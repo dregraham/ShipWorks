@@ -24,6 +24,7 @@ namespace ShipWorks
             Divelements.SandRibbon.StripLayout stripLayout1;
             Divelements.SandRibbon.StripLayout stripLayout3;
             Divelements.SandRibbon.Menu menuFedExEndOfDay;
+            Divelements.SandRibbon.Menu menuOrderLookupViewFedExEndOfDay;
             Divelements.SandRibbon.Shortcut shortcut1;
             Divelements.SandRibbon.Menu menu1;
             Divelements.SandRibbon.Menu menu2;
@@ -70,6 +71,11 @@ namespace ShipWorks
             this.uiModeMenu = new Divelements.SandRibbon.Menu();
             this.mainMenuItemOrderLookup = new Divelements.SandRibbon.MainMenuItem();
             this.mainMenuItemBatchGrid = new Divelements.SandRibbon.MainMenuItem();
+            this.menuOrderLookupViewFedExEndDayClose = new Divelements.SandRibbon.MenuItem();
+            this.menuOrderLookupViewFedExEndDayPrint = new Divelements.SandRibbon.MenuItem();
+            this.menuOrderLookupViewFedExPrintReports = new Divelements.SandRibbon.Menu();
+            this.menuOrderLookupViewFedExEndDayPrintPlaceholder = new Divelements.SandRibbon.MenuItem();
+            this.menuOrderLookupViewFedExSmartPostClose = new Divelements.SandRibbon.MenuItem();
             this.buttonRestore = new Divelements.SandRibbon.Button();
             this.buttonArchive = new Divelements.SandRibbon.Button();
             this.buttonSetupDatabase = new Divelements.SandRibbon.Button();
@@ -256,6 +262,8 @@ namespace ShipWorks
             this.buttonOrderLookupViewReturn = new Divelements.SandRibbon.Button();
             this.buttonOrderLookupViewSCANForm = new Divelements.SandRibbon.Button();
             this.popupOrderLookupViewSCANForm = new Divelements.SandRibbon.Popup();
+            this.buttonOrderLookupViewFedExClose = new Divelements.SandRibbon.Button();
+            this.popupOrderLookupViewFedExEndOfDay = new Divelements.SandRibbon.Popup();
             this.ribbonTabAdmin = new Divelements.SandRibbon.RibbonTab();
             this.ribbonChunkConfiguration = new Divelements.SandRibbon.RibbonChunk();
             this.ribbonChunkHistory = new Divelements.SandRibbon.RibbonChunk();
@@ -313,6 +321,7 @@ namespace ShipWorks
             stripLayout1 = new Divelements.SandRibbon.StripLayout();
             stripLayout3 = new Divelements.SandRibbon.StripLayout();
             menuFedExEndOfDay = new Divelements.SandRibbon.Menu();
+            menuOrderLookupViewFedExEndOfDay = new Divelements.SandRibbon.Menu();
             shortcut1 = new Divelements.SandRibbon.Shortcut();
             menu1 = new Divelements.SandRibbon.Menu();
             menu2 = new Divelements.SandRibbon.Menu();
@@ -784,6 +793,44 @@ namespace ShipWorks
             this.mainMenuItemBatchGrid.QuickAccessKey = "B";
             this.mainMenuItemBatchGrid.Text = "Batch Grid";
             this.mainMenuItemBatchGrid.Activate += new System.EventHandler(this.OnShowBatchView);
+            // 
+            // menuOrderLookupViewFedExEndOfDay
+            // 
+            menuOrderLookupViewFedExEndOfDay.Items.AddRange(new Divelements.SandRibbon.WidgetBase[] {
+                this.menuOrderLookupViewFedExEndDayClose,
+                this.menuOrderLookupViewFedExEndDayPrint,
+                this.menuOrderLookupViewFedExSmartPostClose});
+            // 
+            // menuOrderLookupViewFedExEndDayClose
+            // 
+            this.menuOrderLookupViewFedExEndDayClose.Guid = new System.Guid("1B3D49A4-1779-48A5-8F47-786E63BBEDA5");
+            this.menuOrderLookupViewFedExEndDayClose.Text = "Ground Close";
+            this.menuOrderLookupViewFedExEndDayClose.Activate += new System.EventHandler(this.OnFedExGroundClose);
+            // 
+            // menuOrderLookupViewFedExEndDayPrint
+            // 
+            this.menuOrderLookupViewFedExEndDayPrint.Guid = new System.Guid("BAD86337-173F-4568-B061-CF1CB9159E52");
+            this.menuOrderLookupViewFedExEndDayPrint.Items.AddRange(new Divelements.SandRibbon.WidgetBase[] {
+                this.menuOrderLookupViewFedExPrintReports});
+            this.menuOrderLookupViewFedExEndDayPrint.Text = "Print Report";
+            // 
+            // menuOrderLookupViewFedExPrintReports
+            // 
+            this.menuOrderLookupViewFedExPrintReports.Items.AddRange(new Divelements.SandRibbon.WidgetBase[] {
+                this.menuOrderLookupViewFedExEndDayPrintPlaceholder});
+            // 
+            // menuOrderLookupViewFedExEndDayPrintPlaceholder
+            // 
+            this.menuOrderLookupViewFedExEndDayPrintPlaceholder.Enabled = false;
+            this.menuOrderLookupViewFedExEndDayPrintPlaceholder.Guid = new System.Guid("6942C18F-E7FA-4F53-BD99-6A801B96EB68");
+            this.menuOrderLookupViewFedExEndDayPrintPlaceholder.Text = "(None)";
+            // 
+            // menuOrderLookupViewFedExSmartPostClose
+            // 
+            this.menuOrderLookupViewFedExSmartPostClose.GroupName = "SmartPost";
+            this.menuOrderLookupViewFedExSmartPostClose.Guid = new System.Guid("B04EEF5B-851F-4B43-B2F3-DB47CDDEE610");
+            this.menuOrderLookupViewFedExSmartPostClose.Text = "SmartPost Close";
+            this.menuOrderLookupViewFedExSmartPostClose.Activate += new System.EventHandler(this.OnFedExSmartPostClose);
             // 
             // buttonRestore
             // 
@@ -2620,6 +2667,22 @@ namespace ShipWorks
             this.buttonOrderLookupViewSCANForm.Text = "SCAN Form";
             this.buttonOrderLookupViewSCANForm.TextContentRelation = Divelements.SandRibbon.TextContentRelation.Underneath;
             // 
+            // buttonOrderLookupViewFedExClose
+            // 
+            this.buttonOrderLookupViewFedExClose.DropDownStyle = Divelements.SandRibbon.DropDownStyle.Integral;
+            this.buttonOrderLookupViewFedExClose.Guid = new System.Guid("55C4B661-51F4-4B54-8D36-25902918DECE");
+            this.buttonOrderLookupViewFedExClose.Image = ((System.Drawing.Image) (resources.GetObject("buttonFedExClose.Image")));
+            this.ribbonSecurityProvider.SetPermission(this.buttonOrderLookupViewFedExClose, ShipWorks.Users.Security.PermissionType.ShipmentsCreateEditProcess);
+            this.buttonOrderLookupViewFedExClose.PopupWidget = this.popupOrderLookupViewFedExEndOfDay;
+            this.buttonOrderLookupViewFedExClose.QuickAccessKey = "F";
+            this.buttonOrderLookupViewFedExClose.Text = "FedEx Close";
+            this.buttonOrderLookupViewFedExClose.TextContentRelation = Divelements.SandRibbon.TextContentRelation.Underneath;
+            // 
+            // popupOrderLookupViewFedExEndOfDay
+            // 
+            this.popupOrderLookupViewFedExEndOfDay.Items.AddRange(new Divelements.SandRibbon.WidgetBase[] { popupOrderLookupViewFedExEndOfDay });
+            this.popupOrderLookupViewFedExEndOfDay.BeforePopup += new Divelements.SandRibbon.BeforePopupEventHandler(this.OnFedExClosePopupOpening);
+            // 
             // ribbonTabAdmin
             // 
             this.ribbonTabAdmin.Chunks.AddRange(new Divelements.SandRibbon.WidgetBase[] {
@@ -3321,6 +3384,11 @@ namespace ShipWorks
         private Divelements.SandRibbon.MainMenuItem mainMenuItemSupport;
         private Divelements.SandRibbon.MenuItem menuItemSupportForum;
         private Divelements.SandRibbon.MenuItem menuItemRemoteAssistance;
+        private Divelements.SandRibbon.MenuItem menuOrderLookupViewFedExEndDayClose;
+        private Divelements.SandRibbon.MenuItem menuOrderLookupViewFedExEndDayPrint;
+        private Divelements.SandRibbon.MenuItem menuOrderLookupViewFedExEndDayPrintPlaceholder;
+        private Divelements.SandRibbon.MenuItem menuOrderLookupViewFedExSmartPostClose;
+        private Divelements.SandRibbon.Menu menuOrderLookupViewFedExPrintReports;
         private Editions.EditionGuiHelper editionGuiHelper;
         private Divelements.SandRibbon.RibbonTab ribbonTabHelp;
         private Divelements.SandRibbon.Button buttonHelpForum;
@@ -3365,7 +3433,9 @@ namespace ShipWorks
         private Divelements.SandRibbon.Button buttonOrderLookupViewShipAgain;
         private Divelements.SandRibbon.Button buttonOrderLookupViewReturn;
         private Divelements.SandRibbon.Button buttonOrderLookupViewSCANForm;
+        private Divelements.SandRibbon.Button buttonOrderLookupViewFedExClose;
         private Divelements.SandRibbon.Popup popupOrderLookupViewSCANForm;
+        private Divelements.SandRibbon.Popup popupOrderLookupViewFedExEndOfDay;
         private Divelements.SandRibbon.Button button2;
         private Divelements.SandRibbon.Button buttonOrderLookupViewFields;
     }
