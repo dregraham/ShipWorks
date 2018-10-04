@@ -935,6 +935,7 @@ namespace ShipWorks
         /// </summary>
         private void ToggleOrderLookupMode()
         {
+            // clear out any selected orders from the batch view
             Messenger.Current.Send(new OrderSelectionChangingMessage(this, new long[0]));
 
             ToggleUiModeCheckbox(UIMode.OrderLookup);

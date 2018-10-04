@@ -46,8 +46,7 @@ namespace ShipWorks.OrderLookup
             }
 
             // Get the rating hash for the shipment that is currently loaded
-            string currentRateHash =
-                rateHashingServiceLookup[shipment.ShipmentTypeCode].GetRatingHash(shipment);
+            string currentRateHash = rateHashingServiceLookup[shipment.ShipmentTypeCode].GetRatingHash(shipment);
 
             // if rate hashes match, just return latest rates
             if (LatestRateHash == currentRateHash)
