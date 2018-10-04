@@ -63,7 +63,7 @@ namespace ShipWorks.OrderLookup.Controls.Rating
                 }
 
                 base.SelectedRate = value;
-                orchestrator.ShipmentAdapter.SelectServiceFromRate(value);
+                orchestrator.ShipmentAdapter?.SelectServiceFromRate(value);
             }
         }
     }

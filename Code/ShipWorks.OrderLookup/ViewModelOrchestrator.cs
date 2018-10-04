@@ -165,7 +165,7 @@ namespace ShipWorks.OrderLookup
         /// <summary>
         /// Unload the order
         /// </summary>
-        public void Unload() => LoadOrder(null);
+        public void Unload() => ClearOrder();
 
         /// <summary>
         /// Show an error if one is associated with the current shipment
@@ -189,7 +189,17 @@ namespace ShipWorks.OrderLookup
         public void InitializeForCurrentSession()
         {
             subscription = messenger.OfType<OrderLookupSingleScanMessage>()
-                .Subscribe(orderMessage => LoadOrder(orderMessage.Order));
+                .Subscribe(orderMessage =>
+                {
+                    if (orderMessage.Order == null)
+                    {
+                        ClearOrder();
+                    }
+                    else
+                    {
+                        LoadOrder(orderMessage.Order);
+                    }
+                });
         }
 
         /// <summary>
@@ -199,28 +209,33 @@ namespace ShipWorks.OrderLookup
         {
             SaveToDatabase();
             RemovePropertyChangedEventsFromEntities();
+            
+            RefreshPropertiesFromOrder(order);
 
-            if (order != null)
+            AddPropertyChangedEventsToEntities();
+
+            if (ShipmentAdapter != null)
             {
-                RefreshPropertiesFromOrder(order);
-
-                AddPropertyChangedEventsToEntities();
-
-                if (ShipmentAdapter != null)
-                {
-                    messenger.Send(new ShipmentSelectionChangedMessage(this, new[] { ShipmentAdapter.Shipment.ShipmentID }, ShipmentAdapter));
-                }
-
-                RaisePropertyChanged(nameof(ShipmentTypeCode));
+                messenger.Send(new ShipmentSelectionChangedMessage(this, new[] { ShipmentAdapter.Shipment.ShipmentID }, ShipmentAdapter));
             }
-            else
-            {
-                ShipmentAdapter = null;
-                ShipmentAllowEditing = false;
-                PackageAdapters = null;
-            }
+
+            RaisePropertyChanged(nameof(ShipmentTypeCode));
 
             SelectedOrder = order;
+        }
+        
+        /// <summary>
+        /// Clear the order
+        /// </summary>
+        private void ClearOrder()
+        {
+            SaveToDatabase();
+            RemovePropertyChangedEventsFromEntities();
+            
+            ShipmentAdapter = null;
+            ShipmentAllowEditing = false;
+            PackageAdapters = null;
+            SelectedOrder = null;
         }
 
         /// <summary>
