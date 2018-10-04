@@ -23,7 +23,7 @@ namespace ShipWorks.OrderLookup
         bool ShipmentAllowEditing { get; }
 
         /// <summary>
-        /// The orders shipment adapter
+        /// The order's shipment adapter
         /// </summary>
         ICarrierShipmentAdapter ShipmentAdapter { get; }
 
@@ -33,7 +33,7 @@ namespace ShipWorks.OrderLookup
         ShipmentTypeCode ShipmentTypeCode { get; set; }
 
         /// <summary>
-        /// The pacakge adpaters for the order in context
+        /// The package adapters for the order in context
         /// </summary>
         IEnumerable<IPackageAdapter> PackageAdapters { get; }
 
