@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Reflection;
-using System.Runtime.CompilerServices;
 using GalaSoft.MvvmLight.Command;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
@@ -28,7 +26,7 @@ namespace ShipWorks.OrderLookup.Controls.Customs
         private double contentWeight;
         public event PropertyChangedEventHandler PropertyChanged;
         private readonly PropertyChangedHandler handler;
-        private List<PostalCustomsContentType> customsContentTypes;
+        private IEnumerable<PostalCustomsContentType> customsContentTypes;
         private bool customsContentTypeAllowed;
         private bool customsAllowed;
         private readonly IShipmentTypeManager shipmentTypeManager;
@@ -46,7 +44,7 @@ namespace ShipWorks.OrderLookup.Controls.Customs
         }
 
         /// <summary>
-        /// The order lookup Orechestrator
+        /// The order lookup shipment model
         /// </summary>
         [Obfuscation(Exclude = true)]
         public IOrderLookupShipmentModel ShipmentModel { get; }
@@ -110,7 +108,7 @@ namespace ShipWorks.OrderLookup.Controls.Customs
         /// List of available customs content types for the shipment
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public List<PostalCustomsContentType> CustomsContentTypes
+        public IEnumerable<PostalCustomsContentType> CustomsContentTypes
         {
             get => customsContentTypes;
             set => handler.Set(nameof(CustomsContentTypes), ref customsContentTypes, value);
@@ -136,8 +134,8 @@ namespace ShipWorks.OrderLookup.Controls.Customs
             @"Weight must be greater than or equal $0.00.")]
         public double ContentWeight
         {
-            get { return contentWeight; }
-            set { handler.Set(nameof(ContentWeight), ref contentWeight, value); }
+            get => contentWeight;
+            set => handler.Set(nameof(ContentWeight), ref contentWeight, value);
         }
 
         /// <summary>
@@ -160,7 +158,6 @@ namespace ShipWorks.OrderLookup.Controls.Customs
         {
             return SelectedCustomsItem != null &&
                    CustomsItems != null &&
-                   CustomsItems.Count > 0 &&
                    CustomsItems.Contains(SelectedCustomsItem);
         }
 
@@ -179,11 +176,11 @@ namespace ShipWorks.OrderLookup.Controls.Customs
             CustomsContentTypeAllowed = shipmentTypeManager.IsPostal(shipmentAdapter.ShipmentTypeCode);
             if (CustomsContentTypeAllowed)
             {
-                CustomsContentTypes = EnumHelper.GetEnumList<PostalCustomsContentType>().Select(x => x.Value).ToList();
+                CustomsContentTypes = EnumHelper.GetEnumList<PostalCustomsContentType>().Select(x => x.Value);
             }
             else
             {
-                CustomsContentTypes = new List<PostalCustomsContentType>();
+                CustomsContentTypes = Enumerable.Empty<PostalCustomsContentType>();
             }
 
             CustomsItems = new ObservableCollection<IShipmentCustomsItemAdapter>(shipmentAdapter.GetCustomsItemAdapters());
@@ -233,14 +230,14 @@ namespace ShipWorks.OrderLookup.Controls.Customs
         /// </summary>
         private void OnSelectedCustomsItemPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            if (e.PropertyName.Equals(nameof(IShipmentCustomsItemAdapter.UnitValue), StringComparison.OrdinalIgnoreCase) ||
-                e.PropertyName.Equals(nameof(IShipmentCustomsItemAdapter.Quantity), StringComparison.OrdinalIgnoreCase))
+            if (e.PropertyName == nameof(IShipmentCustomsItemAdapter.UnitValue) ||
+                e.PropertyName == nameof(IShipmentCustomsItemAdapter.Quantity))
             {
                 ShipmentModel.ShipmentAdapter.Shipment.CustomsValue = CustomsItems.Sum(ci => ci.UnitValue * (decimal) ci.Quantity);
             }
 
-            if (e.PropertyName.Equals(nameof(IShipmentCustomsItemAdapter.Weight), StringComparison.OrdinalIgnoreCase) ||
-                e.PropertyName.Equals(nameof(IShipmentCustomsItemAdapter.Quantity), StringComparison.OrdinalIgnoreCase))
+            if (e.PropertyName == nameof(IShipmentCustomsItemAdapter.Weight) ||
+                e.PropertyName == nameof(IShipmentCustomsItemAdapter.Quantity))
             {
                 double originalShipmentContentWeight = ContentWeight;
                 ContentWeight = CustomsItems.Sum(ci => ci.Weight * ci.Quantity);
@@ -255,16 +252,13 @@ namespace ShipWorks.OrderLookup.Controls.Customs
         private void RedistributeContentWeight(double originalShipmentContentWeight)
         {
             // If the content weight changed outside of us, redistribute what the new weight among the packages
-            if (Math.Abs(originalShipmentContentWeight - ContentWeight) > 0.001)
+            if (originalShipmentContentWeight.IsEquivalentTo(ContentWeight))
             {
                 IEnumerable<IPackageAdapter> packageAdapters = ShipmentModel.ShipmentAdapter.GetPackageAdapters();
                 foreach (IPackageAdapter packageAdapter in packageAdapters)
                 {
                     packageAdapter.Weight = ContentWeight / packageAdapters.Count();
                 }
-
-                // Not dealing with packages just yet, but might in the future, so keeping this here for reference
-                //LoadDimensionsFromSelectedPackageAdapter();
             }
         }
 
