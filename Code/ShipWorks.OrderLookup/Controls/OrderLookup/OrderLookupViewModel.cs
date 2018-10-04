@@ -25,12 +25,12 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookup
         /// <summary>
         /// Constructor
         /// </summary>
-        public OrderLookupViewModel(IViewModelOrchestrator orchestrator,
+        public OrderLookupViewModel(IOrderLookupShipmentModel shipmentModel,
             OrderLookupSearchViewModel orderLookupSearchViewModel,
             IIndex<OrderLookupPanels, INotifyPropertyChanged> lookupPanels)
         {
             handler = new PropertyChangedHandler(this, () => PropertyChanged);
-            Orchestrator = orchestrator;
+            ShipmentModel = shipmentModel;
             OrderLookupSearchViewModel = orderLookupSearchViewModel;
 
             LeftColumn = new ObservableCollection<INotifyPropertyChanged>(new List<INotifyPropertyChanged>
@@ -90,8 +90,8 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookup
         }
 
         /// <summary>
-        /// Viewmodel Orchestrator
+        /// Viewmodel ShipmentModel
         /// </summary>
-        public IViewModelOrchestrator Orchestrator { get; }
+        public IOrderLookupShipmentModel ShipmentModel { get; }
     }
 }

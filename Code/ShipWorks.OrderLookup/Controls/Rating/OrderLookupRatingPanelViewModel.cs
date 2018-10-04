@@ -23,28 +23,28 @@ namespace ShipWorks.OrderLookup.Controls.Rating
     [KeyedComponent(typeof(INotifyPropertyChanged), OrderLookupPanels.Rates)]
     public class OrderLookupRatingPanelViewModel : RatingPanelViewModel
     {
-        private readonly IViewModelOrchestrator orchestrator;
+        private readonly IOrderLookupShipmentModel shipmentModel;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public OrderLookupRatingPanelViewModel(IViewModelOrchestrator orchestrator,
+        public OrderLookupRatingPanelViewModel(IOrderLookupShipmentModel shipmentModel,
             IMessenger messenger,
             IEnumerable<IRatingPanelGlobalPipeline> globalPipelines,
             Func<ISecurityContext> securityContextRetriever)  : base(messenger, globalPipelines, securityContextRetriever)
         {
-            this.orchestrator = orchestrator;
-            orchestrator.PropertyChanged += OnOrchestratorPropertyChanged;
+            this.shipmentModel = shipmentModel;
+            shipmentModel.PropertyChanged += OnShipmentModelPropertyChanged;
         }
 
         /// <summary>
-        /// Orchestrator Property Changed
+        /// ShipmentModel Property Changed
         /// </summary>
-        private void OnOrchestratorPropertyChanged(object sender, PropertyChangedEventArgs e)
+        private void OnShipmentModelPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            if (e.PropertyName == "Service" && orchestrator.ShipmentAdapter != null)
+            if (e.PropertyName == "Service" && shipmentModel.ShipmentAdapter != null)
             {
-                SelectRate(orchestrator.ShipmentAdapter);
+                SelectRate(shipmentModel.ShipmentAdapter);
             }
         }
 
@@ -63,7 +63,7 @@ namespace ShipWorks.OrderLookup.Controls.Rating
                 }
 
                 base.SelectedRate = value;
-                orchestrator.ShipmentAdapter?.SelectServiceFromRate(value);
+                shipmentModel.ShipmentAdapter?.SelectServiceFromRate(value);
             }
         }
     }

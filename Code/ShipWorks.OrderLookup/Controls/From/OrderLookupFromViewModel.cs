@@ -29,15 +29,15 @@ namespace ShipWorks.OrderLookup.Controls.From
         /// <summary>
         /// Constructor
         /// </summary>
-        public OrderLookupFromViewModel(IViewModelOrchestrator orchestrator, IShippingOriginManager shippingOriginManager, IMessageHelper messageHelper,
+        public OrderLookupFromViewModel(IOrderLookupShipmentModel shipmentModel, IShippingOriginManager shippingOriginManager, IMessageHelper messageHelper,
             IShipmentTypeManager shipmentTypeManager, ICarrierAccountRetrieverFactory carrierAccountRetrieverFactory,
             IValidatedAddressScope validatedAddressScope, IAddressValidator validator, IAddressSelector addressSelector)
             : base(shippingOriginManager, messageHelper, validatedAddressScope, validator, addressSelector)
         {
-            Orchestrator = orchestrator;
+            ShipmentModel = shipmentModel;
             this.shipmentTypeManager = shipmentTypeManager;
             this.carrierAccountRetrieverFactory = carrierAccountRetrieverFactory;
-            Orchestrator.PropertyChanged += OrchestratorPropertyChanged;
+            ShipmentModel.PropertyChanged += ShipmentModelPropertyChanged;
 
             UpdateTitle();
         }
@@ -70,60 +70,60 @@ namespace ShipWorks.OrderLookup.Controls.From
         /// Is address validation enabled or not
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public IViewModelOrchestrator Orchestrator { get; }
+        public IOrderLookupShipmentModel ShipmentModel { get; }
 
         /// <summary>
         /// Save changes to the base entity whenever properties are changed in the view model
         /// </summary>
         private void Save()
         {
-            if (Orchestrator?.ShipmentAdapter?.Shipment?.OriginPerson != null)
+            if (ShipmentModel?.ShipmentAdapter?.Shipment?.OriginPerson != null)
             {
-                SaveToEntity(Orchestrator.ShipmentAdapter.Shipment.OriginPerson);
+                SaveToEntity(ShipmentModel.ShipmentAdapter.Shipment.OriginPerson);
             }
 
-            if (Orchestrator?.ShipmentAdapter?.ShipmentTypeCode == ShipmentTypeCode.Usps)
+            if (ShipmentModel?.ShipmentAdapter?.ShipmentTypeCode == ShipmentTypeCode.Usps)
             {
-                Orchestrator.ShipmentAdapter.Shipment.Postal.Usps.RateShop = RateShop;
+                ShipmentModel.ShipmentAdapter.Shipment.Postal.Usps.RateShop = RateShop;
             }
         }
 
         /// <summary>
         /// Update when the order changes
         /// </summary>
-        private void OrchestratorPropertyChanged(object sender, PropertyChangedEventArgs e)
+        private void ShipmentModelPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            if (Orchestrator.SelectedOrder == null)
+            if (ShipmentModel.SelectedOrder == null)
             {
                 autoSave?.Dispose();
             }
 
-            if (e.PropertyName == "SelectedOrder" && Orchestrator.SelectedOrder != null)
+            if (e.PropertyName == "SelectedOrder" && ShipmentModel.SelectedOrder != null)
             {
-                Load(Orchestrator.ShipmentAdapter.Shipment.OriginPerson, Orchestrator.ShipmentAdapter.Store);
+                Load(ShipmentModel.ShipmentAdapter.Shipment.OriginPerson, ShipmentModel.ShipmentAdapter.Store);
                 autoSave?.Dispose();
                 autoSave = handler.PropertyChangingStream.Throttle(TimeSpan.FromMilliseconds(100)).Subscribe(_ => Save());
 
-                RateShop = Orchestrator.ShipmentAdapter.SupportsRateShopping;
+                RateShop = ShipmentModel.ShipmentAdapter.SupportsRateShopping;
 
                 UpdateTitle();
 
-                handler.RaisePropertyChanged(nameof(Orchestrator));
+                handler.RaisePropertyChanged(nameof(ShipmentModel));
             }
 
             if (e.PropertyName == "OriginOriginID")
             {
-                long originId = Orchestrator.ShipmentAdapter.Shipment.OriginOriginID;
-                long orderId = Orchestrator.SelectedOrder.OrderID;
-                long accountId = Orchestrator.ShipmentAdapter.AccountId.GetValueOrDefault();
-                ShipmentTypeCode shipmentTypeCode = Orchestrator.ShipmentTypeCode;
-                StoreEntity store = Orchestrator.ShipmentAdapter.Store;
+                long originId = ShipmentModel.ShipmentAdapter.Shipment.OriginOriginID;
+                long orderId = ShipmentModel.SelectedOrder.OrderID;
+                long accountId = ShipmentModel.ShipmentAdapter.AccountId.GetValueOrDefault();
+                ShipmentTypeCode shipmentTypeCode = ShipmentModel.ShipmentTypeCode;
+                StoreEntity store = ShipmentModel.ShipmentAdapter.Store;
 
                 SetAddressFromOrigin(originId, orderId, accountId, shipmentTypeCode, store);
 
                 UpdateTitle();
 
-                handler.RaisePropertyChanged(nameof(Orchestrator));
+                handler.RaisePropertyChanged(nameof(ShipmentModel));
             }
         }
 
@@ -134,10 +134,10 @@ namespace ShipWorks.OrderLookup.Controls.From
         {
             string newTitle = "From";
 
-            if (Orchestrator.ShipmentAdapter != null)
+            if (ShipmentModel.ShipmentAdapter != null)
             {
-                ShipmentTypeCode shipmentTypeCode = Orchestrator.ShipmentAdapter.ShipmentTypeCode;
-                long originID = Orchestrator.ShipmentAdapter.Shipment.OriginOriginID;
+                ShipmentTypeCode shipmentTypeCode = ShipmentModel.ShipmentAdapter.ShipmentTypeCode;
+                long originID = ShipmentModel.ShipmentAdapter.Shipment.OriginOriginID;
 
                 List<KeyValuePair<string, long>> origins = shipmentTypeManager.Get(shipmentTypeCode).GetOrigins();
 
@@ -148,7 +148,7 @@ namespace ShipWorks.OrderLookup.Controls.From
                 }
 
                 string accountDescription = carrierAccountRetrieverFactory?.Create(shipmentTypeCode)?
-                                                .GetAccountReadOnly(Orchestrator.ShipmentAdapter.Shipment)?.AccountDescription ?? string.Empty;
+                                                .GetAccountReadOnly(ShipmentModel.ShipmentAdapter.Shipment)?.AccountDescription ?? string.Empty;
 
                 string headerAccountText = RateShop ? "(Rate Shopping)" : accountDescription;
 

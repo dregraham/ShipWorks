@@ -36,10 +36,10 @@ namespace ShipWorks.OrderLookup.Controls.Customs
         /// <summary>
         /// ctor
         /// </summary>
-        public OrderLookupCustomsControlViewModel(IViewModelOrchestrator orchestrator, IShipmentTypeManager shipmentTypeManager)
+        public OrderLookupCustomsControlViewModel(IOrderLookupShipmentModel shipmentModel, IShipmentTypeManager shipmentTypeManager)
         {
-            Orchestrator = orchestrator;
-            Orchestrator.PropertyChanged += OrchestratorPropertyChanged;
+            ShipmentModel = shipmentModel;
+            ShipmentModel.PropertyChanged += ShipmentModelPropertyChanged;
             this.shipmentTypeManager = shipmentTypeManager;
 
             handler = new PropertyChangedHandler(this, () => PropertyChanged);
@@ -49,7 +49,7 @@ namespace ShipWorks.OrderLookup.Controls.Customs
         /// The order lookup Orechestrator
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public IViewModelOrchestrator Orchestrator { get; }
+        public IOrderLookupShipmentModel ShipmentModel { get; }
 
         /// <summary>
         /// The list of customs items
@@ -169,7 +169,7 @@ namespace ShipWorks.OrderLookup.Controls.Customs
         /// </summary>
         private void LoadCustoms()
         {
-            ICarrierShipmentAdapter shipmentAdapter = Orchestrator.ShipmentAdapter;
+            ICarrierShipmentAdapter shipmentAdapter = ShipmentModel.ShipmentAdapter;
 
             if (shipmentAdapter == null || !shipmentAdapter.CustomsAllowed )
             {
@@ -188,7 +188,7 @@ namespace ShipWorks.OrderLookup.Controls.Customs
 
             CustomsItems = new ObservableCollection<IShipmentCustomsItemAdapter>(shipmentAdapter.GetCustomsItemAdapters());
 
-            Orchestrator.RefreshShipmentFromDatabase();
+            ShipmentModel.RefreshShipmentFromDatabase();
 
             SelectedCustomsItem = CustomsItems.FirstOrDefault();
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(DeleteCustomsItemCommand)));
@@ -199,7 +199,7 @@ namespace ShipWorks.OrderLookup.Controls.Customs
         /// </summary>
         private void AddCustomsItem()
         {
-            IShipmentCustomsItemAdapter newItem = Orchestrator.ShipmentAdapter.AddCustomsItem();
+            IShipmentCustomsItemAdapter newItem = ShipmentModel.ShipmentAdapter.AddCustomsItem();
             CustomsItems.Add(newItem);
             SelectedCustomsItem = newItem;
         }
@@ -212,7 +212,7 @@ namespace ShipWorks.OrderLookup.Controls.Customs
             double originalShipmentContentWeight = ContentWeight;
             ContentWeight = CustomsItems.Sum(ci => ci.Weight * ci.Quantity);
             RedistributeContentWeight(originalShipmentContentWeight);
-            Orchestrator.ShipmentAdapter.Shipment.CustomsValue = CustomsItems.Sum(ci => ci.UnitValue * (decimal) ci.Quantity);
+            ShipmentModel.ShipmentAdapter.Shipment.CustomsValue = CustomsItems.Sum(ci => ci.UnitValue * (decimal) ci.Quantity);
 
             IShipmentCustomsItemAdapter selectedItem = SelectedCustomsItem;
             int location = CustomsItems.IndexOf(selectedItem);
@@ -225,7 +225,7 @@ namespace ShipWorks.OrderLookup.Controls.Customs
             }
 
             CustomsItems.Remove(selectedItem);
-            Orchestrator.ShipmentAdapter.DeleteCustomsItem(selectedItem);
+            ShipmentModel.ShipmentAdapter.DeleteCustomsItem(selectedItem);
         }
 
         /// <summary>
@@ -236,7 +236,7 @@ namespace ShipWorks.OrderLookup.Controls.Customs
             if (e.PropertyName.Equals(nameof(IShipmentCustomsItemAdapter.UnitValue), StringComparison.OrdinalIgnoreCase) ||
                 e.PropertyName.Equals(nameof(IShipmentCustomsItemAdapter.Quantity), StringComparison.OrdinalIgnoreCase))
             {
-                Orchestrator.ShipmentAdapter.Shipment.CustomsValue = CustomsItems.Sum(ci => ci.UnitValue * (decimal) ci.Quantity);
+                ShipmentModel.ShipmentAdapter.Shipment.CustomsValue = CustomsItems.Sum(ci => ci.UnitValue * (decimal) ci.Quantity);
             }
 
             if (e.PropertyName.Equals(nameof(IShipmentCustomsItemAdapter.Weight), StringComparison.OrdinalIgnoreCase) ||
@@ -257,7 +257,7 @@ namespace ShipWorks.OrderLookup.Controls.Customs
             // If the content weight changed outside of us, redistribute what the new weight among the packages
             if (Math.Abs(originalShipmentContentWeight - ContentWeight) > 0.001)
             {
-                IEnumerable<IPackageAdapter> packageAdapters = Orchestrator.ShipmentAdapter.GetPackageAdapters();
+                IEnumerable<IPackageAdapter> packageAdapters = ShipmentModel.ShipmentAdapter.GetPackageAdapters();
                 foreach (IPackageAdapter packageAdapter in packageAdapters)
                 {
                     packageAdapter.Weight = ContentWeight / packageAdapters.Count();
@@ -271,15 +271,15 @@ namespace ShipWorks.OrderLookup.Controls.Customs
         /// <summary>
         /// Update when the order changes
         /// </summary>
-        private void OrchestratorPropertyChanged(object sender, PropertyChangedEventArgs e)
+        private void ShipmentModelPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            CustomsAllowed = Orchestrator.ShipmentAdapter?.CustomsAllowed ?? false;
+            CustomsAllowed = ShipmentModel.ShipmentAdapter?.CustomsAllowed ?? false;
 
-            if (e.PropertyName == "SelectedOrder" && Orchestrator.SelectedOrder != null)
+            if (e.PropertyName == "SelectedOrder" && ShipmentModel.SelectedOrder != null)
             {
                 LoadCustoms();
 
-                handler.RaisePropertyChanged(nameof(Orchestrator));
+                handler.RaisePropertyChanged(nameof(ShipmentModel));
             }
         }
    }

@@ -52,9 +52,9 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookup
         }
 
         /// <summary>
-        /// Unload the order from the viewmodel orchestrator
+        /// Unload the order from the viewmodel shipmentModel
         /// </summary>
-        public void Unload() => orderLookupViewModel.Orchestrator.Unload();
+        public void Unload() => orderLookupViewModel.ShipmentModel.Unload();
 
         /// <summary>
         /// Expose the Control
@@ -71,7 +71,7 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookup
             // save to the db.
             if (!((bool) e.NewValue) && e.NewValue != e.OldValue)
             {
-                orderLookupViewModel.Orchestrator.SaveToDatabase();
+                orderLookupViewModel.ShipmentModel.SaveToDatabase();
             }
         }
 
@@ -82,7 +82,7 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookup
         {
             if (IsNonKeyboardInputElement(e.OriginalSource))
             {
-                orderLookupViewModel.Orchestrator.SaveToDatabase();
+                orderLookupViewModel.ShipmentModel.SaveToDatabase();
             }
         }
 

@@ -17,10 +17,10 @@ using ShipWorks.Shipping.Services;
 namespace ShipWorks.OrderLookup
 {
     /// <summary>
-    /// Orchestrates the various view models associated with order lookup mode
+    /// Model used by the various order lookup viewmodels
     /// </summary>
     [Component(SingleInstance = true)]
-    public class ViewModelOrchestrator : IInitializeForCurrentUISession, INotifyPropertyChanged, IViewModelOrchestrator
+    public class OrderLookupShipmentModel : IInitializeForCurrentUISession, INotifyPropertyChanged, IOrderLookupShipmentModel
     {
         private readonly IMessenger messenger;
         private readonly ICarrierShipmentAdapterFactory shipmentAdapterFactory;
@@ -34,7 +34,7 @@ namespace ShipWorks.OrderLookup
         /// <summary>
         /// Constructor
         /// </summary>
-        public ViewModelOrchestrator(IMessenger messenger, ICarrierShipmentAdapterFactory shipmentAdapterFactory, IShippingManager shippingManager, IMessageHelper messageHelper)
+        public OrderLookupShipmentModel(IMessenger messenger, ICarrierShipmentAdapterFactory shipmentAdapterFactory, IShippingManager shippingManager, IMessageHelper messageHelper)
         {
             this.messenger = messenger;
             this.shipmentAdapterFactory = shipmentAdapterFactory;
@@ -106,7 +106,7 @@ namespace ShipWorks.OrderLookup
                             messenger.Send(new ShipmentSelectionChangedMessage(this, new[] { ShipmentAdapter.Shipment.ShipmentID }, ShipmentAdapter));
                         }
                     }
-                    RaisePropertyChanged(nameof(ViewModelOrchestrator));
+                    RaisePropertyChanged(nameof(OrderLookupShipmentModel));
                 }
             }
         }

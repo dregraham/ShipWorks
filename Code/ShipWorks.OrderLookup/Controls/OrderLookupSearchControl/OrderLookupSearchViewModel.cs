@@ -14,7 +14,7 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookupSearchControl
     [Component(RegistrationType.Self)]
     public class OrderLookupSearchViewModel : INotifyPropertyChanged
     {
-        private readonly IViewModelOrchestrator orchestrator;
+        private readonly IOrderLookupShipmentModel shipmentModel;
         private readonly IMessenger messenger;
         public event PropertyChangedEventHandler PropertyChanged;
         private readonly PropertyChangedHandler handler;
@@ -26,11 +26,11 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookupSearchControl
         /// <summary>
         /// Ctor
         /// </summary>
-        public OrderLookupSearchViewModel(IViewModelOrchestrator orchestrator, IMessenger messenger)
+        public OrderLookupSearchViewModel(IOrderLookupShipmentModel shipmentModel, IMessenger messenger)
         {
-            this.orchestrator = orchestrator;
+            this.shipmentModel = shipmentModel;
             this.messenger = messenger;
-            orchestrator.PropertyChanged += UpdateOrderNumber;
+            shipmentModel.PropertyChanged += UpdateOrderNumber;
             handler = new PropertyChangedHandler(this, () => PropertyChanged);
             GetOrderCommand = new RelayCommand(GetOrder);
             ResetCommand = new RelayCommand(Reset);
@@ -102,7 +102,7 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookupSearchControl
         {
             if (e.PropertyName == "SelectedOrder")
             {
-                if (orchestrator.SelectedOrder == null)
+                if (shipmentModel.SelectedOrder == null)
                 {
                     SearchErrorMessage = "No matching orders were found.";
                     SearchError = true;
@@ -112,7 +112,7 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookupSearchControl
                 {
                     SearchErrorMessage = string.Empty;
                     SearchError = false;
-                    OrderNumber = orchestrator.SelectedOrder.OrderNumberComplete;
+                    OrderNumber = shipmentModel.SelectedOrder.OrderNumberComplete;
                 }
             }
         }

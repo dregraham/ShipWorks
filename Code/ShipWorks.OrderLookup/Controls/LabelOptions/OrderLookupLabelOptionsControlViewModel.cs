@@ -38,10 +38,10 @@ namespace ShipWorks.OrderLookup.Controls.LabelOptions
         /// <summary>
         /// ctor
         /// </summary>
-        public OrderLookupLabelOptionsControlViewModel(IViewModelOrchestrator orchestrator, IShipmentTypeManager shipmentTypeManager, IFedExUtility fedExUtility)
+        public OrderLookupLabelOptionsControlViewModel(IOrderLookupShipmentModel shipmentModel, IShipmentTypeManager shipmentTypeManager, IFedExUtility fedExUtility)
         {
-            Orchestrator = orchestrator;
-            Orchestrator.PropertyChanged += OrchestratorPropertyChanged;
+            ShipmentModel = shipmentModel;
+            ShipmentModel.PropertyChanged += ShipmentModelPropertyChanged;
             this.shipmentTypeManager = shipmentTypeManager;
             this.fedExUtility = fedExUtility;
 
@@ -81,10 +81,10 @@ namespace ShipWorks.OrderLookup.Controls.LabelOptions
         }
 
         /// <summary>
-        /// The order lookup Orchestrator
+        /// The order lookup ShipmentModel
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public IViewModelOrchestrator Orchestrator { get; }
+        public IOrderLookupShipmentModel ShipmentModel { get; }
 
         /// <summary>
         /// Command to open the printer article
@@ -95,11 +95,11 @@ namespace ShipWorks.OrderLookup.Controls.LabelOptions
         /// <summary>
         /// Update when the order changes
         /// </summary>
-        private void OrchestratorPropertyChanged(object sender, PropertyChangedEventArgs e)
+        private void ShipmentModelPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            if (e.PropertyName == "SelectedOrder" && Orchestrator.SelectedOrder != null)
+            if (e.PropertyName == "SelectedOrder" && ShipmentModel.SelectedOrder != null)
             {
-                ShipmentEntity shipment = Orchestrator.ShipmentAdapter.Shipment;
+                ShipmentEntity shipment = ShipmentModel.ShipmentAdapter.Shipment;
 
                 // Determine if stealth and no postage is allowed for the new shipment
                 if (shipmentTypeManager.IsPostal(shipment.ShipmentTypeCode))
@@ -117,8 +117,8 @@ namespace ShipWorks.OrderLookup.Controls.LabelOptions
                 LabelFormats = EnumHelper.GetEnumList<ThermalLanguage>(x => ShouldIncludeLabelFormatInList(shipment, x))
                     .Select(x => x.Value).ToList();
 
-                // Update the Orchestrator
-                handler.RaisePropertyChanged(nameof(Orchestrator));
+                // Update the ShipmentModel
+                handler.RaisePropertyChanged(nameof(ShipmentModel));
             }
         }
 
