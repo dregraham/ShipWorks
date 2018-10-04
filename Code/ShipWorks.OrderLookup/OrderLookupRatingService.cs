@@ -16,6 +16,7 @@ namespace ShipWorks.OrderLookup
         private readonly IRatesRetriever ratesRetriever;
         private readonly IIndex<ShipmentTypeCode, IRateHashingService> rateHashingServiceLookup;
         private GenericResult<RateGroup> latestRates;
+        private string latestRateHash;
 
         /// <summary>
         /// ctor
@@ -26,11 +27,6 @@ namespace ShipWorks.OrderLookup
             this.ratesRetriever = ratesRetriever;
             this.rateHashingServiceLookup = rateHashingServiceLookup;
         }
-        
-        /// <summary>
-        /// The last rate hash to be calculated
-        /// </summary>
-        public string LatestRateHash { get; private set; }
 
         /// <summary>
         /// Get rates for the given shipment
@@ -38,9 +34,9 @@ namespace ShipWorks.OrderLookup
         public GenericResult<RateGroup> GetRates(ShipmentEntity shipment)
         {
             // If we don't have a rate hash, get one, and get rates.
-            if (string.IsNullOrWhiteSpace(LatestRateHash))
+            if (string.IsNullOrWhiteSpace(latestRateHash))
             {
-                LatestRateHash = rateHashingServiceLookup[shipment.ShipmentTypeCode].GetRatingHash(shipment);
+                latestRateHash = rateHashingServiceLookup[shipment.ShipmentTypeCode].GetRatingHash(shipment);
                 latestRates = ratesRetriever.GetRates(shipment);
                 return latestRates;
             }
@@ -49,13 +45,13 @@ namespace ShipWorks.OrderLookup
             string currentRateHash = rateHashingServiceLookup[shipment.ShipmentTypeCode].GetRatingHash(shipment);
 
             // if rate hashes match, just return latest rates
-            if (LatestRateHash == currentRateHash)
+            if (latestRateHash == currentRateHash)
             {
                 return latestRates;
             }
             
             // if the latest rate hash doesn't match the current one, set the current to latest, and get rates.
-            LatestRateHash = currentRateHash;
+            latestRateHash = currentRateHash;
             latestRates = ratesRetriever.GetRates(shipment);
             return latestRates;
         }
