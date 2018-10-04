@@ -6,6 +6,7 @@
              xmlns:ui="http://schemas.shipworks.com/ui"
              xmlns:geography="clr-namespace:Interapptive.Shared.Business.Geography;assembly=Interapptive.Shared"
              xmlns:postal="clr-namespace:ShipWorks.Shipping.Carriers.Postal;assembly=ShipWorks.Core"
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
              x:Class="ShipWorks.OrderLookup.Controls.Customs.OrderLookupCustomsControl"
              mc:Ignorable="d"
              d:DesignHeight="450" d:DesignWidth="800"
@@ -51,11 +52,11 @@
                 <TextBox Grid.Row="0" Grid.Column="1"
                      Style="{StaticResource FormNumberTextBox}"
                      Text="{Binding ShipmentModel.ShipmentAdapter.Shipment.CustomsValue, NotifyOnValidationError=true, StringFormat=C, ValidatesOnDataErrors=true}">
-                    <!--<i:Interaction.Behaviors>
-                    <ui:TextBoxInputRegExBehavior RegularExpression="^[+]?\$? ?((\d{1,3}(,\d{3})+)|\d*)\.?(\d+)?$"
-                                                  EmptyValue="" MaxLength="15" />
-                    <ui:TextBoxInputRegExBehavior RegularExpression="^\S*$" EmptyValue="" MaxLength="15" />
-                </i:Interaction.Behaviors>-->
+                    <i:Interaction.Behaviors>
+                        <ui:TextBoxInputRegExBehavior RegularExpression="^[+]?\$? ?((\d{1,3}(,\d{3})+)|\d*)\.?(\d+)?$"
+                                                      EmptyValue="" MaxLength="15" />
+                        <ui:TextBoxInputRegExBehavior RegularExpression="^\S*$" EmptyValue="" MaxLength="15" />
+                    </i:Interaction.Behaviors>
                 </TextBox>
 
                 <TextBlock Grid.Row="1" Grid.Column="0" Text="Content" 
@@ -137,10 +138,10 @@
                          Margin="10 10 0 10"
                              Style="{StaticResource FormNumberTextBox}"
                              Text="{Binding SelectedCustomsItem.Quantity, ConverterParameter=1, Converter={StaticResource EmptyDouble}, NotifyOnValidationError=true, ValidatesOnDataErrors=true}">
-                        <!--<i:Interaction.Behaviors>
-                        <ui:TextBoxInputRegExBehavior RegularExpression="^?\d+(,\d+)*(\.\d+(e\d+)?)?(\.)?$"
-                                                      EmptyValue="" MaxLength="6" />
-                    </i:Interaction.Behaviors>-->
+                        <i:Interaction.Behaviors>
+                            <ui:TextBoxInputRegExBehavior RegularExpression="^?\d+(,\d+)*(\.\d+(e\d+)?)?(\.)?$"
+                                                          EmptyValue="" MaxLength="6" />
+                        </i:Interaction.Behaviors>
                     </TextBox>
                     <TextBlock Grid.Row="1" Grid.Column="0"
                            Text="Description"/>
@@ -159,7 +160,7 @@
                            Text="Value"/>
                     <TextBox Grid.Row="3" Grid.Column="1"
                              Style="{StaticResource FormNumberTextBox}"
-                             Text="{Binding SelectedCustomsItem.UnitValue, Converter={StaticResource EmptyMoney}, Mode=TwoWay, NotifyOnValidationError=true, StringFormat=C, UpdateSourceTrigger=LostFocus, ValidatesOnDataErrors=true}">
+                             Text="{Binding SelectedCustomsItem.UnitValue, Converter={StaticResource EmptyMoney}, NotifyOnValidationError=true, StringFormat=C, UpdateSourceTrigger=LostFocus, ValidatesOnDataErrors=true}">
                     </TextBox>
                     <TextBlock Grid.Row="4" Grid.Column="0"
                            Text="Harmonized Code"/>

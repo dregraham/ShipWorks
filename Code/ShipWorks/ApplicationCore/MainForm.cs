@@ -892,7 +892,7 @@ namespace ShipWorks
             {
                 panelDockingArea.Controls.Remove(orderLookupControl.Control);
                 orderLookupControl.Unload();
-                orderLookupLifetimeScope?.Dispose();
+                orderLookupLifetimeScope.Dispose();
                 orderLookupLifetimeScope = null;
             }
 

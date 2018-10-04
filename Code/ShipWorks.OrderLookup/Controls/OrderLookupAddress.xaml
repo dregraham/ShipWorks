@@ -63,7 +63,7 @@
                 Grid.Column="1"
                 props:EntityFieldLength.FieldName="PersonNameFull"
                 Style="{StaticResource FormTextBox}"
-                Text="{Binding FullName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                Text="{Binding FullName, UpdateSourceTrigger=PropertyChanged}" />
             <TextBlock
                 Grid.Row="1"
                 Grid.Column="0"
@@ -75,7 +75,7 @@
                 Grid.Column="1"
                 props:EntityFieldLength.FieldName="PersonCompany"
                 Style="{StaticResource FormTextBox}"
-                Text="{Binding Company, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                Text="{Binding Company, UpdateSourceTrigger=PropertyChanged}" />
         </Grid>
 
         <Grid>
@@ -83,9 +83,6 @@
                 <ColumnDefinition Width="85" />
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
-            <Grid.RowDefinitions>
-                <RowDefinition />
-            </Grid.RowDefinitions>
 
             <TextBlock
                 Grid.Row="0"
@@ -107,7 +104,6 @@
                         Style="{StaticResource Image.Icon}" />
                     <TextBlock
                         Margin="0,2,0,0"
-                        VerticalAlignment="Center"
                         Style="{StaticResource FieldLabel}"
                         Text="{Binding ValidationStatus, Converter={StaticResource EnumDescription}}" />
                 </StackPanel>
@@ -254,7 +250,7 @@
                 Grid.Column="1"
                 props:EntityFieldLength.FieldName="PersonEmail"
                 Style="{StaticResource FormTextBox}"
-                Text="{Binding Email, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                Text="{Binding Email, UpdateSourceTrigger=PropertyChanged}" />
 
             <TextBlock
                 Grid.Row="1"
@@ -267,7 +263,7 @@
                 Grid.Column="1"
                 props:EntityFieldLength.FieldName="PersonPhone"
                 Style="{StaticResource FormTextBox}"
-                Text="{Binding Phone, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                Text="{Binding Phone, UpdateSourceTrigger=PropertyChanged}" />
         </Grid>
         <Popup
             Name="AddressPopup"
