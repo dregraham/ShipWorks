@@ -23,8 +23,14 @@
     <None Remove="obj\**" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Interapptive.Shared\Interapptive.Shared.csproj" />
+    <ProjectReference Include="..\ShipWorks.Data.Model\ShipWorks.Data.Model.csproj" />
     <ProjectReference Include="..\ShipWorks.OrderLookup\ShipWorks.OrderLookup.csproj" />
+    <ProjectReference Include="..\ShipWorks.Shared\ShipWorks.Shared.csproj" />
+    <ProjectReference Include="..\ShipWorks.Shipping\ShipWorks.Shipping.csproj" />
+    <ProjectReference Include="..\ShipWorks.SingleScan\ShipWorks.SingleScan.csproj" />
     <ProjectReference Include="..\ShipWorks.Tests.Shared\ShipWorks.Tests.Shared.csproj" />
+    <ProjectReference Include="..\ShipWorks\ShipWorks.Core.csproj" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

@@ -1013,7 +1013,7 @@ namespace ShipWorks
             }
             else if (ribbon.SelectedTab == ribbonTabOrderLookupViewShipmentHistory)
             {
-                ToggleVisiblePanel(shipmentHistory.Control, orderLookupControl.Control);
+                ToggleVisiblePanel(shipmentHistory.Control, orderLookupControl?.Control);
                 shipmentHistory.Activate();
             }
         }

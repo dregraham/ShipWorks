@@ -4,7 +4,6 @@ using System.Windows.Forms;
 using System.Windows.Forms.Integration;
 using System.Windows.Input;
 using Interapptive.Shared.ComponentRegistration;
-using ShipWorks.OrderLookup.Controls.OrderLookup;
 using ShipWorks.UI.Controls;
 
 namespace ShipWorks.OrderLookup.Controls.OrderLookup
@@ -41,7 +40,7 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookup
                 DataContext = orderLookupViewModel
             };
             orderLookupControl.IsKeyboardFocusWithinChanged += OnIsKeyboardFocusWithinChanged;
-            orderLookupControl.LostFocus += OnShippingPanelControlLostFocus;
+            orderLookupControl.LostFocus += OnOrderLookupControlLostFocus;
 
             ElementHost host = new ElementHost
             {
@@ -72,18 +71,18 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookup
             // save to the db.
             if (!((bool) e.NewValue) && e.NewValue != e.OldValue)
             {
-                //orderLookupViewModel.Orchestrator.SaveToDatabase();
+                orderLookupViewModel.Orchestrator.SaveToDatabase();
             }
         }
 
         /// <summary>
         /// The shipping panel has lost focus
         /// </summary>
-        private void OnShippingPanelControlLostFocus(object sender, RoutedEventArgs e)
+        private void OnOrderLookupControlLostFocus(object sender, RoutedEventArgs e)
         {
             if (IsNonKeyboardInputElement(e.OriginalSource))
             {
-                //orderLookupViewModel.Orchestrator.SaveToDatabase();
+                orderLookupViewModel.Orchestrator.SaveToDatabase();
             }
         }
 
