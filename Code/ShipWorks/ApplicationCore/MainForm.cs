@@ -3277,6 +3277,20 @@ namespace ShipWorks
         }
 
         /// <summary>
+        /// Create a manual order from the order lookup panel
+        /// </summary>
+        private void OnOrderLookupManualOrder(object sender, EventArgs e)
+        {
+            using (AddOrderWizard dlg = new AddOrderWizard(null, null))
+            {
+                if (dlg.ShowDialog(this) == DialogResult.OK)
+                {
+                    Messenger.Current.Send(new OrderLookupSearchMessage(this, dlg.OrderID.ToString()));
+                }
+            }
+        }
+
+        /// <summary>
         /// Create a new combined order
         /// </summary>
         private async void OnCombineOrders(object sender, EventArgs e)
