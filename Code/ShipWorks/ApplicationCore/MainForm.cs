@@ -1009,7 +1009,7 @@ namespace ShipWorks
             if (ribbon.SelectedTab == ribbonTabOrderLookupViewShipping)
             {
                 ToggleVisiblePanel(orderLookupControl.Control, shipmentHistory?.Control);
-                shipmentHistory.Deactivate();
+                shipmentHistory?.Deactivate();
             }
             else if (ribbon.SelectedTab == ribbonTabOrderLookupViewShipmentHistory)
             {
