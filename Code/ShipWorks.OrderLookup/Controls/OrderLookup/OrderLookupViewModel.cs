@@ -92,6 +92,7 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookup
         /// <summary>
         /// Viewmodel ShipmentModel
         /// </summary>
+        [Obfuscation(Exclude = true)]
         public IOrderLookupShipmentModel ShipmentModel { get; }
     }
 }
