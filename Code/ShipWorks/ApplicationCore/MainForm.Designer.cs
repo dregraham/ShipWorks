@@ -2677,7 +2677,7 @@ namespace ShipWorks
             // popupOrderLookupViewFedExEndOfDay
             // 
             this.popupOrderLookupViewFedExEndOfDay.Items.AddRange(new Divelements.SandRibbon.WidgetBase[] { menuOrderLookupViewFedExEndOfDay });
-            this.popupOrderLookupViewFedExEndOfDay.BeforePopup += new Divelements.SandRibbon.BeforePopupEventHandler(this.OnFedExClosePopupOpening);
+            this.popupOrderLookupViewFedExEndOfDay.BeforePopup += new Divelements.SandRibbon.BeforePopupEventHandler(this.OnOrderLookupViewFedExClosePopupOpening);
             // 
             // popupPostalScanForm
             // 

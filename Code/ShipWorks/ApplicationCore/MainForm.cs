@@ -4072,11 +4072,25 @@ namespace ShipWorks
         /// <summary>
         /// The FedEx Close popup menu is opening, so we need to dynamically populate it
         /// </summary>
-        private void OnFedExClosePopupOpening(object sender, BeforePopupEventArgs e)
-        {
-            FedExGroundClose.PopulatePrintReportsMenu(menuFedExPrintReports);
+        private void OnFedExClosePopupOpening(object sender, BeforePopupEventArgs e) =>
+            PopulateFedExCloseMenu(menuFedExPrintReports, menuFedExSmartPostClose);
 
-            menuFedExSmartPostClose.Visible = FedExUtility.GetSmartPostHubs().Count > 0;
+        /// <summary>
+        /// The FedEx Close popup menu is opening, so we need to dynamically populate it
+        /// </summary>
+        private void OnOrderLookupViewFedExClosePopupOpening(object sender, BeforePopupEventArgs e) =>
+            PopulateFedExCloseMenu(menuOrderLookupViewFedExPrintReports, menuOrderLookupViewFedExSmartPostClose);
+
+        /// <summary>
+        /// Populate the FedEx close menu
+        /// </summary>
+        /// <param name="printMenu"></param>
+        /// <param name="closeMenu"></param>
+        private void PopulateFedExCloseMenu(Divelements.SandRibbon.Menu printMenu, SandMenuItem closeMenu)
+        {
+            FedExGroundClose.PopulatePrintReportsMenu(printMenu);
+
+            closeMenu.Visible = FedExUtility.GetSmartPostHubs().Any();
         }
 
         /// <summary>
