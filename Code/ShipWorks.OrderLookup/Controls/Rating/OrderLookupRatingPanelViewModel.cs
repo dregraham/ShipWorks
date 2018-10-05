@@ -2,15 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Reflection;
-using Autofac.Features.Indexed;
 using Interapptive.Shared.ComponentRegistration;
-using Interapptive.Shared.Utility;
 using ShipWorks.Core.Messaging;
-using ShipWorks.Core.Messaging.Messages.Shipping;
 using ShipWorks.Data.Model.HelperClasses;
-using ShipWorks.Messaging.Messages;
-using ShipWorks.Messaging.Messages.Shipping;
-using ShipWorks.Shipping;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.UI.RatingPanel;
 using ShipWorks.Shipping.UI.RatingPanel.ObservableRegistrations;
@@ -24,8 +18,6 @@ namespace ShipWorks.OrderLookup.Controls.Rating
     [KeyedComponent(typeof(INotifyPropertyChanged), OrderLookupPanels.Rates)]
     public class OrderLookupRatingPanelViewModel : RatingPanelViewModel
     {
-        private readonly IOrderLookupShipmentModel shipmentModel;
-
         /// <summary>
         /// Constructor
         /// </summary>
@@ -34,7 +26,7 @@ namespace ShipWorks.OrderLookup.Controls.Rating
             IEnumerable<IRatingPanelGlobalPipeline> globalPipelines,
             Func<ISecurityContext> securityContextRetriever)  : base(messenger, globalPipelines, securityContextRetriever)
         {
-            this.shipmentModel = shipmentModel;
+            ShipmentModel = shipmentModel;
             shipmentModel.PropertyChanged += OnShipmentModelPropertyChanged;
         }
 
@@ -43,11 +35,14 @@ namespace ShipWorks.OrderLookup.Controls.Rating
         /// </summary>
         private void OnShipmentModelPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            if (e.PropertyName == PostalShipmentFields.Service.Name && shipmentModel.ShipmentAdapter != null)
+            if (e.PropertyName == PostalShipmentFields.Service.Name && ShipmentModel.ShipmentAdapter != null)
             {
-                SelectRate(shipmentModel.ShipmentAdapter);
+                SelectRate(ShipmentModel.ShipmentAdapter);
             }
         }
+        
+        [Obfuscation(Exclude = true)]
+        public IOrderLookupShipmentModel ShipmentModel { get; }
 
         /// <summary>
         /// The currently selected rate
@@ -64,7 +59,7 @@ namespace ShipWorks.OrderLookup.Controls.Rating
                 }
 
                 base.SelectedRate = value;
-                shipmentModel.ShipmentAdapter?.SelectServiceFromRate(value);
+                ShipmentModel.ShipmentAdapter?.SelectServiceFromRate(value);
             }
         }
     }

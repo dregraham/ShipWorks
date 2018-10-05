@@ -323,7 +323,8 @@
     </UserControl.Resources>
 
     <StackPanel>
-        <ContentControl Content="{Binding .}">
+        <ContentControl Content="{Binding .}"
+                        IsEnabled="{Binding ShipmentModel.ShipmentAllowEditing}">
             <ContentControl.ContentTemplate>
                 <MultiBinding Converter="{StaticResource ShipmentTypeToOrderLookupTemplateConverter}">
                     <Binding Path="ShipmentModel.ShipmentTypeCode" />

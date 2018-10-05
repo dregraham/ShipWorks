@@ -5,12 +5,12 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:ui="http://schemas.shipworks.com/ui"
              xmlns:sw="http://schemas.shipworks.com/sw"
-             xmlns:ratingpanel="clr-namespace:ShipWorks.Shipping.UI.RatingPanel;assembly=ShipWorks.Shipping.UI"
              xmlns:amazon="clr-namespace:ShipWorks.Shipping.UI.Carriers.Amazon;assembly=ShipWorks.Shipping.UI"
              xmlns:localRating="clr-namespace:ShipWorks.Shipping.UI.Carriers.Ups.LocalRating;assembly=ShipWorks.Shipping.UI"
+             xmlns:rating="clr-namespace:ShipWorks.OrderLookup.Controls.Rating"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800"
-             d:DataContext="{d:DesignInstance ratingpanel:TestRatingPanelViewModel, IsDesignTimeCreatable=True}"
+             d:DataContext="{d:DesignInstance rating:OrderLookupRatingPanelViewModel, IsDesignTimeCreatable=True}"
              FontFamily="/ShipWorks.OrderLookup;component/#Roboto">
     <UserControl.Resources>
         <ResourceDictionary>
@@ -22,12 +22,10 @@
 
             <ui:ImageToBitmapSourceConverter x:Key="ImageToBitmapSource" />
             <ui:InvertBooleanConverter x:Key="InvertBoolean" />
-            <ui:HalfCentCurrencyConverter x:Key="HalfCentCurrency" />
             <ui:TypeBasedTemplateSelector x:Key="TypeBasedTemplateSelector" />
             <ui:BooleanComparisonConverter x:Key="BooleanAnd" BooleanOperator="{x:Static ui:BooleanOperator.And}" />
             <ui:BooleanToVisibilityConverter x:Key="BooleanToVisibility" />
             <ui:BooleanToVisibilityConverter x:Key="BooleanToVisibilityInverted" Invert="True" />
-
             <FrameworkElement x:Key="ProxyElement"
                         DataContext="{Binding}"/>
         </ResourceDictionary>
@@ -43,14 +41,19 @@
 
         <DataGrid Grid.Row="1"
                   Style="{StaticResource DataGrid.Static}"
-                  IsEnabled="{Binding IsLoading, Converter={StaticResource InvertBoolean}}"
                   Visibility="{Binding IsLoading, Converter={StaticResource BooleanToVisibilityInverted}}"
                   ItemsSource="{Binding Rates}"
                   SelectedItem="{Binding SelectedRate, Mode=TwoWay}"                        
                   SelectionUnit="FullRow"
                   CanUserResizeColumns="True"                  
                   HorizontalGridLinesBrush="{StaticResource BorderColor}"
-                  VerticalGridLinesBrush="{StaticResource BorderColor}">            
+                  VerticalGridLinesBrush="{StaticResource BorderColor}">
+            <DataGrid.IsEnabled>
+                <MultiBinding Converter="{StaticResource BooleanAnd}">
+                    <Binding Mode="OneWay" Path="ShipmentModel.ShipmentAllowEditing" />
+                    <Binding Path="IsLoading" Converter="{StaticResource InvertBoolean}"/>
+                </MultiBinding>
+            </DataGrid.IsEnabled>            
             <DataGrid.RowStyle>                
                 <Style TargetType="DataGridRow">
                     <Style.Resources>
