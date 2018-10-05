@@ -2524,8 +2524,7 @@ namespace ShipWorks
             this.ribbonChunkOrderLookupViewShipping.ItemJustification = Divelements.SandRibbon.ItemJustification.Near;
             this.ribbonChunkOrderLookupViewShipping.Items.AddRange(new Divelements.SandRibbon.WidgetBase[] {
             this.buttonOrderLookupViewCreateLabel,
-            this.buttonOrderLookupViewManualOrder,
-            this.buttonOrderLookupViewFedExClose
+            this.buttonOrderLookupViewManualOrder
             });
             this.ribbonChunkOrderLookupViewShipping.Text = "Shipping";
             // 
@@ -2625,7 +2624,8 @@ namespace ShipWorks
             this.buttonOrderLookupViewVoid,
             this.buttonOrderLookupViewShipAgain,
             this.buttonOrderLookupViewReturn,
-            this.buttonOrderLookupViewSCANForm});
+            this.buttonOrderLookupViewSCANForm,
+            this.buttonOrderLookupViewFedExClose});
             this.ribbonChunkOrderLookupViewActions.Text = "Actions";
             // 
             // buttonOrderLookupViewVoid
