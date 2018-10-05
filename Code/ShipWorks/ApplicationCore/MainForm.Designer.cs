@@ -226,10 +226,15 @@ namespace ShipWorks
             this.buttonEndiciaSCAN = new Divelements.SandRibbon.Button();
             this.popupPostalScanForm = new Divelements.SandRibbon.Popup();
             this.menuEndiciaScanForm = new Divelements.SandRibbon.Menu();
+            this.menuOrderLookupViewEndiciaScanForm = new Divelements.SandRibbon.Menu();
             this.menuCreateEndiciaScanForm = new Divelements.SandRibbon.MenuItem();
+            this.menuOrderLookupViewCreateEndiciaScanForm = new Divelements.SandRibbon.MenuItem();
             this.menuPrintScanForm = new Divelements.SandRibbon.MenuItem();
+            this.menuOrderLookupViewPrintScanForm = new Divelements.SandRibbon.MenuItem();
             this.menuPrintEndiciaScanForm = new Divelements.SandRibbon.Menu();
+            this.menuOrderLookupViewPrintEndiciaScanForm = new Divelements.SandRibbon.Menu();
             this.menuEndiciaScanFormNone = new Divelements.SandRibbon.MenuItem();
+            this.menuOrderLookupViewEndiciaScanFormNone = new Divelements.SandRibbon.MenuItem();
             this.ribbonChunkManageEmail = new Divelements.SandRibbon.RibbonChunk();
             this.buttonEmailMessages = new Divelements.SandRibbon.Button();
             this.ribbonChunkDownload = new Divelements.SandRibbon.RibbonChunk();
@@ -253,7 +258,6 @@ namespace ShipWorks
             this.ribbonChunkOrderLookupViewActions = new Divelements.SandRibbon.RibbonChunk();
             this.buttonOrderLookupViewVoid = new Divelements.SandRibbon.Button();
             this.buttonOrderLookupViewShipAgain = new Divelements.SandRibbon.Button();
-            this.buttonOrderLookupViewReturn = new Divelements.SandRibbon.Button();
             this.buttonOrderLookupViewSCANForm = new Divelements.SandRibbon.Button();
             this.popupOrderLookupViewSCANForm = new Divelements.SandRibbon.Popup();
             this.ribbonTabAdmin = new Divelements.SandRibbon.RibbonTab();
@@ -2575,7 +2579,6 @@ namespace ShipWorks
             this.ribbonChunkOrderLookupViewActions.Items.AddRange(new Divelements.SandRibbon.WidgetBase[] {
             this.buttonOrderLookupViewVoid,
             this.buttonOrderLookupViewShipAgain,
-            this.buttonOrderLookupViewReturn,
             this.buttonOrderLookupViewSCANForm});
             this.ribbonChunkOrderLookupViewActions.Text = "Actions";
             // 
@@ -2599,16 +2602,6 @@ namespace ShipWorks
             this.buttonOrderLookupViewShipAgain.Text = "Ship Again";
             this.buttonOrderLookupViewShipAgain.TextContentRelation = Divelements.SandRibbon.TextContentRelation.Underneath;
             // 
-            // buttonOrderLookupViewReturn
-            // 
-            this.buttonOrderLookupViewReturn.Guid = new System.Guid("287f6db0-b93d-4db6-bbb1-9d0905704b59");
-            this.buttonOrderLookupViewReturn.Image = global::ShipWorks.Properties.Resources.box_previous_32_32;
-            this.buttonOrderLookupViewReturn.Padding = new Divelements.SandRibbon.WidgetEdges(3, 2, 4, 14);
-            this.ribbonSecurityProvider.SetPermission(this.buttonOrderLookupViewReturn, ShipWorks.Users.Security.PermissionType.ShipmentsCreateEditProcess);
-            this.buttonOrderLookupViewReturn.QuickAccessKey = "OE";
-            this.buttonOrderLookupViewReturn.Text = "Return";
-            this.buttonOrderLookupViewReturn.TextContentRelation = Divelements.SandRibbon.TextContentRelation.Underneath;
-            // 
             // buttonOrderLookupViewSCANForm
             // 
             this.buttonOrderLookupViewSCANForm.DropDownStyle = Divelements.SandRibbon.DropDownStyle.Integral;
@@ -2620,6 +2613,42 @@ namespace ShipWorks
             this.buttonOrderLookupViewSCANForm.QuickAccessKey = "L";
             this.buttonOrderLookupViewSCANForm.Text = "SCAN Form";
             this.buttonOrderLookupViewSCANForm.TextContentRelation = Divelements.SandRibbon.TextContentRelation.Underneath;
+            // 
+            // popupPostalScanForm
+            // 
+            this.popupOrderLookupViewSCANForm.Items.AddRange(new Divelements.SandRibbon.WidgetBase[] {
+            this.menuOrderLookupViewEndiciaScanForm});
+            this.popupOrderLookupViewSCANForm.BeforePopup += new Divelements.SandRibbon.BeforePopupEventHandler(this.OnOrderLookupViewPostalScanFormOpening);
+            // 
+            // menuOrderLookupViewEndiciaScanForm
+            // 
+            this.menuOrderLookupViewEndiciaScanForm.Items.AddRange(new Divelements.SandRibbon.WidgetBase[] {
+            this.menuOrderLookupViewCreateEndiciaScanForm,
+            this.menuOrderLookupViewPrintScanForm});
+            // 
+            // menuOrderLookupViewCreateEndiciaScanForm
+            // 
+            this.menuOrderLookupViewCreateEndiciaScanForm.Guid = new System.Guid("3494C176-AF18-4D60-8853-77027C1DB9B2");
+            this.menuOrderLookupViewCreateEndiciaScanForm.Text = "Create SCAN Form...";
+            // 
+            // menuOrderLookupViewPrintScanForm
+            // 
+            this.menuOrderLookupViewPrintScanForm.GroupName = "Reprint";
+            this.menuOrderLookupViewPrintScanForm.Guid = new System.Guid("0D98E502-C129-4802-834E-87BEE24192B5");
+            this.menuOrderLookupViewPrintScanForm.Items.AddRange(new Divelements.SandRibbon.WidgetBase[] {
+            this.menuOrderLookupViewPrintEndiciaScanForm});
+            this.menuOrderLookupViewPrintScanForm.Text = "Print";
+            // 
+            // menuOrderLookupViewPrintEndiciaScanForm
+            // 
+            this.menuOrderLookupViewPrintEndiciaScanForm.Items.AddRange(new Divelements.SandRibbon.WidgetBase[] {
+            this.menuOrderLookupViewEndiciaScanFormNone});
+            // 
+            // menuOrderLookupViewEndiciaScanFormNone
+            // 
+            this.menuOrderLookupViewEndiciaScanFormNone.Enabled = false;
+            this.menuOrderLookupViewEndiciaScanFormNone.Guid = new System.Guid("961F1C13-E3FE-49BF-A2A8-BB7BEAD18B14");
+            this.menuOrderLookupViewEndiciaScanFormNone.Text = "(none)";
             // 
             // ribbonTabAdmin
             // 
@@ -3314,10 +3343,15 @@ namespace ShipWorks
         private Divelements.SandRibbon.Button buttonEndiciaSCAN;
         private Divelements.SandRibbon.Popup popupPostalScanForm;
         private Divelements.SandRibbon.MenuItem menuCreateEndiciaScanForm;
+        private Divelements.SandRibbon.MenuItem menuOrderLookupViewCreateEndiciaScanForm;
         private Divelements.SandRibbon.MenuItem menuPrintScanForm;
+        private Divelements.SandRibbon.MenuItem menuOrderLookupViewPrintScanForm;
         private Divelements.SandRibbon.MenuItem menuEndiciaScanFormNone;
+        private Divelements.SandRibbon.MenuItem menuOrderLookupViewEndiciaScanFormNone;
         private Divelements.SandRibbon.Menu menuEndiciaScanForm;
+        private Divelements.SandRibbon.Menu menuOrderLookupViewEndiciaScanForm;
         private Divelements.SandRibbon.Menu menuPrintEndiciaScanForm;
+        private Divelements.SandRibbon.Menu menuOrderLookupViewPrintEndiciaScanForm;
         private Divelements.SandRibbon.MenuItem menuFedExSmartPostClose;
         private Divelements.SandRibbon.MainMenuItem mainMenuItemSupport;
         private Divelements.SandRibbon.MenuItem menuItemSupportForum;
@@ -3364,7 +3398,6 @@ namespace ShipWorks
         private Divelements.SandRibbon.Popup popup2;
         private Divelements.SandRibbon.Button buttonOrderLookupViewVoid;
         private Divelements.SandRibbon.Button buttonOrderLookupViewShipAgain;
-        private Divelements.SandRibbon.Button buttonOrderLookupViewReturn;
         private Divelements.SandRibbon.Button buttonOrderLookupViewSCANForm;
         private Divelements.SandRibbon.Popup popupOrderLookupViewSCANForm;
         private Divelements.SandRibbon.Button button2;
