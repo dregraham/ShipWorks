@@ -1,17 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Linq;
-using System.Text;
 using Divelements.SandRibbon;
-using RibbonShortcut = Divelements.SandRibbon.Shortcut;
-using ShipWorks.Data.Grid.Paging;
-using ShipWorks.Stores;
-using ShipWorks.Data;
-using ShipWorks.Data.Model;
+using log4net;
 using ShipWorks.ApplicationCore;
 using ShipWorks.Filters;
+using RibbonShortcut = Divelements.SandRibbon.Shortcut;
 
 namespace ShipWorks.Users.Security
 {
@@ -21,11 +16,11 @@ namespace ShipWorks.Users.Security
     [ProvideProperty("Permission", typeof(WidgetBase))]
     public partial class RibbonSecurityProvider : Component, IExtenderProvider
     {
-        Dictionary<WidgetBase, PermissionType> permissionMap = new Dictionary<WidgetBase, PermissionType>();
-        Dictionary<WidgetBase, Func<bool>> additionalConditions = new Dictionary<WidgetBase, Func<bool>>();
-
-        Ribbon ribbon;
-        MainGridControl gridControl;
+        private ILog log = LogManager.GetLogger(typeof(RibbonSecurityProvider));
+        private Dictionary<WidgetBase, PermissionType> permissionMap = new Dictionary<WidgetBase, PermissionType>();
+        private Dictionary<WidgetBase, Func<bool>> additionalConditions = new Dictionary<WidgetBase, Func<bool>>();
+        private Ribbon ribbon;
+        private MainGridControl gridControl;
 
         /// <summary>
         /// Constructor
@@ -244,13 +239,13 @@ namespace ShipWorks.Users.Security
             {
                 if (tab.Chunks.Count > 0 && !tab.Chunks.Cast<RibbonChunk>().Any(c => c.Visible))
                 {
-                    // We used to hide Tabs that were empty - but this code was cuasing Tabs to be improperly hidden forever
+                    // We used to hide Tabs that were empty - but this code was causing Tabs to be improperly hidden forever
                     // since for some reason SandRibbon reports Tab.Chunks as empty when the Ribbon is minimized, and the tab is popped open.
                     // Further, there should no longer actually ever be a case where a tab would be completely empty.  Even users with no rights
                     // still have some 'stuff' on each tab.  This exception is to catch the case for when\if that ever changes.  If it does,
-                    // then this will have to be updated to handle proper add\remove of tabs as necessary.  Review the code prior to 10/10/2011 to see how
+                    // then this will have to be updated to handle proper add/remove of tabs as necessary.  Review the code prior to 10/10/2011 to see how
                     // it used to (buggily) work, and update from there.
-                    throw new InvalidOperationException("There should not be a case where a tab has no visible chunks.");
+                    log.DebugFormat("A tab ({0}) has no visible chunks.", tab.Name);
                 }
             }
         }

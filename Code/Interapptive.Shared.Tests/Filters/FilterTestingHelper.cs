@@ -1,14 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Filters;
 using ShipWorks.Filters.Content;
+using ShipWorks.Filters.Content.Conditions;
+using ShipWorks.Filters.Content.Conditions.Orders;
 using ShipWorks.Filters.Search;
 
 namespace Interapptive.Shared.Tests.Filters
@@ -29,7 +27,7 @@ namespace Interapptive.Shared.Tests.Filters
                 FilterEntity filter = new FilterEntity
                 {
                     Name = "Processed Shipments",
-                    FilterTarget = (int)FilterTarget.Shipments,
+                    FilterTarget = (int) FilterTarget.Shipments,
                     IsFolder = false,
                     Definition = definition.GetXml(),
                     State = 1
@@ -48,7 +46,7 @@ namespace Interapptive.Shared.Tests.Filters
                 {
                     ParentFilterNodeID = -26,
                     Created = DateTime.Now,
-                    Purpose = (int)FilterNodePurpose.Standard,
+                    Purpose = (int) FilterNodePurpose.Standard,
                     FilterSequence = sequence,
                     FilterNodeContentID = filterNodeContent.FilterNodeContentID
                 };
@@ -129,6 +127,38 @@ namespace Interapptive.Shared.Tests.Filters
                     }
                 }
             }
+        }
+
+        /// <summary>
+        /// Gets XML for an order number filter definition
+        /// </summary>
+        public static string OrderNumberDefinitionXml(long orderNumber) =>
+            OrderNumberDefinitionXml(new OrderNumberCondition
+            {
+                IsNumeric = false,
+                StringOperator = StringOperator.BeginsWith,
+                StringValue = orderNumber.ToString()
+            });
+
+        /// <summary>
+        /// Gets XML for an order number filter definition
+        /// </summary>
+        public static string OrderNumberDefinitionXml(Condition condition) =>
+            CreateDefinitionXml(FilterTarget.Orders, condition);
+
+        /// <summary>
+        /// Gets XML for an order number filter definition
+        /// </summary>
+        public static string CreateDefinitionXml(FilterTarget target, Condition condition)
+        {
+            FilterDefinition filterDefinitions = new FilterDefinition(target)
+            {
+                RootContainer = new ConditionGroupContainer(new ConditionGroup())
+            };
+
+            filterDefinitions.RootContainer.FirstGroup.Conditions.Add(condition);
+
+            return filterDefinitions.GetXml();
         }
     }
 }

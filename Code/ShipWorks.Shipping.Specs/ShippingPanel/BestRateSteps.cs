@@ -138,7 +138,6 @@ namespace ShipWorks.Shipping.Specs.ShippingPanel
                 .Set(x => x.ContentWeight, 2)
                 .Save();
 
-            //var shipment = ShippingManager.CreateShipment(context.Order);
             var shipmentAdapter = context.Container.Resolve<ICarrierShipmentAdapterFactory>().Get(shipment);
 
             var message = new OrderSelectionChangedMessage(
@@ -296,6 +295,7 @@ namespace ShipWorks.Shipping.Specs.ShippingPanel
                 .ForEach(x => x.EndSession());
 
             shippingPanelViewModel.Dispose();
+            context.Dispose();
         }
     }
 }

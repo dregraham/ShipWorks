@@ -134,6 +134,7 @@ namespace ShipWorks.ApplicationCore.Logging
         Overstock,
         CommerceV3,
         Zentail,
+        Bonanza,
 
         [ApiPrivateLogSource]
         ShipEngine,

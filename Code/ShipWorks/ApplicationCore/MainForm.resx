@@ -9304,7 +9304,7 @@
     <value>970, 17</value>
   </metadata>
   <metadata name="notifyIconMenuStrip.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>17, 56</value>
+    <value>1441, 17</value>
   </metadata>
   <data name="notifyIcon.Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
@@ -9762,7 +9762,7 @@
     <value>1254, 17</value>
   </metadata>
   <metadata name="contextMenuCustomerGrid.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>180, 56</value>
+    <value>1604, 17</value>
   </metadata>
   <data name="contextCustomerLookupOrders.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
@@ -9782,7 +9782,7 @@
 </value>
   </data>
   <metadata name="contextMenuTemplatesPlaceholder.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>555, 56</value>
+    <value>193, 56</value>
   </metadata>
   <data name="contextOrderLookupCustomer.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
@@ -9802,7 +9802,7 @@
 </value>
   </data>
   <metadata name="windowLayoutProvider.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>379, 56</value>
+    <value>17, 56</value>
   </metadata>
   <metadata name="selectionDependentEnabler.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>633, 17</value>

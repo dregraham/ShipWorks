@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
-using System.Reactive.Threading.Tasks;
 using ShipWorks.ApplicationCore;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Data.Model.EntityClasses;
@@ -9,8 +8,8 @@ using ShipWorks.Messaging.Messages.SingleScan;
 using ShipWorks.Settings;
 using ShipWorks.Stores.Communication;
 using System.Threading.Tasks;
-using ShipWorks.SingleScan;
 using System.Linq;
+using ShipWorks.Core.Common.Threading;
 using ShipWorks.Messaging.Messages.Shipping;
 using ShipWorks.Messaging.Messages;
 
@@ -57,14 +56,14 @@ namespace ShipWorks.OrderLookup
 
             subscriptions = new CompositeDisposable(
                 messenger.OfType<SingleScanMessage>()
-                .Where(x => !processingScan && !mainForm.AdditionalFormsOpen() && mainForm.UIMode == UIMode.OrderLookup)
+                .Where(x => !processingScan && !mainForm.AdditionalFormsOpen() && mainForm.UIMode == UIMode.OrderLookup && !mainForm.IsShipmentHistoryActive())
                 .Do(_ => processingScan = true)
-                .Subscribe(x => OnSingleScanMessage(x).ToObservable()),
+                .Subscribe(x => OnSingleScanMessage(x).Forget()),
 
                 messenger.OfType<OrderLookupSearchMessage>()
-                .Where(x => !processingScan && !mainForm.AdditionalFormsOpen() && mainForm.UIMode == UIMode.OrderLookup)
+                .Where(x => !processingScan && !mainForm.AdditionalFormsOpen() && mainForm.UIMode == UIMode.OrderLookup && !mainForm.IsShipmentHistoryActive())
                 .Do(_ => processingScan = true)
-                .Subscribe(x => OnOrderLookupSearchMessage(x).ToObservable())
+                .Subscribe(x => OnOrderLookupSearchMessage(x).Forget())
             );
         }
 

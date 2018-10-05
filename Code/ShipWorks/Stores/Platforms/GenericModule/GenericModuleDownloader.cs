@@ -25,6 +25,7 @@ namespace ShipWorks.Stores.Platforms.GenericModule
     /// Provides the entry point into the order download processes for Generic
     /// </summary>
     [KeyedComponent(typeof(IStoreDownloader), StoreTypeCode.Amosoft)]
+    [KeyedComponent(typeof(IStoreDownloader), StoreTypeCode.Bonanza)]
     [KeyedComponent(typeof(IStoreDownloader), StoreTypeCode.Brightpearl)]
     [KeyedComponent(typeof(IStoreDownloader), StoreTypeCode.Cart66Lite)]
     [KeyedComponent(typeof(IStoreDownloader), StoreTypeCode.Cart66Pro)]

@@ -146,14 +146,28 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
             ShipmentTypeDataService.LoadShipmentData(
                 this, shipment, shipment, "OnTrac", typeof(OnTracShipmentEntity), refreshIfPresent);
         }
-        
+
         /// <summary>
-        /// Get shipment description
+        /// Get the carrier specific description of the shipping service used. The carrier specific data must already exist
+        /// when this method is called.
         /// </summary>
-        public override string GetServiceDescription(ShipmentEntity shipment)
-        {
-            return EnumHelper.GetDescription((OnTracServiceType) shipment.OnTrac.Service);
-        }
+        public override string GetServiceDescription(ShipmentEntity shipment) =>
+            GetServiceDescriptionInternal((OnTracServiceType) shipment.OnTrac.Service);
+
+        /// <summary>
+        /// Get the carrier specific description of the shipping service used. The carrier specific data must already exist
+        /// when this method is called.
+        /// </summary>
+        public override string GetServiceDescription(string serviceCode) =>
+            Functional.ParseInt(serviceCode)
+                .Match(x => GetServiceDescriptionInternal((OnTracServiceType) x), _ => "Unknown");
+
+        /// <summary>
+        /// Get the carrier specific description of the shipping service used. The carrier specific data must already exist
+        /// when this method is called.
+        /// </summary>
+        private string GetServiceDescriptionInternal(OnTracServiceType service) =>
+            EnumHelper.GetDescription(service);
 
         /// <summary>
         /// Get all service types
@@ -259,7 +273,7 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
             onTrac.Reference2 = string.Empty;
             onTrac.Instructions = string.Empty;
         }
-        
+
         /// Update the dynamic shipment data that could have changed "outside" the known editor
         /// </summary>
         public override void UpdateDynamicShipmentData(ShipmentEntity shipment)
@@ -313,7 +327,7 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
         /// <summary>
         /// Load all the label data for the given shipmentID
         /// </summary>
-        static List<TemplateLabelData> LoadLabelData(Func<ShipmentEntity> shipment)
+        private static List<TemplateLabelData> LoadLabelData(Func<ShipmentEntity> shipment)
         {
             if (shipment == null)
             {

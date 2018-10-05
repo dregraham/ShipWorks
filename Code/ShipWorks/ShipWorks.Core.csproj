@@ -753,6 +753,8 @@
     <Compile Include="ApplicationCore\Interaction\IMenuCommandExecutionContext.cs" />
     <Compile Include="ApplicationCore\Interaction\SelectionDependentEntry.cs" />
     <Compile Include="ApplicationCore\IoCLogRequestModule.cs" />
+    <Compile Include="OrderLookup\IOrderLookupFieldManager.cs" />
+    <Compile Include="OrderLookup\IShipmentHistory.cs" />
     <Compile Include="ApplicationCore\Licensing\Activation\CustomerLicenseActivationActivity.cs" />
     <Compile Include="ApplicationCore\Licensing\Activation\CustomerLicenseActivationService.cs" />
     <Compile Include="ApplicationCore\Licensing\Activation\ICustomerLicenseActivationActivity.cs" />
@@ -972,12 +974,18 @@
     <Compile Include="Common\Threading\BackgroundProgressDlg.cs" />
     <Compile Include="Common\Threading\BackgroundSingleItemProgressDialog.cs" />
     <Compile Include="Data\FilterTelemetryService.cs" />
+    <Compile Include="Data\Grid\Columns\Definitions\ShipmentsHistoryColumnDefinitionFactory.cs" />
+    <Compile Include="Data\Grid\Paging\EntityGatewayUtility.cs" />
+    <Compile Include="Data\Grid\Paging\PageDetails.cs" />
+    <Compile Include="Data\Grid\Paging\Pager.cs" />
     <Compile Include="Filters\Content\Conditions\OrderItems\OrderItemHeightCondition.cs" />
     <Compile Include="Filters\Content\Conditions\OrderItems\OrderItemLengthCondition.cs" />
     <Compile Include="Filters\Content\Conditions\OrderItems\OrderItemWidthCondition.cs" />
+    <Compile Include="Filters\Content\SqlGeneration\FilterQueryType.cs" />
     <Compile Include="Filters\Content\IFilterDefinition.cs" />
     <Compile Include="Filters\Search\ISearchDefinitionProviderFactory.cs" />
     <Compile Include="Messaging\Messages\OrderLookupSingleScanMessage.cs" />
+    <Compile Include="OrderLookup\OrderLookupSearchMessage.cs" />
     <Compile Include="Shipping\ShipmentUpdateOperationResult.cs" />
     <Compile Include="Shipping\ShipSense\IShipSenseSynchronizer.cs" />
     <Compile Include="Shipping\ShipSense\NullKnowledgebase.cs" />
@@ -8632,6 +8640,7 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="ApplicationCore\Licensing\WSDL\Activation_v1.wsdl" />
+    <None Include="ClassDiagram1.cd" />
     <None Include="packages.config" />
     <None Include="Properties\interapptive_public.snk" />
     <None Include="Properties\Settings.settings">
@@ -10673,6 +10682,9 @@
     <None Include="Resources\add - Copy.png" />
     <None Include="ApplicationCore\Appearance\WindowLayoutDefault\panels.xml" />
     <None Include="ApplicationCore\Appearance\WindowLayoutDefault\ribbon.xml" />
+    <EmbeddedResource Include="Filters\Content\SqlGeneration\Templates\ExistsQueryFolder.sql" />
+    <EmbeddedResource Include="Filters\Content\SqlGeneration\Templates\ExistsQuery.sql" />
+    <EmbeddedResource Include="Filters\Content\SqlGeneration\Templates\ExistsQueryEmpty.sql" />
     <Content Include="Resources\add.png" />
     <None Include="Resources\blank16.png" />
     <None Include="Resources\calendar_31.png" />
@@ -10826,6 +10838,7 @@
     <None Include="Resources\infiplex.png" />
     <None Include="Resources\asendia.png" />
     <Resource Include="Resources\box_closed_with_label_32_32.png" />
+    <None Include="Resources\bonanza.png" />
     <Content Include="Resources\data_16.png" />
     <Content Include="Resources\data_error_16.png" />
     <Content Include="Resources\data_ok_16.png" />

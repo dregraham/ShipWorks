@@ -141,6 +141,7 @@ namespace ShipWorks.OrderLookup.Tests
         [Fact]
         public void InitializeForCurrentSession_SendsOrderLookupSingleScanMessage()
         {
+            orderRepository.Setup(x => x.GetOrderID("Foo")).Returns(1);
             mainForm.SetupGet(u => u.UIMode).Returns(UIMode.OrderLookup);
 
             SingleScanMessage singleScanMessage = new SingleScanMessage(this, new ScanMessage(this, "Foo", IntPtr.Zero));

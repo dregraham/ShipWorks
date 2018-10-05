@@ -19,10 +19,10 @@ namespace ShipWorks.Data.Grid.Columns
     public static class GridColumnDefinitionManager
     {
         // Logger
-        static readonly ILog log = LogManager.GetLogger(typeof(GridColumnDefinitionManager));
+        private static readonly ILog log = LogManager.GetLogger(typeof(GridColumnDefinitionManager));
 
         // All column definitions, their default values, and display data.  Specific to the logged in user.
-        static Dictionary<GridColumnDefinitionSet, GridColumnDefinitionCollection> columnDefinitions = new Dictionary<GridColumnDefinitionSet, GridColumnDefinitionCollection>();
+        private static Dictionary<GridColumnDefinitionSet, GridColumnDefinitionCollection> columnDefinitions = new Dictionary<GridColumnDefinitionSet, GridColumnDefinitionCollection>();
 
         /// <summary>
         /// Load user column data. To be called when a user logs in.
@@ -62,6 +62,7 @@ namespace ShipWorks.Data.Grid.Columns
             columnDefinitions[GridColumnDefinitionSet.Audit] = LoadColumnDefinitions(AuditColumnDefinitionFactory.CreateDefinitions(), columnFormats);
             columnDefinitions[GridColumnDefinitionSet.AuditChanges] = LoadColumnDefinitions(AuditChangeColumnDefinitionFactory.CreateDefinitions(), columnFormats);
             columnDefinitions[GridColumnDefinitionSet.ServiceStatus] = LoadColumnDefinitions(ServiceStatusColumnDefinitionFactory.CreateDefinitions(), columnFormats);
+            columnDefinitions[GridColumnDefinitionSet.ShipmentsHistory] = LoadColumnDefinitions(ShipmentsHistoryColumnDefinitionFactory.CreateDefinitions(), columnFormats);
 
             // If there are left over columns, they must have been deleted from ShipWorks, and need removed from the database
             if (columnFormats.Count > 0)

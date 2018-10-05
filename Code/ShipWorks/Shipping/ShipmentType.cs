@@ -50,14 +50,14 @@ namespace ShipWorks.Shipping
     public abstract class ShipmentType
     {
         // Logger
-        static readonly ILog log = LogManager.GetLogger(typeof(ShipmentType));
+        private static readonly ILog log = LogManager.GetLogger(typeof(ShipmentType));
 
         /// <summary>
         /// HTTPS certificate inspector to use.
         /// </summary>
         private ICertificateInspector certificateInspector;
 
-        private static object syncLock = new object();
+        private static readonly object syncLock = new object();
 
         protected ShipmentType()
         {
@@ -533,10 +533,14 @@ namespace ShipWorks.Shipping
                 // Go through each additional profile and apply it as well
                 foreach (ShippingDefaultsRuleEntity rule in ShippingDefaultsRuleManager.GetRules(ShipmentTypeCode))
                 {
-                    IShippingProfileEntity profile = shippingProfileManager.GetProfileReadOnly(rule.ShippingProfileID);
-                    if (profile != null && filterHelper.IsObjectInFilterContent(shipment.OrderID, rule))
+                    if (shippingProfile.ShippingProfileEntity.ShippingProfileID != rule.ShippingProfileID &&
+                        FilterHelper.IsObjectInFilterContent(shipment.OrderID, rule.FilterNodeID))
                     {
-                        shippingProfileService.Get(profile.ShippingProfileID).Apply(shipment);
+                        IShippingProfileEntity profile = shippingProfileManager.GetProfileReadOnly(rule.ShippingProfileID);
+                        if (profile != null)
+                        {
+                            shippingProfileService.Get(profile.ShippingProfileID)?.Apply(shipment);
+                        }
                     }
                 }
 
@@ -818,6 +822,12 @@ namespace ShipWorks.Shipping
         /// when this method is called.
         /// </summary>
         public abstract string GetServiceDescription(ShipmentEntity shipment);
+
+        /// <summary>
+        /// Get the carrier specific description of the shipping service used. The carrier specific data must already exist
+        /// when this method is called.
+        /// </summary>
+        public abstract string GetServiceDescription(string serviceCode);
 
         /// <summary>
         /// Get the carrier specific description of the shipping service used, overridden by shipment types to provide a

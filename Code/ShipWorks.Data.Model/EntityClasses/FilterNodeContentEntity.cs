@@ -316,6 +316,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("Cost", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("Count", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("EntityExistsQuery", fieldHashtable);
 		}
 		#endregion
 
@@ -472,6 +474,16 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.Int32)GetValue((int)FilterNodeContentFieldIndex.Count, true); }
 			set	{ SetValue((int)FilterNodeContentFieldIndex.Count, value); }
+		}
+
+		/// <summary> The EntityExistsQuery property of the Entity FilterNodeContent<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "FilterNodeContent"."EntityExistsQuery"<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 2147483647<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.String EntityExistsQuery
+		{
+			get { return (System.String)GetValue((int)FilterNodeContentFieldIndex.EntityExistsQuery, true); }
+			set	{ SetValue((int)FilterNodeContentFieldIndex.EntityExistsQuery, value); }
 		}
 	
 		/// <summary> Gets the type of the hierarchy this entity is in. </summary>

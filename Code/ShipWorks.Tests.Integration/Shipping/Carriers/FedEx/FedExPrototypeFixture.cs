@@ -22,14 +22,14 @@ using ShipWorks.Shipping.Carriers.FedEx;
 using ShipWorks.Shipping.Carriers.FedEx.Api;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Enums;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Environment;
+using ShipWorks.Shipping.Carriers.FedEx.Api.Ship;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip;
+using ShipWorks.Shipping.FedEx;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Tests.Integration.MSTest.Utilities;
 using ShipWorks.Tests.Integration.Shared;
-using ShipWorks.Shipping.Carriers.FedEx.Api.Ship;
-using ShipWorks.Shipping.FedEx;
 using FedExLocationType = ShipWorks.Shipping.Carriers.FedEx.Api.Enums.FedExLocationType;
 
 namespace ShipWorks.Tests.Integration.Shipping.Carriers.FedEx
@@ -272,7 +272,7 @@ namespace ShipWorks.Tests.Integration.Shipping.Carriers.FedEx
                         );
 
                         var result = shippingClerk.Ship(shipment).Value
-                            .Map(r => r.ForEach(x => x.Process()));
+                            .Do(r => r.ForEach(x => x.Process()));
 
                         if (result.Failure)
                         {

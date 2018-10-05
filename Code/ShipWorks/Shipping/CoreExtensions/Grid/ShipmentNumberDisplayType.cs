@@ -1,18 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using ShipWorks.Data.Grid.Columns;
-using ShipWorks.Data.Grid.Columns.DisplayTypes.Editors;
-using System.Drawing;
-using ShipWorks.Data.Grid;
+﻿using System.Drawing;
 using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.Data.Grid.Columns;
 using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.Shipping.CoreExtensions.Grid
 {
     /// <summary>
-    /// Grid column dislay type for showing the "1 of 1" stuff for shipments
+    /// Grid column display type for showing the "1 of 1" stuff for shipments
     /// </summary>
     public class ShipmentNumberDisplayType : GridColumnDisplayType
     {

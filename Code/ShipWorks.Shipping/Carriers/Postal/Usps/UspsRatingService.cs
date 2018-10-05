@@ -294,7 +294,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                 telemetricResult.RunTimedEvent(TelemetricEventType.GetRates, () => CreateWebClient().GetRates(shipment)) :
                 CreateWebClient().GetRates(shipment);
 
-            RateGroup rateGroup = new RateGroup(FilterRatesByExcludedServices(shipment, results.rates));
+            var rates = results.rates
+                .Do(r => r.ShipmentType = ShipmentTypeCode.Usps)
+                .ToList();
+
+            RateGroup rateGroup = new RateGroup(FilterRatesByExcludedServices(shipment, rates));
             AddUspsRatePromotionFootnote(shipment, rateGroup);
 
             foreach (var error in results.errors)

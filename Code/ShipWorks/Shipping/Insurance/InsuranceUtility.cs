@@ -9,12 +9,14 @@ using System.Windows.Forms;
 using System.Xml;
 using System.Xml.Linq;
 using System.Xml.XPath;
+using Autofac;
 using Interapptive.Shared;
 using Interapptive.Shared.Business.Geography;
 using Interapptive.Shared.Net;
 using log4net;
 using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Licensing;
+using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Shipping.Carriers.Postal.Endicia;
@@ -30,17 +32,15 @@ namespace ShipWorks.Shipping.Insurance
     /// </summary>
     public static class InsuranceUtility
     {
-        static readonly ILog log = LogManager.GetLogger(typeof(InsuranceUtility));
-
-        static string countryExclusionsFile = Path.Combine(DataPath.SharedSettings, @"Insurance\insuranceExcludedCountries.xml");
-
-        static List<string> excludedCountries = new List<string>();
+        private static readonly ILog log = LogManager.GetLogger(typeof(InsuranceUtility));
+        private static readonly string countryExclusionsFile = Path.Combine(DataPath.SharedSettings, @"Insurance\insuranceExcludedCountries.xml");
+        private static List<string> excludedCountries = new List<string>();
 
         // Anytime our ShipWorks rates change and the code to calculate rates is updated, this should be increased along with our version.php
-        const int shipWorksRateCalculateVersion = 1;
+        private const int shipWorksRateCalculateVersion = 1;
 
         // Anytime any carrier's rates change and the code to calculate them changes, this should be increased along with our version.php
-        const int carrierRateCalculationVersion = 1;
+        private const int carrierRateCalculationVersion = 1;
 
         // The actual rates that are current - may be larger than the ones the code knows about
         private static int shipWorksRateActualVersion = shipWorksRateCalculateVersion;
@@ -50,7 +50,7 @@ namespace ShipWorks.Shipping.Insurance
         private static int infoBannerVersion = 1;
 
         // Cost per $100 of declared value for OnTrac
-        const decimal onTracInsuranceRate = 0.8m;
+        private const decimal onTracInsuranceRate = 0.8m;
 
         /// <summary>
         /// The URL to the customer agreement file online
@@ -215,7 +215,7 @@ namespace ShipWorks.Shipping.Insurance
         /// <summary>
         /// Get the cost of insurance for the given shipment given the specified declared value
         /// </summary>
-        public static InsuranceCost GetInsuranceCost(ShipmentEntity shipment, decimal declaredValue)
+        public static InsuranceCost GetInsuranceCost(ShipmentEntity originalShipment, decimal declaredValue)
         {
             InsuranceCost cost = new InsuranceCost();
 
@@ -225,6 +225,8 @@ namespace ShipWorks.Shipping.Insurance
                 cost.AddInfoMessage("ShipWorks Insurance can only cover up to $5000 in declared value.");
                 return cost;
             }
+
+            var shipment = GetShipmentWithStoreSpecificAddressIfNecessary(originalShipment);
 
             // Check country
             try
@@ -264,6 +266,23 @@ namespace ShipWorks.Shipping.Insurance
             }
 
             return cost;
+        }
+
+        /// <summary>
+        /// Get the shipment with the address updated if necessary
+        /// </summary>
+        private static ShipmentEntity GetShipmentWithStoreSpecificAddressIfNecessary(ShipmentEntity shipment)
+        {
+            using (var lifetimeScope = IoC.BeginLifetimeScope())
+            {
+                var storeTypeManager = lifetimeScope.Resolve<IStoreTypeManager>();
+                var storeType = storeTypeManager.GetType(shipment);
+
+                var shipmentToUse = storeType.WillOverrideShipmentDetailsChangeShipment(shipment) ? EntityUtility.CloneEntity(shipment) : shipment;
+                storeType.OverrideShipmentDetails(shipmentToUse);
+
+                return shipmentToUse;
+            }
         }
 
         /// <summary>

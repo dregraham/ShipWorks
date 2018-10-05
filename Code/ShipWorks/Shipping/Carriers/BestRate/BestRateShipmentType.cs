@@ -8,12 +8,10 @@ using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
-using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Filters.Content.Conditions.Shipments;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Insurance;
-using ShipWorks.Shipping.Profiles;
 using ShipWorks.Shipping.Services;
 using ShipWorks.Shipping.Settings;
 
@@ -120,6 +118,15 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         }
 
         /// <summary>
+        /// Get the carrier specific description of the shipping service used. The carrier specific data must already exist
+        /// when this method is called.
+        /// </summary>
+        public override string GetServiceDescription(string serviceCode)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
         /// Get the insurance data that describes what type of insurance is being used and on what parcels.
         /// </summary>
         /// <exception cref="System.ArgumentNullException">shipment</exception>
@@ -184,15 +191,15 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         public static void ApplySelectedShipmentRate(ShipmentEntity shipment, RateResult bestRate)
         {
             AddBestRateEvent(shipment, BestRateEventTypes.RateSelected);
-            BestRateEventTypes originalEventTypes = (BestRateEventTypes)shipment.BestRateEvents;
+            BestRateEventTypes originalEventTypes = (BestRateEventTypes) shipment.BestRateEvents;
 
-            BestRateResultTag bestRateResultTag = ((BestRateResultTag)bestRate.Tag);
+            BestRateResultTag bestRateResultTag = ((BestRateResultTag) bestRate.Tag);
 
             bestRateResultTag.RateSelectionDelegate(shipment);
 
             // Reset the event types after the selected shipment has been applied to
             // avoid losing them during the transition to the targeted shipment type
-            shipment.BestRateEvents = (byte)originalEventTypes;
+            shipment.BestRateEvents = (byte) originalEventTypes;
         }
 
         /// <summary>
@@ -210,7 +217,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
 
             base.ConfigureNewShipment(shipment);
 
-            shipment.BestRate.RequestedLabelFormat = (int)LabelFormatType.Standard;
+            shipment.BestRate.RequestedLabelFormat = (int) LabelFormatType.Standard;
         }
 
         /// <summary>
@@ -237,7 +244,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
 
             InsuranceProvider shipmentInsuranceProvider = GetShipmentInsuranceProvider(shipment);
 
-            shipment.InsuranceProvider = (int)shipmentInsuranceProvider;
+            shipment.InsuranceProvider = (int) shipmentInsuranceProvider;
             shipment.Insurance = shipment.BestRate.Insurance;
 
             shipment.RequestedLabelFormat = shipment.BestRate.RequestedLabelFormat;
@@ -286,10 +293,10 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         /// </summary>
         public static void AddBestRateEvent(ShipmentEntity shipment, BestRateEventTypes eventType)
         {
-            if ((shipment.BestRateEvents & (byte)BestRateEventTypes.RateAutoSelectedAndProcessed) != (byte)BestRateEventTypes.RateAutoSelectedAndProcessed)
+            if ((shipment.BestRateEvents & (byte) BestRateEventTypes.RateAutoSelectedAndProcessed) != (byte) BestRateEventTypes.RateAutoSelectedAndProcessed)
             {
                 // User already processed it, don't give credit for getting rates which happens during process...
-                shipment.BestRateEvents |= (byte)eventType;
+                shipment.BestRateEvents |= (byte) eventType;
             }
         }
 
@@ -300,7 +307,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         {
             if (shipment.BestRate != null)
             {
-                shipment.BestRate.RequestedLabelFormat = (int)requestedLabelFormat;
+                shipment.BestRate.RequestedLabelFormat = (int) requestedLabelFormat;
             }
         }
 

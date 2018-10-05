@@ -35,18 +35,14 @@ namespace ShipWorks.Stores.Content
     /// </summary>
     public partial class AddOrderWizard : WizardForm
     {
-        static readonly ILog log = LogManager.GetLogger(typeof(AddOrderWizard));
-
-        OrderEntity order;
-        long? customerID;
-
-        long? initialStoreID;
-
-        Guid itemsLayoutID = new Guid("{3B2EE2CB-7F3F-46c5-A858-3B219CBC70AA}");
-        Guid chargesLayoutID = new Guid("{84F6F636-8261-425b-9F92-903890E1E07F}");
-        static Guid noteSettingsKey = new Guid("{04DBAEA2-3EB9-49c9-A5B5-8BA5E035F692}");
-
-        ContextMenuStrip menuOrderStatus;
+        private static readonly ILog log = LogManager.GetLogger(typeof(AddOrderWizard));
+        private OrderEntity order;
+        private long? customerID;
+        private long? initialStoreID;
+        private Guid itemsLayoutID = new Guid("{3B2EE2CB-7F3F-46c5-A858-3B219CBC70AA}");
+        private Guid chargesLayoutID = new Guid("{84F6F636-8261-425b-9F92-903890E1E07F}");
+        private static Guid noteSettingsKey = new Guid("{04DBAEA2-3EB9-49c9-A5B5-8BA5E035F692}");
+        private ContextMenuStrip menuOrderStatus;
 
         /// <summary>
         /// Constructor
@@ -108,7 +104,7 @@ namespace ShipWorks.Stores.Content
             amountSpent.Text = "";
 
             var validStores = (from store in StoreManager.GetAllStores()
-                               where store.Enabled && UserSession.Security.HasPermission(PermissionType.OrdersModify, store.StoreID) 
+                               where store.Enabled && UserSession.Security.HasPermission(PermissionType.OrdersModify, store.StoreID)
                                select new { Key = store.StoreName, Value = store })
                 .ToList();
 
@@ -422,6 +418,7 @@ namespace ShipWorks.Stores.Content
 
                     if (result != DialogResult.OK)
                     {
+                        e.OverrideResult = DialogResult.Cancel;
                         e.NextPage = wizardPageStoreCustomer;
                         return;
                     }
