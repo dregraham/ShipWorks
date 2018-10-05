@@ -122,7 +122,7 @@ namespace ShipWorks
     /// </summary>
     [NDependIgnoreLongTypes]
     public partial class MainForm : RibbonForm, IMainForm
-    {        
+    {
         // Logger
         private static readonly ILog log = LogManager.GetLogger(typeof(MainForm));
 
@@ -147,7 +147,8 @@ namespace ShipWorks
         private ILifetimeScope menuCommandLifetimeScope;
         private IArchiveNotificationManager archiveNotificationManager;
         private ICurrentUserSettings currentUserSettings;
-        private Control orderLookupControl;
+        private ILifetimeScope orderLookupLifetimeScope;
+        private IOrderLookup orderLookupControl;
         private IShipmentHistory shipmentHistory;
 
         private readonly string unicodeCheckmark = $"    {'\u2714'.ToString()}";
@@ -159,7 +160,7 @@ namespace ShipWorks
             Justification = "The WindowStateSaver's constructor does the work, so we don't need to store the variable.")]
         public MainForm()
         {
-            
+
             currentUserSettings = IoC.UnsafeGlobalLifetimeScope.Resolve<ICurrentUserSettings>();
 
             InitializeComponent();
@@ -314,8 +315,6 @@ namespace ShipWorks
             ApplyDisplaySettings();
 
             ApplyEditingContext();
-
-            orderLookupControl = IoC.UnsafeGlobalLifetimeScope.Resolve<IOrderLookup>().Control;
         }
 
         /// <summary>
@@ -927,7 +926,13 @@ namespace ShipWorks
         /// </summary>
         private void ToggleBatchMode(IUserEntity user)
         {
-            panelDockingArea.Controls.Remove(orderLookupControl);
+            if (orderLookupLifetimeScope != null)
+            {
+                panelDockingArea.Controls.Remove(orderLookupControl.Control);
+                orderLookupControl.Unload();
+                orderLookupLifetimeScope?.Dispose();
+                orderLookupLifetimeScope = null;
+            }
 
             ToggleUiModeCheckbox(UIMode.Batch);
 
@@ -965,9 +970,11 @@ namespace ShipWorks
 
         /// <summary>
         /// Switch from batch to order lookup mode
-        /// </summary> 
+        /// </summary>
         private void ToggleOrderLookupMode()
         {
+            Messenger.Current.Send(new OrderSelectionChangingMessage(this, new long[0]));
+
             ToggleUiModeCheckbox(UIMode.OrderLookup);
 
             heartBeat = new Heartbeat();
@@ -986,8 +993,10 @@ namespace ShipWorks
             // Clear Filter Trees
             ClearFilterTrees();
 
-            panelDockingArea.Controls.Add(orderLookupControl);
-            orderLookupControl.BringToFront();
+            orderLookupLifetimeScope = IoC.BeginLifetimeScope();
+            orderLookupControl = orderLookupLifetimeScope.Resolve<IOrderLookup>();
+            panelDockingArea.Controls.Add(orderLookupControl.Control);
+            orderLookupControl.Control.BringToFront();
 
             UIMode = UIMode.OrderLookup;
         }
@@ -999,13 +1008,22 @@ namespace ShipWorks
         {
             if (ribbon.SelectedTab == ribbonTabOrderLookupViewShipping)
             {
-                ToggleVisiblePanel(orderLookupControl, shipmentHistory?.Control);
+                ToggleVisiblePanel(orderLookupControl.Control, shipmentHistory?.Control);
+                shipmentHistory?.Deactivate();
             }
             else if (ribbon.SelectedTab == ribbonTabOrderLookupViewShipmentHistory)
             {
-                ToggleVisiblePanel(shipmentHistory.Control, orderLookupControl);
-                shipmentHistory.ReloadShipmentData();
+                ToggleVisiblePanel(shipmentHistory.Control, orderLookupControl?.Control);
+                shipmentHistory.Activate();
             }
+        }
+
+        /// <summary>
+        /// True if shipping history control is active
+        /// </summary>
+        public bool IsShipmentHistoryActive()
+        {
+            return panelDockingArea.Controls.Contains(shipmentHistory.Control);
         }
 
         /// <summary>
@@ -3254,6 +3272,20 @@ namespace ShipWorks
                 if (dlg.ShowDialog(this) == DialogResult.OK)
                 {
                     LookupOrder(dlg.OrderID);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Create a manual order from the order lookup panel
+        /// </summary>
+        private void OnOrderLookupManualOrder(object sender, EventArgs e)
+        {
+            using (AddOrderWizard dlg = new AddOrderWizard(null, null))
+            {
+                if (dlg.ShowDialog(this) == DialogResult.OK)
+                {
+                    Messenger.Current.Send(new OrderLookupSearchMessage(this, dlg.OrderID.ToString()));
                 }
             }
         }

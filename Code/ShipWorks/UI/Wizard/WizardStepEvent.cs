@@ -1,8 +1,5 @@
 using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
-using ShipWorks.ApplicationCore.Licensing;
+using System.Windows.Forms;
 
 namespace ShipWorks.UI.Wizard
 {
@@ -38,5 +35,10 @@ namespace ShipWorks.UI.Wizard
         /// simulated as apart of a Skip.
         /// </summary>
         public bool Skipping { get; set; }
+
+        /// <summary>
+        /// Override the result of the dialog if we're closing in a way other than the standard path
+        /// </summary>
+        public DialogResult? OverrideResult { get; set; }
     }
 }

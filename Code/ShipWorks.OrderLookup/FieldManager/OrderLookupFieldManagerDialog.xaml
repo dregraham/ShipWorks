@@ -50,10 +50,13 @@
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
-        <TextBlock TextWrapping="Wrap">Here you can choose which fields should be visible in the Order Lookup view.</TextBlock>
+        <TextBlock TextWrapping="Wrap">Choose which fields should be visible in the Order Lookup view.</TextBlock>
 
         <ScrollViewer Grid.Row="1" Margin="0,8">
-            <ItemsControl ItemsSource="{Binding Sections}" Style="{StaticResource FieldListBox}">
+            <ItemsControl
+                IsTabStop="False"
+                ItemsSource="{Binding Sections}"
+                Style="{StaticResource FieldListBox}">
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
                         <Border Style="{StaticResource FieldBorder}">
@@ -77,19 +80,20 @@
                                             Text="{Binding Name, Mode=OneTime}" />
                                     </CheckBox>
                                     <ToggleButton
-                                        Grid.Column="1"
                                         x:Name="expandButton"
+                                        Grid.Column="1"
                                         IsChecked="{Binding Expanded}"
                                         Style="{StaticResource FieldExpander.DownHeaderStyle}"
                                         Visibility="{Binding HasChildren, Mode=OneTime, Converter={StaticResource BooleanToVisibility}}" />
                                 </Grid>
 
                                 <ItemsControl
-                                    Visibility="{Binding IsChecked, ElementName=expandButton, Converter={StaticResource BooleanToVisibility}}"
                                     Grid.Row="1"
                                     IsEnabled="{Binding Selected}"
+                                    IsTabStop="False"
                                     ItemsSource="{Binding SectionFields, Mode=OneTime}"
-                                    Style="{StaticResource FieldListBox}">
+                                    Style="{StaticResource FieldListBox}"
+                                    Visibility="{Binding IsChecked, ElementName=expandButton, Converter={StaticResource BooleanToVisibility}}">
                                     <ItemsControl.ItemTemplate>
                                         <DataTemplate>
                                             <Border Style="{StaticResource FieldBorder}">
@@ -109,14 +113,23 @@
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
         </ScrollViewer>
-
-        <Button
+        <StackPanel
             Grid.Row="2"
             HorizontalAlignment="Right"
-            Command="{Binding Save}"
-            IsDefault="True"
-            Style="{StaticResource PrimaryButton}">
-            Save
-        </Button>
+            Orientation="Horizontal">
+            <Button
+                Margin="8,0,0,0"
+                IsCancel="True"
+                Style="{StaticResource SmallSecondaryButton}">
+                Cancel
+            </Button>
+            <Button
+                Margin="8,0,0,0"
+                Command="{Binding Save}"
+                IsDefault="True"
+                Style="{StaticResource PrimaryButton}">
+                Save
+            </Button>
+        </StackPanel>
     </Grid>
 </Window>

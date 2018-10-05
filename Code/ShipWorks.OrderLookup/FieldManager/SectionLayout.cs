@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
+using Newtonsoft.Json;
 
 namespace ShipWorks.OrderLookup.FieldManager
 {
@@ -17,6 +18,7 @@ namespace ShipWorks.OrderLookup.FieldManager
         /// Name
         /// </summary>
         [Description("Name of the section")]
+        [JsonIgnore]
         public string Name { get; set; } = string.Empty;
 
         /// <summary>
@@ -59,7 +61,6 @@ namespace ShipWorks.OrderLookup.FieldManager
                 throw new InvalidOperationException("Copying SectionLayouts with different Ids is not supported.");
             }
 
-            Name = toCopy.Name;
             Selected = toCopy.Selected;
             Expanded = toCopy.Expanded;
         }

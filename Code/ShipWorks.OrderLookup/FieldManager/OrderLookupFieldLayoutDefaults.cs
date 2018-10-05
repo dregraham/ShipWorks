@@ -89,7 +89,7 @@ namespace ShipWorks.OrderLookup.FieldManager
                     new SectionFieldLayout() { Id = "Service", Name = "Service" },
                     new SectionFieldLayout() { Id = "Confirmation", Name = "Confirmation" },
                     new SectionFieldLayout() { Id = "Packaging", Name = "Packaging" },
-                    new SectionFieldLayout() { Id = "MultiPackageShipment", Name = "Multi-Package Shipment" },
+                    new SectionFieldLayout() { Id = "MultiPackageShipment", Name = "Package Add/Delete" },
                     new SectionFieldLayout() { Id = "NonStandardPackaging", Name = "Non-Standard Packaging" },
                     new SectionFieldLayout() { Id = "Weight", Name = "Weight" },
                     new SectionFieldLayout() { Id = "Dimensions", Name = "Dimensions" },
@@ -153,7 +153,7 @@ namespace ShipWorks.OrderLookup.FieldManager
 
             sectionLayouts.Add(new SectionLayout()
             {
-                Name = "Ontrac Reference and Instructions",
+                Name = "OnTrac - Reference and Instructions",
                 Id = "OnTracReferenceAndInstructions",
                 SectionFields = new List<SectionFieldLayout>()
                 {

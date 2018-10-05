@@ -8,75 +8,162 @@ using System.Reflection;
 using ShipWorks.Data.Model.EntityClasses;
 using System;
 using System.Reactive.Linq;
+using Interapptive.Shared.Business;
+using System.Collections.Generic;
+using System.Linq;
+using ShipWorks.Data.Model.Custom;
+using ShipWorks.Shipping.Carriers;
 
 namespace ShipWorks.OrderLookup.Controls.From
 {
     /// <summary>
-    /// View model for the From address 
+    /// View model for the From address
     /// </summary>
     [KeyedComponent(typeof(INotifyPropertyChanged), OrderLookupPanels.From)]
     public class OrderLookupFromViewModel : AddressViewModel
     {
+        private string title;
+        private bool rateShop;
         IDisposable autoSave;
+        private readonly IShipmentTypeManager shipmentTypeManager;
+        private readonly ICarrierAccountRetrieverFactory carrierAccountRetrieverFactory;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public OrderLookupFromViewModel(IOrderLookupMessageBus messageBus, IShippingOriginManager shippingOriginManager, IMessageHelper messageHelper,
+        public OrderLookupFromViewModel(IViewModelOrchestrator orchestrator, IShippingOriginManager shippingOriginManager, IMessageHelper messageHelper,
+            IShipmentTypeManager shipmentTypeManager, ICarrierAccountRetrieverFactory carrierAccountRetrieverFactory,
             IValidatedAddressScope validatedAddressScope, IAddressValidator validator, IAddressSelector addressSelector)
             : base(shippingOriginManager, messageHelper, validatedAddressScope, validator, addressSelector)
         {
-            MessageBus = messageBus;
-            MessageBus.PropertyChanged += MessageBusPropertyChanged;
+            Orchestrator = orchestrator;
+            this.shipmentTypeManager = shipmentTypeManager;
+            this.carrierAccountRetrieverFactory = carrierAccountRetrieverFactory;
+            Orchestrator.PropertyChanged += OrchestratorPropertyChanged;
+
+            UpdateTitle();
+        }
+
+        /// <summary>
+        /// The addresses title
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public string Title
+        {
+            get { return title; }
+            set { handler.Set(nameof(Title), ref title, value); }
+        }
+
+        /// <summary>
+        /// Origin Rate shopping
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public bool RateShop
+        {
+            get { return rateShop; }
+            set
+            {
+                handler.Set(nameof(RateShop), ref rateShop, value);
+                UpdateTitle();
+            }
         }
 
         /// <summary>
         /// Is address validation enabled or not
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public IOrderLookupMessageBus MessageBus { get; }
-        
+        public IViewModelOrchestrator Orchestrator { get; }
+
         /// <summary>
         /// Save changes to the base entity whenever properties are changed in the view model
         /// </summary>
         private void Save()
         {
-            if (MessageBus?.ShipmentAdapter?.Shipment?.OriginPerson != null)
+            if (Orchestrator?.ShipmentAdapter?.Shipment?.OriginPerson != null)
             {
-                SaveToEntity(MessageBus.ShipmentAdapter.Shipment.OriginPerson);
+                SaveToEntity(Orchestrator.ShipmentAdapter.Shipment.OriginPerson);
+            }
+
+            if (Orchestrator?.ShipmentAdapter?.ShipmentTypeCode == ShipmentTypeCode.Usps)
+            {
+                Orchestrator.ShipmentAdapter.Shipment.Postal.Usps.RateShop = RateShop;
             }
         }
 
         /// <summary>
         /// Update when the order changes
         /// </summary>
-        private void MessageBusPropertyChanged(object sender, PropertyChangedEventArgs e)
+        private void OrchestratorPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            if (MessageBus.Order == null)
+            if (Orchestrator.SelectedOrder == null)
             {
                 autoSave?.Dispose();
             }
 
-            if (e.PropertyName == "Order" &&
-                MessageBus.Order != null)
+            if (e.PropertyName == "SelectedOrder" &&
+                Orchestrator.SelectedOrder != null)
             {
-                base.Load(MessageBus.ShipmentAdapter.Shipment.OriginPerson, MessageBus.ShipmentAdapter.Store);
+                base.Load(Orchestrator.ShipmentAdapter.Shipment.OriginPerson, Orchestrator.ShipmentAdapter.Store);
                 autoSave?.Dispose();
-                autoSave = handler.PropertyChangingStream.Throttle(TimeSpan.FromMilliseconds(500)).Subscribe(_ => Save());
-                handler.RaisePropertyChanged(nameof(MessageBus));
+                autoSave = handler.PropertyChangingStream.Throttle(TimeSpan.FromMilliseconds(100)).Subscribe(_ => Save());
+
+                RateShop = Orchestrator.ShipmentAdapter.SupportsRateShopping;
+
+                UpdateTitle();
+
+                handler.RaisePropertyChanged(nameof(Orchestrator));
             }
 
             if (e.PropertyName == "OriginOriginID")
             {
-                long originId = MessageBus.ShipmentAdapter.Shipment.OriginOriginID;
-                long orderId = MessageBus.Order.OrderID;
-                long accountId = MessageBus.ShipmentAdapter.AccountId.GetValueOrDefault();
-                ShipmentTypeCode shipmentTypeCode = MessageBus.ShipmentAdapter.ShipmentTypeCode;
-                StoreEntity store = MessageBus.ShipmentAdapter.Store;
+                long originId = Orchestrator.ShipmentAdapter.Shipment.OriginOriginID;
+                long orderId = Orchestrator.SelectedOrder.OrderID;
+                long accountId = Orchestrator.ShipmentAdapter.AccountId.GetValueOrDefault();
+                ShipmentTypeCode shipmentTypeCode = Orchestrator.ShipmentTypeCode;
+                StoreEntity store = Orchestrator.ShipmentAdapter.Store;
 
                 base.SetAddressFromOrigin(originId, orderId, accountId, shipmentTypeCode, store);
-                handler.RaisePropertyChanged(nameof(MessageBus));
+
+                UpdateTitle();
+
+                handler.RaisePropertyChanged(nameof(Orchestrator));
             }
+        }
+
+        /// <summary>
+        /// Update the title
+        /// </summary>
+        private void UpdateTitle()
+        {
+            string headerAccountText = string.Empty;
+            string AccountDescription = string.Empty;
+            string newTitle = "From";
+
+            if (Orchestrator.ShipmentAdapter != null)
+            {
+                ShipmentTypeCode shipmentTypeCode = Orchestrator.ShipmentAdapter.ShipmentTypeCode;
+                long originID = Orchestrator.ShipmentAdapter.Shipment.OriginOriginID;
+
+                List<KeyValuePair<string, long>> origins = shipmentTypeManager.Get(shipmentTypeCode).GetOrigins();
+
+                string OriginDescription = string.Empty;
+                if (origins.Any(o => o.Value == originID))
+                {
+                    OriginDescription = origins.First(w => w.Value == originID).Key;
+                }
+
+                AccountDescription = carrierAccountRetrieverFactory?.Create(shipmentTypeCode)?
+                    .GetAccountReadOnly(Orchestrator.ShipmentAdapter.Shipment)?.AccountDescription ?? string.Empty;
+
+                headerAccountText = RateShop ? "(Rate Shopping)" : AccountDescription;
+
+                if (!string.IsNullOrWhiteSpace(headerAccountText) && !string.IsNullOrWhiteSpace(OriginDescription))
+                {
+                    newTitle = $"From Account: {headerAccountText}, {OriginDescription}";
+                }
+            }
+
+            Title = newTitle;
         }
     }
 }

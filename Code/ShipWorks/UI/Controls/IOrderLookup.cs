@@ -11,5 +11,10 @@ namespace ShipWorks.UI.Controls
         /// The Order Lookup Control
         /// </summary>
         UserControl Control { get; }
+
+        /// <summary>
+        /// Unload the order
+        /// </summary>
+        void Unload();
     }
 }

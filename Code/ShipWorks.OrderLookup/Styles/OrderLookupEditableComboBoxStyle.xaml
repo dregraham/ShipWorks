@@ -4,6 +4,7 @@
                     xmlns:ui="http://schemas.shipworks.com/ui">
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="/ShipWorks.OrderLookup;component/Styles/Colors.xaml"/>
+        <ResourceDictionary Source="/ShipWorks.OrderLookup;component/Styles/OrderLookupComboBoxStyle.xaml"/>
     </ResourceDictionary.MergedDictionaries>
     <ControlTemplate x:Key="OrderLookupEditableComboBoxTemplate" TargetType="{x:Type ui:ShipWorksComboBox}">
         <Grid x:Name="templateRoot" SnapsToDevicePixels="True">
@@ -35,12 +36,12 @@
                         <Setter Property="Template">
                             <Setter.Value>
                                 <ControlTemplate TargetType="{x:Type ToggleButton}">
-                                    <Border x:Name="templateRoot" BorderBrush="{StaticResource BorderBrushColor}" BorderThickness="{TemplateBinding BorderThickness}" SnapsToDevicePixels="True" 
+                                    <Border x:Name="templateRoot" BorderBrush="{StaticResource BorderColor}" BorderThickness="{TemplateBinding BorderThickness}" SnapsToDevicePixels="True" 
                                             Background="{StaticResource ButtonBackgroundGradient}"
                                             CornerRadius="1">
                                         <Border x:Name="splitBorder" HorizontalAlignment="Right" SnapsToDevicePixels="True">
                                             <Path x:Name="Arrow"
-                                                Data="M7,10L12,15L17,10H7Z" Fill="{StaticResource IconBrushColor}"
+                                                Data="M7,10L12,15L17,10H7Z" Fill="{StaticResource IconColor}"
                                                 Height="4" Width="6" Margin="11 0 11 0" Stretch="Fill"/>
                                         </Border>
                                     </Border>
@@ -53,7 +54,7 @@
                                                 <Condition Binding="{Binding IsEnabled, RelativeSource={RelativeSource Self}}" Value="true"/>
                                             </MultiDataTrigger.Conditions>
                                             <Setter Property="Background" TargetName="templateRoot" Value="{StaticResource ButtonBackgroundGradient}"/>
-                                            <Setter Property="BorderBrush" TargetName="templateRoot" Value="{StaticResource BorderBrushColor}"/>
+                                            <Setter Property="BorderBrush" TargetName="templateRoot" Value="{StaticResource BorderColor}"/>
                                             <Setter Property="Background" TargetName="splitBorder" Value="Transparent"/>
                                             <Setter Property="BorderBrush" TargetName="splitBorder" Value="Transparent"/>
                                         </MultiDataTrigger>
@@ -141,5 +142,8 @@
             </Trigger>
         </ControlTemplate.Triggers>
     </ControlTemplate>
-
+    <Style x:Key="EditableFormComboBox" TargetType="{x:Type ui:ShipWorksComboBox}"
+           BasedOn="{StaticResource FormComboBox}">
+        <Setter Property="Template" Value="{StaticResource OrderLookupEditableComboBoxTemplate}"/>
+    </Style>
 </ResourceDictionary>

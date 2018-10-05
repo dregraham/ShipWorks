@@ -1,8 +1,12 @@
 ﻿using System;
+using System.Reactive.Disposables;
+using System.Reactive.Linq;
 using System.Windows.Forms;
 using ComponentFactory.Krypton.Toolkit;
 using Interapptive.Shared.ComponentRegistration;
+using ShipWorks.Core.Messaging;
 using ShipWorks.Data.Grid.Columns;
+using ShipWorks.Messaging.Messages.SingleScan;
 using ShipWorks.Users;
 
 namespace ShipWorks.OrderLookup.ShipmentHistory.Controls
@@ -15,6 +19,8 @@ namespace ShipWorks.OrderLookup.ShipmentHistory.Controls
     {
         private readonly ShipmentHistoryGrid shipmentGrid;
         private readonly Func<IUserSession> getUserSession;
+        private readonly IMessenger messenger;
+        private IDisposable subscriptions;
 
         /// <summary>
         /// Constructor
@@ -27,12 +33,13 @@ namespace ShipWorks.OrderLookup.ShipmentHistory.Controls
         /// <summary>
         /// Constructor
         /// </summary>
-        public ShipmentHistoryPanel(ShipmentHistoryGrid shipmentGrid, Func<IUserSession> getUserSession) : this()
+        public ShipmentHistoryPanel(ShipmentHistoryGrid shipmentGrid, Func<IUserSession> getUserSession, IMessenger messenger) : this()
         {
+            this.messenger = messenger;
             this.getUserSession = getUserSession;
             this.shipmentGrid = shipmentGrid;
 
-            this.shipmentPanel.Controls.Add(shipmentGrid);
+            shipmentPanel.Controls.Add(shipmentGrid);
         }
 
         /// <summary>
@@ -41,12 +48,24 @@ namespace ShipWorks.OrderLookup.ShipmentHistory.Controls
         public Control Control => this;
 
         /// <summary>
-        /// Update the history
+        /// Refresh the history, load any components
         /// </summary>
-        public void ReloadShipmentData()
+        public void Activate()
         {
             kryptonHeader.Values.Heading = "Today's Shipments for " + getUserSession().User.Username;
             shipmentGrid.Reload();
+
+            Deactivate();
+
+            subscriptions = new CompositeDisposable(
+                messenger.OfType<SingleScanMessage>()
+                    .Where(x => Visible && CanFocus)
+                    .Subscribe(x => searchBox.Text = x.ScannedText),
+
+                messenger.OfType<OrderLookupSearchMessage>()
+                    .Where(x => Visible && CanFocus)
+                    .Subscribe(x => searchBox.Text = x.SearchText)
+            );
         }
 
         /// <summary>
@@ -81,5 +100,25 @@ namespace ShipWorks.OrderLookup.ShipmentHistory.Controls
         /// </summary>
         private void OnEndSearch(object sender, EventArgs e) =>
             shipmentGrid.Search(string.Empty);
+        
+        /// <summary> 
+        /// Clean up any resources being used.
+        /// </summary>
+        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        protected override void Dispose(bool disposing)
+        {
+            Deactivate();
+
+            if (disposing && (components != null))
+            {
+                components.Dispose();
+            }
+            base.Dispose(disposing);
+        }
+
+        /// <summary>
+        /// Unload any components
+        /// </summary>
+        public void Deactivate() => subscriptions?.Dispose();
     }
 }

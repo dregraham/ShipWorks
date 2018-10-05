@@ -2544,6 +2544,7 @@ namespace ShipWorks
             this.buttonOrderLookupViewManualOrder.QuickAccessKey = "OE";
             this.buttonOrderLookupViewManualOrder.Text = "Manual\r\nOrder";
             this.buttonOrderLookupViewManualOrder.TextContentRelation = Divelements.SandRibbon.TextContentRelation.Underneath;
+            this.buttonOrderLookupViewManualOrder.Activate += new System.EventHandler(this.OnOrderLookupManualOrder);
             // 
             // ribbonChunkOrderLookupViewProfiles
             // 
