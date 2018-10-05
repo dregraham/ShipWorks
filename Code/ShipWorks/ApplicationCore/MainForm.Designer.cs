@@ -2524,7 +2524,9 @@ namespace ShipWorks
             this.ribbonChunkOrderLookupViewShipping.ItemJustification = Divelements.SandRibbon.ItemJustification.Near;
             this.ribbonChunkOrderLookupViewShipping.Items.AddRange(new Divelements.SandRibbon.WidgetBase[] {
             this.buttonOrderLookupViewCreateLabel,
-            this.buttonOrderLookupViewManualOrder});
+            this.buttonOrderLookupViewManualOrder,
+            this.buttonOrderLookupViewFedExClose
+            });
             this.ribbonChunkOrderLookupViewShipping.Text = "Shipping";
             // 
             // buttonOrderLookupViewCreateLabel
@@ -2681,7 +2683,7 @@ namespace ShipWorks
             // 
             // popupOrderLookupViewFedExEndOfDay
             // 
-            this.popupOrderLookupViewFedExEndOfDay.Items.AddRange(new Divelements.SandRibbon.WidgetBase[] { popupOrderLookupViewFedExEndOfDay });
+            this.popupOrderLookupViewFedExEndOfDay.Items.AddRange(new Divelements.SandRibbon.WidgetBase[] { menuOrderLookupViewFedExEndOfDay });
             this.popupOrderLookupViewFedExEndOfDay.BeforePopup += new Divelements.SandRibbon.BeforePopupEventHandler(this.OnFedExClosePopupOpening);
             // 
             // ribbonTabAdmin
