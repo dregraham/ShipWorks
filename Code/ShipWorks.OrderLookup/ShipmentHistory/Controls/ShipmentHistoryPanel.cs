@@ -1,11 +1,17 @@
 ﻿using System;
+using System.Linq;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using ComponentFactory.Krypton.Toolkit;
+using Divelements.SandGrid;
 using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.UI;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Data.Grid.Columns;
+using ShipWorks.Data.Grid.Paging;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Messaging.Messages.SingleScan;
 using ShipWorks.Users;
 
@@ -20,6 +26,8 @@ namespace ShipWorks.OrderLookup.ShipmentHistory.Controls
         private readonly ShipmentHistoryGrid shipmentGrid;
         private readonly Func<IUserSession> getUserSession;
         private readonly IMessenger messenger;
+        private readonly IShipmentHistoryVoidProcessor shipmentHistoryVoidProcessor;
+        private readonly IMessageHelper messageHelper;
         private IDisposable subscriptions;
 
         /// <summary>
@@ -33,8 +41,15 @@ namespace ShipWorks.OrderLookup.ShipmentHistory.Controls
         /// <summary>
         /// Constructor
         /// </summary>
-        public ShipmentHistoryPanel(ShipmentHistoryGrid shipmentGrid, Func<IUserSession> getUserSession, IMessenger messenger) : this()
+        public ShipmentHistoryPanel(
+            ShipmentHistoryGrid shipmentGrid,
+            Func<IUserSession> getUserSession,
+            IMessenger messenger,
+            IShipmentHistoryVoidProcessor shipmentHistoryVoidProcessor,
+            IMessageHelper messageHelper) : this()
         {
+            this.messageHelper = messageHelper;
+            this.shipmentHistoryVoidProcessor = shipmentHistoryVoidProcessor;
             this.messenger = messenger;
             this.getUserSession = getUserSession;
             this.shipmentGrid = shipmentGrid;
@@ -50,12 +65,16 @@ namespace ShipWorks.OrderLookup.ShipmentHistory.Controls
         /// <summary>
         /// Refresh the history, load any components
         /// </summary>
-        public void Activate()
+        public void Activate(Divelements.SandRibbon.Button voidButton)
         {
             kryptonHeader.Values.Heading = "Today's Shipments for " + getUserSession().User.Username;
             shipmentGrid.Reload();
 
             Deactivate();
+
+            voidButton.Activate += OnVoid;
+            shipmentGrid.SelectionChanged += OnGridSelectionChanged;
+            voidButton.Enabled = false;
 
             subscriptions = new CompositeDisposable(
                 messenger.OfType<SingleScanMessage>()
@@ -64,14 +83,52 @@ namespace ShipWorks.OrderLookup.ShipmentHistory.Controls
 
                 messenger.OfType<OrderLookupSearchMessage>()
                     .Where(x => Visible && CanFocus)
-                    .Subscribe(x => searchBox.Text = x.SearchText)
+                    .Subscribe(x => searchBox.Text = x.SearchText),
+
+                Disposable.Create(() => voidButton.Activate -= OnVoid),
+                Disposable.Create(() => shipmentGrid.SelectionChanged -= OnGridSelectionChanged)
             );
+
+            // Handle a grid summary change
+            void OnGridSelectionChanged(object sender, SelectionChangedEventArgs e)
+            {
+                var row = e?.Grid.SelectedElements.OfType<ShipWorks.Data.Grid.Paging.PagedEntityGrid.PagedEntityGridRow>()?.FirstOrDefault();
+                voidButton.Enabled = e?.Grid.SelectedElementCount == 1 &&
+                    row.Entity is ProcessedShipmentEntity shipment &&
+                    !shipment.Voided;
+                voidButton.Tag = row;
+            }
+        }
+
+        /// <summary>
+        /// Void the shipment
+        /// </summary>
+        private async void OnVoid(object sender, EventArgs e)
+        {
+            if (sender is Divelements.SandRibbon.Button voidButton &&
+                voidButton.Tag is PagedEntityGrid.PagedEntityGridRow row &&
+                row.Entity is ProcessedShipmentEntity processedShipment)
+            {
+                using (messageHelper.ShowProgressDialog("Voiding", "Voiding shipment"))
+                {
+                    await Task.Run(() => shipmentHistoryVoidProcessor.Void(processedShipment)
+                            .Bind(x => shipmentGrid.RefreshEntity(x))
+                            .Do(x => row.LoadRowEntity(x))
+                            .Do(x => voidButton.Enabled = !x.Voided))
+                        .ConfigureAwait(true);
+                }
+            }
         }
 
         /// <summary>
         /// Save the grid column state
         /// </summary>
         public void SaveGridColumnState() => shipmentGrid.SaveState();
+
+        /// <summary>
+        /// Unload any components
+        /// </summary>
+        public void Deactivate() => subscriptions?.Dispose();
 
         /// <summary>
         /// Control is loading
@@ -100,7 +157,7 @@ namespace ShipWorks.OrderLookup.ShipmentHistory.Controls
         /// </summary>
         private void OnEndSearch(object sender, EventArgs e) =>
             shipmentGrid.Search(string.Empty);
-        
+
         /// <summary> 
         /// Clean up any resources being used.
         /// </summary>
@@ -115,10 +172,5 @@ namespace ShipWorks.OrderLookup.ShipmentHistory.Controls
             }
             base.Dispose(disposing);
         }
-
-        /// <summary>
-        /// Unload any components
-        /// </summary>
-        public void Deactivate() => subscriptions?.Dispose();
     }
 }
