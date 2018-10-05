@@ -31,9 +31,9 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
         private readonly PropertyChangedHandler handler;
         private readonly IDimensionsManager dimensionsManager;
         private readonly IShipmentPackageTypesBuilderFactory shipmentPackageTypesBuilderFactory;
+        private readonly IShipmentTypeManager shipmentTypeManager;
         private readonly IShipmentServicesBuilderFactory shipmentServicesBuilderFactory;
         private readonly ShipmentTypeProvider shipmentTypeProvider;
-        private readonly Func<PostalShipmentType> getPostalShipmentType;
         private readonly Func<DimensionsManagerDlg> getDimensionsManagerDlg;
         private List<DimensionsProfileEntity> dimensionProfiles;
         private Dictionary<ShipmentTypeCode, string> providers;
@@ -51,8 +51,7 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
             IShipmentTypeManager shipmentTypeManager,
             IShipmentServicesBuilderFactory shipmentServicesBuilderFactory,
             IInsuranceViewModel insuranceViewModel,
-            ShipmentTypeProvider shipmentTypeProvider, 
-            Func<PostalShipmentType> getPostalShipmentType,
+            ShipmentTypeProvider shipmentTypeProvider,
             Func<DimensionsManagerDlg> getDimensionsManagerDlg)
         {
             ShipmentModel = shipmentModel;
@@ -60,9 +59,9 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
 
             this.dimensionsManager = dimensionsManager;
             this.shipmentPackageTypesBuilderFactory = shipmentPackageTypesBuilderFactory;
+            this.shipmentTypeManager = shipmentTypeManager;
             this.shipmentServicesBuilderFactory = shipmentServicesBuilderFactory;
             this.shipmentTypeProvider = shipmentTypeProvider;
-            this.getPostalShipmentType = getPostalShipmentType;
             this.getDimensionsManagerDlg = getDimensionsManagerDlg;
             InsuranceViewModel = insuranceViewModel;
             handler = new PropertyChangedHandler(this, () => PropertyChanged);
@@ -260,7 +259,7 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
             }
             else
             {
-                PostalShipmentType postalShipmentType = getPostalShipmentType();
+                PostalShipmentType postalShipmentType = (PostalShipmentType) shipmentTypeManager.Get(ShipmentModel.ShipmentAdapter.ShipmentTypeCode);
                 PostalServiceType postalServiceType = (PostalServiceType) ShipmentModel.ShipmentAdapter.ServiceType;
 
                 // See if all have confirmation as an option or not

@@ -46,8 +46,6 @@ namespace ShipWorks.OrderLookup.Controls.LabelOptions
             this.fedExUtility = fedExUtility;
 
             handler = new PropertyChangedHandler(this, () => PropertyChanged);
-
-            OpenPrinterArticleCommand = new RelayCommand(OpenPrinterArticle);
        }
 
         /// <summary>
@@ -85,12 +83,6 @@ namespace ShipWorks.OrderLookup.Controls.LabelOptions
         /// </summary>
         [Obfuscation(Exclude = true)]
         public IOrderLookupShipmentModel ShipmentModel { get; }
-
-        /// <summary>
-        /// Command to open the printer article
-        /// </summary>
-        [Obfuscation(Exclude = true)]
-        public ICommand OpenPrinterArticleCommand { get; }
 
         /// <summary>
         /// Update when the order changes
@@ -164,14 +156,6 @@ namespace ShipWorks.OrderLookup.Controls.LabelOptions
             }
 
             return true;
-        }
-
-        /// <summary>
-        /// Open the printer help article
-        /// </summary>
-        private void OpenPrinterArticle()
-        {
-            Process.Start("http://support.shipworks.com/support/solutions/articles/140916-what-printer-should-i");
         }
     }
 }
