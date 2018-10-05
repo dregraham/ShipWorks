@@ -20,6 +20,12 @@
             <ui:InvertBooleanConverter x:Key="InvertBooleanConverter" />
             <ui:BooleanComparisonConverter x:Key="BooleanComparisonConverter" />
 
+            <ui:WeightControl x:Key="WeightControl"
+                        AcceptApplyWeightKeyboardShortcut="True"
+                        ErrorMessage="{Binding WeightErrorMessage}"
+                        Style="{StaticResource OrderLookupWeightControl}"
+                        Weight="{Binding ShipmentModel.ShipmentAdapter.ContentWeight, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=true, NotifyOnValidationError=true}" />
+
             <UserControl x:Key="ProviderComboBox">
                 <ui:ShipWorksComboBox
                     DisplayMemberPath="Value"
@@ -58,11 +64,10 @@
                         Style="{StaticResource FieldLabel}"
                         Text="Weight" />
 
-                    <ui:WeightControl
-                        AcceptApplyWeightKeyboardShortcut="True"
-                        ErrorMessage="{Binding WeightErrorMessage}"
-                        Style="{StaticResource OrderLookupWeightControl}"
-                        Weight="{Binding ShipmentModel.ShipmentAdapter.ContentWeight, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=true, NotifyOnValidationError=true}" />
+                    <ContentControl
+                        Grid.Row="1"
+                        Grid.Column="1"
+                        Content="{StaticResource WeightControl}" />
                 </Grid>
             </DataTemplate>
 
@@ -195,11 +200,10 @@
                         Grid.Column="0"
                         Style="{StaticResource FieldLabel}"
                         Text="Weight" />
-                    <ui:WeightControl
-                        AcceptApplyWeightKeyboardShortcut="True"
-                        ErrorMessage="{Binding WeightErrorMessage}"
-                        Style="{StaticResource OrderLookupWeightControl}"
-                        Weight="{Binding ShipmentModel.ShipmentAdapter.ContentWeight, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=true, NotifyOnValidationError=true}" />
+                    <ContentControl
+                        Grid.Row="6"
+                        Grid.Column="1"
+                        Content="{StaticResource WeightControl}" />
                     <TextBlock
                         Grid.Row="7"
                         Grid.Column="0"
