@@ -48,6 +48,11 @@ namespace ShipWorks.OrderLookup.ShipmentHistory.Controls
         public Control Control => this;
 
         /// <summary>
+        /// Number of rows in the grid
+        /// </summary>
+        public long RowCount => shipmentGrid.RowCount;
+
+        /// <summary>
         /// Refresh the history, load any components
         /// </summary>
         public void Activate()

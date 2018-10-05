@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows.Forms;
 using Interapptive.Shared.ComponentRegistration;
+using ShipWorks.ApplicationCore;
 using ShipWorks.Data.Grid.Paging;
 using ShipWorks.Data.Model;
 using ShipWorks.Filters;
@@ -17,8 +18,10 @@ namespace ShipWorks.OrderLookup.ShipmentHistory.Controls
         private const long ReloadValue = 0;
         private const long FilterValue = 1;
         private readonly Func<ShipmentHistoryEntityGateway> createGateway;
+        private readonly IMainForm mainForm;
         private string searchText;
         private ShipmentHistoryEntityGateway gateway;
+        private long rowCount = 0;
 
         /// <summary>
         /// Constructor
@@ -30,9 +33,26 @@ namespace ShipWorks.OrderLookup.ShipmentHistory.Controls
         /// <summary>
         /// Constructor
         /// </summary>
-        public ShipmentHistoryGrid(Func<ShipmentHistoryEntityGateway> createGateway) : this()
+        public ShipmentHistoryGrid(Func<ShipmentHistoryEntityGateway> createGateway, IMainForm mainForm) : this()
         {
             this.createGateway = createGateway;
+            this.mainForm = mainForm;
+
+            entityGrid.RowLoadingComplete += OnEntityGridRowLoadingComplete;
+        }
+
+        /// <summary>
+        /// Number of rows in the grid
+        /// </summary>
+        public long RowCount => rowCount;
+
+        /// <summary>
+        /// Event handler for when the grid finishes loading rows.
+        /// </summary>
+        private void OnEntityGridRowLoadingComplete(object sender, EventArgs e)
+        {
+            rowCount = entityGrid.Rows.Count;
+            mainForm.UpdateStatusBar();
         }
 
         /// <summary>
