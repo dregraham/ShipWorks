@@ -14,5 +14,13 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookupSearchControl
         {
             InitializeComponent();
         }
+
+        /// <summary>
+        /// Set searchbox focus
+        /// </summary>
+        private void OnLoad(object sender, System.Windows.RoutedEventArgs e)
+        {
+            SearchBox.Focus();
+        }
     }
 }
