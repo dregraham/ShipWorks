@@ -21,7 +21,6 @@ namespace ShipWorks.OrderLookup.ShipmentHistory.Controls
         private readonly IMainForm mainForm;
         private string searchText;
         private ShipmentHistoryEntityGateway gateway;
-        private long rowCount = 0;
 
         /// <summary>
         /// Constructor
@@ -44,14 +43,14 @@ namespace ShipWorks.OrderLookup.ShipmentHistory.Controls
         /// <summary>
         /// Number of rows in the grid
         /// </summary>
-        public long RowCount => rowCount;
+        public long RowCount { get; private set; }
 
         /// <summary>
         /// Event handler for when the grid finishes loading rows.
         /// </summary>
         private void OnEntityGridRowLoadingComplete(object sender, EventArgs e)
         {
-            rowCount = entityGrid.Rows.Count;
+            RowCount = entityGrid.Rows.Count;
             mainForm.UpdateStatusBar();
         }
 
