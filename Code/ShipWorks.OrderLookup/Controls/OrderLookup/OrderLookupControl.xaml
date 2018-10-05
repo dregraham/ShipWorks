@@ -74,7 +74,9 @@
             <Grid Grid.Row="1">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition />
+                    <ColumnDefinition Width="auto"/>
                     <ColumnDefinition />
+                    <ColumnDefinition Width="auto"/>
                     <ColumnDefinition />
                 </Grid.ColumnDefinitions>
                 <Grid.Resources>
@@ -85,20 +87,22 @@
                         <Setter Property="dd:DragDrop.IsDropTarget" Value="True" />
                     </Style>
                     <Style TargetType="GridSplitter">
-                        <Setter Property="HorizontalAlignment" Value="Right" />
                         <Setter Property="VerticalAlignment" Value="Stretch" />
+                        <Setter Property="HorizontalAlignment" Value="Center" />
                         <Setter Property="Background" Value="Transparent" />
                         <Setter Property="ShowsPreview" Value="True" />
-                        <Setter Property="Width" Value="3" />
+                        <Setter Property="Width" Value="5" />
                     </Style>
                 </Grid.Resources>
 
-                <ItemsControl Grid.Column="0" ItemsSource="{Binding LeftColumn}" />
-                <ItemsControl Grid.Column="1" ItemsSource="{Binding MiddleColumn}" />
-                <ItemsControl Grid.Column="2" ItemsSource="{Binding RightColumn}" />
+                <ItemsControl Grid.Column="0" ItemsSource="{Binding LeftColumn}"
+                              Margin="4 0 0 0"/>
+                <ItemsControl Grid.Column="2" ItemsSource="{Binding MiddleColumn}" />
+                <ItemsControl Grid.Column="4" ItemsSource="{Binding RightColumn}"
+                              Margin="0 0 4 0"/>
 
-                <GridSplitter Grid.Column="0" />
-                <GridSplitter Grid.Column="1" />
+                <GridSplitter Grid.Column="1"/>
+                <GridSplitter Grid.Column="3"/>
             </Grid>
         </Grid>
     </ScrollViewer>
