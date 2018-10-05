@@ -87,12 +87,15 @@
             Background="Transparent">
             <Hyperlink
                 ui:Link.OpenInBrowser="True"
+                Background="Transparent"
                 NavigateUri="http://support.shipworks.com/support/solutions/articles/140916-what-printer-should-i"
                 Style="{StaticResource LinkButton}">
-                <Path
-                    Fill="Gray"
-                    Stretch="Fill"
-                    Style="{StaticResource InformationIcon}" />
+                <Border BorderBrush="{x:Null}" Background="Transparent">
+                    <Path
+                        Fill="Gray"
+                        Stretch="Fill"
+                        Style="{StaticResource InformationIcon}" />
+                </Border>
             </Hyperlink>
         </TextBlock>
 
