@@ -3987,6 +3987,7 @@ namespace ShipWorks
                 using (ShippingSettingsDlg dlg = new ShippingSettingsDlg(lifetimeScope))
                 {
                     dlg.ShowDialog(this);
+                    ribbonSecurityProvider.UpdateSecurityUI();
                 }
             }
         }
