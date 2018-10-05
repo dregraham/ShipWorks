@@ -149,7 +149,7 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
         {
             if (ShipmentModel.SelectedOrder != null)
             {
-                if (e.PropertyName == "SelectedOrder")
+                if (e.PropertyName == nameof(ShipmentModel.SelectedOrder))
                 {
                     Providers = shipmentTypeProvider.GetAvailableShipmentTypes(ShipmentModel.ShipmentAdapter).ToDictionary(s => s, s => EnumHelper.GetDescription(s));
                     RefreshDimensionalProfiles();
@@ -188,7 +188,7 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
                     handler.RaisePropertyChanged(nameof(IsProfileSelected));
                 }
 
-                if (e.PropertyName == nameof(ShipmentModel.ShipmentTypeCode) || e.PropertyName == "SelectedOrder")
+                if (e.PropertyName == nameof(ShipmentModel.ShipmentTypeCode) || e.PropertyName == nameof(ShipmentModel.SelectedOrder))
                 {
                     RefreshPackageTypes();
                 }
@@ -200,7 +200,7 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
                 }
 
                 if (e.PropertyName == nameof(ShipmentModel.SelectedOrder) || e.PropertyName == nameof(ShipmentModel.ShipmentTypeCode) ||
-                    e.PropertyName == "ShipCountryCode")
+                    e.PropertyName == nameof(ShipmentFields.ShipCountryCode.Name))
                 {
                     RefreshServiceTypes();
                 }
