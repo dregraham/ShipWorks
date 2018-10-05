@@ -11,7 +11,7 @@
              FontFamily="/ShipWorks.OrderLookup;component/#Roboto"
              FontSize="20px"
              d:DesignWidth="1000"
-             Loaded="Loaded">
+             Loaded="OnLoad">
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>

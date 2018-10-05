@@ -103,7 +103,7 @@ namespace ShipWorks.OrderLookup.Controls.From
             {
                 Load(ShipmentModel.ShipmentAdapter.Shipment.OriginPerson, ShipmentModel.ShipmentAdapter.Store);
                 autoSave?.Dispose();
-                autoSave = handler.PropertyChangingStream.Throttle(TimeSpan.FromMilliseconds(100)).Subscribe(_ => Save());
+                autoSave = handler.PropertyChangingStream.Where(p => p != nameof(Title)).Throttle(TimeSpan.FromMilliseconds(100)).Subscribe(_ => Save());
 
                 RateShop = ShipmentModel.ShipmentAdapter.SupportsRateShopping;
 
