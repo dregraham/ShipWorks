@@ -14,12 +14,12 @@ using static ShipWorks.Tests.Shared.ExtensionMethods.ParameterShorteners;
 
 namespace ShipWorks.OrderLookup.Tests.ShipmentHistory
 {
-    public class ShipmentHistoryVoidProcessorTest
+    public class PreviousShipmentVoidActionHandlerTest
     {
         private readonly AutoMock mock;
-        private readonly ShipmentHistoryVoidProcessor testObject;
+        private readonly PreviousShipmentVoidActionHandler testObject;
 
-        public ShipmentHistoryVoidProcessorTest()
+        public PreviousShipmentVoidActionHandlerTest()
         {
             mock = AutoMockExtensions.GetLooseThatReturnsMocks();
 
@@ -31,7 +31,7 @@ namespace ShipWorks.OrderLookup.Tests.ShipmentHistory
                 .Setup(x => x.GetLatestShipmentDetails())
                 .ReturnsAsync(new PreviousProcessedShipmentDetails(123, false));
 
-            testObject = mock.Create<ShipmentHistoryVoidProcessor>();
+            testObject = mock.Create<PreviousShipmentVoidActionHandler>();
         }
 
         [Fact]

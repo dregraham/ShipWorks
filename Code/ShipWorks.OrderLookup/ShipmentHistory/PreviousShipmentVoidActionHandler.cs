@@ -14,7 +14,7 @@ namespace ShipWorks.OrderLookup.ShipmentHistory
     /// Process voids for the shipment history view
     /// </summary>
     [Component]
-    public class ShipmentHistoryVoidProcessor : IShipmentHistoryVoidProcessor
+    public class PreviousShipmentVoidActionHandler : IPreviousShipmentVoidActionHandler
     {
         private readonly IShippingManager shippingManager;
         private readonly IShippingErrorManager shippingErrorManager;
@@ -24,7 +24,7 @@ namespace ShipWorks.OrderLookup.ShipmentHistory
         /// <summary>
         /// Constructor
         /// </summary>
-        public ShipmentHistoryVoidProcessor(
+        public PreviousShipmentVoidActionHandler(
             IShippingManager shippingManager,
             IShippingErrorManager shippingErrorManager,
             IOrderLookupPreviousShipmentLocator shipmentLocator,

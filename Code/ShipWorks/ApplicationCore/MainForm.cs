@@ -235,7 +235,7 @@ namespace ShipWorks
         {
             using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
-                IPreviousShipmentActionManager previousShipmentActionManager = lifetimeScope.Resolve<IPreviousShipmentActionManager>();
+                IPreviousShipmentReprintActionHandler previousShipmentActionManager = lifetimeScope.Resolve<IPreviousShipmentReprintActionHandler>();
                 await previousShipmentActionManager.ReprintLastShipment().ConfigureAwait(false);
             }
         }
@@ -248,7 +248,7 @@ namespace ShipWorks
             using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
                 var messageHelper = lifetimeScope.Resolve<IMessageHelper>();
-                var voidHandler = lifetimeScope.Resolve<IShipmentHistoryVoidProcessor>();
+                var voidHandler = lifetimeScope.Resolve<IPreviousShipmentVoidActionHandler>();
 
                 try
                 {

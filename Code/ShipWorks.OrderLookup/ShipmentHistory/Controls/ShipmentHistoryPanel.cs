@@ -26,7 +26,7 @@ namespace ShipWorks.OrderLookup.ShipmentHistory.Controls
         private readonly ShipmentHistoryGrid shipmentGrid;
         private readonly Func<IUserSession> getUserSession;
         private readonly IMessenger messenger;
-        private readonly IShipmentHistoryVoidProcessor shipmentHistoryVoidProcessor;
+        private readonly IPreviousShipmentVoidActionHandler shipmentHistoryVoidProcessor;
         private readonly IMessageHelper messageHelper;
         private IDisposable subscriptions;
 
@@ -45,7 +45,7 @@ namespace ShipWorks.OrderLookup.ShipmentHistory.Controls
             ShipmentHistoryGrid shipmentGrid,
             Func<IUserSession> getUserSession,
             IMessenger messenger,
-            IShipmentHistoryVoidProcessor shipmentHistoryVoidProcessor,
+            IPreviousShipmentVoidActionHandler shipmentHistoryVoidProcessor,
             IMessageHelper messageHelper) : this()
         {
             this.messageHelper = messageHelper;

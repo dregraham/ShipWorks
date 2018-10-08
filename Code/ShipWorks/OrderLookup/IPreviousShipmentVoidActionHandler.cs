@@ -8,7 +8,7 @@ namespace ShipWorks.OrderLookup
     /// <summary>
     /// Process voids for the shipment history view
     /// </summary>
-    public interface IShipmentHistoryVoidProcessor
+    public interface IPreviousShipmentVoidActionHandler
     {
         /// <summary>
         /// Void a processed shipment

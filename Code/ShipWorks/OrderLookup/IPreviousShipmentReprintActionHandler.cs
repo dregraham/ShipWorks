@@ -3,9 +3,9 @@
 namespace ShipWorks.OrderLookup
 {
     /// <summary>
-    /// Interface to delegate tasks on previous shipments (reprint, void, etc)
+    /// Interface to reprint last shipment
     /// </summary>
-    public interface IPreviousShipmentActionManager
+    public interface IPreviousShipmentReprintActionHandler
     {
         /// <summary>
         /// Reprint the last shipment

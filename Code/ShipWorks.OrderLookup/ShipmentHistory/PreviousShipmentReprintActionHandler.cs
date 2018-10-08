@@ -13,7 +13,7 @@ namespace ShipWorks.OrderLookup.ShipmentHistory
     /// Class to delegate tasks on previous shipments (reprint, void, etc)
     /// </summary>
     [Component]
-    public class PreviousShipmentActionManager : IPreviousShipmentActionManager
+    public class PreviousShipmentReprintActionHandler : IPreviousShipmentReprintActionHandler
     {
         private readonly IMessenger messenger;
         private readonly IShippingManager shippingManager;
@@ -23,7 +23,7 @@ namespace ShipWorks.OrderLookup.ShipmentHistory
         /// <summary>
         /// Constructor
         /// </summary>
-        public PreviousShipmentActionManager(
+        public PreviousShipmentReprintActionHandler(
             IMessenger messenger,
             IOrderLookupPreviousShipmentLocator shipmentLocator,
             IShippingManager shippingManager,
@@ -44,6 +44,7 @@ namespace ShipWorks.OrderLookup.ShipmentHistory
 
             if (shipmentDetails == null)
             {
+                messageHelper.ShowError("Could not find a processed shipment from today");
                 return;
             }
 

@@ -12,14 +12,14 @@ using Xunit;
 
 namespace ShipWorks.OrderLookup.Tests.ShipmentHistory
 {
-    public class PreviousShipmentActionManagerTest
+    public class PreviousShipmentReprintActionHandlerTest
     {
         private readonly AutoMock mock;
         private readonly Mock<IShippingManager> shippingManager;
         private readonly Mock<IMessenger> messenger;
-        private PreviousShipmentActionManager testObject;
+        private PreviousShipmentReprintActionHandler testObject;
 
-        public PreviousShipmentActionManagerTest()
+        public PreviousShipmentReprintActionHandlerTest()
         {
             mock = AutoMockExtensions.GetLooseThatReturnsMocks();
             shippingManager = mock.Mock<IShippingManager>();
@@ -43,7 +43,7 @@ namespace ShipWorks.OrderLookup.Tests.ShipmentHistory
                     s.Voided = false;
                 });
 
-            testObject = mock.Create<PreviousShipmentActionManager>();
+            testObject = mock.Create<PreviousShipmentReprintActionHandler>();
             await testObject.ReprintLastShipment().ConfigureAwait(false);
 
             messenger.Verify(m => m.Send(It.IsAny<ReprintLabelsMessage>(), string.Empty), Times.Once);
@@ -62,7 +62,7 @@ namespace ShipWorks.OrderLookup.Tests.ShipmentHistory
                 .Setup(a => a.RefreshShipment(It.IsAny<ShipmentEntity>()))
                 .Throws<ObjectDeletedException>();
 
-            testObject = mock.Create<PreviousShipmentActionManager>();
+            testObject = mock.Create<PreviousShipmentReprintActionHandler>();
             await testObject.ReprintLastShipment().ConfigureAwait(false);
 
             messenger.Verify(m => m.Send(It.IsAny<ReprintLabelsMessage>(), string.Empty), Times.Never);
@@ -75,7 +75,7 @@ namespace ShipWorks.OrderLookup.Tests.ShipmentHistory
                 .Setup(x => x.GetLatestShipmentDetails())
                 .ReturnsAsync((PreviousProcessedShipmentDetails) null);
 
-            testObject = mock.Create<PreviousShipmentActionManager>();
+            testObject = mock.Create<PreviousShipmentReprintActionHandler>();
             await testObject.ReprintLastShipment().ConfigureAwait(false);
 
             messenger.Verify(m => m.Send(It.IsAny<ReprintLabelsMessage>(), string.Empty), Times.Never);
