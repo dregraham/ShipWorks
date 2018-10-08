@@ -150,7 +150,6 @@ namespace ShipWorks
         private ILifetimeScope orderLookupLifetimeScope;
         private IOrderLookup orderLookupControl;
         private IShipmentHistory shipmentHistory;
-        private readonly IPreviousShipmentActionManager previousShipmentActionManager;
 
         private readonly string unicodeCheckmark = $"    {'\u2714'.ToString()}";
 
@@ -162,7 +161,6 @@ namespace ShipWorks
         public MainForm()
         {
             currentUserSettings = IoC.UnsafeGlobalLifetimeScope.Resolve<ICurrentUserSettings>();
-            previousShipmentActionManager = IoC.UnsafeGlobalLifetimeScope.Resolve<IPreviousShipmentActionManager>();
 
             InitializeComponent();
 
@@ -240,7 +238,10 @@ namespace ShipWorks
         /// </summary>
         private void OnOrderLookupViewReprintLastShipment(object sender, System.EventArgs e)
         {
-            previousShipmentActionManager.ReprintLastShipment().ConfigureAwait(false);
+            using (IPreviousShipmentActionManager previousShipmentActionManager = IoC.UnsafeGlobalLifetimeScope.Resolve<IPreviousShipmentActionManager>())
+            {
+                previousShipmentActionManager.ReprintLastShipment().ConfigureAwait(false);
+            }
         }
 
         #region Initialization \ Shutdown

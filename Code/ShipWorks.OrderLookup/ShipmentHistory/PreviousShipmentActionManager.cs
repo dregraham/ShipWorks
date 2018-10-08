@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.QuerySpec;
@@ -19,7 +20,7 @@ namespace ShipWorks.OrderLookup.ShipmentHistory
     /// Class to delegate tasks on previous shipments (reprint, void, etc)
     /// </summary>
     [Component]
-    public class PreviousShipmentActionManager : IPreviousShipmentActionManager
+    public class PreviousShipmentActionManager : IPreviousShipmentActionManager, IDisposable
     {
         private readonly ISqlAdapterFactory sqlAdapterFactory;
         private readonly IDateTimeProvider dateTimeProvider;
@@ -90,6 +91,13 @@ namespace ShipWorks.OrderLookup.ShipmentHistory
                     sqlAdapterFactory.Create(),
                     x => x.FetchFirstAsync(shipmentQuery))
                 .ConfigureAwait(false);
+        }
+
+        /// <summary>
+        /// Dispose
+        /// </summary>
+        public void Dispose()
+        {
         }
     }
 }
