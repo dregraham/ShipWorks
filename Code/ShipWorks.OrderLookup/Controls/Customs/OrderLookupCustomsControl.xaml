@@ -9,7 +9,7 @@
              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
              x:Class="ShipWorks.OrderLookup.Controls.Customs.OrderLookupCustomsControl"
              mc:Ignorable="d"
-             d:DesignHeight="450" d:DesignWidth="800"
+             d:DesignHeight="450" d:DesignWidth="500"
              d:DataContext="{d:DesignInstance {x:Type local:OrderLookupCustomsControlViewModel}}"
              FontSize="12"
              FontFamily="/ShipWorks.OrderLookup;component/#Roboto">
@@ -81,8 +81,21 @@
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
-                <ListBox Grid.Row="0" Grid.Column="0"
+                <Border Grid.Row="0"
+                        Grid.Column="0"
+                        BorderThickness="1"
+                        BorderBrush="#d7d7d7">
+                    <TextBlock
+                        Margin="1 0 0 0"
+                        Background="#FAFAFA"
+                        Text="Description"/>
+                </Border>
+
+
+
+                <ListBox Grid.Row="1" Grid.Column="0"
                          SelectionMode="Single"
                          MaxHeight="90"
                          ItemsSource="{Binding CustomsItems}"
@@ -99,7 +112,7 @@
                         </DataTemplate>
                     </ListBox.ItemTemplate>
                 </ListBox>
-                <StackPanel Grid.Row="0" Grid.Column="1"
+                <StackPanel Grid.Row="1" Grid.Column="1"
                             Margin="4, 0, 0, 0"
                             Orientation="Vertical">
                     <Button Style="{StaticResource OrderLookup.Button.Add}"
