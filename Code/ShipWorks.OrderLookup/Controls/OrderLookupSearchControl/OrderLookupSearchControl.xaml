@@ -114,7 +114,11 @@
                                 VerticalContentAlignment="Center"
                                 MinWidth="100"
                                 FontSize="20"
-                                Background="{StaticResource InputControlBackgroundGradient}"/>
+                                Background="{StaticResource InputControlBackgroundGradient}">
+                            <TextBox.InputBindings>
+                                <KeyBinding Command="{Binding Path=GetOrderCommand}" Key="Enter" />
+                            </TextBox.InputBindings>
+                        </TextBox>
                         <StackPanel Grid.Column="1"
                                 Orientation="Vertical">
                             <Separator Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}"
@@ -126,8 +130,7 @@
                                 Background="#e6e6e6"
                             BorderBrush="{StaticResource BorderColor}"
                             BorderThickness="0"
-                            Command="{Binding GetOrderCommand}"
-                            IsDefault="True">
+                            Command="{Binding GetOrderCommand}">
                             <Canvas Width="13" Height="13" Margin="10 6 10 5">
                                 <Canvas.LayoutTransform>
                                     <ScaleTransform ScaleX="1.3" ScaleY="1.3"/>
