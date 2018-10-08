@@ -55,6 +55,11 @@ namespace ShipWorks.OrderLookup.ShipmentHistory
         /// </summary>
         private Task<Unit> PerformVoid(PreviousProcessedShipmentDetails shipment)
         {
+            if (shipment == null)
+            {
+                return Task.FromException<Unit>(new Exception("Could not find a processed shipment from today"));
+            }
+
             if (shipment.Voided)
             {
                 return Task.FromException<Unit>(new Exception("The last processed shipment has already been voided"));

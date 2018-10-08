@@ -2,9 +2,7 @@
 using Autofac.Extras.Moq;
 using Interapptive.Shared.Utility;
 using Moq;
-using SD.LLBLGen.Pro.QuerySpec;
 using ShipWorks.Core.Messaging;
-using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Messaging.Messages.Shipping;
 using ShipWorks.OrderLookup.ShipmentHistory;
@@ -19,8 +17,6 @@ namespace ShipWorks.OrderLookup.Tests.ShipmentHistory
         private readonly AutoMock mock;
         private readonly Mock<IShippingManager> shippingManager;
         private readonly Mock<IMessenger> messenger;
-        private readonly Mock<ISqlAdapter> sqlAdapter;
-        private readonly Mock<ISqlAdapterFactory> sqlAdapterFactory;
         private PreviousShipmentActionManager testObject;
 
         public PreviousShipmentActionManagerTest()
@@ -28,8 +24,6 @@ namespace ShipWorks.OrderLookup.Tests.ShipmentHistory
             mock = AutoMockExtensions.GetLooseThatReturnsMocks();
             shippingManager = mock.Mock<IShippingManager>();
             messenger = mock.Mock<IMessenger>();
-            sqlAdapter = mock.Mock<ISqlAdapter>();
-            sqlAdapterFactory = mock.Mock<ISqlAdapterFactory>();
         }
 
         [Fact]
@@ -37,8 +31,9 @@ namespace ShipWorks.OrderLookup.Tests.ShipmentHistory
         {
             ShipmentEntity unRefreshedShipment = new ShipmentEntity(3);
 
-            sqlAdapter.Setup(a => a.FetchFirstAsync(It.IsAny<DynamicQuery<long?>>())).ReturnsAsync(unRefreshedShipment.ShipmentID);
-            sqlAdapterFactory.Setup(f => f.Create()).Returns(sqlAdapter.Object);
+            mock.Mock<IOrderLookupPreviousShipmentLocator>()
+                .Setup(x => x.GetLatestShipmentDetails())
+                .ReturnsAsync(new PreviousProcessedShipmentDetails(unRefreshedShipment.ShipmentID, false));
 
             shippingManager
                 .Setup(a => a.RefreshShipment(It.IsAny<ShipmentEntity>()))
@@ -57,10 +52,11 @@ namespace ShipWorks.OrderLookup.Tests.ShipmentHistory
         [Fact]
         public async Task ReprintLastShipment_DoesNotSendMessage_WhenShipmentIsDeleted()
         {
-            ShipmentEntity unRefreshedShipment = new ShipmentEntity(3) {DeletedFromDatabase = true};
+            ShipmentEntity unRefreshedShipment = new ShipmentEntity(3) { DeletedFromDatabase = true };
 
-            sqlAdapter.Setup(a => a.FetchFirstAsync(It.IsAny<DynamicQuery<long?>>())).ReturnsAsync(unRefreshedShipment.ShipmentID);
-            sqlAdapterFactory.Setup(f => f.Create()).Returns(sqlAdapter.Object);
+            mock.Mock<IOrderLookupPreviousShipmentLocator>()
+                .Setup(x => x.GetLatestShipmentDetails())
+                .ReturnsAsync(new PreviousProcessedShipmentDetails(unRefreshedShipment.ShipmentID, false));
 
             shippingManager
                 .Setup(a => a.RefreshShipment(It.IsAny<ShipmentEntity>()))
@@ -75,8 +71,9 @@ namespace ShipWorks.OrderLookup.Tests.ShipmentHistory
         [Fact]
         public async Task ReprintLastShipment_DoesNotSendReprintLabelsMessage_WhenShipmentHasBeenDeleted()
         {
-            sqlAdapter.Setup(a => a.FetchFirstAsync(It.IsAny<DynamicQuery<long>>())).ReturnsAsync(null);
-            sqlAdapterFactory.Setup(f => f.Create()).Returns(sqlAdapter.Object);
+            mock.Mock<IOrderLookupPreviousShipmentLocator>()
+                .Setup(x => x.GetLatestShipmentDetails())
+                .ReturnsAsync((PreviousProcessedShipmentDetails) null);
 
             testObject = mock.Create<PreviousShipmentActionManager>();
             await testObject.ReprintLastShipment().ConfigureAwait(false);
