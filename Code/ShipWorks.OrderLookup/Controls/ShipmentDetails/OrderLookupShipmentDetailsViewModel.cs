@@ -223,7 +223,7 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
             DimensionProfiles =
                 dimensionsManager.Profiles(ShipmentModel.PackageAdapters.FirstOrDefault()).ToList();
 
-            if (DimensionProfiles.None(d => d.DimensionsProfileID ==
+            if (ShipmentModel.ShipmentAdapter.Shipment.Postal != null && DimensionProfiles.None(d => d.DimensionsProfileID ==
                                             ShipmentModel.ShipmentAdapter.Shipment.Postal.DimsProfileID))
             {
                 ShipmentModel.ShipmentAdapter.Shipment.Postal.DimsProfileID = 0;
