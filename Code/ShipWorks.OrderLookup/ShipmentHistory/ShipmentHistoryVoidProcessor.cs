@@ -1,4 +1,8 @@
-﻿using Interapptive.Shared.ComponentRegistration;
+﻿using System;
+using System.Reactive;
+using System.Threading.Tasks;
+using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.Extensions;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
@@ -15,6 +19,7 @@ namespace ShipWorks.OrderLookup.ShipmentHistory
         private readonly IShippingManager shippingManager;
         private readonly IShippingErrorManager shippingErrorManager;
         private readonly IMessageHelper messageHelper;
+        private readonly IOrderLookupPreviousShipmentLocator shipmentLocator;
 
         /// <summary>
         /// Constructor
@@ -22,8 +27,10 @@ namespace ShipWorks.OrderLookup.ShipmentHistory
         public ShipmentHistoryVoidProcessor(
             IShippingManager shippingManager,
             IShippingErrorManager shippingErrorManager,
+            IOrderLookupPreviousShipmentLocator shipmentLocator,
             IMessageHelper messageHelper)
         {
+            this.shipmentLocator = shipmentLocator;
             this.messageHelper = messageHelper;
             this.shippingErrorManager = shippingErrorManager;
             this.shippingManager = shippingManager;
@@ -35,5 +42,26 @@ namespace ShipWorks.OrderLookup.ShipmentHistory
         public GenericResult<ProcessedShipmentEntity> Void(ProcessedShipmentEntity shipment) =>
             shippingManager.VoidShipment(shipment.ShipmentID, shippingErrorManager)
                 .Map(_ => shipment);
+
+        /// <summary>
+        /// Void a processed shipment
+        /// </summary>
+        public Task<Unit> VoidLast() =>
+            shipmentLocator.GetLatestShipmentID()
+                .Bind(PerformVoid);
+
+        /// <summary>
+        /// Perform the void of a previous shipment
+        /// </summary>
+        private Task<Unit> PerformVoid(PreviousProcessedShipmentDetails shipment)
+        {
+            if (shipment.Voided)
+            {
+                return Task.FromException<Unit>(new Exception("The last processed shipment has already been voided"));
+            }
+
+            return shippingManager.VoidShipment(shipment.ShipmentID, shippingErrorManager)
+                .Match(x => Task.FromResult<Unit>(Unit.Default), ex => Task.FromException<Unit>(ex));
+        }
     }
 }

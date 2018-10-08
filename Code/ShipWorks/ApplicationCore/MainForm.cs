@@ -231,11 +231,36 @@ namespace ShipWorks
         /// <summary>
         /// Reprint the last order lookup processed shipment
         /// </summary>
-        private void OnOrderLookupViewReprintLastShipment(object sender, System.EventArgs e)
+        private async void OnOrderLookupViewReprintLastShipment(object sender, System.EventArgs e)
         {
-            using (IPreviousShipmentActionManager previousShipmentActionManager = IoC.UnsafeGlobalLifetimeScope.Resolve<IPreviousShipmentActionManager>())
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
-                previousShipmentActionManager.ReprintLastShipment().ConfigureAwait(false);
+                IPreviousShipmentActionManager previousShipmentActionManager = lifetimeScope.Resolve<IPreviousShipmentActionManager>();
+                await previousShipmentActionManager.ReprintLastShipment().ConfigureAwait(false);
+            }
+        }
+
+        /// <summary>
+        /// Reprint the last order lookup processed shipment
+        /// </summary>
+        private async void OnOrderLookupViewVoidLastShipment(object sender, System.EventArgs e)
+        {
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+            {
+                var messageHelper = lifetimeScope.Resolve<IMessageHelper>();
+                var voidHandler = lifetimeScope.Resolve<IShipmentHistoryVoidProcessor>();
+
+                try
+                {
+                    await Functional.UsingAsync(
+                        messageHelper.ShowProgressDialog("Voiding", "Voiding last processed shipment"),
+                        _ => voidHandler.VoidLast())
+                    .ConfigureAwait(true);
+                }
+                catch (Exception ex)
+                {
+                    messageHelper.ShowError(ex.Message);
+                }
             }
         }
 

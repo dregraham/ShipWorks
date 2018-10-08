@@ -1,7 +1,9 @@
-﻿using Interapptive.Shared.Utility;
+﻿using System.Reactive;
+using System.Threading.Tasks;
+using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 
-namespace ShipWorks.OrderLookup.ShipmentHistory
+namespace ShipWorks.OrderLookup
 {
     /// <summary>
     /// Process voids for the shipment history view
@@ -12,5 +14,10 @@ namespace ShipWorks.OrderLookup.ShipmentHistory
         /// Void a processed shipment
         /// </summary>
         GenericResult<ProcessedShipmentEntity> Void(ProcessedShipmentEntity shipment);
+
+        /// <summary>
+        /// Void last processed shipment
+        /// </summary>
+        Task<Unit> VoidLast();
     }
 }

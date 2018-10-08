@@ -176,7 +176,9 @@
     </Compile>
     <Compile Include="FieldManager\IOrderLookupFieldManagerDialog.cs" />
     <Compile Include="FieldManager\OrderLookupFieldManagerViewModel.cs" />
-    <Compile Include="ShipmentHistory\IShipmentHistoryVoidProcessor.cs" />
+    <Compile Include="IOrderLookupPreviousShipmentLocator.cs" />
+    <Compile Include="OrderLookupPreviousShipmentLocator.cs" />
+    <Compile Include="PreviousProcessedShipmentDetails.cs" />
     <Compile Include="ShipmentHistory\Controls\ShipmentHistoryGrid.cs">
       <SubType>UserControl</SubType>
     </Compile>
