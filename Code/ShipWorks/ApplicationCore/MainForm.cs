@@ -150,6 +150,7 @@ namespace ShipWorks
         private ILifetimeScope orderLookupLifetimeScope;
         private IOrderLookup orderLookupControl;
         private IShipmentHistory shipmentHistory;
+        private readonly IPreviousShipmentActionManager previousShipmentActionManager;
 
         private readonly string unicodeCheckmark = $"    {'\u2714'.ToString()}";
 
@@ -160,8 +161,8 @@ namespace ShipWorks
             Justification = "The WindowStateSaver's constructor does the work, so we don't need to store the variable.")]
         public MainForm()
         {
-
             currentUserSettings = IoC.UnsafeGlobalLifetimeScope.Resolve<ICurrentUserSettings>();
+            previousShipmentActionManager = IoC.UnsafeGlobalLifetimeScope.Resolve<IPreviousShipmentActionManager>();
 
             InitializeComponent();
 
@@ -233,6 +234,14 @@ namespace ShipWorks
         /// Get the current UIMode
         /// </summary>
         public UIMode UIMode { get; private set; }
+
+        /// <summary>
+        /// Reprint the last order lookup processed shipment
+        /// </summary>
+        private void OnOrderLookupViewReprintLastShipment(object sender, System.EventArgs e)
+        {
+            previousShipmentActionManager.ReprintLastShipment().ConfigureAwait(false);
+        }
 
         #region Initialization \ Shutdown
 
