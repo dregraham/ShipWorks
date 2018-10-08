@@ -926,13 +926,7 @@ namespace ShipWorks
         /// </summary>
         private void ToggleBatchMode(IUserEntity user)
         {
-            if (orderLookupLifetimeScope != null)
-            {
-                panelDockingArea.Controls.Remove(orderLookupControl.Control);
-                orderLookupControl.Unload();
-                orderLookupLifetimeScope.Dispose();
-                orderLookupLifetimeScope = null;
-            }
+            UnloadOrderLookupMode();
 
             ToggleUiModeCheckbox(UIMode.Batch);
 
@@ -969,10 +963,26 @@ namespace ShipWorks
         }
 
         /// <summary>
+        /// Unload the Order Lookup Mode
+        /// </summary>
+        private void UnloadOrderLookupMode()
+        {
+            if (orderLookupLifetimeScope != null)
+            {
+                panelDockingArea.Controls.Remove(orderLookupControl.Control);
+                orderLookupControl.Unload();
+                orderLookupLifetimeScope.Dispose();
+                orderLookupLifetimeScope = null;
+            }
+        }
+
+        /// <summary>
         /// Switch from batch to order lookup mode
         /// </summary>
         private void ToggleOrderLookupMode()
         {
+            UnloadOrderLookupMode();
+
             // clear out any selected orders from the batch view
             Messenger.Current.Send(new OrderSelectionChangingMessage(this, new long[0]));
 

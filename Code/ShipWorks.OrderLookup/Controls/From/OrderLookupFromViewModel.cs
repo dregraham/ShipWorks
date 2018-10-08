@@ -101,15 +101,15 @@ namespace ShipWorks.OrderLookup.Controls.From
 
             if (e.PropertyName == nameof(ShipmentModel.SelectedOrder) && ShipmentModel.SelectedOrder != null)
             {
-                Load(ShipmentModel.ShipmentAdapter.Shipment.OriginPerson, ShipmentModel.ShipmentAdapter.Store);
                 autoSave?.Dispose();
-                autoSave = handler.PropertyChangingStream.Where(p => p != nameof(Title)).Throttle(TimeSpan.FromMilliseconds(100)).Subscribe(_ => Save());
+                Load(ShipmentModel.ShipmentAdapter.Shipment.OriginPerson, ShipmentModel.ShipmentAdapter.Store);
 
                 RateShop = ShipmentModel.ShipmentAdapter.SupportsRateShopping;
 
                 UpdateTitle();
 
                 handler.RaisePropertyChanged(nameof(ShipmentModel));
+                autoSave = handler.PropertyChangingStream.Where(p => p != nameof(Title)).Throttle(TimeSpan.FromMilliseconds(100)).Subscribe(_ => Save());
             }
 
             if (e.PropertyName == ShipmentFields.OriginOriginID.Name)

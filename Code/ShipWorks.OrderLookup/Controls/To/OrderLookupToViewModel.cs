@@ -73,14 +73,13 @@ namespace ShipWorks.OrderLookup.Controls.To
 
             if (e.PropertyName == nameof(ShipmentModel.SelectedOrder) && ShipmentModel.SelectedOrder != null)
             {
-                base.Load(ShipmentModel.ShipmentAdapter.Shipment.ShipPerson, ShipmentModel.ShipmentAdapter.Store);
-
                 autoSave?.Dispose();
-                autoSave = handler.PropertyChangingStream.Where(p => p != nameof(Title)).Throttle(TimeSpan.FromMilliseconds(100)).Subscribe(_ => Save());
+                Load(ShipmentModel.ShipmentAdapter.Shipment.ShipPerson, ShipmentModel.ShipmentAdapter.Store);
 
                 UpdateTitle();
 
                 handler.RaisePropertyChanged(nameof(ShipmentModel));
+                autoSave = handler.PropertyChangingStream.Where(p => p != nameof(Title)).Throttle(TimeSpan.FromMilliseconds(100)).Subscribe(_ => Save());
             }
 
             if (e.PropertyName == ShipmentFields.ShipCountryCode.Name)
