@@ -308,7 +308,7 @@
                                             </cmd:EventToCommand>
                                         </i:EventTrigger>
                                     </i:Interaction.Triggers>
-                                    <TextBlock Style="{StaticResource FieldLabel}" Text="{Binding Key}" />
+                                    <TextBlock Text="{Binding Key}" />
                                 </Border>
 
                                 <Separator Margin="26,4,2,4" Visibility="{Binding Value.IsOriginal, Converter={StaticResource BooleanToVisibility}}" />
