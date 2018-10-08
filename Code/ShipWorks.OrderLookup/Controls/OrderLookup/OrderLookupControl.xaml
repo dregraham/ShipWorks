@@ -51,7 +51,7 @@
                 </Expander>
             </DataTemplate>
             <DataTemplate DataType="{x:Type ratingPanel:RatingPanelViewModel}">
-                <Expander Header="Rates" Padding="0" IsExpanded="True">
+                <Expander Header="Rates" Padding="1 -1 0 0" IsExpanded="True">
                     <rating:OrderLookupRatingControl />
                 </Expander>
             </DataTemplate>
