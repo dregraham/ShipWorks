@@ -2599,6 +2599,7 @@ namespace ShipWorks
             this.buttonOrderLookupViewReprintLast.QuickAccessKey = "OE";
             this.buttonOrderLookupViewReprintLast.Text = "Reprint\r\nLast";
             this.buttonOrderLookupViewReprintLast.TextContentRelation = Divelements.SandRibbon.TextContentRelation.Underneath;
+            this.buttonOrderLookupViewReprintLast.Activate += OnOrderLookupViewReprintLastShipment;
             // 
             // buttonOrderLookupViewVoidLast
             // 
