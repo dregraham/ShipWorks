@@ -122,6 +122,7 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookupSearchControl
         /// </summary>
         private void GetOrder()
         {
+            shipmentModel.SaveToDatabase();
             messenger.Send(new OrderLookupSearchMessage(this, OrderNumber));
         }
 

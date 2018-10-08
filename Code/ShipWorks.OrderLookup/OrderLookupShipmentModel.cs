@@ -144,6 +144,7 @@ namespace ShipWorks.OrderLookup
             IDictionary<ShipmentEntity, Exception> errors;
             using (handler.SuppressChangeNotifications())
             {
+                ShipmentAdapter.UpdateDynamicData();
                 errors = shippingManager.SaveShipmentToDatabase(ShipmentAdapter?.Shipment, false);
             }
 

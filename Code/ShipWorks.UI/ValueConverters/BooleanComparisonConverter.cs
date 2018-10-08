@@ -50,7 +50,7 @@ namespace ShipWorks.UI.ValueConverters
         /// <summary>
         /// Convert a collection of booleans to a single boolean
         /// </summary>
-        public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
+        public virtual object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
         {
             IEnumerable<bool> booleanValues = values.OfType<bool>();
             return BooleanOperator == BooleanOperator.And ?
