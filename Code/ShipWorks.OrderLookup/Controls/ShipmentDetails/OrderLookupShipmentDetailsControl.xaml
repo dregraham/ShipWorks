@@ -20,11 +20,12 @@
             <ui:InvertBooleanConverter x:Key="InvertBooleanConverter" />
             <ui:BooleanComparisonConverter x:Key="BooleanComparisonConverter" />
 
-            <ui:WeightControl x:Key="WeightControl"
-                        AcceptApplyWeightKeyboardShortcut="True"
-                        ErrorMessage="{Binding WeightErrorMessage}"
-                        Style="{StaticResource OrderLookupWeightControl}"
-                        Weight="{Binding ShipmentModel.ShipmentAdapter.ContentWeight, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=true, NotifyOnValidationError=true}" />
+            <ui:WeightControl
+                x:Key="WeightControl"
+                AcceptApplyWeightKeyboardShortcut="True"
+                ErrorMessage="{Binding WeightErrorMessage}"
+                Style="{StaticResource OrderLookupWeightControl}"
+                Weight="{Binding ShipmentModel.ShipmentAdapter.ContentWeight, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=true, NotifyOnValidationError=true}" />
 
             <UserControl x:Key="ProviderComboBox">
                 <ui:ShipWorksComboBox
@@ -323,8 +324,7 @@
     </UserControl.Resources>
 
     <StackPanel>
-        <ContentControl Content="{Binding .}"
-                        IsEnabled="{Binding ShipmentModel.ShipmentAllowEditing}">
+        <ContentControl Content="{Binding .}" IsEnabled="{Binding ShipmentModel.ShipmentAllowEditing}">
             <ContentControl.ContentTemplate>
                 <MultiBinding Converter="{StaticResource ShipmentTypeToOrderLookupTemplateConverter}">
                     <Binding Path="ShipmentModel.ShipmentTypeCode" />

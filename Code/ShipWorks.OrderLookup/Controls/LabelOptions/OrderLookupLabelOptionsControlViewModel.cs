@@ -31,7 +31,7 @@ namespace ShipWorks.OrderLookup.Controls.LabelOptions
         private readonly PropertyChangedHandler handler;
         private bool allowStealth;
         private bool allowNoPostage;
-        private List<ThermalLanguage> labelFormats;
+        private Dictionary<int, string> labelFormats;
 
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -72,7 +72,7 @@ namespace ShipWorks.OrderLookup.Controls.LabelOptions
         /// List of available label formats for the shipment
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public List<ThermalLanguage> LabelFormats
+        public Dictionary<int, string> LabelFormats
         {
             get => labelFormats;
             set => handler.Set(nameof(LabelFormats), ref labelFormats, value);
@@ -107,7 +107,7 @@ namespace ShipWorks.OrderLookup.Controls.LabelOptions
 
                 // Set the available label formats for the new shipment
                 LabelFormats = EnumHelper.GetEnumList<ThermalLanguage>(x => ShouldIncludeLabelFormatInList(shipment, x))
-                    .Select(x => x.Value).ToList();
+                    .Select(x => x.Value).ToDictionary(s => (int) s, s => EnumHelper.GetDescription(s));
 
                 // Update the ShipmentModel
                 handler.RaisePropertyChanged(nameof(ShipmentModel));
@@ -148,11 +148,6 @@ namespace ShipWorks.OrderLookup.Controls.LabelOptions
                         return false;
                     }
                     break;
-            }
-
-            if (labelFormat == ThermalLanguage.None)
-            {
-                return false;
             }
 
             return true;

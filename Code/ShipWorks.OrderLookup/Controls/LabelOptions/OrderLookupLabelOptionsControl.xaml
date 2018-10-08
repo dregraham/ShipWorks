@@ -16,7 +16,6 @@
     <UserControl.Resources>
         <ResourceDictionary>
             <ui:BooleanToVisibilityConverter x:Key="BoolToVis" />
-            <ui:IntToEnumConverter x:Key="IntToEnum" />
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/ShipWorks.OrderLookup;component/Styles/OrderLookupStyle.xaml" />
                 <ResourceDictionary Source="/ShipWorks.OrderLookup;component/Styles/Shapes.xaml" />
@@ -90,7 +89,7 @@
                 Background="Transparent"
                 NavigateUri="http://support.shipworks.com/support/solutions/articles/140916-what-printer-should-i"
                 Style="{StaticResource LinkButton}">
-                <Border BorderBrush="{x:Null}" Background="Transparent">
+                <Border Background="Transparent" BorderBrush="{x:Null}">
                     <Path
                         Fill="Gray"
                         Stretch="Fill"
@@ -112,8 +111,10 @@
             Grid.Column="2"
             MinWidth="100"
             Margin="10,0,0,0"
+            DisplayMemberPath="Value"
             ItemsSource="{Binding LabelFormats, UpdateSourceTrigger=PropertyChanged}"
-            SelectedItem="{Binding ShipmentModel.ShipmentAdapter.Shipment.RequestedLabelFormat, Converter={StaticResource IntToEnum}, ConverterParameter={x:Type printers:ThermalLanguage}}"
+            SelectedValue="{Binding ShipmentModel.ShipmentAdapter.Shipment.RequestedLabelFormat}"
+            SelectedValuePath="Key"
             Style="{StaticResource FormComboBox}" />
     </Grid>
 </UserControl>
