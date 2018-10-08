@@ -14,7 +14,7 @@ using static Interapptive.Shared.Utility.Functional;
 namespace ShipWorks.OrderLookup.ShipmentHistory
 {
     /// <summary>
-    /// Class to delegate tasks on previous shipments (reprint, void, etc)
+    /// Locate the last processed shipment for order lookup
     /// </summary>
     [Component]
     public class OrderLookupPreviousShipmentLocator : IOrderLookupPreviousShipmentLocator
@@ -40,9 +40,9 @@ namespace ShipWorks.OrderLookup.ShipmentHistory
         }
 
         /// <summary>
-        /// Get the last shipment ID to reprint.
+        /// Get details of the last processed shipment
         /// </summary>
-        public async Task<PreviousProcessedShipmentDetails> GetLatestShipmentID()
+        public async Task<PreviousProcessedShipmentDetails> GetLatestShipmentDetails()
         {
             QueryFactory factory = new QueryFactory();
             EntityQuery<ProcessedShipmentEntity> queryStarter = factory.ProcessedShipment

@@ -40,7 +40,7 @@ namespace ShipWorks.OrderLookup.ShipmentHistory
         /// </summary>
         public async Task ReprintLastShipment()
         {
-            var shipmentDetails = await shipmentLocator.GetLatestShipmentID().ConfigureAwait(true);
+            var shipmentDetails = await shipmentLocator.GetLatestShipmentDetails().ConfigureAwait(true);
 
             if (shipmentDetails == null)
             {

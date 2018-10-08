@@ -3,13 +3,13 @@
 namespace ShipWorks.OrderLookup.ShipmentHistory
 {
     /// <summary>
-    /// Class to delegate tasks on previous shipments (reprint, void, etc)
+    /// Locate the last processed shipment for order lookup
     /// </summary>
     public interface IOrderLookupPreviousShipmentLocator
     {
         /// <summary>
-        /// Get the last shipment ID to reprint.
+        /// Get details of the last processed shipment
         /// </summary>
-        Task<PreviousProcessedShipmentDetails> GetLatestShipmentID();
+        Task<PreviousProcessedShipmentDetails> GetLatestShipmentDetails();
     }
 }

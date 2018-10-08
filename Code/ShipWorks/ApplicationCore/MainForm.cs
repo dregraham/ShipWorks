@@ -241,7 +241,7 @@ namespace ShipWorks
         }
 
         /// <summary>
-        /// Reprint the last order lookup processed shipment
+        /// Void the last order lookup processed shipment
         /// </summary>
         private async void OnOrderLookupViewVoidLastShipment(object sender, System.EventArgs e)
         {

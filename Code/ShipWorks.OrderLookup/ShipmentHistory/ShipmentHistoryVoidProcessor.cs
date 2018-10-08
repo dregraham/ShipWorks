@@ -47,7 +47,7 @@ namespace ShipWorks.OrderLookup.ShipmentHistory
         /// Void a processed shipment
         /// </summary>
         public Task<Unit> VoidLast() =>
-            shipmentLocator.GetLatestShipmentID()
+            shipmentLocator.GetLatestShipmentDetails()
                 .Bind(PerformVoid);
 
         /// <summary>
