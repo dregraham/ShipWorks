@@ -11,6 +11,7 @@ using ShipWorks.Core.Messaging;
 using ShipWorks.Core.UI;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Messaging.Messages;
+using ShipWorks.Messaging.Messages.SingleScan;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Services;
 
@@ -29,6 +30,8 @@ namespace ShipWorks.OrderLookup
         private readonly PropertyChangedHandler handler;
         private OrderEntity selectedOrder;
         private bool shipmentAllowEditing;
+
+        public event EventHandler OnSearchOrder;
 
         /// <summary>
         /// Constructor
@@ -193,7 +196,7 @@ namespace ShipWorks.OrderLookup
         /// </summary>
         public void InitializeForCurrentSession()
         {
-            subscription = messenger.OfType<OrderLookupSingleScanMessage>()
+            IDisposable onSingleScan = messenger.OfType<OrderLookupSingleScanMessage>()
                 .Subscribe(orderMessage =>
                 {
                     if (orderMessage.Order == null)
@@ -204,6 +207,12 @@ namespace ShipWorks.OrderLookup
                     {
                         LoadOrder(orderMessage.Order);
                     }
+                });
+
+            IDisposable onOrderSearch = messenger.OfType<SingleScanMessage>()
+                .Subscribe(message =>
+                {
+                    OnSearchOrder?.Invoke(this, null);
                 });
         }
 

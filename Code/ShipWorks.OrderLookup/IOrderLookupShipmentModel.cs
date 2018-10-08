@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Reflection;
 using ShipWorks.Data.Model.EntityClasses;
@@ -61,5 +62,10 @@ namespace ShipWorks.OrderLookup
         /// Unload the order
         /// </summary>
         void Unload();
+
+        /// <summary>
+        /// Fires when an order is cleared
+        /// </summary>
+        event EventHandler OnSearchOrder;
     }
 }

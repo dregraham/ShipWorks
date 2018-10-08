@@ -1,3 +1,4 @@
+using System;
 using System.ComponentModel;
 using System.Reflection;
 using System.Windows.Input;
@@ -35,6 +36,16 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookupSearchControl
             GetOrderCommand = new RelayCommand(GetOrder);
             ResetCommand = new RelayCommand(Reset);
             CreateLabelCommand = new RelayCommand(CreateLabel);
+            shipmentModel.OnSearchOrder += (s, e) => ClearOrderError();
+        }
+
+        /// <summary>
+        /// Clears the order error
+        /// </summary>
+        private void ClearOrderError() 
+        {
+            SearchError = false;
+            SearchErrorMessage = string.Empty;
         }
 
         /// <summary>
@@ -122,6 +133,7 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookupSearchControl
         /// </summary>
         private void GetOrder()
         {
+            ClearOrderError();
             shipmentModel.SaveToDatabase();
             messenger.Send(new OrderLookupSearchMessage(this, OrderNumber));
         }
