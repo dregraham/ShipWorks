@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Linq;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
@@ -12,6 +13,7 @@ using ShipWorks.Core.Messaging;
 using ShipWorks.Data.Grid.Columns;
 using ShipWorks.Data.Grid.Paging;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Messaging.Messages.SingleScan;
 using ShipWorks.Users;
 
@@ -23,6 +25,7 @@ namespace ShipWorks.OrderLookup.ShipmentHistory.Controls
     [Component(RegistrationType.SpecificService, Service = typeof(IShipmentHistory))]
     public partial class ShipmentHistoryPanel : UserControl, IShipmentHistory, IDisposable
     {
+        private readonly static Guid gridSettingsKey = new Guid("{C5933658-6323-4599-A81A-15DAF6A07D95}");
         private readonly ShipmentHistoryGrid shipmentGrid;
         private readonly Func<IUserSession> getUserSession;
         private readonly IMessenger messenger;
@@ -141,7 +144,11 @@ namespace ShipWorks.OrderLookup.ShipmentHistory.Controls
             shipmentGrid.Dock = DockStyle.Fill;
 
             // Initialize the shipmentHistory panel
-            shipmentGrid.Initialize(new Guid("{C5933658-6323-4599-A81A-15DAF6A07D95}"), GridColumnDefinitionSet.ShipmentsHistory, null);
+            shipmentGrid.Initialize(gridSettingsKey, GridColumnDefinitionSet.ShipmentsHistory, layout =>
+            {
+                layout.DefaultSortColumnGuid = layout.AllColumns[ProcessedShipmentFields.ProcessedDate].Definition.ColumnGuid;
+                layout.DefaultSortOrder = ListSortDirection.Descending;
+            });
 
             shipmentGrid.LoadState();
         }
