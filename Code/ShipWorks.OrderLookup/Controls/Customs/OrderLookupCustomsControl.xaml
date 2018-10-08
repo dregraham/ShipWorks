@@ -62,17 +62,16 @@
                 <TextBlock Grid.Row="1" Grid.Column="0" Text="Content"
                        Visibility="{Binding CustomsContentTypeAllowed, Converter={StaticResource BooleanToVisibility}}"
                        Style="{StaticResource FieldLabel}"/>
-                <ui:ShipWorksComboBox Grid.Row="1" Grid.Column="1"
-                                  Visibility="{Binding CustomsContentTypeAllowed, Converter={StaticResource BooleanToVisibility}}"
-                                  ItemsSource="{Binding CustomsContentTypes}"
-                                  SelectedItem="{Binding ShipmentModel.ShipmentAdapter.Shipment.Postal.CustomsContentType, ConverterParameter={x:Type postal:PostalCustomsContentType}, Converter={StaticResource IntToEnum}}"
-                                  Style="{StaticResource FormComboBox}">
-                    <ui:ShipWorksComboBox.ItemTemplate>
-                        <DataTemplate>
-                            <TextBlock Text="{Binding Converter={StaticResource EnumDescription}}"/>
-                        </DataTemplate>
-                    </ui:ShipWorksComboBox.ItemTemplate>
-                </ui:ShipWorksComboBox>
+                <ui:ShipWorksComboBox
+                    Grid.Row="1"
+                    Grid.Column="1"
+                    DisplayMemberPath="Value"
+                    ItemsSource="{Binding CustomsContentTypes}"
+                    SelectedValue="{Binding ShipmentModel.ShipmentAdapter.Shipment.Postal.CustomsContentType, UpdateSourceTrigger=PropertyChanged}"
+                    SelectedValuePath="Key"
+                    Style="{StaticResource FormComboBox}"
+                    Visibility="{Binding CustomsContentTypeAllowed, Converter={StaticResource BooleanToVisibility}}" />
+
             </Grid>
 
             <Grid Grid.Row="1">

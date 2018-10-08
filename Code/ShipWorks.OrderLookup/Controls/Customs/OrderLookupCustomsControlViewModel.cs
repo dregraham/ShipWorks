@@ -26,7 +26,7 @@ namespace ShipWorks.OrderLookup.Controls.Customs
         private double contentWeight;
         public event PropertyChangedEventHandler PropertyChanged;
         private readonly PropertyChangedHandler handler;
-        private IEnumerable<PostalCustomsContentType> customsContentTypes;
+        private Dictionary<int, string> customsContentTypes;
         private bool customsContentTypeAllowed;
         private bool customsAllowed;
         private readonly IShipmentTypeManager shipmentTypeManager;
@@ -108,7 +108,7 @@ namespace ShipWorks.OrderLookup.Controls.Customs
         /// List of available customs content types for the shipment
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public IEnumerable<PostalCustomsContentType> CustomsContentTypes
+        public Dictionary<int, string> CustomsContentTypes
         {
             get => customsContentTypes;
             set => handler.Set(nameof(CustomsContentTypes), ref customsContentTypes, value);
@@ -176,11 +176,11 @@ namespace ShipWorks.OrderLookup.Controls.Customs
             CustomsContentTypeAllowed = shipmentTypeManager.IsPostal(shipmentAdapter.ShipmentTypeCode);
             if (CustomsContentTypeAllowed)
             {
-                CustomsContentTypes = EnumHelper.GetEnumList<PostalCustomsContentType>().Select(x => x.Value);
+                CustomsContentTypes = EnumHelper.GetEnumList<PostalCustomsContentType>().ToDictionary(x => (int) x.Value, x => x.Description);
             }
             else
             {
-                CustomsContentTypes = Enumerable.Empty<PostalCustomsContentType>();
+                CustomsContentTypes = new Dictionary<int, string>();
             }
 
             CustomsItems = new ObservableCollection<IShipmentCustomsItemAdapter>(shipmentAdapter.GetCustomsItemAdapters());
