@@ -5,10 +5,12 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:valueConverters="clr-namespace:ShipWorks.UI.ValueConverters;assembly=ShipWorks.UI"
+    xmlns:shippingPanel="clr-namespace:ShipWorks.Shipping.UI.ShippingPanel;assembly=ShipWorks.Shipping.UI"
     d:DesignHeight="100"
     d:DesignWidth="400"
     Grid.IsSharedSizeScope="False"
     mc:Ignorable="d"
+    d:DataContext="{d:DesignInstance shippingPanel:InsuranceViewModel}"
     FontFamily="/ShipWorks.OrderLookup;component/#Roboto">
     <UserControl.Resources>
         <ResourceDictionary>
@@ -100,6 +102,7 @@
                 Style="{StaticResource FieldLabel}"
                 Text="{Binding InsuranceValueLabelDisplayText, FallbackValue='Insured Value', Converter={StaticResource TrimEndColon}}" />
             <TextBox
+                MinWidth="100"
                 VerticalAlignment="Center"
                 IsEnabled="{Binding Insurance}"                
                 Style="{StaticResource FormNumberTextBox}"

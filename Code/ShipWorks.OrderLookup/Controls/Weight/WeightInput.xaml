@@ -38,6 +38,8 @@
                         BorderThickness="0"
                         Style="{x:Null}"
                         Height="26"
+                        MaxLength="16"
+                        Foreground="{StaticResource ControlTextColor}"
                         Text="{Binding Path=Text, RelativeSource={RelativeSource TemplatedParent}, NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True}">
                         <TextBox.Triggers>
                             <EventTrigger RoutedEvent="TextBoxBase.TextChanged">

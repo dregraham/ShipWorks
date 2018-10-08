@@ -19,6 +19,7 @@
             <controls:ShipmentTypeToOrderLookupTemplateConverter x:Key="ShipmentTypeToOrderLookupTemplateConverter" />
             <ui:InvertBooleanConverter x:Key="InvertBooleanConverter" />
             <ui:BooleanComparisonToVisiblityConverter x:Key="BooleanComparisonToVisiblityConverter" />
+            <ui:DoubleToWeightStringConverter x:Key="DoubleToWeightConverter"/>
             <ui:WeightControl
                 x:Key="WeightControl"
                 AcceptApplyWeightKeyboardShortcut="True"
@@ -210,31 +211,22 @@
                         Style="{StaticResource FieldLabel}"
                         Text="Dimensions" />
 
-                    <StackPanel
+                    <ui:ShipWorksComboBox
                         Grid.Row="7"
                         Grid.Column="1"
-                        Orientation="Horizontal">
-                        <ui:ShipWorksComboBox
-                            Margin="10,0,0,5"
-                            DisplayMemberPath="Name"
-                            ItemsSource="{Binding DimensionProfiles}"
-                            SelectedIndexWhenNull="{x:Static ui:RelativeIndex.Last}"
-                            SelectedValuePath="DimensionsProfileID"
-                            Style="{StaticResource FormComboBox}">
-                            <ComboBox.SelectedValue>
-                                <Binding
-                                    Mode="TwoWay"
-                                    Path="ShipmentModel.ShipmentAdapter.Shipment.Postal.DimsProfileID"
-                                    UpdateSourceTrigger="PropertyChanged" />
-                            </ComboBox.SelectedValue>
-                        </ui:ShipWorksComboBox>
-                        <Button
-                            Margin="3,0,0,0"
-                            VerticalAlignment="Center"
-                            Command="{Binding ManageDimensionalProfiles}"
-                            Content="Manage..."
-                            Style="{StaticResource Link}" />
-                    </StackPanel>
+                        Margin="10,0,0,5"
+                        DisplayMemberPath="Name"
+                        ItemsSource="{Binding DimensionProfiles}"
+                        SelectedIndexWhenNull="{x:Static ui:RelativeIndex.Last}"
+                        SelectedValuePath="DimensionsProfileID"
+                        Style="{StaticResource FormComboBox}">
+                        <ComboBox.SelectedValue>
+                            <Binding
+                                Mode="TwoWay"
+                                Path="ShipmentModel.ShipmentAdapter.Shipment.Postal.DimsProfileID"
+                                UpdateSourceTrigger="PropertyChanged" />
+                        </ComboBox.SelectedValue>
+                    </ui:ShipWorksComboBox>
 
                     <Grid
                         Grid.Row="8"
@@ -250,6 +242,7 @@
                             Grid.Column="0"
                             Height="23"
                             Margin="0,0,5,0"
+                            MaxLength="3"
                             IsEnabled="{Binding IsProfileSelected, Converter={StaticResource InvertBooleanConverter}}"
                             Style="{StaticResource FormTextBox}"
                             Text="{Binding ShipmentModel.ShipmentAdapter.Shipment.Postal.DimsLength}" />
@@ -258,6 +251,7 @@
                             Grid.Column="1"
                             Height="23"
                             Margin="0,0,5,0"
+                            MaxLength="3"
                             IsEnabled="{Binding IsProfileSelected, Converter={StaticResource InvertBooleanConverter}}"
                             Style="{StaticResource FormTextBox}"
                             Text="{Binding ShipmentModel.ShipmentAdapter.Shipment.Postal.DimsWidth}" />
@@ -266,6 +260,7 @@
                             Grid.Column="2"
                             Height="23"
                             Margin="0,0,5,0"
+                            MaxLength="3"
                             IsEnabled="{Binding IsProfileSelected, Converter={StaticResource InvertBooleanConverter}}"
                             Style="{StaticResource FormTextBox}"
                             Text="{Binding ShipmentModel.ShipmentAdapter.Shipment.Postal.DimsHeight}" />
@@ -282,25 +277,23 @@
                         Margin="5,0,0,10">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="auto" />
-                            <ColumnDefinition Width="auto" />
                             <ColumnDefinition Width="100" />
                         </Grid.ColumnDefinitions>
                         <CheckBox
                             Grid.Column="0"
                             Margin="5,0,0,0"
                             IsChecked="{Binding ShipmentModel.ShipmentAdapter.Shipment.Postal.DimsAddWeight}"
-                            Style="{StaticResource FormCheckBox}" />
-                        <TextBlock
-                            Grid.Column="1"
-                            Margin="5,0,0,1"
-                            Foreground="Gray"
-                            Style="{StaticResource FieldLabel}"
-                            Text="Add to weight" />
+                            Style="{StaticResource FormCheckBox}" 
+                            Content="Add-to weight"/>
+
                         <TextBox
-                            Grid.Column="2"
+                            Grid.Column="1"
                             Margin="5,0,0,0"
+                            MaxLength="16"
                             Style="{StaticResource FormTextBox}"
-                            Text="{Binding ShipmentModel.ShipmentAdapter.Shipment.Postal.DimsWeight, UpdateSourceTrigger=PropertyChanged}">
+                            Text="{Binding ShipmentModel.ShipmentAdapter.Shipment.Postal.DimsWeight, UpdateSourceTrigger=PropertyChanged, 
+                                           Converter={StaticResource DoubleToWeightConverter}}">
+
                             <TextBox.Visibility>
                                 <MultiBinding Converter="{StaticResource BooleanComparisonToVisiblityConverter}">
                                     <Binding Converter="{StaticResource InvertBooleanConverter}" Path="IsProfileSelected" />
@@ -316,7 +309,6 @@
                         DataContext="{Binding InsuranceViewModel}" />
                 </Grid>
             </DataTemplate>
-
         </ResourceDictionary>
     </UserControl.Resources>
 
