@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Reactive;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Extensions;
 using Interapptive.Shared.UI;
@@ -40,8 +41,8 @@ namespace ShipWorks.OrderLookup.ShipmentHistory
         /// Void a processed shipment
         /// </summary>
         public GenericResult<ProcessedShipmentEntity> Void(ProcessedShipmentEntity shipment) =>
-            shippingManager.VoidShipment(shipment.ShipmentID, shippingErrorManager)
-                .Map(_ => shipment);
+            VoidInternal(shipment.ShipmentID)
+                .Map(() => shipment);
 
         /// <summary>
         /// Void a processed shipment
@@ -65,8 +66,21 @@ namespace ShipWorks.OrderLookup.ShipmentHistory
                 return Task.FromException<Unit>(new Exception("The last processed shipment has already been voided"));
             }
 
-            return shippingManager.VoidShipment(shipment.ShipmentID, shippingErrorManager)
-                .Match(x => Task.FromResult<Unit>(Unit.Default), ex => Task.FromException<Unit>(ex));
+            return VoidInternal(shipment.ShipmentID)
+                .Match(() => Task.FromResult<Unit>(Unit.Default), ex => Task.FromException<Unit>(ex));
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        private Result VoidInternal(long shipmentID)
+        {
+            if (messageHelper.ShowQuestion("Are you sure you want to void this shipment?") == DialogResult.OK)
+            {
+                return shippingManager.VoidShipment(shipmentID, shippingErrorManager);
+            }
+
+            return Result.FromSuccess();
         }
     }
 }

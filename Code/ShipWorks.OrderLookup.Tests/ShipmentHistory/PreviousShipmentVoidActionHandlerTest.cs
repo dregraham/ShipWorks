@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Reactive;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using Autofac.Extras.Moq;
+using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
@@ -31,6 +33,10 @@ namespace ShipWorks.OrderLookup.Tests.ShipmentHistory
                 .Setup(x => x.GetLatestShipmentDetails())
                 .ReturnsAsync(new PreviousProcessedShipmentDetails(123, false));
 
+            mock.Mock<IMessageHelper>()
+                .Setup(x => x.ShowQuestion(AnyString))
+                .Returns(DialogResult.OK);
+
             testObject = mock.Create<PreviousShipmentVoidActionHandler>();
         }
 
@@ -40,6 +46,18 @@ namespace ShipWorks.OrderLookup.Tests.ShipmentHistory
             testObject.Void(new ProcessedShipmentEntity { ShipmentID = 123 });
 
             mock.Mock<IShippingManager>().Verify(x => x.VoidShipment(123, It.IsAny<IShippingErrorManager>()));
+        }
+
+        [Fact]
+        public void Void_DoesNotDelegateToShippingManager_WhenPopupCanceled()
+        {
+            mock.Mock<IMessageHelper>()
+                .Setup(x => x.ShowQuestion(AnyString))
+                .Returns(DialogResult.Cancel);
+
+            testObject.Void(new ProcessedShipmentEntity { ShipmentID = 123 });
+
+            mock.Mock<IShippingManager>().Verify(x => x.VoidShipment(AnyLong, It.IsAny<IShippingErrorManager>()), Times.Never);
         }
 
         [Fact]
@@ -56,6 +74,18 @@ namespace ShipWorks.OrderLookup.Tests.ShipmentHistory
             await testObject.VoidLast();
 
             mock.Mock<IShippingManager>().Verify(x => x.VoidShipment(123, It.IsAny<IShippingErrorManager>()));
+        }
+
+        [Fact]
+        public async Task VoidLast_DoesNotDelegateToShipmentProcessor_WhenPopupCanceled()
+        {
+            mock.Mock<IMessageHelper>()
+                .Setup(x => x.ShowQuestion(AnyString))
+                .Returns(DialogResult.Cancel);
+
+            await testObject.VoidLast();
+
+            mock.Mock<IShippingManager>().Verify(x => x.VoidShipment(AnyLong, It.IsAny<IShippingErrorManager>()), Times.Never);
         }
 
         [Fact]
