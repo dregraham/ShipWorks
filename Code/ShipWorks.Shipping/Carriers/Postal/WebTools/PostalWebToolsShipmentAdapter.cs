@@ -89,8 +89,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
             PostalRateSelection selection = rate.Tag as PostalRateSelection;
 
             return selection != null &&
-                (int) selection.ServiceType == ServiceType &&
-                (int) selection.ConfirmationType == Shipment.Postal.Confirmation;
+                (int) selection.ServiceType == ServiceType;
         }
 
         /// <summary>
@@ -128,7 +127,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
             if (rateSelection != null)
             {
                 Shipment.Postal.Service = (int) rateSelection.ServiceType;
-                Shipment.Postal.Confirmation = (int) rateSelection.ConfirmationType;
             }
         }
 

@@ -15,8 +15,8 @@ namespace ShipWorks.Shipping.Tests.Carriers.Postal.Endicia
 {
     public class EndiciaShipmentAdapterTest : IDisposable
     {
-        readonly AutoMock mock;
-        readonly ShipmentEntity shipment;
+        private readonly AutoMock mock;
+        private readonly ShipmentEntity shipment;
 
         public EndiciaShipmentAdapterTest()
         {
@@ -229,7 +229,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Postal.Endicia
 
             var testObject = mock.Create<EndiciaShipmentAdapter>(TypedParameter.From(shipment));
 
-            testObject.SelectServiceFromRate(new RateResult("Foo", "1", 1M, new PostalRateSelection(serviceType, confirmationType))
+            testObject.SelectServiceFromRate(new RateResult("Foo", "1", 1M, new PostalRateSelection(serviceType))
             {
                 Selectable = true,
                 ShipmentType = ShipmentTypeCode.Endicia
@@ -271,38 +271,10 @@ namespace ShipWorks.Shipping.Tests.Carriers.Postal.Endicia
         }
 
         [Fact]
-        public void DoesRateMatchSelectedService_ReturnsFalse_WhenServiceAndConfirmationDoNotMatch()
-        {
-            var testObject = mock.Create<EndiciaShipmentAdapter>(new TypedParameter(typeof(ShipmentEntity), shipment));
-            var rate = new RateResult("Foo", "1", 0, new PostalRateSelection(PostalServiceType.AsendiaGeneric, PostalConfirmationType.Signature))
-            {
-                ShipmentType = ShipmentTypeCode.Endicia
-            };
-
-            var result = testObject.DoesRateMatchSelectedService(rate);
-
-            Assert.False(result);
-        }
-
-        [Fact]
         public void DoesRateMatchSelectedService_ReturnsFalse_WhenServiceDoesNotMatch()
         {
             var testObject = mock.Create<EndiciaShipmentAdapter>(new TypedParameter(typeof(ShipmentEntity), shipment));
-            var rate = new RateResult("Foo", "1", 0, new PostalRateSelection(PostalServiceType.AsendiaGeneric, PostalConfirmationType.Delivery))
-            {
-                ShipmentType = ShipmentTypeCode.Endicia
-            };
-
-            var result = testObject.DoesRateMatchSelectedService(rate);
-
-            Assert.False(result);
-        }
-
-        [Fact]
-        public void DoesRateMatchSelectedService_ReturnsFalse_WhenConfirmationDoesNotMatch()
-        {
-            var testObject = mock.Create<EndiciaShipmentAdapter>(new TypedParameter(typeof(ShipmentEntity), shipment));
-            var rate = new RateResult("Foo", "1", 0, new PostalRateSelection(PostalServiceType.FirstClass, PostalConfirmationType.Signature))
+            var rate = new RateResult("Foo", "1", 0, new PostalRateSelection(PostalServiceType.AsendiaGeneric))
             {
                 ShipmentType = ShipmentTypeCode.Endicia
             };
@@ -330,7 +302,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Postal.Endicia
         public void DoesRateMatchSelectedService_ReturnsTrue_WhenServiceAndConfirmationMatches()
         {
             var testObject = mock.Create<EndiciaShipmentAdapter>(new TypedParameter(typeof(ShipmentEntity), shipment));
-            var rate = new RateResult("Foo", "1", 0, new PostalRateSelection(PostalServiceType.FirstClass, PostalConfirmationType.Delivery))
+            var rate = new RateResult("Foo", "1", 0, new PostalRateSelection(PostalServiceType.FirstClass))
             {
                 ShipmentType = ShipmentTypeCode.Endicia
             };

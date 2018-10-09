@@ -503,7 +503,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
                 PostalUtility.GetPostalServiceTypeDescription(serviceType),
                 PostalUtility.GetDaysForRate(uspsRate.DeliverDays, uspsRate.DeliveryDate),
                 uspsRate.Amount,
-                new UspsPostalRateSelection(serviceType, PostalConfirmationType.None, account))
+                new UspsPostalRateSelection(serviceType, account))
             {
                 ProviderLogo = EnumHelper.GetImage((ShipmentTypeCode) shipment.ShipmentType)
             };

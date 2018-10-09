@@ -488,19 +488,16 @@ namespace ShipWorks.Shipping.Carriers.Postal
             PostalPackagingType? packagingType,
             string shipCountry)
         {
-            if (rate.ServiceType != serviceType)
-            {
-                return false;
-            }
+            return rate.ServiceType == serviceType;
 
-            if (rate.ConfirmationType == confirmationType)
-            {
-                return true;
-            }
+            //if (rate.ServiceType != serviceType)
+            //{
+            //    return false;
+            //}
 
-            return confirmationType == PostalConfirmationType.Delivery &&
-                packagingType.HasValue &&
-                IsFreeInternationalDeliveryConfirmation(shipCountry, serviceType, packagingType.Value);
+            //return confirmationType == PostalConfirmationType.Delivery &&
+            //    packagingType.HasValue &&
+            //    IsFreeInternationalDeliveryConfirmation(shipCountry, serviceType, packagingType.Value);
         }
 
         /// <summary>

@@ -139,7 +139,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             if (rateSelection != null)
             {
                 Shipment.Postal.Service = (int) rateSelection.ServiceType;
-                Shipment.Postal.Confirmation = (int) rateSelection.ConfirmationType;
             }
         }
 

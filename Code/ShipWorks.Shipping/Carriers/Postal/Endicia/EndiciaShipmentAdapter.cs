@@ -66,7 +66,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             get { return Shipment.Postal.Service; }
             set { Shipment.Postal.Service = value; }
         }
-        
+
         /// <summary>
         /// Service type name
         /// </summary>
@@ -93,8 +93,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             PostalRateSelection selection = rate.Tag as PostalRateSelection;
 
             return selection != null &&
-                (int) selection.ServiceType == ServiceType &&
-                (int) selection.ConfirmationType == Shipment.Postal.Confirmation;
+                (int) selection.ServiceType == ServiceType;
         }
 
         /// <summary>
@@ -123,8 +122,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
 
             if (rateSelection != null)
             {
-                Shipment.Postal.Service = (int) rateSelection.ServiceType;
-                Shipment.Postal.Confirmation = (int) rateSelection.ConfirmationType;
+                Shipment.Postal.Service = (int) rateSelection.ServiceType; ;
             }
         }
 

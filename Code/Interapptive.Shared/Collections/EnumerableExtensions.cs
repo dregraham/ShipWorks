@@ -433,6 +433,32 @@ namespace Interapptive.Shared.Collections
         }
 
         /// <summary>
+        /// Prepend an item to an enumerable
+        /// </summary>
+        public static IEnumerable<T> Prepend<T>(this IEnumerable<T> source, T item)
+        {
+            MethodConditions.EnsureArgumentIsNotNull(source, nameof(source));
+
+            return PrependInternal(source, item);
+        }
+
+        /// <summary>
+        /// Prepend an item to an enumerable
+        /// </summary>
+        private static IEnumerable<T> PrependInternal<T>(IEnumerable<T> source, T item)
+        {
+            yield return item;
+
+            using (IEnumerator<T> iter = source.GetEnumerator())
+            {
+                while (iter.MoveNext())
+                {
+                    yield return iter.Current;
+                }
+            }
+        }
+
+        /// <summary>
         /// Append an item to an enumerable
         /// </summary>
         public static IEnumerable<T> Append<T>(this IEnumerable<T> source, T item)

@@ -266,7 +266,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
                     EnumHelper.GetDescription(serviceType),
                     days,
                     amount,
-                    new PostalRateSelection(serviceType, PostalConfirmationType.None))
+                    new PostalRateSelection(serviceType))
                 {
                     ProviderLogo = EnumHelper.GetImage(ShipmentTypeCode.PostalWebTools)
                 });
@@ -449,7 +449,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
                     EnumHelper.GetDescription(serviceType),
                     days,
                     amount,
-                    new PostalRateSelection(serviceType, PostalConfirmationType.None))
+                    new PostalRateSelection(serviceType))
                 {
                     ShipmentType = ShipmentTypeCode.PostalWebTools,
                     ProviderLogo = EnumHelper.GetImage(ShipmentTypeCode.PostalWebTools)
