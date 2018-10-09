@@ -31,7 +31,7 @@ namespace ShipWorks.OrderLookup
         private readonly PropertyChangedHandler handler;
         private OrderEntity selectedOrder;
         private bool shipmentAllowEditing;
-
+        private bool isSaving = false;
         public event EventHandler OnSearchOrder;
 
         /// <summary>
@@ -140,19 +140,28 @@ namespace ShipWorks.OrderLookup
         /// </summary>
         public void SaveToDatabase()
         {
-            if (!ShipmentAllowEditing || (ShipmentAdapter?.Shipment?.Processed ?? true))
+            if (isSaving)
             {
                 return;
             }
 
-            IDictionary<ShipmentEntity, Exception> errors;
-            using (handler.SuppressChangeNotifications())
+            isSaving = true;
+            using (Disposable.Create(() => isSaving = false))
             {
-                ShipmentAdapter.UpdateDynamicData();
-                errors = shippingManager.SaveShipmentToDatabase(ShipmentAdapter?.Shipment, false);
-            }
+                if (!ShipmentAllowEditing || (ShipmentAdapter?.Shipment?.Processed ?? true))
+                {
+                    return;
+                }
 
-            DisplayError(errors);
+                IDictionary<ShipmentEntity, Exception> errors;
+                using (handler.SuppressChangeNotifications())
+                {
+                    ShipmentAdapter.UpdateDynamicData();
+                    errors = shippingManager.SaveShipmentToDatabase(ShipmentAdapter?.Shipment, false);
+                }
+
+                DisplayError(errors);
+            }
         }
 
         /// <summary>
@@ -188,7 +197,7 @@ namespace ShipWorks.OrderLookup
                 messageHelper.ShowError("The selected shipments were edited or deleted by another ShipWorks user and your changes could not be saved.\n\n" +
                                         "The shipments will be refreshed to reflect the recent changes.");
 
-                messenger.Send(new OrderSelectionChangingMessage(this, new[] { ShipmentAdapter.Shipment.OrderID }));
+                LoadOrder(ShipmentAdapter.Shipment.Order);
             }
         }
 
@@ -204,6 +213,8 @@ namespace ShipWorks.OrderLookup
                     {
                         try
                         {
+                            SaveToDatabase();
+
                             if (orderMessage.Order == null)
                             {
                                 ClearOrder();
@@ -231,7 +242,6 @@ namespace ShipWorks.OrderLookup
         /// </summary>
         private void LoadOrder(OrderEntity order)
         {
-            SaveToDatabase();
             RemovePropertyChangedEventsFromEntities();
 
             if ((order.Shipments?.Count ?? 0) > 0)

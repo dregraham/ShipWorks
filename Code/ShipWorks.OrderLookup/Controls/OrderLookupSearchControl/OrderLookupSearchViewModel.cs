@@ -134,7 +134,6 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookupSearchControl
         private void GetOrder()
         {
             ClearOrderError();
-            shipmentModel.SaveToDatabase();
             messenger.Send(new OrderLookupSearchMessage(this, OrderNumber));
         }
 
