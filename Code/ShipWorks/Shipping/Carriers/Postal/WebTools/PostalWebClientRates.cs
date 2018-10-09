@@ -1,23 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using ShipWorks.Data.Model.EntityClasses;
 using System.IO;
-using System.Xml;
-using ShipWorks.Data;
-using Interapptive.Shared.Utility;
-using ShipWorks.ApplicationCore.Logging;
 using System.Net;
+using System.Text.RegularExpressions;
+using System.Web;
+using System.Xml;
 using System.Xml.XPath;
-using ShipWorks.Shipping.Editing;
+using Interapptive.Shared;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Net;
-using System.Web;
-using Interapptive.Shared;
-using ShipWorks.Shipping.Editing.Rating;
+using Interapptive.Shared.Utility;
+using ShipWorks.ApplicationCore.Logging;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.BestRate;
-using System.Text.RegularExpressions;
+using ShipWorks.Shipping.Editing;
+using ShipWorks.Shipping.Editing.Rating;
 
 namespace ShipWorks.Shipping.Carriers.Postal.WebTools
 {
@@ -133,7 +130,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
                 xmlRequest = writer.ToString();
             }
 
-
             IApiLogEntry logger = logEntryFactory.GetLogEntry(ApiLogSource.UspsNoPostage, "Rate", LogActionType.GetRates);
 
             logger.LogRequest(xmlRequest);
@@ -176,7 +172,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
         private static string ProcessXmlRequest(string xmlRequest, string api)
         {
             // The production server URL
-            string serverUrl =$"{PostalWebUtility.ServerUrl}?API={api}&XML=";
+            string serverUrl = $"{PostalWebUtility.ServerUrl}?API={api}&XML=";
 
             try
             {
@@ -266,42 +262,14 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
                 decimal amount = XPathUtility.Evaluate(rateNode, "Rate", 0m);
                 string days = GetDaysForRate(serviceType, rateNode);
 
-                if (serviceType == PostalServiceType.ExpressMail)
+                rates.Add(new RateResult(
+                    EnumHelper.GetDescription(serviceType),
+                    days,
+                    amount,
+                    new PostalRateSelection(serviceType, PostalConfirmationType.None))
                 {
-                    rates.Add(new RateResult(
-                        EnumHelper.GetDescription(serviceType),
-                        days,
-                        amount,
-                        new PostalRateSelection(serviceType, PostalConfirmationType.None))
-                    {
-                        ProviderLogo = EnumHelper.GetImage(ShipmentTypeCode.PostalWebTools)
-                    });
-                }
-                else
-                {
-                    rates.Add(new RateResult(EnumHelper.GetDescription(serviceType), days)
-                    {
-                        Tag = new PostalRateSelection(serviceType, PostalConfirmationType.Delivery),
-                        ProviderLogo = EnumHelper.GetImage(ShipmentTypeCode.PostalWebTools)
-                    });
-
-                    decimal deliveryAmount = (serviceType == PostalServiceType.PriorityMail || serviceType == PostalServiceType.FirstClass) ? 0m : .19m;
-                    decimal signatureAmount = 1.80m;
-
-                    // Delivery confirmation
-                    rates.Add(new RateResult(
-                        string.Format("       Delivery Confirmation ({0:c})", deliveryAmount),
-                        "",
-                        amount + deliveryAmount,
-                        new PostalRateSelection(serviceType, PostalConfirmationType.Delivery)));
-
-                    // Signature confirmation
-                    rates.Add(new RateResult(
-                        string.Format("       Signature Confirmation ({0:c})", signatureAmount),
-                        "",
-                        amount + signatureAmount,
-                        new PostalRateSelection(serviceType, PostalConfirmationType.Signature)));
-                }
+                    ProviderLogo = EnumHelper.GetImage(ShipmentTypeCode.PostalWebTools)
+                });
             }
 
             foreach (var rate in rates)
@@ -348,7 +316,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
                     string description = XPathUtility.Evaluate(rateNode, "MailService", "");
 
                     if (description.Contains("Flat") &&
-                            (packaging == PostalPackagingType.Envelope  ||
+                            (packaging == PostalPackagingType.Envelope ||
                              packaging == PostalPackagingType.FlatRateEnvelope ||
                              packaging == PostalPackagingType.LargeEnvelope))
                     {
@@ -482,10 +450,10 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
                     days,
                     amount,
                     new PostalRateSelection(serviceType, PostalConfirmationType.None))
-                    {
-                        ShipmentType = ShipmentTypeCode.PostalWebTools,
-                        ProviderLogo = EnumHelper.GetImage(ShipmentTypeCode.PostalWebTools)
-                    });
+                {
+                    ShipmentType = ShipmentTypeCode.PostalWebTools,
+                    ProviderLogo = EnumHelper.GetImage(ShipmentTypeCode.PostalWebTools)
+                });
             }
 
             return rates;
@@ -595,7 +563,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
         /// </summary>
         private static string GetSizeValue(PostalShipmentEntity postalShipment, DimensionsAdapter dimensions)
         {
-            if (postalShipment.PackagingType == (int)PostalPackagingType.Package)
+            if (postalShipment.PackagingType == (int) PostalPackagingType.Package)
             {
                 if (dimensions.Height > 12 || dimensions.Width > 12 || dimensions.Length > 12)
                 {
