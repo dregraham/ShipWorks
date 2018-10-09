@@ -112,6 +112,10 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
             set => handler.Set(nameof(Providers), ref providers, value);
         }
 
+        /// <summary>
+        /// Shipment type code
+        /// </summary>
+        [Obfuscation(Exclude = true)]
         public ShipmentTypeCode ShipmentTypeCode
         {
             get => ShipmentModel.ShipmentAdapter?.ShipmentTypeCode ?? ShipmentTypeCode.None;
