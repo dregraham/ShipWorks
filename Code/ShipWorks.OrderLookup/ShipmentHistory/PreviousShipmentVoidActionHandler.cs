@@ -41,20 +41,20 @@ namespace ShipWorks.OrderLookup.ShipmentHistory
         /// Void a processed shipment
         /// </summary>
         public GenericResult<ProcessedShipmentEntity> Void(ProcessedShipmentEntity shipment) =>
-            VoidInternal(shipment.ShipmentID)
+            PerformVoid(shipment.ShipmentID)
                 .Map(() => shipment);
 
         /// <summary>
-        /// Void a processed shipment
+        /// Void the processed shipment
         /// </summary>
         public Task<Unit> VoidLast() =>
             shipmentLocator.GetLatestShipmentDetails()
-                .Bind(PerformVoid);
+                .Bind(VoidLastShipment);
 
         /// <summary>
-        /// Perform the void of a previous shipment
+        /// Void the previous shipment
         /// </summary>
-        private Task<Unit> PerformVoid(PreviousProcessedShipmentDetails shipment)
+        private Task<Unit> VoidLastShipment(PreviousProcessedShipmentDetails shipment)
         {
             if (shipment == null)
             {
@@ -66,14 +66,14 @@ namespace ShipWorks.OrderLookup.ShipmentHistory
                 return Task.FromException<Unit>(new Exception("The last processed shipment has already been voided"));
             }
 
-            return VoidInternal(shipment.ShipmentID)
+            return PerformVoid(shipment.ShipmentID)
                 .Match(() => Task.FromResult<Unit>(Unit.Default), ex => Task.FromException<Unit>(ex));
         }
 
         /// <summary>
-        /// 
+        /// Perform the actual void
         /// </summary>
-        private Result VoidInternal(long shipmentID)
+        private Result PerformVoid(long shipmentID)
         {
             if (messageHelper.ShowQuestion("Are you sure you want to void this shipment?") == DialogResult.OK)
             {
