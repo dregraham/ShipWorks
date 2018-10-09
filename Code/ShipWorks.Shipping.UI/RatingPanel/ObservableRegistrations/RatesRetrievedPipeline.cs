@@ -63,7 +63,7 @@ namespace ShipWorks.Shipping.UI.RatingPanel.ObservableRegistrations
         /// <returns></returns>
         private IObservable<IShipWorksMessage> GetResumeObservable()
         {
-            return messenger.OfType<OrderSelectionChangingMessage>().Select(x=>x as IShipWorksMessage).Merge(messenger.OfType<OrderLookupSingleScanMessage>().Select(x => x as IShipWorksMessage));
+            return messenger.OfType<OrderSelectionChangingMessage>().Select(x => x as IShipWorksMessage).Merge(messenger.OfType<OrderLookupSingleScanMessage>().Select(x => x as IShipWorksMessage));
         }
 
         /// <summary>

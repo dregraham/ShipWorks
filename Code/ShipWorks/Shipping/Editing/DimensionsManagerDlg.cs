@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows.Forms;
 using Divelements.SandGrid;
+using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.UI;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Data.Connection;
@@ -13,6 +14,7 @@ namespace ShipWorks.Shipping.Editing
     /// <summary>
     /// Window for managing dimensions profiles
     /// </summary>
+    [Component(RegistrationType.Self)]
     public partial class DimensionsManagerDlg : Form
     {
         long initialProfileID = 0;

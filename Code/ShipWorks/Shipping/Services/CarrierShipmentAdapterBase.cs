@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
@@ -15,6 +16,7 @@ namespace ShipWorks.Shipping.Services
     /// <summary>
     /// Base class for ICarrierShipmentAdapter that implements code that's the same across all shipment adapters
     /// </summary>
+    [Obfuscation(Exclude = true, ApplyToMembers = true, StripAfterObfuscation = false)]
     public abstract class CarrierShipmentAdapterBase : ICarrierShipmentAdapter
     {
         private ShipmentType shipmentType;

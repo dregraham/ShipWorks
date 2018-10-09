@@ -4,7 +4,11 @@
         <ResourceDictionary Source="/ShipWorks.UI;component/Styles/Controls/ButtonStyle.xaml"/>
         <ResourceDictionary Source="/ShipWorks.OrderLookup;component/Styles/Colors.xaml"/>
     </ResourceDictionary.MergedDictionaries>
-    
+
+    <Style x:Key="LinkButton" TargetType="{x:Type Hyperlink}">
+        <Setter Property="TextBlock.TextDecorations" Value="{x:Null}" />
+    </Style>
+
     <Style x:Key="Link" TargetType="{x:Type Button}">
         <Setter Property="Cursor" Value="Hand" />
         <Setter Property="Foreground" Value="#4a90e2" />

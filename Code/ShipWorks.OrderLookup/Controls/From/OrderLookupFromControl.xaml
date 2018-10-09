@@ -28,7 +28,7 @@
                 <StackPanel>
                     <TextBlock Style="{StaticResource FieldLabel}" Text="Account">
                         <TextBlock.Visibility>
-                            <Binding Converter="{StaticResource BooleanToVisibility}" Path="Orchestrator.ShipmentAdapter.SupportsAccounts" />
+                            <Binding Converter="{StaticResource BooleanToVisibility}" Path="ShipmentModel.ShipmentAdapter.SupportsAccounts" />
                         </TextBlock.Visibility>
                     </TextBlock>
                 </StackPanel>
@@ -44,22 +44,22 @@
                         SelectedValuePath="AccountId"
                         Style="{StaticResource FormComboBox}">
                         <ComboBox.SelectedValue>
-                            <Binding Path="Orchestrator.ShipmentAdapter.AccountId" />
+                            <Binding Path="ShipmentModel.ShipmentAdapter.AccountId" />
                         </ComboBox.SelectedValue>
                         <ComboBox.IsEnabled>
                             <MultiBinding Converter="{StaticResource BooleanAndConverter}">
-                                <Binding Mode="OneWay" Path="Orchestrator.ShipmentAllowEditing" />
-                                <Binding Converter="{StaticResource InvertBoolean}" Mode="OneWay" Path="Orchestrator.ShipmentAdapter.SupportsRateShopping" />
+                                <Binding Mode="OneWay" Path="ShipmentModel.ShipmentAllowEditing" />
+                                <Binding Converter="{StaticResource InvertBoolean}" Mode="OneWay" Path="ShipmentModel.ShipmentAdapter.SupportsRateShopping" />
                             </MultiBinding>
                         </ComboBox.IsEnabled>
                         <ComboBox.Visibility>
-                            <Binding Converter="{StaticResource BooleanToVisibility}" Path="Orchestrator.ShipmentAdapter.SupportsAccounts" />
+                            <Binding Converter="{StaticResource BooleanToVisibility}" Path="ShipmentModel.ShipmentAdapter.SupportsAccounts" />
                         </ComboBox.Visibility>
                         <ComboBox.ItemsSource>
                             <Binding
                                 Converter="{StaticResource ShipmentTypeToAccountsConverter}"
                                 Mode="OneWay"
-                                Path="Orchestrator.ShipmentTypeCode" />
+                                Path="ShipmentModel.ShipmentTypeCode" />
                         </ComboBox.ItemsSource>
                     </ui:ShipWorksComboBox>
                 </StackPanel>
@@ -76,22 +76,22 @@
                         SelectedValuePath="Value"
                         Style="{StaticResource StackedFormComboBox}">
                         <ComboBox.IsEnabled>
-                            <Binding Mode="OneWay" Path="Orchestrator.ShipmentAllowEditing" />
+                            <Binding Mode="OneWay" Path="ShipmentModel.ShipmentAllowEditing" />
                         </ComboBox.IsEnabled>
                         <ComboBox.ItemsSource>
                             <Binding
                                 Converter="{StaticResource ShipmentTypeToOriginAddresses}"
                                 Mode="OneWay"
-                                Path="Orchestrator.ShipmentTypeCode" />
+                                Path="ShipmentModel.ShipmentTypeCode" />
                         </ComboBox.ItemsSource>
                         <ComboBox.SelectedValue>
-                            <Binding Path="Orchestrator.ShipmentAdapter.Shipment.OriginOriginID" />
+                            <Binding Path="ShipmentModel.ShipmentAdapter.Shipment.OriginOriginID" />
                         </ComboBox.SelectedValue>
                     </ui:ShipWorksComboBox>
 
                     <local:OrderLookupAddress>
                         <local:OrderLookupAddress.IsEnabled>
-                            <Binding Mode="OneWay" Path="Orchestrator.ShipmentAllowEditing" />
+                            <Binding Mode="OneWay" Path="ShipmentModel.ShipmentAllowEditing" />
                         </local:OrderLookupAddress.IsEnabled>
                     </local:OrderLookupAddress>
                 </StackPanel>
@@ -126,7 +126,7 @@
                         Content="Automatically use the USPS account with the least expensive Rate"
                         Style="{StaticResource FormCheckBox}">
                         <CheckBox.IsEnabled>
-                            <Binding Mode="OneWay" Path="Orchestrator.ShipmentAllowEditing" />
+                            <Binding Mode="OneWay" Path="ShipmentModel.ShipmentAllowEditing" />
                         </CheckBox.IsEnabled>
                         <CheckBox.IsChecked>
                             <Binding Path="RateShop" />
@@ -159,7 +159,7 @@
             <ContentControl Content="{Binding .}">
                 <ContentControl.ContentTemplate>
                     <MultiBinding Converter="{StaticResource ShipmentTypeToOrderLookupTemplateConverter}">
-                    <Binding Path="Orchestrator.ShipmentTypeCode" />
+                    <Binding Path="ShipmentModel.ShipmentTypeCode" />
                         <Binding RelativeSource="{RelativeSource Self}" />
                     </MultiBinding>
                 </ContentControl.ContentTemplate>

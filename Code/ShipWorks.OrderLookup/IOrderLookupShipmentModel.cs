@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Reflection;
 using ShipWorks.Data.Model.EntityClasses;
@@ -10,7 +11,7 @@ namespace ShipWorks.OrderLookup
     /// <summary>
     /// Represents the Order Lookup Data Service
     /// </summary>
-    public interface IViewModelOrchestrator
+    public interface IOrderLookupShipmentModel
     {
         /// <summary>
         /// The order that's in context
@@ -23,7 +24,7 @@ namespace ShipWorks.OrderLookup
         bool ShipmentAllowEditing { get; }
 
         /// <summary>
-        /// The orders shipment adapter
+        /// The order's shipment adapter
         /// </summary>
         ICarrierShipmentAdapter ShipmentAdapter { get; }
 
@@ -33,7 +34,7 @@ namespace ShipWorks.OrderLookup
         ShipmentTypeCode ShipmentTypeCode { get; set; }
 
         /// <summary>
-        /// The pacakge adpaters for the order in context
+        /// The package adapters for the order in context
         /// </summary>
         IEnumerable<IPackageAdapter> PackageAdapters { get; }
 
@@ -61,5 +62,10 @@ namespace ShipWorks.OrderLookup
         /// Unload the order
         /// </summary>
         void Unload();
+
+        /// <summary>
+        /// Fires when an order is cleared
+        /// </summary>
+        event EventHandler OnSearchOrder;
     }
 }

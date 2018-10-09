@@ -1,3 +1,4 @@
+using System;
 using System.ComponentModel;
 using System.Reflection;
 using System.Windows.Input;
@@ -14,7 +15,7 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookupSearchControl
     [Component(RegistrationType.Self)]
     public class OrderLookupSearchViewModel : INotifyPropertyChanged
     {
-        private readonly IViewModelOrchestrator orchestrator;
+        private readonly IOrderLookupShipmentModel shipmentModel;
         private readonly IMessenger messenger;
         public event PropertyChangedEventHandler PropertyChanged;
         private readonly PropertyChangedHandler handler;
@@ -26,15 +27,25 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookupSearchControl
         /// <summary>
         /// Ctor
         /// </summary>
-        public OrderLookupSearchViewModel(IViewModelOrchestrator orchestrator, IMessenger messenger)
+        public OrderLookupSearchViewModel(IOrderLookupShipmentModel shipmentModel, IMessenger messenger)
         {
-            this.orchestrator = orchestrator;
+            this.shipmentModel = shipmentModel;
             this.messenger = messenger;
-            orchestrator.PropertyChanged += UpdateOrderNumber;
+            shipmentModel.PropertyChanged += UpdateOrderNumber;
             handler = new PropertyChangedHandler(this, () => PropertyChanged);
             GetOrderCommand = new RelayCommand(GetOrder);
             ResetCommand = new RelayCommand(Reset);
             CreateLabelCommand = new RelayCommand(CreateLabel);
+            shipmentModel.OnSearchOrder += (s, e) => ClearOrderError();
+        }
+
+        /// <summary>
+        /// Clears the order error
+        /// </summary>
+        private void ClearOrderError() 
+        {
+            SearchError = false;
+            SearchErrorMessage = string.Empty;
         }
 
         /// <summary>
@@ -46,7 +57,7 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookupSearchControl
             get => orderNumber;
             set => handler.Set(nameof(OrderNumber), ref orderNumber, value);
         }
-        
+
         /// <summary>
         /// Total cost of the shipment
         /// </summary>
@@ -94,15 +105,15 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookupSearchControl
         /// </summary>
         [Obfuscation(Exclude = true)]
         public ICommand CreateLabelCommand { get; set; }
-        
+
         /// <summary>
         /// Update the order number when the order changes
         /// </summary>
         private void UpdateOrderNumber(object sender, PropertyChangedEventArgs e)
         {
-            if (e.PropertyName == "SelectedOrder")
+            if (e.PropertyName == nameof(shipmentModel.SelectedOrder))
             {
-                if (orchestrator.SelectedOrder == null)
+                if (shipmentModel.SelectedOrder == null)
                 {
                     SearchErrorMessage = "No matching orders were found.";
                     SearchError = true;
@@ -112,19 +123,21 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookupSearchControl
                 {
                     SearchErrorMessage = string.Empty;
                     SearchError = false;
-                    OrderNumber = orchestrator.SelectedOrder.OrderNumberComplete;
+                    OrderNumber = shipmentModel.SelectedOrder.OrderNumberComplete;
                 }
             }
         }
-        
+
         /// <summary>
-        /// Get the order with the current order number 
+        /// Get the order with the current order number
         /// </summary>
         private void GetOrder()
         {
+            ClearOrderError();
+            shipmentModel.SaveToDatabase();
             messenger.Send(new OrderLookupSearchMessage(this, OrderNumber));
         }
-        
+
         /// <summary>
         /// Reset the order
         /// </summary>

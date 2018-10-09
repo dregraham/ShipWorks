@@ -1,0 +1,28 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    
+    <Style x:Key="InformationIcon" TargetType="{x:Type Path}">
+        <Setter Property="Data" Value="M11,9H13V7H11M12,20C7.59,20 4,16.41 4,12C4,7.59 7.59,4 12,4C16.41,4 20,7.59 20,12C20,16.41 16.41,20 12,20M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M11,17H13V11H11V17Z"/>
+    </Style>
+    
+    <Style x:Key="CalendarIcon" TargetType="{x:Type Path}">
+        <Setter Property="Data" Value="M9,10H7V12H9V10M13,10H11V12H13V10M17,10H15V12H17V10M19,3H18V1H16V3H8V1H6V3H5C3.89,3 3,3.9 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V5A2,2 0 0,0 19,3M19,19H5V8H19V19Z"/>
+    </Style>
+    
+    <Style x:Key="ScaleIcon" TargetType="{x:Type Path}">
+        <Setter Property="Data" Value="M17.930249,8.94719091 L17.930249,7.53253928 L13.4505188,7.53253928 L13.4505188,6 L28.5401362,6 L28.5401362,7.53253928 L24.0604061,7.53253928 L24.0604061,8.94719091 L26.1823835,8.94719091 L29,17.4351007 L27.3612599,21.3253928 L14.6293951,21.3253928 L13,17.4351007 L15.8082715,8.94719091 L17.930249,8.94719091 Z M21.0163593,19.9107411 C23.6857686,19.9107411 25.8497524,17.7467573 25.8497524,15.077348 C25.8497524,12.4079387 23.6857686,10.2439549 21.0163593,10.2439549 C18.34695,10.2439549 16.1829662,12.4079387 16.1829662,15.077348 C16.1829662,17.7467573 18.34695,19.9107411 21.0163593,19.9107411 Z M21.0163593,16.1383367 C20.5606065,16.1383367 20.1911458,16.0100382 20.1911458,14.2521346 C20.1911458,13.0801988 20.466217,12.01921 21.0163593,11.0691684 C21.5665016,12.01921 21.8415727,13.0801988 21.8415727,14.2521346 C21.8415727,16.0100382 21.4721121,16.1383367 21.0163593,16.1383367 Z"/>
+    </Style>
+    
+    <Style x:Key="DropDownArrowIcon" TargetType="{x:Type Path}">
+        <Setter Property="Data" Value="M7,10L12,15L17,10H7Z"/>
+    </Style>
+    
+    <Style x:Key="ExpanderDownArrowIcon" TargetType="{x:Type Path}">
+        <Setter Property="Data" Value="M 1,1.5 L 6.5,7 L 12,1.5"/>
+    </Style>
+    
+    <Style x:Key="ExpanderUpArrowIcon" TargetType="{x:Type Path}">
+        <Setter Property="Data" Value="M 1,6.5  L 6.5,1  L 12,6.5"/>
+    </Style>
+    
+</ResourceDictionary>

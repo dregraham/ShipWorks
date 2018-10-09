@@ -7,7 +7,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using GalaSoft.MvvmLight.Command;
+using GalaSoft.MvvmLight.CommandWpf;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
 using ShipWorks.Common.IO.Hardware.Printers;
@@ -31,23 +31,21 @@ namespace ShipWorks.OrderLookup.Controls.LabelOptions
         private readonly PropertyChangedHandler handler;
         private bool allowStealth;
         private bool allowNoPostage;
-        private List<ThermalLanguage> labelFormats;
+        private Dictionary<int, string> labelFormats;
 
         public event PropertyChangedEventHandler PropertyChanged;
 
         /// <summary>
         /// ctor
         /// </summary>
-        public OrderLookupLabelOptionsControlViewModel(IViewModelOrchestrator orchestrator, IShipmentTypeManager shipmentTypeManager, IFedExUtility fedExUtility)
+        public OrderLookupLabelOptionsControlViewModel(IOrderLookupShipmentModel shipmentModel, IShipmentTypeManager shipmentTypeManager, IFedExUtility fedExUtility)
         {
-            Orchestrator = orchestrator;
-            Orchestrator.PropertyChanged += OrchestratorPropertyChanged;
+            ShipmentModel = shipmentModel;
+            ShipmentModel.PropertyChanged += ShipmentModelPropertyChanged;
             this.shipmentTypeManager = shipmentTypeManager;
             this.fedExUtility = fedExUtility;
 
             handler = new PropertyChangedHandler(this, () => PropertyChanged);
-
-            OpenPrinterArticleCommand = new RelayCommand(OpenPrinterArticle);
        }
 
         /// <summary>
@@ -74,32 +72,26 @@ namespace ShipWorks.OrderLookup.Controls.LabelOptions
         /// List of available label formats for the shipment
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public List<ThermalLanguage> LabelFormats
+        public Dictionary<int, string> LabelFormats
         {
             get => labelFormats;
             set => handler.Set(nameof(LabelFormats), ref labelFormats, value);
         }
 
         /// <summary>
-        /// The order lookup Orchestrator
+        /// The order lookup ShipmentModel
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public IViewModelOrchestrator Orchestrator { get; }
-
-        /// <summary>
-        /// Command to open the printer article
-        /// </summary>
-        [Obfuscation(Exclude = true)]
-        public ICommand OpenPrinterArticleCommand { get; }
+        public IOrderLookupShipmentModel ShipmentModel { get; }
 
         /// <summary>
         /// Update when the order changes
         /// </summary>
-        private void OrchestratorPropertyChanged(object sender, PropertyChangedEventArgs e)
+        private void ShipmentModelPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            if (e.PropertyName == "SelectedOrder" && Orchestrator.SelectedOrder != null)
+            if (e.PropertyName == nameof(ShipmentModel.SelectedOrder) && ShipmentModel.SelectedOrder != null)
             {
-                ShipmentEntity shipment = Orchestrator.ShipmentAdapter.Shipment;
+                ShipmentEntity shipment = ShipmentModel.ShipmentAdapter.Shipment;
 
                 // Determine if stealth and no postage is allowed for the new shipment
                 if (shipmentTypeManager.IsPostal(shipment.ShipmentTypeCode))
@@ -115,10 +107,10 @@ namespace ShipWorks.OrderLookup.Controls.LabelOptions
 
                 // Set the available label formats for the new shipment
                 LabelFormats = EnumHelper.GetEnumList<ThermalLanguage>(x => ShouldIncludeLabelFormatInList(shipment, x))
-                    .Select(x => x.Value).ToList();
+                    .Select(x => x.Value).ToDictionary(s => (int) s, s => EnumHelper.GetDescription(s));
 
-                // Update the Orchestrator
-                handler.RaisePropertyChanged(nameof(Orchestrator));
+                // Update the ShipmentModel
+                handler.RaisePropertyChanged(nameof(ShipmentModel));
             }
         }
 
@@ -158,20 +150,7 @@ namespace ShipWorks.OrderLookup.Controls.LabelOptions
                     break;
             }
 
-            if (labelFormat == ThermalLanguage.None)
-            {
-                return false;
-            }
-
             return true;
-        }
-
-        /// <summary>
-        /// Open the printer help article
-        /// </summary>
-        private void OpenPrinterArticle()
-        {
-            Process.Start("http://support.shipworks.com/support/solutions/articles/140916-what-printer-should-i");
         }
     }
 }

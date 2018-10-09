@@ -2,6 +2,7 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="/ShipWorks.OrderLookup;component/Styles/Colors.xaml"/>
+        <ResourceDictionary Source="/ShipWorks.OrderLookup;component/Styles/Shapes.xaml"/>
     </ResourceDictionary.MergedDictionaries>
     <Style x:Key="Expander.HeaderFocusVisual">
         <Setter Property="Control.Template">
@@ -28,12 +29,12 @@
                             <ContentPresenter Grid.Column="0" HorizontalAlignment="Left" Margin="10,0,0,0" RecognizesAccessKey="True" SnapsToDevicePixels="True" VerticalAlignment="Center"/>
                             <Path x:Name="arrow" 
                                   Margin="0 0 10 0"
-                                  Grid.Column="1" Data=" M 1,1.5 L 6.5,7 L 12,1.5" HorizontalAlignment="Center" SnapsToDevicePixels="false" Stroke="Black" StrokeThickness="2.5" VerticalAlignment="Center"/>
+                                  Grid.Column="1" Style="{StaticResource ExpanderDownArrowIcon}" HorizontalAlignment="Center" SnapsToDevicePixels="false" Stroke="Black" StrokeThickness="2.5" VerticalAlignment="Center"/>
                         </Grid>
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsChecked" Value="true">
-                            <Setter Property="Data" TargetName="arrow" Value="M 1,6.5  L 6.5,1  L 12,6.5"/>
+                            <Setter Property="Style" TargetName="arrow" Value="{StaticResource ExpanderUpArrowIcon}"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -54,7 +55,7 @@
         <Setter Property="FontStyle" Value="Normal" />
         <Setter Property="FontStretch" Value="Normal" />
         <Setter Property="FontWeight" Value="Normal" />
-        <Setter Property="Margin" Value="5"/>
+        <Setter Property="Margin" Value="3 5 3 5"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Expander}">

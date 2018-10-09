@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Data;
 
 namespace ShipWorks.UI.ValueConverters
@@ -18,7 +14,7 @@ namespace ShipWorks.UI.ValueConverters
         /// </summary>
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if(value is string str)
+            if (value is string str)
             {
                 return str.TrimEnd(':');
             }

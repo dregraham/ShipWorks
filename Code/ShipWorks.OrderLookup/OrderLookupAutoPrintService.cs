@@ -31,13 +31,13 @@ namespace ShipWorks.OrderLookup
         private readonly IMessenger messenger;
         private readonly ISchedulerProvider schedulerProvider;
         private readonly IAutoPrintService autoPrintService;
-        
+
         /// <summary>
         /// Initializes a new instance of the <see cref="AutoPrintServicePipeline"/> class.
         /// </summary>
         public OrderLookupAutoPrintService(
-            IAutoPrintService autoPrintService, 
-            Func<Type, ILog> logFactory, 
+            IAutoPrintService autoPrintService,
+            Func<Type, ILog> logFactory,
             ISqlAdapterFactory sqlAdapterFactory,
             IMessenger messenger,
             ISchedulerProvider schedulerProvider)
@@ -59,8 +59,14 @@ namespace ShipWorks.OrderLookup
                 return new AutoPrintCompletionResult(orderId);
             }
 
-            GenericResult<AutoPrintResult> autoPrintResult = 
-                await autoPrintService.Print(new AutoPrintServiceDto() { OrderID = orderId, MatchedOrderCount = 1 }).ConfigureAwait(false);
+            GenericResult<AutoPrintResult> autoPrintResult =
+                await autoPrintService.Print(
+                    new AutoPrintServiceDto()
+                    {
+                        OrderID = orderId,
+                        MatchedOrderCount = 1,
+                        ScannedBarcode = message.ScannedText
+                    }).ConfigureAwait(false);
 
             AutoPrintCompletionResult result = await WaitForShipmentsProcessedMessage(autoPrintResult).ConfigureAwait(false);
             SaveUnprocessedShipments(result);
@@ -110,7 +116,7 @@ namespace ShipWorks.OrderLookup
         }
 
         /// <summary>
-        /// Checks to see if the ShipmentsProcessedMessage is the default message. 
+        /// Checks to see if the ShipmentsProcessedMessage is the default message.
         /// </summary>
         private static bool IsDefaultValue(ShipmentsProcessedMessage shipmentsProcessedMessage)
         {

@@ -4,6 +4,7 @@
                     xmlns:ui="http://schemas.shipworks.com/ui">
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="/ShipWorks.OrderLookup;component/Styles/Colors.xaml"/>
+        <ResourceDictionary Source="/ShipWorks.OrderLookup;component/Styles/Shapes.xaml"/>
     </ResourceDictionary.MergedDictionaries>
     <ControlTemplate x:Key="OrderLookupComboBoxTemplate" TargetType="{x:Type ui:ShipWorksComboBox}">
         <Grid x:Name="templateRoot" SnapsToDevicePixels="True">
@@ -40,7 +41,8 @@
                                             CornerRadius="1">
                                         <Border x:Name="splitBorder" HorizontalAlignment="Right" SnapsToDevicePixels="True">
                                               <Path x:Name="Arrow"
-                                                    Data="M7,10L12,15L17,10H7Z" Fill="{StaticResource IconColor}"
+                                                    Style="{StaticResource DropDownArrowIcon}"
+                                                    Fill="{StaticResource IconColor}"
                                                     Height="4" Width="6" Margin="0 0 11 0" Stretch="Fill"/>
                                         </Border>
                                     </Border>

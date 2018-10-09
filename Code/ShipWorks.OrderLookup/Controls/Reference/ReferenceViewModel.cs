@@ -17,27 +17,27 @@ namespace ShipWorks.OrderLookup.Controls.Reference
         /// <summary>
         /// ctor
         /// </summary>
-        public ReferenceViewModel(IViewModelOrchestrator orchestrator)
+        public ReferenceViewModel(IOrderLookupShipmentModel shipmentModel)
         {
-            Orchestrator = orchestrator;
-            Orchestrator.PropertyChanged += OrchestratorPropertyChanged;
+            ShipmentModel = shipmentModel;
+            ShipmentModel.PropertyChanged += ShipmentModelPropertyChanged;
             handler = new PropertyChangedHandler(this, () => PropertyChanged);
         }
 
         /// <summary>
-        /// The order lookup Orchestrator
+        /// The order lookup ShipmentModel
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public IViewModelOrchestrator Orchestrator { get; private set; }
+        public IOrderLookupShipmentModel ShipmentModel { get; }
 
         /// <summary>
         /// Update when the order changes
         /// </summary>
-        private void OrchestratorPropertyChanged(object sender, PropertyChangedEventArgs e)
+        private void ShipmentModelPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            if (e.PropertyName == "SelectedOrder" && Orchestrator.SelectedOrder != null)
+            if (e.PropertyName == nameof(ShipmentModel.SelectedOrder) && ShipmentModel.SelectedOrder != null)
             {
-                handler.RaisePropertyChanged(nameof(Orchestrator));
+                handler.RaisePropertyChanged(nameof(ShipmentModel));
             }
         }
     }
