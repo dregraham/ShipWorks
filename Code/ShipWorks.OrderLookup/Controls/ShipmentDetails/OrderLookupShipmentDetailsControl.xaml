@@ -209,23 +209,35 @@
                         Grid.Column="0"
                         Style="{StaticResource FieldLabel}"
                         Text="Dimensions" />
-
-                    <ui:ShipWorksComboBox
-                        Grid.Row="7"
-                        Grid.Column="1"
-                        Margin="10,0,0,5"
-                        DisplayMemberPath="Name"
-                        ItemsSource="{Binding DimensionProfiles}"
-                        SelectedIndexWhenNull="{x:Static ui:RelativeIndex.Last}"
-                        SelectedValuePath="DimensionsProfileID"
-                        Style="{StaticResource FormComboBox}">
+                    <Grid Grid.Row="7"
+                          Grid.Column="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <ui:ShipWorksComboBox Grid.Column="0"
+                                              Margin="10,0,0,5"
+                                              DisplayMemberPath="Name"
+                                              ItemsSource="{Binding DimensionProfiles}"
+                                              SelectedIndexWhenNull="{x:Static ui:RelativeIndex.Last}"
+                                              SelectedValuePath="DimensionsProfileID"
+                                              Style="{StaticResource FormComboBox}">
                         <ComboBox.SelectedValue>
                             <Binding
                                 Mode="TwoWay"
                                 Path="ShipmentModel.ShipmentAdapter.Shipment.Postal.DimsProfileID"
                                 UpdateSourceTrigger="PropertyChanged" />
                         </ComboBox.SelectedValue>
-                    </ui:ShipWorksComboBox>
+                       </ui:ShipWorksComboBox>
+
+                        <Button
+                            Grid.Column="1"
+                            Margin="3,0,0,0"
+                            VerticalAlignment="Center"
+                            Command="{Binding ManageDimensionalProfiles}"
+                            Content="Manage..."
+                            Style="{StaticResource Link}" />
+                    </Grid>
 
                     <Grid
                         Grid.Row="8"
