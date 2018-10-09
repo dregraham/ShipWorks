@@ -213,14 +213,13 @@ namespace ShipWorks.OrderLookup
                     {
                         try
                         {
-                            SaveToDatabase();
-
                             if (orderMessage.Order == null)
                             {
                                 ClearOrder();
                             }
                             else
                             {
+                                SaveToDatabase();
                                 LoadOrder(orderMessage.Order);
                             }
                         }
