@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Reflection;
 using Interapptive.Shared.ComponentRegistration;
@@ -89,20 +90,20 @@ namespace ShipWorks.OrderLookup
             get => ShipmentAdapter?.ShipmentTypeCode ?? ShipmentTypeCode.None;
             set
             {
-                
+
                 if (value != ShipmentTypeCode)
                 {
                     // The shipping manager interacts with the database when changing the shipment type so we save prior to
                     // changing shipment types.
                     SaveToDatabase();
 
-                    // Changing shipment type leads to unloading and loading entities into the current ShipmentEntity. 
+                    // Changing shipment type leads to unloading and loading entities into the current ShipmentEntity.
                     // To prepare for this, we remove existing handlers from the existing entities, change the shipment type,
                     // then add handlers to the possibly new entities.
                     using (handler.SuppressChangeNotifications())
                     {
                         RemovePropertyChangedEventsFromEntities();
-  
+
                         ShipmentAdapter = shippingManager.ChangeShipmentType(value, ShipmentAdapter.Shipment);
                         RefreshProperties();
 
@@ -196,24 +197,33 @@ namespace ShipWorks.OrderLookup
         /// </summary>
         public void InitializeForCurrentSession()
         {
-            IDisposable onSingleScan = messenger.OfType<OrderLookupSingleScanMessage>()
-                .Subscribe(orderMessage =>
-                {
-                    if (orderMessage.Order == null)
+            subscription = new CompositeDisposable()
+            {
+                messenger.OfType<OrderLookupSingleScanMessage>()
+                    .Subscribe(orderMessage =>
                     {
-                        ClearOrder();
-                    }
-                    else
+                        try
+                        {
+                            if (orderMessage.Order == null)
+                            {
+                                ClearOrder();
+                            }
+                            else
+                            {
+                                LoadOrder(orderMessage.Order);
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            messageHelper.ShowError("An error occurred when loading your order.", ex);
+                        }
+                    }),
+                messenger.OfType<SingleScanMessage>()
+                    .Subscribe(message =>
                     {
-                        LoadOrder(orderMessage.Order);
-                    }
-                });
-
-            IDisposable onOrderSearch = messenger.OfType<SingleScanMessage>()
-                .Subscribe(message =>
-                {
-                    OnSearchOrder?.Invoke(this, null);
-                });
+                        OnSearchOrder?.Invoke(this, null);
+                    })
+            };
         }
 
         /// <summary>
@@ -242,7 +252,7 @@ namespace ShipWorks.OrderLookup
 
             SelectedOrder = order;
         }
-        
+
         /// <summary>
         /// Clear the order
         /// </summary>
@@ -250,7 +260,7 @@ namespace ShipWorks.OrderLookup
         {
             SaveToDatabase();
             RemovePropertyChangedEventsFromEntities();
-            
+
             ShipmentAdapter = null;
             ShipmentAllowEditing = false;
             PackageAdapters = null;

@@ -45,7 +45,7 @@ namespace ShipWorks.OrderLookup
             this.orderRepository = orderRepository;
             this.onDemandDownloaderFactory = onDemandDownloaderFactory;
             this.orderLookupAutoPrintService = orderLookupAutoPrintService;
-            
+
         }
 
         /// <summary>
@@ -90,7 +90,7 @@ namespace ShipWorks.OrderLookup
                 }
 
                 SendOrderMessage(order);
-            } 
+            }
             finally
             {
                 processingScan = false;
