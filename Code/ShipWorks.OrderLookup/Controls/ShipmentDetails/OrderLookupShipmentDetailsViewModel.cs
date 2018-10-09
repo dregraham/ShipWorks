@@ -112,6 +112,18 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
             set => handler.Set(nameof(Providers), ref providers, value);
         }
 
+        public ShipmentTypeCode ShipmentTypeCode
+        {
+            get => ShipmentModel.ShipmentAdapter?.ShipmentTypeCode ?? ShipmentTypeCode.None;
+            set
+            {
+                if (value != ShipmentModel.ShipmentAdapter.ShipmentTypeCode)
+                {
+                    ShipmentModel.ChangeShipmentType(value);                    
+                }
+            }
+        }
+
         /// <summary>
         /// Collection of valid PackageTypes
         /// </summary>
@@ -157,7 +169,7 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
 
                 if (e.PropertyName == nameof(ShipmentModel.SelectedOrder) ||
                     e.PropertyName == PostalShipmentFields.Service.Name ||
-                    e.PropertyName == nameof(ShipmentModel.ShipmentTypeCode) ||
+                    e.PropertyName == nameof(ShipmentModel.ShipmentAdapter.ShipmentTypeCode) ||
                     e.PropertyName == ShipmentFields.ShipCountryCode.Name)
                 {
                     RefreshInsurance();
@@ -188,18 +200,18 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
                     handler.RaisePropertyChanged(nameof(IsProfileSelected));
                 }
 
-                if (e.PropertyName == nameof(ShipmentModel.ShipmentTypeCode) || e.PropertyName == nameof(ShipmentModel.SelectedOrder))
+                if (e.PropertyName == nameof(ShipmentModel.ShipmentAdapter.ShipmentTypeCode) || e.PropertyName == nameof(ShipmentModel.SelectedOrder))
                 {
                     RefreshPackageTypes();
                 }
 
-                if (e.PropertyName == nameof(ShipmentModel.SelectedOrder) || e.PropertyName == nameof(ShipmentModel.ShipmentTypeCode) || e.PropertyName == PostalShipmentFields.Service.Name ||
+                if (e.PropertyName == nameof(ShipmentModel.SelectedOrder) || e.PropertyName == nameof(ShipmentModel.ShipmentAdapter.ShipmentTypeCode) || e.PropertyName == PostalShipmentFields.Service.Name ||
                     e.PropertyName == "PackagingType")
                 {
                     RefreshConfirmationTypes();
                 }
 
-                if (e.PropertyName == nameof(ShipmentModel.SelectedOrder) || e.PropertyName == nameof(ShipmentModel.ShipmentTypeCode) ||
+                if (e.PropertyName == nameof(ShipmentModel.SelectedOrder) || e.PropertyName == nameof(ShipmentModel.ShipmentAdapter.ShipmentTypeCode) ||
                     e.PropertyName == nameof(ShipmentFields.ShipCountryCode.Name))
                 {
                     RefreshServiceTypes();

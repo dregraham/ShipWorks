@@ -31,7 +31,7 @@
                     DisplayMemberPath="Value"
                     ItemsSource="{Binding Providers}"
                     SelectedIndexWhenNull="{x:Static ui:RelativeIndex.First}"
-                    SelectedValue="{Binding ShipmentModel.ShipmentTypeCode, UpdateSourceTrigger=PropertyChanged}"
+                    SelectedValue="{Binding ShipmentTypeCode, UpdateSourceTrigger=PropertyChanged}"
                     SelectedValuePath="Key"
                     Style="{StaticResource FormComboBox}" />
             </UserControl>
@@ -324,7 +324,7 @@
         <ContentControl Content="{Binding .}" IsEnabled="{Binding ShipmentModel.ShipmentAllowEditing}">
             <ContentControl.ContentTemplate>
                 <MultiBinding Converter="{StaticResource ShipmentTypeToOrderLookupTemplateConverter}">
-                    <Binding Path="ShipmentModel.ShipmentTypeCode" />
+                    <Binding Path="ShipmentModel.ShipmentAdapter.ShipmentTypeCode" />
                     <Binding RelativeSource="{RelativeSource Self}" />
                 </MultiBinding>
             </ContentControl.ContentTemplate>
