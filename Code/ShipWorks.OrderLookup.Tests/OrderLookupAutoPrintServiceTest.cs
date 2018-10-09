@@ -44,7 +44,7 @@ namespace ShipWorks.OrderLookup.Tests
 
             await testObject.AutoPrintShipment(123, message);
 
-            autoPrintService.Verify(a => a.Print(new AutoPrintServiceDto() { OrderID = 123, MatchedOrderCount = 1 }));
+            autoPrintService.Verify(a => a.Print(new AutoPrintServiceDto() { OrderID = 123, MatchedOrderCount = 1, ScannedBarcode = message.ScannedText}));
         }
 
         [Fact]
