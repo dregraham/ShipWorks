@@ -15,6 +15,7 @@ using Shared.System.ComponentModel.DataAnnotations;
 using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Core.UI;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Filters.Content.Conditions.Shipments;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers.FedEx;
@@ -135,6 +136,12 @@ namespace ShipWorks.OrderLookup.Controls.LabelOptions
         /// </summary>
         private void ShipmentModelPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
+            if (e.PropertyName == nameof(ShipmentFields.RequestedLabelFormat))
+            {
+                ThermalLanguage labelFormat = (ThermalLanguage) ShipmentModel.ShipmentAdapter.Shipment.RequestedLabelFormat;
+                shipmentTypeManager.Get(ShipmentModel.ShipmentAdapter.Shipment).SaveRequestedLabelFormat(labelFormat, ShipmentModel.ShipmentAdapter.Shipment);
+            }
+
             if (e.PropertyName == nameof(ShipmentModel.SelectedOrder) && ShipmentModel.SelectedOrder != null)
             {
                 ShipmentEntity shipment = ShipmentModel.ShipmentAdapter.Shipment;
