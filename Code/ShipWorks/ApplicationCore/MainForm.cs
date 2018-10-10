@@ -78,11 +78,6 @@ using ShipWorks.Settings;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers.FedEx;
 using ShipWorks.Shipping.Carriers.FedEx.Api;
-using ShipWorks.Shipping.Carriers.Postal.Endicia;
-using ShipWorks.Shipping.Carriers.Postal.Endicia.Express1;
-using ShipWorks.Shipping.Carriers.Postal.Usps;
-using ShipWorks.Shipping.Carriers.Postal.Usps.Express1.ScanForm;
-using ShipWorks.Shipping.Carriers.Postal.Usps.ScanForm;
 using ShipWorks.Shipping.Carriers.UPS.WorldShip;
 using ShipWorks.Shipping.Profiles;
 using ShipWorks.Shipping.ScanForms;
@@ -299,7 +294,8 @@ namespace ShipWorks
             ribbonSecurityProvider.AddAdditionalCondition(buttonUpdateOnline, () => OnlineUpdateCommandProvider.HasOnlineUpdateCommands());
             ribbonSecurityProvider.AddAdditionalCondition(buttonFedExClose, () => FedExAccountManager.Accounts.Count > 0);
             ribbonSecurityProvider.AddAdditionalCondition(buttonOrderLookupViewFedExClose, () => FedExAccountManager.Accounts.Count > 0);
-            ribbonSecurityProvider.AddAdditionalCondition(buttonEndiciaSCAN, () => (EndiciaAccountManager.EndiciaAccounts.Count + EndiciaAccountManager.Express1Accounts.Count + UspsAccountManager.Express1Accounts.Count + UspsAccountManager.UspsAccounts.Count) > 0);
+            ribbonSecurityProvider.AddAdditionalCondition(buttonEndiciaSCAN, AreThereAnyPostalAccounts);
+            ribbonSecurityProvider.AddAdditionalCondition(buttonOrderLookupViewSCANForm, AreThereAnyPostalAccounts);
             ribbonSecurityProvider.AddAdditionalCondition(buttonFirewall, () => SqlSession.IsConfigured && !SqlSession.Current.Configuration.IsLocalDb());
             ribbonSecurityProvider.AddAdditionalCondition(buttonChangeConnection, () => SqlSession.IsConfigured && !SqlSession.Current.Configuration.IsLocalDb());
             ribbonSecurityProvider.AddAdditionalCondition(buttonOrderLookupViewFields, () => UIMode == UIMode.OrderLookup);
@@ -317,6 +313,15 @@ namespace ShipWorks
 
             ApplyEditingContext();
         }
+
+        /// <summary>
+        /// Checks whether we have any postal accounts
+        /// </summary>
+        /// <returns></returns>
+        private static bool AreThereAnyPostalAccounts() =>
+            Using(
+                IoC.BeginLifetimeScope(),
+                scope => scope.Resolve<IEnumerable<IScanFormAccountRepository>>().Any(x => x.HasAccounts));
 
         /// <summary>
         /// Main form has been made visible
@@ -1060,8 +1065,7 @@ namespace ShipWorks
         /// </summary>
         private void ExecuteLogonActions()
         {
-            Action action = null;
-            while (logonActions.TryDequeue(out action))
+            while (logonActions.TryDequeue(out Action action))
             {
                 action();
             }
@@ -1079,9 +1083,9 @@ namespace ShipWorks
         {
             using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
-                ISetupGuide SetupGuide = lifetimeScope.Resolve<ISetupGuide>();
-                SetupGuide.LoadOwner(this);
-                SetupGuide.ShowDialog();
+                ISetupGuide setupGuide = lifetimeScope.Resolve<ISetupGuide>();
+                setupGuide.LoadOwner(this);
+                setupGuide.ShowDialog();
             }
         }
 
@@ -1712,6 +1716,7 @@ namespace ShipWorks
             editionGuiHelper.RegisterElement(buttonNewOrder, EditionFeature.AddOrderCustomer);
             editionGuiHelper.RegisterElement(buttonNewCustomer, EditionFeature.AddOrderCustomer);
             editionGuiHelper.RegisterElement(buttonEndiciaSCAN, EditionFeature.EndiciaScanForm);
+            editionGuiHelper.RegisterElement(buttonOrderLookupViewSCANForm, EditionFeature.EndiciaScanForm);
         }
 
         /// <summary>
@@ -4004,6 +4009,7 @@ namespace ShipWorks
                 using (ShippingSettingsDlg dlg = new ShippingSettingsDlg(lifetimeScope))
                 {
                     dlg.ShowDialog(this);
+                    ribbonSecurityProvider.UpdateSecurityUI();
                 }
             }
         }
@@ -4089,11 +4095,25 @@ namespace ShipWorks
         /// <summary>
         /// The FedEx Close popup menu is opening, so we need to dynamically populate it
         /// </summary>
-        private void OnFedExClosePopupOpening(object sender, BeforePopupEventArgs e)
-        {
-            FedExGroundClose.PopulatePrintReportsMenu(menuFedExPrintReports);
+        private void OnFedExClosePopupOpening(object sender, BeforePopupEventArgs e) =>
+            PopulateFedExCloseMenu(menuFedExPrintReports, menuFedExSmartPostClose);
 
-            menuFedExSmartPostClose.Visible = FedExUtility.GetSmartPostHubs().Count > 0;
+        /// <summary>
+        /// The FedEx Close popup menu is opening, so we need to dynamically populate it
+        /// </summary>
+        private void OnOrderLookupViewFedExClosePopupOpening(object sender, BeforePopupEventArgs e) =>
+            PopulateFedExCloseMenu(menuOrderLookupViewFedExPrintReports, menuOrderLookupViewFedExSmartPostClose);
+
+        /// <summary>
+        /// Populate the FedEx close menu
+        /// </summary>
+        /// <param name="printMenu"></param>
+        /// <param name="closeMenu"></param>
+        private void PopulateFedExCloseMenu(Divelements.SandRibbon.Menu printMenu, SandMenuItem closeMenu)
+        {
+            FedExGroundClose.PopulatePrintReportsMenu(printMenu);
+
+            closeMenu.Visible = FedExUtility.GetSmartPostHubs().Any();
         }
 
         /// <summary>
@@ -4170,16 +4190,27 @@ namespace ShipWorks
         /// <summary>
         /// The postal scan form popup is opening, we need to dynamically repopulate the print menu
         /// </summary>
-        private void OnPostalScanFormOpening(object sender, BeforePopupEventArgs e)
-        {
-            List<IScanFormAccountRepository> repositories = new List<IScanFormAccountRepository>();
-            repositories.Add(new EndiciaScanFormAccountRepository());
-            repositories.Add(new Express1EndiciaScanFormAccountRepository());
-            repositories.Add(new Express1UspsScanFormAccountRepository());
-            repositories.Add(new UspsScanFormAccountRepository());
+        private void OnPostalScanFormOpening(object sender, BeforePopupEventArgs e) =>
+            PopulatePostalSCANFormMenu(menuCreateEndiciaScanForm, menuPrintEndiciaScanForm);
 
-            ScanFormUtility.PopulateCreateScanFormMenu(menuCreateEndiciaScanForm, repositories);
-            ScanFormUtility.PopulatePrintScanFormMenu(menuPrintEndiciaScanForm, repositories);
+        /// <summary>
+        /// The postal scan form popup is opening, we need to dynamically repopulate the print menu
+        /// </summary>
+        private void OnOrderLookupViewPostalScanFormOpening(object sender, BeforePopupEventArgs e) =>
+            PopulatePostalSCANFormMenu(menuOrderLookupViewCreateEndiciaScanForm, menuOrderLookupViewPrintEndiciaScanForm);
+
+        /// <summary>
+        /// Populate the contents of the postal scan form menu
+        /// </summary>
+        private void PopulatePostalSCANFormMenu(SandMenuItem createMenu, Divelements.SandRibbon.Menu printMenu)
+        {
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+            {
+                var repositories = lifetimeScope.Resolve<IEnumerable<IScanFormAccountRepository>>();
+
+                ScanFormUtility.PopulateCreateScanFormMenu(createMenu, repositories);
+                ScanFormUtility.PopulatePrintScanFormMenu(printMenu, repositories);
+            }
         }
 
         #endregion

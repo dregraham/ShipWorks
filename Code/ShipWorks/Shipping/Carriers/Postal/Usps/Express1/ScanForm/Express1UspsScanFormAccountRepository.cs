@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
+using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Postal.Usps.ScanForm;
 using ShipWorks.Shipping.ScanForms;
@@ -25,7 +27,12 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.ScanForm
         /// <returns>A new instance of IScanFormCarrierAccount</returns>
         protected override IScanFormCarrierAccount CreateScanFormCarrierAccount(UspsAccountEntity accountEntity)
         {
-            return new Express1UspsScanFormCarrierAccount(new UspsScanFormRepository((UspsResellerType)accountEntity.UspsReseller), accountEntity);
+            return new Express1UspsScanFormCarrierAccount(new UspsScanFormRepository((UspsResellerType) accountEntity.UspsReseller), accountEntity);
         }
+
+        /// <summary>
+        /// Does the repository have any accounts
+        /// </summary>
+        public bool HasAccounts => UspsAccountManager.Express1AccountsReadOnly.Any(x => x.PendingInitialAccount == (int) UspsPendingAccountType.None);
     }
 }
