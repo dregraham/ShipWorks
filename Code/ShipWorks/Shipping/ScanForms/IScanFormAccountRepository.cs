@@ -1,13 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Windows.Forms;
-using ShipWorks.Data.Model.EntityClasses;
-using SD.LLBLGen.Pro.ORMSupportClasses;
+﻿using System.Collections.Generic;
+using Interapptive.Shared.ComponentRegistration;
 
 namespace ShipWorks.Shipping.ScanForms
 {
+    /// <summary>
+    /// Account repository that can be used for SCAN forms
+    /// </summary>
+    [Service]
     public interface IScanFormAccountRepository
     {
         /// <summary>
@@ -15,5 +14,10 @@ namespace ShipWorks.Shipping.ScanForms
         /// </summary>
         /// <returns>A collection of the ScanFormCarrierAccount objects.</returns>
         IEnumerable<IScanFormCarrierAccount> GetAccounts();
+
+        /// <summary>
+        /// Does the repository have any accounts
+        /// </summary>
+        bool HasAccounts { get; }
     }
 }

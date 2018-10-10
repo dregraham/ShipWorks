@@ -1,6 +1,5 @@
 ﻿using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
-using ShipWorks.AddressValidation;
 using ShipWorks.AddressValidation.Enums;
 using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Data.Grid.Columns.DisplayTypes;
@@ -27,8 +26,6 @@ namespace ShipWorks.Data.Grid.Columns.Definitions
         /// </summary>
         public static GridColumnDefinitionCollection CreateDefinitions()
         {
-            EntityGridAddressSelector addressSelector = new EntityGridAddressSelector("Ship");
-
             return new GridColumnDefinitionCollection
             {
                 new GridColumnDefinition("{175794CD-E6A4-444A-9019-12F9D704C2C8}", true,
@@ -65,7 +62,7 @@ namespace ShipWorks.Data.Grid.Columns.Definitions
                     new GridUserDisplayType(), "Processed By", new object[] { "Joe", Resources.user_16 },
                     new GridColumnFieldValueProvider(ProcessedShipmentFields.ProcessedUserID),
                     new GridColumnAdvancedSortProvider(UserFields.Username, UserFields.UserID, ProcessedShipmentFields.ProcessedUserID, JoinHint.Right)),
-                
+
                 new GridColumnDefinition("{7A3953A2-91FC-4385-A77F-251F49C4CD4C}",
                     new GridComputerDisplayType(), "Processed On", @"\\ShippingPC",
                     new GridColumnFieldValueProvider(ProcessedShipmentFields.ProcessedComputerID),

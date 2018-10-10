@@ -754,6 +754,8 @@
     <Compile Include="ApplicationCore\Interaction\SelectionDependentEntry.cs" />
     <Compile Include="ApplicationCore\IoCLogRequestModule.cs" />
     <Compile Include="OrderLookup\IOrderLookupFieldManager.cs" />
+    <Compile Include="OrderLookup\IPreviousShipmentReprintActionHandler.cs" />
+    <Compile Include="OrderLookup\IPreviousShipmentVoidActionHandler.cs" />
     <Compile Include="OrderLookup\IShipmentHistory.cs" />
     <Compile Include="ApplicationCore\Licensing\Activation\CustomerLicenseActivationActivity.cs" />
     <Compile Include="ApplicationCore\Licensing\Activation\CustomerLicenseActivationService.cs" />

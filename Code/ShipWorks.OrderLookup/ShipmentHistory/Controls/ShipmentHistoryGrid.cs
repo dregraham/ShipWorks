@@ -1,8 +1,12 @@
 ﻿using System;
 using System.Windows.Forms;
+using Divelements.SandGrid;
 using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.Utility;
+using ShipWorks.ApplicationCore;
 using ShipWorks.Data.Grid.Paging;
 using ShipWorks.Data.Model;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Filters;
 using ShipWorks.Stores.Content.Panels;
 
@@ -17,6 +21,7 @@ namespace ShipWorks.OrderLookup.ShipmentHistory.Controls
         private const long ReloadValue = 0;
         private const long FilterValue = 1;
         private readonly Func<ShipmentHistoryEntityGateway> createGateway;
+        private readonly IMainForm mainForm;
         private string searchText;
         private ShipmentHistoryEntityGateway gateway;
 
@@ -30,10 +35,32 @@ namespace ShipWorks.OrderLookup.ShipmentHistory.Controls
         /// <summary>
         /// Constructor
         /// </summary>
-        public ShipmentHistoryGrid(Func<ShipmentHistoryEntityGateway> createGateway) : this()
+        public ShipmentHistoryGrid(Func<ShipmentHistoryEntityGateway> createGateway, IMainForm mainForm) : this()
         {
             this.createGateway = createGateway;
+            this.mainForm = mainForm;
+
+            entityGrid.RowLoadingComplete += OnEntityGridRowLoadingComplete;
         }
+
+        /// <summary>
+        /// Number of rows in the grid
+        /// </summary>
+        public long RowCount { get; private set; }
+
+        /// <summary>
+        /// Event handler for when the grid finishes loading rows.
+        /// </summary>
+        private void OnEntityGridRowLoadingComplete(object sender, EventArgs e)
+        {
+            RowCount = entityGrid.Rows.Count;
+            mainForm.UpdateStatusBar();
+        }
+
+        /// <summary>
+        /// A selection in the grid has changed
+        /// </summary>
+        public event SelectionChangedEventHandler SelectionChanged;
 
         /// <summary>
         /// Handle the load event
@@ -42,10 +69,17 @@ namespace ShipWorks.OrderLookup.ShipmentHistory.Controls
         {
             base.OnLoad(e);
 
+            entityGrid.SelectionChanged += OnEntityGridSelectionChanged;
             entityGrid.AllowMultipleSelection = false;
             entityGrid.Dock = DockStyle.Fill;
             addLink.Visible = false;
         }
+
+        /// <summary>
+        /// Handle when the selection has changed in the grid
+        /// </summary>
+        private void OnEntityGridSelectionChanged(object sender, SelectionChangedEventArgs e) =>
+            SelectionChanged?.Invoke(this, e);
 
         /// <summary>
         /// Perform a search using the given text
@@ -76,6 +110,12 @@ namespace ShipWorks.OrderLookup.ShipmentHistory.Controls
         /// The targets this supports
         /// </summary>
         public override FilterTarget[] SupportedTargets => new[] { FilterTarget.Orders, FilterTarget.Customers };
+
+        /// <summary>
+        /// Refresh the 
+        /// </summary>
+        public GenericResult<ProcessedShipmentEntity> RefreshEntity(ProcessedShipmentEntity shipment) =>
+            gateway.RefreshEntity(shipment);
 
         /// <summary>
         /// Create the gateway used by the underlying entity grid

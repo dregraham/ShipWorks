@@ -16,7 +16,7 @@ namespace ShipWorks.OrderLookup
         /// <summary>
         /// Refresh the history, load any components
         /// </summary>
-        void Activate();
+        void Activate(Divelements.SandRibbon.Button voidButton);
 
         /// <summary>
         /// Unload any components
@@ -27,5 +27,10 @@ namespace ShipWorks.OrderLookup
         /// Save the grid column state
         /// </summary>
         void SaveGridColumnState();
+
+        /// <summary>
+        /// Number of rows in the grid
+        /// </summary>
+        long RowCount { get; }
     }
 }
