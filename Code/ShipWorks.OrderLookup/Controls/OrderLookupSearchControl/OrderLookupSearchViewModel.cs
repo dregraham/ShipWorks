@@ -142,6 +142,9 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookupSearchControl
         private void Reset()
         {
             shipmentModel.Unload();
+            SearchErrorMessage = string.Empty;
+            SearchError = false;
+            OrderNumber = string.Empty;
         }
 
         /// <summary>
