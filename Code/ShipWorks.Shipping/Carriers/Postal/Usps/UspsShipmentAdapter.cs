@@ -94,12 +94,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             PostalRateSelection selection = rate.Tag as PostalRateSelection;
             PostalShipmentType shipmentType = GetShipmentType<PostalShipmentType>();
 
-            var serviceType = (PostalServiceType) ServiceType;
-            var confirmationType = (PostalConfirmationType) Shipment.Postal.Confirmation;
-            var packagingType = (PostalPackagingType) Shipment.Postal.PackagingType;
-
             return selection != null &&
-                shipmentType.DoesRateMatchServiceAndPackaging(selection, serviceType);
+                shipmentType.DoesRateMatchServiceAndPackaging(selection, (PostalServiceType) ServiceType);
         }
 
         /// <summary>
