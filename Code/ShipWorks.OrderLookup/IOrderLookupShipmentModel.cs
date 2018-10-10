@@ -63,6 +63,14 @@ namespace ShipWorks.OrderLookup
         /// </summary>
         event EventHandler OnSearchOrder;
 
+        /// <summary>
+        /// Changes the shipment type
+        /// </summary>
         void ChangeShipmentType(ShipmentTypeCode value);
+
+        /// <summary>
+        /// Load the order
+        /// </summary>
+        void LoadOrder(OrderEntity order);
     }
 }
