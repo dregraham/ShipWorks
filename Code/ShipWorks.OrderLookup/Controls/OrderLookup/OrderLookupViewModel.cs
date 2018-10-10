@@ -23,9 +23,7 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookup
     {
         public event PropertyChangedEventHandler PropertyChanged;
         private readonly PropertyChangedHandler handler;
-        private bool showColumns = false;
         private readonly IDisposable subscriptions;
-        private readonly IObservable<IShipWorksMessage> messages;
 
         private ObservableCollection<INotifyPropertyChanged> leftColumn;
         private ObservableCollection<INotifyPropertyChanged> middleColumn;
@@ -61,7 +59,7 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookup
                 lookupPanels[OrderLookupPanels.Rates],
                 lookupPanels[OrderLookupPanels.Customs]
             };
-            
+
             subscriptions = new CompositeDisposable(
                 messages.OfType<ShipmentSelectionChangedMessage>()
                     .Subscribe(_ => handler.RaisePropertyChanged(nameof(ShowColumns))),
@@ -116,9 +114,9 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookup
         /// Should the columns be displayed?
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public Visibility ShowColumns => 
-            ShipmentModel?.ShipmentAdapter?.Shipment?.Processed == false ? 
-                Visibility.Visible : 
+        public Visibility ShowColumns =>
+            ShipmentModel?.ShipmentAdapter?.Shipment?.Processed == false ?
+                Visibility.Visible :
                 Visibility.Hidden;
 
         /// <summary>
