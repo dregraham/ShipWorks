@@ -33,7 +33,7 @@ namespace ShipWorks.OrderLookup.Controls.LabelOptions
         private readonly PropertyChangedHandler handler;
         private bool allowStealth;
         private bool allowNoPostage;
-        private DateTime shipDate;
+        private DateTime? shipDate;
         private Dictionary<int, string> labelFormats;
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -57,7 +57,7 @@ namespace ShipWorks.OrderLookup.Controls.LabelOptions
         [Obfuscation(Exclude = true)]
         [Required(ErrorMessage = @"Ship date is required")]
         [DateCompare(DateCompareType.Today, ValueCompareOperatorType.GreaterThanOrEqualTo, ErrorMessage = @"Ship date must be today or in the future.")]
-        public DateTime ShipDate
+        public DateTime? ShipDate
         {
             get { return shipDate; }
             set
@@ -67,7 +67,7 @@ namespace ShipWorks.OrderLookup.Controls.LabelOptions
                 if (ShipmentModel?.ShipmentAdapter?.ShipDate != null &&
                     ShipmentModel.ShipmentAdapter.ShipDate != value)
                 {
-                    ShipmentModel.ShipmentAdapter.ShipDate = value;
+                    ShipmentModel.ShipmentAdapter.ShipDate = value.Value;
                 }
             }
         }
