@@ -35,6 +35,16 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
     /// </summary>
     public class EndiciaApiClient : IEndiciaApiClient
     {
+        // We don't include delivery confirmation because we want to treat that like None, because it is
+        // included at no charge for services to which it applies.
+        private readonly static IDictionary<PostalConfirmationType, Func<PostagePrice, decimal>> confirmationLookup =
+            new Dictionary<PostalConfirmationType, Func<PostagePrice, decimal>>
+            {
+                { PostalConfirmationType.Signature, x => x.Fees.SignatureConfirmation},
+                { PostalConfirmationType.AdultSignatureRequired, x => x.Fees.AdultSignature },
+                { PostalConfirmationType.AdultSignatureRestricted, x => x.Fees.AdultSignatureRestrictedDelivery }
+            };
+
         private readonly ICarrierAccountRepository<EndiciaAccountEntity, IEndiciaAccountEntity> accountRepository;
         private readonly ILogEntryFactory logEntryFactory;
         private readonly ICertificateInspector certificateInspector;
@@ -44,7 +54,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
 
         private const string standardEndiciaPartnerID = "lswk";
         private const string freemiumEndiciaPartnerID = "lseb";
-
 
         /// <summary>
         /// Initializes a new instance of the <see cref="EndiciaApiClient"/> class.
@@ -372,19 +381,19 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         /// <summary>
         /// Get rating details from a price
         /// </summary>
-        private (PostalServiceType? service, decimal amount) GetRatingDetails(PostagePrice price) =>
-            (EndiciaApiTransforms.GetServiceTypeFromRateMailService(price.MailClass), price.Postage.TotalAmount);
+        private (PostalServiceType? service, PostagePrice postage) GetRatingDetails(PostagePrice price) =>
+            (EndiciaApiTransforms.GetServiceTypeFromRateMailService(price.MailClass), price);
 
         /// <summary>
         /// Does ShipWorks know about the service
         /// </summary>
-        private bool IsKnownService((PostalServiceType? service, decimal amount) value) =>
+        private bool IsKnownService((PostalServiceType? service, PostagePrice postage) value) =>
             value.service.HasValue;
 
         /// <summary>
         /// Is this a standard service that should be shown
         /// </summary>
-        private bool IsStandardService((PostalServiceType? service, decimal amount) value, IShipmentEntity shipment)
+        private bool IsStandardService((PostalServiceType? service, PostagePrice postage) value, IShipmentEntity shipment)
         {
             PostalServiceType serviceType = value.service.Value;
 
@@ -409,18 +418,33 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         /// <summary>
         /// Add a rate to the rate result list from the response
         /// </summary>
-        private static RateResult BuildRateFromResponse((PostalServiceType? service, decimal amount) value, ShipmentEntity shipment, EndiciaShipmentType endiciaShipmentType)
+        private static RateResult BuildRateFromResponse((PostalServiceType? service, PostagePrice postage) value, ShipmentEntity shipment, EndiciaShipmentType endiciaShipmentType)
         {
             var serviceType = value.service.Value;
 
-            return new RateResult(PostalUtility.GetPostalServiceTypeDescription(serviceType),
+            var (description, getAmount) = GetRateAddOnDetails(
+                (PostalConfirmationType) shipment.Postal.Confirmation,
+                endiciaShipmentType.GetAvailableConfirmationTypes(shipment.ShipCountryCode, serviceType, (PostalPackagingType) shipment.Postal.PackagingType));
+
+            return new RateResult(PostalUtility.GetPostalServiceTypeDescription(serviceType) + description,
                 PostalUtility.GetServiceTransitDays(serviceType),
-                value.amount,
+                value.postage.Postage.TotalAmount + getAmount(value.postage),
                 new PostalRateSelection(serviceType))
             {
                 ProviderLogo = EnumHelper.GetImage(ShipmentTypeCode.Endicia)
             };
         }
+
+        /// <summary>
+        /// Get details for required rate addons
+        /// </summary>
+        private static (string description, Func<PostagePrice, decimal> getAmount) GetRateAddOnDetails(PostalConfirmationType confirmation, IEnumerable<PostalConfirmationType> addOns) =>
+            addOns
+                .Where(x => x == confirmation && confirmationLookup.ContainsKey(x))
+                .Select(x => confirmationLookup[x])
+                .Select(x => (description: " (" + EnumHelper.GetDescription(confirmation) + ")", getAmount: x))
+                .DefaultIfEmpty((description: string.Empty, x => 0))
+                .First();
 
         /// <summary>
         /// Get first class envelope rates and add them to rate result list, if needed
@@ -459,7 +483,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             {
                 try
                 {
-                    return GetRate(shipment, endiciaShipmentType, PostalServiceType.ParcelSelect);
+                    return GetRate(shipment, endiciaShipmentType, PostalServiceType.ParcelSelect, (PostalConfirmationType) shipment.Postal.Confirmation);
                 }
                 catch (EndiciaException ex)
                 {
@@ -682,7 +706,13 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         /// <summary>
         /// Get the postal rate for the given shipment, service, and confirmation selection.
         /// </summary>
-        private RateResult GetRate(ShipmentEntity shipment, EndiciaShipmentType endiciaShipmentType, PostalServiceType serviceType)
+        private RateResult GetRate(ShipmentEntity shipment, EndiciaShipmentType endiciaShipmentType, PostalServiceType serviceType) =>
+            GetRate(shipment, endiciaShipmentType, serviceType, PostalConfirmationType.None);
+
+        /// <summary>
+        /// Get the postal rate for the given shipment, service, and confirmation selection.
+        /// </summary>
+        private RateResult GetRate(ShipmentEntity shipment, EndiciaShipmentType endiciaShipmentType, PostalServiceType serviceType, PostalConfirmationType confirmation)
         {
             PostalShipmentEntity postal = shipment.Postal;
 
@@ -728,9 +758,21 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             AddAccountDetailsToRateRequest(request, account);
             AddPackageDetailsToGetRateRequest(shipment, request, packagingType, postal);
             AddAddressDetailsToGetRateRequest(shipment, account, request);
+            AddConfirmationDetailsToGetRateRequest(confirmation, request);
             AddInsuranceDetailsToGetRateRequest(shipment, request);
 
             return ProcessRateRequest(shipment, serviceType, account, request);
+        }
+
+        /// <summary>
+        /// Add confirmation details to the get rate request
+        /// </summary>
+        private static void AddConfirmationDetailsToGetRateRequest(PostalConfirmationType confirmation, PostageRateRequest request)
+        {
+            // Service options
+            request.Services = new SpecialServices();
+            request.Services.DeliveryConfirmation = confirmation == PostalConfirmationType.Delivery ? "ON" : "OFF";
+            request.Services.SignatureConfirmation = confirmation == PostalConfirmationType.Signature ? "ON" : "OFF";
         }
 
         /// <summary>
