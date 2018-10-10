@@ -41,6 +41,16 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
     /// </summary>
     public class UspsWebClient : IUspsWebClient
     {
+        // We don't include delivery confirmation because we want to treat that like None, because it is
+        // included at no charge for services to which it applies.
+        private readonly static IDictionary<PostalConfirmationType, AddOnTypeV11> confirmationLookup =
+            new Dictionary<PostalConfirmationType, AddOnTypeV11>
+            {
+                { PostalConfirmationType.Signature, AddOnTypeV11.USASC },
+                { PostalConfirmationType.AdultSignatureRequired, AddOnTypeV11.USAASR },
+                { PostalConfirmationType.AdultSignatureRestricted, AddOnTypeV11.USAASRD }
+            };
+
         // This value came from USPS (the "standard" account value is 88)
         private const int ExpeditedPlanID = 0;
 
@@ -499,10 +509,12 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         /// </summary>
         private static RateResult BuildRateResult(ShipmentEntity shipment, UspsAccountEntity account, RateV25 uspsRate, PostalServiceType serviceType)
         {
+            var (description, amount) = GetRateAddOnDetails((PostalConfirmationType) shipment.Postal.Confirmation, uspsRate.AddOns);
+
             var baseRate = new RateResult(
-                PostalUtility.GetPostalServiceTypeDescription(serviceType),
+                PostalUtility.GetPostalServiceTypeDescription(serviceType) + description,
                 PostalUtility.GetDaysForRate(uspsRate.DeliverDays, uspsRate.DeliveryDate),
-                uspsRate.Amount,
+                uspsRate.Amount + amount,
                 new UspsPostalRateSelection(serviceType, account))
             {
                 ProviderLogo = EnumHelper.GetImage((ShipmentTypeCode) shipment.ShipmentType)
@@ -510,6 +522,15 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
 
             return PostalUtility.SetServiceDetails(baseRate, serviceType, uspsRate.DeliverDays, ShipmentTypeCode.Usps);
         }
+
+        /// <summary>
+        /// Get details for required rate addons
+        /// </summary>
+        private static (string description, decimal amount) GetRateAddOnDetails(PostalConfirmationType confirmation, IEnumerable<AddOnV11> addOns) =>
+            addOns
+                .Where(x => confirmationLookup.TryGetValue(confirmation, out AddOnTypeV11 type) && type == x.AddOnType)
+                .Select(x => (description: " (" + EnumHelper.GetDescription(confirmation) + ")", amount: x.Amount))
+                .FirstOrDefault();
 
         /// <summary>
         /// The internal GetRates implementation intended to be wrapped by the exception wrapper
