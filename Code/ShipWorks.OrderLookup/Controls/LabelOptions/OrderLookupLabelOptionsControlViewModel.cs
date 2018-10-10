@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
@@ -10,6 +11,7 @@ using System.Windows.Input;
 using GalaSoft.MvvmLight.CommandWpf;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
+using Shared.System.ComponentModel.DataAnnotations;
 using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Core.UI;
 using ShipWorks.Data.Model.EntityClasses;
@@ -24,13 +26,14 @@ namespace ShipWorks.OrderLookup.Controls.LabelOptions
     /// View model for the OrderLookupLabelOptionsControlViewModel
     /// </summary>
     [KeyedComponent(typeof(INotifyPropertyChanged), OrderLookupPanels.LabelOptions)]
-    public class OrderLookupLabelOptionsControlViewModel : INotifyPropertyChanged
+    public class OrderLookupLabelOptionsControlViewModel : INotifyPropertyChanged, IDataErrorInfo
     {
         private readonly IShipmentTypeManager shipmentTypeManager;
         private readonly IFedExUtility fedExUtility;
         private readonly PropertyChangedHandler handler;
         private bool allowStealth;
         private bool allowNoPostage;
+        private DateTime shipDate;
         private Dictionary<int, string> labelFormats;
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -46,7 +49,28 @@ namespace ShipWorks.OrderLookup.Controls.LabelOptions
             this.fedExUtility = fedExUtility;
 
             handler = new PropertyChangedHandler(this, () => PropertyChanged);
-       }
+        }
+
+        /// <summary>
+        /// Shipment ship date
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        [Required(ErrorMessage = @"Ship date is required")]
+        [DateCompare(DateCompareType.Today, ValueCompareOperatorType.GreaterThanOrEqualTo, ErrorMessage = @"Ship date must be today or in the future.")]
+        public DateTime ShipDate
+        {
+            get { return shipDate; }
+            set
+            {
+                handler.Set(nameof(ShipDate), ref shipDate, value);
+
+                if (ShipmentModel?.ShipmentAdapter?.ShipDate != null &&
+                    ShipmentModel.ShipmentAdapter.ShipDate != value)
+                {
+                    ShipmentModel.ShipmentAdapter.ShipDate = value;
+                }
+            }
+        }
 
         /// <summary>
         /// Requested label format for the shipment
@@ -85,6 +109,28 @@ namespace ShipWorks.OrderLookup.Controls.LabelOptions
         public IOrderLookupShipmentModel ShipmentModel { get; }
 
         /// <summary>
+        /// Do nothing
+        /// </summary>
+        public string Error => null;
+
+        /// <summary>
+        /// Accessor for property validation
+        /// </summary>
+        public string this[string columnName]
+        {
+            get
+            {
+                // If the shipment is null or processed, don't validate anything.
+                if (ShipmentModel?.ShipmentAdapter?.Shipment == null || ShipmentModel.ShipmentAdapter.Shipment.Processed)
+                {
+                    return string.Empty;
+                }
+
+                return InputValidation<OrderLookupLabelOptionsControlViewModel>.Validate(this, columnName);
+            }
+        }
+
+        /// <summary>
         /// Update when the order changes
         /// </summary>
         private void ShipmentModelPropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -92,6 +138,7 @@ namespace ShipWorks.OrderLookup.Controls.LabelOptions
             if (e.PropertyName == nameof(ShipmentModel.SelectedOrder) && ShipmentModel.SelectedOrder != null)
             {
                 ShipmentEntity shipment = ShipmentModel.ShipmentAdapter.Shipment;
+                ShipDate = ShipmentModel.ShipmentAdapter.ShipDate;
 
                 // Determine if stealth and no postage is allowed for the new shipment
                 if (shipmentTypeManager.IsPostal(shipment.ShipmentTypeCode))

@@ -161,7 +161,7 @@ namespace ShipWorks.OrderLookup
                 messageHelper.ShowError("The selected shipments were edited or deleted by another ShipWorks user and your changes could not be saved.\n\n" +
                                         "The shipments will be refreshed to reflect the recent changes.");
 
-                LoadOrder(ShipmentAdapter.Shipment.Order);
+                RefreshShipmentFromDatabase();
             }
         }
 
@@ -210,6 +210,11 @@ namespace ShipWorks.OrderLookup
             if ((order.Shipments?.Count ?? 0) > 0)
             {
                 ShipmentAdapter = shippingManager.GetShipmentAdapter(order.Shipments.First());
+
+                // Update dynamic data here because everything downstream will also attempt to update dynamic data
+                // doing it here gives us a head start before we are tracking property changes, this also ensures that the
+                // shipment date is not in the past
+                ShipmentAdapter.UpdateDynamicData();
             }
 
             RefreshProperties();
