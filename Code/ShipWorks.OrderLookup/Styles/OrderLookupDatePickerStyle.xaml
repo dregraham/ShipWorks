@@ -3,7 +3,7 @@
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="/ShipWorks.OrderLookup;component/Styles/Colors.xaml"/>
         <ResourceDictionary Source="/ShipWorks.OrderLookup;component/Styles/Shapes.xaml"/>
-        <ResourceDictionary Source="/ShipWorks.UI;component/Styles/ErrorTemplates.xaml"/>
+        <ResourceDictionary Source="/ShipWorks.OrderLookup;component/Styles/ErrorTemplates.xaml"/>
     </ResourceDictionary.MergedDictionaries>
     <Style x:Key="DatePickerTextBoxStyle" TargetType="{x:Type DatePickerTextBox}">
         <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.WindowTextBrushKey}}"/>
@@ -73,7 +73,7 @@
     <Style x:Key="DatePicker" TargetType="{x:Type DatePicker}">
         <Setter Property="Foreground" Value="#FF333333" />
         <Setter Property="IsTodayHighlighted" Value="True" />
-        <Setter Property="SelectedDateFormat" Value="Short" />        
+        <Setter Property="SelectedDateFormat" Value="Short" />
         <Setter Property="BorderBrush" Value="{StaticResource BorderColor}"/>
         <Setter Property="BorderThickness" Value="1" />
         <Setter Property="Height" Value="28"/>
@@ -84,7 +84,7 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type DatePicker}">
-                    <Border BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="1" Background="Transparent">                        
+                    <Border BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="1" Background="Transparent">
                         <VisualStateManager.VisualStateGroups>
                             <VisualStateGroup x:Name="CommonStates">
                                 <VisualState x:Name="Normal" />
@@ -99,7 +99,7 @@
                             <Grid.Resources>
                                 <SolidColorBrush x:Key="DisabledBrush" Color="#A5FFFFFF" />
                                 <ControlTemplate x:Key="DropDownButtonTemplate" TargetType="{x:Type Button}" >
-                                    <Border BorderBrush="{StaticResource BorderColor}" BorderThickness="1 0 0 0" SnapsToDevicePixels="True" Background="{StaticResource ButtonBackgroundGradient}">                                        
+                                    <Border BorderBrush="{StaticResource BorderColor}" BorderThickness="1 0 0 0" SnapsToDevicePixels="True" Background="{StaticResource ButtonBackgroundGradient}">
                                         <Grid Margin="7 5 11 5">
                                             <Grid.ColumnDefinitions>
                                                 <ColumnDefinition Width="auto"/>
@@ -115,15 +115,15 @@
                                                   Fill="{StaticResource IconColor}"
                                               Height="4" Width="6" Margin="6 0 0 0" Stretch="Fill"/>
                                         </Grid>
-                                    </Border>                                    
+                                    </Border>
                                 </ControlTemplate>
                             </Grid.Resources>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*" />
                                 <ColumnDefinition Width="Auto" />
                             </Grid.ColumnDefinitions>
-                            
-                            <DatePickerTextBox x:Name="PART_TextBox" Grid.Column="0" Foreground="{TemplateBinding Foreground}" Focusable="{TemplateBinding Focusable}"                                               
+
+                            <DatePickerTextBox x:Name="PART_TextBox" Grid.Column="0" Foreground="{TemplateBinding Foreground}" Focusable="{TemplateBinding Focusable}"
                                                VerticalAlignment="Center"
                                                VerticalContentAlignment="Center"
                                                Height="{TemplateBinding Height}"
@@ -134,8 +134,8 @@
                             <Button Grid.Column="1" x:Name="PART_Button" Foreground="{TemplateBinding Foreground}" Focusable="False"
                                     Template="{StaticResource DropDownButtonTemplate}" VerticalAlignment="{TemplateBinding VerticalAlignment}"
                                     Height="{TemplateBinding Height}"/>
-                            
-                            <Grid x:Name="PART_DisabledVisual" Grid.ColumnSpan="2" Grid.Column="0" IsHitTestVisible="False" Opacity="0" >                                
+
+                            <Grid x:Name="PART_DisabledVisual" Grid.ColumnSpan="2" Grid.Column="0" IsHitTestVisible="False" Opacity="0" >
                                 <Popup x:Name="PART_Popup" AllowsTransparency="True" Placement="Bottom" PlacementTarget="{Binding ElementName=PART_TextBox}" StaysOpen="False" />
                             </Grid>
                         </Grid>
