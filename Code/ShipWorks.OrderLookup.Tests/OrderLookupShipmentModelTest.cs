@@ -20,20 +20,6 @@ namespace ShipWorks.OrderLookup.Tests
         }
 
         [Fact]
-        public void InitializeForCurrentSession_SubscribesToOrderFoundMessage()
-        {
-            OrderLookupShipmentModel testObject = mock.Create<OrderLookupShipmentModel>();
-
-            testObject.InitializeForCurrentSession();
-
-            OrderEntity order = new OrderEntity();
-            order.Shipments.Add(new ShipmentEntity());
-            testMessenger.Send(new OrderLookupSingleScanMessage(this, order));
-            
-            Assert.Equal(order, testObject.SelectedOrder);
-        }
-
-        [Fact]
         public void RaisePropertyChanged_RaisesPropertyChangedWithNameOfProperty()
         {
             OrderLookupShipmentModel testObject = mock.Create<OrderLookupShipmentModel>();
