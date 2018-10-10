@@ -1,12 +1,11 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 
 namespace ShipWorks.OrderLookup
 {
     /// <summary>
-    /// Interface to delegate tasks on previous shipments (reprint, void, etc)
+    /// Interface to reprint last shipment
     /// </summary>
-    public interface IPreviousShipmentActionManager : IDisposable
+    public interface IPreviousShipmentReprintActionHandler
     {
         /// <summary>
         /// Reprint the last shipment

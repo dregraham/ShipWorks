@@ -23,12 +23,12 @@ namespace ShipWorks.OrderLookup.Controls.To
         /// <summary>
         /// Constructor
         /// </summary>
-        public OrderLookupToViewModel(IViewModelOrchestrator orchestrator, IShippingOriginManager shippingOriginManager, IMessageHelper messageHelper,
+        public OrderLookupToViewModel(IOrderLookupShipmentModel shipmentModel, IShippingOriginManager shippingOriginManager, IMessageHelper messageHelper,
             IValidatedAddressScope validatedAddressScope, IAddressValidator validator, IAddressSelector addressSelector)
             : base(shippingOriginManager, messageHelper, validatedAddressScope, validator, addressSelector)
         {
-            Orchestrator = orchestrator;
-            Orchestrator.PropertyChanged += OrchestratorPropertyChanged;
+            ShipmentModel = shipmentModel;
+            ShipmentModel.PropertyChanged += ShipmentModelPropertyChanged;
 
             IsAddressValidationEnabled = true;
             Title = "To";
@@ -48,42 +48,43 @@ namespace ShipWorks.OrderLookup.Controls.To
         /// Is address validation enabled or not
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public IViewModelOrchestrator Orchestrator { get; private set; }
+        public IOrderLookupShipmentModel ShipmentModel { get; private set; }
 
         /// <summary>
         /// Save changes to the base entity whenever properties are changed in the view model
         /// </summary>
         private void Save()
         {
-            if (Orchestrator?.ShipmentAdapter?.Shipment?.ShipPerson != null)
+            if (ShipmentModel?.ShipmentAdapter?.Shipment?.ShipPerson != null)
             {
-                SaveToEntity(Orchestrator.ShipmentAdapter.Shipment.ShipPerson);
+                SaveToEntity(ShipmentModel.ShipmentAdapter.Shipment.ShipPerson);
             }
         }
 
         /// <summary>
         /// Update when the order changes
         /// </summary>
-        private void OrchestratorPropertyChanged(object sender, PropertyChangedEventArgs e)
+        private void ShipmentModelPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            if (Orchestrator.SelectedOrder == null)
+            if (ShipmentModel.SelectedOrder == null)
             {
                 autoSave?.Dispose();
             }
 
-            if (e.PropertyName == "SelectedOrder" && Orchestrator.SelectedOrder != null)
+            if (e.PropertyName == nameof(ShipmentModel.SelectedOrder) && ShipmentModel.SelectedOrder != null)
             {
-                base.Load(Orchestrator.ShipmentAdapter.Shipment.ShipPerson, Orchestrator.ShipmentAdapter.Store);
-
                 autoSave?.Dispose();
-                autoSave = handler.PropertyChangingStream.Throttle(TimeSpan.FromMilliseconds(100)).Subscribe(_ => Save());
+                Load(ShipmentModel.ShipmentAdapter.Shipment.ShipPerson, ShipmentModel.ShipmentAdapter.Store);
 
                 UpdateTitle();
 
-                handler.RaisePropertyChanged(nameof(Orchestrator));
+                handler.RaisePropertyChanged(nameof(ShipmentModel));
+                autoSave = handler.PropertyChangingStream.Where(p => p != nameof(Title)).Throttle(TimeSpan.FromMilliseconds(100)).Subscribe(_ => Save());
             }
 
-            if (e.PropertyName == ShipmentFields.ShipCountryCode.Name)
+            if (e.PropertyName == ShipmentFields.ShipCountryCode.Name ||
+                e.PropertyName == ShipmentFields.ShipLastName.Name ||
+                e.PropertyName == ShipmentFields.ShipFirstName.Name)
             {
                 UpdateTitle();
             }
@@ -95,9 +96,9 @@ namespace ShipWorks.OrderLookup.Controls.To
         private void UpdateTitle()
         {
             string isDomestic = string.Empty;
-            if (Orchestrator?.ShipmentAdapter?.IsDomestic != null)
+            if (ShipmentModel?.ShipmentAdapter?.IsDomestic != null)
             {
-                isDomestic = Orchestrator.ShipmentAdapter.IsDomestic ? "(Domestic)" : "(International)";
+                isDomestic = ShipmentModel.ShipmentAdapter.IsDomestic ? "(Domestic)" : "(International)";
             }
             Title = $"To {FullName} {isDomestic}";
         }

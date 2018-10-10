@@ -15,7 +15,7 @@
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </UserControl.Resources>
-    <Grid IsEnabled="{Binding Orchestrator.ShipmentAllowEditing}">
+    <Grid IsEnabled="{Binding ShipmentModel.ShipmentAllowEditing}">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto"/>
             <ColumnDefinition Width="*"/>
@@ -32,7 +32,7 @@
         <TextBox Grid.Row="0" Grid.Column="1"
                  Style="{StaticResource FormTextBox}">
             <TextBox.Text>
-                <Binding Path="Orchestrator.ShipmentAdapter.Shipment.Postal.Memo1" />
+                <Binding Path="ShipmentModel.ShipmentAdapter.Shipment.Postal.Memo1" />
             </TextBox.Text>
         </TextBox>
         
@@ -42,7 +42,7 @@
         <TextBox Grid.Row="1" Grid.Column="1"
                  Style="{StaticResource FormTextBox}">
             <TextBox.Text>
-                <Binding Path="Orchestrator.ShipmentAdapter.Shipment.Postal.Memo2" />
+                <Binding Path="ShipmentModel.ShipmentAdapter.Shipment.Postal.Memo2" />
             </TextBox.Text>
         </TextBox>
 
@@ -54,7 +54,7 @@
                  Margin="10 0 0 0"
                  Style="{StaticResource FormTextBox}">
             <TextBox.Text>
-                <Binding Path="Orchestrator.ShipmentAdapter.Shipment.Postal.Memo3" />
+                <Binding Path="ShipmentModel.ShipmentAdapter.Shipment.Postal.Memo3" />
             </TextBox.Text>
         </TextBox>
     </Grid>

@@ -12,6 +12,7 @@ using System.Linq;
 using ShipWorks.Core.Common.Threading;
 using ShipWorks.Messaging.Messages.Shipping;
 using ShipWorks.Messaging.Messages;
+using ShipWorks.SingleScan;
 
 namespace ShipWorks.OrderLookup
 {
@@ -44,7 +45,7 @@ namespace ShipWorks.OrderLookup
             this.orderRepository = orderRepository;
             this.onDemandDownloaderFactory = onDemandDownloaderFactory;
             this.orderLookupAutoPrintService = orderLookupAutoPrintService;
-            
+
         }
 
         /// <summary>
@@ -64,7 +65,7 @@ namespace ShipWorks.OrderLookup
                 .Where(x => !processingScan && !mainForm.AdditionalFormsOpen() && mainForm.UIMode == UIMode.OrderLookup && !mainForm.IsShipmentHistoryActive())
                 .Do(_ => processingScan = true)
                 .Subscribe(x => OnOrderLookupSearchMessage(x).Forget())
-                );
+            );
         }
 
         /// <summary>
@@ -80,8 +81,8 @@ namespace ShipWorks.OrderLookup
 
                 if (orderId.HasValue)
                 {
-                    var result = await orderLookupAutoPrintService.AutoPrintShipment(orderId.Value, message).ConfigureAwait(true);
-                    order = result.ProcessShipmentResults?.Cast<ProcessShipmentResult?>().FirstOrDefault()?.Shipment.Order;
+                    AutoPrintCompletionResult result = await orderLookupAutoPrintService.AutoPrintShipment(orderId.Value, message).ConfigureAwait(true);
+                    order = result.ProcessShipmentResults?.Select(x=>x.Shipment.Order).FirstOrDefault();
                     if (order == null)
                     {
                         order = await orderRepository.GetOrder(orderId.Value).ConfigureAwait(true);
@@ -89,7 +90,7 @@ namespace ShipWorks.OrderLookup
                 }
 
                 SendOrderMessage(order);
-            } 
+            }
             finally
             {
                 processingScan = false;

@@ -16,7 +16,7 @@ namespace ShipWorks.OrderLookup
         /// <summary>
         /// Refresh the history, load any components
         /// </summary>
-        void Activate();
+        void Activate(Divelements.SandRibbon.Button voidButton);
 
         /// <summary>
         /// Unload any components

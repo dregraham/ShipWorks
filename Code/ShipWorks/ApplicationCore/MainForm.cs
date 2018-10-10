@@ -231,11 +231,36 @@ namespace ShipWorks
         /// <summary>
         /// Reprint the last order lookup processed shipment
         /// </summary>
-        private void OnOrderLookupViewReprintLastShipment(object sender, System.EventArgs e)
+        private async void OnOrderLookupViewReprintLastShipment(object sender, System.EventArgs e)
         {
-            using (IPreviousShipmentActionManager previousShipmentActionManager = IoC.UnsafeGlobalLifetimeScope.Resolve<IPreviousShipmentActionManager>())
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
-                previousShipmentActionManager.ReprintLastShipment().ConfigureAwait(false);
+                IPreviousShipmentReprintActionHandler previousShipmentActionManager = lifetimeScope.Resolve<IPreviousShipmentReprintActionHandler>();
+                await previousShipmentActionManager.ReprintLastShipment().ConfigureAwait(false);
+            }
+        }
+
+        /// <summary>
+        /// Void the last order lookup processed shipment
+        /// </summary>
+        private async void OnOrderLookupViewVoidLastShipment(object sender, System.EventArgs e)
+        {
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+            {
+                var messageHelper = lifetimeScope.Resolve<IMessageHelper>();
+                var voidHandler = lifetimeScope.Resolve<IPreviousShipmentVoidActionHandler>();
+
+                try
+                {
+                    await Functional.UsingAsync(
+                        messageHelper.ShowProgressDialog("Voiding", "Voiding last processed shipment"),
+                        _ => voidHandler.VoidLast())
+                    .ConfigureAwait(true);
+                }
+                catch (Exception ex)
+                {
+                    messageHelper.ShowError(ex.Message);
+                }
             }
         }
 
@@ -944,13 +969,7 @@ namespace ShipWorks
         /// </summary>
         private void ToggleBatchMode(IUserEntity user)
         {
-            if (orderLookupLifetimeScope != null)
-            {
-                panelDockingArea.Controls.Remove(orderLookupControl.Control);
-                orderLookupControl.Unload();
-                orderLookupLifetimeScope?.Dispose();
-                orderLookupLifetimeScope = null;
-            }
+            UnloadOrderLookupMode();
 
             ToggleUiModeCheckbox(UIMode.Batch);
 
@@ -987,10 +1006,27 @@ namespace ShipWorks
         }
 
         /// <summary>
+        /// Unload the Order Lookup Mode
+        /// </summary>
+        private void UnloadOrderLookupMode()
+        {
+            if (orderLookupLifetimeScope != null)
+            {
+                panelDockingArea.Controls.Remove(orderLookupControl.Control);
+                orderLookupControl.Unload();
+                orderLookupLifetimeScope.Dispose();
+                orderLookupLifetimeScope = null;
+            }
+        }
+
+        /// <summary>
         /// Switch from batch to order lookup mode
         /// </summary>
         private void ToggleOrderLookupMode()
         {
+            UnloadOrderLookupMode();
+
+            // clear out any selected orders from the batch view
             Messenger.Current.Send(new OrderSelectionChangingMessage(this, new long[0]));
 
             ToggleUiModeCheckbox(UIMode.OrderLookup);
@@ -1032,7 +1068,7 @@ namespace ShipWorks
             else if (ribbon.SelectedTab == ribbonTabOrderLookupViewShipmentHistory)
             {
                 ToggleVisiblePanel(shipmentHistory.Control, orderLookupControl?.Control);
-                shipmentHistory.Activate();
+                shipmentHistory.Activate(buttonOrderLookupViewVoid);
             }
 
             UpdateStatusBar();

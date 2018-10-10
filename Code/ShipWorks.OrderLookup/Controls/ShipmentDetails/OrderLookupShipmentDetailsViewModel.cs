@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
@@ -9,6 +10,7 @@ using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
 using ShipWorks.Core.UI;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Shipping.Editing;
@@ -32,7 +34,7 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
         private readonly IShipmentTypeManager shipmentTypeManager;
         private readonly IShipmentServicesBuilderFactory shipmentServicesBuilderFactory;
         private readonly ShipmentTypeProvider shipmentTypeProvider;
-
+        private readonly Func<DimensionsManagerDlg> getDimensionsManagerDlg;
         private List<DimensionsProfileEntity> dimensionProfiles;
         private Dictionary<ShipmentTypeCode, string> providers;
         private IEnumerable<KeyValuePair<int, string>> packageTypes;
@@ -43,22 +45,24 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
         /// Constructor
         /// </summary>
         public OrderLookupShipmentDetailsViewModel(
-            IViewModelOrchestrator orchestrator,
+            IOrderLookupShipmentModel shipmentModel,
             IDimensionsManager dimensionsManager,
             IShipmentPackageTypesBuilderFactory shipmentPackageTypesBuilderFactory,
             IShipmentTypeManager shipmentTypeManager,
-            IShipmentServicesBuilderFactory shipmentServicesBuilderFactory, 
-            IInsuranceViewModel insuranceViewModel, 
-            ShipmentTypeProvider shipmentTypeProvider)
+            IShipmentServicesBuilderFactory shipmentServicesBuilderFactory,
+            IInsuranceViewModel insuranceViewModel,
+            ShipmentTypeProvider shipmentTypeProvider,
+            Func<DimensionsManagerDlg> getDimensionsManagerDlg)
         {
-            Orchestrator = orchestrator;
-            Orchestrator.PropertyChanged += OrchestratorPropertyChanged;
+            ShipmentModel = shipmentModel;
+            ShipmentModel.PropertyChanged += ShipmentModelPropertyChanged;
 
             this.dimensionsManager = dimensionsManager;
             this.shipmentPackageTypesBuilderFactory = shipmentPackageTypesBuilderFactory;
             this.shipmentTypeManager = shipmentTypeManager;
             this.shipmentServicesBuilderFactory = shipmentServicesBuilderFactory;
             this.shipmentTypeProvider = shipmentTypeProvider;
+            this.getDimensionsManagerDlg = getDimensionsManagerDlg;
             InsuranceViewModel = insuranceViewModel;
             handler = new PropertyChangedHandler(this, () => PropertyChanged);
             ManageDimensionalProfiles = new RelayCommand(ManageDimensionalProfilesAction);
@@ -71,17 +75,17 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
         public ICommand ManageDimensionalProfiles { get; set; }
 
         /// <summary>
-        /// The ViewModel Orchestrator
+        /// The ViewModel ShipmentModel
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public IViewModelOrchestrator Orchestrator { get; }
+        public IOrderLookupShipmentModel ShipmentModel { get; }
 
         /// <summary>
         /// Insurance information
         /// </summary>
         [Obfuscation(Exclude = true)]
         public IInsuranceViewModel InsuranceViewModel { get; }
-        
+
         /// <summary>
         /// The dimension profiles
         /// </summary>
@@ -96,7 +100,7 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
         /// True if a profile is selected
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public bool IsProfileSelected => Orchestrator.ShipmentAdapter.Shipment.Postal.DimsProfileID > 0;
+        public bool IsProfileSelected => ShipmentModel.ShipmentAdapter.Shipment.Postal.DimsProfileID > 0;
 
         /// <summary>
         /// Collection of ServiceTypes
@@ -106,7 +110,23 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
         {
             get => providers;
             set => handler.Set(nameof(Providers), ref providers, value);
-        }        
+        }
+
+        /// <summary>
+        /// Shipment type code
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public ShipmentTypeCode ShipmentTypeCode
+        {
+            get => ShipmentModel.ShipmentAdapter?.ShipmentTypeCode ?? ShipmentTypeCode.None;
+            set
+            {
+                if (value != ShipmentModel.ShipmentAdapter.ShipmentTypeCode)
+                {
+                    ShipmentModel.ChangeShipmentType(value);                    
+                }
+            }
+        }
 
         /// <summary>
         /// Collection of valid PackageTypes
@@ -136,37 +156,37 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
         {
             get => serviceTypes;
             set => handler.Set(nameof(ServiceTypes), ref serviceTypes, value);
-        }        
+        }
 
         /// <summary>
         /// Update when order changes
         /// </summary>
-        private void OrchestratorPropertyChanged(object sender, PropertyChangedEventArgs e)
+        private void ShipmentModelPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            if (Orchestrator.SelectedOrder != null)
+            if (ShipmentModel.SelectedOrder != null)
             {
-                if (e.PropertyName == "SelectedOrder")
+                if (e.PropertyName == nameof(ShipmentModel.SelectedOrder))
                 {
-                    RefreshProviders();
-                    RefreshDimensionalProfiles();                    
+                    Providers = shipmentTypeProvider.GetAvailableShipmentTypes(ShipmentModel.ShipmentAdapter).ToDictionary(s => s, s => EnumHelper.GetDescription(s));
+                    RefreshDimensionalProfiles();
                 }
 
-                if (e.PropertyName == "SelectedOrder" || 
-                    e.PropertyName == "Service" || 
-                    e.PropertyName == nameof(Orchestrator.ShipmentTypeCode) || 
-                    e.PropertyName == "ShipCountryCode")
+                if (e.PropertyName == nameof(ShipmentModel.SelectedOrder) ||
+                    e.PropertyName == PostalShipmentFields.Service.Name ||
+                    e.PropertyName == nameof(ShipmentModel.ShipmentAdapter.ShipmentTypeCode) ||
+                    e.PropertyName == ShipmentFields.ShipCountryCode.Name)
                 {
                     RefreshInsurance();
                 }
 
-                if (e.PropertyName == "SelectedOrder" || e.PropertyName == "Service")
+                if (e.PropertyName == nameof(ShipmentModel.SelectedOrder) || e.PropertyName == PostalShipmentFields.Service.Name)
                 {
-                    handler.RaisePropertyChanged(nameof(Orchestrator));
+                    handler.RaisePropertyChanged(nameof(ShipmentModel));
                 }
 
                 if (e.PropertyName == "DimsProfileID")
                 {
-                    PostalShipmentEntity postal = Orchestrator.ShipmentAdapter.Shipment.Postal;
+                    PostalShipmentEntity postal = ShipmentModel.ShipmentAdapter.Shipment.Postal;
                     if (postal.DimsProfileID != 0)
                     {
                         DimensionsProfileEntity profile =
@@ -184,19 +204,19 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
                     handler.RaisePropertyChanged(nameof(IsProfileSelected));
                 }
 
-                if (e.PropertyName == nameof(Orchestrator.ShipmentTypeCode) || e.PropertyName == "SelectedOrder")
+                if (e.PropertyName == nameof(ShipmentModel.ShipmentAdapter.ShipmentTypeCode) || e.PropertyName == nameof(ShipmentModel.SelectedOrder))
                 {
                     RefreshPackageTypes();
                 }
 
-                if (e.PropertyName == "SelectedOrder" || e.PropertyName == nameof(Orchestrator.ShipmentTypeCode) || e.PropertyName == "Service" ||
+                if (e.PropertyName == nameof(ShipmentModel.SelectedOrder) || e.PropertyName == nameof(ShipmentModel.ShipmentAdapter.ShipmentTypeCode) || e.PropertyName == PostalShipmentFields.Service.Name ||
                     e.PropertyName == "PackagingType")
                 {
                     RefreshConfirmationTypes();
                 }
 
-                if (e.PropertyName == "SelectedOrder" || e.PropertyName == nameof(Orchestrator.ShipmentTypeCode) ||
-                    e.PropertyName == "ShipCountryCode")
+                if (e.PropertyName == nameof(ShipmentModel.SelectedOrder) || e.PropertyName == nameof(ShipmentModel.ShipmentAdapter.ShipmentTypeCode) ||
+                    e.PropertyName == nameof(ShipmentFields.ShipCountryCode.Name))
                 {
                     RefreshServiceTypes();
                 }
@@ -204,23 +224,11 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
         }
 
         /// <summary>
-        /// Refresh the list of available providers
-        /// </summary>
-        private void RefreshProviders()
-        {            
-            Providers = new Dictionary<ShipmentTypeCode, string>();
-            foreach(ShipmentTypeCode shipmentType in shipmentTypeProvider.GetAvailableShipmentTypes(Orchestrator.ShipmentAdapter))
-            {
-                Providers.Add(shipmentType, EnumHelper.GetDescription(shipmentType));
-            }
-        }
-        
-        /// <summary>
         /// Refreshes Insurance
         /// </summary>
         private void RefreshInsurance()
         {
-            InsuranceViewModel.Load(Orchestrator.PackageAdapters, Orchestrator.PackageAdapters.FirstOrDefault(), Orchestrator.ShipmentAdapter);
+            InsuranceViewModel.Load(ShipmentModel.PackageAdapters, ShipmentModel.PackageAdapters.FirstOrDefault(), ShipmentModel.ShipmentAdapter);
         }
 
         /// <summary>
@@ -229,59 +237,58 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
         private void RefreshDimensionalProfiles()
         {
             DimensionProfiles =
-                dimensionsManager.Profiles(Orchestrator.PackageAdapters.FirstOrDefault()).ToList();
+                dimensionsManager.Profiles(ShipmentModel.PackageAdapters.FirstOrDefault()).ToList();
 
-            if (DimensionProfiles.None(d => d.DimensionsProfileID ==
-                                            Orchestrator.ShipmentAdapter.Shipment.Postal.DimsProfileID))
+            if (ShipmentModel.ShipmentAdapter.Shipment.Postal != null && DimensionProfiles.None(d => d.DimensionsProfileID ==
+                                            ShipmentModel.ShipmentAdapter.Shipment.Postal.DimsProfileID))
             {
-                Orchestrator.ShipmentAdapter.Shipment.Postal.DimsProfileID = 0;
+                ShipmentModel.ShipmentAdapter.Shipment.Postal.DimsProfileID = 0;
             }
         }
-        
+
         /// <summary>
         /// Refresh the package types
         /// </summary>
         private void RefreshPackageTypes()
         {
-            if (Orchestrator.ShipmentAdapter?.Shipment == null)
+            if (ShipmentModel.ShipmentAdapter?.Shipment == null)
             {
                 PackageTypes = Enumerable.Empty<KeyValuePair<int, string>>();
             }
             else
             {
-                PackageTypes = shipmentPackageTypesBuilderFactory.Get(Orchestrator.ShipmentAdapter.ShipmentTypeCode)
-                    .BuildPackageTypeDictionary(new[] {Orchestrator.ShipmentAdapter.Shipment});
+                PackageTypes = shipmentPackageTypesBuilderFactory.Get(ShipmentModel.ShipmentAdapter.ShipmentTypeCode)
+                    .BuildPackageTypeDictionary(new[] {ShipmentModel.ShipmentAdapter.Shipment});
             }
         }
-        
+
         /// <summary>
         /// Refresh the confirmation types
         /// </summary>
         private void RefreshConfirmationTypes()
         {
             // Check to see if object is a postal shipment adapter
-            if (Orchestrator.ShipmentAdapter != null &&
-                !PostalUtility.IsPostalShipmentType(Orchestrator.ShipmentAdapter.ShipmentTypeCode))
+            if (ShipmentModel.ShipmentAdapter != null &&
+                !PostalUtility.IsPostalShipmentType(ShipmentModel.ShipmentAdapter.ShipmentTypeCode))
             {
                 ConfirmationTypes = Enumerable.Empty<KeyValuePair<int, string>>();
             }
             else
             {
-                PostalShipmentType postalShipmentType =
-                    (PostalShipmentType) shipmentTypeManager.Get(Orchestrator.ShipmentAdapter.ShipmentTypeCode);
-                PostalServiceType postalServiceType = (PostalServiceType) Orchestrator.ShipmentAdapter.ServiceType;
+                PostalShipmentType postalShipmentType = (PostalShipmentType) shipmentTypeManager.Get(ShipmentModel.ShipmentAdapter.ShipmentTypeCode);
+                PostalServiceType postalServiceType = (PostalServiceType) ShipmentModel.ShipmentAdapter.ServiceType;
 
                 // See if all have confirmation as an option or not
                 PostalPackagingType packagingType =
-                    (PostalPackagingType) Orchestrator.ShipmentAdapter.Shipment.Postal.PackagingType;
+                    (PostalPackagingType) ShipmentModel.ShipmentAdapter.Shipment.Postal.PackagingType;
                 ConfirmationTypes = postalShipmentType
-                    .GetAvailableConfirmationTypes(Orchestrator.ShipmentAdapter.Shipment.ShipCountryCode,
+                    .GetAvailableConfirmationTypes(ShipmentModel.ShipmentAdapter.Shipment.ShipCountryCode,
                                                    postalServiceType, packagingType)
                     .ToDictionary(serviceType => (int) serviceType,
                                   serviceType => EnumHelper.GetDescription(serviceType));
             }
         }
-        
+
         /// <summary>
         /// Refresh the ServiceTypes
         /// </summary>
@@ -291,12 +298,12 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
 
             try
             {
-                updatedServices = shipmentServicesBuilderFactory.Get(Orchestrator.ShipmentAdapter.ShipmentTypeCode)
-                    .BuildServiceTypeDictionary(new[] {Orchestrator.ShipmentAdapter.Shipment});
+                updatedServices = shipmentServicesBuilderFactory.Get(ShipmentModel.ShipmentAdapter.ShipmentTypeCode)
+                    .BuildServiceTypeDictionary(new[] {ShipmentModel.ShipmentAdapter.Shipment});
             }
             catch (InvalidRateGroupShippingException)
             {
-                updatedServices.Add(Orchestrator.ShipmentAdapter.ServiceType, "Error getting service types.");
+                updatedServices.Add(ShipmentModel.ShipmentAdapter.ServiceType, "Error getting service types.");
             }
 
             // If no service types are returned, the carrier doesn't support service types,
@@ -307,7 +314,7 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
             }
             else
             {
-                ServiceTypes = new List<KeyValuePair<int, string>>(updatedServices);
+                ServiceTypes = updatedServices.ToList();
             }
         }
 
@@ -316,7 +323,7 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
         /// </summary>
         private void ManageDimensionalProfilesAction()
         {
-            using (DimensionsManagerDlg dlg = new DimensionsManagerDlg())
+            using (DimensionsManagerDlg dlg = getDimensionsManagerDlg())
             {
                 dlg.ShowDialog();
                 RefreshDimensionalProfiles();

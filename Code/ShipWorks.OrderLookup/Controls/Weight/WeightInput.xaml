@@ -34,10 +34,12 @@
                         HorizontalContentAlignment="Left"
                         VerticalContentAlignment="Center"
                         Background="{StaticResource InputControlBackgroundGradient}"
-                        BorderBrush="Transparent"
-                        BorderThickness="0"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}"
                         Style="{x:Null}"
                         Height="26"
+                        MaxLength="16"
+                        Foreground="{StaticResource ControlTextColor}"
                         Text="{Binding Path=Text, RelativeSource={RelativeSource TemplatedParent}, NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True}">
                         <TextBox.Triggers>
                             <EventTrigger RoutedEvent="TextBoxBase.TextChanged">

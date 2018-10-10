@@ -2609,6 +2609,7 @@ namespace ShipWorks
             this.buttonOrderLookupViewVoidLast.QuickAccessKey = "OE";
             this.buttonOrderLookupViewVoidLast.Text = "Void\r\nLast";
             this.buttonOrderLookupViewVoidLast.TextContentRelation = Divelements.SandRibbon.TextContentRelation.Underneath;
+            this.buttonOrderLookupViewVoidLast.Activate += new System.EventHandler(this.OnOrderLookupViewVoidLastShipment);
             // 
             // ribbonTabOrderLookupViewShipmentHistory
             // 

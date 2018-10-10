@@ -129,6 +129,26 @@ namespace ShipWorks.OrderLookup.ShipmentHistory
                 .ContinueWith(task => UpdateFilteredList());
         }
 
+        /// <summary>
+        /// Refresh the given entity
+        /// </summary>
+        /// <param name="shipment"></param>
+        /// <param name="p"></param>
+        public GenericResult<ProcessedShipmentEntity> RefreshEntity(ProcessedShipmentEntity shipment)
+        {
+            if (Using(
+                sqlAdapterFactory.Create(),
+                x => x.FetchEntity(shipment)))
+            {
+                return shipment;
+            };
+
+            return GenericResult.FromError("Could not refresh shipment", shipment);
+        }
+
+        /// <summary>
+        /// Update the filtered list
+        /// </summary>
         private void UpdateFilteredList()
         {
             filteredList = shipmentHeaders.Where(x => x.MatchesFilter(filterTerm)).ToImmutableArray();

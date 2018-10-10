@@ -22,7 +22,7 @@ namespace ShipWorks.UI.ValueConverters
                 Enum enumValue = default(Enum);
                 if (parameter is Type)
                 {
-                    enumValue = (Enum) Enum.Parse((Type) parameter, value.ToString());
+                    enumValue = Enum.Parse((Type) parameter, value.ToString()) as Enum;
                 }
 
                 return enumValue;
@@ -36,16 +36,24 @@ namespace ShipWorks.UI.ValueConverters
         /// </summary>
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (value != null)
+            if (value is int && parameter != null)
             {
                 int returnValue = 0;
 
                 if (parameter is Type)
                 {
-                    returnValue = (int) Enum.Parse((Type) parameter, value.ToString());
+                    try
+                    {
+                        // cant use Enum.TryParse because it requires a type argument and we dont have one here.
+                        returnValue = (int) Enum.Parse((Type) parameter, value.ToString());
+                    }
+                    catch (ArgumentException)
+                    {
+                        return null;
+                    }
+                    
+                    return returnValue;
                 }
-
-                return returnValue;
             }
 
             return null;

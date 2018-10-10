@@ -2,6 +2,7 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="/ShipWorks.OrderLookup;component/Styles/Colors.xaml"/>
+        <ResourceDictionary Source="/ShipWorks.OrderLookup;component/Styles/Shapes.xaml"/>
         <ResourceDictionary Source="/ShipWorks.UI;component/Styles/ErrorTemplates.xaml"/>
     </ResourceDictionary.MergedDictionaries>
     <Style x:Key="DatePickerTextBoxStyle" TargetType="{x:Type DatePickerTextBox}">
@@ -105,12 +106,13 @@
                                                 <ColumnDefinition Width="auto"/>
                                             </Grid.ColumnDefinitions>
                                             <Path Grid.Column="0"
-                                              Data="M9,10H7V12H9V10M13,10H11V12H13V10M17,10H15V12H17V10M19,3H18V1H16V3H8V1H6V3H5C3.89,3 3,3.9 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V5A2,2 0 0,0 19,3M19,19H5V8H19V19Z"
+                                              Style="{StaticResource CalendarIcon}"
                                               HorizontalAlignment="Center" Fill="{StaticResource IconColor}" VerticalAlignment="Center"
                                               Height="15" Width="15"
                                               Stretch="Fill" />
                                             <Path Grid.Column="1"
-                                              Data="M7,10L12,15L17,10H7Z" Fill="{StaticResource IconColor}"
+                                                  Style="{StaticResource DropDownArrowIcon}"
+                                                  Fill="{StaticResource IconColor}"
                                               Height="4" Width="6" Margin="6 0 0 0" Stretch="Fill"/>
                                         </Grid>
                                     </Border>                                    

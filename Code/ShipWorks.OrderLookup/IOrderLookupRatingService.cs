@@ -10,11 +10,6 @@ namespace ShipWorks.OrderLookup
     public interface IOrderLookupRatingService
     {
         /// <summary>
-        /// The last rate hash to be calculated
-        /// </summary>
-        string LatestRateHash { get; }
-        
-        /// <summary>
         /// Get rates for the given shipment
         /// </summary>
         GenericResult<RateGroup> GetRates(ShipmentEntity shipment);

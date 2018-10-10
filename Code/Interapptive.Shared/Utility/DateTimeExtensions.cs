@@ -8,6 +8,11 @@ namespace Interapptive.Shared.Utility
     public static class DateTimeExtensions
     {
         /// <summary>
+        /// Yesterdays date
+        /// </summary>
+        public static DateTime Yesterday => DateTime.Today.Subtract(new TimeSpan(1, 0, 0, 0));
+        
+        /// <summary>
         /// Get a value that is at least the minimum value specified
         /// </summary>
         /// <returns>The value if greater than the minimum, otherwise the minimum</returns>

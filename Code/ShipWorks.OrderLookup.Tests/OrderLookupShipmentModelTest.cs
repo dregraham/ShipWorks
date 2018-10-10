@@ -1,7 +1,4 @@
 ﻿using Autofac.Extras.Moq;
-using Interapptive.Shared.Threading;
-using Microsoft.Reactive.Testing;
-using Moq;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Messaging.Messages;
@@ -10,12 +7,12 @@ using Xunit;
 
 namespace ShipWorks.OrderLookup.Tests
 {
-    public class ViewModelOrchestratorTest
+    public class OrderLookupShipmentModelTest
     {
         private readonly AutoMock mock;
         private readonly TestMessenger testMessenger;
 
-        public ViewModelOrchestratorTest()
+        public OrderLookupShipmentModelTest()
         {
             mock = AutoMockExtensions.GetLooseThatReturnsMocks();
             testMessenger = new TestMessenger();
@@ -25,7 +22,7 @@ namespace ShipWorks.OrderLookup.Tests
         [Fact]
         public void InitializeForCurrentSession_SubscribesToOrderFoundMessage()
         {
-            ViewModelOrchestrator testObject = mock.Create<ViewModelOrchestrator>();
+            OrderLookupShipmentModel testObject = mock.Create<OrderLookupShipmentModel>();
 
             testObject.InitializeForCurrentSession();
 
@@ -39,7 +36,7 @@ namespace ShipWorks.OrderLookup.Tests
         [Fact]
         public void RaisePropertyChanged_RaisesPropertyChangedWithNameOfProperty()
         {
-            ViewModelOrchestrator testObject = mock.Create<ViewModelOrchestrator>();
+            OrderLookupShipmentModel testObject = mock.Create<OrderLookupShipmentModel>();
             Assert.PropertyChanged(testObject, "FooBar", () => testObject.RaisePropertyChanged("FooBar"));
         }
     }

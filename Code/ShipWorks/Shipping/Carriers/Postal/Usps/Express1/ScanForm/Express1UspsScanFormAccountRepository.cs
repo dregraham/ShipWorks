@@ -33,6 +33,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.ScanForm
         /// <summary>
         /// Does the repository have any accounts
         /// </summary>
-        public bool HasAccounts => UspsAccountManager.Express1AccountsReadOnly.Any(x => x.PendingInitialAccount == (int) UspsPendingAccountType.None);
+        public override bool HasAccounts => UspsAccountManager.Express1AccountsReadOnly.Any(x => x.PendingInitialAccount == (int) UspsPendingAccountType.None);
     }
 }

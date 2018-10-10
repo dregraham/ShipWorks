@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Globalization;
+using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -10,7 +11,7 @@ namespace ShipWorks.OrderLookup.Controls
     /// <summary>
     /// Data template selector based on shipment type code
     /// </summary>
-    
+    [Obfuscation(Feature = "PreserveLiteralValues", Exclude = false, StripAfterObfuscation = false)]
     public class ShipmentTypeToOrderLookupTemplateConverter : IMultiValueConverter
     {
         /// <summary>
@@ -18,7 +19,7 @@ namespace ShipWorks.OrderLookup.Controls
         /// </summary>
         /// <remarks>
         /// If not found or unknown shipmenttypecode or no shipmenttypecode, "default" template is returned.
-        /// If not found, null is returned.
+        /// If the default template is not found, null is returned.
         /// </remarks>
         public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
         {

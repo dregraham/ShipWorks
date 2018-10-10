@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Reflection;
 using Interapptive.Shared.ComponentRegistration;
@@ -11,33 +12,34 @@ using ShipWorks.Core.Messaging;
 using ShipWorks.Core.UI;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Messaging.Messages;
+using ShipWorks.Messaging.Messages.SingleScan;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Services;
 
 namespace ShipWorks.OrderLookup
 {
     /// <summary>
-    /// Data service for the order lookup UI Mode
+    /// Model used by the various order lookup viewmodels
     /// </summary>
     [Component(SingleInstance = true)]
-    public class ViewModelOrchestrator : IInitializeForCurrentUISession, INotifyPropertyChanged, IViewModelOrchestrator
+    public class OrderLookupShipmentModel : IInitializeForCurrentUISession, INotifyPropertyChanged, IOrderLookupShipmentModel
     {
         private readonly IMessenger messenger;
-        private readonly ICarrierShipmentAdapterFactory shipmentAdapterFactory;
         private readonly IShippingManager shippingManager;
         private readonly IMessageHelper messageHelper;
         private IDisposable subscription;
         private readonly PropertyChangedHandler handler;
         private OrderEntity selectedOrder;
         private bool shipmentAllowEditing;
+        private bool isSaving = false;
+        public event EventHandler OnSearchOrder;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public ViewModelOrchestrator(IMessenger messenger, ICarrierShipmentAdapterFactory shipmentAdapterFactory, IShippingManager shippingManager, IMessageHelper messageHelper)
+        public OrderLookupShipmentModel(IMessenger messenger, IShippingManager shippingManager, IMessageHelper messageHelper)
         {
             this.messenger = messenger;
-            this.shipmentAdapterFactory = shipmentAdapterFactory;
             this.shippingManager = shippingManager;
             this.messageHelper = messageHelper;
             handler = new PropertyChangedHandler(this, () => PropertyChanged);
@@ -74,42 +76,10 @@ namespace ShipWorks.OrderLookup
         public ICarrierShipmentAdapter ShipmentAdapter { get; private set; }
 
         /// <summary>
-        /// The pacakge adpaters for the order in context
+        /// The package adapters for the order in context
         /// </summary>
         [Obfuscation(Exclude = true)]
         public IEnumerable<IPackageAdapter> PackageAdapters { get; private set; }
-
-        /// <summary>
-        /// ShipmentType of selected shipment
-        /// </summary>
-        [Obfuscation(Exclude = true)]
-        public ShipmentTypeCode ShipmentTypeCode
-        {
-            get => ShipmentAdapter?.ShipmentTypeCode ?? ShipmentTypeCode.None;
-            set
-            {
-                if (value != ShipmentTypeCode)
-                {
-                    SaveToDatabase();
-                    using (handler.SuppressChangeNotifications())
-                    {
-                        RemovePropertyChangedEventsFromEntities();
-
-                        shippingManager.ChangeShipmentType(value, ShipmentAdapter.Shipment);
-
-                        RefreshPropertiesFromOrder(selectedOrder);
-
-                        AddPropertyChangedEventsToEntities();
-
-                        if (ShipmentAdapter != null)
-                        {
-                            messenger.Send(new ShipmentSelectionChangedMessage(this, new[] { ShipmentAdapter.Shipment.ShipmentID }, ShipmentAdapter));
-                        }
-                    }
-                    RaisePropertyChanged(nameof(ViewModelOrchestrator));
-                }
-            }
-        }
 
         /// <summary>
         /// Invoked when a property on the order object changes
@@ -123,7 +93,7 @@ namespace ShipWorks.OrderLookup
         {
             handler.RaisePropertyChanged(propertyName);
 
-            if (ShipmentAdapter != null && ShipmentAdapter.Shipment != null)
+            if (ShipmentAdapter?.Shipment != null)
             {
                 messenger.Send(new ShipmentChangedMessage(this, ShipmentAdapter, propertyName));
             }
@@ -134,18 +104,28 @@ namespace ShipWorks.OrderLookup
         /// </summary>
         public void SaveToDatabase()
         {
-            if (ShipmentAdapter == null || !ShipmentAllowEditing || (ShipmentAdapter?.Shipment?.Processed ?? true))
+            if (isSaving)
             {
                 return;
             }
 
-            IDictionary<ShipmentEntity, Exception> errors;
-            using (handler.SuppressChangeNotifications())
+            isSaving = true;
+            using (Disposable.Create(() => isSaving = false))
             {
-                errors = shippingManager.SaveShipmentToDatabase(ShipmentAdapter?.Shipment, false);
-            }
+                if (!ShipmentAllowEditing || (ShipmentAdapter?.Shipment?.Processed ?? true))
+                {
+                    return;
+                }
 
-            DisplayError(errors);
+                IDictionary<ShipmentEntity, Exception> errors;
+                using (handler.SuppressChangeNotifications())
+                {
+                    ShipmentAdapter.UpdateDynamicData();
+                    errors = shippingManager.SaveShipmentToDatabase(ShipmentAdapter?.Shipment, false);
+                }
+
+                DisplayError(errors);
+            }
         }
 
         /// <summary>
@@ -156,8 +136,10 @@ namespace ShipWorks.OrderLookup
             RemovePropertyChangedEventsFromEntities();
 
             shippingManager.RefreshShipment(ShipmentAdapter.Shipment);
+            ShipmentAdapter = shippingManager.GetShipmentAdapter(ShipmentAdapter.Shipment);
 
-            RefreshPropertiesFromOrder(SelectedOrder);
+            RefreshProperties();
+
             AddPropertyChangedEventsToEntities();
             RaisePropertyChanged(null);
         }
@@ -165,7 +147,7 @@ namespace ShipWorks.OrderLookup
         /// <summary>
         /// Unload the order
         /// </summary>
-        public void Unload() => LoadOrder(null);
+        public void Unload() => ClearOrder();
 
         /// <summary>
         /// Show an error if one is associated with the current shipment
@@ -179,7 +161,7 @@ namespace ShipWorks.OrderLookup
                 messageHelper.ShowError("The selected shipments were edited or deleted by another ShipWorks user and your changes could not be saved.\n\n" +
                                         "The shipments will be refreshed to reflect the recent changes.");
 
-                messenger.Send(new OrderSelectionChangingMessage(this, new[] { ShipmentAdapter.Shipment.OrderID }));
+                LoadOrder(ShipmentAdapter.Shipment.Order);
             }
         }
 
@@ -188,8 +170,34 @@ namespace ShipWorks.OrderLookup
         /// </summary>
         public void InitializeForCurrentSession()
         {
-            subscription = messenger.OfType<OrderLookupSingleScanMessage>()
-                .Subscribe(orderMessage => LoadOrder(orderMessage.Order));
+            subscription = new CompositeDisposable()
+            {
+                messenger.OfType<OrderLookupSingleScanMessage>()
+                    .Subscribe(orderMessage =>
+                    {
+                        try
+                        {
+                            if (orderMessage.Order == null)
+                            {
+                                ClearOrder();
+                            }
+                            else
+                            {
+                                SaveToDatabase();
+                                LoadOrder(orderMessage.Order);
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            messageHelper.ShowError("An error occurred when loading your order.", ex);
+                        }
+                    }),
+                messenger.OfType<SingleScanMessage>()
+                    .Subscribe(message =>
+                    {
+                        OnSearchOrder?.Invoke(this, null);
+                    })
+            };
         }
 
         /// <summary>
@@ -197,43 +205,48 @@ namespace ShipWorks.OrderLookup
         /// </summary>
         private void LoadOrder(OrderEntity order)
         {
-            SaveToDatabase();
             RemovePropertyChangedEventsFromEntities();
 
-            if (order != null)
+            if ((order.Shipments?.Count ?? 0) > 0)
             {
-                RefreshPropertiesFromOrder(order);
-
-                AddPropertyChangedEventsToEntities();
-
-                if (ShipmentAdapter != null)
-                {
-                    messenger.Send(new ShipmentSelectionChangedMessage(this, new[] { ShipmentAdapter.Shipment.ShipmentID }, ShipmentAdapter));
-                }
-
-                RaisePropertyChanged(nameof(ShipmentTypeCode));
+                ShipmentAdapter = shippingManager.GetShipmentAdapter(order.Shipments.First());
             }
-            else
+
+            RefreshProperties();
+
+            AddPropertyChangedEventsToEntities();
+
+            if (ShipmentAdapter != null)
             {
-                ShipmentAdapter = null;
-                ShipmentAllowEditing = false;
-                PackageAdapters = null;
+                messenger.Send(new ShipmentSelectionChangedMessage(this, new[] { ShipmentAdapter.Shipment.ShipmentID }, ShipmentAdapter));
             }
+
+            RaisePropertyChanged(nameof(ShipmentTypeCode));
 
             SelectedOrder = order;
         }
 
         /// <summary>
+        /// Clear the order
+        /// </summary>
+        private void ClearOrder()
+        {
+            SaveToDatabase();
+            RemovePropertyChangedEventsFromEntities();
+
+            ShipmentAdapter = null;
+            ShipmentAllowEditing = false;
+            PackageAdapters = null;
+            SelectedOrder = null;
+        }
+
+        /// <summary>
         /// Refresh properties from the given order
         /// </summary>
-        private void RefreshPropertiesFromOrder(OrderEntity order)
+        private void RefreshProperties()
         {
-            if (order?.Shipments != null)
-            {
-                ShipmentAdapter = shipmentAdapterFactory.Get(order.Shipments.First());
-                ShipmentAllowEditing = !ShipmentAdapter?.Shipment?.Processed ?? false;
-                PackageAdapters = ShipmentAdapter?.GetPackageAdapters();
-            }     
+            ShipmentAllowEditing = !ShipmentAdapter?.Shipment?.Processed ?? false;
+            PackageAdapters = ShipmentAdapter?.GetPackageAdapters();
         }
 
         /// <summary>
@@ -261,6 +274,7 @@ namespace ShipWorks.OrderLookup
             {
                 ShipmentAdapter.Shipment.PropertyChanged -= RaisePropertyChanged;
             }
+
             if (ShipmentAdapter?.Shipment?.Postal != null)
             {
                 ShipmentAdapter.Shipment.Postal.PropertyChanged -= RaisePropertyChanged;
@@ -268,7 +282,7 @@ namespace ShipWorks.OrderLookup
         }
 
         /// <summary>
-        /// Call the RaisePropropertyChanged with propertyname
+        /// Call the RaisePropertyChanged with PropertyName
         /// </summary>
         private void RaisePropertyChanged(object sender, PropertyChangedEventArgs e) => RaisePropertyChanged(e.PropertyName);
 
@@ -287,5 +301,29 @@ namespace ShipWorks.OrderLookup
         {
             Dispose();
         }
+
+        public void ChangeShipmentType(ShipmentTypeCode value)
+        {
+            if (value != ShipmentAdapter.ShipmentTypeCode)
+            {
+                // Changing shipment type leads to unloading and loading entities into the current ShipmentEntity.
+                // To prepare for this, we remove existing handlers from the existing entities, change the shipment type,
+                // then add handlers to the possibly new entities.
+                using (handler.SuppressChangeNotifications())
+                {
+                    RemovePropertyChangedEventsFromEntities();
+
+                    ShipmentAdapter = shippingManager.ChangeShipmentType(value, ShipmentAdapter.Shipment);
+                    RefreshProperties();
+
+                    AddPropertyChangedEventsToEntities();
+
+                    messenger.Send(new ShipmentSelectionChangedMessage(this, new[] { ShipmentAdapter.Shipment.ShipmentID }, ShipmentAdapter));
+                }
+
+                RaisePropertyChanged(nameof(OrderLookupShipmentModel));
+            }
+        }
     }
 }
+

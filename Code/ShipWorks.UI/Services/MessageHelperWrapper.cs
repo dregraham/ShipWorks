@@ -6,7 +6,6 @@ using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Threading;
 using Interapptive.Shared.UI;
 using ShipWorks.Common.Threading;
-using ShipWorks.UI.Dialogs;
 using ShipWorks.UI.Dialogs.Popup;
 using ShipWorks.Users;
 
@@ -45,6 +44,11 @@ namespace ShipWorks.UI.Services
         /// <summary>
         /// Show an error message box with the given error text.
         /// </summary>
+        public void ShowError(string message, Exception ex) => MessageHelper.ShowError(ownerFactory(), message, ex);
+
+        /// <summary>
+        /// Show an error message box with the given error text.
+        /// </summary>
         public void ShowError(IWin32Window owner, string message) => MessageHelper.ShowError(owner, message);
 
         /// <summary>
@@ -73,7 +77,16 @@ namespace ShipWorks.UI.Services
         /// </summary>
         public DialogResult ShowQuestion(string message)
         {
-            return MessageHelper.ShowQuestion(ownerFactory(), message);
+            Control owner = ownerFactory();
+
+            if (owner.InvokeRequired)
+            {
+                return (DialogResult) owner.Invoke((Func<string, DialogResult>) ShowQuestion, message);
+            }
+            else
+            {
+                return MessageHelper.ShowQuestion(ownerFactory(), message);
+            }
         }
 
         /// <summary>

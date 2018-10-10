@@ -16,7 +16,7 @@ namespace ShipWorks.OrderLookup.Tests.From
     {
         readonly AutoMock mock;
         private readonly OrderLookupFromViewModel testObject;
-        private readonly Mock<IViewModelOrchestrator> orchestrator;
+        private readonly Mock<IOrderLookupShipmentModel> shipmentModel;
 
         public OrderLookupFromViewModelTest()
         {
@@ -41,8 +41,8 @@ namespace ShipWorks.OrderLookup.Tests.From
             Mock<ICarrierAccountRetrieverFactory> factory = mock.Mock<ICarrierAccountRetrieverFactory>();
             factory.Setup(f => f.Create(ShipmentTypeCode.Usps)).Returns(accountRetriever);
 
-            orchestrator = mock.Mock<IViewModelOrchestrator>();
-            orchestrator.SetupGet(o => o.ShipmentAdapter).Returns(shipmentAdapter);
+            shipmentModel = mock.Mock<IOrderLookupShipmentModel>();
+            shipmentModel.SetupGet(o => o.ShipmentAdapter).Returns(shipmentAdapter);
 
             testObject = mock.Create<OrderLookupFromViewModel>();
         }
@@ -50,7 +50,7 @@ namespace ShipWorks.OrderLookup.Tests.From
         [Fact]
         public void Title_IsFrom_WhenNoShipmentIsLoaded()
         {
-            orchestrator.SetupGet(o => o.ShipmentAdapter).Returns((ICarrierShipmentAdapter)null);
+            shipmentModel.SetupGet(o => o.ShipmentAdapter).Returns((ICarrierShipmentAdapter) null);
 
             testObject.RateShop = false;
 
