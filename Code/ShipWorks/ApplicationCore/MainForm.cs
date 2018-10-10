@@ -155,7 +155,6 @@ namespace ShipWorks
             Justification = "The WindowStateSaver's constructor does the work, so we don't need to store the variable.")]
         public MainForm()
         {
-
             currentUserSettings = IoC.UnsafeGlobalLifetimeScope.Resolve<ICurrentUserSettings>();
 
             InitializeComponent();
@@ -228,6 +227,17 @@ namespace ShipWorks
         /// Get the current UIMode
         /// </summary>
         public UIMode UIMode { get; private set; }
+
+        /// <summary>
+        /// Reprint the last order lookup processed shipment
+        /// </summary>
+        private void OnOrderLookupViewReprintLastShipment(object sender, System.EventArgs e)
+        {
+            using (IPreviousShipmentActionManager previousShipmentActionManager = IoC.UnsafeGlobalLifetimeScope.Resolve<IPreviousShipmentActionManager>())
+            {
+                previousShipmentActionManager.ReprintLastShipment().ConfigureAwait(false);
+            }
+        }
 
         #region Initialization \ Shutdown
 
