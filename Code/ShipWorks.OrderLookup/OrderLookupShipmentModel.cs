@@ -185,7 +185,7 @@ namespace ShipWorks.OrderLookup
 
             if ((order.Shipments?.Count ?? 0) > 0)
             {
-                ShipmentAdapter = shippingManager.GetShipmentAdapter(order.Shipments.First());
+                ShipmentAdapter = shippingManager.GetShipmentAdapter(order.Shipments.Last());
 
                 // Update dynamic data here because everything downstream will also attempt to update dynamic data
                 // doing it here gives us a head start before we are tracking property changes, this also ensures that the
