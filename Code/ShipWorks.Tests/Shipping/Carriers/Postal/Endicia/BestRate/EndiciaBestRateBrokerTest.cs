@@ -290,31 +290,6 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Endicia.BestRate
         }
 
         [Fact]
-        public void GetBestRates_UpdatesDescriptionWhenPartOfRateGroup()
-        {
-            rateGroup1.Rates.Clear();
-            rateGroup3.Rates.Clear();
-
-            RateResult result1 = new RateResult("Foo", "4") { ServiceLevel = ServiceLevelType.OneDay };
-            RateResult result2 = new RateResult("       Bar", string.Empty, 4, new PostalRateSelection(PostalServiceType.StandardPost)) { ServiceLevel = ServiceLevelType.OneDay };
-
-            RateResult result3 = new RateResult("Baz", "3") { ServiceLevel = ServiceLevelType.OneDay };
-            RateResult result4 = new RateResult("   Other", string.Empty, 4, new PostalRateSelection(PostalServiceType.ExpressMail)) { ServiceLevel = ServiceLevelType.OneDay };
-
-            rateGroup1.Rates.Add(result1);
-            rateGroup1.Rates.Add(result2);
-            rateGroup1.Rates.Add(result3);
-            rateGroup1.Rates.Add(result4);
-
-            RateGroup bestRates = testObject.GetBestRates(testShipment, new List<BrokerException>());
-
-            Assert.Equal("USPS Foo Bar", bestRates.Rates.Single(r => r.RateID == result2.RateID).Description);
-            Assert.Equal("USPS Baz Other", bestRates.Rates.Single(r => r.RateID == result4.RateID).Description);
-            Assert.Equal("4", bestRates.Rates.Single(r => r.RateID == result2.RateID).Days);
-            Assert.Equal("3", bestRates.Rates.Single(r => r.RateID == result4.RateID).Days);
-        }
-
-        [Fact]
         public void GetBestRates_OriginalEndiciaShipmentDetailsAreRestoredAfterCall()
         {
             PostalShipmentEntity EndiciaShipment = new PostalShipmentEntity();

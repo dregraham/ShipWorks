@@ -122,7 +122,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
 
             if (rateSelection != null)
             {
-                Shipment.Postal.Service = (int) rateSelection.ServiceType; ;
+                Shipment.Postal.Service = (int) rateSelection.ServiceType;
             }
         }
 

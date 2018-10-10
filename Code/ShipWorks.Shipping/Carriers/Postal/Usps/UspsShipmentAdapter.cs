@@ -99,8 +99,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             var packagingType = (PostalPackagingType) Shipment.Postal.PackagingType;
 
             return selection != null &&
-                shipmentType.DoesRateMatchServiceAndPackaging(selection, serviceType, confirmationType,
-                    packagingType, Shipment.ShipCountryCode);
+                shipmentType.DoesRateMatchServiceAndPackaging(selection, serviceType);
         }
 
         /// <summary>

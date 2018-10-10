@@ -223,10 +223,10 @@ namespace ShipWorks.Shipping.Tests.Carriers.Postal.Usps
         }
 
         [Theory]
-        [InlineData(PostalServiceType.AsendiaIpa, PostalConfirmationType.AdultSignatureRequired)]
-        [InlineData(PostalServiceType.PriorityMail, PostalConfirmationType.Delivery)]
-        [InlineData(PostalServiceType.ExpressMail, PostalConfirmationType.None)]
-        public void UpdateServiceFromRate_SetsService_WhenTagIsValid(PostalServiceType serviceType, PostalConfirmationType confirmationType)
+        [InlineData(PostalServiceType.AsendiaIpa)]
+        [InlineData(PostalServiceType.PriorityMail)]
+        [InlineData(PostalServiceType.ExpressMail)]
+        public void UpdateServiceFromRate_SetsService_WhenTagIsValid(PostalServiceType serviceType)
         {
             mock.WithShipmentTypeFromShipmentManager(x =>
             {
@@ -240,7 +240,6 @@ namespace ShipWorks.Shipping.Tests.Carriers.Postal.Usps
                 ShipmentType = ShipmentTypeCode.Usps
             });
             Assert.Equal((int) serviceType, shipment.Postal.Service);
-            Assert.Equal((int) confirmationType, shipment.Postal.Confirmation);
         }
 
         [Theory]
@@ -284,8 +283,8 @@ namespace ShipWorks.Shipping.Tests.Carriers.Postal.Usps
 
         [Theory]
         [InlineData(PostalServiceType.AsendiaGeneric)]
-        [InlineData(PostalServiceType.FirstClass)]
-        public void DoesRateMatchSelectedService_ReturnsFalse_WhenServiceAndConfirmationDoNotMatch(PostalServiceType serviceType)
+        [InlineData(PostalServiceType.ConsolidatorDomestic)]
+        public void DoesRateMatchSelectedService_ReturnsFalse_WhenServiceDoesNotMatch(PostalServiceType serviceType)
         {
             mock.WithShipmentTypeFromShipmentManager<PostalShipmentType>(x =>
             {

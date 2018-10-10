@@ -414,8 +414,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
                 return false;
             }
 
-            return shipmentType.DoesRateMatchServiceAndPackaging(current, serviceType, confirmationType,
-                selectedPackagingType, personControl.CountryCode);
+            return shipmentType.DoesRateMatchServiceAndPackaging(current, serviceType);
         }
 
         /// <summary>
