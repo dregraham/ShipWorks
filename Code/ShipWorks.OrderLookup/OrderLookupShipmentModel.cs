@@ -27,6 +27,7 @@ namespace ShipWorks.OrderLookup
         private readonly IMessenger messenger;
         private readonly IShippingManager shippingManager;
         private readonly IMessageHelper messageHelper;
+        private IDisposable subscription;
         private readonly PropertyChangedHandler handler;
         private OrderEntity selectedOrder;
         private bool shipmentAllowEditing;
@@ -290,6 +291,7 @@ namespace ShipWorks.OrderLookup
         /// </summary>
         public void Dispose()
         {
+            subscription?.Dispose();
         }
 
         /// <summary>
