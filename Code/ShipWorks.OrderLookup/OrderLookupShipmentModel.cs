@@ -238,6 +238,8 @@ namespace ShipWorks.OrderLookup
             ShipmentAllowEditing = false;
             PackageAdapters = null;
             SelectedOrder = null;
+
+            messenger.Send(new OrderLookupClearOrderMessage());
         }
 
         /// <summary>
