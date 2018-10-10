@@ -1,4 +1,3 @@
-using System;
 using System.ComponentModel;
 using System.Reflection;
 using System.Windows.Input;
@@ -142,7 +141,7 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookupSearchControl
         /// </summary>
         private void Reset()
         {
-            throw new System.NotImplementedException();
+            shipmentModel.Unload();
         }
 
         /// <summary>
