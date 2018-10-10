@@ -27,5 +27,10 @@ namespace ShipWorks.OrderLookup
         /// Save the grid column state
         /// </summary>
         void SaveGridColumnState();
+
+        /// <summary>
+        /// Number of rows in the grid
+        /// </summary>
+        long RowCount { get; }
     }
 }
