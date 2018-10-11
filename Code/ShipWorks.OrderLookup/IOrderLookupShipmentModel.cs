@@ -29,11 +29,6 @@ namespace ShipWorks.OrderLookup
         ICarrierShipmentAdapter ShipmentAdapter { get; }
 
         /// <summary>
-        /// ShipmentType
-        /// </summary>
-        ShipmentTypeCode ShipmentTypeCode { get; set; }
-
-        /// <summary>
         /// The package adapters for the order in context
         /// </summary>
         IEnumerable<IPackageAdapter> PackageAdapters { get; }
@@ -67,5 +62,15 @@ namespace ShipWorks.OrderLookup
         /// Fires when an order is cleared
         /// </summary>
         event EventHandler OnSearchOrder;
+
+        /// <summary>
+        /// Changes the shipment type
+        /// </summary>
+        void ChangeShipmentType(ShipmentTypeCode value);
+
+        /// <summary>
+        /// Load the order
+        /// </summary>
+        void LoadOrder(OrderEntity order);
     }
 }

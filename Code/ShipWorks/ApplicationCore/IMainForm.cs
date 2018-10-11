@@ -33,5 +33,10 @@ namespace ShipWorks.ApplicationCore
         /// True if shipping history control is active
         /// </summary>
         bool IsShipmentHistoryActive();
+
+        /// <summary>
+        /// Update the contents of the status bar
+        /// </summary>
+        void UpdateStatusBar();
     }
 }

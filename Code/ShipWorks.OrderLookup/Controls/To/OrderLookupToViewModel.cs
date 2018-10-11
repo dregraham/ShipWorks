@@ -82,7 +82,9 @@ namespace ShipWorks.OrderLookup.Controls.To
                 autoSave = handler.PropertyChangingStream.Where(p => p != nameof(Title)).Throttle(TimeSpan.FromMilliseconds(100)).Subscribe(_ => Save());
             }
 
-            if (e.PropertyName == ShipmentFields.ShipCountryCode.Name)
+            if (e.PropertyName == ShipmentFields.ShipCountryCode.Name ||
+                e.PropertyName == ShipmentFields.ShipLastName.Name ||
+                e.PropertyName == ShipmentFields.ShipFirstName.Name)
             {
                 UpdateTitle();
             }

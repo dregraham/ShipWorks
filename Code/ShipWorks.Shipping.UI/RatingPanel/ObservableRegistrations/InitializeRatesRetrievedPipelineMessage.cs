@@ -2,17 +2,17 @@
 using Interapptive.Shared.Messaging;
 using ShipWorks.Data.Model.EntityClasses;
 
-namespace ShipWorks.Messaging.Messages
+namespace ShipWorks.Shipping.UI.RatingPanel.ObservableRegistrations
 {
     /// <summary>
-    /// Order was found via OrderLookup
+    /// Initialize rating
     /// </summary>
-    public struct OrderLookupSingleScanMessage : IShipWorksMessage
+    public struct InitializeRatesRetrievedPipelineMessage : IShipWorksMessage
     {
         /// <summary>
         /// Ctor
         /// </summary>
-        public OrderLookupSingleScanMessage(object sender, OrderEntity order)
+        public InitializeRatesRetrievedPipelineMessage(object sender, OrderEntity order)
         {
             MessageId = Guid.NewGuid();
             Sender = sender;

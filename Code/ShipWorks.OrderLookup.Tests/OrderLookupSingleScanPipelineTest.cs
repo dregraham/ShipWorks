@@ -65,7 +65,7 @@ namespace ShipWorks.OrderLookup.Tests
             autoPrintService
                 .Setup(p => p.AutoPrintShipment(AnyLong, It.IsAny<SingleScanMessage>()))
                 .ReturnsAsync(printResult);
-            
+
             testObject = mock.Create<OrderLookupSingleScanPipeline>();
             testObject.InitializeForCurrentSession();
         }
@@ -139,7 +139,7 @@ namespace ShipWorks.OrderLookup.Tests
         }
 
         [Fact]
-        public void InitializeForCurrentSession_SendsOrderLookupSingleScanMessage()
+        public void InitializeForCurrentSession_LoadsOrderOnShipmentModel()
         {
             orderRepository.Setup(x => x.GetOrderID("Foo")).Returns(1);
             mainForm.SetupGet(u => u.UIMode).Returns(UIMode.OrderLookup);
@@ -147,7 +147,7 @@ namespace ShipWorks.OrderLookup.Tests
             SingleScanMessage singleScanMessage = new SingleScanMessage(this, new ScanMessage(this, "Foo", IntPtr.Zero));
             testMessenger.Send(singleScanMessage);
 
-            Assert.Equal(order, testMessenger.SentMessages.OfType<OrderLookupSingleScanMessage>().Single().Order);
+            mock.Mock<IOrderLookupShipmentModel>().Verify(s => s.LoadOrder(order));
         }
     }
 }

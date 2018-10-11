@@ -117,7 +117,7 @@ namespace ShipWorks.OrderLookup.Controls.From
                 long originId = ShipmentModel.ShipmentAdapter.Shipment.OriginOriginID;
                 long orderId = ShipmentModel.SelectedOrder.OrderID;
                 long accountId = ShipmentModel.ShipmentAdapter.AccountId.GetValueOrDefault();
-                ShipmentTypeCode shipmentTypeCode = ShipmentModel.ShipmentTypeCode;
+                ShipmentTypeCode shipmentTypeCode = ShipmentModel.ShipmentAdapter.ShipmentTypeCode;
                 StoreEntity store = ShipmentModel.ShipmentAdapter.Store;
 
                 SetAddressFromOrigin(originId, orderId, accountId, shipmentTypeCode, store);

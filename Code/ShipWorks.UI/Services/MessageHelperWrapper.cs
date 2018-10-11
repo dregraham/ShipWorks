@@ -44,6 +44,11 @@ namespace ShipWorks.UI.Services
         /// <summary>
         /// Show an error message box with the given error text.
         /// </summary>
+        public void ShowError(string message, Exception ex) => MessageHelper.ShowError(ownerFactory(), message, ex);
+
+        /// <summary>
+        /// Show an error message box with the given error text.
+        /// </summary>
         public void ShowError(IWin32Window owner, string message) => MessageHelper.ShowError(owner, message);
 
         /// <summary>

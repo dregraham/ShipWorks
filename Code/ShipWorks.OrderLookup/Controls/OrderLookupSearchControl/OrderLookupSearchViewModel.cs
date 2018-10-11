@@ -1,4 +1,3 @@
-using System;
 using System.ComponentModel;
 using System.Reflection;
 using System.Windows.Input;
@@ -117,7 +116,16 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookupSearchControl
                 {
                     SearchErrorMessage = "No matching orders were found.";
                     SearchError = true;
-                    OrderNumber = string.Empty;
+                }
+                else if (shipmentModel.ShipmentAdapter?.Shipment?.Voided == true)
+                {
+                    SearchErrorMessage = "The order's shipment has been voided.";
+                    SearchError = true;
+                }
+                else if (shipmentModel.ShipmentAdapter?.Shipment?.Processed == true)
+                {
+                    SearchErrorMessage = "The order's shipment has already been processed.";
+                    SearchError = true;
                 }
                 else
                 {
@@ -134,7 +142,6 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookupSearchControl
         private void GetOrder()
         {
             ClearOrderError();
-            shipmentModel.SaveToDatabase();
             messenger.Send(new OrderLookupSearchMessage(this, OrderNumber));
         }
 
@@ -143,7 +150,10 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookupSearchControl
         /// </summary>
         private void Reset()
         {
-            throw new System.NotImplementedException();
+            shipmentModel.Unload();
+            SearchErrorMessage = string.Empty;
+            SearchError = false;
+            OrderNumber = string.Empty;
         }
 
         /// <summary>
