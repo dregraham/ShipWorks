@@ -71,7 +71,7 @@
                 Grid.Row="0"
                 Margin="10"
                 DataContext="{Binding OrderLookupSearchViewModel}" />
-            <Grid Grid.Row="1">
+            <Grid Grid.Row="1" Visibility="{Binding ShowColumns}">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition />
                     <ColumnDefinition Width="auto"/>
