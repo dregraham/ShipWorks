@@ -337,7 +337,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
             var (description, amount) = GetRateAddOnDetails((PostalConfirmationType) shipment.Postal.Confirmation, uspsRate.AddOns);
 
             var baseRate = new RateResult(
-               PostalUtility.GetPostalServiceTypeDescription(serviceType),
+               PostalUtility.GetPostalServiceTypeDescription(serviceType) + description,
                PostalUtility.GetDaysForRate(uspsRate.DeliverDays, uspsRate.DeliveryDate),
                uspsRate.Amount + amount,
                new UspsPostalRateSelection(serviceType, account))
