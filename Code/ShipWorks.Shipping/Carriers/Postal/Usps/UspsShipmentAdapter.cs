@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Reactive.Disposables;
 using System.Reflection;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
@@ -142,5 +144,21 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// </summary>
         /// <returns></returns>
         public override ICarrierShipmentAdapter Clone() => new UspsShipmentAdapter(this);
+
+        /// <summary>
+        /// Send a notification if service related properties change
+        /// </summary>
+        public override IDisposable NotifyIfServiceRelatedPropertiesChange(Action<string> raisePropertyChanged)
+        {
+            var startingConfirmation = Shipment.Postal.Confirmation;
+
+            return Disposable.Create(() =>
+            {
+                if (startingConfirmation != Shipment.Postal.Confirmation)
+                {
+                    raisePropertyChanged(nameof(Shipment.Postal.Confirmation));
+                }
+            });
+        }
     }
 }

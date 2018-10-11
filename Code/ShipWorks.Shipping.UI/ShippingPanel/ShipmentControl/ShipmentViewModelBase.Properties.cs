@@ -118,9 +118,12 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
                     updatedServiceType = Services.FirstOrDefault().Key;
                 }
 
-                handler.Set(nameof(ServiceType), ref serviceType, updatedServiceType, false);
-                RefreshPackageTypes();
-                RefreshInsurance();
+                using (var serviceUpdateHandler = shipmentAdapter.NotifyIfServiceRelatedPropertiesChange(handler.RaisePropertyChanged))
+                {
+                    handler.Set(nameof(ServiceType), ref serviceType, updatedServiceType, false);
+                    RefreshPackageTypes();
+                    RefreshInsurance();
+                }
             }
         }
 

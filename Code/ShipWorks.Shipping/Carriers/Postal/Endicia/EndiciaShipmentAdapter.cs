@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Reactive.Disposables;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Editing.Rating;
@@ -131,5 +133,21 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         /// </summary>
         /// <returns></returns>
         public override ICarrierShipmentAdapter Clone() => new EndiciaShipmentAdapter(this);
+
+        /// <summary>
+        /// Send a notification if service related properties change
+        /// </summary>
+        public override IDisposable NotifyIfServiceRelatedPropertiesChange(Action<string> raisePropertyChanged)
+        {
+            var startingConfirmation = Shipment.Postal.Confirmation;
+
+            return Disposable.Create(() =>
+            {
+                if (startingConfirmation != Shipment.Postal.Confirmation)
+                {
+                    raisePropertyChanged(nameof(Shipment.Postal.Confirmation));
+                }
+            });
+        }
     }
 }
