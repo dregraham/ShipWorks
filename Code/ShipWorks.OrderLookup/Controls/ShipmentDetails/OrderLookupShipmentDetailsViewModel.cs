@@ -29,8 +29,10 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
             {
                 if (e.PropertyName == nameof(shipmentModel.ShipmentAdapter.ShipmentTypeCode) || e.PropertyName == nameof(shipmentModel.SelectedOrder))
                 {
+                    var key = shipmentModel.ShipmentAdapter?.ShipmentTypeCode;
                     var old = Context;
-                    Context = createDetailsViewModel[shipmentModel.ShipmentAdapter.ShipmentTypeCode];
+
+                    Context = key.HasValue && createDetailsViewModel.TryGetValue(key.Value, out IOrderLookupDetailsViewModel newModel) ? newModel : null;
                     old?.Dispose();
                 }
             };

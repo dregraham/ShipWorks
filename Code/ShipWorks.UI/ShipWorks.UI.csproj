@@ -251,6 +251,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="AttachedProperties\ExpanderState.cs" />
     <Compile Include="Services\MessageHelperWrapper.cs" />
+    <Compile Include="Triggers\SetFocusTrigger.cs" />
     <Compile Include="UiModule.cs" />
     <Compile Include="ValueConverters\BooleanAndConverter.cs" />
     <Compile Include="ValueConverters\BooleanComparisonToVisiblityConverter.cs" />

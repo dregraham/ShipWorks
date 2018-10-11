@@ -26,7 +26,7 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
     /// Viewmodel for orderlookup
     /// </summary>
     [KeyedComponent(typeof(IOrderLookupDetailsViewModel), ShipmentTypeCode.Usps)]
-    [WpfView(typeof(OrderLookupEndiciaShipmentDetailsControl))]
+    [WpfView(typeof(OrderLookupUspsShipmentDetailsControl))]
     public class OrderLookupUspsShipmentDetailsViewModel : IOrderLookupDetailsViewModel, INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
@@ -68,6 +68,31 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
             InsuranceViewModel = insuranceViewModel;
             handler = new PropertyChangedHandler(this, () => PropertyChanged);
             ManageDimensionalProfiles = new RelayCommand(ManageDimensionalProfilesAction);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            RefreshDimensionalProfiles();
+            RefreshInsurance();
+            RefreshPackageTypes();
+            RefreshConfirmationTypes();
+            RefreshServiceTypes();
+
+
         }
 
         /// <summary>
