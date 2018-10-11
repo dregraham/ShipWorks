@@ -48,6 +48,16 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
     /// </summary>
     public class Express1UspsWebClient : IUspsWebClient
     {
+        // We don't include delivery confirmation because we want to treat that like None, because it is
+        // included at no charge for services to which it applies.
+        private readonly static IDictionary<PostalConfirmationType, AddOnTypeV6> confirmationLookup =
+            new Dictionary<PostalConfirmationType, AddOnTypeV6>
+            {
+                { PostalConfirmationType.Signature, AddOnTypeV6.USASC },
+                { PostalConfirmationType.AdultSignatureRequired, AddOnTypeV6.USAASR },
+                { PostalConfirmationType.AdultSignatureRestricted, AddOnTypeV6.USAASRD }
+            };
+
         // These lengths come from the error that USPS' API gives us when we send data that is too long
         private const int MaxCustomsContentDescriptionLength = 20;
         private const int MaxCustomsItemDescriptionLength = 60;
@@ -324,10 +334,12 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
         /// </summary>
         private static RateResult BuildRateResult(ShipmentEntity shipment, UspsAccountEntity account, RateV14 uspsRate, PostalServiceType serviceType)
         {
+            var (description, amount) = GetRateAddOnDetails((PostalConfirmationType) shipment.Postal.Confirmation, uspsRate.AddOns);
+
             var baseRate = new RateResult(
                PostalUtility.GetPostalServiceTypeDescription(serviceType),
                PostalUtility.GetDaysForRate(uspsRate.DeliverDays, uspsRate.DeliveryDate),
-               uspsRate.Amount,
+               uspsRate.Amount + amount,
                new UspsPostalRateSelection(serviceType, account))
             {
                 ShipmentType = ShipmentTypeCode.Express1Usps,
@@ -338,6 +350,15 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
 
             return baseRate;
         }
+
+        /// <summary>
+        /// Get details for required rate addons
+        /// </summary>
+        private static (string description, decimal amount) GetRateAddOnDetails(PostalConfirmationType confirmation, IEnumerable<AddOnV6> addOns) =>
+            addOns
+                .Where(x => confirmationLookup.TryGetValue(confirmation, out AddOnTypeV6 type) && type == x.AddOnType)
+                .Select(x => (description: " (" + EnumHelper.GetDescription(confirmation) + ")", amount: x.Amount))
+                .FirstOrDefault();
 
         /// <summary>
         /// The internal GetRates implementation intended to be wrapped by the auth wrapper
