@@ -22,12 +22,11 @@ namespace ShipWorks.OrderLookup
     /// Model used by the various order lookup viewmodels
     /// </summary>
     [Component(SingleInstance = true)]
-    public class OrderLookupShipmentModel : IInitializeForCurrentUISession, INotifyPropertyChanged, IOrderLookupShipmentModel
+    public class OrderLookupShipmentModel : INotifyPropertyChanged, IOrderLookupShipmentModel
     {
         private readonly IMessenger messenger;
         private readonly IShippingManager shippingManager;
         private readonly IMessageHelper messageHelper;
-        private IDisposable subscription;
         private readonly PropertyChangedHandler handler;
         private OrderEntity selectedOrder;
         private bool shipmentAllowEditing;
@@ -147,7 +146,11 @@ namespace ShipWorks.OrderLookup
         /// <summary>
         /// Unload the order
         /// </summary>
-        public void Unload() => ClearOrder();
+        public void Unload()
+        {
+            SaveToDatabase();
+            ClearOrder();
+        }
 
         /// <summary>
         /// Show an error if one is associated with the current shipment
@@ -161,55 +164,33 @@ namespace ShipWorks.OrderLookup
                 messageHelper.ShowError("The selected shipments were edited or deleted by another ShipWorks user and your changes could not be saved.\n\n" +
                                         "The shipments will be refreshed to reflect the recent changes.");
 
-                LoadOrder(ShipmentAdapter.Shipment.Order);
+                RefreshShipmentFromDatabase();
             }
-        }
-
-        /// <summary>
-        /// Start listening for order found messages
-        /// </summary>
-        public void InitializeForCurrentSession()
-        {
-            subscription = new CompositeDisposable()
-            {
-                messenger.OfType<OrderLookupSingleScanMessage>()
-                    .Subscribe(orderMessage =>
-                    {
-                        try
-                        {
-                            if (orderMessage.Order == null)
-                            {
-                                ClearOrder();
-                            }
-                            else
-                            {
-                                SaveToDatabase();
-                                LoadOrder(orderMessage.Order);
-                            }
-                        }
-                        catch (Exception ex)
-                        {
-                            messageHelper.ShowError("An error occurred when loading your order.", ex);
-                        }
-                    }),
-                messenger.OfType<SingleScanMessage>()
-                    .Subscribe(message =>
-                    {
-                        OnSearchOrder?.Invoke(this, null);
-                    })
-            };
         }
 
         /// <summary>
         /// Load an order
         /// </summary>
-        private void LoadOrder(OrderEntity order)
+        public void LoadOrder(OrderEntity order)
         {
+            OnSearchOrder?.Invoke(this, null);
+
+            if (order == null)
+            {
+                ClearOrder();
+                return;
+            }
+
             RemovePropertyChangedEventsFromEntities();
 
             if ((order.Shipments?.Count ?? 0) > 0)
             {
-                ShipmentAdapter = shippingManager.GetShipmentAdapter(order.Shipments.First());
+                ShipmentAdapter = shippingManager.GetShipmentAdapter(order.Shipments.Last());
+
+                // Update dynamic data here because everything downstream will also attempt to update dynamic data
+                // doing it here gives us a head start before we are tracking property changes, this also ensures that the
+                // shipment date is not in the past
+                ShipmentAdapter.UpdateDynamicData();
             }
 
             RefreshProperties();
@@ -231,13 +212,14 @@ namespace ShipWorks.OrderLookup
         /// </summary>
         private void ClearOrder()
         {
-            SaveToDatabase();
             RemovePropertyChangedEventsFromEntities();
 
             ShipmentAdapter = null;
             ShipmentAllowEditing = false;
             PackageAdapters = null;
             SelectedOrder = null;
+
+            messenger.Send(new OrderLookupClearOrderMessage());
         }
 
         /// <summary>
@@ -285,22 +267,6 @@ namespace ShipWorks.OrderLookup
         /// Call the RaisePropertyChanged with PropertyName
         /// </summary>
         private void RaisePropertyChanged(object sender, PropertyChangedEventArgs e) => RaisePropertyChanged(e.PropertyName);
-
-        /// <summary>
-        /// Dispose
-        /// </summary>
-        public void Dispose()
-        {
-            subscription?.Dispose();
-        }
-
-        /// <summary>
-        /// Stop listening for order found messages
-        /// </summary>
-        public void EndSession()
-        {
-            Dispose();
-        }
 
         public void ChangeShipmentType(ShipmentTypeCode value)
         {
