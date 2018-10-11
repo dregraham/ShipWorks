@@ -36,7 +36,6 @@
             <ColumnDefinition Width="Auto" />
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
-
         <TextBlock
             Grid.Row="0"
             Grid.Column="1"
@@ -47,11 +46,8 @@
             Grid.Row="0"
             Grid.Column="2"
             Margin="10,0,0,10"
-            SelectedDate="{Binding ShipmentModel.ShipmentAdapter.ShipDate, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=true, NotifyOnValidationError=true}"
+            SelectedDate="{Binding ShipDate, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=true, NotifyOnValidationError=true}"
             Style="{StaticResource DatePicker}">
-            <DatePicker.BlackoutDates>
-                <CalendarDateRange Start="{x:Static sys:DateTime.MinValue}" End="{x:Static utility:DateTimeExtensions.Yesterday}"/>
-            </DatePicker.BlackoutDates>
         </DatePicker>
 
         <TextBlock

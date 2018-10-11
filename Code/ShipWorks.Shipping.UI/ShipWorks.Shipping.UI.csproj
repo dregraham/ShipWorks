@@ -292,6 +292,7 @@
       <DependentUpon>ShippingProfileManagerDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="Profiles\ShippingProfileManagerDialogFactory.cs" />
+    <Compile Include="RatingPanel\ObservableRegistrations\InitializeRatesRetrievedPipelineMessage.cs" />
     <Compile Include="RatingPanel\ObservableRegistrations\IRatingPanelGlobalPipeline.cs" />
     <Compile Include="RatingPanel\ObservableRegistrations\ShippingDialogOpeningPipeline.cs" />
     <Compile Include="RatingPanel\ObservableRegistrations\RatesNotSupportedPipeline.cs" />
