@@ -4,7 +4,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
 using System.Windows.Input;
-using GalaSoft.MvvmLight.Command;
+using GalaSoft.MvvmLight.CommandWpf;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
@@ -18,12 +18,11 @@ using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Services;
 using ShipWorks.Shipping.Services.Builders;
 using ShipWorks.Shipping.UI.ShippingPanel;
-using ShipWorks.Templates.Saving;
 
 namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
 {
     /// <summary>
-    /// Viewmodel for orderlookup
+    /// Viewmodel for OrderLookupShipmentDetailsControl
     /// </summary>
     [KeyedComponent(typeof(INotifyPropertyChanged), OrderLookupPanels.ShipmentDetails)]
     public class OrderLookupShipmentDetailsViewModel : INotifyPropertyChanged
@@ -51,8 +50,8 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
         private int packagingType;
         private long dimsProfileID;
         private List<IPackageAdapter> packages;
-        private int selectedPackageCount;
-        private List<int> packageCountRange;
+        
+        private const int MaxPackageCount = 25;
 
         /// <summary>
         /// Constructor
@@ -79,14 +78,37 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
             InsuranceViewModel = insuranceViewModel;
             handler = new PropertyChangedHandler(this, () => PropertyChanged);
             ManageDimensionalProfiles = new RelayCommand(ManageDimensionalProfilesAction);
-            PackageCountRange = Enumerable.Range(1, 25).ToList();
+            AddPackageCommand = new RelayCommand(AddPackage, AddPackageCanExecute);
+            DeletePackageCommand = new RelayCommand(DeletePackage, DeletePackageCanExecute);
         }
+
+        /// <summary>
+        /// Add package command
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public ICommand AddPackageCommand { get; }
+        
+        /// <summary>
+        /// Delete package command
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public ICommand DeletePackageCommand { get; }
+
+        /// <summary>
+        /// Whether or not the user can add a package
+        /// </summary>
+        private bool AddPackageCanExecute() => Packages?.Count < MaxPackageCount;
+
+        /// <summary>
+        /// Whether or not the user can delete a package
+        /// </summary>
+        private bool DeletePackageCanExecute() => SelectedPackage != null && Packages?.Count > 1;
 
         /// <summary>
         /// Manages Dimensional Profiles
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public ICommand ManageDimensionalProfiles { get; set; }
+        public ICommand ManageDimensionalProfiles { get; }
 
         /// <summary>
         /// The ViewModel ShipmentModel
@@ -124,16 +146,6 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
         {
             get => packages;
             set => handler.Set(nameof(Packages), ref packages, value);
-        }
-
-        /// <summary>
-        /// List of numbers representing the number of packages the user can select
-        /// </summary>
-        [Obfuscation(Exclude = true)]
-        public List<int> PackageCountRange
-        {
-            get => packageCountRange;
-            set => handler.Set(nameof(PackageCountRange), ref packageCountRange, value);
         }
         
         /// <summary>
@@ -280,33 +292,6 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
                 SelectedPackage.PackagingType = packagingType;
             }
         }
-        
-        /// <summary>
-        /// The selected number of packages
-        /// </summary>
-        [Obfuscation(Exclude = true)]
-        public int SelectedPackageCount
-        {
-            get => selectedPackageCount;
-            set
-            {
-                handler.Set(nameof(SelectedPackageCount), ref selectedPackageCount, value);
-                
-                int packageCountDifference = SelectedPackageCount - Packages.Count; 
-                if (packageCountDifference > 0)
-                {
-                    AddPackages(packageCountDifference);
-                }
-                else if (packageCountDifference < 0)
-                {
-                    DeletePackage(packageCountDifference);
-                }
-                
-                RefreshPackages();
-                RefreshInsurance();
-            }
-        }
-        
         /// <summary>
         /// Collection of ServiceTypes
         /// </summary>
@@ -439,7 +424,6 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
         private void LoadPackages()
         {
             RefreshPackages();
-            SelectedPackageCount = Packages.Count;
             if (SelectedPackage == null)
             {
                 SelectedPackage = Packages.FirstOrDefault();
@@ -452,28 +436,23 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
         private void RefreshPackages() => Packages = ShipmentModel.ShipmentAdapter.GetPackageAdapters().ToList();
 
         /// <summary>
-        /// Add the given amount of packages to the shipment
+        /// Add a package to the given shipment
         /// </summary>
-        private void AddPackages(int packageCountDifference)
+        private void AddPackage()
         {
-            for (int i = 0; i < packageCountDifference; i++)
-            {
-                ShipmentModel.ShipmentAdapter.AddPackage();
-            }
+            IPackageAdapter newPackage = ShipmentModel.ShipmentAdapter.AddPackage();
+            RefreshPackages();
+            SelectedPackage = newPackage;
         }
 
         /// <summary>
-        /// Delete the given amount of packages from the shipment
+        /// Delete the selected package
         /// </summary>
-        private void DeletePackage(int packageCountDifference)
+        private void DeletePackage()
         {
-            int packagesToDelete = Math.Abs(packageCountDifference);
-
-            for (int i = 0; i < packagesToDelete; i++)
-            {
-                RefreshPackages();
-                ShipmentModel.ShipmentAdapter.DeletePackage(Packages.LastOrDefault());
-            }
+            ShipmentModel.ShipmentAdapter.DeletePackage(SelectedPackage);
+            RefreshPackages();
+            SelectedPackage = Packages.FirstOrDefault();
         }
 
         /// <summary>
