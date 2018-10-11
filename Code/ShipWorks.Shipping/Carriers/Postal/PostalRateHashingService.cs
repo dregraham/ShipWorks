@@ -20,6 +20,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
                 }
 
                 ratingField = base.RatingFields;
+                ratingField.AddShipmentField(PostalShipmentFields.Confirmation);
                 ratingField.AddShipmentField(PostalShipmentFields.PackagingType);
                 ratingField.AddShipmentField(PostalShipmentFields.DimsHeight);
                 ratingField.AddShipmentField(PostalShipmentFields.DimsLength);
