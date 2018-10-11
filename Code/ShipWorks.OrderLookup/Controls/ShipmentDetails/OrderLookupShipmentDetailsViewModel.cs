@@ -18,6 +18,7 @@ using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Services;
 using ShipWorks.Shipping.Services.Builders;
 using ShipWorks.Shipping.UI.ShippingPanel;
+using ShipWorks.Templates.Saving;
 
 namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
 {
@@ -40,6 +41,18 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
         private IEnumerable<KeyValuePair<int, string>> packageTypes;
         private IEnumerable<KeyValuePair<int, string>> confirmationTypes;
         private IEnumerable<KeyValuePair<int, string>> serviceTypes;
+        private IPackageAdapter selectedPackage;
+        private double length;
+        private double width;
+        private double height;
+        private double weight;
+        private bool addToWeight;
+        private double addToWeightValue;
+        private int packagingType;
+        private long dimsProfileID;
+        private List<IPackageAdapter> packages;
+        private int selectedPackageCount;
+        private List<int> packageCountRange;
 
         /// <summary>
         /// Constructor
@@ -66,6 +79,7 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
             InsuranceViewModel = insuranceViewModel;
             handler = new PropertyChangedHandler(this, () => PropertyChanged);
             ManageDimensionalProfiles = new RelayCommand(ManageDimensionalProfilesAction);
+            PackageCountRange = Enumerable.Range(1, 25).ToList();
         }
 
         /// <summary>
@@ -93,15 +107,206 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
         public List<DimensionsProfileEntity> DimensionProfiles
         {
             get => dimensionProfiles;
-            set { handler.Set(nameof(DimensionProfiles), ref dimensionProfiles, value); }
+            set => handler.Set(nameof(DimensionProfiles), ref dimensionProfiles, value);
         }
-
+        
         /// <summary>
         /// True if a profile is selected
         /// </summary>
         [Obfuscation(Exclude = true)]
         public bool IsProfileSelected => ShipmentModel.ShipmentAdapter.Shipment.Postal.DimsProfileID > 0;
+      
+        /// <summary>
+        /// Packages for the shipment
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public List<IPackageAdapter> Packages
+        {
+            get => packages;
+            set => handler.Set(nameof(Packages), ref packages, value);
+        }
 
+        /// <summary>
+        /// List of numbers representing the number of packages the user can select
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public List<int> PackageCountRange
+        {
+            get => packageCountRange;
+            set => handler.Set(nameof(PackageCountRange), ref packageCountRange, value);
+        }
+        
+        /// <summary>
+        /// The currently selected package
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public IPackageAdapter SelectedPackage
+        {
+            get => selectedPackage;
+            set
+            {
+                handler.Set(nameof(SelectedPackage), ref selectedPackage, value);
+                
+                // When adding or removing packages, the selected package is lost, so set it to the first one.
+                if (SelectedPackage == null)
+                {
+                    // Using lowercase version so we don't come back recursively
+                    selectedPackage = Packages.FirstOrDefault();
+                }
+
+                // Load properties from selected package
+                if (SelectedPackage != null)
+                {                   
+                    DimsProfileID = SelectedPackage.DimsProfileID;
+                    Length = SelectedPackage.DimsLength;
+                    Width = SelectedPackage.DimsWidth;
+                    Height = SelectedPackage.DimsHeight;
+                    Weight = SelectedPackage.Weight;
+                    AddToWeight = SelectedPackage.ApplyAdditionalWeight;
+                    AddToWeightValue = SelectedPackage.AdditionalWeight;
+                    PackagingType = SelectedPackage.PackagingType;
+                }
+            }
+        }
+        
+        /// <summary>
+        /// Dimesion profile ID for the selected package
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public long DimsProfileID
+        {
+            get => dimsProfileID;
+            set
+            {
+                handler.Set(nameof(DimsProfileID), ref dimsProfileID, value);
+                SelectedPackage.DimsProfileID = dimsProfileID;
+            }
+        }
+        
+        /// <summary>
+        /// Length of the selected package
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public double Length
+        {
+            get => length;
+            set
+            {
+                handler.Set(nameof(Length), ref length, value);
+                SelectedPackage.DimsLength = length;
+            }
+        }
+
+        /// <summary>
+        /// Width of the selected package
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public double Width
+        {
+            get => width;
+            set
+            {
+                handler.Set(nameof(Width), ref width, value);
+                SelectedPackage.DimsWidth = width;
+            }
+        }
+
+        /// <summary>
+        /// Height of the selected package
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public double Height
+        {
+            get => height;
+            set
+            {
+                handler.Set(nameof(Height), ref height, value);
+                SelectedPackage.DimsHeight = height;
+            }
+        }
+
+        /// <summary>
+        /// Weight of the selected package
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public double Weight
+        {
+            get => weight;
+            set
+            {
+                handler.Set(nameof(Weight), ref weight, value);
+                SelectedPackage.Weight = weight;
+            }
+        }
+
+        /// <summary>
+        /// Whether or not to add additional weight to the selected package
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public bool AddToWeight
+        {
+            get => addToWeight;
+            set
+            {
+                handler.Set(nameof(AddToWeight), ref addToWeight, value);
+                SelectedPackage.ApplyAdditionalWeight = addToWeight;
+            }
+        }
+
+        /// <summary>
+        /// The amount of additional weight to add to the selected package
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public double AddToWeightValue
+        {
+            get => addToWeightValue;
+            set
+            {
+                handler.Set(nameof(AddToWeightValue), ref addToWeightValue, value);
+                SelectedPackage.AdditionalWeight = addToWeightValue;
+            }
+        }
+        
+        /// <summary>
+        /// Packaging type for the selected package
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public int PackagingType
+        {
+            get => packagingType;
+            set
+            {
+                handler.Set(nameof(PackagingType), ref packagingType, value);
+                SelectedPackage.PackagingType = packagingType;
+            }
+        }
+        
+        /// <summary>
+        /// The selected number of packages
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public int SelectedPackageCount
+        {
+            get => selectedPackageCount;
+            set
+            {
+                handler.Set(nameof(SelectedPackageCount), ref selectedPackageCount, value);
+                
+                int packageCountDifference = SelectedPackageCount - Packages.Count; 
+                if (packageCountDifference > 0)
+                {
+                    AddPackages(packageCountDifference);
+                }
+                else if (packageCountDifference < 0)
+                {
+                    DeletePackage(packageCountDifference);
+                }
+                
+                RefreshPackages();
+                RefreshInsurance();
+            }
+        }
+        
         /// <summary>
         /// Collection of ServiceTypes
         /// </summary>
@@ -169,6 +374,11 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
                 {
                     Providers = shipmentTypeProvider.GetAvailableShipmentTypes(ShipmentModel.ShipmentAdapter).ToDictionary(s => s, s => EnumHelper.GetDescription(s));
                     RefreshDimensionalProfiles();
+
+                    if (Packages == null)
+                    {
+                        LoadPackages();
+                    }
                 }
 
                 if (e.PropertyName == nameof(ShipmentModel.SelectedOrder) ||
@@ -220,6 +430,49 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
                 {
                     RefreshServiceTypes();
                 }
+            }
+        }
+
+        /// <summary>
+        /// Load the packages for the shipment
+        /// </summary>
+        private void LoadPackages()
+        {
+            RefreshPackages();
+            SelectedPackageCount = Packages.Count;
+            if (SelectedPackage == null)
+            {
+                SelectedPackage = Packages.FirstOrDefault();
+            }
+        }
+
+        /// <summary>
+        /// Refresh the packages for the shipment
+        /// </summary>
+        private void RefreshPackages() => Packages = ShipmentModel.ShipmentAdapter.GetPackageAdapters().ToList();
+
+        /// <summary>
+        /// Add the given amount of packages to the shipment
+        /// </summary>
+        private void AddPackages(int packageCountDifference)
+        {
+            for (int i = 0; i < packageCountDifference; i++)
+            {
+                ShipmentModel.ShipmentAdapter.AddPackage();
+            }
+        }
+
+        /// <summary>
+        /// Delete the given amount of packages from the shipment
+        /// </summary>
+        private void DeletePackage(int packageCountDifference)
+        {
+            int packagesToDelete = Math.Abs(packageCountDifference);
+
+            for (int i = 0; i < packagesToDelete; i++)
+            {
+                RefreshPackages();
+                ShipmentModel.ShipmentAdapter.DeletePackage(Packages.LastOrDefault());
             }
         }
 

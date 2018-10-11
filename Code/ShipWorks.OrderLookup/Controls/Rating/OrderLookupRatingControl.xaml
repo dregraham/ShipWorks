@@ -71,9 +71,6 @@
             </DataGrid.RowStyle>
             <DataGrid.CellStyle>
                 <Style TargetType="{x:Type DataGridCell}">
-                    <Style.Resources>
-                        <SolidColorBrush x:Key="SelectedColor" Color="{StaticResource SelectionColor}"/>
-                    </Style.Resources>
                     <Setter Property="Padding" Value="3"/>
                     <Setter Property="FontFamily" Value="ShipWorks.OrderLookup;component/#Roboto"/>
                     <Setter Property="BorderThickness" Value="0" />
@@ -89,7 +86,7 @@
                     </Setter>
                     <Style.Triggers>
                         <Trigger Property="IsSelected" Value="true">
-                            <Setter Property="Background" Value="{DynamicResource SelectedColor}" />
+                            <Setter Property="Background" Value="{StaticResource SelectionColor}" />
                         </Trigger>
                     </Style.Triggers>
                 </Style>

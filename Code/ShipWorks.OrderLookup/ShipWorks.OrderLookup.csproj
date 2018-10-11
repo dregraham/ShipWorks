@@ -304,6 +304,8 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Controls\ShipmentDetails\UpsShipmentDetailsTemplate.xaml" />
+    <Page Include="Controls\ShipmentDetails\UspsShipmentDetailsTemplate.xaml" />
     <Page Include="Controls\To\OrderLookupToControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
