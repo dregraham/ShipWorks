@@ -58,14 +58,10 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookupSearchControl
         }
 
         /// <summary>
-        /// Total cost of the shipment
+        /// ShipmentModel
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public string TotalCost
-        {
-            get => totalCost;
-            set => handler.Set(nameof(TotalCost), ref totalCost, value);
-        }
+        public IOrderLookupShipmentModel ShipmentModel => shipmentModel;
 
         /// <summary>
         /// Error message to display when a error occurs while searching
