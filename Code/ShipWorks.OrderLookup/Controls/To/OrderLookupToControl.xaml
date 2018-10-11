@@ -5,9 +5,11 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="clr-namespace:ShipWorks.OrderLookup.Controls"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:to="clr-namespace:ShipWorks.OrderLookup.Controls.To"
     d:DesignWidth="800"
     mc:Ignorable="d"
-    FontFamily="/ShipWorks.OrderLookup;component/#Roboto">
+    FontFamily="/ShipWorks.OrderLookup;component/#Roboto"
+    d:DataContext="{d:DesignInstance to:OrderLookupToViewModel}">
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -24,12 +26,12 @@
             </UserControl>
 
             <DataTemplate x:Key="default">
-                <ContentControl Content="{StaticResource BaseAddressControl}" />
+                <ContentControl Content="{StaticResource BaseAddressControl}" Focusable="False"/>
             </DataTemplate>
 
             <DataTemplate x:Key="usps">
                 <StackPanel>
-                    <ContentControl Content="{StaticResource BaseAddressControl}" />
+                    <ContentControl Content="{StaticResource BaseAddressControl}" Focusable="False"/>
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="85" />
@@ -66,7 +68,7 @@
 
     <Expander Header="{Binding Title}" IsExpanded="True">
         <StackPanel Style="{StaticResource PanelWrapper}" >
-            <ContentControl Content="{Binding .}">
+            <ContentControl Content="{Binding .}" Focusable="False">
                 <ContentControl.ContentTemplate>
                     <MultiBinding Converter="{StaticResource ShipmentTypeToOrderLookupTemplateConverter}">
                         <Binding Path="ShipmentModel.ShipmentAdapter.ShipmentTypeCode" />
