@@ -24,7 +24,7 @@ namespace ShipWorks.OrderLookup.Controls.From
     public class OrderLookupEndiciaFromViewModel : AddressViewModel, IOrderLookupFromViewModel
     {
         private string title;
-        private bool rateShop;
+        private readonly bool rateShop;
         private IDisposable autoSave;
         private readonly IShipmentTypeManager shipmentTypeManager;
         private readonly ICarrierAccountRetrieverFactory carrierAccountRetrieverFactory;
@@ -53,20 +53,6 @@ namespace ShipWorks.OrderLookup.Controls.From
         {
             get => title;
             set => handler.Set(nameof(Title), ref title, value);
-        }
-
-        /// <summary>
-        /// Origin Rate shopping
-        /// </summary>
-        [Obfuscation(Exclude = true)]
-        public bool RateShop
-        {
-            get => rateShop;
-            set
-            {
-                handler.Set(nameof(RateShop), ref rateShop, value);
-                UpdateTitle();
-            }
         }
 
         /// <summary>
@@ -154,11 +140,9 @@ namespace ShipWorks.OrderLookup.Controls.From
                 string accountDescription = carrierAccountRetrieverFactory.Create(shipmentTypeCode)?
                                                 .GetAccountReadOnly(ShipmentModel.ShipmentAdapter.Shipment)?.AccountDescription ?? string.Empty;
 
-                string headerAccountText = RateShop ? "(Rate Shopping)" : accountDescription;
-
-                if (!string.IsNullOrWhiteSpace(headerAccountText) && !string.IsNullOrWhiteSpace(originDescription))
+                if (!string.IsNullOrWhiteSpace(accountDescription) && !string.IsNullOrWhiteSpace(originDescription))
                 {
-                    newTitle = $"From Account: {headerAccountText}, {originDescription}";
+                    newTitle = $"From Account: {accountDescription}, {originDescription}";
                 }
             }
 

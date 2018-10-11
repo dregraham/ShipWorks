@@ -11,7 +11,6 @@
     xmlns:orderLookupSearchControl="clr-namespace:ShipWorks.OrderLookup.Controls.OrderLookupSearchControl"
     xmlns:rating="clr-namespace:ShipWorks.OrderLookup.Controls.Rating"
     xmlns:ratingPanel="clr-namespace:ShipWorks.Shipping.UI.RatingPanel;assembly=ShipWorks.Shipping.UI"
-    xmlns:to="clr-namespace:ShipWorks.OrderLookup.Controls.To"
     d:DataContext="{d:DesignInstance local:OrderLookupViewModel}"
     FontFamily="/ShipWorks.OrderLookup;component/#Roboto"
     mc:Ignorable="d">

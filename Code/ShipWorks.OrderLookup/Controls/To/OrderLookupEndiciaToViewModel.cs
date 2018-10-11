@@ -33,7 +33,7 @@ namespace ShipWorks.OrderLookup.Controls.To
             ShipmentModel.PropertyChanged += ShipmentModelPropertyChanged;
 
             IsAddressValidationEnabled = true;
-            Title = "To";
+            InitializeForChangedShipment();
         }
 
         /// <summary>
@@ -75,13 +75,7 @@ namespace ShipWorks.OrderLookup.Controls.To
 
             if (e.PropertyName == nameof(ShipmentModel.SelectedOrder) && ShipmentModel.SelectedOrder != null)
             {
-                autoSave?.Dispose();
-                Load(ShipmentModel.ShipmentAdapter.Shipment.ShipPerson, ShipmentModel.ShipmentAdapter.Store);
-
-                UpdateTitle();
-
-                handler.RaisePropertyChanged(nameof(ShipmentModel));
-                autoSave = handler.PropertyChangingStream.Where(p => p != nameof(Title)).Throttle(TimeSpan.FromMilliseconds(100)).Subscribe(_ => Save());
+                InitializeForChangedShipment();
             }
 
             if (e.PropertyName == ShipmentFields.ShipCountryCode.Name ||
@@ -90,6 +84,20 @@ namespace ShipWorks.OrderLookup.Controls.To
             {
                 UpdateTitle();
             }
+        }
+
+        /// <summary>
+        /// Initialize view for changed or new shipment
+        /// </summary>
+        private void InitializeForChangedShipment()
+        {
+            autoSave?.Dispose();
+            Load(ShipmentModel.ShipmentAdapter.Shipment.ShipPerson, ShipmentModel.ShipmentAdapter.Store);
+
+            UpdateTitle();
+
+            handler.RaisePropertyChanged(nameof(ShipmentModel));
+            autoSave = handler.PropertyChangingStream.Where(p => p != nameof(Title)).Throttle(TimeSpan.FromMilliseconds(100)).Subscribe(_ => Save());
         }
 
         /// <summary>
