@@ -84,6 +84,7 @@ namespace ShipWorks.OrderLookup
         /// <summary>
         /// Total cost of the shipment
         /// </summary>
+        [Obfuscation(Exclude = true, StripAfterObfuscation = false)]
         public decimal TotalCost
         {
             get => totalCost;

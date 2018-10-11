@@ -112,16 +112,19 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookupSearchControl
                 {
                     SearchErrorMessage = "No matching orders were found.";
                     SearchError = true;
+                    OrderNumber = string.Empty;
                 }
                 else if (shipmentModel.ShipmentAdapter?.Shipment?.Voided == true)
                 {
                     SearchErrorMessage = "The order's shipment has been voided.";
                     SearchError = true;
+                    OrderNumber = shipmentModel.SelectedOrder.OrderNumberComplete;
                 }
                 else if (shipmentModel.ShipmentAdapter?.Shipment?.Processed == true)
                 {
                     SearchErrorMessage = "The order's shipment has already been processed.";
                     SearchError = true;
+                    OrderNumber = shipmentModel.SelectedOrder.OrderNumberComplete;
                 }
                 else
                 {
