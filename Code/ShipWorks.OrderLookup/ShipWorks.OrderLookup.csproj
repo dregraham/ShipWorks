@@ -132,6 +132,15 @@
     <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controls\ShipmentDetails\IOrderLookupDetailsViewModel.cs" />
+    <Compile Include="Controls\ShipmentDetails\OrderLookupEndiciaShipmentDetailsControl.xaml.cs">
+      <DependentUpon>OrderLookupEndiciaShipmentDetailsControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ShipmentDetails\OrderLookupUspsShipmentDetailsControl.xaml.cs">
+      <DependentUpon>OrderLookupUspsShipmentDetailsControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ShipmentDetails\OrderLookupShipmentDetailsViewModel.cs" />
+    <Compile Include="Controls\ShipmentDetails\OrderLookupEndiciaShipmentDetailsViewModel.cs" />
     <Compile Include="FieldManager\IOrderLookupFieldLayoutDefaults.cs" />
     <Compile Include="FieldManager\IOrderLookupFieldLayoutRepository.cs" />
     <Compile Include="FieldManager\OrderLookupFieldLayoutDefaults.cs" />
@@ -195,7 +204,7 @@
     <Compile Include="Controls\ShipmentDetails\OrderLookupShipmentDetailsControl.xaml.cs">
       <DependentUpon>OrderLookupShipmentDetailsControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\ShipmentDetails\OrderLookupShipmentDetailsViewModel.cs" />
+    <Compile Include="Controls\ShipmentDetails\OrderLookupUspsShipmentDetailsViewModel.cs" />
     <Compile Include="Controls\Rating\OrderLookupRatingControl.xaml.cs">
       <DependentUpon>OrderLookupRatingControl.xaml</DependentUpon>
     </Compile>
@@ -303,6 +312,14 @@
     <Page Include="Controls\OrderLookupSearchControl\OrderLookupSearchControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\ShipmentDetails\OrderLookupEndiciaShipmentDetailsControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Controls\ShipmentDetails\OrderLookupUspsShipmentDetailsControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Controls\To\OrderLookupToControl.xaml">
       <SubType>Designer</SubType>
