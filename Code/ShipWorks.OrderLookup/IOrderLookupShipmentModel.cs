@@ -26,6 +26,7 @@ namespace ShipWorks.OrderLookup
         /// <summary>
         /// The order's shipment adapter
         /// </summary>
+        [Obfuscation(Exclude = true)]
         ICarrierShipmentAdapter ShipmentAdapter { get; }
 
         /// <summary>
