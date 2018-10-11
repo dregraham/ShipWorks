@@ -2,13 +2,8 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
-using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Input;
-using GalaSoft.MvvmLight.CommandWpf;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
 using Shared.System.ComponentModel.DataAnnotations;
@@ -16,18 +11,20 @@ using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Core.UI;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
-using ShipWorks.Filters.Content.Conditions.Shipments;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers.FedEx;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
+using ShipWorks.UI;
 
 namespace ShipWorks.OrderLookup.Controls.LabelOptions
 {
     /// <summary>
-    /// View model for the OrderLookupLabelOptionsControlViewModel
+    /// View model for the OrderLookupLabelOptionsViewModel
     /// </summary>
-    [KeyedComponent(typeof(INotifyPropertyChanged), OrderLookupPanels.LabelOptions)]
-    public class OrderLookupLabelOptionsControlViewModel : INotifyPropertyChanged, IDataErrorInfo
+    [KeyedComponent(typeof(IOrderLookupLabelOptionsViewModel), ShipmentTypeCode.Usps)]
+    [KeyedComponent(typeof(IOrderLookupLabelOptionsViewModel), ShipmentTypeCode.Endicia)]
+    [WpfView(typeof(OrderLookupPostalLabelOptionsControl))]
+    public class OrderLookupPostalLabelOptionsViewModel : IOrderLookupLabelOptionsViewModel, IDataErrorInfo
     {
         private readonly IShipmentTypeManager shipmentTypeManager;
         private readonly IFedExUtility fedExUtility;
@@ -40,9 +37,9 @@ namespace ShipWorks.OrderLookup.Controls.LabelOptions
         public event PropertyChangedEventHandler PropertyChanged;
 
         /// <summary>
-        /// ctor
+        /// Constructor
         /// </summary>
-        public OrderLookupLabelOptionsControlViewModel(IOrderLookupShipmentModel shipmentModel, IShipmentTypeManager shipmentTypeManager, IFedExUtility fedExUtility)
+        public OrderLookupPostalLabelOptionsViewModel(IOrderLookupShipmentModel shipmentModel, IShipmentTypeManager shipmentTypeManager, IFedExUtility fedExUtility)
         {
             ShipmentModel = shipmentModel;
             ShipmentModel.PropertyChanged += ShipmentModelPropertyChanged;
@@ -50,7 +47,12 @@ namespace ShipWorks.OrderLookup.Controls.LabelOptions
             this.fedExUtility = fedExUtility;
 
             handler = new PropertyChangedHandler(this, () => PropertyChanged);
+
+            InitializeForChangedShipment(ShipmentModel.ShipmentAdapter.Shipment);
         }
+
+        [Obfuscation(Exclude = true)]
+        public string Title => "Label Options";
 
         /// <summary>
         /// Shipment ship date
@@ -127,7 +129,7 @@ namespace ShipWorks.OrderLookup.Controls.LabelOptions
                     return string.Empty;
                 }
 
-                return InputValidation<OrderLookupLabelOptionsControlViewModel>.Validate(this, columnName);
+                return InputValidation<OrderLookupPostalLabelOptionsViewModel>.Validate(this, columnName);
             }
         }
 
@@ -145,7 +147,6 @@ namespace ShipWorks.OrderLookup.Controls.LabelOptions
             if (e.PropertyName == nameof(ShipmentModel.SelectedOrder) && ShipmentModel.SelectedOrder != null)
             {
                 ShipmentEntity shipment = ShipmentModel.ShipmentAdapter.Shipment;
-                ShipDate = ShipmentModel.ShipmentAdapter.ShipDate;
 
                 // Determine if stealth and no postage is allowed for the new shipment
                 if (shipmentTypeManager.IsPostal(shipment.ShipmentTypeCode))
@@ -160,12 +161,22 @@ namespace ShipWorks.OrderLookup.Controls.LabelOptions
                 }
 
                 // Set the available label formats for the new shipment
-                LabelFormats = EnumHelper.GetEnumList<ThermalLanguage>(x => ShouldIncludeLabelFormatInList(shipment, x))
-                    .Select(x => x.Value).ToDictionary(s => (int) s, s => EnumHelper.GetDescription(s));
+                InitializeForChangedShipment(shipment);
 
                 // Update the ShipmentModel
                 handler.RaisePropertyChanged(nameof(ShipmentModel));
             }
+        }
+
+        /// <summary>
+        /// Initialize the properties for a new or changed shipment
+        /// </summary>
+        /// <param name="shipment"></param>
+        private void InitializeForChangedShipment(ShipmentEntity shipment)
+        {
+            ShipDate = ShipmentModel.ShipmentAdapter.ShipDate;
+            LabelFormats = EnumHelper.GetEnumList<ThermalLanguage>(x => ShouldIncludeLabelFormatInList(shipment, x))
+                .Select(x => x.Value).ToDictionary(s => (int) s, s => EnumHelper.GetDescription(s));
         }
 
         /// <summary>
@@ -206,5 +217,11 @@ namespace ShipWorks.OrderLookup.Controls.LabelOptions
 
             return true;
         }
+
+        /// <summary>
+        /// Dispose
+        /// </summary>
+        public void Dispose() =>
+            ShipmentModel.PropertyChanged -= ShipmentModelPropertyChanged;
     }
 }

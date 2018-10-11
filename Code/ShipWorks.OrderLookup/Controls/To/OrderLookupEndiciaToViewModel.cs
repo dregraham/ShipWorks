@@ -7,6 +7,7 @@ using Interapptive.Shared.UI;
 using ShipWorks.AddressValidation;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Shipping;
+using ShipWorks.UI;
 using ShipWorks.UI.Controls.AddressControl;
 
 namespace ShipWorks.OrderLookup.Controls.To
@@ -14,16 +15,17 @@ namespace ShipWorks.OrderLookup.Controls.To
     /// <summary>
     /// ViewModel for To panel in the OrderLookup view
     /// </summary>
-    [KeyedComponent(typeof(INotifyPropertyChanged), OrderLookupPanels.To)]
-    public class OrderLookupToViewModel : AddressViewModel
+    [KeyedComponent(typeof(IOrderLookupToViewModel), ShipmentTypeCode.Endicia)]
+    [WpfView(typeof(OrderLookupEndiciaToControl))]
+    public class OrderLookupEndiciaToViewModel : AddressViewModel, IOrderLookupToViewModel
     {
         private string title;
-        IDisposable autoSave;
+        private IDisposable autoSave;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public OrderLookupToViewModel(IOrderLookupShipmentModel shipmentModel, IShippingOriginManager shippingOriginManager, IMessageHelper messageHelper,
+        public OrderLookupEndiciaToViewModel(IOrderLookupShipmentModel shipmentModel, IShippingOriginManager shippingOriginManager, IMessageHelper messageHelper,
             IValidatedAddressScope validatedAddressScope, IAddressValidator validator, IAddressSelector addressSelector)
             : base(shippingOriginManager, messageHelper, validatedAddressScope, validator, addressSelector)
         {
@@ -101,6 +103,15 @@ namespace ShipWorks.OrderLookup.Controls.To
                 isDomestic = ShipmentModel.ShipmentAdapter.IsDomestic ? "(Domestic)" : "(International)";
             }
             Title = $"To {FullName} {isDomestic}";
+        }
+
+        /// <summary>
+        /// Dispose
+        /// </summary>
+        public override void Dispose()
+        {
+            autoSave?.Dispose();
+            ShipmentModel.PropertyChanged -= ShipmentModelPropertyChanged;
         }
     }
 }

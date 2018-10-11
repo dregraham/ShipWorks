@@ -1,8 +1,9 @@
-﻿using System;
-
-namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
+﻿namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
 {
-    public interface IOrderLookupDetailsViewModel : IDisposable
+    /// <summary>
+    /// View model for order lookup shipment details
+    /// </summary>
+    public interface IOrderLookupDetailsViewModel : IOrderLookupViewModel
     {
     }
 }

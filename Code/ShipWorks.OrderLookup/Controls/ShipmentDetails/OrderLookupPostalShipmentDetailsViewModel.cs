@@ -23,11 +23,12 @@ using ShipWorks.UI;
 namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
 {
     /// <summary>
-    /// Viewmodel for orderlookup
+    /// View model for shipment details
     /// </summary>
+    [KeyedComponent(typeof(IOrderLookupDetailsViewModel), ShipmentTypeCode.Usps)]
     [KeyedComponent(typeof(IOrderLookupDetailsViewModel), ShipmentTypeCode.Endicia)]
-    [WpfView(typeof(OrderLookupEndiciaShipmentDetailsControl))]
-    public class OrderLookupEndiciaShipmentDetailsViewModel : IOrderLookupDetailsViewModel, INotifyPropertyChanged
+    [WpfView(typeof(OrderLookupPostalShipmentDetailsControl))]
+    public class OrderLookupPostalShipmentDetailsViewModel : IOrderLookupDetailsViewModel, INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
         private readonly PropertyChangedHandler handler;
@@ -46,7 +47,7 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
         /// <summary>
         /// Constructor
         /// </summary>
-        public OrderLookupEndiciaShipmentDetailsViewModel(
+        public OrderLookupPostalShipmentDetailsViewModel(
             IOrderLookupShipmentModel shipmentModel,
             IDimensionsManager dimensionsManager,
             IShipmentPackageTypesBuilderFactory shipmentPackageTypesBuilderFactory,
@@ -68,7 +69,19 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
             InsuranceViewModel = insuranceViewModel;
             handler = new PropertyChangedHandler(this, () => PropertyChanged);
             ManageDimensionalProfiles = new RelayCommand(ManageDimensionalProfilesAction);
+
+            RefreshDimensionalProfiles();
+            RefreshInsurance();
+            RefreshPackageTypes();
+            RefreshConfirmationTypes();
+            RefreshServiceTypes();
         }
+
+        /// <summary>
+        /// Title of the section
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public string Title => "Shipment Details";
 
         /// <summary>
         /// Manages Dimensional Profiles

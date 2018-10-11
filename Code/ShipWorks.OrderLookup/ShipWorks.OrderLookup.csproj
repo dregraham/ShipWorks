@@ -132,15 +132,33 @@
     <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controls\From\IOrderLookupFromViewModel.cs" />
+    <Compile Include="Controls\From\OrderLookupEndiciaFromControl.xaml.cs">
+      <DependentUpon>OrderLookupEndiciaFromControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\From\OrderLookupUspsFromControl.xaml.cs">
+      <DependentUpon>OrderLookupUspsFromControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\From\OrderLookupUspsFromViewModel.cs" />
+    <Compile Include="Controls\LabelOptions\IOrderLookupLabelOptionsViewModel.cs" />
+    <Compile Include="Controls\OrderLookupWrapperControl.xaml.cs">
+      <DependentUpon>OrderLookupWrapperControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\OrderLookupWrapperViewModel.cs" />
+    <Compile Include="Controls\Reference\IOrderLookupReferenceViewModel.cs" />
+    <Compile Include="Controls\Reference\OrderLookupEndiciaReferenceControl.xaml.cs">
+      <DependentUpon>OrderLookupEndiciaReferenceControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\Reference\OrderLookupEndiciaReferenceViewModel.cs" />
     <Compile Include="Controls\ShipmentDetails\IOrderLookupDetailsViewModel.cs" />
-    <Compile Include="Controls\ShipmentDetails\OrderLookupEndiciaShipmentDetailsControl.xaml.cs">
-      <DependentUpon>OrderLookupEndiciaShipmentDetailsControl.xaml</DependentUpon>
+    <Compile Include="Controls\ShipmentDetails\OrderLookupPostalShipmentDetailsControl.xaml.cs">
+      <DependentUpon>OrderLookupPostalShipmentDetailsControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\ShipmentDetails\OrderLookupUspsShipmentDetailsControl.xaml.cs">
-      <DependentUpon>OrderLookupUspsShipmentDetailsControl.xaml</DependentUpon>
+    <Compile Include="Controls\To\IOrderLookupToViewModel.cs" />
+    <Compile Include="Controls\To\OrderLookupEndiciaToControl.xaml.cs">
+      <DependentUpon>OrderLookupEndiciaToControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\ShipmentDetails\OrderLookupShipmentDetailsViewModel.cs" />
-    <Compile Include="Controls\ShipmentDetails\OrderLookupEndiciaShipmentDetailsViewModel.cs" />
+    <Compile Include="Controls\To\OrderLookupEndiciaToViewModel.cs" />
     <Compile Include="FieldManager\IOrderLookupFieldLayoutDefaults.cs" />
     <Compile Include="FieldManager\IOrderLookupFieldLayoutRepository.cs" />
     <Compile Include="FieldManager\OrderLookupFieldLayoutDefaults.cs" />
@@ -158,10 +176,10 @@
       <DependentUpon>OrderLookupCustomsControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\Customs\OrderLookupCustomsControlViewModel.cs" />
-    <Compile Include="Controls\LabelOptions\OrderLookupLabelOptionsControl.xaml.cs">
-      <DependentUpon>OrderLookupLabelOptionsControl.xaml</DependentUpon>
+    <Compile Include="Controls\LabelOptions\OrderLookupPostalLabelOptionsControl.xaml.cs">
+      <DependentUpon>OrderLookupPostalLabelOptionsControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\LabelOptions\OrderLookupLabelOptionsControlViewModel.cs" />
+    <Compile Include="Controls\LabelOptions\OrderLookupPostalLabelOptionsViewModel.cs" />
     <Compile Include="Controls\OrderLookup\OrderLookupControlHost.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -172,10 +190,7 @@
       <DependentUpon>OrderLookupControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\OrderLookup\OrderLookupViewModel.cs" />
-    <Compile Include="Controls\From\OrderLookupFromControl.xaml.cs">
-      <DependentUpon>OrderLookupFromControl.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\From\OrderLookupFromViewModel.cs" />
+    <Compile Include="Controls\From\OrderLookupEndiciaFromViewModel.cs" />
     <Compile Include="Controls\OrderLookupPanels.cs" />
     <Compile Include="Controls\OrderLookupSearchControl\OrderLookupSearchControl.xaml.cs">
       <DependentUpon>OrderLookupSearchControl.xaml</DependentUpon>
@@ -186,7 +201,10 @@
     <Compile Include="FieldManager\IOrderLookupFieldManagerDialog.cs" />
     <Compile Include="FieldManager\OrderLookupFieldManagerViewModel.cs" />
     <Compile Include="IOrderLookupPreviousShipmentLocator.cs" />
+    <Compile Include="Controls\IOrderLookupViewModelWrapper.cs" />
+    <Compile Include="IOrderLookupViewModel.cs" />
     <Compile Include="OrderLookupClearOrderMessage.cs" />
+    <Compile Include="OrderLookupModule.cs" />
     <Compile Include="OrderLookupPreviousShipmentLocator.cs" />
     <Compile Include="PreviousProcessedShipmentDetails.cs" />
     <Compile Include="ShipmentHistory\Controls\ShipmentHistoryGrid.cs">
@@ -198,23 +216,20 @@
     <Compile Include="ShipmentHistory\Controls\ShipmentHistoryPanel.Designer.cs">
       <DependentUpon>ShipmentHistoryPanel.cs</DependentUpon>
     </Compile>
-    <Compile Include="Controls\To\OrderLookupToControl.xaml.cs">
-      <DependentUpon>OrderLookupToControl.xaml</DependentUpon>
+    <Compile Include="Controls\To\OrderLookupUspsToControl.xaml.cs">
+      <DependentUpon>OrderLookupUspsToControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\To\OrderLookupToViewModel.cs" />
-    <Compile Include="Controls\ShipmentDetails\OrderLookupShipmentDetailsControl.xaml.cs">
-      <DependentUpon>OrderLookupShipmentDetailsControl.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\ShipmentDetails\OrderLookupUspsShipmentDetailsViewModel.cs" />
+    <Compile Include="Controls\To\OrderLookupUspsToViewModel.cs" />
+    <Compile Include="Controls\ShipmentDetails\OrderLookupPostalShipmentDetailsViewModel.cs" />
     <Compile Include="Controls\Rating\OrderLookupRatingControl.xaml.cs">
       <DependentUpon>OrderLookupRatingControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\ShipmentTypeToOrderLookupTemplateConverter.cs" />
     <Compile Include="Controls\Rating\OrderLookupRatingPanelViewModel.cs" />
-    <Compile Include="Controls\Reference\ReferenceControl.xaml.cs">
-      <DependentUpon>ReferenceControl.xaml</DependentUpon>
+    <Compile Include="Controls\Reference\OrderLookupUspsReferenceControl.xaml.cs">
+      <DependentUpon>OrderLookupUspsReferenceControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\Reference\ReferenceViewModel.cs" />
+    <Compile Include="Controls\Reference\OrderLookupUspsReferenceViewModel.cs" />
     <Compile Include="IOrderLookupAutoPrintService.cs" />
     <Compile Include="Controls\OrderLookupSearchControl\OrderLookupSearchViewModel.cs" />
     <Compile Include="IOrderLookupOrderRepository.cs" />
@@ -286,6 +301,22 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Controls\From\OrderLookupEndiciaFromControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Controls\From\OrderLookupUspsFromControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Controls\OrderLookupWrapperControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Controls\Reference\OrderLookupEndiciaReferenceControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Controls\ShipmentDetails\OrderLookupInsuranceControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -298,7 +329,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Controls\LabelOptions\OrderLookupLabelOptionsControl.xaml">
+    <Page Include="Controls\LabelOptions\OrderLookupPostalLabelOptionsControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -306,31 +337,23 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Controls\From\OrderLookupFromControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="Controls\OrderLookupSearchControl\OrderLookupSearchControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Controls\ShipmentDetails\OrderLookupEndiciaShipmentDetailsControl.xaml">
+    <Page Include="Controls\ShipmentDetails\OrderLookupPostalShipmentDetailsControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Controls\ShipmentDetails\OrderLookupUspsShipmentDetailsControl.xaml">
+    <Page Include="Controls\To\OrderLookupEndiciaToControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Controls\To\OrderLookupToControl.xaml">
+    <Page Include="Controls\To\OrderLookupUspsToControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Controls\ShipmentDetails\OrderLookupShipmentDetailsControl.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Controls\Reference\ReferenceControl.xaml">
+    <Page Include="Controls\Reference\OrderLookupUspsReferenceControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

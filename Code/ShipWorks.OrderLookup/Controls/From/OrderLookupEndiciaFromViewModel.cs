@@ -11,6 +11,7 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers;
+using ShipWorks.UI;
 using ShipWorks.UI.Controls.AddressControl;
 
 namespace ShipWorks.OrderLookup.Controls.From
@@ -18,19 +19,20 @@ namespace ShipWorks.OrderLookup.Controls.From
     /// <summary>
     /// View model for the From address
     /// </summary>
-    [KeyedComponent(typeof(INotifyPropertyChanged), OrderLookupPanels.From)]
-    public class OrderLookupFromViewModel : AddressViewModel
+    [KeyedComponent(typeof(IOrderLookupFromViewModel), ShipmentTypeCode.Endicia)]
+    [WpfView(typeof(OrderLookupEndiciaFromControl))]
+    public class OrderLookupEndiciaFromViewModel : AddressViewModel, IOrderLookupFromViewModel
     {
         private string title;
         private bool rateShop;
-        IDisposable autoSave;
+        private IDisposable autoSave;
         private readonly IShipmentTypeManager shipmentTypeManager;
         private readonly ICarrierAccountRetrieverFactory carrierAccountRetrieverFactory;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public OrderLookupFromViewModel(IOrderLookupShipmentModel shipmentModel, IShippingOriginManager shippingOriginManager, IMessageHelper messageHelper,
+        public OrderLookupEndiciaFromViewModel(IOrderLookupShipmentModel shipmentModel, IShippingOriginManager shippingOriginManager, IMessageHelper messageHelper,
             IShipmentTypeManager shipmentTypeManager, ICarrierAccountRetrieverFactory carrierAccountRetrieverFactory,
             IValidatedAddressScope validatedAddressScope, IAddressValidator validator, IAddressSelector addressSelector)
             : base(shippingOriginManager, messageHelper, validatedAddressScope, validator, addressSelector)
@@ -40,7 +42,7 @@ namespace ShipWorks.OrderLookup.Controls.From
             this.carrierAccountRetrieverFactory = carrierAccountRetrieverFactory;
             ShipmentModel.PropertyChanged += ShipmentModelPropertyChanged;
 
-            UpdateTitle();
+            InitializeForChangedShipment();
         }
 
         /// <summary>
@@ -82,11 +84,6 @@ namespace ShipWorks.OrderLookup.Controls.From
             {
                 SaveToEntity(ShipmentModel.ShipmentAdapter.Shipment.OriginPerson);
             }
-
-            if (ShipmentModel?.ShipmentAdapter?.ShipmentTypeCode == ShipmentTypeCode.Usps)
-            {
-                ShipmentModel.ShipmentAdapter.Shipment.Postal.Usps.RateShop = RateShop;
-            }
         }
 
         /// <summary>
@@ -101,15 +98,7 @@ namespace ShipWorks.OrderLookup.Controls.From
 
             if (e.PropertyName == nameof(ShipmentModel.SelectedOrder) && ShipmentModel.SelectedOrder != null)
             {
-                autoSave?.Dispose();
-                Load(ShipmentModel.ShipmentAdapter.Shipment.OriginPerson, ShipmentModel.ShipmentAdapter.Store);
-
-                RateShop = ShipmentModel.ShipmentAdapter.SupportsRateShopping;
-
-                UpdateTitle();
-
-                handler.RaisePropertyChanged(nameof(ShipmentModel));
-                autoSave = handler.PropertyChangingStream.Where(p => p != nameof(Title)).Throttle(TimeSpan.FromMilliseconds(100)).Subscribe(_ => Save());
+                InitializeForChangedShipment();
             }
 
             if (e.PropertyName == ShipmentFields.OriginOriginID.Name)
@@ -126,6 +115,20 @@ namespace ShipWorks.OrderLookup.Controls.From
 
                 handler.RaisePropertyChanged(nameof(ShipmentModel));
             }
+        }
+
+        /// <summary>
+        /// Initialize UI for a changed or new shipment
+        /// </summary>
+        private void InitializeForChangedShipment()
+        {
+            autoSave?.Dispose();
+            Load(ShipmentModel.ShipmentAdapter.Shipment.OriginPerson, ShipmentModel.ShipmentAdapter.Store);
+
+            UpdateTitle();
+
+            handler.RaisePropertyChanged(nameof(ShipmentModel));
+            autoSave = handler.PropertyChangingStream.Where(p => p != nameof(Title)).Throttle(TimeSpan.FromMilliseconds(100)).Subscribe(_ => Save());
         }
 
         /// <summary>
@@ -160,6 +163,15 @@ namespace ShipWorks.OrderLookup.Controls.From
             }
 
             Title = newTitle;
+        }
+
+        /// <summary>
+        /// Dispose
+        /// </summary>
+        public void Dispose()
+        {
+            autoSave?.Dispose();
+            ShipmentModel.PropertyChanged -= ShipmentModelPropertyChanged;
         }
     }
 }

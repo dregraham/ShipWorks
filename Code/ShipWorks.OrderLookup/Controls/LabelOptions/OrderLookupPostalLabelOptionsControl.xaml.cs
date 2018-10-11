@@ -3,12 +3,12 @@
     /// <summary>
     /// Interaction logic for OrderLookupLabelOptionsControl.xaml
     /// </summary>
-    public partial class OrderLookupLabelOptionsControl
+    public partial class OrderLookupPostalLabelOptionsControl
     {
         /// <summary>
         /// Ctor
         /// </summary>
-        public OrderLookupLabelOptionsControl()
+        public OrderLookupPostalLabelOptionsControl()
         {
             InitializeComponent();
         }
