@@ -17,7 +17,7 @@
                             <BeginStoryboard Name="Flash">
                                 <Storyboard RepeatBehavior="3x">
                                     <ColorAnimationUsingKeyFrames
-                                        Storyboard.TargetName="PART_Entry"
+                                        Storyboard.Target="{Binding ElementName=PART_Entry}"
                                         Storyboard.TargetProperty="(TextBox.Background).(SolidColorBrush.Color)"
                                         Duration="0:0:0.5">
                                         <DiscreteColorKeyFrame KeyTime="0:0:0" Value="LightGray" />
@@ -34,8 +34,8 @@
                         HorizontalContentAlignment="Left"
                         VerticalContentAlignment="Center"
                         Background="{StaticResource InputControlBackgroundGradient}"
-                        BorderBrush="Transparent"
-                        BorderThickness="0"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}"
                         Style="{x:Null}"
                         Height="26"
                         MaxLength="16"
@@ -45,7 +45,7 @@
                             <EventTrigger RoutedEvent="TextBoxBase.TextChanged">
                                 <BeginStoryboard>
                                     <Storyboard>
-                                        <ColorAnimationUsingKeyFrames Storyboard.TargetName="PART_Entry" Storyboard.TargetProperty="(TextBox.Background).(SolidColorBrush.Color)">
+                                        <ColorAnimationUsingKeyFrames Storyboard.Target="{Binding ElementName=PART_Entry}" Storyboard.TargetProperty="(TextBox.Background).(SolidColorBrush.Color)">
                                             <DiscreteColorKeyFrame KeyTime="0:0:0" Value="White" />
                                         </ColorAnimationUsingKeyFrames>
                                     </Storyboard>

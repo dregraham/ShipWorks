@@ -18,6 +18,11 @@ namespace Interapptive.Shared.UI
         /// <summary>
         /// Show an error
         /// </summary>
+        void ShowError(string message, Exception ex);
+
+        /// <summary>
+        /// Show an error
+        /// </summary>
         void ShowError(IWin32Window owner, string message);
 
         /// <summary>

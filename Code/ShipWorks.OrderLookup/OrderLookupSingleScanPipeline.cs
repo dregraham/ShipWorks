@@ -26,6 +26,7 @@ namespace ShipWorks.OrderLookup
         private readonly IOrderLookupOrderRepository orderRepository;
         private readonly IOnDemandDownloaderFactory onDemandDownloaderFactory;
         private readonly IOrderLookupAutoPrintService orderLookupAutoPrintService;
+        private readonly IOrderLookupShipmentModel shipmentModel;
         private IDisposable subscriptions;
 
         bool processingScan = false;
@@ -38,14 +39,15 @@ namespace ShipWorks.OrderLookup
             IMainForm mainForm,
             IOrderLookupOrderRepository orderRepository,
             IOnDemandDownloaderFactory onDemandDownloaderFactory,
-            IOrderLookupAutoPrintService orderLookupAutoPrintService)
+            IOrderLookupAutoPrintService orderLookupAutoPrintService,
+            IOrderLookupShipmentModel shipmentModel)
         {
             this.messenger = messenger;
             this.mainForm = mainForm;
             this.orderRepository = orderRepository;
             this.onDemandDownloaderFactory = onDemandDownloaderFactory;
             this.orderLookupAutoPrintService = orderLookupAutoPrintService;
-            
+            this.shipmentModel = shipmentModel;
         }
 
         /// <summary>
@@ -75,6 +77,8 @@ namespace ShipWorks.OrderLookup
         {
             try
             {
+                shipmentModel.SaveToDatabase();
+                
                 await onDemandDownloaderFactory.CreateOnDemandDownloader().Download(message.ScannedText).ConfigureAwait(true);
                 long? orderId = orderRepository.GetOrderID(message.ScannedText);
                 OrderEntity order = null;
@@ -89,8 +93,8 @@ namespace ShipWorks.OrderLookup
                     }
                 }
 
-                SendOrderMessage(order);
-            } 
+                shipmentModel.LoadOrder(order);
+            }
             finally
             {
                 processingScan = false;
@@ -104,6 +108,8 @@ namespace ShipWorks.OrderLookup
         {
             try
             {
+                shipmentModel.SaveToDatabase();
+
                 await onDemandDownloaderFactory.CreateOnDemandDownloader().Download(message.SearchText).ConfigureAwait(true);
                 long? orderId = orderRepository.GetOrderID(message.SearchText);
 
@@ -113,20 +119,12 @@ namespace ShipWorks.OrderLookup
                     order = await orderRepository.GetOrder(orderId.Value).ConfigureAwait(true);
                 }
 
-                SendOrderMessage(order);
+                shipmentModel.LoadOrder(order);
             }
             finally
             {
                 processingScan = false;
             }
-        }
-
-        /// <summary>
-        /// SendOrderMessage
-        /// </summary>
-        private void SendOrderMessage(OrderEntity order)
-        {
-            messenger.Send(new OrderLookupSingleScanMessage(this, order));
         }
 
         /// <summary>

@@ -925,6 +925,8 @@ namespace ShipWorks
 
             buttonManageFilters.Visible = UIMode == UIMode.Batch;
 
+            UpdateStatusBar();
+
             if (startHeartbeat)
             {
                 heartBeat.Start();
@@ -1068,6 +1070,8 @@ namespace ShipWorks
                 ToggleVisiblePanel(shipmentHistory.Control, orderLookupControl?.Control);
                 shipmentHistory.Activate(buttonOrderLookupViewVoid);
             }
+
+            UpdateStatusBar();
         }
 
         /// <summary>
@@ -1075,7 +1079,7 @@ namespace ShipWorks
         /// </summary>
         public bool IsShipmentHistoryActive()
         {
-            return panelDockingArea.Controls.Contains(shipmentHistory.Control);
+            return shipmentHistory != null && panelDockingArea.Controls.Contains(shipmentHistory.Control);
         }
 
         /// <summary>
@@ -1782,10 +1786,28 @@ namespace ShipWorks
         /// <summary>
         /// Update the contents of the status bar
         /// </summary>
-        private void UpdateStatusBar()
+        public void UpdateStatusBar()
         {
-            labelStatusTotal.Text = string.Format("{0}: {1:#,##0}", EnumHelper.GetDescription(gridControl.ActiveFilterTarget), gridControl.TotalCount);
-            labelStatusSelected.Text = string.Format("Selected: {0:#,##0}", gridControl.Selection.Count);
+            if (UIMode == UIMode.Batch)
+            {
+                labelStatusTotal.Visible = true;
+                labelStatusTotal.Text = string.Format("{0}: {1:#,##0}", EnumHelper.GetDescription(gridControl.ActiveFilterTarget), gridControl.TotalCount);
+
+                labelStatusSelected.Visible = true;
+                labelStatusSelected.Text = string.Format("Selected: {0:#,##0}", gridControl.Selection.Count);
+            }
+            else if (IsShipmentHistoryActive())
+            {
+                labelStatusTotal.Visible = true;
+                labelStatusTotal.Text = string.Format("Shipments: {0:#,##0}", shipmentHistory.RowCount);
+                
+                labelStatusSelected.Visible = false;
+            }
+            else
+            {
+                labelStatusTotal.Visible = false;
+                labelStatusSelected.Visible = false;
+            }
         }
 
         /// <summary>
