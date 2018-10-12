@@ -13,6 +13,7 @@ using ShipWorks.Core.Common.Threading;
 using ShipWorks.Messaging.Messages.Shipping;
 using ShipWorks.Messaging.Messages;
 using ShipWorks.SingleScan;
+using Interapptive.Shared.Metrics;
 
 namespace ShipWorks.OrderLookup
 {
@@ -26,6 +27,7 @@ namespace ShipWorks.OrderLookup
         private readonly IOrderLookupOrderRepository orderRepository;
         private readonly IOnDemandDownloaderFactory onDemandDownloaderFactory;
         private readonly IOrderLookupAutoPrintService orderLookupAutoPrintService;
+        private readonly AutoWeighService autoWeighService;
         private readonly IOrderLookupShipmentModel shipmentModel;
         private IDisposable subscriptions;
 
@@ -40,6 +42,7 @@ namespace ShipWorks.OrderLookup
             IOrderLookupOrderRepository orderRepository,
             IOnDemandDownloaderFactory onDemandDownloaderFactory,
             IOrderLookupAutoPrintService orderLookupAutoPrintService,
+            AutoWeighService autoWeighService,
             IOrderLookupShipmentModel shipmentModel)
         {
             this.messenger = messenger;
@@ -47,6 +50,7 @@ namespace ShipWorks.OrderLookup
             this.orderRepository = orderRepository;
             this.onDemandDownloaderFactory = onDemandDownloaderFactory;
             this.orderLookupAutoPrintService = orderLookupAutoPrintService;
+            this.autoWeighService = autoWeighService;
             this.shipmentModel = shipmentModel;
         }
 
@@ -78,7 +82,7 @@ namespace ShipWorks.OrderLookup
             try
             {
                 shipmentModel.SaveToDatabase();
-                
+
                 await onDemandDownloaderFactory.CreateOnDemandDownloader().Download(message.ScannedText).ConfigureAwait(true);
                 long? orderId = orderRepository.GetOrderID(message.ScannedText);
                 OrderEntity order = null;
@@ -90,6 +94,16 @@ namespace ShipWorks.OrderLookup
                     if (order == null)
                     {
                         order = await orderRepository.GetOrder(orderId.Value).ConfigureAwait(true);
+                    }
+
+                    if (order != null &&
+                        order.Shipments.Any() &&
+                        !order.Shipments.Last().Processed)
+                    {
+                        using (ITrackedEvent telemetry = new TrackedEvent("OrderLookup.Search.AutoWeigh"))
+                        {
+                            autoWeighService.ApplyWeight(new[] { order.Shipments.Last() }, telemetry);
+                        }
                     }
                 }
 
