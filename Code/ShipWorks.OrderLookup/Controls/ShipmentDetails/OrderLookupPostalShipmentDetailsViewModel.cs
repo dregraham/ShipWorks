@@ -75,6 +75,7 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
             RefreshPackageTypes();
             RefreshConfirmationTypes();
             RefreshServiceTypes();
+            RefreshProviders();
         }
 
         /// <summary>
@@ -182,7 +183,7 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
             {
                 if (e.PropertyName == nameof(ShipmentModel.SelectedOrder))
                 {
-                    Providers = shipmentTypeProvider.GetAvailableShipmentTypes(ShipmentModel.ShipmentAdapter).ToDictionary(s => s, s => EnumHelper.GetDescription(s));
+                    RefreshProviders();
                     RefreshDimensionalProfiles();
                 }
 
@@ -235,6 +236,23 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
                 {
                     RefreshServiceTypes();
                 }
+            }
+        }
+
+        /// <summary>
+        /// Refresh the providers
+        /// </summary>
+        private void RefreshProviders()
+        {
+            if (ShipmentModel.ShipmentAdapter?.Shipment == null)
+            {
+                Providers = new Dictionary<ShipmentTypeCode, string>();
+            }
+            else
+            {
+                Providers = shipmentTypeProvider
+                    .GetAvailableShipmentTypes(ShipmentModel.ShipmentAdapter)
+                    .ToDictionary(s => s, s => EnumHelper.GetDescription(s));
             }
         }
 
