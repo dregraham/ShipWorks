@@ -6,6 +6,7 @@
              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
              xmlns:ui="http://schemas.shipworks.com/ui"
              xmlns:orderLookupSearchControl="clr-namespace:ShipWorks.OrderLookup.Controls.OrderLookupSearchControl"
+             xmlns:system="clr-namespace:System;assembly=mscorlib"
              mc:Ignorable="d"
              d:DataContext="{d:DesignInstance orderLookupSearchControl:OrderLookupSearchViewModel}"
              Foreground="Black"
@@ -19,6 +20,7 @@
                 <ResourceDictionary Source="/ShipWorks.OrderLookup;component/Styles/OrderLookupStyle.xaml"/>
             </ResourceDictionary.MergedDictionaries>
             <ui:BooleanToVisibilityConverter x:Key="BoolToVis"/>
+            <ui:VisibleWhenEqualToParameterConverter x:Key="VisibleWhenNotEqualToParameter" Invert="true" />
 
             <Style TargetType="{x:Type TextBlock}">
                 <Setter Property="VerticalAlignment" Value="Center"/>
@@ -176,9 +178,18 @@
 
                 <TextBlock Grid.Column="1"
                            FontWeight="Bold"
-                           Text="{Binding TotalCost}"
+                           Text="{Binding ShipmentModel.TotalCost, StringFormat='c', UpdateSourceTrigger=PropertyChanged }"
                            MinWidth="75"
-                           HorizontalAlignment="Right"/>
+                           HorizontalAlignment="Right" >
+
+                    <TextBlock.Visibility>
+                        <Binding Path="ShipmentModel.TotalCost" Converter="{StaticResource VisibleWhenNotEqualToParameter}">
+                            <Binding.ConverterParameter>
+                                <system:Decimal>0</system:Decimal>
+                            </Binding.ConverterParameter>
+                        </Binding>
+                    </TextBlock.Visibility>
+                </TextBlock>
             </Grid>
         </Grid>
 

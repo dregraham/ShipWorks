@@ -11,6 +11,7 @@ namespace ShipWorks.OrderLookup
     /// <summary>
     /// Represents the Order Lookup Data Service
     /// </summary>
+    [Obfuscation(ApplyToMembers = true, Exclude = true, StripAfterObfuscation = false)]
     public interface IOrderLookupShipmentModel
     {
         /// <summary>
@@ -62,6 +63,11 @@ namespace ShipWorks.OrderLookup
         /// Fires when an order is cleared
         /// </summary>
         event EventHandler OnSearchOrder;
+
+        /// <summary>
+        /// Total cost of the shipment
+        /// </summary>
+        decimal TotalCost { get; set; }
 
         /// <summary>
         /// Changes the shipment type

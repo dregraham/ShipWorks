@@ -155,6 +155,7 @@
       <type name="Interapptive.Shared.IO.Text.Csv.Resources.ExceptionMessage" />
       <type name="Interapptive.Shared.Properties.Flags" />
       <type name="ShipWorks.UI.Controls.ShipWorksComboBox" />
+      <type name="*ShipmentAdapter*" regex="true" />
     </excludelist>
     <mapping>
       <mapoutput overwrite="true">
