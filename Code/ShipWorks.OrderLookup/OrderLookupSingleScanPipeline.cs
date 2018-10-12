@@ -27,7 +27,7 @@ namespace ShipWorks.OrderLookup
         private readonly IOrderLookupOrderRepository orderRepository;
         private readonly IOnDemandDownloaderFactory onDemandDownloaderFactory;
         private readonly IOrderLookupAutoPrintService orderLookupAutoPrintService;
-        private readonly AutoWeighService autoWeighService;
+        private readonly IAutoWeighService autoWeighService;
         private readonly IOrderLookupShipmentModel shipmentModel;
         private IDisposable subscriptions;
 
@@ -42,7 +42,7 @@ namespace ShipWorks.OrderLookup
             IOrderLookupOrderRepository orderRepository,
             IOnDemandDownloaderFactory onDemandDownloaderFactory,
             IOrderLookupAutoPrintService orderLookupAutoPrintService,
-            AutoWeighService autoWeighService,
+            IAutoWeighService autoWeighService,
             IOrderLookupShipmentModel shipmentModel)
         {
             this.messenger = messenger;
