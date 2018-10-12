@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Reactive.Disposables;
 using System.Reflection;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
@@ -94,13 +96,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             PostalRateSelection selection = rate.Tag as PostalRateSelection;
             PostalShipmentType shipmentType = GetShipmentType<PostalShipmentType>();
 
-            var serviceType = (PostalServiceType) ServiceType;
-            var confirmationType = (PostalConfirmationType) Shipment.Postal.Confirmation;
-            var packagingType = (PostalPackagingType) Shipment.Postal.PackagingType;
-
             return selection != null &&
-                shipmentType.DoesRateMatchServiceAndPackaging(selection, serviceType, confirmationType,
-                    packagingType, Shipment.ShipCountryCode);
+                shipmentType.DoesRateMatchServiceAndPackaging(selection, (PostalServiceType) ServiceType);
         }
 
         /// <summary>
@@ -139,7 +136,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             if (rateSelection != null)
             {
                 Shipment.Postal.Service = (int) rateSelection.ServiceType;
-                Shipment.Postal.Confirmation = (int) rateSelection.ConfirmationType;
             }
         }
 
@@ -148,5 +144,21 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// </summary>
         /// <returns></returns>
         public override ICarrierShipmentAdapter Clone() => new UspsShipmentAdapter(this);
+
+        /// <summary>
+        /// Send a notification if service related properties change
+        /// </summary>
+        public override IDisposable NotifyIfServiceRelatedPropertiesChange(Action<string> raisePropertyChanged)
+        {
+            var startingConfirmation = Shipment.Postal.Confirmation;
+
+            return Disposable.Create(() =>
+            {
+                if (startingConfirmation != Shipment.Postal.Confirmation)
+                {
+                    raisePropertyChanged(nameof(Shipment.Postal.Confirmation));
+                }
+            });
+        }
     }
 }

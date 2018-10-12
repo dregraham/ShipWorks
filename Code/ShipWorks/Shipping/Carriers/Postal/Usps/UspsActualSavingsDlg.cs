@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
-using System.Drawing;
 using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 using Divelements.SandGrid;
 using ShipWorks.Shipping.Editing.Rating;
@@ -37,27 +34,24 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             // Go through each rate
             foreach (RateResult originalRate in originalRates)
             {
-                PostalRateSelection originalRateDetail = (PostalRateSelection)originalRate.OriginalTag;
+                PostalRateSelection originalRateDetail = (PostalRateSelection) originalRate.OriginalTag;
 
                 // If it's an express1 saving rate, replace it with the actual express1 rate
                 if (originalRateDetail != null)
                 {
                     RateResult discountedRate = discountedRates.Where(e1r => e1r.Selectable).FirstOrDefault(e1r =>
-                            ((PostalRateSelection)e1r.OriginalTag).ServiceType == originalRateDetail.ServiceType && ((PostalRateSelection)e1r.OriginalTag).ConfirmationType == originalRateDetail.ConfirmationType);
+                            ((PostalRateSelection) e1r.OriginalTag).ServiceType == originalRateDetail.ServiceType);
 
                     if (discountedRate != null)
                     {
-                        //if (Express1Utilities.IsPostageSavingService(originalRateDetail.ServiceType) && discountedRate.Amount <= originalRate.Amount)
-                        //{
-                            // If we need to add in the parent, add it
-                            if (parentRate != null)
-                            {
-                                sandGrid.Rows.Add(new GridRow(parentRate.Description));
-                                parentRate = null;
-                            }
+                        // If we need to add in the parent, add it
+                        if (parentRate != null)
+                        {
+                            sandGrid.Rows.Add(new GridRow(parentRate.Description));
+                            parentRate = null;
+                        }
 
-                            AddRateLine(originalRate, discountedRate);
-                        //}
+                        AddRateLine(originalRate, discountedRate);
                     }
                 }
                 else

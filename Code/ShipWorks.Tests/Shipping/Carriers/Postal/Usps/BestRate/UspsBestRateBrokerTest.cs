@@ -21,7 +21,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps.BestRate
 {
     public class UspsBestRateBrokerTest
     {
-        private UspsAccountEntity account;
+        private readonly UspsAccountEntity account;
         private RateGroup rateGroup;
         private RateResult rate1;
         private RateResult rate2;
@@ -51,9 +51,9 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps.BestRate
             account2 = new UspsAccountEntity { UspsAccountID = 2, CountryCode = "US" };
             account3 = new UspsAccountEntity { UspsAccountID = 3, CountryCode = "US" };
 
-            rate1 = new RateResult("Account 1a", "4", 12, new PostalRateSelection(PostalServiceType.PriorityMail, PostalConfirmationType.None)) { ServiceLevel = ServiceLevelType.TwoDays };
-            rate2 = new RateResult("Account 1b", "3", 4, new PostalRateSelection(PostalServiceType.StandardPost, PostalConfirmationType.None)) { ServiceLevel = ServiceLevelType.FourToSevenDays };
-            rate3 = new RateResult("Account 1c", "1", 15, new PostalRateSelection(PostalServiceType.ExpressMailPremium, PostalConfirmationType.None)) { ServiceLevel = ServiceLevelType.OneDay };
+            rate1 = new RateResult("Account 1a", "4", 12, new PostalRateSelection(PostalServiceType.PriorityMail)) { ServiceLevel = ServiceLevelType.TwoDays };
+            rate2 = new RateResult("Account 1b", "3", 4, new PostalRateSelection(PostalServiceType.StandardPost)) { ServiceLevel = ServiceLevelType.FourToSevenDays };
+            rate3 = new RateResult("Account 1c", "1", 15, new PostalRateSelection(PostalServiceType.ExpressMailPremium)) { ServiceLevel = ServiceLevelType.OneDay };
 
             rateGroup = new RateGroup(new[] { rate1, rate2, rate3 });
 
@@ -165,8 +165,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps.BestRate
         {
             rateGroup.Rates.Clear();
 
-            RateResult result1 = new RateResult("Account 1a", "4", 4, new PostalRateSelection(PostalServiceType.StandardPost, PostalConfirmationType.None)) { ServiceLevel = ServiceLevelType.FourToSevenDays };
-            RateResult result2 = new RateResult("Account 1b", "3", 4, new PostalRateSelection(PostalServiceType.StandardPost, PostalConfirmationType.None)) { ServiceLevel = ServiceLevelType.FourToSevenDays };
+            RateResult result1 = new RateResult("Account 1a", "4", 4, new PostalRateSelection(PostalServiceType.StandardPost)) { ServiceLevel = ServiceLevelType.FourToSevenDays };
+            RateResult result2 = new RateResult("Account 1b", "3", 4, new PostalRateSelection(PostalServiceType.StandardPost)) { ServiceLevel = ServiceLevelType.FourToSevenDays };
 
             rateGroup.Rates.Add(result1);
             rateGroup.Rates.Add(result2);
@@ -182,8 +182,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps.BestRate
         {
             rateGroup.Rates.Clear();
 
-            RateResult result1 = new RateResult("Account 1a", "4", 4, new PostalRateSelection(PostalServiceType.StandardPost, PostalConfirmationType.None)) { ServiceLevel = ServiceLevelType.FourToSevenDays };
-            RateResult result2 = new RateResult("Account 1b", "3", 2, new PostalRateSelection(PostalServiceType.StandardPost, PostalConfirmationType.None)) { ServiceLevel = ServiceLevelType.FourToSevenDays };
+            RateResult result1 = new RateResult("Account 1a", "4", 4, new PostalRateSelection(PostalServiceType.StandardPost)) { ServiceLevel = ServiceLevelType.FourToSevenDays };
+            RateResult result2 = new RateResult("Account 1b", "3", 2, new PostalRateSelection(PostalServiceType.StandardPost)) { ServiceLevel = ServiceLevelType.FourToSevenDays };
 
             rateGroup.Rates.Add(result1);
             rateGroup.Rates.Add(result2);
@@ -199,8 +199,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps.BestRate
         {
             rateGroup.Rates.Clear();
 
-            RateResult result1 = new RateResult("Account 1a", "4", 4, new PostalRateSelection(PostalServiceType.StandardPost, PostalConfirmationType.None)) { ServiceLevel = ServiceLevelType.TwoDays };
-            RateResult result2 = new RateResult("Account 1b", "3", 4, new PostalRateSelection(PostalServiceType.StandardPost, PostalConfirmationType.None)) { ServiceLevel = ServiceLevelType.FourToSevenDays };
+            RateResult result1 = new RateResult("Account 1a", "4", 4, new PostalRateSelection(PostalServiceType.StandardPost)) { ServiceLevel = ServiceLevelType.TwoDays };
+            RateResult result2 = new RateResult("Account 1b", "3", 4, new PostalRateSelection(PostalServiceType.StandardPost)) { ServiceLevel = ServiceLevelType.FourToSevenDays };
 
             rateGroup.Rates.Add(result1);
             rateGroup.Rates.Add(result2);
@@ -217,8 +217,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps.BestRate
         {
             rateGroup.Rates.Clear();
 
-            RateResult result1 = new RateResult("Account 1a", "4", 4, new PostalRateSelection(PostalServiceType.ExpressMailPremium, PostalConfirmationType.None)) { ServiceLevel = ServiceLevelType.OneDay };
-            RateResult result2 = new RateResult("Account 1b", "3", 4, new PostalRateSelection(PostalServiceType.StandardPost, PostalConfirmationType.None)) { ServiceLevel = ServiceLevelType.OneDay };
+            RateResult result1 = new RateResult("Account 1a", "4", 4, new PostalRateSelection(PostalServiceType.ExpressMailPremium)) { ServiceLevel = ServiceLevelType.OneDay };
+            RateResult result2 = new RateResult("Account 1b", "3", 4, new PostalRateSelection(PostalServiceType.StandardPost)) { ServiceLevel = ServiceLevelType.OneDay };
 
             rateGroup.Rates.Add(result1);
             rateGroup.Rates.Add(result2);
@@ -236,7 +236,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps.BestRate
             rateGroup.Rates.Clear();
 
             RateResult result1 = new RateResult("Account 1a", "4") { ServiceLevel = ServiceLevelType.OneDay };
-            RateResult result2 = new RateResult("Account 1b", "3", 4, new PostalRateSelection(PostalServiceType.StandardPost, PostalConfirmationType.None)) { ServiceLevel = ServiceLevelType.OneDay };
+            RateResult result2 = new RateResult("Account 1b", "3", 4, new PostalRateSelection(PostalServiceType.StandardPost)) { ServiceLevel = ServiceLevelType.OneDay };
 
             rateGroup.Rates.Add(result1);
             rateGroup.Rates.Add(result2);
@@ -247,24 +247,6 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps.BestRate
             Assert.True(rates.Rates.Any(r => r.RateID == result2.RateID));
             Assert.Equal(1, rates.Rates.Count);
         }
-
-        //[Fact]
-        //public void GetBestRates_DoesNotIncludeMediaMail()
-        //{
-        //    TestServiceTypeIsExcluded(PostalServiceType.MediaMail);
-        //}
-
-        //[Fact]
-        //public void GetBestRates_DoesNotIncludeLibrayMail()
-        //{
-        //    TestServiceTypeIsExcluded(PostalServiceType.LibraryMail);
-        //}
-
-        //[Fact]
-        //public void GetBestRates_DoesNotIncludeBPM()
-        //{
-        //    TestServiceTypeIsExcluded(PostalServiceType.BoundPrintedMatter);
-        //}
 
         //[DataSource("Microsoft.VisualStudio.TestTools.DataSource.CSV", "|DataDirectory|\\GetBestRates_DoesNotIncludeTypes.csv", "Usps_GetBestRates_DoesNotIncludeTypes#csv", DataAccessMethod.Sequential)]
         //[DeploymentItem(@"Shipping\Carriers\Postal\Usps\BestRate\Usps_GetBestRates_DoesNotIncludeTypes.csv")]
@@ -276,12 +258,12 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps.BestRate
 
             rateGroup.Rates.Clear();
 
-            RateResult result1 = new RateResult("Account 1b", "3", 4, new PostalRateSelection(excludedServiceType, PostalConfirmationType.None))
+            RateResult result1 = new RateResult("Account 1b", "3", 4, new PostalRateSelection(excludedServiceType))
             {
                 ServiceLevel = ServiceLevelType.OneDay
             };
 
-            RateResult result2 = new RateResult("Account 1b", "3", 4, new PostalRateSelection(PostalServiceType.StandardPost, PostalConfirmationType.None))
+            RateResult result2 = new RateResult("Account 1b", "3", 4, new PostalRateSelection(PostalServiceType.StandardPost))
             {
                 ServiceLevel = ServiceLevelType.OneDay
             };
@@ -294,30 +276,6 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps.BestRate
             Assert.False(rates.Rates.Any(r => r.RateID == result1.RateID));
             Assert.True(rates.Rates.Any(r => r.RateID == result2.RateID));
             Assert.Equal(1, rates.Rates.Count);
-        }
-
-        [Fact]
-        public void GetBestRates_UpdatesDescriptionWhenPartOfRateGroup()
-        {
-            rateGroup.Rates.Clear();
-
-            RateResult result1 = new RateResult("Foo", "4") { ServiceLevel = ServiceLevelType.OneDay };
-            RateResult result2 = new RateResult("       Bar", string.Empty, 4, new PostalRateSelection(PostalServiceType.StandardPost, PostalConfirmationType.None)) { ServiceLevel = ServiceLevelType.OneDay };
-
-            RateResult result3 = new RateResult("Baz", "3") { ServiceLevel = ServiceLevelType.OneDay };
-            RateResult result4 = new RateResult("   Other", string.Empty, 4, new PostalRateSelection(PostalServiceType.ExpressMail, PostalConfirmationType.None)) { ServiceLevel = ServiceLevelType.OneDay };
-
-            rateGroup.Rates.Add(result1);
-            rateGroup.Rates.Add(result2);
-            rateGroup.Rates.Add(result3);
-            rateGroup.Rates.Add(result4);
-
-            RateGroup bestRates = testObject.GetBestRates(testShipment, new List<BrokerException>());
-
-            Assert.Equal("USPS Foo Bar", bestRates.Rates.Single(r => r.RateID == result2.RateID).Description);
-            Assert.Equal("USPS Baz Other", bestRates.Rates.Single(r => r.RateID == result4.RateID).Description);
-            Assert.Equal("4", bestRates.Rates.Single(r => r.RateID == result2.RateID).Days);
-            Assert.Equal("3", bestRates.Rates.Single(r => r.RateID == result4.RateID).Days);
         }
 
         [Fact]
@@ -471,8 +429,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps.BestRate
         {
             rateGroup.Rates.Clear();
 
-            RateResult result1 = new RateResult("Usps Ground", "4", 4, new PostalRateSelection(PostalServiceType.ExpressMailPremium, PostalConfirmationType.None)) { ServiceLevel = ServiceLevelType.OneDay };
-            RateResult result2 = new RateResult("Some Service", "3", 4, new PostalRateSelection(PostalServiceType.StandardPost, PostalConfirmationType.None)) { ServiceLevel = ServiceLevelType.OneDay };
+            RateResult result1 = new RateResult("Usps Ground", "4", 4, new PostalRateSelection(PostalServiceType.ExpressMailPremium)) { ServiceLevel = ServiceLevelType.OneDay };
+            RateResult result2 = new RateResult("Some Service", "3", 4, new PostalRateSelection(PostalServiceType.StandardPost)) { ServiceLevel = ServiceLevelType.OneDay };
 
             rateGroup.Rates.Add(result1);
             rateGroup.Rates.Add(result2);
@@ -490,8 +448,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps.BestRate
         {
             rateGroup.Rates.Clear();
 
-            RateResult result1 = new RateResult("USPS Ground", "4", 4, new PostalRateSelection(PostalServiceType.ExpressMailPremium, PostalConfirmationType.None)) { ServiceLevel = ServiceLevelType.OneDay };
-            RateResult result2 = new RateResult("Some Service", "3", 4, new PostalRateSelection(PostalServiceType.StandardPost, PostalConfirmationType.None)) { ServiceLevel = ServiceLevelType.OneDay };
+            RateResult result1 = new RateResult("USPS Ground", "4", 4, new PostalRateSelection(PostalServiceType.ExpressMailPremium)) { ServiceLevel = ServiceLevelType.OneDay };
+            RateResult result2 = new RateResult("Some Service", "3", 4, new PostalRateSelection(PostalServiceType.StandardPost)) { ServiceLevel = ServiceLevelType.OneDay };
 
             rateGroup.Rates.Add(result1);
             rateGroup.Rates.Add(result2);

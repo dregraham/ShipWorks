@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
-using ShipWorks.Shipping.Editing;
 using Divelements.SandGrid;
 using ShipWorks.Shipping.Editing.Rating;
 
@@ -13,8 +12,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
     /// </summary>
     public partial class Express1ActualSavingsDlg : Form
     {
-        List<RateResult> originalRates;
-        List<RateResult> discountedRates;
+        private List<RateResult> originalRates;
+        private List<RateResult> discountedRates;
 
         /// <summary>
         /// Constructor
@@ -40,13 +39,13 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
             // Go through each rate
             foreach (RateResult originalRate in originalRates)
             {
-                PostalRateSelection originalRateDetail = (PostalRateSelection)originalRate.OriginalTag;
+                PostalRateSelection originalRateDetail = (PostalRateSelection) originalRate.OriginalTag;
 
                 // If it's an express1 saving rate, replace it with the actual express1 rate
                 if (originalRateDetail != null)
                 {
                     RateResult discountedRate = discountedRates.Where(e1r => e1r.Selectable).FirstOrDefault(e1r =>
-                            ((PostalRateSelection)e1r.OriginalTag).ServiceType == originalRateDetail.ServiceType && ((PostalRateSelection)e1r.OriginalTag).ConfirmationType == originalRateDetail.ConfirmationType);
+                            ((PostalRateSelection) e1r.OriginalTag).ServiceType == originalRateDetail.ServiceType);
 
                     if (discountedRate != null)
                     {

@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using ShipWorks.Shipping.Carriers.Postal.Usps.Express1;
 using ShipWorks.Shipping.Editing.Rating;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Usps
@@ -36,12 +35,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// Perform the merge of Express1 rates into Usps rates
         /// </summary>
         private static RateGroup MergeRateGroups(RateGroup uspsRateGroup, RateGroup express1Rates)
-        {   
+        {
             List<RateResult> mergedRates = uspsRateGroup.Rates
                 .Select(uspsRate => GetCheaperMatchingExpress1Rate(express1Rates.Rates, uspsRate) ?? uspsRate)
-                .OrderBy(rate => ((PostalRateSelection)rate.Tag).ServiceType)
+                .OrderBy(rate => ((PostalRateSelection) rate.Tag).ServiceType)
                 .ThenBy(rate => rate.Selectable)
-                .ThenBy(rate => ((PostalRateSelection)rate.Tag).ConfirmationType)
                 .ToList();
 
             MergeIcons(express1Rates, mergedRates);
@@ -99,7 +97,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// </summary>
         private static RateResult GetCheaperMatchingExpress1Rate(IEnumerable<RateResult> express1Rates, RateResult uspsRate)
         {
-            return express1Rates.Select(x => new {Rate = x, Tag = x.Tag as PostalRateSelection})
+            return express1Rates.Select(x => new { Rate = x, Tag = x.Tag as PostalRateSelection })
                 .Where(x => ServicesMatch(x.Tag, uspsRate.Tag as PostalRateSelection))
                 .Select(x => x.Rate)
                 .FirstOrDefault(x => x.AmountOrDefault < uspsRate.AmountOrDefault);
@@ -115,8 +113,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                 return false;
             }
 
-            return express1Tag.ServiceType == uspsTag.ServiceType &&
-                   express1Tag.ConfirmationType == uspsTag.ConfirmationType;
+            return express1Tag.ServiceType == uspsTag.ServiceType;
         }
     }
 }

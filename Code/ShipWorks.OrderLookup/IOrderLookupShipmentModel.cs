@@ -64,6 +64,11 @@ namespace ShipWorks.OrderLookup
         event EventHandler OnSearchOrder;
 
         /// <summary>
+        /// Total cost of the shipment
+        /// </summary>
+        decimal TotalCost { get; set; }
+
+        /// <summary>
         /// Changes the shipment type
         /// </summary>
         void ChangeShipmentType(ShipmentTypeCode value);

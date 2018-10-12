@@ -1,42 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace ShipWorks.Shipping.Carriers.Postal
+﻿namespace ShipWorks.Shipping.Carriers.Postal
 {
     /// <summary>
     /// Simple class that is used to convey the chosen rate from the rate grid to the service control
     /// </summary>
     public class PostalRateSelection
     {
-        PostalServiceType serviceType;
-        PostalConfirmationType confirmationType;
-
         /// <summary>
         /// Constructor
         /// </summary>
-        public PostalRateSelection(PostalServiceType serviceType, PostalConfirmationType confirmationType)
+        public PostalRateSelection(PostalServiceType serviceType)
         {
-            this.serviceType = serviceType;
-            this.confirmationType = confirmationType;
+            ServiceType = serviceType;
         }
 
         /// <summary>
         /// The selected service type
         /// </summary>
-        public PostalServiceType ServiceType
-        {
-            get { return serviceType; }
-        }
-
-        /// <summary>
-        /// The selected confirmation type
-        /// </summary>
-        public PostalConfirmationType ConfirmationType
-        {
-            get { return confirmationType; }
-        }
+        public PostalServiceType ServiceType { get; }
 
         /// <summary>
         /// Determines whether the specified <see cref="System.Object"/>, is equal to this instance.
@@ -48,7 +28,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
 
             if (postalRateSelection != null)
             {
-                isEqual = this.ConfirmationType == postalRateSelection.ConfirmationType && this.ServiceType == postalRateSelection.ServiceType;
+                isEqual = this.ServiceType == postalRateSelection.ServiceType;
             }
 
             return isEqual;
@@ -60,9 +40,6 @@ namespace ShipWorks.Shipping.Carriers.Postal
         /// <returns>
         /// A hash code for this instance, suitable for use in hashing algorithms and data structures like a hash table. 
         /// </returns>
-        public override int GetHashCode()
-        {
-            return base.GetHashCode();
-        }
+        public override int GetHashCode() => base.GetHashCode();
     }
 }

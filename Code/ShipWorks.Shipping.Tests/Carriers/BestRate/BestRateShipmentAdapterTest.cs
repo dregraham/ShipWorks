@@ -6,7 +6,6 @@ using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Carriers.Postal;
-using ShipWorks.Shipping.Carriers.Postal.Usps;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Stores;
 using ShipWorks.Tests.Shared;
@@ -190,10 +189,9 @@ namespace ShipWorks.Shipping.Tests.Carriers.BestRate
         }
 
         [Theory]
-        [InlineData(PostalServiceType.AsendiaGeneric, PostalConfirmationType.Signature)]
-        [InlineData(PostalServiceType.AsendiaGeneric, PostalConfirmationType.Delivery)]
-        [InlineData(PostalServiceType.FirstClass, PostalConfirmationType.Signature)]
-        public void DoesRateMatchSelectedService_ReturnsFalse_WhenServiceAndConfirmationDoNotMatch(PostalServiceType serviceType, PostalConfirmationType confirmation)
+        [InlineData(PostalServiceType.AsendiaGeneric)]
+        [InlineData(PostalServiceType.FirstClass)]
+        public void DoesRateMatchSelectedService_ReturnsFalse_WhenServiceAndConfirmationDoNotMatch(PostalServiceType serviceType)
         {
             mock.WithShipmentTypeFromShipmentManager(x =>
             {
@@ -202,7 +200,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.BestRate
             });
 
             var testObject = mock.Create<BestRateShipmentAdapter>(TypedParameter.From(shipment));
-            var rate = new RateResult("Foo", "1", 0, new PostalRateSelection(serviceType, confirmation))
+            var rate = new RateResult("Foo", "1", 0, new PostalRateSelection(serviceType))
             {
                 ShipmentType = ShipmentTypeCode.Usps
             };

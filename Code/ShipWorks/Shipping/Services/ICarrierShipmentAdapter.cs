@@ -145,6 +145,11 @@ namespace ShipWorks.Shipping.Services
         void DeleteCustomsItem(IShipmentCustomsItemAdapter customsItem);
 
         /// <summary>
+        /// Send a notification if service related properties change
+        /// </summary>
+        IDisposable NotifyIfServiceRelatedPropertiesChange(Action<string> raisePropertyChanged);
+
+        /// <summary>
         /// Does the given rate match the service selected for the shipment
         /// </summary>
         bool DoesRateMatchSelectedService(RateResult rate);

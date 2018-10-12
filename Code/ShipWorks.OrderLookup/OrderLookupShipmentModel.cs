@@ -30,6 +30,7 @@ namespace ShipWorks.OrderLookup
         private readonly PropertyChangedHandler handler;
         private OrderEntity selectedOrder;
         private bool shipmentAllowEditing;
+        private decimal totalCost;
         private bool isSaving = false;
         public event EventHandler OnSearchOrder;
 
@@ -79,6 +80,16 @@ namespace ShipWorks.OrderLookup
         /// </summary>
         [Obfuscation(Exclude = true)]
         public IEnumerable<IPackageAdapter> PackageAdapters { get; private set; }
+
+        /// <summary>
+        /// Total cost of the shipment
+        /// </summary>
+        [Obfuscation(Exclude = true, StripAfterObfuscation = false)]
+        public decimal TotalCost
+        {
+            get => totalCost;
+            set => handler.Set(nameof(TotalCost), ref totalCost, value);
+        }
 
         /// <summary>
         /// Invoked when a property on the order object changes
@@ -218,6 +229,7 @@ namespace ShipWorks.OrderLookup
             ShipmentAllowEditing = false;
             PackageAdapters = null;
             SelectedOrder = null;
+            TotalCost = 0;
 
             messenger.Send(new OrderLookupClearOrderMessage());
         }
@@ -229,6 +241,7 @@ namespace ShipWorks.OrderLookup
         {
             ShipmentAllowEditing = !ShipmentAdapter?.Shipment?.Processed ?? false;
             PackageAdapters = ShipmentAdapter?.GetPackageAdapters();
+            TotalCost = ShipmentAdapter?.Shipment?.ShipmentCost ?? 0;
         }
 
         /// <summary>
