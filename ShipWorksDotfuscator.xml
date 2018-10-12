@@ -23,6 +23,11 @@
         <option>honoroas</option>
         <file dir="${configdir}\Artifacts\Application" name="ShipWorks.Shared.dll" />
       </inputassembly>
+      <inputassembly refid="b2110ce9-5b8d-4c15-8fb4-1ac3980df323">
+        <option>honoroas</option>
+        <option>library</option>
+        <file dir="${configdir}\Artifacts\Application" name="ShipWorks.Data.Model.dll" />
+      </inputassembly>
       <inputassembly refid="0034febc-3a6b-4538-add5-799e66b68ec1">
         <option>honoroas</option>
         <file dir="${configdir}\Artifacts\Application" name="ShipWorks.Shipping.dll" />
@@ -138,11 +143,19 @@
       <type name="Interapptive.Shared.Utility.SerializableObject" applytoderivedtypes="true">
         <method name=".*" regex="true" />
       </type>
+      <type name="ShipWorks.Data.Grid.Columns.GridColumnDisplayType">
+        <method name=".*" regex="true" />
+      </type>
       <type name=".*" regex="true" applytoderivedtypes="true">
         <supertype name="System.Exception" regex="true" />
       </type>
+      <type name="ShipWorks.Data.Model.EntityClasses.PostalProfileEntity" excludetype="false">
+        <method name="get_Usps" signature="ShipWorks.Data.Model.EntityClasses.UspsProfileEntity()" />
+      </type>
       <type name="Interapptive.Shared.IO.Text.Csv.Resources.ExceptionMessage" />
       <type name="Interapptive.Shared.Properties.Flags" />
+      <type name="ShipWorks.UI.Controls.ShipWorksComboBox" />
+      <type name="*ShipmentAdapter*" regex="true" />
     </excludelist>
     <mapping>
       <mapoutput overwrite="true">
@@ -165,6 +178,9 @@
         <file dir="${configdir}\Artifacts\Application" name="ShipWorks.Core.dll" />
       </assembly>
       <assembly>
+        <file dir="${configdir}\Artifacts\Application" name="ShipWorks.Data.Model.dll" />
+      </assembly>
+      <assembly>
         <file dir="${configdir}\Artifacts\Application" name="ShipWorks.exe" />
       </assembly>
       <assembly>
@@ -178,6 +194,9 @@
       </assembly>
       <assembly>
         <file dir="${configdir}\Artifacts\Application" name="ShipWorks.Shipping.UI.dll" />
+      </assembly>
+      <assembly>
+        <file dir="${configdir}\Artifacts\Application" name="ShipWorks.OrderLookup.dll" />
       </assembly>
       <assembly>
         <file dir="${configdir}\Artifacts\Application" name="ShipWorks.Stores.dll" />

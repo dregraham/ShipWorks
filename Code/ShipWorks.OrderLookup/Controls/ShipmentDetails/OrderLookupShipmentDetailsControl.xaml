@@ -20,13 +20,14 @@
             </ResourceDictionary.MergedDictionaries>
             <controls:ShipmentTypeToOrderLookupTemplateConverter x:Key="ShipmentTypeToOrderLookupTemplateConverter" />
             <ui:WeightControl
+                IsTabStop="False"
                 x:Key="WeightControl"
                 AcceptApplyWeightKeyboardShortcut="True"
                 ErrorMessage="{Binding WeightErrorMessage}"
                 Style="{StaticResource OrderLookupWeightControl}"
                 Weight="{Binding ShipmentModel.ShipmentAdapter.ContentWeight, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=true, NotifyOnValidationError=true}" />
 
-            <UserControl x:Key="ProviderComboBox">
+            <UserControl x:Key="ProviderComboBox" IsTabStop="False">
                 <ui:ShipWorksComboBox
                     DisplayMemberPath="Value"
                     ItemsSource="{Binding Providers}"
@@ -56,7 +57,7 @@
                     <ContentControl
                         Grid.Row="0"
                         Grid.Column="1"
-                        Content="{StaticResource ProviderComboBox}" />
+                        Content="{StaticResource ProviderComboBox}"/>
 
                     <TextBlock
                         Grid.Row="1"
@@ -67,14 +68,14 @@
                     <ContentControl
                         Grid.Row="1"
                         Grid.Column="1"
-                        Content="{StaticResource WeightControl}" />
+                        Content="{StaticResource WeightControl}"/>
                 </Grid>
             </DataTemplate>
         </ResourceDictionary>
     </UserControl.Resources>
 
-    <StackPanel>        
-        <ContentControl Content="{Binding .}" IsEnabled="{Binding ShipmentModel.ShipmentAllowEditing}">
+    <StackPanel>
+        <ContentControl Content="{Binding .}" IsEnabled="{Binding ShipmentModel.ShipmentAllowEditing}" IsTabStop="False">
             <ContentControl.ContentTemplate>
                 <MultiBinding Converter="{StaticResource ShipmentTypeToOrderLookupTemplateConverter}">
                     <Binding Path="ShipmentModel.ShipmentAdapter.ShipmentTypeCode" />

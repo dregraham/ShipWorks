@@ -44,16 +44,15 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             List<RateResult> sortedConsolidatedRates = consolidatedRates
                 .OrderBy(GetServiceType)
                 .ThenBy(r => r.Selectable)
-                .ThenBy(rate => ((PostalRateSelection)rate.Tag).ConfirmationType)
                 .ToList();
 
             RateGroup consolidatedRateGroup = new RateGroup(sortedConsolidatedRates);
 
-            rateGroupsToConsolidate.SelectMany(r=>r.FootnoteFactories)
-                .GroupBy(footnoteFactory=>footnoteFactory.GetType())
+            rateGroupsToConsolidate.SelectMany(r => r.FootnoteFactories)
+                .GroupBy(footnoteFactory => footnoteFactory.GetType())
                 // exclude UspsRatePromotionFootnoteFactory if not all rate groups have it
-                .Where(group=> !(group.First() is UspsRatePromotionFootnoteFactory) || group.Count() == rateGroupsToConsolidate.Count )
-                .Select(group=>group.First())
+                .Where(group => !(group.First() is UspsRatePromotionFootnoteFactory) || group.Count() == rateGroupsToConsolidate.Count)
+                .Select(group => group.First())
                 .ToList()
                 .ForEach(consolidatedRateGroup.AddFootnoteFactory);
 
@@ -65,7 +64,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// </summary>
         private PostalServiceType GetServiceType(RateResult rateResult)
         {
-            UspsPostalRateSelection rateResultTag = (UspsPostalRateSelection)rateResult.Tag;
+            UspsPostalRateSelection rateResultTag = (UspsPostalRateSelection) rateResult.Tag;
 
             return rateResultTag.ServiceType;
         }
@@ -86,11 +85,10 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// </summary>
         public bool ServiceMatches(RateResult rateA, RateResult rateB)
         {
-            UspsPostalRateSelection rateATag = (UspsPostalRateSelection)rateA.Tag;
-            UspsPostalRateSelection rateBTag = (UspsPostalRateSelection)rateB.Tag;
+            UspsPostalRateSelection rateATag = (UspsPostalRateSelection) rateA.Tag;
+            UspsPostalRateSelection rateBTag = (UspsPostalRateSelection) rateB.Tag;
 
-            return rateATag.ServiceType == rateBTag.ServiceType &&
-                rateATag.ConfirmationType == rateBTag.ConfirmationType;
+            return rateATag.ServiceType == rateBTag.ServiceType;
         }
     }
 }

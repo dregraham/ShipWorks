@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using Autofac;
-using Interapptive.Shared;
 using Interapptive.Shared.Business;
+using Interapptive.Shared.Collections;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Security;
 using Interapptive.Shared.Utility;
@@ -35,16 +35,25 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
     /// </summary>
     public class EndiciaApiClient : IEndiciaApiClient
     {
+        // We don't include delivery confirmation because we want to treat that like None, because it is
+        // included at no charge for services to which it applies.
+        private readonly static IDictionary<PostalConfirmationType, Func<PostagePrice, decimal>> confirmationLookup =
+            new Dictionary<PostalConfirmationType, Func<PostagePrice, decimal>>
+            {
+                { PostalConfirmationType.Signature, x => x.Fees.SignatureConfirmation},
+                { PostalConfirmationType.AdultSignatureRequired, x => x.Fees.AdultSignature },
+                { PostalConfirmationType.AdultSignatureRestricted, x => x.Fees.AdultSignatureRestrictedDelivery }
+            };
+
         private readonly ICarrierAccountRepository<EndiciaAccountEntity, IEndiciaAccountEntity> accountRepository;
         private readonly ILogEntryFactory logEntryFactory;
         private readonly ICertificateInspector certificateInspector;
-        readonly ILog log = LogManager.GetLogger(typeof(EndiciaApiClient));
+        private readonly ILog log = LogManager.GetLogger(typeof(EndiciaApiClient));
 
         private const string productionUrl = "https://LabelServer.Endicia.com/LabelService/EwsLabelService.asmx";
 
         private const string standardEndiciaPartnerID = "lswk";
         private const string freemiumEndiciaPartnerID = "lseb";
-
 
         /// <summary>
         /// Initializes a new instance of the <see cref="EndiciaApiClient"/> class.
@@ -312,7 +321,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             EndiciaAccountEntity account = GetAccount(postal);
 
             PostalPackagingType packagingType = (PostalPackagingType) postal.PackagingType;
-            
+
             bool isDomestic = shipment.ShipPerson.IsDomesticCountry();
 
             // There are no rates for regional boxes for international
@@ -327,33 +336,40 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
 
             try
             {
-                List<RateResult> rates = new List<RateResult>();
-
                 using (EwsLabelService service = CreateWebService("GetRates", GetReseller(account, shipment), LogActionType.GetRates))
                 {
                     PostageRatesResponse response = ProcessGetRatesRequest(shipment, service, request, account);
 
-                    // No rates available for this service\class\type
+                    // No rates available for this service/class/type
                     if (response.PostagePrice == null)
                     {
                         return new List<RateResult>();
                     }
 
-                    // Go through each item in the result
-                    foreach (PostagePrice price in response.PostagePrice)
-                    {
-                        AddRateFromResponse(shipment, endiciaShipmentType, price, packagingType, rates);
-                    }
+                    IEnumerable<RateResult> rates = response.PostagePrice
+                        .Select(GetRatingDetails)
+                        .Where(IsKnownService)
+                        .Where(x => IsStandardService(x, shipment))
+                        .Select(x => BuildRateFromResponse(x, shipment, endiciaShipmentType))
+                        .ToList();
 
                     if (isDomestic)
                     {
-                        GetFirstClassEnvelopeRates(shipment, endiciaShipmentType, packagingType, rates);
-                        GetParcelSelectRates(shipment, endiciaShipmentType, account, rates);    
+                        var services = rates.Select(x => x.Tag).OfType<PostalRateSelection>().ToList();
+
+                        rates = rates
+                            .Prepend(GetFirstClassEnvelopeRates(shipment, endiciaShipmentType, packagingType, services))
+                            .Append(GetParcelSelectRates(shipment, endiciaShipmentType, account, services));
                     }
 
-                    rates.ForEach(PostalUtility.SetServiceDetails);
-
-                    return rates;
+                    return rates
+                        .Where(x => x != null)
+                        .Do(x =>
+                        {
+                            PostalUtility.SetServiceDetails(x);
+                            x.ShipmentType = ShipmentTypeCode.Endicia;
+                        })
+                        .ToList();
                 }
             }
             catch (Exception ex)
@@ -363,20 +379,23 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         }
 
         /// <summary>
-        /// Add a rate to the rate result list from the response
+        /// Get rating details from a price
         /// </summary>
-        private static void AddRateFromResponse(ShipmentEntity shipment, EndiciaShipmentType endiciaShipmentType,
-                                                PostagePrice price, PostalPackagingType packagingType, List<RateResult> rates)
+        private (PostalServiceType? service, PostagePrice postage) GetRatingDetails(PostagePrice price) =>
+            (EndiciaApiTransforms.GetServiceTypeFromRateMailService(price.MailClass), price);
+
+        /// <summary>
+        /// Does ShipWorks know about the service
+        /// </summary>
+        private bool IsKnownService((PostalServiceType? service, PostagePrice postage) value) =>
+            value.service.HasValue;
+
+        /// <summary>
+        /// Is this a standard service that should be shown
+        /// </summary>
+        private bool IsStandardService((PostalServiceType? service, PostagePrice postage) value, IShipmentEntity shipment)
         {
-            PostalServiceType? serviceResult = EndiciaApiTransforms.GetServiceTypeFromRateMailService(price.MailClass);
-
-            // Skip services we don't know about within SW... so we don't break if new ones are added
-            if (serviceResult == null)
-            {
-                return;
-            }
-
-            PostalServiceType serviceType = serviceResult.Value;
+            PostalServiceType serviceType = value.service.Value;
 
             // If the person has selected Parcel Select as their shipment type, don't include Parcel Select rates here
             // We'll pick it up below by getting individual rates so we can include the Parcel Select specific fields
@@ -384,141 +403,95 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             if (serviceType == PostalServiceType.ParcelSelect &&
                 shipment.Postal.Service == (int) PostalServiceType.ParcelSelect)
             {
-                return;
+                return false;
             }
 
             // Don't confuse people by showing them Standard Post - almost no one will qualify for it.  If they do qualify, they can still manually select it.
             if (serviceType == PostalServiceType.StandardPost)
             {
-                return;
+                return false;
             }
 
-            // Days in transit
-            string days = PostalUtility.GetServiceTransitDays(serviceType);
-
-            List<PostalConfirmationType> confirmationOptions =
-                endiciaShipmentType.GetAvailableConfirmationTypes(shipment.ShipCountryCode, serviceType, packagingType);
-
-            if (confirmationOptions.Count > 0 && confirmationOptions.All(x => x != PostalConfirmationType.None))
-            {
-                AddRateWithConfirmationOptions(rates, serviceType, confirmationOptions, price, days);
-            }
-            else
-            {
-                // Add the single rate for this service
-                rates.Add(new RateResult(PostalUtility.GetPostalServiceTypeDescription(serviceType), days,
-                                         price.Postage.TotalAmount,
-                                         new PostalRateSelection(serviceType, PostalConfirmationType.None))
-                {
-                    ProviderLogo = EnumHelper.GetImage(ShipmentTypeCode.Endicia)
-                });
-            }
+            return true;
         }
+
+        /// <summary>
+        /// Add a rate to the rate result list from the response
+        /// </summary>
+        private static RateResult BuildRateFromResponse((PostalServiceType? service, PostagePrice postage) value, ShipmentEntity shipment, EndiciaShipmentType endiciaShipmentType)
+        {
+            var serviceType = value.service.Value;
+
+            var (description, getAmount) = GetRateAddOnDetails(
+                (PostalConfirmationType) shipment.Postal.Confirmation,
+                endiciaShipmentType.GetAvailableConfirmationTypes(shipment.ShipCountryCode, serviceType, (PostalPackagingType) shipment.Postal.PackagingType));
+
+            return new RateResult(PostalUtility.GetPostalServiceTypeDescription(serviceType) + description,
+                PostalUtility.GetServiceTransitDays(serviceType),
+                value.postage.Postage.TotalAmount + getAmount(value.postage),
+                new PostalRateSelection(serviceType))
+            {
+                ProviderLogo = EnumHelper.GetImage(ShipmentTypeCode.Endicia)
+            };
+        }
+
+        /// <summary>
+        /// Get details for required rate addons
+        /// </summary>
+        private static (string description, Func<PostagePrice, decimal> getAmount) GetRateAddOnDetails(PostalConfirmationType confirmation, IEnumerable<PostalConfirmationType> addOns) =>
+            addOns
+                .Where(x => x == confirmation && confirmationLookup.ContainsKey(x))
+                .Select(x => confirmationLookup[x])
+                .Select(x => (description: " (" + EnumHelper.GetDescription(confirmation) + ")", getAmount: x))
+                .DefaultIfEmpty((description: string.Empty, x => 0))
+                .First();
 
         /// <summary>
         /// Get first class envelope rates and add them to rate result list, if needed
         /// </summary>
-        private void GetFirstClassEnvelopeRates(ShipmentEntity shipment, EndiciaShipmentType endiciaShipmentType, 
-                                                PostalPackagingType packagingType, List<RateResult> rates)
+        private RateResult GetFirstClassEnvelopeRates(ShipmentEntity shipment, EndiciaShipmentType endiciaShipmentType,
+                                                PostalPackagingType packagingType, IEnumerable<PostalRateSelection> services)
         {
             // Special case - endicia not returning a rate for first class envelopes
             if ((packagingType == PostalPackagingType.Envelope || packagingType == PostalPackagingType.LargeEnvelope) &&
-                !rates.Any(r => r.Selectable && ((PostalRateSelection) r.OriginalTag).ServiceType == PostalServiceType.FirstClass))
+                services.None(r => r.ServiceType == PostalServiceType.FirstClass))
             {
                 try
                 {
-                    rates.Insert(0, GetRate(shipment, endiciaShipmentType, PostalServiceType.FirstClass, PostalConfirmationType.None));
+                    return GetRate(shipment, endiciaShipmentType, PostalServiceType.FirstClass);
                 }
                 catch (EndiciaException ex)
                 {
                     log.Error("Failed getting first class destination confirm rate: " + ex.Message, ex);
                 }
             }
+
+            return null;
         }
 
         /// <summary>
         /// Get parcel select rates and add them to rate result list, if needed 
         /// </summary>
-        private void GetParcelSelectRates(ShipmentEntity shipment, EndiciaShipmentType endiciaShipmentType,
-                                          EndiciaAccountEntity account, List<RateResult> rates)
+        private RateResult GetParcelSelectRates(ShipmentEntity shipment, EndiciaShipmentType endiciaShipmentType,
+                                          EndiciaAccountEntity account, IEnumerable<PostalRateSelection> services)
         {
-
             // As of 01/28/2013 Endicia is not returning Parcel Select in the GetAllRates call - they are returning
             // Standard Post instead. If we can't find Parcel Select, try to get those rates manually. In the future
-            // if Endicia updates\fixes it we may be able to remove this.
-            if (account.EndiciaReseller == (int) EndiciaReseller.None && !rates.Any(
-                    r => r.Selectable && ((PostalRateSelection) r.OriginalTag).ServiceType == PostalServiceType.ParcelSelect))
+            // if Endicia updates/fixes it we may be able to remove this.
+            if (account.EndiciaReseller == (int) EndiciaReseller.None &&
+                services.None(r => r.ServiceType == PostalServiceType.ParcelSelect))
             {
                 try
                 {
-                    // We do these here, then add them later, so that in case they throw an Exception we don't end up adding the "Header" line of "Parcel Select" with nothing below it to select.
-                    RateResult withDelivery = GetRate(shipment, endiciaShipmentType, PostalServiceType.ParcelSelect,
-                                                      PostalConfirmationType.Delivery);
-                    RateResult withSignature = GetRate(shipment, endiciaShipmentType, PostalServiceType.ParcelSelect,
-                                                       PostalConfirmationType.Signature);
-
-                    rates.Add(new RateResult(PostalUtility.GetPostalServiceTypeDescription(PostalServiceType.ParcelSelect),
-                                             PostalUtility.GetServiceTransitDays(PostalServiceType.ParcelSelect))
-                    {
-                        ProviderLogo = EnumHelper.GetImage(ShipmentTypeCode.Endicia),
-                        Tag = new PostalRateSelection(PostalServiceType.ParcelSelect, PostalConfirmationType.None)
-                    });
-                    
-                    rates.Add(withDelivery);
-                    rates.Add(withSignature);
+                    return GetRate(shipment, endiciaShipmentType, PostalServiceType.ParcelSelect, (PostalConfirmationType) shipment.Postal.Confirmation);
                 }
                 catch (EndiciaException ex)
                 {
                     log.Error("Failed getting first class destination confirm rate: " + ex.Message, ex);
                 }
             }
-        }
 
-        /// <summary>
-        /// Add a rate that has confirmation options to the rate result list
-        /// </summary>
-        private static void AddRateWithConfirmationOptions(List<RateResult> rates, PostalServiceType serviceType,
-                                                           List<PostalConfirmationType> confirmationOptions,
-                                                           PostagePrice price, string days)
-        {
-            // Add the 'base' rate for the service type, without any confirmations\extras
-            rates.Add(new RateResult(PostalUtility.GetPostalServiceTypeDescription(serviceType), days)
-            {
-                Tag = new PostalRateSelection(serviceType, PostalConfirmationType.None),
-                ProviderLogo = EnumHelper.GetImage(ShipmentTypeCode.Endicia)
-            });
-
-            if (confirmationOptions.Contains(PostalConfirmationType.Delivery))
-            {
-                rates.Add(new RateResult(
-                              $"       Delivery Confirmation ({price.Fees.DeliveryConfirmation:c})", "", 
-                              price.Postage.TotalAmount + price.Fees.DeliveryConfirmation,
-                              new PostalRateSelection(serviceType, PostalConfirmationType.Delivery)));
-            }
-
-            if (confirmationOptions.Contains(PostalConfirmationType.Signature))
-            {
-                rates.Add(new RateResult(
-                              $"       Signature Confirmation ({price.Fees.SignatureConfirmation:c})", "", 
-                              price.Postage.TotalAmount + price.Fees.SignatureConfirmation,
-                              new PostalRateSelection(serviceType, PostalConfirmationType.Signature)));
-            }
-
-            if (confirmationOptions.Contains(PostalConfirmationType.AdultSignatureRequired) && price.Fees.AdultSignature > 0)
-            {
-                rates.Add(new RateResult(
-                              $"       Adult Signature Required ({price.Fees.AdultSignature:c})", "", 
-                              price.Postage.TotalAmount + price.Fees.AdultSignature,
-                              new PostalRateSelection(serviceType, PostalConfirmationType.AdultSignatureRequired)));
-            }
-
-            if (confirmationOptions.Contains(PostalConfirmationType.AdultSignatureRestricted) && price.Fees.AdultSignatureRestrictedDelivery > 0)
-            {
-                rates.Add(new RateResult(
-                              $"       Adult Signature Restricted ({price.Fees.AdultSignatureRestrictedDelivery:c})", "",
-                              price.Postage.TotalAmount + price.Fees.AdultSignatureRestrictedDelivery,
-                              new PostalRateSelection(serviceType, PostalConfirmationType.AdultSignatureRestricted)));
-            }
+            return null;
         }
 
         /// <summary>
@@ -533,7 +506,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
 
             // Check for errors and throw EndiciaApiException if error is found
             CheckGetRatesResponseForErrors(response, account);
-            
+
             return response;
         }
 
@@ -588,10 +561,10 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
 
             // Domestic/International
             request.MailClass = isDomestic ? "Domestic" : "International";
-            
+
             // Machinable
             request.Machinable = postal.NonMachinable ? "FALSE" : "TRUE";
-            
+
             AddAccountDetailsToRatesRequest(account, request);
             AddPackageDetailsToRatesRequest(shipment, packagingType, postal, request);
             AddAddressDetailsToRatesRequest(shipment, account, request);
@@ -733,6 +706,12 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         /// <summary>
         /// Get the postal rate for the given shipment, service, and confirmation selection.
         /// </summary>
+        private RateResult GetRate(ShipmentEntity shipment, EndiciaShipmentType endiciaShipmentType, PostalServiceType serviceType) =>
+            GetRate(shipment, endiciaShipmentType, serviceType, PostalConfirmationType.None);
+
+        /// <summary>
+        /// Get the postal rate for the given shipment, service, and confirmation selection.
+        /// </summary>
         private RateResult GetRate(ShipmentEntity shipment, EndiciaShipmentType endiciaShipmentType, PostalServiceType serviceType, PostalConfirmationType confirmation)
         {
             PostalShipmentEntity postal = shipment.Postal;
@@ -750,7 +729,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             // Used to rate shipments having a future ship date; seven days is the upper bound
             request.DateAdvance = Math.Max(0, (int) Math.Min((shipment.ShipDate.Date - DateTime.Now.Date).TotalDays, 7));
             request.ShipDate = shipment.ShipDate.ToString("MM/dd/yyyy");
-            
+
             // Service
             request.MailClass = endiciaShipmentType.GetMailClassCode(serviceType, packagingType);
 
@@ -775,14 +754,14 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                 request.SortType = EndiciaApiTransforms.GetSortTypeCode((PostalSortType) shipment.Postal.SortType);
                 request.EntryFacility = EndiciaApiTransforms.GetEntryFacilityCode((PostalEntryFacility) shipment.Postal.EntryFacility);
             }
-            
-            AddAccountDetailsToRateRequest(request, account);            
+
+            AddAccountDetailsToRateRequest(request, account);
             AddPackageDetailsToGetRateRequest(shipment, request, packagingType, postal);
             AddAddressDetailsToGetRateRequest(shipment, account, request);
             AddConfirmationDetailsToGetRateRequest(confirmation, request);
             AddInsuranceDetailsToGetRateRequest(shipment, request);
 
-            return ProcessRateRequest(shipment, serviceType, confirmation, account, request);
+            return ProcessRateRequest(shipment, serviceType, account, request);
         }
 
         /// <summary>
@@ -797,7 +776,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         }
 
         /// <summary>
-        /// Add insurance details from the given shipment to the get rate reqeust 
+        /// Add insurance details from the given shipment to the get rate request 
         /// </summary>
         private static void AddInsuranceDetailsToGetRateRequest(ShipmentEntity shipment, PostageRateRequest request)
         {
@@ -887,7 +866,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         /// </summary>
         private RateResult ProcessRateRequest(ShipmentEntity shipment,
             PostalServiceType serviceType,
-            PostalConfirmationType confirmation,
             EndiciaAccountEntity account,
             PostageRateRequest request)
         {
@@ -912,30 +890,14 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                         days = PostalUtility.GetServiceTransitDays(serviceType);
                     }
 
-                    string description;
-
-                    if (confirmation == PostalConfirmationType.None)
-                    {
-                        description = PostalUtility.GetPostalServiceTypeDescription(serviceType);
-                    }
-                    else if (confirmation == PostalConfirmationType.Delivery)
-                    {
-                        description = string.Format("       Delivery Confirmation ({0:c})",
-                            response.PostagePrice[0].Fees.DeliveryConfirmation);
-                        days = "";
-                    }
-                    else
-                    {
-                        description = string.Format("       Signature Confirmation ({0:c})",
-                            response.PostagePrice[0].Fees.SignatureConfirmation);
-                        days = "";
-                    }
-
                     return new RateResult(
-                        description,
+                        PostalUtility.GetPostalServiceTypeDescription(serviceType),
                         days,
                         response.PostagePrice[0].TotalAmount,
-                        new PostalRateSelection(serviceType, confirmation));
+                        new PostalRateSelection(serviceType))
+                    {
+                        ProviderLogo = EnumHelper.GetImage(ShipmentTypeCode.Endicia)
+                    };
                 }
             }
             catch (Exception ex)
@@ -1437,7 +1399,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         }
 
         /// <summary>
-        /// Apply the the to and from addresses to the request.
+        /// Apply the to and from addresses to the request.
         /// </summary>
         private void ApplyAddresses(ShipmentEntity shipment, LabelRequest request, EndiciaAccountEntity account)
         {
@@ -1730,7 +1692,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
 
             PackageStatusRequest packageStatusRequest = new PackageStatusRequest()
             {
-                PicNumbers = new []{shipment.TrackingNumber},
+                PicNumbers = new[] { shipment.TrackingNumber },
                 RequesterID = GetInterapptivePartnerID(GetReseller(account, shipment)),
                 RequestID = Guid.NewGuid().ToString("N"),
                 CertifiedIntermediary = new CertifiedIntermediary()
@@ -1796,7 +1758,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                 {
                     SCANRequest request = new SCANRequest()
                     {
-                        GetSCANRequestParameters = new GetSCANParameters() { ImageFormat = "PNG"},
+                        GetSCANRequestParameters = new GetSCANParameters() { ImageFormat = "PNG" },
                         RequesterID = GetInterapptivePartnerID(reseller),
                         RequestID = Guid.NewGuid().ToString("N"),
                         CertifiedIntermediary = new CertifiedIntermediary()
@@ -1877,7 +1839,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         }
 
         /// <summary>
-        /// Checks the resposne for errors. If an error is found, EndiciaException is thrown
+        /// Checks the response for errors. If an error is found, EndiciaException is thrown
         /// </summary>
         private static void CheckResponseForErrors(UserSignUpResponse userSignUpResponse, long confirmation)
         {

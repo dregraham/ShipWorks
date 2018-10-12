@@ -334,7 +334,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
         /// <summary>
         /// Called when the recipient country has changed.  We may have to switch from an international to domestic UI
         /// </summary>
-        void OnRecipientDestinationChanged(object sender, EventArgs e)
+        private void OnRecipientDestinationChanged(object sender, EventArgs e)
         {
             SaveToShipments();
             LoadShipmentDetails();
@@ -414,8 +414,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
                 return false;
             }
 
-            return shipmentType.DoesRateMatchServiceAndPackaging(current, serviceType, confirmationType,
-                selectedPackagingType, personControl.CountryCode);
+            return shipmentType.DoesRateMatchServiceAndPackaging(current, serviceType);
         }
 
         /// <summary>
@@ -508,29 +507,13 @@ namespace ShipWorks.Shipping.Carriers.Postal
             service.SelectedValue = rate.ServiceType;
             UpdateConfirmationTypes(rate.ServiceType);
 
-            PostalConfirmationType rateConfirmationType = GetConfirmationTypeFromRateSelection(rate);
             confirmation.SelectedIndexChanged -= OnConfirmationChanged;
-            confirmation.SelectedValue = rateConfirmationType;
             if (confirmation.SelectedIndex == -1)
             {
                 confirmation.SelectedIndex = 0;
             }
 
             confirmation.SelectedIndexChanged += OnConfirmationChanged;
-        }
-
-        /// <summary>
-        /// Get the confirmation type from the selected rate
-        /// </summary>
-        private PostalConfirmationType GetConfirmationTypeFromRateSelection(PostalRateSelection rate)
-        {
-            PostalShipmentType postalShipmentType = ShipmentTypeManager.GetType(ShipmentTypeCode) as PostalShipmentType;
-            var selectedPackagingType = (PostalPackagingType?) packagingType.SelectedValue;
-
-            return rate.ConfirmationType == PostalConfirmationType.None &&
-                    postalShipmentType.IsFreeInternationalDeliveryConfirmation(personControl.CountryCode, rate.ServiceType, selectedPackagingType) ?
-                PostalConfirmationType.Delivery :
-                rate.ConfirmationType;
         }
 
         /// <summary>

@@ -5,10 +5,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="clr-namespace:ShipWorks.OrderLookup.Controls.LabelOptions"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:printers="clr-namespace:ShipWorks.Common.IO.Hardware.Printers;assembly=ShipWorks.Core"
     xmlns:ui="http://schemas.shipworks.com/ui"
-    xmlns:sys="clr-namespace:System;assembly=mscorlib"
-    xmlns:utility="clr-namespace:Interapptive.Shared.Utility;assembly=Interapptive.Shared"
     d:DataContext="{d:DesignInstance local:OrderLookupLabelOptionsControlViewModel}"
     d:DesignHeight="150"
     d:DesignWidth="500"
@@ -79,26 +76,31 @@
             IsChecked="{Binding ShipmentModel.ShipmentAdapter.Shipment.Postal.NoPostage, UpdateSourceTrigger=PropertyChanged}"
             Style="{StaticResource FormCheckBox}"
             Visibility="{Binding AllowNoPostage, Converter={StaticResource BoolToVis}}" />
-        <TextBlock
+        
+        <ContentControl
             Grid.Row="3"
             Grid.Column="0"
             Width="15"
             Height="15"
             Margin="0,0,3,0"
-            Background="Transparent">
+            Background="Transparent"
+            Focusable="False">
             <Hyperlink
                 ui:Link.OpenInBrowser="True"
                 Background="Transparent"
                 NavigateUri="http://support.shipworks.com/support/solutions/articles/140916-what-printer-should-i"
-                Style="{StaticResource LinkButton}">
-                <Border Background="Transparent" BorderBrush="{x:Null}">
+                Style="{StaticResource LinkButton}"
+                Focusable="False">
+                <Border Background="Transparent" BorderBrush="{x:Null}"
+                        Focusable="False">
                     <Path
+                        Focusable="False"
                         Fill="Gray"
                         Stretch="Fill"
                         Style="{StaticResource InformationIcon}" />
                 </Border>
             </Hyperlink>
-        </TextBlock>
+        </ContentControl>
 
         <TextBlock
             Grid.Row="3"
