@@ -485,15 +485,16 @@ namespace ShipWorks.Shipping.Carriers.Postal
                 baseRate.ExpectedDeliveryDate = deliveryDate;
             }
         }
-        
+
         /// <summary>
         /// Set service details and shipment type for rate
         /// </summary>
-        public static void SetServiceDetails(RateResult rate, PostalServiceType serviceType,
+        public static RateResult SetServiceDetails(RateResult rate, PostalServiceType serviceType,
                                              string deliveryDays, ShipmentTypeCode shipmentTypeCode)
         {
             SetServiceDetails(rate, serviceType, deliveryDays);
             rate.ShipmentType = shipmentTypeCode;
+            return rate;
         }
 
         /// <summary>

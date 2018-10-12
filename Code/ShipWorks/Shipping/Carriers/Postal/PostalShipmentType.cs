@@ -482,26 +482,8 @@ namespace ShipWorks.Shipping.Carriers.Postal
         /// <summary>
         /// Does the given rate match the specified service and packaging
         /// </summary>
-        public bool DoesRateMatchServiceAndPackaging(PostalRateSelection rate,
-            PostalServiceType serviceType,
-            PostalConfirmationType confirmationType,
-            PostalPackagingType? packagingType,
-            string shipCountry)
-        {
-            if (rate.ServiceType != serviceType)
-            {
-                return false;
-            }
-
-            if (rate.ConfirmationType == confirmationType)
-            {
-                return true;
-            }
-
-            return confirmationType == PostalConfirmationType.Delivery &&
-                packagingType.HasValue &&
-                IsFreeInternationalDeliveryConfirmation(shipCountry, serviceType, packagingType.Value);
-        }
+        public bool DoesRateMatchServiceAndPackaging(PostalRateSelection rate, PostalServiceType serviceType) =>
+            rate.ServiceType == serviceType;
 
         /// <summary>
         /// Returns a list of countries eligible for free international delivery confirmation.

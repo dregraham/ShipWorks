@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reactive.Disposables;
 using System.Reflection;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.Utility;
@@ -361,6 +362,12 @@ namespace ShipWorks.Shipping.Services
             Shipment.CustomsItems.Remove(existingItem);
             UpdateDynamicData();
         }
+
+        /// <summary>
+        /// Send a notification if service related properties change
+        /// </summary>
+        public virtual IDisposable NotifyIfServiceRelatedPropertiesChange(Action<string> raisePropertyChanged) =>
+            Disposable.Empty;
 
         /// <summary>
         /// Get a strongly typed ShipmentType

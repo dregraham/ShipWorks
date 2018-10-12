@@ -15,8 +15,8 @@ namespace ShipWorks.Shipping.Tests.Carriers.Postal.Usps
 {
     public class UspsShipmentAdapterTest : IDisposable
     {
-        readonly AutoMock mock;
-        readonly ShipmentEntity shipment;
+        private readonly AutoMock mock;
+        private readonly ShipmentEntity shipment;
 
         public UspsShipmentAdapterTest()
         {
@@ -223,10 +223,10 @@ namespace ShipWorks.Shipping.Tests.Carriers.Postal.Usps
         }
 
         [Theory]
-        [InlineData(PostalServiceType.AsendiaIpa, PostalConfirmationType.AdultSignatureRequired)]
-        [InlineData(PostalServiceType.PriorityMail, PostalConfirmationType.Delivery)]
-        [InlineData(PostalServiceType.ExpressMail, PostalConfirmationType.None)]
-        public void UpdateServiceFromRate_SetsService_WhenTagIsValid(PostalServiceType serviceType, PostalConfirmationType confirmationType)
+        [InlineData(PostalServiceType.AsendiaIpa)]
+        [InlineData(PostalServiceType.PriorityMail)]
+        [InlineData(PostalServiceType.ExpressMail)]
+        public void UpdateServiceFromRate_SetsService_WhenTagIsValid(PostalServiceType serviceType)
         {
             mock.WithShipmentTypeFromShipmentManager(x =>
             {
@@ -234,13 +234,12 @@ namespace ShipWorks.Shipping.Tests.Carriers.Postal.Usps
                 x.Setup(b => b.ShipmentTypeCode).Returns(ShipmentTypeCode.Usps);
             });
             var testObject = mock.Create<UspsShipmentAdapter>(TypedParameter.From(shipment));
-            testObject.SelectServiceFromRate(new RateResult("Foo", "1", 1M, new PostalRateSelection(serviceType, confirmationType))
+            testObject.SelectServiceFromRate(new RateResult("Foo", "1", 1M, new PostalRateSelection(serviceType))
             {
                 Selectable = true,
                 ShipmentType = ShipmentTypeCode.Usps
             });
             Assert.Equal((int) serviceType, shipment.Postal.Service);
-            Assert.Equal((int) confirmationType, shipment.Postal.Confirmation);
         }
 
         [Theory]
@@ -283,10 +282,9 @@ namespace ShipWorks.Shipping.Tests.Carriers.Postal.Usps
         }
 
         [Theory]
-        [InlineData(PostalServiceType.AsendiaGeneric, PostalConfirmationType.Signature)]
-        [InlineData(PostalServiceType.AsendiaGeneric, PostalConfirmationType.Delivery)]
-        [InlineData(PostalServiceType.FirstClass, PostalConfirmationType.Signature)]
-        public void DoesRateMatchSelectedService_ReturnsFalse_WhenServiceAndConfirmationDoNotMatch(PostalServiceType serviceType, PostalConfirmationType confirmation)
+        [InlineData(PostalServiceType.AsendiaGeneric)]
+        [InlineData(PostalServiceType.ConsolidatorDomestic)]
+        public void DoesRateMatchSelectedService_ReturnsFalse_WhenServiceDoesNotMatch(PostalServiceType serviceType)
         {
             mock.WithShipmentTypeFromShipmentManager<PostalShipmentType>(x =>
             {
@@ -295,7 +293,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Postal.Usps
             });
 
             var testObject = mock.Create<UspsShipmentAdapter>(TypedParameter.From(shipment));
-            var rate = new RateResult("Foo", "1", 0, new PostalRateSelection(serviceType, confirmation))
+            var rate = new RateResult("Foo", "1", 0, new PostalRateSelection(serviceType))
             {
                 ShipmentType = ShipmentTypeCode.Usps
             };
@@ -335,7 +333,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Postal.Usps
             });
 
             var testObject = mock.Create<UspsShipmentAdapter>(TypedParameter.From(shipment));
-            var rate = new RateResult("Foo", "1", 0, new PostalRateSelection(PostalServiceType.FirstClass, PostalConfirmationType.Delivery))
+            var rate = new RateResult("Foo", "1", 0, new PostalRateSelection(PostalServiceType.FirstClass))
             {
                 ShipmentType = ShipmentTypeCode.Usps
             };

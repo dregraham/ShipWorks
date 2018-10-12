@@ -58,14 +58,10 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookupSearchControl
         }
 
         /// <summary>
-        /// Total cost of the shipment
+        /// ShipmentModel
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public string TotalCost
-        {
-            get => totalCost;
-            set => handler.Set(nameof(TotalCost), ref totalCost, value);
-        }
+        public IOrderLookupShipmentModel ShipmentModel => shipmentModel;
 
         /// <summary>
         /// Error message to display when a error occurs while searching
@@ -116,16 +112,19 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookupSearchControl
                 {
                     SearchErrorMessage = "No matching orders were found.";
                     SearchError = true;
+                    OrderNumber = string.Empty;
                 }
                 else if (shipmentModel.ShipmentAdapter?.Shipment?.Voided == true)
                 {
                     SearchErrorMessage = "The order's shipment has been voided.";
                     SearchError = true;
+                    OrderNumber = shipmentModel.SelectedOrder.OrderNumberComplete;
                 }
                 else if (shipmentModel.ShipmentAdapter?.Shipment?.Processed == true)
                 {
                     SearchErrorMessage = "The order's shipment has already been processed.";
                     SearchError = true;
+                    OrderNumber = shipmentModel.SelectedOrder.OrderNumberComplete;
                 }
                 else
                 {
