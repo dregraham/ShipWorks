@@ -154,6 +154,8 @@
       </type>
       <type name="Interapptive.Shared.IO.Text.Csv.Resources.ExceptionMessage" />
       <type name="Interapptive.Shared.Properties.Flags" />
+      <type name="ShipWorks.UI.Controls.ShipWorksComboBox" />
+      <type name="*ShipmentAdapter*" regex="true" />
     </excludelist>
     <mapping>
       <mapoutput overwrite="true">
@@ -192,6 +194,9 @@
       </assembly>
       <assembly>
         <file dir="${configdir}\Artifacts\Application" name="ShipWorks.Shipping.UI.dll" />
+      </assembly>
+      <assembly>
+        <file dir="${configdir}\Artifacts\Application" name="ShipWorks.OrderLookup.dll" />
       </assembly>
       <assembly>
         <file dir="${configdir}\Artifacts\Application" name="ShipWorks.Stores.dll" />

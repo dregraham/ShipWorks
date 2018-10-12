@@ -11,6 +11,7 @@ namespace ShipWorks.OrderLookup
     /// <summary>
     /// Represents the Order Lookup Data Service
     /// </summary>
+    [Obfuscation(ApplyToMembers = true, Exclude = true, StripAfterObfuscation = false)]
     public interface IOrderLookupShipmentModel
     {
         /// <summary>

@@ -67,7 +67,7 @@
                 </StackPanel>
             </UserControl>
 
-            <UserControl x:Key="BaseAddressControl">
+            <UserControl x:Key="BaseAddressControl" Focusable="False">
                 <StackPanel>
                     <TextBlock Style="{StaticResource Header}">Origin</TextBlock>
                     <ui:ShipWorksComboBox
@@ -128,7 +128,8 @@
                     <ContentControl
                         Grid.Row="1"
                         Grid.Column="0"
-                        Content="{StaticResource AccountLabel}" />
+                        Content="{StaticResource AccountLabel}"
+                        Focusable="False"/>
                     <CheckBox
                         Grid.Row="1"
                         Grid.Column="1"
@@ -142,21 +143,22 @@
                         </CheckBox.IsChecked>
                     </CheckBox>
                     <StackPanel Grid.Row="2" Grid.Column="1">
-                        <ContentControl Content="{StaticResource AccountComboBox}" />
+                        <ContentControl Content="{StaticResource AccountComboBox}" 
+                                        Focusable="False"/>
                     </StackPanel>
                     <StackPanel
                         Grid.Row="3"
                         Grid.Column="0"
                         Grid.ColumnSpan="2">
                         <ContentControl
-                            Content="{StaticResource BaseAddressControl}" />
+                            Content="{StaticResource BaseAddressControl}" Focusable="False"/>
                     </StackPanel>
                 </Grid>
             </DataTemplate>
 
             <DataTemplate x:Key="default">
                 <StackPanel>
-                    <ContentControl Content="{StaticResource BaseAddressControl}" />
+                    <ContentControl Content="{StaticResource BaseAddressControl}" Focusable="False"/>
                 </StackPanel>
             </DataTemplate>
 
@@ -165,7 +167,7 @@
     </UserControl.Resources>
     <Expander x:Name="Expander" Header="{Binding Title}">
         <StackPanel Style="{StaticResource PanelWrapper}">
-            <ContentControl Content="{Binding .}">
+            <ContentControl Content="{Binding .}" Focusable="False">
                 <ContentControl.ContentTemplate>
                     <MultiBinding Converter="{StaticResource ShipmentTypeToOrderLookupTemplateConverter}">
                         <Binding Path="ShipmentModel.ShipmentAdapter.ShipmentTypeCode" />
