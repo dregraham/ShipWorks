@@ -219,14 +219,14 @@ namespace ShipWorks.OrderLookup
 
             AddPropertyChangedEventsToEntities();
 
+            RaisePropertyChanged(nameof(ShipmentTypeCode));
+
+            SelectedOrder = order;
+
             if (ShipmentAdapter != null)
             {
                 messenger.Send(new ShipmentSelectionChangedMessage(this, new[] { ShipmentAdapter.Shipment.ShipmentID }, ShipmentAdapter));
             }
-
-            RaisePropertyChanged(nameof(ShipmentTypeCode));
-
-            SelectedOrder = order;
         }
 
         /// <summary>
@@ -278,6 +278,9 @@ namespace ShipWorks.OrderLookup
         /// </summary>
         private void RaisePropertyChanged(object sender, PropertyChangedEventArgs e) => RaisePropertyChanged(e.PropertyName);
 
+        /// <summary>
+        /// Change the provider of the shipment
+        /// </summary>
         public void ChangeShipmentType(ShipmentTypeCode value)
         {
             if (value != ShipmentAdapter.ShipmentTypeCode)
