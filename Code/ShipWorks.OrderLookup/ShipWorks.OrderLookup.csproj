@@ -152,15 +152,16 @@
       <DependentUpon>OrderLookupEndiciaReferenceControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\Reference\OrderLookupEndiciaReferenceViewModel.cs" />
+    <Compile Include="Controls\Reference\OrderLookupPostalReferenceViewModelBase.cs" />
     <Compile Include="Controls\ShipmentDetails\IOrderLookupDetailsViewModel.cs" />
     <Compile Include="Controls\ShipmentDetails\OrderLookupPostalShipmentDetailsControl.xaml.cs">
       <DependentUpon>OrderLookupPostalShipmentDetailsControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\To\IOrderLookupToViewModel.cs" />
-    <Compile Include="Controls\To\OrderLookupEndiciaToControl.xaml.cs">
-      <DependentUpon>OrderLookupEndiciaToControl.xaml</DependentUpon>
+    <Compile Include="Controls\To\OrderLookupGenericToControl.xaml.cs">
+      <DependentUpon>OrderLookupGenericToControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\To\OrderLookupEndiciaToViewModel.cs" />
+    <Compile Include="Controls\To\OrderLookupGenericToViewModel.cs" />
     <Compile Include="FieldManager\IOrderLookupFieldLayoutDefaults.cs" />
     <Compile Include="FieldManager\IOrderLookupFieldLayoutRepository.cs" />
     <Compile Include="FieldManager\OrderLookupFieldLayoutDefaults.cs" />
@@ -347,7 +348,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Controls\To\OrderLookupEndiciaToControl.xaml">
+    <Page Include="Controls\To\OrderLookupGenericToControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

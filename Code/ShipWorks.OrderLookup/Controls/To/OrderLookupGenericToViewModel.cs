@@ -3,8 +3,7 @@ using System.ComponentModel;
 using System.Reactive.Linq;
 using System.Reflection;
 using Interapptive.Shared.ComponentRegistration;
-using Interapptive.Shared.UI;
-using ShipWorks.AddressValidation;
+using ShipWorks.Core.UI;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Shipping;
 using ShipWorks.UI;
@@ -16,23 +15,27 @@ namespace ShipWorks.OrderLookup.Controls.To
     /// ViewModel for To panel in the OrderLookup view
     /// </summary>
     [KeyedComponent(typeof(IOrderLookupToViewModel), ShipmentTypeCode.Endicia)]
-    [WpfView(typeof(OrderLookupEndiciaToControl))]
-    public class OrderLookupEndiciaToViewModel : AddressViewModel, IOrderLookupToViewModel
+    [WpfView(typeof(OrderLookupGenericToControl))]
+    public class OrderLookupGenericToViewModel : IOrderLookupToViewModel
     {
+        private readonly PropertyChangedHandler handler;
         private string title;
         private IDisposable autoSave;
+        private readonly AddressViewModel addressViewModel;
+
+        public event PropertyChangedEventHandler PropertyChanged;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public OrderLookupEndiciaToViewModel(IOrderLookupShipmentModel shipmentModel, IShippingOriginManager shippingOriginManager, IMessageHelper messageHelper,
-            IValidatedAddressScope validatedAddressScope, IAddressValidator validator, IAddressSelector addressSelector)
-            : base(shippingOriginManager, messageHelper, validatedAddressScope, validator, addressSelector)
+        public OrderLookupGenericToViewModel(IOrderLookupShipmentModel shipmentModel, AddressViewModel addressViewModel)
         {
+            this.addressViewModel = addressViewModel;
             ShipmentModel = shipmentModel;
             ShipmentModel.PropertyChanged += ShipmentModelPropertyChanged;
+            handler = new PropertyChangedHandler(this, () => PropertyChanged);
 
-            IsAddressValidationEnabled = true;
+            addressViewModel.IsAddressValidationEnabled = true;
             InitializeForChangedShipment();
         }
 
@@ -59,10 +62,16 @@ namespace ShipWorks.OrderLookup.Controls.To
         public bool Visible => true;
 
         /// <summary>
-        /// Is address validation enabled or not
+        /// Shipment model
         /// </summary>
         [Obfuscation(Exclude = true)]
         public IOrderLookupShipmentModel ShipmentModel { get; private set; }
+
+        /// <summary>
+        /// Address view model
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public AddressViewModel Address { get; }
 
         /// <summary>
         /// Save changes to the base entity whenever properties are changed in the view model
@@ -71,7 +80,7 @@ namespace ShipWorks.OrderLookup.Controls.To
         {
             if (ShipmentModel?.ShipmentAdapter?.Shipment?.ShipPerson != null)
             {
-                SaveToEntity(ShipmentModel.ShipmentAdapter.Shipment.ShipPerson);
+                addressViewModel.SaveToEntity(ShipmentModel.ShipmentAdapter.Shipment.ShipPerson);
             }
         }
 
@@ -104,12 +113,16 @@ namespace ShipWorks.OrderLookup.Controls.To
         private void InitializeForChangedShipment()
         {
             autoSave?.Dispose();
-            Load(ShipmentModel.ShipmentAdapter.Shipment.ShipPerson, ShipmentModel.ShipmentAdapter.Store);
+            addressViewModel.Load(ShipmentModel.ShipmentAdapter.Shipment.ShipPerson, ShipmentModel.ShipmentAdapter.Store);
 
             UpdateTitle();
 
             handler.RaisePropertyChanged(nameof(ShipmentModel));
-            autoSave = handler.PropertyChangingStream.Where(p => p != nameof(Title)).Throttle(TimeSpan.FromMilliseconds(100)).Subscribe(_ => Save());
+            autoSave = handler
+                .Merge(addressViewModel.PropertyChangeStream)
+                .Where(p => p != nameof(Title))
+                .Throttle(TimeSpan.FromMilliseconds(100))
+                .Subscribe(_ => Save());
         }
 
         /// <summary>
@@ -122,13 +135,13 @@ namespace ShipWorks.OrderLookup.Controls.To
             {
                 isDomestic = ShipmentModel.ShipmentAdapter.IsDomestic ? "(Domestic)" : "(International)";
             }
-            Title = $"To {FullName} {isDomestic}";
+            Title = $"To {addressViewModel.FullName} {isDomestic}";
         }
 
         /// <summary>
         /// Dispose
         /// </summary>
-        public override void Dispose()
+        public virtual void Dispose()
         {
             autoSave?.Dispose();
             ShipmentModel.PropertyChanged -= ShipmentModelPropertyChanged;

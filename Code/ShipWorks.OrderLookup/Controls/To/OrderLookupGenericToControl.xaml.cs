@@ -3,14 +3,14 @@
 namespace ShipWorks.OrderLookup.Controls.To
 {
     /// <summary>
-    /// Interaction logic for OrderLookupEndiciaToControl.xaml
+    /// Interaction logic for OrderLookupGenericToControl.xaml
     /// </summary>
-    public partial class OrderLookupEndiciaToControl : UserControl
+    public partial class OrderLookupGenericToControl : UserControl
     {
         /// <summary>
         /// Constructor
         /// </summary>
-        public OrderLookupEndiciaToControl()
+        public OrderLookupGenericToControl()
         {
             InitializeComponent();
         }
