@@ -1,0 +1,328 @@
+﻿<UserControl x:Class="ShipWorks.OrderLookup.Controls.ShipmentDetails.OrderLookupUpsShipmentDetailsControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                                 xmlns:ui="http://schemas.shipworks.com/ui"
+                    xmlns:shipmentDetails="clr-namespace:ShipWorks.OrderLookup.Controls.ShipmentDetails"
+
+                    xmlns:controls="clr-namespace:ShipWorks.OrderLookup.Controls"
+
+             xmlns:local="clr-namespace:ShipWorks.OrderLookup.Controls.ShipmentDetails"
+             mc:Ignorable="d"
+             d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/ShipWorks.OrderLookup;component/Styles/OrderLookupStyle.xaml" />
+                <ResourceDictionary Source="/ShipWorks.OrderLookup;component/Controls/Weight/WeightControl.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+            <ui:InvertBooleanConverter x:Key="InvertBooleanConverter" />
+            <ui:BooleanComparisonToVisiblityConverter x:Key="BooleanComparisonToVisibilityConverter" />
+            <controls:ShipmentTypeToOrderLookupTemplateConverter x:Key="ShipmentTypeToOrderLookupTemplateConverter" />
+        </ResourceDictionary>
+    </UserControl.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="85" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
+        <TextBlock
+                    Grid.Row="0"
+                    Grid.Column="0"
+                    Style="{StaticResource FieldLabel}"
+                    Text="Req. Shipping" />
+
+        <TextBlock
+                    Grid.Row="0"
+                    Grid.Column="1"
+                    Margin="10,0,0,10"
+                    HorizontalAlignment="Left"
+                    Style="{StaticResource FieldLabel}"
+                    Text="{Binding ShipmentModel.SelectedOrder.RequestedShipping, UpdateSourceTrigger=PropertyChanged}" />
+
+        <TextBlock
+                    Grid.Row="1"
+                    Grid.Column="0"
+                    Style="{StaticResource FieldLabel}"
+                    Text="Provider" />
+
+        <ui:ShipWorksComboBox
+
+                    Grid.Row="1"
+                    Grid.Column="1"
+            DisplayMemberPath="Value"
+            ItemsSource="{Binding Providers}"
+            SelectedIndexWhenNull="{x:Static ui:RelativeIndex.First}"
+            SelectedValue="{Binding ShipmentTypeCode, UpdateSourceTrigger=PropertyChanged}"
+            SelectedValuePath="Key"
+            Style="{StaticResource FormComboBox}" />
+
+        <TextBlock
+                    Grid.Row="2"
+                    Grid.Column="0"
+                    Style="{StaticResource FieldLabel}"
+                    Text="Service" />
+
+        <ui:ShipWorksComboBox
+                    Grid.Row="2"
+                    Grid.Column="1"
+                    DisplayMemberPath="Value"
+                    ItemsSource="{Binding ServiceTypes}"
+                    ui:ShipWorksComboBox.SelectedIndexWhenNull="{x:Static ui:RelativeIndex.First}"
+                    SelectedValuePath="Key"
+                    Style="{StaticResource FormComboBox}" SelectedValue="{Binding ShipmentModel.ShipmentAdapter.ServiceType}"/>
+
+        <TextBlock
+                    Grid.Row="3"
+                    Grid.Column="0"
+                    Style="{StaticResource FieldLabel}"
+                    Text="Packaging" />
+
+        <ui:ShipWorksComboBox
+                    Grid.Row="3"
+                    Grid.Column="1"
+                    DisplayMemberPath="Value"
+                    ItemsSource="{Binding PackageTypes}"
+                    ui:ShipWorksComboBox.SelectedIndexWhenNull="{x:Static ui:RelativeIndex.First}"
+                    SelectedValuePath="Key"
+                    Style="{StaticResource FormComboBox}" SelectedValue="{Binding PackagingType}"/>
+
+        <Grid Grid.Row="4"
+                Grid.Column="0"
+                Grid.ColumnSpan="2">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="85"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="auto"/>
+            </Grid.ColumnDefinitions>
+            <TextBlock Grid.Row="0"
+                           Grid.Column="0"
+                           Text="Packages"
+                           Style="{StaticResource FieldLabel}"
+                           Margin="0"/>
+
+            <!-- Package Selector -->
+            <DataGrid Grid.Row="0"
+                          Grid.RowSpan="2"
+                          Grid.Column="1"
+                          ItemsSource="{Binding Packages, UpdateSourceTrigger=PropertyChanged}"
+                          SelectedItem="{Binding SelectedPackage, UpdateSourceTrigger=PropertyChanged}"
+                          Margin="10 0 0 10"
+                          MinHeight="70"
+                          MaxHeight="104"
+                          BorderBrush="{StaticResource BorderColor}"
+                          Foreground="{StaticResource ControlTextColor}"
+                          Background="White"
+                          SelectionMode="Single"
+                          SelectionUnit="FullRow"
+                          AutoGenerateColumns="False"
+                          RowHeaderWidth="0"
+                          GridLinesVisibility="None">
+                <DataGrid.ColumnHeaderStyle>
+                    <Style TargetType="{x:Type DataGridColumnHeader}">
+                        <Setter Property="BorderBrush" Value="{StaticResource BorderColor}"/>
+                        <Setter Property="BorderThickness" Value="0 0 0 1"/>
+                        <Setter Property="Background" Value="{StaticResource ButtonBackgroundGradient}"/>
+                        <Setter Property="Padding" Value="3"/>
+                        <Setter Property="Foreground" Value="{StaticResource ControlTextColor}"/>
+                        <Setter Property="FontSize" Value="12"/>
+                        <Setter Property="FontFamily" Value="/ShipWorks.OrderLookup;component/#Roboto"/>
+                    </Style>
+                </DataGrid.ColumnHeaderStyle>
+                <DataGrid.Columns>
+                    <DataGridTextColumn Width="*" Header="Packages (Select to Edit)" Binding="{Binding Index}"/>
+                </DataGrid.Columns>
+                <DataGrid.CellStyle>
+                    <Style TargetType="{x:Type DataGridCell}">
+                        <Setter Property="Padding" Value="3"/>
+                        <Setter Property="FontFamily" Value="ShipWorks.OrderLookup;component/#Roboto"/>
+                        <Setter Property="BorderThickness" Value="0" />
+                        <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+                        <Setter Property="FontSize" Value="12"/>
+                        <Setter Property="Foreground" Value="{StaticResource ControlTextColor}"/>
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="{x:Type DataGridCell}">
+                                    <Border Padding="{TemplateBinding Padding}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" SnapsToDevicePixels="True">
+                                        <ContentPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+                                    </Border>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                        <Style.Triggers>
+                            <Trigger Property="IsSelected" Value="true">
+                                <Setter Property="Background" Value="{StaticResource SelectionColor}" />
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </DataGrid.CellStyle>
+            </DataGrid>
+
+            <!-- Add package button -->
+            <Button Grid.Row="0"
+                        Grid.Column="2"
+                        Style="{StaticResource OrderLookup.Button.Add}"
+                        VerticalAlignment="Top"
+                        Margin="5 0 0 5"
+                        Command="{Binding AddPackageCommand}"/>
+
+            <!-- Delete package button -->
+            <Button Grid.Row="1"
+                        Grid.Column="2"
+                        Style="{StaticResource OrderLookup.Button.Delete}"
+                        VerticalAlignment="Top"
+                        Margin="5 0 0 0"
+                        Command="{Binding DeletePackageCommand}"/>
+        </Grid>
+
+        <TextBlock
+                    Grid.Row="5"
+                    Grid.Column="0"
+                    Style="{StaticResource FieldLabel}"
+                    Text="Weight" />
+
+        <ui:WeightControl
+
+                    Grid.Row="5"
+                    Grid.Column="1"
+        AcceptApplyWeightKeyboardShortcut="True"
+        ErrorMessage="{Binding WeightErrorMessage}"
+        Style="{StaticResource OrderLookupWeightControl}"
+        Weight="{Binding Weight, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=true, NotifyOnValidationError=true}" />
+
+        <TextBlock
+                    Grid.Row="6"
+                    Grid.Column="0"
+                    Style="{StaticResource FieldLabel}"
+                    Text="Dimensions" />
+        <Grid Grid.Row="6"
+                        Grid.Column="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <ui:ShipWorksComboBox Grid.Column="0"
+                                            Margin="10,0,0,5"
+                                            DisplayMemberPath="Name"
+                                            ItemsSource="{Binding DimensionProfiles}"
+                                            ui:ShipWorksComboBox.SelectedIndexWhenNull="{x:Static ui:RelativeIndex.Last}"
+                                            SelectedValuePath="DimensionsProfileID"
+                                            Style="{StaticResource FormComboBox}" SelectedValue="{Binding DimsProfileID, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+
+            <Button
+                        Grid.Column="1"
+                        Margin="3,0,0,0"
+                        VerticalAlignment="Center"
+                        Command="{Binding ManageDimensionalProfiles}"
+                        Content="Manage..."
+                        Style="{StaticResource Link}" />
+        </Grid>
+
+        <Grid
+                    Grid.Row="7"
+                    Grid.Column="1"
+                    Margin="10,0,0,10">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="50" />
+                <ColumnDefinition Width="50" />
+                <ColumnDefinition Width="50" />
+                <ColumnDefinition Width="auto" />
+            </Grid.ColumnDefinitions>
+            <TextBox
+                        Grid.Column="0"
+                        Height="23"
+                        Margin="0,0,5,0"
+                        MaxLength="3"
+                        IsEnabled="{Binding IsProfileSelected, Converter={StaticResource InvertBooleanConverter}}"
+                        Style="{StaticResource FormTextBox}"
+                        Text="{Binding Length}" />
+
+            <TextBox
+                        Grid.Column="1"
+                        Height="23"
+                        Margin="0,0,5,0"
+                        MaxLength="3"
+                        IsEnabled="{Binding IsProfileSelected, Converter={StaticResource InvertBooleanConverter}}"
+                        Style="{StaticResource FormTextBox}"
+                        Text="{Binding Width}" />
+
+            <TextBox
+                        Grid.Column="2"
+                        Height="23"
+                        Margin="0,0,5,0"
+                        MaxLength="3"
+                        IsEnabled="{Binding IsProfileSelected, Converter={StaticResource InvertBooleanConverter}}"
+                        Style="{StaticResource FormTextBox}"
+                        Text="{Binding Height}" />
+
+            <TextBlock
+                        Grid.Column="3"
+                        VerticalAlignment="Center"
+                        Text="in. (L x W x H)"
+                        Foreground="{StaticResource ControlTextColor}"/>
+
+        </Grid>
+
+        <Grid
+                    Grid.Row="8"
+                    Grid.Column="1"
+                    Margin="5,0,0,10">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="auto" />
+                <ColumnDefinition Width="auto" />
+            </Grid.ColumnDefinitions>
+            <CheckBox
+                        Grid.Column="0"
+                        Margin="5,0,0,0"
+                        IsChecked="{Binding AddToWeight}"
+                        Style="{StaticResource FormCheckBox}"
+                        Content="Add-to weight"/>
+
+            <ui:WeightInput VerticalAlignment="Center"
+                                    VerticalContentAlignment="Center"
+                                    Height="28"
+                                    Width="100"
+                                    FontSize="12"
+                                    Foreground="{StaticResource ControlTextColor}"
+                                    BorderBrush="{StaticResource BorderColor}"
+                                    BorderThickness="1"
+                                    Background="{StaticResource InputControlBackgroundGradient}"
+                                    Style="{StaticResource OrderLookupWeightInput}"
+                                    Grid.Column="1"
+                                    Margin="5,0,0,0"
+                                    Weight="{Binding AddToWeightValue}">
+                <ui:WeightInput.Visibility>
+                    <MultiBinding Converter="{StaticResource BooleanComparisonToVisibilityConverter}">
+                        <Binding Converter="{StaticResource InvertBooleanConverter}" Path="IsProfileSelected" />
+                        <Binding Path="AddToWeight" />
+                    </MultiBinding>
+                </ui:WeightInput.Visibility>
+            </ui:WeightInput>
+
+
+        </Grid>
+        <shipmentDetails:OrderLookupInsuranceControl
+                    Grid.Row="9"
+                    Grid.Column="0"
+                    Grid.ColumnSpan="2"
+                    DataContext="{Binding InsuranceViewModel}" />
+    </Grid>
+</UserControl>

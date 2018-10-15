@@ -156,6 +156,10 @@
     <Compile Include="Controls\ShipmentDetails\OrderLookupPostalShipmentDetailsControl.xaml.cs">
       <DependentUpon>OrderLookupPostalShipmentDetailsControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\ShipmentDetails\OrderLookupUpsShipmentDetailsViewModel .cs" />
+    <Compile Include="Controls\ShipmentDetails\OrderLookupUpsShipmentDetailsControl.xaml.cs">
+      <DependentUpon>OrderLookupUpsShipmentDetailsControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\To\IOrderLookupToViewModel.cs" />
     <Compile Include="Controls\To\OrderLookupEndiciaToControl.xaml.cs">
       <DependentUpon>OrderLookupEndiciaToControl.xaml</DependentUpon>
@@ -346,6 +350,10 @@
     <Page Include="Controls\ShipmentDetails\OrderLookupPostalShipmentDetailsControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Controls\ShipmentDetails\OrderLookupUpsShipmentDetailsControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Controls\To\OrderLookupEndiciaToControl.xaml">
       <Generator>MSBuild:Compile</Generator>
