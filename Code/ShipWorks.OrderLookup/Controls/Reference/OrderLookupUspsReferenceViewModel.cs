@@ -31,7 +31,7 @@ namespace ShipWorks.OrderLookup.Controls.Reference
         /// Is the section expanded
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public bool Expanded { get; set; } = true;
+        public bool Expanded { get; set; } = false;
 
         /// <summary>
         /// Title of the section
