@@ -12,14 +12,17 @@ using ShipWorks.Core.UI;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Shipping.Services;
+using ShipWorks.UI;
 
 namespace ShipWorks.OrderLookup.Controls.Customs
 {
     /// <summary>
     /// View model for the OrderLookupCustomsControl
     /// </summary>
-    [KeyedComponent(typeof(INotifyPropertyChanged), OrderLookupPanels.Customs)]
-    public class OrderLookupCustomsControlViewModel : INotifyPropertyChanged
+    [KeyedComponent(typeof(IOrderLookupCustomsViewModel), ShipmentTypeCode.Usps)]
+    [KeyedComponent(typeof(IOrderLookupCustomsViewModel), ShipmentTypeCode.Endicia)]
+    [WpfView(typeof(OrderLookupGenericCustomsControl))]
+    public class OrderLookupGenericCustomsViewModel : IOrderLookupCustomsViewModel
     {
         private IShipmentCustomsItemAdapter selectedCustomsItem;
         private ObservableCollection<IShipmentCustomsItemAdapter> customsItems;
@@ -28,19 +31,51 @@ namespace ShipWorks.OrderLookup.Controls.Customs
         private readonly PropertyChangedHandler handler;
         private Dictionary<int, string> customsContentTypes;
         private bool customsContentTypeAllowed;
-        private bool customsAllowed;
+        private bool visible;
         private readonly IShipmentTypeManager shipmentTypeManager;
 
         /// <summary>
-        /// ctor
+        /// Constructor
         /// </summary>
-        public OrderLookupCustomsControlViewModel(IOrderLookupShipmentModel shipmentModel, IShipmentTypeManager shipmentTypeManager)
+        public OrderLookupGenericCustomsViewModel(IOrderLookupShipmentModel shipmentModel, IShipmentTypeManager shipmentTypeManager)
         {
             ShipmentModel = shipmentModel;
             ShipmentModel.PropertyChanged += ShipmentModelPropertyChanged;
             this.shipmentTypeManager = shipmentTypeManager;
 
             handler = new PropertyChangedHandler(this, () => PropertyChanged);
+        }
+
+        /// <summary>
+        /// Is the section expanded
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public bool Expanded { get; set; } = true;
+
+        /// <summary>
+        /// The title of the section
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public string Title => "Customs";
+
+        /// <summary>
+        /// Is Customs Allowed
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public bool Visible
+        {
+            get => visible;
+            private set
+            {
+                bool shouldLoadCustoms = (value && !visible);
+
+                handler.Set(nameof(Visible), ref visible, value);
+
+                if (shouldLoadCustoms)
+                {
+                    LoadCustoms();
+                }
+            }
         }
 
         /// <summary>
@@ -57,26 +92,6 @@ namespace ShipWorks.OrderLookup.Controls.Customs
         {
             get => customsItems;
             private set => handler.Set(nameof(CustomsItems), ref customsItems, value);
-        }
-
-        /// <summary>
-        /// Is Customs Allowed
-        /// </summary>
-        [Obfuscation(Exclude = true)]
-        public bool CustomsAllowed
-        {
-            get => customsAllowed;
-            private set
-            {
-                bool shouldLoadCustoms = (value && !customsAllowed);
-
-                handler.Set(nameof(CustomsAllowed), ref customsAllowed, value);
-
-                if (shouldLoadCustoms)
-                {
-                    LoadCustoms();
-                }
-            }
         }
 
         /// <summary>
@@ -168,7 +183,7 @@ namespace ShipWorks.OrderLookup.Controls.Customs
         {
             ICarrierShipmentAdapter shipmentAdapter = ShipmentModel.ShipmentAdapter;
 
-            if (shipmentAdapter == null || !shipmentAdapter.CustomsAllowed )
+            if (shipmentAdapter == null || !shipmentAdapter.CustomsAllowed)
             {
                 return;
             }
@@ -267,7 +282,7 @@ namespace ShipWorks.OrderLookup.Controls.Customs
         /// </summary>
         private void ShipmentModelPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            CustomsAllowed = ShipmentModel.ShipmentAdapter?.CustomsAllowed ?? false;
+            Visible = ShipmentModel.ShipmentAdapter?.CustomsAllowed ?? false;
 
             if (e.PropertyName == nameof(ShipmentModel.SelectedOrder) && ShipmentModel.SelectedOrder != null)
             {
@@ -276,5 +291,13 @@ namespace ShipWorks.OrderLookup.Controls.Customs
                 handler.RaisePropertyChanged(nameof(ShipmentModel));
             }
         }
-   }
+
+        /// <summary>
+        /// Dispose
+        /// </summary>
+        public void Dispose()
+        {
+            ShipmentModel.PropertyChanged -= ShipmentModelPropertyChanged;
+        }
+    }
 }

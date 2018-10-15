@@ -1,0 +1,138 @@
+﻿<UserControl
+    x:Class="ShipWorks.OrderLookup.Controls.From.OrderLookupUspsFromControl"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:from="clr-namespace:ShipWorks.OrderLookup.Controls.From"
+    xmlns:local="clr-namespace:ShipWorks.OrderLookup.Controls"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:sui="clr-namespace:ShipWorks.Shipping.UI.ValueConverters;assembly=ShipWorks.Shipping.UI"
+    xmlns:sw="http://schemas.shipworks.com/sw"
+    xmlns:sys="clr-namespace:System;assembly=mscorlib"
+    xmlns:ui="http://schemas.shipworks.com/ui"
+    d:DesignWidth="800"
+    FontFamily="/ShipWorks.OrderLookup;component/#Roboto"
+    mc:Ignorable="d">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/ShipWorks.OrderLookup;component/Styles/OrderLookupStyle.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+            <sui:ShipmentTypeToOriginAddressesConverter x:Key="ShipmentTypeToOriginAddresses" />
+            <sui:ShipmentTypeToAccountsConverter x:Key="ShipmentTypeToAccountsConverter" />
+            <local:ShipmentTypeToOrderLookupTemplateConverter x:Key="ShipmentTypeToOrderLookupTemplateConverter" />
+            <ui:BooleanToVisibilityConverter x:Key="BooleanToVisibility" />
+            <ui:ValueEqualToParameterConverter x:Key="ValueEqualToParameter" />
+            <ui:InvertBooleanConverter x:Key="InvertBoolean" />
+            <ui:BooleanAndConverter x:Key="BooleanAndConverter" />
+        </ResourceDictionary>
+    </UserControl.Resources>
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="85" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <TextBlock
+            Grid.Row="0"
+            Grid.Column="0"
+            Style="{StaticResource Header}"
+            Text="USPS" />
+
+        <TextBlock
+            Grid.Row="1"
+            Grid.Column="0"
+            Style="{StaticResource FieldLabel}"
+            Text="Account">
+            <TextBlock.Visibility>
+                <Binding Converter="{StaticResource BooleanToVisibility}" Path="ShipmentModel.ShipmentAdapter.SupportsAccounts" />
+            </TextBlock.Visibility>
+        </TextBlock>
+        <CheckBox
+            Grid.Row="1"
+            Grid.Column="1"
+            Content="Automatically use the USPS account with the least expensive Rate"
+            IsChecked="{Binding ShipmentModel.ShipmentAdapter.Shipment.Postal.Usps.RateShop}"
+            Style="{StaticResource FormCheckBox}" />
+        <ui:ShipWorksComboBox
+            x:Name="AccountDropDown"
+            Grid.Row="2"
+            Grid.Column="1"
+            ui:UpdateWhenMessageReceived.MessageType="{x:Type sw:ShippingAccountsChangedMessage}"
+            DisplayMemberPath="Description"
+            SelectedIndexWhenNull="{x:Static ui:RelativeIndex.First}"
+            SelectedValuePath="AccountId"
+            Style="{StaticResource FormComboBox}">
+            <ComboBox.SelectedValue>
+                <Binding Path="ShipmentModel.ShipmentAdapter.AccountId" />
+            </ComboBox.SelectedValue>
+            <ComboBox.IsEnabled>
+                <MultiBinding Converter="{StaticResource BooleanAndConverter}">
+                    <Binding Mode="OneWay" Path="ShipmentModel.ShipmentAllowEditing" />
+                    <Binding
+                        Converter="{StaticResource InvertBoolean}"
+                        Mode="OneWay"
+                        Path="ShipmentModel.ShipmentAdapter.Shipment.Postal.Usps.RateShop" />
+                </MultiBinding>
+            </ComboBox.IsEnabled>
+            <ComboBox.Visibility>
+                <Binding Converter="{StaticResource BooleanToVisibility}" Path="ShipmentModel.ShipmentAdapter.SupportsAccounts" />
+            </ComboBox.Visibility>
+            <ComboBox.ItemsSource>
+                <Binding
+                    Converter="{StaticResource ShipmentTypeToAccountsConverter}"
+                    Mode="OneWay"
+                    Path="ShipmentModel.ShipmentAdapter.ShipmentTypeCode" />
+            </ComboBox.ItemsSource>
+        </ui:ShipWorksComboBox>
+        <StackPanel
+            Grid.Row="3"
+            Grid.Column="0"
+            Grid.ColumnSpan="2">
+            <TextBlock Style="{StaticResource Header}">Origin</TextBlock>
+            <ui:ShipWorksComboBox
+                x:Name="OriginDropDown"
+                ui:UpdateWhenMessageReceived.MessageType="{x:Type sw:OriginAddressChangedMessage}"
+                DisplayMemberPath="Key"
+                SelectedIndexWhenNull="{x:Static ui:RelativeIndex.Last}"
+                SelectedValuePath="Value"
+                Style="{StaticResource StackedFormComboBox}">
+                <ComboBox.IsEnabled>
+                    <Binding Mode="OneWay" Path="ShipmentModel.ShipmentAllowEditing" />
+                </ComboBox.IsEnabled>
+                <ComboBox.ItemsSource>
+                    <Binding
+                        Converter="{StaticResource ShipmentTypeToOriginAddresses}"
+                        Mode="OneWay"
+                        Path="ShipmentModel.ShipmentAdapter.ShipmentTypeCode" />
+                </ComboBox.ItemsSource>
+                <ComboBox.SelectedValue>
+                    <Binding Path="ShipmentModel.ShipmentAdapter.Shipment.OriginOriginID" />
+                </ComboBox.SelectedValue>
+            </ui:ShipWorksComboBox>
+
+            <local:OrderLookupAddress DataContext="{Binding Address}">
+                <local:OrderLookupAddress.IsEnabled>
+                    <MultiBinding Converter="{StaticResource BooleanAndConverter}">
+                        <Binding Mode="OneWay" Path="ShipmentModel.ShipmentAllowEditing" />
+                        <Binding
+                            Converter="{StaticResource ValueEqualToParameter}"
+                            Path="SelectedValue"
+                            Source="{x:Reference OriginDropDown}">
+                            <Binding.ConverterParameter>
+                                <sys:Int64>1</sys:Int64>
+                            </Binding.ConverterParameter>
+                        </Binding>
+                    </MultiBinding>
+                </local:OrderLookupAddress.IsEnabled>
+            </local:OrderLookupAddress>
+        </StackPanel>
+    </Grid>
+</UserControl>

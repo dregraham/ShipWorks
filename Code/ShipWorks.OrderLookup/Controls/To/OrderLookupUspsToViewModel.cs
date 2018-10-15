@@ -7,6 +7,7 @@ using Interapptive.Shared.UI;
 using ShipWorks.AddressValidation;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Shipping;
+using ShipWorks.UI;
 using ShipWorks.UI.Controls.AddressControl;
 
 namespace ShipWorks.OrderLookup.Controls.To
@@ -14,16 +15,17 @@ namespace ShipWorks.OrderLookup.Controls.To
     /// <summary>
     /// ViewModel for To panel in the OrderLookup view
     /// </summary>
-    [KeyedComponent(typeof(INotifyPropertyChanged), OrderLookupPanels.To)]
-    public class OrderLookupToViewModel : AddressViewModel
+    [KeyedComponent(typeof(IOrderLookupToViewModel), ShipmentTypeCode.Usps)]
+    [WpfView(typeof(OrderLookupUspsToControl))]
+    public class OrderLookupUspsToViewModel : AddressViewModel, IOrderLookupToViewModel
     {
         private string title;
-        IDisposable autoSave;
+        private IDisposable autoSave;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public OrderLookupToViewModel(IOrderLookupShipmentModel shipmentModel, IShippingOriginManager shippingOriginManager, IMessageHelper messageHelper,
+        public OrderLookupUspsToViewModel(IOrderLookupShipmentModel shipmentModel, IShippingOriginManager shippingOriginManager, IMessageHelper messageHelper,
             IValidatedAddressScope validatedAddressScope, IAddressValidator validator, IAddressSelector addressSelector)
             : base(shippingOriginManager, messageHelper, validatedAddressScope, validator, addressSelector)
         {
@@ -31,8 +33,14 @@ namespace ShipWorks.OrderLookup.Controls.To
             ShipmentModel.PropertyChanged += ShipmentModelPropertyChanged;
 
             IsAddressValidationEnabled = true;
-            Title = "To";
+            InitializeForChangedShipment();
         }
+
+        /// <summary>
+        /// Is the section expanded
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public bool Expanded { get; set; } = true;
 
         /// <summary>
         ///The addresses title
@@ -43,6 +51,12 @@ namespace ShipWorks.OrderLookup.Controls.To
             get { return title; }
             set { handler.Set(nameof(Title), ref title, value); }
         }
+
+        /// <summary>
+        /// Is the section visible
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public bool Visible => true;
 
         /// <summary>
         /// Is address validation enabled or not
@@ -73,13 +87,7 @@ namespace ShipWorks.OrderLookup.Controls.To
 
             if (e.PropertyName == nameof(ShipmentModel.SelectedOrder) && ShipmentModel.SelectedOrder != null)
             {
-                autoSave?.Dispose();
-                Load(ShipmentModel.ShipmentAdapter.Shipment.ShipPerson, ShipmentModel.ShipmentAdapter.Store);
-
-                UpdateTitle();
-
-                handler.RaisePropertyChanged(nameof(ShipmentModel));
-                autoSave = handler.PropertyChangingStream.Where(p => p != nameof(Title)).Throttle(TimeSpan.FromMilliseconds(100)).Subscribe(_ => Save());
+                InitializeForChangedShipment();
             }
 
             if (e.PropertyName == ShipmentFields.ShipCountryCode.Name ||
@@ -88,6 +96,20 @@ namespace ShipWorks.OrderLookup.Controls.To
             {
                 UpdateTitle();
             }
+        }
+
+        /// <summary>
+        /// Initialize view for changed or new shipment
+        /// </summary>
+        private void InitializeForChangedShipment()
+        {
+            autoSave?.Dispose();
+            Load(ShipmentModel.ShipmentAdapter.Shipment.ShipPerson, ShipmentModel.ShipmentAdapter.Store);
+
+            UpdateTitle();
+
+            handler.RaisePropertyChanged(nameof(ShipmentModel));
+            autoSave = handler.PropertyChangingStream.Where(p => p != nameof(Title)).Throttle(TimeSpan.FromMilliseconds(100)).Subscribe(_ => Save());
         }
 
         /// <summary>
@@ -101,6 +123,15 @@ namespace ShipWorks.OrderLookup.Controls.To
                 isDomestic = ShipmentModel.ShipmentAdapter.IsDomestic ? "(Domestic)" : "(International)";
             }
             Title = $"To {FullName} {isDomestic}";
+        }
+
+        /// <summary>
+        /// Dispose
+        /// </summary>
+        public override void Dispose()
+        {
+            autoSave?.Dispose();
+            ShipmentModel.PropertyChanged -= ShipmentModelPropertyChanged;
         }
     }
 }

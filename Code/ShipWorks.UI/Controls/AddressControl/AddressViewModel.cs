@@ -9,6 +9,7 @@ using System.Reflection;
 using GalaSoft.MvvmLight.CommandWpf;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Business.Geography;
+using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.UI;
 using ShipWorks.AddressValidation;
 using ShipWorks.AddressValidation.Enums;
@@ -23,6 +24,7 @@ namespace ShipWorks.UI.Controls.AddressControl
     /// <summary>
     /// View model for use by AddressControl
     /// </summary>
+    [Component(RegistrationType.Self)]
     public partial class AddressViewModel : INotifyPropertyChanged, INotifyPropertyChanging, IDisposable
     {
         private readonly string[] validationProperties = { nameof(Street), nameof(CountryCode), nameof(PostalCode), nameof(StateProvCode), nameof(City) };
@@ -322,7 +324,7 @@ namespace ShipWorks.UI.Controls.AddressControl
         /// <summary>
         /// Dispose of resources
         /// </summary>
-        public void Dispose()
+        public virtual void Dispose()
         {
             addressValidationSubscriptions?.Dispose();
         }

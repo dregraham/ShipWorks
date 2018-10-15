@@ -4,7 +4,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
 using System.Windows.Input;
-using GalaSoft.MvvmLight.CommandWpf;
+using GalaSoft.MvvmLight.Command;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
@@ -18,14 +18,17 @@ using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Services;
 using ShipWorks.Shipping.Services.Builders;
 using ShipWorks.Shipping.UI.ShippingPanel;
+using ShipWorks.UI;
 
 namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
 {
     /// <summary>
-    /// Viewmodel for OrderLookupShipmentDetailsControl
+    /// View model for shipment details
     /// </summary>
-    [KeyedComponent(typeof(INotifyPropertyChanged), OrderLookupPanels.ShipmentDetails)]
-    public class OrderLookupShipmentDetailsViewModel : INotifyPropertyChanged
+    [KeyedComponent(typeof(IOrderLookupDetailsViewModel), ShipmentTypeCode.Usps)]
+    [KeyedComponent(typeof(IOrderLookupDetailsViewModel), ShipmentTypeCode.Endicia)]
+    [WpfView(typeof(OrderLookupPostalShipmentDetailsControl))]
+    public class OrderLookupPostalShipmentDetailsViewModel : IOrderLookupDetailsViewModel, INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
         private readonly PropertyChangedHandler handler;
@@ -40,23 +43,11 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
         private IEnumerable<KeyValuePair<int, string>> packageTypes;
         private IEnumerable<KeyValuePair<int, string>> confirmationTypes;
         private IEnumerable<KeyValuePair<int, string>> serviceTypes;
-        private IPackageAdapter selectedPackage;
-        private double length;
-        private double width;
-        private double height;
-        private double weight;
-        private bool addToWeight;
-        private double addToWeightValue;
-        private int packagingType;
-        private long dimsProfileID;
-        private List<IPackageAdapter> packages;
-        
-        private const int MaxPackageCount = 25;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public OrderLookupShipmentDetailsViewModel(
+        public OrderLookupPostalShipmentDetailsViewModel(
             IOrderLookupShipmentModel shipmentModel,
             IDimensionsManager dimensionsManager,
             IShipmentPackageTypesBuilderFactory shipmentPackageTypesBuilderFactory,
@@ -78,37 +69,38 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
             InsuranceViewModel = insuranceViewModel;
             handler = new PropertyChangedHandler(this, () => PropertyChanged);
             ManageDimensionalProfiles = new RelayCommand(ManageDimensionalProfilesAction);
-            AddPackageCommand = new RelayCommand(AddPackage, AddPackageCanExecute);
-            DeletePackageCommand = new RelayCommand(DeletePackage, DeletePackageCanExecute);
+
+            RefreshDimensionalProfiles();
+            RefreshInsurance();
+            RefreshPackageTypes();
+            RefreshConfirmationTypes();
+            RefreshServiceTypes();
+            RefreshProviders();
         }
 
         /// <summary>
-        /// Add package command
+        /// Is the section expanded
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public ICommand AddPackageCommand { get; }
-        
+        public bool Expanded { get; set; } = true;
+
         /// <summary>
-        /// Delete package command
+        /// Title of the section
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public ICommand DeletePackageCommand { get; }
+        public string Title => "Shipment Details";
 
         /// <summary>
-        /// Whether or not the user can add a package
+        /// Is the section visible
         /// </summary>
-        private bool AddPackageCanExecute() => Packages?.Count < MaxPackageCount;
-
-        /// <summary>
-        /// Whether or not the user can delete a package
-        /// </summary>
-        private bool DeletePackageCanExecute() => SelectedPackage != null && Packages?.Count > 1;
+        [Obfuscation(Exclude = true)]
+        public bool Visible => true;
 
         /// <summary>
         /// Manages Dimensional Profiles
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public ICommand ManageDimensionalProfiles { get; }
+        public ICommand ManageDimensionalProfiles { get; set; }
 
         /// <summary>
         /// The ViewModel ShipmentModel
@@ -129,169 +121,15 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
         public List<DimensionsProfileEntity> DimensionProfiles
         {
             get => dimensionProfiles;
-            set => handler.Set(nameof(DimensionProfiles), ref dimensionProfiles, value);
+            set { handler.Set(nameof(DimensionProfiles), ref dimensionProfiles, value); }
         }
-        
+
         /// <summary>
         /// True if a profile is selected
         /// </summary>
         [Obfuscation(Exclude = true)]
         public bool IsProfileSelected => ShipmentModel.ShipmentAdapter.Shipment.Postal.DimsProfileID > 0;
-      
-        /// <summary>
-        /// Packages for the shipment
-        /// </summary>
-        [Obfuscation(Exclude = true)]
-        public List<IPackageAdapter> Packages
-        {
-            get => packages;
-            set => handler.Set(nameof(Packages), ref packages, value);
-        }
-        
-        /// <summary>
-        /// The currently selected package
-        /// </summary>
-        [Obfuscation(Exclude = true)]
-        public IPackageAdapter SelectedPackage
-        {
-            get => selectedPackage;
-            set
-            {
-                handler.Set(nameof(SelectedPackage), ref selectedPackage, value);
-                
-                // When adding or removing packages, the selected package is lost, so set it to the first one.
-                if (SelectedPackage == null)
-                {
-                    // Using lowercase version so we don't come back recursively
-                    selectedPackage = Packages.FirstOrDefault();
-                }
 
-                // Load properties from selected package
-                if (SelectedPackage != null)
-                {                   
-                    DimsProfileID = SelectedPackage.DimsProfileID;
-                    Length = SelectedPackage.DimsLength;
-                    Width = SelectedPackage.DimsWidth;
-                    Height = SelectedPackage.DimsHeight;
-                    Weight = SelectedPackage.Weight;
-                    AddToWeight = SelectedPackage.ApplyAdditionalWeight;
-                    AddToWeightValue = SelectedPackage.AdditionalWeight;
-                    PackagingType = SelectedPackage.PackagingType;
-                }
-            }
-        }
-        
-        /// <summary>
-        /// Dimesion profile ID for the selected package
-        /// </summary>
-        [Obfuscation(Exclude = true)]
-        public long DimsProfileID
-        {
-            get => dimsProfileID;
-            set
-            {
-                handler.Set(nameof(DimsProfileID), ref dimsProfileID, value);
-                SelectedPackage.DimsProfileID = dimsProfileID;
-            }
-        }
-        
-        /// <summary>
-        /// Length of the selected package
-        /// </summary>
-        [Obfuscation(Exclude = true)]
-        public double Length
-        {
-            get => length;
-            set
-            {
-                handler.Set(nameof(Length), ref length, value);
-                SelectedPackage.DimsLength = length;
-            }
-        }
-
-        /// <summary>
-        /// Width of the selected package
-        /// </summary>
-        [Obfuscation(Exclude = true)]
-        public double Width
-        {
-            get => width;
-            set
-            {
-                handler.Set(nameof(Width), ref width, value);
-                SelectedPackage.DimsWidth = width;
-            }
-        }
-
-        /// <summary>
-        /// Height of the selected package
-        /// </summary>
-        [Obfuscation(Exclude = true)]
-        public double Height
-        {
-            get => height;
-            set
-            {
-                handler.Set(nameof(Height), ref height, value);
-                SelectedPackage.DimsHeight = height;
-            }
-        }
-
-        /// <summary>
-        /// Weight of the selected package
-        /// </summary>
-        [Obfuscation(Exclude = true)]
-        public double Weight
-        {
-            get => weight;
-            set
-            {
-                handler.Set(nameof(Weight), ref weight, value);
-                SelectedPackage.Weight = weight;
-            }
-        }
-
-        /// <summary>
-        /// Whether or not to add additional weight to the selected package
-        /// </summary>
-        [Obfuscation(Exclude = true)]
-        public bool AddToWeight
-        {
-            get => addToWeight;
-            set
-            {
-                handler.Set(nameof(AddToWeight), ref addToWeight, value);
-                SelectedPackage.ApplyAdditionalWeight = addToWeight;
-            }
-        }
-
-        /// <summary>
-        /// The amount of additional weight to add to the selected package
-        /// </summary>
-        [Obfuscation(Exclude = true)]
-        public double AddToWeightValue
-        {
-            get => addToWeightValue;
-            set
-            {
-                handler.Set(nameof(AddToWeightValue), ref addToWeightValue, value);
-                SelectedPackage.AdditionalWeight = addToWeightValue;
-            }
-        }
-        
-        /// <summary>
-        /// Packaging type for the selected package
-        /// </summary>
-        [Obfuscation(Exclude = true)]
-        public int PackagingType
-        {
-            get => packagingType;
-            set
-            {
-                handler.Set(nameof(PackagingType), ref packagingType, value);
-                SelectedPackage.PackagingType = packagingType;
-            }
-        }
         /// <summary>
         /// Collection of ServiceTypes
         /// </summary>
@@ -313,7 +151,7 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
             {
                 if (value != ShipmentModel.ShipmentAdapter.ShipmentTypeCode)
                 {
-                    ShipmentModel.ChangeShipmentType(value);                    
+                    ShipmentModel.ChangeShipmentType(value);
                 }
             }
         }
@@ -357,13 +195,8 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
             {
                 if (e.PropertyName == nameof(ShipmentModel.SelectedOrder))
                 {
-                    Providers = shipmentTypeProvider.GetAvailableShipmentTypes(ShipmentModel.ShipmentAdapter).ToDictionary(s => s, s => EnumHelper.GetDescription(s));
+                    RefreshProviders();
                     RefreshDimensionalProfiles();
-
-                    if (Packages == null)
-                    {
-                        LoadPackages();
-                    }
                 }
 
                 if (e.PropertyName == nameof(ShipmentModel.SelectedOrder) ||
@@ -419,40 +252,20 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
         }
 
         /// <summary>
-        /// Load the packages for the shipment
+        /// Refresh the providers
         /// </summary>
-        private void LoadPackages()
+        private void RefreshProviders()
         {
-            RefreshPackages();
-            if (SelectedPackage == null)
+            if (ShipmentModel.ShipmentAdapter?.Shipment == null)
             {
-                SelectedPackage = Packages.FirstOrDefault();
+                Providers = new Dictionary<ShipmentTypeCode, string>();
             }
-        }
-
-        /// <summary>
-        /// Refresh the packages for the shipment
-        /// </summary>
-        private void RefreshPackages() => Packages = ShipmentModel.ShipmentAdapter.GetPackageAdapters().ToList();
-
-        /// <summary>
-        /// Add a package to the given shipment
-        /// </summary>
-        private void AddPackage()
-        {
-            IPackageAdapter newPackage = ShipmentModel.ShipmentAdapter.AddPackage();
-            RefreshPackages();
-            SelectedPackage = newPackage;
-        }
-
-        /// <summary>
-        /// Delete the selected package
-        /// </summary>
-        private void DeletePackage()
-        {
-            ShipmentModel.ShipmentAdapter.DeletePackage(SelectedPackage);
-            RefreshPackages();
-            SelectedPackage = Packages.FirstOrDefault();
+            else
+            {
+                Providers = shipmentTypeProvider
+                    .GetAvailableShipmentTypes(ShipmentModel.ShipmentAdapter)
+                    .ToDictionary(s => s, s => EnumHelper.GetDescription(s));
+            }
         }
 
         /// <summary>
@@ -490,7 +303,7 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
             else
             {
                 PackageTypes = shipmentPackageTypesBuilderFactory.Get(ShipmentModel.ShipmentAdapter.ShipmentTypeCode)
-                    .BuildPackageTypeDictionary(new[] {ShipmentModel.ShipmentAdapter.Shipment});
+                    .BuildPackageTypeDictionary(new[] { ShipmentModel.ShipmentAdapter.Shipment });
             }
         }
 
@@ -531,7 +344,7 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
             try
             {
                 updatedServices = shipmentServicesBuilderFactory.Get(ShipmentModel.ShipmentAdapter.ShipmentTypeCode)
-                    .BuildServiceTypeDictionary(new[] {ShipmentModel.ShipmentAdapter.Shipment});
+                    .BuildServiceTypeDictionary(new[] { ShipmentModel.ShipmentAdapter.Shipment });
             }
             catch (InvalidRateGroupShippingException)
             {
@@ -561,5 +374,8 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
                 RefreshDimensionalProfiles();
             }
         }
+
+        public void Dispose() =>
+            ShipmentModel.PropertyChanged -= ShipmentModelPropertyChanged;
     }
 }

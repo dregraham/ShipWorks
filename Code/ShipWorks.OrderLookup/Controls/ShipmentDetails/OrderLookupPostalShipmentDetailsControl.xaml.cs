@@ -1,18 +1,16 @@
-﻿using System.ComponentModel;
-using System.Windows.Controls;
-using ShipWorks.Shipping.Editing;
+﻿using System.Windows.Controls;
 
 namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
 {
     /// <summary>
     /// Shipment Details for the Order Lookup View
     /// </summary>
-    public partial class OrderLookupShipmentDetailsControl : UserControl
+    public partial class OrderLookupPostalShipmentDetailsControl : UserControl
     {
         /// <summary>
         /// Constructor
         /// </summary>
-        public OrderLookupShipmentDetailsControl()
+        public OrderLookupPostalShipmentDetailsControl()
         {
             InitializeComponent();
         }

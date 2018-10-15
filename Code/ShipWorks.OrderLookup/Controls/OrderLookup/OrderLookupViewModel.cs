@@ -1,17 +1,24 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Reflection;
 using System.Windows;
+using Autofac;
 using Autofac.Features.Indexed;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Messaging;
 using ShipWorks.Core.UI;
 using ShipWorks.Messaging.Messages;
+using ShipWorks.OrderLookup.Controls.Customs;
+using ShipWorks.OrderLookup.Controls.From;
+using ShipWorks.OrderLookup.Controls.LabelOptions;
 using ShipWorks.OrderLookup.Controls.OrderLookupSearchControl;
+using ShipWorks.OrderLookup.Controls.Rating;
+using ShipWorks.OrderLookup.Controls.Reference;
+using ShipWorks.OrderLookup.Controls.ShipmentDetails;
+using ShipWorks.OrderLookup.Controls.To;
 
 namespace ShipWorks.OrderLookup.Controls.OrderLookup
 {
@@ -35,29 +42,30 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookup
         public OrderLookupViewModel(IOrderLookupShipmentModel shipmentModel,
             OrderLookupSearchViewModel orderLookupSearchViewModel,
             IIndex<OrderLookupPanels, INotifyPropertyChanged> lookupPanels,
+            ILifetimeScope scope,
             IObservable<IShipWorksMessage> messages)
         {
             handler = new PropertyChangedHandler(this, () => PropertyChanged);
             ShipmentModel = shipmentModel;
             OrderLookupSearchViewModel = orderLookupSearchViewModel;
 
-            LeftColumn = new ObservableCollection<INotifyPropertyChanged>(new List<INotifyPropertyChanged>
+            LeftColumn = new ObservableCollection<INotifyPropertyChanged>
             {
-                lookupPanels[OrderLookupPanels.From],
-                lookupPanels[OrderLookupPanels.To]
-            });
+                scope.Resolve<IOrderLookupWrapperViewModel<IOrderLookupFromViewModel>>(),
+                scope.Resolve<IOrderLookupWrapperViewModel<IOrderLookupToViewModel>>(),
+            };
 
             MiddleColumn = new ObservableCollection<INotifyPropertyChanged>
             {
-                lookupPanels[OrderLookupPanels.ShipmentDetails],
-                lookupPanels[OrderLookupPanels.LabelOptions],
-                lookupPanels[OrderLookupPanels.Reference]
+                scope.Resolve<IOrderLookupWrapperViewModel<IOrderLookupDetailsViewModel>>(),
+                scope.Resolve<IOrderLookupWrapperViewModel<IOrderLookupLabelOptionsViewModel>>(),
+                scope.Resolve<IOrderLookupWrapperViewModel<IOrderLookupReferenceViewModel>>(),
             };
 
             RightColumn = new ObservableCollection<INotifyPropertyChanged>
             {
-                lookupPanels[OrderLookupPanels.Rates],
-                lookupPanels[OrderLookupPanels.Customs]
+                scope.Resolve<IOrderLookupWrapperViewModel<IOrderLookupRatingViewModel>>(),
+                scope.Resolve<IOrderLookupWrapperViewModel<IOrderLookupCustomsViewModel>>(),
             };
 
             subscriptions = new CompositeDisposable(
