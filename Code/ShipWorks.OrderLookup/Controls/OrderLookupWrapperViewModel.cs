@@ -13,7 +13,7 @@ namespace ShipWorks.OrderLookup.Controls
     /// </summary>
     [KeyedComponent(typeof(INotifyPropertyChanged), OrderLookupPanels.ShipmentDetails)]
     [WpfView(typeof(OrderLookupWrapperControl))]
-    public class OrderLookupViewModelWrapper<T> : IOrderLookupViewModelWrapper<T> where T : class, IOrderLookupViewModel
+    public class OrderLookupViewModelWrapper<T> : IOrderLookupWrapperViewModel<T> where T : class, IOrderLookupViewModel
     {
         public event PropertyChangedEventHandler PropertyChanged;
         private readonly PropertyChangedHandler handler;

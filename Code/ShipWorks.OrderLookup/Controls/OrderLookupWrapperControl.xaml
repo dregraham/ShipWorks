@@ -3,10 +3,8 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:local="clr-namespace:ShipWorks.OrderLookup.Controls.ShipmentDetails"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:ui="http://schemas.shipworks.com/ui"
-    d:DataContext="{d:DesignInstance local:OrderLookupShipmentDetailsViewModel}"
     FontFamily="/ShipWorks.OrderLookup;component/#Roboto"
     mc:Ignorable="d">
     <UserControl.Resources>
@@ -15,10 +13,14 @@
                 <ResourceDictionary Source="/ShipWorks.OrderLookup;component/Styles/OrderLookupStyle.xaml" />
             </ResourceDictionary.MergedDictionaries>
             <ui:WpfViewTemplateSelector x:Key="WpfViewTemplateSelector" />
+            <ui:BooleanToVisibilityConverter x:Key="BooleanToVisibility" />
         </ResourceDictionary>
     </UserControl.Resources>
 
-    <Expander Header="{Binding Context.Title}" IsExpanded="True">
+    <Expander
+        Header="{Binding Context.Title}"
+        IsExpanded="{Binding Context.Expanded}"
+        Visibility="{Binding Context.Visible, Converter={StaticResource BooleanToVisibility}}">
         <StackPanel Style="{StaticResource PanelWrapper}">
             <ContentPresenter Content="{Binding Context}" ContentTemplateSelector="{StaticResource WpfViewTemplateSelector}" />
         </StackPanel>

@@ -51,8 +51,20 @@ namespace ShipWorks.OrderLookup.Controls.LabelOptions
             InitializeForChangedShipment(ShipmentModel.ShipmentAdapter.Shipment);
         }
 
+        /// <summary>
+        /// Is the section expanded
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public bool Expanded { get; set; } = true;
+
         [Obfuscation(Exclude = true)]
         public string Title => "Label Options";
+
+        /// <summary>
+        /// Is the section visible
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public bool Visible => true;
 
         /// <summary>
         /// Shipment ship date

@@ -132,6 +132,7 @@
     <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controls\Customs\IOrderLookupCustomsViewModel.cs" />
     <Compile Include="Controls\From\IOrderLookupFromViewModel.cs" />
     <Compile Include="Controls\From\OrderLookupGenericFromControl.xaml.cs">
       <DependentUpon>OrderLookupGenericFromControl.xaml</DependentUpon>
@@ -145,6 +146,7 @@
       <DependentUpon>OrderLookupWrapperControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\OrderLookupWrapperViewModel.cs" />
+    <Compile Include="Controls\Rating\IOrderLookupRatingViewModel.cs" />
     <Compile Include="Controls\Reference\IOrderLookupReferenceViewModel.cs" />
     <Compile Include="Controls\Reference\OrderLookupEndiciaReferenceControl.xaml.cs">
       <DependentUpon>OrderLookupEndiciaReferenceControl.xaml</DependentUpon>
@@ -172,10 +174,10 @@
     <Compile Include="Controls\OrderLookupAddress.xaml.cs">
       <DependentUpon>OrderLookupAddress.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\Customs\OrderLookupCustomsControl.xaml.cs">
-      <DependentUpon>OrderLookupCustomsControl.xaml</DependentUpon>
+    <Compile Include="Controls\Customs\OrderLookupGenericCustomsControl.xaml.cs">
+      <DependentUpon>OrderLookupGenericCustomsControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\Customs\OrderLookupCustomsControlViewModel.cs" />
+    <Compile Include="Controls\Customs\OrderLookupGenericCustomsViewModel.cs" />
     <Compile Include="Controls\LabelOptions\OrderLookupPostalLabelOptionsControl.xaml.cs">
       <DependentUpon>OrderLookupPostalLabelOptionsControl.xaml</DependentUpon>
     </Compile>
@@ -201,7 +203,7 @@
     <Compile Include="FieldManager\IOrderLookupFieldManagerDialog.cs" />
     <Compile Include="FieldManager\OrderLookupFieldManagerViewModel.cs" />
     <Compile Include="IOrderLookupPreviousShipmentLocator.cs" />
-    <Compile Include="Controls\IOrderLookupViewModelWrapper.cs" />
+    <Compile Include="Controls\IOrderLookupWrapperViewModel.cs" />
     <Compile Include="IOrderLookupViewModel.cs" />
     <Compile Include="OrderLookupClearOrderMessage.cs" />
     <Compile Include="OrderLookupModule.cs" />
@@ -221,11 +223,11 @@
     </Compile>
     <Compile Include="Controls\To\OrderLookupUspsToViewModel.cs" />
     <Compile Include="Controls\ShipmentDetails\OrderLookupPostalShipmentDetailsViewModel.cs" />
-    <Compile Include="Controls\Rating\OrderLookupRatingControl.xaml.cs">
-      <DependentUpon>OrderLookupRatingControl.xaml</DependentUpon>
+    <Compile Include="Controls\Rating\OrderLookupGenericRatingControl.xaml.cs">
+      <DependentUpon>OrderLookupGenericRatingControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\ShipmentTypeToOrderLookupTemplateConverter.cs" />
-    <Compile Include="Controls\Rating\OrderLookupRatingPanelViewModel.cs" />
+    <Compile Include="Controls\Rating\OrderLookupGenericRatingViewModel.cs" />
     <Compile Include="Controls\Reference\OrderLookupUspsReferenceControl.xaml.cs">
       <DependentUpon>OrderLookupUspsReferenceControl.xaml</DependentUpon>
     </Compile>
@@ -325,7 +327,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Controls\Customs\OrderLookupCustomsControl.xaml">
+    <Page Include="Controls\Customs\OrderLookupGenericCustomsControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -361,7 +363,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Controls\Rating\OrderLookupRatingControl.xaml">
+    <Page Include="Controls\Rating\OrderLookupGenericRatingControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -52,6 +52,12 @@ namespace ShipWorks.OrderLookup.Controls.From
         }
 
         /// <summary>
+        /// Is the section expanded
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public bool Expanded { get; set; } = true;
+
+        /// <summary>
         /// The addresses title
         /// </summary>
         [Obfuscation(Exclude = true)]
@@ -60,6 +66,12 @@ namespace ShipWorks.OrderLookup.Controls.From
             get => title;
             set => handler.Set(nameof(Title), ref title, value);
         }
+
+        /// <summary>
+        /// Is the section visible
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public bool Visible => true;
 
         /// <summary>
         /// Basic address details

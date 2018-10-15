@@ -14,7 +14,7 @@ namespace ShipWorks.OrderLookup
         protected override void Load(ContainerBuilder builder)
         {
             builder.RegisterGeneric(typeof(OrderLookupViewModelWrapper<>))
-                .As(typeof(IOrderLookupViewModelWrapper<>));
+                .As(typeof(IOrderLookupWrapperViewModel<>));
         }
     }
 }

@@ -28,10 +28,22 @@ namespace ShipWorks.OrderLookup.Controls.Reference
         }
 
         /// <summary>
+        /// Is the section expanded
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public bool Expanded { get; set; } = true;
+
+        /// <summary>
         /// Title of the section
         /// </summary>
         [Obfuscation(Exclude = true)]
         public string Title => "Reference";
+
+        /// <summary>
+        /// Is the section visible
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public bool Visible => true;
 
         /// <summary>
         /// The order lookup ShipmentModel

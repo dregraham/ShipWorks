@@ -11,9 +11,11 @@ using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Messaging;
 using ShipWorks.Core.UI;
 using ShipWorks.Messaging.Messages;
+using ShipWorks.OrderLookup.Controls.Customs;
 using ShipWorks.OrderLookup.Controls.From;
 using ShipWorks.OrderLookup.Controls.LabelOptions;
 using ShipWorks.OrderLookup.Controls.OrderLookupSearchControl;
+using ShipWorks.OrderLookup.Controls.Rating;
 using ShipWorks.OrderLookup.Controls.Reference;
 using ShipWorks.OrderLookup.Controls.ShipmentDetails;
 using ShipWorks.OrderLookup.Controls.To;
@@ -49,21 +51,21 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookup
 
             LeftColumn = new ObservableCollection<INotifyPropertyChanged>
             {
-                scope.Resolve<IOrderLookupViewModelWrapper<IOrderLookupFromViewModel>>(),
-                scope.Resolve<IOrderLookupViewModelWrapper<IOrderLookupToViewModel>>(),
+                scope.Resolve<IOrderLookupWrapperViewModel<IOrderLookupFromViewModel>>(),
+                scope.Resolve<IOrderLookupWrapperViewModel<IOrderLookupToViewModel>>(),
             };
 
             MiddleColumn = new ObservableCollection<INotifyPropertyChanged>
             {
-                scope.Resolve<IOrderLookupViewModelWrapper<IOrderLookupDetailsViewModel>>(),
-                scope.Resolve<IOrderLookupViewModelWrapper<IOrderLookupLabelOptionsViewModel>>(),
-                scope.Resolve<IOrderLookupViewModelWrapper<IOrderLookupReferenceViewModel>>(),
+                scope.Resolve<IOrderLookupWrapperViewModel<IOrderLookupDetailsViewModel>>(),
+                scope.Resolve<IOrderLookupWrapperViewModel<IOrderLookupLabelOptionsViewModel>>(),
+                scope.Resolve<IOrderLookupWrapperViewModel<IOrderLookupReferenceViewModel>>(),
             };
 
             RightColumn = new ObservableCollection<INotifyPropertyChanged>
             {
-                lookupPanels[OrderLookupPanels.Rates],
-                lookupPanels[OrderLookupPanels.Customs]
+                scope.Resolve<IOrderLookupWrapperViewModel<IOrderLookupRatingViewModel>>(),
+                scope.Resolve<IOrderLookupWrapperViewModel<IOrderLookupCustomsViewModel>>(),
             };
 
             subscriptions = new CompositeDisposable(

@@ -79,10 +79,22 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
         }
 
         /// <summary>
+        /// Is the section expanded
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public bool Expanded { get; set; } = true;
+
+        /// <summary>
         /// Title of the section
         /// </summary>
         [Obfuscation(Exclude = true)]
         public string Title => "Shipment Details";
+
+        /// <summary>
+        /// Is the section visible
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public bool Visible => true;
 
         /// <summary>
         /// Manages Dimensional Profiles
