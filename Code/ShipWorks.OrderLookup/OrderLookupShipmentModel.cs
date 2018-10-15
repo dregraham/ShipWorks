@@ -296,11 +296,11 @@ namespace ShipWorks.OrderLookup
                     RefreshProperties();
 
                     AddPropertyChangedEventsToEntities();
-
-                    messenger.Send(new ShipmentSelectionChangedMessage(this, new[] { ShipmentAdapter.Shipment.ShipmentID }, ShipmentAdapter));
                 }
 
                 RaisePropertyChanged(nameof(OrderLookupShipmentModel));
+
+                messenger.Send(new ShipmentSelectionChangedMessage(this, new[] { ShipmentAdapter.Shipment.ShipmentID }, ShipmentAdapter));
             }
         }
     }
