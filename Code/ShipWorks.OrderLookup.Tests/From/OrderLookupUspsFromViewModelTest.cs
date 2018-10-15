@@ -12,13 +12,13 @@ using Xunit;
 
 namespace ShipWorks.OrderLookup.Tests.From
 {
-    public class OrderLookupFromViewModelTest : IDisposable
+    public class OrderLookupUspsFromViewModelTest : IDisposable
     {
-        readonly AutoMock mock;
-        private readonly OrderLookupFromViewModel testObject;
+        private readonly AutoMock mock;
+        private readonly OrderLookupUspsFromViewModel testObject;
         private readonly Mock<IOrderLookupShipmentModel> shipmentModel;
 
-        public OrderLookupFromViewModelTest()
+        public OrderLookupUspsFromViewModelTest()
         {
             mock = AutoMockExtensions.GetLooseThatReturnsMocks();
 
@@ -44,7 +44,7 @@ namespace ShipWorks.OrderLookup.Tests.From
             shipmentModel = mock.Mock<IOrderLookupShipmentModel>();
             shipmentModel.SetupGet(o => o.ShipmentAdapter).Returns(shipmentAdapter);
 
-            testObject = mock.Create<OrderLookupFromViewModel>();
+            testObject = mock.Create<OrderLookupUspsFromViewModel>();
         }
 
         [Fact]

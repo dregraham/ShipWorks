@@ -5,14 +5,13 @@ using System.Linq;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Reflection;
+using Interapptive.Shared.Collections;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.UI;
-using ShipWorks.ApplicationCore;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Core.UI;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Messaging.Messages;
-using ShipWorks.Messaging.Messages.SingleScan;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Services;
 
@@ -24,6 +23,18 @@ namespace ShipWorks.OrderLookup
     [Component(SingleInstance = true)]
     public class OrderLookupShipmentModel : INotifyPropertyChanged, IOrderLookupShipmentModel
     {
+        /// <summary>
+        /// Entities for which we want to wire up property changed handlers
+        /// </summary>
+        private readonly static IEnumerable<Func<ICarrierShipmentAdapter, INotifyPropertyChanged>> eventEntities =
+            new Func<ICarrierShipmentAdapter, INotifyPropertyChanged>[]
+            {
+                x => x?.Shipment,
+                x => x?.Shipment?.Postal,
+                x => x?.Shipment?.Postal?.Usps,
+                x => x?.Shipment?.Postal?.Endicia
+            };
+
         private readonly IMessenger messenger;
         private readonly IShippingManager shippingManager;
         private readonly IMessageHelper messageHelper;
@@ -247,34 +258,20 @@ namespace ShipWorks.OrderLookup
         /// <summary>
         /// Add property change event handlers
         /// </summary>
-        private void AddPropertyChangedEventsToEntities()
-        {
-            if (ShipmentAdapter != null)
-            {
-                ShipmentAdapter.Shipment.PropertyChanged += RaisePropertyChanged;
-            }
-
-            if (ShipmentAdapter?.Shipment?.Postal != null)
-            {
-                ShipmentAdapter.Shipment.Postal.PropertyChanged += RaisePropertyChanged;
-            }
-        }
+        private void AddPropertyChangedEventsToEntities() =>
+            eventEntities
+                .Select(func => func(ShipmentAdapter))
+                .Where(x => x != null)
+                .ForEach(x => x.PropertyChanged += RaisePropertyChanged);
 
         /// <summary>
         /// Remove property changed events from shipment entities
         /// </summary>
-        private void RemovePropertyChangedEventsFromEntities()
-        {
-            if (ShipmentAdapter != null)
-            {
-                ShipmentAdapter.Shipment.PropertyChanged -= RaisePropertyChanged;
-            }
-
-            if (ShipmentAdapter?.Shipment?.Postal != null)
-            {
-                ShipmentAdapter.Shipment.Postal.PropertyChanged -= RaisePropertyChanged;
-            }
-        }
+        private void RemovePropertyChangedEventsFromEntities() =>
+            eventEntities
+                .Select(func => func(ShipmentAdapter))
+                .Where(x => x != null)
+                .ForEach(x => x.PropertyChanged -= RaisePropertyChanged);
 
         /// <summary>
         /// Call the RaisePropertyChanged with PropertyName

@@ -59,14 +59,8 @@
             Grid.Row="1"
             Grid.Column="1"
             Content="Automatically use the USPS account with the least expensive Rate"
-            Style="{StaticResource FormCheckBox}">
-            <CheckBox.IsEnabled>
-                <Binding Mode="OneWay" Path="ShipmentModel.ShipmentAllowEditing" />
-            </CheckBox.IsEnabled>
-            <CheckBox.IsChecked>
-                <Binding Path="RateShop" />
-            </CheckBox.IsChecked>
-        </CheckBox>
+            IsChecked="{Binding ShipmentModel.ShipmentAdapter.Shipment.Postal.Usps.RateShop}"
+            Style="{StaticResource FormCheckBox}" />
         <ui:ShipWorksComboBox
             x:Name="AccountDropDown"
             Grid.Row="2"
@@ -85,7 +79,7 @@
                     <Binding
                         Converter="{StaticResource InvertBoolean}"
                         Mode="OneWay"
-                        Path="ShipmentModel.ShipmentAdapter.SupportsRateShopping" />
+                        Path="ShipmentModel.ShipmentAdapter.Shipment.Postal.Usps.RateShop" />
                 </MultiBinding>
             </ComboBox.IsEnabled>
             <ComboBox.Visibility>
@@ -124,7 +118,7 @@
                 </ComboBox.SelectedValue>
             </ui:ShipWorksComboBox>
 
-            <local:OrderLookupAddress>
+            <local:OrderLookupAddress DataContext="{Binding Address}">
                 <local:OrderLookupAddress.IsEnabled>
                     <MultiBinding Converter="{StaticResource BooleanAndConverter}">
                         <Binding Mode="OneWay" Path="ShipmentModel.ShipmentAllowEditing" />

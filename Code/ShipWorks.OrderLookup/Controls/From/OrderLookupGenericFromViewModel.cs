@@ -5,8 +5,7 @@ using System.Linq;
 using System.Reactive.Linq;
 using System.Reflection;
 using Interapptive.Shared.ComponentRegistration;
-using Interapptive.Shared.UI;
-using ShipWorks.AddressValidation;
+using ShipWorks.Core.UI;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Shipping;
@@ -20,23 +19,30 @@ namespace ShipWorks.OrderLookup.Controls.From
     /// View model for the From address
     /// </summary>
     [KeyedComponent(typeof(IOrderLookupFromViewModel), ShipmentTypeCode.Endicia)]
-    [WpfView(typeof(OrderLookupEndiciaFromControl))]
-    public class OrderLookupEndiciaFromViewModel : AddressViewModel, IOrderLookupFromViewModel
+    [WpfView(typeof(OrderLookupGenericFromControl))]
+    public class OrderLookupGenericFromViewModel : IOrderLookupFromViewModel
     {
         private string title;
-        private readonly bool rateShop;
         private IDisposable autoSave;
+        private readonly PropertyChangedHandler handler;
         private readonly IShipmentTypeManager shipmentTypeManager;
         private readonly ICarrierAccountRetrieverFactory carrierAccountRetrieverFactory;
+        private readonly AddressViewModel addressViewModel;
+
+        public event PropertyChangedEventHandler PropertyChanged;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public OrderLookupEndiciaFromViewModel(IOrderLookupShipmentModel shipmentModel, IShippingOriginManager shippingOriginManager, IMessageHelper messageHelper,
-            IShipmentTypeManager shipmentTypeManager, ICarrierAccountRetrieverFactory carrierAccountRetrieverFactory,
-            IValidatedAddressScope validatedAddressScope, IAddressValidator validator, IAddressSelector addressSelector)
-            : base(shippingOriginManager, messageHelper, validatedAddressScope, validator, addressSelector)
+        public OrderLookupGenericFromViewModel(
+            IOrderLookupShipmentModel shipmentModel,
+            IShipmentTypeManager shipmentTypeManager,
+            ICarrierAccountRetrieverFactory carrierAccountRetrieverFactory,
+            AddressViewModel addressViewModel)
         {
+            handler = new PropertyChangedHandler(this, () => PropertyChanged);
+            this.addressViewModel = addressViewModel;
+
             ShipmentModel = shipmentModel;
             this.shipmentTypeManager = shipmentTypeManager;
             this.carrierAccountRetrieverFactory = carrierAccountRetrieverFactory;
@@ -56,6 +62,12 @@ namespace ShipWorks.OrderLookup.Controls.From
         }
 
         /// <summary>
+        /// Basic address details
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public AddressViewModel Address => addressViewModel;
+
+        /// <summary>
         /// Is address validation enabled or not
         /// </summary>
         [Obfuscation(Exclude = true)]
@@ -68,7 +80,7 @@ namespace ShipWorks.OrderLookup.Controls.From
         {
             if (ShipmentModel?.ShipmentAdapter?.Shipment?.OriginPerson != null)
             {
-                SaveToEntity(ShipmentModel.ShipmentAdapter.Shipment.OriginPerson);
+                addressViewModel.SaveToEntity(ShipmentModel.ShipmentAdapter.Shipment.OriginPerson);
             }
         }
 
@@ -95,7 +107,7 @@ namespace ShipWorks.OrderLookup.Controls.From
                 ShipmentTypeCode shipmentTypeCode = ShipmentModel.ShipmentAdapter.ShipmentTypeCode;
                 StoreEntity store = ShipmentModel.ShipmentAdapter.Store;
 
-                SetAddressFromOrigin(originId, orderId, accountId, shipmentTypeCode, store);
+                addressViewModel.SetAddressFromOrigin(originId, orderId, accountId, shipmentTypeCode, store);
 
                 UpdateTitle();
 
@@ -109,18 +121,22 @@ namespace ShipWorks.OrderLookup.Controls.From
         private void InitializeForChangedShipment()
         {
             autoSave?.Dispose();
-            Load(ShipmentModel.ShipmentAdapter.Shipment.OriginPerson, ShipmentModel.ShipmentAdapter.Store);
+            addressViewModel.Load(ShipmentModel.ShipmentAdapter.Shipment.OriginPerson, ShipmentModel.ShipmentAdapter.Store);
 
             UpdateTitle();
 
             handler.RaisePropertyChanged(nameof(ShipmentModel));
-            autoSave = handler.PropertyChangingStream.Where(p => p != nameof(Title)).Throttle(TimeSpan.FromMilliseconds(100)).Subscribe(_ => Save());
+            autoSave = handler.PropertyChangingStream
+                .Merge(addressViewModel.PropertyChangeStream)
+                .Where(p => p != nameof(Title))
+                .Throttle(TimeSpan.FromMilliseconds(100))
+                .Subscribe(_ => Save());
         }
 
         /// <summary>
         /// Update the title
         /// </summary>
-        private void UpdateTitle()
+        protected void UpdateTitle()
         {
             string newTitle = "From";
 
@@ -137,8 +153,7 @@ namespace ShipWorks.OrderLookup.Controls.From
                     originDescription = origins.First(w => w.Value == originID).Key;
                 }
 
-                string accountDescription = carrierAccountRetrieverFactory.Create(shipmentTypeCode)?
-                                                .GetAccountReadOnly(ShipmentModel.ShipmentAdapter.Shipment)?.AccountDescription ?? string.Empty;
+                string accountDescription = GetHeaderAccountText();
 
                 if (!string.IsNullOrWhiteSpace(accountDescription) && !string.IsNullOrWhiteSpace(originDescription))
                 {
@@ -150,11 +165,19 @@ namespace ShipWorks.OrderLookup.Controls.From
         }
 
         /// <summary>
+        /// Get the text for the account header
+        /// </summary>
+        protected virtual string GetHeaderAccountText() =>
+            carrierAccountRetrieverFactory.Create(ShipmentModel.ShipmentAdapter.ShipmentTypeCode)?
+                .GetAccountReadOnly(ShipmentModel.ShipmentAdapter.Shipment)?.AccountDescription ?? string.Empty;
+
+        /// <summary>
         /// Dispose
         /// </summary>
-        public void Dispose()
+        public virtual void Dispose()
         {
             autoSave?.Dispose();
+            addressViewModel.Dispose();
             ShipmentModel.PropertyChanged -= ShipmentModelPropertyChanged;
         }
     }

@@ -133,8 +133,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Controls\From\IOrderLookupFromViewModel.cs" />
-    <Compile Include="Controls\From\OrderLookupEndiciaFromControl.xaml.cs">
-      <DependentUpon>OrderLookupEndiciaFromControl.xaml</DependentUpon>
+    <Compile Include="Controls\From\OrderLookupGenericFromControl.xaml.cs">
+      <DependentUpon>OrderLookupGenericFromControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\From\OrderLookupUspsFromControl.xaml.cs">
       <DependentUpon>OrderLookupUspsFromControl.xaml</DependentUpon>
@@ -190,7 +190,7 @@
       <DependentUpon>OrderLookupControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\OrderLookup\OrderLookupViewModel.cs" />
-    <Compile Include="Controls\From\OrderLookupEndiciaFromViewModel.cs" />
+    <Compile Include="Controls\From\OrderLookupGenericFromViewModel.cs" />
     <Compile Include="Controls\OrderLookupPanels.cs" />
     <Compile Include="Controls\OrderLookupSearchControl\OrderLookupSearchControl.xaml.cs">
       <DependentUpon>OrderLookupSearchControl.xaml</DependentUpon>
@@ -301,7 +301,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Page Include="Controls\From\OrderLookupEndiciaFromControl.xaml">
+    <Page Include="Controls\From\OrderLookupGenericFromControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
