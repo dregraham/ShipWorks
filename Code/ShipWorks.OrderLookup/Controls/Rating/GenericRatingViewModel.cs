@@ -98,6 +98,8 @@ namespace ShipWorks.OrderLookup.Controls.Rating
         /// </summary>
         public void Dispose()
         {
+            base.Dispose();
+
             ShipmentModel.PropertyChanged -= OnShipmentModelPropertyChanged;
         }
     }
