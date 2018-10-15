@@ -18,7 +18,7 @@ namespace ShipWorks.OrderLookup.Tests.From
     public class OrderLookupUspsFromViewModelTest : IDisposable
     {
         private readonly AutoMock mock;
-        private readonly OrderLookupUspsFromViewModel testObject;
+        private readonly UspsFromViewModel testObject;
         private readonly Mock<IOrderLookupShipmentModel> shipmentModel;
         private readonly ShipmentEntity shipment;
 
@@ -52,7 +52,7 @@ namespace ShipWorks.OrderLookup.Tests.From
             shipmentModel = mock.Mock<IOrderLookupShipmentModel>();
             shipmentModel.SetupGet(o => o.ShipmentAdapter).Returns(shipmentAdapter);
 
-            testObject = mock.Create<OrderLookupUspsFromViewModel>();
+            testObject = mock.Create<UspsFromViewModel>();
         }
 
         [Fact]
