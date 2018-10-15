@@ -39,7 +39,9 @@ namespace ShipWorks.OrderLookup.Controls
         /// </summary>
         private void OnShipmentModelPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            if (e.PropertyName == nameof(shipmentModel.ShipmentAdapter.ShipmentTypeCode) || e.PropertyName == nameof(shipmentModel.SelectedOrder))
+            if (e.PropertyName == nameof(OrderLookupShipmentModel) ||
+                e.PropertyName == nameof(shipmentModel.ShipmentAdapter.ShipmentTypeCode) || 
+                e.PropertyName == nameof(shipmentModel.SelectedOrder))
             {
                 var key = shipmentModel.ShipmentAdapter?.ShipmentTypeCode;
                 var old = Context;

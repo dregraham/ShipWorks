@@ -1,0 +1,118 @@
+﻿<UserControl
+    x:Class="ShipWorks.OrderLookup.Controls.Reference.EndiciaReferenceControl"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Width="400"
+    FontFamily="/ShipWorks.OrderLookup;component/#Roboto"
+    FontSize="12"
+    mc:Ignorable="d">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/ShipWorks.OrderLookup;component/Styles/OrderLookupStyle.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
+    <Grid IsEnabled="{Binding ShipmentModel.ShipmentAllowEditing}">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+
+        <TextBlock
+            Grid.Row="0"
+            Grid.Column="0"
+            Style="{StaticResource FieldLabel}"
+            Text="Rubber Stamp 1" />
+        <TextBox
+            Grid.Row="0"
+            Grid.Column="1"
+            Style="{StaticResource FormTextBox}">
+            <TextBox.Text>
+                <Binding Path="ShipmentModel.ShipmentAdapter.Shipment.Postal.Memo1" />
+            </TextBox.Text>
+        </TextBox>
+
+        <TextBlock
+            Grid.Row="1"
+            Grid.Column="0"
+            Style="{StaticResource FieldLabel}"
+            Text="Rubber Stamp 2" />
+        <TextBox
+            Grid.Row="1"
+            Grid.Column="1"
+            Style="{StaticResource FormTextBox}">
+            <TextBox.Text>
+                <Binding Path="ShipmentModel.ShipmentAdapter.Shipment.Postal.Memo2" />
+            </TextBox.Text>
+        </TextBox>
+
+        <TextBlock
+            Grid.Row="2"
+            Grid.Column="0"
+            Margin="0"
+            Style="{StaticResource FieldLabel}"
+            Text="Rubber Stamp 3" />
+        <TextBox
+            Grid.Row="2"
+            Grid.Column="1"
+            Margin="10,0,0,0"
+            Style="{StaticResource FormTextBox}">
+            <TextBox.Text>
+                <Binding Path="ShipmentModel.ShipmentAdapter.Shipment.Postal.Memo3" />
+            </TextBox.Text>
+        </TextBox>
+
+        <StackPanel
+            Grid.Row="3"
+            Grid.ColumnSpan="2"
+            Margin="0,4,0,10"
+            Orientation="Horizontal">
+            <Path
+                Width="16"
+                Height="16"
+                VerticalAlignment="Center"
+                Fill="Gray"
+                Stretch="UniformToFill"
+                Style="{StaticResource InformationIcon}" />
+            <TextBlock
+                Margin="4,0,0,0"
+                VerticalAlignment="Center"
+                Foreground="Gray">
+                Express Mail and International labels do not display rubber stamps.
+            </TextBlock>
+        </StackPanel>
+
+        <TextBlock
+            Grid.Row="4"
+            Grid.Column="0"
+            Margin="0"
+            Style="{StaticResource FieldLabel}"
+            Text="Reference ID" />
+        <TextBox
+            Grid.Row="4"
+            Grid.Column="1"
+            Margin="10,0,0,0"
+            Style="{StaticResource FormTextBox}"
+            Text="{Binding ShipmentModel.ShipmentAdapter.Shipment.Postal.Endicia.ReferenceID}" />
+
+        <TextBlock
+            Grid.Row="5"
+            Grid.Column="1"
+            Margin="10,4,0,0"
+            VerticalAlignment="Center"
+            Foreground="Gray">
+            This is used to lookup the shipment in Endicia logs.
+        </TextBlock>
+    </Grid>
+</UserControl>

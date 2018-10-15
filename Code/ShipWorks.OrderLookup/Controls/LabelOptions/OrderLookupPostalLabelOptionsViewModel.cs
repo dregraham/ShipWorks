@@ -21,10 +21,10 @@ namespace ShipWorks.OrderLookup.Controls.LabelOptions
     /// <summary>
     /// View model for the OrderLookupLabelOptionsViewModel
     /// </summary>
-    [KeyedComponent(typeof(IOrderLookupLabelOptionsViewModel), ShipmentTypeCode.Usps)]
-    [KeyedComponent(typeof(IOrderLookupLabelOptionsViewModel), ShipmentTypeCode.Endicia)]
-    [WpfView(typeof(OrderLookupPostalLabelOptionsControl))]
-    public class OrderLookupPostalLabelOptionsViewModel : IOrderLookupLabelOptionsViewModel, IDataErrorInfo
+    [KeyedComponent(typeof(ILabelOptionsViewModel), ShipmentTypeCode.Usps)]
+    [KeyedComponent(typeof(ILabelOptionsViewModel), ShipmentTypeCode.Endicia)]
+    [WpfView(typeof(PostalLabelOptionsControl))]
+    public class OrderLookupPostalLabelOptionsViewModel : ILabelOptionsViewModel, IDataErrorInfo
     {
         private readonly IShipmentTypeManager shipmentTypeManager;
         private readonly IFedExUtility fedExUtility;

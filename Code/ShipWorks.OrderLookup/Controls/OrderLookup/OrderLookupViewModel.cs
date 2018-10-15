@@ -51,21 +51,21 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookup
 
             LeftColumn = new ObservableCollection<INotifyPropertyChanged>
             {
-                scope.Resolve<IOrderLookupWrapperViewModel<IOrderLookupFromViewModel>>(),
-                scope.Resolve<IOrderLookupWrapperViewModel<IOrderLookupToViewModel>>(),
+                scope.Resolve<IOrderLookupWrapperViewModel<IFromViewModel>>(),
+                scope.Resolve<IOrderLookupWrapperViewModel<IToViewModel>>(),
             };
 
             MiddleColumn = new ObservableCollection<INotifyPropertyChanged>
             {
-                scope.Resolve<IOrderLookupWrapperViewModel<IOrderLookupDetailsViewModel>>(),
-                scope.Resolve<IOrderLookupWrapperViewModel<IOrderLookupLabelOptionsViewModel>>(),
-                scope.Resolve<IOrderLookupWrapperViewModel<IOrderLookupReferenceViewModel>>(),
+                scope.Resolve<IOrderLookupWrapperViewModel<IDetailsViewModel>>(),
+                scope.Resolve<IOrderLookupWrapperViewModel<ILabelOptionsViewModel>>(),
+                scope.Resolve<IOrderLookupWrapperViewModel<IReferenceViewModel>>(),
             };
 
             RightColumn = new ObservableCollection<INotifyPropertyChanged>
             {
-                scope.Resolve<IOrderLookupWrapperViewModel<IOrderLookupRatingViewModel>>(),
-                scope.Resolve<IOrderLookupWrapperViewModel<IOrderLookupCustomsViewModel>>(),
+                scope.Resolve<IOrderLookupWrapperViewModel<IRatingViewModel>>(),
+                scope.Resolve<IOrderLookupWrapperViewModel<ICustomsViewModel>>(),
             };
 
             subscriptions = new CompositeDisposable(
