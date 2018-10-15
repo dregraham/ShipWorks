@@ -18,12 +18,12 @@
             </ResourceDictionary.MergedDictionaries>
             <controls:ShipmentTypeToOrderLookupTemplateConverter x:Key="ShipmentTypeToOrderLookupTemplateConverter" />
             <ui:InvertBooleanConverter x:Key="InvertBooleanConverter" />
-            <ui:BooleanComparisonToVisiblityConverter x:Key="BooleanComparisonToVisibilityConverter" />
+            <ui:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
             <ui:WeightControl
-                IsTabStop="False"
                 x:Key="WeightControl"
                 AcceptApplyWeightKeyboardShortcut="True"
                 ErrorMessage="{Binding WeightErrorMessage}"
+                IsTabStop="False"
                 Style="{StaticResource OrderLookupWeightControl}"
                 Weight="{Binding ShipmentModel.ShipmentAdapter.ContentWeight, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=true, NotifyOnValidationError=true}" />
 
@@ -57,7 +57,7 @@
                     <ContentControl
                         Grid.Row="0"
                         Grid.Column="1"
-                        Content="{StaticResource ProviderComboBox}"/>
+                        Content="{StaticResource ProviderComboBox}" />
 
                     <TextBlock
                         Grid.Row="1"
@@ -68,7 +68,7 @@
                     <ContentControl
                         Grid.Row="1"
                         Grid.Column="1"
-                        Content="{StaticResource WeightControl}"/>
+                        Content="{StaticResource WeightControl}" />
                 </Grid>
             </DataTemplate>
 
@@ -119,7 +119,7 @@
                         Grid.Row="1"
                         Grid.Column="1"
                         Content="{StaticResource ProviderComboBox}"
-                        Focusable="False"/>
+                        Focusable="False" />
 
                     <TextBlock
                         Grid.Row="2"
@@ -201,7 +201,7 @@
                         Grid.Row="6"
                         Grid.Column="1"
                         Content="{StaticResource WeightControl}"
-                        Focusable="False"/>
+                        Focusable="False" />
                     <TextBlock
                         Grid.Row="7"
                         Grid.Column="0"
@@ -309,17 +309,10 @@
                             BorderThickness="1"
                             FontSize="12"
                             Foreground="{StaticResource ControlTextColor}"
+                            IsEnabled="{Binding IsProfileSelected, Converter={StaticResource InvertBooleanConverter}}"
                             Style="{StaticResource OrderLookupWeightInput}"
-                            Weight="{Binding ShipmentModel.ShipmentAdapter.Shipment.Postal.DimsWeight}">
-                            <ui:WeightInput.Visibility>
-                                <MultiBinding Converter="{StaticResource BooleanComparisonToVisibilityConverter}">
-                                    <Binding Converter="{StaticResource InvertBooleanConverter}" Path="IsProfileSelected" />
-                                    <Binding Path="ShipmentModel.ShipmentAdapter.Shipment.Postal.DimsAddWeight" />
-                                </MultiBinding>
-                            </ui:WeightInput.Visibility>
-                        </ui:WeightInput>
-
-
+                            Visibility="{Binding ShipmentModel.ShipmentAdapter.Shipment.Postal.DimsAddWeight, Converter={StaticResource BooleanToVisibilityConverter}}"
+                            Weight="{Binding ShipmentModel.ShipmentAdapter.Shipment.Postal.DimsWeight}" />
                     </Grid>
                     <local:OrderLookupInsuranceControl
                         Grid.Row="10"
@@ -330,9 +323,12 @@
             </DataTemplate>
         </ResourceDictionary>
     </UserControl.Resources>
-
+    
     <StackPanel>
-        <ContentControl Content="{Binding .}" IsEnabled="{Binding ShipmentModel.ShipmentAllowEditing}" IsTabStop="False">
+        <ContentControl
+            Content="{Binding .}"
+            IsEnabled="{Binding ShipmentModel.ShipmentAllowEditing}"
+            IsTabStop="False">
             <ContentControl.ContentTemplate>
                 <MultiBinding Converter="{StaticResource ShipmentTypeToOrderLookupTemplateConverter}">
                     <Binding Path="ShipmentModel.ShipmentAdapter.ShipmentTypeCode" />
