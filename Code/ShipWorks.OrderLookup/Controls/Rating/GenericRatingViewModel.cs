@@ -96,7 +96,7 @@ namespace ShipWorks.OrderLookup.Controls.Rating
         /// <summary>
         /// Dispose
         /// </summary>
-        public new void Dispose()
+        public void Dispose()
         {
             base.Dispose();
 
