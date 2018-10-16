@@ -10,6 +10,7 @@ using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Data;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Editions;
 using ShipWorks.Shipping.Carriers.Amazon.Enums;
 using ShipWorks.Shipping.Carriers.BestRate;
@@ -220,17 +221,10 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         }
 
         /// <summary>
-        /// Updates the total weight of the shipment
+        /// Get the dims weight from a shipment, if any
         /// </summary>
-        public override void UpdateTotalWeight(ShipmentEntity shipment)
-        {
-            shipment.TotalWeight = shipment.ContentWeight;
-
-            if (shipment.Amazon.DimsAddWeight)
-            {
-                shipment.TotalWeight += shipment.Amazon.DimsWeight;
-            }
-        }
+        protected override double GetDimsWeight(IShipmentEntity shipment) =>
+            shipment.Amazon.DimsAddWeight ? shipment.Amazon.DimsWeight : 0;
 
         /// <summary>
         /// Tracks the shipment.

@@ -222,28 +222,10 @@ namespace ShipWorks.Shipping.Carriers.Dhl
         }
 
         /// <summary>
-        /// Update the total weight of the shipment based on the individual package weights
+        /// Get weights from packages
         /// </summary>
-        public override void UpdateTotalWeight(ShipmentEntity shipment)
-        {
-            double contentWeight = 0;
-            double totalWeight = 0;
-
-            foreach (DhlExpressPackageEntity package in shipment.DhlExpress.Packages)
-            {
-                contentWeight += package.Weight;
-                totalWeight += package.Weight;
-
-                if (package.DimsAddWeight)
-                {
-                    totalWeight += package.DimsWeight;
-                }
-            }
-
-            shipment.ContentWeight = contentWeight;
-            shipment.TotalWeight = totalWeight;
-        }
-
+        protected override IEnumerable<(double weight, bool addDimsWeight, double dimsWeight)> GetPackageWeights(IShipmentEntity shipment) =>
+            shipment.DhlExpress.Packages.Select(x => (x.Weight, x.DimsAddWeight, x.DimsWeight));
 
         /// <summary>
         /// Get the shipment common detail for tango

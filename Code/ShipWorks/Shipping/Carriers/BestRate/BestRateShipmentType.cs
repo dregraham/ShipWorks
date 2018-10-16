@@ -322,16 +322,9 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         }
 
         /// <summary>
-        /// Update the total weight of the shipment
+        /// Get the dims weight from a shipment, if any
         /// </summary>
-        public override void UpdateTotalWeight(ShipmentEntity shipment)
-        {
-            shipment.TotalWeight = shipment.ContentWeight;
-
-            if (shipment.BestRate.DimsAddWeight)
-            {
-                shipment.TotalWeight += shipment.BestRate.DimsWeight;
-            }
-        }
+        protected override double GetDimsWeight(IShipmentEntity shipment) =>
+            shipment.BestRate.DimsAddWeight ? shipment.BestRate.DimsWeight : 0;
     }
 }
