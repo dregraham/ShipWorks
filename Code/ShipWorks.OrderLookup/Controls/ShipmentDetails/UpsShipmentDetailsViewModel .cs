@@ -28,7 +28,7 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
     /// View model for shipment details
     /// </summary>
     [KeyedComponent(typeof(IDetailsViewModel), ShipmentTypeCode.UpsOnLineTools)]
-    [WpfView(typeof(OrderLookupUpsShipmentDetailsControl))]
+    [WpfView(typeof(UpsShipmentDetailsControl))]
     public class UpsShipmentDetailsViewModel : IDetailsViewModel, INotifyPropertyChanged, IDataErrorInfo
     {
         public event PropertyChangedEventHandler PropertyChanged;

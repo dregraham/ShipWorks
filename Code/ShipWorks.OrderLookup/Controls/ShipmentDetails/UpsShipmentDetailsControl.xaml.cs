@@ -18,9 +18,9 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
     /// <summary>
     /// Interaction logic for OrderLookupUpsShipmentDetailsControl.xaml
     /// </summary>
-    public partial class OrderLookupUpsShipmentDetailsControl : UserControl
+    public partial class UpsShipmentDetailsControl : UserControl
     {
-        public OrderLookupUpsShipmentDetailsControl()
+        public UpsShipmentDetailsControl()
         {
             InitializeComponent();
         }
