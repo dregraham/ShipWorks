@@ -87,9 +87,8 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookup
         /// </summary>
         private void OnShipmentModelPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            if (e.PropertyName == nameof(OrderLookupShipmentModel) ||
-                e.PropertyName == nameof(ShipmentModel.ShipmentAdapter.ShipmentTypeCode) ||
-                e.PropertyName == nameof(ShipmentModel.SelectedOrder))
+            if (e.PropertyName == nameof(OrderLookupShipmentModel) ||  // The provider has changed on the shipment
+                e.PropertyName == nameof(ShipmentModel.SelectedOrder)) // The order has changed
             {
                 innerScope?.Dispose();
 
