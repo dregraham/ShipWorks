@@ -92,6 +92,11 @@ namespace ShipWorks.OrderLookup
         }
 
         /// <summary>
+        /// Keep track of the original ShipmentTypeCode so we can ensure its in the list of providers
+        /// </summary>
+        public ShipmentTypeCode OriginalShipmentTypeCode { get; private set; }
+
+        /// <summary>
         /// The package adapters for the order in context
         /// </summary>
         [Obfuscation(Exclude = true)]
@@ -213,6 +218,7 @@ namespace ShipWorks.OrderLookup
             if ((order.Shipments?.Count ?? 0) > 0)
             {
                 ShipmentAdapter = shippingManager.GetShipmentAdapter(order.Shipments.Last());
+                OriginalShipmentTypeCode = ShipmentAdapter.ShipmentTypeCode;
 
                 // Update dynamic data here because everything downstream will also attempt to update dynamic data
                 // doing it here gives us a head start before we are tracking property changes, this also ensures that the

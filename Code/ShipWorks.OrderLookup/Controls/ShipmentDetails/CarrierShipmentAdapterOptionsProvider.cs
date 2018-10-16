@@ -48,11 +48,11 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
         /// <summary>
         /// Get a dictionary of available providers for the adapter
         /// </summary>
-        public Dictionary<ShipmentTypeCode, string> GetProviders(ICarrierShipmentAdapter carrierAdapter)
+        public Dictionary<ShipmentTypeCode, string> GetProviders(ICarrierShipmentAdapter carrierAdapter, ShipmentTypeCode includeProvider)
         {
             return shipmentTypeProvider
                     .GetAvailableShipmentTypes(carrierAdapter)
-                    .Union(new[] { carrierAdapter.ShipmentTypeCode })
+                    .Union(new[] { carrierAdapter.ShipmentTypeCode, includeProvider })
                     .ToDictionary(s => s, s => EnumHelper.GetDescription(s));
         }
 

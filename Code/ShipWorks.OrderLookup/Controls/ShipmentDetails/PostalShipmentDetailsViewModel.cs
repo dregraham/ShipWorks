@@ -241,7 +241,7 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
             else
             {
                 Providers = carrierShipmentAdapterOptionsProvider
-                    .GetProviders(ShipmentModel.ShipmentAdapter);
+                    .GetProviders(ShipmentModel.ShipmentAdapter, ShipmentModel.OriginalShipmentTypeCode);
             }
         }
 
