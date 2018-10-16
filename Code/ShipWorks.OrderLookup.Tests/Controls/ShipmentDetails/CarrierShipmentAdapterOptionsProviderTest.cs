@@ -1,4 +1,5 @@
-﻿using Autofac.Extras.Moq;
+﻿using System.Collections.Generic;
+using Autofac.Extras.Moq;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.OrderLookup.Controls.ShipmentDetails;
@@ -16,6 +17,7 @@ namespace ShipWorks.OrderLookup.Tests.Controls.ShipmentDetails
         readonly CarrierShipmentAdapterOptionsProvider testObject;
         readonly Mock<ICarrierShipmentAdapter> shipmentAdapter;
         readonly Mock<IShipmentTypeManager> shipmentTypeManager;
+        readonly Mock<IDimensionsManager> dimensionsManager;
         readonly ShipmentTypeProvider ShipmentTypeProvider;
 
         public CarrierShipmentAdapterOptionsProviderTest()
@@ -27,11 +29,10 @@ namespace ShipWorks.OrderLookup.Tests.Controls.ShipmentDetails
 
             ShipmentTypeProvider = new ShipmentTypeProvider(new TestMessenger(), shipmentTypeManager.Object);
 
+            dimensionsManager = mock.Mock<IDimensionsManager>();
+
             testObject = mock.Create<CarrierShipmentAdapterOptionsProvider>();
             shipmentAdapter = mock.Mock<ICarrierShipmentAdapter>();
-
-
-
         }
 
         [Fact]
@@ -66,6 +67,34 @@ namespace ShipWorks.OrderLookup.Tests.Controls.ShipmentDetails
             testObject.GetProviders(shipmentAdapter.Object, ShipmentTypeCode.UpsOnLineTools);
 
             shipmentTypeManager.VerifyGet(s => s.EnabledShipmentTypeCodes);
+        }
+
+        [Fact]
+        public void GetProviders_UnionsAdaptersShipmentTypeCode()
+        {
+            shipmentAdapter.SetupGet(s => s.ShipmentTypeCode).Returns(ShipmentTypeCode.iParcel);
+
+            Dictionary<ShipmentTypeCode, string> result = testObject.GetProviders(shipmentAdapter.Object, ShipmentTypeCode.UpsOnLineTools);
+
+            Assert.True(result.ContainsKey(ShipmentTypeCode.iParcel));
+        }
+
+        [Fact]
+        public void GetProviders_UnionsIncludeShipmentTypeCode()
+        {
+            Dictionary<ShipmentTypeCode, string> result = testObject.GetProviders(shipmentAdapter.Object, ShipmentTypeCode.OnTrac);
+
+            Assert.True(result.ContainsKey(ShipmentTypeCode.OnTrac));
+        }
+
+        [Fact]
+        public void GetDimensionsProfiles_DelegatesToDimensionsManager()
+        {
+            IPackageAdapter package = mock.Mock<IPackageAdapter>().Object;
+
+            testObject.GetDimensionsProfiles(package);
+
+            dimensionsManager.Verify(d => d.Profiles(package));
         }
     }
 }
