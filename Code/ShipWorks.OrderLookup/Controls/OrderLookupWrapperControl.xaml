@@ -20,7 +20,7 @@
     <Expander
         Header="{Binding Context.Title}"
         IsExpanded="{Binding Context.Expanded}"
-        Visibility="{Binding Context.Visible, Converter={StaticResource BooleanToVisibility}}">
+        Visibility="{Binding Context.Visible, Converter={StaticResource BooleanToVisibility}, FallbackValue=Collapsed}">
         <StackPanel Style="{StaticResource PanelWrapper}">
             <ContentPresenter Content="{Binding Context}" ContentTemplateSelector="{StaticResource WpfViewTemplateSelector}" />
         </StackPanel>
