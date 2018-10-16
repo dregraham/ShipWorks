@@ -170,15 +170,12 @@
 
             <Grid Grid.Column="1" HorizontalAlignment="Right">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="auto"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
-                <TextBlock Text="Total Cost:" Grid.Column="0"
-                       Margin="0 0 5 0"/>
 
-                <TextBlock Grid.Column="1"
+                <TextBlock Grid.Column="0"
                            FontWeight="Bold"
-                           Text="{Binding ShipmentModel.TotalCost, StringFormat='c', UpdateSourceTrigger=PropertyChanged }"
+                           Text="{Binding ShipmentModel.TotalCost, StringFormat='Total Cost: {0:c}', UpdateSourceTrigger=PropertyChanged }"
                            MinWidth="75"
                            HorizontalAlignment="Right" >
 
@@ -203,7 +200,8 @@
             <Button Content="Create Label"
                     Style="{StaticResource LargePrimaryButton}"
                     HorizontalAlignment="Left"
-                    Command="{Binding CreateLabelCommand}"/>
+                    Command="{Binding CreateLabelCommand}"
+                    Visibility="{Binding ShowCreateLabel, Converter={StaticResource BoolToVis}}" />
             <Button Grid.Column="1"
                 Grid.Row="0"
                 Background="Transparent"
