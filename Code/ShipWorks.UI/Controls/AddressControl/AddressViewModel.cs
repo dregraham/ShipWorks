@@ -324,7 +324,7 @@ namespace ShipWorks.UI.Controls.AddressControl
         /// <summary>
         /// Dispose of resources
         /// </summary>
-        public virtual void Dispose()
+        public void Dispose()
         {
             addressValidationSubscriptions?.Dispose();
         }
