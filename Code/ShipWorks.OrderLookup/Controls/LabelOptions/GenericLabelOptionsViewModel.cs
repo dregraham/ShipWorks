@@ -21,16 +21,10 @@ namespace ShipWorks.OrderLookup.Controls.LabelOptions
     /// <summary>
     /// View model for the OrderLookupLabelOptionsViewModel
     /// </summary>
-    [KeyedComponent(typeof(ILabelOptionsViewModel), ShipmentTypeCode.Usps)]
-    [KeyedComponent(typeof(ILabelOptionsViewModel), ShipmentTypeCode.Endicia)]
-    [WpfView(typeof(PostalLabelOptionsControl))]
-    public class OrderLookupPostalLabelOptionsViewModel : ILabelOptionsViewModel, IDataErrorInfo
+    public class GenericLabelOptionsViewModel: ILabelOptionsViewModel, IDataErrorInfo
     {
         private readonly IShipmentTypeManager shipmentTypeManager;
-        private readonly IFedExUtility fedExUtility;
-        private readonly PropertyChangedHandler handler;
-        private bool allowStealth;
-        private bool allowNoPostage;
+        protected readonly PropertyChangedHandler handler;
         private DateTime? shipDate;
         private Dictionary<int, string> labelFormats;
 
@@ -39,12 +33,11 @@ namespace ShipWorks.OrderLookup.Controls.LabelOptions
         /// <summary>
         /// Constructor
         /// </summary>
-        public OrderLookupPostalLabelOptionsViewModel(IOrderLookupShipmentModel shipmentModel, IShipmentTypeManager shipmentTypeManager, IFedExUtility fedExUtility)
+        public GenericLabelOptionsViewModel(IOrderLookupShipmentModel shipmentModel, IShipmentTypeManager shipmentTypeManager)
         {
             ShipmentModel = shipmentModel;
             ShipmentModel.PropertyChanged += ShipmentModelPropertyChanged;
-            this.shipmentTypeManager = shipmentTypeManager;
-            this.fedExUtility = fedExUtility;
+            this.shipmentTypeManager = shipmentTypeManager;            
 
             handler = new PropertyChangedHandler(this, () => PropertyChanged);
 
@@ -91,26 +84,6 @@ namespace ShipWorks.OrderLookup.Controls.LabelOptions
         }
 
         /// <summary>
-        /// Requested label format for the shipment
-        /// </summary>
-        [Obfuscation(Exclude = true)]
-        public bool AllowStealth
-        {
-            get => allowStealth;
-            set => handler.Set(nameof(AllowStealth), ref allowStealth, value);
-        }
-
-        /// <summary>
-        /// Requested label format for the shipment
-        /// </summary>
-        [Obfuscation(Exclude = true)]
-        public bool AllowNoPostage
-        {
-            get => allowNoPostage;
-            set => handler.Set(nameof(AllowNoPostage), ref allowNoPostage, value);
-        }
-
-        /// <summary>
         /// List of available label formats for the shipment
         /// </summary>
         [Obfuscation(Exclude = true)]
@@ -144,7 +117,7 @@ namespace ShipWorks.OrderLookup.Controls.LabelOptions
                     return string.Empty;
                 }
 
-                return InputValidation<OrderLookupPostalLabelOptionsViewModel>.Validate(this, columnName);
+                return InputValidation<GenericLabelOptionsViewModel>.Validate(this, columnName);
             }
         }
 
@@ -162,18 +135,6 @@ namespace ShipWorks.OrderLookup.Controls.LabelOptions
             if (e.PropertyName == nameof(ShipmentModel.SelectedOrder) && ShipmentModel.SelectedOrder != null)
             {
                 ShipmentEntity shipment = ShipmentModel.ShipmentAdapter.Shipment;
-
-                // Determine if stealth and no postage is allowed for the new shipment
-                if (shipmentTypeManager.IsPostal(shipment.ShipmentTypeCode))
-                {
-                    AllowStealth = true;
-                    AllowNoPostage = true;
-                }
-                else
-                {
-                    AllowStealth = false;
-                    AllowNoPostage = false;
-                }
 
                 // Set the available label formats for the new shipment
                 InitializeForChangedShipment(shipment);
@@ -197,46 +158,13 @@ namespace ShipWorks.OrderLookup.Controls.LabelOptions
         /// <summary>
         /// Whether or not the given label format is allowed for the shipment
         /// </summary>
-        private bool ShouldIncludeLabelFormatInList(ShipmentEntity shipment, ThermalLanguage labelFormat)
-        {
-            switch (shipment.ShipmentTypeCode)
-            {
-                case ShipmentTypeCode.Asendia:
-                case ShipmentTypeCode.Amazon:
-                case ShipmentTypeCode.DhlExpress:
-                    if (labelFormat == ThermalLanguage.EPL)
-                    {
-                        return false;
-                    }
-                    break;
-                case ShipmentTypeCode.FedEx:
-                    if (labelFormat == ThermalLanguage.EPL &&
-                        fedExUtility.IsFimsService((FedExServiceType) shipment.FedEx.Service))
-                    {
-                        return false;
-                    }
-
-                    if (labelFormat != ThermalLanguage.None &&
-                        (shipment.FedEx.Packages?.Any(package => package.DangerousGoodsEnabled) ?? false))
-                    {
-                        return false;
-                    }
-                    break;
-                case ShipmentTypeCode.iParcel:
-                    if (labelFormat == ThermalLanguage.ZPL)
-                    {
-                        return false;
-                    }
-                    break;
-            }
-
-            return true;
-        }
+        protected virtual bool ShouldIncludeLabelFormatInList(ShipmentEntity shipment, ThermalLanguage labelFormat) => true;
 
         /// <summary>
         /// Dispose
         /// </summary>
         public void Dispose() =>
             ShipmentModel.PropertyChanged -= ShipmentModelPropertyChanged;
+
     }
 }

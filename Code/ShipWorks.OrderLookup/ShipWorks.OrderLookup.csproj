@@ -141,7 +141,13 @@
       <DependentUpon>UspsFromControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\From\UspsFromViewModel.cs" />
+    <Compile Include="Controls\LabelOptions\GenericLabelOptionsViewModel.cs" />
     <Compile Include="Controls\LabelOptions\ILabelOptionsViewModel.cs" />
+    <Compile Include="Controls\LabelOptions\PostalLabelOptionsViewModel.cs" />
+    <Compile Include="Controls\LabelOptions\UpsLabelOptionsControl.xaml.cs">
+      <DependentUpon>UpsLabelOptionsControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\LabelOptions\UpsLabelOptionsViewModel.cs" />
     <Compile Include="Controls\OrderLookupWrapperControl.xaml.cs">
       <DependentUpon>OrderLookupWrapperControl.xaml</DependentUpon>
     </Compile>
@@ -190,7 +196,6 @@
     <Compile Include="Controls\LabelOptions\PostalLabelOptionsControl.xaml.cs">
       <DependentUpon>PostalLabelOptionsControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\LabelOptions\OrderLookupPostalLabelOptionsViewModel.cs" />
     <Compile Include="Controls\OrderLookup\OrderLookupControlHost.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -319,6 +324,10 @@
     <Page Include="Controls\From\UspsFromControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Controls\LabelOptions\UpsLabelOptionsControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Controls\OrderLookupWrapperControl.xaml">
       <Generator>MSBuild:Compile</Generator>
