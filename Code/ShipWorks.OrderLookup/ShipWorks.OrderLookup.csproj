@@ -166,6 +166,10 @@
       <DependentUpon>GenericToControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\To\GenericToViewModel.cs" />
+    <Compile Include="Controls\To\UpsToControl.xaml.cs">
+      <DependentUpon>UpsToControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\To\UpsToViewModel.cs" />
     <Compile Include="FieldManager\IOrderLookupFieldLayoutDefaults.cs" />
     <Compile Include="FieldManager\IOrderLookupFieldLayoutRepository.cs" />
     <Compile Include="FieldManager\OrderLookupFieldLayoutDefaults.cs" />
@@ -359,6 +363,10 @@
     <Page Include="Controls\To\GenericToControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Controls\To\UpsToControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Controls\To\UspsToControl.xaml">
       <SubType>Designer</SubType>
