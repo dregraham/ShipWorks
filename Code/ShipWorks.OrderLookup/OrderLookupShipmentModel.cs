@@ -40,6 +40,7 @@ namespace ShipWorks.OrderLookup
         private readonly IShippingManager shippingManager;
         private readonly IMessageHelper messageHelper;
         private readonly PropertyChangedHandler handler;
+        private readonly OrderLookupLabelShortcutPipeline shortcutPipeline;
         private ICarrierShipmentAdapter shipmentAdapter;
         private OrderEntity selectedOrder;
         private bool shipmentAllowEditing;
@@ -50,12 +51,16 @@ namespace ShipWorks.OrderLookup
         /// <summary>
         /// Constructor
         /// </summary>
-        public OrderLookupShipmentModel(IMessenger messenger, IShippingManager shippingManager, IMessageHelper messageHelper)
+        public OrderLookupShipmentModel(IMessenger messenger, IShippingManager shippingManager,
+            IMessageHelper messageHelper, OrderLookupLabelShortcutPipeline shortcutPipeline)
         {
             this.messenger = messenger;
             this.shippingManager = shippingManager;
             this.messageHelper = messageHelper;
             handler = new PropertyChangedHandler(this, () => PropertyChanged);
+            this.shortcutPipeline = shortcutPipeline;
+
+            shortcutPipeline.Register(this);
         }
 
         /// <summary>

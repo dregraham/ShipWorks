@@ -207,6 +207,7 @@
     <Compile Include="Controls\IOrderLookupWrapperViewModel.cs" />
     <Compile Include="IOrderLookupViewModel.cs" />
     <Compile Include="OrderLookupClearOrderMessage.cs" />
+    <Compile Include="OrderLookupLabelShortcutPipeline.cs" />
     <Compile Include="OrderLookupModule.cs" />
     <Compile Include="OrderLookupPreviousShipmentLocator.cs" />
     <Compile Include="PreviousProcessedShipmentDetails.cs" />
