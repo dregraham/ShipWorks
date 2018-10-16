@@ -280,7 +280,7 @@
             <CheckBox
                 Grid.Column="0"
                 Margin="5,0,0,0"
-                IsChecked="{Binding AddToWeight}"
+                IsChecked="{Binding SelectedPackageApplyAdditionalWeight}"
                 Style="{StaticResource FormCheckBox}"
                 Content="Add-to weight"/>
 
@@ -296,9 +296,9 @@
                         Style="{StaticResource OrderLookupWeightInput}"
                         Grid.Column="1"
                         Margin="5,0,0,0"
-                        Weight="{Binding AddToWeightValue}"
+                        Weight="{Binding SelectedPackage.AdditionalWeight}"
                         IsEnabled="{Binding IsProfileSelected, Converter={StaticResource InvertBooleanConverter}}"
-                        Visibility="{Binding ShipmentModel.ShipmentAdapter.Shipment.Postal.DimsAddWeight, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                        Visibility="{Binding SelectedPackageApplyAdditionalWeight, Converter={StaticResource BooleanToVisibilityConverter}}"/>
         </Grid>
         <shipmentDetails:OrderLookupInsuranceControl
             Grid.Row="10"

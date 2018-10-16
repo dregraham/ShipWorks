@@ -98,7 +98,6 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
             }
 
             IPackageAdapter packageAdapter = SelectedPackage;
-            SelectedPackage = null;
             ShipmentModel.ShipmentAdapter.DeletePackage(packageAdapter);
 
             int location = Packages.IndexOf(packageAdapter);
@@ -107,6 +106,8 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
                 Packages.ElementAt(location + 1);
 
             Packages.Remove(packageAdapter);
+
+            RefreshInsurance();
 
             for (int i = 0; i < Packages.Count; i++)
             {
@@ -122,6 +123,8 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
             IPackageAdapter newPackage = ShipmentModel.ShipmentAdapter.AddPackage();
             Packages.Add(newPackage);
             SelectedPackage = newPackage;
+
+            RefreshInsurance();
         }
 
         /// <summary>
@@ -307,11 +310,25 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
                         SelectedPackage.DimsWidth = profile.Width;
                         SelectedPackage.DimsHeight = profile.Height;
                         SelectedPackage.Weight = profile.Weight;
+
                     }
                 }
 
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsProfileSelected)));
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(SelectedPackage)));
+            }
+        }
+
+        /// <summary>
+        /// The shipment content weight
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public bool SelectedPackageApplyAdditionalWeight
+        {
+            get { return SelectedPackage.ApplyAdditionalWeight; }
+            set
+            {
+                handler.Set(nameof(SelectedPackageDimsProfileID), (v) => SelectedPackage.ApplyAdditionalWeight = v, SelectedPackage.ApplyAdditionalWeight, value);
             }
         }
 
@@ -322,21 +339,13 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
         {
             if (ShipmentModel.SelectedOrder != null)
             {
-                if (e.PropertyName == nameof(ShipmentModel.SelectedOrder))
-                {
-                    RefreshProviders();
-                    RefreshDimensionalProfiles();
-                }
-
-                if (e.PropertyName == nameof(ShipmentModel.SelectedOrder) ||
-                    e.PropertyName == UpsShipmentFields.Service.Name ||
+                if (e.PropertyName == UpsShipmentFields.Service.Name ||
                     e.PropertyName == ShipmentFields.ShipCountryCode.Name)
                 {
                     RefreshInsurance();
                 }
 
-                if (e.PropertyName == nameof(ShipmentModel.SelectedOrder) ||
-                    e.PropertyName == nameof(ShipmentFields.ShipCountryCode.Name))
+                if (e.PropertyName == nameof(ShipmentFields.ShipCountryCode.Name))
                 {
                     RefreshServiceTypes();
                 }
@@ -365,7 +374,7 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
         /// </summary>
         private void RefreshInsurance()
         {
-            InsuranceViewModel.Load(ShipmentModel.PackageAdapters, ShipmentModel.PackageAdapters.FirstOrDefault(), ShipmentModel.ShipmentAdapter);
+            InsuranceViewModel.Load(Packages, SelectedPackage, ShipmentModel.ShipmentAdapter);
         }
 
         /// <summary>
