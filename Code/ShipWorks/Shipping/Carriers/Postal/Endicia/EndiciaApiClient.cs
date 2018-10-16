@@ -316,9 +316,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             bool isDomestic = shipment.ShipPerson.IsDomesticCountry();
 
             // There are no rates for regional boxes for international
-            if (!isDomestic && packagingType == PostalPackagingType.RateRegionalBoxA ||
-                packagingType == PostalPackagingType.RateRegionalBoxB ||
-                packagingType == PostalPackagingType.RateRegionalBoxC)
+            if (!isDomestic && (packagingType == PostalPackagingType.RateRegionalBoxA ||
+                                packagingType == PostalPackagingType.RateRegionalBoxB ||
+                                packagingType == PostalPackagingType.RateRegionalBoxC))
             {
                 return new List<RateResult>();
             }

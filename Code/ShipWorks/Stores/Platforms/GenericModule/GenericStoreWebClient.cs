@@ -168,6 +168,8 @@ namespace ShipWorks.Stores.Platforms.GenericModule
         {
             HttpVariableRequestSubmitter request = new HttpVariableRequestSubmitter();
             GenericModuleStoreType type = (GenericModuleStoreType) StoreTypeManager.GetType(Store);
+            ShipmentType shipmentType = ShipmentTypeManager.GetType(shipment.ShipmentTypeCode);
+            shipmentType.LoadShipmentData(shipment, false);
 
             request.Variables.Add("order", orderIdentifier);
             request.Variables.Add("tracking", shipment.TrackingNumber);
@@ -611,7 +613,8 @@ namespace ShipWorks.Stores.Platforms.GenericModule
         private string FormatDate(DateTime? lastModified)
         {
             DateTime date = lastModified ?? DateTime.MinValue;
-            return date.ToString("s");
+            
+            return date.ToString(StoreType.DateFormat);
         }
     }
 }

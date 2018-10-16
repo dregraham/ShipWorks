@@ -93,10 +93,11 @@ namespace ShipWorks.Shipping.Carriers.Postal
         {
             IEnumerable<PostalPackagingType> packageTypes = EnumHelper.GetEnumList<PostalPackagingType>()
                 .Select(x => x.Value)
+                .Where(x => !EnumHelper.GetDeprecated(x))
                 .Except(GetExcludedPackageTypes(repository).Cast<PostalPackagingType>());
 
             // The cubic packaging type is only used by Express1/Endicia
-            return packageTypes.Except(new List<PostalPackagingType> { PostalPackagingType.Cubic }).Cast<int>();
+            return packageTypes.Except(new List<PostalPackagingType> {PostalPackagingType.Cubic}).Cast<int>();
         }
 
         /// <summary>

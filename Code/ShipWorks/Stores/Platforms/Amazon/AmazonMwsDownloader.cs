@@ -14,7 +14,7 @@ using Interapptive.Shared.Enums;
 using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Utility;
 using log4net;
-using ShipWorks.Data.Administration.Retry;
+using ShipWorks.Data.Administration.Recovery;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
@@ -30,16 +30,15 @@ namespace ShipWorks.Stores.Platforms.Amazon
     [KeyedComponent(typeof(IStoreDownloader), StoreTypeCode.Amazon)]
     public class AmazonMwsDownloader : StoreDownloader, IStoreDownloader
     {
-        static readonly ILog log = LogManager.GetLogger(typeof(AmazonMwsDownloader));
-
-        int quantitySeen = 0;
+        private static readonly ILog log = LogManager.GetLogger(typeof(AmazonMwsDownloader));
+        private int quantitySeen = 0;
 
         /// <summary>
         /// Gets the Amazon store entity
         /// </summary>
         private AmazonStoreEntity AmazonStore => (AmazonStoreEntity) Store;
 
-        readonly Func<AmazonStoreEntity, IAmazonMwsClient> createWebClient;
+        private readonly Func<AmazonStoreEntity, IAmazonMwsClient> createWebClient;
 
         /// <summary>
         /// Constructor
@@ -425,7 +424,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
                     // There is only one image URL provided, so populate the both image properties with it
                     item.Thumbnail = XPathUtility.Evaluate(product, "amz:AttributeSets/details:ItemAttributes/details:SmallImage/details:URL", string.Empty);
                     item.Image = item.Thumbnail;
-                   
+
                     item.Weight = (double) GetDimensionValue(product, "Weight");
                     item.Length = GetDimensionValue(product, "Length");
                     item.Width = GetDimensionValue(product, "Width");

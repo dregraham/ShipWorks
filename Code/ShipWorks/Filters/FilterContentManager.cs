@@ -15,7 +15,7 @@ using ShipWorks.ApplicationCore.Interaction;
 using ShipWorks.Common.Threading;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Data;
-using ShipWorks.Data.Administration.Retry;
+using ShipWorks.Data.Administration.Recovery;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
@@ -32,25 +32,25 @@ namespace ShipWorks.Filters
     public static class FilterContentManager
     {
         // Logger
-        static readonly ILog log = LogManager.GetLogger(typeof(FilterContentManager));
+        private static readonly ILog log = LogManager.GetLogger(typeof(FilterContentManager));
 
         // A cache of all the filter counts for each node
-        static readonly Dictionary<long, FilterCount> countCache = new Dictionary<long, FilterCount>();
+        private static readonly Dictionary<long, FilterCount> countCache = new Dictionary<long, FilterCount>();
 
         // The max timestamp value we currently have loaded
-        static long maxTimestamp = 0;
+        private static long maxTimestamp = 0;
 
         // Event that lets us sync threads and know about when calculation is happening
-        static readonly ManualResetEvent calculatingEvent = new ManualResetEvent(true);
+        private static readonly ManualResetEvent calculatingEvent = new ManualResetEvent(true);
 
         // Event that lets us sync threads for quick filters and know about when calculation is happening
-        static readonly ManualResetEvent calculatingQuickFilterEvent = new ManualResetEvent(true);
+        private static readonly ManualResetEvent calculatingQuickFilterEvent = new ManualResetEvent(true);
 
         // So we know when to recalc date filters when the day changes
-        static DateTime dateFiltersLastUpdated;
+        private static DateTime dateFiltersLastUpdated;
 
         // Used to take lock so only one thread can check for changes at a time
-        static readonly object checkChangesLock = new object();
+        private static readonly object checkChangesLock = new object();
 
         // Wait forever constant
         private const int WaitForever = -1;
@@ -627,6 +627,7 @@ namespace ShipWorks.Filters
             // We need the count ID before we can fill these in
             content.InitialCalculation = "";
             content.UpdateCalculation = "";
+            content.EntityExistsQuery = "";
 
             // Save it, creates the ID
             adapter.SaveEntity(content, false, false);
@@ -637,6 +638,7 @@ namespace ShipWorks.Filters
             // Update the calculations
             content.InitialCalculation = filterSql.InitialSql;
             content.UpdateCalculation = filterSql.UpdateSql;
+            content.EntityExistsQuery = filterSql.ExistsSql;
             content.ColumnMask = filterSql.ColumnMask;
             content.JoinMask = filterSql.JoinMask;
 

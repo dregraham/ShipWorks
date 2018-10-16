@@ -34,6 +34,8 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
             context = db.CreateDataContext(x => ContainerInitializer.Initialize(x));
             mock = context.Mock;
 
+            DataPath.Initialize();
+
             order = context.Order;
 
             testObject = mock.Create<InsuranceViewModel>();
@@ -604,7 +606,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
 
 
         [Theory]
-        [InlineData(50,     providerShipWorks, insuredYes, linkVisibleYes, costVisibleYes, infoTipVisibleNo, "(Learn more)", noToolTipText, usCountryCode)]
+        [InlineData(50, providerShipWorks, insuredYes, linkVisibleYes, costVisibleYes, infoTipVisibleNo, "(Learn more)", noToolTipText, usCountryCode)]
         [InlineData(100.00, providerShipWorks, insuredYes, linkVisibleYes, costVisibleYes, infoTipVisibleNo, "(Learn more)", noToolTipText, usCountryCode)]
         [InlineData(101.00, providerShipWorks, insuredYes, linkVisibleYes, costVisibleYes, infoTipVisibleNo, "(Learn more)", noToolTipText, usCountryCode)]
         [InlineData(201.00, providerShipWorks, insuredYes, linkVisibleYes, costVisibleYes, infoTipVisibleNo, "(Learn more)", noToolTipText, usCountryCode)]
@@ -649,7 +651,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
             CarrierShipmentAdapterFactory f = new CarrierShipmentAdapterFactory(IoC.UnsafeGlobalLifetimeScope);
             ICarrierShipmentAdapter shipmentAdapter = f.Get(shipment);
 
-            List<IPackageAdapter> packageAdapters = shipmentAdapter.GetPackageAdapters().ToList();
+            List<IPackageAdapter> packageAdapters = shipmentAdapter.GetPackageAdaptersAndEnsureShipmentIsLoaded().ToList();
 
             testObject.Load(packageAdapters, packageAdapters.First(), shipmentAdapter);
 
@@ -683,7 +685,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
             CarrierShipmentAdapterFactory f = new CarrierShipmentAdapterFactory(IoC.UnsafeGlobalLifetimeScope);
             ICarrierShipmentAdapter shipmentAdapter = f.Get(shipment);
 
-            List<IPackageAdapter> packageAdapters = shipmentAdapter.GetPackageAdapters().ToList();
+            List<IPackageAdapter> packageAdapters = shipmentAdapter.GetPackageAdaptersAndEnsureShipmentIsLoaded().ToList();
 
             testObject.Load(packageAdapters, packageAdapters.First(), shipmentAdapter);
 
@@ -714,7 +716,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
             CarrierShipmentAdapterFactory f = new CarrierShipmentAdapterFactory(IoC.UnsafeGlobalLifetimeScope);
             ICarrierShipmentAdapter shipmentAdapter = f.Get(shipment);
 
-            List<IPackageAdapter> packageAdapters = shipmentAdapter.GetPackageAdapters().ToList();
+            List<IPackageAdapter> packageAdapters = shipmentAdapter.GetPackageAdaptersAndEnsureShipmentIsLoaded().ToList();
 
             testObject.Load(packageAdapters, packageAdapters.First(), shipmentAdapter);
 

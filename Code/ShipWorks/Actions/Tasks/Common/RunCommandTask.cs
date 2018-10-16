@@ -7,12 +7,13 @@ using System.Linq;
 using System.Management;
 using System.Text.RegularExpressions;
 using System.Threading;
+using System.Xml.Serialization;
+using log4net;
 using ShipWorks.Actions.Tasks.Common.Editors;
+using ShipWorks.Actions.Tasks.Common.Enums;
 using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Templates.Tokens;
-using log4net;
-using ShipWorks.Actions.Tasks.Common.Enums;
 
 namespace ShipWorks.Actions.Tasks.Common
 {
@@ -75,7 +76,17 @@ namespace ShipWorks.Actions.Tasks.Common
         /// <summary>
         /// Gets or sets how long to wait before timing out the command
         /// </summary>
-        public int CommandTimeoutInMinutes { get; set; }
+        public int CommandTimeoutInMinutes
+        {
+            get => (int) CommandTimeout.TotalMinutes;
+            set => CommandTimeout = TimeSpan.FromMinutes(value);
+        }
+
+        /// <summary>
+        /// Gets or sets how long to wait before timing out the command
+        /// </summary>
+        [XmlIgnore]
+        public TimeSpan CommandTimeout { get; set; }
 
         /// <summary>
         /// Controls how the task translates the inputs to iterations of the command
@@ -93,7 +104,7 @@ namespace ShipWorks.Actions.Tasks.Common
         /// <summary>
         /// Gets the command log folder.
         /// </summary>
-        private static string CommandLogFolder
+        public static string CommandLogFolder
         {
             get
             {
@@ -152,7 +163,7 @@ namespace ShipWorks.Actions.Tasks.Common
             }
 
             // Get the time that should be used for timing out the process
-            DateTime timeoutDate = DateTime.Now.AddMinutes(CommandTimeoutInMinutes);
+            DateTime timeoutDate = DateTime.Now.Add(CommandTimeout);
 
             if ((ActionTaskInputSource) context.Step.InputSource == ActionTaskInputSource.Nothing)
             {
@@ -365,27 +376,16 @@ namespace ShipWorks.Actions.Tasks.Common
         /// <returns></returns>
         public static IEnumerable<Process> GetChildren(int processId)
         {
-            return Process.GetProcesses().Where(x => GetParentProcess(x.Id) == processId);
-        }
-
-        /// <summary>
-        /// Gets the id of the parent process
-        /// </summary>
-        /// <param name="id">Id of the process whose parent we want to find</param>
-        /// <returns></returns>
-        private static int GetParentProcess(int id)
-        {
-            using (ManagementObject mo = new ManagementObject(string.Format("win32_process.handle='{0}'", id)))
+            string queryText = $"select processid from win32_process where parentprocessid = {processId}";
+            using (var searcher = new ManagementObjectSearcher(queryText))
             {
-                try
-                {
-                    mo.Get();
-                    return Convert.ToInt32(mo["ParentProcessId"]);
-                }
-                catch (ManagementException)
-                {
-                    return -1;
-                }
+                return searcher.Get()
+                    .OfType<ManagementObject>()
+                    .Select(x => x["processid"])
+                    .Where(x => x != null)
+                    .Select(Convert.ToInt32)
+                    .Select(Process.GetProcessById)
+                    .ToList();
             }
         }
     }

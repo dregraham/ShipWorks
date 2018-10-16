@@ -10,7 +10,7 @@ using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.ApplicationCore.Interaction;
 using ShipWorks.Common.Threading;
 using ShipWorks.Core.Messaging;
-using ShipWorks.Data.Administration.Retry;
+using ShipWorks.Data.Administration.Recovery;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.Custom;
@@ -27,43 +27,43 @@ namespace ShipWorks.Filters.Search
     public class SearchProvider : IDisposable
     {
         // Logger
-        static readonly ILog log = LogManager.GetLogger(typeof(SearchProvider));
+        private static readonly ILog log = LogManager.GetLogger(typeof(SearchProvider));
 
         // Type of objects to search
-        FilterTarget filterTarget;
+        private readonly FilterTarget filterTarget;
 
         // The node we are using to search on
-        volatile FilterNodeEntity searchNode;
+        private FilterNodeEntity searchNode;
 
         // The ID of the Search table that logs this search as active
-        long searchID;
+        private long searchID;
 
         // The status of the current search has changed
         public event EventHandler StatusChanged;
 
         // Multi-threaded status tracking
-        volatile bool isSearching = false;
-        volatile bool isCancelRequested = false;
-        object searchFinishingLock = new object();
+        private bool isSearching = false;
+        private bool isCancelRequested = false;
+        private readonly object searchFinishingLock = new object();
 
         // Event that signals that a previous search is complete
-        ManualResetEvent searchComplete = new ManualResetEvent(true);
+        private ManualResetEvent searchComplete = new ManualResetEvent(true);
 
         // The command used to execute the search
-        DbCommand searchCmd;
-        object searchCmdLock = new object();
+        private DbCommand searchCmd;
+        private readonly object searchCmdLock = new object();
 
         // Scheduling
-        FilterDefinition scheduledDefinition = null;
-        bool isScheduled = false;
-        object scheduleLock = new object();
+        private FilterDefinition scheduledDefinition = null;
+        private bool isScheduled = false;
+        private readonly object scheduleLock = new object();
 
         // Used to keep the UI from changing database while we work in the background
-        ApplicationBusyToken busyToken = null;
+        private ApplicationBusyToken busyToken = null;
 
         // Need to keep the Search.Updated field current so other SearchProviders know we are not abandoned and don't delete us.  We
         // store this so we can cancel it later.
-        Guid pingIdleWorkID;
+        private Guid pingIdleWorkID;
 
         /// <summary>
         /// Constructor
@@ -286,7 +286,7 @@ namespace ShipWorks.Filters.Search
         {
             log.DebugFormat("Search - Search thread starting.");
 
-            FilterDefinition definition = (FilterDefinition)state;
+            FilterDefinition definition = (FilterDefinition) state;
             FilterNodeContentEntity nodeContent = null;
 
             try
@@ -340,7 +340,7 @@ namespace ShipWorks.Filters.Search
                             long filterNodeContentID = (nodeContent != null && searchNode.FilterNodeContentID != nodeContent.FilterNodeContentID) ?
                                 nodeContent.FilterNodeContentID :
                                 searchNode.FilterNodeContentID;
-                            
+
                             FilterContentManager.QueueSingleScanFilterUpdateCompleteMessageAsync(filterNodeContentID, Messenger.Current, this);
                         }
 
@@ -525,6 +525,7 @@ namespace ShipWorks.Filters.Search
                 content.Status = (int) FilterCountStatus.RunningInitialCount;
                 content.InitialCalculation = "";
                 content.UpdateCalculation = "";
+                content.EntityExistsQuery = "";
                 content.Cost = 0;
                 content.Count = 0;
                 content.CountVersion = 0;
@@ -645,7 +646,7 @@ namespace ShipWorks.Filters.Search
             {
                 ExecuteCleanup(currentSearchNode);
             }
-            catch (Exception e) when(e is ORMQueryExecutionException || 
+            catch (Exception e) when (e is ORMQueryExecutionException ||
                                      e is SqlException)
             {
                 //Since this is just cleanup, ignore any SQL or ORM query exceptions and carry on
@@ -665,7 +666,7 @@ namespace ShipWorks.Filters.Search
                 // Delete our search filter node
                 try
                 {
-                    adapter.DeleteEntity(new FilterNodeEntity(currentSearchNode.FilterNodeID) {IgnoreConcurrency = true});
+                    adapter.DeleteEntity(new FilterNodeEntity(currentSearchNode.FilterNodeID) { IgnoreConcurrency = true });
                 }
                 catch (ORMConcurrencyException ex)
                 {

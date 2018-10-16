@@ -976,6 +976,7 @@
     <Compile Include="Filters\Content\Conditions\OrderItems\OrderItemLengthCondition.cs" />
     <Compile Include="Filters\Content\Conditions\OrderItems\OrderItemWidthCondition.cs" />
     <Compile Include="Shipping\Policies\AmazonPrimeShippingPolicyTarget.cs" />
+    <Compile Include="Filters\Content\SqlGeneration\FilterQueryType.cs" />
     <Compile Include="Shipping\Policies\AmazonPrimeShippingRestrictionType.cs" />
     <Compile Include="Shipping\ShipmentUpdateOperationResult.cs" />
     <Compile Include="Shipping\Policies\AmazonShipmentShippingPolicy.cs" />
@@ -985,8 +986,8 @@
     <Compile Include="Shipping\ShipSense\Population\NullShipSenseLoaderGateway.cs" />
     <Compile Include="Stores\Orders\Archive\IOrderArchiver.cs" />
     <Compile Include="Common\IO\KeyboardShortcuts\ShortcutSession.cs" />
-    <Compile Include="Data\Administration\Retry\SqlAdapterRetry.cs" />
-    <Compile Include="Data\Administration\Retry\SqlAdapterRetryOptions.cs" />
+    <Compile Include="Data\Administration\Recovery\SqlAdapterRetry.cs" />
+    <Compile Include="Data\Administration\Recovery\SqlAdapterRetryOptions.cs" />
     <Compile Include="Data\Utility\DataFunctions.cs" />
     <Compile Include="Shipping\Carriers\Postal\Endicia\Account\EndiciaNewAccountCredentials.cs" />
     <Compile Include="Shipping\Carriers\Postal\Endicia\IEndiciaApiClient.cs" />
@@ -1048,9 +1049,9 @@
     <Compile Include="Data\Administration\ISetupGuide.cs" />
     <Compile Include="Data\Administration\ISetupGuideViewModel.cs" />
     <Compile Include="Data\Administration\ISqlSchemaVersion.cs" />
-    <Compile Include="Data\Administration\Retry\ISqlAdapterRetry.cs" />
-    <Compile Include="Data\Administration\Retry\ISqlAdapterRetryFactory.cs" />
-    <Compile Include="Data\Administration\Retry\SqlAdapterRetryFactory.cs" />
+    <Compile Include="Data\Administration\Recovery\ISqlAdapterRetry.cs" />
+    <Compile Include="Data\Administration\Recovery\ISqlAdapterRetryFactory.cs" />
+    <Compile Include="Data\Administration\Recovery\SqlAdapterRetryFactory.cs" />
     <Compile Include="Data\Administration\SqlChangeTracking.cs" />
     <Compile Include="Data\Administration\SqlServerEditionIdType.cs" />
     <Compile Include="Data\Administration\SqlServerSetup\SqlInstallationFiles\ISqlInstaller.cs" />
@@ -1105,7 +1106,7 @@
     <Compile Include="Email\EmailCommunicatorWrapper.cs" />
     <Compile Include="Email\IEmailCommunicatorWrapper.cs" />
     <Compile Include="Filters\Content\Conditions\AddressValidationStatusCondition.cs" />
-    <Compile Include="Data\Administration\Retry\SqlAdapterRetryT.cs" />
+    <Compile Include="Data\Administration\Recovery\SqlAdapterRetryT.cs" />
     <Compile Include="Filters\Content\Conditions\EnumEqualityOperator.cs" />
     <Compile Include="Filters\Content\Conditions\Orders\CombinedOrderNumberCondition.cs" />
     <Compile Include="Filters\Content\Conditions\Orders\OrderCombinedCondition.cs" />
@@ -10665,6 +10666,9 @@
     <None Include="Resources\add - Copy.png" />
     <None Include="ApplicationCore\Appearance\WindowLayoutDefault\panels.xml" />
     <None Include="ApplicationCore\Appearance\WindowLayoutDefault\ribbon.xml" />
+    <EmbeddedResource Include="Filters\Content\SqlGeneration\Templates\ExistsQueryFolder.sql" />
+    <EmbeddedResource Include="Filters\Content\SqlGeneration\Templates\ExistsQuery.sql" />
+    <EmbeddedResource Include="Filters\Content\SqlGeneration\Templates\ExistsQueryEmpty.sql" />
     <Content Include="Resources\add.png" />
     <None Include="Resources\blank16.png" />
     <None Include="Resources\calendar_31.png" />
@@ -10818,6 +10822,7 @@
     <None Include="Resources\infiplex.png" />
     <None Include="Resources\asendia.png" />
     <Resource Include="Resources\box_closed_with_label_32_32.png" />
+    <None Include="Resources\bonanza.png" />
     <Content Include="Resources\data_16.png" />
     <Content Include="Resources\data_error_16.png" />
     <Content Include="Resources\data_ok_16.png" />

@@ -2861,7 +2861,7 @@ DAPIxVgFicf/GQCdrAkiuOdOjQAAAABJRU5ErkJggg==
 				name="CreateNew"
 				refimgid="1412729f-f158-4030-8e65-3cc184030023"
 				searchtimeout="30000ms">
-					/form[@controlname='ShippingDlg']/container[@controlname='splitContainer']//toolbar[@controlname='shipmentsToolbar']/rawtext[@rawtext='Create New' and @visible='True']
+					/form[@controlname='ShippingDlg']/container[@controlname='splitContainer']//toolbar[@controlname='shipmentsToolbar']/rawtext[@rawtext='Create New' and @visible='True' and @enabled='True']
 				</item>
 				<item
 				addcaps="text,control,nativewindow"
@@ -3041,7 +3041,7 @@ DAPIxVgFicf/GQCdrAkiuOdOjQAAAABJRU5ErkJggg==
 				name="ComboShipmentType"
 				refimgid="50c4918e-2262-48d0-9e13-3a6e652c1fc3"
 				searchtimeout="30000ms">
-					/form[@controlname='ShippingDlg']/container[@controlname='splitContainer']/?/?/container[@controlname='ratesSplitContainer']/container[@controlname='panel1']/?/?/tabpage[@controlname='tabPageService']/combobox[@controlname='comboShipmentType' and @visible='True']
+					/form[@controlname='ShippingDlg']/container[@controlname='splitContainer']/?/?/container[@controlname='ratesSplitContainer']/container[@controlname='panel1']/?/?/tabpage[@controlname='tabPageService']/combobox[@controlname='comboShipmentType' and @visible='True' and @enabled='True']
 				</item>
 				<item
 				addcaps="text,accessible"

@@ -1,7 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Collections.Specialized;
+using System.Linq;
 using System.Net;
 using System.Text;
+using System.Web;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Net;
@@ -9,7 +11,6 @@ using Interapptive.Shared.Security;
 using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore.Logging;
 using Newtonsoft.Json;
-using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Platforms.ChannelAdvisor.DTO;
 
 namespace ShipWorks.Stores.Platforms.ChannelAdvisor
@@ -143,17 +144,16 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         /// </summary>
         public ChannelAdvisorOrderResult GetOrders(DateTime start, string refreshToken)
         {
-            IHttpVariableRequestSubmitter submitter = CreateRequest(ordersEndpoint, HttpVerb.Get);
+            IHttpVariableRequestSubmitter getOrdersRequestSubmitter = CreateRequest(ordersEndpoint, HttpVerb.Get);
 
-            submitter.Variables.Add("access_token", GetAccessToken(refreshToken));
+            getOrdersRequestSubmitter.Variables.Add("access_token", GetAccessToken(refreshToken));
 
             // Manually formate the date because the Universal Sortable Date Time format does not include milliseconds but CA does include milliseconds
-            submitter.Variables.Add("$filter", $"PaymentDateUtc gt {start:yyyy'-'MM'-'dd'T'HH':'mm':'ss'.'fffffff'Z'} and PaymentStatus eq 'Cleared'");
-            submitter.Variables.Add("$count", "true");
-            submitter.Variables.Add("$orderby", "CreatedDateUtc");
-            submitter.Variables.Add("$expand", "Fulfillments,Items($expand=FulfillmentItems)");
+            getOrdersRequestSubmitter.Variables.Add("$filter", $"PaymentDateUtc gt {start:yyyy'-'MM'-'dd'T'HH':'mm':'ss'.'fffffff'Z'} and PaymentStatus eq 'Cleared'");
+            getOrdersRequestSubmitter.Variables.Add("$orderby", "CreatedDateUtc");
+            getOrdersRequestSubmitter.Variables.Add("$expand", "Fulfillments,Items($expand=FulfillmentItems)");
 
-            return ProcessRequest<ChannelAdvisorOrderResult>(submitter, "GetOrders", refreshToken);
+            return SubmitGetOrders(getOrdersRequestSubmitter, refreshToken);
         }
 
         /// <summary>
@@ -161,9 +161,9 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         /// </summary>
         public ChannelAdvisorOrderResult GetOrders(string nextToken, string refreshToken)
         {
-            IHttpVariableRequestSubmitter submitter = CreateRequest(nextToken, HttpVerb.Get);
+            IHttpVariableRequestSubmitter getOrdersRequestSubmitter = CreateRequest(nextToken, HttpVerb.Get);
 
-            return ProcessRequest<ChannelAdvisorOrderResult>(submitter, "GetOrders", refreshToken);
+            return SubmitGetOrders(getOrdersRequestSubmitter, refreshToken);
         }
 
         /// <summary>
@@ -173,7 +173,9 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         {
             IHttpVariableRequestSubmitter submitter = CreateRequest(nextToken, HttpVerb.Get);
 
-            return ProcessRequest<ChannelAdvisorOrderItemsResult>(submitter, "GetOrders", refreshToken);
+            return Functional
+                .Retry(() => ProcessRequest<ChannelAdvisorOrderItemsResult>(submitter, "GetOrders", refreshToken), 10, ShouldRetryRequest)
+                .Match(x => x, ex => throw ex);
         }
         
         /// <summary>
@@ -193,7 +195,9 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
                 submitter.Variables.Add("access_token", GetAccessToken(refreshToken));
                 submitter.Variables.Add("$expand", "Attributes, Images, DCQuantities");
 
-                ChannelAdvisorProduct product = ProcessRequest<ChannelAdvisorProduct>(submitter, "GetProduct", refreshToken);
+                ChannelAdvisorProduct product = Functional
+                    .Retry(() => ProcessRequest<ChannelAdvisorProduct>(submitter, "GetProduct", refreshToken), 10, ShouldRetryRequest)
+                    .Match(x => x, ex => throw ex);
 
                 productCache[productID] = product;
 
@@ -206,7 +210,6 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
             }
         }
 
-
         /// <summary>
         /// Uploads the shipment details.
         /// </summary>
@@ -214,6 +217,24 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
             string refreshToken,
             string channelAdvisorOrderID) =>
             UploadShipmentDetails(channelAdvisorShipment, refreshToken, channelAdvisorOrderID, false);
+
+        /// <summary>
+        /// Submits a GetOrders request
+        /// </summary>
+        private ChannelAdvisorOrderResult SubmitGetOrders(IHttpVariableRequestSubmitter getOrdersRequestSubmitter, string refreshToken)
+        {
+            return Functional
+                .Retry(() => ProcessRequest<ChannelAdvisorOrderResult>(getOrdersRequestSubmitter, "GetOrders", refreshToken), 10, ShouldRetryRequest)
+                .Match(x => x, ex => throw ex);
+        }
+
+        /// <summary>
+        /// Determines if the exception is a timeout or internal server error
+        /// </summary>
+        private static bool ShouldRetryRequest(Exception ex)
+        {
+            return (ex as ChannelAdvisorException)?.InnerException is WebException;
+        }
 
         /// <summary>
         /// Uploads the shipment details.
@@ -232,7 +253,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
 
                 requestBody = $"{{\"Value\":{serializedShipment}}}";
             }
-            catch (Newtonsoft.Json.JsonException ex)
+            catch (JsonException ex)
             {
                 throw new ChannelAdvisorException("Error creating ChannelAdvisor shipment request.", ex);
             }
@@ -302,7 +323,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
                     MissingMemberHandling = MissingMemberHandling.Ignore
                 });
             }
-            catch (WebException ex) when (((HttpWebResponse)ex.Response).StatusCode == HttpStatusCode.Unauthorized && generateNewTokenIfExpired)
+            catch (WebException ex) when (((HttpWebResponse) ex.Response).StatusCode == HttpStatusCode.Unauthorized && generateNewTokenIfExpired)
             {
                 apiLogEntry.LogResponse(ex);
                 return RetryRequestWithNewToken<T>(request, action, refreshToken);
@@ -319,8 +340,21 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         /// </summary>
         private T RetryRequestWithNewToken<T>(IHttpVariableRequestSubmitter request, string action, string refreshToken)
         {
-            request.Variables.Remove("access_token");
-            request.Variables.Add("access_token", GetAccessToken(refreshToken, true));
+            // If the request has variables, it must be the initial request, so replace the variable.
+            // If not, the url came from the last get order response, and the variables are already in the query string,
+            // so adjust them there.
+            if (request.Variables.Any())
+            {
+                request.Variables.Remove("access_token");
+                request.Variables.Add("access_token", GetAccessToken(refreshToken, true));
+            }
+            else
+            {
+                NameValueCollection parameterValues = HttpUtility.ParseQueryString(request.Uri.Query);
+                parameterValues.Set("access_token", GetAccessToken(refreshToken, true));
+                string url = request.Uri.AbsolutePath;
+                request.Uri = new Uri(EndpointBase + url + "?" + parameterValues);
+            }
 
             return ProcessRequest<T>(request, action, refreshToken, false);
         }

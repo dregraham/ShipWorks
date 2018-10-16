@@ -23,56 +23,37 @@ namespace ShipWorks.Stores.Platforms.GenericModule
         /// <summary>
         /// The download strategy
         /// </summary>
-        public GenericStoreDownloadStrategy DownloadStrategy
-        {
-            get;
-            set;
-        }
+        public GenericStoreDownloadStrategy DownloadStrategy { get; set; }
 
         /// <summary>
         /// The level of support for online status
         /// </summary>
-        public GenericOnlineStatusSupport OnlineStatusSupport
-        {
-            get;
-            set;
-        }
+        public GenericOnlineStatusSupport OnlineStatusSupport { get; set; }
 
         /// <summary>
         /// DataType of online status code, if supported
         /// </summary>
-        public GenericVariantDataType OnlineStatusDataType
-        {
-            get;
-            set;
-        }
+        public GenericVariantDataType OnlineStatusDataType { get; set; }
 
         /// <summary>
         /// Indiciates if online customer ID's are supported
         /// </summary>
-        public bool OnlineCustomerSupport
-        {
-            get;
-            set;
-        }
+        public bool OnlineCustomerSupport { get; set; }
 
         /// <summary>
         /// DataType of online customer ID's, if supported
         /// </summary>
-        public GenericVariantDataType OnlineCustomerDataType
-        {
-            get;
-            set;
-        }
+        public GenericVariantDataType OnlineCustomerDataType { get; set; }
 
         /// <summary>
         /// Indiciates if uploading online shipment details is supported
         /// </summary>
-        public bool OnlineShipmentDetails
-        {
-            get;
-            set;
-        }
+        public bool OnlineShipmentDetails { get; set; }
+
+        /// <summary>
+        /// Indicates if milliseconds should be included in dates
+        /// </summary>
+        public bool IncludeMilliseconds { get; set; }
 
         /// <summary>
         /// Read the values from the module response
@@ -96,6 +77,7 @@ namespace ShipWorks.Stores.Platforms.GenericModule
             string onlineStatusDataType = XPathUtility.Evaluate(xpath, "//Capabilities/OnlineStatus/@dataType", "numeric");
 
             bool onlineShipmentSupported = XPathUtility.EvaluateXsdBoolean(xpath, "//Capabilities/OnlineShipmentUpdate/@supported", false);
+            IncludeMilliseconds = XPathUtility.EvaluateXsdBoolean(xpath, "//Capabilities/IncludeMilliseconds/@supported", false);
 
             // Apply download strategy
             switch (downloadStrategy)

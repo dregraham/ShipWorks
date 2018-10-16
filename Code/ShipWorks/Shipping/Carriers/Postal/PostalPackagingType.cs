@@ -52,7 +52,9 @@ namespace ShipWorks.Shipping.Carriers.Postal
         [SortOrder(10)]
         RateRegionalBoxB = 9,
 
+        // Regional box c was discontinued in 2016
         [Description("Regional Rate Box C")]
+        [Deprecated]
         RateRegionalBoxC = 11,
 
         [Description("Cubic")]

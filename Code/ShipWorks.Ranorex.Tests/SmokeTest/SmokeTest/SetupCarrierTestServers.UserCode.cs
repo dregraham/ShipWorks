@@ -14,6 +14,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
 using WinForms = System.Windows.Forms;
+using System.Diagnostics;
 
 using Ranorex;
 using Ranorex.Core;
@@ -39,9 +40,16 @@ namespace SmokeTest
 
         	string smokeTestPath = System.IO.Path.GetFullPath(System.IO.Path.Combine(System.IO.Directory.GetCurrentDirectory(),@"..\..\"));
         	string userPath = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
-            Report.Log(ReportLevel.Info, "Application", "Run TestServers.cmd to change test server settings in registry");
-            Host.Local.RunApplication("TestServers.cmd", "", "", false);
-        
+        	
+        	
+
+            Report.Log(ReportLevel.Info, "Application", "Run command to change USPS test server setting in registry to production");
+            
+            Process regeditProcess = Process.Start("regedit.exe", "/s " + smokeTestPath + @"ZipFiles\TestServers.reg");
+			regeditProcess.WaitForExit();
+
+
+
         }
 
 

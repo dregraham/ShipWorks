@@ -11,7 +11,7 @@ using Interapptive.Shared.Utility;
 using log4net;
 using ShipWorks.ApplicationCore;
 using ShipWorks.Data;
-using ShipWorks.Data.Administration.Retry;
+using ShipWorks.Data.Administration.Recovery;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Import;
 using ShipWorks.Data.Import.Xml;
@@ -25,6 +25,7 @@ namespace ShipWorks.Stores.Platforms.GenericModule
     /// Provides the entry point into the order download processes for Generic
     /// </summary>
     [KeyedComponent(typeof(IStoreDownloader), StoreTypeCode.Amosoft)]
+    [KeyedComponent(typeof(IStoreDownloader), StoreTypeCode.Bonanza)]
     [KeyedComponent(typeof(IStoreDownloader), StoreTypeCode.Brightpearl)]
     [KeyedComponent(typeof(IStoreDownloader), StoreTypeCode.Cart66Lite)]
     [KeyedComponent(typeof(IStoreDownloader), StoreTypeCode.Cart66Pro)]
@@ -403,7 +404,7 @@ namespace ShipWorks.Stores.Platforms.GenericModule
             LoadAmazonOrderDetails(order, xpath);
 
             // last modified
-            order.OnlineLastModified = DateTime.Parse(XPathUtility.Evaluate(xpath, "LastModified", order.OrderDate.ToString("s")));
+            order.OnlineLastModified = DateTime.Parse(XPathUtility.Evaluate(xpath, "LastModified", order.OrderDate.ToString(storeType.DateFormat)));
 
             // If Parse can tell what timezone it's in, it automatically converts it to local.  We need UTC.
             if (order.OnlineLastModified.Kind == DateTimeKind.Local)

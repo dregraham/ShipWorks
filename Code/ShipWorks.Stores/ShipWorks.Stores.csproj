@@ -148,6 +148,7 @@
     <Reference Include="System.ValueTuple, Version=4.0.2.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\..\packages\System.ValueTuple.4.4.0\lib\netstandard1.0\System.ValueTuple.dll</HintPath>
     </Reference>
+    <Reference Include="System.Web" />
     <Reference Include="System.Web.Services" />
     <Reference Include="System.Windows" />
     <Reference Include="System.Windows.Forms" />
@@ -269,6 +270,7 @@
     <Compile Include="Platforms\BigCommerce\OnlineUpdating\IBigCommerceDataAccess.cs" />
     <Compile Include="Platforms\BigCommerce\OnlineUpdating\IBigCommerceItemLoader.cs" />
     <Compile Include="Platforms\BigCommerce\OnlineUpdating\BigCommerceShipmentDetailsUpdaterClient.cs" />
+    <Compile Include="Platforms\Bonanza\BonanzaStoreType.cs" />
     <Compile Include="Platforms\Brightpearl\CoreExtensions\Filters\Orders\BrightpearlAmazonOrderIDCondition.cs" />
     <Compile Include="Platforms\Brightpearl\CoreExtensions\Filters\Orders\BrightpearlIsFBACondition.cs" />
     <Compile Include="Platforms\Brightpearl\CoreExtensions\Filters\Orders\BrightpearlIsPrimeCondition.cs" />

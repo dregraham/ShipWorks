@@ -134,11 +134,11 @@ namespace ShipWorks.Shipping.Profiles
         {
             return ProfilesReadOnly.SingleOrDefault(p => p.ShippingProfileID == profileID);
         }
-        
+
         /// <summary>
         /// Get profiles for the given shipment type
         /// </summary>
-        public static IEnumerable<IShippingProfileEntity> GetProfilesFor(ShipmentTypeCode shipmentTypeCode, 
+        public static IEnumerable<IShippingProfileEntity> GetProfilesFor(ShipmentTypeCode shipmentTypeCode,
                                                                          bool includeDefaultProfiles)
         {
             IEnumerable<IShippingProfileEntity> profiles = ProfilesReadOnly.Where(p => p.ShipmentType == null ||
@@ -148,10 +148,10 @@ namespace ShipWorks.Shipping.Profiles
             {
                 profiles = profiles.Where(p => !p.ShipmentTypePrimary);
             }
-            
+
             return profiles;
         }
-        
+
         /// <summary>
         /// Save the given profile to the database
         /// </summary>
@@ -218,7 +218,7 @@ namespace ShipWorks.Shipping.Profiles
                     adapter.DeleteEntity(package);
 
                     changes = true;
-                }                
+                }
             }
 
             return changes;

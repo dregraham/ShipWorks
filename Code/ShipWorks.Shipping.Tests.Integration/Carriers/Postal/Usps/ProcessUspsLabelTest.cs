@@ -94,10 +94,8 @@ namespace ShipWorks.Shipping.Tests.Integration.Carriers.Postal.Usps
                     }
                 };
 
-                Address address = new Address();
-                string email = "";
-
-                w.Setup(x => x.GetAccountInfo(It.IsAny<object>(), out accountInfo, out address, out email)).Returns("");
+                w.Setup(x => x.GetAccountInfo(It.IsAny<Credentials>()))
+                    .Returns(new AccountInfoResult(accountInfo, new Address(), ""));
             });
 
             webServiceFactory.Setup(x => x.Create(It.IsAny<string>(), It.IsAny<LogActionType>()))
@@ -123,7 +121,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Carriers.Postal.Usps
                 .Set(x => x.OriginPerson = localAddress)
                 .Set(x => x.ShipPerson = localAddress)
                 .Set(x => x.Postal.Usps.RateShop = true)
-                .Set(x => x.Postal.Service = (int)PostalServiceType.FirstClass)
+                .Set(x => x.Postal.Service = (int) PostalServiceType.FirstClass)
                 .Save();
 
             var accounts = new Dictionary<string, long>
@@ -159,10 +157,8 @@ namespace ShipWorks.Shipping.Tests.Integration.Carriers.Postal.Usps
                     }
                 };
 
-                Address address = new Address();
-                string email = "";
-
-                w.Setup(x => x.GetAccountInfo(It.IsAny<object>(), out accountInfo, out address, out email)).Returns("");
+                w.Setup(x => x.GetAccountInfo(It.IsAny<Credentials>()))
+                    .Returns(new AccountInfoResult(accountInfo, new Address(), ""));
             });
 
             webServiceFactory.Setup(x => x.Create(It.IsAny<string>(), It.IsAny<LogActionType>())).Returns(webService);

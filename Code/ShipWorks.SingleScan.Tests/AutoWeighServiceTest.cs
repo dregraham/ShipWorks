@@ -52,7 +52,7 @@ namespace ShipWorks.SingleScan.Tests
             var packageAdapter = mock.Mock<IPackageAdapter>();
 
             var shipmentAdapter = mock.Mock<ICarrierShipmentAdapter>();
-            shipmentAdapter.Setup(a => a.GetPackageAdapters())
+            shipmentAdapter.Setup(a => a.GetPackageAdaptersAndEnsureShipmentIsLoaded())
                 .Returns(new List<IPackageAdapter> { packageAdapter.Object, packageAdapter.Object });
 
             mock.Mock<ICarrierShipmentAdapterFactory>().Setup(x => x.Get(It.IsAny<ShipmentEntity>()))
@@ -77,7 +77,7 @@ namespace ShipWorks.SingleScan.Tests
             packageAdapter.SetupGet(p => p.Weight).Returns(42);
 
             var shipmentAdapter = mock.Mock<ICarrierShipmentAdapter>();
-            shipmentAdapter.Setup(a => a.GetPackageAdapters())
+            shipmentAdapter.Setup(a => a.GetPackageAdaptersAndEnsureShipmentIsLoaded())
                 .Returns(new List<IPackageAdapter> { packageAdapter.Object, packageAdapter.Object });
 
             mock.Mock<ICarrierShipmentAdapterFactory>().Setup(x => x.Get(It.IsAny<ShipmentEntity>()))
@@ -101,7 +101,7 @@ namespace ShipWorks.SingleScan.Tests
             var packageAdapter = mock.Mock<IPackageAdapter>();
 
             var shipmentAdapter = mock.Mock<ICarrierShipmentAdapter>();
-            shipmentAdapter.Setup(a => a.GetPackageAdapters())
+            shipmentAdapter.Setup(a => a.GetPackageAdaptersAndEnsureShipmentIsLoaded())
                 .Returns(new List<IPackageAdapter> { packageAdapter.Object, packageAdapter.Object });
 
             mock.Mock<ICarrierShipmentAdapterFactory>().Setup(x => x.Get(It.IsAny<ShipmentEntity>()))
@@ -126,7 +126,7 @@ namespace ShipWorks.SingleScan.Tests
             packageAdapter.SetupGet(x => x.Weight).Returns(100);
 
             var shipmentAdapter = mock.Mock<ICarrierShipmentAdapter>();
-            shipmentAdapter.Setup(a => a.GetPackageAdapters())
+            shipmentAdapter.Setup(a => a.GetPackageAdaptersAndEnsureShipmentIsLoaded())
                 .Returns(new List<IPackageAdapter> { packageAdapter.Object, packageAdapter.Object });
 
             mock.Mock<ICarrierShipmentAdapterFactory>().Setup(x => x.Get(It.IsAny<ShipmentEntity>()))
@@ -150,7 +150,7 @@ namespace ShipWorks.SingleScan.Tests
             var packageAdapter = mock.Mock<IPackageAdapter>();
 
             var shipmentAdapter = mock.Mock<ICarrierShipmentAdapter>();
-            shipmentAdapter.Setup(a => a.GetPackageAdapters())
+            shipmentAdapter.Setup(a => a.GetPackageAdaptersAndEnsureShipmentIsLoaded())
                 .Returns(new List<IPackageAdapter> { packageAdapter.Object, packageAdapter.Object });
 
             mock.Mock<ICarrierShipmentAdapterFactory>().Setup(x => x.Get(It.IsAny<ShipmentEntity>()))
@@ -174,7 +174,7 @@ namespace ShipWorks.SingleScan.Tests
             var packageAdapter = mock.Mock<IPackageAdapter>();
 
             var shipmentAdapter = mock.Mock<ICarrierShipmentAdapter>();
-            shipmentAdapter.Setup(a => a.GetPackageAdapters())
+            shipmentAdapter.Setup(a => a.GetPackageAdaptersAndEnsureShipmentIsLoaded())
                 .Returns(new List<IPackageAdapter> { packageAdapter.Object, packageAdapter.Object });
 
             mock.Mock<ICarrierShipmentAdapterFactory>().Setup(x => x.Get(It.IsAny<ShipmentEntity>()))

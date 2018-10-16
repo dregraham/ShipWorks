@@ -315,7 +315,7 @@ namespace Interapptive.Shared.Collections
         /// <summary>
         /// Performs the specified action for each item in source
         /// </summary>
-        public static IEnumerable<T> ForEach<T>(this IEnumerable<T> source, Action<T> action)
+        public static void ForEach<T>(this IEnumerable<T> source, Action<T> action)
         {
             MethodConditions.EnsureArgumentIsNotNull(source, nameof(source));
             MethodConditions.EnsureArgumentIsNotNull(action, nameof(action));
@@ -324,14 +324,12 @@ namespace Interapptive.Shared.Collections
             {
                 action(item);
             }
-
-            return source;
         }
 
         /// <summary>
         /// Performs the specified action for each item in source
         /// </summary>
-        public static IEnumerable<T> ForEach<T>(this IEnumerable<T> source, Action<T, int> action)
+        public static void ForEach<T>(this IEnumerable<T> source, Action<T, int> action)
         {
             MethodConditions.EnsureArgumentIsNotNull(source, nameof(source));
             MethodConditions.EnsureArgumentIsNotNull(action, nameof(action));
@@ -342,17 +340,40 @@ namespace Interapptive.Shared.Collections
                 action(item, index);
                 index += 1;
             }
-
-            return source;
         }
+
+        /// <summary>
+        /// Performs the specified action for each item in source
+        /// </summary>
+        public static IEnumerable<T> Do<T>(this IEnumerable<T> source, Action<T> action) =>
+            source.Select(x =>
+            {
+                action(x);
+                return x;
+            });
+
+        /// <summary>
+        /// Performs the specified action for each item in source
+        /// </summary>
+        public static IEnumerable<T> Do<T>(this IEnumerable<T> source, Action<T, int> action) =>
+            source.Select((x, i) =>
+            {
+                action(x, i);
+                return x;
+            });
 
         /// <summary>
         /// Convert an int to a comparison result
         /// </summary>
         private static ComparisonResult ConvertIntToComparisonResult(int result)
         {
-            return result < 0 ? ComparisonResult.Less :
-                result > 0 ? ComparisonResult.More :
+            if (result < 0)
+            {
+                return ComparisonResult.Less;
+            }
+
+            return result > 0 ?
+                ComparisonResult.More :
                 ComparisonResult.Equal;
         }
 

@@ -10,7 +10,7 @@ using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.ApplicationCore;
 using ShipWorks.Data;
-using ShipWorks.Data.Administration.Retry;
+using ShipWorks.Data.Administration.Recovery;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
@@ -19,7 +19,7 @@ using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Platforms.Ebay.Enums;
 using ShipWorks.Stores.Platforms.Ebay.Tokens;
 using ShipWorks.Stores.Platforms.Ebay.WebServices;
-using ShipWorks.Stores.Platforms.Ebay.Requests;
+using ShipWorks.Users.Audit;
 
 namespace ShipWorks.Stores.Platforms.Ebay.OrderCombining
 {
@@ -29,15 +29,12 @@ namespace ShipWorks.Stores.Platforms.Ebay.OrderCombining
     public class EbayCombinedOrderCandidate
     {
         // Logger
-        static readonly ILog log = LogManager.GetLogger(typeof(EbayCombinedOrderCandidate));
-
-        List<EbayCombinedOrderComponent> components = new List<EbayCombinedOrderComponent>();
-
-        bool shippingOverridden = false;
-        decimal shippingCost;
-
-        bool adjustmentOverridden = false;
-        decimal adjustment;
+        private static readonly ILog log = LogManager.GetLogger(typeof(EbayCombinedOrderCandidate));
+        private List<EbayCombinedOrderComponent> components = new List<EbayCombinedOrderComponent>();
+        private bool shippingOverridden = false;
+        private decimal shippingCost;
+        private bool adjustmentOverridden = false;
+        private decimal adjustment;
 
 
         /// <summary>
@@ -298,11 +295,13 @@ namespace ShipWorks.Stores.Platforms.Ebay.OrderCombining
                     SqlAdapterRetry<SqlDeadlockException> sqlDeadlockRetry =
                         new SqlAdapterRetry<SqlDeadlockException>(5, -5, string.Format("EbayCombinedOrderCandidate.CombineLocalOrders for ebayOrderID {0}", ebayOrderID));
 
-                    await sqlDeadlockRetry.ExecuteWithRetryAsync(adapter =>
+                    // Don't commit because sqlDeadlockRetry will do the commit
+                    using (new AuditBehaviorScope(ConfigurationData.Fetch().AuditDeletedOrders ? AuditState.Enabled : AuditState.NoDetails))
                     {
-                        return CombineLocalOrders(adapter, toCombine, ebayOrderID);
-                        // Don't commit because sqlDeadlockRetry will do the commit
-                    }).ConfigureAwait(false);
+                        await sqlDeadlockRetry
+                            .ExecuteWithRetryAsync(adapter => CombineLocalOrders(adapter, toCombine, ebayOrderID))
+                            .ConfigureAwait(false);
+                    }
 
                     result = true;
                 }

@@ -3948,6 +3948,8 @@ namespace ShipWorks.Data.Model
 		Cost,
 		///<summary>Count. </summary>
 		Count,
+		///<summary>EntityExistsQuery. </summary>
+		EntityExistsQuery,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -4442,6 +4444,8 @@ namespace ShipWorks.Data.Model
 		AmazonAuthToken,
 		///<summary>AmazonApiRegion. </summary>
 		AmazonApiRegion,
+		///<summary>IncludeMilliseconds. </summary>
+		IncludeMilliseconds,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -6040,6 +6044,8 @@ namespace ShipWorks.Data.Model
 		AmazonAuthToken,
 		///<summary>AmazonApiRegion. Inherited from GenericModuleStore</summary>
 		AmazonApiRegion,
+		///<summary>IncludeMilliseconds. Inherited from GenericModuleStore</summary>
+		IncludeMilliseconds,
 		///<summary>StoreID. </summary>
 		StoreID,
 		///<summary>MagentoTrackingEmails. </summary>
@@ -6450,6 +6456,8 @@ namespace ShipWorks.Data.Model
 		AmazonAuthToken,
 		///<summary>AmazonApiRegion. Inherited from GenericModuleStore</summary>
 		AmazonApiRegion,
+		///<summary>IncludeMilliseconds. Inherited from GenericModuleStore</summary>
+		IncludeMilliseconds,
 		///<summary>StoreID. </summary>
 		StoreID,
 		///<summary>EncryptionPassphrase. </summary>

@@ -15,6 +15,9 @@ using System.Windows.Input;
 
 namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels
 {
+    /// <summary>
+    /// Base class for mapping ODBC
+    /// </summary>
     public abstract class OdbcMapSettingsControlViewModel : INotifyPropertyChanged, IOdbcMapSettingsControlViewModel
     {
         private string mapName = string.Empty;
@@ -232,18 +235,24 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels
         }
 
         /// <summary>
-        /// Poplates ColumnSource and sets the selected table
+        /// Populates ColumnSource and sets the selected table
         /// </summary>
         /// <param name="columnSourceFromStore">The column source from store.</param>
         protected void LoadAndSetColumnSource(string columnSourceFromStore)
         {
-            IOdbcColumnSource loadedColumnSource;
-
-            Tables = schema.Tables as IList<IOdbcColumnSource> ?? schema.Tables.ToList();
-
+            try
+            {
+                Tables = schema.Tables as IList<IOdbcColumnSource> ?? schema.Tables.ToList();
+            }
+            catch (Exception)
+            {
+                MessageHelper.ShowInformation("ShipWorks was unable to retrieve a list of tables from your ODBC source, you will have to write a query to map columns.");
+                ColumnSourceIsTable = false;
+            }
+            
             if (ColumnSourceIsTable && !string.IsNullOrWhiteSpace(columnSourceFromStore))
             {
-                loadedColumnSource = columnSourceFactory(columnSourceFromStore);
+                IOdbcColumnSource loadedColumnSource = columnSourceFactory(columnSourceFromStore);
                 IOdbcColumnSource table = Tables.FirstOrDefault(t => t.Name == loadedColumnSource.Name);
 
                 if (table != null)

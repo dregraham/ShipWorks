@@ -18,7 +18,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data;
-using ShipWorks.Data.Administration.Retry;
+using ShipWorks.Data.Administration.Recovery;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
@@ -35,17 +35,16 @@ namespace ShipWorks.Stores.Platforms.Etsy
     [KeyedComponent(typeof(IStoreDownloader), StoreTypeCode.Etsy)]
     public class EtsyDownloader : StoreDownloader
     {
-        static readonly ILog log = LogManager.GetLogger(typeof(EtsyDownloader));
-
-        int totalCount = 0;
-        const int goBackDaysForUnpaid = 60;
-        const int goBackDaysForUnshipped = 60;
+        private static readonly ILog log = LogManager.GetLogger(typeof(EtsyDownloader));
+        private int totalCount = 0;
+        private const int goBackDaysForUnpaid = 60;
+        private const int goBackDaysForUnshipped = 60;
         private readonly IEtsyWebClient webClient;
 
         /// <summary>
         /// Number of orders to download at a time.
         /// </summary>
-        const int limit = 100;
+        private const int limit = 100;
 
         /// <summary>
         /// Constructor

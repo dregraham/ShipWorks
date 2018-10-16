@@ -108,7 +108,6 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.ChannelAdvisor
             {
                 OdataContext = "",
                 OdataNextLink = "",
-                ResultCount = 1,
                 Orders = new List<ChannelAdvisorOrder>() { order }
             };
 
@@ -127,7 +126,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.ChannelAdvisor
         public async Task Download_SetsProgressDetailWithOrderCount()
         {
             await testObject.Download(mockProgressReporter.Object, downloadLogID, dbConnection);
-            mockProgressReporter.VerifySet(r => r.Detail = $"Downloading {firstBatch.ResultCount} orders...");
+            mockProgressReporter.VerifySet(r => r.Detail = $"Downloading orders...");
         }
 
         [Fact]
@@ -179,7 +178,6 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.ChannelAdvisor
             {
                 OdataContext = "",
                 OdataNextLink = "",
-                ResultCount = 1,
                 Orders = new List<ChannelAdvisorOrder> { order }
             };
 

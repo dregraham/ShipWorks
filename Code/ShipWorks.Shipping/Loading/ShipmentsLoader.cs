@@ -75,8 +75,6 @@ namespace ShipWorks.Shipping.Loading
         private bool LoadShipments(IProgressReporter workProgress, List<long> entityIDsOriginalSort,
             IDictionary<long, ShipmentEntity> globalShipments, BlockingCollection<ShipmentEntity> shipmentsToValidate, bool createIfNoShipments)
         {
-            bool ensureFilterCountsUpToDateCalled = ensureFiltersUpToDateTimeout <= 0;
-
             using (ITrackedDurationEvent trackedDurationEvent = startDurationEvent("LoadShipments"))
             {
                 bool wasCanceled = false;
@@ -90,18 +88,6 @@ namespace ShipWorks.Shipping.Loading
                 foreach (IEnumerable<long> orderIDs in orderByDescending.SplitIntoChunksOf(100))
                 {
                     IEnumerable<OrderEntity> orders = orderManager.LoadOrders(orderIDs, FullOrderPrefetchPath.Value);
-
-                    // Only ensure filter counts are up to date if there are any orders that have NO shipments already.
-                    // This is because the filter counts need to be up to date so that the correct profile can be used
-                    // to create new shipments.
-                    // We only need to do it once, even while in a chunk, because they only need to be up to date as to
-                    // when LoadShipments was called.  If they aren't up to date 200 orders in, we don't care.
-                    if (!ensureFilterCountsUpToDateCalled && orders.Any(o => o.Shipments.Count == 0))
-                    {
-                        // We need to make sure filters are up to date so profiles being applied can be as accurate as possible.
-                        filterHelper.EnsureFiltersUpToDate(TimeSpan.FromSeconds(ensureFiltersUpToDateTimeout));
-                        ensureFilterCountsUpToDateCalled = true;
-                    }
 
                     foreach (OrderEntity order in orders)
                     {

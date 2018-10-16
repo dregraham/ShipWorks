@@ -9,7 +9,7 @@ using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Security;
 using Interapptive.Shared.Utility;
 using log4net;
-using ShipWorks.Data.Administration.Retry;
+using ShipWorks.Data.Administration.Recovery;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Communication;
@@ -30,7 +30,6 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         private readonly string refreshToken;
         private readonly ISqlAdapterRetry sqlAdapter;
         private IEnumerable<ChannelAdvisorDistributionCenter> distributionCenters;
-        private int totalOrders;
         private readonly ChannelAdvisorStoreEntity caStore;
 
         /// <summary>
@@ -78,9 +77,8 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
                 DateTime start = await GetChannelAdvisorOrderDateStartingPoint();
 
                 ChannelAdvisorOrderResult ordersResult = restClient.GetOrders(start.AddSeconds(-2), refreshToken);
-                totalOrders = ordersResult.ResultCount;
 
-                Progress.Detail = $"Downloading {ordersResult.ResultCount} orders...";
+                Progress.Detail = $"Downloading orders...";
 
                 while (ordersResult?.Orders?.Any() ?? false)
                 {
@@ -93,7 +91,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
                         }
 
                         DownloadOtherLineItems(caOrder);
-                        
+
                         List<ChannelAdvisorProduct> caProducts = DownloadChannelAdvisorProducts(caOrder);
 
                         await LoadOrder(caOrder, caProducts).ConfigureAwait(false);
@@ -128,11 +126,11 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
             {
                 string nextToken =
                     $"https://api.channeladvisor.com/v1/Orders({caOrder.ID})/Items?$skip={caOrderItems.Count}&$expand=FulfillmentItems";
-                
+
                 ChannelAdvisorOrderItemsResult nextPage = restClient.GetOrderItems(
                     nextToken,
                     refreshToken);
-                
+
                 caOrderItems.AddRange(nextPage.OrderItems);
                 maxItems += 20;
             }
@@ -199,8 +197,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         private async Task LoadOrder(ChannelAdvisorOrder caOrder, List<ChannelAdvisorProduct> caProducts)
         {
             // Update the status
-            Progress.Detail = $"Processing order {QuantitySaved + 1} of {totalOrders}...";
-            Progress.PercentComplete = Math.Min(100 * QuantitySaved / totalOrders, 100);
+            Progress.Detail = $"Processing order {QuantitySaved + 1}...";
 
             // Check if it has been canceled
             if (!Progress.IsCancelRequested)
@@ -217,7 +214,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
 
                 // Required by order loader
                 order.Store = Store;
-                
+
                 //Order loader loads the order
                 orderLoaderFactory(distributionCenters).LoadOrder(order, caOrder, caProducts, this);
 

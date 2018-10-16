@@ -3,18 +3,26 @@ using System.Linq;
 using Autofac;
 using Autofac.Extras.Moq;
 using Interapptive.Shared.Collections;
+using Interapptive.Shared.Tests.Filters;
+using Interapptive.Shared.Threading;
 using Interapptive.Shared.Utility;
 using Moq;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.AddressValidation.Enums;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Common.IO.Hardware.Printers;
-using ShipWorks.Data.Administration.Retry;
+using ShipWorks.Common.Threading;
+using ShipWorks.Data.Administration.Recovery;
 using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Editions;
+using ShipWorks.Filters;
+using ShipWorks.Filters.Content;
+using ShipWorks.Filters.Content.Conditions;
+using ShipWorks.Filters.Content.Conditions.Orders;
 using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Carriers.FedEx;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Enums;
@@ -29,6 +37,7 @@ using ShipWorks.Startup;
 using ShipWorks.Tests.Shared;
 using ShipWorks.Tests.Shared.Database;
 using ShipWorks.Tests.Shared.EntityBuilders;
+using ShipWorks.Users;
 using ShipWorks.Users.Security;
 using Xunit;
 
@@ -40,6 +49,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
     {
         private readonly AutoMock mock;
         private readonly DataContext context;
+        private readonly IFilterHelper filterHelper;
 
         public ShippingManagerTest(DatabaseFixture db)
         {
@@ -62,6 +72,9 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
             licenseService.Setup(ls => ls.CheckRestriction(It.IsAny<EditionFeature>(), It.IsAny<object>()))
                 .Returns(EditionRestrictionLevel.None);
             mock.Provide(licenseService.Object);
+
+            filterHelper = mock.Create<IFilterHelper>();
+            filterHelper.RegenerateFilters(SqlSession.Current.OpenConnection());
         }
 
         /// <summary>
@@ -442,14 +455,14 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
         [Fact]
         public void CreateShipment_AppliesProfilesInOrder_ForFedExShipment()
         {
-            CreateProfileRule(context.Order.OrderID, ShipmentTypeCode.FedEx,
+            CreateProfileRule(context.Order.OrderID, context.Order.OrderNumber, ShipmentTypeCode.FedEx,
                 x => x.AsFedEx(p =>
                 {
                     p.Set(s => s.DropoffType, (int) FedExDropoffType.DropBox);
                     p.Set(s => s.SmartPostConfirmation, true);
                 }));
 
-            CreateProfileRule(context.Order.OrderID, ShipmentTypeCode.FedEx,
+            CreateProfileRule(context.Order.OrderID, context.Order.OrderNumber, ShipmentTypeCode.FedEx,
                 x => x.AsFedEx(p => p.Set(s => s.DropoffType, (int) FedExDropoffType.RegularPickup)));
 
             context.SetDefaultShipmentType(ShipmentTypeCode.FedEx);
@@ -463,7 +476,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
         [Fact]
         public void CreateShipment_DoesNotApplyProfileForOtherTYpe_ForFedExShipment()
         {
-            CreateProfileRule(context.Order.OrderID, ShipmentTypeCode.Other,
+            CreateProfileRule(context.Order.OrderID, context.Order.OrderNumber, ShipmentTypeCode.Other,
                 x => x.AsOther().Set(p => p.ReturnShipment, true));
 
             context.SetDefaultShipmentType(ShipmentTypeCode.FedEx);
@@ -520,14 +533,14 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
         [Fact]
         public void CreateShipment_AppliesProfilesInOrder_ForUpsShipment()
         {
-            CreateProfileRule(context.Order.OrderID, ShipmentTypeCode.UpsOnLineTools,
+            CreateProfileRule(context.Order.OrderID, context.Order.OrderNumber, ShipmentTypeCode.UpsOnLineTools,
                 x => x.AsUps(p =>
                 {
                     p.Set(s => s.CostCenter, "Bar");
                     p.Set(s => s.CarbonNeutral, true);
                 }));
 
-            CreateProfileRule(context.Order.OrderID, ShipmentTypeCode.UpsOnLineTools,
+            CreateProfileRule(context.Order.OrderID, context.Order.OrderNumber, ShipmentTypeCode.UpsOnLineTools,
                 x => x.AsUps(p => p.Set(s => s.CostCenter, "Foo")));
 
             context.SetDefaultShipmentType(ShipmentTypeCode.UpsOnLineTools);
@@ -541,7 +554,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
         [Fact]
         public void CreateShipment_DoesNotApplyProfileForOtherTYpe_ForUpsShipment()
         {
-            CreateProfileRule(context.Order.OrderID, ShipmentTypeCode.Other,
+            CreateProfileRule(context.Order.OrderID, context.Order.OrderNumber, ShipmentTypeCode.Other,
                 x => x.AsOther().Set(p => p.ReturnShipment, true));
 
             context.SetDefaultShipmentType(ShipmentTypeCode.UpsOnLineTools);
@@ -598,14 +611,14 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
         [Fact]
         public void CreateShipment_AppliesProfilesInOrder_ForiParcelShipment()
         {
-            CreateProfileRule(context.Order.OrderID, ShipmentTypeCode.iParcel,
+            CreateProfileRule(context.Order.OrderID, context.Order.OrderNumber, ShipmentTypeCode.iParcel,
                 x => x.AsIParcel(p =>
                 {
                     p.Set(s => s.Service, (int) iParcelServiceType.Saver);
                     p.Set(s => s.IsDeliveryDutyPaid, true);
                 }));
 
-            CreateProfileRule(context.Order.OrderID, ShipmentTypeCode.iParcel,
+            CreateProfileRule(context.Order.OrderID, context.Order.OrderNumber, ShipmentTypeCode.iParcel,
                 x => x.AsIParcel(p => p.Set(s => s.Service, (int) iParcelServiceType.SaverDeferred)));
 
             context.SetDefaultShipmentType(ShipmentTypeCode.iParcel);
@@ -619,7 +632,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
         [Fact]
         public void CreateShipment_DoesNotApplyProfileForOtherTYpe_ForiParcelShipment()
         {
-            CreateProfileRule(context.Order.OrderID, ShipmentTypeCode.Other,
+            CreateProfileRule(context.Order.OrderID, context.Order.OrderNumber, ShipmentTypeCode.Other,
                 x => x.AsOther().Set(p => p.ReturnShipment, true));
 
             context.SetDefaultShipmentType(ShipmentTypeCode.iParcel);
@@ -681,14 +694,14 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
         [Fact]
         public void CreateShipment_AppliesProfilesInOrder_ForUspsShipment()
         {
-            CreateProfileRule(context.Order.OrderID, ShipmentTypeCode.Usps,
+            CreateProfileRule(context.Order.OrderID, context.Order.OrderNumber, ShipmentTypeCode.Usps,
                 x => x.AsPostal(o => o.AsUsps(p =>
                 {
                     p.Set(s => s.RateShop, false);
                     p.Set(s => s.HidePostage, true);
                 })));
 
-            CreateProfileRule(context.Order.OrderID, ShipmentTypeCode.Usps,
+            CreateProfileRule(context.Order.OrderID, context.Order.OrderNumber, ShipmentTypeCode.Usps,
                 x => x.AsPostal(o => o.AsUsps(p => p.Set(s => s.RateShop, true))));
 
             context.SetDefaultShipmentType(ShipmentTypeCode.Usps);
@@ -702,7 +715,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
         [Fact]
         public void CreateShipment_DoesNotApplyProfileForOtherTYpe_ForUspsShipment()
         {
-            CreateProfileRule(context.Order.OrderID, ShipmentTypeCode.Other,
+            CreateProfileRule(context.Order.OrderID, context.Order.OrderNumber, ShipmentTypeCode.Other,
                 x => x.AsOther().Set(p => p.ReturnShipment, true));
 
             context.SetDefaultShipmentType(ShipmentTypeCode.Usps);
@@ -766,14 +779,14 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
         [Fact]
         public void CreateShipment_AppliesProfilesInOrder_ForEndiciaShipment()
         {
-            CreateProfileRule(context.Order.OrderID, ShipmentTypeCode.Endicia,
+            CreateProfileRule(context.Order.OrderID, context.Order.OrderNumber, ShipmentTypeCode.Endicia,
                 x => x.AsPostal(o => o.AsEndicia(p =>
                 {
                     p.Set(s => s.ScanBasedReturn, false);
                     p.Set(s => s.StealthPostage, true);
                 })));
 
-            CreateProfileRule(context.Order.OrderID, ShipmentTypeCode.Endicia,
+            CreateProfileRule(context.Order.OrderID, context.Order.OrderNumber, ShipmentTypeCode.Endicia,
                 x => x.AsPostal(o => o.AsEndicia(p => p.Set(s => s.ScanBasedReturn, true))));
 
             context.SetDefaultShipmentType(ShipmentTypeCode.Endicia);
@@ -787,7 +800,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
         [Fact]
         public void CreateShipment_DoesNotApplyProfileForOtherTYpe_ForEndiciaShipment()
         {
-            CreateProfileRule(context.Order.OrderID, ShipmentTypeCode.Other,
+            CreateProfileRule(context.Order.OrderID, context.Order.OrderNumber, ShipmentTypeCode.Other,
                 x => x.AsOther().Set(p => p.ReturnShipment, true));
 
             context.SetDefaultShipmentType(ShipmentTypeCode.Endicia);
@@ -843,14 +856,14 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
         [Fact]
         public void CreateShipment_AppliesProfilesInOrder_ForOnTracShipment()
         {
-            CreateProfileRule(context.Order.OrderID, ShipmentTypeCode.OnTrac,
+            CreateProfileRule(context.Order.OrderID, context.Order.OrderNumber, ShipmentTypeCode.OnTrac,
                 x => x.AsOnTrac(p =>
                 {
                     p.Set(s => s.Service, (int) OnTracServiceType.Sunrise);
                     p.Set(s => s.Instructions, "blah");
                 }));
 
-            CreateProfileRule(context.Order.OrderID, ShipmentTypeCode.OnTrac,
+            CreateProfileRule(context.Order.OrderID, context.Order.OrderNumber, ShipmentTypeCode.OnTrac,
                 x => x.AsOnTrac(p => p.Set(s => s.Service, (int) OnTracServiceType.SunriseGold)));
 
             context.SetDefaultShipmentType(ShipmentTypeCode.OnTrac);
@@ -864,7 +877,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
         [Fact]
         public void CreateShipment_DoesNotApplyProfileForOnTracTYpe_ForOnTracShipment()
         {
-            CreateProfileRule(context.Order.OrderID, ShipmentTypeCode.Other,
+            CreateProfileRule(context.Order.OrderID, context.Order.OrderNumber, ShipmentTypeCode.Other,
                 x => x.AsOther().Set(p => p.ReturnShipment, true));
 
             context.SetDefaultShipmentType(ShipmentTypeCode.OnTrac);
@@ -904,14 +917,14 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
         [Fact]
         public void CreateShipment_AppliesProfilesInOrder_ForOtherShipment()
         {
-            CreateProfileRule(context.Order.OrderID, ShipmentTypeCode.Other,
+            CreateProfileRule(context.Order.OrderID, context.Order.OrderNumber, ShipmentTypeCode.Other,
                 x => x.AsOther(p =>
                 {
                     p.Set(s => s.Service, "Bar");
                     p.Set(s => s.Carrier, "Baz");
                 }));
 
-            CreateProfileRule(context.Order.OrderID, ShipmentTypeCode.Other,
+            CreateProfileRule(context.Order.OrderID, context.Order.OrderNumber, ShipmentTypeCode.Other,
                 x => x.AsOther(p => p.Set(s => s.Service, "Foo")));
 
             context.SetDefaultShipmentType(ShipmentTypeCode.Other);
@@ -925,7 +938,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
         [Fact]
         public void CreateShipment_DoesNotApplyProfileForOtherTYpe_ForOtherShipment()
         {
-            CreateProfileRule(context.Order.OrderID, ShipmentTypeCode.OnTrac,
+            CreateProfileRule(context.Order.OrderID, context.Order.OrderNumber, ShipmentTypeCode.OnTrac,
                 x => x.AsOnTrac().Set(p => p.ReturnShipment, true));
 
             context.SetDefaultShipmentType(ShipmentTypeCode.Other);
@@ -941,39 +954,37 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
         /// <summary>
         /// Create a filter node
         /// </summary>
-        private static FilterNodeEntity CreateFilterNode(long objectID)
+        private FilterNodeEntity CreateFilterNode(long objectID, long orderNumber)
         {
             var filter = Create.Entity<FilterEntity>()
+                .Set(f => f.Definition = FilterTestingHelper.OrderNumberDefinitionXml(orderNumber))
+                .Set(f => f.Name = $"Filter for {orderNumber}")
+                .Set(f => f.IsFolder = false)
+                .Set(f => f.State = (int) FilterState.Enabled)
                 .Save();
 
-            var sequence = Create.Entity<FilterSequenceEntity>()
-                .Set(x => x.Filter, filter)
-                .Save();
+            FilterNodeEntity rootOrderFilter = FilterLayoutContext.Current.FindNode(BuiltinFilter.GetTopLevelKey(FilterTarget.Orders));
 
-            var content = Create.Entity<FilterNodeContentEntity>()
-                .Save();
+            var filterNode = FilterLayoutContext.Current.AddFilter(filter, rootOrderFilter, 0).First();
 
-            Create.Entity<FilterNodeContentDetailEntity>()
-                .Set(x => x.FilterNodeContentID, content.FilterNodeContentID)
-                .Set(x => x.EntityID, objectID)
-                .Save();
+            FilterLayoutContext.Current.Reload();
 
-            return Create.Entity<FilterNodeEntity>()
-                .Set(x => x.FilterSequence, sequence)
-                .Set(x => x.FilterNodeContent, content)
-                .Save();
+            IProgressReporter progressReporter = new ProgressItem("calc initial filter counts");
+            filterHelper.CalculateInitialFilterCounts(SqlSession.Current.OpenConnection(), progressReporter, 0);
+
+            return filterNode;
         }
 
         /// <summary>
         /// Create a profile that will be associated with a rule
         /// </summary>
-        private static void CreateProfileRule(long objectId, ShipmentTypeCode shipmentType,
+        private void CreateProfileRule(long objectId, long orderNumber, ShipmentTypeCode shipmentType,
             Func<ProfileEntityBuilder, EntityBuilder<ShippingProfileEntity>> configureProfile)
         {
             var profile = configureProfile(Create.Profile())
                 .Save();
 
-            var node = CreateFilterNode(objectId);
+            var node = CreateFilterNode(objectId, orderNumber);
 
             Create.Entity<ShippingDefaultsRuleEntity>()
                 .Set(x => x.ShippingProfileID, profile.ShippingProfileID)

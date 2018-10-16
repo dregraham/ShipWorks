@@ -22,7 +22,11 @@ namespace ShipWorks.Data.Model.EntityClasses
         /// <summary>
         /// Get the address of the account
         /// </summary>
-        public PersonAdapter Address => new PersonAdapter(this, string.Empty);
+        public PersonAdapter Address
+        {
+            get { return new PersonAdapter(this, string.Empty); }
+            set { PersonAdapter.Copy(value, Address); }
+        }
 
         /// <summary>
         /// Gets the account description.

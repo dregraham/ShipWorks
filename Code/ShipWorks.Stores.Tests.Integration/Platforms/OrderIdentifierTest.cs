@@ -144,6 +144,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms
             { StoreTypeCode.Amazon, typeof(AmazonOrderIdentifier) },
             { StoreTypeCode.Amosoft, typeof(AlphaNumericOrderIdentifier) },
             { StoreTypeCode.BigCommerce, typeof(BigCommerceOrderIdentifier) },
+            { StoreTypeCode.Bonanza, typeof(AlphaNumericOrderIdentifier) },
             { StoreTypeCode.Brightpearl, typeof(AlphaNumericOrderIdentifier) },
             { StoreTypeCode.BuyDotCom, typeof(AlphaNumericOrderIdentifier) },
             { StoreTypeCode.Cart66Lite, typeof(AlphaNumericOrderIdentifier) },

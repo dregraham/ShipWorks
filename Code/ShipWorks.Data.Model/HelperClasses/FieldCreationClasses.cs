@@ -9132,6 +9132,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(FilterNodeContentFieldIndex.Count);}
 		}
+		/// <summary>Creates a new FilterNodeContentEntity.EntityExistsQuery field instance</summary>
+		public static EntityField2 EntityExistsQuery
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(FilterNodeContentFieldIndex.EntityExistsQuery);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity FilterNodeContentDetailEntity</summary>
@@ -10296,6 +10301,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 AmazonApiRegion
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(GenericModuleStoreFieldIndex.AmazonApiRegion);}
+		}
+		/// <summary>Creates a new GenericModuleStoreEntity.IncludeMilliseconds field instance</summary>
+		public static EntityField2 IncludeMilliseconds
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(GenericModuleStoreFieldIndex.IncludeMilliseconds);}
 		}
 	}
 
@@ -14032,6 +14042,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(MagentoStoreFieldIndex.AmazonApiRegion);}
 		}
+		/// <summary>Creates a new MagentoStoreEntity.IncludeMilliseconds field instance</summary>
+		public static EntityField2 IncludeMilliseconds
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(MagentoStoreFieldIndex.IncludeMilliseconds);}
+		}
 		/// <summary>Creates a new MagentoStoreEntity.StoreID field instance</summary>
 		public static EntityField2 StoreID
 		{
@@ -15006,6 +15021,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 AmazonApiRegion
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(MivaStoreFieldIndex.AmazonApiRegion);}
+		}
+		/// <summary>Creates a new MivaStoreEntity.IncludeMilliseconds field instance</summary>
+		public static EntityField2 IncludeMilliseconds
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(MivaStoreFieldIndex.IncludeMilliseconds);}
 		}
 		/// <summary>Creates a new MivaStoreEntity.StoreID field instance</summary>
 		public static EntityField2 StoreID

@@ -73,7 +73,7 @@ namespace SmokeTest
         [System.CodeDom.Compiler.GeneratedCode("Ranorex", "8.1")]
         void ITestModule.Run()
         {
-            Mouse.DefaultMoveTime = 1000;
+            Mouse.DefaultMoveTime = 300;
             Keyboard.DefaultKeyPressTime = 100;
             Delay.SpeedFactor = 1.00;
 
@@ -81,22 +81,91 @@ namespace SmokeTest
 
             // Move mouse to avoid click inconsistency.
             Report.Log(ReportLevel.Info, "Mouse", "Move mouse to avoid click inconsistency.\r\nMouse Left Move item 'ShippingDlg.SplitContainer.CreateNew' at Center.", repo.ShippingDlg.SplitContainer.CreateNewInfo, new RecordItemIndex(0));
-            repo.ShippingDlg.SplitContainer.CreateNew.MoveTo(300);
+            repo.ShippingDlg.SplitContainer.CreateNew.MoveTo();
             Delay.Milliseconds(200);
             
             // Click Create New to create new shipment
             Report.Log(ReportLevel.Info, "Mouse", "Click Create New to create new shipment\r\nMouse Left Click item 'ShippingDlg.SplitContainer.CreateNew' at Center.", repo.ShippingDlg.SplitContainer.CreateNewInfo, new RecordItemIndex(1));
-            repo.ShippingDlg.SplitContainer.CreateNew.Click(300);
+            repo.ShippingDlg.SplitContainer.CreateNew.Click();
             Delay.Milliseconds(200);
             
             // Move mouse to avoid click inconsistency.
             Report.Log(ReportLevel.Info, "Mouse", "Move mouse to avoid click inconsistency.\r\nMouse Left Move item 'ShippingDlg.SplitContainer.ComboShipmentType' at Center.", repo.ShippingDlg.SplitContainer.ComboShipmentTypeInfo, new RecordItemIndex(2));
-            repo.ShippingDlg.SplitContainer.ComboShipmentType.MoveTo(300);
+            repo.ShippingDlg.SplitContainer.ComboShipmentType.MoveTo();
+            Delay.Milliseconds(200);
+            
+            Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Click item 'ShippingDlg.SplitContainer.ComboShipmentType' at Center.", repo.ShippingDlg.SplitContainer.ComboShipmentTypeInfo, new RecordItemIndex(3));
+            repo.ShippingDlg.SplitContainer.ComboShipmentType.Click();
             Delay.Milliseconds(200);
             
             // Set Provider: DHL Express
-            Report.Log(ReportLevel.Info, "Set value", "Set Provider: DHL Express\r\nSetting attribute SelectedItemText to 'DHL Express' on item 'ShippingDlg.SplitContainer.ComboShipmentType'.", repo.ShippingDlg.SplitContainer.ComboShipmentTypeInfo, new RecordItemIndex(3));
-            repo.ShippingDlg.SplitContainer.ComboShipmentType.Element.SetAttributeValue("SelectedItemText", "DHL Express");
+            //Report.Log(ReportLevel.Info, "Set value", "Set Provider: DHL Express\r\nSetting attribute SelectedItemText to 'DHL Express' on item 'ShippingDlg.SplitContainer.ComboShipmentType'.", repo.ShippingDlg.SplitContainer.ComboShipmentTypeInfo, new RecordItemIndex(4));
+            //repo.ShippingDlg.SplitContainer.ComboShipmentType.Element.SetAttributeValue("SelectedItemText", "DHL Express");
+            //Delay.Milliseconds(0);
+            
+            // USPS (Express1)
+            Report.Log(ReportLevel.Info, "Keyboard", "USPS (Express1)\r\nKey sequence '{Down}'.", new RecordItemIndex(5));
+            Keyboard.Press("{Down}");
+            Delay.Milliseconds(0);
+            
+            Report.Log(ReportLevel.Info, "Delay", "Waiting for 5s.", new RecordItemIndex(6));
+            Delay.Duration(5000, false);
+            
+            // FedEx
+            Report.Log(ReportLevel.Info, "Keyboard", "FedEx\r\nKey sequence '{Down}'.", new RecordItemIndex(7));
+            Keyboard.Press("{Down}");
+            Delay.Milliseconds(0);
+            
+            Report.Log(ReportLevel.Info, "Delay", "Waiting for 5s.", new RecordItemIndex(8));
+            Delay.Duration(5000, false);
+            
+            // UPS
+            Report.Log(ReportLevel.Info, "Keyboard", "UPS\r\nKey sequence '{Down}'.", new RecordItemIndex(9));
+            Keyboard.Press("{Down}");
+            Delay.Milliseconds(0);
+            
+            Report.Log(ReportLevel.Info, "Delay", "Waiting for 5s.", new RecordItemIndex(10));
+            Delay.Duration(5000, false);
+            
+            // UPS (WorldShip)
+            Report.Log(ReportLevel.Info, "Keyboard", "UPS (WorldShip)\r\nKey sequence '{Down}'.", new RecordItemIndex(11));
+            Keyboard.Press("{Down}");
+            Delay.Milliseconds(0);
+            
+            Report.Log(ReportLevel.Info, "Delay", "Waiting for 5s.", new RecordItemIndex(12));
+            Delay.Duration(5000, false);
+            
+            // USPS (Endiciaj)
+            Report.Log(ReportLevel.Info, "Keyboard", "USPS (Endiciaj)\r\nKey sequence '{Down}'.", new RecordItemIndex(13));
+            Keyboard.Press("{Down}");
+            Delay.Milliseconds(0);
+            
+            Report.Log(ReportLevel.Info, "Delay", "Waiting for 5s.", new RecordItemIndex(14));
+            Delay.Duration(5000, false);
+            
+            // USPS (Express1 for Endicia)
+            Report.Log(ReportLevel.Info, "Keyboard", "USPS (Express1 for Endicia)\r\nKey sequence '{Down}'.", new RecordItemIndex(15));
+            Keyboard.Press("{Down}");
+            Delay.Milliseconds(0);
+            
+            Report.Log(ReportLevel.Info, "Delay", "Waiting for 5s.", new RecordItemIndex(16));
+            Delay.Duration(5000, false);
+            
+            // OnTrac
+            Report.Log(ReportLevel.Info, "Keyboard", "OnTrac\r\nKey sequence '{Down}'.", new RecordItemIndex(17));
+            Keyboard.Press("{Down}");
+            Delay.Milliseconds(0);
+            
+            Report.Log(ReportLevel.Info, "Delay", "Waiting for 5s.", new RecordItemIndex(18));
+            Delay.Duration(5000, false);
+            
+            // DHL Express
+            Report.Log(ReportLevel.Info, "Keyboard", "DHL Express\r\nKey sequence '{Down}'.", new RecordItemIndex(19));
+            Keyboard.Press("{Down}");
+            Delay.Milliseconds(0);
+            
+            Report.Log(ReportLevel.Info, "Keyboard", "Key sequence '{Return}'.", new RecordItemIndex(20));
+            Keyboard.Press("{Return}");
             Delay.Milliseconds(0);
             
         }

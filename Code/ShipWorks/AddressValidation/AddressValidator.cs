@@ -1,35 +1,26 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Interapptive.Shared;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Business.Geography;
+using Interapptive.Shared.ComponentRegistration;
 using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.AddressValidation.Enums;
 using ShipWorks.Data.Model.EntityClasses;
-using System.Threading.Tasks;
-using ShipWorks.Shipping.Carriers.Postal;
-using ShipWorks.Stores;
 
 namespace ShipWorks.AddressValidation
 {
     /// <summary>
     /// Validates and updates addresses
     /// </summary>
+    [Component]
     public class AddressValidator : IAddressValidator
     {
         private readonly IAddressValidationWebClient webClient;
-        static readonly ILog log = LogManager.GetLogger(typeof(AddressValidator));
-
-        /// <summary>
-        /// Creates a new instance of the AddressValidator with the default web client
-        /// </summary>
-        public AddressValidator() :
-            this(new StampsAddressValidationWebClient())
-        {
-            
-        }
+        private static readonly ILog log = LogManager.GetLogger(typeof(AddressValidator));
 
         /// <summary>
         /// Creates a new instance of the AddressValidator using the specified web client
@@ -56,7 +47,7 @@ namespace ShipWorks.AddressValidation
         /// </summary>
         public bool CanShowSuggestions(AddressValidationStatusType status)
         {
-            switch(status)
+            switch (status)
             {
                 case AddressValidationStatusType.Fixed:
                 case AddressValidationStatusType.HasSuggestions:
@@ -69,11 +60,11 @@ namespace ShipWorks.AddressValidation
         }
 
         /// <summary>
-        /// Can a message be shown fo the given validation status
+        /// Can a message be shown for the given validation status
         /// </summary>
         public bool CanShowMessage(AddressValidationStatusType status)
         {
-            switch(status)
+            switch (status)
             {
                 case AddressValidationStatusType.BadAddress:
                 case AddressValidationStatusType.WillNotValidate:
@@ -153,7 +144,7 @@ namespace ShipWorks.AddressValidation
             {
                 log.Warn("Error communicating with Address Validation Server.", ex);
                 addressAdapter.AddressValidationError = string.Format("Error communicating with Address Validation Server.\r\n{0}", ex.Message);
-                addressAdapter.AddressValidationStatus = (int)AddressValidationStatusType.Error;
+                addressAdapter.AddressValidationStatus = (int) AddressValidationStatusType.Error;
                 addressAdapter.AddressType = (int) AddressType.Error;
                 saveAction(null, new List<ValidatedAddressEntity>());
             }
@@ -179,9 +170,9 @@ namespace ShipWorks.AddressValidation
         /// <summary>
         /// Can the given status be validated
         /// </summary>
-        public bool CanValidate(AddressValidationStatusType status) 
+        public bool CanValidate(AddressValidationStatusType status)
             => AddressValidationPolicy.ShouldValidate(status);
-        
+
         /// <summary>
         /// Set the validation status on the entity when we should only notify instead of update
         /// </summary>
@@ -189,19 +180,19 @@ namespace ShipWorks.AddressValidation
         {
             List<AddressValidationResult> suggestedAddresses = validationResult.AddressValidationResults;
 
-            adapter.AddressType = (int)validationResult.AddressType;
+            adapter.AddressType = (int) validationResult.AddressType;
 
             if (!suggestedAddresses.Any())
             {
-                adapter.AddressValidationStatus = (int)AddressValidationStatusType.BadAddress;    
+                adapter.AddressValidationStatus = (int) AddressValidationStatusType.BadAddress;
             }
             else if (suggestedAddresses.Count == 1 && suggestedAddresses[0].IsValid && suggestedAddresses[0].IsEqualTo(adapter))
             {
-                adapter.AddressValidationStatus = (int)AddressValidationStatusType.Valid;
+                adapter.AddressValidationStatus = (int) AddressValidationStatusType.Valid;
             }
             else
             {
-                adapter.AddressValidationStatus = (int)AddressValidationStatusType.HasSuggestions;
+                adapter.AddressValidationStatus = (int) AddressValidationStatusType.HasSuggestions;
             }
         }
 
@@ -212,21 +203,21 @@ namespace ShipWorks.AddressValidation
         {
             List<AddressValidationResult> suggestedAddresses = validationResult.AddressValidationResults;
 
-            adapter.AddressType = (int)validationResult.AddressType;
-            
+            adapter.AddressType = (int) validationResult.AddressType;
+
             if (!suggestedAddresses.Any())
             {
-                adapter.AddressValidationStatus = (int)AddressValidationStatusType.BadAddress;
+                adapter.AddressValidationStatus = (int) AddressValidationStatusType.BadAddress;
             }
             else if (suggestedAddresses.Count == 1 && suggestedAddresses[0].IsValid)
             {
                 adapter.AddressValidationStatus = suggestedAddresses[0].IsEqualTo(adapter) ?
-                    (int)AddressValidationStatusType.Valid :
-                    (int)AddressValidationStatusType.Fixed;
+                    (int) AddressValidationStatusType.Valid :
+                    (int) AddressValidationStatusType.Fixed;
             }
             else
             {
-                adapter.AddressValidationStatus = (int)AddressValidationStatusType.HasSuggestions;
+                adapter.AddressValidationStatus = (int) AddressValidationStatusType.HasSuggestions;
             }
         }
 
@@ -261,7 +252,7 @@ namespace ShipWorks.AddressValidation
                 AddressPrefix = string.Empty
             };
             AddressAdapter adapter = new AddressAdapter(address, "");
-            
+
             validationResult.CopyTo(adapter);
             UpdateInternationalTerritoryAndMilitaryAddress(adapter);
             address.IsOriginal = false;

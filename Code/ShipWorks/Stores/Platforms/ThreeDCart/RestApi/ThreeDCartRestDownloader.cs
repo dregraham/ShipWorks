@@ -12,7 +12,7 @@ using Interapptive.Shared.Net;
 using Interapptive.Shared.Utility;
 using log4net;
 using ShipWorks.Data;
-using ShipWorks.Data.Administration.Retry;
+using ShipWorks.Data.Administration.Recovery;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Import;
 using ShipWorks.Data.Model.EntityClasses;
@@ -28,7 +28,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi
     [Component]
     public class ThreeDCartRestDownloader : StoreDownloader, IThreeDCartRestDownloader
     {
-        const int MissingCustomerID = 0;
+        private const int MissingCustomerID = 0;
         private readonly IThreeDCartRestWebClient restWebClient;
         private readonly ThreeDCartStoreEntity threeDCartStore;
         private readonly ISqlAdapterRetry sqlAdapterRetry;

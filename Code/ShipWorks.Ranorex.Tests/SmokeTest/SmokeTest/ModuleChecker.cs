@@ -41,6 +41,7 @@ namespace SmokeTest
         /// </summary>
         public ModuleChecker()
         {
+            Environ = "";
         }
 
         /// <summary>
@@ -52,6 +53,18 @@ namespace SmokeTest
         }
 
 #region Variables
+
+        string _Environ;
+
+        /// <summary>
+        /// Gets or sets the value of variable Environ.
+        /// </summary>
+        [TestVariable("ea3c58a2-7d9b-4bbb-8c13-69d12840837c")]
+        public string Environ
+        {
+            get { return _Environ; }
+            set { _Environ = value; }
+        }
 
 #endregion
 
@@ -83,6 +96,9 @@ namespace SmokeTest
             Delay.Milliseconds(0);
             
             CompareModuleChecker();
+            Delay.Milliseconds(0);
+            
+            CopyHosts();
             Delay.Milliseconds(0);
             
         }

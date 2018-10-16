@@ -45,7 +45,7 @@ namespace ShipWorks.Stores.Content.Panels
     /// </summary>
     public partial class ShipmentsPanel : SingleSelectPanelBase
     {
-        static readonly ILog log = LogManager.GetLogger(typeof(ShipmentsPanel));
+        private static readonly ILog log = LogManager.GetLogger(typeof(ShipmentsPanel));
 
         private LoadedOrderSelection loadedOrderSelection;
         private bool isThisPanelVisible;
@@ -318,7 +318,11 @@ namespace ShipWorks.Stores.Content.Panels
             try
             {
                 ShipmentEntity shipment = ShippingManager.CreateShipment(EntityID.Value);
-                await ValidatedAddressManager.ValidateShipmentAsync(shipment, new AddressValidator());
+                using (var lifetimeScope = IoC.BeginLifetimeScope())
+                {
+                    var addressValidator = lifetimeScope.Resolve<IAddressValidator>();
+                    await ValidatedAddressManager.ValidateShipmentAsync(shipment, addressValidator);
+                }
 
                 Messenger.Current.Send(new OpenShippingDialogMessage(this, new[] { shipment }));
             }

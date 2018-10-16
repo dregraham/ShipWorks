@@ -545,10 +545,14 @@ namespace ShipWorks.Shipping
                 // Go through each additional profile and apply it as well
                 foreach (ShippingDefaultsRuleEntity rule in ShippingDefaultsRuleManager.GetRules(ShipmentTypeCode))
                 {
-                    IShippingProfileEntity profile = shippingProfileManager.GetProfileReadOnly(rule.ShippingProfileID);
-                    if (profile != null && filterHelper.IsObjectInFilterContent(shipment.OrderID, rule))
+                    if (shippingProfile.ShippingProfileEntity.ShippingProfileID != rule.ShippingProfileID &&
+                        FilterHelper.IsObjectInFilterContent(shipment.OrderID, rule.FilterNodeID))
                     {
-                        shippingProfileService.Get(profile.ShippingProfileID).Apply(shipment);
+                        IShippingProfileEntity profile = shippingProfileManager.GetProfileReadOnly(rule.ShippingProfileID);
+                        if (profile != null)
+                        {
+                            shippingProfileService.Get(profile.ShippingProfileID)?.Apply(shipment);
+                        }
                     }
                 }
 
