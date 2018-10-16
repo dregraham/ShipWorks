@@ -40,8 +40,8 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookup
             {
                 DataContext = orderLookupViewModel
             };
-            orderLookupControl.IsKeyboardFocusWithinChanged += OnIsKeyboardFocusWithinChanged;
-            orderLookupControl.LostFocus += OnOrderLookupControlLostFocus;
+
+            EnableFocus();
 
             ElementHost host = new ElementHost
             {
@@ -62,7 +62,29 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookup
         /// </summary>
         public void CreateLabel()
         {
-            orderLookupViewModel.ShipmentModel.CreateLabel();
+            using (Disposable.Create(EnableFocus))
+            {
+                DisableFocus();
+                orderLookupViewModel.ShipmentModel.CreateLabel();
+            }
+        }
+
+        /// <summary>
+        /// Enable focus events
+        /// </summary>
+        public void EnableFocus()
+        {
+            orderLookupControl.IsKeyboardFocusWithinChanged += OnIsKeyboardFocusWithinChanged;
+            orderLookupControl.LostFocus += OnOrderLookupControlLostFocus;
+        }
+
+        /// <summary>
+        /// Disable focus events
+        /// </summary>
+        public void DisableFocus()
+        {
+            orderLookupControl.IsKeyboardFocusWithinChanged -= OnIsKeyboardFocusWithinChanged;
+            orderLookupControl.LostFocus -= OnOrderLookupControlLostFocus;
         }
 
         /// <summary>
