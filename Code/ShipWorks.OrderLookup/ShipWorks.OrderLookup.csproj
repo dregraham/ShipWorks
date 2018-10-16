@@ -158,7 +158,11 @@
       <DependentUpon>EndiciaReferenceControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\Reference\EndiciaReferenceViewModel.cs" />
-    <Compile Include="Controls\Reference\PostalReferenceViewModelBase.cs" />
+    <Compile Include="Controls\Reference\ReferenceViewModelBase.cs" />
+    <Compile Include="Controls\Reference\UpsReferenceControl.xaml.cs">
+      <DependentUpon>UpsReferenceControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\Reference\UpsReferenceViewModel.cs" />
     <Compile Include="Controls\ShipmentDetails\IDetailsViewModel.cs" />
     <Compile Include="Controls\ShipmentDetails\PostalShipmentDetailsControl.xaml.cs">
       <DependentUpon>PostalShipmentDetailsControl.xaml</DependentUpon>
@@ -336,6 +340,10 @@
     <Page Include="Controls\Reference\EndiciaReferenceControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Controls\Reference\UpsReferenceControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Controls\ShipmentDetails\OrderLookupInsuranceControl.xaml">
       <Generator>MSBuild:Compile</Generator>

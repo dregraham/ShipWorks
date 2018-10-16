@@ -9,7 +9,7 @@ namespace ShipWorks.OrderLookup.Controls.Reference
     /// </summary>
     [KeyedComponent(typeof(IReferenceViewModel), ShipmentTypeCode.Usps)]
     [WpfView(typeof(UspsReferenceControl))]
-    public class UspsReferenceViewModel : PostalReferenceViewModelBase
+    public class UspsReferenceViewModel : GenericReferenceViewModel
     {
         /// <summary>
         /// Constructor

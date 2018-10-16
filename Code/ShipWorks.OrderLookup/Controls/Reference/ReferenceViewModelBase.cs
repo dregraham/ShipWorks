@@ -7,7 +7,7 @@ namespace ShipWorks.OrderLookup.Controls.Reference
     /// <summary>
     /// View model for order lookup reference control
     /// </summary>
-    public class PostalReferenceViewModelBase : IReferenceViewModel
+    public class GenericReferenceViewModel : IReferenceViewModel
     {
         public event PropertyChangedEventHandler PropertyChanged;
         private readonly PropertyChangedHandler handler;
@@ -15,7 +15,7 @@ namespace ShipWorks.OrderLookup.Controls.Reference
         /// <summary>
         /// Constructor
         /// </summary>
-        public PostalReferenceViewModelBase(IOrderLookupShipmentModel shipmentModel)
+        public GenericReferenceViewModel(IOrderLookupShipmentModel shipmentModel)
         {
             ShipmentModel = shipmentModel;
             ShipmentModel.PropertyChanged += ShipmentModelPropertyChanged;
