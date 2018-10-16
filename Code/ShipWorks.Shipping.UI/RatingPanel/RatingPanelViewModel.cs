@@ -22,7 +22,7 @@ namespace ShipWorks.Shipping.UI.RatingPanel
     public partial class RatingPanelViewModel : IDisposable, INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
-        
+
         protected Func<ISecurityContext> securityContextRetriever;
         protected readonly PropertyChangedHandler handler;
 
@@ -168,7 +168,7 @@ namespace ShipWorks.Shipping.UI.RatingPanel
         /// <summary>
         /// Dispose any held resources
         /// </summary>
-        public void Dispose()
+        public virtual void Dispose()
         {
             subscriptions?.Dispose();
         }

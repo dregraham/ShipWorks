@@ -158,7 +158,6 @@
       <DependentUpon>EndiciaReferenceControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\Reference\EndiciaReferenceViewModel.cs" />
-    <Compile Include="Controls\Reference\PostalReferenceViewModelBase.cs" />
     <Compile Include="Controls\ShipmentDetails\ICarrierShipmentAdapterOptionsProvider.cs" />
     <Compile Include="Controls\Reference\ReferenceViewModelBase.cs" />
     <Compile Include="Controls\Reference\UpsReferenceControl.xaml.cs">
