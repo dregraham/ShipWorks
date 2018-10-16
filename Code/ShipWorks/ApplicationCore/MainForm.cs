@@ -476,7 +476,8 @@ namespace ShipWorks
             // to save later, after the user has logged out. This caused an exception because we couldn't audit the save.
             // This was moved to its current location because if we're crashing, calling Focus can cause a cross-thread
             // exception, preventing ShipWorks from shutting down. If we're crashing, we can't be sure a save is valid anyway.
-            Focus();
+            Focus(); 
+            UnloadOrderLookupMode();
 
             using (ConnectionSensitiveScope scope = new ConnectionSensitiveScope("close ShipWorks", this))
             {
