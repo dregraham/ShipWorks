@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:ui="http://schemas.shipworks.com/ui"
+             xmlns:sui="clr-namespace:ShipWorks.Shipping.UI.ValueConverters;assembly=ShipWorks.Shipping.UI"
              xmlns:shipmentDetails="clr-namespace:ShipWorks.OrderLookup.Controls.ShipmentDetails"
              xmlns:controls="clr-namespace:ShipWorks.OrderLookup.Controls"
              mc:Ignorable="d"
@@ -16,6 +17,7 @@
             </ResourceDictionary.MergedDictionaries>
             <ui:InvertBooleanConverter x:Key="InvertBooleanConverter" />
             <ui:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+            <sui:CarrierAdapterToAvailableShipmentTypesConverter x:Key="CarrierAdapterToAvailableShipmentTypesConverter" />
             <controls:ShipmentTypeToOrderLookupTemplateConverter x:Key="ShipmentTypeToOrderLookupTemplateConverter" />
         </ResourceDictionary>
     </UserControl.Resources>
@@ -62,11 +64,21 @@
             Grid.Row="1"
             Grid.Column="1"
             DisplayMemberPath="Value"
-            ItemsSource="{Binding Providers}"
             SelectedIndexWhenNull="{x:Static ui:RelativeIndex.First}"
             SelectedValue="{Binding ShipmentTypeCode, UpdateSourceTrigger=PropertyChanged}"
             SelectedValuePath="Key"
-            Style="{StaticResource FormComboBox}" />
+            Style="{StaticResource FormComboBox}">
+            <ComboBox.ItemsSource>
+                <Binding
+                    Converter="{StaticResource CarrierAdapterToAvailableShipmentTypesConverter}"
+                    Mode="OneWay"
+                    Path="ShipmentModel.ShipmentAdapter" />
+            </ComboBox.ItemsSource>
+        </ui:ShipWorksComboBox>
+
+
+
+
 
         <TextBlock
             Grid.Row="2"

@@ -36,10 +36,8 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
         private readonly IDimensionsManager dimensionsManager;
         private readonly IShipmentPackageTypesBuilderFactory shipmentPackageTypesBuilderFactory;
         private readonly IShipmentServicesBuilderFactory shipmentServicesBuilderFactory;
-        private readonly ShipmentTypeProvider shipmentTypeProvider;
         private readonly Func<DimensionsManagerDlg> getDimensionsManagerDlg;
         private List<DimensionsProfileEntity> dimensionProfiles;
-        private Dictionary<ShipmentTypeCode, string> providers;
         private IEnumerable<KeyValuePair<int, string>> packageTypes;
         private IEnumerable<KeyValuePair<int, string>> confirmationTypes;
         private IEnumerable<KeyValuePair<int, string>> serviceTypes;
@@ -55,7 +53,6 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
             IShipmentPackageTypesBuilderFactory shipmentPackageTypesBuilderFactory,
             IShipmentServicesBuilderFactory shipmentServicesBuilderFactory,
             IInsuranceViewModel insuranceViewModel,
-            ShipmentTypeProvider shipmentTypeProvider,
             Func<DimensionsManagerDlg> getDimensionsManagerDlg)
         {
             ShipmentModel = shipmentModel;
@@ -64,7 +61,6 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
             this.dimensionsManager = dimensionsManager;
             this.shipmentPackageTypesBuilderFactory = shipmentPackageTypesBuilderFactory;
             this.shipmentServicesBuilderFactory = shipmentServicesBuilderFactory;
-            this.shipmentTypeProvider = shipmentTypeProvider;
             this.getDimensionsManagerDlg = getDimensionsManagerDlg;
             InsuranceViewModel = insuranceViewModel;
             handler = new PropertyChangedHandler(this, () => PropertyChanged);
@@ -80,7 +76,6 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
             RefreshInsurance();
             RefreshPackageTypes();
             RefreshServiceTypes();
-            RefreshProviders();
 
             ConfirmationTypes =
                 EnumHelper.GetEnumList<UpsDeliveryConfirmationType>()
@@ -190,16 +185,6 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
         /// </summary>
         [Obfuscation(Exclude = true)]
         public bool IsProfileSelected => SelectedPackage.DimsProfileID > 0;
-
-        /// <summary>
-        /// Collection of ServiceTypes
-        /// </summary>
-        [Obfuscation(Exclude = true)]
-        public Dictionary<ShipmentTypeCode, string> Providers
-        {
-            get => providers;
-            set => handler.Set(nameof(Providers), ref providers, value);
-        }
 
         /// <summary>
         /// Shipment type code
@@ -349,23 +334,6 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
                 {
                     RefreshServiceTypes();
                 }
-            }
-        }
-
-        /// <summary>
-        /// Refresh the providers
-        /// </summary>
-        private void RefreshProviders()
-        {
-            if (ShipmentModel.ShipmentAdapter?.Shipment == null)
-            {
-                Providers = new Dictionary<ShipmentTypeCode, string>();
-            }
-            else
-            {
-                Providers = shipmentTypeProvider
-                    .GetAvailableShipmentTypes(ShipmentModel.ShipmentAdapter)
-                    .ToDictionary(s => s, s => EnumHelper.GetDescription(s));
             }
         }
 
