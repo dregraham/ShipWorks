@@ -24,7 +24,6 @@ namespace ShipWorks.OrderLookup.Controls.QuantumViewNotify
         public QuantumViewNotifyControlViewModel(IOrderLookupShipmentModel shipmentModel)
         {
             ShipmentModel = shipmentModel;
-            ShipmentModel.PropertyChanged += ShipmentModelPropertyChanged;
             handler = new PropertyChangedHandler(this, () => PropertyChanged);
 
             SubjectTypes = EnumHelper.GetEnumList<UpsEmailNotificationSubject>()
@@ -72,13 +71,8 @@ namespace ShipWorks.OrderLookup.Controls.QuantumViewNotify
         public UpsEmailNotificationType Sender
         {
             get => (UpsEmailNotificationType) ShipmentModel.ShipmentAdapter.Shipment.Ups.EmailNotifySender;
-            set
-            {
-                ShipmentModel.ShipmentAdapter.Shipment.Ups.EmailNotifySender =
-                    UpdateNotificationFlag(ShipmentModel.ShipmentAdapter.Shipment.Ups.EmailNotifySender, value);
-
-                handler.RaisePropertyChanged(nameof(ShipmentModel.ShipmentAdapter.Shipment.Ups.EmailNotifySender));
-            }
+            set => ShipmentModel.ShipmentAdapter.Shipment.Ups.EmailNotifySender =
+                UpdateNotificationFlag(ShipmentModel.ShipmentAdapter.Shipment.Ups.EmailNotifySender, value);
         }
 
         /// <summary>
@@ -88,13 +82,8 @@ namespace ShipWorks.OrderLookup.Controls.QuantumViewNotify
         public UpsEmailNotificationType Recipient
         {
             get => (UpsEmailNotificationType) ShipmentModel.ShipmentAdapter.Shipment.Ups.EmailNotifyRecipient;
-            set
-            {
-                ShipmentModel.ShipmentAdapter.Shipment.Ups.EmailNotifyRecipient =
-                    UpdateNotificationFlag(ShipmentModel.ShipmentAdapter.Shipment.Ups.EmailNotifyRecipient, value);
-
-                handler.RaisePropertyChanged(nameof(ShipmentModel.ShipmentAdapter.Shipment.Ups.EmailNotifyRecipient));
-            }
+            set => ShipmentModel.ShipmentAdapter.Shipment.Ups.EmailNotifyRecipient =
+                UpdateNotificationFlag(ShipmentModel.ShipmentAdapter.Shipment.Ups.EmailNotifyRecipient, value);
         }
 
         /// <summary>
@@ -104,13 +93,8 @@ namespace ShipWorks.OrderLookup.Controls.QuantumViewNotify
         public UpsEmailNotificationType Other
         {
             get => (UpsEmailNotificationType) ShipmentModel.ShipmentAdapter.Shipment.Ups.EmailNotifyOther;
-            set
-            {
-                ShipmentModel.ShipmentAdapter.Shipment.Ups.EmailNotifyOther =
-                    UpdateNotificationFlag(ShipmentModel.ShipmentAdapter.Shipment.Ups.EmailNotifyOther, value);
-
-                handler.RaisePropertyChanged(nameof(ShipmentModel.ShipmentAdapter.Shipment.Ups.EmailNotifyOther));
-            }
+            set => ShipmentModel.ShipmentAdapter.Shipment.Ups.EmailNotifyOther =
+                UpdateNotificationFlag(ShipmentModel.ShipmentAdapter.Shipment.Ups.EmailNotifyOther, value);
         }
 
         /// <summary>
@@ -131,22 +115,10 @@ namespace ShipWorks.OrderLookup.Controls.QuantumViewNotify
         }
 
         /// <summary>
-        /// Update when the order changes
-        /// </summary>
-        private void ShipmentModelPropertyChanged(object sender, PropertyChangedEventArgs e)
-        {
-            if (ShipmentModel.SelectedOrder != null)
-            {
-                if (e.PropertyName == nameof(ShipmentModel.SelectedOrder))
-                {
-                    handler.RaisePropertyChanged(nameof(ShipmentModel));
-                }
-            }
-        }
-
-        /// <summary>
         /// Dispose
         /// </summary>
-        public void Dispose() => ShipmentModel.PropertyChanged -= ShipmentModelPropertyChanged;
+        public void Dispose()
+        {
+        }
     }
 }

@@ -190,6 +190,7 @@
     <Compile Include="ValueConverters\EmptyMoneyConverterTest.cs" />
     <Compile Include="ValueConverters\IntToEnumConverterTest.cs" />
     <Compile Include="ValueConverters\StringEmptyWhenEqualToParameterConverterTest.cs" />
+    <Compile Include="ValueConverters\UpsEmailNotificationTypeToBoolConverterTest.cs" />
     <Compile Include="ValueConverters\ValueEqualToParameterConverterTest.cs" />
   </ItemGroup>
   <ItemGroup>
