@@ -5,32 +5,25 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Reflection;
 using GalaSoft.MvvmLight.Command;
-using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
 using Shared.System.ComponentModel.DataAnnotations;
 using ShipWorks.Core.UI;
 using ShipWorks.Shipping;
-using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Shipping.Services;
-using ShipWorks.UI;
 
 namespace ShipWorks.OrderLookup.Controls.Customs
 {
     /// <summary>
     /// View model for the OrderLookupCustomsControl
     /// </summary>
-    [KeyedComponent(typeof(ICustomsViewModel), ShipmentTypeCode.Usps)]
-    [KeyedComponent(typeof(ICustomsViewModel), ShipmentTypeCode.Endicia)]
-    [WpfView(typeof(GenericCustomsControl))]
     public class GenericCustomsViewModel : ICustomsViewModel
     {
         private IShipmentCustomsItemAdapter selectedCustomsItem;
         private ObservableCollection<IShipmentCustomsItemAdapter> customsItems;
         private double contentWeight;
         public event PropertyChangedEventHandler PropertyChanged;
-        private readonly PropertyChangedHandler handler;
-        private Dictionary<int, string> customsContentTypes;
-        private bool customsContentTypeAllowed;
+        protected readonly PropertyChangedHandler handler;
+
         private bool visible;
         private readonly IShipmentTypeManager shipmentTypeManager;
 
@@ -120,26 +113,6 @@ namespace ShipWorks.OrderLookup.Controls.Customs
         }
 
         /// <summary>
-        /// List of available customs content types for the shipment
-        /// </summary>
-        [Obfuscation(Exclude = true)]
-        public Dictionary<int, string> CustomsContentTypes
-        {
-            get => customsContentTypes;
-            set => handler.Set(nameof(CustomsContentTypes), ref customsContentTypes, value);
-        }
-
-        /// <summary>
-        /// Whether or not customs content types are supported for this shipment
-        /// </summary>
-        [Obfuscation(Exclude = true)]
-        public bool CustomsContentTypeAllowed
-        {
-            get => customsContentTypeAllowed;
-            set => handler.Set(nameof(CustomsContentTypeAllowed), ref customsContentTypeAllowed, value);
-        }
-
-        /// <summary>
         /// The shipment content weight
         /// </summary>
         [Obfuscation(Exclude = true)]
@@ -186,16 +159,6 @@ namespace ShipWorks.OrderLookup.Controls.Customs
             if (shipmentAdapter == null || !shipmentAdapter.CustomsAllowed)
             {
                 return;
-            }
-
-            CustomsContentTypeAllowed = shipmentTypeManager.IsPostal(shipmentAdapter.ShipmentTypeCode);
-            if (CustomsContentTypeAllowed)
-            {
-                CustomsContentTypes = EnumHelper.GetEnumList<PostalCustomsContentType>().ToDictionary(x => (int) x.Value, x => x.Description);
-            }
-            else
-            {
-                CustomsContentTypes = new Dictionary<int, string>();
             }
 
             CustomsItems = new ObservableCollection<IShipmentCustomsItemAdapter>(shipmentAdapter.GetCustomsItemAdapters());

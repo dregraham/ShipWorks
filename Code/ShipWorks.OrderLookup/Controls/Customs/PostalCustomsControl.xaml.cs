@@ -5,12 +5,12 @@ namespace ShipWorks.OrderLookup.Controls.Customs
     /// <summary>
     /// Interaction logic for GenericCustomsControl.xaml
     /// </summary>
-    public partial class GenericCustomsControl : UserControl
+    public partial class PostalCustomsControl : UserControl
     {
         /// <summary>
         /// Constructor
         /// </summary>
-        public GenericCustomsControl()
+        public PostalCustomsControl()
         {
             InitializeComponent();
         }
