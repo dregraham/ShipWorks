@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Reactive.Disposables;
 using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Forms.Integration;
@@ -55,6 +56,22 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookup
         /// Unload the order from the viewmodel shipmentModel
         /// </summary>
         public void Unload() => orderLookupViewModel.ShipmentModel.Unload();
+
+        /// <summary>
+        /// Create the label for a shipment
+        /// </summary>
+        public void CreateLabel()
+        {
+            orderLookupViewModel.ShipmentModel.CreateLabel();
+        }
+
+        /// <summary>
+        /// Allow the creation of a label
+        /// </summary>
+        public bool CreateLabelAllowed()
+        {
+            return orderLookupViewModel.ShipmentModel?.ShipmentAdapter?.Shipment?.Processed == false;
+        }
 
         /// <summary>
         /// Expose the Control
