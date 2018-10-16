@@ -19,6 +19,7 @@ namespace ShipWorks.OrderLookup.Controls.Rating
     /// </summary>
     [KeyedComponent(typeof(IRatingViewModel), ShipmentTypeCode.Endicia)]
     [KeyedComponent(typeof(IRatingViewModel), ShipmentTypeCode.Usps)]
+    [KeyedComponent(typeof(IRatingViewModel), ShipmentTypeCode.UpsOnLineTools)]
     [WpfView(typeof(GenericRatingControl))]
     public class GenericRatingViewModel : RatingPanelViewModel, IRatingViewModel
     {

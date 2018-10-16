@@ -15,14 +15,11 @@ namespace ShipWorks.OrderLookup.Controls.QuantumViewNotify
 {
     [KeyedComponent(typeof(IQuantumViewNotifyControlViewModel), ShipmentTypeCode.UpsOnLineTools)]
     [WpfView(typeof(QuantumViewNotifyControl))]
-    public class QuantumViewNotifyControlViewModel : IQuantumViewNotifyControlViewModel, INotifyPropertyChanged
+    public class QuantumViewNotifyControlViewModel : IQuantumViewNotifyControlViewModel
     {
         public event PropertyChangedEventHandler PropertyChanged;
         private readonly PropertyChangedHandler handler;
         private Dictionary<int, string> subjectTypes;
-        private bool? notifySenderOnShip = false;
-        private bool? notifySenderOnDeliver = false;
-        private bool? notifySenderOnException = false;
 
         public QuantumViewNotifyControlViewModel(IOrderLookupShipmentModel shipmentModel)
         {
@@ -31,9 +28,9 @@ namespace ShipWorks.OrderLookup.Controls.QuantumViewNotify
             handler = new PropertyChangedHandler(this, () => PropertyChanged);
 
             SubjectTypes = EnumHelper.GetEnumList<UpsEmailNotificationSubject>()
-                .Select(x => x.Value).ToDictionary(s => (int) s, s => EnumHelper.GetDescription(s));
+                                     .ToDictionary(x => (int) x.Value, x => x.Description);
         }
-        
+
         /// <summary>
         /// Is the section expanded
         /// </summary>
@@ -65,51 +62,74 @@ namespace ShipWorks.OrderLookup.Controls.QuantumViewNotify
         public Dictionary<int, string> SubjectTypes
         {
             get => subjectTypes;
-            set => handler.Set(nameof(SubjectTypes), ref subjectTypes, value);        
+            set => handler.Set(nameof(SubjectTypes), ref subjectTypes, value);
         }
-        
+
         /// <summary>
-        /// Notify sender on ship
+        /// Sender notifications flag
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public bool? NotifySenderOnShip
+        public UpsEmailNotificationType Sender
         {
-            get => notifySenderOnShip;
+            get => (UpsEmailNotificationType) ShipmentModel.ShipmentAdapter.Shipment.Ups.EmailNotifySender;
             set
             {
-                handler.Set(nameof(NotifySenderOnShip), ref notifySenderOnShip, value);
-                
-//                if (value)
-//                {
-//                    ShipmentModel.ShipmentAdapter.Shipment.Ups.EmailNotifySender |= (int) UpsEmailNotificationType.Ship;
-//                }
-//                else
-//                {
-//                    ShipmentModel.ShipmentAdapter.Shipment.Ups.EmailNotifySender &= ~ (int) UpsEmailNotificationType.Ship;
-//                }
+                ShipmentModel.ShipmentAdapter.Shipment.Ups.EmailNotifySender =
+                    UpdateNotificationFlag(ShipmentModel.ShipmentAdapter.Shipment.Ups.EmailNotifySender, value);
+
+                handler.RaisePropertyChanged(nameof(ShipmentModel.ShipmentAdapter.Shipment.Ups.EmailNotifySender));
             }
         }
-        
+
         /// <summary>
-        /// Notify sender on delivery
+        /// Recipient notifications flag
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public bool? NotifySenderOnDeliver
+        public UpsEmailNotificationType Recipient
         {
-            get => notifySenderOnDeliver;
-            set => handler.Set(nameof(NotifySenderOnDeliver), ref notifySenderOnDeliver, value);        
+            get => (UpsEmailNotificationType) ShipmentModel.ShipmentAdapter.Shipment.Ups.EmailNotifyRecipient;
+            set
+            {
+                ShipmentModel.ShipmentAdapter.Shipment.Ups.EmailNotifyRecipient =
+                    UpdateNotificationFlag(ShipmentModel.ShipmentAdapter.Shipment.Ups.EmailNotifyRecipient, value);
+
+                handler.RaisePropertyChanged(nameof(ShipmentModel.ShipmentAdapter.Shipment.Ups.EmailNotifyRecipient));
+            }
         }
-        
+
         /// <summary>
-        /// Notify sender on exception
+        /// Other notifications flag
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public bool? NotifySenderOnException
+        public UpsEmailNotificationType Other
         {
-            get => notifySenderOnException;
-            set => handler.Set(nameof(NotifySenderOnException), ref notifySenderOnException, value);        
+            get => (UpsEmailNotificationType) ShipmentModel.ShipmentAdapter.Shipment.Ups.EmailNotifyOther;
+            set
+            {
+                ShipmentModel.ShipmentAdapter.Shipment.Ups.EmailNotifyOther =
+                    UpdateNotificationFlag(ShipmentModel.ShipmentAdapter.Shipment.Ups.EmailNotifyOther, value);
+
+                handler.RaisePropertyChanged(nameof(ShipmentModel.ShipmentAdapter.Shipment.Ups.EmailNotifyOther));
+            }
         }
-        
+
+        /// <summary>
+        /// Update the current UpsEmailNotificationType flag's value with the flag that changed
+        /// </summary>
+        private int UpdateNotificationFlag(int currentValue, UpsEmailNotificationType valueChanged)
+        {
+            if (((UpsEmailNotificationType) currentValue).HasFlag(valueChanged))
+            {
+                currentValue &= ~(int) valueChanged;
+            }
+            else
+            {
+                currentValue |= (int) valueChanged;
+            }
+            
+            return currentValue;
+        }
+
         /// <summary>
         /// Update when the order changes
         /// </summary>
@@ -119,35 +139,14 @@ namespace ShipWorks.OrderLookup.Controls.QuantumViewNotify
             {
                 if (e.PropertyName == nameof(ShipmentModel.SelectedOrder))
                 {
-//                    UpdateVisibility();
-//                    LoadNotifications(ShipmentModel.ShipmentAdapter.Shipment.Ups);
-
                     handler.RaisePropertyChanged(nameof(ShipmentModel));
-                }
-
-                if (e.PropertyName == nameof(ShipmentModel.ShipmentAdapter.ShipmentTypeCode))
-                {
-//                    UpdateVisibility();
-//                    LoadNotifications(ShipmentModel.ShipmentAdapter.Shipment.Ups);
                 }
             }
         }
 
-//        private void LoadNotifications(UpsShipmentEntity shipment)
-//        {
-//            UpsEmailNotificationType notifySender = (UpsEmailNotificationType) shipment.EmailNotifySender;
-//            UpsEmailNotificationType notifyRecipient = (UpsEmailNotificationType) shipment.EmailNotifyRecipient;
-//            UpsEmailNotificationType notifyOther = (UpsEmailNotificationType) shipment.EmailNotifyOther;
-//
-//            NotifySenderOnShip = notifySender.HasFlag(UpsEmailNotificationType.Ship);
-//            NotifySenderOnDeliver = notifySender.HasFlag(UpsEmailNotificationType.Deliver);
-//            NotifySenderOnException = notifySender.HasFlag(UpsEmailNotificationType.Exception);
-//        }
-
-//        private void UpdateVisibility() =>
-//            Visible = ShipmentModel.ShipmentAdapter.ShipmentTypeCode == ShipmentTypeCode.UpsOnLineTools;
-
-
+        /// <summary>
+        /// Dispose
+        /// </summary>
         public void Dispose() => ShipmentModel.PropertyChanged -= ShipmentModelPropertyChanged;
     }
 }
