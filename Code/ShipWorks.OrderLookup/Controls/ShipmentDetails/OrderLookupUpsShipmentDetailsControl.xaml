@@ -15,7 +15,7 @@
                 <ResourceDictionary Source="/ShipWorks.OrderLookup;component/Controls/Weight/WeightControl.xaml" />
             </ResourceDictionary.MergedDictionaries>
             <ui:InvertBooleanConverter x:Key="InvertBooleanConverter" />
-            <ui:BooleanComparisonToVisiblityConverter x:Key="BooleanComparisonToVisibilityConverter" />
+            <ui:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
             <controls:ShipmentTypeToOrderLookupTemplateConverter x:Key="ShipmentTypeToOrderLookupTemplateConverter" />
         </ResourceDictionary>
     </UserControl.Resources>
@@ -256,27 +256,20 @@
                         Content="Add-to weight"/>
 
             <ui:WeightInput VerticalAlignment="Center"
-                                    VerticalContentAlignment="Center"
-                                    Height="28"
-                                    Width="100"
-                                    FontSize="12"
-                                    Foreground="{StaticResource ControlTextColor}"
-                                    BorderBrush="{StaticResource BorderColor}"
-                                    BorderThickness="1"
-                                    Background="{StaticResource InputControlBackgroundGradient}"
-                                    Style="{StaticResource OrderLookupWeightInput}"
-                                    Grid.Column="1"
-                                    Margin="5,0,0,0"
-                                    Weight="{Binding AddToWeightValue}">
-                <ui:WeightInput.Visibility>
-                    <MultiBinding Converter="{StaticResource BooleanComparisonToVisibilityConverter}">
-                        <Binding Converter="{StaticResource InvertBooleanConverter}" Path="IsProfileSelected" />
-                        <Binding Path="AddToWeight" />
-                    </MultiBinding>
-                </ui:WeightInput.Visibility>
-            </ui:WeightInput>
-
-
+                        VerticalContentAlignment="Center"
+                        Height="28"
+                        Width="100"
+                        FontSize="12"
+                        Foreground="{StaticResource ControlTextColor}"
+                        BorderBrush="{StaticResource BorderColor}"
+                        BorderThickness="1"
+                        Background="{StaticResource InputControlBackgroundGradient}"
+                        Style="{StaticResource OrderLookupWeightInput}"
+                        Grid.Column="1"
+                        Margin="5,0,0,0"
+                        Weight="{Binding AddToWeightValue}"
+                        IsEnabled="{Binding IsProfileSelected, Converter={StaticResource InvertBooleanConverter}}"
+                        Visibility="{Binding ShipmentModel.ShipmentAdapter.Shipment.Postal.DimsAddWeight, Converter={StaticResource BooleanToVisibilityConverter}}"/>
         </Grid>
         <shipmentDetails:OrderLookupInsuranceControl
                     Grid.Row="9"
