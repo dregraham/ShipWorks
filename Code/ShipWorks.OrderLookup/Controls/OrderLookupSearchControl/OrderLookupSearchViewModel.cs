@@ -19,6 +19,7 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookupSearchControl
         public event PropertyChangedEventHandler PropertyChanged;
         private readonly PropertyChangedHandler handler;
         private string orderNumber = string.Empty;
+        private bool showCreateLabel = false;
         private string totalCost = string.Empty;
         private string searchErrorMessage = string.Empty;
         private bool searchError;
@@ -62,6 +63,16 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookupSearchControl
         /// </summary>
         [Obfuscation(Exclude = true)]
         public IOrderLookupShipmentModel ShipmentModel => shipmentModel;
+
+        /// <summary>
+        /// Show the create label button?
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public bool ShowCreateLabel
+        {
+            get => showCreateLabel;
+            set => handler.Set(nameof(ShowCreateLabel), ref showCreateLabel, value);
+        }
 
         /// <summary>
         /// Error message to display when a error occurs while searching
@@ -132,6 +143,10 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookupSearchControl
                     SearchError = false;
                     OrderNumber = shipmentModel.SelectedOrder.OrderNumberComplete;
                 }
+            }
+            else if (e.PropertyName == nameof(shipmentModel.ShipmentAdapter))
+            {
+                ShowCreateLabel = shipmentModel.ShipmentAdapter?.Shipment?.Processed == false;
             }
         }
 

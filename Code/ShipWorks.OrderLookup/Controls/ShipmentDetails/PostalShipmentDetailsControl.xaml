@@ -16,8 +16,8 @@
                 <ResourceDictionary Source="/ShipWorks.OrderLookup;component/Controls/Weight/WeightControl.xaml" />
             </ResourceDictionary.MergedDictionaries>
             <controls:ShipmentTypeToOrderLookupTemplateConverter x:Key="ShipmentTypeToOrderLookupTemplateConverter" />
-            <ui:InvertBooleanConverter x:Key="InvertBooleanConverter" />
-            <ui:BooleanComparisonToVisiblityConverter x:Key="BooleanComparisonToVisibilityConverter" />
+            <ui:InvertBooleanConverter x:Key="InvertBoolean" />
+            <ui:BooleanToVisibilityConverter x:Key="BooleanToVisibility" />
         </ResourceDictionary>
     </UserControl.Resources>
 
@@ -211,7 +211,7 @@
                     Grid.Column="0"
                     Height="23"
                     Margin="0,0,5,0"
-                    IsEnabled="{Binding IsProfileSelected, Converter={StaticResource InvertBooleanConverter}}"
+                    IsEnabled="{Binding IsProfileSelected, Converter={StaticResource InvertBoolean}}"
                     MaxLength="3"
                     Style="{StaticResource FormTextBox}"
                     Text="{Binding ShipmentModel.ShipmentAdapter.Shipment.Postal.DimsLength}" />
@@ -220,7 +220,7 @@
                     Grid.Column="1"
                     Height="23"
                     Margin="0,0,5,0"
-                    IsEnabled="{Binding IsProfileSelected, Converter={StaticResource InvertBooleanConverter}}"
+                    IsEnabled="{Binding IsProfileSelected, Converter={StaticResource InvertBoolean}}"
                     MaxLength="3"
                     Style="{StaticResource FormTextBox}"
                     Text="{Binding ShipmentModel.ShipmentAdapter.Shipment.Postal.DimsWidth}" />
@@ -229,7 +229,7 @@
                     Grid.Column="2"
                     Height="23"
                     Margin="0,0,5,0"
-                    IsEnabled="{Binding IsProfileSelected, Converter={StaticResource InvertBooleanConverter}}"
+                    IsEnabled="{Binding IsProfileSelected, Converter={StaticResource InvertBoolean}}"
                     MaxLength="3"
                     Style="{StaticResource FormTextBox}"
                     Text="{Binding ShipmentModel.ShipmentAdapter.Shipment.Postal.DimsHeight}" />
@@ -269,17 +269,10 @@
                     BorderThickness="1"
                     FontSize="12"
                     Foreground="{StaticResource ControlTextColor}"
+                    IsEnabled="{Binding IsProfileSelected, Converter={StaticResource InvertBoolean}}"
                     Style="{StaticResource OrderLookupWeightInput}"
-                    Weight="{Binding ShipmentModel.ShipmentAdapter.Shipment.Postal.DimsWeight}">
-                    <ui:WeightInput.Visibility>
-                        <MultiBinding Converter="{StaticResource BooleanComparisonToVisibilityConverter}">
-                            <Binding Converter="{StaticResource InvertBooleanConverter}" Path="IsProfileSelected" />
-                            <Binding Path="ShipmentModel.ShipmentAdapter.Shipment.Postal.DimsAddWeight" />
-                        </MultiBinding>
-                    </ui:WeightInput.Visibility>
-                </ui:WeightInput>
-
-
+                    Visibility="{Binding ShipmentModel.ShipmentAdapter.Shipment.Postal.DimsAddWeight, Converter={StaticResource BooleanToVisibility}}"
+                    Weight="{Binding ShipmentModel.ShipmentAdapter.Shipment.Postal.DimsWeight}" />
             </Grid>
             <local:OrderLookupInsuranceControl
                 Grid.Row="10"

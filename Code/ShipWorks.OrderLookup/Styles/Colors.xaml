@@ -37,6 +37,11 @@
         <GradientStop Color="White" Offset="0"/>
     </LinearGradientBrush>
 
+    <LinearGradientBrush x:Key="InputControlBackgroundGradientFlash" EndPoint="0.5, 0" StartPoint=".5,1">
+        <GradientStop Color="White" Offset="1"/>
+        <GradientStop Color="#f5f5f5" Offset="0"/>
+    </LinearGradientBrush>
+
     <LinearGradientBrush x:Key="LargePrimaryButtonGradient" EndPoint="0.5, 0" StartPoint=".5,1">
         <GradientStop Color="#528ec6" Offset="1"/>
         <GradientStop Color="#0259ab" Offset="0"/>

@@ -16,13 +16,13 @@
                         <EventTrigger RoutedEvent="weight:ScaleButton.ScaleRead">
                             <BeginStoryboard Name="Flash">
                                 <Storyboard RepeatBehavior="3x">
-                                    <ColorAnimationUsingKeyFrames
-                                        Storyboard.Target="{Binding ElementName=PART_Entry}"
-                                        Storyboard.TargetProperty="(TextBox.Background).(SolidColorBrush.Color)"
+                                    <ObjectAnimationUsingKeyFrames
+                                        Storyboard.TargetName="PART_Entry"
+                                        Storyboard.TargetProperty="(TextBox.Background)"
                                         Duration="0:0:0.5">
-                                        <DiscreteColorKeyFrame KeyTime="0:0:0" Value="LightGray" />
-                                        <DiscreteColorKeyFrame KeyTime="0:0:0.25" Value="White" />
-                                    </ColorAnimationUsingKeyFrames>
+                                        <DiscreteObjectKeyFrame KeyTime="0:0:0" Value="{StaticResource InputControlBackgroundGradientFlash}" />
+                                        <DiscreteObjectKeyFrame KeyTime="0:0:0.25" Value="{StaticResource InputControlBackgroundGradient}" />
+                                    </ObjectAnimationUsingKeyFrames>
                                 </Storyboard>
                             </BeginStoryboard>
                         </EventTrigger>
@@ -40,19 +40,7 @@
                         Height="26"
                         MaxLength="16"
                         Foreground="{StaticResource ControlTextColor}"
-                        Text="{Binding Path=Text, RelativeSource={RelativeSource TemplatedParent}, NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True}">
-                        <TextBox.Triggers>
-                            <EventTrigger RoutedEvent="TextBoxBase.TextChanged">
-                                <BeginStoryboard>
-                                    <Storyboard>
-                                        <ColorAnimationUsingKeyFrames Storyboard.Target="{Binding ElementName=PART_Entry}" Storyboard.TargetProperty="(TextBox.Background).(SolidColorBrush.Color)">
-                                            <DiscreteColorKeyFrame KeyTime="0:0:0" Value="White" />
-                                        </ColorAnimationUsingKeyFrames>
-                                    </Storyboard>
-                                </BeginStoryboard>
-                            </EventTrigger>
-                        </TextBox.Triggers>
-                    </TextBox>
+                        Text="{Binding Path=Text, RelativeSource={RelativeSource TemplatedParent}, NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True}" />
                 </ControlTemplate>
             </Setter.Value>
         </Setter>

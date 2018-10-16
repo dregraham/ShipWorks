@@ -39,6 +39,7 @@ namespace ShipWorks.OrderLookup
         private readonly IShippingManager shippingManager;
         private readonly IMessageHelper messageHelper;
         private readonly PropertyChangedHandler handler;
+        private ICarrierShipmentAdapter shipmentAdapter;
         private OrderEntity selectedOrder;
         private bool shipmentAllowEditing;
         private decimal totalCost;
@@ -84,7 +85,11 @@ namespace ShipWorks.OrderLookup
         /// The shipment adapter for the order in context
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public ICarrierShipmentAdapter ShipmentAdapter { get; private set; }
+        public ICarrierShipmentAdapter ShipmentAdapter
+        {
+            get => shipmentAdapter;
+            private set => handler.Set(nameof(ShipmentAdapter), ref shipmentAdapter, value, true);
+        }
 
         /// <summary>
         /// The package adapters for the order in context
