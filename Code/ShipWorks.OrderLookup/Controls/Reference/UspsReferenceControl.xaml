@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:reference="clr-namespace:ShipWorks.OrderLookup.Controls.Reference"
              mc:Ignorable="d"
+             d:DataContext="{d:DesignInstance reference:UspsReferenceViewModel}"
              FontSize="12"
              FontFamily="/ShipWorks.OrderLookup;component/#Roboto">
     <UserControl.Resources>

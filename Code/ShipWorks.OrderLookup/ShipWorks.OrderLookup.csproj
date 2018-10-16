@@ -152,6 +152,11 @@
       <DependentUpon>OrderLookupWrapperControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\OrderLookupWrapperViewModel.cs" />
+    <Compile Include="Controls\QuantumViewNotify\IQuantumViewNotifyControlViewModel.cs" />
+    <Compile Include="Controls\QuantumViewNotify\QuantumViewNotifyControlViewModel.cs" />
+    <Compile Include="Controls\QuantumViewNotify\QuantumViewNotifyControl.xaml.cs">
+      <DependentUpon>QuantumViewNotifyControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\Rating\IRatingViewModel.cs" />
     <Compile Include="Controls\Reference\IReferenceViewModel.cs" />
     <Compile Include="Controls\Reference\EndiciaReferenceControl.xaml.cs">
@@ -339,6 +344,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Controls\QuantumViewNotify\QuantumViewNotifyControl.xaml" />
     <Page Include="Controls\Reference\EndiciaReferenceControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

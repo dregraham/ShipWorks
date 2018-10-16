@@ -17,6 +17,7 @@ using ShipWorks.OrderLookup.Controls.Customs;
 using ShipWorks.OrderLookup.Controls.From;
 using ShipWorks.OrderLookup.Controls.LabelOptions;
 using ShipWorks.OrderLookup.Controls.OrderLookupSearchControl;
+using ShipWorks.OrderLookup.Controls.QuantumViewNotify;
 using ShipWorks.OrderLookup.Controls.Rating;
 using ShipWorks.OrderLookup.Controls.Reference;
 using ShipWorks.OrderLookup.Controls.ShipmentDetails;
@@ -66,6 +67,7 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookup
                 scope.Resolve<IOrderLookupWrapperViewModel<IDetailsViewModel>>(),
                 scope.Resolve<IOrderLookupWrapperViewModel<ILabelOptionsViewModel>>(),
                 scope.Resolve<IOrderLookupWrapperViewModel<IReferenceViewModel>>(),
+                scope.Resolve<IOrderLookupWrapperViewModel<IQuantumViewNotifyControlViewModel>>()
             };
 
             RightColumn = new ObservableCollection<IOrderLookupWrapperViewModel<IOrderLookupViewModel>>

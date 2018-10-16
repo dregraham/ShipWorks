@@ -163,8 +163,6 @@ namespace ShipWorks.OrderLookup.Controls.LabelOptions
         /// <summary>
         /// Dispose
         /// </summary>
-        public void Dispose() =>
-            ShipmentModel.PropertyChanged -= ShipmentModelPropertyChanged;
-
+        public void Dispose() => ShipmentModel.PropertyChanged -= ShipmentModelPropertyChanged;
     }
 }
