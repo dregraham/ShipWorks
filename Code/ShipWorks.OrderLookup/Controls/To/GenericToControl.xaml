@@ -16,7 +16,7 @@
         </ResourceDictionary>
     </UserControl.Resources>
 
-    <local:OrderLookupAddress>
+    <local:OrderLookupAddress DataContext="{Binding Address}">
         <local:OrderLookupAddress.IsEnabled>
             <Binding Mode="OneWay" Path="ShipmentModel.ShipmentAllowEditing" />
         </local:OrderLookupAddress.IsEnabled>
