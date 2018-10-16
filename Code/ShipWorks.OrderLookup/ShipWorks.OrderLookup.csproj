@@ -157,9 +157,9 @@
     <Compile Include="Controls\ShipmentDetails\PostalShipmentDetailsControl.xaml.cs">
       <DependentUpon>PostalShipmentDetailsControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\ShipmentDetails\OrderLookupUpsShipmentDetailsViewModel .cs" />
-    <Compile Include="Controls\ShipmentDetails\OrderLookupUpsShipmentDetailsControl.xaml.cs">
-      <DependentUpon>OrderLookupUpsShipmentDetailsControl.xaml</DependentUpon>
+    <Compile Include="Controls\ShipmentDetails\UpsShipmentDetailsViewModel .cs" />
+    <Compile Include="Controls\ShipmentDetails\UpsShipmentDetailsControl.xaml.cs">
+      <DependentUpon>UpsShipmentDetailsControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\To\IToViewModel.cs" />
     <Compile Include="Controls\To\GenericToControl.xaml.cs">
@@ -352,7 +352,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Controls\ShipmentDetails\OrderLookupUpsShipmentDetailsControl.xaml">
+    <Page Include="Controls\ShipmentDetails\UpsShipmentDetailsControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

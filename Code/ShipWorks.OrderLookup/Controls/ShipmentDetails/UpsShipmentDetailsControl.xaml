@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="ShipWorks.OrderLookup.Controls.ShipmentDetails.OrderLookupUpsShipmentDetailsControl"
+﻿<UserControl x:Class="ShipWorks.OrderLookup.Controls.ShipmentDetails.UpsShipmentDetailsControl"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -21,6 +21,7 @@
     </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
@@ -86,16 +87,20 @@
             Grid.Row="3"
             Grid.Column="0"
             Style="{StaticResource FieldLabel}"
-            Text="Packaging" />
+            Text="Confirmation" />
 
         <ui:ShipWorksComboBox
             Grid.Row="3"
             Grid.Column="1"
             DisplayMemberPath="Value"
-            ItemsSource="{Binding PackageTypes}"
+            ItemsSource="{Binding ConfirmationTypes}"
             ui:ShipWorksComboBox.SelectedIndexWhenNull="{x:Static ui:RelativeIndex.First}"
             SelectedValuePath="Key"
-            Style="{StaticResource FormComboBox}" SelectedValue="{Binding SelectedPackage.PackagingType}"/>
+            Style="{StaticResource FormComboBox}">
+            <ComboBox.SelectedValue>
+                <Binding Path="ShipmentModel.ShipmentAdapter.Shipment.Ups.DeliveryConfirmation" />
+            </ComboBox.SelectedValue>
+        </ui:ShipWorksComboBox>
 
         <Grid Grid.Row="4"
                 Grid.Column="0"
@@ -152,53 +157,77 @@
                 Command="{Binding DeletePackageCommand}"/>
         </Grid>
 
+
         <TextBlock
-                    Grid.Row="5"
-                    Grid.Column="0"
-                    Style="{StaticResource FieldLabel}"
-                    Text="Weight" />
+            Grid.Row="5"
+            Grid.Column="0"
+            Style="{StaticResource FieldLabel}"
+            Text="Packaging" />
+
+        <ui:ShipWorksComboBox
+            Grid.Row="5"
+            Grid.Column="1"
+            DisplayMemberPath="Value"
+            ItemsSource="{Binding PackageTypes}"
+            ui:ShipWorksComboBox.SelectedIndexWhenNull="{x:Static ui:RelativeIndex.First}"
+            SelectedValuePath="Key"
+            Style="{StaticResource FormComboBox}" SelectedValue="{Binding SelectedPackage.PackagingType}"/>
+
+
+
+        <TextBlock
+            Grid.Row="6"
+            Grid.Column="0"
+            Style="{StaticResource FieldLabel}"
+            Text="Weight" />
 
         <ui:WeightControl
-
-                    Grid.Row="5"
-                    Grid.Column="1"
-        AcceptApplyWeightKeyboardShortcut="True"
-        ErrorMessage="{Binding WeightErrorMessage}"
-        Style="{StaticResource OrderLookupWeightControl}"
-        Weight="{Binding Weight, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=true, NotifyOnValidationError=true}" />
+            Grid.Row="6"
+            Grid.Column="1"
+            AcceptApplyWeightKeyboardShortcut="True"
+            ErrorMessage="{Binding WeightErrorMessage}"
+            Style="{StaticResource OrderLookupWeightControl}"
+            Weight="{Binding SelectedPackageWeight, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=true, NotifyOnValidationError=true}" />
 
         <TextBlock
-                    Grid.Row="6"
-                    Grid.Column="0"
-                    Style="{StaticResource FieldLabel}"
-                    Text="Dimensions" />
-        <Grid Grid.Row="6"
-                        Grid.Column="1">
+            Grid.Row="7"
+            Grid.Column="0"
+            Style="{StaticResource FieldLabel}"
+            Text="Dimensions" />
+        <Grid Grid.Row="7"
+              Grid.Column="1">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
             <ui:ShipWorksComboBox Grid.Column="0"
-                                            Margin="10,0,0,5"
-                                            DisplayMemberPath="Name"
-                                            ItemsSource="{Binding DimensionProfiles}"
-                                            ui:ShipWorksComboBox.SelectedIndexWhenNull="{x:Static ui:RelativeIndex.Last}"
-                                            SelectedValuePath="DimensionsProfileID"
-                                            Style="{StaticResource FormComboBox}" SelectedValue="{Binding DimsProfileID, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                Margin="10,0,0,5"
+                DisplayMemberPath="Name"
+                ItemsSource="{Binding DimensionProfiles}"
+                ui:ShipWorksComboBox.SelectedIndexWhenNull="{x:Static ui:RelativeIndex.Last}"
+                SelectedValuePath="DimensionsProfileID"
+                Style="{StaticResource FormComboBox}">
+                <ComboBox.SelectedValue>
+                    <Binding
+                            Mode="TwoWay"
+                            Path="SelectedPackageDimsProfileID"
+                            UpdateSourceTrigger="PropertyChanged" />
+                </ComboBox.SelectedValue>
+            </ui:ShipWorksComboBox>
 
             <Button
-                        Grid.Column="1"
-                        Margin="3,0,0,0"
-                        VerticalAlignment="Center"
-                        Command="{Binding ManageDimensionalProfiles}"
-                        Content="Manage..."
-                        Style="{StaticResource Link}" />
+                Grid.Column="1"
+                Margin="3,0,0,0"
+                VerticalAlignment="Center"
+                Command="{Binding ManageDimensionalProfiles}"
+                Content="Manage..."
+                Style="{StaticResource Link}" />
         </Grid>
 
         <Grid
-                    Grid.Row="7"
-                    Grid.Column="1"
-                    Margin="10,0,0,10">
+            Grid.Row="8"
+            Grid.Column="1"
+            Margin="10,0,0,10">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="50" />
                 <ColumnDefinition Width="50" />
@@ -206,54 +235,54 @@
                 <ColumnDefinition Width="auto" />
             </Grid.ColumnDefinitions>
             <TextBox
-                        Grid.Column="0"
-                        Height="23"
-                        Margin="0,0,5,0"
-                        MaxLength="3"
-                        IsEnabled="{Binding IsProfileSelected, Converter={StaticResource InvertBooleanConverter}}"
-                        Style="{StaticResource FormTextBox}"
-                        Text="{Binding Length}" />
+                Grid.Column="0"
+                Height="23"
+                Margin="0,0,5,0"
+                MaxLength="3"
+                IsEnabled="{Binding IsProfileSelected, Converter={StaticResource InvertBooleanConverter}}"
+                Style="{StaticResource FormTextBox}"
+                Text="{Binding SelectedPackage.DimsLength}" />
 
             <TextBox
-                        Grid.Column="1"
-                        Height="23"
-                        Margin="0,0,5,0"
-                        MaxLength="3"
-                        IsEnabled="{Binding IsProfileSelected, Converter={StaticResource InvertBooleanConverter}}"
-                        Style="{StaticResource FormTextBox}"
-                        Text="{Binding Width}" />
+                Grid.Column="1"
+                Height="23"
+                Margin="0,0,5,0"
+                MaxLength="3"
+                IsEnabled="{Binding IsProfileSelected, Converter={StaticResource InvertBooleanConverter}}"
+                Style="{StaticResource FormTextBox}"
+                Text="{Binding SelectedPackage.DimsWidth}" />
 
             <TextBox
-                        Grid.Column="2"
-                        Height="23"
-                        Margin="0,0,5,0"
-                        MaxLength="3"
-                        IsEnabled="{Binding IsProfileSelected, Converter={StaticResource InvertBooleanConverter}}"
-                        Style="{StaticResource FormTextBox}"
-                        Text="{Binding Height}" />
+                Grid.Column="2"
+                Height="23"
+                Margin="0,0,5,0"
+                MaxLength="3"
+                IsEnabled="{Binding IsProfileSelected, Converter={StaticResource InvertBooleanConverter}}"
+                Style="{StaticResource FormTextBox}"
+                Text="{Binding SelectedPackage.DimsHeight}" />
 
             <TextBlock
-                        Grid.Column="3"
-                        VerticalAlignment="Center"
-                        Text="in. (L x W x H)"
-                        Foreground="{StaticResource ControlTextColor}"/>
+                Grid.Column="3"
+                VerticalAlignment="Center"
+                Text="in. (L x W x H)"
+                Foreground="{StaticResource ControlTextColor}"/>
 
         </Grid>
 
         <Grid
-                    Grid.Row="8"
-                    Grid.Column="1"
-                    Margin="5,0,0,10">
+            Grid.Row="9"
+            Grid.Column="1"
+            Margin="5,0,0,10">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="auto" />
                 <ColumnDefinition Width="auto" />
             </Grid.ColumnDefinitions>
             <CheckBox
-                        Grid.Column="0"
-                        Margin="5,0,0,0"
-                        IsChecked="{Binding AddToWeight}"
-                        Style="{StaticResource FormCheckBox}"
-                        Content="Add-to weight"/>
+                Grid.Column="0"
+                Margin="5,0,0,0"
+                IsChecked="{Binding AddToWeight}"
+                Style="{StaticResource FormCheckBox}"
+                Content="Add-to weight"/>
 
             <ui:WeightInput VerticalAlignment="Center"
                         VerticalContentAlignment="Center"
@@ -272,9 +301,9 @@
                         Visibility="{Binding ShipmentModel.ShipmentAdapter.Shipment.Postal.DimsAddWeight, Converter={StaticResource BooleanToVisibilityConverter}}"/>
         </Grid>
         <shipmentDetails:OrderLookupInsuranceControl
-                    Grid.Row="9"
-                    Grid.Column="0"
-                    Grid.ColumnSpan="2"
-                    DataContext="{Binding InsuranceViewModel}" />
+            Grid.Row="10"
+            Grid.Column="0"
+            Grid.ColumnSpan="2"
+            DataContext="{Binding InsuranceViewModel}" />
     </Grid>
 </UserControl>

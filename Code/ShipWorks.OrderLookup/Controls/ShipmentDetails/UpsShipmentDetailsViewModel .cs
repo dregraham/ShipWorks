@@ -1,18 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Reflection;
 using System.Windows.Input;
 using GalaSoft.MvvmLight.Command;
+using Interapptive.Shared.Collections;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
+using Shared.System.ComponentModel.DataAnnotations;
 using ShipWorks.Core.UI;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Shipping;
-using ShipWorks.Shipping.Carriers.Postal;
+using ShipWorks.Shipping.Carriers.UPS.Enums;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Services;
@@ -27,13 +29,12 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
     /// </summary>
     [KeyedComponent(typeof(IDetailsViewModel), ShipmentTypeCode.UpsOnLineTools)]
     [WpfView(typeof(OrderLookupUpsShipmentDetailsControl))]
-    public class OrderLookupUpsShipmentDetailsViewModel : IDetailsViewModel, INotifyPropertyChanged
+    public class UpsShipmentDetailsViewModel : IDetailsViewModel, INotifyPropertyChanged, IDataErrorInfo
     {
         public event PropertyChangedEventHandler PropertyChanged;
         private readonly PropertyChangedHandler handler;
         private readonly IDimensionsManager dimensionsManager;
         private readonly IShipmentPackageTypesBuilderFactory shipmentPackageTypesBuilderFactory;
-        private readonly IShipmentTypeManager shipmentTypeManager;
         private readonly IShipmentServicesBuilderFactory shipmentServicesBuilderFactory;
         private readonly ShipmentTypeProvider shipmentTypeProvider;
         private readonly Func<DimensionsManagerDlg> getDimensionsManagerDlg;
@@ -42,17 +43,16 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
         private IEnumerable<KeyValuePair<int, string>> packageTypes;
         private IEnumerable<KeyValuePair<int, string>> confirmationTypes;
         private IEnumerable<KeyValuePair<int, string>> serviceTypes;
-        ObservableCollection<IPackageAdapter> packages;
+        System.Collections.ObjectModel.ObservableCollection<IPackageAdapter> packages;
         private IPackageAdapter selectedPackage;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public OrderLookupUpsShipmentDetailsViewModel(
+        public UpsShipmentDetailsViewModel(
             IOrderLookupShipmentModel shipmentModel,
             IDimensionsManager dimensionsManager,
             IShipmentPackageTypesBuilderFactory shipmentPackageTypesBuilderFactory,
-            IShipmentTypeManager shipmentTypeManager,
             IShipmentServicesBuilderFactory shipmentServicesBuilderFactory,
             IInsuranceViewModel insuranceViewModel,
             ShipmentTypeProvider shipmentTypeProvider,
@@ -63,7 +63,6 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
 
             this.dimensionsManager = dimensionsManager;
             this.shipmentPackageTypesBuilderFactory = shipmentPackageTypesBuilderFactory;
-            this.shipmentTypeManager = shipmentTypeManager;
             this.shipmentServicesBuilderFactory = shipmentServicesBuilderFactory;
             this.shipmentTypeProvider = shipmentTypeProvider;
             this.getDimensionsManagerDlg = getDimensionsManagerDlg;
@@ -71,17 +70,21 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
             handler = new PropertyChangedHandler(this, () => PropertyChanged);
             ManageDimensionalProfiles = new RelayCommand(ManageDimensionalProfilesAction);
             AddPackageCommand = new RelayCommand(AddPackageAction);
-            DeletePackageCommand = new RelayCommand(DeletePackageAction, () => SelectedPackage != null);
+            DeletePackageCommand = new RelayCommand(DeletePackageAction,
+                () => SelectedPackage != null && Packages.Count > 1);
 
-            Packages = new ObservableCollection<IPackageAdapter>(ShipmentModel.PackageAdapters);
+            Packages = new System.Collections.ObjectModel.ObservableCollection<IPackageAdapter>(ShipmentModel.PackageAdapters);
             SelectedPackage = Packages.FirstOrDefault();
 
             RefreshDimensionalProfiles();
             RefreshInsurance();
             RefreshPackageTypes();
-            RefreshConfirmationTypes();
             RefreshServiceTypes();
             RefreshProviders();
+
+            ConfirmationTypes =
+                EnumHelper.GetEnumList<UpsDeliveryConfirmationType>()
+                .Select(e => new KeyValuePair<int, string>((int) e.Value, e.Description));
         }
 
         /// <summary>
@@ -89,7 +92,26 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
         /// </summary>
         private void DeletePackageAction()
         {
+            if (Packages.Count < 2)
+            {
+                return;
+            }
 
+            IPackageAdapter packageAdapter = SelectedPackage;
+            SelectedPackage = null;
+            ShipmentModel.ShipmentAdapter.DeletePackage(packageAdapter);
+
+            int location = Packages.IndexOf(packageAdapter);
+            SelectedPackage = Packages.Last() == packageAdapter ?
+                Packages.ElementAt(location - 1) :
+                Packages.ElementAt(location + 1);
+
+            Packages.Remove(packageAdapter);
+
+            for (int i = 0; i < Packages.Count; i++)
+            {
+                Packages[i].Index = i + 1;
+            }
         }
 
         /// <summary>
@@ -97,7 +119,9 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
         /// </summary>
         private void AddPackageAction()
         {
-
+            IPackageAdapter newPackage = ShipmentModel.ShipmentAdapter.AddPackage();
+            Packages.Add(newPackage);
+            SelectedPackage = newPackage;
         }
 
         /// <summary>
@@ -162,7 +186,7 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
         /// True if a profile is selected
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public bool IsProfileSelected => ShipmentModel.ShipmentAdapter.Shipment.Postal.DimsProfileID > 0;
+        public bool IsProfileSelected => SelectedPackage.DimsProfileID > 0;
 
         /// <summary>
         /// Collection of ServiceTypes
@@ -224,7 +248,7 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
         /// Collection of packages
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public ObservableCollection<IPackageAdapter> Packages
+        public System.Collections.ObjectModel.ObservableCollection<IPackageAdapter> Packages
         {
             get => packages;
             set => handler.Set(nameof(Packages), ref packages, value);
@@ -237,7 +261,58 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
         public IPackageAdapter SelectedPackage
         {
             get => selectedPackage;
-            set => handler.Set(nameof(SelectedPackage), ref selectedPackage, value);
+            set
+            {
+                handler.Set(nameof(SelectedPackage), ref selectedPackage, value);
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(SelectedPackageWeight)));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(SelectedPackageDimsProfileID)));
+            }
+        }
+
+        /// <summary>
+        /// The shipment content weight
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        [Required(AllowEmptyStrings = false, ErrorMessage = @"Weight value is required.")]
+        [Range(0.0001, 999999999, ErrorMessage = @"Please enter a valid weight.")]
+        [DoubleCompare(0, ValueCompareOperatorType.GreaterThanOrEqualTo, ErrorMessage = @"Weight must be greater than or equal $0.00.")]
+        public double SelectedPackageWeight
+        {
+            get { return SelectedPackage.Weight; }
+            set
+            {
+                handler.Set(nameof(SelectedPackageWeight), (v) => SelectedPackage.Weight = v, SelectedPackage.Weight, value);
+            }
+        }
+
+        /// <summary>
+        /// The shipment content weight
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public long SelectedPackageDimsProfileID
+        {
+            get { return SelectedPackage.DimsProfileID; }
+            set
+            {
+                handler.Set(nameof(SelectedPackageDimsProfileID), (v) => SelectedPackage.DimsProfileID = v, SelectedPackage.DimsProfileID, value);
+
+                if (SelectedPackage.DimsProfileID != 0)
+                {
+                    DimensionsProfileEntity profile =
+                        DimensionProfiles.SingleOrDefault(p => p.DimensionsProfileID == SelectedPackage.DimsProfileID);
+
+                    if (profile != null)
+                    {
+                        SelectedPackage.DimsLength = profile.Length;
+                        SelectedPackage.DimsWidth = profile.Width;
+                        SelectedPackage.DimsHeight = profile.Height;
+                        SelectedPackage.Weight = profile.Weight;
+                    }
+                }
+
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsProfileSelected)));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(SelectedPackage)));
+            }
         }
 
         /// <summary>
@@ -249,47 +324,18 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
             {
                 if (e.PropertyName == nameof(ShipmentModel.SelectedOrder))
                 {
-
-
                     RefreshProviders();
                     RefreshDimensionalProfiles();
-
-
                 }
 
                 if (e.PropertyName == nameof(ShipmentModel.SelectedOrder) ||
                     e.PropertyName == UpsShipmentFields.Service.Name ||
-                    e.PropertyName == nameof(ShipmentModel.ShipmentAdapter.ShipmentTypeCode) ||
                     e.PropertyName == ShipmentFields.ShipCountryCode.Name)
                 {
                     RefreshInsurance();
                 }
 
-                if (e.PropertyName == nameof(ShipmentModel.SelectedOrder) || e.PropertyName == UpsShipmentFields.Service.Name)
-                {
-                    handler.RaisePropertyChanged(nameof(ShipmentModel));
-                }
-
-                if (e.PropertyName == "DimsProfileID")
-                {
-                    handler.RaisePropertyChanged(nameof(IsProfileSelected));
-                }
-
-                if (e.PropertyName == nameof(ShipmentModel.ShipmentAdapter.ShipmentTypeCode) || e.PropertyName == nameof(ShipmentModel.SelectedOrder))
-                {
-                    RefreshPackageTypes();
-                }
-
                 if (e.PropertyName == nameof(ShipmentModel.SelectedOrder) ||
-                    e.PropertyName == nameof(ShipmentModel.ShipmentAdapter.ShipmentTypeCode) ||
-                    e.PropertyName == UpsShipmentFields.Service.Name ||
-                    e.PropertyName == "PackagingType")
-                {
-                    RefreshConfirmationTypes();
-                }
-
-                if (e.PropertyName == nameof(ShipmentModel.SelectedOrder) ||
-                    e.PropertyName == nameof(ShipmentModel.ShipmentAdapter.ShipmentTypeCode) ||
                     e.PropertyName == nameof(ShipmentFields.ShipCountryCode.Name))
                 {
                     RefreshServiceTypes();
@@ -327,7 +373,13 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
         /// </summary>
         private void RefreshDimensionalProfiles()
         {
+            DimensionProfiles =
+                dimensionsManager.Profiles(ShipmentModel.PackageAdapters.FirstOrDefault()).ToList();
 
+            if (SelectedPackage != null && DimensionProfiles.None(d => d.DimensionsProfileID == SelectedPackage.DimsProfileID))
+            {
+                SelectedPackage.DimsProfileID = 0;
+            }
         }
 
         /// <summary>
@@ -343,33 +395,6 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
             {
                 PackageTypes = shipmentPackageTypesBuilderFactory.Get(ShipmentModel.ShipmentAdapter.ShipmentTypeCode)
                     .BuildPackageTypeDictionary(new[] { ShipmentModel.ShipmentAdapter.Shipment });
-            }
-        }
-
-        /// <summary>
-        /// Refresh the confirmation types
-        /// </summary>
-        private void RefreshConfirmationTypes()
-        {
-            // Check to see if object is a postal shipment adapter
-            if (ShipmentModel.ShipmentAdapter != null &&
-                !PostalUtility.IsPostalShipmentType(ShipmentModel.ShipmentAdapter.ShipmentTypeCode))
-            {
-                ConfirmationTypes = Enumerable.Empty<KeyValuePair<int, string>>();
-            }
-            else
-            {
-                PostalShipmentType postalShipmentType = (PostalShipmentType) shipmentTypeManager.Get(ShipmentModel.ShipmentAdapter.ShipmentTypeCode);
-                PostalServiceType postalServiceType = (PostalServiceType) ShipmentModel.ShipmentAdapter.ServiceType;
-
-                // See if all have confirmation as an option or not
-                PostalPackagingType packagingType =
-                    (PostalPackagingType) ShipmentModel.ShipmentAdapter.Shipment.Postal.PackagingType;
-                ConfirmationTypes = postalShipmentType
-                    .GetAvailableConfirmationTypes(ShipmentModel.ShipmentAdapter.Shipment.ShipCountryCode,
-                                                   postalServiceType, packagingType)
-                    .ToDictionary(serviceType => (int) serviceType,
-                                  serviceType => EnumHelper.GetDescription(serviceType));
             }
         }
 
@@ -416,5 +441,31 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
 
         public void Dispose() =>
             ShipmentModel.PropertyChanged -= ShipmentModelPropertyChanged;
+
+        #region IDataErrorInfo
+
+        /// <summary>
+        /// Do nothing
+        /// </summary>
+        public string Error => null;
+
+        /// <summary>
+        /// Validate the ColumnNames value
+        /// </summary>
+        public string this[string columnName]
+        {
+            get
+            {
+                // If the shipment is null or processed, don't validate anything.
+                if (ShipmentModel.ShipmentAdapter?.Shipment == null || ShipmentModel.ShipmentAdapter.Shipment.Processed)
+                {
+                    return string.Empty;
+                }
+
+                return InputValidation<UpsShipmentDetailsViewModel>.Validate(this, columnName);
+            }
+        }
+
+        #endregion
     }
 }
