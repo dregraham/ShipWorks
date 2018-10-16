@@ -13,6 +13,7 @@ using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Messaging;
 using ShipWorks.Core.UI;
 using ShipWorks.Messaging.Messages;
+using ShipWorks.Messaging.Messages.Shipping;
 using ShipWorks.OrderLookup.Controls.Customs;
 using ShipWorks.OrderLookup.Controls.From;
 using ShipWorks.OrderLookup.Controls.LabelOptions;
@@ -78,7 +79,9 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookup
                 messages.OfType<ShipmentSelectionChangedMessage>()
                     .Subscribe(_ => handler.RaisePropertyChanged(nameof(ShowColumns))),
                 messages.OfType<OrderLookupClearOrderMessage>()
-                    .Subscribe(_ => handler.RaisePropertyChanged(nameof(ShowColumns)))
+                    .Subscribe(_ => handler.RaisePropertyChanged(nameof(ShowColumns))),
+                messages.OfType<ShipmentsProcessedMessage>()
+                    .Subscribe(x => OrderLookupSearchViewModel.ShipmentModel.LoadOrder(x.Shipments.First().Shipment?.Order))
                 );
         }
 
