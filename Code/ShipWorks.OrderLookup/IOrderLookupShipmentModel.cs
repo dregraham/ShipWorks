@@ -70,6 +70,11 @@ namespace ShipWorks.OrderLookup
         decimal TotalCost { get; set; }
 
         /// <summary>
+        /// Keep track of the original ShipmentTypeCode so we can ensure its in the list of providers
+        /// </summary>
+        ShipmentTypeCode OriginalShipmentTypeCode { get; }
+
+        /// <summary>
         /// Changes the shipment type
         /// </summary>
         void ChangeShipmentType(ShipmentTypeCode value);

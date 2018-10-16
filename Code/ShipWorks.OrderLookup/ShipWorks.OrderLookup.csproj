@@ -141,27 +141,52 @@
       <DependentUpon>UspsFromControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\From\UspsFromViewModel.cs" />
+    <Compile Include="Controls\LabelOptions\GenericLabelOptionsViewModel.cs" />
     <Compile Include="Controls\LabelOptions\ILabelOptionsViewModel.cs" />
+    <Compile Include="Controls\LabelOptions\PostalLabelOptionsViewModel.cs" />
+    <Compile Include="Controls\LabelOptions\UpsLabelOptionsControl.xaml.cs">
+      <DependentUpon>UpsLabelOptionsControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\LabelOptions\UpsLabelOptionsViewModel.cs" />
     <Compile Include="Controls\OrderLookupWrapperControl.xaml.cs">
       <DependentUpon>OrderLookupWrapperControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\OrderLookupWrapperViewModel.cs" />
+    <Compile Include="Controls\QuantumViewNotify\IQuantumViewNotifyControlViewModel.cs" />
+    <Compile Include="Controls\QuantumViewNotify\QuantumViewNotifyControlViewModel.cs" />
+    <Compile Include="Controls\QuantumViewNotify\QuantumViewNotifyControl.xaml.cs">
+      <DependentUpon>QuantumViewNotifyControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\Rating\IRatingViewModel.cs" />
     <Compile Include="Controls\Reference\IReferenceViewModel.cs" />
     <Compile Include="Controls\Reference\EndiciaReferenceControl.xaml.cs">
       <DependentUpon>EndiciaReferenceControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\Reference\EndiciaReferenceViewModel.cs" />
-    <Compile Include="Controls\Reference\PostalReferenceViewModelBase.cs" />
+    <Compile Include="Controls\ShipmentDetails\ICarrierShipmentAdapterOptionsProvider.cs" />
+    <Compile Include="Controls\Reference\ReferenceViewModelBase.cs" />
+    <Compile Include="Controls\Reference\UpsReferenceControl.xaml.cs">
+      <DependentUpon>UpsReferenceControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\Reference\UpsReferenceViewModel.cs" />
     <Compile Include="Controls\ShipmentDetails\IDetailsViewModel.cs" />
     <Compile Include="Controls\ShipmentDetails\PostalShipmentDetailsControl.xaml.cs">
       <DependentUpon>PostalShipmentDetailsControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ShipmentDetails\CarrierShipmentAdapterOptionsProvider.cs" />
+    <Compile Include="Controls\ShipmentDetails\UpsShipmentDetailsViewModel .cs" />
+    <Compile Include="Controls\ShipmentDetails\UpsShipmentDetailsControl.xaml.cs">
+      <DependentUpon>UpsShipmentDetailsControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\To\IToViewModel.cs" />
     <Compile Include="Controls\To\GenericToControl.xaml.cs">
       <DependentUpon>GenericToControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\To\GenericToViewModel.cs" />
+    <Compile Include="Controls\To\UpsToControl.xaml.cs">
+      <DependentUpon>UpsToControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\To\UpsToViewModel.cs" />
     <Compile Include="FieldManager\IOrderLookupFieldLayoutDefaults.cs" />
     <Compile Include="FieldManager\IOrderLookupFieldLayoutRepository.cs" />
     <Compile Include="FieldManager\OrderLookupFieldLayoutDefaults.cs" />
@@ -182,7 +207,6 @@
     <Compile Include="Controls\LabelOptions\PostalLabelOptionsControl.xaml.cs">
       <DependentUpon>PostalLabelOptionsControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\LabelOptions\OrderLookupPostalLabelOptionsViewModel.cs" />
     <Compile Include="Controls\OrderLookup\OrderLookupControlHost.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -312,13 +336,22 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Controls\LabelOptions\UpsLabelOptionsControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Controls\OrderLookupWrapperControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Controls\QuantumViewNotify\QuantumViewNotifyControl.xaml" />
     <Page Include="Controls\Reference\EndiciaReferenceControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Controls\Reference\UpsReferenceControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Controls\ShipmentDetails\OrderLookupInsuranceControl.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -348,9 +381,17 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Controls\ShipmentDetails\UpsShipmentDetailsControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Controls\To\GenericToControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Controls\To\UpsToControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Controls\To\UspsToControl.xaml">
       <SubType>Designer</SubType>

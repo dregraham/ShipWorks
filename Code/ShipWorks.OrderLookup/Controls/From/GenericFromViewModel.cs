@@ -19,6 +19,7 @@ namespace ShipWorks.OrderLookup.Controls.From
     /// View model for the From address
     /// </summary>
     [KeyedComponent(typeof(IFromViewModel), ShipmentTypeCode.Endicia)]
+    [KeyedComponent(typeof(IFromViewModel), ShipmentTypeCode.UpsOnLineTools)]
     [WpfView(typeof(GenericFromControl))]
     public class GenericFromViewModel : IFromViewModel
     {
