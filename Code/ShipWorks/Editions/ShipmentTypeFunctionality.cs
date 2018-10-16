@@ -96,9 +96,11 @@ namespace ShipWorks.Editions
             // Record the raw data that was used to populate the object; we'll use this later
             // for serialization purposes. 
             functionality.originalFunctionalitySource = sourcedElement;
+            if (source != null)
+            {
+                storePolicyConfigurationAction(storeId, policyConfiguration);
+            }
 
-            storePolicyConfigurationAction(storeId, policyConfiguration);
-            
             return functionality;
         }
 

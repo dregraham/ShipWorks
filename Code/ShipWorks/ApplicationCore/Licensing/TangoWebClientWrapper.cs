@@ -270,7 +270,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// <summary>
         /// Gets the Tango customer id for a license.
         /// </summary>
-        public string GetTangoCustomerId()
+        public virtual string GetTangoCustomerId()
         {
             return TangoWebClient.GetTangoCustomerId();
         }
