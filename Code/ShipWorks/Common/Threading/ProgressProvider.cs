@@ -11,7 +11,7 @@ namespace ShipWorks.Common.Threading
     /// </summary>
     public class ProgressProvider : IProgressProvider
     {
-        ObservableCollection<IProgressReporter> progressItems = new ObservableCollection<IProgressReporter>();
+        ThreadSafeObservableCollection<IProgressReporter> progressItems = new ThreadSafeObservableCollection<IProgressReporter>();
 
         bool cancelRequested = false;
         private readonly TaskCompletionSource<Unit> terminatedCompletionSource = new TaskCompletionSource<Unit>();
@@ -27,7 +27,7 @@ namespace ShipWorks.Common.Threading
         /// <summary>
         /// The current list of items in progress
         /// </summary>
-        public ObservableCollection<IProgressReporter> ProgressItems => progressItems;
+        public ThreadSafeObservableCollection<IProgressReporter> ProgressItems => progressItems;
 
         /// <summary>
         /// Indicates if the requested operation has been requested to be canceled.

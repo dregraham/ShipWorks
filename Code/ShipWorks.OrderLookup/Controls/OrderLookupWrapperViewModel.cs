@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel;
 using System.Reflection;
+using Autofac;
 using Autofac.Features.Indexed;
 using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.Core.UI;
@@ -15,39 +16,30 @@ namespace ShipWorks.OrderLookup.Controls
     [WpfView(typeof(OrderLookupWrapperControl))]
     public class OrderLookupViewModelWrapper<T> : IOrderLookupWrapperViewModel<T> where T : class, IOrderLookupViewModel
     {
-        public event PropertyChangedEventHandler PropertyChanged;
         private readonly PropertyChangedHandler handler;
-        private readonly IOrderLookupShipmentModel shipmentModel;
         private T context;
-        private readonly IIndex<ShipmentTypeCode, T> createSectionViewModel;
+
+        public event PropertyChangedEventHandler PropertyChanged;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public OrderLookupViewModelWrapper(
-            IOrderLookupShipmentModel shipmentModel,
-            IIndex<ShipmentTypeCode, T> createSectionViewModel)
+        public OrderLookupViewModelWrapper()
         {
-            this.createSectionViewModel = createSectionViewModel;
             handler = new PropertyChangedHandler(this, () => PropertyChanged);
-            this.shipmentModel = shipmentModel;
-            shipmentModel.PropertyChanged += OnShipmentModelPropertyChanged;
         }
 
         /// <summary>
-        /// Handle when a shipment model property changes
+        /// Update the view model
         /// </summary>
-        private void OnShipmentModelPropertyChanged(object sender, PropertyChangedEventArgs e)
+        public void UpdateViewModel(IOrderLookupShipmentModel shipmentModel, ILifetimeScope innerScope)
         {
-            if (e.PropertyName == nameof(OrderLookupShipmentModel) ||
-                e.PropertyName == nameof(shipmentModel.ShipmentAdapter.ShipmentTypeCode) || 
-                e.PropertyName == nameof(shipmentModel.SelectedOrder))
-            {
-                var key = shipmentModel.ShipmentAdapter?.ShipmentTypeCode;
-                var old = Context;
-                old?.Dispose();
-                Context = key.HasValue && createSectionViewModel.TryGetValue(key.Value, out T newModel) ? newModel : null;
-            }
+            IIndex<ShipmentTypeCode, T> createSectionViewModel = innerScope.Resolve<IIndex<ShipmentTypeCode, T>>();
+
+            var key = shipmentModel.ShipmentAdapter?.ShipmentTypeCode;
+            var old = Context;
+            old?.Dispose();
+            Context = key.HasValue && createSectionViewModel.TryGetValue(key.Value, out T newModel) ? newModel : null;
         }
 
         /// <summary>
@@ -59,11 +51,5 @@ namespace ShipWorks.OrderLookup.Controls
             get => context;
             set { handler.Set(nameof(Context), ref context, value); }
         }
-
-        /// <summary>
-        /// Dispose
-        /// </summary>
-        public void Dispose() =>
-            shipmentModel.PropertyChanged -= OnShipmentModelPropertyChanged;
     }
 }

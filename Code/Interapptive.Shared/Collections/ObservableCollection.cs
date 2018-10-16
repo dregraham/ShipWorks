@@ -5,18 +5,18 @@ using Interapptive.Shared.Threading;
 namespace Interapptive.Shared.Collections
 {
     /// <summary>
-    /// Generic collection with events raised when contents change.  The colection is thread-safe, and the CollectionChanged event
+    /// Generic collection with events raised when contents change.  The collection is thread-safe, and the CollectionChanged event
     /// is raised while the lock is still being held.
     /// </summary>
-    public class ObservableCollection<T> : ThreadSafeCollection<T> where T : class
+    public class ThreadSafeObservableCollection<T> : ThreadSafeCollection<T> where T : class
     {
-        CollectionChangedEventHandler<T> collectionChanged;
-        object eventLock = new object();
+        private CollectionChangedEventHandler<T> collectionChanged;
+        private readonly object eventLock = new object();
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public ObservableCollection()
+        public ThreadSafeObservableCollection()
             : base(ThreadSafeCollectionBehavior.ForEachLocked)
         {
 
@@ -25,7 +25,7 @@ namespace Interapptive.Shared.Collections
         /// <summary>
         /// Constructor
         /// </summary>
-        public ObservableCollection(ThreadSafeCollectionBehavior lockBehavior)
+        public ThreadSafeObservableCollection(ThreadSafeCollectionBehavior lockBehavior)
             : base(lockBehavior)
         {
 

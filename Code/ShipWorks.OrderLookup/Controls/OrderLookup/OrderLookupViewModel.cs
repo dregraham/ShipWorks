@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Linq;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Reflection;
 using System.Windows;
 using Autofac;
 using Autofac.Features.Indexed;
+using Interapptive.Shared.Collections;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Messaging;
 using ShipWorks.Core.UI;
@@ -32,37 +34,41 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookup
         private readonly PropertyChangedHandler handler;
         private readonly IDisposable subscriptions;
 
-        private ObservableCollection<INotifyPropertyChanged> leftColumn;
-        private ObservableCollection<INotifyPropertyChanged> middleColumn;
-        private ObservableCollection<INotifyPropertyChanged> rightColumn;
+        private ObservableCollection<IOrderLookupWrapperViewModel<IOrderLookupViewModel>> leftColumn;
+        private ObservableCollection<IOrderLookupWrapperViewModel<IOrderLookupViewModel>> middleColumn;
+        private ObservableCollection<IOrderLookupWrapperViewModel<IOrderLookupViewModel>> rightColumn;
+        private ILifetimeScope innerScope;
+        private readonly ILifetimeScope scope;
 
         /// <summary>
         /// Constructor
         /// </summary>
         public OrderLookupViewModel(IOrderLookupShipmentModel shipmentModel,
             OrderLookupSearchViewModel orderLookupSearchViewModel,
-            IIndex<OrderLookupPanels, INotifyPropertyChanged> lookupPanels,
+            IIndex<OrderLookupPanels, IOrderLookupWrapperViewModel<IOrderLookupViewModel>> lookupPanels,
             ILifetimeScope scope,
             IObservable<IShipWorksMessage> messages)
         {
+            this.scope = scope;
             handler = new PropertyChangedHandler(this, () => PropertyChanged);
             ShipmentModel = shipmentModel;
+            ShipmentModel.PropertyChanged += OnShipmentModelPropertyChanged;
             OrderLookupSearchViewModel = orderLookupSearchViewModel;
 
-            LeftColumn = new ObservableCollection<INotifyPropertyChanged>
+            LeftColumn = new ObservableCollection<IOrderLookupWrapperViewModel<IOrderLookupViewModel>>
             {
                 scope.Resolve<IOrderLookupWrapperViewModel<IFromViewModel>>(),
                 scope.Resolve<IOrderLookupWrapperViewModel<IToViewModel>>(),
             };
 
-            MiddleColumn = new ObservableCollection<INotifyPropertyChanged>
+            MiddleColumn = new ObservableCollection<IOrderLookupWrapperViewModel<IOrderLookupViewModel>>
             {
                 scope.Resolve<IOrderLookupWrapperViewModel<IDetailsViewModel>>(),
                 scope.Resolve<IOrderLookupWrapperViewModel<ILabelOptionsViewModel>>(),
                 scope.Resolve<IOrderLookupWrapperViewModel<IReferenceViewModel>>(),
             };
 
-            RightColumn = new ObservableCollection<INotifyPropertyChanged>
+            RightColumn = new ObservableCollection<IOrderLookupWrapperViewModel<IOrderLookupViewModel>>
             {
                 scope.Resolve<IOrderLookupWrapperViewModel<IRatingViewModel>>(),
                 scope.Resolve<IOrderLookupWrapperViewModel<ICustomsViewModel>>(),
@@ -77,6 +83,26 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookup
         }
 
         /// <summary>
+        /// Handle changing of shipments or shipment types
+        /// </summary>
+        private void OnShipmentModelPropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == nameof(OrderLookupShipmentModel) ||
+                e.PropertyName == nameof(ShipmentModel.ShipmentAdapter.ShipmentTypeCode) ||
+                e.PropertyName == nameof(ShipmentModel.SelectedOrder))
+            {
+                innerScope?.Dispose();
+
+                innerScope = scope.BeginLifetimeScope();
+
+                LeftColumn
+                    .Concat(MiddleColumn)
+                    .Concat(RightColumn)
+                    .ForEach(x => x.UpdateViewModel(ShipmentModel, innerScope));
+            }
+        }
+
+        /// <summary>
         /// View Model for the search section of the OrderLookup UI Mode
         /// </summary>
         [Obfuscation(Exclude = true)]
@@ -86,7 +112,7 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookup
         /// Order Number to search for
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public ObservableCollection<INotifyPropertyChanged> LeftColumn
+        public ObservableCollection<IOrderLookupWrapperViewModel<IOrderLookupViewModel>> LeftColumn
         {
             get => leftColumn;
             set => handler.Set(nameof(LeftColumn), ref leftColumn, value);
@@ -96,7 +122,7 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookup
         /// Order Number to search for
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public ObservableCollection<INotifyPropertyChanged> MiddleColumn
+        public ObservableCollection<IOrderLookupWrapperViewModel<IOrderLookupViewModel>> MiddleColumn
         {
             get => middleColumn;
             set => handler.Set(nameof(MiddleColumn), ref middleColumn, value);
@@ -106,7 +132,7 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookup
         /// Order Number to search for
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public ObservableCollection<INotifyPropertyChanged> RightColumn
+        public ObservableCollection<IOrderLookupWrapperViewModel<IOrderLookupViewModel>> RightColumn
         {
             get => rightColumn;
             set => handler.Set(nameof(RightColumn), ref rightColumn, value);
@@ -132,7 +158,9 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookup
         /// </summary>
         public void Dispose()
         {
+            ShipmentModel.PropertyChanged -= OnShipmentModelPropertyChanged;
             subscriptions?.Dispose();
+            innerScope?.Dispose();
         }
     }
 }
