@@ -175,7 +175,7 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookupSearchControl
         /// </summary>
         private void CreateLabel()
         {
-            throw new System.NotImplementedException();
+            ShipmentModel.CreateLabel();
         }
     }
 }
