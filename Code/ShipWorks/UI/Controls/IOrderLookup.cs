@@ -18,14 +18,13 @@ namespace ShipWorks.UI.Controls
         void Unload();
 
         /// <summary>
-        /// Create the label for shipment
+        /// Create the label for a shipment
         /// </summary>
         void CreateLabel();
 
         /// <summary>
-        /// All the creation of a label
+        /// Allow the creation of a label
         /// </summary>
         bool CreateLabelAllowed();
-
     }
 }

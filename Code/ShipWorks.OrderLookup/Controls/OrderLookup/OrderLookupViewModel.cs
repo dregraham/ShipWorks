@@ -81,7 +81,7 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookup
                 messages.OfType<OrderLookupClearOrderMessage>()
                     .Subscribe(_ => handler.RaisePropertyChanged(nameof(ShowColumns))),
                 messages.OfType<ShipmentsProcessedMessage>()
-                    .Subscribe(x => OrderLookupSearchViewModel.ShipmentModel.LoadOrder(x.Shipments.First().Shipment?.Order))
+                    .Subscribe(x => OrderLookupSearchViewModel.ShipmentModel.LoadOrder(x.Shipments.FirstOrDefault().Shipment?.Order))
                 );
         }
 
