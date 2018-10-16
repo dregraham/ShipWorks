@@ -12,6 +12,7 @@ using ShipWorks.Core.Messaging;
 using ShipWorks.Core.UI;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Messaging.Messages;
+using ShipWorks.Messaging.Messages.Shipping;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Services;
 
@@ -307,6 +308,21 @@ namespace ShipWorks.OrderLookup
 
                 messenger.Send(new ShipmentSelectionChangedMessage(this, new[] { ShipmentAdapter.Shipment.ShipmentID }, ShipmentAdapter));
             }
+        }
+
+        /// <summary>
+        /// Create the label for a shipment
+        /// </summary>
+        public void CreateLabel()
+        {
+            if (!ShipmentAllowEditing || (shipmentAdapter?.Shipment?.Processed ?? true))
+            {
+                return;
+            }
+
+            SaveToDatabase();
+
+            messenger.Send(new ProcessShipmentsMessage(this, new[] { shipmentAdapter.Shipment }, new[] { shipmentAdapter.Shipment }, null));
         }
     }
 }
