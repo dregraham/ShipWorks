@@ -11,6 +11,9 @@ using ShipWorks.UI;
 
 namespace ShipWorks.OrderLookup.Controls.EmailNotifications
 {
+    /// <summary>
+    /// View model for the QuantumViewNotifyControl
+    /// </summary>
     [KeyedComponent(typeof(IEmailNotificationsViewModel), ShipmentTypeCode.UpsOnLineTools)]
     [WpfView(typeof(QuantumViewNotifyControl))]
     public class QuantumViewNotifyControlViewModel : IEmailNotificationsViewModel
