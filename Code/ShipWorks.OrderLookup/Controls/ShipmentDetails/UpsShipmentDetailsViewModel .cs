@@ -380,7 +380,7 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
                 handler.RaisePropertyChanged(nameof(ShipmentModel));
             }
 
-            if (e.PropertyName == nameof(ShipmentFields.ShipCountryCode.Name))
+            if (e.PropertyName == ShipmentFields.ShipCountryCode.Name)
             {
                 RefreshServiceTypes();
             }
