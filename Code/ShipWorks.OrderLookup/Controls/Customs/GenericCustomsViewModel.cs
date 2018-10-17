@@ -19,6 +19,7 @@ namespace ShipWorks.OrderLookup.Controls.Customs
     /// <summary>
     /// View model for the OrderLookupCustomsControl
     /// </summary>
+    [KeyedComponent(typeof(ICustomsViewModel), ShipmentTypeCode.BestRate)]
     [KeyedComponent(typeof(ICustomsViewModel), ShipmentTypeCode.Usps)]
     [KeyedComponent(typeof(ICustomsViewModel), ShipmentTypeCode.Endicia)]
     [WpfView(typeof(GenericCustomsControl))]

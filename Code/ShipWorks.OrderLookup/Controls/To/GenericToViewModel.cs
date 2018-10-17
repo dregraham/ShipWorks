@@ -14,6 +14,7 @@ namespace ShipWorks.OrderLookup.Controls.To
     /// <summary>
     /// ViewModel for To panel in the OrderLookup view
     /// </summary>
+    [KeyedComponent(typeof(IToViewModel), ShipmentTypeCode.BestRate)]
     [KeyedComponent(typeof(IToViewModel), ShipmentTypeCode.Endicia)]
     [WpfView(typeof(GenericToControl))]
     public class GenericToViewModel : IToViewModel
