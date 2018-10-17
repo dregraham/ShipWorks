@@ -99,7 +99,7 @@
                 <ComboBox.SelectedValue>
                     <Binding
                         Mode="TwoWay"
-                        Path="SelectedDimsProfileID"
+                        Path="ShipmentModel.ShipmentAdapter.Shipment.BestRate.DimsProfileID"
                         UpdateSourceTrigger="PropertyChanged" />
                 </ComboBox.SelectedValue>
             </ui:ShipWorksComboBox>

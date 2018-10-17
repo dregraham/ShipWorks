@@ -197,18 +197,18 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
 
                 if (e.PropertyName == "DimsProfileID")
                 {
-                    BestRateShipmentEntity bestRate = ShipmentModel.ShipmentAdapter.Shipment.BestRate;
-                    if (bestRate.DimsProfileID != 0)
+                    IPackageAdapter packageAdapter = ShipmentModel.PackageAdapters.First();
+                    if (packageAdapter?.DimsProfileID > 0)
                     {
                         DimensionsProfileEntity profile =
-                            DimensionProfiles.SingleOrDefault(p => p.DimensionsProfileID == bestRate.DimsProfileID);
+                            DimensionProfiles.SingleOrDefault(p => p.DimensionsProfileID == packageAdapter.DimsProfileID);
 
                         if (profile != null)
                         {
-                            bestRate.DimsLength = profile.Length;
-                            bestRate.DimsWidth = profile.Width;
-                            bestRate.DimsHeight = profile.Height;
-                            bestRate.DimsWeight = profile.Weight;
+                            packageAdapter.DimsLength = profile.Length;
+                            packageAdapter.DimsWidth = profile.Width;
+                            packageAdapter.DimsHeight = profile.Height;
+                            packageAdapter.Weight = profile.Weight;
                         }
                     }
 
