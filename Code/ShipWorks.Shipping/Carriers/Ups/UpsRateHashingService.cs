@@ -26,7 +26,6 @@ namespace ShipWorks.Shipping.Carriers.UPS
                 ratingField.AddShipmentField(UpsShipmentFields.CodAmount);
                 ratingField.AddShipmentField(UpsShipmentFields.CodEnabled);
                 ratingField.AddShipmentField(UpsShipmentFields.CodPaymentType);
-                ratingField.AddShipmentField(UpsShipmentFields.Service);
                 ratingField.AddShipmentField(UpsShipmentFields.DeliveryConfirmation);
                 ratingField.AddShipmentField(UpsShipmentFields.ReturnService);
                 ratingField.AddShipmentField(UpsShipmentFields.CarbonNeutral);
