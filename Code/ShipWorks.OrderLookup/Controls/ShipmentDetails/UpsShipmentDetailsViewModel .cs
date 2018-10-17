@@ -40,6 +40,7 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
         private IEnumerable<KeyValuePair<int, string>> serviceTypes;
         System.Collections.ObjectModel.ObservableCollection<IPackageAdapter> packages;
         private IPackageAdapter selectedPackage;
+        private UpsPackageEntity actualSelectedPackage;
 
         /// <summary>
         /// Constructor
@@ -255,15 +256,35 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
             get => selectedPackage;
             set
             {
+                if (actualSelectedPackage != null)
+                {
+                    actualSelectedPackage.PropertyChanged -= SelectedPackagePropertyChanged;
+                }
+
                 if (value == null)
                 {
                     value = Packages.First();
                 }
 
                 handler.Set(nameof(SelectedPackage), ref selectedPackage, value);
+
+                actualSelectedPackage = ShipmentModel.ShipmentAdapter.Shipment.Ups.Packages.FirstOrDefault(p => p.UpsPackageID == SelectedPackage.PackageId);
+                if (actualSelectedPackage != null)
+                {
+                    actualSelectedPackage.PropertyChanged += SelectedPackagePropertyChanged;
+                }
+
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(SelectedPackageWeight)));
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(SelectedPackageDimsProfileID)));
             }
+        }
+
+        /// <summary>
+        /// Bubble up packages changing so that rates refresh
+        /// </summary>
+        private void SelectedPackagePropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            ShipmentModel.RaisePropertyChanged(e.PropertyName);
         }
 
         /// <summary>
@@ -332,7 +353,7 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
         private void ShipmentModelPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
 
-            if (e.PropertyName == nameof(ShipmentModel.PackageAdapters))
+            if (e.PropertyName == nameof(ShipmentModel.PackageAdapters) && ShipmentModel.PackageAdapters != null)
             {
                 int selectedIndex = Packages.IndexOf(SelectedPackage);
                 Packages = new System.Collections.ObjectModel.ObservableCollection<IPackageAdapter>(ShipmentModel.PackageAdapters);
