@@ -23,6 +23,7 @@ namespace ShipWorks.SingleScan
         private readonly IUserSession userSession;
         private readonly IDisposable subscriptions;
         private IScannerMessageFilter scannerMessageFilter;
+        private IntPtr mainFormHandle;
 
         /// <summary>
         /// Constructor used for mocking purposes
@@ -69,7 +70,7 @@ namespace ShipWorks.SingleScan
                 UsagePage = RawInputDeviceConstants.Keyboard.UsagePage,
                 Usage = RawInputDeviceConstants.Keyboard.Usage,
                 Flags = (int) RawInputDeviceNotificationFlags.RemoveDevice,
-                TargetHandle = mainForm.Handle
+                TargetHandle = mainFormHandle
             });
         }
 
@@ -86,12 +87,16 @@ namespace ShipWorks.SingleScan
             scannerMessageFilter = scannerMessageFilterFactory.CreateRegisteredScannerInputHandler();
             scannerMessageFilter.Enable();
 
+            // Store the mainForm handle so that if this gets disposed after mainForm is disposed, we don't crash with
+            // an ObjectDisposed exception
+            mainFormHandle = mainForm.Handle;
+
             user32Devices.RegisterRawInputDevice(new RawInputDevice
             {
                 UsagePage = RawInputDeviceConstants.Keyboard.UsagePage,
                 Usage = RawInputDeviceConstants.Keyboard.Usage,
                 Flags = (int) (RawInputDeviceNotificationFlags.Default | RawInputDeviceNotificationFlags.DeviceNotify),
-                TargetHandle = mainForm.Handle,
+                TargetHandle = mainFormHandle,
             });
         }
 

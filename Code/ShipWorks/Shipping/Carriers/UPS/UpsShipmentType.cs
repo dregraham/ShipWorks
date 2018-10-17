@@ -449,7 +449,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// Get weights from packages
         /// </summary>
         protected override IEnumerable<(double weight, bool addDimsWeight, double dimsWeight)> GetPackageWeights(IShipmentEntity shipment) =>
-            shipment.Ups.Packages.Select(x => (x.Weight, x.DimsAddWeight, x.DimsWeight));
+            shipment.Ups?.Packages?.Select(x => (x.Weight, x.DimsAddWeight, x.DimsWeight));
 
         /// <summary>
         /// Get the carrier specific description of the shipping service used. The carrier specific data must already exist

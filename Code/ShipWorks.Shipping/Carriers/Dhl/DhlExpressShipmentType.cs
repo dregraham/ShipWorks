@@ -225,7 +225,7 @@ namespace ShipWorks.Shipping.Carriers.Dhl
         /// Get weights from packages
         /// </summary>
         protected override IEnumerable<(double weight, bool addDimsWeight, double dimsWeight)> GetPackageWeights(IShipmentEntity shipment) =>
-            shipment.DhlExpress.Packages.Select(x => (x.Weight, x.DimsAddWeight, x.DimsWeight));
+            shipment.DhlExpress?.Packages?.Select(x => (x.Weight, x.DimsAddWeight, x.DimsWeight));
 
         /// <summary>
         /// Get the shipment common detail for tango
