@@ -1,22 +1,27 @@
+using System;
+using ShipWorks.Shipping.Carriers.FedEx.Enums;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
 using ShipWorks.UI.ValueConverters;
 using Xunit;
 
 namespace ShipWorks.UI.Tests.ValueConverters
 {
-    public class UpsEmailNotificationTypeToBoolConverterTest
+    public class EnumFlagToBoolConverterTest
     {
-        private readonly UpsEmailNotificationTypeToBoolConverter testObject;
-        public UpsEmailNotificationTypeToBoolConverterTest()
+        private readonly EnumFlagToBoolConverter testObject;
+        public EnumFlagToBoolConverterTest()
         {
-            testObject = new UpsEmailNotificationTypeToBoolConverter();
+            testObject = new EnumFlagToBoolConverter();
         } 
         
         [Theory]
         [InlineData(UpsEmailNotificationType.Ship, UpsEmailNotificationType.Ship)]
         [InlineData(UpsEmailNotificationType.Ship | UpsEmailNotificationType.Exception, UpsEmailNotificationType.Ship)]
         [InlineData(UpsEmailNotificationType.Ship | UpsEmailNotificationType.Exception | UpsEmailNotificationType.Deliver, UpsEmailNotificationType.Ship)]
-        public void Convert_ReturnsTrue_WhenCurrentFlagContainsParameterFlag(UpsEmailNotificationType currentFlagValue, UpsEmailNotificationType parameterFlag)
+        [InlineData(FedExEmailNotificationType.Ship, FedExEmailNotificationType.Ship)]
+        [InlineData(FedExEmailNotificationType.Ship | FedExEmailNotificationType.Exception, FedExEmailNotificationType.Ship)]
+        [InlineData(FedExEmailNotificationType.Ship | FedExEmailNotificationType.Exception | FedExEmailNotificationType.Deliver, FedExEmailNotificationType.Ship)]
+        public void Convert_ReturnsTrue_WhenCurrentFlagContainsParameterFlag(Enum currentFlagValue, Enum parameterFlag)
         {
             Assert.True((bool) testObject.Convert(currentFlagValue, null, parameterFlag, null));
         }
@@ -24,7 +29,9 @@ namespace ShipWorks.UI.Tests.ValueConverters
         [Theory]
         [InlineData(UpsEmailNotificationType.Exception, UpsEmailNotificationType.Ship)]
         [InlineData(UpsEmailNotificationType.Exception | UpsEmailNotificationType.Deliver, UpsEmailNotificationType.Ship)]
-        public void Convert_ReturnsFalse_WhenCurrentFlagDoesNotContainParameterFlag(UpsEmailNotificationType currentFlagValue, UpsEmailNotificationType parameterFlag)
+        [InlineData(FedExEmailNotificationType.Exception, FedExEmailNotificationType.Ship)]
+        [InlineData(FedExEmailNotificationType.Exception | FedExEmailNotificationType.Deliver, FedExEmailNotificationType.Ship)]
+        public void Convert_ReturnsFalse_WhenCurrentFlagDoesNotContainParameterFlag(Enum currentFlagValue, Enum parameterFlag)
         {
             Assert.False((bool) testObject.Convert(currentFlagValue, null, parameterFlag, null));
         }
@@ -42,13 +49,13 @@ namespace ShipWorks.UI.Tests.ValueConverters
         }
         
         [Fact]
-        public void Convert_ReturnsFalse_WhenCurrentFlagIsNotUpsEmailNotificationType()
+        public void Convert_ReturnsFalse_WhenCurrentFlagIsNotEnum()
         {
             Assert.False((bool) testObject.Convert(1, null, UpsEmailNotificationType.Ship, null));
         }
         
         [Fact]
-        public void Convert_ReturnsFalse_WhenParameterFlagIsNotUpsEmailNotificationType()
+        public void Convert_ReturnsFalse_WhenParameterFlagIsNotEnum()
         {
             Assert.False((bool) testObject.Convert(UpsEmailNotificationType.Ship, null, 1, null));   
         }

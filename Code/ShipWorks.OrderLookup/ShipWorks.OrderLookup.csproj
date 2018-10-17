@@ -160,9 +160,9 @@
       <DependentUpon>OrderLookupWrapperControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\OrderLookupWrapperViewModel.cs" />
-    <Compile Include="Controls\QuantumViewNotify\IQuantumViewNotifyControlViewModel.cs" />
-    <Compile Include="Controls\QuantumViewNotify\QuantumViewNotifyControlViewModel.cs" />
-    <Compile Include="Controls\QuantumViewNotify\QuantumViewNotifyControl.xaml.cs">
+    <Compile Include="Controls\EmailNotifications\IEmailNotificationsViewModel.cs" />
+    <Compile Include="Controls\EmailNotifications\QuantumViewNotifyControlViewModel.cs" />
+    <Compile Include="Controls\EmailNotifications\QuantumViewNotifyControl.xaml.cs">
       <DependentUpon>QuantumViewNotifyControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\Rating\IRatingViewModel.cs" />
@@ -360,7 +360,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Controls\QuantumViewNotify\QuantumViewNotifyControl.xaml" />
+    <Page Include="Controls\EmailNotifications\QuantumViewNotifyControl.xaml" />
     <Page Include="Controls\Reference\EndiciaReferenceControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

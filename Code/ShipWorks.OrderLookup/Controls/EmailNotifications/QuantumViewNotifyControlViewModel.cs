@@ -2,20 +2,18 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
-using ComponentFactory.Krypton.Toolkit;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
 using ShipWorks.Core.UI;
-using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
 using ShipWorks.UI;
 
-namespace ShipWorks.OrderLookup.Controls.QuantumViewNotify
+namespace ShipWorks.OrderLookup.Controls.EmailNotifications
 {
-    [KeyedComponent(typeof(IQuantumViewNotifyControlViewModel), ShipmentTypeCode.UpsOnLineTools)]
+    [KeyedComponent(typeof(IEmailNotificationsViewModel), ShipmentTypeCode.UpsOnLineTools)]
     [WpfView(typeof(QuantumViewNotifyControl))]
-    public class QuantumViewNotifyControlViewModel : IQuantumViewNotifyControlViewModel
+    public class QuantumViewNotifyControlViewModel : IEmailNotificationsViewModel
     {
         public event PropertyChangedEventHandler PropertyChanged;
         private readonly PropertyChangedHandler handler;

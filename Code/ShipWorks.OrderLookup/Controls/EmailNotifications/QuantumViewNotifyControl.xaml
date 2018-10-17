@@ -1,20 +1,20 @@
-<UserControl x:Class="ShipWorks.OrderLookup.Controls.QuantumViewNotify.QuantumViewNotifyControl"
+<UserControl x:Class="ShipWorks.OrderLookup.Controls.EmailNotifications.QuantumViewNotifyControl"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:ui="http://schemas.shipworks.com/ui"
-             xmlns:quantumViewNotify="clr-namespace:ShipWorks.OrderLookup.Controls.QuantumViewNotify"
+             xmlns:emailNotifications="clr-namespace:ShipWorks.OrderLookup.Controls.EmailNotifications"
              xmlns:enums="clr-namespace:ShipWorks.Shipping.Carriers.UPS.Enums;assembly=ShipWorks.Core"
              mc:Ignorable="d"
-             d:DataContext="{d:DesignInstance quantumViewNotify:QuantumViewNotifyControlViewModel}"
+             d:DataContext="{d:DesignInstance emailNotifications:QuantumViewNotifyControlViewModel}"
              FontFamily="/ShipWorks.OrderLookup;component/#Roboto">
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/ShipWorks.OrderLookup;component/Styles/OrderLookupStyle.xaml" />
             </ResourceDictionary.MergedDictionaries>
-            <ui:UpsEmailNotificationTypeToBoolConverter x:Key="UpsEmailNotificationTypeConverter"></ui:UpsEmailNotificationTypeToBoolConverter>
+            <ui:EnumFlagToBoolConverter x:Key="EnumFlagConverter"/>
             <Style TargetType="{x:Type CheckBox}" BasedOn="{StaticResource FormCheckBox}">
                 <Setter Property="HorizontalAlignment" Value="Center"/>
                 <Setter Property="Margin" Value="0 6 0 10"/>
@@ -87,16 +87,16 @@
                        Style="{StaticResource FieldLabel}"/>
             <CheckBox Grid.Row="2" Grid.Column="2" 
                       IsChecked="{Binding Sender, 
-                                          Converter={StaticResource UpsEmailNotificationTypeConverter},                                          
+                                          Converter={StaticResource EnumFlagConverter},                                          
                                           ConverterParameter={x:Static enums:UpsEmailNotificationType.Ship}}"/>
             
             <CheckBox Grid.Row="2" Grid.Column="3"
                       IsChecked="{Binding Sender, 
-                                          Converter={StaticResource UpsEmailNotificationTypeConverter},
+                                          Converter={StaticResource EnumFlagConverter},
                                           ConverterParameter={x:Static enums:UpsEmailNotificationType.Exception}}"/>
             <CheckBox Grid.Row="2" Grid.Column="4" 
                       IsChecked="{Binding Sender, 
-                                          Converter={StaticResource UpsEmailNotificationTypeConverter},
+                                          Converter={StaticResource EnumFlagConverter},
                                           ConverterParameter={x:Static enums:UpsEmailNotificationType.Deliver}}"/>
             
             <!-- Recipient row-->
@@ -106,15 +106,15 @@
                        Style="{StaticResource FieldLabel}"/>
             <CheckBox Grid.Row="3" Grid.Column="2"
                       IsChecked="{Binding Recipient, 
-                                          Converter={StaticResource UpsEmailNotificationTypeConverter},
+                                          Converter={StaticResource EnumFlagConverter},
                                           ConverterParameter={x:Static enums:UpsEmailNotificationType.Ship}}"/>
             <CheckBox Grid.Row="3" Grid.Column="3"
                       IsChecked="{Binding Recipient, 
-                                          Converter={StaticResource UpsEmailNotificationTypeConverter},
+                                          Converter={StaticResource EnumFlagConverter},
                                           ConverterParameter={x:Static enums:UpsEmailNotificationType.Exception}}"/>
             <CheckBox Grid.Row="3" Grid.Column="4"
                       IsChecked="{Binding Recipient, 
-                                          Converter={StaticResource UpsEmailNotificationTypeConverter},
+                                          Converter={StaticResource EnumFlagConverter},
                                           ConverterParameter={x:Static enums:UpsEmailNotificationType.Deliver}}"/>
 
             <!-- Other row -->
@@ -129,17 +129,17 @@
             <CheckBox Grid.Row="4" Grid.Column="2"
                       Margin="0 0 0 10"
                       IsChecked="{Binding Other, 
-                                          Converter={StaticResource UpsEmailNotificationTypeConverter},
+                                          Converter={StaticResource EnumFlagConverter},
                                           ConverterParameter={x:Static enums:UpsEmailNotificationType.Ship}}"/>
             <CheckBox Grid.Row="4" Grid.Column="3"
                       Margin="0 0 0 10"
                       IsChecked="{Binding Other, 
-                                          Converter={StaticResource UpsEmailNotificationTypeConverter},
+                                          Converter={StaticResource EnumFlagConverter},
                                           ConverterParameter={x:Static enums:UpsEmailNotificationType.Exception}}"/>
             <CheckBox Grid.Row="4" Grid.Column="4"
                       Margin="0 0 0 10"
                       IsChecked="{Binding Other, 
-                                          Converter={StaticResource UpsEmailNotificationTypeConverter},
+                                          Converter={StaticResource EnumFlagConverter},
                                           ConverterParameter={x:Static enums:UpsEmailNotificationType.Deliver}}"/>
             
             <Line Grid.Row="5"
