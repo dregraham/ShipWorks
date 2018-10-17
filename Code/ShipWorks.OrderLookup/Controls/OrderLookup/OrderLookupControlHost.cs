@@ -55,7 +55,11 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookup
         /// <summary>
         /// Unload the order from the viewmodel shipmentModel
         /// </summary>
-        public void Unload() => orderLookupViewModel.ShipmentModel.Unload();
+        public void Unload()
+        {
+            CommitBindingsOnFocusedControl();
+            orderLookupViewModel.ShipmentModel.Unload();
+        }
 
         /// <summary>
         /// Create the label for a shipment

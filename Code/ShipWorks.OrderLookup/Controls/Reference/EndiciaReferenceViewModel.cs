@@ -9,7 +9,7 @@ namespace ShipWorks.OrderLookup.Controls.Reference
     /// </summary>
     [KeyedComponent(typeof(IReferenceViewModel), ShipmentTypeCode.Endicia)]
     [WpfView(typeof(EndiciaReferenceControl))]
-    public class EndiciaReferenceViewModel : PostalReferenceViewModelBase
+    public class EndiciaReferenceViewModel : GenericReferenceViewModel
     {
         /// <summary>
         /// Constructor

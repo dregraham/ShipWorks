@@ -283,6 +283,7 @@
     <Compile Include="ValueConverters\CharToVisibilityConverter.cs" />
     <Compile Include="ValueConverters\StringToVisibilityConverter.cs" />
     <Compile Include="ValueConverters\TrimEndColonConverter.cs" />
+    <Compile Include="ValueConverters\UpsEmailNotificationTypeConverter.cs" />
     <Compile Include="ValueConverters\ValueEqualToParameterConverter.cs" />
     <Compile Include="ValueConverters\VisibleWhenEqualToParameterConverter.cs" />
     <Compile Include="Properties\XamlNamespaces.cs" />

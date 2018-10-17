@@ -43,7 +43,7 @@ namespace ShipWorks.OrderLookup.Controls
         }
 
         /// <summary>
-        /// The dimension profiles
+        /// View model specific context
         /// </summary>
         [Obfuscation(Exclude = true)]
         public T Context

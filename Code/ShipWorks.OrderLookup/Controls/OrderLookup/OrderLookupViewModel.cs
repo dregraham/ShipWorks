@@ -18,6 +18,7 @@ using ShipWorks.OrderLookup.Controls.Customs;
 using ShipWorks.OrderLookup.Controls.From;
 using ShipWorks.OrderLookup.Controls.LabelOptions;
 using ShipWorks.OrderLookup.Controls.OrderLookupSearchControl;
+using ShipWorks.OrderLookup.Controls.QuantumViewNotify;
 using ShipWorks.OrderLookup.Controls.Rating;
 using ShipWorks.OrderLookup.Controls.Reference;
 using ShipWorks.OrderLookup.Controls.ShipmentDetails;
@@ -67,6 +68,7 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookup
                 scope.Resolve<IOrderLookupWrapperViewModel<IDetailsViewModel>>(),
                 scope.Resolve<IOrderLookupWrapperViewModel<ILabelOptionsViewModel>>(),
                 scope.Resolve<IOrderLookupWrapperViewModel<IReferenceViewModel>>(),
+                scope.Resolve<IOrderLookupWrapperViewModel<IQuantumViewNotifyControlViewModel>>()
             };
 
             RightColumn = new ObservableCollection<IOrderLookupWrapperViewModel<IOrderLookupViewModel>>
@@ -90,9 +92,8 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookup
         /// </summary>
         private void OnShipmentModelPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            if (e.PropertyName == nameof(OrderLookupShipmentModel) ||
-                e.PropertyName == nameof(ShipmentModel.ShipmentAdapter.ShipmentTypeCode) ||
-                e.PropertyName == nameof(ShipmentModel.SelectedOrder))
+            if (e.PropertyName == nameof(OrderLookupShipmentModel) ||  // The provider has changed on the shipment
+                e.PropertyName == nameof(ShipmentModel.SelectedOrder)) // The order has changed
             {
                 innerScope?.Dispose();
 
