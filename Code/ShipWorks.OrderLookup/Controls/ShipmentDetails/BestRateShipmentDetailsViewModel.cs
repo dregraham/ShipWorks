@@ -14,7 +14,6 @@ using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Services;
-using ShipWorks.Shipping.Services.Builders;
 using ShipWorks.Shipping.UI.ShippingPanel;
 using ShipWorks.UI;
 
@@ -136,42 +135,6 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
                 {
                     ShipmentModel.ChangeShipmentType(value);
                 }
-            }
-        }
-
-        /// <summary>
-        /// The selected dims profile
-        /// </summary>
-        [Obfuscation(Exclude = true)]
-        public long SelectedDimsProfileID
-        {
-            get { return ShipmentModel.ShipmentAdapter.Shipment.BestRate.DimsProfileID; }
-            set
-            {
-                BestRateShipmentEntity bestRate = ShipmentModel.ShipmentAdapter.Shipment.BestRate;
-                if (bestRate == null)
-                {
-                    return;
-                }
-
-                handler.Set(nameof(SelectedDimsProfileID),
-                    (v) => bestRate.DimsProfileID = v, bestRate.DimsProfileID, value);
-
-                if (bestRate.DimsProfileID != 0)
-                {
-                    DimensionsProfileEntity profile =
-                        DimensionProfiles.SingleOrDefault(p => p.DimensionsProfileID == bestRate.DimsProfileID);
-
-                    if (profile != null)
-                    {
-                        bestRate.DimsLength = profile.Length;
-                        bestRate.DimsWidth = profile.Width;
-                        bestRate.DimsHeight = profile.Height;
-                        ShipmentModel.ShipmentAdapter.Shipment.ContentWeight = profile.Weight;
-                    }
-                }
-
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsProfileSelected)));
             }
         }
 
