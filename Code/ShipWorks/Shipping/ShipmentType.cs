@@ -781,7 +781,7 @@ namespace ShipWorks.Shipping
         /// <summary>
         /// Update the total weight of the shipment based on its ContentWeight and any packaging weight.
         /// </summary>
-        public void UpdateTotalWeight(ShipmentEntity shipment)
+        public virtual void UpdateTotalWeight(ShipmentEntity shipment)
         {
             if (shipment.Processed)
             {
@@ -814,10 +814,11 @@ namespace ShipWorks.Shipping
             foreach ((double weight, bool addDimsWeight, double dimsWeight) in GetPackageWeights(shipment))
             {
                 contentWeight += weight;
+                totalWeight += weight;
 
                 if (addDimsWeight)
                 {
-                    totalWeight += weight + dimsWeight;
+                    totalWeight += dimsWeight;
                 }
             }
 
