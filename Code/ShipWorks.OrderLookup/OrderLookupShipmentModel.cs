@@ -321,7 +321,7 @@ namespace ShipWorks.OrderLookup
                     AddPropertyChangedEventsToEntities(value);
                 }
 
-                RaisePropertyChanged("");
+                RaisePropertyChanged(nameof(OrderLookupShipmentModel));
 
                 messenger.Send(new ShipmentSelectionChangedMessage(this, new[] { ShipmentAdapter.Shipment.ShipmentID }, ShipmentAdapter));
             }
