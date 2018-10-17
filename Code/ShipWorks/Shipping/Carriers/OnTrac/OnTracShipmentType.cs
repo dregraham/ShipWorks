@@ -388,22 +388,10 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
         public override bool IsResidentialStatusRequired(IShipmentEntity shipment) => true;
 
         /// <summary>
-        /// Update the total weight of the shipment
+        /// Get the dims weight from a shipment, if any
         /// </summary>
-        public override void UpdateTotalWeight(ShipmentEntity shipment)
-        {
-            if (shipment == null)
-            {
-                throw new ArgumentNullException("shipment");
-            }
-
-            shipment.TotalWeight = shipment.ContentWeight;
-
-            if (shipment.OnTrac.DimsAddWeight)
-            {
-                shipment.TotalWeight += shipment.OnTrac.DimsWeight;
-            }
-        }
+        protected override double GetDimsWeight(IShipmentEntity shipment) =>
+            shipment.OnTrac.DimsAddWeight ? shipment.OnTrac.DimsWeight : 0;
 
         /// <summary>
         /// Gets an instance to the best rate shipping broker for the OnTrac shipment type based on the shipment configuration.

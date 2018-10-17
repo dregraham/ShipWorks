@@ -13,6 +13,7 @@ using ShipWorks.Core.UI;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Messaging.Messages;
 using ShipWorks.Shipping;
+using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Shipping.Services;
 
 namespace ShipWorks.OrderLookup
@@ -26,13 +27,13 @@ namespace ShipWorks.OrderLookup
         /// <summary>
         /// Entities for which we want to wire up property changed handlers
         /// </summary>
-        private readonly static IEnumerable<Func<ICarrierShipmentAdapter, INotifyPropertyChanged>> eventEntities =
-            new Func<ICarrierShipmentAdapter, INotifyPropertyChanged>[]
+        private readonly static IEnumerable<(Func<ICarrierShipmentAdapter, INotifyPropertyChanged> getEntity, Func<ShipmentTypeCode, bool> isApplicableFor)> eventEntities =
+            new (Func<ICarrierShipmentAdapter, INotifyPropertyChanged>, Func<ShipmentTypeCode, bool>)[]
             {
-                x => x?.Shipment,
-                x => x?.Shipment?.Postal,
-                x => x?.Shipment?.Postal?.Usps,
-                x => x?.Shipment?.Postal?.Endicia
+                (x => x?.Shipment, x => true),
+                (x => x?.Shipment?.Postal, PostalUtility.IsPostalShipmentType),
+                (x => x?.Shipment?.Postal?.Usps, x => x == ShipmentTypeCode.Usps),
+                (x => x?.Shipment?.Postal?.Endicia, x => x == ShipmentTypeCode.Endicia),
             };
 
         private readonly IMessenger messenger;
@@ -171,7 +172,7 @@ namespace ShipWorks.OrderLookup
 
             RefreshProperties();
 
-            AddPropertyChangedEventsToEntities();
+            AddPropertyChangedEventsToEntities(ShipmentAdapter.ShipmentTypeCode);
             RaisePropertyChanged(null);
         }
 
@@ -228,7 +229,7 @@ namespace ShipWorks.OrderLookup
 
             RefreshProperties();
 
-            AddPropertyChangedEventsToEntities();
+            AddPropertyChangedEventsToEntities(ShipmentAdapter.ShipmentTypeCode);
 
             RaisePropertyChanged(nameof(ShipmentTypeCode));
 
@@ -269,18 +270,22 @@ namespace ShipWorks.OrderLookup
         /// <summary>
         /// Add property change event handlers
         /// </summary>
-        private void AddPropertyChangedEventsToEntities() =>
+        private void AddPropertyChangedEventsToEntities(ShipmentTypeCode shipmentTypeCode) =>
             eventEntities
-                .Select(func => func(ShipmentAdapter))
+                .Where(x => x.isApplicableFor(shipmentTypeCode))
+                .Select(x => x.getEntity(ShipmentAdapter))
                 .Where(x => x != null)
                 .ForEach(x => x.PropertyChanged += RaisePropertyChanged);
 
         /// <summary>
         /// Remove property changed events from shipment entities
         /// </summary>
+        /// <remarks>
+        /// We're purposely removing the property changed handler from ALL shipment type entities because
+        /// it's safe to do and because we might not know what the previous shipment type was</remarks>
         private void RemovePropertyChangedEventsFromEntities() =>
             eventEntities
-                .Select(func => func(ShipmentAdapter))
+                .Select(x => x.getEntity(ShipmentAdapter))
                 .Where(x => x != null)
                 .ForEach(x => x.PropertyChanged -= RaisePropertyChanged);
 
@@ -306,7 +311,7 @@ namespace ShipWorks.OrderLookup
                     ShipmentAdapter = shippingManager.ChangeShipmentType(value, ShipmentAdapter.Shipment);
                     RefreshProperties();
 
-                    AddPropertyChangedEventsToEntities();
+                    AddPropertyChangedEventsToEntities(value);
                 }
 
                 RaisePropertyChanged(nameof(OrderLookupShipmentModel));

@@ -694,7 +694,7 @@ namespace ShipWorks.Shipping
             if (!SupportsMultiplePackages)
             {
                 // LoadPackageProfile sets up the profile before ConfigurePrimaryProfile is called and creates
-                // an in memory PackageProfile with null fields. Let's clear it out and create a new one with initial vialues.
+                // an in memory PackageProfile with null fields. Let's clear it out and create a new one with initial values.
                 profile.Packages.Clear();
                 profile.Packages.Add(new PackageProfileEntity()
                 {
@@ -779,8 +779,7 @@ namespace ShipWorks.Shipping
         }
 
         /// <summary>
-        /// Update the total weight of the shipment based on its ContentWeight and any packaging weight.  The default
-        /// implementation is just to set the TotalWeight equal to the ContentWeight.
+        /// Update the total weight of the shipment based on its ContentWeight and any packaging weight.
         /// </summary>
         public virtual void UpdateTotalWeight(ShipmentEntity shipment)
         {
@@ -789,8 +788,78 @@ namespace ShipWorks.Shipping
                 throw new InvalidOperationException("Cannot update weight on a processed shipment.");
             }
 
-            shipment.TotalWeight = shipment.ContentWeight;
+            if (SupportsMultiplePackages)
+            {
+                UpdateMultiplePackageWeight(shipment);
+            }
+            else
+            {
+                UpdateSinglePackageWeight(shipment);
+            }
         }
+
+        /// <summary>
+        /// Update weight for multi-package shipments
+        /// </summary>
+        /// <remarks>
+        /// We don't want to update the weight unless it's actually different because we now use the notify property changed
+        /// event on the entities and it seems to fire regardless of whether the value has actually changed.  This could also
+        /// be caused by the fact that weight is a double, and 1.5 does not equal 1.500000001
+        /// </remarks>
+        private void UpdateMultiplePackageWeight(ShipmentEntity shipment)
+        {
+            double contentWeight = 0;
+            double totalWeight = 0;
+
+            foreach ((double weight, bool addDimsWeight, double dimsWeight) in GetPackageWeights(shipment))
+            {
+                contentWeight += weight;
+                totalWeight += weight;
+
+                if (addDimsWeight)
+                {
+                    totalWeight += dimsWeight;
+                }
+            }
+
+            if (!contentWeight.IsEquivalentTo(shipment.ContentWeight))
+            {
+                shipment.ContentWeight = contentWeight;
+            }
+
+            if (!totalWeight.IsEquivalentTo(shipment.TotalWeight))
+            {
+                shipment.TotalWeight = totalWeight;
+            }
+        }
+
+        /// <summary>
+        /// Update weight for a single-package shipments
+        /// </summary>
+        /// <remarks>
+        /// We don't want to update the weight unless it's actually different because we now use the notify property changed
+        /// event on the entities and it seems to fire regardless of whether the value has actually changed.  This could also
+        /// be caused by the fact that weight is a double, and 1.5 does not equal 1.500000001
+        /// </remarks>
+        private void UpdateSinglePackageWeight(ShipmentEntity shipment)
+        {
+            var newWeight = shipment.ContentWeight + GetDimsWeight(shipment);
+            if (!newWeight.IsEquivalentTo(shipment.TotalWeight))
+            {
+                shipment.TotalWeight = newWeight;
+            }
+        }
+
+        /// <summary>
+        /// Get weights from packages
+        /// </summary>
+        protected virtual IEnumerable<(double weight, bool addDimsWeight, double dimsWeight)> GetPackageWeights(IShipmentEntity shipment) =>
+            Enumerable.Empty<(double, bool, double)>();
+
+        /// <summary>
+        /// Get the dims weight from a shipment, if any
+        /// </summary>
+        protected virtual double GetDimsWeight(IShipmentEntity shipment) => 0;
 
         /// <summary>
         /// Get the available origins for the ShipmentType.  This is used to display the origin address UI.

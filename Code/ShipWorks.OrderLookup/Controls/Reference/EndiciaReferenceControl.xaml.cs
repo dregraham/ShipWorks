@@ -7,6 +7,9 @@ namespace ShipWorks.OrderLookup.Controls.Reference
     /// </summary>
     public partial class EndiciaReferenceControl : UserControl
     {
+        /// <summary>
+        /// Constructor
+        /// </summary>
         public EndiciaReferenceControl()
         {
             InitializeComponent();
