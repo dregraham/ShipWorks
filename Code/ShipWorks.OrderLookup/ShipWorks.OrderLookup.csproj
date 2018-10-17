@@ -136,6 +136,10 @@
       <DependentUpon>GenericCustomsItemsControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\Customs\ICustomsViewModel.cs" />
+    <Compile Include="Controls\Customs\BestRateCustomsControl.xaml.cs">
+      <DependentUpon>BestRateCustomsControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\Customs\BestRateCustomsViewModel.cs" />
     <Compile Include="Controls\Customs\PostalCustomsViewModel.cs" />
     <Compile Include="Controls\Customs\UpsCustomsControl.xaml.cs">
       <DependentUpon>UpsCustomsControl.xaml</DependentUpon>
@@ -348,6 +352,10 @@
     <Page Include="Controls\Customs\GenericCustomsItemsControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\Customs\BestRateCustomsControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Controls\Customs\UpsCustomsControl.xaml">
       <SubType>Designer</SubType>
