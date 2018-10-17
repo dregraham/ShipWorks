@@ -166,6 +166,10 @@
       <DependentUpon>QuantumViewNotifyControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\Rating\IRatingViewModel.cs" />
+    <Compile Include="Controls\Reference\AmazonReferenceControl.xaml.cs">
+      <DependentUpon>AmazonReferenceControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\Reference\AmazonReferenceViewModel.cs" />
     <Compile Include="Controls\Reference\IReferenceViewModel.cs" />
     <Compile Include="Controls\Reference\EndiciaReferenceControl.xaml.cs">
       <DependentUpon>EndiciaReferenceControl.xaml</DependentUpon>
@@ -365,6 +369,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Controls\EmailNotifications\QuantumViewNotifyControl.xaml" />
+    <Page Include="Controls\Reference\AmazonReferenceControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Controls\Reference\EndiciaReferenceControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
