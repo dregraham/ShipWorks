@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Reflection;
 using System.Windows.Input;
@@ -9,12 +8,11 @@ using GalaSoft.MvvmLight.Command;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
-using Shared.System.ComponentModel.DataAnnotations;
 using ShipWorks.Core.UI;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Shipping;
-using ShipWorks.Shipping.Carriers.UPS.Enums;
+using ShipWorks.Shipping.Carriers.Amazon.Enums;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Services;
 using ShipWorks.Shipping.UI.ShippingPanel;
@@ -38,9 +36,6 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
         private IEnumerable<KeyValuePair<int, string>> packageTypes;
         private IEnumerable<KeyValuePair<int, string>> confirmationTypes;
         private IEnumerable<KeyValuePair<int, string>> serviceTypes;
-        System.Collections.ObjectModel.ObservableCollection<IPackageAdapter> packages;
-        private IPackageAdapter selectedPackage;
-        private UpsPackageEntity actualSelectedPackage;
 
         /// <summary>
         /// Constructor
@@ -62,12 +57,11 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
 
             RefreshDimensionalProfiles();
             RefreshInsurance();
-            RefreshPackageTypes();
             RefreshServiceTypes();
             RefreshProviders();
 
             ConfirmationTypes =
-                EnumHelper.GetEnumList<UpsDeliveryConfirmationType>()
+                EnumHelper.GetEnumList<AmazonDeliveryExperienceType>()
                 .Select(e => new KeyValuePair<int, string>((int) e.Value, e.Description));
         }
 
@@ -121,7 +115,7 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
         /// True if a profile is selected
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public bool IsProfileSelected => true;
+        public bool IsProfileSelected => ShipmentModel.ShipmentAdapter.Shipment.Amazon.DimsProfileID > 0;
 
         /// <summary>
         /// Collection of ServiceTypes
@@ -184,13 +178,27 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
         /// </summary>
         private void ShipmentModelPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            if (e.PropertyName == AmazonShipmentFields.ShippingServiceID.Name ||
-                e.PropertyName == ShipmentFields.ShipCountryCode.Name)
+            if (e.PropertyName == "DimsProfileID")
             {
-                RefreshInsurance();
+                AmazonShipmentEntity amazon = ShipmentModel.ShipmentAdapter.Shipment.Amazon;
+                if (amazon.DimsProfileID != 0)
+                {
+                    DimensionsProfileEntity profile =
+                        DimensionProfiles.SingleOrDefault(p => p.DimensionsProfileID == amazon.DimsProfileID);
+
+                    if (profile != null)
+                    {
+                        amazon.DimsLength = profile.Length;
+                        amazon.DimsWidth = profile.Width;
+                        amazon.DimsHeight = profile.Height;
+                        amazon.DimsWeight = profile.Weight;
+                    }
+                }
+
+                handler.RaisePropertyChanged(nameof(IsProfileSelected));
             }
 
-            if (e.PropertyName == PostalShipmentFields.Service.Name)
+            if (e.PropertyName == AmazonShipmentFields.ShippingServiceName.Name)
             {
                 handler.RaisePropertyChanged(nameof(ShipmentModel));
             }
@@ -198,6 +206,7 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
             if (e.PropertyName == ShipmentFields.ShipCountryCode.Name)
             {
                 RefreshServiceTypes();
+                RefreshInsurance();
             }
         }
 
@@ -221,7 +230,7 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
         /// </summary>
         private void RefreshInsurance()
         {
-            //InsuranceViewModel.Load(Packages, SelectedPackage, ShipmentModel.ShipmentAdapter);
+            InsuranceViewModel.Load(ShipmentModel.PackageAdapters, ShipmentModel.PackageAdapters.FirstOrDefault(), ShipmentModel.ShipmentAdapter);
         }
 
         /// <summary>
@@ -229,21 +238,13 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
         /// </summary>
         private void RefreshDimensionalProfiles()
         {
-            //DimensionProfiles = carrierShipmentAdapterOptionsProvider.GetDimensionsProfiles(SelectedPackage).ToList();
-        }
+            DimensionProfiles =
+                carrierShipmentAdapterOptionsProvider.GetDimensionsProfiles(ShipmentModel.PackageAdapters.FirstOrDefault()).ToList();
 
-        /// <summary>
-        /// Refresh the package types
-        /// </summary>
-        private void RefreshPackageTypes()
-        {
-            if (ShipmentModel.ShipmentAdapter?.Shipment == null)
+            if (ShipmentModel.ShipmentAdapter.Shipment.Amazon != null && DimensionProfiles.None(d => d.DimensionsProfileID ==
+                                            ShipmentModel.ShipmentAdapter.Shipment.Amazon.DimsProfileID))
             {
-                PackageTypes = Enumerable.Empty<KeyValuePair<int, string>>();
-            }
-            else
-            {
-                PackageTypes = carrierShipmentAdapterOptionsProvider.GetPackageTypes(ShipmentModel.ShipmentAdapter);
+                ShipmentModel.ShipmentAdapter.Shipment.Amazon.DimsProfileID = 0;
             }
         }
 
