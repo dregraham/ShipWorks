@@ -351,7 +351,7 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
             get { return SelectedPackage.ApplyAdditionalWeight; }
             set
             {
-                handler.Set(nameof(SelectedPackageDimsProfileID), (v) => SelectedPackage.ApplyAdditionalWeight = v, SelectedPackage.ApplyAdditionalWeight, value);
+                handler.Set(nameof(SelectedPackageApplyAdditionalWeight), (v) => SelectedPackage.ApplyAdditionalWeight = v, SelectedPackage.ApplyAdditionalWeight, value);
             }
         }
 
