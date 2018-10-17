@@ -183,7 +183,7 @@ namespace ShipWorks.Shipping.Carriers.Asendia
         /// Get the dims weight from a shipment, if any
         /// </summary>
         protected override double GetDimsWeight(IShipmentEntity shipment) =>
-            shipment.Asendia.DimsAddWeight ? shipment.Asendia.DimsWeight : 0;
+            shipment.Asendia?.DimsAddWeight == true ? shipment.Asendia.DimsWeight : 0;
 
         /// <summary>
         /// Get the shipment common detail for tango
