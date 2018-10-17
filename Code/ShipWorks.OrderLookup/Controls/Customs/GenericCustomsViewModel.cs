@@ -37,6 +37,8 @@ namespace ShipWorks.OrderLookup.Controls.Customs
             this.shipmentTypeManager = shipmentTypeManager;
 
             handler = new PropertyChangedHandler(this, () => PropertyChanged);
+
+            Visible = ShipmentModel.ShipmentAdapter?.CustomsAllowed ?? false;
         }
 
         /// <summary>
@@ -153,7 +155,7 @@ namespace ShipWorks.OrderLookup.Controls.Customs
         /// Load customs
         /// </summary>
         private void LoadCustoms()
-        {
+        {            
             ICarrierShipmentAdapter shipmentAdapter = ShipmentModel.ShipmentAdapter;
 
             if (shipmentAdapter == null || !shipmentAdapter.CustomsAllowed)
@@ -161,9 +163,12 @@ namespace ShipWorks.OrderLookup.Controls.Customs
                 return;
             }
 
-            CustomsItems = new ObservableCollection<IShipmentCustomsItemAdapter>(shipmentAdapter.GetCustomsItemAdapters());
+            ShipmentModel.SaveToDatabase();
 
             ShipmentModel.RefreshShipmentFromDatabase();
+
+            CustomsItems = new ObservableCollection<IShipmentCustomsItemAdapter>(ShipmentModel.ShipmentAdapter.Shipment.CustomsItems
+                .Select(x => new ShipmentCustomsItemAdapter(x)));
 
             SelectedCustomsItem = CustomsItems.FirstOrDefault();
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(DeleteCustomsItemCommand)));
@@ -246,13 +251,6 @@ namespace ShipWorks.OrderLookup.Controls.Customs
         private void ShipmentModelPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             Visible = ShipmentModel.ShipmentAdapter?.CustomsAllowed ?? false;
-
-            if (e.PropertyName == nameof(ShipmentModel.SelectedOrder) && ShipmentModel.SelectedOrder != null)
-            {
-                LoadCustoms();
-
-                handler.RaisePropertyChanged(nameof(ShipmentModel));
-            }
         }
 
         /// <summary>

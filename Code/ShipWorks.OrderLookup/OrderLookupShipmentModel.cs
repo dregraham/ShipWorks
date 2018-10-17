@@ -34,7 +34,7 @@ namespace ShipWorks.OrderLookup
                 (x => x?.Shipment?.Postal, PostalUtility.IsPostalShipmentType),
                 (x => x?.Shipment?.Postal?.Usps, x => x == ShipmentTypeCode.Usps),
                 (x => x?.Shipment?.Postal?.Endicia, x => x == ShipmentTypeCode.Endicia),
-                (x => x?.Shipment?.Ups, x => x == ShipmentTypeCode.UpsOnLineTools),
+                (x => x?.Shipment?.Ups, x => x == ShipmentTypeCode.UpsOnLineTools)
             };
 
         private readonly IMessenger messenger;
@@ -46,6 +46,8 @@ namespace ShipWorks.OrderLookup
         private bool shipmentAllowEditing;
         private decimal totalCost;
         private bool isSaving = false;
+        private IEnumerable<IPackageAdapter> packageAdapters;
+
         public event EventHandler OnSearchOrder;
 
         /// <summary>
@@ -102,7 +104,11 @@ namespace ShipWorks.OrderLookup
         /// The package adapters for the order in context
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public IEnumerable<IPackageAdapter> PackageAdapters { get; private set; }
+        public IEnumerable<IPackageAdapter> PackageAdapters
+        {
+            get => packageAdapters;
+            private set => handler.Set(nameof(PackageAdapters), ref packageAdapters, value, true);
+        }
 
         /// <summary>
         /// Total cost of the shipment
@@ -315,11 +321,10 @@ namespace ShipWorks.OrderLookup
                     AddPropertyChangedEventsToEntities(value);
                 }
 
-                RaisePropertyChanged(nameof(OrderLookupShipmentModel));
+                RaisePropertyChanged("");
 
                 messenger.Send(new ShipmentSelectionChangedMessage(this, new[] { ShipmentAdapter.Shipment.ShipmentID }, ShipmentAdapter));
             }
         }
     }
 }
-

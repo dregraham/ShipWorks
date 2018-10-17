@@ -255,6 +255,11 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
             get => selectedPackage;
             set
             {
+                if (value == null)
+                {
+                    value = Packages.First();
+                }
+
                 handler.Set(nameof(SelectedPackage), ref selectedPackage, value);
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(SelectedPackageWeight)));
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(SelectedPackageDimsProfileID)));
@@ -326,6 +331,23 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
         /// </summary>
         private void ShipmentModelPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
+
+            if (e.PropertyName == nameof(ShipmentModel.PackageAdapters))
+            {
+                int selectedIndex = Packages.IndexOf(SelectedPackage);
+                Packages = new System.Collections.ObjectModel.ObservableCollection<IPackageAdapter>(ShipmentModel.PackageAdapters);
+
+                if (Packages.IsCountGreaterThan(selectedIndex))
+                {
+                    SelectedPackage = Packages[selectedIndex];
+                }
+                else
+                {
+                    SelectedPackage = Packages.First();
+                }
+
+            }
+
             if (e.PropertyName == UpsShipmentFields.Service.Name ||
                 e.PropertyName == ShipmentFields.ShipCountryCode.Name)
             {
