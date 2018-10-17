@@ -28,13 +28,26 @@ namespace ShipWorks.OrderLookup
         /// <summary>
         /// Entities for which we want to wire up property changed handlers
         /// </summary>
+        /// <remarks>
+        /// I've included all known shipment types (as of October, 2018) so that we don't run into issues when
+        /// adding carriers to the order lookup view.
+        /// </remarks>
         private readonly static IEnumerable<(Func<ICarrierShipmentAdapter, INotifyPropertyChanged> getEntity, Func<ShipmentTypeCode, bool> isApplicableFor)> eventEntities =
             new (Func<ICarrierShipmentAdapter, INotifyPropertyChanged>, Func<ShipmentTypeCode, bool>)[]
             {
                 (x => x?.Shipment, x => true),
+                (x => x?.Shipment?.Amazon, x => x == ShipmentTypeCode.Amazon),
+                (x => x?.Shipment?.Asendia, x => x == ShipmentTypeCode.Asendia),
+                (x => x?.Shipment?.BestRate, x => x == ShipmentTypeCode.BestRate),
+                (x => x?.Shipment?.DhlExpress, x => x == ShipmentTypeCode.DhlExpress),
+                (x => x?.Shipment?.FedEx, x => x == ShipmentTypeCode.FedEx),
+                (x => x?.Shipment?.IParcel, x => x == ShipmentTypeCode.iParcel),
+                (x => x?.Shipment?.OnTrac, x => x == ShipmentTypeCode.OnTrac),
+                (x => x?.Shipment?.Other, x => x == ShipmentTypeCode.Other),
                 (x => x?.Shipment?.Postal, PostalUtility.IsPostalShipmentType),
-                (x => x?.Shipment?.Postal?.Usps, x => x == ShipmentTypeCode.Usps),
-                (x => x?.Shipment?.Postal?.Endicia, x => x == ShipmentTypeCode.Endicia),
+                (x => x?.Shipment?.Postal?.Usps, x => x == ShipmentTypeCode.Usps || x == ShipmentTypeCode.Express1Usps),
+                (x => x?.Shipment?.Postal?.Endicia, x => x == ShipmentTypeCode.Endicia || x == ShipmentTypeCode.Express1Endicia),
+                (x => x?.Shipment?.Ups, x => x == ShipmentTypeCode.UpsOnLineTools || x == ShipmentTypeCode.UpsWorldShip)
             };
 
         private readonly IMessenger messenger;

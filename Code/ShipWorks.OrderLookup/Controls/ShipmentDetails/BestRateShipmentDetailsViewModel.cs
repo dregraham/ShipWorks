@@ -158,7 +158,7 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
                     RefreshInsurance();
                 }
 
-                if (e.PropertyName == "DimsProfileID")
+                if (e.PropertyName == nameof(ShipmentModel.ShipmentAdapter.Shipment.BestRate.DimsProfileID)
                 {
                     IPackageAdapter packageAdapter = ShipmentModel.PackageAdapters.First();
                     if (packageAdapter?.DimsProfileID > 0)
