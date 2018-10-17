@@ -29,6 +29,7 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
     [WpfView(typeof(UpsShipmentDetailsControl))]
     public class UpsShipmentDetailsViewModel : IDetailsViewModel, INotifyPropertyChanged, IDataErrorInfo
     {
+        const int MaxPackageCount = 25;
         public event PropertyChangedEventHandler PropertyChanged;
         private readonly PropertyChangedHandler handler;
         private readonly Func<DimensionsManagerDlg> getDimensionsManagerDlg;
@@ -40,6 +41,7 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
         private IEnumerable<KeyValuePair<int, string>> serviceTypes;
         System.Collections.ObjectModel.ObservableCollection<IPackageAdapter> packages;
         private IPackageAdapter selectedPackage;
+        private UpsPackageEntity actualSelectedPackage;
 
         /// <summary>
         /// Constructor
@@ -58,7 +60,7 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
             InsuranceViewModel = insuranceViewModel;
             handler = new PropertyChangedHandler(this, () => PropertyChanged);
             ManageDimensionalProfiles = new RelayCommand(ManageDimensionalProfilesAction);
-            AddPackageCommand = new RelayCommand(AddPackageAction);
+            AddPackageCommand = new RelayCommand(AddPackageAction, () => Packages.IsCountLessThan(MaxPackageCount));
             DeletePackageCommand = new RelayCommand(DeletePackageAction,
                 () => SelectedPackage != null && Packages.Count > 1);
 
@@ -102,6 +104,9 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
             {
                 Packages[i].Index = i + 1;
             }
+
+            AddPackageCommand.RaiseCanExecuteChanged();
+            DeletePackageCommand.RaiseCanExecuteChanged();
         }
 
         /// <summary>
@@ -114,6 +119,9 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
             SelectedPackage = newPackage;
 
             RefreshInsurance();
+
+            AddPackageCommand.RaiseCanExecuteChanged();
+            DeletePackageCommand.RaiseCanExecuteChanged();
         }
 
         /// <summary>
@@ -255,10 +263,36 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
             get => selectedPackage;
             set
             {
+                if (actualSelectedPackage != null)
+                {
+                    actualSelectedPackage.PropertyChanged -= SelectedPackagePropertyChanged;
+                }
+
+                if (value == null)
+                {
+                    value = Packages.First();
+                }
+
                 handler.Set(nameof(SelectedPackage), ref selectedPackage, value);
+
+                actualSelectedPackage = ShipmentModel.ShipmentAdapter.Shipment.Ups.Packages.FirstOrDefault(p => p.UpsPackageID == SelectedPackage.PackageId);
+                if (actualSelectedPackage != null)
+                {
+                    actualSelectedPackage.PropertyChanged += SelectedPackagePropertyChanged;
+                }
+
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(SelectedPackageWeight)));
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(SelectedPackageDimsProfileID)));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsProfileSelected)));
             }
+        }
+
+        /// <summary>
+        /// Bubble up packages changing so that rates refresh
+        /// </summary>
+        private void SelectedPackagePropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            ShipmentModel.RaisePropertyChanged(e.PropertyName);
         }
 
         /// <summary>
@@ -317,7 +351,7 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
             get { return SelectedPackage.ApplyAdditionalWeight; }
             set
             {
-                handler.Set(nameof(SelectedPackageDimsProfileID), (v) => SelectedPackage.ApplyAdditionalWeight = v, SelectedPackage.ApplyAdditionalWeight, value);
+                handler.Set(nameof(SelectedPackageApplyAdditionalWeight), (v) => SelectedPackage.ApplyAdditionalWeight = v, SelectedPackage.ApplyAdditionalWeight, value);
             }
         }
 
@@ -326,18 +360,37 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
         /// </summary>
         private void ShipmentModelPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            if (ShipmentModel.SelectedOrder != null)
+
+            if (e.PropertyName == nameof(ShipmentModel.PackageAdapters) && ShipmentModel.PackageAdapters != null)
             {
-                if (e.PropertyName == UpsShipmentFields.Service.Name ||
-                    e.PropertyName == ShipmentFields.ShipCountryCode.Name)
+                int selectedIndex = Packages.IndexOf(SelectedPackage);
+                Packages = new System.Collections.ObjectModel.ObservableCollection<IPackageAdapter>(ShipmentModel.PackageAdapters);
+
+                if (Packages.IsCountGreaterThan(selectedIndex))
                 {
-                    RefreshInsurance();
+                    SelectedPackage = Packages[selectedIndex];
+                }
+                else
+                {
+                    SelectedPackage = Packages.First();
                 }
 
-                if (e.PropertyName == nameof(ShipmentFields.ShipCountryCode.Name))
-                {
-                    RefreshServiceTypes();
-                }
+            }
+
+            if (e.PropertyName == UpsShipmentFields.Service.Name ||
+                e.PropertyName == ShipmentFields.ShipCountryCode.Name)
+            {
+                RefreshInsurance();
+            }
+
+            if (e.PropertyName == PostalShipmentFields.Service.Name)
+            {
+                handler.RaisePropertyChanged(nameof(ShipmentModel));
+            }
+
+            if (e.PropertyName == ShipmentFields.ShipCountryCode.Name)
+            {
+                RefreshServiceTypes();
             }
         }
 

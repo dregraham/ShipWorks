@@ -60,6 +60,8 @@ namespace ShipWorks.OrderLookup
         private bool shipmentAllowEditing;
         private decimal totalCost;
         private bool isSaving = false;
+        private IEnumerable<IPackageAdapter> packageAdapters;
+
         public event EventHandler OnSearchOrder;
 
         /// <summary>
@@ -120,7 +122,11 @@ namespace ShipWorks.OrderLookup
         /// The package adapters for the order in context
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public IEnumerable<IPackageAdapter> PackageAdapters { get; private set; }
+        public IEnumerable<IPackageAdapter> PackageAdapters
+        {
+            get => packageAdapters;
+            private set => handler.Set(nameof(PackageAdapters), ref packageAdapters, value, true);
+        }
 
         /// <summary>
         /// Total cost of the shipment
@@ -246,7 +252,10 @@ namespace ShipWorks.OrderLookup
                 ShipmentAdapter.UpdateDynamicData();
             }
 
-            RefreshProperties();
+            using (handler.SuppressChangeNotifications())
+            {
+                RefreshProperties();
+            }
 
             AddPropertyChangedEventsToEntities(ShipmentAdapter.ShipmentTypeCode);
 
@@ -355,4 +364,3 @@ namespace ShipWorks.OrderLookup
         }
     }
 }
-

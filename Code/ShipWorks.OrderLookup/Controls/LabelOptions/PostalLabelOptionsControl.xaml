@@ -6,7 +6,7 @@
     xmlns:local="clr-namespace:ShipWorks.OrderLookup.Controls.LabelOptions"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:ui="http://schemas.shipworks.com/ui"
-    d:DataContext="{d:DesignInstance local:OrderLookupPostalLabelOptionsViewModel}"
+    d:DataContext="{d:DesignInstance local:PostalLabelOptionsViewModel}"
     d:DesignHeight="150"
     d:DesignWidth="500"
     FontFamily="/ShipWorks.OrderLookup;component/#Roboto"

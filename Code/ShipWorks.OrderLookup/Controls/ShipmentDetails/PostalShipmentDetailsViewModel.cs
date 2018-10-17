@@ -222,7 +222,7 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
                     RefreshConfirmationTypes();
                 }
 
-                if (e.PropertyName == nameof(ShipmentFields.ShipCountryCode.Name))
+                if (e.PropertyName == ShipmentFields.ShipCountryCode.Name)
                 {
                     RefreshServiceTypes();
                 }

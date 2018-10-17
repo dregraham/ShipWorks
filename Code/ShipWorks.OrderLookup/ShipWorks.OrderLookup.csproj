@@ -132,7 +132,15 @@
     <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controls\Customs\GenericCustomsItemsControl.xaml.cs">
+      <DependentUpon>GenericCustomsItemsControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\Customs\ICustomsViewModel.cs" />
+    <Compile Include="Controls\Customs\PostalCustomsViewModel.cs" />
+    <Compile Include="Controls\Customs\UpsCustomsControl.xaml.cs">
+      <DependentUpon>UpsCustomsControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\Customs\UpsCustomsViewModel.cs" />
     <Compile Include="Controls\From\IFromViewModel.cs" />
     <Compile Include="Controls\From\GenericFromControl.xaml.cs">
       <DependentUpon>GenericFromControl.xaml</DependentUpon>
@@ -156,9 +164,9 @@
       <DependentUpon>OrderLookupWrapperControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\OrderLookupWrapperViewModel.cs" />
-    <Compile Include="Controls\QuantumViewNotify\IQuantumViewNotifyControlViewModel.cs" />
-    <Compile Include="Controls\QuantumViewNotify\QuantumViewNotifyControlViewModel.cs" />
-    <Compile Include="Controls\QuantumViewNotify\QuantumViewNotifyControl.xaml.cs">
+    <Compile Include="Controls\EmailNotifications\IEmailNotificationsViewModel.cs" />
+    <Compile Include="Controls\EmailNotifications\QuantumViewNotifyControlViewModel.cs" />
+    <Compile Include="Controls\EmailNotifications\QuantumViewNotifyControl.xaml.cs">
       <DependentUpon>QuantumViewNotifyControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\Rating\IRatingViewModel.cs" />
@@ -208,8 +216,8 @@
     <Compile Include="Controls\OrderLookupAddress.xaml.cs">
       <DependentUpon>OrderLookupAddress.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\Customs\GenericCustomsControl.xaml.cs">
-      <DependentUpon>GenericCustomsControl.xaml</DependentUpon>
+    <Compile Include="Controls\Customs\PostalCustomsControl.xaml.cs">
+      <DependentUpon>PostalCustomsControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\Customs\GenericCustomsViewModel.cs" />
     <Compile Include="Controls\LabelOptions\PostalLabelOptionsControl.xaml.cs">
@@ -337,6 +345,14 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Controls\Customs\GenericCustomsItemsControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\Customs\UpsCustomsControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Controls\From\GenericFromControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -357,7 +373,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Controls\QuantumViewNotify\QuantumViewNotifyControl.xaml" />
+    <Page Include="Controls\EmailNotifications\QuantumViewNotifyControl.xaml" />
     <Page Include="Controls\Reference\EndiciaReferenceControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -374,7 +390,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Controls\Customs\GenericCustomsControl.xaml">
+    <Page Include="Controls\Customs\PostalCustomsControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
