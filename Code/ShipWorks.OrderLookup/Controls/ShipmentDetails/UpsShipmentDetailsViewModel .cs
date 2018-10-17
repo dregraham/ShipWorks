@@ -29,6 +29,7 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
     [WpfView(typeof(UpsShipmentDetailsControl))]
     public class UpsShipmentDetailsViewModel : IDetailsViewModel, INotifyPropertyChanged, IDataErrorInfo
     {
+        const int MaxPackageCount = 25;
         public event PropertyChangedEventHandler PropertyChanged;
         private readonly PropertyChangedHandler handler;
         private readonly Func<DimensionsManagerDlg> getDimensionsManagerDlg;
@@ -59,7 +60,7 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
             InsuranceViewModel = insuranceViewModel;
             handler = new PropertyChangedHandler(this, () => PropertyChanged);
             ManageDimensionalProfiles = new RelayCommand(ManageDimensionalProfilesAction);
-            AddPackageCommand = new RelayCommand(AddPackageAction);
+            AddPackageCommand = new RelayCommand(AddPackageAction, () => Packages.IsCountLessThan(MaxPackageCount));
             DeletePackageCommand = new RelayCommand(DeletePackageAction,
                 () => SelectedPackage != null && Packages.Count > 1);
 
@@ -103,6 +104,9 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
             {
                 Packages[i].Index = i + 1;
             }
+
+            AddPackageCommand.RaiseCanExecuteChanged();
+            DeletePackageCommand.RaiseCanExecuteChanged();
         }
 
         /// <summary>
@@ -115,6 +119,9 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
             SelectedPackage = newPackage;
 
             RefreshInsurance();
+
+            AddPackageCommand.RaiseCanExecuteChanged();
+            DeletePackageCommand.RaiseCanExecuteChanged();
         }
 
         /// <summary>

@@ -234,7 +234,10 @@ namespace ShipWorks.OrderLookup
                 ShipmentAdapter.UpdateDynamicData();
             }
 
-            RefreshProperties();
+            using (handler.SuppressChangeNotifications())
+            {
+                RefreshProperties();
+            }
 
             AddPropertyChangedEventsToEntities(ShipmentAdapter.ShipmentTypeCode);
 
