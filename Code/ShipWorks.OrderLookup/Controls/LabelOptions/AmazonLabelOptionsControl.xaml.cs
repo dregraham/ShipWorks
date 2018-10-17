@@ -18,9 +18,9 @@ namespace ShipWorks.OrderLookup.Controls.LabelOptions
     /// <summary>
     /// Interaction logic for UpsLabelOptionsControl.xaml
     /// </summary>
-    public partial class AmazonLabelOptionsControl : UserControl
+    public partial class UpsLabelOptionsControl : UserControl
     {
-        public AmazonLabelOptionsControl()
+        public UpsLabelOptionsControl()
         {
             InitializeComponent();
         }

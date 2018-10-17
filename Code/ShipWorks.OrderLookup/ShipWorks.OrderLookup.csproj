@@ -152,9 +152,13 @@
     <Compile Include="Controls\LabelOptions\GenericLabelOptionsViewModel.cs" />
     <Compile Include="Controls\LabelOptions\ILabelOptionsViewModel.cs" />
     <Compile Include="Controls\LabelOptions\PostalLabelOptionsViewModel.cs" />
+    <Compile Include="Controls\LabelOptions\AmazonLabelOptionsControl.xaml.cs">
+      <DependentUpon>AmazonLabelOptionsControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\LabelOptions\UpsLabelOptionsControl.xaml.cs">
       <DependentUpon>UpsLabelOptionsControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\LabelOptions\AmazonLabelOptionsViewModel.cs" />
     <Compile Include="Controls\LabelOptions\UpsLabelOptionsViewModel.cs" />
     <Compile Include="Controls\OrderLookupWrapperControl.xaml.cs">
       <DependentUpon>OrderLookupWrapperControl.xaml</DependentUpon>
@@ -357,6 +361,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Controls\From\UspsFromControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Controls\LabelOptions\AmazonLabelOptionsControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
