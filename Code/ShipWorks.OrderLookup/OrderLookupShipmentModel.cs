@@ -34,6 +34,7 @@ namespace ShipWorks.OrderLookup
                 (x => x?.Shipment?.Postal, PostalUtility.IsPostalShipmentType),
                 (x => x?.Shipment?.Postal?.Usps, x => x == ShipmentTypeCode.Usps),
                 (x => x?.Shipment?.Postal?.Endicia, x => x == ShipmentTypeCode.Endicia),
+                (x => x?.Shipment?.Ups, x => x == ShipmentTypeCode.UpsOnLineTools),
             };
 
         private readonly IMessenger messenger;

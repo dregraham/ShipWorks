@@ -326,18 +326,20 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
         /// </summary>
         private void ShipmentModelPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            if (ShipmentModel.SelectedOrder != null)
+            if (e.PropertyName == UpsShipmentFields.Service.Name ||
+                e.PropertyName == ShipmentFields.ShipCountryCode.Name)
             {
-                if (e.PropertyName == UpsShipmentFields.Service.Name ||
-                    e.PropertyName == ShipmentFields.ShipCountryCode.Name)
-                {
-                    RefreshInsurance();
-                }
+                RefreshInsurance();
+            }
 
-                if (e.PropertyName == nameof(ShipmentFields.ShipCountryCode.Name))
-                {
-                    RefreshServiceTypes();
-                }
+            if (e.PropertyName == PostalShipmentFields.Service.Name)
+            {
+                handler.RaisePropertyChanged(nameof(ShipmentModel));
+            }
+
+            if (e.PropertyName == nameof(ShipmentFields.ShipCountryCode.Name))
+            {
+                RefreshServiceTypes();
             }
         }
 
