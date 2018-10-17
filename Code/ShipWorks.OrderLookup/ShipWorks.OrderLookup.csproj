@@ -141,6 +141,10 @@
       <DependentUpon>UpsCustomsControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\Customs\UpsCustomsViewModel.cs" />
+    <Compile Include="Controls\From\AmazonFromControl.xaml.cs">
+      <DependentUpon>AmazonFromControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\From\AmazonFromViewModel.cs" />
     <Compile Include="Controls\From\IFromViewModel.cs" />
     <Compile Include="Controls\From\GenericFromControl.xaml.cs">
       <DependentUpon>GenericFromControl.xaml</DependentUpon>
@@ -353,6 +357,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Controls\Customs\UpsCustomsControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\From\AmazonFromControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
