@@ -808,10 +808,13 @@ namespace ShipWorks.Shipping
         /// </remarks>
         private void UpdateMultiplePackageWeight(ShipmentEntity shipment)
         {
+            MethodConditions.EnsureArgumentIsNotNull(shipment, nameof(shipment));
+
             double contentWeight = 0;
             double totalWeight = 0;
 
-            foreach ((double weight, bool addDimsWeight, double dimsWeight) in GetPackageWeights(shipment))
+            var packageDimensions = GetPackageWeights(shipment) ?? Enumerable.Empty<(double, bool, double)>();
+            foreach ((double weight, bool addDimsWeight, double dimsWeight) in packageDimensions)
             {
                 contentWeight += weight;
                 totalWeight += weight;
@@ -843,6 +846,8 @@ namespace ShipWorks.Shipping
         /// </remarks>
         private void UpdateSinglePackageWeight(ShipmentEntity shipment)
         {
+            MethodConditions.EnsureArgumentIsNotNull(shipment, nameof(shipment));
+
             var newWeight = shipment.ContentWeight + GetDimsWeight(shipment);
             if (!newWeight.IsEquivalentTo(shipment.TotalWeight))
             {

@@ -325,6 +325,6 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         /// Get the dims weight from a shipment, if any
         /// </summary>
         protected override double GetDimsWeight(IShipmentEntity shipment) =>
-            shipment.BestRate.DimsAddWeight ? shipment.BestRate.DimsWeight : 0;
+            shipment.BestRate?.DimsAddWeight == true ? shipment.BestRate.DimsWeight : 0;
     }
 }

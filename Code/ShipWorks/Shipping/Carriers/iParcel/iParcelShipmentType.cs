@@ -245,7 +245,7 @@ namespace ShipWorks.Shipping.Carriers.iParcel
         /// Get weights from packages
         /// </summary>
         protected override IEnumerable<(double weight, bool addDimsWeight, double dimsWeight)> GetPackageWeights(IShipmentEntity shipment) =>
-            shipment.IParcel.Packages.Select(x => (x.Weight, x.DimsAddWeight, x.DimsWeight));
+            shipment.IParcel?.Packages?.Select(x => (x.Weight, x.DimsAddWeight, x.DimsWeight));
 
         /// <summary>
         /// Redistribute the ContentWeight from the shipment to each package in the shipment.  This only does something

@@ -112,7 +112,7 @@
                         <Binding
                             Converter="{StaticResource ValueEqualToParameter}"
                             Path="SelectedValue"
-                            Source="{x:Reference OriginDropDown}">
+                            ElementName="OriginDropDown">
                             <Binding.ConverterParameter>
                                 <sys:Int64>1</sys:Int64>
                             </Binding.ConverterParameter>

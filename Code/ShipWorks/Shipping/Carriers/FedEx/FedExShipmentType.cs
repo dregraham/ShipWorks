@@ -652,7 +652,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// Get weights from packages
         /// </summary>
         protected override IEnumerable<(double weight, bool addDimsWeight, double dimsWeight)> GetPackageWeights(IShipmentEntity shipment) =>
-            shipment.FedEx.Packages.Select(x => (x.Weight, x.DimsAddWeight, x.DimsWeight));
+            shipment.FedEx?.Packages?.Select(x => (x.Weight, x.DimsAddWeight, x.DimsWeight));
 
         /// <summary>
         /// Indicates if the residential status indicator is required for the given shipment

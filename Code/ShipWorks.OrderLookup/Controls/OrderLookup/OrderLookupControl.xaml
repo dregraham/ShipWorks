@@ -27,18 +27,22 @@
             </DataTemplate>
         </ResourceDictionary>
     </UserControl.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
 
-    <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
-        <Grid>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="*" />
-            </Grid.RowDefinitions>
-            <orderLookupSearchControl:OrderLookupSearchControl
-                Grid.Row="0"
-                Margin="10"
-                DataContext="{Binding OrderLookupSearchViewModel}" />
-            <Grid Grid.Row="1" Visibility="{Binding ShowColumns}">
+        <orderLookupSearchControl:OrderLookupSearchControl
+            Grid.Row="0"
+            Margin="10"
+            DataContext="{Binding OrderLookupSearchViewModel}" />
+        <ScrollViewer
+            Grid.Row="1"
+            HorizontalScrollBarVisibility="Disabled"
+            VerticalScrollBarVisibility="Auto"
+            Visibility="{Binding ShowColumns}">
+            <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition />
                     <ColumnDefinition Width="auto" />
@@ -82,6 +86,6 @@
                 <GridSplitter Grid.Column="1" />
                 <GridSplitter Grid.Column="3" />
             </Grid>
-        </Grid>
-    </ScrollViewer>
+        </ScrollViewer>
+    </Grid>
 </UserControl>

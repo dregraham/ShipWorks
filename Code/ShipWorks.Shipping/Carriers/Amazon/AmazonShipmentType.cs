@@ -224,7 +224,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// Get the dims weight from a shipment, if any
         /// </summary>
         protected override double GetDimsWeight(IShipmentEntity shipment) =>
-            shipment.Amazon.DimsAddWeight ? shipment.Amazon.DimsWeight : 0;
+            shipment.Amazon?.DimsAddWeight == true ? shipment.Amazon.DimsWeight : 0;
 
         /// <summary>
         /// Tracks the shipment.
