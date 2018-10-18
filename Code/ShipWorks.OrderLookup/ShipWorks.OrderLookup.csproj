@@ -194,10 +194,10 @@
     </Compile>
     <Compile Include="Controls\ShipmentDetails\CarrierShipmentAdapterOptionsProvider.cs" />
     <Compile Include="Controls\ShipmentDetails\BestRateShipmentDetailsViewModel.cs" />
-    <Compile Include="Controls\ShipmentDetails\UpsShipmentDetailsViewModel .cs" />
     <Compile Include="Controls\ShipmentDetails\UpsShipmentDetailsControl.xaml.cs">
       <DependentUpon>UpsShipmentDetailsControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\ShipmentDetails\UpsShipmentDetailsViewModel.cs" />
     <Compile Include="Controls\To\IToViewModel.cs" />
     <Compile Include="Controls\To\GenericToControl.xaml.cs">
       <DependentUpon>GenericToControl.xaml</DependentUpon>
