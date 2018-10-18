@@ -2,15 +2,18 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Reactive.Linq;
 using System.Reflection;
 using System.Windows.Input;
 using GalaSoft.MvvmLight.Command;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
+using ShipWorks.Core.Messaging;
 using ShipWorks.Core.UI;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
+using ShipWorks.Messaging.Messages.Shipping;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers.Amazon.Enums;
 using ShipWorks.Shipping.Editing;
@@ -31,6 +34,7 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
         private readonly PropertyChangedHandler handler;
         private readonly Func<DimensionsManagerDlg> getDimensionsManagerDlg;
         private readonly ICarrierShipmentAdapterOptionsProvider carrierShipmentAdapterOptionsProvider;
+        private readonly IMessenger messenger;
         private List<DimensionsProfileEntity> dimensionProfiles;
         private Dictionary<ShipmentTypeCode, string> providers;
         private IEnumerable<KeyValuePair<int, string>> packageTypes;
@@ -44,13 +48,15 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
             IOrderLookupShipmentModel shipmentModel,
             IInsuranceViewModel insuranceViewModel,
             Func<DimensionsManagerDlg> getDimensionsManagerDlg,
-            ICarrierShipmentAdapterOptionsProvider carrierShipmentAdapterOptionsProvider)
+            ICarrierShipmentAdapterOptionsProvider carrierShipmentAdapterOptionsProvider,
+            IMessenger messenger)
         {
             ShipmentModel = shipmentModel;
             ShipmentModel.PropertyChanged += ShipmentModelPropertyChanged;
 
             this.getDimensionsManagerDlg = getDimensionsManagerDlg;
             this.carrierShipmentAdapterOptionsProvider = carrierShipmentAdapterOptionsProvider;
+            this.messenger = messenger;
             InsuranceViewModel = insuranceViewModel;
             handler = new PropertyChangedHandler(this, () => PropertyChanged);
             ManageDimensionalProfiles = new RelayCommand(ManageDimensionalProfilesAction);
@@ -63,6 +69,15 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
             ConfirmationTypes =
                 EnumHelper.GetEnumList<AmazonDeliveryExperienceType>()
                 .Select(e => new KeyValuePair<int, string>((int) e.Value, e.Description));
+
+            this.messenger.OfType<RatesRetrievedMessage>()
+                .Subscribe(x =>
+                {
+                    if (x.Success)
+                    {
+                        RefreshServiceTypes();
+                    }
+                });
         }
 
         /// <summary>
