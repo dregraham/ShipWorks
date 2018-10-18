@@ -28,7 +28,7 @@ namespace ShipWorks.OrderLookup.Tests
             mock.Provide<IMessenger>(testMessenger);
         }
 
-        public void CreateTestObject(bool isProcessed)
+        public void SetupTestMocks(bool isProcessed)
         {
             order = new OrderEntity { OrderNumber = 1234 };
             shipment = new ShipmentEntity { ShipmentID = 4567, Processed = isProcessed };
@@ -52,7 +52,7 @@ namespace ShipWorks.OrderLookup.Tests
         [Fact]
         public void CreateLabel_DoesNotReturnMessage_WhenOrderIsProcessed()
         {
-            CreateTestObject(true);
+            SetupTestMocks(true);
             
             testObject = mock.Create<OrderLookupShipmentModel>();
             testObject.LoadOrder(order);
@@ -64,7 +64,7 @@ namespace ShipWorks.OrderLookup.Tests
         [Fact]
         public void CreateLabel_DoesReturnMessage_WhenOrderIsNotProcessed()
         {
-            CreateTestObject(false);
+            SetupTestMocks(false);
 
             testObject = mock.Create<OrderLookupShipmentModel>();
             testObject.LoadOrder(order);
