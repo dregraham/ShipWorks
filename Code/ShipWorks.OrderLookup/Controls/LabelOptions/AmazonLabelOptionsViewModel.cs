@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Interapptive.Shared.ComponentRegistration;
+﻿using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping;
@@ -25,6 +20,9 @@ namespace ShipWorks.OrderLookup.Controls.LabelOptions
         {
         }
 
+        /// <summary>
+        /// Exclude EPL because amazon does not support it
+        /// </summary>
         protected override bool ShouldIncludeLabelFormatInList(ShipmentEntity shipment, ThermalLanguage labelFormat)
         {
             if (labelFormat == ThermalLanguage.EPL)
