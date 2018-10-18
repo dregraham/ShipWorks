@@ -46,6 +46,7 @@
             <TextBox
                 Grid.Row="0"
                 Grid.Column="1"
+                Margin="9 0 0 10"
                 Style="{StaticResource FormNumberTextBox}"
                 Text="{Binding ShipmentModel.ShipmentAdapter.Shipment.CustomsValue, Converter={StaticResource EmptyMoney}, NotifyOnValidationError=true, StringFormat=C, ValidatesOnDataErrors=true}">
                 <i:Interaction.Behaviors>
@@ -62,12 +63,13 @@
 
             <TextBlock
                 Grid.Row="1"
-                Grid.Column="0"
+                Grid.Column="0"                
                 Style="{StaticResource FieldLabel}"
                 Text="Content" />
             <ui:ShipWorksComboBox
                 Grid.Row="1"
                 Grid.Column="1"
+                Margin="9 0 0 10"
                 DisplayMemberPath="Value"
                 ItemsSource="{Binding CustomsContentTypes}"
                 SelectedValue="{Binding ShipmentModel.ShipmentAdapter.Shipment.Postal.CustomsContentType, UpdateSourceTrigger=PropertyChanged}"

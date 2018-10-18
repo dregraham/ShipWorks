@@ -45,6 +45,7 @@
             <TextBox
                 Grid.Row="0"
                 Grid.Column="1"
+                Margin="9 0 0 10"
                 Style="{StaticResource FormNumberTextBox}"
                 Text="{Binding ShipmentModel.ShipmentAdapter.Shipment.CustomsValue, Converter={StaticResource EmptyMoney}, NotifyOnValidationError=true, StringFormat=C, ValidatesOnDataErrors=true}">
                 <i:Interaction.Behaviors>

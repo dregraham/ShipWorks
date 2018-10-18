@@ -103,8 +103,9 @@
         </ui:ShipWorksComboBox>
 
         <Grid Grid.Row="4"
-                Grid.Column="0"
-                Grid.ColumnSpan="2">
+              Grid.Column="0"
+              Grid.ColumnSpan="2"
+              Margin="0 0 0 10">
             <Grid.RowDefinitions>
                 <RowDefinition Height="auto"/>
                 <RowDefinition Height="*"/>
@@ -127,9 +128,8 @@
                 Grid.Column="1"
                 ItemsSource="{Binding Packages, UpdateSourceTrigger=PropertyChanged}"
                 SelectedItem="{Binding SelectedPackage, UpdateSourceTrigger=PropertyChanged}"
-                Margin="10 0 0 10"
-                MinHeight="70"
-                MaxHeight="104"
+                Margin="10 0 0 0"
+                MaxHeight="91"
                 SelectionMode="Single">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
@@ -142,17 +142,16 @@
             <Button Grid.Row="0"
                 Grid.Column="2"
                 Style="{StaticResource OrderLookup.Button.Add}"
-                VerticalAlignment="Top"
-                Margin="5 0 0 5"
+                Margin="10 0 0 10"
                 Command="{Binding AddPackageCommand}"/>
 
             <!-- Delete package button -->
             <Button Grid.Row="1"
-                Grid.Column="2"
-                Style="{StaticResource OrderLookup.Button.Delete}"
-                VerticalAlignment="Top"
-                Margin="5 0 0 0"
-                Command="{Binding DeletePackageCommand}"/>
+                    Grid.Column="2"
+                    Style="{StaticResource OrderLookup.Button.Delete}"
+                    Margin="10 0 0 0"
+                    VerticalAlignment="Top"
+                    Command="{Binding DeletePackageCommand}"/>
         </Grid>
 
 
