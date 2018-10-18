@@ -3,7 +3,6 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:from="clr-namespace:ShipWorks.OrderLookup.Controls.From"
     xmlns:local="clr-namespace:ShipWorks.OrderLookup.Controls"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:sui="clr-namespace:ShipWorks.Shipping.UI.ValueConverters;assembly=ShipWorks.Shipping.UI"
@@ -19,7 +18,6 @@
                 <ResourceDictionary Source="/ShipWorks.OrderLookup;component/Styles/OrderLookupStyle.xaml" />
             </ResourceDictionary.MergedDictionaries>
             <sui:ShipmentTypeToOriginAddressesConverter x:Key="ShipmentTypeToOriginAddresses" />
-            <ui:BooleanToVisibilityConverter x:Key="BooleanToVisibility" />
             <ui:ValueEqualToParameterConverter x:Key="ValueEqualToParameter" />
             <ui:BooleanAndConverter x:Key="BooleanAndConverter" />
         </ResourceDictionary>
