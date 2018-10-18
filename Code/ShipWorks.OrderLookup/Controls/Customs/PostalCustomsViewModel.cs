@@ -12,6 +12,9 @@ using ShipWorks.UI;
 
 namespace ShipWorks.OrderLookup.Controls.Customs
 {
+    /// <summary>
+    /// Viewmodel for Postal Customs
+    /// </summary>
     [KeyedComponent(typeof(ICustomsViewModel), ShipmentTypeCode.Usps)]
     [KeyedComponent(typeof(ICustomsViewModel), ShipmentTypeCode.Endicia)]
     [WpfView(typeof(PostalCustomsControl))]
