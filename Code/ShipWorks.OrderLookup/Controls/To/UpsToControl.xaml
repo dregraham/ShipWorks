@@ -40,7 +40,7 @@
                 Grid.Column="0"
                 Grid.ColumnSpan="2"
                 Style="{StaticResource Header}"
-                Text="Residential \ Commercial" />
+                Text="Residential / Commercial" />
             <TextBlock
                 Grid.Row="1"
                 Grid.Column="0"

@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Reflection;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
 using ShipWorks.Shipping;
@@ -31,6 +29,7 @@ namespace ShipWorks.OrderLookup.Controls.To
         /// <summary>
         /// Residential Determination choices
         /// </summary>
+        [Obfuscation(Exclude = true)]
         public Dictionary<int, string> ResidentialDeterminations { get; set; }
     }
 }
