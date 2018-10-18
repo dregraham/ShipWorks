@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Reflection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Editing.Rating;
@@ -130,9 +131,19 @@ namespace ShipWorks.Shipping.Services
         IPackageAdapter AddPackage();
 
         /// <summary>
+        /// Add a new package adapter
+        /// </summary>
+        IPackageAdapter AddPackage(Action<INotifyPropertyChanged> manipulateEntity);
+
+        /// <summary>
         /// Delete the specified package from the shipment
         /// </summary>
         void DeletePackage(IPackageAdapter package);
+
+        /// <summary>
+        /// Delete the specified package from the shipment
+        /// </summary>
+        void DeletePackage(IPackageAdapter package, Action<INotifyPropertyChanged> manipulateEntity);
 
         /// <summary>
         /// Add a new customs item

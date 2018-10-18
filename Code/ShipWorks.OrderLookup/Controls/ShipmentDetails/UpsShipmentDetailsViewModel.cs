@@ -41,7 +41,7 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
         private IEnumerable<KeyValuePair<int, string>> serviceTypes;
         private System.Collections.ObjectModel.ObservableCollection<IPackageAdapter> packages;
         private IPackageAdapter selectedPackage;
-
+        
         /// <summary>
         /// Constructor
         /// </summary>
@@ -88,7 +88,7 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
             }
 
             IPackageAdapter packageAdapter = SelectedPackage;
-            ShipmentModel.ShipmentAdapter.DeletePackage(packageAdapter);
+            ShipmentModel.ShipmentAdapter.DeletePackage(packageAdapter, p => ShipmentModel.UnwirePropertyChangedEvent(p));
 
             int location = Packages.IndexOf(packageAdapter);
             SelectedPackage = Packages.Last() == packageAdapter ?
@@ -115,7 +115,8 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
         /// </summary>
         private void AddPackageAction()
         {
-            IPackageAdapter newPackage = ShipmentModel.ShipmentAdapter.AddPackage();
+            IPackageAdapter newPackage = ShipmentModel.ShipmentAdapter.AddPackage(p=> ShipmentModel.WirePropertyChangedEvent(p));
+            
             Packages.Add(newPackage);
             SelectedPackage = newPackage;
 
