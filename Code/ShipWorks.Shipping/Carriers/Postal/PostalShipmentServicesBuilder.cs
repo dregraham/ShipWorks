@@ -1,7 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using ShipWorks.Data.Model.EntityClasses;
 using Interapptive.Shared.Collections;
+using Interapptive.Shared.Utility;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Settings;
 
 namespace ShipWorks.Shipping.Carriers.Postal
@@ -33,7 +34,10 @@ namespace ShipWorks.Shipping.Carriers.Postal
             bool allInternational = overriddenShipments.None(s => s.ShipPerson.IsDomesticCountry());
             bool allDomestic = overriddenShipments.All(s => s.ShipPerson.IsDomesticCountry());
 
-            List<PostalServiceType> availableServices = shipmentType.GetAvailableServiceTypes(excludedServiceTypeRepository).Select(s => (PostalServiceType)s).ToList();
+            List<PostalServiceType> availableServices = shipmentType.GetAvailableServiceTypes(excludedServiceTypeRepository)
+                .Cast<PostalServiceType>()
+                .Where(x => EnumHelper.GetDeprecated(x) == false)
+                .ToList();
 
             // If they are all international we can load up all the international services
             if (allInternational)
@@ -54,7 +58,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
                 }
 
                 // Bind the drop down to the international services
-                return internationalServicesToLoad.ToDictionary(s => (int)s, PostalUtility.GetPostalServiceTypeDescription);
+                return internationalServicesToLoad.ToDictionary(s => (int) s, PostalUtility.GetPostalServiceTypeDescription);
             }
 
             // If they are all domestic we can load up all the domestic services
@@ -68,10 +72,10 @@ namespace ShipWorks.Shipping.Carriers.Postal
                 {
                     // Always include the service type that the shipment is currently configured in the
                     // event the shipment was configured prior to a service being excluded
-                    domesticServicesToLoad = domesticServicesToLoad.Union(allDomesticServices.Intersect(new List<PostalServiceType> { (PostalServiceType)shipments.First().Postal.Service })).ToList();
+                    domesticServicesToLoad = domesticServicesToLoad.Union(allDomesticServices.Intersect(new List<PostalServiceType> { (PostalServiceType) shipments.First().Postal.Service })).ToList();
                 }
 
-                return domesticServicesToLoad.ToDictionary(s => (int)s, PostalUtility.GetPostalServiceTypeDescription);
+                return domesticServicesToLoad.ToDictionary(s => (int) s, PostalUtility.GetPostalServiceTypeDescription);
             }
 
             // Otherwise there is nothing to choose from

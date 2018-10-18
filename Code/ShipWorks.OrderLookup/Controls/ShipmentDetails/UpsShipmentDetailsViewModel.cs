@@ -41,7 +41,6 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
         private IEnumerable<KeyValuePair<int, string>> serviceTypes;
         private System.Collections.ObjectModel.ObservableCollection<IPackageAdapter> packages;
         private IPackageAdapter selectedPackage;
-        private UpsPackageEntity actualSelectedPackage;
 
         /// <summary>
         /// Constructor
