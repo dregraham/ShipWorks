@@ -1,7 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using Autofac.Extras.Moq;
 using Interapptive.Shared.Threading;
 using Moq;
+using ShipWorks.Core.Messaging.Messages.Shipping;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Messaging.Messages;
 using ShipWorks.Shipping.Services;
 using ShipWorks.Shipping.UI.ShippingPanel;
 using ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations;
@@ -41,7 +45,23 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ObservableRegistrations
         [InlineData(true, "Domestic")]
         public void Register_SetsTextCorrectly_DependingOnIsDomestic(bool isDomestic, string expectedText)
         {
+            var shipmentAdapter = mock.Mock<ICarrierShipmentAdapter>();
+            shipmentAdapter.SetupGet(s => s.Shipment).Returns(new ShipmentEntity());
+
             var viewModel = mock.Create<ShippingPanelViewModel>();
+
+            LoadedOrderSelection LoadedOrderSelection = new LoadedOrderSelection(
+                new OrderEntity(),
+                new[] { shipmentAdapter.Object },
+                new KeyValuePair<long, ShippingAddressEditStateType>[] { new KeyValuePair<long, ShippingAddressEditStateType>(1, ShippingAddressEditStateType.Editable) });
+
+            viewModel.LoadOrder(new OrderSelectionChangedMessage(this, new IOrderSelection[] { LoadedOrderSelection }));
+            viewModel.LoadShipment(shipmentAdapter.Object);
+
+            // Force the property to be different from what we set it to a few lines down
+            // this ensures that the test object gets notified of the property changing
+            viewModel.IsDomestic = !isDomestic;
+
             var testObject = mock.Create<DomesticInternationalDisplayPipeline>();
             testObject.Register(viewModel);
 
