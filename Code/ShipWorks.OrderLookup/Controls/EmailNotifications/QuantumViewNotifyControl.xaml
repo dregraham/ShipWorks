@@ -217,7 +217,7 @@
                 Grid.ColumnSpan="4"
                 MinLines="3"
                 Style="{StaticResource MultiLineFormTextBox}"
-                Text="{Binding ShipmentModel.ShipmentAdapter.Shipment.Ups.EmailNotifyMessage}" 
+                Text="{Binding ShipmentModel.ShipmentAdapter.Shipment.Ups.EmailNotifyMessage, UpdateSourceTrigger=PropertyChanged}" 
                 TextWrapping="Wrap"
                 AcceptsReturn="True" />
         </Grid>
