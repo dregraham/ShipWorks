@@ -37,9 +37,10 @@
         </Grid.RowDefinitions>
         <TextBlock TextWrapping="Wrap"
                    Margin="0 0 0 10"
-                   Text="These settings are for email sent from UPS. This is separate from, and in addition to, any email configured to be sent by ShipWorks."/>
+                   Text="These settings are for email sent from UPS. This is separate from and in addition to any email configured to be sent by ShipWorks."/>
         <Grid Grid.Row="1">
             <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
@@ -70,7 +71,7 @@
             <TextBlock Grid.Row="0" Grid.Column="4"
                        Text="Delivery"
                        HorizontalAlignment="Center"/>
-            
+
             <Line Grid.Row="1" 
                   Grid.Column="0"
                   Grid.ColumnSpan="5"
@@ -89,7 +90,7 @@
                       IsChecked="{Binding Sender, 
                                           Converter={StaticResource EnumFlagConverter},                                          
                                           ConverterParameter={x:Static enums:UpsEmailNotificationType.Ship}}"/>
-            
+
             <CheckBox Grid.Row="2" Grid.Column="3"
                       IsChecked="{Binding Sender, 
                                           Converter={StaticResource EnumFlagConverter},
@@ -98,7 +99,7 @@
                       IsChecked="{Binding Sender, 
                                           Converter={StaticResource EnumFlagConverter},
                                           ConverterParameter={x:Static enums:UpsEmailNotificationType.Deliver}}"/>
-            
+
             <!-- Recipient row-->
             <TextBlock Grid.Row="3" Grid.Column="0"
                        Text="Recipient"
@@ -141,7 +142,7 @@
                       IsChecked="{Binding Other, 
                                           Converter={StaticResource EnumFlagConverter},
                                           ConverterParameter={x:Static enums:UpsEmailNotificationType.Deliver}}"/>
-            
+
             <Line Grid.Row="5"
                   Grid.Column="0"
                   Grid.ColumnSpan="5"
@@ -150,7 +151,7 @@
                   Stroke="DarkGray" 
                   StrokeThickness="1" 
                   Stretch="Uniform"/>
-            
+
             <!-- From Name -->
             <TextBlock Grid.Row="6" Grid.Column="0"
                        Text="From Name"
@@ -171,18 +172,19 @@
                                   Style="{StaticResource FormComboBox}"
                                   SelectedValuePath="Key"
                                   DisplayMemberPath="Value"/>
-        </Grid>
 
-        <!-- Personal Message -->
-        <TextBlock Grid.Row="2"
+            <!-- Personal Message -->
+            <TextBlock Grid.Row="8"
                    Text="Personal Message (Optional)" 
                    Style="{StaticResource FieldLabel}"
-                   HorizontalAlignment="Left"
-                   Margin="0"/>
-        <TextBox Grid.Row="3"
+                   HorizontalAlignment="Left"/>
+            <TextBox Grid.Row="8"
+                     Grid.Column="1"
+                     Grid.ColumnSpan="4"
                  Style="{StaticResource MultiLineFormTextBox}"
                  MinLines="3"
-                 Margin="0"
+
                  Text="{Binding ShipmentModel.ShipmentAdapter.Shipment.Ups.EmailNotifyMessage}"/>
+        </Grid>
     </Grid>
 </UserControl>
