@@ -54,41 +54,6 @@ namespace ShipWorks.Shipping.Services
             Debug.Assert(subscription == null, "Subscription is already initialized");
             EndSession();
 
-            var changedOrders = messenger.OfType<OrderSelectionChangedMessage>()
-                .SelectMany(x => x.LoadedOrderSelection)
-                .OfType<LoadedOrderSelection>()
-                .Select(x => x.ShipmentAdapters.FirstOrDefault())
-                .Where(x => x != null)
-                .Select(x => (
-                    HashingService: rateHashingServiceLookup[x.ShipmentTypeCode],
-                    ShipmentAdapter: x,
-                    OnAfterClone: (Action<ICarrierShipmentAdapter>) null
-                ));
-
-            var changedShipments = messenger.OfType<ShipmentChangedMessage>()
-                .Where(x => x.ShipmentAdapter != null && !(x.Sender is GridProviderDisplayType))
-                .Select(x => new
-                {
-                    Message = x,
-                    HashingService = rateHashingServiceLookup[x.ShipmentAdapter.ShipmentTypeCode],
-                })
-                .Where(x => string.IsNullOrEmpty(x.Message.ChangedField) || x.HashingService.IsRatingField(x.Message.ChangedField))
-                .Select(x =>
-                (
-                    HashingService: x.HashingService,
-                    ShipmentAdapter: x.Message.ShipmentAdapter,
-                    OnAfterClone: x.Message.OnAfterClone
-                ));
-
-            var selectedShipments = messenger.OfType<ShipmentSelectionChangedMessage>()
-                .Where(x => x.SelectedShipment != null)
-                .Select(x =>
-                (
-                    HashingService: rateHashingServiceLookup[x.SelectedShipment.ShipmentTypeCode],
-                    ShipmentAdapter: x.SelectedShipment,
-                    OnAfterClone: (Action<ICarrierShipmentAdapter>) null
-                ));
-
             multipleSelectionSubscription = messenger.OfType<ShipmentSelectionChangedMessage>()
                 .Where(x => x.SelectedShipmentIDs.IsCountGreaterThan(1))
                 .Do(_ => messenger.Send(new RatesNotSupportedMessage(this, "Unable to get rates for multiple shipments.")))
@@ -97,9 +62,9 @@ namespace ShipWorks.Shipping.Services
             // Ignore shipment changes from the GridProvider. This means someone changed the carrier from the
             // shipments panel, and if it is for the current shipment, we'll get another request for rates from
             // the shipping panel
-            subscription = changedShipments
-                .Merge(changedOrders)
-                .Merge(selectedShipments)
+            subscription = ChangedShipments()
+                .Merge(ChangedOrders())
+                .Merge(SelectedShipment())
                 .Select(x => new
                 {
                     ShipmentAdapter = CloneAdapter(x.ShipmentAdapter, x.OnAfterClone),
@@ -120,6 +85,59 @@ namespace ShipWorks.Shipping.Services
 
             // Clear the Rates UI after login
             messenger.Send(new RatesNotSupportedMessage(this, string.Empty));
+        }
+
+        /// <summary>
+        /// Subscribe to shipment selection changes
+        /// </summary>
+        private IObservable<(IRateHashingService HashingService, ICarrierShipmentAdapter ShipmentAdapter, Action<ICarrierShipmentAdapter> OnAfterClone)> SelectedShipment()
+        {
+            return messenger.OfType<ShipmentSelectionChangedMessage>()
+                .Where(x => x.SelectedShipment != null)
+                .Select(x =>
+                (
+                    HashingService: rateHashingServiceLookup[x.SelectedShipment.ShipmentTypeCode],
+                    ShipmentAdapter: x.SelectedShipment,
+                    OnAfterClone: (Action<ICarrierShipmentAdapter>) null
+                ));
+        }
+
+        /// <summary>
+        /// Subscribe to shipment changed messages
+        /// </summary>
+        private IObservable<(IRateHashingService HashingService, ICarrierShipmentAdapter ShipmentAdapter, Action<ICarrierShipmentAdapter> OnAfterClone)> ChangedShipments()
+        {
+            return messenger.OfType<ShipmentChangedMessage>()
+                .Where(x => x.ShipmentAdapter != null && !(x.Sender is GridProviderDisplayType))
+                .Select(x => new
+                {
+                    Message = x,
+                    HashingService = rateHashingServiceLookup[x.ShipmentAdapter.ShipmentTypeCode],
+                })
+                .Where(x => string.IsNullOrEmpty(x.Message.ChangedField) || x.HashingService.IsRatingField(x.Message.ChangedField))
+                .Select(x =>
+                (
+                    HashingService: x.HashingService,
+                    ShipmentAdapter: x.Message.ShipmentAdapter,
+                    OnAfterClone: x.Message.OnAfterClone
+                ));
+        }
+
+        /// <summary>
+        /// Subscribe to ORderSelctionChanged messages
+        /// </summary>
+        private IObservable<(IRateHashingService HashingService, ICarrierShipmentAdapter ShipmentAdapter, Action<ICarrierShipmentAdapter> OnAfterClone)> ChangedOrders()
+        {
+            return messenger.OfType<OrderSelectionChangedMessage>()
+                .SelectMany(x => x.LoadedOrderSelection)
+                .OfType<LoadedOrderSelection>()
+                .Select(x => x.ShipmentAdapters.FirstOrDefault())
+                .Where(x => x != null)
+                .Select(x => (
+                    HashingService: rateHashingServiceLookup[x.ShipmentTypeCode],
+                    ShipmentAdapter: x,
+                    OnAfterClone: (Action<ICarrierShipmentAdapter>) null
+                ));
         }
 
         /// <summary>
