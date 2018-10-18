@@ -29,7 +29,7 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
     [WpfView(typeof(UpsShipmentDetailsControl))]
     public class UpsShipmentDetailsViewModel : IDetailsViewModel, INotifyPropertyChanged, IDataErrorInfo
     {
-        const int MaxPackageCount = 25;
+        private const int MaxPackageCount = 25;
         public event PropertyChangedEventHandler PropertyChanged;
         private readonly PropertyChangedHandler handler;
         private readonly Func<DimensionsManagerDlg> getDimensionsManagerDlg;
@@ -39,7 +39,7 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
         private IEnumerable<KeyValuePair<int, string>> packageTypes;
         private IEnumerable<KeyValuePair<int, string>> confirmationTypes;
         private IEnumerable<KeyValuePair<int, string>> serviceTypes;
-        System.Collections.ObjectModel.ObservableCollection<IPackageAdapter> packages;
+        private System.Collections.ObjectModel.ObservableCollection<IPackageAdapter> packages;
         private IPackageAdapter selectedPackage;
         private UpsPackageEntity actualSelectedPackage;
 
