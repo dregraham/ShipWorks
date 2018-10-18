@@ -105,6 +105,8 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
                 Packages[i].Index = i + 1;
             }
 
+            handler.RaisePropertyChanged(nameof(Packages));
+
             AddPackageCommand.RaiseCanExecuteChanged();
             DeletePackageCommand.RaiseCanExecuteChanged();
         }
@@ -119,6 +121,8 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
             SelectedPackage = newPackage;
 
             RefreshInsurance();
+
+            handler.RaisePropertyChanged(nameof(Packages));
 
             AddPackageCommand.RaiseCanExecuteChanged();
             DeletePackageCommand.RaiseCanExecuteChanged();

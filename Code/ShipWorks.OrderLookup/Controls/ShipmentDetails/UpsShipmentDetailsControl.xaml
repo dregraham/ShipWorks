@@ -124,20 +124,17 @@
             <ListBox Grid.Row="0"
                 Grid.RowSpan="2"
                 Grid.Column="1"
-                     AlternationCount="100"
                 ItemsSource="{Binding Packages, UpdateSourceTrigger=PropertyChanged}"
                 SelectedItem="{Binding SelectedPackage, UpdateSourceTrigger=PropertyChanged}"
                 Margin="10 0 0 10"
                 MinHeight="70"
                 MaxHeight="104"
                 SelectionMode="Single">
-
                 <ListBox.ItemTemplate>
                     <DataTemplate>
                         <TextBlock Text="{Binding Index, StringFormat=Package \{0\}}" />
                     </DataTemplate>
                 </ListBox.ItemTemplate>
-
             </ListBox>
 
             <!-- Add package button -->
