@@ -152,7 +152,7 @@ namespace ShipWorks.OrderLookup
 
             if (ShipmentAdapter?.Shipment != null)
             {
-                messenger.Send(new ShipmentChangedMessage(this, ShipmentAdapter, propertyName));
+                messenger.Send(new ShipmentChangedMessage(this, ShipmentAdapter, propertyName, RemovePropertyChangedEventsFromEntities));
             }
         }
 
@@ -190,14 +190,14 @@ namespace ShipWorks.OrderLookup
         /// </summary>
         public void RefreshShipmentFromDatabase()
         {
-            RemovePropertyChangedEventsFromEntities();
+            RemovePropertyChangedEventsFromEntities(ShipmentAdapter);
 
             shippingManager.RefreshShipment(ShipmentAdapter.Shipment);
             ShipmentAdapter = shippingManager.GetShipmentAdapter(ShipmentAdapter.Shipment);
 
             RefreshProperties();
 
-            AddPropertyChangedEventsToEntities(ShipmentAdapter.ShipmentTypeCode);
+            AddPropertyChangedEventsToEntities(ShipmentAdapter, ShipmentAdapter.ShipmentTypeCode);
             RaisePropertyChanged(null);
         }
 
@@ -239,7 +239,7 @@ namespace ShipWorks.OrderLookup
                 return;
             }
 
-            RemovePropertyChangedEventsFromEntities();
+            RemovePropertyChangedEventsFromEntities(ShipmentAdapter);
 
             if ((order.Shipments?.Count ?? 0) > 0)
             {
@@ -257,7 +257,7 @@ namespace ShipWorks.OrderLookup
                 RefreshProperties();
             }
 
-            AddPropertyChangedEventsToEntities(ShipmentAdapter.ShipmentTypeCode);
+            AddPropertyChangedEventsToEntities(ShipmentAdapter, ShipmentAdapter.ShipmentTypeCode);
 
             RaisePropertyChanged(nameof(ShipmentTypeCode));
 
@@ -274,7 +274,7 @@ namespace ShipWorks.OrderLookup
         /// </summary>
         private void ClearOrder()
         {
-            RemovePropertyChangedEventsFromEntities();
+            RemovePropertyChangedEventsFromEntities(ShipmentAdapter);
 
             ShipmentAdapter = null;
             ShipmentAllowEditing = false;
@@ -298,10 +298,10 @@ namespace ShipWorks.OrderLookup
         /// <summary>
         /// Add property change event handlers
         /// </summary>
-        private void AddPropertyChangedEventsToEntities(ShipmentTypeCode shipmentTypeCode) =>
+        private void AddPropertyChangedEventsToEntities(ICarrierShipmentAdapter adapter, ShipmentTypeCode shipmentTypeCode) =>
             eventEntities
                 .Where(x => x.isApplicableFor(shipmentTypeCode))
-                .Select(x => x.getEntity(ShipmentAdapter))
+                .Select(x => x.getEntity(adapter))
                 .Where(x => x != null)
                 .ForEach(x => x.PropertyChanged += RaisePropertyChanged);
 
@@ -311,9 +311,9 @@ namespace ShipWorks.OrderLookup
         /// <remarks>
         /// We're purposely removing the property changed handler from ALL shipment type entities because
         /// it's safe to do and because we might not know what the previous shipment type was</remarks>
-        private void RemovePropertyChangedEventsFromEntities() =>
+        private void RemovePropertyChangedEventsFromEntities(ICarrierShipmentAdapter adapter) =>
             eventEntities
-                .Select(x => x.getEntity(ShipmentAdapter))
+                .Select(x => x.getEntity(adapter))
                 .Where(x => x != null)
                 .ForEach(x => x.PropertyChanged -= RaisePropertyChanged);
 
@@ -334,12 +334,12 @@ namespace ShipWorks.OrderLookup
                 // then add handlers to the possibly new entities.
                 using (handler.SuppressChangeNotifications())
                 {
-                    RemovePropertyChangedEventsFromEntities();
+                    RemovePropertyChangedEventsFromEntities(ShipmentAdapter);
 
                     ShipmentAdapter = shippingManager.ChangeShipmentType(value, ShipmentAdapter.Shipment);
                     RefreshProperties();
 
-                    AddPropertyChangedEventsToEntities(value);
+                    AddPropertyChangedEventsToEntities(ShipmentAdapter, value);
                 }
 
                 RaisePropertyChanged(nameof(OrderLookupShipmentModel));

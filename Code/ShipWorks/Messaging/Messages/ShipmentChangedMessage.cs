@@ -31,6 +31,18 @@ namespace ShipWorks.Messaging.Messages
         }
 
         /// <summary>
+        /// Constructor
+        /// </summary>
+        public ShipmentChangedMessage(object sender, ICarrierShipmentAdapter shipment, string changedField, Action<ICarrierShipmentAdapter> onAfterClone)
+        {
+            Sender = sender;
+            ShipmentAdapter = shipment;
+            ChangedField = changedField;
+            MessageId = Guid.NewGuid();
+            OnAfterClone = onAfterClone;
+        }
+
+        /// <summary>
         /// Originator of the message
         /// </summary>
         public object Sender { get; }
@@ -49,5 +61,10 @@ namespace ShipWorks.Messaging.Messages
         /// The field that has changed
         /// </summary>
         public string ChangedField { get; }
+
+        /// <summary>
+        /// Perform an action after a clone
+        /// </summary>
+        public Action<ICarrierShipmentAdapter> OnAfterClone { get; }
     }
 }
