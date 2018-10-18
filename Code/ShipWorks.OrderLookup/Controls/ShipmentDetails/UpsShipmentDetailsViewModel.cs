@@ -267,36 +267,16 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
             get => selectedPackage;
             set
             {
-                if (actualSelectedPackage != null)
-                {
-                    actualSelectedPackage.PropertyChanged -= SelectedPackagePropertyChanged;
-                }
-
                 if (value == null)
                 {
                     value = Packages.First();
                 }
 
                 handler.Set(nameof(SelectedPackage), ref selectedPackage, value);
-
-                actualSelectedPackage = ShipmentModel.ShipmentAdapter.Shipment.Ups.Packages.FirstOrDefault(p => p.UpsPackageID == SelectedPackage.PackageId);
-                if (actualSelectedPackage != null)
-                {
-                    actualSelectedPackage.PropertyChanged += SelectedPackagePropertyChanged;
-                }
-
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(SelectedPackageWeight)));
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(SelectedPackageDimsProfileID)));
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsProfileSelected)));
             }
-        }
-
-        /// <summary>
-        /// Bubble up packages changing so that rates refresh
-        /// </summary>
-        private void SelectedPackagePropertyChanged(object sender, PropertyChangedEventArgs e)
-        {
-            ShipmentModel.RaisePropertyChanged(e.PropertyName);
         }
 
         /// <summary>
