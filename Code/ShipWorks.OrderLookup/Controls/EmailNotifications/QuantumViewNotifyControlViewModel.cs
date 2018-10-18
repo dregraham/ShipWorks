@@ -22,6 +22,9 @@ namespace ShipWorks.OrderLookup.Controls.EmailNotifications
         private readonly PropertyChangedHandler handler;
         private Dictionary<int, string> subjectTypes;
 
+        /// <summary>
+        /// Ctor
+        /// </summary>
         public QuantumViewNotifyControlViewModel(IOrderLookupShipmentModel shipmentModel)
         {
             ShipmentModel = shipmentModel;

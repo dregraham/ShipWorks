@@ -172,7 +172,7 @@
     </Compile>
     <Compile Include="Controls\Reference\EndiciaReferenceViewModel.cs" />
     <Compile Include="Controls\ShipmentDetails\ICarrierShipmentAdapterOptionsProvider.cs" />
-    <Compile Include="Controls\Reference\ReferenceViewModelBase.cs" />
+    <Compile Include="Controls\Reference\GenericReferenceViewModel.cs" />
     <Compile Include="Controls\Reference\UpsReferenceControl.xaml.cs">
       <DependentUpon>UpsReferenceControl.xaml</DependentUpon>
     </Compile>
