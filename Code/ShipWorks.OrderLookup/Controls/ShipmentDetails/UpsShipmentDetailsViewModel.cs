@@ -18,6 +18,7 @@ using ShipWorks.Shipping.Carriers.UPS.Enums;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Services;
 using ShipWorks.Shipping.UI.ShippingPanel;
+using ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl;
 using ShipWorks.UI;
 
 namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
@@ -39,9 +40,9 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
         private IEnumerable<KeyValuePair<int, string>> packageTypes;
         private IEnumerable<KeyValuePair<int, string>> confirmationTypes;
         private IEnumerable<KeyValuePair<int, string>> serviceTypes;
-        private System.Collections.ObjectModel.ObservableCollection<IPackageAdapter> packages;
-        private IPackageAdapter selectedPackage;
-        
+        private System.Collections.ObjectModel.ObservableCollection<PackageAdapterWrapper> packages;
+        private PackageAdapterWrapper selectedPackage;
+
         /// <summary>
         /// Constructor
         /// </summary>
@@ -63,7 +64,7 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
             DeletePackageCommand = new RelayCommand(DeletePackageAction,
                 () => SelectedPackage != null && Packages.Count > 1);
 
-            Packages = new System.Collections.ObjectModel.ObservableCollection<IPackageAdapter>(ShipmentModel.PackageAdapters);
+            Packages = new System.Collections.ObjectModel.ObservableCollection<PackageAdapterWrapper>(ShipmentModel.PackageAdapters.Select(x => new PackageAdapterWrapper(x)));
             SelectedPackage = Packages.FirstOrDefault();
 
             RefreshDimensionalProfiles();
@@ -87,8 +88,8 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
                 return;
             }
 
-            IPackageAdapter packageAdapter = SelectedPackage;
-            ShipmentModel.ShipmentAdapter.DeletePackage(packageAdapter, p => ShipmentModel.UnwirePropertyChangedEvent(p));
+            PackageAdapterWrapper packageAdapter = SelectedPackage;
+            ShipmentModel.ShipmentAdapter.DeletePackage(packageAdapter.WrappedAdapter, p => ShipmentModel.UnwirePropertyChangedEvent(p));
 
             int location = Packages.IndexOf(packageAdapter);
             SelectedPackage = Packages.Last() == packageAdapter ?
@@ -104,7 +105,7 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
                 Packages[i].Index = i + 1;
             }
 
-            handler.RaisePropertyChanged(nameof(Packages));
+            handler.RaisePropertyChanged(nameof(ShipmentModel));
 
             AddPackageCommand.RaiseCanExecuteChanged();
             DeletePackageCommand.RaiseCanExecuteChanged();
@@ -115,14 +116,12 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
         /// </summary>
         private void AddPackageAction()
         {
-            IPackageAdapter newPackage = ShipmentModel.ShipmentAdapter.AddPackage(p=> ShipmentModel.WirePropertyChangedEvent(p));
-            
+            PackageAdapterWrapper newPackage = new PackageAdapterWrapper(ShipmentModel.ShipmentAdapter.AddPackage(p => ShipmentModel.WirePropertyChangedEvent(p)));
+
             Packages.Add(newPackage);
             SelectedPackage = newPackage;
 
             RefreshInsurance();
-
-            handler.RaisePropertyChanged(nameof(Packages));
 
             AddPackageCommand.RaiseCanExecuteChanged();
             DeletePackageCommand.RaiseCanExecuteChanged();
@@ -252,7 +251,7 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
         /// Collection of packages
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public System.Collections.ObjectModel.ObservableCollection<IPackageAdapter> Packages
+        public System.Collections.ObjectModel.ObservableCollection<PackageAdapterWrapper> Packages
         {
             get => packages;
             set => handler.Set(nameof(Packages), ref packages, value);
@@ -262,7 +261,7 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
         /// Collection of packages
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public IPackageAdapter SelectedPackage
+        public PackageAdapterWrapper SelectedPackage
         {
             get => selectedPackage;
             set
@@ -348,7 +347,7 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
             if (e.PropertyName == nameof(ShipmentModel.PackageAdapters) && ShipmentModel.PackageAdapters != null)
             {
                 int selectedIndex = Packages.IndexOf(SelectedPackage);
-                Packages = new System.Collections.ObjectModel.ObservableCollection<IPackageAdapter>(ShipmentModel.PackageAdapters);
+                Packages = new System.Collections.ObjectModel.ObservableCollection<PackageAdapterWrapper>(ShipmentModel.PackageAdapters.Select(x => new PackageAdapterWrapper(x)));
 
                 if (Packages.IsCountGreaterThan(selectedIndex))
                 {
