@@ -2,12 +2,9 @@
 using Interapptive.Shared.Enums;
 using ShipWorks.AddressValidation.Enums;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Carriers.Postal;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using ShipWorks.Shipping.Services;
 
 namespace ShipWorks.AddressValidation
 {
@@ -31,7 +28,7 @@ namespace ShipWorks.AddressValidation
         /// </summary>
         public static bool ShouldAutoValidate(AddressValidationStoreSettingType storeSettingStatus)
         {
-            return storeSettingStatus == AddressValidationStoreSettingType.ValidateAndApply || 
+            return storeSettingStatus == AddressValidationStoreSettingType.ValidateAndApply ||
                 storeSettingStatus == AddressValidationStoreSettingType.ValidateAndNotify;
         }
 
@@ -42,7 +39,7 @@ namespace ShipWorks.AddressValidation
         {
             return storeSettingStatus != AddressValidationStoreSettingType.ValidationDisabled;
         }
-        
+
         /// <summary>
         /// Check to see if the store and address can be validated
         /// </summary>
@@ -53,7 +50,7 @@ namespace ShipWorks.AddressValidation
                 return false;
             }
 
-            if (!ShouldValidate((AddressValidationStatusType)address.AddressValidationStatus))
+            if (!ShouldValidate((AddressValidationStatusType) address.AddressValidationStatus))
             {
                 return false;
             }
@@ -62,7 +59,7 @@ namespace ShipWorks.AddressValidation
         }
 
         /// <summary>
-        /// Should addresses from the given store be auto Validated validated 
+        /// Should addresses from the given store be auto validated 
         /// </summary>
         public static bool ShouldAutoValidate(StoreEntity store, AddressAdapter address)
         {
@@ -81,7 +78,7 @@ namespace ShipWorks.AddressValidation
         /// </summary>
         public static bool ShouldManuallyValidate(StoreEntity store, AddressAdapter address)
         {
-            if(ShouldValidate(store, address))
+            if (ShouldValidate(store, address))
             {
                 return address.IsDomesticCountry() ?
                     ShouldManuallyValidate(store.DomesticAddressValidationSetting) :
@@ -89,6 +86,23 @@ namespace ShipWorks.AddressValidation
             }
 
             return false;
+        }
+
+        /// <summary>
+        /// Is address validation enabled for the given store and shipment
+        /// </summary>
+        public static bool IsValidationEnabled(IStoreEntity store, ICarrierShipmentAdapter shipmentAdapter)
+        {
+            if (store == null || shipmentAdapter == null)
+            {
+                return false;
+            }
+
+            var validationSetting = shipmentAdapter.IsDomestic ?
+                store.DomesticAddressValidationSetting :
+                store.InternationalAddressValidationSetting;
+
+            return validationSetting != AddressValidationStoreSettingType.ValidationDisabled;
         }
     }
 }

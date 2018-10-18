@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.ComponentModel;
 using System.Linq;
 using System.Reactive.Disposables;
@@ -32,23 +33,44 @@ namespace ShipWorks.OrderLookup
         /// I've included all known shipment types (as of October, 2018) so that we don't run into issues when
         /// adding carriers to the order lookup view.
         /// </remarks>
-        private readonly static IEnumerable<(Func<ICarrierShipmentAdapter, INotifyPropertyChanged> getEntity, Func<ShipmentTypeCode, bool> isApplicableFor)> eventEntities =
-            new (Func<ICarrierShipmentAdapter, INotifyPropertyChanged>, Func<ShipmentTypeCode, bool>)[]
+        private readonly static IEnumerable<(Func<ICarrierShipmentAdapter, IEnumerable<INotifyPropertyChanged>> getEntity, Func<ShipmentTypeCode, bool> shouldAttach)> eventEntities =
+            new (Func<ICarrierShipmentAdapter, IEnumerable<INotifyPropertyChanged>>, Func<ShipmentTypeCode, bool>)[]
             {
-                (x => x?.Shipment, x => true),
-                (x => x?.Shipment?.Amazon, x => x == ShipmentTypeCode.Amazon),
-                (x => x?.Shipment?.Asendia, x => x == ShipmentTypeCode.Asendia),
-                (x => x?.Shipment?.BestRate, x => x == ShipmentTypeCode.BestRate),
-                (x => x?.Shipment?.DhlExpress, x => x == ShipmentTypeCode.DhlExpress),
-                (x => x?.Shipment?.FedEx, x => x == ShipmentTypeCode.FedEx),
-                (x => x?.Shipment?.IParcel, x => x == ShipmentTypeCode.iParcel),
-                (x => x?.Shipment?.OnTrac, x => x == ShipmentTypeCode.OnTrac),
-                (x => x?.Shipment?.Other, x => x == ShipmentTypeCode.Other),
-                (x => x?.Shipment?.Postal, PostalUtility.IsPostalShipmentType),
-                (x => x?.Shipment?.Postal?.Usps, x => x == ShipmentTypeCode.Usps || x == ShipmentTypeCode.Express1Usps),
-                (x => x?.Shipment?.Postal?.Endicia, x => x == ShipmentTypeCode.Endicia || x == ShipmentTypeCode.Express1Endicia),
-                (x => x?.Shipment?.Ups, x => x == ShipmentTypeCode.UpsOnLineTools || x == ShipmentTypeCode.UpsWorldShip)
+                RegisterEventEntity(x => x?.Shipment, x => true),
+                RegisterEventEntity(x => x?.Shipment?.Amazon, x => x == ShipmentTypeCode.Amazon),
+                RegisterEventEntity(x => x?.Shipment?.Asendia, x => x == ShipmentTypeCode.Asendia),
+                RegisterEventEntity(x => x?.Shipment?.BestRate, x => x == ShipmentTypeCode.BestRate),
+                RegisterEventEntity(x => x?.Shipment?.DhlExpress, x => x == ShipmentTypeCode.DhlExpress),
+                RegisterEventEntity(x => x?.Shipment?.FedEx, x => x == ShipmentTypeCode.FedEx),
+                RegisterEventEntities(x => x?.Shipment?.FedEx?.Packages, x => x == ShipmentTypeCode.FedEx),
+                RegisterEventEntity(x => x?.Shipment?.IParcel, x => x == ShipmentTypeCode.iParcel),
+                RegisterEventEntities(x => x?.Shipment?.IParcel?.Packages, x => x == ShipmentTypeCode.iParcel),
+                RegisterEventEntity(x => x?.Shipment?.OnTrac, x => x == ShipmentTypeCode.OnTrac),
+                RegisterEventEntity(x => x?.Shipment?.Other, x => x == ShipmentTypeCode.Other),
+                RegisterEventEntity(x => x?.Shipment?.Postal, PostalUtility.IsPostalShipmentType),
+                RegisterEventEntity(x => x?.Shipment?.Postal?.Usps, x => x == ShipmentTypeCode.Usps || x == ShipmentTypeCode.Express1Usps),
+                RegisterEventEntity(x => x?.Shipment?.Postal?.Endicia, x => x == ShipmentTypeCode.Endicia || x == ShipmentTypeCode.Express1Endicia),
+                RegisterEventEntity(x => x?.Shipment?.Ups, x => x == ShipmentTypeCode.UpsOnLineTools || x == ShipmentTypeCode.UpsWorldShip),
+                RegisterEventEntities(x => x?.Shipment?.Ups?.Packages, x => x == ShipmentTypeCode.UpsOnLineTools || x == ShipmentTypeCode.UpsWorldShip)
             };
+
+        /// <summary>
+        /// Register an entity that can have property events wired
+        /// </summary>
+        private static (Func<ICarrierShipmentAdapter, IEnumerable<T>>, Func<ShipmentTypeCode, bool>) RegisterEventEntity<T>(Func<ICarrierShipmentAdapter, T> getEntity, Func<ShipmentTypeCode, bool> shouldAttach) where T : INotifyPropertyChanged =>
+            RegisterEventEntities(x => new[] { getEntity(x) }, shouldAttach);
+
+        /// <summary>
+        /// Register entities that can have property events wired
+        /// </summary>
+        private static (Func<ICarrierShipmentAdapter, IEnumerable<T>>, Func<ShipmentTypeCode, bool>) RegisterEventEntities<T>(Func<ICarrierShipmentAdapter, IEnumerable<T>> getEntity, Func<ShipmentTypeCode, bool> shouldAttach) where T : INotifyPropertyChanged
+        {
+            registeredEventEntityTypes = (registeredEventEntityTypes ?? ImmutableHashSet<Type>.Empty).Add(typeof(T));
+
+            return (getEntity, shouldAttach);
+        }
+
+        private static ImmutableHashSet<Type> registeredEventEntityTypes;
 
         private readonly IMessenger messenger;
         private readonly IShippingManager shippingManager;
@@ -152,7 +174,7 @@ namespace ShipWorks.OrderLookup
 
             if (ShipmentAdapter?.Shipment != null)
             {
-                messenger.Send(new ShipmentChangedMessage(this, ShipmentAdapter, propertyName));
+                messenger.Send(new ShipmentChangedMessage(this, ShipmentAdapter, propertyName, RemovePropertyChangedEventsFromEntities));
             }
         }
 
@@ -190,14 +212,14 @@ namespace ShipWorks.OrderLookup
         /// </summary>
         public void RefreshShipmentFromDatabase()
         {
-            RemovePropertyChangedEventsFromEntities();
+            RemovePropertyChangedEventsFromEntities(ShipmentAdapter);
 
             shippingManager.RefreshShipment(ShipmentAdapter.Shipment);
             ShipmentAdapter = shippingManager.GetShipmentAdapter(ShipmentAdapter.Shipment);
 
             RefreshProperties();
 
-            AddPropertyChangedEventsToEntities(ShipmentAdapter.ShipmentTypeCode);
+            AddPropertyChangedEventsToEntities(ShipmentAdapter, ShipmentAdapter.ShipmentTypeCode);
             RaisePropertyChanged(null);
         }
 
@@ -239,7 +261,7 @@ namespace ShipWorks.OrderLookup
                 return;
             }
 
-            RemovePropertyChangedEventsFromEntities();
+            RemovePropertyChangedEventsFromEntities(ShipmentAdapter);
 
             if ((order.Shipments?.Count ?? 0) > 0)
             {
@@ -257,7 +279,7 @@ namespace ShipWorks.OrderLookup
                 RefreshProperties();
             }
 
-            AddPropertyChangedEventsToEntities(ShipmentAdapter.ShipmentTypeCode);
+            AddPropertyChangedEventsToEntities(ShipmentAdapter, ShipmentAdapter.ShipmentTypeCode);
 
             RaisePropertyChanged(nameof(ShipmentTypeCode));
 
@@ -270,11 +292,42 @@ namespace ShipWorks.OrderLookup
         }
 
         /// <summary>
+        /// Wire a property changed event on an INotifyPropertyChanged object
+        /// </summary>
+        public void WirePropertyChangedEvent(INotifyPropertyChanged eventObject)
+        {
+            if (eventObject == null)
+            {
+                return;
+            }
+
+            if (!registeredEventEntityTypes.Contains(eventObject.GetType()))
+            {
+                throw new InvalidOperationException($"Cannot wire events for {eventObject.GetType()} because it is not an entity type that will be unwired");
+            }
+
+            eventObject.PropertyChanged += RaisePropertyChanged;
+        }
+
+        /// <summary>
+        /// Unwire property changed event on an INotifyPropertyChanged object
+        /// </summary>
+        public void UnwirePropertyChangedEvent(INotifyPropertyChanged eventObject)
+        {
+            if (eventObject == null)
+            {
+                return;
+            }
+
+            eventObject.PropertyChanged -= RaisePropertyChanged;
+        }
+
+        /// <summary>
         /// Clear the order
         /// </summary>
         private void ClearOrder()
         {
-            RemovePropertyChangedEventsFromEntities();
+            RemovePropertyChangedEventsFromEntities(ShipmentAdapter);
 
             ShipmentAdapter = null;
             ShipmentAllowEditing = false;
@@ -298,12 +351,12 @@ namespace ShipWorks.OrderLookup
         /// <summary>
         /// Add property change event handlers
         /// </summary>
-        private void AddPropertyChangedEventsToEntities(ShipmentTypeCode shipmentTypeCode) =>
+        private void AddPropertyChangedEventsToEntities(ICarrierShipmentAdapter adapter, ShipmentTypeCode shipmentTypeCode) =>
             eventEntities
-                .Where(x => x.isApplicableFor(shipmentTypeCode))
-                .Select(x => x.getEntity(ShipmentAdapter))
-                .Where(x => x != null)
-                .ForEach(x => x.PropertyChanged += RaisePropertyChanged);
+                .Where(x => x.shouldAttach(shipmentTypeCode))
+                .Select(x => x.getEntity(adapter))
+                .SelectMany(x => x ?? Enumerable.Empty<INotifyPropertyChanged>())
+                .ForEach(WirePropertyChangedEvent);
 
         /// <summary>
         /// Remove property changed events from shipment entities
@@ -311,11 +364,11 @@ namespace ShipWorks.OrderLookup
         /// <remarks>
         /// We're purposely removing the property changed handler from ALL shipment type entities because
         /// it's safe to do and because we might not know what the previous shipment type was</remarks>
-        private void RemovePropertyChangedEventsFromEntities() =>
+        private void RemovePropertyChangedEventsFromEntities(ICarrierShipmentAdapter adapter) =>
             eventEntities
-                .Select(x => x.getEntity(ShipmentAdapter))
-                .Where(x => x != null)
-                .ForEach(x => x.PropertyChanged -= RaisePropertyChanged);
+                .Select(x => x.getEntity(adapter))
+                .SelectMany(x => x ?? Enumerable.Empty<INotifyPropertyChanged>())
+                .ForEach(UnwirePropertyChangedEvent);
 
         /// <summary>
         /// Call the RaisePropertyChanged with PropertyName
@@ -334,12 +387,12 @@ namespace ShipWorks.OrderLookup
                 // then add handlers to the possibly new entities.
                 using (handler.SuppressChangeNotifications())
                 {
-                    RemovePropertyChangedEventsFromEntities();
+                    RemovePropertyChangedEventsFromEntities(ShipmentAdapter);
 
                     ShipmentAdapter = shippingManager.ChangeShipmentType(value, ShipmentAdapter.Shipment);
                     RefreshProperties();
 
-                    AddPropertyChangedEventsToEntities(value);
+                    AddPropertyChangedEventsToEntities(ShipmentAdapter, value);
                 }
 
                 RaisePropertyChanged(nameof(OrderLookupShipmentModel));

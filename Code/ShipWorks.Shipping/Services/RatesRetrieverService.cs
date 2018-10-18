@@ -21,7 +21,7 @@ namespace ShipWorks.Shipping.Services
     [Component(RegistrationType.Self)]
     public class RatesRetrieverService : IRatesRetrieverService
     {
-        const double ThrottleTime = 250;
+        private const double ThrottleTime = 250;
         private readonly IMessenger messenger;
         private readonly IRatesRetriever ratesRetriever;
         private readonly IIndex<ShipmentTypeCode, IRateHashingService> rateHashingServiceLookup;
@@ -59,33 +59,35 @@ namespace ShipWorks.Shipping.Services
                 .OfType<LoadedOrderSelection>()
                 .Select(x => x.ShipmentAdapters.FirstOrDefault())
                 .Where(x => x != null)
-                .Select(x => new
-                {
-                    HashingService = rateHashingServiceLookup[x.ShipmentTypeCode],
-                    ShipmentAdapter = x
-                });
+                .Select(x => (
+                    HashingService: rateHashingServiceLookup[x.ShipmentTypeCode],
+                    ShipmentAdapter: x,
+                    OnAfterClone: (Action<ICarrierShipmentAdapter>) null
+                ));
 
             var changedShipments = messenger.OfType<ShipmentChangedMessage>()
                 .Where(x => x.ShipmentAdapter != null && !(x.Sender is GridProviderDisplayType))
                 .Select(x => new
                 {
                     Message = x,
-                    HashingService = rateHashingServiceLookup[x.ShipmentAdapter.ShipmentTypeCode]
+                    HashingService = rateHashingServiceLookup[x.ShipmentAdapter.ShipmentTypeCode],
                 })
                 .Where(x => string.IsNullOrEmpty(x.Message.ChangedField) || x.HashingService.IsRatingField(x.Message.ChangedField))
-                .Select(x => new
-                {
-                    x.HashingService,
-                    x.Message.ShipmentAdapter
-                });
+                .Select(x =>
+                (
+                    HashingService: x.HashingService,
+                    ShipmentAdapter: x.Message.ShipmentAdapter,
+                    OnAfterClone: x.Message.OnAfterClone
+                ));
 
             var selectedShipments = messenger.OfType<ShipmentSelectionChangedMessage>()
                 .Where(x => x.SelectedShipment != null)
-                .Select(x => new
-                {
-                    HashingService = rateHashingServiceLookup[x.SelectedShipment.ShipmentTypeCode],
-                    ShipmentAdapter = x.SelectedShipment
-                });
+                .Select(x =>
+                (
+                    HashingService: rateHashingServiceLookup[x.SelectedShipment.ShipmentTypeCode],
+                    ShipmentAdapter: x.SelectedShipment,
+                    OnAfterClone: (Action<ICarrierShipmentAdapter>) null
+                ));
 
             multipleSelectionSubscription = messenger.OfType<ShipmentSelectionChangedMessage>()
                 .Where(x => x.SelectedShipmentIDs.IsCountGreaterThan(1))
@@ -100,7 +102,7 @@ namespace ShipWorks.Shipping.Services
                 .Merge(selectedShipments)
                 .Select(x => new
                 {
-                    ShipmentAdapter = x.ShipmentAdapter.Clone(),
+                    ShipmentAdapter = CloneAdapter(x.ShipmentAdapter, x.OnAfterClone),
                     RatingHash = x.HashingService.GetRatingHash(x.ShipmentAdapter.Shipment)
                 })
                 .Do(x => messenger.Send(new RatesRetrievingMessage(this, x.RatingHash)))
@@ -118,6 +120,16 @@ namespace ShipWorks.Shipping.Services
 
             // Clear the Rates UI after login
             messenger.Send(new RatesNotSupportedMessage(this, string.Empty));
+        }
+
+        /// <summary>
+        /// Clone the shipment adapter
+        /// </summary>
+        private ICarrierShipmentAdapter CloneAdapter(ICarrierShipmentAdapter adapter, Action<ICarrierShipmentAdapter> onAfterClone)
+        {
+            var clone = adapter.Clone();
+            onAfterClone?.Invoke(clone);
+            return clone;
         }
 
         /// <summary>
