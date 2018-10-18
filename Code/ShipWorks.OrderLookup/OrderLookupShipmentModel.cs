@@ -12,6 +12,7 @@ using ShipWorks.Core.Messaging;
 using ShipWorks.Core.UI;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Messaging.Messages;
+using ShipWorks.Messaging.Messages.Shipping;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Shipping.Services;
@@ -27,20 +28,33 @@ namespace ShipWorks.OrderLookup
         /// <summary>
         /// Entities for which we want to wire up property changed handlers
         /// </summary>
+        /// <remarks>
+        /// I've included all known shipment types (as of October, 2018) so that we don't run into issues when
+        /// adding carriers to the order lookup view.
+        /// </remarks>
         private readonly static IEnumerable<(Func<ICarrierShipmentAdapter, INotifyPropertyChanged> getEntity, Func<ShipmentTypeCode, bool> isApplicableFor)> eventEntities =
             new (Func<ICarrierShipmentAdapter, INotifyPropertyChanged>, Func<ShipmentTypeCode, bool>)[]
             {
                 (x => x?.Shipment, x => true),
+                (x => x?.Shipment?.Amazon, x => x == ShipmentTypeCode.Amazon),
+                (x => x?.Shipment?.Asendia, x => x == ShipmentTypeCode.Asendia),
+                (x => x?.Shipment?.BestRate, x => x == ShipmentTypeCode.BestRate),
+                (x => x?.Shipment?.DhlExpress, x => x == ShipmentTypeCode.DhlExpress),
+                (x => x?.Shipment?.FedEx, x => x == ShipmentTypeCode.FedEx),
+                (x => x?.Shipment?.IParcel, x => x == ShipmentTypeCode.iParcel),
+                (x => x?.Shipment?.OnTrac, x => x == ShipmentTypeCode.OnTrac),
+                (x => x?.Shipment?.Other, x => x == ShipmentTypeCode.Other),
                 (x => x?.Shipment?.Postal, PostalUtility.IsPostalShipmentType),
-                (x => x?.Shipment?.Postal?.Usps, x => x == ShipmentTypeCode.Usps),
-                (x => x?.Shipment?.Postal?.Endicia, x => x == ShipmentTypeCode.Endicia),
-                (x => x?.Shipment?.Ups, x => x == ShipmentTypeCode.UpsOnLineTools)
+                (x => x?.Shipment?.Postal?.Usps, x => x == ShipmentTypeCode.Usps || x == ShipmentTypeCode.Express1Usps),
+                (x => x?.Shipment?.Postal?.Endicia, x => x == ShipmentTypeCode.Endicia || x == ShipmentTypeCode.Express1Endicia),
+                (x => x?.Shipment?.Ups, x => x == ShipmentTypeCode.UpsOnLineTools || x == ShipmentTypeCode.UpsWorldShip)
             };
 
         private readonly IMessenger messenger;
         private readonly IShippingManager shippingManager;
         private readonly IMessageHelper messageHelper;
         private readonly PropertyChangedHandler handler;
+        private readonly OrderLookupLabelShortcutPipeline shortcutPipeline;
         private ICarrierShipmentAdapter shipmentAdapter;
         private OrderEntity selectedOrder;
         private bool shipmentAllowEditing;
@@ -53,12 +67,16 @@ namespace ShipWorks.OrderLookup
         /// <summary>
         /// Constructor
         /// </summary>
-        public OrderLookupShipmentModel(IMessenger messenger, IShippingManager shippingManager, IMessageHelper messageHelper)
+        public OrderLookupShipmentModel(IMessenger messenger, IShippingManager shippingManager,
+            IMessageHelper messageHelper, OrderLookupLabelShortcutPipeline shortcutPipeline)
         {
             this.messenger = messenger;
             this.shippingManager = shippingManager;
             this.messageHelper = messageHelper;
             handler = new PropertyChangedHandler(this, () => PropertyChanged);
+            this.shortcutPipeline = shortcutPipeline;
+
+            shortcutPipeline.Register(this);
         }
 
         /// <summary>
@@ -328,6 +346,21 @@ namespace ShipWorks.OrderLookup
 
                 messenger.Send(new ShipmentSelectionChangedMessage(this, new[] { ShipmentAdapter.Shipment.ShipmentID }, ShipmentAdapter));
             }
+        }
+
+        /// <summary>
+        /// Create the label for a shipment
+        /// </summary>
+        public void CreateLabel()
+        {
+            if (!ShipmentAllowEditing || (shipmentAdapter?.Shipment?.Processed ?? true))
+            {
+                return;
+            }
+
+            SaveToDatabase();
+
+            messenger.Send(new ProcessShipmentsMessage(this, new[] { shipmentAdapter.Shipment }, new[] { shipmentAdapter.Shipment }, null));
         }
     }
 }

@@ -391,7 +391,7 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
         /// Get the dims weight from a shipment, if any
         /// </summary>
         protected override double GetDimsWeight(IShipmentEntity shipment) =>
-            shipment.OnTrac.DimsAddWeight ? shipment.OnTrac.DimsWeight : 0;
+            shipment.OnTrac?.DimsAddWeight == true ? shipment.OnTrac.DimsWeight : 0;
 
         /// <summary>
         /// Gets an instance to the best rate shipping broker for the OnTrac shipment type based on the shipment configuration.

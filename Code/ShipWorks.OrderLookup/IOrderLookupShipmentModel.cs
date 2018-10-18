@@ -83,5 +83,10 @@ namespace ShipWorks.OrderLookup
         /// Load the order
         /// </summary>
         void LoadOrder(OrderEntity order);
+
+        /// <summary>
+        /// Create the label for an order
+        /// </summary>
+        void CreateLabel();
     }
 }

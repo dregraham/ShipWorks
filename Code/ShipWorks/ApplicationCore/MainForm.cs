@@ -181,6 +181,15 @@ namespace ShipWorks
                 { ribbonTabOrderLookupViewShipping, x => x == UIMode.OrderLookup },
                 { ribbonTabOrderLookupViewShipmentHistory, x => x == UIMode.OrderLookup },
             };
+
+            // Listen for message to enable Create Label button
+            Messenger.Current.Subscribe(x =>
+            {
+                if (x is ShipmentSelectionChangedMessage && currentUserSettings.GetUIMode() == UIMode.OrderLookup)
+                {
+                    buttonOrderLookupViewCreateLabel.Enabled = orderLookupControl?.CreateLabelAllowed() == true;
+                }
+            });
         }
 
         /// <summary>
@@ -262,6 +271,14 @@ namespace ShipWorks
                     messageHelper.ShowError(ex.Message);
                 }
             }
+        }
+
+        /// <summary>
+        /// User clicks the Create Label button in Order Lookup Mode
+        /// </summary>
+        private void OnButtonOrderLookupViewCreateLabel(object sender, System.EventArgs e)
+        {
+            orderLookupControl.CreateLabel();
         }
 
         #region Initialization \ Shutdown
