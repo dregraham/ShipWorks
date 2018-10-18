@@ -48,7 +48,7 @@ namespace ShipWorks.OrderLookup.Tests
         }
 
         [Fact]
-        public void CreateLabel_DoesReturnMessage_WhenOrderIsProcessed()
+        public void CreateLabel_DoesNotReturnMessage_WhenOrderIsProcessed()
         {
             OrderLookupShipmentModel testObject = mock.Create<OrderLookupShipmentModel>();
 
@@ -61,7 +61,7 @@ namespace ShipWorks.OrderLookup.Tests
 
             testObject.CreateLabel();
 
-            Assert.Equal(1, testMessenger.SentMessages.OfType<ProcessShipmentsMessage>().Count());
+            Assert.Equal(0, testMessenger.SentMessages.OfType<ProcessShipmentsMessage>().Count());
         }
     }
 }
