@@ -37,8 +37,10 @@ namespace ShipWorks.OrderLookup.Controls
             IIndex<ShipmentTypeCode, T> createSectionViewModel = innerScope.Resolve<IIndex<ShipmentTypeCode, T>>();
 
             var key = shipmentModel.ShipmentAdapter?.ShipmentTypeCode;
-            var old = Context;
-            old?.Dispose();
+
+            //// We're disposing here even though Autofac will dispose when the lifetime scope is disposed
+            //// because we want to make sure 
+            //Context?.Dispose();
             Context = key.HasValue && createSectionViewModel.TryGetValue(key.Value, out T newModel) ? newModel : null;
         }
 
