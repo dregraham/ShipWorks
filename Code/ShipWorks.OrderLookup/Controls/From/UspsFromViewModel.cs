@@ -42,7 +42,7 @@ namespace ShipWorks.OrderLookup.Controls.From
         /// Get the text for the account header
         /// </summary>
         protected override string GetHeaderAccountText() =>
-            ShipmentModel.ShipmentAdapter.Shipment.Postal.Usps.RateShop ?
+            ShipmentModel.ShipmentAdapter.Shipment?.Postal?.Usps?.RateShop ?? false ?
                 "(Rate Shopping)" :
                 base.GetHeaderAccountText();
 
