@@ -41,7 +41,7 @@ namespace ShipWorks.OrderLookup.Controls.Rating
         /// </summary>
         private void OnShipmentModelPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            if (e.PropertyName == PostalShipmentFields.Service.Name && ShipmentModel.ShipmentAdapter != null)
+            if ((e.PropertyName == PostalShipmentFields.Service.Name || e.PropertyName == AmazonShipmentFields.ShippingServiceID.Name) && ShipmentModel.ShipmentAdapter != null)
             {
                 SelectRate(ShipmentModel.ShipmentAdapter);
             }

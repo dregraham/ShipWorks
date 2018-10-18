@@ -203,6 +203,11 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
                 handler.RaisePropertyChanged(nameof(ShipmentModel));
             }
 
+            if (e.PropertyName == AmazonShipmentFields.ShippingServiceID.Name)
+            {
+                handler.RaisePropertyChanged(nameof(ShipmentModel.ShipmentAdapter.ServiceType));
+            }
+
             if (e.PropertyName == ShipmentFields.ShipCountryCode.Name)
             {
                 RefreshServiceTypes();

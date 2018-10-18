@@ -107,8 +107,8 @@ namespace ShipWorks.Shipping.Carriers.Amazon
 
             if (rateTag != null)
             {
-                Shipment.Amazon.ShippingServiceName = rateTag.Description ?? string.Empty;
                 Shipment.Amazon.ShippingServiceID = rateTag.ShippingServiceId ?? string.Empty;
+                Shipment.Amazon.ShippingServiceName = rateTag.Description ?? string.Empty;
                 Shipment.Amazon.CarrierName = rateTag.CarrierName ?? string.Empty;
                 ServiceType = rateTag.ServiceTypeID;
             }
