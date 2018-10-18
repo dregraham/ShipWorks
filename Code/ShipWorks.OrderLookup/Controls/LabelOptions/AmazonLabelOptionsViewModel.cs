@@ -10,7 +10,7 @@ namespace ShipWorks.OrderLookup.Controls.LabelOptions
     /// View model for the OrderLookupLabelOptionsViewModel
     /// </summary>
     [KeyedComponent(typeof(ILabelOptionsViewModel), ShipmentTypeCode.Amazon)]
-    [WpfView(typeof(AmazonLabelOptionsControl))]
+    [WpfView(typeof(GenericLabelOptionsControl))]
     public class AmazonLabelOptionsViewModel : GenericLabelOptionsViewModel
     {
         /// <summary>

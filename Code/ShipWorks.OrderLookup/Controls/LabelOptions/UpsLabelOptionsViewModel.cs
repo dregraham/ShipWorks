@@ -13,7 +13,7 @@ namespace ShipWorks.OrderLookup.Controls.LabelOptions
     /// View model for the UpsLabelOptionsControl
     /// </summary>
     [KeyedComponent(typeof(ILabelOptionsViewModel), ShipmentTypeCode.UpsOnLineTools)]
-    [WpfView(typeof(UpsLabelOptionsControl))]
+    [WpfView(typeof(GenericLabelOptionsControl))]
     public class UpsLabelOptionsViewModel : GenericLabelOptionsViewModel
     {
         /// <summary>

@@ -156,11 +156,8 @@
     <Compile Include="Controls\LabelOptions\GenericLabelOptionsViewModel.cs" />
     <Compile Include="Controls\LabelOptions\ILabelOptionsViewModel.cs" />
     <Compile Include="Controls\LabelOptions\PostalLabelOptionsViewModel.cs" />
-    <Compile Include="Controls\LabelOptions\AmazonLabelOptionsControl.xaml.cs">
-      <DependentUpon>AmazonLabelOptionsControl.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\LabelOptions\UpsLabelOptionsControl.xaml.cs">
-      <DependentUpon>UpsLabelOptionsControl.xaml</DependentUpon>
+    <Compile Include="Controls\LabelOptions\GenericLabelOptionsControl.xaml.cs">
+      <DependentUpon>GenericLabelOptionsControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\LabelOptions\AmazonLabelOptionsViewModel.cs" />
     <Compile Include="Controls\LabelOptions\UpsLabelOptionsViewModel.cs" />
@@ -372,13 +369,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Controls\LabelOptions\AmazonLabelOptionsControl.xaml">
+    <Page Include="Controls\LabelOptions\GenericLabelOptionsControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Controls\LabelOptions\UpsLabelOptionsControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Controls\OrderLookupWrapperControl.xaml">
       <Generator>MSBuild:Compile</Generator>
