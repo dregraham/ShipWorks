@@ -198,13 +198,9 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
                 handler.RaisePropertyChanged(nameof(IsProfileSelected));
             }
 
-            if (e.PropertyName == AmazonShipmentFields.ShippingServiceName.Name)
-            {
-                handler.RaisePropertyChanged(nameof(ShipmentModel));
-            }
-
             if (e.PropertyName == AmazonShipmentFields.ShippingServiceID.Name)
             {
+                handler.RaisePropertyChanged(nameof(ShipmentModel));
                 handler.RaisePropertyChanged(nameof(ShipmentModel.ShipmentAdapter.ServiceType));
             }
 
