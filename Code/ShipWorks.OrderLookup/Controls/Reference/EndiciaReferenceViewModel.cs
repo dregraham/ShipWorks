@@ -16,7 +16,6 @@ namespace ShipWorks.OrderLookup.Controls.Reference
         /// </summary>
         public EndiciaReferenceViewModel(IOrderLookupShipmentModel shipmentModel) : base(shipmentModel)
         {
-
         }
     }
 }
