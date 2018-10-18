@@ -5,6 +5,7 @@ using System.Reactive.Linq;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Business.Geography;
 using Interapptive.Shared.Threading;
+using ShipWorks.AddressValidation;
 using ShipWorks.Shipping.Services;
 using ShipWorks.UI.Controls.AddressControl;
 
@@ -15,14 +16,13 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations
     /// </summary>
     public class DomesticInternationalDisplayPipeline : IShippingPanelTransientPipeline
     {
-        readonly HashSet<string> domesticAffectingProperties = new HashSet<string>
+        private readonly HashSet<string> domesticAffectingProperties = new HashSet<string>
         {
             nameof(AddressViewModel.CountryCode),
             nameof(AddressViewModel.PostalCode),
             nameof(AddressViewModel.StateProvCode)
         };
-
-        readonly ISchedulerProvider schedulerProvider;
+        private readonly ISchedulerProvider schedulerProvider;
         private IDisposable subscription;
 
         /// <summary>
@@ -53,7 +53,11 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations
             IDisposable updateText = viewModel.PropertyChangeStream
                 .Where(x => x == nameof(viewModel.IsDomestic))
                 .ObserveOn(schedulerProvider.Dispatcher)
-                .Subscribe(_ => viewModel.DomesticInternationalText = (viewModel.IsDomestic ?? true) ? "Domestic" : "International");
+                .Subscribe(_ =>
+                {
+                    viewModel.DomesticInternationalText = (viewModel.IsDomestic ?? true) ? "Domestic" : "International";
+                    viewModel.Destination.IsAddressValidationEnabled = AddressValidationPolicy.IsValidationEnabled(viewModel.ShipmentAdapter.Store, viewModel.ShipmentAdapter);
+                });
 
             subscription = new CompositeDisposable(updateViewModel, updateText);
         }
