@@ -14,9 +14,6 @@ using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Shipping.Editing;
-using ShipWorks.Shipping.Editing.Rating;
-using ShipWorks.Shipping.Services;
-using ShipWorks.Shipping.Services.Builders;
 using ShipWorks.Shipping.UI.ShippingPanel;
 using ShipWorks.UI;
 
@@ -40,6 +37,7 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
         private IEnumerable<KeyValuePair<int, string>> packageTypes;
         private IEnumerable<KeyValuePair<int, string>> confirmationTypes;
         private IEnumerable<KeyValuePair<int, string>> serviceTypes;
+        private double contentWeight;
 
         /// <summary>
         /// Constructor
@@ -60,6 +58,8 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
             InsuranceViewModel = insuranceViewModel;
             handler = new PropertyChangedHandler(this, () => PropertyChanged);
             ManageDimensionalProfiles = new RelayCommand(ManageDimensionalProfilesAction);
+
+            ContentWeight = ShipmentModel.ShipmentAdapter.ContentWeight;
 
             RefreshDimensionalProfiles();
             RefreshInsurance();
@@ -148,6 +148,26 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
         }
 
         /// <summary>
+        /// ContentWeight
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public double ContentWeight
+        {
+            get => contentWeight;
+            set
+            {
+                contentWeight = value;
+                if (!contentWeight.IsEquivalentTo(ShipmentModel.ShipmentAdapter.ContentWeight))
+                {
+                    ShipmentEntity shipment = ShipmentModel.ShipmentAdapter.Shipment;
+                    shipment.ContentWeight = contentWeight;
+                    shipmentTypeManager.Get(shipment)
+                        .UpdateTotalWeight(shipment);
+                }
+            }
+        }
+
+        /// <summary>
         /// Collection of valid PackageTypes
         /// </summary>
         [Obfuscation(Exclude = true)]
@@ -184,6 +204,12 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
         {
             if (ShipmentModel.SelectedOrder != null)
             {
+                if ((e.PropertyName == nameof(ShipmentModel.ShipmentAdapter) || e.PropertyName == nameof(ShipmentModel)) &&
+                    (ShipmentModel?.ShipmentAdapter?.Shipment != null))
+                {
+                    ContentWeight = ShipmentModel.ShipmentAdapter.Shipment.ContentWeight;
+                }
+
                 if (e.PropertyName == PostalShipmentFields.Service.Name ||
                     e.PropertyName == nameof(ShipmentModel.ShipmentAdapter.ShipmentTypeCode) ||
                     e.PropertyName == ShipmentFields.ShipCountryCode.Name)

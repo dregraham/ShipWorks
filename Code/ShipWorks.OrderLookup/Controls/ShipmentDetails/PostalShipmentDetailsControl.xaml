@@ -161,7 +161,7 @@
                 AcceptApplyWeightKeyboardShortcut="True"
                 ErrorMessage="{Binding WeightErrorMessage}"
                 Style="{StaticResource OrderLookupWeightControl}"
-                Weight="{Binding ShipmentModel.ShipmentAdapter.ContentWeight, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=true, NotifyOnValidationError=true}" />
+                Weight="{Binding ContentWeight, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=true, NotifyOnValidationError=true}" />
             <TextBlock
                 Grid.Row="7"
                 Grid.Column="0"
