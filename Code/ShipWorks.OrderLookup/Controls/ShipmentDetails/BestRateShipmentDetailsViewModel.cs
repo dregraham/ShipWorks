@@ -7,7 +7,6 @@ using System.Windows.Input;
 using GalaSoft.MvvmLight.Command;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.ComponentRegistration;
-using Interapptive.Shared.Utility;
 using ShipWorks.Core.UI;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
@@ -24,13 +23,12 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
     /// </summary>
     [KeyedComponent(typeof(IDetailsViewModel), ShipmentTypeCode.BestRate)]
     [WpfView(typeof(BestRateShipmentDetailsControl))]
-    public class BestRateShipmentDetailsViewModel : IDetailsViewModel, INotifyPropertyChanged
+    public class BestRateShipmentDetailsViewModel : IDetailsViewModel, INotifyPropertyChanged, IDataErrorInfo
     {
         public event PropertyChangedEventHandler PropertyChanged;
         private readonly PropertyChangedHandler handler;
-        private readonly IDimensionsManager dimensionsManager;
-        private readonly ShipmentTypeProvider shipmentTypeProvider;
         private readonly Func<DimensionsManagerDlg> getDimensionsManagerDlg;
+        private readonly ICarrierShipmentAdapterOptionsProvider carrierShipmentAdapterOptionsProvider;
         private List<DimensionsProfileEntity> dimensionProfiles;
         private Dictionary<ShipmentTypeCode, string> providers;
 
@@ -39,17 +37,15 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
         /// </summary>
         public BestRateShipmentDetailsViewModel(
             IOrderLookupShipmentModel shipmentModel,
-            IDimensionsManager dimensionsManager,
             IInsuranceViewModel insuranceViewModel,
-            ShipmentTypeProvider shipmentTypeProvider,
-            Func<DimensionsManagerDlg> getDimensionsManagerDlg)
+            Func<DimensionsManagerDlg> getDimensionsManagerDlg,
+            ICarrierShipmentAdapterOptionsProvider carrierShipmentAdapterOptionsProvider)
         {
             ShipmentModel = shipmentModel;
             ShipmentModel.PropertyChanged += ShipmentModelPropertyChanged;
 
-            this.dimensionsManager = dimensionsManager;
-            this.shipmentTypeProvider = shipmentTypeProvider;
             this.getDimensionsManagerDlg = getDimensionsManagerDlg;
+            this.carrierShipmentAdapterOptionsProvider = carrierShipmentAdapterOptionsProvider;
 
             InsuranceViewModel = insuranceViewModel;
             handler = new PropertyChangedHandler(this, () => PropertyChanged);
@@ -191,9 +187,7 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
             }
             else
             {
-                Providers = shipmentTypeProvider
-                    .GetAvailableShipmentTypes(ShipmentModel.ShipmentAdapter)
-                    .ToDictionary(s => s, s => EnumHelper.GetDescription(s));
+                Providers = carrierShipmentAdapterOptionsProvider.GetProviders(ShipmentModel.ShipmentAdapter, ShipmentModel.OriginalShipmentTypeCode);
             }
         }
 
@@ -211,7 +205,7 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
         private void RefreshDimensionalProfiles()
         {
             DimensionProfiles =
-                dimensionsManager.Profiles(ShipmentModel.PackageAdapters.FirstOrDefault()).ToList();
+                carrierShipmentAdapterOptionsProvider.GetDimensionsProfiles(ShipmentModel.PackageAdapters.FirstOrDefault()).ToList();
 
             if (ShipmentModel.ShipmentAdapter.Shipment.BestRate != null && DimensionProfiles.None(d => d.DimensionsProfileID ==
                                             ShipmentModel.ShipmentAdapter.Shipment.BestRate.DimsProfileID))
@@ -234,5 +228,31 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
 
         public void Dispose() =>
             ShipmentModel.PropertyChanged -= ShipmentModelPropertyChanged;
+
+        #region IDataErrorInfo
+
+        /// <summary>
+        /// Do nothing
+        /// </summary>
+        public string Error => null;
+
+        /// <summary>
+        /// Validate the ColumnNames value
+        /// </summary>
+        public string this[string columnName]
+        {
+            get
+            {
+                // If the shipment is null or processed, don't validate anything.
+                if (ShipmentModel.ShipmentAdapter?.Shipment == null || ShipmentModel.ShipmentAdapter.Shipment.Processed)
+                {
+                    return string.Empty;
+                }
+
+                return InputValidation<BestRateShipmentDetailsViewModel>.Validate(this, columnName);
+            }
+        }
+
+        #endregion
     }
 }
