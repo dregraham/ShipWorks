@@ -6,6 +6,7 @@
              xmlns:local="clr-namespace:ShipWorks.OrderLookup.Controls.EmailNotifications"
              xmlns:ui="http://schemas.shipworks.com/ui"
              xmlns:enums="clr-namespace:ShipWorks.Shipping.Carriers.FedEx.Enums;assembly=ShipWorks.Core"
+             FontFamily="/ShipWorks.OrderLookup;component/#Roboto"
              mc:Ignorable="d"             
              d:DataContext="{d:DesignInstance local:FedExEmailNotificationsViewModel}">
     <UserControl.Resources>
