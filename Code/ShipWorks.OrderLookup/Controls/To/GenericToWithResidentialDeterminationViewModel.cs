@@ -9,13 +9,17 @@ using ShipWorks.UI.Controls.AddressControl;
 
 namespace ShipWorks.OrderLookup.Controls.To
 {
+    /// <summary>
+    /// ViewModel for To panel in the OrderLookup view
+    /// </summary>
     [KeyedComponent(typeof(IToViewModel), ShipmentTypeCode.FedEx)]
     [WpfView(typeof(GenericToWithResidentialDeterminationControl))]
     public class GenericToWithResidentialDeterminationViewModel : GenericToViewModel
     {
-        
-        public GenericToWithResidentialDeterminationViewModel(IOrderLookupShipmentModel shipmentModel,
-                                                              AddressViewModel addressViewModel) :
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public GenericToWithResidentialDeterminationViewModel(IOrderLookupShipmentModel shipmentModel, AddressViewModel addressViewModel) :
             base(shipmentModel, addressViewModel)
         {
             ResidentialDeterminations = EnumHelper.GetEnumList<ResidentialDeterminationType>()

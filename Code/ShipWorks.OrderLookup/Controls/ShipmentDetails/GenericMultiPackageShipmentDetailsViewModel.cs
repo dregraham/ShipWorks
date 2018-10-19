@@ -18,6 +18,9 @@ using ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl;
 
 namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
 {
+    /// <summary>
+    /// View model for shipment details
+    /// </summary>
     public abstract class GenericMultiPackageShipmentDetailsViewModel : IDetailsViewModel, IDataErrorInfo
     {
         private const int MaxPackageCount = 25;

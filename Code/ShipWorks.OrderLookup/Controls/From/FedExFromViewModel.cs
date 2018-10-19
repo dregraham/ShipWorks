@@ -10,6 +10,9 @@ using ShipWorks.UI.Controls.AddressControl;
 
 namespace ShipWorks.OrderLookup.Controls.From
 {
+    /// <summary>
+    /// Viewmodle for the FedEx From control
+    /// </summary>
     [KeyedComponent(typeof(IFromViewModel), ShipmentTypeCode.FedEx)]
     [WpfView(typeof(FedExFromControl))]
     public class FedExFromViewModel : GenericFromViewModel
@@ -25,6 +28,9 @@ namespace ShipWorks.OrderLookup.Controls.From
                 .ToDictionary(x => (int) x.Value, x => x.Description);
         }
 
+        /// <summary>
+        /// Collection of applicable Residential Determinations
+        /// </summary>
         [Obfuscation(Exclude = true)]
         public Dictionary<int, string> ResidentialDeterminations { get; }
     }
