@@ -294,11 +294,9 @@
     <Compile Include="IOrderLookupAutoPrintService.cs" />
     <Compile Include="Controls\OrderLookupSearchControl\OrderLookupSearchViewModel.cs" />
     <Compile Include="IOrderLookupOrderRepository.cs" />
-    <Compile Include="IOrderLookupRatingService.cs" />
     <Compile Include="IOrderLookupShipmentModel.cs" />
     <Compile Include="OrderLookupAutoPrintService.cs" />
     <Compile Include="OrderLookupOrderRepository.cs" />
-    <Compile Include="OrderLookupRatingService.cs" />
     <Compile Include="OrderLookupShipmentModel.cs" />
     <Compile Include="OrderLookupSingleScanPipeline.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
