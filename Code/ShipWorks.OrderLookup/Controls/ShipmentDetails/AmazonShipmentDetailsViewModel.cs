@@ -8,6 +8,7 @@ using System.Windows.Input;
 using GalaSoft.MvvmLight.Command;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.Threading;
 using Interapptive.Shared.Utility;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Core.UI;
@@ -35,6 +36,7 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
         private readonly Func<DimensionsManagerDlg> getDimensionsManagerDlg;
         private readonly ICarrierShipmentAdapterOptionsProvider carrierShipmentAdapterOptionsProvider;
         private readonly IMessenger messenger;
+        private readonly ISchedulerProvider schedulerProvider;
         private List<DimensionsProfileEntity> dimensionProfiles;
         private readonly IDisposable updateServicesWhenRatesRetrieved;
         private Dictionary<ShipmentTypeCode, string> providers;
@@ -50,7 +52,8 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
             IInsuranceViewModel insuranceViewModel,
             Func<DimensionsManagerDlg> getDimensionsManagerDlg,
             ICarrierShipmentAdapterOptionsProvider carrierShipmentAdapterOptionsProvider,
-            IMessenger messenger)
+            IMessenger messenger,
+            ISchedulerProvider schedulerProvider)
         {
             ShipmentModel = shipmentModel;
             ShipmentModel.PropertyChanged += ShipmentModelPropertyChanged;
@@ -58,6 +61,7 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
             this.getDimensionsManagerDlg = getDimensionsManagerDlg;
             this.carrierShipmentAdapterOptionsProvider = carrierShipmentAdapterOptionsProvider;
             this.messenger = messenger;
+            this.schedulerProvider = schedulerProvider;
             InsuranceViewModel = insuranceViewModel;
             handler = new PropertyChangedHandler(this, () => PropertyChanged);
             ManageDimensionalProfiles = new RelayCommand(ManageDimensionalProfilesAction);
@@ -72,6 +76,7 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
                 .Select(e => new KeyValuePair<int, string>((int) e.Value, e.Description));
 
             updateServicesWhenRatesRetrieved = this.messenger.OfType<RatesRetrievedMessage>()
+                .ObserveOn(schedulerProvider.Dispatcher)
                 .Subscribe(x =>
                 {
                     if (x.Success && ShipmentModel?.ShipmentAdapter != null)
