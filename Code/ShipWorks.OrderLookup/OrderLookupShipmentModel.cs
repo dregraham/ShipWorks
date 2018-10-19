@@ -370,7 +370,8 @@ namespace ShipWorks.OrderLookup
         private void RefreshProperties()
         {
             ShipmentAllowEditing = !ShipmentAdapter?.Shipment?.Processed ?? false;
-            PackageAdapters = ShipmentAdapter?.GetPackageAdapters();
+            PackageAdapters = ShipmentAdapter?.GetPackageAdaptersAndEnsureShipmentIsLoaded();
+
             TotalCost = ShipmentAdapter?.Shipment?.ShipmentCost ?? 0;
         }
 
