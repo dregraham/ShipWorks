@@ -133,6 +133,9 @@ namespace ShipWorks.Shipping.Services
         /// <summary>
         /// Add a new package adapter
         /// </summary>
+        /// <param name="manipulateEntity">
+        /// Pass in an action to manipulate the package that gets added to the shipment
+        /// </param>
         IPackageAdapter AddPackage(Action<INotifyPropertyChanged> manipulateEntity);
 
         /// <summary>
@@ -143,6 +146,9 @@ namespace ShipWorks.Shipping.Services
         /// <summary>
         /// Delete the specified package from the shipment
         /// </summary>
+        /// <param name="manipulateEntity">
+        /// Pass in an action to manipulate the package that gets deleted from the shipment
+        /// </param>
         void DeletePackage(IPackageAdapter package, Action<INotifyPropertyChanged> manipulateEntity);
 
         /// <summary>
