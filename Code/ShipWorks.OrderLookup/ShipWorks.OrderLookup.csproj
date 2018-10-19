@@ -190,6 +190,10 @@
       <DependentUpon>AmazonReferenceControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\Reference\AmazonReferenceViewModel.cs" />
+    <Compile Include="Controls\Reference\FedExReferenceControl.xaml.cs">
+      <DependentUpon>FedExReferenceControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\Reference\FedExReferenceViewModel.cs" />
     <Compile Include="Controls\Reference\IReferenceViewModel.cs" />
     <Compile Include="Controls\Reference\EndiciaReferenceControl.xaml.cs">
       <DependentUpon>EndiciaReferenceControl.xaml</DependentUpon>
@@ -422,6 +426,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Controls\Reference\EndiciaReferenceControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Controls\Reference\FedExReferenceControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
