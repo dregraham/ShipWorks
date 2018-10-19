@@ -14,6 +14,7 @@ using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Shipping.Editing;
+using ShipWorks.Shipping.Services;
 using ShipWorks.Shipping.UI.ShippingPanel;
 using ShipWorks.UI;
 
