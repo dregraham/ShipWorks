@@ -87,6 +87,11 @@ namespace ShipWorks.OrderLookup
         public event EventHandler OnSearchOrder;
 
         /// <summary>
+        /// An order is starting to unload
+        /// </summary>
+        public event EventHandler OrderUnloading;
+
+        /// <summary>
         /// An order is starting to load
         /// </summary>
         public event EventHandler OrderLoading;
@@ -340,6 +345,7 @@ namespace ShipWorks.OrderLookup
         /// </summary>
         private void ClearOrder()
         {
+            OrderUnloading?.Invoke(this, EventArgs.Empty);
             RemovePropertyChangedEventsFromEntities(ShipmentAdapter);
 
             ShipmentAdapter = null;

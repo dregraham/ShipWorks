@@ -253,6 +253,9 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
                 {
                     RefreshServiceTypes(ShipmentModel.ShipmentAdapter);
                 }
+
+                var shipmentType = (PostalShipmentType) shipmentTypeManager.Get(ShipmentModel.ShipmentAdapter.ShipmentTypeCode);
+                shipmentType.UpdatePostalDetails(ShipmentModel.ShipmentAdapter.Shipment);
             }
         }
 
@@ -332,6 +335,7 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
                     .GetAvailableConfirmationTypes(adapter.Shipment.ShipCountryCode, postalServiceType, packagingType)
                     .ToDictionary(serviceType => (int) serviceType,
                                   serviceType => EnumHelper.GetDescription(serviceType));
+
             }
         }
 

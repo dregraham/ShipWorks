@@ -100,6 +100,11 @@ namespace ShipWorks.OrderLookup
         void UnwirePropertyChangedEvent(INotifyPropertyChanged eventObject);
 
         /// <summary>
+        /// An order is starting to unload
+        /// </summary>
+        event EventHandler OrderUnloading;
+
+        /// <summary>
         /// An order is starting to load
         /// </summary>
         event EventHandler OrderLoading;

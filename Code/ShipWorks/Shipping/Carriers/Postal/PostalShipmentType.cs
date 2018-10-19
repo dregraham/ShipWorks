@@ -162,6 +162,14 @@ namespace ShipWorks.Shipping.Carriers.Postal
         {
             base.UpdateDynamicShipmentData(shipment);
 
+            UpdatePostalDetails(shipment);
+        }
+
+        /// <summary>
+        /// Update the postal details of a shipment
+        /// </summary>
+        public void UpdatePostalDetails(ShipmentEntity shipment)
+        {
             // Need to check with the store  to see if anything about the shipment was overridden in case
             // it may have effected the shipping services available (i.e. the eBay GSP program)
             ShipmentEntity overriddenShipment = ShippingManager.GetOverriddenStoreShipment(shipment);
