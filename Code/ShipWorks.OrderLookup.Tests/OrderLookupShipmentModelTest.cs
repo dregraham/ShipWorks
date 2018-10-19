@@ -4,6 +4,7 @@ using Moq;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Messaging.Messages.Shipping;
+using ShipWorks.Shipping;
 using ShipWorks.Shipping.Services;
 using ShipWorks.Tests.Shared;
 using Xunit;
@@ -14,7 +15,11 @@ namespace ShipWorks.OrderLookup.Tests
     {
         private readonly AutoMock mock;
         private readonly TestMessenger testMessenger;
-        private Mock<IOrderLookupShipmentModel> viewModel;
+        private OrderLookupShipmentModel testObject;
+        private OrderEntity order;
+        private ShipmentEntity shipment;
+        private Mock<ICarrierShipmentAdapter> shipmentAdapter;
+        private Mock<IShippingManager> shippingManager;
 
         public OrderLookupShipmentModelTest()
         {
@@ -23,45 +28,49 @@ namespace ShipWorks.OrderLookup.Tests
             mock.Provide<IMessenger>(testMessenger);
         }
 
-        [Fact]
-        public void RaisePropertyChanged_RaisesPropertyChangedWithNameOfProperty()
+        private void SetupTestMocks(bool isProcessed)
         {
-            OrderLookupShipmentModel testObject = mock.Create<OrderLookupShipmentModel>();
-            Assert.PropertyChanged(testObject, "FooBar", () => testObject.RaisePropertyChanged("FooBar"));
+            order = new OrderEntity { OrderNumber = 1234 };
+            shipment = new ShipmentEntity { ShipmentID = 4567, Processed = isProcessed };
+            shipmentAdapter = mock.Mock<ICarrierShipmentAdapter>();
+            shippingManager = mock.Mock<IShippingManager>();
+
+            shipmentAdapter.Setup(x => x.Shipment).Returns(shipment);
+
+            shippingManager.Setup(x => x.GetShipmentAdapter(It.IsAny<ShipmentEntity>())).Returns(shipmentAdapter.Object);
+
+            order.Shipments.Add(shipmentAdapter.Object.Shipment);
         }
 
         [Fact]
-        public void CreateLabel_DoesNotReturnMessage_WhenOrderIsNotProcessed()
+        public void RaisePropertyChanged_RaisesPropertyChangedWithNameOfProperty()
         {
-            OrderLookupShipmentModel testObject = mock.Create<OrderLookupShipmentModel>();
-
-            var shipmentAdapter = mock.Mock<ICarrierShipmentAdapter>();
-            shipmentAdapter.Setup(sa => sa.Shipment).Returns(new ShipmentEntity { ShipmentID = 1, Processed = false });
-
-            viewModel = mock.CreateMock<IOrderLookupShipmentModel>();
-            viewModel.Setup(d => d.SelectedOrder).Returns(new OrderEntity { OrderNumber = 123 });
-            viewModel.Setup(d => d.ShipmentAdapter).Returns(shipmentAdapter.Object);
-            
-            testObject.CreateLabel();
-            
-            Assert.Empty(testMessenger.SentMessages.OfType<ProcessShipmentsMessage>());
+            testObject = mock.Create<OrderLookupShipmentModel>();
+            Assert.PropertyChanged(testObject, "FooBar", () => testObject.RaisePropertyChanged("FooBar"));
         }
 
         [Fact]
         public void CreateLabel_DoesNotReturnMessage_WhenOrderIsProcessed()
         {
-            OrderLookupShipmentModel testObject = mock.Create<OrderLookupShipmentModel>();
+            SetupTestMocks(true);
+            
+            testObject = mock.Create<OrderLookupShipmentModel>();
+            testObject.LoadOrder(order);
+            testObject.CreateLabel(); 
 
-            var shipmentAdapter = mock.Mock<ICarrierShipmentAdapter>();
-            shipmentAdapter.Setup(sa => sa.Shipment).Returns(new ShipmentEntity { ShipmentID = 1, Processed = true });
+            Assert.Empty(testMessenger.SentMessages.OfType<ProcessShipmentsMessage>());
+        }
 
-            viewModel = mock.CreateMock<IOrderLookupShipmentModel>();
-            viewModel.Setup(d => d.SelectedOrder).Returns(new OrderEntity { OrderNumber = 123 });
-            viewModel.Setup(d => d.ShipmentAdapter).Returns(shipmentAdapter.Object);
+        [Fact]
+        public void CreateLabel_DoesReturnMessage_WhenOrderIsNotProcessed()
+        {
+            SetupTestMocks(false);
 
+            testObject = mock.Create<OrderLookupShipmentModel>();
+            testObject.LoadOrder(order);
             testObject.CreateLabel();
 
-            Assert.Equal(0, testMessenger.SentMessages.OfType<ProcessShipmentsMessage>().Count());
+            Assert.Equal(1, testMessenger.SentMessages.OfType<ProcessShipmentsMessage>().Count());
         }
     }
 }

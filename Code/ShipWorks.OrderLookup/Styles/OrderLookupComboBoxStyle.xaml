@@ -6,7 +6,7 @@
         <ResourceDictionary Source="/ShipWorks.OrderLookup;component/Styles/Colors.xaml"/>
         <ResourceDictionary Source="/ShipWorks.OrderLookup;component/Styles/Shapes.xaml"/>
     </ResourceDictionary.MergedDictionaries>
-    <ControlTemplate x:Key="OrderLookupComboBoxTemplate" TargetType="{x:Type ui:ShipWorksComboBox}">
+    <ControlTemplate x:Key="OrderLookupComboBoxTemplate" TargetType="ComboBox">
         <Grid x:Name="templateRoot" SnapsToDevicePixels="True">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
@@ -186,6 +186,17 @@
         </ControlTemplate.Triggers>
     </ControlTemplate>
     <Style x:Key="FormComboBox" TargetType="{x:Type ui:ShipWorksComboBox}">
+        <Setter Property="Margin" Value="10 0 0 10"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
+        <Setter Property="Height" Value="28"/>
+        <Setter Property="FontSize" Value="12"/>
+        <Setter Property="Foreground" Value="{StaticResource ControlTextColor}"/>
+        <Setter Property="BorderBrush" Value="{StaticResource BorderColor}"/>
+        <Setter Property="Background" Value="{StaticResource ButtonBackgroundGradient}"/>
+        <Setter Property="Template" Value="{StaticResource OrderLookupComboBoxTemplate}"/>
+    </Style>
+    <Style x:Key="FormComboBox2" TargetType="ComboBox">
         <Setter Property="Margin" Value="10 0 0 10"/>
         <Setter Property="VerticalAlignment" Value="Center"/>
         <Setter Property="VerticalContentAlignment" Value="Center"/>

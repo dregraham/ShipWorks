@@ -38,7 +38,13 @@ namespace ShipWorks.OrderLookup.Controls.To
             ShipmentModel.PropertyChanged += ShipmentModelPropertyChanged;
             handler = new PropertyChangedHandler(this, () => PropertyChanged);
 
-            addressViewModel.IsAddressValidationEnabled = ShipmentModel.ShipmentAdapter.Store.DomesticAddressValidationSetting != AddressValidationStoreSettingType.ValidationDisabled; ;
+            if (ShipmentModel?.ShipmentAdapter?.Store != null)
+            { 
+                addressViewModel.IsAddressValidationEnabled = ShipmentModel.ShipmentAdapter.IsDomestic ? 
+                    ShipmentModel.ShipmentAdapter.Store.DomesticAddressValidationSetting != AddressValidationStoreSettingType.ValidationDisabled :
+                    ShipmentModel.ShipmentAdapter.Store.InternationalAddressValidationSetting != AddressValidationStoreSettingType.ValidationDisabled;
+            }
+
             InitializeForChangedShipment();
         }
 

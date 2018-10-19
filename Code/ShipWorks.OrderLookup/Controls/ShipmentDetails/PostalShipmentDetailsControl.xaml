@@ -20,7 +20,6 @@
             <ui:BooleanToVisibilityConverter x:Key="BooleanToVisibility" />
         </ResourceDictionary>
     </UserControl.Resources>
-
     <StackPanel>
         <Grid IsEnabled="{Binding ShipmentModel.ShipmentAllowEditing}">
             <Grid.RowDefinitions>
@@ -64,15 +63,14 @@
                 Style="{StaticResource FieldLabel}"
                 Text="Provider" />
 
-            <ui:ShipWorksComboBox
+            <ComboBox
                 Grid.Row="1"
                 Grid.Column="1"
                 DisplayMemberPath="Value"
                 ItemsSource="{Binding Providers}"
-                SelectedIndexWhenNull="{x:Static ui:RelativeIndex.First}"
                 SelectedValue="{Binding ShipmentTypeCode, UpdateSourceTrigger=PropertyChanged}"
                 SelectedValuePath="Key"
-                Style="{StaticResource FormComboBox}" />
+                Style="{StaticResource FormComboBox2}" />
 
             <TextBlock
                 Grid.Row="2"
@@ -80,18 +78,17 @@
                 Style="{StaticResource FieldLabel}"
                 Text="Service" />
 
-            <ui:ShipWorksComboBox
+            <ComboBox
                 Grid.Row="2"
                 Grid.Column="1"
                 DisplayMemberPath="Value"
                 ItemsSource="{Binding ServiceTypes}"
-                SelectedIndexWhenNull="{x:Static ui:RelativeIndex.First}"
                 SelectedValuePath="Key"
-                Style="{StaticResource FormComboBox}">
+                Style="{StaticResource FormComboBox2}">
                 <ComboBox.SelectedValue>
                     <Binding Path="ShipmentModel.ShipmentAdapter.ServiceType" />
                 </ComboBox.SelectedValue>
-            </ui:ShipWorksComboBox>
+            </ComboBox>
 
             <TextBlock
                 Grid.Row="3"
@@ -99,18 +96,17 @@
                 Style="{StaticResource FieldLabel}"
                 Text="Confirmation" />
 
-            <ui:ShipWorksComboBox
+            <ComboBox
                 Grid.Row="3"
                 Grid.Column="1"
                 DisplayMemberPath="Value"
                 ItemsSource="{Binding ConfirmationTypes}"
-                SelectedIndexWhenNull="{x:Static ui:RelativeIndex.First}"
                 SelectedValuePath="Key"
-                Style="{StaticResource FormComboBox}">
+                Style="{StaticResource FormComboBox2}">
                 <ComboBox.SelectedValue>
                     <Binding Path="ShipmentModel.ShipmentAdapter.Shipment.Postal.Confirmation" />
                 </ComboBox.SelectedValue>
-            </ui:ShipWorksComboBox>
+            </ComboBox>
 
             <TextBlock
                 Grid.Row="4"
@@ -118,19 +114,18 @@
                 Style="{StaticResource FieldLabel}"
                 Text="Packaging" />
 
-            <ui:ShipWorksComboBox
+            <ComboBox
                 Grid.Row="4"
                 Grid.Column="1"
                 Margin="10,0,0,5"
                 DisplayMemberPath="Value"
                 ItemsSource="{Binding PackageTypes}"
-                SelectedIndexWhenNull="{x:Static ui:RelativeIndex.First}"
                 SelectedValuePath="Key"
-                Style="{StaticResource FormComboBox}">
+                Style="{StaticResource FormComboBox2}">
                 <ComboBox.SelectedValue>
                     <Binding Path="ShipmentModel.ShipmentAdapter.Shipment.Postal.PackagingType" />
                 </ComboBox.SelectedValue>
-            </ui:ShipWorksComboBox>
+            </ComboBox>
 
             <StackPanel
                 Grid.Row="5"
@@ -161,7 +156,7 @@
                 AcceptApplyWeightKeyboardShortcut="True"
                 ErrorMessage="{Binding WeightErrorMessage}"
                 Style="{StaticResource OrderLookupWeightControl}"
-                Weight="{Binding ShipmentModel.ShipmentAdapter.ContentWeight, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=true, NotifyOnValidationError=true}" />
+                Weight="{Binding ContentWeight, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=true, NotifyOnValidationError=true}" />
             <TextBlock
                 Grid.Row="7"
                 Grid.Column="0"
@@ -172,21 +167,20 @@
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
-                <ui:ShipWorksComboBox
+                <ComboBox
                     Grid.Column="0"
                     Margin="10,0,0,5"
                     DisplayMemberPath="Name"
                     ItemsSource="{Binding DimensionProfiles}"
-                    SelectedIndexWhenNull="{x:Static ui:RelativeIndex.Last}"
                     SelectedValuePath="DimensionsProfileID"
-                    Style="{StaticResource FormComboBox}">
+                    Style="{StaticResource FormComboBox2}">
                     <ComboBox.SelectedValue>
                         <Binding
                             Mode="TwoWay"
                             Path="ShipmentModel.ShipmentAdapter.Shipment.Postal.DimsProfileID"
                             UpdateSourceTrigger="PropertyChanged" />
                     </ComboBox.SelectedValue>
-                </ui:ShipWorksComboBox>
+                </ComboBox>
 
                 <Button
                     Grid.Column="1"

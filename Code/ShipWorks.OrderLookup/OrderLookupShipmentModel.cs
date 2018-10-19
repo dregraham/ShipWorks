@@ -89,6 +89,16 @@ namespace ShipWorks.OrderLookup
         public event EventHandler OnSearchOrder;
 
         /// <summary>
+        /// An order is starting to load
+        /// </summary>
+        public event EventHandler OrderLoading;
+
+        /// <summary>
+        /// An order has fully loaded
+        /// </summary>
+        public event EventHandler OrderLoaded;
+
+        /// <summary>
         /// Constructor
         /// </summary>
         public OrderLookupShipmentModel(
@@ -260,6 +270,8 @@ namespace ShipWorks.OrderLookup
         /// </summary>
         public void LoadOrder(OrderEntity order)
         {
+            OrderLoading?.Invoke(this, EventArgs.Empty);
+
             OnSearchOrder?.Invoke(this, null);
 
             if (order == null)
@@ -295,6 +307,7 @@ namespace ShipWorks.OrderLookup
             if (ShipmentAdapter != null)
             {
                 messenger.Send(new ShipmentSelectionChangedMessage(this, new[] { ShipmentAdapter.Shipment.ShipmentID }, ShipmentAdapter));
+                OrderLoaded?.Invoke(this, EventArgs.Empty);
             }
         }
 
