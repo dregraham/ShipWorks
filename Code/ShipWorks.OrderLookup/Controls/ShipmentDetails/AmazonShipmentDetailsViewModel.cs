@@ -36,6 +36,7 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
         private readonly ICarrierShipmentAdapterOptionsProvider carrierShipmentAdapterOptionsProvider;
         private readonly IMessenger messenger;
         private List<DimensionsProfileEntity> dimensionProfiles;
+        private readonly IDisposable updateServicesWhenRatesRetrieved;
         private Dictionary<ShipmentTypeCode, string> providers;
         private IEnumerable<KeyValuePair<int, string>> packageTypes;
         private IEnumerable<KeyValuePair<int, string>> confirmationTypes;
@@ -70,10 +71,10 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
                 EnumHelper.GetEnumList<AmazonDeliveryExperienceType>()
                 .Select(e => new KeyValuePair<int, string>((int) e.Value, e.Description));
 
-            this.messenger.OfType<RatesRetrievedMessage>()
+            updateServicesWhenRatesRetrieved = this.messenger.OfType<RatesRetrievedMessage>()
                 .Subscribe(x =>
                 {
-                    if (x.Success)
+                    if (x.Success && ShipmentModel?.ShipmentAdapter != null)
                     {
                         RefreshServiceTypes();
                     }
@@ -284,8 +285,15 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
             }
         }
 
-        public void Dispose() =>
+        /// <summary>
+        /// Dispose
+        /// </summary>
+        public void Dispose()
+        {
             ShipmentModel.PropertyChanged -= ShipmentModelPropertyChanged;
+            updateServicesWhenRatesRetrieved?.Dispose();
+        }
+
 
         #region IDataErrorInfo
 
