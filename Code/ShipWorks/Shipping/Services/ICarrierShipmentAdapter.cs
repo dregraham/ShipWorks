@@ -169,5 +169,10 @@ namespace ShipWorks.Shipping.Services
         /// For rates that are not selectable, find their first child that is.
         /// </summary>
         RateResult GetChildRateForRate(RateResult parentRate, IEnumerable<RateResult> rates);
+
+        /// <summary>
+        /// Update the total weight of the shipment based on its ContentWeight and any packaging weight.
+        /// </summary>
+        void UpdateTotalWeight();
     }
 }

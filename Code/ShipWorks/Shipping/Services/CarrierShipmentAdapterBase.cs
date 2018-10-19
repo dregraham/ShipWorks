@@ -383,6 +383,11 @@ namespace ShipWorks.Shipping.Services
             Disposable.Empty;
 
         /// <summary>
+        /// Update the total weight of the shipment based on its ContentWeight and any packaging weight.
+        /// </summary>
+        public void UpdateTotalWeight() => shipmentType.UpdateTotalWeight(Shipment);
+        
+        /// <summary>
         /// Get a strongly typed ShipmentType
         /// </summary>
         protected T GetShipmentType<T>() where T : ShipmentType => shipmentType as T;
