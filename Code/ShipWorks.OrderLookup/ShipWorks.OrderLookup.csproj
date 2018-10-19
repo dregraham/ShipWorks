@@ -132,6 +132,13 @@
     <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controls\Customs\FedExCustomsControl.xaml.cs">
+      <DependentUpon>FedExCustomsControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\Customs\FedExCustomsItemsControl.xaml.cs">
+      <DependentUpon>FedExCustomsItemsControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\Customs\FedExCustomsViewModel.cs" />
     <Compile Include="Controls\Customs\GenericCustomsItemsControl.xaml.cs">
       <DependentUpon>GenericCustomsItemsControl.xaml</DependentUpon>
     </Compile>
@@ -379,6 +386,11 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Controls\Customs\FedExCustomsControl.xaml" />
+    <Page Include="Controls\Customs\FedExCustomsItemsControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Controls\Customs\GenericCustomsItemsControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
