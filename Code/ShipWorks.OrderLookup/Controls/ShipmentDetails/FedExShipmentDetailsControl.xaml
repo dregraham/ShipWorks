@@ -58,12 +58,11 @@
             Style="{StaticResource FieldLabel}"
             Text="Provider" />
 
-        <ui:ShipWorksComboBox
+        <ComboBox
             Grid.Row="1"
             Grid.Column="1"
             DisplayMemberPath="Value"
             ItemsSource="{Binding Providers}"
-            SelectedIndexWhenNull="{x:Static ui:RelativeIndex.First}"
             SelectedValue="{Binding ShipmentTypeCode, UpdateSourceTrigger=PropertyChanged}"
             SelectedValuePath="Key"
             Style="{StaticResource FormComboBox}" />
@@ -74,12 +73,11 @@
             Style="{StaticResource FieldLabel}"
             Text="Service" />
 
-        <ui:ShipWorksComboBox
+        <ComboBox
             Grid.Row="2"
             Grid.Column="1"
             DisplayMemberPath="Value"
             ItemsSource="{Binding ServiceTypes}"
-            ui:ShipWorksComboBox.SelectedIndexWhenNull="{x:Static ui:RelativeIndex.First}"
             SelectedValuePath="Key"
             Style="{StaticResource FormComboBox}" SelectedValue="{Binding ShipmentModel.ShipmentAdapter.ServiceType}"/>
 
@@ -89,16 +87,15 @@
             Style="{StaticResource FieldLabel}"
             Text="Signature" />
 
-        <ui:ShipWorksComboBox
+        <ComboBox
             Grid.Row="3"
             Grid.Column="1"
             DisplayMemberPath="Value"
             ItemsSource="{Binding SignatureTypes}"
-            ui:ShipWorksComboBox.SelectedIndexWhenNull="{x:Static ui:RelativeIndex.First}"
             SelectedValuePath="Key"
             Style="{StaticResource FormComboBox}"
             SelectedValue="{Binding ShipmentModel.ShipmentAdapter.Shipment.FedEx.Signature}">
-        </ui:ShipWorksComboBox>
+        </ComboBox>
 
         <Grid Grid.Row="4"
               Grid.Column="0"
@@ -158,12 +155,11 @@
             Style="{StaticResource FieldLabel}"
             Text="Packaging" />
 
-        <ui:ShipWorksComboBox
+        <ComboBox
             Grid.Row="5"
             Grid.Column="1"
             DisplayMemberPath="Value"
             ItemsSource="{Binding PackageTypes}"
-            ui:ShipWorksComboBox.SelectedIndexWhenNull="{x:Static ui:RelativeIndex.First}"
             SelectedValuePath="Key"
             Style="{StaticResource FormComboBox}" SelectedValue="{Binding SelectedPackage.PackagingType}"/>
 
@@ -192,11 +188,10 @@
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
-            <ui:ShipWorksComboBox Grid.Column="0"
+            <ComboBox Grid.Column="0"
                 Margin="10,0,0,5"
                 DisplayMemberPath="Name"
                 ItemsSource="{Binding DimensionProfiles}"
-                ui:ShipWorksComboBox.SelectedIndexWhenNull="{x:Static ui:RelativeIndex.Last}"
                 SelectedValuePath="DimensionsProfileID"
                 Style="{StaticResource FormComboBox}">
                 <ComboBox.SelectedValue>
@@ -205,7 +200,7 @@
                             Path="SelectedPackageDimsProfileID"
                             UpdateSourceTrigger="PropertyChanged" />
                 </ComboBox.SelectedValue>
-            </ui:ShipWorksComboBox>
+            </ComboBox>
 
             <Button
                 Grid.Column="1"

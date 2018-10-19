@@ -89,7 +89,7 @@
                 Grid.Column="0"
                 Style="{StaticResource FieldLabel}"
                 Text="B13A Filing Option" />
-            <ui:ShipWorksComboBox
+            <ComboBox
                 Grid.Row="3"
                 Grid.Column="1"
                 DisplayMemberPath="Value"

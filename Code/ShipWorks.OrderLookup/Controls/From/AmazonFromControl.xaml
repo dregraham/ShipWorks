@@ -24,11 +24,10 @@
     </UserControl.Resources>
     <StackPanel>
         <TextBlock Style="{StaticResource Header}" Text="Origin" />
-        <ui:ShipWorksComboBox
+        <ComboBox
             x:Name="OriginDropDown"
             ui:UpdateWhenMessageReceived.MessageType="{x:Type sw:OriginAddressChangedMessage}"
             DisplayMemberPath="Key"
-            SelectedIndexWhenNull="{x:Static ui:RelativeIndex.Last}"
             SelectedValuePath="Value"
             Style="{StaticResource StackedFormComboBox}">
             <ComboBox.IsEnabled>
@@ -43,7 +42,7 @@
             <ComboBox.SelectedValue>
                 <Binding Path="ShipmentModel.ShipmentAdapter.Shipment.OriginOriginID" />
             </ComboBox.SelectedValue>
-        </ui:ShipWorksComboBox>
+        </ComboBox>
 
         <local:OrderLookupAddress DataContext="{Binding Address}">
             <local:OrderLookupAddress.IsEnabled>

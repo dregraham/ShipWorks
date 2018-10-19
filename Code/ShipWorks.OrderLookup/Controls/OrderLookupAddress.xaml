@@ -187,7 +187,7 @@
                 Style="{StaticResource FieldLabel}">
                 State / Prov
             </TextBlock>
-            <ui:ShipWorksComboBox
+            <ComboBox
                 Grid.Row="3"
                 Grid.Column="1"
                 props:EntityFieldLength.FieldName="PersonState"
@@ -216,7 +216,7 @@
                 Style="{StaticResource FieldLabel}">
                 Country
             </TextBlock>
-            <ui:ShipWorksComboBox
+            <ComboBox
                 x:Name="CountryComboBox"
                 Grid.Row="5"
                 Grid.Column="1"

@@ -198,7 +198,7 @@
                 Grid.Column="0"
                 Style="{StaticResource FieldLabel}"
                 Text="Subject" />
-            <ui:ShipWorksComboBox
+            <ComboBox
                 Grid.Row="7"
                 Grid.Column="1"
                 Grid.ColumnSpan="4"

@@ -6,7 +6,7 @@
         <ResourceDictionary Source="/ShipWorks.OrderLookup;component/Styles/Colors.xaml"/>
         <ResourceDictionary Source="/ShipWorks.OrderLookup;component/Styles/OrderLookupComboBoxStyle.xaml"/>
     </ResourceDictionary.MergedDictionaries>
-    <ControlTemplate x:Key="OrderLookupEditableComboBoxTemplate" TargetType="{x:Type ui:ShipWorksComboBox}">
+    <ControlTemplate x:Key="OrderLookupEditableComboBoxTemplate" TargetType="{x:Type ComboBox}">
         <Grid x:Name="templateRoot" SnapsToDevicePixels="True">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
@@ -142,7 +142,7 @@
             </Trigger>
         </ControlTemplate.Triggers>
     </ControlTemplate>
-    <Style x:Key="EditableFormComboBox" TargetType="{x:Type ui:ShipWorksComboBox}"
+    <Style x:Key="EditableFormComboBox" TargetType="{x:Type ComboBox}"
            BasedOn="{StaticResource FormComboBox}">
         <Setter Property="Template" Value="{StaticResource OrderLookupEditableComboBoxTemplate}"/>
     </Style>

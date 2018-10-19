@@ -87,7 +87,7 @@
             <Grid Margin="1,0,5,0">
                 <Grid.Resources>
                     <Style BasedOn="{StaticResource FieldLabel}" TargetType="{x:Type TextBlock}" />
-                    <Style BasedOn="{StaticResource FormComboBox}" TargetType="{x:Type ui:ShipWorksComboBox}" />
+                    <Style BasedOn="{StaticResource FormComboBox}" TargetType="{x:Type ComboBox}" />
                     <Style BasedOn="{StaticResource FormTextBox}" TargetType="{x:Type TextBox}" />
                 </Grid.Resources>
                 <Grid.ColumnDefinitions>
@@ -165,7 +165,7 @@
                     Grid.Row="5"
                     Grid.Column="0"
                     Text="Country of Origin" />
-                <ui:ShipWorksComboBox
+                <ComboBox
                     x:Name="CountryComboBox"
                     Grid.Row="5"
                     Grid.Column="1"

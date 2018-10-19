@@ -46,12 +46,11 @@
                 Style="{StaticResource FieldLabel}"
                 Text="Address" />
 
-            <ui:ShipWorksComboBox
+            <ComboBox
                 Grid.Row="1"
                 Grid.Column="1"
                 DisplayMemberPath="Value"
                 ItemsSource="{Binding ResidentialDeterminations}"
-                SelectedIndexWhenNull="{x:Static ui:RelativeIndex.First}"
                 SelectedValue="{Binding ShipmentModel.ShipmentAdapter.Shipment.ResidentialDetermination}"
                 SelectedValuePath="Key"
                 Style="{StaticResource FormComboBox}" />
