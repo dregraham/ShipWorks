@@ -11,7 +11,7 @@ namespace ShipWorks.UI
     public class WpfViewTemplateSelector : DataTemplateSelector
     {
         private static readonly DataTemplate emptyTemplate = new DataTemplate();
-        private readonly Dictionary<Type, Func<DataTemplate>> templates = new Dictionary<Type, Func<DataTemplate>>();
+        private readonly Dictionary<Type, DataTemplate> templates = new Dictionary<Type, DataTemplate>();
 
         /// <summary>
         /// Select a template for a given item
@@ -23,24 +23,24 @@ namespace ShipWorks.UI
                 return emptyTemplate;
             }
 
-            Func<DataTemplate> templateCreator = null;
-            if (templates.TryGetValue(item.GetType(), out templateCreator))
+            DataTemplate template = null;
+            if (templates.TryGetValue(item.GetType(), out template))
             {
-                return templateCreator();
+                return template;
             }
 
             Type itemType = item.GetType();
-            templateCreator = CreateTemplateCreator(itemType);
+            template = CreateTemplate(itemType);
 
-            templates.Add(itemType, templateCreator);
+            templates.Add(itemType, template);
 
-            return templateCreator();
+            return template;
         }
 
         /// <summary>
         /// Create a template for the type specified
         /// </summary>
-        private Func<DataTemplate> CreateTemplateCreator(Type itemType)
+        private DataTemplate CreateTemplate(Type itemType)
         {
             var viewAttribute = Attribute.GetCustomAttribute(itemType, typeof(WpfViewAttribute)) as WpfViewAttribute;
             if (viewAttribute == null)
@@ -48,7 +48,10 @@ namespace ShipWorks.UI
                 throw new InvalidOperationException($"A view must be specified for {itemType.Name}");
             }
 
-            return () => new DataTemplate { VisualTree = new FrameworkElementFactory(viewAttribute.ViewType) };
+            return new DataTemplate
+            {
+                VisualTree = new FrameworkElementFactory(viewAttribute.ViewType)
+            };
         }
     }
 }
