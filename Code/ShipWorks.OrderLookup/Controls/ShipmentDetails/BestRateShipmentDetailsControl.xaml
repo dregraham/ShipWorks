@@ -106,7 +106,7 @@
 
             <Button
                 Grid.Column="1"
-                Margin="3,0,0,0"
+                Margin="5,0,0,0"
                 VerticalAlignment="Center"
                 Command="{Binding ManageDimensionalProfiles}"
                 Content="Manage..."

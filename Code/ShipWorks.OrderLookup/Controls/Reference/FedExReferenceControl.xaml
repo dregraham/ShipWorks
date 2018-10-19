@@ -4,7 +4,6 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:reference="clr-namespace:ShipWorks.OrderLookup.Controls.Reference"
-    Width="400"
     FontFamily="/ShipWorks.OrderLookup;component/#Roboto"
     FontSize="12"
     mc:Ignorable="d"
@@ -73,11 +72,13 @@
         <TextBlock
             Grid.Row="3"
             Grid.Column="0"
+            Margin="0"
             Style="{StaticResource FieldLabel}"
             Text="Integrity" />
         <TextBox
             Grid.Row="3"
             Grid.Column="1"
+            Margin="10 0 0 0"
             Style="{StaticResource FormTextBox}">
             <TextBox.Text>
                 <Binding Path="ShipmentModel.ShipmentAdapter.Shipment.FedEx.ReferenceShipmentIntegrity" />

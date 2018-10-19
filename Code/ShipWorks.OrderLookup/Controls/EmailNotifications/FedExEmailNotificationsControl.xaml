@@ -64,11 +64,13 @@
                 Grid.Row="0"
                 Grid.Column="0"
                 Grid.ColumnSpan="2"
+                VerticalAlignment="Bottom"
                 Text="Email Address" />
             <TextBlock
                 Grid.Row="0"
                 Grid.Column="2"
                 HorizontalAlignment="Center"
+                VerticalAlignment="Bottom"
                 Margin="10 0"
                 Text="Ship" />
             <TextBlock
@@ -76,12 +78,14 @@
                 Grid.Column="3"
                 Margin="10 0"
                 HorizontalAlignment="Center"
+                VerticalAlignment="Bottom"
                 Text="Exception" />
             <TextBlock
                 Grid.Row="0"
                 Grid.Column="4"
                 Margin="10 0"
                 HorizontalAlignment="Center"
+                VerticalAlignment="Bottom"
                 Text="Delivery" />
             <TextBlock
                 Grid.Row="0"
@@ -208,6 +212,7 @@
             <CheckBox
                 Grid.Row="5"
                 Grid.Column="5"
+                Margin="0,0,0,10"
                 IsChecked="{Binding Other, Converter={StaticResource EnumFlagConverter}, ConverterParameter={x:Static enums:FedExEmailNotificationType.EstimatedDelivery}}" />
 
             <Line
@@ -228,7 +233,6 @@
                 Grid.Column="0"
                 Grid.Row="7"
                 HorizontalAlignment="Left"
-                VerticalAlignment="Center"
                 Margin="0"
                 Style="{StaticResource FieldLabel}"
                 Text="Personal Message (Optional)" 
@@ -238,6 +242,7 @@
                 Grid.Column="1"
                 Grid.ColumnSpan="5"
                 MinLines="3"
+                MaxLines="3"
                 Margin="10 0 0 0"
                 Style="{StaticResource MultiLineFormTextBox}"
                 Text="{Binding ShipmentModel.ShipmentAdapter.Shipment.FedEx.EmailNotifyMessage, UpdateSourceTrigger=PropertyChanged}" 
