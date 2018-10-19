@@ -89,6 +89,11 @@ namespace ShipWorks.OrderLookup
         public event EventHandler OnSearchOrder;
 
         /// <summary>
+        /// An order is starting to unload
+        /// </summary>
+        public event EventHandler OrderUnloading;
+
+        /// <summary>
         /// An order is starting to load
         /// </summary>
         public event EventHandler OrderLoading;
@@ -187,11 +192,14 @@ namespace ShipWorks.OrderLookup
         /// </summary>
         public void RaisePropertyChanged(string propertyName)
         {
-            handler.RaisePropertyChanged(propertyName);
-
-            if (ShipmentAdapter?.Shipment != null)
+            using (ShipmentAdapter?.Shipment.BatchPropertyChangeNotifications())
             {
-                messenger.Send(new ShipmentChangedMessage(this, ShipmentAdapter, propertyName, RemovePropertyChangedEventsFromEntities));
+                handler.RaisePropertyChanged(propertyName);
+
+                if (ShipmentAdapter?.Shipment != null)
+                {
+                    messenger.Send(new ShipmentChangedMessage(this, ShipmentAdapter, propertyName, RemovePropertyChangedEventsFromEntities));
+                }
             }
         }
 
@@ -347,6 +355,7 @@ namespace ShipWorks.OrderLookup
         /// </summary>
         private void ClearOrder()
         {
+            OrderUnloading?.Invoke(this, EventArgs.Empty);
             RemovePropertyChangedEventsFromEntities(ShipmentAdapter);
 
             ShipmentAdapter = null;
@@ -364,7 +373,8 @@ namespace ShipWorks.OrderLookup
         private void RefreshProperties()
         {
             ShipmentAllowEditing = !ShipmentAdapter?.Shipment?.Processed ?? false;
-            PackageAdapters = ShipmentAdapter?.GetPackageAdapters();
+            PackageAdapters = ShipmentAdapter?.GetPackageAdaptersAndEnsureShipmentIsLoaded();
+
             TotalCost = ShipmentAdapter?.Shipment?.ShipmentCost ?? 0;
         }
 

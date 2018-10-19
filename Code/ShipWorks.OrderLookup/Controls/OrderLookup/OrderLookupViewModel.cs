@@ -55,6 +55,7 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookup
             handler = new PropertyChangedHandler(this, () => PropertyChanged);
             ShipmentModel = shipmentModel;
             ShipmentModel.PropertyChanged += OnShipmentModelPropertyChanged;
+            ShipmentModel.OrderUnloading += OnShipmentModelOrderUnloading;
             ShipmentModel.OrderLoading += OnShipmentModelOrderLoading;
             ShipmentModel.OrderLoaded += OnShipmentModelOrderLoaded;
             OrderLookupSearchViewModel = orderLookupSearchViewModel;
@@ -88,6 +89,11 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookup
                     .Subscribe(x => OrderLookupSearchViewModel.ShipmentModel.LoadOrder(x.Shipments.FirstOrDefault().Shipment?.Order))
                 );
         }
+
+        /// <summary>
+        /// An order is unloading
+        /// </summary>
+        private void OnShipmentModelOrderUnloading(object sender, EventArgs e) => UnloadViewModels();
 
         /// <summary>
         /// An order has fully loaded

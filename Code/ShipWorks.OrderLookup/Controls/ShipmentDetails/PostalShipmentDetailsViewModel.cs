@@ -205,7 +205,8 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
         {
             if (ShipmentModel.SelectedOrder != null)
             {
-                if ((e.PropertyName == nameof(ShipmentModel.ShipmentAdapter) || e.PropertyName == nameof(ShipmentModel)) &&
+                if ((e.PropertyName == nameof(ShipmentModel.ShipmentAdapter) ||
+                    e.PropertyName == nameof(ShipmentModel)) &&
                     (ShipmentModel?.ShipmentAdapter?.Shipment != null))
                 {
                     ContentWeight = ShipmentModel.ShipmentAdapter.Shipment.ContentWeight;
@@ -244,7 +245,7 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
                 }
 
                 if (e.PropertyName == PostalShipmentFields.Service.Name ||
-                    e.PropertyName == "PackagingType")
+                    e.PropertyName == PostalShipmentFields.PackagingType.Name)
                 {
                     RefreshConfirmationTypes(ShipmentModel.ShipmentAdapter);
                 }
@@ -252,6 +253,15 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
                 if (e.PropertyName == ShipmentFields.ShipCountryCode.Name)
                 {
                     RefreshServiceTypes(ShipmentModel.ShipmentAdapter);
+                }
+
+                if (e.PropertyName == PostalShipmentFields.Service.Name ||
+                    e.PropertyName == PostalShipmentFields.PackagingType.Name ||
+                    e.PropertyName == PostalShipmentFields.Confirmation.Name ||
+                    e.PropertyName == ShipmentFields.ShipCountryCode.Name)
+                {
+                    var shipmentType = (PostalShipmentType) shipmentTypeManager.Get(ShipmentModel.ShipmentAdapter.ShipmentTypeCode);
+                    shipmentType.UpdatePostalDetails(ShipmentModel.ShipmentAdapter.Shipment);
                 }
             }
         }
@@ -332,6 +342,7 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
                     .GetAvailableConfirmationTypes(adapter.Shipment.ShipCountryCode, postalServiceType, packagingType)
                     .ToDictionary(serviceType => (int) serviceType,
                                   serviceType => EnumHelper.GetDescription(serviceType));
+
             }
         }
 

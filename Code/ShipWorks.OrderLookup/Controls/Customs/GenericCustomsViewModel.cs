@@ -237,7 +237,7 @@ namespace ShipWorks.OrderLookup.Controls.Customs
             // If the content weight changed outside of us, redistribute what the new weight among the packages
             if (originalShipmentContentWeight.IsEquivalentTo(ContentWeight))
             {
-                IEnumerable<IPackageAdapter> packageAdapters = ShipmentModel.ShipmentAdapter.GetPackageAdapters();
+                IEnumerable<IPackageAdapter> packageAdapters = ShipmentModel.ShipmentAdapter.GetPackageAdaptersAndEnsureShipmentIsLoaded();
                 foreach (IPackageAdapter packageAdapter in packageAdapters)
                 {
                     packageAdapter.Weight = ContentWeight / packageAdapters.Count();

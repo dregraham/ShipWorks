@@ -147,6 +147,7 @@ namespace ShipWorks.Shipping.Services
         {
             var clone = adapter.Clone();
             onAfterClone?.Invoke(clone);
+            clone.UpdateTotalWeight();
             return clone;
         }
 
