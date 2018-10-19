@@ -145,6 +145,10 @@
       <DependentUpon>UpsCustomsControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\Customs\UpsCustomsViewModel.cs" />
+    <Compile Include="Controls\EmailNotifications\FedExEmailNotificationsControl.xaml.cs">
+      <DependentUpon>FedExEmailNotificationsControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\EmailNotifications\FedExEmailNotificationsViewModel.cs" />
     <Compile Include="Controls\From\AmazonFromControl.xaml.cs">
       <DependentUpon>AmazonFromControl.xaml</DependentUpon>
     </Compile>
@@ -382,6 +386,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Controls\EmailNotifications\FedExEmailNotificationsControl.xaml" />
     <Page Include="Controls\From\AmazonFromControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

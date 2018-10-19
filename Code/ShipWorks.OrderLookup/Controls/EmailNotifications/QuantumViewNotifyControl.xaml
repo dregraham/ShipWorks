@@ -40,7 +40,7 @@
             Margin="0,0,0,10"
             Text="These settings are for email sent from UPS. This is separate from and in addition to any email configured to be sent by ShipWorks."
             TextWrapping="Wrap" />
-        <Grid Grid.Row="1">
+        <Grid Grid.Row="1" Grid.IsSharedSizeScope="True">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
@@ -53,11 +53,11 @@
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="auto" />
+                <ColumnDefinition Width="100" />
                 <ColumnDefinition Width="*" />
-                <ColumnDefinition Width=".2*" />
-                <ColumnDefinition Width=".2*" />
-                <ColumnDefinition Width=".2*" />
+                <ColumnDefinition Width="auto" SharedSizeGroup="A" />
+                <ColumnDefinition Width="auto" SharedSizeGroup="A"/>
+                <ColumnDefinition Width="auto" SharedSizeGroup="A"/>
             </Grid.ColumnDefinitions>
 
             <!--  Grid headers  -->
@@ -70,15 +70,18 @@
                 Grid.Row="0"
                 Grid.Column="2"
                 HorizontalAlignment="Center"
+                Margin="10 0"
                 Text="Ship" />
             <TextBlock
                 Grid.Row="0"
                 Grid.Column="3"
                 HorizontalAlignment="Center"
+                Margin="10 0"
                 Text="Exception" />
             <TextBlock
                 Grid.Row="0"
                 Grid.Column="4"
+                Margin="10 0"
                 HorizontalAlignment="Center"
                 Text="Delivery" />
 
@@ -208,14 +211,19 @@
             <!--  Personal Message  -->
             <TextBlock
                 Grid.Row="8"
+                Grid.Column="0"
                 HorizontalAlignment="Left"
+                VerticalAlignment="Center"
                 Style="{StaticResource FieldLabel}"
-                Text="Personal Message (Optional)" />
+                Margin="0"
+                Text="Personal Message (Optional)" 
+                TextWrapping="Wrap"/>
             <TextBox
                 Grid.Row="8"
                 Grid.Column="1"
                 Grid.ColumnSpan="4"
                 MinLines="3"
+                Margin="10 0 0 0"
                 Style="{StaticResource MultiLineFormTextBox}"
                 Text="{Binding ShipmentModel.ShipmentAdapter.Shipment.Ups.EmailNotifyMessage, UpdateSourceTrigger=PropertyChanged}" 
                 TextWrapping="Wrap"
