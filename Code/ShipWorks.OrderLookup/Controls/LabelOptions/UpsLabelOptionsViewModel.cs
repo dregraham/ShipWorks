@@ -10,10 +10,10 @@ using ShipWorks.UI;
 namespace ShipWorks.OrderLookup.Controls.LabelOptions
 {
     /// <summary>
-    /// View model for the OrderLookupLabelOptionsViewModel
+    /// View model for the UpsLabelOptionsControl
     /// </summary>
     [KeyedComponent(typeof(ILabelOptionsViewModel), ShipmentTypeCode.UpsOnLineTools)]
-    [WpfView(typeof(UpsLabelOptionsControl))]
+    [WpfView(typeof(GenericLabelOptionsControl))]
     public class UpsLabelOptionsViewModel : GenericLabelOptionsViewModel
     {
         /// <summary>

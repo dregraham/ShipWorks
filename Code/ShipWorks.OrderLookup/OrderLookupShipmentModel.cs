@@ -16,6 +16,7 @@ using ShipWorks.Messaging.Messages;
 using ShipWorks.Messaging.Messages.Shipping;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers.Postal;
+using ShipWorks.Shipping.Insurance;
 using ShipWorks.Shipping.Services;
 
 namespace ShipWorks.OrderLookup
@@ -75,6 +76,7 @@ namespace ShipWorks.OrderLookup
         private readonly IMessenger messenger;
         private readonly IShippingManager shippingManager;
         private readonly IMessageHelper messageHelper;
+        private readonly Func<IInsuranceBehaviorChangeViewModel> createInsuranceBehaviorChange;
         private readonly PropertyChangedHandler handler;
         private readonly OrderLookupLabelShortcutPipeline shortcutPipeline;
         private ICarrierShipmentAdapter shipmentAdapter;
@@ -104,12 +106,17 @@ namespace ShipWorks.OrderLookup
         /// <summary>
         /// Constructor
         /// </summary>
-        public OrderLookupShipmentModel(IMessenger messenger, IShippingManager shippingManager,
-            IMessageHelper messageHelper, OrderLookupLabelShortcutPipeline shortcutPipeline)
+        public OrderLookupShipmentModel(
+            IMessenger messenger,
+            IShippingManager shippingManager,
+            IMessageHelper messageHelper,
+            Func<IInsuranceBehaviorChangeViewModel> createInsuranceBehaviorChange,
+			OrderLookupLabelShortcutPipeline shortcutPipeline)
         {
             this.messenger = messenger;
             this.shippingManager = shippingManager;
             this.messageHelper = messageHelper;
+			this.createInsuranceBehaviorChange = createInsuranceBehaviorChange;
             handler = new PropertyChangedHandler(this, () => PropertyChanged);
             this.shortcutPipeline = shortcutPipeline;
 
@@ -412,7 +419,12 @@ namespace ShipWorks.OrderLookup
                 {
                     RemovePropertyChangedEventsFromEntities(ShipmentAdapter);
 
+					bool originalInsuranceSelection = shipmentAdapter.Shipment.Insurance;
                     ShipmentAdapter = shippingManager.ChangeShipmentType(value, ShipmentAdapter.Shipment);
+					ShipmentAdapter.UpdateDynamicData();
+
+					createInsuranceBehaviorChange().Notify(originalInsuranceSelection, shipmentAdapter.Shipment.Insurance);
+
                     RefreshProperties();
 
                     AddPropertyChangedEventsToEntities(ShipmentAdapter, value);

@@ -7,14 +7,14 @@ namespace ShipWorks.OrderLookup.Controls.Reference
     /// <summary>
     /// View model for order lookup reference control
     /// </summary>
-    [KeyedComponent(typeof(IReferenceViewModel), ShipmentTypeCode.Endicia)]
-    [WpfView(typeof(EndiciaReferenceControl))]
-    public class EndiciaReferenceViewModel : GenericReferenceViewModel
+    [KeyedComponent(typeof(IReferenceViewModel), ShipmentTypeCode.Amazon)]
+    [WpfView(typeof(AmazonReferenceControl))]
+    public class AmazonReferenceViewModel : GenericReferenceViewModel
     {
         /// <summary>
         /// Constructor
         /// </summary>
-        public EndiciaReferenceViewModel(IOrderLookupShipmentModel shipmentModel) : base(shipmentModel)
+        public AmazonReferenceViewModel(IOrderLookupShipmentModel shipmentModel) : base(shipmentModel)
         {
         }
     }

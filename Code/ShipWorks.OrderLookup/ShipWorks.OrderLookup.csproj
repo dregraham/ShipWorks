@@ -145,6 +145,10 @@
       <DependentUpon>UpsCustomsControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\Customs\UpsCustomsViewModel.cs" />
+    <Compile Include="Controls\From\AmazonFromControl.xaml.cs">
+      <DependentUpon>AmazonFromControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\From\AmazonFromViewModel.cs" />
     <Compile Include="Controls\From\IFromViewModel.cs" />
     <Compile Include="Controls\From\GenericFromControl.xaml.cs">
       <DependentUpon>GenericFromControl.xaml</DependentUpon>
@@ -160,9 +164,10 @@
       <DependentUpon>BestRateLabelOptionsControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\LabelOptions\BestRateLabelOptionsViewModel.cs" />
-    <Compile Include="Controls\LabelOptions\UpsLabelOptionsControl.xaml.cs">
-      <DependentUpon>UpsLabelOptionsControl.xaml</DependentUpon>
+    <Compile Include="Controls\LabelOptions\GenericLabelOptionsControl.xaml.cs">
+      <DependentUpon>GenericLabelOptionsControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\LabelOptions\AmazonLabelOptionsViewModel.cs" />
     <Compile Include="Controls\LabelOptions\UpsLabelOptionsViewModel.cs" />
     <Compile Include="Controls\OrderLookupWrapperControl.xaml.cs">
       <DependentUpon>OrderLookupWrapperControl.xaml</DependentUpon>
@@ -174,13 +179,20 @@
       <DependentUpon>QuantumViewNotifyControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\Rating\IRatingViewModel.cs" />
+    <Compile Include="Controls\Reference\AmazonReferenceControl.xaml.cs">
+      <DependentUpon>AmazonReferenceControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\Reference\AmazonReferenceViewModel.cs" />
     <Compile Include="Controls\Reference\IReferenceViewModel.cs" />
     <Compile Include="Controls\Reference\EndiciaReferenceControl.xaml.cs">
       <DependentUpon>EndiciaReferenceControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\Reference\EndiciaReferenceViewModel.cs" />
+    <Compile Include="Controls\ShipmentDetails\AmazonShipmentDetailsControl.xaml.cs">
+      <DependentUpon>AmazonShipmentDetailsControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\ShipmentDetails\ICarrierShipmentAdapterOptionsProvider.cs" />
-    <Compile Include="Controls\Reference\ReferenceViewModelBase.cs" />
+    <Compile Include="Controls\Reference\GenericReferenceViewModel.cs" />
     <Compile Include="Controls\Reference\UpsReferenceControl.xaml.cs">
       <DependentUpon>UpsReferenceControl.xaml</DependentUpon>
     </Compile>
@@ -194,10 +206,11 @@
     </Compile>
     <Compile Include="Controls\ShipmentDetails\CarrierShipmentAdapterOptionsProvider.cs" />
     <Compile Include="Controls\ShipmentDetails\BestRateShipmentDetailsViewModel.cs" />
+    <Compile Include="Controls\ShipmentDetails\AmazonShipmentDetailsViewModel.cs" />
+    <Compile Include="Controls\ShipmentDetails\UpsShipmentDetailsViewModel.cs" />
     <Compile Include="Controls\ShipmentDetails\UpsShipmentDetailsControl.xaml.cs">
       <DependentUpon>UpsShipmentDetailsControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\ShipmentDetails\UpsShipmentDetailsViewModel.cs" />
     <Compile Include="Controls\To\IToViewModel.cs" />
     <Compile Include="Controls\To\GenericToControl.xaml.cs">
       <DependentUpon>GenericToControl.xaml</DependentUpon>
@@ -281,11 +294,9 @@
     <Compile Include="IOrderLookupAutoPrintService.cs" />
     <Compile Include="Controls\OrderLookupSearchControl\OrderLookupSearchViewModel.cs" />
     <Compile Include="IOrderLookupOrderRepository.cs" />
-    <Compile Include="IOrderLookupRatingService.cs" />
     <Compile Include="IOrderLookupShipmentModel.cs" />
     <Compile Include="OrderLookupAutoPrintService.cs" />
     <Compile Include="OrderLookupOrderRepository.cs" />
-    <Compile Include="OrderLookupRatingService.cs" />
     <Compile Include="OrderLookupShipmentModel.cs" />
     <Compile Include="OrderLookupSingleScanPipeline.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -361,6 +372,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Controls\From\AmazonFromControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Controls\From\GenericFromControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -373,20 +388,28 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Controls\LabelOptions\UpsLabelOptionsControl.xaml">
-      <SubType>Designer</SubType>
+    <Page Include="Controls\LabelOptions\GenericLabelOptionsControl.xaml">
       <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Controls\OrderLookupWrapperControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Controls\EmailNotifications\QuantumViewNotifyControl.xaml" />
+    <Page Include="Controls\Reference\AmazonReferenceControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Controls\Reference\EndiciaReferenceControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Controls\Reference\UpsReferenceControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\ShipmentDetails\AmazonShipmentDetailsControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

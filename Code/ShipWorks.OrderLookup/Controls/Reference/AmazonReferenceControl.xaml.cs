@@ -13,14 +13,14 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace ShipWorks.OrderLookup.Controls.LabelOptions
+namespace ShipWorks.OrderLookup.Controls.Reference
 {
     /// <summary>
-    /// Interaction logic for UpsLabelOptionsControl.xaml
+    /// Interaction logic for AmazonReferenceControl.xaml
     /// </summary>
-    public partial class UpsLabelOptionsControl : UserControl
+    public partial class AmazonReferenceControl : UserControl
     {
-        public UpsLabelOptionsControl()
+        public AmazonReferenceControl()
         {
             InitializeComponent();
         }

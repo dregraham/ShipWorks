@@ -75,14 +75,9 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
 
             // If no service types are returned, the carrier doesn't support service types,
             // so just return.
-            if (!updatedServices.Any())
-            {
-                return new List<KeyValuePair<int, string>>();
-            }
-            else
-            {
-               return updatedServices.ToList();
-            }
+            return updatedServices.Any() ?
+                updatedServices.ToList() : 
+                Enumerable.Empty<KeyValuePair<int, string>>();
         }
 
         /// <summary>

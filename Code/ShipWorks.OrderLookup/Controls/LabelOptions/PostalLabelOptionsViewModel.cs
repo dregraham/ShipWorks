@@ -19,7 +19,7 @@ using ShipWorks.UI;
 namespace ShipWorks.OrderLookup.Controls.LabelOptions
 {
     /// <summary>
-    /// View model for the OrderLookupLabelOptionsViewModel
+    /// View model for the PostalLabelOptionsControl
     /// </summary>
     [KeyedComponent(typeof(ILabelOptionsViewModel), ShipmentTypeCode.Usps)]
     [KeyedComponent(typeof(ILabelOptionsViewModel), ShipmentTypeCode.Endicia)]

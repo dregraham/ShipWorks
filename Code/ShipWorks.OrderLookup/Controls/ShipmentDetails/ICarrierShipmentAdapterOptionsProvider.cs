@@ -5,6 +5,9 @@ using ShipWorks.Shipping.Services;
 
 namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
 {
+    /// <summary>
+    /// Resource for getting options available for a carrier adapter
+    /// </summary>
     public interface ICarrierShipmentAdapterOptionsProvider
     {
         /// <summary>

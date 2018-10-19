@@ -21,6 +21,7 @@ namespace ShipWorks.OrderLookup.Controls.Rating
     [KeyedComponent(typeof(IRatingViewModel), ShipmentTypeCode.Endicia)]
     [KeyedComponent(typeof(IRatingViewModel), ShipmentTypeCode.Usps)]
     [KeyedComponent(typeof(IRatingViewModel), ShipmentTypeCode.UpsOnLineTools)]
+    [KeyedComponent(typeof(IRatingViewModel), ShipmentTypeCode.Amazon)]
     [WpfView(typeof(GenericRatingControl))]
     public class GenericRatingViewModel : RatingPanelViewModel, IRatingViewModel
     {
@@ -41,7 +42,7 @@ namespace ShipWorks.OrderLookup.Controls.Rating
         /// </summary>
         private void OnShipmentModelPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            if (e.PropertyName == PostalShipmentFields.Service.Name && ShipmentModel.ShipmentAdapter != null)
+            if ((e.PropertyName == PostalShipmentFields.Service.Name || e.PropertyName == AmazonShipmentFields.ShippingServiceID.Name) && ShipmentModel.ShipmentAdapter != null)
             {
                 SelectRate(ShipmentModel.ShipmentAdapter);
             }

@@ -1,4 +1,6 @@
-﻿using System.Linq;
+﻿using System;
+using System.ComponentModel;
+using System.Linq;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
@@ -74,11 +76,13 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// <summary>
         /// Add a new package to the shipment
         /// </summary>
-        public override IPackageAdapter AddPackage()
+        public override IPackageAdapter AddPackage(Action<INotifyPropertyChanged> manipulateEntity)
         {
             FedExPackageEntity package = FedExUtility.CreateDefaultPackage();
             Shipment.FedEx.Packages.Add(package);
             UpdateDynamicData();
+
+            manipulateEntity?.Invoke(package);
 
             return new FedExPackageAdapter(Shipment, package, Shipment.FedEx.Packages.IndexOf(package) + 1);
         }
@@ -86,9 +90,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// <summary>
         /// Delete a package from the shipment
         /// </summary>
-        public override void DeletePackage(IPackageAdapter packageAdapter)
+        public override void DeletePackage(IPackageAdapter packageAdapter, Action<INotifyPropertyChanged> manipulateEntity)
         {
-            DeletePackageFromCollection(Shipment.FedEx.Packages, x => x.FedExPackageID == packageAdapter.PackageId);
+            DeletePackageFromCollection(Shipment.FedEx.Packages, x => x.FedExPackageID == packageAdapter.PackageId, manipulateEntity);
         }
 
         /// <summary>
