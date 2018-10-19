@@ -111,12 +111,12 @@ namespace ShipWorks.OrderLookup
             IShippingManager shippingManager,
             IMessageHelper messageHelper,
             Func<IInsuranceBehaviorChangeViewModel> createInsuranceBehaviorChange,
-			OrderLookupLabelShortcutPipeline shortcutPipeline)
+            OrderLookupLabelShortcutPipeline shortcutPipeline)
         {
             this.messenger = messenger;
             this.shippingManager = shippingManager;
             this.messageHelper = messageHelper;
-			this.createInsuranceBehaviorChange = createInsuranceBehaviorChange;
+            this.createInsuranceBehaviorChange = createInsuranceBehaviorChange;
             handler = new PropertyChangedHandler(this, () => PropertyChanged);
             this.shortcutPipeline = shortcutPipeline;
 
@@ -314,8 +314,8 @@ namespace ShipWorks.OrderLookup
 
             if (ShipmentAdapter != null)
             {
-                messenger.Send(new ShipmentSelectionChangedMessage(this, new[] { ShipmentAdapter.Shipment.ShipmentID }, ShipmentAdapter));
                 OrderLoaded?.Invoke(this, EventArgs.Empty);
+                messenger.Send(new ShipmentSelectionChangedMessage(this, new[] { ShipmentAdapter.Shipment.ShipmentID }, ShipmentAdapter));
             }
         }
 
@@ -419,11 +419,11 @@ namespace ShipWorks.OrderLookup
                 {
                     RemovePropertyChangedEventsFromEntities(ShipmentAdapter);
 
-					bool originalInsuranceSelection = shipmentAdapter.Shipment.Insurance;
+                    bool originalInsuranceSelection = shipmentAdapter.Shipment.Insurance;
                     ShipmentAdapter = shippingManager.ChangeShipmentType(value, ShipmentAdapter.Shipment);
-					ShipmentAdapter.UpdateDynamicData();
+                    ShipmentAdapter.UpdateDynamicData();
 
-					createInsuranceBehaviorChange().Notify(originalInsuranceSelection, shipmentAdapter.Shipment.Insurance);
+                    createInsuranceBehaviorChange().Notify(originalInsuranceSelection, shipmentAdapter.Shipment.Insurance);
 
                     RefreshProperties();
 
