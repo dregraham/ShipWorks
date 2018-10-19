@@ -192,11 +192,14 @@ namespace ShipWorks.OrderLookup
         /// </summary>
         public void RaisePropertyChanged(string propertyName)
         {
-            handler.RaisePropertyChanged(propertyName);
-
-            if (ShipmentAdapter?.Shipment != null)
+            using (ShipmentAdapter?.Shipment.BatchPropertyChangeNotifications())
             {
-                messenger.Send(new ShipmentChangedMessage(this, ShipmentAdapter, propertyName, RemovePropertyChangedEventsFromEntities));
+                handler.RaisePropertyChanged(propertyName);
+
+                if (ShipmentAdapter?.Shipment != null)
+                {
+                    messenger.Send(new ShipmentChangedMessage(this, ShipmentAdapter, propertyName, RemovePropertyChangedEventsFromEntities));
+                }
             }
         }
 
