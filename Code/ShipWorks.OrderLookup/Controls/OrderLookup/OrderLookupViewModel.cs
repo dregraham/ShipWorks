@@ -7,7 +7,6 @@ using System.Reactive.Linq;
 using System.Reflection;
 using System.Windows;
 using Autofac;
-using Autofac.Features.Indexed;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Messaging;
@@ -47,17 +46,15 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookup
         /// </summary>
         public OrderLookupViewModel(IOrderLookupShipmentModel shipmentModel,
             OrderLookupSearchViewModel orderLookupSearchViewModel,
-            IIndex<OrderLookupPanels, IOrderLookupWrapperViewModel<IOrderLookupViewModel>> lookupPanels,
             ILifetimeScope scope,
             IObservable<IShipWorksMessage> messages)
         {
             this.scope = scope;
             handler = new PropertyChangedHandler(this, () => PropertyChanged);
             ShipmentModel = shipmentModel;
-            ShipmentModel.PropertyChanged += OnShipmentModelPropertyChanged;
-            ShipmentModel.OrderUnloading += OnShipmentModelOrderUnloading;
-            ShipmentModel.OrderLoading += OnShipmentModelOrderLoading;
-            ShipmentModel.OrderLoaded += OnShipmentModelOrderLoaded;
+            ShipmentModel.ShipmentUnloading += OnShipmentModelShipmentUnloading;
+            ShipmentModel.ShipmentLoading += OnShipmentModelShipmentLoading;
+            ShipmentModel.ShipmentLoaded += OnShipmentModelShipmentLoaded;
             OrderLookupSearchViewModel = orderLookupSearchViewModel;
 
             LeftColumn = new ObservableCollection<IOrderLookupWrapperViewModel<IOrderLookupViewModel>>
@@ -91,31 +88,19 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookup
         }
 
         /// <summary>
-        /// An order is unloading
+        /// A shipment is unloading
         /// </summary>
-        private void OnShipmentModelOrderUnloading(object sender, EventArgs e) => UnloadViewModels();
+        private void OnShipmentModelShipmentUnloading(object sender, EventArgs e) => UnloadViewModels();
 
         /// <summary>
-        /// An order has fully loaded
+        /// A shipment has fully loaded
         /// </summary>
-        private void OnShipmentModelOrderLoaded(object sender, EventArgs e) => LoadViewModels();
+        private void OnShipmentModelShipmentLoaded(object sender, EventArgs e) => LoadViewModels();
 
         /// <summary>
-        /// An order is loading
+        /// A shipment is loading
         /// </summary>
-        private void OnShipmentModelOrderLoading(object sender, EventArgs e) => UnloadViewModels();
-
-        /// <summary>
-        /// Handle changing of shipments or shipment types
-        /// </summary>
-        private void OnShipmentModelPropertyChanged(object sender, PropertyChangedEventArgs e)
-        {
-            if (e.PropertyName == nameof(OrderLookupShipmentModel))  // The provider has changed on the shipment
-            {
-                UnloadViewModels();
-                LoadViewModels();
-            }
-        }
+        private void OnShipmentModelShipmentLoading(object sender, EventArgs e) => UnloadViewModels();
 
         /// <summary>
         /// Load the view models
@@ -194,9 +179,9 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookup
         /// </summary>
         public void Dispose()
         {
-            ShipmentModel.PropertyChanged -= OnShipmentModelPropertyChanged;
-            ShipmentModel.OrderLoading -= OnShipmentModelOrderLoading;
-            ShipmentModel.OrderLoaded -= OnShipmentModelOrderLoaded;
+            ShipmentModel.ShipmentUnloading -= OnShipmentModelShipmentUnloading;
+            ShipmentModel.ShipmentLoading -= OnShipmentModelShipmentLoading;
+            ShipmentModel.ShipmentLoaded -= OnShipmentModelShipmentLoaded;
             subscriptions?.Dispose();
             innerScope?.Dispose();
         }
