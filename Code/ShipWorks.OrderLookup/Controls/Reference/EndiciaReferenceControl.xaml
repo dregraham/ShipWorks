@@ -5,7 +5,6 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:reference="clr-namespace:ShipWorks.OrderLookup.Controls.Reference"
-    Width="400"
     FontFamily="/ShipWorks.OrderLookup;component/#Roboto"
     FontSize="12"
     mc:Ignorable="d"
