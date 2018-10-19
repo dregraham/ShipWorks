@@ -172,7 +172,6 @@
       <DependentUpon>GenericLabelOptionsControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\LabelOptions\AmazonLabelOptionsViewModel.cs" />
-    <Compile Include="Controls\LabelOptions\UpsLabelOptionsViewModel.cs" />
     <Compile Include="Controls\OrderLookupWrapperControl.xaml.cs">
       <DependentUpon>OrderLookupWrapperControl.xaml</DependentUpon>
     </Compile>
