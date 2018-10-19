@@ -10,8 +10,8 @@ namespace ShipWorks.UI
     /// </summary>
     public class WpfViewTemplateSelector : DataTemplateSelector
     {
-        static readonly DataTemplate emptyTemplate = new DataTemplate();
-        readonly Dictionary<Type, DataTemplate> templates = new Dictionary<Type, DataTemplate>();
+        private static readonly DataTemplate emptyTemplate = new DataTemplate();
+        private readonly Dictionary<Type, Func<DataTemplate>> templates = new Dictionary<Type, Func<DataTemplate>>();
 
         /// <summary>
         /// Select a template for a given item
@@ -23,24 +23,24 @@ namespace ShipWorks.UI
                 return emptyTemplate;
             }
 
-            DataTemplate template = null;
-            if (templates.TryGetValue(item.GetType(), out template))
+            Func<DataTemplate> templateCreator = null;
+            if (templates.TryGetValue(item.GetType(), out templateCreator))
             {
-                return template;
+                return templateCreator();
             }
 
             Type itemType = item.GetType();
-            template = CreateTemplate(itemType);
+            templateCreator = CreateTemplateCreator(itemType);
 
-            templates.Add(itemType, template);
+            templates.Add(itemType, templateCreator);
 
-            return template;
+            return templateCreator();
         }
 
         /// <summary>
         /// Create a template for the type specified
         /// </summary>
-        private DataTemplate CreateTemplate(Type itemType)
+        private Func<DataTemplate> CreateTemplateCreator(Type itemType)
         {
             var viewAttribute = Attribute.GetCustomAttribute(itemType, typeof(WpfViewAttribute)) as WpfViewAttribute;
             if (viewAttribute == null)
@@ -48,10 +48,7 @@ namespace ShipWorks.UI
                 throw new InvalidOperationException($"A view must be specified for {itemType.Name}");
             }
 
-            return new DataTemplate
-            {
-                VisualTree = new FrameworkElementFactory(viewAttribute.ViewType)
-            };
+            return () => new DataTemplate { VisualTree = new FrameworkElementFactory(viewAttribute.ViewType) };
         }
     }
 }

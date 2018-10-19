@@ -8,12 +8,8 @@ using ShipWorks.Shipping.ShipEngine;
 using ShipWorks.Shipping.Tracking;
 using ShipWorks.Tests.Shared;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using ShipWorks.Shipping.Carriers.FedEx;
-using ShipWorks.Tests.Shared.EntityBuilders;
 using Xunit;
 using static ShipWorks.Tests.Shared.ExtensionMethods.ParameterShorteners;
 

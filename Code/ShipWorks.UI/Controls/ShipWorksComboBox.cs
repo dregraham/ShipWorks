@@ -11,7 +11,7 @@ namespace ShipWorks.UI.Controls
     /// </summary>
     public class ShipWorksComboBox : ComboBox
     {
-        static readonly PropertyMetadata existingMetadata = SelectedValueProperty.GetMetadata(typeof(Selector));
+        private static readonly PropertyMetadata existingMetadata = SelectedValueProperty.GetMetadata(typeof(Selector));
 
         /// <summary>
         /// Message type dependency property

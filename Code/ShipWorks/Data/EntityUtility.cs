@@ -4,11 +4,11 @@ using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Reactive.Disposables;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 using Common.Logging;
 using Interapptive.Shared;
-using Interapptive.Shared.Collections;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.Custom;
@@ -27,7 +27,7 @@ namespace ShipWorks.Data
     {
         #region InternalDataAdapter
 
-        class InternalDataAdapter : DataAccessAdapter
+        private class InternalDataAdapter : DataAccessAdapter
         {
             /// <summary>
             /// Get the collection of all relations for the given entity
@@ -43,8 +43,8 @@ namespace ShipWorks.Data
 
         #endregion
 
-        static ILog log = LogManager.GetLogger(typeof(EntityUtility));
-        static Dictionary<EntityType, int> entitySeedValues = new Dictionary<EntityType, int>();
+        private static ILog log = LogManager.GetLogger(typeof(EntityUtility));
+        private static Dictionary<EntityType, int> entitySeedValues = new Dictionary<EntityType, int>();
 
         /// <summary>
         /// Static constructor
@@ -217,7 +217,7 @@ namespace ShipWorks.Data
         /// <summary>
         /// Clone the entity
         /// </summary>
-        static T CloneIt<T>(T entity) where T : EntityBase2
+        private static T CloneIt<T>(T entity) where T : EntityBase2
         {
             using (MemoryStream memoryStream = new MemoryStream(1284))
             {
@@ -861,5 +861,23 @@ namespace ShipWorks.Data
                 .Where(x => x.IsDirty).ToDictionary(x => x,
                 x => x.Fields.OfType<IEntityField2>().Where(field => field.IsChanged).ToList() as IEnumerable<IEntityField2>);
         }
+
+        /// <summary>
+        /// Suppress property change notifications
+        /// </summary>
+        /// <remarks>This is not thread-safe</remarks>
+        public static IDisposable SurpressPropertyChangeNotificationsOnGraph(this CommonEntityBase entity) =>
+            new CompositeDisposable(new ObjectGraphUtils()
+                .ProduceTopologyOrderedList(entity)
+                .Select(x => x.SurpressPropertyChangeNotifications()));
+
+        /// <summary>
+        /// Suppress property change notifications until the scope is finished, then send notifications for all properties
+        /// </summary>
+        /// <remarks>This is not thread-safe</remarks>
+        public static IDisposable BatchPropertyChangeNotificationsOnGraph(this CommonEntityBase entity) =>
+            new CompositeDisposable(new ObjectGraphUtils()
+                .ProduceTopologyOrderedList(entity)
+                .Select(x => x.BatchPropertyChangeNotifications()));
     }
 }

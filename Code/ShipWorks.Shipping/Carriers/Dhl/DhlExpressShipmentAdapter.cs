@@ -1,4 +1,6 @@
-﻿using Interapptive.Shared.ComponentRegistration;
+﻿using System;
+using System.ComponentModel;
+using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Editing.Rating;
@@ -75,11 +77,13 @@ namespace ShipWorks.Shipping.Carriers.Dhl
         /// <summary>
         /// Add a new package to the shipment
         /// </summary>
-        public override IPackageAdapter AddPackage()
+        public override IPackageAdapter AddPackage(Action<INotifyPropertyChanged> manipulateEntity)
         {
             DhlExpressPackageEntity package = DhlExpressShipmentType.CreateDefaultPackage();
             Shipment.DhlExpress.Packages.Add(package);
             UpdateDynamicData();
+
+            manipulateEntity?.Invoke(package);
 
             return new DhlExpressPackageAdapter(Shipment, package, Shipment.DhlExpress.Packages.IndexOf(package) + 1);
         }
@@ -87,9 +91,9 @@ namespace ShipWorks.Shipping.Carriers.Dhl
         /// <summary>
         /// Delete a package from the shipment
         /// </summary>
-        public override void DeletePackage(IPackageAdapter packageAdapter)
+        public override void DeletePackage(IPackageAdapter packageAdapter, Action<INotifyPropertyChanged> manipulateEntity)
         {
-            DeletePackageFromCollection(Shipment.DhlExpress.Packages, x => x.DhlExpressPackageID == packageAdapter.PackageId);
+            DeletePackageFromCollection(Shipment.DhlExpress.Packages, x => x.DhlExpressPackageID == packageAdapter.PackageId, manipulateEntity);
         }
 
         /// <summary>

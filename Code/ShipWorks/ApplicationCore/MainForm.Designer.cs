@@ -2540,6 +2540,7 @@ namespace ShipWorks
             this.buttonOrderLookupViewCreateLabel.QuickAccessKey = "OE";
             this.buttonOrderLookupViewCreateLabel.Text = "Create\r\nLabel";
             this.buttonOrderLookupViewCreateLabel.TextContentRelation = Divelements.SandRibbon.TextContentRelation.Underneath;
+            this.buttonOrderLookupViewCreateLabel.Activate += OnButtonOrderLookupViewCreateLabel;
             // 
             // buttonOrderLookupViewManualOrder
             // 

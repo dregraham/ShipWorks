@@ -1,25 +1,80 @@
 using System;
+using System.Collections.Generic;
+using System.Data.SqlTypes;
+using System.Linq;
+using System.Reactive.Disposables;
 using Interapptive.Shared.Collections;
+using Interapptive.Shared.Utility;
 using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Model.Custom;
-using System.Data.SqlTypes;
 
 namespace ShipWorks.Data.Model.EntityClasses
 {
-    partial class CommonEntityBase
+    public partial class CommonEntityBase
     {
-        static readonly ILog log = LogManager.GetLogger(typeof(CommonEntityBase));
-
-        bool ignoreConcurrency = false;
+        private static readonly ILog log = LogManager.GetLogger(typeof(CommonEntityBase));
+        private bool ignoreConcurrency = false;
 
         // Indicates if we are in process of saving a new entity or just updating
-        bool savingNewEntity = false;
+        private bool savingNewEntity = false;
+        private int suppressPropertyChangeNotifications;
+        private Stack<HashSet<string>> propertyChanges = new Stack<HashSet<string>>();
 
         /// <summary>
         /// Raised when an entity is persisted to the database - deleted or saved
         /// </summary>
         public static event EntityPersistedEventHandler EntityPersisted;
+
+        /// <summary>
+        /// Suppress property change notifications
+        /// </summary>
+        /// <remarks>This is not thread-safe</remarks>
+        public IDisposable SurpressPropertyChangeNotifications()
+        {
+            suppressPropertyChangeNotifications += 1;
+
+            return Disposable.Create(() => Math.Max(0, suppressPropertyChangeNotifications -= 1));
+        }
+
+        /// <summary>
+        /// Suppress property change notifications until the scope is finished, then send notifications for all properties
+        /// </summary>
+        /// <remarks>This is not thread-safe</remarks>
+        public IDisposable BatchPropertyChangeNotifications()
+        {
+            propertyChanges.Push(new HashSet<string>());
+
+            var suppression = SurpressPropertyChangeNotifications();
+
+            return Disposable.Create(() =>
+            {
+                suppression.Dispose();
+
+                propertyChanges
+                    .Pop()
+                    .ForEach(base.OnPropertyChanged);
+            });
+        }
+
+        /// <summary>
+        /// Called when a property changed value. Call this method to signal data-bound controls a property has changed.
+        /// </summary>
+        /// <param name="propertyName">Name of the property.</param>
+        protected override void OnPropertyChanged(string propertyName)
+        {
+            if (suppressPropertyChangeNotifications > 0)
+            {
+                if (propertyChanges.Any())
+                {
+                    propertyChanges.Peek()?.Add(propertyName);
+                }
+            }
+            else
+            {
+                base.OnPropertyChanged(propertyName);
+            }
+        }
 
         /// <summary>
         /// Controls if this Entity ignores timestamp concurrency checking.  Only matters if the entity class is already registered
@@ -176,6 +231,19 @@ namespace ShipWorks.Data.Model.EntityClasses
             base.OnAuditDeleteOfEntity();
 
             RaiseEntityPersisted(this, EntityPersistedAction.Delete);
+        }
+
+        /// <summary>
+        /// Check whether we should update the value
+        /// </summary>
+        protected override void OnSetValue(int fieldIndex, object valueToSet, out bool cancel)
+        {
+            base.OnSetValue(fieldIndex, valueToSet, out cancel);
+
+            if (valueToSet is double newValue && Fields[fieldIndex].CurrentValue is double oldValue)
+            {
+                cancel = cancel || oldValue.IsEquivalentTo(newValue);
+            }
         }
 
         /// <summary>

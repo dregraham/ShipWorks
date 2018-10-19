@@ -70,6 +70,11 @@ namespace ShipWorks.OrderLookup
         decimal TotalCost { get; set; }
 
         /// <summary>
+        /// Keep track of the original ShipmentTypeCode so we can ensure its in the list of providers
+        /// </summary>
+        ShipmentTypeCode OriginalShipmentTypeCode { get; }
+
+        /// <summary>
         /// Changes the shipment type
         /// </summary>
         void ChangeShipmentType(ShipmentTypeCode value);
@@ -78,5 +83,35 @@ namespace ShipWorks.OrderLookup
         /// Load the order
         /// </summary>
         void LoadOrder(OrderEntity order);
+
+        /// <summary>
+        /// Create the label for an order
+        /// </summary>
+        void CreateLabel();
+
+        /// <summary>
+        /// Wire a property changed event on an INotifyPropertyChanged object
+        /// </summary>
+        void WirePropertyChangedEvent(INotifyPropertyChanged eventObject);
+
+        /// <summary>
+        /// Unwire property changed event on an INotifyPropertyChanged object
+        /// </summary>
+        void UnwirePropertyChangedEvent(INotifyPropertyChanged eventObject);
+
+        /// <summary>
+        /// An order is starting to unload
+        /// </summary>
+        event EventHandler OrderUnloading;
+
+        /// <summary>
+        /// An order is starting to load
+        /// </summary>
+        event EventHandler OrderLoading;
+
+        /// <summary>
+        /// An order was fully loaded
+        /// </summary>
+        event EventHandler OrderLoaded;
     }
 }

@@ -162,6 +162,14 @@ namespace ShipWorks.Shipping.Carriers.Postal
         {
             base.UpdateDynamicShipmentData(shipment);
 
+            UpdatePostalDetails(shipment);
+        }
+
+        /// <summary>
+        /// Update the postal details of a shipment
+        /// </summary>
+        public void UpdatePostalDetails(ShipmentEntity shipment)
+        {
             // Need to check with the store  to see if anything about the shipment was overridden in case
             // it may have effected the shipping services available (i.e. the eBay GSP program)
             ShipmentEntity overriddenShipment = ShippingManager.GetOverriddenStoreShipment(shipment);
@@ -241,17 +249,10 @@ namespace ShipWorks.Shipping.Carriers.Postal
         }
 
         /// <summary>
-        /// Update the total weight of the shipment
+        /// Get the dims weight from a shipment, if any
         /// </summary>
-        public override void UpdateTotalWeight(ShipmentEntity shipment)
-        {
-            shipment.TotalWeight = shipment.ContentWeight;
-
-            if (shipment.Postal.DimsAddWeight)
-            {
-                shipment.TotalWeight += shipment.Postal.DimsWeight;
-            }
-        }
+        protected override double GetDimsWeight(IShipmentEntity shipment) =>
+            shipment.Postal?.DimsAddWeight == true ? shipment.Postal.DimsWeight : 0;
 
         /// <summary>
         /// Get the parcel data for the shipment

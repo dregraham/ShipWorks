@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Reactive.Disposables;
 using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Forms.Integration;
@@ -39,8 +40,8 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookup
             {
                 DataContext = orderLookupViewModel
             };
-            orderLookupControl.IsKeyboardFocusWithinChanged += OnIsKeyboardFocusWithinChanged;
-            orderLookupControl.LostFocus += OnOrderLookupControlLostFocus;
+
+            EnableFocusEvents();
 
             ElementHost host = new ElementHost
             {
@@ -54,7 +55,49 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookup
         /// <summary>
         /// Unload the order from the viewmodel shipmentModel
         /// </summary>
-        public void Unload() => orderLookupViewModel.ShipmentModel.Unload();
+        public void Unload()
+        {
+            CommitBindingsOnFocusedControl();
+            orderLookupViewModel.ShipmentModel.Unload();
+        }
+
+        /// <summary>
+        /// Create the label for a shipment
+        /// </summary>
+        public void CreateLabel()
+        {
+            using (Disposable.Create(EnableFocusEvents))
+            {
+                DisableFocusEvents();
+                orderLookupViewModel.ShipmentModel.CreateLabel();
+            }
+        }
+
+        /// <summary>
+        /// Enable focus events
+        /// </summary>
+        public void EnableFocusEvents()
+        {
+            orderLookupControl.IsKeyboardFocusWithinChanged += OnIsKeyboardFocusWithinChanged;
+            orderLookupControl.LostFocus += OnOrderLookupControlLostFocus;
+        }
+
+        /// <summary>
+        /// Disable focus events
+        /// </summary>
+        public void DisableFocusEvents()
+        {
+            orderLookupControl.IsKeyboardFocusWithinChanged -= OnIsKeyboardFocusWithinChanged;
+            orderLookupControl.LostFocus -= OnOrderLookupControlLostFocus;
+        }
+
+        /// <summary>
+        /// Allow the creation of a label
+        /// </summary>
+        public bool CreateLabelAllowed()
+        {
+            return orderLookupViewModel.ShipmentModel?.ShipmentAdapter?.Shipment?.Processed == false;
+        }
 
         /// <summary>
         /// Expose the Control

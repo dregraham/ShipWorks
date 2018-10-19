@@ -154,7 +154,6 @@
                 Grid.Row="1"
                 Grid.Column="0"
                 Padding="0,3,0,2"
-                VerticalAlignment="Top"
                 Style="{StaticResource FieldLabel}">
                 Street
             </TextBlock>

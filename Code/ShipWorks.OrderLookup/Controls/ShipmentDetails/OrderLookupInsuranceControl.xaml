@@ -95,8 +95,7 @@
             Grid.Row="1"
             Grid.Column="1"
             Orientation="Horizontal"
-            Style="{StaticResource FormWrapPanel}"
-            Visibility="{Binding Insurance, Converter={StaticResource BooleanToVisibility}}">
+            Style="{StaticResource FormWrapPanel}" >
             <TextBlock                
                 VerticalAlignment="Center"
                 Style="{StaticResource FieldLabel}"

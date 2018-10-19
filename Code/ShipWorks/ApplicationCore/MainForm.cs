@@ -181,6 +181,15 @@ namespace ShipWorks
                 { ribbonTabOrderLookupViewShipping, x => x == UIMode.OrderLookup },
                 { ribbonTabOrderLookupViewShipmentHistory, x => x == UIMode.OrderLookup },
             };
+
+            // Listen for message to enable Create Label button
+            Messenger.Current.Subscribe(x =>
+            {
+                if (x is ShipmentSelectionChangedMessage && currentUserSettings.GetUIMode() == UIMode.OrderLookup)
+                {
+                    buttonOrderLookupViewCreateLabel.Enabled = orderLookupControl?.CreateLabelAllowed() == true;
+                }
+            });
         }
 
         /// <summary>
@@ -262,6 +271,14 @@ namespace ShipWorks
                     messageHelper.ShowError(ex.Message);
                 }
             }
+        }
+
+        /// <summary>
+        /// User clicks the Create Label button in Order Lookup Mode
+        /// </summary>
+        private void OnButtonOrderLookupViewCreateLabel(object sender, System.EventArgs e)
+        {
+            orderLookupControl.CreateLabel();
         }
 
         #region Initialization \ Shutdown
@@ -476,7 +493,8 @@ namespace ShipWorks
             // to save later, after the user has logged out. This caused an exception because we couldn't audit the save.
             // This was moved to its current location because if we're crashing, calling Focus can cause a cross-thread
             // exception, preventing ShipWorks from shutting down. If we're crashing, we can't be sure a save is valid anyway.
-            Focus();
+            Focus(); 
+            UnloadOrderLookupMode();
 
             using (ConnectionSensitiveScope scope = new ConnectionSensitiveScope("close ShipWorks", this))
             {

@@ -5,6 +5,7 @@ using GalaSoft.MvvmLight.Command;
 using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Core.UI;
+using ShipWorks.Users.Security;
 
 namespace ShipWorks.OrderLookup.Controls.OrderLookupSearchControl
 {
@@ -16,21 +17,24 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookupSearchControl
     {
         private readonly IOrderLookupShipmentModel shipmentModel;
         private readonly IMessenger messenger;
+        private readonly ISecurityContext securityContext;
         public event PropertyChangedEventHandler PropertyChanged;
         private readonly PropertyChangedHandler handler;
         private string orderNumber = string.Empty;
         private bool showCreateLabel = false;
-        private string totalCost = string.Empty;
         private string searchErrorMessage = string.Empty;
         private bool searchError;
 
         /// <summary>
         /// Ctor
         /// </summary>
-        public OrderLookupSearchViewModel(IOrderLookupShipmentModel shipmentModel, IMessenger messenger)
+        public OrderLookupSearchViewModel(IOrderLookupShipmentModel shipmentModel, IMessenger messenger, 
+                                          ISecurityContext securityContext)
         {
             this.shipmentModel = shipmentModel;
             this.messenger = messenger;
+            this.securityContext = securityContext;
+
             shipmentModel.PropertyChanged += UpdateOrderNumber;
             handler = new PropertyChangedHandler(this, () => PropertyChanged);
             GetOrderCommand = new RelayCommand(GetOrder);
@@ -85,7 +89,7 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookupSearchControl
         }
 
         /// <summary>
-        /// Indicates whether or not an error has occured while searching.
+        /// Indicates whether or not an error has occurred while searching.
         /// </summary>
         [Obfuscation(Exclude = true)]
         public bool SearchError
@@ -144,9 +148,14 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookupSearchControl
                     OrderNumber = shipmentModel.SelectedOrder.OrderNumberComplete;
                 }
             }
-            else if (e.PropertyName == nameof(shipmentModel.ShipmentAdapter))
+
+            if (e.PropertyName == nameof(shipmentModel.ShipmentAdapter) ||
+                e.PropertyName == nameof(shipmentModel.SelectedOrder))
             {
-                ShowCreateLabel = shipmentModel.ShipmentAdapter?.Shipment?.Processed == false;
+                ShowCreateLabel = ShipmentModel?.SelectedOrder != null &&
+                                  ShipmentModel?.ShipmentAdapter?.Shipment != null &&
+                                  !ShipmentModel.ShipmentAdapter.Shipment.Processed &&
+                                  securityContext.HasPermission(PermissionType.ShipmentsCreateEditProcess, ShipmentModel.SelectedOrder.OrderID);
             }
         }
 
@@ -156,6 +165,8 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookupSearchControl
         private void GetOrder()
         {
             ClearOrderError();
+            ShipmentModel.TotalCost = 0;
+            ShowCreateLabel = false;
             messenger.Send(new OrderLookupSearchMessage(this, OrderNumber));
         }
 
@@ -175,7 +186,7 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookupSearchControl
         /// </summary>
         private void CreateLabel()
         {
-            throw new System.NotImplementedException();
+            ShipmentModel.CreateLabel();
         }
     }
 }

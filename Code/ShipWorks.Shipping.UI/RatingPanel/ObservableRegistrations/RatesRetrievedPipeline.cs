@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Linq;
-using System.Reactive;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using Interapptive.Shared.Collections;
@@ -20,8 +18,8 @@ namespace ShipWorks.Shipping.UI.RatingPanel.ObservableRegistrations
     /// </summary>
     public class RatesRetrievedPipeline : IRatingPanelGlobalPipeline
     {
-        readonly IMessenger messenger;
-        readonly ISchedulerProvider schedulerProvider;
+        private readonly IMessenger messenger;
+        private readonly ISchedulerProvider schedulerProvider;
 
         /// <summary>
         /// Constructor
@@ -68,7 +66,9 @@ namespace ShipWorks.Shipping.UI.RatingPanel.ObservableRegistrations
         /// <returns></returns>
         private IObservable<IShipWorksMessage> GetResumeObservable()
         {
-            return messenger.OfType<OrderSelectionChangingMessage>().Select(x => x as IShipWorksMessage).Merge(messenger.OfType<InitializeRatesRetrievedPipelineMessage>().Select(x => x as IShipWorksMessage));
+            return messenger.OfType<OrderSelectionChangingMessage>()
+                .Select(x => x as IShipWorksMessage)
+                .Merge(messenger.OfType<InitializeRatesRetrievedPipelineMessage>().Select(x => x as IShipWorksMessage));
         }
 
         /// <summary>

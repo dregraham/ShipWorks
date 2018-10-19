@@ -33,6 +33,10 @@ namespace ShipWorks.OrderLookup.Controls
         
         [ApiValue("Rates")]
         [Description("Rates")]
-        Rates
+        Rates,
+        
+        [ApiValue("QuantumViewNotify")]
+        [Description("Quantum View Notify")]
+        QuantumViewNotify
     }
 }
