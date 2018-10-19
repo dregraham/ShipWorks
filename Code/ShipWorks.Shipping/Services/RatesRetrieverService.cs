@@ -65,6 +65,7 @@ namespace ShipWorks.Shipping.Services
             subscription = ChangedShipments()
                 .Merge(ChangedOrders())
                 .Merge(SelectedShipment())
+                .Where(x => x.ShipmentAdapter?.Shipment?.Processed == false)
                 .Select(x => new
                 {
                     ShipmentAdapter = CloneAdapter(x.ShipmentAdapter, x.OnAfterClone),

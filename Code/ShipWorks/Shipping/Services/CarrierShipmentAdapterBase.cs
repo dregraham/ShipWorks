@@ -385,8 +385,14 @@ namespace ShipWorks.Shipping.Services
         /// <summary>
         /// Update the total weight of the shipment based on its ContentWeight and any packaging weight.
         /// </summary>
-        public void UpdateTotalWeight() => shipmentType.UpdateTotalWeight(Shipment);
-        
+        public void UpdateTotalWeight()
+        {
+            if (Shipment.Processed)
+            {
+                shipmentType.UpdateTotalWeight(Shipment);
+            }
+        }
+
         /// <summary>
         /// Get a strongly typed ShipmentType
         /// </summary>
