@@ -223,13 +223,14 @@
     <Compile Include="Controls\ShipmentDetails\UpsShipmentDetailsControl.xaml.cs">
       <DependentUpon>UpsShipmentDetailsControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\To\GenericToWithResidentialDeterminationViewModel.cs" />
     <Compile Include="Controls\To\IToViewModel.cs" />
     <Compile Include="Controls\To\GenericToControl.xaml.cs">
       <DependentUpon>GenericToControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\To\GenericToViewModel.cs" />
-    <Compile Include="Controls\To\UpsToControl.xaml.cs">
-      <DependentUpon>UpsToControl.xaml</DependentUpon>
+    <Compile Include="Controls\To\GenericToWithResidentialDeterminationControl.xaml.cs">
+      <DependentUpon>GenericToWithResidentialDeterminationControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\To\UpsToViewModel.cs" />
     <Compile Include="FieldManager\IOrderLookupFieldLayoutDefaults.cs" />
@@ -473,7 +474,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Controls\To\UpsToControl.xaml">
+    <Page Include="Controls\To\GenericToWithResidentialDeterminationControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
