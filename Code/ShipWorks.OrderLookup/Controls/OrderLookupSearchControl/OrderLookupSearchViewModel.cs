@@ -22,7 +22,6 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookupSearchControl
         private readonly PropertyChangedHandler handler;
         private string orderNumber = string.Empty;
         private bool showCreateLabel = false;
-        private string totalCost = string.Empty;
         private string searchErrorMessage = string.Empty;
         private bool searchError;
 
@@ -166,6 +165,8 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookupSearchControl
         private void GetOrder()
         {
             ClearOrderError();
+            ShipmentModel.TotalCost = 0;
+            ShowCreateLabel = false;
             messenger.Send(new OrderLookupSearchMessage(this, OrderNumber));
         }
 
