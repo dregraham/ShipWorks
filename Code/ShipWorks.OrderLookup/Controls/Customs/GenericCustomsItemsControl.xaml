@@ -51,7 +51,7 @@
             <ListBox
                 Grid.Row="1"
                 Grid.Column="0"
-                MaxHeight="90"
+                MaxHeight="97"
                 ItemsSource="{Binding CustomsItems}"
                 SelectedValue="{Binding SelectedCustomsItem}"
                 SelectionMode="Single">
@@ -71,10 +71,10 @@
             <StackPanel
                 Grid.Row="1"
                 Grid.Column="1"
-                Margin="4,0,0,0"
+                Margin="10,0,0,0"
                 Orientation="Vertical">
                 <Button
-                    Margin="0,0,0,4"
+                    Margin="0,0,0,10"
                     Command="{Binding AddCustomsItemCommand}"
                     Style="{StaticResource OrderLookup.Button.Add}" />
                 <Button Command="{Binding DeleteCustomsItemCommand, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource OrderLookup.Button.Delete}" />

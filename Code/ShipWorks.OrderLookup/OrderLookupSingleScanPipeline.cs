@@ -1,19 +1,18 @@
 ﻿using System;
+using System.Linq;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
+using System.Threading.Tasks;
+using Interapptive.Shared.Metrics;
+using log4net;
 using ShipWorks.ApplicationCore;
+using ShipWorks.Core.Common.Threading;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Messaging.Messages.SingleScan;
 using ShipWorks.Settings;
-using ShipWorks.Stores.Communication;
-using System.Threading.Tasks;
-using System.Linq;
-using ShipWorks.Core.Common.Threading;
-using ShipWorks.Messaging.Messages.Shipping;
-using ShipWorks.Messaging.Messages;
 using ShipWorks.SingleScan;
-using Interapptive.Shared.Metrics;
+using ShipWorks.Stores.Communication;
 
 namespace ShipWorks.OrderLookup
 {
@@ -29,9 +28,9 @@ namespace ShipWorks.OrderLookup
         private readonly IOrderLookupAutoPrintService orderLookupAutoPrintService;
         private readonly IAutoWeighService autoWeighService;
         private readonly IOrderLookupShipmentModel shipmentModel;
+        private readonly ILog log;
         private IDisposable subscriptions;
-
-        bool processingScan = false;
+        private bool processingScan = false;
 
         /// <summary>
         /// Constructor
@@ -43,7 +42,8 @@ namespace ShipWorks.OrderLookup
             IOnDemandDownloaderFactory onDemandDownloaderFactory,
             IOrderLookupAutoPrintService orderLookupAutoPrintService,
             IAutoWeighService autoWeighService,
-            IOrderLookupShipmentModel shipmentModel)
+            IOrderLookupShipmentModel shipmentModel,
+            Func<Type, ILog> createLogger)
         {
             this.messenger = messenger;
             this.mainForm = mainForm;
@@ -52,6 +52,7 @@ namespace ShipWorks.OrderLookup
             this.orderLookupAutoPrintService = orderLookupAutoPrintService;
             this.autoWeighService = autoWeighService;
             this.shipmentModel = shipmentModel;
+            log = createLogger(GetType());
         }
 
         /// <summary>
@@ -90,7 +91,7 @@ namespace ShipWorks.OrderLookup
                 if (orderId.HasValue)
                 {
                     AutoPrintCompletionResult result = await orderLookupAutoPrintService.AutoPrintShipment(orderId.Value, message).ConfigureAwait(true);
-                    order = result.ProcessShipmentResults?.Select(x=>x.Shipment.Order).FirstOrDefault();
+                    order = result.ProcessShipmentResults?.Select(x => x.Shipment.Order).FirstOrDefault();
                     if (order == null)
                     {
                         order = await orderRepository.GetOrder(orderId.Value).ConfigureAwait(true);
@@ -134,6 +135,10 @@ namespace ShipWorks.OrderLookup
                 }
 
                 shipmentModel.LoadOrder(order);
+            }
+            catch (Exception ex)
+            {
+                log.Error("Error while loading an order", ex);
             }
             finally
             {

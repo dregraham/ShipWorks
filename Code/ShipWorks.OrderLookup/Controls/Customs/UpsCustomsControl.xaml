@@ -49,6 +49,7 @@
             <TextBox
                 Grid.Row="0"
                 Grid.Column="1"
+                Margin="9 0 0 10"
                 Style="{StaticResource FormNumberTextBox}"
                 Text="{Binding ShipmentModel.ShipmentAdapter.Shipment.CustomsValue, Converter={StaticResource EmptyMoney}, NotifyOnValidationError=true, StringFormat=C, ValidatesOnDataErrors=true}">
                 <i:Interaction.Behaviors>
@@ -71,6 +72,7 @@
             <CheckBox
                 Grid.Row="1"
                 Grid.Column="1"
+                Margin="8 0 0 10"
                 IsChecked="{Binding ShipmentModel.ShipmentAdapter.Shipment.Ups.CustomsDocumentsOnly, UpdateSourceTrigger=PropertyChanged}"
                 Content="Documents only"
                 Style="{StaticResource FormCheckBox}" />
@@ -83,6 +85,7 @@
             <TextBox
                 Grid.Row="2"
                 Grid.Column="1"
+                Margin="9 0 0 10"
                 Style="{StaticResource FormTextBox}"
                 Text="{Binding ShipmentModel.ShipmentAdapter.Shipment.Ups.CustomsDescription, UpdateSourceTrigger=PropertyChanged}" />
         </Grid>

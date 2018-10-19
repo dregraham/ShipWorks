@@ -18,7 +18,6 @@ namespace ShipWorks.OrderLookup.Controls.To
         public UspsToViewModel(IOrderLookupShipmentModel shipmentModel, AddressViewModel addressViewModel)
             : base(shipmentModel, addressViewModel)
         {
-
         }
     }
 }

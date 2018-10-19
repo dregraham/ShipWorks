@@ -136,6 +136,10 @@
       <DependentUpon>GenericCustomsItemsControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\Customs\ICustomsViewModel.cs" />
+    <Compile Include="Controls\Customs\BestRateCustomsControl.xaml.cs">
+      <DependentUpon>BestRateCustomsControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\Customs\BestRateCustomsViewModel.cs" />
     <Compile Include="Controls\Customs\PostalCustomsViewModel.cs" />
     <Compile Include="Controls\Customs\UpsCustomsControl.xaml.cs">
       <DependentUpon>UpsCustomsControl.xaml</DependentUpon>
@@ -156,6 +160,10 @@
     <Compile Include="Controls\LabelOptions\GenericLabelOptionsViewModel.cs" />
     <Compile Include="Controls\LabelOptions\ILabelOptionsViewModel.cs" />
     <Compile Include="Controls\LabelOptions\PostalLabelOptionsViewModel.cs" />
+    <Compile Include="Controls\LabelOptions\BestRateLabelOptionsControl.xaml.cs">
+      <DependentUpon>BestRateLabelOptionsControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\LabelOptions\BestRateLabelOptionsViewModel.cs" />
     <Compile Include="Controls\LabelOptions\GenericLabelOptionsControl.xaml.cs">
       <DependentUpon>GenericLabelOptionsControl.xaml</DependentUpon>
     </Compile>
@@ -190,12 +198,16 @@
     </Compile>
     <Compile Include="Controls\Reference\UpsReferenceViewModel.cs" />
     <Compile Include="Controls\ShipmentDetails\IDetailsViewModel.cs" />
+    <Compile Include="Controls\ShipmentDetails\BestRateShipmentDetailsControl.xaml.cs">
+      <DependentUpon>BestRateShipmentDetailsControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\ShipmentDetails\PostalShipmentDetailsControl.xaml.cs">
       <DependentUpon>PostalShipmentDetailsControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\ShipmentDetails\CarrierShipmentAdapterOptionsProvider.cs" />
+    <Compile Include="Controls\ShipmentDetails\BestRateShipmentDetailsViewModel.cs" />
     <Compile Include="Controls\ShipmentDetails\AmazonShipmentDetailsViewModel.cs" />
-    <Compile Include="Controls\ShipmentDetails\UpsShipmentDetailsViewModel .cs" />
+    <Compile Include="Controls\ShipmentDetails\UpsShipmentDetailsViewModel.cs" />
     <Compile Include="Controls\ShipmentDetails\UpsShipmentDetailsControl.xaml.cs">
       <DependentUpon>UpsShipmentDetailsControl.xaml</DependentUpon>
     </Compile>
@@ -252,6 +264,7 @@
     <Compile Include="Controls\IOrderLookupWrapperViewModel.cs" />
     <Compile Include="IOrderLookupViewModel.cs" />
     <Compile Include="OrderLookupClearOrderMessage.cs" />
+    <Compile Include="OrderLookupLabelShortcutPipeline.cs" />
     <Compile Include="OrderLookupModule.cs" />
     <Compile Include="OrderLookupPreviousShipmentLocator.cs" />
     <Compile Include="PreviousProcessedShipmentDetails.cs" />
@@ -353,6 +366,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Controls\Customs\BestRateCustomsControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Controls\Customs\UpsCustomsControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -366,6 +383,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Controls\From\UspsFromControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Controls\LabelOptions\BestRateLabelOptionsControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -417,6 +438,10 @@
     <Page Include="Controls\OrderLookupSearchControl\OrderLookupSearchControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\ShipmentDetails\BestRateShipmentDetailsControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Controls\ShipmentDetails\PostalShipmentDetailsControl.xaml">
       <Generator>MSBuild:Compile</Generator>

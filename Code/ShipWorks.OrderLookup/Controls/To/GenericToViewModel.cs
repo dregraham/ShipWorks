@@ -3,6 +3,8 @@ using System.ComponentModel;
 using System.Reactive.Linq;
 using System.Reflection;
 using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.Enums;
+using ShipWorks.AddressValidation;
 using ShipWorks.Core.UI;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Shipping;
@@ -14,6 +16,7 @@ namespace ShipWorks.OrderLookup.Controls.To
     /// <summary>
     /// ViewModel for To panel in the OrderLookup view
     /// </summary>
+    [KeyedComponent(typeof(IToViewModel), ShipmentTypeCode.BestRate)]
     [KeyedComponent(typeof(IToViewModel), ShipmentTypeCode.Endicia)]
     [WpfView(typeof(GenericToControl))]
     public class GenericToViewModel : IToViewModel
@@ -35,7 +38,7 @@ namespace ShipWorks.OrderLookup.Controls.To
             ShipmentModel.PropertyChanged += ShipmentModelPropertyChanged;
             handler = new PropertyChangedHandler(this, () => PropertyChanged);
 
-            addressViewModel.IsAddressValidationEnabled = true;
+            addressViewModel.IsAddressValidationEnabled = ShipmentModel.ShipmentAdapter.Store.DomesticAddressValidationSetting != AddressValidationStoreSettingType.ValidationDisabled; ;
             InitializeForChangedShipment();
         }
 
@@ -100,6 +103,13 @@ namespace ShipWorks.OrderLookup.Controls.To
             }
 
             if (e.PropertyName == ShipmentFields.ShipCountryCode.Name ||
+                e.PropertyName == ShipmentFields.OriginCountryCode.Name)
+            {
+                addressViewModel.IsAddressValidationEnabled = AddressValidationPolicy.IsValidationEnabled(ShipmentModel.ShipmentAdapter?.Store, ShipmentModel.ShipmentAdapter);
+            }
+
+            if (e.PropertyName == ShipmentFields.ShipCountryCode.Name ||
+                e.PropertyName == ShipmentFields.OriginCountryCode.Name ||
                 e.PropertyName == ShipmentFields.ShipLastName.Name ||
                 e.PropertyName == ShipmentFields.ShipFirstName.Name)
             {

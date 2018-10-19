@@ -10,17 +10,16 @@ using Autofac;
 using GalaSoft.MvvmLight.CommandWpf;
 using Interapptive.Shared;
 using Interapptive.Shared.Collections;
-using Interapptive.Shared.Enums;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Win32;
 using log4net;
+using ShipWorks.AddressValidation;
 using ShipWorks.ApplicationCore;
 using ShipWorks.Common.IO.KeyboardShortcuts;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Core.Messaging.Messages.Shipping;
 using ShipWorks.Core.UI;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.IO.KeyboardShortcuts;
 using ShipWorks.Messaging.Messages;
 using ShipWorks.Messaging.Messages.Dialogs;
 using ShipWorks.Messaging.Messages.Shipping;
@@ -85,7 +84,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
             IMessageHelper messageHelper,
             IShippingViewModelFactory shippingViewModelFactory,
             Func<Type, ILog> logFactory,
-            Func<ISecurityContext> securityContextRetriever, 
+            Func<ISecurityContext> securityContextRetriever,
             ShipmentTypeProvider shipmentTypeProvider,
             IShortcutManager shortcutManager) : this()
         {
@@ -145,13 +144,13 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         /// </summary>
         [Obfuscation(Exclude = true)]
         public ICommand CopyTrackingNumberToClipboardCommand { get; }
-        
+
         /// <summary>
         /// Title for Tooltip for creating labels
         /// </summary>
         [Obfuscation(Exclude = true)]
         public string CreateLabelTooltipTitle { get; }
-        
+
         /// <summary>
         /// Description for Tooltip for creating labels
         /// </summary>
@@ -167,7 +166,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         /// Expose a stream of property changes
         /// </summary>
         public virtual IObservable<string> PropertyChangeStream => handler.Where(x => !internalFields.Contains(x));
-        
+
         /// <summary>
         /// Gets the shipment from the current adapter
         /// </summary>
@@ -297,7 +296,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
             {
                 return ShippingPanelLoadedShipmentResult.NotCreated;
             }
-            
+
             return ShippingPanelLoadedShipmentResult.Success;
         }
 
@@ -606,7 +605,8 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
 
             Origin.Load(fromShipmentAdapter.Shipment.OriginPerson, fromShipmentAdapter.Store);
             Destination.Load(fromShipmentAdapter.Shipment.ShipPerson, fromShipmentAdapter.Store);
-            Destination.IsAddressValidationEnabled = fromShipmentAdapter.Store.DomesticAddressValidationSetting != AddressValidationStoreSettingType.ValidationDisabled;
+
+            Destination.IsAddressValidationEnabled = AddressValidationPolicy.IsValidationEnabled(fromShipmentAdapter.Store, fromShipmentAdapter);
 
             AllowEditing = !fromShipmentAdapter.Shipment.Processed;
 

@@ -244,7 +244,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
         /// Get the dims weight from a shipment, if any
         /// </summary>
         protected override double GetDimsWeight(IShipmentEntity shipment) =>
-            shipment.Postal.DimsAddWeight ? shipment.Postal.DimsWeight : 0;
+            shipment.Postal?.DimsAddWeight == true ? shipment.Postal.DimsWeight : 0;
 
         /// <summary>
         /// Get the parcel data for the shipment

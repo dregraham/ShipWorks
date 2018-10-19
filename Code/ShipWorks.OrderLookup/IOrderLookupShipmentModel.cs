@@ -83,5 +83,20 @@ namespace ShipWorks.OrderLookup
         /// Load the order
         /// </summary>
         void LoadOrder(OrderEntity order);
+
+        /// <summary>
+        /// Create the label for an order
+        /// </summary>
+        void CreateLabel();
+
+        /// <summary>
+        /// Wire a property changed event on an INotifyPropertyChanged object
+        /// </summary>
+        void WirePropertyChangedEvent(INotifyPropertyChanged eventObject);
+
+        /// <summary>
+        /// Unwire property changed event on an INotifyPropertyChanged object
+        /// </summary>
+        void UnwirePropertyChangedEvent(INotifyPropertyChanged eventObject);
     }
 }
