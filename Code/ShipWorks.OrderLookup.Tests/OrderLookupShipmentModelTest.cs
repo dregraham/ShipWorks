@@ -28,7 +28,7 @@ namespace ShipWorks.OrderLookup.Tests
             mock.Provide<IMessenger>(testMessenger);
         }
 
-        public void SetupTestMocks(bool isProcessed)
+        private void SetupTestMocks(bool isProcessed)
         {
             order = new OrderEntity { OrderNumber = 1234 };
             shipment = new ShipmentEntity { ShipmentID = 4567, Processed = isProcessed };
