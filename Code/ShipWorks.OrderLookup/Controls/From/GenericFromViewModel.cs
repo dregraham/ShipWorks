@@ -6,6 +6,8 @@ using System.Reactive.Linq;
 using System.Reflection;
 using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.Core.UI;
+using ShipWorks.Data.Model.Custom;
+using ShipWorks.Data.Model.Custom.EntityClasses;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Shipping;
@@ -173,6 +175,10 @@ namespace ShipWorks.OrderLookup.Controls.From
                 {
                     newTitle = $"From Account: {accountDescription}, {originDescription}";
                 }
+                else if (string.IsNullOrWhiteSpace(accountDescription) && !string.IsNullOrWhiteSpace(originDescription))
+                {
+                    newTitle = $"From Account: {originDescription}";
+                }
             }
 
             Title = newTitle;
@@ -181,9 +187,13 @@ namespace ShipWorks.OrderLookup.Controls.From
         /// <summary>
         /// Get the text for the account header
         /// </summary>
-        protected virtual string GetHeaderAccountText() =>
-            carrierAccountRetrieverFactory.Create(ShipmentModel.ShipmentAdapter.ShipmentTypeCode)?
-                .GetAccountReadOnly(ShipmentModel.ShipmentAdapter.Shipment)?.AccountDescription ?? string.Empty;
+        protected virtual string GetHeaderAccountText()
+        {
+            ICarrierAccount account = carrierAccountRetrieverFactory.Create(ShipmentModel.ShipmentAdapter.ShipmentTypeCode)?
+                .GetAccountReadOnly(ShipmentModel.ShipmentAdapter.Shipment);
+
+            return account is NullCarrierAccount ? string.Empty : account?.AccountDescription ?? string.Empty;
+        }
 
         /// <summary>
         /// Dispose
