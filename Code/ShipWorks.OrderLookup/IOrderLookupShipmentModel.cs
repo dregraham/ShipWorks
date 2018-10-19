@@ -98,5 +98,15 @@ namespace ShipWorks.OrderLookup
         /// Unwire property changed event on an INotifyPropertyChanged object
         /// </summary>
         void UnwirePropertyChangedEvent(INotifyPropertyChanged eventObject);
+
+        /// <summary>
+        /// An order is starting to load
+        /// </summary>
+        event EventHandler OrderLoading;
+
+        /// <summary>
+        /// An order was fully loaded
+        /// </summary>
+        event EventHandler OrderLoaded;
     }
 }

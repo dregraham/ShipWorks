@@ -55,6 +55,8 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookup
             handler = new PropertyChangedHandler(this, () => PropertyChanged);
             ShipmentModel = shipmentModel;
             ShipmentModel.PropertyChanged += OnShipmentModelPropertyChanged;
+            ShipmentModel.OrderLoading += OnShipmentModelOrderLoading;
+            ShipmentModel.OrderLoaded += OnShipmentModelOrderLoaded;
             OrderLookupSearchViewModel = orderLookupSearchViewModel;
 
             LeftColumn = new ObservableCollection<IOrderLookupWrapperViewModel<IOrderLookupViewModel>>
@@ -88,23 +90,47 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookup
         }
 
         /// <summary>
+        /// An order has fully loaded
+        /// </summary>
+        private void OnShipmentModelOrderLoaded(object sender, EventArgs e) => LoadViewModels();
+
+        /// <summary>
+        /// An order is loading
+        /// </summary>
+        private void OnShipmentModelOrderLoading(object sender, EventArgs e) => UnloadViewModels();
+
+        /// <summary>
         /// Handle changing of shipments or shipment types
         /// </summary>
         private void OnShipmentModelPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            if (e.PropertyName == nameof(OrderLookupShipmentModel) ||  // The provider has changed on the shipment
-                e.PropertyName == nameof(ShipmentModel.SelectedOrder)) // The order has changed
+            if (e.PropertyName == nameof(OrderLookupShipmentModel))  // The provider has changed on the shipment
             {
-                innerScope?.Dispose();
-
-                innerScope = scope.BeginLifetimeScope();
-
-                LeftColumn
-                    .Concat(MiddleColumn)
-                    .Concat(RightColumn)
-                    .ForEach(x => x.UpdateViewModel(ShipmentModel, innerScope));
+                UnloadViewModels();
+                LoadViewModels();
             }
         }
+
+        /// <summary>
+        /// Load the view models
+        /// </summary>
+        private void LoadViewModels()
+        {
+            // This shouldn't be necessary, but it's safe to do so I'd rather be safe than sorry
+            UnloadViewModels();
+
+            innerScope = scope.BeginLifetimeScope();
+
+            LeftColumn
+                .Concat(MiddleColumn)
+                .Concat(RightColumn)
+                .ForEach(x => x.UpdateViewModel(ShipmentModel, innerScope));
+        }
+
+        /// <summary>
+        /// Unload the view models
+        /// </summary>
+        private void UnloadViewModels() => innerScope?.Dispose();
 
         /// <summary>
         /// View Model for the search section of the OrderLookup UI Mode
@@ -163,6 +189,8 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookup
         public void Dispose()
         {
             ShipmentModel.PropertyChanged -= OnShipmentModelPropertyChanged;
+            ShipmentModel.OrderLoading -= OnShipmentModelOrderLoading;
+            ShipmentModel.OrderLoaded -= OnShipmentModelOrderLoaded;
             subscriptions?.Dispose();
             innerScope?.Dispose();
         }
