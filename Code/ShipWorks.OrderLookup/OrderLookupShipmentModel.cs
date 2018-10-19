@@ -89,19 +89,19 @@ namespace ShipWorks.OrderLookup
         public event EventHandler OnSearchOrder;
 
         /// <summary>
-        /// An order is starting to unload
+        /// A shipment is starting to unload
         /// </summary>
-        public event EventHandler OrderUnloading;
+        public event EventHandler ShipmentUnloading;
 
         /// <summary>
-        /// An order is starting to load
+        /// A shipment is starting to load
         /// </summary>
-        public event EventHandler OrderLoading;
+        public event EventHandler ShipmentLoading;
 
         /// <summary>
-        /// An order has fully loaded
+        /// A shipment has fully loaded
         /// </summary>
-        public event EventHandler OrderLoaded;
+        public event EventHandler ShipmentLoaded;
 
         /// <summary>
         /// Constructor
@@ -111,12 +111,12 @@ namespace ShipWorks.OrderLookup
             IShippingManager shippingManager,
             IMessageHelper messageHelper,
             Func<IInsuranceBehaviorChangeViewModel> createInsuranceBehaviorChange,
-			OrderLookupLabelShortcutPipeline shortcutPipeline)
+            OrderLookupLabelShortcutPipeline shortcutPipeline)
         {
             this.messenger = messenger;
             this.shippingManager = shippingManager;
             this.messageHelper = messageHelper;
-			this.createInsuranceBehaviorChange = createInsuranceBehaviorChange;
+            this.createInsuranceBehaviorChange = createInsuranceBehaviorChange;
             handler = new PropertyChangedHandler(this, () => PropertyChanged);
             this.shortcutPipeline = shortcutPipeline;
 
@@ -278,7 +278,7 @@ namespace ShipWorks.OrderLookup
         /// </summary>
         public void LoadOrder(OrderEntity order)
         {
-            OrderLoading?.Invoke(this, EventArgs.Empty);
+            ShipmentLoading?.Invoke(this, EventArgs.Empty);
 
             OnSearchOrder?.Invoke(this, null);
 
@@ -314,8 +314,8 @@ namespace ShipWorks.OrderLookup
 
             if (ShipmentAdapter != null)
             {
+                ShipmentLoaded?.Invoke(this, EventArgs.Empty);
                 messenger.Send(new ShipmentSelectionChangedMessage(this, new[] { ShipmentAdapter.Shipment.ShipmentID }, ShipmentAdapter));
-                OrderLoaded?.Invoke(this, EventArgs.Empty);
             }
         }
 
@@ -355,7 +355,7 @@ namespace ShipWorks.OrderLookup
         /// </summary>
         private void ClearOrder()
         {
-            OrderUnloading?.Invoke(this, EventArgs.Empty);
+            ShipmentUnloading?.Invoke(this, EventArgs.Empty);
             RemovePropertyChangedEventsFromEntities(ShipmentAdapter);
 
             ShipmentAdapter = null;
@@ -412,6 +412,8 @@ namespace ShipWorks.OrderLookup
         {
             if (value != ShipmentAdapter.ShipmentTypeCode)
             {
+                ShipmentLoading?.Invoke(this, EventArgs.Empty);
+
                 // Changing shipment type leads to unloading and loading entities into the current ShipmentEntity.
                 // To prepare for this, we remove existing handlers from the existing entities, change the shipment type,
                 // then add handlers to the possibly new entities.
@@ -419,11 +421,11 @@ namespace ShipWorks.OrderLookup
                 {
                     RemovePropertyChangedEventsFromEntities(ShipmentAdapter);
 
-					bool originalInsuranceSelection = shipmentAdapter.Shipment.Insurance;
+                    bool originalInsuranceSelection = shipmentAdapter.Shipment.Insurance;
                     ShipmentAdapter = shippingManager.ChangeShipmentType(value, ShipmentAdapter.Shipment);
-					ShipmentAdapter.UpdateDynamicData();
+                    ShipmentAdapter.UpdateDynamicData();
 
-					createInsuranceBehaviorChange().Notify(originalInsuranceSelection, shipmentAdapter.Shipment.Insurance);
+                    createInsuranceBehaviorChange().Notify(originalInsuranceSelection, shipmentAdapter.Shipment.Insurance);
 
                     RefreshProperties();
 
@@ -432,6 +434,7 @@ namespace ShipWorks.OrderLookup
 
                 RaisePropertyChanged(nameof(OrderLookupShipmentModel));
 
+                ShipmentLoaded?.Invoke(this, EventArgs.Empty);
                 messenger.Send(new ShipmentSelectionChangedMessage(this, new[] { ShipmentAdapter.Shipment.ShipmentID }, ShipmentAdapter));
             }
         }
