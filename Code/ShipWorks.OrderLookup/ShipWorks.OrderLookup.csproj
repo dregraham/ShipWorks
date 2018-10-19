@@ -195,6 +195,11 @@
     <Compile Include="Controls\ShipmentDetails\AmazonShipmentDetailsControl.xaml.cs">
       <DependentUpon>AmazonShipmentDetailsControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\ShipmentDetails\FedExShipmentDetailsControl.xaml.cs">
+      <DependentUpon>FedExShipmentDetailsControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ShipmentDetails\FedExShipmentDetailsViewModel.cs" />
+    <Compile Include="Controls\ShipmentDetails\GenericMultiPackageShipmentDetailsViewModel.cs" />
     <Compile Include="Controls\ShipmentDetails\ICarrierShipmentAdapterOptionsProvider.cs" />
     <Compile Include="Controls\Reference\GenericReferenceViewModel.cs" />
     <Compile Include="Controls\Reference\UpsReferenceControl.xaml.cs">
@@ -423,6 +428,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Controls\ShipmentDetails\FedExShipmentDetailsControl.xaml" />
     <Page Include="Controls\ShipmentDetails\OrderLookupInsuranceControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
