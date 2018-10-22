@@ -46,7 +46,7 @@ namespace ShipWorks.OrderLookup.Tests
             scheduleProvider.Setup(s => s.Default).Returns(scheduler);
 
             orderRepository = mock.Mock<IOrderLookupOrderRepository>();
-            orderRepository.Setup(o => o.GetOrderID(AnyString)).Returns(123);
+            orderRepository.Setup(o => o.GetOrderIDs(AnyString)).Returns(new List<long> { 123 });
 
             Mock<IOnDemandDownloaderFactory> downloadFactory = mock.Mock<IOnDemandDownloaderFactory>();
             downloader = mock.Mock<IOnDemandDownloader>();
@@ -110,7 +110,7 @@ namespace ShipWorks.OrderLookup.Tests
         public void InitializeForCurrentSession_DelegatesToAutoPrintService_WhenUIModeIsOrderLookupAndMessageIsSingleScan()
         {
             mainForm.SetupGet(u => u.UIMode).Returns(UIMode.OrderLookup);
-            orderRepository.Setup(o => o.GetOrderID("Foo")).Returns(123);
+            orderRepository.Setup(o => o.GetOrderIDs("Foo")).Returns(new List<long> { 123 });
             SingleScanMessage singleScanMessage = new SingleScanMessage(this, new ScanMessage(this, "Foo", IntPtr.Zero));
             testMessenger.Send(singleScanMessage);
 
@@ -121,7 +121,7 @@ namespace ShipWorks.OrderLookup.Tests
         public void InitializeForCurrentSession_DoesNotDelegateToAutoPrintService_WhenUIModeIsOrderLookupAndMessageIsOrderLookupSearch()
         {
             mainForm.SetupGet(u => u.UIMode).Returns(UIMode.OrderLookup);
-            orderRepository.Setup(o => o.GetOrderID("Foo")).Returns(123);
+            orderRepository.Setup(o => o.GetOrderIDs("Foo")).Returns(new List<long> { 123 });
             OrderLookupSearchMessage message = new OrderLookupSearchMessage(this, "Foo");
             testMessenger.Send(message);
 
@@ -135,13 +135,13 @@ namespace ShipWorks.OrderLookup.Tests
             SingleScanMessage singleScanMessage = new SingleScanMessage(this, new ScanMessage(this, "Foo", IntPtr.Zero));
             testMessenger.Send(singleScanMessage);
 
-            orderRepository.Verify(o => o.GetOrderID("Foo"));
+            orderRepository.Verify(o => o.GetOrderIDs("Foo"));
         }
 
         [Fact]
         public void InitializeForCurrentSession_LoadsOrderOnShipmentModel()
         {
-            orderRepository.Setup(x => x.GetOrderID("Foo")).Returns(1);
+            orderRepository.Setup(x => x.GetOrderIDs("Foo")).Returns(new List<long> { 1 });
             mainForm.SetupGet(u => u.UIMode).Returns(UIMode.OrderLookup);
 
             SingleScanMessage singleScanMessage = new SingleScanMessage(this, new ScanMessage(this, "Foo", IntPtr.Zero));

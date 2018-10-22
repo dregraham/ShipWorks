@@ -40,7 +40,7 @@ namespace ShipWorks.OrderLookup
         /// <summary>
         /// Get the OrderId matching the search text
         /// </summary>
-        public List<long> GetOrderID(string searchText)
+        public List<long> GetOrderIDs(string searchText)
         {
             using (DbConnection conn = sqlSession.OpenConnection())
             {

@@ -85,7 +85,7 @@ namespace ShipWorks.OrderLookup
                 shipmentModel.SaveToDatabase();
 
                 await onDemandDownloaderFactory.CreateOnDemandDownloader().Download(message.ScannedText).ConfigureAwait(true);
-                long? orderId = orderRepository.GetOrderID(message.ScannedText).FirstOrDefault();
+                long? orderId = orderRepository.GetOrderIDs(message.ScannedText).FirstOrDefault();
                 OrderEntity order = null;
 
                 if (orderId.HasValue)
@@ -126,7 +126,7 @@ namespace ShipWorks.OrderLookup
                 shipmentModel.SaveToDatabase();
 
                 await onDemandDownloaderFactory.CreateOnDemandDownloader().Download(message.SearchText).ConfigureAwait(true);
-                long? orderId = orderRepository.GetOrderID(message.SearchText).FirstOrDefault();
+                long? orderId = orderRepository.GetOrderIDs(message.SearchText).FirstOrDefault();
 
                 OrderEntity order = null;
                 if (orderId.HasValue)
