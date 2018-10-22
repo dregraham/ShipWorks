@@ -17,22 +17,28 @@ using ShipWorks.UI;
 
 namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
 {
+    /// <summary>
+    /// Not supported shipment details viewmodel
+    /// </summary>
     [Component]
     [WpfView(typeof(NotSupportedShipmentControl))]
     class NotSupportedShipmentDetailsViewModel : IDetailsViewModel
     {
-        private readonly IOrderLookupShipmentModel shipmentModel;
-        private readonly IMessenger messenger;
-
         public event PropertyChangedEventHandler PropertyChanged;
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
         public NotSupportedShipmentDetailsViewModel(IOrderLookupShipmentModel shipmentModel, 
             ICarrierShipmentAdapterOptionsProvider carrierShipmentAdapterOptionsProvider)
         {
-            this.shipmentModel = shipmentModel;
+            ShipmentModel = shipmentModel;
             Providers = carrierShipmentAdapterOptionsProvider.GetProviders(shipmentModel.ShipmentAdapter, shipmentModel.OriginalShipmentTypeCode);
         }
 
+        /// <summary>
+        /// Is the section expanded
+        /// </summary>
         [Obfuscation(Exclude = true)]
         public bool Expanded { get; set; } = true;
 
@@ -40,7 +46,7 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
         /// Title of the section
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public string Title => $"Shipping with {EnumHelper.GetDescription(shipmentModel.OriginalShipmentTypeCode)} is not supported in Order Lookup mode.";
+        public string Title => $"Shipping with {EnumHelper.GetDescription(ShipmentModel.ShipmentAdapter.ShipmentTypeCode)} is not supported in Order Lookup mode.";
 
 
         /// <summary>
@@ -50,17 +56,23 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
         public bool Visible => true;
 
         /// <summary>
+        /// The shipment model
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public IOrderLookupShipmentModel ShipmentModel { get; private set; }
+
+        /// <summary>
         /// Shipment type code
         /// </summary>
         [Obfuscation(Exclude = true)]
         public ShipmentTypeCode ShipmentTypeCode
         {
-            get => shipmentModel.ShipmentAdapter?.ShipmentTypeCode ?? ShipmentTypeCode.None;
+            get => ShipmentModel.ShipmentAdapter?.ShipmentTypeCode ?? ShipmentTypeCode.None;
             set
             {
-                if (value != shipmentModel.ShipmentAdapter.ShipmentTypeCode)
+                if (value != ShipmentModel.ShipmentAdapter.ShipmentTypeCode)
                 {
-                    shipmentModel.ChangeShipmentType(value);
+                    ShipmentModel.ChangeShipmentType(value);
                 }
             }
         }
@@ -79,6 +91,5 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
         /// Dispose - Nothing to dispose
         /// </summary>
         public void Dispose() { }
-
     }
 }
