@@ -56,12 +56,11 @@
             Style="{StaticResource FieldLabel}"
             Text="Provider" />
 
-        <ui:ShipWorksComboBox
+        <ComboBox
             Grid.Row="1"
             Grid.Column="1"
             DisplayMemberPath="Value"
             ItemsSource="{Binding Providers}"
-            SelectedIndexWhenNull="{x:Static ui:RelativeIndex.First}"
             SelectedValue="{Binding ShipmentTypeCode, UpdateSourceTrigger=PropertyChanged}"
             SelectedValuePath="Key"
             Style="{StaticResource FormComboBox}" />
@@ -88,12 +87,11 @@
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
-            <ui:ShipWorksComboBox
+            <ComboBox
                 Grid.Column="0"
                 Margin="10,0,0,5"
                 DisplayMemberPath="Name"
                 ItemsSource="{Binding DimensionProfiles}"
-                SelectedIndexWhenNull="{x:Static ui:RelativeIndex.Last}"
                 SelectedValuePath="DimensionsProfileID"
                 Style="{StaticResource FormComboBox}">
                 <ComboBox.SelectedValue>
@@ -102,11 +100,11 @@
                         Path="ShipmentModel.ShipmentAdapter.Shipment.BestRate.DimsProfileID"
                         UpdateSourceTrigger="PropertyChanged" />
                 </ComboBox.SelectedValue>
-            </ui:ShipWorksComboBox>
+            </ComboBox>
 
             <Button
                 Grid.Column="1"
-                Margin="3,0,0,0"
+                Margin="5,0,0,0"
                 VerticalAlignment="Center"
                 Command="{Binding ManageDimensionalProfiles}"
                 Content="Manage..."

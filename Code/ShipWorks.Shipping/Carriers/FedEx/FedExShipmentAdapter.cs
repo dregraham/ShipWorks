@@ -76,6 +76,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// <summary>
         /// Add a new package to the shipment
         /// </summary>
+        /// <param name="manipulateEntity">
+        /// Pass in an action to manipulate the package that gets added to the shipment
+        /// </param>
         public override IPackageAdapter AddPackage(Action<INotifyPropertyChanged> manipulateEntity)
         {
             FedExPackageEntity package = FedExUtility.CreateDefaultPackage();
@@ -90,6 +93,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// <summary>
         /// Delete a package from the shipment
         /// </summary>
+        /// <param name="manipulateEntity">
+        /// Pass in an action to manipulate the package that gets deleted from the shipment
+        /// </param>
         public override void DeletePackage(IPackageAdapter packageAdapter, Action<INotifyPropertyChanged> manipulateEntity)
         {
             DeletePackageFromCollection(Shipment.FedEx.Packages, x => x.FedExPackageID == packageAdapter.PackageId, manipulateEntity);

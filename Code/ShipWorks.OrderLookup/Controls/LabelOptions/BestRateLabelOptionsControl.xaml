@@ -55,7 +55,7 @@
             Text="Service Level"
             TextWrapping="Wrap" />
 
-        <ui:ShipWorksComboBox
+        <ComboBox
             Grid.Row="1"
             Grid.Column="2"
             MinWidth="100"

@@ -13,14 +13,14 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace ShipWorks.OrderLookup.Controls.To
+namespace ShipWorks.OrderLookup.Controls.Reference
 {
     /// <summary>
-    /// Interaction logic for UpsToControl.xaml
+    /// Interaction logic for FedExReferenceControl.xaml
     /// </summary>
-    public partial class UpsToControl : UserControl
+    public partial class FedExReferenceControl : UserControl
     {
-        public UpsToControl()
+        public FedExReferenceControl()
         {
             InitializeComponent();
         }

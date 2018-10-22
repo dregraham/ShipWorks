@@ -1,5 +1,5 @@
 ﻿<UserControl
-    x:Class="ShipWorks.OrderLookup.Controls.To.UpsToControl"
+    x:Class="ShipWorks.OrderLookup.Controls.To.GenericToWithResidentialDeterminationControl"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:controls="clr-namespace:ShipWorks.OrderLookup.Controls"
@@ -16,7 +16,6 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/ShipWorks.OrderLookup;component/Styles/OrderLookupStyle.xaml" />
             </ResourceDictionary.MergedDictionaries>
-            <ui:IntToEnumConverter x:Key="IntToEnum" />
         </ResourceDictionary>
     </UserControl.Resources>
 
@@ -47,12 +46,11 @@
                 Style="{StaticResource FieldLabel}"
                 Text="Address" />
 
-            <ui:ShipWorksComboBox
+            <ComboBox
                 Grid.Row="1"
                 Grid.Column="1"
                 DisplayMemberPath="Value"
                 ItemsSource="{Binding ResidentialDeterminations}"
-                SelectedIndexWhenNull="{x:Static ui:RelativeIndex.First}"
                 SelectedValue="{Binding ShipmentModel.ShipmentAdapter.Shipment.ResidentialDetermination}"
                 SelectedValuePath="Key"
                 Style="{StaticResource FormComboBox}" />

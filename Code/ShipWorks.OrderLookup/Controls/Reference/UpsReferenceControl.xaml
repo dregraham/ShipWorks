@@ -33,12 +33,12 @@
             Text="{Binding ShipmentModel.ShipmentAdapter.Shipment.Ups.ReferenceNumber}"/>
 
         <TextBlock Grid.Row="1" Grid.Column="0"
+                   Margin="0"
                    Style="{StaticResource FieldLabel}"
                    Text="Reference 2 #"/>
         <TextBox Grid.Row="1" Grid.Column="1"
+                 Margin="10 0 0 0"
                  Style="{StaticResource FormTextBox}"
-            Text="{Binding ShipmentModel.ShipmentAdapter.Shipment.Ups.ReferenceNumber2}"/>
-
-
+                 Text="{Binding ShipmentModel.ShipmentAdapter.Shipment.Ups.ReferenceNumber2}"/>
     </Grid>
 </UserControl>

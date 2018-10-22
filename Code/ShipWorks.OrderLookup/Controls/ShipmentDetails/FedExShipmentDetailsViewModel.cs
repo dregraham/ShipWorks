@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -8,7 +8,7 @@ using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Shipping;
-using ShipWorks.Shipping.Carriers.UPS.Enums;
+using ShipWorks.Shipping.Carriers.FedEx.Enums;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.UI.ShippingPanel;
 using ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl;
@@ -19,33 +19,33 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
     /// <summary>
     /// View model for shipment details
     /// </summary>
-    [KeyedComponent(typeof(IDetailsViewModel), ShipmentTypeCode.UpsOnLineTools)]
-    [WpfView(typeof(UpsShipmentDetailsControl))]
-    public class UpsShipmentDetailsViewModel : GenericMultiPackageShipmentDetailsViewModel
+    [KeyedComponent(typeof(IDetailsViewModel), ShipmentTypeCode.FedEx)]
+    [WpfView(typeof(FedExShipmentDetailsControl))]
+    public class FedExShipmentDetailsViewModel : GenericMultiPackageShipmentDetailsViewModel
     {
-        private IEnumerable<KeyValuePair<int, string>> confirmationTypes;
-
-        /// <summary>
-        /// Constructor
-        /// </summary>
-        public UpsShipmentDetailsViewModel(IOrderLookupShipmentModel shipmentModel,
-                                           IInsuranceViewModel insuranceViewModel,
-                                           Func<DimensionsManagerDlg> getDimensionsManagerDlg,
-                                           ICarrierShipmentAdapterOptionsProvider carrierShipmentAdapterOptionsProvider) 
-            : base(shipmentModel, insuranceViewModel, getDimensionsManagerDlg, carrierShipmentAdapterOptionsProvider)
-        {
-            ConfirmationTypes = EnumHelper.GetEnumList<UpsDeliveryConfirmationType>()
-                                          .Select(e => new KeyValuePair<int, string>((int) e.Value, e.Description));
-        }
+        private IEnumerable<KeyValuePair<int, string>> signatureTypes;
         
         /// <summary>
-        /// Collection of ConfirmationTypes
+        /// Ctor
+        /// </summary>
+        public FedExShipmentDetailsViewModel(IOrderLookupShipmentModel shipmentModel,
+                                             IInsuranceViewModel insuranceViewModel,
+                                             Func<DimensionsManagerDlg> getDimensionsManagerDlg,
+                                             ICarrierShipmentAdapterOptionsProvider carrierShipmentAdapterOptionsProvider)
+            : base(shipmentModel, insuranceViewModel, getDimensionsManagerDlg, carrierShipmentAdapterOptionsProvider)
+        {
+            SignatureTypes = EnumHelper.GetEnumList<FedExSignatureType>()
+                                       .Select(e => new KeyValuePair<int, string>((int) e.Value, e.Description));
+        }
+
+        /// <summary>
+        /// Collection of SignatureTypes
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public IEnumerable<KeyValuePair<int, string>> ConfirmationTypes
+        public IEnumerable<KeyValuePair<int, string>> SignatureTypes
         {
-            get => confirmationTypes;
-            set => handler.Set(nameof(ConfirmationTypes), ref confirmationTypes, value);
+            get => signatureTypes;
+            set => handler.Set(nameof(SignatureTypes), ref signatureTypes, value);
         }
 
         /// <summary>
@@ -56,7 +56,8 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
             if (e.PropertyName == nameof(ShipmentModel.PackageAdapters) && ShipmentModel.PackageAdapters != null)
             {
                 int selectedIndex = Packages.IndexOf(SelectedPackage);
-                Packages = new System.Collections.ObjectModel.ObservableCollection<PackageAdapterWrapper>(ShipmentModel.PackageAdapters.Select(x => new PackageAdapterWrapper(x)));
+                Packages = new System.Collections.ObjectModel.ObservableCollection<PackageAdapterWrapper>(
+                    ShipmentModel.PackageAdapters.Select(x => new PackageAdapterWrapper(x)));
 
                 if (Packages.IsCountGreaterThan(selectedIndex))
                 {
@@ -68,7 +69,7 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
                 }
             }
 
-            if (e.PropertyName == UpsShipmentFields.Service.Name ||
+            if (e.PropertyName == FedExShipmentFields.Service.Name ||
                 e.PropertyName == ShipmentFields.ShipCountryCode.Name)
             {
                 RefreshInsurance();
@@ -84,7 +85,7 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
                 RefreshServiceTypes();
             }
         }
-        
+
         /// <summary>
         /// Validate the ColumnNames value
         /// </summary>
@@ -98,7 +99,7 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
                     return string.Empty;
                 }
 
-                return InputValidation<UpsShipmentDetailsViewModel>.Validate(this, columnName);
+                return InputValidation<FedExShipmentDetailsViewModel>.Validate(this, columnName);
             }
         }
     }

@@ -185,7 +185,7 @@
             </Trigger>
         </ControlTemplate.Triggers>
     </ControlTemplate>
-    <Style x:Key="FormComboBox" TargetType="{x:Type ui:ShipWorksComboBox}">
+    <Style x:Key="FormComboBox" TargetType="{x:Type ComboBox}">
         <Setter Property="Margin" Value="10 0 0 10"/>
         <Setter Property="VerticalAlignment" Value="Center"/>
         <Setter Property="VerticalContentAlignment" Value="Center"/>
@@ -207,7 +207,7 @@
         <Setter Property="Background" Value="{StaticResource ButtonBackgroundGradient}"/>
         <Setter Property="Template" Value="{StaticResource OrderLookupComboBoxTemplate}"/>
     </Style>
-    <Style x:Key="StackedFormComboBox" TargetType="{x:Type ui:ShipWorksComboBox}"
+    <Style x:Key="StackedFormComboBox" TargetType="{x:Type ComboBox}"
            BasedOn="{StaticResource FormComboBox}">
         <Setter Property="Margin" Value="0 0 0 10"/>
     </Style>   
