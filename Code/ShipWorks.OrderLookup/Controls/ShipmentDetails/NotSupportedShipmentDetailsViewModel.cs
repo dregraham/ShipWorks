@@ -24,7 +24,9 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
     [WpfView(typeof(NotSupportedShipmentControl))]
     class NotSupportedShipmentDetailsViewModel : IDetailsViewModel
     {
+#pragma warning disable CS0067 // Defined in interface, but we don't need to track ProperyChanged
         public event PropertyChangedEventHandler PropertyChanged;
+#pragma warning restore CS0067 // Defined in interface, but we don't need to track ProperyChanged
 
         /// <summary>
         /// Constructor
