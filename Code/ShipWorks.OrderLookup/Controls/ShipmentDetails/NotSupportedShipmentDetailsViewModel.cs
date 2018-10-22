@@ -48,7 +48,13 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
         /// Title of the section
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public string Title => $"Shipping with {EnumHelper.GetDescription(ShipmentModel.ShipmentAdapter.ShipmentTypeCode)} is not supported in Order Lookup mode.";
+        public string Title => "Shipment Details";
+
+        /// <summary>
+        /// Error Message of the section
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public string ErrorMessage => $"Shipping with {EnumHelper.GetDescription(ShipmentModel.ShipmentAdapter.ShipmentTypeCode)} is not supported in Order Lookup mode.";
         
         /// <summary>
         /// Is the section visible

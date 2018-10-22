@@ -21,12 +21,12 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="85" />
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
-
         <TextBlock
             Grid.Row="0"
             Grid.Column="0"
@@ -61,6 +61,12 @@
             SelectedValue="{Binding ShipmentTypeCode, UpdateSourceTrigger=PropertyChanged}"
             SelectedValuePath="Key"
             Style="{StaticResource FormComboBox}" />
-
+        <TextBlock
+            Grid.Row="2"
+            Grid.Column="1"
+            Text="{Binding ErrorMessage}" 
+            FontSize="14"
+            Foreground="Red"
+            Margin="10 0 0 0"/>
     </Grid>
 </UserControl>
