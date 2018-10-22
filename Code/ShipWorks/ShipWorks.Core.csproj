@@ -987,6 +987,7 @@
     <Compile Include="Filters\Content\IFilterDefinition.cs" />
     <Compile Include="Filters\Search\ISearchDefinitionProviderFactory.cs" />
     <Compile Include="OrderLookup\OrderLookupSearchMessage.cs" />
+    <Compile Include="Shipping\Profiles\IProfilePopupService.cs" />
     <Compile Include="Shipping\ShipmentUpdateOperationResult.cs" />
     <Compile Include="Shipping\ShipSense\IShipSenseSynchronizer.cs" />
     <Compile Include="Shipping\ShipSense\NullKnowledgebase.cs" />

@@ -1,19 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
 using Divelements.SandRibbon;
-using Interapptive.Shared.Collections;
-using ShipWorks.ApplicationCore;
 using Interapptive.Shared.ComponentRegistration;
-using Interapptive.Shared.Utility;
+using ShipWorks.ApplicationCore;
 using ShipWorks.Common.IO.KeyboardShortcuts;
-using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Profiles;
 using ShipWorks.UI.Controls.SandRibbon;
 using TD.SandDock;
-using Menu = Divelements.SandRibbon.Menu;
-using MenuItem = Divelements.SandRibbon.MenuItem;
 
 namespace ShipWorks.Shipping.UI.ShippingRibbon
 {
@@ -24,7 +17,6 @@ namespace ShipWorks.Shipping.UI.ShippingRibbon
     public class ShippingRibbonRegistration : IMainFormElementRegistration, IShippingRibbonActions, IDisposable
     {
         private readonly IShippingRibbonService shippingRibbonService;
-        private readonly IShippingProfileService profileService;
         private readonly IShortcutManager shortcutManager;
         private CreateLabelButtonWrapper createLabelButton;
         private RibbonButton actualCreateLabelButton;
@@ -32,19 +24,19 @@ namespace ShipWorks.Shipping.UI.ShippingRibbon
         private RibbonButton returnButton;
         private RibbonButton reprintButton;
         private RibbonButton shipAgainButton;
+        private IDisposable profileMenuDisposable;
         private ApplyProfileButtonWrapper applyProfileButton;
         private RibbonButton manageProfilesButton;
-        private Popup applyProfilePopup;
-        private Menu applyProfileMenu;
         private ShipmentTypeCode? currentShipmentType;
+        private readonly IProfilePopupService profilePopupService;
 
         public ShippingRibbonRegistration(
-            IShippingRibbonService shippingRibbonService, 
-            IShippingProfileService profileService,
+            IShippingRibbonService shippingRibbonService,
+            IProfilePopupService profilePopupService,
             IShortcutManager shortcutManager)
         {
+            this.profilePopupService = profilePopupService;
             this.shippingRibbonService = shippingRibbonService;
-            this.profileService = profileService;
             this.shortcutManager = shortcutManager;
         }
 
@@ -87,31 +79,22 @@ namespace ShipWorks.Shipping.UI.ShippingRibbon
                 Text = "Ship Again",
             };
 
-            applyProfileMenu = new Menu
-            {
-                Text = "Profile List",
-                Guid = new Guid("7DC9AA2C-DB1A-447E-B717-DB252CC39338")
-            };
-
-            applyProfilePopup = new Popup
-            {
-                Items = { applyProfileMenu }
-            };
-
-            applyProfilePopup.BeforePopup += OnApplyProfileBeforePopup;
-
             RibbonButton actualApplyProfileButton = new RibbonButton
             {
                 DropDownStyle = DropDownStyle.Integral,
                 Guid = new Guid("D2AF2859-5B48-4CA1-AA6B-649A033462BB"),
                 Image = Properties.Resources.document_out1,
-                PopupWidget = applyProfilePopup,
                 Text = "Apply",
                 TextContentRelation = TextContentRelation.Underneath
             };
 
             applyProfileButton = new ApplyProfileButtonWrapper(actualApplyProfileButton);
-            
+            profileMenuDisposable = profilePopupService.BuildMenu(
+                actualApplyProfileButton,
+                new Guid("7DC9AA2C-DB1A-447E-B717-DB252CC39338"),
+                () => currentShipmentType,
+                applyProfileButton.ApplyProfile);
+
             manageProfilesButton = new RibbonButton
             {
                 Guid = new Guid("0E7A63DD-0BDB-4AF4-BC24-05666022EF75"),
@@ -155,11 +138,11 @@ namespace ShipWorks.Shipping.UI.ShippingRibbon
             };
 
             ribbon.Controls.Add(ribbonTabShipping);
-            
-            // This needs to be done after the button is added to the ribbon because it needs to hook in to the 
+
+            // This needs to be done after the button is added to the ribbon because it needs to hook in to the
             // host controls loaded event.
             createLabelButton = new CreateLabelButtonWrapper(actualCreateLabelButton, shortcutManager);
-            
+
             ribbon.ResumeLayout();
 
             shippingRibbonService.Register(this);
@@ -178,62 +161,8 @@ namespace ShipWorks.Shipping.UI.ShippingRibbon
                 Text = "Create\r\nLabel",
                 TextContentRelation = TextContentRelation.Underneath
             };
-            
+
             actualCreateLabelButton.Activate += (s, evt) => createLabelButton.CreateLabel();
-        }
-
-        /// <summary>
-        /// Load the profile menu list
-        /// </summary>
-        private void OnApplyProfileBeforePopup(object sender, BeforePopupEventArgs e)
-        {
-            applyProfileMenu.Items.Clear();
-
-            List<WidgetBase> menuItems = new List<WidgetBase>();
-            IEnumerable<IGrouping<ShipmentTypeCode?, IShippingProfileEntity>> profileGroups = profileService
-                .GetConfiguredShipmentTypeProfiles()
-                .Where(p => p.IsApplicable(currentShipmentType))
-                .Select(s => s.ShippingProfileEntity).Cast<IShippingProfileEntity>()
-                .GroupBy(p => p.ShipmentType)
-                .OrderBy(g => g.Key.HasValue ? ShipmentTypeManager.GetSortValue(g.Key.Value) : -1);
-
-            foreach (IGrouping<ShipmentTypeCode?, IShippingProfileEntity> profileGroup in profileGroups)
-            {
-                string groupName = "Global";
-                if (profileGroup.Key.HasValue)
-                {
-                    groupName = profileGroup.ToString();
-                    MenuItem carrierLabel = new MenuItem(EnumHelper.GetDescription(profileGroup.Key.Value))
-                    {
-                        Font = new Font(new FontFamily("Tahoma"), 6.5f, FontStyle.Bold),
-                        Padding = new WidgetEdges(28, -1, 0, -1),
-                        GroupName = groupName,
-                        Enabled = false
-                    };
-                    menuItems.Add(carrierLabel);
-                }
-
-                menuItems.AddRange(profileGroup.OrderByDescending(p => p.ShipmentTypePrimary).ThenBy(p => p.Name)
-                    .Select(profile => CreateMenuItem(profile, groupName)));
-            }
-
-            if (menuItems.None())
-            {
-                menuItems = new List<WidgetBase> { new MenuItem { Text = "(None)", Enabled = false } };
-            }
-
-            applyProfileMenu.Items.AddRange(menuItems.ToArray());
-        }
-
-        /// <summary>
-        /// Create a menu item from the given profile
-        /// </summary>
-        private WidgetBase CreateMenuItem(IShippingProfileEntity profile, string groupName)
-        {
-            MenuItem menuItem = new MenuItem(profile.Name);
-            menuItem.GroupName = groupName;
-            menuItem.Activate += (s, evt) => applyProfileButton.ApplyProfile(profile);
-            return menuItem;
         }
 
         /// <summary>
@@ -291,8 +220,7 @@ namespace ShipWorks.Shipping.UI.ShippingRibbon
             shipAgainButton?.Dispose();
             applyProfileButton?.Dispose();
             manageProfilesButton?.Dispose();
-            applyProfilePopup?.Dispose();
-            applyProfileMenu?.Dispose();
+            profileMenuDisposable?.Dispose();
         }
     }
 }
