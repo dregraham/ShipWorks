@@ -312,7 +312,7 @@ namespace ShipWorks.Shipping.Services
         /// Pass in an action to manipulate the package that gets deleted from the shipment
         /// </param>
         protected void DeletePackageFromCollection<TPackage>(EntityCollection<TPackage> packageCollection,
-            Func<TPackage, bool> packagePredicate, Action<INotifyPropertyChanged> manipulateEntityBeforeDelete) where TPackage : EntityBase2
+            Func<TPackage, bool> packagePredicate, Action<INotifyPropertyChanged> manipulateEntityAfterDelete) where TPackage : EntityBase2
         {
             if (packageCollection.Count < 2)
             {
@@ -320,11 +320,9 @@ namespace ShipWorks.Shipping.Services
             }
 
             TPackage package = packageCollection.FirstOrDefault(packagePredicate);
-            
+
             if (package != null)
             {
-                manipulateEntityBeforeDelete?.Invoke(package);
-
                 // If this isn't set, removing packages won't actually remove them from the database
                 if (packageCollection.RemovedEntitiesTracker == null)
                 {
@@ -332,6 +330,9 @@ namespace ShipWorks.Shipping.Services
                 }
 
                 packageCollection.Remove(package);
+
+                manipulateEntityAfterDelete?.Invoke(package);
+
                 UpdateDynamicData();
             }
         }
@@ -395,7 +396,7 @@ namespace ShipWorks.Shipping.Services
         /// Update the total weight of the shipment based on its ContentWeight and any packaging weight.
         /// </summary>
         public void UpdateTotalWeight() => shipmentType.UpdateTotalWeight(Shipment);
-        
+
         /// <summary>
         /// Get a strongly typed ShipmentType
         /// </summary>
