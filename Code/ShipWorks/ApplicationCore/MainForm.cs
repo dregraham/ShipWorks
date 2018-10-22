@@ -489,12 +489,12 @@ namespace ShipWorks
                 return;
             }
 
-            // This causes the shipping panel to lose focus, which causes it to save. If we don't do this, it will try
-            // to save later, after the user has logged out. This caused an exception because we couldn't audit the save.
-            // This was moved to its current location because if we're crashing, calling Focus can cause a cross-thread
-            // exception, preventing ShipWorks from shutting down. If we're crashing, we can't be sure a save is valid anyway.
-            Focus(); 
-            UnloadOrderLookupMode();
+            //// This causes the shipping panel to lose focus, which causes it to save. If we don't do this, it will try
+            //// to save later, after the user has logged out. This caused an exception because we couldn't audit the save.
+            //// This was moved to its current location because if we're crashing, calling Focus can cause a cross-thread
+            //// exception, preventing ShipWorks from shutting down. If we're crashing, we can't be sure a save is valid anyway.
+            //Focus();
+            //UnloadOrderLookupMode();
 
             using (ConnectionSensitiveScope scope = new ConnectionSensitiveScope("close ShipWorks", this))
             {
@@ -557,6 +557,13 @@ namespace ShipWorks
         /// </summary>
         public bool InitiateLogoff(bool clearRememberMe)
         {
+            // This causes the shipping panel to lose focus, which causes it to save. If we don't do this, it will try
+            // to save later, after the user has logged out. This caused an exception because we couldn't audit the save.
+            // This was moved to its current location because if we're crashing, calling Focus can cause a cross-thread
+            // exception, preventing ShipWorks from shutting down. If we're crashing, we can't be sure a save is valid anyway.
+            Focus();
+            UnloadOrderLookupMode();
+
             // Don't need a scope if we're already in one
             using (ConnectionSensitiveScope scope = (ConnectionSensitiveScope.IsActive ? null : new ConnectionSensitiveScope("log off", this)))
             {
@@ -1161,7 +1168,7 @@ namespace ShipWorks
             foreach (DockControl panel in Panels)
             {
                 IShipWorksMessage message = panel.IsOpen ?
-                    (IShipWorksMessage) new PanelShownMessage(this, panel) :
+                     new PanelShownMessage(this, panel) :
                     (IShipWorksMessage) new PanelHiddenMessage(this, panel);
 
                 Messenger.Current.Send(message);
@@ -1818,7 +1825,7 @@ namespace ShipWorks
             {
                 labelStatusTotal.Visible = true;
                 labelStatusTotal.Text = string.Format("Shipments: {0:#,##0}", shipmentHistory.RowCount);
-                
+
                 labelStatusSelected.Visible = false;
             }
             else
