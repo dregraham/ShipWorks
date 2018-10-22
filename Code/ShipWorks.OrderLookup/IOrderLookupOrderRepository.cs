@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.OrderLookup
@@ -16,6 +17,6 @@ namespace ShipWorks.OrderLookup
         /// <summary>
         /// Get the orders order id matching the search text
         /// </summary>
-        long? GetOrderID(string searchText);
+        List<long> GetOrderID(string searchText);
     }
 }

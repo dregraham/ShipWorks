@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
 using System.Data.SqlClient;
@@ -21,6 +22,8 @@ namespace ShipWorks.OrderLookup
         private readonly ISqlAdapterFactory sqlAdapterFactory;
         private readonly IOrderLoader orderLoader;
 
+        const int maxMatchingOrders = 5;
+
         /// <summary>
         /// Constructor
         /// </summary>
@@ -37,7 +40,7 @@ namespace ShipWorks.OrderLookup
         /// <summary>
         /// Get the OrderId matching the search text
         /// </summary>
-        public long? GetOrderID(string searchText)
+        public List<long> GetOrderID(string searchText)
         {
             using (DbConnection conn = sqlSession.OpenConnection())
             {
@@ -56,10 +59,30 @@ namespace ShipWorks.OrderLookup
                     {
                         cmd.CommandText = "SELECT OrderID FROM [Order] WHERE OrderNumberComplete = @searchText";
                     }
-                    
-                    return (long?) cmd.ExecuteScalar();
+
+                    return GetOrders(cmd);
                 }
             }
+        }
+
+        private List<long> GetOrders(DbCommand cmd)
+        {
+            List<long> orderIds = new List<long>(maxMatchingOrders);
+            using (DbDataReader reader = cmd.ExecuteReader())
+            {
+                int count = 0;
+                while(reader.Read())
+                {
+                    count++;
+                    if (count> maxMatchingOrders)
+                    {
+                        throw new OrderLookupException("Too many matches orders found.");
+                    }
+                    orderIds.Add(reader.GetInt64(0));
+                }
+            }
+
+            return orderIds;
         }
 
         /// <summary>
