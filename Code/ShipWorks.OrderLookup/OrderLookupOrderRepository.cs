@@ -25,7 +25,7 @@ namespace ShipWorks.OrderLookup
         /// Constructor
         /// </summary>
         public OrderLookupOrderRepository(
-            ISqlSession sqlSession, 
+            ISqlSession sqlSession,
             ISqlAdapterFactory sqlAdapterFactory,
             IOrderLoader orderLoader)
         {
@@ -56,7 +56,7 @@ namespace ShipWorks.OrderLookup
                     {
                         cmd.CommandText = "SELECT OrderID FROM [Order] WHERE OrderNumberComplete = @searchText";
                     }
-                    
+
                     return (long?) cmd.ExecuteScalar();
                 }
             }
@@ -68,7 +68,15 @@ namespace ShipWorks.OrderLookup
         public async Task<OrderEntity> GetOrder(long orderID)
         {
             ShipmentsLoadedEventArgs result = await orderLoader.LoadAsync(new[] { orderID }, ProgressDisplayOptions.Delay, true, TimeSpan.FromMilliseconds(1000)).ConfigureAwait(true);
-            return result.Shipments.Last().Order;
+
+            if (result.Shipments.Any())
+            {
+                return result.Shipments.Last().Order;
+            }
+
+            // The OrderId returned no shipments, this could happen if the user has no
+            // rights to create a shipment for the OrderID or if the OrderID does not exist in the database
+            return null;
         }
     }
 }
