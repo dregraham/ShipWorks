@@ -91,6 +91,7 @@ namespace ShipWorks.OrderLookup.Controls.Rating
                 ShipmentModel.ShipmentAdapter?.SelectServiceFromRate(value);
 
                 ShipmentModel.TotalCost = SelectedRate != null ? SelectedRate.AmountOrDefault : 0;
+                ShipmentModel.SelectedRate = SelectedRate;
             }
         }
 

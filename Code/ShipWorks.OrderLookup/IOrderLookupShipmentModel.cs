@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Reflection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping;
+using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Services;
 
 namespace ShipWorks.OrderLookup
@@ -73,6 +74,11 @@ namespace ShipWorks.OrderLookup
         /// Keep track of the original ShipmentTypeCode so we can ensure its in the list of providers
         /// </summary>
         ShipmentTypeCode OriginalShipmentTypeCode { get; }
+
+        /// <summary>
+        /// Keep track of the SelectedRate
+        /// </summary>
+        RateResult SelectedRate { get; set; }
 
         /// <summary>
         /// Changes the shipment type

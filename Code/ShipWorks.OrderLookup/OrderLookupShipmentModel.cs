@@ -14,10 +14,13 @@ using ShipWorks.Core.UI;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Messaging.Messages;
 using ShipWorks.Messaging.Messages.Shipping;
+using ShipWorks.OrderLookup.Controls.Rating;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers.Postal;
+using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Insurance;
 using ShipWorks.Shipping.Services;
+using ShipWorks.Shipping.UI.RatingPanel;
 
 namespace ShipWorks.OrderLookup
 {
@@ -161,6 +164,11 @@ namespace ShipWorks.OrderLookup
         /// Keep track of the original ShipmentTypeCode so we can ensure its in the list of providers
         /// </summary>
         public ShipmentTypeCode OriginalShipmentTypeCode { get; private set; }
+
+        /// <summary>
+        /// Selected rate that should be used if processing requires it
+        /// </summary>
+        public RateResult SelectedRate { get; set; }
 
         /// <summary>
         /// The package adapters for the order in context
@@ -451,7 +459,8 @@ namespace ShipWorks.OrderLookup
 
             SaveToDatabase();
 
-            messenger.Send(new ProcessShipmentsMessage(this, new[] { shipmentAdapter.Shipment }, new[] { shipmentAdapter.Shipment }, null));
+            messenger.Send(new ProcessShipmentsMessage(this, new[] { shipmentAdapter.Shipment }, 
+                new[] { shipmentAdapter.Shipment }, SelectedRate));
         }
     }
 }
