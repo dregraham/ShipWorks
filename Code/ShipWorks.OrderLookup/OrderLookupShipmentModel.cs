@@ -254,7 +254,7 @@ namespace ShipWorks.OrderLookup
         public void Unload()
         {
             SaveToDatabase();
-            ClearOrder();
+            ClearOrder(OrderClearReason.Reset);
         }
 
         /// <summary>
@@ -284,7 +284,7 @@ namespace ShipWorks.OrderLookup
 
             if (order == null)
             {
-                ClearOrder();
+                ClearOrder(OrderClearReason.OrderNotFound);
                 return;
             }
 
@@ -353,7 +353,7 @@ namespace ShipWorks.OrderLookup
         /// <summary>
         /// Clear the order
         /// </summary>
-        private void ClearOrder()
+        private void ClearOrder(OrderClearReason reason)
         {
             ShipmentUnloading?.Invoke(this, EventArgs.Empty);
             RemovePropertyChangedEventsFromEntities(ShipmentAdapter);
@@ -364,7 +364,7 @@ namespace ShipWorks.OrderLookup
             SelectedOrder = null;
             TotalCost = 0;
 
-            messenger.Send(new OrderLookupClearOrderMessage());
+            messenger.Send(new OrderLookupClearOrderMessage(this, reason));
         }
 
         /// <summary>

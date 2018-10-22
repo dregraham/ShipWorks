@@ -11,10 +11,11 @@ namespace ShipWorks.OrderLookup
         /// <summary>
         /// Constructor
         /// </summary>
-        public OrderLookupClearOrderMessage(object sender)
+        public OrderLookupClearOrderMessage(object sender, OrderClearReason reason)
         {
             Sender = sender;
             MessageId = Guid.NewGuid();
+            Reason = reason;
         }
 
         /// <summary>
@@ -26,5 +27,10 @@ namespace ShipWorks.OrderLookup
         /// Id of the message used for tracking purposes
         /// </summary>
         public Guid MessageId { get; }
+
+        /// <summary>
+        /// Reason the order was cleared
+        /// </summary>
+        public OrderClearReason Reason { get; }
     }
 }

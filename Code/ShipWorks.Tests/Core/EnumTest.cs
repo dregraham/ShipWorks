@@ -123,7 +123,7 @@ namespace ShipWorks.Tests.Core
                 "ShipWorks.Stores.Platforms.Walmart.DTO".ToUpperInvariant()
             };
 
-        private HashSet<Type> ignoreTypes = new HashSet<Type>
+        private readonly HashSet<Type> ignoreTypes = new HashSet<Type>
         {
             typeof(FedExRateRequestOptions),
         };
@@ -223,6 +223,7 @@ namespace ShipWorks.Tests.Core
                 "ShipWorks.Filters.Content.FilterDefinitionSourceType".ToUpperInvariant(),
                 "ShipWorks.Filters.FilterHelper+FilterImageType".ToUpperInvariant(),
                 "ShipWorks.Filters.Management.FilterEditingResult".ToUpperInvariant(),
+                "ShipWorks.OrderLookup.OrderClearReason".ToUpperInvariant(),
                 "ShipWorks.Shipping.ShipmentUpdateOperationResult".ToUpperInvariant(),
                 "ShipWorks.Shipping.Carriers.FedEx.Enums.FedExEmailNotificationType".ToUpperInvariant(),
                 "ShipWorks.Shipping.Carriers.FedEx.Enums.FedExMaskedDataType".ToUpperInvariant(),
