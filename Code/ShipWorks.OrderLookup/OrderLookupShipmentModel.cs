@@ -12,11 +12,13 @@ using Interapptive.Shared.UI;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Core.UI;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Messaging.Messages;
 using ShipWorks.Messaging.Messages.Shipping;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Shipping.Insurance;
+using ShipWorks.Shipping.Profiles;
 using ShipWorks.Shipping.Services;
 
 namespace ShipWorks.OrderLookup
@@ -77,6 +79,7 @@ namespace ShipWorks.OrderLookup
         private readonly IShippingManager shippingManager;
         private readonly IMessageHelper messageHelper;
         private readonly Func<IInsuranceBehaviorChangeViewModel> createInsuranceBehaviorChange;
+        private readonly IShippingProfileService profileService;
         private readonly PropertyChangedHandler handler;
         private readonly OrderLookupLabelShortcutPipeline shortcutPipeline;
         private ICarrierShipmentAdapter shipmentAdapter;
@@ -85,6 +88,7 @@ namespace ShipWorks.OrderLookup
         private decimal totalCost;
         private bool isSaving = false;
         private IEnumerable<IPackageAdapter> packageAdapters;
+        private IDisposable profileDisposable;
 
         public event EventHandler OnSearchOrder;
 
@@ -111,16 +115,14 @@ namespace ShipWorks.OrderLookup
             IShippingManager shippingManager,
             IMessageHelper messageHelper,
             Func<IInsuranceBehaviorChangeViewModel> createInsuranceBehaviorChange,
-            OrderLookupLabelShortcutPipeline shortcutPipeline)
+            IShippingProfileService profileService)
         {
+            this.profileService = profileService;
             this.messenger = messenger;
             this.shippingManager = shippingManager;
             this.messageHelper = messageHelper;
             this.createInsuranceBehaviorChange = createInsuranceBehaviorChange;
             handler = new PropertyChangedHandler(this, () => PropertyChanged);
-            this.shortcutPipeline = shortcutPipeline;
-
-            shortcutPipeline.Register(this);
         }
 
         /// <summary>
@@ -412,30 +414,12 @@ namespace ShipWorks.OrderLookup
         {
             if (value != ShipmentAdapter.ShipmentTypeCode)
             {
-                ShipmentLoading?.Invoke(this, EventArgs.Empty);
-
-                // Changing shipment type leads to unloading and loading entities into the current ShipmentEntity.
-                // To prepare for this, we remove existing handlers from the existing entities, change the shipment type,
-                // then add handlers to the possibly new entities.
-                using (handler.SuppressChangeNotifications())
+                ModifyShipmentWithReload(() =>
                 {
-                    RemovePropertyChangedEventsFromEntities(ShipmentAdapter);
-
-                    bool originalInsuranceSelection = shipmentAdapter.Shipment.Insurance;
-                    ShipmentAdapter = shippingManager.ChangeShipmentType(value, ShipmentAdapter.Shipment);
-                    ShipmentAdapter.UpdateDynamicData();
-
-                    createInsuranceBehaviorChange().Notify(originalInsuranceSelection, shipmentAdapter.Shipment.Insurance);
-
-                    RefreshProperties();
-
-                    AddPropertyChangedEventsToEntities(ShipmentAdapter, value);
-                }
-
-                RaisePropertyChanged(nameof(OrderLookupShipmentModel));
-
-                ShipmentLoaded?.Invoke(this, EventArgs.Empty);
-                messenger.Send(new ShipmentSelectionChangedMessage(this, new[] { ShipmentAdapter.Shipment.ShipmentID }, ShipmentAdapter));
+                    var adapter = shippingManager.ChangeShipmentType(value, ShipmentAdapter.Shipment);
+                    adapter.UpdateDynamicData();
+                    return adapter;
+                });
             }
         }
 
@@ -452,6 +436,59 @@ namespace ShipWorks.OrderLookup
             SaveToDatabase();
 
             messenger.Send(new ProcessShipmentsMessage(this, new[] { shipmentAdapter.Shipment }, new[] { shipmentAdapter.Shipment }, null));
+        }
+
+        /// <summary>
+        /// Register the profile handler
+        /// </summary>
+        public void RegisterProfileHandler(Func<Func<ShipmentTypeCode?>, Action<IShippingProfileEntity>, IDisposable> profileRegistration) =>
+            profileDisposable = profileRegistration(() => ShipmentAdapter?.ShipmentTypeCode, ApplyProfile);
+
+        /// <summary>
+        /// Apply the profile to the current shipment
+        /// </summary>
+        private void ApplyProfile(IShippingProfileEntity profileEntity)
+        {
+            var profile = profileService.Get(profileEntity.ShippingProfileID);
+            if (ShipmentAdapter?.Shipment != null && profile.IsApplicable(ShipmentAdapter?.Shipment?.ShipmentTypeCode))
+            {
+                ModifyShipmentWithReload(() => profile.Apply(ShipmentAdapter.Shipment));
+            }
+        }
+
+        /// <summary>
+        /// Modify the shipment going through the reload process to ensure that major changes (like provider) can be reflected
+        /// </summary>
+        private void ModifyShipmentWithReload(Func<ICarrierShipmentAdapter> performModification)
+        {
+            ShipmentLoading?.Invoke(this, EventArgs.Empty);
+
+            // Changing shipment type leads to unloading and loading entities into the current ShipmentEntity.
+            // To prepare for this, we remove existing handlers from the existing entities, change the shipment type,
+            // then add handlers to the possibly new entities.
+            using (handler.SuppressChangeNotifications())
+            {
+                RemovePropertyChangedEventsFromEntities(ShipmentAdapter);
+
+                bool originalInsuranceSelection = shipmentAdapter.Shipment.Insurance;
+                ShipmentAdapter = performModification();
+
+                createInsuranceBehaviorChange().Notify(originalInsuranceSelection, shipmentAdapter.Shipment.Insurance);
+
+                RefreshProperties();
+
+                AddPropertyChangedEventsToEntities(ShipmentAdapter, ShipmentAdapter.ShipmentTypeCode);
+            }
+
+            RaisePropertyChanged(nameof(OrderLookupShipmentModel));
+
+            ShipmentLoaded?.Invoke(this, EventArgs.Empty);
+            messenger.Send(new ShipmentSelectionChangedMessage(this, new[] { ShipmentAdapter.Shipment.ShipmentID }, ShipmentAdapter));
+        }
+
+        public void Dispose()
+        {
+            profileDisposable?.Dispose();
         }
     }
 }

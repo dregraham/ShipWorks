@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Reflection;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Services;
 
@@ -12,7 +13,7 @@ namespace ShipWorks.OrderLookup
     /// Represents the Order Lookup Data Service
     /// </summary>
     [Obfuscation(ApplyToMembers = true, Exclude = true, StripAfterObfuscation = false)]
-    public interface IOrderLookupShipmentModel
+    public interface IOrderLookupShipmentModel : IDisposable
     {
         /// <summary>
         /// The order that's in context
@@ -88,6 +89,11 @@ namespace ShipWorks.OrderLookup
         /// Create the label for an order
         /// </summary>
         void CreateLabel();
+
+        /// <summary>
+        /// Register the profile handler
+        /// </summary>
+        void RegisterProfileHandler(Func<Func<ShipmentTypeCode?>, Action<IShippingProfileEntity>, IDisposable> profileRegistration);
 
         /// <summary>
         /// Wire a property changed event on an INotifyPropertyChanged object

@@ -1067,6 +1067,15 @@ namespace ShipWorks
 
             orderLookupLifetimeScope = IoC.BeginLifetimeScope();
             orderLookupControl = orderLookupLifetimeScope.Resolve<IOrderLookup>();
+
+            var profilePopupService = orderLookupLifetimeScope.Resolve<IProfilePopupService>();
+            orderLookupControl.RegisterProfileHandler(
+                (getShipmentType, onApply) => profilePopupService.BuildMenu(
+                    buttonOrderLookupViewApplyProfile,
+                    new Guid("98602808-B402-48F9-A5D1-EE10FCE16565"),
+                    getShipmentType,
+                    onApply));
+
             panelDockingArea.Controls.Add(orderLookupControl.Control);
             orderLookupControl.Control.BringToFront();
 
