@@ -1,0 +1,59 @@
+﻿<UserControl
+    x:Class="ShipWorks.OrderLookup.Controls.ShipmentDetails.NotSupportedShipmentControl"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:ShipWorks.OrderLookup.Controls.ShipmentDetails"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:ui="http://schemas.shipworks.com/ui"
+    FontFamily="/ShipWorks.OrderLookup;component/#Roboto"
+    mc:Ignorable="d">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/ShipWorks.OrderLookup;component/Styles/OrderLookupStyle.xaml" />
+                <ResourceDictionary Source="/ShipWorks.OrderLookup;component/Controls/Weight/WeightControl.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
+    <Grid IsEnabled="{Binding ShipmentModel.ShipmentAllowEditing}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="85" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
+        <TextBlock
+            Grid.Row="0"
+            Grid.Column="0"
+            Style="{StaticResource FieldLabel}"
+            Text="Req. Shipping" />
+
+        <TextBlock
+            Grid.Row="0"
+            Grid.Column="1"
+            Margin="10,0,0,10"
+            HorizontalAlignment="Left"
+            Style="{StaticResource FieldLabel}"
+            Text="{Binding ShipmentModel.SelectedOrder.RequestedShipping, UpdateSourceTrigger=PropertyChanged}" />
+
+        <TextBlock
+            Grid.Row="1"
+            Grid.Column="0"
+            Style="{StaticResource FieldLabel}"
+            Text="Provider" />
+
+        <ComboBox
+            Grid.Row="1"
+            Grid.Column="1"
+            DisplayMemberPath="Value"
+            ItemsSource="{Binding Providers}"
+            SelectedValue="{Binding ShipmentTypeCode, UpdateSourceTrigger=PropertyChanged}"
+            SelectedValuePath="Key"
+            Style="{StaticResource FormComboBox}" />
+
+    </Grid>
+</UserControl>
