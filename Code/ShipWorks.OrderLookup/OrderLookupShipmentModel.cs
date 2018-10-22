@@ -370,6 +370,7 @@ namespace ShipWorks.OrderLookup
             ShipmentAllowEditing = false;
             PackageAdapters = null;
             SelectedOrder = null;
+            SelectedRate = null;
             TotalCost = 0;
 
             messenger.Send(new OrderLookupClearOrderMessage(this, reason));
@@ -418,6 +419,8 @@ namespace ShipWorks.OrderLookup
         /// </summary>
         public void ChangeShipmentType(ShipmentTypeCode value)
         {
+            SelectedRate = null;
+            
             if (value != ShipmentAdapter.ShipmentTypeCode)
             {
                 ShipmentLoading?.Invoke(this, EventArgs.Empty);
