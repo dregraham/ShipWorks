@@ -41,7 +41,7 @@ namespace ShipWorks.OrderLookup.Controls
             {
                 Context = null;
             }
-            if (createSectionViewModel.TryGetValue(key.Value, out T newModel))
+            else if (createSectionViewModel.TryGetValue(key.Value, out T newModel))
             {
                 Context = newModel;
             }
