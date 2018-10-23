@@ -2,7 +2,6 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Interapptive.Shared.Collections;
-using Interapptive.Shared.UI;
 using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.OrderLookup
@@ -14,54 +13,49 @@ namespace ShipWorks.OrderLookup
     {
         private readonly IOrderLookupMultipleMatchesViewModel viewModel;
         private readonly IOrderLookupOrderRepository repository;
-        private readonly IMessageHelper messageHelper;
 
         /// <summary>
         /// Constructor
         /// </summary>
         public OrderLookupConfirmationService(
             IOrderLookupMultipleMatchesViewModel viewModel,
-            IOrderLookupOrderRepository repository,
-            IMessageHelper messageHelper)
+            IOrderLookupOrderRepository repository)
         {
             this.viewModel = viewModel;
             this.repository = repository;
-            this.messageHelper = messageHelper;
         }
 
         /// <summary>
         /// Prompt the user to confirm which order they want
         /// </summary>
-        public async Task<long?> ConfirmOrder(List<long> list)
+        public async Task<long?> ConfirmOrder(IEnumerable<long> orderIDs)
         {
-            if (list.IsCountLessThan(2))
+            if (orderIDs.None())
             {
-                return list.FirstOrDefault();
-            }
-
-            if (list.IsCountGreaterThan(5))
-            {
-                messageHelper.ShowError("Too many orders, try a different search!");
                 return null;
             }
 
-            // now we know we have 5 or less orders
-            List<OrderEntity> orders = await GetOrders(list);
+            if (orderIDs.IsCountEqualTo(1))
+            {
+                return orderIDs.First();
+            }
+
+            List<OrderEntity> orders = await GetOrders(orderIDs);
             viewModel.Load(orders);
 
+            //TODO: show dialog
 
-
-            return viewModel.SelectedOrder.OrderID;
+            return viewModel.SelectedOrder?.OrderID;
         }
 
         /// <summary>
         /// Get orders for the list of ids
         /// </summary>
-        private async Task<List<OrderEntity>> GetOrders(List<long> list)
+        private async Task<List<OrderEntity>> GetOrders(IEnumerable<long> orderIDs)
         {
-            var result = new List<OrderEntity>();
+            List<OrderEntity> result = new List<OrderEntity>();
 
-            foreach (long orderID in list)
+            foreach (long orderID in orderIDs)
             {
                 result.Add(await repository.GetOrder(orderID));
             }

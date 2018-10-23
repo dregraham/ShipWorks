@@ -261,13 +261,16 @@
     <Compile Include="FieldManager\IOrderLookupFieldManagerDialog.cs" />
     <Compile Include="FieldManager\OrderLookupFieldManagerViewModel.cs" />
     <Compile Include="IOrderLookupConfirmationService.cs" />
+    <Compile Include="IOrderLookupMultipleMatchesViewModel.cs" />
     <Compile Include="IOrderLookupPreviousShipmentLocator.cs" />
     <Compile Include="Controls\IOrderLookupWrapperViewModel.cs" />
     <Compile Include="IOrderLookupViewModel.cs" />
     <Compile Include="OrderLookupClearOrderMessage.cs" />
+    <Compile Include="OrderLookupConfirmationService.cs" />
     <Compile Include="OrderLookupException.cs" />
     <Compile Include="OrderLookupLabelShortcutPipeline.cs" />
     <Compile Include="OrderLookupModule.cs" />
+    <Compile Include="OrderLookupMultipleMatchesViewModel.cs" />
     <Compile Include="OrderLookupPreviousShipmentLocator.cs" />
     <Compile Include="PreviousProcessedShipmentDetails.cs" />
     <Compile Include="ShipmentHistory\Controls\ShipmentHistoryGrid.cs">
