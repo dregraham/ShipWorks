@@ -169,6 +169,8 @@
     </Compile>
     <Compile Include="Controls\LabelOptions\AmazonLabelOptionsViewModel.cs" />
     <Compile Include="Controls\LabelOptions\UpsLabelOptionsViewModel.cs" />
+    <Compile Include="Controls\OrderConfirmationDialog\IOrderConfirmationViewModel.cs" />
+    <Compile Include="Controls\OrderConfirmationDialog\OrderConfirmationViewModel.cs" />
     <Compile Include="Controls\OrderLookupWrapperControl.xaml.cs">
       <DependentUpon>OrderLookupWrapperControl.xaml</DependentUpon>
     </Compile>
@@ -261,7 +263,6 @@
     <Compile Include="FieldManager\IOrderLookupFieldManagerDialog.cs" />
     <Compile Include="FieldManager\OrderLookupFieldManagerViewModel.cs" />
     <Compile Include="IOrderLookupConfirmationService.cs" />
-    <Compile Include="IOrderLookupMultipleMatchesViewModel.cs" />
     <Compile Include="IOrderLookupPreviousShipmentLocator.cs" />
     <Compile Include="Controls\IOrderLookupWrapperViewModel.cs" />
     <Compile Include="IOrderLookupViewModel.cs" />
@@ -270,7 +271,6 @@
     <Compile Include="OrderLookupException.cs" />
     <Compile Include="OrderLookupLabelShortcutPipeline.cs" />
     <Compile Include="OrderLookupModule.cs" />
-    <Compile Include="OrderLookupMultipleMatchesViewModel.cs" />
     <Compile Include="OrderLookupPreviousShipmentLocator.cs" />
     <Compile Include="PreviousProcessedShipmentDetails.cs" />
     <Compile Include="ShipmentHistory\Controls\ShipmentHistoryGrid.cs">

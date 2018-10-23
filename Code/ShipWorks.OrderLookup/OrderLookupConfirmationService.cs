@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Interapptive.Shared.Collections;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.OrderLookup.Controls.OrderConfirmationDialog;
 
 namespace ShipWorks.OrderLookup
 {
@@ -11,14 +12,14 @@ namespace ShipWorks.OrderLookup
     /// </summary>
     public class OrderLookupConfirmationService : IOrderLookupConfirmationService
     {
-        private readonly IOrderLookupMultipleMatchesViewModel viewModel;
+        private readonly IOrderConfirmationViewModel viewModel;
         private readonly IOrderLookupOrderRepository repository;
 
         /// <summary>
         /// Constructor
         /// </summary>
         public OrderLookupConfirmationService(
-            IOrderLookupMultipleMatchesViewModel viewModel,
+            IOrderConfirmationViewModel viewModel,
             IOrderLookupOrderRepository repository)
         {
             this.viewModel = viewModel;

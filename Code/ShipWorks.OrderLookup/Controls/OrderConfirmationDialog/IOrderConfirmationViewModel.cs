@@ -1,12 +1,12 @@
 ﻿using System.Collections.Generic;
 using ShipWorks.Data.Model.EntityClasses;
 
-namespace ShipWorks.OrderLookup
+namespace ShipWorks.OrderLookup.Controls.OrderConfirmationDialog
 {
     /// <summary>
     /// Represents a view model for multiple matched orders to confirm
     /// </summary>
-    public interface IOrderLookupMultipleMatchesViewModel
+    public interface IOrderConfirmationViewModel
     {
         /// <summary>
         /// The Orders

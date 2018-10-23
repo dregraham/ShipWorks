@@ -2,6 +2,7 @@
 using System.Reflection;
 using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.OrderLookup.Controls.OrderConfirmationDialog;
 
 namespace ShipWorks.OrderLookup
 {
@@ -9,7 +10,7 @@ namespace ShipWorks.OrderLookup
     /// View Model for confirming multiple matched orders
     /// </summary>
     [Component]
-    public class OrderLookupMultipleMatchesViewModel : IOrderLookupMultipleMatchesViewModel
+    public class OrderConfirmationViewModel : IOrderConfirmationViewModel
     {
         /// <summary>
         /// The selected order
