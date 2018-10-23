@@ -4,6 +4,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:controls="clr-namespace:ShipWorks.OrderLookup.Controls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:sys="clr-namespace:System;assembly=mscorlib"
     xmlns:local="clr-namespace:ShipWorks.OrderLookup.Controls.ShipmentDetails"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:ui="http://schemas.shipworks.com/ui"
@@ -17,6 +18,7 @@
             </ResourceDictionary.MergedDictionaries>
             <ui:InvertBooleanConverter x:Key="InvertBoolean" />
             <ui:BooleanToVisibilityConverter x:Key="BooleanToVisibility" />
+            <ui:VisibleWhenEqualToParameterConverter x:Key="VisibleWhenNotEqualToParameter" Invert="true" />
         </ResourceDictionary>
     </UserControl.Resources>
 
@@ -130,7 +132,6 @@
                 <ComboBox
                     Grid.Column="0"
                     Margin="10,0,0,5"
-                    DisplayMemberPath="Name"
                     ItemsSource="{Binding DimensionProfiles}"
                     SelectedValuePath="DimensionsProfileID"
                     Style="{StaticResource FormComboBox}">
@@ -140,6 +141,29 @@
                             Path="ShipmentModel.ShipmentAdapter.Shipment.Amazon.DimsProfileID"
                             UpdateSourceTrigger="PropertyChanged" />
                     </ComboBox.SelectedValue>
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="{Binding Name}" />
+                                <TextBlock>
+                                    <TextBlock.Visibility>
+                                        <Binding Path="DimensionsProfileID" Converter="{StaticResource VisibleWhenNotEqualToParameter}">
+                                            <Binding.ConverterParameter>
+                                                <sys:Int64>0</sys:Int64>
+                                            </Binding.ConverterParameter>
+                                        </Binding>
+                                    </TextBlock.Visibility>
+                                    <TextBlock.Text>
+                                        <MultiBinding StringFormat=" ({0} x {1} x {2})">
+                                            <Binding Path="Length" UpdateSourceTrigger="PropertyChanged"/>
+                                            <Binding Path="Width" UpdateSourceTrigger="PropertyChanged"/>
+                                            <Binding Path="Height" UpdateSourceTrigger="PropertyChanged"/>
+                                        </MultiBinding>
+                                    </TextBlock.Text>
+                                </TextBlock>
+                            </StackPanel>
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
                 </ComboBox>
 
                 <Button
