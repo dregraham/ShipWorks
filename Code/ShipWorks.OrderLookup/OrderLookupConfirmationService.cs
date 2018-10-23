@@ -41,7 +41,7 @@ namespace ShipWorks.OrderLookup
             }
 
             List<OrderEntity> orders = await GetOrders(orderIDs);
-            viewModel.Load(orders);
+            viewModel.Orders = orders;
 
             //TODO: show dialog
 

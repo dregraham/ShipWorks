@@ -17,10 +17,5 @@ namespace ShipWorks.OrderLookup
         /// The SelectedOrder
         /// </summary>
         OrderEntity SelectedOrder { get; set; }
-
-        /// <summary>
-        /// Load the orders into the view model
-        /// </summary>
-        void Load(IEnumerable<OrderEntity> orders);
     }
 }

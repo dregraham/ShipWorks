@@ -22,13 +22,5 @@ namespace ShipWorks.OrderLookup
         /// </summary>
         [Obfuscation(Exclude = true)]
         public IEnumerable<OrderEntity> Orders { get; set; }
-
-        /// <summary>
-        /// Load the orders into the view model
-        /// </summary>
-        public void Load(IEnumerable<OrderEntity> orders)
-        {
-
-        }
     }
 }
