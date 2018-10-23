@@ -88,7 +88,7 @@ namespace ShipWorks.OrderLookup
                 shipmentModel.SaveToDatabase();
 
                 await onDemandDownloaderFactory.CreateOnDemandDownloader().Download(message.ScannedText).ConfigureAwait(true);
-                long? orderId = orderLookupConfirmationService.ConfirmOrder(orderRepository.GetOrderIDs(message.ScannedText));
+                long? orderId = await orderLookupConfirmationService.ConfirmOrder(orderRepository.GetOrderIDs(message.ScannedText));
                 OrderEntity order = null;
 
                 if (orderId.HasValue)
@@ -133,8 +133,8 @@ namespace ShipWorks.OrderLookup
                 shipmentModel.SaveToDatabase();
 
                 await onDemandDownloaderFactory.CreateOnDemandDownloader().Download(message.SearchText).ConfigureAwait(true);
-                long? orderId = orderLookupConfirmationService.ConfirmOrder(orderRepository.GetOrderIDs(message.SearchText));
-                
+                long? orderId = await orderLookupConfirmationService.ConfirmOrder(orderRepository.GetOrderIDs(message.SearchText));
+
                 OrderEntity order = null;
                 if (orderId.HasValue)
                 {
