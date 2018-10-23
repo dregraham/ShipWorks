@@ -5,6 +5,46 @@
         <ResourceDictionary Source="/ShipWorks.OrderLookup;component/Styles/Colors.xaml"/>
     </ResourceDictionary.MergedDictionaries>
 
+    <Style x:Key="SmallButton" TargetType="{x:Type Button}">
+        <Setter Property="Height" Value="32"/>
+        <Setter Property="MinWidth" Value="50" />
+        <Setter Property="Padding" Value="20,4" />
+        <Setter Property="FontSize" Value="12"/>
+        <Setter Property="FontWeight" Value="Bold" />
+        <Setter Property="HorizontalContentAlignment" Value="Center"/>       
+    </Style>
+
+    <Style x:Key="SmallPrimaryButton" TargetType="{x:Type Button}" BasedOn="{StaticResource SmallButton}">
+        <Setter Property="Foreground" Value="White"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border CornerRadius="2" Background="{StaticResource LargePrimaryButtonGradient}" BorderBrush="#0e497f" BorderThickness="1px">
+                        <ContentPresenter x:Name="contentPresenter" ContentTemplate="{TemplateBinding ContentTemplate}" Content="{TemplateBinding Content}" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="SmallSecondaryButton" TargetType="{x:Type Button}" BasedOn="{StaticResource SmallButton}">
+        <Setter Property="Foreground" Value="{StaticResource ControlTextColor}"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border CornerRadius="2" Background="#E6E6E6" BorderBrush="#D4D4D4" BorderThickness="1px">
+                        <ContentPresenter x:Name="contentPresenter" ContentTemplate="{TemplateBinding ContentTemplate}" Content="{TemplateBinding Content}" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="LargePrimaryButton" TargetType="{x:Type Button}" BasedOn="{StaticResource SmallPrimaryButton}">
+        <Setter Property="Width" Value="207"/>
+        <Setter Property="FontSize" Value="16"/>
+    </Style>    
+
     <Style x:Key="LinkButton" TargetType="{x:Type Hyperlink}">
         <Setter Property="TextBlock.TextDecorations" Value="{x:Null}" />
     </Style>
