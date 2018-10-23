@@ -39,17 +39,43 @@ namespace ShipWorks.UI.Services
         /// <summary>
         /// Show an error message box with the given error text.
         /// </summary>
-        public void ShowError(string message) => MessageHelper.ShowError(ownerFactory(), message);
+        public void ShowError(string message, Exception ex)
+        {
+            Control owner = ownerFactory();
+
+            if (owner.InvokeRequired)
+            {
+                owner.Invoke((Action<string, Exception>) ShowError, message, ex);
+            }
+            else
+            {
+                MessageHelper.ShowError(ownerFactory(), message, ex);
+            }
+        }
 
         /// <summary>
         /// Show an error message box with the given error text.
         /// </summary>
-        public void ShowError(string message, Exception ex) => MessageHelper.ShowError(ownerFactory(), message, ex);
+        public void ShowError(IWin32Window owner, string message)
+        {
+            MessageHelper.ShowError(owner, message);
+            if (((Control) owner).InvokeRequired)
+            {
+                ((Control) owner).Invoke((Action<string>) ShowError, message);
+            }
+            else
+            {
+                MessageHelper.ShowError(ownerFactory(), message);
+            }
+        }
 
         /// <summary>
         /// Show an error message box with the given error text.
         /// </summary>
-        public void ShowError(IWin32Window owner, string message) => MessageHelper.ShowError(owner, message);
+        public void ShowError(string message)
+        {
+            ShowError(ownerFactory(), message);
+        }
 
         /// <summary>
         /// Show an information message

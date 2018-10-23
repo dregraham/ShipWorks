@@ -42,6 +42,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
         /// <summary>
         /// Id of the package to which this adapter applies
         /// </summary>
+        [Obfuscation(Exclude = true)]
         public long PackageId
         {
             get { return packageAdapter.PackageId; }
@@ -50,6 +51,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
         /// <summary>
         /// Gets or sets the weight.
         /// </summary>
+        [Obfuscation(Exclude = true)]
         public double Weight
         {
             get { return packageAdapter.Weight; }
@@ -59,6 +61,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
         /// <summary>
         /// Gets or sets the additional weight.
         /// </summary>
+        [Obfuscation(Exclude = true)]
         public double AdditionalWeight
         {
             get { return packageAdapter.AdditionalWeight; }
@@ -68,6 +71,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
         /// <summary>
         /// Gets or sets the whether the additional weight should be applied.
         /// </summary>
+        [Obfuscation(Exclude = true)]
         public bool ApplyAdditionalWeight
         {
             get { return packageAdapter.ApplyAdditionalWeight; }
@@ -77,6 +81,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
         /// <summary>
         /// Gets or sets the dims length.
         /// </summary>
+        [Obfuscation(Exclude = true)]
         public double DimsLength
         {
             get { return packageAdapter.DimsLength; }
@@ -86,6 +91,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
         /// <summary>
         /// Gets or sets the dims width.
         /// </summary>
+        [Obfuscation(Exclude = true)]
         public double DimsWidth
         {
             get { return packageAdapter.DimsWidth; }
@@ -95,6 +101,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
         /// <summary>
         /// Gets or sets the dims height.
         /// </summary>
+        [Obfuscation(Exclude = true)]
         public double DimsHeight
         {
             get { return packageAdapter.DimsHeight; }
@@ -104,6 +111,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
         /// <summary>
         /// Gets or sets the dimension profile id.
         /// </summary>
+        [Obfuscation(Exclude = true)]
         public long DimsProfileID
         {
             get { return packageAdapter.DimsProfileID; }
@@ -113,6 +121,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
         /// <summary>
         /// Gets or sets the packaging type.
         /// </summary>
+        [Obfuscation(Exclude = true)]
         public int PackagingType
         {
             get { return packageAdapter.PackagingType; }
@@ -122,6 +131,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
         /// <summary>
         /// Gets or sets the insurance choice.
         /// </summary>
+        [Obfuscation(Exclude = true)]
         public IInsuranceChoice InsuranceChoice
         {
             get { return packageAdapter.InsuranceChoice; }
@@ -131,6 +141,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
         /// <summary>
         /// Gets an error, if any
         /// </summary>
+        [Obfuscation(Exclude = true)]
         public string Error
         {
             get { return packageAdapter.Error; }

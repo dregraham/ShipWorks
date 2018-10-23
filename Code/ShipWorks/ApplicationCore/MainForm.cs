@@ -266,9 +266,9 @@ namespace ShipWorks
                         _ => voidHandler.VoidLast())
                     .ConfigureAwait(true);
                 }
-                catch (Exception ex)
+                catch
                 {
-                    messageHelper.ShowError(ex.Message);
+                    // Just continue, as VoidLast already handled the exception
                 }
             }
         }
