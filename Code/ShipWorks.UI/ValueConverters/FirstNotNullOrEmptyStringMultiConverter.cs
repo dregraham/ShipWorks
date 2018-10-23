@@ -22,7 +22,7 @@ namespace ShipWorks.UI.ValueConverters
                 }
             }
 
-            return null;
+            return string.Empty;
         }
 
         /// <summary>

@@ -49,7 +49,7 @@ namespace ShipWorks.OrderLookup
             
             OrderConfirmationDialog confirmationDialog = new OrderConfirmationDialog(owner, viewModel);
             viewModel.Orders = orders;
-            viewModel.SelectedOrder = orders.FirstOrDefault();
+            viewModel.SelectedOrder = null;
             
             bool? dialogResult = confirmationDialog.ShowDialog();
 
