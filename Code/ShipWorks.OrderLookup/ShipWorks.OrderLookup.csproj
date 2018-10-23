@@ -170,6 +170,9 @@
     <Compile Include="Controls\LabelOptions\AmazonLabelOptionsViewModel.cs" />
     <Compile Include="Controls\LabelOptions\UpsLabelOptionsViewModel.cs" />
     <Compile Include="Controls\OrderConfirmationDialog\IOrderConfirmationViewModel.cs" />
+    <Compile Include="Controls\OrderConfirmationDialog\OrderConfirmationDialog.xaml.cs">
+      <DependentUpon>OrderConfirmationDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\OrderConfirmationDialog\OrderConfirmationViewModel.cs" />
     <Compile Include="Controls\OrderLookupWrapperControl.xaml.cs">
       <DependentUpon>OrderLookupWrapperControl.xaml</DependentUpon>
@@ -397,6 +400,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Controls\OrderConfirmationDialog\OrderConfirmationDialog.xaml" />
     <Page Include="Controls\OrderLookupWrapperControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

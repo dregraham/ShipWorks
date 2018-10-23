@@ -1,0 +1,102 @@
+<ui:InteropWindow x:Class="ShipWorks.OrderLookup.Controls.OrderConfirmationDialog.OrderConfirmationDialog"
+                  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                  xmlns:ui="clr-namespace:Interapptive.Shared.UI;assembly=Interapptive.Shared"
+                  xmlns:valueConverters="http://schemas.shipworks.com/ui"
+                  xmlns:orderConfirmationDialog="clr-namespace:ShipWorks.OrderLookup.Controls.OrderConfirmationDialog"
+                  xmlns:entityClasses="clr-namespace:ShipWorks.Data.Model.EntityClasses;assembly=ShipWorks.Data.Model"
+                  mc:Ignorable="d"
+                  d:DataContext="{d:DesignInstance orderConfirmationDialog:OrderConfirmationViewModel}"
+                  
+                  MinHeight="200" MinWidth="400"
+                  Height="400" Width="500"
+                  FontFamily="/ShipWorks.OrderLookup;component/#Roboto"
+
+                  Title="Multiple Matching Orders">
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/ShipWorks.OrderLookup;component/Styles/OrderLookupStyle.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+            <valueConverters:NullToBooleanConverter x:Key="NullToBool" />
+            <valueConverters:FirstNotNullItemMultiConverter x:Key="FirstNotNullItemMultiConverter" />
+            <valueConverters:EnumImageConverter x:Key="EnumImage" />
+        </ResourceDictionary>
+    </Window.Resources>
+    <Grid Margin="{StaticResource StandardPaddingFull}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="auto"/>
+        </Grid.RowDefinitions>
+        
+        <TextBlock Grid.Row="0"
+                   Text="There are multiple orders that match the ID you looked up. Which order are you working on?"
+                   TextWrapping="Wrap"
+                   Margin="{StaticResource StandardPaddingBottom}"
+                   Style="{StaticResource StandardText}"/>
+
+        <DataGrid Grid.Row="1"
+                  Margin="{StaticResource StandardPaddingBottom}"
+                  ItemsSource="{Binding Orders}"
+                  SelectedItem="{Binding SelectedOrder, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                  AutoGenerateColumns="False"
+                  Style="{StaticResource DataGrid.SingleRowSelection}">
+            <DataGrid.ColumnHeaderStyle>
+                <Style BasedOn="{StaticResource {x:Type DataGridColumnHeader}}" TargetType="{x:Type DataGridColumnHeader}">
+                    <Setter Property="Height" Value="20"/>
+                </Style>
+            </DataGrid.ColumnHeaderStyle>
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Recipient"
+                                    Width="*">
+                    <DataGridTextColumn.Binding>
+                        <MultiBinding Converter="{StaticResource FirstNotNullItemMultiConverter}">
+                            <Binding Path="ShipPerson.ParsedName.FullName"/>
+                            <Binding Path="ShipPerson.Company"/>
+                        </MultiBinding>
+                    </DataGridTextColumn.Binding>
+                </DataGridTextColumn>
+                <DataGridTemplateColumn Header="Store"
+                                        Width="*">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate DataType="{x:Type entityClasses:OrderEntity}">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <Image Grid.Column="0" 
+                                       Height="15" Width="15"
+                                       VerticalAlignment="Center"
+                                       Margin="0 0 5 0" Source="{Binding Path=Store.StoreTypeCode, Converter={StaticResource EnumImage}}"/>
+                                <TextBlock Grid.Column="1" 
+                                           Text="{Binding Path=Store.StoreName}" TextTrimming="CharacterEllipsis" VerticalAlignment="Center"/>
+                            </Grid>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
+        </DataGrid>
+
+        <Grid Grid.Row="2" HorizontalAlignment="Right" Grid.IsSharedSizeScope="True">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="auto" SharedSizeGroup="a"/>
+                <ColumnDefinition Width="auto" SharedSizeGroup="a"/>
+            </Grid.ColumnDefinitions>
+            <Button Grid.Column="0"
+                    Content="Cancel"
+                    Style="{StaticResource SmallSecondaryButton}"
+                    Margin="{StaticResource StandardPaddingRight}"
+                    IsCancel="True"/>
+            <Button Grid.Column="1"
+                    Content="Select"                    
+                    Style="{StaticResource SmallPrimaryButton}"
+                    IsEnabled="{Binding SelectedOrder, Converter={StaticResource NullToBool}}"
+                    IsDefault="True"
+                    Click="OnClickSelect"/>
+        </Grid>
+    </Grid>
+</ui:InteropWindow>

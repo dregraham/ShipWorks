@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using Interapptive.Shared.Collections;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.OrderLookup.Controls.OrderConfirmationDialog;
@@ -14,16 +15,19 @@ namespace ShipWorks.OrderLookup
     {
         private readonly IOrderConfirmationViewModel viewModel;
         private readonly IOrderLookupOrderRepository repository;
+        private readonly IWin32Window owner;
 
         /// <summary>
         /// Constructor
         /// </summary>
         public OrderLookupConfirmationService(
             IOrderConfirmationViewModel viewModel,
-            IOrderLookupOrderRepository repository)
+            IOrderLookupOrderRepository repository,
+            IWin32Window owner)
         {
             this.viewModel = viewModel;
             this.repository = repository;
+            this.owner = owner;
         }
 
         /// <summary>
@@ -44,9 +48,14 @@ namespace ShipWorks.OrderLookup
             List<OrderEntity> orders = await GetOrders(orderIDs);
             viewModel.Orders = orders;
 
-            //TODO: show dialog
+            OrderConfirmationDialog confirmationDialog = new OrderConfirmationDialog(owner, viewModel);
 
-            return viewModel.SelectedOrder?.OrderID;
+            bool? dialogResult = confirmationDialog.ShowDialog();
+
+            return dialogResult.HasValue && dialogResult.Value ? 
+                viewModel.SelectedOrder?.OrderID :
+                null;
+
         }
 
         /// <summary>
