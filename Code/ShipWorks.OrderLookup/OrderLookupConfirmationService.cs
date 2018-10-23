@@ -46,10 +46,11 @@ namespace ShipWorks.OrderLookup
             }
 
             List<OrderEntity> orders = await GetOrders(orderIDs);
-            viewModel.Orders = orders;
-
+            
             OrderConfirmationDialog confirmationDialog = new OrderConfirmationDialog(owner, viewModel);
-
+            viewModel.Orders = orders;
+            viewModel.SelectedOrder = orders.FirstOrDefault();
+            
             bool? dialogResult = confirmationDialog.ShowDialog();
 
             return dialogResult.HasValue && dialogResult.Value ? 

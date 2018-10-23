@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
 using System.Reflection;
 using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.Core.UI;
@@ -44,11 +43,7 @@ namespace ShipWorks.OrderLookup.Controls.OrderConfirmationDialog
         public IEnumerable<OrderEntity> Orders
         {
             get => orders;
-            set
-            {
-                orders = value;
-                SelectedOrder = orders.FirstOrDefault();
-            }
+            set => handler.Set(nameof(Orders), ref orders, value);
         }
     }
 }

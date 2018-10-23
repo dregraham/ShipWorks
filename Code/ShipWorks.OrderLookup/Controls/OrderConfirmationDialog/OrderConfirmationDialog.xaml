@@ -11,7 +11,7 @@
                   d:DataContext="{d:DesignInstance orderConfirmationDialog:OrderConfirmationViewModel}"
                   
                   MinHeight="200" MinWidth="400"
-                  Height="400" Width="500"
+                  Height="300" Width="400"
                   FontFamily="/ShipWorks.OrderLookup;component/#Roboto"
 
                   Title="Multiple Matching Orders">
@@ -42,7 +42,7 @@
                   Margin="{StaticResource StandardPaddingBottom}"
                   ItemsSource="{Binding Orders}"
                   SelectedItem="{Binding SelectedOrder, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
-                  AutoGenerateColumns="False"
+                  AutoGenerateColumns="False"                  
                   Style="{StaticResource DataGrid.SingleRowSelection}">
             <DataGrid.ColumnHeaderStyle>
                 <Style BasedOn="{StaticResource {x:Type DataGridColumnHeader}}" TargetType="{x:Type DataGridColumnHeader}">
