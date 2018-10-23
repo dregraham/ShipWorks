@@ -21,7 +21,7 @@
                 <ResourceDictionary Source="/ShipWorks.OrderLookup;component/Styles/OrderLookupStyle.xaml" />
             </ResourceDictionary.MergedDictionaries>
             <valueConverters:NullToBooleanConverter x:Key="NullToBool" />
-            <valueConverters:FirstNotNullItemMultiConverter x:Key="FirstNotNullItemMultiConverter" />
+            <valueConverters:FirstNotNullOrEmptyStringMultiConverter x:Key="FirstNotNullOrEmptyStringMultiConverter" />
             <valueConverters:EnumImageConverter x:Key="EnumImage" />
         </ResourceDictionary>
     </Window.Resources>
@@ -53,7 +53,7 @@
                 <DataGridTextColumn Header="Recipient"
                                     Width="*">
                     <DataGridTextColumn.Binding>
-                        <MultiBinding Converter="{StaticResource FirstNotNullItemMultiConverter}">
+                        <MultiBinding Converter="{StaticResource FirstNotNullOrEmptyStringMultiConverter}">
                             <Binding Path="ShipPerson.ParsedName.FullName"/>
                             <Binding Path="ShipPerson.Company"/>
                         </MultiBinding>
