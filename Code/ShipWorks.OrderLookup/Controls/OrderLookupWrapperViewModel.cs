@@ -37,7 +37,22 @@ namespace ShipWorks.OrderLookup.Controls
             IIndex<ShipmentTypeCode, T> createSectionViewModel = innerScope.Resolve<IIndex<ShipmentTypeCode, T>>();
 
             var key = shipmentModel.ShipmentAdapter?.ShipmentTypeCode;
-            Context = key.HasValue && createSectionViewModel.TryGetValue(key.Value, out T newModel) ? newModel : null;
+            if (!key.HasValue)
+            {
+                Context = null;
+            }
+            else if (createSectionViewModel.TryGetValue(key.Value, out T newModel))
+            {
+                Context = newModel;
+            }
+            else if(innerScope.TryResolve<T>(out T nullModel))
+            {
+                Context = nullModel;
+            }
+            else
+            {
+                Context = null;
+            }
         }
 
         /// <summary>

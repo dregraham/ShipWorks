@@ -16,11 +16,14 @@ using System.Windows.Shapes;
 namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
 {
     /// <summary>
-    /// Interaction logic for AmazonShipmentDetailsControl.xaml
+    /// Interaction logic for NotSupportedShipmentControl.xaml
     /// </summary>
-    public partial class AmazonShipmentDetailsControl : UserControl
+    public partial class NotSupportedShipmentControl : UserControl
     {
-        public AmazonShipmentDetailsControl()
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public NotSupportedShipmentControl()
         {
             InitializeComponent();
             Loaded += OnControlLoaded;
