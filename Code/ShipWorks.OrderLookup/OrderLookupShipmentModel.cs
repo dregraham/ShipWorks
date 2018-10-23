@@ -11,10 +11,12 @@ using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.UI;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Core.UI;
+using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Messaging.Messages;
 using ShipWorks.Messaging.Messages.Shipping;
+using ShipWorks.OrderLookup.ShipmentModelPipelines;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Shipping.Insurance;
@@ -81,7 +83,7 @@ namespace ShipWorks.OrderLookup
         private readonly Func<IInsuranceBehaviorChangeViewModel> createInsuranceBehaviorChange;
         private readonly IShippingProfileService profileService;
         private readonly PropertyChangedHandler handler;
-        private readonly OrderLookupLabelShortcutPipeline shortcutPipeline;
+        private readonly IDisposable subscription;
         private ICarrierShipmentAdapter shipmentAdapter;
         private OrderEntity selectedOrder;
         private bool shipmentAllowEditing;
@@ -96,6 +98,11 @@ namespace ShipWorks.OrderLookup
         /// A shipment is starting to unload
         /// </summary>
         public event EventHandler ShipmentUnloading;
+
+        /// <summary>
+        /// A shipment needs binding
+        /// </summary>
+        public event EventHandler ShipmentNeedsBinding;
 
         /// <summary>
         /// A shipment is starting to load
@@ -115,7 +122,8 @@ namespace ShipWorks.OrderLookup
             IShippingManager shippingManager,
             IMessageHelper messageHelper,
             Func<IInsuranceBehaviorChangeViewModel> createInsuranceBehaviorChange,
-            IShippingProfileService profileService)
+            IShippingProfileService profileService,
+            IEnumerable<IOrderLookupShipmentModelPipeline> pipelines)
         {
             this.profileService = profileService;
             this.messenger = messenger;
@@ -123,6 +131,8 @@ namespace ShipWorks.OrderLookup
             this.messageHelper = messageHelper;
             this.createInsuranceBehaviorChange = createInsuranceBehaviorChange;
             handler = new PropertyChangedHandler(this, () => PropertyChanged);
+
+            subscription = new CompositeDisposable(pipelines.Select(x => x.Register(this)).ToArray());
         }
 
         /// <summary>
@@ -216,6 +226,7 @@ namespace ShipWorks.OrderLookup
             }
 
             isSaving = true;
+
             using (Disposable.Create(() => isSaving = false))
             {
                 if (!ShipmentAllowEditing || (ShipmentAdapter?.Shipment?.Processed ?? true))
@@ -442,17 +453,27 @@ namespace ShipWorks.OrderLookup
         /// Register the profile handler
         /// </summary>
         public void RegisterProfileHandler(Func<Func<ShipmentTypeCode?>, Action<IShippingProfileEntity>, IDisposable> profileRegistration) =>
-            profileDisposable = profileRegistration(() => ShipmentAdapter?.ShipmentTypeCode, ApplyProfile);
+            profileDisposable = profileRegistration(() => ShipmentAdapter?.ShipmentTypeCode, x => ApplyProfile(x.ShippingProfileID));
 
         /// <summary>
         /// Apply the profile to the current shipment
         /// </summary>
-        private void ApplyProfile(IShippingProfileEntity profileEntity)
+        public bool ApplyProfile(long profileID)
         {
-            var profile = profileService.Get(profileEntity.ShippingProfileID);
+            var profile = profileService.Get(profileID);
             if (ShipmentAdapter?.Shipment != null && profile.IsApplicable(ShipmentAdapter?.Shipment?.ShipmentTypeCode))
             {
+                ShipmentNeedsBinding?.Invoke(this, EventArgs.Empty);
+
+                var originalShipment = EntityUtility.CloneEntity(ShipmentAdapter.Shipment, true);
+
                 ModifyShipmentWithReload(() => profile.Apply(ShipmentAdapter.Shipment));
+
+                return true;
+            }
+            else
+            {
+                return false;
             }
         }
 
@@ -486,8 +507,12 @@ namespace ShipWorks.OrderLookup
             messenger.Send(new ShipmentSelectionChangedMessage(this, new[] { ShipmentAdapter.Shipment.ShipmentID }, ShipmentAdapter));
         }
 
+        /// <summary>
+        /// Dispose
+        /// </summary>
         public void Dispose()
         {
+            subscription.Dispose();
             profileDisposable?.Dispose();
         }
     }

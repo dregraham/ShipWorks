@@ -27,8 +27,14 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookup
         {
             InitializeComponent();
             this.orderLookupViewModel = orderLookupViewModel;
+            orderLookupViewModel.ShipmentModel.ShipmentNeedsBinding += OnShipmentModelShipmentSaving;
             shortcutPipeline.Register(orderLookupViewModel.ShipmentModel);
         }
+
+        /// <summary>
+        /// A shipment is about to be saved
+        /// </summary>
+        private void OnShipmentModelShipmentSaving(object sender, EventArgs e) => CommitBindingsOnFocusedControl();
 
         /// <summary>
         /// Set the element host on load

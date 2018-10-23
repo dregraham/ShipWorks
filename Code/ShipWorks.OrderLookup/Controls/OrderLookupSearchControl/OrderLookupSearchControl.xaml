@@ -7,6 +7,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:orderLookupSearchControl="clr-namespace:ShipWorks.OrderLookup.Controls.OrderLookupSearchControl"
     xmlns:system="clr-namespace:System;assembly=mscorlib"
+    xmlns:sw="http://schemas.shipworks.com/sw"
     xmlns:ui="http://schemas.shipworks.com/ui"
     d:DataContext="{d:DesignInstance orderLookupSearchControl:OrderLookupSearchViewModel}"
     d:DesignWidth="1000"
@@ -138,6 +139,7 @@
                             BorderBrush="{x:Null}"
                             BorderThickness="0"
                             FontSize="20"
+                            ui:Focus.WhenMessageReceived="{x:Type sw:FocusQuickSearchMessage}"
                             Text="{Binding OrderNumber, UpdateSourceTrigger=PropertyChanged}">
                             <TextBox.InputBindings>
                                 <KeyBinding Key="Enter" Command="{Binding Path=GetOrderCommand}" />

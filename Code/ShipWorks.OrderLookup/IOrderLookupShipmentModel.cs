@@ -116,8 +116,18 @@ namespace ShipWorks.OrderLookup
         event EventHandler ShipmentLoading;
 
         /// <summary>
+        /// A shipment needs binding
+        /// </summary>
+        event EventHandler ShipmentNeedsBinding;
+
+        /// <summary>
         /// A shipment was fully loaded
         /// </summary>
         event EventHandler ShipmentLoaded;
+
+        /// <summary>
+        /// Apply the profile to the current shipment
+        /// </summary>
+        bool ApplyProfile(long profileID);
     }
 }

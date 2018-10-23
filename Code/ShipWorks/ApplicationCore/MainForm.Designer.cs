@@ -2580,6 +2580,7 @@ namespace ShipWorks
             this.buttonOrderLookupViewManageProfiles.QuickAccessKey = "OE";
             this.buttonOrderLookupViewManageProfiles.Text = "Manage";
             this.buttonOrderLookupViewManageProfiles.TextContentRelation = Divelements.SandRibbon.TextContentRelation.Underneath;
+            this.buttonOrderLookupViewManageProfiles.Activate += new System.EventHandler(this.OnManageShippingProfiles);
             //
             // ribbonChunkOrderLookupViewPreviousLabel
             //
