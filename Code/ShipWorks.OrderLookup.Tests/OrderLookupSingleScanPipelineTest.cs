@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Reactive.Linq;
 using Autofac.Extras.Moq;
 using Interapptive.Shared.Threading;
 using Microsoft.Reactive.Testing;
@@ -9,7 +7,6 @@ using Moq;
 using ShipWorks.ApplicationCore;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Messaging.Messages;
 using ShipWorks.Messaging.Messages.Shipping;
 using ShipWorks.Messaging.Messages.SingleScan;
 using ShipWorks.Settings;
@@ -47,6 +44,8 @@ namespace ShipWorks.OrderLookup.Tests
 
             orderRepository = mock.Mock<IOrderLookupOrderRepository>();
             orderRepository.Setup(o => o.GetOrderIDs(AnyString)).Returns(new List<long> { 123 });
+
+            mock.Mock<IOrderLookupConfirmationService>().Setup(o => o.ConfirmOrder(It.IsAny<List<long>>())).Returns(123);
 
             Mock<IOnDemandDownloaderFactory> downloadFactory = mock.Mock<IOnDemandDownloaderFactory>();
             downloader = mock.Mock<IOnDemandDownloader>();
@@ -142,6 +141,7 @@ namespace ShipWorks.OrderLookup.Tests
         public void InitializeForCurrentSession_LoadsOrderOnShipmentModel()
         {
             orderRepository.Setup(x => x.GetOrderIDs("Foo")).Returns(new List<long> { 1 });
+            mock.Mock<IOrderLookupConfirmationService>().Setup(o => o.ConfirmOrder(It.IsAny<List<long>>())).Returns(1);
             mainForm.SetupGet(u => u.UIMode).Returns(UIMode.OrderLookup);
 
             SingleScanMessage singleScanMessage = new SingleScanMessage(this, new ScanMessage(this, "Foo", IntPtr.Zero));

@@ -260,6 +260,7 @@
     </Compile>
     <Compile Include="FieldManager\IOrderLookupFieldManagerDialog.cs" />
     <Compile Include="FieldManager\OrderLookupFieldManagerViewModel.cs" />
+    <Compile Include="IOrderLookupConfirmationService.cs" />
     <Compile Include="IOrderLookupPreviousShipmentLocator.cs" />
     <Compile Include="Controls\IOrderLookupWrapperViewModel.cs" />
     <Compile Include="IOrderLookupViewModel.cs" />

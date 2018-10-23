@@ -28,6 +28,7 @@ namespace ShipWorks.OrderLookup
         private readonly IOrderLookupAutoPrintService orderLookupAutoPrintService;
         private readonly IAutoWeighService autoWeighService;
         private readonly IOrderLookupShipmentModel shipmentModel;
+        private readonly IOrderLookupConfirmationService orderLookupConfirmationService;
         private readonly ILog log;
         private IDisposable subscriptions;
         private bool processingScan = false;
@@ -43,7 +44,8 @@ namespace ShipWorks.OrderLookup
             IOrderLookupAutoPrintService orderLookupAutoPrintService,
             IAutoWeighService autoWeighService,
             IOrderLookupShipmentModel shipmentModel,
-            Func<Type, ILog> createLogger)
+            Func<Type, ILog> createLogger,
+            IOrderLookupConfirmationService orderLookupConfirmationService)
         {
             this.messenger = messenger;
             this.mainForm = mainForm;
@@ -52,6 +54,7 @@ namespace ShipWorks.OrderLookup
             this.orderLookupAutoPrintService = orderLookupAutoPrintService;
             this.autoWeighService = autoWeighService;
             this.shipmentModel = shipmentModel;
+            this.orderLookupConfirmationService = orderLookupConfirmationService;
             log = createLogger(GetType());
         }
 
@@ -85,7 +88,7 @@ namespace ShipWorks.OrderLookup
                 shipmentModel.SaveToDatabase();
 
                 await onDemandDownloaderFactory.CreateOnDemandDownloader().Download(message.ScannedText).ConfigureAwait(true);
-                long? orderId = orderRepository.GetOrderIDs(message.ScannedText).FirstOrDefault();
+                long? orderId = orderLookupConfirmationService.ConfirmOrder(orderRepository.GetOrderIDs(message.ScannedText));
                 OrderEntity order = null;
 
                 if (orderId.HasValue)
@@ -110,6 +113,10 @@ namespace ShipWorks.OrderLookup
 
                 shipmentModel.LoadOrder(order);
             }
+            catch (Exception ex)
+            {
+                log.Error("Error while loading an order", ex);
+            }
             finally
             {
                 processingScan = false;
@@ -126,8 +133,8 @@ namespace ShipWorks.OrderLookup
                 shipmentModel.SaveToDatabase();
 
                 await onDemandDownloaderFactory.CreateOnDemandDownloader().Download(message.SearchText).ConfigureAwait(true);
-                long? orderId = orderRepository.GetOrderIDs(message.SearchText).FirstOrDefault();
-
+                long? orderId = orderLookupConfirmationService.ConfirmOrder(orderRepository.GetOrderIDs(message.SearchText));
+                
                 OrderEntity order = null;
                 if (orderId.HasValue)
                 {
