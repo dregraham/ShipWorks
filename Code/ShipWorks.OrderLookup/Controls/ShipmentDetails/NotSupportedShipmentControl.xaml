@@ -54,6 +54,7 @@
             Text="Provider" />
 
         <ComboBox
+            Name="Provider"
             Grid.Row="1"
             Grid.Column="1"
             DisplayMemberPath="Value"
@@ -64,10 +65,10 @@
         <TextBlock
             Grid.Row="2"
             Grid.Column="1"
-            TextWrapping="Wrap"
-            Text="{Binding ErrorMessage}"
+            Margin="10,0,0,0"
             FontSize="14"
             Foreground="Red"
-            Margin="10 0 0 0"/>
+            Text="{Binding ErrorMessage}"
+            TextWrapping="Wrap" />
     </Grid>
 </UserControl>

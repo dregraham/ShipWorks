@@ -64,6 +64,7 @@
             Text="Provider" />
 
         <ComboBox
+            Name="Provider"
             Grid.Row="1"
             Grid.Column="1"
             DisplayMemberPath="Value"

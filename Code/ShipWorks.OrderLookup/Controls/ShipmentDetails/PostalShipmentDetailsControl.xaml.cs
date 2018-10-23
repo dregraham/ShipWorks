@@ -1,4 +1,6 @@
-﻿using System.Windows.Controls;
+﻿using System;
+using System.Windows;
+using System.Windows.Controls;
 
 namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
 {
@@ -13,6 +15,12 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
         public PostalShipmentDetailsControl()
         {
             InitializeComponent();
+            Loaded += OnControlLoaded;
+        }
+
+        private void OnControlLoaded(object sender, RoutedEventArgs e)
+        {
+            Provider.Focus();
         }
     }
 }
