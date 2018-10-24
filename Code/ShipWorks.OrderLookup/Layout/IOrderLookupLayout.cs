@@ -1,7 +1,7 @@
 ﻿using Autofac;
 using ShipWorks.OrderLookup.Controls.OrderLookup;
 
-namespace ShipWorks.OrderLookup
+namespace ShipWorks.OrderLookup.Layout
 {
     /// <summary>
     /// Represents the OrderLookup Layout

@@ -14,6 +14,7 @@ using ShipWorks.Core.UI;
 using ShipWorks.Messaging.Messages;
 using ShipWorks.Messaging.Messages.Shipping;
 using ShipWorks.OrderLookup.Controls.OrderLookupSearchControl;
+using ShipWorks.OrderLookup.Layout;
 
 namespace ShipWorks.OrderLookup.Controls.OrderLookup
 {

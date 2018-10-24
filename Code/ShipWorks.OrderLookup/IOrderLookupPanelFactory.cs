@@ -11,6 +11,6 @@ namespace ShipWorks.OrderLookup
         /// <summary>
         /// Get a collection of IOrderLookupPanelViewModels
         /// </summary>
-        IEnumerable<IOrderLookupPanelViewModel<IOrderLookupViewModel>> GetPanels<T>(ILifetimeScope scope);
+        IEnumerable<IOrderLookupPanelViewModel<IOrderLookupViewModel>> GetPanels(ILifetimeScope scope);
     }
 }
