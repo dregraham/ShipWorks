@@ -42,8 +42,8 @@
                 Margin="4,0,4,0"
                 Visibility="{Binding InfoTipVisibility, FallbackValue=Visible}"
                 Background="Transparent"
-                BorderBrush="{x:Null}" 
-                VerticalAlignment="Top">                
+                BorderBrush="{x:Null}"
+                VerticalAlignment="Top">
                 <Border.ToolTip>
                     <ToolTip>
                         <Grid>
@@ -78,7 +78,7 @@
                   Stretch="Fill"/>
             </Border>
             <TextBlock
-        
+
             Style="{StaticResource FieldLabel}"
             Text="{Binding InsuranceLabelDisplayText, FallbackValue='Insurance', Converter={StaticResource TrimEndColon}}" />
         </StackPanel>
@@ -96,16 +96,16 @@
             Grid.Column="1"
             Orientation="Horizontal"
             Style="{StaticResource FormWrapPanel}" >
-            <TextBlock                
+            <TextBlock
                 VerticalAlignment="Center"
                 Style="{StaticResource FieldLabel}"
                 Text="{Binding InsuranceValueLabelDisplayText, FallbackValue='Insured Value', Converter={StaticResource TrimEndColon}}" />
             <TextBox
                 MinWidth="100"
                 VerticalAlignment="Center"
-                IsEnabled="{Binding Insurance}"                
+                IsEnabled="{Binding Insurance}"
                 Style="{StaticResource FormNumberTextBox}"
-                Text="{Binding DeclaredValue, StringFormat=c, FallbackValue='50.50', Converter={StaticResource EmptyMoney}, TargetNullValue='', ValidatesOnDataErrors=true, NotifyOnValidationError=true, UpdateSourceTrigger=PropertyChanged}" />
+                Text="{Binding DeclaredValue, StringFormat=c, FallbackValue='50.50', Converter={StaticResource EmptyMoney}, TargetNullValue='', ValidatesOnDataErrors=true, NotifyOnValidationError=true}" />
 
             <TextBlock
                 Margin="5,0,0,10"

@@ -254,6 +254,9 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
                 }
 
                 handler.Set(nameof(SelectedPackage), ref selectedPackage, value);
+
+                RefreshInsurance();
+
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(SelectedPackageWeight)));
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(SelectedPackageDimsProfileID)));
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsProfileSelected)));
@@ -362,7 +365,7 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
         /// <summary>
         /// Refresh the package types
         /// </summary>
-        private void RefreshPackageTypes()
+        protected void RefreshPackageTypes()
         {
             if (ShipmentModel.ShipmentAdapter?.Shipment == null)
             {

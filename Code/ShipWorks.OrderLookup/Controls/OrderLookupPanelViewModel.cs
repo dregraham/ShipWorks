@@ -10,11 +10,11 @@ using ShipWorks.UI;
 namespace ShipWorks.OrderLookup.Controls
 {
     /// <summary>
-    /// Generic view model wrapper
+    /// Generic view model panel
     /// </summary>
     [KeyedComponent(typeof(INotifyPropertyChanged), OrderLookupPanels.ShipmentDetails)]
-    [WpfView(typeof(OrderLookupWrapperControl))]
-    public class OrderLookupViewModelWrapper<T> : IOrderLookupWrapperViewModel<T> where T : class, IOrderLookupViewModel
+    [WpfView(typeof(OrderLookupPanelControl))]
+    public class OrderLookupViewModelPanel<T> : IOrderLookupPanelViewModel<T> where T : class, IOrderLookupViewModel
     {
         private readonly PropertyChangedHandler handler;
         private T context;
@@ -24,7 +24,7 @@ namespace ShipWorks.OrderLookup.Controls
         /// <summary>
         /// Constructor
         /// </summary>
-        public OrderLookupViewModelWrapper()
+        public OrderLookupViewModelPanel()
         {
             handler = new PropertyChangedHandler(this, () => PropertyChanged);
         }
@@ -37,7 +37,22 @@ namespace ShipWorks.OrderLookup.Controls
             IIndex<ShipmentTypeCode, T> createSectionViewModel = innerScope.Resolve<IIndex<ShipmentTypeCode, T>>();
 
             var key = shipmentModel.ShipmentAdapter?.ShipmentTypeCode;
-            Context = key.HasValue && createSectionViewModel.TryGetValue(key.Value, out T newModel) ? newModel : null;
+            if (!key.HasValue)
+            {
+                Context = null;
+            }
+            else if (createSectionViewModel.TryGetValue(key.Value, out T newModel))
+            {
+                Context = newModel;
+            }
+            else if(innerScope.TryResolve<T>(out T nullModel))
+            {
+                Context = nullModel;
+            }
+            else
+            {
+                Context = null;
+            }
         }
 
         /// <summary>

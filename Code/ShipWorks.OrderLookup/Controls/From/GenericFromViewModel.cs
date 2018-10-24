@@ -126,8 +126,6 @@ namespace ShipWorks.OrderLookup.Controls.From
                 addressViewModel.SetAddressFromOrigin(originId, orderId, accountId, shipmentTypeCode, store);
 
                 UpdateTitle();
-
-                handler.RaisePropertyChanged(nameof(ShipmentModel));
             }
         }
 

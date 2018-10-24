@@ -1,5 +1,5 @@
 ﻿<UserControl
-    x:Class="ShipWorks.OrderLookup.Controls.OrderLookupWrapperControl"
+    x:Class="ShipWorks.OrderLookup.Controls.OrderLookupPanelControl"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -21,7 +21,7 @@
         Header="{Binding Context.Title}"
         IsExpanded="{Binding Context.Expanded}"
         Visibility="{Binding Context.Visible, Converter={StaticResource BooleanToVisibility}, FallbackValue=Collapsed}">
-        <StackPanel Style="{StaticResource PanelWrapper}">
+        <StackPanel Style="{StaticResource PanelPanel}">
             <ContentPresenter Content="{Binding Context}" ContentTemplateSelector="{StaticResource WpfViewTemplateSelector}" />
         </StackPanel>
     </Expander>
