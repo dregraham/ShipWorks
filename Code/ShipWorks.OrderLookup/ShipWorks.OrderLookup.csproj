@@ -224,6 +224,10 @@
     <Compile Include="Controls\ShipmentDetails\BestRateShipmentDetailsControl.xaml.cs">
       <DependentUpon>BestRateShipmentDetailsControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\ShipmentDetails\NotSupportedShipmentControl.xaml.cs">
+      <DependentUpon>NotSupportedShipmentControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ShipmentDetails\NotSupportedShipmentDetailsViewModel.cs" />
     <Compile Include="Controls\ShipmentDetails\PostalShipmentDetailsControl.xaml.cs">
       <DependentUpon>PostalShipmentDetailsControl.xaml</DependentUpon>
     </Compile>
@@ -457,6 +461,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Controls\ShipmentDetails\FedExShipmentDetailsControl.xaml" />
+    <Page Include="Controls\ShipmentDetails\NotSupportedShipmentControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Controls\ShipmentDetails\OrderLookupInsuranceControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
