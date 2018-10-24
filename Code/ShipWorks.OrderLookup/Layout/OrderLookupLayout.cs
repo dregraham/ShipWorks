@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using Autofac;
 using Interapptive.Shared.ComponentRegistration;
 using log4net;
@@ -21,7 +22,7 @@ namespace ShipWorks.OrderLookup.Layout
         private readonly IOrderLookupPanelFactory panelFactory;
         private readonly IUserSession userSession;
 
-        string defaultLayout = "[[{\"Name\":\"IFromViewModel\",\"Expanded\":false},{\"Name\":\"IToViewModel\",\"Expanded\":true}],[{\"Name\":\"IDetailsViewModel\",\"Expanded\":true},{\"Name\":\"ILabelOptionsViewModel\",\"Expanded\":false},{\"Name\":\"IReferenceViewModel\",\"Expanded\":false},{\"Name\":\"IEmailNotificationsViewModel\",\"Expanded\":false}],[{\"Name\":\"ICustomsViewModel\",\"Expanded\":true},{\"Name\":\"IRatingViewModel\",\"Expanded\":true}]]";
+        const string defaultLayout = "[[{\"Name\":\"IFromViewModel\",\"Expanded\":false},{\"Name\":\"IToViewModel\",\"Expanded\":true}],[{\"Name\":\"IDetailsViewModel\",\"Expanded\":true},{\"Name\":\"ILabelOptionsViewModel\",\"Expanded\":false},{\"Name\":\"IReferenceViewModel\",\"Expanded\":false},{\"Name\":\"IEmailNotificationsViewModel\",\"Expanded\":false}],[{\"Name\":\"ICustomsViewModel\",\"Expanded\":true},{\"Name\":\"IRatingViewModel\",\"Expanded\":true}]]";
         private readonly ILog log;
 
         /// <summary>
@@ -40,7 +41,6 @@ namespace ShipWorks.OrderLookup.Layout
         /// </summary>
         public void Apply(IMainOrderLookupViewModel orderLookupViewModel, ILifetimeScope scope)
         {
-
             IEnumerable<IOrderLookupPanelViewModel<IOrderLookupViewModel>> allPanels = panelFactory.GetPanels(scope);
 
             List<List<PanelInfo>> layout = GetLayout();
@@ -48,6 +48,16 @@ namespace ShipWorks.OrderLookup.Layout
             orderLookupViewModel.LeftColumn = GetColumn(0, layout, allPanels);
             orderLookupViewModel.MiddleColumn = GetColumn(1, layout, allPanels);
             orderLookupViewModel.RightColumn = GetColumn(2, layout, allPanels);
+
+            IEnumerable<IOrderLookupPanelViewModel<IOrderLookupViewModel>> missingPanels = allPanels
+                            .Except(orderLookupViewModel.LeftColumn)
+                            .Except(orderLookupViewModel.MiddleColumn)
+                            .Except(orderLookupViewModel.RightColumn);
+
+            foreach (IOrderLookupPanelViewModel<IOrderLookupViewModel> missingPanel in missingPanels)
+            {
+                orderLookupViewModel.RightColumn.Add(missingPanel);
+            }
         }
 
         /// <summary>
@@ -55,7 +65,7 @@ namespace ShipWorks.OrderLookup.Layout
         /// </summary>
         private List<List<PanelInfo>> GetLayout()
         {
-            string serializedLayout = userSession.User.Settings.GridMenuLayout;
+            string serializedLayout = userSession.User.Settings.OrderLookupLayout;
             if (string.IsNullOrWhiteSpace(serializedLayout))
             {
                 serializedLayout = defaultLayout;
@@ -101,7 +111,7 @@ namespace ShipWorks.OrderLookup.Layout
         /// </summary>
         public void Save(IMainOrderLookupViewModel orderLookupViewModel)
         {
-            userSession.User.Settings.GridMenuLayout = 
+            userSession.User.Settings.OrderLookupLayout = 
                 JsonConvert.SerializeObject(new[] { orderLookupViewModel.LeftColumn, orderLookupViewModel.MiddleColumn, orderLookupViewModel.RightColumn });
         }
 
@@ -110,7 +120,16 @@ namespace ShipWorks.OrderLookup.Layout
         /// </summary>
         private struct PanelInfo
         {
+            /// <summary>
+            /// Name of Panel
+            /// </summary>
+            [Obfuscation(Exclude = true)]
             public string Name { get; set; }
+
+            /// <summary>
+            /// Initial Expansion state
+            /// </summary>
+            [Obfuscation(Exclude = true)]
             public bool Expanded { get; set; }
         }
     }

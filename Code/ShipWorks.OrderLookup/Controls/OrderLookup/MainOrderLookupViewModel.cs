@@ -57,6 +57,8 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookup
             OrderLookupSearchViewModel = orderLookupSearchViewModel;
             this.layout = layout;
             layout.Apply(this, scope);
+            LeftColumn.Concat(MiddleColumn).Concat(RightColumn).ForEach(p => p.PropertyChanged += PanelPropertyChanged);
+            
 
             subscriptions = new CompositeDisposable(
                 messages.OfType<ShipmentSelectionChangedMessage>()
@@ -72,6 +74,17 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookup
                 );
         }
 
+        /// <summary>
+        /// Save state when expansion mode changes
+        /// </summary>
+        private void PanelPropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == nameof(OrderLookupViewModelPanel<IOrderLookupViewModel>.Expanded))
+            {
+                layout.Save(this);
+            }
+        }
+        
         /// <summary>
         /// A shipment is unloading
         /// </summary>
@@ -160,27 +173,35 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookup
                 Visibility.Hidden;
 
         /// <summary>
-        /// Dispose
+        /// Updates the current drag state
         /// </summary>
-        public void Dispose()
-        {
-            ShipmentModel.ShipmentUnloading -= OnShipmentModelShipmentUnloading;
-            ShipmentModel.ShipmentLoading -= OnShipmentModelShipmentLoading;
-            ShipmentModel.ShipmentLoaded -= OnShipmentModelShipmentLoaded;
-            subscriptions?.Dispose();
-            innerScope?.Dispose();
-        }
-
         public void DragOver(IDropInfo dropInfo)
         {
             dropTarget.DragOver(dropInfo);
         }
 
+        /// <summary>
+        /// Performs a drop
+        /// </summary>
+        /// <param name="dropInfo"></param>
         public void Drop(IDropInfo dropInfo)
         {
             dropTarget.Drop(dropInfo);
 
             layout.Save(this);
+        }
+
+        /// <summary>
+        /// Dispose
+        /// </summary>
+        public void Dispose()
+        {
+            LeftColumn.Concat(MiddleColumn).Concat(RightColumn).ForEach(p => p.PropertyChanged -= PanelPropertyChanged);
+            ShipmentModel.ShipmentUnloading -= OnShipmentModelShipmentUnloading;
+            ShipmentModel.ShipmentLoading -= OnShipmentModelShipmentLoading;
+            ShipmentModel.ShipmentLoaded -= OnShipmentModelShipmentLoaded;
+            subscriptions?.Dispose();
+            innerScope?.Dispose();
         }
     }
 }
