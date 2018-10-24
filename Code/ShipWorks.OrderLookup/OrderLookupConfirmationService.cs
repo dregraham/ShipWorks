@@ -52,10 +52,10 @@ namespace ShipWorks.OrderLookup
             viewModel.Orders = orders;
             viewModel.SelectedOrder = null;
 
-            confirmationDialog.ShowDialog();
+            bool? dialogResult = confirmationDialog.ShowDialog();
 
-            return viewModel.SelectedOrder?.OrderID;
-
+            return dialogResult.HasValue && dialogResult.Value ?
+                viewModel.SelectedOrder?.OrderID : null;
         }
 
         /// <summary>
