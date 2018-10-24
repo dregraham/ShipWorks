@@ -293,6 +293,7 @@
     <Compile Include="IOrderLookupPanelFactory.cs" />
     <Compile Include="IOrderLookupPreviousShipmentLocator.cs" />
     <Compile Include="IOrderLookupViewModel.cs" />
+    <Compile Include="Layout\DropHandler.cs" />
     <Compile Include="OrderClearReason.cs" />
     <Compile Include="OrderLookupClearOrderMessage.cs" />
     <Compile Include="OrderLookupLabelShortcutPipeline.cs" />
