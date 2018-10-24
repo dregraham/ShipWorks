@@ -347,12 +347,16 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
         /// </summary>
         private void RefreshDimensionalProfiles()
         {
-            DimensionProfiles = carrierShipmentAdapterOptionsProvider.GetDimensionsProfiles(SelectedPackage).ToList();
+            dimensionProfiles = new List<DimensionsProfileEntity>();
+            carrierShipmentAdapterOptionsProvider.GetDimensionsProfiles(SelectedPackage)
+                .ForEach(p => dimensionProfiles.Add(p));
 
             if (SelectedPackage != null && DimensionProfiles.None(d => d.DimensionsProfileID == SelectedPackage.DimsProfileID))
             {
                 SelectedPackage.DimsProfileID = 0;
             }
+
+            DimensionProfiles = dimensionProfiles;
         }
 
         /// <summary>

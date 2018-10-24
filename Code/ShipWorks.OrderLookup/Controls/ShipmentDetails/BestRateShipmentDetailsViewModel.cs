@@ -204,14 +204,17 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
         /// </summary>
         private void RefreshDimensionalProfiles()
         {
-            DimensionProfiles =
-                carrierShipmentAdapterOptionsProvider.GetDimensionsProfiles(ShipmentModel.PackageAdapters.FirstOrDefault()).ToList();
+            dimensionProfiles = new List<DimensionsProfileEntity>();
+            carrierShipmentAdapterOptionsProvider.GetDimensionsProfiles(ShipmentModel.PackageAdapters.FirstOrDefault())
+                .ForEach(p => dimensionProfiles.Add(p));
 
             if (ShipmentModel.ShipmentAdapter.Shipment.BestRate != null && DimensionProfiles.None(d => d.DimensionsProfileID ==
                                             ShipmentModel.ShipmentAdapter.Shipment.BestRate.DimsProfileID))
             {
                 ShipmentModel.ShipmentAdapter.Shipment.BestRate.DimsProfileID = 0;
             }
+
+            DimensionProfiles = dimensionProfiles;
         }
 
         /// <summary>

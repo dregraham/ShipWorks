@@ -295,14 +295,17 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
         /// </summary>
         private void RefreshDimensionalProfiles(IOrderLookupShipmentModel model)
         {
-            DimensionProfiles =
-                carrierShipmentAdapterOptionsProvider.GetDimensionsProfiles(model.PackageAdapters.FirstOrDefault()).ToList();
+            dimensionProfiles = new List<DimensionsProfileEntity>();
+            carrierShipmentAdapterOptionsProvider.GetDimensionsProfiles(model.PackageAdapters.FirstOrDefault())
+                .ForEach(p => dimensionProfiles.Add(p));
 
             if (model.ShipmentAdapter.Shipment.Postal != null &&
                 DimensionProfiles.None(d => d.DimensionsProfileID == model.ShipmentAdapter.Shipment.Postal.DimsProfileID))
             {
                 model.ShipmentAdapter.Shipment.Postal.DimsProfileID = 0;
             }
+
+            DimensionProfiles = dimensionProfiles;
         }
 
         /// <summary>
