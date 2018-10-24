@@ -13,15 +13,7 @@ using Interapptive.Shared.Messaging;
 using ShipWorks.Core.UI;
 using ShipWorks.Messaging.Messages;
 using ShipWorks.Messaging.Messages.Shipping;
-using ShipWorks.OrderLookup.Controls.Customs;
-using ShipWorks.OrderLookup.Controls.EmailNotifications;
-using ShipWorks.OrderLookup.Controls.From;
-using ShipWorks.OrderLookup.Controls.LabelOptions;
 using ShipWorks.OrderLookup.Controls.OrderLookupSearchControl;
-using ShipWorks.OrderLookup.Controls.Rating;
-using ShipWorks.OrderLookup.Controls.Reference;
-using ShipWorks.OrderLookup.Controls.ShipmentDetails;
-using ShipWorks.OrderLookup.Controls.To;
 
 namespace ShipWorks.OrderLookup.Controls.OrderLookup
 {
@@ -29,7 +21,7 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookup
     /// Main view model for the OrderLookup UI Mode
     /// </summary>
     [Component(RegisterAs = RegistrationType.Self)]
-    public class OrderLookupViewModel : INotifyPropertyChanged, IDisposable
+    public class MainOrderLookupViewModel : INotifyPropertyChanged, IDisposable, IMainOrderLookupViewModel
     {
         public event PropertyChangedEventHandler PropertyChanged;
         private readonly PropertyChangedHandler handler;
@@ -44,8 +36,9 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookup
         /// <summary>
         /// Constructor
         /// </summary>
-        public OrderLookupViewModel(IOrderLookupShipmentModel shipmentModel,
+        public MainOrderLookupViewModel(IOrderLookupShipmentModel shipmentModel,
             OrderLookupSearchViewModel orderLookupSearchViewModel,
+            IOrderLookupLayout layout,
             ILifetimeScope scope,
             IObservable<IShipWorksMessage> messages)
         {
@@ -57,25 +50,7 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookup
             ShipmentModel.ShipmentLoaded += OnShipmentModelShipmentLoaded;
             OrderLookupSearchViewModel = orderLookupSearchViewModel;
 
-            LeftColumn = new ObservableCollection<IOrderLookupPanelViewModel<IOrderLookupViewModel>>
-            {
-                scope.Resolve<IOrderLookupPanelViewModel<IFromViewModel>>(),
-                scope.Resolve<IOrderLookupPanelViewModel<IToViewModel>>(),
-            };
-
-            MiddleColumn = new ObservableCollection<IOrderLookupPanelViewModel<IOrderLookupViewModel>>
-            {
-                scope.Resolve<IOrderLookupPanelViewModel<IDetailsViewModel>>(),
-                scope.Resolve<IOrderLookupPanelViewModel<ILabelOptionsViewModel>>(),
-                scope.Resolve<IOrderLookupPanelViewModel<IReferenceViewModel>>(),
-                scope.Resolve<IOrderLookupPanelViewModel<IEmailNotificationsViewModel>>()
-            };
-
-            RightColumn = new ObservableCollection<IOrderLookupPanelViewModel<IOrderLookupViewModel>>
-            {
-                scope.Resolve<IOrderLookupPanelViewModel<IRatingViewModel>>(),
-                scope.Resolve<IOrderLookupPanelViewModel<ICustomsViewModel>>(),
-            };
+            layout.Apply(this, scope);
 
             subscriptions = new CompositeDisposable(
                 messages.OfType<ShipmentSelectionChangedMessage>()

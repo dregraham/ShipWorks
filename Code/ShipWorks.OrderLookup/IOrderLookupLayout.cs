@@ -1,4 +1,7 @@
-﻿namespace ShipWorks.OrderLookup
+﻿using Autofac;
+using ShipWorks.OrderLookup.Controls.OrderLookup;
+
+namespace ShipWorks.OrderLookup
 {
     /// <summary>
     /// Represents the OrderLookup Layout
@@ -8,7 +11,7 @@
         /// <summary>
         /// Apply the layout to the view model
         /// </summary>
-        void Apply(IOrderLookupViewModel orderLookupViewModel);
+        void Apply(IMainOrderLookupViewModel orderLookupViewModel, ILifetimeScope scope);
 
         /// <summary>
         /// Save the view model

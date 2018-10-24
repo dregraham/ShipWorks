@@ -15,13 +15,13 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookup
     [Component(RegisterAs = RegistrationType.SpecificService, Service = typeof(IOrderLookup))]
     public partial class OrderLookupControlHost : UserControl, IOrderLookup
     {
-        private readonly OrderLookupViewModel orderLookupViewModel;
+        private readonly MainOrderLookupViewModel orderLookupViewModel;
         private OrderLookupControl orderLookupControl;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public OrderLookupControlHost(OrderLookupViewModel orderLookupViewModel)
+        public OrderLookupControlHost(MainOrderLookupViewModel orderLookupViewModel)
         {
             InitializeComponent();
             this.orderLookupViewModel = orderLookupViewModel;

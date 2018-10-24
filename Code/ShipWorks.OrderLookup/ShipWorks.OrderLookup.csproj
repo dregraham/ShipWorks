@@ -193,6 +193,7 @@
     <Compile Include="Controls\EmailNotifications\QuantumViewNotifyControl.xaml.cs">
       <DependentUpon>QuantumViewNotifyControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\OrderLookup\IMainOrderLookupViewModel.cs" />
     <Compile Include="Controls\Rating\IRatingViewModel.cs" />
     <Compile Include="Controls\Reference\AmazonReferenceControl.xaml.cs">
       <DependentUpon>AmazonReferenceControl.xaml</DependentUpon>
@@ -278,7 +279,7 @@
     <Compile Include="Controls\OrderLookup\OrderLookupControl.xaml.cs">
       <DependentUpon>OrderLookupControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\OrderLookup\OrderLookupViewModel.cs" />
+    <Compile Include="Controls\OrderLookup\MainOrderLookupViewModel.cs" />
     <Compile Include="Controls\From\GenericFromViewModel.cs" />
     <Compile Include="Controls\OrderLookupPanels.cs" />
     <Compile Include="Controls\OrderLookupSearchControl\OrderLookupSearchControl.xaml.cs">
@@ -298,6 +299,7 @@
     <Compile Include="OrderLookupClearOrderMessage.cs" />
     <Compile Include="OrderLookupLabelShortcutPipeline.cs" />
     <Compile Include="OrderLookupModule.cs" />
+    <Compile Include="OrderLookupPanelFactory.cs" />
     <Compile Include="OrderLookupPreviousShipmentLocator.cs" />
     <Compile Include="PreviousProcessedShipmentDetails.cs" />
     <Compile Include="ShipmentHistory\Controls\ShipmentHistoryGrid.cs">
