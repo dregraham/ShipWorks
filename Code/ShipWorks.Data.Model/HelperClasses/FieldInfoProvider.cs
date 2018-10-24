@@ -3536,6 +3536,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("UserSettingsEntity", "AutoWeigh", typeof(System.Boolean), false, false, false, false,  (int)UserSettingsFieldIndex.AutoWeigh, 0, 0, 0);
 			this.AddElementFieldInfo("UserSettingsEntity", "DialogSettings", typeof(System.String), false, false, false, true,  (int)UserSettingsFieldIndex.DialogSettings, 2147483647, 0, 0);
 			this.AddElementFieldInfo("UserSettingsEntity", "UIMode", typeof(ShipWorks.Settings.UIMode), false, false, false, false,  (int)UserSettingsFieldIndex.UIMode, 0, 0, 10);
+			this.AddElementFieldInfo("UserSettingsEntity", "OrderLookupLayout", typeof(System.String), false, false, false, true,  (int)UserSettingsFieldIndex.OrderLookupLayout, 2147483647, 0, 0);
 		}
 		/// <summary>Inits UspsAccountEntity's FieldInfo objects</summary>
 		private void InitUspsAccountEntityInfos()

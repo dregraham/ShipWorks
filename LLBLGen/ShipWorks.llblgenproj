@@ -3140,6 +3140,7 @@
           <Field Name="GridMenuLayout" Type="string" IsOptional="true" MaxLength="2147483647" FieldIndex="4" />
           <Field Name="OrderFilterExpandedFolders" Type="string" IsOptional="true" MaxLength="2147483647" FieldIndex="9" />
           <Field Name="OrderFilterLastActive" Type="long" FieldIndex="8" />
+          <Field Name="OrderLookupLayout" Type="string" IsOptional="true" MaxLength="2147483647" FieldIndex="19" />
           <Field Name="ShippingWeightFormat" Type="int" FieldIndex="10" />
           <Field Name="SingleScanSettings" Type="int" FieldIndex="15" />
           <Field Name="TemplateExpandedFolders" Type="string" IsOptional="true" MaxLength="2147483647" FieldIndex="11" />
@@ -4351,7 +4352,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2018-10-02T21:05:28.810239Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2018-10-24T18:55:03.7737949Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -4723,10 +4724,10 @@
                     <Field Name="OrderItemID" Ordinal="1" IsPrimaryKey="true" DbType="0" Precision="19" />
                     <Field Name="OrderAddressID" Ordinal="2" DbType="0" Precision="19" />
                     <Field Name="OrderProductID" Ordinal="3" DbType="0" Precision="19" />
-                    <Field Name="IsDigitalItem" Ordinal="4" DbType="2" />
-                    <Field Name="EventDate" Ordinal="5" IsOptional="true" DbType="4" />
-                    <Field Name="EventName" Ordinal="6" IsOptional="true" DbType="12" Length="255" />
-                    <Field Name="ParentOrderProductID" Ordinal="7" IsOptional="true" DbType="0" Precision="19" />
+                    <Field Name="ParentOrderProductID" Ordinal="4" IsOptional="true" DbType="0" Precision="19" />
+                    <Field Name="IsDigitalItem" Ordinal="5" HasDefaultValue="true" DefaultValue="(0)" DbType="2" />
+                    <Field Name="EventDate" Ordinal="6" IsOptional="true" DbType="4" />
+                    <Field Name="EventName" Ordinal="7" IsOptional="true" DbType="12" Length="255" />
                   </Fields>
                 </Table>
                 <Table Name="BigCommerceStore">
@@ -6392,7 +6393,7 @@
                     <Field Name="JoinMask" Ordinal="8" DbType="8" Precision="10" />
                     <Field Name="Cost" Ordinal="9" DbType="8" Precision="10" />
                     <Field Name="Count" Ordinal="10" DbType="8" Precision="10" />
-                    <Field Name="EntityExistsQuery" Ordinal="11" IsOptional="true" HasDefaultValue="true" DefaultValue="''" DbType="12" Length="2147483647" />
+                    <Field Name="EntityExistsQuery" Ordinal="11" DbType="12" Length="2147483647" />
                   </Fields>
                 </Table>
                 <Table Name="FilterNodeContentDetail">
@@ -6403,7 +6404,7 @@
                   </Fields>
                 </Table>
                 <Table Name="FilterNodeContentDirty">
-                  <PkConstraintName Name="PK_FilterNodeContentDirty_1" />
+                  <PkConstraintName Name="PK_FilterNodeContentDirty" />
                   <Fields>
                     <Field Name="FilterNodeContentDirtyID" Ordinal="1" IsIdentity="true" IsPrimaryKey="true" DbType="0" Precision="19" />
                     <Field Name="RowVersion" Ordinal="2" IsTimestamp="true" DbType="21" />
@@ -6691,7 +6692,7 @@
                   </Fields>
                 </Table>
                 <Table Name="iParcelPackage">
-                  <PkConstraintName Name="PK_iParcelPackageNew" />
+                  <PkConstraintName Name="PK_iParcelPackage" />
                   <Fields>
                     <Field Name="iParcelPackageID" Ordinal="1" IsIdentity="true" IsPrimaryKey="true" DbType="0" Precision="19" />
                     <Field Name="ShipmentID" Ordinal="2" DbType="0" Precision="19" />
@@ -7399,9 +7400,9 @@
                   <Fields>
                     <Field Name="OverstockOrderSearchID" Ordinal="1" IsIdentity="true" IsPrimaryKey="true" DbType="0" Precision="19" />
                     <Field Name="OrderID" Ordinal="2" DbType="0" Precision="19" />
-                    <Field Name="OriginalOrderID" Ordinal="3" DbType="0" Precision="19" />
-                    <Field Name="SalesChannelName" Ordinal="4" DbType="12" Length="50" />
-                    <Field Name="WarehouseCode" Ordinal="5" IsOptional="true" DbType="12" Length="50" />
+                    <Field Name="SalesChannelName" Ordinal="3" DbType="12" Length="50" />
+                    <Field Name="WarehouseCode" Ordinal="4" IsOptional="true" DbType="12" Length="50" />
+                    <Field Name="OriginalOrderID" Ordinal="5" DbType="0" Precision="19" />
                   </Fields>
                 </Table>
                 <Table Name="OverstockStore">
@@ -8882,6 +8883,7 @@
                     <Field Name="AutoWeigh" Ordinal="17" DbType="2" />
                     <Field Name="DialogSettings" Ordinal="18" IsOptional="true" DbType="26" Length="2147483647" />
                     <Field Name="UIMode" Ordinal="19" DbType="8" Precision="10" />
+                    <Field Name="OrderLookupLayout" Ordinal="20" IsOptional="true" DbType="12" Length="2147483647" />
                   </Fields>
                 </Table>
                 <Table Name="UspsAccount">
@@ -13476,6 +13478,7 @@
             <FieldMapping FieldName="GridMenuLayout" TargetFieldName="GridMenuLayout" />
             <FieldMapping FieldName="OrderFilterExpandedFolders" TargetFieldName="OrderFilterExpandedFolders" />
             <FieldMapping FieldName="OrderFilterLastActive" TargetFieldName="OrderFilterLastActive" />
+            <FieldMapping FieldName="OrderLookupLayout" TargetFieldName="OrderLookupLayout" />
             <FieldMapping FieldName="ShippingWeightFormat" TargetFieldName="ShippingWeightFormat" />
             <FieldMapping FieldName="SingleScanSettings" TargetFieldName="SingleScanSettings" />
             <FieldMapping FieldName="TemplateExpandedFolders" TargetFieldName="TemplateExpandedFolders" />
