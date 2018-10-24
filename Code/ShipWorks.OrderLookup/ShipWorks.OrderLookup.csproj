@@ -301,7 +301,6 @@
     <Compile Include="OrderClearReason.cs" />
     <Compile Include="OrderLookupClearOrderMessage.cs" />
     <Compile Include="OrderLookupConfirmationService.cs" />
-    <Compile Include="OrderLookupException.cs" />
     <Compile Include="OrderLookupLabelShortcutPipeline.cs" />
     <Compile Include="OrderLookupModule.cs" />
     <Compile Include="OrderLookupPreviousShipmentLocator.cs" />
