@@ -108,7 +108,7 @@
                 Text="{Binding DeclaredValue, StringFormat=c, FallbackValue='50.50', Converter={StaticResource EmptyMoney}, TargetNullValue='', ValidatesOnDataErrors=true, NotifyOnValidationError=true, UpdateSourceTrigger=PropertyChanged}" />
 
             <TextBlock
-                Margin="4,0,4,10"
+                Margin="5,0,0,10"
                 VerticalAlignment="Center"
                 Text="{Binding Path=InsuranceCostDisplayText, FallbackValue='$0.55'}"
                 Visibility="{Binding CostVisibility, FallbackValue=Visible}">
@@ -127,7 +127,7 @@
             </TextBlock>
 
             <Button
-                Margin="0 0 0 10"
+                Margin="5 0 0 10"
                 VerticalAlignment="Center"
                 Command="{Binding ShowInsurancePromoDialogCommand}"
                 Content="{Binding Path=InsuranceLinkDisplayText, FallbackValue='$50.00'}"

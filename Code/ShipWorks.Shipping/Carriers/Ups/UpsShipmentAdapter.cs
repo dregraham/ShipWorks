@@ -76,6 +76,9 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// <summary>
         /// Add a new package to the shipment
         /// </summary>
+        /// <param name="manipulateEntity">
+        /// Pass in an action to manipulate the package that gets added to the shipment
+        /// </param>
         public override IPackageAdapter AddPackage(Action<INotifyPropertyChanged> manipulateEntity)
         {
             UpsPackageEntity package = UpsUtility.CreateDefaultPackage();
@@ -91,6 +94,9 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// <summary>
         /// Delete a package from the shipment
         /// </summary>
+        /// <param name="manipulateEntity">
+        /// Pass in an action to manipulate the package that gets deleted from the shipment
+        /// </param>
         public override void DeletePackage(IPackageAdapter packageAdapter, Action<INotifyPropertyChanged> manipulateEntity)
         {
             DeletePackageFromCollection(Shipment.Ups.Packages, x => x.UpsPackageID == packageAdapter.PackageId, manipulateEntity);

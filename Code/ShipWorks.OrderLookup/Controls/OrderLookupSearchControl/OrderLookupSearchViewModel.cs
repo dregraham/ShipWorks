@@ -1,4 +1,7 @@
+using System;
 using System.ComponentModel;
+using System.Linq;
+using System.Reactive.Linq;
 using System.Reflection;
 using System.Windows.Input;
 using GalaSoft.MvvmLight.Command;
@@ -13,25 +16,27 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookupSearchControl
     /// View model for the OrderLookupSearchControl
     /// </summary>
     [Component(RegistrationType.Self)]
-    public class OrderLookupSearchViewModel : INotifyPropertyChanged
+    public class OrderLookupSearchViewModel : INotifyPropertyChanged, IDisposable
     {
-        private readonly IOrderLookupShipmentModel shipmentModel;
         private readonly IMessenger messenger;
         private readonly ISecurityContext securityContext;
         public event PropertyChangedEventHandler PropertyChanged;
         private readonly PropertyChangedHandler handler;
+        private readonly IDisposable subscription;
         private string orderNumber = string.Empty;
         private bool showCreateLabel = false;
         private string searchErrorMessage = string.Empty;
         private bool searchError;
 
         /// <summary>
-        /// Ctor
+        /// Constructor
         /// </summary>
-        public OrderLookupSearchViewModel(IOrderLookupShipmentModel shipmentModel, IMessenger messenger, 
-                                          ISecurityContext securityContext)
+        public OrderLookupSearchViewModel(
+            IOrderLookupShipmentModel shipmentModel,
+            IMessenger messenger,
+            ISecurityContext securityContext)
         {
-            this.shipmentModel = shipmentModel;
+            this.ShipmentModel = shipmentModel;
             this.messenger = messenger;
             this.securityContext = securityContext;
 
@@ -41,12 +46,17 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookupSearchControl
             ResetCommand = new RelayCommand(Reset);
             CreateLabelCommand = new RelayCommand(CreateLabel);
             shipmentModel.OnSearchOrder += (s, e) => ClearOrderError();
+
+            subscription = messenger
+                .OfType<OrderLookupClearOrderMessage>()
+                .Where(x => x.Reason == OrderClearReason.Reset)
+                .Subscribe(_ => ClearOrderError());
         }
 
         /// <summary>
         /// Clears the order error
         /// </summary>
-        private void ClearOrderError() 
+        private void ClearOrderError()
         {
             SearchError = false;
             SearchErrorMessage = string.Empty;
@@ -66,7 +76,7 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookupSearchControl
         /// ShipmentModel
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public IOrderLookupShipmentModel ShipmentModel => shipmentModel;
+        public IOrderLookupShipmentModel ShipmentModel { get; }
 
         /// <summary>
         /// Show the create label button?
@@ -121,36 +131,36 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookupSearchControl
         /// </summary>
         private void UpdateOrderNumber(object sender, PropertyChangedEventArgs e)
         {
-            if (e.PropertyName == nameof(shipmentModel.SelectedOrder))
+            if (e.PropertyName == nameof(ShipmentModel.SelectedOrder))
             {
-                if (shipmentModel.SelectedOrder == null)
+                if (ShipmentModel.SelectedOrder == null)
                 {
                     SearchErrorMessage = "No matching orders were found.";
                     SearchError = true;
                     OrderNumber = string.Empty;
                 }
-                else if (shipmentModel.ShipmentAdapter?.Shipment?.Voided == true)
+                else if (ShipmentModel.ShipmentAdapter?.Shipment?.Voided == true)
                 {
                     SearchErrorMessage = "The order's shipment has been voided.";
                     SearchError = true;
-                    OrderNumber = shipmentModel.SelectedOrder.OrderNumberComplete;
+                    OrderNumber = ShipmentModel.SelectedOrder.OrderNumberComplete;
                 }
-                else if (shipmentModel.ShipmentAdapter?.Shipment?.Processed == true)
+                else if (ShipmentModel.ShipmentAdapter?.Shipment?.Processed == true)
                 {
                     SearchErrorMessage = "The order's shipment has already been processed.";
                     SearchError = true;
-                    OrderNumber = shipmentModel.SelectedOrder.OrderNumberComplete;
+                    OrderNumber = ShipmentModel.SelectedOrder.OrderNumberComplete;
                 }
                 else
                 {
                     SearchErrorMessage = string.Empty;
                     SearchError = false;
-                    OrderNumber = shipmentModel.SelectedOrder.OrderNumberComplete;
+                    OrderNumber = ShipmentModel.SelectedOrder.OrderNumberComplete;
                 }
             }
 
-            if (e.PropertyName == nameof(shipmentModel.ShipmentAdapter) ||
-                e.PropertyName == nameof(shipmentModel.SelectedOrder))
+            if (e.PropertyName == nameof(ShipmentModel.ShipmentAdapter) ||
+                e.PropertyName == nameof(ShipmentModel.SelectedOrder))
             {
                 ShowCreateLabel = ShipmentModel?.SelectedOrder != null &&
                                   ShipmentModel?.ShipmentAdapter?.Shipment != null &&
@@ -175,7 +185,7 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookupSearchControl
         /// </summary>
         private void Reset()
         {
-            shipmentModel.Unload();
+            ShipmentModel.Unload();
             SearchErrorMessage = string.Empty;
             SearchError = false;
             OrderNumber = string.Empty;
@@ -188,5 +198,10 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookupSearchControl
         {
             ShipmentModel.CreateLabel();
         }
+
+        /// <summary>
+        /// Dispose
+        /// </summary>
+        public void Dispose() => subscription.Dispose();
     }
 }

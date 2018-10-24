@@ -23,6 +23,15 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
         public AmazonShipmentDetailsControl()
         {
             InitializeComponent();
+            Loaded += OnControlLoaded;
+        }
+
+        /// <summary>
+        /// Handles the control load event
+        /// </summary>
+        private void OnControlLoaded(object sender, RoutedEventArgs e)
+        {
+            Provider.Focus();
         }
     }
 }

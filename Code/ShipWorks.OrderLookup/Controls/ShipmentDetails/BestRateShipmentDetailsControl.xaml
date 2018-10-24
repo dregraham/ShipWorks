@@ -18,6 +18,7 @@
             <controls:ShipmentTypeToOrderLookupTemplateConverter x:Key="ShipmentTypeToOrderLookupTemplateConverter" />
             <ui:InvertBooleanConverter x:Key="InvertBoolean" />
             <ui:BooleanToVisibilityConverter x:Key="BooleanToVisibility" />
+            <ui:DefaultWhenNullOrEmptyConverter x:Key="NoneWhenEmpty" />
         </ResourceDictionary>
     </UserControl.Resources>
 
@@ -47,8 +48,14 @@
             Grid.Column="1"
             Margin="10,0,0,10"
             HorizontalAlignment="Left"
-            Style="{StaticResource FieldLabel}"
-            Text="{Binding ShipmentModel.SelectedOrder.RequestedShipping, UpdateSourceTrigger=PropertyChanged}" />
+            Style="{StaticResource FieldLabel}">
+            <TextBlock.Text>
+                <Binding
+                    Converter="{StaticResource NoneWhenEmpty}"
+                    ConverterParameter="(None)"
+                    Path="ShipmentModel.SelectedOrder.RequestedShipping" />
+            </TextBlock.Text>
+        </TextBlock>
 
         <TextBlock
             Grid.Row="1"
@@ -56,12 +63,12 @@
             Style="{StaticResource FieldLabel}"
             Text="Provider" />
 
-        <ui:ShipWorksComboBox
+        <ComboBox
+            Name="Provider"
             Grid.Row="1"
             Grid.Column="1"
             DisplayMemberPath="Value"
             ItemsSource="{Binding Providers}"
-            SelectedIndexWhenNull="{x:Static ui:RelativeIndex.First}"
             SelectedValue="{Binding ShipmentTypeCode, UpdateSourceTrigger=PropertyChanged}"
             SelectedValuePath="Key"
             Style="{StaticResource FormComboBox}" />
@@ -88,12 +95,11 @@
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
-            <ui:ShipWorksComboBox
+            <ComboBox
                 Grid.Column="0"
                 Margin="10,0,0,5"
-                DisplayMemberPath="Name"
+                ItemTemplate="{DynamicResource DimsProfileItemTemplate}"
                 ItemsSource="{Binding DimensionProfiles}"
-                SelectedIndexWhenNull="{x:Static ui:RelativeIndex.Last}"
                 SelectedValuePath="DimensionsProfileID"
                 Style="{StaticResource FormComboBox}">
                 <ComboBox.SelectedValue>
@@ -102,11 +108,11 @@
                         Path="ShipmentModel.ShipmentAdapter.Shipment.BestRate.DimsProfileID"
                         UpdateSourceTrigger="PropertyChanged" />
                 </ComboBox.SelectedValue>
-            </ui:ShipWorksComboBox>
+            </ComboBox>
 
             <Button
                 Grid.Column="1"
-                Margin="3,0,0,0"
+                Margin="5,0,0,0"
                 VerticalAlignment="Center"
                 Command="{Binding ManageDimensionalProfiles}"
                 Content="Manage..."

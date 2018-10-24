@@ -9,6 +9,7 @@ using ShipWorks.ApplicationCore;
 using ShipWorks.Core.Common.Threading;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Filters.Search;
 using ShipWorks.Messaging.Messages.SingleScan;
 using ShipWorks.Settings;
 using ShipWorks.SingleScan;
@@ -28,6 +29,7 @@ namespace ShipWorks.OrderLookup
         private readonly IOrderLookupAutoPrintService orderLookupAutoPrintService;
         private readonly IAutoWeighService autoWeighService;
         private readonly IOrderLookupShipmentModel shipmentModel;
+        private readonly ISingleScanOrderShortcut singleScanOrderShortcut;
         private readonly IOrderLookupConfirmationService orderLookupConfirmationService;
         private readonly ILog log;
         private IDisposable subscriptions;
@@ -44,6 +46,7 @@ namespace ShipWorks.OrderLookup
             IOrderLookupAutoPrintService orderLookupAutoPrintService,
             IAutoWeighService autoWeighService,
             IOrderLookupShipmentModel shipmentModel,
+            ISingleScanOrderShortcut singleScanOrderShortcut,
             Func<Type, ILog> createLogger,
             IOrderLookupConfirmationService orderLookupConfirmationService)
         {
@@ -54,6 +57,7 @@ namespace ShipWorks.OrderLookup
             this.orderLookupAutoPrintService = orderLookupAutoPrintService;
             this.autoWeighService = autoWeighService;
             this.shipmentModel = shipmentModel;
+            this.singleScanOrderShortcut = singleScanOrderShortcut;
             this.orderLookupConfirmationService = orderLookupConfirmationService;
             log = createLogger(GetType());
         }
@@ -87,9 +91,9 @@ namespace ShipWorks.OrderLookup
             {
                 shipmentModel.SaveToDatabase();
 
-                await onDemandDownloaderFactory.CreateOnDemandDownloader().Download(message.ScannedText).ConfigureAwait(true);
-                long? orderId = await orderLookupConfirmationService.ConfirmOrder(orderRepository.GetOrderIDs(message.ScannedText));
+                long? orderId = await GetOrderID(message.ScannedText);
                 OrderEntity order = null;
+                bool loadOrder = false;
 
                 if (orderId.HasValue)
                 {
@@ -100,18 +104,25 @@ namespace ShipWorks.OrderLookup
                         order = await orderRepository.GetOrder(orderId.Value).ConfigureAwait(true);
                     }
 
-                    if (order != null &&
-                        order.Shipments.Any() &&
-                        !order.Shipments.Last().Processed)
+                    loadOrder = order != null &&
+                                order.Shipments.Any() &&
+                                !order.Shipments.Last().Processed;
+
+                    if (loadOrder)
                     {
                         using (ITrackedEvent telemetry = new TrackedEvent("OrderLookup.Search.AutoWeigh"))
                         {
                             autoWeighService.ApplyWeight(new[] { order.Shipments.Last() }, telemetry);
                         }
+
+                        shipmentModel.LoadOrder(order);
                     }
                 }
-
-                shipmentModel.LoadOrder(order);
+                
+                if(!loadOrder)
+                {
+                    shipmentModel.Unload();
+                }
             }
             catch (Exception ex)
             {
@@ -120,6 +131,26 @@ namespace ShipWorks.OrderLookup
             finally
             {
                 processingScan = false;
+            }
+        }
+
+        /// <summary>
+        /// Get OrderID based on scanned text
+        /// </summary>
+        /// <param name="scannedText"></param>
+        /// <returns></returns>
+        private async Task<long?> GetOrderID(string scannedText)
+        {
+            // If it was a Single Scan Order Shortcut we know the order has already been downloaded and
+            // the scanned barcode is not one that we should try to download again.
+            if (singleScanOrderShortcut.AppliesTo(scannedText))
+            {
+                return singleScanOrderShortcut.GetOrderID(scannedText);
+            }
+            else
+            {
+                await onDemandDownloaderFactory.CreateOnDemandDownloader().Download(scannedText).ConfigureAwait(true);
+                return await orderLookupConfirmationService.ConfirmOrder(orderRepository.GetOrderIDs(scannedText));
             }
         }
 

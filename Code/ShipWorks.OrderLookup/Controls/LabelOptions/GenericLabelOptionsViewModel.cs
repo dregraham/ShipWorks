@@ -21,10 +21,13 @@ namespace ShipWorks.OrderLookup.Controls.LabelOptions
     /// <summary>
     /// View model for the OrderLookupLabelOptionsViewModel
     /// </summary>
+    [KeyedComponent(typeof(ILabelOptionsViewModel), ShipmentTypeCode.UpsOnLineTools)]
+    [KeyedComponent(typeof(ILabelOptionsViewModel), ShipmentTypeCode.FedEx)]
+    [WpfView(typeof(GenericLabelOptionsControl))]
     public class GenericLabelOptionsViewModel: ILabelOptionsViewModel, IDataErrorInfo
     {
         private readonly IShipmentTypeManager shipmentTypeManager;
-        protected readonly PropertyChangedHandler handler;
+        private readonly PropertyChangedHandler handler;
         private DateTime? shipDate;
         private Dictionary<int, string> labelFormats;
 
@@ -70,7 +73,7 @@ namespace ShipWorks.OrderLookup.Controls.LabelOptions
         [DateCompare(DateCompareType.Today, ValueCompareOperatorType.GreaterThanOrEqualTo, ErrorMessage = @"Ship date must be today or in the future.")]
         public DateTime? ShipDate
         {
-            get { return shipDate; }
+            get => shipDate;
             set
             {
                 handler.Set(nameof(ShipDate), ref shipDate, value);

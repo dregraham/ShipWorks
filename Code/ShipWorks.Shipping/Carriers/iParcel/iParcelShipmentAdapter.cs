@@ -78,6 +78,9 @@ namespace ShipWorks.Shipping.Carriers.iParcel
         /// <summary>
         /// Add a new package to the shipment
         /// </summary>
+        /// <param name="manipulateEntity">
+        /// Pass in an action to manipulate the package that gets added to the shipment
+        /// </param>
         public override IPackageAdapter AddPackage(Action<INotifyPropertyChanged> manipulateEntity)
         {
             IParcelPackageEntity package = iParcelShipmentType.CreateDefaultPackage();
@@ -93,6 +96,9 @@ namespace ShipWorks.Shipping.Carriers.iParcel
         /// <summary>
         /// Delete a package from the shipment
         /// </summary>
+        /// <param name="manipulateEntity">
+        /// Pass in an action to manipulate the package that gets deleted from the shipment
+        /// </param>
         public override void DeletePackage(IPackageAdapter packageAdapter, Action<INotifyPropertyChanged> manipulateEntity)
         {
             DeletePackageFromCollection(Shipment.IParcel.Packages, x => x.IParcelPackageID == packageAdapter.PackageId, manipulateEntity);

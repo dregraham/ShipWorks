@@ -17,11 +17,12 @@ namespace ShipWorks.OrderLookup.Controls.Rating
     /// <summary>
     /// View model for the RatingPanelControl for use with Order lookup mode
     /// </summary>
+    [KeyedComponent(typeof(IRatingViewModel), ShipmentTypeCode.Amazon)]
     [KeyedComponent(typeof(IRatingViewModel), ShipmentTypeCode.BestRate)]
     [KeyedComponent(typeof(IRatingViewModel), ShipmentTypeCode.Endicia)]
-    [KeyedComponent(typeof(IRatingViewModel), ShipmentTypeCode.Usps)]
+    [KeyedComponent(typeof(IRatingViewModel), ShipmentTypeCode.FedEx)]
     [KeyedComponent(typeof(IRatingViewModel), ShipmentTypeCode.UpsOnLineTools)]
-    [KeyedComponent(typeof(IRatingViewModel), ShipmentTypeCode.Amazon)]
+    [KeyedComponent(typeof(IRatingViewModel), ShipmentTypeCode.Usps)]
     [WpfView(typeof(GenericRatingControl))]
     public class GenericRatingViewModel : RatingPanelViewModel, IRatingViewModel
     {
@@ -89,10 +90,8 @@ namespace ShipWorks.OrderLookup.Controls.Rating
                 base.SelectedRate = value;
                 ShipmentModel.ShipmentAdapter?.SelectServiceFromRate(value);
 
-                if (SelectedRate != null)
-                {
-                    ShipmentModel.TotalCost = SelectedRate.AmountOrDefault;
-                }
+                ShipmentModel.TotalCost = SelectedRate != null ? SelectedRate.AmountOrDefault : 0;
+                ShipmentModel.SelectedRate = SelectedRate;
             }
         }
 

@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Reflection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping;
+using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Services;
 
 namespace ShipWorks.OrderLookup
@@ -75,6 +76,11 @@ namespace ShipWorks.OrderLookup
         ShipmentTypeCode OriginalShipmentTypeCode { get; }
 
         /// <summary>
+        /// Keep track of the SelectedRate
+        /// </summary>
+        RateResult SelectedRate { get; set; }
+
+        /// <summary>
         /// Changes the shipment type
         /// </summary>
         void ChangeShipmentType(ShipmentTypeCode value);
@@ -100,18 +106,18 @@ namespace ShipWorks.OrderLookup
         void UnwirePropertyChangedEvent(INotifyPropertyChanged eventObject);
 
         /// <summary>
-        /// An order is starting to unload
+        /// A shipment is starting to unload
         /// </summary>
-        event EventHandler OrderUnloading;
+        event EventHandler ShipmentUnloading;
 
         /// <summary>
-        /// An order is starting to load
+        /// A shipment is starting to load
         /// </summary>
-        event EventHandler OrderLoading;
+        event EventHandler ShipmentLoading;
 
         /// <summary>
-        /// An order was fully loaded
+        /// A shipment was fully loaded
         /// </summary>
-        event EventHandler OrderLoaded;
+        event EventHandler ShipmentLoaded;
     }
 }
