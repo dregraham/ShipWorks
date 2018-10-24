@@ -290,7 +290,7 @@
     <EmbeddedResource Include="Data\Administration\Scripts\Update\5.14\5.14.0.13.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\5.17\5.17.4.0.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\5.21\5.21.0.0.sql" />
-    <Content Include="Data\Administration\Scripts\Update\5.31\5.31.0.3.sql" />
+    <EmbeddedResource Include="Data\Administration\Scripts\Update\5.31\5.31.0.3.sql" />
     <None Include="Properties\interapptive_public.snk" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\5.27\5.27.0.3.sql" />
     <EmbeddedResource Include="Templates\Distribution\Source.zip" />

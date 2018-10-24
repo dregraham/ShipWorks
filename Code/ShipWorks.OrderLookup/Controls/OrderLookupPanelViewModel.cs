@@ -20,6 +20,7 @@ namespace ShipWorks.OrderLookup.Controls
     {
         private readonly PropertyChangedHandler handler;
         private T context;
+        private bool expanded;
 
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -35,14 +36,20 @@ namespace ShipWorks.OrderLookup.Controls
         /// Name of the panel
         /// </summary>
         [JsonProperty]
+        [Obfuscation(Exclude = true)]
         public string Name => typeof(T).Name;
 
         /// <summary>
         /// Whether or not the panel is expanded
         /// </summary>
         [JsonProperty]
-        public bool Expanded => Context.Expanded;
-        
+        [Obfuscation(Exclude = true)]
+        public bool Expanded
+        {
+            get => expanded;
+            set => handler.Set(nameof(Expanded), ref expanded, value);
+        }
+
         /// <summary>
         /// View model specific context
         /// </summary>

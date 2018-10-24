@@ -7,6 +7,7 @@ using System.Reactive.Linq;
 using System.Reflection;
 using System.Windows;
 using Autofac;
+using GongSolutions.Wpf.DragDrop;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Messaging;
@@ -22,7 +23,7 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookup
     /// Main view model for the OrderLookup UI Mode
     /// </summary>
     [Component(RegisterAs = RegistrationType.Self)]
-    public class MainOrderLookupViewModel : INotifyPropertyChanged, IDisposable, IMainOrderLookupViewModel
+    public class MainOrderLookupViewModel : INotifyPropertyChanged, IDisposable, IMainOrderLookupViewModel, IDropTarget
     {
         public event PropertyChangedEventHandler PropertyChanged;
         private readonly PropertyChangedHandler handler;
@@ -32,7 +33,9 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookup
         private ObservableCollection<IOrderLookupPanelViewModel<IOrderLookupViewModel>> middleColumn;
         private ObservableCollection<IOrderLookupPanelViewModel<IOrderLookupViewModel>> rightColumn;
         private ILifetimeScope innerScope;
+        private readonly IOrderLookupLayout layout;
         private readonly ILifetimeScope scope;
+        private readonly IDropTarget dropTarget;
 
         /// <summary>
         /// Constructor
@@ -41,16 +44,18 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookup
             OrderLookupSearchViewModel orderLookupSearchViewModel,
             IOrderLookupLayout layout,
             ILifetimeScope scope,
-            IObservable<IShipWorksMessage> messages)
+            IObservable<IShipWorksMessage> messages,
+            IDropTarget dropTarget)
         {
             this.scope = scope;
+            this.dropTarget = dropTarget;
             handler = new PropertyChangedHandler(this, () => PropertyChanged);
             ShipmentModel = shipmentModel;
             ShipmentModel.ShipmentUnloading += OnShipmentModelShipmentUnloading;
             ShipmentModel.ShipmentLoading += OnShipmentModelShipmentLoading;
             ShipmentModel.ShipmentLoaded += OnShipmentModelShipmentLoaded;
             OrderLookupSearchViewModel = orderLookupSearchViewModel;
-
+            this.layout = layout;
             layout.Apply(this, scope);
 
             subscriptions = new CompositeDisposable(
@@ -164,6 +169,18 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookup
             ShipmentModel.ShipmentLoaded -= OnShipmentModelShipmentLoaded;
             subscriptions?.Dispose();
             innerScope?.Dispose();
+        }
+
+        public void DragOver(IDropInfo dropInfo)
+        {
+            dropTarget.DragOver(dropInfo);
+        }
+
+        public void Drop(IDropInfo dropInfo)
+        {
+            dropTarget.Drop(dropInfo);
+
+            layout.Save(this);
         }
     }
 }

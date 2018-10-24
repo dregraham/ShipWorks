@@ -26,6 +26,6 @@ namespace ShipWorks.OrderLookup
         /// <summary>
         /// Whether or not the panel is expanded
         /// </summary>
-        bool Expanded { get; } 
+        bool Expanded { get; set; } 
     }
 }

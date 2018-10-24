@@ -16,6 +16,6 @@ namespace ShipWorks.OrderLookup.Layout
         /// <summary>
         /// Save the view model
         /// </summary>
-        void Save();
+        void Save(IMainOrderLookupViewModel orderLookupViewModel);
     }
 }
