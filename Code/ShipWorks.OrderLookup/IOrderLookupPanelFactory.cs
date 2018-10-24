@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Autofac;
 
 namespace ShipWorks.OrderLookup
 {
@@ -10,6 +11,6 @@ namespace ShipWorks.OrderLookup
         /// <summary>
         /// Get a collection of IOrderLookupPanelViewModels
         /// </summary>
-        IEnumerable<IOrderLookupPanelViewModel<T>> GetPanels<T>() where T : IOrderLookupViewModel;
+        IEnumerable<IOrderLookupPanelViewModel<IOrderLookupViewModel>> GetPanels<T>(ILifetimeScope scope);
     }
 }
