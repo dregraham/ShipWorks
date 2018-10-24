@@ -17,5 +17,15 @@ namespace ShipWorks.OrderLookup
         /// Update the view model with new inner view models if necessary
         /// </summary>
         void UpdateViewModel(IOrderLookupShipmentModel shipmentModel, ILifetimeScope innerScope);
+
+        /// <summary>
+        /// Name of the panel
+        /// </summary>
+        string Name { get; }
+        
+        /// <summary>
+        /// Whether or not the panel is expanded
+        /// </summary>
+        bool Expanded { get; } 
     }
 }

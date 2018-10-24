@@ -3,6 +3,7 @@ using System.Reflection;
 using Autofac;
 using Autofac.Features.Indexed;
 using Interapptive.Shared.ComponentRegistration;
+using Newtonsoft.Json;
 using ShipWorks.Core.UI;
 using ShipWorks.Shipping;
 using ShipWorks.UI;
@@ -14,6 +15,7 @@ namespace ShipWorks.OrderLookup.Controls
     /// </summary>
     [KeyedComponent(typeof(INotifyPropertyChanged), OrderLookupPanels.ShipmentDetails)]
     [WpfView(typeof(OrderLookupPanelControl))]
+    [JsonObject(MemberSerialization.OptIn)]
     public class OrderLookupViewModelPanel<T> : IOrderLookupPanelViewModel<T> where T : class, IOrderLookupViewModel
     {
         private readonly PropertyChangedHandler handler;
@@ -27,6 +29,28 @@ namespace ShipWorks.OrderLookup.Controls
         public OrderLookupViewModelPanel()
         {
             handler = new PropertyChangedHandler(this, () => PropertyChanged);
+        }
+
+        /// <summary>
+        /// Name of the panel
+        /// </summary>
+        [JsonProperty]
+        public string Name => typeof(T).Name;
+
+        /// <summary>
+        /// Whether or not the panel is expanded
+        /// </summary>
+        [JsonProperty]
+        public bool Expanded => Context.Expanded;
+        
+        /// <summary>
+        /// View model specific context
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public T Context
+        {
+            get => context;
+            set => handler.Set(nameof(Context), ref context, value);
         }
 
         /// <summary>
@@ -45,7 +69,7 @@ namespace ShipWorks.OrderLookup.Controls
             {
                 Context = newModel;
             }
-            else if(innerScope.TryResolve<T>(out T nullModel))
+            else if(innerScope.TryResolve(out T nullModel))
             {
                 Context = nullModel;
             }
@@ -53,16 +77,6 @@ namespace ShipWorks.OrderLookup.Controls
             {
                 Context = null;
             }
-        }
-
-        /// <summary>
-        /// View model specific context
-        /// </summary>
-        [Obfuscation(Exclude = true)]
-        public T Context
-        {
-            get => context;
-            set { handler.Set(nameof(Context), ref context, value); }
         }
     }
 }
