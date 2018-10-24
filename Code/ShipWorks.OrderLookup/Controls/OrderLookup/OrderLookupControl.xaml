@@ -8,7 +8,7 @@
     xmlns:local="clr-namespace:ShipWorks.OrderLookup.Controls.OrderLookup"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:orderLookupSearchControl="clr-namespace:ShipWorks.OrderLookup.Controls.OrderLookupSearchControl"
-    d:DataContext="{d:DesignInstance local:OrderLookupViewModel}"
+    d:DataContext="{d:DesignInstance local:MainOrderLookupViewModel}"
     FontFamily="/ShipWorks.OrderLookup;component/#Roboto"
     mc:Ignorable="d">
     <UserControl.Resources>
@@ -56,6 +56,7 @@
                         <Setter Property="HorizontalAlignment" Value="Stretch" />
                         <Setter Property="dd:DragDrop.IsDragSource" Value="True" />
                         <Setter Property="dd:DragDrop.IsDropTarget" Value="True" />
+                        <Setter Property="dd:DragDrop.DropHandler" Value="{Binding}" />
                         <Setter Property="IsTabStop" Value="False" />
                     </Style>
                     <Style TargetType="GridSplitter">
