@@ -10,11 +10,11 @@ using ShipWorks.UI;
 namespace ShipWorks.OrderLookup.Controls
 {
     /// <summary>
-    /// Generic view model wrapper
+    /// Generic view model panel
     /// </summary>
     [KeyedComponent(typeof(INotifyPropertyChanged), OrderLookupPanels.ShipmentDetails)]
-    [WpfView(typeof(OrderLookupWrapperControl))]
-    public class OrderLookupViewModelWrapper<T> : IOrderLookupWrapperViewModel<T> where T : class, IOrderLookupViewModel
+    [WpfView(typeof(OrderLookupPanelControl))]
+    public class OrderLookupViewModelPanel<T> : IOrderLookupPanelViewModel<T> where T : class, IOrderLookupViewModel
     {
         private readonly PropertyChangedHandler handler;
         private T context;
@@ -24,7 +24,7 @@ namespace ShipWorks.OrderLookup.Controls
         /// <summary>
         /// Constructor
         /// </summary>
-        public OrderLookupViewModelWrapper()
+        public OrderLookupViewModelPanel()
         {
             handler = new PropertyChangedHandler(this, () => PropertyChanged);
         }
