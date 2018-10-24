@@ -170,7 +170,7 @@
                 <ComboBox
                     Grid.Column="0"
                     Margin="10,0,0,5"
-                    DisplayMemberPath="Name"
+                    ItemTemplate="{DynamicResource DimsProfileItemTemplate}"
                     ItemsSource="{Binding DimensionProfiles}"
                     SelectedValuePath="DimensionsProfileID"
                     Style="{StaticResource FormComboBox2}">

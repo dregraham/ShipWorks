@@ -4,7 +4,6 @@ using System.Collections.Immutable;
 using System.ComponentModel;
 using System.Linq;
 using System.Reactive.Disposables;
-using System.Reactive.Linq;
 using System.Reflection;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.ComponentRegistration;
@@ -19,6 +18,7 @@ using ShipWorks.Messaging.Messages.Shipping;
 using ShipWorks.OrderLookup.ShipmentModelPipelines;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers.Postal;
+using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Insurance;
 using ShipWorks.Shipping.Profiles;
 using ShipWorks.Shipping.Services;
@@ -173,6 +173,11 @@ namespace ShipWorks.OrderLookup
         /// Keep track of the original ShipmentTypeCode so we can ensure its in the list of providers
         /// </summary>
         public ShipmentTypeCode OriginalShipmentTypeCode { get; private set; }
+
+        /// <summary>
+        /// Selected rate that should be used if processing requires it
+        /// </summary>
+        public RateResult SelectedRate { get; set; }
 
         /// <summary>
         /// The package adapters for the order in context
@@ -375,6 +380,7 @@ namespace ShipWorks.OrderLookup
             ShipmentAllowEditing = false;
             PackageAdapters = null;
             SelectedOrder = null;
+            SelectedRate = null;
             TotalCost = 0;
 
             messenger.Send(new OrderLookupClearOrderMessage(this, reason));
@@ -423,6 +429,8 @@ namespace ShipWorks.OrderLookup
         /// </summary>
         public void ChangeShipmentType(ShipmentTypeCode value)
         {
+            SelectedRate = null;
+            
             if (value != ShipmentAdapter.ShipmentTypeCode)
             {
                 ModifyShipmentWithReload(() =>
@@ -446,7 +454,8 @@ namespace ShipWorks.OrderLookup
 
             SaveToDatabase();
 
-            messenger.Send(new ProcessShipmentsMessage(this, new[] { shipmentAdapter.Shipment }, new[] { shipmentAdapter.Shipment }, null));
+            messenger.Send(new ProcessShipmentsMessage(this, new[] { shipmentAdapter.Shipment }, 
+                new[] { shipmentAdapter.Shipment }, SelectedRate));
         }
 
         /// <summary>

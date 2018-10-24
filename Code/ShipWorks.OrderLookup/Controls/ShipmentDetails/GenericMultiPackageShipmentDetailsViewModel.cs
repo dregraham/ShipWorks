@@ -26,7 +26,7 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
         private const int MaxPackageCount = 25;
         public event PropertyChangedEventHandler PropertyChanged;
         protected readonly PropertyChangedHandler handler;
-        
+
         private readonly Func<DimensionsManagerDlg> getDimensionsManagerDlg;
         private readonly ICarrierShipmentAdapterOptionsProvider carrierShipmentAdapterOptionsProvider;
         private List<DimensionsProfileEntity> dimensionProfiles;
@@ -93,6 +93,8 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
                 Packages[i].Index = i + 1;
             }
 
+            // Force rates to refresh after adding a package
+            ShipmentModel.RaisePropertyChanged(null);
             handler.RaisePropertyChanged(nameof(ShipmentModel));
 
             AddPackageCommand.RaiseCanExecuteChanged();
@@ -111,6 +113,8 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
 
             RefreshInsurance();
 
+            // Force rates to refresh after adding a package
+            ShipmentModel.RaisePropertyChanged(null);
             AddPackageCommand.RaiseCanExecuteChanged();
             DeletePackageCommand.RaiseCanExecuteChanged();
         }
@@ -214,7 +218,7 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
             get => packageTypes;
             set => handler.Set(nameof(PackageTypes), ref packageTypes, value);
         }
-        
+
         /// <summary>
         /// Collection of ServiceTypes
         /// </summary>
@@ -385,7 +389,7 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
                 RefreshDimensionalProfiles();
             }
         }
-        
+
         /// <summary>
         /// Update when order changes
         /// </summary>
@@ -411,7 +415,7 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
             get
             {
                 Debug.Assert(true, "This method should be overriden in the implementing class");
-                
+
                 // If the shipment is null or processed, don't validate anything.
                 if (ShipmentModel.ShipmentAdapter?.Shipment == null || ShipmentModel.ShipmentAdapter.Shipment.Processed)
                 {

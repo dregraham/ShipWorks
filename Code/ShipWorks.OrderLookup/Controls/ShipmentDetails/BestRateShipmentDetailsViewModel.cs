@@ -167,7 +167,7 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
                             packageAdapter.DimsLength = profile.Length;
                             packageAdapter.DimsWidth = profile.Width;
                             packageAdapter.DimsHeight = profile.Height;
-                            packageAdapter.Weight = profile.Weight;
+                            packageAdapter.AdditionalWeight = profile.Weight;
                         }
                     }
 
