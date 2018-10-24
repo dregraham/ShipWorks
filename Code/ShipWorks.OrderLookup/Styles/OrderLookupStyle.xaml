@@ -20,7 +20,7 @@
 
     <ui:VisibleWhenEqualToParameterConverter x:Key="VisibleWhenNotEqualToParameter" Invert="true" />
 
-    <Style x:Key="PanelWrapper" TargetType="{x:Type StackPanel}">
+    <Style x:Key="PanelPanel" TargetType="{x:Type StackPanel}">
         <Setter Property="Margin" Value="5,5,5,5" />
     </Style>
 

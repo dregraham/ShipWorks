@@ -6,7 +6,7 @@ namespace ShipWorks.OrderLookup
     /// <summary>
     /// Basic Order Lookup view model
     /// </summary>
-    public interface IOrderLookupWrapperViewModel<out T> : INotifyPropertyChanged where T : IOrderLookupViewModel
+    public interface IOrderLookupPanelViewModel<out T> : INotifyPropertyChanged where T : IOrderLookupViewModel
     {
         /// <summary>
         /// Carrier specific context

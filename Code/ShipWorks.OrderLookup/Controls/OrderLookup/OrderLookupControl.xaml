@@ -23,7 +23,7 @@
             <Style BasedOn="{StaticResource Expander.Style}" TargetType="{x:Type Expander}" />
 
             <DataTemplate x:Key="SectionItemTemplate">
-                <basic:OrderLookupWrapperControl />
+                <basic:OrderLookupPanelControl />
             </DataTemplate>
         </ResourceDictionary>
     </UserControl.Resources>

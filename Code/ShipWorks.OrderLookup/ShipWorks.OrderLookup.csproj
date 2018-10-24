@@ -172,6 +172,7 @@
       <DependentUpon>UspsFromControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\From\UspsFromViewModel.cs" />
+    <Compile Include="Controls\IOrderLookupPanelViewModel.cs" />
     <Compile Include="Controls\LabelOptions\GenericLabelOptionsViewModel.cs" />
     <Compile Include="Controls\LabelOptions\ILabelOptionsViewModel.cs" />
     <Compile Include="Controls\LabelOptions\PostalLabelOptionsViewModel.cs" />
@@ -189,10 +190,10 @@
       <DependentUpon>OrderConfirmationDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\OrderConfirmationDialog\OrderConfirmationViewModel.cs" />
-    <Compile Include="Controls\OrderLookupWrapperControl.xaml.cs">
-      <DependentUpon>OrderLookupWrapperControl.xaml</DependentUpon>
+    <Compile Include="Controls\OrderLookupPanelControl.xaml.cs">
+      <DependentUpon>OrderLookupPanelControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\OrderLookupWrapperViewModel.cs" />
+    <Compile Include="Controls\OrderLookupPanelViewModel.cs" />
     <Compile Include="Controls\EmailNotifications\IEmailNotificationsViewModel.cs" />
     <Compile Include="Controls\EmailNotifications\QuantumViewNotifyControlViewModel.cs" />
     <Compile Include="Controls\EmailNotifications\QuantumViewNotifyControl.xaml.cs">
@@ -296,7 +297,6 @@
     <Compile Include="FieldManager\OrderLookupFieldManagerViewModel.cs" />
     <Compile Include="IOrderLookupConfirmationService.cs" />
     <Compile Include="IOrderLookupPreviousShipmentLocator.cs" />
-    <Compile Include="Controls\IOrderLookupWrapperViewModel.cs" />
     <Compile Include="IOrderLookupViewModel.cs" />
     <Compile Include="OrderClearReason.cs" />
     <Compile Include="OrderLookupClearOrderMessage.cs" />
@@ -440,7 +440,7 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Controls\OrderConfirmationDialog\OrderConfirmationDialog.xaml" />
-    <Page Include="Controls\OrderLookupWrapperControl.xaml">
+    <Page Include="Controls\OrderLookupPanelControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
