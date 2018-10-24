@@ -183,6 +183,11 @@
       <DependentUpon>GenericLabelOptionsControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\LabelOptions\AmazonLabelOptionsViewModel.cs" />
+    <Compile Include="Controls\OrderItems\IOrderItemsViewModel.cs" />
+    <Compile Include="Controls\OrderItems\OrderItemsControl.xaml.cs">
+      <DependentUpon>OrderItemsControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\OrderItems\OrderItemsViewModel.cs" />
     <Compile Include="Controls\OrderLookupWrapperControl.xaml.cs">
       <DependentUpon>OrderLookupWrapperControl.xaml</DependentUpon>
     </Compile>
@@ -430,6 +435,10 @@
     <Page Include="Controls\LabelOptions\GenericLabelOptionsControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Controls\OrderItems\OrderItemsControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Controls\OrderLookupWrapperControl.xaml">
       <Generator>MSBuild:Compile</Generator>

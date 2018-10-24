@@ -17,6 +17,7 @@ using ShipWorks.OrderLookup.Controls.Customs;
 using ShipWorks.OrderLookup.Controls.EmailNotifications;
 using ShipWorks.OrderLookup.Controls.From;
 using ShipWorks.OrderLookup.Controls.LabelOptions;
+using ShipWorks.OrderLookup.Controls.OrderItems;
 using ShipWorks.OrderLookup.Controls.OrderLookupSearchControl;
 using ShipWorks.OrderLookup.Controls.Rating;
 using ShipWorks.OrderLookup.Controls.Reference;
@@ -61,6 +62,7 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookup
             {
                 scope.Resolve<IOrderLookupWrapperViewModel<IFromViewModel>>(),
                 scope.Resolve<IOrderLookupWrapperViewModel<IToViewModel>>(),
+                scope.Resolve<IOrderLookupWrapperViewModel<IOrderItemsViewModel>>()
             };
 
             MiddleColumn = new ObservableCollection<IOrderLookupWrapperViewModel<IOrderLookupViewModel>>
