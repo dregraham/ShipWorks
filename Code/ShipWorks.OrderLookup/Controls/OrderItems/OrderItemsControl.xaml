@@ -8,20 +8,13 @@
     d:DesignHeight="450"
     d:DesignWidth="800"
     FontFamily="/ShipWorks.OrderLookup;component/#Roboto"
-    mc:Ignorable="d"
-    Margin="-14 -16 -14 -14">
+    mc:Ignorable="d">
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/ShipWorks.UI;component/Styles/GlobalStyle.xaml" />
                 <ResourceDictionary Source="/ShipWorks.OrderLookup;component/Styles/Colors.xaml" />
             </ResourceDictionary.MergedDictionaries>
-
-            <ui:InvertBooleanConverter x:Key="InvertBoolean" />
-            <ui:BooleanComparisonConverter x:Key="BooleanAnd" BooleanOperator="{x:Static ui:BooleanOperator.And}" />
-            <ui:BooleanToVisibilityConverter x:Key="BooleanToVisibility" />
-            <ui:BooleanToVisibilityConverter x:Key="BooleanToVisibilityInverted" Invert="True" />
-            <FrameworkElement x:Key="ProxyElement" DataContext="{Binding}" />
         </ResourceDictionary>
     </UserControl.Resources>
     <Grid>
@@ -30,95 +23,14 @@
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-        <ContentControl Content="{StaticResource ProxyElement}" Visibility="Collapsed" />
-
         <DataGrid
             Grid.Row="1"
             CanUserResizeColumns="True"
             HorizontalGridLinesBrush="{StaticResource BorderColor}"
-            ItemsSource="{Binding ShipmentModel.SelectedOrder.Items}"
+            ItemsSource="{Binding ShipmentAdapter.SelectedOrder.Items}"
             SelectionUnit="FullRow"
             Style="{StaticResource DataGrid.Static}"
-            VerticalGridLinesBrush="{StaticResource BorderColor}"
-            Visibility="{Binding IsLoading, Converter={StaticResource BooleanToVisibilityInverted}}">
-            <DataGrid.IsEnabled>
-                <MultiBinding Converter="{StaticResource BooleanAnd}">
-                    <Binding Mode="OneWay" Path="ShipmentModel.ShipmentAllowEditing" />
-                    <Binding Converter="{StaticResource InvertBoolean}" Path="IsLoading" />
-                </MultiBinding>
-            </DataGrid.IsEnabled>
-            <DataGrid.RowStyle>
-                <Style TargetType="DataGridRow">
-                    <Setter Property="IsEnabled">
-                        <Setter.Value>
-                            <MultiBinding Converter="{StaticResource BooleanAnd}">
-                                <Binding
-                                    Mode="OneWay"
-                                    Path="DataContext.AllowSelection"
-                                    RelativeSource="{RelativeSource AncestorType=UserControl}" />
-                                <Binding Path="Selectable" />
-                            </MultiBinding>
-                        </Setter.Value>
-                    </Setter>
-                    <Setter Property="Height" Value="25" />
-                </Style>
-            </DataGrid.RowStyle>
-            <DataGrid.CellStyle>
-                <Style TargetType="{x:Type DataGridCell}">
-                    <Setter Property="Padding" Value="3" />
-                    <Setter Property="FontFamily" Value="ShipWorks.OrderLookup;component/#Roboto" />
-                    <Setter Property="BorderThickness" Value="0" />
-                    <Setter Property="FocusVisualStyle" Value="{x:Null}" />
-                    <Setter Property="Template">
-                        <Setter.Value>
-                            <ControlTemplate TargetType="{x:Type DataGridCell}">
-                                <Border
-                                    Padding="{TemplateBinding Padding}"
-                                    Background="{TemplateBinding Background}"
-                                    BorderBrush="{TemplateBinding BorderBrush}"
-                                    BorderThickness="{TemplateBinding BorderThickness}"
-                                    SnapsToDevicePixels="True">
-                                    <ContentPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
-                                </Border>
-                            </ControlTemplate>
-                        </Setter.Value>
-                    </Setter>
-                    <Style.Triggers>
-                        <Trigger Property="IsSelected" Value="true">
-                            <Setter Property="Background" Value="{StaticResource SelectionColor}" />
-                        </Trigger>
-                    </Style.Triggers>
-                </Style>
-
-            </DataGrid.CellStyle>
-            <DataGrid.ColumnHeaderStyle>
-                <Style BasedOn="{StaticResource {x:Type DataGridColumnHeader}}" TargetType="{x:Type DataGridColumnHeader}">
-                    <Setter Property="Background" Value="{StaticResource ButtonBackgroundGradient}" />
-                    <Setter Property="BorderBrush" Value="{StaticResource BorderColor}" />
-                    <Setter Property="Foreground" Value="{StaticResource ControlTextColor}" />
-                    <Setter Property="FontWeight" Value="Bold" />
-                    <Setter Property="Padding" Value="3" />
-                    <Setter Property="MinWidth" Value="75" />
-                    <Setter Property="Template">
-                        <Setter.Value>
-                            <ControlTemplate TargetType="{x:Type DataGridColumnHeader}">
-                                <Grid Background="{TemplateBinding Background}">
-                                    <Border
-                                        Height="20"
-                                        BorderBrush="{StaticResource BorderColor}"
-                                        BorderThickness="0,0,1,1">
-                                        <ContentPresenter
-                                            Margin="3"
-                                            HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                            VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
-                                            SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
-                                    </Border>
-                                </Grid>
-                            </ControlTemplate>
-                        </Setter.Value>
-                    </Setter>
-                </Style>
-            </DataGrid.ColumnHeaderStyle>
+            VerticalGridLinesBrush="{StaticResource BorderColor}">
             <DataGrid.Columns>
                 <DataGridTextColumn
                     Width="*"
@@ -152,13 +64,5 @@
                     Header="Bin/Location" />
             </DataGrid.Columns>
         </DataGrid>
-        <Border
-            Grid.Row="1"
-            Margin="5,32,0,0"
-            HorizontalAlignment="Left"
-            VerticalAlignment="Top"
-            Visibility="{Binding ShowEmptyMessage, Converter={StaticResource BooleanToVisibility}}">
-            <TextBlock Style="{StaticResource TextBlock.Empty}" Text="{Binding EmptyMessage}" />
-        </Border>
     </Grid>
 </UserControl>
