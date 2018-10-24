@@ -11,7 +11,7 @@ namespace ShipWorks.OrderLookup
     public interface IOrderLookupConfirmationService
     {
         /// <summary>
-        /// Confirm a list of orders. Return the selected order of null
+        /// Confirm a list of orders. Return the selected order or null
         /// </summary>
         Task<long?> ConfirmOrder(IEnumerable<long> list);
     }
