@@ -183,6 +183,7 @@
       <DependentUpon>GenericLabelOptionsControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\LabelOptions\AmazonLabelOptionsViewModel.cs" />
+    <Compile Include="Controls\OrderConfirmationDialog\IOrderConfirmationDialog.cs" />
     <Compile Include="Controls\OrderConfirmationDialog\IOrderConfirmationViewModel.cs" />
     <Compile Include="Controls\OrderConfirmationDialog\OrderConfirmationDialog.xaml.cs">
       <DependentUpon>OrderConfirmationDialog.xaml</DependentUpon>

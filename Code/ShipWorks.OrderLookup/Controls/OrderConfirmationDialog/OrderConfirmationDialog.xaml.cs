@@ -3,16 +3,19 @@ using System.Windows.Forms;
 
 namespace ShipWorks.OrderLookup.Controls.OrderConfirmationDialog
 {
-    public partial class OrderConfirmationDialog 
+    /// <summary>
+    /// Dialog for confirming orders
+    /// </summary>
+    public partial class OrderConfirmationDialog : IOrderConfirmationDialog
     {
         /// <summary>
         /// Ctor
         /// </summary>
-        public OrderConfirmationDialog(IWin32Window owner, object viewModel) : base(owner, viewModel, false)
+        public OrderConfirmationDialog(IWin32Window owner, IOrderConfirmationViewModel viewModel) : base(owner, viewModel, false)
         {
             InitializeComponent();
         }
-        
+
         /// <summary>
         /// When select is clicked, set the dialog result to true and close.
         /// </summary>

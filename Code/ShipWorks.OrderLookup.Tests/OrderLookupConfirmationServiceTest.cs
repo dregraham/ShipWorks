@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Autofac.Extras.Moq;
 using Moq;
-using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Tests.Shared;
 using Xunit;
 

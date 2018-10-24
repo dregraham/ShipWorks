@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -15,7 +16,7 @@ namespace ShipWorks.OrderLookup
     {
         private readonly IOrderConfirmationViewModel viewModel;
         private readonly IOrderLookupOrderRepository repository;
-        private readonly IWin32Window owner;
+        private readonly Func<IOrderConfirmationViewModel, IOrderConfirmationDialog> dialogFactory;
 
         /// <summary>
         /// Constructor
@@ -23,11 +24,11 @@ namespace ShipWorks.OrderLookup
         public OrderLookupConfirmationService(
             IOrderConfirmationViewModel viewModel,
             IOrderLookupOrderRepository repository,
-            IWin32Window owner)
+            Func<IOrderConfirmationViewModel, IOrderConfirmationDialog> dialogFactory)
         {
             this.viewModel = viewModel;
             this.repository = repository;
-            this.owner = owner;
+            this.dialogFactory = dialogFactory;
         }
 
         /// <summary>
@@ -46,16 +47,14 @@ namespace ShipWorks.OrderLookup
             }
 
             List<OrderEntity> orders = await GetOrders(orderIDs);
-            
-            OrderConfirmationDialog confirmationDialog = new OrderConfirmationDialog(owner, viewModel);
+
+            IOrderConfirmationDialog confirmationDialog = dialogFactory(viewModel);
             viewModel.Orders = orders;
             viewModel.SelectedOrder = null;
-            
-            bool? dialogResult = confirmationDialog.ShowDialog();
 
-            return dialogResult.HasValue && dialogResult.Value ? 
-                viewModel.SelectedOrder?.OrderID :
-                null;
+            confirmationDialog.ShowDialog();
+
+            return viewModel.SelectedOrder?.OrderID;
 
         }
 
