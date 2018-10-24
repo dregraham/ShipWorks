@@ -22,8 +22,6 @@ namespace ShipWorks.OrderLookup
         private readonly ISqlAdapterFactory sqlAdapterFactory;
         private readonly IOrderLoader orderLoader;
 
-        const int maxMatchingOrders = 5;
-
         /// <summary>
         /// Constructor
         /// </summary>
@@ -65,19 +63,16 @@ namespace ShipWorks.OrderLookup
             }
         }
 
+        /// <summary>
+        /// Returns all order ids that match
+        /// </summary>
         private List<long> GetOrders(DbCommand cmd)
         {
-            List<long> orderIds = new List<long>(maxMatchingOrders);
+            List<long> orderIds = new List<long>();
             using (DbDataReader reader = cmd.ExecuteReader())
             {
-                int count = 0;
                 while(reader.Read())
                 {
-                    count++;
-                    if (count> maxMatchingOrders)
-                    {
-                        throw new OrderLookupException("Too many matches orders found.");
-                    }
                     orderIds.Add(reader.GetInt64(0));
                 }
             }
