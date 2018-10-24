@@ -4188,7 +4188,8 @@ CREATE TABLE [dbo].[UserSettings]
 [SingleScanSettings] [int] NOT NULL,
 [AutoWeigh] [bit] NOT NULL,
 [DialogSettings] [xml] NULL,
-[UIMode] [int] NOT NULL
+[UIMode] [int] NOT NULL,
+[OrderLookupLayout] [nvarchar] (max) COLLATE SQL_Latin1_General_CP1_CI_AS
 )
 GO
 PRINT N'Creating primary key [PK_UserSetting_1] on [dbo].[UserSettings]'
