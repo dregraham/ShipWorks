@@ -334,6 +334,7 @@
     <Compile Include="ShipmentHistory\PreviousShipmentReprintActionHandler.cs" />
     <Compile Include="ShipmentHistory\PreviousShipmentVoidActionHandler.cs" />
     <Compile Include="ShipmentModelPipelines\ApplyProfilePipeline.cs" />
+    <Compile Include="ShipmentModelPipelines\SettingsChangedPipeline.cs" />
     <Compile Include="ShipmentModelPipelines\FocusQuickSearchPipeline.cs" />
     <Compile Include="ShipmentModelPipelines\ClearSearchPipeline.cs" />
     <Compile Include="ShipmentModelPipelines\IOrderLookupShipmentModelPipeline.cs" />
