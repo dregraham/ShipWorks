@@ -18,6 +18,7 @@
             <controls:ShipmentTypeToOrderLookupTemplateConverter x:Key="ShipmentTypeToOrderLookupTemplateConverter" />
             <ui:InvertBooleanConverter x:Key="InvertBoolean" />
             <ui:BooleanToVisibilityConverter x:Key="BooleanToVisibility" />
+            <ui:DefaultWhenNullOrEmptyConverter x:Key="NoneWhenEmpty" />
         </ResourceDictionary>
     </UserControl.Resources>
     <StackPanel>
@@ -54,8 +55,14 @@
                 Grid.Column="1"
                 Margin="10,0,0,10"
                 HorizontalAlignment="Left"
-                Style="{StaticResource FieldLabel}"
-                Text="{Binding ShipmentModel.SelectedOrder.RequestedShipping, UpdateSourceTrigger=PropertyChanged}" />
+                Style="{StaticResource FieldLabel}">
+                <TextBlock.Text>
+                    <Binding
+                        Converter="{StaticResource NoneWhenEmpty}"
+                        ConverterParameter="(None)"
+                        Path="ShipmentModel.SelectedOrder.RequestedShipping" />
+                </TextBlock.Text>
+            </TextBlock>
 
             <TextBlock
                 Grid.Row="1"
@@ -64,6 +71,7 @@
                 Text="Provider" />
 
             <ComboBox
+                Name="Provider"
                 Grid.Row="1"
                 Grid.Column="1"
                 DisplayMemberPath="Value"
