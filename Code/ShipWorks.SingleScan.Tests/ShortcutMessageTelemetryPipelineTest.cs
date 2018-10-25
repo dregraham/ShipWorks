@@ -223,8 +223,6 @@ namespace ShipWorks.SingleScan.Tests
             ShortcutMessage shortcutMessage = new ShortcutMessage(scanMessageBroker, shortcut, ShortcutTriggerType.Barcode, "abcd");
             testMessenger.Send(shortcutMessage);
 
-            ShippingProfile profile = mock.Create<ShippingProfile>(TypedParameter.From<IShippingProfileEntity>(null), TypedParameter.From<IShortcutEntity>(shortcut));
-
             testMessenger.Send(new ProcessShipmentsMessage(this, new[] { new ShipmentEntity() }, new[] { new ShipmentEntity() }, null));
 
             scheduler.Start();
