@@ -49,7 +49,7 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookupSearchControl
 
             subscription = messenger
                 .OfType<OrderLookupClearOrderMessage>()
-                .Where(x => x.Reason == OrderClearReason.Reset)
+                .Where(x => x.Reason == OrderClearReason.Reset || x.Reason == OrderClearReason.NewSearch)
                 .Subscribe(_ => ClearOrderError());
         }
 
@@ -137,7 +137,6 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookupSearchControl
                 {
                     SearchErrorMessage = "No matching orders were found.";
                     SearchError = true;
-                    OrderNumber = string.Empty;
                 }
                 else if (ShipmentModel.ShipmentAdapter?.Shipment?.Voided == true)
                 {

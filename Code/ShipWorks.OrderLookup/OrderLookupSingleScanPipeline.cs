@@ -73,11 +73,13 @@ namespace ShipWorks.OrderLookup
                 messenger.OfType<SingleScanMessage>()
                 .Where(x => !processingScan && !mainForm.AdditionalFormsOpen() && mainForm.UIMode == UIMode.OrderLookup && !mainForm.IsShipmentHistoryActive())
                 .Do(_ => processingScan = true)
+                .Do(_=> shipmentModel.Unload(OrderClearReason.NewSearch))
                 .Subscribe(x => OnSingleScanMessage(x).Forget()),
 
                 messenger.OfType<OrderLookupSearchMessage>()
                 .Where(x => !processingScan && !mainForm.AdditionalFormsOpen() && mainForm.UIMode == UIMode.OrderLookup && !mainForm.IsShipmentHistoryActive())
                 .Do(_ => processingScan = true)
+                .Do(_ => shipmentModel.Unload(OrderClearReason.NewSearch))
                 .Subscribe(x => OnOrderLookupSearchMessage(x).Forget())
             );
         }
@@ -89,8 +91,6 @@ namespace ShipWorks.OrderLookup
         {
             try
             {
-                shipmentModel.SaveToDatabase();
-
                 long? orderId = await GetOrderID(message.ScannedText);
                 OrderEntity order = null;
                 bool loadOrder = false;
@@ -161,8 +161,6 @@ namespace ShipWorks.OrderLookup
         {
             try
             {
-                shipmentModel.SaveToDatabase();
-
                 await onDemandDownloaderFactory.CreateOnDemandDownloader().Download(message.SearchText).ConfigureAwait(true);
                 long? orderId = await orderLookupConfirmationService.ConfirmOrder(orderRepository.GetOrderIDs(message.SearchText));
 
