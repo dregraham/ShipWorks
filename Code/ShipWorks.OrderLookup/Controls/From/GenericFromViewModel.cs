@@ -218,7 +218,7 @@ namespace ShipWorks.OrderLookup.Controls.From
         /// </summary>
         protected virtual string GetHeaderAccountText()
         {
-            return ShipmentModel.ShipmentAdapter.AccountId.HasValue  && ShipmentModel.ShipmentAdapter.AccountId.Value != 0 ? 
+            return ShipmentModel.ShipmentAdapter.AccountId.HasValue && ShipmentModel.ShipmentAdapter.AccountId.Value != 0 ? 
                 Accounts.SingleOrDefault(a => a.Key == ShipmentModel.ShipmentAdapter.AccountId).Value :
                 "(None)";
         }

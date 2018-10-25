@@ -45,7 +45,7 @@ namespace ShipWorks.OrderLookup.Tests
             orderRepository = mock.Mock<IOrderLookupOrderRepository>();
             orderRepository.Setup(o => o.GetOrderIDs(AnyString)).Returns(new List<long> { 123 });
 
-            mock.Mock<IOrderLookupConfirmationService>().Setup(o => o.ConfirmOrder(string.Empty, It.IsAny<List<long>>())).ReturnsAsync(123);
+            mock.Mock<IOrderLookupConfirmationService>().Setup(o => o.ConfirmOrder(AnyString, It.IsAny<List<long>>())).ReturnsAsync(123);
 
             Mock<IOnDemandDownloaderFactory> downloadFactory = mock.Mock<IOnDemandDownloaderFactory>();
             downloader = mock.Mock<IOnDemandDownloader>();
@@ -141,7 +141,7 @@ namespace ShipWorks.OrderLookup.Tests
         public void InitializeForCurrentSession_LoadsOrderOnShipmentModel()
         {
             orderRepository.Setup(x => x.GetOrderIDs("Foo")).Returns(new List<long> { 1 });
-            mock.Mock<IOrderLookupConfirmationService>().Setup(o => o.ConfirmOrder(string.Empty, It.IsAny<List<long>>())).ReturnsAsync(1);
+            mock.Mock<IOrderLookupConfirmationService>().Setup(o => o.ConfirmOrder("Foo", It.IsAny<List<long>>())).ReturnsAsync(1);
             mainForm.SetupGet(u => u.UIMode).Returns(UIMode.OrderLookup);
 
             SingleScanMessage singleScanMessage = new SingleScanMessage(this, new ScanMessage(this, "Foo", IntPtr.Zero));
