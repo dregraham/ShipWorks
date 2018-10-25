@@ -1,7 +1,9 @@
 ﻿using System.ComponentModel;
+using System.Linq;
 using System.Reflection;
+using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.Core.UI;
-using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping;
 using ShipWorks.UI;
 
 namespace ShipWorks.OrderLookup.Controls.OrderItems
@@ -9,6 +11,12 @@ namespace ShipWorks.OrderLookup.Controls.OrderItems
     /// <summary>
     /// View model for OrderItemControl
     /// </summary>
+    [KeyedComponent(typeof(IOrderItemsViewModel), ShipmentTypeCode.Amazon)]
+    [KeyedComponent(typeof(IOrderItemsViewModel), ShipmentTypeCode.BestRate)]
+    [KeyedComponent(typeof(IOrderItemsViewModel), ShipmentTypeCode.Endicia)]
+    [KeyedComponent(typeof(IOrderItemsViewModel), ShipmentTypeCode.FedEx)]
+    [KeyedComponent(typeof(IOrderItemsViewModel), ShipmentTypeCode.UpsOnLineTools)]
+    [KeyedComponent(typeof(IOrderItemsViewModel), ShipmentTypeCode.Usps)]
     [WpfView(typeof(OrderItemsControl))]
     public class OrderItemsViewModel : IOrderItemsViewModel
     {
@@ -21,7 +29,6 @@ namespace ShipWorks.OrderLookup.Controls.OrderItems
         public OrderItemsViewModel(IOrderLookupShipmentModel shipmentModel)
         {
             ShipmentModel = shipmentModel;
-            //orderItems = shipmentModel.SelectedOrder.OrderItems;
             ShipmentModel.PropertyChanged += ShipmentModelPropertyChanged;
             handler = new PropertyChangedHandler(this, () => PropertyChanged);
         }
@@ -49,6 +56,12 @@ namespace ShipWorks.OrderLookup.Controls.OrderItems
         /// </summary>
         [Obfuscation(Exclude = true)]
         public IOrderLookupShipmentModel ShipmentModel { get; }
+
+        /// <summary>
+        /// Does the order item exist
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public bool OrderItemExists => ShipmentModel.SelectedOrder.OrderItems.Any();
 
         /// <summary>
         /// Update when the order changes
