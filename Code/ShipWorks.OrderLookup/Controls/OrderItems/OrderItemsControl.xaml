@@ -29,9 +29,10 @@
             CanUserResizeColumns="True"
             HorizontalGridLinesBrush="{StaticResource BorderColor}"
             ItemsSource="{Binding ShipmentModel.SelectedOrder.OrderItems}"
-            SelectionUnit="FullRow"
             Style="{StaticResource DataGrid.Static}"
             VerticalGridLinesBrush="{StaticResource BorderColor}"
+            IsEnabled="False"
+            IsHitTestVisible="False"
             Visibility="{Binding OrderItemExists, Converter={StaticResource BooleanToVisibility}}">
             <DataGrid.RowStyle>
                 <Style TargetType="DataGridRow">
