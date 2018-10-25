@@ -35,9 +35,9 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookup
         private readonly PropertyChangedHandler handler;
         private readonly IDisposable subscriptions;
 
-        private ObservableCollection<IOrderLookupWrapperViewModel<IOrderLookupViewModel>> leftColumn;
-        private ObservableCollection<IOrderLookupWrapperViewModel<IOrderLookupViewModel>> middleColumn;
-        private ObservableCollection<IOrderLookupWrapperViewModel<IOrderLookupViewModel>> rightColumn;
+        private ObservableCollection<IOrderLookupPanelViewModel<IOrderLookupViewModel>> leftColumn;
+        private ObservableCollection<IOrderLookupPanelViewModel<IOrderLookupViewModel>> middleColumn;
+        private ObservableCollection<IOrderLookupPanelViewModel<IOrderLookupViewModel>> rightColumn;
         private ILifetimeScope innerScope;
         private readonly ILifetimeScope scope;
 
@@ -57,24 +57,24 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookup
             ShipmentModel.ShipmentLoaded += OnShipmentModelShipmentLoaded;
             OrderLookupSearchViewModel = orderLookupSearchViewModel;
 
-            LeftColumn = new ObservableCollection<IOrderLookupWrapperViewModel<IOrderLookupViewModel>>
+            LeftColumn = new ObservableCollection<IOrderLookupPanelViewModel<IOrderLookupViewModel>>
             {
-                scope.Resolve<IOrderLookupWrapperViewModel<IFromViewModel>>(),
-                scope.Resolve<IOrderLookupWrapperViewModel<IToViewModel>>(),
+                scope.Resolve<IOrderLookupPanelViewModel<IFromViewModel>>(),
+                scope.Resolve<IOrderLookupPanelViewModel<IToViewModel>>(),
             };
 
-            MiddleColumn = new ObservableCollection<IOrderLookupWrapperViewModel<IOrderLookupViewModel>>
+            MiddleColumn = new ObservableCollection<IOrderLookupPanelViewModel<IOrderLookupViewModel>>
             {
-                scope.Resolve<IOrderLookupWrapperViewModel<IDetailsViewModel>>(),
-                scope.Resolve<IOrderLookupWrapperViewModel<ILabelOptionsViewModel>>(),
-                scope.Resolve<IOrderLookupWrapperViewModel<IReferenceViewModel>>(),
-                scope.Resolve<IOrderLookupWrapperViewModel<IEmailNotificationsViewModel>>()
+                scope.Resolve<IOrderLookupPanelViewModel<IDetailsViewModel>>(),
+                scope.Resolve<IOrderLookupPanelViewModel<ILabelOptionsViewModel>>(),
+                scope.Resolve<IOrderLookupPanelViewModel<IReferenceViewModel>>(),
+                scope.Resolve<IOrderLookupPanelViewModel<IEmailNotificationsViewModel>>()
             };
 
-            RightColumn = new ObservableCollection<IOrderLookupWrapperViewModel<IOrderLookupViewModel>>
+            RightColumn = new ObservableCollection<IOrderLookupPanelViewModel<IOrderLookupViewModel>>
             {
-                scope.Resolve<IOrderLookupWrapperViewModel<IRatingViewModel>>(),
-                scope.Resolve<IOrderLookupWrapperViewModel<ICustomsViewModel>>(),
+                scope.Resolve<IOrderLookupPanelViewModel<IRatingViewModel>>(),
+                scope.Resolve<IOrderLookupPanelViewModel<ICustomsViewModel>>(),
             };
 
             subscriptions = new CompositeDisposable(
@@ -137,7 +137,7 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookup
         /// Order Number to search for
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public ObservableCollection<IOrderLookupWrapperViewModel<IOrderLookupViewModel>> LeftColumn
+        public ObservableCollection<IOrderLookupPanelViewModel<IOrderLookupViewModel>> LeftColumn
         {
             get => leftColumn;
             set => handler.Set(nameof(LeftColumn), ref leftColumn, value);
@@ -147,7 +147,7 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookup
         /// Order Number to search for
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public ObservableCollection<IOrderLookupWrapperViewModel<IOrderLookupViewModel>> MiddleColumn
+        public ObservableCollection<IOrderLookupPanelViewModel<IOrderLookupViewModel>> MiddleColumn
         {
             get => middleColumn;
             set => handler.Set(nameof(MiddleColumn), ref middleColumn, value);
@@ -157,7 +157,7 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookup
         /// Order Number to search for
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public ObservableCollection<IOrderLookupWrapperViewModel<IOrderLookupViewModel>> RightColumn
+        public ObservableCollection<IOrderLookupPanelViewModel<IOrderLookupViewModel>> RightColumn
         {
             get => rightColumn;
             set => handler.Set(nameof(RightColumn), ref rightColumn, value);
