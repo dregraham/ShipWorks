@@ -17,5 +17,10 @@ namespace ShipWorks.OrderLookup.Controls.OrderConfirmationDialog
         /// The SelectedOrder
         /// </summary>
         OrderEntity SelectedOrder { get; set; }
+
+        /// <summary>
+        /// The text that was searched for
+        /// </summary>
+        string SearchText { get; set; }
     }
 }

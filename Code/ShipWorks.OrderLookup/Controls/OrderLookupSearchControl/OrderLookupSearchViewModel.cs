@@ -137,6 +137,7 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookupSearchControl
                 {
                     SearchErrorMessage = "No matching orders were found.";
                     SearchError = true;
+                    OrderNumber = string.Empty;
                 }
                 else if (ShipmentModel.ShipmentAdapter?.Shipment?.Voided == true)
                 {

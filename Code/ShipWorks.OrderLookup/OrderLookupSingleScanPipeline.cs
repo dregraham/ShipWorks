@@ -150,7 +150,7 @@ namespace ShipWorks.OrderLookup
             else
             {
                 await onDemandDownloaderFactory.CreateOnDemandDownloader().Download(scannedText).ConfigureAwait(true);
-                return await orderLookupConfirmationService.ConfirmOrder(orderRepository.GetOrderIDs(scannedText));
+                return await orderLookupConfirmationService.ConfirmOrder(scannedText, orderRepository.GetOrderIDs(scannedText));
             }
         }
 
@@ -162,7 +162,7 @@ namespace ShipWorks.OrderLookup
             try
             {
                 await onDemandDownloaderFactory.CreateOnDemandDownloader().Download(message.SearchText).ConfigureAwait(true);
-                long? orderId = await orderLookupConfirmationService.ConfirmOrder(orderRepository.GetOrderIDs(message.SearchText));
+                long? orderId = await orderLookupConfirmationService.ConfirmOrder(message.SearchText, orderRepository.GetOrderIDs(message.SearchText));
 
                 OrderEntity order = null;
                 if (orderId.HasValue)

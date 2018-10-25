@@ -21,19 +21,19 @@ namespace ShipWorks.OrderLookup.Tests
         [Fact]
         public async Task ConfirmOrderReturnsNull_WhenNoOrderIDs()
         {
-            Assert.Null(await testObject.ConfirmOrder(new List<long>()));
+            Assert.Null(await testObject.ConfirmOrder(string.Empty, new List<long>()));
         }
 
         [Fact]
         public async Task ConfirmOrderReturnsFirstOrderID_WhenOrderIDsContainsOneOrderID()
         {
-            Assert.Equal(123, await testObject.ConfirmOrder(new List<long>() { 123 }));
+            Assert.Equal(123, await testObject.ConfirmOrder(string.Empty, new List<long>() { 123 }));
         }
 
         [Fact]
         public async Task ConfirmOrderDelegatesToOrderRepository()
         {
-            await testObject.ConfirmOrder(new List<long>() { 123, 456, 789 });
+            await testObject.ConfirmOrder(string.Empty, new List<long>() { 123, 456, 789 });
 
             Mock<IOrderLookupOrderRepository> repo = mock.Mock<IOrderLookupOrderRepository>();
 

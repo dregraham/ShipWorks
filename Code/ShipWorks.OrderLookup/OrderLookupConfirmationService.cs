@@ -34,7 +34,7 @@ namespace ShipWorks.OrderLookup
         /// <summary>
         /// Prompt the user to confirm which order they want
         /// </summary>
-        public async Task<long?> ConfirmOrder(IEnumerable<long> orderIDs)
+        public async Task<long?> ConfirmOrder(string searchText, IEnumerable<long> orderIDs)
         {
             if (orderIDs.None())
             {
@@ -50,6 +50,7 @@ namespace ShipWorks.OrderLookup
 
             IOrderConfirmationDialog confirmationDialog = dialogFactory(viewModel);
             viewModel.Orders = orders;
+            viewModel.SearchText = searchText;
             viewModel.SelectedOrder = null;
 
             bool? dialogResult = confirmationDialog.ShowDialog();

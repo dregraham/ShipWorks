@@ -13,6 +13,6 @@ namespace ShipWorks.OrderLookup
         /// <summary>
         /// Confirm a list of orders. Return the selected order or null
         /// </summary>
-        Task<long?> ConfirmOrder(IEnumerable<long> list);
+        Task<long?> ConfirmOrder(string searchText, IEnumerable<long> list);
     }
 }

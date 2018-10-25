@@ -17,6 +17,7 @@ namespace ShipWorks.OrderLookup.Controls.OrderConfirmationDialog
         private readonly PropertyChangedHandler handler;
         private OrderEntity selectedOrder;
         private IEnumerable<OrderEntity> orders;
+        private string searchText;
 
         /// <summary>
         /// Ctor
@@ -44,6 +45,16 @@ namespace ShipWorks.OrderLookup.Controls.OrderConfirmationDialog
         {
             get => orders;
             set => handler.Set(nameof(Orders), ref orders, value);
+        }
+
+        /// <summary>
+        /// The text that was searched for
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public string SearchText
+        {
+            get => searchText;
+            set => handler.Set(nameof(SearchText), ref searchText, value);
         }
     }
 }
