@@ -6,7 +6,7 @@
              xmlns:local="clr-namespace:ShipWorks.OrderLookup.Controls.EmailNotifications"
              xmlns:ui="http://schemas.shipworks.com/ui"
              xmlns:enums="clr-namespace:ShipWorks.Shipping.Carriers.FedEx.Enums;assembly=ShipWorks.Core"
-             xmlns:syncfusion="clr-namespace:Syncfusion.Windows.Controls.Input;assembly=Syncfusion.SfInput.WPF"
+             xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
              FontFamily="/ShipWorks.OrderLookup;component/#Roboto"
              mc:Ignorable="d"             
              d:DataContext="{d:DesignInstance local:FedExEmailNotificationsViewModel}">
