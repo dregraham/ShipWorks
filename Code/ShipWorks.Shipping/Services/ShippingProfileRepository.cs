@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.Win32.Native;
 using log4net;
 using ShipWorks.Common.IO.KeyboardShortcuts;
-using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.IO.KeyboardShortcuts;
 using ShipWorks.Shipping.Profiles;
@@ -64,17 +64,75 @@ namespace ShipWorks.Shipping.Services
         /// </summary>
         private IShippingProfile CreateShippingProfile(IShippingProfileEntity shippingProfileEntity, IEnumerable<IShortcutEntity> shortcuts)
         {
-            IShortcutEntity shortcutEntity = shortcuts.SingleOrDefault(s => s.RelatedObjectID == shippingProfileEntity.ShippingProfileID);
-            if (shortcutEntity == null)
-            {
-                shortcutEntity = new ShortcutEntity
-                {
-                    Action = KeyboardShortcutCommand.ApplyProfile,
-                    RelatedObjectID = shippingProfileEntity.ShippingProfileID
-                };
-            }
+            IShortcutEntity shortcutEntity = shortcuts.SingleOrDefault(s => s.RelatedObjectID == shippingProfileEntity.ShippingProfileID) ??
+                new ProfileShortcutSkeleton(shippingProfileEntity.ShippingProfileID);
 
             return shippingProfileFactory.Create(shippingProfileEntity, shortcutEntity);
+        }
+
+        /// <summary>
+        /// Skeleton implementation of Shortcut when a profile doesn't actually have any shortcuts
+        /// </summary>
+        /// <remarks>
+        /// We used to create a new instance of the ShortcutEntity and set the two values implemented
+        /// in this skeleton, but for a large number of profiles, doing that took a non-trivial amount
+        /// of time because of the LLBLgen machinery involved. Since we don't need any of that in this
+        /// case, we can use a fake - but fast - version instead.
+        /// </remarks>
+        private class ProfileShortcutSkeleton : IShortcutEntity
+        {
+            /// <summary>
+            /// Constructor
+            /// </summary>
+            public ProfileShortcutSkeleton(long relatedObjectID)
+            {
+                RelatedObjectID = relatedObjectID;
+            }
+
+            /// <summary>
+            /// Shortcut ID
+            /// </summary>
+            public long ShortcutID => 0;
+
+            /// <summary>
+            /// Row version
+            /// </summary>
+            public byte[] RowVersion => new byte[0];
+
+            /// <summary>
+            /// Modifier keys
+            /// </summary>
+            public KeyboardShortcutModifiers? ModifierKeys => null;
+
+            /// <summary>
+            /// Virtual key
+            /// </summary>
+            public VirtualKeys? VirtualKey => null;
+
+            /// <summary>
+            /// Barcode
+            /// </summary>
+            public string Barcode => null;
+
+            /// <summary>
+            /// Action
+            /// </summary>
+            public KeyboardShortcutCommand Action => KeyboardShortcutCommand.ApplyProfile;
+
+            /// <summary>
+            /// Related object id
+            /// </summary>
+            public long? RelatedObjectID { get; }
+
+            /// <summary>
+            /// AsReadOnly
+            /// </summary>
+            public IShortcutEntity AsReadOnly() => this;
+
+            /// <summary>
+            /// AsReadOnly
+            /// </summary>
+            public IShortcutEntity AsReadOnly(IDictionary<object, object> objectMap) => this;
         }
     }
 }

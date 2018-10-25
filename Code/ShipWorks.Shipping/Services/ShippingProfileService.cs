@@ -41,24 +41,36 @@ namespace ShipWorks.Shipping.Services
         /// Get the configured shipment types profiles
         /// </summary>
         public IEnumerable<IShippingProfile> GetConfiguredShipmentTypeProfiles() =>
+            GetConfiguredShipmentTypeProfiles(shipmentTypeManager.ConfiguredShipmentTypeCodes.ToList());
+
+        /// <summary>
+        /// Get the configured shipment types profiles
+        /// </summary>
+        private IEnumerable<IShippingProfile> GetConfiguredShipmentTypeProfiles(IEnumerable<ShipmentTypeCode> allowableShipmentTypes) =>
             shippingProfileRepository
                 .GetAll()
-                .Where(x => ConfiguredShipmentTypeProfile(x.ShippingProfileEntity.ShipmentType));
+                .Where(x => ConfiguredShipmentTypeProfile(x.ShippingProfileEntity.ShipmentType, allowableShipmentTypes));
 
         /// <summary>
         /// Get the configured shipment types profiles
         /// </summary>
         public IEnumerable<IEditableShippingProfile> GetEditableConfiguredShipmentTypeProfiles() =>
+            GetEditableConfiguredShipmentTypeProfiles(shipmentTypeManager.ConfiguredShipmentTypeCodes.ToList());
+
+        /// <summary>
+        /// Get the configured shipment types profiles
+        /// </summary>
+        public IEnumerable<IEditableShippingProfile> GetEditableConfiguredShipmentTypeProfiles(IEnumerable<ShipmentTypeCode> allowableShipmentTypes) =>
             editableShippingProfileRepository
                 .GetAll()
-                .Where(x => ConfiguredShipmentTypeProfile(x.ShippingProfileEntity.ShipmentType));
+                .Where(x => ConfiguredShipmentTypeProfile(x.ShippingProfileEntity.ShipmentType, allowableShipmentTypes));
 
         /// <summary>
         /// Returns true if should show in grid
         /// </summary>
         /// <returns>Return true if global profile or the shipment type is configured</returns>
-        private bool ConfiguredShipmentTypeProfile(ShipmentTypeCode? shipmentType) =>
-            !shipmentType.HasValue || shipmentTypeManager.ConfiguredShipmentTypeCodes.Contains(shipmentType.Value);
+        private bool ConfiguredShipmentTypeProfile(ShipmentTypeCode? shipmentType, IEnumerable<ShipmentTypeCode> allowableShipmentTypes) =>
+            !shipmentType.HasValue || allowableShipmentTypes.Contains(shipmentType.Value);
 
         /// <summary>
         /// Get the available hotkeys for the given ShippingProfile
