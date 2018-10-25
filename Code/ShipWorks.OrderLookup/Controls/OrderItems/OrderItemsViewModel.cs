@@ -14,8 +14,9 @@ namespace ShipWorks.OrderLookup.Controls.OrderItems
     [WpfView(typeof(OrderItemsControl))]
     public class OrderItemsViewModel : IOrderItemsViewModel
     {
+#pragma warning disable CS0067 // Defined in interface, but we don't need to track ProperyChanged
         public event PropertyChangedEventHandler PropertyChanged;
-        private readonly PropertyChangedHandler handler;
+#pragma warning restore CS0067 // Defined in interface, but we don't need to track ProperyChanged
 
         /// <summary>
         /// Constructor
