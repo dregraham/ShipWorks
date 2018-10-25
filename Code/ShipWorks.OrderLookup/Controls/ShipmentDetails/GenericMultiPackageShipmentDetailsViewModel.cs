@@ -370,6 +370,10 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
             else
             {
                 PackageTypes = carrierShipmentAdapterOptionsProvider.GetPackageTypes(ShipmentModel.ShipmentAdapter);
+                if (PackageTypes.None(s => s.Key == SelectedPackage.PackagingType))
+                {
+                    SelectedPackage.PackagingType = PackageTypes.FirstOrDefault().Key;
+                }
             }
         }
 
@@ -379,6 +383,10 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
         protected void RefreshServiceTypes()
         {
             ServiceTypes = carrierShipmentAdapterOptionsProvider.GetServiceTypes(ShipmentModel.ShipmentAdapter);
+            if (ServiceTypes.None(s => s.Key == ShipmentModel.ShipmentAdapter.ServiceType))
+            {
+                ShipmentModel.ShipmentAdapter.ServiceType = ServiceTypes.FirstOrDefault().Key;
+            }
         }
 
         /// <summary>
