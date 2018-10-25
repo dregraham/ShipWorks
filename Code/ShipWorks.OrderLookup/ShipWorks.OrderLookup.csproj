@@ -322,7 +322,6 @@
     <Compile Include="Controls\Rating\GenericRatingControl.xaml.cs">
       <DependentUpon>GenericRatingControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\ShipmentTypeToOrderLookupTemplateConverter.cs" />
     <Compile Include="Controls\Rating\GenericRatingViewModel.cs" />
     <Compile Include="Controls\Reference\UspsReferenceControl.xaml.cs">
       <DependentUpon>UspsReferenceControl.xaml</DependentUpon>
