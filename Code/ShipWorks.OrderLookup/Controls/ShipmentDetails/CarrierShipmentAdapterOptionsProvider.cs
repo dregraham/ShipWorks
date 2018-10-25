@@ -2,7 +2,7 @@
 using System.Linq;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
-using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Services;
@@ -76,16 +76,31 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
             // If no service types are returned, the carrier doesn't support service types,
             // so just return.
             return updatedServices.Any() ?
-                updatedServices.ToList() : 
+                updatedServices.ToList() :
                 Enumerable.Empty<KeyValuePair<int, string>>();
         }
 
         /// <summary>
         /// Get the available profiles for the package adapter
         /// </summary>
-        public IEnumerable<DimensionsProfileEntity> GetDimensionsProfiles(IPackageAdapter package)
-        {
-            return dimsManager.Profiles(package);
-        }
+        public IDictionary<long, string> GetDimensionsProfiles(IPackageAdapter package) =>
+            dimsManager
+                .ProfilesReadOnly(package)
+                .ToDictionary(x => x.DimensionsProfileID, FormatDimensionsProfileDescription);
+
+        /// <summary>
+        /// Get the available profiles for the package adapter
+        /// </summary>
+        public IDimensionsProfileEntity GetDimensionsProfile(long dimensionsProfileID) =>
+            dimsManager.GetProfileReadOnly(dimensionsProfileID);
+
+
+        /// <summary>
+        /// Format the description of a dimensions profile
+        /// </summary>
+        private string FormatDimensionsProfileDescription(IDimensionsProfileEntity dim) =>
+            dim.DimensionsProfileID == 0 ?
+                dim.Name :
+                $"{dim.Name} ({dim.Length} x {dim.Width} x {dim.Height})";
     }
 }

@@ -6,7 +6,6 @@ using System.Reactive.Linq;
 using System.Reflection;
 using System.Windows.Input;
 using GalaSoft.MvvmLight.Command;
-using Interapptive.Shared.Collections;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Threading;
 using Interapptive.Shared.Utility;
@@ -18,7 +17,6 @@ using ShipWorks.Messaging.Messages.Shipping;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers.Amazon.Enums;
 using ShipWorks.Shipping.Editing;
-using ShipWorks.Shipping.Services;
 using ShipWorks.Shipping.UI.ShippingPanel;
 using ShipWorks.UI;
 
@@ -37,7 +35,7 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
         private readonly ICarrierShipmentAdapterOptionsProvider carrierShipmentAdapterOptionsProvider;
         private readonly IMessenger messenger;
         private readonly ISchedulerProvider schedulerProvider;
-        private List<DimensionsProfileEntity> dimensionProfiles;
+        private IDictionary<long, string> dimensionProfiles;
         private readonly IDisposable updateServicesWhenRatesRetrieved;
         private Dictionary<ShipmentTypeCode, string> providers;
         private IEnumerable<KeyValuePair<int, string>> packageTypes;
@@ -126,7 +124,7 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
         /// The dimension profiles
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public List<DimensionsProfileEntity> DimensionProfiles
+        public IDictionary<long, string> DimensionProfiles
         {
             get => dimensionProfiles;
             set { handler.Set(nameof(DimensionProfiles), ref dimensionProfiles, value); }
@@ -204,8 +202,7 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
                 AmazonShipmentEntity amazon = ShipmentModel.ShipmentAdapter.Shipment.Amazon;
                 if (amazon.DimsProfileID != 0)
                 {
-                    DimensionsProfileEntity profile =
-                        DimensionProfiles.SingleOrDefault(p => p.DimensionsProfileID == amazon.DimsProfileID);
+                    var profile = carrierShipmentAdapterOptionsProvider.GetDimensionsProfile(amazon.DimsProfileID);
 
                     if (profile != null)
                     {
@@ -260,17 +257,13 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
         /// </summary>
         private void RefreshDimensionalProfiles()
         {
-            dimensionProfiles = new List<DimensionsProfileEntity>();
-            carrierShipmentAdapterOptionsProvider.GetDimensionsProfiles(ShipmentModel.PackageAdapters.FirstOrDefault())
-                .ForEach(p => dimensionProfiles.Add(p));
+            DimensionProfiles = carrierShipmentAdapterOptionsProvider.GetDimensionsProfiles(null);
 
-            if (ShipmentModel.ShipmentAdapter.Shipment.Amazon != null && DimensionProfiles.None(d => d.DimensionsProfileID ==
-                                            ShipmentModel.ShipmentAdapter.Shipment.Amazon.DimsProfileID))
+            if (ShipmentModel.ShipmentAdapter.Shipment.Amazon != null &&
+                !DimensionProfiles.ContainsKey(ShipmentModel.ShipmentAdapter.Shipment.Amazon.DimsProfileID))
             {
                 ShipmentModel.ShipmentAdapter.Shipment.Amazon.DimsProfileID = 0;
             }
-
-            DimensionProfiles = dimensionProfiles;
         }
 
         /// <summary>

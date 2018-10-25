@@ -14,11 +14,11 @@ namespace ShipWorks.OrderLookup.Tests.Controls.ShipmentDetails
     public class CarrierShipmentAdapterOptionsProviderTest
     {
         private readonly AutoMock mock;
-        readonly CarrierShipmentAdapterOptionsProvider testObject;
-        readonly Mock<ICarrierShipmentAdapter> shipmentAdapter;
-        readonly Mock<IShipmentTypeManager> shipmentTypeManager;
-        readonly Mock<IDimensionsManager> dimensionsManager;
-        readonly ShipmentTypeProvider ShipmentTypeProvider;
+        private readonly CarrierShipmentAdapterOptionsProvider testObject;
+        private readonly Mock<ICarrierShipmentAdapter> shipmentAdapter;
+        private readonly Mock<IShipmentTypeManager> shipmentTypeManager;
+        private readonly Mock<IDimensionsManager> dimensionsManager;
+        private readonly ShipmentTypeProvider ShipmentTypeProvider;
 
         public CarrierShipmentAdapterOptionsProviderTest()
         {
@@ -94,7 +94,7 @@ namespace ShipWorks.OrderLookup.Tests.Controls.ShipmentDetails
 
             testObject.GetDimensionsProfiles(package);
 
-            dimensionsManager.Verify(d => d.Profiles(package));
+            dimensionsManager.Verify(d => d.ProfilesReadOnly(package));
         }
     }
 }
