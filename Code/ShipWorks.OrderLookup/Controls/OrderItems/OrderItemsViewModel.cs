@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Reflection;
 using Interapptive.Shared.ComponentRegistration;
-using ShipWorks.Core.UI;
+using ShipWorks.Shipping;
 using ShipWorks.UI;
 
 namespace ShipWorks.OrderLookup.Controls.OrderItems
@@ -10,7 +10,12 @@ namespace ShipWorks.OrderLookup.Controls.OrderItems
     /// <summary>
     /// View model for OrderItemsControl
     /// </summary>
-    [Component]
+    [KeyedComponent(typeof(IOrderItemsViewModel), ShipmentTypeCode.Amazon)]
+    [KeyedComponent(typeof(IOrderItemsViewModel), ShipmentTypeCode.BestRate)]
+    [KeyedComponent(typeof(IOrderItemsViewModel), ShipmentTypeCode.Endicia)]
+    [KeyedComponent(typeof(IOrderItemsViewModel), ShipmentTypeCode.FedEx)]
+    [KeyedComponent(typeof(IOrderItemsViewModel), ShipmentTypeCode.UpsOnLineTools)]
+    [KeyedComponent(typeof(IOrderItemsViewModel), ShipmentTypeCode.Usps)]
     [WpfView(typeof(OrderItemsControl))]
     public class OrderItemsViewModel : IOrderItemsViewModel
     {
