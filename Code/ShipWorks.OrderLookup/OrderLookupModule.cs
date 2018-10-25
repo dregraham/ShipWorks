@@ -13,8 +13,8 @@ namespace ShipWorks.OrderLookup
         /// </summary>
         protected override void Load(ContainerBuilder builder)
         {
-            builder.RegisterGeneric(typeof(OrderLookupViewModelWrapper<>))
-                .As(typeof(IOrderLookupWrapperViewModel<>));
+            builder.RegisterGeneric(typeof(OrderLookupViewModelPanel<>))
+                .As(typeof(IOrderLookupPanelViewModel<>));
         }
     }
 }

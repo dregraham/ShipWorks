@@ -90,6 +90,7 @@ namespace ShipWorks.OrderLookup
 
                 long? orderId = await GetOrderID(message.ScannedText);
                 OrderEntity order = null;
+                bool loadOrder = false;
 
                 if (orderId.HasValue)
                 {
@@ -100,18 +101,25 @@ namespace ShipWorks.OrderLookup
                         order = await orderRepository.GetOrder(orderId.Value).ConfigureAwait(true);
                     }
 
-                    if (order != null &&
-                        order.Shipments.Any() &&
-                        !order.Shipments.Last().Processed)
+                    loadOrder = order != null &&
+                                order.Shipments.Any() &&
+                                !order.Shipments.Last().Processed;
+
+                    if (loadOrder)
                     {
                         using (ITrackedEvent telemetry = new TrackedEvent("OrderLookup.Search.AutoWeigh"))
                         {
                             autoWeighService.ApplyWeight(new[] { order.Shipments.Last() }, telemetry);
                         }
+
+                        shipmentModel.LoadOrder(order);
                     }
                 }
-
-                shipmentModel.LoadOrder(order);
+                
+                if(!loadOrder)
+                {
+                    shipmentModel.Unload();
+                }
             }
             finally
             {

@@ -3,14 +3,14 @@
 namespace ShipWorks.OrderLookup.Controls
 {
     /// <summary>
-    /// Generic wrapper for all the order lookup controls
+    /// Generic panel for all the order lookup controls
     /// </summary>
-    public partial class OrderLookupWrapperControl : UserControl
+    public partial class OrderLookupPanelControl : UserControl
     {
         /// <summary>
         /// Constructor
         /// </summary>
-        public OrderLookupWrapperControl()
+        public OrderLookupPanelControl()
         {
             InitializeComponent();
         }

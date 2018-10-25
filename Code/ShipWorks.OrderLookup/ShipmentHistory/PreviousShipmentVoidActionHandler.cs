@@ -77,7 +77,8 @@ namespace ShipWorks.OrderLookup.ShipmentHistory
         {
             if (messageHelper.ShowQuestion("Are you sure you want to void this shipment?") == DialogResult.OK)
             {
-                return shippingManager.VoidShipment(shipmentID, shippingErrorManager);
+                return shippingManager.VoidShipment(shipmentID, shippingErrorManager)
+                    .OnFailure(ex => messageHelper.ShowError(ex.Message, ex));
             }
 
             return Result.FromSuccess();
