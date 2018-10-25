@@ -56,8 +56,8 @@
             Grid.Row="1"
             Grid.Column="1"
             ui:UpdateWhenMessageReceived.MessageType="{x:Type sw:ShippingAccountsChangedMessage}"
-            DisplayMemberPath="Description"
-            SelectedValuePath="AccountId"
+            DisplayMemberPath="Value"
+            SelectedValuePath="Key"
             Style="{StaticResource FormComboBox}">
             <ComboBox.SelectedValue>
                 <Binding Path="ShipmentModel.ShipmentAdapter.AccountId" />

@@ -53,9 +53,10 @@ namespace ShipWorks.OrderLookup.Controls.From
 
             Accounts = GetAccounts(carrierAccountRetrieverFactory);
 
-            if (Accounts.None(a=>a.AccountId == ShipmentModel.ShipmentAdapter.AccountId))
+            if (!ShipmentModel.ShipmentAdapter.AccountId.HasValue || 
+                Accounts.TryGetValue(ShipmentModel.ShipmentAdapter.AccountId.Value, out string x))
             {
-                ShipmentModel.ShipmentAdapter.AccountId = Accounts.FirstOrDefault()?.AccountId ?? 0;
+                ShipmentModel.ShipmentAdapter.AccountId = Accounts.Select(e=>e.Key).FirstOrDefault();
             }
             
             ShipmentModel.PropertyChanged += ShipmentModelPropertyChanged;
@@ -66,17 +67,15 @@ namespace ShipWorks.OrderLookup.Controls.From
         /// <summary>
         /// Get a list of accounts
         /// </summary>
-        private IEnumerable<ICarrierAccount> GetAccounts(ICarrierAccountRetrieverFactory carrierAccountRetrieverFactory)
+        private Dictionary<long, string> GetAccounts(ICarrierAccountRetrieverFactory carrierAccountRetrieverFactory)
         {
             IEnumerable<ICarrierAccount> accounts = carrierAccountRetrieverFactory.Create(ShipmentModel.ShipmentAdapter.ShipmentTypeCode).Accounts;
             if (accounts.None())
             {
-                return new List<ICarrierAccount> { new NullCarrierAccount() };
+                accounts = new List<ICarrierAccount> { new NullCarrierAccount() };
             }
-            else
-            {
-                return accounts;
-            }
+
+            return accounts.ToDictionary(a => a.AccountId, a => a.AccountDescription);
         }
 
         /// <summary>
@@ -111,7 +110,7 @@ namespace ShipWorks.OrderLookup.Controls.From
         /// Carrier accounts
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public IEnumerable<ICarrierAccount> Accounts { get; }
+        public Dictionary<long, string> Accounts { get; }
 
         /// <summary>
         /// Is address validation enabled or not
@@ -219,9 +218,9 @@ namespace ShipWorks.OrderLookup.Controls.From
         /// </summary>
         protected virtual string GetHeaderAccountText()
         {
-            ICarrierAccount account = Accounts.SingleOrDefault(a => a.AccountId == ShipmentModel.ShipmentAdapter.AccountId);
-
-            return account is NullCarrierAccount ? string.Empty : account?.AccountDescription ?? string.Empty;
+            return ShipmentModel.ShipmentAdapter.AccountId.HasValue  && ShipmentModel.ShipmentAdapter.AccountId.Value != 0 ? 
+                Accounts.SingleOrDefault(a => a.Key == ShipmentModel.ShipmentAdapter.AccountId).Value :
+                "(None)";
         }
 
         /// <summary>
