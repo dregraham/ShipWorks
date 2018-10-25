@@ -387,6 +387,7 @@
     <Compile Include="Profiles\ProfileAppliedPipeline.cs" />
     <Compile Include="Insurance\InsuranceBehaviorChangeViewModel.cs" />
     <Compile Include="Profiles\ProfilePopupService.cs" />
+    <Compile Include="Services\ShippingProfileRepository.cs" />
     <Compile Include="Services\ArchiveRatesRetrieverService.cs" />
     <Compile Include="Profiles\BaseShippingProfileApplicationStrategy.cs" />
     <Compile Include="Profiles\GlobalShippingProfileApplicationStrategy.cs" />
@@ -416,7 +417,7 @@
     <Compile Include="Services\ShipmentProcessorSteps\ShipmentProcessorModule.cs" />
     <Compile Include="Services\ShipmentProcessorSteps\TelemetricLabelRetrievalStep.cs" />
     <Compile Include="Services\ShippingProfileFactory.cs" />
-    <Compile Include="Services\ShippingProfileRepository.cs" />
+    <Compile Include="Services\EditableShippingProfileRepository.cs" />
     <Compile Include="Services\ShippingProfileService.cs" />
     <Compile Include="ShipEngine\ICarrierShipmentRequestFactory.cs" />
     <Compile Include="ShipEngine\IShipEngineApiFactory.cs" />

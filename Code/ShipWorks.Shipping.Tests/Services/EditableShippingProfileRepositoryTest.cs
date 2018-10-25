@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Autofac;
+﻿using Autofac;
 using Autofac.Extras.Moq;
 using Moq;
 using SD.LLBLGen.Pro.ORMSupportClasses;
@@ -17,11 +12,11 @@ using Xunit;
 
 namespace ShipWorks.Shipping.Tests.Services
 {
-    public class ShippingProfileRepositoryTest
+    public class EditableShippingProfileRepositoryTest
     {
         private readonly AutoMock mock;
 
-        public ShippingProfileRepositoryTest()
+        public EditableShippingProfileRepositoryTest()
         {
             mock = AutoMockExtensions.GetLooseThatReturnsMocks();
         }
@@ -35,7 +30,7 @@ namespace ShipWorks.Shipping.Tests.Services
             var sqlAdapter = mock.FromFactory<ISqlAdapterFactory>()
                 .Mock(f => f.CreateTransacted());
 
-            var testObject = mock.Create<ShippingProfileRepository>();
+            var testObject = mock.Create<EditableShippingProfileRepository>();
             var result = testObject.Delete(CreateShippingProfile(profile, shortcut));
 
             Assert.True(result.Success);
@@ -56,7 +51,7 @@ namespace ShipWorks.Shipping.Tests.Services
                 .Setup(m => m.DeleteProfile(profile, sqlAdapter.Object))
                 .Throws(new ORMQueryExecutionException("", "", null, null, null));
 
-            var testObject = mock.Create<ShippingProfileRepository>();
+            var testObject = mock.Create<EditableShippingProfileRepository>();
             var result = testObject.Delete(CreateShippingProfile(profile, shortcut));
 
             Assert.True(result.Failure);
@@ -73,7 +68,7 @@ namespace ShipWorks.Shipping.Tests.Services
             var sqlAdapter = mock.FromFactory<ISqlAdapterFactory>()
                 .Mock(f => f.CreateTransacted());
 
-            var testObject = mock.Create<ShippingProfileRepository>();
+            var testObject = mock.Create<EditableShippingProfileRepository>();
             testObject.Delete(CreateShippingProfile(profile, shortcut));
 
             sqlAdapter.Verify(a => a.Commit(), Times.Once);
@@ -92,9 +87,9 @@ namespace ShipWorks.Shipping.Tests.Services
             mock.Mock<IShortcutManager>().SetupGet(m => m.Shortcuts).Returns(shortcuts);
             mock.Mock<IShippingProfileManager>().SetupGet(m => m.Profiles).Returns(profiles);
 
-            mock.Create<ShippingProfileRepository>().GetAll();
+            mock.Create<EditableShippingProfileRepository>().GetAll();
 
-            mock.Mock<IShippingProfileFactory>().Verify(s => s.Create(profile, shortcut));
+            mock.Mock<IShippingProfileFactory>().Verify(s => s.CreateEditable(profile, shortcut));
         }
 
         [Fact]
@@ -109,9 +104,9 @@ namespace ShipWorks.Shipping.Tests.Services
             mock.Mock<IShortcutManager>().SetupGet(m => m.Shortcuts).Returns(shortcuts);
             mock.Mock<IShippingProfileManager>().SetupGet(m => m.Profiles).Returns(profiles);
 
-            mock.Create<ShippingProfileRepository>().Get(42);
+            mock.Create<EditableShippingProfileRepository>().Get(42);
 
-            mock.Mock<IShippingProfileFactory>().Verify(s => s.Create(profile, shortcut));
+            mock.Mock<IShippingProfileFactory>().Verify(s => s.CreateEditable(profile, shortcut));
         }
 
         [Fact]
@@ -127,7 +122,7 @@ namespace ShipWorks.Shipping.Tests.Services
             var sqlAdapter = mock.FromFactory<ISqlAdapterFactory>()
                 .Mock(f => f.CreateTransacted());
 
-            var testObject = mock.Create<ShippingProfileRepository>();
+            var testObject = mock.Create<EditableShippingProfileRepository>();
             var result = testObject.Save(CreateShippingProfile(profile, shortcut));
 
             Assert.True(result.Success);
@@ -148,7 +143,7 @@ namespace ShipWorks.Shipping.Tests.Services
             var sqlAdapter = mock.FromFactory<ISqlAdapterFactory>()
                 .Mock(f => f.CreateTransacted());
 
-            var testObject = mock.Create<ShippingProfileRepository>();
+            var testObject = mock.Create<EditableShippingProfileRepository>();
             testObject.Save(CreateShippingProfile(profile, shortcut));
 
             sqlAdapter.Verify(a => a.Commit(), Times.Once);
@@ -171,9 +166,9 @@ namespace ShipWorks.Shipping.Tests.Services
                 .Setup(m => m.SaveProfile(profile, sqlAdapter.Object))
                 .Throws(new ORMConcurrencyException("blah", profile));
 
-            ShippingProfile shippingProfile = CreateShippingProfile(profile, shortcut);
+            var shippingProfile = CreateShippingProfile(profile, shortcut);
 
-            var testObject = mock.Create<ShippingProfileRepository>();
+            var testObject = mock.Create<EditableShippingProfileRepository>();
 
             var result = testObject.Save(shippingProfile);
 
@@ -197,9 +192,9 @@ namespace ShipWorks.Shipping.Tests.Services
                 .Setup(m => m.SaveProfile(profile, sqlAdapter.Object))
                 .Throws(new ORMQueryExecutionException("", "", null, null, null));
 
-            ShippingProfile shippingProfile = CreateShippingProfile(profile, shortcut);
+            var shippingProfile = CreateShippingProfile(profile, shortcut);
 
-            var testObject = mock.Create<ShippingProfileRepository>();
+            var testObject = mock.Create<EditableShippingProfileRepository>();
 
             var result = testObject.Save(shippingProfile);
 
@@ -213,7 +208,7 @@ namespace ShipWorks.Shipping.Tests.Services
             ShortcutEntity shortcut = new ShortcutEntity { RelatedObjectID = 42 };
             ShippingProfileEntity profile = new ShippingProfileEntity { ShippingProfileID = 42 };
 
-            var testObject = mock.Create<ShippingProfileRepository>();
+            var testObject = mock.Create<EditableShippingProfileRepository>();
             var result = testObject.Save(CreateShippingProfile(profile, shortcut));
 
             Assert.True(result.Failure);
@@ -233,7 +228,7 @@ namespace ShipWorks.Shipping.Tests.Services
             mock.Mock<IShippingProfileManager>().Setup(m => m.Profiles)
                 .Returns(new[] { new ShippingProfileEntity { Name = "blah" } });
 
-            var testObject = mock.Create<ShippingProfileRepository>();
+            var testObject = mock.Create<EditableShippingProfileRepository>();
             var result = testObject.Save(CreateShippingProfile(profile, shortcut));
 
             Assert.True(result.Failure);
@@ -256,19 +251,14 @@ namespace ShipWorks.Shipping.Tests.Services
             mock.Mock<IShortcutManager>().SetupGet(m => m.Shortcuts)
                 .Returns(new[] { new ShortcutEntity { Barcode = "blip" } });
 
-            var testObject = mock.Create<ShippingProfileRepository>();
+            var testObject = mock.Create<EditableShippingProfileRepository>();
             var result = testObject.Save(CreateShippingProfile(profile, shortcut));
 
             Assert.True(result.Failure);
             Assert.Equal("The barcode \"blip\" is already in use.", result.Message);
         }
 
-        private ShippingProfile CreateShippingProfile(ShippingProfileEntity profile, ShortcutEntity shortcut)
-        {
-            var shippingProfile = mock.Create<ShippingProfile>();
-            shippingProfile.Shortcut = shortcut;
-            shippingProfile.ShippingProfileEntity = profile;
-            return shippingProfile;
-        }
+        private EditableShippingProfile CreateShippingProfile(ShippingProfileEntity profile, ShortcutEntity shortcut) =>
+            mock.Create<EditableShippingProfile>(TypedParameter.From(profile), TypedParameter.From(shortcut));
     }
 }

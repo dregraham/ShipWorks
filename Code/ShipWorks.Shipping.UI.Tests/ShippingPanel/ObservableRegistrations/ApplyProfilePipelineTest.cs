@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Reactive.Subjects;
 using Autofac.Extras.Moq;
-using Divelements.SandRibbon;
 using Interapptive.Shared.Messaging;
 using Interapptive.Shared.Threading;
 using Moq;
-using ShipWorks.Common.IO.KeyboardShortcuts;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Messaging.Messages.Shipping;
 using ShipWorks.Shipping.Profiles;
@@ -19,8 +17,8 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ObservableRegistrations
 {
     public class ShippingProfilePipelineTest : IDisposable
     {
-        readonly AutoMock mock;
-        readonly Subject<IShipWorksMessage> messenger;
+        private readonly AutoMock mock;
+        private readonly Subject<IShipWorksMessage> messenger;
 
         public ShippingProfilePipelineTest()
         {
@@ -40,7 +38,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ObservableRegistrations
             messenger.OnNext(new ApplyProfileMessage(this, 1234, 0));
 
             mock.Mock<IShippingProfileService>()
-                .Verify(x => x.Get(It.IsAny<long>()), Times.Never);
+                .Verify(x => x.GetEditable(It.IsAny<long>()), Times.Never);
         }
 
         [Fact]

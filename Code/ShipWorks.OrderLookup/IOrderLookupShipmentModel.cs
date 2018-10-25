@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Reflection;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Editing.Rating;
+using ShipWorks.Shipping.Profiles;
 using ShipWorks.Shipping.Services;
 
 namespace ShipWorks.OrderLookup
@@ -99,7 +99,7 @@ namespace ShipWorks.OrderLookup
         /// <summary>
         /// Register the profile handler
         /// </summary>
-        void RegisterProfileHandler(Func<Func<ShipmentTypeCode?>, Action<IShippingProfileEntity>, IDisposable> profileRegistration);
+        void RegisterProfileHandler(Func<Func<ShipmentTypeCode?>, Action<IShippingProfile>, IDisposable> profileRegistration);
 
         /// <summary>
         /// Wire a property changed event on an INotifyPropertyChanged object
@@ -134,6 +134,6 @@ namespace ShipWorks.OrderLookup
         /// <summary>
         /// Apply the profile to the current shipment
         /// </summary>
-        bool ApplyProfile(long profileID);
+        bool ApplyProfile(IShippingProfile profile);
     }
 }

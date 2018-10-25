@@ -34,7 +34,7 @@ namespace ShipWorks.Shipping.Profiles
                 Button profileButton,
                 Guid menuGuid,
                 Func<ShipmentTypeCode?> getCurrentShipmentType,
-                Action<IShippingProfileEntity> onSelection) =>
+                Action<IShippingProfile> onSelection) =>
             new ProfilePopup(profileButton, menuGuid, getCurrentShipmentType, onSelection, profileService);
 
         /// <summary>
@@ -45,13 +45,13 @@ namespace ShipWorks.Shipping.Profiles
             private readonly Popup popup;
             private readonly Menu menu;
             private readonly Func<ShipmentTypeCode?> getCurrentShipmentType;
-            private readonly Action<IShippingProfileEntity> onSelection;
+            private readonly Action<IShippingProfile> onSelection;
             private readonly IShippingProfileService profileService;
 
             public ProfilePopup(Button profileButton,
                 Guid menuGuid,
                 Func<ShipmentTypeCode?> getCurrentShipmentType,
-                Action<IShippingProfileEntity> onSelection,
+                Action<IShippingProfile> onSelection,
                 IShippingProfileService profileService)
             {
                 this.profileService = profileService;
@@ -82,14 +82,14 @@ namespace ShipWorks.Shipping.Profiles
                 menu.Items.Clear();
 
                 List<WidgetBase> menuItems = new List<WidgetBase>();
-                IEnumerable<IGrouping<ShipmentTypeCode?, IShippingProfileEntity>> profileGroups = profileService
+                IEnumerable<IGrouping<ShipmentTypeCode?, IShippingProfile>> profileGroups = profileService
                     .GetConfiguredShipmentTypeProfiles()
                     .Where(p => p.IsApplicable(getCurrentShipmentType()))
-                    .Select(s => s.ShippingProfileEntity).Cast<IShippingProfileEntity>()
-                    .GroupBy(p => p.ShipmentType)
+                    //.Select(s => s.ShippingProfileEntity).Cast<IShippingProfileEntity>()
+                    .GroupBy(p => p.ShippingProfileEntity.ShipmentType)
                     .OrderBy(g => g.Key.HasValue ? ShipmentTypeManager.GetSortValue(g.Key.Value) : -1);
 
-                foreach (IGrouping<ShipmentTypeCode?, IShippingProfileEntity> profileGroup in profileGroups)
+                foreach (IGrouping<ShipmentTypeCode?, IShippingProfile> profileGroup in profileGroups)
                 {
                     string groupName = "Global";
                     if (profileGroup.Key.HasValue)
@@ -105,8 +105,11 @@ namespace ShipWorks.Shipping.Profiles
                         menuItems.Add(carrierLabel);
                     }
 
-                    menuItems.AddRange(profileGroup.OrderByDescending(p => p.ShipmentTypePrimary).ThenBy(p => p.Name)
-                        .Select(profile => CreateMenuItem(profile, groupName)));
+                    menuItems.AddRange(
+                        profileGroup
+                            .OrderByDescending(p => p.ShippingProfileEntity.ShipmentTypePrimary)
+                            .ThenBy(p => p.ShippingProfileEntity.Name)
+                            .Select(profile => CreateMenuItem(profile, groupName)));
                 }
 
                 if (menuItems.None())
@@ -120,9 +123,9 @@ namespace ShipWorks.Shipping.Profiles
             /// <summary>
             /// Create a menu item from the given profile
             /// </summary>
-            private WidgetBase CreateMenuItem(IShippingProfileEntity profile, string groupName)
+            private WidgetBase CreateMenuItem(IShippingProfile profile, string groupName)
             {
-                MenuItem menuItem = new MenuItem(profile.Name) { GroupName = groupName };
+                MenuItem menuItem = new MenuItem(profile.ShippingProfileEntity.Name) { GroupName = groupName };
                 menuItem.Activate += (s, evt) => onSelection(profile);
                 return menuItem;
             }

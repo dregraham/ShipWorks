@@ -7,6 +7,7 @@ using System.Windows.Input;
 using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping;
+using ShipWorks.Shipping.Profiles;
 using ShipWorks.UI.Controls;
 
 namespace ShipWorks.OrderLookup.Controls.OrderLookup
@@ -85,7 +86,7 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookup
         /// <summary>
         /// Register the profile handler
         /// </summary>
-        public void RegisterProfileHandler(Func<Func<ShipmentTypeCode?>, Action<IShippingProfileEntity>, IDisposable> profileRegistration) =>
+        public void RegisterProfileHandler(Func<Func<ShipmentTypeCode?>, Action<IShippingProfile>, IDisposable> profileRegistration) =>
             orderLookupViewModel.ShipmentModel.RegisterProfileHandler(profileRegistration);
 
         /// <summary>
