@@ -96,7 +96,6 @@
             </DataGrid.Columns>
         </DataGrid>
         <Border
-            Grid.Row="1"
             Margin="5,5,0,0"
             HorizontalAlignment="Left"
             VerticalAlignment="Top">
