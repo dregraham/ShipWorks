@@ -22,7 +22,6 @@
     </UserControl.Resources>
     <Grid>
         <DataGrid
-            Grid.Row="1"
             CanUserResizeColumns="True"
             HorizontalGridLinesBrush="{StaticResource BorderColor}"
             ItemsSource="{Binding ShipmentModel.SelectedOrder.OrderItems}"
@@ -102,7 +101,7 @@
             HorizontalAlignment="Left"
             VerticalAlignment="Top">
             <TextBlock>
-                <TextBlock Text="No order items to be displayed" />
+                <TextBlock Text="The order has no items" />
                 <TextBlock.Visibility>
                     <Binding Path="OrderItemExists" Converter="{StaticResource BooleanToNoVisibility}"/>
                 </TextBlock.Visibility>
