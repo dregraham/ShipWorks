@@ -57,8 +57,11 @@ namespace ShipWorks.OrderLookup.ShipmentModelPipelines
         private void ReloadOrder(IOrderLookupShipmentModel model)
         {
             OrderEntity order = model.SelectedOrder;
-            model.Unload();
-            model.LoadOrder(order);
+            if (order != null)
+            {
+                model.Unload();
+                model.LoadOrder(order);
+            }
         }
     }
 }
