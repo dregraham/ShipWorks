@@ -21,9 +21,6 @@
         </ResourceDictionary>
     </UserControl.Resources>
     <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-        </Grid.RowDefinitions>
         <DataGrid
             Grid.Row="1"
             CanUserResizeColumns="True"
@@ -39,27 +36,6 @@
                     <Setter Property="Height" Value="25" />
                 </Style>
             </DataGrid.RowStyle>
-            <DataGrid.CellStyle>
-                <Style TargetType="{x:Type DataGridCell}">
-                    <Setter Property="Padding" Value="3" />
-                    <Setter Property="FontFamily" Value="ShipWorks.OrderLookup;component/#Roboto" />
-                    <Setter Property="BorderThickness" Value="0" />
-                    <Setter Property="Template">
-                        <Setter.Value>
-                            <ControlTemplate TargetType="{x:Type DataGridCell}">
-                                <Border
-                                    Padding="{TemplateBinding Padding}"
-                                    Background="{TemplateBinding Background}"
-                                    BorderBrush="{TemplateBinding BorderBrush}"
-                                    BorderThickness="{TemplateBinding BorderThickness}"
-                                    SnapsToDevicePixels="True">
-                                    <ContentPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
-                                </Border>
-                            </ControlTemplate>
-                        </Setter.Value>
-                    </Setter>
-                </Style>
-            </DataGrid.CellStyle>
             <DataGrid.ColumnHeaderStyle>
                 <Style BasedOn="{StaticResource {x:Type DataGridColumnHeader}}" TargetType="{x:Type DataGridColumnHeader}">
                     <Setter Property="Background" Value="{StaticResource ButtonBackgroundGradient}" />
@@ -67,7 +43,6 @@
                     <Setter Property="Foreground" Value="{StaticResource ControlTextColor}" />
                     <Setter Property="FontWeight" Value="Bold" />
                     <Setter Property="Padding" Value="3" />
-                    <Setter Property="MinWidth" Value="75" />
                     <Setter Property="Template">
                         <Setter.Value>
                             <ControlTemplate TargetType="{x:Type DataGridColumnHeader}">

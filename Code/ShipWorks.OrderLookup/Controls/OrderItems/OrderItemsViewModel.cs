@@ -3,20 +3,14 @@ using System.Linq;
 using System.Reflection;
 using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.Core.UI;
-using ShipWorks.Shipping;
 using ShipWorks.UI;
 
 namespace ShipWorks.OrderLookup.Controls.OrderItems
 {
     /// <summary>
-    /// View model for OrderItemControl
+    /// View model for OrderItemsControl
     /// </summary>
-    [KeyedComponent(typeof(IOrderItemsViewModel), ShipmentTypeCode.Amazon)]
-    [KeyedComponent(typeof(IOrderItemsViewModel), ShipmentTypeCode.BestRate)]
-    [KeyedComponent(typeof(IOrderItemsViewModel), ShipmentTypeCode.Endicia)]
-    [KeyedComponent(typeof(IOrderItemsViewModel), ShipmentTypeCode.FedEx)]
-    [KeyedComponent(typeof(IOrderItemsViewModel), ShipmentTypeCode.UpsOnLineTools)]
-    [KeyedComponent(typeof(IOrderItemsViewModel), ShipmentTypeCode.Usps)]
+    [Component]
     [WpfView(typeof(OrderItemsControl))]
     public class OrderItemsViewModel : IOrderItemsViewModel
     {
@@ -29,8 +23,6 @@ namespace ShipWorks.OrderLookup.Controls.OrderItems
         public OrderItemsViewModel(IOrderLookupShipmentModel shipmentModel)
         {
             ShipmentModel = shipmentModel;
-            ShipmentModel.PropertyChanged += ShipmentModelPropertyChanged;
-            handler = new PropertyChangedHandler(this, () => PropertyChanged);
         }
 
         /// <summary>
@@ -61,22 +53,16 @@ namespace ShipWorks.OrderLookup.Controls.OrderItems
         /// Does the order item exist
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public bool OrderItemExists => ShipmentModel.SelectedOrder.OrderItems.Any();
-
-        /// <summary>
-        /// Update when the order changes
-        /// </summary>
-        private void ShipmentModelPropertyChanged(object sender, PropertyChangedEventArgs e)
-        {
-            if (e.PropertyName == nameof(ShipmentModel.SelectedOrder) && ShipmentModel.SelectedOrder != null)
-            {
-                handler.RaisePropertyChanged(nameof(ShipmentModel));
-            }
-        }
+        public bool OrderItemExists => ShipmentModel?.SelectedOrder?.OrderItems?.Any() == true;
 
         /// <summary>
         /// Dispose the view model
         /// </summary>
-        public void Dispose() => ShipmentModel.PropertyChanged -= ShipmentModelPropertyChanged;
+        /// <remarks>
+        /// This was left unimplemented so that IOrderLookupViewModel can be reused.
+        /// </remarks>
+        public void Dispose()
+        {
+        }
     }
 }
