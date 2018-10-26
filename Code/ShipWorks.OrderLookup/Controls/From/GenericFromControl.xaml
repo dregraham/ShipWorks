@@ -52,10 +52,11 @@
                 <Binding Converter="{StaticResource BooleanToVisibility}" Path="ShipmentModel.ShipmentAdapter.SupportsAccounts" />
             </TextBlock.Visibility>
         </TextBlock>
-        <ComboBox
+        <ui:ShipWorksComboBox
             x:Name="AccountDropDown"
             Grid.Row="1"
             Grid.Column="1"
+            SelectedIndexWhenNull="{x:Static ui:RelativeIndex.First}"
             ui:UpdateWhenMessageReceived.MessageType="{x:Type sw:ShippingAccountsChangedMessage}"
             DisplayMemberPath="Value"
             SelectedValuePath="Key"
@@ -72,7 +73,7 @@
             <ComboBox.ItemsSource>
                 <Binding Mode="OneWay" Path="Accounts" />
             </ComboBox.ItemsSource>
-        </ComboBox>
+        </ui:ShipWorksComboBox>
         <StackPanel
             Grid.Row="2"
             Grid.Column="0"
