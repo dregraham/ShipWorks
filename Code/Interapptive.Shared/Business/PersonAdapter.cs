@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Reflection;
 using System.Text;
 using Interapptive.Shared.Data;
 using SD.LLBLGen.Pro.ORMSupportClasses;
@@ -267,8 +268,8 @@ namespace Interapptive.Shared.Business
 
         /// <summary>
         /// Status indicating how well ShipWorks was able to recognize the unparsed name string.
-        /// 
-        /// Not all entities implement NameParseStatus, however we need to keep track of the status in 
+        ///
+        /// Not all entities implement NameParseStatus, however we need to keep track of the status in
         /// memory so that when copying or comparing with other person adapters we have a true copy/comparison.
         /// </summary>
         public PersonNameParseStatus NameParseStatus
@@ -301,7 +302,7 @@ namespace Interapptive.Shared.Business
         /// Original, unparsed name
         /// </summary>
         /// <remarks>
-        /// Not all entities implement UnparsedName, however we need to keep track of it in 
+        /// Not all entities implement UnparsedName, however we need to keep track of it in
         /// memory so that when copying or comparing with other person adapters we have a true copy/comparison.
         /// </remarks>
         public string UnparsedName
@@ -333,6 +334,7 @@ namespace Interapptive.Shared.Business
         /// <summary>
         /// Parsed version of the name
         /// </summary>
+        [Obfuscation(Exclude = true)]
         public PersonName ParsedName
         {
             get { return new PersonName(this); }
@@ -377,6 +379,7 @@ namespace Interapptive.Shared.Business
         /// <summary>
         /// Company
         /// </summary>
+        [Obfuscation(Exclude = true)]
         public string Company
         {
             get { return GetField<string>("Company"); }

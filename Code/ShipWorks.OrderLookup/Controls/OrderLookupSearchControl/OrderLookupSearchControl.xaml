@@ -31,62 +31,6 @@
             <Style TargetType="{x:Type TextBox}">
                 <Setter Property="VerticalAlignment" Value="Center" />
             </Style>
-
-            <Style x:Key="LargePrimaryButton" TargetType="Button">
-                <Setter Property="Height" Value="32" />
-                <Setter Property="Width" Value="207" />
-                <Setter Property="Foreground" Value="White" />
-                <Setter Property="FontSize" Value="16" />
-                <Setter Property="FontWeight" Value="Bold" />
-                <Setter Property="HorizontalContentAlignment" Value="Center" />
-                <Setter Property="Template">
-                    <Setter.Value>
-                        <ControlTemplate TargetType="Button">
-                            <Border
-                                Background="{StaticResource LargePrimaryButtonGradient}"
-                                BorderBrush="#0e497f"
-                                BorderThickness="1px"
-                                CornerRadius="2">
-                                <ContentPresenter
-                                    x:Name="contentPresenter"
-                                    Margin="{TemplateBinding Padding}"
-                                    HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                    VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
-                                    Content="{TemplateBinding Content}"
-                                    ContentTemplate="{TemplateBinding ContentTemplate}" />
-                            </Border>
-                        </ControlTemplate>
-                    </Setter.Value>
-                </Setter>
-            </Style>
-
-            <Style x:Key="SmallSecondaryButton" TargetType="Button">
-                <Setter Property="Height" Value="32" />
-                <Setter Property="Width" Value="121" />
-                <Setter Property="Foreground" Value="#4A4A4A" />
-                <Setter Property="FontSize" Value="12" />
-                <Setter Property="FontWeight" Value="Bold" />
-                <Setter Property="HorizontalContentAlignment" Value="Center" />
-                <Setter Property="Template">
-                    <Setter.Value>
-                        <ControlTemplate TargetType="Button">
-                            <Border
-                                Background="#E6E6E6"
-                                BorderBrush="#D4D4D4"
-                                BorderThickness="1px"
-                                CornerRadius="2">
-                                <ContentPresenter
-                                    x:Name="contentPresenter"
-                                    Margin="{TemplateBinding Padding}"
-                                    HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                    VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
-                                    Content="{TemplateBinding Content}"
-                                    ContentTemplate="{TemplateBinding ContentTemplate}" />
-                            </Border>
-                        </ControlTemplate>
-                    </Setter.Value>
-                </Setter>
-            </Style>
         </ResourceDictionary>
     </UserControl.Resources>
     <Grid>

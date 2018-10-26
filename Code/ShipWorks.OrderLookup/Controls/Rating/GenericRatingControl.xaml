@@ -19,6 +19,7 @@
                 <ResourceDictionary Source="/ShipWorks.UI;component/Styles/GlobalStyle.xaml" />
                 <ResourceDictionary Source="/ShipWorks.Shipping.UI;component/RatingPanel/FootnoteTemplates/FootnoteTemplates.xaml" />
                 <ResourceDictionary Source="/ShipWorks.OrderLookup;component/Styles/Colors.xaml" />
+                <ResourceDictionary Source="/ShipWorks.OrderLookup;component/Styles/OrderLookupDataGridStyle.xaml" />
             </ResourceDictionary.MergedDictionaries>
 
             <ui:ImageToBitmapSourceConverter x:Key="ImageToBitmapSource" />
@@ -40,20 +41,25 @@
 
         <DataGrid
             Grid.Row="1"
-            CanUserResizeColumns="True"
             HorizontalGridLinesBrush="{StaticResource BorderColor}"
             ItemsSource="{Binding Rates}"
             SelectedItem="{Binding SelectedRate}"
-            SelectionUnit="FullRow"
-            Style="{StaticResource DataGrid.Static}"
+            Style="{StaticResource DataGrid.SingleRowSelection}"
             VerticalGridLinesBrush="{StaticResource BorderColor}"
-            Visibility="{Binding IsLoading, Converter={StaticResource BooleanToVisibilityInverted}}">
+            Visibility="{Binding IsLoading, Converter={StaticResource BooleanToVisibilityInverted}}"
+            RowHeight="25">
             <DataGrid.IsEnabled>
                 <MultiBinding Converter="{StaticResource BooleanAnd}">
                     <Binding Mode="OneWay" Path="ShipmentModel.ShipmentAllowEditing" />
                     <Binding Converter="{StaticResource InvertBoolean}" Path="IsLoading" />
                 </MultiBinding>
             </DataGrid.IsEnabled>
+            <DataGrid.ColumnHeaderStyle>
+                <Style BasedOn="{StaticResource {x:Type DataGridColumnHeader}}" TargetType="{x:Type DataGridColumnHeader}">
+                    <Setter Property="Height" Value="20"/>
+                    <Setter Property="MinWidth" Value="75" />                    
+                </Style>
+            </DataGrid.ColumnHeaderStyle>
             <DataGrid.RowStyle>
                 <Style TargetType="DataGridRow">
                     <Setter Property="IsEnabled">
@@ -70,62 +76,6 @@
                     <Setter Property="Height" Value="25" />
                 </Style>
             </DataGrid.RowStyle>
-            <DataGrid.CellStyle>
-                <Style TargetType="{x:Type DataGridCell}">
-                    <Setter Property="Padding" Value="3" />
-                    <Setter Property="FontFamily" Value="ShipWorks.OrderLookup;component/#Roboto" />
-                    <Setter Property="BorderThickness" Value="0" />
-                    <Setter Property="FocusVisualStyle" Value="{x:Null}" />
-                    <Setter Property="Template">
-                        <Setter.Value>
-                            <ControlTemplate TargetType="{x:Type DataGridCell}">
-                                <Border
-                                    Padding="{TemplateBinding Padding}"
-                                    Background="{TemplateBinding Background}"
-                                    BorderBrush="{TemplateBinding BorderBrush}"
-                                    BorderThickness="{TemplateBinding BorderThickness}"
-                                    SnapsToDevicePixels="True">
-                                    <ContentPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
-                                </Border>
-                            </ControlTemplate>
-                        </Setter.Value>
-                    </Setter>
-                    <Style.Triggers>
-                        <Trigger Property="IsSelected" Value="true">
-                            <Setter Property="Background" Value="{StaticResource SelectionColor}" />
-                        </Trigger>
-                    </Style.Triggers>
-                </Style>
-
-            </DataGrid.CellStyle>
-            <DataGrid.ColumnHeaderStyle>
-                <Style BasedOn="{StaticResource {x:Type DataGridColumnHeader}}" TargetType="{x:Type DataGridColumnHeader}">
-                    <Setter Property="Background" Value="{StaticResource ButtonBackgroundGradient}" />
-                    <Setter Property="BorderBrush" Value="{StaticResource BorderColor}" />
-                    <Setter Property="Foreground" Value="{StaticResource ControlTextColor}" />
-                    <Setter Property="FontWeight" Value="Bold" />
-                    <Setter Property="Padding" Value="3" />
-                    <Setter Property="MinWidth" Value="75" />
-                    <Setter Property="Template">
-                        <Setter.Value>
-                            <ControlTemplate TargetType="{x:Type DataGridColumnHeader}">
-                                <Grid Background="{TemplateBinding Background}">
-                                    <Border
-                                        Height="20"
-                                        BorderBrush="{StaticResource BorderColor}"
-                                        BorderThickness="0,0,1,1">
-                                        <ContentPresenter
-                                            Margin="3"
-                                            HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                            VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
-                                            SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
-                                    </Border>
-                                </Grid>
-                            </ControlTemplate>
-                        </Setter.Value>
-                    </Setter>
-                </Style>
-            </DataGrid.ColumnHeaderStyle>
             <DataGrid.Columns>
                 <DataGridTemplateColumn Width="26" CanUserResize="False">
                     <DataGridTemplateColumn.HeaderTemplate>
