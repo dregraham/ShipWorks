@@ -7,6 +7,7 @@ using System.Reflection;
 using System.Windows;
 using Autofac;
 using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.Utility;
 using log4net;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -97,16 +98,28 @@ namespace ShipWorks.OrderLookup.Layout
         /// </summary>
         private ObservableCollection<IOrderLookupPanelViewModel<IOrderLookupViewModel>> GetColumn(int columnIndex, IEnumerable<IEnumerable<PanelInfo>> layout, IEnumerable<IOrderLookupPanelViewModel<IOrderLookupViewModel>> allPanels)
         {
-            List<IOrderLookupPanelViewModel<IOrderLookupViewModel>> panels = new List<IOrderLookupPanelViewModel<IOrderLookupViewModel>>();
 
+            MethodConditions.EnsureArgumentIsNotNull(layout, "layout");
+            MethodConditions.EnsureArgumentIsNotNull(allPanels, "allPanels");
+
+            List<IOrderLookupPanelViewModel<IOrderLookupViewModel>> panels = new List<IOrderLookupPanelViewModel<IOrderLookupViewModel>>();
+            
             if (layout.Count() > columnIndex)
             {
-                List<PanelInfo> column = layout.ToArray()[columnIndex].ToList();
+                IEnumerable<PanelInfo> column = layout.ToArray()[columnIndex];
+                if (column == null)
+                {
+                    throw new NullReferenceException("layout.ToArray()[columnIndex] is null");
+                }
+                
                 foreach (PanelInfo panelInfo in column)
                 {
                     IOrderLookupPanelViewModel<IOrderLookupViewModel> panelToAdd = allPanels.SingleOrDefault(p => p.Name == panelInfo.Name);
-                    panelToAdd.Expanded = panelInfo.Expanded;
-                    panels.Add(panelToAdd);
+                    if (panelToAdd != null)
+                    {
+                        panelToAdd.Expanded = panelInfo.Expanded;
+                        panels.Add(panelToAdd);
+                    }
                 }
             }
 
