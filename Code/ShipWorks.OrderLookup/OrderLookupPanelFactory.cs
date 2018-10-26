@@ -34,7 +34,6 @@ namespace ShipWorks.OrderLookup
                 scope.Resolve<IOrderLookupPanelViewModel<IRatingViewModel>>(),
                 scope.Resolve<IOrderLookupPanelViewModel<ICustomsViewModel>>()
             };
-
         }
     }
 }
