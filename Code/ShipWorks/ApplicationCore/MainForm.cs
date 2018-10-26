@@ -3121,7 +3121,15 @@ namespace ShipWorks
         {
             Cursor.Current = Cursors.WaitCursor;
 
-            EditCustomer(gridControl.Selection.Keys.First());
+            if (((ToolStripMenuItem) sender).Name == "contextOrderEditCustomer")
+            {
+                OrderEntity order = (OrderEntity) DataProvider.GetEntity(gridControl.Selection.Keys.First());
+                EditCustomer(order.CustomerID);
+            }
+            else
+            {
+                EditCustomer(gridControl.Selection.Keys.First());
+            }
         }
 
         /// <summary>
