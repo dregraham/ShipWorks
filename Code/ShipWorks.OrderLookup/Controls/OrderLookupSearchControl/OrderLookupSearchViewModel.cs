@@ -49,7 +49,7 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookupSearchControl
 
             subscription = messenger
                 .OfType<OrderLookupClearOrderMessage>()
-                .Where(x => x.Reason == OrderClearReason.Reset)
+                .Where(x => x.Reason == OrderClearReason.Reset || x.Reason == OrderClearReason.NewSearch)
                 .Subscribe(_ => ClearOrderError());
         }
 
@@ -153,8 +153,7 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookupSearchControl
                 }
                 else
                 {
-                    SearchErrorMessage = string.Empty;
-                    SearchError = false;
+                    ClearOrderError();
                     OrderNumber = ShipmentModel.SelectedOrder.OrderNumberComplete;
                 }
             }
@@ -186,8 +185,7 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookupSearchControl
         private void Reset()
         {
             ShipmentModel.Unload();
-            SearchErrorMessage = string.Empty;
-            SearchError = false;
+            ClearOrderError();
             OrderNumber = string.Empty;
         }
 

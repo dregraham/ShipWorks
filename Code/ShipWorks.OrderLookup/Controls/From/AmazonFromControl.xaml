@@ -27,8 +27,8 @@
         <ComboBox
             x:Name="OriginDropDown"
             ui:UpdateWhenMessageReceived.MessageType="{x:Type sw:OriginAddressChangedMessage}"
-            DisplayMemberPath="Key"
-            SelectedValuePath="Value"
+            DisplayMemberPath="Value"
+            SelectedValuePath="Key"
             Style="{StaticResource StackedFormComboBox}">
             <ComboBox.IsEnabled>
                 <Binding Mode="OneWay" Path="ShipmentModel.ShipmentAllowEditing" />

@@ -14,5 +14,10 @@
         /// An order was not found
         /// </summary>
         OrderNotFound,
+
+        /// <summary>
+        /// Starting a new search
+        /// </summary>
+        NewSearch
     }
 }

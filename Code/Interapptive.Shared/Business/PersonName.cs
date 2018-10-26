@@ -1,5 +1,6 @@
 using Interapptive.Shared.Utility;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
 
@@ -57,7 +58,7 @@ namespace Interapptive.Shared.Business
         /// <summary>
         /// Constructor
         /// </summary>
-        public PersonName(string first, string middle, string last) : 
+        public PersonName(string first, string middle, string last) :
             this(first, middle, last, "", PersonNameParseStatus.Simple)
         {
             PersonName parsedPersonName = Create(first, middle, last);
@@ -68,7 +69,7 @@ namespace Interapptive.Shared.Business
         /// <summary>
         /// Constructor
         /// </summary>
-        public PersonName(PersonAdapter person) : 
+        public PersonName(PersonAdapter person) :
             this(person.FirstName, person.MiddleName, person.LastName, person.UnparsedName, person.NameParseStatus)
         {
             PersonName parsedPersonName = string.IsNullOrWhiteSpace(person.UnparsedName) ?
@@ -91,7 +92,7 @@ namespace Interapptive.Shared.Business
         {
             return Parse($"{first.Trim()}{StringUtility.SpaceIfNotNullOrWhiteSpace(middle)}{middle.Trim()}{StringUtility.SpaceIfNotNullOrWhiteSpace(last)}{last.Trim()}");
         }
-        
+
         /// <summary>
         /// Returns the number of words in the input string
         /// </summary>
@@ -337,6 +338,7 @@ namespace Interapptive.Shared.Business
         /// <summary>
         /// Returns a string that represents the concatenated full name
         /// </summary>
+        [Obfuscation(Exclude = true)]
         public string FullName
         {
             get

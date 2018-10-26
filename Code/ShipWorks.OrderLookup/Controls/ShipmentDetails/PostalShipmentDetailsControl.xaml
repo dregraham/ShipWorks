@@ -15,7 +15,6 @@
                 <ResourceDictionary Source="/ShipWorks.OrderLookup;component/Styles/OrderLookupStyle.xaml" />
                 <ResourceDictionary Source="/ShipWorks.OrderLookup;component/Controls/Weight/WeightControl.xaml" />
             </ResourceDictionary.MergedDictionaries>
-            <controls:ShipmentTypeToOrderLookupTemplateConverter x:Key="ShipmentTypeToOrderLookupTemplateConverter" />
             <ui:InvertBooleanConverter x:Key="InvertBoolean" />
             <ui:BooleanToVisibilityConverter x:Key="BooleanToVisibility" />
             <ui:DefaultWhenNullOrEmptyConverter x:Key="NoneWhenEmpty" />

@@ -58,7 +58,6 @@ namespace ShipWorks.UI.Services
         /// </summary>
         public void ShowError(IWin32Window owner, string message)
         {
-            MessageHelper.ShowError(owner, message);
             if (((Control) owner).InvokeRequired)
             {
                 ((Control) owner).Invoke((Action<string>) ShowError, message);
