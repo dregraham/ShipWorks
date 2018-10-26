@@ -18,7 +18,7 @@ namespace ShipWorks.Shipping.Editing
     {
         private static TableSynchronizer<DimensionsProfileEntity> synchronizer;
         private static bool needCheckForChanges = false;
-        private static ImmutableList<IDimensionsProfileEntity> readOnlyEntities;
+        private static ImmutableList<IDimensionsProfileEntity> readOnlyEntities = ImmutableList.Create<IDimensionsProfileEntity>() ;
 
         /// <summary>
         /// Initialize DimensionsManager
