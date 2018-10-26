@@ -25,7 +25,7 @@ namespace ShipWorks.OrderLookup.Layout
         private readonly IUserSession userSession;
         private readonly ILog log;
         private OrderLookupLayoutDefaults defaults;
-        
+
         /// <summary>
         /// Constructor
         /// </summary>
@@ -85,7 +85,7 @@ namespace ShipWorks.OrderLookup.Layout
                 List<List<PanelInfo>> panels = JsonConvert.DeserializeObject<List<List<PanelInfo>>>((string) jLayout.SelectToken("Panels"));
                 return (leftColumnWidth, rightColumnWidth, panels);
             }
-            catch (JsonException ex)
+            catch (Exception ex)
             {
                 log.Error(ex);
                 return (defaults.LeftColumnWidth, defaults.RightColumnWidth, defaults.GetDefaults());
