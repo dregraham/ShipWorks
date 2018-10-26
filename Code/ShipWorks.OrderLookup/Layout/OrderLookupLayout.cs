@@ -4,10 +4,12 @@ using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Windows;
 using Autofac;
 using Interapptive.Shared.ComponentRegistration;
 using log4net;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using ShipWorks.OrderLookup.Controls.OrderLookup;
 using ShipWorks.Users;
 
@@ -22,8 +24,8 @@ namespace ShipWorks.OrderLookup.Layout
         private readonly IOrderLookupPanelFactory panelFactory;
         private readonly IUserSession userSession;
         private readonly ILog log;
-        private readonly IEnumerable<IEnumerable<PanelInfo>> defaultLayout;
-
+        private OrderLookupLayoutDefaults defaults;
+        
         /// <summary>
         /// Constructor
         /// </summary>
@@ -34,7 +36,7 @@ namespace ShipWorks.OrderLookup.Layout
 
             log = createLogger(GetType());
 
-            defaultLayout = new OrderLookupLayoutDefaults().GetDefaults();
+            defaults = new OrderLookupLayoutDefaults();
         }
 
         /// <summary>
@@ -44,11 +46,11 @@ namespace ShipWorks.OrderLookup.Layout
         {
             IEnumerable<IOrderLookupPanelViewModel<IOrderLookupViewModel>> allPanels = panelFactory.GetPanels(scope);
 
-            IEnumerable<IEnumerable<PanelInfo>> layout = GetLayout();
+            (GridLength leftColumnWidth, GridLength middleColumnWidth, IEnumerable<IEnumerable<PanelInfo>> panels) = GetLayout();
 
-            orderLookupViewModel.LeftColumn = GetColumn(0, layout, allPanels);
-            orderLookupViewModel.MiddleColumn = GetColumn(1, layout, allPanels);
-            orderLookupViewModel.RightColumn = GetColumn(2, layout, allPanels);
+            orderLookupViewModel.LeftColumn = GetColumn(0, panels, allPanels);
+            orderLookupViewModel.MiddleColumn = GetColumn(1, panels, allPanels);
+            orderLookupViewModel.RightColumn = GetColumn(2, panels, allPanels);
 
             IEnumerable<IOrderLookupPanelViewModel<IOrderLookupViewModel>> missingPanels = allPanels
                             .Except(orderLookupViewModel.LeftColumn)
@@ -59,31 +61,35 @@ namespace ShipWorks.OrderLookup.Layout
             {
                 orderLookupViewModel.RightColumn.Add(missingPanel);
             }
+
+            orderLookupViewModel.LeftColumnWidth = leftColumnWidth;
+            orderLookupViewModel.MiddleColumnWidth = middleColumnWidth;
         }
 
         /// <summary>
         /// Retrieves the layout. If anything goes wrong, a default layout is returned.
         /// </summary>
-        private IEnumerable<IEnumerable<PanelInfo>> GetLayout()
+        private (GridLength, GridLength, IEnumerable<IEnumerable<PanelInfo>>) GetLayout()
         {
             string serializedLayout = userSession.User.Settings.OrderLookupLayout;
             if (string.IsNullOrWhiteSpace(serializedLayout))
             {
-                return defaultLayout;
+                return (defaults.LeftColumnWidth, defaults.MiddleColumnWidth, defaults.GetDefaults());
             }
 
-            IEnumerable<IEnumerable<PanelInfo>> layout;
             try
             {
-                layout = JsonConvert.DeserializeObject<List<List<PanelInfo>>>(serializedLayout);
+                JObject jLayout = JObject.Parse(serializedLayout);
+                GridLength leftColumnWidth = JsonConvert.DeserializeObject<GridLength>((string)jLayout.SelectToken("LeftColumnWidth"));
+                GridLength middleColumnWidth = JsonConvert.DeserializeObject<GridLength>((string) jLayout.SelectToken("MiddleColumnWidth"));
+                List<List<PanelInfo>> panels = JsonConvert.DeserializeObject<List<List<PanelInfo>>>((string) jLayout.SelectToken("Panels"));
+                return (leftColumnWidth, middleColumnWidth, panels);
             }
             catch (JsonException ex)
             {
                 log.Error(ex);
-                return defaultLayout;
+                return (defaults.LeftColumnWidth, defaults.MiddleColumnWidth, defaults.GetDefaults());
             }
-
-            return layout;
         }
 
         /// <summary>
@@ -112,8 +118,14 @@ namespace ShipWorks.OrderLookup.Layout
         /// </summary>
         public void Save(IMainOrderLookupViewModel orderLookupViewModel)
         {
-            userSession.User.Settings.OrderLookupLayout = 
-                JsonConvert.SerializeObject(new[] { orderLookupViewModel.LeftColumn, orderLookupViewModel.MiddleColumn, orderLookupViewModel.RightColumn });
+            string panels = JsonConvert.SerializeObject(new[] { orderLookupViewModel.LeftColumn, orderLookupViewModel.MiddleColumn, orderLookupViewModel.RightColumn });
+
+            JObject layout = new JObject(
+                            new JProperty("LeftColumnWidth", JsonConvert.SerializeObject(orderLookupViewModel.LeftColumnWidth)),
+                            new JProperty("MiddleColumnWidth", JsonConvert.SerializeObject(orderLookupViewModel.MiddleColumnWidth)),
+                            new JProperty("Panels", panels));
+
+            userSession.User.Settings.OrderLookupLayout = JsonConvert.SerializeObject(layout);
         }
     }
 }

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Windows;
 
 namespace ShipWorks.OrderLookup.Layout
 {
@@ -7,6 +8,16 @@ namespace ShipWorks.OrderLookup.Layout
     /// </summary>
     public class OrderLookupLayoutDefaults 
     {
+        /// <summary>
+        /// Left Column Width
+        /// </summary>
+        public GridLength LeftColumnWidth => new GridLength(1, GridUnitType.Star);
+
+        /// <summary>
+        /// Middle Column Width
+        /// </summary>
+        public GridLength MiddleColumnWidth => new GridLength(1, GridUnitType.Star);
+
         /// <summary>
         /// Get default layout
         /// </summary>

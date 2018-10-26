@@ -33,6 +33,8 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookup
         private ObservableCollection<IOrderLookupPanelViewModel<IOrderLookupViewModel>> middleColumn;
         private ObservableCollection<IOrderLookupPanelViewModel<IOrderLookupViewModel>> rightColumn;
         private ILifetimeScope innerScope;
+        private GridLength middleColumnWidth;
+        private GridLength leftColumnWidth;
         private readonly IOrderLookupLayout layout;
         private readonly ILifetimeScope scope;
         private readonly IDropTarget dropTarget;
@@ -171,6 +173,46 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookup
             ShipmentModel?.ShipmentAdapter?.Shipment?.Processed == false ?
                 Visibility.Visible :
                 Visibility.Hidden;
+
+        /// <summary>
+        /// Width of the left column
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public GridLength LeftColumnWidth
+        {
+            get => leftColumnWidth;
+            set
+            {
+                // This gets rid of the star that is part of the default layout.
+                if (value.Value > 1 && value.IsStar)
+                {
+                    value = new GridLength(value.Value);
+                }
+
+                handler.Set(nameof(LeftColumnWidth), ref leftColumnWidth, value);
+                layout.Save(this);
+            }
+        }
+
+        /// <summary>
+        /// Width of the middle column
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public GridLength MiddleColumnWidth
+        {
+            get => middleColumnWidth;
+            set
+            {
+                // This gets rid of the star that is part of the default layout.
+                if (value.Value > 1 && value.IsStar)
+                {
+                    value = new GridLength(value.Value);
+                }
+
+                handler.Set(nameof(MiddleColumnWidth), ref middleColumnWidth, value);
+                layout.Save(this);
+            }
+        }
 
         /// <summary>
         /// Updates the current drag state

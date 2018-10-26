@@ -1,5 +1,5 @@
 ﻿<UserControl
-    x:Class="ShipWorks.OrderLookup.Controls.OrderLookup.OrderLookupControl"
+    x:Class="ShipWorks.OrderLookup.Controls.OrderLookup.MainOrderLookupControl"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:basic="clr-namespace:ShipWorks.OrderLookup.Controls"
@@ -16,7 +16,7 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/ShipWorks.OrderLookup;component/Styles/OrderLookupStyle.xaml" />
             </ResourceDictionary.MergedDictionaries>
-            <Style TargetType="{x:Type local:OrderLookupControl}">
+            <Style TargetType="{x:Type local:MainOrderLookupControl}">
                 <Setter Property="Background" Value="{StaticResource OrderLookupBackgroundColor}" />
             </Style>
 
@@ -44,11 +44,11 @@
             Visibility="{Binding ShowColumns}">
             <Grid>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition />
+                    <ColumnDefinition Width="{Binding LeftColumnWidth, Mode=TwoWay}"/>
                     <ColumnDefinition Width="auto" />
-                    <ColumnDefinition />
+                    <ColumnDefinition Width="{Binding MiddleColumnWidth, Mode=TwoWay}"/>
                     <ColumnDefinition Width="auto" />
-                    <ColumnDefinition />
+                    <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
                 <Grid.Resources>
                     <Style TargetType="ItemsControl">

@@ -1,4 +1,5 @@
 ﻿using System.Collections.ObjectModel;
+using System.Windows;
 
 namespace ShipWorks.OrderLookup.Controls.OrderLookup
 {
@@ -21,5 +22,15 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookup
         /// The rights column of panels
         /// </summary>
         ObservableCollection<IOrderLookupPanelViewModel<IOrderLookupViewModel>> RightColumn { get; set; }
+
+        /// <summary>
+        /// Width of the left column
+        /// </summary>
+        GridLength LeftColumnWidth { get; set; }
+
+        /// <summary>
+        /// Width of the middle column
+        /// </summary>
+        GridLength MiddleColumnWidth { get; set; }
     }
 }

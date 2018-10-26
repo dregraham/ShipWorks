@@ -276,8 +276,8 @@
     <Compile Include="Controls\OrderLookup\OrderLookupControlHost.Designer.cs">
       <DependentUpon>OrderLookupControlHost.cs</DependentUpon>
     </Compile>
-    <Compile Include="Controls\OrderLookup\OrderLookupControl.xaml.cs">
-      <DependentUpon>OrderLookupControl.xaml</DependentUpon>
+    <Compile Include="Controls\OrderLookup\MainOrderLookupControl.xaml.cs">
+      <DependentUpon>MainOrderLookupControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\OrderLookup\MainOrderLookupViewModel.cs" />
     <Compile Include="Controls\From\GenericFromViewModel.cs" />
@@ -485,7 +485,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Controls\OrderLookup\OrderLookupControl.xaml">
+    <Page Include="Controls\OrderLookup\MainOrderLookupControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

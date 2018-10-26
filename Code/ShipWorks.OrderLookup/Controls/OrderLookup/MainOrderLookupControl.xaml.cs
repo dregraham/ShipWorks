@@ -4,14 +4,14 @@ using GongSolutions.Wpf.DragDrop;
 namespace ShipWorks.OrderLookup.Controls.OrderLookup
 {
     /// <summary>
-    /// Interaction logic for OrderLookupControl.xaml
+    /// Interaction logic for MainOrderLookupControl.xaml
     /// </summary>
-    public partial class OrderLookupControl : UserControl
+    public partial class MainOrderLookupControl : UserControl
     {
         /// <summary>
         /// Constructor
         /// </summary>
-        public OrderLookupControl()
+        public MainOrderLookupControl()
         {
             InitializeComponent();
 
