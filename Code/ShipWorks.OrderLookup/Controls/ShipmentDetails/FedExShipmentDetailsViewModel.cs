@@ -24,7 +24,7 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
     public class FedExShipmentDetailsViewModel : GenericMultiPackageShipmentDetailsViewModel
     {
         private IEnumerable<KeyValuePair<int, string>> signatureTypes;
-        
+
         /// <summary>
         /// Ctor
         /// </summary>
@@ -75,8 +75,9 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
                 RefreshInsurance();
             }
 
-            if (e.PropertyName == PostalShipmentFields.Service.Name)
+            if (e.PropertyName == FedExShipmentFields.Service.Name)
             {
+                RefreshPackageTypes();
                 handler.RaisePropertyChanged(nameof(ShipmentModel));
             }
 

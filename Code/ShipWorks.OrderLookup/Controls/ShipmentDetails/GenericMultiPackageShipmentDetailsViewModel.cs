@@ -361,7 +361,7 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
         /// <summary>
         /// Refresh the package types
         /// </summary>
-        private void RefreshPackageTypes()
+        protected void RefreshPackageTypes()
         {
             if (ShipmentModel.ShipmentAdapter?.Shipment == null)
             {
