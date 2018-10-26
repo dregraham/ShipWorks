@@ -2,6 +2,9 @@ using System.Reflection;
 
 namespace ShipWorks.OrderLookup.Layout
 {
+    /// <summary>
+    /// Info used for saving panel state
+    /// </summary>
     public struct PanelInfo
     {
         /// <summary>
