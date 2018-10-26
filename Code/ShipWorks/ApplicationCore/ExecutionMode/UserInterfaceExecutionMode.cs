@@ -13,7 +13,9 @@ using ActiproSoftware.SyntaxEditor;
 using CefSharp;
 using Interapptive.Shared.Data;
 using Interapptive.Shared.IO.Hardware.Scales;
+using Interapptive.Shared.Metrics;
 using Interapptive.Shared.UI;
+using Interapptive.Shared.Utility;
 using log4net;
 using NDesk.Options;
 using ShipWorks.ApplicationCore.Crashes;
@@ -206,6 +208,7 @@ namespace ShipWorks.ApplicationCore.ExecutionMode
             // Start idle processing
             IdleWatcher.Initialize();
 
+            Telemetry.SetUserInterfaceView(EnumHelper.GetDescription(MainForm.UIMode));
             log.InfoFormat("Application activated.");
         }
 
