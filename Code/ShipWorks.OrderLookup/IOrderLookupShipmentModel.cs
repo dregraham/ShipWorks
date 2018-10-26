@@ -61,6 +61,11 @@ namespace ShipWorks.OrderLookup
         void Unload();
 
         /// <summary>
+        /// Unload the order with reason
+        /// </summary>
+        void Unload(OrderClearReason reason);
+
+        /// <summary>
         /// Fires when an order is cleared
         /// </summary>
         event EventHandler OnSearchOrder;

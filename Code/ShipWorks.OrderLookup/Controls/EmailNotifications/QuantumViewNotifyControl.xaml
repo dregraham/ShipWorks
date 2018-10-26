@@ -7,6 +7,7 @@
     xmlns:enums="clr-namespace:ShipWorks.Shipping.Carriers.UPS.Enums;assembly=ShipWorks.Core"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:ui="http://schemas.shipworks.com/ui"
+    xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
     d:DataContext="{d:DesignInstance emailNotifications:QuantumViewNotifyControlViewModel}"
     FontFamily="/ShipWorks.OrderLookup;component/#Roboto"
     mc:Ignorable="d">
@@ -18,7 +19,7 @@
             <ui:EnumFlagToBoolConverter x:Key="EnumFlagConverter" />
             <Style BasedOn="{StaticResource FormCheckBox}" TargetType="{x:Type CheckBox}">
                 <Setter Property="HorizontalAlignment" Value="Center" />
-                <Setter Property="Margin" Value="0,6,0,10" />
+                <Setter Property="Margin" Value="0 0 0 10"/>
             </Style>
             <Style TargetType="{x:Type TextBlock}">
                 <Setter Property="VerticalAlignment" Value="Center" />
@@ -51,44 +52,41 @@
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="100" />
+                <ColumnDefinition Width="auto"/>
                 <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="auto" SharedSizeGroup="A" />
-                <ColumnDefinition Width="auto" SharedSizeGroup="A"/>
-                <ColumnDefinition Width="auto" SharedSizeGroup="A"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
             <!--  Grid headers  -->
             <TextBlock
                 Grid.Row="0"
-                Grid.Column="0"
-                Grid.ColumnSpan="2"
+                Grid.Column="0"                
+                HorizontalAlignment="Right"
                 Text="Email Address" />
+            <TextBlock
+                Grid.Row="0"
+                Grid.Column="1"
+                HorizontalAlignment="Center"
+                Text="Ship" />
             <TextBlock
                 Grid.Row="0"
                 Grid.Column="2"
                 HorizontalAlignment="Center"
-                Margin="10 0"
-                Text="Ship" />
-            <TextBlock
-                Grid.Row="0"
-                Grid.Column="3"
-                HorizontalAlignment="Center"
-                Margin="10 0"
                 Text="Exception" />
             <TextBlock
                 Grid.Row="0"
-                Grid.Column="4"
-                Margin="10 0"
+                Grid.Column="3"
                 HorizontalAlignment="Center"
                 Text="Delivery" />
 
             <Line
                 Grid.Row="1"
                 Grid.Column="0"
-                Grid.ColumnSpan="5"
+                Grid.ColumnSpan="4"
                 Margin="0,5,0,10"
                 Stretch="Uniform"
                 Stroke="DarkGray"
@@ -101,42 +99,40 @@
             <!--  Sender row  -->
             <TextBlock
                 Grid.Row="2"
-                Grid.Column="0"
-                Margin="0,6,0,10"
+                Grid.Column="0"                
                 Style="{StaticResource FieldLabel}"
                 Text="Sender" />
             <CheckBox
                 Grid.Row="2"
-                Grid.Column="2"
+                Grid.Column="1"                
                 IsChecked="{Binding Sender, Converter={StaticResource EnumFlagConverter}, ConverterParameter={x:Static enums:UpsEmailNotificationType.Ship}}" />
 
             <CheckBox
                 Grid.Row="2"
-                Grid.Column="3"
+                Grid.Column="2"
                 IsChecked="{Binding Sender, Converter={StaticResource EnumFlagConverter}, ConverterParameter={x:Static enums:UpsEmailNotificationType.Exception}}" />
             <CheckBox
                 Grid.Row="2"
-                Grid.Column="4"
+                Grid.Column="3"
                 IsChecked="{Binding Sender, Converter={StaticResource EnumFlagConverter}, ConverterParameter={x:Static enums:UpsEmailNotificationType.Deliver}}" />
 
             <!--  Recipient row  -->
             <TextBlock
                 Grid.Row="3"
-                Grid.Column="0"
-                Margin="0,6,0,10"
+                Grid.Column="0"                
                 Style="{StaticResource FieldLabel}"
                 Text="Recipient" />
             <CheckBox
                 Grid.Row="3"
-                Grid.Column="2"
+                Grid.Column="1"
                 IsChecked="{Binding Recipient, Converter={StaticResource EnumFlagConverter}, ConverterParameter={x:Static enums:UpsEmailNotificationType.Ship}}" />
             <CheckBox
                 Grid.Row="3"
-                Grid.Column="3"
+                Grid.Column="2"
                 IsChecked="{Binding Recipient, Converter={StaticResource EnumFlagConverter}, ConverterParameter={x:Static enums:UpsEmailNotificationType.Exception}}" />
             <CheckBox
                 Grid.Row="3"
-                Grid.Column="4"
+                Grid.Column="3"
                 IsChecked="{Binding Recipient, Converter={StaticResource EnumFlagConverter}, ConverterParameter={x:Static enums:UpsEmailNotificationType.Deliver}}" />
 
             <!--  Other row  -->
@@ -145,31 +141,31 @@
                 Grid.Column="0"
                 Style="{StaticResource FieldLabel}"
                 Text="Other" />
-            <TextBox
-                Grid.Row="4"
-                Grid.Column="1"
-                Style="{StaticResource FormTextBox}"
-                Text="{Binding ShipmentModel.ShipmentAdapter.Shipment.Ups.EmailNotifyOtherAddress, UpdateSourceTrigger=PropertyChanged}" />
             <CheckBox
                 Grid.Row="4"
-                Grid.Column="2"
-                Margin="0,0,0,10"
+                Grid.Column="1"                
                 IsChecked="{Binding Other, Converter={StaticResource EnumFlagConverter}, ConverterParameter={x:Static enums:UpsEmailNotificationType.Ship}}" />
             <CheckBox
                 Grid.Row="4"
-                Grid.Column="3"
-                Margin="0,0,0,10"
+                Grid.Column="2"                
                 IsChecked="{Binding Other, Converter={StaticResource EnumFlagConverter}, ConverterParameter={x:Static enums:UpsEmailNotificationType.Exception}}" />
             <CheckBox
                 Grid.Row="4"
-                Grid.Column="4"
-                Margin="0,0,0,10"
+                Grid.Column="3"                
                 IsChecked="{Binding Other, Converter={StaticResource EnumFlagConverter}, ConverterParameter={x:Static enums:UpsEmailNotificationType.Deliver}}" />
 
-            <Line
+            <syncfusion:SfTextBoxExt
                 Grid.Row="5"
+                Grid.Column="1"
+                Grid.ColumnSpan="3"
+                Watermark="Other Email Address"
+                Style="{StaticResource FormTextBox}"
+                Text="{Binding ShipmentModel.ShipmentAdapter.Shipment.Ups.EmailNotifyOtherAddress, UpdateSourceTrigger=PropertyChanged}" />
+            
+            <Line
+                Grid.Row="6"
                 Grid.Column="0"
-                Grid.ColumnSpan="5"
+                Grid.ColumnSpan="4"
                 Margin="0,0,0,10"
                 Stretch="Uniform"
                 Stroke="DarkGray"
@@ -181,27 +177,27 @@
 
             <!--  From Name  -->
             <TextBlock
-                Grid.Row="6"
+                Grid.Row="7"
                 Grid.Column="0"
                 Style="{StaticResource FieldLabel}"
                 Text="From Name" />
             <TextBox
-                Grid.Row="6"
+                Grid.Row="7"
                 Grid.Column="1"
-                Grid.ColumnSpan="4"
+                Grid.ColumnSpan="3"
                 Style="{StaticResource FormTextBox}"
                 Text="{Binding ShipmentModel.ShipmentAdapter.Shipment.Ups.EmailNotifyFrom}" />
 
             <!--  Subject  -->
             <TextBlock
-                Grid.Row="7"
+                Grid.Row="8"
                 Grid.Column="0"
                 Style="{StaticResource FieldLabel}"
                 Text="Subject" />
             <ComboBox
-                Grid.Row="7"
+                Grid.Row="8"
                 Grid.Column="1"
-                Grid.ColumnSpan="4"
+                Grid.ColumnSpan="3"
                 DisplayMemberPath="Value"
                 ItemsSource="{Binding SubjectTypes, UpdateSourceTrigger=PropertyChanged}"
                 SelectedValue="{Binding ShipmentModel.ShipmentAdapter.Shipment.Ups.EmailNotifySubject}"
@@ -210,17 +206,18 @@
 
             <!--  Personal Message  -->
             <TextBlock
-                Grid.Row="8"
+                Grid.Row="9"
                 Grid.Column="0"
                 HorizontalAlignment="Left"
                 Style="{StaticResource FieldLabel}"
                 Margin="0"
+                MaxWidth="100"
                 Text="Personal Message (Optional)" 
                 TextWrapping="Wrap"/>
             <TextBox
-                Grid.Row="8"
+                Grid.Row="9"
                 Grid.Column="1"
-                Grid.ColumnSpan="4"
+                Grid.ColumnSpan="3"
                 VerticalScrollBarVisibility="Auto"
                 MinLines="3"
                 MaxLines="3"

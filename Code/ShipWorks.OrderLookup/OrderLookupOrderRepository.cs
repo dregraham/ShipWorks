@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
 using System.Data.SqlClient;
@@ -37,7 +38,7 @@ namespace ShipWorks.OrderLookup
         /// <summary>
         /// Get the OrderId matching the search text
         /// </summary>
-        public long? GetOrderID(string searchText)
+        public List<long> GetOrderIDs(string searchText)
         {
             using (DbConnection conn = sqlSession.OpenConnection())
             {
@@ -57,9 +58,26 @@ namespace ShipWorks.OrderLookup
                         cmd.CommandText = "SELECT OrderID FROM [Order] WHERE OrderNumberComplete = @searchText";
                     }
 
-                    return (long?) cmd.ExecuteScalar();
+                    return GetOrders(cmd);
                 }
             }
+        }
+
+        /// <summary>
+        /// Returns all order ids that match
+        /// </summary>
+        private List<long> GetOrders(DbCommand cmd)
+        {
+            List<long> orderIds = new List<long>();
+            using (DbDataReader reader = cmd.ExecuteReader())
+            {
+                while(reader.Read())
+                {
+                    orderIds.Add(reader.GetInt64(0));
+                }
+            }
+
+            return orderIds;
         }
 
         /// <summary>

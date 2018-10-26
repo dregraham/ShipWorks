@@ -30,6 +30,7 @@ namespace ShipWorks.OrderLookup
         private readonly IAutoWeighService autoWeighService;
         private readonly IOrderLookupShipmentModel shipmentModel;
         private readonly ISingleScanOrderShortcut singleScanOrderShortcut;
+        private readonly IOrderLookupConfirmationService orderLookupConfirmationService;
         private readonly ILog log;
         private IDisposable subscriptions;
         private bool processingScan = false;
@@ -46,7 +47,8 @@ namespace ShipWorks.OrderLookup
             IAutoWeighService autoWeighService,
             IOrderLookupShipmentModel shipmentModel,
             ISingleScanOrderShortcut singleScanOrderShortcut,
-            Func<Type, ILog> createLogger)
+            Func<Type, ILog> createLogger,
+            IOrderLookupConfirmationService orderLookupConfirmationService)
         {
             this.messenger = messenger;
             this.mainForm = mainForm;
@@ -56,6 +58,7 @@ namespace ShipWorks.OrderLookup
             this.autoWeighService = autoWeighService;
             this.shipmentModel = shipmentModel;
             this.singleScanOrderShortcut = singleScanOrderShortcut;
+            this.orderLookupConfirmationService = orderLookupConfirmationService;
             log = createLogger(GetType());
         }
 
@@ -70,11 +73,13 @@ namespace ShipWorks.OrderLookup
                 messenger.OfType<SingleScanMessage>()
                 .Where(x => !processingScan && !mainForm.AdditionalFormsOpen() && mainForm.UIMode == UIMode.OrderLookup && !mainForm.IsShipmentHistoryActive())
                 .Do(_ => processingScan = true)
+                .Do(_=> shipmentModel.Unload(OrderClearReason.NewSearch))
                 .Subscribe(x => OnSingleScanMessage(x).Forget()),
 
                 messenger.OfType<OrderLookupSearchMessage>()
                 .Where(x => !processingScan && !mainForm.AdditionalFormsOpen() && mainForm.UIMode == UIMode.OrderLookup && !mainForm.IsShipmentHistoryActive())
                 .Do(_ => processingScan = true)
+                .Do(_ => shipmentModel.Unload(OrderClearReason.NewSearch))
                 .Subscribe(x => OnOrderLookupSearchMessage(x).Forget())
             );
         }
@@ -86,8 +91,6 @@ namespace ShipWorks.OrderLookup
         {
             try
             {
-                shipmentModel.SaveToDatabase();
-
                 long? orderId = await GetOrderID(message.ScannedText);
                 OrderEntity order = null;
                 bool loadOrder = false;
@@ -121,6 +124,10 @@ namespace ShipWorks.OrderLookup
                     shipmentModel.Unload();
                 }
             }
+            catch (Exception ex)
+            {
+                log.Error("Error while loading an order", ex);
+            }
             finally
             {
                 processingScan = false;
@@ -143,7 +150,7 @@ namespace ShipWorks.OrderLookup
             else
             {
                 await onDemandDownloaderFactory.CreateOnDemandDownloader().Download(scannedText).ConfigureAwait(true);
-                return orderRepository.GetOrderID(scannedText);
+                return await orderLookupConfirmationService.ConfirmOrder(scannedText, orderRepository.GetOrderIDs(scannedText));
             }
         }
 
@@ -154,10 +161,8 @@ namespace ShipWorks.OrderLookup
         {
             try
             {
-                shipmentModel.SaveToDatabase();
-
                 await onDemandDownloaderFactory.CreateOnDemandDownloader().Download(message.SearchText).ConfigureAwait(true);
-                long? orderId = orderRepository.GetOrderID(message.SearchText);
+                long? orderId = await orderLookupConfirmationService.ConfirmOrder(message.SearchText, orderRepository.GetOrderIDs(message.SearchText));
 
                 OrderEntity order = null;
                 if (orderId.HasValue)

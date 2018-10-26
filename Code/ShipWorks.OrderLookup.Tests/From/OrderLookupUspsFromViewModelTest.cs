@@ -43,11 +43,12 @@ namespace ShipWorks.OrderLookup.Tests.From
             Mock<ICarrierShipmentAdapter> shipmentAdapter = mock.Mock<ICarrierShipmentAdapter>();
             shipmentAdapter.SetupGet(s => s.ShipmentTypeCode).Returns(ShipmentTypeCode.Usps);
             shipmentAdapter.SetupGet(s => s.Shipment).Returns(shipment);
+            shipmentAdapter.SetupGet(s => s.AccountId).Returns(42);
 
             mock.FromFactory<ICarrierAccountRetrieverFactory>()
                 .Mock(x => x.Create(It.IsAny<ShipmentTypeCode>()))
-                .Setup(a => a.GetAccountReadOnly(AnyIShipment))
-                .Returns(new UspsAccountEntity { Description = "blah" });
+                .Setup(a => a.Accounts)
+                .Returns(new[] { new UspsAccountEntity { Description = "blah", UspsAccountID = 42 } });
 
             shipmentModel = mock.Mock<IOrderLookupShipmentModel>();
             shipmentModel.SetupGet(o => o.ShipmentAdapter).Returns(shipmentAdapter);

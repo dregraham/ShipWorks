@@ -19,8 +19,6 @@
                 <ResourceDictionary Source="/ShipWorks.OrderLookup;component/Styles/OrderLookupStyle.xaml" />
             </ResourceDictionary.MergedDictionaries>
             <sui:ShipmentTypeToOriginAddressesConverter x:Key="ShipmentTypeToOriginAddresses" />
-            <sui:ShipmentTypeToAccountsConverter x:Key="ShipmentTypeToAccountsConverter" />
-            <local:ShipmentTypeToOrderLookupTemplateConverter x:Key="ShipmentTypeToOrderLookupTemplateConverter" />
             <ui:BooleanToVisibilityConverter x:Key="BooleanToVisibility" />
             <ui:ValueEqualToParameterConverter x:Key="ValueEqualToParameter" />
             <ui:InvertBooleanConverter x:Key="InvertBoolean" />
@@ -54,13 +52,14 @@
                 <Binding Converter="{StaticResource BooleanToVisibility}" Path="ShipmentModel.ShipmentAdapter.SupportsAccounts" />
             </TextBlock.Visibility>
         </TextBlock>
-        <ComboBox
+        <ui:ShipWorksComboBox
             x:Name="AccountDropDown"
             Grid.Row="1"
             Grid.Column="1"
+            SelectedIndexWhenNull="{x:Static ui:RelativeIndex.First}"
             ui:UpdateWhenMessageReceived.MessageType="{x:Type sw:ShippingAccountsChangedMessage}"
-            DisplayMemberPath="Description"
-            SelectedValuePath="AccountId"
+            DisplayMemberPath="Value"
+            SelectedValuePath="Key"
             Style="{StaticResource FormComboBox}">
             <ComboBox.SelectedValue>
                 <Binding Path="ShipmentModel.ShipmentAdapter.AccountId" />
@@ -72,12 +71,9 @@
                 <Binding Converter="{StaticResource BooleanToVisibility}" Path="ShipmentModel.ShipmentAdapter.SupportsAccounts" />
             </ComboBox.Visibility>
             <ComboBox.ItemsSource>
-                <Binding
-                    Converter="{StaticResource ShipmentTypeToAccountsConverter}"
-                    Mode="OneWay"
-                    Path="ShipmentModel.ShipmentAdapter.ShipmentTypeCode" />
+                <Binding Mode="OneWay" Path="Accounts" />
             </ComboBox.ItemsSource>
-        </ComboBox>
+        </ui:ShipWorksComboBox>
         <StackPanel
             Grid.Row="2"
             Grid.Column="0"

@@ -259,10 +259,15 @@ namespace ShipWorks.OrderLookup
         /// <summary>
         /// Unload the order
         /// </summary>
-        public void Unload()
+        public void Unload() => Unload(OrderClearReason.Reset);
+
+        /// <summary>
+        /// Unload the order
+        /// </summary>
+        public void Unload(OrderClearReason clearReason)
         {
             SaveToDatabase();
-            ClearOrder(OrderClearReason.Reset);
+            ClearOrder(clearReason);
         }
 
         /// <summary>
