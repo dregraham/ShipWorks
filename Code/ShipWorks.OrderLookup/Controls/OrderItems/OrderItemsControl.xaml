@@ -64,31 +64,31 @@
             </DataGrid.ColumnHeaderStyle>
             <DataGrid.Columns>
                 <DataGridTextColumn
-                    Width="*"
+                    Width="0.5*"
                     Binding="{Binding Name}"
                     ElementStyle="{StaticResource DataGrid.Element.Default}"
                     Foreground="{StaticResource ControlTextColor}"
                     Header="Item name" />
                 <DataGridTextColumn
-                    Width=".4*"
+                    Width="0.8*"
                     Binding="{Binding SKU}"
                     ElementStyle="{StaticResource DataGrid.Element.Default}"
                     Foreground="{StaticResource ControlTextColor}"
                     Header="SKU" />
                 <DataGridTextColumn
-                    Width=".4*"
+                    Width="0.5*"
                     Binding="{Binding Quantity}"
                     ElementStyle="{StaticResource DataGrid.Element.Default}"
                     Foreground="{StaticResource ControlTextColor}"
                     Header="Quantity" />
                 <DataGridTextColumn
-                    Width=".4*"
+                    Width="0.5*"
                     Binding="{Binding UnitPrice, StringFormat={}{0:C}}"
                     ElementStyle="{StaticResource DataGrid.Element.Default}"
                     Foreground="{StaticResource ControlTextColor}"
                     Header="Price" />
                 <DataGridTextColumn
-                    Width=".4*"
+                    Width="0.5*"
                     Binding="{Binding Location}"
                     ElementStyle="{StaticResource DataGrid.Element.Default}"
                     Foreground="{StaticResource ControlTextColor}"
