@@ -1,6 +1,14 @@
 using System.Collections.Generic;
 using System.Reflection;
 using System.Windows;
+using ShipWorks.OrderLookup.Controls.Customs;
+using ShipWorks.OrderLookup.Controls.EmailNotifications;
+using ShipWorks.OrderLookup.Controls.From;
+using ShipWorks.OrderLookup.Controls.LabelOptions;
+using ShipWorks.OrderLookup.Controls.Rating;
+using ShipWorks.OrderLookup.Controls.Reference;
+using ShipWorks.OrderLookup.Controls.ShipmentDetails;
+using ShipWorks.OrderLookup.Controls.To;
 
 namespace ShipWorks.OrderLookup.Layout
 {
@@ -27,20 +35,20 @@ namespace ShipWorks.OrderLookup.Layout
         {
             new List<PanelInfo>
             {
-                new PanelInfo("IFromViewModel", false),
-                new PanelInfo("IToViewModel", true)
+                new PanelInfo(nameof(IFromViewModel), false),
+                new PanelInfo(nameof(IToViewModel), true)
             },
             new List<PanelInfo>
             {
-                new PanelInfo("IDetailsViewModel", true),
-                new PanelInfo("ILabelOptionsViewModel", false),
-                new PanelInfo("IReferenceViewModel", false),
-                new PanelInfo("IEmailNotificationsViewModel", false)
+                new PanelInfo(nameof(IDetailsViewModel), true),
+                new PanelInfo(nameof(ILabelOptionsViewModel), false),
+                new PanelInfo(nameof(IReferenceViewModel), false),
+                new PanelInfo(nameof(IEmailNotificationsViewModel), false)
             },
             new List<PanelInfo>
             {
-                new PanelInfo("ICustomsViewModel", true),
-                new PanelInfo("IRatingViewModel", true)
+                new PanelInfo(nameof(ICustomsViewModel), true),
+                new PanelInfo(nameof(IRatingViewModel), true)
             }
         };
     }
