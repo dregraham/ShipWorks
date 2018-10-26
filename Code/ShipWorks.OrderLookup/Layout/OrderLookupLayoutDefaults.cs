@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Reflection;
 using System.Windows;
 
 namespace ShipWorks.OrderLookup.Layout
@@ -6,7 +7,8 @@ namespace ShipWorks.OrderLookup.Layout
     /// <summary>
     /// Defaults for the order lookup mode layout
     /// </summary>
-    public class OrderLookupLayoutDefaults 
+    [Obfuscation(ApplyToMembers = true, Exclude = true, StripAfterObfuscation = false)]
+    public class OrderLookupLayoutDefaults
     {
         /// <summary>
         /// Left Column Width
@@ -26,19 +28,19 @@ namespace ShipWorks.OrderLookup.Layout
             new List<PanelInfo>
             {
                 new PanelInfo("IFromViewModel", false),
-                new PanelInfo("IToViewModel", true)    
+                new PanelInfo("IToViewModel", true)
             },
             new List<PanelInfo>
             {
                 new PanelInfo("IDetailsViewModel", true),
                 new PanelInfo("ILabelOptionsViewModel", false),
                 new PanelInfo("IReferenceViewModel", false),
-                new PanelInfo("IEmailNotificationsViewModel", false)    
+                new PanelInfo("IEmailNotificationsViewModel", false)
             },
             new List<PanelInfo>
             {
                 new PanelInfo("ICustomsViewModel", true),
-                new PanelInfo("IRatingViewModel", true)    
+                new PanelInfo("IRatingViewModel", true)
             }
         };
     }

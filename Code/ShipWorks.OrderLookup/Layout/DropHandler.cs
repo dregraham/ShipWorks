@@ -8,7 +8,7 @@ namespace ShipWorks.OrderLookup.Layout
     /// Drop Handler for Order Lookup Mode
     /// </summary>
     [Component]
-    [Obfuscation(Exclude = true)]
+    [Obfuscation(ApplyToMembers = true, Exclude = true, StripAfterObfuscation = false)]
     public class DropHandler : DefaultDropHandler
     {
     }
