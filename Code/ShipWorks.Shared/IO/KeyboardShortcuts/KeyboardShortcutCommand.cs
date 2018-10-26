@@ -26,31 +26,31 @@ namespace ShipWorks.IO.KeyboardShortcuts
         /// </summary>
         [Description("Apply Profile")]
         ApplyProfile = 2,
-        
+
         /// <summary>
         /// Create a label
         /// </summary>
         [Description("Create Label")]
         CreateLabel = 3,
-        
+
         /// <summary>
         /// Simulates a Tab key press
         /// </summary>
         [Description("Press Tab Key")]
         Tab = 4,
-        
+
         /// <summary>
         /// Simulates an Escape key press
         /// </summary>
         [Description("Press Escape Key")]
         Escape = 5,
-        
+
         /// <summary>
         /// Simulates an Enter key press
         /// </summary>
         [Description("Press Enter Key")]
         Enter = 6,
-        
+
         /// <summary>
         /// Toggles auto print on/off
         /// </summary>

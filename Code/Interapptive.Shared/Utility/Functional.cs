@@ -116,6 +116,14 @@ namespace Interapptive.Shared.Utility
                 GenericResult.FromError<int>($"Could not parse {value} as int");
 
         /// <summary>
+        /// Parse a long value
+        /// </summary>
+        public static GenericResult<long> ParseLong(string value) =>
+            long.TryParse(value, out long result) ?
+                result :
+                GenericResult.FromError<long>($"Could not parse {value} as long");
+
+        /// <summary>
         /// Parse an decimal value
         /// </summary>
         public static GenericResult<decimal> ParseDecimal(string value) =>
