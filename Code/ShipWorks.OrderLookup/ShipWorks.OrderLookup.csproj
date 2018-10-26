@@ -296,6 +296,8 @@
     <Compile Include="IOrderLookupViewModel.cs" />
     <Compile Include="Layout\DropHandler.cs" />
     <Compile Include="Layout\OrderLookupLayout.cs" />
+    <Compile Include="Layout\OrderLookupLayoutDefaults.cs" />
+    <Compile Include="Layout\PanelInfo.cs" />
     <Compile Include="OrderClearReason.cs" />
     <Compile Include="OrderLookupClearOrderMessage.cs" />
     <Compile Include="OrderLookupLabelShortcutPipeline.cs" />

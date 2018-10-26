@@ -21,9 +21,8 @@ namespace ShipWorks.OrderLookup.Layout
     {
         private readonly IOrderLookupPanelFactory panelFactory;
         private readonly IUserSession userSession;
-
-        const string defaultLayout = "[[{\"Name\":\"IFromViewModel\",\"Expanded\":false},{\"Name\":\"IToViewModel\",\"Expanded\":true}],[{\"Name\":\"IDetailsViewModel\",\"Expanded\":true},{\"Name\":\"ILabelOptionsViewModel\",\"Expanded\":false},{\"Name\":\"IReferenceViewModel\",\"Expanded\":false},{\"Name\":\"IEmailNotificationsViewModel\",\"Expanded\":false}],[{\"Name\":\"ICustomsViewModel\",\"Expanded\":true},{\"Name\":\"IRatingViewModel\",\"Expanded\":true}]]";
         private readonly ILog log;
+        private readonly IEnumerable<IEnumerable<PanelInfo>> defaultLayout;
 
         /// <summary>
         /// Constructor
@@ -34,6 +33,8 @@ namespace ShipWorks.OrderLookup.Layout
             this.userSession = userSession;
 
             log = createLogger(GetType());
+
+            defaultLayout = new OrderLookupLayoutDefaults().GetDefaults();
         }
 
         /// <summary>
@@ -43,7 +44,7 @@ namespace ShipWorks.OrderLookup.Layout
         {
             IEnumerable<IOrderLookupPanelViewModel<IOrderLookupViewModel>> allPanels = panelFactory.GetPanels(scope);
 
-            List<List<PanelInfo>> layout = GetLayout();
+            IEnumerable<IEnumerable<PanelInfo>> layout = GetLayout();
 
             orderLookupViewModel.LeftColumn = GetColumn(0, layout, allPanels);
             orderLookupViewModel.MiddleColumn = GetColumn(1, layout, allPanels);
@@ -63,15 +64,15 @@ namespace ShipWorks.OrderLookup.Layout
         /// <summary>
         /// Retrieves the layout. If anything goes wrong, a default layout is returned.
         /// </summary>
-        private List<List<PanelInfo>> GetLayout()
+        private IEnumerable<IEnumerable<PanelInfo>> GetLayout()
         {
             string serializedLayout = userSession.User.Settings.OrderLookupLayout;
             if (string.IsNullOrWhiteSpace(serializedLayout))
             {
-                serializedLayout = defaultLayout;
+                return defaultLayout;
             }
 
-            List<List<PanelInfo>> layout;
+            IEnumerable<IEnumerable<PanelInfo>> layout;
             try
             {
                 layout = JsonConvert.DeserializeObject<List<List<PanelInfo>>>(serializedLayout);
@@ -79,7 +80,7 @@ namespace ShipWorks.OrderLookup.Layout
             catch (JsonException ex)
             {
                 log.Error(ex);
-                layout = JsonConvert.DeserializeObject<List<List<PanelInfo>>>(defaultLayout);
+                return defaultLayout;
             }
 
             return layout;
@@ -88,14 +89,14 @@ namespace ShipWorks.OrderLookup.Layout
         /// <summary>
         /// Get a column. If the column index is not defined, return an empty collection
         /// </summary>
-        private ObservableCollection<IOrderLookupPanelViewModel<IOrderLookupViewModel>> GetColumn(int columnIndex, List<List<PanelInfo>> layout, IEnumerable<IOrderLookupPanelViewModel<IOrderLookupViewModel>> allPanels)
+        private ObservableCollection<IOrderLookupPanelViewModel<IOrderLookupViewModel>> GetColumn(int columnIndex, IEnumerable<IEnumerable<PanelInfo>> layout, IEnumerable<IOrderLookupPanelViewModel<IOrderLookupViewModel>> allPanels)
         {
             List<IOrderLookupPanelViewModel<IOrderLookupViewModel>> panels = new List<IOrderLookupPanelViewModel<IOrderLookupViewModel>>();
 
-            if (layout.Count > columnIndex)
+            if (layout.Count() > columnIndex)
             {
-                List<PanelInfo> column = layout[columnIndex];
-                foreach (var panelInfo in column)
+                List<PanelInfo> column = layout.ToArray()[columnIndex].ToList();
+                foreach (PanelInfo panelInfo in column)
                 {
                     IOrderLookupPanelViewModel<IOrderLookupViewModel> panelToAdd = allPanels.SingleOrDefault(p => p.Name == panelInfo.Name);
                     panelToAdd.Expanded = panelInfo.Expanded;
@@ -113,24 +114,6 @@ namespace ShipWorks.OrderLookup.Layout
         {
             userSession.User.Settings.OrderLookupLayout = 
                 JsonConvert.SerializeObject(new[] { orderLookupViewModel.LeftColumn, orderLookupViewModel.MiddleColumn, orderLookupViewModel.RightColumn });
-        }
-
-        /// <summary>
-        /// Panel Information
-        /// </summary>
-        private struct PanelInfo
-        {
-            /// <summary>
-            /// Name of Panel
-            /// </summary>
-            [Obfuscation(Exclude = true)]
-            public string Name { get; set; }
-
-            /// <summary>
-            /// Initial Expansion state
-            /// </summary>
-            [Obfuscation(Exclude = true)]
-            public bool Expanded { get; set; }
         }
     }
 }
