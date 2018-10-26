@@ -33,7 +33,7 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookup
         private ObservableCollection<IOrderLookupPanelViewModel<IOrderLookupViewModel>> middleColumn;
         private ObservableCollection<IOrderLookupPanelViewModel<IOrderLookupViewModel>> rightColumn;
         private ILifetimeScope innerScope;
-        private GridLength middleColumnWidth;
+        private GridLength rightColumnWidth;
         private GridLength leftColumnWidth;
         private readonly IOrderLookupLayout layout;
         private readonly ILifetimeScope scope;
@@ -198,9 +198,9 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookup
         /// Width of the middle column
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public GridLength MiddleColumnWidth
+        public GridLength RightColumnWidth
         {
-            get => middleColumnWidth;
+            get => rightColumnWidth;
             set
             {
                 // This gets rid of the star that is part of the default layout.
@@ -209,7 +209,7 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookup
                     value = new GridLength(value.Value);
                 }
 
-                handler.Set(nameof(MiddleColumnWidth), ref middleColumnWidth, value);
+                handler.Set(nameof(RightColumnWidth), ref rightColumnWidth, value);
                 layout.Save(this);
             }
         }

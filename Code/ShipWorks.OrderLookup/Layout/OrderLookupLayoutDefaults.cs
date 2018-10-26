@@ -16,7 +16,7 @@ namespace ShipWorks.OrderLookup.Layout
         /// <summary>
         /// Middle Column Width
         /// </summary>
-        public GridLength MiddleColumnWidth => new GridLength(1, GridUnitType.Star);
+        public GridLength RightColumnWidth => new GridLength(1, GridUnitType.Star);
 
         /// <summary>
         /// Get default layout

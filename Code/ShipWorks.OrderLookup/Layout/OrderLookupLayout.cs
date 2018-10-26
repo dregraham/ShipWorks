@@ -46,7 +46,7 @@ namespace ShipWorks.OrderLookup.Layout
         {
             IEnumerable<IOrderLookupPanelViewModel<IOrderLookupViewModel>> allPanels = panelFactory.GetPanels(scope);
 
-            (GridLength leftColumnWidth, GridLength middleColumnWidth, IEnumerable<IEnumerable<PanelInfo>> panels) = GetLayout();
+            (GridLength leftColumnWidth, GridLength rightColumnWidth, IEnumerable<IEnumerable<PanelInfo>> panels) = GetLayout();
 
             orderLookupViewModel.LeftColumn = GetColumn(0, panels, allPanels);
             orderLookupViewModel.MiddleColumn = GetColumn(1, panels, allPanels);
@@ -63,7 +63,7 @@ namespace ShipWorks.OrderLookup.Layout
             }
 
             orderLookupViewModel.LeftColumnWidth = leftColumnWidth;
-            orderLookupViewModel.MiddleColumnWidth = middleColumnWidth;
+            orderLookupViewModel.RightColumnWidth = rightColumnWidth;
         }
 
         /// <summary>
@@ -74,21 +74,21 @@ namespace ShipWorks.OrderLookup.Layout
             string serializedLayout = userSession.User.Settings.OrderLookupLayout;
             if (string.IsNullOrWhiteSpace(serializedLayout))
             {
-                return (defaults.LeftColumnWidth, defaults.MiddleColumnWidth, defaults.GetDefaults());
+                return (defaults.LeftColumnWidth, defaults.RightColumnWidth, defaults.GetDefaults());
             }
 
             try
             {
                 JObject jLayout = JObject.Parse(serializedLayout);
-                GridLength leftColumnWidth = JsonConvert.DeserializeObject<GridLength>((string)jLayout.SelectToken("LeftColumnWidth"));
-                GridLength middleColumnWidth = JsonConvert.DeserializeObject<GridLength>((string) jLayout.SelectToken("MiddleColumnWidth"));
+                GridLength leftColumnWidth = JsonConvert.DeserializeObject<GridLength>((string) jLayout.SelectToken("LeftColumnWidth"));
+                GridLength rightColumnWidth = JsonConvert.DeserializeObject<GridLength>((string) jLayout.SelectToken("RightColumnWidth"));
                 List<List<PanelInfo>> panels = JsonConvert.DeserializeObject<List<List<PanelInfo>>>((string) jLayout.SelectToken("Panels"));
-                return (leftColumnWidth, middleColumnWidth, panels);
+                return (leftColumnWidth, rightColumnWidth, panels);
             }
             catch (JsonException ex)
             {
                 log.Error(ex);
-                return (defaults.LeftColumnWidth, defaults.MiddleColumnWidth, defaults.GetDefaults());
+                return (defaults.LeftColumnWidth, defaults.RightColumnWidth, defaults.GetDefaults());
             }
         }
 
@@ -122,7 +122,7 @@ namespace ShipWorks.OrderLookup.Layout
 
             JObject layout = new JObject(
                             new JProperty("LeftColumnWidth", JsonConvert.SerializeObject(orderLookupViewModel.LeftColumnWidth)),
-                            new JProperty("MiddleColumnWidth", JsonConvert.SerializeObject(orderLookupViewModel.MiddleColumnWidth)),
+                            new JProperty("RightColumnWidth", JsonConvert.SerializeObject(orderLookupViewModel.RightColumnWidth)),
                             new JProperty("Panels", panels));
 
             userSession.User.Settings.OrderLookupLayout = JsonConvert.SerializeObject(layout);

@@ -44,11 +44,11 @@
             Visibility="{Binding ShowColumns}">
             <Grid>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="{Binding LeftColumnWidth, Mode=TwoWay}"/>
+                    <ColumnDefinition Width="{Binding LeftColumnWidth, Mode=TwoWay}" />
                     <ColumnDefinition Width="auto" />
-                    <ColumnDefinition Width="{Binding MiddleColumnWidth, Mode=TwoWay}"/>
+                    <ColumnDefinition />
                     <ColumnDefinition Width="auto" />
-                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="{Binding RightColumnWidth, Mode=TwoWay}" />
                 </Grid.ColumnDefinitions>
                 <Grid.Resources>
                     <Style TargetType="ItemsControl">

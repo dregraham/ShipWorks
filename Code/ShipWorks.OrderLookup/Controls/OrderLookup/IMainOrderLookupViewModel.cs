@@ -31,6 +31,6 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookup
         /// <summary>
         /// Width of the middle column
         /// </summary>
-        GridLength MiddleColumnWidth { get; set; }
+        GridLength RightColumnWidth { get; set; }
     }
 }
