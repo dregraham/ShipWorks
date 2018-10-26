@@ -1,3 +1,4 @@
+using System.Reflection;
 using GongSolutions.Wpf.DragDrop;
 using Interapptive.Shared.ComponentRegistration;
 
@@ -7,6 +8,7 @@ namespace ShipWorks.OrderLookup.Layout
     /// Drop Handler for Order Lookup Mode
     /// </summary>
     [Component]
+    [Obfuscation(Exclude = true)]
     public class DropHandler : DefaultDropHandler
     {
     }
