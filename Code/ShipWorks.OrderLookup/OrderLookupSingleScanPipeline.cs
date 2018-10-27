@@ -133,8 +133,8 @@ namespace ShipWorks.OrderLookup
                             }
 
                             loadOrder = order != null &&
-                                        order.Shipments.Any() &&
-                                        !order.Shipments.Last().Processed;
+                                        order.Shipments.Any();
+                                        
 
                             if (loadOrder)
                             {

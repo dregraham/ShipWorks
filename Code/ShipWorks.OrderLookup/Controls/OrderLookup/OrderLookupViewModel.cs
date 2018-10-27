@@ -175,10 +175,10 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookup
         /// Should the columns be displayed?
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public Visibility ShowColumns =>
-            ShipmentModel?.ShipmentAdapter?.Shipment?.Processed == false ?
-                Visibility.Visible :
-                Visibility.Hidden;
+        public Visibility ShowColumns => Visibility.Visible;
+            //ShipmentModel?.ShipmentAdapter?.Shipment?.Processed == false ?
+            //    Visibility.Visible :
+            //    Visibility.Hidden;
 
         /// <summary>
         /// Dispose

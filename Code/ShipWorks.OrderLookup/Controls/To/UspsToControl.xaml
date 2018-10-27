@@ -17,6 +17,9 @@
     </UserControl.Resources>
 
     <StackPanel>
+        <StackPanel.IsEnabled>
+            <Binding Mode="OneWay" Path="ShipmentModel.ShipmentAllowEditing" />
+        </StackPanel.IsEnabled>
         <local:OrderLookupAddress DataContext="{Binding Address}">
             <local:OrderLookupAddress.IsEnabled>
                 <Binding Mode="OneWay" Path="ShipmentModel.ShipmentAllowEditing" />
