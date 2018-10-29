@@ -5,6 +5,7 @@ using ShipWorks.OrderLookup.Controls.Customs;
 using ShipWorks.OrderLookup.Controls.EmailNotifications;
 using ShipWorks.OrderLookup.Controls.From;
 using ShipWorks.OrderLookup.Controls.LabelOptions;
+using ShipWorks.OrderLookup.Controls.OrderItems;
 using ShipWorks.OrderLookup.Controls.Rating;
 using ShipWorks.OrderLookup.Controls.Reference;
 using ShipWorks.OrderLookup.Controls.ShipmentDetails;
@@ -36,7 +37,8 @@ namespace ShipWorks.OrderLookup.Layout
             new List<PanelInfo>
             {
                 new PanelInfo(nameof(IFromViewModel), false),
-                new PanelInfo(nameof(IToViewModel), true)
+                new PanelInfo(nameof(IToViewModel), true),
+                new PanelInfo(nameof(IOrderItemsViewModel), true)
             },
             new List<PanelInfo>
             {
