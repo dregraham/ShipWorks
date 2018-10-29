@@ -15,10 +15,10 @@
                 <ResourceDictionary Source="/ShipWorks.OrderLookup;component/Styles/OrderLookupStyle.xaml" />
                 <ResourceDictionary Source="/ShipWorks.OrderLookup;component/Controls/Weight/WeightControl.xaml" />
             </ResourceDictionary.MergedDictionaries>
-            <controls:ShipmentTypeToOrderLookupTemplateConverter x:Key="ShipmentTypeToOrderLookupTemplateConverter" />
             <ui:InvertBooleanConverter x:Key="InvertBoolean" />
             <ui:BooleanToVisibilityConverter x:Key="BooleanToVisibility" />
             <ui:DefaultWhenNullOrEmptyConverter x:Key="NoneWhenEmpty" />
+            <ui:StringEmptyWhenEqualToParameterConverter x:Key="StringEmptyWhenEqualToParameter" />
         </ResourceDictionary>
     </UserControl.Resources>
     <StackPanel>
@@ -216,7 +216,9 @@
                     IsEnabled="{Binding IsProfileSelected, Converter={StaticResource InvertBoolean}}"
                     MaxLength="3"
                     Style="{StaticResource FormTextBox}"
-                    Text="{Binding ShipmentModel.ShipmentAdapter.Shipment.Postal.DimsLength}" />
+                    Text="{Binding ShipmentModel.ShipmentAdapter.Shipment.Postal.DimsLength,
+                            Converter={StaticResource StringEmptyWhenEqualToParameter},
+                            ConverterParameter=0}" />
 
                 <TextBox
                     Grid.Column="1"
@@ -225,7 +227,9 @@
                     IsEnabled="{Binding IsProfileSelected, Converter={StaticResource InvertBoolean}}"
                     MaxLength="3"
                     Style="{StaticResource FormTextBox}"
-                    Text="{Binding ShipmentModel.ShipmentAdapter.Shipment.Postal.DimsWidth}" />
+                    Text="{Binding ShipmentModel.ShipmentAdapter.Shipment.Postal.DimsWidth,
+                            Converter={StaticResource StringEmptyWhenEqualToParameter},
+                            ConverterParameter=0}" />
 
                 <TextBox
                     Grid.Column="2"
@@ -234,7 +238,9 @@
                     IsEnabled="{Binding IsProfileSelected, Converter={StaticResource InvertBoolean}}"
                     MaxLength="3"
                     Style="{StaticResource FormTextBox}"
-                    Text="{Binding ShipmentModel.ShipmentAdapter.Shipment.Postal.DimsHeight}" />
+                    Text="{Binding ShipmentModel.ShipmentAdapter.Shipment.Postal.DimsHeight,
+                            Converter={StaticResource StringEmptyWhenEqualToParameter},
+                            ConverterParameter=0}" />
 
                 <TextBlock
                     Grid.Column="3"

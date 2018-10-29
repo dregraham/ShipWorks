@@ -1,7 +1,7 @@
 ﻿using System;
 using Interapptive.Shared.Messaging;
-using ShipWorks.IO.KeyboardShortcuts;
 using ShipWorks.Data.Model.EntityInterfaces;
+using ShipWorks.IO.KeyboardShortcuts;
 
 namespace ShipWorks.Common.IO.KeyboardShortcuts.Messages
 {
@@ -13,19 +13,19 @@ namespace ShipWorks.Common.IO.KeyboardShortcuts.Messages
         /// <summary>
         /// Constructor
         /// </summary>
-        public ShortcutMessage(object sender, IShortcutEntity shortcut, ShortcutTriggerType trigger ,string value)
+        public ShortcutMessage(object sender, IShortcutEntity shortcut, ShortcutTriggerType trigger, string value)
         {
             MessageId = Guid.NewGuid();
             Sender = sender;
             Shortcut = shortcut;
             Trigger = trigger;
             Value = value;
-            
+
             CreatedDate = DateTime.UtcNow;
         }
 
         /// <summary>
-        /// The shortcut 
+        /// The shortcut
         /// </summary>
         public IShortcutEntity Shortcut { get; }
 
@@ -53,7 +53,7 @@ namespace ShipWorks.Common.IO.KeyboardShortcuts.Messages
         /// The value that triggered the shortcut
         /// </summary>
         public string Value { get; }
-        
+
         /// <summary>
         /// Checks whether this message applies to the given command
         /// </summary>

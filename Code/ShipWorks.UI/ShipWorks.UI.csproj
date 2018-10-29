@@ -139,7 +139,7 @@
     </Compile>
     <Compile Include="AttachedProperties\DoubleClick.cs" />
     <Compile Include="AttachedProperties\EntityFieldLength.cs" />
-    <Compile Include="AttachedProperties\Focus.cs" />
+    <Compile Include="AttachedProperties\Focus.Startup.cs" />
     <Compile Include="AttachedProperties\LimitScrollSize.cs" />
     <Compile Include="AttachedProperties\LimitScrollSizeMode.cs" />
     <Compile Include="AttachedProperties\Link.cs" />
@@ -257,6 +257,7 @@
     <Compile Include="ValueConverters\BooleanToIntConverter.cs" />
     <Compile Include="ValueConverters\BooleanToGridRowHeightConverter.cs" />
     <Compile Include="ValueConverters\BooleanLambdaConverter.cs" />
+    <Compile Include="ValueConverters\FirstNotNullOrEmptyStringMultiConverter.cs" />
     <Compile Include="ValueConverters\IntToEnumConverter.cs" />
     <Compile Include="ValueConverters\InverseBooleanConverter.cs" />
     <Compile Include="ValueConverters\BooleanComparisonConverter.cs" />
@@ -318,6 +319,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
+    <Compile Include="AttachedProperties\Focus.WhenMessageReceived.cs" />
     <None Include="interapptive_public.snk" />
     <None Include="packages.config" />
   </ItemGroup>

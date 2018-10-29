@@ -30,7 +30,7 @@ namespace ShipWorks.Shipping.Profiles
         /// Constructor used when we don't have an existing ShippingProfileEntity or ShortcutEntity
         /// </summary>
         public ShippingProfile(
-            IShippingProfileRepository shippingProfileRepository, 
+            IShippingProfileRepository shippingProfileRepository,
             IShippingProfileApplicationStrategyFactory strategyFactory,
             IShippingManager shippingManager,
             IMessenger messenger,
@@ -56,7 +56,7 @@ namespace ShipWorks.Shipping.Profiles
         public ShortcutEntity Shortcut { get; set; }
 
         /// <summary>
-        /// The associated Shortcut 
+        /// The associated Shortcut
         /// </summary>
         /// <remarks>
         /// This is the description of the ShortcutKey. Blank if no associated keyboard shortcut
@@ -152,7 +152,7 @@ namespace ShipWorks.Shipping.Profiles
                 }
                 messenger.Send(new ProfileAppliedMessage(this, originalShipments, shipmentList));
             }
-            
+
             return shipmentList.Select(s => shippingManager.GetShipmentAdapter(s));
         }
 
@@ -188,7 +188,7 @@ namespace ShipWorks.Shipping.Profiles
         /// Check to see if the profile can be applied
         /// </summary>
         private bool CanApply(IEnumerable<ShipmentEntity> shipments)
-            => shipments.All(s => securityContext().HasPermission(PermissionType.ShipmentsCreateEditProcess, s.OrderID)) && 
+            => shipments.All(s => securityContext().HasPermission(PermissionType.ShipmentsCreateEditProcess, s.OrderID)) &&
                 shipments.All(s => IsApplicable(s.ShipmentTypeCode));
     }
 }

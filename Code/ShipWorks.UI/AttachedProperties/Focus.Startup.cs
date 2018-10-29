@@ -5,9 +5,9 @@ using System.Windows.Input;
 namespace ShipWorks.UI.AttachedProperties
 {
     /// <summary>
-    /// Set focus on a control on load
+    /// Set focus on a control
     /// </summary>
-    public class Focus
+    public partial class Focus
     {
         public static readonly DependencyProperty StartupProperty =
             DependencyProperty.RegisterAttached("Startup", typeof(FrameworkElement), typeof(Focus), new PropertyMetadata(StartupSetCallback));

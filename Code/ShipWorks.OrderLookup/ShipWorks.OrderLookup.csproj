@@ -96,6 +96,18 @@
     <Reference Include="SD.LLBLGen.Pro.ORMSupportClasses, Version=5.1.0.0, Culture=neutral, PublicKeyToken=ca73b74ba4e3ff27, processorArchitecture=MSIL">
       <HintPath>..\..\packages\SD.LLBLGen.Pro.ORMSupportClasses.5.1.2\lib\net45\SD.LLBLGen.Pro.ORMSupportClasses.dll</HintPath>
     </Reference>
+    <Reference Include="Syncfusion.Licensing, Version=16.3460.0.21, Culture=neutral, PublicKeyToken=632609b4d040f6b4, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Syncfusion.Licensing.16.3.0.21\lib\net46\Syncfusion.Licensing.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Syncfusion.SfInput.Wpf, Version=16.3460.0.21, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89">
+      <HintPath>..\..\packages\Syncfusion.SfInput.WPF.16.3.0.21\lib\net46\Syncfusion.SfInput.Wpf.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Syncfusion.SfShared.Wpf, Version=16.3460.0.21, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89">
+      <HintPath>..\..\packages\Syncfusion.SfShared.WPF.16.3.0.21\lib\net46\Syncfusion.SfShared.Wpf.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Collections.Immutable, Version=1.2.2.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
@@ -184,6 +196,17 @@
       <DependentUpon>GenericLabelOptionsControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\LabelOptions\AmazonLabelOptionsViewModel.cs" />
+    <Compile Include="Controls\OrderConfirmationDialog\IOrderConfirmationDialog.cs" />
+    <Compile Include="Controls\OrderItems\IOrderItemsViewModel.cs" />
+    <Compile Include="Controls\OrderItems\OrderItemsControl.xaml.cs">
+      <DependentUpon>OrderItemsControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\OrderItems\OrderItemsViewModel.cs" />
+    <Compile Include="Controls\OrderConfirmationDialog\IOrderConfirmationViewModel.cs" />
+    <Compile Include="Controls\OrderConfirmationDialog\OrderConfirmationDialog.xaml.cs">
+      <DependentUpon>OrderConfirmationDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\OrderConfirmationDialog\OrderConfirmationViewModel.cs" />
     <Compile Include="Controls\OrderLookupPanelControl.xaml.cs">
       <DependentUpon>OrderLookupPanelControl.xaml</DependentUpon>
     </Compile>
@@ -291,6 +314,7 @@
     <Compile Include="FieldManager\IOrderLookupFieldManagerDialog.cs" />
     <Compile Include="FieldManager\OrderLookupFieldManagerViewModel.cs" />
     <Compile Include="Layout\IOrderLookupLayout.cs" />
+    <Compile Include="IOrderLookupConfirmationService.cs" />
     <Compile Include="IOrderLookupPanelFactory.cs" />
     <Compile Include="IOrderLookupPreviousShipmentLocator.cs" />
     <Compile Include="IOrderLookupViewModel.cs" />
@@ -300,6 +324,7 @@
     <Compile Include="Layout\PanelInfo.cs" />
     <Compile Include="OrderClearReason.cs" />
     <Compile Include="OrderLookupClearOrderMessage.cs" />
+    <Compile Include="OrderLookupConfirmationService.cs" />
     <Compile Include="OrderLookupLabelShortcutPipeline.cs" />
     <Compile Include="OrderLookupModule.cs" />
     <Compile Include="OrderLookupPanelFactory.cs" />
@@ -322,7 +347,6 @@
     <Compile Include="Controls\Rating\GenericRatingControl.xaml.cs">
       <DependentUpon>GenericRatingControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\ShipmentTypeToOrderLookupTemplateConverter.cs" />
     <Compile Include="Controls\Rating\GenericRatingViewModel.cs" />
     <Compile Include="Controls\Reference\UspsReferenceControl.xaml.cs">
       <DependentUpon>UspsReferenceControl.xaml</DependentUpon>
@@ -341,6 +365,11 @@
     <Compile Include="ShipmentHistory\ShipmentHistoryHeader.cs" />
     <Compile Include="ShipmentHistory\PreviousShipmentReprintActionHandler.cs" />
     <Compile Include="ShipmentHistory\PreviousShipmentVoidActionHandler.cs" />
+    <Compile Include="ShipmentModelPipelines\ApplyProfilePipeline.cs" />
+    <Compile Include="ShipmentModelPipelines\SettingsChangedPipeline.cs" />
+    <Compile Include="ShipmentModelPipelines\FocusQuickSearchPipeline.cs" />
+    <Compile Include="ShipmentModelPipelines\ClearSearchPipeline.cs" />
+    <Compile Include="ShipmentModelPipelines\IOrderLookupShipmentModelPipeline.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
@@ -439,6 +468,11 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Controls\OrderItems\OrderItemsControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\OrderConfirmationDialog\OrderConfirmationDialog.xaml" />
     <Page Include="Controls\OrderLookupPanelControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -555,6 +589,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Styles\OrderLookupComboBoxStyle.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Styles\OrderLookupDataGridStyle.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

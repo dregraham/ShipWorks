@@ -1,4 +1,7 @@
-﻿using System.Windows.Forms;
+﻿using System;
+using System.Windows.Forms;
+using ShipWorks.Data.Model.EntityInterfaces;
+using ShipWorks.Shipping;
 
 namespace ShipWorks.UI.Controls
 {
@@ -26,5 +29,10 @@ namespace ShipWorks.UI.Controls
         /// Allow the creation of a label
         /// </summary>
         bool CreateLabelAllowed();
+
+        /// <summary>
+        /// Register the profile handler
+        /// </summary>
+        void RegisterProfileHandler(Func<Func<ShipmentTypeCode?>, Action<IShippingProfileEntity>, IDisposable> profileRegistration);
     }
 }

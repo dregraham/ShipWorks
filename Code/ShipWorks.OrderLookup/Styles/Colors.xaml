@@ -7,6 +7,11 @@
     <SolidColorBrush x:Key="IconColor" Color="#4a4a4a"/>
     <SolidColorBrush x:Key="ControlTextColor" Color="#4a4a4a"/>
     <SolidColorBrush x:Key="SelectionColor" Color="#4a90e2"/>
+    
+    <!-- Button Colors --> 
+    <SolidColorBrush x:Key="Button.Disabled.Background" Color="#FFF4F4F4"/>
+    <SolidColorBrush x:Key="Button.Disabled.Border" Color="#FFADB2B5"/>
+    <SolidColorBrush x:Key="Button.Disabled.Foreground" Color="#FF838383"/>
 
     <!-- CheckBox Colors -->
     <SolidColorBrush x:Key="OptionMark.MouseOver.Background" Color="#D7D7D7"/>

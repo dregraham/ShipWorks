@@ -5,6 +5,8 @@ using System.Windows.Forms;
 using System.Windows.Forms.Integration;
 using System.Windows.Input;
 using Interapptive.Shared.ComponentRegistration;
+using ShipWorks.Data.Model.EntityInterfaces;
+using ShipWorks.Shipping;
 using ShipWorks.UI.Controls;
 
 namespace ShipWorks.OrderLookup.Controls.OrderLookup
@@ -21,11 +23,18 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookup
         /// <summary>
         /// Constructor
         /// </summary>
-        public OrderLookupControlHost(MainOrderLookupViewModel orderLookupViewModel)
+        public OrderLookupControlHost(MainOrderLookupViewModel orderLookupViewModel, OrderLookupLabelShortcutPipeline shortcutPipeline)
         {
             InitializeComponent();
             this.orderLookupViewModel = orderLookupViewModel;
+            orderLookupViewModel.ShipmentModel.ShipmentNeedsBinding += OnShipmentModelShipmentSaving;
+            shortcutPipeline.Register(orderLookupViewModel.ShipmentModel);
         }
+
+        /// <summary>
+        /// A shipment is about to be saved
+        /// </summary>
+        private void OnShipmentModelShipmentSaving(object sender, EventArgs e) => CommitBindingsOnFocusedControl();
 
         /// <summary>
         /// Set the element host on load
@@ -72,6 +81,12 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookup
                 orderLookupViewModel.ShipmentModel.CreateLabel();
             }
         }
+
+        /// <summary>
+        /// Register the profile handler
+        /// </summary>
+        public void RegisterProfileHandler(Func<Func<ShipmentTypeCode?>, Action<IShippingProfileEntity>, IDisposable> profileRegistration) =>
+            orderLookupViewModel.ShipmentModel.RegisterProfileHandler(profileRegistration);
 
         /// <summary>
         /// Enable focus events

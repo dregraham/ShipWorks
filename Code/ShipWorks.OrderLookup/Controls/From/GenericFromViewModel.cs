@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Reflection;
+using Interapptive.Shared.Collections;
 using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.Core.UI;
 using ShipWorks.Data.Model.Custom;
@@ -30,7 +31,7 @@ namespace ShipWorks.OrderLookup.Controls.From
         private IDisposable autoSave;
         private readonly PropertyChangedHandler handler;
         private readonly IShipmentTypeManager shipmentTypeManager;
-        private readonly ICarrierAccountRetrieverFactory carrierAccountRetrieverFactory;
+
         private readonly AddressViewModel addressViewModel;
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -49,10 +50,32 @@ namespace ShipWorks.OrderLookup.Controls.From
 
             ShipmentModel = shipmentModel;
             this.shipmentTypeManager = shipmentTypeManager;
-            this.carrierAccountRetrieverFactory = carrierAccountRetrieverFactory;
+
+            Accounts = GetAccounts(carrierAccountRetrieverFactory);
+
+            if (!ShipmentModel.ShipmentAdapter.AccountId.HasValue || 
+                Accounts.TryGetValue(ShipmentModel.ShipmentAdapter.AccountId.Value, out string x))
+            {
+                ShipmentModel.ShipmentAdapter.AccountId = Accounts.Select(e=>e.Key).FirstOrDefault();
+            }
+            
             ShipmentModel.PropertyChanged += ShipmentModelPropertyChanged;
 
             InitializeForChangedShipment();
+        }
+
+        /// <summary>
+        /// Get a list of accounts
+        /// </summary>
+        private Dictionary<long, string> GetAccounts(ICarrierAccountRetrieverFactory carrierAccountRetrieverFactory)
+        {
+            IEnumerable<ICarrierAccount> accounts = carrierAccountRetrieverFactory.Create(ShipmentModel.ShipmentAdapter.ShipmentTypeCode).Accounts;
+            if (accounts.None())
+            {
+                accounts = new List<ICarrierAccount> { new NullCarrierAccount() };
+            }
+
+            return accounts.ToDictionary(a => a.AccountId, a => a.AccountDescription);
         }
 
         /// <summary>
@@ -76,6 +99,12 @@ namespace ShipWorks.OrderLookup.Controls.From
         /// </summary>
         [Obfuscation(Exclude = true)]
         public AddressViewModel Address => addressViewModel;
+
+        /// <summary>
+        /// Carrier accounts
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public Dictionary<long, string> Accounts { get; }
 
         /// <summary>
         /// Is address validation enabled or not
@@ -120,8 +149,6 @@ namespace ShipWorks.OrderLookup.Controls.From
                 addressViewModel.SetAddressFromOrigin(originId, orderId, accountId, shipmentTypeCode, store);
 
                 UpdateTitle();
-
-                handler.RaisePropertyChanged(nameof(ShipmentModel));
             }
         }
 
@@ -183,10 +210,9 @@ namespace ShipWorks.OrderLookup.Controls.From
         /// </summary>
         protected virtual string GetHeaderAccountText()
         {
-            ICarrierAccount account = carrierAccountRetrieverFactory.Create(ShipmentModel.ShipmentAdapter.ShipmentTypeCode)?
-                .GetAccountReadOnly(ShipmentModel.ShipmentAdapter.Shipment);
-
-            return account is NullCarrierAccount ? string.Empty : account?.AccountDescription ?? string.Empty;
+            return ShipmentModel.ShipmentAdapter.AccountId.HasValue && ShipmentModel.ShipmentAdapter.AccountId.Value != 0 ? 
+                Accounts.SingleOrDefault(a => a.Key == ShipmentModel.ShipmentAdapter.AccountId).Value :
+                "(None)";
         }
 
         /// <summary>

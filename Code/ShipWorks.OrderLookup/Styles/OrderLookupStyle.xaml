@@ -5,10 +5,12 @@
     xmlns:ui="http://schemas.shipworks.com/ui">
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="/ShipWorks.UI;component/Styles/Controls/GridStyle.xaml" />
+        <ResourceDictionary Source="/ShipWorks.UI;component/Styles/Sizes.xaml" />
         <ResourceDictionary Source="/ShipWorks.OrderLookup;component/Styles/Colors.xaml" />
         <ResourceDictionary Source="/ShipWorks.OrderLookup;component/Styles/OrderLookupButtonStyle.xaml" />
         <ResourceDictionary Source="/ShipWorks.OrderLookup;component/Styles/OrderLookupCheckBoxStyle.xaml" />
         <ResourceDictionary Source="/ShipWorks.OrderLookup;component/Styles/OrderLookupComboBoxStyle.xaml" />
+        <ResourceDictionary Source="/ShipWorks.OrderLookup;component/Styles/OrderLookupDataGridStyle.xaml"/>
         <ResourceDictionary Source="/ShipWorks.OrderLookup;component/Styles/OrderLookupDatePickerStyle.xaml" />
         <ResourceDictionary Source="/ShipWorks.OrderLookup;component/Styles/OrderLookupEditableComboBoxStyle.xaml" />
         <ResourceDictionary Source="/ShipWorks.OrderLookup;component/Styles/OrderLookupExpanderStyle.xaml" />

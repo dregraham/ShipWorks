@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Reflection;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Services;
@@ -13,7 +14,7 @@ namespace ShipWorks.OrderLookup
     /// Represents the Order Lookup Data Service
     /// </summary>
     [Obfuscation(ApplyToMembers = true, Exclude = true, StripAfterObfuscation = false)]
-    public interface IOrderLookupShipmentModel
+    public interface IOrderLookupShipmentModel : IDisposable
     {
         /// <summary>
         /// The order that's in context
@@ -61,6 +62,11 @@ namespace ShipWorks.OrderLookup
         void Unload();
 
         /// <summary>
+        /// Unload the order with reason
+        /// </summary>
+        void Unload(OrderClearReason reason);
+
+        /// <summary>
         /// Fires when an order is cleared
         /// </summary>
         event EventHandler OnSearchOrder;
@@ -96,6 +102,11 @@ namespace ShipWorks.OrderLookup
         void CreateLabel();
 
         /// <summary>
+        /// Register the profile handler
+        /// </summary>
+        void RegisterProfileHandler(Func<Func<ShipmentTypeCode?>, Action<IShippingProfileEntity>, IDisposable> profileRegistration);
+
+        /// <summary>
         /// Wire a property changed event on an INotifyPropertyChanged object
         /// </summary>
         void WirePropertyChangedEvent(INotifyPropertyChanged eventObject);
@@ -116,8 +127,18 @@ namespace ShipWorks.OrderLookup
         event EventHandler ShipmentLoading;
 
         /// <summary>
+        /// A shipment needs binding
+        /// </summary>
+        event EventHandler ShipmentNeedsBinding;
+
+        /// <summary>
         /// A shipment was fully loaded
         /// </summary>
         event EventHandler ShipmentLoaded;
+
+        /// <summary>
+        /// Apply the profile to the current shipment
+        /// </summary>
+        bool ApplyProfile(long profileID);
     }
 }
