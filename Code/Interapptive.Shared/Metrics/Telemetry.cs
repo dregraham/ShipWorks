@@ -112,6 +112,22 @@ namespace Interapptive.Shared.Metrics
         }
 
         /// <summary>
+        /// Sets the user interface view mode: Batch or OrderLookup.
+        /// </summary>
+        /// <param name="viewMode">The view mode.</param>
+        public static void SetUserInterfaceView(string viewMode)
+        {
+            if (!telemetryClient.Context.Properties.ContainsKey("UIMode"))
+            {
+                telemetryClient.Context.Properties.Add("UIMode", viewMode);
+            }
+            else
+            {
+                telemetryClient.Context.Properties["UIMode"] = viewMode;
+            }
+        }
+
+        /// <summary>
         /// Get the storage connection string
         /// </summary>
         private static string GetInstrumentationKey(Version version)

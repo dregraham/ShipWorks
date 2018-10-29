@@ -936,6 +936,7 @@ namespace ShipWorks
                 ToggleBatchMode(user);
             }
 
+
             ToggleQuickAccessToolbar(ribbon, quickAccessToolBar, UIMode);
 
             ribbon.Tabs.Clear();
@@ -944,6 +945,9 @@ namespace ShipWorks
             buttonManageFilters.Visible = UIMode == UIMode.Batch;
 
             UpdateStatusBar();
+            
+            // Notify telemetry of the UI Mode change
+            Telemetry.SetUserInterfaceView(EnumHelper.GetDescription(UIMode));
 
             if (startHeartbeat)
             {
