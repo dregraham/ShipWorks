@@ -226,22 +226,7 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
 
                 if (e.PropertyName == "DimsProfileID")
                 {
-                    PostalShipmentEntity postal = ShipmentModel.ShipmentAdapter.Shipment.Postal;
-                    if (postal.DimsProfileID != 0)
-                    {
-                        DimensionsProfileEntity profile =
-                            DimensionProfiles.SingleOrDefault(p => p.DimensionsProfileID == postal.DimsProfileID);
-
-                        if (profile != null)
-                        {
-                            postal.DimsLength = profile.Length;
-                            postal.DimsWidth = profile.Width;
-                            postal.DimsHeight = profile.Height;
-                            postal.DimsWeight = profile.Weight;
-                        }
-                    }
-
-                    handler.RaisePropertyChanged(nameof(IsProfileSelected));
+                    ApplyDimensionalProfile();
                 }
 
                 if (e.PropertyName == PostalShipmentFields.Service.Name ||
@@ -264,6 +249,36 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
                     shipmentType.UpdatePostalDetails(ShipmentModel.ShipmentAdapter.Shipment);
                 }
             }
+        }
+
+        /// <summary>
+        /// Apply a dimensional profile
+        /// </summary>
+        private void ApplyDimensionalProfile()
+        {
+            PostalShipmentEntity postal = ShipmentModel.ShipmentAdapter.Shipment.Postal;
+            if (postal.DimsProfileID != 0)
+            {
+                DimensionsProfileEntity profile =
+                    DimensionProfiles.SingleOrDefault(p => p.DimensionsProfileID == postal.DimsProfileID);
+
+                if (profile != null)
+                {
+                    postal.DimsLength = profile.Length;
+                    postal.DimsWidth = profile.Width;
+                    postal.DimsHeight = profile.Height;
+                    postal.DimsWeight = profile.Weight;
+                }
+            }
+            else
+            {
+                postal.DimsLength = 0;
+                postal.DimsWidth = 0;
+                postal.DimsHeight = 0;
+                postal.DimsWeight = 0;
+            }
+
+            handler.RaisePropertyChanged(nameof(IsProfileSelected));
         }
 
         /// <summary>
