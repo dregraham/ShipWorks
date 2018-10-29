@@ -201,22 +201,7 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
         {
             if (e.PropertyName == "DimsProfileID")
             {
-                AmazonShipmentEntity amazon = ShipmentModel.ShipmentAdapter.Shipment.Amazon;
-                if (amazon.DimsProfileID != 0)
-                {
-                    DimensionsProfileEntity profile =
-                        DimensionProfiles.SingleOrDefault(p => p.DimensionsProfileID == amazon.DimsProfileID);
-
-                    if (profile != null)
-                    {
-                        amazon.DimsLength = profile.Length;
-                        amazon.DimsWidth = profile.Width;
-                        amazon.DimsHeight = profile.Height;
-                        amazon.DimsWeight = profile.Weight;
-                    }
-                }
-
-                handler.RaisePropertyChanged(nameof(IsProfileSelected));
+                ApplyDimensionalProfile();
             }
 
             if (e.PropertyName == AmazonShipmentFields.ShippingServiceID.Name)
@@ -230,6 +215,37 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
                 RefreshServiceTypes();
                 RefreshInsurance();
             }
+        }
+
+
+        /// <summary>
+        /// Apply a dimensional profile
+        /// </summary>
+        private void ApplyDimensionalProfile()
+        {
+            AmazonShipmentEntity amazon = ShipmentModel.ShipmentAdapter.Shipment.Amazon;
+            if (amazon.DimsProfileID != 0)
+            {
+                DimensionsProfileEntity profile =
+                    DimensionProfiles.SingleOrDefault(p => p.DimensionsProfileID == amazon.DimsProfileID);
+
+                if (profile != null)
+                {
+                    amazon.DimsLength = profile.Length;
+                    amazon.DimsWidth = profile.Width;
+                    amazon.DimsHeight = profile.Height;
+                    amazon.DimsWeight = profile.Weight;
+                }
+            }
+            else
+            {
+                amazon.DimsLength = 0;
+                amazon.DimsWidth = 0;
+                amazon.DimsHeight = 0;
+                amazon.DimsWeight = 0;
+            }
+
+            handler.RaisePropertyChanged(nameof(IsProfileSelected));
         }
 
         /// <summary>
