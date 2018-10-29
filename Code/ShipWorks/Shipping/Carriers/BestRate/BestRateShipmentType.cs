@@ -180,7 +180,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             LoadShipmentData(shipment, false);
 
             IEnumerable<IBestRateShippingBroker> brokers = brokerFactory.CreateBrokers(shipment);
-            return brokers.AsParallel().Any(b => b.IsCustomsRequired(shipment));
+            return brokers.Any(b => b.IsCustomsRequired(shipment));
         }
 
         /// <summary>
