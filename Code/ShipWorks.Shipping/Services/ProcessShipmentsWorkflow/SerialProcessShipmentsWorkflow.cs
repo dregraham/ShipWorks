@@ -153,33 +153,22 @@ namespace ShipWorks.Shipping.Services.ProcessShipmentsWorkflow
 
             try
             {
-                telemetricResult.RunTimedEvent("PrepareShipment.DurationInMilliseconds", () =>
-                {
-                    prepareShipmentResult = prepareShipmentTask.PrepareShipment(initial);
-                });
+                prepareShipmentResult = telemetricResult.RunTimedEvent("PrepareShipment.DurationInMilliseconds", 
+                    () => prepareShipmentTask.PrepareShipment(initial));
 
                 if (initial.CancellationSource.IsCancellationRequested)
                 {
                     return null;
                 }
 
-                ILabelRetrievalResult getLabelResult = null;
-                await telemetricResult.RunTimedEvent("GenerateLabel.DurationInMilliseconds", async () =>
-                {
-                    getLabelResult = await getLabelTask.GetLabel(prepareShipmentResult).ConfigureAwait(false);
-                });
+                ILabelRetrievalResult getLabelResult = await telemetricResult.RunTimedEvent("GenerateLabel.DurationInMilliseconds",
+                    () => getLabelTask.GetLabel(prepareShipmentResult)).ConfigureAwait(false);
+                
+                ILabelPersistenceResult saveLabelResult = telemetricResult.RunTimedEvent("SaveLabel.DurationInMilliseconds",
+                    () => saveLabelTask.SaveLabel(getLabelResult));
 
-                ILabelPersistenceResult saveLabelResult = null;
-                telemetricResult.RunTimedEvent("SaveLabel.DurationInMilliseconds", () =>
-                {
-                    saveLabelResult = saveLabelTask.SaveLabel(getLabelResult);
-                });
-
-                ILabelResultLogResult logLabelResult = null;
-                telemetricResult.RunTimedEvent("LogLabel.DurationInMilliseconds", () =>
-                {
-                    logLabelResult = completeLabelTask.Complete(saveLabelResult);
-                });
+                ILabelResultLogResult logLabelResult = telemetricResult.RunTimedEvent("LogLabel.DurationInMilliseconds", 
+                    () => completeLabelTask.Complete(saveLabelResult));
 
                 return logLabelResult;
 
