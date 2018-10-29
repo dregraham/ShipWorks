@@ -253,7 +253,6 @@
     <Compile Include="Services\MessageHelperWrapper.cs" />
     <Compile Include="Triggers\SetFocusTrigger.cs" />
     <Compile Include="UiModule.cs" />
-    <Compile Include="ValueConverters\AdditionConverter.cs" />
     <Compile Include="ValueConverters\BooleanAndConverter.cs" />
     <Compile Include="ValueConverters\BooleanToIntConverter.cs" />
     <Compile Include="ValueConverters\BooleanToGridRowHeightConverter.cs" />

@@ -12,7 +12,8 @@
     d:DataContext="{d:DesignInstance local:MainOrderLookupViewModel}"
     FontFamily="/ShipWorks.OrderLookup;component/#Roboto"
     mc:Ignorable="d"
-    x:Name="OrderLookupControl">
+    x:Name="OrderLookupControl"
+    SizeChanged="OnControlSizeChanged">
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -27,8 +28,6 @@
             <DataTemplate x:Key="SectionItemTemplate">
                 <basic:OrderLookupPanelControl />
             </DataTemplate>
-            
-            <ui:AdditionConverter x:Key="AdditionConverter"/>
         </ResourceDictionary>
     </UserControl.Resources>
     <Grid>
@@ -46,25 +45,20 @@
             HorizontalScrollBarVisibility="Disabled"
             VerticalScrollBarVisibility="Auto"
             Visibility="{Binding ShowColumns}">
-            <Grid>
+            <Grid x:Name="ColumnGrid" SizeChanged="OnGridControlSizeChanged"
+                  MaxWidth="{Binding ElementName=OrderLookupControl, Path=ActualWidth}">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="{Binding LeftColumnWidth, Mode=TwoWay}"
-                                      MinWidth="10"
-                                      MaxWidth="{Binding ElementName=OrderLookupControl, Path=ActualWidth,
-                                            Converter={StaticResource AdditionConverter}, 
-                                            ConverterParameter=-35}"/>
+                    <ColumnDefinition x:Name="LeftColumn" 
+                                      Width="{Binding LeftColumnWidth, Mode=TwoWay}"
+                                      MinWidth="10"/>
                     <ColumnDefinition Width="auto" />
-                    <ColumnDefinition Width="*"
-                                      MinWidth="10"
-                                      MaxWidth="{Binding ElementName=OrderLookupControl, Path=ActualWidth,
-                                            Converter={StaticResource AdditionConverter}, 
-                                            ConverterParameter=-35}"/>
+                    <ColumnDefinition x:Name="MiddleColumn" 
+                                      Width="*"
+                                      MinWidth="10"/>
                     <ColumnDefinition Width="auto" />
-                    <ColumnDefinition Width="{Binding RightColumnWidth, Mode=TwoWay}"
-                                      MinWidth="10"
-                                      MaxWidth="{Binding ElementName=OrderLookupControl, Path=ActualWidth,
-                                            Converter={StaticResource AdditionConverter}, 
-                                            ConverterParameter=-35}"/>
+                    <ColumnDefinition x:Name="RightColumn" 
+                                      Width="{Binding RightColumnWidth, Mode=TwoWay}"
+                                      MinWidth="10"/>
                 </Grid.ColumnDefinitions>
                 <Grid.Resources>
                     <Style TargetType="ItemsControl">
@@ -74,6 +68,7 @@
                         <Setter Property="dd:DragDrop.IsDropTarget" Value="True" />
                         <Setter Property="dd:DragDrop.DropHandler" Value="{Binding}" />
                         <Setter Property="IsTabStop" Value="False" />
+                        <Setter Property="MinWidth" Value="10"/>
                     </Style>
                     <Style TargetType="GridSplitter">
                         <Setter Property="VerticalAlignment" Value="Stretch" />
@@ -101,8 +96,8 @@
                     ItemTemplate="{StaticResource SectionItemTemplate}"
                     ItemsSource="{Binding RightColumn}" />
 
-                <GridSplitter Grid.Column="1" />
-                <GridSplitter Grid.Column="3" />
+                <GridSplitter Grid.Column="1" DragCompleted="OnGridSplitterDragComplete" />
+                <GridSplitter Grid.Column="3" DragCompleted="OnGridSplitterDragComplete" />
             </Grid>
         </ScrollViewer>
     </Grid>
