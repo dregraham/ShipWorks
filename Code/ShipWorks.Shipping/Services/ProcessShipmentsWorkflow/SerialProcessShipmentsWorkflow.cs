@@ -155,7 +155,7 @@ namespace ShipWorks.Shipping.Services.ProcessShipmentsWorkflow
             {
                 telemetricResult.RunTimedEvent("PrepareShipment.DurationInMilliseconds", () =>
                 {
-                    return prepareShipmentResult = prepareShipmentTask.PrepareShipment(initial);
+                    prepareShipmentResult = prepareShipmentTask.PrepareShipment(initial);
                 });
 
                 if (initial.CancellationSource.IsCancellationRequested)
@@ -172,7 +172,7 @@ namespace ShipWorks.Shipping.Services.ProcessShipmentsWorkflow
                 ILabelPersistenceResult saveLabelResult = null;
                 telemetricResult.RunTimedEvent("SaveLabel.DurationInMilliseconds", () =>
                 {
-                    return saveLabelResult = saveLabelTask.SaveLabel(getLabelResult);
+                    saveLabelResult = saveLabelTask.SaveLabel(getLabelResult);
                 });
 
                 ILabelResultLogResult logLabelResult = null;
