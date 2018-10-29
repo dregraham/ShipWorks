@@ -8,9 +8,11 @@
     xmlns:local="clr-namespace:ShipWorks.OrderLookup.Controls.OrderLookup"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:orderLookupSearchControl="clr-namespace:ShipWorks.OrderLookup.Controls.OrderLookupSearchControl"
+    xmlns:ui="http://schemas.shipworks.com/ui"
     d:DataContext="{d:DesignInstance local:MainOrderLookupViewModel}"
     FontFamily="/ShipWorks.OrderLookup;component/#Roboto"
-    mc:Ignorable="d">
+    mc:Ignorable="d"
+    x:Name="OrderLookupControl">
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -25,6 +27,8 @@
             <DataTemplate x:Key="SectionItemTemplate">
                 <basic:OrderLookupPanelControl />
             </DataTemplate>
+            
+            <ui:AdditionConverter x:Key="AdditionConverter"/>
         </ResourceDictionary>
     </UserControl.Resources>
     <Grid>
@@ -44,11 +48,23 @@
             Visibility="{Binding ShowColumns}">
             <Grid>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="{Binding LeftColumnWidth, Mode=TwoWay}" />
+                    <ColumnDefinition Width="{Binding LeftColumnWidth, Mode=TwoWay}"
+                                      MinWidth="10"
+                                      MaxWidth="{Binding ElementName=OrderLookupControl, Path=ActualWidth,
+                                            Converter={StaticResource AdditionConverter}, 
+                                            ConverterParameter=-35}"/>
                     <ColumnDefinition Width="auto" />
-                    <ColumnDefinition />
+                    <ColumnDefinition Width="*"
+                                      MinWidth="10"
+                                      MaxWidth="{Binding ElementName=OrderLookupControl, Path=ActualWidth,
+                                            Converter={StaticResource AdditionConverter}, 
+                                            ConverterParameter=-35}"/>
                     <ColumnDefinition Width="auto" />
-                    <ColumnDefinition Width="{Binding RightColumnWidth, Mode=TwoWay}" />
+                    <ColumnDefinition Width="{Binding RightColumnWidth, Mode=TwoWay}"
+                                      MinWidth="10"
+                                      MaxWidth="{Binding ElementName=OrderLookupControl, Path=ActualWidth,
+                                            Converter={StaticResource AdditionConverter}, 
+                                            ConverterParameter=-35}"/>
                 </Grid.ColumnDefinitions>
                 <Grid.Resources>
                     <Style TargetType="ItemsControl">
@@ -65,6 +81,7 @@
                         <Setter Property="Background" Value="Transparent" />
                         <Setter Property="ShowsPreview" Value="True" />
                         <Setter Property="Width" Value="5" />
+                        <Setter Property="Margin" Value="1 0" />
                         <Setter Property="IsTabStop" Value="False" />
                     </Style>
                 </Grid.Resources>
