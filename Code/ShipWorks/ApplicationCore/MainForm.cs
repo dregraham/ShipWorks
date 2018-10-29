@@ -187,7 +187,9 @@ namespace ShipWorks
             {
                 if (x is ShipmentSelectionChangedMessage && currentUserSettings.GetUIMode() == UIMode.OrderLookup)
                 {
-                    buttonOrderLookupViewCreateLabel.Enabled = orderLookupControl?.CreateLabelAllowed() == true;
+                    var canProcess = orderLookupControl?.CreateLabelAllowed() == true;
+                    buttonOrderLookupViewCreateLabel.Enabled = canProcess;
+                    buttonOrderLookupViewApplyProfile.Enabled = canProcess;
                 }
             });
         }

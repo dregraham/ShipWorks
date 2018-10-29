@@ -466,7 +466,8 @@ namespace ShipWorks.OrderLookup
         public bool ApplyProfile(IShippingProfile profile)
         {
             //var profile = profileService.Get(profileID);
-            if (ShipmentAdapter?.Shipment != null && profile.IsApplicable(ShipmentAdapter?.Shipment?.ShipmentTypeCode))
+            if (ShipmentAdapter?.Shipment?.Processed == false &&
+                profile.IsApplicable(ShipmentAdapter.Shipment.ShipmentTypeCode))
             {
                 ShipmentNeedsBinding?.Invoke(this, EventArgs.Empty);
 
