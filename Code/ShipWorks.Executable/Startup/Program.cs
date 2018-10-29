@@ -7,6 +7,7 @@ using Newtonsoft.Json;
 using SD.Tools.OrmProfiler.Interceptor;
 using ShipWorks.ApplicationCore;
 using ShipWorks.Data.JsonConverters;
+using Syncfusion.Licensing;
 
 namespace ShipWorks.Startup
 {
@@ -27,6 +28,7 @@ namespace ShipWorks.Startup
                 InterceptorCore.Initialize("ShipWorks");
             }
 #endif
+            SyncfusionLicenseProvider.RegisterLicense("MzgxODJAMzEzNjJlMzMyZTMwQkhIaE4yS1NsbHliVVJYRjF3R3dPYmM0c01XbkdTcnVlLzZiOUdXeUlrTT0=");
 
             MessageLogger.Current.AddConverters(() => new JsonConverter[] {
                 new ShipmentEntityJsonConverter(),
