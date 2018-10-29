@@ -239,8 +239,8 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
                     e.PropertyName == PostalShipmentFields.Confirmation.Name ||
                     e.PropertyName == ShipmentFields.ShipCountryCode.Name)
                 {
-                    var shipmentType = (PostalShipmentType) shipmentTypeManager.Get(ShipmentModel.ShipmentAdapter.ShipmentTypeCode);
-                    shipmentType.UpdatePostalDetails(ShipmentModel.ShipmentAdapter.Shipment);
+                    ShipmentType shipmentType = shipmentTypeManager.Get(ShipmentModel.ShipmentAdapter.ShipmentTypeCode);
+                    shipmentType.RectifyCarrierSpecificData(ShipmentModel.ShipmentAdapter.Shipment);
                 }
             }
         }
