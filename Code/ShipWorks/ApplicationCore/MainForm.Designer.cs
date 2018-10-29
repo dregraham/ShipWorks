@@ -1537,7 +1537,7 @@ namespace ShipWorks
             this.contextOrderEditCustomer.Size = new System.Drawing.Size(169, 22);
             this.contextOrderEditCustomer.Text = "Edit Customer";
             this.contextOrderEditCustomer.Visible = false;
-            this.contextOrderEditCustomer.Click += new System.EventHandler(this.OnEditCustomer);
+            this.contextOrderEditCustomer.Click += new System.EventHandler(this.OnContextOrderEditCustomer);
             //
             // contextOrderLookupCustomer
             //
