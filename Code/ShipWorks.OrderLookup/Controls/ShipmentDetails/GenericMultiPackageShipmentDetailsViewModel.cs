@@ -303,6 +303,13 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
                         SelectedPackage.AdditionalWeight = profile.Weight;
                     }
                 }
+                else
+                {
+                    SelectedPackage.DimsLength = 0;
+                    SelectedPackage.DimsWidth = 0;
+                    SelectedPackage.DimsHeight = 0;
+                    SelectedPackage.AdditionalWeight = 0;
+                }
 
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsProfileSelected)));
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(SelectedPackage)));
