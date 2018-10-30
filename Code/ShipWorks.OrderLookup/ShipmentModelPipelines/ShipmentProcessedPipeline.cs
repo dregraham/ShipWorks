@@ -4,6 +4,7 @@ using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using Interapptive.Shared.UI;
 using ShipWorks.Core.Messaging;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Messaging.Messages.Shipping;
 
 namespace ShipWorks.OrderLookup.ShipmentModelPipelines
@@ -42,7 +43,7 @@ namespace ShipWorks.OrderLookup.ShipmentModelPipelines
         /// </summary>
         private void HandleSuccessfulShipment(IOrderLookupShipmentModel model, ShipmentsProcessedMessage message)
         {
-            model.Unload();
+            model.RefreshShipmentFromDatabase();
             messageHelper.ShowPopup(
                 "Processed Successfully\n" +
                 $"Order: {message.Shipments.FirstOrDefault().Shipment?.Order.OrderNumberComplete}");
