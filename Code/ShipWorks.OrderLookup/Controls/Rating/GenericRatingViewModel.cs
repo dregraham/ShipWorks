@@ -96,6 +96,11 @@ namespace ShipWorks.OrderLookup.Controls.Rating
         }
 
         /// <summary>
+        /// Field layout repository
+        /// </summary>
+        public IOrderLookupFieldLayoutRepository FieldLayoutRepository => ShipmentModel.FieldLayoutRepository;
+
+        /// <summary>
         /// Dispose
         /// </summary>
         public override void Dispose()

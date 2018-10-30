@@ -26,7 +26,7 @@ namespace ShipWorks.OrderLookup.Controls.Customs
         {
             CustomsExportFilingOptions = EnumHelper.GetEnumList<FedExCustomsExportFilingOption>().ToDictionary(x => (int) x.Value, x => x.Description);
         }
-        
+
         /// <summary>
         /// List of available customs export filing options
         /// </summary>
@@ -34,7 +34,7 @@ namespace ShipWorks.OrderLookup.Controls.Customs
         public Dictionary<int, string> CustomsExportFilingOptions
         {
             get => customsExportFilingOptions;
-            set => handler.Set(nameof(CustomsExportFilingOptions), ref customsExportFilingOptions, value);
+            set => Handler.Set(nameof(CustomsExportFilingOptions), ref customsExportFilingOptions, value);
         }
     }
 }

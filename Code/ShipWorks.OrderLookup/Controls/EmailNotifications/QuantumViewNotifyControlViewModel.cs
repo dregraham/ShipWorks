@@ -1,10 +1,8 @@
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
-using ShipWorks.Core.UI;
 using ShipWorks.OrderLookup.FieldManager;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
@@ -17,20 +15,15 @@ namespace ShipWorks.OrderLookup.Controls.EmailNotifications
     /// </summary>
     [KeyedComponent(typeof(IEmailNotificationsViewModel), ShipmentTypeCode.UpsOnLineTools)]
     [WpfView(typeof(QuantumViewNotifyControl))]
-    public class QuantumViewNotifyControlViewModel : IEmailNotificationsViewModel
+    public class QuantumViewNotifyControlViewModel : OrderLookupViewModelBase, IEmailNotificationsViewModel
     {
-        public event PropertyChangedEventHandler PropertyChanged;
-        private readonly PropertyChangedHandler handler;
         private Dictionary<int, string> subjectTypes;
 
         /// <summary>
         /// Ctor
         /// </summary>
-        public QuantumViewNotifyControlViewModel(IOrderLookupShipmentModel shipmentModel)
+        public QuantumViewNotifyControlViewModel(IOrderLookupShipmentModel shipmentModel) : base(shipmentModel)
         {
-            ShipmentModel = shipmentModel;
-            handler = new PropertyChangedHandler(this, () => PropertyChanged);
-
             SubjectTypes = EnumHelper.GetEnumList<UpsEmailNotificationSubject>()
                                      .ToDictionary(x => (int) x.Value, x => x.Description);
         }
@@ -38,25 +31,13 @@ namespace ShipWorks.OrderLookup.Controls.EmailNotifications
         /// <summary>
         /// Panel ID
         /// </summary>
-        public SectionLayoutIDs PanelID => SectionLayoutIDs.UPSQuantumViewNotify;
+        public override SectionLayoutIDs PanelID => SectionLayoutIDs.UPSQuantumViewNotify;
 
         /// <summary>
         /// Title of the section
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public string Title => "Quantum View Notify";
-
-        /// <summary>
-        /// Is the section visible
-        /// </summary>
-        [Obfuscation(Exclude = true)]
-        public bool Visible => true;
-
-        /// <summary>
-        /// The ViewModel ShipmentModel
-        /// </summary>
-        [Obfuscation(Exclude = true)]
-        public IOrderLookupShipmentModel ShipmentModel { get; }
+        public override string Title { get; protected set; } = "Quantum View Notify";
 
         /// <summary>
         /// Subject types
@@ -65,7 +46,7 @@ namespace ShipWorks.OrderLookup.Controls.EmailNotifications
         public Dictionary<int, string> SubjectTypes
         {
             get => subjectTypes;
-            set => handler.Set(nameof(SubjectTypes), ref subjectTypes, value);
+            set => Handler.Set(nameof(SubjectTypes), ref subjectTypes, value);
         }
 
         /// <summary>
@@ -114,15 +95,8 @@ namespace ShipWorks.OrderLookup.Controls.EmailNotifications
             {
                 currentValue |= (int) valueChanged;
             }
-            
-            return currentValue;
-        }
 
-        /// <summary>
-        /// Dispose
-        /// </summary>
-        public void Dispose()
-        {
+            return currentValue;
         }
     }
 }

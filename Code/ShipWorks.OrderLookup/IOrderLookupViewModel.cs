@@ -2,23 +2,32 @@
 using System.ComponentModel;
 using ShipWorks.OrderLookup.FieldManager;
 
-/// <summary>
-/// Generic view model for order lookup
-/// </summary>
-public interface IOrderLookupViewModel : INotifyPropertyChanged, IDisposable
+namespace ShipWorks.OrderLookup
 {
-    /// <summary>
-    /// Title of the section
-    /// </summary>
-    string Title { get; }
 
     /// <summary>
-    /// Is the section visible
+    /// Generic view model for order lookup
     /// </summary>
-    bool Visible { get; }
+    public interface IOrderLookupViewModel : IFieldRepositoryProvider, INotifyPropertyChanged, IDisposable
+    {
+        /// <summary>
+        /// Title of the section
+        /// </summary>
+        string Title { get; }
 
-    /// <summary>
-    /// Panel ID 
-    /// </summary>
-    SectionLayoutIDs PanelID { get; }
+        /// <summary>
+        /// Is the section visible
+        /// </summary>
+        bool Visible { get; }
+
+        /// <summary>
+        /// Panel ID
+        /// </summary>
+        SectionLayoutIDs PanelID { get; }
+
+        /// <summary>
+        /// Main shipment model
+        /// </summary>
+        IOrderLookupShipmentModel ShipmentModel { get; }
+    }
 }

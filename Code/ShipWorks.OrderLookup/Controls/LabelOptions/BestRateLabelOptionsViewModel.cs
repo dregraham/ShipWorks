@@ -7,7 +7,6 @@ using System.Reflection;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
 using Shared.System.ComponentModel.DataAnnotations;
-using ShipWorks.Core.UI;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.OrderLookup.FieldManager;
 using ShipWorks.Shipping;
@@ -21,25 +20,18 @@ namespace ShipWorks.OrderLookup.Controls.LabelOptions
     /// </summary>
     [KeyedComponent(typeof(ILabelOptionsViewModel), ShipmentTypeCode.BestRate)]
     [WpfView(typeof(BestRateLabelOptionsControl))]
-    public class BestRateLabelOptionsViewModel : ILabelOptionsViewModel, IDataErrorInfo
+    public class BestRateLabelOptionsViewModel : OrderLookupViewModelBase, ILabelOptionsViewModel, IDataErrorInfo
     {
         private readonly IShipmentTypeManager shipmentTypeManager;
-        private readonly PropertyChangedHandler handler;
         private DateTime? shipDate;
         private Dictionary<int, string> serviceLevels;
-
-        public event PropertyChangedEventHandler PropertyChanged;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public BestRateLabelOptionsViewModel(IOrderLookupShipmentModel shipmentModel, IShipmentTypeManager shipmentTypeManager)
+        public BestRateLabelOptionsViewModel(IOrderLookupShipmentModel shipmentModel, IShipmentTypeManager shipmentTypeManager) : base(shipmentModel)
         {
-            ShipmentModel = shipmentModel;
-            ShipmentModel.PropertyChanged += ShipmentModelPropertyChanged;
             this.shipmentTypeManager = shipmentTypeManager;
-
-            handler = new PropertyChangedHandler(this, () => PropertyChanged);
 
             InitializeForChangedShipment(ShipmentModel.ShipmentAdapter.Shipment);
         }
@@ -47,19 +39,13 @@ namespace ShipWorks.OrderLookup.Controls.LabelOptions
         /// <summary>
         /// Panel ID
         /// </summary>
-        public SectionLayoutIDs PanelID => SectionLayoutIDs.LabelOptions;
+        public override SectionLayoutIDs PanelID => SectionLayoutIDs.LabelOptions;
 
         /// <summary>
         /// Title of the section
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public string Title => "Label Options";
-
-        /// <summary>
-        /// Is the section visible
-        /// </summary>
-        [Obfuscation(Exclude = true)]
-        public bool Visible => true;
+        public override string Title { get; protected set; } = "Label Options";
 
         /// <summary>
         /// Shipment ship date
@@ -72,7 +58,7 @@ namespace ShipWorks.OrderLookup.Controls.LabelOptions
             get { return shipDate; }
             set
             {
-                handler.Set(nameof(ShipDate), ref shipDate, value);
+                Handler.Set(nameof(ShipDate), ref shipDate, value);
 
                 if (ShipmentModel?.ShipmentAdapter?.ShipDate != null &&
                     ShipmentModel.ShipmentAdapter.ShipDate != value)
@@ -89,14 +75,8 @@ namespace ShipWorks.OrderLookup.Controls.LabelOptions
         public Dictionary<int, string> ServiceLevels
         {
             get => serviceLevels;
-            set => handler.Set(nameof(ServiceLevels), ref serviceLevels, value);
+            set => Handler.Set(nameof(ServiceLevels), ref serviceLevels, value);
         }
-
-        /// <summary>
-        /// The order lookup ShipmentModel
-        /// </summary>
-        [Obfuscation(Exclude = true)]
-        public IOrderLookupShipmentModel ShipmentModel { get; }
 
         /// <summary>
         /// Do nothing
@@ -123,8 +103,10 @@ namespace ShipWorks.OrderLookup.Controls.LabelOptions
         /// <summary>
         /// Update when the order changes
         /// </summary>
-        private void ShipmentModelPropertyChanged(object sender, PropertyChangedEventArgs e)
+        protected override void ShipmentModelPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
+            base.ShipmentModelPropertyChanged(sender, e);
+
             if (e.PropertyName == nameof(ShipmentModel.SelectedOrder) && ShipmentModel.SelectedOrder != null)
             {
                 ShipmentEntity shipment = ShipmentModel.ShipmentAdapter.Shipment;
@@ -133,7 +115,7 @@ namespace ShipWorks.OrderLookup.Controls.LabelOptions
                 InitializeForChangedShipment(shipment);
 
                 // Update the ShipmentModel
-                handler.RaisePropertyChanged(nameof(ShipmentModel));
+                Handler.RaisePropertyChanged(nameof(ShipmentModel));
             }
         }
 
@@ -147,11 +129,5 @@ namespace ShipWorks.OrderLookup.Controls.LabelOptions
             ServiceLevels = EnumHelper.GetEnumList<ServiceLevelType>()
                 .Select(x => x.Value).ToDictionary(s => (int) s, s => EnumHelper.GetDescription(s));
         }
-
-        /// <summary>
-        /// Dispose
-        /// </summary>
-        public void Dispose() =>
-            ShipmentModel.PropertyChanged -= ShipmentModelPropertyChanged;
     }
 }

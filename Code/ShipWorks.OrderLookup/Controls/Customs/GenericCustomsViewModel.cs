@@ -7,7 +7,6 @@ using System.Reflection;
 using GalaSoft.MvvmLight.Command;
 using Interapptive.Shared.Utility;
 using Shared.System.ComponentModel.DataAnnotations;
-using ShipWorks.Core.UI;
 using ShipWorks.OrderLookup.FieldManager;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Services;
@@ -17,13 +16,11 @@ namespace ShipWorks.OrderLookup.Controls.Customs
     /// <summary>
     /// View model for the OrderLookupCustomsControl
     /// </summary>
-    public class GenericCustomsViewModel : ICustomsViewModel
+    public class GenericCustomsViewModel : OrderLookupViewModelBase, ICustomsViewModel
     {
         private IShipmentCustomsItemAdapter selectedCustomsItem;
         private ObservableCollection<IShipmentCustomsItemAdapter> customsItems;
         private double contentWeight;
-        public event PropertyChangedEventHandler PropertyChanged;
-        protected readonly PropertyChangedHandler handler;
 
         private bool visible;
         private readonly IShipmentTypeManager shipmentTypeManager;
@@ -31,13 +28,9 @@ namespace ShipWorks.OrderLookup.Controls.Customs
         /// <summary>
         /// Constructor
         /// </summary>
-        public GenericCustomsViewModel(IOrderLookupShipmentModel shipmentModel, IShipmentTypeManager shipmentTypeManager)
+        public GenericCustomsViewModel(IOrderLookupShipmentModel shipmentModel, IShipmentTypeManager shipmentTypeManager) : base(shipmentModel)
         {
-            ShipmentModel = shipmentModel;
-            ShipmentModel.PropertyChanged += ShipmentModelPropertyChanged;
             this.shipmentTypeManager = shipmentTypeManager;
-
-            handler = new PropertyChangedHandler(this, () => PropertyChanged);
 
             Visible = ShipmentModel.ShipmentAdapter?.CustomsAllowed ?? false;
         }
@@ -46,20 +39,20 @@ namespace ShipWorks.OrderLookup.Controls.Customs
         /// The title of the section
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public string Title => "Customs";
+        public override string Title { get; protected set; } = "Customs";
 
         /// <summary>
         /// Is Customs Allowed
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public bool Visible
+        public override bool Visible
         {
             get => visible;
-            private set
+            protected set
             {
                 bool shouldLoadCustoms = (value && !visible);
 
-                handler.Set(nameof(Visible), ref visible, value);
+                Handler.Set(nameof(Visible), ref visible, value);
 
                 if (shouldLoadCustoms)
                 {
@@ -69,25 +62,19 @@ namespace ShipWorks.OrderLookup.Controls.Customs
         }
 
         /// <summary>
-        /// The order lookup shipment model
-        /// </summary>
-        [Obfuscation(Exclude = true)]
-        public IOrderLookupShipmentModel ShipmentModel { get; }
-
-        /// <summary>
         /// The list of customs items
         /// </summary>
         [Obfuscation(Exclude = true)]
         public ObservableCollection<IShipmentCustomsItemAdapter> CustomsItems
         {
             get => customsItems;
-            private set => handler.Set(nameof(CustomsItems), ref customsItems, value);
+            private set => Handler.Set(nameof(CustomsItems), ref customsItems, value);
         }
 
         /// <summary>
         /// Panel ID
         /// </summary>
-        public virtual SectionLayoutIDs PanelID => SectionLayoutIDs.Customs;
+        public override SectionLayoutIDs PanelID => SectionLayoutIDs.Customs;
 
         /// <summary>
         /// The selected customs item
@@ -103,14 +90,14 @@ namespace ShipWorks.OrderLookup.Controls.Customs
                     SelectedCustomsItem.PropertyChanged -= OnSelectedCustomsItemPropertyChanged;
                 }
 
-                handler.Set(nameof(SelectedCustomsItem), ref selectedCustomsItem, value);
+                Handler.Set(nameof(SelectedCustomsItem), ref selectedCustomsItem, value);
 
                 if (SelectedCustomsItem != null)
                 {
                     SelectedCustomsItem.PropertyChanged += OnSelectedCustomsItemPropertyChanged;
                 }
 
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(DeleteCustomsItemCommand)));
+                RaisePropertyChanged(nameof(DeleteCustomsItemCommand));
             }
         }
 
@@ -125,7 +112,7 @@ namespace ShipWorks.OrderLookup.Controls.Customs
         public double ContentWeight
         {
             get => contentWeight;
-            set => handler.Set(nameof(ContentWeight), ref contentWeight, value);
+            set => Handler.Set(nameof(ContentWeight), ref contentWeight, value);
         }
 
         /// <summary>
@@ -155,7 +142,7 @@ namespace ShipWorks.OrderLookup.Controls.Customs
         /// Load customs
         /// </summary>
         private void LoadCustoms()
-        {            
+        {
             ICarrierShipmentAdapter shipmentAdapter = ShipmentModel.ShipmentAdapter;
 
             if (shipmentAdapter == null || !shipmentAdapter.CustomsAllowed)
@@ -171,7 +158,7 @@ namespace ShipWorks.OrderLookup.Controls.Customs
                 .Select(x => new ShipmentCustomsItemAdapter(x)));
 
             SelectedCustomsItem = CustomsItems.FirstOrDefault();
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(DeleteCustomsItemCommand)));
+            RaisePropertyChanged(nameof(DeleteCustomsItemCommand));
         }
 
         /// <summary>
@@ -248,17 +235,11 @@ namespace ShipWorks.OrderLookup.Controls.Customs
         /// <summary>
         /// Update when the order changes
         /// </summary>
-        private void ShipmentModelPropertyChanged(object sender, PropertyChangedEventArgs e)
+        protected override void ShipmentModelPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            Visible = ShipmentModel.ShipmentAdapter?.CustomsAllowed ?? false;
-        }
+            base.ShipmentModelPropertyChanged(sender, e);
 
-        /// <summary>
-        /// Dispose
-        /// </summary>
-        public void Dispose()
-        {
-            ShipmentModel.PropertyChanged -= ShipmentModelPropertyChanged;
+            Visible = ShipmentModel.ShipmentAdapter?.CustomsAllowed ?? false;
         }
     }
 }

@@ -49,7 +49,7 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
         public IEnumerable<KeyValuePair<int, string>> SignatureTypes
         {
             get => signatureTypes;
-            set => handler.Set(nameof(SignatureTypes), ref signatureTypes, value);
+            set => Handler.Set(nameof(SignatureTypes), ref signatureTypes, value);
         }
 
         /// <summary>
@@ -96,7 +96,7 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
                 ShipmentType shipmentType = shipmentTypeManager.Get(ShipmentTypeCode.FedEx);
                 shipmentType.RectifyCarrierSpecificData(ShipmentModel.ShipmentAdapter.Shipment);
 
-                handler.RaisePropertyChanged(null);
+                Handler.RaisePropertyChanged(null);
             }
         }
 

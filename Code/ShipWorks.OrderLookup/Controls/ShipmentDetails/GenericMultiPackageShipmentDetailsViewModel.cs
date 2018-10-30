@@ -9,7 +9,6 @@ using System.Windows.Input;
 using GalaSoft.MvvmLight.CommandWpf;
 using Interapptive.Shared.Collections;
 using Shared.System.ComponentModel.DataAnnotations;
-using ShipWorks.Core.UI;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.OrderLookup.FieldManager;
 using ShipWorks.Shipping;
@@ -22,11 +21,9 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
     /// <summary>
     /// View model for shipment details
     /// </summary>
-    public abstract class GenericMultiPackageShipmentDetailsViewModel : IDetailsViewModel, IDataErrorInfo
+    public abstract class GenericMultiPackageShipmentDetailsViewModel : OrderLookupViewModelBase, IDetailsViewModel, IDataErrorInfo
     {
         private const int MaxPackageCount = 25;
-        public event PropertyChangedEventHandler PropertyChanged;
-        protected readonly PropertyChangedHandler handler;
 
         private readonly Func<DimensionsManagerDlg> getDimensionsManagerDlg;
         private readonly ICarrierShipmentAdapterOptionsProvider carrierShipmentAdapterOptionsProvider;
@@ -43,15 +40,13 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
         protected GenericMultiPackageShipmentDetailsViewModel(IOrderLookupShipmentModel shipmentModel,
                                                               IInsuranceViewModel insuranceViewModel,
                                                               Func<DimensionsManagerDlg> getDimensionsManagerDlg,
-                                                              ICarrierShipmentAdapterOptionsProvider carrierShipmentAdapterOptionsProvider)
+                                                              ICarrierShipmentAdapterOptionsProvider carrierShipmentAdapterOptionsProvider) :
+            base(shipmentModel)
         {
-            ShipmentModel = shipmentModel;
-            ShipmentModel.PropertyChanged += ShipmentModelPropertyChanged;
-
             this.getDimensionsManagerDlg = getDimensionsManagerDlg;
             this.carrierShipmentAdapterOptionsProvider = carrierShipmentAdapterOptionsProvider;
             InsuranceViewModel = insuranceViewModel;
-            handler = new PropertyChangedHandler(this, () => PropertyChanged);
+
             ManageDimensionalProfiles = new RelayCommand(ManageDimensionalProfilesAction);
             AddPackageCommand = new RelayCommand(AddPackageAction, () => Packages.IsCountLessThan(MaxPackageCount));
             DeletePackageCommand = new RelayCommand(DeletePackageAction,
@@ -70,7 +65,7 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
         /// <summary>
         /// Panel ID
         /// </summary>
-        public SectionLayoutIDs PanelID => SectionLayoutIDs.ShipmentDetails;
+        public override SectionLayoutIDs PanelID => SectionLayoutIDs.ShipmentDetails;
 
         /// <summary>
         /// Delete the selected package
@@ -101,7 +96,7 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
 
             // Force rates to refresh after adding a package
             ShipmentModel.RaisePropertyChanged(null);
-            handler.RaisePropertyChanged(nameof(ShipmentModel));
+            Handler.RaisePropertyChanged(nameof(ShipmentModel));
 
             AddPackageCommand.RaiseCanExecuteChanged();
             DeletePackageCommand.RaiseCanExecuteChanged();
@@ -129,13 +124,7 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
         /// Title of the section
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public string Title => "Shipment Details";
-
-        /// <summary>
-        /// Is the section visible
-        /// </summary>
-        [Obfuscation(Exclude = true)]
-        public bool Visible => true;
+        public override string Title { get; protected set; } = "Shipment Details";
 
         /// <summary>
         /// Manages Dimensional Profiles
@@ -156,12 +145,6 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
         public RelayCommand AddPackageCommand { get; set; }
 
         /// <summary>
-        /// The ViewModel ShipmentModel
-        /// </summary>
-        [Obfuscation(Exclude = true)]
-        public IOrderLookupShipmentModel ShipmentModel { get; }
-
-        /// <summary>
         /// Insurance information
         /// </summary>
         [Obfuscation(Exclude = true)]
@@ -174,7 +157,7 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
         public List<DimensionsProfileEntity> DimensionProfiles
         {
             get => dimensionProfiles;
-            set => handler.Set(nameof(DimensionProfiles), ref dimensionProfiles, value);
+            set => Handler.Set(nameof(DimensionProfiles), ref dimensionProfiles, value);
         }
 
         /// <summary>
@@ -190,7 +173,7 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
         public Dictionary<ShipmentTypeCode, string> Providers
         {
             get => providers;
-            set => handler.Set(nameof(Providers), ref providers, value);
+            set => Handler.Set(nameof(Providers), ref providers, value);
         }
 
         /// <summary>
@@ -216,7 +199,7 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
         public IEnumerable<KeyValuePair<int, string>> PackageTypes
         {
             get => packageTypes;
-            set => handler.Set(nameof(PackageTypes), ref packageTypes, value);
+            set => Handler.Set(nameof(PackageTypes), ref packageTypes, value);
         }
 
         /// <summary>
@@ -226,7 +209,7 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
         public IEnumerable<KeyValuePair<int, string>> ServiceTypes
         {
             get => serviceTypes;
-            set => handler.Set(nameof(ServiceTypes), ref serviceTypes, value);
+            set => Handler.Set(nameof(ServiceTypes), ref serviceTypes, value);
         }
 
         /// <summary>
@@ -236,7 +219,7 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
         public System.Collections.ObjectModel.ObservableCollection<PackageAdapterWrapper> Packages
         {
             get => packages;
-            set => handler.Set(nameof(Packages), ref packages, value);
+            set => Handler.Set(nameof(Packages), ref packages, value);
         }
 
         /// <summary>
@@ -253,13 +236,13 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
                     value = Packages.First();
                 }
 
-                handler.Set(nameof(SelectedPackage), ref selectedPackage, value);
+                Handler.Set(nameof(SelectedPackage), ref selectedPackage, value);
 
                 RefreshInsurance();
 
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(SelectedPackageWeight)));
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(SelectedPackageDimsProfileID)));
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsProfileSelected)));
+                RaisePropertyChanged(nameof(SelectedPackageWeight));
+                RaisePropertyChanged(nameof(SelectedPackageDimsProfileID));
+                RaisePropertyChanged(nameof(IsProfileSelected));
             }
         }
 
@@ -275,7 +258,7 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
             get => SelectedPackage.Weight;
             set
             {
-                handler.Set(nameof(SelectedPackageWeight), (v) => SelectedPackage.Weight = v, SelectedPackage.Weight, value);
+                Handler.Set(nameof(SelectedPackageWeight), (v) => SelectedPackage.Weight = v, SelectedPackage.Weight, value);
             }
         }
 
@@ -288,7 +271,7 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
             get => SelectedPackage.DimsProfileID;
             set
             {
-                handler.Set(nameof(SelectedPackageDimsProfileID), (v) => SelectedPackage.DimsProfileID = v, SelectedPackage.DimsProfileID, value);
+                Handler.Set(nameof(SelectedPackageDimsProfileID), (v) => SelectedPackage.DimsProfileID = v, SelectedPackage.DimsProfileID, value);
 
                 if (SelectedPackage.DimsProfileID != 0)
                 {
@@ -311,8 +294,8 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
                     SelectedPackage.AdditionalWeight = 0;
                 }
 
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsProfileSelected)));
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(SelectedPackage)));
+                RaisePropertyChanged(nameof(IsProfileSelected));
+                RaisePropertyChanged(nameof(SelectedPackage));
             }
         }
 
@@ -325,7 +308,7 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
             get => SelectedPackage.ApplyAdditionalWeight;
             set
             {
-                handler.Set(nameof(SelectedPackageApplyAdditionalWeight), (v) => SelectedPackage.ApplyAdditionalWeight = v, SelectedPackage.ApplyAdditionalWeight, value);
+                Handler.Set(nameof(SelectedPackageApplyAdditionalWeight), (v) => SelectedPackage.ApplyAdditionalWeight = v, SelectedPackage.ApplyAdditionalWeight, value);
             }
         }
 
@@ -399,16 +382,6 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
                 RefreshDimensionalProfiles();
             }
         }
-
-        /// <summary>
-        /// Update when order changes
-        /// </summary>
-        protected abstract void ShipmentModelPropertyChanged(object sender, PropertyChangedEventArgs e);
-
-        /// <summary>
-        /// Dispose
-        /// </summary>
-        public void Dispose() => ShipmentModel.PropertyChanged -= ShipmentModelPropertyChanged;
 
         #region IDataErrorInfo
 

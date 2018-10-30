@@ -1,5 +1,4 @@
-﻿using System.ComponentModel;
-using System.Linq;
+﻿using System.Linq;
 using System.Reflection;
 using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.OrderLookup.FieldManager;
@@ -18,18 +17,14 @@ namespace ShipWorks.OrderLookup.Controls.OrderItems
     [KeyedComponent(typeof(IOrderItemsViewModel), ShipmentTypeCode.UpsOnLineTools)]
     [KeyedComponent(typeof(IOrderItemsViewModel), ShipmentTypeCode.Usps)]
     [WpfView(typeof(OrderItemsControl))]
-    public class OrderItemsViewModel : IOrderItemsViewModel
+    public class OrderItemsViewModel : OrderLookupViewModelBase, IOrderItemsViewModel
     {
-#pragma warning disable CS0067 // Defined in interface, but we don't need to track ProperyChanged
-        public event PropertyChangedEventHandler PropertyChanged;
-#pragma warning restore CS0067 // Defined in interface, but we don't need to track ProperyChanged
-
         /// <summary>
         /// Constructor
         /// </summary>
-        public OrderItemsViewModel(IOrderLookupShipmentModel shipmentModel)
+        public OrderItemsViewModel(IOrderLookupShipmentModel shipmentModel) : base(shipmentModel)
         {
-            ShipmentModel = shipmentModel;
+
         }
 
         /// <summary>
@@ -42,39 +37,17 @@ namespace ShipWorks.OrderLookup.Controls.OrderItems
         /// Title of the section
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public string Title => "Order Items";
-
-        /// <summary>
-        /// Is the section visible
-        /// </summary>
-        [Obfuscation(Exclude = true)]
-        public bool Visible => true;
+        public override string Title { get; protected set; } = "Order Items";
 
         /// <summary>
         /// Panel ID
         /// </summary>
-        public SectionLayoutIDs PanelID => SectionLayoutIDs.Items;
-
-        /// <summary>
-        /// The order lookup ShipmentModel
-        /// </summary>
-        [Obfuscation(Exclude = true)]
-        public IOrderLookupShipmentModel ShipmentModel { get; }
+        public override SectionLayoutIDs PanelID => SectionLayoutIDs.Items;
 
         /// <summary>
         /// Does the order item exist
         /// </summary>
         [Obfuscation(Exclude = true)]
         public bool OrderItemExists => ShipmentModel?.SelectedOrder?.OrderItems?.Any() == true;
-
-        /// <summary>
-        /// Dispose the view model
-        /// </summary>
-        /// <remarks>
-        /// This was left unimplemented so that IOrderLookupViewModel can be reused.
-        /// </remarks>
-        public void Dispose()
-        {
-        }
     }
 }

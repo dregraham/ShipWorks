@@ -25,9 +25,9 @@
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <ui:HidableRowDefinition FieldID="{x:Static ns:SectionLayoutFieldIDs.USPSReferenceMemo1}" />
-            <ui:HidableRowDefinition FieldID="{x:Static ns:SectionLayoutFieldIDs.USPSReferenceMemo2}" />
-            <ui:HidableRowDefinition FieldID="{x:Static ns:SectionLayoutFieldIDs.USPSReferenceMemo3}" />
+            <ui:FieldLayoutRowDefinition FieldID="{x:Static ns:SectionLayoutFieldIDs.USPSReferenceMemo1}" />
+            <ui:FieldLayoutRowDefinition FieldID="{x:Static ns:SectionLayoutFieldIDs.USPSReferenceMemo2}" />
+            <ui:FieldLayoutRowDefinition FieldID="{x:Static ns:SectionLayoutFieldIDs.USPSReferenceMemo3}" />
         </Grid.RowDefinitions>
 
         <TextBlock

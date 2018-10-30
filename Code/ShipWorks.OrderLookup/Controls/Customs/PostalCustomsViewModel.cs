@@ -34,7 +34,7 @@ namespace ShipWorks.OrderLookup.Controls.Customs
         public Dictionary<int, string> CustomsContentTypes
         {
             get => customsContentTypes;
-            set => handler.Set(nameof(CustomsContentTypes), ref customsContentTypes, value);
+            set => Handler.Set(nameof(CustomsContentTypes), ref customsContentTypes, value);
         }
     }
 }

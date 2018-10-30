@@ -14,50 +14,33 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
     /// </summary>
     [Component]
     [WpfView(typeof(NotSupportedShipmentControl))]
-    class NotSupportedShipmentDetailsViewModel : IDetailsViewModel
+    internal class NotSupportedShipmentDetailsViewModel : OrderLookupViewModelBase, IDetailsViewModel
     {
-#pragma warning disable CS0067 // Defined in interface, but we don't need to track ProperyChanged
-        public event PropertyChangedEventHandler PropertyChanged;
-#pragma warning restore CS0067 // Defined in interface, but we don't need to track ProperyChanged
-
         /// <summary>
         /// Constructor
         /// </summary>
-        public NotSupportedShipmentDetailsViewModel(IOrderLookupShipmentModel shipmentModel, 
-            ICarrierShipmentAdapterOptionsProvider carrierShipmentAdapterOptionsProvider)
+        public NotSupportedShipmentDetailsViewModel(IOrderLookupShipmentModel shipmentModel,
+            ICarrierShipmentAdapterOptionsProvider carrierShipmentAdapterOptionsProvider) : base(shipmentModel)
         {
-            ShipmentModel = shipmentModel;
             Providers = carrierShipmentAdapterOptionsProvider.GetProviders(shipmentModel.ShipmentAdapter, shipmentModel.OriginalShipmentTypeCode);
         }
 
         /// <summary>
         /// Panel ID
         /// </summary>
-        public SectionLayoutIDs PanelID => SectionLayoutIDs.ShipmentDetails;
+        public override SectionLayoutIDs PanelID => SectionLayoutIDs.ShipmentDetails;
 
         /// <summary>
         /// Title of the section
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public string Title => "Shipment Details";
+        public override string Title { get; protected set; } = "Shipment Details";
 
         /// <summary>
         /// Error Message of the section
         /// </summary>
         [Obfuscation(Exclude = true)]
         public string ErrorMessage => $"Shipping with {EnumHelper.GetDescription(ShipmentModel.ShipmentAdapter.ShipmentTypeCode)} is not supported in Order Lookup mode.";
-        
-        /// <summary>
-        /// Is the section visible
-        /// </summary>
-        [Obfuscation(Exclude = true)]
-        public bool Visible => true;
-
-        /// <summary>
-        /// The shipment model
-        /// </summary>
-        [Obfuscation(Exclude = true)]
-        public IOrderLookupShipmentModel ShipmentModel { get; private set; }
 
         /// <summary>
         /// Shipment type code
@@ -84,10 +67,5 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
             get;
             private set;
         }
-
-        /// <summary>
-        /// Dispose - Nothing to dispose
-        /// </summary>
-        public void Dispose() { }
     }
 }

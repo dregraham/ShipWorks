@@ -49,7 +49,7 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
         public IEnumerable<KeyValuePair<int, string>> ConfirmationTypes
         {
             get => confirmationTypes;
-            set => handler.Set(nameof(ConfirmationTypes), ref confirmationTypes, value);
+            set => Handler.Set(nameof(ConfirmationTypes), ref confirmationTypes, value);
         }
 
         /// <summary>
@@ -57,6 +57,8 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
         /// </summary>
         protected override void ShipmentModelPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
+            base.ShipmentModelPropertyChanged(sender, e);
+
             if (e.PropertyName == nameof(ShipmentModel.PackageAdapters) && ShipmentModel.PackageAdapters != null)
             {
                 int selectedIndex = Packages.IndexOf(SelectedPackage);
@@ -90,7 +92,7 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
                 ShipmentType shipmentType = shipmentTypeManager.Get(ShipmentTypeCode.UpsOnLineTools);
                 shipmentType.RectifyCarrierSpecificData(ShipmentModel.ShipmentAdapter.Shipment);
 
-                handler.RaisePropertyChanged(null);
+                Handler.RaisePropertyChanged(null);
             }
         }
 
