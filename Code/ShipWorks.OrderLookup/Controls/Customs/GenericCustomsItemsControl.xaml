@@ -23,10 +23,10 @@
             <ui:EmptyDoubleConverter x:Key="EmptyDouble" />
         </ResourceDictionary>
     </UserControl.Resources>
-    <Grid  IsEnabled="{Binding ShipmentModel.ShipmentAllowEditing}" >
+    <Grid IsEnabled="{Binding ShipmentModel.ShipmentAllowEditing}">
         <Grid.RowDefinitions>
             <RowDefinition Height="auto" />
-            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto" />
         </Grid.RowDefinitions>
         <Grid Grid.Row="0">
             <Grid.ColumnDefinitions>

@@ -23,7 +23,7 @@
             <ui:StringEmptyWhenEqualToParameterConverter x:Key="StringEmptyWhenEqualToParameter" />
         </ResourceDictionary>
     </UserControl.Resources>
-    <Grid IsEnabled="{Binding ShipmentModel.ShipmentAllowEditing}" >
+    <Grid IsEnabled="{Binding ShipmentModel.ShipmentAllowEditing}">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
@@ -248,9 +248,7 @@
                 IsEnabled="{Binding IsProfileSelected, Converter={StaticResource InvertBooleanConverter}}"
                 MaxLength="3"
                 Style="{StaticResource FormTextBox}"
-                Text="{Binding SelectedPackage.DimsLength,
-                        Converter={StaticResource StringEmptyWhenEqualToParameter},
-                        ConverterParameter=0}" />
+                Text="{Binding SelectedPackage.DimsLength, Converter={StaticResource StringEmptyWhenEqualToParameter}, ConverterParameter=0}" />
 
             <TextBox
                 Grid.Column="1"
@@ -259,9 +257,7 @@
                 IsEnabled="{Binding IsProfileSelected, Converter={StaticResource InvertBooleanConverter}}"
                 MaxLength="3"
                 Style="{StaticResource FormTextBox}"
-                Text="{Binding SelectedPackage.DimsWidth,
-                        Converter={StaticResource StringEmptyWhenEqualToParameter},
-                        ConverterParameter=0}" />
+                Text="{Binding SelectedPackage.DimsWidth, Converter={StaticResource StringEmptyWhenEqualToParameter}, ConverterParameter=0}" />
 
             <TextBox
                 Grid.Column="2"
@@ -270,9 +266,7 @@
                 IsEnabled="{Binding IsProfileSelected, Converter={StaticResource InvertBooleanConverter}}"
                 MaxLength="3"
                 Style="{StaticResource FormTextBox}"
-                Text="{Binding SelectedPackage.DimsHeight,
-                        Converter={StaticResource StringEmptyWhenEqualToParameter},
-                        ConverterParameter=0}" />
+                Text="{Binding SelectedPackage.DimsHeight, Converter={StaticResource StringEmptyWhenEqualToParameter}, ConverterParameter=0}" />
 
             <TextBlock
                 Grid.Column="3"
