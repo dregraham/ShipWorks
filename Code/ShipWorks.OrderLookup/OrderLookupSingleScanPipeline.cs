@@ -102,14 +102,16 @@ namespace ShipWorks.OrderLookup
                     }
 
                     loadOrder = order != null &&
-                                order.Shipments.Any() &&
-                                !order.Shipments.Last().Processed;
+                                order.Shipments.Any();
 
                     if (loadOrder)
                     {
-                        using (ITrackedEvent telemetry = new TrackedEvent("OrderLookup.Search.AutoWeigh"))
+                        if (!order.Shipments.Last().Processed)
                         {
-                            autoWeighService.ApplyWeight(new[] { order.Shipments.Last() }, telemetry);
+                            using (ITrackedEvent telemetry = new TrackedEvent("OrderLookup.Search.AutoWeigh"))
+                            {
+                                autoWeighService.ApplyWeight(new[] { order.Shipments.Last() }, telemetry);
+                            }
                         }
 
                         shipmentModel.LoadOrder(order);
