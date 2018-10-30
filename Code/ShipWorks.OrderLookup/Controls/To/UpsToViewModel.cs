@@ -21,8 +21,9 @@ namespace ShipWorks.OrderLookup.Controls.To
         public UpsToViewModel(
             IOrderLookupShipmentModel shipmentModel,
             AddressViewModel addressViewModel,
-            ISchedulerProvider schedulerProvider)
-            : base(shipmentModel, addressViewModel, schedulerProvider)
+            ISchedulerProvider schedulerProvider,
+			OrderLookupToFieldLayoutProvider fieldLayoutProvider)
+            : base(shipmentModel, addressViewModel, schedulerProvider, fieldLayoutProvider)
         {
             ResidentialDeterminations = EnumHelper.GetEnumList<ResidentialDeterminationType>(r => r != ResidentialDeterminationType.FedExAddressLookup)
                 .ToDictionary(r => (int) r.Value, r => r.Description);

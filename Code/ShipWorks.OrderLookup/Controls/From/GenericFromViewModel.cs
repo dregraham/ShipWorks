@@ -33,6 +33,7 @@ namespace ShipWorks.OrderLookup.Controls.From
         private readonly IOrderLookupShipmentModel shipmentModel;
         private readonly ICarrierAccountRetrieverFactory carrierAccountRetrieverFactory;
         private readonly IShipmentTypeManager shipmentTypeManager;
+        private readonly OrderLookupFromFieldLayoutProvider fieldLayoutProvider;
 
         private readonly AddressViewModel addressViewModel;
         private readonly ISchedulerProvider schedulerProvider;
@@ -45,10 +46,13 @@ namespace ShipWorks.OrderLookup.Controls.From
             IShipmentTypeManager shipmentTypeManager,
             ICarrierAccountRetrieverFactory carrierAccountRetrieverFactory,
             AddressViewModel addressViewModel,
-            ISchedulerProvider schedulerProvider) : base(shipmentModel)
+            ISchedulerProvider schedulerProvider,
+            OrderLookupFromFieldLayoutProvider fieldLayoutProvider) : base(shipmentModel)
         {
             this.schedulerProvider = schedulerProvider;
+            this.fieldLayoutProvider = fieldLayoutProvider;
             this.addressViewModel = addressViewModel;
+            this.addressViewModel.FieldLayoutProvider = this.fieldLayoutProvider;
 
             this.shipmentTypeManager = shipmentTypeManager;
 
@@ -76,6 +80,11 @@ namespace ShipWorks.OrderLookup.Controls.From
 
             return accounts.ToDictionary(a => a.AccountId, a => a.AccountDescription);
         }
+
+        /// <summary>
+        /// Field layout provider
+        /// </summary>
+        public IOrderLookupFieldLayoutProvider FieldLayoutProvider => fieldLayoutProvider;
 
         /// <summary>
         /// Panel ID

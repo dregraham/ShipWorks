@@ -40,6 +40,11 @@ namespace ShipWorks.OrderLookup.Controls.OrderItems
         public override string Title { get; protected set; } = "Order Items";
 
         /// <summary>
+        /// Field layout repository
+        /// </summary>
+        public IOrderLookupFieldLayoutProvider FieldLayoutProvider => ShipmentModel.FieldLayoutProvider;
+
+        /// <summary>
         /// Panel ID
         /// </summary>
         public override SectionLayoutIDs PanelID => SectionLayoutIDs.Items;

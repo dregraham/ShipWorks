@@ -26,6 +26,11 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
         }
 
         /// <summary>
+        /// Field layout repository
+        /// </summary>
+        public IOrderLookupFieldLayoutProvider FieldLayoutProvider => ShipmentModel.FieldLayoutProvider;
+
+        /// <summary>
         /// Panel ID
         /// </summary>
         public override SectionLayoutIDs PanelID => SectionLayoutIDs.ShipmentDetails;

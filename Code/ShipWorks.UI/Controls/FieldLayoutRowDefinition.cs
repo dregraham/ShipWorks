@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
+using ShipWorks.OrderLookup;
 using ShipWorks.OrderLookup.FieldManager;
 
 namespace ShipWorks.UI.Controls
@@ -82,11 +83,10 @@ namespace ShipWorks.UI.Controls
         {
             if (sender is FieldLayoutRowDefinition rowDefinition)
             {
-                if (rowDefinition.DataContext is IFieldRepositoryProvider fieldRepositoryProvider &&
+                if (rowDefinition.DataContext is IOrderLookupViewModel fieldRepositoryProvider &&
                     rowDefinition.FieldID.HasValue)
                 {
-                    var fieldVisible = fieldRepositoryProvider
-                        .FieldLayoutRepository
+                    var fieldVisible = fieldRepositoryProvider.FieldLayoutProvider
                         .Fetch()
                         .SelectMany(x => x.SectionFields)
                         .Where(x => x.Id.Equals(rowDefinition.FieldID.Value))

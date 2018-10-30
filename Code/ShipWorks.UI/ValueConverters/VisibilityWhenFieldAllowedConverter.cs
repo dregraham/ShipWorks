@@ -18,7 +18,7 @@ namespace ShipWorks.UI.ValueConverters
         /// </summary>
         public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
         {
-            IOrderLookupFieldLayoutRepository repo = values[0] as IOrderLookupFieldLayoutRepository;
+            IOrderLookupFieldLayoutProvider repo = values[0] as IOrderLookupFieldLayoutProvider;
             SectionLayoutFieldIDs? fieldID = EnumHelper.TryParseEnum<SectionLayoutFieldIDs>(values[1].ToString(), true);
             Visibility visibility = Visibility.Visible;
 

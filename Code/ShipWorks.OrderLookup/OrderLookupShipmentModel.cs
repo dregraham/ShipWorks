@@ -30,7 +30,7 @@ namespace ShipWorks.OrderLookup
     /// Model used by the various order lookup viewmodels
     /// </summary>
     [Component(SingleInstance = true)]
-    public class OrderLookupShipmentModel : INotifyPropertyChanged, IOrderLookupShipmentModel, IFieldRepositoryProvider
+    public class OrderLookupShipmentModel : INotifyPropertyChanged, IOrderLookupShipmentModel
     {
         /// <summary>
         /// Entities for which we want to wire up property changed handlers
@@ -92,7 +92,7 @@ namespace ShipWorks.OrderLookup
         private bool isSaving = false;
         private IEnumerable<IPackageAdapter> packageAdapters;
         private IDisposable profileDisposable;
-        private readonly IOrderLookupFieldLayoutRepository fieldLayoutRepository;
+        private IOrderLookupFieldLayoutProvider fieldLayoutProvider;
 
         public event EventHandler OnSearchOrder;
 
@@ -126,7 +126,7 @@ namespace ShipWorks.OrderLookup
             Func<IInsuranceBehaviorChangeViewModel> createInsuranceBehaviorChange,
             IShippingProfileService profileService,
             IEnumerable<IOrderLookupShipmentModelPipeline> pipelines,
-            IOrderLookupFieldLayoutRepository orderLookupFieldLayoutRepository)
+            OrderLookupFieldLayoutProvider orderLookupFieldLayoutProvider)
         {
             this.profileService = profileService;
             this.messenger = messenger;
@@ -136,13 +136,13 @@ namespace ShipWorks.OrderLookup
             handler = new PropertyChangedHandler(this, () => PropertyChanged);
 
             subscription = new CompositeDisposable(pipelines.Select(x => x.Register(this)).ToArray());
-            fieldLayoutRepository = orderLookupFieldLayoutRepository;
+            fieldLayoutProvider = orderLookupFieldLayoutProvider;
         }
 
         /// <summary>
         /// Field layout repo
         /// </summary>
-        public IOrderLookupFieldLayoutRepository FieldLayoutRepository => fieldLayoutRepository;
+        public IOrderLookupFieldLayoutProvider FieldLayoutProvider => fieldLayoutProvider;
 
         /// <summary>
         /// The order that is currently in context

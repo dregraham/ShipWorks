@@ -22,9 +22,9 @@ namespace ShipWorks.OrderLookup.FieldManager
                     Expanded = true,
                     SectionFields = new List<SectionFieldLayout>()
                         {
-                            new SectionFieldLayout() { Id = SectionLayoutFieldIDs.ToFullName, Name = "Full Name" },
-                            new SectionFieldLayout() { Id = SectionLayoutFieldIDs.ToStreet, Name = "Street", Selected = false},
-                            new SectionFieldLayout() { Id = SectionLayoutFieldIDs.ToStateProvince, Name = "State Province" }
+                            new SectionFieldLayout() { Id = SectionLayoutFieldIDs.FullName, Name = "Full Name" },
+                            new SectionFieldLayout() { Id = SectionLayoutFieldIDs.Street, Name = "Street", Selected = false},
+                            new SectionFieldLayout() { Id = SectionLayoutFieldIDs.StateProvince, Name = "State Province" }
                         }
                 },
                 new SectionLayout()
@@ -34,10 +34,10 @@ namespace ShipWorks.OrderLookup.FieldManager
                     Selected = false,
                     SectionFields = new List<SectionFieldLayout>()
                     {
-                        new SectionFieldLayout() { Id = SectionLayoutFieldIDs.FromFullName, Name = "Full Name"},
-                        new SectionFieldLayout() { Id = SectionLayoutFieldIDs.FromStreet, Name = "Street"},
-                        new SectionFieldLayout() { Id = SectionLayoutFieldIDs.FromCity, Name = "City", Selected = false },
-                        new SectionFieldLayout() { Id = SectionLayoutFieldIDs.FromStateProvince, Name = "State Province", Selected = false }
+                        new SectionFieldLayout() { Id = SectionLayoutFieldIDs.FullName, Name = "Full Name"},
+                        new SectionFieldLayout() { Id = SectionLayoutFieldIDs.Street, Name = "Street"},
+                        new SectionFieldLayout() { Id = SectionLayoutFieldIDs.City, Name = "City", Selected = false },
+                        new SectionFieldLayout() { Id = SectionLayoutFieldIDs.StateProvince, Name = "State Province", Selected = false }
                     }
                 },
                 new SectionLayout()

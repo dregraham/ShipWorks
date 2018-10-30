@@ -8,39 +8,35 @@ namespace ShipWorks.OrderLookup.FieldManager
     [Obfuscation(Exclude = true, ApplyToMembers = true, StripAfterObfuscation = false)]
     public enum SectionLayoutFieldIDs
     {
-        FromUSPSAccountSelector,
-        FromOrigin,
-        FromFullName,
-        FromCompany,
-        FromStreet,
-        FromCity,
-        FromStateProvince,
-        FromPostalCode,
-        FromCountry,
-        FromEmail,
-        FromPhone,
-        FromFax,
-        FromWebsite,
-        FromFedExResidentialCommercialAddress,
-        FromUspsHideStealth,
+        /* Common address fields */
+        FullName,
+        Company,
+        Street,
+        City,
+        StateProvince,
+        PostalCode,
+        Country,
+        Email,
+        Phone,
+        Fax,
+        Website,
 
-        ToFullName,
-        ToCompany,
-        ToStreet,
-        ToCity,
-        ToStateProvince,
-        ToPostalCode,
-        ToCountry,
-        ToEmail,
-        ToPhone,
-        ToUSPSRequireFullAddressValidation,
-        ToAddressType,
+        /* From address specific fields */
+        USPSAccountSelector,
+        Origin,
+        FedExResidentialCommercialAddress,
+        UspsHideStealth,
 
+        /* To address specific fields */
+        USPSRequireFullAddressValidation,
+        AddressType,
+
+        /* Label Options */
         LabelOptionsShipDate,
         LabelOptionsUspsHideStealth,
         LabelOptionsRequestedLabelFormat,
 
-
+        /* Shipment details */
         ShipmentDetailsRequestedShipping,
         ShipmentDetailsProvider,
         ShipmentDetailsService,
@@ -55,16 +51,19 @@ namespace ShipWorks.OrderLookup.FieldManager
         ShipmentDetailsOnTracSaturdayDelivery,
         ShipmentDetailsOnTracSignatureRequired,
 
+        /* USPS Reference fields */
         USPSReferenceMemo1,
         USPSReferenceMemo2,
         USPSReferenceMemo3,
 
+        /* FedEx Fields */
         FedExSignatureAndReferenceSignatureRequired,
         FedExSignatureAndReferenceReferenceNumber,
         FedExSignatureAndReferenceInvoiceNumber,
         FedExSignatureAndReferencePostOfficeNumber,
         FedExSignatureAndReferenceIntegrity,
 
+        /* UPS Reference Fields */
         UPSReferenceReferenceNumber,
         UPSReferenceReferenceNumber2
     }

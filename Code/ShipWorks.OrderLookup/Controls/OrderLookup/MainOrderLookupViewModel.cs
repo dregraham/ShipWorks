@@ -114,7 +114,7 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookup
 
             innerScope = scope.BeginLifetimeScope();
 
-            List<SectionLayout> sectionLayouts = ShipmentModel.FieldLayoutRepository.Fetch().ToList();
+            List<SectionLayout> sectionLayouts = ShipmentModel.FieldLayoutProvider.Fetch().ToList();
 
             LeftColumn
                 .Concat(MiddleColumn)

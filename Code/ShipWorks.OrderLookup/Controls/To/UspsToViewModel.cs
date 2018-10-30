@@ -19,8 +19,9 @@ namespace ShipWorks.OrderLookup.Controls.To
         public UspsToViewModel(
             IOrderLookupShipmentModel shipmentModel,
             AddressViewModel addressViewModel,
-            ISchedulerProvider schedulerProvider)
-            : base(shipmentModel, addressViewModel, schedulerProvider)
+            ISchedulerProvider schedulerProvider,
+			OrderLookupToFieldLayoutProvider fieldLayoutProvider)
+            : base(shipmentModel, addressViewModel, schedulerProvider, fieldLayoutProvider)
         {
         }
     }

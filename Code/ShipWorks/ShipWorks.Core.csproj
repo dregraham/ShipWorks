@@ -756,7 +756,7 @@
     <Compile Include="ApplicationCore\Interaction\IMenuCommandExecutionContext.cs" />
     <Compile Include="ApplicationCore\Interaction\SelectionDependentEntry.cs" />
     <Compile Include="ApplicationCore\IoCLogRequestModule.cs" />
-    <Compile Include="OrderLookup\FieldManager\IFieldRepositoryProvider.cs" />
+    <Compile Include="OrderLookup\FieldManager\IOrderLookupFieldLayoutProvider.cs" />
     <Compile Include="OrderLookup\FieldManager\IOrderLookupFieldLayoutRepository.cs" />
     <Compile Include="OrderLookup\FieldManager\ISectionFieldLayout.cs" />
     <Compile Include="OrderLookup\FieldManager\ISectionLayout.cs" />
@@ -766,6 +766,7 @@
     <Compile Include="OrderLookup\FieldManager\SectionLayoutIDs.cs" />
     <Compile Include="Messaging\Messages\Shipping\FocusQuickSearchMessage.cs" />
     <Compile Include="OrderLookup\IOrderLookupFieldManager.cs" />
+    <Compile Include="OrderLookup\IOrderLookupViewModel.cs" />
     <Compile Include="OrderLookup\IPreviousShipmentReprintActionHandler.cs" />
     <Compile Include="OrderLookup\IPreviousShipmentVoidActionHandler.cs" />
     <Compile Include="OrderLookup\IShipmentHistory.cs" />

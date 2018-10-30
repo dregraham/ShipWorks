@@ -160,9 +160,9 @@ namespace ShipWorks.OrderLookup.Tests.FieldManager
                 Selected = true,
                 SectionFields = new List<SectionFieldLayout>()
                     {
-                        new SectionFieldLayout() { Id = SectionLayoutFieldIDs.ToFullName, Name = "Full Name"},
-                        new SectionFieldLayout() { Id = SectionLayoutFieldIDs.ToStreet, Name = "Street", Selected = false},
-                        new SectionFieldLayout() { Id = SectionLayoutFieldIDs.ToStateProvince, Name = "State Province" }
+                        new SectionFieldLayout() { Id = SectionLayoutFieldIDs.FullName, Name = "Full Name"},
+                        new SectionFieldLayout() { Id = SectionLayoutFieldIDs.Street, Name = "Street", Selected = false},
+                        new SectionFieldLayout() { Id = SectionLayoutFieldIDs.StateProvince, Name = "State Province" }
                     }
             });
 
@@ -173,10 +173,10 @@ namespace ShipWorks.OrderLookup.Tests.FieldManager
                 Selected = false,
                 SectionFields = new List<SectionFieldLayout>()
                 {
-                    new SectionFieldLayout() { Id = SectionLayoutFieldIDs.FromFullName, Name = "Full Name" },
-                    new SectionFieldLayout() { Id = SectionLayoutFieldIDs.FromStreet, Name = "Street"},
-                    new SectionFieldLayout() { Id = SectionLayoutFieldIDs.FromCity, Name = "City", Selected = false },
-                    new SectionFieldLayout() { Id = SectionLayoutFieldIDs.FromStateProvince, Name = "State Province", Selected = false }
+                    new SectionFieldLayout() { Id = SectionLayoutFieldIDs.FullName, Name = "Full Name" },
+                    new SectionFieldLayout() { Id = SectionLayoutFieldIDs.Street, Name = "Street"},
+                    new SectionFieldLayout() { Id = SectionLayoutFieldIDs.City, Name = "City", Selected = false },
+                    new SectionFieldLayout() { Id = SectionLayoutFieldIDs.StateProvince, Name = "State Province", Selected = false }
                 }
             });
 
@@ -216,9 +216,9 @@ namespace ShipWorks.OrderLookup.Tests.FieldManager
                 Selected = false,
                 SectionFields = new List<SectionFieldLayout>()
                     {
-                        new SectionFieldLayout() { Id = SectionLayoutFieldIDs.ToFullName, Name = "Full Name New", Selected = false },
-                        new SectionFieldLayout() { Id = SectionLayoutFieldIDs.ToStreet, Name = "Street New", Selected = true},
-                        new SectionFieldLayout() { Id = SectionLayoutFieldIDs.ToStateProvince, Name = "State Province New", Selected = false }
+                        new SectionFieldLayout() { Id = SectionLayoutFieldIDs.FullName, Name = "Full Name New", Selected = false },
+                        new SectionFieldLayout() { Id = SectionLayoutFieldIDs.Street, Name = "Street New", Selected = true},
+                        new SectionFieldLayout() { Id = SectionLayoutFieldIDs.StateProvince, Name = "State Province New", Selected = false }
                     }
             });
 
@@ -229,10 +229,10 @@ namespace ShipWorks.OrderLookup.Tests.FieldManager
                 Selected = false,
                 SectionFields = new List<SectionFieldLayout>()
                 {
-                    new SectionFieldLayout() { Id = SectionLayoutFieldIDs.FromFullName, Name = "Full Name New", Selected = false },
-                    new SectionFieldLayout() { Id = SectionLayoutFieldIDs.FromStreet, Name = "Street New", Selected = false},
-                    new SectionFieldLayout() { Id = SectionLayoutFieldIDs.FromCity, Name = "City New", Selected = true },
-                    new SectionFieldLayout() { Id = SectionLayoutFieldIDs.FromStateProvince, Name = "State Province New", Selected = true }
+                    new SectionFieldLayout() { Id = SectionLayoutFieldIDs.FullName, Name = "Full Name New", Selected = false },
+                    new SectionFieldLayout() { Id = SectionLayoutFieldIDs.Street, Name = "Street New", Selected = false},
+                    new SectionFieldLayout() { Id = SectionLayoutFieldIDs.City, Name = "City New", Selected = true },
+                    new SectionFieldLayout() { Id = SectionLayoutFieldIDs.StateProvince, Name = "State Province New", Selected = true }
                 }
             });
 

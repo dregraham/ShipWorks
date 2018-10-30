@@ -29,6 +29,12 @@ namespace ShipWorks.OrderLookup.Controls.Reference
         public override string Title { get; protected set; } = "Reference";
 
         /// <summary>
+
+        /// <summary>
+        /// Field layout repository
+        /// </summary>
+        public IOrderLookupFieldLayoutProvider FieldLayoutProvider => ShipmentModel.FieldLayoutProvider;
+
         /// Update when the order changes
         /// </summary>
         protected override void ShipmentModelPropertyChanged(object sender, PropertyChangedEventArgs e)

@@ -26,7 +26,8 @@ namespace ShipWorks.OrderLookup.Controls.From
             IShipmentTypeManager shipmentTypeManager,
             ICarrierAccountRetrieverFactory carrierAccountRetrieverFactory,
             AddressViewModel addressViewModel,
-            ISchedulerProvider schedulerProvider) : base(shipmentModel, shipmentTypeManager, carrierAccountRetrieverFactory, addressViewModel, schedulerProvider)
+            ISchedulerProvider schedulerProvider,
+			OrderLookupFromFieldLayoutProvider fieldLayoutProvider) : base(shipmentModel, shipmentTypeManager, carrierAccountRetrieverFactory, addressViewModel, schedulerProvider, fieldLayoutProvider)
         {
             // Don't give the user the option to have FedEx perform the address look up; the thought it that the shipper will know
             // what type of address they are shipping from, and it saves delays associated with a service call

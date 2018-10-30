@@ -6,6 +6,7 @@ using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Enums;
 using Interapptive.Shared.Threading;
 using ShipWorks.AddressValidation;
+using ShipWorks.Core.UI;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.OrderLookup.FieldManager;
 using ShipWorks.Shipping;
@@ -25,6 +26,7 @@ namespace ShipWorks.OrderLookup.Controls.To
         private string title;
         private IDisposable autoSave;
         private readonly AddressViewModel addressViewModel;
+        private readonly OrderLookupToFieldLayoutProvider fieldLayoutProvider;
         private readonly ISchedulerProvider schedulerProvider;
 
         /// <summary>
@@ -33,10 +35,12 @@ namespace ShipWorks.OrderLookup.Controls.To
         public GenericToViewModel(
             IOrderLookupShipmentModel shipmentModel,
             AddressViewModel addressViewModel,
-            ISchedulerProvider schedulerProvider) : base(shipmentModel)
+            ISchedulerProvider schedulerProvider,
         {
             this.schedulerProvider = schedulerProvider;
             this.addressViewModel = addressViewModel;
+            this.fieldLayoutProvider = fieldLayoutProvider;
+            this.addressViewModel.FieldLayoutProvider = this.fieldLayoutProvider;
 
             if (ShipmentModel?.ShipmentAdapter?.Store != null)
             {
@@ -52,6 +56,11 @@ namespace ShipWorks.OrderLookup.Controls.To
         /// Panel ID
         /// </summary>
         public override SectionLayoutIDs PanelID => SectionLayoutIDs.To;
+
+        /// <summary>
+        /// Field layout provider
+        /// </summary>
+        public IOrderLookupFieldLayoutProvider FieldLayoutProvider => fieldLayoutProvider;
 
         /// <summary>
         ///The addresses title

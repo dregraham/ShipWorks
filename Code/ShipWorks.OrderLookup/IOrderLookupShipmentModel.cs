@@ -17,7 +17,10 @@ namespace ShipWorks.OrderLookup
     [Obfuscation(ApplyToMembers = true, Exclude = true, StripAfterObfuscation = false)]
     public interface IOrderLookupShipmentModel : IDisposable
     {
-        IOrderLookupFieldLayoutRepository FieldLayoutRepository { get; }
+        /// <summary>
+        /// Field layout repo
+        /// </summary>
+        IOrderLookupFieldLayoutProvider FieldLayoutProvider { get; }
 
         /// <summary>
         /// The order that's in context

@@ -13,6 +13,7 @@
     xmlns:props="clr-namespace:ShipWorks.UI.AttachedProperties;assembly=ShipWorks.UI"
     xmlns:sys="clr-namespace:System;assembly=mscorlib"
     xmlns:valueConverters="clr-namespace:ShipWorks.UI.ValueConverters;assembly=ShipWorks.UI"
+    xmlns:ns="clr-namespace:ShipWorks.OrderLookup.FieldManager;assembly=ShipWorks.Core"
     d:DataContext="{d:DesignInstance AddressControl:AddressViewModel,
                                      IsDesignTimeCreatable=False}"
     d:DesignHeight="380"
@@ -37,6 +38,7 @@
             <valueConverters:AddressKeyValueToBooleanConverter x:Key="AddressKeyValueToBooleanConverter" />
             <valueConverters:VisibleWhenEqualToParameterConverter x:Key="VisibleWhenEqualToParameter" />
             <valueConverters:VisibleWhenEqualToParameterConverter x:Key="VisibleWhenNotEqualToParameter" Invert="true" />
+            <valueConverters:HeightWhenFieldAllowedConverter x:Key="HeightWhenFieldAllowedConverter"/>
         </ResourceDictionary>
     </UserControl.Resources>
     <StackPanel>
@@ -48,7 +50,15 @@
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
-                <RowDefinition />
+                <RowDefinition>
+                    <RowDefinition.Height>
+                        <MultiBinding Converter="{StaticResource HeightWhenFieldAllowedConverter}">
+                            <Binding Path="FieldLayoutProvider" Mode="OneWay" />
+                            <Binding Source="{x:Static ns:SectionLayoutFieldIDs.FullName}" />
+                            <Binding Source="{x:Static GridLength.Auto}" />
+                        </MultiBinding>
+                    </RowDefinition.Height>
+                </RowDefinition>
                 <RowDefinition />
             </Grid.RowDefinitions>
 
@@ -64,6 +74,7 @@
                 props:EntityFieldLength.FieldName="PersonNameFull"
                 Style="{StaticResource FormTextBox}"
                 Text="{Binding FullName, UpdateSourceTrigger=PropertyChanged}" />
+
             <TextBlock
                 Grid.Row="1"
                 Grid.Column="0"

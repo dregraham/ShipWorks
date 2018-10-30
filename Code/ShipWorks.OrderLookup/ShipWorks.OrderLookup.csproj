@@ -180,6 +180,7 @@
     <Compile Include="Controls\From\GenericFromControl.xaml.cs">
       <DependentUpon>GenericFromControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\From\OrderLookupFromFieldLayoutProvider.cs" />
     <Compile Include="Controls\From\UspsFromControl.xaml.cs">
       <DependentUpon>UspsFromControl.xaml</DependentUpon>
     </Compile>
@@ -264,6 +265,7 @@
       <DependentUpon>UpsShipmentDetailsControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\To\GenericToWithResidentialDeterminationViewModel.cs" />
+    <Compile Include="Controls\To\IOrderLookupToFieldLayoutRepository.cs" />
     <Compile Include="Controls\To\IToViewModel.cs" />
     <Compile Include="Controls\To\GenericToControl.xaml.cs">
       <DependentUpon>GenericToControl.xaml</DependentUpon>
@@ -272,6 +274,7 @@
     <Compile Include="Controls\To\GenericToWithResidentialDeterminationControl.xaml.cs">
       <DependentUpon>GenericToWithResidentialDeterminationControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\To\OrderLookupToFieldLayoutProvider.cs" />
     <Compile Include="Controls\To\UpsToViewModel.cs" />
     <Compile Include="FieldManager\IOrderLookupFieldLayoutDefaults.cs" />
     <Compile Include="FieldManager\OrderLookupFieldLayoutDefaults.cs" />
@@ -310,11 +313,11 @@
     </Compile>
     <Compile Include="FieldManager\IOrderLookupFieldManagerDialog.cs" />
     <Compile Include="FieldManager\OrderLookupFieldManagerViewModel.cs" />
+    <Compile Include="FieldManager\OrderLookupFieldLayoutProvider.cs" />
     <Compile Include="Layout\IOrderLookupLayout.cs" />
     <Compile Include="IOrderLookupConfirmationService.cs" />
     <Compile Include="IOrderLookupPanelFactory.cs" />
     <Compile Include="IOrderLookupPreviousShipmentLocator.cs" />
-    <Compile Include="IOrderLookupViewModel.cs" />
     <Compile Include="Layout\DropHandler.cs" />
     <Compile Include="Layout\OrderLookupLayout.cs" />
     <Compile Include="Layout\OrderLookupLayoutDefaults.cs" />

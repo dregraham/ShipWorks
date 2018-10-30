@@ -36,6 +36,11 @@ namespace ShipWorks.OrderLookup.Controls.Customs
         }
 
         /// <summary>
+        /// Field layout repository
+        /// </summary>
+        public IOrderLookupFieldLayoutProvider FieldLayoutProvider => ShipmentModel.FieldLayoutProvider;
+
+        /// <summary>
         /// The title of the section
         /// </summary>
         [Obfuscation(Exclude = true)]

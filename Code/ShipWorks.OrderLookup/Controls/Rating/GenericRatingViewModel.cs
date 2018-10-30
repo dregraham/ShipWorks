@@ -40,6 +40,11 @@ namespace ShipWorks.OrderLookup.Controls.Rating
         }
 
         /// <summary>
+        /// Field layout repository
+        /// </summary>
+        public IOrderLookupFieldLayoutProvider FieldLayoutProvider => ShipmentModel.FieldLayoutProvider;
+
+        /// <summary>
         /// Panel ID
         /// </summary>
         public SectionLayoutIDs PanelID => SectionLayoutIDs.Rates;

@@ -22,20 +22,20 @@ namespace ShipWorks.OrderLookup.FieldManager
                 Id = SectionLayoutIDs.From,
                 SectionFields = new List<SectionFieldLayout>()
                 {
-                    new SectionFieldLayout() { Id = SectionLayoutFieldIDs.FromUSPSAccountSelector, Name = "USPS - Account Selector" },
-                    new SectionFieldLayout() { Id = SectionLayoutFieldIDs.FromOrigin, Name = "Origin"},
-                    new SectionFieldLayout() { Id = SectionLayoutFieldIDs.FromFullName, Name = "Full Name" },
-                    new SectionFieldLayout() { Id = SectionLayoutFieldIDs.FromCompany, Name = "Company" },
-                    new SectionFieldLayout() { Id = SectionLayoutFieldIDs.FromStreet, Name = "Street" },
-                    new SectionFieldLayout() { Id = SectionLayoutFieldIDs.FromCity, Name = "City" },
-                    new SectionFieldLayout() { Id = SectionLayoutFieldIDs.FromStateProvince, Name = "State Province" },
-                    new SectionFieldLayout() { Id = SectionLayoutFieldIDs.FromPostalCode, Name = "Postal Code" },
-                    new SectionFieldLayout() { Id = SectionLayoutFieldIDs.FromCountry, Name = "Country" },
-                    new SectionFieldLayout() { Id = SectionLayoutFieldIDs.FromEmail, Name = "Email" },
-                    new SectionFieldLayout() { Id = SectionLayoutFieldIDs.FromPhone, Name = "Phone" },
-                    new SectionFieldLayout() { Id = SectionLayoutFieldIDs.FromFax, Name = "Fax" },
-                    new SectionFieldLayout() { Id = SectionLayoutFieldIDs.FromWebsite, Name = "Website" },
-                    new SectionFieldLayout() { Id = SectionLayoutFieldIDs.FromFedExResidentialCommercialAddress, Name = "FedEx - Residential/Commercial Address" }
+                    new SectionFieldLayout() { Id = SectionLayoutFieldIDs.USPSAccountSelector, Name = "USPS - Account Selector" },
+                    new SectionFieldLayout() { Id = SectionLayoutFieldIDs.Origin, Name = "Origin"},
+                    new SectionFieldLayout() { Id = SectionLayoutFieldIDs.FullName, Name = "Full Name" },
+                    new SectionFieldLayout() { Id = SectionLayoutFieldIDs.Company, Name = "Company" },
+                    new SectionFieldLayout() { Id = SectionLayoutFieldIDs.Street, Name = "Street" },
+                    new SectionFieldLayout() { Id = SectionLayoutFieldIDs.City, Name = "City" },
+                    new SectionFieldLayout() { Id = SectionLayoutFieldIDs.StateProvince, Name = "State Province" },
+                    new SectionFieldLayout() { Id = SectionLayoutFieldIDs.PostalCode, Name = "Postal Code" },
+                    new SectionFieldLayout() { Id = SectionLayoutFieldIDs.Country, Name = "Country" },
+                    new SectionFieldLayout() { Id = SectionLayoutFieldIDs.Email, Name = "Email" },
+                    new SectionFieldLayout() { Id = SectionLayoutFieldIDs.Phone, Name = "Phone" },
+                    new SectionFieldLayout() { Id = SectionLayoutFieldIDs.Fax, Name = "Fax" },
+                    new SectionFieldLayout() { Id = SectionLayoutFieldIDs.Website, Name = "Website" },
+                    new SectionFieldLayout() { Id = SectionLayoutFieldIDs.FedExResidentialCommercialAddress, Name = "FedEx - Residential/Commercial Address" }
                 }
             });
 
@@ -45,17 +45,17 @@ namespace ShipWorks.OrderLookup.FieldManager
                 Id = SectionLayoutIDs.To,
                 SectionFields = new List<SectionFieldLayout>()
                 {
-                    new SectionFieldLayout() { Id = SectionLayoutFieldIDs.ToFullName, Name = "Full Name" },
-                    new SectionFieldLayout() { Id = SectionLayoutFieldIDs.ToCompany, Name = "Company" },
-                    new SectionFieldLayout() { Id = SectionLayoutFieldIDs.ToStreet, Name = "Street" },
-                    new SectionFieldLayout() { Id = SectionLayoutFieldIDs.ToCity, Name = "City" },
-                    new SectionFieldLayout() { Id = SectionLayoutFieldIDs.ToStateProvince, Name = "State Province" },
-                    new SectionFieldLayout() { Id = SectionLayoutFieldIDs.ToPostalCode, Name = "Postal Code" },
-                    new SectionFieldLayout() { Id = SectionLayoutFieldIDs.ToCountry, Name = "Country" },
-                    new SectionFieldLayout() { Id = SectionLayoutFieldIDs.ToEmail, Name = "Email" },
-                    new SectionFieldLayout() { Id = SectionLayoutFieldIDs.ToPhone, Name = "Phone" },
-                    new SectionFieldLayout() { Id = SectionLayoutFieldIDs.ToUSPSRequireFullAddressValidation, Name = "USPS - Require full address validation" },
-                    new SectionFieldLayout() { Id = SectionLayoutFieldIDs.ToAddressType, Name = "Address Type" }
+                    new SectionFieldLayout() { Id = SectionLayoutFieldIDs.FullName, Name = "Full Name" },
+                    new SectionFieldLayout() { Id = SectionLayoutFieldIDs.Company, Name = "Company" },
+                    new SectionFieldLayout() { Id = SectionLayoutFieldIDs.Street, Name = "Street" },
+                    new SectionFieldLayout() { Id = SectionLayoutFieldIDs.City, Name = "City" },
+                    new SectionFieldLayout() { Id = SectionLayoutFieldIDs.StateProvince, Name = "State Province" },
+                    new SectionFieldLayout() { Id = SectionLayoutFieldIDs.PostalCode, Name = "Postal Code" },
+                    new SectionFieldLayout() { Id = SectionLayoutFieldIDs.Country, Name = "Country" },
+                    new SectionFieldLayout() { Id = SectionLayoutFieldIDs.Email, Name = "Email" },
+                    new SectionFieldLayout() { Id = SectionLayoutFieldIDs.Phone, Name = "Phone" },
+                    new SectionFieldLayout() { Id = SectionLayoutFieldIDs.USPSRequireFullAddressValidation, Name = "USPS - Require full address validation" },
+                    new SectionFieldLayout() { Id = SectionLayoutFieldIDs.AddressType, Name = "Address Type" }
                 }
             });
 

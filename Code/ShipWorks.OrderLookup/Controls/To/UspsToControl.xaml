@@ -29,7 +29,7 @@
             <Grid.Visibility>
                 <MultiBinding Converter="{StaticResource VisibilityWhenFieldAllowed}">
                     <Binding Path="ShipmentModel.FieldLayoutRepository" Mode="OneWay" />
-                    <Binding Source="{x:Static ns:SectionLayoutFieldIDs.ToUSPSRequireFullAddressValidation}" />
+                    <Binding Source="{x:Static ns:SectionLayoutFieldIDs.USPSRequireFullAddressValidation}" />
                     <Binding Source="{x:Static GridLength.Auto}" />
                 </MultiBinding>
             </Grid.Visibility>
