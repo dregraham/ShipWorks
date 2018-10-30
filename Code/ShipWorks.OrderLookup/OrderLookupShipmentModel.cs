@@ -132,6 +132,11 @@ namespace ShipWorks.OrderLookup
         }
 
         /// <summary>
+        /// Can the view accept focus
+        /// </summary>
+        public Func<bool> CanAcceptFocus { get; set; } = () => false;
+
+        /// <summary>
         /// The order that is currently in context
         /// </summary>
         [Obfuscation(Exclude = true)]

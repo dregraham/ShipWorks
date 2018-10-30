@@ -1,20 +1,21 @@
 ﻿using System;
 using System.Reactive.Concurrency;
 using System.Windows.Forms;
+using Interapptive.Shared.ComponentRegistration;
 
 namespace Interapptive.Shared.Threading
 {
     /// <summary>
     /// Provide all the various schedulers
     /// </summary>
+    [Component]
     public sealed class SchedulerProvider : ISchedulerProvider
     {
-        Lazy<IScheduler> windowsFormsEventLoopScheduler;
+        private Lazy<IScheduler> windowsFormsEventLoopScheduler;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        /// <param name="getSchedulerControl"></param>
         public SchedulerProvider(Func<Control> getSchedulerControl)
         {
             // We need to load this lazily because the Control that we need may not be set up when this constructor

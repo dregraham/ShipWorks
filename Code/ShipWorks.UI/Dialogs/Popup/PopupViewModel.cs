@@ -4,7 +4,6 @@ using System.Reflection;
 using System.Windows;
 using System.Windows.Forms;
 using Interapptive.Shared.ComponentRegistration;
-using Interapptive.Shared.UI;
 using ShipWorks.Core.UI;
 
 namespace ShipWorks.UI.Dialogs.Popup
@@ -54,7 +53,7 @@ namespace ShipWorks.UI.Dialogs.Popup
 
         public void ShowWithKeyboard(string message, Control owner) =>
             Show(message, owner, KeyboardIcon, iconFadeStartTimeSpan);
-            
+
 
         public void ShowWithBarcode(string message, Control owner) =>
             Show(message, owner, BarcodeIcon, iconFadeStartTimeSpan);
@@ -66,7 +65,7 @@ namespace ShipWorks.UI.Dialogs.Popup
         {
             Icon = icon;
             Duration = new Duration(fadeTime);
-            
+
             // Sets the message
             Message = message;
 
@@ -80,7 +79,7 @@ namespace ShipWorks.UI.Dialogs.Popup
         /// <summary>
         /// The actual message text we want to display
         /// </summary>
-        [Obfuscation(Exclude=true)]
+        [Obfuscation(Exclude = true)]
         public string Message
         {
             get => message;

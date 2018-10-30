@@ -82,6 +82,11 @@ namespace ShipWorks.OrderLookup
         RateResult SelectedRate { get; set; }
 
         /// <summary>
+        /// Can the view accept focus
+        /// </summary>
+        Func<bool> CanAcceptFocus { get; set; }
+
+        /// <summary>
         /// Changes the shipment type
         /// </summary>
         void ChangeShipmentType(ShipmentTypeCode value);

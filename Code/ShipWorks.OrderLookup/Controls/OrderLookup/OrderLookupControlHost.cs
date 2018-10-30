@@ -5,7 +5,6 @@ using System.Windows.Forms;
 using System.Windows.Forms.Integration;
 using System.Windows.Input;
 using Interapptive.Shared.ComponentRegistration;
-using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Profiles;
 using ShipWorks.UI.Controls;
@@ -29,6 +28,7 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookup
             InitializeComponent();
             this.orderLookupViewModel = orderLookupViewModel;
             orderLookupViewModel.ShipmentModel.ShipmentNeedsBinding += OnShipmentModelShipmentSaving;
+            orderLookupViewModel.ShipmentModel.CanAcceptFocus = () => this.Visible && this.CanFocus;
             shortcutPipeline.Register(orderLookupViewModel.ShipmentModel);
         }
 

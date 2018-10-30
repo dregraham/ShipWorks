@@ -1,19 +1,28 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Autofac.Extras.Moq;
 using Moq;
+using ShipWorks.ApplicationCore;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.FedEx;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
+using ShipWorks.Tests.Shared;
 using Xunit;
 
 namespace ShipWorks.Shipping.Tests.Carriers.FedEx
 {
-    public class FedExShipmentPackageTypesBuilderTest
+    [Collection(TestCollections.IoC)]
+    public class FedExShipmentPackageTypesBuilderTest : IDisposable
     {
+        private readonly AutoMock mock;
+
+        public FedExShipmentPackageTypesBuilderTest()
+        {
+            mock = AutoMockExtensions.GetLooseThatReturnsMocks();
+            IoC.InitializeForUnitTests(mock.Container);
+        }
+
         [Fact]
         public void BuildPackageTypeDictionary_ReturnsCustomPackagingOnly_ShipmentsAreNull()
         {
@@ -23,7 +32,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx
             var packageTypes = BuildPackageTypeDictionary(availablePackageTypes, validPackageTypes, null);
 
             Assert.Equal(1, packageTypes.Count);
-            Assert.Contains((int)FedExPackagingType.Custom, packageTypes.Keys);
+            Assert.Contains((int) FedExPackagingType.Custom, packageTypes.Keys);
         }
 
         [Fact]
@@ -36,7 +45,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx
             var packageTypes = BuildPackageTypeDictionary(availablePackageTypes, validPackageTypes, shipments);
 
             Assert.Equal(1, packageTypes.Count);
-            Assert.Contains((int)FedExPackagingType.Custom, packageTypes.Keys);
+            Assert.Contains((int) FedExPackagingType.Custom, packageTypes.Keys);
         }
 
         [Fact]
@@ -49,7 +58,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx
             var packageTypes = BuildPackageTypeDictionary(availablePackageTypes, validPackageTypes, shipments);
 
             Assert.Equal(1, packageTypes.Count);
-            Assert.Contains((int)FedExPackagingType.Envelope, packageTypes.Keys);
+            Assert.Contains((int) FedExPackagingType.Envelope, packageTypes.Keys);
         }
 
         [Fact]
@@ -61,7 +70,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx
 
             var packageTypes = BuildPackageTypeDictionary(availablePackageTypes, validPackageTypes, shipments);
 
-            Assert.Contains((int)FedExPackagingType.Pak, packageTypes.Keys);
+            Assert.Contains((int) FedExPackagingType.Pak, packageTypes.Keys);
         }
 
         [Fact]
@@ -73,7 +82,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx
 
             var packageTypes = BuildPackageTypeDictionary(availablePackageTypes, validPackageTypes, shipments);
 
-            Assert.Contains((int)FedExPackagingType.Box, packageTypes.Keys);
+            Assert.Contains((int) FedExPackagingType.Box, packageTypes.Keys);
         }
 
         /// <summary>
@@ -120,5 +129,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx
             }
             return results;
         }
+
+        public void Dispose() => mock.Dispose();
     }
 }
