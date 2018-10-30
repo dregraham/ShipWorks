@@ -1,10 +1,12 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
 using System.Reflection;
 using Autofac;
 using Autofac.Features.Indexed;
 using Interapptive.Shared.ComponentRegistration;
 using Newtonsoft.Json;
 using ShipWorks.Core.UI;
+using ShipWorks.OrderLookup.FieldManager;
 using ShipWorks.Shipping;
 using ShipWorks.UI;
 
@@ -22,6 +24,7 @@ namespace ShipWorks.OrderLookup.Controls
         private T context;
         private bool expanded;
         private bool visible;
+        private bool isOriginallyVisible;
 
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -73,8 +76,14 @@ namespace ShipWorks.OrderLookup.Controls
         /// <summary>
         /// Update the view model
         /// </summary>
-        public void UpdateViewModel(IOrderLookupShipmentModel shipmentModel, ILifetimeScope innerScope)
+        public void UpdateViewModel(IOrderLookupShipmentModel shipmentModel, ILifetimeScope innerScope, Func<SectionLayoutIDs, bool> isPanelVisible)
         {
+            isOriginallyVisible = false;
+            if (Context != null)
+            {
+                Context.PropertyChanged -= OnContextPropertyChanged;
+            }
+
             IIndex<ShipmentTypeCode, T> createSectionViewModel = innerScope.Resolve<IIndex<ShipmentTypeCode, T>>();
 
             var key = shipmentModel.ShipmentAdapter?.ShipmentTypeCode;
@@ -85,14 +94,25 @@ namespace ShipWorks.OrderLookup.Controls
             else if (createSectionViewModel.TryGetValue(key.Value, out T newModel))
             {
                 Context = newModel;
+                isOriginallyVisible = isPanelVisible(Context.PanelID);
+                Context.PropertyChanged += OnContextPropertyChanged;
+                Visible = isOriginallyVisible && Context.Visible;
             }
-            else if(innerScope.TryResolve(out T nullModel))
+            else if (innerScope.TryResolve(out T nullModel))
             {
                 Context = nullModel;
             }
             else
             {
                 Context = null;
+            }
+        }
+
+        private void OnContextPropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == nameof(Context.Visible))
+            {
+                Visible = isOriginallyVisible && Context.Visible;
             }
         }
     }

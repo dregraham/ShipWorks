@@ -1,5 +1,7 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
 using Autofac;
+using ShipWorks.OrderLookup.FieldManager;
 
 namespace ShipWorks.OrderLookup
 {
@@ -16,7 +18,7 @@ namespace ShipWorks.OrderLookup
         /// <summary>
         /// Update the view model with new inner view models if necessary
         /// </summary>
-        void UpdateViewModel(IOrderLookupShipmentModel shipmentModel, ILifetimeScope innerScope);
+        void UpdateViewModel(IOrderLookupShipmentModel shipmentModel, ILifetimeScope innerScope, Func<SectionLayoutIDs, bool> isPanelVisible);
 
         /// <summary>
         /// Name of the panel

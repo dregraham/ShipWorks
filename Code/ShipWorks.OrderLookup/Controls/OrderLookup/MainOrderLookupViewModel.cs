@@ -62,7 +62,7 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookup
             this.layout = layout;
             layout.Apply(this, scope);
             LeftColumn.Concat(MiddleColumn).Concat(RightColumn).ForEach(p => p.PropertyChanged += PanelPropertyChanged);
-            
+
 
             subscriptions = new CompositeDisposable(
                 messages.OfType<ShipmentSelectionChangedMessage>()
@@ -88,7 +88,7 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookup
                 layout.Save(this);
             }
         }
-        
+
         /// <summary>
         /// A shipment is unloading
         /// </summary>
@@ -121,8 +121,10 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookup
                 .Concat(RightColumn)
                 .ForEach(x =>
                 {
-                    x.UpdateViewModel(ShipmentModel, innerScope);
-                    x.Visible = sectionLayouts.FirstOrDefault(sl => sl.Id == x.Context?.PanelID)?.Selected == true;
+                    x.UpdateViewModel(
+                        ShipmentModel,
+                        innerScope,
+                        panelID => sectionLayouts.FirstOrDefault(sl => sl.Id == panelID)?.Selected == true);
                 });
         }
 
