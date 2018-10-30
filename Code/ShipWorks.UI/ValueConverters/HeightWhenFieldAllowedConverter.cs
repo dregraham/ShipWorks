@@ -22,9 +22,9 @@ namespace ShipWorks.UI.ValueConverters
             SectionLayoutFieldIDs? fieldID = EnumHelper.TryParseEnum<SectionLayoutFieldIDs>(values[1].ToString(), true);
             GridLength height = (GridLength) values[2];
 
-            if (fieldID.HasValue)
+            if (repo != null && fieldID.HasValue)
             {
-                var sectionFields = repo?.Fetch()?.SelectMany(l => l.SectionFields);
+                var sectionFields = repo.Fetch()?.SelectMany(l => l.SectionFields);
                 var sectionField = sectionFields.FirstOrDefault(l => l.Id.Equals(fieldID.Value));
 
                 height = sectionField?.Selected == true ? height : new GridLength(0);

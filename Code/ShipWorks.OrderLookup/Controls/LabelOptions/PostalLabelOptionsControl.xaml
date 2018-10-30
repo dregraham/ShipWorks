@@ -25,7 +25,7 @@
     </UserControl.Resources>
     <Grid IsEnabled="{Binding ShipmentModel.ShipmentAllowEditing}">
         <Grid.RowDefinitions>
-            <RowDefinition  >
+            <RowDefinition>
                 <RowDefinition.Height>
                     <MultiBinding Converter="{StaticResource HeightWhenFieldAllowedConverter}">
                         <Binding Path="ShipmentModel.FieldLayoutRepository" Mode="OneWay" />
@@ -34,7 +34,7 @@
                     </MultiBinding>
                 </RowDefinition.Height>
             </RowDefinition>
-            <RowDefinition  >
+            <RowDefinition >
                 <RowDefinition.Height>
                     <MultiBinding Converter="{StaticResource HeightWhenFieldAllowedConverter}">
                         <Binding Path="ShipmentModel.FieldLayoutRepository" Mode="OneWay" />
