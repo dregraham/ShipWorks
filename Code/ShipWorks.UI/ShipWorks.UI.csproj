@@ -190,6 +190,7 @@
       <DependentUpon>CustomerLicenseActivationDlg.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\CustomerLicenseActivation\CustomerLicenseActivationViewModel.cs" />
+    <Compile Include="Controls\FieldLayoutRowDefinition.cs" />
     <Compile Include="Controls\KeyboardShortcutDisplay.cs" />
     <Compile Include="Controls\WebBrowser\DismissableWebBrowserDlg.xaml.cs">
       <DependentUpon>DismissableWebBrowserDlg.xaml</DependentUpon>

@@ -8,7 +8,7 @@ namespace ShipWorks.OrderLookup.Controls.Reference
     /// <summary>
     /// View model for order lookup reference control
     /// </summary>
-    public class GenericReferenceViewModel : IReferenceViewModel
+    public class GenericReferenceViewModel : IReferenceViewModel, IFieldRepositoryProvider
     {
         public event PropertyChangedEventHandler PropertyChanged;
         private readonly PropertyChangedHandler handler;
@@ -45,6 +45,11 @@ namespace ShipWorks.OrderLookup.Controls.Reference
         /// </summary>
         [Obfuscation(Exclude = true)]
         public IOrderLookupShipmentModel ShipmentModel { get; }
+
+        /// <summary>
+        /// Field layout repository
+        /// </summary>
+        public IOrderLookupFieldLayoutRepository FieldLayoutRepository => ShipmentModel.FieldLayoutRepository;
 
         /// <summary>
         /// Update when the order changes

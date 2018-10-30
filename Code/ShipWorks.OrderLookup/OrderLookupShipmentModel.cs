@@ -15,8 +15,8 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Messaging.Messages;
 using ShipWorks.Messaging.Messages.Shipping;
-using ShipWorks.OrderLookup.ShipmentModelPipelines;
 using ShipWorks.OrderLookup.FieldManager;
+using ShipWorks.OrderLookup.ShipmentModelPipelines;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Shipping.Editing.Rating;
@@ -30,7 +30,7 @@ namespace ShipWorks.OrderLookup
     /// Model used by the various order lookup viewmodels
     /// </summary>
     [Component(SingleInstance = true)]
-    public class OrderLookupShipmentModel : INotifyPropertyChanged, IOrderLookupShipmentModel
+    public class OrderLookupShipmentModel : INotifyPropertyChanged, IOrderLookupShipmentModel, IFieldRepositoryProvider
     {
         /// <summary>
         /// Entities for which we want to wire up property changed handlers
@@ -92,7 +92,7 @@ namespace ShipWorks.OrderLookup
         private bool isSaving = false;
         private IEnumerable<IPackageAdapter> packageAdapters;
         private IDisposable profileDisposable;
-        private IOrderLookupFieldLayoutRepository fieldLayoutRepository;
+        private readonly IOrderLookupFieldLayoutRepository fieldLayoutRepository;
 
         public event EventHandler OnSearchOrder;
 
@@ -444,7 +444,7 @@ namespace ShipWorks.OrderLookup
         public void ChangeShipmentType(ShipmentTypeCode value)
         {
             SelectedRate = null;
-            
+
             if (value != ShipmentAdapter.ShipmentTypeCode)
             {
                 ModifyShipmentWithReload(() =>
@@ -468,7 +468,7 @@ namespace ShipWorks.OrderLookup
 
             SaveToDatabase();
 
-            messenger.Send(new ProcessShipmentsMessage(this, new[] { shipmentAdapter.Shipment }, 
+            messenger.Send(new ProcessShipmentsMessage(this, new[] { shipmentAdapter.Shipment },
                 new[] { shipmentAdapter.Shipment }, SelectedRate));
         }
 

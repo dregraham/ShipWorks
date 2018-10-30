@@ -756,6 +756,7 @@
     <Compile Include="ApplicationCore\Interaction\IMenuCommandExecutionContext.cs" />
     <Compile Include="ApplicationCore\Interaction\SelectionDependentEntry.cs" />
     <Compile Include="ApplicationCore\IoCLogRequestModule.cs" />
+    <Compile Include="OrderLookup\FieldManager\IFieldRepositoryProvider.cs" />
     <Compile Include="OrderLookup\FieldManager\IOrderLookupFieldLayoutRepository.cs" />
     <Compile Include="OrderLookup\FieldManager\ISectionFieldLayout.cs" />
     <Compile Include="OrderLookup\FieldManager\ISectionLayout.cs" />
