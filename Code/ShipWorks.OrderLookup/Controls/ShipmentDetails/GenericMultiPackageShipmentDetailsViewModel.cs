@@ -31,8 +31,8 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
         private readonly ICarrierShipmentAdapterOptionsProvider carrierShipmentAdapterOptionsProvider;
         private List<DimensionsProfileEntity> dimensionProfiles;
         private Dictionary<ShipmentTypeCode, string> providers;
-        private IEnumerable<KeyValuePair<int, string>> packageTypes;
-        private IEnumerable<KeyValuePair<int, string>> serviceTypes;
+        private IDictionary<int, string> packageTypes;
+        private IDictionary<int, string> serviceTypes;
         private System.Collections.ObjectModel.ObservableCollection<PackageAdapterWrapper> packages;
         private PackageAdapterWrapper selectedPackage;
 
@@ -207,7 +207,7 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
         /// Collection of valid PackageTypes
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public IEnumerable<KeyValuePair<int, string>> PackageTypes
+        public IDictionary<int, string> PackageTypes
         {
             get => packageTypes;
             set => handler.Set(nameof(PackageTypes), ref packageTypes, value);
@@ -217,7 +217,7 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
         /// Collection of ServiceTypes
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public IEnumerable<KeyValuePair<int, string>> ServiceTypes
+        public IDictionary<int, string> ServiceTypes
         {
             get => serviceTypes;
             set => handler.Set(nameof(ServiceTypes), ref serviceTypes, value);
@@ -366,7 +366,7 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
         {
             if (ShipmentModel.ShipmentAdapter?.Shipment == null)
             {
-                PackageTypes = Enumerable.Empty<KeyValuePair<int, string>>();
+                PackageTypes = new Dictionary<int, string>();
             }
             else
             {
