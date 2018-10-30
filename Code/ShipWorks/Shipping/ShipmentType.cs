@@ -1027,6 +1027,19 @@ namespace ShipWorks.Shipping
         }
 
         /// <summary>
+        /// Rectifies carrier specific data on the shipment
+        /// </summary>
+        /// <remarks>
+        /// This allows the ShipmentType to fix any issues on the shipment
+        /// for example if the service is not valid for the ship to country
+        /// or if the packaging type is not valid for the service type
+        /// </remarks>
+        public virtual void RectifyCarrierSpecificData(ShipmentEntity shipment)
+        {
+
+        }
+
+        /// <summary>
         /// Indicates if customs forms may be required to ship the shipment based on the
         /// shipping address and any store specific logic that may impact whether customs
         /// is required (i.e. eBay GSP).

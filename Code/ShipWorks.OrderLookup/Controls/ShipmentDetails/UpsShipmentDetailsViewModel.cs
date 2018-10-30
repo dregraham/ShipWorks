@@ -24,20 +24,24 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
     public class UpsShipmentDetailsViewModel : GenericMultiPackageShipmentDetailsViewModel
     {
         private IEnumerable<KeyValuePair<int, string>> confirmationTypes;
+        private readonly IShipmentTypeManager shipmentTypeManager;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public UpsShipmentDetailsViewModel(IOrderLookupShipmentModel shipmentModel,
-                                           IInsuranceViewModel insuranceViewModel,
-                                           Func<DimensionsManagerDlg> getDimensionsManagerDlg,
-                                           ICarrierShipmentAdapterOptionsProvider carrierShipmentAdapterOptionsProvider) 
+        public UpsShipmentDetailsViewModel(
+            IOrderLookupShipmentModel shipmentModel,
+            IInsuranceViewModel insuranceViewModel,
+            Func<DimensionsManagerDlg> getDimensionsManagerDlg,
+            ICarrierShipmentAdapterOptionsProvider carrierShipmentAdapterOptionsProvider,
+            IShipmentTypeManager shipmentTypeManager)
             : base(shipmentModel, insuranceViewModel, getDimensionsManagerDlg, carrierShipmentAdapterOptionsProvider)
         {
             ConfirmationTypes = EnumHelper.GetEnumList<UpsDeliveryConfirmationType>()
                                           .Select(e => new KeyValuePair<int, string>((int) e.Value, e.Description));
+            this.shipmentTypeManager = shipmentTypeManager;
         }
-        
+
         /// <summary>
         /// Collection of ConfirmationTypes
         /// </summary>
@@ -74,17 +78,24 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
                 RefreshInsurance();
             }
 
-            if (e.PropertyName == PostalShipmentFields.Service.Name)
-            {
-                handler.RaisePropertyChanged(nameof(ShipmentModel));
-            }
-
-            if (e.PropertyName == ShipmentFields.ShipCountryCode.Name)
+            if (e.PropertyName == ShipmentFields.ShipCountryCode.Name ||
+                e.PropertyName == ShipmentFields.OriginCountryCode.Name)
             {
                 RefreshServiceTypes();
             }
+
+            if (e.PropertyName == ShipmentFields.ShipCountryCode.Name ||
+                e.PropertyName == ShipmentFields.OriginCountryCode.Name ||
+                e.PropertyName == UpsShipmentFields.Service.Name ||
+                (e.PropertyName == nameof(ShipmentModel.PackageAdapters) && ShipmentModel.PackageAdapters != null))
+            {
+                ShipmentType shipmentType = shipmentTypeManager.Get(ShipmentTypeCode.UpsOnLineTools);
+                shipmentType.RectifyCarrierSpecificData(ShipmentModel.ShipmentAdapter.Shipment);
+
+                handler.RaisePropertyChanged(null);
+            }
         }
-        
+
         /// <summary>
         /// Validate the ColumnNames value
         /// </summary>

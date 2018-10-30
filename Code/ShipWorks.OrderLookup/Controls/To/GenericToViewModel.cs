@@ -49,12 +49,6 @@ namespace ShipWorks.OrderLookup.Controls.To
         }
 
         /// <summary>
-        /// Is the section expanded
-        /// </summary>
-        [Obfuscation(Exclude = true)]
-        public bool Expanded { get; set; } = true;
-
-        /// <summary>
         ///The addresses title
         /// </summary>
         [Obfuscation(Exclude = true)]

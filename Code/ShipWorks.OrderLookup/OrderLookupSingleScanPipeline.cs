@@ -118,14 +118,14 @@ namespace ShipWorks.OrderLookup
                     if (orderId.HasValue)
                     {
                         TelemetricResult<bool> shipmentLoadTelemetricResult = new TelemetricResult<bool>("Shipment");
-                        await shipmentLoadTelemetricResult.RunTimedEvent(AutoPrintTelemetryTimeSliceName, async () =>
+                        await shipmentLoadTelemetricResult.RunTimedEventAsync(AutoPrintTelemetryTimeSliceName, async () =>
                         {
                             AutoPrintCompletionResult result = await orderLookupAutoPrintService.AutoPrintShipment(orderId.Value, message).ConfigureAwait(true);
                             order = result.ProcessShipmentResults?.Select(x => x.Shipment.Order).FirstOrDefault();
                         });
 
                         // Capture the time required for loading the shipment data
-                        await shipmentLoadTelemetricResult.RunTimedEvent(DataLoadingTelemetryTimeSliceName, async () =>
+                        await shipmentLoadTelemetricResult.RunTimedEventAsync(DataLoadingTelemetryTimeSliceName, async () =>
                         {
                             if (order == null)
                             {
@@ -193,7 +193,7 @@ namespace ShipWorks.OrderLookup
                 List<long> orderIds = new List<long>();
 
                 // Track the time it took to load the order
-                await telemetricResult.RunTimedEvent(DataLoadingTelemetryTimeSliceName, async () =>
+                await telemetricResult.RunTimedEventAsync(DataLoadingTelemetryTimeSliceName, async () =>
                 {
                     await onDemandDownloaderFactory.CreateOnDemandDownloader().Download(scannedText).ConfigureAwait(true);
                     orderIds = orderRepository.GetOrderIDs(scannedText);
@@ -203,10 +203,11 @@ namespace ShipWorks.OrderLookup
                 });
 
                 // Track the time it takes to confirm user input from the confirmation service
-                await telemetricResult.RunTimedEvent(UserInputTelemetryTimeSliceName, async () =>
-                {
-                    telemetricResult.SetValue(await orderLookupConfirmationService.ConfirmOrder(scannedText, orderIds));
-                });
+                long? selectedOrderId = null;
+                await telemetricResult.RunTimedEventAsync(UserInputTelemetryTimeSliceName, async () =>
+                    selectedOrderId = await orderLookupConfirmationService.ConfirmOrder(scannedText, orderIds).ConfigureAwait(false)
+                );
+                telemetricResult.SetValue(selectedOrderId);
             }
 
             return telemetricResult;
@@ -229,27 +230,28 @@ namespace ShipWorks.OrderLookup
                     List<long> orderIds = new List<long>();
 
                     // Track the time it took to load the order
-                    await orderSearchTelemetricResult.RunTimedEvent(DataLoadingTelemetryTimeSliceName, async () =>
+                    await orderSearchTelemetricResult.RunTimedEventAsync(DataLoadingTelemetryTimeSliceName, async () =>
                     {
                         await onDemandDownloaderFactory.CreateOnDemandDownloader().Download(message.SearchText).ConfigureAwait(true);
                         orderIds = orderRepository.GetOrderIDs(message.SearchText);
-
-                        // Make a note of how many orders were found, so we can marry this up with the confirmation telemetry
-                        orderSearchTelemetricResult.AddEntry(OrderCountTelemetryPropertyName, orderIds.Count);
                     });
+
+                    // Make a note of how many orders were found, so we can marry this up with the confirmation telemetry
+                    orderSearchTelemetricResult.AddEntry(OrderCountTelemetryPropertyName, orderIds.Count);
+
 
                     // Track the time for gather user input (if needed at all)
-                    await orderSearchTelemetricResult.RunTimedEvent(UserInputTelemetryTimeSliceName, async () =>
-                    {
-                        orderSearchTelemetricResult.SetValue(await orderLookupConfirmationService.ConfirmOrder(message.SearchText, orderIds));
-                    });
+                    long? selectedOrderId = null;
+                    await orderSearchTelemetricResult.RunTimedEventAsync(UserInputTelemetryTimeSliceName,
+                        async () => selectedOrderId = await orderLookupConfirmationService.ConfirmOrder(message.SearchText, orderIds).ConfigureAwait(false));
+                    orderSearchTelemetricResult.SetValue(selectedOrderId);
 
                     // Record the order data to the telemetry event
                     orderSearchTelemetricResult.WriteTo(telemetryEvent);
 
                     // Instrument the time required to load the shipment
                     TelemetricResult<bool> shipmentLoadTelemetricResult = new TelemetricResult<bool>("Shipment");
-                    await shipmentLoadTelemetricResult.RunTimedEvent(DataLoadingTelemetryTimeSliceName, async () =>
+                    await shipmentLoadTelemetricResult.RunTimedEventAsync(DataLoadingTelemetryTimeSliceName, async () =>
                     {
                         long? orderId = orderSearchTelemetricResult.Value;
                         OrderEntity order = null;

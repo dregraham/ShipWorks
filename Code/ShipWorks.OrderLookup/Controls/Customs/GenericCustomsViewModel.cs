@@ -42,12 +42,6 @@ namespace ShipWorks.OrderLookup.Controls.Customs
         }
 
         /// <summary>
-        /// Is the section expanded
-        /// </summary>
-        [Obfuscation(Exclude = true)]
-        public bool Expanded { get; set; } = true;
-
-        /// <summary>
         /// The title of the section
         /// </summary>
         [Obfuscation(Exclude = true)]

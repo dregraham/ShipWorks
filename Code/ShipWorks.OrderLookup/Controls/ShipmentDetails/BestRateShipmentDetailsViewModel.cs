@@ -57,12 +57,6 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
         }
 
         /// <summary>
-        /// Is the section expanded
-        /// </summary>
-        [Obfuscation(Exclude = true)]
-        public bool Expanded { get; set; } = true;
-
-        /// <summary>
         /// Title of the section
         /// </summary>
         [Obfuscation(Exclude = true)]
@@ -156,24 +150,39 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
 
                 if (e.PropertyName == nameof(ShipmentModel.ShipmentAdapter.Shipment.BestRate.DimsProfileID))
                 {
-                    IPackageAdapter packageAdapter = ShipmentModel.PackageAdapters.First();
-                    if (packageAdapter?.DimsProfileID > 0)
-                    {
-                        DimensionsProfileEntity profile =
-                            DimensionProfiles.SingleOrDefault(p => p.DimensionsProfileID == packageAdapter.DimsProfileID);
-
-                        if (profile != null)
-                        {
-                            packageAdapter.DimsLength = profile.Length;
-                            packageAdapter.DimsWidth = profile.Width;
-                            packageAdapter.DimsHeight = profile.Height;
-                            packageAdapter.AdditionalWeight = profile.Weight;
-                        }
-                    }
-
-                    handler.RaisePropertyChanged(nameof(IsProfileSelected));
+                    ApplyDimensionalProfile();
                 }
             }
+        }
+
+        /// <summary>
+        /// Apply a dimensional profile
+        /// </summary>
+        private void ApplyDimensionalProfile()
+        {
+            IPackageAdapter packageAdapter = ShipmentModel.PackageAdapters.First();
+            if (packageAdapter?.DimsProfileID > 0)
+            {
+                DimensionsProfileEntity profile =
+                    DimensionProfiles.SingleOrDefault(p => p.DimensionsProfileID == packageAdapter.DimsProfileID);
+
+                if (profile != null)
+                {
+                    packageAdapter.DimsLength = profile.Length;
+                    packageAdapter.DimsWidth = profile.Width;
+                    packageAdapter.DimsHeight = profile.Height;
+                    packageAdapter.AdditionalWeight = profile.Weight;
+                }
+            }
+            else
+            {
+                packageAdapter.DimsLength = 0;
+                packageAdapter.DimsWidth = 0;
+                packageAdapter.DimsHeight = 0;
+                packageAdapter.AdditionalWeight = 0;
+            }
+
+            handler.RaisePropertyChanged(nameof(IsProfileSelected));
         }
 
         /// <summary>

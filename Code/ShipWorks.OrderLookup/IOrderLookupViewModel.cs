@@ -7,11 +7,6 @@ using System.ComponentModel;
 public interface IOrderLookupViewModel : INotifyPropertyChanged, IDisposable
 {
     /// <summary>
-    /// Is the section expanded
-    /// </summary>
-    bool Expanded { get; set; }
-
-    /// <summary>
     /// Title of the section
     /// </summary>
     string Title { get; }

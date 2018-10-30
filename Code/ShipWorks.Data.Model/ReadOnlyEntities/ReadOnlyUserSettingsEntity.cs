@@ -55,6 +55,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             AutoWeigh = source.AutoWeigh;
             DialogSettings = source.DialogSettings;
             UIMode = source.UIMode;
+            OrderLookupLayout = source.OrderLookupLayout;
             
             User = (IUserEntity) source.User?.AsReadOnly(objectMap);
             
@@ -178,6 +179,12 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         public ShipWorks.Settings.UIMode UIMode { get; }
+        /// <summary> The OrderLookupLayout property of the Entity UserSettings<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "UserSettings"."OrderLookupLayout"<br/>
+        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 2147483647<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+        public System.String OrderLookupLayout { get; }
         
         public IUserEntity User { get; }
         
