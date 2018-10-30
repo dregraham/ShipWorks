@@ -44,7 +44,8 @@ namespace ShipWorks.OrderLookup.ShipmentModelPipelines
         {
             model.Unload();
             messageHelper.ShowPopup(
-                $"Successfully processed order {message.Shipments.FirstOrDefault().Shipment?.Order.OrderNumberComplete}");
+                "Processed Successfully\n" +
+                $"Order: {message.Shipments.FirstOrDefault().Shipment?.Order.OrderNumberComplete}");
         }
     }
 }
