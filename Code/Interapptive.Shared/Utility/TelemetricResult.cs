@@ -48,39 +48,98 @@ namespace Interapptive.Shared.Utility
         /// <summary>
         /// Run and record a time entry for specified action
         /// </summary>
+        /// <remarks>
+        /// Using the TelemetricEventType is useful when the same event
+        /// type is being used in multiple places and you want to
+        /// guarantee consistent event names.
+        /// </remarks>
         public void RunTimedEvent(TelemetricEventType eventType, Action eventToTime) =>
             RunTimedEvent(eventType, eventToTime.ToFunc());
 
         /// <summary>
         /// Run and record a time entry for specified action
         /// </summary>
+        /// <remarks>
+        /// Using the TelemetricEventType is useful when the same event
+        /// type is being used in multiple places and you want to
+        /// guarantee consistent event names.
+        /// </remarks>
         public K RunTimedEvent<K>(TelemetricEventType eventType, Func<K> eventToTime)
         {
-            StartTimedEvent(EnumHelper.GetDescription(eventType));
+            return RunTimedEvent(EnumHelper.GetDescription(eventType), eventToTime);
+        }
+
+        /// <summary>
+        /// Run and record a time entry for specified action
+        /// </summary>
+        /// <remarks>
+        /// Using the TelemetricEventType is useful when the same event
+        /// type is being used in multiple places and you want to
+        /// guarantee consistent event names.
+        /// </remarks>
+        public async Task RunTimedEventAsync(TelemetricEventType eventType, Func<Task> eventToTime)
+        {
+            await RunTimedEvent(EnumHelper.GetDescription(eventType), eventToTime);
+        }
+
+        /// <summary>
+        /// Run and record a time entry for specified action
+        /// </summary>
+        /// <remarks>
+        /// Specifying the eventName as a string gives you more control
+        /// over the naming of the timed event or for cases where you're not
+        /// concerned about consistent naming for the same type of event that
+        /// can be invoked from multiple places.
+        /// </remarks>
+        public void RunTimedEvent(string eventName, Action eventToTime) =>
+            RunTimedEvent(eventName, eventToTime.ToFunc());
+
+        /// <summary>
+        /// Run and record a time entry for specified action
+        /// </summary>
+        /// <remarks>
+        /// Specifying the eventName as a string gives you more control
+        /// over the naming of the timed event or for cases where you're not
+        /// concerned about consistent naming for the same type of event that
+        /// can be invoked from multiple places.
+        /// </remarks>
+        public K RunTimedEvent<K>(string eventName, Func<K> eventToTime)
+        {
+            StartTimedEvent(eventName);
             try
             {
                 return eventToTime();
             }
+            catch (Exception)
+            {
+                StopTimedEvent(eventName);
+                throw;
+            }
             finally
             {
-                StopTimedEvent(EnumHelper.GetDescription(eventType));
+                StopTimedEvent(eventName);
             }
         }
 
         /// <summary>
         /// Run and record a time entry for specified action
         /// </summary>
-        public async Task RunTimedEventAsync(TelemetricEventType eventType, Func<Task> eventToTime)
+        /// <remarks>
+        /// Using the TelemetricEventType is useful when the same event
+        /// type is being used in multiple places and you want to
+        /// guarantee consistent event names.
+        /// </remarks>
+        public async Task RunTimedEventAsync(string eventName, Func<Task> eventToTime)
         {
-            StartTimedEvent(EnumHelper.GetDescription(eventType));
+            StartTimedEvent(eventName);
             try
             {
                 await eventToTime();
-                StopTimedEvent(EnumHelper.GetDescription(eventType));
+                StopTimedEvent(eventName);
             }
             catch (Exception)
             {
-                StopTimedEvent(EnumHelper.GetDescription(eventType));
+                StopTimedEvent(eventName);
                 throw;
             }
         }
