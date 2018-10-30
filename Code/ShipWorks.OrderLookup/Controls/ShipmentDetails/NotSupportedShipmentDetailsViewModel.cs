@@ -1,17 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Input;
-using GalaSoft.MvvmLight.CommandWpf;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
-using ShipWorks.Core.Messaging;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Messaging.Messages.Dialogs;
+using ShipWorks.OrderLookup.FieldManager;
 using ShipWorks.Shipping;
 using ShipWorks.UI;
 
@@ -37,7 +29,12 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
             ShipmentModel = shipmentModel;
             Providers = carrierShipmentAdapterOptionsProvider.GetProviders(shipmentModel.ShipmentAdapter, shipmentModel.OriginalShipmentTypeCode);
         }
-        
+
+        /// <summary>
+        /// Panel ID
+        /// </summary>
+        public SectionLayoutIDs PanelID => SectionLayoutIDs.ShipmentDetails;
+
         /// <summary>
         /// Title of the section
         /// </summary>

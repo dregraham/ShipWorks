@@ -9,6 +9,7 @@ using Interapptive.Shared.Utility;
 using Shared.System.ComponentModel.DataAnnotations;
 using ShipWorks.Core.UI;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.OrderLookup.FieldManager;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Editing.Enums;
 using ShipWorks.UI;
@@ -42,6 +43,11 @@ namespace ShipWorks.OrderLookup.Controls.LabelOptions
 
             InitializeForChangedShipment(ShipmentModel.ShipmentAdapter.Shipment);
         }
+
+        /// <summary>
+        /// Panel ID
+        /// </summary>
+        public SectionLayoutIDs PanelID => SectionLayoutIDs.LabelOptions;
 
         /// <summary>
         /// Title of the section

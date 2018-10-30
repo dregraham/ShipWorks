@@ -8,6 +8,7 @@ using GalaSoft.MvvmLight.Command;
 using Interapptive.Shared.Utility;
 using Shared.System.ComponentModel.DataAnnotations;
 using ShipWorks.Core.UI;
+using ShipWorks.OrderLookup.FieldManager;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Services;
 
@@ -82,6 +83,11 @@ namespace ShipWorks.OrderLookup.Controls.Customs
             get => customsItems;
             private set => handler.Set(nameof(CustomsItems), ref customsItems, value);
         }
+
+        /// <summary>
+        /// Panel ID
+        /// </summary>
+        public virtual SectionLayoutIDs PanelID => SectionLayoutIDs.Customs;
 
         /// <summary>
         /// The selected customs item

@@ -21,6 +21,7 @@ namespace ShipWorks.OrderLookup.Controls
         private readonly PropertyChangedHandler handler;
         private T context;
         private bool expanded;
+        private bool visible;
 
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -58,6 +59,15 @@ namespace ShipWorks.OrderLookup.Controls
         {
             get => context;
             set => handler.Set(nameof(Context), ref context, value);
+        }
+
+        /// <summary>
+        /// Whether or not the panel is visible
+        /// </summary>
+        public bool Visible
+        {
+            get => visible;
+            set => handler.Set(nameof(Visible), ref visible, value);
         }
 
         /// <summary>

@@ -7,6 +7,7 @@ using Interapptive.Shared.Enums;
 using ShipWorks.AddressValidation;
 using ShipWorks.Core.UI;
 using ShipWorks.Data.Model.HelperClasses;
+using ShipWorks.OrderLookup.FieldManager;
 using ShipWorks.Shipping;
 using ShipWorks.UI;
 using ShipWorks.UI.Controls.AddressControl;
@@ -47,6 +48,11 @@ namespace ShipWorks.OrderLookup.Controls.To
 
             InitializeForChangedShipment();
         }
+
+        /// <summary>
+        /// Panel ID
+        /// </summary>
+        public SectionLayoutIDs PanelID => SectionLayoutIDs.To;
 
         /// <summary>
         ///The addresses title

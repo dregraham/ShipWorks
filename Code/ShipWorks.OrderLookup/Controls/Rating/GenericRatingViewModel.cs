@@ -5,6 +5,7 @@ using System.Reflection;
 using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Data.Model.HelperClasses;
+using ShipWorks.OrderLookup.FieldManager;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.UI.RatingPanel;
@@ -37,6 +38,11 @@ namespace ShipWorks.OrderLookup.Controls.Rating
             ShipmentModel = shipmentModel;
             ShipmentModel.PropertyChanged += OnShipmentModelPropertyChanged;
         }
+
+        /// <summary>
+        /// Panel ID
+        /// </summary>
+        public SectionLayoutIDs PanelID => SectionLayoutIDs.Rates;
 
         /// <summary>
         /// ShipmentModel Property Changed

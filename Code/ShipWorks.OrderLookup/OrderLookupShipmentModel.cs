@@ -16,6 +16,7 @@ using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Messaging.Messages;
 using ShipWorks.Messaging.Messages.Shipping;
 using ShipWorks.OrderLookup.ShipmentModelPipelines;
+using ShipWorks.OrderLookup.FieldManager;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Shipping.Editing.Rating;
@@ -91,6 +92,7 @@ namespace ShipWorks.OrderLookup
         private bool isSaving = false;
         private IEnumerable<IPackageAdapter> packageAdapters;
         private IDisposable profileDisposable;
+        private IOrderLookupFieldLayoutRepository fieldLayoutRepository;
 
         public event EventHandler OnSearchOrder;
 
@@ -123,7 +125,8 @@ namespace ShipWorks.OrderLookup
             IMessageHelper messageHelper,
             Func<IInsuranceBehaviorChangeViewModel> createInsuranceBehaviorChange,
             IShippingProfileService profileService,
-            IEnumerable<IOrderLookupShipmentModelPipeline> pipelines)
+            IEnumerable<IOrderLookupShipmentModelPipeline> pipelines,
+            IOrderLookupFieldLayoutRepository orderLookupFieldLayoutRepository)
         {
             this.profileService = profileService;
             this.messenger = messenger;
@@ -133,7 +136,13 @@ namespace ShipWorks.OrderLookup
             handler = new PropertyChangedHandler(this, () => PropertyChanged);
 
             subscription = new CompositeDisposable(pipelines.Select(x => x.Register(this)).ToArray());
+            fieldLayoutRepository = orderLookupFieldLayoutRepository;
         }
+
+        /// <summary>
+        /// Field layout repo
+        /// </summary>
+        public IOrderLookupFieldLayoutRepository FieldLayoutRepository => fieldLayoutRepository;
 
         /// <summary>
         /// The order that is currently in context

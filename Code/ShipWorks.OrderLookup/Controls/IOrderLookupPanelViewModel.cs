@@ -22,10 +22,15 @@ namespace ShipWorks.OrderLookup
         /// Name of the panel
         /// </summary>
         string Name { get; }
-        
+
         /// <summary>
         /// Whether or not the panel is expanded
         /// </summary>
-        bool Expanded { get; set; } 
+        bool Expanded { get; set; }
+
+        /// <summary>
+        /// Whether or not the panel is visible
+        /// </summary>
+        bool Visible { get; set; }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using ShipWorks.OrderLookup.FieldManager;
 
 /// <summary>
 /// Generic view model for order lookup
@@ -15,4 +16,9 @@ public interface IOrderLookupViewModel : INotifyPropertyChanged, IDisposable
     /// Is the section visible
     /// </summary>
     bool Visible { get; }
+
+    /// <summary>
+    /// Panel ID 
+    /// </summary>
+    SectionLayoutIDs PanelID { get; }
 }

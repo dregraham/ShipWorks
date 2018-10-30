@@ -11,6 +11,7 @@ using Interapptive.Shared.Collections;
 using Shared.System.ComponentModel.DataAnnotations;
 using ShipWorks.Core.UI;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.OrderLookup.FieldManager;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.UI.ShippingPanel;
@@ -65,6 +66,11 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
             RefreshServiceTypes();
             RefreshProviders();
         }
+
+        /// <summary>
+        /// Panel ID
+        /// </summary>
+        public SectionLayoutIDs PanelID => SectionLayoutIDs.ShipmentDetails;
 
         /// <summary>
         /// Delete the selected package

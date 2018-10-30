@@ -6,6 +6,8 @@
     xmlns:local="clr-namespace:ShipWorks.OrderLookup.Controls.LabelOptions"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:ui="http://schemas.shipworks.com/ui"
+    xmlns:system="clr-namespace:System;assembly=mscorlib"
+    xmlns:ns="clr-namespace:ShipWorks.OrderLookup.FieldManager;assembly=ShipWorks.Core"
     d:DataContext="{d:DesignInstance local:PostalLabelOptionsViewModel}"
     d:DesignHeight="150"
     d:DesignWidth="500"
@@ -18,14 +20,39 @@
                 <ResourceDictionary Source="/ShipWorks.OrderLookup;component/Styles/OrderLookupStyle.xaml" />
                 <ResourceDictionary Source="/ShipWorks.OrderLookup;component/Styles/Shapes.xaml" />
             </ResourceDictionary.MergedDictionaries>
+            <ui:HeightWhenFieldAllowedConverter x:Key="HeightWhenFieldAllowedConverter"/>
         </ResourceDictionary>
     </UserControl.Resources>
     <Grid IsEnabled="{Binding ShipmentModel.ShipmentAllowEditing}">
         <Grid.RowDefinitions>
+            <RowDefinition  >
+                <RowDefinition.Height>
+                    <MultiBinding Converter="{StaticResource HeightWhenFieldAllowedConverter}">
+                        <Binding Path="ShipmentModel.FieldLayoutRepository" Mode="OneWay" />
+                        <Binding Source="{x:Static ns:SectionLayoutFieldIDs.LabelOptionsShipDate}" />
+                        <Binding Source="{x:Static GridLength.Auto}" />
+                    </MultiBinding>
+                </RowDefinition.Height>
+            </RowDefinition>
+            <RowDefinition  >
+                <RowDefinition.Height>
+                    <MultiBinding Converter="{StaticResource HeightWhenFieldAllowedConverter}">
+                        <Binding Path="ShipmentModel.FieldLayoutRepository" Mode="OneWay" />
+                        <Binding Source="{x:Static ns:SectionLayoutFieldIDs.LabelOptionsUspsHideStealth}" />
+                        <Binding Source="{x:Static GridLength.Auto}" />
+                    </MultiBinding>
+                </RowDefinition.Height>
+            </RowDefinition>
             <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
+            <RowDefinition  >
+                <RowDefinition.Height>
+                    <MultiBinding Converter="{StaticResource HeightWhenFieldAllowedConverter}">
+                        <Binding Path="ShipmentModel.FieldLayoutRepository" Mode="OneWay" />
+                        <Binding Source="{x:Static ns:SectionLayoutFieldIDs.LabelOptionsRequestedLabelFormat}" />
+                        <Binding Source="{x:Static GridLength.Auto}" />
+                    </MultiBinding>
+                </RowDefinition.Height>
+            </RowDefinition>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto" />
@@ -52,7 +79,7 @@
             Style="{StaticResource FieldLabel}"
             Text="Stealth" />
 
-        <CheckBox
+        <CheckBox 
             Grid.Row="1"
             Grid.Column="2"
             Content="Hide Postage"

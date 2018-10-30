@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Reflection;
 using Interapptive.Shared.ComponentRegistration;
+using ShipWorks.OrderLookup.FieldManager;
 using ShipWorks.Shipping;
 using ShipWorks.UI;
 
@@ -48,6 +49,11 @@ namespace ShipWorks.OrderLookup.Controls.OrderItems
         /// </summary>
         [Obfuscation(Exclude = true)]
         public bool Visible => true;
+
+        /// <summary>
+        /// Panel ID
+        /// </summary>
+        public SectionLayoutIDs PanelID => SectionLayoutIDs.Items;
 
         /// <summary>
         /// The order lookup ShipmentModel

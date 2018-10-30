@@ -11,9 +11,8 @@ using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Core.UI;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
+using ShipWorks.OrderLookup.FieldManager;
 using ShipWorks.Shipping;
-using ShipWorks.Shipping.Carriers.FedEx;
-using ShipWorks.Shipping.Carriers.FedEx.Enums;
 using ShipWorks.UI;
 
 namespace ShipWorks.OrderLookup.Controls.LabelOptions
@@ -46,6 +45,11 @@ namespace ShipWorks.OrderLookup.Controls.LabelOptions
 
             InitializeForChangedShipment(ShipmentModel.ShipmentAdapter.Shipment);
         }
+
+        /// <summary>
+        /// Panel ID
+        /// </summary>
+        public SectionLayoutIDs PanelID => SectionLayoutIDs.LabelOptions;
 
         /// <summary>
         /// Title of the section

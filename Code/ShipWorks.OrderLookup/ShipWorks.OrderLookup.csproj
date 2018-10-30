@@ -274,12 +274,9 @@
     </Compile>
     <Compile Include="Controls\To\UpsToViewModel.cs" />
     <Compile Include="FieldManager\IOrderLookupFieldLayoutDefaults.cs" />
-    <Compile Include="FieldManager\IOrderLookupFieldLayoutRepository.cs" />
     <Compile Include="FieldManager\OrderLookupFieldLayoutDefaults.cs" />
     <Compile Include="FieldManager\OrderLookupFieldLayoutRepository.cs" />
     <Compile Include="FieldManager\OrderLookupFieldManagerDesignerViewModel.cs" />
-    <Compile Include="FieldManager\SectionFieldLayout.cs" />
-    <Compile Include="FieldManager\SectionLayout.cs" />
     <Compile Include="Controls\ShipmentDetails\OrderLookupInsuranceControl.xaml.cs">
       <DependentUpon>OrderLookupInsuranceControl.xaml</DependentUpon>
     </Compile>

@@ -2,6 +2,7 @@ using System.ComponentModel;
 using System.Reflection;
 using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.Core.UI;
+using ShipWorks.OrderLookup.FieldManager;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
 using ShipWorks.UI;
@@ -26,6 +27,11 @@ namespace ShipWorks.OrderLookup.Controls.EmailNotifications
             ShipmentModel = shipmentModel;
             handler = new PropertyChangedHandler(this, () => PropertyChanged);
         }
+
+        /// <summary>
+        /// Panel ID
+        /// </summary>
+        public SectionLayoutIDs PanelID => SectionLayoutIDs.FedExEmailNotifications;
 
         /// <summary>
         /// Title of the section

@@ -10,6 +10,7 @@ using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.Core.UI;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
+using ShipWorks.OrderLookup.FieldManager;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Services;
@@ -55,6 +56,11 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
             RefreshInsurance();
             RefreshProviders();
         }
+
+        /// <summary>
+        /// Panel ID
+        /// </summary>
+        public SectionLayoutIDs PanelID => SectionLayoutIDs.ShipmentDetails;
 
         /// <summary>
         /// Title of the section

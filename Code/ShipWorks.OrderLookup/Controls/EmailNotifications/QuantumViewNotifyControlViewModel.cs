@@ -5,6 +5,7 @@ using System.Reflection;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
 using ShipWorks.Core.UI;
+using ShipWorks.OrderLookup.FieldManager;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
 using ShipWorks.UI;
@@ -33,6 +34,11 @@ namespace ShipWorks.OrderLookup.Controls.EmailNotifications
             SubjectTypes = EnumHelper.GetEnumList<UpsEmailNotificationSubject>()
                                      .ToDictionary(x => (int) x.Value, x => x.Description);
         }
+
+        /// <summary>
+        /// Panel ID
+        /// </summary>
+        public SectionLayoutIDs PanelID => SectionLayoutIDs.UPSQuantumViewNotify;
 
         /// <summary>
         /// Title of the section

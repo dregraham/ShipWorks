@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel;
 using System.Reflection;
 using ShipWorks.Core.UI;
+using ShipWorks.OrderLookup.FieldManager;
 
 namespace ShipWorks.OrderLookup.Controls.Reference
 {
@@ -21,6 +22,11 @@ namespace ShipWorks.OrderLookup.Controls.Reference
             ShipmentModel.PropertyChanged += ShipmentModelPropertyChanged;
             handler = new PropertyChangedHandler(this, () => PropertyChanged);
         }
+
+        /// <summary>
+        /// Panel ID
+        /// </summary>
+        public virtual SectionLayoutIDs PanelID => SectionLayoutIDs.Undefined;
 
         /// <summary>
         /// Title of the section

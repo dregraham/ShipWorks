@@ -1,4 +1,5 @@
 ﻿using Interapptive.Shared.ComponentRegistration;
+using ShipWorks.OrderLookup.FieldManager;
 using ShipWorks.Shipping;
 using ShipWorks.UI;
 
@@ -17,5 +18,10 @@ namespace ShipWorks.OrderLookup.Controls.Reference
         public FedExReferenceViewModel(IOrderLookupShipmentModel shipmentModel) : base(shipmentModel)
         {
         }
+
+        /// <summary>
+        /// Panel ID
+        /// </summary>
+        public override SectionLayoutIDs PanelID => SectionLayoutIDs.FedExSignatureAndReference;
     }
 }

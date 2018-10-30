@@ -11,6 +11,7 @@ using ShipWorks.Data.Model.Custom;
 using ShipWorks.Data.Model.Custom.EntityClasses;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
+using ShipWorks.OrderLookup.FieldManager;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers;
 using ShipWorks.UI;
@@ -77,6 +78,11 @@ namespace ShipWorks.OrderLookup.Controls.From
 
             return accounts.ToDictionary(a => a.AccountId, a => a.AccountDescription);
         }
+
+        /// <summary>
+        /// Panel ID
+        /// </summary>
+        public SectionLayoutIDs PanelID => SectionLayoutIDs.From;
 
         /// <summary>
         /// The addresses title
