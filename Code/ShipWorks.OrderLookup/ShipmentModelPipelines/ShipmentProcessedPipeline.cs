@@ -43,7 +43,8 @@ namespace ShipWorks.OrderLookup.ShipmentModelPipelines
         /// </summary>
         private void HandleSuccessfulShipment(IOrderLookupShipmentModel model, ShipmentsProcessedMessage message)
         {
-            model.RefreshShipmentFromDatabase();
+            model.LoadOrder(message.Shipments.First().Shipment.Order);
+
             messageHelper.ShowPopup(
                 "Processed Successfully\n" +
                 $"Order: {message.Shipments.FirstOrDefault().Shipment?.Order.OrderNumberComplete}");
