@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 using System.Reflection;
 using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.Core.Messaging;
@@ -84,6 +85,10 @@ namespace ShipWorks.OrderLookup.Controls.Rating
             {
                 if (base.SelectedRate == value)
                 {
+                    if (ShipmentModel.OriginalShipmentTypeCode == ShipmentTypeCode.BestRate)
+                    {
+                        base.SelectedRate = Rates.FirstOrDefault();
+                    }
                     return;
                 }
 
