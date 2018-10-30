@@ -221,6 +221,8 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
             {
                 ShipmentModel.ShipmentAdapter.Shipment.BestRate.DimsProfileID = 0;
             }
+
+            handler.RaisePropertyChanged(null);
         }
 
         /// <summary>
