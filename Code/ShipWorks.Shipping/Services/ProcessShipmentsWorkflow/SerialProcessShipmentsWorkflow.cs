@@ -161,8 +161,9 @@ namespace ShipWorks.Shipping.Services.ProcessShipmentsWorkflow
                     return null;
                 }
 
-                ILabelRetrievalResult getLabelResult = await telemetricResult.RunTimedEvent("GenerateLabel.DurationInMilliseconds",
-                    () => getLabelTask.GetLabel(prepareShipmentResult)).ConfigureAwait(false);
+                ILabelRetrievalResult getLabelResult = null;
+                await telemetricResult.RunTimedEventAsync("GenerateLabel.DurationInMilliseconds",
+                    async () => getLabelResult = await getLabelTask.GetLabel(prepareShipmentResult).ConfigureAwait(false));
                 
                 ILabelPersistenceResult saveLabelResult = telemetricResult.RunTimedEvent("SaveLabel.DurationInMilliseconds",
                     () => saveLabelTask.SaveLabel(getLabelResult));
