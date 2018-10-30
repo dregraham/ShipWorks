@@ -3140,6 +3140,7 @@
           <Field Name="GridMenuLayout" Type="string" IsOptional="true" MaxLength="2147483647" FieldIndex="4" />
           <Field Name="OrderFilterExpandedFolders" Type="string" IsOptional="true" MaxLength="2147483647" FieldIndex="9" />
           <Field Name="OrderFilterLastActive" Type="long" FieldIndex="8" />
+          <Field Name="OrderLookupLayout" Type="string" IsOptional="true" MaxLength="2147483647" FieldIndex="19" />
           <Field Name="ShippingWeightFormat" Type="int" FieldIndex="10" />
           <Field Name="SingleScanSettings" Type="int" FieldIndex="15" />
           <Field Name="TemplateExpandedFolders" Type="string" IsOptional="true" MaxLength="2147483647" FieldIndex="11" />
@@ -4351,7 +4352,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2018-10-02T21:05:28.810239Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2018-10-24T18:55:03.7737949Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -8882,6 +8883,7 @@
                     <Field Name="AutoWeigh" Ordinal="17" DbType="2" />
                     <Field Name="DialogSettings" Ordinal="18" IsOptional="true" DbType="26" Length="2147483647" />
                     <Field Name="UIMode" Ordinal="19" DbType="8" Precision="10" />
+                    <Field Name="OrderLookupLayout" Ordinal="20" IsOptional="true" DbType="12" Length="2147483647" />
                   </Fields>
                 </Table>
                 <Table Name="UspsAccount">
@@ -13476,6 +13478,7 @@
             <FieldMapping FieldName="GridMenuLayout" TargetFieldName="GridMenuLayout" />
             <FieldMapping FieldName="OrderFilterExpandedFolders" TargetFieldName="OrderFilterExpandedFolders" />
             <FieldMapping FieldName="OrderFilterLastActive" TargetFieldName="OrderFilterLastActive" />
+            <FieldMapping FieldName="OrderLookupLayout" TargetFieldName="OrderLookupLayout" />
             <FieldMapping FieldName="ShippingWeightFormat" TargetFieldName="ShippingWeightFormat" />
             <FieldMapping FieldName="SingleScanSettings" TargetFieldName="SingleScanSettings" />
             <FieldMapping FieldName="TemplateExpandedFolders" TargetFieldName="TemplateExpandedFolders" />

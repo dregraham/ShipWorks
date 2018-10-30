@@ -7,22 +7,15 @@ using System.Reactive.Linq;
 using System.Reflection;
 using System.Windows;
 using Autofac;
+using GongSolutions.Wpf.DragDrop;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Messaging;
 using ShipWorks.Core.UI;
 using ShipWorks.Messaging.Messages;
 using ShipWorks.Messaging.Messages.Shipping;
-using ShipWorks.OrderLookup.Controls.Customs;
-using ShipWorks.OrderLookup.Controls.EmailNotifications;
-using ShipWorks.OrderLookup.Controls.From;
-using ShipWorks.OrderLookup.Controls.LabelOptions;
-using ShipWorks.OrderLookup.Controls.OrderItems;
 using ShipWorks.OrderLookup.Controls.OrderLookupSearchControl;
-using ShipWorks.OrderLookup.Controls.Rating;
-using ShipWorks.OrderLookup.Controls.Reference;
-using ShipWorks.OrderLookup.Controls.ShipmentDetails;
-using ShipWorks.OrderLookup.Controls.To;
+using ShipWorks.OrderLookup.Layout;
 
 namespace ShipWorks.OrderLookup.Controls.OrderLookup
 {
@@ -30,7 +23,7 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookup
     /// Main view model for the OrderLookup UI Mode
     /// </summary>
     [Component(RegisterAs = RegistrationType.Self)]
-    public class OrderLookupViewModel : INotifyPropertyChanged, IDisposable
+    public class MainOrderLookupViewModel : INotifyPropertyChanged, IDisposable, IMainOrderLookupViewModel, IDropTarget
     {
         public event PropertyChangedEventHandler PropertyChanged;
         private readonly PropertyChangedHandler handler;
@@ -40,44 +33,34 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookup
         private ObservableCollection<IOrderLookupPanelViewModel<IOrderLookupViewModel>> middleColumn;
         private ObservableCollection<IOrderLookupPanelViewModel<IOrderLookupViewModel>> rightColumn;
         private ILifetimeScope innerScope;
+        private GridLength rightColumnWidth;
+        private GridLength leftColumnWidth;
+        private readonly IOrderLookupLayout layout;
         private readonly ILifetimeScope scope;
+        private readonly IDropTarget dropTarget;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public OrderLookupViewModel(IOrderLookupShipmentModel shipmentModel,
+        public MainOrderLookupViewModel(IOrderLookupShipmentModel shipmentModel,
             OrderLookupSearchViewModel orderLookupSearchViewModel,
+            IOrderLookupLayout layout,
             ILifetimeScope scope,
-            IObservable<IShipWorksMessage> messages)
+            IObservable<IShipWorksMessage> messages,
+            IDropTarget dropTarget)
         {
             this.scope = scope;
+            this.dropTarget = dropTarget;
             handler = new PropertyChangedHandler(this, () => PropertyChanged);
             ShipmentModel = shipmentModel;
             ShipmentModel.ShipmentUnloading += OnShipmentModelShipmentUnloading;
             ShipmentModel.ShipmentLoading += OnShipmentModelShipmentLoading;
             ShipmentModel.ShipmentLoaded += OnShipmentModelShipmentLoaded;
             OrderLookupSearchViewModel = orderLookupSearchViewModel;
-
-            LeftColumn = new ObservableCollection<IOrderLookupPanelViewModel<IOrderLookupViewModel>>
-            {
-                scope.Resolve<IOrderLookupPanelViewModel<IFromViewModel>>(),
-                scope.Resolve<IOrderLookupPanelViewModel<IToViewModel>>(),
-                scope.Resolve<IOrderLookupPanelViewModel<IOrderItemsViewModel>>()
-            };
-
-            MiddleColumn = new ObservableCollection<IOrderLookupPanelViewModel<IOrderLookupViewModel>>
-            {
-                scope.Resolve<IOrderLookupPanelViewModel<IDetailsViewModel>>(),
-                scope.Resolve<IOrderLookupPanelViewModel<ILabelOptionsViewModel>>(),
-                scope.Resolve<IOrderLookupPanelViewModel<IReferenceViewModel>>(),
-                scope.Resolve<IOrderLookupPanelViewModel<IEmailNotificationsViewModel>>()
-            };
-
-            RightColumn = new ObservableCollection<IOrderLookupPanelViewModel<IOrderLookupViewModel>>
-            {
-                scope.Resolve<IOrderLookupPanelViewModel<IRatingViewModel>>(),
-                scope.Resolve<IOrderLookupPanelViewModel<ICustomsViewModel>>(),
-            };
+            this.layout = layout;
+            layout.Apply(this, scope);
+            LeftColumn.Concat(MiddleColumn).Concat(RightColumn).ForEach(p => p.PropertyChanged += PanelPropertyChanged);
+            
 
             subscriptions = new CompositeDisposable(
                 messages.OfType<ShipmentSelectionChangedMessage>()
@@ -93,6 +76,17 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookup
                 );
         }
 
+        /// <summary>
+        /// Save state when expansion mode changes
+        /// </summary>
+        private void PanelPropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == nameof(OrderLookupViewModelPanel<IOrderLookupViewModel>.Expanded))
+            {
+                layout.Save(this);
+            }
+        }
+        
         /// <summary>
         /// A shipment is unloading
         /// </summary>
@@ -181,10 +175,70 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookup
                 Visibility.Hidden;
 
         /// <summary>
+        /// Width of the left column
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public GridLength LeftColumnWidth
+        {
+            get => leftColumnWidth;
+            set
+            {
+                // This gets rid of the star that is part of the default layout.
+                if (value.Value > 1 && value.IsStar)
+                {
+                    value = new GridLength(value.Value);
+                }
+
+                handler.Set(nameof(LeftColumnWidth), ref leftColumnWidth, value);
+                layout.Save(this);
+            }
+        }
+
+        /// <summary>
+        /// Width of the middle column
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public GridLength RightColumnWidth
+        {
+            get => rightColumnWidth;
+            set
+            {
+                // This gets rid of the star that is part of the default layout.
+                if (value.Value > 1 && value.IsStar)
+                {
+                    value = new GridLength(value.Value);
+                }
+
+                handler.Set(nameof(RightColumnWidth), ref rightColumnWidth, value);
+                layout.Save(this);
+            }
+        }
+
+        /// <summary>
+        /// Updates the current drag state
+        /// </summary>
+        public void DragOver(IDropInfo dropInfo)
+        {
+            dropTarget.DragOver(dropInfo);
+        }
+
+        /// <summary>
+        /// Performs a drop
+        /// </summary>
+        /// <param name="dropInfo"></param>
+        public void Drop(IDropInfo dropInfo)
+        {
+            dropTarget.Drop(dropInfo);
+
+            layout.Save(this);
+        }
+
+        /// <summary>
         /// Dispose
         /// </summary>
         public void Dispose()
         {
+            LeftColumn.Concat(MiddleColumn).Concat(RightColumn).ForEach(p => p.PropertyChanged -= PanelPropertyChanged);
             ShipmentModel.ShipmentUnloading -= OnShipmentModelShipmentUnloading;
             ShipmentModel.ShipmentLoading -= OnShipmentModelShipmentLoading;
             ShipmentModel.ShipmentLoaded -= OnShipmentModelShipmentLoaded;

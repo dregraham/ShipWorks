@@ -27,7 +27,6 @@ namespace ShipWorks.Startup
                 InterceptorCore.Initialize("ShipWorks");
             }
 #endif
-
             MessageLogger.Current.AddConverters(() => new JsonConverter[] {
                 new ShipmentEntityJsonConverter(),
                 new StoreEntityJsonConverter()

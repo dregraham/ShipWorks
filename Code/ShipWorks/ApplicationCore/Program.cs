@@ -19,6 +19,7 @@ using ShipWorks.ApplicationCore.Services;
 using ShipWorks.Data.Connection;
 using ShipWorks.Users;
 using ShipWorks.Users.Audit;
+using Syncfusion.Licensing;
 
 namespace ShipWorks
 {
@@ -409,6 +410,7 @@ namespace ShipWorks
         private static void ApplyThirdPartyLicenses()
         {
             Rebex.Licensing.Key = "==FkhSvCGeTWZceYPGxAXhIFg8MsCGacCTnp+8iElvsPrtAft0NvMidZJIU4F0YbKZoH3sq==";
+            SyncfusionLicenseProvider.RegisterLicense("MzgxODJAMzEzNjJlMzMyZTMwQkhIaE4yS1NsbHliVVJYRjF3R3dPYmM0c01XbkdTcnVlLzZiOUdXeUlrTT0=");
         }
     }
 }

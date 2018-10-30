@@ -26592,6 +26592,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(UserSettingsFieldIndex.UIMode);}
 		}
+		/// <summary>Creates a new UserSettingsEntity.OrderLookupLayout field instance</summary>
+		public static EntityField2 OrderLookupLayout
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(UserSettingsFieldIndex.OrderLookupLayout);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity UspsAccountEntity</summary>

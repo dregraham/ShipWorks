@@ -533,6 +533,21 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         {
             base.UpdateDynamicShipmentData(shipment);
 
+            RectifyCarrierSpecificData(shipment);
+        }
+
+        /// <summary>
+        /// Rectifies carrier specific data on the shipment
+        /// </summary>
+        /// <remarks>
+        /// This allows the ShipmentType to fix any issues on the shipment
+        /// for example if the service is not valid for the ship to country
+        /// or if the packaging type is not valid for the service type
+        /// </remarks>
+        public override void RectifyCarrierSpecificData(ShipmentEntity shipment)
+        {
+            base.RectifyCarrierSpecificData(shipment);
+
             if (shipment.FedEx.HomeDeliveryDate < dateTimeProvider.Now.Date)
             {
                 shipment.FedEx.HomeDeliveryDate = dateTimeProvider.Now.Date.AddHours(12);
