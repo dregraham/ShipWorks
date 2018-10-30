@@ -4,6 +4,7 @@ using System.Reactive.Linq;
 using System.Reflection;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Enums;
+using Interapptive.Shared.Threading;
 using ShipWorks.AddressValidation;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.OrderLookup.FieldManager;
@@ -24,12 +25,17 @@ namespace ShipWorks.OrderLookup.Controls.To
         private string title;
         private IDisposable autoSave;
         private readonly AddressViewModel addressViewModel;
+        private readonly ISchedulerProvider schedulerProvider;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public GenericToViewModel(IOrderLookupShipmentModel shipmentModel, AddressViewModel addressViewModel) : base(shipmentModel)
+        public GenericToViewModel(
+            IOrderLookupShipmentModel shipmentModel,
+            AddressViewModel addressViewModel,
+            ISchedulerProvider schedulerProvider) : base(shipmentModel)
         {
+            this.schedulerProvider = schedulerProvider;
             this.addressViewModel = addressViewModel;
 
             if (ShipmentModel?.ShipmentAdapter?.Store != null)
@@ -121,6 +127,7 @@ namespace ShipWorks.OrderLookup.Controls.To
                 .Merge(addressViewModel.PropertyChangeStream)
                 .Where(p => p != nameof(Title))
                 .Throttle(TimeSpan.FromMilliseconds(100))
+                .ObserveOn(schedulerProvider.WindowsFormsEventLoop)
                 .Subscribe(_ => Save());
         }
 

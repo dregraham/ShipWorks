@@ -6,6 +6,7 @@ using System.Reactive.Linq;
 using System.Reflection;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.Threading;
 using ShipWorks.Data.Model.Custom;
 using ShipWorks.Data.Model.Custom.EntityClasses;
 using ShipWorks.Data.Model.EntityClasses;
@@ -29,9 +30,12 @@ namespace ShipWorks.OrderLookup.Controls.From
     {
         private string title;
         private IDisposable autoSave;
+        private readonly IOrderLookupShipmentModel shipmentModel;
+        private readonly ICarrierAccountRetrieverFactory carrierAccountRetrieverFactory;
         private readonly IShipmentTypeManager shipmentTypeManager;
 
         private readonly AddressViewModel addressViewModel;
+        private readonly ISchedulerProvider schedulerProvider;
 
         /// <summary>
         /// Constructor
@@ -40,8 +44,10 @@ namespace ShipWorks.OrderLookup.Controls.From
             IOrderLookupShipmentModel shipmentModel,
             IShipmentTypeManager shipmentTypeManager,
             ICarrierAccountRetrieverFactory carrierAccountRetrieverFactory,
-            AddressViewModel addressViewModel) : base(shipmentModel)
+            AddressViewModel addressViewModel,
+            ISchedulerProvider schedulerProvider) : base(shipmentModel)
         {
+            this.schedulerProvider = schedulerProvider;
             this.addressViewModel = addressViewModel;
 
             this.shipmentTypeManager = shipmentTypeManager;
@@ -155,6 +161,7 @@ namespace ShipWorks.OrderLookup.Controls.From
                 .Merge(addressViewModel.PropertyChangeStream)
                 .Where(p => p != nameof(Title))
                 .Throttle(TimeSpan.FromMilliseconds(100))
+                .ObserveOn(schedulerProvider.WindowsFormsEventLoop)
                 .Subscribe(_ => Save());
         }
 

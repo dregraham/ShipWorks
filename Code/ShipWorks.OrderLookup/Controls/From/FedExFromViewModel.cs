@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Reflection;
 using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.Threading;
 using Interapptive.Shared.Utility;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers;
@@ -11,7 +12,7 @@ using ShipWorks.UI.Controls.AddressControl;
 namespace ShipWorks.OrderLookup.Controls.From
 {
     /// <summary>
-    /// Viewmodle for the FedEx From control
+    /// View model for the FedEx From control
     /// </summary>
     [KeyedComponent(typeof(IFromViewModel), ShipmentTypeCode.FedEx)]
     [WpfView(typeof(FedExFromControl))]
@@ -20,7 +21,12 @@ namespace ShipWorks.OrderLookup.Controls.From
         /// <summary>
         /// Constructor
         /// </summary>
-        public FedExFromViewModel(IOrderLookupShipmentModel shipmentModel, IShipmentTypeManager shipmentTypeManager, ICarrierAccountRetrieverFactory carrierAccountRetrieverFactory, AddressViewModel addressViewModel) : base(shipmentModel, shipmentTypeManager, carrierAccountRetrieverFactory, addressViewModel)
+        public FedExFromViewModel(
+            IOrderLookupShipmentModel shipmentModel,
+            IShipmentTypeManager shipmentTypeManager,
+            ICarrierAccountRetrieverFactory carrierAccountRetrieverFactory,
+            AddressViewModel addressViewModel,
+            ISchedulerProvider schedulerProvider) : base(shipmentModel, shipmentTypeManager, carrierAccountRetrieverFactory, addressViewModel, schedulerProvider)
         {
             // Don't give the user the option to have FedEx perform the address look up; the thought it that the shipper will know
             // what type of address they are shipping from, and it saves delays associated with a service call

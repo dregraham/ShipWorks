@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.Threading;
 using Interapptive.Shared.Utility;
 using ShipWorks.Shipping;
 using ShipWorks.UI;
@@ -17,8 +18,11 @@ namespace ShipWorks.OrderLookup.Controls.To
         /// <summary>
         /// Constructor
         /// </summary>
-        public UpsToViewModel(IOrderLookupShipmentModel shipmentModel, AddressViewModel addressViewModel)
-            : base(shipmentModel, addressViewModel)
+        public UpsToViewModel(
+            IOrderLookupShipmentModel shipmentModel,
+            AddressViewModel addressViewModel,
+            ISchedulerProvider schedulerProvider)
+            : base(shipmentModel, addressViewModel, schedulerProvider)
         {
             ResidentialDeterminations = EnumHelper.GetEnumList<ResidentialDeterminationType>(r => r != ResidentialDeterminationType.FedExAddressLookup)
                 .ToDictionary(r => (int) r.Value, r => r.Description);

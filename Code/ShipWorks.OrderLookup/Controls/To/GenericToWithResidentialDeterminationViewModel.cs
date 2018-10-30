@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.Threading;
 using Interapptive.Shared.Utility;
 using ShipWorks.Shipping;
 using ShipWorks.UI;
@@ -19,8 +20,11 @@ namespace ShipWorks.OrderLookup.Controls.To
         /// <summary>
         /// Constructor
         /// </summary>
-        public GenericToWithResidentialDeterminationViewModel(IOrderLookupShipmentModel shipmentModel, AddressViewModel addressViewModel) :
-            base(shipmentModel, addressViewModel)
+        public GenericToWithResidentialDeterminationViewModel(
+            IOrderLookupShipmentModel shipmentModel,
+            AddressViewModel addressViewModel,
+            ISchedulerProvider schedulerProvider) :
+            base(shipmentModel, addressViewModel, schedulerProvider)
         {
             ResidentialDeterminations = EnumHelper.GetEnumList<ResidentialDeterminationType>()
                                                   .ToDictionary(r => (int) r.Value, r => r.Description);

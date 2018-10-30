@@ -257,7 +257,7 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
                 RefreshPackageTypes(ShipmentModel.ShipmentAdapter);
             }
 
-            handler.RaisePropertyChanged(null);
+            Handler.RaisePropertyChanged(null);
         }
 
         /// <summary>
