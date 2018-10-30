@@ -4,6 +4,8 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:ui="http://schemas.shipworks.com/ui"
+             xmlns:ns="clr-namespace:ShipWorks.OrderLookup.FieldManager;assembly=ShipWorks.Core"
              mc:Ignorable="d"
              FontSize="12"
              FontFamily="/ShipWorks.OrderLookup;component/#Roboto">
@@ -12,18 +14,34 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/ShipWorks.OrderLookup;component/Styles/OrderLookupStyle.xaml" />
             </ResourceDictionary.MergedDictionaries>
+            <ui:HeightWhenFieldAllowedConverter x:Key="HeightWhenFieldAllowedConverter"/>
         </ResourceDictionary>
     </UserControl.Resources>
     <Grid IsEnabled="{Binding ShipmentModel.ShipmentAllowEditing}">
+        <Grid.RowDefinitions>
+            <RowDefinition>
+                <RowDefinition.Height>
+                    <MultiBinding Converter="{StaticResource HeightWhenFieldAllowedConverter}">
+                        <Binding Path="ShipmentModel.FieldLayoutRepository" Mode="OneWay" />
+                        <Binding Source="{x:Static ns:SectionLayoutFieldIDs.UPSReferenceReferenceNumber}" />
+                        <Binding Source="{x:Static GridLength.Auto}" />
+                    </MultiBinding>
+                </RowDefinition.Height>
+            </RowDefinition>
+            <RowDefinition>
+                <RowDefinition.Height>
+                    <MultiBinding Converter="{StaticResource HeightWhenFieldAllowedConverter}">
+                        <Binding Path="ShipmentModel.FieldLayoutRepository" Mode="OneWay" />
+                        <Binding Source="{x:Static ns:SectionLayoutFieldIDs.UPSReferenceReferenceNumber2}" />
+                        <Binding Source="{x:Static GridLength.Auto}" />
+                    </MultiBinding>
+                </RowDefinition.Height>
+            </RowDefinition>
+        </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
-        <Grid.RowDefinitions>
-            <RowDefinition/>
-            <RowDefinition/>
-            <RowDefinition/>
-        </Grid.RowDefinitions>
 
         <TextBlock Grid.Row="0" Grid.Column="0"
                    Style="{StaticResource FieldLabel}"

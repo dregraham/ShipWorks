@@ -4,6 +4,8 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:reference="clr-namespace:ShipWorks.OrderLookup.Controls.Reference"
+             xmlns:ui="http://schemas.shipworks.com/ui"
+             xmlns:ns="clr-namespace:ShipWorks.OrderLookup.FieldManager;assembly=ShipWorks.Core"
              mc:Ignorable="d"
              d:DataContext="{d:DesignInstance reference:UspsReferenceViewModel}"
              FontSize="12"
@@ -13,6 +15,7 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/ShipWorks.OrderLookup;component/Styles/OrderLookupStyle.xaml" />
             </ResourceDictionary.MergedDictionaries>
+            <ui:HeightWhenFieldAllowedConverter x:Key="HeightWhenFieldAllowedConverter"/>
         </ResourceDictionary>
     </UserControl.Resources>
     <Grid IsEnabled="{Binding ShipmentModel.ShipmentAllowEditing}">
@@ -21,9 +24,33 @@
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition/>
-            <RowDefinition/>
-            <RowDefinition/>
+            <RowDefinition>
+                <RowDefinition.Height>
+                    <MultiBinding Converter="{StaticResource HeightWhenFieldAllowedConverter}">
+                        <Binding Path="ShipmentModel.FieldLayoutRepository" Mode="OneWay" />
+                        <Binding Source="{x:Static ns:SectionLayoutFieldIDs.USPSReferenceMemo1}" />
+                        <Binding Source="{x:Static GridLength.Auto}" />
+                    </MultiBinding>
+                </RowDefinition.Height>
+            </RowDefinition>
+            <RowDefinition>
+                <RowDefinition.Height>
+                    <MultiBinding Converter="{StaticResource HeightWhenFieldAllowedConverter}">
+                        <Binding Path="ShipmentModel.FieldLayoutRepository" Mode="OneWay" />
+                        <Binding Source="{x:Static ns:SectionLayoutFieldIDs.USPSReferenceMemo2}" />
+                        <Binding Source="{x:Static GridLength.Auto}" />
+                    </MultiBinding>
+                </RowDefinition.Height>
+            </RowDefinition>
+            <RowDefinition>
+                <RowDefinition.Height>
+                    <MultiBinding Converter="{StaticResource HeightWhenFieldAllowedConverter}">
+                        <Binding Path="ShipmentModel.FieldLayoutRepository" Mode="OneWay" />
+                        <Binding Source="{x:Static ns:SectionLayoutFieldIDs.USPSReferenceMemo3}" />
+                        <Binding Source="{x:Static GridLength.Auto}" />
+                    </MultiBinding>
+                </RowDefinition.Height>
+            </RowDefinition>
         </Grid.RowDefinitions>
 
         <TextBlock Grid.Row="0" Grid.Column="0"
