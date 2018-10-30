@@ -39,7 +39,7 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
         /// <summary>
         /// Get an enumerable of package types for the adapter
         /// </summary>
-        public IEnumerable<KeyValuePair<int, string>> GetPackageTypes(ICarrierShipmentAdapter carrierAdapter)
+        public IDictionary<int, string> GetPackageTypes(ICarrierShipmentAdapter carrierAdapter)
         {
             return shipmentPackageTypesBuilderFactory.Get(carrierAdapter.ShipmentTypeCode)
                     .BuildPackageTypeDictionary(new[] { carrierAdapter.Shipment });
@@ -59,7 +59,7 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
         /// <summary>
         /// Get the service types available for the adapter
         /// </summary>
-        public IEnumerable<KeyValuePair<int, string>> GetServiceTypes(ICarrierShipmentAdapter carrierAdapter)
+        public IDictionary<int, string> GetServiceTypes(ICarrierShipmentAdapter carrierAdapter)
         {
             Dictionary<int, string> updatedServices = new Dictionary<int, string>();
 
@@ -73,11 +73,7 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
                 updatedServices.Add(carrierAdapter.ServiceType, "Error getting service types.");
             }
 
-            // If no service types are returned, the carrier doesn't support service types,
-            // so just return.
-            return updatedServices.Any() ?
-                updatedServices.ToList() : 
-                Enumerable.Empty<KeyValuePair<int, string>>();
+            return updatedServices;
         }
 
         /// <summary>

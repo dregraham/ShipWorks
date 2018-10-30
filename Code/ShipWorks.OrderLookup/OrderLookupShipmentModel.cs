@@ -218,7 +218,7 @@ namespace ShipWorks.OrderLookup
         /// </summary>
         public void RaisePropertyChanged(string propertyName)
         {
-            using (ShipmentAdapter?.Shipment.BatchPropertyChangeNotifications())
+            using (ShipmentAdapter?.Shipment.BatchPropertyChangeNotificationsOnGraph())
             {
                 handler.RaisePropertyChanged(propertyName);
 
