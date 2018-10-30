@@ -26,7 +26,7 @@ namespace ShipWorks.UI.Dialogs.Popup
         private readonly TimeSpan iconFadeStartTimeSpan = TimeSpan.FromSeconds(2);
         private Duration duration;
 
-        private const char NoIcon = (char) 0;
+        private const char NoIcon = '\0';
         private const char KeyboardIcon = (char) 0xf11c;
         private const char BarcodeIcon = (char) 0xf02a;
 

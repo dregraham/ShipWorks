@@ -19,8 +19,6 @@ namespace ShipWorks.OrderLookup.ShipmentModelPipelines
         /// <summary>
         /// ctor
         /// </summary>
-        /// <param name="messenger"></param>
-        /// <param name="messageHelper"></param>
         public ShipmentProcessedPipeline(IMessenger messenger, IMessageHelper messageHelper)
         {
             this.messageHelper = messageHelper;
@@ -33,12 +31,20 @@ namespace ShipWorks.OrderLookup.ShipmentModelPipelines
         public IDisposable Register(IOrderLookupShipmentModel model) => new CompositeDisposable(
             messenger.OfType<ShipmentsProcessedMessage>()
                 .Where(x => x.Shipments.All(y => y.IsSuccessful))
-                .Subscribe(x => model.Unload()),
+                .Subscribe(x => HandleSuccessfulShipment(model, x)),
             messenger.OfType<ShipmentsProcessedMessage>()
                 .Where(x => x.Shipments.Any(y => !y.IsSuccessful))
-                .Subscribe(x => model.LoadOrder(x.Shipments.FirstOrDefault().Shipment?.Order)),
-            messenger.OfType<ShipmentsProcessedMessage>()
-                .Where(m => m.Shipments.All(y => y.IsSuccessful))
-                .Subscribe(x => messageHelper.ShowPopup($"Successfully processed order {x.Shipments.FirstOrDefault().Shipment?.Order.OrderNumberComplete}")));
+                .Subscribe(x => model.LoadOrder(x.Shipments.FirstOrDefault().Shipment?.Order))
+        );
+
+        /// <summary>
+        /// Handle a successful ShipmentsProcessedMessage
+        /// </summary>
+        private void HandleSuccessfulShipment(IOrderLookupShipmentModel model, ShipmentsProcessedMessage message)
+        {
+            model.Unload();
+            messageHelper.ShowPopup(
+                $"Successfully processed order {message.Shipments.FirstOrDefault().Shipment?.Order.OrderNumberComplete}");
+        }
     }
 }

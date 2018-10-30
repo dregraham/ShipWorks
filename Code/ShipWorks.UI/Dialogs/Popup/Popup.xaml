@@ -4,8 +4,6 @@
                   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
                   xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                   xmlns:sui="clr-namespace:Interapptive.Shared.UI;assembly=Interapptive.Shared"
-                  xmlns:ui="http://schemas.shipworks.com/ui"
-                  xmlns:local="clr-namespace:ShipWorks.UI.Dialogs"
                   xmlns:vc="clr-namespace:ShipWorks.UI.ValueConverters"
                   xmlns:popup="clr-namespace:ShipWorks.UI.Dialogs.Popup"
                   d:DataContext="{d:DesignInstance popup:PopupViewModel, IsDesignTimeCreatable=False}"
@@ -58,7 +56,7 @@
                         Foreground="Black" 
                         Background="White" 
                         FontSize="30" Margin="10"
-                        VerticalAlignment="Center"></TextBlock>
+                        VerticalAlignment="Center"/>
             <TextBlock Grid.Column="1"
                        Foreground="White" 
                        Margin="4,0"
