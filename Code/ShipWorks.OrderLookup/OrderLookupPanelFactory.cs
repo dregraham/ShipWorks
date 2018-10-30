@@ -5,6 +5,7 @@ using ShipWorks.OrderLookup.Controls.Customs;
 using ShipWorks.OrderLookup.Controls.EmailNotifications;
 using ShipWorks.OrderLookup.Controls.From;
 using ShipWorks.OrderLookup.Controls.LabelOptions;
+using ShipWorks.OrderLookup.Controls.OrderItems;
 using ShipWorks.OrderLookup.Controls.Rating;
 using ShipWorks.OrderLookup.Controls.Reference;
 using ShipWorks.OrderLookup.Controls.ShipmentDetails;
@@ -32,7 +33,8 @@ namespace ShipWorks.OrderLookup
                 scope.Resolve<IOrderLookupPanelViewModel<IFromViewModel>>(),
                 scope.Resolve<IOrderLookupPanelViewModel<IToViewModel>>(),
                 scope.Resolve<IOrderLookupPanelViewModel<IRatingViewModel>>(),
-                scope.Resolve<IOrderLookupPanelViewModel<ICustomsViewModel>>()
+                scope.Resolve<IOrderLookupPanelViewModel<ICustomsViewModel>>(),
+                scope.Resolve<IOrderLookupPanelViewModel<IOrderItemsViewModel>>()
             };
         }
     }
