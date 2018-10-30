@@ -163,10 +163,8 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookup
         /// Should the columns be displayed?
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public Visibility ShowColumns => Visibility.Visible;
-            //ShipmentModel?.ShipmentAdapter?.Shipment?.Processed == false ?
-            //    Visibility.Visible :
-            //    Visibility.Hidden;
+        public Visibility ShowColumns => ShipmentModel.ShipmentAdapter == null ? Visibility.Collapsed : Visibility.Visible;
+            
 
         /// <summary>
         /// Width of the left column

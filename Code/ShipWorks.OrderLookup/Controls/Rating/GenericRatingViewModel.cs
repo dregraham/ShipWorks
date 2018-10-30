@@ -47,6 +47,10 @@ namespace ShipWorks.OrderLookup.Controls.Rating
             {
                 SelectRate(ShipmentModel.ShipmentAdapter);
             }
+            if (e.PropertyName == nameof(ShipmentModel.SelectedOrder))
+            {
+                handler.RaisePropertyChanged(ShipmentFields.Processed.Name);
+            }
         }
 
         /// <summary>
