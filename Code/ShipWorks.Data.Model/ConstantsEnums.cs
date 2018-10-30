@@ -11468,6 +11468,8 @@ namespace ShipWorks.Data.Model
 		DialogSettings,
 		///<summary>UIMode. </summary>
 		UIMode,
+		///<summary>OrderLookupLayout. </summary>
+		OrderLookupLayout,
 		/// <summary></summary>
 		AmountOfFields
 	}

@@ -387,6 +387,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("DialogSettings", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("UIMode", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("OrderLookupLayout", fieldHashtable);
 		}
 		#endregion
 
@@ -673,6 +675,16 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (ShipWorks.Settings.UIMode)GetValue((int)UserSettingsFieldIndex.UIMode, true); }
 			set	{ SetValue((int)UserSettingsFieldIndex.UIMode, value); }
+		}
+
+		/// <summary> The OrderLookupLayout property of the Entity UserSettings<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "UserSettings"."OrderLookupLayout"<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 2147483647<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual System.String OrderLookupLayout
+		{
+			get { return (System.String)GetValue((int)UserSettingsFieldIndex.OrderLookupLayout, true); }
+			set	{ SetValue((int)UserSettingsFieldIndex.OrderLookupLayout, value); }
 		}
 
 		/// <summary> Gets / sets related entity of type 'UserEntity' which has to be set using a fetch action earlier. If no related entity is set for this property, null is returned.<br/><br/>

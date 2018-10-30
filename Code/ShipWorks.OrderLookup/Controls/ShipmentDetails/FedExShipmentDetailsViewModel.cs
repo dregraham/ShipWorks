@@ -24,18 +24,22 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
     public class FedExShipmentDetailsViewModel : GenericMultiPackageShipmentDetailsViewModel
     {
         private IEnumerable<KeyValuePair<int, string>> signatureTypes;
+        private readonly IShipmentTypeManager shipmentTypeManager;
 
         /// <summary>
         /// Ctor
         /// </summary>
-        public FedExShipmentDetailsViewModel(IOrderLookupShipmentModel shipmentModel,
-                                             IInsuranceViewModel insuranceViewModel,
-                                             Func<DimensionsManagerDlg> getDimensionsManagerDlg,
-                                             ICarrierShipmentAdapterOptionsProvider carrierShipmentAdapterOptionsProvider)
+        public FedExShipmentDetailsViewModel(
+            IOrderLookupShipmentModel shipmentModel,
+            IInsuranceViewModel insuranceViewModel,
+            Func<DimensionsManagerDlg> getDimensionsManagerDlg,
+            ICarrierShipmentAdapterOptionsProvider carrierShipmentAdapterOptionsProvider,
+            IShipmentTypeManager shipmentTypeManager)
             : base(shipmentModel, insuranceViewModel, getDimensionsManagerDlg, carrierShipmentAdapterOptionsProvider)
         {
             SignatureTypes = EnumHelper.GetEnumList<FedExSignatureType>()
                                        .Select(e => new KeyValuePair<int, string>((int) e.Value, e.Description));
+            this.shipmentTypeManager = shipmentTypeManager;
         }
 
         /// <summary>
@@ -78,13 +82,43 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
             if (e.PropertyName == FedExShipmentFields.Service.Name)
             {
                 RefreshPackageTypes();
-                handler.RaisePropertyChanged(nameof(ShipmentModel));
             }
 
-            if (e.PropertyName == ShipmentFields.ShipCountryCode.Name)
+            if (e.PropertyName == ShipmentFields.ShipCountryCode.Name ||
+                e.PropertyName == ShipmentFields.OriginCountryCode.Name)
             {
                 RefreshServiceTypes();
             }
+
+            if (e.PropertyName == ShipmentFields.ShipCountryCode.Name ||
+                e.PropertyName == ShipmentFields.OriginCountryCode.Name ||
+                e.PropertyName == FedExShipmentFields.Service.Name ||
+                (e.PropertyName == nameof(ShipmentModel.PackageAdapters) && ShipmentModel.PackageAdapters != null))
+            {
+                UpdateDynamicData();
+            }
+        }
+
+        /// <summary>
+        /// Ensure that the properties of the shipment are correct
+        /// and that our lists contain the selected values in the shipment
+        /// </summary>
+        private void UpdateDynamicData()
+        {
+            ShipmentType shipmentType = shipmentTypeManager.Get(ShipmentTypeCode.FedEx);
+            shipmentType.RectifyCarrierSpecificData(ShipmentModel.ShipmentAdapter.Shipment);
+
+            if (!ServiceTypes.ContainsKey(ShipmentModel.ShipmentAdapter.Shipment.Postal.Service))
+            {
+                RefreshServiceTypes();
+            }
+
+            if (!PackageTypes.ContainsKey(ShipmentModel.ShipmentAdapter.Shipment.Postal.PackagingType))
+            {
+                RefreshPackageTypes();
+            }
+
+            handler.RaisePropertyChanged(null);
         }
 
         /// <summary>

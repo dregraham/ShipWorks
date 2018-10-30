@@ -17,13 +17,13 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookup
     [Component(RegisterAs = RegistrationType.SpecificService, Service = typeof(IOrderLookup))]
     public partial class OrderLookupControlHost : UserControl, IOrderLookup
     {
-        private readonly OrderLookupViewModel orderLookupViewModel;
-        private OrderLookupControl orderLookupControl;
+        private readonly MainOrderLookupViewModel orderLookupViewModel;
+        private MainOrderLookupControl mainOrderLookupControl;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public OrderLookupControlHost(OrderLookupViewModel orderLookupViewModel, OrderLookupLabelShortcutPipeline shortcutPipeline)
+        public OrderLookupControlHost(MainOrderLookupViewModel orderLookupViewModel, OrderLookupLabelShortcutPipeline shortcutPipeline)
         {
             InitializeComponent();
             this.orderLookupViewModel = orderLookupViewModel;
@@ -45,7 +45,7 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookup
 
             base.OnLoad(e);
 
-            orderLookupControl = new OrderLookupControl()
+            mainOrderLookupControl = new MainOrderLookupControl()
             {
                 DataContext = orderLookupViewModel
             };
@@ -55,7 +55,7 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookup
             ElementHost host = new ElementHost
             {
                 Dock = DockStyle.Fill,
-                Child = orderLookupControl
+                Child = mainOrderLookupControl
             };
 
             Controls.Add(host);
@@ -93,8 +93,8 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookup
         /// </summary>
         public void EnableFocusEvents()
         {
-            orderLookupControl.IsKeyboardFocusWithinChanged += OnIsKeyboardFocusWithinChanged;
-            orderLookupControl.LostFocus += OnOrderLookupControlLostFocus;
+            mainOrderLookupControl.IsKeyboardFocusWithinChanged += OnIsKeyboardFocusWithinChanged;
+            mainOrderLookupControl.LostFocus += OnOrderLookupControlLostFocus;
         }
 
         /// <summary>
@@ -102,8 +102,8 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookup
         /// </summary>
         public void DisableFocusEvents()
         {
-            orderLookupControl.IsKeyboardFocusWithinChanged -= OnIsKeyboardFocusWithinChanged;
-            orderLookupControl.LostFocus -= OnOrderLookupControlLostFocus;
+            mainOrderLookupControl.IsKeyboardFocusWithinChanged -= OnIsKeyboardFocusWithinChanged;
+            mainOrderLookupControl.LostFocus -= OnOrderLookupControlLostFocus;
         }
 
         /// <summary>
@@ -155,7 +155,7 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookup
         /// </summary>
         private void CommitBindingsOnFocusedControl()
         {
-            IInputElement focusedElement = FindFocusedInputElement(orderLookupControl);
+            IInputElement focusedElement = FindFocusedInputElement(mainOrderLookupControl);
             if (!IsNonKeyboardInputElement(focusedElement))
             {
                 CommitBindings(focusedElement);
@@ -167,7 +167,7 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookup
         /// </summary>
         private IInputElement FindFocusedInputElement(DependencyObject container)
         {
-            DependencyObject focusScope = FocusManager.GetFocusScope(orderLookupControl);
+            DependencyObject focusScope = FocusManager.GetFocusScope(mainOrderLookupControl);
             return focusScope == null ?
                 null :
                 FocusManager.GetFocusedElement(focusScope);

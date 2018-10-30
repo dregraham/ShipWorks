@@ -359,6 +359,21 @@ namespace ShipWorks.Shipping.Carriers.UPS
         {
             base.UpdateDynamicShipmentData(shipment);
 
+            RectifyCarrierSpecificData(shipment);
+        }
+
+        /// <summary>
+        /// Rectifies carrier specific data on the shipment
+        /// </summary>
+        /// <remarks>
+        /// This allows the ShipmentType to fix any issues on the shipment
+        /// for example if the service is not valid for the ship to country
+        /// or if the packaging type is not valid for the service type
+        /// </remarks>
+        public override void RectifyCarrierSpecificData(ShipmentEntity shipment)
+        {
+            base.RectifyCarrierSpecificData(shipment);
+
             UpsServiceType serviceType = (UpsServiceType) shipment.Ups.Service;
 
             // Need to check with the store  to see if anything about the shipment was overridden in case

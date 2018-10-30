@@ -209,7 +209,7 @@ namespace ShipWorks.OrderLookup
         /// </summary>
         public void RaisePropertyChanged(string propertyName)
         {
-            using (ShipmentAdapter?.Shipment.BatchPropertyChangeNotifications())
+            using (ShipmentAdapter?.Shipment.BatchPropertyChangeNotificationsOnGraph())
             {
                 handler.RaisePropertyChanged(propertyName);
 
@@ -435,7 +435,7 @@ namespace ShipWorks.OrderLookup
         public void ChangeShipmentType(ShipmentTypeCode value)
         {
             SelectedRate = null;
-            
+
             if (value != ShipmentAdapter.ShipmentTypeCode)
             {
                 ModifyShipmentWithReload(() =>
@@ -459,7 +459,7 @@ namespace ShipWorks.OrderLookup
 
             SaveToDatabase();
 
-            messenger.Send(new ProcessShipmentsMessage(this, new[] { shipmentAdapter.Shipment }, 
+            messenger.Send(new ProcessShipmentsMessage(this, new[] { shipmentAdapter.Shipment },
                 new[] { shipmentAdapter.Shipment }, SelectedRate));
         }
 

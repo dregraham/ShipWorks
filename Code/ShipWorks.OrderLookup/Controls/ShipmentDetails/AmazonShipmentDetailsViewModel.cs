@@ -87,12 +87,6 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
         }
 
         /// <summary>
-        /// Is the section expanded
-        /// </summary>
-        [Obfuscation(Exclude = true)]
-        public bool Expanded { get; set; } = true;
-
-        /// <summary>
         /// Title of the section
         /// </summary>
         [Obfuscation(Exclude = true)]
@@ -283,6 +277,8 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
             {
                 ShipmentModel.ShipmentAdapter.Shipment.Amazon.DimsProfileID = 0;
             }
+
+            handler.RaisePropertyChanged(null);
         }
 
         /// <summary>

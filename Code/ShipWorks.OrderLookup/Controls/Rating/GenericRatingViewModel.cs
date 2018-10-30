@@ -54,12 +54,6 @@ namespace ShipWorks.OrderLookup.Controls.Rating
         /// Title of the section
         /// </summary>
         [Obfuscation]
-        public bool Expanded { get; set; } = true;
-
-        /// <summary>
-        /// Title of the section
-        /// </summary>
-        [Obfuscation]
         public string Title => "Rates";
 
         /// <summary>

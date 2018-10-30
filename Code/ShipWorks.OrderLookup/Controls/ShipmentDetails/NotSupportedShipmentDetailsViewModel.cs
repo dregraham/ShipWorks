@@ -37,13 +37,7 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
             ShipmentModel = shipmentModel;
             Providers = carrierShipmentAdapterOptionsProvider.GetProviders(shipmentModel.ShipmentAdapter, shipmentModel.OriginalShipmentTypeCode);
         }
-
-        /// <summary>
-        /// Is the section expanded
-        /// </summary>
-        [Obfuscation(Exclude = true)]
-        public bool Expanded { get; set; } = true;
-
+        
         /// <summary>
         /// Title of the section
         /// </summary>

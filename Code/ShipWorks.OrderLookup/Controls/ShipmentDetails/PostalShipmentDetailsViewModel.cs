@@ -35,9 +35,9 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
         private readonly ICarrierShipmentAdapterOptionsProvider carrierShipmentAdapterOptionsProvider;
         private List<DimensionsProfileEntity> dimensionProfiles;
         private Dictionary<ShipmentTypeCode, string> providers;
-        private IEnumerable<KeyValuePair<int, string>> packageTypes;
-        private IEnumerable<KeyValuePair<int, string>> confirmationTypes;
-        private IEnumerable<KeyValuePair<int, string>> serviceTypes;
+        private IDictionary<int, string> packageTypes;
+        private IDictionary<int, string> confirmationTypes;
+        private IDictionary<int, string> serviceTypes;
         private double contentWeight;
 
         /// <summary>
@@ -69,12 +69,6 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
 
             ContentWeight = ShipmentModel.ShipmentAdapter.ContentWeight;
         }
-
-        /// <summary>
-        /// Is the section expanded
-        /// </summary>
-        [Obfuscation(Exclude = true)]
-        public bool Expanded { get; set; } = true;
 
         /// <summary>
         /// Title of the section
@@ -172,7 +166,7 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
         /// Collection of valid PackageTypes
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public IEnumerable<KeyValuePair<int, string>> PackageTypes
+        public IDictionary<int, string> PackageTypes
         {
             get => packageTypes;
             set => handler.Set(nameof(PackageTypes), ref packageTypes, value);
@@ -182,7 +176,7 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
         /// Collection of ConfirmationTypes
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public IEnumerable<KeyValuePair<int, string>> ConfirmationTypes
+        public IDictionary<int, string> ConfirmationTypes
         {
             get => confirmationTypes;
             set => handler.Set(nameof(ConfirmationTypes), ref confirmationTypes, value);
@@ -192,7 +186,7 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
         /// Collection of ServiceTypes
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public IEnumerable<KeyValuePair<int, string>> ServiceTypes
+        public IDictionary<int, string> ServiceTypes
         {
             get => serviceTypes;
             set => handler.Set(nameof(ServiceTypes), ref serviceTypes, value);
@@ -245,10 +239,36 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
                     e.PropertyName == PostalShipmentFields.Confirmation.Name ||
                     e.PropertyName == ShipmentFields.ShipCountryCode.Name)
                 {
-                    var shipmentType = (PostalShipmentType) shipmentTypeManager.Get(ShipmentModel.ShipmentAdapter.ShipmentTypeCode);
-                    shipmentType.UpdatePostalDetails(ShipmentModel.ShipmentAdapter.Shipment);
+                    UpdateDynamicData();
                 }
             }
+        }
+
+        /// <summary>
+        /// Ensure that the properties of the shipment are correct
+        /// and that our lists contain the selected values in the shipment
+        /// </summary>
+        private void UpdateDynamicData()
+        {
+            ShipmentType shipmentType = shipmentTypeManager.Get(ShipmentModel.ShipmentAdapter.ShipmentTypeCode);
+            shipmentType.RectifyCarrierSpecificData(ShipmentModel.ShipmentAdapter.Shipment);
+
+            if (!ConfirmationTypes.ContainsKey(ShipmentModel.ShipmentAdapter.Shipment.Postal.Confirmation))
+            {
+                RefreshConfirmationTypes(ShipmentModel.ShipmentAdapter);
+            }
+
+            if (!ServiceTypes.ContainsKey(ShipmentModel.ShipmentAdapter.Shipment.Postal.Service))
+            {
+                RefreshServiceTypes(ShipmentModel.ShipmentAdapter);
+            }
+
+            if (!PackageTypes.ContainsKey(ShipmentModel.ShipmentAdapter.Shipment.Postal.PackagingType))
+            {
+                RefreshPackageTypes(ShipmentModel.ShipmentAdapter);
+            }
+
+            handler.RaisePropertyChanged(null);
         }
 
         /// <summary>
@@ -318,6 +338,8 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
             {
                 model.ShipmentAdapter.Shipment.Postal.DimsProfileID = 0;
             }
+
+            handler.RaisePropertyChanged(null);
         }
 
         /// <summary>
@@ -327,7 +349,7 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
         {
             if (adapter?.Shipment == null)
             {
-                PackageTypes = Enumerable.Empty<KeyValuePair<int, string>>();
+                PackageTypes = new Dictionary<int, string>();
             }
             else
             {
@@ -344,7 +366,7 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
             if (adapter != null &&
                 !PostalUtility.IsPostalShipmentType(adapter.ShipmentTypeCode))
             {
-                ConfirmationTypes = Enumerable.Empty<KeyValuePair<int, string>>();
+                ConfirmationTypes = new Dictionary<int, string>();
             }
             else
             {

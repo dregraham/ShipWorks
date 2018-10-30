@@ -1,3 +1,6 @@
+using Syncfusion.Licensing;
+using Syncfusion.Windows.Controls.Input;
+
 namespace ShipWorks.OrderLookup.Controls.EmailNotifications
 {
     /// <summary>
@@ -10,6 +13,9 @@ namespace ShipWorks.OrderLookup.Controls.EmailNotifications
         /// </summary>
         public FedExEmailNotificationsControl()
         {
+            // this is only here so the assembly is included
+            SfTextBoxExt sfTextBox = new SfTextBoxExt();
+
             InitializeComponent();
         }
     }
