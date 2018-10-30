@@ -9,28 +9,28 @@ using ShipWorks.OrderLookup.FieldManager;
 namespace ShipWorks.UI.ValueConverters
 {
     /// <summary>
-    /// Converter to return height based on field being allowed
+    /// Return Visibility based on field being allowed
     /// </summary>
-    public class HeightWhenFieldAllowedConverter : IMultiValueConverter
+    public class VisibilityWhenFieldAllowedConverter : IMultiValueConverter
     {
         /// <summary>
-        /// Convert height based on field visibility
+        /// Return Visibility based on field visibility
         /// </summary>
         public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
         {
             IOrderLookupFieldLayoutRepository repo = values[0] as IOrderLookupFieldLayoutRepository;
             SectionLayoutFieldIDs? fieldID = EnumHelper.TryParseEnum<SectionLayoutFieldIDs>(values[1].ToString(), true);
-            GridLength height = (GridLength) values[2];
+            Visibility visibility = Visibility.Visible;
 
             if (repo != null && fieldID.HasValue)
             {
                 var sectionFields = repo.Fetch()?.SelectMany(l => l.SectionFields);
                 var sectionField = sectionFields?.FirstOrDefault(l => l.Id.Equals(fieldID.Value));
 
-                height = sectionField?.Selected == true ? height : new GridLength(0);
+                visibility = sectionField?.Selected == true ? visibility : Visibility.Collapsed;
             }
 
-            return height;
+            return visibility;
         }
 
         /// <summary>
