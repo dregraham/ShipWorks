@@ -84,12 +84,14 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
                 RefreshPackageTypes();
             }
 
-            if (e.PropertyName == ShipmentFields.ShipCountryCode.Name)
+            if (e.PropertyName == ShipmentFields.ShipCountryCode.Name ||
+                e.PropertyName == ShipmentFields.OriginCountryCode.Name)
             {
                 RefreshServiceTypes();
             }
 
             if (e.PropertyName == ShipmentFields.ShipCountryCode.Name ||
+                e.PropertyName == ShipmentFields.OriginCountryCode.Name ||
                 e.PropertyName == FedExShipmentFields.Service.Name ||
                 (e.PropertyName == nameof(ShipmentModel.PackageAdapters) && ShipmentModel.PackageAdapters != null))
             {
