@@ -13,7 +13,7 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
         /// <summary>
         /// Get an enumerable of package types for the adapter
         /// </summary>
-        IEnumerable<KeyValuePair<int, string>> GetPackageTypes(ICarrierShipmentAdapter carrierAdapter);
+        IDictionary<int, string> GetPackageTypes(ICarrierShipmentAdapter carrierAdapter);
 
         /// <summary>
         /// Get a dictionary of available providers for the adapter
@@ -23,7 +23,7 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
         /// <summary>
         /// Get the service types available for the adapter
         /// </summary>
-        IEnumerable<KeyValuePair<int, string>> GetServiceTypes(ICarrierShipmentAdapter carrierAdapter);
+        IDictionary<int, string> GetServiceTypes(ICarrierShipmentAdapter carrierAdapter);
 
         /// <summary>
         /// Get the available profiles for the package adapter
