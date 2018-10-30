@@ -489,13 +489,6 @@ namespace ShipWorks
                 return;
             }
 
-            //// This causes the shipping panel to lose focus, which causes it to save. If we don't do this, it will try
-            //// to save later, after the user has logged out. This caused an exception because we couldn't audit the save.
-            //// This was moved to its current location because if we're crashing, calling Focus can cause a cross-thread
-            //// exception, preventing ShipWorks from shutting down. If we're crashing, we can't be sure a save is valid anyway.
-            //Focus();
-            //UnloadOrderLookupMode();
-
             using (ConnectionSensitiveScope scope = new ConnectionSensitiveScope("close ShipWorks", this))
             {
                 if (!scope.Acquired)
@@ -1078,6 +1071,15 @@ namespace ShipWorks
 
             orderLookupLifetimeScope = IoC.BeginLifetimeScope();
             orderLookupControl = orderLookupLifetimeScope.Resolve<IOrderLookup>();
+
+            var profilePopupService = orderLookupLifetimeScope.Resolve<IProfilePopupService>();
+            orderLookupControl.RegisterProfileHandler(
+                (getShipmentType, onApply) => profilePopupService.BuildMenu(
+                    buttonOrderLookupViewApplyProfile,
+                    new Guid("98602808-B402-48F9-A5D1-EE10FCE16565"),
+                    getShipmentType,
+                    onApply));
+
             panelDockingArea.Controls.Add(orderLookupControl.Control);
             orderLookupControl.Control.BringToFront();
 

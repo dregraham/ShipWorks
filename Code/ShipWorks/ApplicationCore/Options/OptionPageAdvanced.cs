@@ -8,6 +8,7 @@ using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using log4net;
 using ShipWorks.Common.Threading;
+using ShipWorks.Core.Messaging;
 using ShipWorks.Data;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
@@ -120,11 +121,12 @@ namespace ShipWorks.ApplicationCore.Options
 
             config.UseParallelActionQueue = useParallelActionProcessing.Checked;
 
-            ShippingSettingsEntity settings = ShippingSettings.Fetch();
+            ShippingSettingsWrapper shippingSettingsWrapper = new ShippingSettingsWrapper(Messenger.Current);
+            ShippingSettingsEntity settings = shippingSettingsWrapper.Fetch();
             settings.ShipSenseEnabled = enableShipSense.Checked;
             settings.AutoCreateShipments = autoCreateShipments.Checked;
             settings.ShipmentEditLimit = (int) shipmentEditLimit.SelectedValue;
-            ShippingSettings.Save(settings);
+            shippingSettingsWrapper.Save(settings);
 
             ConfigurationData.Save(config);
         }
