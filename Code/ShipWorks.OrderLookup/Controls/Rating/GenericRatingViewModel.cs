@@ -85,14 +85,20 @@ namespace ShipWorks.OrderLookup.Controls.Rating
             {
                 if (base.SelectedRate == value)
                 {
-                    if (ShipmentModel.OriginalShipmentTypeCode == ShipmentTypeCode.BestRate)
+                    if (ShipmentModel.ShipmentAdapter.ShipmentTypeCode == ShipmentTypeCode.BestRate)
                     {
                         base.SelectedRate = Rates.FirstOrDefault();
                     }
-                    return;
+                    else
+                    {
+                        return;
+                    }
+                }
+                else
+                {
+                    base.SelectedRate = value;
                 }
 
-                base.SelectedRate = value;
                 ShipmentModel.ShipmentAdapter?.SelectServiceFromRate(value);
 
                 ShipmentModel.TotalCost = SelectedRate != null ? SelectedRate.AmountOrDefault : 0;
