@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 
@@ -10,34 +11,37 @@ namespace ShipWorks.UI.AttachedProperties
     public partial class Focus
     {
         public static readonly DependencyProperty StartupProperty =
-            DependencyProperty.RegisterAttached("Startup", typeof(FrameworkElement), typeof(Focus), new PropertyMetadata(StartupSetCallback));
+            DependencyProperty.RegisterAttached("Startup", typeof(bool), typeof(Focus), new PropertyMetadata(StartupSetCallback));
 
         /// <summary>
         /// Set the startup property
         /// </summary>
-        public static void SetStartup(UIElement element, FrameworkElement value) =>
+        public static void SetStartup(UIElement element, bool value) =>
             element.SetValue(StartupProperty, value);
 
         /// <summary>
         /// Get the startup property
         /// </summary>
-        public static FrameworkElement GetStartup(UIElement element) =>
-            (FrameworkElement) element.GetValue(StartupProperty);
+        public static bool GetStartup(UIElement element) =>
+            (bool) element.GetValue(StartupProperty);
 
         /// <summary>
         /// Handle when the startup property changes
         /// </summary>
-        private static void StartupSetCallback(DependencyObject dependencyObject, DependencyPropertyChangedEventArgs dependencyPropertyChangedEventArgs)
+        private static void StartupSetCallback(DependencyObject dependencyObject, DependencyPropertyChangedEventArgs args)
         {
             var frameworkElement = (FrameworkElement) dependencyObject;
-            var target = GetStartup(frameworkElement);
+           
 
-            if (target == null)
+            if (frameworkElement == null || !(args.NewValue is bool newValue))
             {
                 return;
             }
 
-            frameworkElement.Loaded += (s, e) => HandleFrameworkElementLoaded(target);
+            if(newValue)
+            {
+                frameworkElement.Loaded += (s, e) => HandleFrameworkElementLoaded(frameworkElement);
+            }
         }
 
         /// <summary>

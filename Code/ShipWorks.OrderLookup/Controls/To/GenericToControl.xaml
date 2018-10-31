@@ -16,10 +16,12 @@
         </ResourceDictionary>
     </UserControl.Resources>
 
-    <local:OrderLookupAddress DataContext="{Binding Address}">
-        <local:OrderLookupAddress.IsEnabled>
-            <Binding Mode="OneWay" Path="ShipmentModel.ShipmentAllowEditing" />
-        </local:OrderLookupAddress.IsEnabled>
-    </local:OrderLookupAddress>
+    <StackPanel IsEnabled="{Binding ShipmentModel.ShipmentAllowEditing, Mode=OneWay}">
+        <local:OrderLookupAddress DataContext="{Binding Address}">
+            <local:OrderLookupAddress.IsEnabled>
+                <Binding Mode="OneWay" Path="ShipmentModel.ShipmentAllowEditing" />
+            </local:OrderLookupAddress.IsEnabled>
+        </local:OrderLookupAddress>
+    </StackPanel>
 </UserControl>
 

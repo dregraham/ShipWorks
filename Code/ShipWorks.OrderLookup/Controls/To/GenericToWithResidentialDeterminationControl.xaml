@@ -19,7 +19,7 @@
         </ResourceDictionary>
     </UserControl.Resources>
 
-    <StackPanel IsEnabled="{Binding ShipmentModel.ShipmentAllowEditing}">
+    <StackPanel IsEnabled="{Binding ShipmentModel.ShipmentAllowEditing, Mode=OneWay}">
         <controls:OrderLookupAddress DataContext="{Binding Address}">
             <controls:OrderLookupAddress.IsEnabled>
                 <Binding Mode="OneWay" Path="ShipmentModel.ShipmentAllowEditing" />
