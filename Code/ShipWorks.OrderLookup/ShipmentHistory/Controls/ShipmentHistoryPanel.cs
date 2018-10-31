@@ -121,7 +121,7 @@ namespace ShipWorks.OrderLookup.ShipmentHistory.Controls
         /// <summary>
         /// Ship the shipment again
         /// </summary>
-        private async void OnShipAgain(object sender, EventArgs e)
+        private void OnShipAgain(object sender, EventArgs e)
         {
             if (sender is Divelements.SandRibbon.Button voidButton &&
                 voidButton.Tag is PagedEntityGrid.PagedEntityGridRow row &&
