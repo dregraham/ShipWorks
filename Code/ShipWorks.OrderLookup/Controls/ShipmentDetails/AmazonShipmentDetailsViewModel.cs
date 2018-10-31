@@ -277,6 +277,8 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
             {
                 ShipmentModel.ShipmentAdapter.Shipment.Amazon.DimsProfileID = 0;
             }
+
+            handler.RaisePropertyChanged(null);
         }
 
         /// <summary>

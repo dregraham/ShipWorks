@@ -95,11 +95,30 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
                 e.PropertyName == FedExShipmentFields.Service.Name ||
                 (e.PropertyName == nameof(ShipmentModel.PackageAdapters) && ShipmentModel.PackageAdapters != null))
             {
-                ShipmentType shipmentType = shipmentTypeManager.Get(ShipmentTypeCode.FedEx);
-                shipmentType.RectifyCarrierSpecificData(ShipmentModel.ShipmentAdapter.Shipment);
-
-                handler.RaisePropertyChanged(null);
+                UpdateDynamicData();
             }
+        }
+
+        /// <summary>
+        /// Ensure that the properties of the shipment are correct
+        /// and that our lists contain the selected values in the shipment
+        /// </summary>
+        private void UpdateDynamicData()
+        {
+            ShipmentType shipmentType = shipmentTypeManager.Get(ShipmentTypeCode.FedEx);
+            shipmentType.RectifyCarrierSpecificData(ShipmentModel.ShipmentAdapter.Shipment);
+
+            if (!ServiceTypes.ContainsKey(ShipmentModel.ShipmentAdapter.Shipment.Postal.Service))
+            {
+                RefreshServiceTypes();
+            }
+
+            if (!PackageTypes.ContainsKey(ShipmentModel.ShipmentAdapter.Shipment.Postal.PackagingType))
+            {
+                RefreshPackageTypes();
+            }
+
+            handler.RaisePropertyChanged(null);
         }
 
         /// <summary>
