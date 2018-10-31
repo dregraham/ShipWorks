@@ -123,8 +123,8 @@ namespace ShipWorks.OrderLookup.ShipmentHistory.Controls
         /// </summary>
         private void OnShipAgain(object sender, EventArgs e)
         {
-            if (sender is Divelements.SandRibbon.Button voidButton &&
-                voidButton.Tag is PagedEntityGrid.PagedEntityGridRow row &&
+            if (sender is Divelements.SandRibbon.Button shipAgainButton &&
+                shipAgainButton.Tag is PagedEntityGrid.PagedEntityGridRow row &&
                 row.Entity is ProcessedShipmentEntity processedShipment)
             {
                 messenger.Send(new OrderLookupShipAgainMessage(this, processedShipment.ShipmentID));
