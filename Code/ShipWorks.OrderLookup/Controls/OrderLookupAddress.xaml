@@ -4,22 +4,22 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:AddressControl="clr-namespace:ShipWorks.UI.Controls.AddressControl;assembly=ShipWorks.UI"
     xmlns:cmd="http://www.galasoft.ch/mvvmlight"
-    xmlns:ui="clr-namespace:ShipWorks.UI.Controls;assembly=ShipWorks.UI"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:geography="clr-namespace:Interapptive.Shared.Business.Geography;assembly=Interapptive.Shared"
     xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
     xmlns:local="clr-namespace:ShipWorks.OrderLookup.Controls"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:ns="clr-namespace:ShipWorks.OrderLookup.FieldManager;assembly=ShipWorks.Core"
     xmlns:props="clr-namespace:ShipWorks.UI.AttachedProperties;assembly=ShipWorks.UI"
     xmlns:sys="clr-namespace:System;assembly=mscorlib"
+    xmlns:ui="clr-namespace:ShipWorks.UI.Controls;assembly=ShipWorks.UI"
     xmlns:valueConverters="clr-namespace:ShipWorks.UI.ValueConverters;assembly=ShipWorks.UI"
-    xmlns:ns="clr-namespace:ShipWorks.OrderLookup.FieldManager;assembly=ShipWorks.Core"
     d:DataContext="{d:DesignInstance AddressControl:AddressViewModel,
                                      IsDesignTimeCreatable=False}"
     d:DesignHeight="380"
     d:DesignWidth="350"
-    mc:Ignorable="d"
-    FontFamily="/ShipWorks.OrderLookup;component/#Roboto">
+    FontFamily="/ShipWorks.OrderLookup;component/#Roboto"
+    mc:Ignorable="d">
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -38,11 +38,26 @@
             <valueConverters:AddressKeyValueToBooleanConverter x:Key="AddressKeyValueToBooleanConverter" />
             <valueConverters:VisibleWhenEqualToParameterConverter x:Key="VisibleWhenEqualToParameter" />
             <valueConverters:VisibleWhenEqualToParameterConverter x:Key="VisibleWhenNotEqualToParameter" Invert="true" />
-            <valueConverters:HeightWhenFieldAllowedConverter x:Key="HeightWhenFieldAllowedConverter"/>
+            <valueConverters:HeightWhenFieldAllowedConverter x:Key="HeightWhenFieldAllowedConverter" />
+            <valueConverters:SectionLayoutVisibilityConverter x:Key="SectionLayoutVisibility" />
+            <valueConverters:VisibilityMultiConverter x:Key="VisibilityMulti" BooleanOperator="Or" />
         </ResourceDictionary>
     </UserControl.Resources>
     <StackPanel>
-        <TextBlock Style="{StaticResource Header}">Name</TextBlock>
+        <TextBlock Style="{StaticResource Header}" Text="Name">
+            <TextBlock.Visibility>
+                <MultiBinding Converter="{StaticResource VisibilityMulti}">
+                    <Binding
+                        Converter="{StaticResource SectionLayoutVisibility}"
+                        ConverterParameter="{x:Static ns:SectionLayoutFieldIDs.FullName}"
+                        Path="FieldLayoutProvider" />
+                    <Binding
+                        Converter="{StaticResource SectionLayoutVisibility}"
+                        ConverterParameter="{x:Static ns:SectionLayoutFieldIDs.Company}"
+                        Path="FieldLayoutProvider" />
+                </MultiBinding>
+            </TextBlock.Visibility>
+        </TextBlock>
 
         <Grid>
             <Grid.ColumnDefinitions>
@@ -196,8 +211,8 @@
                 IsEditable="True"
                 IsTextSearchEnabled="True"
                 ItemsSource="{Binding SelectedValue, ElementName=CountryComboBox, Converter={StaticResource StateProvinceConverter}}"
-                Text="{Binding StateProvCode}"
-                Style="{StaticResource EditableFormComboBox}" />
+                Style="{StaticResource EditableFormComboBox}"
+                Text="{Binding StateProvCode}" />
 
             <TextBlock
                 Grid.Row="3"
@@ -226,7 +241,7 @@
                 ItemsSource="{Binding Source={x:Static geography:CountryList.Countries}, Mode=OneTime}"
                 SelectedValue="{Binding CountryCode}"
                 SelectedValuePath="Value"
-                Style="{StaticResource FormComboBox}"/>
+                Style="{StaticResource FormComboBox}" />
         </Grid>
 
         <TextBlock Style="{StaticResource Header}">Contact Information</TextBlock>
