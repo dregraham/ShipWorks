@@ -69,7 +69,7 @@
                 Text="Provider" />
 
             <ComboBox
-                ui:Focus.Startup="True"
+                ui:Focus.Startup="true"
                 Grid.Row="1"
                 Grid.Column="1"
                 DisplayMemberPath="Value"
