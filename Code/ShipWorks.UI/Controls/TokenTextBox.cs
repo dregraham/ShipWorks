@@ -122,6 +122,7 @@ namespace ShipWorks.UI.Controls
             if (selectedToken != null)
             {
                 Text = selectedToken.Xsl;
+                suggestionSelector.SelectedItem = null;
             }
 
             // Close the popup regardless of whether there is a selection
