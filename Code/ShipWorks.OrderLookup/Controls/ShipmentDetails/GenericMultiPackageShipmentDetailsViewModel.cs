@@ -351,6 +351,8 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
             {
                 SelectedPackage.DimsProfileID = 0;
             }
+
+            handler.RaisePropertyChanged(nameof(SelectedPackageDimsProfileID));
         }
 
         /// <summary>

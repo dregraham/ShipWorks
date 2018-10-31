@@ -333,6 +333,8 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
             {
                 model.ShipmentAdapter.Shipment.Postal.DimsProfileID = 0;
             }
+
+            handler.RaisePropertyChanged(null);
         }
 
         /// <summary>
