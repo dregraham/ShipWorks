@@ -1841,6 +1841,11 @@ namespace ShipWorks
             }
         }
 
+        public void SelectOrderLookupTab()
+        {
+            throw new NotImplementedException();
+        }
+
         /// <summary>
         /// Get the shipment dock control
         /// </summary>
