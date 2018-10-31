@@ -9,12 +9,12 @@ namespace ShipWorks.OrderLookup.Controls.To
     /// </summary>
     public class OrderLookupToFieldLayoutProvider : IOrderLookupFieldLayoutProvider
     {
-        private readonly OrderLookupFieldLayoutProvider orderLookupFieldLayoutProvider;
+        private readonly IOrderLookupFieldLayoutProvider orderLookupFieldLayoutProvider;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public OrderLookupToFieldLayoutProvider(OrderLookupFieldLayoutProvider orderLookupFieldLayoutProvider)
+        public OrderLookupToFieldLayoutProvider(IOrderLookupFieldLayoutProvider orderLookupFieldLayoutProvider)
         {
             this.orderLookupFieldLayoutProvider = orderLookupFieldLayoutProvider;
         }

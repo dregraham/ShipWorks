@@ -51,7 +51,7 @@
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <ui:FieldLayoutRowDefinition FieldID="{x:Static ns:SectionLayoutFieldIDs.FullName}" />
-                <RowDefinition />
+                <ui:FieldLayoutRowDefinition FieldID="{x:Static ns:SectionLayoutFieldIDs.Company}" />
             </Grid.RowDefinitions>
 
             <TextBlock
@@ -145,23 +145,22 @@
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
-                <RowDefinition />
-                <RowDefinition />
-                <RowDefinition />
-                <RowDefinition />
-                <RowDefinition />
-                <RowDefinition />
+                <ui:FieldLayoutRowDefinition FieldID="{x:Static ns:SectionLayoutFieldIDs.Street}" />
+                <ui:FieldLayoutRowDefinition FieldID="{x:Static ns:SectionLayoutFieldIDs.City}" />
+                <ui:FieldLayoutRowDefinition FieldID="{x:Static ns:SectionLayoutFieldIDs.StateProvince}" />
+                <ui:FieldLayoutRowDefinition FieldID="{x:Static ns:SectionLayoutFieldIDs.PostalCode}" />
+                <ui:FieldLayoutRowDefinition FieldID="{x:Static ns:SectionLayoutFieldIDs.Country}" />
             </Grid.RowDefinitions>
 
             <TextBlock
-                Grid.Row="1"
+                Grid.Row="0"
                 Grid.Column="0"
                 Padding="0,3,0,2"
                 Style="{StaticResource FieldLabel}">
                 Street
             </TextBlock>
             <TextBox
-                Grid.Row="1"
+                Grid.Row="0"
                 Grid.Column="1"
                 props:EntityFieldLength.FieldName="PersonStreetFull"
                 props:TextRestriction.MaxLines="3"
@@ -172,26 +171,26 @@
                 Text="{Binding Street, UpdateSourceTrigger=PropertyChanged}" />
 
             <TextBlock
-                Grid.Row="2"
+                Grid.Row="1"
                 Grid.Column="0"
                 Style="{StaticResource FieldLabel}">
                 City
             </TextBlock>
             <TextBox
-                Grid.Row="2"
+                Grid.Row="1"
                 Grid.Column="1"
                 props:EntityFieldLength.FieldName="PersonCity"
                 Style="{StaticResource FormTextBox}"
                 Text="{Binding City, UpdateSourceTrigger=PropertyChanged}" />
 
             <TextBlock
-                Grid.Row="3"
+                Grid.Row="2"
                 Grid.Column="0"
                 Style="{StaticResource FieldLabel}">
                 State / Prov
             </TextBlock>
             <ComboBox
-                Grid.Row="3"
+                Grid.Row="2"
                 Grid.Column="1"
                 props:EntityFieldLength.FieldName="PersonState"
                 IsEditable="True"
@@ -201,27 +200,27 @@
                 Style="{StaticResource EditableFormComboBox}" />
 
             <TextBlock
-                Grid.Row="4"
+                Grid.Row="3"
                 Grid.Column="0"
                 Style="{StaticResource FieldLabel}">
                 Postal Code
             </TextBlock>
             <TextBox
-                Grid.Row="4"
+                Grid.Row="3"
                 Grid.Column="1"
                 props:EntityFieldLength.FieldName="PersonPostal"
                 Style="{StaticResource FormTextBox}"
                 Text="{Binding PostalCode, UpdateSourceTrigger=PropertyChanged}" />
 
             <TextBlock
-                Grid.Row="5"
+                Grid.Row="4"
                 Grid.Column="0"
                 Style="{StaticResource FieldLabel}">
                 Country
             </TextBlock>
             <ComboBox
                 x:Name="CountryComboBox"
-                Grid.Row="5"
+                Grid.Row="4"
                 Grid.Column="1"
                 DisplayMemberPath="Key"
                 ItemsSource="{Binding Source={x:Static geography:CountryList.Countries}, Mode=OneTime}"
@@ -237,8 +236,8 @@
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
-                <RowDefinition />
-                <RowDefinition />
+                <ui:FieldLayoutRowDefinition FieldID="{x:Static ns:SectionLayoutFieldIDs.Email}" />
+                <ui:FieldLayoutRowDefinition FieldID="{x:Static ns:SectionLayoutFieldIDs.Phone}" />
             </Grid.RowDefinitions>
 
             <TextBlock

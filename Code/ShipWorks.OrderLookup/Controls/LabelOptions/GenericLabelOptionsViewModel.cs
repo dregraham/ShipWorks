@@ -31,8 +31,8 @@ namespace ShipWorks.OrderLookup.Controls.LabelOptions
         /// <summary>
         /// Constructor
         /// </summary>
-        public GenericLabelOptionsViewModel(IOrderLookupShipmentModel shipmentModel, IShipmentTypeManager shipmentTypeManager) :
-            base(shipmentModel)
+        public GenericLabelOptionsViewModel(IOrderLookupShipmentModel shipmentModel, IShipmentTypeManager shipmentTypeManager,
+            OrderLookupFieldLayoutProvider fieldLayoutProvider) : base(shipmentModel, fieldLayoutProvider)
         {
             this.shipmentTypeManager = shipmentTypeManager;
 
@@ -42,7 +42,7 @@ namespace ShipWorks.OrderLookup.Controls.LabelOptions
         /// <summary>
         /// Field layout repository
         /// </summary>
-        public IOrderLookupFieldLayoutProvider FieldLayoutProvider => ShipmentModel.FieldLayoutProvider;
+        public override IOrderLookupFieldLayoutProvider FieldLayoutProvider => ShipmentModel.FieldLayoutProvider;
 
         /// <summary>
         /// Panel ID

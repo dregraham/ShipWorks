@@ -22,7 +22,8 @@ namespace ShipWorks.OrderLookup.Controls.OrderItems
         /// <summary>
         /// Constructor
         /// </summary>
-        public OrderItemsViewModel(IOrderLookupShipmentModel shipmentModel) : base(shipmentModel)
+        public OrderItemsViewModel(IOrderLookupShipmentModel shipmentModel,
+            OrderLookupFieldLayoutProvider fieldLayoutProvider) : base(shipmentModel, fieldLayoutProvider)
         {
 
         }
@@ -42,7 +43,7 @@ namespace ShipWorks.OrderLookup.Controls.OrderItems
         /// <summary>
         /// Field layout repository
         /// </summary>
-        public IOrderLookupFieldLayoutProvider FieldLayoutProvider => ShipmentModel.FieldLayoutProvider;
+        public override IOrderLookupFieldLayoutProvider FieldLayoutProvider => ShipmentModel.FieldLayoutProvider;
 
         /// <summary>
         /// Panel ID

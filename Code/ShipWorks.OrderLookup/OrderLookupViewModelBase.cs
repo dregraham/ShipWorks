@@ -11,6 +11,7 @@ namespace ShipWorks.OrderLookup
     public abstract class OrderLookupViewModelBase : IOrderLookupViewModel
     {
         private readonly PropertyChangedHandler handler;
+        private readonly IOrderLookupFieldLayoutProvider fieldLayoutProvider;
 
         /// <summary>
         /// Property changed event
@@ -20,9 +21,10 @@ namespace ShipWorks.OrderLookup
         /// <summary>
         /// Constructor
         /// </summary>
-        public OrderLookupViewModelBase(IOrderLookupShipmentModel shipmentModel)
+        public OrderLookupViewModelBase(IOrderLookupShipmentModel shipmentModel, IOrderLookupFieldLayoutProvider fieldLayoutProvider)
         {
             ShipmentModel = shipmentModel;
+            this.fieldLayoutProvider = fieldLayoutProvider;
             ShipmentModel.PropertyChanged += ShipmentModelPropertyChanged;
             handler = new PropertyChangedHandler(this, () => PropertyChanged);
         }
@@ -47,7 +49,7 @@ namespace ShipWorks.OrderLookup
         /// <summary>
         /// Field layout repository
         /// </summary>
-        public IOrderLookupFieldLayoutRepository FieldLayoutRepository => ShipmentModel.FieldLayoutRepository;
+        public virtual IOrderLookupFieldLayoutProvider FieldLayoutProvider => fieldLayoutProvider;
 
         /// <summary>
         /// The order lookup ShipmentModel

@@ -1,5 +1,4 @@
 ﻿using System.Reflection;
-using ShipWorks.OrderLookup.FieldManager;
 
 namespace ShipWorks.OrderLookup.Controls.From
 {
@@ -9,9 +8,5 @@ namespace ShipWorks.OrderLookup.Controls.From
     [Obfuscation(ApplyToMembers = true, Exclude = true, StripAfterObfuscation = false)]
     public interface IFromViewModel : IOrderLookupViewModel
     {
-        /// <summary>
-        /// Field layout provider
-        /// </summary>
-        IOrderLookupFieldLayoutProvider FieldLayoutProvider { get; }
     }
 }

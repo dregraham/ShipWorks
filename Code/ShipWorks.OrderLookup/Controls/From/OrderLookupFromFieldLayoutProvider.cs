@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.OrderLookup.FieldManager;
 
 namespace ShipWorks.OrderLookup.Controls.From

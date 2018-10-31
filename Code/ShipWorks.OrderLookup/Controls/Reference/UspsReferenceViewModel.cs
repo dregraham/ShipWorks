@@ -15,7 +15,8 @@ namespace ShipWorks.OrderLookup.Controls.Reference
         /// <summary>
         /// Constructor
         /// </summary>
-        public UspsReferenceViewModel(IOrderLookupShipmentModel shipmentModel) : base(shipmentModel)
+        public UspsReferenceViewModel(IOrderLookupShipmentModel shipmentModel,
+            OrderLookupFieldLayoutProvider fieldLayoutProvider) : base(shipmentModel, fieldLayoutProvider)
         {
 
         }

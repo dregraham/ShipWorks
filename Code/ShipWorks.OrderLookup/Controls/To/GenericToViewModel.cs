@@ -26,7 +26,6 @@ namespace ShipWorks.OrderLookup.Controls.To
         private string title;
         private IDisposable autoSave;
         private readonly AddressViewModel addressViewModel;
-        private readonly OrderLookupToFieldLayoutProvider fieldLayoutProvider;
         private readonly ISchedulerProvider schedulerProvider;
 
         /// <summary>
@@ -36,12 +35,12 @@ namespace ShipWorks.OrderLookup.Controls.To
             IOrderLookupShipmentModel shipmentModel,
             AddressViewModel addressViewModel,
             ISchedulerProvider schedulerProvider,
-            OrderLookupToFieldLayoutProvider fieldLayoutProvider)
+            OrderLookupFieldLayoutProvider fieldLayoutProvider) : 
+                base(shipmentModel, new OrderLookupToFieldLayoutProvider(fieldLayoutProvider))
         {
             this.schedulerProvider = schedulerProvider;
             this.addressViewModel = addressViewModel;
-            this.fieldLayoutProvider = new OrderLookupToFieldLayoutProvider(fieldLayoutProvider); 
-            this.addressViewModel.FieldLayoutProvider = this.fieldLayoutProvider;
+            this.addressViewModel.FieldLayoutProvider = FieldLayoutProvider;
 
             if (ShipmentModel?.ShipmentAdapter?.Store != null)
             {
@@ -57,11 +56,6 @@ namespace ShipWorks.OrderLookup.Controls.To
         /// Panel ID
         /// </summary>
         public override SectionLayoutIDs PanelID => SectionLayoutIDs.To;
-
-        /// <summary>
-        /// Field layout provider
-        /// </summary>
-        public IOrderLookupFieldLayoutProvider FieldLayoutProvider => fieldLayoutProvider;
 
         /// <summary>
         ///The addresses title

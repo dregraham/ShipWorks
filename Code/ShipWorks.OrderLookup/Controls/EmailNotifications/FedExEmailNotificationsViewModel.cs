@@ -17,7 +17,8 @@ namespace ShipWorks.OrderLookup.Controls.EmailNotifications
         /// <summary>
         /// Ctor
         /// </summary>
-        public FedExEmailNotificationsViewModel(IOrderLookupShipmentModel shipmentModel) : base(shipmentModel)
+        public FedExEmailNotificationsViewModel(IOrderLookupShipmentModel shipmentModel,
+            OrderLookupFieldLayoutProvider fieldLayoutProvider) : base(shipmentModel, fieldLayoutProvider)
         {
 
         }
@@ -25,7 +26,7 @@ namespace ShipWorks.OrderLookup.Controls.EmailNotifications
         /// <summary>
         /// Field layout repository
         /// </summary>
-        public IOrderLookupFieldLayoutProvider FieldLayoutProvider => ShipmentModel.FieldLayoutProvider;
+        public override IOrderLookupFieldLayoutProvider FieldLayoutProvider => ShipmentModel.FieldLayoutProvider;
 
         /// <summary>
         /// Panel ID

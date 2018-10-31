@@ -22,7 +22,8 @@ namespace ShipWorks.OrderLookup.Controls.EmailNotifications
         /// <summary>
         /// Ctor
         /// </summary>
-        public QuantumViewNotifyControlViewModel(IOrderLookupShipmentModel shipmentModel) : base(shipmentModel)
+        public QuantumViewNotifyControlViewModel(IOrderLookupShipmentModel shipmentModel,
+            OrderLookupFieldLayoutProvider fieldLayoutProvider) : base(shipmentModel, fieldLayoutProvider)
         {
             SubjectTypes = EnumHelper.GetEnumList<UpsEmailNotificationSubject>()
                                      .ToDictionary(x => (int) x.Value, x => x.Description);
@@ -31,7 +32,7 @@ namespace ShipWorks.OrderLookup.Controls.EmailNotifications
         /// <summary>
         /// Field layout repository
         /// </summary>
-        public IOrderLookupFieldLayoutProvider FieldLayoutProvider => ShipmentModel.FieldLayoutProvider;
+        public override IOrderLookupFieldLayoutProvider FieldLayoutProvider => ShipmentModel.FieldLayoutProvider;
 
         /// <summary>
         /// Panel ID

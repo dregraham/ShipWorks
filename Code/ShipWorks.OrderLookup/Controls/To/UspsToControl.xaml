@@ -26,16 +26,9 @@
             </local:OrderLookupAddress.IsEnabled>
         </local:OrderLookupAddress>
         <Grid>
-            <Grid.Visibility>
-                <MultiBinding Converter="{StaticResource VisibilityWhenFieldAllowed}">
-                    <Binding Path="ShipmentModel.FieldLayoutRepository" Mode="OneWay" />
-                    <Binding Source="{x:Static ns:SectionLayoutFieldIDs.USPSRequireFullAddressValidation}" />
-                    <Binding Source="{x:Static GridLength.Auto}" />
-                </MultiBinding>
-            </Grid.Visibility>
             <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
+                <ui:FieldLayoutRowDefinition FieldID="{x:Static ns:SectionLayoutFieldIDs.USPSRequireFullAddressValidation}" />
+                <ui:FieldLayoutRowDefinition FieldID="{x:Static ns:SectionLayoutFieldIDs.USPSRequireFullAddressValidation}" />
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="85" />

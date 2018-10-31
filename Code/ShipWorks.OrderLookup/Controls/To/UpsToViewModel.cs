@@ -23,7 +23,7 @@ namespace ShipWorks.OrderLookup.Controls.To
             IOrderLookupShipmentModel shipmentModel,
             AddressViewModel addressViewModel,
             ISchedulerProvider schedulerProvider,
-			OrderLookupToFieldLayoutProvider fieldLayoutProvider)
+			OrderLookupFieldLayoutProvider fieldLayoutProvider)
             : base(shipmentModel, addressViewModel, schedulerProvider, fieldLayoutProvider)
         {
             ResidentialDeterminations = EnumHelper.GetEnumList<ResidentialDeterminationType>(r => r != ResidentialDeterminationType.FedExAddressLookup)

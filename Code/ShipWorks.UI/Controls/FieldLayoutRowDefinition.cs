@@ -6,6 +6,7 @@ using System.Windows;
 using System.Windows.Controls;
 using ShipWorks.OrderLookup;
 using ShipWorks.OrderLookup.FieldManager;
+using ShipWorks.UI.Controls.AddressControl;
 
 namespace ShipWorks.UI.Controls
 {
@@ -83,7 +84,7 @@ namespace ShipWorks.UI.Controls
         {
             if (sender is FieldLayoutRowDefinition rowDefinition)
             {
-                if (rowDefinition.DataContext is IOrderLookupViewModel fieldRepositoryProvider &&
+                if (rowDefinition.DataContext is IOrderLookupFieldLayoutProviderHost fieldRepositoryProvider &&
                     rowDefinition.FieldID.HasValue)
                 {
                     var fieldVisible = fieldRepositoryProvider.FieldLayoutProvider

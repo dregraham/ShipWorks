@@ -28,7 +28,9 @@ namespace ShipWorks.OrderLookup.Controls.Customs
         /// <summary>
         /// Constructor
         /// </summary>
-        public GenericCustomsViewModel(IOrderLookupShipmentModel shipmentModel, IShipmentTypeManager shipmentTypeManager) : base(shipmentModel)
+        public GenericCustomsViewModel(IOrderLookupShipmentModel shipmentModel, 
+                IShipmentTypeManager shipmentTypeManager,
+                OrderLookupFieldLayoutProvider fieldLayoutProvider) : base(shipmentModel, fieldLayoutProvider)
         {
             this.shipmentTypeManager = shipmentTypeManager;
 
@@ -38,7 +40,7 @@ namespace ShipWorks.OrderLookup.Controls.Customs
         /// <summary>
         /// Field layout repository
         /// </summary>
-        public IOrderLookupFieldLayoutProvider FieldLayoutProvider => ShipmentModel.FieldLayoutProvider;
+        public override IOrderLookupFieldLayoutProvider FieldLayoutProvider => ShipmentModel.FieldLayoutProvider;
 
         /// <summary>
         /// The title of the section

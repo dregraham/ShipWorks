@@ -7,7 +7,7 @@ namespace ShipWorks.OrderLookup
     /// <summary>
     /// Generic view model for order lookup
     /// </summary>
-    public interface IOrderLookupViewModel : INotifyPropertyChanged, IDisposable
+    public interface IOrderLookupViewModel : IOrderLookupFieldLayoutProviderHost, INotifyPropertyChanged, IDisposable
     {
         /// <summary>
         /// Title of the section
@@ -23,10 +23,5 @@ namespace ShipWorks.OrderLookup
         /// Panel ID 
         /// </summary>
         SectionLayoutIDs PanelID { get; }
-
-        /// <summary>
-        /// Field layout repository
-        /// </summary>
-        IOrderLookupFieldLayoutProvider FieldLayoutProvider { get; }
     }
 }

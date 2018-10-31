@@ -21,11 +21,11 @@ namespace ShipWorks.OrderLookup.Controls.To
         /// <summary>
         /// Constructor
         /// </summary>
-        public GenericToWithResidentialDeterminationViewModel(IOrderLookupShipmentModel shipmentModel, AddressViewModel addressViewModel, OrderLookupToFieldLayoutProvider fieldLayoutProvider) :
-            IOrderLookupShipmentModel shipmentModel,
-            AddressViewModel addressViewModel,
-            ISchedulerProvider schedulerProvider,
-			OrderLookupToFieldLayoutProvider fieldLayoutProvider) :
+        public GenericToWithResidentialDeterminationViewModel(
+                IOrderLookupShipmentModel shipmentModel,
+                AddressViewModel addressViewModel,
+                ISchedulerProvider schedulerProvider,
+                OrderLookupFieldLayoutProvider fieldLayoutProvider) :
             base(shipmentModel, addressViewModel, schedulerProvider, fieldLayoutProvider)
         {
             ResidentialDeterminations = EnumHelper.GetEnumList<ResidentialDeterminationType>()

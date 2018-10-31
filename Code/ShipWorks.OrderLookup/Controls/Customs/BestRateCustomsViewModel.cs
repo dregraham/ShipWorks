@@ -1,4 +1,5 @@
 ﻿using Interapptive.Shared.ComponentRegistration;
+using ShipWorks.OrderLookup.FieldManager;
 using ShipWorks.Shipping;
 using ShipWorks.UI;
 
@@ -14,8 +15,8 @@ namespace ShipWorks.OrderLookup.Controls.Customs
         /// <summary>
         /// Constructor
         /// </summary>
-        public BestRateCustomsViewModel(IOrderLookupShipmentModel shipmentModel, IShipmentTypeManager shipmentTypeManager) : 
-            base(shipmentModel, shipmentTypeManager)
+        public BestRateCustomsViewModel(IOrderLookupShipmentModel shipmentModel, IShipmentTypeManager shipmentTypeManager,
+            OrderLookupFieldLayoutProvider fieldLayoutProvider) : base(shipmentModel, shipmentTypeManager, fieldLayoutProvider)
         {
         }
     }

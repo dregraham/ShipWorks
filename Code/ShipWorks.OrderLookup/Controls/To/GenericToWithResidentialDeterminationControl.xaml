@@ -7,6 +7,7 @@
     xmlns:local="clr-namespace:ShipWorks.OrderLookup.Controls.To"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:ui="http://schemas.shipworks.com/ui"
+    xmlns:ns="clr-namespace:ShipWorks.OrderLookup.FieldManager;assembly=ShipWorks.Core"
     d:DataContext="{d:DesignInstance local:UpsToViewModel}"
     d:DesignWidth="800"
     FontFamily="/ShipWorks.OrderLookup;component/#Roboto"
@@ -31,8 +32,8 @@
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
+                <ui:FieldLayoutRowDefinition FieldID="{x:Static ns:SectionLayoutFieldIDs.FedExResidentialCommercialAddress}" />
+                <ui:FieldLayoutRowDefinition FieldID="{x:Static ns:SectionLayoutFieldIDs.FedExResidentialCommercialAddress}" />
             </Grid.RowDefinitions>
             <TextBlock
                 Grid.Row="0"

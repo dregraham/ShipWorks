@@ -20,7 +20,8 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
         /// Constructor
         /// </summary>
         public NotSupportedShipmentDetailsViewModel(IOrderLookupShipmentModel shipmentModel,
-            ICarrierShipmentAdapterOptionsProvider carrierShipmentAdapterOptionsProvider) : base(shipmentModel)
+            ICarrierShipmentAdapterOptionsProvider carrierShipmentAdapterOptionsProvider,
+            OrderLookupFieldLayoutProvider fieldLayoutProvider) : base(shipmentModel, fieldLayoutProvider)
         {
             Providers = carrierShipmentAdapterOptionsProvider.GetProviders(shipmentModel.ShipmentAdapter, shipmentModel.OriginalShipmentTypeCode);
         }
@@ -28,7 +29,7 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
         /// <summary>
         /// Field layout repository
         /// </summary>
-        public IOrderLookupFieldLayoutProvider FieldLayoutProvider => ShipmentModel.FieldLayoutProvider;
+        public override IOrderLookupFieldLayoutProvider FieldLayoutProvider => ShipmentModel.FieldLayoutProvider;
 
         /// <summary>
         /// Panel ID

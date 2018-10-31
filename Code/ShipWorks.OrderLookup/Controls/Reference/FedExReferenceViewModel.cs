@@ -15,7 +15,8 @@ namespace ShipWorks.OrderLookup.Controls.Reference
         /// <summary>
         /// Constructor
         /// </summary>
-        public FedExReferenceViewModel(IOrderLookupShipmentModel shipmentModel) : base(shipmentModel)
+        public FedExReferenceViewModel(IOrderLookupShipmentModel shipmentModel,
+            OrderLookupFieldLayoutProvider fieldLayoutProvider) : base(shipmentModel, fieldLayoutProvider)
         {
         }
 

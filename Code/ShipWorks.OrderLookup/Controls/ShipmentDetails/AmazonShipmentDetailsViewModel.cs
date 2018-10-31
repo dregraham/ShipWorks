@@ -51,7 +51,8 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
             Func<DimensionsManagerDlg> getDimensionsManagerDlg,
             ICarrierShipmentAdapterOptionsProvider carrierShipmentAdapterOptionsProvider,
             IMessenger messenger,
-            ISchedulerProvider schedulerProvider) : base(shipmentModel)
+            ISchedulerProvider schedulerProvider,
+            OrderLookupFieldLayoutProvider fieldLayoutProvider) : base(shipmentModel, fieldLayoutProvider)
         {
             this.getDimensionsManagerDlg = getDimensionsManagerDlg;
             this.carrierShipmentAdapterOptionsProvider = carrierShipmentAdapterOptionsProvider;
@@ -84,7 +85,7 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
         /// <summary>
         /// Field layout repository
         /// </summary>
-        public IOrderLookupFieldLayoutProvider FieldLayoutProvider => ShipmentModel.FieldLayoutProvider;
+        public override IOrderLookupFieldLayoutProvider FieldLayoutProvider => ShipmentModel.FieldLayoutProvider;
 
         /// <summary>
         /// Panel ID

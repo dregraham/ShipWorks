@@ -21,7 +21,7 @@ namespace ShipWorks.OrderLookup.Controls.To
             IOrderLookupShipmentModel shipmentModel,
             AddressViewModel addressViewModel,
             ISchedulerProvider schedulerProvider,
-			OrderLookupToFieldLayoutProvider fieldLayoutProvider)
+			OrderLookupFieldLayoutProvider fieldLayoutProvider)
             : base(shipmentModel, addressViewModel, schedulerProvider, fieldLayoutProvider)
         {
         }

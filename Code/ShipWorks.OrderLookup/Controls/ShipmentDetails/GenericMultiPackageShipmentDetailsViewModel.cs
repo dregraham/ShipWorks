@@ -40,8 +40,8 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
         protected GenericMultiPackageShipmentDetailsViewModel(IOrderLookupShipmentModel shipmentModel,
                                                               IInsuranceViewModel insuranceViewModel,
                                                               Func<DimensionsManagerDlg> getDimensionsManagerDlg,
-                                                              ICarrierShipmentAdapterOptionsProvider carrierShipmentAdapterOptionsProvider) :
-            base(shipmentModel)
+                                                              ICarrierShipmentAdapterOptionsProvider carrierShipmentAdapterOptionsProvider,
+                                                              OrderLookupFieldLayoutProvider fieldLayoutProvider) : base(shipmentModel, fieldLayoutProvider)
         {
             this.getDimensionsManagerDlg = getDimensionsManagerDlg;
             this.carrierShipmentAdapterOptionsProvider = carrierShipmentAdapterOptionsProvider;
@@ -65,7 +65,7 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
         /// <summary>
         /// Field layout repository
         /// </summary>
-        public IOrderLookupFieldLayoutProvider FieldLayoutProvider => ShipmentModel.FieldLayoutProvider;
+        public override IOrderLookupFieldLayoutProvider FieldLayoutProvider => ShipmentModel.FieldLayoutProvider;
 
         /// <summary>
         /// Panel ID

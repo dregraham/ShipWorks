@@ -25,7 +25,7 @@ namespace ShipWorks.OrderLookup.Controls.Rating
     [KeyedComponent(typeof(IRatingViewModel), ShipmentTypeCode.UpsOnLineTools)]
     [KeyedComponent(typeof(IRatingViewModel), ShipmentTypeCode.Usps)]
     [WpfView(typeof(GenericRatingControl))]
-    public class GenericRatingViewModel : RatingPanelViewModel, IRatingViewModel
+    public class GenericRatingViewModel : RatingPanelViewModel, IRatingViewModel, IOrderLookupViewModel
     {
         /// <summary>
         /// Constructor
@@ -99,11 +99,6 @@ namespace ShipWorks.OrderLookup.Controls.Rating
                 ShipmentModel.SelectedRate = SelectedRate;
             }
         }
-
-        /// <summary>
-        /// Field layout repository
-        /// </summary>
-        public IOrderLookupFieldLayoutRepository FieldLayoutRepository => ShipmentModel.FieldLayoutRepository;
 
         /// <summary>
         /// Dispose

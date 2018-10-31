@@ -25,7 +25,7 @@ namespace ShipWorks.OrderLookup.Controls.From
                 ICarrierAccountRetrieverFactory carrierAccountRetrieverFactory,
                 AddressViewModel addressViewModel,
                 ISchedulerProvider schedulerProvider,
-                OrderLookupFromFieldLayoutProvider fieldLayoutProvider) :
+                OrderLookupFieldLayoutProvider fieldLayoutProvider) :
             base(shipmentModel, shipmentTypeManager, carrierAccountRetrieverFactory, addressViewModel, schedulerProvider, fieldLayoutProvider)
         {
             ShipmentModel.PropertyChanged += UspsShipmentModelPropertyChanged;
