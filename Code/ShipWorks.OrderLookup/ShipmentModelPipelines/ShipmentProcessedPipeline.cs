@@ -3,9 +3,11 @@ using System.Linq;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using Interapptive.Shared.UI;
+using ShipWorks.ApplicationCore;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Messaging.Messages.Shipping;
+using ShipWorks.Settings;
 
 namespace ShipWorks.OrderLookup.ShipmentModelPipelines
 {
@@ -15,14 +17,16 @@ namespace ShipWorks.OrderLookup.ShipmentModelPipelines
     public class ShipmentProcessedPipeline : IOrderLookupShipmentModelPipeline
     {
         private readonly IMessageHelper messageHelper;
+        private readonly IMainForm mainForm;
         private readonly IMessenger messenger;
 
         /// <summary>
         /// ctor
         /// </summary>
-        public ShipmentProcessedPipeline(IMessenger messenger, IMessageHelper messageHelper)
+        public ShipmentProcessedPipeline(IMessenger messenger, IMessageHelper messageHelper, IMainForm mainForm)
         {
             this.messageHelper = messageHelper;
+            this.mainForm = mainForm;
             this.messenger = messenger;
         }
 
@@ -31,6 +35,7 @@ namespace ShipWorks.OrderLookup.ShipmentModelPipelines
         /// </summary>
         public IDisposable Register(IOrderLookupShipmentModel model) => new CompositeDisposable(
             messenger.OfType<ShipmentsProcessedMessage>()
+                .Where(_ => mainForm.UIMode == UIMode.OrderLookup)
                 .Where(x => x.Shipments.All(y => y.IsSuccessful))
                 .Subscribe(x => HandleSuccessfulShipment(model, x)),
             messenger.OfType<ShipmentsProcessedMessage>()
@@ -47,7 +52,8 @@ namespace ShipWorks.OrderLookup.ShipmentModelPipelines
 
             messageHelper.ShowPopup(
                 "Processed Successfully\n" +
-                $"Order: {message.Shipments.FirstOrDefault().Shipment?.Order.OrderNumberComplete}");
+                $"Order: {message.Shipments.FirstOrDefault().Shipment?.Order.OrderNumberComplete}",
+                TimeSpan.FromSeconds(1.5));
         }
     }
 }

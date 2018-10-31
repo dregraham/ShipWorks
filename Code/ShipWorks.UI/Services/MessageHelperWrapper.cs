@@ -132,6 +132,23 @@ namespace ShipWorks.UI.Services
         }
 
         /// <summary>
+        /// Show a popup message
+        /// </summary>
+        public void ShowPopup(string message, TimeSpan fadeTime)
+        {
+            Control owner = ownerFactory();
+
+            if (owner.InvokeRequired)
+            {
+                owner.Invoke((Action<string, TimeSpan>) ShowPopup, message, fadeTime);
+            }
+            else
+            {
+                popupViewModelFactory().Show(message, owner, fadeTime);
+            }
+        }
+
+        /// <summary>
         /// Show a popup message with a Keyboard Icon
         /// </summary>
         public void ShowKeyboardPopup(string message)

@@ -51,11 +51,22 @@ namespace ShipWorks.UI.Dialogs.Popup
         public void Show(string message, IWin32Window owner) =>
             Show(message, owner, NoIcon, defaultFadeStartTimeSpan);
 
+        /// <summary>
+        /// Shows the popup
+        /// </summary>
+        public void Show(string message, IWin32Window owner, TimeSpan fadeStartTimeSpan) =>
+            Show(message, owner, NoIcon, fadeStartTimeSpan);
 
+        /// <summary>
+        /// Shows popup with keyboard icon
+        /// </summary>
         public void ShowWithKeyboard(string message, Control owner) =>
             Show(message, owner, KeyboardIcon, iconFadeStartTimeSpan);
             
 
+        /// <summary>
+        /// Shows the popup with barcode icon
+        /// </summary>
         public void ShowWithBarcode(string message, Control owner) =>
             Show(message, owner, BarcodeIcon, iconFadeStartTimeSpan);
 
