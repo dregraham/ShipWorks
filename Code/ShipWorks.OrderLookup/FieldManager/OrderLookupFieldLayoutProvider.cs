@@ -7,6 +7,9 @@ using ShipWorks.Shipping.Settings;
 
 namespace ShipWorks.OrderLookup.FieldManager
 {
+    /// <summary>
+    /// Class for getting field layouts
+    /// </summary>
     [Component(RegistrationType.Self)]
     public class OrderLookupFieldLayoutProvider : IOrderLookupFieldLayoutProvider
     {
