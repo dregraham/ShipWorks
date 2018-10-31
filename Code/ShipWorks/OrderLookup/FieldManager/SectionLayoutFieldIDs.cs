@@ -48,8 +48,6 @@ namespace ShipWorks.OrderLookup.FieldManager
         ShipmentDetailsDimensions,
         ShipmentDetailsAddToWeight,
         ShipmentDetailsInsurance,
-        ShipmentDetailsOnTracSaturdayDelivery,
-        ShipmentDetailsOnTracSignatureRequired,
 
         /* USPS Reference fields */
         USPSReferenceMemo1,
