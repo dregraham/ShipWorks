@@ -19,6 +19,7 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Messaging.Messages;
 using ShipWorks.Messaging.Messages.Dialogs;
 using ShipWorks.Messaging.Messages.Shipping;
+using ShipWorks.Settings;
 
 namespace ShipWorks.Shipping.Services.Dialogs
 {
@@ -77,6 +78,7 @@ namespace ShipWorks.Shipping.Services.Dialogs
                     .ObserveOn(schedulerProvider.WindowsFormsEventLoop)
                     .Subscribe(x => OpenShippingDialog(x)),
                 messenger.OfType<ShipAgainMessage>()
+                    .Where(m => m.UIMode == UIMode.Batch)
                     .SelectInBackgroundWithDialog(schedulerProvider, CreateProgressDialog, ShipAgain)
                     .Where(x => x != null)
                     .Select(x => new OpenShippingDialogMessage(this, new[] { x }))
