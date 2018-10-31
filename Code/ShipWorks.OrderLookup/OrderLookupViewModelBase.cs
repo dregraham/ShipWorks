@@ -10,7 +10,7 @@ namespace ShipWorks.OrderLookup
     /// </summary>
     public abstract class OrderLookupViewModelBase : IOrderLookupViewModel
     {
-        private readonly PropertyChangedHandler handler;
+        protected readonly PropertyChangedHandler handler;
         private readonly IOrderLookupFieldLayoutProvider fieldLayoutProvider;
 
         /// <summary>
