@@ -176,6 +176,7 @@
     <Compile Include="Controls\ChannelLimit\ChannelLimitDlgFactory.cs" />
     <Compile Include="Controls\ChannelLimit\ChannelLimitFactory.cs" />
     <Compile Include="Controls\ChannelLimit\ChannelLimitViewModel.cs" />
+    <Compile Include="Controls\ControlOwnerProvider.cs" />
     <Compile Include="Controls\CustomerLicenseActivation\CustomerLicenseActivationDlgViewModel.cs" />
     <Compile Include="Controls\CustomerLicenseActivation\CustomerLicenseActivationControl.xaml.cs">
       <DependentUpon>CustomerLicenseActivationControl.xaml</DependentUpon>
@@ -191,7 +192,7 @@
     </Compile>
     <Compile Include="Controls\CustomerLicenseActivation\CustomerLicenseActivationViewModel.cs" />
     <Compile Include="Controls\KeyboardShortcutDisplay.cs" />
-    <Compile Include="Controls\TemplateTextBox.cs" />
+    <Compile Include="Controls\TokenTextBox.cs" />
     <Compile Include="Controls\WebBrowser\DismissableWebBrowserDlg.xaml.cs">
       <DependentUpon>DismissableWebBrowserDlg.xaml</DependentUpon>
     </Compile>
@@ -445,7 +446,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Themes\Controls\TemplateTextBox.xaml">
+    <Page Include="Themes\Controls\TokenTextBox.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

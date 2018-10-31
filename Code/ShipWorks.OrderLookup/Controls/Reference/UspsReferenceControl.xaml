@@ -33,7 +33,7 @@
             Grid.Column="0"
             Style="{StaticResource FieldLabel}"
             Text="Memo 1" />
-        <ui:TemplateTextBox
+        <ui:TokenTextBox
             Grid.Row="0"
             Grid.Column="1"
             Style="{StaticResource FormTextBox}"
