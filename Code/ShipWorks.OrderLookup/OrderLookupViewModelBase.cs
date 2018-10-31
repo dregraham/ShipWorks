@@ -32,13 +32,13 @@ namespace ShipWorks.OrderLookup
         /// <summary>
         /// Title of the section
         /// </summary>
-        [Obfuscation(Exclude = true)]
+        [Obfuscation(Exclude = true, StripAfterObfuscation = false)]
         public abstract string Title { get; protected set; }
 
         /// <summary>
         /// Is the section visible
         /// </summary>
-        [Obfuscation(Exclude = true)]
+        [Obfuscation(Exclude = true, StripAfterObfuscation = false)]
         public virtual bool Visible { get; protected set; } = true;
 
         /// <summary>
@@ -49,12 +49,13 @@ namespace ShipWorks.OrderLookup
         /// <summary>
         /// Field layout repository
         /// </summary>
+        [Obfuscation(Exclude = true, StripAfterObfuscation = false)]
         public virtual IOrderLookupFieldLayoutProvider FieldLayoutProvider => fieldLayoutProvider;
 
         /// <summary>
         /// The order lookup ShipmentModel
         /// </summary>
-        [Obfuscation(Exclude = true)]
+        [Obfuscation(Exclude = true, StripAfterObfuscation = false)]
         public IOrderLookupShipmentModel ShipmentModel { get; }
 
         /// <summary>

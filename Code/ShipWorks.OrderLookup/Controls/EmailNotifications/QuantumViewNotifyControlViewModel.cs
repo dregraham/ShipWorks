@@ -32,23 +32,24 @@ namespace ShipWorks.OrderLookup.Controls.EmailNotifications
         /// <summary>
         /// Field layout repository
         /// </summary>
+        [Obfuscation(Exclude = true, StripAfterObfuscation = false)]
         public override IOrderLookupFieldLayoutProvider FieldLayoutProvider => ShipmentModel.FieldLayoutProvider;
 
         /// <summary>
         /// Panel ID
         /// </summary>
         public override SectionLayoutIDs PanelID => SectionLayoutIDs.UPSQuantumViewNotify;
-
+        
         /// <summary>
         /// Title of the section
         /// </summary>
-        [Obfuscation(Exclude = true)]
+        [Obfuscation(Exclude = true, StripAfterObfuscation = false)]
         public override string Title { get; protected set; } = "Quantum View Notify";
 
         /// <summary>
         /// Subject types
         /// </summary>
-        [Obfuscation(Exclude = true)]
+        [Obfuscation(Exclude = true, StripAfterObfuscation = false)]
         public Dictionary<int, string> SubjectTypes
         {
             get => subjectTypes;
@@ -58,7 +59,7 @@ namespace ShipWorks.OrderLookup.Controls.EmailNotifications
         /// <summary>
         /// Sender notifications flag
         /// </summary>
-        [Obfuscation(Exclude = true)]
+        [Obfuscation(Exclude = true, StripAfterObfuscation = false)]
         public UpsEmailNotificationType Sender
         {
             get => (UpsEmailNotificationType) ShipmentModel.ShipmentAdapter.Shipment.Ups.EmailNotifySender;
@@ -69,7 +70,7 @@ namespace ShipWorks.OrderLookup.Controls.EmailNotifications
         /// <summary>
         /// Recipient notifications flag
         /// </summary>
-        [Obfuscation(Exclude = true)]
+        [Obfuscation(Exclude = true, StripAfterObfuscation = false)]
         public UpsEmailNotificationType Recipient
         {
             get => (UpsEmailNotificationType) ShipmentModel.ShipmentAdapter.Shipment.Ups.EmailNotifyRecipient;
@@ -80,7 +81,7 @@ namespace ShipWorks.OrderLookup.Controls.EmailNotifications
         /// <summary>
         /// Other notifications flag
         /// </summary>
-        [Obfuscation(Exclude = true)]
+        [Obfuscation(Exclude = true, StripAfterObfuscation = false)]
         public UpsEmailNotificationType Other
         {
             get => (UpsEmailNotificationType) ShipmentModel.ShipmentAdapter.Shipment.Ups.EmailNotifyOther;

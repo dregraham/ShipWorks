@@ -90,6 +90,7 @@ namespace ShipWorks.OrderLookup.Controls
             if (!key.HasValue)
             {
                 Context = null;
+                Visible = false;
             }
             else if (createSectionViewModel.TryGetValue(key.Value, out T newModel))
             {
@@ -105,6 +106,7 @@ namespace ShipWorks.OrderLookup.Controls
             else
             {
                 Context = null;
+                Visible = false;
             }
         }
 
