@@ -155,6 +155,10 @@ namespace ShipWorks.OrderLookup
 
                         shipmentLoadTelemetricResult.WriteTo(telemetryEvent);
                     }
+                    else
+                    {
+                        shipmentModel.LoadOrder(null);
+                    }
                 }
             }
             catch (Exception ex)
