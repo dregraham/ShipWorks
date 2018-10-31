@@ -2,30 +2,30 @@
 using System.Linq;
 using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.OrderLookup.FieldManager;
-using ShipWorks.Shipping.Settings;
 
 namespace ShipWorks.OrderLookup.Controls.From
 {
     /// <summary>
     /// Field layout provider specifically for From addresses
     /// </summary>
-    [Component(RegistrationType.Self)]
-    public class OrderLookupFromFieldLayoutProvider : OrderLookupFieldLayoutProvider
+    public class OrderLookupFromFieldLayoutProvider : IOrderLookupFieldLayoutProvider
     {
+        private readonly OrderLookupFieldLayoutProvider orderLookupFieldLayoutProvider;
+
         /// <summary>
         /// Constructor
         /// </summary>
-        public OrderLookupFromFieldLayoutProvider(IShippingSettings shippingSettings,
-            IOrderLookupFieldLayoutDefaults defaultsProvider) : base(shippingSettings, defaultsProvider)
+        public OrderLookupFromFieldLayoutProvider(OrderLookupFieldLayoutProvider orderLookupFieldLayoutProvider)
         {
+            this.orderLookupFieldLayoutProvider = orderLookupFieldLayoutProvider;
         }
 
         /// <summary>
         /// Fetch the section layouts from the database, excluding To address fields.
         /// </summary>
-        public override IEnumerable<SectionLayout> Fetch()
+        public IEnumerable<SectionLayout> Fetch()
         {
-            return base.Fetch().Where(p => p.Id != SectionLayoutIDs.To);
+            return orderLookupFieldLayoutProvider.Fetch().Where(p => p.Id != SectionLayoutIDs.To);
         }
     }
 }

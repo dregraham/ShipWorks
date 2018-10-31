@@ -9,6 +9,7 @@
     xmlns:sw="http://schemas.shipworks.com/sw"
     xmlns:sys="clr-namespace:System;assembly=mscorlib"
     xmlns:ui="http://schemas.shipworks.com/ui"
+    xmlns:ns="clr-namespace:ShipWorks.OrderLookup.FieldManager;assembly=ShipWorks.Core"
     d:DesignWidth="800"
     FontFamily="/ShipWorks.OrderLookup;component/#Roboto"
     mc:Ignorable="d">
@@ -22,9 +23,22 @@
             <ui:BooleanAndConverter x:Key="BooleanAndConverter" />
         </ResourceDictionary>
     </UserControl.Resources>
-    <StackPanel>
-        <TextBlock Style="{StaticResource Header}" Text="Origin" />
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="85" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <ui:FieldLayoutRowDefinition FieldID="{x:Static ns:SectionLayoutFieldIDs.Origin}" /> <!-- 0 Origin header -->
+            <ui:FieldLayoutRowDefinition FieldID="{x:Static ns:SectionLayoutFieldIDs.Origin}" /> <!-- 1 Origin dropdown-->
+            <RowDefinition Height="Auto" /> <!-- 2 Supports accounts/account dropdown -->
+        </Grid.RowDefinitions>
+        <TextBlock Style="{StaticResource Header}" Text="Origin" Grid.Row="0" Grid.ColumnSpan="2" />
         <ComboBox
+            Grid.Row="1"
+            Grid.Column="0"
+            Grid.ColumnSpan="2"
             x:Name="OriginDropDown"
             ui:UpdateWhenMessageReceived.MessageType="{x:Type sw:OriginAddressChangedMessage}"
             DisplayMemberPath="Value"
@@ -44,7 +58,7 @@
             </ComboBox.SelectedValue>
         </ComboBox>
 
-        <local:OrderLookupAddress DataContext="{Binding Address}">
+        <local:OrderLookupAddress DataContext="{Binding Address}" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2">
             <local:OrderLookupAddress.IsEnabled>
                 <MultiBinding Converter="{StaticResource BooleanAndConverter}">
                     <Binding Mode="OneWay" Path="ShipmentModel.ShipmentAllowEditing" />
@@ -59,6 +73,6 @@
                 </MultiBinding>
             </local:OrderLookupAddress.IsEnabled>
         </local:OrderLookupAddress>
-    </StackPanel>
+    </Grid>
 
 </UserControl>

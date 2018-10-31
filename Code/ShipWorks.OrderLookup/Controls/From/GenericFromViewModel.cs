@@ -6,6 +6,7 @@ using System.Reactive.Linq;
 using System.Reflection;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.ComponentRegistration;
+using ShipWorks.Core.UI;
 using Interapptive.Shared.Threading;
 using ShipWorks.Data.Model.Custom;
 using ShipWorks.Data.Model.Custom.EntityClasses;
@@ -33,7 +34,7 @@ namespace ShipWorks.OrderLookup.Controls.From
         private readonly IOrderLookupShipmentModel shipmentModel;
         private readonly ICarrierAccountRetrieverFactory carrierAccountRetrieverFactory;
         private readonly IShipmentTypeManager shipmentTypeManager;
-        private readonly OrderLookupFromFieldLayoutProvider fieldLayoutProvider;
+        private readonly IOrderLookupFieldLayoutProvider fieldLayoutProvider;
 
         private readonly AddressViewModel addressViewModel;
         private readonly ISchedulerProvider schedulerProvider;
@@ -47,7 +48,7 @@ namespace ShipWorks.OrderLookup.Controls.From
             ICarrierAccountRetrieverFactory carrierAccountRetrieverFactory,
             AddressViewModel addressViewModel,
             ISchedulerProvider schedulerProvider,
-            OrderLookupFromFieldLayoutProvider fieldLayoutProvider) : base(shipmentModel)
+            OrderLookupFromFieldLayoutProvider fieldLayoutProvider) : base(shipmentModel, fieldLayoutProvider)
         {
             this.schedulerProvider = schedulerProvider;
             this.fieldLayoutProvider = fieldLayoutProvider;

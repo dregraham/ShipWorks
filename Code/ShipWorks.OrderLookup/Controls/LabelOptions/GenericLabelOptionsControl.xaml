@@ -19,29 +19,12 @@
                 <ResourceDictionary Source="/ShipWorks.OrderLookup;component/Styles/OrderLookupStyle.xaml" />
                 <ResourceDictionary Source="/ShipWorks.OrderLookup;component/Styles/Shapes.xaml" />
             </ResourceDictionary.MergedDictionaries>
-            <ui:HeightWhenFieldAllowedConverter x:Key="HeightWhenFieldAllowedConverter"/>
         </ResourceDictionary>
     </UserControl.Resources>
     <Grid IsEnabled="{Binding ShipmentModel.ShipmentAllowEditing}">
         <Grid.RowDefinitions>
-            <RowDefinition>
-                <RowDefinition.Height>
-                    <MultiBinding Converter="{StaticResource HeightWhenFieldAllowedConverter}">
-                        <Binding Path="ShipmentModel.FieldLayoutRepository" Mode="OneWay" />
-                        <Binding Source="{x:Static ns:SectionLayoutFieldIDs.LabelOptionsShipDate}" />
-                        <Binding Source="{x:Static GridLength.Auto}" />
-                    </MultiBinding>
-                </RowDefinition.Height>
-            </RowDefinition>
-            <RowDefinition>
-                <RowDefinition.Height>
-                    <MultiBinding Converter="{StaticResource HeightWhenFieldAllowedConverter}">
-                        <Binding Path="ShipmentModel.FieldLayoutRepository" Mode="OneWay" />
-                        <Binding Source="{x:Static ns:SectionLayoutFieldIDs.LabelOptionsRequestedLabelFormat}" />
-                        <Binding Source="{x:Static GridLength.Auto}" />
-                    </MultiBinding>
-                </RowDefinition.Height>
-            </RowDefinition>
+            <ui:FieldLayoutRowDefinition FieldID="{x:Static ns:SectionLayoutFieldIDs.LabelOptionsShipDate}" />
+            <ui:FieldLayoutRowDefinition FieldID="{x:Static ns:SectionLayoutFieldIDs.LabelOptionsRequestedLabelFormat}" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto" />

@@ -50,15 +50,7 @@
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
-                <RowDefinition>
-                    <RowDefinition.Height>
-                        <MultiBinding Converter="{StaticResource HeightWhenFieldAllowedConverter}">
-                            <Binding Path="FieldLayoutProvider" Mode="OneWay" />
-                            <Binding Source="{x:Static ns:SectionLayoutFieldIDs.FullName}" />
-                            <Binding Source="{x:Static GridLength.Auto}" />
-                        </MultiBinding>
-                    </RowDefinition.Height>
-                </RowDefinition>
+                <ui:FieldLayoutRowDefinition FieldID="{x:Static ns:SectionLayoutFieldIDs.FullName}" />
                 <RowDefinition />
             </Grid.RowDefinitions>
 

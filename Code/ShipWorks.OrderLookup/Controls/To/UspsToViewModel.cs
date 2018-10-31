@@ -1,5 +1,6 @@
 ﻿using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Threading;
+using ShipWorks.OrderLookup.FieldManager;
 using ShipWorks.Shipping;
 using ShipWorks.UI;
 using ShipWorks.UI.Controls.AddressControl;

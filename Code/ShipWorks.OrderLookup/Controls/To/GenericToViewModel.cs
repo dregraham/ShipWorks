@@ -36,10 +36,11 @@ namespace ShipWorks.OrderLookup.Controls.To
             IOrderLookupShipmentModel shipmentModel,
             AddressViewModel addressViewModel,
             ISchedulerProvider schedulerProvider,
+            OrderLookupToFieldLayoutProvider fieldLayoutProvider)
         {
             this.schedulerProvider = schedulerProvider;
             this.addressViewModel = addressViewModel;
-            this.fieldLayoutProvider = fieldLayoutProvider;
+            this.fieldLayoutProvider = new OrderLookupToFieldLayoutProvider(fieldLayoutProvider); 
             this.addressViewModel.FieldLayoutProvider = this.fieldLayoutProvider;
 
             if (ShipmentModel?.ShipmentAdapter?.Store != null)

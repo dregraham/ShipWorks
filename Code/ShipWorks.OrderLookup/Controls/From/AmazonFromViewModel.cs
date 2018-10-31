@@ -1,5 +1,4 @@
 ﻿using Interapptive.Shared.ComponentRegistration;
-using Interapptive.Shared.Threading;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers;
 using ShipWorks.UI;
@@ -17,7 +16,7 @@ namespace ShipWorks.OrderLookup.Controls.From
             ICarrierAccountRetrieverFactory carrierAccountRetrieverFactory,
             AddressViewModel addressViewModel,
             ISchedulerProvider schedulerProvider,
-			OrderLookupFromFieldLayoutProvider fieldLayoutProvider) :
+            OrderLookupFromFieldLayoutProvider fieldLayoutProvider) 
             base(shipmentModel, shipmentTypeManager, carrierAccountRetrieverFactory, addressViewModel, schedulerProvider, fieldLayoutProvider)
         {
         }

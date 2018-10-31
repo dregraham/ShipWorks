@@ -15,47 +15,14 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/ShipWorks.OrderLookup;component/Styles/OrderLookupStyle.xaml" />
             </ResourceDictionary.MergedDictionaries>
-            <ui:HeightWhenFieldAllowedConverter x:Key="HeightWhenFieldAllowedConverter"/>
         </ResourceDictionary>
     </UserControl.Resources>
     <Grid IsEnabled="{Binding ShipmentModel.ShipmentAllowEditing}">
         <Grid.RowDefinitions>
-            <RowDefinition>
-                <RowDefinition.Height>
-                    <MultiBinding Converter="{StaticResource HeightWhenFieldAllowedConverter}">
-                        <Binding Path="ShipmentModel.FieldLayoutRepository" Mode="OneWay" />
-                        <Binding Source="{x:Static ns:SectionLayoutFieldIDs.FedExSignatureAndReferenceReferenceNumber}" />
-                        <Binding Source="{x:Static GridLength.Auto}" />
-                    </MultiBinding>
-                </RowDefinition.Height>
-            </RowDefinition>
-            <RowDefinition>
-                <RowDefinition.Height>
-                    <MultiBinding Converter="{StaticResource HeightWhenFieldAllowedConverter}">
-                        <Binding Path="ShipmentModel.FieldLayoutRepository" Mode="OneWay" />
-                        <Binding Source="{x:Static ns:SectionLayoutFieldIDs.FedExSignatureAndReferenceInvoiceNumber}" />
-                        <Binding Source="{x:Static GridLength.Auto}" />
-                    </MultiBinding>
-                </RowDefinition.Height>
-            </RowDefinition>
-            <RowDefinition>
-                <RowDefinition.Height>
-                    <MultiBinding Converter="{StaticResource HeightWhenFieldAllowedConverter}">
-                        <Binding Path="ShipmentModel.FieldLayoutRepository" Mode="OneWay" />
-                        <Binding Source="{x:Static ns:SectionLayoutFieldIDs.FedExSignatureAndReferencePostOfficeNumber}" />
-                        <Binding Source="{x:Static GridLength.Auto}" />
-                    </MultiBinding>
-                </RowDefinition.Height>
-            </RowDefinition>
-            <RowDefinition>
-                <RowDefinition.Height>
-                    <MultiBinding Converter="{StaticResource HeightWhenFieldAllowedConverter}">
-                        <Binding Path="ShipmentModel.FieldLayoutRepository" Mode="OneWay" />
-                        <Binding Source="{x:Static ns:SectionLayoutFieldIDs.FedExSignatureAndReferenceIntegrity}" />
-                        <Binding Source="{x:Static GridLength.Auto}" />
-                    </MultiBinding>
-                </RowDefinition.Height>
-            </RowDefinition>
+            <ui:FieldLayoutRowDefinition FieldID="{x:Static ns:SectionLayoutFieldIDs.FedExSignatureAndReferenceReferenceNumber}" />
+            <ui:FieldLayoutRowDefinition FieldID="{x:Static ns:SectionLayoutFieldIDs.FedExSignatureAndReferenceInvoiceNumber}" />
+            <ui:FieldLayoutRowDefinition FieldID="{x:Static ns:SectionLayoutFieldIDs.FedExSignatureAndReferencePostOfficeNumber}" />
+            <ui:FieldLayoutRowDefinition FieldID="{x:Static ns:SectionLayoutFieldIDs.FedExSignatureAndReferenceIntegrity}" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto" />

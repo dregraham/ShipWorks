@@ -15,7 +15,6 @@
     mc:Ignorable="d">
     <UserControl.Resources>
         <ResourceDictionary>
-            <ui:HeightWhenFieldAllowedConverter x:Key="HeightWhenFieldAllowedConverter"/>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/ShipWorks.OrderLookup;component/Styles/OrderLookupStyle.xaml" />
                 <ResourceDictionary Source="/ShipWorks.OrderLookup;component/Styles/Shapes.xaml" />
@@ -24,15 +23,7 @@
     </UserControl.Resources>
     <Grid IsEnabled="{Binding ShipmentModel.ShipmentAllowEditing}">
         <Grid.RowDefinitions>
-            <RowDefinition>
-                <RowDefinition.Height>
-                    <MultiBinding Converter="{StaticResource HeightWhenFieldAllowedConverter}">
-                        <Binding Path="ShipmentModel.FieldLayoutRepository" Mode="OneWay" />
-                        <Binding Source="{x:Static ns:SectionLayoutFieldIDs.LabelOptionsShipDate}" />
-                        <Binding Source="{x:Static GridLength.Auto}" />
-                    </MultiBinding>
-                </RowDefinition.Height>
-            </RowDefinition>
+            <ui:FieldLayoutRowDefinition FieldID="{x:Static ns:SectionLayoutFieldIDs.LabelOptionsShipDate}" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />

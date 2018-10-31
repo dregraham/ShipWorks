@@ -4,6 +4,7 @@ using System.Reflection;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Threading;
 using Interapptive.Shared.Utility;
+using ShipWorks.OrderLookup.FieldManager;
 using ShipWorks.Shipping;
 using ShipWorks.UI;
 using ShipWorks.UI.Controls.AddressControl;
@@ -20,7 +21,7 @@ namespace ShipWorks.OrderLookup.Controls.To
         /// <summary>
         /// Constructor
         /// </summary>
-        public GenericToWithResidentialDeterminationViewModel(
+        public GenericToWithResidentialDeterminationViewModel(IOrderLookupShipmentModel shipmentModel, AddressViewModel addressViewModel, OrderLookupToFieldLayoutProvider fieldLayoutProvider) :
             IOrderLookupShipmentModel shipmentModel,
             AddressViewModel addressViewModel,
             ISchedulerProvider schedulerProvider,
