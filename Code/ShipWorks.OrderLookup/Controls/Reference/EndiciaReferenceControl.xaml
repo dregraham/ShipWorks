@@ -5,10 +5,11 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:reference="clr-namespace:ShipWorks.OrderLookup.Controls.Reference"
+    xmlns:ui="http://schemas.shipworks.com/ui"
+    d:DataContext="{d:DesignInstance reference:EndiciaReferenceViewModel}"
     FontFamily="/ShipWorks.OrderLookup;component/#Roboto"
     FontSize="12"
-    mc:Ignorable="d"
-    d:DataContext="{d:DesignInstance reference:EndiciaReferenceViewModel}">
+    mc:Ignorable="d">
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -35,28 +36,22 @@
             Grid.Column="0"
             Style="{StaticResource FieldLabel}"
             Text="Rubber Stamp 1" />
-        <TextBox
+        <ui:TokenTextBox
             Grid.Row="0"
             Grid.Column="1"
-            Style="{StaticResource FormTextBox}">
-            <TextBox.Text>
-                <Binding Path="ShipmentModel.ShipmentAdapter.Shipment.Postal.Memo1" />
-            </TextBox.Text>
-        </TextBox>
+            Style="{StaticResource FormTextBox}"
+            Text="{Binding ShipmentModel.ShipmentAdapter.Shipment.Postal.Memo1}" />
 
         <TextBlock
             Grid.Row="1"
             Grid.Column="0"
             Style="{StaticResource FieldLabel}"
             Text="Rubber Stamp 2" />
-        <TextBox
+        <ui:TokenTextBox
             Grid.Row="1"
             Grid.Column="1"
-            Style="{StaticResource FormTextBox}">
-            <TextBox.Text>
-                <Binding Path="ShipmentModel.ShipmentAdapter.Shipment.Postal.Memo2" />
-            </TextBox.Text>
-        </TextBox>
+            Style="{StaticResource FormTextBox}"
+            Text="{Binding ShipmentModel.ShipmentAdapter.Shipment.Postal.Memo2}" />
 
         <TextBlock
             Grid.Row="2"
@@ -64,15 +59,12 @@
             Margin="0"
             Style="{StaticResource FieldLabel}"
             Text="Rubber Stamp 3" />
-        <TextBox
+        <ui:TokenTextBox
             Grid.Row="2"
             Grid.Column="1"
             Margin="10,0,0,0"
-            Style="{StaticResource FormTextBox}">
-            <TextBox.Text>
-                <Binding Path="ShipmentModel.ShipmentAdapter.Shipment.Postal.Memo3" />
-            </TextBox.Text>
-        </TextBox>
+            Style="{StaticResource FormTextBox}"
+            Text="{Binding ShipmentModel.ShipmentAdapter.Shipment.Postal.Memo3}" />
 
         <StackPanel
             Grid.Row="3"
@@ -100,7 +92,7 @@
             Margin="0"
             Style="{StaticResource FieldLabel}"
             Text="Reference ID" />
-        <TextBox
+        <ui:TokenTextBox
             Grid.Row="4"
             Grid.Column="1"
             Margin="10,0,0,0"

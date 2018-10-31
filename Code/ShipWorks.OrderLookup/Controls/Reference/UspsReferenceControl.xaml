@@ -44,14 +44,14 @@
             Grid.Column="0"
             Style="{StaticResource FieldLabel}"
             Text="Memo 2" />
-        <TextBox
+        <ui:TokenTextBox
             Grid.Row="1"
             Grid.Column="1"
             Style="{StaticResource FormTextBox}">
             <TextBox.Text>
                 <Binding Path="ShipmentModel.ShipmentAdapter.Shipment.Postal.Memo2" />
             </TextBox.Text>
-        </TextBox>
+        </ui:TokenTextBox>
 
         <TextBlock
             Grid.Row="2"
@@ -59,7 +59,7 @@
             Margin="0"
             Style="{StaticResource FieldLabel}"
             Text="Memo 3" />
-        <TextBox
+        <ui:TokenTextBox
             Grid.Row="2"
             Grid.Column="1"
             Margin="10,0,0,0"
@@ -67,6 +67,6 @@
             <TextBox.Text>
                 <Binding Path="ShipmentModel.ShipmentAdapter.Shipment.Postal.Memo3" />
             </TextBox.Text>
-        </TextBox>
+        </ui:TokenTextBox>
     </Grid>
 </UserControl>
