@@ -1841,10 +1841,10 @@ namespace ShipWorks
             }
         }
 
-        public void SelectOrderLookupTab()
-        {
-            throw new NotImplementedException();
-        }
+        /// <summary>
+        /// Select the order lookup tab
+        /// </summary>
+        public void SelectOrderLookupTab() => ribbon.SelectedTab = ribbonTabOrderLookupViewShipping;
 
         /// <summary>
         /// Get the shipment dock control
