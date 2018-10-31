@@ -13,12 +13,11 @@ namespace ShipWorks.Messaging.Messages.Shipping
         /// <summary>
         /// Constructor
         /// </summary>
-        public ShipAgainMessage(object sender, ShipmentEntity shipment, UIMode uiMode)
+        public ShipAgainMessage(object sender, ShipmentEntity shipment)
         {
             Sender = sender;
             Shipment = shipment;
             MessageId = Guid.NewGuid();
-            UIMode = uiMode;
         }
 
         /// <summary>
@@ -35,10 +34,5 @@ namespace ShipWorks.Messaging.Messages.Shipping
         /// Shipment to ship again
         /// </summary>
         public ShipmentEntity Shipment { get; }
-        
-        /// <summary>
-        /// UI mode when message was sent
-        /// </summary>
-        public UIMode UIMode { get; }
     }
 }

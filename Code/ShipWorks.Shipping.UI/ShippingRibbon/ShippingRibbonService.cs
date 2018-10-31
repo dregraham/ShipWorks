@@ -107,7 +107,7 @@ namespace ShipWorks.Shipping.UI.ShippingRibbon
         {
             if (currentShipment != null && currentShipment.Processed)
             {
-                messages.Send(new ShipAgainMessage(this, currentShipment, UIMode.Batch));
+                messages.Send(new ShipAgainMessage(this, currentShipment));
             }
         }
 

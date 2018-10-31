@@ -78,7 +78,6 @@ namespace ShipWorks.Shipping.Services.Dialogs
                     .ObserveOn(schedulerProvider.WindowsFormsEventLoop)
                     .Subscribe(x => OpenShippingDialog(x)),
                 messenger.OfType<ShipAgainMessage>()
-                    .Where(m => m.UIMode == UIMode.Batch)
                     .SelectInBackgroundWithDialog(schedulerProvider, CreateProgressDialog, ShipAgain)
                     .Where(x => x != null)
                     .Select(x => new OpenShippingDialogMessage(this, new[] { x }))
