@@ -11,6 +11,7 @@ using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Messaging.Messages;
 using ShipWorks.Messaging.Messages.Dialogs;
 using ShipWorks.Messaging.Messages.Shipping;
+using ShipWorks.Settings;
 using ShipWorks.Shipping.Services;
 using ShipWorks.UI.Controls.SandRibbon;
 using ShipWorks.Users.Security;
@@ -106,7 +107,7 @@ namespace ShipWorks.Shipping.UI.ShippingRibbon
         {
             if (currentShipment != null && currentShipment.Processed)
             {
-                messages.Send(new ShipAgainMessage(this, currentShipment));
+                messages.Send(new ShipAgainMessage(this, currentShipment, UIMode.Batch));
             }
         }
 
