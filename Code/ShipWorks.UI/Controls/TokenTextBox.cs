@@ -1,7 +1,10 @@
 ﻿using System;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
+using Autofac;
+using ShipWorks.ApplicationCore;
 using ShipWorks.Templates.Tokens;
 using ShipWorks.UI.Controls.Design;
 using WinForms = System.Windows.Forms;
@@ -15,6 +18,8 @@ namespace ShipWorks.UI.Controls
     public class TokenTextBox : TextBox
     {
         private ButtonBase editorButton;
+        private Selector suggestionSelector;
+        private ToggleButton popupButton;
         private readonly ControlOwnerProvider ownerProvider;
 
         /// <summary>
@@ -45,7 +50,22 @@ namespace ShipWorks.UI.Controls
         {
             base.OnApplyTemplate();
 
+            if (DesignModeDetector.IsDesignerHosted())
+            {
+                return;
+            }
+
             SetupEditorButton();
+            SetupSuggestions();
+            SetupPopupButton();
+        }
+
+        /// <summary>
+        /// Setup the popup button
+        /// </summary>
+        private void SetupPopupButton()
+        {
+            popupButton = GetTemplateChild("PART_TogglePopupButton") as ToggleButton;
         }
 
         /// <summary>
@@ -62,10 +82,50 @@ namespace ShipWorks.UI.Controls
 
             if (editorButton == null)
             {
-                throw new InvalidOperationException("PART_Button is not available in the template");
+                throw new InvalidOperationException("PART_EditorButton is not available in the template");
             }
 
             editorButton.Click += OnEditorButtonClick;
+        }
+
+        /// <summary>
+        /// Setup suggestions
+        /// </summary>
+        private void SetupSuggestions()
+        {
+            if (suggestionSelector != null)
+            {
+                suggestionSelector.SelectionChanged -= OnSuggestionSelectorSelectionChanged;
+            }
+
+            suggestionSelector = GetTemplateChild("PART_SuggestionSelector") as Selector;
+
+            if (suggestionSelector == null)
+            {
+                throw new InvalidOperationException("PART_SuggestionSelector is not available in the template");
+            }
+
+            using (var lifetimeScope = IoC.BeginLifetimeScope())
+            {
+                var tokenSuggestions = lifetimeScope.Resolve<ITokenSuggestionFactory>();
+                suggestionSelector.ItemsSource = tokenSuggestions.GetSuggestions(TokenUsage.Generic);
+                suggestionSelector.SelectionChanged += OnSuggestionSelectorSelectionChanged;
+            }
+        }
+
+        /// <summary>
+        /// Handle suggestion selection
+        /// </summary>
+        private void OnSuggestionSelectorSelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            var selectedToken = e.AddedItems.OfType<TokenSuggestion>().FirstOrDefault();
+            if (selectedToken != null)
+            {
+                Text = selectedToken.Xsl;
+            }
+
+            // Close the popup regardless of whether there is a selection
+            popupButton.IsChecked = false;
         }
 
         /// <summary>

@@ -35,7 +35,7 @@
                                 HorizontalScrollBarVisibility="Hidden"
                                 VerticalScrollBarVisibility="Hidden" />
                             <ToggleButton
-                                x:Name="TogglePopupButton"
+                                x:Name="PART_TogglePopupButton"
                                 Grid.Column="1"
                                 Margin="1"
                                 Content="D">
@@ -57,25 +57,33 @@
                                 Content="E" />
                             <Popup
                                 x:Name="Popup"
-                                IsOpen="{Binding IsChecked, ElementName=TogglePopupButton, Mode=TwoWay}"
+                                IsOpen="{Binding IsChecked, ElementName=PART_TogglePopupButton, Mode=TwoWay}"
                                 Placement="Bottom"
-                                PlacementTarget="{Binding ElementName=TogglePopupButton}"
+                                PlacementTarget="{Binding ElementName=PART_TogglePopupButton}"
                                 PopupAnimation="Slide"
                                 StaysOpen="false">
                                 <Border
-                                    Width="100"
-                                    Height="200"
                                     Background="White"
                                     BorderBrush="Black"
                                     BorderThickness="1">
-                                    <StackPanel>
+                                    <ListView x:Name="PART_SuggestionSelector">
+                                        <ListView.ItemTemplate>
+                                            <DataTemplate>
+                                                <StackPanel>
+                                                    <TextBlock FontWeight="bold" Text="{Binding Description}" />
+                                                    <TextBlock Text="{Binding Xsl}" />
+                                                </StackPanel>
+                                            </DataTemplate>
+                                        </ListView.ItemTemplate>
+                                    </ListView>
+                                    <!--<StackPanel>
                                         <TextBlock FontWeight="bold">
                                             <Run Text="This is a test" />
                                         </TextBlock>
                                         <TextBlock>
                                             <Run Text="//order/orderid" />
                                         </TextBlock>
-                                    </StackPanel>
+                                    </StackPanel>-->
                                 </Border>
                             </Popup>
                         </Grid>
