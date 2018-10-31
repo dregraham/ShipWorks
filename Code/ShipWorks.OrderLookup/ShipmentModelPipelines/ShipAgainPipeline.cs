@@ -53,7 +53,7 @@ namespace ShipWorks.OrderLookup.ShipmentModelPipelines
         /// </summary>
         private void ShipAgain(OrderLookupShipAgainMessage message, IOrderLookupShipmentModel model)
         {
-            using (messageHelper.ShowProgressDialog("Shipping", "Creating new shipment"))
+            using (messageHelper.ShowProgressDialog("Create Shipment", "Creating new shipment"))
             {
                 ICarrierShipmentAdapter shipmentAdapter = shippingManager.GetShipment(message.ShipmentID);
                 ShipmentEntity shipment = shippingManager.CreateShipmentCopy(shipmentAdapter.Shipment);
