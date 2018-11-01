@@ -53,6 +53,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             AllowEbayCombineLocally = source.AllowEbayCombineLocally;
             ArchivalSettingsXml = source.ArchivalSettingsXml;
             AuditEnabled = source.AuditEnabled;
+            AllowUIModeToggle = source.AllowUIModeToggle;
             
             
             
@@ -163,6 +164,12 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         public System.Boolean AuditEnabled { get; }
+        /// <summary> The AllowUIModeToggle property of the Entity Configuration<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "Configuration"."AllowUIModeToggle"<br/>
+        /// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+        public System.Boolean AllowUIModeToggle { get; }
         
         
         
