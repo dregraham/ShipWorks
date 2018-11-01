@@ -597,10 +597,10 @@ namespace ShipWorks
             //
             // buttonOrderLookupViewFields
             //
-            this.buttonOrderLookupViewFields.Guid = new System.Guid("cf121122-bbfb-4eb0-aa60-6d41d1128b12");
+            this.buttonOrderLookupViewFields.Guid = new System.Guid("A9CE2A60-E87B-4D22-B5E6-A3D02BF5ECCB");
             this.buttonOrderLookupViewFields.Image = global::ShipWorks.Properties.Resources.form_blue_edit;
             this.ribbonSecurityProvider.SetPermission(this.buttonOrderLookupViewFields, ShipWorks.Users.Security.PermissionType.ManageFields);
-            this.buttonOrderLookupViewFields.QuickAccessKey = "O";
+            this.buttonOrderLookupViewFields.QuickAccessKey = "F";
             this.buttonOrderLookupViewFields.Text = "Fields";
             this.buttonOrderLookupViewFields.TextContentRelation = Divelements.SandRibbon.TextContentRelation.Underneath;
             this.buttonOrderLookupViewFields.Activate += new System.EventHandler(this.OnManageOrderLookupFields);
@@ -935,7 +935,7 @@ namespace ShipWorks
             // buttonEditOrder
             //
             this.selectionDependentEnabler.SetEnabledWhen(this.buttonEditOrder, ShipWorks.ApplicationCore.Interaction.SelectionDependentType.OneOrder);
-            this.buttonEditOrder.Guid = new System.Guid("287f6db0-b93d-4db6-bbb1-9d0905704b59");
+            this.buttonEditOrder.Guid = new System.Guid("AFFAB209-DE03-4A93-AFFE-00399F409269");
             this.buttonEditOrder.Image = global::ShipWorks.Properties.Resources.form_blue_edit;
             this.buttonEditOrder.Padding = new Divelements.SandRibbon.WidgetEdges(3, 2, 4, 14);
             this.buttonEditOrder.QuickAccessKey = "OE";
@@ -2536,17 +2536,17 @@ namespace ShipWorks
             this.buttonOrderLookupViewCreateLabel.Guid = new System.Guid("287f6db0-b93d-4db6-bbb1-9d0905704b59");
             this.buttonOrderLookupViewCreateLabel.Image = global::ShipWorks.Properties.Resources.box_next_32_32;
             this.ribbonSecurityProvider.SetPermission(this.buttonOrderLookupViewCreateLabel, ShipWorks.Users.Security.PermissionType.ShipmentsCreateEditProcess);
-            this.buttonOrderLookupViewCreateLabel.QuickAccessKey = "OE";
+            this.buttonOrderLookupViewCreateLabel.QuickAccessKey = "C";
             this.buttonOrderLookupViewCreateLabel.Text = "Create\r\nLabel";
             this.buttonOrderLookupViewCreateLabel.TextContentRelation = Divelements.SandRibbon.TextContentRelation.Underneath;
             this.buttonOrderLookupViewCreateLabel.Activate += OnButtonOrderLookupViewCreateLabel;
             //
             // buttonOrderLookupViewManualOrder
             //
-            this.buttonOrderLookupViewManualOrder.Guid = new System.Guid("287f6db0-b93d-4db6-bbb1-9d0905704b59");
+            this.buttonOrderLookupViewManualOrder.Guid = new System.Guid("5C624ADB-4566-4FB5-99AC-FDE61E55267B");
             this.buttonOrderLookupViewManualOrder.Image = global::ShipWorks.Properties.Resources.form_blue_edit;
             this.ribbonSecurityProvider.SetPermission(this.buttonOrderLookupViewManualOrder, ShipWorks.Users.Security.PermissionType.CustomersAddOrder);
-            this.buttonOrderLookupViewManualOrder.QuickAccessKey = "OE";
+            this.buttonOrderLookupViewManualOrder.QuickAccessKey = "ON";
             this.buttonOrderLookupViewManualOrder.Text = "Manual\r\nOrder";
             this.buttonOrderLookupViewManualOrder.TextContentRelation = Divelements.SandRibbon.TextContentRelation.Underneath;
             this.buttonOrderLookupViewManualOrder.Activate += new System.EventHandler(this.OnOrderLookupManualOrder);
@@ -2567,17 +2567,17 @@ namespace ShipWorks
             this.buttonOrderLookupViewApplyProfile.Image = global::ShipWorks.Properties.Resources.document_out1;
             this.buttonOrderLookupViewApplyProfile.Padding = new Divelements.SandRibbon.WidgetEdges(8, 2, 8, 14);
             this.ribbonSecurityProvider.SetPermission(this.buttonOrderLookupViewApplyProfile, ShipWorks.Users.Security.PermissionType.ShipmentsCreateEditProcess);
-            this.buttonOrderLookupViewApplyProfile.QuickAccessKey = "L";
+            this.buttonOrderLookupViewApplyProfile.QuickAccessKey = "A";
             this.buttonOrderLookupViewApplyProfile.Text = "Apply";
             this.buttonOrderLookupViewApplyProfile.TextContentRelation = Divelements.SandRibbon.TextContentRelation.Underneath;
             //
             // buttonOrderLookupViewManageProfiles
             //
-            this.buttonOrderLookupViewManageProfiles.Guid = new System.Guid("287f6db0-b93d-4db6-bbb1-9d0905704b59");
+            this.buttonOrderLookupViewManageProfiles.Guid = new System.Guid("1A9E0525-CDF7-4327-8861-CB3DDFDF22CA");
             this.buttonOrderLookupViewManageProfiles.Image = global::ShipWorks.Properties.Resources.document_gear_32_32;
             this.buttonOrderLookupViewManageProfiles.Padding = new Divelements.SandRibbon.WidgetEdges(3, 2, 4, 14);
             this.ribbonSecurityProvider.SetPermission(this.buttonOrderLookupViewManageProfiles, ShipWorks.Users.Security.PermissionType.ShipmentsManageSettings);
-            this.buttonOrderLookupViewManageProfiles.QuickAccessKey = "OE";
+            this.buttonOrderLookupViewManageProfiles.QuickAccessKey = "M";
             this.buttonOrderLookupViewManageProfiles.Text = "Manage";
             this.buttonOrderLookupViewManageProfiles.TextContentRelation = Divelements.SandRibbon.TextContentRelation.Underneath;
             this.buttonOrderLookupViewManageProfiles.Activate += new System.EventHandler(this.OnManageShippingProfiles);
@@ -2593,20 +2593,20 @@ namespace ShipWorks
             //
             // buttonOrderLookupViewReprintLast
             //
-            this.buttonOrderLookupViewReprintLast.Guid = new System.Guid("287f6db0-b93d-4db6-bbb1-9d0905704b59");
+            this.buttonOrderLookupViewReprintLast.Guid = new System.Guid("0B1191AC-BE79-4F40-961E-F622E496F068");
             this.buttonOrderLookupViewReprintLast.Image = global::ShipWorks.Properties.Resources.printer;
             this.ribbonSecurityProvider.SetPermission(this.buttonOrderLookupViewReprintLast, ShipWorks.Users.Security.PermissionType.ShipmentsCreateEditProcess);
-            this.buttonOrderLookupViewReprintLast.QuickAccessKey = "OE";
+            this.buttonOrderLookupViewReprintLast.QuickAccessKey = "R";
             this.buttonOrderLookupViewReprintLast.Text = "Reprint\r\nLast";
             this.buttonOrderLookupViewReprintLast.TextContentRelation = Divelements.SandRibbon.TextContentRelation.Underneath;
             this.buttonOrderLookupViewReprintLast.Activate += OnOrderLookupViewReprintLastShipment;
             //
             // buttonOrderLookupViewVoidLast
             //
-            this.buttonOrderLookupViewVoidLast.Guid = new System.Guid("287f6db0-b93d-4db6-bbb1-9d0905704b59");
+            this.buttonOrderLookupViewVoidLast.Guid = new System.Guid("C1D07022-AF19-4E72-9CCF-537FCC9F25C2");
             this.buttonOrderLookupViewVoidLast.Image = global::ShipWorks.Properties.Resources.box_void_32_32;
             this.ribbonSecurityProvider.SetPermission(this.buttonOrderLookupViewVoidLast, ShipWorks.Users.Security.PermissionType.ShipmentsVoidDelete);
-            this.buttonOrderLookupViewVoidLast.QuickAccessKey = "OE";
+            this.buttonOrderLookupViewVoidLast.QuickAccessKey = "V";
             this.buttonOrderLookupViewVoidLast.Text = "Void\r\nLast";
             this.buttonOrderLookupViewVoidLast.TextContentRelation = Divelements.SandRibbon.TextContentRelation.Underneath;
             this.buttonOrderLookupViewVoidLast.Activate += new System.EventHandler(this.OnOrderLookupViewVoidLastShipment);
@@ -2635,21 +2635,21 @@ namespace ShipWorks
             //
             // buttonOrderLookupViewVoid
             //
-            this.buttonOrderLookupViewVoid.Guid = new System.Guid("287f6db0-b93d-4db6-bbb1-9d0905704b59");
+            this.buttonOrderLookupViewVoid.Guid = new System.Guid("46F7AC0D-1DD5-41B7-93AC-E0E1DD1DD2E0");
             this.buttonOrderLookupViewVoid.Image = global::ShipWorks.Properties.Resources.box_void_32_32;
             this.buttonOrderLookupViewVoid.Padding = new Divelements.SandRibbon.WidgetEdges(3, 2, 4, 14);
             this.ribbonSecurityProvider.SetPermission(this.buttonOrderLookupViewVoid, ShipWorks.Users.Security.PermissionType.ShipmentsVoidDelete);
-            this.buttonOrderLookupViewVoid.QuickAccessKey = "OE";
+            this.buttonOrderLookupViewVoid.QuickAccessKey = "V";
             this.buttonOrderLookupViewVoid.Text = "Void";
             this.buttonOrderLookupViewVoid.TextContentRelation = Divelements.SandRibbon.TextContentRelation.Underneath;
             //
             // buttonOrderLookupViewShipAgain
             //
-            this.buttonOrderLookupViewShipAgain.Guid = new System.Guid("287f6db0-b93d-4db6-bbb1-9d0905704b59");
+            this.buttonOrderLookupViewShipAgain.Guid = new System.Guid("6EBBD6E5-72EE-4BEE-9CDF-4301A55BDC70");
             this.buttonOrderLookupViewShipAgain.Image = global::ShipWorks.Properties.Resources.box_next_32_32;
             this.buttonOrderLookupViewShipAgain.Padding = new Divelements.SandRibbon.WidgetEdges(3, 2, 4, 14);
             this.ribbonSecurityProvider.SetPermission(this.buttonOrderLookupViewShipAgain, ShipWorks.Users.Security.PermissionType.ShipmentsCreateEditProcess);
-            this.buttonOrderLookupViewShipAgain.QuickAccessKey = "OE";
+            this.buttonOrderLookupViewShipAgain.QuickAccessKey = "S";
             this.buttonOrderLookupViewShipAgain.Text = "Ship Again";
             this.buttonOrderLookupViewShipAgain.TextContentRelation = Divelements.SandRibbon.TextContentRelation.Underneath;
             //
@@ -2661,7 +2661,7 @@ namespace ShipWorks
             this.buttonOrderLookupViewSCANForm.Padding = new Divelements.SandRibbon.WidgetEdges(8, 2, 8, 14);
             this.ribbonSecurityProvider.SetPermission(this.buttonOrderLookupViewSCANForm, ShipWorks.Users.Security.PermissionType.ShipmentsCreateEditProcess);
             this.buttonOrderLookupViewSCANForm.PopupWidget = this.popupOrderLookupViewSCANForm;
-            this.buttonOrderLookupViewSCANForm.QuickAccessKey = "L";
+            this.buttonOrderLookupViewSCANForm.QuickAccessKey = "N";
             this.buttonOrderLookupViewSCANForm.Text = "SCAN Form";
             this.buttonOrderLookupViewSCANForm.TextContentRelation = Divelements.SandRibbon.TextContentRelation.Underneath;
             //
