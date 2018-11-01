@@ -1,4 +1,6 @@
+using System;
 using Autofac.Extras.Moq;
+using ShipWorks.ApplicationCore;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Ship.Manipulators.Request;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
@@ -9,15 +11,18 @@ using Xunit;
 
 namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship.Manipulators.Request
 {
-    public class FedExRecipientManipulatorTest
+    [Collection(TestCollections.IoC)]
+    public class FedExRecipientManipulatorTest : IDisposable
     {
         private readonly ProcessShipmentRequest processShipmentRequest;
         private readonly ShipmentEntity shipment;
         private readonly FedExRecipientManipulator testObject;
+        private readonly AutoMock mock;
 
         public FedExRecipientManipulatorTest()
         {
-            AutoMock mock = AutoMockExtensions.GetLooseThatReturnsMocks();
+            mock = AutoMockExtensions.GetLooseThatReturnsMocks();
+            IoC.InitializeForUnitTests(mock.Container);
 
             shipment = BuildFedExShipmentEntity.SetupRequestShipmentEntity();
 
@@ -159,5 +164,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship.Manipulators.Request
             Assert.Equal(string.Empty, processShipmentRequest.RequestedShipment.Recipient.Address.StateOrProvinceCode);
             Assert.Equal("GU", processShipmentRequest.RequestedShipment.Recipient.Address.CountryCode);
         }
+
+        public void Dispose() => mock.Dispose();
     }
 }

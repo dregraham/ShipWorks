@@ -10,7 +10,6 @@ using GalaSoft.MvvmLight.CommandWpf;
 using Interapptive.Shared.Collections;
 using Shared.System.ComponentModel.DataAnnotations;
 using ShipWorks.Core.UI;
-using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.UI.ShippingPanel;
@@ -29,7 +28,7 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
 
         private readonly Func<DimensionsManagerDlg> getDimensionsManagerDlg;
         private readonly ICarrierShipmentAdapterOptionsProvider carrierShipmentAdapterOptionsProvider;
-        private List<DimensionsProfileEntity> dimensionProfiles;
+        private IDictionary<long, string> dimensionProfiles;
         private Dictionary<ShipmentTypeCode, string> providers;
         private IDictionary<int, string> packageTypes;
         private IDictionary<int, string> serviceTypes;
@@ -165,7 +164,7 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
         /// The dimension profiles
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public List<DimensionsProfileEntity> DimensionProfiles
+        public IDictionary<long, string> DimensionProfiles
         {
             get => dimensionProfiles;
             set => handler.Set(nameof(DimensionProfiles), ref dimensionProfiles, value);
@@ -286,8 +285,7 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
 
                 if (SelectedPackage.DimsProfileID != 0)
                 {
-                    DimensionsProfileEntity profile =
-                        DimensionProfiles.SingleOrDefault(p => p.DimensionsProfileID == SelectedPackage.DimsProfileID);
+                    var profile = carrierShipmentAdapterOptionsProvider.GetDimensionsProfile(SelectedPackage.DimsProfileID);
 
                     if (profile != null)
                     {
@@ -351,9 +349,10 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
         /// </summary>
         private void RefreshDimensionalProfiles()
         {
-            DimensionProfiles = carrierShipmentAdapterOptionsProvider.GetDimensionsProfiles(SelectedPackage).ToList();
+            DimensionProfiles = carrierShipmentAdapterOptionsProvider.GetDimensionsProfiles(SelectedPackage);
 
-            if (SelectedPackage != null && DimensionProfiles.None(d => d.DimensionsProfileID == SelectedPackage.DimsProfileID))
+            if (SelectedPackage != null &&
+                !DimensionProfiles.ContainsKey(SelectedPackage.DimsProfileID))
             {
                 SelectedPackage.DimsProfileID = 0;
             }

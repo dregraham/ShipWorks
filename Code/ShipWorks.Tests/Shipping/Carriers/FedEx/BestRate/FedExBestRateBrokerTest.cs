@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Autofac.Extras.Moq;
 using Moq;
+using ShipWorks.ApplicationCore;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping;
@@ -11,19 +13,24 @@ using ShipWorks.Shipping.Carriers.FedEx;
 using ShipWorks.Shipping.Carriers.FedEx.BestRate;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Insurance;
+using ShipWorks.Tests.Shared;
 using Xunit;
 
 namespace ShipWorks.Tests.Shipping.Carriers.FedEx.BestRate
 {
-    public class FedExBestRateBrokerTest
+    [Collection(TestCollections.IoC)]
+    public class FedExBestRateBrokerTest : IDisposable
     {
-
         private readonly FedExBestRateBroker testObject;
         private readonly Mock<ICarrierAccountRepository<FedExAccountEntity, IFedExAccountEntity>> genericRepositoryMock;
         private readonly Mock<FedExShipmentType> genericShipmentTypeMock;
+        private readonly AutoMock mock;
 
         public FedExBestRateBrokerTest()
         {
+            mock = AutoMockExtensions.GetLooseThatReturnsMocks();
+            IoC.InitializeForUnitTests(mock.Container);
+
             genericRepositoryMock = new Mock<ICarrierAccountRepository<FedExAccountEntity, IFedExAccountEntity>>();
             genericShipmentTypeMock = new Mock<FedExShipmentType>();
 
@@ -45,7 +52,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.BestRate
         [Fact]
         public void GetBestRates_AddsBrokerException_WhenExceptionsRateFootnoteFactoryIsReturnedFromBase()
         {
-            FedExAccountEntity account = new FedExAccountEntity() {CountryCode = "US"};
+            FedExAccountEntity account = new FedExAccountEntity() { CountryCode = "US" };
 
             genericRepositoryMock.Setup(x => x.Accounts)
                                  .Returns(new List<FedExAccountEntity> { account });
@@ -74,5 +81,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.BestRate
             Assert.Equal(1, brokerExceptions.Count);
             Assert.Equal("blah", brokerExceptions.Single().Message);
         }
+
+        public void Dispose() => mock.Dispose();
     }
 }

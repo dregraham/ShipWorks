@@ -11,6 +11,11 @@ namespace ShipWorks.Users
     public interface ICurrentUserSettings
     {
         /// <summary>
+        /// Gets the current user session
+        /// </summary>
+        IUserSession UserSession { get; }
+
+        /// <summary>
         /// Should the specified notification type be shown
         /// </summary>
         bool ShouldShowNotification(UserConditionalNotificationType notificationType);

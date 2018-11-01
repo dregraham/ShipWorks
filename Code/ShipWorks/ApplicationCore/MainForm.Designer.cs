@@ -2576,7 +2576,6 @@ namespace ShipWorks
             this.buttonOrderLookupViewManageProfiles.Guid = new System.Guid("1A9E0525-CDF7-4327-8861-CB3DDFDF22CA");
             this.buttonOrderLookupViewManageProfiles.Image = global::ShipWorks.Properties.Resources.document_gear_32_32;
             this.buttonOrderLookupViewManageProfiles.Padding = new Divelements.SandRibbon.WidgetEdges(3, 2, 4, 14);
-            this.ribbonSecurityProvider.SetPermission(this.buttonOrderLookupViewManageProfiles, ShipWorks.Users.Security.PermissionType.ShipmentsManageSettings);
             this.buttonOrderLookupViewManageProfiles.QuickAccessKey = "M";
             this.buttonOrderLookupViewManageProfiles.Text = "Manage";
             this.buttonOrderLookupViewManageProfiles.TextContentRelation = Divelements.SandRibbon.TextContentRelation.Underneath;

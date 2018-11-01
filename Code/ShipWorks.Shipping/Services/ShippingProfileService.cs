@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
-using Interapptive.Shared.Win32.Native;
-using log4net;
 using ShipWorks.Common.IO.KeyboardShortcuts;
-using ShipWorks.IO.KeyboardShortcuts;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Profiles;
 
 namespace ShipWorks.Shipping.Services
@@ -18,6 +15,7 @@ namespace ShipWorks.Shipping.Services
     public class ShippingProfileService : IShippingProfileService
     {
         private readonly IShortcutManager shortcutManager;
+        private readonly IEditableShippingProfileRepository editableShippingProfileRepository;
         private readonly IShippingProfileRepository shippingProfileRepository;
         private readonly IShipmentTypeManager shipmentTypeManager;
         private readonly IShippingProfileFactory shippingProfileFactory;
@@ -25,12 +23,15 @@ namespace ShipWorks.Shipping.Services
         /// <summary>
         /// Constructor
         /// </summary>
-        public ShippingProfileService(IShortcutManager shortcutManager,
+        public ShippingProfileService(
+            IShortcutManager shortcutManager,
+            IEditableShippingProfileRepository editableShippingProfileRepository,
             IShippingProfileRepository shippingProfileRepository,
             IShipmentTypeManager shipmentTypeManager,
             IShippingProfileFactory shippingProfileFactory)
         {
             this.shortcutManager = shortcutManager;
+            this.editableShippingProfileRepository = editableShippingProfileRepository;
             this.shippingProfileRepository = shippingProfileRepository;
             this.shipmentTypeManager = shipmentTypeManager;
             this.shippingProfileFactory = shippingProfileFactory;
@@ -39,24 +40,42 @@ namespace ShipWorks.Shipping.Services
         /// <summary>
         /// Get the configured shipment types profiles
         /// </summary>
-        public IEnumerable<IShippingProfile> GetConfiguredShipmentTypeProfiles() => 
-            shippingProfileRepository.GetAll().Where(ConfiguredShipmentTypeProfile);
+        public IEnumerable<IShippingProfile> GetConfiguredShipmentTypeProfiles() =>
+            GetConfiguredShipmentTypeProfiles(shipmentTypeManager.ConfiguredShipmentTypeCodes.ToList());
+
+        /// <summary>
+        /// Get the configured shipment types profiles
+        /// </summary>
+        private IEnumerable<IShippingProfile> GetConfiguredShipmentTypeProfiles(IEnumerable<ShipmentTypeCode> allowableShipmentTypes) =>
+            shippingProfileRepository
+                .GetAll()
+                .Where(x => ConfiguredShipmentTypeProfile(x.ShippingProfileEntity.ShipmentType, allowableShipmentTypes));
+
+        /// <summary>
+        /// Get the configured shipment types profiles
+        /// </summary>
+        public IEnumerable<IEditableShippingProfile> GetEditableConfiguredShipmentTypeProfiles() =>
+            GetEditableConfiguredShipmentTypeProfiles(shipmentTypeManager.ConfiguredShipmentTypeCodes.ToList());
+
+        /// <summary>
+        /// Get the configured shipment types profiles
+        /// </summary>
+        public IEnumerable<IEditableShippingProfile> GetEditableConfiguredShipmentTypeProfiles(IEnumerable<ShipmentTypeCode> allowableShipmentTypes) =>
+            editableShippingProfileRepository
+                .GetAll()
+                .Where(x => ConfiguredShipmentTypeProfile(x.ShippingProfileEntity.ShipmentType, allowableShipmentTypes));
 
         /// <summary>
         /// Returns true if should show in grid
         /// </summary>
-        private bool ConfiguredShipmentTypeProfile(IShippingProfile shippingProfile)
-        {
-            ShipmentTypeCode? shipmentType = shippingProfile.ShippingProfileEntity.ShipmentType;
-
-            // Return true if glbal profile or the shipment type is configured
-            return !shipmentType.HasValue || shipmentTypeManager.ConfiguredShipmentTypeCodes.Contains(shipmentType.Value);
-        }
+        /// <returns>Return true if global profile or the shipment type is configured</returns>
+        private bool ConfiguredShipmentTypeProfile(ShipmentTypeCode? shipmentType, IEnumerable<ShipmentTypeCode> allowableShipmentTypes) =>
+            !shipmentType.HasValue || allowableShipmentTypes.Contains(shipmentType.Value);
 
         /// <summary>
         /// Get the available hotkeys for the given ShippingProfile
         /// </summary>
-        public IEnumerable<KeyboardShortcutData> GetAvailableHotkeys(IShippingProfile shippingProfile)
+        public IEnumerable<KeyboardShortcutData> GetAvailableHotkeys(IEditableShippingProfile shippingProfile)
         {
             IList<KeyboardShortcutData> availableHotkeys = shortcutManager.GetAvailableHotkeys().ToList();
             KeyboardShortcutData profilesKeyboardShortcut = shippingProfile.KeyboardShortcut;
@@ -71,25 +90,37 @@ namespace ShipWorks.Shipping.Services
         /// <summary>
         /// Get the shipping profile
         /// </summary>
-        public IShippingProfile Get(long shippingProfileEntityId) =>
-            shippingProfileRepository.Get(shippingProfileEntityId);
-        
+        public IShippingProfile Get(long profileId) =>
+            shippingProfileRepository.Get(profileId);
+
+        /// <summary>
+        /// Get the shipping profile
+        /// </summary>
+        public IShippingProfile Get(IShippingProfileEntity profile) =>
+            shippingProfileRepository.Get(profile);
+
+        /// <summary>
+        /// Get the shipping profile
+        /// </summary>
+        public IEditableShippingProfile GetEditable(long shippingProfileEntityId) =>
+            editableShippingProfileRepository.Get(shippingProfileEntityId);
+
         /// <summary>
         /// Delete the shipping profile
         /// </summary>
-        public Result Delete(IShippingProfile shippingProfile) => 
-            shippingProfileRepository.Delete(shippingProfile);
+        public Result Delete(IEditableShippingProfile shippingProfile) =>
+            editableShippingProfileRepository.Delete(shippingProfile);
 
         /// <summary>
         /// Save the shipping profile
         /// </summary>
-        public Result Save(IShippingProfile shippingProfile) =>
-            shippingProfileRepository.Save(shippingProfile);
-        
+        public Result Save(IEditableShippingProfile shippingProfile) =>
+            editableShippingProfileRepository.Save(shippingProfile);
+
         /// <summary>
         /// Create an empty ShippingProfile
         /// </summary>
-        public IShippingProfile CreateEmptyShippingProfile() =>
-            shippingProfileFactory.Create();
+        public IEditableShippingProfile CreateEmptyShippingProfile() =>
+            shippingProfileFactory.CreateEditable();
     }
 }

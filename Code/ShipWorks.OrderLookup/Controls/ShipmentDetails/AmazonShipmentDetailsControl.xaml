@@ -139,9 +139,9 @@
                 <ComboBox
                     Grid.Column="0"
                     Margin="10,0,0,5"
-                    ItemTemplate="{DynamicResource DimsProfileItemTemplate}"
+                    DisplayMemberPath="Value"
                     ItemsSource="{Binding DimensionProfiles}"
-                    SelectedValuePath="DimensionsProfileID"
+                    SelectedValuePath="Key"
                     Style="{StaticResource FormComboBox}">
                     <ComboBox.SelectedValue>
                         <Binding

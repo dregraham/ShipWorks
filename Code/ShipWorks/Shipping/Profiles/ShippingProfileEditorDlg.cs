@@ -1,19 +1,15 @@
 ﻿using System;
-using System.Drawing;
-using System.Windows.Forms;
-using Interapptive.Shared.Utility;
-using Interapptive.Shared.UI;
-using ShipWorks.IO.KeyboardShortcuts;
-using Interapptive.Shared.ComponentRegistration;
 using System.Collections.Generic;
-using ShipWorks.Shipping.Settings;
+using System.Drawing;
 using System.Linq;
-using ShipWorks.Core.Messaging;
-using ShipWorks.Messaging.Messages.SingleScan;
+using System.Windows.Forms;
+using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.UI;
+using Interapptive.Shared.Utility;
 using ShipWorks.Common.IO.KeyboardShortcuts;
-using Interapptive.Shared.Collections;
-using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.Core.Messaging;
 using ShipWorks.Data.Model.Custom;
+using ShipWorks.Messaging.Messages.SingleScan;
 
 namespace ShipWorks.Shipping.Profiles
 {
@@ -24,7 +20,7 @@ namespace ShipWorks.Shipping.Profiles
     public partial class ShippingProfileEditorDlg : Form
     {
         private readonly IProfileControlFactory profileControlFactory;
-        private IShippingProfile profile;
+        private IEditableShippingProfile profile;
         private readonly IShippingProfileService shippingProfileService;
         private readonly IShipmentTypeManager shipmentTypeManager;
         private readonly IMessenger messenger;
@@ -33,10 +29,10 @@ namespace ShipWorks.Shipping.Profiles
         /// Constructor
         /// </summary>
         public ShippingProfileEditorDlg(
-            IShippingProfile profile, 
+            IEditableShippingProfile profile,
             IShippingProfileService shippingProfileService,
             IProfileControlFactory profileControlFactory,
-			IShipmentTypeManager shipmentTypeManager,
+            IShipmentTypeManager shipmentTypeManager,
             IMessenger messenger)
         {
             InitializeComponent();
@@ -89,7 +85,7 @@ namespace ShipWorks.Shipping.Profiles
             ShippingProfileControlBase newControl = null;
 
             ShipmentTypeCode? selectedProvider = (ShipmentTypeCode?) provider.SelectedValue;
-            // Create the new profile control            
+            // Create the new profile control
             if (selectedProvider.HasValue)
             {
                 newControl = profileControlFactory.Create(selectedProvider.Value);
@@ -107,7 +103,7 @@ namespace ShipWorks.Shipping.Profiles
 
                 // Load the profile data into the control
                 newControl.LoadProfile(profile.ShippingProfileEntity);
-            }            
+            }
 
             // If there is a new control, add it now
             if (newControl != null)
@@ -129,7 +125,7 @@ namespace ShipWorks.Shipping.Profiles
         {
             profile.ShippingProfileEntity.Name = profileName.Text.Trim();
             profile.ChangeShortcut(keyboardShortcut.SelectedValue as KeyboardShortcutData, barcode.Text);
-            
+
             // Have the profile control save itself
             ShippingProfileControlBase profileControl = panelSettings.Controls.Count > 0
                 ? panelSettings.Controls[0] as ShippingProfileControlBase
@@ -165,21 +161,21 @@ namespace ShipWorks.Shipping.Profiles
                     profile.Shortcut.ResetDirtyFieldsToDbValues();
                 }
             }
-            
+
             messenger.Send(new EnableSingleScanInputFilterMessage(this));
         }
-        
+
         /// <summary>
         /// Load list of available shortcuts to populated the shortcut combo box
         /// </summary>
         private void LoadShortcuts()
         {
             IEnumerable<KeyboardShortcutData> availableHotkeys = shippingProfileService.GetAvailableHotkeys(profile);
-            
+
             List<KeyValuePair<string, KeyboardShortcutData>> dataSource = new List<KeyValuePair<string, KeyboardShortcutData>>();
             dataSource.Add(new KeyValuePair<string, KeyboardShortcutData>("None", null));
             foreach (KeyboardShortcutData hotkey in availableHotkeys.OrderBy(k => k.ShortcutText))
-            {                
+            {
                 dataSource.Add(new KeyValuePair<string, KeyboardShortcutData>(hotkey.ShortcutText, hotkey));
             }
 
@@ -211,7 +207,7 @@ namespace ShipWorks.Shipping.Profiles
 
             List<KeyValuePair<string, ShipmentTypeCode?>> dataSource = new List<KeyValuePair<string, ShipmentTypeCode?>>();
             dataSource.Add(new KeyValuePair<string, ShipmentTypeCode?>("No Change", null));
-            foreach(ShipmentTypeCode shipmentType in configuredShipmentTypes)
+            foreach (ShipmentTypeCode shipmentType in configuredShipmentTypes)
             {
                 dataSource.Add(new KeyValuePair<string, ShipmentTypeCode?>(EnumHelper.GetDescription(shipmentType), shipmentType));
             }
@@ -219,7 +215,7 @@ namespace ShipWorks.Shipping.Profiles
             provider.DisplayMember = "Key";
             provider.ValueMember = "Value";
             provider.DataSource = dataSource;
-            
+
             this.provider.SelectedValueChanged += OnChangeProvider;
         }
 
@@ -232,7 +228,7 @@ namespace ShipWorks.Shipping.Profiles
 
             LoadProfileEditor();
         }
-        
+
         /// <summary>
         /// Disable accept button as scans can send an enter key
         /// </summary>

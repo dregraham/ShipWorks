@@ -12,7 +12,6 @@ using ShipWorks.Core.Messaging;
 using ShipWorks.Core.UI;
 using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Messaging.Messages;
 using ShipWorks.Messaging.Messages.Shipping;
 using ShipWorks.OrderLookup.ShipmentModelPipelines;
@@ -81,7 +80,6 @@ namespace ShipWorks.OrderLookup
         private readonly IShippingManager shippingManager;
         private readonly IMessageHelper messageHelper;
         private readonly Func<IInsuranceBehaviorChangeViewModel> createInsuranceBehaviorChange;
-        private readonly IShippingProfileService profileService;
         private readonly PropertyChangedHandler handler;
         private readonly IDisposable subscription;
         private ICarrierShipmentAdapter shipmentAdapter;
@@ -122,10 +120,8 @@ namespace ShipWorks.OrderLookup
             IShippingManager shippingManager,
             IMessageHelper messageHelper,
             Func<IInsuranceBehaviorChangeViewModel> createInsuranceBehaviorChange,
-            IShippingProfileService profileService,
             IEnumerable<IOrderLookupShipmentModelPipeline> pipelines)
         {
-            this.profileService = profileService;
             this.messenger = messenger;
             this.shippingManager = shippingManager;
             this.messageHelper = messageHelper;
@@ -134,6 +130,11 @@ namespace ShipWorks.OrderLookup
 
             subscription = new CompositeDisposable(pipelines.Select(x => x.Register(this)).ToArray());
         }
+
+        /// <summary>
+        /// Can the view accept focus
+        /// </summary>
+        public Func<bool> CanAcceptFocus { get; set; } = () => false;
 
         /// <summary>
         /// The order that is currently in context
@@ -466,16 +467,17 @@ namespace ShipWorks.OrderLookup
         /// <summary>
         /// Register the profile handler
         /// </summary>
-        public void RegisterProfileHandler(Func<Func<ShipmentTypeCode?>, Action<IShippingProfileEntity>, IDisposable> profileRegistration) =>
-            profileDisposable = profileRegistration(() => ShipmentAdapter?.ShipmentTypeCode, x => ApplyProfile(x.ShippingProfileID));
+        public void RegisterProfileHandler(Func<Func<ShipmentTypeCode?>, Action<IShippingProfile>, IDisposable> profileRegistration) =>
+            profileDisposable = profileRegistration(() => ShipmentAdapter?.ShipmentTypeCode, x => ApplyProfile(x));
 
         /// <summary>
         /// Apply the profile to the current shipment
         /// </summary>
-        public bool ApplyProfile(long profileID)
+        public bool ApplyProfile(IShippingProfile profile)
         {
-            var profile = profileService.Get(profileID);
-            if (ShipmentAdapter?.Shipment != null && profile.IsApplicable(ShipmentAdapter?.Shipment?.ShipmentTypeCode))
+            //var profile = profileService.Get(profileID);
+            if (ShipmentAdapter?.Shipment?.Processed == false &&
+                profile.IsApplicable(ShipmentAdapter.Shipment.ShipmentTypeCode))
             {
                 ShipmentNeedsBinding?.Invoke(this, EventArgs.Empty);
 

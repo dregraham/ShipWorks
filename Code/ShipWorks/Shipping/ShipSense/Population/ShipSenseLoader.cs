@@ -2,12 +2,12 @@
 using System.Threading.Tasks;
 using Autofac;
 using Interapptive.Shared.Threading;
-using Interapptive.Shared.Utility;
 using log4net;
 using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Common.Threading;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.Settings;
 using ShipWorks.Stores.Content;
 
 namespace ShipWorks.Shipping.ShipSense.Population
@@ -20,7 +20,7 @@ namespace ShipWorks.Shipping.ShipSense.Population
         private const string AppLockName = "ShipSenseLoader_Working";
         private static readonly ILog log = LogManager.GetLogger(typeof(ShipSenseLoader));
 
-        private static object runningLock = new object();
+        private static readonly object runningLock = new object();
 
         private IShipSenseLoaderGateway shipSenseLoaderGateway;
         private readonly IProgressReporter progressReporter;
@@ -29,8 +29,8 @@ namespace ShipWorks.Shipping.ShipSense.Population
         /// Initializes a new instance of the <see cref="ShipSenseLoader" /> class.
         /// </summary>
         /// <param name="progressReporter">The progress reporter.</param>
-        public ShipSenseLoader(IProgressReporter progressReporter)
-            : this(progressReporter, new ShipSenseLoaderGateway(new Knowledgebase()))
+        public ShipSenseLoader(IProgressReporter progressReporter, IShippingSettings shippingSettings)
+            : this(progressReporter, new ShipSenseLoaderGateway(new Knowledgebase(shippingSettings)))
         { }
 
         /// <summary>

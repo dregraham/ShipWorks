@@ -35,7 +35,7 @@
                 <TextBlock.Visibility>
                     <Binding Converter="{StaticResource VisibleWhenNotEqualToParameter}" Path="DimensionsProfileID">
                         <Binding.ConverterParameter>
-                            <System:Int64>0</System:Int64>
+                            <System:Int64>12</System:Int64>
                         </Binding.ConverterParameter>
                     </Binding>
                 </TextBlock.Visibility>
