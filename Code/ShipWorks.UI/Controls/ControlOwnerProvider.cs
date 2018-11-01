@@ -1,5 +1,4 @@
-﻿using System;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Interop;
 using Interapptive.Shared.Win32;
 using WinForms = System.Windows.Forms;
@@ -76,11 +75,6 @@ namespace ShipWorks.UI.Controls
             }
 
             return null;
-        }
-
-        public void Dispose()
-        {
-            throw new NotImplementedException();
         }
     }
 }

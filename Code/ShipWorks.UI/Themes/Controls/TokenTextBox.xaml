@@ -4,6 +4,10 @@
     xmlns:local="clr-namespace:ShipWorks.UI.Controls"
     xmlns:selectors="clr-namespace:ShipWorks.UI.Selectors">
 
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="/ShipWorks.UI;component/Styles/GlobalStyle.xaml" />
+    </ResourceDictionary.MergedDictionaries>
+
     <Style x:Key="FirstListViewItem" TargetType="ListViewItem">
         <Setter Property="HorizontalContentAlignment" Value="Stretch" />
         <Setter Property="BorderBrush" Value="Transparent" />
@@ -29,6 +33,49 @@
     <SolidColorBrush x:Key="TextBox.Focus.Border" Color="#FF569DE5" />
     <SolidColorBrush x:Key="ComboBox.Static.Glyph" Color="#FF606060" />
 
+    <ControlTemplate x:Key="ButtonTemplate" TargetType="{x:Type ButtonBase}">
+        <Border
+            x:Name="border"
+            Background="{TemplateBinding Background}"
+            BorderBrush="{TemplateBinding BorderBrush}"
+            BorderThickness="{TemplateBinding BorderThickness}"
+            SnapsToDevicePixels="True">
+            <ContentPresenter
+                x:Name="contentPresenter"
+                Margin="{TemplateBinding Padding}"
+                HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                Content="{TemplateBinding Content}"
+                ContentStringFormat="{TemplateBinding ContentStringFormat}"
+                ContentTemplate="{TemplateBinding ContentTemplate}"
+                Focusable="False"
+                RecognizesAccessKey="True"
+                SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+        </Border>
+        <ControlTemplate.Triggers>
+            <Trigger Property="Button.IsDefaulted" Value="True">
+                <Setter TargetName="border" Property="BorderBrush" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}" />
+            </Trigger>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter TargetName="border" Property="Background" Value="#FFBEE6FD" />
+                <Setter TargetName="border" Property="BorderBrush" Value="{StaticResource TextBox.MouseOver.Border}" />
+            </Trigger>
+            <Trigger Property="IsPressed" Value="True">
+                <Setter TargetName="border" Property="Background" Value="#FFC4E5F6" />
+                <Setter TargetName="border" Property="BorderBrush" Value="#FF2C628B" />
+            </Trigger>
+            <Trigger Property="ToggleButton.IsChecked" Value="True">
+                <Setter TargetName="border" Property="Background" Value="#FFBCDDEE" />
+                <Setter TargetName="border" Property="BorderBrush" Value="#FF245A83" />
+            </Trigger>
+            <Trigger Property="IsEnabled" Value="False">
+                <Setter TargetName="border" Property="Background" Value="#FFF4F4F4" />
+                <Setter TargetName="border" Property="BorderBrush" Value="#FFADB2B5" />
+                <Setter TargetName="contentPresenter" Property="TextElement.Foreground" Value="#FF838383" />
+            </Trigger>
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
+
     <Style TargetType="{x:Type local:TokenTextBox}">
         <Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.WindowBrushKey}}" />
         <Setter Property="BorderBrush" Value="{StaticResource TextBox.Static.Border}" />
@@ -43,116 +90,123 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type local:TokenTextBox}">
-                    <Border
-                        x:Name="border"
-                        Background="{TemplateBinding Background}"
-                        BorderBrush="{TemplateBinding BorderBrush}"
-                        BorderThickness="{TemplateBinding BorderThickness}"
-                        SnapsToDevicePixels="True">
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*" />
-                                <ColumnDefinition Width="Auto" />
-                                <ColumnDefinition Width="Auto" />
-                            </Grid.ColumnDefinitions>
+
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <Border
+                            x:Name="border"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            SnapsToDevicePixels="True">
 
                             <ScrollViewer
                                 x:Name="PART_ContentHost"
                                 Focusable="false"
                                 HorizontalScrollBarVisibility="Hidden"
                                 VerticalScrollBarVisibility="Hidden" />
-
-                            <UniformGrid
+                        </Border>
+                        <UniformGrid
+                            Grid.Column="1"
+                            Columns="2"
+                            Rows="1">
+                            <ToggleButton
+                                x:Name="PART_TogglePopupButton"
+                                Grid.Column="0"
+                                HorizontalContentAlignment="Stretch"
+                                VerticalContentAlignment="Stretch"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="0,1,1,1"
+                                Template="{StaticResource ButtonTemplate}">
+                                <ToggleButton.Style>
+                                    <Style TargetType="{x:Type ToggleButton}">
+                                        <Setter Property="IsHitTestVisible" Value="True" />
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding IsOpen, ElementName=PART_Popup}" Value="True">
+                                                <Setter Property="IsHitTestVisible" Value="False" />
+                                            </DataTrigger>
+                                            <Trigger Property="IsMouseOver" Value="True">
+                                                <Setter Property="BorderThickness" Value="0,1,1,1" />
+                                            </Trigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </ToggleButton.Style>
+                                <Path
+                                    Margin="4"
+                                    Fill="{StaticResource ComboBox.Static.Glyph}"
+                                    Stretch="Uniform"
+                                    Style="{StaticResource Path.Material.ChevronDown}" />
+                            </ToggleButton>
+                            <Button
+                                x:Name="PART_EditorButton"
                                 Grid.Column="1"
-                                Columns="2"
-                                Rows="1">
-                                <ToggleButton
-                                    x:Name="PART_TogglePopupButton"
-                                    Grid.Column="0"
-                                    Margin="1"
-                                    HorizontalContentAlignment="Stretch"
-                                    VerticalContentAlignment="Stretch">
-                                    <ToggleButton.Style>
-                                        <Style TargetType="{x:Type ToggleButton}">
-                                            <Setter Property="IsHitTestVisible" Value="True" />
-                                            <Style.Triggers>
-                                                <DataTrigger Binding="{Binding IsOpen, ElementName=Popup}" Value="True">
-                                                    <Setter Property="IsHitTestVisible" Value="False" />
-                                                </DataTrigger>
-                                            </Style.Triggers>
-                                        </Style>
-                                    </ToggleButton.Style>
-                                    <Path
-                                        x:Name="arrow"
-                                        Margin="4"
-                                        Data="F1 M 0,0 L 2.667,2.66665 L 5.3334,0 L 5.3334,-1.78168 L 2.6667,0.88501 L0,-1.78168 L0,0 Z"
-                                        Fill="{StaticResource ComboBox.Static.Glyph}"
-                                        Stretch="Uniform" />
-                                </ToggleButton>
-                                <Button
-                                    x:Name="PART_EditorButton"
-                                    Grid.Column="1"
-                                    Margin="1">
-                                    <Image
-                                        Height="auto"
-                                        Margin="2"
-                                        Source="/Shipworks.Core;component/Resources/edit.png" />
-                                </Button>
-                            </UniformGrid>
+                                HorizontalContentAlignment="Stretch"
+                                VerticalContentAlignment="Stretch"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                Template="{StaticResource ButtonTemplate}">
+                                <Path
+                                    Margin="4"
+                                    Fill="{StaticResource ComboBox.Static.Glyph}"
+                                    Stretch="Uniform"
+                                    Style="{StaticResource Path.Material.Pencil}" />
+                            </Button>
+                        </UniformGrid>
 
-                            <Popup
-                                x:Name="Popup"
-                                IsOpen="{Binding IsChecked, ElementName=PART_TogglePopupButton, Mode=TwoWay}"
-                                Placement="Bottom"
-                                PlacementTarget="{Binding ElementName=PART_TogglePopupButton}"
-                                PopupAnimation="Slide"
-                                StaysOpen="false">
-                                <Border
-                                    Background="White"
-                                    BorderBrush="{DynamicResource {x:Static SystemColors.WindowFrameBrushKey}}"
-                                    BorderThickness="1">
-                                    <Grid>
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="25" />
-                                            <ColumnDefinition Width="Auto" />
-                                        </Grid.ColumnDefinitions>
+                        <Popup
+                            x:Name="PART_Popup"
+                            IsOpen="{Binding IsChecked, ElementName=PART_TogglePopupButton, Mode=TwoWay}"
+                            Placement="Bottom"
+                            PlacementTarget="{Binding ElementName=PART_TogglePopupButton}"
+                            PopupAnimation="Slide"
+                            StaysOpen="false">
+                            <Border
+                                Background="White"
+                                BorderBrush="{DynamicResource {x:Static SystemColors.WindowFrameBrushKey}}"
+                                BorderThickness="1">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="25" />
+                                        <ColumnDefinition Width="Auto" />
+                                    </Grid.ColumnDefinitions>
 
-                                        <Border
-                                            Grid.Column="0"
-                                            Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}"
-                                            BorderBrush="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}"
-                                            BorderThickness="0,0,1,0">
-                                            <Rectangle Width="1" Height="1" />
-                                        </Border>
+                                    <Border
+                                        Grid.Column="0"
+                                        Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}"
+                                        BorderBrush="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}"
+                                        BorderThickness="0,0,1,0">
+                                        <Rectangle Width="1" Height="1" />
+                                    </Border>
 
-                                        <ListView
-                                            x:Name="PART_SuggestionSelector"
-                                            Grid.Column="1"
-                                            Margin="4,2"
-                                            BorderBrush="Transparent"
-                                            BorderThickness="0"
-                                            ItemContainerStyleSelector="{StaticResource ListStyleSelector}">
-                                            <ListView.ItemTemplate>
-                                                <DataTemplate>
-                                                    <StackPanel>
-                                                        <TextBlock
-                                                            Margin="0,2"
-                                                            FontSize="12"
-                                                            FontWeight="bold"
-                                                            Text="{Binding Description}" />
-                                                        <TextBlock
-                                                            Margin="0,2"
-                                                            FontSize="12"
-                                                            Text="{Binding Xsl}" />
-                                                    </StackPanel>
-                                                </DataTemplate>
-                                            </ListView.ItemTemplate>
-                                        </ListView>
-                                    </Grid>
-                                </Border>
-                            </Popup>
-                        </Grid>
-                    </Border>
+                                    <ListView
+                                        x:Name="PART_SuggestionSelector"
+                                        Grid.Column="1"
+                                        Margin="4,2"
+                                        BorderBrush="Transparent"
+                                        BorderThickness="0"
+                                        ItemContainerStyleSelector="{StaticResource ListStyleSelector}">
+                                        <ListView.ItemTemplate>
+                                            <DataTemplate>
+                                                <StackPanel>
+                                                    <TextBlock
+                                                        Margin="0,2"
+                                                        FontSize="12"
+                                                        FontWeight="bold"
+                                                        Text="{Binding Description}" />
+                                                    <TextBlock
+                                                        Margin="0,2"
+                                                        FontSize="12"
+                                                        Text="{Binding Xsl}" />
+                                                </StackPanel>
+                                            </DataTemplate>
+                                        </ListView.ItemTemplate>
+                                    </ListView>
+                                </Grid>
+                            </Border>
+                        </Popup>
+                    </Grid>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsEnabled" Value="false">
                             <Setter TargetName="border" Property="Opacity" Value="0.56" />
