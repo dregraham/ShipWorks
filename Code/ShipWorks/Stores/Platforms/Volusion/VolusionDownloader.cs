@@ -451,17 +451,24 @@ namespace ShipWorks.Stores.Platforms.Volusion
 
             string date = XPathUtility.Evaluate(xpath, node, "");
 
-            DateTime serverTime = DateTime.Parse(date);
-
             try
             {
-                TimeZoneInfo serverTz = TimeZoneInfo.FindSystemTimeZoneById(volusionStore.ServerTimeZone);
-                return TimeZoneInfo.ConvertTimeToUtc(serverTime, serverTz);
+                DateTime serverTime = DateTime.Parse(date);
+
+                try
+                {
+                    TimeZoneInfo serverTz = TimeZoneInfo.FindSystemTimeZoneById(volusionStore.ServerTimeZone);
+                    return TimeZoneInfo.ConvertTimeToUtc(serverTime, serverTz);
+                }
+                catch (Exception ex) when (ex is InvalidTimeZoneException || ex is TimeZoneNotFoundException || ex is ArgumentException)
+                {
+                    // just convert directly to UTC
+                    return serverTime.ToUniversalTime();
+                }
             }
-            catch (Exception ex) when (ex is InvalidTimeZoneException || ex is TimeZoneNotFoundException || ex is ArgumentException)
+            catch (FormatException)
             {
-                // just convert directly to UTC
-                return serverTime.ToUniversalTime();
+                throw new VolusionException($"Failed to convert Order Date '{date}' to DateTime.");
             }
         }
 
