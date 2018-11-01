@@ -1,22 +1,24 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using Interapptive.Shared.Messaging;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Settings;
 
-namespace ShipWorks.Messaging.Messages.Shipping
+namespace ShipWorks.OrderLookup
 {
     /// <summary>
     /// Request that a shipment be shipped again
     /// </summary>
-    public struct ShipAgainMessage : IShipWorksMessage
+    public struct OrderLookupShipAgainMessage : IShipWorksMessage
     {
         /// <summary>
         /// Constructor
         /// </summary>
-        public ShipAgainMessage(object sender, ShipmentEntity shipment)
+        public OrderLookupShipAgainMessage(object sender, long shipmentID)
         {
             Sender = sender;
-            Shipment = shipment;
+            ShipmentID = shipmentID;
             MessageId = Guid.NewGuid();
         }
 
@@ -26,13 +28,13 @@ namespace ShipWorks.Messaging.Messages.Shipping
         public object Sender { get; }
 
         /// <summary>
+        /// The shipmentID to ship again
+        /// </summary>
+        public long ShipmentID { get; }
+
+        /// <summary>
         /// Id of the message used for tracking purposes
         /// </summary>
         public Guid MessageId { get; }
-
-        /// <summary>
-        /// Shipment to ship again
-        /// </summary>
-        public ShipmentEntity Shipment { get; }
     }
 }

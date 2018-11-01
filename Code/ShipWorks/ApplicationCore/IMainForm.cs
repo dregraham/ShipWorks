@@ -38,5 +38,10 @@ namespace ShipWorks.ApplicationCore
         /// Update the contents of the status bar
         /// </summary>
         void UpdateStatusBar();
+
+        /// <summary>
+        /// Select the order lookup tab
+        /// </summary>
+        void SelectOrderLookupTab();
     }
 }

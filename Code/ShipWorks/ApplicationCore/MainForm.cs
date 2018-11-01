@@ -1099,7 +1099,7 @@ namespace ShipWorks
             else if (ribbon.SelectedTab == ribbonTabOrderLookupViewShipmentHistory)
             {
                 ToggleVisiblePanel(shipmentHistory.Control, orderLookupControl?.Control);
-                shipmentHistory.Activate(buttonOrderLookupViewVoid);
+                shipmentHistory.Activate(buttonOrderLookupViewVoid, buttonOrderLookupViewShipAgain);
             }
 
             UpdateStatusBar();
@@ -1840,6 +1840,11 @@ namespace ShipWorks
                 labelStatusSelected.Visible = false;
             }
         }
+
+        /// <summary>
+        /// Select the order lookup tab
+        /// </summary>
+        public void SelectOrderLookupTab() => ribbon.SelectedTab = ribbonTabOrderLookupViewShipping;
 
         /// <summary>
         /// Get the shipment dock control
