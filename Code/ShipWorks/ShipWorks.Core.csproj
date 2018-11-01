@@ -756,6 +756,9 @@
     <Compile Include="ApplicationCore\Interaction\IMenuCommandExecutionContext.cs" />
     <Compile Include="ApplicationCore\Interaction\SelectionDependentEntry.cs" />
     <Compile Include="ApplicationCore\IoCLogRequestModule.cs" />
+    <Compile Include="ApplicationCore\MainForm.OrderLookupHeartbeat.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Messaging\Messages\Shipping\FocusQuickSearchMessage.cs" />
     <Compile Include="OrderLookup\IOrderLookupFieldManager.cs" />
     <Compile Include="OrderLookup\IPreviousShipmentReprintActionHandler.cs" />
