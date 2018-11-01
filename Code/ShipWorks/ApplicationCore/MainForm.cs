@@ -1053,7 +1053,7 @@ namespace ShipWorks
 
             ToggleUiModeCheckbox(UIMode.OrderLookup);
 
-            heartBeat = new Heartbeat();
+            heartBeat = new OrderLookupHeartbeat(this);
 
             // Hide all dock windows.  Hide them first so they don't attempt to save when the filter changes (due to the tree being cleared)
             foreach (DockControl control in Panels)
