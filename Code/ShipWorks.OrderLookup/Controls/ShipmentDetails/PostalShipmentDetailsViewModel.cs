@@ -7,9 +7,9 @@ using System.Windows.Input;
 using GalaSoft.MvvmLight.Command;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
-using ShipWorks.Core.UI;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
+using ShipWorks.OrderLookup.FieldManager;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Shipping.Editing;
@@ -25,10 +25,8 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
     [KeyedComponent(typeof(IDetailsViewModel), ShipmentTypeCode.Usps)]
     [KeyedComponent(typeof(IDetailsViewModel), ShipmentTypeCode.Endicia)]
     [WpfView(typeof(PostalShipmentDetailsControl))]
-    public class PostalShipmentDetailsViewModel : IDetailsViewModel, INotifyPropertyChanged
+    public class PostalShipmentDetailsViewModel : OrderLookupViewModelBase, IDetailsViewModel, INotifyPropertyChanged
     {
-        public event PropertyChangedEventHandler PropertyChanged;
-        private readonly PropertyChangedHandler handler;
         private readonly IShipmentTypeManager shipmentTypeManager;
         private readonly Func<DimensionsManagerDlg> getDimensionsManagerDlg;
         private readonly ICarrierShipmentAdapterOptionsProvider carrierShipmentAdapterOptionsProvider;
@@ -47,13 +45,13 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
             IShipmentTypeManager shipmentTypeManager,
             IInsuranceViewModel insuranceViewModel,
             Func<DimensionsManagerDlg> getDimensionsManagerDlg,
-            ICarrierShipmentAdapterOptionsProvider carrierShipmentAdapterOptionsProvider)
+            ICarrierShipmentAdapterOptionsProvider carrierShipmentAdapterOptionsProvider,
+            OrderLookupFieldLayoutProvider fieldLayoutProvider) : base(shipmentModel, fieldLayoutProvider)
         {
             this.shipmentTypeManager = shipmentTypeManager;
             this.getDimensionsManagerDlg = getDimensionsManagerDlg;
             this.carrierShipmentAdapterOptionsProvider = carrierShipmentAdapterOptionsProvider;
             InsuranceViewModel = insuranceViewModel;
-            handler = new PropertyChangedHandler(this, () => PropertyChanged);
             ManageDimensionalProfiles = new RelayCommand(ManageDimensionalProfilesAction);
 
             RefreshDimensionalProfiles(shipmentModel);
@@ -63,35 +61,30 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
             RefreshServiceTypes(shipmentModel.ShipmentAdapter);
             RefreshProviders(shipmentModel);
 
-            ShipmentModel = shipmentModel;
-            ShipmentModel.PropertyChanged += ShipmentModelPropertyChanged;
-
             ContentWeight = ShipmentModel.ShipmentAdapter.ContentWeight;
         }
+
+        /// <summary>
+        /// Field layout repository
+        /// </summary>
+        public override IOrderLookupFieldLayoutProvider FieldLayoutProvider => ShipmentModel.FieldLayoutProvider;
+
+        /// <summary>
+        /// Panel ID
+        /// </summary>
+        public override SectionLayoutIDs PanelID => SectionLayoutIDs.ShipmentDetails;
 
         /// <summary>
         /// Title of the section
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public string Title => "Shipment Details";
-
-        /// <summary>
-        /// Is the section visible
-        /// </summary>
-        [Obfuscation(Exclude = true)]
-        public bool Visible => true;
+        public override string Title { get; protected set; } = "Shipment Details";
 
         /// <summary>
         /// Manages Dimensional Profiles
         /// </summary>
         [Obfuscation(Exclude = true)]
         public ICommand ManageDimensionalProfiles { get; set; }
-
-        /// <summary>
-        /// The ViewModel ShipmentModel
-        /// </summary>
-        [Obfuscation(Exclude = true)]
-        public IOrderLookupShipmentModel ShipmentModel { get; }
 
         /// <summary>
         /// Insurance information
@@ -106,7 +99,7 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
         public IDictionary<long, string> DimensionProfiles
         {
             get => dimensionProfiles;
-            set { handler.Set(nameof(DimensionProfiles), ref dimensionProfiles, value); }
+            set { Handler.Set(nameof(DimensionProfiles), ref dimensionProfiles, value); }
         }
 
         /// <summary>
@@ -122,7 +115,7 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
         public Dictionary<ShipmentTypeCode, string> Providers
         {
             get => providers;
-            set => handler.Set(nameof(Providers), ref providers, value);
+            set => Handler.Set(nameof(Providers), ref providers, value);
         }
 
         /// <summary>
@@ -168,7 +161,7 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
         public IDictionary<int, string> PackageTypes
         {
             get => packageTypes;
-            set => handler.Set(nameof(PackageTypes), ref packageTypes, value);
+            set => Handler.Set(nameof(PackageTypes), ref packageTypes, value);
         }
 
         /// <summary>
@@ -178,7 +171,7 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
         public IDictionary<int, string> ConfirmationTypes
         {
             get => confirmationTypes;
-            set => handler.Set(nameof(ConfirmationTypes), ref confirmationTypes, value);
+            set => Handler.Set(nameof(ConfirmationTypes), ref confirmationTypes, value);
         }
 
         /// <summary>
@@ -188,14 +181,16 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
         public IDictionary<int, string> ServiceTypes
         {
             get => serviceTypes;
-            set => handler.Set(nameof(ServiceTypes), ref serviceTypes, value);
+            set => Handler.Set(nameof(ServiceTypes), ref serviceTypes, value);
         }
 
         /// <summary>
         /// Update when order changes
         /// </summary>
-        private void ShipmentModelPropertyChanged(object sender, PropertyChangedEventArgs e)
+        protected override void ShipmentModelPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
+            base.ShipmentModelPropertyChanged(sender, e);
+
             if (ShipmentModel.SelectedOrder != null)
             {
                 if ((e.PropertyName == nameof(ShipmentModel.ShipmentAdapter) ||
@@ -214,7 +209,7 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
 
                 if (e.PropertyName == PostalShipmentFields.Service.Name)
                 {
-                    handler.RaisePropertyChanged(nameof(ShipmentModel));
+                    Handler.RaisePropertyChanged(nameof(ShipmentModel));
                 }
 
                 if (e.PropertyName == nameof(PostalShipmentFields.DimsProfileID))
@@ -267,7 +262,7 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
                 RefreshPackageTypes(ShipmentModel.ShipmentAdapter);
             }
 
-            handler.RaisePropertyChanged(null);
+            Handler.RaisePropertyChanged(null);
         }
 
         /// <summary>
@@ -296,7 +291,7 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
                 packageAdapter.AdditionalWeight = 0;
             }
 
-            handler.RaisePropertyChanged(nameof(IsProfileSelected));
+            Handler.RaisePropertyChanged(nameof(IsProfileSelected));
         }
 
         /// <summary>
@@ -399,8 +394,5 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
                 RefreshDimensionalProfiles(ShipmentModel);
             }
         }
-
-        public void Dispose() =>
-            ShipmentModel.PropertyChanged -= ShipmentModelPropertyChanged;
     }
 }

@@ -1,7 +1,6 @@
-using System.ComponentModel;
 using System.Reflection;
 using Interapptive.Shared.ComponentRegistration;
-using ShipWorks.Core.UI;
+using ShipWorks.OrderLookup.FieldManager;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
 using ShipWorks.UI;
@@ -13,37 +12,32 @@ namespace ShipWorks.OrderLookup.Controls.EmailNotifications
     /// </summary>
     [KeyedComponent(typeof(IEmailNotificationsViewModel), ShipmentTypeCode.FedEx)]
     [WpfView(typeof(FedExEmailNotificationsControl))]
-    public class FedExEmailNotificationsViewModel : IEmailNotificationsViewModel
+    public class FedExEmailNotificationsViewModel : OrderLookupViewModelBase, IEmailNotificationsViewModel
     {
-        public event PropertyChangedEventHandler PropertyChanged;
-        private readonly PropertyChangedHandler handler;
-
         /// <summary>
         /// Ctor
         /// </summary>
-        public FedExEmailNotificationsViewModel(IOrderLookupShipmentModel shipmentModel)
+        public FedExEmailNotificationsViewModel(IOrderLookupShipmentModel shipmentModel,
+            OrderLookupFieldLayoutProvider fieldLayoutProvider) : base(shipmentModel, fieldLayoutProvider)
         {
-            ShipmentModel = shipmentModel;
-            handler = new PropertyChangedHandler(this, () => PropertyChanged);
+
         }
+
+        /// <summary>
+        /// Field layout repository
+        /// </summary>
+        public override IOrderLookupFieldLayoutProvider FieldLayoutProvider => ShipmentModel.FieldLayoutProvider;
+
+        /// <summary>
+        /// Panel ID
+        /// </summary>
+        public override SectionLayoutIDs PanelID => SectionLayoutIDs.FedExEmailNotifications;
 
         /// <summary>
         /// Title of the section
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public string Title => "Email Notifications";
-
-        /// <summary>
-        /// Is the section visible
-        /// </summary>
-        [Obfuscation(Exclude = true)]
-        public bool Visible => true;
-
-        /// <summary>
-        /// The ViewModel ShipmentModel
-        /// </summary>
-        [Obfuscation(Exclude = true)]
-        public IOrderLookupShipmentModel ShipmentModel { get; }
+        public override string Title { get; protected set; } = "Email Notifications";
 
         /// <summary>
         /// Sender notifications flag
@@ -66,7 +60,7 @@ namespace ShipWorks.OrderLookup.Controls.EmailNotifications
             set => ShipmentModel.ShipmentAdapter.Shipment.FedEx.EmailNotifyRecipient =
                 UpdateNotificationFlag(ShipmentModel.ShipmentAdapter.Shipment.FedEx.EmailNotifyRecipient, value);
         }
-        
+
         /// <summary>
         /// Other notifications flag
         /// </summary>
@@ -102,15 +96,8 @@ namespace ShipWorks.OrderLookup.Controls.EmailNotifications
             {
                 currentValue |= (int) valueChanged;
             }
-            
-            return currentValue;
-        }
 
-        /// <summary>
-        /// Dispose
-        /// </summary>
-        public void Dispose()
-        {
+            return currentValue;
         }
     }
 }

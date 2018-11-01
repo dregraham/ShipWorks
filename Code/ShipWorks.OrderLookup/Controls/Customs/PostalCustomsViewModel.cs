@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
+using ShipWorks.OrderLookup.FieldManager;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.UI;
@@ -25,7 +23,8 @@ namespace ShipWorks.OrderLookup.Controls.Customs
         /// <summary>
         /// Constructor
         /// </summary>
-        public PostalCustomsViewModel(IOrderLookupShipmentModel shipmentModel, IShipmentTypeManager shipmentTypeManager) : base(shipmentModel, shipmentTypeManager)
+        public PostalCustomsViewModel(IOrderLookupShipmentModel shipmentModel, IShipmentTypeManager shipmentTypeManager,
+            OrderLookupFieldLayoutProvider fieldLayoutProvider) : base(shipmentModel, shipmentTypeManager, fieldLayoutProvider)
         {
             CustomsContentTypes = EnumHelper.GetEnumList<PostalCustomsContentType>().ToDictionary(x => (int) x.Value, x => x.Description);
         }
@@ -37,7 +36,7 @@ namespace ShipWorks.OrderLookup.Controls.Customs
         public Dictionary<int, string> CustomsContentTypes
         {
             get => customsContentTypes;
-            set => handler.Set(nameof(CustomsContentTypes), ref customsContentTypes, value);
+            set => Handler.Set(nameof(CustomsContentTypes), ref customsContentTypes, value);
         }
     }
 }

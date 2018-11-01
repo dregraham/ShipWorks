@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Reflection;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.OrderLookup.FieldManager;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Profiles;
@@ -16,6 +17,11 @@ namespace ShipWorks.OrderLookup
     [Obfuscation(ApplyToMembers = true, Exclude = true, StripAfterObfuscation = false)]
     public interface IOrderLookupShipmentModel : IDisposable
     {
+        /// <summary>
+        /// Field layout repo
+        /// </summary>
+        IOrderLookupFieldLayoutProvider FieldLayoutProvider { get; }
+
         /// <summary>
         /// The order that's in context
         /// </summary>

@@ -759,8 +759,16 @@
     <Compile Include="ApplicationCore\MainForm.OrderLookupHeartbeat.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="OrderLookup\FieldManager\IOrderLookupFieldLayoutProvider.cs" />
+    <Compile Include="OrderLookup\FieldManager\IOrderLookupFieldLayoutRepository.cs" />
+    <Compile Include="OrderLookup\FieldManager\SectionFieldLayout.cs" />
+    <Compile Include="OrderLookup\FieldManager\SectionLayout.cs" />
+    <Compile Include="OrderLookup\FieldManager\SectionLayoutFieldIDs.cs" />
+    <Compile Include="OrderLookup\FieldManager\SectionLayoutIDs.cs" />
     <Compile Include="Messaging\Messages\Shipping\FocusQuickSearchMessage.cs" />
     <Compile Include="OrderLookup\IOrderLookupFieldManager.cs" />
+    <Compile Include="OrderLookup\IOrderLookupFieldLayoutProviderHost.cs" />
+    <Compile Include="OrderLookup\IOrderLookupViewModel.cs" />
     <Compile Include="OrderLookup\IPreviousShipmentReprintActionHandler.cs" />
     <Compile Include="OrderLookup\IPreviousShipmentVoidActionHandler.cs" />
     <Compile Include="OrderLookup\IShipmentHistory.cs" />

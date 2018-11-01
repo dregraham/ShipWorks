@@ -5,6 +5,8 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="clr-namespace:ShipWorks.OrderLookup.Controls"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:ui="http://schemas.shipworks.com/ui"
+    xmlns:ns="clr-namespace:ShipWorks.OrderLookup.FieldManager;assembly=ShipWorks.Core"
     d:DesignWidth="800"
     FontFamily="/ShipWorks.OrderLookup;component/#Roboto"
     mc:Ignorable="d">
@@ -13,6 +15,7 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/ShipWorks.OrderLookup;component/Styles/OrderLookupStyle.xaml" />
             </ResourceDictionary.MergedDictionaries>
+            <ui:VisibilityWhenFieldAllowedConverter x:Key="VisibilityWhenFieldAllowed"/>
         </ResourceDictionary>
     </UserControl.Resources>
 
@@ -26,14 +29,14 @@
             </local:OrderLookupAddress.IsEnabled>
         </local:OrderLookupAddress>
         <Grid>
+            <Grid.RowDefinitions>
+                <ui:FieldLayoutRowDefinition FieldID="{x:Static ns:SectionLayoutFieldIDs.USPSRequireFullAddressValidation}" />
+                <ui:FieldLayoutRowDefinition FieldID="{x:Static ns:SectionLayoutFieldIDs.USPSRequireFullAddressValidation}" />
+            </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="85" />
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-            </Grid.RowDefinitions>
             <TextBlock
                 Grid.Row="0"
                 Grid.Column="0"

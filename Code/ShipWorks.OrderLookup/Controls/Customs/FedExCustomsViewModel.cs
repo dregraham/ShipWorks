@@ -3,6 +3,7 @@ using System.Linq;
 using System.Reflection;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
+using ShipWorks.OrderLookup.FieldManager;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
 using ShipWorks.UI;
@@ -21,12 +22,13 @@ namespace ShipWorks.OrderLookup.Controls.Customs
         /// <summary>
         /// Ctor
         /// </summary>
-        public FedExCustomsViewModel(IOrderLookupShipmentModel shipmentModel, IShipmentTypeManager shipmentTypeManager)
-            : base(shipmentModel, shipmentTypeManager)
+        public FedExCustomsViewModel(IOrderLookupShipmentModel shipmentModel, 
+            IShipmentTypeManager shipmentTypeManager,
+            OrderLookupFieldLayoutProvider fieldLayoutProvider) : base(shipmentModel, shipmentTypeManager, fieldLayoutProvider)
         {
             CustomsExportFilingOptions = EnumHelper.GetEnumList<FedExCustomsExportFilingOption>().ToDictionary(x => (int) x.Value, x => x.Description);
         }
-        
+
         /// <summary>
         /// List of available customs export filing options
         /// </summary>
@@ -34,7 +36,7 @@ namespace ShipWorks.OrderLookup.Controls.Customs
         public Dictionary<int, string> CustomsExportFilingOptions
         {
             get => customsExportFilingOptions;
-            set => handler.Set(nameof(CustomsExportFilingOptions), ref customsExportFilingOptions, value);
+            set => Handler.Set(nameof(CustomsExportFilingOptions), ref customsExportFilingOptions, value);
         }
     }
 }

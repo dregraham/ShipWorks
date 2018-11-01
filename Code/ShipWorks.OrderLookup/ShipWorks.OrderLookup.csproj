@@ -180,6 +180,7 @@
     <Compile Include="Controls\From\GenericFromControl.xaml.cs">
       <DependentUpon>GenericFromControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\From\OrderLookupFromFieldLayoutProvider.cs" />
     <Compile Include="Controls\From\UspsFromControl.xaml.cs">
       <DependentUpon>UspsFromControl.xaml</DependentUpon>
     </Compile>
@@ -272,14 +273,12 @@
     <Compile Include="Controls\To\GenericToWithResidentialDeterminationControl.xaml.cs">
       <DependentUpon>GenericToWithResidentialDeterminationControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\To\OrderLookupToFieldLayoutProvider.cs" />
     <Compile Include="Controls\To\UpsToViewModel.cs" />
     <Compile Include="FieldManager\IOrderLookupFieldLayoutDefaults.cs" />
-    <Compile Include="FieldManager\IOrderLookupFieldLayoutRepository.cs" />
     <Compile Include="FieldManager\OrderLookupFieldLayoutDefaults.cs" />
     <Compile Include="FieldManager\OrderLookupFieldLayoutRepository.cs" />
     <Compile Include="FieldManager\OrderLookupFieldManagerDesignerViewModel.cs" />
-    <Compile Include="FieldManager\SectionFieldLayout.cs" />
-    <Compile Include="FieldManager\SectionLayout.cs" />
     <Compile Include="Controls\ShipmentDetails\OrderLookupInsuranceControl.xaml.cs">
       <DependentUpon>OrderLookupInsuranceControl.xaml</DependentUpon>
     </Compile>
@@ -313,11 +312,11 @@
     </Compile>
     <Compile Include="FieldManager\IOrderLookupFieldManagerDialog.cs" />
     <Compile Include="FieldManager\OrderLookupFieldManagerViewModel.cs" />
+    <Compile Include="FieldManager\OrderLookupFieldLayoutProvider.cs" />
     <Compile Include="Layout\IOrderLookupLayout.cs" />
     <Compile Include="IOrderLookupConfirmationService.cs" />
     <Compile Include="IOrderLookupPanelFactory.cs" />
     <Compile Include="IOrderLookupPreviousShipmentLocator.cs" />
-    <Compile Include="IOrderLookupViewModel.cs" />
     <Compile Include="Layout\DropHandler.cs" />
     <Compile Include="Layout\OrderLookupLayout.cs" />
     <Compile Include="Layout\OrderLookupLayoutDefaults.cs" />
@@ -329,6 +328,7 @@
     <Compile Include="OrderLookupModule.cs" />
     <Compile Include="OrderLookupPanelFactory.cs" />
     <Compile Include="OrderLookupPreviousShipmentLocator.cs" />
+    <Compile Include="OrderLookupViewModelBase.cs" />
     <Compile Include="PreviousProcessedShipmentDetails.cs" />
     <Compile Include="ShipmentHistory\Controls\ShipmentHistoryGrid.cs">
       <SubType>UserControl</SubType>

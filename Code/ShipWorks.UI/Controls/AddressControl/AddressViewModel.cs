@@ -17,6 +17,8 @@ using ShipWorks.Core.UI;
 using ShipWorks.Data;
 using ShipWorks.Data.Model.Custom.EntityClasses;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.OrderLookup;
+using ShipWorks.OrderLookup.FieldManager;
 using ShipWorks.Shipping;
 
 namespace ShipWorks.UI.Controls.AddressControl
@@ -25,7 +27,7 @@ namespace ShipWorks.UI.Controls.AddressControl
     /// View model for use by AddressControl
     /// </summary>
     [Component(RegistrationType.Self)]
-    public partial class AddressViewModel : INotifyPropertyChanged, INotifyPropertyChanging, IDisposable
+    public partial class AddressViewModel : IOrderLookupFieldLayoutProviderHost, INotifyPropertyChanged, INotifyPropertyChanging, IDisposable
     {
         private readonly string[] validationProperties = { nameof(Street), nameof(CountryCode), nameof(PostalCode), nameof(StateProvCode), nameof(City) };
         private readonly IAddressValidator validator;
@@ -62,6 +64,7 @@ namespace ShipWorks.UI.Controls.AddressControl
             this.messageHelper = messageHelper;
             this.validatedAddressScope = validatedAddressScope;
             this.addressSelector = addressSelector;
+
             AddressSuggestions = Enumerable.Empty<KeyValuePair<string, ValidatedAddressEntity>>();
             ValidateCommand = new RelayCommand(ValidateAddress);
             ShowValidationMessageCommand = new RelayCommand(ShowValidationMessage);
@@ -90,6 +93,12 @@ namespace ShipWorks.UI.Controls.AddressControl
         /// </summary>
         [Obfuscation(Exclude = true)]
         public bool CanShowValidationMessage => validator.CanShowMessage(ValidationStatus) && !string.IsNullOrEmpty(ValidationMessage);
+
+        /// <summary>
+        /// Field layout provider
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public IOrderLookupFieldLayoutProvider FieldLayoutProvider { get; set; }
 
         /// <summary>
         /// Load the person

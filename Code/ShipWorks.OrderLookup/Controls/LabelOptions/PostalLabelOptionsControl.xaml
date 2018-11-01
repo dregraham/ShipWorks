@@ -6,6 +6,8 @@
     xmlns:local="clr-namespace:ShipWorks.OrderLookup.Controls.LabelOptions"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:ui="http://schemas.shipworks.com/ui"
+    xmlns:system="clr-namespace:System;assembly=mscorlib"
+    xmlns:ns="clr-namespace:ShipWorks.OrderLookup.FieldManager;assembly=ShipWorks.Core"
     d:DataContext="{d:DesignInstance local:PostalLabelOptionsViewModel}"
     d:DesignHeight="150"
     d:DesignWidth="500"
@@ -22,10 +24,10 @@
     </UserControl.Resources>
     <Grid IsEnabled="{Binding ShipmentModel.ShipmentAllowEditing}">
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
+            <ui:FieldLayoutRowDefinition FieldID="{x:Static ns:SectionLayoutFieldIDs.LabelOptionsShipDate}" />
+            <ui:FieldLayoutRowDefinition FieldID="{x:Static ns:SectionLayoutFieldIDs.LabelOptionsUspsHideStealth}" />
+            <ui:FieldLayoutRowDefinition FieldID="{x:Static ns:SectionLayoutFieldIDs.LabelOptionsNoPostage}" />
+            <ui:FieldLayoutRowDefinition FieldID="{x:Static ns:SectionLayoutFieldIDs.LabelOptionsRequestedLabelFormat}" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto" />
@@ -52,7 +54,7 @@
             Style="{StaticResource FieldLabel}"
             Text="Stealth" />
 
-        <CheckBox
+        <CheckBox 
             Grid.Row="1"
             Grid.Column="2"
             Content="Hide Postage"

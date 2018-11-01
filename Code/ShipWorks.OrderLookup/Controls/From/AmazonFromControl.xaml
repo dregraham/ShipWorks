@@ -5,6 +5,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="clr-namespace:ShipWorks.OrderLookup.Controls"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:ns="clr-namespace:ShipWorks.OrderLookup.FieldManager;assembly=ShipWorks.Core"
     xmlns:sui="clr-namespace:ShipWorks.Shipping.UI.ValueConverters;assembly=ShipWorks.Shipping.UI"
     xmlns:sw="http://schemas.shipworks.com/sw"
     xmlns:sys="clr-namespace:System;assembly=mscorlib"
@@ -22,10 +23,30 @@
             <ui:BooleanAndConverter x:Key="BooleanAndConverter" />
         </ResourceDictionary>
     </UserControl.Resources>
-    <StackPanel IsEnabled="{Binding ShipmentModel.ShipmentAllowEditing}">
-        <TextBlock Style="{StaticResource Header}" Text="Origin" />
+
+    <Grid IsEnabled="{Binding ShipmentModel.ShipmentAllowEditing}">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="85" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <ui:FieldLayoutRowDefinition FieldID="{x:Static ns:SectionLayoutFieldIDs.Origin}" />
+            <!--  0 Origin header  -->
+            <ui:FieldLayoutRowDefinition FieldID="{x:Static ns:SectionLayoutFieldIDs.Origin}" />
+            <!--  1 Origin dropdown  -->
+            <RowDefinition Height="Auto" />
+            <!--  2 Supports accounts/account dropdown  -->
+        </Grid.RowDefinitions>
+        <TextBlock
+            Grid.Row="0"
+            Grid.ColumnSpan="2"
+            Style="{StaticResource Header}"
+            Text="Origin" />
         <ComboBox
             x:Name="OriginDropDown"
+            Grid.Row="1"
+            Grid.Column="0"
+            Grid.ColumnSpan="2"
             ui:UpdateWhenMessageReceived.MessageType="{x:Type sw:OriginAddressChangedMessage}"
             DisplayMemberPath="Value"
             SelectedValuePath="Key"
@@ -44,7 +65,11 @@
             </ComboBox.SelectedValue>
         </ComboBox>
 
-        <local:OrderLookupAddress DataContext="{Binding Address}">
+        <local:OrderLookupAddress
+            Grid.Row="2"
+            Grid.Column="0"
+            Grid.ColumnSpan="2"
+            DataContext="{Binding Address}">
             <local:OrderLookupAddress.IsEnabled>
                 <MultiBinding Converter="{StaticResource BooleanAndConverter}">
                     <Binding Mode="OneWay" Path="ShipmentModel.ShipmentAllowEditing" />
@@ -59,6 +84,5 @@
                 </MultiBinding>
             </local:OrderLookupAddress.IsEnabled>
         </local:OrderLookupAddress>
-    </StackPanel>
-
+    </Grid>
 </UserControl>

@@ -4,21 +4,22 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:AddressControl="clr-namespace:ShipWorks.UI.Controls.AddressControl;assembly=ShipWorks.UI"
     xmlns:cmd="http://www.galasoft.ch/mvvmlight"
-    xmlns:ui="clr-namespace:ShipWorks.UI.Controls;assembly=ShipWorks.UI"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:geography="clr-namespace:Interapptive.Shared.Business.Geography;assembly=Interapptive.Shared"
     xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
     xmlns:local="clr-namespace:ShipWorks.OrderLookup.Controls"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:ns="clr-namespace:ShipWorks.OrderLookup.FieldManager;assembly=ShipWorks.Core"
     xmlns:props="clr-namespace:ShipWorks.UI.AttachedProperties;assembly=ShipWorks.UI"
     xmlns:sys="clr-namespace:System;assembly=mscorlib"
+    xmlns:ui="clr-namespace:ShipWorks.UI.Controls;assembly=ShipWorks.UI"
     xmlns:valueConverters="clr-namespace:ShipWorks.UI.ValueConverters;assembly=ShipWorks.UI"
     d:DataContext="{d:DesignInstance AddressControl:AddressViewModel,
                                      IsDesignTimeCreatable=False}"
     d:DesignHeight="380"
     d:DesignWidth="350"
-    mc:Ignorable="d"
-    FontFamily="/ShipWorks.OrderLookup;component/#Roboto">
+    FontFamily="/ShipWorks.OrderLookup;component/#Roboto"
+    mc:Ignorable="d">
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -35,12 +36,25 @@
             <valueConverters:EnumImageConverter x:Key="EnumImage" />
             <valueConverters:BooleanToVisibilityConverter x:Key="BooleanToVisibility" />
             <valueConverters:AddressKeyValueToBooleanConverter x:Key="AddressKeyValueToBooleanConverter" />
-            <valueConverters:VisibleWhenEqualToParameterConverter x:Key="VisibleWhenEqualToParameter" />
-            <valueConverters:VisibleWhenEqualToParameterConverter x:Key="VisibleWhenNotEqualToParameter" Invert="true" />
+            <valueConverters:SectionLayoutVisibilityConverter x:Key="SectionLayoutVisibility" />
+            <valueConverters:VisibilityMultiConverter x:Key="VisibilityMulti" BooleanOperator="Or" />
         </ResourceDictionary>
     </UserControl.Resources>
     <StackPanel>
-        <TextBlock Style="{StaticResource Header}">Name</TextBlock>
+        <TextBlock Style="{StaticResource Header}" Text="Name">
+            <TextBlock.Visibility>
+                <MultiBinding Converter="{StaticResource VisibilityMulti}">
+                    <Binding
+                        Converter="{StaticResource SectionLayoutVisibility}"
+                        ConverterParameter="{x:Static ns:SectionLayoutFieldIDs.FullName}"
+                        Path="FieldLayoutProvider" />
+                    <Binding
+                        Converter="{StaticResource SectionLayoutVisibility}"
+                        ConverterParameter="{x:Static ns:SectionLayoutFieldIDs.Company}"
+                        Path="FieldLayoutProvider" />
+                </MultiBinding>
+            </TextBlock.Visibility>
+        </TextBlock>
 
         <Grid>
             <Grid.ColumnDefinitions>
@@ -48,8 +62,8 @@
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
-                <RowDefinition />
-                <RowDefinition />
+                <ui:FieldLayoutRowDefinition FieldID="{x:Static ns:SectionLayoutFieldIDs.FullName}" />
+                <ui:FieldLayoutRowDefinition FieldID="{x:Static ns:SectionLayoutFieldIDs.Company}" />
             </Grid.RowDefinitions>
 
             <TextBlock
@@ -64,6 +78,7 @@
                 props:EntityFieldLength.FieldName="PersonNameFull"
                 Style="{StaticResource FormTextBox}"
                 Text="{Binding FullName, UpdateSourceTrigger=PropertyChanged}" />
+
             <TextBlock
                 Grid.Row="1"
                 Grid.Column="0"
@@ -87,9 +102,9 @@
             <TextBlock
                 Grid.Row="0"
                 Grid.Column="0"
-                Style="{StaticResource Header}">
-                Address
-            </TextBlock>
+                Style="{StaticResource Header}" Text="Address"
+                Visibility="{Binding IsAddressValidationEnabled, Converter={StaticResource BooleanToVisibility}}"/>
+                
             <ui:AlignmentWrapPanel
                 Grid.Row="0"
                 Grid.Column="1"
@@ -142,23 +157,22 @@
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
-                <RowDefinition />
-                <RowDefinition />
-                <RowDefinition />
-                <RowDefinition />
-                <RowDefinition />
-                <RowDefinition />
+                <ui:FieldLayoutRowDefinition FieldID="{x:Static ns:SectionLayoutFieldIDs.Street}" />
+                <ui:FieldLayoutRowDefinition FieldID="{x:Static ns:SectionLayoutFieldIDs.City}" />
+                <ui:FieldLayoutRowDefinition FieldID="{x:Static ns:SectionLayoutFieldIDs.StateProvince}" />
+                <ui:FieldLayoutRowDefinition FieldID="{x:Static ns:SectionLayoutFieldIDs.PostalCode}" />
+                <ui:FieldLayoutRowDefinition FieldID="{x:Static ns:SectionLayoutFieldIDs.Country}" />
             </Grid.RowDefinitions>
 
             <TextBlock
-                Grid.Row="1"
+                Grid.Row="0"
                 Grid.Column="0"
                 Padding="0,3,0,2"
                 Style="{StaticResource FieldLabel}">
                 Street
             </TextBlock>
             <TextBox
-                Grid.Row="1"
+                Grid.Row="0"
                 Grid.Column="1"
                 props:EntityFieldLength.FieldName="PersonStreetFull"
                 props:TextRestriction.MaxLines="3"
@@ -169,73 +183,86 @@
                 Text="{Binding Street, UpdateSourceTrigger=PropertyChanged}" />
 
             <TextBlock
-                Grid.Row="2"
+                Grid.Row="1"
                 Grid.Column="0"
                 Style="{StaticResource FieldLabel}">
                 City
             </TextBlock>
             <TextBox
-                Grid.Row="2"
+                Grid.Row="1"
                 Grid.Column="1"
                 props:EntityFieldLength.FieldName="PersonCity"
                 Style="{StaticResource FormTextBox}"
                 Text="{Binding City, UpdateSourceTrigger=PropertyChanged}" />
 
             <TextBlock
-                Grid.Row="3"
+                Grid.Row="2"
                 Grid.Column="0"
                 Style="{StaticResource FieldLabel}">
                 State / Prov
             </TextBlock>
             <ComboBox
-                Grid.Row="3"
+                Grid.Row="2"
                 Grid.Column="1"
                 props:EntityFieldLength.FieldName="PersonState"
                 IsEditable="True"
                 IsTextSearchEnabled="True"
                 ItemsSource="{Binding SelectedValue, ElementName=CountryComboBox, Converter={StaticResource StateProvinceConverter}}"
-                Text="{Binding StateProvCode}"
-                Style="{StaticResource EditableFormComboBox}" />
+                Style="{StaticResource EditableFormComboBox}"
+                Text="{Binding StateProvCode}" />
 
             <TextBlock
-                Grid.Row="4"
+                Grid.Row="3"
                 Grid.Column="0"
                 Style="{StaticResource FieldLabel}">
                 Postal Code
             </TextBlock>
             <TextBox
-                Grid.Row="4"
+                Grid.Row="3"
                 Grid.Column="1"
                 props:EntityFieldLength.FieldName="PersonPostal"
                 Style="{StaticResource FormTextBox}"
                 Text="{Binding PostalCode, UpdateSourceTrigger=PropertyChanged}" />
 
             <TextBlock
-                Grid.Row="5"
+                Grid.Row="4"
                 Grid.Column="0"
                 Style="{StaticResource FieldLabel}">
                 Country
             </TextBlock>
             <ComboBox
                 x:Name="CountryComboBox"
-                Grid.Row="5"
+                Grid.Row="4"
                 Grid.Column="1"
                 DisplayMemberPath="Key"
                 ItemsSource="{Binding Source={x:Static geography:CountryList.Countries}, Mode=OneTime}"
                 SelectedValue="{Binding CountryCode}"
                 SelectedValuePath="Value"
-                Style="{StaticResource FormComboBox}"/>
+                Style="{StaticResource FormComboBox}" />
         </Grid>
 
-        <TextBlock Style="{StaticResource Header}">Contact Information</TextBlock>
+        <TextBlock Style="{StaticResource Header}" Text="Contact Information">
+            <TextBlock.Visibility>
+                <MultiBinding Converter="{StaticResource VisibilityMulti}">
+                    <Binding
+                        Converter="{StaticResource SectionLayoutVisibility}"
+                        ConverterParameter="{x:Static ns:SectionLayoutFieldIDs.Email}"
+                        Path="FieldLayoutProvider" />
+                    <Binding
+                        Converter="{StaticResource SectionLayoutVisibility}"
+                        ConverterParameter="{x:Static ns:SectionLayoutFieldIDs.Phone}"
+                        Path="FieldLayoutProvider" />
+                </MultiBinding>
+            </TextBlock.Visibility>
+        </TextBlock>
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="85" />
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
-                <RowDefinition />
-                <RowDefinition />
+                <ui:FieldLayoutRowDefinition FieldID="{x:Static ns:SectionLayoutFieldIDs.Email}" />
+                <ui:FieldLayoutRowDefinition FieldID="{x:Static ns:SectionLayoutFieldIDs.Phone}" />
             </Grid.RowDefinitions>
 
             <TextBlock

@@ -53,6 +53,11 @@
                     <Setter Property="Height" Value="20" />
                 </Style>
             </DataGrid.ColumnHeaderStyle>
+            <DataGrid.Resources>
+                <Style TargetType="DataGridRow">
+                    <EventSetter Event="MouseDoubleClick" Handler="OnClickSelect"/>
+                </Style>
+            </DataGrid.Resources>
             <DataGrid.Columns>
                 <DataGridTextColumn Width="*" Header="Recipient">
                     <DataGridTextColumn.Binding>

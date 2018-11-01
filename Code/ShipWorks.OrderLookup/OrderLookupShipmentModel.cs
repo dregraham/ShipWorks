@@ -14,6 +14,7 @@ using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Messaging.Messages;
 using ShipWorks.Messaging.Messages.Shipping;
+using ShipWorks.OrderLookup.FieldManager;
 using ShipWorks.OrderLookup.ShipmentModelPipelines;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers.Postal;
@@ -120,7 +121,8 @@ namespace ShipWorks.OrderLookup
             IShippingManager shippingManager,
             IMessageHelper messageHelper,
             Func<IInsuranceBehaviorChangeViewModel> createInsuranceBehaviorChange,
-            IEnumerable<IOrderLookupShipmentModelPipeline> pipelines)
+            IEnumerable<IOrderLookupShipmentModelPipeline> pipelines,
+            OrderLookupFieldLayoutProvider orderLookupFieldLayoutProvider)
         {
             this.messenger = messenger;
             this.shippingManager = shippingManager;
@@ -129,12 +131,18 @@ namespace ShipWorks.OrderLookup
             handler = new PropertyChangedHandler(this, () => PropertyChanged);
 
             subscription = new CompositeDisposable(pipelines.Select(x => x.Register(this)).ToArray());
+            FieldLayoutProvider = orderLookupFieldLayoutProvider;
         }
 
         /// <summary>
         /// Can the view accept focus
         /// </summary>
         public Func<bool> CanAcceptFocus { get; set; } = () => false;
+
+        /// <summary>
+        /// Field layout repo
+        /// </summary>
+        public IOrderLookupFieldLayoutProvider FieldLayoutProvider { get; }
 
         /// <summary>
         /// The order that is currently in context
@@ -437,7 +445,7 @@ namespace ShipWorks.OrderLookup
         {
             //Setting Selected Rate and TotalCost so that values
             //do not carry over between shipments or changing shipment types.
-            SelectedRate = null; 
+            SelectedRate = null;
             TotalCost = 0;
 
             if (value != ShipmentAdapter.ShipmentTypeCode)

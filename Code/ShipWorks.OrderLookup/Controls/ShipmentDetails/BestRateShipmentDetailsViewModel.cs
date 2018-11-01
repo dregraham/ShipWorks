@@ -6,8 +6,8 @@ using System.Reflection;
 using System.Windows.Input;
 using GalaSoft.MvvmLight.Command;
 using Interapptive.Shared.ComponentRegistration;
-using ShipWorks.Core.UI;
 using ShipWorks.Data.Model.HelperClasses;
+using ShipWorks.OrderLookup.FieldManager;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Services;
@@ -21,10 +21,8 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
     /// </summary>
     [KeyedComponent(typeof(IDetailsViewModel), ShipmentTypeCode.BestRate)]
     [WpfView(typeof(BestRateShipmentDetailsControl))]
-    public class BestRateShipmentDetailsViewModel : IDetailsViewModel, INotifyPropertyChanged, IDataErrorInfo
+    public class BestRateShipmentDetailsViewModel : OrderLookupViewModelBase, IDetailsViewModel, INotifyPropertyChanged, IDataErrorInfo
     {
-        public event PropertyChangedEventHandler PropertyChanged;
-        private readonly PropertyChangedHandler handler;
         private readonly Func<DimensionsManagerDlg> getDimensionsManagerDlg;
         private readonly ICarrierShipmentAdapterOptionsProvider carrierShipmentAdapterOptionsProvider;
         private IDictionary<long, string> dimensionProfiles;
@@ -37,16 +35,13 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
             IOrderLookupShipmentModel shipmentModel,
             IInsuranceViewModel insuranceViewModel,
             Func<DimensionsManagerDlg> getDimensionsManagerDlg,
-            ICarrierShipmentAdapterOptionsProvider carrierShipmentAdapterOptionsProvider)
+            ICarrierShipmentAdapterOptionsProvider carrierShipmentAdapterOptionsProvider,
+            OrderLookupFieldLayoutProvider fieldLayoutProvider) : base(shipmentModel, fieldLayoutProvider)
         {
-            ShipmentModel = shipmentModel;
-            ShipmentModel.PropertyChanged += ShipmentModelPropertyChanged;
-
             this.getDimensionsManagerDlg = getDimensionsManagerDlg;
             this.carrierShipmentAdapterOptionsProvider = carrierShipmentAdapterOptionsProvider;
 
             InsuranceViewModel = insuranceViewModel;
-            handler = new PropertyChangedHandler(this, () => PropertyChanged);
             ManageDimensionalProfiles = new RelayCommand(ManageDimensionalProfilesAction);
 
             RefreshDimensionalProfiles();
@@ -55,28 +50,26 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
         }
 
         /// <summary>
+        /// Field layout repository
+        /// </summary>
+        public override IOrderLookupFieldLayoutProvider FieldLayoutProvider => ShipmentModel.FieldLayoutProvider;
+
+        /// <summary>
+        /// Panel ID
+        /// </summary>
+        public override SectionLayoutIDs PanelID => SectionLayoutIDs.ShipmentDetails;
+
+        /// <summary>
         /// Title of the section
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public string Title => "Shipment Details";
-
-        /// <summary>
-        /// Is the section visible
-        /// </summary>
-        [Obfuscation(Exclude = true)]
-        public bool Visible => true;
+        public override string Title { get; protected set; } = "Shipment Details";
 
         /// <summary>
         /// Manages Dimensional Profiles
         /// </summary>
         [Obfuscation(Exclude = true)]
         public ICommand ManageDimensionalProfiles { get; set; }
-
-        /// <summary>
-        /// The ViewModel ShipmentModel
-        /// </summary>
-        [Obfuscation(Exclude = true)]
-        public IOrderLookupShipmentModel ShipmentModel { get; }
 
         /// <summary>
         /// Insurance information
@@ -91,7 +84,7 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
         public IDictionary<long, string> DimensionProfiles
         {
             get => dimensionProfiles;
-            set { handler.Set(nameof(DimensionProfiles), ref dimensionProfiles, value); }
+            set { Handler.Set(nameof(DimensionProfiles), ref dimensionProfiles, value); }
         }
 
         /// <summary>
@@ -107,7 +100,7 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
         public Dictionary<ShipmentTypeCode, string> Providers
         {
             get => providers;
-            set => handler.Set(nameof(Providers), ref providers, value);
+            set => Handler.Set(nameof(Providers), ref providers, value);
         }
 
         /// <summary>
@@ -129,8 +122,10 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
         /// <summary>
         /// Update when order changes
         /// </summary>
-        private void ShipmentModelPropertyChanged(object sender, PropertyChangedEventArgs e)
+        protected override void ShipmentModelPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
+            base.ShipmentModelPropertyChanged(sender, e);
+
             if (ShipmentModel.SelectedOrder != null)
             {
                 if (e.PropertyName == nameof(ShipmentModel.SelectedOrder))
@@ -161,7 +156,7 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
             IPackageAdapter packageAdapter = ShipmentModel.PackageAdapters.First();
             if (packageAdapter?.DimsProfileID > 0)
             {
-                        var profile = carrierShipmentAdapterOptionsProvider.GetDimensionsProfile(packageAdapter.DimsProfileID);
+                var profile = carrierShipmentAdapterOptionsProvider.GetDimensionsProfile(packageAdapter.DimsProfileID);
 
                 if (profile != null)
                 {
@@ -179,7 +174,7 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
                 packageAdapter.AdditionalWeight = 0;
             }
 
-            handler.RaisePropertyChanged(nameof(IsProfileSelected));
+            Handler.RaisePropertyChanged(nameof(IsProfileSelected));
         }
 
         /// <summary>
@@ -232,9 +227,6 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
                 RefreshDimensionalProfiles();
             }
         }
-
-        public void Dispose() =>
-            ShipmentModel.PropertyChanged -= ShipmentModelPropertyChanged;
 
         #region IDataErrorInfo
 

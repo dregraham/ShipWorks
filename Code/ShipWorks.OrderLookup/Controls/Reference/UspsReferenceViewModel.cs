@@ -1,4 +1,5 @@
 ﻿using Interapptive.Shared.ComponentRegistration;
+using ShipWorks.OrderLookup.FieldManager;
 using ShipWorks.Shipping;
 using ShipWorks.UI;
 
@@ -14,9 +15,15 @@ namespace ShipWorks.OrderLookup.Controls.Reference
         /// <summary>
         /// Constructor
         /// </summary>
-        public UspsReferenceViewModel(IOrderLookupShipmentModel shipmentModel) : base(shipmentModel)
+        public UspsReferenceViewModel(IOrderLookupShipmentModel shipmentModel,
+            OrderLookupFieldLayoutProvider fieldLayoutProvider) : base(shipmentModel, fieldLayoutProvider)
         {
 
         }
+
+        /// <summary>
+        /// Panel ID
+        /// </summary>
+        public override SectionLayoutIDs PanelID => SectionLayoutIDs.USPSReference;
     }
 }
