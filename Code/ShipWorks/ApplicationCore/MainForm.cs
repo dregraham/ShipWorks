@@ -3125,6 +3125,17 @@ namespace ShipWorks
         }
 
         /// <summary>
+        /// Edit the customer associated with the selected order
+        /// </summary>
+        private void OnContextOrderEditCustomer(object sender, EventArgs e)
+        {
+            Cursor.Current = Cursors.WaitCursor;
+
+            OrderEntity order = (OrderEntity) DataProvider.GetEntity(gridControl.Selection.Keys.First());
+            EditCustomer(order.CustomerID);
+        }
+
+        /// <summary>
         /// Initiate the editing of the given customer
         /// </summary>
         private void EditCustomer(long customerID)
