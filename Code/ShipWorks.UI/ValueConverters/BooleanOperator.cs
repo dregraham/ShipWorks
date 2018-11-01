@@ -6,7 +6,7 @@ namespace ShipWorks.UI.ValueConverters
     /// <summary>
     /// Operator to use for boolean comparisons
     /// </summary>
-    [Obfuscation(Feature = "PreserveLiteralValues", Exclude = false, StripAfterObfuscation = false)]
+    [Obfuscation(Exclude = true, ApplyToMembers = true, StripAfterObfuscation = false)]
     public enum BooleanOperator
     {
         [Description("And")]

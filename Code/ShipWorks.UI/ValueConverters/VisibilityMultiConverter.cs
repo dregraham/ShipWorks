@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Globalization;
 using System.Linq;
+using System.Reflection;
 using System.Windows;
 using System.Windows.Data;
 
@@ -9,6 +10,7 @@ namespace ShipWorks.UI.ValueConverters
     /// <summary>
     /// Visibility based on multiple visibilities
     /// </summary>
+    [Obfuscation(Exclude = true, ApplyToMembers = true, StripAfterObfuscation = false)]
     public class VisibilityMultiConverter : IMultiValueConverter
     {
         /// <summary>

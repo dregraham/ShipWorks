@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Reflection;
 using Autofac;
 using ShipWorks.OrderLookup.FieldManager;
 
@@ -8,6 +9,7 @@ namespace ShipWorks.OrderLookup
     /// <summary>
     /// Basic Order Lookup view model
     /// </summary>
+    [Obfuscation(Exclude = true, StripAfterObfuscation = true, ApplyToMembers = true)]
     public interface IOrderLookupPanelViewModel<out T> : INotifyPropertyChanged where T : IOrderLookupViewModel
     {
         /// <summary>

@@ -18,6 +18,7 @@ namespace ShipWorks.OrderLookup.Controls
     [KeyedComponent(typeof(INotifyPropertyChanged), OrderLookupPanels.ShipmentDetails)]
     [WpfView(typeof(OrderLookupPanelControl))]
     [JsonObject(MemberSerialization.OptIn)]
+    [Obfuscation(Exclude = true, StripAfterObfuscation = true, ApplyToMembers = true)]
     public class OrderLookupViewModelPanel<T> : IOrderLookupPanelViewModel<T> where T : class, IOrderLookupViewModel
     {
         private readonly PropertyChangedHandler handler;

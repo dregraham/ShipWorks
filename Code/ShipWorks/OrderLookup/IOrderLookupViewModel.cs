@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Reflection;
 using ShipWorks.OrderLookup.FieldManager;
 
 namespace ShipWorks.OrderLookup
@@ -7,6 +8,7 @@ namespace ShipWorks.OrderLookup
     /// <summary>
     /// Generic view model for order lookup
     /// </summary>
+    [Obfuscation(Exclude = true, ApplyToMembers = true, StripAfterObfuscation = false)]
     public interface IOrderLookupViewModel : IOrderLookupFieldLayoutProviderHost, INotifyPropertyChanged, IDisposable
     {
         /// <summary>
