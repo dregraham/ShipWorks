@@ -25,7 +25,6 @@ namespace ShipWorks.OrderLookup.FieldManager
         USPSAccountSelector,
         Origin,
         FedExResidentialCommercialAddress,
-        UspsHideStealth,
 
         /* To address specific fields */
         USPSRequireFullAddressValidation,
@@ -34,6 +33,7 @@ namespace ShipWorks.OrderLookup.FieldManager
         /* Label Options */
         LabelOptionsShipDate,
         LabelOptionsUspsHideStealth,
+        LabelOptionsNoPostage,
         LabelOptionsRequestedLabelFormat,
 
         /* Shipment details */

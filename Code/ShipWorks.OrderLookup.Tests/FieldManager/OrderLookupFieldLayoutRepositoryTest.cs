@@ -189,6 +189,7 @@ namespace ShipWorks.OrderLookup.Tests.FieldManager
                 {
                     new SectionFieldLayout() { Id = SectionLayoutFieldIDs.LabelOptionsShipDate, Name = "Ship Date"},
                     new SectionFieldLayout() { Id = SectionLayoutFieldIDs.LabelOptionsUspsHideStealth, Name = "USPS - Stealth Postage", Selected = false },
+                    new SectionFieldLayout() { Id = SectionLayoutFieldIDs.LabelOptionsNoPostage, Name = "USPS - No Postage" },
                     new SectionFieldLayout() { Id = SectionLayoutFieldIDs.LabelOptionsRequestedLabelFormat, Name = "Requested Label Format" }
                 }
             });
@@ -245,6 +246,7 @@ namespace ShipWorks.OrderLookup.Tests.FieldManager
                 {
                     new SectionFieldLayout() { Id = SectionLayoutFieldIDs.LabelOptionsShipDate, Name = "Ship Date New", Selected = false },
                     new SectionFieldLayout() { Id = SectionLayoutFieldIDs.LabelOptionsUspsHideStealth, Name = "USPS - Stealth Postage New", Selected = true  },
+                    new SectionFieldLayout() { Id = SectionLayoutFieldIDs.LabelOptionsNoPostage, Name = "USPS - No Postage" },
                     new SectionFieldLayout() { Id = SectionLayoutFieldIDs.LabelOptionsRequestedLabelFormat, Name = "Requested Label Format New", Selected = false }
                 }
             });

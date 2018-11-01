@@ -74,6 +74,7 @@ namespace ShipWorks.OrderLookup.FieldManager
                 {
                     new SectionFieldLayout() { Id = SectionLayoutFieldIDs.LabelOptionsShipDate, Name = "Ship Date" },
                     new SectionFieldLayout() { Id = SectionLayoutFieldIDs.LabelOptionsUspsHideStealth, Name = "USPS - Stealth Postage" },
+                    new SectionFieldLayout() { Id = SectionLayoutFieldIDs.LabelOptionsNoPostage, Name = "USPS - No Postage" },
                     new SectionFieldLayout() { Id = SectionLayoutFieldIDs.LabelOptionsRequestedLabelFormat, Name = "Requested Label Format" }
                 }
             });

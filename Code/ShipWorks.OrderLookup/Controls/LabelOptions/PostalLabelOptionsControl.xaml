@@ -26,7 +26,7 @@
         <Grid.RowDefinitions>
             <ui:FieldLayoutRowDefinition FieldID="{x:Static ns:SectionLayoutFieldIDs.LabelOptionsShipDate}" />
             <ui:FieldLayoutRowDefinition FieldID="{x:Static ns:SectionLayoutFieldIDs.LabelOptionsUspsHideStealth}" />
-            <RowDefinition Height="Auto" />
+            <ui:FieldLayoutRowDefinition FieldID="{x:Static ns:SectionLayoutFieldIDs.LabelOptionsNoPostage}" />
             <ui:FieldLayoutRowDefinition FieldID="{x:Static ns:SectionLayoutFieldIDs.LabelOptionsRequestedLabelFormat}" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
