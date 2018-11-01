@@ -78,7 +78,7 @@ namespace ShipWorks.OrderLookup.ShipmentHistory.Controls
         /// <summary>
         /// Refresh the history, load any components
         /// </summary>
-        public void Activate(Divelements.SandRibbon.Button voidButton)
+        public void Activate(Divelements.SandRibbon.Button voidButton, Divelements.SandRibbon.Button shipAgainButton)
         {
             kryptonHeader.Values.Heading = "Today's Shipments for " + getCurrentUserSettings().UserSession.User.Username;
             shipmentGrid.Reload();
@@ -86,8 +86,12 @@ namespace ShipWorks.OrderLookup.ShipmentHistory.Controls
             Deactivate();
 
             voidButton.Activate += OnVoid;
-            shipmentGrid.SelectionChanged += OnGridSelectionChanged;
             voidButton.Enabled = false;
+
+            shipAgainButton.Activate += OnShipAgain;
+            shipAgainButton.Enabled = false;
+
+            shipmentGrid.SelectionChanged += OnGridSelectionChanged;
 
             subscriptions = new CompositeDisposable(
                 messenger.OfType<SingleScanMessage>()
@@ -119,6 +123,7 @@ namespace ShipWorks.OrderLookup.ShipmentHistory.Controls
                     .Subscribe(),
 
             Disposable.Create(() => voidButton.Activate -= OnVoid),
+                Disposable.Create(() => shipAgainButton.Activate -= OnShipAgain),
                 Disposable.Create(() => shipmentGrid.SelectionChanged -= OnGridSelectionChanged)
             );
 
@@ -129,7 +134,24 @@ namespace ShipWorks.OrderLookup.ShipmentHistory.Controls
                 voidButton.Enabled = e?.Grid.SelectedElementCount == 1 &&
                     row.Entity is ProcessedShipmentEntity shipment &&
                     !shipment.Voided;
+
+                shipAgainButton.Enabled = e?.Grid.SelectedElementCount == 1;
+
                 voidButton.Tag = row;
+                shipAgainButton.Tag = row;
+            }
+        }
+
+        /// <summary>
+        /// Ship the shipment again
+        /// </summary>
+        private void OnShipAgain(object sender, EventArgs e)
+        {
+            if (sender is Divelements.SandRibbon.Button shipAgainButton &&
+                shipAgainButton.Tag is PagedEntityGrid.PagedEntityGridRow row &&
+                row.Entity is ProcessedShipmentEntity processedShipment)
+            {
+                messenger.Send(new OrderLookupShipAgainMessage(this, processedShipment.ShipmentID));
             }
         }
 

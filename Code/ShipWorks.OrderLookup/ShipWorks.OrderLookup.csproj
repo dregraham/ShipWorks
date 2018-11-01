@@ -328,6 +328,7 @@
     <Compile Include="OrderLookupModule.cs" />
     <Compile Include="OrderLookupPanelFactory.cs" />
     <Compile Include="OrderLookupPreviousShipmentLocator.cs" />
+    <Compile Include="OrderLookupShipAgainMessage.cs" />
     <Compile Include="OrderLookupViewModelBase.cs" />
     <Compile Include="PreviousProcessedShipmentDetails.cs" />
     <Compile Include="ShipmentHistory\Controls\ShipmentHistoryGrid.cs">
@@ -370,6 +371,7 @@
     <Compile Include="ShipmentModelPipelines\FocusQuickSearchPipeline.cs" />
     <Compile Include="ShipmentModelPipelines\ClearSearchPipeline.cs" />
     <Compile Include="ShipmentModelPipelines\IOrderLookupShipmentModelPipeline.cs" />
+    <Compile Include="ShipmentModelPipelines\ShipAgainPipeline.cs" />
     <Compile Include="ShipmentModelPipelines\ShipmentProcessedPipeline.cs" />
   </ItemGroup>
   <ItemGroup>
