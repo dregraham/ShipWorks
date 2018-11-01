@@ -2241,7 +2241,12 @@ namespace ShipWorks
         {
             UpdateLoginLogoffMenu();
 
-            mainMenuItemViewMode.Visible = UserSession.IsLoggedOn;
+            // Check if we should show the option to toggle UI modes
+            using (var lifetimeScope = IoC.BeginLifetimeScope())
+            {
+                IConfigurationData configurationData = lifetimeScope.Resolve<IConfigurationData>();
+                mainMenuItemViewMode.Visible = UserSession.IsLoggedOn && configurationData.FetchReadOnly().AllowUIModeToggle;
+            }
 
             // Only show backup \ restore if logged on
             if (!UserSession.IsLoggedOn)
