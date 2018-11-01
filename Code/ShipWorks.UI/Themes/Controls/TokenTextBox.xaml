@@ -76,6 +76,13 @@
         </ControlTemplate.Triggers>
     </ControlTemplate>
 
+    <Style x:Key="ButtonBase" TargetType="{x:Type ButtonBase}">
+        <Setter Property="Padding" Value="3" />
+        <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+        <Setter Property="VerticalContentAlignment" Value="Stretch" />
+        <Setter Property="Template" Value="{StaticResource ButtonTemplate}" />
+    </Style>
+
     <Style TargetType="{x:Type local:TokenTextBox}">
         <Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.WindowBrushKey}}" />
         <Setter Property="BorderBrush" Value="{StaticResource TextBox.Static.Border}" />
@@ -90,7 +97,6 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type local:TokenTextBox}">
-
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*" />
@@ -116,13 +122,10 @@
                             <ToggleButton
                                 x:Name="PART_TogglePopupButton"
                                 Grid.Column="0"
-                                HorizontalContentAlignment="Stretch"
-                                VerticalContentAlignment="Stretch"
                                 BorderBrush="{TemplateBinding BorderBrush}"
-                                BorderThickness="0,1,1,1"
-                                Template="{StaticResource ButtonTemplate}">
+                                BorderThickness="0,1,1,1">
                                 <ToggleButton.Style>
-                                    <Style TargetType="{x:Type ToggleButton}">
+                                    <Style BasedOn="{StaticResource ButtonBase}" TargetType="{x:Type ToggleButton}">
                                         <Setter Property="IsHitTestVisible" Value="True" />
                                         <Style.Triggers>
                                             <DataTrigger Binding="{Binding IsOpen, ElementName=PART_Popup}" Value="True">
@@ -143,10 +146,8 @@
                             <Button
                                 x:Name="PART_EditorButton"
                                 Grid.Column="1"
-                                HorizontalContentAlignment="Stretch"
-                                VerticalContentAlignment="Stretch"
                                 BorderBrush="{TemplateBinding BorderBrush}"
-                                Template="{StaticResource ButtonTemplate}">
+                                Style="{StaticResource ButtonBase}">
                                 <Path
                                     Margin="4"
                                     Fill="{StaticResource ComboBox.Static.Glyph}"
