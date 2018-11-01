@@ -15,12 +15,6 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
         public PostalShipmentDetailsControl()
         {
             InitializeComponent();
-            Loaded += OnControlLoaded;
-        }
-
-        private void OnControlLoaded(object sender, RoutedEventArgs e)
-        {
-            Provider.Focus();
         }
     }
 }

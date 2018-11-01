@@ -26,7 +26,7 @@ namespace ShipWorks.UI.Dialogs.Popup
         private readonly TimeSpan iconFadeStartTimeSpan = TimeSpan.FromSeconds(2);
         private Duration duration;
 
-        private const char NoIcon = (char) 0;
+        private const char NoIcon = '\0';
         private const char KeyboardIcon = (char) 0xf11c;
         private const char BarcodeIcon = (char) 0xf02a;
 
@@ -51,11 +51,22 @@ namespace ShipWorks.UI.Dialogs.Popup
         public void Show(string message, IWin32Window owner) =>
             Show(message, owner, NoIcon, defaultFadeStartTimeSpan);
 
+        /// <summary>
+        /// Shows the popup
+        /// </summary>
+        public void Show(string message, IWin32Window owner, TimeSpan fadeStartTimeSpan) =>
+            Show(message, owner, NoIcon, fadeStartTimeSpan);
 
+        /// <summary>
+        /// Shows popup with keyboard icon
+        /// </summary>
         public void ShowWithKeyboard(string message, Control owner) =>
             Show(message, owner, KeyboardIcon, iconFadeStartTimeSpan);
             
 
+        /// <summary>
+        /// Shows the popup with barcode icon
+        /// </summary>
         public void ShowWithBarcode(string message, Control owner) =>
             Show(message, owner, BarcodeIcon, iconFadeStartTimeSpan);
 

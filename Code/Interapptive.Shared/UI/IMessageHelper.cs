@@ -56,6 +56,11 @@ namespace Interapptive.Shared.UI
         void ShowPopup(string message);
 
         /// <summary>
+        /// Show a popup for specified amount of time
+        /// </summary>
+        void ShowPopup(string message, TimeSpan fadeTime);
+
+        /// <summary>
         /// Show a popup message with a Keyboard image
         /// </summary>
         void ShowKeyboardPopup(string message);

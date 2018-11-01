@@ -15,7 +15,12 @@ namespace ShipWorks.UI.ValueConverters
         /// </summary>
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            return char.IsWhiteSpace((char) value) ? Visibility.Collapsed : Visibility.Visible;
+            if (value is char character)
+            {
+                return character == '\0' ? Visibility.Collapsed : Visibility.Visible;
+            }
+
+            return null;
         }
 
         /// <summary>

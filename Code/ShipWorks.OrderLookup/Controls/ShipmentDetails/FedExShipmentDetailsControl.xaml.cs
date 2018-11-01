@@ -13,16 +13,6 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
         public FedExShipmentDetailsControl()
         {
             InitializeComponent();
-            Loaded += OnControlLoaded;
         }
-
-        /// <summary>
-        /// Handles the control load event
-        /// </summary>
-        private void OnControlLoaded(object sender, RoutedEventArgs e)
-        {
-            Provider.Focus();
-        }
-
     }
 }

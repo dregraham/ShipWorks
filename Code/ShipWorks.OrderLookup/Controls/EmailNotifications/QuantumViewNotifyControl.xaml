@@ -6,8 +6,8 @@
     xmlns:emailNotifications="clr-namespace:ShipWorks.OrderLookup.Controls.EmailNotifications"
     xmlns:enums="clr-namespace:ShipWorks.Shipping.Carriers.UPS.Enums;assembly=ShipWorks.Core"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:ui="http://schemas.shipworks.com/ui"
     xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
+    xmlns:ui="http://schemas.shipworks.com/ui"
     d:DataContext="{d:DesignInstance emailNotifications:QuantumViewNotifyControlViewModel}"
     FontFamily="/ShipWorks.OrderLookup;component/#Roboto"
     mc:Ignorable="d">
@@ -19,7 +19,7 @@
             <ui:EnumFlagToBoolConverter x:Key="EnumFlagConverter" />
             <Style BasedOn="{StaticResource FormCheckBox}" TargetType="{x:Type CheckBox}">
                 <Setter Property="HorizontalAlignment" Value="Center" />
-                <Setter Property="Margin" Value="0 0 0 10"/>
+                <Setter Property="Margin" Value="0,0,0,10" />
             </Style>
             <Style TargetType="{x:Type TextBlock}">
                 <Setter Property="VerticalAlignment" Value="Center" />
@@ -30,7 +30,7 @@
             </Style>
         </ResourceDictionary>
     </UserControl.Resources>
-    <Grid>
+    <Grid IsEnabled="{Binding ShipmentModel.ShipmentAllowEditing}">
         <Grid.RowDefinitions>
             <RowDefinition Height="auto" />
             <RowDefinition Height="auto" />
@@ -55,16 +55,16 @@
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition Width="auto" />
                 <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
 
             <!--  Grid headers  -->
             <TextBlock
                 Grid.Row="0"
-                Grid.Column="0"                
+                Grid.Column="0"
                 HorizontalAlignment="Right"
                 Text="Email Address" />
             <TextBlock
@@ -99,12 +99,12 @@
             <!--  Sender row  -->
             <TextBlock
                 Grid.Row="2"
-                Grid.Column="0"                
+                Grid.Column="0"
                 Style="{StaticResource FieldLabel}"
                 Text="Sender" />
             <CheckBox
                 Grid.Row="2"
-                Grid.Column="1"                
+                Grid.Column="1"
                 IsChecked="{Binding Sender, Converter={StaticResource EnumFlagConverter}, ConverterParameter={x:Static enums:UpsEmailNotificationType.Ship}}" />
 
             <CheckBox
@@ -119,7 +119,7 @@
             <!--  Recipient row  -->
             <TextBlock
                 Grid.Row="3"
-                Grid.Column="0"                
+                Grid.Column="0"
                 Style="{StaticResource FieldLabel}"
                 Text="Recipient" />
             <CheckBox
@@ -143,25 +143,25 @@
                 Text="Other" />
             <CheckBox
                 Grid.Row="4"
-                Grid.Column="1"                
+                Grid.Column="1"
                 IsChecked="{Binding Other, Converter={StaticResource EnumFlagConverter}, ConverterParameter={x:Static enums:UpsEmailNotificationType.Ship}}" />
             <CheckBox
                 Grid.Row="4"
-                Grid.Column="2"                
+                Grid.Column="2"
                 IsChecked="{Binding Other, Converter={StaticResource EnumFlagConverter}, ConverterParameter={x:Static enums:UpsEmailNotificationType.Exception}}" />
             <CheckBox
                 Grid.Row="4"
-                Grid.Column="3"                
+                Grid.Column="3"
                 IsChecked="{Binding Other, Converter={StaticResource EnumFlagConverter}, ConverterParameter={x:Static enums:UpsEmailNotificationType.Deliver}}" />
 
             <syncfusion:SfTextBoxExt
                 Grid.Row="5"
                 Grid.Column="1"
                 Grid.ColumnSpan="3"
-                Watermark="Other Email Address"
                 Style="{StaticResource FormTextBox}"
-                Text="{Binding ShipmentModel.ShipmentAdapter.Shipment.Ups.EmailNotifyOtherAddress, UpdateSourceTrigger=PropertyChanged}" />
-            
+                Text="{Binding ShipmentModel.ShipmentAdapter.Shipment.Ups.EmailNotifyOtherAddress, UpdateSourceTrigger=PropertyChanged}"
+                Watermark="Other Email Address" />
+
             <Line
                 Grid.Row="6"
                 Grid.Column="0"
@@ -208,24 +208,24 @@
             <TextBlock
                 Grid.Row="9"
                 Grid.Column="0"
+                MaxWidth="100"
+                Margin="0"
                 HorizontalAlignment="Left"
                 Style="{StaticResource FieldLabel}"
-                Margin="0"
-                MaxWidth="100"
-                Text="Personal Message (Optional)" 
-                TextWrapping="Wrap"/>
+                Text="Personal Message (Optional)"
+                TextWrapping="Wrap" />
             <TextBox
                 Grid.Row="9"
                 Grid.Column="1"
                 Grid.ColumnSpan="3"
-                VerticalScrollBarVisibility="Auto"
-                MinLines="3"
+                Margin="10,0,0,0"
+                AcceptsReturn="True"
                 MaxLines="3"
-                Margin="10 0 0 0"
+                MinLines="3"
                 Style="{StaticResource MultiLineFormTextBox}"
-                Text="{Binding ShipmentModel.ShipmentAdapter.Shipment.Ups.EmailNotifyMessage, UpdateSourceTrigger=PropertyChanged}" 
+                Text="{Binding ShipmentModel.ShipmentAdapter.Shipment.Ups.EmailNotifyMessage, UpdateSourceTrigger=PropertyChanged}"
                 TextWrapping="Wrap"
-                AcceptsReturn="True" />
+                VerticalScrollBarVisibility="Auto" />
         </Grid>
     </Grid>
 </UserControl>

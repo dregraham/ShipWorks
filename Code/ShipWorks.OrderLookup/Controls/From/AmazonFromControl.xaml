@@ -22,7 +22,7 @@
             <ui:BooleanAndConverter x:Key="BooleanAndConverter" />
         </ResourceDictionary>
     </UserControl.Resources>
-    <StackPanel>
+    <StackPanel IsEnabled="{Binding ShipmentModel.ShipmentAllowEditing}">
         <TextBlock Style="{StaticResource Header}" Text="Origin" />
         <ComboBox
             x:Name="OriginDropDown"
@@ -50,8 +50,8 @@
                     <Binding Mode="OneWay" Path="ShipmentModel.ShipmentAllowEditing" />
                     <Binding
                         Converter="{StaticResource ValueEqualToParameter}"
-                        Path="SelectedValue"
-                        ElementName="OriginDropDown">
+                        ElementName="OriginDropDown"
+                        Path="SelectedValue">
                         <Binding.ConverterParameter>
                             <sys:Int64>1</sys:Int64>
                         </Binding.ConverterParameter>

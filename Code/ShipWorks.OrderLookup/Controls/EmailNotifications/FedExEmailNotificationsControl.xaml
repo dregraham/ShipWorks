@@ -1,15 +1,16 @@
-<UserControl x:Class="ShipWorks.OrderLookup.Controls.EmailNotifications.FedExEmailNotificationsControl"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:local="clr-namespace:ShipWorks.OrderLookup.Controls.EmailNotifications"
-             xmlns:ui="http://schemas.shipworks.com/ui"
-             xmlns:enums="clr-namespace:ShipWorks.Shipping.Carriers.FedEx.Enums;assembly=ShipWorks.Core"
-             xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
-             FontFamily="/ShipWorks.OrderLookup;component/#Roboto"
-             mc:Ignorable="d"             
-             d:DataContext="{d:DesignInstance local:FedExEmailNotificationsViewModel}">
+<UserControl
+    x:Class="ShipWorks.OrderLookup.Controls.EmailNotifications.FedExEmailNotificationsControl"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:enums="clr-namespace:ShipWorks.Shipping.Carriers.FedEx.Enums;assembly=ShipWorks.Core"
+    xmlns:local="clr-namespace:ShipWorks.OrderLookup.Controls.EmailNotifications"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
+    xmlns:ui="http://schemas.shipworks.com/ui"
+    d:DataContext="{d:DesignInstance local:FedExEmailNotificationsViewModel}"
+    FontFamily="/ShipWorks.OrderLookup;component/#Roboto"
+    mc:Ignorable="d">
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -18,7 +19,7 @@
             <ui:EnumFlagToBoolConverter x:Key="EnumFlagConverter" />
             <Style BasedOn="{StaticResource FormCheckBox}" TargetType="{x:Type CheckBox}">
                 <Setter Property="HorizontalAlignment" Value="Center" />
-                <Setter Property="Margin" Value="0,0,0,10" />                
+                <Setter Property="Margin" Value="0,0,0,10" />
             </Style>
             <Style TargetType="{x:Type TextBlock}">
                 <Setter Property="VerticalAlignment" Value="Center" />
@@ -29,7 +30,7 @@
             </Style>
         </ResourceDictionary>
     </UserControl.Resources>
-    <Grid>
+    <Grid IsEnabled="{Binding ShipmentModel.ShipmentAllowEditing}">
         <Grid.RowDefinitions>
             <RowDefinition Height="auto" />
             <RowDefinition Height="auto" />
@@ -52,7 +53,7 @@
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition Width="auto" />
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="*" />
@@ -62,11 +63,11 @@
             <!--  Grid headers  -->
             <TextBlock
                 Grid.Row="0"
-                Grid.Column="0"                
-                VerticalAlignment="Bottom"
+                Grid.Column="0"
                 HorizontalAlignment="Right"
-                Text="Email Address" 
-                TextWrapping="WrapWithOverflow"/>
+                VerticalAlignment="Bottom"
+                Text="Email Address"
+                TextWrapping="WrapWithOverflow" />
             <TextBlock
                 Grid.Row="0"
                 Grid.Column="1"
@@ -79,22 +80,22 @@
                 HorizontalAlignment="Center"
                 VerticalAlignment="Bottom"
                 Text="Exception"
-                TextWrapping="WrapWithOverflow"/>
+                TextWrapping="WrapWithOverflow" />
             <TextBlock
                 Grid.Row="0"
                 Grid.Column="3"
                 HorizontalAlignment="Center"
                 VerticalAlignment="Bottom"
-                Text="Delivery" 
-                TextWrapping="WrapWithOverflow"/>
+                Text="Delivery"
+                TextWrapping="WrapWithOverflow" />
             <TextBlock
                 Grid.Row="0"
-                Grid.Column="4"                
-                HorizontalAlignment="Center"
-                TextAlignment="Center"
+                Grid.Column="4"
                 MaxWidth="90"
-                TextWrapping="WrapWithOverflow"
-                Text="Estimated Delivery" />
+                HorizontalAlignment="Center"
+                Text="Estimated Delivery"
+                TextAlignment="Center"
+                TextWrapping="WrapWithOverflow" />
 
             <Line
                 Grid.Row="1"
@@ -117,7 +118,7 @@
                 Text="Sender" />
             <CheckBox
                 Grid.Row="2"
-                Grid.Column="1"                
+                Grid.Column="1"
                 IsChecked="{Binding Sender, Converter={StaticResource EnumFlagConverter}, ConverterParameter={x:Static enums:FedExEmailNotificationType.Ship}}" />
 
             <CheckBox
@@ -178,13 +179,13 @@
                 Grid.Row="4"
                 Grid.Column="4"
                 IsChecked="{Binding Broker, Converter={StaticResource EnumFlagConverter}, ConverterParameter={x:Static enums:FedExEmailNotificationType.EstimatedDelivery}}" />
-            
+
             <!--  Other row  -->
             <TextBlock
                 Grid.Row="5"
                 Grid.Column="0"
                 Style="{StaticResource FieldLabel}"
-                Text="Other" /> 
+                Text="Other" />
             <CheckBox
                 Grid.Row="5"
                 Grid.Column="1"
@@ -207,9 +208,9 @@
                 Grid.Column="1"
                 Grid.ColumnSpan="4"
                 Style="{StaticResource FormTextBox}"
-                Text="{Binding ShipmentModel.ShipmentAdapter.Shipment.FedEx.EmailNotifyOtherAddress, UpdateSourceTrigger=PropertyChanged}" 
-                Watermark="Other Email Address"/>
-            
+                Text="{Binding ShipmentModel.ShipmentAdapter.Shipment.FedEx.EmailNotifyOtherAddress, UpdateSourceTrigger=PropertyChanged}"
+                Watermark="Other Email Address" />
+
             <Line
                 Grid.Row="7"
                 Grid.Column="0"
@@ -222,29 +223,30 @@
                 X2="1"
                 Y1="0"
                 Y2="0" />
-        
+
             <!--  Personal Message  -->
             <TextBlock
-                Grid.Column="0"
                 Grid.Row="8"
-                HorizontalAlignment="Left"
-                Margin="0"
-                Style="{StaticResource FieldLabel}"
-                Text="Personal Message (Optional)" 
+                Grid.Column="0"
                 MaxWidth="100"
-                TextWrapping="Wrap"/>
-            <TextBox Grid.Row="8"
-                     Grid.Column="1"
-                     Grid.ColumnSpan="4"                     
-                     VerticalScrollBarVisibility="Auto"
-                     MinLines="3"
-                     MaxLines="3"
-                     Margin="10 0 0 0"
-                     Style="{StaticResource MultiLineFormTextBox}"
-                     Text="{Binding ShipmentModel.ShipmentAdapter.Shipment.FedEx.EmailNotifyMessage, UpdateSourceTrigger=PropertyChanged}" 
-                     TextWrapping="Wrap"
-                     AcceptsReturn="True" />
+                Margin="0"
+                HorizontalAlignment="Left"
+                Style="{StaticResource FieldLabel}"
+                Text="Personal Message (Optional)"
+                TextWrapping="Wrap" />
+            <TextBox
+                Grid.Row="8"
+                Grid.Column="1"
+                Grid.ColumnSpan="4"
+                Margin="10,0,0,0"
+                AcceptsReturn="True"
+                MaxLines="3"
+                MinLines="3"
+                Style="{StaticResource MultiLineFormTextBox}"
+                Text="{Binding ShipmentModel.ShipmentAdapter.Shipment.FedEx.EmailNotifyMessage, UpdateSourceTrigger=PropertyChanged}"
+                TextWrapping="Wrap"
+                VerticalScrollBarVisibility="Auto" />
         </Grid>
-    
+
     </Grid>
 </UserControl>

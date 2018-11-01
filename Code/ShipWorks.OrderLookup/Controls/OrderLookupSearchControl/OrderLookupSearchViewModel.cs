@@ -141,13 +141,13 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookupSearchControl
                 }
                 else if (ShipmentModel.ShipmentAdapter?.Shipment?.Voided == true)
                 {
-                    SearchErrorMessage = "The order's shipment has been voided.";
+                    SearchErrorMessage = "This order's shipment has been voided.";
                     SearchError = true;
                     OrderNumber = ShipmentModel.SelectedOrder.OrderNumberComplete;
                 }
                 else if (ShipmentModel.ShipmentAdapter?.Shipment?.Processed == true)
                 {
-                    SearchErrorMessage = "The order's shipment has already been processed.";
+                    SearchErrorMessage = "This order's shipment has been processed.";
                     SearchError = true;
                     OrderNumber = ShipmentModel.SelectedOrder.OrderNumberComplete;
                 }

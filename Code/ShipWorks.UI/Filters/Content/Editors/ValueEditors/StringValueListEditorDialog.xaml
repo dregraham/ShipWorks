@@ -40,7 +40,7 @@
                  AcceptsReturn="True"
                  VerticalScrollBarVisibility="Auto"
                  HorizontalScrollBarVisibility="Auto"
-                 ap:Focus.Startup="{Binding RelativeSource={RelativeSource Self}}" />
+                 ap:Focus.Startup="true" />
 
         <StackPanel Grid.Row="2" 
                     Orientation="Horizontal"

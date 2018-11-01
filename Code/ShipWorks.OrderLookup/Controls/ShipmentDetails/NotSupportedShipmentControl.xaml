@@ -54,7 +54,7 @@
             Text="Provider" />
 
         <ComboBox
-            Name="Provider"
+            ui:Focus.Startup="true"
             Grid.Row="1"
             Grid.Column="1"
             DisplayMemberPath="Value"

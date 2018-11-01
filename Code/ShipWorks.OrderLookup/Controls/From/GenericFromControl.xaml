@@ -27,7 +27,7 @@
         </ResourceDictionary>
     </UserControl.Resources>
 
-    <Grid>
+    <Grid IsEnabled="{Binding ShipmentModel.ShipmentAllowEditing}" >
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="85" />
             <ColumnDefinition Width="*" />

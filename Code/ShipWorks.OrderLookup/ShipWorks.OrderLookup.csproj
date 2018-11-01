@@ -370,6 +370,7 @@
     <Compile Include="ShipmentModelPipelines\FocusQuickSearchPipeline.cs" />
     <Compile Include="ShipmentModelPipelines\ClearSearchPipeline.cs" />
     <Compile Include="ShipmentModelPipelines\IOrderLookupShipmentModelPipeline.cs" />
+    <Compile Include="ShipmentModelPipelines\ShipmentProcessedPipeline.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

@@ -22,7 +22,7 @@
         </ResourceDictionary>
     </UserControl.Resources>
 
-    <Grid>
+    <Grid IsEnabled="{Binding ShipmentModel.ShipmentAllowEditing}">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
@@ -64,7 +64,7 @@
             Text="Provider" />
 
         <ComboBox
-            Name="Provider"
+            ui:Focus.Startup="true"
             Grid.Row="1"
             Grid.Column="1"
             DisplayMemberPath="Value"
@@ -136,9 +136,7 @@
                 IsEnabled="{Binding IsProfileSelected, Converter={StaticResource InvertBoolean}}"
                 MaxLength="3"
                 Style="{StaticResource FormTextBox}"
-                Text="{Binding ShipmentModel.ShipmentAdapter.Shipment.BestRate.DimsLength,
-                            Converter={StaticResource StringEmptyWhenEqualToParameter},
-                            ConverterParameter=0}" />
+                Text="{Binding ShipmentModel.ShipmentAdapter.Shipment.BestRate.DimsLength, Converter={StaticResource StringEmptyWhenEqualToParameter}, ConverterParameter=0}" />
 
             <TextBox
                 Grid.Column="1"
@@ -147,9 +145,7 @@
                 IsEnabled="{Binding IsProfileSelected, Converter={StaticResource InvertBoolean}}"
                 MaxLength="3"
                 Style="{StaticResource FormTextBox}"
-                Text="{Binding ShipmentModel.ShipmentAdapter.Shipment.BestRate.DimsWidth,
-                            Converter={StaticResource StringEmptyWhenEqualToParameter},
-                            ConverterParameter=0}" />
+                Text="{Binding ShipmentModel.ShipmentAdapter.Shipment.BestRate.DimsWidth, Converter={StaticResource StringEmptyWhenEqualToParameter}, ConverterParameter=0}" />
 
             <TextBox
                 Grid.Column="2"
@@ -158,9 +154,7 @@
                 IsEnabled="{Binding IsProfileSelected, Converter={StaticResource InvertBoolean}}"
                 MaxLength="3"
                 Style="{StaticResource FormTextBox}"
-                Text="{Binding ShipmentModel.ShipmentAdapter.Shipment.BestRate.DimsHeight,
-                            Converter={StaticResource StringEmptyWhenEqualToParameter},
-                            ConverterParameter=0}" />
+                Text="{Binding ShipmentModel.ShipmentAdapter.Shipment.BestRate.DimsHeight, Converter={StaticResource StringEmptyWhenEqualToParameter}, ConverterParameter=0}" />
 
             <TextBlock
                 Grid.Column="3"
