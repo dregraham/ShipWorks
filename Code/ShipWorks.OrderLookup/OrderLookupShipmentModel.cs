@@ -432,9 +432,14 @@ namespace ShipWorks.OrderLookup
         /// <summary>
         /// Change the provider of the shipment
         /// </summary>
+        /// <remarks>
+        /// Selected Rate is set to null and TotalCost is set to zero
+        /// to avoid those values carrying over when the shipment changes.
+        /// </remarks>
         public void ChangeShipmentType(ShipmentTypeCode value)
         {
             SelectedRate = null;
+            TotalCost = 0;
 
             if (value != ShipmentAdapter.ShipmentTypeCode)
             {
