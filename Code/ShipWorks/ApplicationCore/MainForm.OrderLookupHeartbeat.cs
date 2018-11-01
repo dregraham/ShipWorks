@@ -1,5 +1,4 @@
 ﻿using Interapptive.Shared.Win32;
-using log4net;
 using ShipWorks.ApplicationCore;
 using ShipWorks.UI;
 
@@ -19,9 +18,6 @@ namespace ShipWorks
         /// </remarks>
         private class OrderLookupHeartbeat : Heartbeat
         {
-            private static readonly ILog log = LogManager.GetLogger(typeof(OrderLookupHeartbeat));
-
-            // The instance of the MainForm that owns us
             private readonly MainForm mainForm;
 
             /// <summary>
@@ -35,15 +31,8 @@ namespace ShipWorks
             /// <summary>
             /// Determines if the heartbeat is ready to beat
             /// </summary>
-            protected override bool CanBeat()
-            {
-                if (mainForm.IsDisposed)
-                {
-                    return false;
-                }
-
-                return base.CanBeat();
-            }
+            protected override bool CanBeat() =>
+                !mainForm.IsDisposed || base.CanBeat();
 
             /// <summary>
             /// Runs after it is determined that ShipWorks is not in a state to do a heartbeat.
