@@ -60,8 +60,6 @@ namespace ShipWorks.UI.Controls.Weight
         private readonly Func<string, ITrackedDurationEvent> startDurationEvent;
         private readonly ControlOwnerProvider ownerProvider;
 
-        //private IntPtr ownerHandle;
-
         /// <summary>
         /// Static constructor
         /// </summary>
