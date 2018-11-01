@@ -434,7 +434,8 @@ namespace ShipWorks.OrderLookup
         /// </summary>
         public void ChangeShipmentType(ShipmentTypeCode value)
         {
-            //Setting Selected Rate and TotalCost so that values do not carrying over between shipments.
+            //Setting Selected Rate and TotalCost so that values
+            //do not carry over between shipments or changing shipment types.
             SelectedRate = null; 
             TotalCost = 0;
 
