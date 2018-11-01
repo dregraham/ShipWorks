@@ -11,6 +11,7 @@ using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Messaging.Messages;
 using ShipWorks.Messaging.Messages.Dialogs;
 using ShipWorks.Messaging.Messages.Shipping;
+using ShipWorks.Settings;
 using ShipWorks.Shipping.Services;
 using ShipWorks.UI.Controls.SandRibbon;
 using ShipWorks.Users.Security;

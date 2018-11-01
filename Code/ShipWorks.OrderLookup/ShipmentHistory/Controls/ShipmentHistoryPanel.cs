@@ -14,6 +14,7 @@ using ShipWorks.Data.Grid.Columns;
 using ShipWorks.Data.Grid.Paging;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
+using ShipWorks.Messaging.Messages.Shipping;
 using ShipWorks.Messaging.Messages.SingleScan;
 using ShipWorks.Users;
 
@@ -73,7 +74,7 @@ namespace ShipWorks.OrderLookup.ShipmentHistory.Controls
         /// <summary>
         /// Refresh the history, load any components
         /// </summary>
-        public void Activate(Divelements.SandRibbon.Button voidButton)
+        public void Activate(Divelements.SandRibbon.Button voidButton, Divelements.SandRibbon.Button shipAgainButton)
         {
             kryptonHeader.Values.Heading = "Today's Shipments for " + getUserSession().User.Username;
             shipmentGrid.Reload();
@@ -81,8 +82,12 @@ namespace ShipWorks.OrderLookup.ShipmentHistory.Controls
             Deactivate();
 
             voidButton.Activate += OnVoid;
-            shipmentGrid.SelectionChanged += OnGridSelectionChanged;
             voidButton.Enabled = false;
+
+            shipAgainButton.Activate += OnShipAgain;
+            shipAgainButton.Enabled = false;
+
+            shipmentGrid.SelectionChanged += OnGridSelectionChanged;
 
             subscriptions = new CompositeDisposable(
                 messenger.OfType<SingleScanMessage>()
@@ -94,6 +99,7 @@ namespace ShipWorks.OrderLookup.ShipmentHistory.Controls
                     .Subscribe(x => searchBox.Text = x.SearchText),
 
                 Disposable.Create(() => voidButton.Activate -= OnVoid),
+                Disposable.Create(() => shipAgainButton.Activate -= OnShipAgain),
                 Disposable.Create(() => shipmentGrid.SelectionChanged -= OnGridSelectionChanged)
             );
 
@@ -104,7 +110,24 @@ namespace ShipWorks.OrderLookup.ShipmentHistory.Controls
                 voidButton.Enabled = e?.Grid.SelectedElementCount == 1 &&
                     row.Entity is ProcessedShipmentEntity shipment &&
                     !shipment.Voided;
+
+                shipAgainButton.Enabled = e?.Grid.SelectedElementCount == 1;
+
                 voidButton.Tag = row;
+                shipAgainButton.Tag = row;
+            }
+        }
+
+        /// <summary>
+        /// Ship the shipment again
+        /// </summary>
+        private void OnShipAgain(object sender, EventArgs e)
+        {
+            if (sender is Divelements.SandRibbon.Button shipAgainButton &&
+                shipAgainButton.Tag is PagedEntityGrid.PagedEntityGridRow row &&
+                row.Entity is ProcessedShipmentEntity processedShipment)
+            {
+                messenger.Send(new OrderLookupShipAgainMessage(this, processedShipment.ShipmentID));
             }
         }
 
@@ -170,7 +193,7 @@ namespace ShipWorks.OrderLookup.ShipmentHistory.Controls
         private void OnEndSearch(object sender, EventArgs e) =>
             shipmentGrid.Search(string.Empty);
 
-        /// <summary> 
+        /// <summary>
         /// Clean up any resources being used.
         /// </summary>
         /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
