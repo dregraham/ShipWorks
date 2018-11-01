@@ -36,9 +36,6 @@
             <valueConverters:EnumImageConverter x:Key="EnumImage" />
             <valueConverters:BooleanToVisibilityConverter x:Key="BooleanToVisibility" />
             <valueConverters:AddressKeyValueToBooleanConverter x:Key="AddressKeyValueToBooleanConverter" />
-            <valueConverters:VisibleWhenEqualToParameterConverter x:Key="VisibleWhenEqualToParameter" />
-            <valueConverters:VisibleWhenEqualToParameterConverter x:Key="VisibleWhenNotEqualToParameter" Invert="true" />
-            <valueConverters:HeightWhenFieldAllowedConverter x:Key="HeightWhenFieldAllowedConverter" />
             <valueConverters:SectionLayoutVisibilityConverter x:Key="SectionLayoutVisibility" />
             <valueConverters:VisibilityMultiConverter x:Key="VisibilityMulti" BooleanOperator="Or" />
         </ResourceDictionary>
@@ -105,9 +102,9 @@
             <TextBlock
                 Grid.Row="0"
                 Grid.Column="0"
-                Style="{StaticResource Header}">
-                Address
-            </TextBlock>
+                Style="{StaticResource Header}" Text="Address"
+                Visibility="{Binding IsAddressValidationEnabled, Converter={StaticResource BooleanToVisibility}}"/>
+                
             <ui:AlignmentWrapPanel
                 Grid.Row="0"
                 Grid.Column="1"
@@ -244,7 +241,20 @@
                 Style="{StaticResource FormComboBox}" />
         </Grid>
 
-        <TextBlock Style="{StaticResource Header}">Contact Information</TextBlock>
+        <TextBlock Style="{StaticResource Header}" Text="Contact Information">
+            <TextBlock.Visibility>
+                <MultiBinding Converter="{StaticResource VisibilityMulti}">
+                    <Binding
+                        Converter="{StaticResource SectionLayoutVisibility}"
+                        ConverterParameter="{x:Static ns:SectionLayoutFieldIDs.Email}"
+                        Path="FieldLayoutProvider" />
+                    <Binding
+                        Converter="{StaticResource SectionLayoutVisibility}"
+                        ConverterParameter="{x:Static ns:SectionLayoutFieldIDs.Phone}"
+                        Path="FieldLayoutProvider" />
+                </MultiBinding>
+            </TextBlock.Visibility>
+        </TextBlock>
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="85" />
