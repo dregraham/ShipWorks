@@ -1,5 +1,6 @@
 using System.Windows;
 using System.Windows.Forms;
+using System.Windows.Input;
 
 namespace ShipWorks.OrderLookup.Controls.OrderConfirmationDialog
 {
@@ -23,6 +24,19 @@ namespace ShipWorks.OrderLookup.Controls.OrderConfirmationDialog
         {
             DialogResult = true;
             Close();
+        }
+
+        /// <summary>
+        /// When enter is typed in the grid, select the order and close.
+        /// </summary>
+        private void OnDataGridPreviewKeyDown(object sender, System.Windows.Input.KeyEventArgs e)
+        {
+            if (Key.Enter == e.Key)
+            {
+                e.Handled = true;
+                DialogResult = true;
+                Close();
+            }
         }
     }
 }

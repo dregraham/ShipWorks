@@ -90,7 +90,7 @@
                             <Paragraph>Apply a shipping profile then create the label.</Paragraph>
                         </ListItem>
                         <ListItem>
-                            <Paragraph>Edit the shipment by clicking the View All Options button.</Paragraph>
+                            <Paragraph>Process the shipment in Batch Grid mode.</Paragraph>
                         </ListItem>
                     </List>
                 </FlowDocument>
