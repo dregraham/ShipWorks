@@ -5,8 +5,8 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="clr-namespace:ShipWorks.OrderLookup.Controls.ShipmentDetails"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:ui="http://schemas.shipworks.com/ui"
     xmlns:ns="clr-namespace:ShipWorks.OrderLookup.FieldManager;assembly=ShipWorks.Core"
+    xmlns:ui="http://schemas.shipworks.com/ui"
     FontFamily="/ShipWorks.OrderLookup;component/#Roboto"
     mc:Ignorable="d">
     <UserControl.Resources>
@@ -16,6 +16,7 @@
                 <ResourceDictionary Source="/ShipWorks.OrderLookup;component/Controls/Weight/WeightControl.xaml" />
             </ResourceDictionary.MergedDictionaries>
             <ui:DefaultWhenNullOrEmptyConverter x:Key="NoneWhenEmpty" />
+            <ui:EnumDescriptionConverter x:Key="EnumDescription" />
         </ResourceDictionary>
     </UserControl.Resources>
     <Grid IsEnabled="{Binding ShipmentModel.ShipmentAllowEditing}">
@@ -55,21 +56,45 @@
             Text="Provider" />
 
         <ComboBox
-            ui:Focus.Startup="true"
             Grid.Row="1"
             Grid.Column="1"
+            ui:Focus.Startup="true"
             DisplayMemberPath="Value"
             ItemsSource="{Binding Providers}"
             SelectedValue="{Binding ShipmentTypeCode, UpdateSourceTrigger=PropertyChanged}"
             SelectedValuePath="Key"
             Style="{StaticResource FormComboBox}" />
-        <TextBlock
+        <StackPanel
             Grid.Row="2"
             Grid.Column="1"
             Margin="10,0,0,0"
-            FontSize="14"
-            Foreground="Red"
-            Text="{Binding ErrorMessage}"
-            TextWrapping="Wrap" />
+            Orientation="Vertical">
+            <StackPanel.Resources>
+                <Style TargetType="FlowDocument">
+                    <Setter Property="FontSize" Value="14" />
+                    <Setter Property="Foreground" Value="Red" />
+                </Style>
+            </StackPanel.Resources>
+            <FlowDocumentScrollViewer IsToolBarVisible="False" VerticalScrollBarVisibility="Hidden" >
+                <FlowDocument PagePadding="0">
+                    <Paragraph>
+                        Modifying
+                        <Run Text="{Binding ShipmentTypeCode, Converter={StaticResource EnumDescription}}" />
+                        shipment details is not supported in Order Lookup Mode. You can:
+                    </Paragraph>
+                    <List >
+                        <ListItem>
+                            <Paragraph>Create the label with the current shipment details.</Paragraph>
+                        </ListItem>
+                        <ListItem>
+                            <Paragraph>Apply a shipping profile then create the label.</Paragraph>
+                        </ListItem>
+                        <ListItem>
+                            <Paragraph>Edit the shipment by clicking the View All Options button.</Paragraph>
+                        </ListItem>
+                    </List>
+                </FlowDocument>
+            </FlowDocumentScrollViewer>
+        </StackPanel>
     </Grid>
 </UserControl>
