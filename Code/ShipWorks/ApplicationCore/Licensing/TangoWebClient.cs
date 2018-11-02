@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Net;
+using System.Reactive;
 using System.Reflection;
 using System.Security.Cryptography.X509Certificates;
 using System.Web.Services.Protocols;
@@ -1171,6 +1172,7 @@ namespace ShipWorks.ApplicationCore.Licensing
 
             try
             {
+                TelemetricResult<Unit> telemetricResult = new TelemetricResult<Unit>("Tango.Request");
                 using (TrackedDurationEvent telemetryEvent = new TrackedDurationEvent("Tango.Request"))
                 {
                     string action = postRequest.Variables.FirstOrDefault(v => v.Name.Equals("action", StringComparison.InvariantCultureIgnoreCase))?.Value ?? logEntryName;
@@ -1178,10 +1180,11 @@ namespace ShipWorks.ApplicationCore.Licensing
 
                     // First validate that we are connecting to interapptive, and not a fake redirect to steal passwords and such.  Doing this pre-call
                     // also prevents stealing the headers user\pass with fiddler
-                    ValidateSecureConnection(postRequest.Uri);
-                    telemetryEvent.AddMetricUsingCurrentDuration("Tango.Request.ValidateSecureConnection");
+                    telemetricResult.RunTimedEvent("ValidateSecureConnection", () => ValidateSecureConnection(postRequest.Uri));
+                    
+                    telemetricResult.RunTimedEvent("ActualRequest", () => postResponse = postRequest.GetResponse());
 
-                    postResponse = postRequest.GetResponse();
+                    telemetricResult.WriteTo(telemetryEvent);
                 }
 
                 // Ensure the site has a valid interapptive secure certificate
