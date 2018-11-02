@@ -1,25 +1,33 @@
-using Xunit;
+using System;
+using Autofac.Extras.Moq;
 using Moq;
+using ShipWorks.ApplicationCore;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.FedEx.Api;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Tracking.Response;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Tracking.Response.Manipulators;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Track;
+using ShipWorks.Tests.Shared;
+using Xunit;
 
 namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Tracking.Response.Manipulators
 {
-    public class FedExTrackingResponseManipulatorTest
+    [Collection(TestCollections.IoC)]
+    public class FedExTrackingResponseManipulatorTest : IDisposable
     {
         private FedExTrackingResponseManipulator testObject;
-
-        FedExTrackingResponse fedExTrackingResponse;
-        TrackReply nativeResponse;
+        private FedExTrackingResponse fedExTrackingResponse;
+        private TrackReply nativeResponse;
         private Mock<CarrierRequest> carrierRequest;
         private ShipmentEntity shipment;
+        private readonly AutoMock mock;
 
         public FedExTrackingResponseManipulatorTest()
         {
+            mock = AutoMockExtensions.GetLooseThatReturnsMocks();
+            IoC.InitializeForUnitTests(mock.Container);
+
             nativeResponse = FedExTrackingUtilities.BuildSuccessTrackReply();
             shipment = new ShipmentEntity
             {
@@ -118,5 +126,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Tracking.Response.Manipula
 
             Assert.Equal(0, fedExTrackingResponse.TrackingResult.Details.Count);
         }
+
+        public void Dispose() => mock.Dispose();
     }
 }

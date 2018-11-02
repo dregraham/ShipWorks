@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Reflection;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data.Model.EntityInterfaces;
+using ShipWorks.OrderLookup.FieldManager;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Editing.Rating;
+using ShipWorks.Shipping.Profiles;
 using ShipWorks.Shipping.Services;
 
 namespace ShipWorks.OrderLookup
@@ -16,6 +17,11 @@ namespace ShipWorks.OrderLookup
     [Obfuscation(ApplyToMembers = true, Exclude = true, StripAfterObfuscation = false)]
     public interface IOrderLookupShipmentModel : IDisposable
     {
+        /// <summary>
+        /// Field layout repo
+        /// </summary>
+        IOrderLookupFieldLayoutProvider FieldLayoutProvider { get; }
+
         /// <summary>
         /// The order that's in context
         /// </summary>
@@ -87,6 +93,11 @@ namespace ShipWorks.OrderLookup
         RateResult SelectedRate { get; set; }
 
         /// <summary>
+        /// Can the view accept focus
+        /// </summary>
+        Func<bool> CanAcceptFocus { get; set; }
+
+        /// <summary>
         /// Changes the shipment type
         /// </summary>
         void ChangeShipmentType(ShipmentTypeCode value);
@@ -104,7 +115,7 @@ namespace ShipWorks.OrderLookup
         /// <summary>
         /// Register the profile handler
         /// </summary>
-        void RegisterProfileHandler(Func<Func<ShipmentTypeCode?>, Action<IShippingProfileEntity>, IDisposable> profileRegistration);
+        void RegisterProfileHandler(Func<Func<ShipmentTypeCode?>, Action<IShippingProfile>, IDisposable> profileRegistration);
 
         /// <summary>
         /// Wire a property changed event on an INotifyPropertyChanged object
@@ -139,6 +150,6 @@ namespace ShipWorks.OrderLookup
         /// <summary>
         /// Apply the profile to the current shipment
         /// </summary>
-        bool ApplyProfile(long profileID);
+        bool ApplyProfile(IShippingProfile profile);
     }
 }

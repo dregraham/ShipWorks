@@ -1,6 +1,5 @@
 ﻿using System;
 using Divelements.SandRibbon;
-using ShipWorks.Data.Model.EntityInterfaces;
 
 namespace ShipWorks.Shipping.Profiles
 {
@@ -16,6 +15,6 @@ namespace ShipWorks.Shipping.Profiles
             Button actualApplyProfileButton,
             Guid menuGuid,
             Func<ShipmentTypeCode?> getCurrentShipmentType,
-            Action<IShippingProfileEntity> onSelection);
+            Action<IShippingProfile> onSelection);
     }
 }

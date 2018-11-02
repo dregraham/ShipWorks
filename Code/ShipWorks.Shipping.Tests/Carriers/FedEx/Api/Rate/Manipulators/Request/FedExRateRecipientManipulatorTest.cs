@@ -1,18 +1,27 @@
-﻿using ShipWorks.Data.Model.EntityClasses;
+﻿using System;
+using Autofac.Extras.Moq;
+using ShipWorks.ApplicationCore;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Manipulators.Request;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate;
+using ShipWorks.Tests.Shared;
 using ShipWorks.Tests.Shared.EntityBuilders;
 using Xunit;
 
 namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Rate.Manipulators.Request
 {
-    public class FedExRateRecipientManipulatorTest
+    [Collection(TestCollections.IoC)]
+    public class FedExRateRecipientManipulatorTest : IDisposable
     {
         private FedExRateRecipientManipulator testObject;
         private ShipmentEntity shipment;
+        private readonly AutoMock mock;
 
         public FedExRateRecipientManipulatorTest()
         {
+            mock = AutoMockExtensions.GetLooseThatReturnsMocks();
+            IoC.InitializeForUnitTests(mock.Container);
+
             shipment = Create.Shipment().AsFedEx().Build();
 
             testObject = new FedExRateRecipientManipulator();
@@ -101,5 +110,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Rate.Manipulators.Request
             Assert.Equal(string.Empty, result.RequestedShipment.Recipient.Address.StateOrProvinceCode);
             Assert.Equal("GU", result.RequestedShipment.Recipient.Address.CountryCode);
         }
+
+        public void Dispose() => mock.Dispose();
     }
 }

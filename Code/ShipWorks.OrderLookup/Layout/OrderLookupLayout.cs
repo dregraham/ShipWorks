@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.IO;
 using System.Linq;
-using System.Reflection;
 using System.Windows;
 using Autofac;
 using Interapptive.Shared.ComponentRegistration;
@@ -25,8 +23,7 @@ namespace ShipWorks.OrderLookup.Layout
         private readonly IOrderLookupPanelFactory panelFactory;
         private readonly IUserSession userSession;
         private readonly ILog log;
-        private OrderLookupLayoutDefaults defaults;
-
+        
         /// <summary>
         /// Constructor
         /// </summary>
@@ -36,8 +33,6 @@ namespace ShipWorks.OrderLookup.Layout
             this.userSession = userSession;
 
             log = createLogger(GetType());
-
-            defaults = new OrderLookupLayoutDefaults();
         }
 
         /// <summary>
@@ -47,6 +42,7 @@ namespace ShipWorks.OrderLookup.Layout
         {
             IEnumerable<IOrderLookupPanelViewModel<IOrderLookupViewModel>> allPanels = panelFactory.GetPanels(scope);
 
+            // WPF uses GridLength for defining widths. Yes, I agree, it is weird.
             (GridLength leftColumnWidth, GridLength rightColumnWidth, IEnumerable<IEnumerable<PanelInfo>> panels) = GetLayout();
 
             orderLookupViewModel.LeftColumn = GetColumn(0, panels, allPanels);
@@ -70,12 +66,15 @@ namespace ShipWorks.OrderLookup.Layout
         /// <summary>
         /// Retrieves the layout. If anything goes wrong, a default layout is returned.
         /// </summary>
+        /// <remarks>
+        /// WPF uses GridLength for defining widths. Yes, I agree, it is weird.
+        /// </remarks>
         private (GridLength, GridLength, IEnumerable<IEnumerable<PanelInfo>>) GetLayout()
         {
             string serializedLayout = userSession.User.Settings.OrderLookupLayout;
             if (string.IsNullOrWhiteSpace(serializedLayout))
             {
-                return (defaults.LeftColumnWidth, defaults.RightColumnWidth, defaults.GetDefaults());
+                return (OrderLookupLayoutDefaults.LeftColumnWidth, OrderLookupLayoutDefaults.RightColumnWidth, OrderLookupLayoutDefaults.GetDefaults());
             }
 
             try
@@ -89,7 +88,7 @@ namespace ShipWorks.OrderLookup.Layout
             catch (Exception ex)
             {
                 log.Error(ex);
-                return (defaults.LeftColumnWidth, defaults.RightColumnWidth, defaults.GetDefaults());
+                return (OrderLookupLayoutDefaults.LeftColumnWidth, OrderLookupLayoutDefaults.RightColumnWidth, OrderLookupLayoutDefaults.GetDefaults());
             }
         }
 
@@ -98,7 +97,6 @@ namespace ShipWorks.OrderLookup.Layout
         /// </summary>
         private ObservableCollection<IOrderLookupPanelViewModel<IOrderLookupViewModel>> GetColumn(int columnIndex, IEnumerable<IEnumerable<PanelInfo>> layout, IEnumerable<IOrderLookupPanelViewModel<IOrderLookupViewModel>> allPanels)
         {
-
             MethodConditions.EnsureArgumentIsNotNull(layout, "layout");
             MethodConditions.EnsureArgumentIsNotNull(allPanels, "allPanels");
 

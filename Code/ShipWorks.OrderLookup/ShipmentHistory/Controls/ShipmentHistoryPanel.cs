@@ -9,11 +9,15 @@ using ComponentFactory.Krypton.Toolkit;
 using Divelements.SandGrid;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.UI;
+using Interapptive.Shared.Utility;
+using ShipWorks.Common.IO.KeyboardShortcuts;
+using ShipWorks.Common.IO.KeyboardShortcuts.Messages;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Data.Grid.Columns;
 using ShipWorks.Data.Grid.Paging;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
+using ShipWorks.IO.KeyboardShortcuts;
 using ShipWorks.Messaging.Messages.Shipping;
 using ShipWorks.Messaging.Messages.SingleScan;
 using ShipWorks.Users;
@@ -28,7 +32,7 @@ namespace ShipWorks.OrderLookup.ShipmentHistory.Controls
     {
         private readonly static Guid gridSettingsKey = new Guid("{C5933658-6323-4599-A81A-15DAF6A07D95}");
         private readonly ShipmentHistoryGrid shipmentGrid;
-        private readonly Func<IUserSession> getUserSession;
+        private readonly Func<ICurrentUserSettings> getCurrentUserSettings;
         private readonly IMessenger messenger;
         private readonly IPreviousShipmentVoidActionHandler shipmentHistoryVoidProcessor;
         private readonly IMessageHelper messageHelper;
@@ -47,7 +51,7 @@ namespace ShipWorks.OrderLookup.ShipmentHistory.Controls
         /// </summary>
         public ShipmentHistoryPanel(
             ShipmentHistoryGrid shipmentGrid,
-            Func<IUserSession> getUserSession,
+            Func<ICurrentUserSettings> getCurrentUserSettings,
             IMessenger messenger,
             IPreviousShipmentVoidActionHandler shipmentHistoryVoidProcessor,
             IMessageHelper messageHelper) : this()
@@ -55,7 +59,7 @@ namespace ShipWorks.OrderLookup.ShipmentHistory.Controls
             this.messageHelper = messageHelper;
             this.shipmentHistoryVoidProcessor = shipmentHistoryVoidProcessor;
             this.messenger = messenger;
-            this.getUserSession = getUserSession;
+            this.getCurrentUserSettings = getCurrentUserSettings;
             this.shipmentGrid = shipmentGrid;
 
             shipmentPanel.Controls.Add(shipmentGrid);
@@ -76,7 +80,7 @@ namespace ShipWorks.OrderLookup.ShipmentHistory.Controls
         /// </summary>
         public void Activate(Divelements.SandRibbon.Button voidButton, Divelements.SandRibbon.Button shipAgainButton)
         {
-            kryptonHeader.Values.Heading = "Today's Shipments for " + getUserSession().User.Username;
+            kryptonHeader.Values.Heading = "Today's Shipments for " + getCurrentUserSettings().UserSession.User.Username;
             shipmentGrid.Reload();
 
             Deactivate();
@@ -91,14 +95,34 @@ namespace ShipWorks.OrderLookup.ShipmentHistory.Controls
 
             subscriptions = new CompositeDisposable(
                 messenger.OfType<SingleScanMessage>()
-                    .Where(x => Visible && CanFocus)
+                    .Where(_ => IsFocusable)
                     .Subscribe(x => searchBox.Text = x.ScannedText),
 
                 messenger.OfType<OrderLookupSearchMessage>()
-                    .Where(x => Visible && CanFocus)
+                    .Where(_ => IsFocusable)
                     .Subscribe(x => searchBox.Text = x.SearchText),
 
-                Disposable.Create(() => voidButton.Activate -= OnVoid),
+                messenger.OfType<FocusQuickSearchMessage>()
+                    .Where(_ => IsFocusable)
+                    .Subscribe(_ => searchBox.Focus()),
+
+                messenger.OfType<ShortcutMessage>()
+                    .Where(m => m.AppliesTo(KeyboardShortcutCommand.FocusQuickSearch))
+                    .ObserveOn(messenger.Schedulers.WindowsFormsEventLoop)
+                    .Where(_ => IsFocusable)
+                    .Do(_ => searchBox.Focus())
+                    .Do(ShowShortcutIndicator)
+                    .Subscribe(),
+
+                messenger.OfType<ShortcutMessage>()
+                    .Where(m => m.AppliesTo(KeyboardShortcutCommand.ClearQuickSearch))
+                    .ObserveOn(messenger.Schedulers.WindowsFormsEventLoop)
+                    .Where(_ => IsFocusable)
+                    .Do(_ => searchBox.Clear())
+                    .Do(ShowShortcutIndicator)
+                    .Subscribe(),
+
+            Disposable.Create(() => voidButton.Activate -= OnVoid),
                 Disposable.Create(() => shipAgainButton.Activate -= OnShipAgain),
                 Disposable.Create(() => shipmentGrid.SelectionChanged -= OnGridSelectionChanged)
             );
@@ -130,6 +154,11 @@ namespace ShipWorks.OrderLookup.ShipmentHistory.Controls
                 messenger.Send(new OrderLookupShipAgainMessage(this, processedShipment.ShipmentID));
             }
         }
+
+        /// <summary>
+        /// Is this control focusable
+        /// </summary>
+        private bool IsFocusable => Visible && base.CanFocus;
 
         /// <summary>
         /// Void the shipment
@@ -192,6 +221,26 @@ namespace ShipWorks.OrderLookup.ShipmentHistory.Controls
         /// </summary>
         private void OnEndSearch(object sender, EventArgs e) =>
             shipmentGrid.Search(string.Empty);
+
+        /// <summary>
+        /// Show shortcut indicator
+        /// </summary>
+        private void ShowShortcutIndicator(ShortcutMessage shortcutMessage)
+        {
+            if (getCurrentUserSettings().ShouldShowNotification(UserConditionalNotificationType.ShortcutIndicator))
+            {
+                string actionName = EnumHelper.GetDescription(shortcutMessage.Shortcut.Action);
+
+                if (shortcutMessage.Trigger == ShortcutTriggerType.Hotkey)
+                {
+                    messageHelper.ShowKeyboardPopup($"{shortcutMessage.Value}: {actionName}");
+                }
+                else
+                {
+                    messageHelper.ShowBarcodePopup($"Barcode: {actionName}");
+                }
+            }
+        }
 
         /// <summary>
         /// Clean up any resources being used.

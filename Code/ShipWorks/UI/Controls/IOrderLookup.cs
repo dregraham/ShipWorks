@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Forms;
-using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping;
+using ShipWorks.Shipping.Profiles;
 
 namespace ShipWorks.UI.Controls
 {
@@ -33,6 +33,6 @@ namespace ShipWorks.UI.Controls
         /// <summary>
         /// Register the profile handler
         /// </summary>
-        void RegisterProfileHandler(Func<Func<ShipmentTypeCode?>, Action<IShippingProfileEntity>, IDisposable> profileRegistration);
+        void RegisterProfileHandler(Func<Func<ShipmentTypeCode?>, Action<IShippingProfile>, IDisposable> profileRegistration);
     }
 }

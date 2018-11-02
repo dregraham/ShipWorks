@@ -5,10 +5,9 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="clr-namespace:ShipWorks.OrderLookup.Controls.ShipmentDetails"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:ns="clr-namespace:ShipWorks.OrderLookup.FieldManager;assembly=ShipWorks.Core"
     xmlns:ui="http://schemas.shipworks.com/ui"
     d:DataContext="{d:DesignInstance local:FedExShipmentDetailsViewModel}"
-    d:DesignHeight="300"
-    d:DesignWidth="300"
     FontFamily="/ShipWorks.OrderLookup;component/#Roboto"
     mc:Ignorable="d">
     <UserControl.Resources>
@@ -25,17 +24,17 @@
     </UserControl.Resources>
     <Grid IsEnabled="{Binding ShipmentModel.ShipmentAllowEditing}">
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
+            <ui:FieldLayoutRowDefinition FieldID="{x:Static ns:SectionLayoutFieldIDs.ShipmentDetailsRequestedShipping}" />
+            <ui:FieldLayoutRowDefinition FieldID="{x:Static ns:SectionLayoutFieldIDs.ShipmentDetailsProvider}" />
+            <ui:FieldLayoutRowDefinition FieldID="{x:Static ns:SectionLayoutFieldIDs.ShipmentDetailsService}" />
+            <ui:FieldLayoutRowDefinition FieldID="{x:Static ns:SectionLayoutFieldIDs.FedExSignatureAndReferenceSignatureRequired}" />
+            <ui:FieldLayoutRowDefinition FieldID="{x:Static ns:SectionLayoutFieldIDs.ShipmentDetailsMultiPackageShipment}" />
+            <ui:FieldLayoutRowDefinition FieldID="{x:Static ns:SectionLayoutFieldIDs.ShipmentDetailsPackaging}" />
+            <ui:FieldLayoutRowDefinition FieldID="{x:Static ns:SectionLayoutFieldIDs.ShipmentDetailsWeight}" />
+            <ui:FieldLayoutRowDefinition FieldID="{x:Static ns:SectionLayoutFieldIDs.ShipmentDetailsDimensions}" />
+            <ui:FieldLayoutRowDefinition FieldID="{x:Static ns:SectionLayoutFieldIDs.ShipmentDetailsDimensions}" />
+            <ui:FieldLayoutRowDefinition FieldID="{x:Static ns:SectionLayoutFieldIDs.ShipmentDetailsAddToWeight}" />
+            <ui:FieldLayoutRowDefinition FieldID="{x:Static ns:SectionLayoutFieldIDs.ShipmentDetailsInsurance}" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="85" />
@@ -69,9 +68,9 @@
             Text="Provider" />
 
         <ComboBox
-            ui:Focus.Startup="true"
             Grid.Row="1"
             Grid.Column="1"
+            ui:Focus.Startup="true"
             DisplayMemberPath="Value"
             ItemsSource="{Binding Providers}"
             SelectedValue="{Binding ShipmentTypeCode, UpdateSourceTrigger=PropertyChanged}"
@@ -207,9 +206,9 @@
             <ComboBox
                 Grid.Column="0"
                 Margin="10,0,0,5"
-                ItemTemplate="{DynamicResource DimsProfileItemTemplate}"
+                DisplayMemberPath="Value"
                 ItemsSource="{Binding DimensionProfiles}"
-                SelectedValuePath="DimensionsProfileID"
+                SelectedValuePath="Key"
                 Style="{StaticResource FormComboBox}">
                 <ComboBox.SelectedValue>
                     <Binding

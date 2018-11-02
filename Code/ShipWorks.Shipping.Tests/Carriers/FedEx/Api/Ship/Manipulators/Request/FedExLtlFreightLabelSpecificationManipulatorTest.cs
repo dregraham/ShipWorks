@@ -1,17 +1,20 @@
+using System;
 using Autofac.Extras.Moq;
 using Moq;
+using ShipWorks.ApplicationCore;
 using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Environment;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Ship.Manipulators.Request;
+using ShipWorks.Shipping.Carriers.FedEx.Enums;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship;
 using ShipWorks.Tests.Shared;
 using Xunit;
-using ShipWorks.Shipping.Carriers.FedEx.Enums;
 
 namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship.Manipulators.Request
 {
-    public class FedExLtlFreightLabelSpecificationManipulatorTest
+    [Collection(TestCollections.IoC)]
+    public class FedExLtlFreightLabelSpecificationManipulatorTest : IDisposable
     {
         private FedExLtlFreightLabelSpecificationManipulator testObject;
         private readonly AutoMock mock;
@@ -21,6 +24,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship.Manipulators.Request
         public FedExLtlFreightLabelSpecificationManipulatorTest()
         {
             mock = AutoMockExtensions.GetLooseThatReturnsMocks();
+            IoC.InitializeForUnitTests(mock.Container);
 
             shippingSettings = new ShippingSettingsEntity();
             shippingSettings.FedExThermalDocTab = false;
@@ -31,7 +35,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship.Manipulators.Request
             // Initialize the shipment entity that we'll be testing with
             shipment = new ShipmentEntity()
             {
-                ShipmentType = (int)ShipmentTypeCode.FedEx,
+                ShipmentType = (int) ShipmentTypeCode.FedEx,
                 FedEx = new FedExShipmentEntity(),
                 ShipCountryCode = "US",
                 OriginCountryCode = "US"
@@ -47,7 +51,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship.Manipulators.Request
         [InlineData(FedExServiceType.FedExFreightPriority, true)]
         public void ShouldApply_ReturnsCorrectValue(FedExServiceType serviceType, bool expectedValue)
         {
-            shipment.FedEx.Service = (int)serviceType;
+            shipment.FedEx.Service = (int) serviceType;
 
             Assert.Equal(expectedValue, testObject.ShouldApply(shipment, 0));
         }
@@ -110,7 +114,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship.Manipulators.Request
         public void Manipulate_SetsPaperLetter_ForImageLabel()
         {
             // Setup to generate an image label
-            shipment.RequestedLabelFormat = (int)ThermalLanguage.None;
+            shipment.RequestedLabelFormat = (int) ThermalLanguage.None;
 
             var result = testObject.Manipulate(shipment, new ProcessShipmentRequest(), 0);
 
@@ -118,5 +122,6 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship.Manipulators.Request
             Assert.Equal(LabelStockType.PAPER_LETTER, labelSpecification.LabelStockType);
         }
 
+        public void Dispose() => mock.Dispose();
     }
 }

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Linq;
 using System.Reflection;
 using System.Windows.Forms;
 using System.Windows.Input;
@@ -25,16 +24,16 @@ namespace ShipWorks.Shipping.UI.Profiles
         private readonly IWin32Window owner;
         private readonly IShippingProfileService shippingProfileService;
         private readonly PropertyChangedHandler handler;
-        private IShippingProfile selectedShippingProfile;
-        private readonly Func<IShippingProfile, ShippingProfileEditorDlg> shippingProfileEditorDialogFactory;
-        
+        private IEditableShippingProfile selectedShippingProfile;
+        private readonly Func<IEditableShippingProfile, ShippingProfileEditorDlg> shippingProfileEditorDialogFactory;
+
         public event PropertyChangedEventHandler PropertyChanged;
 
         /// <summary>
         /// Constructor
         /// </summary>
         public ShippingProfileManagerDialogViewModel(IShippingProfileService shippingProfileService,
-            Func<IShippingProfile, ShippingProfileEditorDlg> shippingProfileEditorDialogFactory,
+            Func<IEditableShippingProfile, ShippingProfileEditorDlg> shippingProfileEditorDialogFactory,
             IMessageHelper messageHelper,
             IPrintJobFactory printJobFactory,
             IWin32Window owner)
@@ -53,7 +52,7 @@ namespace ShipWorks.Shipping.UI.Profiles
 
             PrintBarcodesCommand = new RelayCommand(PrintBarcodes);
 
-            ShippingProfiles = new ObservableCollection<IShippingProfile>(shippingProfileService.GetConfiguredShipmentTypeProfiles());
+            ShippingProfiles = new ObservableCollection<IEditableShippingProfile>(shippingProfileService.GetEditableConfiguredShipmentTypeProfiles());
         }
 
         /// <summary>
@@ -90,13 +89,13 @@ namespace ShipWorks.Shipping.UI.Profiles
         /// Collection of profiles
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public ObservableCollection<IShippingProfile> ShippingProfiles { get; }
+        public ObservableCollection<IEditableShippingProfile> ShippingProfiles { get; }
 
         /// <summary>
         /// Currently selected ShippingProfile
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public IShippingProfile SelectedShippingProfile
+        public IEditableShippingProfile SelectedShippingProfile
         {
             get => selectedShippingProfile;
             set => handler.Set(nameof(SelectedShippingProfile), ref selectedShippingProfile, value);
@@ -112,7 +111,7 @@ namespace ShipWorks.Shipping.UI.Profiles
             if (dialogResult == DialogResult.OK)
             {
                 // Unset the profile before deleting so it isnt used in logic after the delete
-                IShippingProfile profileToDelete = SelectedShippingProfile;
+                IEditableShippingProfile profileToDelete = SelectedShippingProfile;
                 SelectedShippingProfile = null;
                 ShippingProfiles.Remove(profileToDelete);
                 shippingProfileService.Delete(profileToDelete);
@@ -124,7 +123,7 @@ namespace ShipWorks.Shipping.UI.Profiles
         /// </summary>
         private void Edit()
         {
-            IShippingProfile selected = SelectedShippingProfile;
+            IEditableShippingProfile selected = SelectedShippingProfile;
 
             ShippingProfileEditorDlg profileEditor = shippingProfileEditorDialogFactory(selected);
 
@@ -140,14 +139,14 @@ namespace ShipWorks.Shipping.UI.Profiles
         /// </summary>
         private void Add()
         {
-            IShippingProfile profile = shippingProfileService.CreateEmptyShippingProfile();
+            IEditableShippingProfile profile = shippingProfileService.CreateEmptyShippingProfile();
 
             if (shippingProfileEditorDialogFactory(profile).ShowDialog() == DialogResult.OK)
             {
                 // The dialog saves and refetches, but this profile still points to the old profile,
                 // so we need to get the new one.
-                profile = shippingProfileService.Get(profile.ShippingProfileEntity.ShippingProfileID);
-                
+                profile = shippingProfileService.GetEditable(profile.ShippingProfileEntity.ShippingProfileID);
+
                 ShippingProfiles.Add(profile);
                 SelectedShippingProfile = profile;
             }

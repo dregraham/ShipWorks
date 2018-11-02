@@ -7,10 +7,12 @@ using System.Reflection;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.Core.UI;
+using Interapptive.Shared.Threading;
 using ShipWorks.Data.Model.Custom;
 using ShipWorks.Data.Model.Custom.EntityClasses;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
+using ShipWorks.OrderLookup.FieldManager;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers;
 using ShipWorks.UI;
@@ -25,16 +27,13 @@ namespace ShipWorks.OrderLookup.Controls.From
     [KeyedComponent(typeof(IFromViewModel), ShipmentTypeCode.Endicia)]
     [KeyedComponent(typeof(IFromViewModel), ShipmentTypeCode.UpsOnLineTools)]
     [WpfView(typeof(GenericFromControl))]
-    public class GenericFromViewModel : IFromViewModel
+    public class GenericFromViewModel : OrderLookupViewModelBase, IFromViewModel
     {
         private string title;
         private IDisposable autoSave;
-        private readonly PropertyChangedHandler handler;
         private readonly IShipmentTypeManager shipmentTypeManager;
-
         private readonly AddressViewModel addressViewModel;
-
-        public event PropertyChangedEventHandler PropertyChanged;
+        private readonly ISchedulerProvider schedulerProvider;
 
         /// <summary>
         /// Constructor
@@ -43,23 +42,23 @@ namespace ShipWorks.OrderLookup.Controls.From
             IOrderLookupShipmentModel shipmentModel,
             IShipmentTypeManager shipmentTypeManager,
             ICarrierAccountRetrieverFactory carrierAccountRetrieverFactory,
-            AddressViewModel addressViewModel)
+            AddressViewModel addressViewModel,
+            ISchedulerProvider schedulerProvider,
+            OrderLookupFieldLayoutProvider fieldLayoutProvider) : base(shipmentModel, new OrderLookupFromFieldLayoutProvider(fieldLayoutProvider))
         {
-            handler = new PropertyChangedHandler(this, () => PropertyChanged);
+            this.schedulerProvider = schedulerProvider;
             this.addressViewModel = addressViewModel;
+            this.addressViewModel.FieldLayoutProvider = FieldLayoutProvider;
 
-            ShipmentModel = shipmentModel;
             this.shipmentTypeManager = shipmentTypeManager;
 
             Accounts = GetAccounts(carrierAccountRetrieverFactory);
 
-            if (!ShipmentModel.ShipmentAdapter.AccountId.HasValue || 
+            if (!ShipmentModel.ShipmentAdapter.AccountId.HasValue ||
                 Accounts.TryGetValue(ShipmentModel.ShipmentAdapter.AccountId.Value, out string x))
             {
-                ShipmentModel.ShipmentAdapter.AccountId = Accounts.Select(e=>e.Key).FirstOrDefault();
+                ShipmentModel.ShipmentAdapter.AccountId = Accounts.Select(e => e.Key).FirstOrDefault();
             }
-            
-            ShipmentModel.PropertyChanged += ShipmentModelPropertyChanged;
 
             InitializeForChangedShipment();
         }
@@ -79,20 +78,19 @@ namespace ShipWorks.OrderLookup.Controls.From
         }
 
         /// <summary>
+        /// Panel ID
+        /// </summary>
+        public override SectionLayoutIDs PanelID => SectionLayoutIDs.From;
+
+        /// <summary>
         /// The addresses title
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public string Title
+        public override string Title
         {
             get => title;
-            set => handler.Set(nameof(Title), ref title, value);
+            protected set => Handler.Set(nameof(Title), ref title, value);
         }
-
-        /// <summary>
-        /// Is the section visible
-        /// </summary>
-        [Obfuscation(Exclude = true)]
-        public bool Visible => true;
 
         /// <summary>
         /// Basic address details
@@ -105,12 +103,6 @@ namespace ShipWorks.OrderLookup.Controls.From
         /// </summary>
         [Obfuscation(Exclude = true)]
         public Dictionary<long, string> Accounts { get; }
-
-        /// <summary>
-        /// Is address validation enabled or not
-        /// </summary>
-        [Obfuscation(Exclude = true)]
-        public IOrderLookupShipmentModel ShipmentModel { get; }
 
         /// <summary>
         /// Save changes to the base entity whenever properties are changed in the view model
@@ -126,8 +118,10 @@ namespace ShipWorks.OrderLookup.Controls.From
         /// <summary>
         /// Update when the order changes
         /// </summary>
-        private void ShipmentModelPropertyChanged(object sender, PropertyChangedEventArgs e)
+        protected override void ShipmentModelPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
+            base.ShipmentModelPropertyChanged(sender, e);
+
             if (ShipmentModel.SelectedOrder == null)
             {
                 autoSave?.Dispose();
@@ -162,11 +156,12 @@ namespace ShipWorks.OrderLookup.Controls.From
 
             UpdateTitle();
 
-            handler.RaisePropertyChanged(nameof(ShipmentModel));
-            autoSave = handler.PropertyChangingStream
+            Handler.RaisePropertyChanged(nameof(ShipmentModel));
+            autoSave = Handler.PropertyChangingStream
                 .Merge(addressViewModel.PropertyChangeStream)
                 .Where(p => p != nameof(Title))
                 .Throttle(TimeSpan.FromMilliseconds(100))
+                .ObserveOn(schedulerProvider.WindowsFormsEventLoop)
                 .Subscribe(_ => Save());
         }
 
@@ -210,7 +205,7 @@ namespace ShipWorks.OrderLookup.Controls.From
         /// </summary>
         protected virtual string GetHeaderAccountText()
         {
-            return ShipmentModel.ShipmentAdapter.AccountId.HasValue && ShipmentModel.ShipmentAdapter.AccountId.Value != 0 ? 
+            return ShipmentModel.ShipmentAdapter.AccountId.HasValue && ShipmentModel.ShipmentAdapter.AccountId.Value != 0 ?
                 Accounts.SingleOrDefault(a => a.Key == ShipmentModel.ShipmentAdapter.AccountId).Value :
                 "(None)";
         }
@@ -218,11 +213,11 @@ namespace ShipWorks.OrderLookup.Controls.From
         /// <summary>
         /// Dispose
         /// </summary>
-        public virtual void Dispose()
+        public override void Dispose()
         {
             autoSave?.Dispose();
             addressViewModel.Dispose();
-            ShipmentModel.PropertyChanged -= ShipmentModelPropertyChanged;
+            base.Dispose();
         }
     }
 }

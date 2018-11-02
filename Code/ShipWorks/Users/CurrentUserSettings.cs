@@ -32,6 +32,11 @@ namespace ShipWorks.Users
         }
 
         /// <summary>
+        /// Gets the current user session
+        /// </summary>
+        public IUserSession UserSession => userSession;
+
+        /// <summary>
         /// Should the specified notification type be shown
         /// </summary>
         public bool ShouldShowNotification(UserConditionalNotificationType notificationType)
@@ -67,7 +72,7 @@ namespace ShipWorks.Users
 
             return notificationSettings.CanShowAfter.HasValue && date > notificationSettings.CanShowAfter;
         }
-		
+
         /// <summary>
         /// Start showing the given notification for the user
         /// </summary>
@@ -91,11 +96,11 @@ namespace ShipWorks.Users
         {
             DialogSettings settings = userSession.Settings?.DialogSettingsObject;
 
-			if (settings == null)
-			{
-				return;
-			}
-			
+            if (settings == null)
+            {
+                return;
+            }
+
             settings.NotificationDialogSettings = settings.NotificationDialogSettings
                 .Where(x => x.Type != notificationType)
                 .Append(new NotificationDialogSetting(notificationType))

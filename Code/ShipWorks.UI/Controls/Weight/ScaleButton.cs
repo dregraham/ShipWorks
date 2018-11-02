@@ -8,7 +8,6 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
-using System.Windows.Interop;
 using Autofac;
 using Interapptive.Shared.IO.Hardware.Scales;
 using Interapptive.Shared.Metrics;
@@ -19,7 +18,6 @@ using ShipWorks.Common.IO.KeyboardShortcuts.Messages;
 using ShipWorks.Core.Messaging;
 using ShipWorks.IO.KeyboardShortcuts;
 using ShipWorks.UI.Controls.Design;
-using WinForms = System.Windows.Forms;
 
 namespace ShipWorks.UI.Controls.Weight
 {
@@ -54,14 +52,13 @@ namespace ShipWorks.UI.Controls.Weight
         public static readonly DependencyProperty AcceptApplyWeightKeyboardShortcutProperty =
             DependencyProperty.Register("AcceptApplyWeightKeyboardShortcut", typeof(bool), typeof(ScaleButton),
                 new FrameworkPropertyMetadata(AcceptApplyWeightKeyboardShortcutDefault));
-
-        IDisposable weightSubscription;
-        IDisposable applyWeightSubscription;
-        ButtonBase scaleButton;
-        TextBlock display;
+        private IDisposable weightSubscription;
+        private IDisposable applyWeightSubscription;
+        private ButtonBase scaleButton;
+        private TextBlock display;
         private readonly IShortcutManager shortcutManager;
         private readonly Func<string, ITrackedDurationEvent> startDurationEvent;
-        private IntPtr ownerHandle;
+        private readonly ControlOwnerProvider ownerProvider;
 
         /// <summary>
         /// Static constructor
@@ -87,42 +84,7 @@ namespace ShipWorks.UI.Controls.Weight
             shortcutManager = IoC.UnsafeGlobalLifetimeScope.Resolve<IShortcutManager>();
             startDurationEvent = IoC.UnsafeGlobalLifetimeScope.Resolve<Func<string, ITrackedDurationEvent>>();
 
-            Loaded += OnScaleButtonLoaded;
-        }
-
-        /// <summary>
-        /// The button has been loaded
-        /// </summary>
-        private void OnScaleButtonLoaded(object sender, RoutedEventArgs e)
-        {
-            ownerHandle = (GetOwnerWindow() ?? GetOwnerForm()).GetValueOrDefault();
-        }
-
-        /// <summary>
-        /// Get the owner Window, if there is one
-        /// </summary>
-        private IntPtr? GetOwnerWindow()
-        {
-            Window owner = Window.GetWindow(this);
-            return owner == null ? (IntPtr?) null : new WindowInteropHelper(owner).Handle;
-        }
-
-        /// <summary>
-        /// Get the owner Form, if there is one
-        /// </summary>
-        private IntPtr? GetOwnerForm()
-        {
-            HwndSource wpfHandle = PresentationSource.FromVisual(this) as HwndSource;
-
-            //the WPF control is hosted if the wpfHandle is not null
-            if (wpfHandle != null)
-            {
-                WinForms.Control host = WinForms.Control.FromChildHandle(wpfHandle.Handle);
-
-                return host?.FindForm()?.Handle;
-            }
-
-            return null;
+            ownerProvider = new ControlOwnerProvider(this);
         }
 
         /// <summary>
@@ -216,7 +178,7 @@ namespace ShipWorks.UI.Controls.Weight
                     .Where(_ => AcceptApplyWeightKeyboardShortcut &&
                         Focusable &&
                         scaleButton.IsEnabled &&
-                        ownerHandle == NativeMethods.GetActiveWindow())
+                        ownerProvider.Owner.Handle == NativeMethods.GetActiveWindow())
                     .SelectMany(_ => ApplyWeight(Controls.WeightControl.KeyboardShortcutTelemetryKey).ToObservable())
                     .Subscribe();
             }

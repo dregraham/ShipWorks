@@ -59,7 +59,7 @@ namespace ShipWorks.SingleScan
         /// </summary>
         private IObservable<ProfileAppliedMessage> ProfileAppliedSignal(ShortcutMessage shortcutMessage) =>
              messenger.OfType<ProfileAppliedMessage>()
-                .Where(profileAppliedMessage => ((ShippingProfile) profileAppliedMessage.Sender).Shortcut.Equals(shortcutMessage.Shortcut));
+                .Where(profileAppliedMessage => ((IShippingProfile) profileAppliedMessage.Sender).Shortcut.Equals(shortcutMessage.Shortcut));
 
         /// <summary>
         /// Show indicator

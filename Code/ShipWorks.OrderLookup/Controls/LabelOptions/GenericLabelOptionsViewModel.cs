@@ -8,12 +8,10 @@ using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
 using Shared.System.ComponentModel.DataAnnotations;
 using ShipWorks.Common.IO.Hardware.Printers;
-using ShipWorks.Core.UI;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
+using ShipWorks.OrderLookup.FieldManager;
 using ShipWorks.Shipping;
-using ShipWorks.Shipping.Carriers.FedEx;
-using ShipWorks.Shipping.Carriers.FedEx.Enums;
 using ShipWorks.UI;
 
 namespace ShipWorks.OrderLookup.Controls.LabelOptions
@@ -24,40 +22,38 @@ namespace ShipWorks.OrderLookup.Controls.LabelOptions
     [KeyedComponent(typeof(ILabelOptionsViewModel), ShipmentTypeCode.UpsOnLineTools)]
     [KeyedComponent(typeof(ILabelOptionsViewModel), ShipmentTypeCode.FedEx)]
     [WpfView(typeof(GenericLabelOptionsControl))]
-    public class GenericLabelOptionsViewModel: ILabelOptionsViewModel, IDataErrorInfo
+    public class GenericLabelOptionsViewModel : OrderLookupViewModelBase, ILabelOptionsViewModel, IDataErrorInfo
     {
         private readonly IShipmentTypeManager shipmentTypeManager;
-        private readonly PropertyChangedHandler handler;
         private DateTime? shipDate;
         private Dictionary<int, string> labelFormats;
-
-        public event PropertyChangedEventHandler PropertyChanged;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public GenericLabelOptionsViewModel(IOrderLookupShipmentModel shipmentModel, IShipmentTypeManager shipmentTypeManager)
+        public GenericLabelOptionsViewModel(IOrderLookupShipmentModel shipmentModel, IShipmentTypeManager shipmentTypeManager,
+            OrderLookupFieldLayoutProvider fieldLayoutProvider) : base(shipmentModel, fieldLayoutProvider)
         {
-            ShipmentModel = shipmentModel;
-            ShipmentModel.PropertyChanged += ShipmentModelPropertyChanged;
-            this.shipmentTypeManager = shipmentTypeManager;            
-
-            handler = new PropertyChangedHandler(this, () => PropertyChanged);
+            this.shipmentTypeManager = shipmentTypeManager;
 
             InitializeForChangedShipment(ShipmentModel.ShipmentAdapter.Shipment);
         }
 
         /// <summary>
+        /// Field layout repository
+        /// </summary>
+        public override IOrderLookupFieldLayoutProvider FieldLayoutProvider => ShipmentModel.FieldLayoutProvider;
+
+        /// <summary>
+        /// Panel ID
+        /// </summary>
+        public override SectionLayoutIDs PanelID => SectionLayoutIDs.LabelOptions;
+
+        /// <summary>
         /// Title of the section
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public string Title => "Label Options";
-
-        /// <summary>
-        /// Is the section visible
-        /// </summary>
-        [Obfuscation(Exclude = true)]
-        public bool Visible => true;
+        public override string Title { get; protected set; } = "Label Options";
 
         /// <summary>
         /// Shipment ship date
@@ -70,7 +66,7 @@ namespace ShipWorks.OrderLookup.Controls.LabelOptions
             get => shipDate;
             set
             {
-                handler.Set(nameof(ShipDate), ref shipDate, value);
+                Handler.Set(nameof(ShipDate), ref shipDate, value);
 
                 if (ShipmentModel?.ShipmentAdapter?.ShipDate != null &&
                     ShipmentModel.ShipmentAdapter.ShipDate != value)
@@ -87,14 +83,8 @@ namespace ShipWorks.OrderLookup.Controls.LabelOptions
         public Dictionary<int, string> LabelFormats
         {
             get => labelFormats;
-            set => handler.Set(nameof(LabelFormats), ref labelFormats, value);
+            set => Handler.Set(nameof(LabelFormats), ref labelFormats, value);
         }
-
-        /// <summary>
-        /// The order lookup ShipmentModel
-        /// </summary>
-        [Obfuscation(Exclude = true)]
-        public IOrderLookupShipmentModel ShipmentModel { get; }
 
         /// <summary>
         /// Do nothing
@@ -121,8 +111,10 @@ namespace ShipWorks.OrderLookup.Controls.LabelOptions
         /// <summary>
         /// Update when the order changes
         /// </summary>
-        private void ShipmentModelPropertyChanged(object sender, PropertyChangedEventArgs e)
+        protected override void ShipmentModelPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
+            base.ShipmentModelPropertyChanged(sender, e);
+
             if (e.PropertyName == nameof(ShipmentFields.RequestedLabelFormat))
             {
                 ThermalLanguage labelFormat = (ThermalLanguage) ShipmentModel.ShipmentAdapter.Shipment.RequestedLabelFormat;
@@ -137,7 +129,7 @@ namespace ShipWorks.OrderLookup.Controls.LabelOptions
                 InitializeForChangedShipment(shipment);
 
                 // Update the ShipmentModel
-                handler.RaisePropertyChanged(nameof(ShipmentModel));
+                Handler.RaisePropertyChanged(nameof(ShipmentModel));
             }
         }
 
@@ -156,10 +148,5 @@ namespace ShipWorks.OrderLookup.Controls.LabelOptions
         /// Whether or not the given label format is allowed for the shipment
         /// </summary>
         protected virtual bool ShouldIncludeLabelFormatInList(ShipmentEntity shipment, ThermalLanguage labelFormat) => true;
-
-        /// <summary>
-        /// Dispose
-        /// </summary>
-        public void Dispose() => ShipmentModel.PropertyChanged -= ShipmentModelPropertyChanged;
     }
 }

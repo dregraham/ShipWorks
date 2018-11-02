@@ -7,6 +7,7 @@ using Interapptive.Shared.Collections;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.HelperClasses;
+using ShipWorks.OrderLookup.FieldManager;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
 using ShipWorks.Shipping.Editing;
@@ -34,14 +35,15 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
             IInsuranceViewModel insuranceViewModel,
             Func<DimensionsManagerDlg> getDimensionsManagerDlg,
             ICarrierShipmentAdapterOptionsProvider carrierShipmentAdapterOptionsProvider,
-            IShipmentTypeManager shipmentTypeManager)
-            : base(shipmentModel, insuranceViewModel, getDimensionsManagerDlg, carrierShipmentAdapterOptionsProvider)
+            IShipmentTypeManager shipmentTypeManager,
+            OrderLookupFieldLayoutProvider fieldLayoutProvider)
+            : base(shipmentModel, insuranceViewModel, getDimensionsManagerDlg, carrierShipmentAdapterOptionsProvider, fieldLayoutProvider)
         {
             SignatureTypes = EnumHelper.GetEnumList<FedExSignatureType>()
                                        .Select(e => new KeyValuePair<int, string>((int) e.Value, e.Description));
             this.shipmentTypeManager = shipmentTypeManager;
         }
-
+        
         /// <summary>
         /// Collection of SignatureTypes
         /// </summary>
@@ -49,7 +51,7 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
         public IEnumerable<KeyValuePair<int, string>> SignatureTypes
         {
             get => signatureTypes;
-            set => handler.Set(nameof(SignatureTypes), ref signatureTypes, value);
+            set => Handler.Set(nameof(SignatureTypes), ref signatureTypes, value);
         }
 
         /// <summary>
@@ -118,7 +120,7 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
                 RefreshPackageTypes();
             }
 
-            handler.RaisePropertyChanged(null);
+            Handler.RaisePropertyChanged(null);
         }
 
         /// <summary>

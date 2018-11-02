@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using System.Reactive;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Autofac;
@@ -29,8 +30,8 @@ namespace ShipWorks.ApplicationCore.Options
     public partial class OptionPageAdvanced : OptionPageBase
     {
         // Logger
-        static readonly ILog log = LogManager.GetLogger(typeof(OptionPageAdvanced));
-        ConfigurationEntity config;
+        private static readonly ILog log = LogManager.GetLogger(typeof(OptionPageAdvanced));
+        private ConfigurationEntity config;
 
         /// <summary>
         /// Constructor
@@ -145,7 +146,7 @@ namespace ShipWorks.ApplicationCore.Options
                     IAuditUtility auditUtility = lifetimeScope.Resolve<IAuditUtility>();
                     string from = config.AuditEnabled ? "Enabled" : "Disabled";
                     string to = auditEnabled.Checked ? "Enabled" : "Disabled";
-                    AuditReason auditReason = new AuditReason(AuditReasonType.AuditStateChanged, 
+                    AuditReason auditReason = new AuditReason(AuditReasonType.AuditStateChanged,
                         $"Auditing state changed from {from} to {to}");
 
                     auditUtility.AuditAsync(null, AuditActionType.AuditStateChanged, auditReason, SqlAdapter.Default);
@@ -272,7 +273,7 @@ namespace ShipWorks.ApplicationCore.Options
                 progressDialog.ActionColumnHeaderText = "ShipSense";
                 progressDialog.CloseTextWhenComplete = "Close";
 
-                CreateReloadKnowledgebaseTask(progressProvider).Start();
+                CreateReloadKnowledgebaseTask(progressProvider);
 
                 // Show the progress dialog
                 progressDialog.ShowDialog(this);
@@ -293,22 +294,24 @@ namespace ShipWorks.ApplicationCore.Options
             AuditUtility.Audit(AuditActionType.ReloadShipSenseStarted);
 
             // Setup dependencies for the progress dialog
-            ProgressItem progressItem = new ProgressItem("Reloading ShipSense");
-            progressProvider.ProgressItems.Add(progressItem);
-
-            ShipSenseLoader loader = new ShipSenseLoader(progressItem);
-
-            // Indicate that we want to reset the hash keys and prepare the environment for the
-            // load process to begin
-            loader.ResetOrderHashKeys = true;
-            loader.PrepareForLoading();
+            var progressItem = progressProvider.AddItem("Reloading ShipSense");
 
             // Start the load asynchronously now that everything should be ready to load
             // We MUST ContinueWith and dispose the loader so that the sql connection
-            Task reloadKnowledgebaTask = new Task(loader.LoadData);
-            reloadKnowledgebaTask.ContinueWith(t => loader.Dispose());
+            // gets disposed.
+            return Functional.UsingAsync(IoC.BeginLifetimeScope(),
+                scope =>
+                {
+                    var shippingSettings = scope.Resolve<IShippingSettings>();
+                    ShipSenseLoader loader = new ShipSenseLoader(progressItem, shippingSettings);
 
-            return reloadKnowledgebaTask;
+                    // Indicate that we want to reset the hash keys and prepare the environment for the
+                    // load process to begin
+                    loader.ResetOrderHashKeys = true;
+                    loader.PrepareForLoading();
+
+                    return Task.Factory.StartNew(loader.LoadData).ContinueWith(_ => Unit.Default);
+                });
         }
 
         /// <summary>

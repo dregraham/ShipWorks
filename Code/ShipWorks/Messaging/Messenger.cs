@@ -2,43 +2,49 @@
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Runtime.CompilerServices;
+using Autofac;
+using Autofac.Features.OwnedInstances;
+using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Messaging;
 using Interapptive.Shared.Messaging.Logging;
+using Interapptive.Shared.Threading;
+using ShipWorks.ApplicationCore;
 
 namespace ShipWorks.Core.Messaging
 {
     /// <summary>
     /// Messenger that allows messages to be sent and handled from anywhere in the application
     /// </summary>
+    [Component(SingleInstance = true)]
     public class Messenger : IMessenger
     {
         private readonly IObservable<IShipWorksMessage> messageStream;
         private IObserver<IShipWorksMessage> observer;
 
         /// <summary>
-        /// Create the static instance
-        /// </summary>
-        static Messenger()
-        {
-            Current = new Messenger();
-        }
-
-        /// <summary>
         /// Constructor
         /// </summary>
-        public Messenger()
+        public Messenger(ISchedulerProvider schedulerProvider)
         {
+            Schedulers = schedulerProvider;
+
             messageStream = Observable.Create<IShipWorksMessage>(x =>
             {
                 observer = x;
                 return Disposable.Create(() => observer = null);
             }).Publish().RefCount();
         }
-
+        
         /// <summary>
         /// Get the current messenger instance
         /// </summary>
-        public static IMessenger Current { get; private set; }
+        public static IMessenger Current =>
+            IoC.UnsafeGlobalLifetimeScope.Resolve<Owned<IMessenger>>().Value;
+
+        /// <summary>
+        /// Available schedulers
+        /// </summary>
+        public ISchedulerProvider Schedulers { get; }
 
         /// <summary>
         /// Send a message to any listeners

@@ -528,7 +528,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// <summary>
         /// Update the dynamic shipment data that could have changed "outside" the known editor
         /// </summary>
-        [NDependIgnoreLongMethod]
         public override void UpdateDynamicShipmentData(ShipmentEntity shipment)
         {
             base.UpdateDynamicShipmentData(shipment);
@@ -548,15 +547,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         {
             base.RectifyCarrierSpecificData(shipment);
 
-            if (shipment.FedEx.HomeDeliveryDate < dateTimeProvider.Now.Date)
-            {
-                shipment.FedEx.HomeDeliveryDate = dateTimeProvider.Now.Date.AddHours(12);
-            }
-
-            if (shipment.FedEx.FreightGuaranteeDate < dateTimeProvider.Now.Date)
-            {
-                shipment.FedEx.FreightGuaranteeDate = dateTimeProvider.Now.Date.AddHours(12);
-            }
+            UpdateShipmentDates(shipment);
 
             // Ensure the cod address is up-to-date
             if (!UpdatePersonAddress(shipment, new PersonAdapter(shipment.FedEx, "Cod"), shipment.FedEx.CodOriginID))
@@ -600,36 +591,62 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             // Check the FedEx wide PennyOne settings and get them updated
             foreach (var package in shipment.FedEx.Packages)
             {
-                package.InsurancePennyOne = settings.FedExInsurancePennyOne;
+                RectifyPackageSpecificData(package, shipment, settings, maxPackageDeclaredValue);
+            }
+        }
 
-                // For SmartPost, we force Penny One since FedEx does not provide the first $100 for that
-                // For LTL Freight, we force Penny One to match liability calculations from DHL Express and Asendia
-                if (shipment.FedEx.Service == (int) FedExServiceType.SmartPost ||
-                    FedExUtility.IsFreightLtlService(shipment.FedEx.Service))
-                {
-                    package.InsurancePennyOne = true;
-                }
+        /// <summary>
+        /// Update various shipment dates
+        /// </summary>
+        private void UpdateShipmentDates(ShipmentEntity shipment)
+        {
+            var now = dateTimeProvider.Now.Date;
 
-                // The only time we send the full insured value as declared value is if insurance is enabled, and they are using carrier insurance.
-                if (shipment.Insurance && shipment.InsuranceProvider == (int) InsuranceProvider.Carrier)
-                {
-                    package.DeclaredValue = package.InsuranceValue;
-                }
-                else if (shipment.FedEx.Service == (int) FedExServiceType.SmartPost)
-                {
-                    // SmartPost shouldn't be sending any insurance value
-                    package.DeclaredValue = 0;
-                }
-                else
-                {
-                    // Otherwise, regardless of if they are insuring or not, penny one or not, etc., we just send up to the first $100 since it's free anyway
-                    package.DeclaredValue = Math.Min(100, package.InsuranceValue);
+            if (shipment.FedEx.HomeDeliveryDate < now)
+            {
+                shipment.FedEx.HomeDeliveryDate = now.AddHours(12);
+            }
 
-                    // We may have to lower it some more for international shipments so we aren't higher than the CustomsValue
-                    if (maxPackageDeclaredValue != null)
-                    {
-                        package.DeclaredValue = Math.Min(package.DeclaredValue, (decimal) maxPackageDeclaredValue);
-                    }
+            if (shipment.FedEx.FreightGuaranteeDate < now)
+            {
+                shipment.FedEx.FreightGuaranteeDate = now.AddHours(12);
+            }
+        }
+
+        /// <summary>
+        /// Rectify package specific data
+        /// </summary>
+        private static void RectifyPackageSpecificData(FedExPackageEntity package, IShipmentEntity shipment, IShippingSettingsEntity settings, decimal? maxPackageDeclaredValue)
+        {
+            package.InsurancePennyOne = settings.FedExInsurancePennyOne;
+
+            // For SmartPost, we force Penny One since FedEx does not provide the first $100 for that
+            // For LTL Freight, we force Penny One to match liability calculations from DHL Express and Asendia
+            if (shipment.FedEx.Service == (int) FedExServiceType.SmartPost ||
+                FedExUtility.IsFreightLtlService(shipment.FedEx.Service))
+            {
+                package.InsurancePennyOne = true;
+            }
+
+            // The only time we send the full insured value as declared value is if insurance is enabled, and they are using carrier insurance.
+            if (shipment.Insurance && shipment.InsuranceProvider == (int) InsuranceProvider.Carrier)
+            {
+                package.DeclaredValue = package.InsuranceValue;
+            }
+            else if (shipment.FedEx.Service == (int) FedExServiceType.SmartPost)
+            {
+                // SmartPost shouldn't be sending any insurance value
+                package.DeclaredValue = 0;
+            }
+            else
+            {
+                // Otherwise, regardless of if they are insuring or not, penny one or not, etc., we just send up to the first $100 since it's free anyway
+                package.DeclaredValue = Math.Min(100, package.InsuranceValue);
+
+                // We may have to lower it some more for international shipments so we aren't higher than the CustomsValue
+                if (maxPackageDeclaredValue != null)
+                {
+                    package.DeclaredValue = Math.Min(package.DeclaredValue, (decimal) maxPackageDeclaredValue);
                 }
             }
         }

@@ -45,6 +45,7 @@ namespace ShipWorks.OrderLookup.ShipmentModelPipelines
             messenger.OfType<ShortcutMessage>()
                 .Where(m => m.AppliesTo(KeyboardShortcutCommand.FocusQuickSearch))
                 .ObserveOn(schedulerProvider.WindowsFormsEventLoop)
+                .Where(_ => model.CanAcceptFocus())
                 .Do(_ => messenger.Send(new FocusQuickSearchMessage(this)))
                 .Do(ShowShortcutIndicator)
                 .Subscribe();

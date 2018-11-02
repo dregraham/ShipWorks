@@ -7,6 +7,7 @@
     xmlns:local="clr-namespace:ShipWorks.OrderLookup.Controls.ShipmentDetails"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:ui="http://schemas.shipworks.com/ui"
+    xmlns:ns="clr-namespace:ShipWorks.OrderLookup.FieldManager;assembly=ShipWorks.Core"
     FontFamily="/ShipWorks.OrderLookup;component/#Roboto"
     mc:Ignorable="d">
     <UserControl.Resources>
@@ -25,17 +26,15 @@
     <StackPanel>
         <Grid IsEnabled="{Binding ShipmentModel.ShipmentAllowEditing}">
             <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
+                <ui:FieldLayoutRowDefinition FieldID="{x:Static ns:SectionLayoutFieldIDs.ShipmentDetailsRequestedShipping}" />
+                <ui:FieldLayoutRowDefinition FieldID="{x:Static ns:SectionLayoutFieldIDs.ShipmentDetailsProvider}" />
+                <ui:FieldLayoutRowDefinition FieldID="{x:Static ns:SectionLayoutFieldIDs.ShipmentDetailsService}" />
+                <ui:FieldLayoutRowDefinition FieldID="{x:Static ns:SectionLayoutFieldIDs.ShipmentDetailsConfirmation}" />
+                <ui:FieldLayoutRowDefinition FieldID="{x:Static ns:SectionLayoutFieldIDs.ShipmentDetailsWeight}" />
+                <ui:FieldLayoutRowDefinition FieldID="{x:Static ns:SectionLayoutFieldIDs.ShipmentDetailsDimensions}" />
+                <ui:FieldLayoutRowDefinition FieldID="{x:Static ns:SectionLayoutFieldIDs.ShipmentDetailsDimensions}" />
+                <ui:FieldLayoutRowDefinition FieldID="{x:Static ns:SectionLayoutFieldIDs.ShipmentDetailsAddToWeight}" />
+                <ui:FieldLayoutRowDefinition FieldID="{x:Static ns:SectionLayoutFieldIDs.ShipmentDetailsInsurance}" />
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="85" />
@@ -115,23 +114,23 @@
             </ComboBox>
 
             <TextBlock
-                Grid.Row="6"
+                Grid.Row="4"
                 Grid.Column="0"
                 Style="{StaticResource FieldLabel}"
                 Text="Weight" />
             <ui:WeightControl
-                Grid.Row="6"
+                Grid.Row="4"
                 Grid.Column="1"
                 AcceptApplyWeightKeyboardShortcut="True"
                 ErrorMessage="{Binding WeightErrorMessage}"
                 Style="{StaticResource OrderLookupWeightControl}"
                 Weight="{Binding ShipmentModel.ShipmentAdapter.ContentWeight, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=true, NotifyOnValidationError=true}" />
             <TextBlock
-                Grid.Row="7"
+                Grid.Row="5"
                 Grid.Column="0"
                 Style="{StaticResource FieldLabel}"
                 Text="Dimensions" />
-            <Grid Grid.Row="7" Grid.Column="1">
+            <Grid Grid.Row="5" Grid.Column="1">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="Auto" />
@@ -139,9 +138,9 @@
                 <ComboBox
                     Grid.Column="0"
                     Margin="10,0,0,5"
-                    ItemTemplate="{DynamicResource DimsProfileItemTemplate}"
+                    DisplayMemberPath="Value"
                     ItemsSource="{Binding DimensionProfiles}"
-                    SelectedValuePath="DimensionsProfileID"
+                    SelectedValuePath="Key"
                     Style="{StaticResource FormComboBox}">
                     <ComboBox.SelectedValue>
                         <Binding
@@ -161,7 +160,7 @@
             </Grid>
 
             <Grid
-                Grid.Row="8"
+                Grid.Row="6"
                 Grid.Column="1"
                 Margin="10,0,0,10">
                 <Grid.ColumnDefinitions>
@@ -212,7 +211,7 @@
             </Grid>
 
             <Grid
-                Grid.Row="9"
+                Grid.Row="7"
                 Grid.Column="1"
                 Margin="5,0,0,10">
                 <Grid.ColumnDefinitions>
@@ -244,7 +243,7 @@
                     Weight="{Binding ShipmentModel.ShipmentAdapter.Shipment.Amazon.DimsWeight}" />
             </Grid>
             <local:OrderLookupInsuranceControl
-                Grid.Row="10"
+                Grid.Row="8"
                 Grid.Column="0"
                 Grid.ColumnSpan="2"
                 DataContext="{Binding InsuranceViewModel}" />

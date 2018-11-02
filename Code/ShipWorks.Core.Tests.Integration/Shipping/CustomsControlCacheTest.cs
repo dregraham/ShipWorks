@@ -1,6 +1,7 @@
 ﻿using System;
 using Autofac.Extras.Moq;
 using Moq;
+using ShipWorks.ApplicationCore;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping;
@@ -22,9 +23,6 @@ using ShipWorks.Tests.Shared.EntityBuilders;
 using ShipWorks.UI.Controls;
 using ShipWorks.Users;
 using Xunit;
-using Autofac;
-using ShipWorks.Tests.Shared;
-using ShipWorks.ApplicationCore;
 
 namespace ShipWorks.Core.Tests.Integration.Shipping
 {
@@ -49,7 +47,7 @@ namespace ShipWorks.Core.Tests.Integration.Shipping
             adapter = new SqlAdapter(false);
 
             UserSettingsEntity userSettings = new UserSettingsEntity();
-            userSettings.ShippingWeightFormat = (int)WeightDisplayFormat.FractionalPounds;
+            userSettings.ShippingWeightFormat = (int) WeightDisplayFormat.FractionalPounds;
 
             UserEntity user = new UserEntity();
             user.Settings = userSettings;

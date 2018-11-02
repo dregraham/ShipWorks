@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Runtime.CompilerServices;
 using Interapptive.Shared.Messaging;
+using Interapptive.Shared.Threading;
 
 namespace ShipWorks.Core.Messaging
 {
@@ -13,5 +14,10 @@ namespace ShipWorks.Core.Messaging
         /// Send a message to any listeners
         /// </summary>
         void Send<T>(T message, [CallerMemberName] string callerName = "") where T : IShipWorksMessage;
+
+        /// <summary>
+        /// Available schedulers
+        /// </summary>
+        ISchedulerProvider Schedulers { get; }
     }
 }

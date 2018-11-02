@@ -1,16 +1,21 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
-using Xunit;
+using Autofac.Extras.Moq;
 using Moq;
+using ShipWorks.ApplicationCore;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping.ShipSense;
 using ShipWorks.Shipping.ShipSense.Hashing;
+using ShipWorks.Tests.Shared;
+using Xunit;
 
 namespace ShipWorks.Tests.Shipping.ShipSense
 {
-    public class ShipSenseSynchronizerTest
+    [Collection(TestCollections.IoC)]
+    public class ShipSenseSynchronizerTest : IDisposable
     {
         private ShipSenseSynchronizer testObject;
 
@@ -21,9 +26,13 @@ namespace ShipWorks.Tests.Shipping.ShipSense
 
         private ShippingSettingsEntity shippingSettingsEntity;
         private List<ShipmentEntity> shipments;
+        private readonly AutoMock mock;
 
         public ShipSenseSynchronizerTest()
         {
+            mock = AutoMockExtensions.GetLooseThatReturnsMocks();
+            IoC.InitializeForUnitTests(mock.Container);
+
             // Setup the hash to just return a pipe-delimited list of the keys
             hashingStrategy = new Mock<IKnowledgebaseHash>();
             hashingStrategy.Setup(h => h.ComputeHash(It.IsAny<IEnumerable<ShipSenseOrderItemKey>>()))
@@ -48,7 +57,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense
                           return keys;
                       });
 
-            // Setup the knowledge base to use the mock hash, mock key factory, and to return 
+            // Setup the knowledge base to use the mock hash, mock key factory, and to return
             // a KnowledgebaseEntry based on the order ID
             knowledgebase = new Mock<IKnowledgebase>();
             knowledgebase.SetupGet(k => k.HashingStrategy).Returns(hashingStrategy.Object);
@@ -92,7 +101,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense
         [Fact]
         public void Constructor_AddsShipmentsToDictionary()
         {
-            // Already constructed the testObject in the initializer, so just 
+            // Already constructed the testObject in the initializer, so just
             // inspect it
             Assert.Equal(6, testObject.MonitoredShipments.Count());
         }
@@ -100,8 +109,8 @@ namespace ShipWorks.Tests.Shipping.ShipSense
         [Fact]
         public void Constructor_AddsKnowledgebaseEntriesToDictionary()
         {
-            // Already constructed the testObject in the initializer, so just 
-            // inspect it. Based on the shipments and mocks, there should be 
+            // Already constructed the testObject in the initializer, so just
+            // inspect it. Based on the shipments and mocks, there should be
             // two entries
             Assert.Equal(2, testObject.KnowledgebaseEntries.Count());
         }
@@ -136,7 +145,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense
         [Fact]
         public void Add_UpdatesKnowledgebaseEntries_WhenShipmentIsAdded_AndKnowledgebaseEntryDoesNotAlreadyExist()
         {
-            // Create a shipment and change the order item SKU, so it gets 
+            // Create a shipment and change the order item SKU, so it gets
             // recognized as a new entry that needs to be added (based on our mocks)
             ShipmentEntity shipment = GetShipmentForOrder2(10);
             shipment.Order.OrderItems[0].SKU = "ABC123";
@@ -164,7 +173,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense
         [Fact]
         public void Add_DoesNotRemoveExistingShipments_WithSameShipmentID_WhenHashIsDifferent()
         {
-            // Create a shipment and change the order item SKU, so it gets 
+            // Create a shipment and change the order item SKU, so it gets
             // recognized as a new entry that needs to be added (based on our mocks)
             ShipmentEntity shipment = GetShipmentForOrder2(1);
             shipment.Order.OrderItems[0].SKU = "ABC123";
@@ -235,7 +244,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense
 
             Assert.Equal(originalCount, testObject.MonitoredShipments.Count());
         }
-        
+
         [Fact]
         public void Remove_DecrementsShipmentsBeingMonitored()
         {
@@ -273,18 +282,18 @@ namespace ShipWorks.Tests.Shipping.ShipSense
 
             Assert.Equal(originalCount - 1, testObject.MonitoredShipments.Count());
         }
-        
+
         [Fact]
         public void SynchronizeWith_LeavesStatusAsNotApplied_WhenShipmentShipSenseStatusIsNotApplied_AndShipSenseIsDisabled()
         {
             shippingSettingsEntity.ShipSenseEnabled = false;
 
             ShipmentEntity shipment = shipments[0];
-            shipment.ShipSenseStatus = (int)ShipSenseStatus.NotApplied;
-            
+            shipment.ShipSenseStatus = (int) ShipSenseStatus.NotApplied;
+
             testObject.SynchronizeWith(shipment);
 
-            Assert.Equal((int)ShipSenseStatus.NotApplied, shipment.ShipSenseStatus);
+            Assert.Equal((int) ShipSenseStatus.NotApplied, shipment.ShipSenseStatus);
         }
 
         [Fact]
@@ -293,11 +302,11 @@ namespace ShipWorks.Tests.Shipping.ShipSense
             shippingSettingsEntity.ShipSenseEnabled = true;
 
             ShipmentEntity shipment = shipments[0];
-            shipment.ShipSenseStatus = (int)ShipSenseStatus.NotApplied;
+            shipment.ShipSenseStatus = (int) ShipSenseStatus.NotApplied;
 
             testObject.SynchronizeWith(shipment);
 
-            Assert.Equal((int)ShipSenseStatus.NotApplied, shipment.ShipSenseStatus);
+            Assert.Equal((int) ShipSenseStatus.NotApplied, shipment.ShipSenseStatus);
         }
 
         [Fact]
@@ -307,11 +316,11 @@ namespace ShipWorks.Tests.Shipping.ShipSense
 
             // Based on the mocked knowledge base, the shipment should be seen as overwritten
             ShipmentEntity shipment = shipments[0];
-            shipment.ShipSenseStatus = (int)ShipSenseStatus.Applied;
+            shipment.ShipSenseStatus = (int) ShipSenseStatus.Applied;
 
             testObject.SynchronizeWith(shipment);
 
-            Assert.Equal((int)ShipSenseStatus.Overwritten, shipment.ShipSenseStatus);
+            Assert.Equal((int) ShipSenseStatus.Overwritten, shipment.ShipSenseStatus);
         }
 
         [Fact]
@@ -321,11 +330,11 @@ namespace ShipWorks.Tests.Shipping.ShipSense
 
             // Based on the mocked knowledge base, the shipment should be seen as overwritten
             ShipmentEntity shipment = shipments[0];
-            shipment.ShipSenseStatus = (int)ShipSenseStatus.Applied;
+            shipment.ShipSenseStatus = (int) ShipSenseStatus.Applied;
 
             testObject.SynchronizeWith(shipment);
 
-            Assert.Equal((int)ShipSenseStatus.Overwritten, shipment.ShipSenseStatus);
+            Assert.Equal((int) ShipSenseStatus.Overwritten, shipment.ShipSenseStatus);
         }
 
         [Fact]
@@ -334,7 +343,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense
             shippingSettingsEntity.ShipSenseEnabled = true;
 
             ShipmentEntity shipment = shipments[0];
-            shipment.ShipSenseStatus = (int)ShipSenseStatus.Applied;
+            shipment.ShipSenseStatus = (int) ShipSenseStatus.Applied;
 
             // Setup the shipment to be the same its corresponding KB entry
             KnowledgebaseEntry entry = knowledgebase.Object.GetEntry(shipment.Order);
@@ -343,7 +352,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense
 
             testObject.SynchronizeWith(shipment);
 
-            Assert.Equal((int)ShipSenseStatus.Applied, shipment.ShipSenseStatus);
+            Assert.Equal((int) ShipSenseStatus.Applied, shipment.ShipSenseStatus);
         }
 
         [Fact]
@@ -352,7 +361,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense
             shippingSettingsEntity.ShipSenseEnabled = false;
 
             ShipmentEntity shipment = shipments[0];
-            shipment.ShipSenseStatus = (int)ShipSenseStatus.Applied;
+            shipment.ShipSenseStatus = (int) ShipSenseStatus.Applied;
 
             // Setup the shipment to be the same its corresponding KB entry
             KnowledgebaseEntry entry = knowledgebase.Object.GetEntry(shipment.Order);
@@ -361,7 +370,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense
 
             testObject.SynchronizeWith(shipment);
 
-            Assert.Equal((int)ShipSenseStatus.Applied, shipment.ShipSenseStatus);
+            Assert.Equal((int) ShipSenseStatus.Applied, shipment.ShipSenseStatus);
         }
 
         [Fact]
@@ -369,14 +378,14 @@ namespace ShipWorks.Tests.Shipping.ShipSense
         {
             shippingSettingsEntity.ShipSenseEnabled = false;
 
-            // Shipment[0] is for order1 based on the initialization, so all elements 
+            // Shipment[0] is for order1 based on the initialization, so all elements
             // should still have their original values
             ShipmentEntity shipment = shipments[0];
             shipment.Postal.DimsHeight = 1;
             shipment.Postal.DimsLength = 1;
             shipment.Postal.DimsWidth = 1;
             shipment.Postal.DimsWeight = 1;
-            
+
             testObject.SynchronizeWith(shipment);
 
             KnowledgebaseEntry entry = knowledgebase.Object.GetEntry(shipment.Order);
@@ -393,7 +402,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense
         {
             shippingSettingsEntity.ShipSenseEnabled = true;
 
-            // Shipment[0] is for order1 based on the initialization, so all elements 
+            // Shipment[0] is for order1 based on the initialization, so all elements
             // should still have their original values
             ShipmentEntity shipment = shipments[0];
             shipment.Postal.DimsHeight = 1;
@@ -418,13 +427,13 @@ namespace ShipWorks.Tests.Shipping.ShipSense
         public void SynchronizeWith_ShipSenseStatusOfMatchedShipmentsIsSameAsSourcedShipment_WhenShipSenseIsEnabled_AndMatchedShipmentsAndSourcedShipmentHaveShipSenseApplied()
         {
             shippingSettingsEntity.ShipSenseEnabled = true;
-            
+
             foreach (ShipmentEntity entity in shipments)
             {
-                entity.ShipSenseStatus = (int)ShipSenseStatus.Applied;
+                entity.ShipSenseStatus = (int) ShipSenseStatus.Applied;
             }
 
-            // Shipment[0] is for order1 based on the initialization, so all elements 
+            // Shipment[0] is for order1 based on the initialization, so all elements
             // should still have their original values
             ShipmentEntity shipment = shipments[0];
             shipment.Postal.DimsHeight = 1;
@@ -453,10 +462,10 @@ namespace ShipWorks.Tests.Shipping.ShipSense
 
             foreach (ShipmentEntity entity in shipments)
             {
-                entity.ShipSenseStatus = (int)ShipSenseStatus.Applied;
+                entity.ShipSenseStatus = (int) ShipSenseStatus.Applied;
             }
-            
-            // Shipment[0] is for order1 based on the initialization, so all elements 
+
+            // Shipment[0] is for order1 based on the initialization, so all elements
             // should still have their original values
             ShipmentEntity shipment = shipments[0];
             shipment.Postal.DimsHeight = 5.0;
@@ -464,14 +473,14 @@ namespace ShipWorks.Tests.Shipping.ShipSense
             shipment.Postal.DimsLength = 5.0;
             shipment.Postal.DimsWidth = 5.0;
             shipment.Postal.DimsWeight = 5.0;
-            shipment.ShipSenseStatus = (int)ShipSenseStatus.NotApplied;
-            
+            shipment.ShipSenseStatus = (int) ShipSenseStatus.NotApplied;
+
             testObject.SynchronizeWith(shipment);
 
             // Shipments 2, 4, and 5 should match based on the initialization
-            Assert.Equal((int)ShipSenseStatus.Applied, shipments[2].ShipSenseStatus);
-            Assert.Equal((int)ShipSenseStatus.Applied, shipments[4].ShipSenseStatus);
-            Assert.Equal((int)ShipSenseStatus.Applied, shipments[5].ShipSenseStatus);
+            Assert.Equal((int) ShipSenseStatus.Applied, shipments[2].ShipSenseStatus);
+            Assert.Equal((int) ShipSenseStatus.Applied, shipments[4].ShipSenseStatus);
+            Assert.Equal((int) ShipSenseStatus.Applied, shipments[5].ShipSenseStatus);
         }
 
         [Fact]
@@ -481,24 +490,24 @@ namespace ShipWorks.Tests.Shipping.ShipSense
 
             foreach (ShipmentEntity entity in shipments)
             {
-                entity.ShipSenseStatus = (int)ShipSenseStatus.Applied;
+                entity.ShipSenseStatus = (int) ShipSenseStatus.Applied;
             }
 
-            // Shipment[0] is for order1 based on the initialization, so all elements 
+            // Shipment[0] is for order1 based on the initialization, so all elements
             // should still have their original values
             ShipmentEntity shipment = shipments[0];
             shipment.Postal.DimsHeight = 1;
             shipment.Postal.DimsLength = 1;
             shipment.Postal.DimsWidth = 1;
             shipment.Postal.DimsWeight = 1;
-            shipment.ShipSenseStatus = (int)ShipSenseStatus.NotApplied;
+            shipment.ShipSenseStatus = (int) ShipSenseStatus.NotApplied;
 
             testObject.SynchronizeWith(shipment);
 
             // Shipments 2, 4, and 5 should match based on the initialization
-            Assert.Equal((int)ShipSenseStatus.Overwritten, shipments[2].ShipSenseStatus);
-            Assert.Equal((int)ShipSenseStatus.Overwritten, shipments[4].ShipSenseStatus);
-            Assert.Equal((int)ShipSenseStatus.Overwritten, shipments[5].ShipSenseStatus);
+            Assert.Equal((int) ShipSenseStatus.Overwritten, shipments[2].ShipSenseStatus);
+            Assert.Equal((int) ShipSenseStatus.Overwritten, shipments[4].ShipSenseStatus);
+            Assert.Equal((int) ShipSenseStatus.Overwritten, shipments[5].ShipSenseStatus);
         }
 
         [Fact]
@@ -508,24 +517,24 @@ namespace ShipWorks.Tests.Shipping.ShipSense
 
             foreach (ShipmentEntity entity in shipments)
             {
-                entity.ShipSenseStatus = (int)ShipSenseStatus.NotApplied;
+                entity.ShipSenseStatus = (int) ShipSenseStatus.NotApplied;
             }
 
-            // Shipment[0] is for order1 based on the initialization, so all elements 
+            // Shipment[0] is for order1 based on the initialization, so all elements
             // should still have their original values
             ShipmentEntity shipment = shipments[0];
             shipment.Postal.DimsHeight = 1;
             shipment.Postal.DimsLength = 1;
             shipment.Postal.DimsWidth = 1;
             shipment.Postal.DimsWeight = 1;
-            shipment.ShipSenseStatus = (int)ShipSenseStatus.Applied;
+            shipment.ShipSenseStatus = (int) ShipSenseStatus.Applied;
 
             testObject.SynchronizeWith(shipment);
 
             // Shipments 2, 4, and 5 should match based on the initialization
-            Assert.Equal((int)ShipSenseStatus.NotApplied, shipments[2].ShipSenseStatus);
-            Assert.Equal((int)ShipSenseStatus.NotApplied, shipments[4].ShipSenseStatus);
-            Assert.Equal((int)ShipSenseStatus.NotApplied, shipments[5].ShipSenseStatus);
+            Assert.Equal((int) ShipSenseStatus.NotApplied, shipments[2].ShipSenseStatus);
+            Assert.Equal((int) ShipSenseStatus.NotApplied, shipments[4].ShipSenseStatus);
+            Assert.Equal((int) ShipSenseStatus.NotApplied, shipments[5].ShipSenseStatus);
         }
 
         [Fact]
@@ -569,7 +578,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense
                 GetSinglePackageShipmentForOrder1(6)
             };
 
-            ShipmentEntity multiPackageShipment = shipments[1];            
+            ShipmentEntity multiPackageShipment = shipments[1];
             ShipmentType shipmentType = ShipmentTypeManager.GetType(multiPackageShipment);
 
             // Create KB entry for the multi package shipment to use in our assertions
@@ -605,7 +614,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense
             // Create KB entry for the multi package shipment to use in our assertions
             KnowledgebaseEntry multiPackageEntry = new KnowledgebaseEntry();
             multiPackageEntry.ApplyFrom(shipmentType.GetPackageAdapters(multiPackageShipment), multiPackageShipment.CustomsItems);
-            
+
             testObject.SynchronizeWith(multiPackageShipment);
 
             Assert.False(multiPackageEntry.Matches(shipments[4]));
@@ -625,7 +634,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense
                 Assert.False(true, "Should not have thrown KeyNotFoundException");
             }
         }
-        
+
         private ShipmentEntity GetSinglePackageShipmentForOrder1(int shipmentID)
         {
             OrderEntity order = new OrderEntity { OrderID = 1 };
@@ -639,7 +648,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense
                 OriginPostalCode = "63102",
                 ShipCountryCode = "US",
                 ShipPostalCode = "63102",
-                ShipmentType = (int)ShipmentTypeCode.Endicia,
+                ShipmentType = (int) ShipmentTypeCode.Endicia,
                 Postal = new PostalShipmentEntity
                 {
                     Endicia = new EndiciaShipmentEntity(),
@@ -666,7 +675,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense
                 OriginPostalCode = "63102",
                 ShipCountryCode = "US",
                 ShipPostalCode = "63102",
-                ShipmentType = (int)ShipmentTypeCode.FedEx,
+                ShipmentType = (int) ShipmentTypeCode.FedEx,
                 FedEx = new FedExShipmentEntity()
             };
 
@@ -689,7 +698,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense
                 OriginPostalCode = "63102",
                 ShipCountryCode = "US",
                 ShipPostalCode = "63102",
-                ShipmentType = (int)ShipmentTypeCode.FedEx,
+                ShipmentType = (int) ShipmentTypeCode.FedEx,
                 FedEx = new FedExShipmentEntity()
             };
 
@@ -697,5 +706,6 @@ namespace ShipWorks.Tests.Shipping.ShipSense
             return shipment;
         }
 
+        public void Dispose() => mock.Dispose();
     }
 }

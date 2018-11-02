@@ -524,7 +524,7 @@ namespace ShipWorks.Shipping
                     shippingProfileManager.SaveProfile(primaryProfile);
                 }
 
-                IShippingProfile shippingProfile = shippingProfileService.Get(primaryProfile.ShippingProfileID);
+                var shippingProfile = shippingProfileService.Get(primaryProfile);
                 shippingProfile.Apply(shipment);
 
                 // Now apply ShipSense
@@ -539,7 +539,7 @@ namespace ShipWorks.Shipping
                         IShippingProfileEntity profile = shippingProfileManager.GetProfileReadOnly(rule.ShippingProfileID);
                         if (profile != null)
                         {
-                            shippingProfileService.Get(profile.ShippingProfileID)?.Apply(shipment);
+                            shippingProfileService.Get(profile).Apply(shipment);
                         }
                     }
                 }

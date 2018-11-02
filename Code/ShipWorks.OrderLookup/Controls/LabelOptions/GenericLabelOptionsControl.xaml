@@ -6,6 +6,7 @@
     xmlns:local="clr-namespace:ShipWorks.OrderLookup.Controls.LabelOptions"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:ui="http://schemas.shipworks.com/ui"
+    xmlns:ns="clr-namespace:ShipWorks.OrderLookup.FieldManager;assembly=ShipWorks.Core"
     d:DesignHeight="150"
     d:DesignWidth="500"
     FontFamily="/ShipWorks.OrderLookup;component/#Roboto"
@@ -22,8 +23,8 @@
     </UserControl.Resources>
     <Grid IsEnabled="{Binding ShipmentModel.ShipmentAllowEditing}">
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
+            <ui:FieldLayoutRowDefinition FieldID="{x:Static ns:SectionLayoutFieldIDs.LabelOptionsShipDate}" />
+            <ui:FieldLayoutRowDefinition FieldID="{x:Static ns:SectionLayoutFieldIDs.LabelOptionsRequestedLabelFormat}" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto" />

@@ -4,20 +4,24 @@ using System.Linq;
 using System.Reactive.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Autofac.Extras.Moq;
 using Interapptive.Shared.Messaging;
 using Moq;
 using ShipWorks.Core.Messaging;
+using ShipWorks.Tests.Shared;
 using Xunit;
 
 namespace ShipWorks.Tests.Interapptive.Shared
 {
     public class MessengerTest
     {
+        private readonly AutoMock mock;
         private Messenger messenger;
 
         public MessengerTest()
         {
-            messenger = new Messenger();
+            mock = AutoMockExtensions.GetLooseThatReturnsMocks();
+            messenger = mock.Create<Messenger>();
         }
 
         [Fact]

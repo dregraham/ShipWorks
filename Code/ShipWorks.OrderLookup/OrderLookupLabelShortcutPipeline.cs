@@ -46,7 +46,7 @@ namespace ShipWorks.OrderLookup
             subscription = messenger.OfType<ShortcutMessage>()
                 .Where(m => m.AppliesTo(KeyboardShortcutCommand.CreateLabel))
                 .Where(_ => currentUserSettings.GetUIMode() == UIMode.OrderLookup)
-                .Where(m => orderLookupShipmentModel.ShipmentAdapter.Shipment != null)
+                .Where(m => orderLookupShipmentModel?.ShipmentAdapter?.Shipment != null)
                 .Where(m => orderLookupShipmentModel.ShipmentAdapter.ShipmentTypeCode != ShipmentTypeCode.None)
                 .Where(m => !orderLookupShipmentModel.ShipmentAdapter.Shipment.Processed)
                 .Where(_ => orderLookupShipmentModel.SelectedOrder != null &&

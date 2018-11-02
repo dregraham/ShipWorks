@@ -1,17 +1,28 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Autofac.Extras.Moq;
 using Moq;
+using ShipWorks.ApplicationCore;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.FedEx;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
+using ShipWorks.Tests.Shared;
 using Xunit;
 
 namespace ShipWorks.Shipping.Tests.Carriers.FedEx
 {
-
-    public class FedExShipmentServicesBuilderTest
+    [Collection(TestCollections.IoC)]
+    public class FedExShipmentServicesBuilderTest : IDisposable
     {
+        private readonly AutoMock mock;
+
+        public FedExShipmentServicesBuilderTest()
+        {
+            mock = AutoMockExtensions.GetLooseThatReturnsMocks();
+            IoC.InitializeForUnitTests(mock.Container);
+        }
+
         [Fact]
         public void BuildServiceTypeDictionary_ReturnsGround_ShipmentsAreNullGroundValidAndNotExcluded()
         {
@@ -21,7 +32,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx
 
             var results = BuildServiceTypeDictionary(availableServiceTypes, validServiceTypes, shipments);
 
-            Assert.Contains((int)FedExServiceType.FedExGround, results.Keys);
+            Assert.Contains((int) FedExServiceType.FedExGround, results.Keys);
         }
 
         [Fact]
@@ -33,7 +44,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx
 
             var results = BuildServiceTypeDictionary(availableServiceTypes, validServiceTypes, shipments);
 
-            Assert.DoesNotContain((int)FedExServiceType.FedExGround, results.Keys);
+            Assert.DoesNotContain((int) FedExServiceType.FedExGround, results.Keys);
         }
 
         [Fact]
@@ -45,7 +56,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx
 
             var results = BuildServiceTypeDictionary(availableServiceTypes, validServiceTypes, shipments);
 
-            Assert.Contains((int)FedExServiceType.FedExGround, results.Keys);
+            Assert.Contains((int) FedExServiceType.FedExGround, results.Keys);
         }
 
         [Fact]
@@ -57,20 +68,20 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx
 
             var results = BuildServiceTypeDictionary(availableServiceTypes, validServiceTypes, shipments);
 
-            Assert.Contains((int)FedExServiceType.FedExGround, results.Keys);
+            Assert.Contains((int) FedExServiceType.FedExGround, results.Keys);
         }
 
         [Fact]
         public void BuildServiceTypeDictionary_DoesntAddShipmentTypesFromShipments_WhenShipmentsAreMixOfDomesticAndInternational()
         {
             List<ShipmentEntity> shipments = GetSingleShipment(FedExServiceType.FedExGround).Union(GetSingleShipment(FedExServiceType.FedEx2Day, "IT")).ToList();
-            
+
             var availableServiceTypes = new List<FedExServiceType>() { FedExServiceType.FedExGround }.Cast<int>();
             var validServiceTypes = new List<FedExServiceType>() { FedExServiceType.FedExGround };
 
             var results = BuildServiceTypeDictionary(availableServiceTypes, validServiceTypes, shipments);
 
-            Assert.DoesNotContain((int)FedExServiceType.FedExGround, results.Keys);
+            Assert.DoesNotContain((int) FedExServiceType.FedExGround, results.Keys);
         }
 
         /// <summary>
@@ -79,9 +90,9 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx
         /// <param name="serviceType">Type of the service.</param>
         /// <param name="shipCountryCode">The ship country code.</param>
         /// <returns></returns>
-        private static IEnumerable<ShipmentEntity> GetSingleShipment(FedExServiceType serviceType, string shipCountryCode="US")
+        private static IEnumerable<ShipmentEntity> GetSingleShipment(FedExServiceType serviceType, string shipCountryCode = "US")
         {
-            return new [] {
+            return new[] {
                 new ShipmentEntity()
                 {
                     ShipCountryCode = shipCountryCode,
@@ -101,8 +112,8 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx
         /// <param name="shipments">The shipments.</param>
         /// <returns></returns>
         private static Dictionary<int, string> BuildServiceTypeDictionary(
-            IEnumerable<int> availableServiceTypes, 
-            List<FedExServiceType> validServiceTypes, 
+            IEnumerable<int> availableServiceTypes,
+            List<FedExServiceType> validServiceTypes,
             IEnumerable<ShipmentEntity> shipments)
         {
             Dictionary<int, string> results;
@@ -131,5 +142,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx
             }
             return results;
         }
+
+        public void Dispose() => mock.Dispose();
     }
 }

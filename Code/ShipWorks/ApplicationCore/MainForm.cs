@@ -187,7 +187,9 @@ namespace ShipWorks
             {
                 if (x is ShipmentSelectionChangedMessage && currentUserSettings.GetUIMode() == UIMode.OrderLookup)
                 {
-                    buttonOrderLookupViewCreateLabel.Enabled = orderLookupControl?.CreateLabelAllowed() == true;
+                    var canProcess = orderLookupControl?.CreateLabelAllowed() == true;
+                    buttonOrderLookupViewCreateLabel.Enabled = canProcess;
+                    buttonOrderLookupViewApplyProfile.Enabled = canProcess;
                 }
             });
         }
@@ -1053,7 +1055,7 @@ namespace ShipWorks
 
             ToggleUiModeCheckbox(UIMode.OrderLookup);
 
-            heartBeat = new Heartbeat();
+            heartBeat = new OrderLookupHeartbeat(this);
 
             // Hide all dock windows.  Hide them first so they don't attempt to save when the filter changes (due to the tree being cleared)
             foreach (DockControl control in Panels)
@@ -2241,7 +2243,12 @@ namespace ShipWorks
         {
             UpdateLoginLogoffMenu();
 
-            mainMenuItemViewMode.Visible = UserSession.IsLoggedOn;
+            // Check if we should show the option to toggle UI modes
+            using (var lifetimeScope = IoC.BeginLifetimeScope())
+            {
+                IConfigurationData configurationData = lifetimeScope.Resolve<IConfigurationData>();
+                mainMenuItemViewMode.Visible = UserSession.IsLoggedOn && configurationData.FetchReadOnly().AllowUIModeToggle;
+            }
 
             // Only show backup \ restore if logged on
             if (!UserSession.IsLoggedOn)
@@ -3522,6 +3529,17 @@ namespace ShipWorks
             Cursor.Current = Cursors.WaitCursor;
 
             EditCustomer(gridControl.Selection.Keys.First());
+        }
+
+        /// <summary>
+        /// Edit the customer associated with the selected order
+        /// </summary>
+        private void OnContextOrderEditCustomer(object sender, EventArgs e)
+        {
+            Cursor.Current = Cursors.WaitCursor;
+
+            OrderEntity order = (OrderEntity) DataProvider.GetEntity(gridControl.Selection.Keys.First());
+            EditCustomer(order.CustomerID);
         }
 
         /// <summary>

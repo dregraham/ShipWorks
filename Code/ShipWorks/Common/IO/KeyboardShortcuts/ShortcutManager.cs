@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using Interapptive.Shared.Collections;
@@ -12,6 +13,7 @@ using ShipWorks.ApplicationCore;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Data.Utility;
 using ShipWorks.IO.KeyboardShortcuts;
 
@@ -26,9 +28,10 @@ namespace ShipWorks.Common.IO.KeyboardShortcuts
     {
         private TableSynchronizer<ShortcutEntity> tableSynchronizer;
         private bool needCheckForChanges;
-        
+        private ReadOnlyCollection<IShortcutEntity> readOnlyEntities;
+
         // Shortcuts reserved for future use
-        private readonly KeyboardShortcutData[] reservedShortcuts = 
+        private readonly KeyboardShortcutData[] reservedShortcuts =
         {
             new KeyboardShortcutData(null, VirtualKeys.A, KeyboardShortcutModifiers.Ctrl | KeyboardShortcutModifiers.Shift, null),
             new KeyboardShortcutData(null, VirtualKeys.C, KeyboardShortcutModifiers.Ctrl | KeyboardShortcutModifiers.Shift, null),
@@ -76,6 +79,7 @@ namespace ShipWorks.Common.IO.KeyboardShortcuts
                     if (tableSynchronizer.Synchronize())
                     {
                         tableSynchronizer.EntityCollection.Sort((int) ShortcutFieldIndex.Action, ListSortDirection.Ascending);
+                        readOnlyEntities = tableSynchronizer.EntityCollection.Select(x => x.AsReadOnly()).ToReadOnly();
                     }
 
                     needCheckForChanges = false;
@@ -102,9 +106,9 @@ namespace ShipWorks.Common.IO.KeyboardShortcuts
         /// <summary>
         /// Get shortcut for given hotkey
         /// </summary>
-        public ShortcutEntity GetShortcut(VirtualKeys key, KeyboardShortcutModifiers modifierKeys) 
+        public ShortcutEntity GetShortcut(VirtualKeys key, KeyboardShortcutModifiers modifierKeys)
             => Shortcuts.SingleOrDefault(s => s.VirtualKey == key && s.ModifierKeys == modifierKeys);
-		
+
         /// <summary>
         /// Get weigh shortcut
         /// </summary>
@@ -112,7 +116,7 @@ namespace ShipWorks.Common.IO.KeyboardShortcuts
         /// The first iteration of the weigh shortcut used Ctrl+W, but when other hotkeys were added, we only wanted
         /// users to use hotkeys with Ctrl+Shift as modifiers, so the shortcut was changed to Ctrl+Shift+W, however,
         /// for existing users, Ctrl+W will still be in the database. When getting the shortcut, we always want to
-        /// return the Ctrl+Shift+W version. 
+        /// return the Ctrl+Shift+W version.
         /// </remarks>
         public ShortcutEntity GetWeighShortcut() => Shortcuts.FirstOrDefault(
             s => s.Action == KeyboardShortcutCommand.ApplyWeight &&
@@ -200,7 +204,26 @@ namespace ShipWorks.Common.IO.KeyboardShortcuts
                 }
             }
         }
-        
+
+        /// <summary>
+        /// All the shortcuts
+        /// </summary>
+        public IEnumerable<IShortcutEntity> ShortcutsReadOnly
+        {
+            get
+            {
+                lock (tableSynchronizer)
+                {
+                    if (needCheckForChanges)
+                    {
+                        CheckForChanges();
+                    }
+
+                    return readOnlyEntities;
+                }
+            }
+        }
+
         /// <summary>
         /// Get tooltip text for tooltip
         /// </summary>
@@ -208,7 +231,7 @@ namespace ShipWorks.Common.IO.KeyboardShortcuts
         {
             string hotKey = new KeyboardShortcutData(Shortcuts.FirstOrDefault(s =>
                                 s.Action == KeyboardShortcutCommand.CreateLabel))?.ShortcutText ?? "No Shortcut Defined";
-            
+
             return ($"Create Label ({hotKey})", "Create a shipping label for the selected order.");
         }
     }
