@@ -2,6 +2,7 @@
 using System.Windows.Forms;
 using Divelements.SandGrid;
 using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore;
 using ShipWorks.Data.Grid.Paging;
@@ -24,6 +25,7 @@ namespace ShipWorks.OrderLookup.ShipmentHistory.Controls
         private readonly IMainForm mainForm;
         private string searchText;
         private ShipmentHistoryEntityGateway gateway;
+        private readonly Func<string, ITrackedDurationEvent> telemetryFactory;
 
         /// <summary>
         /// Constructor
@@ -35,10 +37,11 @@ namespace ShipWorks.OrderLookup.ShipmentHistory.Controls
         /// <summary>
         /// Constructor
         /// </summary>
-        public ShipmentHistoryGrid(Func<ShipmentHistoryEntityGateway> createGateway, IMainForm mainForm) : this()
+        public ShipmentHistoryGrid(Func<ShipmentHistoryEntityGateway> createGateway, IMainForm mainForm, Func<string, ITrackedDurationEvent> telemetryFactory) : this()
         {
             this.createGateway = createGateway;
             this.mainForm = mainForm;
+            this.telemetryFactory = telemetryFactory;
 
             entityGrid.RowLoadingComplete += OnEntityGridRowLoadingComplete;
         }
@@ -53,6 +56,14 @@ namespace ShipWorks.OrderLookup.ShipmentHistory.Controls
         /// </summary>
         private void OnEntityGridRowLoadingComplete(object sender, EventArgs e)
         {
+            using (ITrackedDurationEvent telemetryEvent = telemetryFactory("OrderLookup.Shipment.History"))
+            {
+                RowCount = entityGrid.Rows.Count;
+                mainForm.UpdateStatusBar();
+
+                telemetryEvent.AddMetric("Shipment.History.Shipment.Count", RowCount);
+            }
+
             RowCount = entityGrid.Rows.Count;
             mainForm.UpdateStatusBar();
         }
