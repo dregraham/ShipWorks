@@ -10,6 +10,7 @@ using System.Xml;
 using System.Xml.Linq;
 using Interapptive.Shared;
 using Interapptive.Shared.Business;
+using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Security;
 using Interapptive.Shared.Utility;
@@ -618,7 +619,7 @@ namespace ShipWorks.ApplicationCore.Licensing
                 {
                     throw new TangoException(errorNode.InnerText);
                 }
-                
+
                 onlineShipmentID = xmlResponse.SelectSingleNode("//OnlineShipmentID")?.InnerText;
             }
 
@@ -669,8 +670,8 @@ namespace ShipWorks.ApplicationCore.Licensing
 
             // Send best rate usage data to Tango
             BestRateEventsDescription bestRateEventsDescription = new BestRateEventsDescription((BestRateEventTypes) shipment.BestRateEvents);
-            postRequest.Variables.Add("bestrateevents", bestRateEventsDescription.ToString());          
-            
+            postRequest.Variables.Add("bestrateevents", bestRateEventsDescription.ToString());
+
             ShipmentCommonDetail shipmentDetail = shipmentType.GetShipmentCommonDetail(shipment);
             AddOrderDetailsToLogShipmentRequest(shipment, postRequest);
             AddAddressDetailsToLogShipmentRequest(shipment, postRequest);
@@ -693,7 +694,7 @@ namespace ShipWorks.ApplicationCore.Licensing
                                           ((int) shipmentDetail.OriginalShipmentType).ToString() :
                                           string.Empty);
             postRequest.Variables.Add("swServiceType", shipmentDetail.ServiceType.ToString());
-            
+
             postRequest.Variables.Add("carrier", ShippingManager.GetCarrierName(shipmentType.ShipmentTypeCode));
             postRequest.Variables.Add("service", ShippingManager.GetActualServiceUsed(shipment));
             postRequest.Variables.Add("tracking", tracking);
@@ -711,7 +712,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         {
             postRequest.Variables.Add("packageCount", shipmentType.GetParcelCount(shipment).ToString());
             postRequest.Variables.Add("swPackagingType", shipmentDetail.PackagingType.ToString());
-            
+
             postRequest.Variables.Add("weight", shipment.TotalWeight.ToString());
             postRequest.Variables.Add("packageLength", shipmentDetail.PackageLength.ToString());
             postRequest.Variables.Add("packageWidth", shipmentDetail.PackageWidth.ToString());
@@ -746,7 +747,7 @@ namespace ShipWorks.ApplicationCore.Licensing
             postRequest.Variables.Add("orderSubTotal", OrderUtility.CalculateTotal(shipment.Order, false).ToString());
             postRequest.Variables.Add("orderTotal", shipment.Order.OrderTotal.ToString());
         }
-        
+
         /// <summary>
         /// Add insurance details from the given shipment to the log shipment request
         /// </summary>
@@ -790,8 +791,8 @@ namespace ShipWorks.ApplicationCore.Licensing
             }
             else
             {
-                InsuredWith insuredWith = shipment.InsurancePolicy.CreatedWithApi ? 
-                    InsuredWith.SuccessfullyInsuredViaApi : 
+                InsuredWith insuredWith = shipment.InsurancePolicy.CreatedWithApi ?
+                    InsuredWith.SuccessfullyInsuredViaApi :
                     InsuredWith.FailedToInsureViaApi;
                 postRequest.Variables.Add("insuredwith", EnumHelper.GetApiValue(insuredWith));
             }
@@ -1088,7 +1089,7 @@ namespace ShipWorks.ApplicationCore.Licensing
 
             if (bestRateShipmentTypeFunctionality?.SelectSingleNode("Restriction")?.InnerText.ToLower() == "disabled")
             {
-                // If it exists remove it 
+                // If it exists remove it
                 shipmentTypeFunctionality.RemoveChild(bestRateShipmentTypeFunctionality);
 
                 // add the new default which enables best rate but limits it to local rating only
@@ -1166,23 +1167,32 @@ namespace ShipWorks.ApplicationCore.Licensing
                 e.HttpWebRequest.Headers.Add("SOAPAction", "http://stamps.com/xml/namespace/2015/06/shipworks/shipworksv1/IShipWorks/ShipworksPost");
             };
 
+            IHttpResponseReader postResponse = null;
+
             try
             {
-                // First validate that we are connecting to interapptive, and not a fake redirect to steal passwords and such.  Doing this pre-call
-                // also prevents stealing the headers user\pass with fiddler
-                ValidateSecureConnection(postRequest.Uri);
-
-                using (IHttpResponseReader postResponse = postRequest.GetResponse())
+                using (TrackedDurationEvent telemetryEvent = new TrackedDurationEvent("Tango.Request"))
                 {
-                    // Ensure the site has a valid interapptive secure certificate
-                    ValidateInterapptiveCertificate(postResponse.HttpWebRequest);
+                    string action = postRequest.Variables.FirstOrDefault(v => v.Name.Equals("action", StringComparison.InvariantCultureIgnoreCase))?.Value ?? logEntryName;
+                    telemetryEvent.AddProperty("Tango.Request.Action", action);
 
-                    string result = postResponse.ReadResult().Trim();
+                    // First validate that we are connecting to interapptive, and not a fake redirect to steal passwords and such.  Doing this pre-call
+                    // also prevents stealing the headers user\pass with fiddler
+                    ValidateSecureConnection(postRequest.Uri);
+                    telemetryEvent.AddMetricUsingCurrentDuration("Tango.Request.ValidateSecureConnection");
 
-                    logEntry.LogResponse(result);
-
-                    return result;
+                    postResponse = postRequest.GetResponse();
                 }
+
+                // Ensure the site has a valid interapptive secure certificate
+                ValidateInterapptiveCertificate(postResponse.HttpWebRequest);
+
+                string result = postResponse.ReadResult().Trim();
+
+                logEntry.LogResponse(result);
+
+                return result;
+
             }
             catch (Exception ex)
             {
@@ -1192,6 +1202,10 @@ namespace ShipWorks.ApplicationCore.Licensing
                 }
 
                 throw;
+            }
+            finally
+            {
+                postResponse?.Dispose();
             }
         }
 

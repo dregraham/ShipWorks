@@ -27,6 +27,14 @@ namespace Interapptive.Shared.Metrics
         public static ITrackedDurationEvent Dummy => new DummyTrackedDurationEvent();
 
         /// <summary>
+        /// Add a metric using the current duration
+        /// </summary>
+        public void AddMetricUsingCurrentDuration(string metricName)
+        {
+            AddMetric(metricName, stopwatch.ElapsedMilliseconds);
+        }
+
+        /// <summary>
         /// Stop the stopwatch
         /// </summary>
         private void Stop()
