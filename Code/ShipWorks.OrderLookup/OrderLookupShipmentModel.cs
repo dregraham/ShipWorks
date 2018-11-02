@@ -8,6 +8,7 @@ using System.Reflection;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.UI;
+using Interapptive.Shared.Utility;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Core.UI;
 using ShipWorks.Data;
@@ -266,12 +267,19 @@ namespace ShipWorks.OrderLookup
         {
             RemovePropertyChangedEventsFromEntities(ShipmentAdapter);
 
-            shippingManager.RefreshShipment(ShipmentAdapter.Shipment);
-            ShipmentAdapter = shippingManager.GetShipmentAdapter(ShipmentAdapter.Shipment);
+            try
+            {
+                shippingManager.RefreshShipment(ShipmentAdapter.Shipment);
+                ShipmentAdapter = shippingManager.GetShipmentAdapter(ShipmentAdapter.Shipment);
+                RefreshProperties();
+                AddPropertyChangedEventsToEntities(ShipmentAdapter, ShipmentAdapter.ShipmentTypeCode);
+            }
+            catch (ObjectDeletedException)
+            {
+                // The shipment was deleted, so just unload
+                Unload(OrderClearReason.Reset);
+            }
 
-            RefreshProperties();
-
-            AddPropertyChangedEventsToEntities(ShipmentAdapter, ShipmentAdapter.ShipmentTypeCode);
             RaisePropertyChanged(null);
         }
 
