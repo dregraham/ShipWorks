@@ -35,7 +35,7 @@
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
+            <ui:FieldLayoutRowDefinition FieldID="{x:Static ns:SectionLayoutFieldIDs.AccountSelector}" />
             <ui:FieldLayoutRowDefinition FieldID="{x:Static ns:SectionLayoutFieldIDs.Origin}" />
             <ui:FieldLayoutRowDefinition FieldID="{x:Static ns:SectionLayoutFieldIDs.Origin}" />
             <RowDefinition Height="Auto" />

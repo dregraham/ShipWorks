@@ -9,6 +9,7 @@ namespace ShipWorks.OrderLookup.FieldManager
     public enum SectionLayoutFieldIDs
     {
         /* Common address fields */
+        AccountSelector,
         FullName,
         Company,
         Street,
@@ -22,7 +23,6 @@ namespace ShipWorks.OrderLookup.FieldManager
         Website,
 
         /* From address specific fields */
-        USPSAccountSelector,
         Origin,
         FedExResidentialCommercialAddress,
 

@@ -22,7 +22,7 @@ namespace ShipWorks.OrderLookup.FieldManager
                 Id = SectionLayoutIDs.From,
                 SectionFields = new List<SectionFieldLayout>()
                 {
-                    new SectionFieldLayout() { Id = SectionLayoutFieldIDs.USPSAccountSelector, Name = "USPS - Account Selector" },
+                    new SectionFieldLayout() { Id = SectionLayoutFieldIDs.AccountSelector, Name = "Account Selector" },
                     new SectionFieldLayout() { Id = SectionLayoutFieldIDs.Origin, Name = "Origin"},
                     new SectionFieldLayout() { Id = SectionLayoutFieldIDs.FullName, Name = "Full Name" },
                     new SectionFieldLayout() { Id = SectionLayoutFieldIDs.Company, Name = "Company" },
@@ -95,7 +95,7 @@ namespace ShipWorks.OrderLookup.FieldManager
                     new SectionFieldLayout() { Id = SectionLayoutFieldIDs.ShipmentDetailsWeight, Name = "Weight" },
                     new SectionFieldLayout() { Id = SectionLayoutFieldIDs.ShipmentDetailsDimensions, Name = "Dimensions" },
                     new SectionFieldLayout() { Id = SectionLayoutFieldIDs.ShipmentDetailsAddToWeight, Name = "Add to weight" },
-                    new SectionFieldLayout() { Id = SectionLayoutFieldIDs.ShipmentDetailsInsurance, Name = "Insurance" }
+                    new SectionFieldLayout() { Id = SectionLayoutFieldIDs.ShipmentDetailsInsurance, Name = "Protection / Insurance" }
                 }
             });
 

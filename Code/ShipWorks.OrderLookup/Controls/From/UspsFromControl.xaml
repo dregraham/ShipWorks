@@ -33,8 +33,8 @@
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" /> <!-- 0 Shipment type name -->
-            <ui:FieldLayoutRowDefinition FieldID="{x:Static ns:SectionLayoutFieldIDs.USPSAccountSelector}" /> <!-- 1 Supports accounts/rate shop -->
-            <ui:FieldLayoutRowDefinition FieldID="{x:Static ns:SectionLayoutFieldIDs.USPSAccountSelector}" /> <!-- 2 AccountDropDown -->
+            <ui:FieldLayoutRowDefinition FieldID="{x:Static ns:SectionLayoutFieldIDs.AccountSelector}" /> <!-- 1 Supports accounts/rate shop -->
+            <ui:FieldLayoutRowDefinition FieldID="{x:Static ns:SectionLayoutFieldIDs.AccountSelector}" /> <!-- 2 AccountDropDown -->
             <ui:FieldLayoutRowDefinition FieldID="{x:Static ns:SectionLayoutFieldIDs.Origin}" /> <!-- 3 Origin header -->
             <ui:FieldLayoutRowDefinition FieldID="{x:Static ns:SectionLayoutFieldIDs.Origin}" /> <!-- 4 Origin drop down -->
             <RowDefinition Height="Auto" /> <!-- 5 OrderLookupAddress control -->

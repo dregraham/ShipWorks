@@ -32,20 +32,13 @@
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <!--  0 Shipment type name  -->
-            <RowDefinition Height="Auto" />
-            <!--  1 Supports accounts/account dropdown  -->
-            <ui:FieldLayoutRowDefinition FieldID="{x:Static ns:SectionLayoutFieldIDs.Origin}" />
-            <!--  2 Origin header  -->
-            <ui:FieldLayoutRowDefinition FieldID="{x:Static ns:SectionLayoutFieldIDs.Origin}" />
-            <!--  3 Origin dropdown  -->
-            <RowDefinition Height="Auto" />
-            <!--  4 OrderLookupAddress control  -->
-            <ui:FieldLayoutRowDefinition FieldID="{x:Static ns:SectionLayoutFieldIDs.FedExResidentialCommercialAddress}" />
-            <!--  5 Residential/Commercial  -->
-            <ui:FieldLayoutRowDefinition FieldID="{x:Static ns:SectionLayoutFieldIDs.FedExResidentialCommercialAddress}" />
-            <!--  6 Residential/Commercial text and dropdown  -->
+            <RowDefinition Height="Auto" /> <!--  0 Shipment type name  -->
+            <ui:FieldLayoutRowDefinition FieldID="{x:Static ns:SectionLayoutFieldIDs.AccountSelector}" /> <!--  1 Supports accounts/account dropdown  -->
+            <ui:FieldLayoutRowDefinition FieldID="{x:Static ns:SectionLayoutFieldIDs.Origin}" /> <!--  2 Origin header  -->
+            <ui:FieldLayoutRowDefinition FieldID="{x:Static ns:SectionLayoutFieldIDs.Origin}" /> <!--  3 Origin dropdown  -->
+            <RowDefinition Height="Auto" /> <!--  4 OrderLookupAddress control  -->
+            <ui:FieldLayoutRowDefinition FieldID="{x:Static ns:SectionLayoutFieldIDs.FedExResidentialCommercialAddress}" /> <!--  5 Residential/Commercial  -->
+            <ui:FieldLayoutRowDefinition FieldID="{x:Static ns:SectionLayoutFieldIDs.FedExResidentialCommercialAddress}" /> <!--  6 Residential/Commercial text and dropdown  -->
         </Grid.RowDefinitions>
         <TextBlock
             Grid.Row="0"

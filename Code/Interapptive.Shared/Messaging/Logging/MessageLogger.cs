@@ -5,6 +5,7 @@ using System.Reactive.Concurrency;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using Newtonsoft.Json;
+using ShipWorks.ApplicationCore;
 
 namespace Interapptive.Shared.Messaging.Logging
 {
@@ -42,17 +43,17 @@ namespace Interapptive.Shared.Messaging.Logging
         {
             endpoint = $"http://localhost:9809/ShipWorks/{Guid.NewGuid()}";
             client = new WebClient();
-            settings = new JsonSerializerSettings { ReferenceLoopHandling = ReferenceLoopHandling.Ignore };
+            settings = new JsonSerializerSettings {ReferenceLoopHandling = ReferenceLoopHandling.Ignore};
             Observable.Create<ILogItem>(x =>
-            {
-                observer = x;
-                return Disposable.Create(() => observer = null);
-            })
-            .ObserveOn(TaskPoolScheduler.Default)
-            .Where(x => x.TrackingPath != null)
-            .Select(x => new { Data = JsonConvert.SerializeObject(x, settings), Endpoint = x.Endpoint })
-            .Do(x => client.UploadString(endpoint + "/" + x.Endpoint, "POST", x.Data))
-            .Subscribe(_ => { }, ex => { });
+                {
+                    observer = x;
+                    return Disposable.Create(() => observer = null);
+                })
+                .ObserveOn(TaskPoolScheduler.Default)
+                .Where(x => x.TrackingPath != null && InterapptiveOnly.MagicKeysDown)
+                .Select(x => new {Data = JsonConvert.SerializeObject(x, settings), Endpoint = x.Endpoint})
+                .Do(x => client.UploadString(endpoint + "/" + x.Endpoint, "POST", x.Data))
+                .Subscribe(_ => { }, ex => { });
         }
 
         /// <summary>
