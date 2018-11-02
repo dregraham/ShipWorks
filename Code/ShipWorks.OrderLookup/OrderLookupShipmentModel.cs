@@ -85,7 +85,7 @@ namespace ShipWorks.OrderLookup
         private readonly Func<IInsuranceBehaviorChangeViewModel> createInsuranceBehaviorChange;
         private readonly PropertyChangedHandler handler;
         private readonly IDisposable subscription;
-        private readonly ISecurityContext securityContext;
+        private readonly Func<ISecurityContext> securityContext;
         private ICarrierShipmentAdapter shipmentAdapter;
         private OrderEntity selectedOrder;
         private bool shipmentAllowEditing;
@@ -126,7 +126,7 @@ namespace ShipWorks.OrderLookup
             Func<IInsuranceBehaviorChangeViewModel> createInsuranceBehaviorChange,
             IEnumerable<IOrderLookupShipmentModelPipeline> pipelines,
             OrderLookupFieldLayoutProvider orderLookupFieldLayoutProvider,
-            ISecurityContext securityContext)
+            Func<ISecurityContext> securityContext)
         {
             this.messenger = messenger;
             this.shippingManager = shippingManager;
@@ -417,7 +417,7 @@ namespace ShipWorks.OrderLookup
         /// </summary>
         private void RefreshProperties()
         {
-            ShipmentAllowEditing = securityContext.HasPermission(PermissionType.ShipmentsCreateEditProcess, ShipmentAdapter?.Shipment?.ShipmentID) && 
+            ShipmentAllowEditing = securityContext().HasPermission(PermissionType.ShipmentsCreateEditProcess, ShipmentAdapter?.Shipment?.ShipmentID) && 
                                    (!ShipmentAdapter?.Shipment?.Processed ?? false);
             PackageAdapters = ShipmentAdapter?.GetPackageAdaptersAndEnsureShipmentIsLoaded();
 
