@@ -36,7 +36,7 @@ namespace ShipWorks.OrderLookup.ShipmentModelPipelines
         public IDisposable Register(IOrderLookupShipmentModel model) => new CompositeDisposable(
             messenger.OfType<ShipmentsProcessedMessage>()
                 .Where(_ => mainForm.UIMode == UIMode.OrderLookup)
-                .Where(x => x.Shipments.All(y => y.IsSuccessful))
+                .Where(x => x.Shipments.All(s => s.Shipment.Processed))
                 .Subscribe(x => HandleSuccessfulShipment(model, x)),
             messenger.OfType<ShipmentsProcessedMessage>()
                 .Where(x => x.Shipments.Any(y => !y.IsSuccessful))
