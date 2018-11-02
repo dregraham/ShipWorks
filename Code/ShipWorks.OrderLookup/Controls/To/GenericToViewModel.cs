@@ -6,7 +6,6 @@ using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Enums;
 using Interapptive.Shared.Threading;
 using ShipWorks.AddressValidation;
-using ShipWorks.Core.UI;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.OrderLookup.FieldManager;
 using ShipWorks.Shipping;

@@ -93,7 +93,7 @@
                 Text="{Binding Company, UpdateSourceTrigger=PropertyChanged}" />
         </Grid>
 
-        <Grid>
+        <Grid Visibility="{Binding Path=AddressValidationVisibility}">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="85" />
                 <ColumnDefinition Width="*" />

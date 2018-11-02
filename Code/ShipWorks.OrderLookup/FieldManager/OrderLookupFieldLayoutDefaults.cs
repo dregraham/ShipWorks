@@ -95,7 +95,7 @@ namespace ShipWorks.OrderLookup.FieldManager
                     new SectionFieldLayout() { Id = SectionLayoutFieldIDs.ShipmentDetailsWeight, Name = "Weight" },
                     new SectionFieldLayout() { Id = SectionLayoutFieldIDs.ShipmentDetailsDimensions, Name = "Dimensions" },
                     new SectionFieldLayout() { Id = SectionLayoutFieldIDs.ShipmentDetailsAddToWeight, Name = "Add to weight" },
-                    new SectionFieldLayout() { Id = SectionLayoutFieldIDs.ShipmentDetailsInsurance, Name = "Protection / Insurance" }
+                    new SectionFieldLayout() { Id = SectionLayoutFieldIDs.ShipmentDetailsInsurance, Name = "Protection/Insurance" }
                 }
             });
 
