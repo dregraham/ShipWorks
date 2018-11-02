@@ -23,6 +23,7 @@ namespace ShipWorks.OrderLookup.ShipmentHistory.Controls
         private const long FilterValue = 1;
         private readonly Func<ShipmentHistoryEntityGateway> createGateway;
         private readonly IMainForm mainForm;
+        private ITrackedDurationEvent loadingTelemetry;
         private string searchText;
         private ShipmentHistoryEntityGateway gateway;
         private readonly Func<string, ITrackedDurationEvent> telemetryFactory;
@@ -56,12 +57,14 @@ namespace ShipWorks.OrderLookup.ShipmentHistory.Controls
         /// </summary>
         private void OnEntityGridRowLoadingComplete(object sender, EventArgs e)
         {
-            using (ITrackedDurationEvent telemetryEvent = telemetryFactory("OrderLookup.Shipment.History"))
+            // Since the creator and the consumer of the telemetry may be different, we'll get a local copy
+            // to avoid the possibility of threading issues. Telemetry won't send again if it's already been
+            // disposed, so calling Dispose multiple times should be safe.
+            var localLoadingTelementry = loadingTelemetry;
+            if (localLoadingTelementry != null)
             {
-                RowCount = entityGrid.Rows.Count;
-                mainForm.UpdateStatusBar();
-
-                telemetryEvent.AddMetric("Shipment.History.Shipment.Count", RowCount);
+                localLoadingTelementry.AddMetric("Shipment.History.Shipment.Count", entityGrid.Rows.Count);
+                localLoadingTelementry.Dispose();
             }
 
             RowCount = entityGrid.Rows.Count;
@@ -107,6 +110,8 @@ namespace ShipWorks.OrderLookup.ShipmentHistory.Controls
         /// </summary>
         public void Reload()
         {
+            loadingTelemetry = telemetryFactory("OrderLookup.Shipment.History");
+
             searchText = string.Empty;
 
             ChangeContent(ReloadValue);
@@ -123,7 +128,7 @@ namespace ShipWorks.OrderLookup.ShipmentHistory.Controls
         public override FilterTarget[] SupportedTargets => new[] { FilterTarget.Orders, FilterTarget.Customers };
 
         /// <summary>
-        /// Refresh the 
+        /// Refresh the specified entity
         /// </summary>
         public GenericResult<ProcessedShipmentEntity> RefreshEntity(ProcessedShipmentEntity shipment) =>
             gateway.RefreshEntity(shipment);
