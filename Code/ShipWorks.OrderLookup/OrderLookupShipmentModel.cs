@@ -23,6 +23,7 @@ using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Insurance;
 using ShipWorks.Shipping.Profiles;
 using ShipWorks.Shipping.Services;
+using ShipWorks.Users.Security;
 
 namespace ShipWorks.OrderLookup
 {
@@ -84,6 +85,7 @@ namespace ShipWorks.OrderLookup
         private readonly Func<IInsuranceBehaviorChangeViewModel> createInsuranceBehaviorChange;
         private readonly PropertyChangedHandler handler;
         private readonly IDisposable subscription;
+        private readonly ISecurityContext securityContext;
         private ICarrierShipmentAdapter shipmentAdapter;
         private OrderEntity selectedOrder;
         private bool shipmentAllowEditing;
@@ -123,12 +125,14 @@ namespace ShipWorks.OrderLookup
             IMessageHelper messageHelper,
             Func<IInsuranceBehaviorChangeViewModel> createInsuranceBehaviorChange,
             IEnumerable<IOrderLookupShipmentModelPipeline> pipelines,
-            OrderLookupFieldLayoutProvider orderLookupFieldLayoutProvider)
+            OrderLookupFieldLayoutProvider orderLookupFieldLayoutProvider,
+            ISecurityContext securityContext)
         {
             this.messenger = messenger;
             this.shippingManager = shippingManager;
             this.messageHelper = messageHelper;
             this.createInsuranceBehaviorChange = createInsuranceBehaviorChange;
+            this.securityContext = securityContext;
             handler = new PropertyChangedHandler(this, () => PropertyChanged);
 
             subscription = new CompositeDisposable(pipelines.Select(x => x.Register(this)).ToArray());
@@ -413,7 +417,8 @@ namespace ShipWorks.OrderLookup
         /// </summary>
         private void RefreshProperties()
         {
-            ShipmentAllowEditing = !ShipmentAdapter?.Shipment?.Processed ?? false;
+            ShipmentAllowEditing = securityContext.HasPermission(PermissionType.ShipmentsCreateEditProcess, ShipmentAdapter?.Shipment?.ShipmentID) && 
+                                   (!ShipmentAdapter?.Shipment?.Processed ?? false);
             PackageAdapters = ShipmentAdapter?.GetPackageAdaptersAndEnsureShipmentIsLoaded();
 
             TotalCost = ShipmentAdapter?.Shipment?.ShipmentCost ?? 0;
