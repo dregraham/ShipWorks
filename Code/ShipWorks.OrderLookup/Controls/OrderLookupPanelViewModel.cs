@@ -85,29 +85,39 @@ namespace ShipWorks.OrderLookup.Controls
                 Context.PropertyChanged -= OnContextPropertyChanged;
             }
 
-            IIndex<ShipmentTypeCode, T> createSectionViewModel = innerScope.Resolve<IIndex<ShipmentTypeCode, T>>();
-
             var key = shipmentModel.ShipmentAdapter?.ShipmentTypeCode;
-            if (!key.HasValue)
+            SetContext(innerScope, key);
+
+            if (Context==null)
             {
-                Context = null;
                 Visible = false;
             }
-            else if (createSectionViewModel.TryGetValue(key.Value, out T newModel))
+            else
             {
-                Context = newModel;
                 isOriginallyVisible = isPanelVisible(Context.PanelID);
                 Context.PropertyChanged += OnContextPropertyChanged;
                 Visible = isOriginallyVisible && Context.Visible;
             }
-            else if (innerScope.TryResolve(out T nullModel))
+        }
+
+        /// <summary>
+        /// Set Context to the correct viewmodel
+        /// </summary>
+        private void SetContext(ILifetimeScope innerScope, ShipmentTypeCode? key)
+        {
+            IIndex<ShipmentTypeCode, T> createSectionViewModel = innerScope.Resolve<IIndex<ShipmentTypeCode, T>>();
+
+            if (key.HasValue && createSectionViewModel.TryGetValue(key.Value, out T newModel))
+            {
+                Context = newModel;
+            }
+            else if (key.HasValue && innerScope.TryResolve(out T nullModel))
             {
                 Context = nullModel;
             }
             else
             {
                 Context = null;
-                Visible = false;
             }
         }
 
