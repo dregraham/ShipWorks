@@ -77,6 +77,12 @@ namespace ShipWorks.Tests.Core
                 }
                 else
                 {
+                    // If the enum doesn't need the Descrition attribute, just continue to the next enum.
+                    if (ignoreMissingDescriptionEnums.Contains(type.FullName.ToUpperInvariant()))
+                    {
+                        continue;
+                    }
+
                     foreach (var enumValueName in Enum.GetNames(type))
                     {
                         var memberInfos = type.GetMember(enumValueName);
@@ -100,6 +106,15 @@ namespace ShipWorks.Tests.Core
         /// </summary>
         private bool HasObfuscationAttribute(Type type) =>
             type.GetCustomAttribute<ObfuscationAttribute>(false) != null;
+
+        /// <summary>
+        /// Enums that don't need the description attribute
+        /// </summary>
+        private List<string> ignoreMissingDescriptionEnums = new List<string>()
+        {
+            "ShipWorks.OrderLookup.FieldManager.SectionLayoutFieldIDs".ToUpperInvariant(),
+            "ShipWorks.OrderLookup.FieldManager.SectionLayoutIDs".ToUpperInvariant()
+        };
 
         /// <summary>
         /// If namespace begins with these values, they are ignored.

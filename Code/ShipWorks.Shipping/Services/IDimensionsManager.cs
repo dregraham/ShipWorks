@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 
 namespace ShipWorks.Shipping.Services
 {
@@ -11,11 +11,11 @@ namespace ShipWorks.Shipping.Services
         /// <summary>
         /// Return all the dimensions profiles plus the "Enter Dimensions" based on default package adapter.
         /// </summary>
-        IEnumerable<DimensionsProfileEntity> Profiles(IPackageAdapter defaultPackageAdapter);
+        IEnumerable<IDimensionsProfileEntity> ProfilesReadOnly(IPackageAdapter defaultPackageAdapter);
 
         /// <summary>
         /// Get the profile with the specified ID, or null if not found.
         /// </summary>
-        DimensionsProfileEntity GetProfile(long dimensionsProfileID);
+        IDimensionsProfileEntity GetProfileReadOnly(long dimensionsProfileID);
     }
 }

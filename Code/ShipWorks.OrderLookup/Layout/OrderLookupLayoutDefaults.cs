@@ -17,22 +17,22 @@ namespace ShipWorks.OrderLookup.Layout
     /// Defaults for the order lookup mode layout
     /// </summary>
     [Obfuscation(ApplyToMembers = true, Exclude = true, StripAfterObfuscation = false)]
-    public class OrderLookupLayoutDefaults
+    public static class OrderLookupLayoutDefaults
     {
         /// <summary>
         /// Left Column Width
         /// </summary>
-        public GridLength LeftColumnWidth => new GridLength(1, GridUnitType.Star);
+        public static GridLength LeftColumnWidth => new GridLength(1, GridUnitType.Star);
 
         /// <summary>
         /// Middle Column Width
         /// </summary>
-        public GridLength RightColumnWidth => new GridLength(1, GridUnitType.Star);
+        public static GridLength RightColumnWidth => new GridLength(1, GridUnitType.Star);
 
         /// <summary>
         /// Get default layout
         /// </summary>
-        public IEnumerable<IEnumerable<PanelInfo>> GetDefaults() => new List<List<PanelInfo>>
+        public static IEnumerable<IEnumerable<PanelInfo>> GetDefaults() => new List<List<PanelInfo>>
         {
             new List<PanelInfo>
             {

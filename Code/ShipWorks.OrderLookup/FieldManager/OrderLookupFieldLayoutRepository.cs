@@ -1,9 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using Interapptive.Shared.Collections;
+﻿using System.Collections.Generic;
 using Interapptive.Shared.ComponentRegistration;
-using Interapptive.Shared.Extensions;
 using Newtonsoft.Json;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Settings;
@@ -17,15 +13,16 @@ namespace ShipWorks.OrderLookup.FieldManager
     public class OrderLookupFieldLayoutRepository : IOrderLookupFieldLayoutRepository
     {
         private readonly IShippingSettings shippingSettings;
-        private readonly IOrderLookupFieldLayoutDefaults defaultsProvider;
+        private readonly IOrderLookupFieldLayoutProvider fieldLayoutProvider;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public OrderLookupFieldLayoutRepository(IShippingSettings shippingSettings, IOrderLookupFieldLayoutDefaults defaultsProvider)
+        public OrderLookupFieldLayoutRepository(IShippingSettings shippingSettings,
+            OrderLookupFieldLayoutProvider fieldLayoutProvider)
         {
             this.shippingSettings = shippingSettings;
-            this.defaultsProvider = defaultsProvider;
+            this.fieldLayoutProvider = fieldLayoutProvider;
         }
 
         /// <summary>
@@ -34,30 +31,7 @@ namespace ShipWorks.OrderLookup.FieldManager
         /// <returns></returns>
         public IEnumerable<SectionLayout> Fetch()
         {
-            // Create a clone so we don't modify the defaultsProvider's copy
-            List<SectionLayout> defaultSectionLayouts = defaultsProvider.GetDefaults().Select(d => d.Clone()).ToList();
-
-            string jsonFieldLayouts = shippingSettings.FetchReadOnly().OrderLookupFieldLayout;
-            IEnumerable<SectionLayout> fieldLayouts = null;
-
-            if (!jsonFieldLayouts.TryParseJson(out fieldLayouts))
-            {
-                return defaultSectionLayouts;
-            }
-            
-            foreach (SectionLayout defaultSectionLayout in defaultSectionLayouts.Intersect(fieldLayouts, (opd1, opd2) => opd1.Id == opd2.Id))
-            {
-                SectionLayout sectionLayout = fieldLayouts.First(fl => fl.Id == defaultSectionLayout.Id);
-                defaultSectionLayout.Copy(sectionLayout);
-
-                foreach (SectionFieldLayout defaultSectionFieldLayout in defaultSectionLayout.SectionFields.Intersect(sectionLayout.SectionFields, (opd1, opd2) => opd1.Id == opd2.Id))
-                {
-                    SectionFieldLayout sectionFieldLayout = sectionLayout.SectionFields.First(sf => sf.Id == defaultSectionFieldLayout.Id);
-                    defaultSectionFieldLayout.Copy(sectionFieldLayout);
-                }
-            }
-
-            return defaultSectionLayouts;
+            return fieldLayoutProvider.Fetch();
         }
 
         /// <summary>

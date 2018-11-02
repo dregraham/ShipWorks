@@ -8,13 +8,14 @@ using System.Reflection;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.UI;
+using Interapptive.Shared.Utility;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Core.UI;
 using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Messaging.Messages;
 using ShipWorks.Messaging.Messages.Shipping;
+using ShipWorks.OrderLookup.FieldManager;
 using ShipWorks.OrderLookup.ShipmentModelPipelines;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers.Postal;
@@ -22,6 +23,7 @@ using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Insurance;
 using ShipWorks.Shipping.Profiles;
 using ShipWorks.Shipping.Services;
+using ShipWorks.Users.Security;
 
 namespace ShipWorks.OrderLookup
 {
@@ -81,9 +83,9 @@ namespace ShipWorks.OrderLookup
         private readonly IShippingManager shippingManager;
         private readonly IMessageHelper messageHelper;
         private readonly Func<IInsuranceBehaviorChangeViewModel> createInsuranceBehaviorChange;
-        private readonly IShippingProfileService profileService;
         private readonly PropertyChangedHandler handler;
         private readonly IDisposable subscription;
+        private readonly Func<ISecurityContext> securityContext;
         private ICarrierShipmentAdapter shipmentAdapter;
         private OrderEntity selectedOrder;
         private bool shipmentAllowEditing;
@@ -122,18 +124,30 @@ namespace ShipWorks.OrderLookup
             IShippingManager shippingManager,
             IMessageHelper messageHelper,
             Func<IInsuranceBehaviorChangeViewModel> createInsuranceBehaviorChange,
-            IShippingProfileService profileService,
-            IEnumerable<IOrderLookupShipmentModelPipeline> pipelines)
+            IEnumerable<IOrderLookupShipmentModelPipeline> pipelines,
+            OrderLookupFieldLayoutProvider orderLookupFieldLayoutProvider,
+            Func<ISecurityContext> securityContext)
         {
-            this.profileService = profileService;
             this.messenger = messenger;
             this.shippingManager = shippingManager;
             this.messageHelper = messageHelper;
             this.createInsuranceBehaviorChange = createInsuranceBehaviorChange;
+            this.securityContext = securityContext;
             handler = new PropertyChangedHandler(this, () => PropertyChanged);
 
             subscription = new CompositeDisposable(pipelines.Select(x => x.Register(this)).ToArray());
+            FieldLayoutProvider = orderLookupFieldLayoutProvider;
         }
+
+        /// <summary>
+        /// Can the view accept focus
+        /// </summary>
+        public Func<bool> CanAcceptFocus { get; set; } = () => false;
+
+        /// <summary>
+        /// Field layout repo
+        /// </summary>
+        public IOrderLookupFieldLayoutProvider FieldLayoutProvider { get; }
 
         /// <summary>
         /// The order that is currently in context
@@ -257,12 +271,19 @@ namespace ShipWorks.OrderLookup
         {
             RemovePropertyChangedEventsFromEntities(ShipmentAdapter);
 
-            shippingManager.RefreshShipment(ShipmentAdapter.Shipment);
-            ShipmentAdapter = shippingManager.GetShipmentAdapter(ShipmentAdapter.Shipment);
+            try
+            {
+                shippingManager.RefreshShipment(ShipmentAdapter.Shipment);
+                ShipmentAdapter = shippingManager.GetShipmentAdapter(ShipmentAdapter.Shipment);
+                RefreshProperties();
+                AddPropertyChangedEventsToEntities(ShipmentAdapter, ShipmentAdapter.ShipmentTypeCode);
+            }
+            catch (ObjectDeletedException)
+            {
+                // The shipment was deleted, so just unload
+                Unload(OrderClearReason.Reset);
+            }
 
-            RefreshProperties();
-
-            AddPropertyChangedEventsToEntities(ShipmentAdapter, ShipmentAdapter.ShipmentTypeCode);
             RaisePropertyChanged(null);
         }
 
@@ -396,7 +417,8 @@ namespace ShipWorks.OrderLookup
         /// </summary>
         private void RefreshProperties()
         {
-            ShipmentAllowEditing = !ShipmentAdapter?.Shipment?.Processed ?? false;
+            ShipmentAllowEditing = securityContext().HasPermission(PermissionType.ShipmentsCreateEditProcess, ShipmentAdapter?.Shipment?.ShipmentID) && 
+                                   (!ShipmentAdapter?.Shipment?.Processed ?? false);
             PackageAdapters = ShipmentAdapter?.GetPackageAdaptersAndEnsureShipmentIsLoaded();
 
             TotalCost = ShipmentAdapter?.Shipment?.ShipmentCost ?? 0;
@@ -434,7 +456,10 @@ namespace ShipWorks.OrderLookup
         /// </summary>
         public void ChangeShipmentType(ShipmentTypeCode value)
         {
+            //Setting Selected Rate and TotalCost so that values
+            //do not carry over between shipments or changing shipment types.
             SelectedRate = null;
+            TotalCost = 0;
 
             if (value != ShipmentAdapter.ShipmentTypeCode)
             {
@@ -466,16 +491,17 @@ namespace ShipWorks.OrderLookup
         /// <summary>
         /// Register the profile handler
         /// </summary>
-        public void RegisterProfileHandler(Func<Func<ShipmentTypeCode?>, Action<IShippingProfileEntity>, IDisposable> profileRegistration) =>
-            profileDisposable = profileRegistration(() => ShipmentAdapter?.ShipmentTypeCode, x => ApplyProfile(x.ShippingProfileID));
+        public void RegisterProfileHandler(Func<Func<ShipmentTypeCode?>, Action<IShippingProfile>, IDisposable> profileRegistration) =>
+            profileDisposable = profileRegistration(() => ShipmentAdapter?.ShipmentTypeCode, x => ApplyProfile(x));
 
         /// <summary>
         /// Apply the profile to the current shipment
         /// </summary>
-        public bool ApplyProfile(long profileID)
+        public bool ApplyProfile(IShippingProfile profile)
         {
-            var profile = profileService.Get(profileID);
-            if (ShipmentAdapter?.Shipment != null && profile.IsApplicable(ShipmentAdapter?.Shipment?.ShipmentTypeCode))
+            //var profile = profileService.Get(profileID);
+            if (ShipmentAdapter?.Shipment?.Processed == false &&
+                profile.IsApplicable(ShipmentAdapter.Shipment.ShipmentTypeCode))
             {
                 ShipmentNeedsBinding?.Invoke(this, EventArgs.Empty);
 

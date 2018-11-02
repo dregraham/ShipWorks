@@ -1,15 +1,17 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reactive;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml.Linq;
+using Autofac;
+using Interapptive.Shared.Utility;
+using ShipWorks.ApplicationCore;
 using ShipWorks.Common.Threading;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping.ShipSense.Population;
-using ShipWorks.Users;
 using ShipWorks.Users.Audit;
 
 namespace ShipWorks.Shipping.ShipSense.Settings
@@ -17,9 +19,9 @@ namespace ShipWorks.Shipping.ShipSense.Settings
     public partial class ShipSenseUniquenessSettingsDlg : Form
     {
         private XElement originalUniquenessXml;
-        
+
         // Present the user with a confirmation message box describing what will happen and only save the settings if Yes is chosen
-        const string ConfirmationText = @"Adjusting the ShipSense configuration could result in ShipSense " +
+        private const string ConfirmationText = @"Adjusting the ShipSense configuration could result in ShipSense " +
                                         "not being able to know how orders should be shipped until it has recognized your shipping patterns based on the new configuration.";
 
         /// <summary>
@@ -57,9 +59,9 @@ namespace ShipWorks.Shipping.ShipSense.Settings
         }
 
         /// <summary>
-        /// Builds an XML document based on the data elements in the configuration control that is 
-        /// stored in the ShippingSettings.ShipSenseUniquenessXml  and saves the configuration 
-        /// to the database. The XML is in the format of: 
+        /// Builds an XML document based on the data elements in the configuration control that is
+        /// stored in the ShippingSettings.ShipSenseUniquenessXml  and saves the configuration
+        /// to the database. The XML is in the format of:
         /// <ShipSenseUniqueness><ItemAttribute><Name>...</Name><Name>...</Name></ItemAttribute></ShipSenseUniqueness>
         /// </summary>
         private XElement GenerateShipSenseConfiguration()
@@ -129,7 +131,7 @@ namespace ShipWorks.Shipping.ShipSense.Settings
             {
                 DialogResult result = DialogResult.No;
                 bool isReloadRequested = false;
-                
+
                 // Confirm that the user actually wants to change the ShipSense settings
                 using (ShipSenseConfirmationDlg shipSenseConfirmationDlg = new ShipSenseConfirmationDlg(ConfirmationText))
                 {
@@ -143,7 +145,7 @@ namespace ShipWorks.Shipping.ShipSense.Settings
 
                     if (isReloadRequested)
                     {
-                        // A reload was requested, so setup the progress provider and dialog for the 
+                        // A reload was requested, so setup the progress provider and dialog for the
                         // loader to attach to
                         ProgressProvider progressProvider = new ProgressProvider();
                         using (ProgressDlg progressDialog = new ProgressDlg(progressProvider))
@@ -164,13 +166,13 @@ namespace ShipWorks.Shipping.ShipSense.Settings
                     }
                 }
             }
-                        
+
             Close();
         }
 
         /// <summary>
         /// Reloads the ShipSense knowledge base with the latest shipment history. This overloaded
-        /// version allows the reload process to attach a progress item to an existing 
+        /// version allows the reload process to attach a progress item to an existing
         /// progress provider.
         /// </summary>
         private static void ReloadKnowledgebase(ProgressProvider progressProvider)
@@ -179,20 +181,24 @@ namespace ShipWorks.Shipping.ShipSense.Settings
             AuditUtility.Audit(AuditActionType.ReloadShipSenseStarted);
 
             // Setup dependencies for the progress dialog
-            ProgressItem progressItem = new ProgressItem("Reloading ShipSense");
-            progressProvider.ProgressItems.Add(progressItem);
-
-            ShipSenseLoader loader = new ShipSenseLoader(progressItem);
-
-            // Indicate that we want to reset the hash keys and prepare the environment for the 
-            // load process to begin
-            loader.ResetOrderHashKeys = true;
-            loader.PrepareForLoading();
+            var progressItem = progressProvider.AddItem("Reloading ShipSense");
 
             // Start the load asynchronously now that everything should be ready to load
             // We MUST ContinueWith and dispose the loader so that the sql connection
             // gets disposed.
-            Task.Factory.StartNew(loader.LoadData).ContinueWith(t => loader.Dispose());
+            Functional.UsingAsync(IoC.BeginLifetimeScope(),
+                scope =>
+                {
+                    var shippingSettings = scope.Resolve<IShippingSettings>();
+                    ShipSenseLoader loader = new ShipSenseLoader(progressItem, shippingSettings);
+
+                    // Indicate that we want to reset the hash keys and prepare the environment for the
+                    // load process to begin
+                    loader.ResetOrderHashKeys = true;
+                    loader.PrepareForLoading();
+
+                    return Task.Factory.StartNew(loader.LoadData).ContinueWith(_ => Unit.Default);
+                });
         }
 
         /// <summary>

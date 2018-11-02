@@ -55,7 +55,7 @@ namespace ShipWorks.Shipping
     public partial class ShippingDlg : Form
     {
         // Logger
-        static readonly ILog log = LogManager.GetLogger(typeof(ShippingDlg));
+        private static readonly ILog log = LogManager.GetLogger(typeof(ShippingDlg));
 
         // We load shipments asynchronously.  This flag lets us know if that's what we're currently doing, so we don't try to do
         // it again.
@@ -105,7 +105,7 @@ namespace ShipWorks.Shipping
         private bool closing;
         private bool applyingProfile;
         private readonly bool isArchiveMode = false;
-        IDisposable keyboardShortcutSubscription;
+        private IDisposable keyboardShortcutSubscription;
         private IShippingSettings shippingSettings;
 
         /// <summary>
@@ -311,7 +311,7 @@ namespace ShipWorks.Shipping
                 long? profileId = shortcutMessage.Shortcut.RelatedObjectID;
                 if (profileId != null)
                 {
-                    await ApplyProfile(profileId.Value);
+                    await ApplyProfile(ShippingProfileManager.GetProfileReadOnly(profileId.Value));
                 }
             }
             else if (shortcutMessage.AppliesTo(KeyboardShortcutCommand.CreateLabel))
@@ -1786,19 +1786,19 @@ namespace ShipWorks.Shipping
             ToolStripMenuItem menuItem = (ToolStripMenuItem) sender;
             IShippingProfileEntity profile = (IShippingProfileEntity) menuItem.Tag;
 
-            await ApplyProfile(profile.ShippingProfileID);
+            await ApplyProfile(profile);
         }
 
         /// <summary>
         /// Apply the given profile
         /// </summary>
-        private async Task ApplyProfile(long profileId)
+        private async Task ApplyProfile(IShippingProfileEntity profile)
         {
             applyingProfile = true;
             // Save any changes that have been made thus far, so the profile changes can be made on top of that
             SaveChangesToUIDisplayedShipments();
 
-            shippingProfileService.Get(profileId)
+            shippingProfileService.Get(profile)
                 .Apply(uiDisplayedShipments.Where(s => !s.Processed));
 
             // Reload the UI to show the changes
@@ -2331,7 +2331,7 @@ namespace ShipWorks.Shipping
         private async void OnProcessAll(object sender, EventArgs e)
         {
             IEnumerable<ShipmentEntity> shipments = FetchShipmentsFromShipmentControl();
-            
+
             //Check how many are in the list and clear if necessary
             if (shipments.Count() > 1)
             {

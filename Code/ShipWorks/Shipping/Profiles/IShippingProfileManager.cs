@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Threading.Tasks;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
@@ -15,6 +14,11 @@ namespace ShipWorks.Shipping.Profiles
         /// Return the active list of all profiles
         /// </summary>
         IEnumerable<ShippingProfileEntity> Profiles { get; }
+
+        /// <summary>
+        /// Return the active list of all profiles
+        /// </summary>
+        IEnumerable<IShippingProfileEntity> ProfilesReadOnly { get; }
 
         /// <summary>
         /// Get the default profile for the given shipment type

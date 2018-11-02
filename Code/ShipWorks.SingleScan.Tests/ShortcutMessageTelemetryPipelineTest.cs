@@ -1,4 +1,5 @@
 ﻿using System;
+using Autofac;
 using Autofac.Extras.Moq;
 using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Threading;
@@ -8,6 +9,7 @@ using ShipWorks.Common.IO.KeyboardShortcuts;
 using ShipWorks.Common.IO.KeyboardShortcuts.Messages;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.IO.KeyboardShortcuts;
 using ShipWorks.Messaging.Messages.Shipping;
 using ShipWorks.Messaging.Messages.SingleScan;
@@ -58,7 +60,7 @@ namespace ShipWorks.SingleScan.Tests
                 Action = KeyboardShortcutCommand.ApplyWeight
             };
 
-            ShortcutMessage shortcutMessage = new ShortcutMessage(scanMessageBroker, shortcut, ShortcutTriggerType.Barcode,"abcd");
+            ShortcutMessage shortcutMessage = new ShortcutMessage(scanMessageBroker, shortcut, ShortcutTriggerType.Barcode, "abcd");
             testMessenger.Send(shortcutMessage);
 
             scheduler.Start();
@@ -145,8 +147,7 @@ namespace ShipWorks.SingleScan.Tests
             ShortcutMessage shortcutMessage = new ShortcutMessage(scanMessageBroker, shortcut, ShortcutTriggerType.Barcode, "abcd");
             testMessenger.Send(shortcutMessage);
 
-            ShippingProfile profile = mock.Create<ShippingProfile>();
-            profile.Shortcut = shortcut;
+            ShippingProfile profile = mock.Create<ShippingProfile>(TypedParameter.From<IShippingProfileEntity>(null), TypedParameter.From<IShortcutEntity>(shortcut));
 
             testMessenger.Send(new ProfileAppliedMessage(profile, null, null));
 
@@ -158,7 +159,7 @@ namespace ShipWorks.SingleScan.Tests
             telemetryEvent.Verify(t => t.AddProperty("Shortcuts.Applied.Value", "abcd"));
             telemetryEvent.Verify(t => t.AddProperty("Shortcuts.Applied.Action", "ShippingProfile"));
         }
-        
+
         [Fact]
         public void InitializeForCurrentSession_CollectsTelemetryData_WhenShortcutActionIsApplyProfileAndProfileAppliedMessageIsNotSent()
         {
@@ -194,8 +195,9 @@ namespace ShipWorks.SingleScan.Tests
             ShortcutMessage shortcutMessage = new ShortcutMessage(scanMessageBroker, shortcut, ShortcutTriggerType.Barcode, "abcd");
             testMessenger.Send(shortcutMessage);
 
-            ShippingProfile profile = mock.Create<ShippingProfile>();
-            profile.Shortcut = new ShortcutEntity();
+            ShippingProfile profile = mock.Create<ShippingProfile>(
+                TypedParameter.From<IShippingProfileEntity>(null),
+                TypedParameter.From<IShortcutEntity>(new ShortcutEntity()));
 
             testMessenger.Send(new ProfileAppliedMessage(profile, null, null));
 
@@ -207,7 +209,7 @@ namespace ShipWorks.SingleScan.Tests
             telemetryEvent.Verify(t => t.AddProperty("Shortcuts.Applied.Value", "abcd"));
             telemetryEvent.Verify(t => t.AddProperty("Shortcuts.Applied.Action", "ShippingProfile"));
         }
-        
+
         [Fact]
         public void InitializeForCurrentSession_CollectsTelemetryData_WhenShortcutActionIsCreateLabelAndProcessShipmentMessageIsSent()
         {
@@ -221,9 +223,6 @@ namespace ShipWorks.SingleScan.Tests
             ShortcutMessage shortcutMessage = new ShortcutMessage(scanMessageBroker, shortcut, ShortcutTriggerType.Barcode, "abcd");
             testMessenger.Send(shortcutMessage);
 
-            ShippingProfile profile = mock.Create<ShippingProfile>();
-            profile.Shortcut = shortcut;
-
             testMessenger.Send(new ProcessShipmentsMessage(this, new[] { new ShipmentEntity() }, new[] { new ShipmentEntity() }, null));
 
             scheduler.Start();
@@ -234,7 +233,7 @@ namespace ShipWorks.SingleScan.Tests
             telemetryEvent.Verify(t => t.AddProperty("Shortcuts.Applied.Value", "abcd"));
             telemetryEvent.Verify(t => t.AddProperty("Shortcuts.Applied.Action", "LabelPrinted"));
         }
-        
+
         [Fact]
         public void InitializeForCurrentSession_CollectsTelemetryData_WhenShortcutActionIsCreateLabelAndProcessShipmentMessageIsNotSent()
         {

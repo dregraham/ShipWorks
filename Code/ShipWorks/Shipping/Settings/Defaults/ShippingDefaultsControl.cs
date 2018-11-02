@@ -17,7 +17,7 @@ namespace ShipWorks.Shipping.Settings.Defaults
     /// </summary>
     public partial class ShippingDefaultsControl : UserControl
     {
-        ShipmentType shipmentType;
+        private ShipmentType shipmentType;
 
         /// <summary>
         /// A profile has been edited in some way
@@ -119,10 +119,10 @@ namespace ShipWorks.Shipping.Settings.Defaults
                 ShippingProfileEntity profile = shippingProfileManager.GetOrCreatePrimaryProfile(shipmentType);
 
                 IShippingProfileService shippingProfileService = lifetimeScope.Resolve<IShippingProfileService>();
-                IShippingProfile shippingProfile = shippingProfileService.Get(profile.ShippingProfileID);
-                
+                var shippingProfile = shippingProfileService.GetEditable(profile.ShippingProfileID);
+
                 ShippingProfileEditorDlg profileEditor = lifetimeScope.Resolve<ShippingProfileEditorDlg>(
-                    new TypedParameter(typeof(IShippingProfile), shippingProfile)
+                    TypedParameter.From(shippingProfile)
                 );
                 profileEditor.ShowDialog(this);
             }
@@ -170,7 +170,7 @@ namespace ShipWorks.Shipping.Settings.Defaults
         /// <summary>
         /// Delete the rule that generated the event
         /// </summary>
-        void OnDeleteRule(object sender, EventArgs e)
+        private void OnDeleteRule(object sender, EventArgs e)
         {
             ShippingDefaultsRuleControl ruleControl = (ShippingDefaultsRuleControl) sender;
             ShippingDefaultsRuleEntity rule = ruleControl.Rule;
@@ -190,7 +190,7 @@ namespace ShipWorks.Shipping.Settings.Defaults
         /// <summary>
         /// Move the given rule down
         /// </summary>
-        void OnMoveDownRule(object sender, EventArgs e)
+        private void OnMoveDownRule(object sender, EventArgs e)
         {
             ShippingDefaultsRuleControl ruleControl = (ShippingDefaultsRuleControl) sender;
             int index = panelSettingsArea.Controls.IndexOf(ruleControl);
@@ -206,7 +206,7 @@ namespace ShipWorks.Shipping.Settings.Defaults
         /// <summary>
         /// Move the given rule up
         /// </summary>
-        void OnMoveUpRule(object sender, EventArgs e)
+        private void OnMoveUpRule(object sender, EventArgs e)
         {
             ShippingDefaultsRuleControl ruleControl = (ShippingDefaultsRuleControl) sender;
             int index = panelSettingsArea.Controls.IndexOf(ruleControl);

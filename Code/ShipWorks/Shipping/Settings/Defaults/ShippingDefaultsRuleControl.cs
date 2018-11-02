@@ -70,7 +70,7 @@ namespace ShipWorks.Shipping.Settings.Defaults
         /// </summary>
         public bool IsFilterDisabled => filterCombo.IsSelectedFilterDisabled;
 
-        /// <summary> 
+        /// <summary>
         /// Gets a value indicating whether this the filter being used for this rule has changed.
         /// </summary>
         /// <value>
@@ -88,7 +88,7 @@ namespace ShipWorks.Shipping.Settings.Defaults
             filterCombo.LoadLayouts(FilterTarget.Orders);
 
             filterCombo.SelectedFilterNodeID = rule.FilterNodeID;
-            
+
             if (filterCombo.SelectedFilterNode == null)
             {
                 filterCombo.SelectFirstNode();
@@ -183,7 +183,7 @@ namespace ShipWorks.Shipping.Settings.Defaults
             ToolStripMenuItem manageProfiles = new ToolStripMenuItem("Manage Profiles...");
             manageProfiles.Click += OnManageProfiles;
             menuStrip.Items.Add(manageProfiles);
-            
+
             return menuStrip;
         }
 
@@ -193,10 +193,10 @@ namespace ShipWorks.Shipping.Settings.Defaults
         private ToolStripMenuItem CreateSelectProfileMenu()
         {
             ToolStripMenuItem selectMenu = new ToolStripMenuItem("Select");
-            
+
             List<IShippingProfileEntity> applicableProfiles =
                 ShippingProfileManager.GetProfilesFor(Rule.ShipmentTypeCode, false).ToList();
-            
+
             if (applicableProfiles.Any())
             {
                 // Global profiles
@@ -226,15 +226,15 @@ namespace ShipWorks.Shipping.Settings.Defaults
                     };
                     selectMenu.DropDownItems.Add(carrierLabel);
                     carrierProfiles.ForEach(p => AddProfileToMenu(p, selectMenu));
-                    
+
                     selectMenu.DropDown.PerformLayout();
                 }
             }
             else
             {
-                selectMenu.DropDownItems.Add(new ToolStripMenuItem("(none)") {Enabled = false});
+                selectMenu.DropDownItems.Add(new ToolStripMenuItem("(none)") { Enabled = false });
             }
-            
+
             return selectMenu;
         }
 
@@ -260,13 +260,13 @@ namespace ShipWorks.Shipping.Settings.Defaults
             using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
                 IShippingProfileService shippingProfileService = lifetimeScope.Resolve<IShippingProfileService>();
-                
+
                 ShippingProfileEditorDlg profileEditor = lifetimeScope.Resolve<ShippingProfileEditorDlg>(
-                    new TypedParameter(typeof(IShippingProfile), shippingProfileService.Get(profile.ShippingProfileID))
+                    new TypedParameter(typeof(IEditableShippingProfile), shippingProfileService.GetEditable(profile.ShippingProfileID))
                 );
                 profileEditor.ShowDialog(this);
             }
-            
+
             UpdateProfileDisplay(profile);
         }
 
@@ -316,9 +316,9 @@ namespace ShipWorks.Shipping.Settings.Defaults
                 adapter.Commit();
             }
 
-            // Sync up the original filter ID with the saved filter ID for instances where 
-            // this control's remains in memory and the Initialize method is not called 
-            // prior to showing the control. This will prevent a false positive in the 
+            // Sync up the original filter ID with the saved filter ID for instances where
+            // this control's remains in memory and the Initialize method is not called
+            // prior to showing the control. This will prevent a false positive in the
             // HasFilterChanged property.
             originalFilterID = filterCombo.SelectedFilterNode?.FilterID ?? NoFilterSelectedID;
         }

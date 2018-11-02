@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
@@ -15,6 +16,7 @@ using ShipWorks.Core.UI;
 using ShipWorks.Messaging.Messages;
 using ShipWorks.Messaging.Messages.Shipping;
 using ShipWorks.OrderLookup.Controls.OrderLookupSearchControl;
+using ShipWorks.OrderLookup.FieldManager;
 using ShipWorks.OrderLookup.Layout;
 
 namespace ShipWorks.OrderLookup.Controls.OrderLookup
@@ -60,7 +62,7 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookup
             this.layout = layout;
             layout.Apply(this, scope);
             LeftColumn.Concat(MiddleColumn).Concat(RightColumn).ForEach(p => p.PropertyChanged += PanelPropertyChanged);
-            
+
 
             subscriptions = new CompositeDisposable(
                 messages.OfType<ShipmentSelectionChangedMessage>()
@@ -80,7 +82,7 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookup
                 layout.Save(this);
             }
         }
-        
+
         /// <summary>
         /// A shipment is unloading
         /// </summary>
@@ -106,10 +108,18 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookup
 
             innerScope = scope.BeginLifetimeScope();
 
+            List<SectionLayout> sectionLayouts = ShipmentModel.FieldLayoutProvider.Fetch().ToList();
+
             LeftColumn
                 .Concat(MiddleColumn)
                 .Concat(RightColumn)
-                .ForEach(x => x.UpdateViewModel(ShipmentModel, innerScope));
+                .ForEach(x =>
+                {
+                    x.UpdateViewModel(
+                        ShipmentModel,
+                        innerScope,
+                        panelID => sectionLayouts.FirstOrDefault(sl => sl.Id == panelID)?.Selected == true);
+                });
         }
 
         /// <summary>

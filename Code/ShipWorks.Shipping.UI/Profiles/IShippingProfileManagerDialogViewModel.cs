@@ -27,11 +27,11 @@ namespace ShipWorks.Shipping.UI.Profiles
         /// <summary>
         /// Shipping Profiles loaded in the dialog
         /// </summary>
-        ObservableCollection<IShippingProfile> ShippingProfiles { get; }
+        ObservableCollection<IEditableShippingProfile> ShippingProfiles { get; }
 
         /// <summary>
         /// Selected Shipping Profile
         /// </summary>
-        IShippingProfile SelectedShippingProfile { get; set; }
+        IEditableShippingProfile SelectedShippingProfile { get; set; }
     }
 }

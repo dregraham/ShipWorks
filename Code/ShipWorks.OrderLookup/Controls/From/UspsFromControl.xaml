@@ -9,6 +9,7 @@
     xmlns:sw="http://schemas.shipworks.com/sw"
     xmlns:sys="clr-namespace:System;assembly=mscorlib"
     xmlns:ui="http://schemas.shipworks.com/ui"
+    xmlns:ns="clr-namespace:ShipWorks.OrderLookup.FieldManager;assembly=ShipWorks.Core"
     d:DesignWidth="800"
     FontFamily="/ShipWorks.OrderLookup;component/#Roboto"
     mc:Ignorable="d">
@@ -31,11 +32,12 @@
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" /> <!-- 0 Shipment type name -->
+            <ui:FieldLayoutRowDefinition FieldID="{x:Static ns:SectionLayoutFieldIDs.AccountSelector}" /> <!-- 1 Supports accounts/rate shop -->
+            <ui:FieldLayoutRowDefinition FieldID="{x:Static ns:SectionLayoutFieldIDs.AccountSelector}" /> <!-- 2 AccountDropDown -->
+            <ui:FieldLayoutRowDefinition FieldID="{x:Static ns:SectionLayoutFieldIDs.Origin}" /> <!-- 3 Origin header -->
+            <ui:FieldLayoutRowDefinition FieldID="{x:Static ns:SectionLayoutFieldIDs.Origin}" /> <!-- 4 Origin drop down -->
+            <RowDefinition Height="Auto" /> <!-- 5 OrderLookupAddress control -->
         </Grid.RowDefinitions>
         <TextBlock
             Grid.Row="0"
@@ -58,6 +60,7 @@
             Content="Automatically use the USPS account with the least expensive Rate"
             IsChecked="{Binding ShipmentModel.ShipmentAdapter.Shipment.Postal.Usps.RateShop}"
             Style="{StaticResource FormCheckBox}" />
+
         <ComboBox
             x:Name="AccountDropDown"
             Grid.Row="2"
@@ -85,46 +88,51 @@
                 <Binding Mode="OneWay" Path="Accounts" />
             </ComboBox.ItemsSource>
         </ComboBox>
-        <StackPanel
-            Grid.Row="3"
-            Grid.Column="0"
-            Grid.ColumnSpan="2">
-            <TextBlock Style="{StaticResource Header}">Origin</TextBlock>
-            <ComboBox
-                x:Name="OriginDropDown"
-                ui:UpdateWhenMessageReceived.MessageType="{x:Type sw:OriginAddressChangedMessage}"
-                DisplayMemberPath="Key"
-                SelectedValuePath="Value"
-                Style="{StaticResource StackedFormComboBox}">
-                <ComboBox.IsEnabled>
-                    <Binding Mode="OneWay" Path="ShipmentModel.ShipmentAllowEditing" />
-                </ComboBox.IsEnabled>
-                <ComboBox.ItemsSource>
-                    <Binding
-                        Converter="{StaticResource ShipmentTypeToOriginAddresses}"
-                        Mode="OneWay"
-                        Path="ShipmentModel.ShipmentAdapter.ShipmentTypeCode" />
-                </ComboBox.ItemsSource>
-                <ComboBox.SelectedValue>
-                    <Binding Path="ShipmentModel.ShipmentAdapter.Shipment.OriginOriginID" />
-                </ComboBox.SelectedValue>
-            </ComboBox>
 
-            <local:OrderLookupAddress DataContext="{Binding Address}">
-                <local:OrderLookupAddress.IsEnabled>
-                    <MultiBinding Converter="{StaticResource BooleanAndConverter}">
-                        <Binding Mode="OneWay" Path="ShipmentModel.ShipmentAllowEditing" />
-                        <Binding
-                            Converter="{StaticResource ValueEqualToParameter}"
-                            Path="SelectedValue"
-                            ElementName="OriginDropDown">
-                            <Binding.ConverterParameter>
-                                <sys:Int64>1</sys:Int64>
-                            </Binding.ConverterParameter>
-                        </Binding>
-                    </MultiBinding>
-                </local:OrderLookupAddress.IsEnabled>
-            </local:OrderLookupAddress>
-        </StackPanel>
+        <TextBlock Style="{StaticResource Header}"
+                   Grid.Row="3"
+                   Grid.Column="0"
+                   Grid.ColumnSpan="2">Origin</TextBlock>
+        <ComboBox
+            Grid.Row="4"
+            Grid.Column="0"
+            Grid.ColumnSpan="2"
+            x:Name="OriginDropDown"
+            ui:UpdateWhenMessageReceived.MessageType="{x:Type sw:OriginAddressChangedMessage}"
+            DisplayMemberPath="Key"
+            SelectedValuePath="Value"
+            Style="{StaticResource StackedFormComboBox}">
+            <ComboBox.IsEnabled>
+                <Binding Mode="OneWay" Path="ShipmentModel.ShipmentAllowEditing" />
+            </ComboBox.IsEnabled>
+            <ComboBox.ItemsSource>
+                <Binding
+                    Converter="{StaticResource ShipmentTypeToOriginAddresses}"
+                    Mode="OneWay"
+                    Path="ShipmentModel.ShipmentAdapter.ShipmentTypeCode" />
+            </ComboBox.ItemsSource>
+            <ComboBox.SelectedValue>
+                <Binding Path="ShipmentModel.ShipmentAdapter.Shipment.OriginOriginID" />
+            </ComboBox.SelectedValue>
+        </ComboBox>
+
+        <local:OrderLookupAddress DataContext="{Binding Address}"
+                                  Grid.Row="5"
+                                  Grid.Column="0"
+                                  Grid.ColumnSpan="2">
+            <local:OrderLookupAddress.IsEnabled>
+                <MultiBinding Converter="{StaticResource BooleanAndConverter}">
+                    <Binding Mode="OneWay" Path="ShipmentModel.ShipmentAllowEditing" />
+                    <Binding
+                        Converter="{StaticResource ValueEqualToParameter}"
+                        Path="SelectedValue"
+                        ElementName="OriginDropDown">
+                        <Binding.ConverterParameter>
+                            <sys:Int64>1</sys:Int64>
+                        </Binding.ConverterParameter>
+                    </Binding>
+                </MultiBinding>
+            </local:OrderLookupAddress.IsEnabled>
+        </local:OrderLookupAddress>
     </Grid>
 </UserControl>

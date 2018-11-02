@@ -1,13 +1,16 @@
-﻿<UserControl x:Class="ShipWorks.OrderLookup.Controls.Reference.UspsReferenceControl"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:reference="clr-namespace:ShipWorks.OrderLookup.Controls.Reference"
-             mc:Ignorable="d"
-             d:DataContext="{d:DesignInstance reference:UspsReferenceViewModel}"
-             FontSize="12"
-             FontFamily="/ShipWorks.OrderLookup;component/#Roboto">
+﻿<UserControl
+    x:Class="ShipWorks.OrderLookup.Controls.Reference.UspsReferenceControl"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:ns="clr-namespace:ShipWorks.OrderLookup.FieldManager;assembly=ShipWorks.Core"
+    xmlns:reference="clr-namespace:ShipWorks.OrderLookup.Controls.Reference"
+    xmlns:ui="http://schemas.shipworks.com/ui"
+    d:DataContext="{d:DesignInstance reference:UspsReferenceViewModel}"
+    FontFamily="/ShipWorks.OrderLookup;component/#Roboto"
+    FontSize="12"
+    mc:Ignorable="d">
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -17,45 +20,54 @@
     </UserControl.Resources>
     <Grid IsEnabled="{Binding ShipmentModel.ShipmentAllowEditing}">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto"/>
-            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition/>
-            <RowDefinition/>
-            <RowDefinition/>
+            <ui:FieldLayoutRowDefinition FieldID="{x:Static ns:SectionLayoutFieldIDs.USPSReferenceMemo1}" />
+            <ui:FieldLayoutRowDefinition FieldID="{x:Static ns:SectionLayoutFieldIDs.USPSReferenceMemo2}" />
+            <ui:FieldLayoutRowDefinition FieldID="{x:Static ns:SectionLayoutFieldIDs.USPSReferenceMemo3}" />
         </Grid.RowDefinitions>
 
-        <TextBlock Grid.Row="0" Grid.Column="0"
-                   Style="{StaticResource FieldLabel}"
-                   Text="Memo 1"/>
-        <TextBox Grid.Row="0" Grid.Column="1"
-                 Style="{StaticResource FormTextBox}">
-            <TextBox.Text>
-                <Binding Path="ShipmentModel.ShipmentAdapter.Shipment.Postal.Memo1" />
-            </TextBox.Text>
-        </TextBox>
-        
-        <TextBlock Grid.Row="1" Grid.Column="0"
-                   Style="{StaticResource FieldLabel}"
-                   Text="Memo 2"/>
-        <TextBox Grid.Row="1" Grid.Column="1"
-                 Style="{StaticResource FormTextBox}">
+        <TextBlock
+            Grid.Row="0"
+            Grid.Column="0"
+            Style="{StaticResource FieldLabel}"
+            Text="Memo 1" />
+        <ui:TokenTextBox
+            Grid.Row="0"
+            Grid.Column="1"
+            Style="{StaticResource FormTextBox}"
+            Text="{Binding ShipmentModel.ShipmentAdapter.Shipment.Postal.Memo1}" />
+
+        <TextBlock
+            Grid.Row="1"
+            Grid.Column="0"
+            Style="{StaticResource FieldLabel}"
+            Text="Memo 2" />
+        <ui:TokenTextBox
+            Grid.Row="1"
+            Grid.Column="1"
+            Style="{StaticResource FormTextBox}">
             <TextBox.Text>
                 <Binding Path="ShipmentModel.ShipmentAdapter.Shipment.Postal.Memo2" />
             </TextBox.Text>
-        </TextBox>
+        </ui:TokenTextBox>
 
-        <TextBlock Grid.Row="2" Grid.Column="0"
-                   Style="{StaticResource FieldLabel}"
-                   Text="Memo 3"
-                   Margin="0"/>
-        <TextBox Grid.Row="2" Grid.Column="1"
-                 Margin="10 0 0 0"
-                 Style="{StaticResource FormTextBox}">
+        <TextBlock
+            Grid.Row="2"
+            Grid.Column="0"
+            Margin="0"
+            Style="{StaticResource FieldLabel}"
+            Text="Memo 3" />
+        <ui:TokenTextBox
+            Grid.Row="2"
+            Grid.Column="1"
+            Margin="10,0,0,0"
+            Style="{StaticResource FormTextBox}">
             <TextBox.Text>
                 <Binding Path="ShipmentModel.ShipmentAdapter.Shipment.Postal.Memo3" />
             </TextBox.Text>
-        </TextBox>
+        </ui:TokenTextBox>
     </Grid>
 </UserControl>

@@ -5,8 +5,8 @@ using System.Windows.Forms;
 using System.Windows.Forms.Integration;
 using System.Windows.Input;
 using Interapptive.Shared.ComponentRegistration;
-using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping;
+using ShipWorks.Shipping.Profiles;
 using ShipWorks.UI.Controls;
 
 namespace ShipWorks.OrderLookup.Controls.OrderLookup
@@ -28,6 +28,7 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookup
             InitializeComponent();
             this.orderLookupViewModel = orderLookupViewModel;
             orderLookupViewModel.ShipmentModel.ShipmentNeedsBinding += OnShipmentModelShipmentSaving;
+            orderLookupViewModel.ShipmentModel.CanAcceptFocus = () => this.Visible && this.CanFocus;
             shortcutPipeline.Register(orderLookupViewModel.ShipmentModel);
         }
 
@@ -85,7 +86,7 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookup
         /// <summary>
         /// Register the profile handler
         /// </summary>
-        public void RegisterProfileHandler(Func<Func<ShipmentTypeCode?>, Action<IShippingProfileEntity>, IDisposable> profileRegistration) =>
+        public void RegisterProfileHandler(Func<Func<ShipmentTypeCode?>, Action<IShippingProfile>, IDisposable> profileRegistration) =>
             orderLookupViewModel.ShipmentModel.RegisterProfileHandler(profileRegistration);
 
         /// <summary>

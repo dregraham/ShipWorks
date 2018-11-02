@@ -1,5 +1,7 @@
 ﻿using System.ComponentModel;
 using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.Threading;
+using ShipWorks.OrderLookup.FieldManager;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers;
 using ShipWorks.UI;
@@ -21,8 +23,10 @@ namespace ShipWorks.OrderLookup.Controls.From
                 IOrderLookupShipmentModel shipmentModel,
                 IShipmentTypeManager shipmentTypeManager,
                 ICarrierAccountRetrieverFactory carrierAccountRetrieverFactory,
-                AddressViewModel addressViewModel) :
-            base(shipmentModel, shipmentTypeManager, carrierAccountRetrieverFactory, addressViewModel)
+                AddressViewModel addressViewModel,
+                ISchedulerProvider schedulerProvider,
+                OrderLookupFieldLayoutProvider fieldLayoutProvider) :
+            base(shipmentModel, shipmentTypeManager, carrierAccountRetrieverFactory, addressViewModel, schedulerProvider, fieldLayoutProvider)
         {
             ShipmentModel.PropertyChanged += UspsShipmentModelPropertyChanged;
         }

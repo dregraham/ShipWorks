@@ -11,7 +11,7 @@ namespace ShipWorks.Templates.Printing
     {
         private readonly string title;
         private const string HTMLContent = "<html><head><title></title><style>body {{font-family:Arial; text-align:center;}}table {{margin-bottom:40px;}} td {{text-align:center;}} .barcode {{font-family:'Free 3 of 9 Extended';font-size:36pt;}} </style></head><body>{0}</body></html>";
-        
+
         /// <summary>
         /// Constructor
         /// </summary>
@@ -25,7 +25,7 @@ namespace ShipWorks.Templates.Printing
         /// The barcodes on this page
         /// </summary>
         public IEnumerable<PrintableBarcode> Barcodes { get; }
-        
+
         /// <summary>
         /// Get the pages html content
         /// </summary>

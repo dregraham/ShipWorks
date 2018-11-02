@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Services;
 
@@ -28,6 +28,11 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
         /// <summary>
         /// Get the available profiles for the package adapter
         /// </summary>
-        IEnumerable<DimensionsProfileEntity> GetDimensionsProfiles(IPackageAdapter package);
+        IDictionary<long, string> GetDimensionsProfiles(IPackageAdapter package);
+
+        /// <summary>
+        /// Get a specified dimension profile
+        /// </summary>
+        IDimensionsProfileEntity GetDimensionsProfile(long dimensionsProfileID);
     }
 }

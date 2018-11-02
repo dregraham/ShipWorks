@@ -7,5 +7,6 @@
 [assembly: XmlnsDefinition("http://schemas.shipworks.com/ui", "ShipWorks.UI.Controls.AddressControl")]
 [assembly: XmlnsDefinition("http://schemas.shipworks.com/ui", "ShipWorks.UI.Controls.TypeBasedTemplateSelector")]
 [assembly: XmlnsDefinition("http://schemas.shipworks.com/ui", "ShipWorks.UI.Controls.Weight")]
+[assembly: XmlnsDefinition("http://schemas.shipworks.com/ui", "ShipWorks.UI.Selectors")]
 [assembly: XmlnsDefinition("http://schemas.shipworks.com/ui", "ShipWorks.UI.ValueConverters")]
 [assembly: XmlnsDefinition("http://schemas.shipworks.com/ui", "ShipWorks.UI.Triggers")]

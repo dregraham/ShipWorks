@@ -27,6 +27,10 @@
     <Style x:Key="FormWrapPanel" TargetType="{x:Type WrapPanel}">
         <Setter Property="Margin" Value="10,0,0,0" />
     </Style>
+   
+    <Style TargetType="{x:Type Paragraph}">
+        <Setter Property="FontFamily" Value="/ShipWorks.OrderLookup;component/#Roboto" />
+    </Style>
 
     <DataTemplate x:Key="DimsProfileItemTemplate">
         <StackPanel Orientation="Horizontal">
@@ -35,7 +39,7 @@
                 <TextBlock.Visibility>
                     <Binding Converter="{StaticResource VisibleWhenNotEqualToParameter}" Path="DimensionsProfileID">
                         <Binding.ConverterParameter>
-                            <System:Int64>0</System:Int64>
+                            <System:Int64>12</System:Int64>
                         </Binding.ConverterParameter>
                     </Binding>
                 </TextBlock.Visibility>

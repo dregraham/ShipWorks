@@ -3,9 +3,9 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:from="clr-namespace:ShipWorks.OrderLookup.Controls.From"
     xmlns:local="clr-namespace:ShipWorks.OrderLookup.Controls"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:ns="clr-namespace:ShipWorks.OrderLookup.FieldManager;assembly=ShipWorks.Core"
     xmlns:sui="clr-namespace:ShipWorks.Shipping.UI.ValueConverters;assembly=ShipWorks.Shipping.UI"
     xmlns:sw="http://schemas.shipworks.com/sw"
     xmlns:sys="clr-namespace:System;assembly=mscorlib"
@@ -32,9 +32,13 @@
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" /> <!--  0 Shipment type name  -->
+            <ui:FieldLayoutRowDefinition FieldID="{x:Static ns:SectionLayoutFieldIDs.AccountSelector}" /> <!--  1 Supports accounts/account dropdown  -->
+            <ui:FieldLayoutRowDefinition FieldID="{x:Static ns:SectionLayoutFieldIDs.Origin}" /> <!--  2 Origin header  -->
+            <ui:FieldLayoutRowDefinition FieldID="{x:Static ns:SectionLayoutFieldIDs.Origin}" /> <!--  3 Origin dropdown  -->
+            <RowDefinition Height="Auto" /> <!--  4 OrderLookupAddress control  -->
+            <ui:FieldLayoutRowDefinition FieldID="{x:Static ns:SectionLayoutFieldIDs.FedExResidentialCommercialAddress}" /> <!--  5 Residential/Commercial  -->
+            <ui:FieldLayoutRowDefinition FieldID="{x:Static ns:SectionLayoutFieldIDs.FedExResidentialCommercialAddress}" /> <!--  6 Residential/Commercial text and dropdown  -->
         </Grid.RowDefinitions>
         <TextBlock
             Grid.Row="0"
@@ -72,76 +76,76 @@
                 <Binding Mode="OneWay" Path="Accounts" />
             </ComboBox.ItemsSource>
         </ComboBox>
-        <StackPanel
+
+        <TextBlock
             Grid.Row="2"
             Grid.Column="0"
-            Grid.ColumnSpan="2">
-            <TextBlock Style="{StaticResource Header}">Origin</TextBlock>
-            <ComboBox
-                x:Name="OriginDropDown"
-                ui:UpdateWhenMessageReceived.MessageType="{x:Type sw:OriginAddressChangedMessage}"
-                DisplayMemberPath="Key"
-                SelectedValuePath="Value"
-                Style="{StaticResource StackedFormComboBox}">
-                <ComboBox.IsEnabled>
+            Grid.ColumnSpan="2"
+            Style="{StaticResource Header}">
+            Origin
+        </TextBlock>
+        <ComboBox
+            x:Name="OriginDropDown"
+            Grid.Row="3"
+            Grid.Column="0"
+            Grid.ColumnSpan="2"
+            ui:UpdateWhenMessageReceived.MessageType="{x:Type sw:OriginAddressChangedMessage}"
+            DisplayMemberPath="Key"
+            SelectedValuePath="Value"
+            Style="{StaticResource StackedFormComboBox}">
+            <ComboBox.IsEnabled>
+                <Binding Mode="OneWay" Path="ShipmentModel.ShipmentAllowEditing" />
+            </ComboBox.IsEnabled>
+            <ComboBox.ItemsSource>
+                <Binding
+                    Converter="{StaticResource ShipmentTypeToOriginAddresses}"
+                    Mode="OneWay"
+                    Path="ShipmentModel.ShipmentAdapter.ShipmentTypeCode" />
+            </ComboBox.ItemsSource>
+            <ComboBox.SelectedValue>
+                <Binding Path="ShipmentModel.ShipmentAdapter.Shipment.OriginOriginID" />
+            </ComboBox.SelectedValue>
+        </ComboBox>
+
+        <local:OrderLookupAddress
+            Grid.Row="4"
+            Grid.Column="0"
+            Grid.ColumnSpan="2"
+            DataContext="{Binding Address}">
+            <local:OrderLookupAddress.IsEnabled>
+                <MultiBinding Converter="{StaticResource BooleanAndConverter}">
                     <Binding Mode="OneWay" Path="ShipmentModel.ShipmentAllowEditing" />
-                </ComboBox.IsEnabled>
-                <ComboBox.ItemsSource>
                     <Binding
-                        Converter="{StaticResource ShipmentTypeToOriginAddresses}"
-                        Mode="OneWay"
-                        Path="ShipmentModel.ShipmentAdapter.ShipmentTypeCode" />
-                </ComboBox.ItemsSource>
-                <ComboBox.SelectedValue>
-                    <Binding Path="ShipmentModel.ShipmentAdapter.Shipment.OriginOriginID" />
-                </ComboBox.SelectedValue>
-            </ComboBox>
+                        Converter="{StaticResource ValueEqualToParameter}"
+                        ElementName="OriginDropDown"
+                        Path="SelectedValue">
+                        <Binding.ConverterParameter>
+                            <sys:Int64>1</sys:Int64>
+                        </Binding.ConverterParameter>
+                    </Binding>
+                </MultiBinding>
+            </local:OrderLookupAddress.IsEnabled>
+        </local:OrderLookupAddress>
 
-            <local:OrderLookupAddress DataContext="{Binding Address}">
-                <local:OrderLookupAddress.IsEnabled>
-                    <MultiBinding Converter="{StaticResource BooleanAndConverter}">
-                        <Binding Mode="OneWay" Path="ShipmentModel.ShipmentAllowEditing" />
-                        <Binding
-                            Converter="{StaticResource ValueEqualToParameter}"
-                            ElementName="OriginDropDown"
-                            Path="SelectedValue">
-                            <Binding.ConverterParameter>
-                                <sys:Int64>1</sys:Int64>
-                            </Binding.ConverterParameter>
-                        </Binding>
-                    </MultiBinding>
-                </local:OrderLookupAddress.IsEnabled>
-            </local:OrderLookupAddress>
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="85" />
-                    <ColumnDefinition Width="*" />
-                </Grid.ColumnDefinitions>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                </Grid.RowDefinitions>
-                <TextBlock
-                    Grid.Row="0"
-                    Grid.Column="0"
-                    Grid.ColumnSpan="2"
-                    Style="{StaticResource Header}"
-                    Text="Residential / Commercial" />
-                <TextBlock
-                    Grid.Row="1"
-                    Grid.Column="0"
-                    Style="{StaticResource FieldLabel}"
-                    Text="Address" />
+        <TextBlock
+            Grid.Row="5"
+            Grid.Column="0"
+            Grid.ColumnSpan="2"
+            Style="{StaticResource Header}"
+            Text="Residential / Commercial" />
+        <TextBlock
+            Grid.Row="6"
+            Grid.Column="0"
+            Style="{StaticResource FieldLabel}"
+            Text="Address" />
 
-                <ComboBox
-                    Grid.Row="1"
-                    Grid.Column="1"
-                    DisplayMemberPath="Value"
-                    ItemsSource="{Binding ResidentialDeterminations}"
-                    SelectedValue="{Binding ShipmentModel.ShipmentAdapter.Shipment.FedEx.OriginResidentialDetermination}"
-                    SelectedValuePath="Key"
-                    Style="{StaticResource FormComboBox}" />
-            </Grid>
-        </StackPanel>
+        <ComboBox
+            Grid.Row="6"
+            Grid.Column="1"
+            DisplayMemberPath="Value"
+            ItemsSource="{Binding ResidentialDeterminations}"
+            SelectedValue="{Binding ShipmentModel.ShipmentAdapter.Shipment.FedEx.OriginResidentialDetermination}"
+            SelectedValuePath="Key"
+            Style="{StaticResource FormComboBox}" />
     </Grid>
 </UserControl>

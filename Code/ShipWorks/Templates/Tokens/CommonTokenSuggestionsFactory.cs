@@ -1,15 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
+using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.Stores;
-using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.Templates.Tokens
 {
     /// <summary>
     /// Provides common token suggestions based on where the token is going to be used.
     /// </summary>
+    [Component]
     public class CommonTokenSuggestionsFactory : ITokenSuggestionFactory
     {
         private readonly TokenSuggestion[] genericSuggestions;
@@ -23,7 +22,7 @@ namespace ShipWorks.Templates.Tokens
         {
             genericSuggestions = new TokenSuggestion[]
             {
-                new TokenSuggestion("{//Order/Number}", 
+                new TokenSuggestion("{//Order/Number}",
                     "Order Number"),
 
                 new TokenSuggestion("{//Order/Item/Name}",
@@ -35,7 +34,7 @@ namespace ShipWorks.Templates.Tokens
 
             emailAddressSuggestions = new TokenSuggestion[]
             {
-                new TokenSuggestion("{//Order/Address[@type='bill']/Email}", 
+                new TokenSuggestion("{//Order/Address[@type='bill']/Email}",
                     "Billing Email Address"),
 
                 new TokenSuggestion("{//Order/Address[@type='ship']/Email}",
@@ -45,7 +44,7 @@ namespace ShipWorks.Templates.Tokens
 
             shippingSuggestions = new TokenSuggestion[]
             {
-                new TokenSuggestion("{//Order/Number}", 
+                new TokenSuggestion("{//Order/Number}",
                     "Order Number"),
 
                 new TokenSuggestion("{//Order/Item/Name}",
@@ -56,22 +55,22 @@ namespace ShipWorks.Templates.Tokens
 
                 new TokenSuggestion(
                     "<xsl:for-each select=\"//Order/Item\">\r\n" +
-                    "    {Name}\r\n" + 
-                    "    <xsl:if test=\"position() !=  last()\">, </xsl:if>\r\n" + 
+                    "    {Name}\r\n" +
+                    "    <xsl:if test=\"position() !=  last()\">, </xsl:if>\r\n" +
                     "</xsl:for-each>",
                     "Items Names"),
 
                 new TokenSuggestion(
                     "<xsl:for-each select=\"//Order/Item\">\r\n" +
-                    "    ({Quantity}) - {Name}\r\n" + 
-                    "    <xsl:if test=\"position() !=  last()\">, </xsl:if>\r\n" + 
+                    "    ({Quantity}) - {Name}\r\n" +
+                    "    <xsl:if test=\"position() !=  last()\">, </xsl:if>\r\n" +
                     "</xsl:for-each>",
                     "Item Quantity and Name"),
 
                 new TokenSuggestion(
                     "<xsl:for-each select=\"//Order/Item\">\r\n" +
-                    "    ({Quantity}) - {Code} - {Location}\r\n" + 
-                    "    <xsl:if test=\"position() !=  last()\">, </xsl:if>\r\n" + 
+                    "    ({Quantity}) - {Code} - {Location}\r\n" +
+                    "    <xsl:if test=\"position() !=  last()\">, </xsl:if>\r\n" +
                     "</xsl:for-each>",
                     "Item Quantity and Locations")
             };

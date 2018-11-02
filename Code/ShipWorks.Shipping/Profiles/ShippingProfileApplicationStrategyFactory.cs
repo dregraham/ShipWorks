@@ -26,7 +26,7 @@ namespace ShipWorks.Shipping.Profiles
         /// <summary>
         /// Create an Profile Application Strategy
         /// </summary>
-        public IShippingProfileApplicationStrategy Create(ShipmentTypeCode? shipmentType) => 
+        public IShippingProfileApplicationStrategy Create(ShipmentTypeCode? shipmentType) =>
             shipmentType == null ? createGlobalStrategy() : strategyIndex[shipmentType.Value];
     }
 }
