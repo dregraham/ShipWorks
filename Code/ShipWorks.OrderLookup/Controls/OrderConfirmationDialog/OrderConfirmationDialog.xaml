@@ -47,7 +47,8 @@
             AutoGenerateColumns="False"
             ItemsSource="{Binding Orders}"
             SelectedItem="{Binding SelectedOrder, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
-            Style="{StaticResource DataGrid.SingleRowSelection}">
+            Style="{StaticResource DataGrid.SingleRowSelection}"
+            PreviewKeyDown="OnDataGridPreviewKeyDown">
             <DataGrid.ColumnHeaderStyle>
                 <Style BasedOn="{StaticResource {x:Type DataGridColumnHeader}}" TargetType="{x:Type DataGridColumnHeader}">
                     <Setter Property="Height" Value="20" />
