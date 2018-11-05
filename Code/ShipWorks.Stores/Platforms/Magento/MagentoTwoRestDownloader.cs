@@ -418,6 +418,16 @@ namespace ShipWorks.Stores.Platforms.Magento
                 AddCustomOptions(orderItem, magentoOrderItem.ProductOption.ExtensionAttributes.CustomOptions, productId);
             }
 
+            if (magentoOrderItem?.ParentItemId != null)
+            {
+                Item magentoParentOrderItem = webClient.GetItem(magentoOrderItem.ParentItemId.Value);
+
+                if (magentoParentOrderItem?.ProductOption?.ExtensionAttributes != null)
+                {
+                    AddCustomOptions(orderItem, magentoParentOrderItem.ProductOption.ExtensionAttributes.CustomOptions, magentoParentOrderItem.ProductId);
+                }
+            }
+
         }
 
         /// <summary>
@@ -435,9 +445,9 @@ namespace ShipWorks.Stores.Platforms.Magento
                 orderItemAttribute.Name = itemDetail.Name;
                 orderItemAttribute.UnitPrice = 0;
 
-                if(itemDetail.Price > 0)
+                if (itemDetail.Price > 0)
                 {
-                   isDynamicPricing = true;
+                    isDynamicPricing = true;
                 }
             }
 
