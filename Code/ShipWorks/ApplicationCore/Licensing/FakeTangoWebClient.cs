@@ -101,6 +101,27 @@ namespace ShipWorks.ApplicationCore.Licensing
         }
 
         /// <summary>
+        /// Gets the Tango customer id for a license.
+        /// </summary>
+        public override string GetTangoCustomerId()
+        {
+            StoreEntity store = StoreManager.GetEnabledStores()
+                                    .FirstOrDefault(s => new ShipWorksLicense(s.License).IsTrial == false) ??
+                                StoreManager.GetAllStores()
+                                    .FirstOrDefault(s => new ShipWorksLicense(s.License).IsTrial == false);
+
+            try
+            {
+                return store != null ? GetLicenseStatus(store.License, store).TangoCustomerID : string.Empty;
+            }
+            catch (TangoException ex)
+            {
+                log.Error(ex);
+                return string.Empty;
+            }
+        }
+
+        /// <summary>
         /// Request a trial for use with the specified store. If a trial already exists, a new one will not be created.
         /// </summary>
         public override TrialDetail GetTrial(StoreEntity store)

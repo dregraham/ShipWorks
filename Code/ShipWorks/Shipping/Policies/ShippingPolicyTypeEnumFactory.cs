@@ -29,13 +29,16 @@ namespace ShipWorks.Shipping.Policies
                     if (shipmentTypeCode == ShipmentTypeCode.BestRate)
                     {
                         // Rate result count restrictions only applies to BestRate for now. The rate control, 
-                        // BestRateResultTag, and the service control(s) will need to be refactored to 
+                        // BestRateResultTag, and the service control(s) will need to be re-factored to 
                         // support this across all shipment types
                         return new RateResultCountShippingPolicy();
                     }
                     
                     return new NonRestrictedRateCountShippingPolicy();
-                }
+                 }
+
+                case ShippingPolicyType.AmazonShipmentRestriction:
+                    return new AmazonShipmentShippingPolicy();
 
                 default:
                     throw new InvalidOperationException(string.Format("Could not create a policy for type {0}", policyType));

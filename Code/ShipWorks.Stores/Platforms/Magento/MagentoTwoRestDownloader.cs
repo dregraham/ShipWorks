@@ -371,9 +371,7 @@ namespace ShipWorks.Stores.Platforms.Magento
 
             IEnumerable<Item> itemList = items as IList<Item> ?? items.ToList();
             IEnumerable<Item> subItemList = itemList
-                .Where(i => i.ProductType != "configurable")  // Ignore configurable items
-                .Where(i => !i.ParentItemId.HasValue ||       // Ignore items that are part of a bundle
-                    items.FirstOrDefault(x => x.ItemId == i.ParentItemId.Value)?.ProductType != "bundle");
+                .Where(i => i.ProductType != "configurable"); // Ignore configurable items
 
             foreach (Item item in subItemList)
             {
@@ -390,12 +388,19 @@ namespace ShipWorks.Stores.Platforms.Magento
         private void LoadItem(OrderEntity orderEntity, IEnumerable<Item> itemList, Item item)
         {
             OrderItemEntity orderItem = InstantiateOrderItem(orderEntity);
+            Item magentoOrderItem = webClient.GetItem(item.ItemId);
 
             orderItem.Name = item.Name;
             orderItem.Quantity = item.QtyOrdered;
             orderItem.Code = item.ItemId.ToString();
             orderItem.SKU = item.Sku;
-            orderItem.UnitPrice = Convert.ToDecimal(item.ParentItem?.Price ?? item.Price);
+            orderItem.UnitPrice = Convert.ToDecimal(item.Price);
+
+            if (item.ProductType?.Equals("bundle", StringComparison.InvariantCultureIgnoreCase) == true)
+            {
+                AddBundleOptions(orderItem, itemList, item.ItemId);
+            }
+
             if (orderItem.UnitPrice == 0m)
             {
                 Item configurableItemWithPrice = itemList.FirstOrDefault(i => i.ProductType == "configurable" && i.Sku == orderItem.SKU && (i.ParentItem?.Price ?? i.Price) > 0D);
@@ -407,17 +412,10 @@ namespace ShipWorks.Stores.Platforms.Magento
 
             orderItem.Weight = item.Weight;
 
-            Item magentoOrderItem = webClient.GetItem(item.ItemId);
-
             if (magentoOrderItem?.ProductOption?.ExtensionAttributes != null)
             {
                 int productId = itemList.FirstOrDefault(i => i.ProductType == "configurable" && i.Sku == orderItem.SKU)?.ProductId ?? item.ProductId;
                 AddCustomOptions(orderItem, magentoOrderItem.ProductOption.ExtensionAttributes.CustomOptions, productId);
-            }
-
-            if (item.ProductType?.Equals("bundle", StringComparison.InvariantCultureIgnoreCase) == true)
-            {
-                AddBundleOptions(orderItem, magentoOrderItem?.Sku);
             }
 
             if (magentoOrderItem?.ParentItemId != null)
@@ -429,28 +427,36 @@ namespace ShipWorks.Stores.Platforms.Magento
                     AddCustomOptions(orderItem, magentoParentOrderItem.ProductOption.ExtensionAttributes.CustomOptions, magentoParentOrderItem.ProductId);
                 }
             }
+
         }
 
         /// <summary>
-        /// Add all of the bundle options for the order item
+        /// Add child products' name and SKU as attributes to parent item
         /// </summary>
-        private void AddBundleOptions(OrderItemEntity item, string parentProductSku)
+        private void AddBundleOptions(OrderItemEntity item, IEnumerable<Item> itemList, long parentItemID)
         {
-            if (parentProductSku.IsNullOrWhiteSpace())
-            {
-                return;
-            }
+            // Assume the bundle has a set price and is not the sum of prices of the individual items included in the bundle
+            bool isDynamicPricing = false;
 
-            // Get the parent product option details so we can add attributes
-            IEnumerable<ProductOptionDetail> parentProductOptionDetails = webClient.GetBundleProductOptionsBySku(parentProductSku);
-
-            foreach (ProductOptionDetail optionDetail in parentProductOptionDetails)
+            foreach (Item itemDetail in itemList.Where(s => s.ParentItemId == parentItemID))
             {
                 OrderItemAttributeEntity orderItemAttribute = InstantiateOrderItemAttribute(item);
-                orderItemAttribute.Description = optionDetail?.Title;
-                orderItemAttribute.Name = optionDetail?.Title ?? "Option";
+                orderItemAttribute.Description = itemDetail.Sku;
+                orderItemAttribute.Name = itemDetail.Name;
                 orderItemAttribute.UnitPrice = 0;
+
+                if (itemDetail.Price > 0)
+                {
+                    isDynamicPricing = true;
+                }
             }
+
+            // If the child items do have prices, set the parent item price to 0 to avoid doubling the order total
+            if (isDynamicPricing)
+            {
+                item.UnitPrice = 0m;
+            }
+
         }
 
         /// <summary>
