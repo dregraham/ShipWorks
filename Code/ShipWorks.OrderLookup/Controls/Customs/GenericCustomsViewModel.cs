@@ -5,6 +5,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Reflection;
 using GalaSoft.MvvmLight.Command;
+using Interapptive.Shared.Collections;
 using Interapptive.Shared.Utility;
 using Shared.System.ComponentModel.DataAnnotations;
 using ShipWorks.OrderLookup.FieldManager;
@@ -28,7 +29,7 @@ namespace ShipWorks.OrderLookup.Controls.Customs
         /// <summary>
         /// Constructor
         /// </summary>
-        public GenericCustomsViewModel(IOrderLookupShipmentModel shipmentModel, 
+        public GenericCustomsViewModel(IOrderLookupShipmentModel shipmentModel,
                 IShipmentTypeManager shipmentTypeManager,
                 OrderLookupFieldLayoutProvider fieldLayoutProvider) : base(shipmentModel, fieldLayoutProvider)
         {
@@ -157,9 +158,14 @@ namespace ShipWorks.OrderLookup.Controls.Customs
                 return;
             }
 
-            ShipmentModel.SaveToDatabase();
-
-            ShipmentModel.RefreshShipmentFromDatabase();
+            // Customs should have been created upstream when the shipment was loaded originally
+            // If the user changes the shipments country to international we need to trigger
+            // a save which will create customs items
+            if (ShipmentModel.ShipmentAdapter.Shipment.CustomsItems.None())
+            {
+                ShipmentModel.SaveToDatabase();
+                ShipmentModel.RefreshShipmentFromDatabase();
+            }
 
             CustomsItems = new ObservableCollection<IShipmentCustomsItemAdapter>(ShipmentModel.ShipmentAdapter.Shipment.CustomsItems
                 .Select(x => new ShipmentCustomsItemAdapter(x)));
