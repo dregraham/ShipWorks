@@ -17,6 +17,7 @@
             </ResourceDictionary.MergedDictionaries>
             <ui:DefaultWhenNullOrEmptyConverter x:Key="NoneWhenEmpty" />
             <ui:EnumDescriptionConverter x:Key="EnumDescription" />
+            <ui:BooleanToVisibilityConverter x:Key="BooleanToVisibility" />
         </ResourceDictionary>
     </UserControl.Resources>
     <Grid IsEnabled="{Binding ShipmentModel.ShipmentAllowEditing}">
@@ -75,7 +76,10 @@
                     <Setter Property="Foreground" Value="Red" />
                 </Style>
             </StackPanel.Resources>
-            <FlowDocumentScrollViewer IsToolBarVisible="False" VerticalScrollBarVisibility="Hidden" >
+            <FlowDocumentScrollViewer IsToolBarVisible="False" VerticalScrollBarVisibility="Hidden">
+                <FlowDocumentScrollViewer.Visibility>
+                    <Binding Converter="{StaticResource BooleanToVisibility}" Path="ShipmentModel.ShipmentAllowEditing" />
+                </FlowDocumentScrollViewer.Visibility>
                 <FlowDocument PagePadding="0">
                     <Paragraph>
                         Modifying
