@@ -207,6 +207,11 @@ namespace Interapptive.Shared.Utility
         /// </summary>
         public void WriteTo(ITrackedDurationEvent trackedDurationEvent)
         {
+            if (trackedDurationEvent == null)
+            {
+                return;
+            }
+
             long overallTime = 0;
             foreach (KeyValuePair<string, List<long>> telemetryEventType in telemetry)
             {
