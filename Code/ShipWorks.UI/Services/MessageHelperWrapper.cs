@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Reactive.Concurrency;
 using System.Reactive.Disposables;
+using System.Windows;
 using System.Windows.Forms;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Threading;
@@ -58,13 +59,17 @@ namespace ShipWorks.UI.Services
         /// </summary>
         public void ShowError(IWin32Window owner, string message)
         {
-            if (((Control) owner).InvokeRequired)
+            if(owner is Window ownerWindow && !ownerWindow.Dispatcher.CheckAccess())
             {
-                ((Control) owner).Invoke((Action<string>) ShowError, message);
+                ownerWindow.Dispatcher.Invoke((Action<string>) ShowError, message);
+            }
+            else if (owner is Control ownerControl && ownerControl.InvokeRequired)
+            {
+                ownerControl.Invoke((Action<string>) ShowError, message);
             }
             else
             {
-                MessageHelper.ShowError(ownerFactory(), message);
+                MessageHelper.ShowError(owner, message);
             }
         }
 
