@@ -6,9 +6,12 @@ using System.Reactive.Linq;
 using System.Threading.Tasks;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.Metrics;
+using Interapptive.Shared.Threading;
+using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using log4net;
 using ShipWorks.ApplicationCore;
+using ShipWorks.Common.Threading;
 using ShipWorks.Core.Common.Threading;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Data.Model.EntityClasses;
@@ -26,6 +29,7 @@ namespace ShipWorks.OrderLookup
     public class OrderLookupSingleScanPipeline : IInitializeForCurrentUISession
     {
         private readonly IMessenger messenger;
+        private readonly IMessageHelper messageHelper;
         private readonly IMainForm mainForm;
         private readonly IOrderLookupOrderRepository orderRepository;
         private readonly IOnDemandDownloaderFactory onDemandDownloaderFactory;
@@ -51,6 +55,7 @@ namespace ShipWorks.OrderLookup
         /// </summary>
         public OrderLookupSingleScanPipeline(
             IMessenger messenger,
+            IMessageHelper messageHelper,
             IMainForm mainForm,
             IOrderLookupOrderRepository orderRepository,
             IOnDemandDownloaderFactory onDemandDownloaderFactory,
@@ -63,6 +68,7 @@ namespace ShipWorks.OrderLookup
             Func<string, ITrackedDurationEvent> telemetryFactory)
         {
             this.messenger = messenger;
+            this.messageHelper = messageHelper;
             this.mainForm = mainForm;
             this.orderRepository = orderRepository;
             this.onDemandDownloaderFactory = onDemandDownloaderFactory;
@@ -112,6 +118,8 @@ namespace ShipWorks.OrderLookup
         /// </summary>
         private async Task OnSingleScanMessage(SingleScanMessage message)
         {
+            IDisposable progressDialog = messageHelper.ShowProgressDialog("Order Lookup", "Loading Order", new ProgressProvider(), TimeSpan.FromMilliseconds(10));
+
             try
             {
                 using (ITrackedDurationEvent telemetryEvent = telemetryFactory("SingleScan.Search.OrderLookup"))
@@ -180,6 +188,7 @@ namespace ShipWorks.OrderLookup
             finally
             {
                 processingScan = false;
+                progressDialog.Dispose();
             }
         }
 
@@ -234,6 +243,8 @@ namespace ShipWorks.OrderLookup
         /// </summary>
         private async Task OnOrderLookupSearchMessage(OrderLookupSearchMessage message)
         {
+            IDisposable progressDialog = messageHelper.ShowProgressDialog("Order Lookup", "Loading Order", new ProgressProvider(), TimeSpan.FromMilliseconds(10));
+
             try
             {
                 using (ITrackedDurationEvent telemetryEvent = telemetryFactory("SingleScan.Search.OrderLookup"))
@@ -292,6 +303,7 @@ namespace ShipWorks.OrderLookup
             finally
             {
                 processingScan = false;
+                progressDialog.Dispose();
             }
         }
 
