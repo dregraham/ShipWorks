@@ -326,7 +326,9 @@
     <Compile Include="OrderLookupModule.cs" />
     <Compile Include="OrderLookupPanelFactory.cs" />
     <Compile Include="OrderLookupPreviousShipmentLocator.cs" />
+    <Compile Include="OrderLookupRegistrationOverride.cs" />
     <Compile Include="OrderLookupShipAgainMessage.cs" />
+    <Compile Include="OrderLookupShipmentModel.cs" />
     <Compile Include="OrderLookupViewModelBase.cs" />
     <Compile Include="PreviousProcessedShipmentDetails.cs" />
     <Compile Include="ShipmentHistory\Controls\ShipmentHistoryGrid.cs">

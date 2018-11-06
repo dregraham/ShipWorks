@@ -756,9 +756,11 @@
     <Compile Include="ApplicationCore\Interaction\IMenuCommandExecutionContext.cs" />
     <Compile Include="ApplicationCore\Interaction\SelectionDependentEntry.cs" />
     <Compile Include="ApplicationCore\IoCLogRequestModule.cs" />
+    <Compile Include="ApplicationCore\IRegistrationOverride.cs" />
     <Compile Include="ApplicationCore\MainForm.OrderLookupHeartbeat.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="OrderLookup\CoreOrderLookupRegistrationOverride.cs" />
     <Compile Include="OrderLookup\FieldManager\IOrderLookupFieldLayoutProvider.cs" />
     <Compile Include="OrderLookup\FieldManager\IOrderLookupFieldLayoutRepository.cs" />
     <Compile Include="OrderLookup\FieldManager\SectionFieldLayout.cs" />
@@ -769,6 +771,7 @@
     <Compile Include="OrderLookup\IOrderLookupFieldManager.cs" />
     <Compile Include="OrderLookup\IOrderLookupFieldLayoutProviderHost.cs" />
     <Compile Include="OrderLookup\IOrderLookupPipeline.cs" />
+    <Compile Include="OrderLookup\IOrderLookupRegistrationOverride.cs" />
     <Compile Include="OrderLookup\IOrderLookupShipmentModel.cs" />
     <Compile Include="OrderLookup\IOrderLookupViewModel.cs" />
     <Compile Include="OrderLookup\IPreviousShipmentReprintActionHandler.cs" />
@@ -1006,7 +1009,6 @@
     <Compile Include="OrderLookup\OrderClearReason.cs" />
     <Compile Include="OrderLookup\OrderLookupClearOrderMessage.cs" />
     <Compile Include="OrderLookup\OrderLookupSearchMessage.cs" />
-    <Compile Include="OrderLookup\OrderLookupShipmentModel.cs" />
     <Compile Include="OrderLookup\ShipmentModelPipelines\IOrderLookupShipmentModelPipeline.cs" />
     <Compile Include="Shipping\Profiles\EditableShippingProfile.cs" />
     <Compile Include="Shipping\Profiles\IEditableShippingProfile.cs" />
