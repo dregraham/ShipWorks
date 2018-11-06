@@ -76,6 +76,12 @@
                             <AdornedElementPlaceholder x:Name="adorner" />
                         </Grid>
                     </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter Property="Opacity" Value="0.56" />
+                            <Setter Property="TextElement.Foreground" Value="#FF838383" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>

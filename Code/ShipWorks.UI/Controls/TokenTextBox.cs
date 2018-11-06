@@ -3,6 +3,7 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
+using System.Windows.Media;
 using Autofac;
 using ShipWorks.ApplicationCore;
 using ShipWorks.Templates.Tokens;
@@ -25,7 +26,16 @@ namespace ShipWorks.UI.Controls
         private ToggleButton popupButton;
         private Popup popup;
         private readonly ControlOwnerProvider ownerProvider;
+        
+        public static readonly DependencyProperty ButtonBackgroundProperty = 
+            DependencyProperty.Register("ButtonBackground", typeof(Brush), 
+                                        typeof(TokenTextBox), new UIPropertyMetadata(SystemColors.ControlBrush));
+        
+        public static readonly DependencyProperty ButtonIconColorProperty = 
+            DependencyProperty.Register("ButtonIconColor", typeof(Brush), 
+                                        typeof(TokenTextBox), new UIPropertyMetadata(Brushes.Black));
 
+        
         /// <summary>
         /// Constructor
         /// </summary>
@@ -34,6 +44,24 @@ namespace ShipWorks.UI.Controls
             DefaultStyleKeyProperty.OverrideMetadata(typeof(TokenTextBox), new FrameworkPropertyMetadata(typeof(TokenTextBox)));
         }
 
+        /// <summary>
+        /// Background color for buttons
+        /// </summary>
+        public Brush ButtonBackground
+        {
+            get => (Brush) GetValue(ButtonBackgroundProperty);
+            set => SetValue(ButtonBackgroundProperty, value);
+        }
+
+        /// <summary>
+        /// Icon color for buttons
+        /// </summary>
+        public Brush ButtonIconColor
+        {
+            get => (Brush) GetValue(ButtonIconColorProperty);
+            set => SetValue(ButtonIconColorProperty, value);
+        }
+        
         /// <summary>
         /// Constructor
         /// </summary>
