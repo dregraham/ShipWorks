@@ -119,7 +119,7 @@ namespace ShipWorks.OrderLookup
                     telemetryEvent.AddProperty(InputSourceTelemetryPropertyName, "Barcode");
                     telemetryEvent.AddProperty(InputTextTelemetryPropertyName, message.ScannedText);
 
-                    TelemetricResult<long?> orderLookupTelemetricResult = await GetOrderID(message.ScannedText);
+                    TelemetricResult<long?> orderLookupTelemetricResult = await GetOrderID(message.ScannedText).ConfigureAwait(true);
                     orderLookupTelemetricResult.WriteTo(telemetryEvent);
 
                     long? orderId = orderLookupTelemetricResult.Value;
@@ -131,21 +131,19 @@ namespace ShipWorks.OrderLookup
                         TelemetricResult<bool> shipmentLoadTelemetricResult = new TelemetricResult<bool>("Shipment");
                         order = await shipmentLoadTelemetricResult.RunTimedEventAsync(AutoPrintTelemetryTimeSliceName, async () =>
                         {
-                            AutoPrintCompletionResult result = await orderLookupAutoPrintService.AutoPrintShipment(orderId.Value, message).ConfigureAwait(true);
+                            AutoPrintCompletionResult result = await orderLookupAutoPrintService.AutoPrintShipment(orderId.Value, message).ConfigureAwait(false);
                             return result.ProcessShipmentResults?.Select(x => x.Shipment.Order).FirstOrDefault();
-                        });
+                        }).ConfigureAwait(true);
 
                         // Capture the time required for loading the shipment data
                         await shipmentLoadTelemetricResult.RunTimedEventAsync(DataLoadingTelemetryTimeSliceName, async () =>
                         {
                             if (order == null)
                             {
-                                order = await orderRepository.GetOrder(orderId.Value).ConfigureAwait(true);
+                                order = await orderRepository.GetOrder(orderId.Value).ConfigureAwait(false);
                             }
 
-                            loadOrder = order != null &&
-                                        order.Shipments.Any();
-
+                            loadOrder = order?.Shipments.Any() == true;
 
                             if (loadOrder)
                             {
@@ -165,7 +163,7 @@ namespace ShipWorks.OrderLookup
                             {
                                 shipmentModel.Unload();
                             }
-                        });
+                        }).ConfigureAwait(true);
 
                         shipmentLoadTelemetricResult.WriteTo(telemetryEvent);
                     }
@@ -250,20 +248,19 @@ namespace ShipWorks.OrderLookup
                         DataLoadingTelemetryTimeSliceName,
                                 async () =>
                                 {
-                                    await onDemandDownloaderFactory.CreateOnDemandDownloader().Download(message.SearchText).ConfigureAwait(true);
+                                    await onDemandDownloaderFactory.CreateOnDemandDownloader().Download(message.SearchText).ConfigureAwait(false);
                                     return orderRepository.GetOrderIDs(message.SearchText);
                                 })
-                            .ConfigureAwait(false);
+                            .ConfigureAwait(true);
 
                     // Make a note of how many orders were found, so we can marry this up with the confirmation telemetry
                     orderSearchTelemetricResult.AddEntry(OrderCountTelemetryPropertyName, orderIds.Count);
-
 
                     // Track the time for gather user input (if needed at all)
                     long? selectedOrderId = await orderSearchTelemetricResult.RunTimedEventAsync(
                             UserInputTelemetryTimeSliceName,
                             () => orderLookupConfirmationService.ConfirmOrder(message.SearchText, orderIds))
-                        .ConfigureAwait(false);
+                        .ConfigureAwait(true);
                     orderSearchTelemetricResult.SetValue(selectedOrderId);
 
                     // Record the order data to the telemetry event
@@ -282,7 +279,7 @@ namespace ShipWorks.OrderLookup
                         }
 
                         shipmentModel.LoadOrder(order);
-                    });
+                    }).ConfigureAwait(true);
 
                     // Record the shipment data to the telemetry event
                     shipmentLoadTelemetricResult.WriteTo(telemetryEvent);
