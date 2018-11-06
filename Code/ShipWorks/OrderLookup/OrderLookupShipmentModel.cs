@@ -31,6 +31,7 @@ namespace ShipWorks.OrderLookup
     /// Model used by the various order lookup viewmodels
     /// </summary>
     [Component(SingleInstance = true)]
+    [Obfuscation(Exclude = true, )]
     public class OrderLookupShipmentModel : INotifyPropertyChanged, IOrderLookupShipmentModel
     {
         /// <summary>
@@ -125,7 +126,7 @@ namespace ShipWorks.OrderLookup
             IMessageHelper messageHelper,
             Func<IInsuranceBehaviorChangeViewModel> createInsuranceBehaviorChange,
             IEnumerable<IOrderLookupShipmentModelPipeline> pipelines,
-            OrderLookupFieldLayoutProvider orderLookupFieldLayoutProvider,
+            IOrderLookupFieldLayoutProvider orderLookupFieldLayoutProvider,
             Func<ISecurityContext> securityContext)
         {
             this.messenger = messenger;

@@ -1072,7 +1072,17 @@ namespace ShipWorks
             // Clear Filter Trees
             ClearFilterTrees();
 
-            orderLookupLifetimeScope = IoC.BeginLifetimeScope(x => x.RegisterType<ValidatedAddressScope>().AsImplementedInterfaces().SingleInstance());
+            orderLookupLifetimeScope = IoC.BeginLifetimeScope(x =>
+            {
+                x.RegisterType<ValidatedAddressScope>().AsImplementedInterfaces().SingleInstance();
+                x.RegisterType<OrderLookupShipmentModel>().AsImplementedInterfaces().SingleInstance();
+            });
+
+            foreach (IOrderLookupPipeline service in orderLookupLifetimeScope.Resolve<IEnumerable<IOrderLookupPipeline>>())
+            {
+                service.InitializeForCurrentScope();
+            }
+
             orderLookupControl = orderLookupLifetimeScope.Resolve<IOrderLookup>();
 
             var profilePopupService = orderLookupLifetimeScope.Resolve<IProfilePopupService>();
