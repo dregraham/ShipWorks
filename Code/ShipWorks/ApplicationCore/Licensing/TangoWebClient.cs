@@ -1145,28 +1145,13 @@ namespace ShipWorks.ApplicationCore.Licensing
             // Timeout
             postRequest.Timeout = TimeSpan.FromSeconds(60);
 
-            // Get the url
-            string tangoUrl = "https://www.interapptive.com/ShipWorksNet/ShipWorksV1.svc/account/shipworks";
-
             // Set the uri
-            postRequest.Uri = new Uri(tangoUrl);
+            postRequest.Uri = new Uri("https://www.interapptive.com/ShipWorksNet/ShipWorksV1.svc/account/shipworks");
 
             // Logging
             ApiLogEntry logEntry = new ApiLogEntry(ApiLogSource.ShipWorks, logEntryName);
             logEntry.LogRequest(postRequest);
-
-            // Setup parameters
-            postRequest.RequestSubmitting += delegate (object sender, HttpRequestSubmittingEventArgs e)
-            {
-                e.HttpWebRequest.KeepAlive = false;
-
-                e.HttpWebRequest.UserAgent = "shipworks";
-                e.HttpWebRequest.Headers.Add("X-SHIPWORKS-VERSION", Version);
-
-                e.HttpWebRequest.Headers.Add("X-SHIPWORKS-USER", SecureText.Decrypt("C5NOiKdNaM/324R7sIjFUA==", "interapptive"));
-                e.HttpWebRequest.Headers.Add("X-SHIPWORKS-PASS", SecureText.Decrypt("lavEgsQoKGM=", "interapptive"));
-                e.HttpWebRequest.Headers.Add("SOAPAction", "http://stamps.com/xml/namespace/2015/06/shipworks/shipworksv1/IShipWorks/ShipworksPost");
-            };
+            ConfigureRequest(postRequest);
 
             IHttpResponseReader postResponse = null;
             TrackedDurationEvent telemetryEvent = null;
@@ -1214,6 +1199,24 @@ namespace ShipWorks.ApplicationCore.Licensing
                 postResponse?.Dispose();
                 telemetryEvent?.Dispose();
             }
+        }
+
+        /// <summary>
+        /// configure the post request
+        /// </summary>
+        private static void ConfigureRequest(HttpVariableRequestSubmitter postRequest)
+        {
+            postRequest.RequestSubmitting += delegate (object sender, HttpRequestSubmittingEventArgs e)
+            {
+                e.HttpWebRequest.KeepAlive = false;
+
+                e.HttpWebRequest.UserAgent = "shipworks";
+                e.HttpWebRequest.Headers.Add("X-SHIPWORKS-VERSION", Version);
+
+                e.HttpWebRequest.Headers.Add("X-SHIPWORKS-USER", SecureText.Decrypt("C5NOiKdNaM/324R7sIjFUA==", "interapptive"));
+                e.HttpWebRequest.Headers.Add("X-SHIPWORKS-PASS", SecureText.Decrypt("lavEgsQoKGM=", "interapptive"));
+                e.HttpWebRequest.Headers.Add("SOAPAction", "http://stamps.com/xml/namespace/2015/06/shipworks/shipworksv1/IShipWorks/ShipworksPost");
+            };
         }
 
         /// <summary>
