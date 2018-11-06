@@ -49,7 +49,7 @@ namespace ShipWorks.UI.Dialogs.Popup
         {
             if (Math.Abs(Opacity) < 0.02)
             {
-                Visibility = Visibility.Hidden;
+                Visibility = Visibility.Collapsed;
             }
         }
     }

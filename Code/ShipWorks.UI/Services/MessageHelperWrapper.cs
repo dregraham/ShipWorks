@@ -216,8 +216,16 @@ namespace ShipWorks.UI.Services
                 Description = description
             };
 
-            return schedulerProvider.WindowsFormsEventLoop
-                .Schedule(Tuple.Create(progressDialog, ownerFactory()), timeSpan, OpenProgressDialog);
+            if (timeSpan == TimeSpan.Zero)
+            {
+                return OpenProgressDialog(schedulerProvider.Default, Tuple.Create(progressDialog, ownerFactory()));
+            }
+            else
+            {
+                return schedulerProvider.WindowsFormsEventLoop
+                                .Schedule(Tuple.Create(progressDialog, ownerFactory()), timeSpan, OpenProgressDialog);
+            }
+            
         }
 
         /// <summary>
