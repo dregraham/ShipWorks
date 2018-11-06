@@ -31,7 +31,7 @@ namespace ShipWorks.OrderLookup
     /// Model used by the various order lookup viewmodels
     /// </summary>
     [Component(SingleInstance = true)]
-    [Obfuscation(Exclude = true, )]
+    [Obfuscation(Exclude = true, StripAfterObfuscation = false)]
     public class OrderLookupShipmentModel : INotifyPropertyChanged, IOrderLookupShipmentModel
     {
         /// <summary>
