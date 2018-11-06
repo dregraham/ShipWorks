@@ -401,6 +401,9 @@ namespace ShipWorks.ApplicationCore
                 .SingleInstance();
         }
 
+        /// <summary>
+        /// Begin a lifetime scope and include any registration overrides that are of type T
+        /// </summary>
         public static ILifetimeScope BeginLifetimeScopeWithOverrides<T>() where T : IRegistrationOverride
         {
             var orderLookupRegistrationOverrides = UnsafeGlobalLifetimeScope.Resolve<Owned<IEnumerable<T>>>().Value;

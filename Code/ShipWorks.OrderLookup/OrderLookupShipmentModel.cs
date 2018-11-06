@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Reactive.Disposables;
 using System.Reflection;
@@ -31,7 +32,8 @@ namespace ShipWorks.OrderLookup
     /// Model used by the various order lookup viewmodels
     /// </summary>
     [Component(SingleInstance = true)]
-    [Obfuscation(Exclude = true, StripAfterObfuscation = false)]
+    [SuppressMessage("ShipWorks", "SW0002:Identifier should not be obfuscated",
+        Justification = "Identifier is not being used for data binding")]
     public class OrderLookupShipmentModel : INotifyPropertyChanged, IOrderLookupShipmentModel
     {
         /// <summary>
