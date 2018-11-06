@@ -34,6 +34,7 @@ using Interapptive.Shared.Win32;
 using log4net;
 using ShipWorks.Actions;
 using ShipWorks.Actions.Triggers;
+using ShipWorks.AddressValidation;
 using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Appearance;
 using ShipWorks.ApplicationCore.Crashes;
@@ -1071,7 +1072,7 @@ namespace ShipWorks
             // Clear Filter Trees
             ClearFilterTrees();
 
-            orderLookupLifetimeScope = IoC.BeginLifetimeScope();
+            orderLookupLifetimeScope = IoC.BeginLifetimeScope(x => x.RegisterType<ValidatedAddressScope>().AsImplementedInterfaces().SingleInstance());
             orderLookupControl = orderLookupLifetimeScope.Resolve<IOrderLookup>();
 
             var profilePopupService = orderLookupLifetimeScope.Resolve<IProfilePopupService>();
