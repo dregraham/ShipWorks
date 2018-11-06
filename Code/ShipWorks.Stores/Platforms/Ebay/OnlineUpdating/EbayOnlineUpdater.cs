@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Threading.Tasks;
 using Autofac;
@@ -30,6 +31,8 @@ namespace ShipWorks.Stores.Platforms.Ebay.OnlineUpdating
     /// Client for updating an eBay order with shipped/paid status
     /// </summary>
     [Component]
+    [SuppressMessage("SonarLint", "S3358: Ternary operators should not be nested",
+            Justification = "This is legacy code. If there's time, we can address the issue.")]
     public class EbayOnlineUpdater : IEbayOnlineUpdater
     {
         // Logger

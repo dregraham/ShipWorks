@@ -1,6 +1,5 @@
 ﻿using System;
-using System.ComponentModel;
-using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
 using Interapptive.Shared.Win32.Native;
 
@@ -10,6 +9,8 @@ namespace Interapptive.Shared.Win32
     /// User32 wrapper for managing devices
     /// </summary>
     [CLSCompliant(false)]
+    [SuppressMessage("SonarLint", "S4200: Native methods should be wrapped",
+            Justification = "This is legacy code. If there's time, we can address the issue.")]
     public class User32Devices : IUser32Devices
     {
         /// <summary>Function to register a raw input device.</summary>
@@ -31,10 +32,10 @@ namespace Interapptive.Shared.Win32
         (
             [In, Out] RawInputDeviceListItem[] RawInputDeviceList,
             ref uint NumDevices,
-            uint Size 
+            uint Size
         );
-		
-		/// <summary>
+
+        /// <summary>
         /// Retrieves information about the raw input device.
         /// </summary>
         /// <param name="hDevice">A handle to the raw input device. This comes from the lParam of the WM_INPUT message, from the hDevice member of RAWINPUTHEADER, or from GetRawInputDeviceList. It can also be NULL if an application inserts input data, for example, by using SendInput.</param>
@@ -64,7 +65,7 @@ namespace Interapptive.Shared.Win32
             GetRawInputDeviceInfo(deviceHandle, RawInputDeviceInformationCommand.DeviceName, pData, ref size);
 
             // hidPAth will be a string like \\?\blahblah#VID_12A0&PID_A73B#lkjasdf#lkjsdlfk
-            // We want to capture VID_12A0&PID_A73B... 
+            // We want to capture VID_12A0&PID_A73B...
             // VID represents the vendor ID and PID is the productID.
             string hidPath = Marshal.PtrToStringAuto(pData);
             string[] hidParts = hidPath?.Split('#');

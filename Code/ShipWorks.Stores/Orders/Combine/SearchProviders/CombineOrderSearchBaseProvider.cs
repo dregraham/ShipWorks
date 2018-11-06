@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
@@ -18,6 +19,8 @@ namespace ShipWorks.Stores.Orders.Combine.SearchProviders
     /// Base combined order search provider.
     /// </summary>
     /// <typeparam name="TResult">Type of the resulting order identifier</typeparam>
+    [SuppressMessage("SonarLint", "S3358: Ternary operators should not be nested",
+            Justification = "This is legacy code. If there's time, we can address the issue.")]
     public abstract class CombineOrderSearchBaseProvider<TResult> : ICombineOrderSearchProvider<TResult>
     {
         protected readonly ISqlAdapterFactory sqlAdapterFactory;

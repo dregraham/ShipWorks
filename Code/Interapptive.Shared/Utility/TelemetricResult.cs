@@ -121,7 +121,7 @@ namespace Interapptive.Shared.Utility
         /// type is being used in multiple places and you want to
         /// guarantee consistent event names.
         /// </remarks>
-        public Task<T> RunTimedEventAsync<T>(TelemetricEventType eventType, Func<Task<T>> eventToTime) =>
+        public Task<K> RunTimedEventAsync<K>(TelemetricEventType eventType, Func<Task<K>> eventToTime) =>
             RunTimedEventAsync(EnumHelper.GetDescription(eventType), eventToTime);
 
         /// <summary>
