@@ -61,13 +61,11 @@
             </Trigger>
             <Trigger Property="IsPressed" Value="True">
                 <Setter TargetName="border" Property="Background" Value="#FFC4E5F6" />
-                <Setter TargetName="border" Property="BorderBrush" Value="#FF2C628B" />
-                <Setter TargetName="border" Property="BorderThickness" Value="1" />
             </Trigger>
             <Trigger Property="ToggleButton.IsChecked" Value="True">
                 <Setter TargetName="border" Property="Background" Value="#FFBCDDEE" />
                 <Setter TargetName="border" Property="BorderBrush" Value="#FF245A83" />
-                <Setter TargetName="border" Property="BorderThickness" Value="0 1 1 1" />
+                <Setter TargetName="border" Property="BorderThickness" Value="1" />
             </Trigger>
             <Trigger Property="IsEnabled" Value="False">
                 <Setter TargetName="border" Property="Opacity" Value="0.56" />
