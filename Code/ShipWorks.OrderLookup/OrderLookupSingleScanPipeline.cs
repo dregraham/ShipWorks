@@ -148,7 +148,7 @@ namespace ShipWorks.OrderLookup
                         {
                             if (order == null)
                             {
-                                order = await orderRepository.GetOrder(orderId.Value).ConfigureAwait(false);
+                                order = await orderRepository.GetOrder(orderId.Value).ConfigureAwait(true);
                             }
 
                             loadOrder = order?.Shipments.Any() == true;
