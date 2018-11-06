@@ -50,7 +50,7 @@ namespace ShipWorks.OrderLookup.ShipmentModelPipelines
                 .Subscribe(),
             messenger.OfType<ShipmentsProcessedMessage>()
                 .Where(_ => mainForm.UIMode == UIMode.OrderLookup)
-                .Where(x => x.Shipments.Any(y => !y.IsSuccessful))
+                .Where(x => x.Shipments.None(s => s.Shipment.Processed))
                 .Do(x => model.LoadOrder(x.Shipments.FirstOrDefault().Shipment?.Order))
                 .CatchAndContinue((Exception ex) => log.Error("Error handling failed label creation", ex))
                 .Subscribe()
