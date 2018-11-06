@@ -106,12 +106,12 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
             ShipmentType shipmentType = shipmentTypeManager.Get(ShipmentTypeCode.UpsOnLineTools);
             shipmentType.RectifyCarrierSpecificData(ShipmentModel.ShipmentAdapter.Shipment);
 
-            if (!ServiceTypes.ContainsKey(ShipmentModel.ShipmentAdapter.Shipment.Postal.Service))
+            if (!ServiceTypes.ContainsKey(ShipmentModel.ShipmentAdapter.Shipment.Ups.Service))
             {
                 RefreshServiceTypes();
             }
 
-            if (!PackageTypes.ContainsKey(ShipmentModel.ShipmentAdapter.Shipment.Postal.PackagingType))
+            if (SelectedPackage != null && !PackageTypes.ContainsKey(SelectedPackage.PackagingType))
             {
                 RefreshPackageTypes();
             }

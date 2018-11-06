@@ -53,9 +53,9 @@ namespace ShipWorks.Shipping.Services
                 .Merge(selectedShipments)
                 .Select(x => x.ToString())
                 .Do(x => messenger.Send(new RatesRetrievingMessage(this, x)))
-                .CatchAndContinue((Exception ex) => log.Error("Error occurred while getting rates", ex))
                 .ObserveOn(schedulerProvider.WindowsFormsEventLoop)
                 .Do(_ => messenger.Send(new RatesNotSupportedMessage(this, ArchiveConstants.RatesNotRetrievedInArchiveMessage)))
+                .CatchAndContinue((Exception ex) => log.Error("Error occurred while getting rates", ex))
                 .Subscribe();
 
             // Clear the Rates UI after login

@@ -2,10 +2,12 @@ using System;
 using System.Linq;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
+using Interapptive.Shared.Collections;
 using Interapptive.Shared.UI;
+using log4net;
+//using log4net;
 using ShipWorks.ApplicationCore;
 using ShipWorks.Core.Messaging;
-using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Messaging.Messages.Shipping;
 using ShipWorks.Settings;
 
@@ -19,15 +21,21 @@ namespace ShipWorks.OrderLookup.ShipmentModelPipelines
         private readonly IMessageHelper messageHelper;
         private readonly IMainForm mainForm;
         private readonly IMessenger messenger;
+        private readonly ILog log;
 
         /// <summary>
-        /// ctor
+        /// Constructor
         /// </summary>
-        public ShipmentProcessedPipeline(IMessenger messenger, IMessageHelper messageHelper, IMainForm mainForm)
+        public ShipmentProcessedPipeline(
+            IMessenger messenger,
+            IMessageHelper messageHelper,
+            IMainForm mainForm,
+            Func<Type, ILog> createLog)
         {
             this.messageHelper = messageHelper;
             this.mainForm = mainForm;
             this.messenger = messenger;
+            log = createLog(GetType());
         }
 
         /// <summary>
@@ -37,10 +45,15 @@ namespace ShipWorks.OrderLookup.ShipmentModelPipelines
             messenger.OfType<ShipmentsProcessedMessage>()
                 .Where(_ => mainForm.UIMode == UIMode.OrderLookup)
                 .Where(x => x.Shipments.All(s => s.Shipment.Processed))
-                .Subscribe(x => HandleSuccessfulShipment(model, x)),
+                .Do(x => HandleSuccessfulShipment(model, x))
+                .CatchAndContinue((Exception ex) => log.Error("Error handling successful label creation", ex))
+                .Subscribe(),
             messenger.OfType<ShipmentsProcessedMessage>()
+                .Where(_ => mainForm.UIMode == UIMode.OrderLookup)
                 .Where(x => x.Shipments.Any(y => !y.IsSuccessful))
-                .Subscribe(x => model.LoadOrder(x.Shipments.FirstOrDefault().Shipment?.Order))
+                .Do(x => model.LoadOrder(x.Shipments.FirstOrDefault().Shipment?.Order))
+                .CatchAndContinue((Exception ex) => log.Error("Error handling failed label creation", ex))
+                .Subscribe()
         );
 
         /// <summary>

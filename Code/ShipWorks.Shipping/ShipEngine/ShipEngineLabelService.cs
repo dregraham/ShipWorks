@@ -1,11 +1,11 @@
-﻿using ShipWorks.Data.Model.EntityClasses;
-using System;
+﻿using System;
 using System.Threading.Tasks;
-using ShipEngine.ApiClient.Model;
-using log4net;
-using Interapptive.Shared.Utility;
-using ShipWorks.ApplicationCore.Logging;
 using Autofac.Features.Indexed;
+using Interapptive.Shared.Utility;
+using log4net;
+using ShipEngine.ApiClient.Model;
+using ShipWorks.ApplicationCore.Logging;
+using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.Shipping.ShipEngine
 {
@@ -41,7 +41,7 @@ namespace ShipWorks.Shipping.ShipEngine
         /// The shipment type code for this label service
         /// </summary>
         public abstract ShipmentTypeCode ShipmentTypeCode { get; }
-        
+
         /// <summary>
         /// Create the label
         /// </summary>
@@ -54,12 +54,11 @@ namespace ShipWorks.Shipping.ShipEngine
             try
             {
                 TelemetricResult<IDownloadedLabelData> telemetricResult = new TelemetricResult<IDownloadedLabelData>("API.ResponseTimeInMilliseconds");
-                Label label = null;
-                await telemetricResult.RunTimedEventAsync(TelemetricEventType.GetLabel, 
-                                                       async () => label = await shipEngineWebClient
-                                                                         .PurchaseLabel(request, ApiLogSource)
-                                                                         .ConfigureAwait(false));
-                
+                Label label = await telemetricResult.RunTimedEventAsync(
+                        TelemetricEventType.GetLabel,
+                        () => shipEngineWebClient.PurchaseLabel(request, ApiLogSource))
+                    .ConfigureAwait(false);
+
                 telemetricResult.SetValue(createDownloadedLabelData(shipment, label));
 
                 return telemetricResult;
@@ -69,7 +68,7 @@ namespace ShipWorks.Shipping.ShipEngine
                 throw new ShippingException(GetExceptionMessage(ex.GetBaseException(), GetShipEngineCarrierID(shipment)));
             }
         }
-        
+
         /// <summary>
         /// Void the shipment
         /// </summary>

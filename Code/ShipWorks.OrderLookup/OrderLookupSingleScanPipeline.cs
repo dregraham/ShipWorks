@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
+using Interapptive.Shared.Collections;
 using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Utility;
 using log4net;
@@ -85,16 +86,26 @@ namespace ShipWorks.OrderLookup
                 messenger.OfType<SingleScanMessage>()
                 .Where(x => !processingScan && !mainForm.AdditionalFormsOpen() && mainForm.UIMode == UIMode.OrderLookup && !mainForm.IsShipmentHistoryActive())
                 .Do(_ => processingScan = true)
-                .Do(_=> shipmentModel.Unload(OrderClearReason.NewSearch))
-                .Subscribe(x => OnSingleScanMessage(x).Forget()),
+                .Do(_ => shipmentModel.Unload(OrderClearReason.NewSearch))
+                .Do(x => OnSingleScanMessage(x).Forget())
+                .CatchAndContinue((Exception ex) => HandleException(ex))
+                .Subscribe(),
 
                 messenger.OfType<OrderLookupSearchMessage>()
                 .Where(x => !processingScan && !mainForm.AdditionalFormsOpen() && mainForm.UIMode == UIMode.OrderLookup && !mainForm.IsShipmentHistoryActive())
                 .Do(_ => processingScan = true)
                 .Do(_ => shipmentModel.Unload(OrderClearReason.NewSearch))
-                .Subscribe(x => OnOrderLookupSearchMessage(x).Forget())
+                .Do(x => OnOrderLookupSearchMessage(x).Forget())
+                .CatchAndContinue((Exception ex) => HandleException(ex))
+                .Subscribe()
             );
         }
+
+        /// <summary>
+        /// Logs the exception and reconnect pipeline.
+        /// </summary>
+        private void HandleException(Exception ex) =>
+            log.Error("Error occurred while handling scan message.", ex);
 
         /// <summary>
         /// Download order, auto print if needed, send order message
@@ -118,10 +129,10 @@ namespace ShipWorks.OrderLookup
                     if (orderId.HasValue)
                     {
                         TelemetricResult<bool> shipmentLoadTelemetricResult = new TelemetricResult<bool>("Shipment");
-                        await shipmentLoadTelemetricResult.RunTimedEventAsync(AutoPrintTelemetryTimeSliceName, async () =>
+                        order = await shipmentLoadTelemetricResult.RunTimedEventAsync(AutoPrintTelemetryTimeSliceName, async () =>
                         {
                             AutoPrintCompletionResult result = await orderLookupAutoPrintService.AutoPrintShipment(orderId.Value, message).ConfigureAwait(true);
-                            order = result.ProcessShipmentResults?.Select(x => x.Shipment.Order).FirstOrDefault();
+                            return result.ProcessShipmentResults?.Select(x => x.Shipment.Order).FirstOrDefault();
                         });
 
                         // Capture the time required for loading the shipment data
@@ -134,16 +145,16 @@ namespace ShipWorks.OrderLookup
 
                             loadOrder = order != null &&
                                         order.Shipments.Any();
-                                        
+
 
                             if (loadOrder)
                             {
-                        if (!order.Shipments.Last().Processed)
-                        {
-                        using (ITrackedEvent telemetry = new TrackedEvent("OrderLookup.Search.AutoWeigh"))
-                        {
-                            autoWeighService.ApplyWeight(new[] { order.Shipments.Last() }, telemetry);
-                            }
+                                if (!order.Shipments.Last().Processed)
+                                {
+                                    using (ITrackedEvent telemetry = new TrackedEvent("OrderLookup.Search.AutoWeigh"))
+                                    {
+                                        autoWeighService.ApplyWeight(new[] { order.Shipments.Last() }, telemetry);
+                                    }
                                 }
 
                                 shipmentModel.LoadOrder(order);
@@ -210,10 +221,10 @@ namespace ShipWorks.OrderLookup
                 });
 
                 // Track the time it takes to confirm user input from the confirmation service
-                long? selectedOrderId = null;
-                await telemetricResult.RunTimedEventAsync(UserInputTelemetryTimeSliceName, async () =>
-                    selectedOrderId = await orderLookupConfirmationService.ConfirmOrder(scannedText, orderIds).ConfigureAwait(false)
-                );
+                long? selectedOrderId = await telemetricResult.RunTimedEventAsync(
+                        UserInputTelemetryTimeSliceName,
+                        () => orderLookupConfirmationService.ConfirmOrder(scannedText, orderIds))
+                    .ConfigureAwait(false);
                 telemetricResult.SetValue(selectedOrderId);
             }
 
@@ -234,23 +245,25 @@ namespace ShipWorks.OrderLookup
 
                     TelemetricResult<long?> orderSearchTelemetricResult = new TelemetricResult<long?>("Order");
 
-                    List<long> orderIds = new List<long>();
-
                     // Track the time it took to load the order
-                    await orderSearchTelemetricResult.RunTimedEventAsync(DataLoadingTelemetryTimeSliceName, async () =>
-                    {
-                        await onDemandDownloaderFactory.CreateOnDemandDownloader().Download(message.SearchText).ConfigureAwait(true);
-                        orderIds = orderRepository.GetOrderIDs(message.SearchText);
-                    });
+                    List<long> orderIds = await orderSearchTelemetricResult.RunTimedEventAsync(
+                        DataLoadingTelemetryTimeSliceName,
+                                async () =>
+                                {
+                                    await onDemandDownloaderFactory.CreateOnDemandDownloader().Download(message.SearchText).ConfigureAwait(true);
+                                    return orderRepository.GetOrderIDs(message.SearchText);
+                                })
+                            .ConfigureAwait(false);
 
                     // Make a note of how many orders were found, so we can marry this up with the confirmation telemetry
                     orderSearchTelemetricResult.AddEntry(OrderCountTelemetryPropertyName, orderIds.Count);
 
 
                     // Track the time for gather user input (if needed at all)
-                    long? selectedOrderId = null;
-                    await orderSearchTelemetricResult.RunTimedEventAsync(UserInputTelemetryTimeSliceName,
-                        async () => selectedOrderId = await orderLookupConfirmationService.ConfirmOrder(message.SearchText, orderIds).ConfigureAwait(false));
+                    long? selectedOrderId = await orderSearchTelemetricResult.RunTimedEventAsync(
+                            UserInputTelemetryTimeSliceName,
+                            () => orderLookupConfirmationService.ConfirmOrder(message.SearchText, orderIds))
+                        .ConfigureAwait(false);
                     orderSearchTelemetricResult.SetValue(selectedOrderId);
 
                     // Record the order data to the telemetry event

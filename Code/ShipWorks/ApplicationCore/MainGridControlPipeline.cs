@@ -24,7 +24,7 @@ namespace ShipWorks.ApplicationCore
     public class MainGridControlPipeline : IMainGridControlPipeline
     {
         // Logger
-        static readonly ILog log = LogManager.GetLogger(typeof(MainGridControlPipeline));
+        private static readonly ILog log = LogManager.GetLogger(typeof(MainGridControlPipeline));
 
         private readonly IMainForm mainForm;
         private readonly IMessenger messenger;
@@ -41,8 +41,8 @@ namespace ShipWorks.ApplicationCore
         /// Constructor
         /// </summary>
         public MainGridControlPipeline(
-            IMessenger messenger, 
-            IMainForm mainForm, 
+            IMessenger messenger,
+            IMainForm mainForm,
             ISchedulerProvider schedulerProvider,
             IOnDemandDownloaderFactory onDemandDownloaderFactory,
             ICurrentUserSettings currentUserSettings)
@@ -69,17 +69,19 @@ namespace ShipWorks.ApplicationCore
                     .Throttle(TimeSpan.FromMilliseconds(450))
                     .ObserveOn(schedulerProvider.WindowsFormsEventLoop)
                     .Where(_ => currentUserSettings.GetUIMode() == UIMode.Batch)
-                    .CatchAndContinue((Exception ex) => log.Error("Error occurred while debouncing quick search.", ex))
                     .Do(x => PerformDownloadOnDemand(gridControl.GetBasicSearchText()))
-                    .Subscribe(x => gridControl.PerformManualSearch()),
+                    .Do(x => gridControl.PerformManualSearch())
+                    .CatchAndContinue((Exception ex) => log.Error("Error occurred while debouncing quick search.", ex))
+                    .Subscribe(),
 
                 // Wire up observable for debouncing advanced search text box
                 Observable.FromEventPattern(gridControl.FilterEditorDefinitionEditedAdd, gridControl.FilterEditorDefinitionEditedRemove)
                     .Throttle(TimeSpan.FromMilliseconds(450))
                     .ObserveOn(schedulerProvider.WindowsFormsEventLoop)
                     .Where(_ => currentUserSettings.GetUIMode() == UIMode.Batch)
+                    .Do(x => gridControl.PerformManualSearch())
                     .CatchAndContinue((Exception ex) => log.Error("Error occurred while debouncing advanced search.", ex))
-                    .Subscribe(x => gridControl.PerformManualSearch()),
+                    .Subscribe(),
 
                 // Wire up observable for doing barcode searches
                 scanMessages.ObserveOn(schedulerProvider.WindowsFormsEventLoop)
@@ -92,13 +94,14 @@ namespace ShipWorks.ApplicationCore
                     .Do(scanMsg => PerformBarcodeSearchAsync(gridControl, scanMsg.ScannedText))
                     // Start listening for FilterCountsUpdatedMessages, and only continue after we receive one or the timeout has passed.
                     .ContinueAfter(messenger.OfType<SingleScanFilterUpdateCompleteMessage>(), TimeSpan.FromSeconds(25), schedulerProvider.WindowsFormsEventLoop)
+                    .Do(_ => StartScanMessagesObservation())
                     .CatchAndContinue((Exception ex) =>
                     {
                         log.Error("Error occurred while performing barcode search.", ex);
 
                         StartScanMessagesObservation();
                     })
-                    .Subscribe(_ => StartScanMessagesObservation()),
+                    .Subscribe(),
 
                 // This class doesn't actually get disposed, so we need to include our cleanup here
                 Disposable.Create(() =>

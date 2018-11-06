@@ -356,8 +356,9 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
                         Save();
                     }
                 })
+                .Do(x => messenger.Send(new ShipmentChangedMessage(this, ShipmentAdapter, x)))
                 .CatchAndContinue((NullReferenceException ex) => log.Error("Error occurred while handling property changed", ex))
-                .Subscribe(x => messenger.Send(new ShipmentChangedMessage(this, ShipmentAdapter, x)));
+                .Subscribe();
 
             messenger.Send(new ShipmentChangedMessage(this, ShipmentAdapter, changedField));
         }

@@ -43,7 +43,7 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
                                        .Select(e => new KeyValuePair<int, string>((int) e.Value, e.Description));
             this.shipmentTypeManager = shipmentTypeManager;
         }
-        
+
         /// <summary>
         /// Collection of SignatureTypes
         /// </summary>
@@ -110,12 +110,12 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
             ShipmentType shipmentType = shipmentTypeManager.Get(ShipmentTypeCode.FedEx);
             shipmentType.RectifyCarrierSpecificData(ShipmentModel.ShipmentAdapter.Shipment);
 
-            if (!ServiceTypes.ContainsKey(ShipmentModel.ShipmentAdapter.Shipment.Postal.Service))
+            if (!ServiceTypes.ContainsKey(ShipmentModel.ShipmentAdapter.Shipment.FedEx.Service))
             {
                 RefreshServiceTypes();
             }
 
-            if (!PackageTypes.ContainsKey(ShipmentModel.ShipmentAdapter.Shipment.Postal.PackagingType))
+            if (!PackageTypes.ContainsKey(ShipmentModel.ShipmentAdapter.Shipment.FedEx.PackagingType))
             {
                 RefreshPackageTypes();
             }

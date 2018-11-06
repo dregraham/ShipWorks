@@ -1090,17 +1090,19 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
             // If this is a return shipment, swap the to/from addresses
             if (shipment.ReturnShipment)
             {
-                await telemetricResult.RunTimedEventAsync(TelemetricEventType.CleanseAddress,
-                    async () => toAddress = await CleanseAddress(account, shipment.OriginPerson, false).ConfigureAwait(false));
+                toAddress = await telemetricResult.RunTimedEventAsync(
+                        TelemetricEventType.CleanseAddress,
+                        () => CleanseAddress(account, shipment.OriginPerson, false))
+                    .ConfigureAwait(false);
                 fromAddress = CreateAddress(shipment.ShipPerson);
             }
             else
             {
                 fromAddress = CreateAddress(shipment.OriginPerson);
-                await telemetricResult.RunTimedEventAsync(TelemetricEventType.CleanseAddress,
-                    async () => toAddress =
-                        await CleanseAddress(account, shipment.ShipPerson, shipment.Postal.Usps.RequireFullAddressValidation)
-                            .ConfigureAwait(false));
+                toAddress = await telemetricResult.RunTimedEventAsync(
+                        TelemetricEventType.CleanseAddress,
+                        () => CleanseAddress(account, shipment.ShipPerson, shipment.Postal.Usps.RequireFullAddressValidation))
+                    .ConfigureAwait(false);
             }
 
             if (shipment.ReturnShipment && !(toAddress.AsAddressAdapter().IsDomesticCountry() && fromAddress.AsAddressAdapter().IsDomesticCountry()))

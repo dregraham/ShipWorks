@@ -3,10 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Interapptive.Shared;
-using Interapptive.Shared.Threading;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Metrics;
+using Interapptive.Shared.Threading;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Editing.Rating;
@@ -143,7 +142,7 @@ namespace ShipWorks.Shipping.Services.ProcessShipmentsWorkflow
         /// <summary>
         /// Process a single shipment
         /// </summary>
-        private async Task<ILabelResultLogResult> ProcessShipment(ProcessShipmentState initial, 
+        private async Task<ILabelResultLogResult> ProcessShipment(ProcessShipmentState initial,
             IProgressReporter workProgress, int shipmentCount, ITrackedDurationEvent telemetryEvent)
         {
             workProgress.Detail = $"Shipment {initial.Index + 1} of {shipmentCount}";
@@ -153,7 +152,7 @@ namespace ShipWorks.Shipping.Services.ProcessShipmentsWorkflow
 
             try
             {
-                prepareShipmentResult = telemetricResult.RunTimedEvent("PrepareShipment.DurationInMilliseconds", 
+                prepareShipmentResult = telemetricResult.RunTimedEvent("PrepareShipment.DurationInMilliseconds",
                     () => prepareShipmentTask.PrepareShipment(initial));
 
                 if (initial.CancellationSource.IsCancellationRequested)
@@ -161,14 +160,15 @@ namespace ShipWorks.Shipping.Services.ProcessShipmentsWorkflow
                     return null;
                 }
 
-                ILabelRetrievalResult getLabelResult = null;
-                await telemetricResult.RunTimedEventAsync("GenerateLabel.DurationInMilliseconds",
-                    async () => getLabelResult = await getLabelTask.GetLabel(prepareShipmentResult).ConfigureAwait(false));
-                
+                ILabelRetrievalResult getLabelResult = await telemetricResult.RunTimedEventAsync(
+                        "GenerateLabel.DurationInMilliseconds",
+                        () => getLabelTask.GetLabel(prepareShipmentResult))
+                    .ConfigureAwait(false);
+
                 ILabelPersistenceResult saveLabelResult = telemetricResult.RunTimedEvent("SaveLabel.DurationInMilliseconds",
                     () => saveLabelTask.SaveLabel(getLabelResult));
 
-                ILabelResultLogResult logLabelResult = telemetricResult.RunTimedEvent("LogLabel.DurationInMilliseconds", 
+                ILabelResultLogResult logLabelResult = telemetricResult.RunTimedEvent("LogLabel.DurationInMilliseconds",
                     () => completeLabelTask.Complete(saveLabelResult));
 
                 return logLabelResult;

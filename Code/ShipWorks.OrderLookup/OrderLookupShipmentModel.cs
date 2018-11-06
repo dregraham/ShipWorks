@@ -417,7 +417,7 @@ namespace ShipWorks.OrderLookup
         /// </summary>
         private void RefreshProperties()
         {
-            ShipmentAllowEditing = securityContext().HasPermission(PermissionType.ShipmentsCreateEditProcess, ShipmentAdapter?.Shipment?.ShipmentID) && 
+            ShipmentAllowEditing = securityContext().HasPermission(PermissionType.ShipmentsCreateEditProcess, ShipmentAdapter?.Shipment?.ShipmentID) &&
                                    (!ShipmentAdapter?.Shipment?.Processed ?? false);
             PackageAdapters = ShipmentAdapter?.GetPackageAdaptersAndEnsureShipmentIsLoaded();
 

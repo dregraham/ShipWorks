@@ -80,9 +80,10 @@ namespace ShipWorks.Shipping.Services
                     x.RatingHash,
                     Rates = ratesRetriever.GetRates(x.ShipmentAdapter.Shipment)
                 })
-                .CatchAndContinue((Exception ex) => log.Error("Error occurred while getting rates", ex))
                 .ObserveOn(schedulerProvider.WindowsFormsEventLoop)
-                .Subscribe(x => messenger.Send(new RatesRetrievedMessage(this, x.RatingHash, x.Rates, x.ShipmentAdapter)));
+                .Do(x => messenger.Send(new RatesRetrievedMessage(this, x.RatingHash, x.Rates, x.ShipmentAdapter)))
+                .CatchAndContinue((Exception ex) => log.Error("Error occurred while getting rates", ex))
+                .Subscribe();
 
             // Clear the Rates UI after login
             messenger.Send(new RatesNotSupportedMessage(this, string.Empty));

@@ -103,9 +103,10 @@ namespace ShipWorks.Shipping.Services
                 .Select(x => x.Last())
                 .SelectMany(x => Load(x.OrderIdList, shippingSettings.FetchReadOnly().AutoCreateShipments)
                     .ToObservable().Select(result => new { Result = result, x.ShipmentSelector }))
-                .CatchAndContinue((Exception ex) => log.Error(ex))
                 .ObserveOn(schedulerProvider.WindowsFormsEventLoop)
-                .Subscribe(x => messenger.Send(new OrderSelectionChangedMessage(this, x.Result, x.ShipmentSelector)));
+                .Do(x => messenger.Send(new OrderSelectionChangedMessage(this, x.Result, x.ShipmentSelector)))
+                .CatchAndContinue((Exception ex) => log.Error(ex))
+                .Subscribe();
         }
 
         /// <summary>

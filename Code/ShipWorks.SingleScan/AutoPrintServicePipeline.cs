@@ -16,7 +16,6 @@ using ShipWorks.Messaging.Messages;
 using ShipWorks.Messaging.Messages.Filters;
 using ShipWorks.Messaging.Messages.Shipping;
 using ShipWorks.Messaging.Messages.SingleScan;
-using ShipWorks.Settings;
 using ShipWorks.Stores.Content.Panels.Selectors;
 
 namespace ShipWorks.SingleScan
@@ -45,11 +44,11 @@ namespace ShipWorks.SingleScan
         /// Initializes a new instance of the <see cref="AutoPrintServicePipeline"/> class.
         /// </summary>
         public AutoPrintServicePipeline(
-            IAutoPrintService autoPrintService, 
+            IAutoPrintService autoPrintService,
             IMessenger messenger,
-            ISchedulerProvider schedulerProvider, 
-            Func<Type, ILog> logFactory, 
-            ISqlAdapterFactory sqlAdapterFactory, 
+            ISchedulerProvider schedulerProvider,
+            Func<Type, ILog> logFactory,
+            ISqlAdapterFactory sqlAdapterFactory,
             IMainForm mainForm)
         {
             this.messenger = messenger;
@@ -90,14 +89,15 @@ namespace ShipWorks.SingleScan
                 .SelectMany(m => autoPrintService.Print(m).ToObservable())
                 .SelectMany(WaitForShipmentsProcessedMessage)
                 .Do(SaveUnprocessedShipments)
-                // Currently, MapPanel (and possibly other consumers of this message) assumes OrderSelectionChangingMessage to 
+                // Currently, MapPanel (and possibly other consumers of this message) assumes OrderSelectionChangingMessage to
                 // be sent on the UI thread. If the message isn't sent on the UI, the map panel throws a Cross Threaded Exception
-                // as it doesn't attempt to Invoke. This should be addressed in the future, but putting the message on the 
+                // as it doesn't attempt to Invoke. This should be addressed in the future, but putting the message on the
                 // WindowsFormsEventLoop is a safe workaround.
                 .ObserveOn(schedulerProvider.WindowsFormsEventLoop)
                 .Do(SendOrderSelectionChangingMessage)
+                .Do(x => StartScanMessagesObservation())
                 .CatchAndContinue((Exception ex) => HandleException(ex))
-                .Subscribe(x => StartScanMessagesObservation());
+                .Subscribe();
         }
 
         /// <summary>
@@ -115,7 +115,7 @@ namespace ShipWorks.SingleScan
                         .SpecificEntities(shipmentsProcessedResult.ProcessShipmentResults.Select(shipment => shipment.Shipment.ShipmentID).Distinct());
                 }
 
-                messenger.Send(new OrderSelectionChangingMessage(this, new[] {shipmentsProcessedResult.OrderID.Value}, shipmentRowSelector));
+                messenger.Send(new OrderSelectionChangingMessage(this, new[] { shipmentsProcessedResult.OrderID.Value }, shipmentRowSelector));
             }
             else
             {

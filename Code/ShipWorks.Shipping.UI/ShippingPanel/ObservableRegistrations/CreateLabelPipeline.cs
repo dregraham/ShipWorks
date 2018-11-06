@@ -41,8 +41,9 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations
                 .Trackable()
                 .ObserveOn(schedulerProvider.Dispatcher)
                 .Where(this, x => x.ShipmentID == viewModel.Shipment?.ShipmentID)
+                .Do(this, _ => viewModel.CreateLabel())
                 .CatchAndContinue((Exception ex) => log.Error("An error occurred while handling processed shipment", ex))
-                .Subscribe(this, _ => viewModel.CreateLabel());
+                .Subscribe(this);
         }
 
         /// <summary>

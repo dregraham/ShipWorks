@@ -34,7 +34,7 @@ namespace ShipWorks.Core.Messaging
                 return Disposable.Create(() => observer = null);
             }).Publish().RefCount();
         }
-        
+
         /// <summary>
         /// Get the current messenger instance
         /// </summary>
