@@ -7,7 +7,9 @@ using ShipWorks.Messaging.Messages.Shipping;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Services;
 using ShipWorks.Tests.Shared;
+using ShipWorks.Users.Security;
 using Xunit;
+using static ShipWorks.Tests.Shared.ExtensionMethods.ParameterShorteners;
 
 namespace ShipWorks.OrderLookup.Tests
 {
@@ -26,6 +28,10 @@ namespace ShipWorks.OrderLookup.Tests
             mock = AutoMockExtensions.GetLooseThatReturnsMocks();
             testMessenger = new TestMessenger();
             mock.Provide<IMessenger>(testMessenger);
+
+            mock.Mock<ISecurityContext>()
+                .Setup(x => x.HasPermission(PermissionType.ShipmentsCreateEditProcess, AnyLong))
+                .Returns(true);
         }
 
         private void SetupTestMocks(bool isProcessed)
@@ -53,10 +59,10 @@ namespace ShipWorks.OrderLookup.Tests
         public void CreateLabel_DoesNotReturnMessage_WhenOrderIsProcessed()
         {
             SetupTestMocks(true);
-            
+
             testObject = mock.Create<OrderLookupShipmentModel>();
             testObject.LoadOrder(order);
-            testObject.CreateLabel(); 
+            testObject.CreateLabel();
 
             Assert.Empty(testMessenger.SentMessages.OfType<ProcessShipmentsMessage>());
         }
