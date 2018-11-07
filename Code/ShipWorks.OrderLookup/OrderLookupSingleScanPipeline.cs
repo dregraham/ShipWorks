@@ -160,7 +160,6 @@ namespace ShipWorks.OrderLookup
                                 shipmentModel.LoadOrder(order);
                             }
 
-
                             if (!loadOrder)
                             {
                                 shipmentModel.Unload();
@@ -190,7 +189,7 @@ namespace ShipWorks.OrderLookup
         /// </summary>
         /// <param name="scannedText"></param>
         /// <returns></returns>
-        private async Task<TelemetricResult<long?>> GetOrderID(string scannedText)
+        public async Task<TelemetricResult<long?>> GetOrderID(string scannedText)
         {
             TelemetricResult<long?> telemetricResult = new TelemetricResult<long?>("Order");
 
@@ -234,7 +233,7 @@ namespace ShipWorks.OrderLookup
         /// <summary>
         /// Download order, send order message
         /// </summary>
-        private async Task OnOrderLookupSearchMessage(OrderLookupSearchMessage message)
+        public async Task OnOrderLookupSearchMessage(OrderLookupSearchMessage message)
         {
             try
             {

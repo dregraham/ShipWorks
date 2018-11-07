@@ -92,13 +92,11 @@ namespace ShipWorks.OrderLookup.Tests
         }
 
         [Fact]
-        public void InitializeForCurrentSession_DelegatesToOnDemandDownlader_WhenUIModeIsOrderLookupAndMessageIsOrderLookupSearch()
+        public async Task OnOrderLookupSearchMessage_DelegatesToOnDemandDownlader_WhenUIModeIsOrderLookupAndMessageIsOrderLookupSearch()
         {
-            testObject.InitializeForCurrentScope();
-
             mainForm.SetupGet(u => u.UIMode).Returns(UIMode.OrderLookup);
-            testMessenger.Send(new OrderLookupSearchMessage(this, "Foo"));
 
+            await testObject.OnOrderLookupSearchMessage(new OrderLookupSearchMessage(this, "Foo"));
             downloader.Verify(d => d.Download("Foo"));
         }
 
