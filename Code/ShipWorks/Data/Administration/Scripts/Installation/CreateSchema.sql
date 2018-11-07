@@ -1093,7 +1093,8 @@ ALTER TABLE [dbo].[AuditChangeDetail] ADD CONSTRAINT [PK_AuditChangeDetail] PRIM
 GO
 PRINT N'Creating index [IX_SWDefault_AuditChangeDetail_AuditChangeID] on [dbo].[AuditChangeDetail]'
 GO
-CREATE NONCLUSTERED INDEX [IX_SWDefault_AuditChangeDetail_AuditChangeID] ON [dbo].[AuditChangeDetail] ([AuditChangeID])
+CREATE UNIQUE INDEX [IX_SWDefault_AuditChangeDetail_AuditChangeID] ON [dbo].[AuditChangeDetail] ([AuditChangeID], [AuditChangeDetailID] ) 
+	INCLUDE ( [AuditID])
 GO
 PRINT N'Creating index [IX_SWDefault_AuditChangeDetail_AuditID] on [dbo].[AuditChangeDetail]'
 GO
