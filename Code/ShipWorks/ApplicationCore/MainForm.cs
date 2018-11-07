@@ -34,7 +34,6 @@ using Interapptive.Shared.Win32;
 using log4net;
 using ShipWorks.Actions;
 using ShipWorks.Actions.Triggers;
-using ShipWorks.AddressValidation;
 using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Appearance;
 using ShipWorks.ApplicationCore.Crashes;
@@ -948,7 +947,7 @@ namespace ShipWorks
             buttonManageFilters.Visible = UIMode == UIMode.Batch;
 
             UpdateStatusBar();
-            
+
             // Notify telemetry of the UI Mode change
             Telemetry.SetUserInterfaceView(EnumHelper.GetDescription(UIMode));
 
@@ -1072,7 +1071,13 @@ namespace ShipWorks
             // Clear Filter Trees
             ClearFilterTrees();
 
-            orderLookupLifetimeScope = IoC.BeginLifetimeScope(x => x.RegisterType<ValidatedAddressScope>().AsImplementedInterfaces().SingleInstance());
+            orderLookupLifetimeScope = IoC.BeginLifetimeScopeWithOverrides<IOrderLookupRegistrationOverride>();
+
+            foreach (IOrderLookupPipeline service in orderLookupLifetimeScope.Resolve<IEnumerable<IOrderLookupPipeline>>())
+            {
+                service.InitializeForCurrentScope();
+            }
+
             orderLookupControl = orderLookupLifetimeScope.Resolve<IOrderLookup>();
 
             var profilePopupService = orderLookupLifetimeScope.Resolve<IProfilePopupService>();

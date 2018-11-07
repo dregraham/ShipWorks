@@ -66,7 +66,7 @@ namespace ShipWorks.OrderLookup.Tests
                 .ReturnsAsync(printResult);
 
             testObject = mock.Create<OrderLookupSingleScanPipeline>();
-            testObject.InitializeForCurrentSession();
+            testObject.InitializeForCurrentScope();
         }
 
         [Fact]

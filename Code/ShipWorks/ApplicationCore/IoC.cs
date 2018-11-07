@@ -5,7 +5,9 @@ using System.Reflection;
 using System.Windows.Forms;
 using Autofac;
 using Autofac.Builder;
+using Autofac.Features.OwnedInstances;
 using Interapptive.Shared;
+using Interapptive.Shared.Collections;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.ComponentRegistration.Ordering;
 using Interapptive.Shared.IO.Hardware.Scales;
@@ -397,6 +399,16 @@ namespace ShipWorks.ApplicationCore
             builder.RegisterType<ValidatedAddressManagerWrapper>()
                 .AsImplementedInterfaces()
                 .SingleInstance();
+        }
+
+        /// <summary>
+        /// Begin a lifetime scope and include any registration overrides that are of type T
+        /// </summary>
+        public static ILifetimeScope BeginLifetimeScopeWithOverrides<T>() where T : IRegistrationOverride
+        {
+            var orderLookupRegistrationOverrides = UnsafeGlobalLifetimeScope.Resolve<Owned<IEnumerable<T>>>().Value;
+
+            return BeginLifetimeScope(builder => orderLookupRegistrationOverrides.ForEach(x => x.Register(builder)));
         }
     }
 }
