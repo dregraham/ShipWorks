@@ -1,5 +1,6 @@
 <ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:ui="http://schemas.shipworks.com/ui">
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="/ShipWorks.UI;component/Styles/Controls/GridStyle.xaml" />
         <ResourceDictionary Source="/ShipWorks.OrderLookup;component/Styles/Colors.xaml"/>
@@ -35,4 +36,10 @@
         <Setter Property="BorderBrush" Value="{StaticResource BorderColor}"/>
         <Setter Property="Background" Value="{StaticResource InputControlBackgroundGradient}"/>
     </Style>
+    <Style x:Key="FormTokenTextBox" TargetType="{x:Type ui:TokenTextBox}"
+           BasedOn="{StaticResource FormTextBox}">
+        <Setter Property="ButtonBackground" Value="{StaticResource ButtonBackgroundGradient}"/>
+        <Setter Property="ButtonIconColor" Value="{StaticResource IconColor}"/>
+    </Style>
+    
 </ResourceDictionary>

@@ -80,7 +80,7 @@
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type ui:ScaleButton}">
                     <StackPanel Orientation="Horizontal">
-                        <Border BorderBrush="{StaticResource BorderColor}" BorderThickness="1,0,0,0">
+                        <Border BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}">
                             <Button
                                 Name="PART_Button"
                                 Background="{StaticResource ButtonBackgroundGradient}"

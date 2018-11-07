@@ -16,6 +16,7 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/ShipWorks.OrderLookup;component/Styles/OrderLookupStyle.xaml" />
             </ResourceDictionary.MergedDictionaries>
+            <Style TargetType="{x:Type ui:TokenTextBox}" BasedOn="{StaticResource FormTokenTextBox}"/>
         </ResourceDictionary>
     </UserControl.Resources>
     <Grid IsEnabled="{Binding ShipmentModel.ShipmentAllowEditing}">
@@ -38,7 +39,6 @@
         <ui:TokenTextBox
             Grid.Row="0"
             Grid.Column="1"
-            Style="{StaticResource FormTextBox}"
             Text="{Binding ShipmentModel.ShipmentAdapter.Shipment.FedEx.ReferenceCustomer}" />
 
         <TextBlock
@@ -49,7 +49,6 @@
         <ui:TokenTextBox
             Grid.Row="1"
             Grid.Column="1"
-            Style="{StaticResource FormTextBox}"
             Text="{Binding ShipmentModel.ShipmentAdapter.Shipment.FedEx.ReferenceInvoice}" />
 
         <TextBlock
@@ -60,7 +59,6 @@
         <ui:TokenTextBox
             Grid.Row="2"
             Grid.Column="1"
-            Style="{StaticResource FormTextBox}"
             Text="{Binding ShipmentModel.ShipmentAdapter.Shipment.FedEx.ReferencePO}" />
 
         <TextBlock
@@ -73,7 +71,6 @@
             Grid.Row="3"
             Grid.Column="1"
             Margin="10,0,0,0"
-            Style="{StaticResource FormTextBox}"
             Text="{Binding ShipmentModel.ShipmentAdapter.Shipment.FedEx.ReferenceShipmentIntegrity}" />
     </Grid>
 </UserControl>

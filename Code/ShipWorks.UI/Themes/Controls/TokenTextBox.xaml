@@ -31,12 +31,12 @@
     <SolidColorBrush x:Key="TextBox.Static.Border" Color="#FFABAdB3" />
     <SolidColorBrush x:Key="TextBox.MouseOver.Border" Color="#FF7EB4EA" />
     <SolidColorBrush x:Key="TextBox.Focus.Border" Color="#FF569DE5" />
-    <SolidColorBrush x:Key="ComboBox.Static.Glyph" Color="#FF606060" />
 
     <ControlTemplate x:Key="ButtonTemplate" TargetType="{x:Type ButtonBase}">
         <Border
             x:Name="border"
-            Background="{TemplateBinding Background}"
+            Background="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:TokenTextBox}},
+                                 Path=ButtonBackground}"
             BorderBrush="{TemplateBinding BorderBrush}"
             BorderThickness="{TemplateBinding BorderThickness}"
             SnapsToDevicePixels="True">
@@ -58,19 +58,62 @@
             </Trigger>
             <Trigger Property="IsMouseOver" Value="True">
                 <Setter TargetName="border" Property="Background" Value="#FFBEE6FD" />
-                <Setter TargetName="border" Property="BorderBrush" Value="{StaticResource TextBox.MouseOver.Border}" />
             </Trigger>
             <Trigger Property="IsPressed" Value="True">
                 <Setter TargetName="border" Property="Background" Value="#FFC4E5F6" />
-                <Setter TargetName="border" Property="BorderBrush" Value="#FF2C628B" />
             </Trigger>
             <Trigger Property="ToggleButton.IsChecked" Value="True">
                 <Setter TargetName="border" Property="Background" Value="#FFBCDDEE" />
                 <Setter TargetName="border" Property="BorderBrush" Value="#FF245A83" />
+                <Setter TargetName="border" Property="BorderThickness" Value="1" />
             </Trigger>
             <Trigger Property="IsEnabled" Value="False">
-                <Setter TargetName="border" Property="Background" Value="#FFF4F4F4" />
-                <Setter TargetName="border" Property="BorderBrush" Value="#FFADB2B5" />
+                <Setter TargetName="border" Property="Opacity" Value="0.56" />
+                <Setter TargetName="contentPresenter" Property="TextElement.Foreground" Value="#FF838383" />
+            </Trigger>
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
+    
+    <ControlTemplate x:Key="RoundedButtonTemplate" TargetType="{x:Type ButtonBase}">
+        <Border
+            x:Name="border"
+            Background="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:TokenTextBox}},
+                                 Path=ButtonBackground}"
+            BorderBrush="{TemplateBinding BorderBrush}"
+            BorderThickness="{TemplateBinding BorderThickness}"
+            SnapsToDevicePixels="True"
+            CornerRadius="0 1 1 0">
+            <ContentPresenter
+                x:Name="contentPresenter"
+                Margin="{TemplateBinding Padding}"
+                HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                Content="{TemplateBinding Content}"
+                ContentStringFormat="{TemplateBinding ContentStringFormat}"
+                ContentTemplate="{TemplateBinding ContentTemplate}"
+                Focusable="False"
+                RecognizesAccessKey="True"
+                SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+        </Border>
+        <ControlTemplate.Triggers>
+            <Trigger Property="Button.IsDefaulted" Value="True">
+                <Setter TargetName="border" Property="BorderBrush" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}" />
+            </Trigger>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter TargetName="border" Property="Background" Value="#FFBEE6FD" />
+            </Trigger>
+            <Trigger Property="IsPressed" Value="True">
+                <Setter TargetName="border" Property="Background" Value="#FFC4E5F6" />
+                <Setter TargetName="border" Property="BorderBrush" Value="#FF2C628B" />
+                <Setter TargetName="border" Property="BorderThickness" Value="1" />
+            </Trigger>
+            <Trigger Property="ToggleButton.IsChecked" Value="True">
+                <Setter TargetName="border" Property="Background" Value="#FFBCDDEE" />
+                <Setter TargetName="border" Property="BorderBrush" Value="#FF245A83" />
+                <Setter TargetName="border" Property="BorderThickness" Value="0 1 1 1" />
+            </Trigger>
+            <Trigger Property="IsEnabled" Value="False">
+                <Setter TargetName="border" Property="Opacity" Value="0.56" />
                 <Setter TargetName="contentPresenter" Property="TextElement.Foreground" Value="#FF838383" />
             </Trigger>
         </ControlTemplate.Triggers>
@@ -80,7 +123,6 @@
         <Setter Property="Padding" Value="3" />
         <Setter Property="HorizontalContentAlignment" Value="Stretch" />
         <Setter Property="VerticalContentAlignment" Value="Stretch" />
-        <Setter Property="Template" Value="{StaticResource ButtonTemplate}" />
     </Style>
 
     <Style TargetType="{x:Type local:TokenTextBox}">
@@ -107,7 +149,8 @@
                             Background="{TemplateBinding Background}"
                             BorderBrush="{TemplateBinding BorderBrush}"
                             BorderThickness="{TemplateBinding BorderThickness}"
-                            SnapsToDevicePixels="True">
+                            SnapsToDevicePixels="True"
+                            CornerRadius="1 0 0 1">
 
                             <ScrollViewer
                                 x:Name="PART_ContentHost"
@@ -121,9 +164,9 @@
                             Rows="1">
                             <ToggleButton
                                 x:Name="PART_TogglePopupButton"
-                                Grid.Column="0"
                                 BorderBrush="{TemplateBinding BorderBrush}"
-                                BorderThickness="0,1,1,1">
+                                BorderThickness="0,1,0,1"
+                                Template="{StaticResource ButtonTemplate}">
                                 <ToggleButton.Style>
                                     <Style BasedOn="{StaticResource ButtonBase}" TargetType="{x:Type ToggleButton}">
                                         <Setter Property="IsHitTestVisible" Value="True" />
@@ -132,25 +175,27 @@
                                                 <Setter Property="IsHitTestVisible" Value="False" />
                                             </DataTrigger>
                                             <Trigger Property="IsMouseOver" Value="True">
-                                                <Setter Property="BorderThickness" Value="0,1,1,1" />
+                                                <Setter Property="BorderThickness" Value="1" />
                                             </Trigger>
                                         </Style.Triggers>
                                     </Style>
                                 </ToggleButton.Style>
                                 <Path
                                     Margin="4"
-                                    Fill="{StaticResource ComboBox.Static.Glyph}"
+                                    Fill="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:TokenTextBox}},
+                                                   Path=ButtonIconColor}"
                                     Stretch="Uniform"
                                     Style="{StaticResource Path.Material.ChevronDown}" />
                             </ToggleButton>
                             <Button
                                 x:Name="PART_EditorButton"
-                                Grid.Column="1"
                                 BorderBrush="{TemplateBinding BorderBrush}"
-                                Style="{StaticResource ButtonBase}">
+                                Style="{StaticResource ButtonBase}"
+                                Template="{StaticResource RoundedButtonTemplate}">
                                 <Path
                                     Margin="4"
-                                    Fill="{StaticResource ComboBox.Static.Glyph}"
+                                    Fill="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:TokenTextBox}},
+                                                   Path=ButtonIconColor}"
                                     Stretch="Uniform"
                                     Style="{StaticResource Path.Material.Pencil}" />
                             </Button>

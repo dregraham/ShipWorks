@@ -97,9 +97,8 @@
                         </VisualStateManager.VisualStateGroups>
                         <Grid x:Name="PART_Root" Background="{StaticResource InputControlBackgroundGradient}">
                             <Grid.Resources>
-                                <SolidColorBrush x:Key="DisabledBrush" Color="#A5FFFFFF" />
                                 <ControlTemplate x:Key="DropDownButtonTemplate" TargetType="{x:Type Button}" >
-                                    <Border BorderBrush="{StaticResource BorderColor}" BorderThickness="1 0 0 0" SnapsToDevicePixels="True" Background="{StaticResource ButtonBackgroundGradient}">
+                                    <Border x:Name="border" BorderBrush="{StaticResource BorderColor}" BorderThickness="1 0 0 0" SnapsToDevicePixels="True" Background="{StaticResource ButtonBackgroundGradient}">
                                         <Grid Margin="7 5 11 5">
                                             <Grid.ColumnDefinitions>
                                                 <ColumnDefinition Width="auto"/>
@@ -116,6 +115,14 @@
                                               Height="4" Width="6" Margin="6 0 0 0" Stretch="Fill"/>
                                         </Grid>
                                     </Border>
+                                    <ControlTemplate.Triggers>                                        
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter TargetName="border" Property="Background" Value="#FFBEE6FD" />
+                                        </Trigger>
+                                        <Trigger Property="IsPressed" Value="True">
+                                            <Setter TargetName="border" Property="Background" Value="#FFC4E5F6" />
+                                        </Trigger>
+                                    </ControlTemplate.Triggers>
                                 </ControlTemplate>
                             </Grid.Resources>
                             <Grid.ColumnDefinitions>
@@ -140,6 +147,12 @@
                             </Grid>
                         </Grid>
                     </Border>
+                    <ControlTemplate.Triggers>                        
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter Property="Opacity" Value="0.56" />
+                            <Setter Property="TextElement.Foreground" Value="#FF838383" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
