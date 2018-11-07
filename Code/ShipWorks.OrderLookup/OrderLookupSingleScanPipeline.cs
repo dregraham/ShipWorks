@@ -213,7 +213,7 @@ namespace ShipWorks.OrderLookup
                 // Track the time it took to load the order
                 await telemetricResult.RunTimedEventAsync(DataLoadingTelemetryTimeSliceName, async () =>
                 {
-                    await onDemandDownloaderFactory.CreateOnDemandDownloader().Download(scannedText).ConfigureAwait(true);
+                    await Task.Run(() => onDemandDownloaderFactory.CreateOnDemandDownloader().Download(scannedText)).ConfigureAwait(true);
                     orderIds = orderRepository.GetOrderIDs(scannedText);
 
                     // Make a note of how many orders were found, so we can marry this up with the confirmation telemetry
@@ -250,7 +250,7 @@ namespace ShipWorks.OrderLookup
                         DataLoadingTelemetryTimeSliceName,
                                 async () =>
                                 {
-                                    await onDemandDownloaderFactory.CreateOnDemandDownloader().Download(message.SearchText).ConfigureAwait(false);
+                                    await Task.Run(() => onDemandDownloaderFactory.CreateOnDemandDownloader().Download(message.SearchText)).ConfigureAwait(false);
                                     return orderRepository.GetOrderIDs(message.SearchText);
                                 })
                             .ConfigureAwait(true);
