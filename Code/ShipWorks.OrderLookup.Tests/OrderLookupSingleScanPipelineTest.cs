@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Autofac.Extras.Moq;
 using Interapptive.Shared.Threading;
 using Microsoft.Reactive.Testing;
@@ -66,12 +67,13 @@ namespace ShipWorks.OrderLookup.Tests
                 .ReturnsAsync(printResult);
 
             testObject = mock.Create<OrderLookupSingleScanPipeline>();
-            testObject.InitializeForCurrentSession();
         }
 
         [Fact]
         public void InitializeForCurrentSession_DelegatesToOnDemandDownlader_WhenUIModeIsOrderLookupAndMessageIsSingleScan()
         {
+            testObject.InitializeForCurrentSession();
+
             mainForm.SetupGet(u => u.UIMode).Returns(UIMode.OrderLookup);
             testMessenger.Send(new SingleScanMessage(this, new ScanMessage(this, "Foo", IntPtr.Zero)));
 
@@ -81,6 +83,8 @@ namespace ShipWorks.OrderLookup.Tests
         [Fact]
         public void InitializeForCurrentSession_DoesNotDelegatesToOnDemandDownlader_WhenUIModeIsBatchMessageIsSingleScan()
         {
+            testObject.InitializeForCurrentSession();
+
             mainForm.SetupGet(u => u.UIMode).Returns(UIMode.Batch);
             testMessenger.Send(new SingleScanMessage(this, new ScanMessage(this, "Foo", IntPtr.Zero)));
 
@@ -90,6 +94,8 @@ namespace ShipWorks.OrderLookup.Tests
         [Fact]
         public void InitializeForCurrentSession_DelegatesToOnDemandDownlader_WhenUIModeIsOrderLookupAndMessageIsOrderLookupSearch()
         {
+            testObject.InitializeForCurrentSession();
+
             mainForm.SetupGet(u => u.UIMode).Returns(UIMode.OrderLookup);
             testMessenger.Send(new OrderLookupSearchMessage(this, "Foo"));
 
@@ -99,6 +105,8 @@ namespace ShipWorks.OrderLookup.Tests
         [Fact]
         public void InitializeForCurrentSession_DoesNotDelegatesToOnDemandDownlader_WhenUIModeIsBatchMessageIsOrderLookupSearch()
         {
+            testObject.InitializeForCurrentSession();
+
             mainForm.SetupGet(u => u.UIMode).Returns(UIMode.Batch);
             testMessenger.Send(new OrderLookupSearchMessage(this, "Foo"));
 
@@ -106,12 +114,13 @@ namespace ShipWorks.OrderLookup.Tests
         }
 
         [Fact]
-        public void InitializeForCurrentSession_DelegatesToAutoPrintService_WhenUIModeIsOrderLookupAndMessageIsSingleScan()
+        public async Task InitializeForCurrentSession_DelegatesToAutoPrintService_WhenUIModeIsOrderLookupAndMessageIsSingleScan()
         {
             mainForm.SetupGet(u => u.UIMode).Returns(UIMode.OrderLookup);
             orderRepository.Setup(o => o.GetOrderIDs("Foo")).Returns(new List<long> { 123 });
             SingleScanMessage singleScanMessage = new SingleScanMessage(this, new ScanMessage(this, "Foo", IntPtr.Zero));
-            testMessenger.Send(singleScanMessage);
+
+            await testObject.OnSingleScanMessage(singleScanMessage);
 
             autoPrintService.Verify(a => a.AutoPrintShipment(123, singleScanMessage));
         }
@@ -119,6 +128,8 @@ namespace ShipWorks.OrderLookup.Tests
         [Fact]
         public void InitializeForCurrentSession_DoesNotDelegateToAutoPrintService_WhenUIModeIsOrderLookupAndMessageIsOrderLookupSearch()
         {
+            testObject.InitializeForCurrentSession();
+
             mainForm.SetupGet(u => u.UIMode).Returns(UIMode.OrderLookup);
             orderRepository.Setup(o => o.GetOrderIDs("Foo")).Returns(new List<long> { 123 });
             OrderLookupSearchMessage message = new OrderLookupSearchMessage(this, "Foo");
@@ -130,6 +141,8 @@ namespace ShipWorks.OrderLookup.Tests
         [Fact]
         public void InitializeForCurrentSession_DelegatesToOrderLookupOrderRepository_WhenUIModeIsOrderLookupAndMessageIsSingleScan()
         {
+            testObject.InitializeForCurrentSession();
+
             mainForm.SetupGet(u => u.UIMode).Returns(UIMode.OrderLookup);
             SingleScanMessage singleScanMessage = new SingleScanMessage(this, new ScanMessage(this, "Foo", IntPtr.Zero));
             testMessenger.Send(singleScanMessage);
@@ -138,14 +151,15 @@ namespace ShipWorks.OrderLookup.Tests
         }
 
         [Fact]
-        public void InitializeForCurrentSession_LoadsOrderOnShipmentModel()
+        public async Task OnSingleScanMessage_LoadsOrderOnShipmentModel()
         {
             orderRepository.Setup(x => x.GetOrderIDs("Foo")).Returns(new List<long> { 1 });
             mock.Mock<IOrderLookupConfirmationService>().Setup(o => o.ConfirmOrder("Foo", It.IsAny<List<long>>())).ReturnsAsync(1);
             mainForm.SetupGet(u => u.UIMode).Returns(UIMode.OrderLookup);
 
             SingleScanMessage singleScanMessage = new SingleScanMessage(this, new ScanMessage(this, "Foo", IntPtr.Zero));
-            testMessenger.Send(singleScanMessage);
+
+            await testObject.OnSingleScanMessage(singleScanMessage);
 
             mock.Mock<IOrderLookupShipmentModel>().Verify(s => s.LoadOrder(order));
         }

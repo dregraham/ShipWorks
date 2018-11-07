@@ -113,7 +113,7 @@ namespace ShipWorks.OrderLookup
         /// <summary>
         /// Download order, auto print if needed, send order message
         /// </summary>
-        private async Task OnSingleScanMessage(SingleScanMessage message)
+        public async Task OnSingleScanMessage(SingleScanMessage message)
         {
             try
             {
