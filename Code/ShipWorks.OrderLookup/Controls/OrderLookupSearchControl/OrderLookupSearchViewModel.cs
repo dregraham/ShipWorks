@@ -39,7 +39,7 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookupSearchControl
             this.messenger = messenger;
             this.securityContext = securityContext;
 
-            shipmentModel.PropertyChanged += UpdateOrderNumber;
+            shipmentModel.PropertyChanged += ShipmentModelPropertyChanged;
             handler = new PropertyChangedHandler(this, () => PropertyChanged);
             GetOrderCommand = new RelayCommand(GetOrder);
             ResetCommand = new RelayCommand(Reset);
@@ -142,9 +142,9 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookupSearchControl
         public ICommand CreateLabelCommand { get; set; }
 
         /// <summary>
-        /// Update the order number when the order changes
+        /// Update when the shipment model changes
         /// </summary>
-        private void UpdateOrderNumber(object sender, PropertyChangedEventArgs e)
+        private void ShipmentModelPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             if (e.PropertyName == nameof(ShipmentModel.SelectedOrder))
             {

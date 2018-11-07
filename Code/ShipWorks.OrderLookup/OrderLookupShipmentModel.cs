@@ -213,7 +213,7 @@ namespace ShipWorks.OrderLookup
         public decimal TotalCost
         {
             get => totalCost;
-            set => handler.Set(nameof(TotalCost), ref totalCost, value);
+            set => handler.Set(nameof(TotalCost), ref totalCost, value, true);
         }
 
         /// <summary>

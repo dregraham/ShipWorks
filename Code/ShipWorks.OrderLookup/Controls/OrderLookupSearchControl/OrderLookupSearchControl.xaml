@@ -161,7 +161,7 @@
                     MinWidth="75"
                     HorizontalAlignment="Right"
                     FontWeight="Bold"
-                    Text="{Binding ShipmentModel.TotalCost, StringFormat='Total Cost: {0:c}', UpdateSourceTrigger=PropertyChanged}">
+                    Text="{Binding ShipmentModel.TotalCost, StringFormat='Total Cost: {0:c}', Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
 
                     <TextBlock.Visibility>
                         <Binding Converter="{StaticResource VisibleWhenNotEqualToParameter}" Path="ShipmentModel.TotalCost">
