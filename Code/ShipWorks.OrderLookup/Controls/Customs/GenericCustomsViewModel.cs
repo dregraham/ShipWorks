@@ -161,7 +161,7 @@ namespace ShipWorks.OrderLookup.Controls.Customs
             // Customs should have been created upstream when the shipment was loaded originally
             // If the user changes the shipments country to international we need to trigger
             // a save which will create customs items
-            if (ShipmentModel.ShipmentAdapter.Shipment.CustomsItems.None())
+            if (!ShipmentModel.ShipmentAdapter.Shipment.CustomsGenerated)
             {
                 ShipmentModel.SaveToDatabase();
                 ShipmentModel.RefreshShipmentFromDatabase();
