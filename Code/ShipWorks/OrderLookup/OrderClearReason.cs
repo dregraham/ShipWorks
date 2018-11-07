@@ -18,6 +18,11 @@
         /// <summary>
         /// Starting a new search
         /// </summary>
-        NewSearch
+        NewSearch,
+
+        /// <summary>
+        /// Error loading order
+        /// </summary>
+        ErrorLoadingOrder
     }
 }

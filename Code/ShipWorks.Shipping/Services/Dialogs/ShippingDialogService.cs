@@ -19,7 +19,6 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Messaging.Messages;
 using ShipWorks.Messaging.Messages.Dialogs;
 using ShipWorks.Messaging.Messages.Shipping;
-using ShipWorks.Settings;
 
 namespace ShipWorks.Shipping.Services.Dialogs
 {
@@ -129,6 +128,12 @@ namespace ShipWorks.Shipping.Services.Dialogs
             IOrderLoader shipmentsLoader = shipmentsLoaderFactory().Value;
             ShipmentsLoadedEventArgs results = await shipmentsLoader.LoadAsync(message.OrderIDs, ProgressDisplayOptions.Delay, true, TimeSpan.FromSeconds(30))
                 .ConfigureAwait(false);
+
+            if (results.Error != null)
+            {
+                messageHelper.ShowError("There was an error loading selected shipments. Please try again.", results.Error);
+                return default(OpenShippingDialogMessage);
+            }
 
             if (results.Cancelled)
             {

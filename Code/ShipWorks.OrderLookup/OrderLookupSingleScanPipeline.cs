@@ -177,6 +177,7 @@ namespace ShipWorks.OrderLookup
             catch (Exception ex)
             {
                 log.Error("Error while loading an order", ex);
+                shipmentModel.Unload(OrderClearReason.ErrorLoadingOrder);
             }
             finally
             {

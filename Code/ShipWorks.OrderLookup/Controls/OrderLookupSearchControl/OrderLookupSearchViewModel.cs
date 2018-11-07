@@ -48,7 +48,10 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookupSearchControl
 
             subscription = messenger
                 .OfType<OrderLookupClearOrderMessage>()
-                .Where(x => x.Reason == OrderClearReason.Reset || x.Reason == OrderClearReason.NewSearch)
+                .Where(x =>
+                    x.Reason == OrderClearReason.Reset ||
+                    x.Reason == OrderClearReason.NewSearch ||
+                    x.Reason == OrderClearReason.ErrorLoadingOrder)
                 .Subscribe(x => ClearOrderError(x.Reason));
         }
 
@@ -61,6 +64,11 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookupSearchControl
             {
                 SearchError = true;
                 SearchErrorMessage = "Loading Order...";
+            }
+            else if (reason == OrderClearReason.ErrorLoadingOrder)
+            {
+                SearchError = true;
+                SearchErrorMessage = "There was an error loading the shipment. Please try again.";
             }
             else
             {

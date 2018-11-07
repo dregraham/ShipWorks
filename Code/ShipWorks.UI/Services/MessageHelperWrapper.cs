@@ -59,7 +59,7 @@ namespace ShipWorks.UI.Services
         /// </summary>
         public void ShowError(IWin32Window owner, string message)
         {
-            if(owner is Window ownerWindow && !ownerWindow.Dispatcher.CheckAccess())
+            if (owner is Window ownerWindow && !ownerWindow.Dispatcher.CheckAccess())
             {
                 ownerWindow.Dispatcher.Invoke((Action<string>) ShowError, message);
             }
@@ -216,10 +216,10 @@ namespace ShipWorks.UI.Services
                 Description = description
             };
 
-                return schedulerProvider.WindowsFormsEventLoop
-                                .Schedule(Tuple.Create(progressDialog, ownerFactory()), timeSpan, OpenProgressDialog);
-            }
-            
+            return schedulerProvider.WindowsFormsEventLoop
+                            .Schedule(Tuple.Create(progressDialog, ownerFactory()), timeSpan, OpenProgressDialog);
+        }
+
         /// <summary>
         /// Show a dialog and get the results
         /// </summary>
