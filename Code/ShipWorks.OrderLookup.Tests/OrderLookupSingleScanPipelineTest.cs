@@ -72,7 +72,7 @@ namespace ShipWorks.OrderLookup.Tests
         [Fact]
         public void InitializeForCurrentSession_DelegatesToOnDemandDownlader_WhenUIModeIsOrderLookupAndMessageIsSingleScan()
         {
-            testObject.InitializeForCurrentSession();
+            testObject.InitializeForCurrentScope();
 
             mainForm.SetupGet(u => u.UIMode).Returns(UIMode.OrderLookup);
             testMessenger.Send(new SingleScanMessage(this, new ScanMessage(this, "Foo", IntPtr.Zero)));
@@ -83,7 +83,7 @@ namespace ShipWorks.OrderLookup.Tests
         [Fact]
         public void InitializeForCurrentSession_DoesNotDelegatesToOnDemandDownlader_WhenUIModeIsBatchMessageIsSingleScan()
         {
-            testObject.InitializeForCurrentSession();
+            testObject.InitializeForCurrentScope();
 
             mainForm.SetupGet(u => u.UIMode).Returns(UIMode.Batch);
             testMessenger.Send(new SingleScanMessage(this, new ScanMessage(this, "Foo", IntPtr.Zero)));
@@ -94,7 +94,7 @@ namespace ShipWorks.OrderLookup.Tests
         [Fact]
         public void InitializeForCurrentSession_DelegatesToOnDemandDownlader_WhenUIModeIsOrderLookupAndMessageIsOrderLookupSearch()
         {
-            testObject.InitializeForCurrentSession();
+            testObject.InitializeForCurrentScope();
 
             mainForm.SetupGet(u => u.UIMode).Returns(UIMode.OrderLookup);
             testMessenger.Send(new OrderLookupSearchMessage(this, "Foo"));
@@ -105,7 +105,7 @@ namespace ShipWorks.OrderLookup.Tests
         [Fact]
         public void InitializeForCurrentSession_DoesNotDelegatesToOnDemandDownlader_WhenUIModeIsBatchMessageIsOrderLookupSearch()
         {
-            testObject.InitializeForCurrentSession();
+            testObject.InitializeForCurrentScope();
 
             mainForm.SetupGet(u => u.UIMode).Returns(UIMode.Batch);
             testMessenger.Send(new OrderLookupSearchMessage(this, "Foo"));
@@ -128,7 +128,7 @@ namespace ShipWorks.OrderLookup.Tests
         [Fact]
         public void InitializeForCurrentSession_DoesNotDelegateToAutoPrintService_WhenUIModeIsOrderLookupAndMessageIsOrderLookupSearch()
         {
-            testObject.InitializeForCurrentSession();
+            testObject.InitializeForCurrentScope();
 
             mainForm.SetupGet(u => u.UIMode).Returns(UIMode.OrderLookup);
             orderRepository.Setup(o => o.GetOrderIDs("Foo")).Returns(new List<long> { 123 });
@@ -141,7 +141,7 @@ namespace ShipWorks.OrderLookup.Tests
         [Fact]
         public void InitializeForCurrentSession_DelegatesToOrderLookupOrderRepository_WhenUIModeIsOrderLookupAndMessageIsSingleScan()
         {
-            testObject.InitializeForCurrentSession();
+            testObject.InitializeForCurrentScope();
 
             mainForm.SetupGet(u => u.UIMode).Returns(UIMode.OrderLookup);
             SingleScanMessage singleScanMessage = new SingleScanMessage(this, new ScanMessage(this, "Foo", IntPtr.Zero));

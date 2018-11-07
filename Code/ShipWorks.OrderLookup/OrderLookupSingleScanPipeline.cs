@@ -6,7 +6,6 @@ using System.Reactive.Linq;
 using System.Threading.Tasks;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.Metrics;
-using Interapptive.Shared.Threading;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using log4net;
@@ -26,7 +25,7 @@ namespace ShipWorks.OrderLookup
     /// <summary>
     /// Listens for scan. Sends OrderFound message when the scan corresponds to an order
     /// </summary>
-    public class OrderLookupSingleScanPipeline : IInitializeForCurrentUISession
+    public class OrderLookupSingleScanPipeline : IOrderLookupPipeline
     {
         private readonly IMessenger messenger;
         private readonly IMainForm mainForm;
@@ -79,9 +78,9 @@ namespace ShipWorks.OrderLookup
         }
 
         /// <summary>
-        /// Initialize pipeline
+        /// Interface for initializing order lookup pipelines under a top level lifetime scope
         /// </summary>
-        public void InitializeForCurrentSession()
+        public void InitializeForCurrentScope()
         {
             EndSession();
 
