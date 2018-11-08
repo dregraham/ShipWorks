@@ -46,6 +46,19 @@ namespace ShipWorks.UI.Controls
         }
 
         /// <summary>
+        /// Constructor
+        /// </summary>
+        public TokenTextBox()
+        {
+            if (DesignModeDetector.IsDesignerHosted())
+            {
+                return;
+            }
+
+            ownerProvider = new ControlOwnerProvider(this);
+        }
+
+        /// <summary>
         /// Background color for buttons
         /// </summary>
         [Obfuscation(Exclude = true)]
@@ -65,19 +78,6 @@ namespace ShipWorks.UI.Controls
             set => SetValue(ButtonIconColorProperty, value);
         }
         
-        /// <summary>
-        /// Constructor
-        /// </summary>
-        public TokenTextBox()
-        {
-            if (DesignModeDetector.IsDesignerHosted())
-            {
-                return;
-            }
-
-            ownerProvider = new ControlOwnerProvider(this);
-        }
-
         /// <summary>
         /// Apply the template
         /// </summary>
