@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
@@ -47,6 +48,7 @@ namespace ShipWorks.UI.Controls
         /// <summary>
         /// Background color for buttons
         /// </summary>
+        [Obfuscation(Exclude = true)]
         public Brush ButtonBackground
         {
             get => (Brush) GetValue(ButtonBackgroundProperty);
@@ -56,6 +58,7 @@ namespace ShipWorks.UI.Controls
         /// <summary>
         /// Icon color for buttons
         /// </summary>
+        [Obfuscation(Exclude = true)]
         public Brush ButtonIconColor
         {
             get => (Brush) GetValue(ButtonIconColorProperty);
