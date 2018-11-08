@@ -462,6 +462,7 @@ namespace ShipWorks.Stores.Management
 
                 // Fill in non-null values for anything the store is not yet configured for
                 store.InitializeNullsToDefault();
+                store.StartSetup();
 
                 // Save it right away It is marked as SetupComplete = false so it doesn't show up
                 // to the rest of ShipWorks.  We save it right away so we can get a PK for wizard steps that create FK tables.
@@ -1055,7 +1056,7 @@ namespace ShipWorks.Stores.Management
             AdjustShipmentType();
 
             // Mark that this store is now ready
-            store.SetupComplete = true;
+            store.CompleteSetup();
             StoreManager.SaveStore(store, adapter);
 
             if (wasStoreSelectionSkipped && OpenedFrom == OpenedFromSource.InitialSetup)
