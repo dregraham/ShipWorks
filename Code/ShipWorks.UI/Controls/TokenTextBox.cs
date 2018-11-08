@@ -20,6 +20,7 @@ namespace ShipWorks.UI.Controls
     [TemplatePart(Name = "PART_TogglePopupButton", Type = typeof(ToggleButton))]
     [TemplatePart(Name = "PART_Popup", Type = typeof(Popup))]
     [TemplatePart(Name = "PART_SuggestionSelector", Type = typeof(Selector))]
+    [Obfuscation(ApplyToMembers = true, Exclude = true, StripAfterObfuscation = false)]
     public class TokenTextBox : TextBox
     {
         private ButtonBase editorButton;
@@ -61,7 +62,6 @@ namespace ShipWorks.UI.Controls
         /// <summary>
         /// Background color for buttons
         /// </summary>
-        [Obfuscation(Exclude = true)]
         public Brush ButtonBackground
         {
             get => (Brush) GetValue(ButtonBackgroundProperty);
@@ -71,7 +71,6 @@ namespace ShipWorks.UI.Controls
         /// <summary>
         /// Icon color for buttons
         /// </summary>
-        [Obfuscation(Exclude = true)]
         public Brush ButtonIconColor
         {
             get => (Brush) GetValue(ButtonIconColorProperty);
