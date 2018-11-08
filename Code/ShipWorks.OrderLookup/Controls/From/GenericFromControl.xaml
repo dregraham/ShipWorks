@@ -59,7 +59,6 @@
             x:Name="AccountDropDown"
             Grid.Row="1"
             Grid.Column="1"
-            ui:UpdateWhenMessageReceived.MessageType="{x:Type sw:ShippingAccountsChangedMessage}"
             DisplayMemberPath="Value"
             SelectedValuePath="Key"
             Style="{StaticResource FormComboBox}">
@@ -87,7 +86,6 @@
             Grid.Column="0"
             Grid.ColumnSpan="2"
             x:Name="OriginDropDown"
-            ui:UpdateWhenMessageReceived.MessageType="{x:Type sw:OriginAddressChangedMessage}"
             DisplayMemberPath="Key"
             SelectedValuePath="Value"
             Style="{StaticResource StackedFormComboBox}">

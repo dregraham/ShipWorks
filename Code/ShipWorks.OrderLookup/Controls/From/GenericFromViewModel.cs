@@ -24,8 +24,6 @@ namespace ShipWorks.OrderLookup.Controls.From
     /// View model for the From address
     /// </summary>
     [KeyedComponent(typeof(IFromViewModel), ShipmentTypeCode.BestRate)]
-    [KeyedComponent(typeof(IFromViewModel), ShipmentTypeCode.Endicia)]
-    [KeyedComponent(typeof(IFromViewModel), ShipmentTypeCode.UpsOnLineTools)]
     [WpfView(typeof(GenericFromControl))]
     public class GenericFromViewModel : OrderLookupViewModelBase, IFromViewModel
     {
@@ -55,7 +53,7 @@ namespace ShipWorks.OrderLookup.Controls.From
             Accounts = GetAccounts(carrierAccountRetrieverFactory);
 
             if (!ShipmentModel.ShipmentAdapter.AccountId.HasValue ||
-                Accounts.TryGetValue(ShipmentModel.ShipmentAdapter.AccountId.Value, out string x))
+                !Accounts.TryGetValue(ShipmentModel.ShipmentAdapter.AccountId.Value, out string x))
             {
                 ShipmentModel.ShipmentAdapter.AccountId = Accounts.Select(e => e.Key).FirstOrDefault();
             }
@@ -157,6 +155,7 @@ namespace ShipWorks.OrderLookup.Controls.From
             UpdateTitle();
 
             Handler.RaisePropertyChanged(nameof(ShipmentModel));
+
             autoSave = Handler.PropertyChangingStream
                 .Merge(addressViewModel.PropertyChangeStream)
                 .Where(p => p != nameof(Title))
