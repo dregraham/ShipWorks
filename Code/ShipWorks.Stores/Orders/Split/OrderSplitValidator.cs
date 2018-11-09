@@ -67,7 +67,7 @@ namespace ShipWorks.Stores.Orders.Split
 
             if (store == null)
             {
-                return Result.FromError($"This orders store has been deleted, order cannot be split");
+                return Result.FromError($"This order's store has been deleted, order cannot be split");
             }
 
             if (storeTypeCodesNotAllowed.Contains(store.StoreTypeCode))
