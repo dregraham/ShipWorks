@@ -156,8 +156,10 @@ namespace ShipWorks
         public MainForm()
         {
             currentUserSettings = IoC.UnsafeGlobalLifetimeScope.Resolve<ICurrentUserSettings>();
-
+            
             InitializeComponent();
+
+            panelDockingArea.Visible = false;
 
             foreach (IMainFormElementRegistration registration in IoC.UnsafeGlobalLifetimeScope.Resolve<IEnumerable<IMainFormElementRegistration>>())
             {
@@ -955,6 +957,8 @@ namespace ShipWorks
             {
                 heartBeat.Start();
             }
+
+            panelDockingArea.Visible = true;
         }
 
         /// <summary>
@@ -1459,9 +1463,6 @@ namespace ShipWorks
             {
                 holder.InitializeForCurrentUser();
             }
-
-            // Show main UI areas
-            panelDockingArea.Visible = true;
         }
 
         /// <summary>
