@@ -69,7 +69,7 @@ namespace ShipWorks.Stores.Orders.Combine
 
             if (storeEntity == null)
             {
-                return Result.FromError($"This order's store has been deleted, order cannot be split");
+                return Result.FromError($"This order's store has been deleted, order cannot be combined");
             }
 
             bool canCombine = gateway.CanCombine(storeEntity, orderIDs);
