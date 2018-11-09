@@ -5,6 +5,7 @@ using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data;
 using ShipWorks.Data.Model;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Content;
 using ShipWorks.Users.Security;
 
@@ -25,7 +26,7 @@ namespace ShipWorks.Stores.Orders.Split
         private readonly ISecurityContext securityContext;
         private readonly IOrderSplitGateway orderSplitGateway;
         private readonly IStoreManager storeManager;
-        private readonly IEnumerable<StoreTypeCode> storeTypeCodesNotAllowed = 
+        private readonly IEnumerable<StoreTypeCode> storeTypeCodesNotAllowed =
             new[] {StoreTypeCode.Walmart, StoreTypeCode.Groupon, StoreTypeCode.NeweggMarketplace, StoreTypeCode.Sears, StoreTypeCode.Overstock};
 
         /// <summary>
@@ -62,7 +63,12 @@ namespace ShipWorks.Stores.Orders.Split
                 return Result.FromError("The current user does not have permission to modify orders");
             }
 
-            var store = storeManager.GetRelatedStore(firstId);
+            StoreEntity store = storeManager.GetRelatedStore(firstId);
+
+            if (store == null)
+            {
+                return Result.FromError($"This orders store has been deleted, order cannot be split");
+            }
 
             if (storeTypeCodesNotAllowed.Contains(store.StoreTypeCode))
             {
