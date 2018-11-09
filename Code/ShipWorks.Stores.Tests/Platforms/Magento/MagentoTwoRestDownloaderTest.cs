@@ -153,7 +153,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Magento
         {
             await LoadOrder("MagentoOrderWithItemAttributes");
 
-            Assert.Equal(5.25, orderEntity.RollupItemTotalWeight);
+            Assert.Equal(5.25, orderEntity.OrderItems.First().Weight);
         }
 
         [Fact]
