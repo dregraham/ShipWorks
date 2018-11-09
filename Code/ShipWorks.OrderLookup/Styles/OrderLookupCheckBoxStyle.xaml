@@ -61,6 +61,10 @@
             <Trigger Property="IsChecked" Value="{x:Null}">
                 <Setter Property="Opacity" TargetName="indeterminateMark" Value="1"/>
             </Trigger>
+            <Trigger Property="IsEnabled" Value="False">
+                <Setter Property="Opacity" Value="0.56" />
+                <Setter Property="Foreground" Value="#FF838383" />
+            </Trigger>
         </ControlTemplate.Triggers>
     </ControlTemplate>
     
