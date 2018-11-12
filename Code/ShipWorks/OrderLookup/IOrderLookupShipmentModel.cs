@@ -110,7 +110,7 @@ namespace ShipWorks.OrderLookup
         /// <summary>
         /// Create the label for an order
         /// </summary>
-        void CreateLabel();
+        bool CreateLabel();
 
         /// <summary>
         /// Register the profile handler
