@@ -5,7 +5,6 @@ using System.Data;
 using System.Drawing.Imaging;
 using System.Linq;
 using System.Text;
-using Interapptive.Shared;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
@@ -23,7 +22,6 @@ using ShipWorks.Shipping.Carriers.iParcel.Enums;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Insurance;
-using ShipWorks.Shipping.Profiles;
 using ShipWorks.Shipping.Services;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping.Settings.Origin;
@@ -181,7 +179,7 @@ namespace ShipWorks.Shipping.Carriers.iParcel
 
             return adapters;
         }
-        
+
         /// <summary>
         /// Get the default profile for the shipment type
         /// </summary>
@@ -244,27 +242,10 @@ namespace ShipWorks.Shipping.Carriers.iParcel
         }
 
         /// <summary>
-        /// Update the total weight of the shipment based on the individual package weights
+        /// Get weights from packages
         /// </summary>
-        public override void UpdateTotalWeight(ShipmentEntity shipment)
-        {
-            double contentWeight = 0;
-            double totalWeight = 0;
-
-            foreach (IParcelPackageEntity package in shipment.IParcel.Packages)
-            {
-                contentWeight += package.Weight;
-                totalWeight += package.Weight;
-
-                if (package.DimsAddWeight)
-                {
-                    totalWeight += package.DimsWeight;
-                }
-            }
-
-            shipment.ContentWeight = contentWeight;
-            shipment.TotalWeight = totalWeight;
-        }
+        protected override IEnumerable<(double weight, bool addDimsWeight, double dimsWeight)> GetPackageWeights(IShipmentEntity shipment) =>
+            shipment.IParcel?.Packages?.Select(x => (x.Weight, x.DimsAddWeight, x.DimsWeight));
 
         /// <summary>
         /// Redistribute the ContentWeight from the shipment to each package in the shipment.  This only does something
@@ -392,10 +373,23 @@ namespace ShipWorks.Shipping.Carriers.iParcel
         /// Get the carrier specific description of the shipping service used. The carrier specific data must already exist
         /// when this method is called.
         /// </summary>
-        public override string GetServiceDescription(ShipmentEntity shipment)
-        {
-            return EnumHelper.GetDescription((iParcelServiceType) shipment.IParcel.Service);
-        }
+        public override string GetServiceDescription(ShipmentEntity shipment) =>
+            GetServiceDescriptionInternal((iParcelServiceType) shipment.IParcel.Service);
+
+        /// <summary>
+        /// Get the carrier specific description of the shipping service used. The carrier specific data must already exist
+        /// when this method is called.
+        /// </summary>
+        public override string GetServiceDescription(string serviceCode) =>
+            Functional.ParseInt(serviceCode)
+                .Match(x => GetServiceDescriptionInternal((iParcelServiceType) x), _ => "Unknown");
+
+        /// <summary>
+        /// Get the carrier specific description of the shipping service used. The carrier specific data must already exist
+        /// when this method is called.
+        /// </summary>
+        private string GetServiceDescriptionInternal(iParcelServiceType service) =>
+            EnumHelper.GetDescription(service);
 
         /// <summary>
         /// Get the total packages contained by the shipment

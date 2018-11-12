@@ -6,6 +6,7 @@ using Interapptive.Shared.Collections;
 using Interapptive.Shared.Messaging;
 using Interapptive.Shared.Messaging.TrackedObservable;
 using Interapptive.Shared.Threading;
+using ShipWorks.Core.Messaging;
 using ShipWorks.Messaging.Messages;
 using ShipWorks.Messaging.Messages.Dialogs;
 using ShipWorks.Messaging.Messages.Shipping;
@@ -17,13 +18,13 @@ namespace ShipWorks.Shipping.UI.RatingPanel.ObservableRegistrations
     /// </summary>
     public class RatesRetrievedPipeline : IRatingPanelGlobalPipeline
     {
-        readonly IObservable<IShipWorksMessage> messenger;
-        readonly ISchedulerProvider schedulerProvider;
+        private readonly IMessenger messenger;
+        private readonly ISchedulerProvider schedulerProvider;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public RatesRetrievedPipeline(IObservable<IShipWorksMessage> messenger, ISchedulerProvider schedulerProvider)
+        public RatesRetrievedPipeline(IMessenger messenger, ISchedulerProvider schedulerProvider)
         {
             this.messenger = messenger;
             this.schedulerProvider = schedulerProvider;
@@ -34,13 +35,13 @@ namespace ShipWorks.Shipping.UI.RatingPanel.ObservableRegistrations
         /// </summary>
         public IDisposable Register(RatingPanelViewModel viewModel)
         {
-            return new CompositeDisposable(
+            IDisposable registration = new CompositeDisposable(
                 messenger.OfType<RatesRetrievingMessage>()
                     .Trackable()
                     .ObserveOn(schedulerProvider.Dispatcher)
                     .IgnoreBetweenMessages(
                         messenger.OfType<OpenShippingDialogMessage>(),
-                        messenger.OfType<OrderSelectionChangingMessage>())
+                        GetResumeObservable())
                     .Subscribe(this, _ => viewModel.ShowSpinner()),
                 messenger.OfType<RatesRetrievingMessage>()
                     .Trackable()
@@ -51,8 +52,23 @@ namespace ShipWorks.Shipping.UI.RatingPanel.ObservableRegistrations
                     .Dump(this)
                     .IgnoreBetweenMessages(
                         messenger.OfType<OpenShippingDialogMessage>().Trackable().Select(this, x => "Window closing"),
-                        messenger.OfType<OrderSelectionChangingMessage>().Trackable().Select(this, x => "Window opening"))
+                        GetResumeObservable().Trackable().Select(this, x => "Window opening"))
                     .Subscribe(this, viewModel.LoadRates));
+
+            messenger.Send(new InitializeRatesRetrievedPipelineMessage());
+
+            return registration;
+        }
+
+        /// <summary>
+        /// Act when ORderSelectionChangingMessage or OrderLookupSingleScanMessage received.
+        /// </summary>
+        /// <returns></returns>
+        private IObservable<IShipWorksMessage> GetResumeObservable()
+        {
+            return messenger.OfType<OrderSelectionChangingMessage>()
+                .Select(x => x as IShipWorksMessage)
+                .Merge(messenger.OfType<InitializeRatesRetrievedPipelineMessage>().Select(x => x as IShipWorksMessage));
         }
 
         /// <summary>

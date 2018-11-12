@@ -20,7 +20,7 @@ namespace ShipWorks.Tests.Filters.Search
         [Fact]
         public void GetDefinition_ReturnsDefinitionWithCustomerIDCondition_WhenSearchStringIsNumber()
         {
-            FilterDefinition def = testObject.GetDefinition("12345");
+            var def = testObject.GetDefinition("12345");
 
             CustomerIDCondition condition =
                 def.RootContainer.FirstGroup.Conditions.FirstOrDefault(
@@ -32,7 +32,7 @@ namespace ShipWorks.Tests.Filters.Search
         [Fact]
         public void GetDefinition_ReturnsDefinitionWithoutCustomerIDCondition_WhenSearchStringIsNotNumber()
         {
-            FilterDefinition def = testObject.GetDefinition("Chris");
+            var def = testObject.GetDefinition("Chris");
 
             CustomerIDCondition condition =
                 def.RootContainer.FirstGroup.Conditions.FirstOrDefault(
@@ -44,7 +44,7 @@ namespace ShipWorks.Tests.Filters.Search
         [Fact]
         public void GetDefinition_ReturnsDefinitionWithFullSearchStringCustomerFirstNameCondition_WhenSearchStringDoesNotHaveSpaces()
         {
-            FilterDefinition def = testObject.GetDefinition("Chris");
+            var def = testObject.GetDefinition("Chris");
 
             CustomerFirstNameCondition condition =
                 def.RootContainer.FirstGroup.Conditions.FirstOrDefault(
@@ -56,7 +56,7 @@ namespace ShipWorks.Tests.Filters.Search
         [Fact]
         public void GetDefinition_ReturnsDefinitionWithFullSearchStringCustomerLastNameCondition_WhenSearchStringDoesNotHaveSpaces()
         {
-            FilterDefinition def = testObject.GetDefinition("Chris");
+            var def = testObject.GetDefinition("Chris");
 
             CustomerLastNameCondition condition =
                 def.RootContainer.FirstGroup.Conditions.FirstOrDefault(
@@ -68,7 +68,7 @@ namespace ShipWorks.Tests.Filters.Search
         [Fact]
         public void GetDefinition_ReturnsDefinitionWithFullSearchStringCustomerEmailCondition_WhenSearchStringDoesNotHaveSpaces()
         {
-            FilterDefinition def = testObject.GetDefinition("Chris");
+            var def = testObject.GetDefinition("Chris");
 
             CustomerEmailAddressCondition condition =
                 def.RootContainer.FirstGroup.Conditions.FirstOrDefault(
@@ -80,7 +80,7 @@ namespace ShipWorks.Tests.Filters.Search
         [Fact]
         public void GetDefinition_ReturnsDefinitionWithParsedSearchStringCustomerFirstNameCondition_WhenSearchStringHasSpaces()
         {
-            FilterDefinition def = testObject.GetDefinition("Chris is cool");
+            var def = testObject.GetDefinition("Chris is cool");
 
             CustomerFirstNameCondition condition =
                 def.RootContainer.FirstGroup.Conditions.FirstOrDefault(
@@ -92,7 +92,7 @@ namespace ShipWorks.Tests.Filters.Search
         [Fact]
         public void GetDefinition_ReturnsDefinitionWithParsedSearchStringCustomerLastNameCondition_WhenSearchStringHasSpaces()
         {
-            FilterDefinition def = testObject.GetDefinition("Chris is cool");
+            var def = testObject.GetDefinition("Chris is cool");
 
             CustomerLastNameCondition condition =
                 def.RootContainer.FirstGroup.Conditions.FirstOrDefault(
@@ -104,7 +104,7 @@ namespace ShipWorks.Tests.Filters.Search
         [Fact]
         public void GetDefinition_ReturnsDefinitionWithoutCustomerEmailCondition_WhenSearchStringHasSpaces()
         {
-            FilterDefinition def = testObject.GetDefinition("Chris is cool");
+            var def = testObject.GetDefinition("Chris is cool");
 
             CustomerEmailAddressCondition condition =
                 def.RootContainer.FirstGroup.Conditions.FirstOrDefault(
@@ -116,7 +116,7 @@ namespace ShipWorks.Tests.Filters.Search
         [Fact]
         public void GetDefinition_ReturnsDefinitionWithFirstGroupJoinTypeAny_WhenSearchStringDoesNotHaveSpaces()
         {
-            FilterDefinition def = testObject.GetDefinition("Chris");
+            var def = testObject.GetDefinition("Chris");
 
             Assert.Equal(ConditionJoinType.Any, def.RootContainer.FirstGroup.JoinType);
         }
@@ -124,7 +124,7 @@ namespace ShipWorks.Tests.Filters.Search
         [Fact]
         public void GetDefinition_ReturnsDefinitionWithFirstGroupJoinTypeAll_WhenSearchStringHasSpaces()
         {
-            FilterDefinition def = testObject.GetDefinition("Chris is cool");
+            var def = testObject.GetDefinition("Chris is cool");
 
             Assert.Equal(ConditionJoinType.All, def.RootContainer.FirstGroup.JoinType);
         }
@@ -132,7 +132,7 @@ namespace ShipWorks.Tests.Filters.Search
         [Fact]
         public void GetDefinition_ReturnsDefinitionWithConditionAddressOperatorShipOrBill()
         {
-            FilterDefinition def = testObject.GetDefinition("Chris");
+            var def = testObject.GetDefinition("Chris");
 
             CustomerFirstNameCondition condition =
                 def.RootContainer.FirstGroup.Conditions.FirstOrDefault(
@@ -144,7 +144,7 @@ namespace ShipWorks.Tests.Filters.Search
         [Fact]
         public void GetDefinition_ReturnsDefinitionWithConditionOperatorBeginsWith()
         {
-            FilterDefinition def = testObject.GetDefinition("Chris");
+            var def = testObject.GetDefinition("Chris");
 
             CustomerFirstNameCondition condition =
                 def.RootContainer.FirstGroup.Conditions.FirstOrDefault(

@@ -12,6 +12,7 @@ using ShipWorks.ApplicationCore.Options;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Messaging.Messages.Filters;
 using ShipWorks.Messaging.Messages.SingleScan;
+using ShipWorks.Settings;
 using ShipWorks.Stores.Communication;
 using ShipWorks.Users;
 
@@ -23,12 +24,12 @@ namespace ShipWorks.ApplicationCore
     public class MainGridControlPipeline : IMainGridControlPipeline
     {
         // Logger
-        static readonly ILog log = LogManager.GetLogger(typeof(MainGridControlPipeline));
+        private static readonly ILog log = LogManager.GetLogger(typeof(MainGridControlPipeline));
 
         private readonly IMainForm mainForm;
         private readonly IMessenger messenger;
-        private readonly IUserSession userSession;
         private readonly ISchedulerProvider schedulerProvider;
+        private readonly ICurrentUserSettings currentUserSettings;
         private readonly IOnDemandDownloader singleScanOnDemandDownloader;
         private readonly IOnDemandDownloader onDemandDownloader;
 
@@ -40,15 +41,15 @@ namespace ShipWorks.ApplicationCore
         /// Constructor
         /// </summary>
         public MainGridControlPipeline(
-            IMessenger messenger, 
-            IUserSession userSession, 
-            IMainForm mainForm, 
+            IMessenger messenger,
+            IMainForm mainForm,
             ISchedulerProvider schedulerProvider,
-            IOnDemandDownloaderFactory onDemandDownloaderFactory)
+            IOnDemandDownloaderFactory onDemandDownloaderFactory,
+            ICurrentUserSettings currentUserSettings)
         {
             this.messenger = messenger;
-            this.userSession = userSession;
             this.schedulerProvider = schedulerProvider;
+            this.currentUserSettings = currentUserSettings;
             singleScanOnDemandDownloader = onDemandDownloaderFactory.CreateSingleScanOnDemandDownloader();
             onDemandDownloader = onDemandDownloaderFactory.CreateOnDemandDownloader();
             this.mainForm = mainForm;
@@ -67,19 +68,24 @@ namespace ShipWorks.ApplicationCore
                 Observable.FromEventPattern(gridControl.SearchTextChangedAdd, gridControl.SearchTextChangedRemove)
                     .Throttle(TimeSpan.FromMilliseconds(450))
                     .ObserveOn(schedulerProvider.WindowsFormsEventLoop)
-                    .CatchAndContinue((Exception ex) => log.Error("Error occurred while debouncing quick search.", ex))
+                    .Where(_ => currentUserSettings.GetUIMode() == UIMode.Batch)
                     .Do(x => PerformDownloadOnDemand(gridControl.GetBasicSearchText()))
-                    .Subscribe(x => gridControl.PerformManualSearch()),
+                    .Do(x => gridControl.PerformManualSearch())
+                    .CatchAndContinue((Exception ex) => log.Error("Error occurred while debouncing quick search.", ex))
+                    .Subscribe(),
 
                 // Wire up observable for debouncing advanced search text box
                 Observable.FromEventPattern(gridControl.FilterEditorDefinitionEditedAdd, gridControl.FilterEditorDefinitionEditedRemove)
                     .Throttle(TimeSpan.FromMilliseconds(450))
                     .ObserveOn(schedulerProvider.WindowsFormsEventLoop)
+                    .Where(_ => currentUserSettings.GetUIMode() == UIMode.Batch)
+                    .Do(x => gridControl.PerformManualSearch())
                     .CatchAndContinue((Exception ex) => log.Error("Error occurred while debouncing advanced search.", ex))
-                    .Subscribe(x => gridControl.PerformManualSearch()),
+                    .Subscribe(),
 
                 // Wire up observable for doing barcode searches
                 scanMessages.ObserveOn(schedulerProvider.WindowsFormsEventLoop)
+                    .Where(_ => currentUserSettings.GetUIMode() == UIMode.Batch)
                     // This causes the shipping panel to save if there are unsaved changes
                     .Do(_ => mainForm.Focus())
                     .Where(scanMsg => AllowBarcodeSearch(gridControl, scanMsg.ScannedText))
@@ -88,13 +94,14 @@ namespace ShipWorks.ApplicationCore
                     .Do(scanMsg => PerformBarcodeSearchAsync(gridControl, scanMsg.ScannedText))
                     // Start listening for FilterCountsUpdatedMessages, and only continue after we receive one or the timeout has passed.
                     .ContinueAfter(messenger.OfType<SingleScanFilterUpdateCompleteMessage>(), TimeSpan.FromSeconds(25), schedulerProvider.WindowsFormsEventLoop)
+                    .Do(_ => StartScanMessagesObservation())
                     .CatchAndContinue((Exception ex) =>
                     {
                         log.Error("Error occurred while performing barcode search.", ex);
 
                         StartScanMessagesObservation();
                     })
-                    .Subscribe(_ => StartScanMessagesObservation()),
+                    .Subscribe(),
 
                 // This class doesn't actually get disposed, so we need to include our cleanup here
                 Disposable.Create(() =>
@@ -171,7 +178,7 @@ namespace ShipWorks.ApplicationCore
             return !barcode.IsNullOrWhiteSpace() &&
                    gridControl.Visible &&
                    gridControl.CanFocus &&
-                   userSession.Settings?.SingleScanSettings != (int) SingleScanSettings.Disabled &&
+                   currentUserSettings.GetSingleScanSettings() != SingleScanSettings.Disabled &&
                    !mainForm.AdditionalFormsOpen();
         }
     }

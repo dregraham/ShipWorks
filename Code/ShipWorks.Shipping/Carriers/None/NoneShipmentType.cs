@@ -33,7 +33,12 @@ namespace ShipWorks.Shipping.Carriers.None
         /// <summary>
         /// Get the carrier specific description of the shipping service used
         /// </summary>
-        public override string GetServiceDescription(ShipmentEntity shipment) => String.Empty;
+        public override string GetServiceDescription(ShipmentEntity shipment) => string.Empty;
+
+        /// <summary>
+        /// Get the carrier specific description of the shipping service used
+        /// </summary>
+        public override string GetServiceDescription(string serviceCode) => string.Empty;
 
         /// <summary>
         /// No parcels for 'None' shipments

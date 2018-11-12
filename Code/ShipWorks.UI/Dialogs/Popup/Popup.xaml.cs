@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using System.Windows;
 using System.Windows.Media.Animation;
 using Interapptive.Shared.ComponentRegistration;
@@ -12,6 +13,9 @@ namespace ShipWorks.UI.Dialogs.Popup
     [Component(Service = typeof(IPopup), RegisterAs = RegistrationType.SpecificService)]
     public partial class Popup : InteropWindow, IPopup
     {
+
+        static volatile object locker = new Object();
+
         /// <summary>
         /// Constructor
         /// </summary>
@@ -25,13 +29,16 @@ namespace ShipWorks.UI.Dialogs.Popup
         /// </summary>
         public void ShowAction()
         {
-            Storyboard storyboard = (Storyboard) FindResource("storyBoard");
-            storyboard.Stop();
-            storyboard.Seek(TimeSpan.Zero);
+            lock (locker)
+            {
+                Storyboard storyboard = (Storyboard) FindResource("storyBoard");
 
-            Visibility = Visibility.Visible;
+                storyboard.Stop();
+                storyboard.Seek(TimeSpan.Zero);
+                Visibility = Visibility.Visible;
 
-            storyboard.Begin();
+                storyboard.Begin();
+            }
         }
 
         /// <summary>
@@ -41,15 +48,17 @@ namespace ShipWorks.UI.Dialogs.Popup
         {
             DataContext = viewModel;
         }
-        
+
         /// <summary>
         /// Once the storyboard completes, hide the control
         /// </summary>
         private void OnStoryboardCompleted(object sender, EventArgs e)
         {
-            if (Math.Abs(Opacity) < 0.02)
+            bool locked = false;
+            Monitor.TryEnter(locker, 0, ref locked);
+            if(!locked)
             {
-                Visibility = Visibility.Hidden;
+                Visibility = Visibility.Collapsed;
             }
         }
     }

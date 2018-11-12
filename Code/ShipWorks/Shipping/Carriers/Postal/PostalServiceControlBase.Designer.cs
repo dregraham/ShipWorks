@@ -177,6 +177,7 @@
             this.confirmation.Size = new System.Drawing.Size(300, 21);
             this.confirmation.TabIndex = 3;
             this.confirmation.SelectedIndexChanged += new System.EventHandler(this.OnConfirmationChanged);
+            this.confirmation.SelectedIndexChanged += new System.EventHandler(this.OnRateCriteriaChanged);
             //
             // service
             //

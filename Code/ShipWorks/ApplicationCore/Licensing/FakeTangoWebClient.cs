@@ -23,7 +23,7 @@ namespace ShipWorks.ApplicationCore.Licensing
     public class FakeTangoWebClient : TangoWebClientWrapper, ITangoWebClient
     {
         private const string CustomizedTangoFilesKeyName = "TangoWebClientDataPath";
-        ILog log = LogManager.GetLogger(typeof(FakeTangoWebClient));
+        private ILog log = LogManager.GetLogger(typeof(FakeTangoWebClient));
 
         /// <summary>
         /// Makes a request to Tango to add a store
@@ -62,8 +62,8 @@ namespace ShipWorks.ApplicationCore.Licensing
         [Obfuscation(Exclude = true)]
         public override IEnumerable<Nudge> GetNudges(IEnumerable<StoreEntity> stores)
         {
-            // Build up a couple of dummy nudges for testing purposes. Null is being configured as the INudgeAction 
-            // until the actual implementations are ready. Null is a good test to ensure that this is accounted 
+            // Build up a couple of dummy nudges for testing purposes. Null is being configured as the INudgeAction
+            // until the actual implementations are ready. Null is a good test to ensure that this is accounted
             return Enumerable.Empty<Nudge>();
         }
 
@@ -98,27 +98,6 @@ namespace ShipWorks.ApplicationCore.Licensing
                 StoreTypeManager.GetType(store).LicenseIdentifier);
 
             return new LicenseAccountDetail(licenseXml, store);
-        }
-
-        /// <summary>
-        /// Gets the Tango customer id for a license.
-        /// </summary>
-        public override string GetTangoCustomerId()
-        {
-            StoreEntity store = StoreManager.GetEnabledStores()
-                                    .FirstOrDefault(s => new ShipWorksLicense(s.License).IsTrial == false) ??
-                                StoreManager.GetAllStores()
-                                    .FirstOrDefault(s => new ShipWorksLicense(s.License).IsTrial == false);
-
-            try
-            {
-                return store != null ? GetLicenseStatus(store.License, store).TangoCustomerID : string.Empty;
-            }
-            catch (TangoException ex)
-            {
-                log.Error(ex);
-                return string.Empty;
-            }
         }
 
         /// <summary>
@@ -157,6 +136,11 @@ namespace ShipWorks.ApplicationCore.Licensing
 
             return new GetActiveStoresResponse(xmlResponse).ActiveStores;
         }
+
+        /// <summary>
+        /// Gets the Tango customer id for a license.
+        /// </summary>
+        public override string GetTangoCustomerId() => "FakeCustomerID";
 
         /// <summary>
         /// Get an xml document from the given file

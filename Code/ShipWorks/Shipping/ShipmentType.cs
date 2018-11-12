@@ -50,7 +50,7 @@ namespace ShipWorks.Shipping
     public abstract class ShipmentType
     {
         // Logger
-        static readonly ILog log = LogManager.GetLogger(typeof(ShipmentType));
+        private static readonly ILog log = LogManager.GetLogger(typeof(ShipmentType));
 
         /// <summary>
         /// HTTPS certificate inspector to use.
@@ -536,7 +536,7 @@ namespace ShipWorks.Shipping
                     shippingProfileManager.SaveProfile(primaryProfile);
                 }
 
-                IShippingProfile shippingProfile = shippingProfileService.Get(primaryProfile.ShippingProfileID);
+                var shippingProfile = shippingProfileService.Get(primaryProfile);
                 shippingProfile.Apply(shipment);
 
                 // Now apply ShipSense
@@ -551,7 +551,7 @@ namespace ShipWorks.Shipping
                         IShippingProfileEntity profile = shippingProfileManager.GetProfileReadOnly(rule.ShippingProfileID);
                         if (profile != null)
                         {
-                            shippingProfileService.Get(profile.ShippingProfileID)?.Apply(shipment);
+                            shippingProfileService.Get(profile).Apply(shipment);
                         }
                     }
                 }
@@ -706,7 +706,7 @@ namespace ShipWorks.Shipping
             if (!SupportsMultiplePackages)
             {
                 // LoadPackageProfile sets up the profile before ConfigurePrimaryProfile is called and creates
-                // an in memory PackageProfile with null fields. Let's clear it out and create a new one with initial vialues.
+                // an in memory PackageProfile with null fields. Let's clear it out and create a new one with initial values.
                 profile.Packages.Clear();
                 profile.Packages.Add(new PackageProfileEntity()
                 {
@@ -791,8 +791,7 @@ namespace ShipWorks.Shipping
         }
 
         /// <summary>
-        /// Update the total weight of the shipment based on its ContentWeight and any packaging weight.  The default
-        /// implementation is just to set the TotalWeight equal to the ContentWeight.
+        /// Update the total weight of the shipment based on its ContentWeight and any packaging weight.
         /// </summary>
         public virtual void UpdateTotalWeight(ShipmentEntity shipment)
         {
@@ -801,8 +800,83 @@ namespace ShipWorks.Shipping
                 throw new InvalidOperationException("Cannot update weight on a processed shipment.");
             }
 
-            shipment.TotalWeight = shipment.ContentWeight;
+            if (SupportsMultiplePackages)
+            {
+                UpdateMultiplePackageWeight(shipment);
+            }
+            else
+            {
+                UpdateSinglePackageWeight(shipment);
+            }
         }
+
+        /// <summary>
+        /// Update weight for multi-package shipments
+        /// </summary>
+        /// <remarks>
+        /// We don't want to update the weight unless it's actually different because we now use the notify property changed
+        /// event on the entities and it seems to fire regardless of whether the value has actually changed.  This could also
+        /// be caused by the fact that weight is a double, and 1.5 does not equal 1.500000001
+        /// </remarks>
+        private void UpdateMultiplePackageWeight(ShipmentEntity shipment)
+        {
+            MethodConditions.EnsureArgumentIsNotNull(shipment, nameof(shipment));
+
+            double contentWeight = 0;
+            double totalWeight = 0;
+
+            var packageDimensions = GetPackageWeights(shipment) ?? Enumerable.Empty<(double, bool, double)>();
+            foreach ((double weight, bool addDimsWeight, double dimsWeight) in packageDimensions)
+            {
+                contentWeight += weight;
+                totalWeight += weight;
+
+                if (addDimsWeight)
+                {
+                    totalWeight += dimsWeight;
+                }
+            }
+
+            if (!contentWeight.IsEquivalentTo(shipment.ContentWeight))
+            {
+                shipment.ContentWeight = contentWeight;
+            }
+
+            if (!totalWeight.IsEquivalentTo(shipment.TotalWeight))
+            {
+                shipment.TotalWeight = totalWeight;
+            }
+        }
+
+        /// <summary>
+        /// Update weight for a single-package shipments
+        /// </summary>
+        /// <remarks>
+        /// We don't want to update the weight unless it's actually different because we now use the notify property changed
+        /// event on the entities and it seems to fire regardless of whether the value has actually changed.  This could also
+        /// be caused by the fact that weight is a double, and 1.5 does not equal 1.500000001
+        /// </remarks>
+        private void UpdateSinglePackageWeight(ShipmentEntity shipment)
+        {
+            MethodConditions.EnsureArgumentIsNotNull(shipment, nameof(shipment));
+
+            var newWeight = shipment.ContentWeight + GetDimsWeight(shipment);
+            if (!newWeight.IsEquivalentTo(shipment.TotalWeight))
+            {
+                shipment.TotalWeight = newWeight;
+            }
+        }
+
+        /// <summary>
+        /// Get weights from packages
+        /// </summary>
+        protected virtual IEnumerable<(double weight, bool addDimsWeight, double dimsWeight)> GetPackageWeights(IShipmentEntity shipment) =>
+            Enumerable.Empty<(double, bool, double)>();
+
+        /// <summary>
+        /// Get the dims weight from a shipment, if any
+        /// </summary>
+        protected virtual double GetDimsWeight(IShipmentEntity shipment) => 0;
 
         /// <summary>
         /// Get the available origins for the ShipmentType.  This is used to display the origin address UI.
@@ -834,6 +908,12 @@ namespace ShipWorks.Shipping
         /// when this method is called.
         /// </summary>
         public abstract string GetServiceDescription(ShipmentEntity shipment);
+
+        /// <summary>
+        /// Get the carrier specific description of the shipping service used. The carrier specific data must already exist
+        /// when this method is called.
+        /// </summary>
+        public abstract string GetServiceDescription(string serviceCode);
 
         /// <summary>
         /// Get the carrier specific description of the shipping service used, overridden by shipment types to provide a
@@ -954,6 +1034,19 @@ namespace ShipWorks.Shipping
         /// Clear any data that should not be part of a shipment after it has been copied.
         /// </summary>
         public virtual void ClearDataForCopiedShipment(ShipmentEntity shipment)
+        {
+
+        }
+
+        /// <summary>
+        /// Rectifies carrier specific data on the shipment
+        /// </summary>
+        /// <remarks>
+        /// This allows the ShipmentType to fix any issues on the shipment
+        /// for example if the service is not valid for the ship to country
+        /// or if the packaging type is not valid for the service type
+        /// </remarks>
+        public virtual void RectifyCarrierSpecificData(ShipmentEntity shipment)
         {
 
         }

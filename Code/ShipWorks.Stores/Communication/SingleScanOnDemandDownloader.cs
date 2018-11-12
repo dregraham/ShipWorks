@@ -1,5 +1,4 @@
 ﻿using System.Threading.Tasks;
-using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.Filters.Search;
 
 namespace ShipWorks.Stores.Communication
@@ -28,7 +27,7 @@ namespace ShipWorks.Stores.Communication
         /// </summary>
         public Task Download(string orderNumber)
         {
-            // Is the orderNumber a Singel Scan Order Shortcut?
+            // Is the orderNumber a Single Scan Order Shortcut? 
             if (orderShortcut.AppliesTo(orderNumber))
             {
                 return Task.CompletedTask;
@@ -36,6 +35,7 @@ namespace ShipWorks.Stores.Communication
 
             // We know the order Number is not a shortcut, so attempt to download by
             // delegating to the onDemandDownloader
+            // (If it is a shortcut with an OrderID, we know it has already been downloaded)
             return onDemandDownloader.Download(orderNumber);
         }
     }

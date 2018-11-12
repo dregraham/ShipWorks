@@ -9,6 +9,7 @@ using System.Reflection;
 using GalaSoft.MvvmLight.CommandWpf;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Business.Geography;
+using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.UI;
 using ShipWorks.AddressValidation;
 using ShipWorks.AddressValidation.Enums;
@@ -16,6 +17,8 @@ using ShipWorks.Core.UI;
 using ShipWorks.Data;
 using ShipWorks.Data.Model.Custom.EntityClasses;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.OrderLookup;
+using ShipWorks.OrderLookup.FieldManager;
 using ShipWorks.Shipping;
 
 namespace ShipWorks.UI.Controls.AddressControl
@@ -23,12 +26,13 @@ namespace ShipWorks.UI.Controls.AddressControl
     /// <summary>
     /// View model for use by AddressControl
     /// </summary>
-    public partial class AddressViewModel : INotifyPropertyChanged, INotifyPropertyChanging, IDisposable
+    [Component(RegistrationType.Self)]
+    public partial class AddressViewModel : IOrderLookupFieldLayoutProviderHost, INotifyPropertyChanged, INotifyPropertyChanging, IDisposable
     {
         private readonly string[] validationProperties = { nameof(Street), nameof(CountryCode), nameof(PostalCode), nameof(StateProvCode), nameof(City) };
         private readonly IAddressValidator validator;
-        private readonly PropertyChangedHandler handler;
-        private readonly IShippingOriginManager shippingOriginManager;
+        protected readonly PropertyChangedHandler handler;
+        protected readonly IShippingOriginManager shippingOriginManager;
         private readonly IMessageHelper messageHelper;
         private readonly IValidatedAddressScope validatedAddressScope;
         private readonly IAddressSelector addressSelector;
@@ -60,6 +64,7 @@ namespace ShipWorks.UI.Controls.AddressControl
             this.messageHelper = messageHelper;
             this.validatedAddressScope = validatedAddressScope;
             this.addressSelector = addressSelector;
+
             AddressSuggestions = Enumerable.Empty<KeyValuePair<string, ValidatedAddressEntity>>();
             ValidateCommand = new RelayCommand(ValidateAddress);
             ShowValidationMessageCommand = new RelayCommand(ShowValidationMessage);
@@ -88,6 +93,12 @@ namespace ShipWorks.UI.Controls.AddressControl
         /// </summary>
         [Obfuscation(Exclude = true)]
         public bool CanShowValidationMessage => validator.CanShowMessage(ValidationStatus) && !string.IsNullOrEmpty(ValidationMessage);
+
+        /// <summary>
+        /// Field layout provider
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public IOrderLookupFieldLayoutProvider FieldLayoutProvider { get; set; }
 
         /// <summary>
         /// Load the person

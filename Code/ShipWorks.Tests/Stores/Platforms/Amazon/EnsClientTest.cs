@@ -41,20 +41,6 @@ namespace ShipWorks.Tests.Stores.Amazon
         }
 
         /// <summary>
-        /// Testing a method that was failing deep in WCF for no reason.  This stopped after a reboot, keeping here for
-        /// future diagnostics.
-        /// 
-        /// Failed with a COMException "logon failure"
-        /// </summary>
-        [Fact]
-        public void DomainTest()
-        {
-            Domain domain = Domain.GetCurrentDomain();
-
-            Assert.NotNull(domain);
-        }
-
-        /// <summary>
         /// Adding a certificate to the system cert store
         /// </summary>
         [Fact]

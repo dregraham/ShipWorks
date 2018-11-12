@@ -1093,7 +1093,8 @@ ALTER TABLE [dbo].[AuditChangeDetail] ADD CONSTRAINT [PK_AuditChangeDetail] PRIM
 GO
 PRINT N'Creating index [IX_SWDefault_AuditChangeDetail_AuditChangeID] on [dbo].[AuditChangeDetail]'
 GO
-CREATE NONCLUSTERED INDEX [IX_SWDefault_AuditChangeDetail_AuditChangeID] ON [dbo].[AuditChangeDetail] ([AuditChangeID])
+CREATE UNIQUE INDEX [IX_SWDefault_AuditChangeDetail_AuditChangeID] ON [dbo].[AuditChangeDetail] ([AuditChangeID], [AuditChangeDetailID] ) 
+	INCLUDE ( [AuditID])
 GO
 PRINT N'Creating index [IX_SWDefault_AuditChangeDetail_AuditID] on [dbo].[AuditChangeDetail]'
 GO
@@ -1240,7 +1241,8 @@ CREATE TABLE [dbo].[Shipment]
 [ShipSenseEntry] [varbinary] (max) NOT NULL,
 [OnlineShipmentID] [varchar] (128) NOT NULL,
 [BilledType] [int] NOT NULL,
-[BilledWeight] [float] NOT NULL
+[BilledWeight] [float] NOT NULL,
+[ProcessedWithUiMode] [int] NULL
 )
 GO
 PRINT N'Creating primary key [PK_Shipment] on [dbo].[Shipment]'
@@ -4186,7 +4188,9 @@ CREATE TABLE [dbo].[UserSettings]
 [CustomerFilterExpandedFolders] [xml] NULL,
 [SingleScanSettings] [int] NOT NULL,
 [AutoWeigh] [bit] NOT NULL,
-[DialogSettings] [xml] NULL
+[DialogSettings] [xml] NULL,
+[UIMode] [int] NOT NULL,
+[OrderLookupLayout] [nvarchar] (max) COLLATE SQL_Latin1_General_CP1_CI_AS
 )
 GO
 PRINT N'Creating primary key [PK_UserSetting_1] on [dbo].[UserSettings]'
@@ -4443,7 +4447,8 @@ CREATE TABLE [dbo].[Configuration]
 [UseParallelActionQueue] [bit] NOT NULL CONSTRAINT [DF_Configuration_UseParallelActionQueue] DEFAULT ((1)),
 [AllowEbayCombineLocally] [bit] NOT NULL CONSTRAINT [DF_Configuration_AllowEbayCombineLocally] DEFAULT ((0)),
 [ArchivalSettingsXml] [xml] NOT NULL CONSTRAINT [DF_Configuration_ArchivalSettingsXml] DEFAULT ('<ArchivalSettings/>'),
-[AuditEnabled] [bit] NOT NULL CONSTRAINT [DF_Configuration_AuditEnabled] DEFAULT ((1))
+[AuditEnabled] [bit] NOT NULL CONSTRAINT [DF_Configuration_AuditEnabled] DEFAULT ((1)),
+[AllowUIModeToggle] [bit] NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_Configuration] on [dbo].[Configuration]'
@@ -5122,7 +5127,8 @@ CREATE TABLE [dbo].[ShippingSettings]
 [ShipmentEditLimit] [int] NOT NULL,
 [ShipmentsLoaderEnsureFiltersLoadedTimeout] [int] NOT NULL CONSTRAINT [DF_ShippingSettings_ShipmentsLoaderEnsureFiltersLoadedTimeout] DEFAULT ((0)),
 [ShipmentDateCutoffJson] [nvarchar] (1000) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_ShippingSettings_ShipmentDateCutoffJson] DEFAULT (''),
-[ShipEngineApiKey] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL
+[ShipEngineApiKey] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[OrderLookupFieldLayout] [nvarchar] (max) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_ShippingSettings_OrderLookupFieldLayout] DEFAULT ('')
 )
 GO
 PRINT N'Creating primary key [PK_ShippingSettings] on [dbo].[ShippingSettings]'

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Reflection;
 using Interapptive.Shared.Business;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 
@@ -122,11 +123,13 @@ namespace ShipWorks.Data.Model.EntityClasses
         /// <summary>
         /// Gets the billing address as a person adapter
         /// </summary>
+        [Obfuscation(Exclude = true)]
         public PersonAdapter BillPerson => new PersonAdapter(this, "Bill");
 
         /// <summary>
         /// Shipping address as a person adapter
         /// </summary>
+        [Obfuscation(Exclude = true)]
         public PersonAdapter ShipPerson
         {
             get { return new PersonAdapter(this, "Ship"); }

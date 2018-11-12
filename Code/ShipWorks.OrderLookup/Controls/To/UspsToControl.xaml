@@ -1,0 +1,62 @@
+﻿<UserControl
+    x:Class="ShipWorks.OrderLookup.Controls.To.UspsToControl"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:ShipWorks.OrderLookup.Controls"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:ui="http://schemas.shipworks.com/ui"
+    xmlns:ns="clr-namespace:ShipWorks.OrderLookup.FieldManager;assembly=ShipWorks.Core"
+    d:DesignWidth="800"
+    FontFamily="/ShipWorks.OrderLookup;component/#Roboto"
+    mc:Ignorable="d">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/ShipWorks.OrderLookup;component/Styles/OrderLookupStyle.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+            <ui:VisibilityWhenFieldAllowedConverter x:Key="VisibilityWhenFieldAllowed"/>
+        </ResourceDictionary>
+    </UserControl.Resources>
+
+    <StackPanel>
+        <StackPanel.IsEnabled>
+            <Binding Mode="OneWay" Path="ShipmentModel.ShipmentAllowEditing" />
+        </StackPanel.IsEnabled>
+        <local:OrderLookupAddress DataContext="{Binding Address}">
+            <local:OrderLookupAddress.IsEnabled>
+                <Binding Mode="OneWay" Path="ShipmentModel.ShipmentAllowEditing" />
+            </local:OrderLookupAddress.IsEnabled>
+        </local:OrderLookupAddress>
+        <Grid>
+            <Grid.RowDefinitions>
+                <ui:FieldLayoutRowDefinition FieldID="{x:Static ns:SectionLayoutFieldIDs.USPSRequireFullAddressValidation}" />
+                <ui:FieldLayoutRowDefinition FieldID="{x:Static ns:SectionLayoutFieldIDs.USPSRequireFullAddressValidation}" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="85" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <TextBlock
+                Grid.Row="0"
+                Grid.Column="0"
+                Grid.ColumnSpan="2"
+                Style="{StaticResource Header}"
+                Text="USPS Validation" />
+
+            <CheckBox
+                Grid.Row="1"
+                Grid.Column="1"
+                Content="Require full address validation"
+                Style="{StaticResource FormCheckBox}">
+                <CheckBox.IsEnabled>
+                    <Binding Mode="OneWay" Path="ShipmentModel.ShipmentAllowEditing" />
+                </CheckBox.IsEnabled>
+                <CheckBox.IsChecked>
+                    <Binding Path="ShipmentModel.ShipmentAdapter.Shipment.Postal.Usps.RequireFullAddressValidation" />
+                </CheckBox.IsChecked>
+            </CheckBox>
+        </Grid>
+    </StackPanel>
+</UserControl>
+

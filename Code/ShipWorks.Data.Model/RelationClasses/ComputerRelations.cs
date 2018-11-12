@@ -34,6 +34,8 @@ namespace ShipWorks.Data.Model.RelationClasses
 			toReturn.Add(this.AuditEntityUsingComputerID);
 			toReturn.Add(this.DownloadEntityUsingComputerID);
 			toReturn.Add(this.PrintResultEntityUsingComputerID);
+			toReturn.Add(this.ProcessedShipmentEntityUsingProcessedComputerID);
+			toReturn.Add(this.ProcessedShipmentEntityUsingVoidedComputerID);
 			toReturn.Add(this.ServerMessageSignoffEntityUsingComputerID);
 			toReturn.Add(this.ServiceStatusEntityUsingComputerID);
 			toReturn.Add(this.ShipmentEntityUsingProcessedComputerID);
@@ -101,6 +103,36 @@ namespace ShipWorks.Data.Model.RelationClasses
 				relation.AddEntityFieldPair(ComputerFields.ComputerID, PrintResultFields.ComputerID);
 				relation.InheritanceInfoPkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("ComputerEntity", true);
 				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("PrintResultEntity", false);
+				return relation;
+			}
+		}
+
+		/// <summary>Returns a new IEntityRelation object, between ComputerEntity and ProcessedShipmentEntity over the 1:n relation they have, using the relation between the fields:
+		/// Computer.ComputerID - ProcessedShipment.ProcessedComputerID
+		/// </summary>
+		public virtual IEntityRelation ProcessedShipmentEntityUsingProcessedComputerID
+		{
+			get
+			{
+				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToMany, "" , true);
+				relation.AddEntityFieldPair(ComputerFields.ComputerID, ProcessedShipmentFields.ProcessedComputerID);
+				relation.InheritanceInfoPkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("ComputerEntity", true);
+				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("ProcessedShipmentEntity", false);
+				return relation;
+			}
+		}
+
+		/// <summary>Returns a new IEntityRelation object, between ComputerEntity and ProcessedShipmentEntity over the 1:n relation they have, using the relation between the fields:
+		/// Computer.ComputerID - ProcessedShipment.VoidedComputerID
+		/// </summary>
+		public virtual IEntityRelation ProcessedShipmentEntityUsingVoidedComputerID
+		{
+			get
+			{
+				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToMany, "" , true);
+				relation.AddEntityFieldPair(ComputerFields.ComputerID, ProcessedShipmentFields.VoidedComputerID);
+				relation.InheritanceInfoPkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("ComputerEntity", true);
+				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("ProcessedShipmentEntity", false);
 				return relation;
 			}
 		}
@@ -214,6 +246,8 @@ namespace ShipWorks.Data.Model.RelationClasses
 		internal static readonly IEntityRelation AuditEntityUsingComputerIDStatic = new ComputerRelations().AuditEntityUsingComputerID;
 		internal static readonly IEntityRelation DownloadEntityUsingComputerIDStatic = new ComputerRelations().DownloadEntityUsingComputerID;
 		internal static readonly IEntityRelation PrintResultEntityUsingComputerIDStatic = new ComputerRelations().PrintResultEntityUsingComputerID;
+		internal static readonly IEntityRelation ProcessedShipmentEntityUsingProcessedComputerIDStatic = new ComputerRelations().ProcessedShipmentEntityUsingProcessedComputerID;
+		internal static readonly IEntityRelation ProcessedShipmentEntityUsingVoidedComputerIDStatic = new ComputerRelations().ProcessedShipmentEntityUsingVoidedComputerID;
 		internal static readonly IEntityRelation ServerMessageSignoffEntityUsingComputerIDStatic = new ComputerRelations().ServerMessageSignoffEntityUsingComputerID;
 		internal static readonly IEntityRelation ServiceStatusEntityUsingComputerIDStatic = new ComputerRelations().ServiceStatusEntityUsingComputerID;
 		internal static readonly IEntityRelation ShipmentEntityUsingProcessedComputerIDStatic = new ComputerRelations().ShipmentEntityUsingProcessedComputerID;

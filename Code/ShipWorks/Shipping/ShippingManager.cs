@@ -576,6 +576,15 @@ namespace ShipWorks.Shipping
         }
 
         /// <summary>
+        /// Get the service used. Returns blank if not processed or "(Deleted)" if the shipment has been deleted.
+        /// </summary>
+        public static string GetActualServiceUsed(ShipmentTypeCode shipmentTypeCode, string service)
+        {
+            ShipmentType shipmentType = ShipmentTypeManager.GetType(shipmentTypeCode);
+            return shipmentType.GetServiceDescription(service);
+        }
+
+        /// <summary>
         /// Get the service used overridden to ensure compatibility with marketplaces
         /// </summary>
         /// <remarks>

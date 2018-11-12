@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.ComponentModel;
 using System.Reflection;
-using System.ComponentModel;
 
 namespace ShipWorks.Data.Grid.Columns
 {
@@ -65,6 +61,9 @@ namespace ShipWorks.Data.Grid.Columns
         AuditChanges,
 
         [Description("Service Status")]
-        ServiceStatus
+        ServiceStatus,
+
+        [Description("Shipment History")]
+        ShipmentsHistory
     }
 }

@@ -1,19 +1,20 @@
 using System;
 using Autofac.Extras.Moq;
 using Moq;
+using ShipWorks.ApplicationCore;
 using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Environment;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Ship.Manipulators.Request;
+using ShipWorks.Shipping.Carriers.FedEx.Enums;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship;
 using ShipWorks.Tests.Shared;
 using Xunit;
-using ShipWorks.Shipping.Carriers.FedEx.Enums;
 
 namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship.Manipulators.Request
 {
-    public class FedExLabelSpecificationManipulatorTest
+    [Collection(TestCollections.IoC)]
+    public class FedExLabelSpecificationManipulatorTest : IDisposable
     {
         private FedExLabelSpecificationManipulator testObject;
         private readonly AutoMock mock;
@@ -23,6 +24,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship.Manipulators.Request
         public FedExLabelSpecificationManipulatorTest()
         {
             mock = AutoMockExtensions.GetLooseThatReturnsMocks();
+            IoC.InitializeForUnitTests(mock.Container);
 
             shippingSettings = new ShippingSettingsEntity();
             shippingSettings.FedExThermalDocTab = true;
@@ -53,7 +55,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship.Manipulators.Request
         [InlineData(FedExServiceType.FedExFreightPriority, false)]
         public void ShouldApply_ReturnsCorrectValue(FedExServiceType serviceType, bool expectedValue)
         {
-            shipment.FedEx.Service = (int)serviceType;
+            shipment.FedEx.Service = (int) serviceType;
 
             Assert.Equal(expectedValue, testObject.ShouldApply(shipment, 0));
         }
@@ -102,7 +104,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship.Manipulators.Request
             Assert.Equal(LabelMaskableDataType.DUTIES_AND_TAXES_PAYOR_ACCOUNT_NUMBER, labelSpecification.CustomerSpecifiedDetail.MaskedData[2]);
             Assert.Equal(LabelMaskableDataType.CUSTOMS_VALUE, labelSpecification.CustomerSpecifiedDetail.MaskedData[3]);
         }
-        
+
         [Fact]
         public void Manipulate_ReturnsFailure_WhenUnknownThermalType()
         {
@@ -171,5 +173,6 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship.Manipulators.Request
             Assert.Equal(LabelStockType.PAPER_4X6, labelSpecification.LabelStockType);
         }
 
+        public void Dispose() => mock.Dispose();
     }
 }

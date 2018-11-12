@@ -8,6 +8,7 @@ using ShipWorks.Common.IO.KeyboardShortcuts;
 using ShipWorks.Common.IO.KeyboardShortcuts.Messages;
 using ShipWorks.Core.Messaging;
 using ShipWorks.IO.KeyboardShortcuts;
+using ShipWorks.Settings;
 using ShipWorks.Users;
 
 namespace ShipWorks.SingleScan
@@ -22,7 +23,7 @@ namespace ShipWorks.SingleScan
         private readonly ICurrentUserSettings currentUserSettings;
         private readonly IMessageHelper messageHelper;
         private readonly ISchedulerProvider schedulerProvider;
-
+        
         /// <summary>
         /// Constructor
         /// </summary>
@@ -46,6 +47,7 @@ namespace ShipWorks.SingleScan
                 .Where(m => m.AppliesTo(KeyboardShortcutCommand.ClearQuickSearch) ||
                             m.AppliesTo(KeyboardShortcutCommand.FocusQuickSearch))
                 .ObserveOn(schedulerProvider.WindowsFormsEventLoop)
+                .Where(_ => currentUserSettings.GetUIMode() == UIMode.Batch)
                 .Subscribe(message => HandleQuickSearchMessage(message, mainGridControl));
 
             return subscription;

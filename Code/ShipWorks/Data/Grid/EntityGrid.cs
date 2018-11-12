@@ -32,33 +32,32 @@ namespace ShipWorks.Data.Grid
     /// </summary>
     public partial class EntityGrid : SandGrid
     {
-        static readonly ILog log = LogManager.GetLogger(typeof(EntityGrid));
+        private static readonly ILog log = LogManager.GetLogger(typeof(EntityGrid));
+        private DetailViewSettings viewSettings;
 
-        DetailViewSettings viewSettings;
-
-        // Use to render the the detail view
-        DetailViewRenderer detailRenderer;
+        // Use to render the detail view
+        private DetailViewRenderer detailRenderer;
 
         // Responsible for loading, saving, and manipulating grid columns
-        EntityGridColumnStrategy columnStrategy;
+        private EntityGridColumnStrategy columnStrategy;
 
         // Provides notification that we should show the column context menu
-        ColumnContextMenuProvider contextMenuProvider;
+        private ColumnContextMenuProvider contextMenuProvider;
 
         // Allow for suspending of sort processing while messing with columns
-        bool suspendSortProcessing = false;
+        private bool suspendSortProcessing = false;
 
         // Field source for nested error display.  If null then nested error display is off
-        EntityGridRowErrorProvider errorProvider;
+        private EntityGridRowErrorProvider errorProvider;
 
         // The minimum size the control needs to be to not show any scroll bars.
-        Size minimumNoScrollSize = new Size(50, 25);
+        private Size minimumNoScrollSize = new Size(50, 25);
 
         // Used to know which grid cell was clicked, for purposed of Copy operations.
-        EntityGridColumn contextMenuColumn;
+        private EntityGridColumn contextMenuColumn;
 
         // Exposes the grids current selection state
-        EntityGridSelection selection;
+        private EntityGridSelection selection;
 
         /// <summary>
         /// Raised when a column-specific action occurs in one of the cells of an actionable column.
@@ -72,12 +71,11 @@ namespace ShipWorks.Data.Grid
 
         #region class SortMaintainer
 
-        class SortMaintainer : IDisposable
+        private class SortMaintainer : IDisposable
         {
-            Guid sortColumnID = Guid.Empty;
-            ListSortDirection sortOrder = ListSortDirection.Descending;
-
-            EntityGrid grid;
+            private Guid sortColumnID = Guid.Empty;
+            private readonly ListSortDirection sortOrder = ListSortDirection.Descending;
+            private EntityGrid grid;
 
             /// <summary>
             /// Constructor
@@ -115,7 +113,7 @@ namespace ShipWorks.Data.Grid
 
         #region class CopyWithTemplateData
 
-        class CopyWithTemplateData
+        private class CopyWithTemplateData
         {
             public HtmlControl HtmlControl { get; set; }
             public string PlainText { get; set; }
@@ -142,11 +140,6 @@ namespace ShipWorks.Data.Grid
         /// </summary>
         public void InitializeColumns(EntityGridColumnStrategy columnStrategy)
         {
-            if (columnStrategy == null)
-            {
-                throw new ArgumentNullException("columnStrategy");
-            }
-
             // Create the provider to allow us to have a context menu for the grid column headers
             if (contextMenuProvider == null)
             {
@@ -162,33 +155,35 @@ namespace ShipWorks.Data.Grid
         }
 
         /// <summary>
-        /// Tells the grid that the colunm state should be automatically persisted when the given Form closes.
+        /// Tells the grid that the column state should be automatically persisted when the given Form closes.
         /// </summary>
         public void SaveColumnsOnClose(Form form)
         {
-            form.FormClosing += delegate { columnStrategy.SaveColumns(this); };
+            form.FormClosing += delegate { ColumnStrategy.SaveColumns(this); };
         }
 
         /// <summary>
         /// The configured grid column strategy
         /// </summary>
-        public EntityGridColumnStrategy ColumnStrategy
-        {
-            get { return columnStrategy; }
-        }
+        public EntityGridColumnStrategy ColumnStrategy => columnStrategy;
 
         /// <summary>
         /// Show the grid column editor
         /// </summary>
-        void OnGridColumnContextMenu(object sender, ColumnContextMenuEventArgs e)
+        private void OnGridColumnContextMenu(object sender, ColumnContextMenuEventArgs e)
         {
+            if (ColumnStrategy == null)
+            {
+                throw new InvalidOperationException("EntityGrid must be initialized before it can be used");
+            }
+
             Cursor.Current = Cursors.WaitCursor;
 
             // Save the state of the columns before we start messing with them
-            columnStrategy.SaveColumns(this);
+            ColumnStrategy.SaveColumns(this);
 
             // Create the popup editor that will be used for interactive editing
-            UserControl editor = columnStrategy.CreatePopupEditor(this, OnContextGridColumnsChanged);
+            UserControl editor = ColumnStrategy.CreatePopupEditor(this, OnContextGridColumnsChanged);
 
             // Check if context editing is not supported
             if (editor == null)
@@ -202,7 +197,7 @@ namespace ShipWorks.Data.Grid
             PopupController popupController = new PopupController(editor);
             popupController.Size = editor.Size;
 
-            // Show the poup
+            // Show the popup
             Point clientPoint = e.ClientPoint;
             popupController.ShowDropDown(new Rectangle(clientPoint.X, clientPoint.Y, 10, 1), this);
 
@@ -212,14 +207,14 @@ namespace ShipWorks.Data.Grid
             // We have to make sure we still are sorted on a valid column.  User may have made the sort column invisible.
             if (SortColumn == null || !SortColumn.Visible)
             {
-                columnStrategy.ApplyInitialSort(this);
+                ColumnStrategy.ApplyInitialSort(this);
             }
         }
 
         /// <summary>
         /// The layout has been changed via the context editor
         /// </summary>
-        void OnContextGridColumnsChanged()
+        private void OnContextGridColumnsChanged()
         {
             ReloadColumns();
         }
@@ -229,12 +224,17 @@ namespace ShipWorks.Data.Grid
         /// </summary>
         public void ShowColumnEditorDialog()
         {
+            if (ColumnStrategy == null)
+            {
+                throw new InvalidOperationException("EntityGrid must be initialized before it can be used");
+            }
+
             Cursor.Current = Cursors.WaitCursor;
 
-            columnStrategy.SaveColumns(this);
+            ColumnStrategy.SaveColumns(this);
 
             // Show the modal editing window
-            using (Form dlg = columnStrategy.CreateModalEditor())
+            using (Form dlg = ColumnStrategy.CreateModalEditor())
             {
                 dlg.ShowDialog(this);
             }
@@ -245,28 +245,30 @@ namespace ShipWorks.Data.Grid
             // We have to make sure we still are sorted on a valid column.  User may have made the sort column invisible.
             if (SortColumn == null || !SortColumn.Visible)
             {
-                columnStrategy.ApplyInitialSort(this);
+                ColumnStrategy.ApplyInitialSort(this);
             }
         }
 
         /// <summary>
         /// Save the current state of grid columns
         /// </summary>
-        public void SaveColumns()
-        {
-            ColumnStrategy.SaveColumns(this);
-        }
+        public void SaveColumns() => ColumnStrategy?.SaveColumns(this);
 
         /// <summary>
         /// Reload the column set while maintaining the current sort
         /// </summary>
         public void ReloadColumns()
         {
+            if (ColumnStrategy == null)
+            {
+                throw new InvalidOperationException("EntityGrid must be initialized before it can be used");
+            }
+
             SuspendSortProcessing = true;
 
             using (SortMaintainer sortMaintainer = new SortMaintainer(this))
             {
-                columnStrategy.LoadColumns(this);
+                ColumnStrategy.LoadColumns(this);
             }
 
             SuspendSortProcessing = false;
@@ -369,7 +371,7 @@ namespace ShipWorks.Data.Grid
         /// <summary>
         /// The current detail view settings have changed and we need to apply them.
         /// </summary>
-        void OnDetailViewSettingsChanged(object sender, EventArgs e)
+        private void OnDetailViewSettingsChanged(object sender, EventArgs e)
         {
             ApplyDetailViewSettings();
         }
@@ -576,7 +578,7 @@ namespace ShipWorks.Data.Grid
         /// <summary>
         /// Copy with the user's chosen template
         /// </summary>
-        void OnCopyWithTemplate(object sender, TemplateNodeChangedEventArgs e)
+        private void OnCopyWithTemplate(object sender, TemplateNodeChangedEventArgs e)
         {
             // Needed due to the way we get the selected keys and create the html control
             Debug.Assert(!InvokeRequired);
@@ -673,7 +675,7 @@ namespace ShipWorks.Data.Grid
         /// <summary>
         /// Copy operation has completed
         /// </summary>
-        void OnCopyWithTemplateCompleted(object sender, BackgroundExecutorCompletedEventArgs<IList<TemplateResult>> e)
+        private void OnCopyWithTemplateCompleted(object sender, BackgroundExecutorCompletedEventArgs<IList<TemplateResult>> e)
         {
             CopyWithTemplateData data = (CopyWithTemplateData) e.UserState;
 
@@ -718,7 +720,7 @@ namespace ShipWorks.Data.Grid
                     try
                     {
                         // Generate the bitmap (if it would be of significant enough size).  And, any smaller than that,
-                        // and the htmlcontrol thows an exception.
+                        // and the htmlcontrol throws an exception.
                         if (bounds.Width > 5 && bounds.Height > 5)
                         {
                             bitmap = htmlControl.RenderToBitmap(bounds, Color.White);
@@ -836,7 +838,7 @@ namespace ShipWorks.Data.Grid
                         CopyEntityText(entity, columnsToCopy, sb);
                     },
 
-                    // We don't pull from SelectedElements, as they may not bein order.
+                    // We don't pull from SelectedElements, as they may not be in order.
                     Rows.OfType<EntityGridRow>().Where(r => r.Selected && r.Entity != null).Select(r => r.Entity),
 
                     sb);
@@ -871,7 +873,7 @@ namespace ShipWorks.Data.Grid
         /// <summary>
         /// Copy operation has completed
         /// </summary>
-        void OnTextCopyCompleted<T>(object sender, BackgroundExecutorCompletedEventArgs<T> e)
+        private void OnTextCopyCompleted<T>(object sender, BackgroundExecutorCompletedEventArgs<T> e)
         {
             if (e.Canceled)
             {
@@ -901,7 +903,7 @@ namespace ShipWorks.Data.Grid
         /// <summary>
         /// Copy the data out of the selected column
         /// </summary>
-        void OnCopyColumn(object sender, EventArgs e)
+        private void OnCopyColumn(object sender, EventArgs e)
         {
             InitiateTextCopy(new List<EntityGridColumn> { contextMenuColumn }, false);
         }
@@ -909,7 +911,7 @@ namespace ShipWorks.Data.Grid
         /// <summary>
         /// Copy the data of the selected rows
         /// </summary>
-        void OnCopyRow(object sender, EventArgs e)
+        private void OnCopyRow(object sender, EventArgs e)
         {
             InitiateTextCopy(Columns.OfType<EntityGridColumn>().Where(c => c.Visible).ToList(), false);
         }
@@ -917,7 +919,7 @@ namespace ShipWorks.Data.Grid
         /// <summary>
         /// Copy the data of the selected rows, including column headers
         /// </summary>
-        void OnCopyRowWithHeaders(object sender, EventArgs e)
+        private void OnCopyRowWithHeaders(object sender, EventArgs e)
         {
             InitiateTextCopy(Columns.OfType<EntityGridColumn>().Where(c => c.Visible).ToList(), true);
         }
@@ -925,7 +927,7 @@ namespace ShipWorks.Data.Grid
         /// <summary>
         /// The copy with template menu item is opening
         /// </summary>
-        void OnCopyWithTemplateOpening(object sender, EventArgs e)
+        private void OnCopyWithTemplateOpening(object sender, EventArgs e)
         {
             TemplateTreePopupController.ShowMenuDropDown(FindForm(), (ToolStripMenuItem) sender, OnCopyWithTemplate);
         }

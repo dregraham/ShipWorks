@@ -593,6 +593,26 @@ namespace ShipWorks.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        public static System.Drawing.Bitmap buttonEndSearch {
+            get {
+                object obj = ResourceManager.GetObject("buttonEndSearch", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap buttonEndSearchDisabled {
+            get {
+                object obj = ResourceManager.GetObject("buttonEndSearchDisabled", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         public static System.Drawing.Bitmap calendar_31 {
             get {
                 object obj = ResourceManager.GetObject("calendar_31", resourceCulture);
@@ -4343,6 +4363,16 @@ namespace ShipWorks.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        public static System.Drawing.Bitmap table_sql32 {
+            get {
+                object obj = ResourceManager.GetObject("table_sql32", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         public static System.Drawing.Bitmap template_add {
             get {
                 object obj = ResourceManager.GetObject("template_add", resourceCulture);
@@ -4896,6 +4926,16 @@ namespace ShipWorks.Properties {
         public static System.Drawing.Bitmap window_save {
             get {
                 object obj = ResourceManager.GetObject("window_save", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap windows {
+            get {
+                object obj = ResourceManager.GetObject("windows", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

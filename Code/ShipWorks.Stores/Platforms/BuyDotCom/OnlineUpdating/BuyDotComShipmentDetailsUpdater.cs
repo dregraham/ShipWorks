@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Threading.Tasks;
 using Interapptive.Shared.ComponentRegistration;
@@ -18,6 +19,8 @@ namespace ShipWorks.Stores.Platforms.BuyDotCom.OnlineUpdating
     /// Uploads tracking information on Buy.com
     /// </summary>
     [Component]
+    [SuppressMessage("SonarLint", "S3358: Ternary operators should not be nested",
+            Justification = "This is legacy code. If there's time, we can address the issue.")]
     public class BuyDotComShipmentDetailsUpdater : IBuyDotComShipmentDetailsUpdater
     {
         private readonly ILog log;

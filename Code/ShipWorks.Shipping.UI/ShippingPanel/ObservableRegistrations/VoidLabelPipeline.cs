@@ -51,8 +51,9 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations
                 .Where(x => x.ShipmentID == viewModel.Shipment?.ShipmentID)
                 .Where(x => messageHelper.ShowDialog(() => new ShipmentVoidConfirmDlg()) == DialogResult.OK)
                 .SelectInBackgroundWithDialog(schedulerProvider, CreateProgressDialog, VoidShipment)
+                .Do(HandleResult)
                 .CatchAndContinue((Exception ex) => log.Error("An error occurred while handling processed shipment", ex))
-                .Subscribe(HandleResult);
+                .Subscribe();
         }
 
         /// <summary>

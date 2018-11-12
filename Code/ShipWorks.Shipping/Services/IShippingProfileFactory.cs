@@ -1,4 +1,5 @@
 ﻿using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Profiles;
 
 namespace ShipWorks.Shipping.Services
@@ -11,11 +12,16 @@ namespace ShipWorks.Shipping.Services
         /// <summary>
         /// Creates a new ShippingProfile with a new ShippingProfileEntity and ShortcutEntity
         /// </summary>
-        IShippingProfile Create();
+        IEditableShippingProfile CreateEditable();
 
         /// <summary>
         /// Creates a ShippingProfile with an existing ShippingProfileEntity and ShortcutEntity
         /// </summary>
-        IShippingProfile Create(ShippingProfileEntity shippingProfileEntity, ShortcutEntity shortcut);
+        IEditableShippingProfile CreateEditable(ShippingProfileEntity shippingProfileEntity, ShortcutEntity shortcut);
+
+        /// <summary>
+        /// Create a profile that can be applied
+        /// </summary>
+        IShippingProfile Create(IShippingProfileEntity profile, IShortcutEntity shortcut);
     }
 }

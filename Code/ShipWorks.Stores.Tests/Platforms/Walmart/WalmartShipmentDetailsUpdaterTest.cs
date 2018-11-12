@@ -6,6 +6,7 @@ using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping;
+using ShipWorks.Stores.Orders;
 using ShipWorks.Stores.Platforms.Walmart;
 using ShipWorks.Stores.Platforms.Walmart.DTO;
 using ShipWorks.Stores.Platforms.Walmart.OnlineUpdating;

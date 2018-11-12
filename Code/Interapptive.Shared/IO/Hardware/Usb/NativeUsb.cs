@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
 using Microsoft.Win32.SafeHandles;
 
@@ -11,6 +9,8 @@ namespace Interapptive.Shared.Usb
     /// Native Win32 methods specifically for dealing with USB devices
     /// </summary>
     [NDependIgnore]
+    [SuppressMessage("SonarLint", "S4200: Native methods should be wrapped",
+            Justification = "This is legacy code. If there's time, we can address the issue.")]
     public static class NativeUsb
     {
         #region Structures
@@ -188,10 +188,10 @@ namespace Interapptive.Shared.Usb
         /// <returns>True if successful, false if not (e.g. when index is passed end of InfoSet)</returns>
         [DllImport("setupapi.dll", SetLastError = true)]
         public static extern bool SetupDiEnumDeviceInterfaces(
-            IntPtr lpDeviceInfoSet, 
-            int nDeviceInfoData, 
-            ref Guid gClass, 
-            int nIndex, 
+            IntPtr lpDeviceInfoSet,
+            int nDeviceInfoData,
+            ref Guid gClass,
+            int nIndex,
             ref DeviceInterfaceData oInterfaceData);
 
         /// <summary>
@@ -209,11 +209,11 @@ namespace Interapptive.Shared.Usb
         /// <returns></returns>
         [DllImport("setupapi.dll", SetLastError = true)]
         public static extern bool SetupDiGetDeviceInterfaceDetail(
-            IntPtr lpDeviceInfoSet, 
-            ref DeviceInterfaceData oInterfaceData, 
-            IntPtr lpDeviceInterfaceDetailData, 
-            int nDeviceInterfaceDetailDataSize, 
-            ref int nRequiredSize, 
+            IntPtr lpDeviceInfoSet,
+            ref DeviceInterfaceData oInterfaceData,
+            IntPtr lpDeviceInterfaceDetailData,
+            int nDeviceInterfaceDetailDataSize,
+            ref int nRequiredSize,
             IntPtr lpDeviceInfoData);
 
         /// <summary>
@@ -231,11 +231,11 @@ namespace Interapptive.Shared.Usb
         /// <returns></returns>
         [DllImport("setupapi.dll", SetLastError = true)]
         public static extern bool SetupDiGetDeviceInterfaceDetail(
-            IntPtr lpDeviceInfoSet, 
-            ref DeviceInterfaceData oInterfaceData, 
-            ref DeviceInterfaceDetailData oDetailData, 
-            int nDeviceInterfaceDetailDataSize, 
-            ref int nRequiredSize, 
+            IntPtr lpDeviceInfoSet,
+            ref DeviceInterfaceData oInterfaceData,
+            ref DeviceInterfaceDetailData oDetailData,
+            int nDeviceInterfaceDetailDataSize,
+            ref int nRequiredSize,
             IntPtr lpDeviceInfoData);
 
         /// <summary>
@@ -269,7 +269,7 @@ namespace Interapptive.Shared.Usb
         /// </summary>
         [DllImport("hid.dll", SetLastError = true)]
         public static extern bool HidD_GetAttributes(SafeFileHandle handle, ref HidDAttributes Attributes);
- 
+
         /// <summary>
         /// Creates/opens a file, serial port, USB device... etc
         /// </summary>
@@ -283,11 +283,11 @@ namespace Interapptive.Shared.Usb
         /// <returns></returns>
         [DllImport("kernel32.dll", SetLastError = true)]
         public static extern SafeFileHandle CreateFile(
-            [MarshalAs(UnmanagedType.LPStr)] string strName, 
-            int nAccess, int nShareMode, 
-            IntPtr lpSecurity, 
-            int nCreationFlags, 
-            int nAttributes, 
+            [MarshalAs(UnmanagedType.LPStr)] string strName,
+            int nAccess, int nShareMode,
+            IntPtr lpSecurity,
+            int nCreationFlags,
+            int nAttributes,
             IntPtr lpTemplate);
 
         /// <summary>

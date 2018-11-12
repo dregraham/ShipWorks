@@ -1,0 +1,104 @@
+﻿<UserControl
+    x:Class="ShipWorks.OrderLookup.Controls.ShipmentDetails.NotSupportedShipmentControl"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:ShipWorks.OrderLookup.Controls.ShipmentDetails"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:ns="clr-namespace:ShipWorks.OrderLookup.FieldManager;assembly=ShipWorks.Core"
+    xmlns:ui="http://schemas.shipworks.com/ui"
+    FontFamily="/ShipWorks.OrderLookup;component/#Roboto"
+    mc:Ignorable="d">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/ShipWorks.OrderLookup;component/Styles/OrderLookupStyle.xaml" />
+                <ResourceDictionary Source="/ShipWorks.OrderLookup;component/Controls/Weight/WeightControl.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+            <ui:DefaultWhenNullOrEmptyConverter x:Key="NoneWhenEmpty" />
+            <ui:EnumDescriptionConverter x:Key="EnumDescription" />
+            <ui:BooleanToVisibilityConverter x:Key="BooleanToVisibility" />
+        </ResourceDictionary>
+    </UserControl.Resources>
+    <Grid IsEnabled="{Binding ShipmentModel.ShipmentAllowEditing}">
+        <Grid.RowDefinitions>
+            <ui:FieldLayoutRowDefinition FieldID="{x:Static ns:SectionLayoutFieldIDs.ShipmentDetailsRequestedShipping}" />
+            <ui:FieldLayoutRowDefinition FieldID="{x:Static ns:SectionLayoutFieldIDs.ShipmentDetailsProvider}" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="85" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <TextBlock
+            Grid.Row="0"
+            Grid.Column="0"
+            Style="{StaticResource FieldLabel}"
+            Text="Req. Shipping" />
+
+        <TextBlock
+            Grid.Row="0"
+            Grid.Column="1"
+            Margin="10,0,0,10"
+            HorizontalAlignment="Left"
+            Style="{StaticResource FieldLabel}">
+            <TextBlock.Text>
+                <Binding
+                    Converter="{StaticResource NoneWhenEmpty}"
+                    ConverterParameter="(None)"
+                    Path="ShipmentModel.SelectedOrder.RequestedShipping" />
+            </TextBlock.Text>
+        </TextBlock>
+
+        <TextBlock
+            Grid.Row="1"
+            Grid.Column="0"
+            Style="{StaticResource FieldLabel}"
+            Text="Provider" />
+
+        <ComboBox
+            Grid.Row="1"
+            Grid.Column="1"
+            ui:Focus.Startup="true"
+            DisplayMemberPath="Value"
+            ItemsSource="{Binding Providers}"
+            SelectedValue="{Binding ShipmentTypeCode, UpdateSourceTrigger=PropertyChanged}"
+            SelectedValuePath="Key"
+            Style="{StaticResource FormComboBox}" />
+        <StackPanel
+            Grid.Row="2"
+            Grid.Column="1"
+            Margin="10,0,0,0"
+            Orientation="Vertical">
+            <StackPanel.Resources>
+                <Style TargetType="FlowDocument">
+                    <Setter Property="FontSize" Value="14" />
+                    <Setter Property="Foreground" Value="Red" />
+                </Style>
+            </StackPanel.Resources>
+            <FlowDocumentScrollViewer IsToolBarVisible="False" VerticalScrollBarVisibility="Hidden">
+                <FlowDocumentScrollViewer.Visibility>
+                    <Binding Converter="{StaticResource BooleanToVisibility}" Path="ShipmentModel.ShipmentAllowEditing" />
+                </FlowDocumentScrollViewer.Visibility>
+                <FlowDocument PagePadding="0">
+                    <Paragraph>
+                        Modifying
+                        <Run Text="{Binding ShipmentTypeCode, Converter={StaticResource EnumDescription}}" />
+                        shipment details is not supported in Order Lookup Mode. You can:
+                    </Paragraph>
+                    <List >
+                        <ListItem>
+                            <Paragraph>Create the label with the current shipment details.</Paragraph>
+                        </ListItem>
+                        <ListItem>
+                            <Paragraph>Apply a shipping profile then create the label.</Paragraph>
+                        </ListItem>
+                        <ListItem>
+                            <Paragraph>Process the shipment in Batch Grid mode.</Paragraph>
+                        </ListItem>
+                    </List>
+                </FlowDocument>
+            </FlowDocumentScrollViewer>
+        </StackPanel>
+    </Grid>
+</UserControl>

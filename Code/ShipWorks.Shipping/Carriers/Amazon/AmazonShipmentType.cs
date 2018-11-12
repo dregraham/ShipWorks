@@ -11,6 +11,7 @@ using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Data;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Editions;
 using ShipWorks.Shipping.Carriers.Amazon.Enums;
 using ShipWorks.Shipping.Carriers.BestRate;
@@ -87,6 +88,11 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             shipment.Amazon.ShippingServiceName;
 
         /// <summary>
+        /// Get the carrier specific description of the shipping service used.
+        /// </summary>
+        public override string GetServiceDescription(string serviceCode) => serviceCode;
+
+        /// <summary>
         /// Get detailed information about the parcel in a generic way that can be used across shipment types
         /// </summary>
         public override ShipmentParcel GetParcelDetail(ShipmentEntity shipment, int parcelIndex)
@@ -125,7 +131,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// <summary>
         /// Load all the label data for the given shipmentID
         /// </summary>
-        static List<TemplateLabelData> LoadLabelData(Func<ShipmentEntity> shipment)
+        private static List<TemplateLabelData> LoadLabelData(Func<ShipmentEntity> shipment)
         {
             MethodConditions.EnsureArgumentIsNotNull(shipment, nameof(shipment));
 
@@ -221,19 +227,12 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             amazon.Reference1 = "Order {//Order/Number}";
             amazon.ShippingProfile.RequestedLabelFormat = (int) ThermalLanguage.None;
         }
-       
-        /// <summary>
-        /// Updates the total weight of the shipment
-        /// </summary>
-        public override void UpdateTotalWeight(ShipmentEntity shipment)
-        {
-            shipment.TotalWeight = shipment.ContentWeight;
 
-            if (shipment.Amazon.DimsAddWeight)
-            {
-                shipment.TotalWeight += shipment.Amazon.DimsWeight;
-            }
-        }
+        /// <summary>
+        /// Get the dims weight from a shipment, if any
+        /// </summary>
+        protected override double GetDimsWeight(IShipmentEntity shipment) =>
+            shipment.Amazon?.DimsAddWeight == true ? shipment.Amazon.DimsWeight : 0;
 
         /// <summary>
         /// Tracks the shipment.

@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Reactive;
+using System.Reactive.Disposables;
 using System.Threading.Tasks;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.Metrics;
@@ -14,9 +16,8 @@ namespace Interapptive.Shared.Utility
     public class TelemetricResult<T> : ITelemetryCollection<T>
     {
         private readonly string baseTelemetryName;
-        private readonly Stopwatch stopwatch;
         private readonly Dictionary<string, List<long>> telemetry;
-        private string currentEventName;
+        private readonly string currentEventName;
 
         /// <summary>
         /// Constructor
@@ -25,7 +26,6 @@ namespace Interapptive.Shared.Utility
         {
             this.baseTelemetryName = baseTelemetryName;
             currentEventName = string.Empty;
-            stopwatch = new Stopwatch();
             telemetry = new Dictionary<string, List<long>>();
         }
 
@@ -48,72 +48,109 @@ namespace Interapptive.Shared.Utility
         /// <summary>
         /// Run and record a time entry for specified action
         /// </summary>
+        /// <remarks>
+        /// Using the TelemetricEventType is useful when the same event
+        /// type is being used in multiple places and you want to
+        /// guarantee consistent event names.
+        /// </remarks>
         public void RunTimedEvent(TelemetricEventType eventType, Action eventToTime) =>
             RunTimedEvent(eventType, eventToTime.ToFunc());
 
         /// <summary>
         /// Run and record a time entry for specified action
         /// </summary>
-        public K RunTimedEvent<K>(TelemetricEventType eventType, Func<K> eventToTime)
-        {
-            StartTimedEvent(EnumHelper.GetDescription(eventType));
-            try
-            {
-                return eventToTime();
-            }
-            finally
-            {
-                StopTimedEvent(EnumHelper.GetDescription(eventType));
-            }
-        }
+        /// <remarks>
+        /// Using the TelemetricEventType is useful when the same event
+        /// type is being used in multiple places and you want to
+        /// guarantee consistent event names.
+        /// </remarks>
+        public K RunTimedEvent<K>(TelemetricEventType eventType, Func<K> eventToTime) =>
+            RunTimedEvent(EnumHelper.GetDescription(eventType), eventToTime);
 
         /// <summary>
         /// Run and record a time entry for specified action
         /// </summary>
-        public async Task RunTimedEventAsync(TelemetricEventType eventType, Func<Task> eventToTime)
-        {
-            StartTimedEvent(EnumHelper.GetDescription(eventType));
-            try
-            {
-                await eventToTime();
-                StopTimedEvent(EnumHelper.GetDescription(eventType));
-            }
-            catch (Exception)
-            {
-                StopTimedEvent(EnumHelper.GetDescription(eventType));
-                throw;
-            }
-        }
+        /// <remarks>
+        /// Specifying the eventName as a string gives you more control
+        /// over the naming of the timed event or for cases where you're not
+        /// concerned about consistent naming for the same type of event that
+        /// can be invoked from multiple places.
+        /// </remarks>
+        public void RunTimedEvent(string eventName, Action eventToTime) =>
+            RunTimedEvent(eventName, eventToTime.ToFunc());
+
+        /// <summary>
+        /// Run and record a time entry for specified action
+        /// </summary>
+        /// <remarks>
+        /// Specifying the eventName as a string gives you more control
+        /// over the naming of the timed event or for cases where you're not
+        /// concerned about consistent naming for the same type of event that
+        /// can be invoked from multiple places.
+        /// </remarks>
+        public K RunTimedEvent<K>(string eventName, Func<K> eventToTime) =>
+            Functional.Using(StartTimedEvent(eventName), _ => eventToTime());
+
+        /// <summary>
+        /// Run and record a time entry for specified action
+        /// </summary>
+        /// <remarks>
+        /// Using the TelemetricEventType is useful when the same event
+        /// type is being used in multiple places and you want to
+        /// guarantee consistent event names.
+        /// </remarks>
+        public Task RunTimedEventAsync(TelemetricEventType eventType, Func<Task> eventToTime) =>
+            RunTimedEventAsync(EnumHelper.GetDescription(eventType), () => eventToTime().ContinueWith((t) => Unit.Default));
+
+        /// <summary>
+        /// Run and record a time entry for specified action
+        /// </summary>
+        /// <remarks>
+        /// Using the TelemetricEventType is useful when the same event
+        /// type is being used in multiple places and you want to
+        /// guarantee consistent event names.
+        /// </remarks>
+        public Task RunTimedEventAsync(string eventName, Func<Task> eventToTime) =>
+            RunTimedEventAsync(eventName, () => eventToTime().ContinueWith((t) => Unit.Default));
+
+        /// <summary>
+        /// Run and record a time entry for specified action
+        /// </summary>
+        /// <remarks>
+        /// Using the TelemetricEventType is useful when the same event
+        /// type is being used in multiple places and you want to
+        /// guarantee consistent event names.
+        /// </remarks>
+        public Task<K> RunTimedEventAsync<K>(TelemetricEventType eventType, Func<Task<K>> eventToTime) =>
+            RunTimedEventAsync(EnumHelper.GetDescription(eventType), eventToTime);
+
+        /// <summary>
+        /// Run and record a time entry for specified action
+        /// </summary>
+        /// <remarks>
+        /// Specifying the eventName as a string gives you more control
+        /// over the naming of the timed event or for cases where you're not
+        /// concerned about consistent naming for the same type of event that
+        /// can be invoked from multiple places.
+        /// </remarks>
+        public Task<K> RunTimedEventAsync<K>(string eventName, Func<Task<K>> eventToTime) =>
+            Functional.UsingAsync(StartTimedEvent(eventName), _ => eventToTime());
 
         /// <summary>
         /// Start timing an event
         /// </summary>
-        private void StartTimedEvent(string eventName)
+        private IDisposable StartTimedEvent(string eventName)
         {
-            Debug.Assert(stopwatch.IsRunning == false);
-
-            currentEventName = eventName;
+            var stopwatch = new Stopwatch();
             stopwatch.Start();
-        }
 
-        /// <summary>
-        /// End timing of an event and store the result
-        /// </summary>
-        private void StopTimedEvent(string eventName)
-        {
-            Debug.Assert(stopwatch.IsRunning);
-
-            if (eventName != currentEventName)
+            return Disposable.Create(() =>
             {
-                throw new ArgumentException($"Invalid call to StopTimedEvent. EventName '{eventName}' must match CurrentEventName '{currentEventName}'.");
-            }
+                stopwatch.Stop();
 
-            stopwatch.Stop();
-
-            long elapsed = stopwatch.ElapsedMilliseconds;
-            AddEntry($"{baseTelemetryName}.{eventName}", elapsed);
-
-            stopwatch.Reset();
+                long elapsed = stopwatch.ElapsedMilliseconds;
+                AddEntry($"{baseTelemetryName}.{eventName}", elapsed);
+            });
         }
 
         /// <summary>
@@ -148,6 +185,11 @@ namespace Interapptive.Shared.Utility
         /// </summary>
         public void WriteTo(ITrackedDurationEvent trackedDurationEvent)
         {
+            if (trackedDurationEvent == null)
+            {
+                return;
+            }
+
             long overallTime = 0;
             foreach (KeyValuePair<string, List<long>> telemetryEventType in telemetry)
             {

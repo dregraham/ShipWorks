@@ -26,6 +26,7 @@ using ShipWorks.Filters.Content;
 using ShipWorks.Filters.Content.Conditions;
 using ShipWorks.Filters.Content.Conditions.Shipments;
 using ShipWorks.Messaging.Messages.Shipping;
+using ShipWorks.Settings;
 using ShipWorks.Shipping.Carriers.FedEx;
 using ShipWorks.Shipping.Carriers.iParcel;
 using ShipWorks.Shipping.Carriers.OnTrac;
@@ -43,6 +44,7 @@ using ShipWorks.Tests.Shared.Carriers.Postal.Usps;
 using ShipWorks.Tests.Shared.Database;
 using ShipWorks.Tests.Shared.EntityBuilders;
 using ShipWorks.Tests.Shared.ExtensionMethods;
+using ShipWorks.Users;
 using Xunit;
 
 namespace ShipWorks.Shipping.Tests.Integration.Services
@@ -58,6 +60,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
         private Mock<IMessageHelper> messageHelper;
         private Mock<IMessenger> messenger;
         private Mock<IDateTimeProvider> dateTimeProvider;
+        private Mock<IUserSession> userSession;
 
         public ShipmentProcessorTest(DatabaseFixture db)
         {
@@ -69,9 +72,14 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
                     dateTimeProvider = builder.RegisterMock<IDateTimeProvider>(mock);
                     builder.RegisterMock<IActionDispatcher>(mock);
                     builder.RegisterMock<ITangoWebClient>(mock);
+                    userSession = builder.RegisterMock<IUserSession>(mock);
                 });
 
             dateTimeProvider.Setup(x => x.UtcNow).Returns(new DateTime(2016, 1, 20, 10, 30, 0));
+
+            userSession.Setup(u => u.IsLoggedOn).Returns(true);
+            userSession.Setup(u => u.User).Returns(context.User);
+            userSession.Setup(u => u.Computer).Returns(context.Computer);
 
             Modify.Store(context.Store)
                 .Set(x => x.Enabled, true)
@@ -204,6 +212,28 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
             await ProcessShipment();
 
             Assert.False(shipment.Processed);
+        }
+
+        [Theory]
+        [InlineData(UIMode.Batch)]
+        [InlineData(UIMode.OrderLookup)]
+        public async Task Process_SetsProcessedWithUiMode_Correctly(UIMode expectedUiMode)
+        {
+            context.User.Settings.UIMode = expectedUiMode;
+            userSession.Setup(u => u.User).Returns(context.User);
+            userSession.Setup(u => u.Settings).Returns(context.User.Settings);
+
+            Modify.Entity(shipment.Other)
+                .Set(x => x.Carrier, "Foo")
+                .Set(x => x.Service, "Bar")
+                .Save();
+
+            testObject = context.Container.Resolve<IShipmentProcessor>();
+
+            var results = await ProcessShipment();
+            shipment = results.First().Shipment;
+
+            Assert.Equal(expectedUiMode, shipment.ProcessedWithUiMode);
         }
 
         [Fact]

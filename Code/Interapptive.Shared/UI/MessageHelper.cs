@@ -58,6 +58,20 @@ namespace Interapptive.Shared.UI
         }
 
         /// <summary>
+        /// Show an error message box with the given error text.
+        /// </summary>
+        public static void ShowError(IWin32Window owner, string text, Exception ex)
+        {
+            log.Error($"ShowError: {text}", ex);
+
+            MessageBox.Show(owner,
+                text,
+                Caption,
+                MessageBoxButtons.OK,
+                MessageBoxIcon.Error);
+        }
+
+        /// <summary>
         /// Show an information message box with no icon.
         /// </summary>
         public static void ShowMessage(IWin32Window owner, string text)

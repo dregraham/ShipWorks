@@ -524,24 +524,30 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             profile.FedEx.ReturnsClearance = false;
             profile.FedEx.ThirdPartyConsignee = false;
         }
-        
+
         /// <summary>
         /// Update the dynamic shipment data that could have changed "outside" the known editor
         /// </summary>
-        [NDependIgnoreLongMethod]
         public override void UpdateDynamicShipmentData(ShipmentEntity shipment)
         {
             base.UpdateDynamicShipmentData(shipment);
 
-            if (shipment.FedEx.HomeDeliveryDate < dateTimeProvider.Now.Date)
-            {
-                shipment.FedEx.HomeDeliveryDate = dateTimeProvider.Now.Date.AddHours(12);
-            }
+            RectifyCarrierSpecificData(shipment);
+        }
 
-            if (shipment.FedEx.FreightGuaranteeDate < dateTimeProvider.Now.Date)
-            {
-                shipment.FedEx.FreightGuaranteeDate = dateTimeProvider.Now.Date.AddHours(12);
-            }
+        /// <summary>
+        /// Rectifies carrier specific data on the shipment
+        /// </summary>
+        /// <remarks>
+        /// This allows the ShipmentType to fix any issues on the shipment
+        /// for example if the service is not valid for the ship to country
+        /// or if the packaging type is not valid for the service type
+        /// </remarks>
+        public override void RectifyCarrierSpecificData(ShipmentEntity shipment)
+        {
+            base.RectifyCarrierSpecificData(shipment);
+
+            UpdateShipmentDates(shipment);
 
             // Ensure the cod address is up-to-date
             if (!UpdatePersonAddress(shipment, new PersonAdapter(shipment.FedEx, "Cod"), shipment.FedEx.CodOriginID))
@@ -585,36 +591,62 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             // Check the FedEx wide PennyOne settings and get them updated
             foreach (var package in shipment.FedEx.Packages)
             {
-                package.InsurancePennyOne = settings.FedExInsurancePennyOne;
+                RectifyPackageSpecificData(package, shipment, settings, maxPackageDeclaredValue);
+            }
+        }
 
-                // For SmartPost, we force Penny One since FedEx does not provide the first $100 for that
-                // For LTL Freight, we force Penny One to match liability calculations from DHL Express and Asendia
-                if (shipment.FedEx.Service == (int) FedExServiceType.SmartPost ||
-                    FedExUtility.IsFreightLtlService(shipment.FedEx.Service))
-                {
-                    package.InsurancePennyOne = true;
-                }
+        /// <summary>
+        /// Update various shipment dates
+        /// </summary>
+        private void UpdateShipmentDates(ShipmentEntity shipment)
+        {
+            var now = dateTimeProvider.Now.Date;
 
-                // The only time we send the full insured value as declared value is if insurance is enabled, and they are using carrier insurance.
-                if (shipment.Insurance && shipment.InsuranceProvider == (int) InsuranceProvider.Carrier)
-                {
-                    package.DeclaredValue = package.InsuranceValue;
-                }
-                else if (shipment.FedEx.Service == (int) FedExServiceType.SmartPost)
-                {
-                    // SmartPost shouldn't be sending any insurance value
-                    package.DeclaredValue = 0;
-                }
-                else
-                {
-                    // Otherwise, regardless of if they are insuring or not, penny one or not, etc., we just send up to the first $100 since it's free anyway
-                    package.DeclaredValue = Math.Min(100, package.InsuranceValue);
+            if (shipment.FedEx.HomeDeliveryDate < now)
+            {
+                shipment.FedEx.HomeDeliveryDate = now.AddHours(12);
+            }
 
-                    // We may have to lower it some more for international shipments so we aren't higher than the CustomsValue
-                    if (maxPackageDeclaredValue != null)
-                    {
-                        package.DeclaredValue = Math.Min(package.DeclaredValue, (decimal) maxPackageDeclaredValue);
-                    }
+            if (shipment.FedEx.FreightGuaranteeDate < now)
+            {
+                shipment.FedEx.FreightGuaranteeDate = now.AddHours(12);
+            }
+        }
+
+        /// <summary>
+        /// Rectify package specific data
+        /// </summary>
+        private static void RectifyPackageSpecificData(FedExPackageEntity package, IShipmentEntity shipment, IShippingSettingsEntity settings, decimal? maxPackageDeclaredValue)
+        {
+            package.InsurancePennyOne = settings.FedExInsurancePennyOne;
+
+            // For SmartPost, we force Penny One since FedEx does not provide the first $100 for that
+            // For LTL Freight, we force Penny One to match liability calculations from DHL Express and Asendia
+            if (shipment.FedEx.Service == (int) FedExServiceType.SmartPost ||
+                FedExUtility.IsFreightLtlService(shipment.FedEx.Service))
+            {
+                package.InsurancePennyOne = true;
+            }
+
+            // The only time we send the full insured value as declared value is if insurance is enabled, and they are using carrier insurance.
+            if (shipment.Insurance && shipment.InsuranceProvider == (int) InsuranceProvider.Carrier)
+            {
+                package.DeclaredValue = package.InsuranceValue;
+            }
+            else if (shipment.FedEx.Service == (int) FedExServiceType.SmartPost)
+            {
+                // SmartPost shouldn't be sending any insurance value
+                package.DeclaredValue = 0;
+            }
+            else
+            {
+                // Otherwise, regardless of if they are insuring or not, penny one or not, etc., we just send up to the first $100 since it's free anyway
+                package.DeclaredValue = Math.Min(100, package.InsuranceValue);
+
+                // We may have to lower it some more for international shipments so we aren't higher than the CustomsValue
+                if (maxPackageDeclaredValue != null)
+                {
+                    package.DeclaredValue = Math.Min(package.DeclaredValue, (decimal) maxPackageDeclaredValue);
                 }
             }
         }
@@ -649,27 +681,10 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         }
 
         /// <summary>
-        /// Update the total weight of the shipment based on the individual package weights
+        /// Get weights from packages
         /// </summary>
-        public override void UpdateTotalWeight(ShipmentEntity shipment)
-        {
-            double contentWeight = 0;
-            double totalWeight = 0;
-
-            foreach (FedExPackageEntity package in shipment.FedEx.Packages)
-            {
-                contentWeight += package.Weight;
-                totalWeight += package.Weight;
-
-                if (package.DimsAddWeight)
-                {
-                    totalWeight += package.DimsWeight;
-                }
-            }
-
-            shipment.ContentWeight = contentWeight;
-            shipment.TotalWeight = totalWeight;
-        }
+        protected override IEnumerable<(double weight, bool addDimsWeight, double dimsWeight)> GetPackageWeights(IShipmentEntity shipment) =>
+            shipment.FedEx?.Packages?.Select(x => (x.Weight, x.DimsAddWeight, x.DimsWeight));
 
         /// <summary>
         /// Indicates if the residential status indicator is required for the given shipment
@@ -680,10 +695,21 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// <summary>
         /// Get the carrier specific description of the shipping service used
         /// </summary>
-        public override string GetServiceDescription(ShipmentEntity shipment)
-        {
-            return string.Format("{0}", EnumHelper.GetDescription((FedExServiceType) shipment.FedEx.Service));
-        }
+        public override string GetServiceDescription(ShipmentEntity shipment) =>
+            GetServiceDescriptionInternal((FedExServiceType) shipment.FedEx.Service);
+
+        /// <summary>
+        /// Get the service description for the shipment
+        /// </summary>
+        public override string GetServiceDescription(string serviceCode) =>
+            Functional.ParseInt(serviceCode)
+                .Match(x => GetServiceDescriptionInternal((FedExServiceType) x), _ => "Unknown");
+
+        /// <summary>
+        /// Get the carrier specific description of the shipping service used
+        /// </summary>
+        private string GetServiceDescriptionInternal(FedExServiceType service) =>
+            EnumHelper.GetDescription(service);
 
         /// <summary>
         /// Get the FedEx account number used for the shipment
@@ -917,7 +943,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
 
             FedExSettings fedExSettings = new FedExSettings(SettingsRepository);
 
-            if (!string.IsNullOrWhiteSpace(shipment.TrackingNumber) 
+            if (!string.IsNullOrWhiteSpace(shipment.TrackingNumber)
                 && FedExUtility.IsFimsService((FedExServiceType) shipment.FedEx.Service))
             {
                 return string.Format(fedExSettings.FimsTrackEndpointUrlFormat, shipment.TrackingNumber);

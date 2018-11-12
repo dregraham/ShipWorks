@@ -10,6 +10,6 @@ namespace ShipWorks.Filters.Search
         /// <summary>
         /// Gets a filter definition based on the provided quick search string.
         /// </summary>
-        FilterDefinition GetDefinition(string quickSearchString);
+        IFilterDefinition GetDefinition(string quickSearchString);
     }
 }

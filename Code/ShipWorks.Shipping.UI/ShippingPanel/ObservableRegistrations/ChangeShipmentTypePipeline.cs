@@ -1,4 +1,7 @@
-﻿using Autofac.Features.OwnedInstances;
+﻿using System;
+using System.Linq;
+using System.Reactive.Linq;
+using Autofac.Features.OwnedInstances;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.Threading;
 using Interapptive.Shared.Utility;
@@ -7,9 +10,6 @@ using ShipWorks.Core.Messaging;
 using ShipWorks.Messaging.Messages;
 using ShipWorks.Shipping.Insurance;
 using ShipWorks.Shipping.Services;
-using System;
-using System.Linq;
-using System.Reactive.Linq;
 
 namespace ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations
 {
@@ -50,9 +50,8 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations
                 .Where(x => x == nameof(viewModel.ShipmentType))
                 .Where(x => viewModel.Shipment != null && viewModel.ShipmentStatus == ShipmentStatus.Unprocessed)
                 .Select(_ => ChangeShipmentType(viewModel))
-                .CatchAndContinue((Exception ex) => log.Error("An error occurred while changing shipment types", ex))
                 .ObserveOn(schedulerProvider.Dispatcher)
-                .Subscribe(x =>
+                .Do(x =>
                 {
                     // We need to get a reference to the view model before loading the shipment because loading the shipment
                     // will dispose the lifetimeScope that owns the createInsuranceBehaviorChangeViewModel func
@@ -64,7 +63,9 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations
                     x.originalInsuranceSelection.Do(i => ShowInsuranceNotification(x.adapter, i, insuranceViewModel));
 
                     messenger.Send(new ShipmentChangedMessage(this, x.adapter, nameof(viewModel.ShipmentType)));
-                });
+                })
+                .CatchAndContinue((Exception ex) => log.Error("An error occurred while changing shipment types", ex))
+                .Subscribe();
         }
 
         /// <summary>

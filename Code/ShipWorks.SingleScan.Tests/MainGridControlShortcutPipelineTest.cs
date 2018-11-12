@@ -11,6 +11,7 @@ using ShipWorks.Common.IO.KeyboardShortcuts.Messages;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.IO.KeyboardShortcuts;
+using ShipWorks.Settings;
 using ShipWorks.Users;
 using Xunit;
 using static ShipWorks.Tests.Shared.ExtensionMethods.ParameterShorteners;
@@ -24,7 +25,7 @@ namespace ShipWorks.SingleScan.Tests
         private readonly Mock<IMainGridControl> mainGridControl;
         private readonly MainGridControlShortcutPipeline testObject;
         private readonly TestScheduler scheduler;
-
+        
         public MainGridControlShortcutPipelineTest()
         {
             mock = AutoMockExtensions.GetLooseThatReturnsMocks();
@@ -32,6 +33,7 @@ namespace ShipWorks.SingleScan.Tests
             testMessenger = new TestMessenger();
             mock.Provide<IMessenger>(testMessenger);
             mainGridControl = mock.CreateMock<IMainGridControl>();
+
             testObject = mock.Create<MainGridControlShortcutPipeline>();
 
             Mock<ISchedulerProvider> scheduleProvider = mock.WithMockImmediateScheduler();
@@ -82,6 +84,26 @@ namespace ShipWorks.SingleScan.Tests
             scheduler.Start();
 
             mock.Mock<IMessageHelper>().Verify(m => m.ShowBarcodePopup(expectedIndicatorText), Times.Once);
+        }
+
+        [Fact]
+        public void BarcodeMessage_DoesNotShowIndicator_WhenNotInBatchUIMode()
+        {
+            mock.Mock<ICurrentUserSettings>()
+                .Setup(s => s.ShouldShowNotification(It.IsAny<UserConditionalNotificationType>()))
+                .Returns(true);
+
+            mock.Mock<ICurrentUserSettings>()
+                .Setup(s => s.GetUIMode())
+                .Returns(UIMode.OrderLookup);
+
+            var shortcut = new ShortcutEntity() { Action = KeyboardShortcutCommand.FocusQuickSearch };
+            var message = new ShortcutMessage(this, shortcut, ShortcutTriggerType.Barcode, string.Empty);
+            testMessenger.Send(message);
+
+            scheduler.Start();
+
+            mock.Mock<IMessageHelper>().Verify(m => m.ShowBarcodePopup(AnyString), Times.Never);
         }
 
         [Theory]

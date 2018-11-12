@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Reflection;
 using Shared.System.ComponentModel.DataAnnotations;
-using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Services;
 
@@ -25,8 +25,8 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
         private bool supportsPackageTypes;
         private bool supportsDimensions;
         protected ICarrierShipmentAdapter shipmentAdapter;
-        private ObservableCollection<DimensionsProfileEntity> dimensionsProfiles;
-        private DimensionsProfileEntity selectedDimensionsProfile;
+        private ObservableCollection<IDimensionsProfileEntity> dimensionsProfiles;
+        private IDimensionsProfileEntity selectedDimensionsProfile;
         private IInsuranceViewModel insuranceViewModel;
         private double dimsLength;
         private double dimsWidth;
@@ -118,9 +118,12 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
                     updatedServiceType = Services.FirstOrDefault().Key;
                 }
 
-                handler.Set(nameof(ServiceType), ref serviceType, updatedServiceType, false);
-                RefreshPackageTypes();
-                RefreshInsurance();
+                using (var serviceUpdateHandler = shipmentAdapter.NotifyIfServiceRelatedPropertiesChange(handler.RaisePropertyChanged))
+                {
+                    handler.Set(nameof(ServiceType), ref serviceType, updatedServiceType, false);
+                    RefreshPackageTypes();
+                    RefreshInsurance();
+                }
             }
         }
 
@@ -191,7 +194,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
         /// Gets or sets the packaging type.
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public DimensionsProfileEntity SelectedDimensionsProfile
+        public IDimensionsProfileEntity SelectedDimensionsProfile
         {
             get
             {
@@ -233,7 +236,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
         /// Does the shipment support package types?
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public ObservableCollection<DimensionsProfileEntity> DimensionsProfiles
+        public ObservableCollection<IDimensionsProfileEntity> DimensionsProfiles
         {
             get { return dimensionsProfiles; }
             set { handler.Set(nameof(DimensionsProfiles), ref dimensionsProfiles, value, true); }

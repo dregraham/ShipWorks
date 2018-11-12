@@ -21,7 +21,7 @@ namespace ShipWorks.Filters.Content.Conditions
         static readonly ILog log = LogManager.GetLogger(typeof(ConditionGroup));
 
         // List of conditions in the group
-        ObservableCollection<Condition> conditions = new ObservableCollection<Condition>();
+        ThreadSafeObservableCollection<Condition> conditions = new ThreadSafeObservableCollection<Condition>();
 
         // How the results are combined
         ConditionJoinType joinType = ConditionJoinType.All;

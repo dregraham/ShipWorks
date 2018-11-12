@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Interapptive.Shared.Collections;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Utility;
@@ -25,47 +24,42 @@ namespace ShipWorks.Templates.Printing
         /// Constructor
         /// </summary>
         public PrintJobFactory(
-            Func<string, ITrackedEvent> telemetryEventFunc, 
-            IShippingProfileService shippingProfileService, 
+            Func<string, ITrackedEvent> telemetryEventFunc,
+            IShippingProfileService shippingProfileService,
             IShortcutManager shortcutManager)
         {
             this.shippingProfileService = shippingProfileService;
             this.shortcutManager = shortcutManager;
         }
-        
+
         /// <summary>
         /// Create a barcode print job for all barcodes
         /// </summary>
         public IPrintJob CreateBarcodePrintJob()
         {
-            IEnumerable<PrintableBarcode> shippingProfileBarcodeData = shippingProfileService.GetConfiguredShipmentTypeProfiles()
-                .Where(p => !string.IsNullOrWhiteSpace(p.Barcode) || !string.IsNullOrWhiteSpace(p.ShortcutKey))
-                .Select(p => new PrintableBarcode(p.ShippingProfileEntity.Name, p.Barcode, p.ShortcutKey));
+            IEnumerable<PrintableBarcode> shippingProfileBarcodeData = shippingProfileService
+                .GetConfiguredShipmentTypeProfiles()
+                .Where(p => p.HasShortcutOrBarcode)
+                .Select(p => p.ToPrintableBarcode());
 
             BarcodePage profileBarcodePage = new BarcodePage("Shipping Profiles", shippingProfileBarcodeData);
             BarcodePage shortcutsBarcodePage = new BarcodePage("ShipWorks Shortcuts", GetBuiltInShortcutData());
-            
+
             return new BarcodePrintJob(this, new[] { profileBarcodePage, shortcutsBarcodePage });
         }
-        
+
         /// <summary>
         /// Get a list of profiles shortcut data
         /// </summary>
-        private IEnumerable<PrintableBarcode> GetBuiltInShortcutData()
-        {
-            List<PrintableBarcode> barcodes = new List<PrintableBarcode>();
-
+        private IEnumerable<PrintableBarcode> GetBuiltInShortcutData() =>
             shortcutManager.Shortcuts
                 .Where(s => s.Action != KeyboardShortcutCommand.ApplyProfile)
-                .ForEach(s => barcodes.Add(new PrintableBarcode(EnumHelper.GetDescription(s.Action), s.Barcode, new KeyboardShortcutData(s).ShortcutText)));
+                .Select(s => new PrintableBarcode(EnumHelper.GetDescription(s.Action), s.Barcode, new KeyboardShortcutData(s).ShortcutText));
 
-            return barcodes;
-        }
-        
         /// <summary>
         /// Crate a print job with the given template result
         /// </summary>
-        public IPrintJob CreatePrintJob(IList<TemplateResult> templateResults) => 
+        public IPrintJob CreatePrintJob(IList<TemplateResult> templateResults) =>
             PrintJob.Create(templateResults);
     }
 }

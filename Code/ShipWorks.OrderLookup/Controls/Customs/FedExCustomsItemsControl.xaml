@@ -1,0 +1,205 @@
+﻿<UserControl
+    x:Class="ShipWorks.OrderLookup.Controls.Customs.FedExCustomsItemsControl"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:geography="clr-namespace:Interapptive.Shared.Business.Geography;assembly=Interapptive.Shared"
+    xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+    xmlns:local="clr-namespace:ShipWorks.OrderLookup.Controls.Customs"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:ui="http://schemas.shipworks.com/ui"
+    d:DataContext="{d:DesignInstance local:FedExCustomsViewModel}"
+    d:DesignHeight="450"
+    d:DesignWidth="800"
+    mc:Ignorable="d">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/ShipWorks.OrderLookup;component/Styles/OrderLookupStyle.xaml" />
+                <ResourceDictionary Source="/ShipWorks.OrderLookup;component/Controls/Weight/WeightControl.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+            <ui:EmptyMoneyConverter x:Key="EmptyMoney" />
+            <ui:NullToBooleanConverter x:Key="NullToBoolean" />
+            <ui:VisibleWhenEqualToParameterConverter x:Key="VisibleWhenEqualToParameter" />
+            <ui:EmptyDoubleConverter x:Key="EmptyDouble" />
+        </ResourceDictionary>
+    </UserControl.Resources>
+    <Grid IsEnabled="{Binding ShipmentModel.ShipmentAllowEditing}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" />
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <Border
+                Grid.Row="0"
+                Grid.Column="0"
+                BorderBrush="#d7d7d7"
+                BorderThickness="1">
+                <TextBlock
+                    Margin="1,0,0,0"
+                    Background="#FAFAFA"
+                    Text="Description" />
+            </Border>
+
+            <ListBox
+                Grid.Row="1"
+                Grid.Column="0"
+                MaxHeight="97"
+                ItemsSource="{Binding CustomsItems}"
+                SelectedValue="{Binding SelectedCustomsItem}"
+                SelectionMode="Single">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <Grid>
+                            <TextBlock Text="{Binding Description}" />
+                            <TextBlock
+                                FontStyle="Italic"
+                                Foreground="LightGray"
+                                Text="No description"
+                                Visibility="{Binding Description, ConverterParameter='', Converter={StaticResource VisibleWhenEqualToParameter}}" />
+                        </Grid>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+            <StackPanel
+                Grid.Row="1"
+                Grid.Column="1"
+                Margin="10,0,0,0"
+                Orientation="Vertical">
+                <Button
+                    Margin="0,0,0,10"
+                    Command="{Binding AddCustomsItemCommand}"
+                    Style="{StaticResource OrderLookup.Button.Add}" />
+                <Button Command="{Binding DeleteCustomsItemCommand, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource OrderLookup.Button.Delete}" />
+            </StackPanel>
+        </Grid>
+        <GroupBox
+            Grid.Row="1"
+            Margin="0,10,0,0"
+            Header="Selected Content"
+            IsEnabled="{Binding SelectedCustomsItem, Converter={StaticResource NullToBoolean}}">
+            <Grid Margin="1,0,5,0">
+                <Grid.Resources>
+                    <Style BasedOn="{StaticResource FieldLabel}" TargetType="{x:Type TextBlock}" />
+                    <Style BasedOn="{StaticResource FormComboBox}" TargetType="{x:Type ComboBox}" />
+                    <Style BasedOn="{StaticResource FormTextBox}" TargetType="{x:Type TextBox}" />
+                </Grid.Resources>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <TextBlock
+                    Grid.Row="0"
+                    Grid.Column="0"
+                    Margin="0,10,0,10"
+                    Text="Quantity" />
+                <TextBox
+                    Grid.Row="0"
+                    Grid.Column="1"
+                    Margin="10,10,0,10"
+                    Style="{StaticResource FormNumberTextBox}"
+                    Text="{Binding SelectedCustomsItem.Quantity, ConverterParameter=1, Converter={StaticResource EmptyDouble}, NotifyOnValidationError=true, ValidatesOnDataErrors=true}">
+                    <i:Interaction.Behaviors>
+                        <ui:TextBoxInputRegExBehavior
+                            EmptyValue=""
+                            MaxLength="6"
+                            RegularExpression="^?\d+(,\d+)*(\.\d+(e\d+)?)?(\.)?$" />
+                    </i:Interaction.Behaviors>
+                </TextBox>
+                <TextBlock
+                    Grid.Row="1"
+                    Grid.Column="0"
+                    Text="Description" />
+                <TextBox
+                    Grid.Row="1"
+                    Grid.Column="1"
+                    MaxLength="150"
+                    Text="{Binding SelectedCustomsItem.Description, NotifyOnValidationError=true, ValidatesOnDataErrors=true}"
+                    Validation.ErrorTemplate="{StaticResource Template.Error.TextBox}" />
+                <TextBlock
+                    Grid.Row="2"
+                    Grid.Column="0"
+                    Text="Weight" />
+                <ui:WeightControl
+                    Grid.Row="2"
+                    Grid.Column="1"
+                    ErrorMessage="{Binding WeightErrorMessage, Mode=OneWay}"
+                    Style="{StaticResource OrderLookupWeightControl}"
+                    Weight="{Binding SelectedCustomsItem.Weight, Mode=TwoWay, UpdateSourceTrigger=LostFocus, ValidatesOnDataErrors=true, NotifyOnValidationError=true}" />
+                <TextBlock
+                    Grid.Row="3"
+                    Grid.Column="0"
+                    Text="Value" />
+                <TextBox
+                    Grid.Row="3"
+                    Grid.Column="1"
+                    Style="{StaticResource FormNumberTextBox}"
+                    Text="{Binding SelectedCustomsItem.UnitValue, Converter={StaticResource EmptyMoney}, NotifyOnValidationError=true, StringFormat=C, UpdateSourceTrigger=LostFocus, ValidatesOnDataErrors=true}" />
+                <TextBlock
+                    Grid.Row="4"
+                    Grid.Column="0"
+                    Text="Harmonized Code" />
+                <TextBox
+                    Grid.Row="4"
+                    Grid.Column="1"
+                    MaxLength="14"
+                    Style="{StaticResource FormNumberTextBox}"
+                    Text="{Binding SelectedCustomsItem.HarmonizedCode, NotifyOnValidationError=true, ValidatesOnDataErrors=true}" />
+                <TextBlock
+                    Grid.Row="5"
+                    Grid.Column="0"
+                    Text="Country of Origin" />
+                <ComboBox
+                    x:Name="CountryComboBox"
+                    Grid.Row="5"
+                    Grid.Column="1"
+                    DisplayMemberPath="Key"
+                    ItemsSource="{Binding Mode=OneTime, Source={x:Static geography:CountryList.Countries}}"
+                    SelectedValue="{Binding SelectedCustomsItem.CountryOfOrigin}"
+                    SelectedValuePath="Value"
+                    Style="{StaticResource FormComboBox}" />
+
+                <TextBlock
+                    Grid.Row="6"
+                    Grid.Column="0"
+                    Text="Number of Pieces" />
+                <TextBox
+                    Grid.Row="6"
+                    Grid.Column="1"
+                    MaxLength="14"
+                    Style="{StaticResource FormNumberTextBox}"
+                    Text="{Binding SelectedCustomsItem.NumberOfPieces, NotifyOnValidationError=true, ValidatesOnDataErrors=true}" />
+
+                <TextBlock
+                    Grid.Row="7"
+                    Grid.Column="0"
+                    Text="Unit Price" />
+                <TextBox
+                    Grid.Row="7"
+                    Grid.Column="1"
+                    MaxLength="14"
+                    Style="{StaticResource FormNumberTextBox}"
+                    Text="{Binding SelectedCustomsItem.UnitPriceAmount, Converter={StaticResource EmptyMoney}, NotifyOnValidationError=true, StringFormat=C, UpdateSourceTrigger=LostFocus, ValidatesOnDataErrors=true}" />
+            </Grid>
+        </GroupBox>
+    </Grid>
+</UserControl>
+

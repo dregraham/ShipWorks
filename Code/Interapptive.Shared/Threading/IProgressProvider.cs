@@ -33,7 +33,7 @@ namespace Interapptive.Shared.Threading
         /// <summary>
         /// The current list of items in progress
         /// </summary>
-        ObservableCollection<IProgressReporter> ProgressItems { get; }
+        ThreadSafeObservableCollection<IProgressReporter> ProgressItems { get; }
 
         /// <summary>
         /// Creates and adds a new ProgressItem of the given name

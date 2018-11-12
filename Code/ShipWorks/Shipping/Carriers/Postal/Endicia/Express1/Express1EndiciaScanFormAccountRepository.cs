@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
-using ShipWorks.Shipping.ScanForms;
+using System.Linq;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.ScanForms;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Endicia.Express1
 {
@@ -24,5 +25,10 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.Express1
 
             return carrierAccounts;
         }
+
+        /// <summary>
+        /// Does the repository have any accounts
+        /// </summary>
+        public bool HasAccounts => EndiciaAccountManager.Express1AccountsReadOnly.Any();
     }
 }

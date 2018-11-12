@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
-using System.Windows.Input;
 using Interapptive.Shared.Win32.Native;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.IO.KeyboardShortcuts;
 
 namespace ShipWorks.Common.IO.KeyboardShortcuts
@@ -22,6 +22,11 @@ namespace ShipWorks.Common.IO.KeyboardShortcuts
         /// </summary>
         /// <returns></returns>
         IEnumerable<ShortcutEntity> Shortcuts { get; }
+
+        /// <summary>
+        /// All the shortcuts
+        /// </summary>
+        IEnumerable<IShortcutEntity> ShortcutsReadOnly { get; }
 
         /// <summary>
         /// Save shortcut

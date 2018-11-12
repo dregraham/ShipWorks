@@ -19,8 +19,17 @@ namespace ShipWorks.UI.ValueConverters
         /// </summary>
         public virtual object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            return !DesignModeDetector.IsDesignerHosted() ?
-                EnumHelper.GetDescription(value as Enum) : "Designer enum description.";
+            if (DesignModeDetector.IsDesignerHosted())
+            {
+                return "Designer enum description.";
+            }
+
+            if (value == null || string.IsNullOrWhiteSpace(value.ToString()))
+            {
+                return null;
+            }
+
+            return EnumHelper.GetDescription(value as Enum);
         }
 
         /// <summary>

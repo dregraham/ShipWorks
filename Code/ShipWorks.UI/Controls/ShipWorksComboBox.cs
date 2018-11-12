@@ -11,7 +11,7 @@ namespace ShipWorks.UI.Controls
     /// </summary>
     public class ShipWorksComboBox : ComboBox
     {
-        static readonly PropertyMetadata existingMetadata = SelectedValueProperty.GetMetadata(typeof(Selector));
+        private static readonly PropertyMetadata existingMetadata = SelectedValueProperty.GetMetadata(typeof(Selector));
 
         /// <summary>
         /// Message type dependency property
@@ -84,7 +84,7 @@ namespace ShipWorks.UI.Controls
                 // (because we delayed execution by dispatching), don't change the value. We got into a situation
                 // where the value would be null first, then set correctly. The null would schedule this action,
                 // then the correct value would be set. Then this action would be run and wipe out the correct value.
-                if (combo.SelectedItem == null)
+                if (combo.SelectedItem == null && combo.Items.OfType<object>().Any())
                 {
                     combo.SelectedItem = relativeIndex == RelativeIndex.Last ?
                         combo.Items.OfType<object>().Last() :

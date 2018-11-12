@@ -137,6 +137,7 @@
   <ItemGroup>
     <Compile Include="Custom\AmazonOrderEntityTest.cs" />
     <Compile Include="Custom\ChannelAdvisorOrderEntityTest.cs" />
+    <Compile Include="Custom\CommonEntityBaseTest.cs" />
     <Compile Include="Custom\EndicaAccountEntityTest.cs" />
     <Compile Include="Custom\FedExAccountEntityTest.cs" />
     <Compile Include="Custom\IParcelAccountEntityTest.cs" />

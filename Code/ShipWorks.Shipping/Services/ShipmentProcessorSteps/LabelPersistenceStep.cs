@@ -174,6 +174,7 @@ namespace ShipWorks.Shipping.Services.ShipmentProcessorSteps
             shipment.ProcessedDate = dateTimeProvider.UtcNow;
             shipment.ProcessedUserID = userSession.User.UserID;
             shipment.ProcessedComputerID = userSession.Computer.ComputerID;
+            shipment.ProcessedWithUiMode = userSession.Settings.UIMode;
         }
 
         /// <summary>

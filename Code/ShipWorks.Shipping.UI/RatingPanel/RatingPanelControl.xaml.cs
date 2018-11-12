@@ -1,16 +1,23 @@
-﻿using System.Windows.Controls;
-
-namespace ShipWorks.Shipping.UI.RatingPanel
+﻿namespace ShipWorks.Shipping.UI.RatingPanel
 {
     /// <summary>
     /// Interaction logic for RatingPanelControl.xaml
     /// </summary>
-    public partial class RatingPanelControl : UserControl
+    public partial class RatingPanelControl
     {
-        public RatingPanelControl(RatingPanelViewModel viewModel)
+        /// <summary>
+        /// Ctor
+        /// </summary>
+        public RatingPanelControl()
         {
             InitializeComponent();
+        }
 
+        /// <summary>
+        /// Ctor that loads the view model
+        /// </summary>
+        public RatingPanelControl(RatingPanelViewModel viewModel) : this()
+        {
             DataContext = viewModel;
         }
     }

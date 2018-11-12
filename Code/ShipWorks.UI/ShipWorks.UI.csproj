@@ -139,14 +139,14 @@
     </Compile>
     <Compile Include="AttachedProperties\DoubleClick.cs" />
     <Compile Include="AttachedProperties\EntityFieldLength.cs" />
-    <Compile Include="AttachedProperties\Focus.cs" />
+    <Compile Include="AttachedProperties\Focus.Startup.cs" />
     <Compile Include="AttachedProperties\LimitScrollSize.cs" />
     <Compile Include="AttachedProperties\LimitScrollSizeMode.cs" />
+    <Compile Include="AttachedProperties\Link.cs" />
     <Compile Include="AttachedProperties\ListSelection.cs" />
     <Compile Include="AttachedProperties\PopupClickManager.cs" />
     <Compile Include="AttachedProperties\TextRestriction.cs" />
     <Compile Include="AttachedProperties\UpdateWhenMessageReceived.cs" />
-    <Compile Include="AttachedProperties\Link.cs" />
     <Compile Include="AttachedProperties\WebBrowserUtility.cs" />
     <Compile Include="BackgroundAsyncMessageHelper.cs" />
     <Compile Include="Behaviors\ComboBoxSelectionChangedBehavior.cs" />
@@ -176,6 +176,7 @@
     <Compile Include="Controls\ChannelLimit\ChannelLimitDlgFactory.cs" />
     <Compile Include="Controls\ChannelLimit\ChannelLimitFactory.cs" />
     <Compile Include="Controls\ChannelLimit\ChannelLimitViewModel.cs" />
+    <Compile Include="Controls\ControlOwnerProvider.cs" />
     <Compile Include="Controls\CustomerLicenseActivation\CustomerLicenseActivationDlgViewModel.cs" />
     <Compile Include="Controls\CustomerLicenseActivation\CustomerLicenseActivationControl.xaml.cs">
       <DependentUpon>CustomerLicenseActivationControl.xaml</DependentUpon>
@@ -190,7 +191,9 @@
       <DependentUpon>CustomerLicenseActivationDlg.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\CustomerLicenseActivation\CustomerLicenseActivationViewModel.cs" />
+    <Compile Include="Controls\FieldLayoutRowDefinition.cs" />
     <Compile Include="Controls\KeyboardShortcutDisplay.cs" />
+    <Compile Include="Controls\TokenTextBox.cs" />
     <Compile Include="Controls\WebBrowser\DismissableWebBrowserDlg.xaml.cs">
       <DependentUpon>DismissableWebBrowserDlg.xaml</DependentUpon>
     </Compile>
@@ -250,11 +253,21 @@
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="AttachedProperties\ExpanderState.cs" />
+    <Compile Include="Selectors\ListStyleSelector.cs" />
     <Compile Include="Services\MessageHelperWrapper.cs" />
+    <Compile Include="Triggers\SetFocusTrigger.cs" />
     <Compile Include="UiModule.cs" />
+    <Compile Include="ValueConverters\BooleanAndConverter.cs" />
+    <Compile Include="ValueConverters\BooleanOperator.cs" />
     <Compile Include="ValueConverters\BooleanToIntConverter.cs" />
     <Compile Include="ValueConverters\BooleanToGridRowHeightConverter.cs" />
     <Compile Include="ValueConverters\BooleanLambdaConverter.cs" />
+    <Compile Include="ValueConverters\SectionLayoutVisibilityConverter.cs" />
+    <Compile Include="ValueConverters\VisibilityMultiConverter.cs" />
+    <Compile Include="ValueConverters\VisibilityWhenFieldAllowedConverter.cs" />
+    <Compile Include="ValueConverters\HeightWhenFieldAllowedConverter.cs" />
+    <Compile Include="ValueConverters\FirstNotNullOrEmptyStringMultiConverter.cs" />
+    <Compile Include="ValueConverters\IntToEnumConverter.cs" />
     <Compile Include="ValueConverters\InverseBooleanConverter.cs" />
     <Compile Include="ValueConverters\BooleanComparisonConverter.cs" />
     <Compile Include="ValueConverters\BooleanConverter.cs" />
@@ -270,6 +283,7 @@
     <Compile Include="ValueConverters\InvertBooleanConverter.cs" />
     <Compile Include="ValueConverters\IsEmptyConverter.cs" />
     <Compile Include="ValueConverters\AddressKeyValueToBooleanConverter.cs" />
+    <Compile Include="ValueConverters\NullToBooleanConverter.cs" />
     <Compile Include="ValueConverters\NullVisibilityConverter.cs" />
     <Compile Include="ValueConverters\PluralizingValueConverter.cs" />
     <Compile Include="ValueConverters\RadioButtonCheckedConverter.cs" />
@@ -278,6 +292,8 @@
     <Compile Include="ValueConverters\HalfCentCurrencyConverter.cs" />
     <Compile Include="ValueConverters\CharToVisibilityConverter.cs" />
     <Compile Include="ValueConverters\StringToVisibilityConverter.cs" />
+    <Compile Include="ValueConverters\TrimEndColonConverter.cs" />
+    <Compile Include="ValueConverters\EnumFlagToBoolConverter.cs" />
     <Compile Include="ValueConverters\ValueEqualToParameterConverter.cs" />
     <Compile Include="ValueConverters\VisibleWhenEqualToParameterConverter.cs" />
     <Compile Include="Properties\XamlNamespaces.cs" />
@@ -312,6 +328,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
+    <Compile Include="AttachedProperties\Focus.WhenMessageReceived.cs" />
     <None Include="interapptive_public.snk" />
     <None Include="packages.config" />
   </ItemGroup>
@@ -435,6 +452,10 @@
     <Page Include="Themes\Controls\ScaleButton.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Themes\Controls\TokenTextBox.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Themes\Controls\WaitSpinner.xaml">
       <SubType>Designer</SubType>

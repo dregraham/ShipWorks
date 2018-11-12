@@ -5,7 +5,9 @@ using System.Reflection;
 using System.Windows.Forms;
 using Autofac;
 using Autofac.Builder;
+using Autofac.Features.OwnedInstances;
 using Interapptive.Shared;
+using Interapptive.Shared.Collections;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.ComponentRegistration.Ordering;
 using Interapptive.Shared.IO.Hardware.Scales;
@@ -13,7 +15,6 @@ using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Pdf;
 using Interapptive.Shared.Security;
-using Interapptive.Shared.Threading;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using Interapptive.Shared.Win32;
@@ -27,7 +28,6 @@ using ShipWorks.ApplicationCore.Licensing.LicenseEnforcement;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.ApplicationCore.Security;
 using ShipWorks.Common;
-using ShipWorks.Core.Messaging;
 using ShipWorks.Data;
 using ShipWorks.Data.Administration.SqlServerSetup;
 using ShipWorks.Data.Connection;
@@ -83,6 +83,15 @@ namespace ShipWorks.ApplicationCore
         /// </summary>
         public static IContainer Initialize(Action<ContainerBuilder> addExtraRegistrations, params Assembly[] assemblies) =>
             current = Build(addExtraRegistrations, assemblies);
+
+        /// <summary>
+        /// Build the registrations
+        /// </summary>
+        /// <remarks>
+        /// This should be used for tests since the Initialize method sets the current container, which is not thread safe
+        /// </remarks>
+        public static IContainer InitializeForUnitTests(IContainer container) =>
+            current = container;
 
         /// <summary>
         /// Build the registrations
@@ -148,10 +157,6 @@ namespace ShipWorks.ApplicationCore
                 .AsSelf()
                 .SingleInstance();
 
-            builder.RegisterInstance(Messenger.Current)
-                .AsImplementedInterfaces()
-                .ExternallyOwned();
-
             builder.RegisterType<SqlServerInstaller>()
                 .AsSelf();
 
@@ -175,9 +180,6 @@ namespace ShipWorks.ApplicationCore
                 .As<IWin32Window>()
                 .As<IMainForm>()
                 .ExternallyOwned();
-
-            builder.RegisterType<SchedulerProvider>()
-                .AsImplementedInterfaces();
 
             builder.RegisterInstance(SqlDateTimeProvider.Current)
                 .AsImplementedInterfaces()
@@ -397,6 +399,16 @@ namespace ShipWorks.ApplicationCore
             builder.RegisterType<ValidatedAddressManagerWrapper>()
                 .AsImplementedInterfaces()
                 .SingleInstance();
+        }
+
+        /// <summary>
+        /// Begin a lifetime scope and include any registration overrides that are of type T
+        /// </summary>
+        public static ILifetimeScope BeginLifetimeScopeWithOverrides<T>() where T : IRegistrationOverride
+        {
+            var orderLookupRegistrationOverrides = UnsafeGlobalLifetimeScope.Resolve<Owned<IEnumerable<T>>>().Value;
+
+            return BeginLifetimeScope(builder => orderLookupRegistrationOverrides.ForEach(x => x.Register(builder)));
         }
     }
 }

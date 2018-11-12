@@ -1,5 +1,3 @@
-using ShipWorks.ApplicationCore;
-
 namespace ShipWorks
 {
     partial class MainForm
@@ -26,6 +24,7 @@ namespace ShipWorks
             Divelements.SandRibbon.StripLayout stripLayout1;
             Divelements.SandRibbon.StripLayout stripLayout3;
             Divelements.SandRibbon.Menu menuFedExEndOfDay;
+            Divelements.SandRibbon.Menu menuOrderLookupViewFedExEndOfDay;
             Divelements.SandRibbon.Shortcut shortcut1;
             Divelements.SandRibbon.Menu menu1;
             Divelements.SandRibbon.Menu menu2;
@@ -52,6 +51,7 @@ namespace ShipWorks
             this.buttonShippingSettings = new Divelements.SandRibbon.Button();
             this.buttonShippingProfiles = new Divelements.SandRibbon.Button();
             this.buttonOptions = new Divelements.SandRibbon.Button();
+            this.buttonOrderLookupViewFields = new Divelements.SandRibbon.Button();
             this.buttonManageStores = new Divelements.SandRibbon.Button();
             this.buttonManageUsers = new Divelements.SandRibbon.Button();
             this.buttonEmailAccounts = new Divelements.SandRibbon.Button();
@@ -68,18 +68,27 @@ namespace ShipWorks
             this.menuItemHelpAbout = new Divelements.SandRibbon.MenuItem();
             this.mainMenuItemSetupDatabase = new Divelements.SandRibbon.MainMenuItem();
             this.mainMenuItemBackupDatabase = new Divelements.SandRibbon.MainMenuItem();
+            this.uiModeMenu = new Divelements.SandRibbon.Menu();
+            this.mainMenuItemOrderLookup = new Divelements.SandRibbon.MainMenuItem();
+            this.mainMenuItemBatchGrid = new Divelements.SandRibbon.MainMenuItem();
+            this.menuOrderLookupViewFedExEndDayClose = new Divelements.SandRibbon.MenuItem();
+            this.menuOrderLookupViewFedExEndDayPrint = new Divelements.SandRibbon.MenuItem();
+            this.menuOrderLookupViewFedExPrintReports = new Divelements.SandRibbon.Menu();
+            this.menuOrderLookupViewFedExEndDayPrintPlaceholder = new Divelements.SandRibbon.MenuItem();
+            this.menuOrderLookupViewFedExSmartPostClose = new Divelements.SandRibbon.MenuItem();
             this.buttonRestore = new Divelements.SandRibbon.Button();
             this.buttonArchive = new Divelements.SandRibbon.Button();
             this.buttonSetupDatabase = new Divelements.SandRibbon.Button();
             this.stripLayoutModifyOrders = new Divelements.SandRibbon.StripLayout();
-            this.stripLayoutCombineSplitOrders = new Divelements.SandRibbon.StripLayout();
             this.buttonNewOrder = new Divelements.SandRibbon.Button();
             this.buttonDeleteOrders = new Divelements.SandRibbon.Button();
+            this.stripLayoutCombineSplitOrders = new Divelements.SandRibbon.StripLayout();
             this.buttonCombine = new Divelements.SandRibbon.Button();
             this.buttonSplit = new Divelements.SandRibbon.Button();
             this.buttonEditCustomer = new Divelements.SandRibbon.Button();
             this.buttonEditOrder = new Divelements.SandRibbon.Button();
             this.panelArchiveNotification = new System.Windows.Forms.Panel();
+            this.dashboardBarSample = new ShipWorks.ApplicationCore.Dashboard.DashboardBar();
             this.panelDockingArea = new System.Windows.Forms.Panel();
             this.gridControl = new ShipWorks.ApplicationCore.MainGridControl();
             this.dockContainer1 = new TD.SandDock.DockContainer();
@@ -211,8 +220,9 @@ namespace ShipWorks
             this.mainMenuItemOptions = new Divelements.SandRibbon.MainMenuItem();
             this.mainMenuItemSupport = new Divelements.SandRibbon.MainMenuItem();
             this.mainMenuItemDatabase = new Divelements.SandRibbon.MainMenuItem();
+            this.mainMenuItemViewMode = new Divelements.SandRibbon.MainMenuItem();
             this.mainMenuLogon = new Divelements.SandRibbon.MainMenuItem();
-            this.ribbonTabHome = new Divelements.SandRibbon.RibbonTab();
+            this.ribbonTabGridViewHome = new Divelements.SandRibbon.RibbonTab();
             this.ribbonChunkOrders = new Divelements.SandRibbon.RibbonChunk();
             this.ribbonChunkOrdersSep1 = new Divelements.SandRibbon.Separator();
             this.ribbonChunkCustomers = new Divelements.SandRibbon.RibbonChunk();
@@ -222,18 +232,41 @@ namespace ShipWorks
             this.buttonEndiciaSCAN = new Divelements.SandRibbon.Button();
             this.popupPostalScanForm = new Divelements.SandRibbon.Popup();
             this.menuEndiciaScanForm = new Divelements.SandRibbon.Menu();
+            this.menuOrderLookupViewEndiciaScanForm = new Divelements.SandRibbon.Menu();
             this.menuCreateEndiciaScanForm = new Divelements.SandRibbon.MenuItem();
+            this.menuOrderLookupViewCreateEndiciaScanForm = new Divelements.SandRibbon.MenuItem();
             this.menuPrintScanForm = new Divelements.SandRibbon.MenuItem();
+            this.menuOrderLookupViewPrintScanForm = new Divelements.SandRibbon.MenuItem();
             this.menuPrintEndiciaScanForm = new Divelements.SandRibbon.Menu();
+            this.menuOrderLookupViewPrintEndiciaScanForm = new Divelements.SandRibbon.Menu();
             this.menuEndiciaScanFormNone = new Divelements.SandRibbon.MenuItem();
+            this.menuOrderLookupViewEndiciaScanFormNone = new Divelements.SandRibbon.MenuItem();
             this.ribbonChunkManageEmail = new Divelements.SandRibbon.RibbonChunk();
             this.buttonEmailMessages = new Divelements.SandRibbon.Button();
             this.ribbonChunkDownload = new Divelements.SandRibbon.RibbonChunk();
             this.buttonDownload = new Divelements.SandRibbon.Button();
-            this.ribbonTabCreate = new Divelements.SandRibbon.RibbonTab();
+            this.ribbonTabGridViewCreate = new Divelements.SandRibbon.RibbonTab();
             this.ribbonChunkPrint = new Divelements.SandRibbon.RibbonChunk();
             this.ribbonChunkSendEmail = new Divelements.SandRibbon.RibbonChunk();
             this.ribbonChunkFile = new Divelements.SandRibbon.RibbonChunk();
+            this.ribbonTabOrderLookupViewShipping = new Divelements.SandRibbon.RibbonTab();
+            this.ribbonChunkOrderLookupViewShipping = new Divelements.SandRibbon.RibbonChunk();
+            this.buttonOrderLookupViewCreateLabel = new Divelements.SandRibbon.Button();
+            this.buttonOrderLookupViewManualOrder = new Divelements.SandRibbon.Button();
+            this.ribbonChunkOrderLookupViewProfiles = new Divelements.SandRibbon.RibbonChunk();
+            this.buttonOrderLookupViewApplyProfile = new Divelements.SandRibbon.Button();
+            this.buttonOrderLookupViewManageProfiles = new Divelements.SandRibbon.Button();
+            this.ribbonChunkOrderLookupViewPreviousLabel = new Divelements.SandRibbon.RibbonChunk();
+            this.buttonOrderLookupViewReprintLast = new Divelements.SandRibbon.Button();
+            this.buttonOrderLookupViewVoidLast = new Divelements.SandRibbon.Button();
+            this.ribbonTabOrderLookupViewShipmentHistory = new Divelements.SandRibbon.RibbonTab();
+            this.ribbonChunkOrderLookupViewActions = new Divelements.SandRibbon.RibbonChunk();
+            this.buttonOrderLookupViewVoid = new Divelements.SandRibbon.Button();
+            this.buttonOrderLookupViewShipAgain = new Divelements.SandRibbon.Button();
+            this.buttonOrderLookupViewSCANForm = new Divelements.SandRibbon.Button();
+            this.popupOrderLookupViewSCANForm = new Divelements.SandRibbon.Popup();
+            this.buttonOrderLookupViewFedExClose = new Divelements.SandRibbon.Button();
+            this.popupOrderLookupViewFedExEndOfDay = new Divelements.SandRibbon.Popup();
             this.ribbonTabAdmin = new Divelements.SandRibbon.RibbonTab();
             this.ribbonChunkConfiguration = new Divelements.SandRibbon.RibbonChunk();
             this.ribbonChunkHistory = new Divelements.SandRibbon.RibbonChunk();
@@ -277,10 +310,12 @@ namespace ShipWorks
             this.pictureBox7 = new System.Windows.Forms.PictureBox();
             this.pictureBox8 = new System.Windows.Forms.PictureBox();
             this.dashboardArea = new System.Windows.Forms.Panel();
-            this.dashboardBarSample = new ShipWorks.ApplicationCore.Dashboard.DashboardBar();
             this.ribbonSecurityProvider = new ShipWorks.Users.Security.RibbonSecurityProvider(this.components);
             this.editionGuiHelper = new ShipWorks.Editions.EditionGuiHelper(this.components);
             this.menuItem1 = new Divelements.SandRibbon.MenuItem();
+            this.popup1 = new Divelements.SandRibbon.Popup();
+            this.popup2 = new Divelements.SandRibbon.Popup();
+            this.button2 = new Divelements.SandRibbon.Button();
             statusBarStrip = new Divelements.SandRibbon.StatusBarStrip();
             stripLayout6 = new Divelements.SandRibbon.StripLayout();
             stripLayoutDatabase = new Divelements.SandRibbon.StripLayout();
@@ -289,6 +324,7 @@ namespace ShipWorks
             stripLayout1 = new Divelements.SandRibbon.StripLayout();
             stripLayout3 = new Divelements.SandRibbon.StripLayout();
             menuFedExEndOfDay = new Divelements.SandRibbon.Menu();
+            menuOrderLookupViewFedExEndOfDay = new Divelements.SandRibbon.Menu();
             shortcut1 = new Divelements.SandRibbon.Shortcut();
             menu1 = new Divelements.SandRibbon.Menu();
             menu2 = new Divelements.SandRibbon.Menu();
@@ -499,7 +535,8 @@ namespace ShipWorks
             this.buttonManageActions,
             this.buttonShippingSettings,
             this.buttonShippingProfiles,
-            this.buttonOptions});
+            this.buttonOptions,
+            this.buttonOrderLookupViewFields});
             //
             // buttonManageFilters
             //
@@ -541,7 +578,7 @@ namespace ShipWorks
             //
             // buttonShippingProfiles
             //
-            this.buttonShippingProfiles.Guid = new System.Guid("13BA3580-9867-41A9-91B4-200E7BD1639B");
+            this.buttonShippingProfiles.Guid = new System.Guid("13ba3580-9867-41a9-91b4-200e7bd1639b");
             this.buttonShippingProfiles.Image = global::ShipWorks.Properties.Resources.box_closed_with_label_32_32;
             this.ribbonSecurityProvider.SetPermission(this.buttonShippingProfiles, ShipWorks.Users.Security.PermissionType.ShipmentsManageSettings);
             this.buttonShippingProfiles.QuickAccessKey = "SP";
@@ -557,6 +594,16 @@ namespace ShipWorks
             this.buttonOptions.Text = "Options";
             this.buttonOptions.TextContentRelation = Divelements.SandRibbon.TextContentRelation.Underneath;
             this.buttonOptions.Activate += new System.EventHandler(this.OnShowOptions);
+            //
+            // buttonOrderLookupViewFields
+            //
+            this.buttonOrderLookupViewFields.Guid = new System.Guid("A9CE2A60-E87B-4D22-B5E6-A3D02BF5ECCB");
+            this.buttonOrderLookupViewFields.Image = global::ShipWorks.Properties.Resources.form_blue_edit;
+            this.ribbonSecurityProvider.SetPermission(this.buttonOrderLookupViewFields, ShipWorks.Users.Security.PermissionType.ManageFields);
+            this.buttonOrderLookupViewFields.QuickAccessKey = "F";
+            this.buttonOrderLookupViewFields.Text = "Fields";
+            this.buttonOrderLookupViewFields.TextContentRelation = Divelements.SandRibbon.TextContentRelation.Underneath;
+            this.buttonOrderLookupViewFields.Activate += new System.EventHandler(this.OnManageOrderLookupFields);
             //
             // stripLayout3
             //
@@ -726,6 +773,68 @@ namespace ShipWorks
             this.mainMenuItemBackupDatabase.Text = "&Backup";
             this.mainMenuItemBackupDatabase.Activate += new System.EventHandler(this.OnBackupShipWorks);
             //
+            // uiModeMenu
+            //
+            this.uiModeMenu.DrawMargin = false;
+            this.uiModeMenu.Items.AddRange(new Divelements.SandRibbon.WidgetBase[] {
+            this.mainMenuItemOrderLookup,
+            this.mainMenuItemBatchGrid});
+            //
+            // mainMenuItemOrderLookup
+            //
+            this.mainMenuItemOrderLookup.Guid = new System.Guid("072bf177-36c3-4809-9297-1c1e62a92e4b");
+            this.mainMenuItemOrderLookup.Image = global::ShipWorks.Properties.Resources.box_view32;
+            this.mainMenuItemOrderLookup.QuickAccessKey = "O";
+            this.mainMenuItemOrderLookup.Text = "Order Lookup";
+            this.mainMenuItemOrderLookup.Activate += new System.EventHandler(this.OnShowOrderLookupView);
+            //
+            // mainMenuItemBatchGrid
+            //
+            this.mainMenuItemBatchGrid.GroupName = "batch";
+            this.mainMenuItemBatchGrid.Guid = new System.Guid("138732e5-e3fe-4ae6-ae4b-edd7f28590ee");
+            this.mainMenuItemBatchGrid.Image = global::ShipWorks.Properties.Resources.table_sql32;
+            this.mainMenuItemBatchGrid.QuickAccessKey = "B";
+            this.mainMenuItemBatchGrid.Text = "Batch Grid";
+            this.mainMenuItemBatchGrid.Activate += new System.EventHandler(this.OnShowBatchView);
+            //
+            // menuOrderLookupViewFedExEndOfDay
+            //
+            menuOrderLookupViewFedExEndOfDay.Items.AddRange(new Divelements.SandRibbon.WidgetBase[] {
+                this.menuOrderLookupViewFedExEndDayClose,
+                this.menuOrderLookupViewFedExEndDayPrint,
+                this.menuOrderLookupViewFedExSmartPostClose});
+            //
+            // menuOrderLookupViewFedExEndDayClose
+            //
+            this.menuOrderLookupViewFedExEndDayClose.Guid = new System.Guid("1B3D49A4-1779-48A5-8F47-786E63BBEDA5");
+            this.menuOrderLookupViewFedExEndDayClose.Text = "Ground Close";
+            this.menuOrderLookupViewFedExEndDayClose.Activate += new System.EventHandler(this.OnFedExGroundClose);
+            //
+            // menuOrderLookupViewFedExEndDayPrint
+            //
+            this.menuOrderLookupViewFedExEndDayPrint.Guid = new System.Guid("BAD86337-173F-4568-B061-CF1CB9159E52");
+            this.menuOrderLookupViewFedExEndDayPrint.Items.AddRange(new Divelements.SandRibbon.WidgetBase[] {
+                this.menuOrderLookupViewFedExPrintReports});
+            this.menuOrderLookupViewFedExEndDayPrint.Text = "Print Report";
+            //
+            // menuOrderLookupViewFedExPrintReports
+            //
+            this.menuOrderLookupViewFedExPrintReports.Items.AddRange(new Divelements.SandRibbon.WidgetBase[] {
+                this.menuOrderLookupViewFedExEndDayPrintPlaceholder});
+            //
+            // menuOrderLookupViewFedExEndDayPrintPlaceholder
+            //
+            this.menuOrderLookupViewFedExEndDayPrintPlaceholder.Enabled = false;
+            this.menuOrderLookupViewFedExEndDayPrintPlaceholder.Guid = new System.Guid("6942C18F-E7FA-4F53-BD99-6A801B96EB68");
+            this.menuOrderLookupViewFedExEndDayPrintPlaceholder.Text = "(None)";
+            //
+            // menuOrderLookupViewFedExSmartPostClose
+            //
+            this.menuOrderLookupViewFedExSmartPostClose.GroupName = "SmartPost";
+            this.menuOrderLookupViewFedExSmartPostClose.Guid = new System.Guid("B04EEF5B-851F-4B43-B2F3-DB47CDDEE610");
+            this.menuOrderLookupViewFedExSmartPostClose.Text = "SmartPost Close";
+            this.menuOrderLookupViewFedExSmartPostClose.Activate += new System.EventHandler(this.OnFedExSmartPostClose);
+            //
             // buttonRestore
             //
             this.buttonRestore.Guid = new System.Guid("a77a0044-436b-4602-bf52-62db00244224");
@@ -738,7 +847,7 @@ namespace ShipWorks
             //
             // buttonArchive
             //
-            this.buttonArchive.Guid = new System.Guid("457547E9-DC3A-4CD9-A196-864C43CD1249");
+            this.buttonArchive.Guid = new System.Guid("457547e9-dc3a-4cd9-a196-864c43cd1249");
             this.buttonArchive.Image = global::ShipWorks.Properties.Resources.data_time;
             this.ribbonSecurityProvider.SetPermission(this.buttonArchive, ShipWorks.Users.Security.PermissionType.DatabaseArchive);
             this.buttonArchive.QuickAccessKey = "A";
@@ -759,21 +868,11 @@ namespace ShipWorks
             // stripLayoutModifyOrders
             //
             this.stripLayoutModifyOrders.Items.AddRange(new Divelements.SandRibbon.WidgetBase[] {
-                this.buttonNewOrder,
-                this.buttonDeleteOrders});
+            this.buttonNewOrder,
+            this.buttonDeleteOrders});
             this.stripLayoutModifyOrders.ItemSpacing = 6;
             this.stripLayoutModifyOrders.LayoutDirection = Divelements.SandRibbon.LayoutDirection.Vertical;
             this.stripLayoutModifyOrders.Margin = new Divelements.SandRibbon.WidgetEdges(0, 3, 0, 0);
-            //
-            // stripLayoutCombineSplitOrders
-            //
-            this.stripLayoutCombineSplitOrders.Items.AddRange(new Divelements.SandRibbon.WidgetBase[] {
-                this.buttonCombine,
-                this.buttonSplit
-                });
-            this.stripLayoutCombineSplitOrders.ItemSpacing = 6;
-            this.stripLayoutCombineSplitOrders.LayoutDirection = Divelements.SandRibbon.LayoutDirection.Vertical;
-            this.stripLayoutCombineSplitOrders.Margin = new Divelements.SandRibbon.WidgetEdges(0, 3, 0, 0);
             //
             // buttonNewOrder
             //
@@ -794,9 +893,18 @@ namespace ShipWorks
             this.buttonDeleteOrders.Text = "Delete";
             this.buttonDeleteOrders.Activate += new System.EventHandler(this.OnDelete);
             //
+            // stripLayoutCombineSplitOrders
+            //
+            this.stripLayoutCombineSplitOrders.Items.AddRange(new Divelements.SandRibbon.WidgetBase[] {
+            this.buttonCombine,
+            this.buttonSplit});
+            this.stripLayoutCombineSplitOrders.ItemSpacing = 6;
+            this.stripLayoutCombineSplitOrders.LayoutDirection = Divelements.SandRibbon.LayoutDirection.Vertical;
+            this.stripLayoutCombineSplitOrders.Margin = new Divelements.SandRibbon.WidgetEdges(0, 3, 0, 0);
+            //
             // buttonCombine
             //
-            this.buttonCombine.Guid = new System.Guid("A8BF47AA-A2E2-4B59-B871-E5FF993623E6");
+            this.buttonCombine.Guid = new System.Guid("a8bf47aa-a2e2-4b59-b871-e5ff993623e6");
             this.buttonCombine.Image = global::ShipWorks.Properties.Resources.merge_icon_16x16;
             this.ribbonSecurityProvider.SetPermission(this.buttonCombine, ShipWorks.Users.Security.PermissionType.OrdersModify);
             this.buttonCombine.QuickAccessKey = "OC";
@@ -805,7 +913,7 @@ namespace ShipWorks
             //
             // buttonSplit
             //
-            this.buttonSplit.Guid = new System.Guid("911AAC51-83D9-4AEC-B1ED-5A3B1F9F51A7");
+            this.buttonSplit.Guid = new System.Guid("911aac51-83d9-4aec-b1ed-5a3b1f9f51a7");
             this.buttonSplit.Image = global::ShipWorks.Properties.Resources.split_icon_16x16;
             this.ribbonSecurityProvider.SetPermission(this.buttonSplit, ShipWorks.Users.Security.PermissionType.OrdersModify);
             this.buttonSplit.QuickAccessKey = "OS";
@@ -827,7 +935,7 @@ namespace ShipWorks
             // buttonEditOrder
             //
             this.selectionDependentEnabler.SetEnabledWhen(this.buttonEditOrder, ShipWorks.ApplicationCore.Interaction.SelectionDependentType.OneOrder);
-            this.buttonEditOrder.Guid = new System.Guid("287f6db0-b93d-4db6-bbb1-9d0905704b59");
+            this.buttonEditOrder.Guid = new System.Guid("AFFAB209-DE03-4A93-AFFE-00399F409269");
             this.buttonEditOrder.Image = global::ShipWorks.Properties.Resources.form_blue_edit;
             this.buttonEditOrder.Padding = new Divelements.SandRibbon.WidgetEdges(3, 2, 4, 14);
             this.buttonEditOrder.QuickAccessKey = "OE";
@@ -835,16 +943,40 @@ namespace ShipWorks
             this.buttonEditOrder.TextContentRelation = Divelements.SandRibbon.TextContentRelation.Underneath;
             this.buttonEditOrder.Activate += new System.EventHandler(this.OnEditOrder);
             //
+            // panelArchiveNotification
+            //
+            this.panelArchiveNotification.BackColor = System.Drawing.Color.Transparent;
+            this.panelArchiveNotification.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panelArchiveNotification.Location = new System.Drawing.Point(3, 177);
+            this.panelArchiveNotification.Name = "panelArchiveNotification";
+            this.panelArchiveNotification.Size = new System.Drawing.Size(969, 52);
+            this.panelArchiveNotification.TabIndex = 6;
+            this.panelArchiveNotification.Visible = false;
+            //
+            // dashboardBarSample
+            //
+            this.dashboardBarSample.BackColor = System.Drawing.Color.Transparent;
+            this.dashboardBarSample.CanUserDismiss = true;
+            this.dashboardBarSample.Dock = System.Windows.Forms.DockStyle.Top;
+            this.dashboardBarSample.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+            this.dashboardBarSample.Image = ((System.Drawing.Image) (resources.GetObject("dashboardBarSample.Image")));
+            this.dashboardBarSample.Location = new System.Drawing.Point(0, 0);
+            this.dashboardBarSample.Name = "dashboardBarSample";
+            this.dashboardBarSample.PrimaryText = "Prmary Text";
+            this.dashboardBarSample.SecondaryText = "Secondary Text";
+            this.dashboardBarSample.Size = new System.Drawing.Size(969, 26);
+            this.dashboardBarSample.TabIndex = 0;
+            //
             // panelDockingArea
             //
             this.panelDockingArea.Controls.Add(this.gridControl);
             this.panelDockingArea.Controls.Add(this.dockContainer1);
             this.panelDockingArea.Controls.Add(this.dockContainer);
             this.panelDockingArea.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panelDockingArea.Location = new System.Drawing.Point(3, 177);
+            this.panelDockingArea.Location = new System.Drawing.Point(3, 229);
             this.panelDockingArea.Name = "panelDockingArea";
             this.panelDockingArea.Padding = new System.Windows.Forms.Padding(2, 0, 2, 4);
-            this.panelDockingArea.Size = new System.Drawing.Size(969, 550);
+            this.panelDockingArea.Size = new System.Drawing.Size(969, 498);
             this.panelDockingArea.TabIndex = 5;
             //
             // gridControl
@@ -853,7 +985,7 @@ namespace ShipWorks
             this.gridControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
             this.gridControl.Location = new System.Drawing.Point(220, 0);
             this.gridControl.Name = "gridControl";
-            this.gridControl.Size = new System.Drawing.Size(747, 327);
+            this.gridControl.Size = new System.Drawing.Size(747, 275);
             this.gridControl.TabIndex = 0;
             this.gridControl.SelectionChanged += new System.EventHandler(this.OnGridSelectionChanged);
             this.gridControl.SortChanged += new System.EventHandler(this.OnGridSortChanged);
@@ -887,7 +1019,7 @@ namespace ShipWorks
                         ((TD.SandDock.DockControl)(this.dockableWindowShipments)),
                         ((TD.SandDock.DockControl)(this.dockableWindowEmail)),
                         ((TD.SandDock.DockControl)(this.dockableWindowPrinted))}, this.dockableWindowShipments)))});
-            this.dockContainer1.Location = new System.Drawing.Point(220, 327);
+            this.dockContainer1.Location = new System.Drawing.Point(220, 275);
             this.dockContainer1.Manager = this.sandDockManager;
             this.dockContainer1.Name = "dockContainer1";
             this.dockContainer1.Size = new System.Drawing.Size(747, 219);
@@ -972,7 +1104,7 @@ namespace ShipWorks
             this.dockableWindowMap.BorderStyle = TD.SandDock.Rendering.BorderStyle.Flat;
             this.dockableWindowMap.Controls.Add(this.panelMap);
             this.dockableWindowMap.Guid = new System.Guid("988996c1-c313-42fc-918c-e17dfdf172a4");
-            this.dockableWindowMap.Location = new System.Drawing.Point(0, 25);
+            this.dockableWindowMap.Location = new System.Drawing.Point(0, 0);
             this.dockableWindowMap.Name = "dockableWindowMap";
             this.dockableWindowMap.ShowOptions = false;
             this.dockableWindowMap.Size = new System.Drawing.Size(378, 170);
@@ -996,7 +1128,7 @@ namespace ShipWorks
             this.dockableWindowStreetView.BorderStyle = TD.SandDock.Rendering.BorderStyle.Flat;
             this.dockableWindowStreetView.Controls.Add(this.panelStreetView);
             this.dockableWindowStreetView.Guid = new System.Guid("f4aeeb98-50bf-4fe1-bdd6-0ed890af0c81");
-            this.dockableWindowStreetView.Location = new System.Drawing.Point(0, 0);
+            this.dockableWindowStreetView.Location = new System.Drawing.Point(0, 25);
             this.dockableWindowStreetView.Name = "dockableWindowStreetView";
             this.dockableWindowStreetView.ShowOptions = false;
             this.dockableWindowStreetView.Size = new System.Drawing.Size(378, 170);
@@ -1043,7 +1175,7 @@ namespace ShipWorks
             //
             this.dockableWindowShipments.BorderStyle = TD.SandDock.Rendering.BorderStyle.Flat;
             this.dockableWindowShipments.Controls.Add(this.panelShipments);
-            this.dockableWindowShipments.Guid = DockPanelIdentifiers.ShipmentsPanelGuid;
+            this.dockableWindowShipments.Guid = new System.Guid("b65cc6d7-1b93-43ad-b0e6-23bc4b1ec699");
             this.dockableWindowShipments.Location = new System.Drawing.Point(382, 25);
             this.dockableWindowShipments.Name = "dockableWindowShipments";
             this.dockableWindowShipments.ShowOptions = false;
@@ -1054,6 +1186,7 @@ namespace ShipWorks
             //
             // panelShipments
             //
+            this.panelShipments.AllowRatesPanelLink = true;
             this.panelShipments.AutoScroll = true;
             this.panelShipments.BackColor = System.Drawing.Color.White;
             this.panelShipments.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -1136,7 +1269,7 @@ namespace ShipWorks
             this.dockContainer.Location = new System.Drawing.Point(2, 0);
             this.dockContainer.Manager = this.sandDockManager;
             this.dockContainer.Name = "dockContainer";
-            this.dockContainer.Size = new System.Drawing.Size(218, 546);
+            this.dockContainer.Size = new System.Drawing.Size(218, 494);
             this.dockContainer.TabIndex = 6;
             //
             // dockableWindowOrderFilters
@@ -1147,21 +1280,23 @@ namespace ShipWorks
             this.dockableWindowOrderFilters.Location = new System.Drawing.Point(0, 21);
             this.dockableWindowOrderFilters.Name = "dockableWindowOrderFilters";
             this.dockableWindowOrderFilters.ShowOptions = false;
-            this.dockableWindowOrderFilters.Size = new System.Drawing.Size(214, 230);
+            this.dockableWindowOrderFilters.Size = new System.Drawing.Size(214, 204);
             this.dockableWindowOrderFilters.TabImage = global::ShipWorks.Properties.Resources.filter;
             this.dockableWindowOrderFilters.TabIndex = 0;
             this.dockableWindowOrderFilters.Text = "Orders";
             //
             // orderFilterTree
             //
+            this.orderFilterTree.AlwaysShowMyFilters = false;
             this.orderFilterTree.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.orderFilterTree.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.orderFilterTree.FilterScope = ShipWorks.Filters.Controls.FilterScope.Any;
             this.orderFilterTree.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
             this.orderFilterTree.HideDisabledFilters = true;
             this.orderFilterTree.HotTrackNode = null;
             this.orderFilterTree.Location = new System.Drawing.Point(1, 1);
             this.orderFilterTree.Name = "orderFilterTree";
-            this.orderFilterTree.Size = new System.Drawing.Size(212, 228);
+            this.orderFilterTree.Size = new System.Drawing.Size(212, 202);
             this.orderFilterTree.TabIndex = 0;
             this.orderFilterTree.SelectedFilterNodeChanged += new System.EventHandler(this.OnSelectedFilterNodeChanged);
             //
@@ -1180,8 +1315,10 @@ namespace ShipWorks
             //
             // customerFilterTree
             //
+            this.customerFilterTree.AlwaysShowMyFilters = false;
             this.customerFilterTree.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.customerFilterTree.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.customerFilterTree.FilterScope = ShipWorks.Filters.Controls.FilterScope.Any;
             this.customerFilterTree.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
             this.customerFilterTree.HideDisabledFilters = true;
             this.customerFilterTree.HotTrackNode = null;
@@ -1196,10 +1333,10 @@ namespace ShipWorks
             this.dockableWindowNotes.BorderStyle = TD.SandDock.Rendering.BorderStyle.Flat;
             this.dockableWindowNotes.Controls.Add(this.panelNotes);
             this.dockableWindowNotes.Guid = new System.Guid("a965dab5-1007-4f3a-b48c-4f3dd12df869");
-            this.dockableWindowNotes.Location = new System.Drawing.Point(0, 300);
+            this.dockableWindowNotes.Location = new System.Drawing.Point(0, 274);
             this.dockableWindowNotes.Name = "dockableWindowNotes";
             this.dockableWindowNotes.ShowOptions = false;
-            this.dockableWindowNotes.Size = new System.Drawing.Size(214, 222);
+            this.dockableWindowNotes.Size = new System.Drawing.Size(214, 196);
             this.dockableWindowNotes.TabImage = global::ShipWorks.Properties.Resources.note16;
             this.dockableWindowNotes.TabIndex = 0;
             this.dockableWindowNotes.Text = "Notes";
@@ -1211,7 +1348,7 @@ namespace ShipWorks
             this.panelNotes.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
             this.panelNotes.Location = new System.Drawing.Point(1, 1);
             this.panelNotes.Name = "panelNotes";
-            this.panelNotes.Size = new System.Drawing.Size(212, 220);
+            this.panelNotes.Size = new System.Drawing.Size(212, 194);
             this.panelNotes.TabIndex = 0;
             this.panelNotes.NotesChanged += new System.EventHandler(this.OnPanelDataChanged);
             //
@@ -1253,6 +1390,10 @@ namespace ShipWorks
             this.toolStripMenuItemOpenShipWorks.Size = new System.Drawing.Size(162, 22);
             this.toolStripMenuItemOpenShipWorks.Text = "Open ShipWorks";
             this.toolStripMenuItemOpenShipWorks.Click += new System.EventHandler(this.OnTaskTrayMenuOpenShipWorks);
+            //
+            // kryptonManager
+            //
+            this.kryptonManager.GlobalPaletteMode = ComponentFactory.Krypton.Toolkit.PaletteModeManager.Office2010Blue;
             //
             // label14
             //
@@ -1322,9 +1463,8 @@ namespace ShipWorks
             this.contextMenuOrderGrid.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.contextMenuOrderGrid.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.contextOrderEditOrder,
-                this.contextOrderCombineOrder,
-                this.contextOrderSplitOrder,
-
+            this.contextOrderCombineOrder,
+            this.contextOrderSplitOrder,
             this.contextOrderSep1,
             this.contextOrderLocalStatus,
             this.contextOrderOnlineUpdate,
@@ -1349,7 +1489,7 @@ namespace ShipWorks
             this.contextOrderSave,
             this.contextOrderSaveOpen});
             this.contextMenuOrderGrid.Name = "contextMenuOrderGrid";
-            this.contextMenuOrderGrid.Size = new System.Drawing.Size(170, 420);
+            this.contextMenuOrderGrid.Size = new System.Drawing.Size(170, 464);
             //
             // contextOrderEditOrder
             //
@@ -1366,7 +1506,7 @@ namespace ShipWorks
             //
             this.contextOrderCombineOrder.Image = global::ShipWorks.Properties.Resources.merge_icon_16x16;
             this.contextOrderCombineOrder.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
-            this.gridMenuLayoutProvider.SetLayoutGuid(this.contextOrderCombineOrder, new System.Guid("E537A928-2B0C-4453-8F7D-1C1F1FD7D0FD"));
+            this.gridMenuLayoutProvider.SetLayoutGuid(this.contextOrderCombineOrder, new System.Guid("e537a928-2b0c-4453-8f7d-1c1f1fd7d0fd"));
             this.contextOrderCombineOrder.Name = "contextOrderCombineOrder";
             this.contextOrderCombineOrder.Size = new System.Drawing.Size(169, 22);
             this.contextOrderCombineOrder.Text = "Combine Orders";
@@ -1376,12 +1516,11 @@ namespace ShipWorks
             //
             this.contextOrderSplitOrder.Image = global::ShipWorks.Properties.Resources.split_icon_16x16;
             this.contextOrderSplitOrder.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
-            this.gridMenuLayoutProvider.SetLayoutGuid(this.contextOrderSplitOrder, new System.Guid("69D57A7F-C089-4B43-A0C2-A6AC5F8DABFE"));
+            this.gridMenuLayoutProvider.SetLayoutGuid(this.contextOrderSplitOrder, new System.Guid("69d57a7f-c089-4b43-a0c2-a6ac5f8dabfe"));
             this.contextOrderSplitOrder.Name = "contextOrderSplitOrder";
             this.contextOrderSplitOrder.Size = new System.Drawing.Size(169, 22);
             this.contextOrderSplitOrder.Text = "Split Order";
             this.contextOrderSplitOrder.Click += new System.EventHandler(this.OnSplitOrder);
-
             //
             // contextOrderSep1
             //
@@ -1637,7 +1776,6 @@ namespace ShipWorks
             // contextCustomerPrint
             //
             this.contextCustomerPrint.DropDown = this.contextMenuTemplatesPlaceholder;
-            this.selectionDependentEnabler.SetEnabledWhen(this.contextCustomerPrint, ShipWorks.ApplicationCore.Interaction.SelectionDependentType.OneOrMoreCustomers);
             this.contextCustomerPrint.Image = global::ShipWorks.Properties.Resources.printer1;
             this.gridMenuLayoutProvider.SetLayoutGuid(this.contextCustomerPrint, new System.Guid("38cce3e9-137e-4dba-8f11-f88b0637b4f9"));
             this.contextCustomerPrint.Name = "contextCustomerPrint";
@@ -1745,7 +1883,6 @@ namespace ShipWorks
             // contextCustomerPreview
             //
             this.contextCustomerPreview.DropDown = this.contextMenuTemplatesPlaceholder;
-            this.selectionDependentEnabler.SetEnabledWhen(this.contextCustomerPreview, ShipWorks.ApplicationCore.Interaction.SelectionDependentType.OneOrMoreCustomers);
             this.contextCustomerPreview.Image = global::ShipWorks.Properties.Resources.printer_view16;
             this.gridMenuLayoutProvider.SetLayoutGuid(this.contextCustomerPreview, new System.Guid("bc35d3c7-5a87-4cc1-8a2b-1d6cba92f22a"));
             this.contextCustomerPreview.Name = "contextCustomerPreview";
@@ -2094,8 +2231,10 @@ namespace ShipWorks
             this.ribbon.ApplicationImage = global::ShipWorks.Properties.Resources.sw_cubes_32x32;
             this.ribbon.ApplicationMenu = this.applicationMenu;
             this.ribbon.ApplicationToolTip = new Divelements.SandRibbon.SuperToolTip("Application", "Click here to manage ShipWorks.", null, false);
-            this.ribbon.Controls.Add(this.ribbonTabHome);
-            this.ribbon.Controls.Add(this.ribbonTabCreate);
+            this.ribbon.Controls.Add(this.ribbonTabGridViewHome);
+            this.ribbon.Controls.Add(this.ribbonTabGridViewCreate);
+            this.ribbon.Controls.Add(this.ribbonTabOrderLookupViewShipping);
+            this.ribbon.Controls.Add(this.ribbonTabOrderLookupViewShipmentHistory);
             this.ribbon.Controls.Add(this.ribbonTabAdmin);
             this.ribbon.Controls.Add(this.ribbonTabView);
             this.ribbon.Controls.Add(this.ribbonTabHelp);
@@ -2106,6 +2245,7 @@ namespace ShipWorks
             this.ribbon.TabIndex = 0;
             this.ribbon.ToolBar = this.quickAccessToolBar;
             this.ribbon.HelpRequested += new System.Windows.Forms.HelpEventHandler(this.OnHelpRequested);
+            this.ribbon.SelectedTabChanged += OnRibbonSelectedTabChanged;
             //
             // applicationMenu
             //
@@ -2117,6 +2257,7 @@ namespace ShipWorks
             this.mainMenuItemOptions,
             this.mainMenuItemSupport,
             this.mainMenuItemDatabase,
+            this.mainMenuItemViewMode,
             this.mainMenuLogon});
             this.applicationMenu.OptionsButtonImage = ((System.Drawing.Image) (resources.GetObject("applicationMenu.OptionsButtonImage")));
             this.applicationMenu.OptionsButtonText = "ShipWorks Opt&ions";
@@ -2152,6 +2293,15 @@ namespace ShipWorks
             this.ribbonSecurityProvider.SetPermission(this.mainMenuItemDatabase, ShipWorks.Users.Security.PermissionType.DatabaseSetup);
             this.mainMenuItemDatabase.Text = "Database";
             //
+            // mainMenuItemViewMode
+            //
+            this.mainMenuItemViewMode.GroupName = "View Mode";
+            this.mainMenuItemViewMode.Guid = new System.Guid("9bcb14b5-0a25-4dac-bbe6-5c609fc343ec");
+            this.mainMenuItemViewMode.Image = global::ShipWorks.Properties.Resources.windows;
+            this.mainMenuItemViewMode.Items.AddRange(new Divelements.SandRibbon.WidgetBase[] {
+            this.uiModeMenu});
+            this.mainMenuItemViewMode.Text = "View Mode";
+            //
             // mainMenuLogon
             //
             this.mainMenuLogon.GroupName = "LogOnOff";
@@ -2161,20 +2311,20 @@ namespace ShipWorks
             this.mainMenuLogon.Text = "&Log On \\ Log Off";
             this.mainMenuLogon.Activate += new System.EventHandler(this.OnLogonLogoff);
             //
-            // ribbonTabHome
+            // ribbonTabGridViewHome
             //
-            this.ribbonTabHome.Chunks.AddRange(new Divelements.SandRibbon.WidgetBase[] {
+            this.ribbonTabGridViewHome.Chunks.AddRange(new Divelements.SandRibbon.WidgetBase[] {
             this.ribbonChunkOrders,
             this.ribbonChunkCustomers,
             this.ribbonChunkShipping,
             this.ribbonChunkManageEmail,
             this.ribbonChunkDownload});
-            this.ribbonTabHome.Location = new System.Drawing.Point(1, 53);
-            this.ribbonTabHome.Manager = this.ribbonManager;
-            this.ribbonTabHome.Name = "ribbonTabHome";
-            this.ribbonTabHome.Size = new System.Drawing.Size(967, 90);
-            this.ribbonTabHome.TabIndex = 0;
-            this.ribbonTabHome.Text = "&Home";
+            this.ribbonTabGridViewHome.Location = new System.Drawing.Point(1, 53);
+            this.ribbonTabGridViewHome.Manager = this.ribbonManager;
+            this.ribbonTabGridViewHome.Name = "ribbonTabGridViewHome";
+            this.ribbonTabGridViewHome.Size = new System.Drawing.Size(967, 90);
+            this.ribbonTabGridViewHome.TabIndex = 0;
+            this.ribbonTabGridViewHome.Text = "&Home";
             //
             // ribbonChunkOrders
             //
@@ -2318,18 +2468,18 @@ namespace ShipWorks
             this.buttonDownload.TextContentRelation = Divelements.SandRibbon.TextContentRelation.Underneath;
             this.buttonDownload.Activate += new System.EventHandler(this.OnDownloadOrders);
             //
-            // ribbonTabCreate
+            // ribbonTabGridViewCreate
             //
-            this.ribbonTabCreate.Chunks.AddRange(new Divelements.SandRibbon.WidgetBase[] {
+            this.ribbonTabGridViewCreate.Chunks.AddRange(new Divelements.SandRibbon.WidgetBase[] {
             this.ribbonChunkPrint,
             this.ribbonChunkSendEmail,
             this.ribbonChunkFile});
-            this.ribbonTabCreate.Location = new System.Drawing.Point(1, 53);
-            this.ribbonTabCreate.Manager = this.ribbonManager;
-            this.ribbonTabCreate.Name = "ribbonTabCreate";
-            this.ribbonTabCreate.Size = new System.Drawing.Size(967, 90);
-            this.ribbonTabCreate.TabIndex = 5;
-            this.ribbonTabCreate.Text = "&Output";
+            this.ribbonTabGridViewCreate.Location = new System.Drawing.Point(1, 53);
+            this.ribbonTabGridViewCreate.Manager = this.ribbonManager;
+            this.ribbonTabGridViewCreate.Name = "ribbonTabGridViewCreate";
+            this.ribbonTabGridViewCreate.Size = new System.Drawing.Size(967, 90);
+            this.ribbonTabGridViewCreate.TabIndex = 5;
+            this.ribbonTabGridViewCreate.Text = "&Output";
             //
             // ribbonChunkPrint
             //
@@ -2358,6 +2508,214 @@ namespace ShipWorks
             this.buttonSave,
             this.buttonSaveOpen});
             this.ribbonChunkFile.Text = "File";
+            //
+            // ribbonTabOrderLookupViewShipping
+            //
+            this.ribbonTabOrderLookupViewShipping.Chunks.AddRange(new Divelements.SandRibbon.WidgetBase[] {
+            this.ribbonChunkOrderLookupViewShipping,
+            this.ribbonChunkOrderLookupViewProfiles,
+            this.ribbonChunkOrderLookupViewPreviousLabel});
+            this.ribbonTabOrderLookupViewShipping.Location = new System.Drawing.Point(1, 53);
+            this.ribbonTabOrderLookupViewShipping.Manager = this.ribbonManager;
+            this.ribbonTabOrderLookupViewShipping.Name = "ribbonTabOrderLookupViewShipping";
+            this.ribbonTabOrderLookupViewShipping.Size = new System.Drawing.Size(967, 90);
+            this.ribbonTabOrderLookupViewShipping.TabIndex = 0;
+            this.ribbonTabOrderLookupViewShipping.Text = "&Shipping";
+            //
+            // ribbonChunkOrderLookupViewShipping
+            //
+            this.ribbonChunkOrderLookupViewShipping.FurtherOptions = false;
+            this.ribbonChunkOrderLookupViewShipping.ItemJustification = Divelements.SandRibbon.ItemJustification.Near;
+            this.ribbonChunkOrderLookupViewShipping.Items.AddRange(new Divelements.SandRibbon.WidgetBase[] {
+            this.buttonOrderLookupViewCreateLabel,
+            this.buttonOrderLookupViewManualOrder
+            });
+            this.ribbonChunkOrderLookupViewShipping.Text = "Shipping";
+            //
+            // buttonOrderLookupViewCreateLabel
+            //
+            this.buttonOrderLookupViewCreateLabel.Guid = new System.Guid("287f6db0-b93d-4db6-bbb1-9d0905704b59");
+            this.buttonOrderLookupViewCreateLabel.Image = global::ShipWorks.Properties.Resources.box_next_32_32;
+            this.ribbonSecurityProvider.SetPermission(this.buttonOrderLookupViewCreateLabel, ShipWorks.Users.Security.PermissionType.ShipmentsCreateEditProcess);
+            this.buttonOrderLookupViewCreateLabel.QuickAccessKey = "C";
+            this.buttonOrderLookupViewCreateLabel.Text = "Create\r\nLabel";
+            this.buttonOrderLookupViewCreateLabel.TextContentRelation = Divelements.SandRibbon.TextContentRelation.Underneath;
+            this.buttonOrderLookupViewCreateLabel.Activate += OnButtonOrderLookupViewCreateLabel;
+            //
+            // buttonOrderLookupViewManualOrder
+            //
+            this.buttonOrderLookupViewManualOrder.Guid = new System.Guid("5C624ADB-4566-4FB5-99AC-FDE61E55267B");
+            this.buttonOrderLookupViewManualOrder.Image = global::ShipWorks.Properties.Resources.form_blue_edit;
+            this.ribbonSecurityProvider.SetPermission(this.buttonOrderLookupViewManualOrder, ShipWorks.Users.Security.PermissionType.CustomersAddOrder);
+            this.buttonOrderLookupViewManualOrder.QuickAccessKey = "ON";
+            this.buttonOrderLookupViewManualOrder.Text = "Manual\r\nOrder";
+            this.buttonOrderLookupViewManualOrder.TextContentRelation = Divelements.SandRibbon.TextContentRelation.Underneath;
+            this.buttonOrderLookupViewManualOrder.Activate += new System.EventHandler(this.OnOrderLookupManualOrder);
+            //
+            // ribbonChunkOrderLookupViewProfiles
+            //
+            this.ribbonChunkOrderLookupViewProfiles.FurtherOptions = false;
+            this.ribbonChunkOrderLookupViewProfiles.ItemJustification = Divelements.SandRibbon.ItemJustification.Near;
+            this.ribbonChunkOrderLookupViewProfiles.Items.AddRange(new Divelements.SandRibbon.WidgetBase[] {
+            this.buttonOrderLookupViewApplyProfile,
+            this.buttonOrderLookupViewManageProfiles});
+            this.ribbonChunkOrderLookupViewProfiles.Text = "Profiles";
+            //
+            // buttonOrderLookupViewApplyProfile
+            //
+            this.buttonOrderLookupViewApplyProfile.DropDownStyle = Divelements.SandRibbon.DropDownStyle.Integral;
+            this.buttonOrderLookupViewApplyProfile.Guid = new System.Guid("020d3d77-23ad-4391-9bcc-60be5437b4aa");
+            this.buttonOrderLookupViewApplyProfile.Image = global::ShipWorks.Properties.Resources.document_out1;
+            this.buttonOrderLookupViewApplyProfile.Padding = new Divelements.SandRibbon.WidgetEdges(8, 2, 8, 14);
+            this.ribbonSecurityProvider.SetPermission(this.buttonOrderLookupViewApplyProfile, ShipWorks.Users.Security.PermissionType.ShipmentsCreateEditProcess);
+            this.buttonOrderLookupViewApplyProfile.QuickAccessKey = "A";
+            this.buttonOrderLookupViewApplyProfile.Text = "Apply";
+            this.buttonOrderLookupViewApplyProfile.TextContentRelation = Divelements.SandRibbon.TextContentRelation.Underneath;
+            //
+            // buttonOrderLookupViewManageProfiles
+            //
+            this.buttonOrderLookupViewManageProfiles.Guid = new System.Guid("1A9E0525-CDF7-4327-8861-CB3DDFDF22CA");
+            this.buttonOrderLookupViewManageProfiles.Image = global::ShipWorks.Properties.Resources.box_closed_with_label_32_32;
+            this.buttonOrderLookupViewManageProfiles.Padding = new Divelements.SandRibbon.WidgetEdges(3, 2, 4, 14);
+            this.buttonOrderLookupViewManageProfiles.QuickAccessKey = "M";
+            this.buttonOrderLookupViewManageProfiles.Text = "Manage";
+            this.buttonOrderLookupViewManageProfiles.TextContentRelation = Divelements.SandRibbon.TextContentRelation.Underneath;
+            this.buttonOrderLookupViewManageProfiles.Activate += new System.EventHandler(this.OnManageShippingProfiles);
+            //
+            // ribbonChunkOrderLookupViewPreviousLabel
+            //
+            this.ribbonChunkOrderLookupViewPreviousLabel.FurtherOptions = false;
+            this.ribbonChunkOrderLookupViewPreviousLabel.ItemJustification = Divelements.SandRibbon.ItemJustification.Near;
+            this.ribbonChunkOrderLookupViewPreviousLabel.Items.AddRange(new Divelements.SandRibbon.WidgetBase[] {
+            this.buttonOrderLookupViewReprintLast,
+            this.buttonOrderLookupViewVoidLast});
+            this.ribbonChunkOrderLookupViewPreviousLabel.Text = "Previous Label";
+            //
+            // buttonOrderLookupViewReprintLast
+            //
+            this.buttonOrderLookupViewReprintLast.Guid = new System.Guid("0B1191AC-BE79-4F40-961E-F622E496F068");
+            this.buttonOrderLookupViewReprintLast.Image = global::ShipWorks.Properties.Resources.printer;
+            this.ribbonSecurityProvider.SetPermission(this.buttonOrderLookupViewReprintLast, ShipWorks.Users.Security.PermissionType.ShipmentsCreateEditProcess);
+            this.buttonOrderLookupViewReprintLast.QuickAccessKey = "R";
+            this.buttonOrderLookupViewReprintLast.Text = "Reprint\r\nLast";
+            this.buttonOrderLookupViewReprintLast.TextContentRelation = Divelements.SandRibbon.TextContentRelation.Underneath;
+            this.buttonOrderLookupViewReprintLast.Activate += OnOrderLookupViewReprintLastShipment;
+            //
+            // buttonOrderLookupViewVoidLast
+            //
+            this.buttonOrderLookupViewVoidLast.Guid = new System.Guid("C1D07022-AF19-4E72-9CCF-537FCC9F25C2");
+            this.buttonOrderLookupViewVoidLast.Image = global::ShipWorks.Properties.Resources.box_void_32_32;
+            this.ribbonSecurityProvider.SetPermission(this.buttonOrderLookupViewVoidLast, ShipWorks.Users.Security.PermissionType.ShipmentsVoidDelete);
+            this.buttonOrderLookupViewVoidLast.QuickAccessKey = "V";
+            this.buttonOrderLookupViewVoidLast.Text = "Void\r\nLast";
+            this.buttonOrderLookupViewVoidLast.TextContentRelation = Divelements.SandRibbon.TextContentRelation.Underneath;
+            this.buttonOrderLookupViewVoidLast.Activate += new System.EventHandler(this.OnOrderLookupViewVoidLastShipment);
+            //
+            // ribbonTabOrderLookupViewShipmentHistory
+            //
+            this.ribbonTabOrderLookupViewShipmentHistory.Chunks.AddRange(new Divelements.SandRibbon.WidgetBase[] {
+            this.ribbonChunkOrderLookupViewActions});
+            this.ribbonTabOrderLookupViewShipmentHistory.Location = new System.Drawing.Point(1, 53);
+            this.ribbonTabOrderLookupViewShipmentHistory.Manager = this.ribbonManager;
+            this.ribbonTabOrderLookupViewShipmentHistory.Name = "ribbonTabOrderLookupViewShipmentHistory";
+            this.ribbonTabOrderLookupViewShipmentHistory.Size = new System.Drawing.Size(967, 90);
+            this.ribbonTabOrderLookupViewShipmentHistory.TabIndex = 0;
+            this.ribbonTabOrderLookupViewShipmentHistory.Text = "Shipment &History";
+            //
+            // ribbonChunkOrderLookupViewActions
+            //
+            this.ribbonChunkOrderLookupViewActions.FurtherOptions = false;
+            this.ribbonChunkOrderLookupViewActions.ItemJustification = Divelements.SandRibbon.ItemJustification.Near;
+            this.ribbonChunkOrderLookupViewActions.Items.AddRange(new Divelements.SandRibbon.WidgetBase[] {
+            this.buttonOrderLookupViewVoid,
+            this.buttonOrderLookupViewShipAgain,
+            this.buttonOrderLookupViewSCANForm,
+            this.buttonOrderLookupViewFedExClose});
+            this.ribbonChunkOrderLookupViewActions.Text = "Actions";
+            //
+            // buttonOrderLookupViewVoid
+            //
+            this.buttonOrderLookupViewVoid.Guid = new System.Guid("46F7AC0D-1DD5-41B7-93AC-E0E1DD1DD2E0");
+            this.buttonOrderLookupViewVoid.Image = global::ShipWorks.Properties.Resources.box_void_32_32;
+            this.buttonOrderLookupViewVoid.Padding = new Divelements.SandRibbon.WidgetEdges(3, 2, 4, 14);
+            this.ribbonSecurityProvider.SetPermission(this.buttonOrderLookupViewVoid, ShipWorks.Users.Security.PermissionType.ShipmentsVoidDelete);
+            this.buttonOrderLookupViewVoid.QuickAccessKey = "V";
+            this.buttonOrderLookupViewVoid.Text = "Void";
+            this.buttonOrderLookupViewVoid.TextContentRelation = Divelements.SandRibbon.TextContentRelation.Underneath;
+            //
+            // buttonOrderLookupViewShipAgain
+            //
+            this.buttonOrderLookupViewShipAgain.Guid = new System.Guid("6EBBD6E5-72EE-4BEE-9CDF-4301A55BDC70");
+            this.buttonOrderLookupViewShipAgain.Image = global::ShipWorks.Properties.Resources.box_next_32_32;
+            this.buttonOrderLookupViewShipAgain.Padding = new Divelements.SandRibbon.WidgetEdges(3, 2, 4, 14);
+            this.ribbonSecurityProvider.SetPermission(this.buttonOrderLookupViewShipAgain, ShipWorks.Users.Security.PermissionType.ShipmentsCreateEditProcess);
+            this.buttonOrderLookupViewShipAgain.QuickAccessKey = "S";
+            this.buttonOrderLookupViewShipAgain.Text = "Ship Again";
+            this.buttonOrderLookupViewShipAgain.TextContentRelation = Divelements.SandRibbon.TextContentRelation.Underneath;
+            //
+            // buttonOrderLookupViewSCANForm
+            //
+            this.buttonOrderLookupViewSCANForm.DropDownStyle = Divelements.SandRibbon.DropDownStyle.Integral;
+            this.buttonOrderLookupViewSCANForm.Guid = new System.Guid("020d3d77-23ad-4391-9bcc-60be5437b4aa");
+            this.buttonOrderLookupViewSCANForm.Image = global::ShipWorks.Properties.Resources.graphics_tablet;
+            this.buttonOrderLookupViewSCANForm.Padding = new Divelements.SandRibbon.WidgetEdges(8, 2, 8, 14);
+            this.ribbonSecurityProvider.SetPermission(this.buttonOrderLookupViewSCANForm, ShipWorks.Users.Security.PermissionType.ShipmentsCreateEditProcess);
+            this.buttonOrderLookupViewSCANForm.PopupWidget = this.popupOrderLookupViewSCANForm;
+            this.buttonOrderLookupViewSCANForm.QuickAccessKey = "N";
+            this.buttonOrderLookupViewSCANForm.Text = "SCAN Form";
+            this.buttonOrderLookupViewSCANForm.TextContentRelation = Divelements.SandRibbon.TextContentRelation.Underneath;
+            //
+            // buttonOrderLookupViewFedExClose
+            //
+            this.buttonOrderLookupViewFedExClose.DropDownStyle = Divelements.SandRibbon.DropDownStyle.Integral;
+            this.buttonOrderLookupViewFedExClose.Guid = new System.Guid("55C4B661-51F4-4B54-8D36-25902918DECE");
+            this.buttonOrderLookupViewFedExClose.Image = ((System.Drawing.Image) (resources.GetObject("buttonFedExClose.Image")));
+            this.ribbonSecurityProvider.SetPermission(this.buttonOrderLookupViewFedExClose, ShipWorks.Users.Security.PermissionType.ShipmentsCreateEditProcess);
+            this.buttonOrderLookupViewFedExClose.PopupWidget = this.popupOrderLookupViewFedExEndOfDay;
+            this.buttonOrderLookupViewFedExClose.QuickAccessKey = "F";
+            this.buttonOrderLookupViewFedExClose.Text = "FedEx Close";
+            this.buttonOrderLookupViewFedExClose.TextContentRelation = Divelements.SandRibbon.TextContentRelation.Underneath;
+            //
+            // popupOrderLookupViewFedExEndOfDay
+            //
+            this.popupOrderLookupViewFedExEndOfDay.Items.AddRange(new Divelements.SandRibbon.WidgetBase[] { menuOrderLookupViewFedExEndOfDay });
+            this.popupOrderLookupViewFedExEndOfDay.BeforePopup += new Divelements.SandRibbon.BeforePopupEventHandler(this.OnOrderLookupViewFedExClosePopupOpening);
+            //
+            // popupPostalScanForm
+            //
+            this.popupOrderLookupViewSCANForm.Items.AddRange(new Divelements.SandRibbon.WidgetBase[] {
+            this.menuOrderLookupViewEndiciaScanForm});
+            this.popupOrderLookupViewSCANForm.BeforePopup += new Divelements.SandRibbon.BeforePopupEventHandler(this.OnOrderLookupViewPostalScanFormOpening);
+            //
+            // menuOrderLookupViewEndiciaScanForm
+            //
+            this.menuOrderLookupViewEndiciaScanForm.Items.AddRange(new Divelements.SandRibbon.WidgetBase[] {
+            this.menuOrderLookupViewCreateEndiciaScanForm,
+            this.menuOrderLookupViewPrintScanForm});
+            //
+            // menuOrderLookupViewCreateEndiciaScanForm
+            //
+            this.menuOrderLookupViewCreateEndiciaScanForm.Guid = new System.Guid("3494C176-AF18-4D60-8853-77027C1DB9B2");
+            this.menuOrderLookupViewCreateEndiciaScanForm.Text = "Create SCAN Form...";
+            //
+            // menuOrderLookupViewPrintScanForm
+            //
+            this.menuOrderLookupViewPrintScanForm.GroupName = "Reprint";
+            this.menuOrderLookupViewPrintScanForm.Guid = new System.Guid("0D98E502-C129-4802-834E-87BEE24192B5");
+            this.menuOrderLookupViewPrintScanForm.Items.AddRange(new Divelements.SandRibbon.WidgetBase[] {
+            this.menuOrderLookupViewPrintEndiciaScanForm});
+            this.menuOrderLookupViewPrintScanForm.Text = "Print";
+            //
+            // menuOrderLookupViewPrintEndiciaScanForm
+            //
+            this.menuOrderLookupViewPrintEndiciaScanForm.Items.AddRange(new Divelements.SandRibbon.WidgetBase[] {
+            this.menuOrderLookupViewEndiciaScanFormNone});
+            //
+            // menuOrderLookupViewEndiciaScanFormNone
+            //
+            this.menuOrderLookupViewEndiciaScanFormNone.Enabled = false;
+            this.menuOrderLookupViewEndiciaScanFormNone.Guid = new System.Guid("961F1C13-E3FE-49BF-A2A8-BB7BEAD18B14");
+            this.menuOrderLookupViewEndiciaScanFormNone.Text = "(none)";
             //
             // ribbonTabAdmin
             //
@@ -2750,17 +3108,6 @@ namespace ShipWorks
             this.pictureBox8.TabIndex = 0;
             this.pictureBox8.TabStop = false;
             //
-            // panelArchiveNotification
-            //
-            this.panelArchiveNotification.Visible = false;
-            this.panelArchiveNotification.BackColor = System.Drawing.Color.Transparent;
-            this.panelArchiveNotification.Controls.Add(this.dashboardBarSample);
-            this.panelArchiveNotification.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelArchiveNotification.Location = new System.Drawing.Point(3, 149);
-            this.panelArchiveNotification.Name = "panelArchiveNotification";
-            this.panelArchiveNotification.Size = new System.Drawing.Size(969, 52);
-            this.panelArchiveNotification.TabIndex = 6;
-            //
             // dashboardArea
             //
             this.dashboardArea.BackColor = System.Drawing.Color.Transparent;
@@ -2770,20 +3117,6 @@ namespace ShipWorks
             this.dashboardArea.Name = "dashboardArea";
             this.dashboardArea.Size = new System.Drawing.Size(969, 28);
             this.dashboardArea.TabIndex = 6;
-            //
-            // dashboardBarSample
-            //
-            this.dashboardBarSample.BackColor = System.Drawing.Color.Transparent;
-            this.dashboardBarSample.CanUserDismiss = true;
-            this.dashboardBarSample.Dock = System.Windows.Forms.DockStyle.Top;
-            this.dashboardBarSample.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
-            this.dashboardBarSample.Image = ((System.Drawing.Image) (resources.GetObject("dashboardBarSample.Image")));
-            this.dashboardBarSample.Location = new System.Drawing.Point(0, 0);
-            this.dashboardBarSample.Name = "dashboardBarSample";
-            this.dashboardBarSample.PrimaryText = "Prmary Text";
-            this.dashboardBarSample.SecondaryText = "Secondary Text";
-            this.dashboardBarSample.Size = new System.Drawing.Size(969, 26);
-            this.dashboardBarSample.TabIndex = 0;
             //
             // ribbonSecurityProvider
             //
@@ -2795,6 +3128,13 @@ namespace ShipWorks
             this.menuItem1.Image = global::ShipWorks.Properties.Resources.help_earth;
             this.menuItem1.Padding = new Divelements.SandRibbon.WidgetEdges(40, 3, 20, 3);
             this.menuItem1.Text = "Support Forum";
+            //
+            // button2
+            //
+            this.button2.Image = global::ShipWorks.Properties.Resources.box_next_32_32;
+            this.button2.QuickAccessKey = "OE";
+            this.button2.Text = "Create\r\nLabel";
+            this.button2.TextContentRelation = Divelements.SandRibbon.TextContentRelation.Underneath;
             //
             // MainForm
             //
@@ -2847,20 +3187,23 @@ namespace ShipWorks
             this.ResumeLayout(false);
 
         }
-
         #endregion
 
         private Divelements.SandRibbon.RibbonManager ribbonManager;
         private Divelements.SandRibbon.Ribbon ribbon;
         private Divelements.SandRibbon.ApplicationMenu applicationMenu;
         private Divelements.SandRibbon.MainMenuItem mainMenuLogon;
-        private Divelements.SandRibbon.RibbonTab ribbonTabHome;
+        private Divelements.SandRibbon.RibbonTab ribbonTabOrderLookupViewShipping;
+        private Divelements.SandRibbon.RibbonTab ribbonTabOrderLookupViewShipmentHistory;
+        private Divelements.SandRibbon.RibbonTab ribbonTabGridViewHome;
         private Divelements.SandRibbon.StatusBar statusBar;
         private Divelements.SandRibbon.RibbonTab ribbonTabView;
         private Divelements.SandRibbon.RibbonChunk ribbonChunkPanels;
         private Divelements.SandRibbon.RibbonTab ribbonTabAdmin;
         private Divelements.SandRibbon.RibbonChunk ribbonChunkConfiguration;
         private Divelements.SandRibbon.MainMenuItem mainMenuItemSetupDatabase;
+        private Divelements.SandRibbon.MainMenuItem mainMenuItemOrderLookup;
+        private Divelements.SandRibbon.MainMenuItem mainMenuItemBatchGrid;
         private Divelements.SandRibbon.MainMenuItem mainMenuItemBackupDatabase;
         private Divelements.SandRibbon.QuickAccessToolBar quickAccessToolBar;
         private Divelements.SandRibbon.Button buttonShowPanels;
@@ -2898,7 +3241,7 @@ namespace ShipWorks
         private Divelements.SandRibbon.Button buttonManageFilters;
         private Divelements.SandRibbon.Button buttonManageTemplates;
         private Divelements.SandRibbon.Button buttonManageActions;
-        private Divelements.SandRibbon.RibbonTab ribbonTabCreate;
+        private Divelements.SandRibbon.RibbonTab ribbonTabGridViewCreate;
         private Divelements.SandRibbon.RibbonChunk ribbonChunkPrint;
         private Divelements.SandRibbon.Button buttonPrint;
         private Divelements.SandRibbon.Popup popupPrint;
@@ -3067,14 +3410,24 @@ namespace ShipWorks
         private Divelements.SandRibbon.Button buttonEndiciaSCAN;
         private Divelements.SandRibbon.Popup popupPostalScanForm;
         private Divelements.SandRibbon.MenuItem menuCreateEndiciaScanForm;
+        private Divelements.SandRibbon.MenuItem menuOrderLookupViewCreateEndiciaScanForm;
         private Divelements.SandRibbon.MenuItem menuPrintScanForm;
+        private Divelements.SandRibbon.MenuItem menuOrderLookupViewPrintScanForm;
         private Divelements.SandRibbon.MenuItem menuEndiciaScanFormNone;
+        private Divelements.SandRibbon.MenuItem menuOrderLookupViewEndiciaScanFormNone;
         private Divelements.SandRibbon.Menu menuEndiciaScanForm;
+        private Divelements.SandRibbon.Menu menuOrderLookupViewEndiciaScanForm;
         private Divelements.SandRibbon.Menu menuPrintEndiciaScanForm;
+        private Divelements.SandRibbon.Menu menuOrderLookupViewPrintEndiciaScanForm;
         private Divelements.SandRibbon.MenuItem menuFedExSmartPostClose;
         private Divelements.SandRibbon.MainMenuItem mainMenuItemSupport;
         private Divelements.SandRibbon.MenuItem menuItemSupportForum;
         private Divelements.SandRibbon.MenuItem menuItemRemoteAssistance;
+        private Divelements.SandRibbon.MenuItem menuOrderLookupViewFedExEndDayClose;
+        private Divelements.SandRibbon.MenuItem menuOrderLookupViewFedExEndDayPrint;
+        private Divelements.SandRibbon.MenuItem menuOrderLookupViewFedExEndDayPrintPlaceholder;
+        private Divelements.SandRibbon.MenuItem menuOrderLookupViewFedExSmartPostClose;
+        private Divelements.SandRibbon.Menu menuOrderLookupViewFedExPrintReports;
         private Editions.EditionGuiHelper editionGuiHelper;
         private Divelements.SandRibbon.RibbonTab ribbonTabHelp;
         private Divelements.SandRibbon.Button buttonHelpForum;
@@ -3094,12 +3447,34 @@ namespace ShipWorks
         private Divelements.SandRibbon.MenuItem menuItemBuySupplies;
         private Divelements.SandRibbon.Separator separator2;
         private Divelements.SandRibbon.MainMenuItem mainMenuItemDatabase;
+        private Divelements.SandRibbon.MainMenuItem mainMenuItemViewMode;
         private System.Windows.Forms.ToolStripMenuItem contextOrderCustomActions;
         private System.Windows.Forms.ToolStripSeparator contextCustomerCustomActionsSep;
         private System.Windows.Forms.ToolStripMenuItem contextCustomerCustomActions;
         private Divelements.SandRibbon.Button buttonUship;
         private System.Windows.Forms.ToolStripMenuItem contextOrderInsuranceClaim;
         private Divelements.SandRibbon.Button buttonInsuranceClaim;
+        private Divelements.SandRibbon.Menu uiModeMenu;
+        private Divelements.SandRibbon.RibbonChunk ribbonChunkOrderLookupViewShipping;
+        private Divelements.SandRibbon.RibbonChunk ribbonChunkOrderLookupViewProfiles;
+        private Divelements.SandRibbon.RibbonChunk ribbonChunkOrderLookupViewPreviousLabel;
+        private Divelements.SandRibbon.RibbonChunk ribbonChunkOrderLookupViewActions;
+        private Divelements.SandRibbon.Button buttonOrderLookupViewCreateLabel;
+        private Divelements.SandRibbon.Button buttonOrderLookupViewManualOrder;
+        private Divelements.SandRibbon.Button buttonOrderLookupViewApplyProfile;
+        private Divelements.SandRibbon.Button buttonOrderLookupViewManageProfiles;
+        private Divelements.SandRibbon.Button buttonOrderLookupViewReprintLast;
+        private Divelements.SandRibbon.Button buttonOrderLookupViewVoidLast;
+        private Divelements.SandRibbon.Popup popup1;
+        private Divelements.SandRibbon.Popup popup2;
+        private Divelements.SandRibbon.Button buttonOrderLookupViewVoid;
+        private Divelements.SandRibbon.Button buttonOrderLookupViewShipAgain;
+        private Divelements.SandRibbon.Button buttonOrderLookupViewSCANForm;
+        private Divelements.SandRibbon.Button buttonOrderLookupViewFedExClose;
+        private Divelements.SandRibbon.Popup popupOrderLookupViewSCANForm;
+        private Divelements.SandRibbon.Popup popupOrderLookupViewFedExEndOfDay;
+        private Divelements.SandRibbon.Button button2;
+        private Divelements.SandRibbon.Button buttonOrderLookupViewFields;
     }
 }
 

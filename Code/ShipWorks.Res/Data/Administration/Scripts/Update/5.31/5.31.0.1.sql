@@ -1,0 +1,12 @@
+﻿SET NUMERIC_ROUNDABORT OFF
+GO
+SET ANSI_PADDING, ANSI_WARNINGS, CONCAT_NULL_YIELDS_NULL, ARITHABORT, QUOTED_IDENTIFIER, ANSI_NULLS ON
+GO
+PRINT N'Altering [dbo].[Shipment]'
+GO
+IF COL_LENGTH(N'[dbo].[Shipment]', N'ProcessedWithUiMode') IS NULL
+	ALTER TABLE [dbo].[Shipment] ADD [ProcessedWithUiMode] [int] NULL
+GO
+
+UPDATE Shipment SET ProcessedWithUiMode = 0 WHERE Processed = 1
+GO
