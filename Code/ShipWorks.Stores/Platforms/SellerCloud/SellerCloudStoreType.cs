@@ -3,6 +3,7 @@ using Interapptive.Shared.UI;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Content;
+using ShipWorks.Shipping;
 using ShipWorks.Stores.Platforms.GenericModule;
 
 namespace ShipWorks.Stores.Platforms.SellerCloud
@@ -36,5 +37,18 @@ namespace ShipWorks.Stores.Platforms.SellerCloud
         /// </summary>
         public override string AccountSettingsHelpUrl =>
             "http://support.shipworks.com/support/solutions/articles/4000097089-adding-a-sellercloud-store";
+
+        /// <summary>
+        /// Get value entered in Carrier Name field
+        /// </summary>
+        public override string GetOnlineCarrierName(ShipmentEntity shipment)
+        {
+            if (ShipmentTypeCode.Other == shipment.ShipmentTypeCode)
+            {
+                return shipment.Other.Carrier.ToString();
+            }
+
+            return base.GetOnlineCarrierName(shipment);
+        }
     }
 }
