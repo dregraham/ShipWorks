@@ -1015,6 +1015,9 @@
     <Compile Include="Shipping\Profiles\IProfilePopupService.cs" />
     <Compile Include="Shipping\Services\IAppliableShippingProfileRepository.cs" />
     <Compile Include="Shipping\ShipmentUpdateOperationResult.cs" />
+    <Compile Include="Shipping\Policies\AmazonPrimeShippingPolicyTarget.cs" />
+    <Compile Include="Shipping\Policies\AmazonPrimeShippingRestrictionType.cs" />
+    <Compile Include="Shipping\Policies\AmazonShipmentShippingPolicy.cs" />
     <Compile Include="Shipping\ShipSense\IShipSenseSynchronizer.cs" />
     <Compile Include="Shipping\ShipSense\NullKnowledgebase.cs" />
     <Compile Include="Shipping\ShipSense\NullShipSenseSynchronizer.cs" />

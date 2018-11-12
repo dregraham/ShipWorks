@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Reactive;
 using System.Threading.Tasks;
 using Autofac.Extras.Moq;
 using Interapptive.Shared.Threading;
+using Interapptive.Shared.Utility;
 using Microsoft.Reactive.Testing;
 using Moq;
 using ShipWorks.ApplicationCore;
@@ -77,7 +79,7 @@ namespace ShipWorks.OrderLookup.Tests
             mainForm.SetupGet(u => u.UIMode).Returns(UIMode.OrderLookup);
             testMessenger.Send(new SingleScanMessage(this, new ScanMessage(this, "Foo", IntPtr.Zero)));
 
-            downloader.Verify(d => d.Download("Foo"));
+            RetryAssertion(() => downloader.Verify(d => d.Download("Foo")));
         }
 
         [Fact]
@@ -88,7 +90,7 @@ namespace ShipWorks.OrderLookup.Tests
             mainForm.SetupGet(u => u.UIMode).Returns(UIMode.Batch);
             testMessenger.Send(new SingleScanMessage(this, new ScanMessage(this, "Foo", IntPtr.Zero)));
 
-            downloader.Verify(d => d.Download(It.IsAny<string>()), Times.Never);
+            RetryAssertion(() => downloader.Verify(d => d.Download(It.IsAny<string>()), Times.Never));
         }
 
         [Fact]
@@ -108,7 +110,7 @@ namespace ShipWorks.OrderLookup.Tests
             mainForm.SetupGet(u => u.UIMode).Returns(UIMode.Batch);
             testMessenger.Send(new OrderLookupSearchMessage(this, "Foo"));
 
-            downloader.Verify(d => d.Download(It.IsAny<string>()), Times.Never);
+            RetryAssertion(() => downloader.Verify(d => d.Download(It.IsAny<string>()), Times.Never));
         }
 
         [Fact]
@@ -133,7 +135,7 @@ namespace ShipWorks.OrderLookup.Tests
             OrderLookupSearchMessage message = new OrderLookupSearchMessage(this, "Foo");
             testMessenger.Send(message);
 
-            autoPrintService.Verify(a => a.AutoPrintShipment(It.IsAny<long>(), It.IsAny<SingleScanMessage>()), Times.Never);
+            RetryAssertion(() => autoPrintService.Verify(a => a.AutoPrintShipment(It.IsAny<long>(), It.IsAny<SingleScanMessage>()), Times.Never));
         }
 
         [Fact]
@@ -145,7 +147,7 @@ namespace ShipWorks.OrderLookup.Tests
             SingleScanMessage singleScanMessage = new SingleScanMessage(this, new ScanMessage(this, "Foo", IntPtr.Zero));
             testMessenger.Send(singleScanMessage);
 
-            orderRepository.Verify(o => o.GetOrderIDs("Foo"));
+            RetryAssertion(() => orderRepository.Verify(o => o.GetOrderIDs("Foo")));
         }
 
         [Fact]
@@ -160,6 +162,19 @@ namespace ShipWorks.OrderLookup.Tests
             await testObject.OnSingleScanMessage(singleScanMessage);
 
             mock.Mock<IOrderLookupShipmentModel>().Verify(s => s.LoadOrder(order));
+        }
+
+        /// <summary>
+        /// Retry a given assertion, since we may need to wait for actions to complete
+        /// </summary>
+        /// <param name="action"></param>
+        private Task RetryAssertion(Action action)
+        {
+            return Functional.RetryAsync(() =>
+            {
+                action();
+                return Task.FromResult(Unit.Default);
+            }, 5, TimeSpan.FromSeconds(250), ex => true);
         }
     }
 }

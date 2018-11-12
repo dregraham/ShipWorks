@@ -57,9 +57,21 @@ namespace ShipWorks.Shipping
         /// </summary>
         private ICertificateInspector certificateInspector;
 
-        private static readonly object syncLock = new object();
+        private static object syncLock = new object();
+        private readonly IDataProvider dataProvider;
 
-        protected ShipmentType()
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        protected ShipmentType(IDataProvider dataProvider)
+        {
+            this.dataProvider = dataProvider;
+        }
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        protected ShipmentType() : this(new DataProviderWrapper(new SqlAdapterFactory()))
         {
             // Use the trusting inspector until told otherwise trusting so that calls will continue to work as expected.
             // Calls that require specific inspection should override the CertificateInspector property.
@@ -213,7 +225,7 @@ namespace ShipWorks.Shipping
             IAmazonOrder order;
             if (shipment.Order == null)
             {
-                order = DataProvider.GetEntity(shipment.OrderID) as IAmazonOrder;
+                order = dataProvider.GetEntity(shipment.OrderID) as IAmazonOrder;
             }
             else
             {

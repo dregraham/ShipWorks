@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Drawing.Imaging;
 using System.Linq;
+using Interapptive.Shared.Collections;
 using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.ApplicationCore.Licensing;
@@ -15,6 +16,7 @@ using ShipWorks.Editions;
 using ShipWorks.Shipping.Carriers.Amazon.Enums;
 using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Editing;
+using ShipWorks.Shipping.Policies;
 using ShipWorks.Shipping.Services;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping.Tracking;
@@ -31,28 +33,22 @@ namespace ShipWorks.Shipping.Carriers.Amazon
     public class AmazonShipmentType : ShipmentType
     {
         private readonly IStoreManager storeManager;
-        private readonly IOrderManager orderManager;
         private readonly IShippingManager shippingManager;
         private readonly ILicenseService licenseService;
         private readonly IAmazonServiceTypeRepository serviceTypeRepository;
-
-        /// <summary>
-        /// Constructor for tests
-        /// </summary>
-        public AmazonShipmentType()
-        {
-        }
+        private readonly IOrderManager orderManager;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public AmazonShipmentType(IStoreManager storeManager, IOrderManager orderManager, IShippingManager shippingManager, ILicenseService licenseService, IAmazonServiceTypeRepository serviceTypeRepository)
+        public AmazonShipmentType(IStoreManager storeManager, IShippingManager shippingManager, ILicenseService licenseService, 
+            IAmazonServiceTypeRepository serviceTypeRepository, IOrderManager orderManager)
         {
             this.storeManager = storeManager;
-            this.orderManager = orderManager;
             this.shippingManager = shippingManager;
             this.licenseService = licenseService;
             this.serviceTypeRepository = serviceTypeRepository;
+            this.orderManager = orderManager;
         }
 
         /// <summary>
@@ -189,13 +185,25 @@ namespace ShipWorks.Shipping.Carriers.Amazon
                 return false;
             }
 
-            orderManager.PopulateOrderDetails(shipment);
+            if (shipment.Order == null)
+            {
+                orderManager.PopulateOrderDetails(shipment);
+            }
 
-            IAmazonOrder order = shipment.Order as IAmazonOrder;
+            IAmazonOrder amazonOrder = shipment.Order as IAmazonOrder;
 
-            IAmazonCredentials amazonCredentials = storeManager.GetStore(shipment.Order.StoreID) as IAmazonCredentials;
+            AmazonPrimeShippingPolicyTarget target = new AmazonPrimeShippingPolicyTarget()
+            {
+                Shipment = shipment,
+                Allowed = false,
+                AmazonOrder = amazonOrder,
+                AmazonCredentials = storeManager.GetStore(shipment.Order.StoreID) as IAmazonCredentials
+            };
 
-            return order != null && order.IsPrime && amazonCredentials != null;
+            ILicense license = licenseService.GetLicenses().FirstOrDefault();
+            license?.ApplyShippingPolicy(ShipmentTypeCode, target);
+
+            return target.Allowed;
         }
 
         /// <summary>
