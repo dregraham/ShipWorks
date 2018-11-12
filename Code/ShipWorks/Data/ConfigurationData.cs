@@ -20,6 +20,7 @@ namespace ShipWorks.Data
     /// </summary>
     public static class ConfigurationData
     {
+        private static readonly Func<ISqlAdapter> defaultGetSqlAdapter = () => SqlAdapter.Default;
         private static readonly object lockObj = new object();
         private static ConfigurationEntity config;
         private static IConfigurationEntity configReadOnly;
@@ -35,10 +36,8 @@ namespace ShipWorks.Data
         /// <summary>
         /// Completely reload the count cache
         /// </summary>
-        public static void InitializeForCurrentDatabase()
-        {
-            UpdateConfiguration(SqlAdapter.Default);
-        }
+        public static void InitializeForCurrentDatabase() =>
+            UpdateConfiguration(defaultGetSqlAdapter);
 
         /// <summary>
         /// Load the configuration from the database
@@ -52,18 +51,18 @@ namespace ShipWorks.Data
         /// Get the current configuration instance
         /// </summary>
         public static ConfigurationEntity Fetch() =>
-            Fetch(SqlAdapter.Default);
+            Fetch(defaultGetSqlAdapter);
 
         /// <summary>
         /// Get the current configuration instance
         /// </summary>
-        public static ConfigurationEntity Fetch(ISqlAdapter sqlAdapter)
+        public static ConfigurationEntity Fetch(Func<ISqlAdapter> getSqlAdapter)
         {
             lock (lockObj)
             {
                 if (needCheckForChanges)
                 {
-                    UpdateConfiguration(sqlAdapter);
+                    UpdateConfiguration(getSqlAdapter);
                 }
 
                 return EntityUtility.CloneEntity(config);
@@ -74,18 +73,18 @@ namespace ShipWorks.Data
         /// Get the current configuration instance
         /// </summary>
         public static IConfigurationEntity FetchReadOnly() =>
-            FetchReadOnly(SqlAdapter.Default);
+            FetchReadOnly(defaultGetSqlAdapter);
 
         /// <summary>
         /// Get the current configuration instance
         /// </summary>
-        public static IConfigurationEntity FetchReadOnly(ISqlAdapter sqlAdapter)
+        public static IConfigurationEntity FetchReadOnly(Func<ISqlAdapter> getSqlAdapter)
         {
             lock (lockObj)
             {
                 if (needCheckForChanges)
                 {
-                    UpdateConfiguration(sqlAdapter);
+                    UpdateConfiguration(getSqlAdapter);
                 }
 
                 return configReadOnly;
@@ -95,12 +94,12 @@ namespace ShipWorks.Data
         /// <summary>
         /// Update the configuration stored in memory
         /// </summary>
-        private static void UpdateConfiguration(ISqlAdapter sqlAdapter)
+        private static void UpdateConfiguration(Func<ISqlAdapter> getSqlAdapter)
         {
             lock (lockObj)
             {
                 ConfigurationEntity newConfig = new ConfigurationEntity(true);
-                sqlAdapter.FetchEntity(newConfig);
+                getSqlAdapter().FetchEntity(newConfig);
                 config = newConfig;
                 configReadOnly = newConfig.AsReadOnly();
                 needCheckForChanges = false;
