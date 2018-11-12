@@ -169,14 +169,20 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
             UpsApiCore.WriteAddressXml(xmlWriter, origin);
             xmlWriter.WriteEndElement();
 
+            bool isResidentialAddress = ResidentialDeterminationService.DetermineResidentialAddress(shipment);
+
             // if this is a return shipment, need to change ShipTo/ShipFrom
             if (shipment.ReturnShipment && !isSurePost)
             {
                 PersonAdapter temp = origin;
                 origin = recipient;
                 recipient = temp;
-            }
 
+                // determine if return recipient is a residential address
+                isResidentialAddress = string.IsNullOrEmpty(recipient.Company);
+                shipment.ResidentialResult = isResidentialAddress;
+            }
+           
             #region Determine name, company, and attention
 
             string companyOrName = "";
@@ -213,8 +219,9 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
             xmlWriter.WriteElementString("AttentionName", StringUtility.Truncate(attention, 35));
             xmlWriter.WriteElementString("PhoneNumber", Regex.Replace(recipient.Phone, @"\D", ""));
             xmlWriter.WriteElementString("EMailAddress", UpsUtility.GetCorrectedEmailAddress(recipient.Email));
-            UpsApiCore.WriteAddressXml(xmlWriter, recipient, ResidentialDeterminationService.DetermineResidentialAddress(shipment) ? "ResidentialAddress" : (string) null);
+            UpsApiCore.WriteAddressXml(xmlWriter, recipient, isResidentialAddress ? "ResidentialAddress" : (string) null);
             xmlWriter.WriteEndElement();
+            
 
             // ShipFrom
             string attentionName = new PersonName(origin).FullName;

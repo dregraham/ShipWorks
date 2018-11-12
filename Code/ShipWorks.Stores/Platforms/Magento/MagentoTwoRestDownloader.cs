@@ -394,6 +394,7 @@ namespace ShipWorks.Stores.Platforms.Magento
             orderItem.Quantity = item.QtyOrdered;
             orderItem.Code = item.ItemId.ToString();
             orderItem.SKU = item.Sku;
+            orderItem.Weight = item.Weight;
             orderItem.UnitPrice = Convert.ToDecimal(item.Price);
 
             if (item.ProductType?.Equals("bundle", StringComparison.InvariantCultureIgnoreCase) == true)
@@ -409,8 +410,6 @@ namespace ShipWorks.Stores.Platforms.Magento
                     orderItem.UnitPrice = Convert.ToDecimal(configurableItemWithPrice.ParentItem?.Price ?? configurableItemWithPrice.Price);
                 }
             }
-
-            orderItem.Weight = item.Weight;
 
             if (magentoOrderItem?.ProductOption?.ExtensionAttributes != null)
             {
@@ -435,9 +434,6 @@ namespace ShipWorks.Stores.Platforms.Magento
         /// </summary>
         private void AddBundleOptions(OrderItemEntity item, IEnumerable<Item> itemList, long parentItemID)
         {
-            // Assume the bundle has a set price and is not the sum of prices of the individual items included in the bundle
-            bool isDynamicPricing = false;
-
             foreach (Item itemDetail in itemList.Where(s => s.ParentItemId == parentItemID))
             {
                 OrderItemAttributeEntity orderItemAttribute = InstantiateOrderItemAttribute(item);
@@ -445,18 +441,15 @@ namespace ShipWorks.Stores.Platforms.Magento
                 orderItemAttribute.Name = itemDetail.Name;
                 orderItemAttribute.UnitPrice = 0;
 
+                // If the child items have prices, set the parent item price to 0 to avoid doubling the order total
                 if (itemDetail.Price > 0)
                 {
-                    isDynamicPricing = true;
+                    item.UnitPrice = 0m;
                 }
             }
 
-            // If the child items do have prices, set the parent item price to 0 to avoid doubling the order total
-            if (isDynamicPricing)
-            {
-                item.UnitPrice = 0m;
-            }
-
+            // Magento always supplies item weights, so make parent weight 0
+            item.Weight = 0;
         }
 
         /// <summary>

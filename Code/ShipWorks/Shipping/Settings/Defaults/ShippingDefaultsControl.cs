@@ -119,10 +119,16 @@ namespace ShipWorks.Shipping.Settings.Defaults
                 ShippingProfileEntity profile = shippingProfileManager.GetOrCreatePrimaryProfile(shipmentType);
 
                 IShippingProfileService shippingProfileService = lifetimeScope.Resolve<IShippingProfileService>();
-                var shippingProfile = shippingProfileService.GetEditable(profile.ShippingProfileID);
 
+                if (shippingProfileService.Get(profile.ShippingProfileID) == null)
+                {
+                    ShippingProfileManager.SaveProfile(profile);
+                }
+
+                IShippingProfile shippingProfile = shippingProfileService.Get(profile.ShippingProfileID);
+                
                 ShippingProfileEditorDlg profileEditor = lifetimeScope.Resolve<ShippingProfileEditorDlg>(
-                    TypedParameter.From(shippingProfile)
+                    new TypedParameter(typeof(IShippingProfile), shippingProfile)
                 );
                 profileEditor.ShowDialog(this);
             }
