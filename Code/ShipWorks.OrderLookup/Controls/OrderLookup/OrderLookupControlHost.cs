@@ -1,10 +1,15 @@
 ﻿using System;
+using System.Reactive;
 using System.Reactive.Disposables;
+using System.Reactive.Linq;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Forms.Integration;
 using System.Windows.Input;
 using Interapptive.Shared.ComponentRegistration;
+using ShipWorks.Core.Messaging;
+using ShipWorks.Messaging.Messages.Shipping;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Profiles;
 using ShipWorks.UI.Controls;
@@ -19,12 +24,14 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookup
     {
         private readonly MainOrderLookupViewModel orderLookupViewModel;
         private MainOrderLookupControl mainOrderLookupControl;
+        private readonly IMessenger messenger;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public OrderLookupControlHost(MainOrderLookupViewModel orderLookupViewModel, OrderLookupLabelShortcutPipeline shortcutPipeline)
+        public OrderLookupControlHost(MainOrderLookupViewModel orderLookupViewModel, OrderLookupLabelShortcutPipeline shortcutPipeline, IMessenger messenger)
         {
+            this.messenger = messenger;
             InitializeComponent();
             this.orderLookupViewModel = orderLookupViewModel;
             orderLookupViewModel.ShipmentModel.ShipmentNeedsBinding += OnShipmentModelShipmentSaving;
@@ -74,12 +81,24 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookup
         /// <summary>
         /// Create the label for a shipment
         /// </summary>
-        public void CreateLabel()
+        public async Task CreateLabel()
         {
             using (Disposable.Create(EnableFocusEvents))
             {
                 DisableFocusEvents();
-                orderLookupViewModel.ShipmentModel.CreateLabel();
+                CommitBindingsOnFocusedControl();
+
+                // Wait for one of the following scenarios:
+                await Observable.Merge(new[]
+                    {
+                        // The label creation process has completed
+                        messenger.OfType<ShipmentsProcessedMessage>().Select(_ => Unit.Default),
+                        // Time out after 30 seconds
+                        Observable.Timer(TimeSpan.FromSeconds(30)).Select(_ => Unit.Default),
+                        // The create label process didn't start
+                        Observable.Return(Unit.Default).Where(_ => !orderLookupViewModel.ShipmentModel.CreateLabel())
+                    })
+                    .FirstAsync();
             }
         }
 

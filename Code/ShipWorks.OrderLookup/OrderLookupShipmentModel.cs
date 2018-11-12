@@ -478,17 +478,19 @@ namespace ShipWorks.OrderLookup
         /// <summary>
         /// Create the label for a shipment
         /// </summary>
-        public void CreateLabel()
+        public bool CreateLabel()
         {
             if (!ShipmentAllowEditing || (shipmentAdapter?.Shipment?.Processed ?? true))
             {
-                return;
+                return false;
             }
 
             SaveToDatabase();
 
             messenger.Send(new ProcessShipmentsMessage(this, new[] { shipmentAdapter.Shipment },
                 new[] { shipmentAdapter.Shipment }, SelectedRate));
+
+            return true;
         }
 
         /// <summary>

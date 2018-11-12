@@ -156,7 +156,7 @@ namespace ShipWorks
         public MainForm()
         {
             currentUserSettings = IoC.UnsafeGlobalLifetimeScope.Resolve<ICurrentUserSettings>();
-            
+
             InitializeComponent();
 
             panelDockingArea.Visible = false;
@@ -282,7 +282,7 @@ namespace ShipWorks
         /// </summary>
         private void OnButtonOrderLookupViewCreateLabel(object sender, System.EventArgs e)
         {
-            orderLookupControl.CreateLabel();
+            orderLookupControl.CreateLabel().Forget();
         }
 
         #region Initialization \ Shutdown
