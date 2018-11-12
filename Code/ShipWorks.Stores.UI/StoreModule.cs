@@ -1,6 +1,7 @@
 ﻿using Autofac;
 using Interapptive.Shared.Metrics;
 using RestSharp;
+using ShipWorks.Stores.Orders;
 using ShipWorks.Stores.Services;
 
 namespace ShipWorks.Stores.UI

@@ -7,10 +7,10 @@ using Interapptive.Shared.Collections;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Core.Messaging.Messages.Shipping;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Messaging.Messages;
 using ShipWorks.Messaging.Messages.Dialogs;
 using ShipWorks.Messaging.Messages.Shipping;
+using ShipWorks.Shipping.Profiles;
 using ShipWorks.Shipping.Services;
 using ShipWorks.UI.Controls.SandRibbon;
 using ShipWorks.Users.Security;
@@ -22,9 +22,9 @@ namespace ShipWorks.Shipping.UI.ShippingRibbon
     /// </summary>
     public class ShippingRibbonService : IShippingRibbonService, IDisposable
     {
-        readonly IMessenger messages;
-        IShippingRibbonActions shippingRibbonActions;
-        IDisposable subscription;
+        private readonly IMessenger messages;
+        private IShippingRibbonActions shippingRibbonActions;
+        private IDisposable subscription;
         private ShipmentEntity currentShipment;
         private IEnumerable<long> currentOrderIDs = Enumerable.Empty<long>();
         private readonly Func<ISecurityContext> securityContextRetriever;
@@ -91,11 +91,11 @@ namespace ShipWorks.Shipping.UI.ShippingRibbon
         /// </summary>
         private void OnApplyProfile(object sender, EventArgs e)
         {
-            IShippingProfileEntity profile = (sender as IRibbonButton)?.Tag as IShippingProfileEntity;
+            IShippingProfile profile = (sender as IRibbonButton)?.Tag as IShippingProfile;
 
             if (currentShipment != null && !currentShipment.Processed && profile != null)
             {
-                messages.Send(new ApplyProfileMessage(this, currentShipment.ShipmentID, profile.ShippingProfileID));
+                messages.Send(new ApplyProfileMessage(this, currentShipment.ShipmentID, profile.ShippingProfileEntity.ShippingProfileID));
             }
         }
 

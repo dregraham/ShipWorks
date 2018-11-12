@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using System.Reactive.Disposables;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Editing.Rating;
@@ -89,8 +91,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
             PostalRateSelection selection = rate.Tag as PostalRateSelection;
 
             return selection != null &&
-                (int) selection.ServiceType == ServiceType &&
-                (int) selection.ConfirmationType == Shipment.Postal.Confirmation;
+                (int) selection.ServiceType == ServiceType;
         }
 
         /// <summary>
@@ -128,7 +129,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
             if (rateSelection != null)
             {
                 Shipment.Postal.Service = (int) rateSelection.ServiceType;
-                Shipment.Postal.Confirmation = (int) rateSelection.ConfirmationType;
             }
         }
 
@@ -137,5 +137,21 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
         /// </summary>
         /// <returns></returns>
         public override ICarrierShipmentAdapter Clone() => new PostalWebToolsShipmentAdapter(this);
+
+        /// <summary>
+        /// Send a notification if service related properties change
+        /// </summary>
+        public override IDisposable NotifyIfServiceRelatedPropertiesChange(Action<string> raisePropertyChanged)
+        {
+            var startingConfirmation = Shipment.Postal.Confirmation;
+
+            return Disposable.Create(() =>
+            {
+                if (startingConfirmation != Shipment.Postal.Confirmation)
+                {
+                    raisePropertyChanged(nameof(Shipment.Postal.Confirmation));
+                }
+            });
+        }
     }
 }

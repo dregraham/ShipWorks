@@ -19,19 +19,20 @@ using ShipWorks.ApplicationCore.Services;
 using ShipWorks.Data.Connection;
 using ShipWorks.Users;
 using ShipWorks.Users.Audit;
+using Syncfusion.Licensing;
 
 namespace ShipWorks
 {
     public static class Program
     {
         // Indicates if the application is shutting down due to an exception
-        static bool isCrashing = false;
+        private static bool isCrashing = false;
 
         // Logger
-        static readonly ILog log = LogManager.GetLogger(typeof(Program));
+        private static readonly ILog log = LogManager.GetLogger(typeof(Program));
 
         // Require at least 100 MB of free space to run ShipWorks successfully
-        const long minDriveSpace = 1024 * 1024 * 100;
+        private const long minDriveSpace = 1024 * 1024 * 100;
 
         private static ExecutionMode executionMode;
 
@@ -367,6 +368,8 @@ namespace ShipWorks
         /// </summary>
         private async static Task HandleUnhandledException(Exception ex, bool guiThread)
         {
+            log.Error("Got an unhandled exception", ex);
+
             // No executionMode, so default to the original exception handling.
             if (isCrashing)
             {
@@ -407,6 +410,7 @@ namespace ShipWorks
         private static void ApplyThirdPartyLicenses()
         {
             Rebex.Licensing.Key = "==FkhSvCGeTWZceYPGxAXhIFg8MsCGacCTnp+8iElvsPrtAft0NvMidZJIU4F0YbKZoH3sq==";
+            SyncfusionLicenseProvider.RegisterLicense("MzgxODJAMzEzNjJlMzMyZTMwQkhIaE4yS1NsbHliVVJYRjF3R3dPYmM0c01XbkdTcnVlLzZiOUdXeUlrTT0=");
         }
     }
 }

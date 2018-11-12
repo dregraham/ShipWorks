@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Interapptive.Shared;
-using Interapptive.Shared.Threading;
 using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.Metrics;
+using Interapptive.Shared.Threading;
+using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Services.ShipmentProcessorSteps;
@@ -23,6 +24,7 @@ namespace ShipWorks.Shipping.Services.ProcessShipmentsWorkflow
         private readonly LabelPersistenceStep saveLabelTask;
         private readonly LabelResultLogStep completeLabelTask;
         private readonly IShippingManager shippingManager;
+        private readonly Func<string, ITrackedDurationEvent> telemetryFactory;
 
         /// <summary>
         /// Constructor
@@ -32,13 +34,15 @@ namespace ShipWorks.Shipping.Services.ProcessShipmentsWorkflow
             ILabelRetrievalStep getLabelTask,
             LabelPersistenceStep saveLabelTask,
             LabelResultLogStep completeLabelTask,
-            IShippingManager shippingManager)
+            IShippingManager shippingManager,
+            Func<string, ITrackedDurationEvent> telemetryFactory)
         {
             this.shippingManager = shippingManager;
             this.completeLabelTask = completeLabelTask;
             this.saveLabelTask = saveLabelTask;
             this.getLabelTask = getLabelTask;
             this.prepareShipmentTask = prepareShipmentTask;
+            this.telemetryFactory = telemetryFactory;
         }
 
         /// <summary>
@@ -58,33 +62,39 @@ namespace ShipWorks.Shipping.Services.ProcessShipmentsWorkflow
             RateResult chosenRateResult, IProgressReporter workProgress, CancellationTokenSource cancellationSource,
             Action counterRateCarrierConfiguredWhileProcessingAction)
         {
-            workProgress.CanCancel = false;
-            workProgress.Starting();
-            prepareShipmentTask.CounterRateCarrierConfiguredWhileProcessing = counterRateCarrierConfiguredWhileProcessingAction;
-
-            IEnumerable<ProcessShipmentState> input = await CreateShipmentProcessorInput(shipments, chosenRateResult, cancellationSource);
-            return await Task.Run(async () =>
+            using (ITrackedDurationEvent telemetryEvent = telemetryFactory("Shipping.Shipments.Process"))
             {
-                ProcessShipmentsWorkflowResult workflowResult = new ProcessShipmentsWorkflowResult(chosenRateResult);
-                List<ILabelResultLogResult> results = new List<ILabelResultLogResult>();
-                foreach (ProcessShipmentState processShipmentState in input)
+                telemetryEvent.AddMetric("Shipments.Count", shipments.Count());
+                telemetryEvent.AddProperty("Processing.Workflow", Name);
+
+                workProgress.CanCancel = false;
+                workProgress.Starting();
+                prepareShipmentTask.CounterRateCarrierConfiguredWhileProcessing = counterRateCarrierConfiguredWhileProcessingAction;
+
+                IEnumerable<ProcessShipmentState> input = await CreateShipmentProcessorInput(shipments, chosenRateResult, cancellationSource);
+                return await Task.Run(async () =>
                 {
-                    if (cancellationSource.IsCancellationRequested)
+                    ProcessShipmentsWorkflowResult workflowResult = new ProcessShipmentsWorkflowResult(chosenRateResult);
+                    List<ILabelResultLogResult> results = new List<ILabelResultLogResult>();
+                    foreach (ProcessShipmentState processShipmentState in input)
                     {
-                        break;
+                        if (cancellationSource.IsCancellationRequested)
+                        {
+                            break;
+                        }
+
+                        results.Add(await ProcessShipment(processShipmentState, workProgress, shipments.Count(), telemetryEvent).ConfigureAwait(false));
                     }
 
-                    results.Add(await ProcessShipment(processShipmentState, workProgress, shipments.Count()).ConfigureAwait(false));
-                }
+                    ProcessShipmentsWorkflowResult result = results
+                        .Where(x => x != null)
+                        .Aggregate(workflowResult, AggregateResults);
 
-                ProcessShipmentsWorkflowResult result = results
-                    .Where(x => x != null)
-                    .Aggregate(workflowResult, AggregateResults);
+                    workProgress.Completed();
 
-                workProgress.Completed();
-
-                return result;
-            });
+                    return result;
+                });
+            }
         }
 
         /// <summary>
@@ -132,26 +142,41 @@ namespace ShipWorks.Shipping.Services.ProcessShipmentsWorkflow
         /// <summary>
         /// Process a single shipment
         /// </summary>
-        private async Task<ILabelResultLogResult> ProcessShipment(ProcessShipmentState initial, IProgressReporter workProgress, int shipmentCount)
+        private async Task<ILabelResultLogResult> ProcessShipment(ProcessShipmentState initial,
+            IProgressReporter workProgress, int shipmentCount, ITrackedDurationEvent telemetryEvent)
         {
             workProgress.Detail = $"Shipment {initial.Index + 1} of {shipmentCount}";
 
+            TelemetricResult<ILabelResultLogResult> telemetricResult = new TelemetricResult<ILabelResultLogResult>("Shipments.Process");
             IShipmentPreparationResult prepareShipmentResult = null;
 
             try
             {
-                prepareShipmentResult = prepareShipmentTask.PrepareShipment(initial);
+                prepareShipmentResult = telemetricResult.RunTimedEvent("PrepareShipment.DurationInMilliseconds",
+                    () => prepareShipmentTask.PrepareShipment(initial));
+
                 if (initial.CancellationSource.IsCancellationRequested)
                 {
                     return null;
                 }
 
-                ILabelRetrievalResult getLabelResult = await getLabelTask.GetLabel(prepareShipmentResult).ConfigureAwait(false);
-                ILabelPersistenceResult saveLabelResult = saveLabelTask.SaveLabel(getLabelResult);
-                return completeLabelTask.Complete(saveLabelResult);
+                ILabelRetrievalResult getLabelResult = await telemetricResult.RunTimedEventAsync(
+                        "GenerateLabel.DurationInMilliseconds",
+                        () => getLabelTask.GetLabel(prepareShipmentResult))
+                    .ConfigureAwait(false);
+
+                ILabelPersistenceResult saveLabelResult = telemetricResult.RunTimedEvent("SaveLabel.DurationInMilliseconds",
+                    () => saveLabelTask.SaveLabel(getLabelResult));
+
+                ILabelResultLogResult logLabelResult = telemetricResult.RunTimedEvent("LogLabel.DurationInMilliseconds",
+                    () => completeLabelTask.Complete(saveLabelResult));
+
+                return logLabelResult;
+
             }
             finally
             {
+                telemetricResult.WriteTo(telemetryEvent);
                 prepareShipmentResult?.EntityLock?.Dispose();
             }
         }

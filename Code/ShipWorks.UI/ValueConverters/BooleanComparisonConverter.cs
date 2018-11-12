@@ -1,25 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
-using System.Reflection;
 using System.Windows.Data;
 
 namespace ShipWorks.UI.ValueConverters
 {
-    /// <summary>
-    /// Operator to use for boolean comparisons
-    /// </summary>
-    [Obfuscation(Feature = "PreserveLiteralValues", Exclude = false, StripAfterObfuscation = false)]
-    public enum BooleanOperator
-    {
-        [Description("And")]
-        And,
-
-        [Description("Or")]
-        Or
-    }
 
     /// <summary>
     /// Compare a collection of booleans
@@ -50,7 +36,7 @@ namespace ShipWorks.UI.ValueConverters
         /// <summary>
         /// Convert a collection of booleans to a single boolean
         /// </summary>
-        public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
+        public virtual object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
         {
             IEnumerable<bool> booleanValues = values.OfType<bool>();
             return BooleanOperator == BooleanOperator.And ?

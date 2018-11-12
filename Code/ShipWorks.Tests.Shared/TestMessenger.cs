@@ -4,6 +4,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using Interapptive.Shared.Messaging;
+using Interapptive.Shared.Threading;
 using ShipWorks.Core.Messaging;
 
 namespace ShipWorks.Tests.Shared
@@ -21,9 +22,14 @@ namespace ShipWorks.Tests.Shared
         public List<IShipWorksMessage> SentMessages { get; }
 
         /// <summary>
+        /// Available schedulers
+        /// </summary>
+        public ISchedulerProvider Schedulers { get; set; } = new TestSchedulerProvider();
+
+        /// <summary>
         /// The subject of the message
         /// </summary>
-        readonly Subject<IShipWorksMessage> subject = new Subject<IShipWorksMessage>();
+        private readonly Subject<IShipWorksMessage> subject = new Subject<IShipWorksMessage>();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="TestMessenger"/> class.

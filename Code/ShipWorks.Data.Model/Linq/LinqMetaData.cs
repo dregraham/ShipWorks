@@ -503,6 +503,9 @@ namespace ShipWorks.Data.Model.Linq
 				case ShipWorks.Data.Model.EntityType.PrintResultEntity:
 					toReturn = this.PrintResult;
 					break;
+				case ShipWorks.Data.Model.EntityType.ProcessedShipmentEntity:
+					toReturn = this.ProcessedShipment;
+					break;
 				case ShipWorks.Data.Model.EntityType.ProStoresOrderEntity:
 					toReturn = this.ProStoresOrder;
 					break;
@@ -1636,6 +1639,12 @@ namespace ShipWorks.Data.Model.Linq
 		public DataSource2<PrintResultEntity> PrintResult
 		{
 			get { return new DataSource2<PrintResultEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
+		}
+		
+		/// <summary>returns the datasource to use in a Linq query when targeting ProcessedShipmentEntity instances in the database.</summary>
+		public DataSource2<ProcessedShipmentEntity> ProcessedShipment
+		{
+			get { return new DataSource2<ProcessedShipmentEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
 		}
 		
 		/// <summary>returns the datasource to use in a Linq query when targeting ProStoresOrderEntity instances in the database.</summary>

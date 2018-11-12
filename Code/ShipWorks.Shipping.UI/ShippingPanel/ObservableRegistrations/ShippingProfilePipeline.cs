@@ -47,20 +47,21 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations
             subscription = messageStream.OfType<ApplyProfileMessage>()
                 .Where(x => x.ShipmentID == viewModel.Shipment?.ShipmentID)
                 .Select(x => shippingProfileService.Get(x.ProfileID).Apply(viewModel.Shipment))
-                .CatchAndContinue((Exception ex) => log.Error("An error occurred while applying profile to shipment", ex))
                 .ObserveOn(schedulerProvider.Dispatcher)
-                .Subscribe(x => 
+                .Do(x =>
                 {
-                    // Because now the profile can change the ShipmentType of the shipment 
+                    // Because now the profile can change the ShipmentType of the shipment
                     // we are mimicking the logic found in the ChangeShipmentTypePipeline
-                    // If the user clicks to apply a profile but never gives focus to the 
-                    // shipping panel and the shipping panel never loses focus nothing saves 
+                    // If the user clicks to apply a profile but never gives focus to the
+                    // shipping panel and the shipping panel never loses focus nothing saves
                     // the shipment, this forces the panel to refresh the new shipment and save it.
                     viewModel.LoadShipment(x);
                     viewModel.SaveToDatabase();
 
                     messenger.Send(new ShipmentChangedMessage(this, x, nameof(viewModel.ShipmentType)));
-                });
+                })
+                .CatchAndContinue((Exception ex) => log.Error("An error occurred while applying profile to shipment", ex))
+                .Subscribe();
         }
 
         /// <summary>

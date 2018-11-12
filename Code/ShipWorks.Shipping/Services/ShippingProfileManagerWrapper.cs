@@ -1,16 +1,8 @@
-using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
-using System.Reflection;
-using Interapptive.Shared.Collections;
-using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Connection;
-using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
-using ShipWorks.Data.Model.HelperClasses;
-using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Shipping.Profiles;
 
 namespace ShipWorks.Shipping.Services
@@ -28,7 +20,7 @@ namespace ShipWorks.Shipping.Services
         /// Constructor
         /// </summary>
         public ShippingProfileManagerWrapper(
-            IShipmentTypeManager shipmentTypeManager, 
+            IShipmentTypeManager shipmentTypeManager,
             ISqlAdapterFactory sqlAdapterFactory)
         {
             this.shipmentTypeManager = shipmentTypeManager;
@@ -53,7 +45,7 @@ namespace ShipWorks.Shipping.Services
                 DeleteProfile(profile, adapter);
                 adapter.Commit();
             }
-            
+
             ShippingProfileManager.CheckForChangesNeeded();
         }
 
@@ -65,7 +57,7 @@ namespace ShipWorks.Shipping.Services
             adapter.DeleteEntity(profile);
             ShippingProfileManager.CheckForChangesNeeded();
         }
-        
+
         /// <summary>
         /// Get the default profile for the given shipment type
         /// </summary>
@@ -134,11 +126,16 @@ namespace ShipWorks.Shipping.Services
         /// </summary>
         public IEnumerable<IShippingProfileEntity> GetProfilesFor(ShipmentTypeCode shipmentType, bool includeDefaultProfiles) =>
             ShippingProfileManager.GetProfilesFor(shipmentType, includeDefaultProfiles);
-        
+
         /// <summary>
         /// Return the active list of all profiles
         /// </summary>
         public IEnumerable<ShippingProfileEntity> Profiles => ShippingProfileManager.Profiles;
+
+        /// <summary>
+        /// Return the active list of all profiles
+        /// </summary>
+        public IEnumerable<IShippingProfileEntity> ProfilesReadOnly => ShippingProfileManager.ProfilesReadOnly;
 
         /// <summary>
         /// Get profiles for the given shipment type
@@ -163,7 +160,7 @@ namespace ShipWorks.Shipping.Services
         {
             ShippingProfileManager.SaveProfile(profile, adapter);
         }
-        
+
         /// <summary>
         /// Ensure the carrier specific profile data is created and loaded for the given profile
         /// </summary>

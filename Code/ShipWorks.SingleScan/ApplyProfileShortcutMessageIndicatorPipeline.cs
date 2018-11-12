@@ -1,15 +1,15 @@
 ﻿using System;
 using System.Linq;
 using System.Reactive.Linq;
+using Interapptive.Shared.Collections;
+using Interapptive.Shared.Threading;
+using Interapptive.Shared.UI;
 using ShipWorks.ApplicationCore;
+using ShipWorks.Common.IO.KeyboardShortcuts;
 using ShipWorks.Common.IO.KeyboardShortcuts.Messages;
 using ShipWorks.Core.Messaging;
 using ShipWorks.IO.KeyboardShortcuts;
-using Interapptive.Shared.Collections;
 using ShipWorks.Shipping.Profiles;
-using Interapptive.Shared.Threading;
-using Interapptive.Shared.UI;
-using ShipWorks.Common.IO.KeyboardShortcuts;
 using ShipWorks.Users;
 
 namespace ShipWorks.SingleScan
@@ -28,7 +28,7 @@ namespace ShipWorks.SingleScan
         /// <summary>
         /// Constructor
         /// </summary>
-        public ApplyProfileShortcutMessageIndicatorPipeline(IMessenger messenger, 
+        public ApplyProfileShortcutMessageIndicatorPipeline(IMessenger messenger,
             ICurrentUserSettings currentUserSettings,
             IMessageHelper messageHelper,
             ISchedulerProvider schedulerProvider)
@@ -47,7 +47,7 @@ namespace ShipWorks.SingleScan
             EndSession();
 
             subscription = messenger.OfType<ShortcutMessage>()
-                            .Where(m => m.AppliesTo(KeyboardShortcutCommand.ApplyProfile) && 
+                            .Where(m => m.AppliesTo(KeyboardShortcutCommand.ApplyProfile) &&
                                 currentUserSettings.ShouldShowNotification(UserConditionalNotificationType.ShortcutIndicator))
                             .ContinueAfter(ProfileAppliedSignal, TimeSpan.FromSeconds(1), schedulerProvider.Default,
                                 (x, y) => (shortcutMessage: x, profileAppliedMessage: y))
@@ -59,8 +59,8 @@ namespace ShipWorks.SingleScan
         /// </summary>
         private IObservable<ProfileAppliedMessage> ProfileAppliedSignal(ShortcutMessage shortcutMessage) =>
              messenger.OfType<ProfileAppliedMessage>()
-                .Where(profileAppliedMessage => ((ShippingProfile) profileAppliedMessage.Sender).Shortcut.Equals(shortcutMessage.Shortcut));
-        
+                .Where(profileAppliedMessage => ((IShippingProfile) profileAppliedMessage.Sender).Shortcut.Equals(shortcutMessage.Shortcut));
+
         /// <summary>
         /// Show indicator
         /// </summary>
@@ -71,7 +71,7 @@ namespace ShipWorks.SingleScan
                 string action = shortcutMessage.Trigger == ShortcutTriggerType.Hotkey ? shortcutMessage.Value : "Barcode";
                 string name = (profileAppliedMessage?.Sender as IShippingProfile)?.ShippingProfileEntity?.Name ?? string.Empty;
                 string message = $"{action}: {name}";
-                
+
                 if (shortcutMessage.Trigger == ShortcutTriggerType.Hotkey)
                 {
                     messageHelper.ShowKeyboardPopup(message);

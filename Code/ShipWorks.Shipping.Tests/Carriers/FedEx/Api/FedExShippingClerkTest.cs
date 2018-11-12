@@ -9,6 +9,7 @@ using Interapptive.Shared.Net;
 using Interapptive.Shared.Utility;
 using log4net;
 using Moq;
+using ShipWorks.ApplicationCore;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers.Api;
@@ -35,7 +36,8 @@ using ServiceType = ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate.ServiceTy
 
 namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
 {
-    public class FedExShippingClerkTest
+    [Collection(TestCollections.IoC)]
+    public class FedExShippingClerkTest : IDisposable
     {
         private FedExShippingClerk testObject;
 
@@ -68,13 +70,14 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
 
         private Mock<IFedExRequestFactory> requestFactory;
 
-        private PostalCodeInquiryReply reply;
+        private readonly PostalCodeInquiryReply reply;
 
         private ShipmentEntity shipmentEntity;
 
         public FedExShippingClerkTest()
         {
             mock = AutoMockExtensions.GetLooseThatReturnsMocks();
+            IoC.InitializeForUnitTests(mock.Container);
 
             requestFactory = mock.Mock<IFedExRequestFactory>();
 
@@ -1593,6 +1596,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
             Assert.Contains(FedExServiceType.PriorityOvernight,
                 results.Rates.Select(x => x.Tag).OfType<FedExRateSelection>().Select(x => x.ServiceType));
         }
+
+        public void Dispose() => mock.Dispose();
 
         #endregion GetRates Tests
     }

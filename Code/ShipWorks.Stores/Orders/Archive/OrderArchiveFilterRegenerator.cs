@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Data.Common;
 using System.Xml;
 using System.Xml.Linq;
 using Interapptive.Shared.ComponentRegistration;
@@ -7,6 +8,7 @@ using Interapptive.Shared.Utility;
 using log4net;
 using ShipWorks.Data;
 using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Filters;
 
 namespace ShipWorks.Stores.Orders.Archive
@@ -42,7 +44,7 @@ namespace ShipWorks.Stores.Orders.Archive
         /// </summary>
         public void Regenerate()
         {
-            var configurationEntity = configurationData.FetchReadOnly();
+            IConfigurationEntity configurationEntity = configurationData.FetchReadOnly();
 
             try
             {

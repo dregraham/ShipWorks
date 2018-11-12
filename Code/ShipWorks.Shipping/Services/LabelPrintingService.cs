@@ -14,7 +14,6 @@ using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Common.Threading;
 using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Filters;
 using ShipWorks.Messaging.Messages.Shipping;
 using ShipWorks.Templates;
 using ShipWorks.Templates.Media;
@@ -32,7 +31,7 @@ namespace ShipWorks.Shipping.Services
         private readonly IObservable<IShipWorksMessage> messages;
         private readonly Control owner;
         private readonly ILog log;
-        IDisposable subscription;
+        private IDisposable subscription;
 
         /// <summary>
         /// Constructor
@@ -57,8 +56,9 @@ namespace ShipWorks.Shipping.Services
             EndSession();
 
             subscription = messages.OfType<ReprintLabelsMessage>()
+                .Do(async x => await ReprintLabel(x).ConfigureAwait(false))
                 .CatchAndContinue((Exception ex) => log.Error("Unable to print the requested labels", ex))
-                .Subscribe(async x => await ReprintLabel(x).ConfigureAwait(false));
+                .Subscribe();
         }
 
         /// <summary>
@@ -144,7 +144,7 @@ namespace ShipWorks.Shipping.Services
             Dictionary<TemplateEntity, List<long>> delayedPrints)
         {
             // If it's standard or thermal we can print it right away
-            if (template.Type == (int)TemplateType.Standard || template.Type == (int)TemplateType.Thermal)
+            if (template.Type == (int) TemplateType.Standard || template.Type == (int) TemplateType.Thermal)
             {
                 PrintJob printJob = PrintJob.Create(template, new List<long> { shipment.ShipmentID });
                 printJob.Print();
@@ -173,7 +173,7 @@ namespace ShipWorks.Shipping.Services
             IDictionary<TemplateEntity, List<long>> delayedPrints)
         {
             // It must be a label template
-            if (template.Type != (int)TemplateType.Label)
+            if (template.Type != (int) TemplateType.Label)
             {
                 return;
             }

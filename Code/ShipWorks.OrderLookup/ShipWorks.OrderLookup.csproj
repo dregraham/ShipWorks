@@ -1,0 +1,642 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <ProjectGuid>{D5B2CF61-E6C6-4A91-A4E5-9AA2515E70C4}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>ShipWorks.OrderLookup</RootNamespace>
+    <AssemblyName>ShipWorks.OrderLookup</AssemblyName>
+    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <Deterministic>true</Deterministic>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;CODE_ANALYSIS</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>..\..\Build\Interapptive.Strict.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <DelaySign>true</DelaySign>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>Properties\interapptive_public.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug %28No Analyzers%29|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\Debug %28No Analyzers%29\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;CODE_ANALYSIS</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>..\..\Build\Empty.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Autofac, Version=4.6.2.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Autofac.4.6.2\lib\net45\Autofac.dll</HintPath>
+    </Reference>
+    <Reference Include="ComponentFactory.Krypton.Toolkit, Version=4.4.0.0, Culture=neutral, PublicKeyToken=a87e673e9ecb6e8e, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Components\ComponentFactory.Krypton.Toolkit.dll</HintPath>
+    </Reference>
+    <Reference Include="Divelements.SandGrid, Version=2.2.4.1, Culture=neutral, PublicKeyToken=75b7ec17dd7c14c3, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Components\Divelements.SandGrid.dll</HintPath>
+    </Reference>
+    <Reference Include="Divelements.SandRibbon, Version=1.6.6.1, Culture=neutral, PublicKeyToken=75b7ec17dd7c14c3, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Components\Divelements.SandRibbon.dll</HintPath>
+    </Reference>
+    <Reference Include="GalaSoft.MvvmLight, Version=5.3.0.19026, Culture=neutral, PublicKeyToken=e7570ab207bcb616, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\MvvmLightLibs.5.3.0.0\lib\net45\GalaSoft.MvvmLight.dll</HintPath>
+    </Reference>
+    <Reference Include="GalaSoft.MvvmLight.Extras, Version=5.3.0.19032, Culture=neutral, PublicKeyToken=669f0b5e8f868abf, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\MvvmLightLibs.5.3.0.0\lib\net45\GalaSoft.MvvmLight.Extras.dll</HintPath>
+    </Reference>
+    <Reference Include="GalaSoft.MvvmLight.Platform, Version=5.3.0.19032, Culture=neutral, PublicKeyToken=5f873c45e98af8a1, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\MvvmLightLibs.5.3.0.0\lib\net45\GalaSoft.MvvmLight.Platform.dll</HintPath>
+    </Reference>
+    <Reference Include="GongSolutions.Wpf.DragDrop, Version=1.1.0.22, Culture=neutral, PublicKeyToken=6a464ecbd35cd6df, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\gong-wpf-dragdrop.1.1.0.22\lib\net46\GongSolutions.Wpf.DragDrop.dll</HintPath>
+    </Reference>
+    <Reference Include="log4net, Version=2.0.7.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\log4net.2.0.7\lib\net45-full\log4net.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.ServiceLocation, Version=1.3.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\CommonServiceLocator.1.3\lib\portable-net4+sl5+netcore45+wpa81+wp8\Microsoft.Practices.ServiceLocation.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="PresentationFramework.Aero2" />
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+    <Reference Include="SD.LLBLGen.Pro.ORMSupportClasses, Version=5.1.0.0, Culture=neutral, PublicKeyToken=ca73b74ba4e3ff27, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\SD.LLBLGen.Pro.ORMSupportClasses.5.1.2\lib\net45\SD.LLBLGen.Pro.ORMSupportClasses.dll</HintPath>
+    </Reference>
+    <Reference Include="Syncfusion.Licensing, Version=16.3460.0.21, Culture=neutral, PublicKeyToken=632609b4d040f6b4, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Syncfusion.Licensing.16.3.0.21\lib\net46\Syncfusion.Licensing.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Syncfusion.SfInput.Wpf, Version=16.3460.0.21, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89">
+      <HintPath>..\..\packages\Syncfusion.SfInput.WPF.16.3.0.21\lib\net46\Syncfusion.SfInput.Wpf.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Syncfusion.SfShared.Wpf, Version=16.3460.0.21, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89">
+      <HintPath>..\..\packages\Syncfusion.SfShared.WPF.16.3.0.21\lib\net46\Syncfusion.SfShared.Wpf.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Collections.Immutable, Version=1.2.2.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\System.Collections.Immutable.1.4.0\lib\portable-net45+win8+wp8+wpa81\System.Collections.Immutable.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.IO.Compression.FileSystem" />
+    <Reference Include="System.Numerics" />
+    <Reference Include="System.Reactive.Core, Version=3.0.3000.0, Culture=neutral, PublicKeyToken=94bc3704cddfc263, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\System.Reactive.Core.3.1.1\lib\net46\System.Reactive.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Reactive.Interfaces, Version=3.0.1000.0, Culture=neutral, PublicKeyToken=94bc3704cddfc263, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\System.Reactive.Interfaces.3.1.1\lib\net45\System.Reactive.Interfaces.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Reactive.Linq, Version=3.0.3000.0, Culture=neutral, PublicKeyToken=94bc3704cddfc263, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\System.Reactive.Linq.3.1.1\lib\net46\System.Reactive.Linq.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ValueTuple, Version=4.0.2.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\System.ValueTuple.4.4.0\lib\netstandard1.0\System.ValueTuple.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Windows.Interactivity, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\MvvmLightLibs.5.3.0.0\lib\net45\System.Windows.Interactivity.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xaml" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+    <Reference Include="WindowsBase" />
+    <Reference Include="WindowsFormsIntegration" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Controls\Customs\FedExCustomsControl.xaml.cs">
+      <DependentUpon>FedExCustomsControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\Customs\FedExCustomsItemsControl.xaml.cs">
+      <DependentUpon>FedExCustomsItemsControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\Customs\FedExCustomsViewModel.cs" />
+    <Compile Include="Controls\Customs\GenericCustomsItemsControl.xaml.cs">
+      <DependentUpon>GenericCustomsItemsControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\Customs\ICustomsViewModel.cs" />
+    <Compile Include="Controls\Customs\BestRateCustomsControl.xaml.cs">
+      <DependentUpon>BestRateCustomsControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\Customs\BestRateCustomsViewModel.cs" />
+    <Compile Include="Controls\Customs\PostalCustomsViewModel.cs" />
+    <Compile Include="Controls\Customs\UpsCustomsControl.xaml.cs">
+      <DependentUpon>UpsCustomsControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\Customs\UpsCustomsViewModel.cs" />
+    <Compile Include="Controls\EmailNotifications\FedExEmailNotificationsControl.xaml.cs">
+      <DependentUpon>FedExEmailNotificationsControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\EmailNotifications\FedExEmailNotificationsViewModel.cs" />
+    <Compile Include="Controls\From\AmazonFromControl.xaml.cs">
+      <DependentUpon>AmazonFromControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\From\AmazonFromViewModel.cs" />
+    <Compile Include="Controls\From\UpsFromControl.xaml.cs">
+      <DependentUpon>UpsFromControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\From\EndiciaFromControl.xaml.cs">
+      <DependentUpon>EndiciaFromControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\From\UpsFromViewModel.cs" />
+    <Compile Include="Controls\From\EndiciaFromViewModel.cs" />
+    <Compile Include="Controls\From\FedExFromControl.xaml.cs">
+      <DependentUpon>FedExFromControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\From\FedExFromViewModel.cs" />
+    <Compile Include="Controls\From\IFromViewModel.cs" />
+    <Compile Include="Controls\From\GenericFromControl.xaml.cs">
+      <DependentUpon>GenericFromControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\From\OrderLookupFromFieldLayoutProvider.cs" />
+    <Compile Include="Controls\From\UspsFromControl.xaml.cs">
+      <DependentUpon>UspsFromControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\From\UspsFromViewModel.cs" />
+    <Compile Include="Controls\IOrderLookupPanelViewModel.cs" />
+    <Compile Include="Controls\LabelOptions\GenericLabelOptionsViewModel.cs" />
+    <Compile Include="Controls\LabelOptions\ILabelOptionsViewModel.cs" />
+    <Compile Include="Controls\LabelOptions\PostalLabelOptionsViewModel.cs" />
+    <Compile Include="Controls\LabelOptions\BestRateLabelOptionsControl.xaml.cs">
+      <DependentUpon>BestRateLabelOptionsControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\LabelOptions\BestRateLabelOptionsViewModel.cs" />
+    <Compile Include="Controls\LabelOptions\GenericLabelOptionsControl.xaml.cs">
+      <DependentUpon>GenericLabelOptionsControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\LabelOptions\AmazonLabelOptionsViewModel.cs" />
+    <Compile Include="Controls\OrderConfirmationDialog\IOrderConfirmationDialog.cs" />
+    <Compile Include="Controls\OrderItems\IOrderItemsViewModel.cs" />
+    <Compile Include="Controls\OrderItems\OrderItemsControl.xaml.cs">
+      <DependentUpon>OrderItemsControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\OrderItems\OrderItemsViewModel.cs" />
+    <Compile Include="Controls\OrderConfirmationDialog\IOrderConfirmationViewModel.cs" />
+    <Compile Include="Controls\OrderConfirmationDialog\OrderConfirmationDialog.xaml.cs">
+      <DependentUpon>OrderConfirmationDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\OrderConfirmationDialog\OrderConfirmationViewModel.cs" />
+    <Compile Include="Controls\OrderLookupPanelControl.xaml.cs">
+      <DependentUpon>OrderLookupPanelControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\OrderLookupPanelViewModel.cs" />
+    <Compile Include="Controls\EmailNotifications\IEmailNotificationsViewModel.cs" />
+    <Compile Include="Controls\EmailNotifications\QuantumViewNotifyControlViewModel.cs" />
+    <Compile Include="Controls\EmailNotifications\QuantumViewNotifyControl.xaml.cs">
+      <DependentUpon>QuantumViewNotifyControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\OrderLookup\IMainOrderLookupViewModel.cs" />
+    <Compile Include="Controls\Rating\IRatingViewModel.cs" />
+    <Compile Include="Controls\Reference\AmazonReferenceControl.xaml.cs">
+      <DependentUpon>AmazonReferenceControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\Reference\AmazonReferenceViewModel.cs" />
+    <Compile Include="Controls\Reference\FedExReferenceControl.xaml.cs">
+      <DependentUpon>FedExReferenceControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\Reference\FedExReferenceViewModel.cs" />
+    <Compile Include="Controls\Reference\IReferenceViewModel.cs" />
+    <Compile Include="Controls\Reference\EndiciaReferenceControl.xaml.cs">
+      <DependentUpon>EndiciaReferenceControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\Reference\EndiciaReferenceViewModel.cs" />
+    <Compile Include="Controls\ShipmentDetails\AmazonShipmentDetailsControl.xaml.cs">
+      <DependentUpon>AmazonShipmentDetailsControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ShipmentDetails\FedExShipmentDetailsControl.xaml.cs">
+      <DependentUpon>FedExShipmentDetailsControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ShipmentDetails\FedExShipmentDetailsViewModel.cs" />
+    <Compile Include="Controls\ShipmentDetails\GenericMultiPackageShipmentDetailsViewModel.cs" />
+    <Compile Include="Controls\ShipmentDetails\ICarrierShipmentAdapterOptionsProvider.cs" />
+    <Compile Include="Controls\Reference\GenericReferenceViewModel.cs" />
+    <Compile Include="Controls\Reference\UpsReferenceControl.xaml.cs">
+      <DependentUpon>UpsReferenceControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\Reference\UpsReferenceViewModel.cs" />
+    <Compile Include="Controls\ShipmentDetails\IDetailsViewModel.cs" />
+    <Compile Include="Controls\ShipmentDetails\BestRateShipmentDetailsControl.xaml.cs">
+      <DependentUpon>BestRateShipmentDetailsControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ShipmentDetails\NotSupportedShipmentControl.xaml.cs">
+      <DependentUpon>NotSupportedShipmentControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ShipmentDetails\NotSupportedShipmentDetailsViewModel.cs" />
+    <Compile Include="Controls\ShipmentDetails\PostalShipmentDetailsControl.xaml.cs">
+      <DependentUpon>PostalShipmentDetailsControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ShipmentDetails\CarrierShipmentAdapterOptionsProvider.cs" />
+    <Compile Include="Controls\ShipmentDetails\BestRateShipmentDetailsViewModel.cs" />
+    <Compile Include="Controls\ShipmentDetails\AmazonShipmentDetailsViewModel.cs" />
+    <Compile Include="Controls\ShipmentDetails\UpsShipmentDetailsViewModel.cs" />
+    <Compile Include="Controls\ShipmentDetails\UpsShipmentDetailsControl.xaml.cs">
+      <DependentUpon>UpsShipmentDetailsControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\To\GenericToWithResidentialDeterminationViewModel.cs" />
+    <Compile Include="Controls\To\IToViewModel.cs" />
+    <Compile Include="Controls\To\GenericToControl.xaml.cs">
+      <DependentUpon>GenericToControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\To\GenericToViewModel.cs" />
+    <Compile Include="Controls\To\GenericToWithResidentialDeterminationControl.xaml.cs">
+      <DependentUpon>GenericToWithResidentialDeterminationControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\To\OrderLookupToFieldLayoutProvider.cs" />
+    <Compile Include="Controls\To\UpsToViewModel.cs" />
+    <Compile Include="FieldManager\IOrderLookupFieldLayoutDefaults.cs" />
+    <Compile Include="FieldManager\OrderLookupFieldLayoutDefaults.cs" />
+    <Compile Include="FieldManager\OrderLookupFieldLayoutRepository.cs" />
+    <Compile Include="FieldManager\OrderLookupFieldManagerDesignerViewModel.cs" />
+    <Compile Include="Controls\ShipmentDetails\OrderLookupInsuranceControl.xaml.cs">
+      <DependentUpon>OrderLookupInsuranceControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\OrderLookupAddress.xaml.cs">
+      <DependentUpon>OrderLookupAddress.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\Customs\PostalCustomsControl.xaml.cs">
+      <DependentUpon>PostalCustomsControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\Customs\GenericCustomsViewModel.cs" />
+    <Compile Include="Controls\LabelOptions\PostalLabelOptionsControl.xaml.cs">
+      <DependentUpon>PostalLabelOptionsControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\OrderLookup\OrderLookupControlHost.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\OrderLookup\OrderLookupControlHost.Designer.cs">
+      <DependentUpon>OrderLookupControlHost.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\OrderLookup\MainOrderLookupControl.xaml.cs">
+      <DependentUpon>MainOrderLookupControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\OrderLookup\MainOrderLookupViewModel.cs" />
+    <Compile Include="Controls\From\GenericFromViewModel.cs" />
+    <Compile Include="Controls\OrderLookupPanels.cs" />
+    <Compile Include="Controls\OrderLookupSearchControl\OrderLookupSearchControl.xaml.cs">
+      <DependentUpon>OrderLookupSearchControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="FieldManager\OrderLookupFieldManagerDialog.xaml.cs">
+      <DependentUpon>OrderLookupFieldManagerDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="FieldManager\IOrderLookupFieldManagerDialog.cs" />
+    <Compile Include="FieldManager\OrderLookupFieldManagerViewModel.cs" />
+    <Compile Include="FieldManager\OrderLookupFieldLayoutProvider.cs" />
+    <Compile Include="Layout\IOrderLookupLayout.cs" />
+    <Compile Include="IOrderLookupConfirmationService.cs" />
+    <Compile Include="IOrderLookupPanelFactory.cs" />
+    <Compile Include="IOrderLookupPreviousShipmentLocator.cs" />
+    <Compile Include="Layout\DropHandler.cs" />
+    <Compile Include="Layout\OrderLookupLayout.cs" />
+    <Compile Include="Layout\OrderLookupLayoutDefaults.cs" />
+    <Compile Include="Layout\PanelInfo.cs" />
+    <Compile Include="OrderLookupConfirmationService.cs" />
+    <Compile Include="OrderLookupLabelShortcutPipeline.cs" />
+    <Compile Include="OrderLookupModule.cs" />
+    <Compile Include="OrderLookupPanelFactory.cs" />
+    <Compile Include="OrderLookupPreviousShipmentLocator.cs" />
+    <Compile Include="OrderLookupRegistrationOverride.cs" />
+    <Compile Include="OrderLookupShipAgainMessage.cs" />
+    <Compile Include="OrderLookupShipmentModel.cs" />
+    <Compile Include="OrderLookupViewModelBase.cs" />
+    <Compile Include="PreviousProcessedShipmentDetails.cs" />
+    <Compile Include="ShipmentHistory\Controls\ShipmentHistoryGrid.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ShipmentHistory\Controls\ShipmentHistoryPanel.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ShipmentHistory\Controls\ShipmentHistoryPanel.Designer.cs">
+      <DependentUpon>ShipmentHistoryPanel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\To\UspsToControl.xaml.cs">
+      <DependentUpon>UspsToControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\To\UspsToViewModel.cs" />
+    <Compile Include="Controls\ShipmentDetails\PostalShipmentDetailsViewModel.cs" />
+    <Compile Include="Controls\Rating\GenericRatingControl.xaml.cs">
+      <DependentUpon>GenericRatingControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\Rating\GenericRatingViewModel.cs" />
+    <Compile Include="Controls\Reference\UspsReferenceControl.xaml.cs">
+      <DependentUpon>UspsReferenceControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\Reference\UspsReferenceViewModel.cs" />
+    <Compile Include="IOrderLookupAutoPrintService.cs" />
+    <Compile Include="Controls\OrderLookupSearchControl\OrderLookupSearchViewModel.cs" />
+    <Compile Include="IOrderLookupOrderRepository.cs" />
+    <Compile Include="OrderLookupAutoPrintService.cs" />
+    <Compile Include="OrderLookupOrderRepository.cs" />
+    <Compile Include="OrderLookupSingleScanPipeline.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ShipmentHistory\ShipmentHistoryEntityGateway.cs" />
+    <Compile Include="ShipmentHistory\ShipmentHistoryHeader.cs" />
+    <Compile Include="ShipmentHistory\PreviousShipmentReprintActionHandler.cs" />
+    <Compile Include="ShipmentHistory\PreviousShipmentVoidActionHandler.cs" />
+    <Compile Include="ShipmentModelPipelines\ApplyProfilePipeline.cs" />
+    <Compile Include="ShipmentModelPipelines\SettingsChangedPipeline.cs" />
+    <Compile Include="ShipmentModelPipelines\FocusQuickSearchPipeline.cs" />
+    <Compile Include="ShipmentModelPipelines\ClearSearchPipeline.cs" />
+    <Compile Include="ShipmentModelPipelines\ShipAgainPipeline.cs" />
+    <Compile Include="ShipmentModelPipelines\ShipmentProcessedPipeline.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+    <None Include="packages.config" />
+    <None Include="Properties\interapptive_public.snk" />
+    <Resource Include="Roboto-Regular.ttf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Controls\OrderLookup\OrderLookupControlHost.resx">
+      <DependentUpon>OrderLookupControlHost.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ShipmentHistory\Controls\ShipmentHistoryPanel.resx">
+      <DependentUpon>ShipmentHistoryPanel.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Interapptive.Shared\Interapptive.Shared.csproj">
+      <Project>{1E53A000-FDEB-4E9E-8BE0-19CDC14A0282}</Project>
+      <Name>Interapptive.Shared</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ShipWorks.Data.Model\ShipWorks.Data.Model.csproj">
+      <Project>{6F05267C-1883-4526-8D83-E46B7B2D2FAF}</Project>
+      <Name>ShipWorks.Data.Model</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ShipWorks.Shipping.UI\ShipWorks.Shipping.UI.csproj">
+      <Project>{a93f195e-44bc-4c73-8f70-7714a040ea0e}</Project>
+      <Name>ShipWorks.Shipping.UI</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ShipWorks.Shipping\ShipWorks.Shipping.csproj">
+      <Project>{a5eb7a6b-1600-4be2-aed6-3284c4e7987c}</Project>
+      <Name>ShipWorks.Shipping</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ShipWorks.SingleScan\ShipWorks.SingleScan.csproj">
+      <Project>{490753AB-DA9F-4150-AAA4-651ABDBC2B2E}</Project>
+      <Name>ShipWorks.SingleScan</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ShipWorks.UI\ShipWorks.UI.csproj">
+      <Project>{1f6a1dc6-dd72-4279-8747-6789f83711ff}</Project>
+      <Name>ShipWorks.UI</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ShipWorks.Shared\ShipWorks.Shared.csproj">
+      <Project>{DFCF14EA-6596-4B9C-B743-D7CE9E5F4348}</Project>
+      <Name>ShipWorks.Shared</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ShipWorks.SqlServer\ShipWorks.SqlServer.csproj">
+      <Project>{D9FBA556-68E0-4961-A400-636A9A6BC7BC}</Project>
+      <Name>ShipWorks.SqlServer</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ShipWorks\ShipWorks.Core.csproj">
+      <Project>{02653371-C0DC-4D70-949D-60D37C69F781}</Project>
+      <Name>ShipWorks.Core</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Include="Controls\Customs\FedExCustomsControl.xaml" />
+    <Page Include="Controls\Customs\FedExCustomsItemsControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\Customs\GenericCustomsItemsControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\Customs\BestRateCustomsControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Controls\Customs\UpsCustomsControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\EmailNotifications\FedExEmailNotificationsControl.xaml" />
+    <Page Include="Controls\From\AmazonFromControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\From\UpsFromControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Controls\From\EndiciaFromControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\From\FedExFromControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\From\GenericFromControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Controls\From\UspsFromControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Controls\LabelOptions\BestRateLabelOptionsControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Controls\LabelOptions\GenericLabelOptionsControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Controls\OrderItems\OrderItemsControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\OrderConfirmationDialog\OrderConfirmationDialog.xaml" />
+    <Page Include="Controls\OrderLookupPanelControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Controls\EmailNotifications\QuantumViewNotifyControl.xaml" />
+    <Page Include="Controls\Reference\AmazonReferenceControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Controls\Reference\EndiciaReferenceControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Controls\Reference\FedExReferenceControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Controls\Reference\UpsReferenceControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\ShipmentDetails\AmazonShipmentDetailsControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\ShipmentDetails\FedExShipmentDetailsControl.xaml" />
+    <Page Include="Controls\ShipmentDetails\NotSupportedShipmentControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\ShipmentDetails\OrderLookupInsuranceControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Controls\OrderLookupAddress.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Controls\Customs\PostalCustomsControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\LabelOptions\PostalLabelOptionsControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\OrderLookup\MainOrderLookupControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\OrderLookupSearchControl\OrderLookupSearchControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\ShipmentDetails\BestRateShipmentDetailsControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Controls\ShipmentDetails\PostalShipmentDetailsControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Controls\ShipmentDetails\UpsShipmentDetailsControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\To\GenericToControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Controls\To\GenericToWithResidentialDeterminationControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\To\UspsToControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\Reference\UspsReferenceControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Controls\Weight\ScaleButton.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Controls\Rating\GenericRatingControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\Weight\WeightControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Controls\Weight\WeightInput.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="FieldManager\FieldManagerStyle.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Styles\Colors.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Styles\ErrorTemplates.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Styles\OrderLookupButtonStyle.xaml" />
+    <Page Include="Styles\OrderLookupCheckBoxStyle.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Styles\OrderLookupComboBoxStyle.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Styles\OrderLookupDataGridStyle.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Styles\OrderLookupDatePickerStyle.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Styles\OrderLookupEditableComboBoxStyle.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Styles\OrderLookupExpanderStyle.xaml" />
+    <Page Include="Styles\OrderLookupStyle.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Styles\OrderLookupTextBlockStyle.xaml" />
+    <Page Include="Styles\OrderLookupTextBoxStyle.xaml" />
+    <Page Include="FieldManager\OrderLookupFieldManagerDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Styles\Shapes.xaml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="RobotoFontLicense.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

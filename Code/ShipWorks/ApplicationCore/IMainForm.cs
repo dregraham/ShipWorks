@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel;
 using System.Windows.Forms;
+using ShipWorks.Settings;
 
 namespace ShipWorks.ApplicationCore
 {
@@ -8,6 +9,11 @@ namespace ShipWorks.ApplicationCore
     /// </summary>
     public interface IMainForm : ISynchronizeInvoke, IWin32Window
     {
+        /// <summary>
+        /// Gets the main forms UIMode
+        /// </summary>
+        UIMode UIMode { get; }
+
         /// <summary>
         /// Returns true if any forms, other than the main UI form or floating panels, are open.  False otherwise.
         /// </summary>
@@ -22,5 +28,20 @@ namespace ShipWorks.ApplicationCore
         /// True if shippingPanel is Open
         /// </summary>
         bool IsShippingPanelOpen();
+
+        /// <summary>
+        /// True if shipping history control is active
+        /// </summary>
+        bool IsShipmentHistoryActive();
+
+        /// <summary>
+        /// Update the contents of the status bar
+        /// </summary>
+        void UpdateStatusBar();
+
+        /// <summary>
+        /// Select the order lookup tab
+        /// </summary>
+        void SelectOrderLookupTab();
     }
 }

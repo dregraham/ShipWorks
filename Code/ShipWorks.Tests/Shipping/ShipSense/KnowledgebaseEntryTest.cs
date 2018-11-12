@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Xml.Linq;
-using Xunit;
+using Autofac.Extras.Moq;
 using Moq;
-using ShipWorks.Data;
+using ShipWorks.ApplicationCore;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Shipping;
@@ -14,20 +12,27 @@ using ShipWorks.Shipping.Services;
 using ShipWorks.Shipping.ShipSense;
 using ShipWorks.Shipping.ShipSense.Customs;
 using ShipWorks.Shipping.ShipSense.Packaging;
+using ShipWorks.Tests.Shared;
+using Xunit;
 
 namespace ShipWorks.Tests.Shipping.ShipSense
 {
-    public class KnowledgebaseEntryTest
+    [Collection(TestCollections.IoC)]
+    public class KnowledgebaseEntryTest : IDisposable
     {
         private KnowledgebaseEntry testObject;
 
         private List<IPackageAdapter> adapters;
         private readonly Mock<IPackageAdapter> adapter1;
         private readonly Mock<IPackageAdapter> adapter2;
+        private readonly AutoMock mock;
 
         public KnowledgebaseEntryTest()
         {
-            adapter1 = new Mock<IPackageAdapter>();
+            mock = AutoMockExtensions.GetLooseThatReturnsMocks();
+            IoC.InitializeForUnitTests(mock.Container);
+
+            adapter1 = mock.CreateMock<IPackageAdapter>();
             adapter1.SetupAllProperties();
 
             adapter1.Object.AdditionalWeight = 1.2;
@@ -37,8 +42,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense
             adapter1.Object.DimsWidth = 4;
             adapter1.Object.ApplyAdditionalWeight = false;
 
-
-            adapter2 = new Mock<IPackageAdapter>();
+            adapter2 = mock.CreateMock<IPackageAdapter>();
             adapter2.SetupAllProperties();
 
             adapter2.Object.AdditionalWeight = 5.4;
@@ -119,7 +123,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense
         {
             testObject.ApplyTo(adapters);
 
-            // Don't iterate over each element because we want to verify that set 
+            // Don't iterate over each element because we want to verify that set
             // was called via Moq
             adapter1.VerifySet(a => a.AdditionalWeight = testObject.Packages.ElementAt(0).AdditionalWeight, Times.Once());
             adapter2.VerifySet(a => a.AdditionalWeight = testObject.Packages.ElementAt(1).AdditionalWeight, Times.Once());
@@ -130,7 +134,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense
         {
             testObject.ApplyTo(adapters);
 
-            // Don't iterate over each element because we want to verify that set 
+            // Don't iterate over each element because we want to verify that set
             // was called via Moq
             adapter1.VerifySet(a => a.DimsHeight = testObject.Packages.ElementAt(0).Height, Times.Once());
             adapter2.VerifySet(a => a.DimsHeight = testObject.Packages.ElementAt(1).Height, Times.Once());
@@ -141,7 +145,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense
         {
             testObject.ApplyTo(adapters);
 
-            // Don't iterate over each element because we want to verify that set 
+            // Don't iterate over each element because we want to verify that set
             // was called via Moq
             adapter1.VerifySet(a => a.DimsLength = testObject.Packages.ElementAt(0).Length, Times.Once());
             adapter2.VerifySet(a => a.DimsLength = testObject.Packages.ElementAt(1).Length, Times.Once());
@@ -152,7 +156,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense
         {
             testObject.ApplyTo(adapters);
 
-            // Don't iterate over each element because we want to verify that set 
+            // Don't iterate over each element because we want to verify that set
             // was called via Moq
             adapter1.VerifySet(a => a.Weight = testObject.Packages.ElementAt(0).Weight, Times.Once());
             adapter2.VerifySet(a => a.Weight = testObject.Packages.ElementAt(1).Weight, Times.Once());
@@ -163,7 +167,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense
         {
             testObject.ApplyTo(adapters);
 
-            // Don't iterate over each element because we want to verify that set 
+            // Don't iterate over each element because we want to verify that set
             // was called via Moq
             adapter1.VerifySet(a => a.ApplyAdditionalWeight = testObject.Packages.ElementAt(0).ApplyAdditionalWeight, Times.Once());
             adapter2.VerifySet(a => a.ApplyAdditionalWeight = testObject.Packages.ElementAt(1).ApplyAdditionalWeight, Times.Once());
@@ -174,7 +178,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense
         {
             testObject.ApplyTo(adapters);
 
-            // Don't iterate over each element because we want to verify that set 
+            // Don't iterate over each element because we want to verify that set
             // was called via Moq
             adapter1.VerifySet(a => a.DimsWidth = testObject.Packages.ElementAt(0).Width, Times.Once());
             adapter2.VerifySet(a => a.DimsWidth = testObject.Packages.ElementAt(1).Width, Times.Once());
@@ -282,7 +286,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense
         {
             testObject.ApplyFrom(adapters);
 
-            // Check that the Get property was called to confirm that the values are not equal 
+            // Check that the Get property was called to confirm that the values are not equal
             // because the adapter value was assigned to
             adapter1.VerifyGet(a => a.AdditionalWeight, Times.Once());
             adapter2.VerifyGet(a => a.AdditionalWeight, Times.Once());
@@ -299,7 +303,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense
         {
             testObject.ApplyFrom(adapters);
 
-            // Check that the Get property was called to confirm that the values are not equal 
+            // Check that the Get property was called to confirm that the values are not equal
             // because the adapter value was assigned to
             adapter1.VerifyGet(a => a.ApplyAdditionalWeight, Times.Once());
             adapter2.VerifyGet(a => a.ApplyAdditionalWeight, Times.Once());
@@ -316,7 +320,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense
         {
             testObject.ApplyFrom(adapters);
 
-            // Check that the Get property was called to confirm that the values are not equal 
+            // Check that the Get property was called to confirm that the values are not equal
             // because the adapter value was assigned to
             adapter1.VerifyGet(a => a.DimsHeight, Times.Once());
             adapter2.VerifyGet(a => a.DimsHeight, Times.Once());
@@ -332,7 +336,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense
         {
             testObject.ApplyFrom(adapters);
 
-            // Check that the Get property was called to confirm that the values are not equal 
+            // Check that the Get property was called to confirm that the values are not equal
             // because the adapter value was assigned to
             adapter1.VerifyGet(a => a.DimsLength, Times.Once());
             adapter2.VerifyGet(a => a.DimsLength, Times.Once());
@@ -348,7 +352,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense
         {
             testObject.ApplyFrom(adapters);
 
-            // Check that the Get property was called to confirm that the values are not equal 
+            // Check that the Get property was called to confirm that the values are not equal
             // because the adapter value was assigned to
             adapter1.VerifyGet(a => a.Weight, Times.Once());
             adapter2.VerifyGet(a => a.Weight, Times.Once());
@@ -364,7 +368,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense
         {
             testObject.ApplyFrom(adapters);
 
-            // Check that the Get property was called to confirm that the values are not equal 
+            // Check that the Get property was called to confirm that the values are not equal
             // because the adapter value was assigned to
             adapter1.VerifyGet(a => a.DimsWidth, Times.Once());
             adapter2.VerifyGet(a => a.DimsWidth, Times.Once());
@@ -452,7 +456,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense
             testObject.ApplyFrom(adapters, shipmentCustomsItems);
 
             // Quick check some of the adapter stuff
-            // Check that the Get property was called to confirm that the values are not equal 
+            // Check that the Get property was called to confirm that the values are not equal
             // because the adapter value was assigned to
             adapter1.VerifyGet(a => a.DimsWidth, Times.Once());
             adapter2.VerifyGet(a => a.DimsWidth, Times.Once());
@@ -592,7 +596,6 @@ namespace ShipWorks.Tests.Shipping.ShipSense
             // Change the store ID of the matching shipment
             ShipmentEntity shipment = CreateMatchingShipment();
 
-
             // Make the values on the entry match the adapters and the customs items of the shipment
             // Use the adapters from the FedEx shipment type, so the HashCode gets applied
             testObject.ApplyFrom(new FedExShipmentType().GetPackageAdapters(shipment));
@@ -613,7 +616,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense
                 OriginPostalCode = "63102",
                 ShipCountryCode = "US",
                 ShipPostalCode = "63102",
-                ShipmentType = (int)ShipmentTypeCode.FedEx,
+                ShipmentType = (int) ShipmentTypeCode.FedEx,
                 ContentWeight = 0,
                 FedEx = new FedExShipmentEntity()
             };
@@ -653,6 +656,8 @@ namespace ShipWorks.Tests.Shipping.ShipSense
 
             shipment.CustomsItems.Add(customsEntity);
         }
+
+        public void Dispose() => mock.Dispose();
     }
 }
 

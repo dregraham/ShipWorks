@@ -1,13 +1,16 @@
-﻿using Interapptive.Shared;
-using System;
+﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
 using System.Text;
+using Interapptive.Shared;
 
 namespace ShipWorks.Stores.Platforms.Odbc
 {
     /// <summary>
     /// Class for interacting with the odbc32.dll
     /// </summary>
+    [SuppressMessage("SonarLint", "S4200: Native methods should be wrapped",
+            Justification = "This is legacy code. If there's time, we can address the issue.")]
     public static class Odbc32
     {
         // API return values from functions (from sql.h)

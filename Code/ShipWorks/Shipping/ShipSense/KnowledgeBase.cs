@@ -3,12 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.IO.Zip;
 using Interapptive.Shared.Threading;
 using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
-using Interapptive.Shared.ComponentRegistration;
-using ShipWorks.Core.Messaging;
 using ShipWorks.Data;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model;
@@ -37,9 +36,9 @@ namespace ShipWorks.Shipping.ShipSense
         /// <summary>
         /// Initializes a new instance of the <see cref="Knowledgebase"/> class.
         /// </summary>
-        public Knowledgebase()
+        public Knowledgebase(IShippingSettings shippingSettings)
             : this(new KnowledgebaseHash(), new ShipSenseOrderItemKeyFactory(),
-                LogManager.GetLogger, new ShippingSettingsWrapper(new Messenger()))
+                LogManager.GetLogger, shippingSettings)
         {
         }
 

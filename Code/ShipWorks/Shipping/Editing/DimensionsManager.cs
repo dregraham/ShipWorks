@@ -1,23 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data.Utility;
-using ShipWorks.Data.Model;
+using System.Collections.Immutable;
 using System.ComponentModel;
+using System.Linq;
 using ShipWorks.Data;
-using ShipWorks.Shipping.Services;
+using ShipWorks.Data.Model;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
+using ShipWorks.Data.Utility;
 
 namespace ShipWorks.Shipping.Editing
 {
     /// <summary>
     /// Provides access to the dimensions profiles
     /// </summary>
-    public static class DimensionsManager 
+    public static class DimensionsManager
     {
-        static TableSynchronizer<DimensionsProfileEntity> synchronizer;
-        static bool needCheckForChanges = false;
+        private static TableSynchronizer<DimensionsProfileEntity> synchronizer;
+        private static bool needCheckForChanges = false;
+        private static ImmutableList<IDimensionsProfileEntity> readOnlyEntities = ImmutableList.Create<IDimensionsProfileEntity>() ;
 
         /// <summary>
         /// Initialize DimensionsManager
@@ -49,6 +50,7 @@ namespace ShipWorks.Shipping.Editing
                 if (synchronizer.Synchronize())
                 {
                     synchronizer.EntityCollection.Sort((int) DimensionsProfileFieldIndex.Name, ListSortDirection.Ascending);
+                    readOnlyEntities = synchronizer.EntityCollection.Select(x => x.AsReadOnly()).ToImmutableList();
                 }
 
                 needCheckForChanges = false;
@@ -58,32 +60,29 @@ namespace ShipWorks.Shipping.Editing
         /// <summary>
         /// Return all the dimensions profiles
         /// </summary>
-        public static List<DimensionsProfileEntity> Profiles
-        {
-            get
-            {
-                lock (synchronizer)
-                {
-                    if (needCheckForChanges)
-                    {
-                        InternalCheckForChanges();
-                    }
+        public static List<DimensionsProfileEntity> Profiles =>
+            EnsureChangesLoaded(() => EntityUtility.CloneEntityCollection(synchronizer.EntityCollection));
 
-                    return EntityUtility.CloneEntityCollection(synchronizer.EntityCollection);
-                }
-            }
-        }
+        /// <summary>
+        /// Return all the dimensions profiles
+        /// </summary>
+        public static IEnumerable<IDimensionsProfileEntity> ProfilesReadOnly =>
+            EnsureChangesLoaded(() => readOnlyEntities);
 
         /// <summary>
         /// Get the profile with the specified ID, or null if not found.
         /// </summary>
-        public static DimensionsProfileEntity GetProfile(long profileID)
-        {
-            return Profiles.Where(p => p.DimensionsProfileID == profileID).FirstOrDefault();
-        }
+        public static DimensionsProfileEntity GetProfile(long profileID) =>
+            Profiles.FirstOrDefault(p => p.DimensionsProfileID == profileID);
 
         /// <summary>
-        /// Ensure the givnen adapter has the latest info for its profile
+        /// Get the profile with the specified ID, or null if not found.
+        /// </summary>
+        public static IDimensionsProfileEntity GetProfileReadOnly(long profileID) =>
+            ProfilesReadOnly.FirstOrDefault(p => p.DimensionsProfileID == profileID);
+
+        /// <summary>
+        /// Ensure the given adapter has the latest info for its profile
         /// </summary>
         public static void UpdateDimensions(DimensionsAdapter adapter)
         {
@@ -107,6 +106,22 @@ namespace ShipWorks.Shipping.Editing
                 adapter.Width = profile.Width;
                 adapter.Height = profile.Height;
                 adapter.Weight = profile.Weight;
+            }
+        }
+
+        /// <summary>
+        /// Perform the operation, ensuring all changes are loaded
+        /// </summary>
+        private static T EnsureChangesLoaded<T>(Func<T> func)
+        {
+            lock (synchronizer)
+            {
+                if (needCheckForChanges)
+                {
+                    InternalCheckForChanges();
+                }
+
+                return func();
             }
         }
     }

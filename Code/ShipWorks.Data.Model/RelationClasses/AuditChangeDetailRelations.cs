@@ -30,6 +30,7 @@ namespace ShipWorks.Data.Model.RelationClasses
 		public virtual List<IEntityRelation> GetAllRelations()
 		{
 			List<IEntityRelation> toReturn = new List<IEntityRelation>();
+			toReturn.Add(this.AuditEntityUsingAuditID);
 			toReturn.Add(this.AuditChangeEntityUsingAuditChangeID);
 			return toReturn;
 		}
@@ -38,6 +39,20 @@ namespace ShipWorks.Data.Model.RelationClasses
 
 
 
+		/// <summary>Returns a new IEntityRelation object, between AuditChangeDetailEntity and AuditEntity over the m:1 relation they have, using the relation between the fields:
+		/// AuditChangeDetail.AuditID - Audit.AuditID
+		/// </summary>
+		public virtual IEntityRelation AuditEntityUsingAuditID
+		{
+			get
+			{
+				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.ManyToOne, "Audit", false);
+				relation.AddEntityFieldPair(AuditFields.AuditID, AuditChangeDetailFields.AuditID);
+				relation.InheritanceInfoPkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("AuditEntity", false);
+				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("AuditChangeDetailEntity", true);
+				return relation;
+			}
+		}
 		/// <summary>Returns a new IEntityRelation object, between AuditChangeDetailEntity and AuditChangeEntity over the m:1 relation they have, using the relation between the fields:
 		/// AuditChangeDetail.AuditChangeID - AuditChange.AuditChangeID
 		/// </summary>
@@ -66,6 +81,7 @@ namespace ShipWorks.Data.Model.RelationClasses
 	/// <summary>Static class which is used for providing relationship instances which are re-used internally for syncing</summary>
 	internal static class StaticAuditChangeDetailRelations
 	{
+		internal static readonly IEntityRelation AuditEntityUsingAuditIDStatic = new AuditChangeDetailRelations().AuditEntityUsingAuditID;
 		internal static readonly IEntityRelation AuditChangeEntityUsingAuditChangeIDStatic = new AuditChangeDetailRelations().AuditChangeEntityUsingAuditChangeID;
 
 		/// <summary>CTor</summary>

@@ -5,12 +5,12 @@ using System.Linq;
 using System.Threading.Tasks;
 using Interapptive.Shared;
 using Interapptive.Shared.Collections;
+using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Threading;
 using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.AddressValidation.Enums;
-using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.Custom;
@@ -49,7 +49,7 @@ namespace ShipWorks.Shipping.Loading
         /// </summary>
         [NDependIgnoreTooManyParams]
         public Task<bool> StartTask(IProgressProvider progressProvider, List<long> orderIDs,
-            IDictionary<long, ShipmentEntity> globalShipments, BlockingCollection<ShipmentEntity> shipmentsToValidate, 
+            IDictionary<long, ShipmentEntity> globalShipments, BlockingCollection<ShipmentEntity> shipmentsToValidate,
             bool createIfNoShipments, int ensureFiltersUpToDateTimeout)
         {
             this.ensureFiltersUpToDateTimeout = ensureFiltersUpToDateTimeout;
@@ -60,9 +60,17 @@ namespace ShipWorks.Shipping.Loading
             {
                 workProgress.Starting();
 
-                bool wasCanceled = LoadShipments(workProgress, orderIDs, globalShipments, shipmentsToValidate, createIfNoShipments);
-
-                workProgress.Completed();
+                bool wasCanceled = false;
+                try
+                {
+                    wasCanceled = LoadShipments(workProgress, orderIDs, globalShipments, shipmentsToValidate, createIfNoShipments);
+                    workProgress.Completed();
+                }
+                catch (Exception ex)
+                {
+                    shipmentsToValidate.CompleteAdding();
+                    workProgress.Failed(ex);
+                }
 
                 return wasCanceled;
             });

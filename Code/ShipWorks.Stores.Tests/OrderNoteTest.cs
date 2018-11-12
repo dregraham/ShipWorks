@@ -4,6 +4,7 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Content;
 using System;
 using System.Linq;
+using ShipWorks.Stores.Orders;
 using Xunit;
 
 namespace ShipWorks.Stores.Tests

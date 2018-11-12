@@ -196,7 +196,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                     PostalRateSelection tag = rate.Tag as PostalRateSelection;
                     if (tag != null)
                     {
-                        rate.Tag = new UspsPostalRateSelection(tag.ServiceType, tag.ConfirmationType, express1AutoRouteAccount);
+                        rate.Tag = new UspsPostalRateSelection(tag.ServiceType, express1AutoRouteAccount);
                     }
                 }
                 return rateGroup;

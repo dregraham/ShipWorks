@@ -56,7 +56,7 @@ namespace ShipWorks.Tests.Filters.Search
             orderPrefix.Setup(o => o.AppliesTo(It.Is<string>(s => s == singleScanOrderNumber))).Returns(true);
             orderPrefix.Setup(o => o.GetOrderID(It.Is<string>(s => s == singleScanOrderNumber))).Returns(1006);
 
-            FilterDefinition definition = testObject.GetDefinition(singleScanOrderNumber);
+            var definition = testObject.GetDefinition(singleScanOrderNumber);
             Condition condition = definition.RootContainer.FirstGroup.Conditions.FirstOrDefault();
 
             Assert.True(condition is OrderIDCondition);
@@ -68,7 +68,7 @@ namespace ShipWorks.Tests.Filters.Search
             orderPrefix.Setup(o => o.AppliesTo(It.Is<string>(s => s == singleScanOrderNumber))).Returns(true);
             orderPrefix.Setup(o => o.GetOrderID(It.Is<string>(s => s == singleScanOrderNumber))).Returns(1006);
 
-            FilterDefinition definition = testObject.GetDefinition(singleScanOrderNumber);
+            var definition = testObject.GetDefinition(singleScanOrderNumber);
             Condition condition = definition.RootContainer.FirstGroup.Conditions.FirstOrDefault();
 
             Assert.Equal(1006, ((OrderIDCondition) condition).Value1);

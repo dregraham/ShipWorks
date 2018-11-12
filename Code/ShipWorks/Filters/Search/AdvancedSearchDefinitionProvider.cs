@@ -28,7 +28,7 @@ namespace ShipWorks.Filters.Search
         /// <summary>
         /// Get the Advanced AND Quick search definition combined in a single FilterDefinition
         /// </summary>
-        public FilterDefinition GetDefinition(string quickSearchString)
+        public IFilterDefinition GetDefinition(string quickSearchString)
         {
             // If the filter definition is empty (no criteria has been selected) don't return
             // the definition. An empty definition returns all orders or customers, which is
@@ -43,7 +43,7 @@ namespace ShipWorks.Filters.Search
                 return advancedFilterDefinition;
             }
 
-            FilterDefinition quickFilterDefinition = quickSearchDefinitionProvider.GetDefinition(quickSearchString);
+            IFilterDefinition quickFilterDefinition = quickSearchDefinitionProvider.GetDefinition(quickSearchString);
 
             List<Condition> quickSearchConditions = new List<Condition>();
             // Grap all of the conditions from the quick filter

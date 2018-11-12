@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Linq;
-using System.Reactive.Subjects;
 using Autofac.Extras.Moq;
-using Interapptive.Shared.Messaging;
 using Interapptive.Shared.Threading;
 using Interapptive.Shared.Utility;
 using Moq;
+using ShipWorks.Core.Messaging;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Messaging.Messages;
 using ShipWorks.Messaging.Messages.Dialogs;
@@ -21,14 +20,14 @@ namespace ShipWorks.Shipping.UI.Tests.RatingPanel.ObservableRegistrations
 {
     public class RatesRetrievedPipelineTest : IDisposable
     {
-        readonly AutoMock mock;
-        readonly Subject<IShipWorksMessage> subject;
+        private readonly AutoMock mock;
+        private readonly TestMessenger subject;
 
         public RatesRetrievedPipelineTest()
         {
             mock = AutoMockExtensions.GetLooseThatReturnsMocks();
-            subject = new Subject<IShipWorksMessage>();
-            mock.Provide<IObservable<IShipWorksMessage>>(subject);
+            subject = new TestMessenger();
+            mock.Provide<IMessenger>(subject);
             mock.Provide<ISchedulerProvider>(new ImmediateSchedulerProvider());
         }
 
@@ -39,8 +38,8 @@ namespace ShipWorks.Shipping.UI.Tests.RatingPanel.ObservableRegistrations
             var testObject = mock.Create<RatesRetrievedPipeline>();
             testObject.Register(viewModel.Object);
 
-            subject.OnNext(new OrderSelectionChangingMessage(this, Enumerable.Empty<long>()));
-            subject.OnNext(new RatesRetrievingMessage(this, "Foo"));
+            subject.Send(new OrderSelectionChangingMessage(this, Enumerable.Empty<long>()));
+            subject.Send(new RatesRetrievingMessage(this, "Foo"));
 
             viewModel.Verify(x => x.ShowSpinner());
         }
@@ -52,10 +51,10 @@ namespace ShipWorks.Shipping.UI.Tests.RatingPanel.ObservableRegistrations
             var testObject = mock.Create<RatesRetrievedPipeline>();
             testObject.Register(viewModel.Object);
 
-            subject.OnNext(new OrderSelectionChangingMessage(this, Enumerable.Empty<long>()));
-            subject.OnNext(new OrderSelectionChangingMessage(this, Enumerable.Empty<long>()));
-            subject.OnNext(new OrderSelectionChangingMessage(this, Enumerable.Empty<long>()));
-            subject.OnNext(new RatesRetrievingMessage(this, "Foo"));
+            subject.Send(new OrderSelectionChangingMessage(this, Enumerable.Empty<long>()));
+            subject.Send(new OrderSelectionChangingMessage(this, Enumerable.Empty<long>()));
+            subject.Send(new OrderSelectionChangingMessage(this, Enumerable.Empty<long>()));
+            subject.Send(new RatesRetrievingMessage(this, "Foo"));
 
             viewModel.Verify(x => x.ShowSpinner(), Times.Once);
         }
@@ -67,13 +66,13 @@ namespace ShipWorks.Shipping.UI.Tests.RatingPanel.ObservableRegistrations
             var testObject = mock.Create<RatesRetrievedPipeline>();
             testObject.Register(viewModel.Object);
 
-            subject.OnNext(new OrderSelectionChangingMessage(this, Enumerable.Empty<long>()));
-            subject.OnNext(new RatesRetrievingMessage(this, "Foo"));
-            subject.OnNext(new OpenShippingDialogMessage(this, Enumerable.Empty<ShipmentEntity>()));
-            subject.OnNext(new OpenShippingDialogMessage(this, Enumerable.Empty<ShipmentEntity>()));
-            subject.OnNext(new OpenShippingDialogMessage(this, Enumerable.Empty<ShipmentEntity>()));
-            subject.OnNext(new OrderSelectionChangingMessage(this, Enumerable.Empty<long>()));
-            subject.OnNext(new RatesRetrievingMessage(this, "Foo"));
+            subject.Send(new OrderSelectionChangingMessage(this, Enumerable.Empty<long>()));
+            subject.Send(new RatesRetrievingMessage(this, "Foo"));
+            subject.Send(new OpenShippingDialogMessage(this, Enumerable.Empty<ShipmentEntity>()));
+            subject.Send(new OpenShippingDialogMessage(this, Enumerable.Empty<ShipmentEntity>()));
+            subject.Send(new OpenShippingDialogMessage(this, Enumerable.Empty<ShipmentEntity>()));
+            subject.Send(new OrderSelectionChangingMessage(this, Enumerable.Empty<long>()));
+            subject.Send(new RatesRetrievingMessage(this, "Foo"));
 
             viewModel.Verify(x => x.ShowSpinner(), Times.Exactly(2));
         }
@@ -87,8 +86,8 @@ namespace ShipWorks.Shipping.UI.Tests.RatingPanel.ObservableRegistrations
             var testObject = mock.Create<RatesRetrievedPipeline>();
             testObject.Register(viewModel.Object);
 
-            subject.OnNext(new OrderSelectionChangingMessage(this, Enumerable.Empty<long>()));
-            subject.OnNext(new RatesRetrievingMessage(this, "Foo"));
+            subject.Send(new OrderSelectionChangingMessage(this, Enumerable.Empty<long>()));
+            subject.Send(new RatesRetrievingMessage(this, "Foo"));
 
             viewModel.Verify(x => x.ShowSpinner(), Times.Never);
 
@@ -104,7 +103,8 @@ namespace ShipWorks.Shipping.UI.Tests.RatingPanel.ObservableRegistrations
             var testObject = mock.Create<RatesRetrievedPipeline>();
             testObject.Register(viewModel.Object);
 
-            subject.OnNext(new RatesRetrievingMessage(this, "Foo"));
+            subject.Send(new OpenShippingDialogMessage(this, Enumerable.Empty<ShipmentEntity>()));
+            subject.Send(new RatesRetrievingMessage(this, "Foo"));
 
             viewModel.Verify(x => x.ShowSpinner(), Times.Never);
         }
@@ -116,9 +116,9 @@ namespace ShipWorks.Shipping.UI.Tests.RatingPanel.ObservableRegistrations
             var testObject = mock.Create<RatesRetrievedPipeline>();
             testObject.Register(viewModel.Object);
 
-            subject.OnNext(new OrderSelectionChangingMessage(this, Enumerable.Empty<long>()));
-            subject.OnNext(new OpenShippingDialogMessage(this, Enumerable.Empty<ShipmentEntity>()));
-            subject.OnNext(new RatesRetrievingMessage(this, "Foo"));
+            subject.Send(new OrderSelectionChangingMessage(this, Enumerable.Empty<long>()));
+            subject.Send(new OpenShippingDialogMessage(this, Enumerable.Empty<ShipmentEntity>()));
+            subject.Send(new RatesRetrievingMessage(this, "Foo"));
 
             viewModel.Verify(x => x.ShowSpinner(), Times.Never);
         }
@@ -131,9 +131,9 @@ namespace ShipWorks.Shipping.UI.Tests.RatingPanel.ObservableRegistrations
             testObject.Register(viewModel.Object);
             var retrievedMessage = CreateRetrievedMessageWithHash("Foo");
 
-            subject.OnNext(new OrderSelectionChangingMessage(this, Enumerable.Empty<long>()));
-            subject.OnNext(new RatesRetrievingMessage(this, "Foo"));
-            subject.OnNext(retrievedMessage);
+            subject.Send(new OrderSelectionChangingMessage(this, Enumerable.Empty<long>()));
+            subject.Send(new RatesRetrievingMessage(this, "Foo"));
+            subject.Send(retrievedMessage);
 
             viewModel.Verify(x => x.LoadRates(retrievedMessage));
         }
@@ -145,11 +145,11 @@ namespace ShipWorks.Shipping.UI.Tests.RatingPanel.ObservableRegistrations
             var testObject = mock.Create<RatesRetrievedPipeline>();
             testObject.Register(viewModel.Object);
 
-            subject.OnNext(new OrderSelectionChangingMessage(this, Enumerable.Empty<long>()));
-            subject.OnNext(new RatesRetrievingMessage(this, "Foo"));
-            subject.OnNext(new RatesRetrievingMessage(this, "Bar"));
-            subject.OnNext(new RatesRetrievingMessage(this, "Foo"));
-            subject.OnNext(CreateRetrievedMessageWithHash("Foo"));
+            subject.Send(new OrderSelectionChangingMessage(this, Enumerable.Empty<long>()));
+            subject.Send(new RatesRetrievingMessage(this, "Foo"));
+            subject.Send(new RatesRetrievingMessage(this, "Bar"));
+            subject.Send(new RatesRetrievingMessage(this, "Foo"));
+            subject.Send(CreateRetrievedMessageWithHash("Foo"));
 
             viewModel.Verify(x => x.LoadRates(It.IsAny<RatesRetrievedMessage>()), Times.Once);
         }
@@ -163,11 +163,11 @@ namespace ShipWorks.Shipping.UI.Tests.RatingPanel.ObservableRegistrations
             var notCalledMessage = CreateRetrievedMessageWithHash("Foo");
             var message = CreateRetrievedMessageWithHash("Bar");
 
-            subject.OnNext(new OrderSelectionChangingMessage(this, Enumerable.Empty<long>()));
-            subject.OnNext(new RatesRetrievingMessage(this, "Foo"));
-            subject.OnNext(new RatesRetrievingMessage(this, "Bar"));
-            subject.OnNext(notCalledMessage);
-            subject.OnNext(message);
+            subject.Send(new OrderSelectionChangingMessage(this, Enumerable.Empty<long>()));
+            subject.Send(new RatesRetrievingMessage(this, "Foo"));
+            subject.Send(new RatesRetrievingMessage(this, "Bar"));
+            subject.Send(notCalledMessage);
+            subject.Send(message);
 
             viewModel.Verify(x => x.LoadRates(notCalledMessage), Times.Never);
             viewModel.Verify(x => x.LoadRates(message), Times.Once);
@@ -180,8 +180,9 @@ namespace ShipWorks.Shipping.UI.Tests.RatingPanel.ObservableRegistrations
             var testObject = mock.Create<RatesRetrievedPipeline>();
             testObject.Register(viewModel.Object);
 
-            subject.OnNext(new RatesRetrievingMessage(this, "Foo"));
-            subject.OnNext(CreateRetrievedMessageWithHash("Foo"));
+            subject.Send(new OpenShippingDialogMessage(this, Enumerable.Empty<ShipmentEntity>()));
+            subject.Send(new RatesRetrievingMessage(this, "Foo"));
+            subject.Send(CreateRetrievedMessageWithHash("Foo"));
 
             viewModel.Verify(x => x.LoadRates(It.IsAny<RatesRetrievedMessage>()), Times.Never);
         }
@@ -193,10 +194,10 @@ namespace ShipWorks.Shipping.UI.Tests.RatingPanel.ObservableRegistrations
             var testObject = mock.Create<RatesRetrievedPipeline>();
             testObject.Register(viewModel.Object);
 
-            subject.OnNext(new OrderSelectionChangingMessage(this, Enumerable.Empty<long>()));
-            subject.OnNext(new OpenShippingDialogMessage(this, Enumerable.Empty<ShipmentEntity>()));
-            subject.OnNext(new RatesRetrievingMessage(this, "Foo"));
-            subject.OnNext(CreateRetrievedMessageWithHash("Foo"));
+            subject.Send(new OrderSelectionChangingMessage(this, Enumerable.Empty<long>()));
+            subject.Send(new OpenShippingDialogMessage(this, Enumerable.Empty<ShipmentEntity>()));
+            subject.Send(new RatesRetrievingMessage(this, "Foo"));
+            subject.Send(CreateRetrievedMessageWithHash("Foo"));
 
             viewModel.Verify(x => x.LoadRates(It.IsAny<RatesRetrievedMessage>()), Times.Never);
         }
@@ -211,9 +212,9 @@ namespace ShipWorks.Shipping.UI.Tests.RatingPanel.ObservableRegistrations
             var testObject = mock.Create<RatesRetrievedPipeline>();
             testObject.Register(viewModel.Object);
 
-            subject.OnNext(new OrderSelectionChangingMessage(this, Enumerable.Empty<long>()));
-            subject.OnNext(new RatesRetrievingMessage(this, "Foo"));
-            subject.OnNext(CreateRetrievedMessageWithHash("Foo"));
+            subject.Send(new OrderSelectionChangingMessage(this, Enumerable.Empty<long>()));
+            subject.Send(new RatesRetrievingMessage(this, "Foo"));
+            subject.Send(CreateRetrievedMessageWithHash("Foo"));
 
             scheduler.Default.AdvanceBy(249);
             scheduler.Dispatcher.Start();
@@ -233,9 +234,9 @@ namespace ShipWorks.Shipping.UI.Tests.RatingPanel.ObservableRegistrations
             var testObject = mock.Create<RatesRetrievedPipeline>();
             testObject.Register(viewModel.Object);
 
-            subject.OnNext(new OrderSelectionChangingMessage(this, Enumerable.Empty<long>()));
-            subject.OnNext(new RatesRetrievingMessage(this, "Bar"));
-            subject.OnNext(CreateRetrievedMessageWithHash("Foo"));
+            subject.Send(new OrderSelectionChangingMessage(this, Enumerable.Empty<long>()));
+            subject.Send(new RatesRetrievingMessage(this, "Bar"));
+            subject.Send(CreateRetrievedMessageWithHash("Foo"));
 
             viewModel.Verify(x => x.LoadRates(It.IsAny<RatesRetrievedMessage>()), Times.Never);
         }

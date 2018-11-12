@@ -314,7 +314,6 @@
     <Compile Include="Platforms\ChannelAdvisor\DTO\ChannelAdvisorPromotion.cs" />
     <Compile Include="Platforms\ChannelAdvisor\IChannelAdvisorRestClient.cs" />
     <Compile Include="IOrderNote.cs" />
-    <Compile Include="IOrderRepository.cs" />
     <Compile Include="IOrderChargeCalculator.cs" />
     <Compile Include="IStoreSettingsTelemetryCollector.cs" />
     <Compile Include="OrderNote.cs" />

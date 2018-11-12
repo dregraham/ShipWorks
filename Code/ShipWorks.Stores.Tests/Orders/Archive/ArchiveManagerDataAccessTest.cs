@@ -22,6 +22,12 @@ namespace ShipWorks.Stores.Tests.Orders.Archive
         public ArchiveManagerDataAccessTest()
         {
             mock = AutoMockExtensions.GetLooseThatReturnsMocks();
+
+            Mock<DbConnection> dbConnection = mock.CreateMock<DbConnection>();
+            mock.Mock<ISqlSession>()
+                .Setup(s => s.OpenConnection())
+                .Returns(dbConnection.Object);
+
             testObject = mock.Create<ArchiveManagerDataAccess>();
         }
 

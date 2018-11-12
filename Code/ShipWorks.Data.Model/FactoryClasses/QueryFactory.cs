@@ -988,6 +988,12 @@ namespace ShipWorks.Data.Model.FactoryClasses
 			get { return Create<PrintResultEntity>(); }
 		}
 
+		/// <summary>Creates and returns a new EntityQuery for the ProcessedShipment entity</summary>
+		public EntityQuery<ProcessedShipmentEntity> ProcessedShipment
+		{
+			get { return Create<ProcessedShipmentEntity>(); }
+		}
+
 		/// <summary>Creates and returns a new EntityQuery for the ProStoresOrder entity</summary>
 		public EntityQuery<ProStoresOrderEntity> ProStoresOrder
 		{

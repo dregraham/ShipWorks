@@ -214,18 +214,18 @@
                 <TextBox x:Name="dimsLength"
                          Style="{StaticResource Grid.TextBox.Dimension}"
                          Text="{Binding DimsLength, UpdateSourceTrigger=PropertyChanged,
-                                ValidatesOnDataErrors=true, NotifyOnValidationError=true, 
+                                ValidatesOnDataErrors=true, NotifyOnValidationError=true,
                                 Converter={StaticResource StringEmptyWhenEqualToParameter},
                                 ConverterParameter=0}" />
                 <TextBox Style="{StaticResource Grid.TextBox.Dimension}"
                          Text="{Binding DimsWidth, UpdateSourceTrigger=PropertyChanged,
-                                ValidatesOnDataErrors=true, NotifyOnValidationError=true, 
-                                Converter={StaticResource StringEmptyWhenEqualToParameter}, 
+                                ValidatesOnDataErrors=true, NotifyOnValidationError=true,
+                                Converter={StaticResource StringEmptyWhenEqualToParameter},
                                 ConverterParameter=0}" />
                 <TextBox Style="{StaticResource Grid.TextBox.Dimension}"
                          Text="{Binding DimsHeight, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged,
                                 ValidatesOnDataErrors=true, NotifyOnValidationError=true,
-                                Converter={StaticResource StringEmptyWhenEqualToParameter}, 
+                                Converter={StaticResource StringEmptyWhenEqualToParameter},
                                 ConverterParameter=0}" />
                 <TextBlock Margin="2, 0, 0, 0"
                            VerticalAlignment="Center">in.  (L x W x H)</TextBlock>

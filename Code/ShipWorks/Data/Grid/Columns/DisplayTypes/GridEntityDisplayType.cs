@@ -30,15 +30,7 @@ namespace ShipWorks.Data.Grid.Columns.DisplayTypes
     public class GridEntityDisplayType : GridColumnDisplayType
     {
         // When testing for hyperlinks, we format our value a lot.  This is so we don't overdue going to the database to do that
-        LruCache<long, GridEntityDisplayInfo> valueCache = new LruCache<long, GridEntityDisplayInfo>(50, TimeSpan.FromSeconds(10));
-
-        /// <summary>
-        /// Indicates if the icon representing the entity type is displayed
-        /// </summary>
-        bool showIcon = true;
-
-        // Indicates if a prefix of the object type is shown before the object.  Such as "Order" in "Order 12"
-        bool includeTypePrefix = true;
+        private readonly LruCache<long, GridEntityDisplayInfo> valueCache = new LruCache<long, GridEntityDisplayInfo>(50, TimeSpan.FromSeconds(10));
 
         /// <summary>
         /// Constructor
@@ -60,22 +52,19 @@ namespace ShipWorks.Data.Grid.Columns.DisplayTypes
         }
 
         /// <summary>
+        /// Indicates if the hyperlink is allowable
+        /// </summary>
+        public bool AllowHyperlink { get; set; } = true;
+
+        /// <summary>
         /// Indicates if the icon representing the entity type should be displayed
         /// </summary>
-        public bool ShowIcon
-        {
-            get { return showIcon; }
-            set { showIcon = value; }
-        }
+        public bool ShowIcon { get; set; } = true;
 
         /// <summary>
         /// Indicates if the prefix for the object type should be shown, Such as "Order" in "Order 12"
         /// </summary>
-        public bool IncludeTypePrefix
-        {
-            get { return includeTypePrefix; }
-            set { includeTypePrefix = value; }
-        }
+        public bool IncludeTypePrefix { get; set; } = true;
 
         /// <summary>
         /// The value returned from this is passed to the rest of the overridden functions
@@ -116,7 +105,7 @@ namespace ShipWorks.Data.Grid.Columns.DisplayTypes
             {
                 ObjectLabel label = ObjectLabelManager.GetLabel(objectID);
 
-                info.DisplayText = label.GetCustomText(includeTypePrefix, true, true);
+                info.DisplayText = label.GetCustomText(IncludeTypePrefix, true, true);
                 info.EntityType = EntityUtility.GetEntityType(objectID);
                 info.IsDeleted = label.IsDeleted;
             }
@@ -137,7 +126,7 @@ namespace ShipWorks.Data.Grid.Columns.DisplayTypes
         /// </summary>
         protected override Image GetDisplayImage(object value)
         {
-            if (!showIcon)
+            if (!ShowIcon)
             {
                 return null;
             }
@@ -175,9 +164,9 @@ namespace ShipWorks.Data.Grid.Columns.DisplayTypes
         /// <summary>
         /// Called back from the hyperlink decorator to determine if hyperlinking is enabled
         /// </summary>
-        void OnQueryHyperlinkEnabled(object sender, GridHyperlinkQueryEnabledEventArgs e)
+        private void OnQueryHyperlinkEnabled(object sender, GridHyperlinkQueryEnabledEventArgs e)
         {
-            e.Enabled = IsHyperlinked(e.Value);
+            e.Enabled = AllowHyperlink && IsHyperlinked(e.Value);
         }
 
         /// <summary>
@@ -237,7 +226,7 @@ namespace ShipWorks.Data.Grid.Columns.DisplayTypes
         /// <summary>
         /// Handle when the link gets clicked
         /// </summary>
-        void OnLinkClicked(object sender, GridHyperlinkClickEventArgs e)
+        private void OnLinkClicked(object sender, GridHyperlinkClickEventArgs e)
         {
             OnLinkClicked(e.Row, e.Column);
         }

@@ -462,7 +462,7 @@ namespace ShipWorks.ApplicationCore
         /// </summary>
         public void ReloadGridColumns()
         {
-            if (ActiveGrid.ActiveFilterNode != null)
+            if (ActiveGrid?.ActiveFilterNode != null)
             {
                 ActiveGrid.ReloadColumns();
             }
@@ -473,7 +473,7 @@ namespace ShipWorks.ApplicationCore
         /// </summary>
         public void SaveGridColumnState()
         {
-            if (ActiveGrid.ActiveFilterNode != null)
+            if (ActiveGrid?.ActiveFilterNode != null)
             {
                 ActiveGrid.SaveColumns();
             }
@@ -860,7 +860,7 @@ namespace ShipWorks.ApplicationCore
         /// <summary>
         /// Get the FilterDefinition that defines what the user is currently searching for
         /// </summary>
-        private FilterDefinition GetSearchDefinition(string searchText)
+        private IFilterDefinition GetSearchDefinition(string searchText)
         {
             using (ILifetimeScope scope = IoC.BeginLifetimeScope())
             {

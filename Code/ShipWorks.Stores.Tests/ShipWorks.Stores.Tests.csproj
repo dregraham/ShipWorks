@@ -54,6 +54,7 @@
       <Project>{a5eb7a6b-1600-4be2-aed6-3284c4e7987c}</Project>
       <Name>ShipWorks.Shipping</Name>
     </ProjectReference>
+    <ProjectReference Include="..\ShipWorks.SqlServer\ShipWorks.SqlServer.csproj" />
     <ProjectReference Include="..\ShipWorks.Stores.UI\ShipWorks.Stores.UI.csproj">
       <Project>{BBF456B8-8182-4FC1-8E59-3AAFAE5BFA53}</Project>
       <Name>ShipWorks.Stores.UI</Name>
@@ -121,6 +122,9 @@
     <ProjectReference Include="..\ShipWorks.Tests.Shared\ShipWorks.Tests.Shared.csproj" />
   </ItemGroup>
   <ItemGroup>
+    <Reference Include="ActiproSoftware.Shared.Net20">
+      <HintPath>..\..\Components\ActiproSoftware.Shared.Net20.dll</HintPath>
+    </Reference>
     <Reference Include="PresentationFramework" />
     <Reference Include="System.Runtime.Serialization.Formatters.Soap" />
     <Reference Include="System.Windows.Forms" />

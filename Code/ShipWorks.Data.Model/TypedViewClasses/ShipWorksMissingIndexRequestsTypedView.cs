@@ -24,15 +24,13 @@ namespace ShipWorks.Data.Model.TypedViewClasses
 	// __LLBLGENPRO_USER_CODE_REGION_START AdditionalNamespaces
 	// __LLBLGENPRO_USER_CODE_REGION_END
 	
-	
 	/// <summary>Typed datatable for the view 'ShipWorksMissingIndexRequests'.<br/><br/></summary>
 	[Serializable, System.ComponentModel.DesignerCategory("Code")]
 	[ToolboxItem(true)]
 	[DesignTimeVisible(true)]
 	public partial class ShipWorksMissingIndexRequestsTypedView : TypedViewBase<ShipWorksMissingIndexRequestsRow>, ITypedView2
 		// __LLBLGENPRO_USER_CODE_REGION_START AdditionalInterfacesView
-		// __LLBLGENPRO_USER_CODE_REGION_END
-			
+		// __LLBLGENPRO_USER_CODE_REGION_END	
 	{
 		#region Class Member Declarations
 		private DataColumn _columnIndexHandle;
@@ -45,7 +43,6 @@ namespace ShipWorks.Data.Model.TypedViewClasses
 		private IEntityFields2	_fields;
 		// __LLBLGENPRO_USER_CODE_REGION_START AdditionalMembers
 		// __LLBLGENPRO_USER_CODE_REGION_END
-		
 		private static Hashtable	_customProperties;
 		private static Hashtable	_fieldsCustomProperties;
 		#endregion
@@ -135,7 +132,6 @@ namespace ShipWorks.Data.Model.TypedViewClasses
 			// __LLBLGENPRO_USER_CODE_REGION_START AdditionalFields
 			// be sure to call _fields.Expand(number of new fields) first. 
 			// __LLBLGENPRO_USER_CODE_REGION_END
-			
 			OnInitialized();
 		}
 
@@ -152,7 +148,6 @@ namespace ShipWorks.Data.Model.TypedViewClasses
 			_fields = EntityFieldsFactory.CreateTypedViewEntityFieldsObject(TypedViewType.ShipWorksMissingIndexRequestsTypedView);
 			// __LLBLGENPRO_USER_CODE_REGION_START InitMembers
 			// __LLBLGENPRO_USER_CODE_REGION_END
-			
 		}
 
 		/// <summary>Clones this instance.</summary>
@@ -247,14 +242,12 @@ namespace ShipWorks.Data.Model.TypedViewClasses
 
 		// __LLBLGENPRO_USER_CODE_REGION_START AdditionalColumnProperties
 		// __LLBLGENPRO_USER_CODE_REGION_END
-		
  		#endregion
 
 		#region Custom TypedView code
 		
 		// __LLBLGENPRO_USER_CODE_REGION_START CustomTypedViewCode
 		// __LLBLGENPRO_USER_CODE_REGION_END
-		
 		#endregion
 
 		#region Included Code
@@ -265,8 +258,7 @@ namespace ShipWorks.Data.Model.TypedViewClasses
 	/// <summary>Typed datarow for the typed datatable ShipWorksMissingIndexRequests</summary>
 	public partial class ShipWorksMissingIndexRequestsRow : DataRow
 		// __LLBLGENPRO_USER_CODE_REGION_START AdditionalInterfacesRow
-		// __LLBLGENPRO_USER_CODE_REGION_END
-			
+		// __LLBLGENPRO_USER_CODE_REGION_END	
 	{
 		#region Class Member Declarations
 		private ShipWorksMissingIndexRequestsTypedView	_parent;
@@ -433,7 +425,6 @@ namespace ShipWorks.Data.Model.TypedViewClasses
 		
 		// __LLBLGENPRO_USER_CODE_REGION_START CustomTypedViewRowCode
 		// __LLBLGENPRO_USER_CODE_REGION_END
-		
 		#endregion
 		
 		#region Included Row Code

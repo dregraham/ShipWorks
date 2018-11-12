@@ -44,8 +44,9 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations
                 .Select(x => x.VoidShipmentResults.FirstOrDefault(r => r.Shipment.ShipmentID == viewModel.Shipment.ShipmentID))
                 .Where(x => x.Shipment != null)
                 .ObserveOn(schedulerProvider.Dispatcher)
+                .Do(x => HandleShipmentsVoided(viewModel, x))
                 .CatchAndContinue((Exception ex) => log.Error("An error occurred while handling voiding shipment.", ex))
-                .Subscribe(x => HandleShipmentsVoided(viewModel, x));
+                .Subscribe();
         }
 
         /// <summary>

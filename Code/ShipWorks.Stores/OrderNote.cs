@@ -2,6 +2,7 @@
 using ShipWorks.Stores.Content;
 using System;
 using System.Linq;
+using ShipWorks.Stores.Orders;
 
 namespace ShipWorks.Stores
 {

@@ -109,6 +109,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             OnlineShipmentID = source.OnlineShipmentID;
             BilledType = source.BilledType;
             BilledWeight = source.BilledWeight;
+            ProcessedWithUiMode = source.ProcessedWithUiMode;
             
             Amazon = (IAmazonShipmentEntity) source.Amazon?.AsReadOnly(objectMap);
             Asendia = (IAsendiaShipmentEntity) source.Asendia?.AsReadOnly(objectMap);
@@ -573,6 +574,12 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Table field type characteristics (type, precision, scale, length): Float, 38, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         public System.Double BilledWeight { get; }
+        /// <summary> The ProcessedWithUiMode property of the Entity Shipment<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "Shipment"."ProcessedWithUiMode"<br/>
+        /// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+        public Nullable<ShipWorks.Settings.UIMode> ProcessedWithUiMode { get; }
         
         public IAmazonShipmentEntity Amazon { get; }
         

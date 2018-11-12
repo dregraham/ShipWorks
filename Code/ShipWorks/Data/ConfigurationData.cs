@@ -141,7 +141,9 @@ namespace ShipWorks.Data
                 CustomerKey = string.Empty,
 
                 UseParallelActionQueue = true,
-                AllowEbayCombineLocally = false
+                AllowEbayCombineLocally = false,
+
+                AllowUIModeToggle = false
             };
 
             adapter.SaveEntity(newConfig);

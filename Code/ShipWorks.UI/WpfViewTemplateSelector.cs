@@ -10,8 +10,8 @@ namespace ShipWorks.UI
     /// </summary>
     public class WpfViewTemplateSelector : DataTemplateSelector
     {
-        static readonly DataTemplate emptyTemplate = new DataTemplate();
-        readonly Dictionary<Type, DataTemplate> templates = new Dictionary<Type, DataTemplate>();
+        private static readonly DataTemplate emptyTemplate = new DataTemplate();
+        private readonly Dictionary<Type, DataTemplate> templates = new Dictionary<Type, DataTemplate>();
 
         /// <summary>
         /// Select a template for a given item

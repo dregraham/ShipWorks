@@ -25,13 +25,13 @@ namespace ShipWorks.Startup
             if (InterapptiveOnly.MagicKeysDown)
             {
                 InterceptorCore.Initialize("ShipWorks");
+
+                MessageLogger.Current.AddConverters(() => new JsonConverter[] {
+                    new ShipmentEntityJsonConverter(),
+                    new StoreEntityJsonConverter()
+                });
             }
 #endif
-
-            MessageLogger.Current.AddConverters(() => new JsonConverter[] {
-                new ShipmentEntityJsonConverter(),
-                new StoreEntityJsonConverter()
-            });
 
             ContainerInitializer.Initialize();
 

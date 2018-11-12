@@ -4,7 +4,6 @@ using System.Linq;
 using Autofac.Features.Indexed;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Utility;
-using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
@@ -185,9 +184,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                     if (express1Rates != null)
                     {
                         express1Rate = express1Rates.Where(e1r => e1r.Selectable).FirstOrDefault(e1r =>
-                            ((PostalRateSelection) e1r.OriginalTag).ServiceType == endiciaRateDetail.ServiceType &&
-                            ((PostalRateSelection) e1r.OriginalTag).ConfirmationType ==
-                            endiciaRateDetail.ConfirmationType);
+                            ((PostalRateSelection) e1r.OriginalTag).ServiceType == endiciaRateDetail.ServiceType);
                     }
 
                     // If Express1 returned a rate, check to make sure it is a lower amount

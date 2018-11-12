@@ -11,19 +11,34 @@ namespace ShipWorks.Data.Model.EntityClasses
         // force a guid to be used as the name.  These two fields help this to be transparent to the Add Store Wizard.
         string preSetupCompleteInternalName = null;
         string preSetupCompleteUserName = null;
+        private bool isSettingUp;
 
         // We cache this so we only have to look it up once
         static string baseObjectName = ((IEntityCore) new StoreEntity()).LLBLGenProEntityName;
 
         /// <summary>
-        /// By default we will assume that setup is complete.  This is so that if we use StoreEntity as a 'Prototype' for saving a field or two only, that the code thinking
-        /// that setup is not complete will not kick-in and change the store names to guids
+        /// Start setting up the store
         /// </summary>
-        protected override void OnInitClassMembersComplete()
+        /// <remarks>
+        /// Start the setup process which ensures a valid, unique name by setting
+        /// it to a guid instead of the user selection.
+        /// </remarks>
+        public void StartSetup()
         {
-            base.OnInitClassMembersComplete();
+            isSettingUp = true;
+            SetupComplete = false;
+        }
 
-            Fields[(int) StoreFieldIndex.SetupComplete].ForcedCurrentValueWrite(true);
+        /// <summary>
+        /// Finish setting up the store
+        /// </summary>
+        /// <remarks>
+        /// This will stop the store name guid override
+        /// </remarks>
+        public void CompleteSetup()
+        {
+            isSettingUp = false;
+            SetupComplete = true;
         }
 
         /// <summary>
@@ -33,7 +48,7 @@ namespace ShipWorks.Data.Model.EntityClasses
         {
             // If this store is not yet setup, then we need to preserve its name as a Guid to prevent a IX_StoreName exception
             // from occurring before the user has picked\finalized the store name decision.
-            if (!SetupComplete)
+            if (isSettingUp)
             {
                 // If the user has selected a name remember it
                 preSetupCompleteUserName = StoreName ?? string.Empty;
@@ -65,7 +80,7 @@ namespace ShipWorks.Data.Model.EntityClasses
         {
             base.OnValidateEntityAfterSave();
 
-            if (!SetupComplete)
+            if (isSettingUp && !string.IsNullOrEmpty(preSetupCompleteUserName))
             {
                 // Restore the name the user wanted
                 StoreName = preSetupCompleteUserName;
