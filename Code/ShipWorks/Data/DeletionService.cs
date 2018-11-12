@@ -148,7 +148,7 @@ namespace ShipWorks.Data
                 lifetimeScope.Resolve<ISecurityContext>().DemandPermission(PermissionType.OrdersModify, orderID);
             }
 
-            using (AuditBehaviorScope scope = new AuditBehaviorScope(ConfigurationData.Fetch().AuditDeletedOrders ? AuditState.Enabled : AuditState.NoDetails))
+            using (AuditBehaviorScope scope = new AuditBehaviorScope(ConfigurationData.FetchReadOnly(adapter).AuditDeletedOrders ? AuditState.Enabled : AuditState.NoDetails))
             {
                 DeleteWithCascade(EntityType.OrderEntity, orderID, adapter);
             }
@@ -167,7 +167,7 @@ namespace ShipWorks.Data
                 lifetimeScope.Resolve<ISecurityContext>().DemandPermission(PermissionType.CustomersDelete, customerID);
             }
 
-            using (AuditBehaviorScope scope = new AuditBehaviorScope(ConfigurationData.Fetch().AuditDeletedOrders ? AuditState.Enabled : AuditState.NoDetails))
+            using (AuditBehaviorScope scope = new AuditBehaviorScope(ConfigurationData.FetchReadOnly(adapter).AuditDeletedOrders ? AuditState.Enabled : AuditState.NoDetails))
             {
                 DeleteWithCascade(EntityType.CustomerEntity, customerID, adapter);
             }
