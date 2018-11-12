@@ -58,8 +58,6 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookup
                 DataContext = orderLookupViewModel
             };
 
-            EnableFocusEvents();
-
             ElementHost host = new ElementHost
             {
                 Dock = DockStyle.Fill,
@@ -83,23 +81,19 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookup
         /// </summary>
         public async Task CreateLabel()
         {
-            using (Disposable.Create(EnableFocusEvents))
-            {
-                DisableFocusEvents();
-                CommitBindingsOnFocusedControl();
+            CommitBindingsOnFocusedControl();
 
-                // Wait for one of the following scenarios:
-                await Observable.Merge(new[]
-                    {
-                        // The label creation process has completed
-                        messenger.OfType<ShipmentsProcessedMessage>().Select(_ => Unit.Default),
-                        // Time out after 30 seconds
-                        Observable.Timer(TimeSpan.FromSeconds(30)).Select(_ => Unit.Default),
-                        // The create label process didn't start
-                        Observable.Return(Unit.Default).Where(_ => !orderLookupViewModel.ShipmentModel.CreateLabel())
-                    })
-                    .FirstAsync();
-            }
+            // Wait for one of the following scenarios:
+            await Observable.Merge(new[]
+                {
+                    // The label creation process has completed
+                    messenger.OfType<ShipmentsProcessedMessage>().Select(_ => Unit.Default),
+                    // Time out after 30 seconds
+                    Observable.Timer(TimeSpan.FromSeconds(30)).Select(_ => Unit.Default),
+                    // The create label process didn't start
+                    Observable.Return(Unit.Default).Where(_ => !orderLookupViewModel.ShipmentModel.CreateLabel())
+                })
+                .FirstAsync();
         }
 
         /// <summary>
@@ -107,24 +101,6 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookup
         /// </summary>
         public void RegisterProfileHandler(Func<Func<ShipmentTypeCode?>, Action<IShippingProfile>, IDisposable> profileRegistration) =>
             orderLookupViewModel.ShipmentModel.RegisterProfileHandler(profileRegistration);
-
-        /// <summary>
-        /// Enable focus events
-        /// </summary>
-        public void EnableFocusEvents()
-        {
-            mainOrderLookupControl.IsKeyboardFocusWithinChanged += OnIsKeyboardFocusWithinChanged;
-            mainOrderLookupControl.LostFocus += OnOrderLookupControlLostFocus;
-        }
-
-        /// <summary>
-        /// Disable focus events
-        /// </summary>
-        public void DisableFocusEvents()
-        {
-            mainOrderLookupControl.IsKeyboardFocusWithinChanged -= OnIsKeyboardFocusWithinChanged;
-            mainOrderLookupControl.LostFocus -= OnOrderLookupControlLostFocus;
-        }
 
         /// <summary>
         /// Allow the creation of a label
@@ -138,31 +114,6 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookup
         /// Expose the Control
         /// </summary>
         public UserControl Control => this;
-
-        /// <summary>
-        /// Saves the shipment to the database when the shipping panel loses focus.
-        /// </summary>
-        private void OnIsKeyboardFocusWithinChanged(object sender, DependencyPropertyChangedEventArgs e)
-        {
-            // The other Focus events, like LostFocus, don't seem to work the way we need, but IsKeyBoardFocusWithinChanged does.
-            // If the new value is false, meaning we had focus within this control and it's children and then lost it, and it wasn't already false,
-            // save to the db.
-            if (!((bool) e.NewValue) && e.NewValue != e.OldValue)
-            {
-                orderLookupViewModel.ShipmentModel.SaveToDatabase();
-            }
-        }
-
-        /// <summary>
-        /// The shipping panel has lost focus
-        /// </summary>
-        private void OnOrderLookupControlLostFocus(object sender, RoutedEventArgs e)
-        {
-            if (IsNonKeyboardInputElement(e.OriginalSource))
-            {
-                orderLookupViewModel.ShipmentModel.SaveToDatabase();
-            }
-        }
 
         /// <summary>
         /// Is the object an input element that does not hold keyboard focus
