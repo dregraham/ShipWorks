@@ -149,6 +149,14 @@ namespace ShipWorks.Stores.Tests.Platforms.Magento
         }
 
         [Fact]
+        public async Task LoadOrder_LoadsOrderTotalWeight()
+        {
+            await LoadOrder("MagentoOrderWithItemAttributes");
+
+            Assert.Equal(5.25, orderEntity.OrderItems.First().Weight);
+        }
+
+        [Fact]
         public async Task LoadOrder_LoadsOrderCharges()
         {
             await LoadOrder("MagentoOrder");

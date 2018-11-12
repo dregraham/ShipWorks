@@ -66,6 +66,12 @@ namespace ShipWorks.Stores.Orders.Combine
             }
 
             IStoreEntity storeEntity = storeManager.GetRelatedStore(firstId);
+
+            if (storeEntity == null)
+            {
+                return Result.FromError($"This order's store has been deleted, order cannot be combined");
+            }
+
             bool canCombine = gateway.CanCombine(storeEntity, orderIDs);
 
             if (canCombine == false)
