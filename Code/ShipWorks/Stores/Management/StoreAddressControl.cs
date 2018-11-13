@@ -97,7 +97,7 @@ namespace ShipWorks.Stores.Management
             }
             else
             {
-                state.Text = stateProv;   
+                state.Text = stateProv;
             }
         }
     }
