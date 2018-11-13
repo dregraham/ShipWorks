@@ -43,7 +43,7 @@ namespace ShipWorks.Stores.Platforms.SellerCloud
         /// </summary>
         public override string GetOnlineCarrierName(ShipmentEntity shipment)
         {
-            if (ShipmentTypeCode.Other == shipment.ShipmentTypeCode)
+            if (shipment.ShipmentTypeCode == ShipmentTypeCode.Other)
             {
                 return shipment.Other.Carrier.ToString();
             }
