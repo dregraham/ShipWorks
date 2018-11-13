@@ -9,12 +9,12 @@ namespace ShipWorks.Data.Model.EntityClasses
     {
         // Before setup is complete, to ensure the StoreName index is not violated when the store is saved, we
         // force a guid to be used as the name.  These two fields help this to be transparent to the Add Store Wizard.
-        string preSetupCompleteInternalName = null;
-        string preSetupCompleteUserName = null;
+        private string preSetupCompleteInternalName = null;
+        private string preSetupCompleteUserName = null;
         private bool isSettingUp;
 
         // We cache this so we only have to look it up once
-        static string baseObjectName = ((IEntityCore) new StoreEntity()).LLBLGenProEntityName;
+        private static string baseObjectName = ((IEntityCore) new StoreEntity()).LLBLGenProEntityName;
 
         /// <summary>
         /// Start setting up the store
@@ -47,7 +47,7 @@ namespace ShipWorks.Data.Model.EntityClasses
         protected override void OnBeforeEntitySave()
         {
             // If this store is not yet setup, then we need to preserve its name as a Guid to prevent a IX_StoreName exception
-            // from occurring before the user has picked\finalized the store name decision.
+            // from occurring before the user has picked/finalized the store name decision.
             if (isSettingUp)
             {
                 // If the user has selected a name remember it
@@ -59,7 +59,7 @@ namespace ShipWorks.Data.Model.EntityClasses
                     preSetupCompleteInternalName = Guid.NewGuid().ToString();
                 }
 
-                // Force the guid to be used as the name so their is no index violation before setup is complete
+                // Force the guid to be used as the name so there is no index violation before setup is complete
                 StoreName = preSetupCompleteInternalName;
             }
 
@@ -80,7 +80,7 @@ namespace ShipWorks.Data.Model.EntityClasses
         {
             base.OnValidateEntityAfterSave();
 
-            if (isSettingUp && !string.IsNullOrEmpty(preSetupCompleteUserName))
+            if (isSettingUp)
             {
                 // Restore the name the user wanted
                 StoreName = preSetupCompleteUserName;

@@ -156,7 +156,7 @@ namespace ShipWorks
         public MainForm()
         {
             currentUserSettings = IoC.UnsafeGlobalLifetimeScope.Resolve<ICurrentUserSettings>();
-            
+
             InitializeComponent();
 
             panelDockingArea.Visible = false;
@@ -184,6 +184,14 @@ namespace ShipWorks
                 { ribbonTabOrderLookupViewShipmentHistory, x => x == UIMode.OrderLookup },
             };
 
+            SetShipmentButonEnabledState();
+        }
+
+        /// <summary>
+        /// Wire up updating the CreateLabel and ApplyProfile enabled state
+        /// </summary>
+        private void SetShipmentButonEnabledState()
+        {
             // Listen for message to enable Create Label button
             Messenger.Current.Subscribe(x =>
             {
