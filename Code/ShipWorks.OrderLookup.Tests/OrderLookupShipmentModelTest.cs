@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Threading.Tasks;
 using Autofac.Extras.Moq;
 using Moq;
 using ShipWorks.Core.Messaging;
@@ -17,7 +18,7 @@ namespace ShipWorks.OrderLookup.Tests
     {
         private readonly AutoMock mock;
         private readonly TestMessenger testMessenger;
-        private OrderLookupShipmentModel testObject;
+        private readonly OrderLookupShipmentModel testObject;
         private OrderEntity order;
         private ShipmentEntity shipment;
         private Mock<ICarrierShipmentAdapter> shipmentAdapter;
@@ -32,6 +33,9 @@ namespace ShipWorks.OrderLookup.Tests
             mock.Mock<ISecurityContext>()
                 .Setup(x => x.HasPermission(PermissionType.ShipmentsCreateEditProcess, AnyLong))
                 .Returns(true);
+
+            testObject = mock.Create<OrderLookupShipmentModel>();
+            testObject.CreateLabelWrapper = x => Task.FromResult(x());
         }
 
         private void SetupTestMocks(bool isProcessed)
@@ -51,7 +55,6 @@ namespace ShipWorks.OrderLookup.Tests
         [Fact]
         public void RaisePropertyChanged_RaisesPropertyChangedWithNameOfProperty()
         {
-            testObject = mock.Create<OrderLookupShipmentModel>();
             Assert.PropertyChanged(testObject, "FooBar", () => testObject.RaisePropertyChanged("FooBar"));
         }
 
@@ -60,7 +63,6 @@ namespace ShipWorks.OrderLookup.Tests
         {
             SetupTestMocks(true);
 
-            testObject = mock.Create<OrderLookupShipmentModel>();
             testObject.LoadOrder(order);
             testObject.CreateLabel();
 
@@ -72,7 +74,6 @@ namespace ShipWorks.OrderLookup.Tests
         {
             SetupTestMocks(false);
 
-            testObject = mock.Create<OrderLookupShipmentModel>();
             testObject.LoadOrder(order);
             testObject.CreateLabel();
 

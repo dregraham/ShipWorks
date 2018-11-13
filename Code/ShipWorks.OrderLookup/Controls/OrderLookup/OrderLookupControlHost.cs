@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Reactive;
-using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 using System.Windows;
@@ -29,14 +28,14 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookup
         /// <summary>
         /// Constructor
         /// </summary>
-        public OrderLookupControlHost(MainOrderLookupViewModel orderLookupViewModel, OrderLookupLabelShortcutPipeline shortcutPipeline, IMessenger messenger)
+        public OrderLookupControlHost(MainOrderLookupViewModel orderLookupViewModel, IMessenger messenger)
         {
             this.messenger = messenger;
             InitializeComponent();
             this.orderLookupViewModel = orderLookupViewModel;
             orderLookupViewModel.ShipmentModel.ShipmentNeedsBinding += OnShipmentModelShipmentSaving;
             orderLookupViewModel.ShipmentModel.CanAcceptFocus = () => this.Visible && this.CanFocus;
-            shortcutPipeline.Register(orderLookupViewModel.ShipmentModel);
+            orderLookupViewModel.ShipmentModel.CreateLabelWrapper = CreateLabelWrapper;
         }
 
         /// <summary>
@@ -79,7 +78,13 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookup
         /// <summary>
         /// Create the label for a shipment
         /// </summary>
-        public async Task CreateLabel()
+        public Task CreateLabel() =>
+            orderLookupViewModel.ShipmentModel.CreateLabel();
+
+        /// <summary>
+        /// Create the label for a shipment
+        /// </summary>
+        private async Task CreateLabelWrapper(Func<bool> createLabel)
         {
             CommitBindingsOnFocusedControl();
 
@@ -91,7 +96,7 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookup
                     // Time out after 30 seconds
                     Observable.Timer(TimeSpan.FromSeconds(30)).Select(_ => Unit.Default),
                     // The create label process didn't start
-                    Observable.Return(Unit.Default).Where(_ => !orderLookupViewModel.ShipmentModel.CreateLabel())
+                    Observable.Return(Unit.Default).Where(_ => !createLabel())
                 })
                 .FirstAsync();
         }

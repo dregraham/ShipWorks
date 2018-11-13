@@ -6,6 +6,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Reactive.Disposables;
 using System.Reflection;
+using System.Threading.Tasks;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.UI;
@@ -148,7 +149,12 @@ namespace ShipWorks.OrderLookup
         public Func<bool> CanAcceptFocus { get; set; } = () => false;
 
         /// <summary>
-        /// Field layout repo
+        /// Wrapper for creating a label
+        /// </summary>
+        public Func<Func<bool>, Task> CreateLabelWrapper { get; set; }
+
+        /// <summary>
+        /// Field layout repository
         /// </summary>
         public IOrderLookupFieldLayoutProvider FieldLayoutProvider { get; }
 
@@ -478,7 +484,13 @@ namespace ShipWorks.OrderLookup
         /// <summary>
         /// Create the label for a shipment
         /// </summary>
-        public bool CreateLabel()
+        public Task CreateLabel() =>
+            CreateLabelWrapper(CreateLabelInternal);
+
+        /// <summary>
+        /// Create the label for a shipment
+        /// </summary>
+        private bool CreateLabelInternal()
         {
             if (!ShipmentAllowEditing || (shipmentAdapter?.Shipment?.Processed ?? true))
             {
