@@ -21,6 +21,11 @@ namespace ShipWorks.Stores
         StoreEntity GetStore(long storeId);
 
         /// <summary>
+        /// Get the store from Id
+        /// </summary>
+        IStoreEntity GetStoreReadOnly(long storeId);
+
+        /// <summary>
         /// Get the current list of stores.  All stores are returned, regardless of security.
         /// </summary>
         IEnumerable<StoreEntity> GetAllStores();

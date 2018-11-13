@@ -30,7 +30,7 @@ namespace ShipWorks.Stores.Orders.Combine.Actions
         /// </summary>
         public Task Perform(OrderEntity combinedOrder, long survivingOrderID, IEnumerable<IOrderEntity> orders, ISqlAdapter sqlAdapter)
         {
-            IStoreEntity store = storeManager.GetStore(combinedOrder.StoreID);
+            IStoreEntity store = storeManager.GetStoreReadOnly(combinedOrder.StoreID);
 
             IStoreSpecificCombineOrderAction platformCombiner;
 
