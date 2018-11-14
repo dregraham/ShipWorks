@@ -73,6 +73,7 @@ using ShipWorks.Messaging.Messages;
 using ShipWorks.Messaging.Messages.Dialogs;
 using ShipWorks.Messaging.Messages.Panels;
 using ShipWorks.OrderLookup;
+using ShipWorks.Products;
 using ShipWorks.Properties;
 using ShipWorks.Settings;
 using ShipWorks.Shipping;
@@ -143,6 +144,7 @@ namespace ShipWorks
         private IArchiveNotificationManager archiveNotificationManager;
         private ICurrentUserSettings currentUserSettings;
         private ILifetimeScope orderLookupLifetimeScope;
+        private ILifetimeScope productsLifetimeScope;
         private IOrderLookup orderLookupControl;
         private IShipmentHistory shipmentHistory;
 
@@ -182,6 +184,8 @@ namespace ShipWorks
                 { ribbonTabView, x => x == UIMode.Batch },
                 { ribbonTabOrderLookupViewShipping, x => x == UIMode.OrderLookup },
                 { ribbonTabOrderLookupViewShipmentHistory, x => x == UIMode.OrderLookup },
+                { ribbonTabAdmin, x => x == UIMode.Batch || x == UIMode.OrderLookup },
+                { ribbonTabHelp, x => x == UIMode.Batch || x == UIMode.OrderLookup }
             };
 
             SetShipmentButonEnabledState();
@@ -921,6 +925,18 @@ namespace ShipWorks
         }
 
         /// <summary>
+        /// Show the products view
+        /// </summary>
+        private void OnShowProductsView(object sender, EventArgs e)
+        {
+            if (UIMode != UIMode.Products)
+            {
+                // Save the current layout just in case the user made changes to it
+                ChangeUIMode(UIMode.Products);
+            }
+        }
+
+        /// <summary>
         /// Change to the given UI mode
         /// </summary>
         private void ChangeUIMode(UIMode uiMode)
@@ -938,16 +954,27 @@ namespace ShipWorks
         private void UpdateUIMode(IUserEntity user, bool startHeartbeat)
         {
             heartBeat?.Stop();
+            var currentMode = currentUserSettings.GetUIMode();
 
-            if (currentUserSettings.GetUIMode() == UIMode.OrderLookup)
+            UnloadOrderLookupMode();
+            UnloadProductsMode();
+
+            ToggleUiModeCheckbox(currentMode);
+
+            if (currentMode == UIMode.OrderLookup)
             {
-                ToggleOrderLookupMode();
+                EnableOrderLookupMode();
+            }
+            else if (currentMode == UIMode.Products)
+            {
+                EnableProductsMode(user);
             }
             else
             {
-                ToggleBatchMode(user);
+                EnableBatchMode(user);
             }
 
+            UIMode = currentMode;
 
             ToggleQuickAccessToolbar(ribbon, quickAccessToolBar, UIMode);
 
@@ -991,24 +1018,22 @@ namespace ShipWorks
         /// </summary>
         private void ToggleUiModeCheckbox(UIMode currentMode)
         {
-            mainMenuItemBatchGrid.Text = currentMode == UIMode.Batch ?
-                $"Batch Grid{unicodeCheckmark}" :
-                "Batch Grid";
-
-            mainMenuItemOrderLookup.Text = currentMode == UIMode.OrderLookup ?
-                $"Order Lookup{unicodeCheckmark}" :
-                "Order Lookup";
+            mainMenuItemBatchGrid.Text = GetTextForModeMenuItem("Batch Grid", currentMode == UIMode.Batch);
+            mainMenuItemOrderLookup.Text = GetTextForModeMenuItem("Order Lookup", currentMode == UIMode.OrderLookup);
+            mainMenuItemProducts.Text = GetTextForModeMenuItem("Products", currentMode == UIMode.Products);
         }
+
+        /// <summary>
+        /// Get the text for a mode menu item
+        /// </summary>
+        private string GetTextForModeMenuItem(string text, bool isSelected) =>
+            isSelected ? text + unicodeCheckmark : text;
 
         /// <summary>
         /// Switch from order lookup to batch mode
         /// </summary>
-        private void ToggleBatchMode(IUserEntity user)
+        private void EnableBatchMode(IUserEntity user)
         {
-            UnloadOrderLookupMode();
-
-            ToggleUiModeCheckbox(UIMode.Batch);
-
             heartBeat = new UIHeartbeat(this);
 
             windowLayoutProvider.LoadLayout(user.Settings.WindowLayout);
@@ -1037,51 +1062,34 @@ namespace ShipWorks
             SelectInitialFilter(user.Settings);
 
             SendPanelStateMessages();
-
-            UIMode = UIMode.Batch;
         }
 
         /// <summary>
-        /// Unload the Order Lookup Mode
+        /// Switch from order lookup to batch mode
         /// </summary>
-        private void UnloadOrderLookupMode()
+        private void EnableProductsMode(IUserEntity user)
         {
-            if (orderLookupLifetimeScope != null)
-            {
-                panelDockingArea.Controls.Remove(orderLookupControl.Control);
-                orderLookupControl.Unload();
-                orderLookupLifetimeScope.Dispose();
-                orderLookupLifetimeScope = null;
-            }
+            heartBeat = new OrderLookupHeartbeat(this);
+
+            DisableBatchModeControls();
+
+            productsLifetimeScope = IoC.BeginLifetimeScope();
+
+            productsLifetimeScope.Resolve<IProductsMode>()
+                .Initialize(panelDockingArea.Controls.Add, panelDockingArea.Controls.Remove);
         }
 
         /// <summary>
         /// Switch from batch to order lookup mode
         /// </summary>
-        private void ToggleOrderLookupMode()
+        private void EnableOrderLookupMode()
         {
-            UnloadOrderLookupMode();
-
             // clear out any selected orders from the batch view
             Messenger.Current.Send(new OrderSelectionChangingMessage(this, new long[0]));
 
-            ToggleUiModeCheckbox(UIMode.OrderLookup);
-
             heartBeat = new OrderLookupHeartbeat(this);
 
-            // Hide all dock windows.  Hide them first so they don't attempt to save when the filter changes (due to the tree being cleared)
-            foreach (DockControl control in Panels)
-            {
-                control.Close();
-            }
-
-            // Grid has to be cleared first - otherwise the current settings will be saved in response to the filtertree clearing,
-            // and notifying the grid that the selected filter changed.
-            gridControl.Reset();
-            gridControl.Visible = false;
-
-            // Clear Filter Trees
-            ClearFilterTrees();
+            DisableBatchModeControls();
 
             orderLookupLifetimeScope = IoC.BeginLifetimeScopeWithOverrides<IOrderLookupRegistrationOverride>();
 
@@ -1102,8 +1110,49 @@ namespace ShipWorks
 
             panelDockingArea.Controls.Add(orderLookupControl.Control);
             orderLookupControl.Control.BringToFront();
+        }
 
-            UIMode = UIMode.OrderLookup;
+        /// <summary>
+        /// Unload the Order Lookup Mode
+        /// </summary>
+        private void UnloadOrderLookupMode()
+        {
+            if (orderLookupLifetimeScope != null)
+            {
+                panelDockingArea.Controls.Remove(orderLookupControl.Control);
+                orderLookupControl.Unload();
+                orderLookupLifetimeScope.Dispose();
+                orderLookupLifetimeScope = null;
+            }
+        }
+
+        /// <summary>
+        /// Unload the Products Mode
+        /// </summary>
+        private void UnloadProductsMode()
+        {
+            productsLifetimeScope?.Dispose();
+            productsLifetimeScope = null;
+        }
+
+        /// <summary>
+        /// Disable the main batch mode controls
+        /// </summary>
+        private void DisableBatchModeControls()
+        {
+            // Hide all dock windows.  Hide them first so they don't attempt to save when the filter changes (due to the tree being cleared)
+            foreach (DockControl control in Panels)
+            {
+                control.Close();
+            }
+
+            // Grid has to be cleared first - otherwise the current settings will be saved in response to the filtertree clearing,
+            // and notifying the grid that the selected filter changed.
+            gridControl.Reset();
+            gridControl.Visible = false;
+
+            // Clear Filter Trees
+            ClearFilterTrees();
         }
 
         /// <summary>
@@ -1113,12 +1162,12 @@ namespace ShipWorks
         {
             if (ribbon.SelectedTab == ribbonTabOrderLookupViewShipping)
             {
-                ToggleVisiblePanel(orderLookupControl.Control, shipmentHistory?.Control);
+                ToggleVisiblePanel(orderLookupControl?.Control, shipmentHistory?.Control);
                 shipmentHistory?.Deactivate();
             }
             else if (ribbon.SelectedTab == ribbonTabOrderLookupViewShipmentHistory)
             {
-                ToggleVisiblePanel(shipmentHistory.Control, orderLookupControl?.Control);
+                ToggleVisiblePanel(shipmentHistory?.Control, orderLookupControl?.Control);
                 shipmentHistory.Activate(buttonOrderLookupViewVoid, buttonOrderLookupViewShipAgain);
             }
 

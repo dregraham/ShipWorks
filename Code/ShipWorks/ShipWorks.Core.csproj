@@ -1010,6 +1010,7 @@
     <Compile Include="OrderLookup\OrderLookupClearOrderMessage.cs" />
     <Compile Include="OrderLookup\OrderLookupSearchMessage.cs" />
     <Compile Include="OrderLookup\ShipmentModelPipelines\IOrderLookupShipmentModelPipeline.cs" />
+    <Compile Include="Products\IProductsMode.cs" />
     <Compile Include="Shipping\Profiles\EditableShippingProfile.cs" />
     <Compile Include="Shipping\Profiles\IEditableShippingProfile.cs" />
     <Compile Include="Shipping\Profiles\IProfilePopupService.cs" />
@@ -10870,6 +10871,7 @@
     <None Include="Resources\asendia.png" />
     <Resource Include="Resources\box_closed_with_label_32_32.png" />
     <None Include="Resources\bonanza.png" />
+    <Content Include="Resources\box_tall_32.png" />
     <Content Include="Resources\data_16.png" />
     <Content Include="Resources\data_error_16.png" />
     <Content Include="Resources\data_ok_16.png" />

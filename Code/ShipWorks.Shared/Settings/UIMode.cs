@@ -11,11 +11,14 @@ namespace ShipWorks.Settings
     {
         [Description("Batch Mode")]
         Batch = 0,
-        
+
         [Description("Order Lookup Mode")]
         OrderLookup = 1,
-        
+
         [Description("Pending")]
-        Pending = 2
+        Pending = 2,
+
+        [Description("Products")]
+        Products = 3
     }
 }
