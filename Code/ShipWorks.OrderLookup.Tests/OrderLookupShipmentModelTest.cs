@@ -59,23 +59,23 @@ namespace ShipWorks.OrderLookup.Tests
         }
 
         [Fact]
-        public void CreateLabel_DoesNotReturnMessage_WhenOrderIsProcessed()
+        public async Task CreateLabel_DoesNotReturnMessage_WhenOrderIsProcessedAsync()
         {
             SetupTestMocks(true);
 
             testObject.LoadOrder(order);
-            testObject.CreateLabel();
+            await testObject.CreateLabel();
 
             Assert.Empty(testMessenger.SentMessages.OfType<ProcessShipmentsMessage>());
         }
 
         [Fact]
-        public void CreateLabel_DoesReturnMessage_WhenOrderIsNotProcessed()
+        public async Task CreateLabel_DoesReturnMessage_WhenOrderIsNotProcessedAsync()
         {
             SetupTestMocks(false);
 
             testObject.LoadOrder(order);
-            testObject.CreateLabel();
+            await testObject.CreateLabel();
 
             Assert.Equal(1, testMessenger.SentMessages.OfType<ProcessShipmentsMessage>().Count());
         }

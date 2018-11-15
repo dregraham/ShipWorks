@@ -97,6 +97,7 @@ namespace ShipWorks.OrderLookup
         private bool isSaving = false;
         private IEnumerable<IPackageAdapter> packageAdapters;
         private IDisposable profileDisposable;
+        private bool alreadyCreatingLabel;
 
         public event EventHandler OnSearchOrder;
 
@@ -484,8 +485,20 @@ namespace ShipWorks.OrderLookup
         /// <summary>
         /// Create the label for a shipment
         /// </summary>
-        public Task CreateLabel() =>
-            CreateLabelWrapper(CreateLabelInternal);
+        public async Task CreateLabel()
+        {
+            if (alreadyCreatingLabel)
+            {
+                return;
+            }
+
+            alreadyCreatingLabel = true;
+
+            using (Disposable.Create(() => alreadyCreatingLabel = false))
+            {
+                await CreateLabelWrapper(CreateLabelInternal);
+            }
+        }
 
         /// <summary>
         /// Create the label for a shipment
