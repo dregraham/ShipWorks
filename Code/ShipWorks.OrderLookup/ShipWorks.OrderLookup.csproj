@@ -330,7 +330,7 @@
     <Compile Include="Layout\OrderLookupLayoutDefaults.cs" />
     <Compile Include="Layout\PanelInfo.cs" />
     <Compile Include="OrderLookupConfirmationService.cs" />
-    <Compile Include="OrderLookupLabelShortcutPipeline.cs" />
+    <Compile Include="ShipmentModelPipelines\CreateLabelShortcutPipeline.cs" />
     <Compile Include="OrderLookupModule.cs" />
     <Compile Include="OrderLookupPanelFactory.cs" />
     <Compile Include="OrderLookupPreviousShipmentLocator.cs" />

@@ -6,6 +6,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Reactive.Disposables;
 using System.Reflection;
+using System.Threading.Tasks;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.UI;
@@ -96,6 +97,7 @@ namespace ShipWorks.OrderLookup
         private bool isSaving = false;
         private IEnumerable<IPackageAdapter> packageAdapters;
         private IDisposable profileDisposable;
+        private bool alreadyCreatingLabel;
 
         public event EventHandler OnSearchOrder;
 
@@ -148,7 +150,12 @@ namespace ShipWorks.OrderLookup
         public Func<bool> CanAcceptFocus { get; set; } = () => false;
 
         /// <summary>
-        /// Field layout repo
+        /// Wrapper for creating a label
+        /// </summary>
+        public Func<Func<bool>, Task> CreateLabelWrapper { get; set; }
+
+        /// <summary>
+        /// Field layout repository
         /// </summary>
         public IOrderLookupFieldLayoutProvider FieldLayoutProvider { get; }
 
@@ -478,17 +485,37 @@ namespace ShipWorks.OrderLookup
         /// <summary>
         /// Create the label for a shipment
         /// </summary>
-        public void CreateLabel()
+        public async Task CreateLabel()
+        {
+            if (alreadyCreatingLabel)
+            {
+                return;
+            }
+
+            alreadyCreatingLabel = true;
+
+            using (Disposable.Create(() => alreadyCreatingLabel = false))
+            {
+                await CreateLabelWrapper(CreateLabelInternal);
+            }
+        }
+
+        /// <summary>
+        /// Create the label for a shipment
+        /// </summary>
+        private bool CreateLabelInternal()
         {
             if (!ShipmentAllowEditing || (shipmentAdapter?.Shipment?.Processed ?? true))
             {
-                return;
+                return false;
             }
 
             SaveToDatabase();
 
             messenger.Send(new ProcessShipmentsMessage(this, new[] { shipmentAdapter.Shipment },
                 new[] { shipmentAdapter.Shipment }, SelectedRate));
+
+            return true;
         }
 
         /// <summary>

@@ -5,6 +5,7 @@ using System.Reflection;
 using System.Windows.Input;
 using GalaSoft.MvvmLight.Command;
 using Interapptive.Shared.ComponentRegistration;
+using ShipWorks.Core.Common.Threading;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Core.UI;
 using ShipWorks.Users.Security;
@@ -207,10 +208,8 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookupSearchControl
         /// <summary>
         /// Create a label for the current order
         /// </summary>
-        private void CreateLabel()
-        {
-            ShipmentModel.CreateLabel();
-        }
+        private void CreateLabel() =>
+            ShipmentModel.CreateLabel().Forget();
 
         /// <summary>
         /// Dispose

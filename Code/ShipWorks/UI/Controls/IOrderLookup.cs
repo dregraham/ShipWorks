@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Profiles;
@@ -23,7 +24,7 @@ namespace ShipWorks.UI.Controls
         /// <summary>
         /// Create the label for a shipment
         /// </summary>
-        void CreateLabel();
+        Task CreateLabel();
 
         /// <summary>
         /// Allow the creation of a label
