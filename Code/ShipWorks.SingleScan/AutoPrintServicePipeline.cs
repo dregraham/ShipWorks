@@ -16,7 +16,9 @@ using ShipWorks.Messaging.Messages;
 using ShipWorks.Messaging.Messages.Filters;
 using ShipWorks.Messaging.Messages.Shipping;
 using ShipWorks.Messaging.Messages.SingleScan;
+using ShipWorks.Settings;
 using ShipWorks.Stores.Content.Panels.Selectors;
+using ShipWorks.Users;
 
 namespace ShipWorks.SingleScan
 {
@@ -35,6 +37,7 @@ namespace ShipWorks.SingleScan
         private readonly ISchedulerProvider schedulerProvider;
         private readonly ISqlAdapterFactory sqlAdapterFactory;
         private readonly IMainForm mainForm;
+        private readonly ICurrentUserSettings currentUserSettings;
         private readonly IAutoPrintService autoPrintService;
 
         private IDisposable scanMessagesConnection;
@@ -49,12 +52,14 @@ namespace ShipWorks.SingleScan
             ISchedulerProvider schedulerProvider,
             Func<Type, ILog> logFactory,
             ISqlAdapterFactory sqlAdapterFactory,
-            IMainForm mainForm)
+            IMainForm mainForm,
+            ICurrentUserSettings currentUserSettings)
         {
             this.messenger = messenger;
             this.schedulerProvider = schedulerProvider;
             this.sqlAdapterFactory = sqlAdapterFactory;
             this.mainForm = mainForm;
+            this.currentUserSettings = currentUserSettings;
             scanMessages = messenger.OfType<SingleScanMessage>().Publish();
             scanMessagesConnection = scanMessages.Connect();
             this.autoPrintService = autoPrintService;
@@ -77,6 +82,7 @@ namespace ShipWorks.SingleScan
             // picked up before we are finished with possessing the current order.
             // All exit points of the pipeline need to call ReconnectPipeline()
             filterCompletedMessageSubscription = scanMessages
+                .Where(_ => currentUserSettings.GetUIMode() == UIMode.Batch)
                 .Where(x => autoPrintService.AllowAutoPrint(x))
                 .Do(x => EndScanMessagesObservation())
                 .ContinueAfter(messenger.OfType<SingleScanFilterUpdateCompleteMessage>(),

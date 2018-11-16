@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Reflection;
+using System.Threading.Tasks;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.OrderLookup.FieldManager;
 using ShipWorks.Shipping;
@@ -98,6 +99,11 @@ namespace ShipWorks.OrderLookup
         Func<bool> CanAcceptFocus { get; set; }
 
         /// <summary>
+        /// Wrapper for creating a label
+        /// </summary>
+        Func<Func<bool>, Task> CreateLabelWrapper { get; set; }
+
+        /// <summary>
         /// Changes the shipment type
         /// </summary>
         void ChangeShipmentType(ShipmentTypeCode value);
@@ -110,7 +116,7 @@ namespace ShipWorks.OrderLookup
         /// <summary>
         /// Create the label for an order
         /// </summary>
-        void CreateLabel();
+        Task CreateLabel();
 
         /// <summary>
         /// Register the profile handler

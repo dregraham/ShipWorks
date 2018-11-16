@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Threading.Tasks;
 using Autofac.Extras.Moq;
 using Moq;
 using ShipWorks.Core.Messaging;
@@ -17,7 +18,7 @@ namespace ShipWorks.OrderLookup.Tests
     {
         private readonly AutoMock mock;
         private readonly TestMessenger testMessenger;
-        private OrderLookupShipmentModel testObject;
+        private readonly OrderLookupShipmentModel testObject;
         private OrderEntity order;
         private ShipmentEntity shipment;
         private Mock<ICarrierShipmentAdapter> shipmentAdapter;
@@ -32,6 +33,9 @@ namespace ShipWorks.OrderLookup.Tests
             mock.Mock<ISecurityContext>()
                 .Setup(x => x.HasPermission(PermissionType.ShipmentsCreateEditProcess, AnyLong))
                 .Returns(true);
+
+            testObject = mock.Create<OrderLookupShipmentModel>();
+            testObject.CreateLabelWrapper = x => Task.FromResult(x());
         }
 
         private void SetupTestMocks(bool isProcessed)
@@ -51,30 +55,27 @@ namespace ShipWorks.OrderLookup.Tests
         [Fact]
         public void RaisePropertyChanged_RaisesPropertyChangedWithNameOfProperty()
         {
-            testObject = mock.Create<OrderLookupShipmentModel>();
             Assert.PropertyChanged(testObject, "FooBar", () => testObject.RaisePropertyChanged("FooBar"));
         }
 
         [Fact]
-        public void CreateLabel_DoesNotReturnMessage_WhenOrderIsProcessed()
+        public async Task CreateLabel_DoesNotReturnMessage_WhenOrderIsProcessedAsync()
         {
             SetupTestMocks(true);
 
-            testObject = mock.Create<OrderLookupShipmentModel>();
             testObject.LoadOrder(order);
-            testObject.CreateLabel();
+            await testObject.CreateLabel();
 
             Assert.Empty(testMessenger.SentMessages.OfType<ProcessShipmentsMessage>());
         }
 
         [Fact]
-        public void CreateLabel_DoesReturnMessage_WhenOrderIsNotProcessed()
+        public async Task CreateLabel_DoesReturnMessage_WhenOrderIsNotProcessedAsync()
         {
             SetupTestMocks(false);
 
-            testObject = mock.Create<OrderLookupShipmentModel>();
             testObject.LoadOrder(order);
-            testObject.CreateLabel();
+            await testObject.CreateLabel();
 
             Assert.Equal(1, testMessenger.SentMessages.OfType<ProcessShipmentsMessage>().Count());
         }
