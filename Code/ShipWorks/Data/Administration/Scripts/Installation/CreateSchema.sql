@@ -7819,3 +7819,113 @@ BEGIN
 	END
 END
 GO
+
+PRINT N'Creating [dbo].[Product]'
+GO
+CREATE TABLE [dbo].[Product]
+(
+[ProductID] [bigint] NOT NULL IDENTITY(1, 1),
+[CreatedDate] [datetime] NOT NULL,
+[Name] [nvarchar] (300) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[IsActive] [bit] NOT NULL,
+[IsBundle] [bit] NOT NULL
+)
+GO
+PRINT N'Creating primary key [PK_Product] on [dbo].[Product]'
+GO
+ALTER TABLE [dbo].[Product] ADD CONSTRAINT [PK_Product] PRIMARY KEY CLUSTERED  ([ProductID])
+GO
+PRINT N'Creating [dbo].[ProductBundle]'
+GO
+CREATE TABLE [dbo].[ProductBundle]
+(
+[ProductID] [bigint] NOT NULL,
+[ChildProductVariantID] [bigint] NOT NULL,
+[Quantity] [int] NOT NULL
+)
+GO
+PRINT N'Creating primary key [PK_ProductBundle] on [dbo].[ProductBundle]'
+GO
+ALTER TABLE [dbo].[ProductBundle] ADD CONSTRAINT [PK_ProductBundle] PRIMARY KEY CLUSTERED  ([ProductID], [ChildProductVariantID])
+GO
+PRINT N'Creating [dbo].[ProductVariant]'
+GO
+CREATE TABLE [dbo].[ProductVariant]
+(
+[ProductVariantID] [bigint] NOT NULL IDENTITY(1, 1),
+[ProductID] [bigint] NOT NULL,
+[CreatedDate] [datetime] NOT NULL,
+[Name] [nvarchar] (300) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[IsActive] [bit] NOT NULL,
+[UPC] [nvarchar] (30) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+[ASIN] [nvarchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+[ISBN] [nvarchar] (30) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+[Weight] [decimal] (29, 9) NULL,
+[Length] [decimal] (10, 2) NULL,
+[Width] [decimal] (10, 2) NULL,
+[Height] [decimal] (10, 2) NULL,
+[ImageUrl] [nvarchar] (500) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+[BinLocation] [nvarchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+[HarmonizedCode] [nvarchar] (20) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+[DeclaredValue] [money] NULL,
+[CountryOfOrigin] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL
+)
+GO
+PRINT N'Creating primary key [PK_ProductVariant] on [dbo].[ProductVariant]'
+GO
+ALTER TABLE [dbo].[ProductVariant] ADD CONSTRAINT [PK_ProductVariant] PRIMARY KEY CLUSTERED  ([ProductVariantID])
+GO
+PRINT N'Creating [dbo].[ProductVariantAlias]'
+GO
+CREATE TABLE [dbo].[ProductVariantAlias]
+(
+[ProductVariantAliasID] [bigint] NOT NULL,
+[ProductVariantID] [bigint] NOT NULL,
+[AliasName] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[Sku] [bigint] NOT NULL
+)
+GO
+PRINT N'Creating primary key [PK_ProductVariantAlias] on [dbo].[ProductVariantAlias]'
+GO
+ALTER TABLE [dbo].[ProductVariantAlias] ADD CONSTRAINT [PK_ProductVariantAlias] PRIMARY KEY CLUSTERED  ([ProductVariantAliasID])
+GO
+PRINT N'Creating index [IX_SWDefault_ProductVariantAlias_Sku] on [dbo].[ProductVariantAlias]'
+GO
+CREATE NONCLUSTERED INDEX [IX_SWDefault_ProductVariantAlias_Sku] ON [dbo].[ProductVariantAlias] ([Sku]) INCLUDE ([ProductVariantID])
+GO
+PRINT N'Creating [dbo].[ProductVariantTypeAndValue]'
+GO
+CREATE TABLE [dbo].[ProductVariantTypeAndValue]
+(
+[ProductVariantTypeAndValueID] [bigint] NOT NULL,
+[ProductVariantID] [bigint] NOT NULL,
+[AttributeName] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[AttributeValue] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL
+)
+GO
+PRINT N'Creating primary key [PK_ProductVariantTypeAndValue] on [dbo].[ProductVariantTypeAndValue]'
+GO
+ALTER TABLE [dbo].[ProductVariantTypeAndValue] ADD CONSTRAINT [PK_ProductVariantTypeAndValue] PRIMARY KEY CLUSTERED  ([ProductVariantTypeAndValueID])
+GO
+PRINT N'Creating index [IX_SWDefault_ProductVariantTypeAndValue_ProductVariantID] on [dbo].[ProductVariantTypeAndValue]'
+GO
+CREATE NONCLUSTERED INDEX [IX_SWDefault_ProductVariantTypeAndValue_ProductVariantID] ON [dbo].[ProductVariantTypeAndValue] ([ProductVariantID])
+GO
+PRINT N'Adding foreign keys to [dbo].[ProductBundle]'
+GO
+ALTER TABLE [dbo].[ProductBundle] ADD CONSTRAINT [FK_ProductBundle_Product] FOREIGN KEY ([ProductID]) REFERENCES [dbo].[Product] ([ProductID])
+GO
+ALTER TABLE [dbo].[ProductBundle] ADD CONSTRAINT [FK_ProductBundle_ProductVariant] FOREIGN KEY ([ChildProductVariantID]) REFERENCES [dbo].[ProductVariant] ([ProductVariantID])
+GO
+PRINT N'Adding foreign keys to [dbo].[ProductVariantAlias]'
+GO
+ALTER TABLE [dbo].[ProductVariantAlias] ADD CONSTRAINT [FK_ProductVariantAlias_ProductVariant] FOREIGN KEY ([ProductVariantID]) REFERENCES [dbo].[ProductVariant] ([ProductVariantID])
+GO
+PRINT N'Adding foreign keys to [dbo].[ProductVariantTypeAndValue]'
+GO
+ALTER TABLE [dbo].[ProductVariantTypeAndValue] ADD CONSTRAINT [FK_ProductVariantTypeAndValue_ProductVariant] FOREIGN KEY ([ProductVariantID]) REFERENCES [dbo].[ProductVariant] ([ProductVariantID])
+GO
+PRINT N'Adding foreign keys to [dbo].[ProductVariant]'
+GO
+ALTER TABLE [dbo].[ProductVariant] ADD CONSTRAINT [FK_ProductVariant_Product] FOREIGN KEY ([ProductID]) REFERENCES [dbo].[Product] ([ProductID])
+GO

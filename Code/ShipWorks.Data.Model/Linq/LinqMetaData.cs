@@ -506,6 +506,21 @@ namespace ShipWorks.Data.Model.Linq
 				case ShipWorks.Data.Model.EntityType.ProcessedShipmentEntity:
 					toReturn = this.ProcessedShipment;
 					break;
+				case ShipWorks.Data.Model.EntityType.ProductEntity:
+					toReturn = this.Product;
+					break;
+				case ShipWorks.Data.Model.EntityType.ProductBundleEntity:
+					toReturn = this.ProductBundle;
+					break;
+				case ShipWorks.Data.Model.EntityType.ProductVariantEntity:
+					toReturn = this.ProductVariant;
+					break;
+				case ShipWorks.Data.Model.EntityType.ProductVariantAliasEntity:
+					toReturn = this.ProductVariantAlias;
+					break;
+				case ShipWorks.Data.Model.EntityType.ProductVariantTypeAndValueEntity:
+					toReturn = this.ProductVariantTypeAndValue;
+					break;
 				case ShipWorks.Data.Model.EntityType.ProStoresOrderEntity:
 					toReturn = this.ProStoresOrder;
 					break;
@@ -1645,6 +1660,36 @@ namespace ShipWorks.Data.Model.Linq
 		public DataSource2<ProcessedShipmentEntity> ProcessedShipment
 		{
 			get { return new DataSource2<ProcessedShipmentEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
+		}
+		
+		/// <summary>returns the datasource to use in a Linq query when targeting ProductEntity instances in the database.</summary>
+		public DataSource2<ProductEntity> Product
+		{
+			get { return new DataSource2<ProductEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
+		}
+		
+		/// <summary>returns the datasource to use in a Linq query when targeting ProductBundleEntity instances in the database.</summary>
+		public DataSource2<ProductBundleEntity> ProductBundle
+		{
+			get { return new DataSource2<ProductBundleEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
+		}
+		
+		/// <summary>returns the datasource to use in a Linq query when targeting ProductVariantEntity instances in the database.</summary>
+		public DataSource2<ProductVariantEntity> ProductVariant
+		{
+			get { return new DataSource2<ProductVariantEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
+		}
+		
+		/// <summary>returns the datasource to use in a Linq query when targeting ProductVariantAliasEntity instances in the database.</summary>
+		public DataSource2<ProductVariantAliasEntity> ProductVariantAlias
+		{
+			get { return new DataSource2<ProductVariantAliasEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
+		}
+		
+		/// <summary>returns the datasource to use in a Linq query when targeting ProductVariantTypeAndValueEntity instances in the database.</summary>
+		public DataSource2<ProductVariantTypeAndValueEntity> ProductVariantTypeAndValue
+		{
+			get { return new DataSource2<ProductVariantTypeAndValueEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
 		}
 		
 		/// <summary>returns the datasource to use in a Linq query when targeting ProStoresOrderEntity instances in the database.</summary>
