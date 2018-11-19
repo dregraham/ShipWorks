@@ -16,14 +16,14 @@ namespace ShipWorks
         /// performing the other actions. This was discovered by a bug where adding a store caused
         /// a crash because the newly added store was added to the cache before it was completed.
         /// </remarks>
-        private class OrderLookupHeartbeat : Heartbeat
+        private class BasicUIHeartbeat : Heartbeat
         {
             private readonly MainForm mainForm;
 
             /// <summary>
-            /// Initializes a new instance of the <see cref="OrderLookupHeartbeat"/> class.
+            /// Initializes a new instance of the <see cref="BasicUIHeartbeat"/> class.
             /// </summary>
-            public OrderLookupHeartbeat(MainForm mainForm)
+            public BasicUIHeartbeat(MainForm mainForm)
             {
                 this.mainForm = mainForm;
             }

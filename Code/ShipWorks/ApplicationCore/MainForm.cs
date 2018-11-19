@@ -1069,7 +1069,7 @@ namespace ShipWorks
         /// </summary>
         private void EnableProductsMode(IUserEntity user)
         {
-            heartBeat = new OrderLookupHeartbeat(this);
+            heartBeat = new BasicUIHeartbeat(this);
 
             DisableBatchModeControls();
 
@@ -1087,7 +1087,7 @@ namespace ShipWorks
             // clear out any selected orders from the batch view
             Messenger.Current.Send(new OrderSelectionChangingMessage(this, new long[0]));
 
-            heartBeat = new OrderLookupHeartbeat(this);
+            heartBeat = new BasicUIHeartbeat(this);
 
             DisableBatchModeControls();
 
