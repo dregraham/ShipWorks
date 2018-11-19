@@ -8677,6 +8677,102 @@ namespace ShipWorks.Data.Model
 		/// <summary></summary>
 		AmountOfFields
 	}
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: Product.</summary>
+	public enum ProductFieldIndex
+	{
+		///<summary>ProductID. </summary>
+		ProductID,
+		///<summary>CreatedDate. </summary>
+		CreatedDate,
+		///<summary>Name. </summary>
+		Name,
+		///<summary>IsActive. </summary>
+		IsActive,
+		///<summary>IsBundle. </summary>
+		IsBundle,
+		/// <summary></summary>
+		AmountOfFields
+	}
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: ProductBundle.</summary>
+	public enum ProductBundleFieldIndex
+	{
+		///<summary>ProductID. </summary>
+		ProductID,
+		///<summary>ChildProductVariantID. </summary>
+		ChildProductVariantID,
+		///<summary>Quantity. </summary>
+		Quantity,
+		/// <summary></summary>
+		AmountOfFields
+	}
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: ProductVariant.</summary>
+	public enum ProductVariantFieldIndex
+	{
+		///<summary>ProductVariantID. </summary>
+		ProductVariantID,
+		///<summary>ProductID. </summary>
+		ProductID,
+		///<summary>CreatedDate. </summary>
+		CreatedDate,
+		///<summary>Name. </summary>
+		Name,
+		///<summary>IsActive. </summary>
+		IsActive,
+		///<summary>UPC. </summary>
+		UPC,
+		///<summary>ASIN. </summary>
+		ASIN,
+		///<summary>ISBN. </summary>
+		ISBN,
+		///<summary>Weight. </summary>
+		Weight,
+		///<summary>Length. </summary>
+		Length,
+		///<summary>Width. </summary>
+		Width,
+		///<summary>Height. </summary>
+		Height,
+		///<summary>ImageUrl. </summary>
+		ImageUrl,
+		///<summary>BinLocation. </summary>
+		BinLocation,
+		///<summary>HarmonizedCode. </summary>
+		HarmonizedCode,
+		///<summary>DeclaredValue. </summary>
+		DeclaredValue,
+		///<summary>CountryOfOrigin. </summary>
+		CountryOfOrigin,
+		/// <summary></summary>
+		AmountOfFields
+	}
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: ProductVariantAlias.</summary>
+	public enum ProductVariantAliasFieldIndex
+	{
+		///<summary>ProductVariantAliasID. </summary>
+		ProductVariantAliasID,
+		///<summary>ProductVariantID. </summary>
+		ProductVariantID,
+		///<summary>AliasName. </summary>
+		AliasName,
+		///<summary>Sku. </summary>
+		Sku,
+		/// <summary></summary>
+		AmountOfFields
+	}
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: ProductVariantAttribute.</summary>
+	public enum ProductVariantAttributeFieldIndex
+	{
+		///<summary>ProductVariantAttributeID. </summary>
+		ProductVariantAttributeID,
+		///<summary>ProductVariantID. </summary>
+		ProductVariantID,
+		///<summary>AttributeName. </summary>
+		AttributeName,
+		///<summary>AttributeValue. </summary>
+		AttributeValue,
+		/// <summary></summary>
+		AmountOfFields
+	}
 	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: ProStoresOrder.</summary>
 	public enum ProStoresOrderFieldIndex
 	{
@@ -13021,6 +13117,16 @@ namespace ShipWorks.Data.Model
 		PrintResultEntity,
 		///<summary>ProcessedShipment</summary>
 		ProcessedShipmentEntity,
+		///<summary>Product</summary>
+		ProductEntity,
+		///<summary>ProductBundle</summary>
+		ProductBundleEntity,
+		///<summary>ProductVariant</summary>
+		ProductVariantEntity,
+		///<summary>ProductVariantAlias</summary>
+		ProductVariantAliasEntity,
+		///<summary>ProductVariantAttribute</summary>
+		ProductVariantAttributeEntity,
 		///<summary>ProStoresOrder</summary>
 		ProStoresOrderEntity,
 		///<summary>ProStoresOrderSearch</summary>

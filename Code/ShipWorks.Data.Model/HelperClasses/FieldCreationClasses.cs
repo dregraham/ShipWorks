@@ -20199,6 +20199,196 @@ namespace ShipWorks.Data.Model.HelperClasses
 		}
 	}
 
+	/// <summary>Field Creation Class for entity ProductEntity</summary>
+	public partial class ProductFields
+	{
+		/// <summary>Creates a new ProductEntity.ProductID field instance</summary>
+		public static EntityField2 ProductID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ProductFieldIndex.ProductID);}
+		}
+		/// <summary>Creates a new ProductEntity.CreatedDate field instance</summary>
+		public static EntityField2 CreatedDate
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ProductFieldIndex.CreatedDate);}
+		}
+		/// <summary>Creates a new ProductEntity.Name field instance</summary>
+		public static EntityField2 Name
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ProductFieldIndex.Name);}
+		}
+		/// <summary>Creates a new ProductEntity.IsActive field instance</summary>
+		public static EntityField2 IsActive
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ProductFieldIndex.IsActive);}
+		}
+		/// <summary>Creates a new ProductEntity.IsBundle field instance</summary>
+		public static EntityField2 IsBundle
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ProductFieldIndex.IsBundle);}
+		}
+	}
+
+	/// <summary>Field Creation Class for entity ProductBundleEntity</summary>
+	public partial class ProductBundleFields
+	{
+		/// <summary>Creates a new ProductBundleEntity.ProductID field instance</summary>
+		public static EntityField2 ProductID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ProductBundleFieldIndex.ProductID);}
+		}
+		/// <summary>Creates a new ProductBundleEntity.ChildProductVariantID field instance</summary>
+		public static EntityField2 ChildProductVariantID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ProductBundleFieldIndex.ChildProductVariantID);}
+		}
+		/// <summary>Creates a new ProductBundleEntity.Quantity field instance</summary>
+		public static EntityField2 Quantity
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ProductBundleFieldIndex.Quantity);}
+		}
+	}
+
+	/// <summary>Field Creation Class for entity ProductVariantEntity</summary>
+	public partial class ProductVariantFields
+	{
+		/// <summary>Creates a new ProductVariantEntity.ProductVariantID field instance</summary>
+		public static EntityField2 ProductVariantID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ProductVariantFieldIndex.ProductVariantID);}
+		}
+		/// <summary>Creates a new ProductVariantEntity.ProductID field instance</summary>
+		public static EntityField2 ProductID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ProductVariantFieldIndex.ProductID);}
+		}
+		/// <summary>Creates a new ProductVariantEntity.CreatedDate field instance</summary>
+		public static EntityField2 CreatedDate
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ProductVariantFieldIndex.CreatedDate);}
+		}
+		/// <summary>Creates a new ProductVariantEntity.Name field instance</summary>
+		public static EntityField2 Name
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ProductVariantFieldIndex.Name);}
+		}
+		/// <summary>Creates a new ProductVariantEntity.IsActive field instance</summary>
+		public static EntityField2 IsActive
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ProductVariantFieldIndex.IsActive);}
+		}
+		/// <summary>Creates a new ProductVariantEntity.UPC field instance</summary>
+		public static EntityField2 UPC
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ProductVariantFieldIndex.UPC);}
+		}
+		/// <summary>Creates a new ProductVariantEntity.ASIN field instance</summary>
+		public static EntityField2 ASIN
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ProductVariantFieldIndex.ASIN);}
+		}
+		/// <summary>Creates a new ProductVariantEntity.ISBN field instance</summary>
+		public static EntityField2 ISBN
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ProductVariantFieldIndex.ISBN);}
+		}
+		/// <summary>Creates a new ProductVariantEntity.Weight field instance</summary>
+		public static EntityField2 Weight
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ProductVariantFieldIndex.Weight);}
+		}
+		/// <summary>Creates a new ProductVariantEntity.Length field instance</summary>
+		public static EntityField2 Length
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ProductVariantFieldIndex.Length);}
+		}
+		/// <summary>Creates a new ProductVariantEntity.Width field instance</summary>
+		public static EntityField2 Width
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ProductVariantFieldIndex.Width);}
+		}
+		/// <summary>Creates a new ProductVariantEntity.Height field instance</summary>
+		public static EntityField2 Height
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ProductVariantFieldIndex.Height);}
+		}
+		/// <summary>Creates a new ProductVariantEntity.ImageUrl field instance</summary>
+		public static EntityField2 ImageUrl
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ProductVariantFieldIndex.ImageUrl);}
+		}
+		/// <summary>Creates a new ProductVariantEntity.BinLocation field instance</summary>
+		public static EntityField2 BinLocation
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ProductVariantFieldIndex.BinLocation);}
+		}
+		/// <summary>Creates a new ProductVariantEntity.HarmonizedCode field instance</summary>
+		public static EntityField2 HarmonizedCode
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ProductVariantFieldIndex.HarmonizedCode);}
+		}
+		/// <summary>Creates a new ProductVariantEntity.DeclaredValue field instance</summary>
+		public static EntityField2 DeclaredValue
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ProductVariantFieldIndex.DeclaredValue);}
+		}
+		/// <summary>Creates a new ProductVariantEntity.CountryOfOrigin field instance</summary>
+		public static EntityField2 CountryOfOrigin
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ProductVariantFieldIndex.CountryOfOrigin);}
+		}
+	}
+
+	/// <summary>Field Creation Class for entity ProductVariantAliasEntity</summary>
+	public partial class ProductVariantAliasFields
+	{
+		/// <summary>Creates a new ProductVariantAliasEntity.ProductVariantAliasID field instance</summary>
+		public static EntityField2 ProductVariantAliasID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ProductVariantAliasFieldIndex.ProductVariantAliasID);}
+		}
+		/// <summary>Creates a new ProductVariantAliasEntity.ProductVariantID field instance</summary>
+		public static EntityField2 ProductVariantID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ProductVariantAliasFieldIndex.ProductVariantID);}
+		}
+		/// <summary>Creates a new ProductVariantAliasEntity.AliasName field instance</summary>
+		public static EntityField2 AliasName
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ProductVariantAliasFieldIndex.AliasName);}
+		}
+		/// <summary>Creates a new ProductVariantAliasEntity.Sku field instance</summary>
+		public static EntityField2 Sku
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ProductVariantAliasFieldIndex.Sku);}
+		}
+	}
+
+	/// <summary>Field Creation Class for entity ProductVariantAttributeEntity</summary>
+	public partial class ProductVariantAttributeFields
+	{
+		/// <summary>Creates a new ProductVariantAttributeEntity.ProductVariantAttributeID field instance</summary>
+		public static EntityField2 ProductVariantAttributeID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ProductVariantAttributeFieldIndex.ProductVariantAttributeID);}
+		}
+		/// <summary>Creates a new ProductVariantAttributeEntity.ProductVariantID field instance</summary>
+		public static EntityField2 ProductVariantID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ProductVariantAttributeFieldIndex.ProductVariantID);}
+		}
+		/// <summary>Creates a new ProductVariantAttributeEntity.AttributeName field instance</summary>
+		public static EntityField2 AttributeName
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ProductVariantAttributeFieldIndex.AttributeName);}
+		}
+		/// <summary>Creates a new ProductVariantAttributeEntity.AttributeValue field instance</summary>
+		public static EntityField2 AttributeValue
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ProductVariantAttributeFieldIndex.AttributeValue);}
+		}
+	}
+
 	/// <summary>Field Creation Class for entity ProStoresOrderEntity</summary>
 	public partial class ProStoresOrderFields
 	{

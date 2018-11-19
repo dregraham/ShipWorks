@@ -46,7 +46,7 @@ namespace ShipWorks.Data.Model
 		/// <summary>Method which initializes the internal datastores with the structure of hierarchical types.</summary>
 		private void Init()
 		{
-			this.InitClass(229);
+			this.InitClass(234);
 			InitActionEntityMappings();
 			InitActionFilterTriggerEntityMappings();
 			InitActionQueueEntityMappings();
@@ -195,6 +195,11 @@ namespace ShipWorks.Data.Model
 			InitPostalShipmentEntityMappings();
 			InitPrintResultEntityMappings();
 			InitProcessedShipmentEntityMappings();
+			InitProductEntityMappings();
+			InitProductBundleEntityMappings();
+			InitProductVariantEntityMappings();
+			InitProductVariantAliasEntityMappings();
+			InitProductVariantAttributeEntityMappings();
 			InitProStoresOrderEntityMappings();
 			InitProStoresOrderSearchEntityMappings();
 			InitProStoresStoreEntityMappings();
@@ -1652,7 +1657,7 @@ namespace ShipWorks.Data.Model
 			this.AddElementFieldMapping("FilterNodeContentEntity", "JoinMask", "JoinMask", false, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 7);
 			this.AddElementFieldMapping("FilterNodeContentEntity", "Cost", "Cost", false, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 8);
 			this.AddElementFieldMapping("FilterNodeContentEntity", "Count", "Count", false, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 9);
-			this.AddElementFieldMapping("FilterNodeContentEntity", "EntityExistsQuery", "EntityExistsQuery", true, "NVarChar", 2147483647, 0, 0, false, "", null, typeof(System.String), 10);
+			this.AddElementFieldMapping("FilterNodeContentEntity", "EntityExistsQuery", "EntityExistsQuery", false, "NVarChar", 2147483647, 0, 0, false, "", null, typeof(System.String), 10);
 		}
 
 		/// <summary>Inits FilterNodeContentDetailEntity's mappings</summary>
@@ -2728,6 +2733,69 @@ namespace ShipWorks.Data.Model
 			this.AddElementFieldMapping("ProcessedShipmentEntity", "ShipUSTerritory", "ShipUSTerritory", false, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 25);
 			this.AddElementFieldMapping("ProcessedShipmentEntity", "ProcessedWithUiMode", "ProcessedWithUiMode", true, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 26);
 			this.AddElementFieldMapping("ProcessedShipmentEntity", "CombineSplitStatus", "CombineSplitStatus", false, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 27);
+		}
+
+		/// <summary>Inits ProductEntity's mappings</summary>
+		private void InitProductEntityMappings()
+		{
+			this.AddElementMapping("ProductEntity", @"ShipWorksLocal", @"dbo", "Product", 5, 0);
+			this.AddElementFieldMapping("ProductEntity", "ProductID", "ProductID", false, "BigInt", 0, 19, 0, true, "SCOPE_IDENTITY()", null, typeof(System.Int64), 0);
+			this.AddElementFieldMapping("ProductEntity", "CreatedDate", "CreatedDate", false, "DateTime", 0, 0, 0, false, "", null, typeof(System.DateTime), 1);
+			this.AddElementFieldMapping("ProductEntity", "Name", "Name", false, "NVarChar", 300, 0, 0, false, "", null, typeof(System.String), 2);
+			this.AddElementFieldMapping("ProductEntity", "IsActive", "IsActive", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 3);
+			this.AddElementFieldMapping("ProductEntity", "IsBundle", "IsBundle", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 4);
+		}
+
+		/// <summary>Inits ProductBundleEntity's mappings</summary>
+		private void InitProductBundleEntityMappings()
+		{
+			this.AddElementMapping("ProductBundleEntity", @"ShipWorksLocal", @"dbo", "ProductBundle", 3, 0);
+			this.AddElementFieldMapping("ProductBundleEntity", "ProductID", "ProductID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 0);
+			this.AddElementFieldMapping("ProductBundleEntity", "ChildProductVariantID", "ChildProductVariantID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 1);
+			this.AddElementFieldMapping("ProductBundleEntity", "Quantity", "Quantity", false, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 2);
+		}
+
+		/// <summary>Inits ProductVariantEntity's mappings</summary>
+		private void InitProductVariantEntityMappings()
+		{
+			this.AddElementMapping("ProductVariantEntity", @"ShipWorksLocal", @"dbo", "ProductVariant", 17, 0);
+			this.AddElementFieldMapping("ProductVariantEntity", "ProductVariantID", "ProductVariantID", false, "BigInt", 0, 19, 0, true, "SCOPE_IDENTITY()", null, typeof(System.Int64), 0);
+			this.AddElementFieldMapping("ProductVariantEntity", "ProductID", "ProductID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 1);
+			this.AddElementFieldMapping("ProductVariantEntity", "CreatedDate", "CreatedDate", false, "DateTime", 0, 0, 0, false, "", null, typeof(System.DateTime), 2);
+			this.AddElementFieldMapping("ProductVariantEntity", "Name", "Name", false, "NVarChar", 300, 0, 0, false, "", null, typeof(System.String), 3);
+			this.AddElementFieldMapping("ProductVariantEntity", "IsActive", "IsActive", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 4);
+			this.AddElementFieldMapping("ProductVariantEntity", "UPC", "UPC", true, "NVarChar", 30, 0, 0, false, "", null, typeof(System.String), 5);
+			this.AddElementFieldMapping("ProductVariantEntity", "ASIN", "ASIN", true, "NVarChar", 255, 0, 0, false, "", null, typeof(System.String), 6);
+			this.AddElementFieldMapping("ProductVariantEntity", "ISBN", "ISBN", true, "NVarChar", 30, 0, 0, false, "", null, typeof(System.String), 7);
+			this.AddElementFieldMapping("ProductVariantEntity", "Weight", "Weight", true, "Decimal", 0, 29, 9, false, "", null, typeof(System.Decimal), 8);
+			this.AddElementFieldMapping("ProductVariantEntity", "Length", "Length", true, "Decimal", 0, 10, 2, false, "", null, typeof(System.Decimal), 9);
+			this.AddElementFieldMapping("ProductVariantEntity", "Width", "Width", true, "Decimal", 0, 10, 2, false, "", null, typeof(System.Decimal), 10);
+			this.AddElementFieldMapping("ProductVariantEntity", "Height", "Height", true, "Decimal", 0, 10, 2, false, "", null, typeof(System.Decimal), 11);
+			this.AddElementFieldMapping("ProductVariantEntity", "ImageUrl", "ImageUrl", true, "NVarChar", 500, 0, 0, false, "", null, typeof(System.String), 12);
+			this.AddElementFieldMapping("ProductVariantEntity", "BinLocation", "BinLocation", true, "NVarChar", 255, 0, 0, false, "", null, typeof(System.String), 13);
+			this.AddElementFieldMapping("ProductVariantEntity", "HarmonizedCode", "HarmonizedCode", true, "NVarChar", 20, 0, 0, false, "", null, typeof(System.String), 14);
+			this.AddElementFieldMapping("ProductVariantEntity", "DeclaredValue", "DeclaredValue", true, "Money", 0, 19, 4, false, "", null, typeof(System.Decimal), 15);
+			this.AddElementFieldMapping("ProductVariantEntity", "CountryOfOrigin", "CountryOfOrigin", true, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 16);
+		}
+
+		/// <summary>Inits ProductVariantAliasEntity's mappings</summary>
+		private void InitProductVariantAliasEntityMappings()
+		{
+			this.AddElementMapping("ProductVariantAliasEntity", @"ShipWorksLocal", @"dbo", "ProductVariantAlias", 4, 0);
+			this.AddElementFieldMapping("ProductVariantAliasEntity", "ProductVariantAliasID", "ProductVariantAliasID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 0);
+			this.AddElementFieldMapping("ProductVariantAliasEntity", "ProductVariantID", "ProductVariantID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 1);
+			this.AddElementFieldMapping("ProductVariantAliasEntity", "AliasName", "AliasName", false, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 2);
+			this.AddElementFieldMapping("ProductVariantAliasEntity", "Sku", "Sku", false, "NVarChar", 300, 0, 0, false, "", null, typeof(System.String), 3);
+		}
+
+		/// <summary>Inits ProductVariantAttributeEntity's mappings</summary>
+		private void InitProductVariantAttributeEntityMappings()
+		{
+			this.AddElementMapping("ProductVariantAttributeEntity", @"ShipWorksLocal", @"dbo", "ProductVariantAttribute", 4, 0);
+			this.AddElementFieldMapping("ProductVariantAttributeEntity", "ProductVariantAttributeID", "ProductVariantAttributeID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 0);
+			this.AddElementFieldMapping("ProductVariantAttributeEntity", "ProductVariantID", "ProductVariantID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 1);
+			this.AddElementFieldMapping("ProductVariantAttributeEntity", "AttributeName", "AttributeName", false, "NVarChar", 300, 0, 0, false, "", null, typeof(System.String), 2);
+			this.AddElementFieldMapping("ProductVariantAttributeEntity", "AttributeValue", "AttributeValue", false, "NVarChar", 300, 0, 0, false, "", null, typeof(System.String), 3);
 		}
 
 		/// <summary>Inits ProStoresOrderEntity's mappings</summary>

@@ -994,6 +994,36 @@ namespace ShipWorks.Data.Model.FactoryClasses
 			get { return Create<ProcessedShipmentEntity>(); }
 		}
 
+		/// <summary>Creates and returns a new EntityQuery for the Product entity</summary>
+		public EntityQuery<ProductEntity> Product
+		{
+			get { return Create<ProductEntity>(); }
+		}
+
+		/// <summary>Creates and returns a new EntityQuery for the ProductBundle entity</summary>
+		public EntityQuery<ProductBundleEntity> ProductBundle
+		{
+			get { return Create<ProductBundleEntity>(); }
+		}
+
+		/// <summary>Creates and returns a new EntityQuery for the ProductVariant entity</summary>
+		public EntityQuery<ProductVariantEntity> ProductVariant
+		{
+			get { return Create<ProductVariantEntity>(); }
+		}
+
+		/// <summary>Creates and returns a new EntityQuery for the ProductVariantAlias entity</summary>
+		public EntityQuery<ProductVariantAliasEntity> ProductVariantAlias
+		{
+			get { return Create<ProductVariantAliasEntity>(); }
+		}
+
+		/// <summary>Creates and returns a new EntityQuery for the ProductVariantAttribute entity</summary>
+		public EntityQuery<ProductVariantAttributeEntity> ProductVariantAttribute
+		{
+			get { return Create<ProductVariantAttributeEntity>(); }
+		}
+
 		/// <summary>Creates and returns a new EntityQuery for the ProStoresOrder entity</summary>
 		public EntityQuery<ProStoresOrderEntity> ProStoresOrder
 		{
