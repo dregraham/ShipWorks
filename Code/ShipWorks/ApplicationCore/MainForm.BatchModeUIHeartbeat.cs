@@ -15,9 +15,9 @@ namespace ShipWorks
         /// <summary>
         /// Manages the Heartbeat. Heartbeat controls reloading cache.
         /// </summary>
-        private class UIHeartbeat : Heartbeat
+        private class BatchModeUIHeartbeat : Heartbeat
         {
-            private static ILog log = LogManager.GetLogger(typeof(UIHeartbeat));
+            private static ILog log = LogManager.GetLogger(typeof(BatchModeUIHeartbeat));
 
             // The instance of the MainForm that owns us
             private readonly MainForm mainForm;
@@ -26,9 +26,9 @@ namespace ShipWorks
             private System.Windows.Forms.Timer pacemaker = new System.Windows.Forms.Timer();
 
             /// <summary>
-            /// Initializes a new instance of the <see cref="UIHeartbeat"/> class.
+            /// Initializes a new instance of the <see cref="BatchModeUIHeartbeat"/> class.
             /// </summary>
-            public UIHeartbeat(MainForm mainForm)
+            public BatchModeUIHeartbeat(MainForm mainForm)
             {
                 this.mainForm = mainForm;
                 this.pacemaker.Tick += new EventHandler(OnPacemakerTick);
@@ -81,7 +81,7 @@ namespace ShipWorks
             /// </summary>
             protected override void ProcessHeartbeat(bool changesDetected, bool forceReload)
             {
-                // Detect if a modal window is open.  The popup test is, for now, to make sure we don't reload the 
+                // Detect if a modal window is open.  The popup test is, for now, to make sure we don't reload the
                 // grid columns on a filter layout change while the right-click grid column editor is open.
                 if (!NativeMethods.IsWindowEnabled(mainForm.Handle) || PopupController.IsAnyPopupVisible)
                 {

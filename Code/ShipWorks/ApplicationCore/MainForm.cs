@@ -169,7 +169,7 @@ namespace ShipWorks
             }
 
             // Create the heartbeat
-            heartBeat = new UIHeartbeat(this);
+            heartBeat = new BatchModeUIHeartbeat(this);
 
             // Persist size\position of the window
             WindowStateSaver.Manage(this, WindowStateSaverOptions.FullState | WindowStateSaverOptions.InitialMaximize, "MainForm");
@@ -1034,7 +1034,7 @@ namespace ShipWorks
         /// </summary>
         private void EnableBatchMode(IUserEntity user)
         {
-            heartBeat = new UIHeartbeat(this);
+            heartBeat = new BatchModeUIHeartbeat(this);
 
             windowLayoutProvider.LoadLayout(user.Settings.WindowLayout);
             gridMenuLayoutProvider.LoadLayout(user.Settings.GridMenuLayout);

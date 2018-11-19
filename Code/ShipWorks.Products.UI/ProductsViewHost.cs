@@ -6,7 +6,7 @@ using Interapptive.Shared.ComponentRegistration;
 namespace ShipWorks.Products.UI
 {
     /// <summary>
-    ///
+    /// Main UI host control for the products view
     /// </summary>
     [Component(RegistrationType.SpecificService, Service = typeof(IProductsViewHost))]
     public class ProductsViewHost : Control, IProductsViewHost

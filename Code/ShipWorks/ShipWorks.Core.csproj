@@ -757,7 +757,7 @@
     <Compile Include="ApplicationCore\Interaction\SelectionDependentEntry.cs" />
     <Compile Include="ApplicationCore\IoCLogRequestModule.cs" />
     <Compile Include="ApplicationCore\IRegistrationOverride.cs" />
-    <Compile Include="ApplicationCore\MainForm.OrderLookupHeartbeat.cs">
+    <Compile Include="ApplicationCore\MainForm.BasicUIHeartbeat.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="OrderLookup\CoreOrderLookupRegistrationOverride.cs" />
@@ -878,7 +878,7 @@
     <Compile Include="ApplicationCore\Logging\LogActionType.cs" />
     <Compile Include="ApplicationCore\Logging\LogEntryFactory.cs" />
     <Compile Include="ApplicationCore\Logging\NullApiLogEntry.cs" />
-    <Compile Include="ApplicationCore\MainForm.UIHeartbeat.cs">
+    <Compile Include="ApplicationCore\MainForm.BatchModeUIHeartbeat.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="ApplicationCore\MainGridControlPipeline.cs" />
