@@ -64,7 +64,7 @@ GO
 IF OBJECT_ID(N'[dbo].[ProductVariantAlias]', 'U') IS NULL
 CREATE TABLE [dbo].[ProductVariantAlias]
 (
-[ProductVariantAliasID] [bigint] NOT NULL,
+[ProductVariantAliasID] [bigint] NOT NULL IDENTITY(1, 1),
 [ProductVariantID] [bigint] NOT NULL,
 [AliasName] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [Sku] [nvarchar] (300) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL
@@ -85,7 +85,7 @@ GO
 IF OBJECT_ID(N'[dbo].[ProductVariantAttribute]', 'U') IS NULL
 CREATE TABLE [dbo].[ProductVariantAttribute]
 (
-[ProductVariantAttributeID] [bigint] NOT NULL,
+[ProductVariantAttributeID] [bigint] NOT NULL IDENTITY(1, 1),
 [ProductVariantID] [bigint] NOT NULL,
 [AttributeName] [nvarchar] (300) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [AttributeValue] [nvarchar] (300) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL

@@ -20249,6 +20249,61 @@ namespace ShipWorks.Data.Model.HelperClasses
 		}
 	}
 
+	/// <summary>Field Creation Class for entity ProductListItemEntity</summary>
+	public partial class ProductListItemFields
+	{
+		/// <summary>Creates a new ProductListItemEntity.ProductVariantID field instance</summary>
+		public static EntityField2 ProductVariantID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ProductListItemFieldIndex.ProductVariantID);}
+		}
+		/// <summary>Creates a new ProductListItemEntity.SKU field instance</summary>
+		public static EntityField2 SKU
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ProductListItemFieldIndex.SKU);}
+		}
+		/// <summary>Creates a new ProductListItemEntity.Name field instance</summary>
+		public static EntityField2 Name
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ProductListItemFieldIndex.Name);}
+		}
+		/// <summary>Creates a new ProductListItemEntity.Length field instance</summary>
+		public static EntityField2 Length
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ProductListItemFieldIndex.Length);}
+		}
+		/// <summary>Creates a new ProductListItemEntity.Width field instance</summary>
+		public static EntityField2 Width
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ProductListItemFieldIndex.Width);}
+		}
+		/// <summary>Creates a new ProductListItemEntity.Height field instance</summary>
+		public static EntityField2 Height
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ProductListItemFieldIndex.Height);}
+		}
+		/// <summary>Creates a new ProductListItemEntity.Weight field instance</summary>
+		public static EntityField2 Weight
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ProductListItemFieldIndex.Weight);}
+		}
+		/// <summary>Creates a new ProductListItemEntity.BinLocation field instance</summary>
+		public static EntityField2 BinLocation
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ProductListItemFieldIndex.BinLocation);}
+		}
+		/// <summary>Creates a new ProductListItemEntity.ImageUrl field instance</summary>
+		public static EntityField2 ImageUrl
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ProductListItemFieldIndex.ImageUrl);}
+		}
+		/// <summary>Creates a new ProductListItemEntity.IsActive field instance</summary>
+		public static EntityField2 IsActive
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ProductListItemFieldIndex.IsActive);}
+		}
+	}
+
 	/// <summary>Field Creation Class for entity ProductVariantEntity</summary>
 	public partial class ProductVariantFields
 	{
@@ -20361,6 +20416,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 Sku
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ProductVariantAliasFieldIndex.Sku);}
+		}
+		/// <summary>Creates a new ProductVariantAliasEntity.IsDefault field instance</summary>
+		public static EntityField2 IsDefault
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ProductVariantAliasFieldIndex.IsDefault);}
 		}
 	}
 

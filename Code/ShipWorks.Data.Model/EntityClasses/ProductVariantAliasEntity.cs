@@ -354,6 +354,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("AliasName", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("Sku", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("IsDefault", fieldHashtable);
 		}
 		#endregion
 
@@ -455,7 +457,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <summary> The ProductVariantAliasID property of the Entity ProductVariantAlias<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "ProductVariantAlias"."ProductVariantAliasID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): false, true, false</remarks>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, true, true</remarks>
 		public virtual System.Int64 ProductVariantAliasID
 		{
 			get { return (System.Int64)GetValue((int)ProductVariantAliasFieldIndex.ProductVariantAliasID, true); }
@@ -490,6 +492,16 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.String)GetValue((int)ProductVariantAliasFieldIndex.Sku, true); }
 			set	{ SetValue((int)ProductVariantAliasFieldIndex.Sku, value); }
+		}
+
+		/// <summary> The IsDefault property of the Entity ProductVariantAlias<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "ProductVariantAlias"."IsDefault"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.Boolean IsDefault
+		{
+			get { return (System.Boolean)GetValue((int)ProductVariantAliasFieldIndex.IsDefault, true); }
+			set	{ SetValue((int)ProductVariantAliasFieldIndex.IsDefault, value); }
 		}
 
 		/// <summary> Gets / sets related entity of type 'ProductVariantEntity' which has to be set using a fetch action earlier. If no related entity is set for this property, null is returned..<br/><br/></summary>

@@ -1006,6 +1006,12 @@ namespace ShipWorks.Data.Model.FactoryClasses
 			get { return Create<ProductBundleEntity>(); }
 		}
 
+		/// <summary>Creates and returns a new EntityQuery for the ProductListItem entity</summary>
+		public EntityQuery<ProductListItemEntity> ProductListItem
+		{
+			get { return Create<ProductListItemEntity>(); }
+		}
+
 		/// <summary>Creates and returns a new EntityQuery for the ProductVariant entity</summary>
 		public EntityQuery<ProductVariantEntity> ProductVariant
 		{

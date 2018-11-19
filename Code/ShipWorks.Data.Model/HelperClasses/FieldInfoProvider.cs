@@ -49,7 +49,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 		/// <summary>Method which initializes the internal datastores.</summary>
 		private void Init()
 		{
-			this.InitClass( (232 + 2));
+			this.InitClass( (233 + 2));
 			InitActionEntityInfos();
 			InitActionFilterTriggerEntityInfos();
 			InitActionQueueEntityInfos();
@@ -200,6 +200,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			InitProcessedShipmentEntityInfos();
 			InitProductEntityInfos();
 			InitProductBundleEntityInfos();
+			InitProductListItemEntityInfos();
 			InitProductVariantEntityInfos();
 			InitProductVariantAliasEntityInfos();
 			InitProductVariantAttributeEntityInfos();
@@ -2609,6 +2610,21 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("ProductBundleEntity", "ChildProductVariantID", typeof(System.Int64), true, true, false, false,  (int)ProductBundleFieldIndex.ChildProductVariantID, 0, 0, 19);
 			this.AddElementFieldInfo("ProductBundleEntity", "Quantity", typeof(System.Int32), false, false, false, false,  (int)ProductBundleFieldIndex.Quantity, 0, 0, 10);
 		}
+		/// <summary>Inits ProductListItemEntity's FieldInfo objects</summary>
+		private void InitProductListItemEntityInfos()
+		{
+			this.AddFieldIndexEnumForElementName(typeof(ProductListItemFieldIndex), "ProductListItemEntity");
+			this.AddElementFieldInfo("ProductListItemEntity", "ProductVariantID", typeof(System.Int64), false, false, false, false,  (int)ProductListItemFieldIndex.ProductVariantID, 0, 0, 19);
+			this.AddElementFieldInfo("ProductListItemEntity", "SKU", typeof(System.String), false, false, false, false,  (int)ProductListItemFieldIndex.SKU, 300, 0, 0);
+			this.AddElementFieldInfo("ProductListItemEntity", "Name", typeof(System.String), false, false, false, false,  (int)ProductListItemFieldIndex.Name, 300, 0, 0);
+			this.AddElementFieldInfo("ProductListItemEntity", "Length", typeof(Nullable<System.Decimal>), false, false, false, true,  (int)ProductListItemFieldIndex.Length, 0, 2, 10);
+			this.AddElementFieldInfo("ProductListItemEntity", "Width", typeof(Nullable<System.Decimal>), false, false, false, true,  (int)ProductListItemFieldIndex.Width, 0, 2, 10);
+			this.AddElementFieldInfo("ProductListItemEntity", "Height", typeof(Nullable<System.Decimal>), false, false, false, true,  (int)ProductListItemFieldIndex.Height, 0, 2, 10);
+			this.AddElementFieldInfo("ProductListItemEntity", "Weight", typeof(Nullable<System.Decimal>), false, false, false, true,  (int)ProductListItemFieldIndex.Weight, 0, 9, 29);
+			this.AddElementFieldInfo("ProductListItemEntity", "BinLocation", typeof(System.String), false, false, false, true,  (int)ProductListItemFieldIndex.BinLocation, 255, 0, 0);
+			this.AddElementFieldInfo("ProductListItemEntity", "ImageUrl", typeof(System.String), false, false, false, true,  (int)ProductListItemFieldIndex.ImageUrl, 500, 0, 0);
+			this.AddElementFieldInfo("ProductListItemEntity", "IsActive", typeof(System.Boolean), false, false, false, false,  (int)ProductListItemFieldIndex.IsActive, 0, 0, 0);
+		}
 		/// <summary>Inits ProductVariantEntity's FieldInfo objects</summary>
 		private void InitProductVariantEntityInfos()
 		{
@@ -2635,16 +2651,17 @@ namespace ShipWorks.Data.Model.HelperClasses
 		private void InitProductVariantAliasEntityInfos()
 		{
 			this.AddFieldIndexEnumForElementName(typeof(ProductVariantAliasFieldIndex), "ProductVariantAliasEntity");
-			this.AddElementFieldInfo("ProductVariantAliasEntity", "ProductVariantAliasID", typeof(System.Int64), true, false, false, false,  (int)ProductVariantAliasFieldIndex.ProductVariantAliasID, 0, 0, 19);
+			this.AddElementFieldInfo("ProductVariantAliasEntity", "ProductVariantAliasID", typeof(System.Int64), true, false, true, false,  (int)ProductVariantAliasFieldIndex.ProductVariantAliasID, 0, 0, 19);
 			this.AddElementFieldInfo("ProductVariantAliasEntity", "ProductVariantID", typeof(System.Int64), false, true, false, false,  (int)ProductVariantAliasFieldIndex.ProductVariantID, 0, 0, 19);
 			this.AddElementFieldInfo("ProductVariantAliasEntity", "AliasName", typeof(System.String), false, false, false, false,  (int)ProductVariantAliasFieldIndex.AliasName, 50, 0, 0);
 			this.AddElementFieldInfo("ProductVariantAliasEntity", "Sku", typeof(System.String), false, false, false, false,  (int)ProductVariantAliasFieldIndex.Sku, 300, 0, 0);
+			this.AddElementFieldInfo("ProductVariantAliasEntity", "IsDefault", typeof(System.Boolean), false, false, false, false,  (int)ProductVariantAliasFieldIndex.IsDefault, 0, 0, 0);
 		}
 		/// <summary>Inits ProductVariantAttributeEntity's FieldInfo objects</summary>
 		private void InitProductVariantAttributeEntityInfos()
 		{
 			this.AddFieldIndexEnumForElementName(typeof(ProductVariantAttributeFieldIndex), "ProductVariantAttributeEntity");
-			this.AddElementFieldInfo("ProductVariantAttributeEntity", "ProductVariantAttributeID", typeof(System.Int64), true, false, false, false,  (int)ProductVariantAttributeFieldIndex.ProductVariantAttributeID, 0, 0, 19);
+			this.AddElementFieldInfo("ProductVariantAttributeEntity", "ProductVariantAttributeID", typeof(System.Int64), true, false, true, false,  (int)ProductVariantAttributeFieldIndex.ProductVariantAttributeID, 0, 0, 19);
 			this.AddElementFieldInfo("ProductVariantAttributeEntity", "ProductVariantID", typeof(System.Int64), false, true, false, false,  (int)ProductVariantAttributeFieldIndex.ProductVariantID, 0, 0, 19);
 			this.AddElementFieldInfo("ProductVariantAttributeEntity", "AttributeName", typeof(System.String), false, false, false, false,  (int)ProductVariantAttributeFieldIndex.AttributeName, 300, 0, 0);
 			this.AddElementFieldInfo("ProductVariantAttributeEntity", "AttributeValue", typeof(System.String), false, false, false, false,  (int)ProductVariantAttributeFieldIndex.AttributeValue, 300, 0, 0);

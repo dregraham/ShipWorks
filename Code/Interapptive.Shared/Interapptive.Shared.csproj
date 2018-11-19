@@ -179,9 +179,16 @@
       <Link>Properties\AssemblyInfoCommon.cs</Link>
     </Compile>
     <Compile Include="Business\Geography\CurrencyCode.cs" />
+    <Compile Include="Collections\DataVirtualization\DataPage.cs" />
+    <Compile Include="Collections\DataVirtualization\DataWrapper.cs" />
+    <Compile Include="Collections\DataVirtualization\IItemsProvider.cs" />
+    <Compile Include="Collections\DataVirtualization\IVirtualizingCollection.cs" />
+    <Compile Include="Collections\DataVirtualization\VirtualizingCollection.cs" />
     <Compile Include="Collections\DictionaryExtensions.cs" />
+    <Compile Include="Collections\IBasicSortDefinition.cs" />
     <Compile Include="Collections\LambdaComparer.cs" />
     <Compile Include="Collections\ListExtensions.cs" />
+    <Compile Include="Collections\BasicSortDefinition.cs" />
     <Compile Include="ComponentRegistration\ComponentAttribute.cs" />
     <Compile Include="ComponentRegistration\KeyedComponent.cs" />
     <Compile Include="ComponentRegistration\NamedComponentAttribute.cs" />
@@ -875,6 +882,7 @@
     <Analyzer Include="..\..\packages\System.Security.Cryptography.Hashing.Algorithms.Analyzers.1.1.0\analyzers\dotnet\cs\System.Security.Cryptography.Hashing.Algorithms.Analyzers.dll" />
     <Analyzer Include="..\..\packages\System.Security.Cryptography.Hashing.Algorithms.Analyzers.1.1.0\analyzers\dotnet\cs\System.Security.Cryptography.Hashing.Algorithms.CSharp.Analyzers.dll" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
