@@ -8670,12 +8670,12 @@ namespace ShipWorks.Data.Model.Custom
 
 	
 	/// <summary>
-	/// Strongly typed collection of ProductVariantTypeAndValueEntity
+	/// Strongly typed collection of ProductVariantAttributeEntity
 	/// </summary>
-	public class ProductVariantTypeAndValueCollection : EntityCollection<ProductVariantTypeAndValueEntity>
+	public class ProductVariantAttributeCollection : EntityCollection<ProductVariantAttributeEntity>
 	{
         /// <summary>
-        /// Gets the count of all ProductVariantTypeAndValueEntity rows
+        /// Gets the count of all ProductVariantAttributeEntity rows
         /// </summary>
         public static int GetCount(IDataAccessAdapter adapter)
         {
@@ -8683,7 +8683,7 @@ namespace ShipWorks.Data.Model.Custom
         }
 
         /// <summary>
-        /// Gets the count of all ProductVariantTypeAndValueEntity rows filtered by the given predicate
+        /// Gets the count of all ProductVariantAttributeEntity rows filtered by the given predicate
         /// </summary>
         public static int GetCount(IDataAccessAdapter adapter, IPredicate filter)
         {
@@ -8694,13 +8694,13 @@ namespace ShipWorks.Data.Model.Custom
                 bucket = new RelationPredicateBucket(filter);
             }
 
-            return adapter.GetDbCount(new ProductVariantTypeAndValueEntityFactory().CreateFields(), bucket);
+            return adapter.GetDbCount(new ProductVariantAttributeEntityFactory().CreateFields(), bucket);
         }
 
         /// <summary>
         /// Fetch a new collection object that matches the specified filter.
         /// </summary>
-        public static ProductVariantTypeAndValueCollection Fetch(IDataAccessAdapter adapter, IPredicate filter)
+        public static ProductVariantAttributeCollection Fetch(IDataAccessAdapter adapter, IPredicate filter)
         {
 			return Fetch(adapter, filter, null);
         }
@@ -8708,9 +8708,9 @@ namespace ShipWorks.Data.Model.Custom
 		/// <summary>
         /// Fetch a new collection object that matches the specified filter and uses the given prefetch.
         /// </summary>
-        public static ProductVariantTypeAndValueCollection Fetch(IDataAccessAdapter adapter, IPredicate filter, IPrefetchPath2 prefetchPath)
+        public static ProductVariantAttributeCollection Fetch(IDataAccessAdapter adapter, IPredicate filter, IPrefetchPath2 prefetchPath)
         {
-            ProductVariantTypeAndValueCollection collection = new ProductVariantTypeAndValueCollection();
+            ProductVariantAttributeCollection collection = new ProductVariantAttributeCollection();
 
             RelationPredicateBucket bucket = null;
 

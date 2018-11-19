@@ -199,7 +199,7 @@ namespace ShipWorks.Data.Model
 			InitProductBundleEntityMappings();
 			InitProductVariantEntityMappings();
 			InitProductVariantAliasEntityMappings();
-			InitProductVariantTypeAndValueEntityMappings();
+			InitProductVariantAttributeEntityMappings();
 			InitProStoresOrderEntityMappings();
 			InitProStoresOrderSearchEntityMappings();
 			InitProStoresStoreEntityMappings();
@@ -2785,17 +2785,17 @@ namespace ShipWorks.Data.Model
 			this.AddElementFieldMapping("ProductVariantAliasEntity", "ProductVariantAliasID", "ProductVariantAliasID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 0);
 			this.AddElementFieldMapping("ProductVariantAliasEntity", "ProductVariantID", "ProductVariantID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 1);
 			this.AddElementFieldMapping("ProductVariantAliasEntity", "AliasName", "AliasName", false, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 2);
-			this.AddElementFieldMapping("ProductVariantAliasEntity", "Sku", "Sku", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 3);
+			this.AddElementFieldMapping("ProductVariantAliasEntity", "Sku", "Sku", false, "NVarChar", 300, 0, 0, false, "", null, typeof(System.String), 3);
 		}
 
-		/// <summary>Inits ProductVariantTypeAndValueEntity's mappings</summary>
-		private void InitProductVariantTypeAndValueEntityMappings()
+		/// <summary>Inits ProductVariantAttributeEntity's mappings</summary>
+		private void InitProductVariantAttributeEntityMappings()
 		{
-			this.AddElementMapping("ProductVariantTypeAndValueEntity", @"ShipWorksLocal", @"dbo", "ProductVariantTypeAndValue", 4, 0);
-			this.AddElementFieldMapping("ProductVariantTypeAndValueEntity", "ID", "ProductVariantTypeAndValueID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 0);
-			this.AddElementFieldMapping("ProductVariantTypeAndValueEntity", "ProductVariantID", "ProductVariantID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 1);
-			this.AddElementFieldMapping("ProductVariantTypeAndValueEntity", "AttributeName", "AttributeName", false, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 2);
-			this.AddElementFieldMapping("ProductVariantTypeAndValueEntity", "AttributeValue", "AttributeValue", false, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 3);
+			this.AddElementMapping("ProductVariantAttributeEntity", @"ShipWorksLocal", @"dbo", "ProductVariantAttribute", 4, 0);
+			this.AddElementFieldMapping("ProductVariantAttributeEntity", "ProductVariantAttributeID", "ProductVariantAttributeID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 0);
+			this.AddElementFieldMapping("ProductVariantAttributeEntity", "ProductVariantID", "ProductVariantID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 1);
+			this.AddElementFieldMapping("ProductVariantAttributeEntity", "AttributeName", "AttributeName", false, "NVarChar", 300, 0, 0, false, "", null, typeof(System.String), 2);
+			this.AddElementFieldMapping("ProductVariantAttributeEntity", "AttributeValue", "AttributeValue", false, "NVarChar", 300, 0, 0, false, "", null, typeof(System.String), 3);
 		}
 
 		/// <summary>Inits ProStoresOrderEntity's mappings</summary>

@@ -8759,11 +8759,11 @@ namespace ShipWorks.Data.Model
 		/// <summary></summary>
 		AmountOfFields
 	}
-	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: ProductVariantTypeAndValue.</summary>
-	public enum ProductVariantTypeAndValueFieldIndex
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: ProductVariantAttribute.</summary>
+	public enum ProductVariantAttributeFieldIndex
 	{
-		///<summary>ID. </summary>
-		ID,
+		///<summary>ProductVariantAttributeID. </summary>
+		ProductVariantAttributeID,
 		///<summary>ProductVariantID. </summary>
 		ProductVariantID,
 		///<summary>AttributeName. </summary>
@@ -13125,8 +13125,8 @@ namespace ShipWorks.Data.Model
 		ProductVariantEntity,
 		///<summary>ProductVariantAlias</summary>
 		ProductVariantAliasEntity,
-		///<summary>ProductVariantTypeAndValue</summary>
-		ProductVariantTypeAndValueEntity,
+		///<summary>ProductVariantAttribute</summary>
+		ProductVariantAttributeEntity,
 		///<summary>ProStoresOrder</summary>
 		ProStoresOrderEntity,
 		///<summary>ProStoresOrderSearch</summary>

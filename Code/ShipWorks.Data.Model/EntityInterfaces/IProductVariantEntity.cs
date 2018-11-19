@@ -129,7 +129,7 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         
         IEnumerable<IProductBundleEntity> ProductBundle { get; }
         IEnumerable<IProductVariantAliasEntity> ProductVariantAlias { get; }
-        IEnumerable<IProductVariantTypeAndValueEntity> ProductVariantTypeAndValue { get; }
+        IEnumerable<IProductVariantAttributeEntity> ProductVariantAttribute { get; }
 
         
 
@@ -161,7 +161,7 @@ namespace ShipWorks.Data.Model.EntityClasses
         
         IEnumerable<IProductBundleEntity> IProductVariantEntity.ProductBundle => ProductBundle;
         IEnumerable<IProductVariantAliasEntity> IProductVariantEntity.ProductVariantAlias => ProductVariantAlias;
-        IEnumerable<IProductVariantTypeAndValueEntity> IProductVariantEntity.ProductVariantTypeAndValue => ProductVariantTypeAndValue;
+        IEnumerable<IProductVariantAttributeEntity> IProductVariantEntity.ProductVariantAttribute => ProductVariantAttribute;
 
         /// <summary>
         /// Get a read only version of the entity

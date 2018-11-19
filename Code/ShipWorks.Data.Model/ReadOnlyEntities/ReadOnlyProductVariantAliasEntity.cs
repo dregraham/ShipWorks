@@ -70,9 +70,9 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// <summary> The Sku property of the Entity ProductVariantAlias<br/><br/>
         /// </summary>
         /// <remarks>Mapped on table field: "ProductVariantAlias"."Sku"<br/>
-        /// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
+        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 300<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-        public System.Int64 Sku { get; }
+        public System.String Sku { get; }
         
         
         public IProductVariantEntity ProductVariant { get; }

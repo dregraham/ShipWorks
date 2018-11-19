@@ -202,7 +202,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			InitProductBundleEntityInfos();
 			InitProductVariantEntityInfos();
 			InitProductVariantAliasEntityInfos();
-			InitProductVariantTypeAndValueEntityInfos();
+			InitProductVariantAttributeEntityInfos();
 			InitProStoresOrderEntityInfos();
 			InitProStoresOrderSearchEntityInfos();
 			InitProStoresStoreEntityInfos();
@@ -2638,16 +2638,16 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("ProductVariantAliasEntity", "ProductVariantAliasID", typeof(System.Int64), true, false, false, false,  (int)ProductVariantAliasFieldIndex.ProductVariantAliasID, 0, 0, 19);
 			this.AddElementFieldInfo("ProductVariantAliasEntity", "ProductVariantID", typeof(System.Int64), false, true, false, false,  (int)ProductVariantAliasFieldIndex.ProductVariantID, 0, 0, 19);
 			this.AddElementFieldInfo("ProductVariantAliasEntity", "AliasName", typeof(System.String), false, false, false, false,  (int)ProductVariantAliasFieldIndex.AliasName, 50, 0, 0);
-			this.AddElementFieldInfo("ProductVariantAliasEntity", "Sku", typeof(System.Int64), false, false, false, false,  (int)ProductVariantAliasFieldIndex.Sku, 0, 0, 19);
+			this.AddElementFieldInfo("ProductVariantAliasEntity", "Sku", typeof(System.String), false, false, false, false,  (int)ProductVariantAliasFieldIndex.Sku, 300, 0, 0);
 		}
-		/// <summary>Inits ProductVariantTypeAndValueEntity's FieldInfo objects</summary>
-		private void InitProductVariantTypeAndValueEntityInfos()
+		/// <summary>Inits ProductVariantAttributeEntity's FieldInfo objects</summary>
+		private void InitProductVariantAttributeEntityInfos()
 		{
-			this.AddFieldIndexEnumForElementName(typeof(ProductVariantTypeAndValueFieldIndex), "ProductVariantTypeAndValueEntity");
-			this.AddElementFieldInfo("ProductVariantTypeAndValueEntity", "ID", typeof(System.Int64), true, false, false, false,  (int)ProductVariantTypeAndValueFieldIndex.ID, 0, 0, 19);
-			this.AddElementFieldInfo("ProductVariantTypeAndValueEntity", "ProductVariantID", typeof(System.Int64), false, true, false, false,  (int)ProductVariantTypeAndValueFieldIndex.ProductVariantID, 0, 0, 19);
-			this.AddElementFieldInfo("ProductVariantTypeAndValueEntity", "AttributeName", typeof(System.String), false, false, false, false,  (int)ProductVariantTypeAndValueFieldIndex.AttributeName, 50, 0, 0);
-			this.AddElementFieldInfo("ProductVariantTypeAndValueEntity", "AttributeValue", typeof(System.String), false, false, false, false,  (int)ProductVariantTypeAndValueFieldIndex.AttributeValue, 50, 0, 0);
+			this.AddFieldIndexEnumForElementName(typeof(ProductVariantAttributeFieldIndex), "ProductVariantAttributeEntity");
+			this.AddElementFieldInfo("ProductVariantAttributeEntity", "ProductVariantAttributeID", typeof(System.Int64), true, false, false, false,  (int)ProductVariantAttributeFieldIndex.ProductVariantAttributeID, 0, 0, 19);
+			this.AddElementFieldInfo("ProductVariantAttributeEntity", "ProductVariantID", typeof(System.Int64), false, true, false, false,  (int)ProductVariantAttributeFieldIndex.ProductVariantID, 0, 0, 19);
+			this.AddElementFieldInfo("ProductVariantAttributeEntity", "AttributeName", typeof(System.String), false, false, false, false,  (int)ProductVariantAttributeFieldIndex.AttributeName, 300, 0, 0);
+			this.AddElementFieldInfo("ProductVariantAttributeEntity", "AttributeValue", typeof(System.String), false, false, false, false,  (int)ProductVariantAttributeFieldIndex.AttributeValue, 300, 0, 0);
 		}
 		/// <summary>Inits ProStoresOrderEntity's FieldInfo objects</summary>
 		private void InitProStoresOrderEntityInfos()

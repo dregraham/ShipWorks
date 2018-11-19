@@ -2265,7 +2265,7 @@
           <Field Name="VoidedUserID" Type="long" IsReadOnly="true" IsOptional="true" Precision="19" FieldIndex="10" />
         </Fields>
       </EntityDefinition>
-      <EntityDefinition Name="Product" ObjectID="9883f004-5037-40d0-9ae3-3c2b5ce32b49">
+      <EntityDefinition Name="Product" ObjectID="c7893fc6-0d5a-4c18-b3a2-cd88984cf3c9">
         <Fields>
           <Field Name="CreatedDate" Type="datetime" FieldIndex="1" />
           <Field Name="IsActive" Type="bool" FieldIndex="3" />
@@ -2274,14 +2274,14 @@
           <Field Name="ProductID" Type="long" IsReadOnly="true" Precision="19" IsPrimaryKey="true" FieldIndex="0" />
         </Fields>
       </EntityDefinition>
-      <EntityDefinition Name="ProductBundle" ObjectID="c8242166-54bd-42db-be43-2384e83f283b">
+      <EntityDefinition Name="ProductBundle" ObjectID="c47db145-3e9c-4803-ace9-05aad26117e0">
         <Fields>
           <Field Name="ChildProductVariantID" Type="long" Precision="19" IsPrimaryKey="true" FieldIndex="1" />
           <Field Name="ProductID" Type="long" Precision="19" IsPrimaryKey="true" FieldIndex="0" />
           <Field Name="Quantity" Type="int" Precision="10" FieldIndex="2" />
         </Fields>
       </EntityDefinition>
-      <EntityDefinition Name="ProductVariant" ObjectID="fa4df226-cb7c-4e42-b17c-0a419ebbaa59">
+      <EntityDefinition Name="ProductVariant" ObjectID="5235a759-0dd6-4e69-8252-e9a8749a58b8">
         <Fields>
           <Field Name="ASIN" Type="string" IsOptional="true" MaxLength="255" FieldIndex="6" />
           <Field Name="BinLocation" Type="string" IsOptional="true" MaxLength="255" FieldIndex="13" />
@@ -2302,19 +2302,19 @@
           <Field Name="Width" Type="decimal" IsOptional="true" Precision="10" Scale="2" FieldIndex="10" />
         </Fields>
       </EntityDefinition>
-      <EntityDefinition Name="ProductVariantAlias" ObjectID="bfd7b513-6034-4490-9356-5c5e6fb14b3e">
+      <EntityDefinition Name="ProductVariantAlias" ObjectID="a831b91c-79d3-4477-9bec-77931879e956">
         <Fields>
           <Field Name="AliasName" Type="string" MaxLength="50" FieldIndex="2" />
           <Field Name="ProductVariantAliasID" Type="long" Precision="19" IsPrimaryKey="true" FieldIndex="0" />
           <Field Name="ProductVariantID" Type="long" Precision="19" FieldIndex="1" />
-          <Field Name="Sku" Type="long" Precision="19" FieldIndex="3" />
+          <Field Name="Sku" Type="string" MaxLength="300" FieldIndex="3" />
         </Fields>
       </EntityDefinition>
-      <EntityDefinition Name="ProductVariantTypeAndValue" ObjectID="29fbe7b6-f1f5-4ff1-9a5b-929efc3fa07e">
+      <EntityDefinition Name="ProductVariantAttribute" ObjectID="3649c6b1-0cb8-4d2c-8e99-f33bac91e316">
         <Fields>
-          <Field Name="AttributeName" Type="string" MaxLength="50" FieldIndex="2" />
-          <Field Name="AttributeValue" Type="string" MaxLength="50" FieldIndex="3" />
-          <Field Name="ID" Type="long" Precision="19" IsPrimaryKey="true" FieldIndex="0" />
+          <Field Name="AttributeName" Type="string" MaxLength="300" FieldIndex="2" />
+          <Field Name="AttributeValue" Type="string" MaxLength="300" FieldIndex="3" />
+          <Field Name="ProductVariantAttributeID" Type="long" Precision="19" IsPrimaryKey="true" FieldIndex="0" />
           <Field Name="ProductVariantID" Type="long" Precision="19" FieldIndex="1" />
         </Fields>
       </EntityDefinition>
@@ -4007,7 +4007,7 @@
           <FieldFieldRelationship FkField="ProductVariantID" PkField="ProductVariantID" />
         </FieldRelationships>
       </NormalRelationship>
-      <NormalRelationship Name="ProductVariantTypeAndValue.ProductVariant-ProductVariant.ProductVariantTypeAndValue" Start=":ProductVariantTypeAndValue" End=":ProductVariant" StartNavigator="ProductVariant" EndNavigator="ProductVariantTypeAndValue" Type="4">
+      <NormalRelationship Name="ProductVariantAttribute.ProductVariant-ProductVariant.ProductVariantAttribute" Start=":ProductVariantAttribute" End=":ProductVariant" StartNavigator="ProductVariant" EndNavigator="ProductVariantAttribute" Type="4">
         <FieldRelationships>
           <FieldFieldRelationship FkField="ProductVariantID" PkField="ProductVariantID" />
         </FieldRelationships>
@@ -4431,7 +4431,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2018-11-19T16:00:22.8378516Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2018-11-19T17:37:22.188444Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -7702,16 +7702,16 @@
                     <Field Name="ProductVariantAliasID" Ordinal="1" IsPrimaryKey="true" DbType="0" Precision="19" />
                     <Field Name="ProductVariantID" Ordinal="2" DbType="0" Precision="19" />
                     <Field Name="AliasName" Ordinal="3" DbType="12" Length="50" />
-                    <Field Name="Sku" Ordinal="4" DbType="0" Precision="19" />
+                    <Field Name="Sku" Ordinal="4" DbType="12" Length="300" />
                   </Fields>
                 </Table>
-                <Table Name="ProductVariantTypeAndValue">
-                  <PkConstraintName Name="PK_ProductVariantTypeAndValue" />
+                <Table Name="ProductVariantAttribute">
+                  <PkConstraintName Name="PK_ProductVariantAttribute" />
                   <Fields>
-                    <Field Name="ProductVariantTypeAndValueID" Ordinal="1" IsPrimaryKey="true" DbType="0" Precision="19" />
+                    <Field Name="ProductVariantAttributeID" Ordinal="1" IsPrimaryKey="true" DbType="0" Precision="19" />
                     <Field Name="ProductVariantID" Ordinal="2" DbType="0" Precision="19" />
-                    <Field Name="AttributeName" Ordinal="3" DbType="12" Length="50" />
-                    <Field Name="AttributeValue" Ordinal="4" DbType="12" Length="50" />
+                    <Field Name="AttributeName" Ordinal="3" DbType="12" Length="300" />
+                    <Field Name="AttributeValue" Ordinal="4" DbType="12" Length="300" />
                   </Fields>
                 </Table>
                 <Table Name="ProStoresOrder">
@@ -10221,9 +10221,9 @@
                 <FieldPair PkField="dbo:ProductVariant:ProductVariantID" FkField="dbo:ProductVariantAlias:ProductVariantID" />
               </FieldPairs>
             </ForeignKeyConstraint>
-            <ForeignKeyConstraint Name="dbo:ProductVariantTypeAndValue:FK_ProductVariantTypeAndValue_ProductVariant">
+            <ForeignKeyConstraint Name="dbo:ProductVariantAttribute:FK_ProductVariantAttribute_ProductVariant">
               <FieldPairs>
-                <FieldPair PkField="dbo:ProductVariant:ProductVariantID" FkField="dbo:ProductVariantTypeAndValue:ProductVariantID" />
+                <FieldPair PkField="dbo:ProductVariant:ProductVariantID" FkField="dbo:ProductVariantAttribute:ProductVariantID" />
               </FieldPairs>
             </ForeignKeyConstraint>
             <ForeignKeyConstraint Name="dbo:ProStoresOrder:FK_ProStoresOrder_Order">
@@ -12803,11 +12803,11 @@
             <FieldMapping FieldName="Sku" TargetFieldName="Sku" />
           </FieldMappings>
         </EntityMapping>
-        <EntityMapping EntityName=":ProductVariantTypeAndValue" TargetName="ShipWorksLocal:dbo:ProductVariantTypeAndValue">
+        <EntityMapping EntityName=":ProductVariantAttribute" TargetName="ShipWorksLocal:dbo:ProductVariantAttribute">
           <FieldMappings>
             <FieldMapping FieldName="AttributeName" TargetFieldName="AttributeName" />
             <FieldMapping FieldName="AttributeValue" TargetFieldName="AttributeValue" />
-            <FieldMapping FieldName="ID" TargetFieldName="ProductVariantTypeAndValueID" />
+            <FieldMapping FieldName="ProductVariantAttributeID" TargetFieldName="ProductVariantAttributeID" />
             <FieldMapping FieldName="ProductVariantID" TargetFieldName="ProductVariantID" />
           </FieldMappings>
         </EntityMapping>

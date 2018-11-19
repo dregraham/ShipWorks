@@ -518,8 +518,8 @@ namespace ShipWorks.Data.Model.Linq
 				case ShipWorks.Data.Model.EntityType.ProductVariantAliasEntity:
 					toReturn = this.ProductVariantAlias;
 					break;
-				case ShipWorks.Data.Model.EntityType.ProductVariantTypeAndValueEntity:
-					toReturn = this.ProductVariantTypeAndValue;
+				case ShipWorks.Data.Model.EntityType.ProductVariantAttributeEntity:
+					toReturn = this.ProductVariantAttribute;
 					break;
 				case ShipWorks.Data.Model.EntityType.ProStoresOrderEntity:
 					toReturn = this.ProStoresOrder;
@@ -1686,10 +1686,10 @@ namespace ShipWorks.Data.Model.Linq
 			get { return new DataSource2<ProductVariantAliasEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
 		}
 		
-		/// <summary>returns the datasource to use in a Linq query when targeting ProductVariantTypeAndValueEntity instances in the database.</summary>
-		public DataSource2<ProductVariantTypeAndValueEntity> ProductVariantTypeAndValue
+		/// <summary>returns the datasource to use in a Linq query when targeting ProductVariantAttributeEntity instances in the database.</summary>
+		public DataSource2<ProductVariantAttributeEntity> ProductVariantAttribute
 		{
-			get { return new DataSource2<ProductVariantTypeAndValueEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
+			get { return new DataSource2<ProductVariantAttributeEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
 		}
 		
 		/// <summary>returns the datasource to use in a Linq query when targeting ProStoresOrderEntity instances in the database.</summary>

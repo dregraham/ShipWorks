@@ -17,16 +17,16 @@ using ShipWorks.Data.Model.EntityInterfaces;
 namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
 {
     /// <summary>
-    /// Read-only representation of the entity 'ProductVariantTypeAndValue'. <br/><br/>
+    /// Read-only representation of the entity 'ProductVariantAttribute'. <br/><br/>
     /// 
     /// </summary>
     [Serializable]
-    public partial class ReadOnlyProductVariantTypeAndValueEntity : IProductVariantTypeAndValueEntity
+    public partial class ReadOnlyProductVariantAttributeEntity : IProductVariantAttributeEntity
     {
         /// <summary>
         /// Constructor
         /// </summary>
-        internal ReadOnlyProductVariantTypeAndValueEntity(IProductVariantTypeAndValueEntity source, IDictionary<object, object> objectMap)
+        internal ReadOnlyProductVariantAttributeEntity(IProductVariantAttributeEntity source, IDictionary<object, object> objectMap)
         {
             MethodConditions.EnsureArgumentIsNotNull(source, nameof(source));
             MethodConditions.EnsureArgumentIsNotNull(objectMap, nameof(objectMap));
@@ -36,7 +36,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
                 objectMap[source] = this;
             }
             
-            ID = source.ID;
+            ProductVariantAttributeID = source.ProductVariantAttributeID;
             ProductVariantID = source.ProductVariantID;
             AttributeName = source.AttributeName;
             AttributeValue = source.AttributeValue;
@@ -45,32 +45,32 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             ProductVariant = (IProductVariantEntity) source.ProductVariant?.AsReadOnly(objectMap);
             
 
-            CopyCustomProductVariantTypeAndValueData(source);
+            CopyCustomProductVariantAttributeData(source);
         }
 
         
-        /// <summary> The ID property of the Entity ProductVariantTypeAndValue<br/><br/>
+        /// <summary> The ProductVariantAttributeID property of the Entity ProductVariantAttribute<br/><br/>
         /// </summary>
-        /// <remarks>Mapped on table field: "ProductVariantTypeAndValue"."ProductVariantTypeAndValueID"<br/>
+        /// <remarks>Mapped on table field: "ProductVariantAttribute"."ProductVariantAttributeID"<br/>
         /// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, true, false</remarks>
-        public System.Int64 ID { get; }
-        /// <summary> The ProductVariantID property of the Entity ProductVariantTypeAndValue<br/><br/>
+        public System.Int64 ProductVariantAttributeID { get; }
+        /// <summary> The ProductVariantID property of the Entity ProductVariantAttribute<br/><br/>
         /// </summary>
-        /// <remarks>Mapped on table field: "ProductVariantTypeAndValue"."ProductVariantID"<br/>
+        /// <remarks>Mapped on table field: "ProductVariantAttribute"."ProductVariantID"<br/>
         /// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         public System.Int64 ProductVariantID { get; }
-        /// <summary> The AttributeName property of the Entity ProductVariantTypeAndValue<br/><br/>
+        /// <summary> The AttributeName property of the Entity ProductVariantAttribute<br/><br/>
         /// </summary>
-        /// <remarks>Mapped on table field: "ProductVariantTypeAndValue"."AttributeName"<br/>
-        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
+        /// <remarks>Mapped on table field: "ProductVariantAttribute"."AttributeName"<br/>
+        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 300<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         public System.String AttributeName { get; }
-        /// <summary> The AttributeValue property of the Entity ProductVariantTypeAndValue<br/><br/>
+        /// <summary> The AttributeValue property of the Entity ProductVariantAttribute<br/><br/>
         /// </summary>
-        /// <remarks>Mapped on table field: "ProductVariantTypeAndValue"."AttributeValue"<br/>
-        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
+        /// <remarks>Mapped on table field: "ProductVariantAttribute"."AttributeValue"<br/>
+        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 300<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         public System.String AttributeValue { get; }
         
@@ -81,18 +81,18 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// <summary>
         /// Get a read only version of the entity
         /// </summary>
-        public virtual IProductVariantTypeAndValueEntity AsReadOnly() => this;
+        public virtual IProductVariantAttributeEntity AsReadOnly() => this;
 
         /// <summary>
         /// Get a read only version of the entity
         /// </summary>
-        public virtual IProductVariantTypeAndValueEntity AsReadOnly(IDictionary<object, object> objectMap) => this;
+        public virtual IProductVariantAttributeEntity AsReadOnly(IDictionary<object, object> objectMap) => this;
 
         
 
         /// <summary>
         /// Copy any custom data
         /// </summary>
-        partial void CopyCustomProductVariantTypeAndValueData(IProductVariantTypeAndValueEntity source);
+        partial void CopyCustomProductVariantAttributeData(IProductVariantAttributeEntity source);
     }
 }

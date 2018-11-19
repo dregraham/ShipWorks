@@ -25,9 +25,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 {
 	// __LLBLGENPRO_USER_CODE_REGION_START AdditionalNamespaces
 	// __LLBLGENPRO_USER_CODE_REGION_END
-	/// <summary>Entity class which represents the entity 'ProductVariantTypeAndValue'.<br/><br/></summary>
+	/// <summary>Entity class which represents the entity 'ProductVariantAttribute'.<br/><br/></summary>
 	[Serializable]
-	public partial class ProductVariantTypeAndValueEntity : CommonEntityBase
+	public partial class ProductVariantAttributeEntity : CommonEntityBase
 		// __LLBLGENPRO_USER_CODE_REGION_START AdditionalInterfaces
 		// __LLBLGENPRO_USER_CODE_REGION_END	
 	{
@@ -51,13 +51,13 @@ namespace ShipWorks.Data.Model.EntityClasses
 		#endregion
 		
 		/// <summary> Static CTor for setting up custom property hashtables. Is executed before the first instance of this entity class or derived classes is constructed. </summary>
-		static ProductVariantTypeAndValueEntity()
+		static ProductVariantAttributeEntity()
 		{
 			SetupCustomPropertyHashtables();
 		}
 		
 		/// <summary> CTor</summary>
-		public ProductVariantTypeAndValueEntity():base("ProductVariantTypeAndValueEntity")
+		public ProductVariantAttributeEntity():base("ProductVariantAttributeEntity")
 		{
 			InitClassEmpty(null, null);
 		}
@@ -65,42 +65,42 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <summary> CTor</summary>
 		/// <remarks>For framework usage.</remarks>
 		/// <param name="fields">Fields object to set as the fields for this entity.</param>
-		public ProductVariantTypeAndValueEntity(IEntityFields2 fields):base("ProductVariantTypeAndValueEntity")
+		public ProductVariantAttributeEntity(IEntityFields2 fields):base("ProductVariantAttributeEntity")
 		{
 			InitClassEmpty(null, fields);
 		}
 
 		/// <summary> CTor</summary>
-		/// <param name="validator">The custom validator object for this ProductVariantTypeAndValueEntity</param>
-		public ProductVariantTypeAndValueEntity(IValidator validator):base("ProductVariantTypeAndValueEntity")
+		/// <param name="validator">The custom validator object for this ProductVariantAttributeEntity</param>
+		public ProductVariantAttributeEntity(IValidator validator):base("ProductVariantAttributeEntity")
 		{
 			InitClassEmpty(validator, null);
 		}
 				
 		/// <summary> CTor</summary>
-		/// <param name="iD">PK value for ProductVariantTypeAndValue which data should be fetched into this ProductVariantTypeAndValue object</param>
+		/// <param name="productVariantAttributeID">PK value for ProductVariantAttribute which data should be fetched into this ProductVariantAttribute object</param>
 		/// <remarks>The entity is not fetched by this constructor. Use a DataAccessAdapter for that.</remarks>
-		public ProductVariantTypeAndValueEntity(System.Int64 iD):base("ProductVariantTypeAndValueEntity")
+		public ProductVariantAttributeEntity(System.Int64 productVariantAttributeID):base("ProductVariantAttributeEntity")
 		{
 			InitClassEmpty(null, null);
-			this.ID = iD;
+			this.ProductVariantAttributeID = productVariantAttributeID;
 		}
 
 		/// <summary> CTor</summary>
-		/// <param name="iD">PK value for ProductVariantTypeAndValue which data should be fetched into this ProductVariantTypeAndValue object</param>
-		/// <param name="validator">The custom validator object for this ProductVariantTypeAndValueEntity</param>
+		/// <param name="productVariantAttributeID">PK value for ProductVariantAttribute which data should be fetched into this ProductVariantAttribute object</param>
+		/// <param name="validator">The custom validator object for this ProductVariantAttributeEntity</param>
 		/// <remarks>The entity is not fetched by this constructor. Use a DataAccessAdapter for that.</remarks>
-		public ProductVariantTypeAndValueEntity(System.Int64 iD, IValidator validator):base("ProductVariantTypeAndValueEntity")
+		public ProductVariantAttributeEntity(System.Int64 productVariantAttributeID, IValidator validator):base("ProductVariantAttributeEntity")
 		{
 			InitClassEmpty(validator, null);
-			this.ID = iD;
+			this.ProductVariantAttributeID = productVariantAttributeID;
 		}
 
 		/// <summary> Protected CTor for deserialization</summary>
 		/// <param name="info"></param>
 		/// <param name="context"></param>
 		[EditorBrowsable(EditorBrowsableState.Never)]
-		protected ProductVariantTypeAndValueEntity(SerializationInfo info, StreamingContext context) : base(info, context)
+		protected ProductVariantAttributeEntity(SerializationInfo info, StreamingContext context) : base(info, context)
 		{
 			if(SerializationHelper.Optimization != SerializationOptimization.Fast) 
 			{
@@ -120,9 +120,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <param name="fieldIndex">The fieldindex.</param>
 		protected override void PerformDesyncSetupFKFieldChange(int fieldIndex)
 		{
-			switch((ProductVariantTypeAndValueFieldIndex)fieldIndex)
+			switch((ProductVariantAttributeFieldIndex)fieldIndex)
 			{
-				case ProductVariantTypeAndValueFieldIndex.ProductVariantID:
+				case ProductVariantAttributeFieldIndex.ProductVariantID:
 					DesetupSyncProductVariant(true, false);
 					break;
 				default:
@@ -269,7 +269,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <returns>A list of all the EntityRelation objects the type of this instance has. Hierarchy relations are excluded.</returns>
 		protected override List<IEntityRelation> GetAllRelations()
 		{
-			return new ProductVariantTypeAndValueRelations().GetAllRelations();
+			return new ProductVariantAttributeRelations().GetAllRelations();
 		}
 
 		/// <summary> Creates a new IRelationPredicateBucket object which contains the predicate expression and relation collection to fetch the related entity of type 'ProductVariant' to this entity.</summary>
@@ -285,7 +285,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <summary>Creates a new instance of the factory related to this entity</summary>
 		protected override IEntityFactory2 CreateEntityFactory()
 		{
-			return EntityFactoryCache2.GetEntityFactory(typeof(ProductVariantTypeAndValueEntityFactory));
+			return EntityFactoryCache2.GetEntityFactory(typeof(ProductVariantAttributeEntityFactory));
 		}
 #if !CF
 		/// <summary>Adds the member collections to the collections queue (base first)</summary>
@@ -347,7 +347,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties = new Dictionary<string, Dictionary<string, string>>();
 			Dictionary<string, string> fieldHashtable;
 			fieldHashtable = new Dictionary<string, string>();
-			_fieldsCustomProperties.Add("ID", fieldHashtable);
+			_fieldsCustomProperties.Add("ProductVariantAttributeID", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("ProductVariantID", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
@@ -362,7 +362,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <param name="resetFKFields">if set to true it will also reset the FK fields pointing to the related entity</param>
 		private void DesetupSyncProductVariant(bool signalRelatedEntity, bool resetFKFields)
 		{
-			this.PerformDesetupSyncRelatedEntity( _productVariant, new PropertyChangedEventHandler( OnProductVariantPropertyChanged ), "ProductVariant", ShipWorks.Data.Model.RelationClasses.StaticProductVariantTypeAndValueRelations.ProductVariantEntityUsingProductVariantIDStatic, true, signalRelatedEntity, "ProductVariantTypeAndValue", resetFKFields, new int[] { (int)ProductVariantTypeAndValueFieldIndex.ProductVariantID } );
+			this.PerformDesetupSyncRelatedEntity( _productVariant, new PropertyChangedEventHandler( OnProductVariantPropertyChanged ), "ProductVariant", ShipWorks.Data.Model.RelationClasses.StaticProductVariantAttributeRelations.ProductVariantEntityUsingProductVariantIDStatic, true, signalRelatedEntity, "ProductVariantAttribute", resetFKFields, new int[] { (int)ProductVariantAttributeFieldIndex.ProductVariantID } );
 			_productVariant = null;
 		}
 
@@ -374,7 +374,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			{
 				DesetupSyncProductVariant(true, true);
 				_productVariant = (ProductVariantEntity)relatedEntity;
-				this.PerformSetupSyncRelatedEntity( _productVariant, new PropertyChangedEventHandler( OnProductVariantPropertyChanged ), "ProductVariant", ShipWorks.Data.Model.RelationClasses.StaticProductVariantTypeAndValueRelations.ProductVariantEntityUsingProductVariantIDStatic, true, new string[] {  } );
+				this.PerformSetupSyncRelatedEntity( _productVariant, new PropertyChangedEventHandler( OnProductVariantPropertyChanged ), "ProductVariant", ShipWorks.Data.Model.RelationClasses.StaticProductVariantAttributeRelations.ProductVariantEntityUsingProductVariantIDStatic, true, new string[] {  } );
 			}
 		}
 		
@@ -391,7 +391,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		}
 
 		/// <summary> Initializes the class with empty data, as if it is a new Entity.</summary>
-		/// <param name="validator">The validator object for this ProductVariantTypeAndValueEntity</param>
+		/// <param name="validator">The validator object for this ProductVariantAttributeEntity</param>
 		/// <param name="fields">Fields of this entity</param>
 		private void InitClassEmpty(IValidator validator, IEntityFields2 fields)
 		{
@@ -409,9 +409,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 		#region Class Property Declarations
 		/// <summary> The relations object holding all relations of this entity with other entity classes.</summary>
-		public  static ProductVariantTypeAndValueRelations Relations
+		public  static ProductVariantAttributeRelations Relations
 		{
-			get	{ return new ProductVariantTypeAndValueRelations(); }
+			get	{ return new ProductVariantAttributeRelations(); }
 		}
 		
 		/// <summary> The custom properties for this entity type.</summary>
@@ -425,7 +425,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <returns>Ready to use IPrefetchPathElement2 implementation.</returns>
 		public static IPrefetchPathElement2 PrefetchPathProductVariant
 		{
-			get	{ return new PrefetchPathElement2(new EntityCollection(EntityFactoryCache2.GetEntityFactory(typeof(ProductVariantEntityFactory))),	(IEntityRelation)GetRelationsForField("ProductVariant")[0], (int)ShipWorks.Data.Model.EntityType.ProductVariantTypeAndValueEntity, (int)ShipWorks.Data.Model.EntityType.ProductVariantEntity, 0, null, null, null, null, "ProductVariant", SD.LLBLGen.Pro.ORMSupportClasses.RelationType.ManyToOne); }
+			get	{ return new PrefetchPathElement2(new EntityCollection(EntityFactoryCache2.GetEntityFactory(typeof(ProductVariantEntityFactory))),	(IEntityRelation)GetRelationsForField("ProductVariant")[0], (int)ShipWorks.Data.Model.EntityType.ProductVariantAttributeEntity, (int)ShipWorks.Data.Model.EntityType.ProductVariantEntity, 0, null, null, null, null, "ProductVariant", SD.LLBLGen.Pro.ORMSupportClasses.RelationType.ManyToOne); }
 		}
 
 
@@ -452,44 +452,44 @@ namespace ShipWorks.Data.Model.EntityClasses
 			get { return FieldsCustomProperties;}
 		}
 
-		/// <summary> The ID property of the Entity ProductVariantTypeAndValue<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "ProductVariantTypeAndValue"."ProductVariantTypeAndValueID"<br/>
+		/// <summary> The ProductVariantAttributeID property of the Entity ProductVariantAttribute<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "ProductVariantAttribute"."ProductVariantAttributeID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, true, false</remarks>
-		public virtual System.Int64 ID
+		public virtual System.Int64 ProductVariantAttributeID
 		{
-			get { return (System.Int64)GetValue((int)ProductVariantTypeAndValueFieldIndex.ID, true); }
-			set	{ SetValue((int)ProductVariantTypeAndValueFieldIndex.ID, value); }
+			get { return (System.Int64)GetValue((int)ProductVariantAttributeFieldIndex.ProductVariantAttributeID, true); }
+			set	{ SetValue((int)ProductVariantAttributeFieldIndex.ProductVariantAttributeID, value); }
 		}
 
-		/// <summary> The ProductVariantID property of the Entity ProductVariantTypeAndValue<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "ProductVariantTypeAndValue"."ProductVariantID"<br/>
+		/// <summary> The ProductVariantID property of the Entity ProductVariantAttribute<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "ProductVariantAttribute"."ProductVariantID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
 		public virtual System.Int64 ProductVariantID
 		{
-			get { return (System.Int64)GetValue((int)ProductVariantTypeAndValueFieldIndex.ProductVariantID, true); }
-			set	{ SetValue((int)ProductVariantTypeAndValueFieldIndex.ProductVariantID, value); }
+			get { return (System.Int64)GetValue((int)ProductVariantAttributeFieldIndex.ProductVariantID, true); }
+			set	{ SetValue((int)ProductVariantAttributeFieldIndex.ProductVariantID, value); }
 		}
 
-		/// <summary> The AttributeName property of the Entity ProductVariantTypeAndValue<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "ProductVariantTypeAndValue"."AttributeName"<br/>
-		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
+		/// <summary> The AttributeName property of the Entity ProductVariantAttribute<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "ProductVariantAttribute"."AttributeName"<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 300<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
 		public virtual System.String AttributeName
 		{
-			get { return (System.String)GetValue((int)ProductVariantTypeAndValueFieldIndex.AttributeName, true); }
-			set	{ SetValue((int)ProductVariantTypeAndValueFieldIndex.AttributeName, value); }
+			get { return (System.String)GetValue((int)ProductVariantAttributeFieldIndex.AttributeName, true); }
+			set	{ SetValue((int)ProductVariantAttributeFieldIndex.AttributeName, value); }
 		}
 
-		/// <summary> The AttributeValue property of the Entity ProductVariantTypeAndValue<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "ProductVariantTypeAndValue"."AttributeValue"<br/>
-		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
+		/// <summary> The AttributeValue property of the Entity ProductVariantAttribute<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "ProductVariantAttribute"."AttributeValue"<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 300<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
 		public virtual System.String AttributeValue
 		{
-			get { return (System.String)GetValue((int)ProductVariantTypeAndValueFieldIndex.AttributeValue, true); }
-			set	{ SetValue((int)ProductVariantTypeAndValueFieldIndex.AttributeValue, value); }
+			get { return (System.String)GetValue((int)ProductVariantAttributeFieldIndex.AttributeValue, true); }
+			set	{ SetValue((int)ProductVariantAttributeFieldIndex.AttributeValue, value); }
 		}
 
 		/// <summary> Gets / sets related entity of type 'ProductVariantEntity' which has to be set using a fetch action earlier. If no related entity is set for this property, null is returned..<br/><br/></summary>
@@ -505,7 +505,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 				}
 				else
 				{
-					SetSingleRelatedEntityNavigator(value, "ProductVariantTypeAndValue", "ProductVariant", _productVariant, true); 
+					SetSingleRelatedEntityNavigator(value, "ProductVariantAttribute", "ProductVariant", _productVariant, true); 
 				}
 			}
 		}
@@ -526,7 +526,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		[Browsable(false), XmlIgnore]
 		protected override int LLBLGenProEntityTypeValue 
 		{ 
-			get { return (int)ShipWorks.Data.Model.EntityType.ProductVariantTypeAndValueEntity; }
+			get { return (int)ShipWorks.Data.Model.EntityType.ProductVariantAttributeEntity; }
 		}
 
 		#endregion

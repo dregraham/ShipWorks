@@ -15,34 +15,34 @@ using System.Linq;
 namespace ShipWorks.Data.Model.EntityInterfaces
 {
     /// <summary>
-    /// Entity interface which represents the entity 'ProductVariantTypeAndValue'. <br/><br/>
+    /// Entity interface which represents the entity 'ProductVariantAttribute'. <br/><br/>
     /// 
     /// </summary>
-    public partial interface IProductVariantTypeAndValueEntity
+    public partial interface IProductVariantAttributeEntity
     {
         
-        /// <summary> The ID property of the Entity ProductVariantTypeAndValue<br/><br/>
+        /// <summary> The ProductVariantAttributeID property of the Entity ProductVariantAttribute<br/><br/>
         /// </summary>
-        /// <remarks>Mapped on table field: "ProductVariantTypeAndValue"."ProductVariantTypeAndValueID"<br/>
+        /// <remarks>Mapped on table field: "ProductVariantAttribute"."ProductVariantAttributeID"<br/>
         /// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, true, false</remarks>
-        System.Int64 ID { get; }
-        /// <summary> The ProductVariantID property of the Entity ProductVariantTypeAndValue<br/><br/>
+        System.Int64 ProductVariantAttributeID { get; }
+        /// <summary> The ProductVariantID property of the Entity ProductVariantAttribute<br/><br/>
         /// </summary>
-        /// <remarks>Mapped on table field: "ProductVariantTypeAndValue"."ProductVariantID"<br/>
+        /// <remarks>Mapped on table field: "ProductVariantAttribute"."ProductVariantID"<br/>
         /// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         System.Int64 ProductVariantID { get; }
-        /// <summary> The AttributeName property of the Entity ProductVariantTypeAndValue<br/><br/>
+        /// <summary> The AttributeName property of the Entity ProductVariantAttribute<br/><br/>
         /// </summary>
-        /// <remarks>Mapped on table field: "ProductVariantTypeAndValue"."AttributeName"<br/>
-        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
+        /// <remarks>Mapped on table field: "ProductVariantAttribute"."AttributeName"<br/>
+        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 300<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         System.String AttributeName { get; }
-        /// <summary> The AttributeValue property of the Entity ProductVariantTypeAndValue<br/><br/>
+        /// <summary> The AttributeValue property of the Entity ProductVariantAttribute<br/><br/>
         /// </summary>
-        /// <remarks>Mapped on table field: "ProductVariantTypeAndValue"."AttributeValue"<br/>
-        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
+        /// <remarks>Mapped on table field: "ProductVariantAttribute"."AttributeValue"<br/>
+        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 300<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         System.String AttributeValue { get; }
         
@@ -55,12 +55,12 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         /// <summary>
         /// Get a read only version of the entity
         /// </summary>
-        IProductVariantTypeAndValueEntity AsReadOnly();
+        IProductVariantAttributeEntity AsReadOnly();
 
         /// <summary>
         /// Get a read only version of the entity
         /// </summary>
-        IProductVariantTypeAndValueEntity AsReadOnly(IDictionary<object, object> objectMap);
+        IProductVariantAttributeEntity AsReadOnly(IDictionary<object, object> objectMap);
     }
 }
 
@@ -70,34 +70,34 @@ namespace ShipWorks.Data.Model.EntityClasses
     using ShipWorks.Data.Model.ReadOnlyEntityClasses;
 
     /// <summary>
-    /// Entity interface which represents the entity 'ProductVariantTypeAndValue'. <br/><br/>
+    /// Entity interface which represents the entity 'ProductVariantAttribute'. <br/><br/>
     /// 
     /// </summary>
-    public partial class ProductVariantTypeAndValueEntity : IProductVariantTypeAndValueEntity
+    public partial class ProductVariantAttributeEntity : IProductVariantAttributeEntity
     {
         
-        IProductVariantEntity IProductVariantTypeAndValueEntity.ProductVariant => ProductVariant;
+        IProductVariantEntity IProductVariantAttributeEntity.ProductVariant => ProductVariant;
         
 
         /// <summary>
         /// Get a read only version of the entity
         /// </summary>
-        public virtual IProductVariantTypeAndValueEntity AsReadOnly() =>
+        public virtual IProductVariantAttributeEntity AsReadOnly() =>
             AsReadOnly(new Dictionary<object, object>());
 
         /// <summary>
         /// Get a read only version of the entity that handles cyclic references
         /// </summary>
-        public virtual IProductVariantTypeAndValueEntity AsReadOnly(IDictionary<object, object> objectMap)
+        public virtual IProductVariantAttributeEntity AsReadOnly(IDictionary<object, object> objectMap)
         {
             if (objectMap.ContainsKey(this))
             {
-                return (IProductVariantTypeAndValueEntity) objectMap[this];
+                return (IProductVariantAttributeEntity) objectMap[this];
             }
 
             objectMap.Add(this, null);
 
-            return new ReadOnlyProductVariantTypeAndValueEntity(this, objectMap);
+            return new ReadOnlyProductVariantAttributeEntity(this, objectMap);
         }
 
         

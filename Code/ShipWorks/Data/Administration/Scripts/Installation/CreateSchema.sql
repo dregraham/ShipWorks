@@ -7882,7 +7882,7 @@ CREATE TABLE [dbo].[ProductVariantAlias]
 [ProductVariantAliasID] [bigint] NOT NULL,
 [ProductVariantID] [bigint] NOT NULL,
 [AliasName] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[Sku] [bigint] NOT NULL
+[Sku] [nvarchar] (300) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_ProductVariantAlias] on [dbo].[ProductVariantAlias]'
@@ -7893,23 +7893,23 @@ PRINT N'Creating index [IX_SWDefault_ProductVariantAlias_Sku] on [dbo].[ProductV
 GO
 CREATE NONCLUSTERED INDEX [IX_SWDefault_ProductVariantAlias_Sku] ON [dbo].[ProductVariantAlias] ([Sku]) INCLUDE ([ProductVariantID])
 GO
-PRINT N'Creating [dbo].[ProductVariantTypeAndValue]'
+PRINT N'Creating [dbo].[ProductVariantAttribute]'
 GO
-CREATE TABLE [dbo].[ProductVariantTypeAndValue]
+CREATE TABLE [dbo].[ProductVariantAttribute]
 (
-[ProductVariantTypeAndValueID] [bigint] NOT NULL,
+[ProductVariantAttributeID] [bigint] NOT NULL,
 [ProductVariantID] [bigint] NOT NULL,
-[AttributeName] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[AttributeValue] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL
+[AttributeName] [nvarchar] (300) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[AttributeValue] [nvarchar] (300) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL
 )
 GO
-PRINT N'Creating primary key [PK_ProductVariantTypeAndValue] on [dbo].[ProductVariantTypeAndValue]'
+PRINT N'Creating primary key [PK_ProductVariantAttribute] on [dbo].[ProductVariantAttribute]'
 GO
-ALTER TABLE [dbo].[ProductVariantTypeAndValue] ADD CONSTRAINT [PK_ProductVariantTypeAndValue] PRIMARY KEY CLUSTERED  ([ProductVariantTypeAndValueID])
+ALTER TABLE [dbo].[ProductVariantAttribute] ADD CONSTRAINT [PK_ProductVariantAttribute] PRIMARY KEY CLUSTERED  ([ProductVariantAttributeID])
 GO
-PRINT N'Creating index [IX_SWDefault_ProductVariantTypeAndValue_ProductVariantID] on [dbo].[ProductVariantTypeAndValue]'
+PRINT N'Creating index [IX_SWDefault_ProductVariantAttribute_ProductVariantID] on [dbo].[ProductVariantAttribute]'
 GO
-CREATE NONCLUSTERED INDEX [IX_SWDefault_ProductVariantTypeAndValue_ProductVariantID] ON [dbo].[ProductVariantTypeAndValue] ([ProductVariantID])
+CREATE NONCLUSTERED INDEX [IX_SWDefault_ProductVariantAttribute_ProductVariantID] ON [dbo].[ProductVariantAttribute] ([ProductVariantID])
 GO
 PRINT N'Adding foreign keys to [dbo].[ProductBundle]'
 GO
@@ -7921,9 +7921,9 @@ PRINT N'Adding foreign keys to [dbo].[ProductVariantAlias]'
 GO
 ALTER TABLE [dbo].[ProductVariantAlias] ADD CONSTRAINT [FK_ProductVariantAlias_ProductVariant] FOREIGN KEY ([ProductVariantID]) REFERENCES [dbo].[ProductVariant] ([ProductVariantID])
 GO
-PRINT N'Adding foreign keys to [dbo].[ProductVariantTypeAndValue]'
+PRINT N'Adding foreign keys to [dbo].[ProductVariantAttribute]'
 GO
-ALTER TABLE [dbo].[ProductVariantTypeAndValue] ADD CONSTRAINT [FK_ProductVariantTypeAndValue_ProductVariant] FOREIGN KEY ([ProductVariantID]) REFERENCES [dbo].[ProductVariant] ([ProductVariantID])
+ALTER TABLE [dbo].[ProductVariantAttribute] ADD CONSTRAINT [FK_ProductVariantAttribute_ProductVariant] FOREIGN KEY ([ProductVariantID]) REFERENCES [dbo].[ProductVariant] ([ProductVariantID])
 GO
 PRINT N'Adding foreign keys to [dbo].[ProductVariant]'
 GO

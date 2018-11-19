@@ -1018,10 +1018,10 @@ namespace ShipWorks.Data.Model.FactoryClasses
 			get { return Create<ProductVariantAliasEntity>(); }
 		}
 
-		/// <summary>Creates and returns a new EntityQuery for the ProductVariantTypeAndValue entity</summary>
-		public EntityQuery<ProductVariantTypeAndValueEntity> ProductVariantTypeAndValue
+		/// <summary>Creates and returns a new EntityQuery for the ProductVariantAttribute entity</summary>
+		public EntityQuery<ProductVariantAttributeEntity> ProductVariantAttribute
 		{
-			get { return Create<ProductVariantTypeAndValueEntity>(); }
+			get { return Create<ProductVariantAttributeEntity>(); }
 		}
 
 		/// <summary>Creates and returns a new EntityQuery for the ProStoresOrder entity</summary>

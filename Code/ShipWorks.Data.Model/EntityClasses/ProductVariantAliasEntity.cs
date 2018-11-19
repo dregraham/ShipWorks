@@ -484,11 +484,11 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 		/// <summary> The Sku property of the Entity ProductVariantAlias<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "ProductVariantAlias"."Sku"<br/>
-		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 300<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.Int64 Sku
+		public virtual System.String Sku
 		{
-			get { return (System.Int64)GetValue((int)ProductVariantAliasFieldIndex.Sku, true); }
+			get { return (System.String)GetValue((int)ProductVariantAliasFieldIndex.Sku, true); }
 			set	{ SetValue((int)ProductVariantAliasFieldIndex.Sku, value); }
 		}
 

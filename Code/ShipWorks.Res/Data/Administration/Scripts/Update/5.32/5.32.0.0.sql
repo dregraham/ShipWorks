@@ -67,7 +67,7 @@ CREATE TABLE [dbo].[ProductVariantAlias]
 [ProductVariantAliasID] [bigint] NOT NULL,
 [ProductVariantID] [bigint] NOT NULL,
 [AliasName] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[Sku] [bigint] NOT NULL
+[Sku] [nvarchar] (300) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_ProductVariantAlias] on [dbo].[ProductVariantAlias]'
@@ -80,26 +80,26 @@ GO
 IF NOT EXISTS (SELECT 1 FROM sys.indexes WHERE name = N'IX_SWDefault_ProductVariantAlias_Sku' AND object_id = OBJECT_ID(N'[dbo].[ProductVariantAlias]'))
 CREATE NONCLUSTERED INDEX [IX_SWDefault_ProductVariantAlias_Sku] ON [dbo].[ProductVariantAlias] ([Sku]) INCLUDE ([ProductVariantID])
 GO
-PRINT N'Creating [dbo].[ProductVariantTypeAndValue]'
+PRINT N'Creating [dbo].[ProductVariantAttribute]'
 GO
-IF OBJECT_ID(N'[dbo].[ProductVariantTypeAndValue]', 'U') IS NULL
-CREATE TABLE [dbo].[ProductVariantTypeAndValue]
+IF OBJECT_ID(N'[dbo].[ProductVariantAttribute]', 'U') IS NULL
+CREATE TABLE [dbo].[ProductVariantAttribute]
 (
-[ProductVariantTypeAndValueID] [bigint] NOT NULL,
+[ProductVariantAttributeID] [bigint] NOT NULL,
 [ProductVariantID] [bigint] NOT NULL,
-[AttributeName] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[AttributeValue] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL
+[AttributeName] [nvarchar] (300) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[AttributeValue] [nvarchar] (300) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL
 )
 GO
-PRINT N'Creating primary key [PK_ProductVariantTypeAndValue] on [dbo].[ProductVariantTypeAndValue]'
+PRINT N'Creating primary key [PK_ProductVariantAttribute] on [dbo].[ProductVariantAttribute]'
 GO
-IF NOT EXISTS (SELECT 1 FROM sys.indexes WHERE name = N'PK_ProductVariantTypeAndValue' AND object_id = OBJECT_ID(N'[dbo].[ProductVariantTypeAndValue]'))
-ALTER TABLE [dbo].[ProductVariantTypeAndValue] ADD CONSTRAINT [PK_ProductVariantTypeAndValue] PRIMARY KEY CLUSTERED  ([ProductVariantTypeAndValueID])
+IF NOT EXISTS (SELECT 1 FROM sys.indexes WHERE name = N'PK_ProductVariantAttribute' AND object_id = OBJECT_ID(N'[dbo].[ProductVariantAttribute]'))
+ALTER TABLE [dbo].[ProductVariantAttribute] ADD CONSTRAINT [PK_ProductVariantAttribute] PRIMARY KEY CLUSTERED  ([ProductVariantAttributeID])
 GO
-PRINT N'Creating index [IX_SWDefault_ProductVariantTypeAndValue_ProductVariantID] on [dbo].[ProductVariantTypeAndValue]'
+PRINT N'Creating index [IX_SWDefault_ProductVariantAttribute_ProductVariantID] on [dbo].[ProductVariantAttribute]'
 GO
-IF NOT EXISTS (SELECT 1 FROM sys.indexes WHERE name = N'IX_SWDefault_ProductVariantTypeAndValue_ProductVariantID' AND object_id = OBJECT_ID(N'[dbo].[ProductVariantTypeAndValue]'))
-CREATE NONCLUSTERED INDEX [IX_SWDefault_ProductVariantTypeAndValue_ProductVariantID] ON [dbo].[ProductVariantTypeAndValue] ([ProductVariantID])
+IF NOT EXISTS (SELECT 1 FROM sys.indexes WHERE name = N'IX_SWDefault_ProductVariantAttribute_ProductVariantID' AND object_id = OBJECT_ID(N'[dbo].[ProductVariantAttribute]'))
+CREATE NONCLUSTERED INDEX [IX_SWDefault_ProductVariantAttribute_ProductVariantID] ON [dbo].[ProductVariantAttribute] ([ProductVariantID])
 GO
 PRINT N'Adding foreign keys to [dbo].[ProductBundle]'
 GO
@@ -114,10 +114,10 @@ GO
 IF NOT EXISTS (SELECT 1 FROM sys.foreign_keys WHERE object_id = OBJECT_ID(N'[dbo].[FK_ProductVariantAlias_ProductVariant]', 'F') AND parent_object_id = OBJECT_ID(N'[dbo].[ProductVariantAlias]', 'U'))
 ALTER TABLE [dbo].[ProductVariantAlias] ADD CONSTRAINT [FK_ProductVariantAlias_ProductVariant] FOREIGN KEY ([ProductVariantID]) REFERENCES [dbo].[ProductVariant] ([ProductVariantID])
 GO
-PRINT N'Adding foreign keys to [dbo].[ProductVariantTypeAndValue]'
+PRINT N'Adding foreign keys to [dbo].[ProductVariantAttribute]'
 GO
-IF NOT EXISTS (SELECT 1 FROM sys.foreign_keys WHERE object_id = OBJECT_ID(N'[dbo].[FK_ProductVariantTypeAndValue_ProductVariant]', 'F') AND parent_object_id = OBJECT_ID(N'[dbo].[ProductVariantTypeAndValue]', 'U'))
-ALTER TABLE [dbo].[ProductVariantTypeAndValue] ADD CONSTRAINT [FK_ProductVariantTypeAndValue_ProductVariant] FOREIGN KEY ([ProductVariantID]) REFERENCES [dbo].[ProductVariant] ([ProductVariantID])
+IF NOT EXISTS (SELECT 1 FROM sys.foreign_keys WHERE object_id = OBJECT_ID(N'[dbo].[FK_ProductVariantAttribute_ProductVariant]', 'F') AND parent_object_id = OBJECT_ID(N'[dbo].[ProductVariantAttribute]', 'U'))
+ALTER TABLE [dbo].[ProductVariantAttribute] ADD CONSTRAINT [FK_ProductVariantAttribute_ProductVariant] FOREIGN KEY ([ProductVariantID]) REFERENCES [dbo].[ProductVariant] ([ProductVariantID])
 GO
 PRINT N'Adding foreign keys to [dbo].[ProductVariant]'
 GO
