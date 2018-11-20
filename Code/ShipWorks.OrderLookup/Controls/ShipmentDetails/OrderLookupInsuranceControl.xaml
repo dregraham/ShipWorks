@@ -15,14 +15,12 @@
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="/ShipWorks.OrderLookup;component/Styles/OrderLookupStyle.xaml" />
-                <ResourceDictionary Source="/ShipWorks.OrderLookup;component/Styles/Shapes.xaml"/>
+                <ResourceDictionary Source="/ShipWorks.UI;component/Styles/BlueSteel/BlueSteelStyle.xaml" />
                 <ResourceDictionary Source="/ShipWorks.UI;component/Styles/Controls/InsuranceStyle.xaml" />
             </ResourceDictionary.MergedDictionaries>
 
             <valueConverters:EmptyMoneyConverter x:Key="EmptyMoney" />
             <valueConverters:TrimEndColonConverter x:Key="TrimEndColon" />
-            <valueConverters:BooleanToVisibilityConverter x:Key="BooleanToVisibility" />
 
         </ResourceDictionary>
     </UserControl.Resources>
@@ -97,12 +95,10 @@
             Orientation="Horizontal"
             Style="{StaticResource FormWrapPanel}" >
             <TextBlock
-                VerticalAlignment="Center"
                 Style="{StaticResource FieldLabel}"
                 Text="{Binding InsuranceValueLabelDisplayText, FallbackValue='Insured Value', Converter={StaticResource TrimEndColon}}" />
             <TextBox
                 MinWidth="100"
-                VerticalAlignment="Center"
                 IsEnabled="{Binding Insurance}"
                 Style="{StaticResource FormNumberTextBox}"
                 Text="{Binding DeclaredValue, StringFormat=c, FallbackValue='50.50', Converter={StaticResource EmptyMoney}, TargetNullValue='', ValidatesOnDataErrors=true, NotifyOnValidationError=true}" />

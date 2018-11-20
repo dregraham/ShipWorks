@@ -14,7 +14,7 @@
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/ShipWorks.UI;component/Styles/GlobalStyle.xaml" />
-                <ResourceDictionary Source="/ShipWorks.OrderLookup;component/Styles/Colors.xaml" />
+                <ResourceDictionary Source="/ShipWorks.UI;component/Styles/BlueSteel/BlueSteelStyle.xaml" />
             </ResourceDictionary.MergedDictionaries>
             <ui:BooleanToVisibilityConverter x:Key="BooleanToVisibility" />
             <ui:BooleanToVisibilityConverter x:Key="BooleanToNoVisibility" Invert="True" />
