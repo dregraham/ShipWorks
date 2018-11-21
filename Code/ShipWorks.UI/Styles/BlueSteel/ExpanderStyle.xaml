@@ -50,7 +50,7 @@
         <Setter Property="BorderBrush" Value="Transparent"/>
         <Setter Property="BorderThickness" Value="1"/>
         <Setter Property="Padding" Value="10" />
-        <Setter Property="FontFamily" Value="/ShipWorks.OrderLookup;component/#Roboto" />
+        <Setter Property="FontFamily" Value="/ShipWorks.UI;component/Styles/BlueSteel/#Roboto"  />
         <Setter Property="FontSize" Value="8.25 pt" />
         <Setter Property="FontStyle" Value="Normal" />
         <Setter Property="FontStretch" Value="Normal" />
