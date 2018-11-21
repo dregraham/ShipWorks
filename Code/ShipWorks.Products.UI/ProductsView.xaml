@@ -6,6 +6,7 @@
     xmlns:local="clr-namespace:ShipWorks.Products.UI;assembly=ShipWorks.Products.UI"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:ui="http://schemas.shipworks.com/ui"
+    xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
     d:DataContext="{d:DesignInstance local:DesignerProductsMode,
                                      IsDesignTimeCreatable=True}"
     d:DesignHeight="450"
@@ -16,7 +17,11 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/ShipWorks.UI;component/Styles/GlobalStyle.xaml" />
             </ResourceDictionary.MergedDictionaries>
-        </ResourceDictionary>
+
+            <Style TargetType="Button">
+                <Setter Property="Margin" Value="0 0 10 0"/>
+            </Style>
+        </ResourceDictionary>        
     </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
@@ -24,18 +29,43 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
-        <Grid>
+        <Grid IsSharedSizeScope="True">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" SharedSizeGroup="A"/>
+                <ColumnDefinition Width="Auto" SharedSizeGroup="A"/>
+                <ColumnDefinition Width="Auto" SharedSizeGroup="A"/>
+                <ColumnDefinition Width="Auto" SharedSizeGroup="A"/>
+                <ColumnDefinition Width="Auto" SharedSizeGroup="A"/>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
-
-            <CheckBox IsChecked="{Binding ShowInactiveProducts}">Show inactive products</CheckBox>
-            <Button Grid.Column="1" Command="{Binding RefreshProducts}">Refresh</Button>
+            <Button Grid.Column="0"
+                    Content="Add"/>
+            <Button Grid.Column="1"
+                    Content="Edit"/>
+            <Button Grid.Column="2"
+                    Content="Delete"/>
+            <Button Grid.Column="3"
+                    Content="Mark Active"/>
+            <Button Grid.Column="4"
+                    Content="Mark Inactive"/>
+            
+            <CheckBox Grid.Column="5"
+                      IsChecked="{Binding ShowInactiveProducts}"
+                      VerticalAlignment="Center">Show inactive products</CheckBox>
+            <Button Grid.Column="6"
+                    Command="{Binding RefreshProducts}">Refresh</Button>
+            
+            <syncfusion:SfTextBoxExt Grid.Column="7"
+                                     Watermark="Search Products"
+                                     HorizontalAlignment="Right"/>
+                
         </Grid>
 
         <DataGrid
             Grid.Row="1"
+            Margin="0 10 0 0"
             ui:DataGridSort.CurrentSort="{Binding CurrentSort, Mode=TwoWay}"
             AutoGenerateColumns="False"
             CanUserResizeRows="False"
