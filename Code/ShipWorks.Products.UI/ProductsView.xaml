@@ -103,13 +103,32 @@
             VirtualizingStackPanel.VirtualizationMode="Recycling"
             Style="{StaticResource DataGrid}"
             HeadersVisibility="All">
-            <DataGrid.RowHeaderTemplate>
-                <DataTemplate>
-                    <Grid>
-                        <CheckBox IsChecked="{Binding Path=IsSelected, Mode=TwoWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGridRow}}}" />
-                    </Grid>
-                </DataTemplate>
-            </DataGrid.RowHeaderTemplate>
+            <DataGrid.ColumnHeaderStyle>
+                <Style BasedOn="{StaticResource DataGridColumnHeader}" TargetType="{x:Type DataGridColumnHeader}">
+                    <Setter Property="FontSize" Value="16" />
+                </Style>
+            </DataGrid.ColumnHeaderStyle>
+            <DataGrid.RowHeaderStyle>
+                <Style BasedOn="{StaticResource {x:Type DataGridRowHeader}}" TargetType="{x:Type DataGridRowHeader}">
+                    <Setter Property="Background" Value="Transparent"/>
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate>
+                                <Border BorderBrush="{StaticResource BorderColor}"
+                                        Background="Transparent"
+                                        BorderThickness="0 0 1 1"
+                                        HorizontalAlignment="Stretch"
+                                        VerticalAlignment="Stretch">
+                                    <CheckBox IsChecked="{Binding Path=IsSelected, Mode=TwoWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGridRow}}}"
+                                              Margin="3 0"
+                                              HorizontalAlignment="Center"
+                                              VerticalAlignment="Center"/>    
+                                </Border>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </DataGrid.RowHeaderStyle>
             <DataGrid.Columns>
                 <DataGridTemplateColumn CanUserSort="False" Header="Image"
                                         Width="*">
@@ -131,7 +150,8 @@
                                 Style="{StaticResource Link}"
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Center">
-                                <TextBlock Text="{Binding Data.SKU}" />
+                                <TextBlock Text="{Binding Data.SKU}"
+                                           FontSize="12"/>
                             </Button>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
@@ -145,7 +165,8 @@
                                 Style="{StaticResource Link}"
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Center">
-                                <TextBlock Text="{Binding Data.Name}" />
+                                <TextBlock Text="{Binding Data.Name}"
+                                           FontSize="12"/>
                             </Button>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
@@ -157,7 +178,8 @@
                         <DataTemplate>
                             <TextBlock Text="{Binding Data.Dimensions}"
                                        HorizontalAlignment="Left"
-                                       VerticalAlignment="Center"/>
+                                       VerticalAlignment="Center"
+                                       FontSize="12"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
@@ -167,7 +189,8 @@
                         <DataTemplate>
                             <TextBlock Text="{Binding Data.Weight}"
                                        HorizontalAlignment="Left"
-                                       VerticalAlignment="Center"/>
+                                       VerticalAlignment="Center"
+                                       FontSize="12"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
@@ -177,7 +200,8 @@
                         <DataTemplate>
                             <TextBlock Text="{Binding Data.BinLocation}"
                                        HorizontalAlignment="Left"
-                                       VerticalAlignment="Center"/>
+                                       VerticalAlignment="Center"
+                                       FontSize="12"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
