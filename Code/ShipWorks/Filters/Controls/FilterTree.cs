@@ -802,7 +802,7 @@ namespace ShipWorks.Filters.Controls
         /// </summary>
         private long FilterLastActive(IUserSettingsEntity settings)
         {
-            if (Targets.Count() == 1 && Targets.Contains(FilterTarget.Customers))
+            if (Targets?.Count() == 1 && Targets.Contains(FilterTarget.Customers))
             {
                 return settings.CustomerFilterLastActive;
             }
