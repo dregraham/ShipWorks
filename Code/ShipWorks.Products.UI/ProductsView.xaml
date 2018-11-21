@@ -9,21 +9,25 @@
     xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
     d:DataContext="{d:DesignInstance local:DesignerProductsMode,
                                      IsDesignTimeCreatable=True}"
-    d:DesignHeight="450"
-    d:DesignWidth="800"
+    d:DesignHeight="500"
+    d:DesignWidth="1200"
     mc:Ignorable="d">
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/ShipWorks.UI;component/Styles/GlobalStyle.xaml" />
+                <ResourceDictionary Source="/ShipWorks.UI;component/Styles/BlueSteel/BlueSteelStyle.xaml" />
             </ResourceDictionary.MergedDictionaries>
 
-            <Style TargetType="Button">
+            <Style x:Key="PrimaryButton" TargetType="Button" BasedOn="{StaticResource SmallPrimaryButton}">
+                <Setter Property="Margin" Value="0 0 10 0"/>
+            </Style>
+            <Style x:Key="SecondaryButton" TargetType="Button" BasedOn="{StaticResource SmallSecondaryButton}">
                 <Setter Property="Margin" Value="0 0 10 0"/>
             </Style>
         </ResourceDictionary>        
     </UserControl.Resources>
-    <Grid>
+    <Grid Margin="5 10 5 5">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
@@ -41,25 +45,48 @@
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
             <Button Grid.Column="0"
-                    Content="Add"/>
+                    Content="Add"
+                    Style="{StaticResource PrimaryButton}"/>
             <Button Grid.Column="1"
-                    Content="Edit"/>
+                    Content="Edit"
+                    Style="{StaticResource PrimaryButton}"/>
             <Button Grid.Column="2"
-                    Content="Delete"/>
+                    Content="Delete"
+                    Style="{StaticResource PrimaryButton}"/>
             <Button Grid.Column="3"
-                    Content="Mark Active"/>
+                    Content="Mark Active"
+                    Style="{StaticResource SecondaryButton}"/>
             <Button Grid.Column="4"
-                    Content="Mark Inactive"/>
+                    Content="Mark Inactive"
+                    Style="{StaticResource SecondaryButton}"/>
             
             <CheckBox Grid.Column="5"
                       IsChecked="{Binding ShowInactiveProducts}"
-                      VerticalAlignment="Center">Show inactive products</CheckBox>
-            <Button Grid.Column="6"
-                    Command="{Binding RefreshProducts}">Refresh</Button>
+                      Style="{StaticResource FormCheckBox}"
+                      Margin="0 0 10 0">Show inactive products</CheckBox>
+            <!-- <Button Grid.Column="6" -->
+            <!--         Command="{Binding RefreshProducts}" -->
+            <!--         Margin="0 0 10 0">Refresh</Button> -->
             
             <syncfusion:SfTextBoxExt Grid.Column="7"
-                                     Watermark="Search Products"
-                                     HorizontalAlignment="Right"/>
+                                     MinWidth="300"
+                                     HorizontalAlignment="Right"
+                                     VerticalContentAlignment="Center"
+                                     FontSize="20">
+                <syncfusion:SfTextBoxExt.Resources>
+                    <Style TargetType="{x:Type Border}">
+                        <Setter Property="CornerRadius" Value="2"/>
+                    </Style>
+                </syncfusion:SfTextBoxExt.Resources>
+                <syncfusion:SfTextBoxExt.Watermark>
+                    <TextBlock VerticalAlignment="Center"
+                               Text="Search Products"
+                               Opacity=".5"
+                               Margin="2"
+                               FontSize="20"
+                               Background="{StaticResource InputControlBackgroundGradient}"/>
+                </syncfusion:SfTextBoxExt.Watermark>
+            </syncfusion:SfTextBoxExt>
                 
         </Grid>
 
