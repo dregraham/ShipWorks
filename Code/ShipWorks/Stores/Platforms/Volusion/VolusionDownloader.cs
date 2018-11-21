@@ -287,6 +287,7 @@ namespace ShipWorks.Stores.Platforms.Volusion
             OrderItemEntity item = InstantiateOrderItem(order);
 
             item.Code = XPathUtility.Evaluate(xpath, "ProductCode", "");
+            item.SKU = item.Code;
             item.Name = XPathUtility.Evaluate(xpath, "ProductName", "");
             item.Quantity = XPathUtility.Evaluate(xpath, "Quantity", 0);
             item.Weight = XPathUtility.Evaluate(xpath, "ProductWeight", (double) 0.0);
