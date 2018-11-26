@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 using System.Windows.Forms;
 using System.Windows.Input;
 using DataVirtualization;
@@ -21,6 +24,7 @@ namespace ShipWorks.Products
     {
         private readonly IProductsViewHost view;
         private DataWrapper<IVirtualizingCollection<IProductListItemEntity>> products;
+        private IList<IProductListItemEntity> selectedProducts;
         private IBasicSortDefinition currentSort;
         private bool showInactiveProducts;
         private readonly IProductsCollectionFactory productsCollectionFactory;
@@ -39,6 +43,8 @@ namespace ShipWorks.Products
 
             RefreshProducts = new RelayCommand(() => RefreshProductsAction());
             EditProductVariant = new RelayCommand<long>(EditProductVariantAction);
+            SelectedProductsChanged = new RelayCommand<IList>(
+                items => SelectedProducts = items?.OfType<DataWrapper<IProductListItemEntity>>().Select(x => x.Data).ToList());
         }
 
         /// <summary>
@@ -52,12 +58,26 @@ namespace ShipWorks.Products
         public ICommand EditProductVariant { get; }
 
         /// <summary>
+        /// The list of selected products has changed
+        /// </summary>
+        public ICommand SelectedProductsChanged { get; }
+
+        /// <summary>
         /// List of products
         /// </summary>
         public DataWrapper<IVirtualizingCollection<IProductListItemEntity>> Products
         {
             get => products;
             private set => Set(ref products, value);
+        }
+
+        /// <summary>
+        /// Collection of selected products
+        /// </summary>
+        public IList<IProductListItemEntity> SelectedProducts
+        {
+            get => selectedProducts;
+            set => Set(ref selectedProducts, value);
         }
 
         /// <summary>
