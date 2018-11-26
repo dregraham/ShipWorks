@@ -4,8 +4,10 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:ui="clr-namespace:ShipWorks.Products.UI"
+        xmlns:geography="clr-namespace:Interapptive.Shared.Business.Geography;assembly=Interapptive.Shared"
         mc:Ignorable="d"
-        Title="Product Editor" Height="700" Width="600"
+        SizeToContent="Height"
+        Title="Product Editor" Width="500"
         FontFamily="/ShipWorks.UI;component/Styles/BlueSteel/#Roboto"
     d:DataContext="{d:DesignInstance ui:ProductEditorViewModel}">
     <Window.Resources>
@@ -215,13 +217,17 @@
         <TextBlock Grid.Row="18"
                    Grid.Column="0"
                    Text="Country Of Origin:" 
-                   Style="{StaticResource FieldLabel}"/>
+                   Style="{StaticResource FieldLabel}"
+                   Margin="0"/>
 
-        <TextBox Grid.Row="18"
-                 Grid.Column="1"
-                 Text="{Binding CountryOfOrigin, UpdateSourceTrigger=PropertyChanged}" 
-                 Style="{StaticResource FormTextBox}"
-                 Margin="10 0 0 0"/>
-
+        <ComboBox Grid.Row="18"
+                  Grid.Column="1"
+                  DisplayMemberPath="Key"
+                  SelectedValuePath="Value"
+                  SelectedValue="{Binding CountryOfOrigin}"
+                  ItemsSource="{Binding Source={x:Static geography:CountryList.Countries}, Mode=OneTime}"
+                  Style="{StaticResource FormComboBox}"
+                  Margin="10 0 0 0"/>
+        
     </Grid>
 </Window>
