@@ -804,24 +804,24 @@ namespace ShipWorks.Stores.Communication
                 return;
             }
 
-            if ((product.Weight ?? 0) > 0)
-            {
-                item.Weight = (double) product.Weight.Value;
-            }
+            // "Attempting to apply product dimensions to item 00001 for sku ABCD"
+            log.InfoFormat("Attempting to apply product dimensions to item {0} for sku {1}",
+                item.OrderItemID, item.SKU.Trim());
 
-            if ((product.Length ?? 0) > 0)
-            {
-                item.Length = product.Length.Value;
-            }
+            ApplyDim("Weight", item, product.Weight, () => item.Weight = (double) product.Weight.Value);
+            ApplyDim("Length", item, product.Length, () => item.Length = product.Length.Value);
+            ApplyDim("Width", item, product.Width, () => item.Width = product.Width.Value);
+            ApplyDim("Height", item, product.Height, () => item.Height = product.Height.Value);
+        }
 
-            if ((product.Width ?? 0) > 0)
+        /// <summary>
+        /// Apply a dimension when appropriate 
+        /// </summary>
+        private void ApplyDim(string dimName, OrderItemEntity item, decimal? toApply, Action apply)
+        {
+            if (toApply.HasValue && toApply.Value > 0)
             {
-                item.Width = product.Width.Value;
-            }
-
-            if ((product.Height ?? 0) > 0)
-            {
-                item.Height = product.Height.Value;
+                apply();
             }
         }
 
