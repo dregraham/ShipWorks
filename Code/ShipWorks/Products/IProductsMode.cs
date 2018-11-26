@@ -23,6 +23,11 @@ namespace ShipWorks.Products
         ICommand EditProductVariant { get; }
 
         /// <summary>
+        /// Add a product
+        /// </summary>
+        ICommand AddProduct { get; }
+
+        /// <summary>
         /// List of products
         /// </summary>
         DataWrapper<IVirtualizingCollection<IProductListItemEntity>> Products { get; }

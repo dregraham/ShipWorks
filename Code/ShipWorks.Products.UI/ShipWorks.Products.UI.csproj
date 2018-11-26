@@ -86,6 +86,7 @@
       <Link>Properties\AssemblyInfoCommon.cs</Link>
     </Compile>
     <Compile Include="DesignerProductsMode.cs" />
+    <Compile Include="IProductEditorDialog.cs" />
     <Compile Include="IProductsView.cs" />
     <Compile Include="ProductEditorDialog.xaml.cs">
       <DependentUpon>ProductEditorDialog.xaml</DependentUpon>

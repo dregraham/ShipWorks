@@ -64,13 +64,14 @@ namespace ShipWorks.Products.UI
                 }, 2, 3));
         }
 
+        public ICommand AddProduct => throw new NotImplementedException();
         public ICommand RefreshProducts => throw new NotImplementedException();
         public ICommand EditProductVariant => throw new NotImplementedException();
 
         public DataWrapper<IVirtualizingCollection<IProductListItemEntity>> Products { get; private set; }
         public IBasicSortDefinition CurrentSort { get; set; }
         public bool ShowInactiveProducts { get; set; }
-
+        
         public void Dispose()
         {
             throw new NotImplementedException();

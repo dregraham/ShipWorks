@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Reflection;
 using System.Windows.Forms;
 using System.Windows.Input;
 using DataVirtualization;
@@ -8,6 +9,7 @@ using GalaSoft.MvvmLight.CommandWpf;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.UI;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Data.Model.HelperClasses;
 
@@ -25,21 +27,33 @@ namespace ShipWorks.Products
         private bool showInactiveProducts;
         private readonly IProductsCollectionFactory productsCollectionFactory;
         private readonly IMessageHelper messageHelper;
+        private readonly IProductEditorViewModel productEditorViewModel;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public ProductsMode(IProductsViewHost view, IProductsCollectionFactory productsCollectionFactory, IMessageHelper messageHelper)
+        public ProductsMode(IProductsViewHost view, 
+            IProductsCollectionFactory productsCollectionFactory, 
+            IMessageHelper messageHelper,
+            IProductEditorViewModel productEditorViewModel)
         {
             this.productsCollectionFactory = productsCollectionFactory;
             this.messageHelper = messageHelper;
+            this.productEditorViewModel = productEditorViewModel;
             this.view = view;
 
             CurrentSort = new BasicSortDefinition(ProductListItemFields.Name.Name, ListSortDirection.Ascending);
 
             RefreshProducts = new RelayCommand(() => RefreshProductsAction());
             EditProductVariant = new RelayCommand<long>(EditProductVariantAction);
+            AddProduct = new RelayCommand(() => AddProductAction());
         }
+
+        /// <summary>
+        /// Command for Adding a product
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public ICommand AddProduct { get; set; }
 
         /// <summary>
         /// Command to refresh the products list
@@ -114,6 +128,15 @@ namespace ShipWorks.Products
         private void EditProductVariantAction(long productVariantID)
         {
             messageHelper.ShowInformation($"You want to edit {productVariantID}, which will be implemented soon");
+        }
+
+        /// <summary>
+        /// Add a product
+        /// </summary>
+        private void AddProductAction()
+        {
+            productEditorViewModel.ShowProductEditor(new ProductVariantAliasEntity());
+            RefreshProductsAction();
         }
 
         /// <summary>
