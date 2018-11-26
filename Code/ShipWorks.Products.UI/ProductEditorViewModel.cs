@@ -2,7 +2,7 @@ using System;
 using System.ComponentModel;
 using System.Reflection;
 using System.Windows.Input;
-using GalaSoft.MvvmLight.Command;
+using GalaSoft.MvvmLight.CommandWpf;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.UI;
 using SD.LLBLGen.Pro.ORMSupportClasses;
@@ -20,7 +20,7 @@ namespace ShipWorks.Products.UI
     {
         public event PropertyChangedEventHandler PropertyChanged;
         private readonly PropertyChangedHandler handler;
-        private readonly IProductEditorDialog dialog;
+        private readonly ProductEditorDialog dialog;
         private readonly IMessageHelper messageHelper;
         private readonly ISqlAdapterFactory adapterFactory;
         private ProductVariantAliasEntity product;
@@ -45,15 +45,15 @@ namespace ShipWorks.Products.UI
         /// <summary>
         /// Constructor
         /// </summary>
-        public ProductEditorViewModel(IProductEditorDialog dialog, IMessageHelper messageHelper, ISqlAdapterFactory adapterFactory)
+        public ProductEditorViewModel(ProductEditorDialog dialog, IMessageHelper messageHelper, ISqlAdapterFactory adapterFactory)
         {
             handler = new PropertyChangedHandler(this, () => PropertyChanged);
             this.dialog = dialog;
             this.messageHelper = messageHelper;
             this.adapterFactory = adapterFactory;
 
-            Save = new RelayCommand(() => SaveProduct());
-            Cancel = new RelayCommand(() => dialog.Close());
+            Save = new RelayCommand(SaveProduct);
+            Cancel = new RelayCommand(dialog.Close);
         }
 
         /// <summary>
