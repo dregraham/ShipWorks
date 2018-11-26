@@ -13,6 +13,7 @@
 // IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 using System.ComponentModel;
+using System.Reflection;
 
 namespace DataVirtualization
 {
@@ -57,11 +58,13 @@ namespace DataVirtualization
         /// <summary>
         /// Is the wrapper loading the data?
         /// </summary>
+        [Obfuscation(Exclude = true)]
         public bool IsLoading => Data == null;
 
         /// <summary>
         /// Data item
         /// </summary>
+        [Obfuscation(Exclude = true)]
         public T Data
         {
             get => data;

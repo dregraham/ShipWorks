@@ -167,6 +167,20 @@ namespace ShipWorks.Products.UI
         /// </summary>
         public void ShowProductEditor(ProductVariantAliasEntity product)
         {
+            // Ensure the product has a product variant
+            // new ProductVariantAliasEntity does not have a ProductVarientEntity
+            if (product.ProductVariant == null)
+            {
+                product.ProductVariant = new ProductVariantEntity();
+            }
+
+            // Ensure the product variant has a product
+            // new ProductVarientEntity does not have a ProductEntity
+            if (product.ProductVariant.Product == null)
+            {
+                product.ProductVariant.Product = new ProductEntity();
+            }
+
             this.product = product;
             dialog.DataContext = this;
 
@@ -196,8 +210,14 @@ namespace ShipWorks.Products.UI
 
             using (ISqlAdapter adapter = adapterFactory.Create())
             {
-                adapter.SaveEntity(product.ProductVariant);
-                adapter.SaveEntity(product);
+                try
+                {
+                    adapter.SaveEntity(product.ProductVariant.Product);
+                }
+                catch (Exception ex)
+                {
+                    messageHelper.ShowError("An error occurred while saving the product", ex);
+                }
             }
         }
     }
