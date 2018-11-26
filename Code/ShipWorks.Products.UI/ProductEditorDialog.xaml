@@ -66,14 +66,16 @@
         <TextBlock Grid.Row="3"
                    Grid.Column="0"
                    Text="Created Date:"
-                   Style="{StaticResource FieldLabel}"/>
+                   Style="{StaticResource FieldLabel}"
+                   Visibility="Collapsed"/>
 
         <TextBlock Grid.Row="3"
                    Grid.Column="1"
                    Text="{Binding CreatedDate, UpdateSourceTrigger=PropertyChanged}" 
                    Style="{StaticResource FieldLabel}"
                    Margin="10 0 0 10"
-                   HorizontalAlignment="Left"/>
+                   HorizontalAlignment="Left"
+                   Visibility="Collapsed"/>
 
         <TextBlock Grid.Row="4"
                    Grid.Column="0"
