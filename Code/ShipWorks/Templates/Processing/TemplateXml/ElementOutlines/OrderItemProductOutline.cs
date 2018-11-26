@@ -1,5 +1,4 @@
 ﻿using System;
-using Interapptive.Shared;
 using ShipWorks.Data.Model.EntityClasses;
 using log4net;
 using ShipWorks.Data.Model.EntityInterfaces;
@@ -16,8 +15,6 @@ namespace ShipWorks.Templates.Processing.TemplateXml.ElementOutlines
         /// <summary>
         /// Constructor
         /// </summary>
-        [NDependIgnoreLongMethod]
-        [NDependIgnoreComplexMethodAttribute]
         public OrderItemProductOutline(TemplateTranslationContext context)
             : base(context)
         {
