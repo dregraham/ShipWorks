@@ -17,7 +17,7 @@ namespace ShipWorks.Products.UI
     {
         public event PropertyChangedEventHandler PropertyChanged;
         private readonly PropertyChangedHandler handler;
-        private readonly IProductEditorDialog dialog;
+        private readonly Func<IProductEditorDialog> createDialog;
         private readonly IMessageHelper messageHelper;
         private readonly ISqlAdapterFactory adapterFactory;
         private ProductVariantAliasEntity product;
@@ -42,10 +42,10 @@ namespace ShipWorks.Products.UI
         /// <summary>
         /// Constructor
         /// </summary>
-        public ProductEditorViewModel(IProductEditorDialog dialog, IMessageHelper messageHelper, ISqlAdapterFactory adapterFactory)
+        public ProductEditorViewModel(Func<IProductEditorDialog> createDialog, IMessageHelper messageHelper, ISqlAdapterFactory adapterFactory)
         {
             handler = new PropertyChangedHandler(this, () => PropertyChanged);
-            this.dialog = dialog;
+            this.createDialog = createDialog;
             this.messageHelper = messageHelper;
             this.adapterFactory = adapterFactory;
         }
@@ -182,8 +182,25 @@ namespace ShipWorks.Products.UI
             }
 
             this.product = product;
-            dialog.DataContext = this;
 
+            SKU = product.Sku;
+            IsActive = product.ProductVariant.IsActive;
+            Name = product.ProductVariant.Name;
+            UPC = product.ProductVariant.UPC;
+            ASIN = product.ProductVariant.ASIN;
+            ISBN = product.ProductVariant.ISBN;
+            Weight = product.ProductVariant.Weight ?? 0;
+            Length = product.ProductVariant.Length ?? 0;
+            Width = product.ProductVariant.Width ?? 0;
+            Height = product.ProductVariant.Height ?? 0;
+            ImageUrl = product.ProductVariant.ImageUrl;
+            BinLocation = product.ProductVariant.BinLocation;
+            HarmonizedCode = product.ProductVariant.HarmonizedCode;
+            DeclaredValue = product.ProductVariant.DeclaredValue ?? 0;
+            CountryOfOrigin = product.ProductVariant.CountryOfOrigin;
+
+            IProductEditorDialog dialog = createDialog();
+            dialog.DataContext = this;
             messageHelper.ShowDialog(dialog);
         }
 
