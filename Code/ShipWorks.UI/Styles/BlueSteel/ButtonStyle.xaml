@@ -11,7 +11,7 @@
         <Setter Property="Padding" Value="20,4" />
         <Setter Property="FontSize" Value="12"/>
         <Setter Property="FontWeight" Value="Bold" />
-        <Setter Property="HorizontalContentAlignment" Value="Center"/>       
+        <Setter Property="HorizontalContentAlignment" Value="Center"/>
     </Style>
 
     <Style x:Key="SmallPrimaryButton" TargetType="{x:Type Button}" BasedOn="{StaticResource SmallButton}">
@@ -57,7 +57,7 @@
     <Style x:Key="LargePrimaryButton" TargetType="{x:Type Button}" BasedOn="{StaticResource SmallPrimaryButton}">
         <Setter Property="Width" Value="207"/>
         <Setter Property="FontSize" Value="16"/>
-    </Style>    
+    </Style>
 
     <Style x:Key="LinkButton" TargetType="{x:Type Hyperlink}">
         <Setter Property="TextBlock.TextDecorations" Value="{x:Null}" />
@@ -80,7 +80,7 @@
                 <Setter Property="Foreground" Value="Gray" />
             </Trigger>
         </Style.Triggers>
-    </Style>    
+    </Style>
 
     <ControlTemplate x:Key="IconButtonTemplate" TargetType="{x:Type ButtonBase}">
         <Border x:Name="border" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" SnapsToDevicePixels="True">

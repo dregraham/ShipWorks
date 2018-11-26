@@ -2,17 +2,19 @@
     x:Class="ShipWorks.Products.UI.ProductsView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:cmd="clr-namespace:GalaSoft.MvvmLight.Command;assembly=GalaSoft.MvvmLight.Platform"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
     xmlns:local="clr-namespace:ShipWorks.Products.UI;assembly=ShipWorks.Products.UI"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:ui="http://schemas.shipworks.com/ui"
     xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
+    xmlns:ui="http://schemas.shipworks.com/ui"
     d:DataContext="{d:DesignInstance local:DesignerProductsMode,
                                      IsDesignTimeCreatable=True}"
     d:DesignHeight="500"
     d:DesignWidth="1200"
-    mc:Ignorable="d"
-    FontFamily="/ShipWorks.UI;component/Styles/BlueSteel/#Roboto">
+    FontFamily="/ShipWorks.UI;component/Styles/BlueSteel/#Roboto"
+    mc:Ignorable="d">
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -20,15 +22,36 @@
                 <ResourceDictionary Source="/ShipWorks.UI;component/Styles/BlueSteel/BlueSteelStyle.xaml" />
             </ResourceDictionary.MergedDictionaries>
 
-            <Style x:Key="PrimaryButton" TargetType="Button" BasedOn="{StaticResource SmallPrimaryButton}">
-                <Setter Property="Margin" Value="0 0 10 0"/>
+            <Style
+                x:Key="PrimaryButton"
+                BasedOn="{StaticResource SmallPrimaryButton}"
+                TargetType="Button">
+                <Setter Property="Margin" Value="0,0,10,0" />
             </Style>
-            <Style x:Key="SecondaryButton" TargetType="Button" BasedOn="{StaticResource SmallSecondaryButton}">
-                <Setter Property="Margin" Value="0 0 10 0"/>
+            <Style
+                x:Key="SecondaryButton"
+                BasedOn="{StaticResource SmallSecondaryButton}"
+                TargetType="Button">
+                <Setter Property="Margin" Value="0,0,10,0" />
             </Style>
-        </ResourceDictionary>        
+            <Style
+                x:Key="Link.Selected"
+                BasedOn="{StaticResource Link}"
+                TargetType="Button">
+                <Setter Property="Foreground" Value="White" />
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="Button">
+                            <TextBlock TextDecorations="Underline">
+                                <ContentPresenter />
+                            </TextBlock>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+        </ResourceDictionary>
     </UserControl.Resources>
-    <Grid Margin="5 10 5 5">
+    <Grid Margin="5,10,5,5">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
@@ -36,73 +59,89 @@
 
         <Grid IsSharedSizeScope="True">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto" SharedSizeGroup="A"/>
-                <ColumnDefinition Width="Auto" SharedSizeGroup="A"/>
-                <ColumnDefinition Width="Auto" SharedSizeGroup="A"/>
-                <ColumnDefinition Width="Auto" SharedSizeGroup="A"/>
-                <ColumnDefinition Width="Auto" SharedSizeGroup="A"/>
+                <ColumnDefinition Width="Auto" SharedSizeGroup="A" />
+                <ColumnDefinition Width="Auto" SharedSizeGroup="A" />
+                <ColumnDefinition Width="Auto" SharedSizeGroup="A" />
+                <ColumnDefinition Width="Auto" SharedSizeGroup="A" />
+                <ColumnDefinition Width="Auto" SharedSizeGroup="A" />
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
-            <Button Grid.Column="0"
-                    Content="Add"
-                    Style="{StaticResource PrimaryButton}"/>
-            <Button Grid.Column="1"
-                    Content="Edit"
-                    Style="{StaticResource PrimaryButton}"/>
-            <Button Grid.Column="2"
-                    Content="Delete"
-                    Style="{StaticResource PrimaryButton}"/>
-            <Button Grid.Column="3"
-                    Content="Mark Active"
-                    Style="{StaticResource SecondaryButton}"/>
-            <Button Grid.Column="4"
-                    Content="Mark Inactive"
-                    Style="{StaticResource SecondaryButton}"/>
-            
-            <CheckBox Grid.Column="5"
-                      IsChecked="{Binding ShowInactiveProducts}"
-                      Style="{StaticResource FormCheckBox}"
-                      Margin="0 0 10 0">Show inactive products</CheckBox>
-            <!-- <Button Grid.Column="6" -->
-            <!--         Command="{Binding RefreshProducts}" -->
-            <!--         Margin="0 0 10 0">Refresh</Button> -->
-            
-            <syncfusion:SfTextBoxExt Grid.Column="7"
-                                     MinWidth="300"
-                                     HorizontalAlignment="Right"
-                                     VerticalContentAlignment="Center"
-                                     FontSize="20">
+            <Button
+                Grid.Column="0"
+                Content="Add"
+                Style="{StaticResource PrimaryButton}" />
+            <Button
+                Grid.Column="1"
+                Content="Edit"
+                Style="{StaticResource PrimaryButton}" />
+            <Button
+                Grid.Column="2"
+                Command="{Binding RefreshProducts}"
+                Content="Refresh"
+                Style="{StaticResource PrimaryButton}" />
+            <Button
+                Grid.Column="3"
+                Content="Mark Active"
+                Style="{StaticResource SecondaryButton}" />
+            <Button
+                Grid.Column="4"
+                Content="Mark Inactive"
+                Style="{StaticResource SecondaryButton}" />
+
+            <CheckBox
+                Grid.Column="5"
+                Margin="0,0,10,0"
+                IsChecked="{Binding ShowInactiveProducts}"
+                Style="{StaticResource FormCheckBox}">
+                Show inactive products
+            </CheckBox>
+
+            <syncfusion:SfTextBoxExt
+                Grid.Column="7"
+                MinWidth="300"
+                HorizontalAlignment="Right"
+                VerticalContentAlignment="Center"
+                FontSize="20">
                 <syncfusion:SfTextBoxExt.Resources>
                     <Style TargetType="{x:Type Border}">
-                        <Setter Property="CornerRadius" Value="2"/>
+                        <Setter Property="CornerRadius" Value="2" />
                     </Style>
                 </syncfusion:SfTextBoxExt.Resources>
                 <syncfusion:SfTextBoxExt.Watermark>
-                    <TextBlock VerticalAlignment="Center"
-                               Text="Search Products"
-                               Opacity=".5"
-                               Margin="2"
-                               FontSize="20"
-                               Background="{StaticResource InputControlBackgroundGradient}"/>
+                    <TextBlock
+                        Margin="2"
+                        VerticalAlignment="Center"
+                        Background="{StaticResource InputControlBackgroundGradient}"
+                        FontSize="20"
+                        Opacity=".5"
+                        Text="Search Products" />
                 </syncfusion:SfTextBoxExt.Watermark>
             </syncfusion:SfTextBoxExt>
-                
         </Grid>
 
         <DataGrid
+            x:Name="ProductsGrid"
             Grid.Row="1"
-            Margin="0 10 0 0"
+            Margin="0,10,0,0"
             ui:DataGridSort.CurrentSort="{Binding CurrentSort, Mode=TwoWay}"
             AutoGenerateColumns="False"
-            SelectionMode="Extended"
+            HeadersVisibility="All"
             ItemsSource="{Binding Products.Data}"
             ScrollViewer.IsDeferredScrollingEnabled="True"
-            VirtualizingStackPanel.IsVirtualizing="True"
-            VirtualizingStackPanel.VirtualizationMode="Recycling"
+            SelectionMode="Extended"
             Style="{StaticResource DataGrid}"
-            HeadersVisibility="All">
+            VirtualizingStackPanel.IsVirtualizing="True"
+            VirtualizingStackPanel.VirtualizationMode="Recycling">
+            <DataGrid.InputBindings>
+                <KeyBinding Command="ApplicationCommands.NotACommand" Gesture="Ctrl+A" />
+            </DataGrid.InputBindings>
+            <i:Interaction.Triggers>
+                <i:EventTrigger EventName="SelectionChanged">
+                    <cmd:EventToCommand Command="{Binding SelectedProductsChanged}" CommandParameter="{Binding SelectedItems, ElementName=ProductsGrid}" />
+                </i:EventTrigger>
+            </i:Interaction.Triggers>
             <DataGrid.ColumnHeaderStyle>
                 <Style BasedOn="{StaticResource DataGridColumnHeader}" TargetType="{x:Type DataGridColumnHeader}">
                     <Setter Property="FontSize" Value="16" />
@@ -110,19 +149,21 @@
             </DataGrid.ColumnHeaderStyle>
             <DataGrid.RowHeaderStyle>
                 <Style BasedOn="{StaticResource {x:Type DataGridRowHeader}}" TargetType="{x:Type DataGridRowHeader}">
-                    <Setter Property="Background" Value="Transparent"/>
+                    <Setter Property="Background" Value="Transparent" />
                     <Setter Property="Template">
                         <Setter.Value>
                             <ControlTemplate>
-                                <Border BorderBrush="{StaticResource BorderColor}"
-                                        Background="Transparent"
-                                        BorderThickness="0 0 1 1"
-                                        HorizontalAlignment="Stretch"
-                                        VerticalAlignment="Stretch">
-                                    <CheckBox IsChecked="{Binding Path=IsSelected, Mode=TwoWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGridRow}}}"
-                                              Margin="3 0"
-                                              HorizontalAlignment="Center"
-                                              VerticalAlignment="Center"/>    
+                                <Border
+                                    HorizontalAlignment="Stretch"
+                                    VerticalAlignment="Stretch"
+                                    Background="Transparent"
+                                    BorderBrush="{StaticResource BorderColor}"
+                                    BorderThickness="0,0,1,1">
+                                    <CheckBox
+                                        Margin="3,0"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center"
+                                        IsChecked="{Binding Path=IsSelected, Mode=TwoWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGridRow}}}" />
                                 </Border>
                             </ControlTemplate>
                         </Setter.Value>
@@ -130,78 +171,100 @@
                 </Style>
             </DataGrid.RowHeaderStyle>
             <DataGrid.Columns>
-                <DataGridTemplateColumn CanUserSort="False" Header="Image"
-                                        Width="*">
+                <DataGridTemplateColumn
+                    Width="*"
+                    CanUserSort="False"
+                    Header="Image">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <Image Width="64" Height="64" Source="{Binding Data.ImageUrl, IsAsync=True}" 
-                                   HorizontalAlignment="Left"
-                                   VerticalAlignment="Center"/>
+                            <Image
+                                Width="64"
+                                Height="64"
+                                HorizontalAlignment="Left"
+                                VerticalAlignment="Center"
+                                Source="{Binding Data.ImageUrl, IsAsync=True}" />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTemplateColumn Header="SKU" SortMemberPath="SKU"
-                                        Width="*">
+                <DataGridTemplateColumn
+                    Width="*"
+                    Header="SKU"
+                    SortMemberPath="SKU">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <Button
+                                x:Name="SKUButton"
+                                HorizontalAlignment="Left"
+                                VerticalAlignment="Center"
                                 Command="{Binding DataContext.EditProductVariant, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"
                                 CommandParameter="{Binding Data.ProductVariantID}"
-                                Style="{StaticResource Link}"
-                                HorizontalAlignment="Left"
-                                VerticalAlignment="Center">
-                                <TextBlock Text="{Binding Data.SKU}"
-                                           FontSize="12"/>
+                                Style="{StaticResource Link}">
+                                <TextBlock FontSize="12" Text="{Binding Data.SKU}" />
                             </Button>
+                            <DataTemplate.Triggers>
+                                <DataTrigger Binding="{Binding Path=IsSelected, RelativeSource={RelativeSource AncestorType=DataGridRow}}" Value="True">
+                                    <Setter TargetName="SKUButton" Property="Style" Value="{StaticResource Link.Selected}" />
+                                </DataTrigger>
+                            </DataTemplate.Triggers>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTemplateColumn Header="Name" SortMemberPath="Name" Width="*">
+                <DataGridTemplateColumn
+                    Width="*"
+                    Header="Name"
+                    SortMemberPath="Name">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <Button
+                                x:Name="NameButton"
+                                HorizontalAlignment="Left"
+                                VerticalAlignment="Center"
                                 Command="{Binding DataContext.EditProductVariant, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"
                                 CommandParameter="{Binding Data.ProductVariantID}"
-                                Style="{StaticResource Link}"
-                                HorizontalAlignment="Left"
-                                VerticalAlignment="Center">
-                                <TextBlock Text="{Binding Data.Name}"
-                                           FontSize="12"/>
+                                Style="{StaticResource Link}">
+                                <TextBlock FontSize="12" Text="{Binding Data.Name}" />
                             </Button>
+                            <DataTemplate.Triggers>
+                                <DataTrigger Binding="{Binding Path=IsSelected, RelativeSource={RelativeSource AncestorType=DataGridRow}}" Value="True">
+                                    <Setter TargetName="NameButton" Property="Style" Value="{StaticResource Link.Selected}" />
+                                </DataTrigger>
+                            </DataTemplate.Triggers>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTemplateColumn Width="*"
-                                        CanUserSort="False"
-                                        Header="Dimensions">
+                <DataGridTemplateColumn
+                    Width="*"
+                    CanUserSort="False"
+                    Header="Dimensions">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <TextBlock Text="{Binding Data.Dimensions}"
-                                       HorizontalAlignment="Left"
-                                       VerticalAlignment="Center"
-                                       FontSize="12"/>
+                            <TextBlock
+                                HorizontalAlignment="Left"
+                                VerticalAlignment="Center"
+                                FontSize="12"
+                                Text="{Binding Data.Dimensions}" />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTemplateColumn Width="*"
-                                        Header="Weight">
+                <DataGridTemplateColumn Width="*" Header="Weight">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <TextBlock Text="{Binding Data.Weight}"
-                                       HorizontalAlignment="Left"
-                                       VerticalAlignment="Center"
-                                       FontSize="12"/>
+                            <TextBlock
+                                HorizontalAlignment="Left"
+                                VerticalAlignment="Center"
+                                FontSize="12"
+                                Text="{Binding Data.Weight}" />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTemplateColumn Width="*"
-                                        Header="Location">
+                <DataGridTemplateColumn Width="*" Header="Location">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <TextBlock Text="{Binding Data.BinLocation}"
-                                       HorizontalAlignment="Left"
-                                       VerticalAlignment="Center"
-                                       FontSize="12"/>
+                            <TextBlock
+                                HorizontalAlignment="Left"
+                                VerticalAlignment="Center"
+                                FontSize="12"
+                                Text="{Binding Data.BinLocation}" />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
