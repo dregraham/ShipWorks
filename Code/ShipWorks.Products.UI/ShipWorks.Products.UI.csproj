@@ -87,6 +87,10 @@
     </Compile>
     <Compile Include="DesignerProductsMode.cs" />
     <Compile Include="IProductsView.cs" />
+    <Compile Include="ProductEditorDialog.xaml.cs">
+      <DependentUpon>ProductEditorDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ProductEditorViewModel.cs" />
     <Compile Include="ProductsView.xaml.cs">
       <DependentUpon>ProductsView.xaml</DependentUpon>
     </Compile>
@@ -123,6 +127,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Page Include="ProductEditorDialog.xaml" />
     <Page Include="ProductsView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
