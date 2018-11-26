@@ -1,8 +1,8 @@
 <ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <ResourceDictionary.MergedDictionaries>
-        <ResourceDictionary Source="/ShipWorks.OrderLookup;component/Styles/Colors.xaml"/>
-        <ResourceDictionary Source="/ShipWorks.OrderLookup;component/Styles/Shapes.xaml"/>
+        <ResourceDictionary Source="/ShipWorks.UI;component/Styles/BlueSteel/Colors.xaml"/>
+        <ResourceDictionary Source="/ShipWorks.UI;component/Styles/BlueSteel/Shapes.xaml"/>
     </ResourceDictionary.MergedDictionaries>
     <Style x:Key="Expander.HeaderFocusVisual">
         <Setter Property="Control.Template">
@@ -50,7 +50,7 @@
         <Setter Property="BorderBrush" Value="Transparent"/>
         <Setter Property="BorderThickness" Value="1"/>
         <Setter Property="Padding" Value="10" />
-        <Setter Property="FontFamily" Value="/ShipWorks.OrderLookup;component/#Roboto" />
+        <Setter Property="FontFamily" Value="/ShipWorks.UI;component/Styles/BlueSteel/#Roboto"  />
         <Setter Property="FontSize" Value="8.25 pt" />
         <Setter Property="FontStyle" Value="Normal" />
         <Setter Property="FontStretch" Value="Normal" />

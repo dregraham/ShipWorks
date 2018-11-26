@@ -3,11 +3,209 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:ShipWorks.Products.UI;assembly=ShipWorks.Products.UI"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    d:DesignHeight="450"
-    d:DesignWidth="800"
-    mc:Ignorable="d">
-    <Grid>
-        <TextBlock>Products</TextBlock>
+    xmlns:ui="http://schemas.shipworks.com/ui"
+    xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
+    d:DataContext="{d:DesignInstance local:DesignerProductsMode,
+                                     IsDesignTimeCreatable=True}"
+    d:DesignHeight="500"
+    d:DesignWidth="1200"
+    mc:Ignorable="d"
+    FontFamily="/ShipWorks.UI;component/Styles/BlueSteel/#Roboto">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/ShipWorks.UI;component/Styles/GlobalStyle.xaml" />
+                <ResourceDictionary Source="/ShipWorks.UI;component/Styles/BlueSteel/BlueSteelStyle.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+
+            <Style x:Key="PrimaryButton" TargetType="Button" BasedOn="{StaticResource SmallPrimaryButton}">
+                <Setter Property="Margin" Value="0 0 10 0"/>
+            </Style>
+            <Style x:Key="SecondaryButton" TargetType="Button" BasedOn="{StaticResource SmallSecondaryButton}">
+                <Setter Property="Margin" Value="0 0 10 0"/>
+            </Style>
+        </ResourceDictionary>        
+    </UserControl.Resources>
+    <Grid Margin="5 10 5 5">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <Grid IsSharedSizeScope="True">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" SharedSizeGroup="A"/>
+                <ColumnDefinition Width="Auto" SharedSizeGroup="A"/>
+                <ColumnDefinition Width="Auto" SharedSizeGroup="A"/>
+                <ColumnDefinition Width="Auto" SharedSizeGroup="A"/>
+                <ColumnDefinition Width="Auto" SharedSizeGroup="A"/>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Button Grid.Column="0"
+                    Content="Add"
+                    Style="{StaticResource PrimaryButton}"/>
+            <Button Grid.Column="1"
+                    Content="Edit"
+                    Style="{StaticResource PrimaryButton}"/>
+            <Button Grid.Column="2"
+                    Content="Delete"
+                    Style="{StaticResource PrimaryButton}"/>
+            <Button Grid.Column="3"
+                    Content="Mark Active"
+                    Style="{StaticResource SecondaryButton}"/>
+            <Button Grid.Column="4"
+                    Content="Mark Inactive"
+                    Style="{StaticResource SecondaryButton}"/>
+            
+            <CheckBox Grid.Column="5"
+                      IsChecked="{Binding ShowInactiveProducts}"
+                      Style="{StaticResource FormCheckBox}"
+                      Margin="0 0 10 0">Show inactive products</CheckBox>
+            <!-- <Button Grid.Column="6" -->
+            <!--         Command="{Binding RefreshProducts}" -->
+            <!--         Margin="0 0 10 0">Refresh</Button> -->
+            
+            <syncfusion:SfTextBoxExt Grid.Column="7"
+                                     MinWidth="300"
+                                     HorizontalAlignment="Right"
+                                     VerticalContentAlignment="Center"
+                                     FontSize="20">
+                <syncfusion:SfTextBoxExt.Resources>
+                    <Style TargetType="{x:Type Border}">
+                        <Setter Property="CornerRadius" Value="2"/>
+                    </Style>
+                </syncfusion:SfTextBoxExt.Resources>
+                <syncfusion:SfTextBoxExt.Watermark>
+                    <TextBlock VerticalAlignment="Center"
+                               Text="Search Products"
+                               Opacity=".5"
+                               Margin="2"
+                               FontSize="20"
+                               Background="{StaticResource InputControlBackgroundGradient}"/>
+                </syncfusion:SfTextBoxExt.Watermark>
+            </syncfusion:SfTextBoxExt>
+                
+        </Grid>
+
+        <DataGrid
+            Grid.Row="1"
+            Margin="0 10 0 0"
+            ui:DataGridSort.CurrentSort="{Binding CurrentSort, Mode=TwoWay}"
+            AutoGenerateColumns="False"
+            SelectionMode="Extended"
+            ItemsSource="{Binding Products.Data}"
+            ScrollViewer.IsDeferredScrollingEnabled="True"
+            VirtualizingStackPanel.IsVirtualizing="True"
+            VirtualizingStackPanel.VirtualizationMode="Recycling"
+            Style="{StaticResource DataGrid}"
+            HeadersVisibility="All">
+            <DataGrid.ColumnHeaderStyle>
+                <Style BasedOn="{StaticResource DataGridColumnHeader}" TargetType="{x:Type DataGridColumnHeader}">
+                    <Setter Property="FontSize" Value="16" />
+                </Style>
+            </DataGrid.ColumnHeaderStyle>
+            <DataGrid.RowHeaderStyle>
+                <Style BasedOn="{StaticResource {x:Type DataGridRowHeader}}" TargetType="{x:Type DataGridRowHeader}">
+                    <Setter Property="Background" Value="Transparent"/>
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate>
+                                <Border BorderBrush="{StaticResource BorderColor}"
+                                        Background="Transparent"
+                                        BorderThickness="0 0 1 1"
+                                        HorizontalAlignment="Stretch"
+                                        VerticalAlignment="Stretch">
+                                    <CheckBox IsChecked="{Binding Path=IsSelected, Mode=TwoWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGridRow}}}"
+                                              Margin="3 0"
+                                              HorizontalAlignment="Center"
+                                              VerticalAlignment="Center"/>    
+                                </Border>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </DataGrid.RowHeaderStyle>
+            <DataGrid.Columns>
+                <DataGridTemplateColumn CanUserSort="False" Header="Image"
+                                        Width="*">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Image Width="64" Height="64" Source="{Binding Data.ImageUrl, IsAsync=True}" 
+                                   HorizontalAlignment="Left"
+                                   VerticalAlignment="Center"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn Header="SKU" SortMemberPath="SKU"
+                                        Width="*">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Button
+                                Command="{Binding DataContext.EditProductVariant, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"
+                                CommandParameter="{Binding Data.ProductVariantID}"
+                                Style="{StaticResource Link}"
+                                HorizontalAlignment="Left"
+                                VerticalAlignment="Center">
+                                <TextBlock Text="{Binding Data.SKU}"
+                                           FontSize="12"/>
+                            </Button>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn Header="Name" SortMemberPath="Name" Width="*">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Button
+                                Command="{Binding DataContext.EditProductVariant, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"
+                                CommandParameter="{Binding Data.ProductVariantID}"
+                                Style="{StaticResource Link}"
+                                HorizontalAlignment="Left"
+                                VerticalAlignment="Center">
+                                <TextBlock Text="{Binding Data.Name}"
+                                           FontSize="12"/>
+                            </Button>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn Width="*"
+                                        CanUserSort="False"
+                                        Header="Dimensions">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Data.Dimensions}"
+                                       HorizontalAlignment="Left"
+                                       VerticalAlignment="Center"
+                                       FontSize="12"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn Width="*"
+                                        Header="Weight">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Data.Weight}"
+                                       HorizontalAlignment="Left"
+                                       VerticalAlignment="Center"
+                                       FontSize="12"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn Width="*"
+                                        Header="Location">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Data.BinLocation}"
+                                       HorizontalAlignment="Left"
+                                       VerticalAlignment="Center"
+                                       FontSize="12"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
+        </DataGrid>
     </Grid>
 </UserControl>
