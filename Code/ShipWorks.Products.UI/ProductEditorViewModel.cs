@@ -1,14 +1,26 @@
 using System;
 using System.ComponentModel;
 using System.Reflection;
+using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.UI;
 using ShipWorks.Core.UI;
+using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.Products.UI
 {
-    public class ProductEditorViewModel : INotifyPropertyChanged
+    /// <summary>
+    /// View Model for the Product Editor
+    /// </summary>
+    [Component]
+    public class ProductEditorViewModel : IProductEditorViewModel
     {
         public event PropertyChangedEventHandler PropertyChanged;
         private readonly PropertyChangedHandler handler;
+        private readonly IProductEditorDialog dialog;
+        private readonly IMessageHelper messageHelper;
+        private readonly ISqlAdapterFactory adapterFactory;
+        private ProductVariantAliasEntity product;
 
         private bool isActive;
         private DateTime createdDate;
@@ -17,19 +29,25 @@ namespace ShipWorks.Products.UI
         private string upc;
         private string asin;
         private string isbn;
-        private double weight;
-        private double length;
-        private double width;
-        private double height;
+        private decimal weight;
+        private decimal length;
+        private decimal width;
+        private decimal height;
         private string imageUrl;
         private string binLocation;
         private string harmonizedCode;
         private decimal declaredValue;
         private string countryOfOrigin;
 
-        public ProductEditorViewModel()
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public ProductEditorViewModel(IProductEditorDialog dialog, IMessageHelper messageHelper, ISqlAdapterFactory adapterFactory)
         {
             handler = new PropertyChangedHandler(this, () => PropertyChanged);
+            this.dialog = dialog;
+            this.messageHelper = messageHelper;
+            this.adapterFactory = adapterFactory;
         }
 
         [Obfuscation(Exclude = true)]
@@ -82,28 +100,28 @@ namespace ShipWorks.Products.UI
         }
 
         [Obfuscation(Exclude = true)]
-        public double Weight
+        public decimal Weight
         {
             get => weight;
             set => handler.Set(nameof(Weight), ref weight, value);
         }
 
         [Obfuscation(Exclude = true)]
-        public double Length
+        public decimal Length
         {
             get => length;
             set => handler.Set(nameof(Length), ref length, value);
         }
 
         [Obfuscation(Exclude = true)]
-        public double Width
+        public decimal Width
         {
             get => width;
             set => handler.Set(nameof(Width), ref width, value);
         }
 
         [Obfuscation(Exclude = true)]
-        public double Height
+        public decimal Height
         {
             get => height;
             set => handler.Set(nameof(Height), ref height, value);
@@ -142,6 +160,45 @@ namespace ShipWorks.Products.UI
         {
             get => countryOfOrigin;
             set => handler.Set(nameof(CountryOfOrigin), ref countryOfOrigin, value);
+        }
+
+        /// <summary>
+        /// Show the product editor
+        /// </summary>
+        public void ShowProductEditor(ProductVariantAliasEntity product)
+        {
+            this.product = product;
+            dialog.DataContext = this;
+
+            messageHelper.ShowDialog(dialog);
+        }
+
+        /// <summary>
+        /// Save the product
+        /// </summary>
+        private void SaveProduct()
+        {
+            product.Sku = SKU;
+            product.ProductVariant.IsActive = IsActive;
+            product.ProductVariant.Name = Name;
+            product.ProductVariant.UPC = UPC;
+            product.ProductVariant.ASIN = ASIN;
+            product.ProductVariant.ISBN = ISBN;
+            product.ProductVariant.Weight = Weight;
+            product.ProductVariant.Length = Length;
+            product.ProductVariant.Width = Width;
+            product.ProductVariant.Height = Height;
+            product.ProductVariant.ImageUrl = ImageUrl;
+            product.ProductVariant.BinLocation = BinLocation;
+            product.ProductVariant.HarmonizedCode = HarmonizedCode;
+            product.ProductVariant.DeclaredValue = DeclaredValue;
+            product.ProductVariant.CountryOfOrigin = CountryOfOrigin;
+
+            using (ISqlAdapter adapter = adapterFactory.Create())
+            {
+                adapter.SaveEntity(product.ProductVariant);
+                adapter.SaveEntity(product);
+            }
         }
     }
 }
