@@ -55,31 +55,9 @@ namespace DataVirtualization
         /// <summary>
         /// Populate the page
         /// </summary>
-        public void Populate(IEnumerable<T> newItems)
-        {
+        public void Populate(IEnumerable<T> newItems) =>
             newItems
                 .Zip(Items, (x, y) => (Item: x, Wrapper: y))
                 .ForEach(x => x.Wrapper.Data = x.Item);
-
-            //int i;
-            //int index = 0;
-            //for (i = 0; i < newItems.Count && i < Items.Count; i++)
-            //{
-            //    Items[i].Data = newItems[i];
-            //    index = Items[i].Index;
-            //}
-
-            //while (i < newItems.Count)
-            //{
-            //    index++;
-            //    Items.Add(new DataWrapper<T>(index) { Data = newItems[i] });
-            //    i++;
-            //}
-
-            //while (i < Items.Count)
-            //{
-            //    Items.RemoveAt(Items.Count - 1);
-            //}
-        }
     }
 }

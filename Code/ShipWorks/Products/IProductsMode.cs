@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Windows.Forms;
 using System.Windows.Input;
 using DataVirtualization;
@@ -31,6 +32,16 @@ namespace ShipWorks.Products
         /// List of products
         /// </summary>
         DataWrapper<IVirtualizingCollection<IProductListItemEntity>> Products { get; }
+
+        /// <summary>
+        /// Collection of selected products
+        /// </summary>
+        IList<IProductListItemEntity> SelectedProducts { get; set; }
+
+        /// <summary>
+        /// The list of selected products has changed
+        /// </summary>
+        ICommand SelectedProductsChanged { get; }
 
         /// <summary>
         /// Current sorting of the products list
