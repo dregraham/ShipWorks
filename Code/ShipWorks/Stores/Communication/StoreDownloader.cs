@@ -31,6 +31,7 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Data.Model.FactoryClasses;
 using ShipWorks.Data.Model.HelperClasses;
+using ShipWorks.Products;
 using ShipWorks.Shipping.ShipSense;
 using ShipWorks.Stores.Content;
 using ShipWorks.Templates.Tokens;
@@ -760,6 +761,8 @@ namespace ShipWorks.Stores.Communication
             SetAddressValidationStatus(order, true, "Ship", adapter);
             SetAddressValidationStatus(order, true, "Bill", adapter);
 
+            UpdateItemsFromProductCatalog(order);
+
             log.Info($"StoreDownloader.SaveNewOrder waiting for getCustomerTask");
             // Wait for the customer to be found or created
             CustomerEntity customer = await getCustomerTask.ConfigureAwait(false);
@@ -769,6 +772,57 @@ namespace ShipWorks.Stores.Communication
             AdjustNoteCount(order, customer);
 
             await PerformInitialOrderSave(order, customer, adapter).ConfigureAwait(false);
+        }
+
+        /// <summary>
+        /// Loop through each item. If there is a matching active product in the catalog, update the dimensions
+        /// </summary>
+        private void UpdateItemsFromProductCatalog(OrderEntity order)
+        {
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+            {
+                IProductRepository productRepostiory = lifetimeScope.Resolve<IProductRepository>();
+
+                foreach (OrderItemEntity item in order.OrderItems)
+                {
+                    if (!item.SKU.IsNullOrWhiteSpace())
+                    {
+                        IProductVariantEntity product = productRepostiory.FetchProductVariantReadOnly(item.SKU.Trim());
+                        UpdateItemFromProduct(item, product);
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// If product is active, update item with its dimensions
+        /// </summary>
+        private void UpdateItemFromProduct(OrderItemEntity item, IProductVariantEntity product)
+        {
+            if (product == null || !product.IsActive)
+            {
+                return;
+            }
+
+            if ((product.Weight ?? 0) > 0)
+            {
+                item.Weight = (double) product.Weight.Value;
+            }
+
+            if ((product.Length ?? 0) > 0)
+            {
+                item.Length = product.Length.Value;
+            }
+
+            if ((product.Width ?? 0) > 0)
+            {
+                item.Width = product.Width.Value;
+            }
+
+            if ((product.Height ?? 0) > 0)
+            {
+                item.Height = product.Height.Value;
+            }
         }
 
         /// <summary>
