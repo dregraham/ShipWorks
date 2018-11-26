@@ -31,7 +31,7 @@ namespace ShipWorks.Products
         private bool showInactiveProducts;
         private readonly IProductsCollectionFactory productsCollectionFactory;
         private readonly IMessageHelper messageHelper;
-        private readonly IProductEditorViewModel productEditorViewModel;
+        private readonly Func<IProductEditorViewModel> productEditorViewModelFunc;
 
         /// <summary>
         /// Constructor
@@ -39,11 +39,11 @@ namespace ShipWorks.Products
         public ProductsMode(IProductsViewHost view,
             IProductsCollectionFactory productsCollectionFactory,
             IMessageHelper messageHelper,
-            IProductEditorViewModel productEditorViewModel)
+            Func<IProductEditorViewModel> productEditorViewModelFunc)
         {
             this.productsCollectionFactory = productsCollectionFactory;
             this.messageHelper = messageHelper;
-            this.productEditorViewModel = productEditorViewModel;
+            this.productEditorViewModelFunc = productEditorViewModelFunc;
             this.view = view;
 
             CurrentSort = new BasicSortDefinition(ProductListItemFields.Name.Name, ListSortDirection.Ascending);
@@ -155,7 +155,7 @@ namespace ShipWorks.Products
         /// </summary>
         private void AddProductAction()
         {
-            productEditorViewModel.ShowProductEditor(new ProductVariantAliasEntity());
+            productEditorViewModelFunc().ShowProductEditor(new ProductVariantAliasEntity());
             RefreshProductsAction();
         }
 

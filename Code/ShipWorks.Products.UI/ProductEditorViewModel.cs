@@ -1,8 +1,11 @@
 using System;
 using System.ComponentModel;
 using System.Reflection;
+using System.Windows.Input;
+using GalaSoft.MvvmLight.Command;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.UI;
+using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Core.UI;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
@@ -17,7 +20,7 @@ namespace ShipWorks.Products.UI
     {
         public event PropertyChangedEventHandler PropertyChanged;
         private readonly PropertyChangedHandler handler;
-        private readonly Func<IProductEditorDialog> createDialog;
+        private readonly IProductEditorDialog dialog;
         private readonly IMessageHelper messageHelper;
         private readonly ISqlAdapterFactory adapterFactory;
         private ProductVariantAliasEntity product;
@@ -42,13 +45,28 @@ namespace ShipWorks.Products.UI
         /// <summary>
         /// Constructor
         /// </summary>
-        public ProductEditorViewModel(Func<IProductEditorDialog> createDialog, IMessageHelper messageHelper, ISqlAdapterFactory adapterFactory)
+        public ProductEditorViewModel(IProductEditorDialog dialog, IMessageHelper messageHelper, ISqlAdapterFactory adapterFactory)
         {
             handler = new PropertyChangedHandler(this, () => PropertyChanged);
-            this.createDialog = createDialog;
+            this.dialog = dialog;
             this.messageHelper = messageHelper;
             this.adapterFactory = adapterFactory;
+
+            Save = new RelayCommand(() => SaveProduct());
+            Cancel = new RelayCommand(() => dialog.Close());
         }
+
+        /// <summary>
+        /// Save
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public ICommand Save { get; }
+
+        /// <summary>
+        /// Cancel
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public ICommand Cancel { get; }
 
         [Obfuscation(Exclude = true)]
         public bool IsActive
@@ -178,28 +196,33 @@ namespace ShipWorks.Products.UI
             // new ProductVarientEntity does not have a ProductEntity
             if (product.ProductVariant.Product == null)
             {
-                product.ProductVariant.Product = new ProductEntity();
+                product.ProductVariant.Product = new ProductEntity()
+                {
+                    IsActive = true,
+                    IsBundle = false,
+                    Name = string.Empty
+                };
+
             }
 
             this.product = product;
 
-            SKU = product.Sku;
-            IsActive = product.ProductVariant.IsActive;
-            Name = product.ProductVariant.Name;
-            UPC = product.ProductVariant.UPC;
-            ASIN = product.ProductVariant.ASIN;
-            ISBN = product.ProductVariant.ISBN;
+            SKU = product.Sku ?? string.Empty;
+            IsActive = product.ProductVariant.IsNew ? true : product.ProductVariant.IsActive;
+            Name = product.ProductVariant.Name ?? string.Empty;
+            UPC = product.ProductVariant.UPC ?? string.Empty;
+            ASIN = product.ProductVariant.ASIN ?? string.Empty;
+            ISBN = product.ProductVariant.ISBN ?? string.Empty;
             Weight = product.ProductVariant.Weight ?? 0;
             Length = product.ProductVariant.Length ?? 0;
             Width = product.ProductVariant.Width ?? 0;
             Height = product.ProductVariant.Height ?? 0;
-            ImageUrl = product.ProductVariant.ImageUrl;
-            BinLocation = product.ProductVariant.BinLocation;
-            HarmonizedCode = product.ProductVariant.HarmonizedCode;
+            ImageUrl = product.ProductVariant.ImageUrl ?? string.Empty;
+            BinLocation = product.ProductVariant.BinLocation ?? string.Empty;
+            HarmonizedCode = product.ProductVariant.HarmonizedCode ?? string.Empty;
             DeclaredValue = product.ProductVariant.DeclaredValue ?? 0;
-            CountryOfOrigin = product.ProductVariant.CountryOfOrigin;
+            CountryOfOrigin = product.ProductVariant.CountryOfOrigin ?? string.Empty;
 
-            IProductEditorDialog dialog = createDialog();
             dialog.DataContext = this;
             messageHelper.ShowDialog(dialog);
         }
@@ -209,31 +232,52 @@ namespace ShipWorks.Products.UI
         /// </summary>
         private void SaveProduct()
         {
-            product.Sku = SKU;
+            if (string.IsNullOrWhiteSpace(product.Sku))
+            {
+                messageHelper.ShowError("Please enter a value for SKU.");
+            }
+
+            product.Sku = SKU.Trim();
             product.ProductVariant.IsActive = IsActive;
-            product.ProductVariant.Name = Name;
-            product.ProductVariant.UPC = UPC;
-            product.ProductVariant.ASIN = ASIN;
-            product.ProductVariant.ISBN = ISBN;
+            product.ProductVariant.Name = Name.Trim();
+            product.ProductVariant.UPC = UPC.Trim();
+            product.ProductVariant.ASIN = ASIN.Trim();
+            product.ProductVariant.ISBN = ISBN.Trim();
             product.ProductVariant.Weight = Weight;
             product.ProductVariant.Length = Length;
             product.ProductVariant.Width = Width;
             product.ProductVariant.Height = Height;
-            product.ProductVariant.ImageUrl = ImageUrl;
-            product.ProductVariant.BinLocation = BinLocation;
-            product.ProductVariant.HarmonizedCode = HarmonizedCode;
+            product.ProductVariant.ImageUrl = ImageUrl.Trim();
+            product.ProductVariant.BinLocation = BinLocation.Trim();
+            product.ProductVariant.HarmonizedCode = HarmonizedCode.Trim();
             product.ProductVariant.DeclaredValue = DeclaredValue;
-            product.ProductVariant.CountryOfOrigin = CountryOfOrigin;
+            product.ProductVariant.CountryOfOrigin = CountryOfOrigin.Trim();
+
+            if (product.IsNew)
+            {
+                product.AliasName = string.Empty;
+            }
+
+            if (product.ProductVariant.IsNew)
+            {
+                product.ProductVariant.CreatedDate = DateTime.UtcNow;
+            }
+
+            if (product.ProductVariant.Product.IsNew)
+            {
+                product.ProductVariant.Product.CreatedDate = DateTime.UtcNow;
+            }
 
             using (ISqlAdapter adapter = adapterFactory.Create())
             {
                 try
                 {
                     adapter.SaveEntity(product.ProductVariant.Product);
+                    dialog.Close();
                 }
-                catch (Exception ex)
+                catch (ORMQueryExecutionException ex) when (ex.Message.Contains("Cannot insert duplicate key row in object 'dbo.ProductVariantAlias'"))
                 {
-                    messageHelper.ShowError("An error occurred while saving the product", ex);
+                    messageHelper.ShowError("Please enter a unique value for product SKU.", ex);
                 }
             }
         }
