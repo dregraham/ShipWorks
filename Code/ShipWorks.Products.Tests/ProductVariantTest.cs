@@ -9,6 +9,7 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Tests.Shared;
 using Xunit;
+using System.Reflection;
 
 namespace ShipWorks.Products.Tests
 {
@@ -42,6 +43,7 @@ namespace ShipWorks.Products.Tests
         }
 
 
+        [Obfuscation(Exclude = true)]
         public static IEnumerable<object[]> applyDimData =>
            new List<object[]>
            {
