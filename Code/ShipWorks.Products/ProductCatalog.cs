@@ -31,7 +31,7 @@ namespace ShipWorks.Products
         /// <summary>
         /// Fetch a Product from the database
         /// </summary>
-        public IProduct FetchProduct(string sku) => new Product(sku, FetchProductVariantReadOnly(sku));
+        public IProductVariant FetchProductVariant(string sku) => new ProductVariant(sku, FetchProductVariantReadOnly(sku));
 
         /// <summary>
         /// Fetch a product variant based on SKU

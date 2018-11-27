@@ -10,6 +10,6 @@ namespace ShipWorks.Products
        /// <summary>
        /// Fetch a product
        /// </summary>
-        IProduct FetchProduct(string sku);
+        IProductVariant FetchProductVariant(string sku);
     }
 }

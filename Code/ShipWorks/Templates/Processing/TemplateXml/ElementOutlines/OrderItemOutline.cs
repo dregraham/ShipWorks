@@ -21,7 +21,7 @@ namespace ShipWorks.Templates.Processing.TemplateXml.ElementOutlines
     public class OrderItemOutline : ElementOutline
     {
         private static readonly ILog log = LogManager.GetLogger(typeof(OrderItemOutline));
-        private IProduct productVariant;
+        private IProductVariant productVariant;
         private OrderEntity order;
         private long itemID;
         private OrderItemEntity item;
@@ -155,7 +155,7 @@ namespace ShipWorks.Templates.Processing.TemplateXml.ElementOutlines
         /// <summary>
         /// The ProductVariantEntity represented by the bound outline
         /// </summary>
-        private IProduct Product
+        private IProductVariant Product
         {
             get
             {
@@ -164,7 +164,7 @@ namespace ShipWorks.Templates.Processing.TemplateXml.ElementOutlines
                     using (ILifetimeScope scope = IoC.BeginLifetimeScope())
                     {
                         IProductCatalog productCatalog = scope.Resolve<IProductCatalog>();
-                        productVariant = productCatalog.FetchProduct(Item.SKU);
+                        productVariant = productCatalog.FetchProductVariant(Item.SKU);
                     }
 
                     if (productVariant == null)

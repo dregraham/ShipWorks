@@ -24,14 +24,14 @@ namespace ShipWorks.Templates.Processing.TemplateXml.ElementOutlines
         /// <summary>
         /// The OrderItemEntity represented by the bound outline
         /// </summary>
-        private IProduct product { get; set; }
+        private IProductVariant product { get; set; }
 
         /// <summary>
         /// Create a new cloned outline bound to a given order item and product variant
         /// </summary>
         public override ElementOutline CreateDataBoundClone(object data)
         {
-            IProduct product = (IProduct) data;
+            IProductVariant product = (IProductVariant) data;
 
             var boundClone = new OrderItemProductOutline(Context) { product = product };
             product.WriteXml(boundClone);

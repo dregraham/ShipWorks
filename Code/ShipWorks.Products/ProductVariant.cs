@@ -9,16 +9,16 @@ namespace ShipWorks.Products
     /// <summary>
     /// Product from Catalog
     /// </summary>
-    public class Product : IProduct
+    public class ProductVariant : IProductVariant
     {
         private readonly string sku;
         private readonly IProductVariantEntity variant;
-        private static readonly ILog log = LogManager.GetLogger(typeof(Product));
+        private static readonly ILog log = LogManager.GetLogger(typeof(ProductVariant));
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public Product(string sku, IProductVariantEntity variant)
+        public ProductVariant(string sku, IProductVariantEntity variant)
         {
             this.sku = sku;
             this.variant = variant;
@@ -68,7 +68,6 @@ namespace ShipWorks.Products
             ApplyDim(variant.Width, () => item.Width = variant.Width.Value);
             ApplyDim(variant.Height, () => item.Height = variant.Height.Value);
         }
-
 
         /// <summary>
         /// Apply a dimension when appropriate 

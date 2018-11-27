@@ -782,9 +782,9 @@ namespace ShipWorks.Stores.Communication
         {
             using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
-                IProductCatalog productRepostiory = lifetimeScope.Resolve<IProductCatalog>();
+                IProductCatalog productCatalog = lifetimeScope.Resolve<IProductCatalog>();
 
-                order.OrderItems.ForEach(item => productRepostiory.FetchProduct(item.SKU).Apply(item));               
+                order.OrderItems.ForEach(item => productCatalog.FetchProductVariant(item.SKU).Apply(item));               
             }
         }
 

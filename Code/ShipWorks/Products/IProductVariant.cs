@@ -11,7 +11,7 @@ namespace ShipWorks.Products
     /// <summary>
     /// Interface to a product
     /// </summary>
-    public interface IProduct
+    public interface IProductVariant
     {
         /// <summary>
         /// Return true if product can write XML
