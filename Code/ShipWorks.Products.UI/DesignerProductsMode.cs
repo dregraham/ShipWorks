@@ -33,7 +33,8 @@ namespace ShipWorks.Products.UI
                         Height = 3.92M,
                         Weight = 32.63M,
                         BinLocation = "A-B3",
-                        ImageUrl = "https://placekitten.com/64/64"
+                        ImageUrl = "https://placekitten.com/64/64",
+                        IsActive = true,
                     },
                     new DesignerProductListItem
                     {

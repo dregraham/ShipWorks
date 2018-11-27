@@ -13,6 +13,7 @@
 // IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 using System.ComponentModel;
+using System.Reflection;
 
 namespace DataVirtualization
 {
@@ -42,26 +43,31 @@ namespace DataVirtualization
         /// <summary>
         /// A property has changed
         /// </summary>
+        [Obfuscation(Exclude = true)]
         public event PropertyChangedEventHandler PropertyChanged;
 
         /// <summary>
         /// Index
         /// </summary>
+        [Obfuscation(Exclude = true)]
         public int Index { get; }
 
         /// <summary>
         /// Item number
         /// </summary>
+        [Obfuscation(Exclude = true)]
         public int ItemNumber => Index + 1;
 
         /// <summary>
         /// Is the wrapper loading the data?
         /// </summary>
+        [Obfuscation(Exclude = true)]
         public bool IsLoading => Data == null;
 
         /// <summary>
         /// Data item
         /// </summary>
+        [Obfuscation(Exclude = true)]
         public T Data
         {
             get => data;
@@ -76,6 +82,7 @@ namespace DataVirtualization
         /// <summary>
         /// Is this data wrapper in use
         /// </summary>
+        [Obfuscation(Exclude = true)]
         public bool IsInUse => PropertyChanged != null;
 
         /// <summary>
