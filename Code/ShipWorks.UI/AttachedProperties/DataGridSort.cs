@@ -6,10 +6,13 @@ using Interapptive.Shared.Collections;
 
 namespace ShipWorks.UI.AttachedProperties
 {
+    /// <summary>
+    /// Handle custom sorting on a data grid
+    /// </summary>
     public class DataGridSort
     {
         /// <summary>
-        /// The DependencyProperty
+        /// CurrentSort dependency property
         /// </summary>
         public static readonly DependencyProperty CurrentSortProperty =
             DependencyProperty.RegisterAttached("CurrentSort", typeof(IBasicSortDefinition), typeof(DataGridSort),
@@ -59,7 +62,7 @@ namespace ShipWorks.UI.AttachedProperties
             dataGrid.Columns.ForEach(x => x.SortDirection = x.SortMemberPath.EndsWith(sortDefinition.Name) ? sortDefinition.Direction : (ListSortDirection?) null);
 
         /// <summary>
-        /// Opens the URL in the browser
+        /// Handle when the grid is sorting
         /// </summary>
         private static void OnDataGridSorting(object sender, DataGridSortingEventArgs e)
         {

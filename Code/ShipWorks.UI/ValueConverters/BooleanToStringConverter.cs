@@ -8,8 +8,6 @@
         /// <summary>
         /// Constructor
         /// </summary>
-        /// <param name="trueValue">String that represents true</param>
-        /// <param name="falseValue">String that represents false</param>
         public BooleanToStringConverter() : base("Yes", "No")
         {
         }
