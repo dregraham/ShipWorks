@@ -106,7 +106,7 @@
                 HorizontalAlignment="Right"
                 VerticalContentAlignment="Center"
                 FontSize="20"
-                Text="{Binding SearchText}">
+                Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged, Delay=250}">
                 <syncfusion:SfTextBoxExt.Resources>
                     <Style TargetType="{x:Type Border}">
                         <Setter Property="CornerRadius" Value="2" />
