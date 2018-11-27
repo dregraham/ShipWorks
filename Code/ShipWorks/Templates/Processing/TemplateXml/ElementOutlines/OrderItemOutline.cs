@@ -166,11 +166,6 @@ namespace ShipWorks.Templates.Processing.TemplateXml.ElementOutlines
                         IProductCatalog productCatalog = scope.Resolve<IProductCatalog>();
                         productVariant = productCatalog.FetchProductVariant(Item.SKU);
                     }
-
-                    if (productVariant == null)
-                    {
-                        log.WarnFormat("Product for order item Sku, {0}, was deleted and cannot be processed by template.", Item.SKU);
-                    }
                 }
 
                 return productVariant;
