@@ -73,6 +73,7 @@ namespace ShipWorks.Products.UI
         public IList<IProductListItemEntity> SelectedProducts { get; set; }
         public IBasicSortDefinition CurrentSort { get; set; }
         public bool ShowInactiveProducts { get; set; }
+        public string SearchText { get; set; }
 
         public void Dispose()
         {

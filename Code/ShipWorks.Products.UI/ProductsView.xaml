@@ -105,7 +105,8 @@
                 MinWidth="300"
                 HorizontalAlignment="Right"
                 VerticalContentAlignment="Center"
-                FontSize="20">
+                FontSize="20"
+                Text="{Binding SearchText}">
                 <syncfusion:SfTextBoxExt.Resources>
                     <Style TargetType="{x:Type Border}">
                         <Setter Property="CornerRadius" Value="2" />

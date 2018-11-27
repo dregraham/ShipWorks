@@ -26,6 +26,7 @@ namespace ShipWorks.Products
         private DataWrapper<IVirtualizingCollection<IProductListItemEntity>> products;
         private IList<IProductListItemEntity> selectedProducts;
         private IBasicSortDefinition currentSort;
+        private string searchText;
         private bool showInactiveProducts;
         private readonly IProductsCollectionFactory productsCollectionFactory;
         private readonly IMessageHelper messageHelper;
@@ -39,7 +40,7 @@ namespace ShipWorks.Products
             this.messageHelper = messageHelper;
             this.view = view;
 
-            CurrentSort = new BasicSortDefinition(ProductListItemFields.Name.Name, ListSortDirection.Ascending);
+            CurrentSort = new BasicSortDefinition(ProductVariantFields.Name.Name, ListSortDirection.Ascending);
 
             RefreshProducts = new RelayCommand(() => RefreshProductsAction());
             EditProductVariant = new RelayCommand<long>(EditProductVariantAction);
@@ -111,6 +112,21 @@ namespace ShipWorks.Products
         }
 
         /// <summary>
+        /// Search text
+        /// </summary>
+        public string SearchText
+        {
+            get => searchText;
+            set
+            {
+                if (Set(ref searchText, value))
+                {
+                    RefreshProductsAction();
+                }
+            }
+        }
+
+        /// <summary>
         /// Initialize the mode
         /// </summary>
         public void Initialize(Action<Control> addControl, Action<Control> removeControl)
@@ -125,7 +141,7 @@ namespace ShipWorks.Products
         /// </summary>
         private void RefreshProductsAction()
         {
-            Products = productsCollectionFactory.Create(ShowInactiveProducts, CurrentSort);
+            Products = productsCollectionFactory.Create(ShowInactiveProducts, SearchText, CurrentSort);
         }
 
         /// <summary>

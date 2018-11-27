@@ -23,10 +23,10 @@ namespace ShipWorks.Products
         /// <summary>
         /// Constructor
         /// </summary>
-        public ProductItemsProvider(ISqlAdapterFactory sqlAdapterFactory, List<long> productIDs)
+        public ProductItemsProvider(ISqlAdapterFactory sqlAdapterFactory, IEnumerable<long> productIDs)
         {
             this.sqlAdapterFactory = sqlAdapterFactory;
-            this.productIDs = productIDs;
+            this.productIDs = productIDs.Distinct().ToList();
         }
 
         /// <summary>

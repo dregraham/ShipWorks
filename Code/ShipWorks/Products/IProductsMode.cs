@@ -47,6 +47,11 @@ namespace ShipWorks.Products
         /// Show inactive products in addition to active
         /// </summary>
         bool ShowInactiveProducts { get; set; }
+        
+        /// <summary>
+        /// Search text
+        /// </summary>
+        string SearchText { get; set; }
 
         /// <summary>
         /// Initialize the mode
