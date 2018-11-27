@@ -3,6 +3,7 @@ using ShipWorks.Data.Model.EntityClasses;
 using log4net;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Products;
+using Interapptive.Shared.Utility;
 
 namespace ShipWorks.Templates.Processing.TemplateXml.ElementOutlines
 {
@@ -31,7 +32,10 @@ namespace ShipWorks.Templates.Processing.TemplateXml.ElementOutlines
         /// </summary>
         public override ElementOutline CreateDataBoundClone(object data)
         {
+            MethodConditions.EnsureArgumentIsNotNull(data, "data");
+
             IProductVariant product = (IProductVariant) data;
+                        
 
             var boundClone = new OrderItemProductOutline(Context) { product = product };
             product.WriteXml(boundClone);
