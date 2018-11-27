@@ -86,11 +86,13 @@
             <Button
                 Grid.Column="3"
                 Content="Mark Active"
-                Style="{StaticResource SecondaryButton}" />
+                Style="{StaticResource SecondaryButton}"
+                Command="{Binding ActivateProductCommand}"/>
             <Button
                 Grid.Column="4"
                 Content="Mark Inactive"
-                Style="{StaticResource SecondaryButton}" />
+                Style="{StaticResource SecondaryButton}"
+                Command="{Binding DeactivateProductCommand}"/>
 
             <CheckBox
                 Grid.Column="5"

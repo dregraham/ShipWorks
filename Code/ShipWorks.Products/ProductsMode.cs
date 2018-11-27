@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Reflection;
 using System.Windows.Forms;
 using System.Windows.Input;
 using DataVirtualization;
@@ -30,15 +31,18 @@ namespace ShipWorks.Products
         private bool showInactiveProducts;
         private readonly IProductsCollectionFactory productsCollectionFactory;
         private readonly IMessageHelper messageHelper;
+        private readonly IProductRepository productRepository;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public ProductsMode(IProductsViewHost view, IProductsCollectionFactory productsCollectionFactory, IMessageHelper messageHelper)
+        public ProductsMode(IProductsViewHost view, IProductsCollectionFactory productsCollectionFactory, 
+            IMessageHelper messageHelper, IProductRepository productRepository)
         {
             this.productsCollectionFactory = productsCollectionFactory;
             this.messageHelper = messageHelper;
             this.view = view;
+            this.productRepository = productRepository;
 
             CurrentSort = new BasicSortDefinition(ProductVariantFields.Name.Name, ListSortDirection.Ascending);
 
@@ -47,6 +51,20 @@ namespace ShipWorks.Products
             SelectedProductsChanged = new RelayCommand<IList>(
                 items => SelectedProducts = items?.OfType<DataWrapper<IProductListItemEntity>>().Select(x => x.Data).ToList());
         }
+
+        /// <summary>
+        /// RelayCommand for activating a product
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public RelayCommand ActivateProductCommand => 
+            new RelayCommand(() => SetProductActivation(true), () => SelectedProducts?.Any() == true);
+
+        /// <summary>
+        /// RelayCommand for deactivating a product
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public RelayCommand DeactivateProductCommand => 
+            new RelayCommand(() => SetProductActivation(false), () => SelectedProducts?.Any() == true);
 
         /// <summary>
         /// Command to refresh the products list
@@ -150,6 +168,15 @@ namespace ShipWorks.Products
         private void EditProductVariantAction(long productVariantID)
         {
             messageHelper.ShowInformation($"You want to edit {productVariantID}, which will be implemented soon");
+        }
+
+        /// <summary>
+        /// Activate a product
+        /// </summary>
+        private void SetProductActivation(bool makeItActive)
+        {
+            productRepository.SetActivation(SelectedProducts.Select(p => p.ProductVariantID), makeItActive);
+            RefreshProductsAction();
         }
 
         /// <summary>

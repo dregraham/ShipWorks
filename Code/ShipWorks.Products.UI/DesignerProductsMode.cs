@@ -65,6 +65,11 @@ namespace ShipWorks.Products.UI
                 }, 2, 3));
         }
 
+
+        public ICommand ActivateProductCommand => throw new NotImplementedException();
+
+        public ICommand DeactivateProductCommand => throw new NotImplementedException();
+
         public ICommand RefreshProducts => throw new NotImplementedException();
         public ICommand EditProductVariant => throw new NotImplementedException();
         public ICommand SelectedProductsChanged => throw new NotImplementedException();

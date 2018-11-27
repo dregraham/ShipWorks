@@ -47,6 +47,7 @@ namespace ShipWorks.Products
             var query = new QueryFactory().ProductVariant
                 .From(from)
                 .Select(() => ProductVariantFields.ProductVariantID.ToValue<long>())
+                .Distinct()
                 .OrderBy(CreateSortClause(sortDefinition));
 
             if (!includeInactiveProducts)

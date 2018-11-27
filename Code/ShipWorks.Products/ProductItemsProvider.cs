@@ -26,7 +26,7 @@ namespace ShipWorks.Products
         public ProductItemsProvider(ISqlAdapterFactory sqlAdapterFactory, IEnumerable<long> productIDs)
         {
             this.sqlAdapterFactory = sqlAdapterFactory;
-            this.productIDs = productIDs.Distinct().ToList();
+            this.productIDs = productIDs.ToList();
         }
 
         /// <summary>

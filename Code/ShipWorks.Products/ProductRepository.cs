@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using Interapptive.Shared.ComponentRegistration;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using SD.LLBLGen.Pro.QuerySpec;
@@ -19,13 +18,30 @@ namespace ShipWorks.Products
     public class ProductRepository : IProductRepository
     {
         private readonly ISqlAdapterFactory sqlAdapterFactory;
+        private readonly ISqlSession sqlSession;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public ProductRepository(ISqlAdapterFactory sqlAdapterFactory)
+        public ProductRepository(ISqlAdapterFactory sqlAdapterFactory, ISqlSession sqlSession)
         {
             this.sqlAdapterFactory = sqlAdapterFactory;
+            this.sqlSession = sqlSession;
+        }
+
+        /// <summary>
+        /// Set given products activation to specified value
+        /// </summary>
+        public void SetActivation(IEnumerable<long> productIDs, bool activation)
+        {
+            using (var conn = sqlSession.OpenConnection())
+            {
+                using (var comm = conn.CreateCommand())
+                {
+                    comm.CommandText = $"UPDATE ProductVariant SET IsActive = {(activation ? "1" : "0")} WHERE ProductVariantID in ({String.Join(",", productIDs)})";
+                    comm.ExecuteNonQuery();
+                }
+            }
         }
 
         /// <summary>
@@ -37,7 +53,7 @@ namespace ShipWorks.Products
 
             using (ISqlAdapter sqlAdapter = sqlAdapterFactory.Create())
             {
-                productVariant = Load(sku.Trim(), sqlAdapter, ProductPrefetchPath.Value);
+                productVariant = Load(sku, sqlAdapter, ProductPrefetchPath.Value);
             }
 
             return productVariant?.AsReadOnly();
