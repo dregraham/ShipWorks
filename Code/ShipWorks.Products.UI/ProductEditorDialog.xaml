@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:productsUI="clr-namespace:ShipWorks.Products.UI"
         xmlns:geography="clr-namespace:Interapptive.Shared.Business.Geography;assembly=Interapptive.Shared"
-        xmlns:valueConverters="http://schemas.shipworks.com/ui"
+        xmlns:ui="http://schemas.shipworks.com/ui"
         xmlns:sharedUI="clr-namespace:Interapptive.Shared.UI;assembly=Interapptive.Shared"
         mc:Ignorable="d"
         SizeToContent="Height"
@@ -17,7 +17,10 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/ShipWorks.UI;component/Styles/BlueSteel/BlueSteelStyle.xaml" />
             </ResourceDictionary.MergedDictionaries>
-            <valueConverters:EmptyMoneyConverter x:Key="EmptyMoney" />            
+            <ui:EmptyMoneyConverter x:Key="EmptyMoney" />
+            <Style TargetType="{x:Type ui:UnitTextBox}">
+                <Setter Property="Margin" Value="10 0 0 10"/>
+            </Style>
         </ResourceDictionary>
     </Window.Resources>
     <Grid Margin="10">
@@ -138,40 +141,40 @@
                    Text="Weight:" 
                    Style="{StaticResource FieldLabel}"/>
 
-        <TextBox Grid.Row="9"
-                 Grid.Column="1"
-                 Text="{Binding Weight, UpdateSourceTrigger=PropertyChanged}" 
-                 Style="{StaticResource FormNumberTextBox}" />
+        <ui:UnitTextBox Grid.Row="9"
+                        Grid.Column="1"
+                        Value="{Binding Weight, UpdateSourceTrigger=PropertyChanged}"
+                        UnitType="Weight"/>
 
         <TextBlock Grid.Row="10"
                    Grid.Column="0"
                    Text="Length:" 
                    Style="{StaticResource FieldLabel}"/>
 
-        <TextBox Grid.Row="10"
-                 Grid.Column="1"
-                 Text="{Binding Length, UpdateSourceTrigger=PropertyChanged}" 
-                 Style="{StaticResource FormNumberTextBox}"/>
+        <ui:UnitTextBox Grid.Row="10"
+                        Grid.Column="1"
+                        Value="{Binding Length, UpdateSourceTrigger=PropertyChanged}"
+                        UnitType="Length"/>
 
         <TextBlock Grid.Row="11"
                    Grid.Column="0"
                    Text="Width:" 
                    Style="{StaticResource FieldLabel}"/>
-
-        <TextBox Grid.Row="11"
-                 Grid.Column="1"
-                 Text="{Binding Width, UpdateSourceTrigger=PropertyChanged}" 
-                 Style="{StaticResource FormNumberTextBox}"/>
+        
+        <ui:UnitTextBox Grid.Row="11"
+                        Grid.Column="1"
+                        Value="{Binding Width, UpdateSourceTrigger=PropertyChanged}"
+                        UnitType="Length"/>        
 
         <TextBlock Grid.Row="12"
                    Grid.Column="0"
                    Text="Height:" 
                    Style="{StaticResource FieldLabel}"/>
 
-        <TextBox Grid.Row="12"
-                 Grid.Column="1"
-                 Text="{Binding Height, UpdateSourceTrigger=PropertyChanged}" 
-                 Style="{StaticResource FormNumberTextBox}"/>
+        <ui:UnitTextBox Grid.Row="12"
+                        Grid.Column="1"
+                        Value="{Binding Height, UpdateSourceTrigger=PropertyChanged}"
+                        UnitType="Length"/>
 
         <TextBlock Grid.Row="13"
                    Grid.Column="0"
