@@ -1010,7 +1010,8 @@
     <Compile Include="OrderLookup\OrderLookupClearOrderMessage.cs" />
     <Compile Include="OrderLookup\OrderLookupSearchMessage.cs" />
     <Compile Include="OrderLookup\ShipmentModelPipelines\IOrderLookupShipmentModelPipeline.cs" />
-    <Compile Include="Products\IProductRepository.cs" />
+    <Compile Include="Products\IProduct.cs" />
+    <Compile Include="Products\IProductCatalog.cs" />
     <Compile Include="Products\IProductsMode.cs" />
     <Compile Include="Shipping\Profiles\EditableShippingProfile.cs" />
     <Compile Include="Shipping\Profiles\IEditableShippingProfile.cs" />

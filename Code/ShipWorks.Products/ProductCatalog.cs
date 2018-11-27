@@ -13,25 +13,30 @@ using ShipWorks.Data.Model.HelperClasses;
 namespace ShipWorks.Products
 {
     /// <summary>
-    /// Product repository
+    /// Product Catalog
     /// </summary>
     [Component]
-    public class ProductRepository : IProductRepository
+    public class ProductCatalog : IProductCatalog
     {
         private readonly ISqlAdapterFactory sqlAdapterFactory;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public ProductRepository(ISqlAdapterFactory sqlAdapterFactory)
+        public ProductCatalog(ISqlAdapterFactory sqlAdapterFactory)
         {
             this.sqlAdapterFactory = sqlAdapterFactory;
         }
+        
+        /// <summary>
+        /// Fetch a Product from the database
+        /// </summary>
+        public IProduct FetchProduct(string sku) => new Product(sku, FetchProductVariantReadOnly(sku));
 
         /// <summary>
         /// Fetch a product variant based on SKU
         /// </summary>
-        public IProductVariantEntity FetchProductVariantReadOnly(string sku)
+        private IProductVariantEntity FetchProductVariantReadOnly(string sku)
         {
             ProductVariantEntity productVariant;
 

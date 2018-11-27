@@ -8,6 +8,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Autofac;
 using Interapptive.Shared.Business;
+using Interapptive.Shared.Collections;
 using Interapptive.Shared.Enums;
 using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Threading;
@@ -781,47 +782,9 @@ namespace ShipWorks.Stores.Communication
         {
             using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
-                IProductRepository productRepostiory = lifetimeScope.Resolve<IProductRepository>();
+                IProductCatalog productRepostiory = lifetimeScope.Resolve<IProductCatalog>();
 
-                foreach (OrderItemEntity item in order.OrderItems)
-                {
-                    if (!item.SKU.IsNullOrWhiteSpace())
-                    {
-                        IProductVariantEntity product = productRepostiory.FetchProductVariantReadOnly(item.SKU.Trim());
-                        UpdateItemFromProduct(item, product);
-                    }
-                }
-            }
-        }
-
-        /// <summary>
-        /// If product is active, update item with its dimensions
-        /// </summary>
-        private void UpdateItemFromProduct(OrderItemEntity item, IProductVariantEntity product)
-        {
-            if (product == null || !product.IsActive)
-            {
-                return;
-            }
-
-            // "Attempting to apply product dimensions to item 00001 for sku ABCD"
-            log.InfoFormat("Attempting to apply product dimensions to item {0} for sku {1}",
-                item.OrderItemID, item.SKU.Trim());
-
-            ApplyDim("Weight", item, product.Weight, () => item.Weight = (double) product.Weight.Value);
-            ApplyDim("Length", item, product.Length, () => item.Length = product.Length.Value);
-            ApplyDim("Width", item, product.Width, () => item.Width = product.Width.Value);
-            ApplyDim("Height", item, product.Height, () => item.Height = product.Height.Value);
-        }
-
-        /// <summary>
-        /// Apply a dimension when appropriate 
-        /// </summary>
-        private void ApplyDim(string dimName, OrderItemEntity item, decimal? toApply, Action apply)
-        {
-            if (toApply.HasValue && toApply.Value > 0)
-            {
-                apply();
+                order.OrderItems.ForEach(item => productRepostiory.FetchProduct(item.SKU).Apply(item));               
             }
         }
 
