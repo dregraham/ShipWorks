@@ -43,16 +43,19 @@ namespace DataVirtualization
         /// <summary>
         /// A property has changed
         /// </summary>
+        [Obfuscation(Exclude = true)]
         public event PropertyChangedEventHandler PropertyChanged;
 
         /// <summary>
         /// Index
         /// </summary>
+        [Obfuscation(Exclude = true)]
         public int Index { get; }
 
         /// <summary>
         /// Item number
         /// </summary>
+        [Obfuscation(Exclude = true)]
         public int ItemNumber => Index + 1;
 
         /// <summary>
@@ -79,6 +82,7 @@ namespace DataVirtualization
         /// <summary>
         /// Is this data wrapper in use
         /// </summary>
+        [Obfuscation(Exclude = true)]
         public bool IsInUse => PropertyChanged != null;
 
         /// <summary>
