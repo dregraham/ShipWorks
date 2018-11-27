@@ -33,7 +33,8 @@ namespace ShipWorks.Products.UI
                         Height = 3.92M,
                         Weight = 32.63M,
                         BinLocation = "A-B3",
-                        ImageUrl = "https://placekitten.com/64/64"
+                        ImageUrl = "https://placekitten.com/64/64",
+                        IsActive = true,
                     },
                     new DesignerProductListItem
                     {
@@ -64,6 +65,7 @@ namespace ShipWorks.Products.UI
                 }, 2, 3));
         }
 
+        public ICommand AddProduct => throw new NotImplementedException();
         public ICommand RefreshProducts => throw new NotImplementedException();
         public ICommand EditProductVariant => throw new NotImplementedException();
         public ICommand SelectedProductsChanged => throw new NotImplementedException();
@@ -72,7 +74,7 @@ namespace ShipWorks.Products.UI
         public IList<IProductListItemEntity> SelectedProducts { get; set; }
         public IBasicSortDefinition CurrentSort { get; set; }
         public bool ShowInactiveProducts { get; set; }
-
+        
         public void Dispose()
         {
             throw new NotImplementedException();

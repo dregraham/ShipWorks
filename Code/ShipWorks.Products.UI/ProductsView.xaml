@@ -5,9 +5,10 @@
     xmlns:cmd="clr-namespace:GalaSoft.MvvmLight.Command;assembly=GalaSoft.MvvmLight.Platform"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
-    xmlns:local="clr-namespace:ShipWorks.Products.UI;assembly=ShipWorks.Products.UI"
+    xmlns:local="clr-namespace:ShipWorks.Products.UI"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
+    xmlns:sys="clr-namespace:System;assembly=mscorlib"
     xmlns:ui="http://schemas.shipworks.com/ui"
     d:DataContext="{d:DesignInstance local:DesignerProductsMode,
                                      IsDesignTimeCreatable=True}"
@@ -49,6 +50,10 @@
                     </Setter.Value>
                 </Setter>
             </Style>
+            <ui:BooleanToStringConverter x:Key="BooleanToString" />
+            <ui:BooleanToVisibilityConverter x:Key="BooleanToVisibility" />
+            <ui:NumberToWeightStringConverter x:Key="NumberToWeightString" />
+            <sys:Double x:Key="BaseFontSize">14</sys:Double>
         </ResourceDictionary>
     </UserControl.Resources>
     <Grid Margin="5,10,5,5">
@@ -57,7 +62,7 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
-        <Grid IsSharedSizeScope="True">
+        <Grid x:Name="CommandGrid" IsSharedSizeScope="True">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto" SharedSizeGroup="A" />
                 <ColumnDefinition Width="Auto" SharedSizeGroup="A" />
@@ -71,7 +76,8 @@
             <Button
                 Grid.Column="0"
                 Content="Add"
-                Style="{StaticResource PrimaryButton}" />
+                Style="{StaticResource PrimaryButton}" 
+		Command="{Binding AddProduct}" />
             <Button
                 Grid.Column="1"
                 Content="Edit"
@@ -127,6 +133,9 @@
             Margin="0,10,0,0"
             ui:DataGridSort.CurrentSort="{Binding CurrentSort, Mode=TwoWay}"
             AutoGenerateColumns="False"
+            CanUserResizeColumns="True"
+            CanUserSortColumns="True"
+            Grid.IsSharedSizeScope="True"
             HeadersVisibility="All"
             ItemsSource="{Binding Products.Data}"
             ScrollViewer.IsDeferredScrollingEnabled="True"
@@ -137,6 +146,9 @@
             <DataGrid.InputBindings>
                 <KeyBinding Command="ApplicationCommands.NotACommand" Gesture="Ctrl+A" />
             </DataGrid.InputBindings>
+            <DataGrid.CommandBindings>
+                <CommandBinding Command="ApplicationCommands.SelectAll" Executed="OnSelectAllExecuted" />
+            </DataGrid.CommandBindings>
             <i:Interaction.Triggers>
                 <i:EventTrigger EventName="SelectionChanged">
                     <cmd:EventToCommand Command="{Binding SelectedProductsChanged}" CommandParameter="{Binding SelectedItems, ElementName=ProductsGrid}" />
@@ -147,6 +159,19 @@
                     <Setter Property="FontSize" Value="16" />
                 </Style>
             </DataGrid.ColumnHeaderStyle>
+            <DataGrid.RowStyle>
+                <Style TargetType="DataGridRow">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding Path=IsLoading, Mode=OneWay}" Value="True">
+                            <Setter Property="Foreground" Value="LightGray" />
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding Path=Data.IsActive, Mode=OneWay}" Value="False">
+                            <Setter Property="FontStyle" Value="Italic" />
+                            <Setter Property="Opacity" Value="0.5" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </DataGrid.RowStyle>
             <DataGrid.RowHeaderStyle>
                 <Style BasedOn="{StaticResource {x:Type DataGridRowHeader}}" TargetType="{x:Type DataGridRowHeader}">
                     <Setter Property="Background" Value="Transparent" />
@@ -172,7 +197,7 @@
             </DataGrid.RowHeaderStyle>
             <DataGrid.Columns>
                 <DataGridTemplateColumn
-                    Width="*"
+                    Width="Auto"
                     CanUserSort="False"
                     Header="Image">
                     <DataGridTemplateColumn.CellTemplate>
@@ -187,7 +212,8 @@
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
                 <DataGridTemplateColumn
-                    Width="*"
+                    Width="3*"
+                    CanUserSort="True"
                     Header="SKU"
                     SortMemberPath="SKU">
                     <DataGridTemplateColumn.CellTemplate>
@@ -199,7 +225,7 @@
                                 Command="{Binding DataContext.EditProductVariant, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"
                                 CommandParameter="{Binding Data.ProductVariantID}"
                                 Style="{StaticResource Link}">
-                                <TextBlock FontSize="12" Text="{Binding Data.SKU}" />
+                                <TextBlock FontSize="{StaticResource BaseFontSize}" Text="{Binding Data.SKU}" />
                             </Button>
                             <DataTemplate.Triggers>
                                 <DataTrigger Binding="{Binding Path=IsSelected, RelativeSource={RelativeSource AncestorType=DataGridRow}}" Value="True">
@@ -210,7 +236,8 @@
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
                 <DataGridTemplateColumn
-                    Width="*"
+                    Width="8*"
+                    CanUserSort="True"
                     Header="Name"
                     SortMemberPath="Name">
                     <DataGridTemplateColumn.CellTemplate>
@@ -222,7 +249,7 @@
                                 Command="{Binding DataContext.EditProductVariant, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"
                                 CommandParameter="{Binding Data.ProductVariantID}"
                                 Style="{StaticResource Link}">
-                                <TextBlock FontSize="12" Text="{Binding Data.Name}" />
+                                <TextBlock FontSize="{StaticResource BaseFontSize}" Text="{Binding Data.Name}" />
                             </Button>
                             <DataTemplate.Triggers>
                                 <DataTrigger Binding="{Binding Path=IsSelected, RelativeSource={RelativeSource AncestorType=DataGridRow}}" Value="True">
@@ -233,38 +260,79 @@
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
                 <DataGridTemplateColumn
-                    Width="*"
+                    Width="Auto"
                     CanUserSort="False"
-                    Header="Dimensions">
+                    Header="Dimensions (L x W x H)">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <TextBlock
-                                HorizontalAlignment="Left"
-                                VerticalAlignment="Center"
-                                FontSize="12"
-                                Text="{Binding Data.Dimensions}" />
+                            <Grid Margin="8,0">
+                                <Grid.Resources>
+                                    <Style TargetType="TextBlock">
+                                        <Setter Property="VerticalAlignment" Value="Center" />
+                                        <Setter Property="HorizontalAlignment" Value="Right" />
+                                        <Setter Property="FontSize" Value="{StaticResource BaseFontSize}" />
+                                        <Setter Property="Margin" Value="2,0" />
+                                    </Style>
+                                </Grid.Resources>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" SharedSizeGroup="Length" />
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="Auto" SharedSizeGroup="Width" />
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="Auto" SharedSizeGroup="Height" />
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Grid.Column="0" Text="{Binding Data.Length, StringFormat={}{0:#0.#}}" />
+                                <TextBlock Grid.Column="1" Foreground="DarkGray">
+                                    x
+                                </TextBlock>
+                                <TextBlock Grid.Column="2" Text="{Binding Data.Width, StringFormat={}{0:#0.#}}" />
+                                <TextBlock Grid.Column="3" Foreground="DarkGray">
+                                    x
+                                </TextBlock>
+                                <TextBlock Grid.Column="4" Text="{Binding Data.Height, StringFormat={}{0:#0.#}}" />
+                            </Grid>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTemplateColumn Width="*" Header="Weight">
+                <DataGridTemplateColumn Width="1.5*" Header="Weight">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock
+                                Margin="4,0"
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Center"
-                                FontSize="12"
-                                Text="{Binding Data.Weight}" />
+                                FontSize="{StaticResource BaseFontSize}"
+                                Text="{Binding Data.Weight, Converter={StaticResource NumberToWeightString}}" />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTemplateColumn Width="*" Header="Location">
+                <DataGridTemplateColumn
+                    Width="3*"
+                    CanUserSort="True"
+                    Header="Location"
+                    SortMemberPath="BinLocation">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Center"
-                                FontSize="12"
+                                FontSize="{StaticResource BaseFontSize}"
                                 Text="{Binding Data.BinLocation}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn
+                    Width="Auto"
+                    Header="Active"
+                    Visibility="{Binding DataContext.ShowInactiveProducts, Source={x:Reference CommandGrid}, Converter={StaticResource BooleanToVisibility}}">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Path
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                Stroke="Gray"
+                                Style="{StaticResource Path.Checkmark}"
+                                Visibility="{Binding Data.IsActive, Converter={StaticResource BooleanToVisibility}}"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>

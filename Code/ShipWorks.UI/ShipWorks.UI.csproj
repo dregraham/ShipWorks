@@ -264,6 +264,7 @@
     <Compile Include="ValueConverters\BooleanToIntConverter.cs" />
     <Compile Include="ValueConverters\BooleanToGridRowHeightConverter.cs" />
     <Compile Include="ValueConverters\BooleanLambdaConverter.cs" />
+    <Compile Include="ValueConverters\BooleanToStringConverter.cs" />
     <Compile Include="ValueConverters\SectionLayoutVisibilityConverter.cs" />
     <Compile Include="ValueConverters\VisibilityMultiConverter.cs" />
     <Compile Include="ValueConverters\VisibilityWhenFieldAllowedConverter.cs" />
@@ -275,7 +276,7 @@
     <Compile Include="ValueConverters\BooleanConverter.cs" />
     <Compile Include="ValueConverters\BooleanToVisibilityConverter.cs" />
     <Compile Include="ValueConverters\DefaultWhenNullOrEmptyConverter.cs" />
-    <Compile Include="ValueConverters\DoubleToWeightStringConverter.cs" />
+    <Compile Include="ValueConverters\NumberToWeightStringConverter.cs" />
     <Compile Include="ValueConverters\EmptyDoubleConverter.cs" />
     <Compile Include="ValueConverters\EmptyMoneyConverter.cs" />
     <Compile Include="ValueConverters\EnumDescriptionConverter.cs" />

@@ -1,16 +1,33 @@
-﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:valueConverters="clr-namespace:ShipWorks.UI.ValueConverters">
+﻿<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:valueConverters="clr-namespace:ShipWorks.UI.ValueConverters">
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="/ShipWorks.UI;component/Styles/Controls/DataGridStyle.xaml" />
         <ResourceDictionary Source="/ShipWorks.UI;component/Styles/Sizes.xaml" />
-        <ResourceDictionary Source="/ShipWorks.UI;component/Styles/BlueSteel/Colors.xaml"/>
+        <ResourceDictionary Source="/ShipWorks.UI;component/Styles/BlueSteel/Colors.xaml" />
 
     </ResourceDictionary.MergedDictionaries>
-    
+
     <valueConverters:BooleanComparisonConverter x:Key="BooleanAnd" BooleanOperator="{x:Static valueConverters:BooleanOperator.And}" />
 
-    <Style x:Key="DataGridColumnHeader" BasedOn="{StaticResource {x:Type DataGridColumnHeader}}" TargetType="{x:Type DataGridColumnHeader}">
+    <Style x:Key="ColumnHeaderGripperStyle" TargetType="{x:Type Thumb}">
+        <Setter Property="Width" Value="8" />
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="Cursor" Value="SizeWE" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Thumb}">
+                    <Border Padding="{TemplateBinding Padding}" Background="{TemplateBinding Background}" />
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style
+        x:Key="DataGridColumnHeader"
+        BasedOn="{StaticResource {x:Type DataGridColumnHeader}}"
+        TargetType="{x:Type DataGridColumnHeader}">
         <Setter Property="Background" Value="{StaticResource ButtonBackgroundGradient}" />
         <Setter Property="BorderBrush" Value="{StaticResource BorderColor}" />
         <Setter Property="Foreground" Value="{StaticResource ControlTextColor}" />
@@ -24,54 +41,100 @@
                             Height="{TemplateBinding Height}"
                             BorderBrush="{StaticResource BorderColor}"
                             BorderThickness="0,0,1,1">
-                            <ContentPresenter
-                                Margin="3"
-                                HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
-                                SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+                                <ContentPresenter
+                                    Margin="3"
+                                    HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                    VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                    SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                                <Path
+                                    x:Name="SortArrow"
+                                    Grid.Column="1"
+                                    Width="8"
+                                    Height="6"
+                                    Margin="2,0,5,0"
+                                    HorizontalAlignment="Right"
+                                    VerticalAlignment="Center"
+                                    Data="M0,0 L1,0 0.5,1 z"
+                                    Fill="Black"
+                                    Opacity="0.5"
+                                    RenderTransformOrigin="0.5,0.4"
+                                    Stretch="Fill"
+                                    Visibility="Collapsed" />
+                                <Thumb
+                                    x:Name="PART_LeftHeaderGripper"
+                                    HorizontalAlignment="Left"
+                                    Style="{StaticResource ColumnHeaderGripperStyle}" />
+                                <Thumb
+                                    x:Name="PART_RightHeaderGripper"
+                                    HorizontalAlignment="Right"
+                                    Style="{StaticResource ColumnHeaderGripperStyle}" />
+                            </Grid>
                         </Border>
                     </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="SortDirection" Value="Ascending">
+                            <Setter TargetName="SortArrow" Property="Visibility" Value="Visible" />
+                            <Setter TargetName="SortArrow" Property="RenderTransform">
+                                <Setter.Value>
+                                    <RotateTransform Angle="180" />
+                                </Setter.Value>
+                            </Setter>
+                        </Trigger>
+                        <Trigger Property="SortDirection" Value="Descending">
+                            <Setter TargetName="SortArrow" Property="Visibility" Value="Visible" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
     </Style>
-    
-    <Style x:Key="DataGrid" TargetType="{x:Type DataGrid}" BasedOn="{StaticResource DataGrid.Static}">
-        <Setter Property="SelectionUnit" Value="FullRow"/>
-        <Setter Property="HorizontalGridLinesBrush" Value="{StaticResource BorderColor}"/>
-        <Setter Property="VerticalGridLinesBrush" Value="{StaticResource BorderColor}"/>
+
+    <Style
+        x:Key="DataGrid"
+        BasedOn="{StaticResource DataGrid.Static}"
+        TargetType="{x:Type DataGrid}">
+        <Setter Property="SelectionUnit" Value="FullRow" />
+        <Setter Property="HorizontalGridLinesBrush" Value="{StaticResource BorderColor}" />
+        <Setter Property="VerticalGridLinesBrush" Value="{StaticResource BorderColor}" />
         <Setter Property="CellStyle">
             <Setter.Value>
-                    <Style TargetType="{x:Type DataGridCell}">
-                        <Setter Property="Padding" Value="3" />
-                        <Setter Property="FontFamily" Value="/ShipWorks.UI;component/Styles/BlueSteel/#Roboto"/>
-                        <Setter Property="BorderThickness" Value="0" />
-                        <Setter Property="FocusVisualStyle" Value="{x:Null}" />
-                        <Setter Property="Template">
-                            <Setter.Value>
-                                <ControlTemplate TargetType="{x:Type DataGridCell}">
-                                    <Border
+                <Style TargetType="{x:Type DataGridCell}">
+                    <Setter Property="Padding" Value="3" />
+                    <Setter Property="FontFamily" Value="/ShipWorks.UI;component/Styles/BlueSteel/#Roboto" />
+                    <Setter Property="BorderThickness" Value="0" />
+                    <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="{x:Type DataGridCell}">
+                                <Border
                                     Padding="{TemplateBinding Padding}"
                                     Background="{TemplateBinding Background}"
                                     BorderBrush="{TemplateBinding BorderBrush}"
                                     BorderThickness="{TemplateBinding BorderThickness}"
                                     SnapsToDevicePixels="True">
-                                        <ContentPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
-                                    </Border>
-                                </ControlTemplate>
-                            </Setter.Value>
-                        </Setter>
-                        <Style.Triggers>
-                            <Trigger Property="IsSelected" Value="true">
-                                <Setter Property="Background" Value="{StaticResource SelectionColor}" />
-                            </Trigger>
-                        </Style.Triggers> 
-                    </Style>
+                                    <ContentPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                                </Border>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                    <Style.Triggers>
+                        <Trigger Property="IsSelected" Value="true">
+                            <Setter Property="Background" Value="{StaticResource SelectionColor}" />
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
             </Setter.Value>
         </Setter>
-        <Setter Property="ColumnHeaderStyle" Value="{StaticResource DataGridColumnHeader}"/>
+        <Setter Property="ColumnHeaderStyle" Value="{StaticResource DataGridColumnHeader}" />
     </Style>
 
-    <Style x:Key="DataGrid.SingleRowSelection" TargetType="{x:Type DataGrid}" BasedOn="{StaticResource DataGrid}">
-    </Style>
+    <Style
+        x:Key="DataGrid.SingleRowSelection"
+        BasedOn="{StaticResource DataGrid}"
+        TargetType="{x:Type DataGrid}" />
 </ResourceDictionary>
