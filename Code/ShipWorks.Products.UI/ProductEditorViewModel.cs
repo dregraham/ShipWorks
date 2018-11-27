@@ -20,7 +20,7 @@ namespace ShipWorks.Products.UI
     {
         public event PropertyChangedEventHandler PropertyChanged;
         private readonly PropertyChangedHandler handler;
-        private readonly ProductEditorDialog dialog;
+        private readonly IDialog dialog;
         private readonly IMessageHelper messageHelper;
         private readonly ISqlAdapterFactory adapterFactory;
         private ProductVariantAliasEntity product;
@@ -45,10 +45,10 @@ namespace ShipWorks.Products.UI
         /// <summary>
         /// Constructor
         /// </summary>
-        public ProductEditorViewModel(ProductEditorDialog dialog, IMessageHelper messageHelper, ISqlAdapterFactory adapterFactory)
+        public ProductEditorViewModel(IProductEditorDialogFactory dialogFactory, IMessageHelper messageHelper, ISqlAdapterFactory adapterFactory)
         {
             handler = new PropertyChangedHandler(this, () => PropertyChanged);
-            this.dialog = dialog;
+            this.dialog = dialogFactory.Create();
             this.messageHelper = messageHelper;
             this.adapterFactory = adapterFactory;
 

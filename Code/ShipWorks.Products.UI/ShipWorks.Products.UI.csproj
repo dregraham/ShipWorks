@@ -91,6 +91,8 @@
     <Compile Include="ProductEditorDialog.xaml.cs">
       <DependentUpon>ProductEditorDialog.xaml</DependentUpon>
     </Compile>
+    <Compile Include="IProductEditorDialogFactory.cs" />
+    <Compile Include="ProductEditorDialogFactory.cs" />
     <Compile Include="ProductEditorViewModel.cs" />
     <Compile Include="ProductsView.xaml.cs">
       <DependentUpon>ProductsView.xaml</DependentUpon>
