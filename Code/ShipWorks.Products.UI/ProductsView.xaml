@@ -9,6 +9,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
     xmlns:ui="http://schemas.shipworks.com/ui"
+    xmlns:sys="clr-namespace:System;assembly=mscorlib"
     d:DataContext="{d:DesignInstance local:DesignerProductsMode,
                                      IsDesignTimeCreatable=True}"
     d:DesignHeight="500"
@@ -51,6 +52,8 @@
             </Style>
             <ui:BooleanToStringConverter x:Key="BooleanToString" />
             <ui:BooleanToVisibilityConverter x:Key="BooleanToVisibility" />
+            <ui:NumberToWeightStringConverter x:Key="NumberToWeightString" />
+            <sys:Double x:Key="BaseFontSize">14</sys:Double>
         </ResourceDictionary>
     </UserControl.Resources>
     <Grid Margin="5,10,5,5">
@@ -129,7 +132,9 @@
             Margin="0,10,0,0"
             ui:DataGridSort.CurrentSort="{Binding CurrentSort, Mode=TwoWay}"
             AutoGenerateColumns="False"
+            CanUserResizeColumns="True"
             CanUserSortColumns="True"
+            Grid.IsSharedSizeScope="True"
             HeadersVisibility="All"
             ItemsSource="{Binding Products.Data}"
             ScrollViewer.IsDeferredScrollingEnabled="True"
@@ -158,6 +163,7 @@
                         </DataTrigger>
                         <DataTrigger Binding="{Binding Path=Data.IsActive, Mode=OneWay}" Value="False">
                             <Setter Property="FontStyle" Value="Italic" />
+                            <Setter Property="Opacity" Value="0.5" />
                         </DataTrigger>
                     </Style.Triggers>
                 </Style>
@@ -187,7 +193,7 @@
             </DataGrid.RowHeaderStyle>
             <DataGrid.Columns>
                 <DataGridTemplateColumn
-                    Width="*"
+                    Width="Auto"
                     CanUserSort="False"
                     Header="Image">
                     <DataGridTemplateColumn.CellTemplate>
@@ -202,7 +208,7 @@
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
                 <DataGridTemplateColumn
-                    Width="*"
+                    Width="3*"
                     CanUserSort="True"
                     Header="SKU"
                     SortMemberPath="SKU">
@@ -215,7 +221,7 @@
                                 Command="{Binding DataContext.EditProductVariant, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"
                                 CommandParameter="{Binding Data.ProductVariantID}"
                                 Style="{StaticResource Link}">
-                                <TextBlock FontSize="12" Text="{Binding Data.SKU}" />
+                                <TextBlock FontSize="{StaticResource BaseFontSize}" Text="{Binding Data.SKU}" />
                             </Button>
                             <DataTemplate.Triggers>
                                 <DataTrigger Binding="{Binding Path=IsSelected, RelativeSource={RelativeSource AncestorType=DataGridRow}}" Value="True">
@@ -226,7 +232,7 @@
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
                 <DataGridTemplateColumn
-                    Width="*"
+                    Width="8*"
                     CanUserSort="True"
                     Header="Name"
                     SortMemberPath="Name">
@@ -239,7 +245,7 @@
                                 Command="{Binding DataContext.EditProductVariant, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"
                                 CommandParameter="{Binding Data.ProductVariantID}"
                                 Style="{StaticResource Link}">
-                                <TextBlock FontSize="12" Text="{Binding Data.Name}" />
+                                <TextBlock FontSize="{StaticResource BaseFontSize}" Text="{Binding Data.Name}" />
                             </Button>
                             <DataTemplate.Triggers>
                                 <DataTrigger Binding="{Binding Path=IsSelected, RelativeSource={RelativeSource AncestorType=DataGridRow}}" Value="True">
@@ -250,32 +256,54 @@
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
                 <DataGridTemplateColumn
-                    Width="*"
+                    Width="Auto"
                     CanUserSort="False"
-                    Header="Dimensions">
+                    Header="Dimensions (L x W x H)">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <TextBlock
-                                HorizontalAlignment="Left"
-                                VerticalAlignment="Center"
-                                FontSize="12"
-                                Text="{Binding Data.Dimensions}" />
+                            <Grid Margin="8,0">
+                                <Grid.Resources>
+                                    <Style TargetType="TextBlock">
+                                        <Setter Property="VerticalAlignment" Value="Center" />
+                                        <Setter Property="HorizontalAlignment" Value="Right" />
+                                        <Setter Property="FontSize" Value="{StaticResource BaseFontSize}" />
+                                        <Setter Property="Margin" Value="2,0" />
+                                    </Style>
+                                </Grid.Resources>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" SharedSizeGroup="Length" />
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="Auto" SharedSizeGroup="Width" />
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="Auto" SharedSizeGroup="Height" />
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Grid.Column="0" Text="{Binding Data.Length, StringFormat={}{0:#0.#}}" />
+                                <TextBlock Grid.Column="1" Foreground="DarkGray">
+                                    x
+                                </TextBlock>
+                                <TextBlock Grid.Column="2" Text="{Binding Data.Width, StringFormat={}{0:#0.#}}" />
+                                <TextBlock Grid.Column="3" Foreground="DarkGray">
+                                    x
+                                </TextBlock>
+                                <TextBlock Grid.Column="4" Text="{Binding Data.Height, StringFormat={}{0:#0.#}}" />
+                            </Grid>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTemplateColumn Width="*" Header="Weight">
+                <DataGridTemplateColumn Width="1.5*" Header="Weight">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock
+                                Margin="4,0"
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Center"
-                                FontSize="12"
-                                Text="{Binding Data.Weight}" />
+                                FontSize="{StaticResource BaseFontSize}"
+                                Text="{Binding Data.Weight, Converter={StaticResource NumberToWeightString}}" />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
                 <DataGridTemplateColumn
-                    Width="*"
+                    Width="3*"
                     CanUserSort="True"
                     Header="Location"
                     SortMemberPath="BinLocation">
@@ -284,13 +312,13 @@
                             <TextBlock
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Center"
-                                FontSize="12"
+                                FontSize="{StaticResource BaseFontSize}"
                                 Text="{Binding Data.BinLocation}" />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
                 <DataGridTemplateColumn
-                    Width="*"
+                    Width="Auto"
                     Header="Active"
                     Visibility="{Binding DataContext.ShowInactiveProducts, Source={x:Reference CommandGrid}, Converter={StaticResource BooleanToVisibility}}">
                     <DataGridTemplateColumn.CellTemplate>
@@ -298,7 +326,7 @@
                             <TextBlock
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Center"
-                                FontSize="12"
+                                FontSize="{StaticResource BaseFontSize}"
                                 Text="{Binding Data.IsActive, Converter={StaticResource BooleanToString}}" />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
