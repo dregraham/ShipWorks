@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Interapptive.Shared.ComponentRegistration;
+using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using SD.LLBLGen.Pro.QuerySpec;
 using ShipWorks.Data.Connection;
@@ -20,18 +21,21 @@ namespace ShipWorks.Products
     {
         private readonly ISqlAdapterFactory sqlAdapterFactory;
 
+         private readonly ILog productVariantLog;
+
         /// <summary>
         /// Constructor
         /// </summary>
-        public ProductCatalog(ISqlAdapterFactory sqlAdapterFactory)
+        public ProductCatalog(ISqlAdapterFactory sqlAdapterFactory, Func<Type, ILog> logFactory)
         {
             this.sqlAdapterFactory = sqlAdapterFactory;
+            productVariantLog = logFactory(typeof(ProductVariant));
         }
         
         /// <summary>
         /// Fetch a Product from the database
         /// </summary>
-        public IProductVariant FetchProductVariant(string sku) => new ProductVariant(sku, FetchProductVariantReadOnly(sku));
+        public IProductVariant FetchProductVariant(string sku) => new ProductVariant(sku, FetchProductVariantReadOnly(sku), productVariantLog);
 
         /// <summary>
         /// Fetch a product variant based on SKU

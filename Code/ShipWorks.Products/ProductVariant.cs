@@ -13,15 +13,16 @@ namespace ShipWorks.Products
     {
         private readonly string sku;
         private readonly IProductVariantEntity variant;
-        private static readonly ILog log = LogManager.GetLogger(typeof(ProductVariant));
+        private readonly ILog log;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public ProductVariant(string sku, IProductVariantEntity variant)
+        public ProductVariant(string sku, IProductVariantEntity variant, ILog log)
         {
-            this.sku = sku;
+            this.sku = sku?.Trim() ?? string.Empty;
             this.variant = variant;
+            this.log = log;
         }
 
         /// <summary>
@@ -61,7 +62,7 @@ namespace ShipWorks.Products
 
             // "Attempting to apply product dimensions to item 00001 for sku ABCD"
             log.InfoFormat("Attempting to apply product dimensions to item {0} for sku {1}",
-                item.OrderItemID, item.SKU.Trim());
+                item.OrderItemID, sku);
 
             ApplyDim(variant.Weight, () => item.Weight = (double) variant.Weight.Value);
             ApplyDim(variant.Length, () => item.Length = variant.Length.Value);
