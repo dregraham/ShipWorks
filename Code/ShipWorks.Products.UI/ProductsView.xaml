@@ -59,7 +59,7 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
-        <Grid IsSharedSizeScope="True">
+        <Grid x:Name="CommandGrid" IsSharedSizeScope="True">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto" SharedSizeGroup="A" />
                 <ColumnDefinition Width="Auto" SharedSizeGroup="A" />
@@ -292,7 +292,7 @@
                 <DataGridTemplateColumn
                     Width="*"
                     Header="Active"
-                    Visibility="{Binding ShowInactiveProducts, Converter={StaticResource BooleanToVisibility}}">
+                    Visibility="{Binding DataContext.ShowInactiveProducts, Source={x:Reference CommandGrid}, Converter={StaticResource BooleanToVisibility}}">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock
