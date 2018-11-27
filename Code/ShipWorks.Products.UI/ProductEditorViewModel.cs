@@ -232,9 +232,10 @@ namespace ShipWorks.Products.UI
         /// </summary>
         private void SaveProduct()
         {
-            if (string.IsNullOrWhiteSpace(product.Sku))
+            if (string.IsNullOrWhiteSpace(SKU))
             {
                 messageHelper.ShowError("Please enter a value for SKU.");
+                return;
             }
 
             product.Sku = SKU.Trim();
