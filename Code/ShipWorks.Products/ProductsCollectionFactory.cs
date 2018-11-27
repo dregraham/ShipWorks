@@ -36,6 +36,8 @@ namespace ShipWorks.Products
         /// </summary>
         public DataWrapper<IVirtualizingCollection<IProductListItemEntity>> Create(bool includeInactiveProducts, string searchText, IBasicSortDefinition sortDefinition)
         {
+            searchText = searchText?.Trim();
+
             var listWrapper = new DataWrapper<IVirtualizingCollection<IProductListItemEntity>>(0);
             QueryFactory factory = new QueryFactory();
             var from = factory.ProductVariant
@@ -54,10 +56,10 @@ namespace ShipWorks.Products
 
             if (!searchText.IsNullOrWhiteSpace())
             {
-                query = query.Where(ProductVariantFields.Name.Contains(searchText) |
-                                    ProductVariantFields.ASIN.Contains(searchText) |
-                                    ProductVariantFields.UPC.Contains(searchText) |
-                                    ProductVariantAliasFields.Sku == searchText);
+                query = query.Where(ProductVariantFields.Name.StartsWith(searchText) |
+                                    ProductVariantFields.ASIN.StartsWith(searchText) |
+                                    ProductVariantFields.UPC.StartsWith(searchText) |
+                                    ProductVariantAliasFields.Sku.StartsWith(searchText));
             }
 
             Functional.UsingAsync(

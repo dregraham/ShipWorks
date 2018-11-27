@@ -37,7 +37,7 @@ namespace ShipWorks.Products
 
             using (ISqlAdapter sqlAdapter = sqlAdapterFactory.Create())
             {
-                productVariant = Load(sku, sqlAdapter, ProductPrefetchPath.Value);
+                productVariant = Load(sku.Trim(), sqlAdapter, ProductPrefetchPath.Value);
             }
 
             return productVariant?.AsReadOnly();
@@ -51,7 +51,7 @@ namespace ShipWorks.Products
         /// </remarks>
         private ProductVariantEntity Load(string sku, ISqlAdapter sqlAdapter, IEnumerable<IPrefetchPathElement2> prefetchPaths)
         {
-            return FetchFirst(ProductVariantAliasFields.Sku == sku,
+            return FetchFirst(ProductVariantAliasFields.Sku == sku.Trim(),
                 sqlAdapter,
                 prefetchPaths);
         }
