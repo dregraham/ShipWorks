@@ -30,7 +30,7 @@ namespace ShipWorks.UI.Controls
                                                                       FrameworkPropertyMetadataOptions.None,
                                                                       OnMaxValueChanged));
 
-        public static readonly DependencyProperty TextProperty =
+        public static readonly DependencyProperty UnitTextProperty =
             DependencyProperty.Register("Text", typeof(string), typeof(UnitTextBox),
                                         new FrameworkPropertyMetadata(string.Empty,
                                                                       FrameworkPropertyMetadataOptions.BindsTwoWayByDefault,
@@ -53,17 +53,6 @@ namespace ShipWorks.UI.Controls
         private static void OnTextChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             // We need to handle text changes to also handle coercion
-        }
-
-        /// <summary>
-        /// Textual representation of the value
-        /// </summary>
-        [Bindable(true)]
-        [Obfuscation(Exclude = true)]
-        public string Text
-        {
-            get => (string) GetValue(TextProperty);
-            set => SetValue(TextProperty, value);
         }
 
         /// <summary>
@@ -98,7 +87,7 @@ namespace ShipWorks.UI.Controls
             get => (UnitType) GetValue(MaxValueProperty);
             set => SetValue(MaxValueProperty, value);
         }
-        
+
         /// <summary>
         /// Apply the template
         /// </summary>
@@ -124,10 +113,10 @@ namespace ShipWorks.UI.Controls
         /// </summary>
         private static object CoerceTextPropertyChanges(DependencyObject d, object baseValue)
         {
-            return (UnitType) d.GetValue(UnitTypeProperty) == UnitType.Weight ? 
+            return (UnitType) d.GetValue(UnitTypeProperty) == UnitType.Weight ?
                 FormatWeight(d, baseValue) :
                 FormatLength(d, baseValue);
-        }      
+        }
 
         /// <summary>
         /// Format the weight value
@@ -146,7 +135,7 @@ namespace ShipWorks.UI.Controls
 
             return WeightConverter.Current.FormatWeight((double) d.GetValue(ValueProperty));
         }
-        
+
         /// <summary>
         /// Format the length value
         /// </summary>
