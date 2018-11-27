@@ -8,8 +8,8 @@
     xmlns:local="clr-namespace:ShipWorks.Products.UI"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
-    xmlns:ui="http://schemas.shipworks.com/ui"
     xmlns:sys="clr-namespace:System;assembly=mscorlib"
+    xmlns:ui="http://schemas.shipworks.com/ui"
     d:DataContext="{d:DesignInstance local:DesignerProductsMode,
                                      IsDesignTimeCreatable=True}"
     d:DesignHeight="500"
@@ -145,6 +145,9 @@
             <DataGrid.InputBindings>
                 <KeyBinding Command="ApplicationCommands.NotACommand" Gesture="Ctrl+A" />
             </DataGrid.InputBindings>
+            <DataGrid.CommandBindings>
+                <CommandBinding Command="ApplicationCommands.SelectAll" Executed="OnSelectAllExecuted" />
+            </DataGrid.CommandBindings>
             <i:Interaction.Triggers>
                 <i:EventTrigger EventName="SelectionChanged">
                     <cmd:EventToCommand Command="{Binding SelectedProductsChanged}" CommandParameter="{Binding SelectedItems, ElementName=ProductsGrid}" />
@@ -323,11 +326,12 @@
                     Visibility="{Binding DataContext.ShowInactiveProducts, Source={x:Reference CommandGrid}, Converter={StaticResource BooleanToVisibility}}">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <TextBlock
-                                HorizontalAlignment="Left"
+                            <Path
+                                HorizontalAlignment="Center"
                                 VerticalAlignment="Center"
-                                FontSize="{StaticResource BaseFontSize}"
-                                Text="{Binding Data.IsActive, Converter={StaticResource BooleanToString}}" />
+                                Stroke="Gray"
+                                Style="{StaticResource Path.Checkmark}"
+                                Visibility="{Binding Data.IsActive, Converter={StaticResource BooleanToVisibility}}"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
