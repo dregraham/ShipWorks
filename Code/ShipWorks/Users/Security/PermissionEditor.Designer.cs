@@ -48,18 +48,19 @@ namespace ShipWorks.Users.Security
             this.customerCreateLabel = new System.Windows.Forms.Label();
             this.customerEmailLabel = new System.Windows.Forms.Label();
             this.labelCustomers = new System.Windows.Forms.Label();
+            this.manageProducts = new System.Windows.Forms.CheckBox();
             this.panelCustomers.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize) (this.customerNotesPicture)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize) (this.customerDeletePicture)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize) (this.customerCreatePicture)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize) (this.customerEmailPicture)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.customerNotesPicture)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.customerDeletePicture)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.customerCreatePicture)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.customerEmailPicture)).BeginInit();
             this.SuspendLayout();
             // 
             // panelStores
             // 
-            this.panelStores.Anchor = ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.panelStores.Location = new System.Drawing.Point(5, 177);
+            this.panelStores.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.panelStores.Location = new System.Drawing.Point(3, 197);
             this.panelStores.Name = "panelStores";
             this.panelStores.Size = new System.Drawing.Size(287, 119);
             this.panelStores.TabIndex = 5;
@@ -67,7 +68,7 @@ namespace ShipWorks.Users.Security
             // labelManagement
             // 
             this.labelManagement.AutoSize = true;
-            this.labelManagement.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+            this.labelManagement.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labelManagement.Location = new System.Drawing.Point(5, 6);
             this.labelManagement.Name = "labelManagement";
             this.labelManagement.Size = new System.Drawing.Size(82, 13);
@@ -120,7 +121,7 @@ namespace ShipWorks.Users.Security
             this.panelCustomers.Controls.Add(this.customerCreateLabel);
             this.panelCustomers.Controls.Add(this.customerEmailLabel);
             this.panelCustomers.Controls.Add(this.labelCustomers);
-            this.panelCustomers.Location = new System.Drawing.Point(7, 81);
+            this.panelCustomers.Location = new System.Drawing.Point(7, 101);
             this.panelCustomers.Name = "panelCustomers";
             this.panelCustomers.Size = new System.Drawing.Size(287, 94);
             this.panelCustomers.TabIndex = 4;
@@ -128,7 +129,7 @@ namespace ShipWorks.Users.Security
             // infoTipEmailCustomers
             // 
             this.infoTipEmailCustomers.Caption = "A user can send email to customers when he can send email for orders for every st" +
-                "ore.";
+    "ore.";
             this.infoTipEmailCustomers.Location = new System.Drawing.Point(172, 74);
             this.infoTipEmailCustomers.Name = "infoTipEmailCustomers";
             this.infoTipEmailCustomers.Size = new System.Drawing.Size(12, 12);
@@ -138,7 +139,7 @@ namespace ShipWorks.Users.Security
             // infoTipCustomerNotes
             // 
             this.infoTipCustomerNotes.Caption = "A user can edit customer notes if he can edit notes for orders of at least one st" +
-                "ore.";
+    "ore.";
             this.infoTipCustomerNotes.Location = new System.Drawing.Point(153, 56);
             this.infoTipCustomerNotes.Name = "infoTipCustomerNotes";
             this.infoTipCustomerNotes.Size = new System.Drawing.Size(12, 12);
@@ -169,7 +170,7 @@ namespace ShipWorks.Users.Security
             this.label1.ForeColor = System.Drawing.SystemColors.GrayText;
             this.label1.Location = new System.Drawing.Point(66, 2);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(173, 13);
+            this.label1.Size = new System.Drawing.Size(177, 13);
             this.label1.TabIndex = 40;
             this.label1.Text = "(Derived from subsequent settings)";
             // 
@@ -252,12 +253,22 @@ namespace ShipWorks.Users.Security
             // labelCustomers
             // 
             this.labelCustomers.AutoSize = true;
-            this.labelCustomers.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+            this.labelCustomers.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labelCustomers.Location = new System.Drawing.Point(-2, 2);
             this.labelCustomers.Name = "labelCustomers";
             this.labelCustomers.Size = new System.Drawing.Size(68, 13);
             this.labelCustomers.TabIndex = 23;
             this.labelCustomers.Text = "Customers";
+            // 
+            // manageProducts
+            // 
+            this.manageProducts.AutoSize = true;
+            this.manageProducts.Location = new System.Drawing.Point(22, 80);
+            this.manageProducts.Name = "manageProducts";
+            this.manageProducts.Size = new System.Drawing.Size(146, 17);
+            this.manageProducts.TabIndex = 6;
+            this.manageProducts.Text = "Create and edit products";
+            this.manageProducts.UseVisualStyleBackColor = true;
             // 
             // PermissionEditor
             // 
@@ -266,21 +277,22 @@ namespace ShipWorks.Users.Security
             this.AutoScroll = true;
             this.BackColor = System.Drawing.Color.White;
             this.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.Controls.Add(this.manageProducts);
             this.Controls.Add(this.panelCustomers);
             this.Controls.Add(this.panelStores);
             this.Controls.Add(this.labelManagement);
             this.Controls.Add(this.manageActions);
             this.Controls.Add(this.manageFilters);
             this.Controls.Add(this.manageTemplates);
-            this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+            this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Name = "PermissionEditor";
-            this.Size = new System.Drawing.Size(297, 302);
+            this.Size = new System.Drawing.Size(297, 330);
             this.panelCustomers.ResumeLayout(false);
             this.panelCustomers.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize) (this.customerNotesPicture)).EndInit();
-            ((System.ComponentModel.ISupportInitialize) (this.customerDeletePicture)).EndInit();
-            ((System.ComponentModel.ISupportInitialize) (this.customerCreatePicture)).EndInit();
-            ((System.ComponentModel.ISupportInitialize) (this.customerEmailPicture)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.customerNotesPicture)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.customerDeletePicture)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.customerCreatePicture)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.customerEmailPicture)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -308,6 +320,6 @@ namespace ShipWorks.Users.Security
         private UI.Controls.InfoTip infoTipCustomerNotes;
         private UI.Controls.InfoTip infoTipDeleteCustomers;
         private UI.Controls.InfoTip infotipCreateCustomers;
-
+        private System.Windows.Forms.CheckBox manageProducts;
     }
 }

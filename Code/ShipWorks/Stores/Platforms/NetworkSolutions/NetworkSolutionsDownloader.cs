@@ -321,6 +321,7 @@ namespace ShipWorks.Stores.Platforms.NetworkSolutions
                 OrderItemEntity orderItem = InstantiateOrderItem(order);
 
                 orderItem.Code = lineItem.PartNumber;
+                orderItem.SKU = orderItem.Code;
                 orderItem.Name = lineItem.Name;
                 orderItem.Quantity = lineItem.QtySold;
                 orderItem.UnitPrice = lineItem.UnitPrice.Value;

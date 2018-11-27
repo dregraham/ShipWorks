@@ -140,7 +140,23 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// <summary>
         /// Gets the Tango customer id for a license.
         /// </summary>
-        public override string GetTangoCustomerId() => "FakeCustomerID";
+        public override string GetTangoCustomerId()
+        {
+            StoreEntity store = StoreManager.GetEnabledStores()
+                                    .FirstOrDefault(s => new ShipWorksLicense(s.License).IsTrial == false) ??
+                                StoreManager.GetAllStores()
+                                    .FirstOrDefault(s => new ShipWorksLicense(s.License).IsTrial == false);
+
+            try
+            {
+                return store != null ? GetLicenseStatus(store.License, store).TangoCustomerID : string.Empty;
+            }
+            catch (TangoException ex)
+            {
+                log.Error(ex);
+                return string.Empty;
+            }
+        }
 
         /// <summary>
         /// Get an xml document from the given file

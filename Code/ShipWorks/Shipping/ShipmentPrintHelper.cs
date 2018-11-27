@@ -62,8 +62,9 @@ namespace ShipWorks.Shipping
         /// </summary>
         private static TemplateEntity DetermineGroupTemplate(ShippingPrintOutputEntity group, IShipmentEntity shipment)
         {
-            var matchingRule = group.Rules.FirstOrDefault(r => r.FilterNodeID == ShippingPrintOutputManager.FilterNodeAlwaysID || 
-                                                       FilterHelper.IsObjectInFilterContent(shipment.ShipmentID, r.FilterNodeID));
+            var matchingRule = group.Rules.FirstOrDefault(r => r.FilterNodeID != 0 &&
+                                                        (r.FilterNodeID == ShippingPrintOutputManager.FilterNodeAlwaysID ||
+                                                        FilterHelper.IsObjectInFilterContent(shipment.ShipmentID, r.FilterNodeID)));
 
             if (matchingRule != null)
             {
