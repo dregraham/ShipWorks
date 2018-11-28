@@ -50,7 +50,6 @@
                     </Setter.Value>
                 </Setter>
             </Style>
-            <ui:BooleanToStringConverter x:Key="BooleanToString" />
             <ui:BooleanToVisibilityConverter x:Key="BooleanToVisibility" />
             <ui:NumberToWeightStringConverter x:Key="NumberToWeightString" />
             <sys:Double x:Key="BaseFontSize">14</sys:Double>
@@ -62,7 +61,7 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
-        <Grid x:Name="CommandGrid" IsSharedSizeScope="True">
+        <Grid IsSharedSizeScope="True">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto" SharedSizeGroup="A" />
                 <ColumnDefinition Width="Auto" SharedSizeGroup="A" />
@@ -143,6 +142,9 @@
             Style="{StaticResource DataGrid}"
             VirtualizingStackPanel.IsVirtualizing="True"
             VirtualizingStackPanel.VirtualizationMode="Recycling">
+            <DataGrid.Resources>
+                <ui:BindingProxy x:Key="proxy" Data="{Binding}" />
+            </DataGrid.Resources>
             <DataGrid.InputBindings>
                 <KeyBinding Command="ApplicationCommands.NotACommand" Gesture="Ctrl+A" />
             </DataGrid.InputBindings>
@@ -324,7 +326,7 @@
                 <DataGridTemplateColumn
                     Width="Auto"
                     Header="Active"
-                    Visibility="{Binding DataContext.ShowInactiveProducts, Source={x:Reference CommandGrid}, Converter={StaticResource BooleanToVisibility}}">
+                    Visibility="{Binding Data.ShowInactiveProducts, Source={StaticResource proxy}, Converter={StaticResource BooleanToVisibility}}">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <Path
@@ -332,7 +334,7 @@
                                 VerticalAlignment="Center"
                                 Stroke="Gray"
                                 Style="{StaticResource Path.Checkmark}"
-                                Visibility="{Binding Data.IsActive, Converter={StaticResource BooleanToVisibility}}"/>
+                                Visibility="{Binding Data.IsActive, Converter={StaticResource BooleanToVisibility}}" />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
