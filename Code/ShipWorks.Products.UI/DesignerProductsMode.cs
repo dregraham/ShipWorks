@@ -80,7 +80,7 @@ namespace ShipWorks.Products.UI
         public IBasicSortDefinition CurrentSort { get; set; }
         public bool ShowInactiveProducts { get; set; }
         public string SearchText { get; set; }
-
+        
         public void Dispose()
         {
             throw new NotImplementedException();
