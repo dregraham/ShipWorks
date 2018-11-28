@@ -7,7 +7,7 @@ namespace Interapptive.Shared.Enums
     /// <summary>
     /// Unit Type
     /// </summary>
-    [Obfuscation(Exclude = false, StripAfterObfuscation = false, ApplyToMembers = true)]
+    [Obfuscation(Exclude = true, StripAfterObfuscation = false, ApplyToMembers = true)]
     public enum UnitType
     {
         [Description("Weight")]
