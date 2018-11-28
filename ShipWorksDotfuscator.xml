@@ -85,6 +85,7 @@
       </inputassembly>
       <inputassembly refid="3b8b874b-4699-41bf-b28a-e1c06012c4bf">
         <option>honoroas</option>
+        <option>transformxaml</option>
         <file dir="${configdir}\Artifacts\Application" name="ShipWorks.Products.UI.dll" />
       </inputassembly>
     </asmlist>

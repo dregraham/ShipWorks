@@ -61,7 +61,7 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
-        <Grid x:Name="CommandGrid" IsSharedSizeScope="True">
+        <Grid IsSharedSizeScope="True">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto" SharedSizeGroup="A" />
                 <ColumnDefinition Width="Auto" SharedSizeGroup="A" />
@@ -141,6 +141,9 @@
             Style="{StaticResource DataGrid}"
             VirtualizingStackPanel.IsVirtualizing="True"
             VirtualizingStackPanel.VirtualizationMode="Recycling">
+            <DataGrid.Resources>
+                <ui:BindingProxy x:Key="proxy" Data="{Binding}" />
+            </DataGrid.Resources>
             <DataGrid.InputBindings>
                 <KeyBinding Command="ApplicationCommands.NotACommand" Gesture="Ctrl+A" />
             </DataGrid.InputBindings>
@@ -322,7 +325,7 @@
                 <DataGridTemplateColumn
                     Width="Auto"
                     Header="Active"
-                    Visibility="{Binding DataContext.ShowInactiveProducts, Source={x:Reference CommandGrid}, Converter={StaticResource BooleanToVisibility}}">
+                    Visibility="{Binding Data.ShowInactiveProducts, Source={StaticResource proxy}, Converter={StaticResource BooleanToVisibility}}">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <Path

@@ -156,6 +156,7 @@
     <Compile Include="Behaviors\TextBoxInputRegExBehavior.cs" />
     <Compile Include="Behaviors\WebBrowserRunStartupScriptBehavior.cs" />
     <Compile Include="Behaviors\WebBrowserSuppressPopupBehavior.cs" />
+    <Compile Include="BindingProxy.cs" />
     <Compile Include="Controls\AnimatedContentControl.cs" />
     <Compile Include="Controls\ChannelConfirmDelete\ChannelConfirmDeleteFactory.cs" />
     <Compile Include="Controls\ChannelConfirmDelete\ChannelConfirmDeleteViewModel.cs" />

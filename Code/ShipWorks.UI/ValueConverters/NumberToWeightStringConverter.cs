@@ -14,7 +14,6 @@ namespace ShipWorks.UI.ValueConverters
     /// <summary>
     /// Convert double to formatted weight text
     /// </summary>
-    [Obfuscation(Exclude = true)]
     public class NumberToWeightStringConverter : IValueConverter
     {
         /// <summary>
