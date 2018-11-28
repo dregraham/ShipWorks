@@ -433,6 +433,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
 
             itemEntity.YahooProductID = item.ItemID;
             itemEntity.Code = WebUtility.HtmlDecode(item.ItemCode);
+            itemEntity.SKU = itemEntity.Code;
             itemEntity.Name = WebUtility.HtmlDecode(item.Description);
             itemEntity.Quantity = item.Quantity;
             itemEntity.UnitPrice = item.UnitPrice;

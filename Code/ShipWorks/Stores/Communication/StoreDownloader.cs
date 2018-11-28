@@ -8,6 +8,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Autofac;
 using Interapptive.Shared.Business;
+using Interapptive.Shared.Collections;
 using Interapptive.Shared.Enums;
 using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Threading;
@@ -31,6 +32,7 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Data.Model.FactoryClasses;
 using ShipWorks.Data.Model.HelperClasses;
+using ShipWorks.Products;
 using ShipWorks.Shipping.ShipSense;
 using ShipWorks.Stores.Content;
 using ShipWorks.Templates.Tokens;
@@ -760,6 +762,8 @@ namespace ShipWorks.Stores.Communication
             SetAddressValidationStatus(order, true, "Ship", adapter);
             SetAddressValidationStatus(order, true, "Bill", adapter);
 
+            UpdateItemsFromProductCatalog(order);
+
             log.Info($"StoreDownloader.SaveNewOrder waiting for getCustomerTask");
             // Wait for the customer to be found or created
             CustomerEntity customer = await getCustomerTask.ConfigureAwait(false);
@@ -769,6 +773,19 @@ namespace ShipWorks.Stores.Communication
             AdjustNoteCount(order, customer);
 
             await PerformInitialOrderSave(order, customer, adapter).ConfigureAwait(false);
+        }
+
+        /// <summary>
+        /// Loop through each item. If there is a matching active product in the catalog, update the dimensions
+        /// </summary>
+        private void UpdateItemsFromProductCatalog(OrderEntity order)
+        {
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+            {
+                IProductCatalog productCatalog = lifetimeScope.Resolve<IProductCatalog>();
+
+                order.OrderItems.ForEach(item => productCatalog.FetchProductVariant(item.SKU).Apply(item));               
+            }
         }
 
         /// <summary>

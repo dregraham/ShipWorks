@@ -27,6 +27,11 @@ namespace ShipWorks.Products
         ICommand EditProductVariant { get; }
 
         /// <summary>
+        /// Add a product
+        /// </summary>
+        ICommand AddProduct { get; }
+
+        /// <summary>
         /// List of products
         /// </summary>
         [Obfuscation(Exclude = true)]

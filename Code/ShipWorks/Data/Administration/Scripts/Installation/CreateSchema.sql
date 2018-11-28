@@ -7892,8 +7892,17 @@ ALTER TABLE [dbo].[ProductVariantAlias] ADD CONSTRAINT [PK_ProductVariantAlias] 
 GO
 PRINT N'Creating index [IX_SWDefault_ProductVariantAlias_Sku] on [dbo].[ProductVariantAlias]'
 GO
-CREATE NONCLUSTERED INDEX [IX_SWDefault_ProductVariantAlias_Sku] ON [dbo].[ProductVariantAlias] ([Sku]) INCLUDE ([ProductVariantID])
+CREATE UNIQUE NONCLUSTERED INDEX [IX_SWDefault_ProductVariantAlias_Sku] ON [dbo].[ProductVariantAlias] ([Sku]) INCLUDE ([ProductVariantID])
 GO
+PRINT N'Creating index [IX_SWDefault_ProductVariantAlias_IsDefaultSkuProductVariantID] on [dbo].[ProductVariantAlias]'
+GO
+CREATE NONCLUSTERED INDEX [IX_SWDefault_ProductVariantAlias_IsDefaultSkuProductVariantID] ON [dbo].[ProductVariantAlias]
+(
+	[IsDefault] ASC
+)
+INCLUDE ([ProductVariantID], [Sku]) ON [PRIMARY]
+GO
+
 PRINT N'Creating [dbo].[ProductVariantAttribute]'
 GO
 CREATE TABLE [dbo].[ProductVariantAttribute]

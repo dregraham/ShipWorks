@@ -4,7 +4,8 @@ using System.Windows.Forms;
 namespace Interapptive.Shared.UI
 {
     /// <summary>
-    /// Interface for displaying WPF Dialogs. DO NOT IMPLEMENT THIS INTERFACE DIRECTLY. USE INTEROPWINDOW INSTEAD!
+    /// DO NOT IMPLEMENT THIS INTERFACE DIRECTLY. USE INTEROPWINDOW INSTEAD!
+    /// Interface for displaying WPF Dialogs. 
     /// </summary>
     /// <remarks>
     /// This interface was originally used to create wpf dialogs with winforms owners. This eventaully evolved into the

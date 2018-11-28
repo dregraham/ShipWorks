@@ -75,7 +75,8 @@
             <Button
                 Grid.Column="0"
                 Content="Add"
-                Style="{StaticResource PrimaryButton}" />
+                Style="{StaticResource PrimaryButton}" 
+		Command="{Binding AddProduct}" />
             <Button
                 Grid.Column="1"
                 Content="Edit"
@@ -88,11 +89,13 @@
             <Button
                 Grid.Column="3"
                 Content="Mark Active"
-                Style="{StaticResource SecondaryButton}" />
+                Style="{StaticResource SecondaryButton}"
+                Command="{Binding ActivateProductCommand}"/>
             <Button
                 Grid.Column="4"
                 Content="Mark Inactive"
-                Style="{StaticResource SecondaryButton}" />
+                Style="{StaticResource SecondaryButton}"
+                Command="{Binding DeactivateProductCommand}"/>
 
             <CheckBox
                 Grid.Column="5"
@@ -107,7 +110,8 @@
                 MinWidth="300"
                 HorizontalAlignment="Right"
                 VerticalContentAlignment="Center"
-                FontSize="20">
+                FontSize="20"
+                Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged, Delay=250}">
                 <syncfusion:SfTextBoxExt.Resources>
                     <Style TargetType="{x:Type Border}">
                         <Setter Property="CornerRadius" Value="2" />

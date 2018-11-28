@@ -55,6 +55,7 @@
     </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
+    <Reference Include="SD.LLBLGen.Pro.ORMSupportClasses, Version=5.1.0.0, Culture=neutral, PublicKeyToken=ca73b74ba4e3ff27" />
     <Reference Include="Syncfusion.Licensing, Version=16.3460.0.29, Culture=neutral, PublicKeyToken=632609b4d040f6b4, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Syncfusion.Licensing.16.3.0.29\lib\net46\Syncfusion.Licensing.dll</HintPath>
     </Reference>
@@ -87,6 +88,12 @@
     </Compile>
     <Compile Include="DesignerProductsMode.cs" />
     <Compile Include="IProductsView.cs" />
+    <Compile Include="ProductEditorDialog.xaml.cs">
+      <DependentUpon>ProductEditorDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="IProductEditorDialogFactory.cs" />
+    <Compile Include="ProductEditorDialogFactory.cs" />
+    <Compile Include="ProductEditorViewModel.cs" />
     <Compile Include="ProductsView.xaml.cs">
       <DependentUpon>ProductsView.xaml</DependentUpon>
     </Compile>
@@ -123,6 +130,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Page Include="ProductEditorDialog.xaml" />
     <Page Include="ProductsView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

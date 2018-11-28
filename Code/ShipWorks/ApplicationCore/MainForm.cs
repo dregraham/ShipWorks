@@ -1362,6 +1362,7 @@ namespace ShipWorks
                     .Union(ShippingProfileManager.GetTelemetryData())
                     .Union(ConfigurationData.GetTelemetryData())
                     .Union(FilterTelemetryService.GetTelemetryData())
+                    .Union(ProductCatalogTelemetryService.GetTelemetryData())
                     .ToDictionary(k => k.Key, v => v.Value);
             }
             catch (Exception ex)
