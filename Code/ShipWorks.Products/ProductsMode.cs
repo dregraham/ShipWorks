@@ -89,21 +89,25 @@ namespace ShipWorks.Products
         /// <summary>
         /// Command to refresh the products list
         /// </summary>
+        [Obfuscation(Exclude = true)]
         public ICommand RefreshProducts { get; }
 
         /// <summary>
         /// Edit a given product variant
         /// </summary>
+        [Obfuscation(Exclude = true)]
         public ICommand EditProductVariant { get; }
 
         /// <summary>
         /// The list of selected products has changed
         /// </summary>
+        [Obfuscation(Exclude = true)]
         public ICommand SelectedProductsChanged { get; }
 
         /// <summary>
         /// List of products
         /// </summary>
+        [Obfuscation(Exclude = true)]
         public DataWrapper<IVirtualizingCollection<IProductListItemEntity>> Products
         {
             get => products;
@@ -113,6 +117,7 @@ namespace ShipWorks.Products
         /// <summary>
         /// Collection of selected products
         /// </summary>
+        [Obfuscation(Exclude = true)]
         public IList<IProductListItemEntity> SelectedProducts
         {
             get => selectedProducts;
@@ -122,6 +127,7 @@ namespace ShipWorks.Products
         /// <summary>
         /// Current sorting of the products list
         /// </summary>
+        [Obfuscation(Exclude = true)]
         public IBasicSortDefinition CurrentSort
         {
             get => currentSort;
@@ -137,6 +143,7 @@ namespace ShipWorks.Products
         /// <summary>
         /// Show inactive products in addition to active
         /// </summary>
+        [Obfuscation(Exclude = true)]
         public bool ShowInactiveProducts
         {
             get => showInactiveProducts;
@@ -152,6 +159,7 @@ namespace ShipWorks.Products
         /// <summary>
         /// Search text
         /// </summary>
+        [Obfuscation(Exclude = true)]
         public string SearchText
         {
             get => searchText;
