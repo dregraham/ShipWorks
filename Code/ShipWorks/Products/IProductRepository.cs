@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using ShipWorks.Data.Model.EntityInterfaces;
 
 namespace ShipWorks.Products
@@ -16,6 +17,6 @@ namespace ShipWorks.Products
         /// <summary>
         /// Set given products activation to specified value
         /// </summary>
-        void SetActivation(IEnumerable<long> productIDs, bool activation);
+        Task SetActivation(IEnumerable<long> productIDs, bool activation);
     }
 }

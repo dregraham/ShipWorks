@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Interapptive.Shared.ComponentRegistration;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using SD.LLBLGen.Pro.QuerySpec;
@@ -32,14 +33,14 @@ namespace ShipWorks.Products
         /// <summary>
         /// Set given products activation to specified value
         /// </summary>
-        public void SetActivation(IEnumerable<long> productIDs, bool activation)
+        public async Task SetActivation(IEnumerable<long> productIDs, bool activation)
         {
             using (var conn = sqlSession.OpenConnection())
             {
                 using (var comm = conn.CreateCommand())
                 {
                     comm.CommandText = $"UPDATE ProductVariant SET IsActive = {(activation ? "1" : "0")} WHERE ProductVariantID in ({String.Join(",", productIDs)})";
-                    comm.ExecuteNonQuery();
+                    await comm.ExecuteNonQueryAsync().ConfigureAwait(false);
                 }
             }
         }
@@ -95,7 +96,7 @@ namespace ShipWorks.Products
         /// <summary>
         /// Create the pre-fetch path used to load a product variant
         /// </summary>
-        private static readonly Lazy<IEnumerable<IPrefetchPathElement2>>ProductPrefetchPath = new Lazy<IEnumerable<IPrefetchPathElement2>>(() =>
+        private static readonly Lazy<IEnumerable<IPrefetchPathElement2>> ProductPrefetchPath = new Lazy<IEnumerable<IPrefetchPathElement2>>(() =>
         {
             List<IPrefetchPathElement2> prefetchPath = new List<IPrefetchPathElement2>();
 

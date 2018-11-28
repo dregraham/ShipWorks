@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Input;
 using DataVirtualization;
@@ -12,6 +13,7 @@ using GalaSoft.MvvmLight.CommandWpf;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.UI;
+using ShipWorks.Core.Common.Threading;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Data.Model.HelperClasses;
 
@@ -36,7 +38,7 @@ namespace ShipWorks.Products
         /// <summary>
         /// Constructor
         /// </summary>
-        public ProductsMode(IProductsViewHost view, IProductsCollectionFactory productsCollectionFactory, 
+        public ProductsMode(IProductsViewHost view, IProductsCollectionFactory productsCollectionFactory,
             IMessageHelper messageHelper, IProductRepository productRepository)
         {
             this.productsCollectionFactory = productsCollectionFactory;
@@ -50,21 +52,25 @@ namespace ShipWorks.Products
             EditProductVariant = new RelayCommand<long>(EditProductVariantAction);
             SelectedProductsChanged = new RelayCommand<IList>(
                 items => SelectedProducts = items?.OfType<DataWrapper<IProductListItemEntity>>().Select(x => x.Data).ToList());
+
+            DeactivateProductCommand =
+                new RelayCommand(() => SetProductActivation(false).Forget(), () => SelectedProducts?.Any() == true);
+
+            ActivateProductCommand =
+                new RelayCommand(() => SetProductActivation(true).Forget(), () => SelectedProducts?.Any() == true);
         }
 
         /// <summary>
         /// RelayCommand for activating a product
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public RelayCommand ActivateProductCommand => 
-            new RelayCommand(() => SetProductActivation(true), () => SelectedProducts?.Any() == true);
+        public ICommand ActivateProductCommand { get; }
 
         /// <summary>
         /// RelayCommand for deactivating a product
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public RelayCommand DeactivateProductCommand => 
-            new RelayCommand(() => SetProductActivation(false), () => SelectedProducts?.Any() == true);
+        public ICommand DeactivateProductCommand { get; }
 
         /// <summary>
         /// Command to refresh the products list
@@ -173,9 +179,12 @@ namespace ShipWorks.Products
         /// <summary>
         /// Activate a product
         /// </summary>
-        private void SetProductActivation(bool makeItActive)
+        private async Task SetProductActivation(bool makeItActive)
         {
-            productRepository.SetActivation(SelectedProducts.Select(p => p.ProductVariantID), makeItActive);
+            await productRepository
+                .SetActivation(SelectedProducts.Select(p => p.ProductVariantID), makeItActive)
+                .ConfigureAwait(false);
+
             RefreshProductsAction();
         }
 
