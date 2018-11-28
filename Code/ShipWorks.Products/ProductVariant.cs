@@ -28,7 +28,7 @@ namespace ShipWorks.Products
         /// <summary>
         /// Return true if product can write XML
         /// </summary>
-        public bool CanWriteXml => variant != null;
+        public bool CanWriteXml => variant?.IsActive == true;
 
         /// <summary>
         /// Write product XML
@@ -43,8 +43,7 @@ namespace ShipWorks.Products
             outline.AddElement("Name", () => variant.Name);
             outline.AddElement("ImageUrl", () => variant.ImageUrl);
             outline.AddElement("Location", () => variant.BinLocation);
-            outline.AddElement("DateCreated", () => variant.CreatedDate.ToString("d"));
-            outline.AddElement("IsActive", () => variant.IsActive ? "Yes" : "No");
+            outline.AddElement("DateCreated", () => variant.CreatedDate);
             outline.AddElement("HarmonizedCode", () => variant.HarmonizedCode);
             outline.AddElement("CountryOfOrigin", () => variant.CountryOfOrigin);
             outline.AddElement("DeclaredValue", () => variant.DeclaredValue);
