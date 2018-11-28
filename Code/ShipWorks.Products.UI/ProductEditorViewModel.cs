@@ -278,7 +278,7 @@ namespace ShipWorks.Products.UI
                 }
                 catch (ORMQueryExecutionException ex) when (ex.Message.Contains("Cannot insert duplicate key row in object 'dbo.ProductVariantAlias'"))
                 {
-                    messageHelper.ShowError("Please enter a unique value for product SKU.", ex);
+                    messageHelper.ShowError($"The SKU \"{product.Sku}\" already exists. Please enter a unique value for the Product SKU.", ex);
                 }
             }
         }
