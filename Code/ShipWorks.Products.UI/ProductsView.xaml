@@ -51,7 +51,9 @@
                 </Setter>
             </Style>
             <ui:BooleanToVisibilityConverter x:Key="BooleanToVisibility" />
+            <ui:BooleanToVisibilityConverter x:Key="BooleanToVisibilityInverted" Invert="True" />
             <ui:NumberToWeightStringConverter x:Key="NumberToWeightString" />
+            <ui:VisibilityMultiConverter x:Key="VisibilityMulti" />
             <sys:Double x:Key="BaseFontSize">14</sys:Double>
         </ResourceDictionary>
     </UserControl.Resources>
@@ -247,15 +249,25 @@
                     SortMemberPath="Name">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <Button
-                                x:Name="NameButton"
-                                HorizontalAlignment="Left"
-                                VerticalAlignment="Center"
-                                Command="{Binding DataContext.EditProductVariant, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"
-                                CommandParameter="{Binding Data.ProductVariantID}"
-                                Style="{StaticResource Link}">
-                                <TextBlock FontSize="{StaticResource BaseFontSize}" Text="{Binding Data.Name}" />
-                            </Button>
+                            <Grid>
+                                <Button
+                                    x:Name="NameButton"
+                                    HorizontalAlignment="Left"
+                                    VerticalAlignment="Center"
+                                    Command="{Binding DataContext.EditProductVariant, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"
+                                    CommandParameter="{Binding Data.ProductVariantID}"
+                                    Style="{StaticResource Link}"
+                                    Visibility="{Binding IsLoading, Converter={StaticResource BooleanToVisibilityInverted}}">
+                                    <TextBlock FontSize="{StaticResource BaseFontSize}" Text="{Binding Data.Name}" />
+                                </Button>
+                                <TextBlock
+                                    HorizontalAlignment="Left"
+                                    VerticalAlignment="Center"
+                                    Visibility="{Binding IsLoading, Converter={StaticResource BooleanToVisibility}}">
+                                    Loading...
+                                </TextBlock>
+                            </Grid>
+
                             <DataTemplate.Triggers>
                                 <DataTrigger Binding="{Binding Path=IsSelected, RelativeSource={RelativeSource AncestorType=DataGridRow}}" Value="True">
                                     <Setter TargetName="NameButton" Property="Style" Value="{StaticResource Link.Selected}" />
@@ -270,7 +282,7 @@
                     Header="Dimensions (L x W x H)">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <Grid Margin="8,0">
+                            <Grid Margin="8,0" Visibility="{Binding IsLoading, Converter={StaticResource BooleanToVisibilityInverted}}">
                                 <Grid.Resources>
                                     <Style TargetType="TextBlock">
                                         <Setter Property="VerticalAlignment" Value="Center" />
@@ -299,7 +311,11 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTemplateColumn Width="1.5*" Header="Weight">
+                <DataGridTemplateColumn
+                    Width="1.5*"
+                    CanUserSort="True"
+                    Header="Weight"
+                    SortMemberPath="Weight">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock
@@ -328,7 +344,9 @@
                 </DataGridTemplateColumn>
                 <DataGridTemplateColumn
                     Width="Auto"
+                    CanUserSort="True"
                     Header="Active"
+                    SortMemberPath="IsActive"
                     Visibility="{Binding Data.ShowInactiveProducts, Source={StaticResource proxy}, Converter={StaticResource BooleanToVisibility}}">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
@@ -336,8 +354,14 @@
                                 HorizontalAlignment="Center"
                                 VerticalAlignment="Center"
                                 Stroke="Gray"
-                                Style="{StaticResource Path.Checkmark}"
-                                Visibility="{Binding Data.IsActive, Converter={StaticResource BooleanToVisibility}}" />
+                                Style="{StaticResource Path.Checkmark}">
+                                <Path.Visibility>
+                                    <MultiBinding Converter="{StaticResource VisibilityMulti}">
+                                        <Binding Converter="{StaticResource BooleanToVisibilityInverted}" Path="IsLoading" />
+                                        <Binding Converter="{StaticResource BooleanToVisibility}" Path="Data.IsActive" />
+                                    </MultiBinding>
+                                </Path.Visibility>
+                            </Path>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
