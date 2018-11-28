@@ -50,7 +50,6 @@
                     </Setter.Value>
                 </Setter>
             </Style>
-            <ui:BooleanToStringConverter x:Key="BooleanToString" />
             <ui:BooleanToVisibilityConverter x:Key="BooleanToVisibility" />
             <ui:NumberToWeightStringConverter x:Key="NumberToWeightString" />
             <sys:Double x:Key="BaseFontSize">14</sys:Double>
@@ -331,7 +330,7 @@
                                 VerticalAlignment="Center"
                                 Stroke="Gray"
                                 Style="{StaticResource Path.Checkmark}"
-                                Visibility="{Binding Data.IsActive, Converter={StaticResource BooleanToVisibility}}"/>
+                                Visibility="{Binding Data.IsActive, Converter={StaticResource BooleanToVisibility}}" />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>

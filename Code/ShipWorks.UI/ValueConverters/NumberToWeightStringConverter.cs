@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
+using System.Reflection;
 using System.Windows.Data;
 using Autofac;
 using Autofac.Features.OwnedInstances;
@@ -13,6 +14,7 @@ namespace ShipWorks.UI.ValueConverters
     /// <summary>
     /// Convert double to formatted weight text
     /// </summary>
+    [Obfuscation(Exclude = true)]
     public class NumberToWeightStringConverter : IValueConverter
     {
         /// <summary>
