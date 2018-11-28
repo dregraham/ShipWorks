@@ -520,7 +520,6 @@ namespace ShipWorks.Shipping
 
             using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
-                ICarrierShipmentAdapterFactory shipmentAdapterFactory = lifetimeScope.Resolve<ICarrierShipmentAdapterFactory>();
                 IShippingProfileManager shippingProfileManager = lifetimeScope.Resolve<IShippingProfileManager>();
                 ICustomsManager customsManager = lifetimeScope.Resolve<ICustomsManager>();
                 ICarrierAccountRetriever accountRetriever = lifetimeScope.ResolveKeyed<ICarrierAccountRetriever>(ShipmentTypeCode);
@@ -529,8 +528,10 @@ namespace ShipWorks.Shipping
 
                 if (shipment.Order.OrderItems.Count() == 1 && shipment.Order.OrderItems.Single().Quantity == 1)
                 {
-                    OrderItemEntity item = shipment.Order.OrderItems.Single();
+                    ICarrierShipmentAdapterFactory shipmentAdapterFactory = lifetimeScope.Resolve<ICarrierShipmentAdapterFactory>();
                     IPackageAdapter package = shipmentAdapterFactory.Get(shipment).GetPackageAdapters().Single();
+                    OrderItemEntity item = shipment.Order.OrderItems.Single();
+
                     package.DimsLength = (double) item.Length;
                     package.DimsWidth = (double) item.Width;
                     package.DimsHeight = (double) item.Height;
