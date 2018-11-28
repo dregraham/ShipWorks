@@ -76,7 +76,8 @@
             <Button
                 Grid.Column="0"
                 Content="Add"
-                Style="{StaticResource PrimaryButton}" />
+                Style="{StaticResource PrimaryButton}" 
+		Command="{Binding AddProduct}" />
             <Button
                 Grid.Column="1"
                 Content="Edit"

@@ -14,6 +14,7 @@ using Interapptive.Shared.Collections;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.UI;
 using ShipWorks.Core.Common.Threading;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Data.Model.HelperClasses;
 
@@ -33,18 +34,23 @@ namespace ShipWorks.Products
         private bool showInactiveProducts;
         private readonly IProductsCollectionFactory productsCollectionFactory;
         private readonly IMessageHelper messageHelper;
-        private readonly IProductRepository productRepository;
+        private readonly Func<IProductEditorViewModel> productEditorViewModelFunc;
+        private readonly IProductCatalog productCatalog;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public ProductsMode(IProductsViewHost view, IProductsCollectionFactory productsCollectionFactory,
-            IMessageHelper messageHelper, IProductRepository productRepository)
+        public ProductsMode(IProductsViewHost view,
+            IProductsCollectionFactory productsCollectionFactory,
+            IMessageHelper messageHelper,
+            Func<IProductEditorViewModel> productEditorViewModelFunc,
+			IProductCatalog productCatalog)
         {
             this.productsCollectionFactory = productsCollectionFactory;
             this.messageHelper = messageHelper;
+            this.productEditorViewModelFunc = productEditorViewModelFunc;
             this.view = view;
-            this.productRepository = productRepository;
+            this.productCatalog = productCatalog;
 
             CurrentSort = new BasicSortDefinition(ProductVariantFields.Name.Name, ListSortDirection.Ascending);
 
@@ -58,7 +64,15 @@ namespace ShipWorks.Products
 
             ActivateProductCommand =
                 new RelayCommand(() => SetProductActivation(true).Forget(), () => SelectedProducts?.Any() == true);
+
+			AddProduct = new RelayCommand(() => AddProductAction());
         }
+		
+        /// <summary>
+        /// Command for Adding a product
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public ICommand AddProduct { get; set; }
 
         /// <summary>
         /// RelayCommand for activating a product
@@ -177,11 +191,20 @@ namespace ShipWorks.Products
         }
 
         /// <summary>
+        /// Add a product
+        /// </summary>
+        private void AddProductAction()
+        {
+            productEditorViewModelFunc().ShowProductEditor(new ProductVariantAliasEntity());
+            RefreshProductsAction();
+        }
+
+        /// <summary>
         /// Activate a product
         /// </summary>
         private async Task SetProductActivation(bool makeItActive)
         {
-            await productRepository
+            await productCatalog
                 .SetActivation(SelectedProducts.Select(p => p.ProductVariantID), makeItActive)
                 .ConfigureAwait(false);
 

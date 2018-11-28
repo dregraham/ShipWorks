@@ -70,6 +70,7 @@ namespace ShipWorks.Products.UI
 
         public ICommand DeactivateProductCommand => throw new NotImplementedException();
 
+        public ICommand AddProduct => throw new NotImplementedException();
         public ICommand RefreshProducts => throw new NotImplementedException();
         public ICommand EditProductVariant => throw new NotImplementedException();
         public ICommand SelectedProductsChanged => throw new NotImplementedException();

@@ -21,7 +21,7 @@ namespace ShipWorks.Templates.Processing.TemplateXml.ElementOutlines
     public class OrderItemOutline : ElementOutline
     {
         private static readonly ILog log = LogManager.GetLogger(typeof(OrderItemOutline));
-        private IProductVariantEntity productVariant;
+        private IProductVariant productVariant;
         private OrderEntity order;
         private long itemID;
         private OrderItemEntity item;
@@ -63,8 +63,8 @@ namespace ShipWorks.Templates.Processing.TemplateXml.ElementOutlines
             AddElement("Height", () => Item.Height);
 
             AddElement("Product", new OrderItemProductOutline(context), 
-                () => new []{ new Tuple<IProductVariantEntity, OrderItemEntity>(ProductVariant, Item) },
-                If(() => ProductVariant != null));
+                () => new []{ Product },
+                If(() => Product.CanWriteXml));
 
             // Add an outline entry for each unique store type that could potentially be used
             foreach (StoreType storeType in StoreManager.GetUniqueStoreTypes())
@@ -155,7 +155,7 @@ namespace ShipWorks.Templates.Processing.TemplateXml.ElementOutlines
         /// <summary>
         /// The ProductVariantEntity represented by the bound outline
         /// </summary>
-        private IProductVariantEntity ProductVariant
+        private IProductVariant Product
         {
             get
             {
@@ -163,13 +163,8 @@ namespace ShipWorks.Templates.Processing.TemplateXml.ElementOutlines
                 {
                     using (ILifetimeScope scope = IoC.BeginLifetimeScope())
                     {
-                        IProductRepository productRepository = scope.Resolve<IProductRepository>();
-                        productVariant = productRepository.FetchProductVariantReadOnly(Item.SKU);
-                    }
-
-                    if (productVariant == null)
-                    {
-                        log.WarnFormat("Product for order item Sku, {0}, was deleted and cannot be processed by template.", Item.SKU);
+                        IProductCatalog productCatalog = scope.Resolve<IProductCatalog>();
+                        productVariant = productCatalog.FetchProductVariant(Item.SKU);
                     }
                 }
 

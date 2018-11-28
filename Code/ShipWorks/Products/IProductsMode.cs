@@ -24,6 +24,11 @@ namespace ShipWorks.Products
         ICommand EditProductVariant { get; }
 
         /// <summary>
+        /// Add a product
+        /// </summary>
+        ICommand AddProduct { get; }
+
+        /// <summary>
         /// List of products
         /// </summary>
         DataWrapper<IVirtualizingCollection<IProductListItemEntity>> Products { get; }
@@ -47,11 +52,6 @@ namespace ShipWorks.Products
         /// Show inactive products in addition to active
         /// </summary>
         bool ShowInactiveProducts { get; set; }
-        
-        /// <summary>
-        /// Search text
-        /// </summary>
-        string SearchText { get; set; }
 
         /// <summary>
         /// Initialize the mode

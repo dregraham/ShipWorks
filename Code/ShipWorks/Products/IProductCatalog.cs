@@ -5,14 +5,14 @@ using ShipWorks.Data.Model.EntityInterfaces;
 namespace ShipWorks.Products
 {
     /// <summary>
-    /// Product repo interface
+    /// Product Catalog Interface
     /// </summary>
-    public interface IProductRepository
+    public interface IProductCatalog
     {
-        /// <summary>
-        /// Fetch a product variant based on SKU
-        /// </summary>
-        IProductVariantEntity FetchProductVariantReadOnly(string sku);
+       /// <summary>
+       /// Fetch a product
+       /// </summary>
+        IProductVariant FetchProductVariant(string sku);
 
         /// <summary>
         /// Set given products activation to specified value

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Interapptive.Shared.ComponentRegistration;
+using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using SD.LLBLGen.Pro.QuerySpec;
 using ShipWorks.Data.Connection;
@@ -13,20 +14,22 @@ using ShipWorks.Data.Model.HelperClasses;
 namespace ShipWorks.Products
 {
     /// <summary>
-    /// Product repository
+    /// Product Catalog
     /// </summary>
     [Component]
-    public class ProductRepository : IProductRepository
+    public class ProductCatalog : IProductCatalog
     {
         private readonly ISqlAdapterFactory sqlAdapterFactory;
         private readonly ISqlSession sqlSession;
+        private readonly ILog productVariantLog;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public ProductRepository(ISqlAdapterFactory sqlAdapterFactory, ISqlSession sqlSession)
+        public ProductCatalog(ISqlAdapterFactory sqlAdapterFactory, Func<Type, ILog> logFactory, ISqlSession sqlSession)
         {
             this.sqlAdapterFactory = sqlAdapterFactory;
+            productVariantLog = logFactory(typeof(ProductVariant));
             this.sqlSession = sqlSession;
         }
 
@@ -44,11 +47,16 @@ namespace ShipWorks.Products
                 }
             }
         }
+        
+        /// <summary>
+        /// Fetch a Product from the database
+        /// </summary>
+        public IProductVariant FetchProductVariant(string sku) => new ProductVariant(sku, FetchProductVariantReadOnly(sku), productVariantLog);
 
         /// <summary>
         /// Fetch a product variant based on SKU
         /// </summary>
-        public IProductVariantEntity FetchProductVariantReadOnly(string sku)
+        private IProductVariantEntity FetchProductVariantReadOnly(string sku)
         {
             ProductVariantEntity productVariant;
 
