@@ -52,9 +52,9 @@ namespace ShipWorks.Shipping.Carriers.iParcel
                 shipmentType.UpdateTotalWeight(shipment);
             }
 
-            shipmentType.UpdateDynamicShipmentData(shipment);        
+            shipmentType.UpdateDynamicShipmentData(shipment);
         }
-        
+
         /// <summary>
         /// Apply the profile to the package fields
         /// </summary>
@@ -85,9 +85,21 @@ namespace ShipWorks.Shipping.Carriers.iParcel
                 ApplyProfileValue(packageProfile.DimsProfileID, package, IParcelPackageFields.DimsProfileID);
                 if (packageProfile.DimsProfileID != null)
                 {
-                    ApplyProfileValue(packageProfile.DimsLength, package, IParcelPackageFields.DimsLength);
-                    ApplyProfileValue(packageProfile.DimsWidth, package, IParcelPackageFields.DimsWidth);
-                    ApplyProfileValue(packageProfile.DimsHeight, package, IParcelPackageFields.DimsHeight);
+                    if (packageProfile.DimsLength.GetValueOrDefault() > 0)
+                    {
+                        ApplyProfileValue(packageProfile.DimsLength, package, IParcelPackageFields.DimsLength);
+                    }
+
+                    if (packageProfile.DimsWidth.GetValueOrDefault() > 0)
+                    {
+                        ApplyProfileValue(packageProfile.DimsWidth, package, IParcelPackageFields.DimsWidth);
+                    }
+
+                    if (packageProfile.DimsHeight.GetValueOrDefault() > 0)
+                    {
+                        ApplyProfileValue(packageProfile.DimsHeight, package, IParcelPackageFields.DimsHeight);
+                    }
+
                     ApplyProfileValue(packageProfile.DimsWeight, package, IParcelPackageFields.DimsWeight);
                     ApplyProfileValue(packageProfile.DimsAddWeight, package, IParcelPackageFields.DimsAddWeight);
                 }
@@ -119,7 +131,7 @@ namespace ShipWorks.Shipping.Carriers.iParcel
             ApplyProfileValue(source.TrackBySMS, iParcel, IParcelShipmentFields.TrackBySMS);
             ApplyProfileValue(source.IsDeliveryDutyPaid, iParcel, IParcelShipmentFields.IsDeliveryDutyPaid);
         }
-        
+
         /// <summary>
         /// Remove extra packages from the shipment that were not in the profile.
         /// </summary>
