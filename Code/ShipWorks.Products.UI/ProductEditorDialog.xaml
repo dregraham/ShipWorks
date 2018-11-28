@@ -53,7 +53,7 @@
 
         <TextBlock Grid.Row="0"
                    Grid.Column="0"
-                   Text="Product Options:" 
+                   Text="Product Options:"
                    Style="{StaticResource Header}"/>
 
         <TextBlock Grid.Row="1"
@@ -63,7 +63,7 @@
 
         <CheckBox Grid.Row="1"
                   Grid.Column="1"
-                  IsChecked="{Binding IsActive, UpdateSourceTrigger=PropertyChanged}" 
+                  IsChecked="{Binding IsActive, UpdateSourceTrigger=PropertyChanged}"
                   Style="{StaticResource FormCheckBox}"
                   Margin="9 1 0 10"/>
 
@@ -80,7 +80,7 @@
 
         <TextBlock Grid.Row="3"
                    Grid.Column="1"
-                   Text="{Binding CreatedDate, UpdateSourceTrigger=PropertyChanged}" 
+                   Text="{Binding CreatedDate, UpdateSourceTrigger=PropertyChanged}"
                    Style="{StaticResource FieldLabel}"
                    Margin="10 0 0 10"
                    HorizontalAlignment="Left"
@@ -93,7 +93,7 @@
 
         <TextBox Grid.Row="4"
                  Grid.Column="1"
-                 Text="{Binding SKU, UpdateSourceTrigger=PropertyChanged}" 
+                 Text="{Binding SKU, UpdateSourceTrigger=PropertyChanged}"
                  Style="{StaticResource FormTextBox}"/>
 
         <TextBlock Grid.Row="5"
@@ -118,27 +118,27 @@
 
         <TextBlock Grid.Row="7"
                    Grid.Column="0"
-                   Text="ASIN:" 
+                   Text="ASIN:"
                    Style="{StaticResource FieldLabel}"/>
 
         <TextBox Grid.Row="7"
                  Grid.Column="1"
-                 Text="{Binding ASIN, UpdateSourceTrigger=PropertyChanged}" 
+                 Text="{Binding ASIN, UpdateSourceTrigger=PropertyChanged}"
                  Style="{StaticResource FormTextBox}"/>
 
         <TextBlock Grid.Row="8"
                    Grid.Column="0"
-                   Text="ISBN:" 
+                   Text="ISBN:"
                    Style="{StaticResource FieldLabel}"/>
 
         <TextBox Grid.Row="8"
                  Grid.Column="1"
-                 Text="{Binding ISBN, UpdateSourceTrigger=PropertyChanged}" 
+                 Text="{Binding ISBN, UpdateSourceTrigger=PropertyChanged}"
                  Style="{StaticResource FormTextBox}"/>
 
         <TextBlock Grid.Row="9"
                    Grid.Column="0"
-                   Text="Weight:" 
+                   Text="Weight:"
                    Style="{StaticResource FieldLabel}"/>
 
         <ui:UnitTextBox Grid.Row="9"
@@ -148,7 +148,7 @@
 
         <TextBlock Grid.Row="10"
                    Grid.Column="0"
-                   Text="Length:" 
+                   Text="Length:"
                    Style="{StaticResource FieldLabel}"/>
 
         <ui:UnitTextBox Grid.Row="10"
@@ -158,17 +158,17 @@
 
         <TextBlock Grid.Row="11"
                    Grid.Column="0"
-                   Text="Width:" 
+                   Text="Width:"
                    Style="{StaticResource FieldLabel}"/>
-        
+
         <ui:UnitTextBox Grid.Row="11"
                         Grid.Column="1"
                         Value="{Binding Width, UpdateSourceTrigger=PropertyChanged}"
-                        UnitType="Length"/>        
+                        UnitType="Length"/>
 
         <TextBlock Grid.Row="12"
                    Grid.Column="0"
-                   Text="Height:" 
+                   Text="Height:"
                    Style="{StaticResource FieldLabel}"/>
 
         <ui:UnitTextBox Grid.Row="12"
@@ -178,17 +178,17 @@
 
         <TextBlock Grid.Row="13"
                    Grid.Column="0"
-                   Text="Image Url:" 
+                   Text="Image Url:"
                    Style="{StaticResource FieldLabel}"/>
 
         <TextBox Grid.Row="13"
                  Grid.Column="1"
-                 Text="{Binding ImageUrl, UpdateSourceTrigger=PropertyChanged}" 
+                 Text="{Binding ImageUrl, UpdateSourceTrigger=PropertyChanged}"
                  Style="{StaticResource FormTextBox}"/>
 
         <TextBlock Grid.Row="14"
                    Grid.Column="0"
-                   Text="Bin Location:" 
+                   Text="Location:"
                    Style="{StaticResource FieldLabel}"/>
 
         <TextBox Grid.Row="14"
@@ -213,17 +213,17 @@
 
         <TextBlock Grid.Row="17"
                    Grid.Column="0"
-                   Text="Declared Value:" 
+                   Text="Declared Value:"
                    Style="{StaticResource FieldLabel}"/>
 
         <TextBox Grid.Row="17"
                  Grid.Column="1"
-                 Text="{Binding DeclaredValue, Converter={StaticResource EmptyMoney}, NotifyOnValidationError=true, StringFormat=C, UpdateSourceTrigger=LostFocus, ValidatesOnDataErrors=true}"        
+                 Text="{Binding DeclaredValue, Converter={StaticResource EmptyMoney}, NotifyOnValidationError=true, StringFormat=C, UpdateSourceTrigger=LostFocus, ValidatesOnDataErrors=true}"
                  Style="{StaticResource FormTextBox}"/>
 
         <TextBlock Grid.Row="18"
                    Grid.Column="0"
-                   Text="Country Of Origin:" 
+                   Text="Country Of Origin:"
                    Style="{StaticResource FieldLabel}"/>
 
         <ComboBox Grid.Row="18"
