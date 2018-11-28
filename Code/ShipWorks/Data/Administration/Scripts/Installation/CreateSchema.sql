@@ -7894,15 +7894,15 @@ PRINT N'Creating index [IX_SWDefault_ProductVariantAlias_Sku] on [dbo].[ProductV
 GO
 CREATE UNIQUE NONCLUSTERED INDEX [IX_SWDefault_ProductVariantAlias_Sku] ON [dbo].[ProductVariantAlias] ([Sku]) INCLUDE ([ProductVariantID])
 GO
-PRINT N'Creating index [IX_SWDefault_ProductVariantAlias_IsDefaultSkuProductVariantID] on [dbo].[ProductVariantAlias]'
+PRINT N'Creating index [IX_SWDefault_ProductVariantAlias_ProductVariantIDIsDefaultSku] on [dbo].[ProductVariantAlias]'
 GO
-CREATE NONCLUSTERED INDEX [IX_SWDefault_ProductVariantAlias_IsDefaultSkuProductVariantID] ON [dbo].[ProductVariantAlias]
+CREATE NONCLUSTERED INDEX [IX_SWDefault_ProductVariantAlias_ProductVariantIDIsDefaultSku] ON [dbo].[ProductVariantAlias]
 (
+	[ProductVariantID] ASC,
 	[IsDefault] ASC
 )
-INCLUDE ([ProductVariantID], [Sku]) ON [PRIMARY]
+INCLUDE ([Sku])  ON [PRIMARY]
 GO
-
 PRINT N'Creating [dbo].[ProductVariantAttribute]'
 GO
 CREATE TABLE [dbo].[ProductVariantAttribute]
