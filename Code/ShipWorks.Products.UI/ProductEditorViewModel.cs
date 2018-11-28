@@ -234,7 +234,7 @@ namespace ShipWorks.Products.UI
         {
             if (string.IsNullOrWhiteSpace(SKU))
             {
-                messageHelper.ShowError("Please enter a value for SKU.");
+                messageHelper.ShowError($"The following field is required: {Environment.NewLine}SKU");
                 return;
             }
 
