@@ -125,10 +125,10 @@ namespace ShipWorks.Shipping.Settings.Defaults
                     ShippingProfileManager.SaveProfile(profile);
                 }
 
-                IShippingProfile shippingProfile = shippingProfileService.Get(profile.ShippingProfileID);
-                
+                IEditableShippingProfile shippingProfile = shippingProfileService.GetEditable(profile.ShippingProfileID);
+
                 ShippingProfileEditorDlg profileEditor = lifetimeScope.Resolve<ShippingProfileEditorDlg>(
-                    new TypedParameter(typeof(IShippingProfile), shippingProfile)
+                    new TypedParameter(typeof(IEditableShippingProfile), shippingProfile)
                 );
                 profileEditor.ShowDialog(this);
             }

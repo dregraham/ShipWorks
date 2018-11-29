@@ -80,7 +80,7 @@
     </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
-    <Reference Include="PresentationFramework.Aero2" />
+    <Reference Include="PresentationFramework.Aero" />
     <Reference Include="SD.LLBLGen.Pro.ORMSupportClasses, Version=5.1.0.0, Culture=neutral, PublicKeyToken=ca73b74ba4e3ff27, processorArchitecture=MSIL">
       <HintPath>..\..\packages\SD.LLBLGen.Pro.ORMSupportClasses.5.1.2\lib\net45\SD.LLBLGen.Pro.ORMSupportClasses.dll</HintPath>
       <Private>True</Private>
@@ -197,6 +197,7 @@
     <Compile Include="Controls\FieldLayoutRowDefinition.cs" />
     <Compile Include="Controls\KeyboardShortcutDisplay.cs" />
     <Compile Include="Controls\TokenTextBox.cs" />
+    <Compile Include="Controls\UnitTextBox.cs" />
     <Compile Include="Controls\WebBrowser\DismissableWebBrowserDlg.xaml.cs">
       <DependentUpon>DismissableWebBrowserDlg.xaml</DependentUpon>
     </Compile>
@@ -498,6 +499,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Themes\Controls\UnitTextBox.xaml" />
     <Page Include="Themes\Controls\WaitSpinner.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
