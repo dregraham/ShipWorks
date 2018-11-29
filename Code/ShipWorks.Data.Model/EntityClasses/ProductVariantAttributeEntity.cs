@@ -455,7 +455,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <summary> The ProductVariantAttributeID property of the Entity ProductVariantAttribute<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "ProductVariantAttribute"."ProductVariantAttributeID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): false, true, false</remarks>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, true, true</remarks>
 		public virtual System.Int64 ProductVariantAttributeID
 		{
 			get { return (System.Int64)GetValue((int)ProductVariantAttributeFieldIndex.ProductVariantAttributeID, true); }

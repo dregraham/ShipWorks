@@ -512,6 +512,9 @@ namespace ShipWorks.Data.Model.Linq
 				case ShipWorks.Data.Model.EntityType.ProductBundleEntity:
 					toReturn = this.ProductBundle;
 					break;
+				case ShipWorks.Data.Model.EntityType.ProductListItemEntity:
+					toReturn = this.ProductListItem;
+					break;
 				case ShipWorks.Data.Model.EntityType.ProductVariantEntity:
 					toReturn = this.ProductVariant;
 					break;
@@ -1672,6 +1675,12 @@ namespace ShipWorks.Data.Model.Linq
 		public DataSource2<ProductBundleEntity> ProductBundle
 		{
 			get { return new DataSource2<ProductBundleEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
+		}
+		
+		/// <summary>returns the datasource to use in a Linq query when targeting ProductListItemEntity instances in the database.</summary>
+		public DataSource2<ProductListItemEntity> ProductListItem
+		{
+			get { return new DataSource2<ProductListItemEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
 		}
 		
 		/// <summary>returns the datasource to use in a Linq query when targeting ProductVariantEntity instances in the database.</summary>

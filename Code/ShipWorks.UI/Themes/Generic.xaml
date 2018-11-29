@@ -1,7 +1,6 @@
 <ResourceDictionary
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="clr-namespace:ShipWorks.UI">
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="/ShipWorks.UI;component/Themes/Controls/AnimatedContentControl.xaml"/>
@@ -12,5 +11,6 @@
         <ResourceDictionary Source="/ShipWorks.UI;component/Themes/Controls/TokenTextBox.xaml"/>
         <ResourceDictionary Source="/ShipWorks.UI;component/Themes/Controls/WeightControl.xaml"/>
         <ResourceDictionary Source="/ShipWorks.UI;component/Themes/Controls/WaitSpinner.xaml"/>
+        <ResourceDictionary Source="/ShipWorks.UI;component/Themes/Controls/UnitTextBox.xaml"/>
     </ResourceDictionary.MergedDictionaries>
 </ResourceDictionary>

@@ -1,5 +1,4 @@
-﻿using ShipWorks.UI.Controls.Design;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Reflection;
@@ -13,7 +12,7 @@ namespace ShipWorks.UI.ValueConverters
     [Obfuscation(Exclude = true)]
     public abstract class BooleanConverter<T> : IValueConverter
     {
-        readonly bool inDesignMode;
+        private readonly bool inDesignMode;
 
         /// <summary>
         /// Constructor
@@ -44,7 +43,7 @@ namespace ShipWorks.UI.ValueConverters
         public T False { get; set; }
 
         /// <summary>
-        /// Return the opposite value based on criteria.  
+        /// Return the opposite value based on criteria.
         /// </summary>
         public bool Invert { get; set; }
 
