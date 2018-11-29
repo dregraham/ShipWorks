@@ -68,7 +68,11 @@ namespace ShipWorks.UI.AttachedProperties
         {
             if (sender is DataGrid dataGrid)
             {
-                SetCurrentSort(dataGrid, new BasicSortDefinition(e.Column.SortMemberPath, e.Column.SortDirection));
+                ListSortDirection sortDirection = e.Column.SortDirection != ListSortDirection.Descending ?
+                    ListSortDirection.Descending :
+                    ListSortDirection.Ascending;
+
+                SetCurrentSort(dataGrid, new BasicSortDefinition(e.Column.SortMemberPath, sortDirection));
             }
 
             e.Handled = true;

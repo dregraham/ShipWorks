@@ -34,16 +34,33 @@ namespace ShipWorks.Products
         /// <summary>
         /// Create a collection of products
         /// </summary>
-        public DataWrapper<IVirtualizingCollection<IProductListItemEntity>> Create(bool includeInactiveProducts, IBasicSortDefinition sortDefinition)
+        public DataWrapper<IVirtualizingCollection<IProductListItemEntity>> Create(bool includeInactiveProducts, string searchText, IBasicSortDefinition sortDefinition)
         {
-            var listWrapper = new DataWrapper<IVirtualizingCollection<IProductListItemEntity>>(0);
-            var query = new QueryFactory().ProductListItem
-                .Select(() => ProductListItemFields.ProductVariantID.ToValue<long>())
+            searchText = searchText?.Trim();
+
+            var listWrapper = new DataWrapper<IVirtualizingCollection<IProductListItemEntity>>(0, 0, () => { });
+            QueryFactory factory = new QueryFactory();
+            var from = factory.ProductVariant
+                .InnerJoin(factory.ProductVariantAlias)
+                .On(ProductVariantFields.ProductVariantID == ProductVariantAliasFields.ProductVariantID);
+
+            var query = new QueryFactory().ProductVariant
+                .From(from)
+                .Select(() => ProductVariantFields.ProductVariantID.ToValue<long>())
+                .Distinct()
                 .OrderBy(CreateSortClause(sortDefinition));
 
             if (!includeInactiveProducts)
             {
-                query = query.Where(ProductListItemFields.IsActive == true);
+                query = query.Where(ProductVariantFields.IsActive == true);
+            }
+
+            if (!searchText.IsNullOrWhiteSpace())
+            {
+                query = query.Where(ProductVariantFields.Name.StartsWith(searchText) |
+                                    ProductVariantFields.ASIN.StartsWith(searchText) |
+                                    ProductVariantFields.UPC.StartsWith(searchText) |
+                                    ProductVariantAliasFields.Sku.StartsWith(searchText));
             }
 
             Functional.UsingAsync(
@@ -59,9 +76,18 @@ namespace ShipWorks.Products
         /// </summary>
         private ISortClause CreateSortClause(IBasicSortDefinition sortDefinition)
         {
-            var sortField = new ProductListItemEntity().Fields
-                .OfType<IEntityField2>()
-                .Single(x => sortDefinition.Name.EndsWith(x.Name, StringComparison.Ordinal));
+            IEntityField2 sortField;
+
+            if (sortDefinition.Name.Contains("sku", StringComparison.InvariantCultureIgnoreCase))
+            {
+                sortField = ProductVariantAliasFields.Sku;
+            }
+            else
+            {
+                sortField = new ProductVariantEntity().Fields
+                    .OfType<IEntityField2>()
+                    .Single(x => sortDefinition.Name.EndsWith(x.Name, StringComparison.Ordinal));
+            }
 
             return sortDefinition.Direction == ListSortDirection.Ascending ?
                 sortField.Ascending() :

@@ -51,7 +51,9 @@
                 </Setter>
             </Style>
             <ui:BooleanToVisibilityConverter x:Key="BooleanToVisibility" />
+            <ui:BooleanToVisibilityConverter x:Key="BooleanToVisibilityInverted" Invert="True" />
             <ui:NumberToWeightStringConverter x:Key="NumberToWeightString" />
+            <ui:VisibilityMultiConverter x:Key="VisibilityMulti" />
             <sys:Double x:Key="BaseFontSize">14</sys:Double>
         </ResourceDictionary>
     </UserControl.Resources>
@@ -59,6 +61,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
         <Grid IsSharedSizeScope="True">
@@ -74,9 +77,9 @@
             </Grid.ColumnDefinitions>
             <Button
                 Grid.Column="0"
+                Command="{Binding AddProduct}"
                 Content="Add"
-                Style="{StaticResource PrimaryButton}" 
-		Command="{Binding AddProduct}" />
+                Style="{StaticResource PrimaryButton}" />
             <Button
                 Grid.Column="1"
                 Content="Edit"
@@ -88,10 +91,12 @@
                 Style="{StaticResource PrimaryButton}" />
             <Button
                 Grid.Column="3"
+                Command="{Binding ActivateProductCommand}"
                 Content="Mark Active"
                 Style="{StaticResource SecondaryButton}" />
             <Button
                 Grid.Column="4"
+                Command="{Binding DeactivateProductCommand}"
                 Content="Mark Inactive"
                 Style="{StaticResource SecondaryButton}" />
 
@@ -108,7 +113,8 @@
                 MinWidth="300"
                 HorizontalAlignment="Right"
                 VerticalContentAlignment="Center"
-                FontSize="20">
+                FontSize="20"
+                Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged, Delay=250}">
                 <syncfusion:SfTextBoxExt.Resources>
                     <Style TargetType="{x:Type Border}">
                         <Setter Property="CornerRadius" Value="2" />
@@ -135,6 +141,7 @@
             CanUserResizeColumns="True"
             CanUserSortColumns="True"
             Grid.IsSharedSizeScope="True"
+            VerticalScrollBarVisibility="Visible"
             HeadersVisibility="All"
             ItemsSource="{Binding Products.Data}"
             ScrollViewer.IsDeferredScrollingEnabled="True"
@@ -145,12 +152,6 @@
             <DataGrid.Resources>
                 <ui:BindingProxy x:Key="proxy" Data="{Binding}" />
             </DataGrid.Resources>
-            <DataGrid.InputBindings>
-                <KeyBinding Command="ApplicationCommands.NotACommand" Gesture="Ctrl+A" />
-            </DataGrid.InputBindings>
-            <DataGrid.CommandBindings>
-                <CommandBinding Command="ApplicationCommands.SelectAll" Executed="OnSelectAllExecuted" />
-            </DataGrid.CommandBindings>
             <i:Interaction.Triggers>
                 <i:EventTrigger EventName="SelectionChanged">
                     <cmd:EventToCommand Command="{Binding SelectedProductsChanged}" CommandParameter="{Binding SelectedItems, ElementName=ProductsGrid}" />
@@ -244,15 +245,25 @@
                     SortMemberPath="Name">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <Button
-                                x:Name="NameButton"
-                                HorizontalAlignment="Left"
-                                VerticalAlignment="Center"
-                                Command="{Binding DataContext.EditProductVariant, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"
-                                CommandParameter="{Binding Data.ProductVariantID}"
-                                Style="{StaticResource Link}">
-                                <TextBlock FontSize="{StaticResource BaseFontSize}" Text="{Binding Data.Name}" />
-                            </Button>
+                            <Grid>
+                                <Button
+                                    x:Name="NameButton"
+                                    HorizontalAlignment="Left"
+                                    VerticalAlignment="Center"
+                                    Command="{Binding DataContext.EditProductVariant, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"
+                                    CommandParameter="{Binding Data.ProductVariantID}"
+                                    Style="{StaticResource Link}"
+                                    Visibility="{Binding IsLoading, Converter={StaticResource BooleanToVisibilityInverted}}">
+                                    <TextBlock FontSize="{StaticResource BaseFontSize}" Text="{Binding Data.Name}" />
+                                </Button>
+                                <TextBlock
+                                    HorizontalAlignment="Left"
+                                    VerticalAlignment="Center"
+                                    Visibility="{Binding IsLoading, Converter={StaticResource BooleanToVisibility}}">
+                                    Loading...
+                                </TextBlock>
+                            </Grid>
+
                             <DataTemplate.Triggers>
                                 <DataTrigger Binding="{Binding Path=IsSelected, RelativeSource={RelativeSource AncestorType=DataGridRow}}" Value="True">
                                     <Setter TargetName="NameButton" Property="Style" Value="{StaticResource Link.Selected}" />
@@ -267,7 +278,7 @@
                     Header="Dimensions (L x W x H)">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <Grid Margin="8,0">
+                            <Grid Margin="8,0" Visibility="{Binding IsLoading, Converter={StaticResource BooleanToVisibilityInverted}}">
                                 <Grid.Resources>
                                     <Style TargetType="TextBlock">
                                         <Setter Property="VerticalAlignment" Value="Center" />
@@ -283,20 +294,24 @@
                                     <ColumnDefinition Width="Auto" />
                                     <ColumnDefinition Width="Auto" SharedSizeGroup="Height" />
                                 </Grid.ColumnDefinitions>
-                                <TextBlock Grid.Column="0" Text="{Binding Data.Length, StringFormat={}{0:#0.#}}" />
+                                <TextBlock Grid.Column="0" Text="{Binding Data.Length, StringFormat={}{0:#0.##}}" />
                                 <TextBlock Grid.Column="1" Foreground="DarkGray">
                                     x
                                 </TextBlock>
-                                <TextBlock Grid.Column="2" Text="{Binding Data.Width, StringFormat={}{0:#0.#}}" />
+                                <TextBlock Grid.Column="2" Text="{Binding Data.Width, StringFormat={}{0:#0.##}}" />
                                 <TextBlock Grid.Column="3" Foreground="DarkGray">
                                     x
                                 </TextBlock>
-                                <TextBlock Grid.Column="4" Text="{Binding Data.Height, StringFormat={}{0:#0.#}}" />
+                                <TextBlock Grid.Column="4" Text="{Binding Data.Height, StringFormat={}{0:#0.##}}" />
                             </Grid>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTemplateColumn Width="1.5*" Header="Weight">
+                <DataGridTemplateColumn
+                    Width="1.5*"
+                    CanUserSort="True"
+                    Header="Weight"
+                    SortMemberPath="Weight">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock
@@ -325,7 +340,9 @@
                 </DataGridTemplateColumn>
                 <DataGridTemplateColumn
                     Width="Auto"
+                    CanUserSort="True"
                     Header="Active"
+                    SortMemberPath="IsActive"
                     Visibility="{Binding Data.ShowInactiveProducts, Source={StaticResource proxy}, Converter={StaticResource BooleanToVisibility}}">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
@@ -333,12 +350,37 @@
                                 HorizontalAlignment="Center"
                                 VerticalAlignment="Center"
                                 Stroke="Gray"
-                                Style="{StaticResource Path.Checkmark}"
-                                Visibility="{Binding Data.IsActive, Converter={StaticResource BooleanToVisibility}}" />
+                                Style="{StaticResource Path.Checkmark}">
+                                <Path.Visibility>
+                                    <MultiBinding Converter="{StaticResource VisibilityMulti}">
+                                        <Binding Converter="{StaticResource BooleanToVisibilityInverted}" Path="IsLoading" />
+                                        <Binding Converter="{StaticResource BooleanToVisibility}" Path="Data.IsActive" />
+                                    </MultiBinding>
+                                </Path.Visibility>
+                            </Path>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
             </DataGrid.Columns>
         </DataGrid>
+        <ui:WaitSpinner Grid.Row="1" Visibility="{Binding Products.IsLoading, Converter={StaticResource BooleanToVisibility}}">
+            <TextBlock FontSize="{StaticResource BaseFontSize}">Loading products...</TextBlock>
+        </ui:WaitSpinner>
+        <Grid
+            Grid.Row="2"
+            Margin="0,4,0,0"
+            TextBlock.FontSize="{StaticResource BaseFontSize}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <TextBlock Margin="0,0,16,0">
+                Products: <Run Text="{Binding Products.Data.Count, Mode=OneWay, StringFormat='{}{0:#,##0}'}" />
+            </TextBlock>
+            <TextBlock Grid.Column="1">
+                Selected: <Run Text="{Binding SelectedProductIDs.Count, Mode=OneWay, StringFormat='{}{0:#,##0}'}" />
+            </TextBlock>
+        </Grid>
     </Grid>
 </UserControl>

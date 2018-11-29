@@ -15,6 +15,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Interapptive.Shared.Collections;
 
 namespace DataVirtualization
@@ -28,13 +29,15 @@ namespace DataVirtualization
         /// <summary>
         /// Constructor
         /// </summary>
-        public DataPage(int firstIndex, int pageLength)
+        public DataPage(int firstIndex, int pageLength, IItemsProvider<T> itemsProvider)
         {
-            Items = Enumerable.Range(0, pageLength)
-                .Select(x => new DataWrapper<T>(firstIndex + x))
+            var populateAction = CreatePopulateAction(firstIndex, pageLength, itemsProvider);
+
+            Items = itemsProvider.GetIDsInRange(firstIndex, pageLength)
+                .Select((entityID, i) => new DataWrapper<T>(firstIndex + i, entityID, populateAction))
                 .ToList();
 
-            TouchTime = DateTime.Now;
+            TouchTime = DateTime.UtcNow;
         }
 
         /// <summary>
@@ -53,11 +56,46 @@ namespace DataVirtualization
         public bool IsInUse => Items.Any(wrapper => wrapper.IsInUse);
 
         /// <summary>
+        /// Create the populate wrapper action
+        /// </summary>
+        private Action CreatePopulateAction(int firstIndex, int pageLength, IItemsProvider<T> itemsProvider)
+        {
+            Task loadingTask = null;
+
+            return () =>
+            {
+                if (loadingTask == null)
+                {
+                    loadingTask = itemsProvider
+                        .FetchRange(firstIndex, pageLength)
+                        .ContinueWith(t =>
+                        {
+                            loadingTask = null;
+                            Populate(t.Result);
+                        });
+                }
+            };
+        }
+
+        /// <summary>
         /// Populate the page
         /// </summary>
         public void Populate(IEnumerable<T> newItems) =>
             newItems
                 .Zip(Items, (x, y) => (Item: x, Wrapper: y))
                 .ForEach(x => x.Wrapper.Data = x.Item);
+
+        /// <summary>
+        /// Clean up the page
+        /// </summary>
+        internal void CleanUp(DateTime expiration)
+        {
+            if (IsInUse || TouchTime > expiration)
+            {
+                return;
+            }
+
+            Items.ForEach(x => x.CleanUp());
+        }
     }
 }

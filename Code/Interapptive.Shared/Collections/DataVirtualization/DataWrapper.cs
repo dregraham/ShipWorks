@@ -12,7 +12,9 @@
 // LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR
 // IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
+using System;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Reflection;
 
 namespace DataVirtualization
@@ -22,20 +24,24 @@ namespace DataVirtualization
     /// </summary>
     public class DataWrapper<T> : INotifyPropertyChanged where T : class
     {
+        private readonly Action populate;
         private T data;
+        private long entityID;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public DataWrapper(int index)
+        public DataWrapper(int index, long entityID, Action populate)
         {
             Index = index;
+            EntityID = entityID;
+            this.populate = populate;
         }
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public DataWrapper(int index, T data) : this(index)
+        public DataWrapper(int index, T data) : this(index, 0, null)
         {
             Data = data;
         }
@@ -70,12 +76,32 @@ namespace DataVirtualization
         [Obfuscation(Exclude = true)]
         public T Data
         {
-            get => data;
+            get => data ?? FetchData();
             set
             {
-                this.data = value;
-                this.OnPropertyChanged(nameof(Data));
-                this.OnPropertyChanged(nameof(IsLoading));
+                if (data != value)
+                {
+                    this.data = value;
+                    this.OnPropertyChanged(nameof(Data));
+                    this.OnPropertyChanged(nameof(IsLoading));
+                }
+            }
+        }
+
+        /// <summary>
+        /// Entity ID of the data item
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public long EntityID
+        {
+            get => entityID;
+            set
+            {
+                if (value != entityID)
+                {
+                    this.entityID = value;
+                    this.OnPropertyChanged(nameof(EntityID));
+                }
             }
         }
 
@@ -90,5 +116,27 @@ namespace DataVirtualization
         /// </summary>
         private void OnPropertyChanged(string propertyName) =>
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+
+        /// <summary>
+        /// Clean up the data in the wrapper
+        /// </summary>
+        public void CleanUp()
+        {
+            if (!IsInUse)
+            {
+                Data = null;
+                Trace.WriteLine("Cleaned up item " + EntityID);
+            }
+        }
+
+        /// <summary>
+        /// Fetch the data since it is missing
+        /// </summary>
+        private T FetchData()
+        {
+            populate();
+
+            return null;
+        }
     }
 }

@@ -13,9 +13,7 @@ namespace Interapptive.Shared.Collections
         public BasicSortDefinition(string name, ListSortDirection? direction)
         {
             Name = name;
-            Direction = direction != ListSortDirection.Ascending ?
-                ListSortDirection.Ascending :
-                ListSortDirection.Descending;
+            Direction = direction ?? ListSortDirection.Ascending;
         }
 
         /// <summary>

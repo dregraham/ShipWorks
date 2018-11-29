@@ -7890,9 +7890,18 @@ PRINT N'Creating primary key [PK_ProductVariantAlias] on [dbo].[ProductVariantAl
 GO
 ALTER TABLE [dbo].[ProductVariantAlias] ADD CONSTRAINT [PK_ProductVariantAlias] PRIMARY KEY CLUSTERED  ([ProductVariantAliasID])
 GO
-PRINT N'Creating index [UX_SWDefault_ProductVariantAlias_Sku] on [dbo].[ProductVariantAlias]'
+PRINT N'Creating index [IX_SWDefault_ProductVariantAlias_Sku] on [dbo].[ProductVariantAlias]'
 GO
-CREATE UNIQUE NONCLUSTERED INDEX [UX_SWDefault_ProductVariantAlias_Sku] ON [dbo].[ProductVariantAlias] ([Sku]) INCLUDE ([ProductVariantID])
+CREATE UNIQUE NONCLUSTERED INDEX [IX_SWDefault_ProductVariantAlias_Sku] ON [dbo].[ProductVariantAlias] ([Sku]) INCLUDE ([ProductVariantID])
+GO
+PRINT N'Creating index [IX_SWDefault_ProductVariantAlias_ProductVariantIDIsDefaultSku] on [dbo].[ProductVariantAlias]'
+GO
+CREATE NONCLUSTERED INDEX [IX_SWDefault_ProductVariantAlias_ProductVariantIDIsDefaultSku] ON [dbo].[ProductVariantAlias]
+(
+	[ProductVariantID] ASC,
+	[IsDefault] ASC
+)
+INCLUDE ([Sku])  ON [PRIMARY]
 GO
 PRINT N'Creating [dbo].[ProductVariantAttribute]'
 GO

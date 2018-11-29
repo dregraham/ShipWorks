@@ -17,6 +17,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using Interapptive.Shared.Collections;
 
 namespace DataVirtualization
 {
@@ -34,8 +35,9 @@ namespace DataVirtualization
     /// <typeparam name="T"></typeparam>
     public class VirtualizingCollection<T> : IVirtualizingCollection<T> where T : class
     {
+        private readonly int pageSize = 100;
         private Lazy<int> count;
-        private Dictionary<int, DataPage<T>> pages = new Dictionary<int, DataPage<T>>();
+        private DataPage<T>[] pages;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="VirtualizingCollection&lt;T&gt;"/> class.
@@ -43,7 +45,7 @@ namespace DataVirtualization
         /// <param name="itemsProvider">The items provider.</param>
         /// <param name="pageSize">Size of the page.</param>
         /// <param name="pageTimeout">The page timeout.</param>
-        public VirtualizingCollection(IItemsProvider<T> itemsProvider, int pageSize, int pageTimeout) : this(itemsProvider, pageSize)
+        public VirtualizingCollection(IItemsProvider<T> itemsProvider, int pageSize, TimeSpan pageTimeout) : this(itemsProvider, pageSize)
         {
             PageTimeout = pageTimeout;
         }
@@ -55,7 +57,7 @@ namespace DataVirtualization
         /// <param name="pageSize">Size of the page.</param>
         public VirtualizingCollection(IItemsProvider<T> itemsProvider, int pageSize) : this(itemsProvider)
         {
-            PageSize = pageSize;
+            this.pageSize = pageSize;
         }
 
         /// <summary>
@@ -75,16 +77,10 @@ namespace DataVirtualization
         public IItemsProvider<T> ItemsProvider { get; }
 
         /// <summary>
-        /// Gets the size of the page.
-        /// </summary>
-        /// <value>The size of the page.</value>
-        public int PageSize { get; } = 100;
-
-        /// <summary>
         /// Gets the page timeout.
         /// </summary>
         /// <value>The page timeout.</value>
-        public long PageTimeout { get; } = 10_000;
+        public TimeSpan PageTimeout { get; } = TimeSpan.FromSeconds(10);
 
         /// <summary>
         /// Gets the number of elements contained in the <see cref="T:System.Collections.Generic.ICollection`1"/>.
@@ -105,27 +101,29 @@ namespace DataVirtualization
         {
             get
             {
+                if (pages == null)
+                {
+                    pages = new DataPage<T>[(Count / pageSize) + 1];
+                }
+
                 // determine which page and offset within page
-                int pageIndex = index / PageSize;
-                int pageOffset = index % PageSize;
+                int pageIndex = index / pageSize;
+                int pageOffset = index % pageSize;
 
                 // request primary page
                 RequestPage(pageIndex);
 
                 // if accessing upper 50% then request next page
-                if (pageOffset > PageSize / 2 && pageIndex < Count / PageSize)
+                if (pageOffset > pageSize / 2 && pageIndex < Count / pageSize)
                 {
                     RequestPage(pageIndex + 1);
                 }
 
                 // if accessing lower 50% then request previous page
-                if (pageOffset < PageSize / 2 && pageIndex > 0)
+                if (pageOffset < pageSize / 2 && pageIndex > 0)
                 {
                     RequestPage(pageIndex - 1);
                 }
-
-                // remove stale pages
-                CleanUpPages();
 
                 // return requested item
                 return pages[pageIndex].Items[pageOffset];
@@ -194,7 +192,7 @@ namespace DataVirtualization
         /// Always false.
         /// </returns>
         public bool Contains(DataWrapper<T> item) =>
-            pages.Values.Any(x => x.Items.Contains(item));
+            pages?.Where(x => x.Items != null).Any(x => x.Items.Contains(item)) == true;
 
         /// <summary>
         /// TODO
@@ -207,25 +205,16 @@ namespace DataVirtualization
         int IList.IndexOf(object value) => IndexOf((DataWrapper<T>) value);
 
         /// <summary>
-        /// TODO
+        /// Get the index of the given item
         /// </summary>
-        /// <param name="item">The object to locate in the <see cref="T:System.Collections.Generic.IList`1"/>.</param>
-        /// <returns>
-        /// TODO
-        /// </returns>
-        public int IndexOf(DataWrapper<T> item)
-        {
-            foreach (KeyValuePair<int, DataPage<T>> keyValuePair in pages)
-            {
-                int indexWithinPage = keyValuePair.Value.Items.IndexOf(item);
-                if (indexWithinPage != -1)
-                {
-                    return PageSize * keyValuePair.Key + indexWithinPage;
-                }
-            }
-
-            return -1;
-        }
+        public int IndexOf(DataWrapper<T> item) =>
+            (pages ?? Enumerable.Empty<DataPage<T>>())
+                .Where(x => x.Items != null)
+                .Select((x, i) => (IndexWithinPage: x.Items.IndexOf(item), Page: i))
+                .Where(x => x.IndexWithinPage != -1)
+                .Select(x => pageSize * x.Page + x.IndexWithinPage)
+                .DefaultIfEmpty(-1)
+                .First();
 
         /// <summary>
         /// Not supported.
@@ -339,26 +328,14 @@ namespace DataVirtualization
         /// </summary>
         public void CleanUpPages()
         {
-            int[] keys = pages.Keys.ToArray();
-            foreach (int key in keys)
+            if (pages == null)
             {
-                // page 0 is a special case, since WPF ItemsControl access the first item frequently
-                if (key != 0 && (DateTime.Now - pages[key].TouchTime).TotalMilliseconds > PageTimeout)
-                {
-                    bool removePage = true;
-                    DataPage<T> page;
-                    if (pages.TryGetValue(key, out page))
-                    {
-                        removePage = !page.IsInUse;
-                    }
-
-                    if (removePage)
-                    {
-                        pages.Remove(key);
-                        Trace.WriteLine("Removed Page: " + key);
-                    }
-                }
+                return;
             }
+
+            var expirationDate = DateTime.UtcNow.Subtract(PageTimeout);
+
+            pages.WhereNotNull().ForEach(x => x.CleanUp(expirationDate));
         }
 
         /// <summary>
@@ -368,22 +345,24 @@ namespace DataVirtualization
         /// <param name="pageIndex">Index of the page.</param>
         protected virtual void RequestPage(int pageIndex)
         {
-            if (!pages.ContainsKey(pageIndex))
+            if (pages == null)
+            {
+                return;
+            }
+
+            if (pages[pageIndex] == null)
             {
                 // Create a page of empty data wrappers.
-                int pageLength = Math.Min(PageSize, Count - pageIndex * PageSize);
+                int pageLength = Math.Min(pageSize, Count - pageIndex * pageSize);
 
-                var page = new DataPage<T>(pageIndex * PageSize, pageLength);
-                pages.Add(pageIndex, page);
-
-                ItemsProvider.FetchRange(pageIndex * PageSize, pageLength)
-                    .ContinueWith(t => page.Populate(t.Result));
+                var page = new DataPage<T>(pageIndex * pageSize, pageLength, ItemsProvider);
+                pages[pageIndex] = page;
 
                 Trace.WriteLine("Added page: " + pageIndex);
             }
             else
             {
-                pages[pageIndex].TouchTime = DateTime.Now;
+                pages[pageIndex].TouchTime = DateTime.UtcNow;
             }
         }
 
@@ -393,7 +372,13 @@ namespace DataVirtualization
         /// </summary>
         protected void EmptyCache()
         {
-            pages = new Dictionary<int, DataPage<T>>();
+            if (pages != null)
+            {
+                for (int i = 0; i < pages.Length; i++)
+                {
+                    pages[i] = null;
+                }
+            }
         }
     }
 }
