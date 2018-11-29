@@ -486,6 +486,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 FedExServiceType.PriorityOvernight,
                 FedExServiceType.FedEx1DayFreight,
                 FedExServiceType.FirstFreight,
+                FedExServiceType.FirstOvernight,
                 FedExServiceType.OneRatePriorityOvernight,
                 FedExServiceType.FedExNextDayAfternoon,
                 FedExServiceType.FedExNextDayEarlyMorning,
