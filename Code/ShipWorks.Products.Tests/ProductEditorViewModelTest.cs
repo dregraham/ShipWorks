@@ -1,4 +1,5 @@
-﻿using Autofac.Extras.Moq;
+﻿using System;
+using Autofac.Extras.Moq;
 using Interapptive.Shared.UI;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
@@ -80,7 +81,7 @@ namespace ShipWorks.OrderLookup.Tests
 
             testObject.Save.Execute(null);
 
-            mock.Mock<IMessageHelper>().Verify(m => m.ShowError("Please enter a value for SKU."));
+            mock.Mock<IMessageHelper>().Verify(m => m.ShowError($"The following field is required: {Environment.NewLine}SKU"));
         }
     }
 }

@@ -2,11 +2,15 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Autofac;
 using Interapptive.Shared;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data;
 using log4net;
+using ShipWorks.ApplicationCore;
 using ShipWorks.Data.Model;
+using ShipWorks.Data.Model.EntityInterfaces;
+using ShipWorks.Products;
 using ShipWorks.Stores;
 
 namespace ShipWorks.Templates.Processing.TemplateXml.ElementOutlines
@@ -16,14 +20,12 @@ namespace ShipWorks.Templates.Processing.TemplateXml.ElementOutlines
     /// </summary>
     public class OrderItemOutline : ElementOutline
     {
-        static readonly ILog log = LogManager.GetLogger(typeof(OrderItemOutline));
-
-        OrderEntity order;
-
-        long itemID;
-        OrderItemEntity item;
-
-        List<OrderItemAttributeEntity> attributes;
+        private static readonly ILog log = LogManager.GetLogger(typeof(OrderItemOutline));
+        private IProductVariant productVariant;
+        private OrderEntity order;
+        private long itemID;
+        private OrderItemEntity item;
+        private List<OrderItemAttributeEntity> attributes;
 
         /// <summary>
         /// Constructor
@@ -59,7 +61,10 @@ namespace ShipWorks.Templates.Processing.TemplateXml.ElementOutlines
             AddElement("Length", () => Item.Length);
             AddElement("Width", () => Item.Width);
             AddElement("Height", () => Item.Height);
-            
+
+            AddElement("Product", new OrderItemProductOutline(context), 
+                () => new []{ Product },
+                If(() => Product.CanWriteXml));
 
             // Add an outline entry for each unique store type that could potentially be used
             foreach (StoreType storeType in StoreManager.GetUniqueStoreTypes())
@@ -144,6 +149,26 @@ namespace ShipWorks.Templates.Processing.TemplateXml.ElementOutlines
                 }
 
                 return attributes;
+            }
+        }
+
+        /// <summary>
+        /// The ProductVariantEntity represented by the bound outline
+        /// </summary>
+        private IProductVariant Product
+        {
+            get
+            {
+                if (productVariant == null)
+                {
+                    using (ILifetimeScope scope = IoC.BeginLifetimeScope())
+                    {
+                        IProductCatalog productCatalog = scope.Resolve<IProductCatalog>();
+                        productVariant = productCatalog.FetchProductVariant(Item.SKU);
+                    }
+                }
+
+                return productVariant;
             }
         }
     }
