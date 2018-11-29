@@ -141,6 +141,7 @@
             CanUserResizeColumns="True"
             CanUserSortColumns="True"
             Grid.IsSharedSizeScope="True"
+            VerticalScrollBarVisibility="Visible"
             HeadersVisibility="All"
             ItemsSource="{Binding Products.Data}"
             ScrollViewer.IsDeferredScrollingEnabled="True"
