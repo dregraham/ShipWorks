@@ -212,9 +212,14 @@ namespace ShipWorks.Products
         /// </summary>
         private async Task SetProductActivation(bool makeItActive)
         {
-            await productCatalog
-                .SetActivation(SelectedProductIDs, makeItActive)
-                .ConfigureAwait(false);
+            var text = (makeItActive ? "Activating" : "Deactivating") + " products";
+
+            using (var item = messageHelper.ShowProgressDialog(text, text))
+            {
+                await productCatalog
+                    .SetActivation(SelectedProductIDs, makeItActive, item.ProgressItem)
+                    .ConfigureAwait(false);
+            }
 
             RefreshProductsAction();
         }

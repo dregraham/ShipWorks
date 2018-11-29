@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using ShipWorks.Data.Model.EntityInterfaces;
+using Interapptive.Shared.Threading;
 
 namespace ShipWorks.Products
 {
@@ -9,14 +9,14 @@ namespace ShipWorks.Products
     /// </summary>
     public interface IProductCatalog
     {
-       /// <summary>
-       /// Fetch a product
-       /// </summary>
+        /// <summary>
+        /// Fetch a product
+        /// </summary>
         IProductVariant FetchProductVariant(string sku);
 
         /// <summary>
         /// Set given products activation to specified value
         /// </summary>
-        Task SetActivation(IEnumerable<long> productIDs, bool activation);
+        Task SetActivation(IEnumerable<long> productIDs, bool activation, IProgressReporter progressReporter);
     }
 }

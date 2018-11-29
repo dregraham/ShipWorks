@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.Threading;
 using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using SD.LLBLGen.Pro.QuerySpec;
@@ -36,7 +37,7 @@ namespace ShipWorks.Products
         /// <summary>
         /// Set given products activation to specified value
         /// </summary>
-        public async Task SetActivation(IEnumerable<long> productIDs, bool activation)
+        public async Task SetActivation(IEnumerable<long> productIDs, bool activation, IProgressReporter progressReporter)
         {
             using (var conn = sqlSession.OpenConnection())
             {
@@ -47,7 +48,7 @@ namespace ShipWorks.Products
                 }
             }
         }
-        
+
         /// <summary>
         /// Fetch a Product from the database
         /// </summary>
