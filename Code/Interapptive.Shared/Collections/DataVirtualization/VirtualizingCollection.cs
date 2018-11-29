@@ -192,7 +192,7 @@ namespace DataVirtualization
         /// Always false.
         /// </returns>
         public bool Contains(DataWrapper<T> item) =>
-            pages?.Any(x => x.Items.Contains(item)) == true;
+            pages?.Where(x => x.Items != null).Any(x => x.Items.Contains(item)) == true;
 
         /// <summary>
         /// TODO
@@ -209,6 +209,7 @@ namespace DataVirtualization
         /// </summary>
         public int IndexOf(DataWrapper<T> item) =>
             (pages ?? Enumerable.Empty<DataPage<T>>())
+                .Where(x => x.Items != null)
                 .Select((x, i) => (IndexWithinPage: x.Items.IndexOf(item), Page: i))
                 .Where(x => x.IndexWithinPage != -1)
                 .Select(x => pageSize * x.Page + x.IndexWithinPage)
