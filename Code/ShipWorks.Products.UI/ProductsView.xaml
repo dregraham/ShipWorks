@@ -375,10 +375,10 @@
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
             <TextBlock Margin="0,0,16,0">
-                Products:<Run Text="{Binding Products.Data.Count, Mode=OneWay}" />
+                Products: <Run Text="{Binding Products.Data.Count, Mode=OneWay, StringFormat='{}{0:#,##0}'}" />
             </TextBlock>
             <TextBlock Grid.Column="1">
-                Selected:<Run Text="{Binding SelectedProductIDs.Count, Mode=OneWay}" />
+                Selected: <Run Text="{Binding SelectedProductIDs.Count, Mode=OneWay, StringFormat='{}{0:#,##0}'}" />
             </TextBlock>
         </Grid>
     </Grid>
