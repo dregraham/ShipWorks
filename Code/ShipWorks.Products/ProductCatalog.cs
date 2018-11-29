@@ -1,6 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Data.SqlClient;
+using System.Linq;
 using System.Threading.Tasks;
+using Interapptive.Shared.Collections;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Threading;
 using log4net;
@@ -39,14 +43,53 @@ namespace ShipWorks.Products
         /// </summary>
         public async Task SetActivation(IEnumerable<long> productIDs, bool activation, IProgressReporter progressReporter)
         {
+            int chunkSize = 100;
+            List<IEnumerable<long>> chunks = productIDs.SplitIntoChunksOf(chunkSize).ToList();
+            int chunkCount = chunks.Count();
+
+            progressReporter.PercentComplete = 0;
+
             using (var conn = sqlSession.OpenConnection())
             {
-                using (var comm = conn.CreateCommand())
+                for (int i = 0; i < chunkCount; i++)
                 {
-                    comm.CommandText = $"UPDATE ProductVariant SET IsActive = {(activation ? "1" : "0")} WHERE ProductVariantID in ({String.Join(",", productIDs)})";
-                    await comm.ExecuteNonQueryAsync().ConfigureAwait(false);
+                    IEnumerable<long> productsChunk = chunks.Skip(i).First();
+
+                    using (var comm = conn.CreateCommand())
+                    {
+                        comm.CommandText = $"UPDATE ProductVariant SET IsActive = {(activation ? "1" : "0")} WHERE ProductVariantID in (SELECT item FROM @ProductVariantIDs)";
+                        comm.Parameters.Add(CreateProductVariantIDParameter(productsChunk));
+
+                        await comm.ExecuteNonQueryAsync().ConfigureAwait(false);
+                    }
+
+                    if (progressReporter.IsCancelRequested)
+                    {
+                        break;
+                    }
+
+                    progressReporter.PercentComplete = (int) Math.Round(100 * ((i + 1M) / chunkCount));
                 }
             }
+        }
+
+        /// <summary>
+        /// Create a table parameter for the product variant ID list
+        /// </summary>
+        private SqlParameter CreateProductVariantIDParameter(IEnumerable<long> productVariantIDs)
+        {
+            var table = new DataTable();
+            table.Columns.Add("item", typeof(long));
+            foreach (var value in productVariantIDs)
+            {
+                table.Rows.Add(value);
+            }
+
+            return new SqlParameter("@ProductVariantIDs", SqlDbType.Structured)
+            {
+                TypeName = "LongList",
+                Value = table
+            };
         }
 
         /// <summary>
