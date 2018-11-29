@@ -10,6 +10,7 @@ using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Tests.Shared;
 using Xunit;
 using System.Reflection;
+using log4net.Core;
 
 namespace ShipWorks.Products.Tests
 {
@@ -33,15 +34,20 @@ namespace ShipWorks.Products.Tests
             Assert.False(testObject.CanWriteXml);
         }
 
-        [Fact]
-        public void CanWriteXml_IsTrue_WhenVariantIsNotNull()
+        [Theory]
+        [InlineData(true, true)]
+        [InlineData(false, false)]
+        public void CanWriteXml_IsTrue_WhenVariantIsNotNull(bool isActive, bool expectedValue)
         {
+            var productVariantEntity = mock.Mock<IProductVariantEntity>();
+            productVariantEntity.Setup(pve => pve.IsActive).Returns(isActive);
+
             var testObject = mock.Create<ProductVariant>(
-                TypedParameter.From("sku"));
+                TypedParameter.From("sku"),
+                TypedParameter.From(productVariantEntity.Object));
 
-            Assert.True(testObject.CanWriteXml);
+            Assert.Equal(expectedValue, testObject.CanWriteXml);
         }
-
 
         [Obfuscation(Exclude = true)]
         public static IEnumerable<object[]> applyDimData =>
