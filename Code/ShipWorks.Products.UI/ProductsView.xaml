@@ -76,9 +76,9 @@
             </Grid.ColumnDefinitions>
             <Button
                 Grid.Column="0"
+                Command="{Binding AddProduct}"
                 Content="Add"
-                Style="{StaticResource PrimaryButton}" 
-		Command="{Binding AddProduct}" />
+                Style="{StaticResource PrimaryButton}" />
             <Button
                 Grid.Column="1"
                 Content="Edit"
@@ -90,14 +90,14 @@
                 Style="{StaticResource PrimaryButton}" />
             <Button
                 Grid.Column="3"
+                Command="{Binding ActivateProductCommand}"
                 Content="Mark Active"
-                Style="{StaticResource SecondaryButton}"
-                Command="{Binding ActivateProductCommand}"/>
+                Style="{StaticResource SecondaryButton}" />
             <Button
                 Grid.Column="4"
+                Command="{Binding DeactivateProductCommand}"
                 Content="Mark Inactive"
-                Style="{StaticResource SecondaryButton}"
-                Command="{Binding DeactivateProductCommand}"/>
+                Style="{StaticResource SecondaryButton}" />
 
             <CheckBox
                 Grid.Column="5"
@@ -150,12 +150,6 @@
             <DataGrid.Resources>
                 <ui:BindingProxy x:Key="proxy" Data="{Binding}" />
             </DataGrid.Resources>
-            <DataGrid.InputBindings>
-                <KeyBinding Command="ApplicationCommands.NotACommand" Gesture="Ctrl+A" />
-            </DataGrid.InputBindings>
-            <DataGrid.CommandBindings>
-                <CommandBinding Command="ApplicationCommands.SelectAll" Executed="OnSelectAllExecuted" />
-            </DataGrid.CommandBindings>
             <i:Interaction.Triggers>
                 <i:EventTrigger EventName="SelectionChanged">
                     <cmd:EventToCommand Command="{Binding SelectedProductsChanged}" CommandParameter="{Binding SelectedItems, ElementName=ProductsGrid}" />

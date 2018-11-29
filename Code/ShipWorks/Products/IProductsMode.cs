@@ -41,7 +41,7 @@ namespace ShipWorks.Products
         /// Collection of selected products
         /// </summary>
         [Obfuscation(Exclude = true)]
-        IList<IProductListItemEntity> SelectedProducts { get; set; }
+        IList<long> SelectedProductIDs { get; set; }
 
         /// <summary>
         /// The list of selected products has changed

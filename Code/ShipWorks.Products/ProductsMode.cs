@@ -28,7 +28,7 @@ namespace ShipWorks.Products
     {
         private readonly IProductsViewHost view;
         private DataWrapper<IVirtualizingCollection<IProductListItemEntity>> products;
-        private IList<IProductListItemEntity> selectedProducts;
+        private IList<long> selectedProductIDs;
         private IBasicSortDefinition currentSort;
         private string searchText;
         private bool showInactiveProducts;
@@ -44,7 +44,7 @@ namespace ShipWorks.Products
             IProductsCollectionFactory productsCollectionFactory,
             IMessageHelper messageHelper,
             Func<IProductEditorViewModel> productEditorViewModelFunc,
-			IProductCatalog productCatalog)
+            IProductCatalog productCatalog)
         {
             this.productsCollectionFactory = productsCollectionFactory;
             this.messageHelper = messageHelper;
@@ -57,17 +57,17 @@ namespace ShipWorks.Products
             RefreshProducts = new RelayCommand(() => RefreshProductsAction());
             EditProductVariant = new RelayCommand<long>(EditProductVariantAction);
             SelectedProductsChanged = new RelayCommand<IList>(
-                items => SelectedProducts = items?.OfType<DataWrapper<IProductListItemEntity>>().Select(x => x.Data).ToList());
+                items => SelectedProductIDs = items?.OfType<DataWrapper<IProductListItemEntity>>().Select(x => x.EntityID).ToList());
 
             DeactivateProductCommand =
-                new RelayCommand(() => SetProductActivation(false).Forget(), () => SelectedProducts?.Any() == true);
+                new RelayCommand(() => SetProductActivation(false).Forget(), () => SelectedProductIDs?.Any() == true);
 
             ActivateProductCommand =
-                new RelayCommand(() => SetProductActivation(true).Forget(), () => SelectedProducts?.Any() == true);
+                new RelayCommand(() => SetProductActivation(true).Forget(), () => SelectedProductIDs?.Any() == true);
 
-			AddProduct = new RelayCommand(() => AddProductAction());
+            AddProduct = new RelayCommand(() => AddProductAction());
         }
-		
+
         /// <summary>
         /// Command for Adding a product
         /// </summary>
@@ -118,10 +118,10 @@ namespace ShipWorks.Products
         /// Collection of selected products
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public IList<IProductListItemEntity> SelectedProducts
+        public IList<long> SelectedProductIDs
         {
-            get => selectedProducts;
-            set => Set(ref selectedProducts, value);
+            get => selectedProductIDs;
+            set => Set(ref selectedProductIDs, value);
         }
 
         /// <summary>
@@ -213,7 +213,7 @@ namespace ShipWorks.Products
         private async Task SetProductActivation(bool makeItActive)
         {
             await productCatalog
-                .SetActivation(SelectedProducts.Select(p => p.ProductVariantID), makeItActive)
+                .SetActivation(SelectedProductIDs, makeItActive)
                 .ConfigureAwait(false);
 
             RefreshProductsAction();

@@ -38,7 +38,7 @@ namespace ShipWorks.Products
         {
             searchText = searchText?.Trim();
 
-            var listWrapper = new DataWrapper<IVirtualizingCollection<IProductListItemEntity>>(0);
+            var listWrapper = new DataWrapper<IVirtualizingCollection<IProductListItemEntity>>(0, 0, () => { });
             QueryFactory factory = new QueryFactory();
             var from = factory.ProductVariant
                 .InnerJoin(factory.ProductVariantAlias)

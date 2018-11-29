@@ -35,11 +35,17 @@ namespace ShipWorks.Products
         public int FetchCount() => productIDs.Count;
 
         /// <summary>
+        /// Get a list of IDs for the given range
+        /// </summary>
+        public IEnumerable<long> GetIDsInRange(int startIndex, int count) =>
+            productIDs.Skip(startIndex).Take(count);
+
+        /// <summary>
         /// Fetch a range of products
         /// </summary>
-        public async Task<IList<IProductListItemEntity>> FetchRange(int startIndex, int pageCount)
+        public async Task<IList<IProductListItemEntity>> FetchRange(int startIndex, int count)
         {
-            var ids = productIDs.Skip(startIndex).Take(pageCount).ToList();
+            var ids = GetIDsInRange(startIndex, count).ToList();
             var query = new QueryFactory().ProductListItem.Where(ProductListItemFields.ProductVariantID.In(ids));
 
             var list = await Functional.UsingAsync(

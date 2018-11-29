@@ -76,11 +76,11 @@ namespace ShipWorks.Products.UI
         public ICommand SelectedProductsChanged => throw new NotImplementedException();
 
         public DataWrapper<IVirtualizingCollection<IProductListItemEntity>> Products { get; private set; }
-        public IList<IProductListItemEntity> SelectedProducts { get; set; }
+        public IList<long> SelectedProductIDs { get; set; }
         public IBasicSortDefinition CurrentSort { get; set; }
         public bool ShowInactiveProducts { get; set; }
         public string SearchText { get; set; }
-        
+
         public void Dispose()
         {
             throw new NotImplementedException();
@@ -135,7 +135,7 @@ namespace ShipWorks.Products.UI
         public DesignerVirtualizingCollection(IEnumerable<T> items, params int[] loadingIndicies)
         {
             list = items
-                .Select((x, i) => loadingIndicies.Contains(i) ? new DataWrapper<T>(i) : new DataWrapper<T>(i, x))
+                .Select((x, i) => loadingIndicies.Contains(i) ? new DataWrapper<T>(i, 0, () => { }) : new DataWrapper<T>(i, x))
                 .ToList();
         }
 

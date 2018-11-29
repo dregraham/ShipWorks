@@ -30,11 +30,16 @@ namespace DataVirtualization
         int FetchCount();
 
         /// <summary>
+        /// Get a list of IDs for the given range
+        /// </summary>
+        IEnumerable<long> GetIDsInRange(int startIndex, int count);
+
+        /// <summary>
         /// Fetches a range of items.
         /// </summary>
         /// <param name="startIndex">The start index.</param>
         /// <param name="count">The number of items to fetch.</param>
         /// <returns></returns>
-        Task<IList<T>> FetchRange(int startIndex, int pageCount);
+        Task<IList<T>> FetchRange(int startIndex, int count);
     }
 }
