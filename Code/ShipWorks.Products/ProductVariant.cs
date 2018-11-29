@@ -64,10 +64,10 @@ namespace ShipWorks.Products
             log.InfoFormat("Attempting to apply product dimensions to item {0} for sku {1}",
                 item.OrderItemID, sku);
 
-            ApplyDecimalValue(variant.Weight, () => item.Weight = (double) variant.Weight.Value);
-            ApplyDecimalValue(variant.Length, () => item.Length = variant.Length.Value);
-            ApplyDecimalValue(variant.Width, () => item.Width = variant.Width.Value);
-            ApplyDecimalValue(variant.Height, () => item.Height = variant.Height.Value);
+            ApplyValue(variant.Weight, () => item.Weight = (double) variant.Weight.Value);
+            ApplyValue(variant.Length, () => item.Length = variant.Length.Value);
+            ApplyValue(variant.Width, () => item.Width = variant.Width.Value);
+            ApplyValue(variant.Height, () => item.Height = variant.Height.Value);
         }
 
         /// <summary>
@@ -82,18 +82,18 @@ namespace ShipWorks.Products
 
             log.InfoFormat($"Attempting to apply product information to customs item for sku {sku}");
 
-            ApplyStringValue(variant.Name, () => customsItem.Description = variant.Name);
-            ApplyDecimalValue(variant.Weight, () => customsItem.Weight = (double) variant.Weight);
-            ApplyDecimalValue(variant.DeclaredValue, () => customsItem.UnitValue = variant.DeclaredValue.Value);
-            ApplyDecimalValue(variant.DeclaredValue, () => customsItem.UnitPriceAmount = variant.DeclaredValue.Value);
-            ApplyStringValue(variant.CountryOfOrigin, () => customsItem.CountryOfOrigin = variant.CountryOfOrigin);
-            ApplyStringValue(variant.HarmonizedCode, () => customsItem.HarmonizedCode = variant.HarmonizedCode);
+            ApplyValue(variant.Name, () => customsItem.Description = variant.Name);
+            ApplyValue(variant.Weight, () => customsItem.Weight = (double) variant.Weight);
+            ApplyValue(variant.DeclaredValue, () => customsItem.UnitValue = variant.DeclaredValue.Value);
+            ApplyValue(variant.DeclaredValue, () => customsItem.UnitPriceAmount = variant.DeclaredValue.Value);
+            ApplyValue(variant.CountryOfOrigin, () => customsItem.CountryOfOrigin = variant.CountryOfOrigin);
+            ApplyValue(variant.HarmonizedCode, () => customsItem.HarmonizedCode = variant.HarmonizedCode);
         }
 
         /// <summary>
         /// Apply a decimal value when appropriate
         /// </summary>
-        private void ApplyDecimalValue(decimal? toApply, Action apply)
+        private void ApplyValue(decimal? toApply, Action apply)
         {
             if (toApply.HasValue && toApply.Value > 0)
             {
@@ -104,7 +104,7 @@ namespace ShipWorks.Products
         /// <summary>
         /// Apply a string value when appropriate
         /// </summary>
-        private void ApplyStringValue(string toApply, Action apply)
+        private void ApplyValue(string toApply, Action apply)
         {
             if (!string.IsNullOrWhiteSpace(toApply))
             {
