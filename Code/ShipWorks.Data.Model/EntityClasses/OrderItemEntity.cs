@@ -448,6 +448,10 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("Width", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("Height", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("Brand", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("MPN", fieldHashtable);
 		}
 		#endregion
 
@@ -781,6 +785,26 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.Decimal)GetValue((int)OrderItemFieldIndex.Height, true); }
 			set	{ SetValue((int)OrderItemFieldIndex.Height, value); }
+		}
+
+		/// <summary> The Brand property of the Entity OrderItem<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "OrderItem"."Brand"<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.String Brand
+		{
+			get { return (System.String)GetValue((int)OrderItemFieldIndex.Brand, true); }
+			set	{ SetValue((int)OrderItemFieldIndex.Brand, value); }
+		}
+
+		/// <summary> The MPN property of the Entity OrderItem<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "OrderItem"."MPN"<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.String MPN
+		{
+			get { return (System.String)GetValue((int)OrderItemFieldIndex.MPN, true); }
+			set	{ SetValue((int)OrderItemFieldIndex.MPN, value); }
 		}
 
 		/// <summary> Gets the EntityCollection with the related entities of type 'OrderItemAttributeEntity' which are related to this entity via a relation of type '1:n'. If the EntityCollection hasn't been fetched yet, the collection returned will be empty.<br/><br/></summary>

@@ -682,7 +682,6 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("ChannelAdvisorOrderItemEntity", "Classification", typeof(System.String), false, false, false, false,  (int)ChannelAdvisorOrderItemFieldIndex.Classification, 30, 0, 0);
 			this.AddElementFieldInfo("ChannelAdvisorOrderItemEntity", "DistributionCenter", typeof(System.String), false, false, false, false,  (int)ChannelAdvisorOrderItemFieldIndex.DistributionCenter, 80, 0, 0);
 			this.AddElementFieldInfo("ChannelAdvisorOrderItemEntity", "IsFBA", typeof(System.Boolean), false, false, false, false,  (int)ChannelAdvisorOrderItemFieldIndex.IsFBA, 0, 0, 0);
-			this.AddElementFieldInfo("ChannelAdvisorOrderItemEntity", "MPN", typeof(System.String), false, false, false, false,  (int)ChannelAdvisorOrderItemFieldIndex.MPN, 50, 0, 0);
 			this.AddElementFieldInfo("ChannelAdvisorOrderItemEntity", "DistributionCenterID", typeof(System.Int64), false, false, false, false,  (int)ChannelAdvisorOrderItemFieldIndex.DistributionCenterID, 0, 0, 19);
 			this.AddElementFieldInfo("ChannelAdvisorOrderItemEntity", "DistributionCenterName", typeof(System.String), false, false, false, false,  (int)ChannelAdvisorOrderItemFieldIndex.DistributionCenterName, 100, 0, 0);
 		}
@@ -2270,6 +2269,8 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("OrderEntity", "ShipSenseRecognitionStatus", typeof(System.Int32), false, false, false, false,  (int)OrderFieldIndex.ShipSenseRecognitionStatus, 0, 0, 10);
 			this.AddElementFieldInfo("OrderEntity", "ShipAddressType", typeof(System.Int32), false, false, false, false,  (int)OrderFieldIndex.ShipAddressType, 0, 0, 10);
 			this.AddElementFieldInfo("OrderEntity", "CombineSplitStatus", typeof(Interapptive.Shared.Enums.CombineSplitStatusType), false, false, false, false,  (int)OrderFieldIndex.CombineSplitStatus, 0, 0, 10);
+			this.AddElementFieldInfo("OrderEntity", "ChannelOrderID", typeof(System.String), false, false, false, false,  (int)OrderFieldIndex.ChannelOrderID, 50, 0, 0);
+			this.AddElementFieldInfo("OrderEntity", "ShipByDate", typeof(Nullable<System.DateTime>), false, false, false, true,  (int)OrderFieldIndex.ShipByDate, 0, 0, 0);
 		}
 		/// <summary>Inits OrderChargeEntity's FieldInfo objects</summary>
 		private void InitOrderChargeEntityInfos()
@@ -2309,6 +2310,8 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("OrderItemEntity", "Length", typeof(System.Decimal), false, false, false, false,  (int)OrderItemFieldIndex.Length, 0, 2, 10);
 			this.AddElementFieldInfo("OrderItemEntity", "Width", typeof(System.Decimal), false, false, false, false,  (int)OrderItemFieldIndex.Width, 0, 2, 10);
 			this.AddElementFieldInfo("OrderItemEntity", "Height", typeof(System.Decimal), false, false, false, false,  (int)OrderItemFieldIndex.Height, 0, 2, 10);
+			this.AddElementFieldInfo("OrderItemEntity", "Brand", typeof(System.String), false, false, false, false,  (int)OrderItemFieldIndex.Brand, 50, 0, 0);
+			this.AddElementFieldInfo("OrderItemEntity", "MPN", typeof(System.String), false, false, false, false,  (int)OrderItemFieldIndex.MPN, 50, 0, 0);
 		}
 		/// <summary>Inits OrderItemAttributeEntity's FieldInfo objects</summary>
 		private void InitOrderItemAttributeEntityInfos()

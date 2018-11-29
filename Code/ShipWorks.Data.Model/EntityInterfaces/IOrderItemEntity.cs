@@ -159,6 +159,18 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         /// Table field type characteristics (type, precision, scale, length): Decimal, 10, 2, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         System.Decimal Height { get; }
+        /// <summary> The Brand property of the Entity OrderItem<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "OrderItem"."Brand"<br/>
+        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+        System.String Brand { get; }
+        /// <summary> The MPN property of the Entity OrderItem<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "OrderItem"."MPN"<br/>
+        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+        System.String MPN { get; }
         
         
         IOrderEntity Order { get; }

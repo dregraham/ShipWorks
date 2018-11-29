@@ -517,7 +517,9 @@ CREATE TABLE [dbo].[Order]
 [ShipSenseHashKey] [nvarchar] (64) COLLATE SQL_Latin1_General_CP1_CS_AS NOT NULL,
 [ShipSenseRecognitionStatus] int NOT NULL,
 [ShipAddressType] [int] NOT NULL,
-[CombineSplitStatus] [INT] NOT NULL
+[CombineSplitStatus] [INT] NOT NULL,
+[ChannelOrderID] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_Order_ChannelOrderID] DEFAULT (''),
+[ShipByDate] [datetime] NULL
 )
 GO
 PRINT N'Creating primary key [PK_Order] on [dbo].[Order]'
@@ -781,7 +783,9 @@ CREATE TABLE [dbo].[OrderItem]
 [OriginalOrderID] [BIGINT] NOT NULL,
 [Length] [decimal] (10, 2) NOT NULL,
 [Width] [decimal] (10, 2) NOT NULL,
-[Height] [decimal] (10, 2) NOT NULL
+[Height] [decimal] (10, 2) NOT NULL,
+[Brand] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_OrderItem_Brand] DEFAULT (''),
+[MPN] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_OrderItem_MPN] DEFAULT ('')
 )
 GO
 PRINT N'Creating primary key [PK_OrderItem] on [dbo].[OrderItem]'
@@ -1434,7 +1438,6 @@ CREATE TABLE [dbo].[ChannelAdvisorOrderItem]
 [Classification] [nvarchar] (30) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [DistributionCenter] [nvarchar] (80) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [IsFBA] [bit] NOT NULL,
-[MPN] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [DistributionCenterID] [bigint] NOT NULL,
 [DistributionCenterName] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL
 )

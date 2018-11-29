@@ -59,6 +59,8 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             Length = source.Length;
             Width = source.Width;
             Height = source.Height;
+            Brand = source.Brand;
+            MPN = source.MPN;
             
             
             Order = (IOrderEntity) source.Order?.AsReadOnly(objectMap);
@@ -208,6 +210,18 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Table field type characteristics (type, precision, scale, length): Decimal, 10, 2, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         public System.Decimal Height { get; }
+        /// <summary> The Brand property of the Entity OrderItem<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "OrderItem"."Brand"<br/>
+        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+        public System.String Brand { get; }
+        /// <summary> The MPN property of the Entity OrderItem<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "OrderItem"."MPN"<br/>
+        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+        public System.String MPN { get; }
         
         
         public IOrderEntity Order { get; }

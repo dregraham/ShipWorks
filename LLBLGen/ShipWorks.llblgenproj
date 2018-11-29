@@ -513,14 +513,13 @@
         <Fields>
           <Field Name="Classification" Type="string" MaxLength="30" FieldIndex="4" />
           <Field Name="DistributionCenter" Type="string" MaxLength="80" FieldIndex="5" />
-          <Field Name="DistributionCenterID" Type="long" Precision="19" FieldIndex="8" />
-          <Field Name="DistributionCenterName" Type="string" MaxLength="100" FieldIndex="9" />
+          <Field Name="DistributionCenterID" Type="long" Precision="19" FieldIndex="7" />
+          <Field Name="DistributionCenterName" Type="string" MaxLength="100" FieldIndex="8" />
           <Field Name="IsFBA" Type="bool" FieldIndex="6" />
           <Field Name="MarketplaceBuyerID" Type="string" MaxLength="80" FieldIndex="2" />
           <Field Name="MarketplaceName" Type="string" MaxLength="50" FieldIndex="0" />
           <Field Name="MarketplaceSalesID" Type="string" MaxLength="50" FieldIndex="3" />
           <Field Name="MarketplaceStoreName" Type="string" MaxLength="100" FieldIndex="1" />
-          <Field Name="MPN" Type="string" MaxLength="50" FieldIndex="7" />
         </Fields>
       </EntityDefinition>
       <EntityDefinition Name="ChannelAdvisorOrderSearch" ObjectID="fff00b34-ee7d-4254-a1f2-7b17c2524003">
@@ -1927,6 +1926,7 @@
           <Field Name="BillUnparsedName" Type="string" MaxLength="100" FieldIndex="68" />
           <Field Name="BillUSTerritory" Type="int" FieldIndex="35" />
           <Field Name="BillWebsite" Type="string" MaxLength="50" FieldIndex="29" />
+          <Field Name="ChannelOrderID" Type="string" MaxLength="50" FieldIndex="75" />
           <Field Name="CombineSplitStatus" Type="CombineSplitStatusType" FieldIndex="74" />
           <Field Name="CustomerID" Type="long" IsAutoCreated="true" FieldIndex="3" />
           <Field Name="IsManual" Type="bool" FieldIndex="9" />
@@ -1954,6 +1954,7 @@
           <Field Name="ShipAddressValidationError" Type="string" MaxLength="300" FieldIndex="54" />
           <Field Name="ShipAddressValidationStatus" Type="int" FieldIndex="53" />
           <Field Name="ShipAddressValidationSuggestionCount" Type="int" FieldIndex="52" />
+          <Field Name="ShipByDate" Type="datetime" IsOptional="true" FieldIndex="76" />
           <Field Name="ShipCity" Type="string" MaxLength="50" FieldIndex="44" />
           <Field Name="ShipCompany" Type="string" MaxLength="60" FieldIndex="40" />
           <Field Name="ShipCountryCode" Type="string" MaxLength="50" FieldIndex="47" />
@@ -1992,6 +1993,7 @@
       </EntityDefinition>
       <EntityDefinition Name="OrderItem" ObjectID="2b2b0d77-3ba1-479f-a10e-dc96506ac0d2" InheritanceType="2">
         <Fields>
+          <Field Name="Brand" Type="string" MaxLength="50" FieldIndex="22" />
           <Field Name="Code" Type="string" MaxLength="300" FieldIndex="4" />
           <Field Name="Description" Type="string" MaxLength="2147483647" FieldIndex="8" />
           <Field Name="HarmonizedCode" Type="string" MaxLength="20" FieldIndex="18" />
@@ -2002,6 +2004,7 @@
           <Field Name="Length" Type="decimal" Precision="10" Scale="2" FieldIndex="19" />
           <Field Name="LocalStatus" Type="string" MaxLength="255" FieldIndex="16" />
           <Field Name="Location" Type="string" MaxLength="255" FieldIndex="9" />
+          <Field Name="MPN" Type="string" MaxLength="50" FieldIndex="23" />
           <Field Name="Name" Type="string" MaxLength="300" FieldIndex="3" />
           <Field Name="OrderID" Type="long" IsAutoCreated="true" FieldIndex="2" />
           <Field Name="OrderItemID" Type="long" IsReadOnly="true" IsPrimaryKey="true" FieldIndex="0" />
@@ -4353,7 +4356,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2018-11-01T20:42:16.478364Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2018-11-29T19:20:18.9959429Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -4725,10 +4728,10 @@
                     <Field Name="OrderItemID" Ordinal="1" IsPrimaryKey="true" DbType="0" Precision="19" />
                     <Field Name="OrderAddressID" Ordinal="2" DbType="0" Precision="19" />
                     <Field Name="OrderProductID" Ordinal="3" DbType="0" Precision="19" />
-                    <Field Name="IsDigitalItem" Ordinal="4" DbType="2" />
-                    <Field Name="EventDate" Ordinal="5" IsOptional="true" DbType="4" />
-                    <Field Name="EventName" Ordinal="6" IsOptional="true" DbType="12" Length="255" />
-                    <Field Name="ParentOrderProductID" Ordinal="7" IsOptional="true" DbType="0" Precision="19" />
+                    <Field Name="ParentOrderProductID" Ordinal="4" IsOptional="true" DbType="0" Precision="19" />
+                    <Field Name="IsDigitalItem" Ordinal="5" HasDefaultValue="true" DefaultValue="(0)" DbType="2" />
+                    <Field Name="EventDate" Ordinal="6" IsOptional="true" DbType="4" />
+                    <Field Name="EventName" Ordinal="7" IsOptional="true" DbType="12" Length="255" />
                   </Fields>
                 </Table>
                 <Table Name="BigCommerceStore">
@@ -4824,9 +4827,8 @@
                     <Field Name="Classification" Ordinal="6" DbType="12" Length="30" />
                     <Field Name="DistributionCenter" Ordinal="7" DbType="12" Length="80" />
                     <Field Name="IsFBA" Ordinal="8" DbType="2" />
-                    <Field Name="MPN" Ordinal="9" DbType="12" Length="50" />
-                    <Field Name="DistributionCenterID" Ordinal="10" DbType="0" Precision="19" />
-                    <Field Name="DistributionCenterName" Ordinal="11" DbType="12" Length="100" />
+                    <Field Name="DistributionCenterID" Ordinal="9" DbType="0" Precision="19" />
+                    <Field Name="DistributionCenterName" Ordinal="10" DbType="12" Length="100" />
                   </Fields>
                 </Table>
                 <Table Name="ChannelAdvisorOrderSearch">
@@ -6395,7 +6397,7 @@
                     <Field Name="JoinMask" Ordinal="8" DbType="8" Precision="10" />
                     <Field Name="Cost" Ordinal="9" DbType="8" Precision="10" />
                     <Field Name="Count" Ordinal="10" DbType="8" Precision="10" />
-                    <Field Name="EntityExistsQuery" Ordinal="11" IsOptional="true" HasDefaultValue="true" DefaultValue="''" DbType="12" Length="2147483647" />
+                    <Field Name="EntityExistsQuery" Ordinal="11" DbType="12" Length="2147483647" />
                   </Fields>
                 </Table>
                 <Table Name="FilterNodeContentDetail">
@@ -6694,7 +6696,7 @@
                   </Fields>
                 </Table>
                 <Table Name="iParcelPackage">
-                  <PkConstraintName Name="PK_iParcelPackageNew" />
+                  <PkConstraintName Name="PK_iParcelPackage" />
                   <Fields>
                     <Field Name="iParcelPackageID" Ordinal="1" IsIdentity="true" IsPrimaryKey="true" DbType="0" Precision="19" />
                     <Field Name="ShipmentID" Ordinal="2" DbType="0" Precision="19" />
@@ -7237,6 +7239,8 @@
                     <Field Name="ShipSenseRecognitionStatus" Ordinal="73" DbType="8" Precision="10" />
                     <Field Name="ShipAddressType" Ordinal="74" DbType="8" Precision="10" />
                     <Field Name="CombineSplitStatus" Ordinal="75" DbType="8" Precision="10" />
+                    <Field Name="ChannelOrderID" Ordinal="76" HasDefaultValue="true" DefaultValue="''" DbType="12" Length="50" />
+                    <Field Name="ShipByDate" Ordinal="77" IsOptional="true" DbType="4" />
                   </Fields>
                 </Table>
                 <Table Name="OrderCharge">
@@ -7293,6 +7297,8 @@
                     <Field Name="Length" Ordinal="22" DbType="5" Precision="10" Scale="2" />
                     <Field Name="Width" Ordinal="23" DbType="5" Precision="10" Scale="2" />
                     <Field Name="Height" Ordinal="24" DbType="5" Precision="10" Scale="2" />
+                    <Field Name="Brand" Ordinal="25" HasDefaultValue="true" DefaultValue="''" DbType="12" Length="50" />
+                    <Field Name="MPN" Ordinal="26" HasDefaultValue="true" DefaultValue="''" DbType="12" Length="50" />
                   </Fields>
                 </Table>
                 <Table Name="OrderItemAttribute">
@@ -7402,9 +7408,9 @@
                   <Fields>
                     <Field Name="OverstockOrderSearchID" Ordinal="1" IsIdentity="true" IsPrimaryKey="true" DbType="0" Precision="19" />
                     <Field Name="OrderID" Ordinal="2" DbType="0" Precision="19" />
-                    <Field Name="OriginalOrderID" Ordinal="3" DbType="0" Precision="19" />
-                    <Field Name="SalesChannelName" Ordinal="4" DbType="12" Length="50" />
-                    <Field Name="WarehouseCode" Ordinal="5" IsOptional="true" DbType="12" Length="50" />
+                    <Field Name="SalesChannelName" Ordinal="3" DbType="12" Length="50" />
+                    <Field Name="WarehouseCode" Ordinal="4" IsOptional="true" DbType="12" Length="50" />
+                    <Field Name="OriginalOrderID" Ordinal="5" DbType="0" Precision="19" />
                   </Fields>
                 </Table>
                 <Table Name="OverstockStore">
@@ -10812,7 +10818,6 @@
             <FieldMapping FieldName="MarketplaceName" TargetFieldName="MarketplaceName" />
             <FieldMapping FieldName="MarketplaceSalesID" TargetFieldName="MarketplaceSalesID" />
             <FieldMapping FieldName="MarketplaceStoreName" TargetFieldName="MarketplaceStoreName" />
-            <FieldMapping FieldName="MPN" TargetFieldName="MPN" />
             <FieldMapping FieldName="OrderItemID" TargetFieldName="OrderItemID" />
           </FieldMappings>
         </EntityMapping>
@@ -12252,6 +12257,7 @@
             <FieldMapping FieldName="BillUnparsedName" TargetFieldName="BillUnparsedName" />
             <FieldMapping FieldName="BillUSTerritory" TargetFieldName="BillUSTerritory" />
             <FieldMapping FieldName="BillWebsite" TargetFieldName="BillWebsite" />
+            <FieldMapping FieldName="ChannelOrderID" TargetFieldName="ChannelOrderID" />
             <FieldMapping FieldName="CombineSplitStatus" TargetFieldName="CombineSplitStatus" />
             <FieldMapping FieldName="CustomerID" TargetFieldName="CustomerID" />
             <FieldMapping FieldName="IsManual" TargetFieldName="IsManual" />
@@ -12279,6 +12285,7 @@
             <FieldMapping FieldName="ShipAddressValidationError" TargetFieldName="ShipAddressValidationError" />
             <FieldMapping FieldName="ShipAddressValidationStatus" TargetFieldName="ShipAddressValidationStatus" />
             <FieldMapping FieldName="ShipAddressValidationSuggestionCount" TargetFieldName="ShipAddressValidationSuggestionCount" />
+            <FieldMapping FieldName="ShipByDate" TargetFieldName="ShipByDate" />
             <FieldMapping FieldName="ShipCity" TargetFieldName="ShipCity" />
             <FieldMapping FieldName="ShipCompany" TargetFieldName="ShipCompany" />
             <FieldMapping FieldName="ShipCountryCode" TargetFieldName="ShipCountryCode" />
@@ -12317,6 +12324,7 @@
         </EntityMapping>
         <EntityMapping EntityName=":OrderItem" TargetName="ShipWorksLocal:dbo:OrderItem">
           <FieldMappings>
+            <FieldMapping FieldName="Brand" TargetFieldName="Brand" />
             <FieldMapping FieldName="Code" TargetFieldName="Code" />
             <FieldMapping FieldName="Description" TargetFieldName="Description" />
             <FieldMapping FieldName="HarmonizedCode" TargetFieldName="HarmonizedCode" />
@@ -12327,6 +12335,7 @@
             <FieldMapping FieldName="Length" TargetFieldName="Length" />
             <FieldMapping FieldName="LocalStatus" TargetFieldName="LocalStatus" />
             <FieldMapping FieldName="Location" TargetFieldName="Location" />
+            <FieldMapping FieldName="MPN" TargetFieldName="MPN" />
             <FieldMapping FieldName="Name" TargetFieldName="Name" />
             <FieldMapping FieldName="OrderID" TargetFieldName="OrderID" />
             <FieldMapping FieldName="OrderItemID" TargetFieldName="OrderItemID" SequenceToUse="SCOPE_IDENTITY()" />

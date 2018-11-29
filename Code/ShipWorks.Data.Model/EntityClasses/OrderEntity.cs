@@ -813,6 +813,10 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("ShipAddressType", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("CombineSplitStatus", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("ChannelOrderID", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("ShipByDate", fieldHashtable);
 		}
 		#endregion
 
@@ -1761,6 +1765,26 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (Interapptive.Shared.Enums.CombineSplitStatusType)GetValue((int)OrderFieldIndex.CombineSplitStatus, true); }
 			set	{ SetValue((int)OrderFieldIndex.CombineSplitStatus, value); }
+		}
+
+		/// <summary> The ChannelOrderID property of the Entity Order<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "Order"."ChannelOrderID"<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.String ChannelOrderID
+		{
+			get { return (System.String)GetValue((int)OrderFieldIndex.ChannelOrderID, true); }
+			set	{ SetValue((int)OrderFieldIndex.ChannelOrderID, value); }
+		}
+
+		/// <summary> The ShipByDate property of the Entity Order<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "Order"."ShipByDate"<br/>
+		/// Table field type characteristics (type, precision, scale, length): DateTime, 0, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual Nullable<System.DateTime> ShipByDate
+		{
+			get { return (Nullable<System.DateTime>)GetValue((int)OrderFieldIndex.ShipByDate, false); }
+			set	{ SetValue((int)OrderFieldIndex.ShipByDate, value); }
 		}
 
 		/// <summary> Gets the EntityCollection with the related entities of type 'NoteEntity' which are related to this entity via a relation of type '1:n'. If the EntityCollection hasn't been fetched yet, the collection returned will be empty.<br/><br/></summary>

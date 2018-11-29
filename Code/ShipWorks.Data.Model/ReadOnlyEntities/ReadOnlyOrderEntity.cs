@@ -111,6 +111,8 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             ShipSenseRecognitionStatus = source.ShipSenseRecognitionStatus;
             ShipAddressType = source.ShipAddressType;
             CombineSplitStatus = source.CombineSplitStatus;
+            ChannelOrderID = source.ChannelOrderID;
+            ShipByDate = source.ShipByDate;
             
             
             Customer = (ICustomerEntity) source.Customer?.AsReadOnly(objectMap);
@@ -585,6 +587,18 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         public Interapptive.Shared.Enums.CombineSplitStatusType CombineSplitStatus { get; }
+        /// <summary> The ChannelOrderID property of the Entity Order<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "Order"."ChannelOrderID"<br/>
+        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+        public System.String ChannelOrderID { get; }
+        /// <summary> The ShipByDate property of the Entity Order<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "Order"."ShipByDate"<br/>
+        /// Table field type characteristics (type, precision, scale, length): DateTime, 0, 0, 0<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+        public Nullable<System.DateTime> ShipByDate { get; }
         
         
         public ICustomerEntity Customer { get; }
