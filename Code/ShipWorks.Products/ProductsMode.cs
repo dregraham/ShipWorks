@@ -28,7 +28,7 @@ namespace ShipWorks.Products
     {
         private readonly IProductsViewHost view;
         private DataWrapper<IVirtualizingCollection<IProductListItemEntity>> products;
-        private IList<long> selectedProductIDs;
+        private IList<long> selectedProductIDs = new List<long>();
         private IBasicSortDefinition currentSort;
         private string searchText;
         private bool showInactiveProducts;

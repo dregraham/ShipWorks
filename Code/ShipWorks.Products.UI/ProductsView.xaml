@@ -61,6 +61,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
         <Grid IsSharedSizeScope="True">
@@ -292,15 +293,15 @@
                                     <ColumnDefinition Width="Auto" />
                                     <ColumnDefinition Width="Auto" SharedSizeGroup="Height" />
                                 </Grid.ColumnDefinitions>
-                                <TextBlock Grid.Column="0" Text="{Binding Data.Length, StringFormat={}{0:#0.#}}" />
+                                <TextBlock Grid.Column="0" Text="{Binding Data.Length, StringFormat={}{0:#0.##}}" />
                                 <TextBlock Grid.Column="1" Foreground="DarkGray">
                                     x
                                 </TextBlock>
-                                <TextBlock Grid.Column="2" Text="{Binding Data.Width, StringFormat={}{0:#0.#}}" />
+                                <TextBlock Grid.Column="2" Text="{Binding Data.Width, StringFormat={}{0:#0.##}}" />
                                 <TextBlock Grid.Column="3" Foreground="DarkGray">
                                     x
                                 </TextBlock>
-                                <TextBlock Grid.Column="4" Text="{Binding Data.Height, StringFormat={}{0:#0.#}}" />
+                                <TextBlock Grid.Column="4" Text="{Binding Data.Height, StringFormat={}{0:#0.##}}" />
                             </Grid>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
@@ -361,5 +362,24 @@
                 </DataGridTemplateColumn>
             </DataGrid.Columns>
         </DataGrid>
+        <ui:WaitSpinner Grid.Row="1" Visibility="{Binding Products.IsLoading, Converter={StaticResource BooleanToVisibility}}">
+            <TextBlock FontSize="{StaticResource BaseFontSize}">Loading products...</TextBlock>
+        </ui:WaitSpinner>
+        <Grid
+            Grid.Row="2"
+            Margin="0,4,0,0"
+            TextBlock.FontSize="{StaticResource BaseFontSize}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <TextBlock Margin="0,0,16,0">
+                Products:<Run Text="{Binding Products.Data.Count, Mode=OneWay}" />
+            </TextBlock>
+            <TextBlock Grid.Column="1">
+                Selected:<Run Text="{Binding SelectedProductIDs.Count, Mode=OneWay}" />
+            </TextBlock>
+        </Grid>
     </Grid>
 </UserControl>

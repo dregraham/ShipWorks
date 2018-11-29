@@ -101,6 +101,11 @@ namespace DataVirtualization
         {
             get
             {
+                if (pages == null)
+                {
+                    pages = new DataPage<T>[(Count / pageSize) + 1];
+                }
+
                 // determine which page and offset within page
                 int pageIndex = index / pageSize;
                 int pageOffset = index % pageSize;
@@ -187,7 +192,7 @@ namespace DataVirtualization
         /// Always false.
         /// </returns>
         public bool Contains(DataWrapper<T> item) =>
-            pages.Any(x => x.Items.Contains(item));
+            pages?.Any(x => x.Items.Contains(item)) == true;
 
         /// <summary>
         /// TODO
@@ -200,14 +205,10 @@ namespace DataVirtualization
         int IList.IndexOf(object value) => IndexOf((DataWrapper<T>) value);
 
         /// <summary>
-        /// TODO
+        /// Get the index of the given item
         /// </summary>
-        /// <param name="item">The object to locate in the <see cref="T:System.Collections.Generic.IList`1"/>.</param>
-        /// <returns>
-        /// TODO
-        /// </returns>
         public int IndexOf(DataWrapper<T> item) =>
-            pages
+            (pages ?? Enumerable.Empty<DataPage<T>>())
                 .Select((x, i) => (IndexWithinPage: x.Items.IndexOf(item), Page: i))
                 .Where(x => x.IndexWithinPage != -1)
                 .Select(x => pageSize * x.Page + x.IndexWithinPage)
@@ -345,7 +346,7 @@ namespace DataVirtualization
         {
             if (pages == null)
             {
-                pages = new DataPage<T>[(Count / pageSize) + 1];
+                return;
             }
 
             if (pages[pageIndex] == null)
