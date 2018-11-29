@@ -52,7 +52,7 @@ namespace ShipWorks.Products
             this.view = view;
             this.productCatalog = productCatalog;
 
-            CurrentSort = new BasicSortDefinition(ProductVariantFields.Name.Name, ListSortDirection.Ascending);
+            CurrentSort = new BasicSortDefinition(ProductVariantAliasFields.Sku.Name, ListSortDirection.Ascending);
 
             RefreshProducts = new RelayCommand(() => RefreshProductsAction());
             EditProductVariant = new RelayCommand<long>(EditProductVariantAction);
