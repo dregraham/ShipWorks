@@ -51,10 +51,8 @@ namespace ShipWorks.Products
 
             using (var conn = sqlSession.OpenConnection())
             {
-                for (int i = 0; i < chunkCount; i++)
+                foreach (var (productsChunk, index) in chunks.Select((x, i) => (x, i)))
                 {
-                    IEnumerable<long> productsChunk = chunks.Skip(i).First();
-
                     using (var comm = conn.CreateCommand())
                     {
                         comm.CommandText = $"UPDATE ProductVariant SET IsActive = {(activation ? "1" : "0")} WHERE ProductVariantID in (SELECT item FROM @ProductVariantIDs)";
@@ -68,7 +66,7 @@ namespace ShipWorks.Products
                         break;
                     }
 
-                    progressReporter.PercentComplete = (int) Math.Round(100 * ((i + 1M) / chunkCount));
+                    progressReporter.PercentComplete = (int) Math.Round(100 * ((index + 1M) / chunkCount));
                 }
             }
         }
