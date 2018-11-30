@@ -22,7 +22,6 @@ namespace ShipWorks.Products.UI
         private readonly PropertyChangedHandler handler;
         private readonly IDialog dialog;
         private readonly IMessageHelper messageHelper;
-        private readonly ISqlAdapterFactory adapterFactory;
         private ProductVariantAliasEntity product;
 
         private bool isActive;

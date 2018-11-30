@@ -1,8 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using Interapptive.Shared.Threading;
-using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
+using Interapptive.Shared.Threading;
+using ShipWorks.Data.Connection;
+using Interapptive.Shared.Utility;
 
 namespace ShipWorks.Products
 {
@@ -11,15 +12,10 @@ namespace ShipWorks.Products
     /// </summary>
     public interface IProductCatalog
     {
-        /// <summary>
-        /// Fetch a product
-        /// </summary>
-        IProductVariant FetchProductVariant(string sku);
-
-        /// <summary>
-        /// Fetch a product
-        /// </summary>
-        ProductVariantEntity FetchProductVariant(long productVariantID);
+       /// <summary>
+       /// Fetch a product variant wrapper
+       /// </summary>
+        IProductVariant FetchProductVariant(ISqlAdapter sqlAdapter, string sku);
 
         /// <summary>
         /// Set given products activation to specified value
@@ -27,8 +23,18 @@ namespace ShipWorks.Products
         Task SetActivation(IEnumerable<long> productIDs, bool activation, IProgressReporter progressReporter);
 
         /// <summary>
+        /// Fetch a product variant based on SKU
+        /// </summary>
+        ProductVariantEntity FetchProductVariantEntity(ISqlAdapter sqlAdapter, string sku);
+
+        /// <summary>
+        /// Fetch a product variant based on ProductVariantID
+        /// </summary>
+        ProductVariantEntity FetchProductVariantEntity(ISqlAdapter sqlAdapter, long productVariantID);
+
+		/// <summary>
         /// Save the given product
         /// </summary>
-        Result Save(ProductEntity product);
+        Result Save(ISqlAdapter adapter, ProductEntity product);
     }
 }

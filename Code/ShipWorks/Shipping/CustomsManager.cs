@@ -103,28 +103,32 @@ namespace ShipWorks.Shipping
             using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
                 IProductCatalog productCatalog = lifetimeScope.Resolve<IProductCatalog>();
+                ISqlAdapterFactory sqlAdapterFactory = lifetimeScope.Resolve<ISqlAdapterFactory>();
 
-                // By default create one content item representing each item in the order
-                foreach (OrderItemEntity item in shipment.Order.OrderItems)
+                using (ISqlAdapter sqlAdapter = sqlAdapterFactory.Create())
                 {
-                    ShipmentCustomsItemEntity customsItem = new ShipmentCustomsItemEntity
+                    // By default create one content item representing each item in the order
+                    foreach (OrderItemEntity item in shipment.Order.OrderItems)
                     {
-                        Shipment = shipment,
-                        Description = item.Name,
-                        Quantity = item.Quantity,
-                        Weight = item.Weight,
-                        UnitValue = item.UnitPrice,
-                        CountryOfOrigin = "US",
-                        HarmonizedCode = item.HarmonizedCode,
-                        NumberOfPieces = 0,
-                        UnitPriceAmount = item.UnitPrice
-                    };
+                        ShipmentCustomsItemEntity customsItem = new ShipmentCustomsItemEntity
+                        {
+                            Shipment = shipment,
+                            Description = item.Name,
+                            Quantity = item.Quantity,
+                            Weight = item.Weight,
+                            UnitValue = item.UnitPrice,
+                            CountryOfOrigin = "US",
+                            HarmonizedCode = item.HarmonizedCode,
+                            NumberOfPieces = 0,
+                            UnitPriceAmount = item.UnitPrice
+                        };
 
-                    productCatalog.FetchProductVariant(item.SKU).Apply(customsItem);
+                        productCatalog.FetchProductVariant(sqlAdapter, item.SKU).Apply(customsItem);
 
-                    customsItem.UnitValue += item.OrderItemAttributes.Sum(oia => oia.UnitPrice);
-                    customsItem.UnitPriceAmount += item.OrderItemAttributes.Sum(oia => oia.UnitPrice);
-                    customsValue += ((decimal) customsItem.Quantity * customsItem.UnitValue);
+                    	customsItem.UnitValue += item.OrderItemAttributes.Sum(oia => oia.UnitPrice);
+                        customsItem.UnitPriceAmount += item.OrderItemAttributes.Sum(oia => oia.UnitPrice);
+                        customsValue += ((decimal) customsItem.Quantity * customsItem.UnitValue);
+                    }
                 }
             }
 

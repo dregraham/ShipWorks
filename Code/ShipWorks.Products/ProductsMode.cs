@@ -15,6 +15,7 @@ using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using ShipWorks.Core.Common.Threading;
+using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Data.Model.HelperClasses;
@@ -37,6 +38,7 @@ namespace ShipWorks.Products
         private readonly IMessageHelper messageHelper;
         private readonly Func<IProductEditorViewModel> productEditorViewModelFunc;
         private readonly IProductCatalog productCatalog;
+        private readonly ISqlAdapterFactory sqlAdapterFactory;
 
         /// <summary>
         /// Constructor
@@ -45,14 +47,15 @@ namespace ShipWorks.Products
             IProductsCollectionFactory productsCollectionFactory,
             IMessageHelper messageHelper,
             Func<IProductEditorViewModel> productEditorViewModelFunc,
-            IProductCatalog productCatalog)
+            IProductCatalog productCatalog,
+            ISqlAdapterFactory sqlAdapterFactory)
         {
             this.productsCollectionFactory = productsCollectionFactory;
             this.messageHelper = messageHelper;
             this.productEditorViewModelFunc = productEditorViewModelFunc;
             this.view = view;
             this.productCatalog = productCatalog;
-
+            this.sqlAdapterFactory = sqlAdapterFactory;
             CurrentSort = new BasicSortDefinition(ProductVariantAliasFields.Sku.Name, ListSortDirection.Ascending);
 
             RefreshProducts = new RelayCommand(() => RefreshProductsAction());
@@ -215,7 +218,12 @@ namespace ShipWorks.Products
                 return;
             }
 
-            ProductVariantAliasEntity product = productCatalog.FetchProductVariant(productVariantID)?.ProductVariantAlias.FirstOrDefault(a => a.IsDefault);
+            ProductVariantAliasEntity product;
+
+            using (ISqlAdapter adapter = sqlAdapterFactory.Create())
+            {
+                product = productCatalog.FetchProductVariantEntity(adapter, productVariantID)?.ProductVariantAlias.FirstOrDefault(a => a.IsDefault);
+            }
 
             if (product != null)
             {
@@ -253,7 +261,12 @@ namespace ShipWorks.Products
         {
             if (productEditorViewModelFunc().ShowProductEditor(productEntity) ?? false)
             {
-                Result saveResult = productCatalog.Save(productEntity.ProductVariant.Product);
+                Result saveResult;
+
+                using (ISqlAdapter adapter = sqlAdapterFactory.Create())
+                {
+                    saveResult = productCatalog.Save(adapter, productEntity.ProductVariant.Product);
+                }
 
                 if (saveResult.Success)
                 {
