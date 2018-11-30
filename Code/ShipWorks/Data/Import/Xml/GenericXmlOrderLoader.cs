@@ -170,7 +170,7 @@ namespace ShipWorks.Data.Import.Xml
         }
 
         /// <summary>
-        /// Populates the fields of hte OrderItemEntity from the xpathnavigator
+        /// Populates the fields of the OrderItemEntity from the xpathnavigator
         /// </summary>
         private static void LoadItemFields(OrderItemEntity item, XPathNavigator xpath)
         {
@@ -191,6 +191,8 @@ namespace ShipWorks.Data.Import.Xml
             item.Image = XPathUtility.Evaluate(xpath, "Image", "");
             item.Thumbnail = XPathUtility.Evaluate(xpath, "ThumbnailImage", item.Image);
             item.Location = XPathUtility.Evaluate(xpath, "Location", "");
+            item.Brand = XPathUtility.Evaluate(xpath, "Brand", "");
+            item.MPN = XPathUtility.Evaluate(xpath, "MPN", "");
         }
 
         /// <summary>

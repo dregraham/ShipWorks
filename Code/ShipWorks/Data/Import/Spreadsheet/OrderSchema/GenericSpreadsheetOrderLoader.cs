@@ -110,6 +110,9 @@ namespace ShipWorks.Data.Import.Spreadsheet.OrderSchema
             order.LocalStatus = csv.ReadField("Order.LocalStatus", order.LocalStatus ?? "");
             order.OnlineStatus = csv.ReadField("Order.OnlineStatus", order.OnlineStatus ?? "");
 
+            order.ChannelOrderID = csv.ReadField("Order.ChannelOrderID", order.ChannelOrderID ?? "");
+            order.ShipByDate = csv.ReadField("Order.ShipByDate", (DateTime?) null, null, csv.Map.DateSettings.DateFormat, false);
+
             order.RequestedShipping = csv.ReadField("Order.RequestedShipping", order.RequestedShipping ?? "");
 
             // Load Address info
@@ -291,6 +294,9 @@ namespace ShipWorks.Data.Import.Spreadsheet.OrderSchema
                 
                 item.UPC = csv.ReadField("Item.UPC", "");
                 item.ISBN = csv.ReadField("Item.ISBN", "");
+
+                item.Brand = csv.ReadField("Item.Brand", "");
+                item.MPN = csv.ReadField("Item.MPN", "");
 
                 LoadAttributes(item, csv, factory);
 

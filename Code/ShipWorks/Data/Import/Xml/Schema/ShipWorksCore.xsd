@@ -43,6 +43,16 @@
           <xs:documentation>The status code for the current status of the order.  Required when OnlineStatus is designated as supported.  See complexType Module.</xs:documentation>
         </xs:annotation>
       </xs:element>
+      <xs:element name="ChannelOrderID" type="xs:string" minOccurs="0">
+        <xs:annotation>
+          <xs:documentation>The channel order id of the order.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="ShipByDate" type="xs:dateTime" minOccurs="0">
+        <xs:annotation>
+          <xs:documentation>The ship by date of the order.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
       <xs:element name="CustomerID" type="xs:string" minOccurs="0">
         <xs:annotation>
           <xs:documentation>A value uniquely identifying the purchasing customer to ShipWorks.  Required when OnlineCustomerID is designated as supported.  See complexType Module.</xs:documentation>
