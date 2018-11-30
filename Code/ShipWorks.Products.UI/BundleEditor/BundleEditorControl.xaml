@@ -1,0 +1,67 @@
+﻿<UserControl x:Class="ShipWorks.Products.UI.BundleEditor.BundleEditorControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
+             xmlns:local="clr-namespace:ShipWorks.Products.UI.BundleEditor"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="400"
+             d:DataContext="{d:DesignInstance local:BundleEditorViewModel}"
+             FontFamily="/ShipWorks.UI;component/Styles/BlueSteel/#Roboto">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/ShipWorks.UI;component/Styles/BlueSteel/BlueSteelStyle.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="auto"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0"
+              Grid.Column="0"
+              Margin="0 0 0 10">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition Width="auto"/>
+            </Grid.ColumnDefinitions>
+            <syncfusion:SfTextBoxExt Grid.Column="0"
+                                     Text="{Binding Sku}"
+                                     Style="{StaticResource BlueSteelTextBox}"
+                                     Watermark="Enter SKU to add to bundle"
+                                     Margin="0 0 15 0"/>
+            <TextBlock Grid.Column="1"
+                       Text="Qty"
+                       Style="{StaticResource StandardText}"/>
+            <TextBox Grid.Column="2"
+                     Text="{Binding Quantity}"
+                     Style="{StaticResource FormNumberTextBox}"
+                     Margin="10 0 0 0"
+                     Width="50"/>
+        </Grid>
+        <Button Grid.Row="0"
+                Grid.Column="1"
+                Command="{Binding AddCommand}"
+                Content="Add"
+                Style="{StaticResource OrderLookup.Button.Add}"
+                Margin="10 0 0 10"/>
+        <ListBox Grid.Row="1" Grid.Column="0"
+                 ItemsSource="{Binding BundledSkus}"
+                 SelectedItem="{Binding SelectedSku}"
+                 Style="{StaticResource BlueSteel.ListBox}"/>
+        <Button Grid.Row="1" Grid.Column="1"
+                Command="{Binding RemoveCommand}"
+                Content="Remove"
+                Style="{StaticResource OrderLookup.Button.Delete}"
+                VerticalAlignment="Top"
+                Margin="10 0 0 0"/>
+    </Grid>
+</UserControl>

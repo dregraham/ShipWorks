@@ -86,6 +86,10 @@
     <Compile Include="..\ShipWorks\Properties\AssemblyInfoCommon.cs">
       <Link>Properties\AssemblyInfoCommon.cs</Link>
     </Compile>
+    <Compile Include="BundleEditor\BundleEditorControl.xaml.cs">
+      <DependentUpon>BundleEditorControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="BundleEditor\BundleEditorViewModel.cs" />
     <Compile Include="DesignerProductsMode.cs" />
     <Compile Include="IProductsView.cs" />
     <Compile Include="ProductEditorDialog.xaml.cs">
@@ -130,11 +134,16 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Page Include="BundleEditor\BundleEditorControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="ProductEditorDialog.xaml" />
     <Page Include="ProductsView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
