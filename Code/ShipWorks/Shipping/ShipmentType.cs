@@ -509,6 +509,33 @@ namespace ShipWorks.Shipping
         protected abstract void LoadShipmentDataInternal(ShipmentEntity shipment, bool refreshIfPresent);
 
         /// <summary>
+        /// Set the shipments dimensions
+        /// </summary>
+        private void SetPackageDimensions(ShipmentEntity shipment, ILifetimeScope lifetimeScope)
+        {
+            ICarrierShipmentAdapterFactory shipmentAdapterFactory = lifetimeScope.Resolve<ICarrierShipmentAdapterFactory>();
+            IPackageAdapter package = shipmentAdapterFactory.Get(shipment).GetPackageAdapters().Single();
+
+            if (shipment.Order.OrderItems.Count() == 1)
+            {
+                OrderItemEntity item = shipment.Order.OrderItems.Single();
+
+                if (item.Quantity.IsEquivalentTo(1))
+                {
+                    package.DimsLength = (double) item.Length;
+                    package.DimsWidth = (double) item.Width;
+                    package.DimsHeight = (double) item.Height;
+                }
+            }
+            else
+            {
+                package.DimsLength = 0;
+                package.DimsWidth = 0;
+                package.DimsHeight = 0;
+            }
+        }
+
+        /// <summary>
         /// Apply the configured defaults and profile rule settings to the given shipment
         /// </summary>
         public virtual void ConfigureNewShipment(ShipmentEntity shipment)
@@ -526,20 +553,7 @@ namespace ShipWorks.Shipping
                 IFilterHelper filterHelper = lifetimeScope.Resolve<IFilterHelper>();
                 IShippingProfileService shippingProfileService = lifetimeScope.Resolve<IShippingProfileService>();
 
-                if (shipment.Order.OrderItems.Count() == 1)
-                {
-                    OrderItemEntity item = shipment.Order.OrderItems.Single();
-
-                    if (item.Quantity == 1)
-                    {
-                        ICarrierShipmentAdapterFactory shipmentAdapterFactory = lifetimeScope.Resolve<ICarrierShipmentAdapterFactory>();
-                        IPackageAdapter package = shipmentAdapterFactory.Get(shipment).GetPackageAdapters().Single();
-
-                        package.DimsLength = (double) item.Length;
-                        package.DimsWidth = (double) item.Width;
-                        package.DimsHeight = (double) item.Height;
-                    }
-                }
+                SetPackageDimensions(shipment, lifetimeScope);
 
                 // LoadCustomsItems no longer automatically saves the shipment, so we can call it here
                 customsManager.LoadCustomsItems(shipment, false, x => true);
