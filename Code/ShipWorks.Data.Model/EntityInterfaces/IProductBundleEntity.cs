@@ -42,7 +42,7 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         
         
         IProductEntity Product { get; }
-        IProductVariantEntity ProductVariant { get; }
+        IProductVariantEntity ChildVariant { get; }
         
 
         
@@ -72,7 +72,7 @@ namespace ShipWorks.Data.Model.EntityClasses
     {
         
         IProductEntity IProductBundleEntity.Product => Product;
-        IProductVariantEntity IProductBundleEntity.ProductVariant => ProductVariant;
+        IProductVariantEntity IProductBundleEntity.ChildVariant => ChildVariant;
         
 
         /// <summary>

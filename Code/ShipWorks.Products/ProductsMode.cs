@@ -13,7 +13,9 @@ using GalaSoft.MvvmLight.CommandWpf;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.UI;
+using Interapptive.Shared.Utility;
 using ShipWorks.Core.Common.Threading;
+using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Data.Model.HelperClasses;
@@ -36,6 +38,7 @@ namespace ShipWorks.Products
         private readonly IMessageHelper messageHelper;
         private readonly Func<IProductEditorViewModel> productEditorViewModelFunc;
         private readonly IProductCatalog productCatalog;
+        private readonly ISqlAdapterFactory sqlAdapterFactory;
 
         /// <summary>
         /// Constructor
@@ -44,18 +47,20 @@ namespace ShipWorks.Products
             IProductsCollectionFactory productsCollectionFactory,
             IMessageHelper messageHelper,
             Func<IProductEditorViewModel> productEditorViewModelFunc,
-            IProductCatalog productCatalog)
+            IProductCatalog productCatalog,
+            ISqlAdapterFactory sqlAdapterFactory)
         {
             this.productsCollectionFactory = productsCollectionFactory;
             this.messageHelper = messageHelper;
             this.productEditorViewModelFunc = productEditorViewModelFunc;
             this.view = view;
             this.productCatalog = productCatalog;
-
+            this.sqlAdapterFactory = sqlAdapterFactory;
             CurrentSort = new BasicSortDefinition(ProductVariantAliasFields.Sku.Name, ListSortDirection.Ascending);
 
             RefreshProducts = new RelayCommand(() => RefreshProductsAction());
-            EditProductVariant = new RelayCommand<long>(EditProductVariantAction);
+            EditProductVariantLink = new RelayCommand<long>(EditProductVariantAction);
+            EditProductVariantButton = new RelayCommand(EditProductVariantButtonAction, () => SelectedProductIDs?.Count() == 1);
             SelectedProductsChanged = new RelayCommand<IList>(
                 items => SelectedProductIDs = items?.OfType<DataWrapper<IProductListItemEntity>>().Select(x => x.EntityID).ToList());
 
@@ -96,7 +101,13 @@ namespace ShipWorks.Products
         /// Edit a given product variant
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public ICommand EditProductVariant { get; }
+        public ICommand EditProductVariantLink { get; }
+
+        /// <summary>
+        /// Edit a given product variant
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public ICommand EditProductVariantButton { get; }
 
         /// <summary>
         /// The list of selected products has changed
@@ -190,12 +201,34 @@ namespace ShipWorks.Products
             Products = productsCollectionFactory.Create(ShowInactiveProducts, SearchText, CurrentSort);
         }
 
+
+        /// <summary>
+        /// Edit the selected Product
+        /// </summary>
+        private void EditProductVariantButtonAction() =>
+            EditProductVariantAction(SelectedProductIDs.FirstOrDefault());
+
         /// <summary>
         /// Edit the given product variant
         /// </summary>
         private void EditProductVariantAction(long productVariantID)
         {
-            messageHelper.ShowInformation($"You want to edit {productVariantID}, which will be implemented soon");
+            if (productVariantID == 0)
+            {
+                return;
+            }
+
+            ProductVariantAliasEntity product;
+
+            using (ISqlAdapter adapter = sqlAdapterFactory.Create())
+            {
+                product = productCatalog.FetchProductVariantEntity(adapter, productVariantID)?.Aliases.FirstOrDefault(a => a.IsDefault);
+            }
+
+            if (product != null)
+            {
+                EditProduct(product);
+            }
         }
 
         /// <summary>
@@ -203,8 +236,56 @@ namespace ShipWorks.Products
         /// </summary>
         private void AddProductAction()
         {
-            productEditorViewModelFunc().ShowProductEditor(new ProductVariantAliasEntity());
-            RefreshProductsAction();
+            ProductVariantAliasEntity newProduct = new ProductVariantAliasEntity()
+            {
+                AliasName = string.Empty,
+                IsDefault = true,
+                ProductVariant = new ProductVariantEntity()
+                {
+                    Product = new ProductEntity()
+                    {
+                        IsActive = true,
+                        IsBundle = false,
+                        Name = string.Empty
+                    }
+                }
+            };
+
+            EditProduct(newProduct);
+        }
+
+        /// <summary>
+        /// Edit the given product
+        /// </summary>
+        private void EditProduct(ProductVariantAliasEntity productEntity)
+        {
+            if (productEditorViewModelFunc().ShowProductEditor(productEntity) ?? false)
+            {
+                Result saveResult;
+
+                using (ISqlAdapter adapter = sqlAdapterFactory.Create())
+                {
+                    saveResult = productCatalog.Save(adapter, productEntity.ProductVariant.Product);
+                }
+
+                if (saveResult.Success)
+                {
+                    RefreshProductsAction();
+                }
+                else
+                {
+                    if (saveResult.Message.Contains("Cannot insert duplicate key row in object 'dbo.ProductVariantAlias'"))
+                    {
+                        messageHelper.ShowError($"The SKU \"{productEntity.Sku}\" already exists. Please enter a unique value for the Product SKU.", saveResult.Exception);
+                    }
+                    else
+                    {
+                        messageHelper.ShowError(saveResult.Message);
+                    }
+
+                    EditProduct(productEntity);
+                }
+            }
         }
 
         /// <summary>

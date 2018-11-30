@@ -42,7 +42,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             
             
             Product = (IProductEntity) source.Product?.AsReadOnly(objectMap);
-            ProductVariant = (IProductVariantEntity) source.ProductVariant?.AsReadOnly(objectMap);
+            ChildVariant = (IProductVariantEntity) source.ChildVariant?.AsReadOnly(objectMap);
             
 
             CopyCustomProductBundleData(source);
@@ -71,7 +71,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         
         public IProductEntity Product { get; }
         
-        public IProductVariantEntity ProductVariant { get; }
+        public IProductVariantEntity ChildVariant { get; }
         
         
         /// <summary>

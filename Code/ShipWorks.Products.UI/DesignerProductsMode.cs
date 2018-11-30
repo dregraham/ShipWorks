@@ -81,6 +81,10 @@ namespace ShipWorks.Products.UI
         public bool ShowInactiveProducts { get; set; }
         public string SearchText { get; set; }
 
+        public ICommand EditProductVariantLink => throw new NotImplementedException();
+
+        public ICommand EditProductVariantButton => throw new NotImplementedException();
+
         public void Dispose()
         {
             throw new NotImplementedException();

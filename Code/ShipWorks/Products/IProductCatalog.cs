@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using ShipWorks.Data.Model.EntityClasses;
 using Interapptive.Shared.Threading;
 using ShipWorks.Data.Connection;
+using Interapptive.Shared.Utility;
 
 namespace ShipWorks.Products
 {
@@ -30,5 +31,10 @@ namespace ShipWorks.Products
         /// Fetch a product variant based on ProductVariantID
         /// </summary>
         ProductVariantEntity FetchProductVariantEntity(ISqlAdapter sqlAdapter, long productVariantID);
+
+		/// <summary>
+        /// Save the given product
+        /// </summary>
+        Result Save(ISqlAdapter adapter, ProductEntity product);
     }
 }

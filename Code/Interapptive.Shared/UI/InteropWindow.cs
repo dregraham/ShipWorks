@@ -34,7 +34,6 @@ namespace Interapptive.Shared.UI
             ResizeMode = ResizeMode.NoResize;
             FontFamily = new FontFamily("Tahoma");
             FontSize = 11;
-            Topmost = true;
 
             LoadOwner(owner);
 
@@ -73,8 +72,8 @@ namespace Interapptive.Shared.UI
         /// According to this MSDN article https://blogs.msdn.microsoft.com/wpfsdk/2007/04/03/centering-wpf-windows-with-wpf-and-non-wpf-owner-windows/
         /// "if the owned WPF window has its WindowStartupLocation property set to WindowStartupLocation.CenterOwner,
         /// WPF does not center the owned WPF window over the non-WPF owner window"
-        /// 
-        /// So we have to manually set the startup position of the new wpf window to be centered 
+        ///
+        /// So we have to manually set the startup position of the new wpf window to be centered
         /// </remarks>
         /// <param name="owner">The non WPF owner window</param>
         public void LoadOwner(IWin32Window owner)
