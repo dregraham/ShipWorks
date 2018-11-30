@@ -316,6 +316,16 @@
           <xs:documentation>Typically the stock location of the item in a warehouse.</xs:documentation>
         </xs:annotation>
       </xs:element>
+      <xs:element name="Brand" type="xs:string" minOccurs="0">
+        <xs:annotation>
+          <xs:documentation>The brand of a single one of these items.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="MPN" type="xs:string" minOccurs="0">
+        <xs:annotation>
+          <xs:documentation>The Manufacturer Part Number of a single one of these items.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
       <xs:element name="Attributes" minOccurs="0" >
         <xs:annotation>
           <xs:documentation>Attributes are for product variations or options selected by the customer.  Ex. size, color, edition.</xs:documentation>
