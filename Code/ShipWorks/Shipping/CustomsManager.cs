@@ -122,6 +122,7 @@ namespace ShipWorks.Shipping
 
                     productCatalog.FetchProductVariant(item.SKU).Apply(customsItem);
 
+                    customsItem.UnitValue += item.OrderItemAttributes.Sum(oia => oia.UnitPrice);
                     customsItem.UnitPriceAmount += item.OrderItemAttributes.Sum(oia => oia.UnitPrice);
                     customsValue += ((decimal) customsItem.Quantity * customsItem.UnitValue);
                 }
