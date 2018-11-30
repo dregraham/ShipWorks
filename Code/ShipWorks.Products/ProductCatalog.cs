@@ -129,7 +129,7 @@ namespace ShipWorks.Products
 
             if (productVariant.Product.IsBundle)
             {
-                sqlAdapter.FetchEntityCollection(productVariant.Product.ProductBundle,
+                sqlAdapter.FetchEntityCollection(productVariant.Product.Bundles, 
                     new RelationPredicateBucket(ProductEntity.Relations.ProductBundleEntityUsingProductID));
             }
 
@@ -144,8 +144,7 @@ namespace ShipWorks.Products
             List<IPrefetchPathElement2> prefetchPath = new List<IPrefetchPathElement2>
             {
                 ProductVariantEntity.PrefetchPathProduct,
-                ProductVariantEntity.PrefetchPathProductVariantAlias,
-                ProductVariantEntity.PrefetchPathProductBundle
+                ProductVariantEntity.PrefetchPathAliases
             };
 
             return prefetchPath;
@@ -163,7 +162,7 @@ namespace ShipWorks.Products
                     product.CreatedDate = DateTime.UtcNow;
                 }
 
-                product.ProductVariant.Where(v => v.IsNew)?
+                product.Variants.Where(v => v.IsNew)?
                     .ForEach(v => v.CreatedDate = DateTime.UtcNow);
 
                 adapter.SaveEntity(product);

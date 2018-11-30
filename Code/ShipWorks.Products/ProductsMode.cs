@@ -222,7 +222,7 @@ namespace ShipWorks.Products
 
             using (ISqlAdapter adapter = sqlAdapterFactory.Create())
             {
-                product = productCatalog.FetchProductVariantEntity(adapter, productVariantID)?.ProductVariantAlias.FirstOrDefault(a => a.IsDefault);
+                product = productCatalog.FetchProductVariantEntity(adapter, productVariantID)?.Aliases.FirstOrDefault(a => a.IsDefault);
             }
 
             if (product != null)

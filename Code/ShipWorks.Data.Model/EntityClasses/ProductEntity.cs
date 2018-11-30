@@ -32,8 +32,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 		// __LLBLGENPRO_USER_CODE_REGION_END	
 	{
 		#region Class Member Declarations
-		private EntityCollection<ProductBundleEntity> _productBundle;
-		private EntityCollection<ProductVariantEntity> _productVariant;
+		private EntityCollection<ProductBundleEntity> _bundles;
+		private EntityCollection<ProductVariantEntity> _variants;
 
 		// __LLBLGENPRO_USER_CODE_REGION_START PrivateMembers
 		// __LLBLGENPRO_USER_CODE_REGION_END
@@ -46,10 +46,10 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <summary>All names of fields mapped onto a relation. Usable for in-memory filtering</summary>
 		public static partial class MemberNames
 		{
-			/// <summary>Member name ProductBundle</summary>
-			public static readonly string ProductBundle = "ProductBundle";
-			/// <summary>Member name ProductVariant</summary>
-			public static readonly string ProductVariant = "ProductVariant";
+			/// <summary>Member name Bundles</summary>
+			public static readonly string Bundles = "Bundles";
+			/// <summary>Member name Variants</summary>
+			public static readonly string Variants = "Variants";
 		}
 		#endregion
 		
@@ -107,8 +107,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			if(SerializationHelper.Optimization != SerializationOptimization.Fast) 
 			{
-				_productBundle = (EntityCollection<ProductBundleEntity>)info.GetValue("_productBundle", typeof(EntityCollection<ProductBundleEntity>));
-				_productVariant = (EntityCollection<ProductVariantEntity>)info.GetValue("_productVariant", typeof(EntityCollection<ProductVariantEntity>));
+				_bundles = (EntityCollection<ProductBundleEntity>)info.GetValue("_bundles", typeof(EntityCollection<ProductBundleEntity>));
+				_variants = (EntityCollection<ProductVariantEntity>)info.GetValue("_variants", typeof(EntityCollection<ProductVariantEntity>));
 				this.FixupDeserialization(FieldInfoProviderSingleton.GetInstance());
 			}
 			// __LLBLGENPRO_USER_CODE_REGION_START DeserializationConstructor
@@ -124,11 +124,11 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			switch(propertyName)
 			{
-				case "ProductBundle":
-					this.ProductBundle.Add((ProductBundleEntity)entity);
+				case "Bundles":
+					this.Bundles.Add((ProductBundleEntity)entity);
 					break;
-				case "ProductVariant":
-					this.ProductVariant.Add((ProductVariantEntity)entity);
+				case "Variants":
+					this.Variants.Add((ProductVariantEntity)entity);
 					break;
 				default:
 					this.OnSetRelatedEntityProperty(propertyName, entity);
@@ -152,10 +152,10 @@ namespace ShipWorks.Data.Model.EntityClasses
 			RelationCollection toReturn = new RelationCollection();
 			switch(fieldName)
 			{
-				case "ProductBundle":
+				case "Bundles":
 					toReturn.Add(Relations.ProductBundleEntityUsingProductID);
 					break;
-				case "ProductVariant":
+				case "Variants":
 					toReturn.Add(Relations.ProductVariantEntityUsingProductID);
 					break;
 				default:
@@ -186,11 +186,11 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			switch(fieldName)
 			{
-				case "ProductBundle":
-					this.ProductBundle.Add((ProductBundleEntity)relatedEntity);
+				case "Bundles":
+					this.Bundles.Add((ProductBundleEntity)relatedEntity);
 					break;
-				case "ProductVariant":
-					this.ProductVariant.Add((ProductVariantEntity)relatedEntity);
+				case "Variants":
+					this.Variants.Add((ProductVariantEntity)relatedEntity);
 					break;
 				default:
 					break;
@@ -205,11 +205,11 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			switch(fieldName)
 			{
-				case "ProductBundle":
-					this.PerformRelatedEntityRemoval(this.ProductBundle, relatedEntity, signalRelatedEntityManyToOne);
+				case "Bundles":
+					this.PerformRelatedEntityRemoval(this.Bundles, relatedEntity, signalRelatedEntityManyToOne);
 					break;
-				case "ProductVariant":
-					this.PerformRelatedEntityRemoval(this.ProductVariant, relatedEntity, signalRelatedEntityManyToOne);
+				case "Variants":
+					this.PerformRelatedEntityRemoval(this.Variants, relatedEntity, signalRelatedEntityManyToOne);
 					break;
 				default:
 					break;
@@ -238,8 +238,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 		protected override List<IEntityCollection2> GetMemberEntityCollections()
 		{
 			List<IEntityCollection2> toReturn = new List<IEntityCollection2>();
-			toReturn.Add(this.ProductBundle);
-			toReturn.Add(this.ProductVariant);
+			toReturn.Add(this.Bundles);
+			toReturn.Add(this.Variants);
 			return toReturn;
 		}
 
@@ -251,8 +251,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			if (SerializationHelper.Optimization != SerializationOptimization.Fast) 
 			{
-				info.AddValue("_productBundle", ((_productBundle!=null) && (_productBundle.Count>0) && !this.MarkedForDeletion)?_productBundle:null);
-				info.AddValue("_productVariant", ((_productVariant!=null) && (_productVariant.Count>0) && !this.MarkedForDeletion)?_productVariant:null);
+				info.AddValue("_bundles", ((_bundles!=null) && (_bundles.Count>0) && !this.MarkedForDeletion)?_bundles:null);
+				info.AddValue("_variants", ((_variants!=null) && (_variants.Count>0) && !this.MarkedForDeletion)?_variants:null);
 			}
 			// __LLBLGENPRO_USER_CODE_REGION_START GetObjectInfo
 			// __LLBLGENPRO_USER_CODE_REGION_END
@@ -270,7 +270,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 		/// <summary> Creates a new IRelationPredicateBucket object which contains the predicate expression and relation collection to fetch the related entities of type 'ProductBundle' to this entity.</summary>
 		/// <returns></returns>
-		public virtual IRelationPredicateBucket GetRelationInfoProductBundle()
+		public virtual IRelationPredicateBucket GetRelationInfoBundles()
 		{
 			IRelationPredicateBucket bucket = new RelationPredicateBucket();
 			bucket.PredicateExpression.Add(new FieldCompareValuePredicate(ProductBundleFields.ProductID, null, ComparisonOperator.Equal, this.ProductID));
@@ -279,7 +279,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 		/// <summary> Creates a new IRelationPredicateBucket object which contains the predicate expression and relation collection to fetch the related entities of type 'ProductVariant' to this entity.</summary>
 		/// <returns></returns>
-		public virtual IRelationPredicateBucket GetRelationInfoProductVariant()
+		public virtual IRelationPredicateBucket GetRelationInfoVariants()
 		{
 			IRelationPredicateBucket bucket = new RelationPredicateBucket();
 			bucket.PredicateExpression.Add(new FieldCompareValuePredicate(ProductVariantFields.ProductID, null, ComparisonOperator.Equal, this.ProductID));
@@ -298,8 +298,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 		protected override void AddToMemberEntityCollectionsQueue(Queue<IEntityCollection2> collectionsQueue) 
 		{
 			base.AddToMemberEntityCollectionsQueue(collectionsQueue);
-			collectionsQueue.Enqueue(this._productBundle);
-			collectionsQueue.Enqueue(this._productVariant);
+			collectionsQueue.Enqueue(this._bundles);
+			collectionsQueue.Enqueue(this._variants);
 		}
 		
 		/// <summary>Gets the member collections queue from the queue (base first)</summary>
@@ -307,8 +307,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 		protected override void GetFromMemberEntityCollectionsQueue(Queue<IEntityCollection2> collectionsQueue)
 		{
 			base.GetFromMemberEntityCollectionsQueue(collectionsQueue);
-			this._productBundle = (EntityCollection<ProductBundleEntity>) collectionsQueue.Dequeue();
-			this._productVariant = (EntityCollection<ProductVariantEntity>) collectionsQueue.Dequeue();
+			this._bundles = (EntityCollection<ProductBundleEntity>) collectionsQueue.Dequeue();
+			this._variants = (EntityCollection<ProductVariantEntity>) collectionsQueue.Dequeue();
 
 		}
 		
@@ -317,8 +317,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 		protected override bool HasPopulatedMemberEntityCollections()
 		{
 			bool toReturn = false;
-			toReturn |=(this._productBundle != null);
-			toReturn |=(this._productVariant != null);
+			toReturn |=(this._bundles != null);
+			toReturn |=(this._variants != null);
 			return toReturn ? true : base.HasPopulatedMemberEntityCollections();
 		}
 		
@@ -337,8 +337,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 		protected override Dictionary<string, object> GetRelatedData()
 		{
 			Dictionary<string, object> toReturn = new Dictionary<string, object>();
-			toReturn.Add("ProductBundle", _productBundle);
-			toReturn.Add("ProductVariant", _productVariant);
+			toReturn.Add("Bundles", _bundles);
+			toReturn.Add("Variants", _variants);
 			return toReturn;
 		}
 
@@ -406,16 +406,16 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 		/// <summary> Creates a new PrefetchPathElement2 object which contains all the information to prefetch the related entities of type 'ProductBundle' for this entity.</summary>
 		/// <returns>Ready to use IPrefetchPathElement2 implementation.</returns>
-		public static IPrefetchPathElement2 PrefetchPathProductBundle
+		public static IPrefetchPathElement2 PrefetchPathBundles
 		{
-			get	{ return new PrefetchPathElement2( new EntityCollection<ProductBundleEntity>(EntityFactoryCache2.GetEntityFactory(typeof(ProductBundleEntityFactory))), (IEntityRelation)GetRelationsForField("ProductBundle")[0], (int)ShipWorks.Data.Model.EntityType.ProductEntity, (int)ShipWorks.Data.Model.EntityType.ProductBundleEntity, 0, null, null, null, null, "ProductBundle", SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToMany);	}
+			get	{ return new PrefetchPathElement2( new EntityCollection<ProductBundleEntity>(EntityFactoryCache2.GetEntityFactory(typeof(ProductBundleEntityFactory))), (IEntityRelation)GetRelationsForField("Bundles")[0], (int)ShipWorks.Data.Model.EntityType.ProductEntity, (int)ShipWorks.Data.Model.EntityType.ProductBundleEntity, 0, null, null, null, null, "Bundles", SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToMany);	}
 		}
 
 		/// <summary> Creates a new PrefetchPathElement2 object which contains all the information to prefetch the related entities of type 'ProductVariant' for this entity.</summary>
 		/// <returns>Ready to use IPrefetchPathElement2 implementation.</returns>
-		public static IPrefetchPathElement2 PrefetchPathProductVariant
+		public static IPrefetchPathElement2 PrefetchPathVariants
 		{
-			get	{ return new PrefetchPathElement2( new EntityCollection<ProductVariantEntity>(EntityFactoryCache2.GetEntityFactory(typeof(ProductVariantEntityFactory))), (IEntityRelation)GetRelationsForField("ProductVariant")[0], (int)ShipWorks.Data.Model.EntityType.ProductEntity, (int)ShipWorks.Data.Model.EntityType.ProductVariantEntity, 0, null, null, null, null, "ProductVariant", SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToMany);	}
+			get	{ return new PrefetchPathElement2( new EntityCollection<ProductVariantEntity>(EntityFactoryCache2.GetEntityFactory(typeof(ProductVariantEntityFactory))), (IEntityRelation)GetRelationsForField("Variants")[0], (int)ShipWorks.Data.Model.EntityType.ProductEntity, (int)ShipWorks.Data.Model.EntityType.ProductVariantEntity, 0, null, null, null, null, "Variants", SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToMany);	}
 		}
 
 
@@ -494,16 +494,16 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 		/// <summary> Gets the EntityCollection with the related entities of type 'ProductBundleEntity' which are related to this entity via a relation of type '1:n'. If the EntityCollection hasn't been fetched yet, the collection returned will be empty.<br/><br/></summary>
 		[TypeContainedAttribute(typeof(ProductBundleEntity))]
-		public virtual EntityCollection<ProductBundleEntity> ProductBundle
+		public virtual EntityCollection<ProductBundleEntity> Bundles
 		{
-			get { return GetOrCreateEntityCollection<ProductBundleEntity, ProductBundleEntityFactory>("Product", true, false, ref _productBundle);	}
+			get { return GetOrCreateEntityCollection<ProductBundleEntity, ProductBundleEntityFactory>("Product", true, false, ref _bundles);	}
 		}
 
 		/// <summary> Gets the EntityCollection with the related entities of type 'ProductVariantEntity' which are related to this entity via a relation of type '1:n'. If the EntityCollection hasn't been fetched yet, the collection returned will be empty.<br/><br/></summary>
 		[TypeContainedAttribute(typeof(ProductVariantEntity))]
-		public virtual EntityCollection<ProductVariantEntity> ProductVariant
+		public virtual EntityCollection<ProductVariantEntity> Variants
 		{
-			get { return GetOrCreateEntityCollection<ProductVariantEntity, ProductVariantEntityFactory>("Product", true, false, ref _productVariant);	}
+			get { return GetOrCreateEntityCollection<ProductVariantEntity, ProductVariantEntityFactory>("Product", true, false, ref _variants);	}
 		}
 	
 		/// <summary> Gets the type of the hierarchy this entity is in. </summary>
