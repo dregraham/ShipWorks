@@ -22,35 +22,6 @@ namespace ShipWorks.OrderLookup.Tests
         }
 
         [Fact]
-        public void ShowProductEditor_SetsProductVarient_WhenProductVariantIsNull()
-        {
-            var product = new ProductVariantAliasEntity()
-            {
-                ProductVariant = null
-            };
-
-            testObject.ShowProductEditor(product);
-
-            Assert.NotNull(product.ProductVariant);
-        }
-
-        [Fact]
-        public void ShowProductEditor_SetsProductVarientProduct_WhenProductVariantProductIsNull()
-        {
-            var product = new ProductVariantAliasEntity()
-            {
-                ProductVariant = new ProductVariantEntity()
-                {
-                    Product = null
-                }
-            };
-
-            testObject.ShowProductEditor(product);
-
-            Assert.NotNull(product.ProductVariant.Product);
-        }
-
-        [Fact]
         public void ShowProductEditor_DelegatesToMessageHelperShowDialog()
         {
             var product = new ProductVariantAliasEntity()
