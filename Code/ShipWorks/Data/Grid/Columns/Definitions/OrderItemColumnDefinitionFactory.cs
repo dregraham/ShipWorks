@@ -97,6 +97,14 @@ namespace ShipWorks.Data.Grid.Columns.Definitions
                              new GridColumnFunctionValueProvider(FormatDimensions),
                              new GridColumnSortProvider(OrderItemFields.Length)),
 
+                         new GridColumnDefinition("{0B860209-2206-4DE6-BD3B-FF63656F5EA5}", false,
+                            new GridTextDisplayType(), "Brand", "Brandname",
+                            OrderItemFields.Brand),
+
+                         new GridColumnDefinition("{40E061A2-4A17-436E-9C7E-04DEC418F7D7}", false,
+                            new GridTextDisplayType(), "MPN", "MPN",
+                            OrderItemFields.MPN),   
+
                         #region Infopia
 
                         new GridColumnDefinition("{E0286DBF-5663-46cc-A368-2C9898360B03}",

@@ -793,6 +793,12 @@ namespace ShipWorks.Data.Grid.Columns.Definitions
                     {
                         StoreTypeCode = StoreTypeCode.Overstock
                     },
+
+                    new GridColumnDefinition("{5C7C3411-6B22-4DB5-BFCC-5131AFABD3DC}", 
+                        new GridTextDisplayType(), "Channel Order ID", "ABC123", OrderFields.ChannelOrderID),
+
+                    new GridColumnDefinition("{13F8DD60-0104-4575-9B9C-E3DCE4573FB0}",
+                        new GridTextDisplayType(), "Ship by date", "ABC123", OrderFields.ShipByDate)
                 };
 
             return definitions;
