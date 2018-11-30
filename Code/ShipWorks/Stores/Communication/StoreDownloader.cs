@@ -762,7 +762,7 @@ namespace ShipWorks.Stores.Communication
             SetAddressValidationStatus(order, true, "Ship", adapter);
             SetAddressValidationStatus(order, true, "Bill", adapter);
 
-            UpdateItemsFromProductCatalog(order);
+            UpdateItemsFromProductCatalog(adapter, order);
 
             log.Info($"StoreDownloader.SaveNewOrder waiting for getCustomerTask");
             // Wait for the customer to be found or created
@@ -778,13 +778,13 @@ namespace ShipWorks.Stores.Communication
         /// <summary>
         /// Loop through each item. If there is a matching active product in the catalog, update the dimensions
         /// </summary>
-        private void UpdateItemsFromProductCatalog(OrderEntity order)
+        private void UpdateItemsFromProductCatalog(ISqlAdapter adapter, OrderEntity order)
         {
             using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
                 IProductCatalog productCatalog = lifetimeScope.Resolve<IProductCatalog>();
 
-                order.OrderItems.ForEach(item => productCatalog.FetchProductVariant(item.SKU).Apply(item));               
+                order.OrderItems.ForEach(item => productCatalog.FetchProductVariant(adapter, item.SKU).Apply(item));               
             }
         }
 

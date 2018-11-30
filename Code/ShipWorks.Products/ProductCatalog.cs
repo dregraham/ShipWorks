@@ -12,7 +12,6 @@ using SD.LLBLGen.Pro.ORMSupportClasses;
 using SD.LLBLGen.Pro.QuerySpec;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Data.Model.FactoryClasses;
 using ShipWorks.Data.Model.HelperClasses;
 
@@ -24,16 +23,14 @@ namespace ShipWorks.Products
     [Component]
     public class ProductCatalog : IProductCatalog
     {
-        private readonly ISqlAdapterFactory sqlAdapterFactory;
         private readonly ISqlSession sqlSession;
         private readonly ILog productVariantLog;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public ProductCatalog(ISqlAdapterFactory sqlAdapterFactory, Func<Type, ILog> logFactory, ISqlSession sqlSession)
+        public ProductCatalog(ISqlSession sqlSession, Func<Type, ILog> logFactory)
         {
-            this.sqlAdapterFactory = sqlAdapterFactory;
             productVariantLog = logFactory(typeof(ProductVariant));
             this.sqlSession = sqlSession;
         }
@@ -93,35 +90,22 @@ namespace ShipWorks.Products
         /// <summary>
         /// Fetch a Product from the database
         /// </summary>
-        public IProductVariant FetchProductVariant(string sku) => new ProductVariant(sku, FetchProductVariantReadOnly(sku), productVariantLog);
+        public IProductVariant FetchProductVariant(ISqlAdapter sqlAdapter, string sku)
+        {
+            return new ProductVariant(sku, FetchProductVariantEntity(sqlAdapter, sku)?.AsReadOnly(), productVariantLog);
+        }
+
+        /// <summary>
+        /// Fetch a product variant based on ProductVariantID
+        /// </summary>
+        public ProductVariantEntity FetchProductVariantEntity(ISqlAdapter sqlAdapter, long productVariantID) =>
+            FetchFirst(ProductVariantFields.ProductVariantID == productVariantID, sqlAdapter, ProductPrefetchPath.Value);
 
         /// <summary>
         /// Fetch a product variant based on SKU
         /// </summary>
-        private IProductVariantEntity FetchProductVariantReadOnly(string sku)
-        {
-            ProductVariantEntity productVariant;
-
-            using (ISqlAdapter sqlAdapter = sqlAdapterFactory.Create())
-            {
-                productVariant = Load(sku, sqlAdapter, ProductPrefetchPath.Value);
-            }
-
-            return productVariant?.AsReadOnly();
-        }
-
-        /// <summary>
-        /// Get product with the data specified in the prefetch path loaded
-        /// </summary>
-        /// <remarks>
-        /// This method bypasses the entity cache
-        /// </remarks>
-        private ProductVariantEntity Load(string sku, ISqlAdapter sqlAdapter, IEnumerable<IPrefetchPathElement2> prefetchPaths)
-        {
-            return FetchFirst(ProductVariantAliasFields.Sku == sku.Trim(),
-                sqlAdapter,
-                prefetchPaths);
-        }
+        public ProductVariantEntity FetchProductVariantEntity(ISqlAdapter sqlAdapter, string sku) =>
+            FetchFirst(ProductVariantAliasFields.Sku == sku.Trim(), sqlAdapter, ProductPrefetchPath.Value);
 
         /// <summary>
         /// Get the first product in the specified predicate
@@ -140,7 +124,15 @@ namespace ShipWorks.Products
                 query = query.WithPath(path);
             }
 
-            return sqlAdapter.FetchFirst(query);
+            ProductVariantEntity productVariant = sqlAdapter.FetchFirst(query);
+
+            if (productVariant.Product.IsBundle)
+            {
+                sqlAdapter.FetchEntityCollection(productVariant.Product.ProductBundle, 
+                    new RelationPredicateBucket(ProductEntity.Relations.ProductBundleEntityUsingProductID));
+            }
+
+            return productVariant;
         }
 
         /// <summary>
@@ -148,9 +140,12 @@ namespace ShipWorks.Products
         /// </summary>
         private static readonly Lazy<IEnumerable<IPrefetchPathElement2>> ProductPrefetchPath = new Lazy<IEnumerable<IPrefetchPathElement2>>(() =>
         {
-            List<IPrefetchPathElement2> prefetchPath = new List<IPrefetchPathElement2>();
-
-            prefetchPath.Add(ProductVariantEntity.PrefetchPathProductVariantAlias);
+            List<IPrefetchPathElement2> prefetchPath = new List<IPrefetchPathElement2>
+            {
+                ProductVariantEntity.PrefetchPathProduct,
+                ProductVariantEntity.PrefetchPathProductVariantAlias,
+                ProductVariantEntity.PrefetchPathProductBundle
+            };
 
             return prefetchPath;
         });
