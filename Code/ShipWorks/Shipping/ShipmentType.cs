@@ -513,19 +513,25 @@ namespace ShipWorks.Shipping
         /// </summary>
         private void SetPackageDimensions(ShipmentEntity shipment, ILifetimeScope lifetimeScope)
         {
+            ICarrierShipmentAdapterFactory shipmentAdapterFactory = lifetimeScope.Resolve<ICarrierShipmentAdapterFactory>();
+            IPackageAdapter package = shipmentAdapterFactory.Get(shipment).GetPackageAdapters().Single();
+
             if (shipment.Order.OrderItems.Count() == 1)
             {
                 OrderItemEntity item = shipment.Order.OrderItems.Single();
 
-                if (item.Quantity == 1)
+                if (item.Quantity.IsEquivalentTo(1))
                 {
-                    ICarrierShipmentAdapterFactory shipmentAdapterFactory = lifetimeScope.Resolve<ICarrierShipmentAdapterFactory>();
-                    IPackageAdapter package = shipmentAdapterFactory.Get(shipment).GetPackageAdapters().Single();
-
                     package.DimsLength = (double) item.Length;
                     package.DimsWidth = (double) item.Width;
                     package.DimsHeight = (double) item.Height;
                 }
+            }
+            else
+            {
+                package.DimsLength = 0;
+                package.DimsWidth = 0;
+                package.DimsHeight = 0;
             }
         }
 
