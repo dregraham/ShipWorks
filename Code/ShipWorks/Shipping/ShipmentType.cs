@@ -526,6 +526,21 @@ namespace ShipWorks.Shipping
                 IFilterHelper filterHelper = lifetimeScope.Resolve<IFilterHelper>();
                 IShippingProfileService shippingProfileService = lifetimeScope.Resolve<IShippingProfileService>();
 
+                if (shipment.Order.OrderItems.Count() == 1)
+                {
+                    OrderItemEntity item = shipment.Order.OrderItems.Single();
+
+                    if (item.Quantity == 1)
+                    {
+                        ICarrierShipmentAdapterFactory shipmentAdapterFactory = lifetimeScope.Resolve<ICarrierShipmentAdapterFactory>();
+                        IPackageAdapter package = shipmentAdapterFactory.Get(shipment).GetPackageAdapters().Single();
+
+                        package.DimsLength = (double) item.Length;
+                        package.DimsWidth = (double) item.Width;
+                        package.DimsHeight = (double) item.Height;
+                    }
+                }
+
                 // LoadCustomsItems no longer automatically saves the shipment, so we can call it here
                 customsManager.LoadCustomsItems(shipment, false, x => true);
 

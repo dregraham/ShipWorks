@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Linq;
+using Autofac;
 using Interapptive.Shared.Utility;
+using ShipWorks.ApplicationCore;
 using ShipWorks.Data;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.Custom;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Products;
 using ShipWorks.Stores.Content;
 
 namespace ShipWorks.Shipping
@@ -97,27 +100,31 @@ namespace ShipWorks.Shipping
 
             decimal customsValue = 0m;
 
-            // By default create one content item representing each item in the order
-            foreach (OrderItemEntity item in shipment.Order.OrderItems)
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
-                decimal attributePrice = item.OrderItemAttributes.Sum(oia => oia.UnitPrice);
+                IProductCatalog productCatalog = lifetimeScope.Resolve<IProductCatalog>();
 
-                decimal priceAndValue = item.UnitPrice + attributePrice;
-
-                ShipmentCustomsItemEntity customsItem = new ShipmentCustomsItemEntity
+                // By default create one content item representing each item in the order
+                foreach (OrderItemEntity item in shipment.Order.OrderItems)
                 {
-                    Shipment = shipment,
-                    Description = item.Name,
-                    Quantity = item.Quantity,
-                    Weight = item.Weight,
-                    UnitValue = priceAndValue,
-                    CountryOfOrigin = "US",
-                    HarmonizedCode = item.HarmonizedCode,
-                    NumberOfPieces = 0,
-                    UnitPriceAmount = priceAndValue
-                };
+                    ShipmentCustomsItemEntity customsItem = new ShipmentCustomsItemEntity
+                    {
+                        Shipment = shipment,
+                        Description = item.Name,
+                        Quantity = item.Quantity,
+                        Weight = item.Weight,
+                        UnitValue = item.UnitPrice,
+                        CountryOfOrigin = "US",
+                        HarmonizedCode = item.HarmonizedCode,
+                        NumberOfPieces = 0,
+                        UnitPriceAmount = item.UnitPrice
+                    };
 
-                customsValue += ((decimal) customsItem.Quantity * customsItem.UnitValue);
+                    productCatalog.FetchProductVariant(item.SKU).Apply(customsItem);
+
+                    customsItem.UnitPriceAmount += item.OrderItemAttributes.Sum(oia => oia.UnitPrice);
+                    customsValue += ((decimal) customsItem.Quantity * customsItem.UnitValue);
+                }
             }
 
             shipment.CustomsValue = customsValue;

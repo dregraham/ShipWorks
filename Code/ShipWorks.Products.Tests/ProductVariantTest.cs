@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Autofac;
 using Autofac.Extras.Moq;
 using ShipWorks.Data.Model.EntityClasses;
@@ -17,18 +14,17 @@ namespace ShipWorks.Products.Tests
     public class ProductVariantTest : IDisposable
     {
         private readonly AutoMock mock;
-        
+
         public ProductVariantTest()
         {
             mock = AutoMockExtensions.GetLooseThatReturnsMocks();
-                        
         }
 
         [Fact]
         public void CanWriteXml_IsFalse_WhenVariantIsNull()
         {
             var testObject = mock.Create<ProductVariant>(
-                TypedParameter.From("sku"), 
+                TypedParameter.From("sku"),
                 TypedParameter.From<IProductVariantEntity>(null));
 
             Assert.False(testObject.CanWriteXml);
@@ -58,8 +54,17 @@ namespace ShipWorks.Products.Tests
                 new object[] { null, 12 }
            };
 
+        [Obfuscation(Exclude = true)]
+        public static IEnumerable<object[]> applyDecimalData =>
+           new List<object[]>
+           {
+                new object[] { (decimal?) 1, 2, 1 },
+                new object[] { null, 2, 2 },
+                new object[] { (decimal?) 0, 2, 2 }
+           };
+
         [Theory]
-        [MemberData(nameof(applyDimData))]        
+        [MemberData(nameof(applyDimData))]
         public void Apply_AppliesWeight(decimal? productWeight, double expectedWeight)
         {
             var testObject = mock.Create<ProductVariant>(
@@ -118,6 +123,126 @@ namespace ShipWorks.Products.Tests
             Assert.Equal(expectedDim, item.Height);
         }
 
+        [Theory]
+        [InlineData("", "abcd", "abcd")]
+        [InlineData("abcd", "defg", "abcd")]
+        [InlineData("abcd", "", "abcd")]
+        [InlineData(null, "abcd", "abcd")]
+        [InlineData(null, "", "")]
+        public void Apply_AppliesName(string productName, string customsDescription, string expectedName)
+        {
+            var testObject = mock.Create<ProductVariant>(
+                TypedParameter.From("sku"),
+                TypedParameter.From<IProductVariantEntity>(new ProductVariantEntity() { IsActive = true, Name = productName }));
+
+            var item = new ShipmentCustomsItemEntity()
+            {
+                Description = customsDescription
+            };
+
+            testObject.Apply(item);
+
+            Assert.Equal(expectedName, item.Description);
+        }
+
+        [Theory]
+        [InlineData("", "abcd", "abcd")]
+        [InlineData("abcd", "defg", "abcd")]
+        [InlineData("abcd", "", "abcd")]
+        [InlineData(null, "abcd", "abcd")]
+        [InlineData(null, "", "")]
+        public void Apply_AppliesHarmonizedCode(string productHarmonizedCode, string customsHarmonizedCode, string expectedHarmonizedCode)
+        {
+            var testObject = mock.Create<ProductVariant>(
+                TypedParameter.From("sku"),
+                TypedParameter.From<IProductVariantEntity>(new ProductVariantEntity() { IsActive = true, HarmonizedCode = productHarmonizedCode }));
+
+            var item = new ShipmentCustomsItemEntity()
+            {
+                HarmonizedCode = customsHarmonizedCode
+            };
+
+            testObject.Apply(item);
+
+            Assert.Equal(expectedHarmonizedCode, item.HarmonizedCode);
+        }
+
+        [Theory]
+        [InlineData("", "abcd", "abcd")]
+        [InlineData("abcd", "defg", "abcd")]
+        [InlineData("abcd", "", "abcd")]
+        [InlineData(null, "abcd", "abcd")]
+        [InlineData(null, "", "")]
+        public void Apply_AppliesCountryOfOrigin(string productCountry, string customsCountry, string expectedCountry)
+        {
+            var testObject = mock.Create<ProductVariant>(
+                TypedParameter.From("sku"),
+                TypedParameter.From<IProductVariantEntity>(new ProductVariantEntity() { IsActive = true, CountryOfOrigin = productCountry }));
+
+            var item = new ShipmentCustomsItemEntity()
+            {
+                CountryOfOrigin = customsCountry
+            };
+
+            testObject.Apply(item);
+
+            Assert.Equal(expectedCountry, item.CountryOfOrigin);
+        }
+
+        [Theory]
+        [MemberData(nameof(applyDecimalData))]
+        public void Apply_AppliesCustomsWeight(decimal? productWeight, double customsWeight, double expectedWeight)
+        {
+            var testObject = mock.Create<ProductVariant>(
+                TypedParameter.From("sku"),
+                TypedParameter.From<IProductVariantEntity>(new ProductVariantEntity() { IsActive = true, Weight = productWeight}));
+
+            var item = new ShipmentCustomsItemEntity()
+            {
+                Weight = customsWeight
+            };
+
+            testObject.Apply(item);
+
+            Assert.Equal(expectedWeight, item.Weight);
+        }
+
+        [Theory]
+        [MemberData(nameof(applyDecimalData))]
+        public void Apply_AppliesCustomsUnitValue(decimal? productUnitValue, decimal customsUnitValue, decimal expectedUnitValue)
+        {
+            var testObject = mock.Create<ProductVariant>(
+                TypedParameter.From("sku"),
+                TypedParameter.From<IProductVariantEntity>(new ProductVariantEntity() { IsActive = true, DeclaredValue = productUnitValue }));
+
+            var item = new ShipmentCustomsItemEntity()
+            {
+                UnitValue = customsUnitValue
+            };
+
+            testObject.Apply(item);
+
+            Assert.Equal(expectedUnitValue, item.UnitValue);
+        }
+
+
+        [Theory]
+        [MemberData(nameof(applyDecimalData))]
+        public void Apply_AppliesCustomsUnitPriceAmount(decimal? productUnitPriceAmount, decimal customsUnitPriceAmount, decimal expectedUnitPriceAmount)
+        {
+            var testObject = mock.Create<ProductVariant>(
+                TypedParameter.From("sku"),
+                TypedParameter.From<IProductVariantEntity>(new ProductVariantEntity() { IsActive = true, DeclaredValue = productUnitPriceAmount }));
+
+            var item = new ShipmentCustomsItemEntity()
+            {
+                UnitPriceAmount = customsUnitPriceAmount
+            };
+
+            testObject.Apply(item);
+
+            Assert.Equal(expectedUnitPriceAmount, item.UnitPriceAmount);
+        }
         public void Dispose()
         {
             mock.Dispose();

@@ -27,5 +27,10 @@ namespace ShipWorks.Products
         /// Apply product data to an order item
         /// </summary>
         void Apply(OrderItemEntity item);
+
+        /// <summary>
+        /// Apply the product data to the customs item
+        /// </summary>
+        void Apply(ShipmentCustomsItemEntity customsItem);
     }
 }

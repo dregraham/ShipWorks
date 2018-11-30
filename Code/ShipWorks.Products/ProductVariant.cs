@@ -63,18 +63,49 @@ namespace ShipWorks.Products
             log.InfoFormat("Attempting to apply product dimensions to item {0} for sku {1}",
                 item.OrderItemID, sku);
 
-            ApplyDim(variant.Weight, () => item.Weight = (double) variant.Weight.Value);
-            ApplyDim(variant.Length, () => item.Length = variant.Length.Value);
-            ApplyDim(variant.Width, () => item.Width = variant.Width.Value);
-            ApplyDim(variant.Height, () => item.Height = variant.Height.Value);
+            ApplyValue(variant.Weight, () => item.Weight = (double) variant.Weight.Value);
+            ApplyValue(variant.Length, () => item.Length = variant.Length.Value);
+            ApplyValue(variant.Width, () => item.Width = variant.Width.Value);
+            ApplyValue(variant.Height, () => item.Height = variant.Height.Value);
         }
 
         /// <summary>
-        /// Apply a dimension when appropriate 
+        /// Apply the product data to the customs item
         /// </summary>
-        private void ApplyDim(decimal? toApply, Action apply)
+        public void Apply(ShipmentCustomsItemEntity customsItem)
+        {
+            if (variant == null || !variant.IsActive)
+            {
+                return;
+            }
+
+            log.InfoFormat($"Attempting to apply product information to customs item for sku {sku}");
+
+            ApplyValue(variant.Name, () => customsItem.Description = variant.Name);
+            ApplyValue(variant.Weight, () => customsItem.Weight = (double) variant.Weight);
+            ApplyValue(variant.DeclaredValue, () => customsItem.UnitValue = variant.DeclaredValue.Value);
+            ApplyValue(variant.DeclaredValue, () => customsItem.UnitPriceAmount = variant.DeclaredValue.Value);
+            ApplyValue(variant.CountryOfOrigin, () => customsItem.CountryOfOrigin = variant.CountryOfOrigin);
+            ApplyValue(variant.HarmonizedCode, () => customsItem.HarmonizedCode = variant.HarmonizedCode);
+        }
+
+        /// <summary>
+        /// Apply a decimal value when appropriate
+        /// </summary>
+        private void ApplyValue(decimal? toApply, Action apply)
         {
             if (toApply.HasValue && toApply.Value > 0)
+            {
+                apply();
+            }
+        }
+
+        /// <summary>
+        /// Apply a string value when appropriate
+        /// </summary>
+        private void ApplyValue(string toApply, Action apply)
+        {
+            if (!string.IsNullOrWhiteSpace(toApply))
             {
                 apply();
             }

@@ -57,9 +57,22 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
 
             ApplyProfileValue(packageProfile.DimsProfileID, onTracShipment, OnTracShipmentFields.DimsProfileID);
             ApplyProfileValue(packageProfile.DimsWeight, onTracShipment, OnTracShipmentFields.DimsWeight);
-            ApplyProfileValue(packageProfile.DimsLength, onTracShipment, OnTracShipmentFields.DimsLength);
-            ApplyProfileValue(packageProfile.DimsHeight, onTracShipment, OnTracShipmentFields.DimsHeight);
-            ApplyProfileValue(packageProfile.DimsWidth, onTracShipment, OnTracShipmentFields.DimsWidth);
+
+            if (packageProfile.DimsLength.GetValueOrDefault() > 0)
+            {
+                ApplyProfileValue(packageProfile.DimsLength, onTracShipment, OnTracShipmentFields.DimsLength);
+            }
+
+            if (packageProfile.DimsWidth.GetValueOrDefault() > 0)
+            {
+                ApplyProfileValue(packageProfile.DimsWidth, onTracShipment, OnTracShipmentFields.DimsWidth);
+            }
+
+            if (packageProfile.DimsHeight.GetValueOrDefault() > 0)
+            {
+                ApplyProfileValue(packageProfile.DimsHeight, onTracShipment, OnTracShipmentFields.DimsHeight);
+            }
+
             ApplyProfileValue(packageProfile.DimsAddWeight, onTracShipment, OnTracShipmentFields.DimsAddWeight);
 
             ApplyProfileValue(onTracProfile.Reference1, onTracShipment, OnTracShipmentFields.Reference1);

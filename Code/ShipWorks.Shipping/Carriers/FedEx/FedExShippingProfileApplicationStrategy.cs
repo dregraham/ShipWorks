@@ -38,7 +38,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             changedPackageWeights |= RemoveExcessPackages(shipment.FedEx, profile.Packages.Count());
 
             base.ApplyProfile(profile, shipment);
-            
+
             ApplyProfileValue(profile.FedEx.ResidentialDetermination, shipment, ShipmentFields.ResidentialDetermination);
             ApplyProfileValue(profile.ReturnShipment, shipment, ShipmentFields.ReturnShipment);
 
@@ -238,9 +238,21 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             ApplyProfileValue(fedexPackageProfile.DimsProfileID, package, FedExPackageFields.DimsProfileID);
             if (fedexPackageProfile.DimsProfileID != null)
             {
-                ApplyProfileValue(fedexPackageProfile.DimsLength, package, FedExPackageFields.DimsLength);
-                ApplyProfileValue(fedexPackageProfile.DimsWidth, package, FedExPackageFields.DimsWidth);
-                ApplyProfileValue(fedexPackageProfile.DimsHeight, package, FedExPackageFields.DimsHeight);
+                if (fedexPackageProfile.DimsLength.GetValueOrDefault() > 0)
+                {
+                    ApplyProfileValue(fedexPackageProfile.DimsLength, package, FedExPackageFields.DimsLength);
+                }
+
+                if (fedexPackageProfile.DimsWidth.GetValueOrDefault() > 0)
+                {
+                    ApplyProfileValue(fedexPackageProfile.DimsWidth, package, FedExPackageFields.DimsWidth);
+                }
+
+                if (fedexPackageProfile.DimsHeight.GetValueOrDefault() > 0)
+                {
+                    ApplyProfileValue(fedexPackageProfile.DimsHeight, package, FedExPackageFields.DimsHeight);
+                }
+
                 ApplyProfileValue(fedexPackageProfile.DimsWeight, package, FedExPackageFields.DimsWeight);
                 ApplyProfileValue(fedexPackageProfile.DimsAddWeight, package, FedExPackageFields.DimsAddWeight);
             }
