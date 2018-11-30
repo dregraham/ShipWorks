@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Threading;
+using Interapptive.Shared.Utility;
 using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using SD.LLBLGen.Pro.QuerySpec;
@@ -128,7 +129,7 @@ namespace ShipWorks.Products
 
             if (productVariant.Product.IsBundle)
             {
-                sqlAdapter.FetchEntityCollection(productVariant.Product.ProductBundle, 
+                sqlAdapter.FetchEntityCollection(productVariant.Product.ProductBundle,
                     new RelationPredicateBucket(ProductEntity.Relations.ProductBundleEntityUsingProductID));
             }
 
@@ -149,5 +150,30 @@ namespace ShipWorks.Products
 
             return prefetchPath;
         });
+
+		/// <summary>
+        /// Save the product
+        /// </summary>
+        public Result Save(ISqlAdapter adapter, ProductEntity product)
+        {
+            try
+            {
+                if (product.IsNew)
+                {
+                    product.CreatedDate = DateTime.UtcNow;
+                }
+
+                product.ProductVariant.Where(v => v.IsNew)?
+                    .ForEach(v => v.CreatedDate = DateTime.UtcNow);
+
+                adapter.SaveEntity(product);
+
+                return Result.FromSuccess();
+            }
+            catch (ORMQueryExecutionException ex)
+            {
+                return Result.FromError(ex);
+            }
+        }
     }
 }
