@@ -11,6 +11,6 @@ namespace ShipWorks.Products
         /// <summary>
         /// Show the product editor
         /// </summary>
-        void ShowProductEditor(ProductVariantAliasEntity product);
+        bool? ShowProductEditor(ProductVariantAliasEntity product);
     }
 }

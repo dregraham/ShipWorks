@@ -45,12 +45,11 @@ namespace ShipWorks.Products.UI
         /// <summary>
         /// Constructor
         /// </summary>
-        public ProductEditorViewModel(IProductEditorDialogFactory dialogFactory, IMessageHelper messageHelper, ISqlAdapterFactory adapterFactory)
+        public ProductEditorViewModel(IProductEditorDialogFactory dialogFactory, IMessageHelper messageHelper)
         {
             handler = new PropertyChangedHandler(this, () => PropertyChanged);
             this.dialog = dialogFactory.Create();
             this.messageHelper = messageHelper;
-            this.adapterFactory = adapterFactory;
 
             Save = new RelayCommand(SaveProduct);
             Cancel = new RelayCommand(dialog.Close);
@@ -183,28 +182,8 @@ namespace ShipWorks.Products.UI
         /// <summary>
         /// Show the product editor
         /// </summary>
-        public void ShowProductEditor(ProductVariantAliasEntity product)
+        public bool? ShowProductEditor(ProductVariantAliasEntity product)
         {
-            // Ensure the product has a product variant
-            // new ProductVariantAliasEntity does not have a ProductVarientEntity
-            if (product.ProductVariant == null)
-            {
-                product.ProductVariant = new ProductVariantEntity();
-            }
-
-            // Ensure the product variant has a product
-            // new ProductVarientEntity does not have a ProductEntity
-            if (product.ProductVariant.Product == null)
-            {
-                product.ProductVariant.Product = new ProductEntity()
-                {
-                    IsActive = true,
-                    IsBundle = false,
-                    Name = string.Empty
-                };
-
-            }
-
             this.product = product;
 
             SKU = product.Sku ?? string.Empty;
@@ -224,7 +203,7 @@ namespace ShipWorks.Products.UI
             CountryOfOrigin = product.ProductVariant.CountryOfOrigin ?? string.Empty;
 
             dialog.DataContext = this;
-            messageHelper.ShowDialog(dialog);
+            return messageHelper.ShowDialog(dialog);
         }
 
         /// <summary>
@@ -254,33 +233,8 @@ namespace ShipWorks.Products.UI
             product.ProductVariant.DeclaredValue = DeclaredValue;
             product.ProductVariant.CountryOfOrigin = CountryOfOrigin.Trim();
 
-            if (product.IsNew)
-            {
-                product.AliasName = string.Empty;
-            }
-
-            if (product.ProductVariant.IsNew)
-            {
-                product.ProductVariant.CreatedDate = DateTime.UtcNow;
-            }
-
-            if (product.ProductVariant.Product.IsNew)
-            {
-                product.ProductVariant.Product.CreatedDate = DateTime.UtcNow;
-            }
-
-            using (ISqlAdapter adapter = adapterFactory.Create())
-            {
-                try
-                {
-                    adapter.SaveEntity(product.ProductVariant.Product);
-                    dialog.Close();
-                }
-                catch (ORMQueryExecutionException ex) when (ex.Message.Contains("Cannot insert duplicate key row in object 'dbo.ProductVariantAlias'"))
-                {
-                    messageHelper.ShowError($"The SKU \"{product.Sku}\" already exists. Please enter a unique value for the Product SKU.", ex);
-                }
-            }
+            dialog.DialogResult = true;
+            dialog.Close();
         }
     }
 }

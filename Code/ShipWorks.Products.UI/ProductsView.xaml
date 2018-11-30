@@ -83,6 +83,7 @@
             <Button
                 Grid.Column="1"
                 Content="Edit"
+                Command="{Binding EditProductVariantButton}"
                 Style="{StaticResource PrimaryButton}" />
             <Button
                 Grid.Column="2"
@@ -225,7 +226,7 @@
                                 x:Name="SKUButton"
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Center"
-                                Command="{Binding DataContext.EditProductVariant, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"
+                                Command="{Binding DataContext.EditProductVariantLink, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"
                                 CommandParameter="{Binding Data.ProductVariantID}"
                                 Style="{StaticResource Link}">
                                 <TextBlock FontSize="{StaticResource BaseFontSize}" Text="{Binding Data.SKU}" />
@@ -250,7 +251,7 @@
                                     x:Name="NameButton"
                                     HorizontalAlignment="Left"
                                     VerticalAlignment="Center"
-                                    Command="{Binding DataContext.EditProductVariant, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"
+                                    Command="{Binding DataContext.EditProductVariantLink, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"
                                     CommandParameter="{Binding Data.ProductVariantID}"
                                     Style="{StaticResource Link}"
                                     Visibility="{Binding IsLoading, Converter={StaticResource BooleanToVisibilityInverted}}">

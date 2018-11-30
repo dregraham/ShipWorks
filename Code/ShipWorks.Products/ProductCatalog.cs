@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Threading;
+using Interapptive.Shared.Utility;
 using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using SD.LLBLGen.Pro.QuerySpec;
@@ -111,6 +112,17 @@ namespace ShipWorks.Products
         }
 
         /// <summary>
+        /// Fetch a product variant based on ID
+        /// </summary>
+        public ProductVariantEntity FetchProductVariant(long productVariantID)
+        {
+            using (ISqlAdapter sqlAdapter = sqlAdapterFactory.Create())
+            {
+                return FetchFirst(ProductVariantAliasFields.ProductVariantID == productVariantID, sqlAdapter, ProductPrefetchPath.Value);
+            }
+        }
+
+        /// <summary>
         /// Get product with the data specified in the prefetch path loaded
         /// </summary>
         /// <remarks>
@@ -141,6 +153,34 @@ namespace ShipWorks.Products
             }
 
             return sqlAdapter.FetchFirst(query);
+        }
+
+        /// <summary>
+        /// Save the product
+        /// </summary>
+        public Result Save(ProductEntity product)
+        {
+            using (ISqlAdapter adapter = sqlAdapterFactory.Create())
+            {
+                try
+                {
+                    if (product.IsNew)
+                    {
+                        product.CreatedDate = DateTime.UtcNow;
+                    }
+
+                    product.ProductVariant.Where(v => v.IsNew)?
+                        .ForEach(v => v.CreatedDate = DateTime.UtcNow);
+
+                    adapter.SaveEntity(product);
+
+                    return Result.FromSuccess();
+                }
+                catch (ORMQueryExecutionException ex)
+                {
+                    return Result.FromError(ex);
+                }
+            }
         }
 
         /// <summary>
