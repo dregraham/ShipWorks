@@ -1,5 +1,6 @@
 using System;
 using System.ComponentModel;
+using System.Linq;
 using System.Reflection;
 using System.Windows.Input;
 using GalaSoft.MvvmLight.CommandWpf;
@@ -22,7 +23,7 @@ namespace ShipWorks.Products.UI
         private readonly PropertyChangedHandler handler;
         private readonly IDialog dialog;
         private readonly IMessageHelper messageHelper;
-        private ProductVariantAliasEntity product;
+        private ProductVariantEntity productVariant;
 
         private bool isActive;
         private DateTime createdDate;
@@ -189,32 +190,32 @@ namespace ShipWorks.Products.UI
         /// <summary>
         /// Show the product editor
         /// </summary>
-        public bool? ShowProductEditor(ProductVariantAliasEntity product)
+        public bool? ShowProductEditor(ProductVariantEntity productVariant)
         {
-            this.product = product;
-            IsNew = product.IsNew;
+            this.productVariant = productVariant;
+            IsNew = productVariant.IsNew;
 
             if (!IsNew)
             {
-                CreatedDate = DateTime.SpecifyKind(product.ProductVariant.CreatedDate, DateTimeKind.Utc)
+                CreatedDate = DateTime.SpecifyKind(productVariant.CreatedDate, DateTimeKind.Utc)
                     .ToLocalTime();
             }
 
-            SKU = product.Sku ?? string.Empty;
-            IsActive = product.ProductVariant.IsNew ? true : product.ProductVariant.IsActive;
-            Name = product.ProductVariant.Name ?? string.Empty;
-            UPC = product.ProductVariant.UPC ?? string.Empty;
-            ASIN = product.ProductVariant.ASIN ?? string.Empty;
-            ISBN = product.ProductVariant.ISBN ?? string.Empty;
-            Weight = product.ProductVariant.Weight ?? 0;
-            Length = product.ProductVariant.Length ?? 0;
-            Width = product.ProductVariant.Width ?? 0;
-            Height = product.ProductVariant.Height ?? 0;
-            ImageUrl = product.ProductVariant.ImageUrl ?? string.Empty;
-            BinLocation = product.ProductVariant.BinLocation ?? string.Empty;
-            HarmonizedCode = product.ProductVariant.HarmonizedCode ?? string.Empty;
-            DeclaredValue = product.ProductVariant.DeclaredValue ?? 0;
-            CountryOfOrigin = product.ProductVariant.CountryOfOrigin ?? string.Empty;
+            SKU = productVariant.Aliases.First(a => a.IsDefault).Sku ?? string.Empty;
+            IsActive = productVariant.IsNew ? true : productVariant.IsActive;
+            Name = productVariant.Name ?? string.Empty;
+            UPC = productVariant.UPC ?? string.Empty;
+            ASIN = productVariant.ASIN ?? string.Empty;
+            ISBN = productVariant.ISBN ?? string.Empty;
+            Weight = productVariant.Weight ?? 0;
+            Length = productVariant.Length ?? 0;
+            Width = productVariant.Width ?? 0;
+            Height = productVariant.Height ?? 0;
+            ImageUrl = productVariant.ImageUrl ?? string.Empty;
+            BinLocation = productVariant.BinLocation ?? string.Empty;
+            HarmonizedCode = productVariant.HarmonizedCode ?? string.Empty;
+            DeclaredValue = productVariant.DeclaredValue ?? 0;
+            CountryOfOrigin = productVariant.CountryOfOrigin ?? string.Empty;
 
             dialog.DataContext = this;
             return messageHelper.ShowDialog(dialog);
@@ -231,21 +232,21 @@ namespace ShipWorks.Products.UI
                 return;
             }
 
-            product.Sku = SKU.Trim();
-            product.ProductVariant.IsActive = IsActive;
-            product.ProductVariant.Name = Name.Trim();
-            product.ProductVariant.UPC = UPC.Trim();
-            product.ProductVariant.ASIN = ASIN.Trim();
-            product.ProductVariant.ISBN = ISBN.Trim();
-            product.ProductVariant.Weight = Weight;
-            product.ProductVariant.Length = Length;
-            product.ProductVariant.Width = Width;
-            product.ProductVariant.Height = Height;
-            product.ProductVariant.ImageUrl = ImageUrl.Trim();
-            product.ProductVariant.BinLocation = BinLocation.Trim();
-            product.ProductVariant.HarmonizedCode = HarmonizedCode.Trim();
-            product.ProductVariant.DeclaredValue = DeclaredValue;
-            product.ProductVariant.CountryOfOrigin = CountryOfOrigin.Trim();
+            productVariant.Aliases.First(a => a.IsDefault).Sku = SKU.Trim();
+            productVariant.IsActive = IsActive;
+            productVariant.Name = Name.Trim();
+            productVariant.UPC = UPC.Trim();
+            productVariant.ASIN = ASIN.Trim();
+            productVariant.ISBN = ISBN.Trim();
+            productVariant.Weight = Weight;
+            productVariant.Length = Length;
+            productVariant.Width = Width;
+            productVariant.Height = Height;
+            productVariant.ImageUrl = ImageUrl.Trim();
+            productVariant.BinLocation = BinLocation.Trim();
+            productVariant.HarmonizedCode = HarmonizedCode.Trim();
+            productVariant.DeclaredValue = DeclaredValue;
+            productVariant.CountryOfOrigin = CountryOfOrigin.Trim();
 
             dialog.DialogResult = true;
             dialog.Close();
