@@ -192,6 +192,13 @@ namespace ShipWorks.Products.UI
         public bool? ShowProductEditor(ProductVariantAliasEntity product)
         {
             this.product = product;
+            IsNew = product.IsNew;
+
+            if (!IsNew)
+            {
+                CreatedDate = DateTime.SpecifyKind(product.ProductVariant.CreatedDate, DateTimeKind.Utc)
+                    .ToLocalTime();
+            }
 
             SKU = product.Sku ?? string.Empty;
             IsActive = product.ProductVariant.IsNew ? true : product.ProductVariant.IsActive;
