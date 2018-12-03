@@ -284,8 +284,7 @@ namespace ShipWorks.Products
                 }
                 else
                 {
-                    SqlException sqlException = saveResult.Exception.GetBaseException() as SqlException;
-                    if (sqlException != null && sqlException.Number == 2601)
+                    if ((saveResult.Exception.GetBaseException() as SqlException)?.Number == 2601)
                     {
                         messageHelper.ShowError($"The SKU \"{productVariantEntity.Aliases.First(a => a.IsDefault).Sku}\" already exists. Please enter a unique value for the Product SKU.", saveResult.Exception);
                     }
