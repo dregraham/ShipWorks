@@ -40,6 +40,7 @@ namespace ShipWorks.Products.UI
         private string harmonizedCode;
         private decimal declaredValue;
         private string countryOfOrigin;
+        private bool isNew;
 
         /// <summary>
         /// Constructor
@@ -78,6 +79,13 @@ namespace ShipWorks.Products.UI
         {
             get => createdDate;
             set => handler.Set(nameof(CreatedDate), ref createdDate, value);
+        }
+
+        [Obfuscation(Exclude = true)]
+        public bool IsNew
+        {
+            get => isNew;
+            set => handler.Set(nameof(IsNew), ref isNew, value);
         }
 
         [Obfuscation(Exclude = true)]
