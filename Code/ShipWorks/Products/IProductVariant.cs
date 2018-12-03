@@ -16,7 +16,7 @@ namespace ShipWorks.Products
         /// <summary>
         /// Write product XML
         /// </summary>
-        void WriteXml(OrderItemProductOutline outline);
+        void WriteXml(ElementOutline outline, System.Func<OrderItemProductBundleOutline> createOrderItemProductBundleOutline);
 
         /// <summary>
         /// Apply product data to an order item

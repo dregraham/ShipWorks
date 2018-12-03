@@ -1,8 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using log4net;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Templates.Processing.TemplateXml.ElementOutlines;
+using ShipWorks.Templates.Processing.TemplateXml.NodeFactories;
 
 namespace ShipWorks.Products
 {
@@ -14,14 +17,23 @@ namespace ShipWorks.Products
         private readonly string sku;
         private readonly IProductVariantEntity variant;
         private readonly ILog log;
+        private readonly int? quantity;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public ProductVariant(string sku, IProductVariantEntity variant, ILog log)
+        public ProductVariant(string sku, IProductVariantEntity variant, ILog log) : this(sku, variant, null, log)
+        {
+        }
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public ProductVariant(string sku, IProductVariantEntity variant, int? quantity, ILog log)
         {
             this.sku = sku?.Trim() ?? string.Empty;
             this.variant = variant;
+            this.quantity = quantity;
             this.log = log;
         }
 
@@ -33,7 +45,7 @@ namespace ShipWorks.Products
         /// <summary>
         /// Write product XML
         /// </summary>
-        public void WriteXml(OrderItemProductOutline outline)
+        public void WriteXml(ElementOutline outline, Func<OrderItemProductBundleOutline> createOrderItemProductBundleOutline)
         {
             outline.AddElement("SKU", () => sku);
             outline.AddElement("Weight", () => variant.Weight);
@@ -47,7 +59,24 @@ namespace ShipWorks.Products
             outline.AddElement("HarmonizedCode", () => variant.HarmonizedCode);
             outline.AddElement("CountryOfOrigin", () => variant.CountryOfOrigin);
             outline.AddElement("DeclaredValue", () => variant.DeclaredValue);
+            outline.AddElement("Qunatity", () => quantity, ElementOutline.If(() => quantity.HasValue));
+            
+            if (createOrderItemProductBundleOutline != null)
+            {
+                outline.AddElement("BundledProduct", createOrderItemProductBundleOutline(),
+                () => FetchBundledVariants(),
+                ElementOutline.If(() => createOrderItemProductBundleOutline != null && variant.Product.IsBundle));
+            }            
         }
+
+        /// <summary>
+        /// Fetch bundled Variants 
+        /// </summary>
+        private IEnumerable<ProductVariant> FetchBundledVariants()
+        {
+            return variant.Product.Bundles.Select(b => new ProductVariant(b.ChildVariant.Aliases.FirstOrDefault(a => a.IsDefault).Sku, b.ChildVariant, b.Quantity, log));
+        }
+
 
         /// <summary>
         /// Applies product data to an order item

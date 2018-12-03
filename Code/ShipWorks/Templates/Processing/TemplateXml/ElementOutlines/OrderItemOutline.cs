@@ -61,8 +61,8 @@ namespace ShipWorks.Templates.Processing.TemplateXml.ElementOutlines
             AddElement("Width", () => Item.Width);
             AddElement("Height", () => Item.Height);
 
-            AddElement("Product", new OrderItemProductOutline(context), 
-                () => new []{ Product },
+            AddElement("Product", new OrderItemProductOutline(context),
+                () => new[] { new Tuple<IProductVariant, Func<OrderItemProductBundleOutline>>(Product, () => new OrderItemProductBundleOutline(context)) },
                 If(() => Product.CanWriteXml));
 
             // Add an outline entry for each unique store type that could potentially be used
