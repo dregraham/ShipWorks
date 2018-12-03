@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
@@ -264,9 +265,17 @@ namespace ShipWorks.Products
             {
                 Result saveResult;
 
-                using (ISqlAdapter adapter = sqlAdapterFactory.Create())
+                using (ISqlAdapter adapter = sqlAdapterFactory.CreateTransacted())
                 {
                     saveResult = productCatalog.Save(adapter, productVariantEntity.Product);
+                    if (saveResult.Success)
+                    {
+                        adapter.Commit();
+                    }
+                    else
+                    {
+                        adapter.Rollback();
+                    }
                 }
 
                 if (saveResult.Success)
@@ -275,9 +284,10 @@ namespace ShipWorks.Products
                 }
                 else
                 {
-                    if (saveResult.Message.Contains("Cannot insert duplicate key row in object 'dbo.ProductVariantAlias'"))
+                    SqlException sqlException = saveResult.Exception.GetBaseException() as SqlException;
+                    if (sqlException != null && sqlException.Number == 2601)
                     {
-                        messageHelper.ShowError($"The SKU \"{productVariantEntity.Aliases.First(a=> a.IsDefault).Sku}\" already exists. Please enter a unique value for the Product SKU.", saveResult.Exception);
+                        messageHelper.ShowError($"The SKU \"{productVariantEntity.Aliases.First(a => a.IsDefault).Sku}\" already exists. Please enter a unique value for the Product SKU.", saveResult.Exception);
                     }
                     else
                     {
