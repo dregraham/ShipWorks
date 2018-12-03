@@ -192,7 +192,7 @@ namespace DataVirtualization
         /// Always false.
         /// </returns>
         public bool Contains(DataWrapper<T> item) =>
-            pages?.Where(x => x.Items != null).Any(x => x.Items.Contains(item)) == true;
+            LoadedPages.Any(x => x.Items.Contains(item)) == true;
 
         /// <summary>
         /// TODO
@@ -208,8 +208,7 @@ namespace DataVirtualization
         /// Get the index of the given item
         /// </summary>
         public int IndexOf(DataWrapper<T> item) =>
-            (pages ?? Enumerable.Empty<DataPage<T>>())
-                .Where(x => x.Items != null)
+            LoadedPages
                 .Select((x, i) => (IndexWithinPage: x.Items.IndexOf(item), Page: i))
                 .Where(x => x.IndexWithinPage != -1)
                 .Select(x => pageSize * x.Page + x.IndexWithinPage)
@@ -380,5 +379,11 @@ namespace DataVirtualization
                 }
             }
         }
+
+        /// <summary>
+        /// Get a list of pages that have loaded data
+        /// </summary>
+        private IEnumerable<DataPage<T>> LoadedPages =>
+            (pages ?? Enumerable.Empty<DataPage<T>>()).Where(x => x?.Items != null);
     }
 }
