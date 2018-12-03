@@ -181,6 +181,7 @@
     <Compile Include="Business\Geography\CurrencyCode.cs" />
     <Compile Include="Collections\DataVirtualization\DataPage.cs" />
     <Compile Include="Collections\DataVirtualization\DataWrapper.cs" />
+    <Compile Include="Collections\DataVirtualization\IDataWrapper.cs" />
     <Compile Include="Collections\DataVirtualization\IItemsProvider.cs" />
     <Compile Include="Collections\DataVirtualization\IVirtualizingCollection.cs" />
     <Compile Include="Collections\DataVirtualization\VirtualizingCollection.cs" />

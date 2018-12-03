@@ -195,6 +195,7 @@
     </Compile>
     <Compile Include="Controls\CustomerLicenseActivation\CustomerLicenseActivationViewModel.cs" />
     <Compile Include="Controls\FieldLayoutRowDefinition.cs" />
+    <Compile Include="Controls\FilePicker.cs" />
     <Compile Include="Controls\KeyboardShortcutDisplay.cs" />
     <Compile Include="Controls\TokenTextBox.cs" />
     <Compile Include="Controls\UnitTextBox.cs" />
@@ -503,6 +504,10 @@
     <Page Include="Themes\Controls\WaitSpinner.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Themes\Controls\FilePicker.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Themes\Controls\WeightControl.xaml">
       <Generator>MSBuild:Compile</Generator>

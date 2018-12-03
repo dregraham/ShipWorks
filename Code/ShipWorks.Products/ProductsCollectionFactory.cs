@@ -34,7 +34,7 @@ namespace ShipWorks.Products
         /// <summary>
         /// Create a collection of products
         /// </summary>
-        public DataWrapper<IVirtualizingCollection<IProductListItemEntity>> Create(bool includeInactiveProducts, string searchText, IBasicSortDefinition sortDefinition)
+        public IDataWrapper<IVirtualizingCollection<IProductListItemEntity>> Create(bool includeInactiveProducts, string searchText, IBasicSortDefinition sortDefinition)
         {
             searchText = searchText?.Trim();
 

@@ -12,24 +12,54 @@
 // LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR
 // IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-using System.Collections;
-using System.Collections.Generic;
+using System.Reflection;
 
 namespace DataVirtualization
 {
     /// <summary>
-    /// Specialized list implementation that provides data virtualization. The collection is divided up into pages,
-    /// and pages are dynamically fetched from the IItemsProvider when required. Stale pages are removed after a
-    /// configurable period of time.
-    /// Intended for use with large collections on a network or disk resource that cannot be instantiated locally
-    /// due to memory consumption or fetch latency.
+    /// Wrapper for a data item in the virtual collection
     /// </summary>
-    /// <remarks>
-    /// The IList implementation is not fully complete, but should be sufficient for use as read only collection
-    /// data bound to a suitable ItemsControl.
-    /// </remarks>
-    /// <typeparam name="T"></typeparam>
-    public interface IVirtualizingCollection<T> : IList<IDataWrapper<T>>, IList where T : class
+    public interface IDataWrapper<T> where T : class
     {
+        /// <summary>
+        /// Index
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        int Index { get; }
+
+        /// <summary>
+        /// Item number
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        int ItemNumber { get; }
+
+        /// <summary>
+        /// Is the wrapper loading the data?
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        bool IsLoading { get; }
+
+        /// <summary>
+        /// Data item
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        T Data { get; set; }
+
+        /// <summary>
+        /// Entity ID of the data item
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        long EntityID { get; set; }
+
+        /// <summary>
+        /// Is this data wrapper in use
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        bool IsInUse { get; }
+
+        /// <summary>
+        /// Clean up the data in the wrapper
+        /// </summary>
+        void CleanUp();
     }
 }

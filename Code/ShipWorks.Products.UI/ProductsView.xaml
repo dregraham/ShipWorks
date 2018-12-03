@@ -71,6 +71,7 @@
                 <ColumnDefinition Width="Auto" SharedSizeGroup="A" />
                 <ColumnDefinition Width="Auto" SharedSizeGroup="A" />
                 <ColumnDefinition Width="Auto" SharedSizeGroup="A" />
+                <ColumnDefinition Width="Auto" SharedSizeGroup="A" />
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="*" />
@@ -92,17 +93,22 @@
                 Style="{StaticResource PrimaryButton}" />
             <Button
                 Grid.Column="3"
+                Command="{Binding ImportProducts}"
+                Content="Import"
+                Style="{StaticResource PrimaryButton}" />
+            <Button
+                Grid.Column="4"
                 Command="{Binding ActivateProductCommand}"
                 Content="Mark Active"
                 Style="{StaticResource SecondaryButton}" />
             <Button
-                Grid.Column="4"
+                Grid.Column="5"
                 Command="{Binding DeactivateProductCommand}"
                 Content="Mark Inactive"
                 Style="{StaticResource SecondaryButton}" />
 
             <CheckBox
-                Grid.Column="5"
+                Grid.Column="6"
                 Margin="0,0,10,0"
                 IsChecked="{Binding ShowInactiveProducts}"
                 Style="{StaticResource FormCheckBox}">
@@ -110,7 +116,7 @@
             </CheckBox>
 
             <syncfusion:SfTextBoxExt
-                Grid.Column="7"
+                Grid.Column="8"
                 MinWidth="300"
                 HorizontalAlignment="Right"
                 VerticalContentAlignment="Center"

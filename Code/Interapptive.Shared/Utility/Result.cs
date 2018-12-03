@@ -53,7 +53,7 @@ namespace Interapptive.Shared.Utility
         /// <summary>
         /// Get a successful result
         /// </summary>
-        public static Result FromSuccess() => new Result(true, (string)null);
+        public static Result FromSuccess() => new Result(true, (string) null);
 
         /// <summary>
         /// Get an error result

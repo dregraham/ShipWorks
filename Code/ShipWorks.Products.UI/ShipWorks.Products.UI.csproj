@@ -87,6 +87,9 @@
       <Link>Properties\AssemblyInfoCommon.cs</Link>
     </Compile>
     <Compile Include="DesignerProductsMode.cs" />
+    <Compile Include="Import\ProductImporterDialog.xaml.cs">
+      <DependentUpon>ProductImporterDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="IProductsView.cs" />
     <Compile Include="ProductEditorDialog.xaml.cs">
       <DependentUpon>ProductEditorDialog.xaml</DependentUpon>
@@ -130,6 +133,10 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Import\ProductImporterDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="ProductEditorDialog.xaml" />
     <Page Include="ProductsView.xaml">
       <SubType>Designer</SubType>

@@ -19,6 +19,7 @@ using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Data.Model.HelperClasses;
+using ShipWorks.Products.Import;
 
 namespace ShipWorks.Products
 {
@@ -29,7 +30,7 @@ namespace ShipWorks.Products
     public class ProductsMode : ViewModelBase, IProductsMode
     {
         private readonly IProductsViewHost view;
-        private DataWrapper<IVirtualizingCollection<IProductListItemEntity>> products;
+        private IDataWrapper<IVirtualizingCollection<IProductListItemEntity>> products;
         private IList<long> selectedProductIDs = new List<long>();
         private IBasicSortDefinition currentSort;
         private string searchText;
@@ -39,6 +40,7 @@ namespace ShipWorks.Products
         private readonly Func<IProductEditorViewModel> productEditorViewModelFunc;
         private readonly IProductCatalog productCatalog;
         private readonly ISqlAdapterFactory sqlAdapterFactory;
+        private readonly Func<IProductImporterViewModel> productImporterViewModelFunc;
 
         /// <summary>
         /// Constructor
@@ -47,9 +49,11 @@ namespace ShipWorks.Products
             IProductsCollectionFactory productsCollectionFactory,
             IMessageHelper messageHelper,
             Func<IProductEditorViewModel> productEditorViewModelFunc,
+            Func<IProductImporterViewModel> productImporterViewModelFunc,
             IProductCatalog productCatalog,
             ISqlAdapterFactory sqlAdapterFactory)
         {
+            this.productImporterViewModelFunc = productImporterViewModelFunc;
             this.productsCollectionFactory = productsCollectionFactory;
             this.messageHelper = messageHelper;
             this.productEditorViewModelFunc = productEditorViewModelFunc;
@@ -62,13 +66,15 @@ namespace ShipWorks.Products
             EditProductVariantLink = new RelayCommand<long>(EditProductVariantAction);
             EditProductVariantButton = new RelayCommand(EditProductVariantButtonAction, () => SelectedProductIDs?.Count() == 1);
             SelectedProductsChanged = new RelayCommand<IList>(
-                items => SelectedProductIDs = items?.OfType<DataWrapper<IProductListItemEntity>>().Select(x => x.EntityID).ToList());
+                items => SelectedProductIDs = items?.OfType<IDataWrapper<IProductListItemEntity>>().Select(x => x.EntityID).ToList());
 
             DeactivateProductCommand =
                 new RelayCommand(() => SetProductActivation(false).Forget(), () => SelectedProductIDs?.Any() == true);
 
             ActivateProductCommand =
                 new RelayCommand(() => SetProductActivation(true).Forget(), () => SelectedProductIDs?.Any() == true);
+
+            ImportProducts = new RelayCommand(() => productImporterViewModelFunc().ImportProducts().Do(RefreshProductsAction));
 
             AddProduct = new RelayCommand(() => AddProductAction());
         }
@@ -110,6 +116,12 @@ namespace ShipWorks.Products
         public ICommand EditProductVariantButton { get; }
 
         /// <summary>
+        /// Command to import a list of products
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public ICommand ImportProducts { get; }
+
+        /// <summary>
         /// The list of selected products has changed
         /// </summary>
         [Obfuscation(Exclude = true)]
@@ -119,7 +131,7 @@ namespace ShipWorks.Products
         /// List of products
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public DataWrapper<IVirtualizingCollection<IProductListItemEntity>> Products
+        public IDataWrapper<IVirtualizingCollection<IProductListItemEntity>> Products
         {
             get => products;
             private set => Set(ref products, value);
