@@ -13,4 +13,7 @@
             </Setter.Value>
         </Setter>
     </Style>
+    <Style x:Key="BlueSteel.ListBox.SingleSelection" TargetType="{x:Type ListBox}" BasedOn="{StaticResource BlueSteel.ListBox}">
+        <Setter Property="SelectionMode" Value="Single"/>        
+    </Style>    
 </ResourceDictionary>

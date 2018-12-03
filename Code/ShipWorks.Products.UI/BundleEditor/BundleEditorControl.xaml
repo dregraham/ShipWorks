@@ -49,16 +49,25 @@
         </Grid>
         <Button Grid.Row="0"
                 Grid.Column="1"
-                Command="{Binding AddCommand}"
+                Command="{Binding AddSkuToBundleCommand}"
                 Content="Add"
                 Style="{StaticResource OrderLookup.Button.Add}"
                 Margin="10 0 0 10"/>
         <ListBox Grid.Row="1" Grid.Column="0"
-                 ItemsSource="{Binding BundledSkus}"
-                 SelectedItem="{Binding SelectedSku}"
-                 Style="{StaticResource BlueSteel.ListBox}"/>
+                 ItemsSource="{Binding BundleLineItems}"
+                 SelectedItem="{Binding SelectedBundleLineItem}"
+                 Style="{StaticResource BlueSteel.ListBox.SingleSelection}">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <TextBlock Text="{Binding DisplayText}"
+                               Margin="0 5"
+                               VerticalAlignment="Center"
+                               HorizontalAlignment="Left"/>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
         <Button Grid.Row="1" Grid.Column="1"
-                Command="{Binding RemoveCommand}"
+                Command="{Binding RemoveSkuFromBundleCommand}"
                 Content="Remove"
                 Style="{StaticResource OrderLookup.Button.Delete}"
                 VerticalAlignment="Top"

@@ -1,20 +1,176 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel;
+using System.Linq;
+using System.Reflection;
 using System.Windows.Input;
+using GalaSoft.MvvmLight.CommandWpf;
+using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.UI;
+using ShipWorks.Core.UI;
+using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 
 namespace ShipWorks.Products.UI.BundleEditor
 {
-    public class BundleEditorViewModel
+    /// <summary>
+    /// View model for the BundleEditorControl
+    /// </summary>
+    [Component]
+    public class BundleEditorViewModel : IBundleEditorViewModel
     {
-        public string Sku { get; set; }
+        public event PropertyChangedEventHandler PropertyChanged;
+        private readonly PropertyChangedHandler handler;
+        private readonly IProductCatalog productCatalog;
+        private readonly IMessageHelper messageHelper;
+        private string sku;
+        private int quantity;
+        private List<ProductBundleDisplayLineItem> bundleLineItems;
+        private ProductBundleDisplayLineItem selectedBundleLineItem;
+        private ProductVariantAliasEntity baseProductAlias;
+        private ISqlAdapter sqlAdapter;
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public BundleEditorViewModel(IProductCatalog productCatalog, IMessageHelper messageHelper)
+        {
+            handler = new PropertyChangedHandler(this, () => PropertyChanged);
+            
+            this.productCatalog = productCatalog;
+            this.messageHelper = messageHelper;
+            
+            AddSkuToBundleCommand = new RelayCommand(AddProductToBundle);
+            RemoveSkuFromBundleCommand = new RelayCommand(RemoveProductFromBundle, () => SelectedBundleLineItem != null);
+        }
         
-        public int Quantity { get; set; }
+        /// <summary>
+        /// Sku the user enters
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public string Sku
+        {
+            get => sku;
+            set => handler.Set(nameof(Sku), ref sku, value);
+        }
+
+        /// <summary>
+        /// Quantity the user enters
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public int Quantity
+        {
+            get => quantity;
+            set => handler.Set(nameof(Quantity), ref quantity, value);
+        }
+
+        /// <summary>
+        /// The list of bundled skus displayed to the user.
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public List<ProductBundleDisplayLineItem> BundleLineItems
+        {
+            get => bundleLineItems;
+            set => handler.Set(nameof(BundleLineItems), ref bundleLineItems, value);
+        }
+
+        /// <summary>
+        /// The bundle line item the user has selected
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public ProductBundleDisplayLineItem SelectedBundleLineItem
+        {
+            get => selectedBundleLineItem;
+            set => handler.Set(nameof(SelectedBundleLineItem), ref selectedBundleLineItem, value);
+        }
+
+        /// <summary>
+        /// Command for adding a sku to the bundle
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public ICommand AddSkuToBundleCommand { get; }
         
-        public IEnumerable<string> BundledSkus { get; set; }
+        /// <summary>
+        /// Command for removing a sku from the bundle
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public ICommand RemoveSkuFromBundleCommand { get; }
         
-        public string SelectedSku { get; set; }
+        /// <summary>
+        /// Load the view model with the given base product and sql adapter
+        /// </summary>
+        public void Load(ProductVariantAliasEntity baseProductAlias, ISqlAdapter sqlAdapter)
+        {
+            this.baseProductAlias = baseProductAlias;
+            this.sqlAdapter = sqlAdapter;
+
+            if (baseProductAlias.ProductVariant.Product.IsBundle)
+            {
+                foreach (ProductBundleEntity bundledProduct in baseProductAlias.ProductVariant.Product.Bundles)
+                {
+                    ProductVariantEntity bundledProductVariant = bundledProduct.Product.Variants.SingleOrDefault(
+                        x => x.ProductVariantID == bundledProduct.ChildProductVariantID);
+
+                    ProductVariantAliasEntity bundledProductVariantAlias = bundledProductVariant?.Aliases.FirstOrDefault();
+
+                    if (bundledProductVariantAlias != null)
+                    {
+                        BundleLineItems.Add(new ProductBundleDisplayLineItem(bundledProduct, bundledProductVariantAlias.Sku));    
+                    }
+                }
+            }
+            else
+            {
+                BundleLineItems = new List<ProductBundleDisplayLineItem>();
+            }
+        }
+
+        /// <summary>
+        /// Save the currently configured bundle
+        /// </summary>
+        public void Save()
+        {
+            baseProductAlias.ProductVariant.Product.Bundles.Clear();
+            
+            foreach (ProductBundleDisplayLineItem bundleLineItem in BundleLineItems)
+            {
+                baseProductAlias.ProductVariant.Product.Bundles.Add(bundleLineItem.BundledProduct);
+            }
+        }
         
-        public ICommand AddCommand { get; }
-        
-        public ICommand RemoveCommand { get; }
+        /// <summary>
+        /// Add the product with the entered sku to the bundle
+        /// </summary>
+        private void AddProductToBundle()
+        {
+            // Fetch Alias from sku
+            ProductVariantEntity productVariant = productCatalog.FetchProductVariantEntity(sqlAdapter, Sku);
+
+            if (productVariant != null)
+            {
+                ProductBundleEntity bundleEntity = new ProductBundleEntity
+                {
+                    ProductID = baseProductAlias.ProductVariant.ProductID,
+                    ChildProductVariantID = productVariant.ProductVariantID,
+                    Quantity = Quantity
+                };
+                
+                // Add to bundled skus
+                BundleLineItems.Add(new ProductBundleDisplayLineItem(bundleEntity, Sku));
+            }
+            else
+            {
+                // Could not find entered sku
+                messageHelper.ShowError($"SKU {Sku} not found");
+            }
+        }
+
+        /// <summary>
+        /// Remove selected product from bundle
+        /// </summary>
+        private void RemoveProductFromBundle()
+        {
+            BundleLineItems.Remove(SelectedBundleLineItem);
+        }
     }
 }

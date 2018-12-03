@@ -86,10 +86,12 @@
     <Compile Include="..\ShipWorks\Properties\AssemblyInfoCommon.cs">
       <Link>Properties\AssemblyInfoCommon.cs</Link>
     </Compile>
+    <Compile Include="BundleEditor\ProductBundleDisplayLineItem.cs" />
     <Compile Include="BundleEditor\BundleEditorControl.xaml.cs">
       <DependentUpon>BundleEditorControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="BundleEditor\BundleEditorViewModel.cs" />
+    <Compile Include="BundleEditor\IBundleEditorViewModel.cs" />
     <Compile Include="DesignerProductsMode.cs" />
     <Compile Include="IProductsView.cs" />
     <Compile Include="ProductEditorDialog.xaml.cs">
