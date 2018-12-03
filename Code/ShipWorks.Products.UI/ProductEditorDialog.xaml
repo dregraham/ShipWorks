@@ -111,7 +111,8 @@
         <TextBox Grid.Row="5"
                  Grid.Column="1"
                  Text="{Binding SKU, UpdateSourceTrigger=PropertyChanged}"
-                 Style="{StaticResource FormTextBox}"/>
+                 Style="{StaticResource FormTextBox}"
+                 IsEnabled="{Binding IsNew}"/>
 
         <TextBlock Grid.Row="6"
                    Grid.Column="0"
