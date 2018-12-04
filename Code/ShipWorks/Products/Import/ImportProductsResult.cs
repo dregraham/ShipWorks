@@ -5,7 +5,7 @@ namespace ShipWorks.Products.Import
     /// <summary>
     /// Results from importing products
     /// </summary>
-    public struct ImportProductsResult
+    public class ImportProductsResult
     {
         /// <summary>
         /// Constructor

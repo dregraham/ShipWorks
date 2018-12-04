@@ -22,6 +22,7 @@ namespace ShipWorks.Products.Import
         private static readonly string[] ColonSeparator = new[] { " : " };
         private readonly ISqlAdapterFactory sqlAdapterFactory;
         private readonly IProductCatalog productCatalog;
+        private IProgressReporter itemProgressReporter;
 
         /// <summary>
         /// Constructor
@@ -38,7 +39,10 @@ namespace ShipWorks.Products.Import
         /// </summary>
         public async Task<GenericResult<ImportProductsResult>> ImportProducts(string pathAndFilename, IProgressReporter progressReporter)
         {
+            itemProgressReporter = progressReporter;
             ImportProductsResult result;
+
+            itemProgressReporter.PercentComplete = 0;
 
             (List<ProductToImportDto> SkuRows, List<ProductToImportDto> BundleRows) fileLoadResults = productExcelReader.LoadImportFile(pathAndFilename);
 
@@ -57,7 +61,7 @@ namespace ShipWorks.Products.Import
         /// </summary>
         private async Task<ImportProductsResult> ProcessRows(List<ProductToImportDto> skuRows, List<ProductToImportDto> bundleRows)
         {
-            ImportProductsResult results = new ImportProductsResult(0, 0, 0);
+            ImportProductsResult results = new ImportProductsResult(skuRows.Count + bundleRows.Count, 0, 0);
 
             await ProcessSkus(skuRows, results).ConfigureAwait(false);
 
@@ -106,6 +110,13 @@ namespace ShipWorks.Products.Import
                     result.FailedCount++;
                     result.FailureResults.Add(row.Sku, e.Message);
                 }
+
+                if (itemProgressReporter.IsCancelRequested)
+                {
+                    break;
+                }
+
+                itemProgressReporter.PercentComplete = (int) Math.Round(100 * (((decimal) result.SuccessCount + result.FailedCount) / result.TotalCount));
             }
         }
 
@@ -151,6 +162,13 @@ namespace ShipWorks.Products.Import
                     result.FailedCount++;
                     result.FailureResults.Add(row.Sku, e.Message);
                 }
+
+                if (itemProgressReporter.IsCancelRequested)
+                {
+                    break;
+                }
+
+                itemProgressReporter.PercentComplete = (int) Math.Round(100 * (((decimal) result.SuccessCount + result.FailedCount) / result.TotalCount));
             }
         }
 
@@ -208,10 +226,15 @@ namespace ShipWorks.Products.Import
         /// </summary>
         private void ImportProductVariantAliases(ProductVariantEntity productVariant, string mainSku, string aliasSkus)
         {
-            List<ProductVariantAliasEntity> newAliases = aliasSkus.Split(PipeSeparator, StringSplitOptions.RemoveEmptyEntries)
-                .Where(s => !s.IsNullOrWhiteSpace())
-                .Select(s => new ProductVariantAliasEntity() { IsDefault = false, Sku = s, AliasName = s }).ToList();
-            newAliases.Add(new ProductVariantAliasEntity() { IsDefault = true, Sku = mainSku, AliasName = mainSku });
+            List<ProductVariantAliasEntity> newAliases = new List<ProductVariantAliasEntity>()
+                { new ProductVariantAliasEntity() {IsDefault = true, Sku = mainSku, AliasName = mainSku}};
+
+            if (!aliasSkus.IsNullOrWhiteSpace())
+            {
+                newAliases.AddRange(aliasSkus.Split(PipeSeparator, StringSplitOptions.RemoveEmptyEntries)
+                    .Where(s => !s.IsNullOrWhiteSpace())
+                    .Select(s => new ProductVariantAliasEntity() { IsDefault = false, Sku = s, AliasName = s }));
+            }
 
             // Aliases that didn't exist that need to be created.
             newAliases
@@ -231,8 +254,17 @@ namespace ShipWorks.Products.Import
         private async Task ImportProductVariantBundles(ProductVariantEntity bundleProductVariant, string bundledItemSkusAndQuantities,
             ISqlAdapter sqlAdapter)
         {
+            // Delete any bundles currently associated.  We'll add them back later if any were requested.
             await sqlAdapter.DeleteEntityCollectionAsync(bundleProductVariant.Product.Bundles).ConfigureAwait(false);
             bundleProductVariant.Product.Bundles.Clear();
+
+            if (bundledItemSkusAndQuantities.IsNullOrWhiteSpace())
+            {
+                // No bundles requested, so just return.  
+                // If the variant had bundles associated, but then do an import where the cell is empty,
+                // we are assuming they wanted to mark the variant as NOT being a bundle any more.
+                return;
+            }
 
             var bundledItemSkus = new Dictionary<string, int>();
 
