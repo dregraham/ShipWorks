@@ -80,6 +80,9 @@ namespace ShipWorks.Products
             ApplyValue(variant.Height, () => item.Height = variant.Height.Value);
         }
 
+        /// <summary>
+        /// Adds customs data to a shipment for a line item
+        /// </summary>
         public virtual void ApplyCustoms(OrderItemEntity item, ShipmentEntity shipment)
         {
             log.InfoFormat($"Applying product information to customs item for sku {sku}");
@@ -87,6 +90,9 @@ namespace ShipWorks.Products
             ApplyCustoms(item, shipment, variant);
         }
 
+        /// <summary>
+        /// Applies customs item for a variant
+        /// </summary>
         protected ShipmentCustomsItemEntity ApplyCustoms(OrderItemEntity item, ShipmentEntity shipment, IProductVariantEntity variantEntity)
         {
             ShipmentCustomsItemEntity customsItem = new ShipmentCustomsItemEntity
@@ -104,23 +110,18 @@ namespace ShipWorks.Products
 
             if (variantEntity != null && variantEntity.IsActive)
             {
-                Apply(customsItem, variantEntity);
+                ApplyValue(variantEntity.Name, () => customsItem.Description = variantEntity.Name);
+                ApplyValue(variantEntity.Weight, () => customsItem.Weight = (double) variantEntity.Weight);
+                ApplyValue(variantEntity.DeclaredValue, () => customsItem.UnitValue = variantEntity.DeclaredValue.Value);
+                ApplyValue(variantEntity.DeclaredValue, () => customsItem.UnitPriceAmount = variantEntity.DeclaredValue.Value);
+                ApplyValue(variantEntity.CountryOfOrigin, () => customsItem.CountryOfOrigin = variantEntity.CountryOfOrigin);
+                ApplyValue(variantEntity.HarmonizedCode, () => customsItem.HarmonizedCode = variantEntity.HarmonizedCode);
             }
 
             customsItem.UnitValue += item.OrderItemAttributes.Sum(oia => oia.UnitPrice);
             customsItem.UnitPriceAmount += item.OrderItemAttributes.Sum(oia => oia.UnitPrice);
 
             return customsItem;
-        }
-
-        private void Apply(ShipmentCustomsItemEntity customsItem, IProductVariantEntity variantEntity)
-        {
-            ApplyValue(variantEntity.Name, () => customsItem.Description = variantEntity.Name);
-            ApplyValue(variantEntity.Weight, () => customsItem.Weight = (double) variantEntity.Weight);
-            ApplyValue(variantEntity.DeclaredValue, () => customsItem.UnitValue = variantEntity.DeclaredValue.Value);
-            ApplyValue(variantEntity.DeclaredValue, () => customsItem.UnitPriceAmount = variantEntity.DeclaredValue.Value);
-            ApplyValue(variantEntity.CountryOfOrigin, () => customsItem.CountryOfOrigin = variantEntity.CountryOfOrigin);
-            ApplyValue(variantEntity.HarmonizedCode, () => customsItem.HarmonizedCode = variantEntity.HarmonizedCode);
         }
 
         /// <summary>

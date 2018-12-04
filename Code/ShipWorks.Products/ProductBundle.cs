@@ -9,13 +9,21 @@ using ShipWorks.Templates.Processing.TemplateXml.ElementOutlines;
 
 namespace ShipWorks.Products
 {
+    /// <summary>
+    /// Bundle from Catalog
+    /// </summary>
     public class ProductBundle : ProductVariant
     {
+        /// <summary>
+        /// Constructor
+        /// </summary>
         public ProductBundle(string sku, IProductVariantEntity variant, ILog log) : base(sku, variant, log)
         {
-
         }
 
+        /// <summary>
+        /// Apply the product data to the customs item
+        /// </summary>
         public override void ApplyCustoms(OrderItemEntity item, ShipmentEntity shipment)
         {
             Debug.Assert(variant.IsActive, "Variant should be active");
@@ -30,6 +38,9 @@ namespace ShipWorks.Products
             }
         }
 
+        /// <summary>
+        /// Write the bundle's xml
+        /// </summary>
         public override void WriteXml(ElementOutline outline, Func<OrderItemProductBundleOutline> createOrderItemProductBundleOutline)
         {
             base.WriteXml(outline, createOrderItemProductBundleOutline);
