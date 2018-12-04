@@ -14,6 +14,7 @@ using SD.LLBLGen.Pro.QuerySpec;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Data.Model.FactoryClasses;
 using ShipWorks.Data.Model.HelperClasses;
 
@@ -26,15 +27,15 @@ namespace ShipWorks.Products
     public class ProductCatalog : IProductCatalog
     {
         private readonly ISqlSession sqlSession;
-        private readonly ILog productVariantLog;
+        private readonly Func<Type, ILog> logFactory;
 
         /// <summary>
         /// Constructor
         /// </summary>
         public ProductCatalog(ISqlSession sqlSession, Func<Type, ILog> logFactory)
         {
-            productVariantLog = logFactory(typeof(ProductVariant));
             this.sqlSession = sqlSession;
+            this.logFactory = logFactory;
         }
 
         /// <summary>
@@ -94,7 +95,11 @@ namespace ShipWorks.Products
         /// </summary>
         public IProductVariant FetchProductVariant(ISqlAdapter sqlAdapter, string sku)
         {
-            return new ProductVariant(sku, FetchProductVariantEntity(sqlAdapter, sku)?.AsReadOnly(), productVariantLog);
+            IProductVariantEntity variant = FetchProductVariantEntity(sqlAdapter, sku)?.AsReadOnly();
+
+            return variant?.Product.IsBundle ?? false ?
+                new ProductBundle(sku, variant, logFactory(typeof(ProductBundle))) :
+                new ProductVariant(sku, variant, logFactory(typeof(ProductVariant)));
         }
 
         /// <summary>
