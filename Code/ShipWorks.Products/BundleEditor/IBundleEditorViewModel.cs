@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Windows.Input;
 using ShipWorks.Data.Model.EntityClasses;
@@ -23,7 +23,7 @@ namespace ShipWorks.Products.BundleEditor
         /// <summary>
         /// The list of bundled skus displayed to the user.
         /// </summary>
-        List<ProductBundleDisplayLineItem> BundleLineItems { get; set; }
+        ObservableCollection<ProductBundleDisplayLineItem> BundleLineItems { get; set; }
 
         /// <summary>
         /// The bundle line item the user has selected

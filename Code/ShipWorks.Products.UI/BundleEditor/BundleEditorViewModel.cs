@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
@@ -26,7 +27,7 @@ namespace ShipWorks.Products.UI.BundleEditor
         private readonly ISqlAdapterFactory sqlAdapterFactory;
         private string sku;
         private int quantity;
-        private List<ProductBundleDisplayLineItem> bundleLineItems;
+        private ObservableCollection<ProductBundleDisplayLineItem> bundleLineItems;
         private ProductBundleDisplayLineItem selectedBundleLineItem;
         private ProductVariantEntity baseProduct;
 
@@ -38,10 +39,10 @@ namespace ShipWorks.Products.UI.BundleEditor
             handler = new PropertyChangedHandler(this, () => PropertyChanged);
 
             this.productCatalog = productCatalog;
-            this.messageHelper = messageHelper;            
+            this.messageHelper = messageHelper;
             this.sqlAdapterFactory = sqlAdapterFactory;
-			
-            BundleLineItems = new List<ProductBundleDisplayLineItem>();
+
+            BundleLineItems = new ObservableCollection<ProductBundleDisplayLineItem>();
             AddSkuToBundleCommand = new RelayCommand(AddProductToBundle);
             RemoveSkuFromBundleCommand = new RelayCommand(RemoveProductFromBundle, () => SelectedBundleLineItem != null);
             Quantity = 1;
@@ -71,7 +72,7 @@ namespace ShipWorks.Products.UI.BundleEditor
         /// The list of bundled skus displayed to the user.
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public List<ProductBundleDisplayLineItem> BundleLineItems
+        public ObservableCollection<ProductBundleDisplayLineItem> BundleLineItems
         {
             get => bundleLineItems;
             set => handler.Set(nameof(BundleLineItems), ref bundleLineItems, value);
@@ -151,12 +152,12 @@ namespace ShipWorks.Products.UI.BundleEditor
                 return;
             }
 
-            if (Quantity > 0)
+            if (Quantity <= 0)
             {
                 messageHelper.ShowError("Please enter a quantity greater than 0");
                 return;
             }
-            
+
             ProductVariantEntity productVariant;
 
             // Fetch Alias from sku
