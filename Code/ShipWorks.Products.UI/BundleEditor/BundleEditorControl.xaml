@@ -54,7 +54,7 @@
                 Style="{StaticResource OrderLookup.Button.Add}"
                 Margin="10 0 0 10"/>
         <ListBox Grid.Row="1" Grid.Column="0"
-                 ItemsSource="{Binding BundleLineItems}"
+                 ItemsSource="{Binding BundleLineItems, UpdateSourceTrigger=PropertyChanged}"
                  SelectedItem="{Binding SelectedBundleLineItem}"
                  Style="{StaticResource BlueSteel.ListBox.SingleSelection}">
             <ListBox.ItemTemplate>

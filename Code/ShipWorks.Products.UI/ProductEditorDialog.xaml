@@ -7,17 +7,19 @@
         xmlns:geography="clr-namespace:Interapptive.Shared.Business.Geography;assembly=Interapptive.Shared"
         xmlns:ui="http://schemas.shipworks.com/ui"
         xmlns:sharedUI="clr-namespace:Interapptive.Shared.UI;assembly=Interapptive.Shared"
+        xmlns:bundles="clr-namespace:ShipWorks.Products.UI.BundleEditor"
         mc:Ignorable="d"
         SizeToContent="Height"
-        Title="Product Editor" Width="500"
+        Title="Product Editor" Width="700"
         FontFamily="/ShipWorks.UI;component/Styles/BlueSteel/#Roboto"
-    d:DataContext="{d:DesignInstance productsUI:ProductEditorViewModel}">
+        d:DataContext="{d:DesignInstance productsUI:ProductEditorViewModel}">
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/ShipWorks.UI;component/Styles/BlueSteel/BlueSteelStyle.xaml" />
             </ResourceDictionary.MergedDictionaries>
             <ui:EmptyMoneyConverter x:Key="EmptyMoney" />
+            <ui:BooleanToVisibilityConverter x:Key="BooleanToVisibility"/>
             <ui:BooleanToVisibilityConverter x:Key="InvertBooleanToVisibility" Invert="True"/>
             <Style TargetType="{x:Type ui:UnitTextBox}">
                 <Setter Property="Margin" Value="10 0 0 10"/>
@@ -25,62 +27,84 @@
         </ResourceDictionary>
     </Window.Resources>
     <Grid Margin="10">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-        </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto" />
-            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="auto"/>
+        </Grid.RowDefinitions>
+        <Grid Grid.Column="0"
+              Grid.Row="0"
+              Margin="0 0 15 0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
 
-        <TextBlock Grid.Row="0"
+            <TextBlock Grid.Row="0"
                    Grid.Column="0"
-                   Text="Product Options:"
+                   Text="Product Options"
                    Style="{StaticResource Header}"/>
 
-        <TextBlock Grid.Row="1"
+            <TextBlock Grid.Row="1"
                    Grid.Column="0"
                    Style="{StaticResource FieldLabel}"
-                   Text="Is Active:" />
+                   Text="Is Active" />
 
-        <CheckBox Grid.Row="1"
+            <CheckBox Grid.Row="1"
                   Grid.Column="1"
                   IsChecked="{Binding IsActive, UpdateSourceTrigger=PropertyChanged}"
                   Style="{StaticResource FormCheckBox}"
                   Margin="9 1 0 10"/>
 
-        <TextBlock Grid.Row="2"
+            <TextBlock Grid.Row="2"
                    Grid.Column="0"
-                   Text="Product Details:"
+                   Style="{StaticResource FieldLabel}"
+                   Text="Is a Bundle" />
+
+            <CheckBox Grid.Row="2"
+                  Grid.Column="1"
+                  IsChecked="{Binding IsBundle, UpdateSourceTrigger=PropertyChanged}"
+                  Style="{StaticResource FormCheckBox}"
+                  Margin="9 1 0 10"/>
+
+            <TextBlock Grid.Row="3"
+                   Grid.Column="0"
+                   Text="Product Details"
                    Style="{StaticResource Header}"/>
 
-        <TextBlock Grid.Row="3"
+            <TextBlock Grid.Row="4"
                    Grid.Column="0"
                    Text="Created Date:"
                    Style="{StaticResource FieldLabel}"
                    Visibility="Collapsed"/>
 
-        <TextBlock Grid.Row="3"
+            <TextBlock Grid.Row="4"
                    Grid.Column="1"
                    Text="{Binding CreatedDate, UpdateSourceTrigger=PropertyChanged}"
                    Style="{StaticResource FieldLabel}"
@@ -88,13 +112,13 @@
                    HorizontalAlignment="Left"
                    Visibility="Collapsed"/>
 
-        <TextBlock Grid.Row="4"
+            <TextBlock Grid.Row="5"
                    Grid.Column="0"
-                   Text="Created Date:"
+                   Text="Created Date"
                    Style="{StaticResource FieldLabel}"
                    Visibility="{Binding IsNew, Converter={StaticResource InvertBooleanToVisibility}}"/>
 
-        <TextBlock Grid.Row="4"
+            <TextBlock Grid.Row="5"
                    Grid.Column="1"
                    Text="{Binding CreatedDate}"
                    Style="{StaticResource FieldLabel}"
@@ -103,148 +127,162 @@
                    Margin="10 0 0 10"
                    Visibility="{Binding IsNew, Converter={StaticResource InvertBooleanToVisibility}}"/>
 
-        <TextBlock Grid.Row="5"
+            <TextBlock Grid.Row="6"
                    Grid.Column="0"
-                   Text="SKU:"
+                   Text="SKU"
                    Style="{StaticResource FieldLabel}"/>
 
-        <TextBox Grid.Row="5"
+            <TextBox Grid.Row="6"
                  Grid.Column="1"
                  Text="{Binding SKU, UpdateSourceTrigger=PropertyChanged}"
                  Style="{StaticResource FormTextBox}"
                  IsEnabled="{Binding IsNew}"/>
 
-        <TextBlock Grid.Row="6"
+            <TextBlock Grid.Row="7"
                    Grid.Column="0"
-                   Text="Name:"
+                   Text="Name"
                    Style="{StaticResource FieldLabel}"/>
 
-        <TextBox Grid.Row="6"
+            <TextBox Grid.Row="7"
                  Grid.Column="1"
                  Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"
                  Style="{StaticResource FormTextBox}"/>
 
-        <TextBlock Grid.Row="7"
+            <TextBlock Grid.Row="8"
                    Grid.Column="0"
-                   Text="UPC:"
+                   Text="UPC"
                    Style="{StaticResource FieldLabel}"/>
 
-        <TextBox Grid.Row="7"
+            <TextBox Grid.Row="8"
                  Grid.Column="1"
                  Text="{Binding UPC, UpdateSourceTrigger=PropertyChanged}"
                  Style="{StaticResource FormTextBox}"/>
 
-        <TextBlock Grid.Row="8"
+            <TextBlock Grid.Row="9"
                    Grid.Column="0"
-                   Text="ASIN:"
+                   Text="ASIN"
                    Style="{StaticResource FieldLabel}"/>
 
-        <TextBox Grid.Row="8"
+            <TextBox Grid.Row="9"
                  Grid.Column="1"
                  Text="{Binding ASIN, UpdateSourceTrigger=PropertyChanged}"
                  Style="{StaticResource FormTextBox}"/>
 
-        <TextBlock Grid.Row="9"
+            <TextBlock Grid.Row="10"
                    Grid.Column="0"
-                   Text="ISBN:"
+                   Text="ISBN"
                    Style="{StaticResource FieldLabel}"/>
 
-        <TextBox Grid.Row="9"
+            <TextBox Grid.Row="10"
                  Grid.Column="1"
                  Text="{Binding ISBN, UpdateSourceTrigger=PropertyChanged}"
                  Style="{StaticResource FormTextBox}"/>
 
-        <TextBlock Grid.Row="10"
+            <TextBlock Grid.Row="11"
                    Grid.Column="0"
-                   Text="Weight:"
+                   Text="Weight"
                    Style="{StaticResource FieldLabel}"/>
 
-        <ui:UnitTextBox Grid.Row="10"
+            <ui:UnitTextBox Grid.Row="11"
                         Grid.Column="1"
                         Value="{Binding Weight, UpdateSourceTrigger=PropertyChanged}"
                         UnitType="Weight"/>
 
-        <TextBlock Grid.Row="11"
+            <TextBlock Grid.Row="12"
                    Grid.Column="0"
-                   Text="Length:"
+                   Text="Length"
                    Style="{StaticResource FieldLabel}"/>
 
-        <ui:UnitTextBox Grid.Row="11"
+            <ui:UnitTextBox Grid.Row="12"
                         Grid.Column="1"
                         Value="{Binding Length, UpdateSourceTrigger=PropertyChanged}"
                         UnitType="Length"/>
 
-        <TextBlock Grid.Row="12"
+            <TextBlock Grid.Row="13"
                    Grid.Column="0"
-                   Text="Width:"
+                   Text="Width"
                    Style="{StaticResource FieldLabel}"/>
 
-        <ui:UnitTextBox Grid.Row="12"
+            <ui:UnitTextBox Grid.Row="13"
                         Grid.Column="1"
                         Value="{Binding Width, UpdateSourceTrigger=PropertyChanged}"
                         UnitType="Length"/>
 
-        <TextBlock Grid.Row="13"
+            <TextBlock Grid.Row="14"
                    Grid.Column="0"
-                   Text="Height:"
+                   Text="Height"
                    Style="{StaticResource FieldLabel}"/>
 
-        <ui:UnitTextBox Grid.Row="13"
+            <ui:UnitTextBox Grid.Row="14"
                         Grid.Column="1"
                         Value="{Binding Height, UpdateSourceTrigger=PropertyChanged}"
                         UnitType="Length"/>
 
-        <TextBlock Grid.Row="14"
+            <TextBlock Grid.Row="15"
                    Grid.Column="0"
-                   Text="Image Url:"
+                   Text="Image Url"
                    Style="{StaticResource FieldLabel}"/>
 
-        <TextBox Grid.Row="14"
+            <TextBox Grid.Row="15"
                  Grid.Column="1"
                  Text="{Binding ImageUrl, UpdateSourceTrigger=PropertyChanged}"
                  Style="{StaticResource FormTextBox}"/>
 
-        <TextBlock Grid.Row="15"
+            <TextBlock Grid.Row="16"
                    Grid.Column="0"
-                   Text="Location:"
+                   Text="Location"
                    Style="{StaticResource FieldLabel}"/>
 
-        <TextBox Grid.Row="15"
+            <TextBox Grid.Row="16"
                  Grid.Column="1"
                  Text="{Binding BinLocation, UpdateSourceTrigger=PropertyChanged}"
                  Style="{StaticResource FormTextBox}"/>
-
-        <TextBlock Grid.Row="16"
+        </Grid>
+        <Grid Grid.Column="1"
+              Grid.Row="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <TextBlock Grid.Row="0"
                    Grid.Column="0"
-                   Text="Customs Details:"
+                   Text="Customs Details"
                    Style="{StaticResource Header}"/>
 
-        <TextBlock Grid.Row="17"
+            <TextBlock Grid.Row="1"
                    Grid.Column="0"
-                   Text="Harmonized Code:"
+                   Text="Harmonized Code"
                    Style="{StaticResource FieldLabel}"/>
 
-        <TextBox Grid.Row="17"
+            <TextBox Grid.Row="1"
                  Grid.Column="1"
                  Text="{Binding HarmonizedCode, UpdateSourceTrigger=PropertyChanged}"
                  Style="{StaticResource FormTextBox}"/>
 
-        <TextBlock Grid.Row="18"
+            <TextBlock Grid.Row="2"
                    Grid.Column="0"
-                   Text="Declared Value:"
+                   Text="Declared Value"
                    Style="{StaticResource FieldLabel}"/>
 
-        <TextBox Grid.Row="18"
+            <TextBox Grid.Row="2"
                  Grid.Column="1"
                  Text="{Binding DeclaredValue, Converter={StaticResource EmptyMoney}, NotifyOnValidationError=true, StringFormat=C, UpdateSourceTrigger=LostFocus, ValidatesOnDataErrors=true}"
                  Style="{StaticResource FormTextBox}"/>
 
-        <TextBlock Grid.Row="19"
+            <TextBlock Grid.Row="3"
                    Grid.Column="0"
-                   Text="Country Of Origin:"
+                   Text="Country of Origin"
                    Style="{StaticResource FieldLabel}"/>
 
-        <ComboBox Grid.Row="19"
+            <ComboBox Grid.Row="3"
                   Grid.Column="1"
                   DisplayMemberPath="Key"
                   SelectedValuePath="Value"
@@ -252,9 +290,29 @@
                   ItemsSource="{Binding Source={x:Static geography:CountryList.Countries}, Mode=OneTime}"
                   Style="{StaticResource FormComboBox}"/>
 
+            <Grid Grid.Row="4"
+                  Grid.Column="0" 
+                  Grid.ColumnSpan="2"
+                Visibility="{Binding Path=IsBundle, Converter={StaticResource BooleanToVisibility},
+                                                    UpdateSourceTrigger=PropertyChanged}">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <TextBlock Grid.Row="0"
+                           Text="Bundled Skus"
+                           Style="{StaticResource Header}"/>
+                <bundles:BundleEditorControl Grid.Row="1"
+                                         MinHeight="120"
+                                         MaxHeight="120"
+                                         DataContext="{Binding BundleEditorViewModel}"/>
+            </Grid>
+            
+        </Grid>
         <Grid
-            Grid.Row="20"
+            Grid.Row="1"
             Grid.Column="1"
+            VerticalAlignment="Bottom"
             HorizontalAlignment="Right"
             Grid.IsSharedSizeScope="True">
             <Grid.ColumnDefinitions>
@@ -276,5 +334,5 @@
                 Style="{StaticResource SmallPrimaryButton}"
                 Content="Save"/>
         </Grid>
-    </Grid>
+    </Grid>    
 </sharedUI:InteropWindow>

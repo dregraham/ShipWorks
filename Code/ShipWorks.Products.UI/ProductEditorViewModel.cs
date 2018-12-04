@@ -41,6 +41,7 @@ namespace ShipWorks.Products.UI
         private decimal declaredValue;
         private string countryOfOrigin;
         private bool isNew;
+        private bool isBundle;
 
         /// <summary>
         /// Constructor
@@ -72,6 +73,13 @@ namespace ShipWorks.Products.UI
         {
             get => isActive;
             set => handler.Set(nameof(IsActive), ref isActive, value);
+        }
+
+        [Obfuscation(Exclude = true)]
+        public bool IsBundle
+        {
+            get => isBundle;
+            set => handler.Set(nameof(IsBundle), ref isBundle, value);
         }
 
         [Obfuscation(Exclude = true)]
@@ -213,6 +221,7 @@ namespace ShipWorks.Products.UI
 
             SKU = productVariant.Aliases.First(a => a.IsDefault).Sku ?? string.Empty;
             IsActive = productVariant.IsNew ? true : productVariant.IsActive;
+            IsBundle = productVariant.IsNew ? false : productVariant.Product.IsBundle;
             Name = productVariant.Name ?? string.Empty;
             UPC = productVariant.UPC ?? string.Empty;
             ASIN = productVariant.ASIN ?? string.Empty;
@@ -249,6 +258,7 @@ namespace ShipWorks.Products.UI
 
             productVariant.Aliases.First(a => a.IsDefault).Sku = SKU.Trim();
             productVariant.IsActive = IsActive;
+            productVariant.Product.IsBundle = IsBundle;
             productVariant.Name = Name.Trim();
             productVariant.UPC = UPC.Trim();
             productVariant.ASIN = ASIN.Trim();

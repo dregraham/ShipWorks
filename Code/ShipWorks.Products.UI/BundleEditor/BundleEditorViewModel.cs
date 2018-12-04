@@ -44,6 +44,7 @@ namespace ShipWorks.Products.UI.BundleEditor
             BundleLineItems = new List<ProductBundleDisplayLineItem>();
             AddSkuToBundleCommand = new RelayCommand(AddProductToBundle);
             RemoveSkuFromBundleCommand = new RelayCommand(RemoveProductFromBundle, () => SelectedBundleLineItem != null);
+            Quantity = 1;
         }
 
         /// <summary>
@@ -144,6 +145,18 @@ namespace ShipWorks.Products.UI.BundleEditor
         /// </summary>
         private void AddProductToBundle()
         {
+            if (string.IsNullOrWhiteSpace(Sku))
+            {
+                messageHelper.ShowError("Please enter a sku to add to the bundle");
+                return;
+            }
+
+            if (Quantity > 0)
+            {
+                messageHelper.ShowError("Please enter a quantity greater than 0");
+                return;
+            }
+            
             ProductVariantEntity productVariant;
 
             // Fetch Alias from sku
@@ -169,6 +182,9 @@ namespace ShipWorks.Products.UI.BundleEditor
                 // Could not find entered sku
                 messageHelper.ShowError($"SKU {Sku} not found");
             }
+
+            Sku = string.Empty;
+            Quantity = 1;
         }
 
         /// <summary>
