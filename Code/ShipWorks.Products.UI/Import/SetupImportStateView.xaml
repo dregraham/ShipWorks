@@ -3,18 +3,40 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:local="clr-namespace:ShipWorks.Products.UI.Import"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:ui="http://schemas.shipworks.com/ui"
-    d:DesignHeight="450"
-    d:DesignWidth="800"
+    d:DesignHeight="250"
+    d:DesignWidth="600"
     mc:Ignorable="d">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/ShipWorks.UI;component/Styles/BlueSteel/BlueSteelStyle.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+            <Style BasedOn="{StaticResource SmallPrimaryButton}" TargetType="Button" />
+            <Style BasedOn="{StaticResource FormTextBox}" TargetType="TextBox" />
+        </ResourceDictionary>
+    </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-        <ui:FilePicker FilePath="{Binding FilePath}" Filter="Excel|*.xls;*.xlsx|Comma Separated|*.csv|Tab Delimited|*.tab|All Files|*.*" />
+
+        <StackPanel>
+            <StackPanel.Resources>
+                <Style TargetType="TextBlock">
+                    <Setter Property="Margin" Value="0,2" />
+                </Style>
+            </StackPanel.Resources>
+            <TextBlock>To import products into ShipWorks, please complete the following steps:</TextBlock>
+            <StackPanel Margin="24,0,0,16">
+                <TextBlock>
+                    <Run>1. Save the&#160;</Run><Hyperlink>sample products file</Hyperlink>
+                    .</TextBlock>
+                <TextBlock>2. Modify your products list to match the sample, or add your products to the sample.</TextBlock>
+                <TextBlock>3. Click the import button to choose the file and start the import.</TextBlock>
+            </StackPanel>
+        </StackPanel>
 
         <Grid Grid.Row="1" HorizontalAlignment="Right">
             <Grid.ColumnDefinitions>
@@ -22,8 +44,18 @@
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
 
-            <Button Grid.Column="0" Command="{Binding CloseDialog}">Close</Button>
-            <Button Grid.Column="1" Command="{Binding StartImport}">Import</Button>
+            <Button
+                Grid.Column="0"
+                Command="{Binding CloseDialog}"
+                Style="{StaticResource SmallSecondaryButton}">
+                Close
+            </Button>
+            <Button
+                Grid.Column="1"
+                Margin="8,0,0,0"
+                Command="{Binding StartImport}">
+                Import
+            </Button>
         </Grid>
     </Grid>
 </UserControl>

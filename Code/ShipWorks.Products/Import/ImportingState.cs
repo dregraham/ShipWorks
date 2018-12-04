@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -60,6 +61,14 @@ namespace ShipWorks.Products.Import
         /// Cancel the import
         /// </summary>
         public ICommand Cancel { get; }
+
+        /// <summary>
+        /// The dialog was requested to close
+        /// </summary>
+        public void CloseRequested(CancelEventArgs e)
+        {
+            e.Cancel = true;
+        }
 
         /// <summary>
         /// Cancel the import

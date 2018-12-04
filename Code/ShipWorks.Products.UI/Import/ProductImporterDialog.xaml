@@ -2,19 +2,16 @@
     x:Class="ShipWorks.Products.UI.Import.ProductImporterDialog"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:cmd="clr-namespace:GalaSoft.MvvmLight.Command;assembly=GalaSoft.MvvmLight.Platform"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:local="clr-namespace:ShipWorks.Products.UI.Import"
     xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
+    xmlns:local="clr-namespace:ShipWorks.Products.UI.Import"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:ui="http://schemas.shipworks.com/ui"
     Title="Import products"
-    Width="800"
-    Height="450"
-    FontFamily="Tahoma"
-    FontSize="8.25 pt"
-    FontStretch="Normal"
-    FontStyle="Normal"
-    FontWeight="Normal"
+    Width="600"
+    Height="250"
+    FontFamily="/ShipWorks.UI;component/Styles/BlueSteel/#Roboto"
     ShowInTaskbar="False"
     WindowStartupLocation="CenterOwner"
     WindowStyle="ToolWindow"
@@ -22,12 +19,12 @@
     <Window.Resources>
         <ui:WpfViewTemplateSelector x:Key="WpfViewTemplateSelector" />
     </Window.Resources>
-    <!--<i:Interaction.Triggers>
-        <i:EventTrigger EventName="SelectionChanged">
-            <cmd:EventToCommand Command="{Binding SelectedProductsChanged}" CommandParameter="{Binding SelectedItems, ElementName=ProductsGrid}" />
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="Closing">
+            <cmd:EventToCommand Command="{Binding Closing}" PassEventArgsToCommand="True" />
         </i:EventTrigger>
-    </i:Interaction.Triggers>-->
-    <Grid>
+    </i:Interaction.Triggers>
+    <Grid Margin="16">
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>

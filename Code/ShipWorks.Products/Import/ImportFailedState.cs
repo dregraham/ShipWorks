@@ -1,4 +1,5 @@
-﻿using GalaSoft.MvvmLight;
+﻿using System.ComponentModel;
+using GalaSoft.MvvmLight;
 using Interapptive.Shared.ComponentRegistration;
 
 namespace ShipWorks.Products.Import
@@ -13,6 +14,14 @@ namespace ShipWorks.Products.Import
         /// Constructor
         /// </summary>
         public ImportFailedState(IProductImporterStateManager stateManager)
+        {
+
+        }
+
+        /// <summary>
+        /// The dialog was requested to close
+        /// </summary>
+        public void CloseRequested(CancelEventArgs e)
         {
 
         }

@@ -1,9 +1,11 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Reflection;
 using System.Windows.Input;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
 using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.IO;
 
 namespace ShipWorks.Products.Import
 {
@@ -11,22 +13,23 @@ namespace ShipWorks.Products.Import
     public class SetupImportState : ViewModelBase, IProductImportState
     {
         private readonly IProductImporterStateManager stateManager;
-
-        private string filePath;
         private readonly Func<string, IProductImporterStateManager, ImportingState> createImportingState;
+        private readonly IFileSelector fileSelector;
 
         /// <summary>
         /// Constructor
         /// </summary>
         public SetupImportState(
             IProductImporterStateManager stateManager,
+            IFileSelector fileSelector,
             Func<string, IProductImporterStateManager, ImportingState> createImportingState)
         {
+            this.fileSelector = fileSelector;
             this.createImportingState = createImportingState;
             this.stateManager = stateManager;
 
             CloseDialog = new RelayCommand(CloseDialogAction);
-            StartImport = new RelayCommand(StartImportAction, () => !string.IsNullOrWhiteSpace(FilePath));
+            StartImport = new RelayCommand(StartImportAction);
         }
 
         /// <summary>
@@ -42,20 +45,19 @@ namespace ShipWorks.Products.Import
         public ICommand StartImport { get; }
 
         /// <summary>
-        /// Path to the file to import
+        /// The dialog was requested to close
         /// </summary>
-        [Obfuscation]
-        public string FilePath
+        public void CloseRequested(CancelEventArgs e)
         {
-            get => filePath;
-            set => Set(ref filePath, value);
+
         }
 
         /// <summary>
         /// Start the import action
         /// </summary>
         private void StartImportAction() =>
-            stateManager.ChangeState(createImportingState(FilePath, stateManager));
+            fileSelector.GetFilePathToOpen("Excel|*.xls;*.xlsx|Comma Separated|*.csv|Tab Delimited|*.tab|All Files|*.*")
+                .Do(x => stateManager.ChangeState(createImportingState(x, stateManager)));
 
         /// <summary>
         /// Close the dialog
