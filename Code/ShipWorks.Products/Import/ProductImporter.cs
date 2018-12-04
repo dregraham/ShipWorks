@@ -14,7 +14,9 @@ namespace ShipWorks.Products.Import
         /// <summary>
         /// Import products for the given spreadsheet file name and progress reporter.
         /// </summary>
+#pragma warning disable 1998
         public async Task<GenericResult<ImportProductsResult>> ImportProducts(string pathAndFilename, IProgressReporter progressReporter)
+#pragma warning restore 1998
         {
             GenericResult<ImportProductsResult> result = new GenericResult<ImportProductsResult>();
 
