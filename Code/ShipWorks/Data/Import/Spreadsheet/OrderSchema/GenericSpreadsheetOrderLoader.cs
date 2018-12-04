@@ -110,7 +110,6 @@ namespace ShipWorks.Data.Import.Spreadsheet.OrderSchema
             order.LocalStatus = csv.ReadField("Order.LocalStatus", order.LocalStatus ?? "");
             order.OnlineStatus = csv.ReadField("Order.OnlineStatus", order.OnlineStatus ?? "");
 
-            order.ChannelOrderID = csv.ReadField("Order.ChannelOrderID", order.ChannelOrderID ?? "");
             order.ShipByDate = csv.ReadField("Order.ShipByDate", (DateTime?) null, null, csv.Map.DateSettings.DateFormat, false);
 
             order.RequestedShipping = csv.ReadField("Order.RequestedShipping", order.RequestedShipping ?? "");

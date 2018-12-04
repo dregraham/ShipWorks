@@ -112,7 +112,6 @@ namespace ShipWorks.Data.Import.Spreadsheet.OrderSchema
                     new GenericSpreadsheetTargetField("Order.CreditCardNumber",     "Credit Card Number",     typeof(string)),
                     new GenericSpreadsheetTargetField("Order.CreditCardExpiration", "Credit Card Expiration", typeof(string)),
                     new GenericSpreadsheetTargetField("Order.CreditCardName",       "Credit Card Name",       typeof(string)),
-                    new GenericSpreadsheetTargetField("Order.ChannelOrderID",       "Channel Order ID",       typeof(string)),
                     new GenericSpreadsheetTargetField("Order.ShipByDate",           "Ship By Date",           typeof(string)),
                 });
         }
