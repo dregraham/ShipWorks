@@ -1,4 +1,4 @@
-﻿
+﻿using System.Collections.Generic;
 
 namespace ShipWorks.Products.Import
 {
@@ -7,5 +7,9 @@ namespace ShipWorks.Products.Import
     /// </summary>
     public interface IProductExcelReader
     {
+        /// <summary>
+        /// Load the spreadsheet
+        /// </summary>
+        (List<ProductToImportDto> SkuRows, List<ProductToImportDto> BundleRows) LoadImportFile(string filename);
     }
 }

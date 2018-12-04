@@ -127,7 +127,7 @@ namespace ShipWorks.Products
 
             ProductVariantEntity productVariant = sqlAdapter.FetchFirst(query);
 
-            if (productVariant.Product.IsBundle)
+            if (productVariant?.Product?.IsBundle == true)
             {
                 sqlAdapter.FetchEntityCollection(productVariant.Product.Bundles, 
                     new RelationPredicateBucket(ProductEntity.Relations.ProductBundleEntityUsingProductID));

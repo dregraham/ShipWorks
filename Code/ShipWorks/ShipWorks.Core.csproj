@@ -1020,6 +1020,8 @@
     <Compile Include="Products\Import\ImportProductsResult.cs" />
     <Compile Include="Products\Import\IProductExcelReader.cs" />
     <Compile Include="Products\Import\IProductImporter.cs" />
+    <Compile Include="Products\Import\ProductImportException.cs" />
+    <Compile Include="Products\Import\ProductToImportDto.cs" />
     <Compile Include="Products\IProductVariant.cs" />
     <Compile Include="Products\IProductCatalog.cs" />
     <Compile Include="Products\IProductsMode.cs" />
