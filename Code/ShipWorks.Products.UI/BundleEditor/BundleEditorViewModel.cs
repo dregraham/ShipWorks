@@ -9,7 +9,6 @@ using Interapptive.Shared.UI;
 using ShipWorks.Core.UI;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data.Model.EntityInterfaces;
 
 namespace ShipWorks.Products.UI.BundleEditor
 {
@@ -23,27 +22,27 @@ namespace ShipWorks.Products.UI.BundleEditor
         private readonly PropertyChangedHandler handler;
         private readonly IProductCatalog productCatalog;
         private readonly IMessageHelper messageHelper;
+        private readonly ISqlAdapterFactory sqlAdapterFactory;
         private string sku;
         private int quantity;
         private List<ProductBundleDisplayLineItem> bundleLineItems;
         private ProductBundleDisplayLineItem selectedBundleLineItem;
-        private ProductVariantAliasEntity baseProductAlias;
-        private ISqlAdapter sqlAdapter;
+        private ProductVariantEntity productVariant;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public BundleEditorViewModel(IProductCatalog productCatalog, IMessageHelper messageHelper)
+        public BundleEditorViewModel(IProductCatalog productCatalog, IMessageHelper messageHelper, ISqlAdapterFactory sqlAdapterFactory)
         {
             handler = new PropertyChangedHandler(this, () => PropertyChanged);
-            
+
             this.productCatalog = productCatalog;
             this.messageHelper = messageHelper;
-            
+            this.sqlAdapterFactory = sqlAdapterFactory;
             AddSkuToBundleCommand = new RelayCommand(AddProductToBundle);
             RemoveSkuFromBundleCommand = new RelayCommand(RemoveProductFromBundle, () => SelectedBundleLineItem != null);
         }
-        
+
         /// <summary>
         /// Sku the user enters
         /// </summary>
@@ -89,24 +88,23 @@ namespace ShipWorks.Products.UI.BundleEditor
         /// </summary>
         [Obfuscation(Exclude = true)]
         public ICommand AddSkuToBundleCommand { get; }
-        
+
         /// <summary>
         /// Command for removing a sku from the bundle
         /// </summary>
         [Obfuscation(Exclude = true)]
         public ICommand RemoveSkuFromBundleCommand { get; }
-        
+
         /// <summary>
         /// Load the view model with the given base product and sql adapter
         /// </summary>
-        public void Load(ProductVariantAliasEntity baseProductAlias, ISqlAdapter sqlAdapter)
+        public void Load(ProductVariantEntity baseProductVariant)
         {
-            this.baseProductAlias = baseProductAlias;
-            this.sqlAdapter = sqlAdapter;
+            productVariant = baseProductVariant;
 
-            if (baseProductAlias.ProductVariant.Product.IsBundle)
+            if (productVariant.Product.IsBundle)
             {
-                foreach (ProductBundleEntity bundledProduct in baseProductAlias.ProductVariant.Product.Bundles)
+                foreach (ProductBundleEntity bundledProduct in productVariant.Product.Bundles)
                 {
                     ProductVariantEntity bundledProductVariant = bundledProduct.Product.Variants.SingleOrDefault(
                         x => x.ProductVariantID == bundledProduct.ChildProductVariantID);
@@ -115,7 +113,7 @@ namespace ShipWorks.Products.UI.BundleEditor
 
                     if (bundledProductVariantAlias != null)
                     {
-                        BundleLineItems.Add(new ProductBundleDisplayLineItem(bundledProduct, bundledProductVariantAlias.Sku));    
+                        BundleLineItems.Add(new ProductBundleDisplayLineItem(bundledProduct, bundledProductVariantAlias.Sku));
                     }
                 }
             }
@@ -130,31 +128,36 @@ namespace ShipWorks.Products.UI.BundleEditor
         /// </summary>
         public void Save()
         {
-            baseProductAlias.ProductVariant.Product.Bundles.Clear();
-            
+            productVariant.Product.Bundles.Clear();
+
             foreach (ProductBundleDisplayLineItem bundleLineItem in BundleLineItems)
             {
-                baseProductAlias.ProductVariant.Product.Bundles.Add(bundleLineItem.BundledProduct);
+                productVariant.Product.Bundles.Add(bundleLineItem.BundledProduct);
             }
         }
-        
+
         /// <summary>
         /// Add the product with the entered sku to the bundle
         /// </summary>
         private void AddProductToBundle()
         {
+            ProductVariantEntity productVariant;
+
             // Fetch Alias from sku
-            ProductVariantEntity productVariant = productCatalog.FetchProductVariantEntity(sqlAdapter, Sku);
+            using (ISqlAdapter adapter = sqlAdapterFactory.Create())
+            {
+                productVariant = productCatalog.FetchProductVariantEntity(adapter, Sku);
+            }
 
             if (productVariant != null)
             {
                 ProductBundleEntity bundleEntity = new ProductBundleEntity
                 {
-                    ProductID = baseProductAlias.ProductVariant.ProductID,
+                    ProductID = productVariant.ProductID,
                     ChildProductVariantID = productVariant.ProductVariantID,
                     Quantity = Quantity
                 };
-                
+
                 // Add to bundled skus
                 BundleLineItems.Add(new ProductBundleDisplayLineItem(bundleEntity, Sku));
             }

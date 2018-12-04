@@ -10,6 +10,7 @@ using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Core.UI;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Products.UI.BundleEditor;
 
 namespace ShipWorks.Products.UI
 {
@@ -46,12 +47,12 @@ namespace ShipWorks.Products.UI
         /// <summary>
         /// Constructor
         /// </summary>
-        public ProductEditorViewModel(IProductEditorDialogFactory dialogFactory, IMessageHelper messageHelper)
+        public ProductEditorViewModel(IProductEditorDialogFactory dialogFactory, IMessageHelper messageHelper, IBundleEditorViewModel bundleEditorViewModel)
         {
             handler = new PropertyChangedHandler(this, () => PropertyChanged);
-            this.dialog = dialogFactory.Create();
+            dialog = dialogFactory.Create();
             this.messageHelper = messageHelper;
-
+            BundleEditorViewModel = bundleEditorViewModel;
             Save = new RelayCommand(SaveProduct);
             Cancel = new RelayCommand(dialog.Close);
         }
@@ -188,6 +189,12 @@ namespace ShipWorks.Products.UI
         }
 
         /// <summary>
+        /// Bundle editor
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public IBundleEditorViewModel BundleEditorViewModel { get; }
+
+        /// <summary>
         /// Show the product editor
         /// </summary>
         public bool? ShowProductEditor(ProductVariantEntity productVariant)
@@ -199,6 +206,11 @@ namespace ShipWorks.Products.UI
             {
                 CreatedDate = DateTime.SpecifyKind(productVariant.CreatedDate, DateTimeKind.Utc)
                     .ToLocalTime();
+            }
+
+            if (productVariant.Product.IsBundle)
+            {
+                BundleEditorViewModel.Load(productVariant);
             }
 
             SKU = productVariant.Aliases.First(a => a.IsDefault).Sku ?? string.Empty;
@@ -230,6 +242,11 @@ namespace ShipWorks.Products.UI
             {
                 messageHelper.ShowError($"The following field is required: {Environment.NewLine}SKU");
                 return;
+            }
+
+            if (productVariant.Product.IsBundle)
+            {
+                BundleEditorViewModel.Save();
             }
 
             productVariant.Aliases.First(a => a.IsDefault).Sku = SKU.Trim();
