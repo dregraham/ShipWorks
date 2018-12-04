@@ -8,7 +8,11 @@
         <Setter Property="ItemContainerStyle">
             <Setter.Value>
                 <Style TargetType="{x:Type ListBoxItem}">
-                    <Setter Property="Background" Value="{StaticResource SelectionColor}"/>
+                    <Style.Triggers>
+                        <Trigger Property="IsSelected" Value="true">
+                            <Setter Property="Background" Value="{StaticResource SelectionColor}" />
+                        </Trigger>
+                    </Style.Triggers>                
                 </Style>
             </Setter.Value>
         </Setter>
