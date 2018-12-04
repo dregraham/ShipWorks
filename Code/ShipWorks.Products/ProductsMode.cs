@@ -74,10 +74,13 @@ namespace ShipWorks.Products
             ActivateProductCommand =
                 new RelayCommand(() => SetProductActivation(true).Forget(), () => SelectedProductIDs?.Any() == true);
 
-            ImportProducts = new RelayCommand(() => productImporterViewModelFunc().ImportProducts().Do(RefreshProductsAction));
+            ImportProducts = new RelayCommand(() => ImportProductsAction());
 
             AddProduct = new RelayCommand(() => AddProductAction());
         }
+
+        private void ImportProductsAction() =>
+            productImporterViewModelFunc().ImportProducts().Do(RefreshProductsAction);
 
         /// <summary>
         /// Command for Adding a product

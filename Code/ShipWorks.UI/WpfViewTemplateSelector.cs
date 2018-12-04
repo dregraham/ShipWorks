@@ -42,15 +42,18 @@ namespace ShipWorks.UI
         /// </summary>
         private DataTemplate CreateTemplate(Type itemType)
         {
-            var viewAttribute = Attribute.GetCustomAttribute(itemType, typeof(WpfViewAttribute)) as WpfViewAttribute;
-            if (viewAttribute == null)
+            var viewType =
+                WpfViewAttribute.GetViewFor(itemType) ??
+                WpfViewForAttribute.FindViewFor(itemType);
+
+            if (viewType == null)
             {
                 throw new InvalidOperationException($"A view must be specified for {itemType.Name}");
             }
 
             return new DataTemplate
             {
-                VisualTree = new FrameworkElementFactory(viewAttribute.ViewType)
+                VisualTree = new FrameworkElementFactory(viewType)
             };
         }
     }

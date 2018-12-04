@@ -1,5 +1,6 @@
 using System;
 using System.Diagnostics;
+using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Threading;
 using log4net;
 
@@ -8,35 +9,36 @@ namespace ShipWorks.Common.Threading
     /// <summary>
     /// An individual action that will have its progress tracked
     /// </summary>
+    [Component]
     public class ProgressItem : IProgressReporter
     {
         // Logger
-        static readonly ILog log = LogManager.GetLogger(typeof(ProgressItem));
+        private static readonly ILog log = LogManager.GetLogger(typeof(ProgressItem));
 
         // Name of the action
-        string name = string.Empty;
+        private readonly string name = string.Empty;
 
         // Currently displayed detail of the action
-        string detail = string.Empty;
+        private string detail = string.Empty;
 
         // From 0 to 100
-        int percentComplete;
+        private int percentComplete;
 
         // Status of this item
-        ProgressItemStatus status = ProgressItemStatus.Pending;
+        private ProgressItemStatus status = ProgressItemStatus.Pending;
 
         // If set to failure, this allows an exception message to be displayed
-        Exception error = null;
+        private Exception error = null;
 
         // Gets or sets an object that contains data to associate with the item.
-        object tag = null;
+        private object tag = null;
 
         // Indicates if the action can be canceled
-        bool canCancel = true;
+        private bool canCancel = true;
 
         // Indicates if the user has requested cancellation
-        bool cancelRequested = false;
-        object cancelRequestedLock = new object();
+        private bool cancelRequested = false;
+        private readonly object cancelRequestedLock = new object();
 
         // Raised when an of the properties of the item changed
         public event EventHandler Changed;

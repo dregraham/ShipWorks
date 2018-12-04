@@ -215,6 +215,7 @@
     <Compile Include="Enums\UnitType.cs" />
     <Compile Include="Extensions\CharExtensions.cs" />
     <Compile Include="Extensions\CollectionExtensions.cs" />
+    <Compile Include="Extensions\IntExtensions.cs" />
     <Compile Include="Extensions\ObjectExtensions.cs" />
     <Compile Include="Extensions\SemaphoreExtensions.cs" />
     <Compile Include="Extensions\WindowExtensions.cs" />

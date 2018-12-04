@@ -87,8 +87,20 @@
       <Link>Properties\AssemblyInfoCommon.cs</Link>
     </Compile>
     <Compile Include="DesignerProductsMode.cs" />
+    <Compile Include="Import\ImportFailedStateView.xaml.cs">
+      <DependentUpon>ImportFailedStateView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Import\ImportingStateView.xaml.cs">
+      <DependentUpon>ImportingStateView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Import\ImportSucceededStateView.xaml.cs">
+      <DependentUpon>ImportSucceededStateView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Import\ProductImporterDialog.xaml.cs">
       <DependentUpon>ProductImporterDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Import\SetupImportStateView.xaml.cs">
+      <DependentUpon>SetupImportStateView.xaml</DependentUpon>
     </Compile>
     <Compile Include="IProductsView.cs" />
     <Compile Include="ProductEditorDialog.xaml.cs">
@@ -133,7 +145,23 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Import\ImportFailedStateView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Import\ImportingStateView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Import\ImportSucceededStateView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Import\ProductImporterDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Import\SetupImportStateView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

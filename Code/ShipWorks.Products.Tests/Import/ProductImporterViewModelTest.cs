@@ -54,6 +54,19 @@ namespace ShipWorks.Products.Tests.Import
             Assert.True(result.Failure);
         }
 
+        [Fact]
+        public void CloseDialog_CallsCloseOnOpenedDialog()
+        {
+            var dialog = mock.Mock<IProductImporterDialog>();
+            createDialogMock.Setup(f => f(testObject)).Returns(() => dialog.Object);
+
+            testObject.ImportProducts();
+
+            testObject.CloseDialog.Execute(null);
+
+            dialog.Verify(x => x.Close());
+        }
+
         public void Dispose()
         {
             mock.Dispose();

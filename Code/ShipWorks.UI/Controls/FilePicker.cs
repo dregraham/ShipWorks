@@ -17,11 +17,22 @@ namespace ShipWorks.UI.Controls
                     FrameworkPropertyMetadataOptions.BindsTwoWayByDefault,
                     new PropertyChangedCallback(OnFilePathChanged)));
 
+        public static readonly DependencyProperty FilterProperty =
+            DependencyProperty.Register("Filter", typeof(string), typeof(FilePicker));
+
         private TextBox entry;
         private Button browseButton;
 
         /// <summary>
-        /// Weight in fractional lbs
+        /// Static constructor
+        /// </summary>
+        static FilePicker()
+        {
+            DefaultStyleKeyProperty.OverrideMetadata(typeof(FilePicker), new FrameworkPropertyMetadata(typeof(FilePicker)));
+        }
+
+        /// <summary>
+        /// File path
         /// </summary>
         [Bindable(true)]
         [Obfuscation(Exclude = true)]
@@ -29,6 +40,17 @@ namespace ShipWorks.UI.Controls
         {
             get { return (string) GetValue(FilePathProperty); }
             set { SetValue(FilePathProperty, value); }
+        }
+
+        /// <summary>
+        /// Filter for the dialog
+        /// </summary>
+        [Bindable(true)]
+        [Obfuscation(Exclude = true)]
+        public string Filter
+        {
+            get { return (string) GetValue(FilterProperty); }
+            set { SetValue(FilterProperty, value); }
         }
 
         /// <summary>
@@ -58,7 +80,11 @@ namespace ShipWorks.UI.Controls
 
         private void OnBrowseButtonClicked(object sender, RoutedEventArgs e)
         {
-            OpenFileDialog openFileDialog = new OpenFileDialog();
+            OpenFileDialog openFileDialog = new OpenFileDialog
+            {
+                Filter = this.Filter
+            };
+
             if (openFileDialog.ShowDialog() == true)
             {
                 SetCurrentValue(FilePathProperty, openFileDialog.FileName);
