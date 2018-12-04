@@ -27,6 +27,12 @@ namespace ShipWorks.Data.Import.Xml
                 order.OrderDate = order.OrderDate.ToUniversalTime();
             }
 
+            // Channel Order ID
+            order.ChannelOrderID = XPathUtility.Evaluate(xpath, "ChannelOrderID", "");
+
+            // Ship By Date
+            order.ShipByDate = DateTime.Parse(XPathUtility.Evaluate(xpath, "ShipByDate", ""));
+
             // shipping
             order.RequestedShipping = XPathUtility.Evaluate(xpath, "ShippingMethod", "");
 
