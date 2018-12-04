@@ -214,10 +214,7 @@ namespace ShipWorks.Products.UI
                     .ToLocalTime();
             }
 
-            if (productVariant.Product.IsBundle)
-            {
-                BundleEditorViewModel.Load(productVariant);
-            }
+            BundleEditorViewModel.Load(productVariant);
 
             SKU = productVariant.Aliases.First(a => a.IsDefault).Sku ?? string.Empty;
             IsActive = productVariant.IsNew ? true : productVariant.IsActive;
@@ -251,14 +248,12 @@ namespace ShipWorks.Products.UI
                 return;
             }
 
-            if (productVariant.Product.IsBundle)
-            {
-                BundleEditorViewModel.Save();
-            }
+            productVariant.Product.IsBundle = IsBundle;
+
+            BundleEditorViewModel.Save();
 
             productVariant.Aliases.First(a => a.IsDefault).Sku = SKU.Trim();
             productVariant.IsActive = IsActive;
-            productVariant.Product.IsBundle = IsBundle;
             productVariant.Name = Name.Trim();
             productVariant.UPC = UPC.Trim();
             productVariant.ASIN = ASIN.Trim();

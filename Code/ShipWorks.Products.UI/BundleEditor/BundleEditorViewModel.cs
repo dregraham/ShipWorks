@@ -5,10 +5,12 @@ using System.Linq;
 using System.Reflection;
 using System.Windows.Input;
 using GalaSoft.MvvmLight.CommandWpf;
+using Interapptive.Shared.Collections;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.UI;
 using ShipWorks.Core.UI;
 using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model.Custom;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Products.BundleEditor;
 
@@ -106,6 +108,7 @@ namespace ShipWorks.Products.UI.BundleEditor
         public void Load(ProductVariantEntity baseProductVariant)
         {
             baseProduct = baseProductVariant;
+            baseProduct.Product.Bundles.RemovedEntitiesTracker = new ProductBundleCollection();
 
             if (baseProduct.Product.IsBundle)
             {
@@ -120,6 +123,8 @@ namespace ShipWorks.Products.UI.BundleEditor
                         BundleLineItems.Add(
                             new ProductBundleDisplayLineItem(bundledProduct, bundledProductVariantAlias.Sku));
                     }
+
+                    SelectedBundleLineItem = BundleLineItems?.FirstOrDefault();
                 }
             }
             else
@@ -133,11 +138,28 @@ namespace ShipWorks.Products.UI.BundleEditor
         /// </summary>
         public void Save()
         {
-            baseProduct.Product.Bundles.Clear();
-
-            foreach (ProductBundleDisplayLineItem bundleLineItem in BundleLineItems)
+            // If the base product is not a bundle, remove all of its bundle items
+            if (!baseProduct.Product.IsBundle)
             {
-                baseProduct.Product.Bundles.Add(bundleLineItem.BundledProduct);
+                baseProduct.Product.Bundles.RemovedEntitiesTracker.AddRange(baseProduct.Product.Bundles);
+            }
+
+            // Delete the removed items
+            if (baseProduct.Product.Bundles.RemovedEntitiesTracker.Count > 0)
+            {
+                using (ISqlAdapter adapter = sqlAdapterFactory.Create())
+                {
+                    adapter.DeleteEntityCollection(baseProduct.Product.Bundles.RemovedEntitiesTracker);
+                }
+            }
+
+            // Add in any bundle items
+            if (baseProduct.Product.IsBundle)
+            {
+                foreach (ProductBundleDisplayLineItem bundleLineItem in BundleLineItems)
+                {
+                    baseProduct.Product.Bundles.Add(bundleLineItem.BundledProduct);
+                }
             }
         }
 
@@ -193,6 +215,13 @@ namespace ShipWorks.Products.UI.BundleEditor
         /// </summary>
         private void RemoveProductFromBundle()
         {
+            ProductBundleEntity bundleProductToDelete = baseProduct.Product.Bundles.FirstOrDefault(b => b.ProductID == SelectedBundleLineItem.BundledProduct.ProductID);
+
+            if (bundleProductToDelete != null)
+            {
+                baseProduct.Product.Bundles.Remove(bundleProductToDelete);
+            }
+
             BundleLineItems.Remove(SelectedBundleLineItem);
         }
     }
