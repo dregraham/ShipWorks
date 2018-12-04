@@ -3,7 +3,7 @@ using System.ComponentModel;
 using System.Windows.Input;
 using ShipWorks.Data.Model.EntityClasses;
 
-namespace ShipWorks.Products.UI.BundleEditor
+namespace ShipWorks.Products.BundleEditor
 {
     /// <summary>
     /// Interface for the bundle editor view model
@@ -41,7 +41,7 @@ namespace ShipWorks.Products.UI.BundleEditor
         ICommand RemoveSkuFromBundleCommand { get; }
 
         /// <summary>
-        /// Load the view model with the given base product and sql adapter
+        /// Load the view model with the given base product
         /// </summary>
         void Load(ProductVariantEntity productVariant);
 

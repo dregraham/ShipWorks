@@ -6,11 +6,9 @@ using System.Windows.Input;
 using GalaSoft.MvvmLight.CommandWpf;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.UI;
-using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Core.UI;
-using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Products.UI.BundleEditor;
+using ShipWorks.Products.BundleEditor;
 
 namespace ShipWorks.Products.UI
 {

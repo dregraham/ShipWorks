@@ -1,6 +1,6 @@
 using ShipWorks.Data.Model.EntityClasses;
 
-namespace ShipWorks.Products.UI.BundleEditor
+namespace ShipWorks.Products.BundleEditor
 {
     /// <summary>
     /// DTO for displaying product bundle line items
