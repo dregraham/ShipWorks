@@ -170,13 +170,19 @@ namespace ShipWorks.Products.UI.BundleEditor
         {
             if (string.IsNullOrWhiteSpace(Sku))
             {
-                messageHelper.ShowError("Please enter a sku to add to the bundle");
+                messageHelper.ShowError("Please enter a SKU to add to the bundle");
                 return;
             }
 
             if (Quantity <= 0)
             {
                 messageHelper.ShowError("Please enter a quantity greater than 0");
+                return;
+            }
+
+            if (baseProduct.Aliases.Any(a=>a.Sku == sku))
+            {
+                messageHelper.ShowError("A bundle cannot contain itself");
                 return;
             }
 
@@ -190,6 +196,18 @@ namespace ShipWorks.Products.UI.BundleEditor
 
             if (productVariant != null)
             {
+                if (BundleLineItems.Any(i => i.BundledProduct.ChildProductVariantID == productVariant.ProductVariantID))
+                {
+                    messageHelper.ShowError("SKU already exists in bundle.");
+                    return;
+                }
+
+                if (productVariant.Product.IsBundle)
+                {
+                    messageHelper.ShowError("The SKU refers to a bundle. A bundle cannot contain another bundle.");
+                    return;
+                }
+
                 ProductBundleEntity bundleEntity = new ProductBundleEntity
                 {
                     ProductID = productVariant.ProductID,
