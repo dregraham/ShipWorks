@@ -47,6 +47,11 @@ namespace ShipWorks.Products.Import
         }
 
         /// <summary>
+        /// Should products be reloaded after the dialog closes
+        /// </summary>
+        public bool ShouldReloadProducts => true;
+
+        /// <summary>
         /// Action to close the dialog
         /// </summary>
         private void CloseDialogAction() => stateManager.Close();

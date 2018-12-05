@@ -1,6 +1,5 @@
 using System;
 using System.Diagnostics;
-using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Threading;
 using log4net;
 
@@ -9,7 +8,6 @@ namespace ShipWorks.Common.Threading
     /// <summary>
     /// An individual action that will have its progress tracked
     /// </summary>
-    [Component]
     public class ProgressItem : IProgressReporter
     {
         // Logger

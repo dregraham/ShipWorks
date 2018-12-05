@@ -68,7 +68,9 @@ namespace ShipWorks.Products.Import
 
             CurrentState = createInitialState(this);
 
-            return messageHelper.ShowDialog(dialog) == true ?
+            messageHelper.ShowDialog(dialog);
+
+            return CurrentState.ShouldReloadProducts ?
                 Result.FromSuccess() :
                 Result.FromError("Dialog canceled");
         }
@@ -81,6 +83,6 @@ namespace ShipWorks.Products.Import
         /// <summary>
         /// Close the dialog
         /// </summary>
-        public void Close() => dialog?.Close();
+        public void Close() => dialog.Close();
     }
 }

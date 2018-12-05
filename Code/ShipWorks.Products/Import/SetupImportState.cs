@@ -53,6 +53,11 @@ namespace ShipWorks.Products.Import
         }
 
         /// <summary>
+        /// Should products be reloaded after the dialog closes
+        /// </summary>
+        public bool ShouldReloadProducts => false;
+
+        /// <summary>
         /// Save the sample file
         /// </summary>
         private void SaveSampleAction() => productImportFileSelector.SaveSample();

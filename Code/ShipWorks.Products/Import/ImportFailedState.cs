@@ -90,6 +90,11 @@ namespace ShipWorks.Products.Import
         }
 
         /// <summary>
+        /// Should products be reloaded after the dialog closes
+        /// </summary>
+        public bool ShouldReloadProducts => true;
+
+        /// <summary>
         /// Start the import action
         /// </summary>
         private void StartImportAction() =>

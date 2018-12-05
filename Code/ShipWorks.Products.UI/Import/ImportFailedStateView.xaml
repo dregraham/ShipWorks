@@ -59,6 +59,7 @@
             <DataGrid
                 Grid.Row="1"
                 Margin="0,8"
+                IsReadOnly="True"
                 AutoGenerateColumns="False"
                 ItemsSource="{Binding ImportErrors, Mode=OneTime}">
                 <DataGrid.Columns>

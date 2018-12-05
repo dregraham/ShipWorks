@@ -7,6 +7,14 @@ namespace ShipWorks.Products.Import
     /// </summary>
     public interface IProductImportState
     {
+        /// <summary>
+        /// Should products be reloaded after the dialog closes
+        /// </summary>
+        bool ShouldReloadProducts { get; }
+
+        /// <summary>
+        /// Is a close requested
+        /// </summary>
         void CloseRequested(CancelEventArgs e);
     }
 }

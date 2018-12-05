@@ -49,7 +49,7 @@ namespace ShipWorks.Products.Import
         /// </summary>
         private void WriteToFile(string filePath)
         {
-            using (var stream = GetType().Assembly.GetManifestResourceStream(typeof(ProductImportFileSelector), "ProductImportSample.csv"))
+            using (var stream = GetType().Assembly.GetManifestResourceStream("ShipWorks.Products.Import.ProductImportSample.csv"))
             {
                 using (var file = File.OpenWrite(filePath))
                 {

@@ -36,7 +36,7 @@ namespace ShipWorks.Products.Import
         public ImportingState(
             IProductImporterStateManager stateManager,
             IProductImporter productImporter,
-            Func<string, IProgressReporter> createProgressReporter,
+            IProgressFactory progressFactory,
             Func<ImportProductsResult, IProductImporterStateManager, ImportSucceededState> createSuccessState,
             Func<Exception, IProductImporterStateManager, ImportFailedState> createFailedState,
             IMessageHelper messageHelper)
@@ -48,7 +48,7 @@ namespace ShipWorks.Products.Import
             this.stateManager = stateManager;
 
             Cancel = new RelayCommand(CancelAction);
-            progressReporter = createProgressReporter("Importing products...");
+            progressReporter = progressFactory.CreateReporter("Importing products...");
         }
 
         /// <summary>
@@ -78,6 +78,11 @@ namespace ShipWorks.Products.Import
         /// </summary>
         public void CloseRequested(CancelEventArgs e) =>
             e.Cancel = messageHelper.ShowQuestion("Closing will stop the import.  Are you sure?") != DialogResult.OK;
+
+        /// <summary>
+        /// Should products be reloaded after the dialog closes
+        /// </summary>
+        public bool ShouldReloadProducts => true;
 
         /// <summary>
         /// Cancel the import
