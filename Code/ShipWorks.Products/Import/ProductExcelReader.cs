@@ -38,6 +38,15 @@ namespace ShipWorks.Products.Import
             {
                 return GenericResult.FromError<(List<ProductToImportDto> SkuRows, List<ProductToImportDto> BundleRows)>(ex);
             }
+            catch (IOException ex)
+            {
+                if (ex.HResult == -2147024864)
+                {
+                    return GenericResult.FromError<(List<ProductToImportDto> SkuRows, List<ProductToImportDto> BundleRows)>(
+                        new ProductImportException($"An error occurred while reading product spreadsheet '{filename}'." +
+                                                   $"{Environment.NewLine}{Environment.NewLine}Verify that it is not already open by another application.", ex));
+                }
+            }
             catch (Exception ex)
             {
                 return GenericResult.FromError<(List<ProductToImportDto> SkuRows, List<ProductToImportDto> BundleRows)>(
