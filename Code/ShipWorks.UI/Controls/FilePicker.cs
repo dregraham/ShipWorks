@@ -93,7 +93,6 @@ namespace ShipWorks.UI.Controls
 
         private static void OnFilePathChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            //throw new NotImplementedException();
         }
     }
 }

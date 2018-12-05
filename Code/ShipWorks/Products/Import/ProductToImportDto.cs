@@ -1,6 +1,11 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Linq;
 using System.Reflection;
+using Interapptive.Shared.Collections;
 using Interapptive.Shared.Utility;
+using DisplayNameAttribute = System.ComponentModel.DisplayNameAttribute;
 
 namespace ShipWorks.Products.Import
 {
@@ -10,6 +15,11 @@ namespace ShipWorks.Products.Import
     [Obfuscation(Exclude = true, ApplyToMembers = true, StripAfterObfuscation = false)]
     public class ProductToImportDto
     {
+        private static readonly string[] ActiveValues = new[] { "ACTIVE", "YES", "TRUE", "1" };
+        private static readonly string[] PipeSeparator = new[] { " | " };
+        private static readonly string[] ColonSeparator = new[] { " : " };
+        private static List<string> propertyNames = new List<string>();
+
         [DisplayName("SKU")]
         public string Sku { get; set; }
 
@@ -59,7 +69,37 @@ namespace ShipWorks.Products.Import
         public string HarmonizedCode { get; set; }
 
         [DisplayName("Active")]
-        public string Active { get; set; }
+        public string Active { private get; set; }
+
+        public bool IsActive => ActiveValues.Contains(Active.ToUpperInvariant());
+
+        public IEnumerable<string> AliasSkuList => AliasSkus.IsNullOrWhiteSpace() ? 
+            Enumerable.Empty<string>() : 
+            AliasSkus?.Split(PipeSeparator, StringSplitOptions.RemoveEmptyEntries);
+
+        public IEnumerable<(string Sku, int Quantity)> BundleSkuList
+        {
+            get
+            {
+                if (BundleSkus.IsNullOrWhiteSpace())
+                {
+                    return Enumerable.Empty<(string, int)>();
+                }
+
+                return BundleSkus.Split(PipeSeparator, StringSplitOptions.RemoveEmptyEntries)
+                    .Select(skuAndQty =>
+                    {
+                        var values = skuAndQty.Split(ColonSeparator, StringSplitOptions.RemoveEmptyEntries);
+
+                        if (values.Length != 2)
+                        {
+                            throw new ProductImportException($"Quantity wasn't support for bundled item SKU {values[0]}");
+                        }
+
+                        return (values[0], GetValue<int>(values[1], "Bundle Quantity"));
+                    });
+            }
+        }
 
         /// <summary>
         /// Get T value of the given string.
@@ -84,6 +124,25 @@ namespace ShipWorks.Products.Import
             }
 
             throw new ProductImportException($"No value was provided for {propertyName}.");
+        }
+
+        /// <summary>
+        /// Get the list of column names based on each property's DisplayName attribute
+        /// </summary>
+        [Obfuscation(Exclude = true, StripAfterObfuscation = false)]
+        public static List<string> PropertyNames
+        {
+            get
+            {
+                if (propertyNames.None())
+                {
+                    propertyNames = typeof(ProductToImportDto).GetProperties().Where(p => p.Name != nameof(PropertyNames))
+                        .Select(p => p.GetCustomAttributes(typeof(DisplayNameAttribute), true).Select(a => ((DisplayNameAttribute) a).DisplayName).FirstOrDefault())
+                        .ToList();
+                }
+
+                return propertyNames;
+            }
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Interapptive.Shared.Utility;
 
 namespace ShipWorks.Products.Import
 {
@@ -10,6 +11,6 @@ namespace ShipWorks.Products.Import
         /// <summary>
         /// Load the spreadsheet
         /// </summary>
-        (List<ProductToImportDto> SkuRows, List<ProductToImportDto> BundleRows) LoadImportFile(string filename);
+        GenericResult<(List<ProductToImportDto> SkuRows, List<ProductToImportDto> BundleRows)> LoadImportFile(string filename);
     }
 }
