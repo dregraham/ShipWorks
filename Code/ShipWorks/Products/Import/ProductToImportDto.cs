@@ -102,7 +102,7 @@ namespace ShipWorks.Products.Import
 
                         if (values.Length != 2)
                         {
-                            throw new ProductImportException($"Quantity wasn't support for bundled item SKU {values[0]}");
+                            throw new ProductImportException($"Quantity is required, but wasn't supplied for bundled item SKU {values[0]}");
                         }
 
                         int quantity = GetValue<int>(values[1], "Bundle Quantity");
