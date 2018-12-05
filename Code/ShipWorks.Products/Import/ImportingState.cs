@@ -47,7 +47,7 @@ namespace ShipWorks.Products.Import
             this.createSuccessState = createSuccessState;
             this.stateManager = stateManager;
 
-            Cancel = new RelayCommand(CancelAction);
+            StopImport = new RelayCommand(StopImportAction);
             progressReporter = progressFactory.CreateReporter("Importing products...");
         }
 
@@ -62,16 +62,17 @@ namespace ShipWorks.Products.Import
         }
 
         /// <summary>
+        /// Stop the import
+        /// </summary>
+        [Obfuscation]
+        public ICommand StopImport { get; }
+
+        /// <summary>
         /// Start the import
         /// </summary>
         /// <param name="filePath"></param>
         public void StartImport(string filePath) =>
             StartImportInternal(filePath).Forget();
-
-        /// <summary>
-        /// Cancel the import
-        /// </summary>
-        public ICommand Cancel { get; }
 
         /// <summary>
         /// The dialog was requested to close
@@ -87,7 +88,7 @@ namespace ShipWorks.Products.Import
         /// <summary>
         /// Cancel the import
         /// </summary>
-        private void CancelAction() => progressReporter.Cancel();
+        private void StopImportAction() => progressReporter.Cancel();
 
         /// <summary>
         /// Start the import
