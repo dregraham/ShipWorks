@@ -72,6 +72,31 @@ namespace ShipWorks.Products
         }
 
         /// <summary>
+        /// Number of bundles productID exists in.
+        /// </summary>
+        public async Task<int> InBundleCount(long productVariantID)
+        {
+            using (var conn = sqlSession.OpenConnection())
+            {
+                using (var comm = conn.CreateCommand())
+                {
+                    comm.CommandText = $"SELECT COUNT(*) FROM ProductBundle WHERE ChildProductVariantID = @ProductID";
+                    comm.Parameters.Add(new SqlParameter("@ProductID", productVariantID));
+                    return (int) await comm.ExecuteScalarAsync().ConfigureAwait(false);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Remove variant from all bundles
+        /// </summary>
+        public Task RemoveFromAllBundles(ISqlAdapter adapter, long productVariantID)
+        {
+            return adapter.ExecuteSQLAsync("DELETE ProductBundle WHERE ChildProductVariantID = @ProductVariantID", 
+                new { ProductVariantID = productVariantID });
+        }
+
+        /// <summary>
         /// Create a table parameter for the product variant ID list
         /// </summary>
         private SqlParameter CreateProductVariantIDParameter(IEnumerable<long> productVariantIDs)
@@ -135,8 +160,14 @@ namespace ShipWorks.Products
 
             if (productVariant?.Product.IsBundle ?? false)
             {
+                RelationPredicateBucket relationPredicateBucket = new RelationPredicateBucket(ProductEntity.Relations.ProductBundleEntityUsingProductID);
+                relationPredicateBucket.Relations.Add(ProductBundleEntity.Relations.ProductVariantEntityUsingChildProductVariantID);
+                relationPredicateBucket.Relations.Add(ProductVariantEntity.Relations.ProductVariantAliasEntityUsingProductVariantID);
+                relationPredicateBucket.PredicateExpression.Add(ProductVariantAliasFields.IsDefault == true);
+                relationPredicateBucket.PredicateExpression.Add(ProductBundleFields.ProductID == productVariant.ProductID);
+
                 sqlAdapter.FetchEntityCollection(productVariant.Product.Bundles,
-                    ProductBundleRelationBucket.Value,
+                    relationPredicateBucket,
                     ProductBundlePrefetchPath.Value);
             }
 
@@ -168,19 +199,6 @@ namespace ShipWorks.Products
             subPath.Add(ProductVariantEntity.PrefetchPathProduct);
 
             return prefetchPath;
-        });
-
-        /// <summary>
-        /// Predicate bucket to only include the default alias
-        /// </summary>
-        private static readonly Lazy<IRelationPredicateBucket> ProductBundleRelationBucket = new Lazy<IRelationPredicateBucket>(() =>
-        {
-            RelationPredicateBucket relationPredicateBucket = new RelationPredicateBucket(ProductEntity.Relations.ProductBundleEntityUsingProductID);
-            relationPredicateBucket.Relations.Add(ProductBundleEntity.Relations.ProductVariantEntityUsingChildProductVariantID);
-            relationPredicateBucket.Relations.Add(ProductVariantEntity.Relations.ProductVariantAliasEntityUsingProductVariantID);
-            relationPredicateBucket.PredicateExpression.Add(ProductVariantAliasFields.IsDefault == true);
-
-            return relationPredicateBucket;
         });
 
 		/// <summary>

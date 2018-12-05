@@ -261,41 +261,8 @@ namespace ShipWorks.Products
         /// </summary>
         private void EditProduct(ProductVariantEntity productVariantEntity)
         {
-            if (productEditorViewModelFunc().ShowProductEditor(productVariantEntity) ?? false)
-            {
-                Result saveResult;
-
-                using (ISqlAdapter adapter = sqlAdapterFactory.CreateTransacted())
-                {
-                    saveResult = productCatalog.Save(adapter, productVariantEntity.Product);
-                    if (saveResult.Success)
-                    {
-                        adapter.Commit();
-                    }
-                    else
-                    {
-                        adapter.Rollback();
-                    }
-                }
-
-                if (saveResult.Success)
-                {
-                    RefreshProductsAction();
-                }
-                else
-                {
-                    if ((saveResult.Exception.GetBaseException() as SqlException)?.Number == 2601)
-                    {
-                        messageHelper.ShowError($"The SKU \"{productVariantEntity.Aliases.First(a => a.IsDefault).Sku}\" already exists. Please enter a unique value for the Product SKU.", saveResult.Exception);
-                    }
-                    else
-                    {
-                        messageHelper.ShowError(saveResult.Message);
-                    }
-
-                    EditProduct(productVariantEntity);
-                }
-            }
+            productEditorViewModelFunc().ShowProductEditor(productVariantEntity);
+            RefreshProductsAction();            
         }
 
         /// <summary>

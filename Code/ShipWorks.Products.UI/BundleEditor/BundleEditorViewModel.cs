@@ -3,6 +3,8 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
+using System.Threading.Tasks;
+using System.Windows.Forms;
 using System.Windows.Input;
 using GalaSoft.MvvmLight.CommandWpf;
 using Interapptive.Shared.Collections;
@@ -110,6 +112,8 @@ namespace ShipWorks.Products.UI.BundleEditor
             baseProduct = baseProductVariant;
             baseProduct.Product.Bundles.RemovedEntitiesTracker = new ProductBundleCollection();
 
+            BundleLineItems.Clear();
+
             if (baseProduct.Product.IsBundle)
             {
                 // Loop through each bundled product to get their skus
@@ -136,21 +140,22 @@ namespace ShipWorks.Products.UI.BundleEditor
         /// <summary>
         /// Save the currently configured bundle
         /// </summary>
-        public void Save()
+        public async Task Save(ISqlAdapter adapter)
         {
             // If the base product is not a bundle, remove all of its bundle items
             if (!baseProduct.Product.IsBundle)
             {
                 baseProduct.Product.Bundles.RemovedEntitiesTracker.AddRange(baseProduct.Product.Bundles);
             }
+            else
+            {
+                await productCatalog.RemoveFromAllBundles(adapter, baseProduct.ProductVariantID).ConfigureAwait(false);
+            }
 
             // Delete the removed items
             if (baseProduct.Product.Bundles.RemovedEntitiesTracker.Count > 0)
             {
-                using (ISqlAdapter adapter = sqlAdapterFactory.Create())
-                {
-                    adapter.DeleteEntityCollection(baseProduct.Product.Bundles.RemovedEntitiesTracker);
-                }
+                adapter.DeleteEntityCollection(baseProduct.Product.Bundles.RemovedEntitiesTracker);
             }
 
             // Add in any bundle items

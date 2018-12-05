@@ -1,4 +1,5 @@
 using System.Linq;
+using System.Threading.Tasks;
 using Autofac.Extras.Moq;
 using Interapptive.Shared.UI;
 using Moq;
@@ -55,7 +56,7 @@ namespace ShipWorks.Products.Tests
         }
 
         [Fact]
-        public void Save_SavesBundleLineItemsToGivenProduct()
+        public async Task Save_SavesBundleLineItemsToGivenProduct()
         {
             // Load first
             ProductVariantEntity baseProduct = new ProductVariantEntity();
@@ -79,9 +80,9 @@ namespace ShipWorks.Products.Tests
             testObject.Sku = "a";
             testObject.Quantity = 2;
             testObject.AddSkuToBundleCommand.Execute(null);
-            
+
             // Save
-            testObject.Save();
+            await testObject.Save(sqlAdapter.Object);
 
             Assert.True(
                 baseProduct.Product.Bundles.Any(
