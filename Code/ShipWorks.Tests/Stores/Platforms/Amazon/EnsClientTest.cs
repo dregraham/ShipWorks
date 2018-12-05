@@ -43,7 +43,7 @@ namespace ShipWorks.Tests.Stores.Amazon
         /// <summary>
         /// Adding a certificate to the system cert store
         /// </summary>
-        [Fact]
+        [Fact(Skip = "This is a fragile test that does not work with our current CI tools.")]
         public void InstallCertificate()
         {
             clientCert.AddToCertificateStore(System.Security.Cryptography.X509Certificates.StoreName.My, System.Security.Cryptography.X509Certificates.StoreLocation.CurrentUser);
