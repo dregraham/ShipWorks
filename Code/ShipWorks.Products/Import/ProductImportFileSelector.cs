@@ -29,7 +29,7 @@ namespace ShipWorks.Products.Import
         /// Choose the file and start import
         /// </summary>
         public void ChooseFileToImport(IProductImporterStateManager stateManager) =>
-            fileSelector.GetFilePathToOpen("Excel|*.xls;*.xlsx|Comma Separated|*.csv|Tab Delimited|*.tab|All Files|*.*")
+            fileSelector.GetFilePathToOpen("Comma Separated|*.csv|Excel|*.xls;*.xlsx|Tab Delimited|*.tab|All Files|*.*")
                 .Map(x => (FilePath: x, State: createImportingState(stateManager)))
                 .Do(x => stateManager.ChangeState(x.State))
                 .Do(x => x.State.StartImport(x.FilePath));
@@ -40,7 +40,7 @@ namespace ShipWorks.Products.Import
         public void SaveSample()
         {
             fileSelector
-                .GetFilePathToSave("Comma Separated|*.csv")
+                .GetFilePathToSave("Comma Separated|*.csv", "ProductExport_Sample.csv")
                 .Do(x => WriteToFile(x));
         }
 

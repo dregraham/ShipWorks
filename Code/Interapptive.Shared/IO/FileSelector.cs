@@ -28,11 +28,12 @@ namespace Interapptive.Shared.IO
         /// <summary>
         /// Get a file path to save
         /// </summary>
-        public GenericResult<string> GetFilePathToSave(string filter)
+        public GenericResult<string> GetFilePathToSave(string filter, string defaultFileName)
         {
             SaveFileDialog saveFileDialog = new SaveFileDialog
             {
-                Filter = filter
+                Filter = filter,
+                FileName = defaultFileName
             };
 
             return saveFileDialog.ShowDialog() == true ?

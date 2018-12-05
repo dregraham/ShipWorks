@@ -15,6 +15,6 @@ namespace Interapptive.Shared.IO
         /// <summary>
         /// Get a file path to save
         /// </summary>
-        GenericResult<string> GetFilePathToSave(string filter);
+        GenericResult<string> GetFilePathToSave(string filter, string defaultFileName);
     }
 }
