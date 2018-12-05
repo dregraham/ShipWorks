@@ -149,7 +149,8 @@
             SelectionMode="Extended"
             Style="{StaticResource DataGrid}"
             VirtualizingStackPanel.IsVirtualizing="True"
-            VirtualizingStackPanel.VirtualizationMode="Recycling">
+            VirtualizingStackPanel.VirtualizationMode="Recycling"
+            ui:DoubleClick.Command="{Binding EditProductVariantButton}">
             <DataGrid.Resources>
                 <ui:BindingProxy x:Key="proxy" Data="{Binding}" />
             </DataGrid.Resources>
