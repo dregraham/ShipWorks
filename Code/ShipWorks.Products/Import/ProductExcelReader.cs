@@ -73,7 +73,7 @@ namespace ShipWorks.Products.Import
                 }
             }
 
-            List<string> columnNames = ProductToImportDto.PropertyNames; 
+            List<string> columnNames = ProductToImportDto.PropertyNames;
             string missingOnes = String.Join(",", columnNames
                 .Except(row.Columns.Select(c => c.Value.ToString())));
 

@@ -21,7 +21,7 @@ namespace ShipWorks.Products.Import
         public ImportSucceededState(ImportProductsResult results, IProductImporterStateManager stateManager)
         {
             this.stateManager = stateManager;
-            TotalProducts = results.TotalCount;
+            TotalProducts = results.SuccessCount;
 
             CloseDialog = new RelayCommand(CloseDialogAction);
         }

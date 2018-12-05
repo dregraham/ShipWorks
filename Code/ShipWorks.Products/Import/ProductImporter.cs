@@ -42,7 +42,7 @@ namespace ShipWorks.Products.Import
 
             itemProgressReporter.PercentComplete = 0;
 
-            var fileLoadResults = productExcelReader.LoadImportFile(pathAndFilename);
+            var fileLoadResults = await Task.Run(() => productExcelReader.LoadImportFile(pathAndFilename)).ConfigureAwait(false);
 
             if (fileLoadResults.Failure)
             {
@@ -263,7 +263,7 @@ namespace ShipWorks.Products.Import
         private async Task ImportProductVariantBundles(ProductVariantEntity bundleProductVariant, ProductToImportDto productVariantDto,
             ISqlAdapter sqlAdapter)
         {
-            if (productVariantDto.BundleSkuList.Any(s => productVariantDto.AliasSkuList.Any( a => a == s.Sku)))
+            if (productVariantDto.BundleSkuList.Any(s => productVariantDto.AliasSkuList.Any(a => a == s.Sku)))
             {
                 throw new ProductImportException($"Bundles cannot reference themselves.  Product SKU: {productVariantDto.Sku}");
             }
