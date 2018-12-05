@@ -5,14 +5,19 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="clr-namespace:ShipWorks.Products.UI.Import"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:ui="http://schemas.shipworks.com/ui"
+    FontFamily="/ShipWorks.UI;component/Styles/BlueSteel/#Roboto"
     d:DesignHeight="450"
     d:DesignWidth="800"
     mc:Ignorable="d">
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/ShipWorks.UI;component/Styles/GlobalStyle.xaml" />
                 <ResourceDictionary Source="/ShipWorks.UI;component/Styles/BlueSteel/BlueSteelStyle.xaml" />
             </ResourceDictionary.MergedDictionaries>
+            <ui:BooleanToVisibilityConverter x:Key="ShowWhenTrue" />
+            <ui:BooleanToVisibilityConverter x:Key="HideWhenTrue" Invert="True" />
             <Style BasedOn="{StaticResource SmallPrimaryButton}" TargetType="Button" />
             <Style BasedOn="{StaticResource FormTextBox}" TargetType="TextBox" />
         </ResourceDictionary>
@@ -20,24 +25,60 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-        <TextBlock>Importing products failed for the following reason:</TextBlock>
-        <TextBlock Grid.Row="1" Text="{Binding FailureReason}" />
-        <DataGrid Grid.Row="2">
-            <DataGrid.Columns>
-                <DataGridTextColumn Binding="{Binding Key}" Header="SKU" />
-                <DataGridTextColumn Binding="{Binding Value}" Header="Error" />
-            </DataGrid.Columns>
-        </DataGrid>
-        <StackPanel Grid.Row="3">
-            <TextBlock>ADD SOME TEXT ABOUT TRYING AGAIN!!</TextBlock>
+        <ui:NotificationBorder
+            Background="White"
+            BorderBrush="{StaticResource Yellow}"
+            IconControl="!">
+            Product import was not successful.
+        </ui:NotificationBorder>
+
+        <TextBlock
+            Grid.Row="1"
+            Text="{Binding FailureReason, Mode=OneTime}"
+            TextWrapping="Wrap"
+            Visibility="{Binding HasImportErrors, Mode=OneTime, Converter={StaticResource HideWhenTrue}}" />
+
+        <Grid Grid.Row="1" Visibility="{Binding HasImportErrors, Mode=OneTime, Converter={StaticResource ShowWhenTrue}}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+
+            <StackPanel Margin="0,8,0,0">
+                <TextBlock>
+                    <Run Text="{Binding SuccessCount, Mode=OneTime}" />
+                    products were imported successfully.</TextBlock>
+                <TextBlock>
+                    <Run Text="{Binding FailedCount, Mode=OneTime}" />
+                    products failed to import.</TextBlock>
+            </StackPanel>
+            <DataGrid
+                Grid.Row="1"
+                Margin="0,8"
+                AutoGenerateColumns="False"
+                ItemsSource="{Binding ImportErrors, Mode=OneTime}">
+                <DataGrid.Columns>
+                    <DataGridTextColumn
+                        Width="Auto"
+                        Binding="{Binding Key}"
+                        Header="SKU" />
+                    <DataGridTextColumn
+                        Width="*"
+                        Binding="{Binding Value}"
+                        Header="Error" />
+                </DataGrid.Columns>
+            </DataGrid>
+        </Grid>
+
+        <StackPanel Grid.Row="2">
+            <TextBlock>Please resolve the errors and try again.</TextBlock>
         </StackPanel>
         <StackPanel
-            Grid.Row="4"
+            Grid.Row="3"
             HorizontalAlignment="Right"
             VerticalAlignment="Bottom"
             Orientation="Horizontal">

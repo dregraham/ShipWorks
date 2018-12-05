@@ -4,6 +4,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:ui="http://schemas.shipworks.com/ui"
     d:DesignHeight="250"
     d:DesignWidth="600"
     mc:Ignorable="d">
@@ -29,13 +30,15 @@
                 </Style>
             </StackPanel.Resources>
             <TextBlock>To import products into ShipWorks, please complete the following steps:</TextBlock>
-            <StackPanel Margin="24,0,0,16">
+            <StackPanel Margin="24,0,0,0">
                 <TextBlock>
-                    <Run>1. Save the&#160;</Run><Hyperlink>sample products file</Hyperlink>
-                    .</TextBlock>
+                    <Run>1. Save the&#160;</Run><Hyperlink Command="{Binding SaveSample}">sample products file</Hyperlink><Run>.</Run>
+                </TextBlock>
                 <TextBlock>2. Modify your products list to match the sample, or add your products to the sample.</TextBlock>
                 <TextBlock>3. Click the import button to choose the file and start the import.</TextBlock>
             </StackPanel>
+            <TextBlock><Hyperlink ui:Link.OpenInBrowser="True" NavigateUri="http://support.shipworks.com/support/solutions/articles/4000133916-creating-a-product-import-file">Click here</Hyperlink>
+                more details about the format required for importing products.</TextBlock>
         </StackPanel>
 
         <Grid Grid.Row="1" HorizontalAlignment="Right">

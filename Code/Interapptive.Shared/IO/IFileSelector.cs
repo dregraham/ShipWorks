@@ -11,5 +11,10 @@ namespace Interapptive.Shared.IO
         /// Get a file path to open
         /// </summary>
         GenericResult<string> GetFilePathToOpen(string filter);
+
+        /// <summary>
+        /// Get a file path to save
+        /// </summary>
+        GenericResult<string> GetFilePathToSave(string filter);
     }
 }

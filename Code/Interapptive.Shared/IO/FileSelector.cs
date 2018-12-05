@@ -24,5 +24,20 @@ namespace Interapptive.Shared.IO
                 openFileDialog.FileName :
                 GenericResult.FromError<string>("Selection canceled");
         }
+
+        /// <summary>
+        /// Get a file path to save
+        /// </summary>
+        public GenericResult<string> GetFilePathToSave(string filter)
+        {
+            SaveFileDialog saveFileDialog = new SaveFileDialog
+            {
+                Filter = filter
+            };
+
+            return saveFileDialog.ShowDialog() == true ?
+                saveFileDialog.FileName :
+                GenericResult.FromError<string>("Selection canceled");
+        }
     }
 }

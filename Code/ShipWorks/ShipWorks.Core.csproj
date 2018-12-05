@@ -1017,6 +1017,7 @@
     <Compile Include="OrderLookup\OrderLookupClearOrderMessage.cs" />
     <Compile Include="OrderLookup\OrderLookupSearchMessage.cs" />
     <Compile Include="OrderLookup\ShipmentModelPipelines\IOrderLookupShipmentModelPipeline.cs" />
+    <Compile Include="Products\Import\FailedProductImportException.cs" />
     <Compile Include="Products\Import\ImportProductsResult.cs" />
     <Compile Include="Products\Import\IProductExcelReader.cs" />
     <Compile Include="Products\Import\IProductImporter.cs" />

@@ -22,7 +22,6 @@ namespace ShipWorks.Products.Import
         {
             this.stateManager = stateManager;
             TotalProducts = results.TotalCount;
-            //AddedProducts = results.Add
 
             CloseDialog = new RelayCommand(CloseDialogAction);
         }
@@ -38,18 +37,6 @@ namespace ShipWorks.Products.Import
         /// </summary>
         [Obfuscation]
         public int TotalProducts { get; }
-
-        /// <summary>
-        /// Number of products added
-        /// </summary>
-        [Obfuscation]
-        public int AddedProducts { get; }
-
-        /// <summary>
-        /// Number of updated products
-        /// </summary>
-        [Obfuscation]
-        public int UpdatedProducts { get; }
 
         /// <summary>
         /// The dialog was requested to close

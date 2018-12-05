@@ -2,12 +2,14 @@
 using System.ComponentModel;
 using System.Reflection;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using System.Windows.Input;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Extensions;
 using Interapptive.Shared.Threading;
+using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using ShipWorks.Core.Common.Threading;
 
@@ -26,6 +28,7 @@ namespace ShipWorks.Products.Import
 
         private int percentComplete;
         private readonly IProductImporter productImporter;
+        private readonly IMessageHelper messageHelper;
 
         /// <summary>
         /// Constructor
@@ -35,8 +38,10 @@ namespace ShipWorks.Products.Import
             IProductImporter productImporter,
             Func<string, IProgressReporter> createProgressReporter,
             Func<ImportProductsResult, IProductImporterStateManager, ImportSucceededState> createSuccessState,
-            Func<Exception, IProductImporterStateManager, ImportFailedState> createFailedState)
+            Func<Exception, IProductImporterStateManager, ImportFailedState> createFailedState,
+            IMessageHelper messageHelper)
         {
+            this.messageHelper = messageHelper;
             this.productImporter = productImporter;
             this.createFailedState = createFailedState;
             this.createSuccessState = createSuccessState;
@@ -71,10 +76,8 @@ namespace ShipWorks.Products.Import
         /// <summary>
         /// The dialog was requested to close
         /// </summary>
-        public void CloseRequested(CancelEventArgs e)
-        {
-            e.Cancel = true;
-        }
+        public void CloseRequested(CancelEventArgs e) =>
+            e.Cancel = messageHelper.ShowQuestion("Closing will stop the import.  Are you sure?") != DialogResult.OK;
 
         /// <summary>
         /// Cancel the import
