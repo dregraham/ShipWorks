@@ -1,4 +1,8 @@
-﻿using GalaSoft.MvvmLight;
+﻿using System.ComponentModel;
+using System.Reflection;
+using System.Windows.Input;
+using GalaSoft.MvvmLight;
+using GalaSoft.MvvmLight.CommandWpf;
 using Interapptive.Shared.ComponentRegistration;
 
 namespace ShipWorks.Products.Import
@@ -9,12 +13,42 @@ namespace ShipWorks.Products.Import
     [Component(RegistrationType.Self)]
     public class ImportSucceededState : ViewModelBase, IProductImportState
     {
+        private readonly IProductImporterStateManager stateManager;
+
         /// <summary>
         /// Constructor
         /// </summary>
-        public ImportSucceededState(IProductImporterStateManager stateManager)
+        public ImportSucceededState(ImportProductsResult results, IProductImporterStateManager stateManager)
+        {
+            this.stateManager = stateManager;
+            TotalProducts = results.TotalCount;
+
+            CloseDialog = new RelayCommand(CloseDialogAction);
+        }
+
+        /// <summary>
+        /// Close the dialog
+        /// </summary>
+        [Obfuscation]
+        public ICommand CloseDialog { get; }
+
+        /// <summary>
+        /// Total products
+        /// </summary>
+        [Obfuscation]
+        public int TotalProducts { get; }
+
+        /// <summary>
+        /// The dialog was requested to close
+        /// </summary>
+        public void CloseRequested(CancelEventArgs e)
         {
 
         }
+
+        /// <summary>
+        /// Action to close the dialog
+        /// </summary>
+        private void CloseDialogAction() => stateManager.Close();
     }
 }

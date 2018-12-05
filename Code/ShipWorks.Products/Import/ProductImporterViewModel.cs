@@ -1,16 +1,12 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Reflection;
-using System.Threading.Tasks;
 using System.Windows.Input;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
 using Interapptive.Shared.ComponentRegistration;
-using Interapptive.Shared.Extensions;
-using Interapptive.Shared.Threading;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
-using ShipWorks.Common.Threading;
-using ShipWorks.Core.Common.Threading;
 
 namespace ShipWorks.Products.Import
 {
@@ -20,15 +16,11 @@ namespace ShipWorks.Products.Import
     [Component]
     public class ProductImporterViewModel : ViewModelBase, IProductImporterViewModel, IProductImporterStateManager
     {
-        private readonly IProductImporter productImporter;
         private readonly IMessageHelper messageHelper;
         private readonly Func<IProductImporterViewModel, IProductImporterDialog> createDialog;
         private IProductImporterDialog dialog;
 
         private IProductImportState currentState;
-        private string filePath;
-        private bool isImporting;
-        private int percentComplete;
         private readonly Func<IProductImporterStateManager, SetupImportState> createInitialState;
 
         /// <summary>
@@ -37,29 +29,25 @@ namespace ShipWorks.Products.Import
         public ProductImporterViewModel(
             Func<IProductImporterViewModel, IProductImporterDialog> createDialog,
             Func<IProductImporterStateManager, SetupImportState> createInitialState,
-            IProductImporter productImporter,
             IMessageHelper messageHelper)
         {
             this.createInitialState = createInitialState;
             this.createDialog = createDialog;
             this.messageHelper = messageHelper;
-            this.productImporter = productImporter;
 
-            CloseDialog = new RelayCommand(() => CloseDialogAction());
-            StartImport = new RelayCommand(() => StartImportAction().Forget());
+            Closing = new RelayCommand<CancelEventArgs>(ClosingAction);
         }
+
+        /// <summary>
+        /// The dialog is closing
+        /// </summary>
+        private void ClosingAction(CancelEventArgs e) => CurrentState.CloseRequested(e);
 
         /// <summary>
         /// Command to close the dialog
         /// </summary>
         [Obfuscation]
-        public ICommand CloseDialog { get; }
-
-        /// <summary>
-        /// Command to start the import
-        /// </summary>
-        [Obfuscation]
-        public ICommand StartImport { get; }
+        public ICommand Closing { get; }
 
         /// <summary>
         /// Current state of the importer
@@ -69,36 +57,6 @@ namespace ShipWorks.Products.Import
         {
             get => currentState;
             set => Set(ref currentState, value);
-        }
-
-        /// <summary>
-        /// Path to the file to import
-        /// </summary>
-        [Obfuscation]
-        public string FilePath
-        {
-            get => filePath;
-            set => Set(ref filePath, value);
-        }
-
-        /// <summary>
-        /// Is the dialog currently importing
-        /// </summary>
-        [Obfuscation]
-        public bool IsImporting
-        {
-            get => isImporting;
-            set => Set(ref isImporting, value);
-        }
-
-        /// <summary>
-        /// Percent of the import completed
-        /// </summary>
-        [Obfuscation]
-        public int PercentComplete
-        {
-            get => percentComplete;
-            set => Set(ref percentComplete, value);
         }
 
         /// <summary>
@@ -124,41 +82,5 @@ namespace ShipWorks.Products.Import
         /// Close the dialog
         /// </summary>
         public void Close() => dialog?.Close();
-
-        /// <summary>
-        /// Start the import
-        /// </summary>
-        private async Task StartImportAction()
-        {
-            var progressItem = new ProgressItem("Importing");
-
-            try
-            {
-                progressItem.Changed += OnProgressItemUpdate;
-                IsImporting = true;
-                await productImporter.ImportProducts(FilePath, progressItem).ConfigureAwait(true);
-            }
-            finally
-            {
-                progressItem.Changed -= OnProgressItemUpdate;
-                IsImporting = false;
-            }
-        }
-
-        /// <summary>
-        /// Handle an update of the progress dialog
-        /// </summary>
-        private void OnProgressItemUpdate(object sender, EventArgs e)
-        {
-            if (sender is IProgressReporter progressReporter)
-            {
-                PercentComplete = progressReporter.PercentComplete.Clamp(0, 100);
-            }
-        }
-
-        /// <summary>
-        /// Close the dialog
-        /// </summary>
-        private void CloseDialogAction() => dialog?.Close();
     }
 }

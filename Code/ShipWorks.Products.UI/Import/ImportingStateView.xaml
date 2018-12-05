@@ -8,15 +8,38 @@
     d:DesignHeight="450"
     d:DesignWidth="800"
     mc:Ignorable="d">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/ShipWorks.UI;component/Styles/BlueSteel/BlueSteelStyle.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-        <ProgressBar
+        <Grid VerticalAlignment="Center">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="25" />
+            </Grid.RowDefinitions>
+
+            <TextBlock>ShipWorks is importing your products.</TextBlock>
+            <ProgressBar
+                Margin="0,5"
+                Grid.Row="1"
             Maximum="100"
             Minimum="0"
             Value="{Binding PercentComplete}" />
-        <Button Grid.Row="1" Command="{Binding Cancel}">Stop</Button>
+        </Grid>
+        <Button
+            Grid.Row="1"
+            HorizontalAlignment="Right"
+            Command="{Binding Cancel}"
+            Style="{StaticResource SmallPrimaryButton}">
+            Stop
+        </Button>
     </Grid>
 </UserControl>

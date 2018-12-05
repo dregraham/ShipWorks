@@ -53,7 +53,7 @@ namespace ShipWorks.Products.Import
 
             if (result.FailedCount > 0 || result.FailureResults.Any())
             {
-                return GenericResult.FromError("An error or errors occurred while importing products.", result);
+                return GenericResult.FromError(new FailedProductImportException(result), result);
             }
 
             return GenericResult.FromSuccess(result);
@@ -274,7 +274,7 @@ namespace ShipWorks.Products.Import
 
             if (productVariantDto.BundleSkuList.None())
             {
-                // No bundles requested, so just return.  
+                // No bundles requested, so just return.
                 // If the variant had bundles associated, but then do an import where the cell is empty,
                 // we are assuming they wanted to mark the variant as NOT being a bundle any more.
                 return;

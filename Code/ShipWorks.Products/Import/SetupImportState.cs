@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System.ComponentModel;
 using System.Reflection;
 using System.Windows.Input;
 using GalaSoft.MvvmLight;
@@ -11,22 +11,19 @@ namespace ShipWorks.Products.Import
     public class SetupImportState : ViewModelBase, IProductImportState
     {
         private readonly IProductImporterStateManager stateManager;
-
-        private string filePath;
-        private readonly Func<string, IProductImporterStateManager, ImportingState> createImportingState;
+        private readonly IProductImportFileSelector productImportFileSelector;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public SetupImportState(
-            IProductImporterStateManager stateManager,
-            Func<string, IProductImporterStateManager, ImportingState> createImportingState)
+        public SetupImportState(IProductImporterStateManager stateManager, IProductImportFileSelector productImportFileSelector)
         {
-            this.createImportingState = createImportingState;
+            this.productImportFileSelector = productImportFileSelector;
             this.stateManager = stateManager;
 
             CloseDialog = new RelayCommand(CloseDialogAction);
-            StartImport = new RelayCommand(StartImportAction, () => !string.IsNullOrWhiteSpace(FilePath));
+            SaveSample = new RelayCommand(SaveSampleAction);
+            StartImport = new RelayCommand(StartImportAction);
         }
 
         /// <summary>
@@ -36,26 +33,35 @@ namespace ShipWorks.Products.Import
         public ICommand CloseDialog { get; }
 
         /// <summary>
+        /// Save the sample file
+        /// </summary>
+        [Obfuscation]
+        public ICommand SaveSample { get; }
+
+        /// <summary>
         /// Command to start the import
         /// </summary>
         [Obfuscation]
         public ICommand StartImport { get; }
 
         /// <summary>
-        /// Path to the file to import
+        /// The dialog was requested to close
         /// </summary>
-        [Obfuscation]
-        public string FilePath
+        public void CloseRequested(CancelEventArgs e)
         {
-            get => filePath;
-            set => Set(ref filePath, value);
+
         }
+
+        /// <summary>
+        /// Save the sample file
+        /// </summary>
+        private void SaveSampleAction() => productImportFileSelector.SaveSample();
 
         /// <summary>
         /// Start the import action
         /// </summary>
         private void StartImportAction() =>
-            stateManager.ChangeState(createImportingState(FilePath, stateManager));
+            productImportFileSelector.ChooseFileToImport(stateManager);
 
         /// <summary>
         /// Close the dialog

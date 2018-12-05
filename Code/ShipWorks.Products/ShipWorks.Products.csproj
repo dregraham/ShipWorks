@@ -25,7 +25,13 @@
     <None Remove="obj\**" />
   </ItemGroup>
   <ItemGroup>
+    <None Remove="Import\ProductImportSample.csv" />
+  </ItemGroup>
+  <ItemGroup>
     <Compile Include="..\ShipWorks\Properties\AssemblyInfoCommon.cs" Link="Properties\AssemblyInfoCommon.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Import\ProductImportSample.csv" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Interapptive.Shared\Interapptive.Shared.csproj">
