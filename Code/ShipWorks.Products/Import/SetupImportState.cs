@@ -13,7 +13,7 @@ namespace ShipWorks.Products.Import
     public class SetupImportState : ViewModelBase, IProductImportState
     {
         private readonly IProductImporterStateManager stateManager;
-        private readonly Func<string, IProductImporterStateManager, ImportingState> createImportingState;
+        private readonly Func<IProductImporterStateManager, ImportingState> createImportingState;
         private readonly IFileSelector fileSelector;
 
         /// <summary>
@@ -22,7 +22,7 @@ namespace ShipWorks.Products.Import
         public SetupImportState(
             IProductImporterStateManager stateManager,
             IFileSelector fileSelector,
-            Func<string, IProductImporterStateManager, ImportingState> createImportingState)
+            Func<IProductImporterStateManager, ImportingState> createImportingState)
         {
             this.fileSelector = fileSelector;
             this.createImportingState = createImportingState;
@@ -57,7 +57,9 @@ namespace ShipWorks.Products.Import
         /// </summary>
         private void StartImportAction() =>
             fileSelector.GetFilePathToOpen("Excel|*.xls;*.xlsx|Comma Separated|*.csv|Tab Delimited|*.tab|All Files|*.*")
-                .Do(x => stateManager.ChangeState(createImportingState(x, stateManager)));
+                .Map(x => (FilePath: x, State: createImportingState(stateManager)))
+                .Do(x => stateManager.ChangeState(x.State))
+                .Do(x => x.State.StartImport(x.FilePath));
 
         /// <summary>
         /// Close the dialog

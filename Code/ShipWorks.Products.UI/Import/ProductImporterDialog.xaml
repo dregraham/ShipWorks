@@ -8,7 +8,7 @@
     xmlns:local="clr-namespace:ShipWorks.Products.UI.Import"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:ui="http://schemas.shipworks.com/ui"
-    Title="Import products"
+    Title="Import Products"
     Width="600"
     Height="250"
     FontFamily="/ShipWorks.UI;component/Styles/BlueSteel/#Roboto"
