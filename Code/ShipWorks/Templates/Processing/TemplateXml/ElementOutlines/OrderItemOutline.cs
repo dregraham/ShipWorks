@@ -59,6 +59,8 @@ namespace ShipWorks.Templates.Processing.TemplateXml.ElementOutlines
             AddElement("Length", () => Item.Length);
             AddElement("Width", () => Item.Width);
             AddElement("Height", () => Item.Height);
+            AddElement("Brand", () => Item.Brand);
+            AddElement("MPN", () => Item.MPN);
             
 
             // Add an outline entry for each unique store type that could potentially be used

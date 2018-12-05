@@ -47,6 +47,9 @@ namespace ShipWorks.Templates.Processing.TemplateXml.ElementOutlines
             AddElement("RequestedShipping", () => Order.RequestedShipping);
             AddElement("Total", () => Order.OrderTotal);
 
+            AddElement("ChannelOrderID", () => Order.ChannelOrderID);
+            AddElement("ShipByDate", () => Order.ShipByDate);
+
             AddElement("Address", new AddressOutline(context, "ship", true), () => new PersonAdapter(Order, "Ship"));
             AddElement("Address", new AddressOutline(context, "bill", true), () => new PersonAdapter(Order, "Bill"));
 
