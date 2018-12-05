@@ -75,6 +75,8 @@
         <Condition identifier="Order.TotalWeight" />
         <Condition identifier="Order.OnlineLastModified" />
         <Condition identifier="Order.ShipSenseRecognitionStatus" displayAs="ShipSense Status" />
+        <Condition identifier="Order.ChannelOrderID" displayAs="Channel Order ID" />
+        <Condition identifier="Order.ShipByDate" displayAs="ShipByDate" />
         <Separator />
         <Condition identifier="Order.LocalStatus" />
         <Condition identifier="Order.OnlineStatus" />
@@ -341,6 +343,8 @@
       <Condition identifier="OrderItem.Height" displayAs="Height" />
       <Condition identifier="OrderItem.UPC" displayAs="UPC" />
       <Condition identifier="OrderItem.LocalStatus" displayAs="Local Status" />
+      <Condition identifier="OrderItem.Brand" displayAs="Brand" />
+      <Condition identifier="OrderItem.MPN" displayAs="MPN" />
       <Separator/>
       <Condition identifier="BigCommerceOrderItem.IsDigitalItem" />
       <Condition identifier="BigCommerceOrderItem.EventDate" />

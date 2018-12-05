@@ -760,6 +760,10 @@
     <Compile Include="ApplicationCore\MainForm.OrderLookupHeartbeat.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Filters\Content\Conditions\OrderItems\MpnCondition.cs" />
+    <Compile Include="Filters\Content\Conditions\OrderItems\BrandCondition.cs" />
+    <Compile Include="Filters\Content\Conditions\Orders\ChannelOrderIdCondition.cs" />
+    <Compile Include="Filters\Content\Conditions\Orders\ShipByDateCondition.cs" />
     <Compile Include="OrderLookup\CoreOrderLookupRegistrationOverride.cs" />
     <Compile Include="OrderLookup\FieldManager\IOrderLookupFieldLayoutProvider.cs" />
     <Compile Include="OrderLookup\FieldManager\IOrderLookupFieldLayoutRepository.cs" />
