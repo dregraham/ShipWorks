@@ -30,7 +30,7 @@
                 </Style>
             </StackPanel.Resources>
             <TextBlock>To import products into ShipWorks, please complete the following steps:</TextBlock>
-            <StackPanel Margin="24,0,0,0">
+            <StackPanel Margin="24,0,0,12">
                 <TextBlock>
                     <Run>1. Save the&#160;</Run><Hyperlink Command="{Binding SaveSample}">sample products file</Hyperlink><Run>.</Run>
                 </TextBlock>
@@ -38,7 +38,7 @@
                 <TextBlock>3. Click the import button to choose the file and start the import.</TextBlock>
             </StackPanel>
             <TextBlock><Hyperlink ui:Link.OpenInBrowser="True" NavigateUri="http://support.shipworks.com/support/solutions/articles/4000133916-creating-a-product-import-file">Click here</Hyperlink>
-                more details about the format required for importing products.</TextBlock>
+                for more details about the format required for importing products.</TextBlock>
         </StackPanel>
 
         <Grid Grid.Row="1" HorizontalAlignment="Right">

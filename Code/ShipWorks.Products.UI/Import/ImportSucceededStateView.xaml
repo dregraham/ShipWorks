@@ -31,10 +31,10 @@
                 <Path Style="{StaticResource Path.Checkmark}" Stroke="White" />
             </ui:NotificationBorder.IconControl>
 
-            <TextBlock>Product import succeeded!</TextBlock>
+            <TextBlock>Product import succeeded.</TextBlock>
         </ui:NotificationBorder>
 
-        <TextBlock Grid.Row="1" Margin="0,8"><Run Text="{Binding TotalProducts, Mode=OneTime}" />&#160;products imported</TextBlock>
+        <TextBlock Grid.Row="1" Margin="0,8"><Run Text="{Binding TotalProducts, Mode=OneTime, StringFormat='{}{0:#,##0}'}" />&#160;products imported</TextBlock>
 
         <StackPanel
             Grid.Row="3"
