@@ -42,7 +42,8 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
                 new ShipWorksOdbcMappableField(OrderFields.LocalStatus, OdbcOrderFieldDescription.LocalStatus, OdbcFieldValueResolutionStrategy.Default),
 	            new ShipWorksOdbcMappableField(OrderFields.OnlineStatus, OdbcOrderFieldDescription.OnlineStatus, OdbcFieldValueResolutionStrategy.Default),
 	            new ShipWorksOdbcMappableField(OrderFields.RequestedShipping, OdbcOrderFieldDescription.RequestedShipping, OdbcFieldValueResolutionStrategy.Default),
-	            new ShipWorksOdbcMappableField(OrderFields.OnlineCustomerID, OdbcOrderFieldDescription.CustomerID, OdbcFieldValueResolutionStrategy.Default),
+                new ShipWorksOdbcMappableField(OrderFields.ShipByDate, OdbcOrderFieldDescription.ShipByDate, OdbcFieldValueResolutionStrategy.Default),
+                new ShipWorksOdbcMappableField(OrderFields.OnlineCustomerID, OdbcOrderFieldDescription.CustomerID, OdbcFieldValueResolutionStrategy.Default),
 	            new ShipWorksOdbcMappableField(NoteFields.Text, OdbcOrderFieldDescription.NoteInternal, OdbcFieldValueResolutionStrategy.Default),
 	            new ShipWorksOdbcMappableField(NoteFields.Text, OdbcOrderFieldDescription.NotePublic, OdbcFieldValueResolutionStrategy.Default),
 	            new ShipWorksOdbcMappableField(OrderChargeFields.Amount, OdbcOrderFieldDescription.ChargeShipping, OdbcFieldValueResolutionStrategy.Default),
@@ -100,7 +101,9 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
                 new ShipWorksOdbcMappableField(OrderItemFields.Image, OdbcOrderFieldDescription.ItemImage, OdbcFieldValueResolutionStrategy.Default),
                 new ShipWorksOdbcMappableField(OrderItemFields.Thumbnail, OdbcOrderFieldDescription.ItemThumbnail, OdbcFieldValueResolutionStrategy.Default),
                 new ShipWorksOdbcMappableField(OrderItemFields.UPC, OdbcOrderFieldDescription.ItemUPC, OdbcFieldValueResolutionStrategy.Default),
-                new ShipWorksOdbcMappableField(OrderItemFields.ISBN, OdbcOrderFieldDescription.ItemISBN, OdbcFieldValueResolutionStrategy.Default)
+                new ShipWorksOdbcMappableField(OrderItemFields.ISBN, OdbcOrderFieldDescription.ItemISBN, OdbcFieldValueResolutionStrategy.Default),
+                new ShipWorksOdbcMappableField(OrderItemFields.Brand, OdbcOrderFieldDescription.Brand, OdbcFieldValueResolutionStrategy.Default),
+                new ShipWorksOdbcMappableField(OrderItemFields.MPN, OdbcOrderFieldDescription.MPN, OdbcFieldValueResolutionStrategy.Default)
             };
 
 	        return fields;
@@ -214,8 +217,6 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
                 new ShipWorksOdbcMappableField(ShipmentFields.ShipmentCost, OdbcShipmentFieldDescription.ShipmentCost, OdbcFieldValueResolutionStrategy.Default),
                 new ShipWorksOdbcMappableField("", "", EnumHelper.GetDescription(OdbcFieldValueResolutionStrategy.ShippingService), OdbcFieldValueResolutionStrategy.ShippingService),
                 new ShipWorksOdbcMappableField("", "", EnumHelper.GetDescription(OdbcFieldValueResolutionStrategy.ShippingCarrier), OdbcFieldValueResolutionStrategy.ShippingCarrier)
-                // Todo: Still need to add Packaging, # of Packages, Length, Width, Height,
-                // Todo: Insured Value & Insurance Fee
             };
         }
 

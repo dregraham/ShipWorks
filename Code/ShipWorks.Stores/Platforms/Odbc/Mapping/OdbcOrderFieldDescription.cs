@@ -30,6 +30,9 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         [Description("Requested Shipping")]
         RequestedShipping,
 
+        [Description("Ship By Date")]
+        ShipByDate,
+
         [Description("Customer Number")]
         CustomerID,
 
@@ -136,6 +139,12 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         ItemWidth,
 
         [Description("Height")]
-        ItemHeight
+        ItemHeight,
+
+        [Description("Brand")]
+        Brand,
+
+        [Description("MPN")]
+        MPN
     }
 }
