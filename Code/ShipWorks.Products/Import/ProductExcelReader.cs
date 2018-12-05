@@ -20,7 +20,7 @@ namespace ShipWorks.Products.Import
         /// <summary>
         /// Import the products
         /// </summary>
-        public (List<ProductToImportDto> SkuRows, List<ProductToImportDto> BundleRows) LoadImportFile(string filename)
+        public GenericResult<(List<ProductToImportDto> SkuRows, List<ProductToImportDto> BundleRows)> LoadImportFile(string filename)
         {
             try
             {
@@ -34,12 +34,17 @@ namespace ShipWorks.Products.Import
                     }
                 }
             }
+            catch (ProductImportException ex)
+            {
+                return GenericResult.FromError<(List<ProductToImportDto> SkuRows, List<ProductToImportDto> BundleRows)>(ex);
+            }
             catch (Exception ex)
             {
-                throw new ProductImportException($"An error occurred while reading product spreadsheet '{filename}'", ex);
+                return GenericResult.FromError<(List<ProductToImportDto> SkuRows, List<ProductToImportDto> BundleRows)>(
+                    new ProductImportException($"An error occurred while reading product spreadsheet '{filename}'", ex));
             }
 
-            return (skuRows, bundleRows);
+            return GenericResult.FromSuccess((skuRows, bundleRows));
         }
 
         /// <summary>
@@ -50,6 +55,31 @@ namespace ShipWorks.Products.Import
             if(sheet.Rows.Length == 0)
             {
                 throw new ProductImportException($"Sheet '{sheet.Name}' has no rows.");
+            }
+
+            if (sheet.Rows.Length < 2)
+            {
+                throw new ProductImportException("The spreadsheet does not contain the correct header rows.");
+            }
+
+            IRange row = sheet.Rows.FirstOrDefault();
+
+            // Remove any leading/trailing spaces from the header row.
+            foreach (var column in row.Columns)
+            {
+                if (!column.Value.IsNullOrWhiteSpace())
+                {
+                    column.Value = column.Value.Trim();
+                }
+            }
+
+            List<string> columnNames = ProductToImportDto.PropertyNames; 
+            string missingOnes = String.Join(",", columnNames
+                .Except(row.Columns.Select(c => c.Value.ToString())));
+
+            if (missingOnes.Length > 0)
+            {
+                throw new ProductImportException($"The spreadsheet has invalid columns: {missingOnes}. Make sure there are no extra spaces in the column text.");
             }
 
             List<ProductToImportDto> allRows = sheet.ExportData<ProductToImportDto>(1, 1, sheet.Rows.Length, sheet.Columns.Length)

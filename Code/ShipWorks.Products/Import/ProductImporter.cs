@@ -18,8 +18,6 @@ namespace ShipWorks.Products.Import
     public class ProductImporter : IProductImporter
     {
         private readonly IProductExcelReader productExcelReader;
-        private static readonly string[] PipeSeparator = new[] { " | " };
-        private static readonly string[] ColonSeparator = new[] { " : " };
         private readonly ISqlAdapterFactory sqlAdapterFactory;
         private readonly IProductCatalog productCatalog;
         private IProgressReporter itemProgressReporter;
@@ -40,13 +38,18 @@ namespace ShipWorks.Products.Import
         public async Task<GenericResult<ImportProductsResult>> ImportProducts(string pathAndFilename, IProgressReporter progressReporter)
         {
             itemProgressReporter = progressReporter;
-            ImportProductsResult result;
+            ImportProductsResult result = new ImportProductsResult(0, 0, 0);
 
             itemProgressReporter.PercentComplete = 0;
 
-            (List<ProductToImportDto> SkuRows, List<ProductToImportDto> BundleRows) fileLoadResults = productExcelReader.LoadImportFile(pathAndFilename);
+            var fileLoadResults = productExcelReader.LoadImportFile(pathAndFilename);
 
-            result = await ProcessRows(fileLoadResults.SkuRows, fileLoadResults.BundleRows).ConfigureAwait(false);
+            if (fileLoadResults.Failure)
+            {
+                return GenericResult.FromError(fileLoadResults.Exception, result);
+            }
+
+            result = await ProcessRows(fileLoadResults.Value.SkuRows, fileLoadResults.Value.BundleRows).ConfigureAwait(false);
 
             if (result.FailedCount > 0 || result.FailureResults.Any())
             {
@@ -91,6 +94,12 @@ namespace ShipWorks.Products.Import
 
                         await sqlAdapter.DeleteEntityCollectionAsync(productVariant.Aliases).ConfigureAwait(false);
                         productVariant.Aliases.Clear();
+
+                        if (productVariant.Product != null)
+                        {
+                            await sqlAdapter.DeleteEntityCollectionAsync(productVariant.Product.Bundles).ConfigureAwait(false);
+                            productVariant.Product.Bundles.Clear();
+                        }
 
                         CopyCsvDataToProduct(productVariant, row);
 
@@ -144,7 +153,7 @@ namespace ShipWorks.Products.Import
 
                         CopyCsvDataToProduct(bundleProductVariant, row);
 
-                        await ImportProductVariantBundles(bundleProductVariant, row.BundleSkus, sqlAdapter).ConfigureAwait(false);
+                        await ImportProductVariantBundles(bundleProductVariant, row, sqlAdapter).ConfigureAwait(false);
 
                         return await sqlAdapter.SaveEntityAsync(bundleProductVariant.Product, true, true)
                             .ContinueWith(task =>
@@ -213,9 +222,9 @@ namespace ShipWorks.Products.Import
             productVariant.DeclaredValue = ProductToImportDto.GetValue<decimal>(row.DeclaredValue, nameof(row.DeclaredValue));
             productVariant.CountryOfOrigin = row.CountryOfOrigin;
             productVariant.HarmonizedCode = row.HarmonizedCode;
-            productVariant.IsActive = row.Active == "ACTIVE" || row.Active == "YES" || row.Active == "TRUE" || row.Active == "1";
+            productVariant.IsActive = row.IsActive;
 
-            ImportProductVariantAliases(productVariant, row.Sku, row.AliasSkus);
+            ImportProductVariantAliases(productVariant, row.Sku, row);
 
             productVariant.Product.IsActive = productVariant.IsActive;
             productVariant.Product.Name = productVariant.Name;
@@ -224,14 +233,14 @@ namespace ShipWorks.Products.Import
         /// <summary>
         /// Import aliases
         /// </summary>
-        private void ImportProductVariantAliases(ProductVariantEntity productVariant, string mainSku, string aliasSkus)
+        private void ImportProductVariantAliases(ProductVariantEntity productVariant, string mainSku, ProductToImportDto productVariantDto)
         {
             List<ProductVariantAliasEntity> newAliases = new List<ProductVariantAliasEntity>()
                 { new ProductVariantAliasEntity() {IsDefault = true, Sku = mainSku, AliasName = mainSku}};
 
-            if (!aliasSkus.IsNullOrWhiteSpace())
+            if (productVariantDto.AliasSkuList.Any())
             {
-                newAliases.AddRange(aliasSkus.Split(PipeSeparator, StringSplitOptions.RemoveEmptyEntries)
+                newAliases.AddRange(productVariantDto.AliasSkuList
                     .Where(s => !s.IsNullOrWhiteSpace())
                     .Select(s => new ProductVariantAliasEntity() { IsDefault = false, Sku = s, AliasName = s }));
             }
@@ -251,14 +260,19 @@ namespace ShipWorks.Products.Import
         /// <summary>
         /// Import aliases
         /// </summary>
-        private async Task ImportProductVariantBundles(ProductVariantEntity bundleProductVariant, string bundledItemSkusAndQuantities,
+        private async Task ImportProductVariantBundles(ProductVariantEntity bundleProductVariant, ProductToImportDto productVariantDto,
             ISqlAdapter sqlAdapter)
         {
+            if (productVariantDto.BundleSkuList.Any(s => productVariantDto.AliasSkuList.Any( a => a == s.Sku)))
+            {
+                throw new ProductImportException($"Bundles cannot reference themselves.  Product SKU: {productVariantDto.Sku}");
+            }
+
             // Delete any bundles currently associated.  We'll add them back later if any were requested.
             await sqlAdapter.DeleteEntityCollectionAsync(bundleProductVariant.Product.Bundles).ConfigureAwait(false);
             bundleProductVariant.Product.Bundles.Clear();
 
-            if (bundledItemSkusAndQuantities.IsNullOrWhiteSpace())
+            if (productVariantDto.BundleSkuList.None())
             {
                 // No bundles requested, so just return.  
                 // If the variant had bundles associated, but then do an import where the cell is empty,
@@ -266,25 +280,16 @@ namespace ShipWorks.Products.Import
                 return;
             }
 
-            var bundledItemSkus = new Dictionary<string, int>();
-
-            bundledItemSkusAndQuantities.Split(PipeSeparator, StringSplitOptions.RemoveEmptyEntries)
-                .ForEach(skuAndQty =>
-                {
-                    var values = skuAndQty.Split(ColonSeparator, StringSplitOptions.RemoveEmptyEntries);
-                    bundledItemSkus.Add(values[0], ProductToImportDto.GetValue<int>(values[1], "Bundle Quantity"));
-                });
-
             // Get a list of what the final bundle list should be
-            List<ProductBundleEntity> bundlesToCreate = bundledItemSkus
-                .Where(s => !s.Key.IsNullOrWhiteSpace())
+            List<ProductBundleEntity> bundlesToCreate = productVariantDto.BundleSkuList
+                .Where(s => !s.Sku.IsNullOrWhiteSpace())
                 .Select(s =>
                 {
-                    ProductVariantEntity childVariant = productCatalog.FetchProductVariantEntity(sqlAdapter, s.Key);
+                    ProductVariantEntity childVariant = productCatalog.FetchProductVariantEntity(sqlAdapter, s.Sku);
 
                     if (childVariant == null)
                     {
-                        throw new ProductImportException($"Unable to import bundle SKU {bundleProductVariant.Aliases.First(a => a.IsDefault).Sku} because child SKU '{s.Key}' could not be found.");
+                        throw new ProductImportException($"Unable to import bundle SKU {bundleProductVariant.Aliases.First(a => a.IsDefault).Sku} because child SKU '{s.Sku}' could not be found.");
                     }
 
                     return new ProductBundleEntity()
@@ -292,7 +297,7 @@ namespace ShipWorks.Products.Import
                         Product = bundleProductVariant.Product,
                         ChildVariant = childVariant,
                         ChildProductVariantID = childVariant.ProductVariantID,
-                        Quantity = s.Value
+                        Quantity = s.Quantity
                     };
 
                 }).ToList();
