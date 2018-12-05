@@ -185,6 +185,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
 
             // If the value is null (and there wasn't a default value for the type)
             // or the value is already the expected type, return it.
+            
             if (value == null || value.GetType() == field.DataType)
             {
                 return value;
@@ -198,12 +199,37 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
                     return ConvertDecimal(value);
                 }
 
+                if (field.DataType == typeof(DateTime?))
+                {
+                    return ChangeNullableType(value, typeof(DateTime?));
+                }
+
                 return Convert.ChangeType(value, field.DataType);
             }
             catch (Exception ex)
             {
                 throw new ShipWorksOdbcException($"Unable to convert '{value}' to {field.DataType} for {QualifiedName}.", ex);
             }
+        }
+
+        /// <summary>
+        /// Convert the given nullable object to the specfied conversion type
+        /// </summary>
+        private static object ChangeNullableType(object value, Type conversion)
+        {
+            Type newDefault = conversion;
+
+            if (newDefault.IsGenericType && newDefault.GetGenericTypeDefinition().Equals(typeof(Nullable<>)))
+            {
+                if (value == null)
+                {
+                    return null;
+                }
+
+                newDefault = Nullable.GetUnderlyingType(newDefault);
+            }
+            
+            return Convert.ChangeType(value, newDefault);
         }
 
         /// <summary>
@@ -282,6 +308,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
                 {typeof(long), 0L},
                 {typeof(short), 0},
                 {typeof(bool), false},
+                {typeof(DateTime?), null},
                 {typeof(DateTime), null} // We don't want to override dates with any default, so keep it null.
             };
         }
