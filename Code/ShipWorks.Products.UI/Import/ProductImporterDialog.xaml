@@ -10,7 +10,7 @@
     xmlns:ui="http://schemas.shipworks.com/ui"
     Title="Import Products"
     Width="600"
-    Height="250"
+    Height="375"
     FontFamily="/ShipWorks.UI;component/Styles/BlueSteel/#Roboto"
     ShowInTaskbar="False"
     WindowStartupLocation="CenterOwner"
