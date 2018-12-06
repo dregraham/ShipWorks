@@ -232,8 +232,8 @@ namespace ShipWorks.Products.UI
             BundleEditorViewModel.Load(productVariant);
 
             SKU = productVariant.Aliases.First(a => a.IsDefault).Sku ?? string.Empty;
-            IsActive = productVariant.IsNew ? true : productVariant.IsActive;
-            IsBundle = productVariant.IsNew ? false : productVariant.Product.IsBundle;
+            IsActive = productVariant.IsNew || productVariant.IsActive;
+            IsBundle = !productVariant.IsNew && productVariant.Product.IsBundle;
             Name = productVariant.Name ?? string.Empty;
             UPC = productVariant.UPC ?? string.Empty;
             ASIN = productVariant.ASIN ?? string.Empty;
@@ -269,7 +269,7 @@ namespace ShipWorks.Products.UI
                 if (inHowManyBundles > 0)
                 {
                     string plural = inHowManyBundles > 1 ? "s" : "";
-                    string question = $"A bundle cannot be in other bundles.\r\n\r\nThis bundle is already in {inHowManyBundles} existing bundle{plural}.\r\n\r\nShould ShipWorks remove this bundle from the existing bundles?";
+                    string question = $"A bundle cannot be in other bundles.\r\n\r\nThis bundle is already in {inHowManyBundles} existing bundle{plural}.\r\n\r\nShould ShipWorks remove this bundle from the existing bundles{plural}? ";
 
                     DialogResult answer = messageHelper.ShowQuestion(question);
                     if (answer != DialogResult.OK)

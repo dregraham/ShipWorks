@@ -117,15 +117,15 @@ namespace ShipWorks.Products.UI.BundleEditor
             if (baseProduct.Product.IsBundle)
             {
                 // Loop through each bundled product to get their skus
-                foreach (ProductBundleEntity bundledProduct in baseProduct.Product.Bundles)
+                foreach (ProductBundleEntity productBundle in baseProduct.Product.Bundles)
                 {
                     ProductVariantAliasEntity bundledProductVariantAlias =
-                        bundledProduct.ChildVariant?.Aliases.FirstOrDefault(a => a.IsDefault);
+                        productBundle.ChildVariant?.Aliases.FirstOrDefault(a => a.IsDefault);
 
                     if (bundledProductVariantAlias != null)
                     {
                         BundleLineItems.Add(
-                            new ProductBundleDisplayLineItem(bundledProduct, bundledProductVariantAlias.Sku));
+                            new ProductBundleDisplayLineItem(productBundle, bundledProductVariantAlias.Sku));
                     }
 
                     SelectedBundleLineItem = BundleLineItems?.FirstOrDefault();

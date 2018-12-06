@@ -17,7 +17,8 @@ namespace ShipWorks.Products
         /// <summary>
         /// Constructor
         /// </summary>
-        public ProductBundle(string sku, IProductVariantEntity variant, ILog log) : base(sku, variant, log)
+        public ProductBundle(string sku, IProductVariantEntity variant, ILog log) 
+            : base(sku, variant, log)
         {
         }
 
@@ -26,9 +27,6 @@ namespace ShipWorks.Products
         /// </summary>
         public override void ApplyCustoms(OrderItemEntity item, ShipmentEntity shipment)
         {
-            Debug.Assert(variant.IsActive, "Variant should be active");
-            Debug.Assert(variant.Product.IsBundle, "Variant should be a bundle");
-
             log.InfoFormat($"Applying bundle information to customs item for sku {sku}");
 
             foreach (IProductBundleEntity bundleItem in variant.Product.Bundles)

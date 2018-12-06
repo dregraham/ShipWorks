@@ -286,7 +286,7 @@
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
                 <TextBlock Grid.Row="0"
-                           Text="Bundled Skus"
+                           Text="Bundled SKUs"
                            Style="{StaticResource Header}"/>
                 <bundles:BundleEditorControl Grid.Row="1"
                                          MinHeight="120"
