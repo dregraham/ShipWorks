@@ -79,7 +79,7 @@ namespace ShipWorks.Products
         /// <summary>
         /// Number of bundles productID exists in.
         /// </summary>
-        public async Task<int> InBundleCount(long productVariantID)
+        private async Task<int> InBundleCount(long productVariantID)
         {
             using (DbConnection conn = sqlSession.OpenConnection())
             {
@@ -95,7 +95,7 @@ namespace ShipWorks.Products
         /// <summary>
         /// Remove variant from all bundles
         /// </summary>
-        public Task RemoveFromAllBundles(ISqlAdapter adapter, long productVariantID)
+        private Task RemoveFromAllBundles(ISqlAdapter adapter, long productVariantID)
         {
             return adapter.ExecuteSQLAsync("DELETE ProductBundle WHERE ChildProductVariantID = @p0",
                 new object[] { productVariantID });
@@ -105,7 +105,7 @@ namespace ShipWorks.Products
         /// Delete any bundle items flagged for removal from a product OR
         /// remove all bundle items if the product is not a bundle
         /// </summary>
-        public Task DeleteRemovedBundleItems(ISqlAdapter adapter, ProductEntity product)
+        private Task DeleteRemovedBundleItems(ISqlAdapter adapter, ProductEntity product)
         {
             // If the product is not a bundle, remove all of its bundle items
             if (!product.IsBundle)
