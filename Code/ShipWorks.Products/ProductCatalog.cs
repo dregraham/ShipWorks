@@ -5,9 +5,11 @@ using System.Data.Common;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Threading;
+using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
@@ -29,14 +31,16 @@ namespace ShipWorks.Products
     {
         private readonly ISqlSession sqlSession;
         private readonly Func<Type, ILog> logFactory;
+        private readonly IMessageHelper messageHelper;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public ProductCatalog(ISqlSession sqlSession, Func<Type, ILog> logFactory)
+        public ProductCatalog(ISqlSession sqlSession, Func<Type, ILog> logFactory, IMessageHelper messageHelper)
         {
             this.sqlSession = sqlSession;
             this.logFactory = logFactory;
+            this.messageHelper = messageHelper;
         }
 
         /// <summary>
@@ -223,29 +227,82 @@ namespace ShipWorks.Products
             return prefetchPath;
         });
 
-		/// <summary>
+        /// <summary>
         /// Save the product
         /// </summary>
-        public Result Save(ISqlAdapter adapter, ProductEntity product)
+        public async Task<Result> Save(ProductEntity product, ISqlAdapterFactory sqlAdapterFactory)
         {
-            try
+            Result validationResult = await Validate(product);
+            if (validationResult.Failure)
             {
-                if (product.IsNew)
+                return validationResult;
+            }
+            
+            using (ISqlAdapter adapter = sqlAdapterFactory.CreateTransacted())
+            {
+                try
                 {
-                    product.CreatedDate = DateTime.UtcNow;
+                    if (product.IsBundle)
+                    {
+                        await RemoveFromAllBundles(adapter, product.Variants.FirstOrDefault().ProductVariantID).ConfigureAwait(false);
+                    }
+
+                    await DeleteRemovedBundleItems(adapter, product).ConfigureAwait(false);
+
+                    if (product.IsNew)
+                    {
+                        product.CreatedDate = DateTime.UtcNow;
+                    }
+
+                    product.Variants.Where(v => v.IsNew)?
+                        .ForEach(v => v.CreatedDate = DateTime.UtcNow);
+
+                    adapter.SaveEntity(product);
+
+                    adapter.Commit();
                 }
-
-                product.Variants.Where(v => v.IsNew)?
-                    .ForEach(v => v.CreatedDate = DateTime.UtcNow);
-
-                adapter.SaveEntity(product);
-
-                return Result.FromSuccess();
+                catch (ORMQueryExecutionException ex)
+                {
+                    adapter.Rollback();
+                    return Result.FromError(ex);
+                }
             }
-            catch (ORMQueryExecutionException ex)
+
+            return Result.FromSuccess();
+        }
+
+        /// <summary>
+        /// Checks if product is valid
+        /// </summary>
+        private async Task<Result> Validate(ProductEntity product)
+        {
+            var productVariant = product.Variants.FirstOrDefault();
+
+            if (productVariant.Aliases.Any(a => string.IsNullOrWhiteSpace(a.Sku)))
             {
-                return Result.FromError(ex);
+                string message = $"The following field is required: {Environment.NewLine}SKU";
+
+                messageHelper.ShowError(message);
+                return Result.FromError(message);
             }
+
+            if (product.IsBundle)
+            {
+                int inHowManyBundles = await InBundleCount(productVariant.ProductVariantID).ConfigureAwait(true);
+                if (inHowManyBundles > 0)
+                {
+                    string plural = inHowManyBundles > 1 ? "s" : "";
+                    string question = $"A bundle cannot be in other bundles.\r\n\r\nThis bundle is already in {inHowManyBundles} existing bundle{plural}.\r\n\r\nShould ShipWorks remove this bundle from the existing bundles{plural}? ";
+
+                    DialogResult answer = messageHelper.ShowQuestion(question);
+                    if (answer != DialogResult.OK)
+                    {
+                        return Result.FromError("");
+                    }
+                }
+            }
+
+            return Result.FromSuccess();
         }
     }
 }

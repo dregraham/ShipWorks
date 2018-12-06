@@ -38,24 +38,5 @@ namespace ShipWorks.OrderLookup.Tests
 
             mock.Mock<IMessageHelper>().Verify(m => m.ShowDialog(It.IsAny<IDialog>()));
         }
-
-        [Fact]
-        public void SaveProduct_ShowsError_WhenSkuIsBlank()
-        {
-            var product = new ProductVariantAliasEntity()
-            {
-                IsDefault = true,
-                ProductVariant = new ProductVariantEntity()
-                {
-                    Product = new ProductEntity()
-                }
-            };
-
-            testObject.ShowProductEditor(product.ProductVariant);
-
-            testObject.Save.Execute(null);
-
-            mock.Mock<IMessageHelper>().Verify(m => m.ShowError($"The following field is required: {Environment.NewLine}SKU"));
-        }
     }
 }

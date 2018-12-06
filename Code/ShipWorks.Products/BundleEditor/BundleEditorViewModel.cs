@@ -1,7 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reflection;
-using System.Threading.Tasks;
 using System.Windows.Input;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
@@ -123,20 +122,11 @@ namespace ShipWorks.Products.BundleEditor
         /// <summary>
         /// Save the currently configured bundle
         /// </summary>
-        public async Task Save(ISqlAdapter adapter)
+        public void Save()
         {
-            if (!baseProduct.Product.IsBundle)
+            foreach (ProductBundleDisplayLineItem bundleLineItem in BundleLineItems)
             {
-                await productCatalog.DeleteRemovedBundleItems(adapter, baseProduct.Product).ConfigureAwait(false);
-            }
-            else
-            {
-                await productCatalog.RemoveFromAllBundles(adapter, baseProduct.ProductVariantID).ConfigureAwait(false);
-
-                foreach (ProductBundleDisplayLineItem bundleLineItem in BundleLineItems)
-                {
-                    baseProduct.Product.Bundles.Add(bundleLineItem.BundledProduct);
-                }
+                baseProduct.Product.Bundles.Add(bundleLineItem.BundledProduct);
             }
         }
 

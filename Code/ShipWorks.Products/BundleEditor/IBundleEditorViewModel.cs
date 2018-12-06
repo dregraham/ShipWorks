@@ -1,8 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Threading.Tasks;
 using System.Windows.Input;
-using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.Products.BundleEditor
@@ -50,6 +48,6 @@ namespace ShipWorks.Products.BundleEditor
         /// <summary>
         /// Save the bundle to the product
         /// </summary>
-        Task Save(ISqlAdapter adapter);
+        void Save();
     }
 }

@@ -56,7 +56,7 @@ namespace ShipWorks.Products.Tests
         }
 
         [Fact]
-        public async Task Save_SavesBundleLineItemsToGivenProduct()
+        public void Save_SavesBundleLineItemsToGivenProduct()
         {
             // Load first
             ProductVariantEntity baseProduct = new ProductVariantEntity();
@@ -83,7 +83,7 @@ namespace ShipWorks.Products.Tests
             testObject.AddSkuToBundleCommand.Execute(null);
 
             // Save
-            await testObject.Save(sqlAdapter.Object);
+            testObject.Save();
 
             Assert.True(
                 baseProduct.Product.Bundles.Any(

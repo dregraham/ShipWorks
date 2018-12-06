@@ -257,28 +257,6 @@ namespace ShipWorks.Products.ProductEditor
         /// </summary>
         private async Task SaveProduct()
         {
-            if (string.IsNullOrWhiteSpace(SKU))
-            {
-                messageHelper.ShowError($"The following field is required: {Environment.NewLine}SKU");
-                return;
-            }
-
-            if (IsBundle)
-            {
-                int inHowManyBundles = await productCatalog.InBundleCount(productVariant.ProductVariantID).ConfigureAwait(true);
-                if (inHowManyBundles > 0)
-                {
-                    string plural = inHowManyBundles > 1 ? "s" : "";
-                    string question = $"A bundle cannot be in other bundles.\r\n\r\nThis bundle is already in {inHowManyBundles} existing bundle{plural}.\r\n\r\nShould ShipWorks remove this bundle from the existing bundles{plural}? ";
-
-                    DialogResult answer = messageHelper.ShowQuestion(question);
-                    if (answer != DialogResult.OK)
-                    {
-                        return;
-                    }
-                }
-            }
-
             productVariant.Product.IsBundle = IsBundle;
 
             productVariant.Aliases.First(a => a.IsDefault).Sku = SKU.Trim();
@@ -298,21 +276,10 @@ namespace ShipWorks.Products.ProductEditor
             productVariant.CountryOfOrigin = CountryOfOrigin.Trim();
 
             Result saveResult;
+            BundleEditorViewModel.Save();
 
-            using (ISqlAdapter adapter = sqlAdapterFactory.CreateTransacted())
-            {
-                await BundleEditorViewModel.Save(adapter).ConfigureAwait(true);
-                saveResult = productCatalog.Save(adapter, productVariant.Product);
-                if (saveResult.Success)
-                {
-                    adapter.Commit();
-                }
-                else
-                {
-                    adapter.Rollback();
-                }
-            }
-
+            saveResult = await productCatalog.Save(productVariant.Product, sqlAdapterFactory);
+            
             if (saveResult.Success)
             {
                 dialog.DialogResult = true;
@@ -320,12 +287,12 @@ namespace ShipWorks.Products.ProductEditor
             }
             else
             {
-                if ((saveResult.Exception.GetBaseException() as SqlException)?.Number == 2601)
+                if ((saveResult.Exception?.GetBaseException() as SqlException)?.Number == 2601)
                 {
                     string sku = productVariant.DefaultSku;
                     messageHelper.ShowError($"The SKU \"{sku}\" already exists. Please enter a unique value for the Product SKU.", saveResult.Exception);
                 }
-                else
+                else if (!string.IsNullOrWhiteSpace(saveResult.Message))
                 {
                     messageHelper.ShowError(saveResult.Message);
                 }

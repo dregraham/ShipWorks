@@ -35,7 +35,7 @@ namespace ShipWorks.Products
 		/// <summary>
         /// Save the given product
         /// </summary>
-        Result Save(ISqlAdapter adapter, ProductEntity product);
+        Task<Result> Save(ProductEntity product, ISqlAdapterFactory sqlAdapterFactory);
 
         /// <summary>
         /// Number of bundles productID exists in.
