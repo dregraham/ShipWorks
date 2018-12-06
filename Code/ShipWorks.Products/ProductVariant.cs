@@ -57,7 +57,7 @@ namespace ShipWorks.Products
             outline.AddElement("HarmonizedCode", () => variant.HarmonizedCode);
             outline.AddElement("CountryOfOrigin", () => variant.CountryOfOrigin);
             outline.AddElement("DeclaredValue", () => variant.DeclaredValue);
-            outline.AddElement("Quantity", () => quantity, ElementOutline.If(() => quantity.HasValue));                      
+            outline.AddElement("Quantity", () => quantity, ElementOutline.If(() => quantity.HasValue));
         }
 
         /// <summary>
@@ -85,7 +85,7 @@ namespace ShipWorks.Products
         /// </summary>
         public virtual void ApplyCustoms(OrderItemEntity item, ShipmentEntity shipment)
         {
-            log.InfoFormat($"Applying product information to customs item for sku {sku}");
+            log.InfoFormat("Applying product information to customs item for sku {0}", sku);
 
             ApplyCustoms(item, shipment, variant);
         }
