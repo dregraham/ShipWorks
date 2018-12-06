@@ -143,15 +143,12 @@ namespace ShipWorks.UI.Controls
         {
             LengthConverter lengthConverter = new LengthConverter();
 
-            double? length = lengthConverter.ParseLength(baseValue as string);
+            double length = lengthConverter.ParseLength(baseValue as string) ?? 0;
 
-            if (length.HasValue)
-            {
-                double maxLength = (double) d.GetValue(MaxValueProperty);
-                double clampedLength = length.Value.Clamp(0, maxLength);
-                d.SetCurrentValue(ValueProperty, clampedLength);
-                return lengthConverter.FormatLength(clampedLength);
-            }
+            double maxLength = (double) d.GetValue(MaxValueProperty);
+            double clampedLength = length.Clamp(0, maxLength);
+            d.SetCurrentValue(ValueProperty, clampedLength);
+            return lengthConverter.FormatLength(clampedLength);
 
             return lengthConverter.FormatLength((double) d.GetValue(ValueProperty));
         }
