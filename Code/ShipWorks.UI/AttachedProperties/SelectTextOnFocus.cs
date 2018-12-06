@@ -43,15 +43,13 @@ namespace ShipWorks.UI.AttachedProperties
         {
             if (d is TextBox textBox)
             {
-                if ((e.NewValue as bool?).GetValueOrDefault(false))
+                textBox.GotKeyboardFocus -= OnKeyboardFocusSelectText;
+                textBox.PreviewMouseLeftButtonDown -= OnMouseLeftButtonDown;
+                
+                if (e.NewValue as bool? == true)
                 {
                     textBox.GotKeyboardFocus += OnKeyboardFocusSelectText;
                     textBox.PreviewMouseLeftButtonDown += OnMouseLeftButtonDown;
-                }
-                else
-                {
-                    textBox.GotKeyboardFocus -= OnKeyboardFocusSelectText;
-                    textBox.PreviewMouseLeftButtonDown -= OnMouseLeftButtonDown;
                 }
             }
         }
@@ -63,13 +61,7 @@ namespace ShipWorks.UI.AttachedProperties
         {
             DependencyObject dependencyObject = GetParentFromVisualTree(e.OriginalSource);
 
-            if (dependencyObject == null)
-            {
-                return;
-            }
-
-            TextBox textBox = (TextBox)dependencyObject;
-            if (!textBox.IsKeyboardFocusWithin)
+            if (dependencyObject is TextBox textBox && !textBox.IsKeyboardFocusWithin)
             {
                 textBox.Focus();
                 e.Handled = true;

@@ -6,6 +6,7 @@ using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Input;
+using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.ComponentRegistration;
@@ -22,10 +23,8 @@ namespace ShipWorks.Products.UI.BundleEditor
     /// View model for the BundleEditorControl
     /// </summary>
     [Component]
-    public class BundleEditorViewModel : IBundleEditorViewModel
+    public class BundleEditorViewModel : ViewModelBase, IBundleEditorViewModel
     {
-        public event PropertyChangedEventHandler PropertyChanged;
-        private readonly PropertyChangedHandler handler;
         private readonly IProductCatalog productCatalog;
         private readonly IMessageHelper messageHelper;
         private readonly ISqlAdapterFactory sqlAdapterFactory;
@@ -40,8 +39,6 @@ namespace ShipWorks.Products.UI.BundleEditor
         /// </summary>
         public BundleEditorViewModel(IProductCatalog productCatalog, IMessageHelper messageHelper, ISqlAdapterFactory sqlAdapterFactory)
         {
-            handler = new PropertyChangedHandler(this, () => PropertyChanged);
-
             this.productCatalog = productCatalog;
             this.messageHelper = messageHelper;
             this.sqlAdapterFactory = sqlAdapterFactory;
@@ -59,7 +56,7 @@ namespace ShipWorks.Products.UI.BundleEditor
         public string Sku
         {
             get => sku;
-            set => handler.Set(nameof(Sku), ref sku, value);
+            set => Set(ref sku, value);
         }
 
         /// <summary>
@@ -69,7 +66,7 @@ namespace ShipWorks.Products.UI.BundleEditor
         public int Quantity
         {
             get => quantity;
-            set => handler.Set(nameof(Quantity), ref quantity, value);
+            set => Set(ref quantity, value);
         }
 
         /// <summary>
@@ -79,7 +76,7 @@ namespace ShipWorks.Products.UI.BundleEditor
         public ObservableCollection<ProductBundleDisplayLineItem> BundleLineItems
         {
             get => bundleLineItems;
-            set => handler.Set(nameof(BundleLineItems), ref bundleLineItems, value);
+            set => Set(ref bundleLineItems, value);
         }
 
         /// <summary>
@@ -89,7 +86,7 @@ namespace ShipWorks.Products.UI.BundleEditor
         public ProductBundleDisplayLineItem SelectedBundleLineItem
         {
             get => selectedBundleLineItem;
-            set => handler.Set(nameof(SelectedBundleLineItem), ref selectedBundleLineItem, value);
+            set => Set(ref selectedBundleLineItem, value);
         }
 
         /// <summary>
@@ -144,7 +141,7 @@ namespace ShipWorks.Products.UI.BundleEditor
         {
             if (!baseProduct.Product.IsBundle)
             {
-                await productCatalog.DeleteRemovedBundleItems(adapter, baseProduct.Product);
+                await productCatalog.DeleteRemovedBundleItems(adapter, baseProduct.Product).ConfigureAwait(false);
             }
             else
             {
@@ -174,7 +171,7 @@ namespace ShipWorks.Products.UI.BundleEditor
                 return;
             }
 
-            if (baseProduct.Aliases.Any(a=>a.Sku == sku))
+            if (baseProduct.Aliases.Any(a => a.Sku == sku))
             {
                 messageHelper.ShowError("A bundle cannot contain itself");
                 return;
