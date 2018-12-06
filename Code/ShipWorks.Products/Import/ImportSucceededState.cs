@@ -11,7 +11,7 @@ namespace ShipWorks.Products.Import
     /// Import has succeeded
     /// </summary>
     [Component(RegistrationType.Self)]
-    public class ImportSucceededState : ViewModelBase, IProductImportState
+    public class ImportSucceededState : ViewModelBase, IProductImportState, IImportSuccessResults
     {
         private readonly IProductImporterStateManager stateManager;
 
@@ -21,7 +21,9 @@ namespace ShipWorks.Products.Import
         public ImportSucceededState(ImportProductsResult results, IProductImporterStateManager stateManager)
         {
             this.stateManager = stateManager;
-            TotalProducts = results.SuccessCount;
+            SuccessCount = results.SuccessCount;
+            NewCount = results.NewCount;
+            ExistingCount = results.ExistingCount;
 
             CloseDialog = new RelayCommand(CloseDialogAction);
         }
@@ -36,7 +38,19 @@ namespace ShipWorks.Products.Import
         /// Total products
         /// </summary>
         [Obfuscation]
-        public int TotalProducts { get; }
+        public int SuccessCount { get; }
+
+        /// <summary>
+        /// New products
+        /// </summary>
+        [Obfuscation]
+        public int NewCount { get; }
+
+        /// <summary>
+        /// Existing products
+        /// </summary>
+        [Obfuscation]
+        public int ExistingCount { get; }
 
         /// <summary>
         /// The dialog was requested to close

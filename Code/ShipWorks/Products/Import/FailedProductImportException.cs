@@ -13,6 +13,8 @@ namespace ShipWorks.Products.Import
         public FailedProductImportException(ImportProductsResult result) : base("Import failed")
         {
             SuccessCount = result.SuccessCount;
+            NewCount = result.NewCount;
+            ExistingCount = result.ExistingCount;
             FailedCount = result.FailedCount;
             FailedProducts = result.FailureResults ?? new Dictionary<string, string>();
         }
@@ -21,6 +23,16 @@ namespace ShipWorks.Products.Import
         /// Number of products successfully imported
         /// </summary>
         public int SuccessCount { get; }
+
+        /// <summary>
+        /// Number of new products
+        /// </summary>
+        public int NewCount { get; }
+
+        /// <summary>
+        /// Number of products that already existed
+        /// </summary>
+        public int ExistingCount { get; }
 
         /// <summary>
         /// Number of products that failed to import

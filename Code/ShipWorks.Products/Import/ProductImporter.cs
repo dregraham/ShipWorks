@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.Extensions;
 using Interapptive.Shared.Threading;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Connection;
@@ -80,49 +81,48 @@ namespace ShipWorks.Products.Import
         /// <summary>
         /// Import each non-bundle sku into the database
         /// </summary>
-        private async Task ProcessSkus(List<ProductToImportDto> skuRows, ImportProductsResult result)
+        private async Task ProcessSkus(List<ProductToImportDto> rows, ImportProductsResult result) =>
+            await PerformImport(rows, result,
+                async (productVariant, row, sqlAdapter) =>
+                {
+                    if (productVariant.Product != null)
+                    {
+                        await sqlAdapter.DeleteEntityCollectionAsync(productVariant.Product.Bundles).ConfigureAwait(false);
+                        productVariant.Product.Bundles.Clear();
+                    }
+
+                    CopyCsvDataToProduct(productVariant, row);
+                }).ConfigureAwait(false);
+
+        /// <summary>
+        /// Import each bundle sku into the database
+        /// </summary>
+        private async Task ProcessBundles(List<ProductToImportDto> rows, ImportProductsResult result) =>
+            await PerformImport(rows, result,
+                async (productVariant, row, sqlAdapter) =>
+                {
+                    CopyCsvDataToProduct(productVariant, row);
+
+                    await ImportProductVariantBundles(productVariant, row, sqlAdapter).ConfigureAwait(false);
+                })
+                .ConfigureAwait(false);
+
+        /// <summary>
+        /// Perform the import of a given list of rows
+        /// </summary>
+        private async Task PerformImport(
+            List<ProductToImportDto> rows,
+            ImportProductsResult result,
+            Func<ProductVariantEntity, ProductToImportDto, ISqlAdapter, Task> updateProductAction)
         {
             // Loop through each row after the header rows
-            foreach (ProductToImportDto row in skuRows)
+            foreach (ProductToImportDto row in rows.Where(x => !x.Sku.IsNullOrWhiteSpace()))
             {
-                if (row.Sku.IsNullOrWhiteSpace())
-                {
-                    continue;
-                }
-
-                try
-                {
-                    await sqlAdapterFactory.WithPhysicalTransactionAsync(async (transaction, sqlAdapter) =>
-                    {
-                        ProductVariantEntity productVariant = FindExistingProductVariant(sqlAdapter, row.Sku);
-
-                        await sqlAdapter.DeleteEntityCollectionAsync(productVariant.Aliases).ConfigureAwait(false);
-                        productVariant.Aliases.Clear();
-
-                        if (productVariant.Product != null)
-                        {
-                            await sqlAdapter.DeleteEntityCollectionAsync(productVariant.Product.Bundles).ConfigureAwait(false);
-                            productVariant.Product.Bundles.Clear();
-                        }
-
-                        CopyCsvDataToProduct(productVariant, row);
-
-                        return await sqlAdapter.SaveEntityAsync(productVariant.Product, true, true)
-                            .ContinueWith(task =>
-                            {
-                                sqlAdapter.Commit();
-                                return true;
-                            })
-                            .ConfigureAwait(false);
-                    });
-
-                    result.SuccessCount++;
-                }
-                catch (Exception e)
-                {
-                    result.FailedCount++;
-                    result.FailureResults.Add(row.Sku, e.Message);
-                }
+                await sqlAdapterFactory
+                    .WithPhysicalTransactionAsync((transaction, sqlAdapter) => ImportProduct(updateProductAction, sqlAdapter, row))
+                    .Do(result.ProductSucceeded, ex => result.ProductFailed(row.Sku, ex.Message))
+                    .Recover(ex => true)
+                    .ConfigureAwait(false);
 
                 if (itemProgressReporter.IsCancelRequested)
                 {
@@ -134,55 +134,21 @@ namespace ShipWorks.Products.Import
         }
 
         /// <summary>
-        /// Import each bundle sku into the database
+        /// Import a single product
         /// </summary>
-        private async Task ProcessBundles(List<ProductToImportDto> bundleRows, ImportProductsResult result)
+        private async Task<bool> ImportProduct(Func<ProductVariantEntity, ProductToImportDto, ISqlAdapter, Task> updateProductAction, ISqlAdapter sqlAdapter, ProductToImportDto row)
         {
-            // Loop through each row after the header rows
-            foreach (ProductToImportDto row in bundleRows)
-            {
-                if (row.Sku.IsNullOrWhiteSpace())
-                {
-                    continue;
-                }
+            ProductVariantEntity productVariant = FindExistingProductVariant(sqlAdapter, row.Sku);
+            var isNew = productVariant.IsNew;
 
-                try
-                {
-                    await sqlAdapterFactory.WithPhysicalTransactionAsync(async (transaction, sqlAdapter) =>
-                    {
-                        ProductVariantEntity bundleProductVariant = FindExistingProductVariant(sqlAdapter, row.Sku);
+            await sqlAdapter.DeleteEntityCollectionAsync(productVariant.Aliases).ConfigureAwait(false);
+            productVariant.Aliases.Clear();
 
-                        await sqlAdapter.DeleteEntityCollectionAsync(bundleProductVariant.Aliases).ConfigureAwait(false);
-                        bundleProductVariant.Aliases.Clear();
+            await updateProductAction(productVariant, row, sqlAdapter).ConfigureAwait(false);
 
-                        CopyCsvDataToProduct(bundleProductVariant, row);
-
-                        await ImportProductVariantBundles(bundleProductVariant, row, sqlAdapter).ConfigureAwait(false);
-
-                        return await sqlAdapter.SaveEntityAsync(bundleProductVariant.Product, true, true)
-                            .ContinueWith(task =>
-                            {
-                                sqlAdapter.Commit();
-                                return true;
-                            })
-                            .ConfigureAwait(false);
-                    });
-
-                    result.SuccessCount++;
-                }
-                catch (Exception e)
-                {
-                    result.FailedCount++;
-                    result.FailureResults.Add(row.Sku, e.Message);
-                }
-
-                if (itemProgressReporter.IsCancelRequested)
-                {
-                    break;
-                }
-
-                itemProgressReporter.PercentComplete = (int) Math.Round(100 * (((decimal) result.SuccessCount + result.FailedCount) / result.TotalCount));
-            }
+            await sqlAdapter.SaveEntityAsync(productVariant.Product, true, true).ConfigureAwait(false);
+            sqlAdapter.Commit();
+            return isNew;
         }
 
         /// <summary>
@@ -346,9 +312,9 @@ namespace ShipWorks.Products.Import
                 ValidateFieldLength(aliasSku, ProductVariantAliasFields.Sku.MaxLength, "Alias SKU");
             }
 
-            foreach (var bundleSkuQty in row.BundleSkuList)
+            foreach (var (Sku, _) in row.BundleSkuList)
             {
-                ValidateFieldLength(bundleSkuQty.Sku, ProductVariantAliasFields.Sku.MaxLength, "Bundled SKU");
+                ValidateFieldLength(Sku, ProductVariantAliasFields.Sku.MaxLength, "Bundled SKU");
             }
         }
 

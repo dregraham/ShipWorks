@@ -91,6 +91,7 @@
     </Compile>
     <Compile Include="BundleEditor\BundleEditorViewModel.cs" />
     <Compile Include="DesignerProductsMode.cs" />
+    <Compile Include="Import\Designer\DesignModeImportSuccessResultsViewModel.cs" />
     <Compile Include="Import\ImportFailedStateView.xaml.cs">
       <DependentUpon>ImportFailedStateView.xaml</DependentUpon>
     </Compile>
@@ -99,6 +100,9 @@
     </Compile>
     <Compile Include="Import\ImportSucceededStateView.xaml.cs">
       <DependentUpon>ImportSucceededStateView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Import\ImportSuccessResults.xaml.cs">
+      <DependentUpon>ImportSuccessResults.xaml</DependentUpon>
     </Compile>
     <Compile Include="Import\ProductImporterDialog.xaml.cs">
       <DependentUpon>ProductImporterDialog.xaml</DependentUpon>
@@ -162,6 +166,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="BundleEditor\BundleEditorControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Import\ImportSuccessResults.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

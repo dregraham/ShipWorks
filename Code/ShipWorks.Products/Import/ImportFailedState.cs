@@ -14,7 +14,7 @@ namespace ShipWorks.Products.Import
     /// Import has failed
     /// </summary>
     [Component(RegistrationType.Self)]
-    public class ImportFailedState : ViewModelBase, IProductImportState
+    public class ImportFailedState : ViewModelBase, IProductImportState, IImportSuccessResults
     {
         private readonly IProductImporterStateManager stateManager;
         private readonly IProductImportFileSelector productImportFileSelector;
@@ -31,6 +31,8 @@ namespace ShipWorks.Products.Import
             if (exception is FailedProductImportException failedImport)
             {
                 SuccessCount = failedImport.SuccessCount;
+                NewCount = failedImport.NewCount;
+                ExistingCount = failedImport.ExistingCount;
                 FailedCount = failedImport.FailedCount;
                 ImportErrors = failedImport.FailedProducts;
             }
@@ -62,6 +64,18 @@ namespace ShipWorks.Products.Import
         /// </summary>
         [Obfuscation]
         public int SuccessCount { get; }
+
+        /// <summary>
+        /// New products
+        /// </summary>
+        [Obfuscation]
+        public int NewCount { get; }
+
+        /// <summary>
+        /// Existing products
+        /// </summary>
+        [Obfuscation]
+        public int ExistingCount { get; }
 
         /// <summary>
         /// Number of products that failed to import

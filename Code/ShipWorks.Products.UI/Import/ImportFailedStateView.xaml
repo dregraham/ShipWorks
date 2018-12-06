@@ -49,9 +49,7 @@
             </Grid.RowDefinitions>
 
             <StackPanel Margin="0,8,0,0">
-                <TextBlock>
-                    <Run Text="{Binding SuccessCount, Mode=OneTime, StringFormat='{}{0:#,##0}'}" />
-                    products were imported successfully.</TextBlock>
+                <local:ImportSuccessResults Margin="0,0,0,4" />
                 <TextBlock>
                     <Run Text="{Binding FailedCount, Mode=OneTime, StringFormat='{}{0:#,##0}'}" />
                     products failed to import.</TextBlock>
