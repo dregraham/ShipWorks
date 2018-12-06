@@ -3,6 +3,7 @@ using Autofac.Extras.Moq;
 using Interapptive.Shared.UI;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Products.ProductEditor;
 using ShipWorks.Products.UI;
 using ShipWorks.Tests.Shared;
 using Xunit;

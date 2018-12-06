@@ -8,11 +8,12 @@
         xmlns:ui="http://schemas.shipworks.com/ui"
         xmlns:sharedUI="clr-namespace:Interapptive.Shared.UI;assembly=Interapptive.Shared"
         xmlns:bundles="clr-namespace:ShipWorks.Products.UI.BundleEditor"
+        xmlns:productEditor="clr-namespace:ShipWorks.Products.ProductEditor;assembly=ShipWorks.Products"
         mc:Ignorable="d"
         SizeToContent="Height"
         Title="Product Editor" Width="700"
         FontFamily="/ShipWorks.UI;component/Styles/BlueSteel/#Roboto"
-        d:DataContext="{d:DesignInstance productsUI:ProductEditorViewModel}">
+        d:DataContext="{d:DesignInstance productEditor:ProductEditorViewModel}">
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>

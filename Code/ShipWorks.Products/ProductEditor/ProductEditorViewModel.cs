@@ -15,7 +15,7 @@ using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Products.BundleEditor;
 
-namespace ShipWorks.Products.UI
+namespace ShipWorks.Products.ProductEditor
 {
     /// <summary>
     /// View Model for the Product Editor
