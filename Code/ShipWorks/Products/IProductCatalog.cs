@@ -38,11 +38,6 @@ namespace ShipWorks.Products
         Task<Result> Save(ProductEntity product, ISqlAdapterFactory sqlAdapterFactory);
 
         /// <summary>
-        /// Number of bundles productID exists in.
-        /// </summary>
-        Task<int> InBundleCount(long productID);
-
-        /// <summary>
         /// Remove variant from all bundles
         /// </summary>
         Task RemoveFromAllBundles(ISqlAdapter adapter, long productVariantID);
