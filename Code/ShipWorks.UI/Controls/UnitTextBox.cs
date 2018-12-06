@@ -149,8 +149,6 @@ namespace ShipWorks.UI.Controls
             double clampedLength = length.Clamp(0, maxLength);
             d.SetCurrentValue(ValueProperty, clampedLength);
             return lengthConverter.FormatLength(clampedLength);
-
-            return lengthConverter.FormatLength((double) d.GetValue(ValueProperty));
         }
 
         /// <summary>
