@@ -8,6 +8,7 @@ using Interapptive.Shared.Threading;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.HelperClasses;
 
 namespace ShipWorks.Products.Import
 {
@@ -198,6 +199,8 @@ namespace ShipWorks.Products.Import
         /// </summary>
         private void CopyCsvDataToProduct(ProductVariantEntity productVariant, ProductToImportDto row)
         {
+            ValidateRow(row);
+
             if (productVariant.Product == null)
             {
                 productVariant.Product = new ProductEntity()
@@ -321,6 +324,43 @@ namespace ShipWorks.Products.Import
                 }).ToList();
 
             bundleProductVariant.Product.Bundles.AddRange(bundlesToCreate);
+        }
+
+        /// <summary>
+        /// Validate row field lengths
+        /// </summary>
+        private void ValidateRow(ProductToImportDto row)
+        {
+            ValidateFieldLength(row.Sku, ProductVariantAliasFields.Sku.MaxLength, "SKU");
+            ValidateFieldLength(row.Name, ProductVariantFields.Name.MaxLength, "Name");
+            ValidateFieldLength(row.Upc, ProductVariantFields.UPC.MaxLength, "UPC");
+            ValidateFieldLength(row.Asin, ProductVariantFields.ASIN.MaxLength, "ASIN");
+            ValidateFieldLength(row.Isbn, ProductVariantFields.ISBN.MaxLength, "ISBN");
+            ValidateFieldLength(row.ImageUrl, ProductVariantFields.ImageUrl.MaxLength, "Image URL");
+            ValidateFieldLength(row.WarehouseBin, ProductVariantFields.BinLocation.MaxLength, "Warehouse-Bin Location");
+            ValidateFieldLength(row.CountryOfOrigin, ProductVariantFields.CountryOfOrigin.MaxLength, "Country of Origin");
+            ValidateFieldLength(row.HarmonizedCode, ProductVariantFields.HarmonizedCode.MaxLength, "Harmonized Code");
+
+            foreach (string aliasSku in row.AliasSkuList)
+            {
+                ValidateFieldLength(aliasSku, ProductVariantAliasFields.Sku.MaxLength, "Alias SKU");
+            }
+
+            foreach (var bundleSkuQty in row.BundleSkuList)
+            {
+                ValidateFieldLength(bundleSkuQty.Sku, ProductVariantAliasFields.Sku.MaxLength, "Bundled SKU");
+            }
+        }
+
+        /// <summary>
+        /// Do validation on given value.  Return value if validation passed.
+        /// </summary>
+        private void ValidateFieldLength(string value, int maxLength, string nameOfField)
+        {
+            if (value?.Length > maxLength)
+            {
+                throw new ProductImportException($"'{nameOfField}' value is longer than max length of {maxLength}.");
+            }
         }
     }
 }
