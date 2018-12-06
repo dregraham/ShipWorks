@@ -46,5 +46,11 @@ namespace ShipWorks.Products
         /// Remove variant from all bundles
         /// </summary>
         Task RemoveFromAllBundles(ISqlAdapter adapter, long productVariantID);
+
+        /// <summary>
+        /// Delete any bundle items flagged for removal from a product OR
+        /// remove all bundle items if the product is not a bundle
+        /// </summary>
+        Task DeleteRemovedBundleItems(ISqlAdapter adapter, ProductEntity product);
     }
 }

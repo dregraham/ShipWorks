@@ -98,6 +98,27 @@ namespace ShipWorks.Products
         }
 
         /// <summary>
+        /// Delete any bundle items flagged for removal from a product OR
+        /// remove all bundle items if the product is not a bundle
+        /// </summary>
+        public Task DeleteRemovedBundleItems(ISqlAdapter adapter, ProductEntity product)
+        {
+            // If the product is not a bundle, remove all of its bundle items
+            if (!product.IsBundle)
+            {
+                product.Bundles.RemovedEntitiesTracker.AddRange(product.Bundles);
+            }
+
+            // Delete the removed items
+            if (product.Bundles.RemovedEntitiesTracker.Count > 0)
+            {
+                return adapter.DeleteEntityCollectionAsync(product.Bundles.RemovedEntitiesTracker);
+            }
+
+            return Task.CompletedTask;
+        }
+
+        /// <summary>
         /// Create a table parameter for the product variant ID list
         /// </summary>
         private SqlParameter CreateProductVariantIDParameter(IEnumerable<long> productVariantIDs)

@@ -142,25 +142,14 @@ namespace ShipWorks.Products.UI.BundleEditor
         /// </summary>
         public async Task Save(ISqlAdapter adapter)
         {
-            // If the base product is not a bundle, remove all of its bundle items
             if (!baseProduct.Product.IsBundle)
             {
-                baseProduct.Product.Bundles.RemovedEntitiesTracker.AddRange(baseProduct.Product.Bundles);
+                await productCatalog.DeleteRemovedBundleItems(adapter, baseProduct.Product);
             }
             else
             {
                 await productCatalog.RemoveFromAllBundles(adapter, baseProduct.ProductVariantID).ConfigureAwait(false);
-            }
 
-            // Delete the removed items
-            if (baseProduct.Product.Bundles.RemovedEntitiesTracker.Count > 0)
-            {
-                adapter.DeleteEntityCollection(baseProduct.Product.Bundles.RemovedEntitiesTracker);
-            }
-
-            // Add in any bundle items
-            if (baseProduct.Product.IsBundle)
-            {
                 foreach (ProductBundleDisplayLineItem bundleLineItem in BundleLineItems)
                 {
                     baseProduct.Product.Bundles.Add(bundleLineItem.BundledProduct);
