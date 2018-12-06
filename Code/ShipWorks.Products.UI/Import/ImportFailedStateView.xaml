@@ -6,9 +6,9 @@
     xmlns:local="clr-namespace:ShipWorks.Products.UI.Import"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:ui="http://schemas.shipworks.com/ui"
-    FontFamily="/ShipWorks.UI;component/Styles/BlueSteel/#Roboto"
     d:DesignHeight="450"
     d:DesignWidth="800"
+    FontFamily="/ShipWorks.UI;component/Styles/BlueSteel/#Roboto"
     mc:Ignorable="d">
     <UserControl.Resources>
         <ResourceDictionary>
@@ -36,42 +36,44 @@
             Product import was not successful.
         </ui:NotificationBorder>
 
-        <TextBlock
-            Grid.Row="1"
-            Text="{Binding FailureReason, Mode=OneTime}"
-            TextWrapping="Wrap"
-            Visibility="{Binding HasImportErrors, Mode=OneTime, Converter={StaticResource HideWhenTrue}}" />
+        <Grid Grid.Row="1" Margin="0,8,0,0">
+            <TextBlock
+                Text="{Binding FailureReason, Mode=OneTime}"
+                TextWrapping="Wrap"
+                Visibility="{Binding HasImportErrors, Mode=OneTime, Converter={StaticResource HideWhenTrue}}" />
 
-        <Grid Grid.Row="1" Visibility="{Binding HasImportErrors, Mode=OneTime, Converter={StaticResource ShowWhenTrue}}">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="*" />
-            </Grid.RowDefinitions>
+            <Grid Visibility="{Binding HasImportErrors, Mode=OneTime, Converter={StaticResource ShowWhenTrue}}">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
 
-            <StackPanel Margin="0,8,0,0">
-                <local:ImportSuccessResults Margin="0,0,0,4" />
-                <TextBlock>
-                    <Run Text="{Binding FailedCount, Mode=OneTime, StringFormat='{}{0:#,##0}'}" />
-                    products failed to import.</TextBlock>
-            </StackPanel>
-            <DataGrid
-                Grid.Row="1"
-                Margin="0,8"
-                IsReadOnly="True"
-                AutoGenerateColumns="False"
-                ItemsSource="{Binding ImportErrors, Mode=OneTime}">
-                <DataGrid.Columns>
-                    <DataGridTextColumn
-                        Width="Auto"
-                        Binding="{Binding Key}"
-                        Header="SKU" />
-                    <DataGridTextColumn
-                        Width="*"
-                        Binding="{Binding Value}"
-                        Header="Error" />
-                </DataGrid.Columns>
-            </DataGrid>
+                <StackPanel>
+                    <local:ImportSuccessResults Margin="0,0,0,4" />
+                    <TextBlock>
+                        <Run Text="{Binding FailedCount, Mode=OneTime, StringFormat='{}{0:#,##0}'}" />
+                        products failed to import.</TextBlock>
+                </StackPanel>
+                <DataGrid
+                    Grid.Row="1"
+                    Margin="0,8"
+                    AutoGenerateColumns="False"
+                    IsReadOnly="True"
+                    ItemsSource="{Binding ImportErrors, Mode=OneTime}">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn
+                            Width="Auto"
+                            Binding="{Binding Key}"
+                            Header="SKU" />
+                        <DataGridTextColumn
+                            Width="*"
+                            Binding="{Binding Value}"
+                            Header="Error" />
+                    </DataGrid.Columns>
+                </DataGrid>
+            </Grid>
         </Grid>
+
 
         <StackPanel Grid.Row="2">
             <TextBlock>Please resolve the errors and try again.</TextBlock>

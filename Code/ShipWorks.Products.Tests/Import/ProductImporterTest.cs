@@ -1,12 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Autofac.Extras.Moq;
 using Interapptive.Shared.Threading;
-using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using Moq;
 using ShipWorks.Products.Import;
@@ -30,6 +27,21 @@ namespace ShipWorks.Products.Tests.Import
             productExcelReader = mock.Mock<IProductExcelReader>();
             progressReporter = mock.Mock<IProgressReporter>();
             testObject = mock.Create<ProductImporter>();
+        }
+
+        [Fact]
+        public async Task Import_ReturnsFailure_WhenImportHasNoProducts()
+        {
+            productExcelReader.Setup(r => r.LoadImportFile(It.IsAny<string>()))
+                .Returns((
+                    new List<ProductToImportDto> { },
+                    new List<ProductToImportDto> { }
+                ));
+
+            var results = await testObject.ImportProducts(It.IsAny<string>(), progressReporter.Object);
+
+            Assert.True(results.Failure);
+            Assert.Contains("No records found", results.Exception.Message);
         }
 
         [Fact]
@@ -58,7 +70,7 @@ namespace ShipWorks.Products.Tests.Import
 
             (List<ProductToImportDto>, List<ProductToImportDto>) result = (
                 new List<ProductToImportDto>() { productToImport },
-                new List<ProductToImportDto>() {  }
+                new List<ProductToImportDto>() { }
             );
 
             productExcelReader.Setup(r => r.LoadImportFile(It.IsAny<string>()))

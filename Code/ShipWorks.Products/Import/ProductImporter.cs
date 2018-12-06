@@ -54,6 +54,11 @@ namespace ShipWorks.Products.Import
 
             allSkus = fileLoadResults.Value.SkuRows.Concat(fileLoadResults.Value.BundleRows).ToList();
 
+            if (allSkus.None())
+            {
+                return GenericResult.FromError("No records found in file.", result);
+            }
+
             result = await ProcessRows(fileLoadResults.Value.SkuRows, fileLoadResults.Value.BundleRows).ConfigureAwait(false);
 
             if (result.FailedCount > 0 || result.FailureResults.Any())
