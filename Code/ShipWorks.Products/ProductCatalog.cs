@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.Common;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
@@ -49,11 +50,11 @@ namespace ShipWorks.Products
 
             progressReporter.PercentComplete = 0;
 
-            using (var conn = sqlSession.OpenConnection())
+            using (DbConnection conn = sqlSession.OpenConnection())
             {
-                foreach (var (productsChunk, index) in chunks.Select((x, i) => (x, i)))
+                foreach ((IEnumerable<long> productsChunk, int index) in chunks.Select((x, i) => (x, i)))
                 {
-                    using (var comm = conn.CreateCommand())
+                    using (DbCommand comm = conn.CreateCommand())
                     {
                         comm.CommandText = $"UPDATE ProductVariant SET IsActive = {(activation ? "1" : "0")} WHERE ProductVariantID in (SELECT item FROM @ProductVariantIDs)";
                         comm.Parameters.Add(CreateProductVariantIDParameter(productsChunk));
@@ -76,9 +77,9 @@ namespace ShipWorks.Products
         /// </summary>
         public async Task<int> InBundleCount(long productVariantID)
         {
-            using (var conn = sqlSession.OpenConnection())
+            using (DbConnection conn = sqlSession.OpenConnection())
             {
-                using (var comm = conn.CreateCommand())
+                using (DbCommand comm = conn.CreateCommand())
                 {
                     comm.CommandText = $"SELECT COUNT(*) FROM ProductBundle WHERE ChildProductVariantID = @ProductID";
                     comm.Parameters.Add(new SqlParameter("@ProductID", productVariantID));
@@ -92,7 +93,7 @@ namespace ShipWorks.Products
         /// </summary>
         public Task RemoveFromAllBundles(ISqlAdapter adapter, long productVariantID)
         {
-            return adapter.ExecuteSQLAsync("DELETE ProductBundle WHERE ChildProductVariantID = @ProductVariantID", 
+            return adapter.ExecuteSQLAsync("DELETE ProductBundle WHERE ChildProductVariantID = @ProductVariantID",
                 new { ProductVariantID = productVariantID });
         }
 
@@ -101,9 +102,9 @@ namespace ShipWorks.Products
         /// </summary>
         private SqlParameter CreateProductVariantIDParameter(IEnumerable<long> productVariantIDs)
         {
-            var table = new DataTable();
+            DataTable table = new DataTable();
             table.Columns.Add("item", typeof(long));
-            foreach (var value in productVariantIDs)
+            foreach (long value in productVariantIDs)
             {
                 table.Rows.Add(value);
             }
@@ -145,7 +146,7 @@ namespace ShipWorks.Products
         private ProductVariantEntity FetchFirst(IPredicate predicate, ISqlAdapter sqlAdapter)
         {
             QueryFactory factory = new QueryFactory();
-            var from = factory.ProductVariant
+            InnerOuterJoin from = factory.ProductVariant
                 .InnerJoin(factory.ProductVariantAlias)
                 .On(ProductVariantFields.ProductVariantID == ProductVariantAliasFields.ProductVariantID);
 
