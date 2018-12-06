@@ -217,19 +217,17 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         /// </summary>
         private static object ChangeNullableType(object value, Type conversion)
         {
-            Type newDefault = conversion;
-
-            if (newDefault.IsGenericType && newDefault.GetGenericTypeDefinition() == typeof(Nullable<>))
+            if (conversion.IsGenericType && conversion.GetGenericTypeDefinition() == typeof(Nullable<>))
             {
                 if (value == null)
                 {
                     return null;
                 }
 
-                newDefault = Nullable.GetUnderlyingType(newDefault);
+                conversion = Nullable.GetUnderlyingType(conversion);
             }
             
-            return Convert.ChangeType(value, newDefault);
+            return Convert.ChangeType(value, conversion);
         }
 
         /// <summary>
