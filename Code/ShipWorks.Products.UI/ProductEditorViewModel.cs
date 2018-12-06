@@ -231,7 +231,7 @@ namespace ShipWorks.Products.UI
 
             BundleEditorViewModel.Load(productVariant);
 
-            SKU = productVariant.Aliases.FirstOrDefault(a => a.IsDefault).Sku ?? string.Empty;
+            SKU = productVariant.DefaultSku ?? string.Empty;
             IsActive = productVariant.IsNew || productVariant.IsActive;
             IsBundle = !productVariant.IsNew && productVariant.Product.IsBundle;
             Name = productVariant.Name ?? string.Empty;
@@ -322,7 +322,7 @@ namespace ShipWorks.Products.UI
             {
                 if ((saveResult.Exception.GetBaseException() as SqlException)?.Number == 2601)
                 {
-                    string sku = productVariant.Aliases.First(a => a.IsDefault).Sku;
+                    string sku = productVariant.DefaultSku;
                     messageHelper.ShowError($"The SKU \"{sku}\" already exists. Please enter a unique value for the Product SKU.", saveResult.Exception);
                 }
                 else

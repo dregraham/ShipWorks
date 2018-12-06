@@ -1,23 +1,17 @@
-﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
+﻿using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
-using System.Windows.Forms;
 using System.Windows.Input;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
-using Interapptive.Shared.Collections;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.UI;
-using ShipWorks.Core.UI;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.Custom;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Products.BundleEditor;
 
-namespace ShipWorks.Products.UI.BundleEditor
+namespace ShipWorks.Products.BundleEditor
 {
     /// <summary>
     /// View model for the BundleEditorControl
@@ -113,20 +107,12 @@ namespace ShipWorks.Products.UI.BundleEditor
 
             if (baseProduct.Product.IsBundle)
             {
-                // Loop through each bundled product to get their skus
-                foreach (ProductBundleEntity productBundle in baseProduct.Product.Bundles)
-                {
-                    ProductVariantAliasEntity bundledProductVariantAlias =
-                        productBundle.ChildVariant?.Aliases.FirstOrDefault(a => a.IsDefault);
-
-                    if (bundledProductVariantAlias != null)
-                    {
-                        BundleLineItems.Add(
-                            new ProductBundleDisplayLineItem(productBundle, bundledProductVariantAlias.Sku));
-                    }
-
-                    SelectedBundleLineItem = BundleLineItems?.FirstOrDefault();
-                }
+                BundleLineItems = new ObservableCollection<ProductBundleDisplayLineItem>(baseProduct.Product
+                                                                 .Bundles
+                                                                 .Where(x => !string.IsNullOrWhiteSpace(x.ChildVariant?.DefaultSku))
+                                                                 .Select(x => new ProductBundleDisplayLineItem(x, x.ChildVariant.DefaultSku)));
+                
+                SelectedBundleLineItem = BundleLineItems?.FirstOrDefault();
             }
             else
             {

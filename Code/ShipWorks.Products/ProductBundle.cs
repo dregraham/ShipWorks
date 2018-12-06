@@ -56,7 +56,7 @@ namespace ShipWorks.Products
         /// </summary>
         private IEnumerable<ProductVariant> FetchBundledVariants()
         {
-            return variant.Product.Bundles.Select(b => new ProductVariant(b.ChildVariant.Aliases.FirstOrDefault(a => a.IsDefault).Sku, b.ChildVariant, b.Quantity, log));
+            return variant.Product.Bundles.Select(b => new ProductVariant(b.ChildVariant.DefaultSku, b.ChildVariant, b.Quantity, log));
         }
     }
 }
