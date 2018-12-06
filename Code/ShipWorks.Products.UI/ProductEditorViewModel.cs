@@ -54,9 +54,9 @@ namespace ShipWorks.Products.UI
         /// Constructor
         /// </summary>
         public ProductEditorViewModel(
-            IProductEditorDialogFactory dialogFactory, 
-            IMessageHelper messageHelper, 
-            IBundleEditorViewModel bundleEditorViewModel, 
+            IProductEditorDialogFactory dialogFactory,
+            IMessageHelper messageHelper,
+            IBundleEditorViewModel bundleEditorViewModel,
             ISqlAdapterFactory sqlAdapterFactory,
             IProductCatalog productCatalog)
         {
@@ -231,7 +231,7 @@ namespace ShipWorks.Products.UI
 
             BundleEditorViewModel.Load(productVariant);
 
-            SKU = productVariant.Aliases.First(a => a.IsDefault).Sku ?? string.Empty;
+            SKU = productVariant.Aliases.FirstOrDefault(a => a.IsDefault).Sku ?? string.Empty;
             IsActive = productVariant.IsNew || productVariant.IsActive;
             IsBundle = !productVariant.IsNew && productVariant.Product.IsBundle;
             Name = productVariant.Name ?? string.Empty;
