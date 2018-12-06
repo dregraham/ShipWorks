@@ -18,7 +18,7 @@
         <Setter Property="FontFamily" Value="/ShipWorks.UI;component/Styles/BlueSteel/#Roboto"/>
         <Setter Property="attachedProperties:SelectTextOnFocus.Enabled" Value="True"/>
     </Style>
-    
+
     <Style x:Key="FormTextBox" TargetType="{x:Type TextBox}" BasedOn="{StaticResource BlueSteelTextBox}">
         <Setter Property="Margin" Value="10 0 0 10"/>
     </Style>
@@ -49,5 +49,5 @@
         <Setter Property="ButtonBackground" Value="{StaticResource ButtonBackgroundGradient}"/>
         <Setter Property="ButtonIconColor" Value="{StaticResource IconColor}"/>
     </Style>
-    
+
 </ResourceDictionary>

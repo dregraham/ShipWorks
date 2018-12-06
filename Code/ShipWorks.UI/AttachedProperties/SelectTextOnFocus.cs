@@ -1,3 +1,4 @@
+using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -8,6 +9,7 @@ namespace ShipWorks.UI.AttachedProperties
     /// <summary>
     /// Attached property for highlighting all of a textboxes text on focus
     /// </summary>
+    [Obfuscation(Exclude = true)]
     public class SelectTextOnFocus : DependencyObject
     {
         /// <summary>
@@ -19,7 +21,7 @@ namespace ShipWorks.UI.AttachedProperties
             typeof(SelectTextOnFocus),
             new PropertyMetadata(false, EnabledPropertyChanged));
 
-        
+
         /// <summary>
         /// Get the enabled property
         /// </summary>
@@ -45,7 +47,7 @@ namespace ShipWorks.UI.AttachedProperties
             {
                 textBox.GotKeyboardFocus -= OnKeyboardFocusSelectText;
                 textBox.PreviewMouseLeftButtonDown -= OnMouseLeftButtonDown;
-                
+
                 if (e.NewValue as bool? == true)
                 {
                     textBox.GotKeyboardFocus += OnKeyboardFocusSelectText;
@@ -69,8 +71,8 @@ namespace ShipWorks.UI.AttachedProperties
         }
 
         /// <summary>
-        /// Highlight all text when textbox receives focus 
-        /// </summary> 
+        /// Highlight all text when textbox receives focus
+        /// </summary>
         private static void OnKeyboardFocusSelectText(object sender, KeyboardFocusChangedEventArgs e)
         {
             if (e.OriginalSource is TextBox textBox)
