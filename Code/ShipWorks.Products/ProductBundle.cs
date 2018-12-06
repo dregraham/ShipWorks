@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using log4net;
 using ShipWorks.Data.Model.EntityClasses;
@@ -17,7 +16,7 @@ namespace ShipWorks.Products
         /// <summary>
         /// Constructor
         /// </summary>
-        public ProductBundle(string sku, IProductVariantEntity variant, ILog log) 
+        public ProductBundle(string sku, IProductVariantEntity variant, ILog log)
             : base(sku, variant, log)
         {
         }
@@ -27,12 +26,12 @@ namespace ShipWorks.Products
         /// </summary>
         public override void ApplyCustoms(OrderItemEntity item, ShipmentEntity shipment)
         {
-            log.InfoFormat($"Applying bundle information to customs item for sku {sku}");
+            log.InfoFormat("Applying bundle information to customs item for sku {0}", sku);
 
             foreach (IProductBundleEntity bundleItem in variant.Product.Bundles)
             {
                 ShipmentCustomsItemEntity customsItem = ApplyCustoms(item, shipment, bundleItem.ChildVariant);
-                customsItem.Quantity = customsItem.Quantity * bundleItem.Quantity;                
+                customsItem.Quantity = customsItem.Quantity * bundleItem.Quantity;
             }
         }
 
@@ -50,9 +49,9 @@ namespace ShipWorks.Products
                 ElementOutline.If(() => createOrderItemProductBundleOutline != null && variant.Product.IsBundle));
             }
         }
-        
+
         /// <summary>
-        /// Fetch bundled Variants 
+        /// Fetch bundled Variants
         /// </summary>
         private IEnumerable<ProductVariant> FetchBundledVariants()
         {
