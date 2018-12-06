@@ -20,12 +20,14 @@ namespace ShipWorks.Templates.Processing.TemplateXml.ElementOutlines
         public OrderItemProductOutline(TemplateTranslationContext context)
             : base(context)
         {
-        }        
+        }
 
         /// <summary>
         /// The OrderItemEntity represented by the bound outline
         /// </summary>
         private IProductVariant product { get; set; }
+        
+        private Func<OrderItemProductBundleOutline> createOrderItemProductBundleOutline {get; set;}
 
         /// <summary>
         /// Create a new cloned outline bound to a given order item and product variant
@@ -34,11 +36,15 @@ namespace ShipWorks.Templates.Processing.TemplateXml.ElementOutlines
         {
             MethodConditions.EnsureArgumentIsNotNull(data, "data");
 
-            IProductVariant product = (IProductVariant) data;
-                        
+            Tuple<IProductVariant, Func<OrderItemProductBundleOutline>> productData = (Tuple<IProductVariant, Func<OrderItemProductBundleOutline>>) data;
 
-            var boundClone = new OrderItemProductOutline(Context) { product = product };
-            product.WriteXml(boundClone);
+            var boundClone = new OrderItemProductOutline(Context) { product = productData.Item1};
+
+            if (productData.Item1 != null)
+            {
+                productData.Item1.WriteXml(boundClone, productData.Item2);
+            }
+
             return boundClone;
         }
     }

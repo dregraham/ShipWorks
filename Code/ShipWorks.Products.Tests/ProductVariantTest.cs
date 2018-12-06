@@ -8,6 +8,7 @@ using ShipWorks.Tests.Shared;
 using Xunit;
 using System.Reflection;
 using log4net.Core;
+using System.Linq;
 
 namespace ShipWorks.Products.Tests
 {
@@ -129,21 +130,19 @@ namespace ShipWorks.Products.Tests
         [InlineData("abcd", "", "abcd")]
         [InlineData(null, "abcd", "abcd")]
         [InlineData(null, "", "")]
-        public void Apply_AppliesName(string productName, string customsDescription, string expectedName)
+        public void ApplyCustoms_AppliesName(string productName, string itemName, string expectedName)
         {
             var testObject = mock.Create<ProductVariant>(
                 TypedParameter.From("sku"),
                 TypedParameter.From<IProductVariantEntity>(new ProductVariantEntity() { IsActive = true, Name = productName }));
 
-            var item = new ShipmentCustomsItemEntity()
-            {
-                Description = customsDescription
-            };
+            var shipment = new ShipmentEntity();
 
-            testObject.Apply(item);
+            testObject.ApplyCustoms(new OrderItemEntity() { Name = itemName }, shipment);
 
-            Assert.Equal(expectedName, item.Description);
+            Assert.Equal(expectedName, shipment.CustomsItems.First().Description);
         }
+
 
         [Theory]
         [InlineData("", "abcd", "abcd")]
@@ -151,98 +150,77 @@ namespace ShipWorks.Products.Tests
         [InlineData("abcd", "", "abcd")]
         [InlineData(null, "abcd", "abcd")]
         [InlineData(null, "", "")]
-        public void Apply_AppliesHarmonizedCode(string productHarmonizedCode, string customsHarmonizedCode, string expectedHarmonizedCode)
+        public void ApplyCustoms_AppliesHarmonizedCode(string productHarmonizedCode, string itemHarmonizedCode, string expectedHarmonizedCode)
         {
             var testObject = mock.Create<ProductVariant>(
                 TypedParameter.From("sku"),
                 TypedParameter.From<IProductVariantEntity>(new ProductVariantEntity() { IsActive = true, HarmonizedCode = productHarmonizedCode }));
 
-            var item = new ShipmentCustomsItemEntity()
-            {
-                HarmonizedCode = customsHarmonizedCode
-            };
+            var shipment = new ShipmentEntity();
+            testObject.ApplyCustoms(new OrderItemEntity() { HarmonizedCode = itemHarmonizedCode }, shipment);
 
-            testObject.Apply(item);
-
-            Assert.Equal(expectedHarmonizedCode, item.HarmonizedCode);
+            Assert.Equal(expectedHarmonizedCode, shipment.CustomsItems.First().HarmonizedCode);
         }
 
         [Theory]
-        [InlineData("", "abcd", "abcd")]
-        [InlineData("abcd", "defg", "abcd")]
-        [InlineData("abcd", "", "abcd")]
-        [InlineData(null, "abcd", "abcd")]
-        [InlineData(null, "", "")]
-        public void Apply_AppliesCountryOfOrigin(string productCountry, string customsCountry, string expectedCountry)
+        [InlineData("", "US")]
+        [InlineData("abcd", "abcd")]
+        [InlineData(null, "US")]
+        public void Apply_AppliesCountryOfOrigin(string productCountry, string expectedCountry)
         {
             var testObject = mock.Create<ProductVariant>(
-                TypedParameter.From("sku"),
-                TypedParameter.From<IProductVariantEntity>(new ProductVariantEntity() { IsActive = true, CountryOfOrigin = productCountry }));
+                          TypedParameter.From("sku"),
+                          TypedParameter.From<IProductVariantEntity>(new ProductVariantEntity() { IsActive = true, CountryOfOrigin = productCountry}));
 
-            var item = new ShipmentCustomsItemEntity()
-            {
-                CountryOfOrigin = customsCountry
-            };
+            var shipment = new ShipmentEntity();
+            testObject.ApplyCustoms(new OrderItemEntity(), shipment);
 
-            testObject.Apply(item);
-
-            Assert.Equal(expectedCountry, item.CountryOfOrigin);
+            Assert.Equal(expectedCountry, shipment.CustomsItems.First().CountryOfOrigin);
         }
 
         [Theory]
         [MemberData(nameof(applyDecimalData))]
-        public void Apply_AppliesCustomsWeight(decimal? productWeight, double customsWeight, double expectedWeight)
+        public void Apply_AppliesCustomsWeight(decimal? productWeight, double itemWeight, double expectedWeight)
         {
             var testObject = mock.Create<ProductVariant>(
                 TypedParameter.From("sku"),
                 TypedParameter.From<IProductVariantEntity>(new ProductVariantEntity() { IsActive = true, Weight = productWeight}));
 
-            var item = new ShipmentCustomsItemEntity()
-            {
-                Weight = customsWeight
-            };
+            var shipment = new ShipmentEntity();
+            testObject.ApplyCustoms(new OrderItemEntity { Weight = itemWeight }, shipment);
 
-            testObject.Apply(item);
-
-            Assert.Equal(expectedWeight, item.Weight);
+            Assert.Equal(expectedWeight, shipment.CustomsItems.First().Weight);
         }
 
         [Theory]
         [MemberData(nameof(applyDecimalData))]
-        public void Apply_AppliesCustomsUnitValue(decimal? productUnitValue, decimal customsUnitValue, decimal expectedUnitValue)
+        public void Apply_AppliesCustomsUnitValue(decimal? productUnitValue, decimal itemUnitPrice, decimal expectedUnitValue)
         {
             var testObject = mock.Create<ProductVariant>(
                 TypedParameter.From("sku"),
                 TypedParameter.From<IProductVariantEntity>(new ProductVariantEntity() { IsActive = true, DeclaredValue = productUnitValue }));
 
-            var item = new ShipmentCustomsItemEntity()
-            {
-                UnitValue = customsUnitValue
-            };
+            var shipment = new ShipmentEntity();
+            testObject.ApplyCustoms(new OrderItemEntity { UnitPrice = itemUnitPrice }, shipment);
 
-            testObject.Apply(item);
-
-            Assert.Equal(expectedUnitValue, item.UnitValue);
+            Assert.Equal(expectedUnitValue, shipment.CustomsItems.First().UnitValue);
         }
 
 
         [Theory]
         [MemberData(nameof(applyDecimalData))]
-        public void Apply_AppliesCustomsUnitPriceAmount(decimal? productUnitPriceAmount, decimal customsUnitPriceAmount, decimal expectedUnitPriceAmount)
+        public void Apply_AppliesCustomsUnitPriceAmount(decimal? productUnitPriceAmount, decimal itemUnitPrice, decimal expectedUnitPriceAmount)
         {
             var testObject = mock.Create<ProductVariant>(
                 TypedParameter.From("sku"),
                 TypedParameter.From<IProductVariantEntity>(new ProductVariantEntity() { IsActive = true, DeclaredValue = productUnitPriceAmount }));
 
-            var item = new ShipmentCustomsItemEntity()
-            {
-                UnitPriceAmount = customsUnitPriceAmount
-            };
+            var shipment = new ShipmentEntity();
+            testObject.ApplyCustoms(new OrderItemEntity { UnitPrice = itemUnitPrice }, shipment);
 
-            testObject.Apply(item);
-
-            Assert.Equal(expectedUnitPriceAmount, item.UnitPriceAmount);
+            Assert.Equal(expectedUnitPriceAmount, shipment.CustomsItems.First().UnitPriceAmount);
         }
+
         public void Dispose()
         {
             mock.Dispose();

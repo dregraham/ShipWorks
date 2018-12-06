@@ -2272,6 +2272,7 @@
     <Compile Include="Templates\Printing\PrinterSetting.cs" />
     <Compile Include="Templates\Printing\PrinterSettingsFactory.cs" />
     <Compile Include="Templates\Printing\PrintJobFactory.cs" />
+    <Compile Include="Templates\Processing\TemplateXml\ElementOutlines\OrderItemProductBundleOutline.cs" />
     <Compile Include="Templates\Processing\TemplateXml\ElementOutlines\OrderItemProductOutline.cs" />
     <Compile Include="Templates\Processing\TemplateXml\ElementOutlines\ReturnItemOutline.cs" />
     <Compile Include="Templates\Tokens\ITemplateTokenProcessor.cs" />

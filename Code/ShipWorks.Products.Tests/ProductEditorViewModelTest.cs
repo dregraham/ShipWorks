@@ -26,13 +26,14 @@ namespace ShipWorks.OrderLookup.Tests
         {
             var product = new ProductVariantAliasEntity()
             {
+                IsDefault = true,
                 ProductVariant = new ProductVariantEntity()
                 {
                     Product = new ProductEntity()
                 }
             };
 
-            testObject.ShowProductEditor(product);
+            testObject.ShowProductEditor(product.ProductVariant);
 
             mock.Mock<IMessageHelper>().Verify(m => m.ShowDialog(It.IsAny<IDialog>()));
         }
@@ -42,13 +43,14 @@ namespace ShipWorks.OrderLookup.Tests
         {
             var product = new ProductVariantAliasEntity()
             {
+                IsDefault = true,
                 ProductVariant = new ProductVariantEntity()
                 {
                     Product = new ProductEntity()
                 }
             };
 
-            testObject.ShowProductEditor(product);
+            testObject.ShowProductEditor(product.ProductVariant);
 
             testObject.Save.Execute(null);
 

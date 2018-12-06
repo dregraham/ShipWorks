@@ -86,6 +86,10 @@
     <Compile Include="..\ShipWorks\Properties\AssemblyInfoCommon.cs">
       <Link>Properties\AssemblyInfoCommon.cs</Link>
     </Compile>
+    <Compile Include="BundleEditor\BundleEditorControl.xaml.cs">
+      <DependentUpon>BundleEditorControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="BundleEditor\BundleEditorViewModel.cs" />
     <Compile Include="DesignerProductsMode.cs" />
     <Compile Include="Import\ImportFailedStateView.xaml.cs">
       <DependentUpon>ImportFailedStateView.xaml</DependentUpon>
@@ -157,6 +161,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="BundleEditor\BundleEditorControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Import\ProductImporterDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -171,5 +179,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

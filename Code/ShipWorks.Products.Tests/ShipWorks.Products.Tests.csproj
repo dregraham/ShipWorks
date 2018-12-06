@@ -26,6 +26,7 @@
     <ProjectReference Include="..\Interapptive.Shared\Interapptive.Shared.csproj" />
     <ProjectReference Include="..\ShipWorks.Data.Model\ShipWorks.Data.Model.csproj" />
     <ProjectReference Include="..\ShipWorks.Products.UI\ShipWorks.Products.UI.csproj" />
+    <ProjectReference Include="..\ShipWorks.Products\ShipWorks.Products.csproj" />
     <ProjectReference Include="..\ShipWorks.Shared\ShipWorks.Shared.csproj" />
     <ProjectReference Include="..\ShipWorks.Tests.Shared\ShipWorks.Tests.Shared.csproj" />
     <ProjectReference Include="..\ShipWorks\ShipWorks.Core.csproj" />

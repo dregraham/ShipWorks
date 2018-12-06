@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
@@ -233,16 +234,16 @@ namespace ShipWorks.Products
                 return;
             }
 
-            ProductVariantAliasEntity product;
+            ProductVariantAliasEntity productVariantAlias;
 
             using (ISqlAdapter adapter = sqlAdapterFactory.Create())
             {
-                product = productCatalog.FetchProductVariantEntity(adapter, productVariantID)?.Aliases.FirstOrDefault(a => a.IsDefault);
+                productVariantAlias = productCatalog.FetchProductVariantEntity(adapter, productVariantID)?.Aliases.FirstOrDefault(a => a.IsDefault);
             }
 
-            if (product != null)
+            if (productVariantAlias != null)
             {
-                EditProduct(product);
+                EditProduct(productVariantAlias.ProductVariant);
             }
         }
 
@@ -251,36 +252,45 @@ namespace ShipWorks.Products
         /// </summary>
         private void AddProductAction()
         {
-            ProductVariantAliasEntity newProduct = new ProductVariantAliasEntity()
+            ProductVariantEntity productVariant = new ProductVariantEntity()
             {
-                AliasName = string.Empty,
-                IsDefault = true,
-                ProductVariant = new ProductVariantEntity()
+                Product = new ProductEntity()
                 {
-                    Product = new ProductEntity()
-                    {
-                        IsActive = true,
-                        IsBundle = false,
-                        Name = string.Empty
-                    }
+                    IsActive = true,
+                    IsBundle = false,
+                    Name = string.Empty
                 }
             };
 
-            EditProduct(newProduct);
+            productVariant.Aliases.Add(new ProductVariantAliasEntity()
+            {
+                AliasName = string.Empty,
+                IsDefault = true
+            });
+
+            EditProduct(productVariant);
         }
 
         /// <summary>
         /// Edit the given product
         /// </summary>
-        private void EditProduct(ProductVariantAliasEntity productEntity)
+        private void EditProduct(ProductVariantEntity productVariantEntity)
         {
-            if (productEditorViewModelFunc().ShowProductEditor(productEntity) ?? false)
+            if (productEditorViewModelFunc().ShowProductEditor(productVariantEntity) ?? false)
             {
                 Result saveResult;
 
-                using (ISqlAdapter adapter = sqlAdapterFactory.Create())
+                using (ISqlAdapter adapter = sqlAdapterFactory.CreateTransacted())
                 {
-                    saveResult = productCatalog.Save(adapter, productEntity.ProductVariant.Product);
+                    saveResult = productCatalog.Save(adapter, productVariantEntity.Product);
+                    if (saveResult.Success)
+                    {
+                        adapter.Commit();
+                    }
+                    else
+                    {
+                        adapter.Rollback();
+                    }
                 }
 
                 if (saveResult.Success)
@@ -289,16 +299,16 @@ namespace ShipWorks.Products
                 }
                 else
                 {
-                    if (saveResult.Message.Contains("Cannot insert duplicate key row in object 'dbo.ProductVariantAlias'"))
+                    if ((saveResult.Exception.GetBaseException() as SqlException)?.Number == 2601)
                     {
-                        messageHelper.ShowError($"The SKU \"{productEntity.Sku}\" already exists. Please enter a unique value for the Product SKU.", saveResult.Exception);
+                        messageHelper.ShowError($"The SKU \"{productVariantEntity.Aliases.First(a => a.IsDefault).Sku}\" already exists. Please enter a unique value for the Product SKU.", saveResult.Exception);
                     }
                     else
                     {
                         messageHelper.ShowError(saveResult.Message);
                     }
 
-                    EditProduct(productEntity);
+                    EditProduct(productVariantEntity);
                 }
             }
         }

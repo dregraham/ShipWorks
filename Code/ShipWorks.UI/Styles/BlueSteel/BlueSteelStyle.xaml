@@ -18,6 +18,7 @@
         <ResourceDictionary Source="/ShipWorks.UI;component/Styles/BlueSteel/Shapes.xaml"/>
         <ResourceDictionary Source="/ShipWorks.UI;component/Styles/BlueSteel/TextBlockStyle.xaml"/>
         <ResourceDictionary Source="/ShipWorks.UI;component/Styles/BlueSteel/TextBoxStyle.xaml"/>
+        <ResourceDictionary Source="/ShipWorks.UI;component/Styles/BlueSteel/ListBoxStyle.xaml"/>
     </ResourceDictionary.MergedDictionaries>
 
     <valueConverters:VisibleWhenEqualToParameterConverter x:Key="VisibleWhenNotEqualToParameter" Invert="true" />

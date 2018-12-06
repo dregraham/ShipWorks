@@ -12,7 +12,9 @@ using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using SD.LLBLGen.Pro.QuerySpec;
 using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Data.Model.FactoryClasses;
 using ShipWorks.Data.Model.HelperClasses;
 
@@ -25,15 +27,15 @@ namespace ShipWorks.Products
     public class ProductCatalog : IProductCatalog
     {
         private readonly ISqlSession sqlSession;
-        private readonly ILog productVariantLog;
+        private readonly Func<Type, ILog> logFactory;
 
         /// <summary>
         /// Constructor
         /// </summary>
         public ProductCatalog(ISqlSession sqlSession, Func<Type, ILog> logFactory)
         {
-            productVariantLog = logFactory(typeof(ProductVariant));
             this.sqlSession = sqlSession;
+            this.logFactory = logFactory;
         }
 
         /// <summary>
@@ -93,25 +95,29 @@ namespace ShipWorks.Products
         /// </summary>
         public IProductVariant FetchProductVariant(ISqlAdapter sqlAdapter, string sku)
         {
-            return new ProductVariant(sku, FetchProductVariantEntity(sqlAdapter, sku)?.AsReadOnly(), productVariantLog);
+            IProductVariantEntity variant = FetchProductVariantEntity(sqlAdapter, sku)?.AsReadOnly();
+
+            return variant?.Product.IsBundle ?? false ?
+                new ProductBundle(sku, variant, logFactory(typeof(ProductBundle))) :
+                new ProductVariant(sku, variant, logFactory(typeof(ProductVariant)));
         }
 
         /// <summary>
         /// Fetch a product variant based on ProductVariantID
         /// </summary>
         public ProductVariantEntity FetchProductVariantEntity(ISqlAdapter sqlAdapter, long productVariantID) =>
-            FetchFirst(ProductVariantFields.ProductVariantID == productVariantID, sqlAdapter, ProductPrefetchPath.Value);
+            FetchFirst(ProductVariantFields.ProductVariantID == productVariantID, sqlAdapter);
 
         /// <summary>
         /// Fetch a product variant based on SKU
         /// </summary>
         public ProductVariantEntity FetchProductVariantEntity(ISqlAdapter sqlAdapter, string sku) =>
-            FetchFirst(ProductVariantAliasFields.Sku == sku.Trim(), sqlAdapter, ProductPrefetchPath.Value);
+            FetchFirst(ProductVariantAliasFields.Sku == sku.Trim(), sqlAdapter);
 
         /// <summary>
         /// Get the first product in the specified predicate
         /// </summary>
-        private ProductVariantEntity FetchFirst(IPredicate predicate, ISqlAdapter sqlAdapter, IEnumerable<IPrefetchPathElement2> prefetchPaths)
+        private ProductVariantEntity FetchFirst(IPredicate predicate, ISqlAdapter sqlAdapter)
         {
             QueryFactory factory = new QueryFactory();
             var from = factory.ProductVariant
@@ -120,7 +126,7 @@ namespace ShipWorks.Products
 
             EntityQuery<ProductVariantEntity> query = factory.ProductVariant.From(from).Where(predicate);
 
-            foreach (IPrefetchPathElement2 path in prefetchPaths)
+            foreach (IPrefetchPathElement2 path in ProductPrefetchPath.Value)
             {
                 query = query.WithPath(path);
             }
@@ -129,8 +135,9 @@ namespace ShipWorks.Products
 
             if (productVariant?.Product?.IsBundle == true)
             {
-                sqlAdapter.FetchEntityCollection(productVariant.Product.Bundles, 
-                    new RelationPredicateBucket(ProductEntity.Relations.ProductBundleEntityUsingProductID));
+                sqlAdapter.FetchEntityCollection(productVariant.Product.Bundles,
+                    ProductBundleRelationBucket.Value,
+                    ProductBundlePrefetchPath.Value);
             }
 
             return productVariant;
@@ -148,6 +155,32 @@ namespace ShipWorks.Products
             };
 
             return prefetchPath;
+        });
+
+        /// <summary>
+        /// Prefetch to include aliases and product with bundled variant
+        /// </summary>
+        private static readonly Lazy<IPrefetchPath2> ProductBundlePrefetchPath = new Lazy<IPrefetchPath2>(() =>
+        {
+            IPrefetchPath2 prefetchPath = new PrefetchPath2(EntityType.ProductBundleEntity);
+            IPrefetchPath2 subPath = prefetchPath.Add(ProductBundleEntity.PrefetchPathChildVariant).SubPath;
+            subPath.Add(ProductVariantEntity.PrefetchPathAliases);
+            subPath.Add(ProductVariantEntity.PrefetchPathProduct);
+
+            return prefetchPath;
+        });
+
+        /// <summary>
+        /// Predicate bucket to only include the default alias
+        /// </summary>
+        private static readonly Lazy<IRelationPredicateBucket> ProductBundleRelationBucket = new Lazy<IRelationPredicateBucket>(() =>
+        {
+            RelationPredicateBucket relationPredicateBucket = new RelationPredicateBucket(ProductEntity.Relations.ProductBundleEntityUsingProductID);
+            relationPredicateBucket.Relations.Add(ProductBundleEntity.Relations.ProductVariantEntityUsingChildProductVariantID);
+            relationPredicateBucket.Relations.Add(ProductVariantEntity.Relations.ProductVariantAliasEntityUsingProductVariantID);
+            relationPredicateBucket.PredicateExpression.Add(ProductVariantAliasFields.IsDefault == true);
+
+            return relationPredicateBucket;
         });
 
 		/// <summary>

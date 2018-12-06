@@ -429,6 +429,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Styles\BlueSteel\ListBoxStyle.xaml" />
     <Page Include="Styles\BlueSteel\TextBlockStyle.xaml" />
     <Page Include="Styles\BlueSteel\TextBoxStyle.xaml" />
     <Page Include="Styles\BlueSteel\Shapes.xaml" />
