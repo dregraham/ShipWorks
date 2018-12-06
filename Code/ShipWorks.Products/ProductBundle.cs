@@ -44,9 +44,8 @@ namespace ShipWorks.Products
 
             if (createOrderItemProductBundleOutline != null)
             {
-                outline.AddElement("BundledProduct", createOrderItemProductBundleOutline(),
-                () => FetchBundledVariants(),
-                ElementOutline.If(() => createOrderItemProductBundleOutline != null && variant.Product.IsBundle));
+                outline.AddElement("BundledProduct", createOrderItemProductBundleOutline(), () => FetchBundledVariants(),
+                    ElementOutline.If(() => createOrderItemProductBundleOutline != null && variant.Product.IsBundle));
             }
         }
 
