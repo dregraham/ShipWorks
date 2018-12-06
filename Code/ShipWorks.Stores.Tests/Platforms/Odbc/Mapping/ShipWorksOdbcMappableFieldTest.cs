@@ -196,7 +196,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Mapping
             ShipWorksOdbcMappableField testObject = new ShipWorksOdbcMappableField(OrderFields.ShipByDate, "Ship By Date", OdbcFieldValueResolutionStrategy.Default);
             testObject.LoadValue(null);
 
-            Assert.Equal(null, testObject.Value);
+            Assert.Null(testObject.Value);
         }
     }
 }

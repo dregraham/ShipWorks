@@ -142,9 +142,9 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         ItemHeight,
 
         [Description("Brand")]
-        Brand,
+        ItemBrand,
 
         [Description("MPN")]
-        MPN
+        ItemMPN
     }
 }

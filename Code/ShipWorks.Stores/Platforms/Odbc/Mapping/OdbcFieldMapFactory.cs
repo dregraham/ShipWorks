@@ -102,8 +102,8 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
                 new ShipWorksOdbcMappableField(OrderItemFields.Thumbnail, OdbcOrderFieldDescription.ItemThumbnail, OdbcFieldValueResolutionStrategy.Default),
                 new ShipWorksOdbcMappableField(OrderItemFields.UPC, OdbcOrderFieldDescription.ItemUPC, OdbcFieldValueResolutionStrategy.Default),
                 new ShipWorksOdbcMappableField(OrderItemFields.ISBN, OdbcOrderFieldDescription.ItemISBN, OdbcFieldValueResolutionStrategy.Default),
-                new ShipWorksOdbcMappableField(OrderItemFields.Brand, OdbcOrderFieldDescription.Brand, OdbcFieldValueResolutionStrategy.Default),
-                new ShipWorksOdbcMappableField(OrderItemFields.MPN, OdbcOrderFieldDescription.MPN, OdbcFieldValueResolutionStrategy.Default)
+                new ShipWorksOdbcMappableField(OrderItemFields.Brand, OdbcOrderFieldDescription.ItemBrand, OdbcFieldValueResolutionStrategy.Default),
+                new ShipWorksOdbcMappableField(OrderItemFields.MPN, OdbcOrderFieldDescription.ItemMPN, OdbcFieldValueResolutionStrategy.Default)
             };
 
 	        return fields;
