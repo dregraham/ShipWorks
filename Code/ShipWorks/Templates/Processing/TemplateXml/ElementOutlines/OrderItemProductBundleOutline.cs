@@ -26,7 +26,7 @@ namespace ShipWorks.Templates.Processing.TemplateXml.ElementOutlines
         /// </summary>
         public override ElementOutline CreateDataBoundClone(object data)
         {
-            MethodConditions.EnsureArgumentIsNotNull(data, "data");
+            MethodConditions.EnsureArgumentIsNotNull(data, nameof(data));
 
             IProductVariant product = (IProductVariant) data;
 
