@@ -213,13 +213,13 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         }
 
         /// <summary>
-        /// Convert the given nullable object to the specfied conversion type
+        /// Convert the given nullable object to the specified conversion type
         /// </summary>
         private static object ChangeNullableType(object value, Type conversion)
         {
             Type newDefault = conversion;
 
-            if (newDefault.IsGenericType && newDefault.GetGenericTypeDefinition().Equals(typeof(Nullable<>)))
+            if (newDefault.IsGenericType && newDefault.GetGenericTypeDefinition() == typeof(Nullable<>))
             {
                 if (value == null)
                 {
