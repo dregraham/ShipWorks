@@ -93,8 +93,8 @@ namespace ShipWorks.Products
         /// </summary>
         public Task RemoveFromAllBundles(ISqlAdapter adapter, long productVariantID)
         {
-            return adapter.ExecuteSQLAsync("DELETE ProductBundle WHERE ChildProductVariantID = @ProductVariantID",
-                new { ProductVariantID = productVariantID });
+            return adapter.ExecuteSQLAsync("DELETE ProductBundle WHERE ChildProductVariantID = @p0",
+                new object[] { productVariantID });
         }
 
         /// <summary>
