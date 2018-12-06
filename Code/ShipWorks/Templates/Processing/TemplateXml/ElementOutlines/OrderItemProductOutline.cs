@@ -26,7 +26,7 @@ namespace ShipWorks.Templates.Processing.TemplateXml.ElementOutlines
         /// The OrderItemEntity represented by the bound outline
         /// </summary>
         private IProductVariant product { get; set; }
-        
+
         private Func<OrderItemProductBundleOutline> createOrderItemProductBundleOutline {get; set;}
 
         /// <summary>
@@ -34,7 +34,7 @@ namespace ShipWorks.Templates.Processing.TemplateXml.ElementOutlines
         /// </summary>
         public override ElementOutline CreateDataBoundClone(object data)
         {
-            MethodConditions.EnsureArgumentIsNotNull(data, "data");
+            MethodConditions.EnsureArgumentIsNotNull(data, nameof(data));
 
             Tuple<IProductVariant, Func<OrderItemProductBundleOutline>> productData = (Tuple<IProductVariant, Func<OrderItemProductBundleOutline>>) data;
 
