@@ -123,17 +123,12 @@ namespace ShipWorks.UI.Controls
         /// </summary>
         private static object FormatWeight(DependencyObject d, object baseValue)
         {
-            double? weight = WeightConverter.Current.ParseWeight(baseValue as string);
+            double weight = WeightConverter.Current.ParseWeight(baseValue as string) ?? 0;
 
-            if (weight.HasValue)
-            {
-                double maxWeight = (double) d.GetValue(MaxValueProperty);
-                double clampedWeight = weight.Value.Clamp(0, maxWeight);
-                d.SetCurrentValue(ValueProperty, clampedWeight);
-                return WeightConverter.Current.FormatWeight(clampedWeight);
-            }
-
-            return WeightConverter.Current.FormatWeight((double) d.GetValue(ValueProperty));
+            double maxWeight = (double) d.GetValue(MaxValueProperty);
+            double clampedWeight = weight.Clamp(0, maxWeight);
+            d.SetCurrentValue(ValueProperty, clampedWeight);
+            return WeightConverter.Current.FormatWeight(clampedWeight);
         }
 
         /// <summary>
