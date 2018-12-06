@@ -2,7 +2,6 @@
 using ShipWorks.Stores.Platforms.Odbc;
 using ShipWorks.Stores.Platforms.Odbc.Mapping;
 using System;
-using ShipWorks.Data.Model.EntityClasses;
 using Xunit;
 
 namespace ShipWorks.Stores.Tests.Platforms.Odbc.Mapping
@@ -93,10 +92,10 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Mapping
         }
 
         [Fact]
-        public void LoadValue_UsesDefaultValue_WhenValueIsNullandFieldIsNotNullable()
+        public void LoadValue_UsesDefaultValue_WhenValueIsNullAndFieldIsNotNullable()
         {
             ShipWorksOdbcMappableField testObject = new ShipWorksOdbcMappableField(OrderFields.OrderNumber, "Order Number", OdbcFieldValueResolutionStrategy.Default);
-            testObject.LoadValue((object)null);
+            testObject.LoadValue(null);
 
             Assert.Equal(0L, testObject.Value);
         }
@@ -180,6 +179,24 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Mapping
             testObject.LoadValue(2.51F);
 
             Assert.Equal(2.51M, testObject.Value);
+        }
+
+        [Fact]
+        public void LoadValue_WhenValueIsNotNullAndFieldIsNullable()
+        {
+            ShipWorksOdbcMappableField testObject = new ShipWorksOdbcMappableField(OrderFields.ShipByDate, "Ship By Date", OdbcFieldValueResolutionStrategy.Default);
+            testObject.LoadValue(DateTime.Today);
+
+            Assert.Equal(DateTime.Today, testObject.Value);
+        }
+
+        [Fact]
+        public void LoadValue_WhenValueIsNullAndFieldIsNullable()
+        {
+            ShipWorksOdbcMappableField testObject = new ShipWorksOdbcMappableField(OrderFields.ShipByDate, "Ship By Date", OdbcFieldValueResolutionStrategy.Default);
+            testObject.LoadValue(null);
+
+            Assert.Equal(null, testObject.Value);
         }
     }
 }
