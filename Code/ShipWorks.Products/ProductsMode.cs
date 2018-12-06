@@ -2,7 +2,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data.SqlClient;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
@@ -14,7 +13,6 @@ using GalaSoft.MvvmLight.CommandWpf;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.UI;
-using Interapptive.Shared.Utility;
 using ShipWorks.Core.Common.Threading;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
@@ -261,8 +259,10 @@ namespace ShipWorks.Products
         /// </summary>
         private void EditProduct(ProductVariantEntity productVariantEntity)
         {
-            productEditorViewModelFunc().ShowProductEditor(productVariantEntity);
-            RefreshProductsAction();            
+            if (productEditorViewModelFunc().ShowProductEditor(productVariantEntity) ?? false)
+            {
+                RefreshProductsAction();
+            }
         }
 
         /// <summary>
