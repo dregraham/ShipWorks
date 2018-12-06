@@ -21,6 +21,7 @@ namespace ShipWorks.Products.Import
         private readonly ISqlAdapterFactory sqlAdapterFactory;
         private readonly IProductCatalog productCatalog;
         private IProgressReporter itemProgressReporter;
+        private List<ProductToImportDto> allSkus;
 
         /// <summary>
         /// Constructor
@@ -48,6 +49,8 @@ namespace ShipWorks.Products.Import
             {
                 return GenericResult.FromError(fileLoadResults.Exception, result);
             }
+
+            allSkus = fileLoadResults.Value.SkuRows.Concat(fileLoadResults.Value.BundleRows).ToList();
 
             result = await ProcessRows(fileLoadResults.Value.SkuRows, fileLoadResults.Value.BundleRows).ConfigureAwait(false);
 
@@ -289,7 +292,22 @@ namespace ShipWorks.Products.Import
 
                     if (childVariant == null)
                     {
+                        if (allSkus.None(x => s.Sku == x.Sku))
+                        {
+                            throw new ProductImportException($"Unable to import bundle SKU {bundleProductVariant.Aliases.First(a => a.IsDefault).Sku} because child SKU '{s.Sku}' could not be found.");
+                        }
+
+                        if (allSkus.Any(x => s.Sku == x.Sku && x.BundleSkuList.Any()))
+                        {
+                            throw new ProductImportException($"Unable to import bundle SKU {bundleProductVariant.Aliases.First(a => a.IsDefault).Sku} because child SKU '{s.Sku}' is a bundle.  Bundles cannot be comprised of other bundles.");
+                        }
+
                         throw new ProductImportException($"Unable to import bundle SKU {bundleProductVariant.Aliases.First(a => a.IsDefault).Sku} because child SKU '{s.Sku}' could not be found.");
+                    }
+
+                    if (childVariant.Product.IsBundle)
+                    {
+                        throw new ProductImportException($"Unable to import bundle SKU {bundleProductVariant.Aliases.First(a => a.IsDefault).Sku} because child SKU '{s.Sku}' is a bundle.  Bundles cannot be comprised of other bundles.");
                     }
 
                     return new ProductBundleEntity()
