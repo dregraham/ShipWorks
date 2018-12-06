@@ -11,7 +11,6 @@ using Interapptive.Shared.Extensions;
 using Interapptive.Shared.Threading;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
-using ShipWorks.Core.Common.Threading;
 
 namespace ShipWorks.Products.Import
 {
@@ -23,7 +22,7 @@ namespace ShipWorks.Products.Import
     {
         private readonly IProductImporterStateManager stateManager;
         private readonly IProgressReporter progressReporter;
-        private readonly Func<ImportProductsResult, IProductImporterStateManager, ImportSucceededState> createSuccessState;
+        private readonly Func<IImportProductsResult, IProductImporterStateManager, ImportSucceededState> createSuccessState;
         private readonly Func<Exception, IProductImporterStateManager, ImportFailedState> createFailedState;
 
         private int percentComplete;
@@ -37,7 +36,7 @@ namespace ShipWorks.Products.Import
             IProductImporterStateManager stateManager,
             IProductImporter productImporter,
             IProgressFactory progressFactory,
-            Func<ImportProductsResult, IProductImporterStateManager, ImportSucceededState> createSuccessState,
+            Func<IImportProductsResult, IProductImporterStateManager, ImportSucceededState> createSuccessState,
             Func<Exception, IProductImporterStateManager, ImportFailedState> createFailedState,
             IMessageHelper messageHelper)
         {
@@ -70,30 +69,7 @@ namespace ShipWorks.Products.Import
         /// <summary>
         /// Start the import
         /// </summary>
-        /// <param name="filePath"></param>
-        public void StartImport(string filePath) =>
-            StartImportInternal(filePath).Forget();
-
-        /// <summary>
-        /// The dialog was requested to close
-        /// </summary>
-        public void CloseRequested(CancelEventArgs e) =>
-            e.Cancel = messageHelper.ShowQuestion("Closing will stop the import.  Are you sure?") != DialogResult.OK;
-
-        /// <summary>
-        /// Should products be reloaded after the dialog closes
-        /// </summary>
-        public bool ShouldReloadProducts => true;
-
-        /// <summary>
-        /// Cancel the import
-        /// </summary>
-        private void StopImportAction() => progressReporter.Cancel();
-
-        /// <summary>
-        /// Start the import
-        /// </summary>
-        private async Task StartImportInternal(string filePath)
+        public async Task StartImport(string filePath)
         {
             try
             {
@@ -111,6 +87,22 @@ namespace ShipWorks.Products.Import
                 progressReporter.Changed -= OnProgressItemUpdate;
             }
         }
+
+        /// <summary>
+        /// The dialog was requested to close
+        /// </summary>
+        public void CloseRequested(CancelEventArgs e) =>
+            e.Cancel = messageHelper.ShowQuestion("Closing will stop the import.  Are you sure?") != DialogResult.OK;
+
+        /// <summary>
+        /// Should products be reloaded after the dialog closes
+        /// </summary>
+        public bool ShouldReloadProducts => true;
+
+        /// <summary>
+        /// Cancel the import
+        /// </summary>
+        private void StopImportAction() => progressReporter.Cancel();
 
         /// <summary>
         /// The progress item has been updated

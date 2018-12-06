@@ -35,7 +35,7 @@ namespace ShipWorks.Products.Tests.Integration.Import
             context = db.CreateDataContext(x => ContainerInitializer.Initialize(x));
             filename = Path.GetTempFileName();
             mock = context.Mock;
-            progressReporter =  new ProgressItem("Importing products");
+            progressReporter = new ProgressItem("Importing products");
             productCatalog = mock.Create<IProductCatalog>();
         }
 
@@ -186,7 +186,7 @@ namespace ShipWorks.Products.Tests.Integration.Import
         [Fact]
         public async Task LoadImportFile_ReturnsTrueAndDoesNotCreateDuplicateAlias_WhenAliasReferencesItself()
         {
-            List<ProductToImportDto> skuProducts = new List<ProductToImportDto>() { GetFullProduct("1", "1 | 1")};
+            List<ProductToImportDto> skuProducts = new List<ProductToImportDto>() { GetFullProduct("1", "1 | 1") };
             List<ProductToImportDto> bundleProducts = Enumerable.Empty<ProductToImportDto>().ToList();
 
             var result = await RunTest(skuProducts, bundleProducts, true);
@@ -219,8 +219,8 @@ namespace ShipWorks.Products.Tests.Integration.Import
         [Fact]
         public async Task LoadImportFile_ConvertsBundleToProduct()
         {
-            List<ProductToImportDto> skuProducts = new List<ProductToImportDto>() { GetFullProduct("1", "1-a | 1-b"), GetFullProduct("2", "2-a | 2-b")};
-            List<ProductToImportDto> bundleProducts = new List<ProductToImportDto>() {GetFullProduct("3", "3-a | 3-b", "1 : 4 | 2 : 5")};
+            List<ProductToImportDto> skuProducts = new List<ProductToImportDto>() { GetFullProduct("1", "1-a | 1-b"), GetFullProduct("2", "2-a | 2-b") };
+            List<ProductToImportDto> bundleProducts = new List<ProductToImportDto>() { GetFullProduct("3", "3-a | 3-b", "1 : 4 | 2 : 5") };
 
             var result = await RunTest(skuProducts, bundleProducts, true);
             Assert.True(result.Success);
@@ -357,7 +357,7 @@ namespace ShipWorks.Products.Tests.Integration.Import
             }
         }
 
-        public async Task<GenericResult<ImportProductsResult>> RunTest(List<ProductToImportDto> skuProducts, List<ProductToImportDto> bundleProducts, bool shouldSucceed)
+        public async Task<GenericResult<IImportProductsResult>> RunTest(List<ProductToImportDto> skuProducts, List<ProductToImportDto> bundleProducts, bool shouldSucceed)
         {
             var allProducts = skuProducts.Concat(bundleProducts);
 
@@ -400,7 +400,7 @@ namespace ShipWorks.Products.Tests.Integration.Import
             else
             {
                 if (results.Success)
-                { 
+                {
                     results.Value.FailureResults.Add("", "The product should have failed, but did not.");
                 }
             }
@@ -418,7 +418,7 @@ namespace ShipWorks.Products.Tests.Integration.Import
 
             var productVariantSku = productVariant.Aliases.First(a => a.IsDefault);
 
-            bool matches = 
+            bool matches =
                 productVariantSku.Sku == dto.Sku &&
                 productVariant.IsActive == dto.IsActive &&
                 productVariant.ASIN == dto.Asin &&

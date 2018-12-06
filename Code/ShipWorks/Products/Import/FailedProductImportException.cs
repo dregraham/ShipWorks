@@ -10,7 +10,7 @@ namespace ShipWorks.Products.Import
         /// <summary>
         /// Constructor
         /// </summary>
-        public FailedProductImportException(ImportProductsResult result) : base("Import failed")
+        public FailedProductImportException(IImportProductsResult result) : base("Import failed")
         {
             SuccessCount = result.SuccessCount;
             NewCount = result.NewCount;

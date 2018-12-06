@@ -38,10 +38,10 @@ namespace ShipWorks.Products.Import
         /// <summary>
         /// Import products for the given spreadsheet file name and progress reporter.
         /// </summary>
-        public async Task<GenericResult<ImportProductsResult>> ImportProducts(string pathAndFilename, IProgressReporter progressReporter)
+        public async Task<GenericResult<IImportProductsResult>> ImportProducts(string pathAndFilename, IProgressReporter progressReporter)
         {
             itemProgressReporter = progressReporter;
-            ImportProductsResult result = new ImportProductsResult(0, 0, 0);
+            IImportProductsResult result = new ImportProductsResult(0, 0, 0);
 
             itemProgressReporter.PercentComplete = 0;
 

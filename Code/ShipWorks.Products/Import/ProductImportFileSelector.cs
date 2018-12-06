@@ -2,6 +2,7 @@
 using System.IO;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.IO;
+using ShipWorks.Core.Common.Threading;
 
 namespace ShipWorks.Products.Import
 {
@@ -32,7 +33,7 @@ namespace ShipWorks.Products.Import
             fileSelector.GetFilePathToOpen("Comma Separated|*.csv|Excel|*.xls;*.xlsx|Tab Delimited|*.tab|All Files|*.*")
                 .Map(x => (FilePath: x, State: createImportingState(stateManager)))
                 .Do(x => stateManager.ChangeState(x.State))
-                .Do(x => x.State.StartImport(x.FilePath));
+                .Do(x => x.State.StartImport(x.FilePath).Forget());
 
         /// <summary>
         /// Save the sample file

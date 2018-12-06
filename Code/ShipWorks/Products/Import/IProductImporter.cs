@@ -12,6 +12,6 @@ namespace ShipWorks.Products.Import
         /// <summary>
         /// Import products for the given spreadsheet file name and progress reporter.
         /// </summary>
-        Task<GenericResult<ImportProductsResult>> ImportProducts(string pathAndFilename, IProgressReporter progressReporter);
+        Task<GenericResult<IImportProductsResult>> ImportProducts(string pathAndFilename, IProgressReporter progressReporter);
     }
 }

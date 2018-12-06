@@ -5,7 +5,7 @@ namespace ShipWorks.Products.Import
     /// <summary>
     /// Results from importing products
     /// </summary>
-    public class ImportProductsResult
+    public class ImportProductsResult : IImportProductsResult
     {
         /// <summary>
         /// Constructor
@@ -46,7 +46,7 @@ namespace ShipWorks.Products.Import
         /// <summary>
         /// List of SKU and reason for failure.
         /// </summary>
-        public Dictionary<string, string> FailureResults { get; }
+        public IDictionary<string, string> FailureResults { get; }
 
         /// <summary>
         /// A product failed while importing

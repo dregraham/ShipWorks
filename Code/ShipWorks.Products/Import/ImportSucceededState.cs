@@ -18,7 +18,7 @@ namespace ShipWorks.Products.Import
         /// <summary>
         /// Constructor
         /// </summary>
-        public ImportSucceededState(ImportProductsResult results, IProductImporterStateManager stateManager)
+        public ImportSucceededState(IImportProductsResult results, IProductImporterStateManager stateManager)
         {
             this.stateManager = stateManager;
             SuccessCount = results.SuccessCount;
