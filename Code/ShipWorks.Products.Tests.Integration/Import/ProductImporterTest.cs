@@ -191,9 +191,9 @@ namespace ShipWorks.Products.Tests.Integration.Import
 
             var result = await RunTest(skuProducts, bundleProducts, true);
 
-            Assert.True(result.Success);
-            Assert.Equal(1, result.Value.SuccessCount);
-            Assert.Equal(0, result.Value.FailedCount);
+            Assert.True(result.Failure);
+            Assert.Equal(0, result.Value.SuccessCount);
+            Assert.Equal(1, result.Value.FailedCount);
         }
 
         [Fact]
@@ -308,7 +308,7 @@ namespace ShipWorks.Products.Tests.Integration.Import
         }
 
         [Fact]
-        public async Task LoadImportFile_ReturnsFailure_WhenInvalidBundleSeparators()
+        public async Task LoadImportFile_ReturnsSuccess_WhenSpacesAroundBundleSeparators()
         {
             List<string> badBundleTexts = new List<string>()
             {
@@ -329,10 +329,27 @@ namespace ShipWorks.Products.Tests.Integration.Import
 
                 var result = await RunTest(skuProducts, bundleProducts, false);
 
-                Assert.True(result.Failure);
-                Assert.Equal(2, result.Value.SuccessCount);
-                Assert.Equal(1, result.Value.FailedCount);
+                Assert.True(result.Success);
+                Assert.Equal(3, result.Value.SuccessCount);
+                Assert.Equal(0, result.Value.FailedCount);
             }
+        }
+
+        [Theory]
+        [InlineData("1 :", "| 2:", @"1 \:: 3 |\| 2\:: 4 ")]
+        [InlineData("1 :", "| 2 :", @"1 \:: 3 |\| 2 \::4 ")]
+        [InlineData("1:", "| 2:", @"1\::3 |\| 2\::4 ")]
+        [InlineData("1 \\ :", "| 2:", @"1 \\ \::3 |\| 2\::4 ")]
+        public async Task LoadImportFile_ReturnsSuccess_WhenDelimiterIsEscaped(string sku1, string sku2, string bundleText)
+        {
+            List<ProductToImportDto> skuProducts = new List<ProductToImportDto>() { GetFullProduct(sku1, "1-a | 1-b"), GetFullProduct(sku2, "2-a") };
+            List<ProductToImportDto> bundleProducts = new List<ProductToImportDto>() { GetFullProduct("3", "3-a | 3-b | 3-c", bundleText) };
+
+            var result = await RunTest(skuProducts, bundleProducts, false);
+
+            Assert.True(result.Success, $"{bundleText} => {result.Value.FailureResults.FirstOrDefault().Value} ");
+            Assert.Equal(3, result.Value.SuccessCount);
+            Assert.Equal(0, result.Value.FailedCount);
         }
 
         [Fact]

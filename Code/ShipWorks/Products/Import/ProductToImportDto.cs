@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
+using System.Text.RegularExpressions;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.Utility;
 using DisplayNameAttribute = System.ComponentModel.DisplayNameAttribute;
@@ -16,8 +17,8 @@ namespace ShipWorks.Products.Import
     public class ProductToImportDto
     {
         private static readonly string[] ActiveValues = new[] { "ACTIVE", "YES", "TRUE", "1" };
-        private static readonly string[] PipeSeparator = new[] { " | " };
-        private static readonly string[] ColonSeparator = new[] { " : " };
+        private static readonly string SkuSeparatorRegex = @"(?<!($|[^\\])(\\\\)*?\\)\|";
+        private static readonly string SkuQuantitySeparatorRegex = @"(?<!($|[^\\])(\\\\)*?\\):";
         private static List<string> propertyNames = new List<string>();
 
         [DisplayName("SKU")]
@@ -74,8 +75,8 @@ namespace ShipWorks.Products.Import
         public bool IsActive => ActiveValues.Contains(Active.ToUpperInvariant());
 
         public IEnumerable<string> AliasSkuList => AliasSkus.IsNullOrWhiteSpace() ? 
-            Enumerable.Empty<string>() : 
-            AliasSkus?.Split(PipeSeparator, StringSplitOptions.RemoveEmptyEntries)
+            Enumerable.Empty<string>() :
+            Regex.Split(AliasSkus, SkuSeparatorRegex)
                 .Where(s => !s.Equals(Sku.Trim(), StringComparison.InvariantCultureIgnoreCase))
                 .Distinct();
 
@@ -88,12 +89,13 @@ namespace ShipWorks.Products.Import
                     return Enumerable.Empty<(string, int)>();
                 }
 
-                return BundleSkus.Split(PipeSeparator, StringSplitOptions.RemoveEmptyEntries)
+                return Regex.Split(BundleSkus, SkuSeparatorRegex)
                     .Select(skuAndQty =>
                     {
-                        var values = skuAndQty.Split(ColonSeparator, StringSplitOptions.RemoveEmptyEntries);
+                        var values = Regex.Split(skuAndQty, SkuQuantitySeparatorRegex);
 
-                        string testSku = values[0];
+                        string testSku = Regex.Unescape(values[0]);
+                        string testQty = Regex.Unescape(values[1]);
                         if (testSku.Equals(Sku, StringComparison.InvariantCultureIgnoreCase) || 
                                             AliasSkuList.Any(a => a.Equals(testSku, StringComparison.CurrentCultureIgnoreCase)))
                         {
@@ -105,13 +107,13 @@ namespace ShipWorks.Products.Import
                             throw new ProductImportException($"Quantity is required, but wasn't supplied for bundled item SKU {values[0]}");
                         }
 
-                        int quantity = GetValue<int>(values[1], "Bundle Quantity");
+                        int quantity = GetValue<int>(testQty, "Bundle Quantity");
                         if (quantity <= 0)
                         {
                             throw new ProductImportException($"Quantity must be greater than 0 for bundled item SKU {values[0]}");
                         }
 
-                        return (values[0], quantity);
+                        return (testSku, quantity);
                     });
             }
         }
