@@ -76,7 +76,7 @@
         <Condition identifier="Order.OnlineLastModified" />
         <Condition identifier="Order.ShipSenseRecognitionStatus" displayAs="ShipSense Status" />
         <Condition identifier="Order.ChannelOrderID" displayAs="Channel Order ID" />
-        <Condition identifier="Order.ShipByDate" displayAs="ShipByDate" />
+        <Condition identifier="Order.ShipByDate" displayAs="Ship By Date" />
         <Separator />
         <Condition identifier="Order.LocalStatus" />
         <Condition identifier="Order.OnlineStatus" />
