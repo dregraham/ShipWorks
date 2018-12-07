@@ -75,7 +75,7 @@
             <TextBlock Grid.Row="1"
                    Grid.Column="0"
                    Style="{StaticResource FieldLabel}"
-                   Text="Is Active" />
+                   Text="Active" />
 
             <CheckBox Grid.Row="1"
                   Grid.Column="1"
@@ -86,7 +86,7 @@
             <TextBlock Grid.Row="2"
                    Grid.Column="0"
                    Style="{StaticResource FieldLabel}"
-                   Text="Is a Bundle" />
+                   Text="Bundle" />
 
             <CheckBox Grid.Row="2"
                   Grid.Column="1"

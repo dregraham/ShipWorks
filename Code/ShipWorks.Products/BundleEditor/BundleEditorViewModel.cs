@@ -165,13 +165,13 @@ namespace ShipWorks.Products.BundleEditor
             {
                 if (BundleLineItems.Any(i => i.BundledProduct.ChildProductVariantID == productVariant.ProductVariantID))
                 {
-                    messageHelper.ShowError("SKU already exists in bundle.");
+                    messageHelper.ShowError($"The SKU \"{Sku}\" already exists in bundle.");
                     return;
                 }
 
                 if (productVariant.Product.IsBundle)
                 {
-                    messageHelper.ShowError("The SKU refers to a bundle. A bundle cannot contain another bundle.");
+                    messageHelper.ShowError($"The SKU \"{Sku}\" refers to a bundle. A bundle cannot contain another bundle.");
                     return;
                 }
 
@@ -188,7 +188,7 @@ namespace ShipWorks.Products.BundleEditor
             else
             {
                 // Could not find entered sku
-                messageHelper.ShowError($"SKU {Sku} not found");
+                messageHelper.ShowError($"The SKU \"{Sku}\" was not found");
             }
 
             Sku = string.Empty;
