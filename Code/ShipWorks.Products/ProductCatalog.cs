@@ -289,7 +289,7 @@ namespace ShipWorks.Products
                 if (inHowManyBundles > 0)
                 {
                     string plural = inHowManyBundles > 1 ? "s" : "";
-                    string question = $"A bundle cannot be in other bundles.\r\n\r\nThis bundle is already in {inHowManyBundles} existing bundle{plural}.\r\n\r\nShould ShipWorks remove this bundle from the existing bundle{plural}? ";
+                    string question = $"A bundle cannot contain another bundle.\r\n\r{productVariant.DefaultSku ?? "This Product"} is already a part of {inHowManyBundles} existing bundle{plural}.\r\n\r\nDo you want to remove {productVariant.DefaultSku ?? "this product"} from the existing bundle{plural}? ";
 
                     DialogResult answer = messageHelper.ShowQuestion(question);
                     if (answer != DialogResult.OK)
