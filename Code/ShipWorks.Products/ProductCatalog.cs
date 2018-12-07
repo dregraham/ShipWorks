@@ -105,7 +105,7 @@ namespace ShipWorks.Products
         /// Delete any bundle items flagged for removal from a product OR
         /// remove all bundle items if the product is not a bundle
         /// </summary>
-        private Task DeleteRemovedBundleItems(ISqlAdapter adapter, ProductEntity product)
+        private async Task DeleteRemovedBundleItems(ISqlAdapter adapter, ProductEntity product)
         {
             // If the product is not a bundle, remove all of its bundle items
             if (!product.IsBundle)
@@ -114,12 +114,10 @@ namespace ShipWorks.Products
             }
 
             // Delete the removed items
-            if (product.Bundles.RemovedEntitiesTracker.Count > 0)
+            foreach (ProductBundleEntity removedBundle in product.Bundles.RemovedEntitiesTracker)
             {
-                return adapter.DeleteEntityCollectionAsync(product.Bundles.RemovedEntitiesTracker);
+                await adapter.DeleteEntityAsync(removedBundle);
             }
-
-            return Task.CompletedTask;
         }
 
         /// <summary>
@@ -237,25 +235,24 @@ namespace ShipWorks.Products
             {
                 return validationResult;
             }
-            
+
+            if (product.IsNew)
+            {
+                product.CreatedDate = DateTime.UtcNow;
+            }
+
+            product.Variants.Where(v => v.IsNew)?.ForEach(v => v.CreatedDate = DateTime.UtcNow);
+
             using (ISqlAdapter adapter = sqlAdapterFactory.CreateTransacted())
             {
                 try
                 {
                     if (product.IsBundle)
                     {
-                        await RemoveFromAllBundles(adapter, product.Variants.FirstOrDefault().ProductVariantID).ConfigureAwait(false);
+                        await RemoveFromAllBundles(adapter, product.Variants.FirstOrDefault().ProductVariantID).ConfigureAwait(true);
                     }
 
-                    await DeleteRemovedBundleItems(adapter, product).ConfigureAwait(false);
-
-                    if (product.IsNew)
-                    {
-                        product.CreatedDate = DateTime.UtcNow;
-                    }
-
-                    product.Variants.Where(v => v.IsNew)?
-                        .ForEach(v => v.CreatedDate = DateTime.UtcNow);
+                    await DeleteRemovedBundleItems(adapter, product).ConfigureAwait(true);
 
                     adapter.SaveEntity(product);
 
@@ -292,7 +289,7 @@ namespace ShipWorks.Products
                 if (inHowManyBundles > 0)
                 {
                     string plural = inHowManyBundles > 1 ? "s" : "";
-                    string question = $"A bundle cannot be in other bundles.\r\n\r\nThis bundle is already in {inHowManyBundles} existing bundle{plural}.\r\n\r\nShould ShipWorks remove this bundle from the existing bundles{plural}? ";
+                    string question = $"A bundle cannot be in other bundles.\r\n\r\nThis bundle is already in {inHowManyBundles} existing bundle{plural}.\r\n\r\nShould ShipWorks remove this bundle from the existing bundle{plural}? ";
 
                     DialogResult answer = messageHelper.ShowQuestion(question);
                     if (answer != DialogResult.OK)
