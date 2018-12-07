@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
 using Interapptive.Shared.Collections;
@@ -125,7 +126,16 @@ namespace ShipWorks.Products.Import
             {
                 await sqlAdapterFactory
                     .WithPhysicalTransactionAsync((transaction, sqlAdapter) => ImportProduct(updateProductAction, sqlAdapter, row))
-                    .Do(result.ProductSucceeded, ex => result.ProductFailed(row.Sku, ex.Message))
+                    .Do(result.ProductSucceeded, ex =>
+                    {
+                        string message = ex.Message;
+                        if ((ex.InnerException as SqlException)?.Number == 2627)
+                        {
+                            message = $"Bundle SKU '{row.Sku}' has the same bundled item SKU referenced more than once: '{row.BundleSkus}'.";
+                        }
+
+                        result.ProductFailed(row.Sku, message);
+                    })
                     .Recover(ex => true)
                     .ConfigureAwait(false);
 
