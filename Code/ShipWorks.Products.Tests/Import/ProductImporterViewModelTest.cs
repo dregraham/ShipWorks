@@ -32,26 +32,21 @@ namespace ShipWorks.Products.Tests.Import
             mock.Mock<IMessageHelper>().Verify(x => x.ShowDialog(dialog));
         }
 
-        [Fact]
-        public void ImportProducts_ReturnsSuccess_WhenDialogSucceeds()
-        {
-            mock.Mock<IMessageHelper>().Setup(x => x.ShowDialog(It.IsAny<IProductImporterDialog>())).Returns(true);
-
-            var result = testObject.ImportProducts();
-
-            Assert.True(result.Success);
-        }
-
         [Theory]
-        [InlineData(false)]
-        [InlineData(null)]
-        public void ImportProducts_ReturnsFailure_WhenDialogDoesNotSucceed(bool? dialogResult)
+        [InlineData(true, true)]
+        [InlineData(false, false)]
+        public void ImportProducts_ReturnsSuccess_BasedOnCurrentState(bool shouldReload, bool expectedSuccess)
         {
-            mock.Mock<IMessageHelper>().Setup(x => x.ShowDialog(It.IsAny<IProductImporterDialog>())).Returns(dialogResult);
+            var testState = mock.Mock<IProductImportState>();
+            testState.SetupGet(x => x.ShouldReloadProducts).Returns(shouldReload);
+
+            mock.Mock<IMessageHelper>()
+                .Setup(x => x.ShowDialog(It.IsAny<IProductImporterDialog>()))
+                .Callback(() => testObject.CurrentState = testState.Object);
 
             var result = testObject.ImportProducts();
 
-            Assert.True(result.Failure);
+            Assert.Equal(expectedSuccess, result.Success);
         }
 
         public void Dispose()
