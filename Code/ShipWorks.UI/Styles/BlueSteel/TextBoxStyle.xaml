@@ -1,6 +1,7 @@
 <ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:controls="clr-namespace:ShipWorks.UI.Controls">
+                    xmlns:controls="clr-namespace:ShipWorks.UI.Controls"
+                    xmlns:attachedProperties="clr-namespace:ShipWorks.UI.AttachedProperties">
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="/ShipWorks.UI;component/Styles/Controls/GridStyle.xaml" />
         <ResourceDictionary Source="/ShipWorks.UI;component/Styles/BlueSteel/Colors.xaml"/>
@@ -15,8 +16,9 @@
         <Setter Property="BorderBrush" Value="{StaticResource BorderColor}"/>
         <Setter Property="Background" Value="{StaticResource InputControlBackgroundGradient}"/>
         <Setter Property="FontFamily" Value="/ShipWorks.UI;component/Styles/BlueSteel/#Roboto"/>
+        <Setter Property="attachedProperties:SelectTextOnFocus.Enabled" Value="True"/>
     </Style>
-    
+
     <Style x:Key="FormTextBox" TargetType="{x:Type TextBox}" BasedOn="{StaticResource BlueSteelTextBox}">
         <Setter Property="Margin" Value="10 0 0 10"/>
     </Style>
@@ -40,11 +42,12 @@
         <Setter Property="HorizontalAlignment" Value="Stretch"/>
         <Setter Property="BorderBrush" Value="{StaticResource BorderColor}"/>
         <Setter Property="Background" Value="{StaticResource InputControlBackgroundGradient}"/>
+        <Setter Property="attachedProperties:SelectTextOnFocus.Enabled" Value="True"/>
     </Style>
     <Style x:Key="FormTokenTextBox" TargetType="{x:Type controls:TokenTextBox}"
            BasedOn="{StaticResource FormTextBox}">
         <Setter Property="ButtonBackground" Value="{StaticResource ButtonBackgroundGradient}"/>
         <Setter Property="ButtonIconColor" Value="{StaticResource IconColor}"/>
     </Style>
-    
+
 </ResourceDictionary>

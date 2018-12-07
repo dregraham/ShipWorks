@@ -1,4 +1,5 @@
 using System.Linq;
+using System.Threading.Tasks;
 using Autofac.Extras.Moq;
 using Interapptive.Shared.UI;
 using Moq;
@@ -60,15 +61,16 @@ namespace ShipWorks.Products.Tests
             // Load first
             ProductVariantEntity baseProduct = new ProductVariantEntity();
             baseProduct.Product = new ProductEntity(1);
-            baseProduct.Product.IsBundle = false;
+            baseProduct.Product.IsBundle = true;
             
             testObject.Load(baseProduct);
-            
+
             // add product
             ProductVariantEntity productToAddToBundle = new ProductVariantEntity
             {
                 ProductID = 9,
-                ProductVariantID = 2
+                ProductVariantID = 2,
+                Product = new ProductEntity { IsBundle = false }
             };
             
             var sqlAdapter = mock.Mock<ISqlAdapter>();
@@ -79,7 +81,7 @@ namespace ShipWorks.Products.Tests
             testObject.Sku = "a";
             testObject.Quantity = 2;
             testObject.AddSkuToBundleCommand.Execute(null);
-            
+
             // Save
             testObject.Save();
 
@@ -91,6 +93,13 @@ namespace ShipWorks.Products.Tests
         [Fact]
         public void AddProductToBundle_DisplaysError_WhenSkuNotFound()
         {
+            // Load first
+            ProductVariantEntity baseProduct = new ProductVariantEntity();
+            baseProduct.Product = new ProductEntity(1);
+            baseProduct.Product.IsBundle = false;
+
+            testObject.Load(baseProduct);
+
             var sqlAdapter = mock.Mock<ISqlAdapter>();
             mock.Mock<ISqlAdapterFactory>().Setup(x => x.Create()).Returns(sqlAdapter.Object);
             mock.Mock<IProductCatalog>()
@@ -105,13 +114,18 @@ namespace ShipWorks.Products.Tests
         [Fact]
         public void AddProductToBundle_AddsProductWithGivenSkuAndQtyToBundleLineItems()
         {
-            ProductVariantEntity productToAddToBundle = new ProductVariantEntity();
+            ProductVariantEntity productToAddToBundle = new ProductVariantEntity { Product = new ProductEntity(2) };
             
             var sqlAdapter = mock.Mock<ISqlAdapter>();
             mock.Mock<ISqlAdapterFactory>().Setup(x => x.Create()).Returns(sqlAdapter.Object);
             mock.Mock<IProductCatalog>()
                 .Setup(x => x.FetchProductVariantEntity(It.IsAny<ISqlAdapter>(), It.IsAny<string>())).Returns(productToAddToBundle);
-            
+
+            ProductVariantEntity baseProduct = new ProductVariantEntity();
+            baseProduct.Product = new ProductEntity(1);
+            baseProduct.Product.IsBundle = true;
+            testObject.Load(baseProduct);
+
             testObject.Sku = "a";
             testObject.Quantity = 2;
             testObject.AddSkuToBundleCommand.Execute(null);
@@ -128,6 +142,13 @@ namespace ShipWorks.Products.Tests
         [Fact]
         public void RemoveProductFromBundle_RemovesSelectedProductFromBundleLineItems()
         {
+            // Load first
+            ProductVariantEntity baseProduct = new ProductVariantEntity();
+            baseProduct.Product = new ProductEntity(1);
+            baseProduct.Product.IsBundle = false;
+
+            testObject.Load(baseProduct);
+
             var bundledProduct = new ProductBundleDisplayLineItem(new ProductBundleEntity(), "abc");
             
             testObject.BundleLineItems.Add(bundledProduct);

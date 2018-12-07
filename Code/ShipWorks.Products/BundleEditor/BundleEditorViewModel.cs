@@ -1,29 +1,23 @@
-﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
+﻿using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reflection;
 using System.Windows.Input;
+using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
-using Interapptive.Shared.Collections;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.UI;
-using ShipWorks.Core.UI;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.Custom;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Products.BundleEditor;
 
-namespace ShipWorks.Products.UI.BundleEditor
+namespace ShipWorks.Products.BundleEditor
 {
     /// <summary>
     /// View model for the BundleEditorControl
     /// </summary>
     [Component]
-    public class BundleEditorViewModel : IBundleEditorViewModel
+    public class BundleEditorViewModel : ViewModelBase, IBundleEditorViewModel
     {
-        public event PropertyChangedEventHandler PropertyChanged;
-        private readonly PropertyChangedHandler handler;
         private readonly IProductCatalog productCatalog;
         private readonly IMessageHelper messageHelper;
         private readonly ISqlAdapterFactory sqlAdapterFactory;
@@ -38,8 +32,6 @@ namespace ShipWorks.Products.UI.BundleEditor
         /// </summary>
         public BundleEditorViewModel(IProductCatalog productCatalog, IMessageHelper messageHelper, ISqlAdapterFactory sqlAdapterFactory)
         {
-            handler = new PropertyChangedHandler(this, () => PropertyChanged);
-
             this.productCatalog = productCatalog;
             this.messageHelper = messageHelper;
             this.sqlAdapterFactory = sqlAdapterFactory;
@@ -57,7 +49,7 @@ namespace ShipWorks.Products.UI.BundleEditor
         public string Sku
         {
             get => sku;
-            set => handler.Set(nameof(Sku), ref sku, value);
+            set => Set(ref sku, value);
         }
 
         /// <summary>
@@ -67,7 +59,7 @@ namespace ShipWorks.Products.UI.BundleEditor
         public int Quantity
         {
             get => quantity;
-            set => handler.Set(nameof(Quantity), ref quantity, value);
+            set => Set(ref quantity, value);
         }
 
         /// <summary>
@@ -77,7 +69,7 @@ namespace ShipWorks.Products.UI.BundleEditor
         public ObservableCollection<ProductBundleDisplayLineItem> BundleLineItems
         {
             get => bundleLineItems;
-            set => handler.Set(nameof(BundleLineItems), ref bundleLineItems, value);
+            set => Set(ref bundleLineItems, value);
         }
 
         /// <summary>
@@ -87,7 +79,7 @@ namespace ShipWorks.Products.UI.BundleEditor
         public ProductBundleDisplayLineItem SelectedBundleLineItem
         {
             get => selectedBundleLineItem;
-            set => handler.Set(nameof(SelectedBundleLineItem), ref selectedBundleLineItem, value);
+            set => Set(ref selectedBundleLineItem, value);
         }
 
         /// <summary>
@@ -110,22 +102,16 @@ namespace ShipWorks.Products.UI.BundleEditor
             baseProduct = baseProductVariant;
             baseProduct.Product.Bundles.RemovedEntitiesTracker = new ProductBundleCollection();
 
+            BundleLineItems.Clear();
+
             if (baseProduct.Product.IsBundle)
             {
-                // Loop through each bundled product to get their skus
-                foreach (ProductBundleEntity bundledProduct in baseProduct.Product.Bundles)
-                {
-                    ProductVariantAliasEntity bundledProductVariantAlias =
-                        bundledProduct.ChildVariant?.Aliases.FirstOrDefault(a => a.IsDefault);
-
-                    if (bundledProductVariantAlias != null)
-                    {
-                        BundleLineItems.Add(
-                            new ProductBundleDisplayLineItem(bundledProduct, bundledProductVariantAlias.Sku));
-                    }
-
-                    SelectedBundleLineItem = BundleLineItems?.FirstOrDefault();
-                }
+                BundleLineItems = new ObservableCollection<ProductBundleDisplayLineItem>(baseProduct.Product
+                                                                 .Bundles
+                                                                 .Where(x => !string.IsNullOrWhiteSpace(x.ChildVariant?.DefaultSku))
+                                                                 .Select(x => new ProductBundleDisplayLineItem(x, x.ChildVariant.DefaultSku)));
+                
+                SelectedBundleLineItem = BundleLineItems?.FirstOrDefault();
             }
             else
             {
@@ -138,28 +124,9 @@ namespace ShipWorks.Products.UI.BundleEditor
         /// </summary>
         public void Save()
         {
-            // If the base product is not a bundle, remove all of its bundle items
-            if (!baseProduct.Product.IsBundle)
+            foreach (ProductBundleDisplayLineItem bundleLineItem in BundleLineItems)
             {
-                baseProduct.Product.Bundles.RemovedEntitiesTracker.AddRange(baseProduct.Product.Bundles);
-            }
-
-            // Delete the removed items
-            if (baseProduct.Product.Bundles.RemovedEntitiesTracker.Count > 0)
-            {
-                using (ISqlAdapter adapter = sqlAdapterFactory.Create())
-                {
-                    adapter.DeleteEntityCollection(baseProduct.Product.Bundles.RemovedEntitiesTracker);
-                }
-            }
-
-            // Add in any bundle items
-            if (baseProduct.Product.IsBundle)
-            {
-                foreach (ProductBundleDisplayLineItem bundleLineItem in BundleLineItems)
-                {
-                    baseProduct.Product.Bundles.Add(bundleLineItem.BundledProduct);
-                }
+                baseProduct.Product.Bundles.Add(bundleLineItem.BundledProduct);
             }
         }
 
@@ -180,7 +147,7 @@ namespace ShipWorks.Products.UI.BundleEditor
                 return;
             }
 
-            if (baseProduct.Aliases.Any(a=>a.Sku == sku))
+            if (baseProduct.Aliases.Any(a => a.Sku == sku))
             {
                 messageHelper.ShowError("A bundle cannot contain itself");
                 return;

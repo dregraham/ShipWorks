@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using log4net;
 using ShipWorks.Data.Model.EntityClasses;
@@ -17,7 +16,8 @@ namespace ShipWorks.Products
         /// <summary>
         /// Constructor
         /// </summary>
-        public ProductBundle(string sku, IProductVariantEntity variant, ILog log) : base(sku, variant, log)
+        public ProductBundle(string sku, IProductVariantEntity variant, ILog log)
+            : base(sku, variant, log)
         {
         }
 
@@ -26,15 +26,12 @@ namespace ShipWorks.Products
         /// </summary>
         public override void ApplyCustoms(OrderItemEntity item, ShipmentEntity shipment)
         {
-            Debug.Assert(variant.IsActive, "Variant should be active");
-            Debug.Assert(variant.Product.IsBundle, "Variant should be a bundle");
-
-            log.InfoFormat($"Applying bundle information to customs item for sku {sku}");
+            log.InfoFormat("Applying bundle information to customs item for sku {0}", sku);
 
             foreach (IProductBundleEntity bundleItem in variant.Product.Bundles)
             {
                 ShipmentCustomsItemEntity customsItem = ApplyCustoms(item, shipment, bundleItem.ChildVariant);
-                customsItem.Quantity = customsItem.Quantity * bundleItem.Quantity;                
+                customsItem.Quantity = customsItem.Quantity * bundleItem.Quantity;
             }
         }
 
@@ -47,18 +44,17 @@ namespace ShipWorks.Products
 
             if (createOrderItemProductBundleOutline != null)
             {
-                outline.AddElement("BundledProduct", createOrderItemProductBundleOutline(),
-                () => FetchBundledVariants(),
-                ElementOutline.If(() => createOrderItemProductBundleOutline != null && variant.Product.IsBundle));
+                outline.AddElement("BundledProduct", createOrderItemProductBundleOutline(), () => FetchBundledVariants(),
+                    ElementOutline.If(() => createOrderItemProductBundleOutline != null && variant.Product.IsBundle));
             }
         }
-        
+
         /// <summary>
-        /// Fetch bundled Variants 
+        /// Fetch bundled Variants
         /// </summary>
         private IEnumerable<ProductVariant> FetchBundledVariants()
         {
-            return variant.Product.Bundles.Select(b => new ProductVariant(b.ChildVariant.Aliases.FirstOrDefault(a => a.IsDefault).Sku, b.ChildVariant, b.Quantity, log));
+            return variant.Product.Bundles.Select(b => new ProductVariant(b.ChildVariant.DefaultSku, b.ChildVariant, b.Quantity, log));
         }
     }
 }

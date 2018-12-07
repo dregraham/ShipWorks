@@ -147,6 +147,7 @@
     <Compile Include="AttachedProperties\Link.cs" />
     <Compile Include="AttachedProperties\ListSelection.cs" />
     <Compile Include="AttachedProperties\PopupClickManager.cs" />
+    <Compile Include="AttachedProperties\SelectTextOnFocus.cs" />
     <Compile Include="AttachedProperties\TextRestriction.cs" />
     <Compile Include="AttachedProperties\UpdateWhenMessageReceived.cs" />
     <Compile Include="AttachedProperties\WebBrowserUtility.cs" />

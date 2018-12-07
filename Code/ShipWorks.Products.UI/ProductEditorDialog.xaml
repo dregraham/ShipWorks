@@ -8,11 +8,12 @@
         xmlns:ui="http://schemas.shipworks.com/ui"
         xmlns:sharedUI="clr-namespace:Interapptive.Shared.UI;assembly=Interapptive.Shared"
         xmlns:bundles="clr-namespace:ShipWorks.Products.UI.BundleEditor"
+        xmlns:productEditor="clr-namespace:ShipWorks.Products.ProductEditor;assembly=ShipWorks.Products"
         mc:Ignorable="d"
         SizeToContent="Height"
         Title="Product Editor" Width="700"
         FontFamily="/ShipWorks.UI;component/Styles/BlueSteel/#Roboto"
-        d:DataContext="{d:DesignInstance productsUI:ProductEditorViewModel}">
+        d:DataContext="{d:DesignInstance productEditor:ProductEditorViewModel}">
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -98,20 +99,6 @@
                    Text="Product Details"
                    Style="{StaticResource Header}"/>
 
-            <TextBlock Grid.Row="4"
-                   Grid.Column="0"
-                   Text="Created Date:"
-                   Style="{StaticResource FieldLabel}"
-                   Visibility="Collapsed"/>
-
-            <TextBlock Grid.Row="4"
-                   Grid.Column="1"
-                   Text="{Binding CreatedDate, UpdateSourceTrigger=PropertyChanged}"
-                   Style="{StaticResource FieldLabel}"
-                   Margin="10 0 0 10"
-                   HorizontalAlignment="Left"
-                   Visibility="Collapsed"/>
-
             <TextBlock Grid.Row="5"
                    Grid.Column="0"
                    Text="Created Date"
@@ -120,7 +107,7 @@
 
             <TextBlock Grid.Row="5"
                    Grid.Column="1"
-                   Text="{Binding CreatedDate}"
+                   Text="{Binding CreatedDate, StringFormat=MM/dd/yyyy}"
                    Style="{StaticResource FieldLabel}"
                    TextAlignment="Left"
                    HorizontalAlignment="Left"
@@ -291,7 +278,7 @@
                   Style="{StaticResource FormComboBox}"/>
 
             <Grid Grid.Row="4"
-                  Grid.Column="0" 
+                  Grid.Column="0"
                   Grid.ColumnSpan="2"
                 Visibility="{Binding Path=IsBundle, Converter={StaticResource BooleanToVisibility},
                                                     UpdateSourceTrigger=PropertyChanged}">
@@ -300,14 +287,14 @@
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
                 <TextBlock Grid.Row="0"
-                           Text="Bundled Skus"
+                           Text="Bundled SKUs"
                            Style="{StaticResource Header}"/>
                 <bundles:BundleEditorControl Grid.Row="1"
                                          MinHeight="120"
                                          MaxHeight="120"
                                          DataContext="{Binding BundleEditorViewModel}"/>
             </Grid>
-            
+
         </Grid>
         <Grid
             Grid.Row="1"
@@ -334,5 +321,5 @@
                 Style="{StaticResource SmallPrimaryButton}"
                 Content="Save"/>
         </Grid>
-    </Grid>    
+    </Grid>
 </sharedUI:InteropWindow>

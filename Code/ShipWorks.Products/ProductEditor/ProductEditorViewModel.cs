@@ -1,16 +1,21 @@
 using System;
 using System.ComponentModel;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Reflection;
+using System.Threading.Tasks;
+using System.Windows.Forms;
 using System.Windows.Input;
 using GalaSoft.MvvmLight.CommandWpf;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.UI;
+using Interapptive.Shared.Utility;
 using ShipWorks.Core.UI;
+using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Products.BundleEditor;
 
-namespace ShipWorks.Products.UI
+namespace ShipWorks.Products.ProductEditor
 {
     /// <summary>
     /// View Model for the Product Editor
@@ -22,6 +27,8 @@ namespace ShipWorks.Products.UI
         private readonly PropertyChangedHandler handler;
         private readonly IDialog dialog;
         private readonly IMessageHelper messageHelper;
+        private readonly ISqlAdapterFactory sqlAdapterFactory;
+        private readonly IProductCatalog productCatalog;
         private ProductVariantEntity productVariant;
 
         private bool isActive;
@@ -46,13 +53,21 @@ namespace ShipWorks.Products.UI
         /// <summary>
         /// Constructor
         /// </summary>
-        public ProductEditorViewModel(IProductEditorDialogFactory dialogFactory, IMessageHelper messageHelper, IBundleEditorViewModel bundleEditorViewModel)
+        public ProductEditorViewModel(
+            IProductEditorDialogFactory dialogFactory,
+            IMessageHelper messageHelper,
+            IBundleEditorViewModel bundleEditorViewModel,
+            ISqlAdapterFactory sqlAdapterFactory,
+            IProductCatalog productCatalog)
         {
             handler = new PropertyChangedHandler(this, () => PropertyChanged);
+
             dialog = dialogFactory.Create();
             this.messageHelper = messageHelper;
             BundleEditorViewModel = bundleEditorViewModel;
-            Save = new RelayCommand(SaveProduct);
+            this.sqlAdapterFactory = sqlAdapterFactory;
+            this.productCatalog = productCatalog;
+            Save = new RelayCommand(async () => await SaveProduct());
             Cancel = new RelayCommand(dialog.Close);
         }
 
@@ -216,9 +231,9 @@ namespace ShipWorks.Products.UI
 
             BundleEditorViewModel.Load(productVariant);
 
-            SKU = productVariant.Aliases.First(a => a.IsDefault).Sku ?? string.Empty;
-            IsActive = productVariant.IsNew ? true : productVariant.IsActive;
-            IsBundle = productVariant.IsNew ? false : productVariant.Product.IsBundle;
+            SKU = productVariant.DefaultSku ?? string.Empty;
+            IsActive = productVariant.IsNew || productVariant.IsActive;
+            IsBundle = !productVariant.IsNew && productVariant.Product.IsBundle;
             Name = productVariant.Name ?? string.Empty;
             UPC = productVariant.UPC ?? string.Empty;
             ASIN = productVariant.ASIN ?? string.Empty;
@@ -240,17 +255,9 @@ namespace ShipWorks.Products.UI
         /// <summary>
         /// Save the product
         /// </summary>
-        private void SaveProduct()
+        private async Task SaveProduct()
         {
-            if (string.IsNullOrWhiteSpace(SKU))
-            {
-                messageHelper.ShowError($"The following field is required: {Environment.NewLine}SKU");
-                return;
-            }
-
             productVariant.Product.IsBundle = IsBundle;
-
-            BundleEditorViewModel.Save();
 
             productVariant.Aliases.First(a => a.IsDefault).Sku = SKU.Trim();
             productVariant.IsActive = IsActive;
@@ -268,8 +275,28 @@ namespace ShipWorks.Products.UI
             productVariant.DeclaredValue = DeclaredValue;
             productVariant.CountryOfOrigin = CountryOfOrigin.Trim();
 
-            dialog.DialogResult = true;
-            dialog.Close();
+            Result saveResult;
+            BundleEditorViewModel.Save();
+
+            saveResult = await productCatalog.Save(productVariant.Product, sqlAdapterFactory);
+            
+            if (saveResult.Success)
+            {
+                dialog.DialogResult = true;
+                dialog.Close();
+            }
+            else
+            {
+                if ((saveResult.Exception?.GetBaseException() as SqlException)?.Number == 2601)
+                {
+                    messageHelper.ShowError($"The SKU \"{SKU}\" already exists. Please enter a unique value for the Product SKU.", saveResult.Exception);
+                }
+                else if (!string.IsNullOrWhiteSpace(saveResult.Message))
+                {
+                    messageHelper.ShowError(saveResult.Message);
+                }
+            }
+
         }
     }
 }

@@ -2,7 +2,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data.SqlClient;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
@@ -14,7 +13,6 @@ using GalaSoft.MvvmLight.CommandWpf;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.UI;
-using Interapptive.Shared.Utility;
 using ShipWorks.Core.Common.Threading;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
@@ -278,38 +276,7 @@ namespace ShipWorks.Products
         {
             if (productEditorViewModelFunc().ShowProductEditor(productVariantEntity) ?? false)
             {
-                Result saveResult;
-
-                using (ISqlAdapter adapter = sqlAdapterFactory.CreateTransacted())
-                {
-                    saveResult = productCatalog.Save(adapter, productVariantEntity.Product);
-                    if (saveResult.Success)
-                    {
-                        adapter.Commit();
-                    }
-                    else
-                    {
-                        adapter.Rollback();
-                    }
-                }
-
-                if (saveResult.Success)
-                {
-                    RefreshProductsAction();
-                }
-                else
-                {
-                    if ((saveResult.Exception.GetBaseException() as SqlException)?.Number == 2601)
-                    {
-                        messageHelper.ShowError($"The SKU \"{productVariantEntity.Aliases.First(a => a.IsDefault).Sku}\" already exists. Please enter a unique value for the Product SKU.", saveResult.Exception);
-                    }
-                    else
-                    {
-                        messageHelper.ShowError(saveResult.Message);
-                    }
-
-                    EditProduct(productVariantEntity);
-                }
+                RefreshProductsAction();
             }
         }
 

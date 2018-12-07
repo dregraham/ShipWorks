@@ -1,12 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.Common;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Threading;
+using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
@@ -28,14 +31,16 @@ namespace ShipWorks.Products
     {
         private readonly ISqlSession sqlSession;
         private readonly Func<Type, ILog> logFactory;
+        private readonly IMessageHelper messageHelper;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public ProductCatalog(ISqlSession sqlSession, Func<Type, ILog> logFactory)
+        public ProductCatalog(ISqlSession sqlSession, Func<Type, ILog> logFactory, IMessageHelper messageHelper)
         {
             this.sqlSession = sqlSession;
             this.logFactory = logFactory;
+            this.messageHelper = messageHelper;
         }
 
         /// <summary>
@@ -49,11 +54,11 @@ namespace ShipWorks.Products
 
             progressReporter.PercentComplete = 0;
 
-            using (var conn = sqlSession.OpenConnection())
+            using (DbConnection conn = sqlSession.OpenConnection())
             {
-                foreach (var (productsChunk, index) in chunks.Select((x, i) => (x, i)))
+                foreach ((IEnumerable<long> productsChunk, int index) in chunks.Select((x, i) => (x, i)))
                 {
-                    using (var comm = conn.CreateCommand())
+                    using (DbCommand comm = conn.CreateCommand())
                     {
                         comm.CommandText = $"UPDATE ProductVariant SET IsActive = {(activation ? "1" : "0")} WHERE ProductVariantID in (SELECT item FROM @ProductVariantIDs)";
                         comm.Parameters.Add(CreateProductVariantIDParameter(productsChunk));
@@ -72,13 +77,59 @@ namespace ShipWorks.Products
         }
 
         /// <summary>
+        /// Number of bundles productID exists in.
+        /// </summary>
+        private async Task<int> InBundleCount(long productVariantID)
+        {
+            using (DbConnection conn = sqlSession.OpenConnection())
+            {
+                using (DbCommand comm = conn.CreateCommand())
+                {
+                    comm.CommandText = $"SELECT COUNT(*) FROM ProductBundle WHERE ChildProductVariantID = @ProductID";
+                    comm.Parameters.Add(new SqlParameter("@ProductID", productVariantID));
+                    return (int) await comm.ExecuteScalarAsync().ConfigureAwait(false);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Remove variant from all bundles
+        /// </summary>
+        private Task RemoveFromAllBundles(ISqlAdapter adapter, long productVariantID)
+        {
+            return adapter.ExecuteSQLAsync("DELETE ProductBundle WHERE ChildProductVariantID = @p0",
+                new object[] { productVariantID });
+        }
+
+        /// <summary>
+        /// Delete any bundle items flagged for removal from a product OR
+        /// remove all bundle items if the product is not a bundle
+        /// </summary>
+        private Task DeleteRemovedBundleItems(ISqlAdapter adapter, ProductEntity product)
+        {
+            // If the product is not a bundle, remove all of its bundle items
+            if (!product.IsBundle)
+            {
+                product.Bundles.RemovedEntitiesTracker.AddRange(product.Bundles);
+            }
+
+            // Delete the removed items
+            if (product.Bundles.RemovedEntitiesTracker.Count > 0)
+            {
+                return adapter.DeleteEntityCollectionAsync(product.Bundles.RemovedEntitiesTracker);
+            }
+
+            return Task.CompletedTask;
+        }
+
+        /// <summary>
         /// Create a table parameter for the product variant ID list
         /// </summary>
         private SqlParameter CreateProductVariantIDParameter(IEnumerable<long> productVariantIDs)
         {
-            var table = new DataTable();
+            DataTable table = new DataTable();
             table.Columns.Add("item", typeof(long));
-            foreach (var value in productVariantIDs)
+            foreach (long value in productVariantIDs)
             {
                 table.Rows.Add(value);
             }
@@ -120,7 +171,7 @@ namespace ShipWorks.Products
         private ProductVariantEntity FetchFirst(IPredicate predicate, ISqlAdapter sqlAdapter)
         {
             QueryFactory factory = new QueryFactory();
-            var from = factory.ProductVariant
+            InnerOuterJoin from = factory.ProductVariant
                 .InnerJoin(factory.ProductVariantAlias)
                 .On(ProductVariantFields.ProductVariantID == ProductVariantAliasFields.ProductVariantID);
 
@@ -135,8 +186,14 @@ namespace ShipWorks.Products
 
             if (productVariant?.Product?.IsBundle == true)
             {
+                RelationPredicateBucket relationPredicateBucket = new RelationPredicateBucket(ProductEntity.Relations.ProductBundleEntityUsingProductID);
+                relationPredicateBucket.Relations.Add(ProductBundleEntity.Relations.ProductVariantEntityUsingChildProductVariantID);
+                relationPredicateBucket.Relations.Add(ProductVariantEntity.Relations.ProductVariantAliasEntityUsingProductVariantID);
+                relationPredicateBucket.PredicateExpression.Add(ProductVariantAliasFields.IsDefault == true);
+                relationPredicateBucket.PredicateExpression.Add(ProductBundleFields.ProductID == productVariant.ProductID);
+
                 sqlAdapter.FetchEntityCollection(productVariant.Product.Bundles,
-                    ProductBundleRelationBucket.Value,
+                    relationPredicateBucket,
                     ProductBundlePrefetchPath.Value);
             }
 
@@ -171,41 +228,81 @@ namespace ShipWorks.Products
         });
 
         /// <summary>
-        /// Predicate bucket to only include the default alias
-        /// </summary>
-        private static readonly Lazy<IRelationPredicateBucket> ProductBundleRelationBucket = new Lazy<IRelationPredicateBucket>(() =>
-        {
-            RelationPredicateBucket relationPredicateBucket = new RelationPredicateBucket(ProductEntity.Relations.ProductBundleEntityUsingProductID);
-            relationPredicateBucket.Relations.Add(ProductBundleEntity.Relations.ProductVariantEntityUsingChildProductVariantID);
-            relationPredicateBucket.Relations.Add(ProductVariantEntity.Relations.ProductVariantAliasEntityUsingProductVariantID);
-            relationPredicateBucket.PredicateExpression.Add(ProductVariantAliasFields.IsDefault == true);
-
-            return relationPredicateBucket;
-        });
-
-		/// <summary>
         /// Save the product
         /// </summary>
-        public Result Save(ISqlAdapter adapter, ProductEntity product)
+        public async Task<Result> Save(ProductEntity product, ISqlAdapterFactory sqlAdapterFactory)
         {
-            try
+            Result validationResult = await Validate(product);
+            if (validationResult.Failure)
             {
-                if (product.IsNew)
+                return validationResult;
+            }
+            
+            using (ISqlAdapter adapter = sqlAdapterFactory.CreateTransacted())
+            {
+                try
                 {
-                    product.CreatedDate = DateTime.UtcNow;
+                    if (product.IsBundle)
+                    {
+                        await RemoveFromAllBundles(adapter, product.Variants.FirstOrDefault().ProductVariantID).ConfigureAwait(false);
+                    }
+
+                    await DeleteRemovedBundleItems(adapter, product).ConfigureAwait(false);
+
+                    if (product.IsNew)
+                    {
+                        product.CreatedDate = DateTime.UtcNow;
+                    }
+
+                    product.Variants.Where(v => v.IsNew)?
+                        .ForEach(v => v.CreatedDate = DateTime.UtcNow);
+
+                    adapter.SaveEntity(product);
+
+                    adapter.Commit();
                 }
-
-                product.Variants.Where(v => v.IsNew)?
-                    .ForEach(v => v.CreatedDate = DateTime.UtcNow);
-
-                adapter.SaveEntity(product);
-
-                return Result.FromSuccess();
+                catch (ORMQueryExecutionException ex)
+                {
+                    adapter.Rollback();
+                    return Result.FromError(ex);
+                }
             }
-            catch (ORMQueryExecutionException ex)
+
+            return Result.FromSuccess();
+        }
+
+        /// <summary>
+        /// Checks if product is valid
+        /// </summary>
+        private async Task<Result> Validate(ProductEntity product)
+        {
+            var productVariant = product.Variants.FirstOrDefault();
+
+            if (productVariant.Aliases.Any(a => string.IsNullOrWhiteSpace(a.Sku)))
             {
-                return Result.FromError(ex);
+                string message = $"The following field is required: {Environment.NewLine}SKU";
+
+                messageHelper.ShowError(message);
+                return Result.FromError(message);
             }
+
+            if (product.IsBundle)
+            {
+                int inHowManyBundles = await InBundleCount(productVariant.ProductVariantID).ConfigureAwait(true);
+                if (inHowManyBundles > 0)
+                {
+                    string plural = inHowManyBundles > 1 ? "s" : "";
+                    string question = $"A bundle cannot be in other bundles.\r\n\r\nThis bundle is already in {inHowManyBundles} existing bundle{plural}.\r\n\r\nShould ShipWorks remove this bundle from the existing bundles{plural}? ";
+
+                    DialogResult answer = messageHelper.ShowQuestion(question);
+                    if (answer != DialogResult.OK)
+                    {
+                        return Result.FromError("");
+                    }
+                }
+            }
+
+            return Result.FromSuccess();
         }
     }
 }

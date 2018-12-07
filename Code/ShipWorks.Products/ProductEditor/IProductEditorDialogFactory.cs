@@ -1,6 +1,6 @@
 ﻿using Interapptive.Shared.UI;
 
-namespace ShipWorks.Products.UI
+namespace ShipWorks.Products.ProductEditor
 {
     /// <summary>
     /// Represents a factory for getting the ProductEditorDialog

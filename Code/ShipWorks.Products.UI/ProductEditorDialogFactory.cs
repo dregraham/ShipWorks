@@ -1,6 +1,7 @@
 ﻿using System.Windows.Forms;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.UI;
+using ShipWorks.Products.ProductEditor;
 
 namespace ShipWorks.Products.UI
 {
