@@ -47,16 +47,7 @@ namespace ShipWorks.OrderLookup
                     cmd.CommandType = CommandType.Text;
                     cmd.Parameters.Add(new SqlParameter("searchText", searchText));
 
-                    // If the searchtext is numeric add orderId tot he query
-                    if (long.TryParse(searchText, out long orderId))
-                    {
-                        cmd.CommandText = "SELECT OrderID FROM [Order] WHERE OrderID = @searchOrderId OR OrderNumberComplete = @searchText";
-                        cmd.Parameters.Add(new SqlParameter("searchOrderId", orderId));
-                    }
-                    else
-                    {
-                        cmd.CommandText = "SELECT OrderID FROM [Order] WHERE OrderNumberComplete = @searchText";
-                    }
+                    cmd.CommandText = "SELECT OrderID FROM [Order] WHERE OrderNumberComplete = @searchText";
 
                     return GetOrders(cmd);
                 }
