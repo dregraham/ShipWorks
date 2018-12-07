@@ -44,6 +44,9 @@
         <Setter Property="Background" Value="{StaticResource InputControlBackgroundGradient}"/>
         <Setter Property="attachedProperties:SelectTextOnFocus.Enabled" Value="True"/>
     </Style>
+    <Style x:Key="FormIntegerTextBox" TargetType="{x:Type TextBox}" BasedOn="{StaticResource FormNumberTextBox}">
+        <Setter Property="MaxLength" Value="9"/>
+    </Style>
     <Style x:Key="FormTokenTextBox" TargetType="{x:Type controls:TokenTextBox}"
            BasedOn="{StaticResource FormTextBox}">
         <Setter Property="ButtonBackground" Value="{StaticResource ButtonBackgroundGradient}"/>
