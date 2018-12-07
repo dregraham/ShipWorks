@@ -29,10 +29,15 @@ namespace ShipWorks.Data.Import.Xml
 
             // Channel Order ID
             order.ChannelOrderID = XPathUtility.Evaluate(xpath, "ChannelOrderID", "");
+            
+            bool success = DateTime.TryParse(XPathUtility.Evaluate(xpath, "ShipByDate", ""), out DateTime result);
 
-            // Ship By Date
-            order.ShipByDate = DateTime.Parse(XPathUtility.Evaluate(xpath, "ShipByDate", ""));
-
+            if (success)
+            {
+                // Ship By Date
+                order.ShipByDate = result;
+            }
+           
             // shipping
             order.RequestedShipping = XPathUtility.Evaluate(xpath, "ShippingMethod", "");
 
