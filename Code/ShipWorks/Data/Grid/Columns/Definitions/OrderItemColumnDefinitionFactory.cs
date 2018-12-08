@@ -98,11 +98,11 @@ namespace ShipWorks.Data.Grid.Columns.Definitions
                              new GridColumnSortProvider(OrderItemFields.Length)),
 
                          new GridColumnDefinition("{0B860209-2206-4DE6-BD3B-FF63656F5EA5}", false,
-                            new GridTextDisplayType(), "Brand", "Brandname",
+                            new GridTextDisplayType(), "Brand", "Nike",
                             OrderItemFields.Brand),
 
                          new GridColumnDefinition("{40E061A2-4A17-436E-9C7E-04DEC418F7D7}", false,
-                            new GridTextDisplayType(), "MPN", "MPN",
+                            new GridTextDisplayType(), "MPN", "Y-R0011",
                             OrderItemFields.MPN),   
 
                         #region Infopia
