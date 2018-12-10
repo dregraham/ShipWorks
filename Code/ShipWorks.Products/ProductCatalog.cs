@@ -206,7 +206,7 @@ namespace ShipWorks.Products
         /// </summary>
         public async Task<Result> Save(ProductEntity product, ISqlAdapterFactory sqlAdapterFactory)
         {
-            Result validationResult = await Validate(product);
+            Result validationResult = Validate(product);
             if (validationResult.Failure)
             {
                 return validationResult;
@@ -250,7 +250,7 @@ namespace ShipWorks.Products
         /// <summary>
         /// Checks if product is valid
         /// </summary>
-        private async Task<Result> Validate(ProductEntity product)
+        private Result Validate(ProductEntity product)
         {
             var productVariant = product.Variants.FirstOrDefault();
 
