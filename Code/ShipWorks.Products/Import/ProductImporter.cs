@@ -32,7 +32,7 @@ namespace ShipWorks.Products.Import
         /// <summary>
         /// Constructor
         /// </summary>
-        public ProductImporter(IProductExcelReader productExcelReader, ISqlAdapterFactory sqlAdapterFactory, 
+        public ProductImporter(IProductExcelReader productExcelReader, ISqlAdapterFactory sqlAdapterFactory,
             IProductCatalog productCatalog, Func<Type, ILog> logFactory)
         {
             this.productExcelReader = productExcelReader;
