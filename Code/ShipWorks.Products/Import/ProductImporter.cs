@@ -2,12 +2,14 @@
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Extensions;
 using Interapptive.Shared.Threading;
 using Interapptive.Shared.Utility;
+using log4net;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
@@ -23,17 +25,20 @@ namespace ShipWorks.Products.Import
         private readonly IProductExcelReader productExcelReader;
         private readonly ISqlAdapterFactory sqlAdapterFactory;
         private readonly IProductCatalog productCatalog;
+        private readonly ILog log;
         private IProgressReporter itemProgressReporter;
         private List<ProductToImportDto> allSkus;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public ProductImporter(IProductExcelReader productExcelReader, ISqlAdapterFactory sqlAdapterFactory, IProductCatalog productCatalog)
+        public ProductImporter(IProductExcelReader productExcelReader, ISqlAdapterFactory sqlAdapterFactory, 
+            IProductCatalog productCatalog, Func<Type, ILog> logFactory)
         {
             this.productExcelReader = productExcelReader;
             this.sqlAdapterFactory = sqlAdapterFactory;
             this.productCatalog = productCatalog;
+            log = logFactory(GetType());
         }
 
         /// <summary>
@@ -64,10 +69,24 @@ namespace ShipWorks.Products.Import
 
             if (result.FailedCount > 0 || result.FailureResults.Any())
             {
+                LogFailures(result);
+
                 return GenericResult.FromError(new FailedProductImportException(result), result);
             }
 
             return GenericResult.FromSuccess(result);
+        }
+
+        /// <summary>
+        /// Log failure results
+        /// </summary>
+        private void LogFailures(IImportProductsResult result)
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.AppendLine();
+            result.FailureResults.ForEach(f => sb.AppendLine($"Filed to import SKU '{f.Key}'.  Error: '{f.Value}'"));
+            sb.AppendLine();
+            log.Error(sb);
         }
 
         /// <summary>
