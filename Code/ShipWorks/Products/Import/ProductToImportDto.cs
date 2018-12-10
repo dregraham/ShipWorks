@@ -76,7 +76,7 @@ namespace ShipWorks.Products.Import
 
         public IEnumerable<string> AliasSkuList => AliasSkus.IsNullOrWhiteSpace() ? 
             Enumerable.Empty<string>() :
-            Regex.Split(AliasSkus, SkuSeparatorRegex)
+            Regex.Split(AliasSkus, SkuSeparatorRegex, RegexOptions.IgnoreCase)
                 .Where(s => !s.Equals(Sku.Trim(), StringComparison.InvariantCultureIgnoreCase))
                 .Distinct();
 
@@ -89,11 +89,11 @@ namespace ShipWorks.Products.Import
                     return Enumerable.Empty<(string, int)>();
                 }
 
-                return Regex.Split(BundleSkus, SkuSeparatorRegex)
-                    .Select(skuAndQty =>
+                return Regex.Split(BundleSkus, SkuSeparatorRegex, RegexOptions.IgnoreCase)
+                    .Select(skuAndQty => Regex.Split(skuAndQty, SkuQuantitySeparatorRegex, RegexOptions.IgnoreCase))
+                    .Where(values => !(values.Length == 1 && values[0].IsNullOrWhiteSpace())) // Ignore extra beginning/ending delimiters
+                    .Select(values =>
                     {
-                        var values = Regex.Split(skuAndQty, SkuQuantitySeparatorRegex);
-
                         if (values.Length != 2)
                         {
                             throw new ProductImportException($"Quantity is required, but wasn't supplied for bundled item SKU {values[0]}");
