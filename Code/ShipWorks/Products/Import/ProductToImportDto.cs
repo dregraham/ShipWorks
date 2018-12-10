@@ -72,7 +72,7 @@ namespace ShipWorks.Products.Import
         [DisplayName("Active")]
         public string Active { private get; set; }
 
-        public bool IsActive => ActiveValues.Contains(Active.ToUpperInvariant());
+        public bool IsActive => ActiveValues.Contains(Active?.ToUpperInvariant());
 
         public IEnumerable<string> AliasSkuList => AliasSkus.IsNullOrWhiteSpace() ? 
             Enumerable.Empty<string>() :

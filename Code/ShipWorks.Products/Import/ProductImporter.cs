@@ -233,7 +233,7 @@ namespace ShipWorks.Products.Import
             ImportProductVariantAliases(productVariant, row.Sku, row);
 
             productVariant.Product.IsActive = productVariant.IsActive;
-            productVariant.Product.Name = productVariant.Name;
+            productVariant.Product.Name = row.Sku;
         }
 
         /// <summary>
@@ -340,6 +340,11 @@ namespace ShipWorks.Products.Import
             ValidateFieldLength(row.WarehouseBin, ProductVariantFields.BinLocation.MaxLength, "Warehouse-Bin Location");
             ValidateFieldLength(row.CountryOfOrigin, ProductVariantFields.CountryOfOrigin.MaxLength, "Country of Origin");
             ValidateFieldLength(row.HarmonizedCode, ProductVariantFields.HarmonizedCode.MaxLength, "Harmonized Code");
+
+            if (row.Name.IsNullOrWhiteSpace())
+            {
+                throw new ProductImportException("Name is required, but was not provided.");
+            }
 
             foreach (string aliasSku in row.AliasSkuList)
             {
