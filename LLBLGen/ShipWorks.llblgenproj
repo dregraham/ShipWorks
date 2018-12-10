@@ -4002,7 +4002,7 @@
           <FieldFieldRelationship FkField="VoidedUserID" PkField="UserID" />
         </FieldRelationships>
       </NormalRelationship>
-      <NormalRelationship Name="ProductBundle.ChildVariant-ProductVariant." Start=":ProductBundle" End=":ProductVariant" StartNavigator="ChildVariant" Type="4">
+      <NormalRelationship Name="ProductBundle.ChildVariant-ProductVariant.IncludedInBundles" Start=":ProductBundle" End=":ProductVariant" StartNavigator="ChildVariant" EndNavigator="IncludedInBundles" Type="4">
         <FieldRelationships>
           <FieldFieldRelationship FkField="ChildProductVariantID" PkField="ProductVariantID" />
         </FieldRelationships>

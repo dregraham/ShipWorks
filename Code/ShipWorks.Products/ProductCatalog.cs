@@ -206,7 +206,8 @@ namespace ShipWorks.Products
             List<IPrefetchPathElement2> prefetchPath = new List<IPrefetchPathElement2>
             {
                 ProductVariantEntity.PrefetchPathProduct,
-                ProductVariantEntity.PrefetchPathAliases
+                ProductVariantEntity.PrefetchPathAliases,
+                ProductVariantEntity.PrefetchPathIncludedInBundles
             };
 
             return prefetchPath;

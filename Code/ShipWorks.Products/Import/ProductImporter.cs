@@ -294,6 +294,11 @@ namespace ShipWorks.Products.Import
                         throw new ProductImportException($"Unable to import bundle SKU {bundleProductVariant.Aliases.First(a => a.IsDefault).Sku} because child SKU '{s.Sku}' is a bundle.  Bundles cannot be comprised of other bundles.");
                     }
 
+                    if (childVariant.IncludedInBundles.Any())
+                    {
+                        throw new ProductImportException($"Unable to import bundle SKU {bundleProductVariant.Aliases.First(a => a.IsDefault).Sku} because child SKU '{s.Sku}' is a child of another bundle.  Bundles cannot be comprised of other bundles.");
+                    }
+
                     return new ProductBundleEntity()
                     {
                         Product = bundleProductVariant.Product,

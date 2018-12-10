@@ -127,6 +127,7 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         
         IProductEntity Product { get; }
         
+        IEnumerable<IProductBundleEntity> IncludedInBundles { get; }
         IEnumerable<IProductVariantAliasEntity> Aliases { get; }
         IEnumerable<IProductVariantAttributeEntity> VariantAttributes { get; }
 
@@ -158,6 +159,7 @@ namespace ShipWorks.Data.Model.EntityClasses
         
         IProductEntity IProductVariantEntity.Product => Product;
         
+        IEnumerable<IProductBundleEntity> IProductVariantEntity.IncludedInBundles => IncludedInBundles;
         IEnumerable<IProductVariantAliasEntity> IProductVariantEntity.Aliases => Aliases;
         IEnumerable<IProductVariantAttributeEntity> IProductVariantEntity.VariantAttributes => VariantAttributes;
 
