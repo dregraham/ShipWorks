@@ -55,14 +55,14 @@ namespace ShipWorks.Products.Tests.Export
         }
 
         [Fact]
-        public void ExportProducts_DoesNotShowError_WhenExportSucceed()
+        public void ExportProducts_ShowsInformationMessage_WhenExportSucceed()
         {
             mock.Mock<IFileSelector>().Setup(x => x.GetFilePathToSave(AnyString, AnyString)).Returns("Bar");
             var testObject = mock.Create<ProductExporterViewModel>();
 
             testObject.ExportProducts();
 
-            mock.Mock<IMessageHelper>().Verify(x => x.ShowError(AnyString, It.IsAny<Exception>()), Times.Never);
+            mock.Mock<IMessageHelper>().Verify(x => x.ShowInformation("Product export succeeded"));
         }
 
         [Fact]

@@ -51,6 +51,7 @@ namespace ShipWorks.Products.Export
             UsingAsync(
                     messageHelper.ShowProgressDialog("Exporting products", "Exporting products"),
                     dialog => productExporter.Export(path, dialog.ProgressItem).ToTyped<Unit>())
+                .Do(_ => messageHelper.ShowInformation("Product export succeeded"))
                 .Recover(HandleExportError);
 
         /// <summary>
