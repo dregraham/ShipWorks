@@ -108,7 +108,7 @@ namespace ShipWorks.Products.Tests
             testObject.Sku = "a";
             testObject.AddSkuToBundleCommand.Execute(null);
             
-            mock.Mock<IMessageHelper>().Verify(x => x.ShowError("SKU a not found"));
+            mock.Mock<IMessageHelper>().Verify(x => x.ShowError("The SKU \"a\" was not found"));
         }
         
         [Fact]
