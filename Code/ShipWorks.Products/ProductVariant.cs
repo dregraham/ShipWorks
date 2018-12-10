@@ -46,10 +46,10 @@ namespace ShipWorks.Products
         public virtual void WriteXml(ElementOutline outline, Func<OrderItemProductBundleOutline> createOrderItemProductBundleOutline)
         {
             outline.AddElement("SKU", () => sku);
-            outline.AddElement("Weight", () => variant.Weight);
-            outline.AddElement("Length", () => variant.Length);
-            outline.AddElement("Width", () => variant.Width);
-            outline.AddElement("Height", () => variant.Height);
+            outline.AddElement("Weight", () => (double?) variant.Weight);
+            outline.AddElement("Length", () => (double?) variant.Length);
+            outline.AddElement("Width", () => (double?) variant.Width);
+            outline.AddElement("Height", () => (double?) variant.Height);
             outline.AddElement("Name", () => variant.Name);
             outline.AddElement("ImageUrl", () => variant.ImageUrl);
             outline.AddElement("Location", () => variant.BinLocation);
