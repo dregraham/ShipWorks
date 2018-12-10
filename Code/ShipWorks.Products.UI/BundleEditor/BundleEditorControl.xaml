@@ -43,7 +43,7 @@
                        Style="{StaticResource StandardText}"/>
             <TextBox Grid.Column="2"
                      Text="{Binding Quantity}"
-                     Style="{StaticResource FormNumberTextBox}"
+                     Style="{StaticResource FormIntegerTextBox}"
                      Margin="10 0 0 0"
                      Width="50"/>
         </Grid>

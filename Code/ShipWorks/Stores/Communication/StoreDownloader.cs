@@ -762,8 +762,6 @@ namespace ShipWorks.Stores.Communication
             SetAddressValidationStatus(order, true, "Ship", adapter);
             SetAddressValidationStatus(order, true, "Bill", adapter);
 
-            UpdateItemsFromProductCatalog(adapter, order);
-
             log.Info($"StoreDownloader.SaveNewOrder waiting for getCustomerTask");
             // Wait for the customer to be found or created
             CustomerEntity customer = await getCustomerTask.ConfigureAwait(false);
@@ -772,6 +770,9 @@ namespace ShipWorks.Stores.Communication
             // Update the note counts
             AdjustNoteCount(order, customer);
 
+            log.Info($"StoreDownloader.SaveNewOrder UpdateItemsProductCatalog");
+            UpdateItemsFromProductCatalog(adapter, order);
+            
             await PerformInitialOrderSave(order, customer, adapter).ConfigureAwait(false);
         }
 
@@ -784,7 +785,10 @@ namespace ShipWorks.Stores.Communication
             {
                 IProductCatalog productCatalog = lifetimeScope.Resolve<IProductCatalog>();
 
-                order.OrderItems.ForEach(item => productCatalog.FetchProductVariant(adapter, item.SKU).Apply(item));               
+                foreach (OrderItemEntity orderItem in order.OrderItems)
+                {
+                    productCatalog.FetchProductVariant(adapter, orderItem.SKU).Apply(orderItem);
+                }                
             }
         }
 
