@@ -91,7 +91,7 @@ namespace ShipWorks.Products
             // Delete the removed items
             foreach (ProductBundleEntity removedBundle in product.Bundles.RemovedEntitiesTracker)
             {
-                await adapter.DeleteEntityAsync(removedBundle);
+                await adapter.DeleteEntityAsync(removedBundle).ConfigureAwait(false);
             }
         }
 
@@ -227,7 +227,7 @@ namespace ShipWorks.Products
                     {
                         foreach(var bundle in product.Variants.FirstOrDefault().IncludedInBundles)
                         {
-                            await adapter.DeleteEntityAsync(bundle);
+                            await adapter.DeleteEntityAsync(bundle).ConfigureAwait(true);
                         }
                     }
 
