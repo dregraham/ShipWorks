@@ -51,19 +51,18 @@ namespace ShipWorks.Products.Export
             UsingAsync(
                     messageHelper.ShowProgressDialog("Exporting products", "Exporting products"),
                     dialog => productExporter.Export(path, dialog.ProgressItem).ToTyped<Unit>())
-                .Do(_ => messageHelper.ShowInformation("Product export succeeded"))
-                .Recover(HandleExportError);
+                .Do(_ => messageHelper.ShowInformation("Product export succeeded"), HandleExportError, ContinueOn.CurrentThread)
+                .Recover(_ => Unit.Default);
 
         /// <summary>
         /// Handle export errors
         /// </summary>
-        private Unit HandleExportError(Exception ex)
+        private void HandleExportError(Exception ex)
         {
             var actualException = ex is AggregateException aggregateException ?
                 aggregateException.InnerExceptions.FirstOrDefault() :
                 ex;
             messageHelper.ShowError(actualException.Message, actualException);
-            return Unit.Default;
         }
     }
 }
