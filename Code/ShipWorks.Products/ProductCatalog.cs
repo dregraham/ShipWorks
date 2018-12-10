@@ -77,31 +77,6 @@ namespace ShipWorks.Products
         }
 
         /// <summary>
-        /// Number of bundles productID exists in.
-        /// </summary>
-        private async Task<int> InBundleCount(long productVariantID)
-        {
-            using (DbConnection conn = sqlSession.OpenConnection())
-            {
-                using (DbCommand comm = conn.CreateCommand())
-                {
-                    comm.CommandText = $"SELECT COUNT(*) FROM ProductBundle WHERE ChildProductVariantID = @ProductID";
-                    comm.Parameters.Add(new SqlParameter("@ProductID", productVariantID));
-                    return (int) await comm.ExecuteScalarAsync().ConfigureAwait(false);
-                }
-            }
-        }
-
-        /// <summary>
-        /// Remove variant from all bundles
-        /// </summary>
-        private Task RemoveFromAllBundles(ISqlAdapter adapter, long productVariantID)
-        {
-            return adapter.ExecuteSQLAsync("DELETE ProductBundle WHERE ChildProductVariantID = @p0",
-                new object[] { productVariantID });
-        }
-
-        /// <summary>
         /// Delete any bundle items flagged for removal from a product OR
         /// remove all bundle items if the product is not a bundle
         /// </summary>
@@ -250,7 +225,10 @@ namespace ShipWorks.Products
                 {
                     if (product.IsBundle)
                     {
-                        await RemoveFromAllBundles(adapter, product.Variants.FirstOrDefault().ProductVariantID).ConfigureAwait(true);
+                        foreach(var bundle in product.Variants.FirstOrDefault().IncludedInBundles)
+                        {
+                            await adapter.DeleteEntityAsync(bundle);
+                        }
                     }
 
                     await DeleteRemovedBundleItems(adapter, product).ConfigureAwait(true);
@@ -286,7 +264,7 @@ namespace ShipWorks.Products
 
             if (product.IsBundle)
             {
-                int inHowManyBundles = await InBundleCount(productVariant.ProductVariantID).ConfigureAwait(true);
+                int inHowManyBundles = productVariant.IncludedInBundles.Count();
                 if (inHowManyBundles > 0)
                 {
                     string plural = inHowManyBundles > 1 ? "s" : "";
