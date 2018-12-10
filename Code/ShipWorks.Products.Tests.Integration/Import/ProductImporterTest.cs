@@ -147,7 +147,7 @@ namespace ShipWorks.Products.Tests.Integration.Import
             dto.Upc = string.Empty;
             dto.Isbn = string.Empty;
             dto.ImageUrl = string.Empty;
-            dto.Name = string.Empty;
+            dto.Name = "A Name";
             dto.WarehouseBin = string.Empty;
 
             var result = await RunTest(skuProducts, bundleProducts, true);
