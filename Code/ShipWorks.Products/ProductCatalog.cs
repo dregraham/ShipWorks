@@ -182,7 +182,7 @@ namespace ShipWorks.Products
 
             ProductVariantEntity productVariant = sqlAdapter.FetchFirst(query);
 
-            if (productVariant?.Product.IsBundle ?? false)
+            if (productVariant?.Product?.IsBundle == true)
             {
                 RelationPredicateBucket relationPredicateBucket = new RelationPredicateBucket(ProductEntity.Relations.ProductBundleEntityUsingProductID);
                 relationPredicateBucket.Relations.Add(ProductBundleEntity.Relations.ProductVariantEntityUsingChildProductVariantID);
@@ -206,7 +206,8 @@ namespace ShipWorks.Products
             List<IPrefetchPathElement2> prefetchPath = new List<IPrefetchPathElement2>
             {
                 ProductVariantEntity.PrefetchPathProduct,
-                ProductVariantEntity.PrefetchPathAliases
+                ProductVariantEntity.PrefetchPathAliases,
+                ProductVariantEntity.PrefetchPathIncludedInBundles
             };
 
             return prefetchPath;

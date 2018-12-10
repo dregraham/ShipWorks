@@ -68,6 +68,11 @@ namespace ShipWorks.ApplicationCore
         public static ILifetimeScope UnsafeGlobalLifetimeScope => current;
 
         /// <summary>
+        /// All ShipWorks assemblies
+        /// </summary>
+        public static Assembly[] AllAssemblies { get; private set; }
+
+        /// <summary>
         /// Begin a lifetime scope from which dependencies can be resolved
         /// </summary>
         public static ILifetimeScope BeginLifetimeScope() => current.BeginLifetimeScope();
@@ -101,10 +106,10 @@ namespace ShipWorks.ApplicationCore
         /// </remarks>
         public static IContainer Initialize(IContainer container, params Assembly[] assemblies)
         {
-            Assembly[] allAssemblies = assemblies.Union(new[] { typeof(IoC).Assembly }).ToArray();
+            AllAssemblies = assemblies.Union(new[] { typeof(IoC).Assembly }).ToArray();
             var builder = new ContainerBuilder();
 
-            AddRegistrations(builder, allAssemblies);
+            AddRegistrations(builder, AllAssemblies);
 
 #pragma warning disable CS0618 // Type or member is obsolete
             builder.Update(container);
@@ -118,10 +123,10 @@ namespace ShipWorks.ApplicationCore
         /// </summary>
         public static IContainer Build(Action<ContainerBuilder> addExtraRegistrations, params Assembly[] assemblies)
         {
-            Assembly[] allAssemblies = assemblies.Union(new[] { typeof(IoC).Assembly }).ToArray();
+            AllAssemblies = assemblies.Union(new[] { typeof(IoC).Assembly }).ToArray();
             var builder = new ContainerBuilder();
 
-            AddRegistrations(builder, allAssemblies);
+            AddRegistrations(builder, AllAssemblies);
 
             addExtraRegistrations(builder);
 

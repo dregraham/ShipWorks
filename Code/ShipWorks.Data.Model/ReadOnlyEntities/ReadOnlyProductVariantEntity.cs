@@ -57,6 +57,8 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             
             Product = (IProductEntity) source.Product?.AsReadOnly(objectMap);
             
+            IncludedInBundles = source.IncludedInBundles?.Select(x => x.AsReadOnly(objectMap)).OfType<IProductBundleEntity>().ToReadOnly() ??
+                Enumerable.Empty<IProductBundleEntity>();
             Aliases = source.Aliases?.Select(x => x.AsReadOnly(objectMap)).OfType<IProductVariantAliasEntity>().ToReadOnly() ??
                 Enumerable.Empty<IProductVariantAliasEntity>();
             VariantAttributes = source.VariantAttributes?.Select(x => x.AsReadOnly(objectMap)).OfType<IProductVariantAttributeEntity>().ToReadOnly() ??
@@ -172,6 +174,8 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         
         public IProductEntity Product { get; }
         
+        
+        public IEnumerable<IProductBundleEntity> IncludedInBundles { get; }
         
         public IEnumerable<IProductVariantAliasEntity> Aliases { get; }
         

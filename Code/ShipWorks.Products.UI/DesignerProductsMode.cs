@@ -75,7 +75,7 @@ namespace ShipWorks.Products.UI
         public ICommand EditProductVariant => throw new NotImplementedException();
         public ICommand SelectedProductsChanged => throw new NotImplementedException();
 
-        public DataWrapper<IVirtualizingCollection<IProductListItemEntity>> Products { get; private set; }
+        public IDataWrapper<IVirtualizingCollection<IProductListItemEntity>> Products { get; private set; }
         public IList<long> SelectedProductIDs { get; set; }
         public IBasicSortDefinition CurrentSort { get; set; }
         public bool ShowInactiveProducts { get; set; }
@@ -134,16 +134,17 @@ namespace ShipWorks.Products.UI
 
     internal class DesignerVirtualizingCollection<T> : IVirtualizingCollection<T> where T : class
     {
-        private readonly List<DataWrapper<T>> list;
+        private readonly List<IDataWrapper<T>> list;
 
         public DesignerVirtualizingCollection(IEnumerable<T> items, params int[] loadingIndicies)
         {
             list = items
                 .Select((x, i) => loadingIndicies.Contains(i) ? new DataWrapper<T>(i, 0, () => { }) : new DataWrapper<T>(i, x))
+                .OfType<IDataWrapper<T>>()
                 .ToList();
         }
 
-        public DataWrapper<T> this[int index] { get => list[index]; set => throw new NotImplementedException(); }
+        public IDataWrapper<T> this[int index] { get => list[index]; set => throw new NotImplementedException(); }
         object IList.this[int index] { get => this[index]; set => throw new NotImplementedException(); }
 
         public int Count => list.Count;
@@ -156,7 +157,7 @@ namespace ShipWorks.Products.UI
 
         public bool IsSynchronized => false;
 
-        public void Add(DataWrapper<T> item)
+        public void Add(IDataWrapper<T> item)
         {
             throw new NotImplementedException();
         }
@@ -171,7 +172,7 @@ namespace ShipWorks.Products.UI
             throw new NotImplementedException();
         }
 
-        public bool Contains(DataWrapper<T> item)
+        public bool Contains(IDataWrapper<T> item)
         {
             throw new NotImplementedException();
         }
@@ -181,7 +182,7 @@ namespace ShipWorks.Products.UI
             throw new NotImplementedException();
         }
 
-        public void CopyTo(DataWrapper<T>[] array, int arrayIndex)
+        public void CopyTo(IDataWrapper<T>[] array, int arrayIndex)
         {
             throw new NotImplementedException();
         }
@@ -191,13 +192,13 @@ namespace ShipWorks.Products.UI
             throw new NotImplementedException();
         }
 
-        public IEnumerator<DataWrapper<T>> GetEnumerator() => list.GetEnumerator();
+        public IEnumerator<IDataWrapper<T>> GetEnumerator() => list.GetEnumerator();
 
-        public int IndexOf(DataWrapper<T> item) => list.IndexOf(item);
+        public int IndexOf(IDataWrapper<T> item) => list.IndexOf(item);
 
-        public int IndexOf(object value) => this.IndexOf((DataWrapper<T>) value);
+        public int IndexOf(object value) => this.IndexOf((IDataWrapper<T>) value);
 
-        public void Insert(int index, DataWrapper<T> item)
+        public void Insert(int index, IDataWrapper<T> item)
         {
             throw new NotImplementedException();
         }
@@ -207,7 +208,7 @@ namespace ShipWorks.Products.UI
             throw new NotImplementedException();
         }
 
-        public bool Remove(DataWrapper<T> item)
+        public bool Remove(IDataWrapper<T> item)
         {
             throw new NotImplementedException();
         }

@@ -29,7 +29,7 @@ namespace DataVirtualization
     /// data bound to a suitable ItemsControl.
     /// </remarks>
     /// <typeparam name="T"></typeparam>
-    public interface IVirtualizingCollection<T> : IList<DataWrapper<T>>, IList where T : class
+    public interface IVirtualizingCollection<T> : IList<IDataWrapper<T>>, IList where T : class
     {
     }
 }

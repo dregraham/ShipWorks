@@ -199,13 +199,11 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <returns>true if the relation is single sided / one way (so the opposite relation isn't present), false otherwise</returns>
 		protected override bool CheckOneWayRelations(string propertyName)
 		{
-			int numberOfOneWayRelations = 0+1;
+			int numberOfOneWayRelations = 0;
 			switch(propertyName)
 			{
 				case null:
 					return ((numberOfOneWayRelations > 0) || base.CheckOneWayRelations(null));
-				case "ChildVariant":
-					return true;
 				default:
 					return base.CheckOneWayRelations(propertyName);
 			}
@@ -437,7 +435,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <param name="resetFKFields">if set to true it will also reset the FK fields pointing to the related entity</param>
 		private void DesetupSyncChildVariant(bool signalRelatedEntity, bool resetFKFields)
 		{
-			this.PerformDesetupSyncRelatedEntity( _childVariant, new PropertyChangedEventHandler( OnChildVariantPropertyChanged ), "ChildVariant", ShipWorks.Data.Model.RelationClasses.StaticProductBundleRelations.ProductVariantEntityUsingChildProductVariantIDStatic, true, signalRelatedEntity, "", resetFKFields, new int[] { (int)ProductBundleFieldIndex.ChildProductVariantID } );
+			this.PerformDesetupSyncRelatedEntity( _childVariant, new PropertyChangedEventHandler( OnChildVariantPropertyChanged ), "ChildVariant", ShipWorks.Data.Model.RelationClasses.StaticProductBundleRelations.ProductVariantEntityUsingChildProductVariantIDStatic, true, signalRelatedEntity, "IncludedInBundles", resetFKFields, new int[] { (int)ProductBundleFieldIndex.ChildProductVariantID } );
 			_childVariant = null;
 		}
 
@@ -595,7 +593,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 				}
 				else
 				{
-					SetSingleRelatedEntityNavigator(value, "", "ChildVariant", _childVariant, false); 
+					SetSingleRelatedEntityNavigator(value, "IncludedInBundles", "ChildVariant", _childVariant, true); 
 				}
 			}
 		}
