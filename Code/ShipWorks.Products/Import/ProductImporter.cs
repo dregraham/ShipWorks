@@ -84,7 +84,7 @@ namespace ShipWorks.Products.Import
         {
             StringBuilder sb = new StringBuilder();
             sb.AppendLine();
-            result.FailureResults.ForEach(f => sb.AppendLine($"Filed to import SKU '{f.Key}'.  Error: '{f.Value}'"));
+            result.FailureResults.ForEach(f => sb.AppendLine($"Failed to import SKU '{f.Key}'.  Error: '{f.Value}'"));
             sb.AppendLine();
             log.Error(sb);
         }

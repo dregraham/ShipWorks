@@ -94,17 +94,17 @@ namespace ShipWorks.Products.Import
                     {
                         var values = Regex.Split(skuAndQty, SkuQuantitySeparatorRegex);
 
+                        if (values.Length != 2)
+                        {
+                            throw new ProductImportException($"Quantity is required, but wasn't supplied for bundled item SKU {values[0]}");
+                        }
+
                         string testSku = Regex.Unescape(values[0]);
                         string testQty = Regex.Unescape(values[1]);
                         if (testSku.Equals(Sku, StringComparison.InvariantCultureIgnoreCase) || 
                                             AliasSkuList.Any(a => a.Equals(testSku, StringComparison.CurrentCultureIgnoreCase)))
                         {
                             throw new ProductImportException($"Bundles may not be composed of its SKU or any of its alias SKUs.  Problem SKU: {testSku}");
-                        }
-
-                        if (values.Length != 2)
-                        {
-                            throw new ProductImportException($"Quantity is required, but wasn't supplied for bundled item SKU {values[0]}");
                         }
 
                         int quantity = GetValue(testQty, "Bundle Quantity", 0);
