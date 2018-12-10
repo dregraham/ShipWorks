@@ -184,15 +184,14 @@ namespace ShipWorks.Products.BundleEditor
 
                 // Add to bundled skus
                 BundleLineItems.Add(new ProductBundleDisplayLineItem(bundleEntity, Sku));
+                Sku = string.Empty;
+                Quantity = 1;
             }
             else
             {
                 // Could not find entered sku
                 messageHelper.ShowError($"The SKU \"{Sku}\" was not found");
             }
-
-            Sku = string.Empty;
-            Quantity = 1;
         }
 
         /// <summary>
