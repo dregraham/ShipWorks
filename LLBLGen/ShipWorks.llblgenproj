@@ -4728,10 +4728,10 @@
                     <Field Name="OrderItemID" Ordinal="1" IsPrimaryKey="true" DbType="0" Precision="19" />
                     <Field Name="OrderAddressID" Ordinal="2" DbType="0" Precision="19" />
                     <Field Name="OrderProductID" Ordinal="3" DbType="0" Precision="19" />
-                    <Field Name="ParentOrderProductID" Ordinal="4" IsOptional="true" DbType="0" Precision="19" />
-                    <Field Name="IsDigitalItem" Ordinal="5" HasDefaultValue="true" DefaultValue="(0)" DbType="2" />
-                    <Field Name="EventDate" Ordinal="6" IsOptional="true" DbType="4" />
-                    <Field Name="EventName" Ordinal="7" IsOptional="true" DbType="12" Length="255" />
+                    <Field Name="IsDigitalItem" Ordinal="4" DbType="2" />
+                    <Field Name="EventDate" Ordinal="5" IsOptional="true" DbType="4" />
+                    <Field Name="EventName" Ordinal="6" IsOptional="true" DbType="12" Length="255" />
+                    <Field Name="ParentOrderProductID" Ordinal="7" IsOptional="true" DbType="0" Precision="19" />
                   </Fields>
                 </Table>
                 <Table Name="BigCommerceStore">
@@ -6397,7 +6397,7 @@
                     <Field Name="JoinMask" Ordinal="8" DbType="8" Precision="10" />
                     <Field Name="Cost" Ordinal="9" DbType="8" Precision="10" />
                     <Field Name="Count" Ordinal="10" DbType="8" Precision="10" />
-                    <Field Name="EntityExistsQuery" Ordinal="11" DbType="12" Length="2147483647" />
+                    <Field Name="EntityExistsQuery" Ordinal="11" IsOptional="true" HasDefaultValue="true" DefaultValue="''" DbType="12" Length="2147483647" />
                   </Fields>
                 </Table>
                 <Table Name="FilterNodeContentDetail">
@@ -6696,7 +6696,7 @@
                   </Fields>
                 </Table>
                 <Table Name="iParcelPackage">
-                  <PkConstraintName Name="PK_iParcelPackage" />
+                  <PkConstraintName Name="PK_iParcelPackageNew" />
                   <Fields>
                     <Field Name="iParcelPackageID" Ordinal="1" IsIdentity="true" IsPrimaryKey="true" DbType="0" Precision="19" />
                     <Field Name="ShipmentID" Ordinal="2" DbType="0" Precision="19" />
@@ -7408,9 +7408,9 @@
                   <Fields>
                     <Field Name="OverstockOrderSearchID" Ordinal="1" IsIdentity="true" IsPrimaryKey="true" DbType="0" Precision="19" />
                     <Field Name="OrderID" Ordinal="2" DbType="0" Precision="19" />
-                    <Field Name="SalesChannelName" Ordinal="3" DbType="12" Length="50" />
-                    <Field Name="WarehouseCode" Ordinal="4" IsOptional="true" DbType="12" Length="50" />
-                    <Field Name="OriginalOrderID" Ordinal="5" DbType="0" Precision="19" />
+                    <Field Name="OriginalOrderID" Ordinal="3" DbType="0" Precision="19" />
+                    <Field Name="SalesChannelName" Ordinal="4" DbType="12" Length="50" />
+                    <Field Name="WarehouseCode" Ordinal="5" IsOptional="true" DbType="12" Length="50" />
                   </Fields>
                 </Table>
                 <Table Name="OverstockStore">
