@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
 using System.Data.SqlClient;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -20,6 +21,7 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Data.Model.FactoryClasses;
 using ShipWorks.Data.Model.HelperClasses;
+using ShipWorks.Products.Import;
 
 namespace ShipWorks.Products
 {
@@ -279,6 +281,59 @@ namespace ShipWorks.Products
             }
 
             return Result.FromSuccess();
+        }
+
+        /// <summary>
+        /// Get a DataTable of products from the database
+        /// </summary>
+        public async Task<DataTable> GetProductDataForExport()
+        {
+            string exportProductsSql = string.Empty;
+
+            using (Stream stream = GetType().Assembly.GetManifestResourceStream("ShipWorks.Products.Export.ExportProducts.sql"))
+            {
+                if (stream == null)
+                {
+                    throw new ProductImportException($"Unable to load ExportProducts SQL.");
+                }
+
+                // Return the contents
+                using (StreamReader reader = new StreamReader(stream))
+                {
+                    exportProductsSql = reader.ReadToEnd();
+                }
+            }
+
+            DataTable dt = new DataTable("Products");
+            using (DbConnection conn = sqlSession.OpenConnection())
+            {
+                using (DbCommand comm = conn.CreateCommand())
+                {
+                    comm.CommandText = exportProductsSql;
+
+                    try
+                    {
+                        using (DbDataReader reader = await comm.ExecuteReaderAsync().ConfigureAwait(false))
+                        {
+                            dt.Load(reader);
+                        }
+                    }
+                    catch (SqlException ex)
+                    {
+                        throw new ProductImportException($"Unable to select products for export from the database.", ex);
+                    }
+                }
+            }
+
+            // Add the second header row.
+            DataRow secondHeaderRow = dt.NewRow();
+            dt.Columns[dt.Columns["Name"].Ordinal].AllowDBNull = true;
+            dt.Columns[dt.Columns["Active"].Ordinal].AllowDBNull = true;
+            secondHeaderRow[1] = "SKU | SKU";
+            secondHeaderRow[2] = "SKU : Qty | SKU : Qty";
+            dt.Rows.InsertAt(secondHeaderRow, 0);
+
+            return dt;
         }
     }
 }
