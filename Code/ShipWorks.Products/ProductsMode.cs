@@ -18,7 +18,6 @@ using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Data.Model.HelperClasses;
-using ShipWorks.Products.Import;
 
 namespace ShipWorks.Products
 {
@@ -36,10 +35,9 @@ namespace ShipWorks.Products
         private bool showInactiveProducts;
         private readonly IProductsCollectionFactory productsCollectionFactory;
         private readonly IMessageHelper messageHelper;
-        private readonly Func<IProductEditorViewModel> productEditorViewModelFunc;
         private readonly IProductCatalog productCatalog;
         private readonly ISqlAdapterFactory sqlAdapterFactory;
-        private readonly Func<IProductImporterViewModel> productImporterViewModelFunc;
+        private readonly IProductViewModelFactory viewModelFactory;
 
         /// <summary>
         /// Constructor
@@ -47,21 +45,19 @@ namespace ShipWorks.Products
         public ProductsMode(IProductsViewHost view,
             IProductsCollectionFactory productsCollectionFactory,
             IMessageHelper messageHelper,
-            Func<IProductEditorViewModel> productEditorViewModelFunc,
-            Func<IProductImporterViewModel> productImporterViewModelFunc,
+            IProductViewModelFactory viewModelFactory,
             IProductCatalog productCatalog,
             ISqlAdapterFactory sqlAdapterFactory)
         {
-            this.productImporterViewModelFunc = productImporterViewModelFunc;
+            this.viewModelFactory = viewModelFactory;
             this.productsCollectionFactory = productsCollectionFactory;
             this.messageHelper = messageHelper;
-            this.productEditorViewModelFunc = productEditorViewModelFunc;
             this.view = view;
             this.productCatalog = productCatalog;
             this.sqlAdapterFactory = sqlAdapterFactory;
             CurrentSort = new BasicSortDefinition(ProductVariantAliasFields.Sku.Name, ListSortDirection.Ascending);
 
-            RefreshProducts = new RelayCommand(() => RefreshProductsAction());
+            RefreshProducts = new RelayCommand(RefreshProductsAction);
             EditProductVariantLink = new RelayCommand<long>(EditProductVariantAction);
             EditProductVariantButton = new RelayCommand(EditProductVariantButtonAction, () => SelectedProductIDs?.Count() == 1);
             SelectedProductsChanged = new RelayCommand<IList>(
@@ -73,13 +69,10 @@ namespace ShipWorks.Products
             ActivateProductCommand =
                 new RelayCommand(() => SetProductActivation(true).Forget(), () => SelectedProductIDs?.Any() == true);
 
-            ImportProducts = new RelayCommand(() => ImportProductsAction());
-
-            AddProduct = new RelayCommand(() => AddProductAction());
+            ExportProducts = new RelayCommand(ExportProductsAction);
+            ImportProducts = new RelayCommand(ImportProductsAction);
+            AddProduct = new RelayCommand(AddProductAction);
         }
-
-        private void ImportProductsAction() =>
-            productImporterViewModelFunc().ImportProducts().Do(RefreshProductsAction);
 
         /// <summary>
         /// Command for Adding a product
@@ -122,6 +115,12 @@ namespace ShipWorks.Products
         /// </summary>
         [Obfuscation(Exclude = true)]
         public ICommand ImportProducts { get; }
+
+        /// <summary>
+        /// Command to export a list of products
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public ICommand ExportProducts { get; }
 
         /// <summary>
         /// The list of selected products has changed
@@ -215,6 +214,17 @@ namespace ShipWorks.Products
             Products = productsCollectionFactory.Create(ShowInactiveProducts, SearchText, CurrentSort);
         }
 
+        /// <summary>
+        /// Export products
+        /// </summary>
+        private void ExportProductsAction() =>
+            viewModelFactory.CreateExport().ExportProducts();
+
+        /// <summary>
+        /// Import products
+        /// </summary>
+        private void ImportProductsAction() =>
+            viewModelFactory.CreateImport().ImportProducts().Do(RefreshProductsAction);
 
         /// <summary>
         /// Edit the selected Product
@@ -274,7 +284,7 @@ namespace ShipWorks.Products
         /// </summary>
         private void EditProduct(ProductVariantEntity productVariantEntity)
         {
-            if (productEditorViewModelFunc().ShowProductEditor(productVariantEntity) ?? false)
+            if (viewModelFactory.CreateEditor().ShowProductEditor(productVariantEntity) ?? false)
             {
                 RefreshProductsAction();
             }
