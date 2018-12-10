@@ -66,49 +66,47 @@
 
         <Grid IsSharedSizeScope="True">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto" SharedSizeGroup="A" />
-                <ColumnDefinition Width="Auto" SharedSizeGroup="A" />
-                <ColumnDefinition Width="Auto" SharedSizeGroup="A" />
-                <ColumnDefinition Width="Auto" SharedSizeGroup="A" />
-                <ColumnDefinition Width="Auto" SharedSizeGroup="A" />
-                <ColumnDefinition Width="Auto" SharedSizeGroup="A" />
+                <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
-            <Button
-                Grid.Column="0"
-                Command="{Binding AddProduct}"
-                Content="Add"
-                Style="{StaticResource PrimaryButton}" />
-            <Button
-                Grid.Column="1"
-                Content="Edit"
-                Command="{Binding EditProductVariantButton}"
-                Style="{StaticResource PrimaryButton}" />
-            <Button
-                Grid.Column="2"
-                Command="{Binding RefreshProducts}"
-                Content="Refresh"
-                Style="{StaticResource PrimaryButton}" />
-            <Button
-                Grid.Column="3"
-                Command="{Binding ImportProducts}"
-                Content="Import"
-                Style="{StaticResource PrimaryButton}" />
-            <Button
-                Grid.Column="4"
-                Command="{Binding ActivateProductCommand}"
-                Content="Mark Active"
-                Style="{StaticResource SecondaryButton}" />
-            <Button
-                Grid.Column="5"
-                Command="{Binding DeactivateProductCommand}"
-                Content="Mark Inactive"
-                Style="{StaticResource SecondaryButton}" />
+            <UniformGrid
+                Grid.Row="0"
+                Columns="7"
+                Rows="1">
+                <Button
+                    Command="{Binding AddProduct}"
+                    Content="Add"
+                    Style="{StaticResource PrimaryButton}" />
+                <Button
+                    Command="{Binding EditProductVariantButton}"
+                    Content="Edit"
+                    Style="{StaticResource PrimaryButton}" />
+                <Button
+                    Command="{Binding RefreshProducts}"
+                    Content="Refresh"
+                    Style="{StaticResource PrimaryButton}" />
+                <Button
+                    Command="{Binding ImportProducts}"
+                    Content="Import"
+                    Style="{StaticResource PrimaryButton}" />
+                <Button
+                    Command="{Binding ExportProducts}"
+                    Content="Export"
+                    Style="{StaticResource PrimaryButton}" />
+                <Button
+                    Command="{Binding ActivateProductCommand}"
+                    Content="Mark Active"
+                    Style="{StaticResource SecondaryButton}" />
+                <Button
+                    Command="{Binding DeactivateProductCommand}"
+                    Content="Mark Inactive"
+                    Style="{StaticResource SecondaryButton}" />
+            </UniformGrid>
 
             <CheckBox
-                Grid.Column="6"
+                Grid.Column="1"
                 Margin="0,0,10,0"
                 IsChecked="{Binding ShowInactiveProducts}"
                 Style="{StaticResource FormCheckBox}">
@@ -116,7 +114,7 @@
             </CheckBox>
 
             <syncfusion:SfTextBoxExt
-                Grid.Column="8"
+                Grid.Column="3"
                 MinWidth="300"
                 HorizontalAlignment="Right"
                 VerticalContentAlignment="Center"
@@ -144,19 +142,19 @@
             Grid.Row="1"
             Margin="0,10,0,0"
             ui:DataGridSort.CurrentSort="{Binding CurrentSort, Mode=TwoWay}"
+            ui:DoubleClick.Command="{Binding EditProductVariantButton}"
             AutoGenerateColumns="False"
             CanUserResizeColumns="True"
             CanUserSortColumns="True"
             Grid.IsSharedSizeScope="True"
-            VerticalScrollBarVisibility="Visible"
             HeadersVisibility="All"
             ItemsSource="{Binding Products.Data}"
             ScrollViewer.IsDeferredScrollingEnabled="True"
             SelectionMode="Extended"
             Style="{StaticResource DataGrid}"
+            VerticalScrollBarVisibility="Visible"
             VirtualizingStackPanel.IsVirtualizing="True"
-            VirtualizingStackPanel.VirtualizationMode="Recycling"
-            ui:DoubleClick.Command="{Binding EditProductVariantButton}">
+            VirtualizingStackPanel.VirtualizationMode="Recycling">
             <DataGrid.Resources>
                 <ui:BindingProxy x:Key="proxy" Data="{Binding}" />
             </DataGrid.Resources>
@@ -384,10 +382,10 @@
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
             <TextBlock Margin="0,0,16,0">
-                Products: <Run Text="{Binding Products.Data.Count, Mode=OneWay, StringFormat='{}{0:#,##0}'}" />
+                Products:<Run Text="{Binding Products.Data.Count, Mode=OneWay, StringFormat='{}{0:#,##0}'}" />
             </TextBlock>
             <TextBlock Grid.Column="1">
-                Selected: <Run Text="{Binding SelectedProductIDs.Count, Mode=OneWay, StringFormat='{}{0:#,##0}'}" />
+                Selected:<Run Text="{Binding SelectedProductIDs.Count, Mode=OneWay, StringFormat='{}{0:#,##0}'}" />
             </TextBlock>
         </Grid>
     </Grid>
