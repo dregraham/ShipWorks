@@ -107,7 +107,7 @@ namespace ShipWorks.Products.Import
                             throw new ProductImportException($"Quantity is required, but wasn't supplied for bundled item SKU {values[0]}");
                         }
 
-                        int quantity = GetValue<int>(testQty, "Bundle Quantity");
+                        int quantity = GetValue(testQty, "Bundle Quantity", 0);
                         if (quantity <= 0)
                         {
                             throw new ProductImportException($"Quantity must be greater than 0 for bundled item SKU {values[0]}");
@@ -121,7 +121,7 @@ namespace ShipWorks.Products.Import
         /// <summary>
         /// Get T value of the given string.
         /// </summary>
-        public static T GetValue<T>(string text, string propertyName)
+        public static T GetValue<T>(string text, string propertyName, T defaultValue)
         {
             if (!text.IsNullOrWhiteSpace())
             {
@@ -140,7 +140,7 @@ namespace ShipWorks.Products.Import
                 throw new ProductImportException($"Unable to convert '{propertyName}' with value {text.Trim()} to a number.");
             }
 
-            throw new ProductImportException($"No value was provided for {propertyName}.");
+            return defaultValue;
         }
 
         /// <summary>

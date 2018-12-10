@@ -127,7 +127,7 @@ namespace ShipWorks.Products.Tests.Integration.Import
         }
 
         [Fact]
-        public async Task LoadImportFile_ReturnsFailure_WhenAllValuesDefault()
+        public async Task LoadImportFile_ReturnsSuccess_WhenAllValuesDefault()
         {
             List<ProductToImportDto> skuProducts = new List<ProductToImportDto>() { GetFullProduct("1") };
             List<ProductToImportDto> bundleProducts = new List<ProductToImportDto>();
@@ -152,9 +152,9 @@ namespace ShipWorks.Products.Tests.Integration.Import
 
             var result = await RunTest(skuProducts, bundleProducts, true);
 
-            Assert.True(result.Failure);
-            Assert.Equal(0, result.Value.SuccessCount);
-            Assert.Equal(1, result.Value.FailedCount);
+            Assert.True(result.Success);
+            Assert.Equal(1, result.Value.SuccessCount);
+            Assert.Equal(0, result.Value.FailedCount);
         }
 
         [Fact]
@@ -446,11 +446,11 @@ namespace ShipWorks.Products.Tests.Integration.Import
                 productVariant.ImageUrl == dto.ImageUrl &&
                 productVariant.Name == dto.Name &&
                 productVariant.UPC == dto.Upc &&
-                productVariant.DeclaredValue == ProductToImportDto.GetValue<decimal>(dto.DeclaredValue, "DeclaredValue") &&
-                productVariant.Width == ProductToImportDto.GetValue<decimal>(dto.Width, "Width") &&
-                productVariant.Length == ProductToImportDto.GetValue<decimal>(dto.Length, "Length") &&
-                productVariant.Height == ProductToImportDto.GetValue<decimal>(dto.Height, "Height") &&
-                productVariant.Weight == ProductToImportDto.GetValue<decimal>(dto.Weight, "Weight") &&
+                productVariant.DeclaredValue == ProductToImportDto.GetValue<decimal?>(dto.DeclaredValue, "DeclaredValue", null) &&
+                productVariant.Width == ProductToImportDto.GetValue<decimal?>(dto.Width, "Width", null) &&
+                productVariant.Length == ProductToImportDto.GetValue<decimal?>(dto.Length, "Length", null) &&
+                productVariant.Height == ProductToImportDto.GetValue<decimal?>(dto.Height, "Height", null) &&
+                productVariant.Weight == ProductToImportDto.GetValue<decimal?>(dto.Weight, "Weight", null) &&
                 productVariant.Product.IsActive == productVariant.IsActive &&
                 productVariant.Product.IsBundle == !dto.BundleSkus.IsNullOrWhiteSpace() &&
                 dto.AliasSkuList.Count() == productVariant.Aliases.Count - 1 && // Subtract out the main sku
