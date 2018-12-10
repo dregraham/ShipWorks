@@ -798,7 +798,9 @@ namespace ShipWorks.Data.Grid.Columns.Definitions
                         new GridTextDisplayType(), "Channel Order ID", "ABC123", OrderFields.ChannelOrderID),
 
                     new GridColumnDefinition("{13F8DD60-0104-4575-9B9C-E3DCE4573FB0}",
-                        new GridTextDisplayType(), "Ship by date", "ABC123", OrderFields.ShipByDate)
+                        new GridDateDisplayType { UseDescriptiveDates = true, TimeDisplayFormat = TimeDisplayFormat.None, DateFormat = "MMMM dd, yyyy"},
+                        "Ship By Date", DateTimeUtility.ParseEnUS("01/01/9999 12:00 AM").ToUniversalTime(),
+                        OrderFields.ShipByDate)
                 };
 
             return definitions;
