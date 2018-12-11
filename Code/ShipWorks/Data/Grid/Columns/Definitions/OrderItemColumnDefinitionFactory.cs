@@ -103,7 +103,27 @@ namespace ShipWorks.Data.Grid.Columns.Definitions
 
                          new GridColumnDefinition("{40E061A2-4A17-436E-9C7E-04DEC418F7D7}", false,
                             new GridTextDisplayType(), "MPN", "Y-R0011",
-                            OrderItemFields.MPN),   
+                            OrderItemFields.MPN),
+
+                         new GridColumnDefinition("{40E061A2-4A17-436E-9C7E-04DEC418F7D7}", false,
+                             new GridTextDisplayType(), "Custom Field 1", "Custom Field 1",
+                             OrderItemFields.Custom1),
+
+                         new GridColumnDefinition("{8D37F80C-A435-44A3-AD61-B3E66B99FE5B}", false,
+                             new GridTextDisplayType(), "Custom Field 2", "Custom Field 2",
+                             OrderItemFields.Custom2),
+
+                         new GridColumnDefinition("{B8F1A84C-4AF0-4A4E-9F6E-C9BB37E8B4FD}", false,
+                             new GridTextDisplayType(), "Custom Field 3", "Custom Field 3",
+                             OrderItemFields.Custom3),
+
+                         new GridColumnDefinition("{E676687E-EFFA-42CD-AD59-210F0F6E2071}", false,
+                             new GridTextDisplayType(), "Custom Field 4", "Custom Field 4",
+                             OrderItemFields.Custom4),
+
+                         new GridColumnDefinition("{C5DFE9A8-B4DF-4308-88D4-87FD089F093C}", false,
+                             new GridTextDisplayType(), "Custom Field 5", "Custom Field 5",
+                             OrderItemFields.Custom5),
 
                         #region Infopia
 
