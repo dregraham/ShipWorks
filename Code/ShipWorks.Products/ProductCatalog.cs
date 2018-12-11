@@ -228,20 +228,26 @@ namespace ShipWorks.Products
         /// <summary>
         /// Save the product
         /// </summary>
-        public async Task<Result> Save(ProductEntity product, ISqlAdapterFactory sqlAdapterFactory)
+        public async Task<Result> Save(ProductVariantEntity productVariant, ISqlAdapterFactory sqlAdapterFactory)
         {
-            Result validationResult = Validate(product);
+            Result validationResult = Validate(productVariant);
             if (validationResult.Failure)
             {
                 return validationResult;
             }
 
+            ProductEntity product = productVariant.Product;
+            DateTime now = DateTime.UtcNow;
+
             if (product.IsNew)
             {
-                product.CreatedDate = DateTime.UtcNow;
+                product.CreatedDate = now;
             }
 
-            product.Variants.Where(v => v.IsNew)?.ForEach(v => v.CreatedDate = DateTime.UtcNow);
+            if (productVariant.IsNew)
+            {
+                productVariant.CreatedDate = now;
+            }            
 
             using (ISqlAdapter adapter = sqlAdapterFactory.CreateTransacted())
             {
@@ -249,7 +255,7 @@ namespace ShipWorks.Products
                 {
                     if (product.IsBundle)
                     {
-                        foreach(var bundle in product.Variants.FirstOrDefault().IncludedInBundles)
+                        foreach(var bundle in productVariant.IncludedInBundles)
                         {
                             await adapter.DeleteEntityAsync(bundle).ConfigureAwait(true);
                         }
@@ -274,10 +280,8 @@ namespace ShipWorks.Products
         /// <summary>
         /// Checks if product is valid
         /// </summary>
-        private Result Validate(ProductEntity product)
+        private Result Validate(ProductVariantEntity productVariant)
         {
-            var productVariant = product.Variants.FirstOrDefault();
-
             if (productVariant.Aliases.Any(a => string.IsNullOrWhiteSpace(a.Sku)))
             {
                 string message = $"The following field is required: {Environment.NewLine}SKU";
@@ -286,7 +290,7 @@ namespace ShipWorks.Products
                 return Result.FromError(message);
             }
 
-            if (product.IsBundle)
+            if (productVariant.Product.IsBundle)
             {
                 int inHowManyBundles = productVariant.IncludedInBundles.Count();
                 if (inHowManyBundles > 0)

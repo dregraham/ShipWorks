@@ -278,7 +278,7 @@ namespace ShipWorks.Products.ProductEditor
             Result saveResult;
             BundleEditorViewModel.Save();
 
-            saveResult = await productCatalog.Save(productVariant.Product, sqlAdapterFactory);
+            saveResult = await productCatalog.Save(productVariant, sqlAdapterFactory);
             
             if (saveResult.Success)
             {
