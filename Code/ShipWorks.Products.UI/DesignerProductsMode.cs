@@ -85,6 +85,8 @@ namespace ShipWorks.Products.UI
 
         public ICommand EditProductVariantButton => throw new NotImplementedException();
 
+        public ICommand CopyAsVariant => throw new NotImplementedException();
+
         public void Dispose()
         {
             throw new NotImplementedException();

@@ -32,7 +32,7 @@ namespace ShipWorks.Products.Import
         /// <summary>
         /// Constructor
         /// </summary>
-        public ProductImporter(IProductExcelReader productExcelReader, ISqlAdapterFactory sqlAdapterFactory, 
+        public ProductImporter(IProductExcelReader productExcelReader, ISqlAdapterFactory sqlAdapterFactory,
             IProductCatalog productCatalog, Func<Type, ILog> logFactory)
         {
             this.productExcelReader = productExcelReader;
@@ -233,7 +233,6 @@ namespace ShipWorks.Products.Import
             ImportProductVariantAliases(productVariant, row.Sku, row);
 
             productVariant.Product.IsActive = productVariant.IsActive;
-            productVariant.Product.Name = productVariant.Name;
         }
 
         /// <summary>

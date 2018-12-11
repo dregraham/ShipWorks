@@ -289,6 +289,7 @@ namespace ShipWorks.Stores.Tests.Orders.Archive
                     typeof(ProductVariantEntity),
                     typeof(ProductVariantAliasEntity),
                     typeof(ProductBundleEntity),
+                    typeof(ProductAttributeEntity),
                     typeof(ProductVariantAttributeEntity),
                     typeof(ProductListItemEntity),
                     typeof(ProStoresOrderSearchEntity),
