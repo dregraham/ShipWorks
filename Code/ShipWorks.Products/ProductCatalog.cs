@@ -162,6 +162,21 @@ namespace ShipWorks.Products
             FetchFirst(ProductVariantAliasFields.Sku == sku.Trim(), sqlAdapter);
 
         /// <summary>
+        /// Fetch a product attribute based on name
+        /// </summary>
+        public ProductAttributeEntity FetchProductAttribute(ISqlAdapter sqlAdapter, string name)
+        {
+            IPredicate predicate = new FieldCompareValuePredicate(ProductAttributeFields.AttributeName, null, ComparisonOperator.Equal,
+                                                                  name.ToUpper()).CaseInsensitive();
+            
+            EntityQuery<ProductAttributeEntity> query = new QueryFactory().ProductAttribute.Where(predicate);
+
+            ProductAttributeEntity attribute = sqlAdapter.FetchFirst(query);
+
+            return attribute;
+        }
+
+        /// <summary>
         /// Get the first product in the specified predicate
         /// </summary>
         private ProductVariantEntity FetchFirst(IPredicate predicate, ISqlAdapter sqlAdapter)

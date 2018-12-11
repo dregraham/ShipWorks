@@ -41,5 +41,10 @@ namespace ShipWorks.Products
         /// Create a variant based on the given variant
         /// </summary>
         GenericResult<ProductVariantEntity> CreateVariant(ProductVariantEntity productVariant);
+ 
+        /// <summary>
+        /// Fetch a product attribute based on name
+        /// </summary>
+        ProductAttributeEntity FetchProductAttribute(ISqlAdapter sqlAdapter, string name);
     }
 }

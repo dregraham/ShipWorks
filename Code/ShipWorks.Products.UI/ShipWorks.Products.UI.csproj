@@ -110,6 +110,9 @@
       <DependentUpon>SetupImportStateView.xaml</DependentUpon>
     </Compile>
     <Compile Include="IProductsView.cs" />
+    <Compile Include="AttributeEditorControl.xaml.cs">
+      <DependentUpon>AttributeEditorControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ProductEditorDialog.xaml.cs">
       <DependentUpon>ProductEditorDialog.xaml</DependentUpon>
     </Compile>
@@ -175,6 +178,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Import\SetupImportStateView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="AttributeEditorControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
