@@ -13,6 +13,7 @@ using GalaSoft.MvvmLight.CommandWpf;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.UI;
+using Interapptive.Shared.Utility;
 using ShipWorks.Core.Common.Threading;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
@@ -64,6 +65,7 @@ namespace ShipWorks.Products
             RefreshProducts = new RelayCommand(() => RefreshProductsAction());
             EditProductVariantLink = new RelayCommand<long>(EditProductVariantAction);
             EditProductVariantButton = new RelayCommand(EditProductVariantButtonAction, () => SelectedProductIDs?.Count() == 1);
+            CopyAsVariant = new RelayCommand(CopyAsVariantAction, () => SelectedProductIDs?.Count() == 1);
             SelectedProductsChanged = new RelayCommand<IList>(
                 items => SelectedProductIDs = items?.OfType<IDataWrapper<IProductListItemEntity>>().Select(x => x.EntityID).ToList());
 
@@ -116,6 +118,12 @@ namespace ShipWorks.Products
         /// </summary>
         [Obfuscation(Exclude = true)]
         public ICommand EditProductVariantButton { get; }
+
+        /// <summary>
+        /// Copy the selected variant
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public ICommand CopyAsVariant { get; }
 
         /// <summary>
         /// Command to import a list of products
@@ -215,12 +223,40 @@ namespace ShipWorks.Products
             Products = productsCollectionFactory.Create(ShowInactiveProducts, SearchText, CurrentSort);
         }
 
-
         /// <summary>
         /// Edit the selected Product
         /// </summary>
         private void EditProductVariantButtonAction() =>
             EditProductVariantAction(SelectedProductIDs.FirstOrDefault());
+
+        /// <summary>
+        /// Copy the selected variant and edit
+        /// </summary>
+        private void CopyAsVariantAction()
+        {
+            if (SelectedProductIDs.IsCountEqualTo(1) && selectedProductIDs.FirstOrDefault() > 0)
+            {
+                ProductVariantEntity selectedProductVariant;
+                using (ISqlAdapter adapter = sqlAdapterFactory.Create())
+                {
+                    selectedProductVariant = productCatalog.FetchProductVariantEntity(adapter, SelectedProductIDs.First());
+                }
+
+                if (selectedProductVariant != null)
+                {
+                    GenericResult<ProductVariantEntity> result = productCatalog.CreateVariant(selectedProductVariant);
+
+                    if (result.Failure)
+                    {
+                        messageHelper.ShowError(result.Message);
+                    }
+                    else
+                    {
+                        EditProduct(result.Value);
+                    }
+                }
+            }
+        }
 
         /// <summary>
         /// Edit the given product variant

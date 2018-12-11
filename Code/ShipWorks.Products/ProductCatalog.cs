@@ -311,7 +311,7 @@ namespace ShipWorks.Products
         {
             if (productVariant.Product.IsBundle)
             {
-                return GenericResult.FromError<ProductVariantEntity>("");
+                return GenericResult.FromError<ProductVariantEntity>("You cannot create a variant from a bundle.");
             }
 
             return GenericResult.FromSuccess(EntityUtility.CloneAsNew(productVariant));
