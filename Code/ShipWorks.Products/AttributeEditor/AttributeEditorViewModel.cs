@@ -39,9 +39,9 @@ namespace ShipWorks.Products.AttributeEditor
 
             AttributeNames = new ObservableCollection<string>();
             SelectedAttributeName = AttributeNames.FirstOrDefault();
-            
+
             ProductAttributes = new ObservableCollection<ProductVariantAttributeEntity>();
-            
+
             AddAttributeToProductCommand = new RelayCommand(AddAttributeToProduct);
             RemoveAttributeFromProductCommand = new RelayCommand(RemoveAttributeFromProduct, () => SelectedProductAttribute != null);
         }
@@ -55,7 +55,7 @@ namespace ShipWorks.Products.AttributeEditor
             get => selectedAttributeName;
             set => Set(ref selectedAttributeName, value);
         }
-        
+
         /// <summary>
         /// The list of available attribute names
         /// </summary>
@@ -106,15 +106,15 @@ namespace ShipWorks.Products.AttributeEditor
         /// Command for removing an attribute from a product
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public ICommand RemoveAttributeFromProductCommand { get; } 
-        
+        public ICommand RemoveAttributeFromProductCommand { get; }
+
         /// <summary>
         /// Load the view model with the given product
         /// </summary>
         public void Load(ProductVariantEntity productVariantEntity)
         {
             productVariant = productVariantEntity;
-            
+
             AttributeNames = new ObservableCollection<string>(productVariant.Product.Attributes.Select(x => x.AttributeName));
             ProductAttributes = new ObservableCollection<ProductVariantAttributeEntity>(productVariant.Attributes);
         }
@@ -131,7 +131,7 @@ namespace ShipWorks.Products.AttributeEditor
                 productVariant.Attributes.Add(attribute);
             }
         }
-        
+
         /// <summary>
         /// Add an attribute to the product with the selected name and entered value
         /// </summary>
@@ -143,14 +143,14 @@ namespace ShipWorks.Products.AttributeEditor
                 return;
             }
 
-            if (ProductAttributes.Any(x => x.AttributeName.Equals(SelectedAttributeName, StringComparison.InvariantCultureIgnoreCase)))
+            if (ProductAttributes.Any(x => x.ProductAttribute.AttributeName.Equals(SelectedAttributeName, StringComparison.InvariantCultureIgnoreCase)))
             {
                 messageHelper.ShowError($"This product already contains an attribute named \"{SelectedAttributeName}\"");
                 return;
             }
 
             ProductAttributeEntity attribute;
-            
+
             // Get the product attribute with the given name
             using (ISqlAdapter adapter = sqlAdapterFactory.Create())
             {
@@ -163,9 +163,9 @@ namespace ShipWorks.Products.AttributeEditor
                 attribute = new ProductAttributeEntity
                 {
                     AttributeName = SelectedAttributeName
-                };   
+                };
             }
-            
+
             ProductAttributes.Add(new ProductVariantAttributeEntity
             {
                 ProductVariantID = productVariant.ProductVariantID,
@@ -173,7 +173,7 @@ namespace ShipWorks.Products.AttributeEditor
                 AttributeValue = AttributeValue
             });
         }
-        
+
         /// <summary>
         /// Remove the selected attribute from the product
         /// </summary>
