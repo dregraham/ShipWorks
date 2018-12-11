@@ -317,7 +317,6 @@
             <Button
                 Grid.Column="1"
                 Command="{Binding Save}"
-                IsDefault="True"
                 Style="{StaticResource SmallPrimaryButton}"
                 Content="Save"/>
         </Grid>

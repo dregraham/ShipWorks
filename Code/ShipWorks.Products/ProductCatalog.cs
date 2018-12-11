@@ -91,7 +91,7 @@ namespace ShipWorks.Products
             // Delete the removed items
             foreach (ProductBundleEntity removedBundle in product.Bundles.RemovedEntitiesTracker)
             {
-                await adapter.DeleteEntityAsync(removedBundle);
+                await adapter.DeleteEntityAsync(removedBundle).ConfigureAwait(false);
             }
         }
 
@@ -121,9 +121,31 @@ namespace ShipWorks.Products
         {
             IProductVariantEntity variant = FetchProductVariantEntity(sqlAdapter, sku)?.AsReadOnly();
 
-            return variant?.Product.IsBundle ?? false ?
-                new ProductBundle(sku, variant, logFactory(typeof(ProductBundle))) :
-                new ProductVariant(sku, variant, logFactory(typeof(ProductVariant)));
+            if (!IsActive(variant))
+            {
+                return new ProductVariant(sku, null, logFactory(typeof(ProductVariant)));
+            }
+            else if(variant?.Product.IsBundle ?? false)
+            {
+                return new ProductBundle(sku, variant, logFactory(typeof(ProductBundle)));
+            }
+            else
+            {
+                return new ProductVariant(sku, variant, logFactory(typeof(ProductVariant)));
+            }
+        }
+
+        /// <summary>
+        /// Returns true if the variant and variant product are set to active.
+        /// </summary>
+        private bool IsActive(IProductVariantEntity variant)
+        {
+            if (variant == null || !variant.IsActive || !variant.Product.IsActive)
+            {
+                return false;
+            }
+
+            return true;
         }
 
         /// <summary>
@@ -227,7 +249,7 @@ namespace ShipWorks.Products
                     {
                         foreach(var bundle in product.Variants.FirstOrDefault().IncludedInBundles)
                         {
-                            await adapter.DeleteEntityAsync(bundle);
+                            await adapter.DeleteEntityAsync(bundle).ConfigureAwait(true);
                         }
                     }
 
