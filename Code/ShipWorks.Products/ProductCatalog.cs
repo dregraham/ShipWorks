@@ -205,7 +205,8 @@ namespace ShipWorks.Products
             {
                 ProductVariantEntity.PrefetchPathProduct,
                 ProductVariantEntity.PrefetchPathAliases,
-                ProductVariantEntity.PrefetchPathIncludedInBundles
+                ProductVariantEntity.PrefetchPathIncludedInBundles,
+                ProductVariantEntity.PrefetchPathAttributes.WithSubPath(ProductVariantAttributeEntity.PrefetchPathProductAttribute)
             };
 
             return prefetchPath;
