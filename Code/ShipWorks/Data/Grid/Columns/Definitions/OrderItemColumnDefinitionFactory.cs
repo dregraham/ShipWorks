@@ -105,7 +105,7 @@ namespace ShipWorks.Data.Grid.Columns.Definitions
                             new GridTextDisplayType(), "MPN", "Y-R0011",
                             OrderItemFields.MPN),
 
-                         new GridColumnDefinition("{C5DFE9A8-B4DF-4308-88D4-87FD089F093C}", false,
+                         new GridColumnDefinition("{E44EE6C5-A97A-48DF-A459-46EBCE009ABF}", false,
                              new GridTextDisplayType(), "Custom Field 1", "Custom Field 1",
                              OrderItemFields.Custom1),
 
