@@ -37,7 +37,14 @@ namespace ShipWorks.Data.Import.Xml
                 // Ship By Date
                 order.ShipByDate = result;
             }
-           
+
+            // Custom
+            order.Custom1 = XPathUtility.Evaluate(xpath, "Custom1", "");
+            order.Custom2 = XPathUtility.Evaluate(xpath, "Custom2", "");
+            order.Custom3 = XPathUtility.Evaluate(xpath, "Custom3", "");
+            order.Custom4 = XPathUtility.Evaluate(xpath, "Custom4", "");
+            order.Custom5 = XPathUtility.Evaluate(xpath, "Custom5", "");
+
             // shipping
             order.RequestedShipping = XPathUtility.Evaluate(xpath, "ShippingMethod", "");
 
@@ -204,6 +211,11 @@ namespace ShipWorks.Data.Import.Xml
             item.Location = XPathUtility.Evaluate(xpath, "Location", "");
             item.Brand = XPathUtility.Evaluate(xpath, "Brand", "");
             item.MPN = XPathUtility.Evaluate(xpath, "MPN", "");
+            item.Custom1 = XPathUtility.Evaluate(xpath, "Custom1", "");
+            item.Custom2 = XPathUtility.Evaluate(xpath, "Custom2", "");
+            item.Custom3 = XPathUtility.Evaluate(xpath, "Custom3", "");
+            item.Custom4 = XPathUtility.Evaluate(xpath, "Custom4", "");
+            item.Custom5 = XPathUtility.Evaluate(xpath, "Custom5", "");
         }
 
         /// <summary>
