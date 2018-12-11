@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.Immutable;
 
 namespace Interapptive.Shared.Collections
@@ -16,5 +17,21 @@ namespace Interapptive.Shared.Collections
             source.ContainsKey(key) ?
                 source.SetItem(key, map(source[key])) :
                 source.Add(key, map(defaultValue()));
+
+        /// <summary>
+        /// Update the value of the given key, or add it to the dictionary
+        /// </summary>
+        public static void UpdateValue<TKey, TValue>(this IDictionary<TKey, TValue> source,
+            TKey key, TValue value)
+        {
+            if (source.ContainsKey(key))
+            {
+                source[key] = value;
+            }
+            else
+            {
+                source.Add(key, value);
+            }
+        }
     }
 }

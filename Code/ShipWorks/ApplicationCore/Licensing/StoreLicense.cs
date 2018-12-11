@@ -1,4 +1,5 @@
 ﻿using Interapptive.Shared.Utility;
+using Interapptive.Shared.Collections;
 using log4net;
 using ShipWorks.ApplicationCore.Dashboard.Content;
 using ShipWorks.ApplicationCore.Licensing.LicenseEnforcement;
@@ -21,19 +22,24 @@ namespace ShipWorks.ApplicationCore.Licensing
     /// </summary>
     public class StoreLicense : ILicense
     {
+        private readonly TimeSpan nextStoreLicenseCheckTimeToLive;
         private readonly StoreEntity store;
         private readonly ILog log;
         private readonly IMessenger messenger;
+        private readonly IDateTimeProvider dateTimeProvider;
+        private static readonly Dictionary<long, DateTime> nextStoreLicenseCheckTime = new Dictionary<long, DateTime>();
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public StoreLicense(StoreEntity store, Func<Type, ILog> logFactory, IMessenger messenger)
+        public StoreLicense(StoreEntity store, Func<Type, ILog> logFactory, IMessenger messenger, IDateTimeProvider dateTimeProvider)
         {
+            this.dateTimeProvider = dateTimeProvider;
             this.messenger = messenger;
             this.store = store;
             log = logFactory(GetType());
             Key = store.License;
+            nextStoreLicenseCheckTimeToLive = new TimeSpan(4, 0, 0);
         }
 
         /// <summary>
@@ -120,6 +126,8 @@ namespace ShipWorks.ApplicationCore.Licensing
                 LicenseActivationHelper.EnsureActive(store);
                 DisabledReason = string.Empty;
 
+                nextStoreLicenseCheckTime.UpdateValue(store.StoreID, dateTimeProvider.UtcNow.Add(nextStoreLicenseCheckTimeToLive));
+
                 // Let anyone who cares know that enabled carriers may have changed.
                 messenger.Send(new EnabledCarriersChangedMessage(this, new List<ShipmentTypeCode>(), new List<ShipmentTypeCode>()));
             }
@@ -136,8 +144,13 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// </summary>
         public void Refresh()
         {
-            // Always refresh the license for now to mimic historical behavior
-            ForceRefresh();
+            // If the store.StoreID is not in the cache or we've passed our time limit, force a refresh
+            if (!nextStoreLicenseCheckTime.ContainsKey(store.StoreID) || 
+                nextStoreLicenseCheckTime[store.StoreID] < dateTimeProvider.UtcNow)
+            {
+                // The license capabilities have expired
+                ForceRefresh();
+            }
         }
 
         /// <summary>
