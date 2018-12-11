@@ -1,7 +1,7 @@
 ﻿select  SKU.Sku as [SKU], 
 			rtrim(ltrim(substring(aliases.AliasSkus, 1, len(aliases.AliasSkus) - 1))) as [Alias SKUs],
 			rtrim(ltrim(substring(Bundles.[BundleSkus], 1, len(Bundles.[BundleSkus]) - 1))) as  [Bundled SKUs],
-			p.Name as [Name],
+			pv.[Name] as [Name],
 			pv.[UPC] AS [UPC],
 			pv.[ASIN] AS [ASIN],
 			pv.[ISBN] AS [ISBN],
@@ -28,7 +28,7 @@
 	) as aliases
 	cross apply
 	(
-		select top 1 REPLACE(REPLACE(a.Sku, '|', '\|'), ':', '\:') as [Sku]
+		select top 1 a.Sku as [Sku]
 		from ProductVariantAlias a
 			where a.ProductVariantID = pv.ProductVariantID
 			  and a.IsDefault = 1
