@@ -61,17 +61,14 @@ namespace ShipWorks.Products
 
             if (variant.Attributes.Any())
             {
-                ElementOutline attributesOutline = new ElementOutline(outline.Context);
-
-                foreach (ProductVariantAttributeEntity attribute in variant.Attributes.OfType<ProductVariantAttributeEntity>())
+                foreach (IProductVariantAttributeEntity attribute in variant.Attributes)
                 {
-                    ElementOutline attributeOutline = new ElementOutline(attributesOutline.Context);
-                    attributeOutline.AddElement(attribute.AttributeName, attribute.AttributeValue);
+                    ElementOutline attributeOutline = new ElementOutline(outline.Context);
+                    attributeOutline.AddElement("Name", () => attribute.ProductAttribute.AttributeName);
+                    attributeOutline.AddElement("Value", () => attribute.AttributeValue);
 
-                    attributesOutline.AddElement("Attribute", attributeOutline);
+                    outline.AddElement("Attribute", attributeOutline);
                 }
-
-                outline.AddElement("Attributes", attributesOutline);
             }
         }
 

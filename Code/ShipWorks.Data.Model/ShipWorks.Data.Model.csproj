@@ -201,7 +201,6 @@
     <Compile Include="Custom\EntityClasses\ProductListItemEntity.cs" />
     <Compile Include="Custom\EntityClasses\ProductListItemEntity.ReadOnly.cs" />
     <Compile Include="Custom\EntityClasses\ProductListItemEntity.Interface.cs" />
-    <Compile Include="Custom\EntityClasses\ProductVariantAttributeEntity.cs" />
     <Compile Include="Custom\EntityClasses\ProductVariantEntity.cs" />
     <Compile Include="Custom\EntityClasses\ProductVariantEntity.Interface.cs" />
     <Compile Include="Custom\EntityClasses\ProductVariantEntity.ReadOnly.cs" />
