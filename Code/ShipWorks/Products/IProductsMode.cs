@@ -33,6 +33,12 @@ namespace ShipWorks.Products
         ICommand EditProductVariantButton { get; }
 
         /// <summary>
+        /// Copy the selected variant
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        ICommand CopyAsVariant { get; }
+
+        /// <summary>
         /// Add a product
         /// </summary>
         ICommand AddProduct { get; }

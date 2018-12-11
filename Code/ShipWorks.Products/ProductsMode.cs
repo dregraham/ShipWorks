@@ -291,8 +291,7 @@ namespace ShipWorks.Products
                 Product = new ProductEntity()
                 {
                     IsActive = true,
-                    IsBundle = false,
-                    Name = string.Empty
+                    IsBundle = false
                 }
             };
 
