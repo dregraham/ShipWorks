@@ -452,6 +452,16 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("Brand", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("MPN", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("Custom1", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("Custom2", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("Custom3", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("Custom4", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("Custom5", fieldHashtable);
 		}
 		#endregion
 
@@ -805,6 +815,56 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.String)GetValue((int)OrderItemFieldIndex.MPN, true); }
 			set	{ SetValue((int)OrderItemFieldIndex.MPN, value); }
+		}
+
+		/// <summary> The Custom1 property of the Entity OrderItem<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "OrderItem"."Custom1"<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.String Custom1
+		{
+			get { return (System.String)GetValue((int)OrderItemFieldIndex.Custom1, true); }
+			set	{ SetValue((int)OrderItemFieldIndex.Custom1, value); }
+		}
+
+		/// <summary> The Custom2 property of the Entity OrderItem<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "OrderItem"."Custom2"<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.String Custom2
+		{
+			get { return (System.String)GetValue((int)OrderItemFieldIndex.Custom2, true); }
+			set	{ SetValue((int)OrderItemFieldIndex.Custom2, value); }
+		}
+
+		/// <summary> The Custom3 property of the Entity OrderItem<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "OrderItem"."Custom3"<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.String Custom3
+		{
+			get { return (System.String)GetValue((int)OrderItemFieldIndex.Custom3, true); }
+			set	{ SetValue((int)OrderItemFieldIndex.Custom3, value); }
+		}
+
+		/// <summary> The Custom4 property of the Entity OrderItem<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "OrderItem"."Custom4"<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.String Custom4
+		{
+			get { return (System.String)GetValue((int)OrderItemFieldIndex.Custom4, true); }
+			set	{ SetValue((int)OrderItemFieldIndex.Custom4, value); }
+		}
+
+		/// <summary> The Custom5 property of the Entity OrderItem<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "OrderItem"."Custom5"<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.String Custom5
+		{
+			get { return (System.String)GetValue((int)OrderItemFieldIndex.Custom5, true); }
+			set	{ SetValue((int)OrderItemFieldIndex.Custom5, value); }
 		}
 
 		/// <summary> Gets the EntityCollection with the related entities of type 'OrderItemAttributeEntity' which are related to this entity via a relation of type '1:n'. If the EntityCollection hasn't been fetched yet, the collection returned will be empty.<br/><br/></summary>

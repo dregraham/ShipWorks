@@ -2271,6 +2271,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("OrderEntity", "CombineSplitStatus", typeof(Interapptive.Shared.Enums.CombineSplitStatusType), false, false, false, false,  (int)OrderFieldIndex.CombineSplitStatus, 0, 0, 10);
 			this.AddElementFieldInfo("OrderEntity", "ChannelOrderID", typeof(System.String), false, false, false, false,  (int)OrderFieldIndex.ChannelOrderID, 50, 0, 0);
 			this.AddElementFieldInfo("OrderEntity", "ShipByDate", typeof(Nullable<System.DateTime>), false, false, false, true,  (int)OrderFieldIndex.ShipByDate, 0, 0, 0);
+			this.AddElementFieldInfo("OrderEntity", "Custom1", typeof(System.String), false, false, false, false,  (int)OrderFieldIndex.Custom1, 50, 0, 0);
+			this.AddElementFieldInfo("OrderEntity", "Custom2", typeof(System.String), false, false, false, false,  (int)OrderFieldIndex.Custom2, 50, 0, 0);
+			this.AddElementFieldInfo("OrderEntity", "Custom3", typeof(System.String), false, false, false, false,  (int)OrderFieldIndex.Custom3, 50, 0, 0);
+			this.AddElementFieldInfo("OrderEntity", "Custom4", typeof(System.String), false, false, false, false,  (int)OrderFieldIndex.Custom4, 50, 0, 0);
+			this.AddElementFieldInfo("OrderEntity", "Custom5", typeof(System.String), false, false, false, false,  (int)OrderFieldIndex.Custom5, 50, 0, 0);
 		}
 		/// <summary>Inits OrderChargeEntity's FieldInfo objects</summary>
 		private void InitOrderChargeEntityInfos()
@@ -2312,6 +2317,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("OrderItemEntity", "Height", typeof(System.Decimal), false, false, false, false,  (int)OrderItemFieldIndex.Height, 0, 2, 10);
 			this.AddElementFieldInfo("OrderItemEntity", "Brand", typeof(System.String), false, false, false, false,  (int)OrderItemFieldIndex.Brand, 50, 0, 0);
 			this.AddElementFieldInfo("OrderItemEntity", "MPN", typeof(System.String), false, false, false, false,  (int)OrderItemFieldIndex.MPN, 50, 0, 0);
+			this.AddElementFieldInfo("OrderItemEntity", "Custom1", typeof(System.String), false, false, false, false,  (int)OrderItemFieldIndex.Custom1, 50, 0, 0);
+			this.AddElementFieldInfo("OrderItemEntity", "Custom2", typeof(System.String), false, false, false, false,  (int)OrderItemFieldIndex.Custom2, 50, 0, 0);
+			this.AddElementFieldInfo("OrderItemEntity", "Custom3", typeof(System.String), false, false, false, false,  (int)OrderItemFieldIndex.Custom3, 50, 0, 0);
+			this.AddElementFieldInfo("OrderItemEntity", "Custom4", typeof(System.String), false, false, false, false,  (int)OrderItemFieldIndex.Custom4, 50, 0, 0);
+			this.AddElementFieldInfo("OrderItemEntity", "Custom5", typeof(System.String), false, false, false, false,  (int)OrderItemFieldIndex.Custom5, 50, 0, 0);
 		}
 		/// <summary>Inits OrderItemAttributeEntity's FieldInfo objects</summary>
 		private void InitOrderItemAttributeEntityInfos()

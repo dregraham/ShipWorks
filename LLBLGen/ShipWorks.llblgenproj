@@ -1928,6 +1928,11 @@
           <Field Name="BillWebsite" Type="string" MaxLength="50" FieldIndex="29" />
           <Field Name="ChannelOrderID" Type="string" MaxLength="50" FieldIndex="75" />
           <Field Name="CombineSplitStatus" Type="CombineSplitStatusType" FieldIndex="74" />
+          <Field Name="Custom1" Type="string" MaxLength="50" FieldIndex="77" />
+          <Field Name="Custom2" Type="string" MaxLength="50" FieldIndex="78" />
+          <Field Name="Custom3" Type="string" MaxLength="50" FieldIndex="79" />
+          <Field Name="Custom4" Type="string" MaxLength="50" FieldIndex="80" />
+          <Field Name="Custom5" Type="string" MaxLength="50" FieldIndex="81" />
           <Field Name="CustomerID" Type="long" IsAutoCreated="true" FieldIndex="3" />
           <Field Name="IsManual" Type="bool" FieldIndex="9" />
           <Field Name="LocalStatus" Type="string" MaxLength="100" FieldIndex="8" />
@@ -1995,6 +2000,11 @@
         <Fields>
           <Field Name="Brand" Type="string" MaxLength="50" FieldIndex="22" />
           <Field Name="Code" Type="string" MaxLength="300" FieldIndex="4" />
+          <Field Name="Custom1" Type="string" MaxLength="50" FieldIndex="24" />
+          <Field Name="Custom2" Type="string" MaxLength="50" FieldIndex="25" />
+          <Field Name="Custom3" Type="string" MaxLength="50" FieldIndex="26" />
+          <Field Name="Custom4" Type="string" MaxLength="50" FieldIndex="27" />
+          <Field Name="Custom5" Type="string" MaxLength="50" FieldIndex="28" />
           <Field Name="Description" Type="string" MaxLength="2147483647" FieldIndex="8" />
           <Field Name="HarmonizedCode" Type="string" MaxLength="20" FieldIndex="18" />
           <Field Name="Height" Type="decimal" Precision="10" Scale="2" FieldIndex="21" />
@@ -4356,7 +4366,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2018-11-29T19:20:18.9959429Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2018-12-11T19:44:28.5804617Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -7241,6 +7251,11 @@
                     <Field Name="CombineSplitStatus" Ordinal="75" DbType="8" Precision="10" />
                     <Field Name="ChannelOrderID" Ordinal="76" HasDefaultValue="true" DefaultValue="''" DbType="12" Length="50" />
                     <Field Name="ShipByDate" Ordinal="77" IsOptional="true" DbType="4" />
+                    <Field Name="Custom1" Ordinal="78" HasDefaultValue="true" DefaultValue="''" DbType="12" Length="50" />
+                    <Field Name="Custom2" Ordinal="79" HasDefaultValue="true" DefaultValue="''" DbType="12" Length="50" />
+                    <Field Name="Custom3" Ordinal="80" HasDefaultValue="true" DefaultValue="''" DbType="12" Length="50" />
+                    <Field Name="Custom4" Ordinal="81" HasDefaultValue="true" DefaultValue="''" DbType="12" Length="50" />
+                    <Field Name="Custom5" Ordinal="82" HasDefaultValue="true" DefaultValue="''" DbType="12" Length="50" />
                   </Fields>
                 </Table>
                 <Table Name="OrderCharge">
@@ -7299,6 +7314,11 @@
                     <Field Name="Height" Ordinal="24" DbType="5" Precision="10" Scale="2" />
                     <Field Name="Brand" Ordinal="25" HasDefaultValue="true" DefaultValue="''" DbType="12" Length="50" />
                     <Field Name="MPN" Ordinal="26" HasDefaultValue="true" DefaultValue="''" DbType="12" Length="50" />
+                    <Field Name="Custom1" Ordinal="27" HasDefaultValue="true" DefaultValue="''" DbType="12" Length="50" />
+                    <Field Name="Custom2" Ordinal="28" HasDefaultValue="true" DefaultValue="''" DbType="12" Length="50" />
+                    <Field Name="Custom3" Ordinal="29" HasDefaultValue="true" DefaultValue="''" DbType="12" Length="50" />
+                    <Field Name="Custom4" Ordinal="30" HasDefaultValue="true" DefaultValue="''" DbType="12" Length="50" />
+                    <Field Name="Custom5" Ordinal="31" HasDefaultValue="true" DefaultValue="''" DbType="12" Length="50" />
                   </Fields>
                 </Table>
                 <Table Name="OrderItemAttribute">
@@ -12259,6 +12279,11 @@
             <FieldMapping FieldName="BillWebsite" TargetFieldName="BillWebsite" />
             <FieldMapping FieldName="ChannelOrderID" TargetFieldName="ChannelOrderID" />
             <FieldMapping FieldName="CombineSplitStatus" TargetFieldName="CombineSplitStatus" />
+            <FieldMapping FieldName="Custom1" TargetFieldName="Custom1" />
+            <FieldMapping FieldName="Custom2" TargetFieldName="Custom2" />
+            <FieldMapping FieldName="Custom3" TargetFieldName="Custom3" />
+            <FieldMapping FieldName="Custom4" TargetFieldName="Custom4" />
+            <FieldMapping FieldName="Custom5" TargetFieldName="Custom5" />
             <FieldMapping FieldName="CustomerID" TargetFieldName="CustomerID" />
             <FieldMapping FieldName="IsManual" TargetFieldName="IsManual" />
             <FieldMapping FieldName="LocalStatus" TargetFieldName="LocalStatus" />
@@ -12326,6 +12351,11 @@
           <FieldMappings>
             <FieldMapping FieldName="Brand" TargetFieldName="Brand" />
             <FieldMapping FieldName="Code" TargetFieldName="Code" />
+            <FieldMapping FieldName="Custom1" TargetFieldName="Custom1" />
+            <FieldMapping FieldName="Custom2" TargetFieldName="Custom2" />
+            <FieldMapping FieldName="Custom3" TargetFieldName="Custom3" />
+            <FieldMapping FieldName="Custom4" TargetFieldName="Custom4" />
+            <FieldMapping FieldName="Custom5" TargetFieldName="Custom5" />
             <FieldMapping FieldName="Description" TargetFieldName="Description" />
             <FieldMapping FieldName="HarmonizedCode" TargetFieldName="HarmonizedCode" />
             <FieldMapping FieldName="Height" TargetFieldName="Height" />

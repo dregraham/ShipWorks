@@ -2313,7 +2313,7 @@ namespace ShipWorks.Data.Model
 		/// <summary>Inits OrderEntity's mappings</summary>
 		private void InitOrderEntityMappings()
 		{
-			this.AddElementMapping("OrderEntity", @"ShipWorksLocal", @"dbo", "Order", 77, 0);
+			this.AddElementMapping("OrderEntity", @"ShipWorksLocal", @"dbo", "Order", 82, 0);
 			this.AddElementFieldMapping("OrderEntity", "OrderID", "OrderID", false, "BigInt", 0, 19, 0, true, "SCOPE_IDENTITY()", null, typeof(System.Int64), 0);
 			this.AddElementFieldMapping("OrderEntity", "RowVersion", "RowVersion", false, "Timestamp", 2147483647, 0, 0, false, "", null, typeof(System.Byte[]), 1);
 			this.AddElementFieldMapping("OrderEntity", "StoreID", "StoreID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 2);
@@ -2391,6 +2391,11 @@ namespace ShipWorks.Data.Model
 			this.AddElementFieldMapping("OrderEntity", "CombineSplitStatus", "CombineSplitStatus", false, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 74);
 			this.AddElementFieldMapping("OrderEntity", "ChannelOrderID", "ChannelOrderID", false, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 75);
 			this.AddElementFieldMapping("OrderEntity", "ShipByDate", "ShipByDate", true, "DateTime", 0, 0, 0, false, "", null, typeof(System.DateTime), 76);
+			this.AddElementFieldMapping("OrderEntity", "Custom1", "Custom1", false, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 77);
+			this.AddElementFieldMapping("OrderEntity", "Custom2", "Custom2", false, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 78);
+			this.AddElementFieldMapping("OrderEntity", "Custom3", "Custom3", false, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 79);
+			this.AddElementFieldMapping("OrderEntity", "Custom4", "Custom4", false, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 80);
+			this.AddElementFieldMapping("OrderEntity", "Custom5", "Custom5", false, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 81);
 		}
 
 		/// <summary>Inits OrderChargeEntity's mappings</summary>
@@ -2408,7 +2413,7 @@ namespace ShipWorks.Data.Model
 		/// <summary>Inits OrderItemEntity's mappings</summary>
 		private void InitOrderItemEntityMappings()
 		{
-			this.AddElementMapping("OrderItemEntity", @"ShipWorksLocal", @"dbo", "OrderItem", 25, 0);
+			this.AddElementMapping("OrderItemEntity", @"ShipWorksLocal", @"dbo", "OrderItem", 30, 0);
 			this.AddElementFieldMapping("OrderItemEntity", "OrderItemID", "OrderItemID", false, "BigInt", 0, 19, 0, true, "SCOPE_IDENTITY()", null, typeof(System.Int64), 0);
 			this.AddElementFieldMapping("OrderItemEntity", "RowVersion", "RowVersion", false, "Timestamp", 2147483647, 0, 0, false, "", null, typeof(System.Byte[]), 1);
 			this.AddElementFieldMapping("OrderItemEntity", "OrderID", "OrderID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 2);
@@ -2434,6 +2439,11 @@ namespace ShipWorks.Data.Model
 			this.AddElementFieldMapping("OrderItemEntity", "Height", "Height", false, "Decimal", 0, 10, 2, false, "", null, typeof(System.Decimal), 22);
 			this.AddElementFieldMapping("OrderItemEntity", "Brand", "Brand", false, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 23);
 			this.AddElementFieldMapping("OrderItemEntity", "MPN", "MPN", false, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 24);
+			this.AddElementFieldMapping("OrderItemEntity", "Custom1", "Custom1", false, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 25);
+			this.AddElementFieldMapping("OrderItemEntity", "Custom2", "Custom2", false, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 26);
+			this.AddElementFieldMapping("OrderItemEntity", "Custom3", "Custom3", false, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 27);
+			this.AddElementFieldMapping("OrderItemEntity", "Custom4", "Custom4", false, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 28);
+			this.AddElementFieldMapping("OrderItemEntity", "Custom5", "Custom5", false, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 29);
 		}
 
 		/// <summary>Inits OrderItemAttributeEntity's mappings</summary>
