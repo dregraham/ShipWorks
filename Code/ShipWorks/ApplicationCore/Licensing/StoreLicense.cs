@@ -129,7 +129,7 @@ namespace ShipWorks.ApplicationCore.Licensing
                 LicenseActivationHelper.EnsureActive(store);
                 DisabledReason = string.Empty;
 
-                nextStoreLicenseCheckTime.UpdateValue(store.StoreID, dateTimeProvider.UtcNow.Add(nextStoreLicenseCheckTimeToLive));
+                nextStoreLicenseCheckTime[store.StoreID] = dateTimeProvider.UtcNow.Add(nextStoreLicenseCheckTimeToLive);
 
                 // Let anyone who cares know that enabled carriers may have changed.
                 messenger.Send(new EnabledCarriersChangedMessage(this, new List<ShipmentTypeCode>(), new List<ShipmentTypeCode>()));
