@@ -1,6 +1,6 @@
 ﻿select  SKU.Sku as [SKU], 
-			trim(substring(aliases.AliasSkus, 1, len(aliases.AliasSkus) - 1)) as [Alias SKUs],
-			trim(substring(Bundles.[BundleSkus], 1, len(Bundles.[BundleSkus]) - 1)) [Bundled SKUs],
+			rtrim(ltrim(substring(aliases.AliasSkus, 1, len(aliases.AliasSkus) - 1))) as [Alias SKUs],
+			rtrim(ltrim(substring(Bundles.[BundleSkus], 1, len(Bundles.[BundleSkus]) - 1))) as  [Bundled SKUs],
 			p.Name as [Name],
 			pv.[UPC] AS [UPC],
 			pv.[ASIN] AS [ASIN],
@@ -15,12 +15,12 @@
 			pv.[CountryOfOrigin] AS [Country of Origin],
 			pv.[HarmonizedCode] AS [Harmonized Code],
 			pv.[IsActive] AS [Active]
-	from Product p with (nolock), ProductVariant pv with (nolock)
+	from Product p, ProductVariant pv
 	cross apply 
 	(
 		select ISNULL(
 			(select REPLACE(REPLACE(a.Sku, '|', '\|'), ':', '\:') + '|' AS [text()]
-			from ProductVariantAlias a with (nolock)
+			from ProductVariantAlias a
 			where a.ProductVariantID = pv.ProductVariantID
 			  and a.IsDefault = 0
 			FOR XML PATH ('')  ), ' x')
@@ -29,7 +29,7 @@
 	cross apply
 	(
 		select top 1 REPLACE(REPLACE(a.Sku, '|', '\|'), ':', '\:') as [Sku]
-		from ProductVariantAlias a with (nolock)
+		from ProductVariantAlias a
 			where a.ProductVariantID = pv.ProductVariantID
 			  and a.IsDefault = 1
 	) as [SKU]
@@ -38,7 +38,7 @@
 		select ISNULL(
 			(
 			select REPLACE(REPLACE(aBundle.Sku, '|', '\|'), ':', '\:') + ':' + CONVERT(nvarchar(20), pbBundle.Quantity) + '|' AS [text()]
-			from ProductVariant pvBundle with (nolock), ProductBundle pbBundle with (nolock), ProductVariantAlias aBundle with (nolock)
+			from ProductVariant pvBundle, ProductBundle pbBundle, ProductVariantAlias aBundle
 			where aBundle.ProductVariantID = pbBundle.ChildProductVariantID
 			  and aBundle.IsDefault = 1
 			  and pbBundle.ProductID = pvBundle.ProductID
