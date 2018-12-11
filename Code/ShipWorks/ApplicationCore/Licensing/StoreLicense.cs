@@ -39,7 +39,10 @@ namespace ShipWorks.ApplicationCore.Licensing
             this.store = store;
             log = logFactory(GetType());
             Key = store.License;
-            nextStoreLicenseCheckTimeToLive = new TimeSpan(4, 0, 0);
+
+            nextStoreLicenseCheckTimeToLive = InterapptiveOnly.IsInterapptiveUser ? 
+                                              new TimeSpan(0, 3, 0) : // 3 min for internal
+                                              new TimeSpan(4, 0, 0);  // 4 hours for customers
         }
 
         /// <summary>
