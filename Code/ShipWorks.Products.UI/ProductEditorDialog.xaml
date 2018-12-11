@@ -86,13 +86,14 @@
             <TextBlock Grid.Row="2"
                    Grid.Column="0"
                    Style="{StaticResource FieldLabel}"
-                   Text="Bundle" />
+                   Text="Bundle"
+                       Margin="0 0 0 15"/>
 
             <CheckBox Grid.Row="2"
                   Grid.Column="1"
                   IsChecked="{Binding IsBundle, UpdateSourceTrigger=PropertyChanged}"
                   Style="{StaticResource FormCheckBox}"
-                  Margin="9 1 0 10"/>
+                  Margin="9 1 0 15"/>
 
             <TextBlock Grid.Row="3"
                    Grid.Column="0"
@@ -232,8 +233,8 @@
                 <RowDefinition Height="auto"/>
                 <RowDefinition Height="auto"/>
                 <RowDefinition Height="auto"/>
-                <RowDefinition Height="auto"/>
-                <RowDefinition Height="auto"/>
+                <RowDefinition Height="4*"/>
+                <RowDefinition Height="5*"/>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="auto"/>
@@ -267,7 +268,8 @@
             <TextBlock Grid.Row="3"
                    Grid.Column="0"
                    Text="Country of Origin"
-                   Style="{StaticResource FieldLabel}"/>
+                   Style="{StaticResource FieldLabel}"
+                       Margin="0 0 0 15"/>
 
             <ComboBox Grid.Row="3"
                   Grid.Column="1"
@@ -275,12 +277,14 @@
                   SelectedValuePath="Value"
                   SelectedValue="{Binding CountryOfOrigin}"
                   ItemsSource="{Binding Source={x:Static geography:CountryList.Countries}, Mode=OneTime}"
-                  Style="{StaticResource FormComboBox}"/>
+                  Style="{StaticResource FormComboBox}"
+                      Margin="10 0 0 15"/>
 
             <Grid Grid.Row="4"
                   Grid.Column="0"
                   Grid.ColumnSpan="2"
-                Visibility="{Binding Path=IsBundle, Converter={StaticResource BooleanToVisibility},
+                  Margin="0 0 0 15"
+                  Visibility="{Binding Path=IsBundle, Converter={StaticResource BooleanToVisibility},
                                                     UpdateSourceTrigger=PropertyChanged}">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="auto"/>
@@ -290,9 +294,22 @@
                            Text="Bundled SKUs"
                            Style="{StaticResource Header}"/>
                 <bundles:BundleEditorControl Grid.Row="1"
-                                         MinHeight="120"
-                                         MaxHeight="120"
                                          DataContext="{Binding BundleEditorViewModel}"/>
+            </Grid>
+            <Grid Grid.Row="5"
+                  Grid.Column="0"
+                  Grid.ColumnSpan="2"
+                  Margin="0 0 0 10">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <TextBlock Grid.Row="0"
+                           Text="Attributes"
+                           Style="{StaticResource Header}"/>
+                <productsUI:AttributeEditorControl Grid.Row="1"
+                                                   DataContext="{Binding AttributeEditorViewModel}"/>
+
             </Grid>
 
         </Grid>
