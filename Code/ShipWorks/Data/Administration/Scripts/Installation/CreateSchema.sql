@@ -519,7 +519,12 @@ CREATE TABLE [dbo].[Order]
 [ShipAddressType] [int] NOT NULL,
 [CombineSplitStatus] [INT] NOT NULL,
 [ChannelOrderID] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_Order_ChannelOrderID] DEFAULT (''),
-[ShipByDate] [datetime] NULL
+[ShipByDate] [datetime] NULL,
+[Custom1] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_Order_Custom1] DEFAULT (''),
+[Custom2] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_Order_Custom2] DEFAULT (''),
+[Custom3] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_Order_Custom3] DEFAULT (''),
+[Custom4] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_Order_Custom4] DEFAULT (''),
+[Custom5] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_Order_Custom5] DEFAULT ('')
 )
 GO
 PRINT N'Creating primary key [PK_Order] on [dbo].[Order]'
@@ -785,7 +790,12 @@ CREATE TABLE [dbo].[OrderItem]
 [Width] [decimal] (10, 2) NOT NULL,
 [Height] [decimal] (10, 2) NOT NULL,
 [Brand] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_OrderItem_Brand] DEFAULT (''),
-[MPN] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_OrderItem_MPN] DEFAULT ('')
+[MPN] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_OrderItem_MPN] DEFAULT (''),
+[Custom1] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_OrderItem_Custom1] DEFAULT (''),
+[Custom2] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_OrderItem_Custom2] DEFAULT (''),
+[Custom3] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_OrderItem_Custom3] DEFAULT (''),
+[Custom4] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_OrderItem_Custom4] DEFAULT (''),
+[Custom5] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_OrderItem_Custom5] DEFAULT ('')
 )
 GO
 PRINT N'Creating primary key [PK_OrderItem] on [dbo].[OrderItem]'
