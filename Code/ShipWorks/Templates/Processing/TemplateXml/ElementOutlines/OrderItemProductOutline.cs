@@ -27,8 +27,6 @@ namespace ShipWorks.Templates.Processing.TemplateXml.ElementOutlines
         /// </summary>
         private IProductVariant product { get; set; }
 
-        private Func<OrderItemProductBundleOutline> createOrderItemProductBundleOutline {get; set;}
-
         /// <summary>
         /// Create a new cloned outline bound to a given order item and product variant
         /// </summary>

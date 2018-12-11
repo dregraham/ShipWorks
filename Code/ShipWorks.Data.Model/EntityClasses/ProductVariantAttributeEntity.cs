@@ -32,7 +32,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		// __LLBLGENPRO_USER_CODE_REGION_END	
 	{
 		#region Class Member Declarations
-		private ProductAttributeEntity _attributes;
+		private ProductAttributeEntity _productAttribute;
 		private ProductVariantEntity _productVariant;
 
 		// __LLBLGENPRO_USER_CODE_REGION_START PrivateMembers
@@ -46,8 +46,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <summary>All names of fields mapped onto a relation. Usable for in-memory filtering</summary>
 		public static partial class MemberNames
 		{
-			/// <summary>Member name Attributes</summary>
-			public static readonly string Attributes = "Attributes";
+			/// <summary>Member name ProductAttribute</summary>
+			public static readonly string ProductAttribute = "ProductAttribute";
 			/// <summary>Member name ProductVariant</summary>
 			public static readonly string ProductVariant = "ProductVariant";
 		}
@@ -107,10 +107,10 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			if(SerializationHelper.Optimization != SerializationOptimization.Fast) 
 			{
-				_attributes = (ProductAttributeEntity)info.GetValue("_attributes", typeof(ProductAttributeEntity));
-				if(_attributes!=null)
+				_productAttribute = (ProductAttributeEntity)info.GetValue("_productAttribute", typeof(ProductAttributeEntity));
+				if(_productAttribute!=null)
 				{
-					_attributes.AfterSave+=new EventHandler(OnEntityAfterSave);
+					_productAttribute.AfterSave+=new EventHandler(OnEntityAfterSave);
 				}
 				_productVariant = (ProductVariantEntity)info.GetValue("_productVariant", typeof(ProductVariantEntity));
 				if(_productVariant!=null)
@@ -134,7 +134,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 					DesetupSyncProductVariant(true, false);
 					break;
 				case ProductVariantAttributeFieldIndex.ProductAttributeID:
-					DesetupSyncAttributes(true, false);
+					DesetupSyncProductAttribute(true, false);
 					break;
 				default:
 					base.PerformDesyncSetupFKFieldChange(fieldIndex);
@@ -150,8 +150,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			switch(propertyName)
 			{
-				case "Attributes":
-					this.Attributes = (ProductAttributeEntity)entity;
+				case "ProductAttribute":
+					this.ProductAttribute = (ProductAttributeEntity)entity;
 					break;
 				case "ProductVariant":
 					this.ProductVariant = (ProductVariantEntity)entity;
@@ -178,7 +178,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			RelationCollection toReturn = new RelationCollection();
 			switch(fieldName)
 			{
-				case "Attributes":
+				case "ProductAttribute":
 					toReturn.Add(Relations.ProductAttributeEntityUsingProductAttributeID);
 					break;
 				case "ProductVariant":
@@ -212,8 +212,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			switch(fieldName)
 			{
-				case "Attributes":
-					SetupSyncAttributes(relatedEntity);
+				case "ProductAttribute":
+					SetupSyncProductAttribute(relatedEntity);
 					break;
 				case "ProductVariant":
 					SetupSyncProductVariant(relatedEntity);
@@ -231,8 +231,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			switch(fieldName)
 			{
-				case "Attributes":
-					DesetupSyncAttributes(false, true);
+				case "ProductAttribute":
+					DesetupSyncProductAttribute(false, true);
 					break;
 				case "ProductVariant":
 					DesetupSyncProductVariant(false, true);
@@ -256,9 +256,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 		protected override List<IEntity2> GetDependentRelatedEntities()
 		{
 			List<IEntity2> toReturn = new List<IEntity2>();
-			if(_attributes!=null)
+			if(_productAttribute!=null)
 			{
-				toReturn.Add(_attributes);
+				toReturn.Add(_productAttribute);
 			}
 			if(_productVariant!=null)
 			{
@@ -283,7 +283,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			if (SerializationHelper.Optimization != SerializationOptimization.Fast) 
 			{
-				info.AddValue("_attributes", (!this.MarkedForDeletion?_attributes:null));
+				info.AddValue("_productAttribute", (!this.MarkedForDeletion?_productAttribute:null));
 				info.AddValue("_productVariant", (!this.MarkedForDeletion?_productVariant:null));
 			}
 			// __LLBLGENPRO_USER_CODE_REGION_START GetObjectInfo
@@ -302,7 +302,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 		/// <summary> Creates a new IRelationPredicateBucket object which contains the predicate expression and relation collection to fetch the related entity of type 'ProductAttribute' to this entity.</summary>
 		/// <returns></returns>
-		public virtual IRelationPredicateBucket GetRelationInfoAttributes()
+		public virtual IRelationPredicateBucket GetRelationInfoProductAttribute()
 		{
 			IRelationPredicateBucket bucket = new RelationPredicateBucket();
 			bucket.PredicateExpression.Add(new FieldCompareValuePredicate(ProductAttributeFields.ProductAttributeID, null, ComparisonOperator.Equal, this.ProductAttributeID));
@@ -361,7 +361,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		protected override Dictionary<string, object> GetRelatedData()
 		{
 			Dictionary<string, object> toReturn = new Dictionary<string, object>();
-			toReturn.Add("Attributes", _attributes);
+			toReturn.Add("ProductAttribute", _productAttribute);
 			toReturn.Add("ProductVariant", _productVariant);
 			return toReturn;
 		}
@@ -395,31 +395,31 @@ namespace ShipWorks.Data.Model.EntityClasses
 		}
 		#endregion
 
-		/// <summary> Removes the sync logic for member _attributes</summary>
+		/// <summary> Removes the sync logic for member _productAttribute</summary>
 		/// <param name="signalRelatedEntity">If set to true, it will call the related entity's UnsetRelatedEntity method</param>
 		/// <param name="resetFKFields">if set to true it will also reset the FK fields pointing to the related entity</param>
-		private void DesetupSyncAttributes(bool signalRelatedEntity, bool resetFKFields)
+		private void DesetupSyncProductAttribute(bool signalRelatedEntity, bool resetFKFields)
 		{
-			this.PerformDesetupSyncRelatedEntity( _attributes, new PropertyChangedEventHandler( OnAttributesPropertyChanged ), "Attributes", ShipWorks.Data.Model.RelationClasses.StaticProductVariantAttributeRelations.ProductAttributeEntityUsingProductAttributeIDStatic, true, signalRelatedEntity, "ProductVariantAttribute", resetFKFields, new int[] { (int)ProductVariantAttributeFieldIndex.ProductAttributeID } );
-			_attributes = null;
+			this.PerformDesetupSyncRelatedEntity( _productAttribute, new PropertyChangedEventHandler( OnProductAttributePropertyChanged ), "ProductAttribute", ShipWorks.Data.Model.RelationClasses.StaticProductVariantAttributeRelations.ProductAttributeEntityUsingProductAttributeIDStatic, true, signalRelatedEntity, "ProductVariantAttribute", resetFKFields, new int[] { (int)ProductVariantAttributeFieldIndex.ProductAttributeID } );
+			_productAttribute = null;
 		}
 
-		/// <summary> setups the sync logic for member _attributes</summary>
+		/// <summary> setups the sync logic for member _productAttribute</summary>
 		/// <param name="relatedEntity">Instance to set as the related entity of type entityType</param>
-		private void SetupSyncAttributes(IEntityCore relatedEntity)
+		private void SetupSyncProductAttribute(IEntityCore relatedEntity)
 		{
-			if(_attributes!=relatedEntity)
+			if(_productAttribute!=relatedEntity)
 			{
-				DesetupSyncAttributes(true, true);
-				_attributes = (ProductAttributeEntity)relatedEntity;
-				this.PerformSetupSyncRelatedEntity( _attributes, new PropertyChangedEventHandler( OnAttributesPropertyChanged ), "Attributes", ShipWorks.Data.Model.RelationClasses.StaticProductVariantAttributeRelations.ProductAttributeEntityUsingProductAttributeIDStatic, true, new string[] {  } );
+				DesetupSyncProductAttribute(true, true);
+				_productAttribute = (ProductAttributeEntity)relatedEntity;
+				this.PerformSetupSyncRelatedEntity( _productAttribute, new PropertyChangedEventHandler( OnProductAttributePropertyChanged ), "ProductAttribute", ShipWorks.Data.Model.RelationClasses.StaticProductVariantAttributeRelations.ProductAttributeEntityUsingProductAttributeIDStatic, true, new string[] {  } );
 			}
 		}
 		
 		/// <summary>Handles property change events of properties in a related entity.</summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
-		private void OnAttributesPropertyChanged( object sender, PropertyChangedEventArgs e )
+		private void OnProductAttributePropertyChanged( object sender, PropertyChangedEventArgs e )
 		{
 			switch( e.PropertyName )
 			{
@@ -433,7 +433,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <param name="resetFKFields">if set to true it will also reset the FK fields pointing to the related entity</param>
 		private void DesetupSyncProductVariant(bool signalRelatedEntity, bool resetFKFields)
 		{
-			this.PerformDesetupSyncRelatedEntity( _productVariant, new PropertyChangedEventHandler( OnProductVariantPropertyChanged ), "ProductVariant", ShipWorks.Data.Model.RelationClasses.StaticProductVariantAttributeRelations.ProductVariantEntityUsingProductVariantIDStatic, true, signalRelatedEntity, "VariantAttributes", resetFKFields, new int[] { (int)ProductVariantAttributeFieldIndex.ProductVariantID } );
+			this.PerformDesetupSyncRelatedEntity( _productVariant, new PropertyChangedEventHandler( OnProductVariantPropertyChanged ), "ProductVariant", ShipWorks.Data.Model.RelationClasses.StaticProductVariantAttributeRelations.ProductVariantEntityUsingProductVariantIDStatic, true, signalRelatedEntity, "Attributes", resetFKFields, new int[] { (int)ProductVariantAttributeFieldIndex.ProductVariantID } );
 			_productVariant = null;
 		}
 
@@ -494,9 +494,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 		/// <summary> Creates a new PrefetchPathElement2 object which contains all the information to prefetch the related entities of type 'ProductAttribute' for this entity.</summary>
 		/// <returns>Ready to use IPrefetchPathElement2 implementation.</returns>
-		public static IPrefetchPathElement2 PrefetchPathAttributes
+		public static IPrefetchPathElement2 PrefetchPathProductAttribute
 		{
-			get	{ return new PrefetchPathElement2(new EntityCollection(EntityFactoryCache2.GetEntityFactory(typeof(ProductAttributeEntityFactory))),	(IEntityRelation)GetRelationsForField("Attributes")[0], (int)ShipWorks.Data.Model.EntityType.ProductVariantAttributeEntity, (int)ShipWorks.Data.Model.EntityType.ProductAttributeEntity, 0, null, null, null, null, "Attributes", SD.LLBLGen.Pro.ORMSupportClasses.RelationType.ManyToOne); }
+			get	{ return new PrefetchPathElement2(new EntityCollection(EntityFactoryCache2.GetEntityFactory(typeof(ProductAttributeEntityFactory))),	(IEntityRelation)GetRelationsForField("ProductAttribute")[0], (int)ShipWorks.Data.Model.EntityType.ProductVariantAttributeEntity, (int)ShipWorks.Data.Model.EntityType.ProductAttributeEntity, 0, null, null, null, null, "ProductAttribute", SD.LLBLGen.Pro.ORMSupportClasses.RelationType.ManyToOne); }
 		}
 
 		/// <summary> Creates a new PrefetchPathElement2 object which contains all the information to prefetch the related entities of type 'ProductVariant' for this entity.</summary>
@@ -572,18 +572,18 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 		/// <summary> Gets / sets related entity of type 'ProductAttributeEntity' which has to be set using a fetch action earlier. If no related entity is set for this property, null is returned..<br/><br/></summary>
 		[Browsable(true)]
-		public virtual ProductAttributeEntity Attributes
+		public virtual ProductAttributeEntity ProductAttribute
 		{
-			get	{ return _attributes; }
+			get	{ return _productAttribute; }
 			set
 			{
 				if(this.IsDeserializing)
 				{
-					SetupSyncAttributes(value);
+					SetupSyncProductAttribute(value);
 				}
 				else
 				{
-					SetSingleRelatedEntityNavigator(value, "ProductVariantAttribute", "Attributes", _attributes, true); 
+					SetSingleRelatedEntityNavigator(value, "ProductVariantAttribute", "ProductAttribute", _productAttribute, true); 
 				}
 			}
 		}
@@ -601,7 +601,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 				}
 				else
 				{
-					SetSingleRelatedEntityNavigator(value, "VariantAttributes", "ProductVariant", _productVariant, true); 
+					SetSingleRelatedEntityNavigator(value, "Attributes", "ProductVariant", _productVariant, true); 
 				}
 			}
 		}

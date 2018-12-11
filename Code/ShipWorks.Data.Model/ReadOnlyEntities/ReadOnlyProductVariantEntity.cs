@@ -61,7 +61,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
                 Enumerable.Empty<IProductBundleEntity>();
             Aliases = source.Aliases?.Select(x => x.AsReadOnly(objectMap)).OfType<IProductVariantAliasEntity>().ToReadOnly() ??
                 Enumerable.Empty<IProductVariantAliasEntity>();
-            VariantAttributes = source.VariantAttributes?.Select(x => x.AsReadOnly(objectMap)).OfType<IProductVariantAttributeEntity>().ToReadOnly() ??
+            Attributes = source.Attributes?.Select(x => x.AsReadOnly(objectMap)).OfType<IProductVariantAttributeEntity>().ToReadOnly() ??
                 Enumerable.Empty<IProductVariantAttributeEntity>();
 
             CopyCustomProductVariantData(source);
@@ -179,7 +179,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         
         public IEnumerable<IProductVariantAliasEntity> Aliases { get; }
         
-        public IEnumerable<IProductVariantAttributeEntity> VariantAttributes { get; }
+        public IEnumerable<IProductVariantAttributeEntity> Attributes { get; }
         
         /// <summary>
         /// Get a read only version of the entity

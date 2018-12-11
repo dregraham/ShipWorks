@@ -58,6 +58,21 @@ namespace ShipWorks.Products
             outline.AddElement("CountryOfOrigin", () => variant.CountryOfOrigin);
             outline.AddElement("DeclaredValue", () => variant.DeclaredValue);
             outline.AddElement("Quantity", () => quantity, ElementOutline.If(() => quantity.HasValue));
+
+            if (variant.Attributes.Any())
+            {
+                ElementOutline attributesOutline = new ElementOutline(outline.Context);
+
+                foreach (ProductVariantAttributeEntity attribute in variant.Attributes.OfType<ProductVariantAttributeEntity>())
+                {
+                    ElementOutline attributeOutline = new ElementOutline(attributesOutline.Context);
+                    attributeOutline.AddElement(attribute.AttributeName, attribute.AttributeValue);
+
+                    attributesOutline.AddElement("Attribute", attributeOutline);
+                }
+
+                outline.AddElement("Attributes", attributesOutline);
+            }
         }
 
         /// <summary>

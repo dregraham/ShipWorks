@@ -2,10 +2,10 @@
 // This is generated code.
 //////////////////////////////////////////////////////////////
 // Code is generated using LLBLGen Pro version: 5.0
-// Code is generated on: 
+// Code is generated on:
 // Code is generated using templates: ShipWorks
 // Templates vendor: Solutions Design.
-// Templates version: 
+// Templates version:
 //////////////////////////////////////////////////////////////
 using System;
 using System.Collections.Generic;
@@ -16,11 +16,11 @@ namespace ShipWorks.Data.Model.EntityInterfaces
 {
     /// <summary>
     /// Entity interface which represents the entity 'ProductVariantAttribute'. <br/><br/>
-    /// 
+    ///
     /// </summary>
     public partial interface IProductVariantAttributeEntity
     {
-        
+
         /// <summary> The ProductVariantAttributeID property of the Entity ProductVariantAttribute<br/><br/>
         /// </summary>
         /// <remarks>Mapped on table field: "ProductVariantAttribute"."ProductVariantAttributeID"<br/>
@@ -45,13 +45,13 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         /// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         System.Int64 ProductAttributeID { get; }
-        
-        
-        IProductAttributeEntity Attributes { get; }
-        IProductVariantEntity ProductVariant { get; }
-        
 
-        
+
+        IProductAttributeEntity ProductAttribute { get; }
+        IProductVariantEntity ProductVariant { get; }
+
+
+
 
         /// <summary>
         /// Get a read only version of the entity
@@ -72,14 +72,14 @@ namespace ShipWorks.Data.Model.EntityClasses
 
     /// <summary>
     /// Entity interface which represents the entity 'ProductVariantAttribute'. <br/><br/>
-    /// 
+    ///
     /// </summary>
     public partial class ProductVariantAttributeEntity : IProductVariantAttributeEntity
     {
-        
-        IProductAttributeEntity IProductVariantAttributeEntity.Attributes => Attributes;
+
+        IProductAttributeEntity IProductVariantAttributeEntity.ProductAttribute => ProductAttribute;
         IProductVariantEntity IProductVariantAttributeEntity.ProductVariant => ProductVariant;
-        
+
 
         /// <summary>
         /// Get a read only version of the entity
@@ -102,6 +102,6 @@ namespace ShipWorks.Data.Model.EntityClasses
             return new ReadOnlyProductVariantAttributeEntity(this, objectMap);
         }
 
-        
+
     }
 }
