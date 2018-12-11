@@ -106,13 +106,16 @@ namespace ShipWorks.Data.Import.Spreadsheet.OrderSchema
                 order.OnlineCustomerID = customerID;
             }
 
-            // Stuff
+            // Set fields now that we have data
             order.LocalStatus = csv.ReadField("Order.LocalStatus", order.LocalStatus ?? "");
             order.OnlineStatus = csv.ReadField("Order.OnlineStatus", order.OnlineStatus ?? "");
-
             order.ShipByDate = csv.ReadField("Order.ShipByDate", (DateTime?) null, null, csv.Map.DateSettings.DateFormat, false);
-
             order.RequestedShipping = csv.ReadField("Order.RequestedShipping", order.RequestedShipping ?? "");
+            order.Custom1 = csv.ReadField("Order.Custom1", order.Custom1 ?? "");
+            order.Custom2 = csv.ReadField("Order.Custom2", order.Custom2 ?? "");
+            order.Custom3 = csv.ReadField("Order.Custom3", order.Custom3 ?? "");
+            order.Custom4 = csv.ReadField("Order.Custom4", order.Custom4 ?? "");
+            order.Custom5 = csv.ReadField("Order.Custom5", order.Custom5 ?? "");
 
             // Load Address info
             LoadAddressInfo();
@@ -283,20 +286,24 @@ namespace ShipWorks.Data.Import.Spreadsheet.OrderSchema
                     unitWeight = (totalWeight.HasValue && item.Quantity != 0) ? (totalWeight.Value / (double) item.Quantity) : 0d;
                 }
 
-                // Set the numerics now that we have the units
+                // Set fields now that we have data.
                 item.UnitPrice = unitPrice.Value;
                 item.UnitCost = unitCost.Value;
                 item.Weight = unitWeight.Value;
                 item.Length = csv.ReadField("Item.Length", item.Length);
                 item.Width = csv.ReadField("Item.Width", item.Width);
                 item.Height = csv.ReadField("Item.Height", item.Height);
-                
                 item.UPC = csv.ReadField("Item.UPC", "");
                 item.ISBN = csv.ReadField("Item.ISBN", "");
-
                 item.Brand = csv.ReadField("Item.Brand", "");
                 item.MPN = csv.ReadField("Item.MPN", "");
+                item.Custom1 = csv.ReadField("Item.Custom1", "");
+                item.Custom2 = csv.ReadField("Item.Custom2", "");
+                item.Custom3 = csv.ReadField("Item.Custom3", "");
+                item.Custom4 = csv.ReadField("Item.Custom4", "");
+                item.Custom5 = csv.ReadField("Item.Custom5", "");
 
+                // Load Item Attributes
                 LoadAttributes(item, csv, factory);
 
                 // Allow derive classes to load\change their own specific item data
