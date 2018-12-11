@@ -122,7 +122,7 @@
             </CheckBox>
 
             <syncfusion:SfTextBoxExt
-                Grid.Column="8"
+                Grid.Column="9"
                 MinWidth="300"
                 HorizontalAlignment="Right"
                 VerticalContentAlignment="Center"
