@@ -147,6 +147,7 @@
     <Compile Include="AttachedProperties\Link.cs" />
     <Compile Include="AttachedProperties\ListSelection.cs" />
     <Compile Include="AttachedProperties\PopupClickManager.cs" />
+    <Compile Include="AttachedProperties\SelectTextOnFocus.cs" />
     <Compile Include="AttachedProperties\TextRestriction.cs" />
     <Compile Include="AttachedProperties\UpdateWhenMessageReceived.cs" />
     <Compile Include="AttachedProperties\WebBrowserUtility.cs" />
@@ -303,6 +304,7 @@
     <Compile Include="ValueConverters\VisibleWhenEqualToParameterConverter.cs" />
     <Compile Include="Properties\XamlNamespaces.cs" />
     <Compile Include="WpfViewAttribute.cs" />
+    <Compile Include="WpfViewForAttribute.cs" />
     <Compile Include="WpfViewTemplateSelector.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -428,6 +430,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Styles\BlueSteel\ListBoxStyle.xaml" />
     <Page Include="Styles\BlueSteel\TextBlockStyle.xaml" />
     <Page Include="Styles\BlueSteel\TextBoxStyle.xaml" />
     <Page Include="Styles\BlueSteel\Shapes.xaml" />

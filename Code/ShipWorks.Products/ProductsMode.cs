@@ -13,12 +13,12 @@ using GalaSoft.MvvmLight.CommandWpf;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.UI;
-using Interapptive.Shared.Utility;
 using ShipWorks.Core.Common.Threading;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Data.Model.HelperClasses;
+using ShipWorks.Products.Import;
 
 namespace ShipWorks.Products
 {
@@ -29,7 +29,7 @@ namespace ShipWorks.Products
     public class ProductsMode : ViewModelBase, IProductsMode
     {
         private readonly IProductsViewHost view;
-        private DataWrapper<IVirtualizingCollection<IProductListItemEntity>> products;
+        private IDataWrapper<IVirtualizingCollection<IProductListItemEntity>> products;
         private IList<long> selectedProductIDs = new List<long>();
         private IBasicSortDefinition currentSort;
         private string searchText;
@@ -39,6 +39,7 @@ namespace ShipWorks.Products
         private readonly Func<IProductEditorViewModel> productEditorViewModelFunc;
         private readonly IProductCatalog productCatalog;
         private readonly ISqlAdapterFactory sqlAdapterFactory;
+        private readonly Func<IProductImporterViewModel> productImporterViewModelFunc;
 
         /// <summary>
         /// Constructor
@@ -47,9 +48,11 @@ namespace ShipWorks.Products
             IProductsCollectionFactory productsCollectionFactory,
             IMessageHelper messageHelper,
             Func<IProductEditorViewModel> productEditorViewModelFunc,
+            Func<IProductImporterViewModel> productImporterViewModelFunc,
             IProductCatalog productCatalog,
             ISqlAdapterFactory sqlAdapterFactory)
         {
+            this.productImporterViewModelFunc = productImporterViewModelFunc;
             this.productsCollectionFactory = productsCollectionFactory;
             this.messageHelper = messageHelper;
             this.productEditorViewModelFunc = productEditorViewModelFunc;
@@ -62,7 +65,7 @@ namespace ShipWorks.Products
             EditProductVariantLink = new RelayCommand<long>(EditProductVariantAction);
             EditProductVariantButton = new RelayCommand(EditProductVariantButtonAction, () => SelectedProductIDs?.Count() == 1);
             SelectedProductsChanged = new RelayCommand<IList>(
-                items => SelectedProductIDs = items?.OfType<DataWrapper<IProductListItemEntity>>().Select(x => x.EntityID).ToList());
+                items => SelectedProductIDs = items?.OfType<IDataWrapper<IProductListItemEntity>>().Select(x => x.EntityID).ToList());
 
             DeactivateProductCommand =
                 new RelayCommand(() => SetProductActivation(false).Forget(), () => SelectedProductIDs?.Any() == true);
@@ -70,8 +73,13 @@ namespace ShipWorks.Products
             ActivateProductCommand =
                 new RelayCommand(() => SetProductActivation(true).Forget(), () => SelectedProductIDs?.Any() == true);
 
+            ImportProducts = new RelayCommand(() => ImportProductsAction());
+
             AddProduct = new RelayCommand(() => AddProductAction());
         }
+
+        private void ImportProductsAction() =>
+            productImporterViewModelFunc().ImportProducts().Do(RefreshProductsAction);
 
         /// <summary>
         /// Command for Adding a product
@@ -110,6 +118,12 @@ namespace ShipWorks.Products
         public ICommand EditProductVariantButton { get; }
 
         /// <summary>
+        /// Command to import a list of products
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public ICommand ImportProducts { get; }
+
+        /// <summary>
         /// The list of selected products has changed
         /// </summary>
         [Obfuscation(Exclude = true)]
@@ -119,7 +133,7 @@ namespace ShipWorks.Products
         /// List of products
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public DataWrapper<IVirtualizingCollection<IProductListItemEntity>> Products
+        public IDataWrapper<IVirtualizingCollection<IProductListItemEntity>> Products
         {
             get => products;
             private set => Set(ref products, value);
@@ -218,16 +232,16 @@ namespace ShipWorks.Products
                 return;
             }
 
-            ProductVariantAliasEntity product;
+            ProductVariantAliasEntity productVariantAlias;
 
             using (ISqlAdapter adapter = sqlAdapterFactory.Create())
             {
-                product = productCatalog.FetchProductVariantEntity(adapter, productVariantID)?.Aliases.FirstOrDefault(a => a.IsDefault);
+                productVariantAlias = productCatalog.FetchProductVariantEntity(adapter, productVariantID)?.Aliases.FirstOrDefault(a => a.IsDefault);
             }
 
-            if (product != null)
+            if (productVariantAlias != null)
             {
-                EditProduct(product);
+                EditProduct(productVariantAlias.ProductVariant);
             }
         }
 
@@ -236,55 +250,33 @@ namespace ShipWorks.Products
         /// </summary>
         private void AddProductAction()
         {
-            ProductVariantAliasEntity newProduct = new ProductVariantAliasEntity()
+            ProductVariantEntity productVariant = new ProductVariantEntity()
             {
-                AliasName = string.Empty,
-                IsDefault = true,
-                ProductVariant = new ProductVariantEntity()
+                Product = new ProductEntity()
                 {
-                    Product = new ProductEntity()
-                    {
-                        IsActive = true,
-                        IsBundle = false,
-                        Name = string.Empty
-                    }
+                    IsActive = true,
+                    IsBundle = false,
+                    Name = string.Empty
                 }
             };
 
-            EditProduct(newProduct);
+            productVariant.Aliases.Add(new ProductVariantAliasEntity()
+            {
+                AliasName = string.Empty,
+                IsDefault = true
+            });
+
+            EditProduct(productVariant);
         }
 
         /// <summary>
         /// Edit the given product
         /// </summary>
-        private void EditProduct(ProductVariantAliasEntity productEntity)
+        private void EditProduct(ProductVariantEntity productVariantEntity)
         {
-            if (productEditorViewModelFunc().ShowProductEditor(productEntity) ?? false)
+            if (productEditorViewModelFunc().ShowProductEditor(productVariantEntity) ?? false)
             {
-                Result saveResult;
-
-                using (ISqlAdapter adapter = sqlAdapterFactory.Create())
-                {
-                    saveResult = productCatalog.Save(adapter, productEntity.ProductVariant.Product);
-                }
-
-                if (saveResult.Success)
-                {
-                    RefreshProductsAction();
-                }
-                else
-                {
-                    if (saveResult.Message.Contains("Cannot insert duplicate key row in object 'dbo.ProductVariantAlias'"))
-                    {
-                        messageHelper.ShowError($"The SKU \"{productEntity.Sku}\" already exists. Please enter a unique value for the Product SKU.", saveResult.Exception);
-                    }
-                    else
-                    {
-                        messageHelper.ShowError(saveResult.Message);
-                    }
-
-                    EditProduct(productEntity);
-                }
+                RefreshProductsAction();
             }
         }
 

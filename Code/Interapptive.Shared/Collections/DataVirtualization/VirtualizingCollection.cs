@@ -97,7 +97,7 @@ namespace DataVirtualization
         /// the corresponding page from the IItemsProvider if required.
         /// </summary>
         /// <value></value>
-        public DataWrapper<T> this[int index]
+        public IDataWrapper<T> this[int index]
         {
             get
             {
@@ -149,7 +149,7 @@ namespace DataVirtualization
         /// <returns>
         /// A <see cref="T:System.Collections.Generic.IEnumerator`1"/> that can be used to iterate through the collection.
         /// </returns>
-        public IEnumerator<DataWrapper<T>> GetEnumerator()
+        public IEnumerator<IDataWrapper<T>> GetEnumerator()
         {
             for (int i = 0; i < Count; i++)
             {
@@ -172,7 +172,7 @@ namespace DataVirtualization
         /// <exception cref="T:System.NotSupportedException">
         /// The <see cref="T:System.Collections.Generic.ICollection`1"/> is read-only.
         /// </exception>
-        public void Add(DataWrapper<T> item) => throw new NotSupportedException();
+        public void Add(IDataWrapper<T> item) => throw new NotSupportedException();
 
         /// <summary>
         /// Add an item
@@ -182,7 +182,7 @@ namespace DataVirtualization
         /// <summary>
         /// Add an item
         /// </summary>
-        bool IList.Contains(object value) => Contains((DataWrapper<T>) value);
+        bool IList.Contains(object value) => Contains((IDataWrapper<T>) value);
 
         /// <summary>
         /// Not supported.
@@ -191,7 +191,7 @@ namespace DataVirtualization
         /// <returns>
         /// Always false.
         /// </returns>
-        public bool Contains(DataWrapper<T> item) =>
+        public bool Contains(IDataWrapper<T> item) =>
             LoadedPages.Any(x => x.Items.Contains(item)) == true;
 
         /// <summary>
@@ -202,12 +202,12 @@ namespace DataVirtualization
         /// <summary>
         /// Get the index of the specified value
         /// </summary>
-        int IList.IndexOf(object value) => IndexOf((DataWrapper<T>) value);
+        int IList.IndexOf(object value) => IndexOf((IDataWrapper<T>) value);
 
         /// <summary>
         /// Get the index of the given item
         /// </summary>
-        public int IndexOf(DataWrapper<T> item) =>
+        public int IndexOf(IDataWrapper<T> item) =>
             LoadedPages
                 .Select((x, i) => (IndexWithinPage: x.Items.IndexOf(item), Page: i))
                 .Where(x => x.IndexWithinPage != -1)
@@ -226,12 +226,12 @@ namespace DataVirtualization
         /// <exception cref="T:System.NotSupportedException">
         /// The <see cref="T:System.Collections.Generic.IList`1"/> is read-only.
         /// </exception>
-        public void Insert(int index, DataWrapper<T> item) => throw new NotSupportedException();
+        public void Insert(int index, IDataWrapper<T> item) => throw new NotSupportedException();
 
         /// <summary>
         /// Insert an item in the list
         /// </summary>
-        void IList.Insert(int index, object value) => Insert(index, (DataWrapper<T>) value);
+        void IList.Insert(int index, object value) => Insert(index, (IDataWrapper<T>) value);
 
         /// <summary>
         /// Not supported.
@@ -260,7 +260,7 @@ namespace DataVirtualization
         /// <exception cref="T:System.NotSupportedException">
         /// The <see cref="T:System.Collections.Generic.ICollection`1"/> is read-only.
         /// </exception>
-        public bool Remove(DataWrapper<T> item) => throw new NotSupportedException();
+        public bool Remove(IDataWrapper<T> item) => throw new NotSupportedException();
 
         /// <summary>
         /// Not supported.
@@ -282,7 +282,7 @@ namespace DataVirtualization
         /// -or-
         /// Type <paramref name="T"/> cannot be cast automatically to the type of the destination <paramref name="array"/>.
         /// </exception>
-        public void CopyTo(DataWrapper<T>[] array, int arrayIndex) => throw new NotSupportedException();
+        public void CopyTo(IDataWrapper<T>[] array, int arrayIndex) => throw new NotSupportedException();
 
         /// <summary>
         /// Copy to the given array

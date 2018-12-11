@@ -63,7 +63,7 @@
     <PackageReference Include="SD.LLBLGen.Pro.ORMSupportClasses" Version="5.1.2" />
     <PackageReference Include="SonarAnalyzer.CSharp" Version="6.8.1.4648" />
     <PackageReference Include="SQL.LocalDB.Test" Version="1.1.2" />
-    <PackageReference Include="Syncfusion.XlsIO.Base46" Version="15.1.0.41" />
+    <PackageReference Include="Syncfusion.XlsIO.Base46" Version="16.1.0.26" />
     <PackageReference Include="System.Collections.Immutable" Version="1.4.0" />
     <PackageReference Include="System.ComponentModel.Primitives" Version="4.3.0" />
     <PackageReference Include="System.ComponentModel.TypeConverter" Version="4.3.0" />

@@ -157,7 +157,6 @@ namespace ShipWorks.Shipping.Carriers.Postal
         /// <summary>
         /// Update the dynamic data of the shipment
         /// </summary>
-        [NDependIgnoreLongMethod]
         public override void UpdateDynamicShipmentData(ShipmentEntity shipment)
         {
             base.UpdateDynamicShipmentData(shipment);

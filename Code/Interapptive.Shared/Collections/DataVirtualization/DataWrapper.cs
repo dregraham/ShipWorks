@@ -22,7 +22,7 @@ namespace DataVirtualization
     /// <summary>
     /// Wrapper for a data item in the virtual collection
     /// </summary>
-    public class DataWrapper<T> : INotifyPropertyChanged where T : class
+    public class DataWrapper<T> : IDataWrapper<T>, INotifyPropertyChanged where T : class
     {
         private readonly Action populate;
         private T data;

@@ -123,17 +123,12 @@ namespace ShipWorks.UI.Controls
         /// </summary>
         private static object FormatWeight(DependencyObject d, object baseValue)
         {
-            double? weight = WeightConverter.Current.ParseWeight(baseValue as string);
+            double weight = WeightConverter.Current.ParseWeight(baseValue as string) ?? 0;
 
-            if (weight.HasValue)
-            {
-                double maxWeight = (double) d.GetValue(MaxValueProperty);
-                double clampedWeight = weight.Value.Clamp(0, maxWeight);
-                d.SetCurrentValue(ValueProperty, clampedWeight);
-                return WeightConverter.Current.FormatWeight(clampedWeight);
-            }
-
-            return WeightConverter.Current.FormatWeight((double) d.GetValue(ValueProperty));
+            double maxWeight = (double) d.GetValue(MaxValueProperty);
+            double clampedWeight = weight.Clamp(0, maxWeight);
+            d.SetCurrentValue(ValueProperty, clampedWeight);
+            return WeightConverter.Current.FormatWeight(clampedWeight);
         }
 
         /// <summary>
@@ -143,17 +138,12 @@ namespace ShipWorks.UI.Controls
         {
             LengthConverter lengthConverter = new LengthConverter();
 
-            double? length = lengthConverter.ParseLength(baseValue as string);
+            double length = lengthConverter.ParseLength(baseValue as string) ?? 0;
 
-            if (length.HasValue)
-            {
-                double maxLength = (double) d.GetValue(MaxValueProperty);
-                double clampedLength = length.Value.Clamp(0, maxLength);
-                d.SetCurrentValue(ValueProperty, clampedLength);
-                return lengthConverter.FormatLength(clampedLength);
-            }
-
-            return lengthConverter.FormatLength((double) d.GetValue(ValueProperty));
+            double maxLength = (double) d.GetValue(MaxValueProperty);
+            double clampedLength = length.Clamp(0, maxLength);
+            d.SetCurrentValue(ValueProperty, clampedLength);
+            return lengthConverter.FormatLength(clampedLength);
         }
 
         /// <summary>

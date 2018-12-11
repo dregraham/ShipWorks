@@ -35,6 +35,6 @@ namespace ShipWorks.Products
 		/// <summary>
         /// Save the given product
         /// </summary>
-        Result Save(ISqlAdapter adapter, ProductEntity product);
+        Task<Result> Save(ProductEntity product, ISqlAdapterFactory sqlAdapterFactory);
     }
 }
