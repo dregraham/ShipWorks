@@ -239,6 +239,7 @@ namespace ShipWorks.Products.ProductEditor
             }
 
             BundleEditorViewModel.Load(productVariant);
+            AttributeEditorViewModel.Load(productVariant);
 
             SKU = productVariant.DefaultSku ?? string.Empty;
             IsActive = productVariant.IsNew || productVariant.IsActive;
@@ -286,6 +287,7 @@ namespace ShipWorks.Products.ProductEditor
 
             Result saveResult;
             BundleEditorViewModel.Save();
+            AttributeEditorViewModel.Save();
 
             saveResult = await productCatalog.Save(productVariant, sqlAdapterFactory);
             

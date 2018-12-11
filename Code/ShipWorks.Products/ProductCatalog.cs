@@ -245,7 +245,7 @@ namespace ShipWorks.Products
         /// </summary>
         public async Task<Result> Save(ProductVariantEntity productVariant, ISqlAdapterFactory sqlAdapterFactory)
         {
-            Result validationResult = Validate(productVariant);
+            Result validationResult = await Validate(productVariant, sqlAdapterFactory).ConfigureAwait(false);
             if (validationResult.Failure)
             {
                 return validationResult;
@@ -295,7 +295,7 @@ namespace ShipWorks.Products
         /// <summary>
         /// Checks if product is valid
         /// </summary>
-        private Result Validate(ProductVariantEntity productVariant)
+        private async Task<Result> Validate(ProductVariantEntity productVariant, ISqlAdapterFactory sqlAdapterFactory)
         {
             if (productVariant.Aliases.Any(a => string.IsNullOrWhiteSpace(a.Sku)))
             {
@@ -307,6 +307,18 @@ namespace ShipWorks.Products
 
             if (productVariant.Product.IsBundle)
             {
+                // A Bundle can't have siblings
+                IEnumerable<IProductVariantEntity> siblingVariants;
+                using (ISqlAdapter sqlAdapter = sqlAdapterFactory.Create())
+                {
+                    siblingVariants = await FetchSiblingVariants(productVariant, sqlAdapter);
+                }
+                if (siblingVariants.Any())
+                {
+                    return Result.FromError("A product with variants cannot be turned into a bundle");
+                }
+
+                // A Bundle can't be in another bundle
                 int inHowManyBundles = productVariant.IncludedInBundles.Count();
                 if (inHowManyBundles > 0)
                 {
@@ -316,12 +328,25 @@ namespace ShipWorks.Products
                     DialogResult answer = messageHelper.ShowQuestion(question);
                     if (answer != DialogResult.OK)
                     {
-                        return Result.FromError("");
+                        return Result.FromError("A Bundle cannot contain a nother bundle");
                     }
                 }
             }
 
             return Result.FromSuccess();
+        }
+
+        /// <summary>
+        /// Fetch variants of the same product as the passed in variant.
+        /// </summary>
+        private async Task<IEnumerable<IProductVariantEntity>> FetchSiblingVariants(IProductVariantEntity productVariant, ISqlAdapter sqlAdapter)
+        {
+            QueryFactory factory = new QueryFactory();
+            EntityQuery<ProductVariantEntity> query = factory.ProductVariant.Where(ProductVariantFields.ProductID == productVariant.ProductID)
+                .AndWhere(ProductVariantFields.ProductVariantID != productVariant.ProductVariantID);
+
+            IEntityCollection2 queryResults = await sqlAdapter.FetchQueryAsync(query).ConfigureAwait(false);
+            return queryResults.OfType<ProductVariantEntity>().Select(v => v.AsReadOnly());
         }
 
         /// <summary>
