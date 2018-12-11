@@ -14,6 +14,7 @@ using Interapptive.Shared.Utility;
 using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using SD.LLBLGen.Pro.QuerySpec;
+using ShipWorks.Data;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
@@ -301,6 +302,19 @@ namespace ShipWorks.Products
             }
 
             return Result.FromSuccess();
+        }
+
+        /// <summary>
+        /// Create a variant based on the given variant
+        /// </summary>
+        public GenericResult<ProductVariantEntity> CreateVariant(ProductVariantEntity productVariant)
+        {
+            if (productVariant.Product.IsBundle)
+            {
+                return GenericResult.FromError<ProductVariantEntity>("");
+            }
+
+            return GenericResult.FromSuccess(EntityUtility.CloneAsNew(productVariant));
         }
     }
 }

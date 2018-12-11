@@ -36,5 +36,10 @@ namespace ShipWorks.Products
         /// Save the given product
         /// </summary>
         Task<Result> Save(ProductEntity product, ISqlAdapterFactory sqlAdapterFactory);
+
+        /// <summary>
+        /// Create a variant based on the given variant
+        /// </summary>
+        GenericResult<ProductVariantEntity> CreateVariant(ProductVariantEntity productVariant);
     }
 }
