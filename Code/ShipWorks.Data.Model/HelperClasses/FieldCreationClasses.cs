@@ -20212,11 +20212,6 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ProductFieldIndex.CreatedDate);}
 		}
-		/// <summary>Creates a new ProductEntity.Name field instance</summary>
-		public static EntityField2 Name
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(ProductFieldIndex.Name);}
-		}
 		/// <summary>Creates a new ProductEntity.IsActive field instance</summary>
 		public static EntityField2 IsActive
 		{
@@ -20226,6 +20221,26 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 IsBundle
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ProductFieldIndex.IsBundle);}
+		}
+	}
+
+	/// <summary>Field Creation Class for entity ProductAttributeEntity</summary>
+	public partial class ProductAttributeFields
+	{
+		/// <summary>Creates a new ProductAttributeEntity.ProductAttributeID field instance</summary>
+		public static EntityField2 ProductAttributeID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ProductAttributeFieldIndex.ProductAttributeID);}
+		}
+		/// <summary>Creates a new ProductAttributeEntity.ProductID field instance</summary>
+		public static EntityField2 ProductID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ProductAttributeFieldIndex.ProductID);}
+		}
+		/// <summary>Creates a new ProductAttributeEntity.AttributeName field instance</summary>
+		public static EntityField2 AttributeName
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ProductAttributeFieldIndex.AttributeName);}
 		}
 	}
 
@@ -20437,15 +20452,15 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ProductVariantAttributeFieldIndex.ProductVariantID);}
 		}
-		/// <summary>Creates a new ProductVariantAttributeEntity.AttributeName field instance</summary>
-		public static EntityField2 AttributeName
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(ProductVariantAttributeFieldIndex.AttributeName);}
-		}
 		/// <summary>Creates a new ProductVariantAttributeEntity.AttributeValue field instance</summary>
 		public static EntityField2 AttributeValue
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ProductVariantAttributeFieldIndex.AttributeValue);}
+		}
+		/// <summary>Creates a new ProductVariantAttributeEntity.ProductAttributeID field instance</summary>
+		public static EntityField2 ProductAttributeID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ProductVariantAttributeFieldIndex.ProductAttributeID);}
 		}
 	}
 

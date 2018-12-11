@@ -46,7 +46,7 @@ namespace ShipWorks.Data.Model
 		/// <summary>Method which initializes the internal datastores with the structure of hierarchical types.</summary>
 		private void Init()
 		{
-			this.InitClass(235);
+			this.InitClass(236);
 			InitActionEntityMappings();
 			InitActionFilterTriggerEntityMappings();
 			InitActionQueueEntityMappings();
@@ -196,6 +196,7 @@ namespace ShipWorks.Data.Model
 			InitPrintResultEntityMappings();
 			InitProcessedShipmentEntityMappings();
 			InitProductEntityMappings();
+			InitProductAttributeEntityMappings();
 			InitProductBundleEntityMappings();
 			InitProductListItemEntityMappings();
 			InitProductVariantEntityMappings();
@@ -2739,12 +2740,20 @@ namespace ShipWorks.Data.Model
 		/// <summary>Inits ProductEntity's mappings</summary>
 		private void InitProductEntityMappings()
 		{
-			this.AddElementMapping("ProductEntity", @"ShipWorksLocal", @"dbo", "Product", 5, 0);
+			this.AddElementMapping("ProductEntity", @"ShipWorksLocal", @"dbo", "Product", 4, 0);
 			this.AddElementFieldMapping("ProductEntity", "ProductID", "ProductID", false, "BigInt", 0, 19, 0, true, "SCOPE_IDENTITY()", null, typeof(System.Int64), 0);
 			this.AddElementFieldMapping("ProductEntity", "CreatedDate", "CreatedDate", false, "DateTime", 0, 0, 0, false, "", null, typeof(System.DateTime), 1);
-			this.AddElementFieldMapping("ProductEntity", "Name", "Name", false, "NVarChar", 300, 0, 0, false, "", null, typeof(System.String), 2);
-			this.AddElementFieldMapping("ProductEntity", "IsActive", "IsActive", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 3);
-			this.AddElementFieldMapping("ProductEntity", "IsBundle", "IsBundle", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 4);
+			this.AddElementFieldMapping("ProductEntity", "IsActive", "IsActive", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 2);
+			this.AddElementFieldMapping("ProductEntity", "IsBundle", "IsBundle", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 3);
+		}
+
+		/// <summary>Inits ProductAttributeEntity's mappings</summary>
+		private void InitProductAttributeEntityMappings()
+		{
+			this.AddElementMapping("ProductAttributeEntity", @"ShipWorksLocal", @"dbo", "ProductAttribute", 3, 0);
+			this.AddElementFieldMapping("ProductAttributeEntity", "ProductAttributeID", "ProductAttributeID", false, "BigInt", 0, 19, 0, true, "SCOPE_IDENTITY()", null, typeof(System.Int64), 0);
+			this.AddElementFieldMapping("ProductAttributeEntity", "ProductID", "ProductID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 1);
+			this.AddElementFieldMapping("ProductAttributeEntity", "AttributeName", "AttributeName", false, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 2);
 		}
 
 		/// <summary>Inits ProductBundleEntity's mappings</summary>
@@ -2812,8 +2821,8 @@ namespace ShipWorks.Data.Model
 			this.AddElementMapping("ProductVariantAttributeEntity", @"ShipWorksLocal", @"dbo", "ProductVariantAttribute", 4, 0);
 			this.AddElementFieldMapping("ProductVariantAttributeEntity", "ProductVariantAttributeID", "ProductVariantAttributeID", false, "BigInt", 0, 19, 0, true, "SCOPE_IDENTITY()", null, typeof(System.Int64), 0);
 			this.AddElementFieldMapping("ProductVariantAttributeEntity", "ProductVariantID", "ProductVariantID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 1);
-			this.AddElementFieldMapping("ProductVariantAttributeEntity", "AttributeName", "AttributeName", false, "NVarChar", 300, 0, 0, false, "", null, typeof(System.String), 2);
-			this.AddElementFieldMapping("ProductVariantAttributeEntity", "AttributeValue", "AttributeValue", false, "NVarChar", 300, 0, 0, false, "", null, typeof(System.String), 3);
+			this.AddElementFieldMapping("ProductVariantAttributeEntity", "AttributeValue", "AttributeValue", false, "NVarChar", 300, 0, 0, false, "", null, typeof(System.String), 2);
+			this.AddElementFieldMapping("ProductVariantAttributeEntity", "ProductAttributeID", "ProductAttributeID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 3);
 		}
 
 		/// <summary>Inits ProStoresOrderEntity's mappings</summary>

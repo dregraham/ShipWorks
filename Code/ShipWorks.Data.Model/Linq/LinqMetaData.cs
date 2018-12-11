@@ -509,6 +509,9 @@ namespace ShipWorks.Data.Model.Linq
 				case ShipWorks.Data.Model.EntityType.ProductEntity:
 					toReturn = this.Product;
 					break;
+				case ShipWorks.Data.Model.EntityType.ProductAttributeEntity:
+					toReturn = this.ProductAttribute;
+					break;
 				case ShipWorks.Data.Model.EntityType.ProductBundleEntity:
 					toReturn = this.ProductBundle;
 					break;
@@ -1669,6 +1672,12 @@ namespace ShipWorks.Data.Model.Linq
 		public DataSource2<ProductEntity> Product
 		{
 			get { return new DataSource2<ProductEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
+		}
+		
+		/// <summary>returns the datasource to use in a Linq query when targeting ProductAttributeEntity instances in the database.</summary>
+		public DataSource2<ProductAttributeEntity> ProductAttribute
+		{
+			get { return new DataSource2<ProductAttributeEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
 		}
 		
 		/// <summary>returns the datasource to use in a Linq query when targeting ProductBundleEntity instances in the database.</summary>

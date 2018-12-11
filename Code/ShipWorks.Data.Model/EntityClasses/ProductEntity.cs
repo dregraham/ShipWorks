@@ -32,6 +32,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		// __LLBLGENPRO_USER_CODE_REGION_END	
 	{
 		#region Class Member Declarations
+		private EntityCollection<ProductAttributeEntity> _attributes;
 		private EntityCollection<ProductBundleEntity> _bundles;
 		private EntityCollection<ProductVariantEntity> _variants;
 
@@ -46,6 +47,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <summary>All names of fields mapped onto a relation. Usable for in-memory filtering</summary>
 		public static partial class MemberNames
 		{
+			/// <summary>Member name Attributes</summary>
+			public static readonly string Attributes = "Attributes";
 			/// <summary>Member name Bundles</summary>
 			public static readonly string Bundles = "Bundles";
 			/// <summary>Member name Variants</summary>
@@ -107,6 +110,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			if(SerializationHelper.Optimization != SerializationOptimization.Fast) 
 			{
+				_attributes = (EntityCollection<ProductAttributeEntity>)info.GetValue("_attributes", typeof(EntityCollection<ProductAttributeEntity>));
 				_bundles = (EntityCollection<ProductBundleEntity>)info.GetValue("_bundles", typeof(EntityCollection<ProductBundleEntity>));
 				_variants = (EntityCollection<ProductVariantEntity>)info.GetValue("_variants", typeof(EntityCollection<ProductVariantEntity>));
 				this.FixupDeserialization(FieldInfoProviderSingleton.GetInstance());
@@ -124,6 +128,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			switch(propertyName)
 			{
+				case "Attributes":
+					this.Attributes.Add((ProductAttributeEntity)entity);
+					break;
 				case "Bundles":
 					this.Bundles.Add((ProductBundleEntity)entity);
 					break;
@@ -152,6 +159,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 			RelationCollection toReturn = new RelationCollection();
 			switch(fieldName)
 			{
+				case "Attributes":
+					toReturn.Add(Relations.ProductAttributeEntityUsingProductID);
+					break;
 				case "Bundles":
 					toReturn.Add(Relations.ProductBundleEntityUsingProductID);
 					break;
@@ -186,6 +196,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			switch(fieldName)
 			{
+				case "Attributes":
+					this.Attributes.Add((ProductAttributeEntity)relatedEntity);
+					break;
 				case "Bundles":
 					this.Bundles.Add((ProductBundleEntity)relatedEntity);
 					break;
@@ -205,6 +218,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			switch(fieldName)
 			{
+				case "Attributes":
+					this.PerformRelatedEntityRemoval(this.Attributes, relatedEntity, signalRelatedEntityManyToOne);
+					break;
 				case "Bundles":
 					this.PerformRelatedEntityRemoval(this.Bundles, relatedEntity, signalRelatedEntityManyToOne);
 					break;
@@ -238,6 +254,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		protected override List<IEntityCollection2> GetMemberEntityCollections()
 		{
 			List<IEntityCollection2> toReturn = new List<IEntityCollection2>();
+			toReturn.Add(this.Attributes);
 			toReturn.Add(this.Bundles);
 			toReturn.Add(this.Variants);
 			return toReturn;
@@ -251,6 +268,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			if (SerializationHelper.Optimization != SerializationOptimization.Fast) 
 			{
+				info.AddValue("_attributes", ((_attributes!=null) && (_attributes.Count>0) && !this.MarkedForDeletion)?_attributes:null);
 				info.AddValue("_bundles", ((_bundles!=null) && (_bundles.Count>0) && !this.MarkedForDeletion)?_bundles:null);
 				info.AddValue("_variants", ((_variants!=null) && (_variants.Count>0) && !this.MarkedForDeletion)?_variants:null);
 			}
@@ -266,6 +284,15 @@ namespace ShipWorks.Data.Model.EntityClasses
 		protected override List<IEntityRelation> GetAllRelations()
 		{
 			return new ProductRelations().GetAllRelations();
+		}
+
+		/// <summary> Creates a new IRelationPredicateBucket object which contains the predicate expression and relation collection to fetch the related entities of type 'ProductAttribute' to this entity.</summary>
+		/// <returns></returns>
+		public virtual IRelationPredicateBucket GetRelationInfoAttributes()
+		{
+			IRelationPredicateBucket bucket = new RelationPredicateBucket();
+			bucket.PredicateExpression.Add(new FieldCompareValuePredicate(ProductAttributeFields.ProductID, null, ComparisonOperator.Equal, this.ProductID));
+			return bucket;
 		}
 
 		/// <summary> Creates a new IRelationPredicateBucket object which contains the predicate expression and relation collection to fetch the related entities of type 'ProductBundle' to this entity.</summary>
@@ -298,6 +325,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		protected override void AddToMemberEntityCollectionsQueue(Queue<IEntityCollection2> collectionsQueue) 
 		{
 			base.AddToMemberEntityCollectionsQueue(collectionsQueue);
+			collectionsQueue.Enqueue(this._attributes);
 			collectionsQueue.Enqueue(this._bundles);
 			collectionsQueue.Enqueue(this._variants);
 		}
@@ -307,6 +335,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		protected override void GetFromMemberEntityCollectionsQueue(Queue<IEntityCollection2> collectionsQueue)
 		{
 			base.GetFromMemberEntityCollectionsQueue(collectionsQueue);
+			this._attributes = (EntityCollection<ProductAttributeEntity>) collectionsQueue.Dequeue();
 			this._bundles = (EntityCollection<ProductBundleEntity>) collectionsQueue.Dequeue();
 			this._variants = (EntityCollection<ProductVariantEntity>) collectionsQueue.Dequeue();
 
@@ -317,6 +346,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		protected override bool HasPopulatedMemberEntityCollections()
 		{
 			bool toReturn = false;
+			toReturn |=(this._attributes != null);
 			toReturn |=(this._bundles != null);
 			toReturn |=(this._variants != null);
 			return toReturn ? true : base.HasPopulatedMemberEntityCollections();
@@ -328,6 +358,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		protected override void CreateMemberEntityCollectionsQueue(Queue<IEntityCollection2> collectionsQueue, Queue<bool> requiredQueue) 
 		{
 			base.CreateMemberEntityCollectionsQueue(collectionsQueue, requiredQueue);
+			collectionsQueue.Enqueue(requiredQueue.Dequeue() ? new EntityCollection<ProductAttributeEntity>(EntityFactoryCache2.GetEntityFactory(typeof(ProductAttributeEntityFactory))) : null);
 			collectionsQueue.Enqueue(requiredQueue.Dequeue() ? new EntityCollection<ProductBundleEntity>(EntityFactoryCache2.GetEntityFactory(typeof(ProductBundleEntityFactory))) : null);
 			collectionsQueue.Enqueue(requiredQueue.Dequeue() ? new EntityCollection<ProductVariantEntity>(EntityFactoryCache2.GetEntityFactory(typeof(ProductVariantEntityFactory))) : null);
 		}
@@ -337,6 +368,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		protected override Dictionary<string, object> GetRelatedData()
 		{
 			Dictionary<string, object> toReturn = new Dictionary<string, object>();
+			toReturn.Add("Attributes", _attributes);
 			toReturn.Add("Bundles", _bundles);
 			toReturn.Add("Variants", _variants);
 			return toReturn;
@@ -364,8 +396,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("ProductID", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("CreatedDate", fieldHashtable);
-			fieldHashtable = new Dictionary<string, string>();
-			_fieldsCustomProperties.Add("Name", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("IsActive", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
@@ -402,6 +432,13 @@ namespace ShipWorks.Data.Model.EntityClasses
 		public  static Dictionary<string, string> CustomProperties
 		{
 			get { return _customProperties;}
+		}
+
+		/// <summary> Creates a new PrefetchPathElement2 object which contains all the information to prefetch the related entities of type 'ProductAttribute' for this entity.</summary>
+		/// <returns>Ready to use IPrefetchPathElement2 implementation.</returns>
+		public static IPrefetchPathElement2 PrefetchPathAttributes
+		{
+			get	{ return new PrefetchPathElement2( new EntityCollection<ProductAttributeEntity>(EntityFactoryCache2.GetEntityFactory(typeof(ProductAttributeEntityFactory))), (IEntityRelation)GetRelationsForField("Attributes")[0], (int)ShipWorks.Data.Model.EntityType.ProductEntity, (int)ShipWorks.Data.Model.EntityType.ProductAttributeEntity, 0, null, null, null, null, "Attributes", SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToMany);	}
 		}
 
 		/// <summary> Creates a new PrefetchPathElement2 object which contains all the information to prefetch the related entities of type 'ProductBundle' for this entity.</summary>
@@ -462,16 +499,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)ProductFieldIndex.CreatedDate, value); }
 		}
 
-		/// <summary> The Name property of the Entity Product<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "Product"."Name"<br/>
-		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 300<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.String Name
-		{
-			get { return (System.String)GetValue((int)ProductFieldIndex.Name, true); }
-			set	{ SetValue((int)ProductFieldIndex.Name, value); }
-		}
-
 		/// <summary> The IsActive property of the Entity Product<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "Product"."IsActive"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
@@ -490,6 +517,13 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.Boolean)GetValue((int)ProductFieldIndex.IsBundle, true); }
 			set	{ SetValue((int)ProductFieldIndex.IsBundle, value); }
+		}
+
+		/// <summary> Gets the EntityCollection with the related entities of type 'ProductAttributeEntity' which are related to this entity via a relation of type '1:n'. If the EntityCollection hasn't been fetched yet, the collection returned will be empty.<br/><br/></summary>
+		[TypeContainedAttribute(typeof(ProductAttributeEntity))]
+		public virtual EntityCollection<ProductAttributeEntity> Attributes
+		{
+			get { return GetOrCreateEntityCollection<ProductAttributeEntity, ProductAttributeEntityFactory>("Product", true, false, ref _attributes);	}
 		}
 
 		/// <summary> Gets the EntityCollection with the related entities of type 'ProductBundleEntity' which are related to this entity via a relation of type '1:n'. If the EntityCollection hasn't been fetched yet, the collection returned will be empty.<br/><br/></summary>

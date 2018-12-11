@@ -33,12 +33,6 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         /// Table field type characteristics (type, precision, scale, length): DateTime, 0, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         System.DateTime CreatedDate { get; }
-        /// <summary> The Name property of the Entity Product<br/><br/>
-        /// </summary>
-        /// <remarks>Mapped on table field: "Product"."Name"<br/>
-        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 300<br/>
-        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-        System.String Name { get; }
         /// <summary> The IsActive property of the Entity Product<br/><br/>
         /// </summary>
         /// <remarks>Mapped on table field: "Product"."IsActive"<br/>
@@ -54,6 +48,7 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         
         
         
+        IEnumerable<IProductAttributeEntity> Attributes { get; }
         IEnumerable<IProductBundleEntity> Bundles { get; }
         IEnumerable<IProductVariantEntity> Variants { get; }
 
@@ -84,6 +79,7 @@ namespace ShipWorks.Data.Model.EntityClasses
     {
         
         
+        IEnumerable<IProductAttributeEntity> IProductEntity.Attributes => Attributes;
         IEnumerable<IProductBundleEntity> IProductEntity.Bundles => Bundles;
         IEnumerable<IProductVariantEntity> IProductEntity.Variants => Variants;
 

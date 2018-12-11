@@ -8684,12 +8684,22 @@ namespace ShipWorks.Data.Model
 		ProductID,
 		///<summary>CreatedDate. </summary>
 		CreatedDate,
-		///<summary>Name. </summary>
-		Name,
 		///<summary>IsActive. </summary>
 		IsActive,
 		///<summary>IsBundle. </summary>
 		IsBundle,
+		/// <summary></summary>
+		AmountOfFields
+	}
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: ProductAttribute.</summary>
+	public enum ProductAttributeFieldIndex
+	{
+		///<summary>ProductAttributeID. </summary>
+		ProductAttributeID,
+		///<summary>ProductID. </summary>
+		ProductID,
+		///<summary>AttributeName. </summary>
+		AttributeName,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -8794,10 +8804,10 @@ namespace ShipWorks.Data.Model
 		ProductVariantAttributeID,
 		///<summary>ProductVariantID. </summary>
 		ProductVariantID,
-		///<summary>AttributeName. </summary>
-		AttributeName,
 		///<summary>AttributeValue. </summary>
 		AttributeValue,
+		///<summary>ProductAttributeID. </summary>
+		ProductAttributeID,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -13147,6 +13157,8 @@ namespace ShipWorks.Data.Model
 		ProcessedShipmentEntity,
 		///<summary>Product</summary>
 		ProductEntity,
+		///<summary>ProductAttribute</summary>
+		ProductAttributeEntity,
 		///<summary>ProductBundle</summary>
 		ProductBundleEntity,
 		///<summary>ProductListItem</summary>

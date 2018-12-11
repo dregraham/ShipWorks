@@ -38,10 +38,11 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             
             ProductVariantAttributeID = source.ProductVariantAttributeID;
             ProductVariantID = source.ProductVariantID;
-            AttributeName = source.AttributeName;
             AttributeValue = source.AttributeValue;
+            ProductAttributeID = source.ProductAttributeID;
             
             
+            Attributes = (IProductAttributeEntity) source.Attributes?.AsReadOnly(objectMap);
             ProductVariant = (IProductVariantEntity) source.ProductVariant?.AsReadOnly(objectMap);
             
 
@@ -61,19 +62,21 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         public System.Int64 ProductVariantID { get; }
-        /// <summary> The AttributeName property of the Entity ProductVariantAttribute<br/><br/>
-        /// </summary>
-        /// <remarks>Mapped on table field: "ProductVariantAttribute"."AttributeName"<br/>
-        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 300<br/>
-        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-        public System.String AttributeName { get; }
         /// <summary> The AttributeValue property of the Entity ProductVariantAttribute<br/><br/>
         /// </summary>
         /// <remarks>Mapped on table field: "ProductVariantAttribute"."AttributeValue"<br/>
         /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 300<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         public System.String AttributeValue { get; }
+        /// <summary> The ProductAttributeID property of the Entity ProductVariantAttribute<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "ProductVariantAttribute"."ProductAttributeID"<br/>
+        /// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+        public System.Int64 ProductAttributeID { get; }
         
+        
+        public IProductAttributeEntity Attributes { get; }
         
         public IProductVariantEntity ProductVariant { get; }
         

@@ -30,12 +30,28 @@ namespace ShipWorks.Data.Model.RelationClasses
 		public virtual List<IEntityRelation> GetAllRelations()
 		{
 			List<IEntityRelation> toReturn = new List<IEntityRelation>();
+			toReturn.Add(this.ProductAttributeEntityUsingProductID);
 			toReturn.Add(this.ProductBundleEntityUsingProductID);
 			toReturn.Add(this.ProductVariantEntityUsingProductID);
 			return toReturn;
 		}
 
 		#region Class Property Declarations
+
+		/// <summary>Returns a new IEntityRelation object, between ProductEntity and ProductAttributeEntity over the 1:n relation they have, using the relation between the fields:
+		/// Product.ProductID - ProductAttribute.ProductID
+		/// </summary>
+		public virtual IEntityRelation ProductAttributeEntityUsingProductID
+		{
+			get
+			{
+				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToMany, "Attributes" , true);
+				relation.AddEntityFieldPair(ProductFields.ProductID, ProductAttributeFields.ProductID);
+				relation.InheritanceInfoPkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("ProductEntity", true);
+				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("ProductAttributeEntity", false);
+				return relation;
+			}
+		}
 
 		/// <summary>Returns a new IEntityRelation object, between ProductEntity and ProductBundleEntity over the 1:n relation they have, using the relation between the fields:
 		/// Product.ProductID - ProductBundle.ProductID
@@ -82,6 +98,7 @@ namespace ShipWorks.Data.Model.RelationClasses
 	/// <summary>Static class which is used for providing relationship instances which are re-used internally for syncing</summary>
 	internal static class StaticProductRelations
 	{
+		internal static readonly IEntityRelation ProductAttributeEntityUsingProductIDStatic = new ProductRelations().ProductAttributeEntityUsingProductID;
 		internal static readonly IEntityRelation ProductBundleEntityUsingProductIDStatic = new ProductRelations().ProductBundleEntityUsingProductID;
 		internal static readonly IEntityRelation ProductVariantEntityUsingProductIDStatic = new ProductRelations().ProductVariantEntityUsingProductID;
 

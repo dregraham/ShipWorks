@@ -33,20 +33,21 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         /// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         System.Int64 ProductVariantID { get; }
-        /// <summary> The AttributeName property of the Entity ProductVariantAttribute<br/><br/>
-        /// </summary>
-        /// <remarks>Mapped on table field: "ProductVariantAttribute"."AttributeName"<br/>
-        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 300<br/>
-        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-        System.String AttributeName { get; }
         /// <summary> The AttributeValue property of the Entity ProductVariantAttribute<br/><br/>
         /// </summary>
         /// <remarks>Mapped on table field: "ProductVariantAttribute"."AttributeValue"<br/>
         /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 300<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         System.String AttributeValue { get; }
+        /// <summary> The ProductAttributeID property of the Entity ProductVariantAttribute<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "ProductVariantAttribute"."ProductAttributeID"<br/>
+        /// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+        System.Int64 ProductAttributeID { get; }
         
         
+        IProductAttributeEntity Attributes { get; }
         IProductVariantEntity ProductVariant { get; }
         
 
@@ -76,6 +77,7 @@ namespace ShipWorks.Data.Model.EntityClasses
     public partial class ProductVariantAttributeEntity : IProductVariantAttributeEntity
     {
         
+        IProductAttributeEntity IProductVariantAttributeEntity.Attributes => Attributes;
         IProductVariantEntity IProductVariantAttributeEntity.ProductVariant => ProductVariant;
         
 

@@ -30,6 +30,7 @@ namespace ShipWorks.Data.Model.RelationClasses
 		public virtual List<IEntityRelation> GetAllRelations()
 		{
 			List<IEntityRelation> toReturn = new List<IEntityRelation>();
+			toReturn.Add(this.ProductAttributeEntityUsingProductAttributeID);
 			toReturn.Add(this.ProductVariantEntityUsingProductVariantID);
 			return toReturn;
 		}
@@ -38,6 +39,20 @@ namespace ShipWorks.Data.Model.RelationClasses
 
 
 
+		/// <summary>Returns a new IEntityRelation object, between ProductVariantAttributeEntity and ProductAttributeEntity over the m:1 relation they have, using the relation between the fields:
+		/// ProductVariantAttribute.ProductAttributeID - ProductAttribute.ProductAttributeID
+		/// </summary>
+		public virtual IEntityRelation ProductAttributeEntityUsingProductAttributeID
+		{
+			get
+			{
+				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.ManyToOne, "Attributes", false);
+				relation.AddEntityFieldPair(ProductAttributeFields.ProductAttributeID, ProductVariantAttributeFields.ProductAttributeID);
+				relation.InheritanceInfoPkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("ProductAttributeEntity", false);
+				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("ProductVariantAttributeEntity", true);
+				return relation;
+			}
+		}
 		/// <summary>Returns a new IEntityRelation object, between ProductVariantAttributeEntity and ProductVariantEntity over the m:1 relation they have, using the relation between the fields:
 		/// ProductVariantAttribute.ProductVariantID - ProductVariant.ProductVariantID
 		/// </summary>
@@ -66,6 +81,7 @@ namespace ShipWorks.Data.Model.RelationClasses
 	/// <summary>Static class which is used for providing relationship instances which are re-used internally for syncing</summary>
 	internal static class StaticProductVariantAttributeRelations
 	{
+		internal static readonly IEntityRelation ProductAttributeEntityUsingProductAttributeIDStatic = new ProductVariantAttributeRelations().ProductAttributeEntityUsingProductAttributeID;
 		internal static readonly IEntityRelation ProductVariantEntityUsingProductVariantIDStatic = new ProductVariantAttributeRelations().ProductVariantEntityUsingProductVariantID;
 
 		/// <summary>CTor</summary>

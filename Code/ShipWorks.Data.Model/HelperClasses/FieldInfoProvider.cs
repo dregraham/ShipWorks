@@ -49,7 +49,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 		/// <summary>Method which initializes the internal datastores.</summary>
 		private void Init()
 		{
-			this.InitClass( (233 + 2));
+			this.InitClass( (234 + 2));
 			InitActionEntityInfos();
 			InitActionFilterTriggerEntityInfos();
 			InitActionQueueEntityInfos();
@@ -199,6 +199,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			InitPrintResultEntityInfos();
 			InitProcessedShipmentEntityInfos();
 			InitProductEntityInfos();
+			InitProductAttributeEntityInfos();
 			InitProductBundleEntityInfos();
 			InitProductListItemEntityInfos();
 			InitProductVariantEntityInfos();
@@ -2598,9 +2599,16 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddFieldIndexEnumForElementName(typeof(ProductFieldIndex), "ProductEntity");
 			this.AddElementFieldInfo("ProductEntity", "ProductID", typeof(System.Int64), true, false, true, false,  (int)ProductFieldIndex.ProductID, 0, 0, 19);
 			this.AddElementFieldInfo("ProductEntity", "CreatedDate", typeof(System.DateTime), false, false, false, false,  (int)ProductFieldIndex.CreatedDate, 0, 0, 0);
-			this.AddElementFieldInfo("ProductEntity", "Name", typeof(System.String), false, false, false, false,  (int)ProductFieldIndex.Name, 300, 0, 0);
 			this.AddElementFieldInfo("ProductEntity", "IsActive", typeof(System.Boolean), false, false, false, false,  (int)ProductFieldIndex.IsActive, 0, 0, 0);
 			this.AddElementFieldInfo("ProductEntity", "IsBundle", typeof(System.Boolean), false, false, false, false,  (int)ProductFieldIndex.IsBundle, 0, 0, 0);
+		}
+		/// <summary>Inits ProductAttributeEntity's FieldInfo objects</summary>
+		private void InitProductAttributeEntityInfos()
+		{
+			this.AddFieldIndexEnumForElementName(typeof(ProductAttributeFieldIndex), "ProductAttributeEntity");
+			this.AddElementFieldInfo("ProductAttributeEntity", "ProductAttributeID", typeof(System.Int64), true, false, true, false,  (int)ProductAttributeFieldIndex.ProductAttributeID, 0, 0, 19);
+			this.AddElementFieldInfo("ProductAttributeEntity", "ProductID", typeof(System.Int64), false, true, false, false,  (int)ProductAttributeFieldIndex.ProductID, 0, 0, 19);
+			this.AddElementFieldInfo("ProductAttributeEntity", "AttributeName", typeof(System.String), false, false, false, false,  (int)ProductAttributeFieldIndex.AttributeName, 50, 0, 0);
 		}
 		/// <summary>Inits ProductBundleEntity's FieldInfo objects</summary>
 		private void InitProductBundleEntityInfos()
@@ -2663,8 +2671,8 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddFieldIndexEnumForElementName(typeof(ProductVariantAttributeFieldIndex), "ProductVariantAttributeEntity");
 			this.AddElementFieldInfo("ProductVariantAttributeEntity", "ProductVariantAttributeID", typeof(System.Int64), true, false, true, false,  (int)ProductVariantAttributeFieldIndex.ProductVariantAttributeID, 0, 0, 19);
 			this.AddElementFieldInfo("ProductVariantAttributeEntity", "ProductVariantID", typeof(System.Int64), false, true, false, false,  (int)ProductVariantAttributeFieldIndex.ProductVariantID, 0, 0, 19);
-			this.AddElementFieldInfo("ProductVariantAttributeEntity", "AttributeName", typeof(System.String), false, false, false, false,  (int)ProductVariantAttributeFieldIndex.AttributeName, 300, 0, 0);
 			this.AddElementFieldInfo("ProductVariantAttributeEntity", "AttributeValue", typeof(System.String), false, false, false, false,  (int)ProductVariantAttributeFieldIndex.AttributeValue, 300, 0, 0);
+			this.AddElementFieldInfo("ProductVariantAttributeEntity", "ProductAttributeID", typeof(System.Int64), false, true, false, false,  (int)ProductVariantAttributeFieldIndex.ProductAttributeID, 0, 0, 19);
 		}
 		/// <summary>Inits ProStoresOrderEntity's FieldInfo objects</summary>
 		private void InitProStoresOrderEntityInfos()

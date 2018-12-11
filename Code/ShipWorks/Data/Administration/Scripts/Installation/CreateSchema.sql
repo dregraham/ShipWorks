@@ -7905,7 +7905,7 @@ GO
 PRINT N'Creating [dbo].[ProductAttribute]'
 GO
 IF OBJECT_ID(N'[dbo].[ProductAttribute]', 'U') IS NULL
-CREATE TABLE [dbo].[ProductVariantAttribute]
+CREATE TABLE [dbo].[ProductAttribute]
 (
 [ProductAttributeID] [bigint] IDENTITY(1,1) NOT NULL,
 [ProductID] [bigint] NOT NULL,

@@ -3079,6 +3079,27 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		#endregion
 	}
 
+	/// <summary>Factory to create new, empty ProductAttributeEntity objects.</summary>
+	[Serializable]
+	public partial class ProductAttributeEntityFactory : EntityFactoryBase2<ProductAttributeEntity> {
+		/// <summary>CTor</summary>
+		public ProductAttributeEntityFactory() : base("ProductAttributeEntity", ShipWorks.Data.Model.EntityType.ProductAttributeEntity, false) { }
+		
+		/// <summary>Creates a new ProductAttributeEntity instance but uses a special constructor which will set the Fields object of the new IEntity2 instance to the passed in fields object.</summary>
+		/// <param name="fields">Populated IEntityFields2 object for the new IEntity2 to create</param>
+		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
+		public override IEntity2 Create(IEntityFields2 fields) {
+			IEntity2 toReturn = new ProductAttributeEntity(fields);
+			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewProductAttributeUsingFields
+			// __LLBLGENPRO_USER_CODE_REGION_END
+			
+			return toReturn;
+		}
+		#region Included Code
+
+		#endregion
+	}
+
 	/// <summary>Factory to create new, empty ProductBundleEntity objects.</summary>
 	[Serializable]
 	public partial class ProductBundleEntityFactory : EntityFactoryBase2<ProductBundleEntity> {
@@ -5217,6 +5238,9 @@ namespace ShipWorks.Data.Model.FactoryClasses
 					break;
 				case ShipWorks.Data.Model.EntityType.ProductEntity:
 					factoryToUse = new ProductEntityFactory();
+					break;
+				case ShipWorks.Data.Model.EntityType.ProductAttributeEntity:
+					factoryToUse = new ProductAttributeEntityFactory();
 					break;
 				case ShipWorks.Data.Model.EntityType.ProductBundleEntity:
 					factoryToUse = new ProductBundleEntityFactory();

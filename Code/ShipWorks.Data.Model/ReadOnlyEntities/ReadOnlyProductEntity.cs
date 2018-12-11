@@ -38,12 +38,13 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             
             ProductID = source.ProductID;
             CreatedDate = source.CreatedDate;
-            Name = source.Name;
             IsActive = source.IsActive;
             IsBundle = source.IsBundle;
             
             
             
+            Attributes = source.Attributes?.Select(x => x.AsReadOnly(objectMap)).OfType<IProductAttributeEntity>().ToReadOnly() ??
+                Enumerable.Empty<IProductAttributeEntity>();
             Bundles = source.Bundles?.Select(x => x.AsReadOnly(objectMap)).OfType<IProductBundleEntity>().ToReadOnly() ??
                 Enumerable.Empty<IProductBundleEntity>();
             Variants = source.Variants?.Select(x => x.AsReadOnly(objectMap)).OfType<IProductVariantEntity>().ToReadOnly() ??
@@ -65,12 +66,6 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Table field type characteristics (type, precision, scale, length): DateTime, 0, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         public System.DateTime CreatedDate { get; }
-        /// <summary> The Name property of the Entity Product<br/><br/>
-        /// </summary>
-        /// <remarks>Mapped on table field: "Product"."Name"<br/>
-        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 300<br/>
-        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-        public System.String Name { get; }
         /// <summary> The IsActive property of the Entity Product<br/><br/>
         /// </summary>
         /// <remarks>Mapped on table field: "Product"."IsActive"<br/>
@@ -85,6 +80,8 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         public System.Boolean IsBundle { get; }
         
         
+        
+        public IEnumerable<IProductAttributeEntity> Attributes { get; }
         
         public IEnumerable<IProductBundleEntity> Bundles { get; }
         
