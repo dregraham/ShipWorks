@@ -73,7 +73,7 @@
             </Grid.ColumnDefinitions>
             <UniformGrid
                 Grid.Row="0"
-                Columns="7"
+                Columns="6"
                 Rows="1">
                 <Button
                     Command="{Binding AddProduct}"
@@ -82,10 +82,6 @@
                 <Button
                     Command="{Binding EditProductVariantButton}"
                     Content="Edit"
-                    Style="{StaticResource PrimaryButton}" />
-                <Button
-                    Command="{Binding RefreshProducts}"
-                    Content="Refresh"
                     Style="{StaticResource PrimaryButton}" />
                 <Button
                     Command="{Binding ImportProducts}"
@@ -105,13 +101,7 @@
                     Style="{StaticResource SecondaryButton}" />
             </UniformGrid>
 
-            <CheckBox
-                Grid.Column="1"
-                Margin="0,0,10,0"
-                IsChecked="{Binding ShowInactiveProducts}"
-                Style="{StaticResource FormCheckBox}">
-                Show inactive products
-            </CheckBox>
+
 
             <syncfusion:SfTextBoxExt
                 Grid.Column="3"
@@ -376,17 +366,43 @@
             Grid.Row="2"
             Margin="0,4,0,0"
             TextBlock.FontSize="{StaticResource BaseFontSize}">
+            <Grid.Resources>
+                <Style TargetType="TextBlock">
+                    <Setter Property="HorizontalAlignment" Value="Left" />
+                    <Setter Property="VerticalAlignment" Value="Center" />
+                </Style>
+            </Grid.Resources>
             <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
-            <TextBlock Margin="0,0,16,0">
+            <Button
+                Padding="0"
+                Command="{Binding RefreshProducts}"
+                Style="{StaticResource SmallSecondaryButton}">
+                <Path
+                    Margin="4"
+                    Fill="Black"
+                    Stretch="Uniform"
+                    Style="{StaticResource Path.Material.Refresh}" />
+            </Button>
+            <TextBlock Grid.Column="1" Margin="16,0">
                 Products:<Run Text="{Binding Products.Data.Count, Mode=OneWay, StringFormat='{}{0:#,##0}'}" />
             </TextBlock>
-            <TextBlock Grid.Column="1">
+            <TextBlock Grid.Column="2">
                 Selected:<Run Text="{Binding SelectedProductIDs.Count, Mode=OneWay, StringFormat='{}{0:#,##0}'}" />
             </TextBlock>
+            <CheckBox
+                Grid.Column="3"
+                Margin="0"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Center"
+                IsChecked="{Binding ShowInactiveProducts}"
+                Style="{StaticResource FormCheckBox}">
+                Show inactive products
+            </CheckBox>
         </Grid>
     </Grid>
 </UserControl>
