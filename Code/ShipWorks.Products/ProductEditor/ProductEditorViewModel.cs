@@ -13,6 +13,7 @@ using Interapptive.Shared.Utility;
 using ShipWorks.Core.UI;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Products.AttributeEditor;
 using ShipWorks.Products.BundleEditor;
 
 namespace ShipWorks.Products.ProductEditor
@@ -57,6 +58,7 @@ namespace ShipWorks.Products.ProductEditor
             IProductEditorDialogFactory dialogFactory,
             IMessageHelper messageHelper,
             IBundleEditorViewModel bundleEditorViewModel,
+            IAttributeEditorViewModel attributeEditorViewModel,
             ISqlAdapterFactory sqlAdapterFactory,
             IProductCatalog productCatalog)
         {
@@ -65,6 +67,7 @@ namespace ShipWorks.Products.ProductEditor
             dialog = dialogFactory.Create();
             this.messageHelper = messageHelper;
             BundleEditorViewModel = bundleEditorViewModel;
+            AttributeEditorViewModel = attributeEditorViewModel;
             this.sqlAdapterFactory = sqlAdapterFactory;
             this.productCatalog = productCatalog;
             Save = new RelayCommand(async () => await SaveProduct());
@@ -214,6 +217,12 @@ namespace ShipWorks.Products.ProductEditor
         /// </summary>
         [Obfuscation(Exclude = true)]
         public IBundleEditorViewModel BundleEditorViewModel { get; }
+
+        /// <summary>
+        /// Attribute Editor
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public IAttributeEditorViewModel AttributeEditorViewModel { get; }
 
         /// <summary>
         /// Show the product editor
