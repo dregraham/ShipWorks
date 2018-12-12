@@ -42,15 +42,15 @@ namespace ShipWorks.Products
         /// Create a variant based on the given variant
         /// </summary>
         GenericResult<ProductVariantEntity> CreateVariant(ProductVariantEntity productVariant);
- 
+
         /// <summary>
         /// Fetch a product attribute based on name
         /// </summary>
-        ProductAttributeEntity FetchProductAttribute(ISqlAdapter sqlAdapter, string name, long productID);
+        ProductAttributeEntity FetchProductAttribute(string name, long productID);
 
         /// <summary>
         /// Get the available attributes for a variant
         /// </summary>
-        Task<IEnumerable<IProductAttributeEntity>> GetAvailableAttributesFor(ISqlAdapter sqlAdapter, ProductVariantEntity variant);
+        Task<IEnumerable<IProductAttributeEntity>> GetAvailableAttributesFor(ProductVariantEntity variant);
     }
 }

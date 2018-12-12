@@ -29,7 +29,6 @@ namespace ShipWorks.Products.AttributeEditor
         private ProductVariantAttributeValueEntity selectedBundleLineItem;
         private ProductVariantEntity productVariant;
         private readonly IMessageHelper messageHelper;
-        private readonly ISqlAdapterFactory sqlAdapterFactory;
         private readonly IProductCatalog productCatalog;
 
         /// <summary>
@@ -38,7 +37,6 @@ namespace ShipWorks.Products.AttributeEditor
         public AttributeEditorViewModel(IMessageHelper messageHelper, ISqlAdapterFactory sqlAdapterFactory, IProductCatalog productCatalog)
         {
             this.messageHelper = messageHelper;
-            this.sqlAdapterFactory = sqlAdapterFactory;
             this.productCatalog = productCatalog;
 
             AttributeNames = new ObservableCollection<string>();
@@ -118,11 +116,8 @@ namespace ShipWorks.Products.AttributeEditor
         public async Task Load(ProductVariantEntity productVariantEntity)
         {
             productVariant = productVariantEntity;
-            using (ISqlAdapter sqlAdapter = sqlAdapterFactory.Create())
-            {
-                IEnumerable<IProductAttributeEntity> attributes = await productCatalog.GetAvailableAttributesFor(sqlAdapter, productVariantEntity).ConfigureAwait(true);
-                AttributeNames = new ObservableCollection<string>(attributes.Select(a => a.AttributeName));
-            }
+            IEnumerable<IProductAttributeEntity> attributes = await productCatalog.GetAvailableAttributesFor(productVariantEntity).ConfigureAwait(true);
+            AttributeNames = new ObservableCollection<string>(attributes.Select(a => a.AttributeName));
 
             AttributeNames = new ObservableCollection<string>(productVariant.Product.Attributes.Select(x => x.AttributeName));
             ProductAttributes = new ObservableCollection<ProductVariantAttributeValueEntity>(productVariant.Attributes);
@@ -162,10 +157,7 @@ namespace ShipWorks.Products.AttributeEditor
             ProductAttributeEntity attribute;
 
             // Get the product attribute with the given name
-            using (ISqlAdapter adapter = sqlAdapterFactory.Create())
-            {
-                attribute = productCatalog.FetchProductAttribute(adapter, SelectedAttributeName, productVariant.ProductID);
-            }
+            attribute = productCatalog.FetchProductAttribute(SelectedAttributeName, productVariant.ProductID);
 
             // If we didn't find an attribute with the given name, create one
             if (attribute == null)
