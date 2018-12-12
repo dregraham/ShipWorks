@@ -1936,8 +1936,6 @@ namespace ShipWorks.Data.Model
 		ArchivalSettingsXml,
 		///<summary>AuditEnabled. </summary>
 		AuditEnabled,
-		///<summary>AllowUIModeToggle. </summary>
-		AllowUIModeToggle,
 		/// <summary></summary>
 		AmountOfFields
 	}
