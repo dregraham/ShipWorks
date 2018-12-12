@@ -77,7 +77,7 @@ namespace ShipWorks.Products
 
             ImportProducts = new RelayCommand(ImportProductsAction);
 
-            AddProduct = new RelayCommand(async () => await AddProductAction());
+            AddProduct = new RelayCommand(async () => await AddProductAction().ConfigureAwait(true));
         }
 
         private void ImportProductsAction() =>
@@ -252,7 +252,7 @@ namespace ShipWorks.Products
                     }
                     else
                     {
-                        await EditProduct(result.Value).ConfigureAwait(true);
+                        await EditProduct(result.Value).ConfigureAwait(false);
                     }
                 }
             }
