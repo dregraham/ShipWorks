@@ -7,6 +7,7 @@
              xmlns:attributeEditor="clr-namespace:ShipWorks.Products.AttributeEditor;assembly=ShipWorks.Products"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="400"
+             FontFamily="/ShipWorks.UI;component/Styles/BlueSteel/#Roboto"
              d:DataContext="{d:DesignInstance attributeEditor:AttributeEditorViewModel}">
     <UserControl.Resources>
         <ResourceDictionary>
@@ -62,22 +63,30 @@
                  ItemsSource="{Binding ProductAttributes, UpdateSourceTrigger=PropertyChanged}"
                  SelectedItem="{Binding SelectedProductAttribute}"
                  Style="{StaticResource BlueSteel.ListBox.SingleSelection}"
-                 Height="200">
+                 Height="200"
+                 Grid.IsSharedSizeScope="True">
             <ListBox.ItemTemplate>
                 <DataTemplate>
-                    <Grid>
+                    <Grid >
                         <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="auto" SharedSizeGroup="NameColumn"/>
                             <ColumnDefinition Width="auto"/>
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
                         <TextBlock Grid.Column="0"
                                    Text="{Binding ProductAttribute.AttributeName}"
-                                   Margin="0 5 10 5"
+                                   Margin="0 5 5 5"
+                                   MaxWidth="80"
                                    VerticalAlignment="Center"
-                                   HorizontalAlignment="Left"/>
+                                   HorizontalAlignment="Right"
+                                   TextTrimming="CharacterEllipsis"/>
                         <TextBlock Grid.Column="1"
+                                   Text=":"
+                                   VerticalAlignment="Center"
+                                   Margin="0 5"/>
+                        <TextBlock Grid.Column="2"
                                    Text="{Binding AttributeValue}"
-                                   Margin="0 5 0 5"
+                                   Margin="5 5 0 5"
                                    VerticalAlignment="Center"
                                    HorizontalAlignment="Left"/>
                     </Grid>                    
