@@ -201,7 +201,7 @@ namespace ShipWorks.Data.Model
 			InitProductListItemEntityMappings();
 			InitProductVariantEntityMappings();
 			InitProductVariantAliasEntityMappings();
-			InitProductVariantAttributeEntityMappings();
+			InitProductVariantAttributeValueEntityMappings();
 			InitProStoresOrderEntityMappings();
 			InitProStoresOrderSearchEntityMappings();
 			InitProStoresStoreEntityMappings();
@@ -2815,14 +2815,14 @@ namespace ShipWorks.Data.Model
 			this.AddElementFieldMapping("ProductVariantAliasEntity", "IsDefault", "IsDefault", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 4);
 		}
 
-		/// <summary>Inits ProductVariantAttributeEntity's mappings</summary>
-		private void InitProductVariantAttributeEntityMappings()
+		/// <summary>Inits ProductVariantAttributeValueEntity's mappings</summary>
+		private void InitProductVariantAttributeValueEntityMappings()
 		{
-			this.AddElementMapping("ProductVariantAttributeEntity", @"ShipWorksLocal", @"dbo", "ProductVariantAttribute", 4, 0);
-			this.AddElementFieldMapping("ProductVariantAttributeEntity", "ProductVariantAttributeID", "ProductVariantAttributeID", false, "BigInt", 0, 19, 0, true, "SCOPE_IDENTITY()", null, typeof(System.Int64), 0);
-			this.AddElementFieldMapping("ProductVariantAttributeEntity", "ProductVariantID", "ProductVariantID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 1);
-			this.AddElementFieldMapping("ProductVariantAttributeEntity", "AttributeValue", "AttributeValue", false, "NVarChar", 300, 0, 0, false, "", null, typeof(System.String), 2);
-			this.AddElementFieldMapping("ProductVariantAttributeEntity", "ProductAttributeID", "ProductAttributeID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 3);
+			this.AddElementMapping("ProductVariantAttributeValueEntity", @"ShipWorksLocal", @"dbo", "ProductVariantAttributeValue", 4, 0);
+			this.AddElementFieldMapping("ProductVariantAttributeValueEntity", "ProductVariantAttributeValueID", "ProductVariantAttributeValueID", false, "BigInt", 0, 19, 0, true, "SCOPE_IDENTITY()", null, typeof(System.Int64), 0);
+			this.AddElementFieldMapping("ProductVariantAttributeValueEntity", "ProductVariantID", "ProductVariantID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 1);
+			this.AddElementFieldMapping("ProductVariantAttributeValueEntity", "AttributeValue", "AttributeValue", false, "NVarChar", 300, 0, 0, false, "", null, typeof(System.String), 2);
+			this.AddElementFieldMapping("ProductVariantAttributeValueEntity", "ProductAttributeID", "ProductAttributeID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 3);
 		}
 
 		/// <summary>Inits ProStoresOrderEntity's mappings</summary>

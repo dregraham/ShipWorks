@@ -2331,11 +2331,11 @@
           <Field Name="Sku" Type="string" MaxLength="300" FieldIndex="3" />
         </Fields>
       </EntityDefinition>
-      <EntityDefinition Name="ProductVariantAttribute" ObjectID="3649c6b1-0cb8-4d2c-8e99-f33bac91e316">
+      <EntityDefinition Name="ProductVariantAttributeValue" ObjectID="3649c6b1-0cb8-4d2c-8e99-f33bac91e316">
         <Fields>
           <Field Name="AttributeValue" Type="string" MaxLength="300" FieldIndex="2" />
           <Field Name="ProductAttributeID" Type="long" Precision="19" FieldIndex="3" />
-          <Field Name="ProductVariantAttributeID" Type="long" IsReadOnly="true" Precision="19" IsPrimaryKey="true" FieldIndex="0" />
+          <Field Name="ProductVariantAttributeValueID" Type="long" IsReadOnly="true" Precision="19" IsPrimaryKey="true" FieldIndex="0" />
           <Field Name="ProductVariantID" Type="long" Precision="19" FieldIndex="1" />
         </Fields>
       </EntityDefinition>
@@ -4033,12 +4033,12 @@
           <FieldFieldRelationship FkField="ProductVariantID" PkField="ProductVariantID" />
         </FieldRelationships>
       </NormalRelationship>
-      <NormalRelationship Name="ProductVariantAttribute.ProductAttribute-ProductAttribute.ProductVariantAttribute" Start=":ProductVariantAttribute" End=":ProductAttribute" StartNavigator="ProductAttribute" EndNavigator="ProductVariantAttribute" Type="4">
+      <NormalRelationship Name="ProductVariantAttributeValue.ProductAttribute-ProductAttribute.ProductVariantAttributeValue" Start=":ProductVariantAttributeValue" End=":ProductAttribute" StartNavigator="ProductAttribute" EndNavigator="ProductVariantAttributeValue" Type="4">
         <FieldRelationships>
           <FieldFieldRelationship FkField="ProductAttributeID" PkField="ProductAttributeID" />
         </FieldRelationships>
       </NormalRelationship>
-      <NormalRelationship Name="ProductVariantAttribute.ProductVariant-ProductVariant.Attributes" Start=":ProductVariantAttribute" End=":ProductVariant" StartNavigator="ProductVariant" EndNavigator="Attributes" Type="4">
+      <NormalRelationship Name="ProductVariantAttributeValue.ProductVariant-ProductVariant.Attributes" Start=":ProductVariantAttributeValue" End=":ProductVariant" StartNavigator="ProductVariant" EndNavigator="Attributes" Type="4">
         <FieldRelationships>
           <FieldFieldRelationship FkField="ProductVariantID" PkField="ProductVariantID" />
         </FieldRelationships>
@@ -7744,10 +7744,10 @@
                     <Field Name="IsDefault" Ordinal="5" HasDefaultValue="true" DefaultValue="(0)" DbType="2" />
                   </Fields>
                 </Table>
-                <Table Name="ProductVariantAttribute">
-                  <PkConstraintName Name="PK_ProductVariantAttribute" />
+                <Table Name="ProductVariantAttributeValue">
+                  <PkConstraintName Name="PK_ProductVariantAttributeValue" />
                   <Fields>
-                    <Field Name="ProductVariantAttributeID" Ordinal="1" IsIdentity="true" IsPrimaryKey="true" DbType="0" Precision="19" />
+                    <Field Name="ProductVariantAttributeValueID" Ordinal="1" IsIdentity="true" IsPrimaryKey="true" DbType="0" Precision="19" />
                     <Field Name="ProductVariantID" Ordinal="2" DbType="0" Precision="19" />
                     <Field Name="ProductAttributeID" Ordinal="3" DbType="0" Precision="19" />
                     <Field Name="AttributeValue" Ordinal="4" DbType="12" Length="300" />
@@ -10279,14 +10279,14 @@
                 <FieldPair PkField="dbo:ProductVariant:ProductVariantID" FkField="dbo:ProductVariantAlias:ProductVariantID" />
               </FieldPairs>
             </ForeignKeyConstraint>
-            <ForeignKeyConstraint Name="dbo:ProductVariantAttribute:FK_ProductVariantAttribute_ProductAttribute">
+            <ForeignKeyConstraint Name="dbo:ProductVariantAttributeValue:FK_ProductVariantAttributeValue_ProductAttribute">
               <FieldPairs>
-                <FieldPair PkField="dbo:ProductAttribute:ProductAttributeID" FkField="dbo:ProductVariantAttribute:ProductAttributeID" />
+                <FieldPair PkField="dbo:ProductAttribute:ProductAttributeID" FkField="dbo:ProductVariantAttributeValue:ProductAttributeID" />
               </FieldPairs>
             </ForeignKeyConstraint>
-            <ForeignKeyConstraint Name="dbo:ProductVariantAttribute:FK_ProductVariantAttribute_ProductVariant">
+            <ForeignKeyConstraint Name="dbo:ProductVariantAttributeValue:FK_ProductVariantAttributeValue_ProductVariant">
               <FieldPairs>
-                <FieldPair PkField="dbo:ProductVariant:ProductVariantID" FkField="dbo:ProductVariantAttribute:ProductVariantID" />
+                <FieldPair PkField="dbo:ProductVariant:ProductVariantID" FkField="dbo:ProductVariantAttributeValue:ProductVariantID" />
               </FieldPairs>
             </ForeignKeyConstraint>
             <ForeignKeyConstraint Name="dbo:ProStoresOrder:FK_ProStoresOrder_Order">
@@ -12887,11 +12887,11 @@
             <FieldMapping FieldName="Sku" TargetFieldName="Sku" />
           </FieldMappings>
         </EntityMapping>
-        <EntityMapping EntityName=":ProductVariantAttribute" TargetName="ShipWorksLocal:dbo:ProductVariantAttribute">
+        <EntityMapping EntityName=":ProductVariantAttributeValue" TargetName="ShipWorksLocal:dbo:ProductVariantAttributeValue">
           <FieldMappings>
             <FieldMapping FieldName="AttributeValue" TargetFieldName="AttributeValue" />
             <FieldMapping FieldName="ProductAttributeID" TargetFieldName="ProductAttributeID" />
-            <FieldMapping FieldName="ProductVariantAttributeID" TargetFieldName="ProductVariantAttributeID" SequenceToUse="SCOPE_IDENTITY()" />
+            <FieldMapping FieldName="ProductVariantAttributeValueID" TargetFieldName="ProductVariantAttributeValueID" SequenceToUse="SCOPE_IDENTITY()" />
             <FieldMapping FieldName="ProductVariantID" TargetFieldName="ProductVariantID" />
           </FieldMappings>
         </EntityMapping>

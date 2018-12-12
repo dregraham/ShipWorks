@@ -3100,18 +3100,6 @@
     <Compile Include=".\RelationClasses\ProductVariantRelations.cs">
       <GeneratedBy>LLBLGen Pro</GeneratedBy>
     </Compile>
-    <Compile Include=".\EntityClasses\ProductVariantAttributeEntity.cs">
-      <GeneratedBy>LLBLGen Pro</GeneratedBy>
-    </Compile>
-    <Compile Include=".\EntityInterfaces\IProductVariantAttributeEntity.cs">
-      <GeneratedBy>LLBLGen Pro</GeneratedBy>
-    </Compile>
-    <Compile Include=".\ReadOnlyEntities\ReadOnlyProductVariantAttributeEntity.cs">
-      <GeneratedBy>LLBLGen Pro</GeneratedBy>
-    </Compile>
-    <Compile Include=".\RelationClasses\ProductVariantAttributeRelations.cs">
-      <GeneratedBy>LLBLGen Pro</GeneratedBy>
-    </Compile>
     <Compile Include=".\EntityClasses\ProductListItemEntity.cs">
       <GeneratedBy>LLBLGen Pro</GeneratedBy>
     </Compile>
@@ -3134,6 +3122,18 @@
       <GeneratedBy>LLBLGen Pro</GeneratedBy>
     </Compile>
     <Compile Include=".\RelationClasses\ProductAttributeRelations.cs">
+      <GeneratedBy>LLBLGen Pro</GeneratedBy>
+    </Compile>
+    <Compile Include=".\EntityClasses\ProductVariantAttributeValueEntity.cs">
+      <GeneratedBy>LLBLGen Pro</GeneratedBy>
+    </Compile>
+    <Compile Include=".\EntityInterfaces\IProductVariantAttributeValueEntity.cs">
+      <GeneratedBy>LLBLGen Pro</GeneratedBy>
+    </Compile>
+    <Compile Include=".\ReadOnlyEntities\ReadOnlyProductVariantAttributeValueEntity.cs">
+      <GeneratedBy>LLBLGen Pro</GeneratedBy>
+    </Compile>
+    <Compile Include=".\RelationClasses\ProductVariantAttributeValueRelations.cs">
       <GeneratedBy>LLBLGen Pro</GeneratedBy>
     </Compile>
   </ItemGroup>

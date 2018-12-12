@@ -43,8 +43,8 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             
             Product = (IProductEntity) source.Product?.AsReadOnly(objectMap);
             
-            ProductVariantAttribute = source.ProductVariantAttribute?.Select(x => x.AsReadOnly(objectMap)).OfType<IProductVariantAttributeEntity>().ToReadOnly() ??
-                Enumerable.Empty<IProductVariantAttributeEntity>();
+            ProductVariantAttributeValue = source.ProductVariantAttributeValue?.Select(x => x.AsReadOnly(objectMap)).OfType<IProductVariantAttributeValueEntity>().ToReadOnly() ??
+                Enumerable.Empty<IProductVariantAttributeValueEntity>();
 
             CopyCustomProductAttributeData(source);
         }
@@ -73,7 +73,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         public IProductEntity Product { get; }
         
         
-        public IEnumerable<IProductVariantAttributeEntity> ProductVariantAttribute { get; }
+        public IEnumerable<IProductVariantAttributeValueEntity> ProductVariantAttributeValue { get; }
         
         /// <summary>
         /// Get a read only version of the entity

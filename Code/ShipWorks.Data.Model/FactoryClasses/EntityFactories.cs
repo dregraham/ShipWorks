@@ -3179,19 +3179,20 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		#endregion
 	}
 
-	/// <summary>Factory to create new, empty ProductVariantAttributeEntity objects.</summary>
+	/// <summary>Factory to create new, empty ProductVariantAttributeValueEntity objects.</summary>
 	[Serializable]
-	public partial class ProductVariantAttributeEntityFactory : EntityFactoryBase2<ProductVariantAttributeEntity> {
+	public partial class ProductVariantAttributeValueEntityFactory : EntityFactoryBase2<ProductVariantAttributeValueEntity> {
 		/// <summary>CTor</summary>
-		public ProductVariantAttributeEntityFactory() : base("ProductVariantAttributeEntity", ShipWorks.Data.Model.EntityType.ProductVariantAttributeEntity, false) { }
+		public ProductVariantAttributeValueEntityFactory() : base("ProductVariantAttributeValueEntity", ShipWorks.Data.Model.EntityType.ProductVariantAttributeValueEntity, false) { }
 		
-		/// <summary>Creates a new ProductVariantAttributeEntity instance but uses a special constructor which will set the Fields object of the new IEntity2 instance to the passed in fields object.</summary>
+		/// <summary>Creates a new ProductVariantAttributeValueEntity instance but uses a special constructor which will set the Fields object of the new IEntity2 instance to the passed in fields object.</summary>
 		/// <param name="fields">Populated IEntityFields2 object for the new IEntity2 to create</param>
 		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
 		public override IEntity2 Create(IEntityFields2 fields) {
-			IEntity2 toReturn = new ProductVariantAttributeEntity(fields);
-			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewProductVariantAttributeUsingFields
+			IEntity2 toReturn = new ProductVariantAttributeValueEntity(fields);
+			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewProductVariantAttributeValueUsingFields
 			// __LLBLGENPRO_USER_CODE_REGION_END
+			
 			return toReturn;
 		}
 		#region Included Code
@@ -5253,8 +5254,8 @@ namespace ShipWorks.Data.Model.FactoryClasses
 				case ShipWorks.Data.Model.EntityType.ProductVariantAliasEntity:
 					factoryToUse = new ProductVariantAliasEntityFactory();
 					break;
-				case ShipWorks.Data.Model.EntityType.ProductVariantAttributeEntity:
-					factoryToUse = new ProductVariantAttributeEntityFactory();
+				case ShipWorks.Data.Model.EntityType.ProductVariantAttributeValueEntity:
+					factoryToUse = new ProductVariantAttributeValueEntityFactory();
 					break;
 				case ShipWorks.Data.Model.EntityType.ProStoresOrderEntity:
 					factoryToUse = new ProStoresOrderEntityFactory();

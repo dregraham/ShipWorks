@@ -20439,28 +20439,28 @@ namespace ShipWorks.Data.Model.HelperClasses
 		}
 	}
 
-	/// <summary>Field Creation Class for entity ProductVariantAttributeEntity</summary>
-	public partial class ProductVariantAttributeFields
+	/// <summary>Field Creation Class for entity ProductVariantAttributeValueEntity</summary>
+	public partial class ProductVariantAttributeValueFields
 	{
-		/// <summary>Creates a new ProductVariantAttributeEntity.ProductVariantAttributeID field instance</summary>
-		public static EntityField2 ProductVariantAttributeID
+		/// <summary>Creates a new ProductVariantAttributeValueEntity.ProductVariantAttributeValueID field instance</summary>
+		public static EntityField2 ProductVariantAttributeValueID
 		{
-			get { return (EntityField2)EntityFieldFactory.Create(ProductVariantAttributeFieldIndex.ProductVariantAttributeID);}
+			get { return (EntityField2)EntityFieldFactory.Create(ProductVariantAttributeValueFieldIndex.ProductVariantAttributeValueID);}
 		}
-		/// <summary>Creates a new ProductVariantAttributeEntity.ProductVariantID field instance</summary>
+		/// <summary>Creates a new ProductVariantAttributeValueEntity.ProductVariantID field instance</summary>
 		public static EntityField2 ProductVariantID
 		{
-			get { return (EntityField2)EntityFieldFactory.Create(ProductVariantAttributeFieldIndex.ProductVariantID);}
+			get { return (EntityField2)EntityFieldFactory.Create(ProductVariantAttributeValueFieldIndex.ProductVariantID);}
 		}
-		/// <summary>Creates a new ProductVariantAttributeEntity.AttributeValue field instance</summary>
+		/// <summary>Creates a new ProductVariantAttributeValueEntity.AttributeValue field instance</summary>
 		public static EntityField2 AttributeValue
 		{
-			get { return (EntityField2)EntityFieldFactory.Create(ProductVariantAttributeFieldIndex.AttributeValue);}
+			get { return (EntityField2)EntityFieldFactory.Create(ProductVariantAttributeValueFieldIndex.AttributeValue);}
 		}
-		/// <summary>Creates a new ProductVariantAttributeEntity.ProductAttributeID field instance</summary>
+		/// <summary>Creates a new ProductVariantAttributeValueEntity.ProductAttributeID field instance</summary>
 		public static EntityField2 ProductAttributeID
 		{
-			get { return (EntityField2)EntityFieldFactory.Create(ProductVariantAttributeFieldIndex.ProductAttributeID);}
+			get { return (EntityField2)EntityFieldFactory.Create(ProductVariantAttributeValueFieldIndex.ProductAttributeID);}
 		}
 	}
 

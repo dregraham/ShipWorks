@@ -40,7 +40,7 @@ namespace ShipWorks.Products.Tests
         [Fact]
         public async Task Load_LoadsAttributesFromProductVariant()
         {
-            ProductVariantAttributeEntity variantAttributeEntity = new ProductVariantAttributeEntity();
+            ProductVariantAttributeValueEntity variantAttributeEntity = new ProductVariantAttributeValueEntity();
 
             ProductVariantEntity productVariant = new ProductVariantEntity();
             productVariant.Attributes.Add(variantAttributeEntity);
@@ -62,7 +62,7 @@ namespace ShipWorks.Products.Tests
 
             await testObject.Load(productVariant);
 
-            ProductVariantAttributeEntity variantAttributeEntity = new ProductVariantAttributeEntity();
+            ProductVariantAttributeValueEntity variantAttributeEntity = new ProductVariantAttributeValueEntity();
             testObject.ProductAttributes.Add(variantAttributeEntity);
 
             testObject.Save();
@@ -87,7 +87,7 @@ namespace ShipWorks.Products.Tests
         {
             ProductAttributeEntity productAttributeEntity = new ProductAttributeEntity() {AttributeName = "foo"};
 
-            ProductVariantAttributeEntity variantAttributeEntity = new ProductVariantAttributeEntity();
+            ProductVariantAttributeValueEntity variantAttributeEntity = new ProductVariantAttributeValueEntity();
             variantAttributeEntity.ProductAttribute = productAttributeEntity;
             ProductVariantEntity productVariant = new ProductVariantEntity();
             productVariant.Attributes.Add(variantAttributeEntity);
@@ -120,7 +120,7 @@ namespace ShipWorks.Products.Tests
             testObject.AttributeValue = "value";
             testObject.AddAttributeToProductCommand.Execute(null);
 
-            ProductVariantAttributeEntity result = testObject.ProductAttributes.FirstOrDefault();
+            ProductVariantAttributeValueEntity result = testObject.ProductAttributes.FirstOrDefault();
             Assert.Equal(productAttributeEntity.AttributeName, result.ProductAttribute.AttributeName);
             Assert.Equal("value", result.AttributeValue);
         }
@@ -144,7 +144,7 @@ namespace ShipWorks.Products.Tests
         [Fact]
         public void RemoveAttribute_RemovesAttributeFromProductAttributesList()
         {
-            ProductVariantAttributeEntity variantAttributeEntity = new ProductVariantAttributeEntity();
+            ProductVariantAttributeValueEntity variantAttributeEntity = new ProductVariantAttributeValueEntity();
 
             ProductVariantEntity productVariant = new ProductVariantEntity();
             productVariant.Attributes.Add(variantAttributeEntity);
@@ -162,7 +162,7 @@ namespace ShipWorks.Products.Tests
         [Fact]
         public void RemoveProductCommand_IsAllowed_WhenSelectedProductIsNotNull()
         {
-            testObject.SelectedProductAttribute = new ProductVariantAttributeEntity();
+            testObject.SelectedProductAttribute = new ProductVariantAttributeValueEntity();
             Assert.True(testObject.RemoveAttributeFromProductCommand.CanExecute(null));
         }
 

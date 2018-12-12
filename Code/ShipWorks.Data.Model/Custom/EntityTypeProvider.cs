@@ -174,7 +174,7 @@ namespace ShipWorks.Data.Model.Custom
 				case "ProductListItemEntity": return EntityType.ProductListItemEntity;
 				case "ProductVariantEntity": return EntityType.ProductVariantEntity;
 				case "ProductVariantAliasEntity": return EntityType.ProductVariantAliasEntity;
-				case "ProductVariantAttributeEntity": return EntityType.ProductVariantAttributeEntity;
+				case "ProductVariantAttributeValueEntity": return EntityType.ProductVariantAttributeValueEntity;
 				case "ProStoresOrderEntity": return EntityType.ProStoresOrderEntity;
 				case "ProStoresOrderSearchEntity": return EntityType.ProStoresOrderSearchEntity;
 				case "ProStoresStoreEntity": return EntityType.ProStoresStoreEntity;

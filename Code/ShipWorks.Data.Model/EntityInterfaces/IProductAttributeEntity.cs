@@ -43,7 +43,7 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         
         IProductEntity Product { get; }
         
-        IEnumerable<IProductVariantAttributeEntity> ProductVariantAttribute { get; }
+        IEnumerable<IProductVariantAttributeValueEntity> ProductVariantAttributeValue { get; }
 
         
 
@@ -73,7 +73,7 @@ namespace ShipWorks.Data.Model.EntityClasses
         
         IProductEntity IProductAttributeEntity.Product => Product;
         
-        IEnumerable<IProductVariantAttributeEntity> IProductAttributeEntity.ProductVariantAttribute => ProductVariantAttribute;
+        IEnumerable<IProductVariantAttributeValueEntity> IProductAttributeEntity.ProductVariantAttributeValue => ProductVariantAttributeValue;
 
         /// <summary>
         /// Get a read only version of the entity

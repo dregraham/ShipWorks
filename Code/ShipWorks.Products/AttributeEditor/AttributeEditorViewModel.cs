@@ -25,8 +25,8 @@ namespace ShipWorks.Products.AttributeEditor
         private string selectedAttributeName;
         private ObservableCollection<string> attributeNames;
         private string attributeValue;
-        private ObservableCollection<ProductVariantAttributeEntity> bundleLineItems;
-        private ProductVariantAttributeEntity selectedBundleLineItem;
+        private ObservableCollection<ProductVariantAttributeValueEntity> bundleLineItems;
+        private ProductVariantAttributeValueEntity selectedBundleLineItem;
         private ProductVariantEntity productVariant;
         private readonly IMessageHelper messageHelper;
         private readonly ISqlAdapterFactory sqlAdapterFactory;
@@ -44,7 +44,7 @@ namespace ShipWorks.Products.AttributeEditor
             AttributeNames = new ObservableCollection<string>();
             SelectedAttributeName = AttributeNames.FirstOrDefault();
 
-            ProductAttributes = new ObservableCollection<ProductVariantAttributeEntity>();
+            ProductAttributes = new ObservableCollection<ProductVariantAttributeValueEntity>();
 
             AddAttributeToProductCommand = new RelayCommand(AddAttributeToProduct);
             RemoveAttributeFromProductCommand = new RelayCommand(RemoveAttributeFromProduct, () => SelectedProductAttribute != null);
@@ -84,7 +84,7 @@ namespace ShipWorks.Products.AttributeEditor
         /// The list of attributes attached to the current product
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public ObservableCollection<ProductVariantAttributeEntity> ProductAttributes
+        public ObservableCollection<ProductVariantAttributeValueEntity> ProductAttributes
         {
             get => bundleLineItems;
             set => Set(ref bundleLineItems, value);
@@ -94,7 +94,7 @@ namespace ShipWorks.Products.AttributeEditor
         /// The product attribute that the user has selected
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public ProductVariantAttributeEntity SelectedProductAttribute
+        public ProductVariantAttributeValueEntity SelectedProductAttribute
         {
             get => selectedBundleLineItem;
             set => Set(ref selectedBundleLineItem, value);
@@ -125,7 +125,7 @@ namespace ShipWorks.Products.AttributeEditor
             }
 
             AttributeNames = new ObservableCollection<string>(productVariant.Product.Attributes.Select(x => x.AttributeName));
-            ProductAttributes = new ObservableCollection<ProductVariantAttributeEntity>(productVariant.Attributes);
+            ProductAttributes = new ObservableCollection<ProductVariantAttributeValueEntity>(productVariant.Attributes);
         }
 
         /// <summary>
@@ -136,7 +136,7 @@ namespace ShipWorks.Products.AttributeEditor
             productVariant.Attributes.RemovedEntitiesTracker = new ProductAttributeCollection();
             productVariant.Attributes.Clear();
 
-            foreach (ProductVariantAttributeEntity attribute in ProductAttributes)
+            foreach (ProductVariantAttributeValueEntity attribute in ProductAttributes)
             {
                 productVariant.Attributes.Add(attribute);
             }
@@ -177,7 +177,7 @@ namespace ShipWorks.Products.AttributeEditor
                 };
             }
 
-            ProductAttributes.Add(new ProductVariantAttributeEntity
+            ProductAttributes.Add(new ProductVariantAttributeValueEntity
             {
                 ProductVariantID = productVariant.ProductVariantID,
                 ProductAttribute = attribute,

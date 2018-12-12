@@ -240,7 +240,7 @@ namespace ShipWorks.Products
                 ProductVariantEntity.PrefetchPathProduct.WithSubPath(ProductEntity.PrefetchPathAttributes),
                 ProductVariantEntity.PrefetchPathAliases,
                 ProductVariantEntity.PrefetchPathIncludedInBundles,
-                ProductVariantEntity.PrefetchPathAttributes.WithSubPath(ProductVariantAttributeEntity.PrefetchPathProductAttribute)
+                ProductVariantEntity.PrefetchPathAttributes.WithSubPath(ProductVariantAttributeValueEntity.PrefetchPathProductAttribute)
             };
 
             return prefetchPath;
@@ -281,7 +281,7 @@ namespace ShipWorks.Products
             if (productVariant.IsNew)
             {
                 productVariant.CreatedDate = now;
-            }            
+            }
 
             using (ISqlAdapter adapter = sqlAdapterFactory.CreateTransacted())
             {

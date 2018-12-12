@@ -30,24 +30,24 @@ namespace ShipWorks.Data.Model.RelationClasses
 		public virtual List<IEntityRelation> GetAllRelations()
 		{
 			List<IEntityRelation> toReturn = new List<IEntityRelation>();
-			toReturn.Add(this.ProductVariantAttributeEntityUsingProductAttributeID);
+			toReturn.Add(this.ProductVariantAttributeValueEntityUsingProductAttributeID);
 			toReturn.Add(this.ProductEntityUsingProductID);
 			return toReturn;
 		}
 
 		#region Class Property Declarations
 
-		/// <summary>Returns a new IEntityRelation object, between ProductAttributeEntity and ProductVariantAttributeEntity over the 1:n relation they have, using the relation between the fields:
-		/// ProductAttribute.ProductAttributeID - ProductVariantAttribute.ProductAttributeID
+		/// <summary>Returns a new IEntityRelation object, between ProductAttributeEntity and ProductVariantAttributeValueEntity over the 1:n relation they have, using the relation between the fields:
+		/// ProductAttribute.ProductAttributeID - ProductVariantAttributeValue.ProductAttributeID
 		/// </summary>
-		public virtual IEntityRelation ProductVariantAttributeEntityUsingProductAttributeID
+		public virtual IEntityRelation ProductVariantAttributeValueEntityUsingProductAttributeID
 		{
 			get
 			{
-				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToMany, "ProductVariantAttribute" , true);
-				relation.AddEntityFieldPair(ProductAttributeFields.ProductAttributeID, ProductVariantAttributeFields.ProductAttributeID);
+				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToMany, "ProductVariantAttributeValue" , true);
+				relation.AddEntityFieldPair(ProductAttributeFields.ProductAttributeID, ProductVariantAttributeValueFields.ProductAttributeID);
 				relation.InheritanceInfoPkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("ProductAttributeEntity", true);
-				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("ProductVariantAttributeEntity", false);
+				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("ProductVariantAttributeValueEntity", false);
 				return relation;
 			}
 		}
@@ -81,7 +81,7 @@ namespace ShipWorks.Data.Model.RelationClasses
 	/// <summary>Static class which is used for providing relationship instances which are re-used internally for syncing</summary>
 	internal static class StaticProductAttributeRelations
 	{
-		internal static readonly IEntityRelation ProductVariantAttributeEntityUsingProductAttributeIDStatic = new ProductAttributeRelations().ProductVariantAttributeEntityUsingProductAttributeID;
+		internal static readonly IEntityRelation ProductVariantAttributeValueEntityUsingProductAttributeIDStatic = new ProductAttributeRelations().ProductVariantAttributeValueEntityUsingProductAttributeID;
 		internal static readonly IEntityRelation ProductEntityUsingProductIDStatic = new ProductAttributeRelations().ProductEntityUsingProductID;
 
 		/// <summary>CTor</summary>
