@@ -320,6 +320,9 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
             orderLoader.Load(fieldMap, orderEntity, odbcRecordsForOrder, reloadEntireOrder);
 
             orderEntity.ChangeOrderNumber(orderNumberToUse);
+            
+            DateTime? shipDate = orderEntity.ShipByDate;
+            orderEntity.ShipByDate = orderEntity.ChangeDate(shipDate);
 
             return GenericResult.FromSuccess(orderEntity);
         }
