@@ -70,7 +70,7 @@
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
                         <TextBlock Grid.Column="0"
-                                   Text="{Binding Attributes.AttributeName}"
+                                   Text="{Binding ProductAttribute.AttributeName}"
                                    Margin="0 5 10 5"
                                    VerticalAlignment="Center"
                                    HorizontalAlignment="Left"/>

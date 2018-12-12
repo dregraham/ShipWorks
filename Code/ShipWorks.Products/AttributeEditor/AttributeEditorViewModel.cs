@@ -162,6 +162,7 @@ namespace ShipWorks.Products.AttributeEditor
             {
                 attribute = new ProductAttributeEntity
                 {
+                    ProductID = productVariant.ProductID,
                     AttributeName = SelectedAttributeName
                 };
             }
