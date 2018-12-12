@@ -171,7 +171,7 @@ namespace ShipWorks.Products.AttributeEditor
             {
                 ProductVariantID = productVariant.ProductVariantID,
                 ProductAttribute = attribute,
-                AttributeValue = AttributeValue
+                AttributeValue = AttributeValue ?? string.Empty
             });
         }
 
