@@ -10,6 +10,7 @@ using GalaSoft.MvvmLight.CommandWpf;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.UI;
 using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model.Custom;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 
@@ -120,7 +121,7 @@ namespace ShipWorks.Products.AttributeEditor
             using (ISqlAdapter sqlAdapter = sqlAdapterFactory.Create())
             {
                 IEnumerable<IProductAttributeEntity> attributes = await productCatalog.GetAvailableAttributesFor(sqlAdapter, productVariantEntity).ConfigureAwait(true);
-                AttributeNames = new ObservableCollection<string>(attributes.Select(a=>a.AttributeName));
+                AttributeNames = new ObservableCollection<string>(attributes.Select(a => a.AttributeName));
             }
 
             AttributeNames = new ObservableCollection<string>(productVariant.Product.Attributes.Select(x => x.AttributeName));
@@ -132,6 +133,7 @@ namespace ShipWorks.Products.AttributeEditor
         /// </summary>
         public void Save()
         {
+            productVariant.Attributes.RemovedEntitiesTracker = new ProductAttributeCollection();
             productVariant.Attributes.Clear();
 
             foreach (ProductVariantAttributeEntity attribute in ProductAttributes)

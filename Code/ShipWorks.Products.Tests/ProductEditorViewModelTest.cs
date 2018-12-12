@@ -35,7 +35,7 @@ namespace ShipWorks.OrderLookup.Tests
                 }
             };
 
-            await testObject.ShowProductEditor(product.ProductVariant);
+            await testObject.ShowProductEditor(product.ProductVariant).ConfigureAwait(true);
 
             mock.Mock<IMessageHelper>().Verify(m => m.ShowDialog(It.IsAny<IDialog>()));
         }

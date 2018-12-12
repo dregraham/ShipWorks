@@ -75,7 +75,7 @@ namespace ShipWorks.Products
             ActivateProductCommand =
                 new RelayCommand(() => SetProductActivation(true).Forget(), () => SelectedProductIDs?.Any() == true);
 
-            ImportProducts = new RelayCommand(() => ImportProductsAction());
+            ImportProducts = new RelayCommand(ImportProductsAction);
 
             AddProduct = new RelayCommand(async () => await AddProductAction());
         }
@@ -234,7 +234,7 @@ namespace ShipWorks.Products
         /// </summary>
         private async Task CopyAsVariantAction()
         {
-            if (SelectedProductIDs.IsCountEqualTo(1) && selectedProductIDs.FirstOrDefault() > 0)
+            if (SelectedProductIDs.IsCountEqualTo(1) && SelectedProductIDs.FirstOrDefault() > 0)
             {
                 ProductVariantEntity selectedProductVariant;
                 using (ISqlAdapter adapter = sqlAdapterFactory.Create())
