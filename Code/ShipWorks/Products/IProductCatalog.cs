@@ -41,7 +41,7 @@ namespace ShipWorks.Products
         /// <summary>
         /// Create a variant based on the given variant
         /// </summary>
-        GenericResult<ProductVariantEntity> CreateVariant(ProductVariantEntity productVariant);
+        GenericResult<ProductVariantEntity> CloneVariant(ProductVariantEntity productVariant);
 
         /// <summary>
         /// Fetch a product attribute based on name

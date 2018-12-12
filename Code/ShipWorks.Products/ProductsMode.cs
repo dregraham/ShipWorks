@@ -244,7 +244,7 @@ namespace ShipWorks.Products
 
                 if (selectedProductVariant != null)
                 {
-                    GenericResult<ProductVariantEntity> result = productCatalog.CreateVariant(selectedProductVariant);
+                    GenericResult<ProductVariantEntity> result = productCatalog.CloneVariant(selectedProductVariant);
 
                     if (result.Failure)
                     {

@@ -387,14 +387,11 @@ namespace ShipWorks.Products
         /// <summary>
         /// Create a variant based on the given variant
         /// </summary>
-        public GenericResult<ProductVariantEntity> CreateVariant(ProductVariantEntity productVariant)
+        public GenericResult<ProductVariantEntity> CloneVariant(ProductVariantEntity productVariant)
         {
-            if (productVariant.Product.IsBundle)
-            {
-                return GenericResult.FromError<ProductVariantEntity>("You cannot create a variant from a bundle.");
-            }
-
-            return GenericResult.FromSuccess(EntityUtility.CloneAsNew(productVariant));
+            return productVariant.Product.IsBundle ? 
+                GenericResult.FromError<ProductVariantEntity>("You cannot create a variant from a bundle.") :
+                GenericResult.FromSuccess(EntityUtility.CloneAsNew(productVariant));
         }
     }
 }
