@@ -106,7 +106,7 @@ namespace ShipWorks.Products.Tests
         public async Task AddAttribute_AddsAttributeToProductAttributesList()
         {
             ProductAttributeEntity productAttributeEntity = new ProductAttributeEntity(){ AttributeName = "foo"};
-            mock.Mock<IProductCatalog>().Setup(x => x.FetchProductAttribute(It.IsAny<ISqlAdapter>(), "foo", AnyLong))
+            mock.Mock<IProductCatalog>().Setup(x => x.FetchProductAttribute("foo", AnyLong))
                 .Returns(productAttributeEntity);
 
             ProductVariantEntity productVariant = new ProductVariantEntity();
@@ -138,7 +138,7 @@ namespace ShipWorks.Products.Tests
             testObject.AttributeValue = "value";
             testObject.AddAttributeToProductCommand.Execute(null);
 
-            mock.Mock<IProductCatalog>().Verify(x => x.FetchProductAttribute(It.IsAny<ISqlAdapter>(), testObject.SelectedAttributeName, AnyLong));
+            mock.Mock<IProductCatalog>().Verify(x => x.FetchProductAttribute(testObject.SelectedAttributeName, AnyLong));
         }
 
         [Fact]
