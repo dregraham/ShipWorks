@@ -1010,6 +1010,19 @@
     <Compile Include="OrderLookup\OrderLookupClearOrderMessage.cs" />
     <Compile Include="OrderLookup\OrderLookupSearchMessage.cs" />
     <Compile Include="OrderLookup\ShipmentModelPipelines\IOrderLookupShipmentModelPipeline.cs" />
+    <Compile Include="Shipping\Insurance\InsureShip\IInsureShipClaim.cs" />
+    <Compile Include="Shipping\Insurance\InsureShip\Net\Claim\IInsureShipClaimStatusRequest.cs" />
+    <Compile Include="Shipping\Insurance\InsureShip\Net\Claim\IInsureShipSubmitClaimRequest.cs" />
+    <Compile Include="Shipping\Insurance\InsureShip\Net\Claim\InsureShipGetClaimStatusResponse.cs" />
+    <Compile Include="Shipping\Insurance\InsureShip\Net\Claim\InsureShipSubmitClaimResponse.cs" />
+    <Compile Include="Shipping\Insurance\InsureShip\Net\IInsureShipWebClient.cs" />
+    <Compile Include="Shipping\Insurance\InsureShip\Net\InsureShipWebClient.cs" />
+    <Compile Include="Shipping\Insurance\InsureShip\Net\Insure\IInsureShipInsureShipmentRequest.cs" />
+    <Compile Include="Shipping\Insurance\InsureShip\Net\Insure\InsureShipNewPolicyResponse.cs" />
+    <Compile Include="Shipping\Insurance\InsureShip\Net\Void\IInsureShipVoidPolicyRequest.cs" />
+    <Compile Include="Shipping\Insurance\InsureShip\Net\Void\IInsureShipVoidValidator.cs" />
+    <Compile Include="Shipping\Insurance\InsureShip\Net\Void\InsureShipVoidPolicyResponse.cs" />
+    <Compile Include="Shipping\Insurance\InsureShip\Net\Void\InsureShipVoidValidator.cs" />
     <Compile Include="Shipping\Profiles\EditableShippingProfile.cs" />
     <Compile Include="Shipping\Profiles\IEditableShippingProfile.cs" />
     <Compile Include="Shipping\Profiles\IProfilePopupService.cs" />
@@ -2273,32 +2286,15 @@
     <Compile Include="Shipping\Insurance\InsureShip\InsureShipClaimType.cs" />
     <Compile Include="Shipping\Insurance\InsureShip\InsureShipClaim.cs" />
     <Compile Include="Shipping\Insurance\InsureShip\Net\Claim\InsureShipClaimStatusRequest.cs" />
-    <Compile Include="Shipping\Insurance\InsureShip\Net\Claim\InsureShipClaimStatusResponse.cs" />
-    <Compile Include="Shipping\Insurance\InsureShip\Net\Claim\InsureShipSubmitClaimResponse.cs" />
     <Compile Include="Shipping\Insurance\InsureShip\Net\InsureShipShipmentIdentifier.cs" />
-    <Compile Include="Shipping\Insurance\InsureShip\Net\Insure\InsureShipInsureShipmentResponse.cs" />
-    <Compile Include="Shipping\Insurance\InsureShip\Net\IInsureShipRequestFactory.cs" />
-    <Compile Include="Shipping\Insurance\InsureShip\Net\IInsureShipResponseFactory.cs" />
     <Compile Include="Shipping\Insurance\InsureShip\IInsureShipSettings.cs" />
-    <Compile Include="Shipping\Insurance\InsureShip\InsureShipAffiliate.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Shipping\Insurance\InsureShip\InsureShipAffiliateProvider.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Shipping\Insurance\InsureShip\Net\Insure\InsureShipInsureShipmentRequest.cs" />
-    <Compile Include="Shipping\Insurance\InsureShip\Net\InsureShipRequestBase.cs" />
-    <Compile Include="Shipping\Insurance\InsureShip\Net\InsureShipRequestFactory.cs" />
     <Compile Include="Shipping\Insurance\InsureShip\Net\InsureShipResponseException.cs" />
     <Compile Include="Shipping\Insurance\InsureShip\Net\InsureShipResponseCode.cs" />
-    <Compile Include="Shipping\Insurance\InsureShip\Net\IInsureShipResponse.cs" />
     <Compile Include="Shipping\Insurance\InsureShip\InsureShipException.cs" />
-    <Compile Include="Shipping\Insurance\InsureShip\Net\InsureShipResponseFactory.cs" />
     <Compile Include="Shipping\Insurance\InsureShip\InsureShipSettings.cs" />
-    <Compile Include="Shipping\Insurance\InsureShip\InsureShipPolicy.cs" />
     <Compile Include="Shipping\Insurance\InsureShip\Net\Claim\InsureShipSubmitClaimRequest.cs" />
     <Compile Include="Shipping\Insurance\InsureShip\Net\Void\InsureShipVoidPolicyRequest.cs" />
-    <Compile Include="Shipping\Insurance\InsureShip\Net\Void\InsureShipVoidPolicyResponse.cs" />
     <Compile Include="Shipping\InvalidPackageDimensionsException.cs" />
     <Compile Include="Shipping\Policies\BestRateUpsRestrictionShippingPolicy.cs" />
     <Compile Include="Shipping\Policies\IShippingPolicy.cs" />

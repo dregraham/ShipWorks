@@ -1652,7 +1652,7 @@ namespace ShipWorks.Data.Model
 			this.AddElementFieldMapping("FilterNodeContentEntity", "JoinMask", "JoinMask", false, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 7);
 			this.AddElementFieldMapping("FilterNodeContentEntity", "Cost", "Cost", false, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 8);
 			this.AddElementFieldMapping("FilterNodeContentEntity", "Count", "Count", false, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 9);
-			this.AddElementFieldMapping("FilterNodeContentEntity", "EntityExistsQuery", "EntityExistsQuery", true, "NVarChar", 2147483647, 0, 0, false, "", null, typeof(System.String), 10);
+			this.AddElementFieldMapping("FilterNodeContentEntity", "EntityExistsQuery", "EntityExistsQuery", false, "NVarChar", 2147483647, 0, 0, false, "", null, typeof(System.String), 10);
 		}
 
 		/// <summary>Inits FilterNodeContentDetailEntity's mappings</summary>
@@ -1862,7 +1862,7 @@ namespace ShipWorks.Data.Model
 		/// <summary>Inits InsurancePolicyEntity's mappings</summary>
 		private void InitInsurancePolicyEntityMappings()
 		{
-			this.AddElementMapping("InsurancePolicyEntity", @"ShipWorksLocal", @"dbo", "InsurancePolicy", 10, 0);
+			this.AddElementMapping("InsurancePolicyEntity", @"ShipWorksLocal", @"dbo", "InsurancePolicy", 12, 0);
 			this.AddElementFieldMapping("InsurancePolicyEntity", "ShipmentID", "ShipmentID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 0);
 			this.AddElementFieldMapping("InsurancePolicyEntity", "InsureShipStoreName", "InsureShipStoreName", false, "NVarChar", 75, 0, 0, false, "", null, typeof(System.String), 1);
 			this.AddElementFieldMapping("InsurancePolicyEntity", "CreatedWithApi", "CreatedWithApi", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 2);
@@ -1873,6 +1873,8 @@ namespace ShipWorks.Data.Model
 			this.AddElementFieldMapping("InsurancePolicyEntity", "SubmissionDate", "SubmissionDate", true, "DateTime", 0, 0, 0, false, "", null, typeof(System.DateTime), 7);
 			this.AddElementFieldMapping("InsurancePolicyEntity", "ClaimID", "ClaimID", true, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 8);
 			this.AddElementFieldMapping("InsurancePolicyEntity", "EmailAddress", "EmailAddress", true, "NVarChar", 100, 0, 0, false, "", null, typeof(System.String), 9);
+			this.AddElementFieldMapping("InsurancePolicyEntity", "InsureShipPolicyID", "InsureShipPolicyID", true, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 10);
+			this.AddElementFieldMapping("InsurancePolicyEntity", "DateOfIssue", "DateOfIssue", true, "DateTime", 0, 0, 0, false, "", null, typeof(System.DateTime), 11);
 		}
 
 		/// <summary>Inits IParcelAccountEntity's mappings</summary>

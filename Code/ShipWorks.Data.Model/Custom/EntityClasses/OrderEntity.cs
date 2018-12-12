@@ -11,15 +11,14 @@ namespace ShipWorks.Data.Model.EntityClasses
     /// </summary>
     public partial class OrderEntity
     {
-        string prefix = "";
-        string postfix = "";
-
-        bool settingOrderNumberComplete = false;
+        private string prefix = "";
+        private string postfix = "";
+        private bool settingOrderNumberComplete = false;
 
         private const long AlphaNumericOrderNumberIdentifier = long.MinValue;
 
         // We cache this so we only have to look it up once
-        static string baseObjectName = ((IEntityCore) new OrderEntity()).LLBLGenProEntityName;
+        private static string baseObjectName = ((IEntityCore) new OrderEntity()).LLBLGenProEntityName;
 
         /// <summary>
         /// Set the Prefix for the order number
@@ -141,5 +140,10 @@ namespace ShipWorks.Data.Model.EntityClasses
         /// </summary>
         public ShipmentEntity Shipment(long shipmentId) =>
             Shipments.FirstOrDefault(x => x.ShipmentID == shipmentId);
+
+        /// <summary>
+        /// Total cost of the items of the order
+        /// </summary>
+        public decimal SubTotal => OrderItems.Sum(x => x.TotalPrice);
     }
 }

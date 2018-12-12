@@ -48,8 +48,6 @@ namespace ShipWorks.ApplicationCore.Licensing
         // Logger
         private static readonly ILog log = LogManager.GetLogger(typeof(TangoWebClient));
 
-        private static InsureShipAffiliateProvider insureShipAffiliateProvider = new InsureShipAffiliateProvider();
-
         private static Version version;
 
         /// <summary>
@@ -154,12 +152,7 @@ namespace ShipWorks.ApplicationCore.Licensing
             HttpVariableRequestSubmitter postRequest = new HttpVariableRequestSubmitter();
             postRequest.Variables.Add("action", "getstatus");
 
-            LicenseAccountDetail licenseAccountDetail = ProcessAccountRequest(postRequest, store, license, collectTelemetry);
-
-            InsureShipAffiliate insureShipAffiliate = new InsureShipAffiliate(licenseAccountDetail.TangoStoreID, licenseAccountDetail.TangoCustomerID);
-            insureShipAffiliateProvider.Add(store.StoreID, insureShipAffiliate);
-
-            return licenseAccountDetail;
+            return ProcessAccountRequest(postRequest, store, license, collectTelemetry);
         }
 
         /// <summary>
@@ -181,30 +174,6 @@ namespace ShipWorks.ApplicationCore.Licensing
                 log.Error(ex);
                 return string.Empty;
             }
-        }
-
-        /// <summary>
-        /// Returns an InsureShipAffiliate for the specified store.
-        /// If one cannot be found, an InsureShipException is thrown.
-        /// </summary>
-        public static InsureShipAffiliate GetInsureShipAffiliate(StoreEntity store)
-        {
-            InsureShipAffiliate insureShipAffiliate = insureShipAffiliateProvider.GetInsureShipAffiliate(store.StoreID);
-
-            // If it's null, try one more time to populate it.
-            if (insureShipAffiliate == null)
-            {
-                GetLicenseStatus(store.License, store, true);
-                insureShipAffiliate = insureShipAffiliateProvider.GetInsureShipAffiliate(store.StoreID);
-
-                // If it's still null, throw
-                if (insureShipAffiliate == null)
-                {
-                    throw new InsureShipException(string.Format("ShipWorks was unable to determine the Insurance Affiliate for store '{0}'", store.StoreName));
-                }
-            }
-
-            return insureShipAffiliate;
         }
 
         /// <summary>

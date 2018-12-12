@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Globalization;
 using System.Windows.Forms;
+using Autofac;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
-using ShipWorks.ApplicationCore.Licensing;
+using log4net;
+using ShipWorks.ApplicationCore;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Insurance.InsureShip;
 using ShipWorks.Stores;
@@ -27,7 +29,7 @@ namespace ShipWorks.Shipping.Insurance
         }
 
         /// <summary>
-        /// Populate the form fields 
+        /// Populate the form fields
         /// </summary>
         public void LoadClaim(ShipmentEntity shipment)
         {
@@ -40,14 +42,14 @@ namespace ShipWorks.Shipping.Insurance
             }
 
             claimType.Text = EnumHelper.GetDescription((InsureShipClaimType) insurancePolicy.ClaimType);
-            
+
             itemName.Text = insurancePolicy.ItemName;
             description.Text = insurancePolicy.Description;
             email.Text = insurancePolicy.EmailAddress;
 
             damageValue.Text = insurancePolicy.DamageValue.GetValueOrDefault().ToString("C");
             submittedOn.Text = insurancePolicy.SubmissionDate.GetValueOrDefault().ToLocalTime().ToString("g");
-            
+
             claimID.Text = insurancePolicy.ClaimID.GetValueOrDefault().ToString(CultureInfo.InvariantCulture);
         }
 
@@ -56,16 +58,33 @@ namespace ShipWorks.Shipping.Insurance
         /// </summary>
         private string FetchClaimStatus()
         {
-            StoreEntity storeEntity = StoreManager.GetStore(shipment.Order.StoreID);
+            using (var lifetimeScope = IoC.BeginLifetimeScope())
+            {
+                var claim = lifetimeScope.Resolve<IInsureShipClaim>();
+
+                return EnsureStoreExists(lifetimeScope.Resolve<IStoreManager>())
+                    .Bind(() => claim.CheckStatus(shipment))
+                    .OnFailure(ex =>
+                    {
+                        lifetimeScope.Resolve<ILog>(TypedParameter.From(GetType())).Error(ex);
+                        lifetimeScope.Resolve<IMessageHelper>().ShowError("ShipWorks was unable to check the status of your claim. Please try again later or contact InsureShip to check your claim status.");
+                    })
+                    .Match(x => x, ex => string.Empty);
+            }
+        }
+
+        /// <summary>
+        /// Ensure the store for the shipment exists
+        /// </summary>
+        private Result EnsureStoreExists(IStoreManager storeManager)
+        {
+            var storeEntity = storeManager.GetStoreReadOnly(shipment.Order.StoreID);
             if (storeEntity == null)
             {
-                throw new InsureShipException("The store the shipment was in has been deleted.");
+                return new InsureShipException("The store the shipment was in has been deleted.");
             }
 
-            InsureShipAffiliate insureShipAffiliate = TangoWebClient.GetInsureShipAffiliate(storeEntity);
-
-            InsureShipClaim claim = new InsureShipClaim(shipment, insureShipAffiliate);
-            return claim.CheckStatus();
+            return Result.FromSuccess();
         }
 
         /// <summary>
@@ -89,15 +108,8 @@ namespace ShipWorks.Shipping.Insurance
         /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
         private void OnStatusButtonClick(object sender, EventArgs e)
         {
-            try
-            {
-                Cursor.Current = Cursors.WaitCursor;
-                claimStatus.Text = FetchClaimStatus();
-            }
-            catch (InsureShipException)
-            {
-                MessageHelper.ShowError(this, "ShipWorks was unable to check the status of your claim. Please try again later or contact InsureShip to check your claim status.");
-            }
+            Cursor.Current = Cursors.WaitCursor;
+            claimStatus.Text = FetchClaimStatus();
         }
     }
 }

@@ -1543,8 +1543,10 @@
           <Field Name="ClaimType" Type="int" IsOptional="true" FieldIndex="5" />
           <Field Name="CreatedWithApi" Type="bool" FieldIndex="2" />
           <Field Name="DamageValue" Type="decimal" IsOptional="true" Precision="19" Scale="4" FieldIndex="6" />
+          <Field Name="DateOfIssue" Type="datetime" IsOptional="true" FieldIndex="11" />
           <Field Name="Description" Type="string" IsOptional="true" MaxLength="255" FieldIndex="4" />
           <Field Name="EmailAddress" Type="string" IsOptional="true" MaxLength="100" FieldIndex="9" />
+          <Field Name="InsureShipPolicyID" Type="long" IsOptional="true" Precision="19" FieldIndex="10" />
           <Field Name="InsureShipStoreName" Type="string" MaxLength="75" FieldIndex="1" />
           <Field Name="ItemName" Type="string" IsOptional="true" MaxLength="255" FieldIndex="3" />
           <Field Name="ShipmentID" Type="long" IsPrimaryKey="true" IsAutoCreated="true" FieldIndex="0" />
@@ -4353,7 +4355,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2018-11-01T20:42:16.478364Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2018-12-12T17:37:04.7268152Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -4725,7 +4727,7 @@
                     <Field Name="OrderItemID" Ordinal="1" IsPrimaryKey="true" DbType="0" Precision="19" />
                     <Field Name="OrderAddressID" Ordinal="2" DbType="0" Precision="19" />
                     <Field Name="OrderProductID" Ordinal="3" DbType="0" Precision="19" />
-                    <Field Name="IsDigitalItem" Ordinal="4" DbType="2" />
+                    <Field Name="IsDigitalItem" Ordinal="4" HasDefaultValue="true" DefaultValue="(0)" DbType="2" />
                     <Field Name="EventDate" Ordinal="5" IsOptional="true" DbType="4" />
                     <Field Name="EventName" Ordinal="6" IsOptional="true" DbType="12" Length="255" />
                     <Field Name="ParentOrderProductID" Ordinal="7" IsOptional="true" DbType="0" Precision="19" />
@@ -6395,7 +6397,7 @@
                     <Field Name="JoinMask" Ordinal="8" DbType="8" Precision="10" />
                     <Field Name="Cost" Ordinal="9" DbType="8" Precision="10" />
                     <Field Name="Count" Ordinal="10" DbType="8" Precision="10" />
-                    <Field Name="EntityExistsQuery" Ordinal="11" IsOptional="true" HasDefaultValue="true" DefaultValue="''" DbType="12" Length="2147483647" />
+                    <Field Name="EntityExistsQuery" Ordinal="11" DbType="12" Length="2147483647" />
                   </Fields>
                 </Table>
                 <Table Name="FilterNodeContentDetail">
@@ -6668,6 +6670,8 @@
                     <Field Name="SubmissionDate" Ordinal="8" IsOptional="true" DbType="4" />
                     <Field Name="ClaimID" Ordinal="9" IsOptional="true" DbType="0" Precision="19" />
                     <Field Name="EmailAddress" Ordinal="10" IsOptional="true" DbType="12" Length="100" />
+                    <Field Name="InsureShipPolicyID" Ordinal="11" IsOptional="true" DbType="0" Precision="19" />
+                    <Field Name="DateOfIssue" Ordinal="12" IsOptional="true" DbType="4" />
                   </Fields>
                 </Table>
                 <Table Name="iParcelAccount">
@@ -6694,7 +6698,7 @@
                   </Fields>
                 </Table>
                 <Table Name="iParcelPackage">
-                  <PkConstraintName Name="PK_iParcelPackageNew" />
+                  <PkConstraintName Name="PK_iParcelPackage" />
                   <Fields>
                     <Field Name="iParcelPackageID" Ordinal="1" IsIdentity="true" IsPrimaryKey="true" DbType="0" Precision="19" />
                     <Field Name="ShipmentID" Ordinal="2" DbType="0" Precision="19" />
@@ -11850,8 +11854,10 @@
             <FieldMapping FieldName="ClaimType" TargetFieldName="ClaimType" />
             <FieldMapping FieldName="CreatedWithApi" TargetFieldName="CreatedWithApi" />
             <FieldMapping FieldName="DamageValue" TargetFieldName="DamageValue" />
+            <FieldMapping FieldName="DateOfIssue" TargetFieldName="DateOfIssue" />
             <FieldMapping FieldName="Description" TargetFieldName="Description" />
             <FieldMapping FieldName="EmailAddress" TargetFieldName="EmailAddress" />
+            <FieldMapping FieldName="InsureShipPolicyID" TargetFieldName="InsureShipPolicyID" />
             <FieldMapping FieldName="InsureShipStoreName" TargetFieldName="InsureShipStoreName" />
             <FieldMapping FieldName="ItemName" TargetFieldName="ItemName" />
             <FieldMapping FieldName="ShipmentID" TargetFieldName="ShipmentID" />

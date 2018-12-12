@@ -1,49 +1,42 @@
 ﻿using System;
+using System.Net;
 
 namespace ShipWorks.Shipping.Insurance.InsureShip.Net
 {
     /// <summary>
-    /// An InsureShip response specific exception 
+    /// An InsureShip response specific exception
     /// </summary>
     public class InsureShipResponseException : InsureShipException
     {
-        private InsureShipResponseCode insureShipResponseCode;
-
         /// <summary>
         /// Constructor
         /// </summary>
-        public InsureShipResponseException(InsureShipResponseCode insureShipResponseCode)
+        public InsureShipResponseException(HttpStatusCode insureShipResponseCode)
         {
-            this.insureShipResponseCode = insureShipResponseCode;
+            HttpStatusCode = insureShipResponseCode;
         }
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public InsureShipResponseException(InsureShipResponseCode insureShipResponseCode, string message)
+        public InsureShipResponseException(HttpStatusCode insureShipResponseCode, string message)
             : base(message)
         {
-            this.insureShipResponseCode = insureShipResponseCode;
+            HttpStatusCode = insureShipResponseCode;
         }
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public InsureShipResponseException(InsureShipResponseCode insureShipResponseCode, string message, Exception inner)
+        public InsureShipResponseException(HttpStatusCode insureShipResponseCode, string message, Exception inner)
             : base(message, inner)
         {
-            this.insureShipResponseCode = insureShipResponseCode;
+            HttpStatusCode = insureShipResponseCode;
         }
 
         /// <summary>
-        /// Property giving access to this exception's InsureShipResponseCode 
+        /// Property giving access to this exception's HttpStatusCode
         /// </summary>
-        public InsureShipResponseCode InsureShipResponseCode
-        {
-            get
-            {
-                return insureShipResponseCode;
-            }
-        }
+        public HttpStatusCode HttpStatusCode { get; private set; }
     }
 }

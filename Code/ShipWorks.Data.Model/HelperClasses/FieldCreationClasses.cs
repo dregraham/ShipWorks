@@ -11532,6 +11532,16 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(InsurancePolicyFieldIndex.EmailAddress);}
 		}
+		/// <summary>Creates a new InsurancePolicyEntity.InsureShipPolicyID field instance</summary>
+		public static EntityField2 InsureShipPolicyID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(InsurancePolicyFieldIndex.InsureShipPolicyID);}
+		}
+		/// <summary>Creates a new InsurancePolicyEntity.DateOfIssue field instance</summary>
+		public static EntityField2 DateOfIssue
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(InsurancePolicyFieldIndex.DateOfIssue);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity IParcelAccountEntity</summary>

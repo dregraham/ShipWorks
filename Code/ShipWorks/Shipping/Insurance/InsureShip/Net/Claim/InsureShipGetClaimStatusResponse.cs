@@ -1,11 +1,11 @@
 ﻿using Newtonsoft.Json;
 
-namespace ShipWorks.Shipping.Insurance.InsureShip.Net.Void
+namespace ShipWorks.Shipping.Insurance.InsureShip.Net.Claim
 {
     /// <summary>
-    /// Response for a void_policy request
+    /// Response for a get_claim_status request
     /// </summary>
-    public class InsureShipVoidPolicyResponse
+    public class InsureShipGetClaimStatusResponse
     {
         /// <summary>
         /// Status of the response

@@ -1,4 +1,5 @@
 ﻿using System;
+using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Security;
 using ShipWorks.ApplicationCore;
 
@@ -7,8 +8,11 @@ namespace ShipWorks.Shipping.Insurance.InsureShip
     /// <summary>
     /// Class to get InsureShip settings.
     /// </summary>
+    [Component]
     public class InsureShipSettings : IInsureShipSettings
     {
+        private const string salt = "InsureShip7458";
+
         /// <summary>
         /// Gets or sets a value indicating whether [use test server] based on a registry setting.
         /// </summary>
@@ -41,43 +45,28 @@ namespace ShipWorks.Shipping.Insurance.InsureShip
         /// <summary>
         /// InsureShip Username
         /// </summary>
-        public string Username
-        {
-            get
-            {
-                return SecureText.Decrypt("xYGNUSctosMN3kr2vZw1cg==", "InsureShip7458");
-            }
-        }
+        public string ClientID =>
+            UseTestServer ?
+                SecureText.Decrypt("tc7+yEwpdGE=", salt) :
+                SecureText.Decrypt("tc7+yEwpdGE=", salt);
 
         /// <summary>
         /// InsureShip Password
         /// </summary>
-        public string Password
-        {
-            get
-            {
-                return UseTestServer ? SecureText.Decrypt("xYGNUSctosMiU8bYJtpOOA==", "InsureShip7458") : SecureText.Decrypt("byJ2OXi5odKK0PVy7VPB6zKGm6aI++SX", "InsureShip7458");
-            }
-        }
+        public string ApiKey =>
+            UseTestServer ?
+                SecureText.Decrypt("18VbfzIHoxT2lVYwuCXLF+FXVzokfhjKhUrq3Y2AEoO6tCcznbDtttovCAohTkbaXkIXE/YviEtMnwvDmlGzmfj1XWqNs0WO2WBb+rWfU88MhzxwRAug8ifivvVPpwylJn/VXV+boehh4dmjv+e8VPpEd5Td3hTkF0P7212c6ooGcRYaJYjKIQ==", salt) :
+                SecureText.Decrypt("18VbfzIHoxT2lVYwuCXLF+FXVzokfhjKhUrq3Y2AEoO6tCcznbDtttovCAohTkbaXkIXE/YviEtMnwvDmlGzmfj1XWqNs0WO2WBb+rWfU88MhzxwRAug8ifivvVPpwylJn/VXV+boehh4dmjv+e8VPpEd5Td3hTkF0P7212c6ooGcRYaJYjKIQ==", salt);
 
         /// <summary>
         /// InsureShip Url
         /// </summary>
-        public Uri ApiUrl
-        {
-            get { return new Uri(CertificateUrl.AbsoluteUri + "api/"); }
-        }
+        public Uri ApiUrl => CertificateUrl;
 
         /// <summary>
         /// Gets the URL to use when inspecting the certificate data for authenticity.
         /// </summary>
-        public Uri CertificateUrl
-        {
-            get
-            {
-                return UseTestServer ? new Uri("https://osisstagingapi.insureship.com") : new Uri("https://api2.insureship.com");
-            }
-        }
+        public Uri CertificateUrl => new Uri("https://api.insureship.com");
 
         /// <summary>
         /// Gets the amount of time after a shipment has been processed before a claim can be submitted.
@@ -92,13 +81,7 @@ namespace ShipWorks.Shipping.Insurance.InsureShip
         /// <summary>
         /// Gets the maximum age of a policy that is allowed to be voided.
         /// </summary>
-        public TimeSpan VoidPolicyMaximumAge
-        {
-            get
-            {
-                return TimeSpan.FromHours(24);
-            }
-        }
+        public static TimeSpan VoidPolicyMaximumAge => TimeSpan.FromHours(24);
 
         /// <summary>
         /// Gets the phone number that should be used for a customer to contact InsureShip.

@@ -199,7 +199,7 @@ CREATE NONCLUSTERED INDEX [IX_SWDefault_EbayOrder_GuaranteedDelivery] ON [dbo].[
 GO
 PRINT N'Creating index [IX_SWDefault_EbayOrder_OrderID_Includes_CheckoutStatus_GspEligible] on [dbo].[EbayOrder]'
 GO
-CREATE NONCLUSTERED INDEX [IX_SWDefault_EbayOrder_OrderID_Includes_CheckoutStatus_GspEligible] ON [dbo].[EbayOrder] (	[OrderID] ASC) 
+CREATE NONCLUSTERED INDEX [IX_SWDefault_EbayOrder_OrderID_Includes_CheckoutStatus_GspEligible] ON [dbo].[EbayOrder] (	[OrderID] ASC)
 	INCLUDE ([RollupEffectiveCheckoutStatus], [GspEligible]) ON [PRIMARY]
 GO
 PRINT N'Creating [dbo].[WorldShipPackage]'
@@ -1093,7 +1093,7 @@ ALTER TABLE [dbo].[AuditChangeDetail] ADD CONSTRAINT [PK_AuditChangeDetail] PRIM
 GO
 PRINT N'Creating index [IX_SWDefault_AuditChangeDetail_AuditChangeID] on [dbo].[AuditChangeDetail]'
 GO
-CREATE UNIQUE INDEX [IX_SWDefault_AuditChangeDetail_AuditChangeID] ON [dbo].[AuditChangeDetail] ([AuditChangeID], [AuditChangeDetailID] ) 
+CREATE UNIQUE INDEX [IX_SWDefault_AuditChangeDetail_AuditChangeID] ON [dbo].[AuditChangeDetail] ([AuditChangeID], [AuditChangeDetailID] )
 	INCLUDE ( [AuditID])
 GO
 PRINT N'Creating index [IX_SWDefault_AuditChangeDetail_AuditID] on [dbo].[AuditChangeDetail]'
@@ -2202,8 +2202,8 @@ GO
 ALTER TABLE [dbo].[FedExProfilePackage] ADD CONSTRAINT [PK_FedExProfilePackage_PackageProfileID] PRIMARY KEY CLUSTERED ([PackageProfileID])
 GO
 PRINT N'Adding foreign key to [FedExProfilePackage]'
-ALTER TABLE [dbo].[FedExProfilePackage] WITH CHECK ADD CONSTRAINT [FK_FedExProfilePackage_PackageProfile] FOREIGN KEY([PackageProfileID]) 
-REFERENCES [dbo].[PackageProfile] ([PackageProfileID]) 
+ALTER TABLE [dbo].[FedExProfilePackage] WITH CHECK ADD CONSTRAINT [FK_FedExProfilePackage_PackageProfile] FOREIGN KEY([PackageProfileID])
+REFERENCES [dbo].[PackageProfile] ([PackageProfileID])
 ON DELETE CASCADE
 GO
 PRINT N'Creating [dbo].[FilterNode]'
@@ -2402,7 +2402,7 @@ CREATE TABLE [dbo].[GenericModuleStore]
 [AmazonMerchantID] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [AmazonAuthToken] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [AmazonApiRegion] [char] (2) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[IncludeMilliseconds] [bit] NOT NULL 
+[IncludeMilliseconds] [bit] NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_GenericModuleStore] on [dbo].[GenericModuleStore]'
@@ -2486,7 +2486,9 @@ CREATE TABLE [dbo].[InsurancePolicy]
 [DamageValue] [money] NULL,
 [SubmissionDate] [datetime] NULL,
 [ClaimID] [bigint] NULL,
-[EmailAddress] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NULL
+[EmailAddress] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+[InsureShipPolicyID] [bigint] NULL,
+[DateOfIssue] [datetime] NULL
 )
 GO
 PRINT N'Creating primary key [PK_InsurancePolicy] on [dbo].[InsurancePolicy]'
@@ -3270,7 +3272,7 @@ CREATE NONCLUSTERED INDEX [IX_SWDefault_PrintResult_RelatedObjectID] ON [dbo].[P
 GO
 PRINT N'Creating index [IX_SWDefault_PrintResult_PrintDateRelatedObjectID] on [dbo].[PrintResult]'
 GO
-CREATE NONCLUSTERED INDEX [IX_SWDefault_PrintResult_PrintDateRelatedObjectID] ON [dbo].[PrintResult] ([PrintDate], [RelatedObjectID]) INCLUDE ([TemplateType], [ContentResourceID])  
+CREATE NONCLUSTERED INDEX [IX_SWDefault_PrintResult_PrintDateRelatedObjectID] ON [dbo].[PrintResult] ([PrintDate], [RelatedObjectID]) INCLUDE ([TemplateType], [ContentResourceID])
 GO
 ALTER TABLE [dbo].[PrintResult] ENABLE CHANGE_TRACKING
 GO
@@ -3290,7 +3292,7 @@ PRINT N'Creating primary key [PK_ProStoresOrder] on [dbo].[ProStoresOrder]'
 GO
 ALTER TABLE [dbo].[ProStoresOrder] ADD CONSTRAINT [PK_ProStoresOrder] PRIMARY KEY CLUSTERED  ([OrderID])
 GO
-CREATE NONCLUSTERED INDEX [IX_SWDefault_ProStoresOrder_ConfirmationNumber] 
+CREATE NONCLUSTERED INDEX [IX_SWDefault_ProStoresOrder_ConfirmationNumber]
 	ON [dbo].[ProStoresOrder] ( [ConfirmationNumber] ASC )
 GO
 PRINT N'Creating [dbo].[ProStoresStore]'
@@ -3956,7 +3958,7 @@ CREATE TABLE [dbo].[ThreeDCartStore]
 [StatusCodes] [xml] NULL,
 [DownloadModifiedNumberOfDaysBack] [int] NOT NULL,
 [RestUser] [bit] NOT NULL,
-[OrderIDUpgradeFixDate] [datetime] NULL 
+[OrderIDUpgradeFixDate] [datetime] NULL
 )
 GO
 PRINT N'Creating primary key [PK_ThreeDCartStore] on [dbo].[ThreeDCartStore]'
@@ -4143,7 +4145,7 @@ PRINT N'Creating primary key [PK_UpsProfilePackage] on [dbo].[UpsProfilePackage]
 GO
 ALTER TABLE [dbo].[UpsProfilePackage]ADD CONSTRAINT [PK_UpsProfilePackage_PackageProfileID] PRIMARY KEY CLUSTERED ([PackageProfileID])
 GO
-PRINT N'Adding foreign key to [UpsProfilePackage]' 
+PRINT N'Adding foreign key to [UpsProfilePackage]'
 ALTER TABLE [dbo].[UpsProfilePackage]  WITH CHECK ADD  CONSTRAINT [FK_UpsProfilePackage_PackageProfile] FOREIGN KEY([PackageProfileID])
 REFERENCES [dbo].[PackageProfile] ([PackageProfileID])
 ON DELETE CASCADE
@@ -6190,7 +6192,7 @@ CREATE TABLE [dbo].[GenericModuleOrder](
 	[IsFBA] [bit] NOT NULL,
 	[IsPrime] [int] NOT NULL,
 	[IsSameDay] bit NOT NULL
- CONSTRAINT [PK_GenericModuleOrder] PRIMARY KEY CLUSTERED 
+ CONSTRAINT [PK_GenericModuleOrder] PRIMARY KEY CLUSTERED
 (
 	[OrderID] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
@@ -6219,7 +6221,7 @@ GO
 CREATE TABLE [dbo].[GenericModuleOrderItem](
 	[OrderItemID] [bigint] NOT NULL,
 	[AmazonOrderItemCode] [nvarchar](64) NOT NULL
- CONSTRAINT [PK_GenericModuleOrderItem] PRIMARY KEY CLUSTERED 
+ CONSTRAINT [PK_GenericModuleOrderItem] PRIMARY KEY CLUSTERED
 (
 	[OrderItemID] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
@@ -6505,8 +6507,8 @@ ALTER TABLE [dbo].[Shortcut] ADD CONSTRAINT [PK_Shortcut] PRIMARY KEY CLUSTERED 
 GO
 PRINT N'Creating index [IX_SWDefault_Shortcut_Keys] on [dbo].[Shortcut]'
 GO
-CREATE UNIQUE NONCLUSTERED INDEX [IX_SWDefault_Shortcut_Keys] ON [dbo].[Shortcut] ([ModifierKeys], [VirtualKey]) 
-WHERE [ModifierKeys] IS NOT NULL 
+CREATE UNIQUE NONCLUSTERED INDEX [IX_SWDefault_Shortcut_Keys] ON [dbo].[Shortcut] ([ModifierKeys], [VirtualKey])
+WHERE [ModifierKeys] IS NOT NULL
 AND [VirtualKey] IS NOT NULL
 GO
 PRINT N'Creating index [IX_SWDefault_Shortcut_Barcode] on [dbo].[Shortcut]'
@@ -6798,7 +6800,7 @@ PRINT N'Creating primary key [PK_ProStoresOrderSearch] on [dbo].[ProStoresOrderS
 GO
 ALTER TABLE [dbo].[ProStoresOrderSearch] ADD CONSTRAINT [PK_ProStoresOrderSearch] PRIMARY KEY CLUSTERED  ([ProStoresOrderSearchID])
 GO
-CREATE NONCLUSTERED INDEX [IX_SWDefault_ProStoresOrderSearch_ConfirmationNumber] 
+CREATE NONCLUSTERED INDEX [IX_SWDefault_ProStoresOrderSearch_ConfirmationNumber]
 	ON [dbo].[ProStoresOrderSearch] ( [ConfirmationNumber] ASC )
 GO
 PRINT N'Creating [dbo].[SearsOrderSearch]'
@@ -7669,11 +7671,11 @@ GO
 
 PRINT N'Adding FilterNodeSetSwFilterNodeID trigger'
 GO
-CREATE TRIGGER FilterNodeSetSwFilterNodeID 
+CREATE TRIGGER FilterNodeSetSwFilterNodeID
    ON  FilterNode
    WITH ENCRYPTION
    AFTER INSERT,UPDATE
-AS 
+AS
 BEGIN
 	SET NOCOUNT ON;
 
@@ -7694,8 +7696,8 @@ IF EXISTS (SELECT * FROM sys.views WHERE object_id = OBJECT_ID(N'[dbo].[FilterIn
 GO
 CREATE VIEW FilterInfo WITH ENCRYPTION AS
 	SELECT f.Name, f.FilterID, f.IsFolder, f.State, f.[Definition], n.FilterNodeID, c.*
-		FROM FilterNode n INNER JOIN FilterSequence s ON n.FilterSequenceID = s.FilterSequenceID 
-						  INNER JOIN Filter f ON s.FilterID = f.FilterID 
+		FROM FilterNode n INNER JOIN FilterSequence s ON n.FilterSequenceID = s.FilterSequenceID
+						  INNER JOIN Filter f ON s.FilterID = f.FilterID
 						  INNER JOIN FilterNodeContent c ON n.FilterNodeContentID = c.FilterNodeContentID
 GO
 
@@ -7725,7 +7727,7 @@ BEGIN
 	END
 
 	SELECT @filterNodeContentDirtyMinRowVersion = MIN(RowVersion) FROM FilterNodeContentDirty WITH (NOLOCK)
-	
+
 	IF @filterNodeContentDirtyMinRowVersion is null or len(@filterNodeContentDirtyMinRowVersion) = 0
 	BEGIN
 		SET @upToDate = 1
@@ -7737,7 +7739,7 @@ BEGIN
 			SET @upToDate = 1
 		END
 	END
-	
+
 	RETURN(@upToDate);
 END
 GO
@@ -7758,7 +7760,7 @@ BEGIN
 	DECLARE @upToDate bit = 0
 	DECLARE @rowVersion rowversion
 	DECLARE @quickFilterNodeContentDirtyMinRowVersion timestamp
-	
+
 	IF (@currentDbts IS NULL OR @currentDbts = CONVERT(VARBINARY, 0x0))
 	BEGIN
 		SELECT @rowVersion = @@DBTS
@@ -7799,10 +7801,10 @@ BEGIN
 
 	DECLARE @upToDate bit
 	SELECT @upToDate = dbo.AreFilterCountsUpToDate(NULL) & dbo.AreFilterCountsUpToDate(NULL)
-	
+
 	IF @upToDate = 1
 	BEGIN
-		SELECT fi.FilterNodeID 
+		SELECT fi.FilterNodeID
 		FROM FilterNodeContentDetail fncd, FilterInfo fi
 		WHERE fncd.FilterNodeContentID = fi.FilterNodeContentID
 		  AND fncd.ObjectID = @entityID

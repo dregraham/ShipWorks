@@ -159,6 +159,11 @@ namespace ShipWorks.ApplicationCore.Licensing
         }
 
         /// <summary>
+        /// Log the given insurance claim to Tango.
+        /// </summary>
+        public virtual void LogSubmitInsuranceClaim(ShipmentEntity shipment) { }
+
+        /// <summary>
         /// Get an xml document from the given file
         /// </summary>
         private static XmlDocument GetXmlDocumentFromFile(string fileName, params object[] args)

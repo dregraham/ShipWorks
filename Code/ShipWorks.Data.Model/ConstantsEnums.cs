@@ -4976,6 +4976,10 @@ namespace ShipWorks.Data.Model
 		ClaimID,
 		///<summary>EmailAddress. </summary>
 		EmailAddress,
+		///<summary>InsureShipPolicyID. </summary>
+		InsureShipPolicyID,
+		///<summary>DateOfIssue. </summary>
+		DateOfIssue,
 		/// <summary></summary>
 		AmountOfFields
 	}
