@@ -227,7 +227,7 @@ namespace ShipWorks.Products.ProductEditor
         /// <summary>
         /// Show the product editor
         /// </summary>
-        public bool? ShowProductEditor(ProductVariantEntity productVariant)
+        public async Task<bool?> ShowProductEditor(ProductVariantEntity productVariant)
         {
             this.productVariant = productVariant;
             IsNew = productVariant.IsNew;
@@ -239,7 +239,7 @@ namespace ShipWorks.Products.ProductEditor
             }
 
             BundleEditorViewModel.Load(productVariant);
-            AttributeEditorViewModel.Load(productVariant);
+            await AttributeEditorViewModel.Load(productVariant).ConfigureAwait(true);
 
             SKU = productVariant.DefaultSku ?? string.Empty;
             IsActive = productVariant.IsNew || productVariant.IsActive;

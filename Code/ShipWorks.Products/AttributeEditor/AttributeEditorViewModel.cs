@@ -1,7 +1,9 @@
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reflection;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
@@ -9,6 +11,7 @@ using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.UI;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 
 namespace ShipWorks.Products.AttributeEditor
 {
@@ -111,9 +114,14 @@ namespace ShipWorks.Products.AttributeEditor
         /// <summary>
         /// Load the view model with the given product
         /// </summary>
-        public void Load(ProductVariantEntity productVariantEntity)
+        public async Task Load(ProductVariantEntity productVariantEntity)
         {
             productVariant = productVariantEntity;
+            using (ISqlAdapter sqlAdapter = sqlAdapterFactory.Create())
+            {
+                IEnumerable<IProductAttributeEntity> attributes = await productCatalog.GetAvailableAttributesFor(sqlAdapter, productVariantEntity).ConfigureAwait(true);
+                AttributeNames = new ObservableCollection<string>(attributes.Select(a=>a.AttributeName));
+            }
 
             AttributeNames = new ObservableCollection<string>(productVariant.Product.Attributes.Select(x => x.AttributeName));
             ProductAttributes = new ObservableCollection<ProductVariantAttributeEntity>(productVariant.Attributes);
@@ -154,7 +162,7 @@ namespace ShipWorks.Products.AttributeEditor
             // Get the product attribute with the given name
             using (ISqlAdapter adapter = sqlAdapterFactory.Create())
             {
-                attribute = productCatalog.FetchProductAttribute(adapter, SelectedAttributeName);
+                attribute = productCatalog.FetchProductAttribute(adapter, SelectedAttributeName, productVariant.ProductID);
             }
 
             // If we didn't find an attribute with the given name, create one

@@ -63,9 +63,9 @@ namespace ShipWorks.Products
             CurrentSort = new BasicSortDefinition(ProductVariantAliasFields.Sku.Name, ListSortDirection.Ascending);
 
             RefreshProducts = new RelayCommand(() => RefreshProductsAction());
-            EditProductVariantLink = new RelayCommand<long>(EditProductVariantAction);
-            EditProductVariantButton = new RelayCommand(EditProductVariantButtonAction, () => SelectedProductIDs?.Count() == 1);
-            CopyAsVariant = new RelayCommand(CopyAsVariantAction, () => SelectedProductIDs?.Count() == 1);
+            EditProductVariantLink = new RelayCommand<long>(async l => await EditProductVariantAction(l).ConfigureAwait(true));
+            EditProductVariantButton = new RelayCommand(async () => await EditProductVariantButtonAction().ConfigureAwait(true), () => SelectedProductIDs?.Count() == 1);
+            CopyAsVariant = new RelayCommand(async () => await CopyAsVariantAction().ConfigureAwait(true), () => SelectedProductIDs?.Count() == 1);
             SelectedProductsChanged = new RelayCommand<IList>(
                 items => SelectedProductIDs = items?.OfType<IDataWrapper<IProductListItemEntity>>().Select(x => x.EntityID).ToList());
 
@@ -77,7 +77,7 @@ namespace ShipWorks.Products
 
             ImportProducts = new RelayCommand(() => ImportProductsAction());
 
-            AddProduct = new RelayCommand(() => AddProductAction());
+            AddProduct = new RelayCommand(async () => await AddProductAction());
         }
 
         private void ImportProductsAction() =>
@@ -226,13 +226,13 @@ namespace ShipWorks.Products
         /// <summary>
         /// Edit the selected Product
         /// </summary>
-        private void EditProductVariantButtonAction() =>
+        private Task EditProductVariantButtonAction() =>
             EditProductVariantAction(SelectedProductIDs.FirstOrDefault());
 
         /// <summary>
         /// Copy the selected variant and edit
         /// </summary>
-        private void CopyAsVariantAction()
+        private async Task CopyAsVariantAction()
         {
             if (SelectedProductIDs.IsCountEqualTo(1) && selectedProductIDs.FirstOrDefault() > 0)
             {
@@ -252,7 +252,7 @@ namespace ShipWorks.Products
                     }
                     else
                     {
-                        EditProduct(result.Value);
+                        await EditProduct(result.Value).ConfigureAwait(true);
                     }
                 }
             }
@@ -261,7 +261,7 @@ namespace ShipWorks.Products
         /// <summary>
         /// Edit the given product variant
         /// </summary>
-        private void EditProductVariantAction(long productVariantID)
+        private async Task EditProductVariantAction(long productVariantID)
         {
             if (productVariantID == 0)
             {
@@ -277,14 +277,14 @@ namespace ShipWorks.Products
 
             if (productVariantAlias != null)
             {
-                EditProduct(productVariantAlias.ProductVariant);
+                await EditProduct(productVariantAlias.ProductVariant).ConfigureAwait(true);
             }
         }
 
         /// <summary>
         /// Add a product
         /// </summary>
-        private void AddProductAction()
+        private async Task AddProductAction()
         {
             ProductVariantEntity productVariant = new ProductVariantEntity()
             {
@@ -301,15 +301,15 @@ namespace ShipWorks.Products
                 IsDefault = true
             });
 
-            EditProduct(productVariant);
+            await EditProduct(productVariant).ConfigureAwait(true);
         }
 
         /// <summary>
         /// Edit the given product
         /// </summary>
-        private void EditProduct(ProductVariantEntity productVariantEntity)
+        private async Task EditProduct(ProductVariantEntity productVariantEntity)
         {
-            if (productEditorViewModelFunc().ShowProductEditor(productVariantEntity) ?? false)
+            if ((await productEditorViewModelFunc().ShowProductEditor(productVariantEntity).ConfigureAwait(true)) ?? false)
             {
                 RefreshProductsAction();
             }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Autofac.Extras.Moq;
 using Interapptive.Shared.UI;
 using Moq;
@@ -23,7 +24,7 @@ namespace ShipWorks.OrderLookup.Tests
         }
 
         [Fact]
-        public void ShowProductEditor_DelegatesToMessageHelperShowDialog()
+        public async Task ShowProductEditor_DelegatesToMessageHelperShowDialog()
         {
             var product = new ProductVariantAliasEntity()
             {
@@ -34,7 +35,7 @@ namespace ShipWorks.OrderLookup.Tests
                 }
             };
 
-            testObject.ShowProductEditor(product.ProductVariant);
+            await testObject.ShowProductEditor(product.ProductVariant);
 
             mock.Mock<IMessageHelper>().Verify(m => m.ShowDialog(It.IsAny<IDialog>()));
         }

@@ -1,4 +1,5 @@
 using System.Linq;
+using System.Threading.Tasks;
 using Autofac.Extras.Moq;
 using Interapptive.Shared.UI;
 using Moq;
@@ -7,6 +8,7 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Products.AttributeEditor;
 using ShipWorks.Tests.Shared;
 using Xunit;
+using static ShipWorks.Tests.Shared.ExtensionMethods.ParameterShorteners;
 
 namespace ShipWorks.Products.Tests
 {
@@ -22,7 +24,7 @@ namespace ShipWorks.Products.Tests
         }
 
         [Fact]
-        public void Load_LoadsAttributesNamesFromBaseProduct()
+        public async Task Load_LoadsAttributesNamesFromBaseProduct()
         {
             ProductAttributeEntity attributeEntity = new ProductAttributeEntity(){AttributeName = "foo"};
             ProductVariantEntity productVariant = new ProductVariantEntity();
@@ -30,13 +32,13 @@ namespace ShipWorks.Products.Tests
             productEntity.Variants.Add(productVariant);
             productEntity.Attributes.Add(attributeEntity);
 
-            testObject.Load(productVariant);
+            await testObject.Load(productVariant);
 
             Assert.Equal("foo", testObject.AttributeNames.SingleOrDefault());
         }
 
         [Fact]
-        public void Load_LoadsAttributesFromProductVariant()
+        public async Task Load_LoadsAttributesFromProductVariant()
         {
             ProductVariantAttributeEntity variantAttributeEntity = new ProductVariantAttributeEntity();
 
@@ -46,19 +48,19 @@ namespace ShipWorks.Products.Tests
             ProductEntity productEntity = new ProductEntity();
             productEntity.Variants.Add(productVariant);
 
-            testObject.Load(productVariant);
+            await testObject.Load(productVariant);
 
             Assert.Equal(variantAttributeEntity, testObject.ProductAttributes.SingleOrDefault());
         }
 
         [Fact]
-        public void Save_SavesAttributesToProduct()
+        public async Task Save_SavesAttributesToProduct()
         {
             ProductVariantEntity productVariant = new ProductVariantEntity();
             ProductEntity productEntity = new ProductEntity();
             productEntity.Variants.Add(productVariant);
 
-            testObject.Load(productVariant);
+            await testObject.Load(productVariant);
 
             ProductVariantAttributeEntity variantAttributeEntity = new ProductVariantAttributeEntity();
             testObject.ProductAttributes.Add(variantAttributeEntity);
@@ -101,10 +103,10 @@ namespace ShipWorks.Products.Tests
         }
 
         [Fact]
-        public void AddAttribute_AddsAttributeToProductAttributesList()
+        public async Task AddAttribute_AddsAttributeToProductAttributesList()
         {
             ProductAttributeEntity productAttributeEntity = new ProductAttributeEntity(){ AttributeName = "foo"};
-            mock.Mock<IProductCatalog>().Setup(x => x.FetchProductAttribute(It.IsAny<ISqlAdapter>(), "foo"))
+            mock.Mock<IProductCatalog>().Setup(x => x.FetchProductAttribute(It.IsAny<ISqlAdapter>(), "foo", AnyLong))
                 .Returns(productAttributeEntity);
 
             ProductVariantEntity productVariant = new ProductVariantEntity();
@@ -112,7 +114,7 @@ namespace ShipWorks.Products.Tests
             ProductEntity productEntity = new ProductEntity();
             productEntity.Variants.Add(productVariant);
 
-            testObject.Load(productVariant);
+            await testObject.Load(productVariant);
 
             testObject.SelectedAttributeName = "foo";
             testObject.AttributeValue = "value";
@@ -124,19 +126,19 @@ namespace ShipWorks.Products.Tests
         }
 
         [Fact]
-        public void AddAttribute_FetchesProductAttribute()
+        public async Task AddAttribute_FetchesProductAttribute()
         {
             ProductVariantEntity productVariant = new ProductVariantEntity();
             ProductEntity productEntity = new ProductEntity();
             productEntity.Variants.Add(productVariant);
 
-            testObject.Load(productVariant);
+            await testObject.Load(productVariant);
 
             testObject.SelectedAttributeName = "foo";
             testObject.AttributeValue = "value";
             testObject.AddAttributeToProductCommand.Execute(null);
 
-            mock.Mock<IProductCatalog>().Verify(x => x.FetchProductAttribute(It.IsAny<ISqlAdapter>(), testObject.SelectedAttributeName));
+            mock.Mock<IProductCatalog>().Verify(x => x.FetchProductAttribute(It.IsAny<ISqlAdapter>(), testObject.SelectedAttributeName, AnyLong));
         }
 
         [Fact]

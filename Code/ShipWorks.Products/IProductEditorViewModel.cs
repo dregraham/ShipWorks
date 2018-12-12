@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel;
+using System.Threading.Tasks;
 using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.Products
@@ -11,6 +12,6 @@ namespace ShipWorks.Products
         /// <summary>
         /// Show the product editor
         /// </summary>
-        bool? ShowProductEditor(ProductVariantEntity product);
+        Task<bool?> ShowProductEditor(ProductVariantEntity product);
     }
 }

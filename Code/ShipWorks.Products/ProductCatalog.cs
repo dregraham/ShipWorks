@@ -126,7 +126,7 @@ namespace ShipWorks.Products
             {
                 return new ProductVariant(sku, null, logFactory(typeof(ProductVariant)));
             }
-            else if(variant?.Product.IsBundle ?? false)
+            else if (variant?.Product.IsBundle ?? false)
             {
                 return new ProductBundle(sku, variant, logFactory(typeof(ProductBundle)));
             }
@@ -164,16 +164,35 @@ namespace ShipWorks.Products
         /// <summary>
         /// Fetch a product attribute based on name
         /// </summary>
-        public ProductAttributeEntity FetchProductAttribute(ISqlAdapter sqlAdapter, string name)
+        public ProductAttributeEntity FetchProductAttribute(ISqlAdapter sqlAdapter, string name, long productID)
         {
             IPredicate predicate = new FieldCompareValuePredicate(ProductAttributeFields.AttributeName, null, ComparisonOperator.Equal,
                                                                   name.ToUpper()).CaseInsensitive();
-            
-            EntityQuery<ProductAttributeEntity> query = new QueryFactory().ProductAttribute.Where(predicate);
+
+            EntityQuery<ProductAttributeEntity> query = new QueryFactory().ProductAttribute
+                .Where(predicate)
+                .AndWhere(ProductAttributeFields.ProductID == productID);
 
             ProductAttributeEntity attribute = sqlAdapter.FetchFirst(query);
 
             return attribute;
+        }
+
+        /// <summary>
+        /// Get the available attributes for a variant
+        /// </summary>
+        public async Task<IEnumerable<IProductAttributeEntity>> GetAvailableAttributesFor(ISqlAdapter sqlAdapter, ProductVariantEntity variant)
+        {
+            if (variant?.Product?.IsNew ?? true)
+            {
+                return new IProductAttributeEntity[0];
+            }
+
+            QueryFactory factory = new QueryFactory();
+            var query = factory.ProductAttribute.Where(ProductAttributeFields.ProductID == variant.ProductID);
+
+            IEntityCollection2 queryResults = await sqlAdapter.FetchQueryAsync(query).ConfigureAwait(false);
+            return queryResults.OfType<IProductAttributeEntity>().Select(v => v.AsReadOnly());
         }
 
         /// <summary>
@@ -218,7 +237,7 @@ namespace ShipWorks.Products
         {
             List<IPrefetchPathElement2> prefetchPath = new List<IPrefetchPathElement2>
             {
-                ProductVariantEntity.PrefetchPathProduct,
+                ProductVariantEntity.PrefetchPathProduct.WithSubPath(ProductEntity.PrefetchPathAttributes),
                 ProductVariantEntity.PrefetchPathAliases,
                 ProductVariantEntity.PrefetchPathIncludedInBundles,
                 ProductVariantEntity.PrefetchPathAttributes.WithSubPath(ProductVariantAttributeEntity.PrefetchPathProductAttribute)

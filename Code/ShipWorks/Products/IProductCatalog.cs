@@ -4,6 +4,7 @@ using ShipWorks.Data.Model.EntityClasses;
 using Interapptive.Shared.Threading;
 using ShipWorks.Data.Connection;
 using Interapptive.Shared.Utility;
+using ShipWorks.Data.Model.EntityInterfaces;
 
 namespace ShipWorks.Products
 {
@@ -45,6 +46,11 @@ namespace ShipWorks.Products
         /// <summary>
         /// Fetch a product attribute based on name
         /// </summary>
-        ProductAttributeEntity FetchProductAttribute(ISqlAdapter sqlAdapter, string name);
+        ProductAttributeEntity FetchProductAttribute(ISqlAdapter sqlAdapter, string name, long productID);
+
+        /// <summary>
+        /// Get the available attributes for a variant
+        /// </summary>
+        Task<IEnumerable<IProductAttributeEntity>> GetAvailableAttributesFor(ISqlAdapter sqlAdapter, ProductVariantEntity variant);
     }
 }
