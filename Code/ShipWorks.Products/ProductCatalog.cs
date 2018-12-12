@@ -5,6 +5,7 @@ using System.Data.Common;
 using System.Data.SqlClient;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Interapptive.Shared.Collections;
@@ -325,16 +326,27 @@ namespace ShipWorks.Products
                 }
             }
 
-            // Add the second header row.
+            AddSecondHeaderRow(dt);
+
+            return dt;
+        }
+
+        /// <summary>
+        /// Add the second header row.
+        /// </summary>
+        private static void AddSecondHeaderRow(DataTable dt)
+        {
             DataRow secondHeaderRow = dt.NewRow();
             dt.Columns[dt.Columns["Name"].Ordinal].AllowDBNull = true;
             dt.Columns[dt.Columns["Active"].Ordinal].AllowDBNull = true;
             secondHeaderRow[0] = "";
             secondHeaderRow[1] = "SKU | SKU";
             secondHeaderRow[2] = "SKU : Qty | SKU : Qty";
+            secondHeaderRow[7] = "lbs";
+            secondHeaderRow[8] = "inches";
+            secondHeaderRow[9] = "inches";
+            secondHeaderRow[10] = "inches";
             dt.Rows.InsertAt(secondHeaderRow, 0);
-
-            return dt;
         }
     }
 }

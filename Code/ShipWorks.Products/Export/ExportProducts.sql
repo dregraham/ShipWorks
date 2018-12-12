@@ -37,7 +37,7 @@
 	(
 		select ISNULL(
 			(
-			select REPLACE(REPLACE(aBundle.Sku, '|', '\|'), ':', '\:') + ':' + CONVERT(nvarchar(20), pbBundle.Quantity) + '|' AS [text()]
+			select REPLACE(REPLACE(REPLACE(aBundle.Sku, '\', '\\'), '|', '\|'), ':', '\:') + ':' + CONVERT(nvarchar(20), pbBundle.Quantity) + '|' AS [text()]
 			from ProductVariant pvBundle, ProductBundle pbBundle, ProductVariantAlias aBundle
 			where aBundle.ProductVariantID = pbBundle.ChildProductVariantID
 			  and aBundle.IsDefault = 1
