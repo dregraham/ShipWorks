@@ -25,6 +25,7 @@ using ShipWorks.Messaging.Messages;
 using ShipWorks.Messaging.Messages.Shipping;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net;
 using ShipWorks.Shipping.Carriers.Postal.Usps.WebServices;
+using ShipWorks.Shipping.Insurance;
 using ShipWorks.Shipping.Services;
 using ShipWorks.Shipping.Services.ShipmentProcessorSteps.LabelRetrieval;
 using ShipWorks.Shipping.Settings;
@@ -65,6 +66,7 @@ namespace ShipWorks.Shipping.Specs.ShippingPanel
 
                 mock.Override<IMessageHelper>();
                 mock.Override<IMainForm>();
+                mock.Override<IInsuranceUtility>();
             });
 
             IoC.UnsafeGlobalLifetimeScope
