@@ -1143,16 +1143,8 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// </summary>
         private static string ProcessRequest(HttpVariableRequestSubmitter postRequest, string logEntryName, bool collectTelemetry)
         {
-            // Timeout
-            postRequest.Timeout = TimeSpan.FromSeconds(60);
-
-            // Set the uri
-            postRequest.Uri = new Uri("https://www.interapptive.com/ShipWorksNet/ShipWorksV1.svc/account/shipworks");
-
-            // Logging
             ApiLogEntry logEntry = new ApiLogEntry(ApiLogSource.ShipWorks, logEntryName);
-            logEntry.LogRequest(postRequest);
-            ConfigureRequest(postRequest);
+            ConfigureRequest(postRequest, logEntry);
 
             IHttpResponseReader postResponse = null;
             TrackedDurationEvent telemetryEvent = null;
@@ -1209,8 +1201,13 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// <summary>
         /// configure the post request
         /// </summary>
-        private static void ConfigureRequest(HttpVariableRequestSubmitter postRequest)
+        private static void ConfigureRequest(HttpVariableRequestSubmitter postRequest, ApiLogEntry logEntry)
         {
+            postRequest.Timeout = TimeSpan.FromSeconds(60);
+            postRequest.Uri = new Uri("https://www.interapptive.com/ShipWorksNet/ShipWorksV1.svc/account/shipworks");
+
+            logEntry.LogRequest(postRequest);
+
             postRequest.RequestSubmitting += delegate (object sender, HttpRequestSubmittingEventArgs e)
             {
                 e.HttpWebRequest.KeepAlive = false;
