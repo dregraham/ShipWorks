@@ -201,8 +201,6 @@
                 Grid.Row="2"
                 Grid.Column="1"
                 props:EntityFieldLength.FieldName="PersonState"
-                IsEditable="True"
-                IsTextSearchEnabled="True"
                 ItemsSource="{Binding SelectedValue, ElementName=CountryComboBox, Converter={StaticResource StateProvinceConverter}}"
                 Style="{StaticResource EditableFormComboBox}"
                 Text="{Binding StateProvCode}" />

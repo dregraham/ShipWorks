@@ -148,5 +148,7 @@
     <Style x:Key="EditableFormComboBox" TargetType="{x:Type ComboBox}"
            BasedOn="{StaticResource FormComboBox}">
         <Setter Property="Template" Value="{StaticResource OrderLookupEditableComboBoxTemplate}"/>
+        <Setter Property="IsEditable" Value="True"/>
+        <Setter Property="IsTextSearchEnabled" Value="True"/>
     </Style>
 </ResourceDictionary>

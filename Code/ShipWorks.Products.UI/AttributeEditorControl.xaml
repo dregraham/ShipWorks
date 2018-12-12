@@ -42,7 +42,7 @@
                       Grid.Column="1"                     
                       Style="{StaticResource EditableFormComboBox}"
                       ItemsSource="{Binding AttributeNames}"
-                      SelectedItem="{Binding SelectedAttributeName}"/>
+                      Text="{Binding SelectedAttributeName}"/>
             <TextBlock Grid.Row="1"
                        Grid.Column="0"
                        Text="Value"
