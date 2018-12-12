@@ -77,6 +77,11 @@
         <Condition identifier="Order.ShipSenseRecognitionStatus" displayAs="ShipSense Status" />
         <Condition identifier="Order.ChannelOrderID" displayAs="Channel Order ID" />
         <Condition identifier="Order.ShipByDate" displayAs="Ship By Date" />
+        <Condition identifier="Order.Custom1" displayAs="Custom Field 1" />
+        <Condition identifier="Order.Custom2" displayAs="Custom Field 2" />
+        <Condition identifier="Order.Custom3" displayAs="Custom Field 3" />
+        <Condition identifier="Order.Custom4" displayAs="Custom Field 4" />
+        <Condition identifier="Order.Custom5" displayAs="Custom Field 5" />
         <Separator />
         <Condition identifier="Order.LocalStatus" />
         <Condition identifier="Order.OnlineStatus" />
@@ -345,6 +350,11 @@
       <Condition identifier="OrderItem.LocalStatus" displayAs="Local Status" />
       <Condition identifier="OrderItem.Brand" displayAs="Brand" />
       <Condition identifier="OrderItem.MPN" displayAs="MPN" />
+      <Condition identifier="OrderItem.Custom1" displayAs="Custom Field 1" />
+      <Condition identifier="OrderItem.Custom2" displayAs="Custom Field 2" />
+      <Condition identifier="OrderItem.Custom3" displayAs="Custom Field 3" />
+      <Condition identifier="OrderItem.Custom4" displayAs="Custom Field 4" />
+      <Condition identifier="OrderItem.Custom5" displayAs="Custom Field 5" />
       <Separator/>
       <Condition identifier="BigCommerceOrderItem.IsDigitalItem" />
       <Condition identifier="BigCommerceOrderItem.EventDate" />
