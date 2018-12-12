@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Data;
 using System.Threading.Tasks;
 using ShipWorks.Data.Model.EntityClasses;
 using Interapptive.Shared.Threading;
@@ -36,5 +37,10 @@ namespace ShipWorks.Products
         /// Save the given product
         /// </summary>
         Task<Result> Save(ProductEntity product, ISqlAdapterFactory sqlAdapterFactory);
+
+        /// <summary>
+        /// Get a DataTable of products from the database
+        /// </summary>
+        Task<DataTable> GetProductDataForExport();
     }
 }
