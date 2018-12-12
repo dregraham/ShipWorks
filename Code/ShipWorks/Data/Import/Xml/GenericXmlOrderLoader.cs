@@ -34,8 +34,17 @@ namespace ShipWorks.Data.Import.Xml
 
             if (success)
             {
-                // Ship By Date
-                order.ShipByDate = result;
+                DateTime shipByDate = result;
+
+                // Convert to UTC
+                if (shipByDate.Kind == DateTimeKind.Local || shipByDate.Kind == DateTimeKind.Unspecified)
+                {
+                    order.ShipByDate = shipByDate.ToUniversalTime();
+                }
+                else
+                {
+                    order.ShipByDate = shipByDate;
+                }
             }
            
             // shipping
