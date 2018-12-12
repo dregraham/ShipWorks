@@ -41,7 +41,7 @@ namespace ShipWorks.Products.Import
         public void SaveSample()
         {
             fileSelector
-                .GetFilePathToSave("Comma Separated|*.csv", "ProductExport_Sample.csv")
+                .GetFilePathToSave("Comma Separated|*.csv", "ProductImport_Sample.csv")
                 .Do(x => WriteToFile(x));
         }
 
