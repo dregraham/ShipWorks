@@ -516,6 +516,10 @@ namespace ShipWorks.Shipping
             ICarrierShipmentAdapterFactory shipmentAdapterFactory = lifetimeScope.Resolve<ICarrierShipmentAdapterFactory>();
             IPackageAdapter package = shipmentAdapterFactory.Get(shipment).GetPackageAdapters().Single();
 
+            package.DimsLength = 0;
+            package.DimsWidth = 0;
+            package.DimsHeight = 0;
+
             if (shipment.Order.OrderItems.Count() == 1)
             {
                 OrderItemEntity item = shipment.Order.OrderItems.Single();
@@ -526,12 +530,6 @@ namespace ShipWorks.Shipping
                     package.DimsWidth = (double) item.Width;
                     package.DimsHeight = (double) item.Height;
                 }
-            }
-            else
-            {
-                package.DimsLength = 0;
-                package.DimsWidth = 0;
-                package.DimsHeight = 0;
             }
         }
 

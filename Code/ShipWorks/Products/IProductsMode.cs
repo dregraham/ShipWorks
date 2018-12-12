@@ -24,7 +24,13 @@ namespace ShipWorks.Products
         /// Edit a given product variant
         /// </summary>
         [Obfuscation(Exclude = true)]
-        ICommand EditProductVariant { get; }
+        ICommand EditProductVariantLink { get; }
+
+        /// <summary>
+        /// Edit a given product variant
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        ICommand EditProductVariantButton { get; }
 
         /// <summary>
         /// Add a product
@@ -35,7 +41,7 @@ namespace ShipWorks.Products
         /// List of products
         /// </summary>
         [Obfuscation(Exclude = true)]
-        DataWrapper<IVirtualizingCollection<IProductListItemEntity>> Products { get; }
+        IDataWrapper<IVirtualizingCollection<IProductListItemEntity>> Products { get; }
 
         /// <summary>
         /// Collection of selected products

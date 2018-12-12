@@ -41,6 +41,9 @@
     <DelaySign>true</DelaySign>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="CommonServiceLocator, Version=2.0.4.0, Culture=neutral, PublicKeyToken=489b6accfaf20ef0, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\CommonServiceLocator.2.0.4\lib\net46\CommonServiceLocator.dll</HintPath>
+    </Reference>
     <Reference Include="GalaSoft.MvvmLight, Version=5.3.0.19026, Culture=neutral, PublicKeyToken=e7570ab207bcb616, processorArchitecture=MSIL">
       <HintPath>..\..\packages\MvvmLightLibs.5.3.0.0\lib\net45\GalaSoft.MvvmLight.dll</HintPath>
     </Reference>
@@ -49,9 +52,6 @@
     </Reference>
     <Reference Include="GalaSoft.MvvmLight.Platform, Version=5.3.0.19032, Culture=neutral, PublicKeyToken=5f873c45e98af8a1, processorArchitecture=MSIL">
       <HintPath>..\..\packages\MvvmLightLibs.5.3.0.0\lib\net45\GalaSoft.MvvmLight.Platform.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Practices.ServiceLocation, Version=1.3.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\CommonServiceLocator.1.3\lib\portable-net4+sl5+netcore45+wpa81+wp8\Microsoft.Practices.ServiceLocation.dll</HintPath>
     </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
@@ -86,14 +86,34 @@
     <Compile Include="..\ShipWorks\Properties\AssemblyInfoCommon.cs">
       <Link>Properties\AssemblyInfoCommon.cs</Link>
     </Compile>
+    <Compile Include="BundleEditor\BundleEditorControl.xaml.cs">
+      <DependentUpon>BundleEditorControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="DesignerProductsMode.cs" />
+    <Compile Include="Import\Designer\DesignModeImportSuccessResultsViewModel.cs" />
+    <Compile Include="Import\ImportFailedStateView.xaml.cs">
+      <DependentUpon>ImportFailedStateView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Import\ImportingStateView.xaml.cs">
+      <DependentUpon>ImportingStateView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Import\ImportSucceededStateView.xaml.cs">
+      <DependentUpon>ImportSucceededStateView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Import\ImportSuccessResults.xaml.cs">
+      <DependentUpon>ImportSuccessResults.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Import\ProductImporterDialog.xaml.cs">
+      <DependentUpon>ProductImporterDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Import\SetupImportStateView.xaml.cs">
+      <DependentUpon>SetupImportStateView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="IProductsView.cs" />
     <Compile Include="ProductEditorDialog.xaml.cs">
       <DependentUpon>ProductEditorDialog.xaml</DependentUpon>
     </Compile>
-    <Compile Include="IProductEditorDialogFactory.cs" />
     <Compile Include="ProductEditorDialogFactory.cs" />
-    <Compile Include="ProductEditorViewModel.cs" />
     <Compile Include="ProductsView.xaml.cs">
       <DependentUpon>ProductsView.xaml</DependentUpon>
     </Compile>
@@ -130,11 +150,40 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Import\ImportFailedStateView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Import\ImportingStateView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Import\ImportSucceededStateView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="BundleEditor\BundleEditorControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Import\ImportSuccessResults.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Import\ProductImporterDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Import\SetupImportStateView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="ProductEditorDialog.xaml" />
     <Page Include="ProductsView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

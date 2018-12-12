@@ -71,6 +71,7 @@
                 <ColumnDefinition Width="Auto" SharedSizeGroup="A" />
                 <ColumnDefinition Width="Auto" SharedSizeGroup="A" />
                 <ColumnDefinition Width="Auto" SharedSizeGroup="A" />
+                <ColumnDefinition Width="Auto" SharedSizeGroup="A" />
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="*" />
@@ -83,6 +84,7 @@
             <Button
                 Grid.Column="1"
                 Content="Edit"
+                Command="{Binding EditProductVariantButton}"
                 Style="{StaticResource PrimaryButton}" />
             <Button
                 Grid.Column="2"
@@ -91,17 +93,22 @@
                 Style="{StaticResource PrimaryButton}" />
             <Button
                 Grid.Column="3"
+                Command="{Binding ImportProducts}"
+                Content="Import"
+                Style="{StaticResource PrimaryButton}" />
+            <Button
+                Grid.Column="4"
                 Command="{Binding ActivateProductCommand}"
                 Content="Mark Active"
                 Style="{StaticResource SecondaryButton}" />
             <Button
-                Grid.Column="4"
+                Grid.Column="5"
                 Command="{Binding DeactivateProductCommand}"
                 Content="Mark Inactive"
                 Style="{StaticResource SecondaryButton}" />
 
             <CheckBox
-                Grid.Column="5"
+                Grid.Column="6"
                 Margin="0,0,10,0"
                 IsChecked="{Binding ShowInactiveProducts}"
                 Style="{StaticResource FormCheckBox}">
@@ -109,7 +116,7 @@
             </CheckBox>
 
             <syncfusion:SfTextBoxExt
-                Grid.Column="7"
+                Grid.Column="8"
                 MinWidth="300"
                 HorizontalAlignment="Right"
                 VerticalContentAlignment="Center"
@@ -148,7 +155,8 @@
             SelectionMode="Extended"
             Style="{StaticResource DataGrid}"
             VirtualizingStackPanel.IsVirtualizing="True"
-            VirtualizingStackPanel.VirtualizationMode="Recycling">
+            VirtualizingStackPanel.VirtualizationMode="Recycling"
+            ui:DoubleClick.Command="{Binding EditProductVariantButton}">
             <DataGrid.Resources>
                 <ui:BindingProxy x:Key="proxy" Data="{Binding}" />
             </DataGrid.Resources>
@@ -225,7 +233,7 @@
                                 x:Name="SKUButton"
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Center"
-                                Command="{Binding DataContext.EditProductVariant, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"
+                                Command="{Binding DataContext.EditProductVariantLink, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"
                                 CommandParameter="{Binding Data.ProductVariantID}"
                                 Style="{StaticResource Link}">
                                 <TextBlock FontSize="{StaticResource BaseFontSize}" Text="{Binding Data.SKU}" />
@@ -250,7 +258,7 @@
                                     x:Name="NameButton"
                                     HorizontalAlignment="Left"
                                     VerticalAlignment="Center"
-                                    Command="{Binding DataContext.EditProductVariant, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"
+                                    Command="{Binding DataContext.EditProductVariantLink, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"
                                     CommandParameter="{Binding Data.ProductVariantID}"
                                     Style="{StaticResource Link}"
                                     Visibility="{Binding IsLoading, Converter={StaticResource BooleanToVisibilityInverted}}">

@@ -1,15 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using Autofac;
 using Interapptive.Shared;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data;
 using log4net;
 using ShipWorks.ApplicationCore;
+using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model;
-using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Products;
 using ShipWorks.Stores;
 
@@ -62,8 +61,8 @@ namespace ShipWorks.Templates.Processing.TemplateXml.ElementOutlines
             AddElement("Width", () => Item.Width);
             AddElement("Height", () => Item.Height);
 
-            AddElement("Product", new OrderItemProductOutline(context), 
-                () => new []{ Product },
+            AddElement("Product", new OrderItemProductOutline(context),
+                () => new[] { new Tuple<IProductVariant, Func<OrderItemProductBundleOutline>>(Product, () => new OrderItemProductBundleOutline(context)) },
                 If(() => Product.CanWriteXml));
 
             // Add an outline entry for each unique store type that could potentially be used
@@ -164,7 +163,10 @@ namespace ShipWorks.Templates.Processing.TemplateXml.ElementOutlines
                     using (ILifetimeScope scope = IoC.BeginLifetimeScope())
                     {
                         IProductCatalog productCatalog = scope.Resolve<IProductCatalog>();
-                        productVariant = productCatalog.FetchProductVariant(Item.SKU);
+                        using (ISqlAdapter sqlAdapter = scope.Resolve<ISqlAdapterFactory>().Create())
+                        {
+                            productVariant = productCatalog.FetchProductVariant(sqlAdapter, Item.SKU);
+                        }
                     }
                 }
 

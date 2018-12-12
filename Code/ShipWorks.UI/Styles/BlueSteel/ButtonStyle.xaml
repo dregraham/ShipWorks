@@ -16,10 +16,13 @@
 
     <Style x:Key="SmallPrimaryButton" TargetType="{x:Type Button}" BasedOn="{StaticResource SmallButton}">
         <Setter Property="Foreground" Value="White"/>
+        <Setter Property="Background" Value="{StaticResource LargePrimaryButtonGradient}" />
+        <Setter Property="BorderBrush" Value="#0e497f" />
+        <Setter Property="BorderThickness" Value="1" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="Button">
-                    <Border x:Name="Border" CornerRadius="2" Background="{StaticResource LargePrimaryButtonGradient}" BorderBrush="#0e497f" BorderThickness="1px">
+                    <Border x:Name="Border" CornerRadius="2" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}">
                         <ContentPresenter x:Name="contentPresenter" ContentTemplate="{TemplateBinding ContentTemplate}" Content="{TemplateBinding Content}" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
                     </Border>
                     <ControlTemplate.Triggers>
@@ -32,14 +35,25 @@
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Background" Value="{StaticResource LargePrimaryButtonGradientHover}" />
+            </Trigger>
+            <Trigger Property="IsPressed" Value="True">
+                <Setter Property="Background" Value="{StaticResource LargePrimaryButtonGradientPressed}" />
+            </Trigger>
+        </Style.Triggers>
     </Style>
 
     <Style x:Key="SmallSecondaryButton" TargetType="{x:Type Button}" BasedOn="{StaticResource SmallButton}">
         <Setter Property="Foreground" Value="{StaticResource ControlTextColor}"/>
+        <Setter Property="Background" Value="#E6E6E6" />
+        <Setter Property="BorderBrush" Value="#D4D4D4" />
+        <Setter Property="BorderThickness" Value="1" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="Button">
-                    <Border x:Name="Border" CornerRadius="2" Background="#E6E6E6" BorderBrush="#D4D4D4" BorderThickness="1px">
+                    <Border x:Name="Border" CornerRadius="2" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}">
                         <ContentPresenter x:Name="contentPresenter" ContentTemplate="{TemplateBinding ContentTemplate}" Content="{TemplateBinding Content}" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
                     </Border>
                     <ControlTemplate.Triggers>
@@ -52,6 +66,14 @@
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Background" Value="{StaticResource LargeSecondaryButtonGradientHover}" />
+            </Trigger>
+            <Trigger Property="IsPressed" Value="True">
+                <Setter Property="Background" Value="{StaticResource LargeSecondaryButtonGradientPressed}" />
+            </Trigger>
+        </Style.Triggers>
     </Style>
 
     <Style x:Key="LargePrimaryButton" TargetType="{x:Type Button}" BasedOn="{StaticResource SmallPrimaryButton}">

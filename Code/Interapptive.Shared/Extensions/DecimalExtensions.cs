@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Interapptive.Shared.Extensions
+﻿namespace Interapptive.Shared.Extensions
 {
     /// <summary>
     /// Decimal type extension methods

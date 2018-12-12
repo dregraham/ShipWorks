@@ -57,11 +57,11 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             
             Product = (IProductEntity) source.Product?.AsReadOnly(objectMap);
             
-            ProductBundle = source.ProductBundle?.Select(x => x.AsReadOnly(objectMap)).OfType<IProductBundleEntity>().ToReadOnly() ??
+            IncludedInBundles = source.IncludedInBundles?.Select(x => x.AsReadOnly(objectMap)).OfType<IProductBundleEntity>().ToReadOnly() ??
                 Enumerable.Empty<IProductBundleEntity>();
-            ProductVariantAlias = source.ProductVariantAlias?.Select(x => x.AsReadOnly(objectMap)).OfType<IProductVariantAliasEntity>().ToReadOnly() ??
+            Aliases = source.Aliases?.Select(x => x.AsReadOnly(objectMap)).OfType<IProductVariantAliasEntity>().ToReadOnly() ??
                 Enumerable.Empty<IProductVariantAliasEntity>();
-            ProductVariantAttribute = source.ProductVariantAttribute?.Select(x => x.AsReadOnly(objectMap)).OfType<IProductVariantAttributeEntity>().ToReadOnly() ??
+            VariantAttributes = source.VariantAttributes?.Select(x => x.AsReadOnly(objectMap)).OfType<IProductVariantAttributeEntity>().ToReadOnly() ??
                 Enumerable.Empty<IProductVariantAttributeEntity>();
 
             CopyCustomProductVariantData(source);
@@ -175,11 +175,11 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         public IProductEntity Product { get; }
         
         
-        public IEnumerable<IProductBundleEntity> ProductBundle { get; }
+        public IEnumerable<IProductBundleEntity> IncludedInBundles { get; }
         
-        public IEnumerable<IProductVariantAliasEntity> ProductVariantAlias { get; }
+        public IEnumerable<IProductVariantAliasEntity> Aliases { get; }
         
-        public IEnumerable<IProductVariantAttributeEntity> ProductVariantAttribute { get; }
+        public IEnumerable<IProductVariantAttributeEntity> VariantAttributes { get; }
         
         /// <summary>
         /// Get a read only version of the entity

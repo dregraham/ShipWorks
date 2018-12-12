@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using ShipWorks.Data.Model.EntityClasses;
+﻿using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Templates.Processing.TemplateXml.ElementOutlines;
 
 namespace ShipWorks.Products
@@ -21,7 +16,7 @@ namespace ShipWorks.Products
         /// <summary>
         /// Write product XML
         /// </summary>
-        void WriteXml(OrderItemProductOutline outline);
+        void WriteXml(ElementOutline outline, System.Func<OrderItemProductBundleOutline> createOrderItemProductBundleOutline);
 
         /// <summary>
         /// Apply product data to an order item
@@ -31,6 +26,7 @@ namespace ShipWorks.Products
         /// <summary>
         /// Apply the product data to the customs item
         /// </summary>
-        void Apply(ShipmentCustomsItemEntity customsItem);
+        void ApplyCustoms(OrderItemEntity item, ShipmentEntity shipment);
+
     }
 }

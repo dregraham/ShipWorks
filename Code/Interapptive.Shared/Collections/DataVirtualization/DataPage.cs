@@ -35,6 +35,7 @@ namespace DataVirtualization
 
             Items = itemsProvider.GetIDsInRange(firstIndex, pageLength)
                 .Select((entityID, i) => new DataWrapper<T>(firstIndex + i, entityID, populateAction))
+                .OfType<IDataWrapper<T>>()
                 .ToList();
 
             TouchTime = DateTime.UtcNow;
@@ -43,7 +44,7 @@ namespace DataVirtualization
         /// <summary>
         /// Items in the page
         /// </summary>
-        public IList<DataWrapper<T>> Items { get; }
+        public IList<IDataWrapper<T>> Items { get; }
 
         /// <summary>
         /// Last time the page was touched

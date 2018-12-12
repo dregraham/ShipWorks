@@ -181,6 +181,7 @@
     <Compile Include="Business\Geography\CurrencyCode.cs" />
     <Compile Include="Collections\DataVirtualization\DataPage.cs" />
     <Compile Include="Collections\DataVirtualization\DataWrapper.cs" />
+    <Compile Include="Collections\DataVirtualization\IDataWrapper.cs" />
     <Compile Include="Collections\DataVirtualization\IItemsProvider.cs" />
     <Compile Include="Collections\DataVirtualization\IVirtualizingCollection.cs" />
     <Compile Include="Collections\DataVirtualization\VirtualizingCollection.cs" />
@@ -214,6 +215,7 @@
     <Compile Include="Enums\UnitType.cs" />
     <Compile Include="Extensions\CharExtensions.cs" />
     <Compile Include="Extensions\CollectionExtensions.cs" />
+    <Compile Include="Extensions\IntExtensions.cs" />
     <Compile Include="Extensions\ObjectExtensions.cs" />
     <Compile Include="Extensions\SemaphoreExtensions.cs" />
     <Compile Include="Extensions\WindowExtensions.cs" />
@@ -227,10 +229,12 @@
     <Compile Include="Extensions\TaskExtensions.cs" />
     <Compile Include="Extensions\XElementExtensions.cs" />
     <Compile Include="Extensions\XmlTextWriterExtensions.cs" />
+    <Compile Include="IO\FileSelector.cs" />
     <Compile Include="IO\Hardware\IVirtualKeyboard.cs" />
     <Compile Include="IO\Hardware\Scales\IScaleReader.cs" />
     <Compile Include="IO\Hardware\Scales\ScaleReaderWrapper.cs" />
     <Compile Include="IO\Hardware\VirtualKeyboard.cs" />
+    <Compile Include="IO\IFileSelector.cs" />
     <Compile Include="Messaging\Logging\DumpOperation.cs" />
     <Compile Include="Messaging\Logging\SelectManyOperation.cs" />
     <Compile Include="Messaging\Logging\TypeConverter.cs" />
@@ -336,6 +340,7 @@
     <Compile Include="Threading\AsyncSemaphore.cs" />
     <Compile Include="Threading\DetailProgressUpdater.cs" />
     <Compile Include="Threading\EmptyProgressUpdater.cs" />
+    <Compile Include="Threading\IProgressFactory.cs" />
     <Compile Include="Threading\IProgressReporter.cs" />
     <Compile Include="Threading\IProgressUpdater.cs" />
     <Compile Include="Threading\ISchedulerProvider.cs" />

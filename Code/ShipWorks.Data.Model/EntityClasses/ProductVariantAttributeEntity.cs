@@ -362,7 +362,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <param name="resetFKFields">if set to true it will also reset the FK fields pointing to the related entity</param>
 		private void DesetupSyncProductVariant(bool signalRelatedEntity, bool resetFKFields)
 		{
-			this.PerformDesetupSyncRelatedEntity( _productVariant, new PropertyChangedEventHandler( OnProductVariantPropertyChanged ), "ProductVariant", ShipWorks.Data.Model.RelationClasses.StaticProductVariantAttributeRelations.ProductVariantEntityUsingProductVariantIDStatic, true, signalRelatedEntity, "ProductVariantAttribute", resetFKFields, new int[] { (int)ProductVariantAttributeFieldIndex.ProductVariantID } );
+			this.PerformDesetupSyncRelatedEntity( _productVariant, new PropertyChangedEventHandler( OnProductVariantPropertyChanged ), "ProductVariant", ShipWorks.Data.Model.RelationClasses.StaticProductVariantAttributeRelations.ProductVariantEntityUsingProductVariantIDStatic, true, signalRelatedEntity, "VariantAttributes", resetFKFields, new int[] { (int)ProductVariantAttributeFieldIndex.ProductVariantID } );
 			_productVariant = null;
 		}
 
@@ -505,7 +505,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 				}
 				else
 				{
-					SetSingleRelatedEntityNavigator(value, "ProductVariantAttribute", "ProductVariant", _productVariant, true); 
+					SetSingleRelatedEntityNavigator(value, "VariantAttributes", "ProductVariant", _productVariant, true); 
 				}
 			}
 		}

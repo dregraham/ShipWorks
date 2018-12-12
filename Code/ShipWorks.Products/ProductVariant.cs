@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using log4net;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
@@ -11,17 +12,26 @@ namespace ShipWorks.Products
     /// </summary>
     public class ProductVariant : IProductVariant
     {
-        private readonly string sku;
-        private readonly IProductVariantEntity variant;
-        private readonly ILog log;
+        protected readonly string sku;
+        protected readonly IProductVariantEntity variant;
+        protected readonly ILog log;
+        private readonly int? quantity;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public ProductVariant(string sku, IProductVariantEntity variant, ILog log)
+        public ProductVariant(string sku, IProductVariantEntity variant, ILog log) : this(sku, variant, null, log)
+        {
+        }
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public ProductVariant(string sku, IProductVariantEntity variant, int? quantity, ILog log)
         {
             this.sku = sku?.Trim() ?? string.Empty;
             this.variant = variant;
+            this.quantity = quantity;
             this.log = log;
         }
 
@@ -33,13 +43,13 @@ namespace ShipWorks.Products
         /// <summary>
         /// Write product XML
         /// </summary>
-        public void WriteXml(OrderItemProductOutline outline)
+        public virtual void WriteXml(ElementOutline outline, Func<OrderItemProductBundleOutline> createOrderItemProductBundleOutline)
         {
             outline.AddElement("SKU", () => sku);
-            outline.AddElement("Weight", () => variant.Weight);
-            outline.AddElement("Length", () => variant.Length);
-            outline.AddElement("Width", () => variant.Width);
-            outline.AddElement("Height", () => variant.Height);
+            outline.AddElement("Weight", () => (double?) variant.Weight);
+            outline.AddElement("Length", () => (double?) variant.Length);
+            outline.AddElement("Width", () => (double?) variant.Width);
+            outline.AddElement("Height", () => (double?) variant.Height);
             outline.AddElement("Name", () => variant.Name);
             outline.AddElement("ImageUrl", () => variant.ImageUrl);
             outline.AddElement("Location", () => variant.BinLocation);
@@ -47,6 +57,7 @@ namespace ShipWorks.Products
             outline.AddElement("HarmonizedCode", () => variant.HarmonizedCode);
             outline.AddElement("CountryOfOrigin", () => variant.CountryOfOrigin);
             outline.AddElement("DeclaredValue", () => variant.DeclaredValue);
+            outline.AddElement("Quantity", () => quantity, ElementOutline.If(() => quantity.HasValue));
         }
 
         /// <summary>
@@ -70,23 +81,47 @@ namespace ShipWorks.Products
         }
 
         /// <summary>
-        /// Apply the product data to the customs item
+        /// Adds customs data to a shipment for a line item
         /// </summary>
-        public void Apply(ShipmentCustomsItemEntity customsItem)
+        public virtual void ApplyCustoms(OrderItemEntity item, ShipmentEntity shipment)
         {
-            if (variant == null || !variant.IsActive)
+            log.InfoFormat("Applying product information to customs item for sku {0}", sku);
+
+            ApplyCustoms(item, shipment, variant);
+        }
+
+        /// <summary>
+        /// Applies customs item for a variant
+        /// </summary>
+        protected ShipmentCustomsItemEntity ApplyCustoms(OrderItemEntity item, ShipmentEntity shipment, IProductVariantEntity variantEntity)
+        {
+            ShipmentCustomsItemEntity customsItem = new ShipmentCustomsItemEntity
             {
-                return;
+                Shipment = shipment,
+                Description = item.Name,
+                Quantity = item.Quantity,
+                Weight = item.Weight,
+                UnitValue = item.UnitPrice,
+                CountryOfOrigin = "US",
+                HarmonizedCode = item.HarmonizedCode,
+                NumberOfPieces = 0,
+                UnitPriceAmount = item.UnitPrice
+            };
+
+            if (variantEntity != null && variantEntity.IsActive)
+            {
+                ApplyValue(variantEntity.Name, () => customsItem.Description = variantEntity.Name);
+                ApplyValue(variantEntity.Weight, () => customsItem.Weight = (double) variantEntity.Weight);
+                ApplyValue(variantEntity.DeclaredValue, () => customsItem.UnitValue = variantEntity.DeclaredValue.Value);
+                ApplyValue(variantEntity.DeclaredValue, () => customsItem.UnitPriceAmount = variantEntity.DeclaredValue.Value);
+                ApplyValue(variantEntity.CountryOfOrigin, () => customsItem.CountryOfOrigin = variantEntity.CountryOfOrigin);
+                ApplyValue(variantEntity.HarmonizedCode, () => customsItem.HarmonizedCode = variantEntity.HarmonizedCode);
             }
 
-            log.InfoFormat($"Attempting to apply product information to customs item for sku {sku}");
+            customsItem.UnitValue += item.OrderItemAttributes.Sum(oia => oia.UnitPrice);
+            customsItem.UnitPriceAmount += item.OrderItemAttributes.Sum(oia => oia.UnitPrice);
 
-            ApplyValue(variant.Name, () => customsItem.Description = variant.Name);
-            ApplyValue(variant.Weight, () => customsItem.Weight = (double) variant.Weight);
-            ApplyValue(variant.DeclaredValue, () => customsItem.UnitValue = variant.DeclaredValue.Value);
-            ApplyValue(variant.DeclaredValue, () => customsItem.UnitPriceAmount = variant.DeclaredValue.Value);
-            ApplyValue(variant.CountryOfOrigin, () => customsItem.CountryOfOrigin = variant.CountryOfOrigin);
-            ApplyValue(variant.HarmonizedCode, () => customsItem.HarmonizedCode = variant.HarmonizedCode);
+            return customsItem;
         }
 
         /// <summary>

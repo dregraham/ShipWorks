@@ -4002,27 +4002,27 @@
           <FieldFieldRelationship FkField="VoidedUserID" PkField="UserID" />
         </FieldRelationships>
       </NormalRelationship>
-      <NormalRelationship Name="ProductBundle.Product-Product.ProductBundle" Start=":ProductBundle" End=":Product" StartNavigator="Product" EndNavigator="ProductBundle" Type="4">
-        <FieldRelationships>
-          <FieldFieldRelationship FkField="ProductID" PkField="ProductID" />
-        </FieldRelationships>
-      </NormalRelationship>
-      <NormalRelationship Name="ProductBundle.ProductVariant-ProductVariant.ProductBundle" Start=":ProductBundle" End=":ProductVariant" StartNavigator="ProductVariant" EndNavigator="ProductBundle" Type="4">
+      <NormalRelationship Name="ProductBundle.ChildVariant-ProductVariant.IncludedInBundles" Start=":ProductBundle" End=":ProductVariant" StartNavigator="ChildVariant" EndNavigator="IncludedInBundles" Type="4">
         <FieldRelationships>
           <FieldFieldRelationship FkField="ChildProductVariantID" PkField="ProductVariantID" />
         </FieldRelationships>
       </NormalRelationship>
-      <NormalRelationship Name="ProductVariant.Product-Product.ProductVariant" Start=":ProductVariant" End=":Product" StartNavigator="Product" EndNavigator="ProductVariant" Type="4">
+      <NormalRelationship Name="ProductBundle.Product-Product.Bundles" Start=":ProductBundle" End=":Product" StartNavigator="Product" EndNavigator="Bundles" Type="4">
         <FieldRelationships>
           <FieldFieldRelationship FkField="ProductID" PkField="ProductID" />
         </FieldRelationships>
       </NormalRelationship>
-      <NormalRelationship Name="ProductVariantAlias.ProductVariant-ProductVariant.ProductVariantAlias" Start=":ProductVariantAlias" End=":ProductVariant" StartNavigator="ProductVariant" EndNavigator="ProductVariantAlias" Type="4">
+      <NormalRelationship Name="ProductVariant.Product-Product.Variants" Start=":ProductVariant" End=":Product" StartNavigator="Product" EndNavigator="Variants" Type="4">
+        <FieldRelationships>
+          <FieldFieldRelationship FkField="ProductID" PkField="ProductID" />
+        </FieldRelationships>
+      </NormalRelationship>
+      <NormalRelationship Name="ProductVariantAlias.ProductVariant-ProductVariant.Aliases" Start=":ProductVariantAlias" End=":ProductVariant" StartNavigator="ProductVariant" EndNavigator="Aliases" Type="4">
         <FieldRelationships>
           <FieldFieldRelationship FkField="ProductVariantID" PkField="ProductVariantID" />
         </FieldRelationships>
       </NormalRelationship>
-      <NormalRelationship Name="ProductVariantAttribute.ProductVariant-ProductVariant.ProductVariantAttribute" Start=":ProductVariantAttribute" End=":ProductVariant" StartNavigator="ProductVariant" EndNavigator="ProductVariantAttribute" Type="4">
+      <NormalRelationship Name="ProductVariantAttribute.ProductVariant-ProductVariant.VariantAttributes" Start=":ProductVariantAttribute" End=":ProductVariant" StartNavigator="ProductVariant" EndNavigator="VariantAttributes" Type="4">
         <FieldRelationships>
           <FieldFieldRelationship FkField="ProductVariantID" PkField="ProductVariantID" />
         </FieldRelationships>

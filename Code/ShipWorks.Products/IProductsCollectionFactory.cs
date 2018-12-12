@@ -12,6 +12,6 @@ namespace ShipWorks.Products
         /// <summary>
         /// Create a collection of products
         /// </summary>
-        DataWrapper<IVirtualizingCollection<IProductListItemEntity>> Create(bool includeInactiveProducts, string searchText, IBasicSortDefinition sortDefinition);
+        IDataWrapper<IVirtualizingCollection<IProductListItemEntity>> Create(bool includeInactiveProducts, string searchText, IBasicSortDefinition sortDefinition);
     }
 }
