@@ -479,7 +479,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <summary> The EntityExistsQuery property of the Entity FilterNodeContent<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "FilterNodeContent"."EntityExistsQuery"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 2147483647<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual System.String EntityExistsQuery
 		{
 			get { return (System.String)GetValue((int)FilterNodeContentFieldIndex.EntityExistsQuery, true); }
