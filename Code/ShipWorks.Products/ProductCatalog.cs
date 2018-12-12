@@ -329,6 +329,7 @@ namespace ShipWorks.Products
             DataRow secondHeaderRow = dt.NewRow();
             dt.Columns[dt.Columns["Name"].Ordinal].AllowDBNull = true;
             dt.Columns[dt.Columns["Active"].Ordinal].AllowDBNull = true;
+            secondHeaderRow[0] = "";
             secondHeaderRow[1] = "SKU | SKU";
             secondHeaderRow[2] = "SKU : Qty | SKU : Qty";
             dt.Rows.InsertAt(secondHeaderRow, 0);
