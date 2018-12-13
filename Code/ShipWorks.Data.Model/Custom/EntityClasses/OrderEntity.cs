@@ -62,29 +62,6 @@ namespace ShipWorks.Data.Model.EntityClasses
         public void ChangeOrderNumber(string orderNumber) => ChangeOrderNumber(orderNumber, string.Empty, string.Empty);
 
         /// <summary>
-        /// Converts date values to UTC
-        /// </summary>
-        public DateTime? ChangeDate(DateTime? dateTime)
-        {
-            if (dateTime.HasValue)
-            {
-                if (dateTime.Value.Kind == DateTimeKind.Local)
-                {
-                    dateTime = dateTime.Value.ToUniversalTime();
-                    return dateTime;
-                }
-
-                if (dateTime.Value.Kind == DateTimeKind.Unspecified)
-                {
-                    dateTime = dateTime.Value.ToUniversalTime();
-                    return dateTime;
-                }
-            }
-
-            return dateTime;
-        }
-
-        /// <summary>
         /// Trying to set a value of a field
         /// </summary>
         protected override void OnSetValue(int fieldIndex, object valueToSet, out bool cancel)

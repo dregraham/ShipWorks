@@ -30,10 +30,13 @@ namespace ShipWorks.Data.Import.Xml
             // Channel Order ID
             order.ChannelOrderID = XPathUtility.Evaluate(xpath, "ChannelOrderID", "");
             
-            // Load Ship By Date
-            LoadShipByDate(order, xpath);
+            bool success = DateTime.TryParse(XPathUtility.Evaluate(xpath, "ShipByDate", ""), out DateTime result);
 
-            // Custom
+            if (success)
+            {
+                // Ship By Date
+                order.ShipByDate = result;
+            }
             order.Custom1 = XPathUtility.Evaluate(xpath, "Custom1", "");
             order.Custom2 = XPathUtility.Evaluate(xpath, "Custom2", "");
             order.Custom3 = XPathUtility.Evaluate(xpath, "Custom3", "");
