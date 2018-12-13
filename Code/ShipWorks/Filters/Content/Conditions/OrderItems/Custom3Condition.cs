@@ -6,8 +6,8 @@ namespace ShipWorks.Filters.Content.Conditions.OrderItems
     /// <summary>
     /// Condition base on the Custom3 of an OrderItem
     /// </summary>
-    [ConditionElement("Custom Field 3", "OrderItems.Custom3")]
-    public class Custom3Condition : StringCondition
+    [ConditionElement("Custom Field 3", "OrderItem.Custom3")]
+    public class CustomItem3Condition : StringCondition
     {
         /// <summary>
         /// Generate the SQL for the element

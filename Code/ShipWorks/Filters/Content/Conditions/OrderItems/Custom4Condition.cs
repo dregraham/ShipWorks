@@ -6,7 +6,7 @@ namespace ShipWorks.Filters.Content.Conditions.OrderItems
     /// <summary>
     /// Condition base on the Custom4 of an OrderItem
     /// </summary>
-    [ConditionElement("Custom Field 4", "OrderItems.Custom4")]
+    [ConditionElement("Custom Field 4", "OrderItem.Custom4")]
     public class Custom4Condition : StringCondition
     {
         /// <summary>
