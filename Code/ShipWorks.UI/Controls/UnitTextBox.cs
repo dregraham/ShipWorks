@@ -17,6 +17,7 @@ namespace ShipWorks.UI.Controls
     {
         private const double MaxValueDefault = 10000D;
         private TextBox entry;
+        double? initialBoundValue = 0;
 
         public static readonly DependencyProperty ValueProperty =
             DependencyProperty.Register("Value", typeof(double), typeof(UnitTextBox),
@@ -84,8 +85,8 @@ namespace ShipWorks.UI.Controls
         [Obfuscation(Exclude = true)]
         public UnitType UnitType
         {
-            get => (UnitType) GetValue(MaxValueProperty);
-            set => SetValue(MaxValueProperty, value);
+            get => (UnitType) GetValue(UnitTypeProperty);
+            set => SetValue(UnitTypeProperty, value);
         }
 
         /// <summary>
@@ -104,7 +105,7 @@ namespace ShipWorks.UI.Controls
 
             if (!DesignModeDetector.IsDesignerHosted())
             {
-                SetEntryValue(this, 0D);
+                SetEntryValue(this, initialBoundValue ?? 0D);
             }
         }
 
@@ -176,6 +177,10 @@ namespace ShipWorks.UI.Controls
                 input.entry.Text = (UnitType) input.GetValue(UnitTypeProperty) == UnitType.Weight ?
                     WeightConverter.Current.FormatWeight(value) :
                     new LengthConverter().FormatLength(value);
+            }
+            else
+            {
+                input.initialBoundValue = value;
             }
         }
     }
