@@ -278,9 +278,10 @@
                 <TextBlock Grid.Row="0"
                            Text="Aliases"
                            Style="{StaticResource Header}"/>
-                <productsUI:AliasEditorControl Grid.Row="1"/>
+                <productsUI:AliasEditorControl Grid.Row="1"
+                                               DataContext="{Binding AliasEditorViewModel}"/>
             </Grid>            
-            <Grid Grid.Row="1">
+            <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="auto"/>
                     <RowDefinition Height="*"/>
@@ -291,8 +292,7 @@
                 <productsUI:AttributeEditorControl Grid.Row="1"
                                                    DataContext="{Binding AttributeEditorViewModel}"/>
             </Grid>
-            <Grid Grid.Row="2"
-                  Margin="0 15 0 0"
+            <Grid Margin="0 15 0 0"
                   Visibility="{Binding Path=IsBundle, Converter={StaticResource BooleanToVisibility},
                                                     UpdateSourceTrigger=PropertyChanged}">
                 <Grid.RowDefinitions>

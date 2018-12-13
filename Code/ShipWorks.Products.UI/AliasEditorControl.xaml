@@ -3,9 +3,10 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:local="clr-namespace:ShipWorks.Products.UI"
+             xmlns:aliasEditor="clr-namespace:ShipWorks.Products.AliasEditor;assembly=ShipWorks.Products"
              mc:Ignorable="d"
-             d:DesignHeight="300" d:DesignWidth="400">
+             d:DesignHeight="300" d:DesignWidth="400"
+             d:DataContext="{d:DesignInstance aliasEditor:AliasEditorViewModel}">
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -39,14 +40,14 @@
             <TextBox Grid.Row="0" 
                       Grid.Column="1"                     
                       Style="{StaticResource FormTextBox}"
-                      Text="{Binding SelectedAlias}"/>
+                      Text="{Binding AliasName}"/>
             <TextBlock Grid.Row="1"
                        Grid.Column="0"
                        Text="Alias Sku"
                        Style="{StaticResource FieldLabel}"/>
             <TextBox Grid.Row="1"
                      Grid.Column="1"
-                     Text="{Binding AttributeValue}"
+                     Text="{Binding AliasSku}"
                      Style="{StaticResource FormTextBox}"/>
         </Grid>
         <Button Grid.Row="0"
@@ -56,8 +57,8 @@
                 Margin="10 0 0 10"
                 VerticalAlignment="Bottom"/>
         <ListBox Grid.Row="1" Grid.Column="0"
-                 ItemsSource="{Binding ProductAttributes, UpdateSourceTrigger=PropertyChanged}"
-                 SelectedItem="{Binding SelectedProductAttribute}"
+                 ItemsSource="{Binding ProductAliases, UpdateSourceTrigger=PropertyChanged}"
+                 SelectedItem="{Binding SelectedProductAlias}"
                  Style="{StaticResource BlueSteel.ListBox.SingleSelection}"                 
                  Grid.IsSharedSizeScope="True">
             <ListBox.ItemTemplate>

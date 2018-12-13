@@ -13,6 +13,7 @@ using Interapptive.Shared.Utility;
 using ShipWorks.Core.UI;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Products.AliasEditor;
 using ShipWorks.Products.AttributeEditor;
 using ShipWorks.Products.BundleEditor;
 
@@ -59,6 +60,7 @@ namespace ShipWorks.Products.ProductEditor
             IMessageHelper messageHelper,
             IBundleEditorViewModel bundleEditorViewModel,
             IAttributeEditorViewModel attributeEditorViewModel,
+            IAliasEditorViewModel aliasEditorViewModel,
             ISqlAdapterFactory sqlAdapterFactory,
             IProductCatalog productCatalog)
         {
@@ -68,6 +70,7 @@ namespace ShipWorks.Products.ProductEditor
             this.messageHelper = messageHelper;
             BundleEditorViewModel = bundleEditorViewModel;
             AttributeEditorViewModel = attributeEditorViewModel;
+            AliasEditorViewModel = aliasEditorViewModel;
             this.sqlAdapterFactory = sqlAdapterFactory;
             this.productCatalog = productCatalog;
             Save = new RelayCommand(async () => await SaveProduct());
@@ -225,6 +228,12 @@ namespace ShipWorks.Products.ProductEditor
         public IAttributeEditorViewModel AttributeEditorViewModel { get; }
 
         /// <summary>
+        /// View model for the alias editor
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public IAliasEditorViewModel AliasEditorViewModel { get; }
+
+        /// <summary>
         /// Show the product editor
         /// </summary>
         public async Task<bool?> ShowProductEditor(ProductVariantEntity productVariant)
@@ -240,7 +249,8 @@ namespace ShipWorks.Products.ProductEditor
 
             BundleEditorViewModel.Load(productVariant);
             await AttributeEditorViewModel.Load(productVariant).ConfigureAwait(true);
-
+            AliasEditorViewModel.Load(productVariant);
+                    
             SKU = productVariant.DefaultSku ?? string.Empty;
             IsActive = productVariant.IsNew || productVariant.IsActive;
             IsBundle = !productVariant.IsNew && productVariant.Product.IsBundle;
@@ -288,6 +298,7 @@ namespace ShipWorks.Products.ProductEditor
             Result saveResult;
             BundleEditorViewModel.Save();
             AttributeEditorViewModel.Save();
+            AliasEditorViewModel.Save();
 
             saveResult = await productCatalog.Save(productVariant, sqlAdapterFactory);
             

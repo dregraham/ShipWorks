@@ -25,8 +25,8 @@ namespace ShipWorks.Products.AttributeEditor
         private string selectedAttributeName;
         private ObservableCollection<string> attributeNames;
         private string attributeValue;
-        private ObservableCollection<ProductVariantAttributeValueEntity> bundleLineItems;
-        private ProductVariantAttributeValueEntity selectedBundleLineItem;
+        private ObservableCollection<ProductVariantAttributeValueEntity> productAttributes;
+        private ProductVariantAttributeValueEntity selectedProductAttribute;
         private ProductVariantEntity productVariant;
         private readonly IMessageHelper messageHelper;
         private readonly ISqlAdapterFactory sqlAdapterFactory;
@@ -86,8 +86,8 @@ namespace ShipWorks.Products.AttributeEditor
         [Obfuscation(Exclude = true)]
         public ObservableCollection<ProductVariantAttributeValueEntity> ProductAttributes
         {
-            get => bundleLineItems;
-            set => Set(ref bundleLineItems, value);
+            get => productAttributes;
+            set => Set(ref productAttributes, value);
         }
 
         /// <summary>
@@ -96,8 +96,8 @@ namespace ShipWorks.Products.AttributeEditor
         [Obfuscation(Exclude = true)]
         public ProductVariantAttributeValueEntity SelectedProductAttribute
         {
-            get => selectedBundleLineItem;
-            set => Set(ref selectedBundleLineItem, value);
+            get => selectedProductAttribute;
+            set => Set(ref selectedProductAttribute, value);
         }
 
         /// <summary>
