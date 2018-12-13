@@ -136,9 +136,15 @@ namespace ShipWorks.Products.AliasEditor
                 return;
             }
             
-            if (ProductAliases.Any(x => x.Sku.Equals(AliasSku, StringComparison.InvariantCultureIgnoreCase)))
+            if (defaultAlias?.Sku == AliasSku)
             {
-                messageHelper.ShowError($"This product already contains an alias with the sku \"{AliasSku}\"");
+                messageHelper.ShowError($"\"{AliasSku}\" is already the default sku for this product.");
+                return;
+            }
+            
+            if (ProductAliases.Any(x => x.Sku == AliasSku))
+            {
+                messageHelper.ShowError($"This product already contains an alias with the sku \"{AliasSku}\".");
                 return;
             }
 
