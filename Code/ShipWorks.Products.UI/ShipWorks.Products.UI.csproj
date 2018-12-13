@@ -86,6 +86,9 @@
     <Compile Include="..\ShipWorks\Properties\AssemblyInfoCommon.cs">
       <Link>Properties\AssemblyInfoCommon.cs</Link>
     </Compile>
+    <Compile Include="AliasEditorControl.xaml.cs">
+      <DependentUpon>AliasEditorControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="BundleEditor\BundleEditorControl.xaml.cs">
       <DependentUpon>BundleEditorControl.xaml</DependentUpon>
     </Compile>
@@ -153,6 +156,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Page Include="AliasEditorControl.xaml" />
     <Page Include="Import\ImportFailedStateView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
