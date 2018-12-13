@@ -17,8 +17,6 @@ namespace ShipWorks.Products.Import
     public class ProductToImportDto
     {
         private static readonly string[] ActiveValues = new[] { "ACTIVE", "YES", "TRUE", "1" };
-        private static readonly string SkuSeparatorRegex = @"(?<!($|[^\\])(\\\\)*?\\)\|";
-        private static readonly string SkuQuantitySeparatorRegex = @"(?<!($|[^\\])(\\\\)*?\\):";
         private static List<string> propertyNames = new List<string>();
 
         [DisplayName("SKU")]
@@ -72,51 +70,11 @@ namespace ShipWorks.Products.Import
         [DisplayName("Active")]
         public string Active { private get; set; }
 
-        public bool IsActive => ActiveValues.Contains(Active.ToUpperInvariant());
+        public bool IsActive => ActiveValues.Contains(Active?.ToUpperInvariant());
 
-        public IEnumerable<string> AliasSkuList => AliasSkus.IsNullOrWhiteSpace() ? 
-            Enumerable.Empty<string>() :
-            Regex.Split(AliasSkus, SkuSeparatorRegex)
-                .Where(s => !s.Equals(Sku.Trim(), StringComparison.InvariantCultureIgnoreCase))
-                .Distinct();
+        public IEnumerable<string> AliasSkuList { get; set; }
 
-        public IEnumerable<(string Sku, int Quantity)> BundleSkuList
-        {
-            get
-            {
-                if (BundleSkus.IsNullOrWhiteSpace())
-                {
-                    return Enumerable.Empty<(string, int)>();
-                }
-
-                return Regex.Split(BundleSkus, SkuSeparatorRegex)
-                    .Select(skuAndQty =>
-                    {
-                        var values = Regex.Split(skuAndQty, SkuQuantitySeparatorRegex);
-
-                        string testSku = Regex.Unescape(values[0]);
-                        string testQty = Regex.Unescape(values[1]);
-                        if (testSku.Equals(Sku, StringComparison.InvariantCultureIgnoreCase) || 
-                                            AliasSkuList.Any(a => a.Equals(testSku, StringComparison.CurrentCultureIgnoreCase)))
-                        {
-                            throw new ProductImportException($"Bundles may not be composed of its SKU or any of its alias SKUs.  Problem SKU: {testSku}");
-                        }
-
-                        if (values.Length != 2)
-                        {
-                            throw new ProductImportException($"Quantity is required, but wasn't supplied for bundled item SKU {values[0]}");
-                        }
-
-                        int quantity = GetValue(testQty, "Bundle Quantity", 0);
-                        if (quantity <= 0)
-                        {
-                            throw new ProductImportException($"Quantity must be greater than 0 for bundled item SKU {values[0]}");
-                        }
-
-                        return (testSku, quantity);
-                    });
-            }
-        }
+        public IEnumerable<(string Sku, int Quantity)> BundleSkuList { get; set; }
 
         /// <summary>
         /// Get T value of the given string.

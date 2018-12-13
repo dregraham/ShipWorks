@@ -25,12 +25,14 @@
     <None Remove="obj\**" />
   </ItemGroup>
   <ItemGroup>
+    <None Remove="Import\ExportProducts.sql" />
     <None Remove="Import\ProductImportSample.csv" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\ShipWorks\Properties\AssemblyInfoCommon.cs" Link="Properties\AssemblyInfoCommon.cs" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Export\ExportProducts.sql" />
     <EmbeddedResource Include="Import\ProductImportSample.csv" />
   </ItemGroup>
   <ItemGroup>
@@ -58,7 +60,7 @@
     <PackageReference Include="Autofac" Version="4.6.2" />
     <PackageReference Include="Autofac.Mef" Version="4.0.0" />
     <PackageReference Include="Castle.Core" Version="4.2.1" />
-    <PackageReference Include="CommonServiceLocator" Version="2.0.1" />
+    <PackageReference Include="CommonServiceLocator" Version="2.0.4" />
     <PackageReference Include="InterapptiveAnalyzers" Version="1.0.5714.23531" />
     <PackageReference Include="log4net" Version="2.0.7" />
     <PackageReference Include="MvvmLightLibs" Version="5.3.0" />

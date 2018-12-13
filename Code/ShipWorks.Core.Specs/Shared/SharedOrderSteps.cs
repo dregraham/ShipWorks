@@ -36,12 +36,18 @@ namespace ShipWorks.Core.Specs.Shared
             Orders = table.Rows
                 .ToDictionary(
                     x => x["Name"],
-                    x => Create.Order(Context.Store, Context.Customer).Set(o => o.OrderNumber = int.Parse(x["Number"])).Save());
+                    x =>
+                    {
+                        var orderBuilder = Create.Order(Context.Store, Context.Customer)
+                            .WithShipAddress("123 Main", "", "St. Louis", "MO", "63102", "US");
+                        var entityBuilder = orderBuilder.Set(o => o.OrderNumber = int.Parse(x["Number"]));
+                        return entityBuilder.Save();
+                    });
 
             objectContainer.RegisterInstanceAs(Orders);
             objectContainer.RegisterInstanceAs(Orders.Values);
         }
-
+           
         [When(@"a shipment is created for each order")]
         public Task WhenAShipmentIsCreatedForEachOrder() =>
             IoC.UnsafeGlobalLifetimeScope

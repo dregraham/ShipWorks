@@ -24,9 +24,12 @@ namespace ShipWorks.Products.Tests
         [Fact]
         public void ImportProductsCommand_DelegatesToProductImporterViewModel()
         {
+            var viewModel = mock.FromFactory<IProductViewModelFactory>()
+                .Mock(x => x.CreateImport());
+
             testObject.ImportProducts.Execute(null);
 
-            mock.Mock<IProductImporterViewModel>().Verify(x => x.ImportProducts());
+            viewModel.Verify(x => x.ImportProducts());
         }
 
         [Fact]
@@ -43,7 +46,10 @@ namespace ShipWorks.Products.Tests
         [Fact]
         public void ImportProductsCommand_ReloadProducts_WhenImportIsCompleted()
         {
-            mock.Mock<IProductImporterViewModel>().Setup(x => x.ImportProducts()).Returns(Result.FromSuccess);
+            mock.FromFactory<IProductViewModelFactory>()
+                .Mock(x => x.CreateImport())
+                .Setup(x => x.ImportProducts())
+                .Returns(Result.FromSuccess);
             mock.Mock<IProductsCollectionFactory>().ResetCalls();
 
             testObject.ImportProducts.Execute(null);

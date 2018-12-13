@@ -40,7 +40,7 @@ namespace ShipWorks.ApplicationCore.Licensing
     /// <summary>
     /// Interface for working with the interapptive license server
     /// </summary>
-    [NDependIgnoreLongTypesAttribute]
+    [NDependIgnoreLongTypes]
     public static class TangoWebClient
     {
         private const string ActivationUrl = "https://interapptive.com/ShipWorksNet/ActivationV1.svc";
@@ -51,6 +51,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         private static InsureShipAffiliateProvider insureShipAffiliateProvider = new InsureShipAffiliateProvider();
 
         private static Version version;
+        private static DateTime nextSecureConnectionValidation = DateTime.MinValue;
 
         /// <summary>
         /// Gets the version - If version is under 5.0.0.0, return 5.0.0.0
@@ -1142,16 +1143,8 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// </summary>
         private static string ProcessRequest(HttpVariableRequestSubmitter postRequest, string logEntryName, bool collectTelemetry)
         {
-            // Timeout
-            postRequest.Timeout = TimeSpan.FromSeconds(60);
-
-            // Set the uri
-            postRequest.Uri = new Uri("https://www.interapptive.com/ShipWorksNet/ShipWorksV1.svc/account/shipworks");
-
-            // Logging
             ApiLogEntry logEntry = new ApiLogEntry(ApiLogSource.ShipWorks, logEntryName);
-            logEntry.LogRequest(postRequest);
-            ConfigureRequest(postRequest);
+            ConfigureRequest(postRequest, logEntry);
 
             IHttpResponseReader postResponse = null;
             TrackedDurationEvent telemetryEvent = null;
@@ -1170,7 +1163,11 @@ namespace ShipWorks.ApplicationCore.Licensing
 
                 // First validate that we are connecting to interapptive, and not a fake redirect to steal passwords and such.  Doing this pre-call
                 // also prevents stealing the headers user\pass with fiddler
-                telemetricResult.RunTimedEvent("ValidateSecureConnection", () => ValidateSecureConnection(postRequest.Uri));
+                if (nextSecureConnectionValidation < DateTime.UtcNow)
+                {
+                    telemetricResult.RunTimedEvent("ValidateSecureConnection", () => ValidateSecureConnection(postRequest.Uri));
+                    nextSecureConnectionValidation = DateTime.UtcNow.AddMinutes(15);
+                }
 
                 telemetricResult.RunTimedEvent("ActualRequest", () => postResponse = postRequest.GetResponse());
 
@@ -1204,8 +1201,13 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// <summary>
         /// configure the post request
         /// </summary>
-        private static void ConfigureRequest(HttpVariableRequestSubmitter postRequest)
+        private static void ConfigureRequest(HttpVariableRequestSubmitter postRequest, ApiLogEntry logEntry)
         {
+            postRequest.Timeout = TimeSpan.FromSeconds(60);
+            postRequest.Uri = new Uri("https://www.interapptive.com/ShipWorksNet/ShipWorksV1.svc/account/shipworks");
+
+            logEntry.LogRequest(postRequest);
+
             postRequest.RequestSubmitting += delegate (object sender, HttpRequestSubmittingEventArgs e)
             {
                 e.HttpWebRequest.KeepAlive = false;

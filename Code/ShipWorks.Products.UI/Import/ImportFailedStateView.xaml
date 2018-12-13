@@ -60,14 +60,22 @@
                     AutoGenerateColumns="False"
                     IsReadOnly="True"
                     ItemsSource="{Binding ImportErrors, Mode=OneTime}">
+                    <DataGrid.Resources>
+                        <Style x:Key="TextStyle">
+                            <Setter Property="TextBlock.Margin" Value="2" />
+                            <Setter Property="TextBlock.TextWrapping" Value="Wrap" />
+                        </Style>
+                    </DataGrid.Resources>
                     <DataGrid.Columns>
                         <DataGridTextColumn
                             Width="Auto"
                             Binding="{Binding Key}"
+                            ElementStyle="{StaticResource TextStyle}"
                             Header="SKU" />
                         <DataGridTextColumn
                             Width="*"
                             Binding="{Binding Value}"
+                            ElementStyle="{StaticResource TextStyle}"
                             Header="Error" />
                     </DataGrid.Columns>
                 </DataGrid>

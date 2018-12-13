@@ -14,15 +14,11 @@ using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Common.Threading;
 using ShipWorks.Data.Administration.Recovery;
 using ShipWorks.Data.Connection;
-using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Editions;
 using ShipWorks.Filters;
-using ShipWorks.Filters.Content;
-using ShipWorks.Filters.Content.Conditions;
-using ShipWorks.Filters.Content.Conditions.Orders;
 using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Carriers.FedEx;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Enums;
@@ -37,7 +33,6 @@ using ShipWorks.Startup;
 using ShipWorks.Tests.Shared;
 using ShipWorks.Tests.Shared.Database;
 using ShipWorks.Tests.Shared.EntityBuilders;
-using ShipWorks.Users;
 using ShipWorks.Users.Security;
 using Xunit;
 
@@ -298,8 +293,12 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
             var shipmentType = mock.CreateMock<FedExShipmentType>();
             shipmentType.CallBase = true;
 
-            mock.Override<IShipmentTypeManager>()
+            var shipmentTypeManager = mock.Override<IShipmentTypeManager>();
+            shipmentTypeManager
                 .Setup(x => x.InitialShipmentType(It.IsAny<ShipmentEntity>()))
+                .Returns(shipmentType.Object);
+            shipmentTypeManager
+                .Setup(x => x.Get(It.IsAny<ShipmentEntity>()))
                 .Returns(shipmentType.Object);
 
             ShipmentEntity shipment = CreateShipment(context.Order, mock.Container);
@@ -313,8 +312,12 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
             var shipmentType = mock.CreateMock<FedExShipmentType>();
             shipmentType.CallBase = true;
 
-            mock.Override<IShipmentTypeManager>()
+            var shipmentTypeManager = mock.Override<IShipmentTypeManager>();
+            shipmentTypeManager
                 .Setup(x => x.InitialShipmentType(It.IsAny<ShipmentEntity>()))
+                .Returns(shipmentType.Object);
+            shipmentTypeManager
+                .Setup(x => x.Get(It.IsAny<ShipmentEntity>()))
                 .Returns(shipmentType.Object);
 
             ShipmentEntity shipment = CreateShipment(context.Order, mock.Container);

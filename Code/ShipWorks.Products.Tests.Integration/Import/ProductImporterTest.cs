@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Autofac.Extras.Moq;
 using Interapptive.Shared.Collections;
@@ -147,7 +149,7 @@ namespace ShipWorks.Products.Tests.Integration.Import
             dto.Upc = string.Empty;
             dto.Isbn = string.Empty;
             dto.ImageUrl = string.Empty;
-            dto.Name = string.Empty;
+            dto.Name = "A Name";
             dto.WarehouseBin = string.Empty;
 
             var result = await RunTest(skuProducts, bundleProducts, true);
@@ -483,7 +485,7 @@ namespace ShipWorks.Products.Tests.Integration.Import
 
         private ProductToImportDto GetFullProduct(string sku, string aliasSkus = "", string bundleSkus = "")
         {
-            return new ProductToImportDto()
+            var dto = new ProductToImportDto()
             {
                 Sku = sku,
                 Active = "active",
@@ -503,6 +505,83 @@ namespace ShipWorks.Products.Tests.Integration.Import
                 Isbn = $"{sku}-isbn",
                 WarehouseBin = $"{sku}-warehouse/bin"
             };
+
+            dto.AliasSkuList = new List<string>();
+            if (!aliasSkus.IsNullOrWhiteSpace())
+            {
+                dto.AliasSkuList = Regex.Split(dto.AliasSkus, ProductExcelReader.SkuSeparatorRegex, RegexOptions.IgnoreCase)
+                    .Where(s => !s.IsNullOrWhiteSpace() && !s.Equals(dto.Sku.Trim(), StringComparison.InvariantCultureIgnoreCase))
+                    .Distinct()
+                    .Select(s => Regex.Unescape(s).Trim());
+            }
+
+            dto.BundleSkuList = GetBundleSkuList(dto.Sku, dto.BundleSkus, dto.AliasSkuList);
+
+            return dto;
+        }
+
+        /// <summary>
+        /// Build the list of product bundle sku and quantity
+        /// </summary>
+        private IEnumerable<(string Sku, int Quantity)> GetBundleSkuList(string sku, string bundleSkus, IEnumerable<string> aliasSkuList)
+        {
+            if (bundleSkus.IsNullOrWhiteSpace())
+            {
+                return Enumerable.Empty<(string, int)>();
+            }
+
+            return Regex.Split(bundleSkus, ProductExcelReader.SkuSeparatorRegex, RegexOptions.IgnoreCase)
+                .Select(skuAndQty => Regex.Split(skuAndQty, ProductExcelReader.SkuQuantitySeparatorRegex, RegexOptions.IgnoreCase))
+                .Where(values => !(values.Length == 1 && values[0].IsNullOrWhiteSpace())) // Ignore extra beginning/ending delimiters
+                .Select(values =>
+                {
+                    if (values.Length != 2)
+                    {
+                        throw new ProductImportException($"Quantity is required, but wasn't supplied for bundled item SKU {values[0]}");
+                    }
+
+                    string testSku = Regex.Unescape(values[0]);
+                    string testQty = Regex.Unescape(values[1]);
+                    if (testSku.Equals(sku, StringComparison.InvariantCultureIgnoreCase) ||
+                        aliasSkuList.Any(a => a.Equals(testSku, StringComparison.CurrentCultureIgnoreCase)))
+                    {
+                        throw new ProductImportException($"Bundles may not be composed of its SKU or any of its alias SKUs.  Problem SKU: {testSku}");
+                    }
+
+                    int quantity = GetValue(testQty, "Bundle Quantity", 0);
+                    if (quantity <= 0)
+                    {
+                        throw new ProductImportException($"Quantity must be greater than 0 for bundled item SKU {values[0]}");
+                    }
+
+                    return (testSku, quantity);
+                });
+        }
+
+        /// <summary>
+        /// Get T value of the given string.
+        /// </summary>
+        public static T GetValue<T>(string text, string propertyName, T defaultValue)
+        {
+            if (!text.IsNullOrWhiteSpace())
+            {
+                try
+                {
+                    var converter = TypeDescriptor.GetConverter(typeof(T));
+                    if (converter != null)
+                    {
+                        return (T) converter.ConvertFromString(text);
+                    }
+                }
+                catch
+                {
+                    // throwing below
+                }
+
+                throw new ProductImportException($"Unable to convert '{propertyName}' with value {text.Trim()} to a number.");
+            }
+
+            return defaultValue;
         }
 
         public void Dispose()

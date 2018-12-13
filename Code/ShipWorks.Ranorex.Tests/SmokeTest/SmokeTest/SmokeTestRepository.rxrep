@@ -3303,7 +3303,7 @@ lpKZgpMF6Pw3M/MFayOlqIh43SSsYsIrayXz9q3r5Ra2vFFWLUXbtWRiANXcVpB6SHDZSEK3kcS7
 			name="New"
 			refimgid="7c60845f-8b29-4fe9-94be-86b95c3d8486"
 			searchtimeout="30000ms">
-				/form[@title~'ShipWorks']/?/?/element[@controlname='ribbonTabHome']/rawtext[@row='0' and @column='1' and @visible='True']
+				/form[@title~'ShipWorks']/element[@controlname='ribbon']/?/?/rawtext[@rawtext='New' and @column='1']
 			</item>
 			<item
 			addcaps="listitem,accessible"

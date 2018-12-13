@@ -84,7 +84,7 @@ namespace ShipWorks.Products.Import
         {
             StringBuilder sb = new StringBuilder();
             sb.AppendLine();
-            result.FailureResults.ForEach(f => sb.AppendLine($"Filed to import SKU '{f.Key}'.  Error: '{f.Value}'"));
+            result.FailureResults.ForEach(f => sb.AppendLine($"Failed to import SKU '{f.Key}'.  Error: '{f.Value}'"));
             sb.AppendLine();
             log.Error(sb);
         }
@@ -312,11 +312,6 @@ namespace ShipWorks.Products.Import
                         throw new ProductImportException($"Unable to import bundle SKU {bundleProductVariant.Aliases.First(a => a.IsDefault).Sku} because child SKU '{s.Sku}' is a bundle.  Bundles cannot be comprised of other bundles.");
                     }
 
-                    if (childVariant.IncludedInBundles.Any())
-                    {
-                        throw new ProductImportException($"Unable to import bundle SKU {bundleProductVariant.Aliases.First(a => a.IsDefault).Sku} because child SKU '{s.Sku}' is a child of another bundle.  Bundles cannot be comprised of other bundles.");
-                    }
-
                     return new ProductBundleEntity()
                     {
                         Product = bundleProductVariant.Product,
@@ -344,6 +339,11 @@ namespace ShipWorks.Products.Import
             ValidateFieldLength(row.WarehouseBin, ProductVariantFields.BinLocation.MaxLength, "Warehouse-Bin Location");
             ValidateFieldLength(row.CountryOfOrigin, ProductVariantFields.CountryOfOrigin.MaxLength, "Country of Origin");
             ValidateFieldLength(row.HarmonizedCode, ProductVariantFields.HarmonizedCode.MaxLength, "Harmonized Code");
+
+            if (row.Name.IsNullOrWhiteSpace())
+            {
+                throw new ProductImportException("Name is required, but was not provided.");
+            }
 
             foreach (string aliasSku in row.AliasSkuList)
             {
