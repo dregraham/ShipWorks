@@ -36,6 +36,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
 	    {
 	        List<ShipWorksOdbcMappableField> fields = new List<ShipWorksOdbcMappableField>
 	        {
+                // Orders
 	            new ShipWorksOdbcMappableField(OrderFields.OrderNumberComplete, OdbcOrderFieldDescription.Number, true, OdbcFieldValueResolutionStrategy.Default),
 	            new ShipWorksOdbcMappableField(OrderFields.OrderDate, OdbcOrderFieldDescription.DateAndTime, OdbcFieldValueResolutionStrategy.Default),
                 new ShipWorksOdbcMappableField(OrderFields.OnlineLastModified, OdbcOrderFieldDescription.LastModifiedDateAndTime, OdbcFieldValueResolutionStrategy.Default),
@@ -49,14 +50,20 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
 	            new ShipWorksOdbcMappableField(OrderFields.Custom4, OdbcOrderFieldDescription.Custom4, OdbcFieldValueResolutionStrategy.Default),
 	            new ShipWorksOdbcMappableField(OrderFields.Custom5, OdbcOrderFieldDescription.Custom5, OdbcFieldValueResolutionStrategy.Default),
                 new ShipWorksOdbcMappableField(OrderFields.OnlineCustomerID, OdbcOrderFieldDescription.CustomerID, OdbcFieldValueResolutionStrategy.Default),
+
+                // Notes
 	            new ShipWorksOdbcMappableField(NoteFields.Text, OdbcOrderFieldDescription.NoteInternal, OdbcFieldValueResolutionStrategy.Default),
 	            new ShipWorksOdbcMappableField(NoteFields.Text, OdbcOrderFieldDescription.NotePublic, OdbcFieldValueResolutionStrategy.Default),
+
+                // Order Charge
 	            new ShipWorksOdbcMappableField(OrderChargeFields.Amount, OdbcOrderFieldDescription.ChargeShipping, OdbcFieldValueResolutionStrategy.Default),
 	            new ShipWorksOdbcMappableField(OrderChargeFields.Amount, OdbcOrderFieldDescription.ChargeHandling, OdbcFieldValueResolutionStrategy.Default),
 	            new ShipWorksOdbcMappableField(OrderChargeFields.Amount, OdbcOrderFieldDescription.ChargeDiscount, OdbcFieldValueResolutionStrategy.Default),
 	            new ShipWorksOdbcMappableField(OrderChargeFields.Amount, OdbcOrderFieldDescription.ChargeInsurance, OdbcFieldValueResolutionStrategy.Default),
 	            new ShipWorksOdbcMappableField(OrderChargeFields.Amount, OdbcOrderFieldDescription.ChargeOther, OdbcFieldValueResolutionStrategy.Default),
 	            new ShipWorksOdbcMappableField(OrderChargeFields.Amount, OdbcOrderFieldDescription.ChargeTax, OdbcFieldValueResolutionStrategy.Default),
+
+                // Order Payments
 	            new ShipWorksOdbcMappableField(OrderPaymentDetailFields.Value, OdbcOrderFieldDescription.PaymentMethod, OdbcFieldValueResolutionStrategy.Default),
 	            new ShipWorksOdbcMappableField(OrderPaymentDetailFields.Value, OdbcOrderFieldDescription.PaymentReference, OdbcFieldValueResolutionStrategy.Default),
 	            new ShipWorksOdbcMappableField(OrderPaymentDetailFields.Value, OdbcOrderFieldDescription.PaymentCCType, OdbcFieldValueResolutionStrategy.Default),

@@ -330,8 +330,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("ArchivalSettingsXml", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("AuditEnabled", fieldHashtable);
-			fieldHashtable = new Dictionary<string, string>();
-			_fieldsCustomProperties.Add("AllowUIModeToggle", fieldHashtable);
 		}
 		#endregion
 
@@ -558,16 +556,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.Boolean)GetValue((int)ConfigurationFieldIndex.AuditEnabled, true); }
 			set	{ SetValue((int)ConfigurationFieldIndex.AuditEnabled, value); }
-		}
-
-		/// <summary> The AllowUIModeToggle property of the Entity Configuration<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "Configuration"."AllowUIModeToggle"<br/>
-		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.Boolean AllowUIModeToggle
-		{
-			get { return (System.Boolean)GetValue((int)ConfigurationFieldIndex.AllowUIModeToggle, true); }
-			set	{ SetValue((int)ConfigurationFieldIndex.AllowUIModeToggle, value); }
 		}
 	
 		/// <summary> Gets the type of the hierarchy this entity is in. </summary>

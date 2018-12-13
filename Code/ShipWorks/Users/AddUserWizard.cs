@@ -3,7 +3,6 @@ using System.ComponentModel;
 using System.Data;
 using System.Windows.Forms;
 using Interapptive.Shared.UI;
-using ShipWorks.Data;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Email;
@@ -19,7 +18,6 @@ namespace ShipWorks.Users
     {
         UserEntity user;
         PermissionSet permissions;
-        private bool allowIUModeToggle;
 
         /// <summary>
         /// Constructor
@@ -27,7 +25,6 @@ namespace ShipWorks.Users
         public AddUserWizard()
         {
             InitializeComponent();
-            allowIUModeToggle = ConfigurationData.FetchReadOnly().AllowUIModeToggle;
         }
 
         /// <summary>
@@ -94,7 +91,6 @@ namespace ShipWorks.Users
             panelAdminAllRights.Visible = accountAdmin.Checked;
             permissionEditor.Visible = accountStandard.Checked;
             copyRightsFrom.Visible = accountStandard.Checked;
-            uiModeSelectionControl.Visible = allowIUModeToggle;
         }
 
         /// <summary>
@@ -111,11 +107,8 @@ namespace ShipWorks.Users
                     user = UserUtility.CreateUser(name, email.Text.Trim(), password.Text, accountAdmin.Checked, adapter);
                     permissions.CopyTo(user.UserID, adapter);
 
-                    if (allowIUModeToggle)
-                    {
-                        uiModeSelectionControl.SaveTo(user.Settings);
-                        adapter.SaveAndRefetch(user.Settings);
-                    }
+                    uiModeSelectionControl.SaveTo(user.Settings);
+                    adapter.SaveAndRefetch(user.Settings);
 
                     adapter.Commit();
                 }

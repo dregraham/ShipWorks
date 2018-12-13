@@ -66,6 +66,9 @@ Scenario: Correct templates are returned for a shipment based on filter inclusio
 	And the following orders
 		| Name   | Number |
 		| Second | 5678   |
+	And the following "Other" profiles
+		| Default   | Carrier | Name |
+		| Yes       | Other   | Other Default Profile |
 	And a default provider of Other
 	When a shipment is created for each order
 	When templates are retrieved for the shipment for order 5678

@@ -109,7 +109,32 @@ namespace ShipWorks.Data.Import.Spreadsheet.OrderSchema
             // Set fields now that we have data
             order.LocalStatus = csv.ReadField("Order.LocalStatus", order.LocalStatus ?? "");
             order.OnlineStatus = csv.ReadField("Order.OnlineStatus", order.OnlineStatus ?? "");
-            order.ShipByDate = csv.ReadField("Order.ShipByDate", (DateTime?) null, null, csv.Map.DateSettings.DateFormat, false);
+
+            order.ShipByDate = csv.ReadField("Order.ShipByDate", null, null, csv.Map.DateSettings.DateFormat);
+            
+            if (order.ShipByDate.HasValue)
+            {
+                // If Parse can tell what timezone it's in, it automatically converts it to local.  We need UTC.
+                if (order.ShipByDate.Value.Kind == DateTimeKind.Local)
+                {
+                    order.ShipByDate = order.ShipByDate.Value.ToUniversalTime();
+                }
+
+                // If it's unspecified, we need go based on the settings
+                if (order.ShipByDate.Value.Kind == DateTimeKind.Unspecified)
+                {
+                    if (csv.Map.DateSettings.TimeZoneAssumption == GenericSpreadsheetTimeZoneAssumption.Local)
+                    {
+                        order.ShipByDate = order.ShipByDate.Value.ToUniversalTime();
+                    }
+                    else
+                    {
+                        order.ShipByDate = new DateTime(order.ShipByDate.Value.Ticks, DateTimeKind.Utc);
+                    }
+                }
+            }
+            
+
             order.RequestedShipping = csv.ReadField("Order.RequestedShipping", order.RequestedShipping ?? "");
             order.Custom1 = csv.ReadField("Order.Custom1", order.Custom1 ?? "");
             order.Custom2 = csv.ReadField("Order.Custom2", order.Custom2 ?? "");
