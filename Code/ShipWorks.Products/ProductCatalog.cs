@@ -33,21 +33,15 @@ namespace ShipWorks.Products
         private readonly ISqlSession sqlSession;
         private readonly Func<Type, ILog> logFactory;
         private readonly IMessageHelper messageHelper;
-        private readonly ISqlAdapterFactory sqlAdapterFactory;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public ProductCatalog(
-            ISqlSession sqlSession,
-            Func<Type, ILog> logFactory,
-            IMessageHelper messageHelper,
-            ISqlAdapterFactory sqlAdapterFactory)
+        public ProductCatalog(ISqlSession sqlSession, Func<Type, ILog> logFactory, IMessageHelper messageHelper)
         {
             this.sqlSession = sqlSession;
             this.logFactory = logFactory;
             this.messageHelper = messageHelper;
-            this.sqlAdapterFactory = sqlAdapterFactory;
         }
 
         /// <summary>
@@ -170,7 +164,7 @@ namespace ShipWorks.Products
         /// <summary>
         /// Fetch a product attribute based on name
         /// </summary>
-        public ProductAttributeEntity FetchProductAttribute(string name, long productID)
+        public ProductAttributeEntity FetchProductAttribute(ISqlAdapter sqlAdapter, string name, long productID)
         {
             IPredicate predicate = new FieldCompareValuePredicate(ProductAttributeFields.AttributeName, null, ComparisonOperator.Equal,
                                                                   name.ToUpper()).CaseInsensitive();
@@ -179,11 +173,7 @@ namespace ShipWorks.Products
                 .Where(predicate)
                 .AndWhere(ProductAttributeFields.ProductID == productID);
 
-            ProductAttributeEntity attribute;
-            using (ISqlAdapter sqlAdapter = sqlAdapterFactory.Create())
-            {
-                attribute = sqlAdapter.FetchFirst(query);
-            }
+            ProductAttributeEntity attribute = sqlAdapter.FetchFirst(query);
 
             return attribute;
         }
@@ -191,7 +181,7 @@ namespace ShipWorks.Products
         /// <summary>
         /// Get the available attributes for a variant
         /// </summary>
-        public async Task<IEnumerable<IProductAttributeEntity>> GetAvailableAttributesFor(ProductVariantEntity variant)
+        public async Task<IEnumerable<IProductAttributeEntity>> GetAvailableAttributesFor(ISqlAdapter sqlAdapter, ProductVariantEntity variant)
         {
             if (variant?.Product?.IsNew ?? true)
             {
@@ -201,13 +191,7 @@ namespace ShipWorks.Products
             QueryFactory factory = new QueryFactory();
             var query = factory.ProductAttribute.Where(ProductAttributeFields.ProductID == variant.ProductID);
 
-            IEntityCollection2 queryResults;
-            using (ISqlAdapter sqlAdapter = sqlAdapterFactory.Create())
-            {
-                queryResults = await sqlAdapter.FetchQueryAsync(query).ConfigureAwait(false);
-            }
-
-
+            IEntityCollection2 queryResults = await sqlAdapter.FetchQueryAsync(query).ConfigureAwait(false);
             return queryResults.OfType<IProductAttributeEntity>().Select(v => v.AsReadOnly());
         }
 

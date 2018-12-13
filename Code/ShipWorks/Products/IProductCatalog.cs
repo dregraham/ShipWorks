@@ -46,11 +46,11 @@ namespace ShipWorks.Products
         /// <summary>
         /// Fetch a product attribute based on name
         /// </summary>
-        ProductAttributeEntity FetchProductAttribute(string name, long productID);
+        ProductAttributeEntity FetchProductAttribute(ISqlAdapter sqlAdapter, string name, long productID);
 
         /// <summary>
         /// Get the available attributes for a variant
         /// </summary>
-        Task<IEnumerable<IProductAttributeEntity>> GetAvailableAttributesFor(ProductVariantEntity variant);
+        Task<IEnumerable<IProductAttributeEntity>> GetAvailableAttributesFor(ISqlAdapter sqlAdapter, ProductVariantEntity variant);
     }
 }
