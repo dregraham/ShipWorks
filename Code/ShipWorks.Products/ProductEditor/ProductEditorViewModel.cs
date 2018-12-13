@@ -4,7 +4,6 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
-using System.Windows.Forms;
 using System.Windows.Input;
 using GalaSoft.MvvmLight.CommandWpf;
 using Interapptive.Shared.ComponentRegistration;
@@ -225,10 +224,17 @@ namespace ShipWorks.Products.ProductEditor
         public IAttributeEditorViewModel AttributeEditorViewModel { get; }
 
         /// <summary>
+        /// Attribute Editor
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public string DialogTitle { get; private set; }
+
+        /// <summary>
         /// Show the product editor
         /// </summary>
-        public async Task<bool?> ShowProductEditor(ProductVariantEntity productVariant)
+        public async Task<bool?> ShowProductEditor(ProductVariantEntity productVariant, string dialogTitle)
         {
+            DialogTitle = dialogTitle;
             this.productVariant = productVariant;
             IsNew = productVariant.IsNew;
 
@@ -290,7 +296,7 @@ namespace ShipWorks.Products.ProductEditor
             AttributeEditorViewModel.Save();
 
             saveResult = await productCatalog.Save(productVariant, sqlAdapterFactory);
-            
+
             if (saveResult.Success)
             {
                 dialog.DialogResult = true;

@@ -267,7 +267,7 @@ namespace ShipWorks.Products
                     }
                     else
                     {
-                        await EditProduct(result.Value).ConfigureAwait(false);
+                        await EditProduct(result.Value, "New Variant").ConfigureAwait(false);
                     }
                 }
             }
@@ -292,7 +292,7 @@ namespace ShipWorks.Products
 
             if (productVariantAlias != null)
             {
-                await EditProduct(productVariantAlias.ProductVariant).ConfigureAwait(true);
+                await EditProduct(productVariantAlias.ProductVariant, "Edit Product").ConfigureAwait(true);
             }
         }
 
@@ -316,15 +316,15 @@ namespace ShipWorks.Products
                 IsDefault = true
             });
 
-            await EditProduct(productVariant).ConfigureAwait(true);
+            await EditProduct(productVariant, "New Product").ConfigureAwait(true);
         }
 
         /// <summary>
         /// Edit the given product
         /// </summary>
-        private async Task EditProduct(ProductVariantEntity productVariantEntity)
+        private async Task EditProduct(ProductVariantEntity productVariantEntity, string dialogTitle)
         {
-            if ((await productEditorViewModelFunc().ShowProductEditor(productVariantEntity).ConfigureAwait(true)) ?? false)
+            if ((await productEditorViewModelFunc().ShowProductEditor(productVariantEntity, dialogTitle).ConfigureAwait(true)) ?? false)
             {
                 RefreshProductsAction();
             }

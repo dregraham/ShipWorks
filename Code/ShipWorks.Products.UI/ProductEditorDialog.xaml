@@ -11,7 +11,7 @@
         xmlns:productEditor="clr-namespace:ShipWorks.Products.ProductEditor;assembly=ShipWorks.Products"
         mc:Ignorable="d"
         SizeToContent="Height"
-        Title="Product Editor" Width="700"
+        Title="{Binding DialogTitle}" Width="700"
         FontFamily="/ShipWorks.UI;component/Styles/BlueSteel/#Roboto"
         d:DataContext="{d:DesignInstance productEditor:ProductEditorViewModel}">
     <Window.Resources>
