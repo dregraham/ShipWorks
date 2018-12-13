@@ -4,7 +4,6 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
-using System.Windows.Forms;
 using System.Windows.Input;
 using GalaSoft.MvvmLight.CommandWpf;
 using Interapptive.Shared.ComponentRegistration;
@@ -228,6 +227,12 @@ namespace ShipWorks.Products.ProductEditor
         public IAttributeEditorViewModel AttributeEditorViewModel { get; }
 
         /// <summary>
+        /// Attribute Editor
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public string DialogTitle { get; private set; }
+		
+        /// <summary>
         /// View model for the alias editor
         /// </summary>
         [Obfuscation(Exclude = true)]
@@ -236,8 +241,9 @@ namespace ShipWorks.Products.ProductEditor
         /// <summary>
         /// Show the product editor
         /// </summary>
-        public async Task<bool?> ShowProductEditor(ProductVariantEntity productVariant)
+        public async Task<bool?> ShowProductEditor(ProductVariantEntity productVariant, string dialogTitle)
         {
+            DialogTitle = dialogTitle;
             this.productVariant = productVariant;
             IsNew = productVariant.IsNew;
 
@@ -301,7 +307,7 @@ namespace ShipWorks.Products.ProductEditor
             AliasEditorViewModel.Save();
 
             saveResult = await productCatalog.Save(productVariant, sqlAdapterFactory);
-            
+
             if (saveResult.Success)
             {
                 dialog.DialogResult = true;
@@ -311,7 +317,7 @@ namespace ShipWorks.Products.ProductEditor
             {
                 if ((saveResult.Exception?.GetBaseException() as SqlException)?.Number == 2601)
                 {
-                    messageHelper.ShowError($"The SKU \"{SKU}\" already exists. Please enter a unique value for the Product SKU.", saveResult.Exception);
+                    messageHelper.ShowError($"A specified SKU or SKU Alias already exists. Please enter a unique value for all SKUs.", saveResult.Exception);
                 }
                 else if (!string.IsNullOrWhiteSpace(saveResult.Message))
                 {
