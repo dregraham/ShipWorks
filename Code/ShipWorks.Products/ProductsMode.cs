@@ -267,6 +267,7 @@ namespace ShipWorks.Products
                     }
                     else
                     {
+                        result.Value.Aliases.Where(a => !a.IsDefault).ToList().ForEach(a => result.Value.Aliases.Remove(a));
                         await EditProduct(result.Value).ConfigureAwait(false);
                     }
                 }
