@@ -30,23 +30,9 @@ namespace ShipWorks.Data.Import.Xml
             // Channel Order ID
             order.ChannelOrderID = XPathUtility.Evaluate(xpath, "ChannelOrderID", "");
             
-            bool success = DateTime.TryParse(XPathUtility.Evaluate(xpath, "ShipByDate", ""), out DateTime result);
+            // Load Ship By Date
+            LoadShipByDate(order, xpath);
 
-            if (success)
-            {
-                DateTime shipByDate = result;
-
-                // Convert to UTC
-                if (shipByDate.Kind == DateTimeKind.Local || shipByDate.Kind == DateTimeKind.Unspecified)
-                {
-                    order.ShipByDate = shipByDate.ToUniversalTime();
-                }
-                else
-                {
-                    order.ShipByDate = shipByDate;
-                }
-            }
-           
             // shipping
             order.RequestedShipping = XPathUtility.Evaluate(xpath, "ShippingMethod", "");
 
@@ -96,6 +82,29 @@ namespace ShipWorks.Data.Import.Xml
             if (observer != null)
             {
                 observer.OnOrderLoadComplete(order, xpath);
+            }
+        }
+
+        /// <summary>
+        /// Loads ShipByDate from the module XML
+        /// </summary>
+        private static void LoadShipByDate(OrderEntity order, XPathNavigator xpath)
+        {
+            bool success = DateTime.TryParse(XPathUtility.Evaluate(xpath, "ShipByDate", ""), out DateTime result);
+
+            if (success)
+            {
+                DateTime shipByDate = result;
+
+                // Convert to UTC
+                if (shipByDate.Kind == DateTimeKind.Local || shipByDate.Kind == DateTimeKind.Unspecified)
+                {
+                    order.ShipByDate = shipByDate.ToUniversalTime();
+                }
+                else
+                {
+                    order.ShipByDate = shipByDate;
+                }
             }
         }
 
