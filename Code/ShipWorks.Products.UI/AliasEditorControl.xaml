@@ -20,7 +20,7 @@
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
-            <RowDefinition Height="auto"/>
+            <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <Grid Grid.Row="0"
               Grid.Column="0">
@@ -58,8 +58,7 @@
         <ListBox Grid.Row="1" Grid.Column="0"
                  ItemsSource="{Binding ProductAttributes, UpdateSourceTrigger=PropertyChanged}"
                  SelectedItem="{Binding SelectedProductAttribute}"
-                 Style="{StaticResource BlueSteel.ListBox.SingleSelection}"
-                 Height="200"
+                 Style="{StaticResource BlueSteel.ListBox.SingleSelection}"                 
                  Grid.IsSharedSizeScope="True">
             <ListBox.ItemTemplate>
                 <DataTemplate>

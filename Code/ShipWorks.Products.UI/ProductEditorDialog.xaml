@@ -225,65 +225,74 @@
                  Grid.Column="1"
                  Text="{Binding BinLocation, UpdateSourceTrigger=PropertyChanged}"
                  Style="{StaticResource FormTextBox}"/>
-        </Grid>
-        <Grid Grid.Column="1"
-              Grid.Row="0">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="auto"/>
-                <RowDefinition Height="auto"/>
-                <RowDefinition Height="auto"/>
-                <RowDefinition Height="auto"/>
-                <RowDefinition Height="auto"/>
-                <RowDefinition Height="auto"/>
-            </Grid.RowDefinitions>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="auto"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
-            <TextBlock Grid.Row="0"
+
+            <TextBlock Grid.Row="17"
                    Grid.Column="0"
                    Text="Customs Details"
-                   Style="{StaticResource Header}"/>
+                   Style="{StaticResource Header}"
+                       Margin="0 5"/>
 
-            <TextBlock Grid.Row="1"
+            <TextBlock Grid.Row="18"
                    Grid.Column="0"
                    Text="Harmonized Code"
                    Style="{StaticResource FieldLabel}"/>
 
-            <TextBox Grid.Row="1"
+            <TextBox Grid.Row="18"
                  Grid.Column="1"
                  Text="{Binding HarmonizedCode, UpdateSourceTrigger=PropertyChanged}"
                  Style="{StaticResource FormTextBox}"/>
 
-            <TextBlock Grid.Row="2"
+            <TextBlock Grid.Row="19"
                    Grid.Column="0"
                    Text="Declared Value"
                    Style="{StaticResource FieldLabel}"/>
 
-            <TextBox Grid.Row="2"
+            <TextBox Grid.Row="19"
                  Grid.Column="1"
                  Text="{Binding DeclaredValue, Converter={StaticResource EmptyMoney}, NotifyOnValidationError=true, StringFormat=C, UpdateSourceTrigger=LostFocus, ValidatesOnDataErrors=true}"
                  Style="{StaticResource FormTextBox}"/>
 
-            <TextBlock Grid.Row="3"
+            <TextBlock Grid.Row="20"
                    Grid.Column="0"
                    Text="Country of Origin"
                    Style="{StaticResource FieldLabel}"
                        Margin="0 0 0 15"/>
 
-            <ComboBox Grid.Row="3"
+            <ComboBox Grid.Row="20"
                   Grid.Column="1"
                   DisplayMemberPath="Key"
                   SelectedValuePath="Value"
                   SelectedValue="{Binding CountryOfOrigin}"
                   ItemsSource="{Binding Source={x:Static geography:CountryList.Countries}, Mode=OneTime}"
                   Style="{StaticResource FormComboBox}"
-                      Margin="10 0 0 15"/>
-
-            <Grid Grid.Row="4"
-                  Grid.Column="0"
-                  Grid.ColumnSpan="2"
-                  Margin="0 0 0 15"
+                      Margin="10 0 0 0"/>
+        </Grid>
+        <UniformGrid Grid.Column="1"
+                     Grid.Row="0"
+                     Columns="1">
+            <Grid Margin="0 0 0 15">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <TextBlock Grid.Row="0"
+                           Text="Aliases"
+                           Style="{StaticResource Header}"/>
+                <productsUI:AliasEditorControl Grid.Row="1"/>
+            </Grid>            
+            <Grid Grid.Row="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <TextBlock Grid.Row="0"
+                           Text="Attributes"
+                           Style="{StaticResource Header}"/>
+                <productsUI:AttributeEditorControl Grid.Row="1"
+                                                   DataContext="{Binding AttributeEditorViewModel}"/>
+            </Grid>
+            <Grid Grid.Row="2"
+                  Margin="0 15 0 0"
                   Visibility="{Binding Path=IsBundle, Converter={StaticResource BooleanToVisibility},
                                                     UpdateSourceTrigger=PropertyChanged}">
                 <Grid.RowDefinitions>
@@ -296,26 +305,11 @@
                 <bundles:BundleEditorControl Grid.Row="1"
                                          DataContext="{Binding BundleEditorViewModel}"/>
             </Grid>
-            <Grid Grid.Row="5"
-                  Grid.Column="0"
-                  Grid.ColumnSpan="2"
-                  Margin="0 0 0 10">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="auto"/>
-                    <RowDefinition Height="*"/>
-                </Grid.RowDefinitions>
-                <TextBlock Grid.Row="0"
-                           Text="Attributes"
-                           Style="{StaticResource Header}"/>
-                <productsUI:AttributeEditorControl Grid.Row="1"
-                                                   DataContext="{Binding AttributeEditorViewModel}"/>
-
-            </Grid>
-
-        </Grid>
+        </UniformGrid>
         <Grid
             Grid.Row="1"
             Grid.Column="1"
+            Margin="0 15 0 0"
             VerticalAlignment="Bottom"
             HorizontalAlignment="Right"
             Grid.IsSharedSizeScope="True">

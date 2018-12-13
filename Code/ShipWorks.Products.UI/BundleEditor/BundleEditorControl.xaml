@@ -56,8 +56,7 @@
         <ListBox Grid.Row="1" Grid.Column="0"
                  ItemsSource="{Binding BundleLineItems, UpdateSourceTrigger=PropertyChanged}"
                  SelectedItem="{Binding SelectedBundleLineItem}"
-                 Style="{StaticResource BlueSteel.ListBox.SingleSelection}"
-                 Height="200">
+                 Style="{StaticResource BlueSteel.ListBox.SingleSelection}">
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <TextBlock Text="{Binding DisplayText}"
