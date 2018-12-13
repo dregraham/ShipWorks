@@ -73,7 +73,7 @@
             </Grid.ColumnDefinitions>
             <UniformGrid
                 Grid.Row="0"
-                Columns="6"
+                Columns="7"
                 Rows="1">
                 <Button
                     Command="{Binding AddProduct}"
