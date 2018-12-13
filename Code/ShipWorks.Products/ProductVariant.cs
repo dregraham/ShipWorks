@@ -45,7 +45,7 @@ namespace ShipWorks.Products
         /// </summary>
         public virtual void WriteXml(ElementOutline outline, Func<OrderItemProductBundleOutline> createOrderItemProductBundleOutline)
         {
-            outline.AddElement("SKU", () => sku);
+            outline.AddElement("SKU", () => variant.Aliases.FirstOrDefault(a => a.IsDefault).Sku);
             outline.AddElement("Weight", () => (double?) variant.Weight);
             outline.AddElement("Length", () => (double?) variant.Length);
             outline.AddElement("Width", () => (double?) variant.Width);
