@@ -4537,11 +4537,6 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ConfigurationFieldIndex.AuditEnabled);}
 		}
-		/// <summary>Creates a new ConfigurationEntity.AllowUIModeToggle field instance</summary>
-		public static EntityField2 AllowUIModeToggle
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(ConfigurationFieldIndex.AllowUIModeToggle);}
-		}
 	}
 
 	/// <summary>Field Creation Class for entity CustomerEntity</summary>

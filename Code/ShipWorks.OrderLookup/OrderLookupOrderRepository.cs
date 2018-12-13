@@ -36,27 +36,18 @@ namespace ShipWorks.OrderLookup
         }
 
         /// <summary>
-        /// Get the OrderId matching the search text
+        /// Get the OrderId matching the order number
         /// </summary>
-        public List<long> GetOrderIDs(string searchText)
+        public List<long> GetOrderIDs(string orderNumber)
         {
             using (DbConnection conn = sqlSession.OpenConnection())
             {
                 using (DbCommand cmd = conn.CreateCommand())
                 {
                     cmd.CommandType = CommandType.Text;
-                    cmd.Parameters.Add(new SqlParameter("searchText", searchText));
+                    cmd.Parameters.Add(new SqlParameter("orderNumber", orderNumber));
 
-                    // If the searchtext is numeric add orderId tot he query
-                    if (long.TryParse(searchText, out long orderId))
-                    {
-                        cmd.CommandText = "SELECT OrderID FROM [Order] WHERE OrderID = @searchOrderId OR OrderNumberComplete = @searchText";
-                        cmd.Parameters.Add(new SqlParameter("searchOrderId", orderId));
-                    }
-                    else
-                    {
-                        cmd.CommandText = "SELECT OrderID FROM [Order] WHERE OrderNumberComplete = @searchText";
-                    }
+                    cmd.CommandText = "SELECT OrderID FROM [Order] WHERE OrderNumberComplete = @orderNumber";
 
                     return GetOrders(cmd);
                 }
