@@ -61,7 +61,12 @@ namespace ShipWorks.Templates.Processing.TemplateXml.ElementOutlines
             AddElement("Height", () => Item.Height);
             AddElement("Brand", () => Item.Brand);
             AddElement("MPN", () => Item.MPN);
-            
+            AddElement("Custom1", () => Item.Custom1);
+            AddElement("Custom2", () => Item.Custom2);
+            AddElement("Custom3", () => Item.Custom3);
+            AddElement("Custom4", () => Item.Custom4);
+            AddElement("Custom5", () => Item.Custom5);
+
 
             // Add an outline entry for each unique store type that could potentially be used
             foreach (StoreType storeType in StoreManager.GetUniqueStoreTypes())
