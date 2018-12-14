@@ -46,7 +46,6 @@ namespace ShipWorks.Shipping.Insurance.InsureShip.Net.Insure
                 CreatedWithApi = false
             };
 
-            //Uri uri = new Uri(string.Format("{0}new_policy", Settings.ApiUrl.AbsoluteUri));
             return webClient.Submit<InsureShipNewPolicyResponse>("new_policy", CreatePostData(shipment))
                 .Do(x =>
                 {
@@ -66,9 +65,6 @@ namespace ShipWorks.Shipping.Insurance.InsureShip.Net.Insure
 
             ShipmentType shipmentType = shipmentTypeManager.Get(shipment);
             Dictionary<string, string> postData = new Dictionary<string, string>();
-            //postData.Add("distributor_id", Settings.DistributorID);
-            //postData.Add("store_id", Affiliate.InsureShipStoreID);
-            //postData.Add("store_name", Affiliate.InsureShipPolicyID);
             postData.Add("customer_name", shipment.ShipPerson.ParsedName.FullName);
             postData.Add("firstname", shipment.ShipFirstName);
             postData.Add("lastname", shipment.ShipLastName);
@@ -80,6 +76,7 @@ namespace ShipWorks.Shipping.Insurance.InsureShip.Net.Insure
             postData.Add("shipping_amount", shipment.ShipmentCost.ToString("#0.##"));
             postData.Add("order_number", InsureShipShipmentIdentifier.GetUniqueShipmentId(shipment));
             //postData.Add("offer_id", ""); // Is this the same as rate_id??
+            //postData.Add("rate_id", "11");
             postData.Add("email", shipment.ShipEmail);
             postData.Add("phone", shipment.ShipPhone);
             postData.Add("carrier", shipmentType.ShipmentTypeName);
@@ -99,13 +96,6 @@ namespace ShipWorks.Shipping.Insurance.InsureShip.Net.Insure
             postData.Add("billing_state", shipment.Order.BillStateProvCode);
             postData.Add("billing_zip", shipment.Order.BillPostalCode);
             postData.Add("billing_country", shipment.Order.BillPerson.AdjustedCountryCode(ShipmentTypeCode.None));
-
-
-            //postData.Add("rate_id", "11");
-            //postData.Add("order_id", uniqueShipmentId);
-            //postData.Add("shipment_id", uniqueShipmentId);
-
-            //postData.Add("carrier_code", InsureShipCarrierCode.GetCarrierCode(Shipment, shipmentType.IsDomestic(Shipment)));
 
             return postData;
         }
