@@ -54,13 +54,13 @@ namespace ShipWorks.Data.Import.Spreadsheet.OrderSchema
 
             settings = (GenericSpreadsheetOrderMapSettings) csv.Map.TargetSettings;
 
-            DateTime? orderDate = csv.ReadField("Order.DateTime", (DateTime?) null, null, csv.Map.DateSettings.DateTimeFormat, false);
+            DateTime? orderDate = csv.ReadField("Order.DateTime", null, null, csv.Map.DateSettings.DateTimeFormat, false);
 
             // If the full date\time wasn't mapped, let's see if the individual parts were
-            if (orderDate == null)
+            if (!orderDate.HasValue)
             {
-                DateTime? datePart = csv.ReadField("Order.Date", (DateTime?) null, null, csv.Map.DateSettings.DateFormat, false);
-                DateTime? timePart = csv.ReadField("Order.Time", (DateTime?) null, null, csv.Map.DateSettings.TimeFormat, false);
+                DateTime? datePart = csv.ReadField("Order.Date", null, null, csv.Map.DateSettings.DateFormat, false);
+                DateTime? timePart = csv.ReadField("Order.Time", null, null, csv.Map.DateSettings.TimeFormat, false);
 
                 if (datePart == null)
                 {
@@ -78,27 +78,8 @@ namespace ShipWorks.Data.Import.Spreadsheet.OrderSchema
                 }
             }
 
-            order.OrderDate = orderDate.Value;
-
-            // If Parse can tell what timezone it's in, it automatically converts it to local.  We need UTC.
-            if (order.OrderDate.Kind == DateTimeKind.Local)
-            {
-                order.OrderDate = order.OrderDate.ToUniversalTime();
-            }
-
-            // If it's unspecified, we need go based on the settings
-            if (order.OrderDate.Kind == DateTimeKind.Unspecified)
-            {
-                if (csv.Map.DateSettings.TimeZoneAssumption == GenericSpreadsheetTimeZoneAssumption.Local)
-                {
-                    order.OrderDate = order.OrderDate.ToUniversalTime();
-                }
-                else
-                {
-                    order.OrderDate = new DateTime(order.OrderDate.Ticks, DateTimeKind.Utc);
-                }
-            }
-
+            order.OrderDate = LoadDate(orderDate.Value, csv);
+            
             // Only set customer ID if non blank
             string customerID = csv.ReadField("Order.CustomerNumber", "");
             if (!string.IsNullOrWhiteSpace(customerID))
@@ -111,29 +92,11 @@ namespace ShipWorks.Data.Import.Spreadsheet.OrderSchema
             order.OnlineStatus = csv.ReadField("Order.OnlineStatus", order.OnlineStatus ?? "");
 
             order.ShipByDate = csv.ReadField("Order.ShipByDate", null, null, csv.Map.DateSettings.DateFormat);
-            
+
             if (order.ShipByDate.HasValue)
             {
-                // If Parse can tell what timezone it's in, it automatically converts it to local.  We need UTC.
-                if (order.ShipByDate.Value.Kind == DateTimeKind.Local)
-                {
-                    order.ShipByDate = order.ShipByDate.Value.ToUniversalTime();
-                }
-
-                // If it's unspecified, we need go based on the settings
-                if (order.ShipByDate.Value.Kind == DateTimeKind.Unspecified)
-                {
-                    if (csv.Map.DateSettings.TimeZoneAssumption == GenericSpreadsheetTimeZoneAssumption.Local)
-                    {
-                        order.ShipByDate = order.ShipByDate.Value.ToUniversalTime();
-                    }
-                    else
-                    {
-                        order.ShipByDate = new DateTime(order.ShipByDate.Value.Ticks, DateTimeKind.Utc);
-                    }
-                }
+                order.ShipByDate = LoadDate(order.ShipByDate.Value, csv);
             }
-            
 
             order.RequestedShipping = csv.ReadField("Order.RequestedShipping", order.RequestedShipping ?? "");
             order.Custom1 = csv.ReadField("Order.Custom1", order.Custom1 ?? "");
@@ -175,6 +138,31 @@ namespace ShipWorks.Data.Import.Spreadsheet.OrderSchema
                 order.OrderTotal = OrderUtility.CalculateTotal(order);
             }
         }
+
+        private DateTime LoadDate(DateTime date, GenericSpreadsheetReader csvReader)
+        {
+            // If Parse can tell what timezone it's in, it automatically converts it to local. We need UTC.
+            if (date.Kind == DateTimeKind.Local)
+            {
+                date = date.ToUniversalTime();
+                return date;
+            }
+
+            // If it's unspecified, we need go based on the settings
+            if (date.Kind == DateTimeKind.Unspecified)
+            {
+                if (csvReader.Map.DateSettings.TimeZoneAssumption == GenericSpreadsheetTimeZoneAssumption.Local)
+                {
+                    date = date.ToUniversalTime();
+                    return date;
+                }
+
+                date = new DateTime(date.Ticks, DateTimeKind.Utc);
+                return date;
+            }
+            return date;
+        }
+
 
         /// <summary>
         /// Allows derived classes a chance to do additional loading or processing of the fully loaded order
