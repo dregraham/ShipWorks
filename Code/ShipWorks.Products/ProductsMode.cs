@@ -12,6 +12,7 @@ using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.Extensions;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using ShipWorks.Core.Common.Threading;
@@ -267,7 +268,7 @@ namespace ShipWorks.Products
                     }
                     else
                     {
-                        result.Value.Aliases.Where(a => !a.IsDefault).ToList().ForEach(a => result.Value.Aliases.Remove(a));
+                        result.Value.Aliases.RemoveWhere(a => !a.IsDefault);
                         await EditProduct(result.Value, "New Variant").ConfigureAwait(false);
                     }
                 }

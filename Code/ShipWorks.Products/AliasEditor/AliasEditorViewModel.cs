@@ -8,11 +8,15 @@ using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.UI;
+using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.Custom;
 using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.Products.AliasEditor
 {
+    /// <summary>
+    /// ViewModel for the AliasEditor
+    /// </summary>
     [Component]
     public class AliasEditorViewModel : ViewModelBase, IAliasEditorViewModel
     {
@@ -22,19 +26,21 @@ namespace ShipWorks.Products.AliasEditor
         private ProductVariantAliasEntity selectedProductAlias;
         private ProductVariantEntity productVariant;
         private readonly IMessageHelper messageHelper;
+        private readonly IProductCatalog productCatalog;
+        private readonly ISqlAdapterFactory sqlAdapterFactory;
         private ProductVariantAliasEntity defaultAlias;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public AliasEditorViewModel(IMessageHelper messageHelper)
+        public AliasEditorViewModel(IMessageHelper messageHelper, IProductCatalog productCatalog, ISqlAdapterFactory sqlAdapterFactory)
         {
             this.messageHelper = messageHelper;
-
+            this.productCatalog = productCatalog;
+            this.sqlAdapterFactory = sqlAdapterFactory;
             ProductAliases = new ObservableCollection<ProductVariantAliasEntity>();
 
             AddAliasCommand = new RelayCommand(AddAliasToProduct);
-            RemoveAliasCommand = new RelayCommand(RemoveAliasFromProduct, () => SelectedProductAlias != null);
         }
 
         /// <summary>
@@ -84,12 +90,6 @@ namespace ShipWorks.Products.AliasEditor
         public ICommand AddAliasCommand { get; }
 
         /// <summary>
-        /// Command for removing an alias from a product
-        /// </summary>
-        [Obfuscation(Exclude = true)]
-        public ICommand RemoveAliasCommand { get; }
-
-        /// <summary>
         /// Load the view model with the given product
         /// </summary>
         public void Load(ProductVariantEntity productVariantEntity)
@@ -135,16 +135,22 @@ namespace ShipWorks.Products.AliasEditor
                 messageHelper.ShowError("Please enter an alias sku.");
                 return;
             }
-            
+
             if (defaultAlias?.Sku == AliasSku)
             {
                 messageHelper.ShowError($"\"{AliasSku}\" is already the default sku for this product.");
                 return;
             }
-            
+
             if (ProductAliases.Any(x => x.Sku == AliasSku))
             {
                 messageHelper.ShowError($"This product already contains an alias with the sku \"{AliasSku}\".");
+                return;
+            }
+
+            if (IsAliasAlreadyInDatabase())
+            {
+                messageHelper.ShowError($"{AliasSku} already exists for another product in the database.");
                 return;
             }
 
@@ -160,11 +166,20 @@ namespace ShipWorks.Products.AliasEditor
         }
 
         /// <summary>
-        /// Remove the selected alias from the product
+        /// Is alias already in database
         /// </summary>
-        private void RemoveAliasFromProduct()
+        private bool IsAliasAlreadyInDatabase()
         {
-            ProductAliases.Remove(SelectedProductAlias);
+            bool aliasExists = false;
+            using (ISqlAdapter adapter = sqlAdapterFactory.Create())
+            {
+                if (productCatalog.FetchProductVariantEntity(adapter, AliasSku) != null)
+                {
+                    aliasExists = true;
+                }
+            }
+
+            return aliasExists;
         }
     }
 }

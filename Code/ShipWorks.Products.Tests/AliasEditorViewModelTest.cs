@@ -184,34 +184,5 @@ namespace ShipWorks.Products.Tests
             Assert.Equal("foo", testObject.AliasName);
             Assert.Equal("bar", testObject.AliasSku);
         }
-
-        [Fact]
-        public void RemoveAlias_RemovesAliasFromProductAliasesList()
-        {
-            ProductVariantAliasEntity variantAliasEntity = new ProductVariantAliasEntity();
-
-            ProductVariantEntity productVariant = new ProductVariantEntity();
-            productVariant.Aliases.Add(variantAliasEntity);
-
-            testObject.ProductAliases.Add(variantAliasEntity);
-            testObject.SelectedProductAlias = variantAliasEntity;
-            testObject.RemoveAliasCommand.Execute(null);
-
-            Assert.Empty(testObject.ProductAliases);
-        }
-
-        [Fact]
-        public void RemoveProductCommand_IsAllowed_WhenSelectedProductIsNotNull()
-        {
-            testObject.SelectedProductAlias = new ProductVariantAliasEntity();
-            Assert.True(testObject.RemoveAliasCommand.CanExecute(null));
-        }
-
-        [Fact]
-        public void RemoveProductCommand_IsNotAllowed_WhenSelectedProductIsNull()
-        {
-            testObject.SelectedProductAlias = null;
-            Assert.False(testObject.RemoveAliasCommand.CanExecute(null));
-        }
     }
 }
