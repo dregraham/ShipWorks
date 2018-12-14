@@ -135,7 +135,7 @@
                 Height="23"
                 Margin="0,0,5,0"
                 IsEnabled="{Binding IsProfileSelected, Converter={StaticResource InvertBoolean}}"
-                MaxLength="3"
+                MaxLength="5"
                 Style="{StaticResource FormTextBox}"
                 Text="{Binding ShipmentModel.ShipmentAdapter.Shipment.BestRate.DimsLength, Converter={StaticResource StringEmptyWhenEqualToParameter}, ConverterParameter=0}" />
 
@@ -144,7 +144,7 @@
                 Height="23"
                 Margin="0,0,5,0"
                 IsEnabled="{Binding IsProfileSelected, Converter={StaticResource InvertBoolean}}"
-                MaxLength="3"
+                MaxLength="5"
                 Style="{StaticResource FormTextBox}"
                 Text="{Binding ShipmentModel.ShipmentAdapter.Shipment.BestRate.DimsWidth, Converter={StaticResource StringEmptyWhenEqualToParameter}, ConverterParameter=0}" />
 
@@ -153,7 +153,7 @@
                 Height="23"
                 Margin="0,0,5,0"
                 IsEnabled="{Binding IsProfileSelected, Converter={StaticResource InvertBoolean}}"
-                MaxLength="3"
+                MaxLength="5"
                 Style="{StaticResource FormTextBox}"
                 Text="{Binding ShipmentModel.ShipmentAdapter.Shipment.BestRate.DimsHeight, Converter={StaticResource StringEmptyWhenEqualToParameter}, ConverterParameter=0}" />
 

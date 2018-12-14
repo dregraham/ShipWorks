@@ -21,6 +21,7 @@ namespace ShipWorks.Startup
             Justification = "The main program method cannot be async")]
         static void Main(string[] args)
         {
+            System.Windows.FrameworkCompatibilityPreferences.KeepTextBoxDisplaySynchronizedWithTextProperty = false;
 #if DEBUG
             if (InterapptiveOnly.MagicKeysDown)
             {
