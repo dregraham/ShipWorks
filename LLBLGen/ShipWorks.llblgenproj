@@ -587,7 +587,6 @@
         <Fields>
           <Field Name="AddressCasing" Type="bool" FieldIndex="3" />
           <Field Name="AllowEbayCombineLocally" Type="bool" FieldIndex="14" />
-          <Field Name="AllowUIModeToggle" Type="bool" FieldIndex="17" />
           <Field Name="ArchivalSettingsXml" Type="string" MaxLength="2147483647" FieldIndex="15" />
           <Field Name="AuditDeletedOrders" Type="bool" FieldIndex="11" />
           <Field Name="AuditEnabled" Type="bool" FieldIndex="16" />
@@ -5028,7 +5027,6 @@
                     <Field Name="AllowEbayCombineLocally" Ordinal="15" HasDefaultValue="true" DefaultValue="(0)" DbType="2" />
                     <Field Name="ArchivalSettingsXml" Ordinal="16" HasDefaultValue="true" DefaultValue="'&lt;ArchivalSettings/&gt;'" DbType="26" Length="2147483647" />
                     <Field Name="AuditEnabled" Ordinal="17" HasDefaultValue="true" DefaultValue="(1)" DbType="2" />
-                    <Field Name="AllowUIModeToggle" Ordinal="18" DbType="2" />
                   </Fields>
                 </Table>
                 <Table Name="Customer">
@@ -11102,7 +11100,6 @@
           <FieldMappings>
             <FieldMapping FieldName="AddressCasing" TargetFieldName="AddressCasing" />
             <FieldMapping FieldName="AllowEbayCombineLocally" TargetFieldName="AllowEbayCombineLocally" />
-            <FieldMapping FieldName="AllowUIModeToggle" TargetFieldName="AllowUIModeToggle" />
             <FieldMapping FieldName="ArchivalSettingsXml" TargetFieldName="ArchivalSettingsXml" />
             <FieldMapping FieldName="AuditDeletedOrders" TargetFieldName="AuditDeletedOrders" />
             <FieldMapping FieldName="AuditEnabled" TargetFieldName="AuditEnabled" />
