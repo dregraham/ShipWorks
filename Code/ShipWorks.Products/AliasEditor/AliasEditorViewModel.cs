@@ -37,7 +37,6 @@ namespace ShipWorks.Products.AliasEditor
             ProductAliases = new ObservableCollection<ProductVariantAliasEntity>();
 
             AddAliasCommand = new RelayCommand(AddAliasToProduct);
-            RemoveAliasCommand = new RelayCommand(RemoveAliasFromProduct, () => SelectedProductAlias != null);
         }
 
         /// <summary>
@@ -85,12 +84,6 @@ namespace ShipWorks.Products.AliasEditor
         /// </summary>
         [Obfuscation(Exclude = true)]
         public ICommand AddAliasCommand { get; }
-
-        /// <summary>
-        /// Command for removing an alias from a product
-        /// </summary>
-        [Obfuscation(Exclude = true)]
-        public ICommand RemoveAliasCommand { get; }
 
         /// <summary>
         /// Load the view model with the given product
@@ -160,14 +153,6 @@ namespace ShipWorks.Products.AliasEditor
 
             AliasName = string.Empty;
             AliasSku = string.Empty;
-        }
-
-        /// <summary>
-        /// Remove the selected alias from the product
-        /// </summary>
-        private void RemoveAliasFromProduct()
-        {
-            ProductAliases.Remove(SelectedProductAlias);
         }
     }
 }
