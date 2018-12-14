@@ -151,6 +151,7 @@ namespace ShipWorks.Products.AliasEditor
             if (IsAliasAlreadyInDatabase())
             {
                 messageHelper.ShowError($"{AliasSku} already exists for another product in the database.");
+                return;
             }
 
             ProductAliases.Add(new ProductVariantAliasEntity
