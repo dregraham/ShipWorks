@@ -2271,7 +2271,6 @@ namespace ShipWorks
             this.mainMenuItemOptions.Guid = new System.Guid("defc7604-28f0-4810-a047-949bfd4a6433");
             this.mainMenuItemOptions.Image = global::ShipWorks.Properties.Resources.preferences;
             this.mainMenuItemOptions.QuickAccessKey = "O";
-            this.mainMenuItemOptions.Shortcut = ((System.Windows.Forms.Keys) ((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.O)));
             this.mainMenuItemOptions.Text = "&Options";
             this.mainMenuItemOptions.Activate += new System.EventHandler(this.OnShowOptions);
             //
