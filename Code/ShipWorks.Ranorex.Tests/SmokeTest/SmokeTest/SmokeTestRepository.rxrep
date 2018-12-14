@@ -3975,7 +3975,7 @@ GORSxAAAAABJRU5ErkJggg==
 				name="DomesticShipmentRate"
 				refimgid="838913d2-4413-4f7f-a0ca-82bd5755cb3d"
 				searchtimeout="30000ms">
-					/form[@title='Ship Orders']/container[@controlname='splitContainer']/container[@controlname='panel2']/?/?/container[@controlname='panel2']//rawtext[@column='5' and @row='2']
+					/form[@title='Ship Orders']/container[@controlname='splitContainer']/container[@controlname='panel2']/?/?/container[@controlname='panel2']/container[@controlname='rateControl']/?/?/rawtext[@column='5' and @row='1']
 				</item>
 				<item
 				addcaps="unknown,rawtext"
