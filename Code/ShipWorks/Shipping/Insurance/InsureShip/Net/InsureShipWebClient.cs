@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Text;
 using Interapptive.Shared.ComponentRegistration;
@@ -22,12 +23,14 @@ namespace ShipWorks.Shipping.Insurance.InsureShip.Net
         private readonly ILog log;
         private readonly IInsureShipSettings settings;
         private readonly ILogEntryFactory logEntryFactory;
+        private readonly IHttpRequestSubmitterFactory requestSubmitterFactory;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public InsureShipWebClient(IInsureShipSettings settings, ILogEntryFactory logEntryFactory, Func<Type, ILog> createLog)
+        public InsureShipWebClient(IInsureShipSettings settings, IHttpRequestSubmitterFactory requestSubmitterFactory, ILogEntryFactory logEntryFactory, Func<Type, ILog> createLog)
         {
+            this.requestSubmitterFactory = requestSubmitterFactory;
             this.settings = settings;
             this.logEntryFactory = logEntryFactory;
             log = createLog(GetType());
@@ -48,7 +51,7 @@ namespace ShipWorks.Shipping.Insurance.InsureShip.Net
 
             foreach (string key in postData.Keys)
             {
-                requestSubmitter.Variables.Add(key, postData[key]);
+                requestSubmitter.AddVariable(key, postData[key]);
             }
 
             var logEntry = logEntryFactory.GetLogEntry(ApiLogSource.InsureShip, endpoint, LogActionType.Other);
@@ -57,12 +60,10 @@ namespace ShipWorks.Shipping.Insurance.InsureShip.Net
             {
                 logEntry.LogRequest(requestSubmitter);
 
-                HttpWebResponse httpWebResponse = requestSubmitter.GetResponse().HttpWebResponse;
+                var response = requestSubmitter.GetResponse();
+                var responseText = response.ReadResult();
 
-                // Grab the response data and save it to the local instance properties and
-                // log the response
-                var responseText = ReadResponse(httpWebResponse);
-                LogInsureShipResponse(logEntry, httpWebResponse, responseText);
+                LogInsureShipResponse(logEntry, response.HttpWebResponse, responseText);
 
                 return JsonConvert.DeserializeObject<T>(responseText);
             }
@@ -74,6 +75,11 @@ namespace ShipWorks.Shipping.Insurance.InsureShip.Net
                 var responseText = ReadResponse(httpWebResponse);
 
                 LogInsureShipResponse(logEntry, httpWebResponse, responseText);
+                return ex;
+            }
+            catch (ArgumentNullException ex)
+            {
+                // Try to deserialize null
                 return ex;
             }
             catch (JsonException ex)
@@ -89,15 +95,15 @@ namespace ShipWorks.Shipping.Insurance.InsureShip.Net
         /// <param name="uri">The URI.</param>
         protected IHttpVariableRequestSubmitter ConfigureNewRequestSubmitter(Uri uri)
         {
-            var requestSubmitter = new HttpVariableRequestSubmitter { Uri = uri };
+            var requestSubmitter = requestSubmitterFactory.GetHttpVariableRequestSubmitter();
 
-            AddHeaders(requestSubmitter);
-            AddAllowedHttpStatusCodes(requestSubmitter);
+            requestSubmitter.Uri = uri;
+            requestSubmitter.AllowHttpStatusCodes(GetAllowedCodes());
 
-            requestSubmitter.Variables.Add("client_id", settings.ClientID);
-            requestSubmitter.Variables.Add("api_key", settings.ApiKey);
-
-            return requestSubmitter;
+            return requestSubmitter
+                .AddHeader("Accept", "application/json")
+                .AddVariable("client_id", settings.ClientID)
+                .AddVariable("api_key", settings.ApiKey); ;
         }
 
         /// <summary>
@@ -128,29 +134,16 @@ namespace ShipWorks.Shipping.Insurance.InsureShip.Net
         }
 
         /// <summary>
-        /// Adds the common headers to the request including authentication info and content type.
-        /// </summary>
-        protected void AddHeaders(IHttpVariableRequestSubmitter requestSubmitter)
-        {
-            requestSubmitter.ContentType = "application/x-www-form-urlencoded";
-            requestSubmitter.Headers.Add("Accept", "application/json");
-        }
-
-        /// <summary>
-        /// Adds the allowed HTTP status codes to the request based on the response
+        /// Get the allowed HTTP status codes to the request based on the response
         /// codes we are expecting from the InsureShip API.
         /// </summary>
-        protected void AddAllowedHttpStatusCodes(IHttpVariableRequestSubmitter requestSubmitter)
-        {
-            List<HttpStatusCode> allowedCodes = new List<HttpStatusCode>();
-            foreach (Enum value in Enum.GetValues(typeof(InsureShipResponseCode)))
-            {
-                int httpStatusCodeValue = int.Parse(EnumHelper.GetApiValue(value));
-                allowedCodes.Add((HttpStatusCode) httpStatusCodeValue);
-            }
-
-            requestSubmitter.AllowHttpStatusCodes(allowedCodes.ToArray());
-        }
+        private static HttpStatusCode[] GetAllowedCodes() =>
+            Enum.GetValues(typeof(InsureShipResponseCode))
+                .OfType<Enum>()
+                .Select(EnumHelper.GetApiValue)
+                .Select(int.Parse)
+                .Cast<HttpStatusCode>()
+                .ToArray();
 
         /// <summary>
         /// Gets the content of the response.
@@ -159,7 +152,7 @@ namespace ShipWorks.Shipping.Insurance.InsureShip.Net
         {
             using (Stream responseStream = response?.GetResponseStream())
             {
-                if (responseStream != null)
+                if (responseStream?.CanRead == true)
                 {
                     using (StreamReader reader = new StreamReader(responseStream))
                     {

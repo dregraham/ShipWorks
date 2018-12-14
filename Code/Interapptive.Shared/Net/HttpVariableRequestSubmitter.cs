@@ -10,10 +10,10 @@ namespace Interapptive.Shared.Net
     public class HttpVariableRequestSubmitter : HttpRequestSubmitter, IHttpVariableRequestSubmitter
     {
         // The variables to be posted
-        IHttpVariableCollection variables = new HttpVariableCollection();
+        private readonly IHttpVariableCollection variables = new HttpVariableCollection();
 
         // Casing to be used for query string encoding
-        QueryStringEncodingCasing encodingCasing = QueryStringEncodingCasing.Default;
+        private QueryStringEncodingCasing encodingCasing = QueryStringEncodingCasing.Default;
 
         /// <summary>
         /// Constructor
@@ -64,6 +64,24 @@ namespace Interapptive.Shared.Net
         {
             // Encode the query string to bytes
             return StringUtility.Iso8859Encoding.GetBytes(QueryStringUtility.GetQueryString(Variables, VariableEncodingCasing));
+        }
+
+        /// <summary>
+        /// Add a header
+        /// </summary>
+        public IHttpVariableRequestSubmitter AddHeader(string key, string value)
+        {
+            Headers.Add(key, value);
+            return this;
+        }
+
+        /// <summary>
+        /// Add a variable
+        /// </summary>
+        public IHttpVariableRequestSubmitter AddVariable(string key, string value)
+        {
+            Variables.Add(key, value);
+            return this;
         }
     }
 }

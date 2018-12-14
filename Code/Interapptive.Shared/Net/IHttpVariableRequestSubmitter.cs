@@ -1,7 +1,7 @@
 ﻿namespace Interapptive.Shared.Net
 {
     /// <summary>
-    /// interface that represents an Http post request that posts name\value pairs.
+    /// interface that represents an Http post request that posts name/value pairs.
     /// </summary>
     public interface IHttpVariableRequestSubmitter : IHttpRequestSubmitter
     {
@@ -15,5 +15,15 @@
         /// The variables to be posted
         /// </summary>
         IHttpVariableCollection Variables { get; }
+
+        /// <summary>
+        /// Add a header
+        /// </summary>
+        IHttpVariableRequestSubmitter AddHeader(string key, string value);
+
+        /// <summary>
+        /// Add a variable
+        /// </summary>
+        IHttpVariableRequestSubmitter AddVariable(string key, string value);
     }
 }
