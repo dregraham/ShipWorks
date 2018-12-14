@@ -78,7 +78,8 @@ namespace ShipWorks.Data.Import.Spreadsheet.OrderSchema
                 }
             }
 
-            order.OrderDate = LoadDate(orderDate.Value, csv);
+            // Set the OrderDate
+            order.OrderDate = ConvertDateToUTC(orderDate.Value, csv.Map.DateSettings.TimeZoneAssumption);
             
             // Only set customer ID if non blank
             string customerID = csv.ReadField("Order.CustomerNumber", "");
@@ -95,15 +96,14 @@ namespace ShipWorks.Data.Import.Spreadsheet.OrderSchema
 
             if (order.ShipByDate.HasValue)
             {
-                order.ShipByDate = LoadDate(order.ShipByDate.Value, csv);
+                // Set the ShipByDate
+                order.ShipByDate = ConvertDateToUTC(order.ShipByDate.Value, csv.Map.DateSettings.TimeZoneAssumption);
             }
 
             order.RequestedShipping = csv.ReadField("Order.RequestedShipping", order.RequestedShipping ?? "");
-            order.Custom1 = csv.ReadField("Order.Custom1", order.Custom1 ?? "");
-            order.Custom2 = csv.ReadField("Order.Custom2", order.Custom2 ?? "");
-            order.Custom3 = csv.ReadField("Order.Custom3", order.Custom3 ?? "");
-            order.Custom4 = csv.ReadField("Order.Custom4", order.Custom4 ?? "");
-            order.Custom5 = csv.ReadField("Order.Custom5", order.Custom5 ?? "");
+
+            // Load Custom Fields
+            LoadCustomFields(order, csv);
 
             // Load Address info
             LoadAddressInfo();
@@ -139,7 +139,22 @@ namespace ShipWorks.Data.Import.Spreadsheet.OrderSchema
             }
         }
 
-        private DateTime LoadDate(DateTime date, GenericSpreadsheetReader csvReader)
+        /// <summary>
+        /// Load custom fields into the order
+        /// </summary>
+        private static void LoadCustomFields(OrderEntity order, GenericSpreadsheetReader csv)
+        {
+            order.Custom1 = csv.ReadField("Order.Custom1", order.Custom1 ?? "");
+            order.Custom2 = csv.ReadField("Order.Custom2", order.Custom2 ?? "");
+            order.Custom3 = csv.ReadField("Order.Custom3", order.Custom3 ?? "");
+            order.Custom4 = csv.ReadField("Order.Custom4", order.Custom4 ?? "");
+            order.Custom5 = csv.ReadField("Order.Custom5", order.Custom5 ?? "");
+        }
+
+        /// <summary>
+        /// Convert date fields to UTC
+        /// </summary>
+        private DateTime ConvertDateToUTC(DateTime date, GenericSpreadsheetTimeZoneAssumption timeZone)
         {
             // If Parse can tell what timezone it's in, it automatically converts it to local. We need UTC.
             if (date.Kind == DateTimeKind.Local)
@@ -151,7 +166,7 @@ namespace ShipWorks.Data.Import.Spreadsheet.OrderSchema
             // If it's unspecified, we need go based on the settings
             if (date.Kind == DateTimeKind.Unspecified)
             {
-                if (csvReader.Map.DateSettings.TimeZoneAssumption == GenericSpreadsheetTimeZoneAssumption.Local)
+                if (timeZone == GenericSpreadsheetTimeZoneAssumption.Local)
                 {
                     date = date.ToUniversalTime();
                     return date;
@@ -162,7 +177,6 @@ namespace ShipWorks.Data.Import.Spreadsheet.OrderSchema
             }
             return date;
         }
-
 
         /// <summary>
         /// Allows derived classes a chance to do additional loading or processing of the fully loaded order
