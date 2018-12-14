@@ -793,7 +793,7 @@ namespace ShipWorks.Data.Model
 		/// <summary>Inits ConfigurationEntity's mappings</summary>
 		private void InitConfigurationEntityMappings()
 		{
-			this.AddElementMapping("ConfigurationEntity", @"ShipWorksLocal", @"dbo", "Configuration", 18, 0);
+			this.AddElementMapping("ConfigurationEntity", @"ShipWorksLocal", @"dbo", "Configuration", 17, 0);
 			this.AddElementFieldMapping("ConfigurationEntity", "ConfigurationID", "ConfigurationID", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 0);
 			this.AddElementFieldMapping("ConfigurationEntity", "RowVersion", "RowVersion", false, "Timestamp", 2147483647, 0, 0, false, "", null, typeof(System.Byte[]), 1);
 			this.AddElementFieldMapping("ConfigurationEntity", "LogOnMethod", "LogOnMethod", false, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 2);
@@ -811,7 +811,6 @@ namespace ShipWorks.Data.Model
 			this.AddElementFieldMapping("ConfigurationEntity", "AllowEbayCombineLocally", "AllowEbayCombineLocally", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 14);
 			this.AddElementFieldMapping("ConfigurationEntity", "ArchivalSettingsXml", "ArchivalSettingsXml", false, "Xml", 2147483647, 0, 0, false, "", null, typeof(System.String), 15);
 			this.AddElementFieldMapping("ConfigurationEntity", "AuditEnabled", "AuditEnabled", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 16);
-			this.AddElementFieldMapping("ConfigurationEntity", "AllowUIModeToggle", "AllowUIModeToggle", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 17);
 		}
 
 		/// <summary>Inits CustomerEntity's mappings</summary>
@@ -2788,7 +2787,7 @@ namespace ShipWorks.Data.Model
 			this.AddElementFieldMapping("ProductVariantEntity", "ProductVariantID", "ProductVariantID", false, "BigInt", 0, 19, 0, true, "SCOPE_IDENTITY()", null, typeof(System.Int64), 0);
 			this.AddElementFieldMapping("ProductVariantEntity", "ProductID", "ProductID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 1);
 			this.AddElementFieldMapping("ProductVariantEntity", "CreatedDate", "CreatedDate", false, "DateTime", 0, 0, 0, false, "", null, typeof(System.DateTime), 2);
-			this.AddElementFieldMapping("ProductVariantEntity", "Name", "Name", false, "NVarChar", 300, 0, 0, false, "", null, typeof(System.String), 3);
+			this.AddElementFieldMapping("ProductVariantEntity", "Name", "Name", true, "NVarChar", 300, 0, 0, false, "", null, typeof(System.String), 3);
 			this.AddElementFieldMapping("ProductVariantEntity", "IsActive", "IsActive", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 4);
 			this.AddElementFieldMapping("ProductVariantEntity", "UPC", "UPC", true, "NVarChar", 30, 0, 0, false, "", null, typeof(System.String), 5);
 			this.AddElementFieldMapping("ProductVariantEntity", "ASIN", "ASIN", true, "NVarChar", 255, 0, 0, false, "", null, typeof(System.String), 6);

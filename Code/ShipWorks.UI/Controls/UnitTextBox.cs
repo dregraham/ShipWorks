@@ -172,7 +172,9 @@ namespace ShipWorks.UI.Controls
         /// </summary>
         private static void SetEntryValue(UnitTextBox input, double value)
         {
-            if (input?.entry != null)
+            MethodConditions.EnsureArgumentIsNotNull(input, "input");
+
+            if (input.entry != null)
             {
                 input.entry.Text = (UnitType) input.GetValue(UnitTypeProperty) == UnitType.Weight ?
                     WeightConverter.Current.FormatWeight(value) :

@@ -37,7 +37,7 @@ CREATE TABLE [dbo].[ProductVariant]
 [ProductVariantID] [bigint] NOT NULL IDENTITY(1, 1),
 [ProductID] [bigint] NOT NULL,
 [CreatedDate] [datetime] NOT NULL,
-[Name] [nvarchar] (300) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[Name] [nvarchar] (300) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 [IsActive] [bit] NOT NULL,
 [UPC] [nvarchar] (30) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 [ASIN] [nvarchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
@@ -66,7 +66,8 @@ CREATE TABLE [dbo].[ProductVariantAlias]
 [ProductVariantAliasID] [bigint] NOT NULL IDENTITY(1, 1),
 [ProductVariantID] [bigint] NOT NULL,
 [AliasName] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[Sku] [nvarchar] (300) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL
+[Sku] [nvarchar] (300) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[IsDefault] [bit] NOT NULL CONSTRAINT [DF_ProductVariantAlias_IsDefault] DEFAULT ((0))
 )
 GO
 PRINT N'Creating primary key [PK_ProductVariantAlias] on [dbo].[ProductVariantAlias]'
@@ -78,6 +79,15 @@ PRINT N'Creating index [IX_SWDefault_ProductVariantAlias_Sku] on [dbo].[ProductV
 GO
 IF NOT EXISTS (SELECT 1 FROM sys.indexes WHERE name = N'IX_SWDefault_ProductVariantAlias_Sku' AND object_id = OBJECT_ID(N'[dbo].[ProductVariantAlias]'))
 CREATE UNIQUE NONCLUSTERED INDEX [IX_SWDefault_ProductVariantAlias_Sku] ON [dbo].[ProductVariantAlias] ([Sku]) INCLUDE ([ProductVariantID])
+GO
+PRINT N'Creating index [IX_SWDefault_ProductVariantAlias_ProductVariantIDIsDefaultSku] on [dbo].[ProductVariantAlias]'
+GO
+CREATE NONCLUSTERED INDEX [IX_SWDefault_ProductVariantAlias_ProductVariantIDIsDefaultSku] ON [dbo].[ProductVariantAlias]
+(
+	[ProductVariantID] ASC,
+	[IsDefault] ASC
+)
+INCLUDE ([Sku])  ON [PRIMARY]
 GO
 PRINT N'Creating [dbo].[ProductAttribute]'
 GO
