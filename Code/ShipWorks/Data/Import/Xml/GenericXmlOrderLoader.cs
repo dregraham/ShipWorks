@@ -52,37 +52,7 @@ namespace ShipWorks.Data.Import.Xml
             // only do the remainder for new orders
             if (order.IsNew)
             {
-                // Items
-                XPathNodeIterator itemNodes = xpath.Select("Items/Item");
-                while (itemNodes.MoveNext())
-                {
-                    LoadItem(factory, observer, order, itemNodes.Current);
-                }
-
-                // Charges
-                LoadOrderCharges(factory, order, xpath);
-
-                // Credit Card stuff
-                string cctype = XPathUtility.Evaluate(xpath, "Payment/CreditCard/Type", "");
-                if (cctype.Length > 0)
-                {
-                    LoadPaymentDetail(factory, order, "Card Owner", XPathUtility.Evaluate(xpath, "Payment/CreditCard/Owner", ""));
-                    LoadPaymentDetail(factory, order, "Card Expires", XPathUtility.Evaluate(xpath, "Payment/CreditCard/Expires", ""));
-                    LoadPaymentDetail(factory, order, "Card Number", XPathUtility.Evaluate(xpath, "Payment/CreditCard/Number", ""));
-                    LoadPaymentDetail(factory, order, "Card Type", XPathUtility.Evaluate(xpath, "Payment/CreditCard/Type", ""));
-                }
-
-                // Payment Details
-                LoadPaymentDetail(factory, order, "Payment Type", XPathUtility.Evaluate(xpath, "Payment/Method", ""));
-
-                // It's also possible to use name\value pairs in Payment/Detail nodes
-                foreach (XPathNavigator detailXPath in xpath.Select("Payment/Detail").Cast<XPathNavigator>().Reverse())
-                {
-                    LoadPaymentDetail(factory, order, XPathUtility.Evaluate(detailXPath, "@name", ""), XPathUtility.Evaluate(detailXPath, "@value", ""));
-                }
-
-                // Update the total
-                order.OrderTotal = OrderUtility.CalculateTotal(order);
+                LoadOrderDetails(order, factory, observer, xpath);
             }
 
             // notify listeners that the order was loaded
@@ -92,6 +62,49 @@ namespace ShipWorks.Data.Import.Xml
             }
         }
 
+        /// <summary>
+        /// Load the order details from the module XML
+        /// </summary>
+        private static void LoadOrderDetails(OrderEntity order, IOrderElementFactory factory, IGenericXmlOrderLoadObserver observer, XPathNavigator xpath)
+        {
+            // Items
+            XPathNodeIterator itemNodes = xpath.Select("Items/Item");
+            while (itemNodes.MoveNext())
+            {
+                LoadItem(factory, observer, order, itemNodes.Current);
+            }
+
+            // Charges
+            LoadOrderCharges(factory, order, xpath);
+
+            // Credit Card stuff
+            string cctype = XPathUtility.Evaluate(xpath, "Payment/CreditCard/Type", "");
+            if (cctype.Length > 0)
+            {
+                LoadPaymentDetail(factory, order, "Card Owner", XPathUtility.Evaluate(xpath, "Payment/CreditCard/Owner", ""));
+                LoadPaymentDetail(factory, order, "Card Expires",
+                    XPathUtility.Evaluate(xpath, "Payment/CreditCard/Expires", ""));
+                LoadPaymentDetail(factory, order, "Card Number", XPathUtility.Evaluate(xpath, "Payment/CreditCard/Number", ""));
+                LoadPaymentDetail(factory, order, "Card Type", XPathUtility.Evaluate(xpath, "Payment/CreditCard/Type", ""));
+            }
+
+            // Payment Details
+            LoadPaymentDetail(factory, order, "Payment Type", XPathUtility.Evaluate(xpath, "Payment/Method", ""));
+
+            // It's also possible to use name\value pairs in Payment/Detail nodes
+            foreach (XPathNavigator detailXPath in xpath.Select("Payment/Detail").Cast<XPathNavigator>().Reverse())
+            {
+                LoadPaymentDetail(factory, order, XPathUtility.Evaluate(detailXPath, "@name", ""),
+                    XPathUtility.Evaluate(detailXPath, "@value", ""));
+            }
+
+            // Update the total
+            order.OrderTotal = OrderUtility.CalculateTotal(order);
+        }
+
+        /// <summary>
+        /// Loads the custom fields from the module XML
+        /// </summary>
         private static void LoadCustomFields(OrderEntity order, XPathNavigator xpath)
         {
             order.Custom1 = XPathUtility.Evaluate(xpath, "Custom1", "");
