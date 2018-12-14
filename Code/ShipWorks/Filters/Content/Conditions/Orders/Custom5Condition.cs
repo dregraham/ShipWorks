@@ -4,7 +4,7 @@ using ShipWorks.Filters.Content.SqlGeneration;
 namespace ShipWorks.Filters.Content.Conditions.Orders
 {
     /// <summary>
-    /// Condition base on the Custom1 of an Order
+    /// Condition base on the Custom5 of an Order
     /// </summary>
     [ConditionElement("Custom Field 5", "Order.Custom5")]
     public class Custom5Condition : StringCondition
