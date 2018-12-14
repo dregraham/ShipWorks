@@ -2313,7 +2313,7 @@
           <Field Name="IsActive" Type="bool" FieldIndex="4" />
           <Field Name="ISBN" Type="string" IsOptional="true" MaxLength="30" FieldIndex="7" />
           <Field Name="Length" Type="decimal" IsOptional="true" Precision="10" Scale="2" FieldIndex="9" />
-          <Field Name="Name" Type="string" MaxLength="300" FieldIndex="3" />
+          <Field Name="Name" Type="string" IsOptional="true" MaxLength="300" FieldIndex="3" />
           <Field Name="ProductID" Type="long" Precision="19" FieldIndex="1" />
           <Field Name="ProductVariantID" Type="long" IsReadOnly="true" Precision="19" IsPrimaryKey="true" FieldIndex="0" />
           <Field Name="UPC" Type="string" IsOptional="true" MaxLength="30" FieldIndex="5" />
@@ -4461,7 +4461,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2018-12-11T16:02:59.9864449Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2018-12-14T18:11:17.360608Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -7716,7 +7716,7 @@
                     <Field Name="ProductVariantID" Ordinal="1" IsIdentity="true" IsPrimaryKey="true" DbType="0" Precision="19" />
                     <Field Name="ProductID" Ordinal="2" DbType="0" Precision="19" />
                     <Field Name="CreatedDate" Ordinal="3" DbType="4" />
-                    <Field Name="Name" Ordinal="4" DbType="12" Length="300" />
+                    <Field Name="Name" Ordinal="4" IsOptional="true" DbType="12" Length="300" />
                     <Field Name="IsActive" Ordinal="5" DbType="2" />
                     <Field Name="UPC" Ordinal="6" IsOptional="true" DbType="12" Length="30" />
                     <Field Name="ASIN" Ordinal="7" IsOptional="true" DbType="12" Length="255" />

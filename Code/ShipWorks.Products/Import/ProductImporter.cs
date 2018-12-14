@@ -340,11 +340,6 @@ namespace ShipWorks.Products.Import
             ValidateFieldLength(row.CountryOfOrigin, ProductVariantFields.CountryOfOrigin.MaxLength, "Country of Origin");
             ValidateFieldLength(row.HarmonizedCode, ProductVariantFields.HarmonizedCode.MaxLength, "Harmonized Code");
 
-            if (row.Name.IsNullOrWhiteSpace())
-            {
-                throw new ProductImportException("Name is required, but was not provided.");
-            }
-
             foreach (string aliasSku in row.AliasSkuList)
             {
                 ValidateFieldLength(aliasSku, ProductVariantAliasFields.Sku.MaxLength, "Alias SKU");

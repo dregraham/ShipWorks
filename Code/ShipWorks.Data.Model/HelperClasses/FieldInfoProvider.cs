@@ -2639,7 +2639,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("ProductVariantEntity", "ProductVariantID", typeof(System.Int64), true, false, true, false,  (int)ProductVariantFieldIndex.ProductVariantID, 0, 0, 19);
 			this.AddElementFieldInfo("ProductVariantEntity", "ProductID", typeof(System.Int64), false, true, false, false,  (int)ProductVariantFieldIndex.ProductID, 0, 0, 19);
 			this.AddElementFieldInfo("ProductVariantEntity", "CreatedDate", typeof(System.DateTime), false, false, false, false,  (int)ProductVariantFieldIndex.CreatedDate, 0, 0, 0);
-			this.AddElementFieldInfo("ProductVariantEntity", "Name", typeof(System.String), false, false, false, false,  (int)ProductVariantFieldIndex.Name, 300, 0, 0);
+			this.AddElementFieldInfo("ProductVariantEntity", "Name", typeof(System.String), false, false, false, true,  (int)ProductVariantFieldIndex.Name, 300, 0, 0);
 			this.AddElementFieldInfo("ProductVariantEntity", "IsActive", typeof(System.Boolean), false, false, false, false,  (int)ProductVariantFieldIndex.IsActive, 0, 0, 0);
 			this.AddElementFieldInfo("ProductVariantEntity", "UPC", typeof(System.String), false, false, false, true,  (int)ProductVariantFieldIndex.UPC, 30, 0, 0);
 			this.AddElementFieldInfo("ProductVariantEntity", "ASIN", typeof(System.String), false, false, false, true,  (int)ProductVariantFieldIndex.ASIN, 255, 0, 0);

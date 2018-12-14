@@ -37,7 +37,7 @@ CREATE TABLE [dbo].[ProductVariant]
 [ProductVariantID] [bigint] NOT NULL IDENTITY(1, 1),
 [ProductID] [bigint] NOT NULL,
 [CreatedDate] [datetime] NOT NULL,
-[Name] [nvarchar] (300) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[Name] [nvarchar] (300) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 [IsActive] [bit] NOT NULL,
 [UPC] [nvarchar] (30) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 [ASIN] [nvarchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,

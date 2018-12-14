@@ -47,7 +47,7 @@ namespace ShipWorks.Products
         {
             outline.AddAttribute("ProductID", () => variant.ProductID);
             outline.AddAttribute("ProductVariantID", () => variant.ProductVariantID);
-            outline.AddElement("SKU", () => variant.Aliases.FirstOrDefault(a => a.IsDefault).Sku);
+            outline.AddElement("SKU", () => variant.DefaultSku);
             outline.AddElement("Weight", () => (double?) variant.Weight);
             outline.AddElement("Length", () => (double?) variant.Length);
             outline.AddElement("Width", () => (double?) variant.Width);

@@ -2787,7 +2787,7 @@ namespace ShipWorks.Data.Model
 			this.AddElementFieldMapping("ProductVariantEntity", "ProductVariantID", "ProductVariantID", false, "BigInt", 0, 19, 0, true, "SCOPE_IDENTITY()", null, typeof(System.Int64), 0);
 			this.AddElementFieldMapping("ProductVariantEntity", "ProductID", "ProductID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 1);
 			this.AddElementFieldMapping("ProductVariantEntity", "CreatedDate", "CreatedDate", false, "DateTime", 0, 0, 0, false, "", null, typeof(System.DateTime), 2);
-			this.AddElementFieldMapping("ProductVariantEntity", "Name", "Name", false, "NVarChar", 300, 0, 0, false, "", null, typeof(System.String), 3);
+			this.AddElementFieldMapping("ProductVariantEntity", "Name", "Name", true, "NVarChar", 300, 0, 0, false, "", null, typeof(System.String), 3);
 			this.AddElementFieldMapping("ProductVariantEntity", "IsActive", "IsActive", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 4);
 			this.AddElementFieldMapping("ProductVariantEntity", "UPC", "UPC", true, "NVarChar", 30, 0, 0, false, "", null, typeof(System.String), 5);
 			this.AddElementFieldMapping("ProductVariantEntity", "ASIN", "ASIN", true, "NVarChar", 255, 0, 0, false, "", null, typeof(System.String), 6);
