@@ -21,6 +21,9 @@ namespace ShipWorks.Startup
             Justification = "The main program method cannot be async")]
         static void Main(string[] args)
         {
+            // The default value of KeepTextBoxDisplaySynchronizedWithTextProperty depends on which version of dotnet the app targets
+            // 4.0 defaults to false while 4.5 defaults to true, ShipWorks was built assuming the value is false so we set it here.
+            // see https://docs.microsoft.com/en-us/dotnet/api/system.windows.frameworkcompatibilitypreferences.keeptextboxdisplaysynchronizedwithtextproperty?view=netframework-4.5
             System.Windows.FrameworkCompatibilityPreferences.KeepTextBoxDisplaySynchronizedWithTextProperty = false;
 #if DEBUG
             if (InterapptiveOnly.MagicKeysDown)
