@@ -13,6 +13,9 @@ using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.Products.AliasEditor
 {
+    /// <summary>
+    /// ViewModel for the AliasEditor
+    /// </summary>
     [Component]
     public class AliasEditorViewModel : ViewModelBase, IAliasEditorViewModel
     {
