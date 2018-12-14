@@ -108,33 +108,36 @@ namespace ShipWorks.Stores.Platforms.Odbc.Loaders
             List<IShipWorksOdbcMappableField> shipworksFields = applicableEntries.Select(f => f.ShipWorksField).ToList();
 
             // If we have the field for the unit amount, we should use its value.
-            decimal unitAmount = GetAmount(shipworksFields, unitDescription);
-            if (unitAmount>0)
+            decimal? unitAmount = GetAmount(shipworksFields, unitDescription);
+            if (unitAmount != null)
             {
-                return unitAmount;
-            }
-           
-            // If quantity is 0, return 0 to avoid a divide by 0 error.
-            if (Math.Abs(item.Quantity) < .01)
-            {
-                return 0;
+                return unitAmount.Value;
             }
 
             // Return total amount / quantity orderred.
-            return GetAmount(shipworksFields, totalDescription)/Convert.ToDecimal(item.Quantity);
+            decimal? totalAmount = GetAmount(shipworksFields, totalDescription);
+
+            if (totalAmount != null && Math.Abs(item.Quantity) > .01)
+            {
+                return totalAmount.Value / Convert.ToDecimal(item.Quantity);
+            }
+
+            return 0;
         }
 
         /// <summary>
         /// Gets the amount - returns 0 if null.
         /// </summary>
-        private decimal GetAmount(IEnumerable<IShipWorksOdbcMappableField> applicableEntries, OdbcOrderFieldDescription fieldDescription)
+        private decimal? GetAmount(IEnumerable<IShipWorksOdbcMappableField> applicableEntries, OdbcOrderFieldDescription fieldDescription)
         {
-            IShipWorksOdbcMappableField amountField =
-                applicableEntries.SingleOrDefault(f => f.DisplayName == EnumHelper.GetDescription(fieldDescription));
+            object value = applicableEntries.SingleOrDefault(f => f.DisplayName == EnumHelper.GetDescription(fieldDescription))?.Value;
 
-            object value = amountField?.Value;
+            if (value == null)
+            {
+                return null;
+            }
 
-            return value==null ? 0 : Convert.ToDecimal(value);
+            return Convert.ToDecimal(value);
         }
     }
 }
