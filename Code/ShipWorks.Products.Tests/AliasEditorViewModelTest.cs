@@ -1,6 +1,8 @@
 using System.Linq;
 using Autofac.Extras.Moq;
 using Interapptive.Shared.UI;
+using Moq;
+using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Products.AliasEditor;
 using ShipWorks.Tests.Shared;
@@ -68,7 +70,7 @@ namespace ShipWorks.Products.Tests
             ProductVariantAliasEntity defaultAliasEntity = new ProductVariantAliasEntity {IsDefault = true};
             ProductVariantEntity productVariant = new ProductVariantEntity();
             productVariant.Aliases.Add(defaultAliasEntity);
-            
+
             testObject.Load(productVariant);
 
             ProductVariantAliasEntity variantAliasEntity = new ProductVariantAliasEntity();
@@ -78,7 +80,7 @@ namespace ShipWorks.Products.Tests
 
             Assert.Contains(defaultAliasEntity, productVariant.Aliases);
         }
-        
+
         [Fact]
         public void AddAlias_DisplaysError_WhenAliasSkuIsNotEntered()
         {
@@ -92,7 +94,7 @@ namespace ShipWorks.Products.Tests
         {
             ProductVariantAliasEntity defaultAliasEntity = new ProductVariantAliasEntity
             {
-                IsDefault = true, 
+                IsDefault = true,
                 Sku = "foo"
             };
 
@@ -102,9 +104,9 @@ namespace ShipWorks.Products.Tests
             testObject.Load(productVariant);
 
             testObject.AliasSku = "foo";
-            
+
             testObject.AddAliasCommand.Execute(null);
-            
+
             mock.Mock<IMessageHelper>().Verify(x => x.ShowError("\"foo\" is already the default sku for this product."));
         }
 
@@ -113,7 +115,7 @@ namespace ShipWorks.Products.Tests
         {
             ProductVariantAliasEntity defaultAliasEntity = new ProductVariantAliasEntity
             {
-                IsDefault = false, 
+                IsDefault = false,
                 Sku = "foo"
             };
 
@@ -123,15 +125,19 @@ namespace ShipWorks.Products.Tests
             testObject.Load(productVariant);
 
             testObject.AliasSku = "foo";
-            
+
             testObject.AddAliasCommand.Execute(null);
-            
+
             mock.Mock<IMessageHelper>().Verify(x => x.ShowError("This product already contains an alias with the sku \"foo\"."));
         }
 
         [Fact]
         public void AddAlias_AddsAliasToProductAliasesList()
         {
+            mock.Mock<IProductCatalog>()
+                .Setup(c => c.FetchProductVariantEntity(It.IsAny<ISqlAdapter>(), It.IsAny<string>()))
+                .Returns<ProductVariantEntity>(null);
+
             ProductVariantEntity productVariant = new ProductVariantEntity();
             ProductEntity productEntity = new ProductEntity();
             productEntity.Variants.Add(productVariant);
@@ -150,6 +156,10 @@ namespace ShipWorks.Products.Tests
         [Fact]
         public void AddAlias_ClearsAliasNameAndSku_WhenAliasAddedSuccessfully()
         {
+            mock.Mock<IProductCatalog>()
+                .Setup(c => c.FetchProductVariantEntity(It.IsAny<ISqlAdapter>(), It.IsAny<string>()))
+                .Returns<ProductVariantEntity>(null);
+
             ProductVariantEntity productVariant = new ProductVariantEntity();
 
             testObject.Load(productVariant);
@@ -157,17 +167,17 @@ namespace ShipWorks.Products.Tests
             testObject.AliasName = "foo";
             testObject.AliasSku = "bar";
             testObject.AddAliasCommand.Execute(null);
-            
+
             Assert.Empty(testObject.AliasName);
             Assert.Empty(testObject.AliasSku);
         }
-        
+
         [Fact]
         public void AddAlias_DoesNotClearAliasNameAndSku_WhenAliasFailsToAdd()
         {
             ProductVariantAliasEntity defaultAliasEntity = new ProductVariantAliasEntity
             {
-                IsDefault = true, 
+                IsDefault = true,
                 Sku = "bar"
             };
             ProductVariantEntity productVariant = new ProductVariantEntity();
@@ -177,10 +187,10 @@ namespace ShipWorks.Products.Tests
 
             testObject.AliasName = "foo";
             testObject.AliasSku = "bar";
-            
+
             // This will fail to actually add, due to AliasSku matching default sku
             testObject.AddAliasCommand.Execute(null);
-            
+
             Assert.Equal("foo", testObject.AliasName);
             Assert.Equal("bar", testObject.AliasSku);
         }
