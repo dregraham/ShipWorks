@@ -71,6 +71,7 @@ namespace ShipWorks
             this.uiModeMenu = new Divelements.SandRibbon.Menu();
             this.mainMenuItemOrderLookup = new Divelements.SandRibbon.MainMenuItem();
             this.mainMenuItemBatchGrid = new Divelements.SandRibbon.MainMenuItem();
+            this.mainMenuItemProducts = new Divelements.SandRibbon.MainMenuItem();
             this.menuOrderLookupViewFedExEndDayClose = new Divelements.SandRibbon.MenuItem();
             this.menuOrderLookupViewFedExEndDayPrint = new Divelements.SandRibbon.MenuItem();
             this.menuOrderLookupViewFedExPrintReports = new Divelements.SandRibbon.Menu();
@@ -778,7 +779,8 @@ namespace ShipWorks
             this.uiModeMenu.DrawMargin = false;
             this.uiModeMenu.Items.AddRange(new Divelements.SandRibbon.WidgetBase[] {
             this.mainMenuItemOrderLookup,
-            this.mainMenuItemBatchGrid});
+            this.mainMenuItemBatchGrid,
+            this.mainMenuItemProducts});
             //
             // mainMenuItemOrderLookup
             //
@@ -796,6 +798,15 @@ namespace ShipWorks
             this.mainMenuItemBatchGrid.QuickAccessKey = "B";
             this.mainMenuItemBatchGrid.Text = "Batch Grid";
             this.mainMenuItemBatchGrid.Activate += new System.EventHandler(this.OnShowBatchView);
+            //
+            // mainMenuItemProducts
+            //
+            this.mainMenuItemProducts.GroupName = "products";
+            this.mainMenuItemProducts.Guid = new System.Guid("F70670F1-A330-4C3E-BDE7-8CEDDB7B6A0D");
+            this.mainMenuItemProducts.Image = global::ShipWorks.Properties.Resources.box_tall_32;
+            this.mainMenuItemProducts.QuickAccessKey = "P";
+            this.mainMenuItemProducts.Text = "Products";
+            this.mainMenuItemProducts.Activate += new System.EventHandler(this.OnShowProductsView);
             //
             // menuOrderLookupViewFedExEndOfDay
             //
@@ -2271,7 +2282,6 @@ namespace ShipWorks
             this.mainMenuItemOptions.Guid = new System.Guid("defc7604-28f0-4810-a047-949bfd4a6433");
             this.mainMenuItemOptions.Image = global::ShipWorks.Properties.Resources.preferences;
             this.mainMenuItemOptions.QuickAccessKey = "O";
-            this.mainMenuItemOptions.Shortcut = ((System.Windows.Forms.Keys) ((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.O)));
             this.mainMenuItemOptions.Text = "&Options";
             this.mainMenuItemOptions.Activate += new System.EventHandler(this.OnShowOptions);
             //
@@ -3204,6 +3214,7 @@ namespace ShipWorks
         private Divelements.SandRibbon.MainMenuItem mainMenuItemSetupDatabase;
         private Divelements.SandRibbon.MainMenuItem mainMenuItemOrderLookup;
         private Divelements.SandRibbon.MainMenuItem mainMenuItemBatchGrid;
+        private Divelements.SandRibbon.MainMenuItem mainMenuItemProducts;
         private Divelements.SandRibbon.MainMenuItem mainMenuItemBackupDatabase;
         private Divelements.SandRibbon.QuickAccessToolBar quickAccessToolBar;
         private Divelements.SandRibbon.Button buttonShowPanels;

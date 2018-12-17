@@ -2277,6 +2277,80 @@
           <Field Name="VoidedUserID" Type="long" IsReadOnly="true" IsOptional="true" Precision="19" FieldIndex="10" />
         </Fields>
       </EntityDefinition>
+      <EntityDefinition Name="Product" ObjectID="c7893fc6-0d5a-4c18-b3a2-cd88984cf3c9">
+        <Fields>
+          <Field Name="CreatedDate" Type="datetime" FieldIndex="1" />
+          <Field Name="IsActive" Type="bool" FieldIndex="2" />
+          <Field Name="IsBundle" Type="bool" FieldIndex="3" />
+          <Field Name="ProductID" Type="long" IsReadOnly="true" Precision="19" IsPrimaryKey="true" FieldIndex="0" />
+        </Fields>
+      </EntityDefinition>
+      <EntityDefinition Name="ProductAttribute" ObjectID="d0bf81c9-ced6-465c-8a95-1ed9af7b9627">
+        <Fields>
+          <Field Name="AttributeName" Type="string" MaxLength="50" FieldIndex="2" />
+          <Field Name="ProductAttributeID" Type="long" IsReadOnly="true" Precision="19" IsPrimaryKey="true" FieldIndex="0" />
+          <Field Name="ProductID" Type="long" Precision="19" FieldIndex="1" />
+        </Fields>
+      </EntityDefinition>
+      <EntityDefinition Name="ProductBundle" ObjectID="c47db145-3e9c-4803-ace9-05aad26117e0">
+        <Fields>
+          <Field Name="ChildProductVariantID" Type="long" Precision="19" IsPrimaryKey="true" FieldIndex="1" />
+          <Field Name="ProductID" Type="long" Precision="19" IsPrimaryKey="true" FieldIndex="0" />
+          <Field Name="Quantity" Type="int" Precision="10" FieldIndex="2" />
+        </Fields>
+      </EntityDefinition>
+      <EntityDefinition Name="ProductListItem" ObjectID="7c9db163-1aaf-4c8f-b892-82ddb188e653">
+        <Fields>
+          <Field Name="BinLocation" Type="string" IsOptional="true" MaxLength="255" FieldIndex="7" />
+          <Field Name="Height" Type="decimal" IsOptional="true" Precision="10" Scale="2" FieldIndex="5" />
+          <Field Name="ImageUrl" Type="string" IsOptional="true" MaxLength="500" FieldIndex="8" />
+          <Field Name="IsActive" Type="bool" FieldIndex="9" />
+          <Field Name="Length" Type="decimal" IsOptional="true" Precision="10" Scale="2" FieldIndex="3" />
+          <Field Name="Name" Type="string" MaxLength="300" FieldIndex="2" />
+          <Field Name="ProductVariantID" Type="long" Precision="19" FieldIndex="0" />
+          <Field Name="SKU" Type="string" MaxLength="300" FieldIndex="1" />
+          <Field Name="Weight" Type="decimal" IsOptional="true" Precision="29" Scale="9" FieldIndex="6" />
+          <Field Name="Width" Type="decimal" IsOptional="true" Precision="10" Scale="2" FieldIndex="4" />
+        </Fields>
+      </EntityDefinition>
+      <EntityDefinition Name="ProductVariant" ObjectID="5235a759-0dd6-4e69-8252-e9a8749a58b8">
+        <Fields>
+          <Field Name="ASIN" Type="string" IsOptional="true" MaxLength="255" FieldIndex="6" />
+          <Field Name="BinLocation" Type="string" IsOptional="true" MaxLength="255" FieldIndex="13" />
+          <Field Name="CountryOfOrigin" Type="string" IsOptional="true" MaxLength="50" FieldIndex="16" />
+          <Field Name="CreatedDate" Type="datetime" FieldIndex="2" />
+          <Field Name="DeclaredValue" Type="decimal" IsOptional="true" Precision="19" Scale="4" FieldIndex="15" />
+          <Field Name="HarmonizedCode" Type="string" IsOptional="true" MaxLength="20" FieldIndex="14" />
+          <Field Name="Height" Type="decimal" IsOptional="true" Precision="10" Scale="2" FieldIndex="11" />
+          <Field Name="ImageUrl" Type="string" IsOptional="true" MaxLength="500" FieldIndex="12" />
+          <Field Name="IsActive" Type="bool" FieldIndex="4" />
+          <Field Name="ISBN" Type="string" IsOptional="true" MaxLength="30" FieldIndex="7" />
+          <Field Name="Length" Type="decimal" IsOptional="true" Precision="10" Scale="2" FieldIndex="9" />
+          <Field Name="Name" Type="string" IsOptional="true" MaxLength="300" FieldIndex="3" />
+          <Field Name="ProductID" Type="long" Precision="19" FieldIndex="1" />
+          <Field Name="ProductVariantID" Type="long" IsReadOnly="true" Precision="19" IsPrimaryKey="true" FieldIndex="0" />
+          <Field Name="UPC" Type="string" IsOptional="true" MaxLength="30" FieldIndex="5" />
+          <Field Name="Weight" Type="decimal" IsOptional="true" Precision="29" Scale="9" FieldIndex="8" />
+          <Field Name="Width" Type="decimal" IsOptional="true" Precision="10" Scale="2" FieldIndex="10" />
+        </Fields>
+      </EntityDefinition>
+      <EntityDefinition Name="ProductVariantAlias" ObjectID="a831b91c-79d3-4477-9bec-77931879e956">
+        <Fields>
+          <Field Name="AliasName" Type="string" MaxLength="50" FieldIndex="2" />
+          <Field Name="IsDefault" Type="bool" FieldIndex="4" />
+          <Field Name="ProductVariantAliasID" Type="long" IsReadOnly="true" Precision="19" IsPrimaryKey="true" FieldIndex="0" />
+          <Field Name="ProductVariantID" Type="long" Precision="19" FieldIndex="1" />
+          <Field Name="Sku" Type="string" MaxLength="300" FieldIndex="3" />
+        </Fields>
+      </EntityDefinition>
+      <EntityDefinition Name="ProductVariantAttributeValue" ObjectID="3649c6b1-0cb8-4d2c-8e99-f33bac91e316">
+        <Fields>
+          <Field Name="AttributeValue" Type="string" MaxLength="300" FieldIndex="2" />
+          <Field Name="ProductAttributeID" Type="long" Precision="19" FieldIndex="3" />
+          <Field Name="ProductVariantAttributeValueID" Type="long" IsReadOnly="true" Precision="19" IsPrimaryKey="true" FieldIndex="0" />
+          <Field Name="ProductVariantID" Type="long" Precision="19" FieldIndex="1" />
+        </Fields>
+      </EntityDefinition>
       <EntityDefinition Name="ProStoresOrder" ObjectID="5e455c0a-8a3d-4dd1-972c-dfb9fe4564f2" InheritanceType="2">
         <Fields>
           <Field Name="AuthorizedBy" Type="string" MaxLength="50" FieldIndex="2" />
@@ -3944,6 +4018,41 @@
       <NormalRelationship Name="ProcessedShipment.-User._1" Start=":ProcessedShipment" End=":User" Type="4">
         <FieldRelationships>
           <FieldFieldRelationship FkField="VoidedUserID" PkField="UserID" />
+        </FieldRelationships>
+      </NormalRelationship>
+      <NormalRelationship Name="ProductAttribute.Product-Product.Attributes" Start=":ProductAttribute" End=":Product" StartNavigator="Product" EndNavigator="Attributes" Type="4">
+        <FieldRelationships>
+          <FieldFieldRelationship FkField="ProductID" PkField="ProductID" />
+        </FieldRelationships>
+      </NormalRelationship>
+      <NormalRelationship Name="ProductBundle.ChildVariant-ProductVariant.IncludedInBundles" Start=":ProductBundle" End=":ProductVariant" StartNavigator="ChildVariant" EndNavigator="IncludedInBundles" Type="4">
+        <FieldRelationships>
+          <FieldFieldRelationship FkField="ChildProductVariantID" PkField="ProductVariantID" />
+        </FieldRelationships>
+      </NormalRelationship>
+      <NormalRelationship Name="ProductBundle.Product-Product.Bundles" Start=":ProductBundle" End=":Product" StartNavigator="Product" EndNavigator="Bundles" Type="4">
+        <FieldRelationships>
+          <FieldFieldRelationship FkField="ProductID" PkField="ProductID" />
+        </FieldRelationships>
+      </NormalRelationship>
+      <NormalRelationship Name="ProductVariant.Product-Product.Variants" Start=":ProductVariant" End=":Product" StartNavigator="Product" EndNavigator="Variants" Type="4">
+        <FieldRelationships>
+          <FieldFieldRelationship FkField="ProductID" PkField="ProductID" />
+        </FieldRelationships>
+      </NormalRelationship>
+      <NormalRelationship Name="ProductVariantAlias.ProductVariant-ProductVariant.Aliases" Start=":ProductVariantAlias" End=":ProductVariant" StartNavigator="ProductVariant" EndNavigator="Aliases" Type="4">
+        <FieldRelationships>
+          <FieldFieldRelationship FkField="ProductVariantID" PkField="ProductVariantID" />
+        </FieldRelationships>
+      </NormalRelationship>
+      <NormalRelationship Name="ProductVariantAttributeValue.ProductAttribute-ProductAttribute.ProductVariantAttributeValue" Start=":ProductVariantAttributeValue" End=":ProductAttribute" StartNavigator="ProductAttribute" EndNavigator="ProductVariantAttributeValue" Type="4">
+        <FieldRelationships>
+          <FieldFieldRelationship FkField="ProductAttributeID" PkField="ProductAttributeID" />
+        </FieldRelationships>
+      </NormalRelationship>
+      <NormalRelationship Name="ProductVariantAttributeValue.ProductVariant-ProductVariant.Attributes" Start=":ProductVariantAttributeValue" End=":ProductVariant" StartNavigator="ProductVariant" EndNavigator="Attributes" Type="4">
+        <FieldRelationships>
+          <FieldFieldRelationship FkField="ProductVariantID" PkField="ProductVariantID" />
         </FieldRelationships>
       </NormalRelationship>
       <NormalRelationship Name="ProStoresOrderSearch.ProStoresOrder-ProStoresOrder.ProStoresOrderSearch" Start=":ProStoresOrderSearch" End=":ProStoresOrder" StartNavigator="ProStoresOrder" EndNavigator="ProStoresOrderSearch" Type="4" DeleteRuleAction="1">
@@ -7602,6 +7711,72 @@
                     <Field Name="PageHeight" Ordinal="23" DbType="6" Precision="38" />
                   </Fields>
                 </Table>
+                <Table Name="Product">
+                  <PkConstraintName Name="PK_Product" />
+                  <Fields>
+                    <Field Name="ProductID" Ordinal="1" IsIdentity="true" IsPrimaryKey="true" DbType="0" Precision="19" />
+                    <Field Name="CreatedDate" Ordinal="2" DbType="4" />
+                    <Field Name="IsActive" Ordinal="3" DbType="2" />
+                    <Field Name="IsBundle" Ordinal="4" DbType="2" />
+                  </Fields>
+                </Table>
+                <Table Name="ProductAttribute">
+                  <PkConstraintName Name="PK_ProductAttribute" />
+                  <Fields>
+                    <Field Name="ProductAttributeID" Ordinal="1" IsIdentity="true" IsPrimaryKey="true" DbType="0" Precision="19" />
+                    <Field Name="ProductID" Ordinal="2" DbType="0" Precision="19" />
+                    <Field Name="AttributeName" Ordinal="3" DbType="12" Length="50" />
+                  </Fields>
+                </Table>
+                <Table Name="ProductBundle">
+                  <PkConstraintName Name="PK_ProductBundle" />
+                  <Fields>
+                    <Field Name="ProductID" Ordinal="1" IsPrimaryKey="true" DbType="0" Precision="19" />
+                    <Field Name="ChildProductVariantID" Ordinal="2" IsPrimaryKey="true" DbType="0" Precision="19" />
+                    <Field Name="Quantity" Ordinal="3" DbType="8" Precision="10" />
+                  </Fields>
+                </Table>
+                <Table Name="ProductVariant">
+                  <PkConstraintName Name="PK_ProductVariant" />
+                  <Fields>
+                    <Field Name="ProductVariantID" Ordinal="1" IsIdentity="true" IsPrimaryKey="true" DbType="0" Precision="19" />
+                    <Field Name="ProductID" Ordinal="2" DbType="0" Precision="19" />
+                    <Field Name="CreatedDate" Ordinal="3" DbType="4" />
+                    <Field Name="Name" Ordinal="4" IsOptional="true" DbType="12" Length="300" />
+                    <Field Name="IsActive" Ordinal="5" DbType="2" />
+                    <Field Name="UPC" Ordinal="6" IsOptional="true" DbType="12" Length="30" />
+                    <Field Name="ASIN" Ordinal="7" IsOptional="true" DbType="12" Length="255" />
+                    <Field Name="ISBN" Ordinal="8" IsOptional="true" DbType="12" Length="30" />
+                    <Field Name="Weight" Ordinal="9" IsOptional="true" DbType="5" Precision="29" Scale="9" />
+                    <Field Name="Length" Ordinal="10" IsOptional="true" DbType="5" Precision="10" Scale="2" />
+                    <Field Name="Width" Ordinal="11" IsOptional="true" DbType="5" Precision="10" Scale="2" />
+                    <Field Name="Height" Ordinal="12" IsOptional="true" DbType="5" Precision="10" Scale="2" />
+                    <Field Name="ImageUrl" Ordinal="13" IsOptional="true" DbType="12" Length="500" />
+                    <Field Name="BinLocation" Ordinal="14" IsOptional="true" DbType="12" Length="255" />
+                    <Field Name="HarmonizedCode" Ordinal="15" IsOptional="true" DbType="12" Length="20" />
+                    <Field Name="DeclaredValue" Ordinal="16" IsOptional="true" DbType="9" Precision="19" Scale="4" />
+                    <Field Name="CountryOfOrigin" Ordinal="17" IsOptional="true" DbType="12" Length="50" />
+                  </Fields>
+                </Table>
+                <Table Name="ProductVariantAlias">
+                  <PkConstraintName Name="PK_ProductVariantAlias" />
+                  <Fields>
+                    <Field Name="ProductVariantAliasID" Ordinal="1" IsIdentity="true" IsPrimaryKey="true" DbType="0" Precision="19" />
+                    <Field Name="ProductVariantID" Ordinal="2" DbType="0" Precision="19" />
+                    <Field Name="AliasName" Ordinal="3" DbType="12" Length="50" />
+                    <Field Name="Sku" Ordinal="4" DbType="12" Length="300" />
+                    <Field Name="IsDefault" Ordinal="5" HasDefaultValue="true" DefaultValue="(0)" DbType="2" />
+                  </Fields>
+                </Table>
+                <Table Name="ProductVariantAttributeValue">
+                  <PkConstraintName Name="PK_ProductVariantAttributeValue" />
+                  <Fields>
+                    <Field Name="ProductVariantAttributeValueID" Ordinal="1" IsIdentity="true" IsPrimaryKey="true" DbType="0" Precision="19" />
+                    <Field Name="ProductVariantID" Ordinal="2" DbType="0" Precision="19" />
+                    <Field Name="ProductAttributeID" Ordinal="3" DbType="0" Precision="19" />
+                    <Field Name="AttributeValue" Ordinal="4" DbType="12" Length="300" />
+                  </Fields>
+                </Table>
                 <Table Name="ProStoresOrder">
                   <PkConstraintName Name="PK_ProStoresOrder" />
                   <Fields>
@@ -9311,6 +9486,20 @@
                     <Field Name="Service" Ordinal="28" IsOptional="true" DbType="12" Length="101" />
                   </Fields>
                 </View>
+                <View Name="ProductListView">
+                  <Fields>
+                    <Field Name="ProductVariantID" Ordinal="1" DbType="0" Precision="19" />
+                    <Field Name="SKU" Ordinal="2" DbType="12" Length="300" />
+                    <Field Name="Name" Ordinal="3" DbType="12" Length="300" />
+                    <Field Name="Length" Ordinal="4" IsOptional="true" DbType="5" Precision="10" Scale="2" />
+                    <Field Name="Width" Ordinal="5" IsOptional="true" DbType="5" Precision="10" Scale="2" />
+                    <Field Name="Height" Ordinal="6" IsOptional="true" DbType="5" Precision="10" Scale="2" />
+                    <Field Name="Weight" Ordinal="7" IsOptional="true" DbType="5" Precision="29" Scale="9" />
+                    <Field Name="BinLocation" Ordinal="8" IsOptional="true" DbType="12" Length="255" />
+                    <Field Name="ImageUrl" Ordinal="9" IsOptional="true" DbType="12" Length="500" />
+                    <Field Name="IsActive" Ordinal="10" DbType="2" />
+                  </Fields>
+                </View>
                 <View Name="ShipWorksDisabledDefaultIndexes">
                   <Fields>
                     <Field Name="TableName" Ordinal="1" DbType="12" Length="128" />
@@ -10087,6 +10276,41 @@
             <ForeignKeyConstraint Name="dbo:PrintResult:FK_PrintResult_Computer">
               <FieldPairs>
                 <FieldPair PkField="dbo:Computer:ComputerID" FkField="dbo:PrintResult:ComputerID" />
+              </FieldPairs>
+            </ForeignKeyConstraint>
+            <ForeignKeyConstraint Name="dbo:ProductAttribute:FK_ProductAttribute_Product">
+              <FieldPairs>
+                <FieldPair PkField="dbo:Product:ProductID" FkField="dbo:ProductAttribute:ProductID" />
+              </FieldPairs>
+            </ForeignKeyConstraint>
+            <ForeignKeyConstraint Name="dbo:ProductBundle:FK_ProductBundle_Product">
+              <FieldPairs>
+                <FieldPair PkField="dbo:Product:ProductID" FkField="dbo:ProductBundle:ProductID" />
+              </FieldPairs>
+            </ForeignKeyConstraint>
+            <ForeignKeyConstraint Name="dbo:ProductBundle:FK_ProductBundle_ProductVariant">
+              <FieldPairs>
+                <FieldPair PkField="dbo:ProductVariant:ProductVariantID" FkField="dbo:ProductBundle:ChildProductVariantID" />
+              </FieldPairs>
+            </ForeignKeyConstraint>
+            <ForeignKeyConstraint Name="dbo:ProductVariant:FK_ProductVariant_Product">
+              <FieldPairs>
+                <FieldPair PkField="dbo:Product:ProductID" FkField="dbo:ProductVariant:ProductID" />
+              </FieldPairs>
+            </ForeignKeyConstraint>
+            <ForeignKeyConstraint Name="dbo:ProductVariantAlias:FK_ProductVariantAlias_ProductVariant">
+              <FieldPairs>
+                <FieldPair PkField="dbo:ProductVariant:ProductVariantID" FkField="dbo:ProductVariantAlias:ProductVariantID" />
+              </FieldPairs>
+            </ForeignKeyConstraint>
+            <ForeignKeyConstraint Name="dbo:ProductVariantAttributeValue:FK_ProductVariantAttributeValue_ProductAttribute">
+              <FieldPairs>
+                <FieldPair PkField="dbo:ProductAttribute:ProductAttributeID" FkField="dbo:ProductVariantAttributeValue:ProductAttributeID" />
+              </FieldPairs>
+            </ForeignKeyConstraint>
+            <ForeignKeyConstraint Name="dbo:ProductVariantAttributeValue:FK_ProductVariantAttributeValue_ProductVariant">
+              <FieldPairs>
+                <FieldPair PkField="dbo:ProductVariant:ProductVariantID" FkField="dbo:ProductVariantAttributeValue:ProductVariantID" />
               </FieldPairs>
             </ForeignKeyConstraint>
             <ForeignKeyConstraint Name="dbo:ProStoresOrder:FK_ProStoresOrder_Order">
@@ -12631,6 +12855,80 @@
             <FieldMapping FieldName="VoidedComputerID" TargetFieldName="VoidedComputerID" />
             <FieldMapping FieldName="VoidedDate" TargetFieldName="VoidedDate" />
             <FieldMapping FieldName="VoidedUserID" TargetFieldName="VoidedUserID" />
+          </FieldMappings>
+        </EntityMapping>
+        <EntityMapping EntityName=":Product" TargetName="ShipWorksLocal:dbo:Product">
+          <FieldMappings>
+            <FieldMapping FieldName="CreatedDate" TargetFieldName="CreatedDate" />
+            <FieldMapping FieldName="IsActive" TargetFieldName="IsActive" />
+            <FieldMapping FieldName="IsBundle" TargetFieldName="IsBundle" />
+            <FieldMapping FieldName="ProductID" TargetFieldName="ProductID" SequenceToUse="SCOPE_IDENTITY()" />
+          </FieldMappings>
+        </EntityMapping>
+        <EntityMapping EntityName=":ProductAttribute" TargetName="ShipWorksLocal:dbo:ProductAttribute">
+          <FieldMappings>
+            <FieldMapping FieldName="AttributeName" TargetFieldName="AttributeName" />
+            <FieldMapping FieldName="ProductAttributeID" TargetFieldName="ProductAttributeID" SequenceToUse="SCOPE_IDENTITY()" />
+            <FieldMapping FieldName="ProductID" TargetFieldName="ProductID" />
+          </FieldMappings>
+        </EntityMapping>
+        <EntityMapping EntityName=":ProductBundle" TargetName="ShipWorksLocal:dbo:ProductBundle">
+          <FieldMappings>
+            <FieldMapping FieldName="ChildProductVariantID" TargetFieldName="ChildProductVariantID" />
+            <FieldMapping FieldName="ProductID" TargetFieldName="ProductID" />
+            <FieldMapping FieldName="Quantity" TargetFieldName="Quantity" />
+          </FieldMappings>
+        </EntityMapping>
+        <EntityMapping EntityName=":ProductListItem" TargetName="ShipWorksLocal:dbo:ProductListView" ActionCombination="4">
+          <FieldMappings>
+            <FieldMapping FieldName="BinLocation" TargetFieldName="BinLocation" />
+            <FieldMapping FieldName="Height" TargetFieldName="Height" />
+            <FieldMapping FieldName="ImageUrl" TargetFieldName="ImageUrl" />
+            <FieldMapping FieldName="IsActive" TargetFieldName="IsActive" />
+            <FieldMapping FieldName="Length" TargetFieldName="Length" />
+            <FieldMapping FieldName="Name" TargetFieldName="Name" />
+            <FieldMapping FieldName="ProductVariantID" TargetFieldName="ProductVariantID" />
+            <FieldMapping FieldName="SKU" TargetFieldName="SKU" />
+            <FieldMapping FieldName="Weight" TargetFieldName="Weight" />
+            <FieldMapping FieldName="Width" TargetFieldName="Width" />
+          </FieldMappings>
+        </EntityMapping>
+        <EntityMapping EntityName=":ProductVariant" TargetName="ShipWorksLocal:dbo:ProductVariant">
+          <FieldMappings>
+            <FieldMapping FieldName="ASIN" TargetFieldName="ASIN" />
+            <FieldMapping FieldName="BinLocation" TargetFieldName="BinLocation" />
+            <FieldMapping FieldName="CountryOfOrigin" TargetFieldName="CountryOfOrigin" />
+            <FieldMapping FieldName="CreatedDate" TargetFieldName="CreatedDate" />
+            <FieldMapping FieldName="DeclaredValue" TargetFieldName="DeclaredValue" />
+            <FieldMapping FieldName="HarmonizedCode" TargetFieldName="HarmonizedCode" />
+            <FieldMapping FieldName="Height" TargetFieldName="Height" />
+            <FieldMapping FieldName="ImageUrl" TargetFieldName="ImageUrl" />
+            <FieldMapping FieldName="IsActive" TargetFieldName="IsActive" />
+            <FieldMapping FieldName="ISBN" TargetFieldName="ISBN" />
+            <FieldMapping FieldName="Length" TargetFieldName="Length" />
+            <FieldMapping FieldName="Name" TargetFieldName="Name" />
+            <FieldMapping FieldName="ProductID" TargetFieldName="ProductID" />
+            <FieldMapping FieldName="ProductVariantID" TargetFieldName="ProductVariantID" SequenceToUse="SCOPE_IDENTITY()" />
+            <FieldMapping FieldName="UPC" TargetFieldName="UPC" />
+            <FieldMapping FieldName="Weight" TargetFieldName="Weight" />
+            <FieldMapping FieldName="Width" TargetFieldName="Width" />
+          </FieldMappings>
+        </EntityMapping>
+        <EntityMapping EntityName=":ProductVariantAlias" TargetName="ShipWorksLocal:dbo:ProductVariantAlias">
+          <FieldMappings>
+            <FieldMapping FieldName="AliasName" TargetFieldName="AliasName" />
+            <FieldMapping FieldName="IsDefault" TargetFieldName="IsDefault" />
+            <FieldMapping FieldName="ProductVariantAliasID" TargetFieldName="ProductVariantAliasID" SequenceToUse="SCOPE_IDENTITY()" />
+            <FieldMapping FieldName="ProductVariantID" TargetFieldName="ProductVariantID" />
+            <FieldMapping FieldName="Sku" TargetFieldName="Sku" />
+          </FieldMappings>
+        </EntityMapping>
+        <EntityMapping EntityName=":ProductVariantAttributeValue" TargetName="ShipWorksLocal:dbo:ProductVariantAttributeValue">
+          <FieldMappings>
+            <FieldMapping FieldName="AttributeValue" TargetFieldName="AttributeValue" />
+            <FieldMapping FieldName="ProductAttributeID" TargetFieldName="ProductAttributeID" />
+            <FieldMapping FieldName="ProductVariantAttributeValueID" TargetFieldName="ProductVariantAttributeValueID" SequenceToUse="SCOPE_IDENTITY()" />
+            <FieldMapping FieldName="ProductVariantID" TargetFieldName="ProductVariantID" />
           </FieldMappings>
         </EntityMapping>
         <EntityMapping EntityName=":ProStoresOrder" TargetName="ShipWorksLocal:dbo:ProStoresOrder">

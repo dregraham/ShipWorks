@@ -1430,7 +1430,7 @@ oxR2H0ooAYP9a3+6P60/FNH+tb/dH9adQAYoxRRQAUUUUAf/2Q==
 		button="Left"
 		duration="500ms"
 		enabled="True"
-		loc="18;7"
+		loc="Center"
 		movetime="300ms"
 		optional="False"
 		searchpropertyid="588c93c1-5fb3-4e30-884c-c528e6e43694"
@@ -1589,7 +1589,7 @@ oxR2H0ooAYP9a3+6P60/FNH+tb/dH9adQAYoxRRQAUUUUAf/2Q==
 	id="e7742ed2-f8bc-429c-9794-64d8a30b8c72"
 	name="SmokeTestRepository"
 	relativepath="SmokeTestRepository.rxrep"
-	rxversion="8.0">
+	rxversion="8.1">
 		<codegen
 		classname="SmokeTestRepository"
 		namespace="SmokeTest">

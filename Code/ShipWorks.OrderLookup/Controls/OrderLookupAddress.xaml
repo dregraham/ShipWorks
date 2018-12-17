@@ -7,11 +7,9 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:geography="clr-namespace:Interapptive.Shared.Business.Geography;assembly=Interapptive.Shared"
     xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
-    xmlns:local="clr-namespace:ShipWorks.OrderLookup.Controls"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:ns="clr-namespace:ShipWorks.OrderLookup.FieldManager;assembly=ShipWorks.Core"
     xmlns:props="clr-namespace:ShipWorks.UI.AttachedProperties;assembly=ShipWorks.UI"
-    xmlns:sys="clr-namespace:System;assembly=mscorlib"
     xmlns:ui="clr-namespace:ShipWorks.UI.Controls;assembly=ShipWorks.UI"
     xmlns:valueConverters="clr-namespace:ShipWorks.UI.ValueConverters;assembly=ShipWorks.UI"
     d:DataContext="{d:DesignInstance AddressControl:AddressViewModel,
@@ -23,13 +21,11 @@
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="/ShipWorks.OrderLookup;component/Styles/OrderLookupStyle.xaml" />
+                <ResourceDictionary Source="/ShipWorks.UI;component/Styles/BlueSteel/BlueSteelStyle.xaml" />
             </ResourceDictionary.MergedDictionaries>
 
             <Style BasedOn="{StaticResource Grid.TextBlock.Label}" TargetType="TextBlock" />
             <Style BasedOn="{StaticResource Grid.TextBox.Default}" TargetType="TextBox" />
-
-            <sys:Int32 x:Key="One">1</sys:Int32>
 
             <valueConverters:StateProvinceConverter x:Key="StateProvinceConverter" />
             <valueConverters:EnumDescriptionConverter x:Key="EnumDescription" />
@@ -205,8 +201,6 @@
                 Grid.Row="2"
                 Grid.Column="1"
                 props:EntityFieldLength.FieldName="PersonState"
-                IsEditable="True"
-                IsTextSearchEnabled="True"
                 ItemsSource="{Binding SelectedValue, ElementName=CountryComboBox, Converter={StaticResource StateProvinceConverter}}"
                 Style="{StaticResource EditableFormComboBox}"
                 Text="{Binding StateProvCode}" />
