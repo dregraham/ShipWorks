@@ -968,19 +968,7 @@ namespace ShipWorks
             }
 
             ToggleUiModeCheckbox(currentMode);
-
-            if (currentMode == UIMode.OrderLookup)
-            {
-                EnableOrderLookupMode();
-            }
-            else if (currentMode == UIMode.Products)
-            {
-                EnableProductsMode(user);
-            }
-            else
-            {
-                EnableBatchMode(user);
-            }
+            EnableUiMode(currentMode, user);
 
             UIMode = currentMode;
 
@@ -1002,6 +990,25 @@ namespace ShipWorks
             }
 
             panelDockingArea.Visible = true;
+        }
+
+        /// <summary>
+        /// Enables the given UI mode
+        /// </summary>
+        private void EnableUiMode(UIMode mode, IUserEntity user)
+        {
+            if (mode == UIMode.OrderLookup)
+            {
+                EnableOrderLookupMode();
+            }
+            else if (mode == UIMode.Products)
+            {
+                EnableProductsMode(user);
+            }
+            else
+            {
+                EnableBatchMode(user);
+            }
         }
 
         /// <summary>
