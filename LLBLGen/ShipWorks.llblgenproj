@@ -2748,6 +2748,8 @@
           <Field Name="Fax" Type="string" MaxLength="35" FieldIndex="17" />
           <Field Name="InitialDownloadDays" Type="int" IsOptional="true" FieldIndex="29" />
           <Field Name="InitialDownloadOrder" Type="long" IsOptional="true" FieldIndex="30" />
+          <Field Name="InsureShipApiKey" Type="string" IsOptional="true" MaxLength="255" FieldIndex="32" />
+          <Field Name="InsureShipClientID" Type="long" IsOptional="true" Precision="19" FieldIndex="31" />
           <Field Name="InternationalAddressValidationSetting" Type="AddressValidationStoreSettingType" FieldIndex="24" />
           <Field Name="License" Type="string" MaxLength="150" FieldIndex="2" />
           <Field Name="ManualOrderPostfix" Type="string" MaxLength="10" FieldIndex="28" />
@@ -4355,7 +4357,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2018-12-12T17:37:04.7268152Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2018-12-17T16:29:38.1970878Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -8350,6 +8352,8 @@
                     <Field Name="ManualOrderPostfix" Ordinal="29" DbType="12" Length="10" />
                     <Field Name="InitialDownloadDays" Ordinal="30" IsOptional="true" DbType="8" Precision="10" />
                     <Field Name="InitialDownloadOrder" Ordinal="31" IsOptional="true" DbType="0" Precision="19" />
+                    <Field Name="InsureShipClientID" Ordinal="32" IsOptional="true" DbType="0" Precision="19" />
+                    <Field Name="InsureShipApiKey" Ordinal="33" IsOptional="true" DbType="12" Length="255" />
                   </Fields>
                 </Table>
                 <Table Name="SystemData">
@@ -13088,6 +13092,8 @@
             <FieldMapping FieldName="Fax" TargetFieldName="Fax" />
             <FieldMapping FieldName="InitialDownloadDays" TargetFieldName="InitialDownloadDays" />
             <FieldMapping FieldName="InitialDownloadOrder" TargetFieldName="InitialDownloadOrder" />
+            <FieldMapping FieldName="InsureShipApiKey" TargetFieldName="InsureShipApiKey" />
+            <FieldMapping FieldName="InsureShipClientID" TargetFieldName="InsureShipClientID" />
             <FieldMapping FieldName="InternationalAddressValidationSetting" TargetFieldName="InternationalAddressValidationSetting" />
             <FieldMapping FieldName="License" TargetFieldName="License" />
             <FieldMapping FieldName="ManualOrderPostfix" TargetFieldName="ManualOrderPostfix" />

@@ -16,21 +16,6 @@ namespace ShipWorks.Shipping.Insurance.InsureShip
         bool UseTestServer { get; set; }
 
         /// <summary>
-        /// InsureShip Distributor ID
-        /// </summary>
-        string DistributorID { get; }
-
-        /// <summary>
-        /// InsureShip Username
-        /// </summary>
-        string ClientID { get; }
-
-        /// <summary>
-        /// InsureShip Password
-        /// </summary>
-        string ApiKey { get; }
-
-        /// <summary>
         /// InsureShip Url
         /// </summary>
         Uri ApiUrl { get; }

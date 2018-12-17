@@ -32,7 +32,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip.Net.Void
             testObject.VoidInsurancePolicy(shipment);
 
             mock.Mock<IInsureShipWebClient>()
-                .Verify(x => x.Submit<InsureShipVoidPolicyResponse>(AnyString, It.IsAny<Dictionary<string, string>>()), Times.Never);
+                .Verify(x => x.Submit<InsureShipVoidPolicyResponse>(AnyString, AnyIStore, It.IsAny<Dictionary<string, string>>()), Times.Never);
         }
 
         [Fact]
@@ -46,13 +46,13 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip.Net.Void
             testObject.VoidInsurancePolicy(shipment);
 
             mock.Mock<IInsureShipWebClient>()
-                .Verify(x => x.Submit<InsureShipVoidPolicyResponse>(AnyString, It.IsAny<Dictionary<string, string>>()), Times.Never);
+                .Verify(x => x.Submit<InsureShipVoidPolicyResponse>(AnyString, AnyIStore, It.IsAny<Dictionary<string, string>>()), Times.Never);
         }
 
         [Fact]
         public void VoidInsurancePolicy_DelegatesToWebClient_WhenValidationReturnsTrue()
         {
-            var shipment = new ShipmentEntity { InsurancePolicy = new InsurancePolicyEntity() };
+            var shipment = new ShipmentEntity { InsurancePolicy = new InsurancePolicyEntity(), Order = new OrderEntity { Store = new StoreEntity() } };
 
             mock.Mock<IInsureShipVoidValidator>().Setup(x => x.IsVoidable(shipment)).Returns(true);
             var testObject = mock.Create<InsureShipVoidPolicyRequest>();
@@ -60,16 +60,16 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip.Net.Void
             testObject.VoidInsurancePolicy(shipment);
 
             mock.Mock<IInsureShipWebClient>()
-                .Verify(x => x.Submit<InsureShipVoidPolicyResponse>("void_policy", It.IsAny<Dictionary<string, string>>()));
+                .Verify(x => x.Submit<InsureShipVoidPolicyResponse>("void_policy", AnyIStore, It.IsAny<Dictionary<string, string>>()));
         }
 
         [Fact]
         public void VoidInsurancePolicy_ReturnsSuccess_WhenWebClientReturnsSuccess()
         {
-            var shipment = new ShipmentEntity { InsurancePolicy = new InsurancePolicyEntity() };
+            var shipment = new ShipmentEntity { InsurancePolicy = new InsurancePolicyEntity(), Order = new OrderEntity { Store = new StoreEntity() } };
 
             mock.Mock<IInsureShipWebClient>()
-                .Setup(x => x.Submit<InsureShipVoidPolicyResponse>(AnyString, It.IsAny<Dictionary<string, string>>()))
+                .Setup(x => x.Submit<InsureShipVoidPolicyResponse>(AnyString, AnyIStore, It.IsAny<Dictionary<string, string>>()))
                 .Returns(GenericResult.FromSuccess(new InsureShipVoidPolicyResponse()));
             mock.Mock<IInsureShipVoidValidator>().Setup(x => x.IsVoidable(shipment)).Returns(true);
             var testObject = mock.Create<InsureShipVoidPolicyRequest>();
@@ -95,10 +95,10 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip.Net.Void
         [Fact]
         public void VoidInsurancePolicy_ReturnsFailure_WhenWebClientReturnsFailure()
         {
-            var shipment = new ShipmentEntity { InsurancePolicy = new InsurancePolicyEntity() };
+            var shipment = new ShipmentEntity { InsurancePolicy = new InsurancePolicyEntity(), Order = new OrderEntity { Store = new StoreEntity() } };
 
             mock.Mock<IInsureShipWebClient>()
-                .Setup(x => x.Submit<InsureShipVoidPolicyResponse>(AnyString, It.IsAny<Dictionary<string, string>>()))
+                .Setup(x => x.Submit<InsureShipVoidPolicyResponse>(AnyString, AnyIStore, It.IsAny<Dictionary<string, string>>()))
                 .Returns(GenericResult.FromError<InsureShipVoidPolicyResponse>("Foo"));
             mock.Mock<IInsureShipVoidValidator>().Setup(x => x.IsVoidable(shipment)).Returns(true);
             var testObject = mock.Create<InsureShipVoidPolicyRequest>();

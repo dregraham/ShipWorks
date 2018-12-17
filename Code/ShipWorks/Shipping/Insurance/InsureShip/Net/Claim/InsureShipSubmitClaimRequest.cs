@@ -31,7 +31,7 @@ namespace ShipWorks.Shipping.Insurance.InsureShip.Net.Claim
         /// Submits this request to InsureShip
         /// </summary>
         public Result CreateInsuranceClaim(ShipmentEntity shipment) =>
-            webClient.Submit<InsureShipSubmitClaimResponse>("submit_claim", CreatePostData(shipment))
+            webClient.Submit<InsureShipSubmitClaimResponse>("submit_claim", shipment.Order.Store, CreatePostData(shipment))
                 .Do(x => shipment.InsurancePolicy.ClaimID = x.ClaimID);
 
         /// <summary>

@@ -39,7 +39,7 @@ namespace ShipWorks.Shipping.Insurance.InsureShip.Net.Void
         /// </summary>
         private Result PerformVoid(bool isVoidable, ShipmentEntity shipment) =>
             isVoidable ?
-                webClient.Submit<InsureShipVoidPolicyResponse>("void_policy", CreatePostData(shipment)) :
+                webClient.Submit<InsureShipVoidPolicyResponse>("void_policy", shipment.Order.Store, CreatePostData(shipment)) :
                 Result.FromSuccess();
 
         /// <summary>

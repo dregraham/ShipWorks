@@ -1015,7 +1015,11 @@
     <Compile Include="Shipping\Insurance\InsureShip\Net\Claim\IInsureShipSubmitClaimRequest.cs" />
     <Compile Include="Shipping\Insurance\InsureShip\Net\Claim\InsureShipGetClaimStatusResponse.cs" />
     <Compile Include="Shipping\Insurance\InsureShip\Net\Claim\InsureShipSubmitClaimResponse.cs" />
+    <Compile Include="Shipping\Insurance\InsureShip\Net\IInsureShipCredentialRetriever.cs" />
+    <Compile Include="Shipping\Insurance\InsureShip\Net\IInsureShipCredentials.cs" />
     <Compile Include="Shipping\Insurance\InsureShip\Net\IInsureShipWebClient.cs" />
+    <Compile Include="Shipping\Insurance\InsureShip\Net\InsureShipCredentialRetriever.cs" />
+    <Compile Include="Shipping\Insurance\InsureShip\Net\InsureShipCredentials.cs" />
     <Compile Include="Shipping\Insurance\InsureShip\Net\InsureShipWebClient.cs" />
     <Compile Include="Shipping\Insurance\InsureShip\Net\Insure\IInsureShipInsureShipmentRequest.cs" />
     <Compile Include="Shipping\Insurance\InsureShip\Net\Insure\InsureShipNewPolicyResponse.cs" />

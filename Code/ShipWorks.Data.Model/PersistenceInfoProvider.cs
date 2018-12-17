@@ -3267,7 +3267,7 @@ namespace ShipWorks.Data.Model
 		/// <summary>Inits StoreEntity's mappings</summary>
 		private void InitStoreEntityMappings()
 		{
-			this.AddElementMapping("StoreEntity", @"ShipWorksLocal", @"dbo", "Store", 31, 0);
+			this.AddElementMapping("StoreEntity", @"ShipWorksLocal", @"dbo", "Store", 33, 0);
 			this.AddElementFieldMapping("StoreEntity", "StoreID", "StoreID", false, "BigInt", 0, 19, 0, true, "SCOPE_IDENTITY()", null, typeof(System.Int64), 0);
 			this.AddElementFieldMapping("StoreEntity", "RowVersion", "RowVersion", false, "Timestamp", 2147483647, 0, 0, false, "", null, typeof(System.Byte[]), 1);
 			this.AddElementFieldMapping("StoreEntity", "License", "License", false, "NVarChar", 150, 0, 0, false, "", null, typeof(System.String), 2);
@@ -3299,6 +3299,8 @@ namespace ShipWorks.Data.Model
 			this.AddElementFieldMapping("StoreEntity", "ManualOrderPostfix", "ManualOrderPostfix", false, "NVarChar", 10, 0, 0, false, "", null, typeof(System.String), 28);
 			this.AddElementFieldMapping("StoreEntity", "InitialDownloadDays", "InitialDownloadDays", true, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 29);
 			this.AddElementFieldMapping("StoreEntity", "InitialDownloadOrder", "InitialDownloadOrder", true, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 30);
+			this.AddElementFieldMapping("StoreEntity", "InsureShipClientID", "InsureShipClientID", true, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 31);
+			this.AddElementFieldMapping("StoreEntity", "InsureShipApiKey", "InsureShipApiKey", true, "NVarChar", 255, 0, 0, false, "", null, typeof(System.String), 32);
 		}
 
 		/// <summary>Inits SystemDataEntity's mappings</summary>

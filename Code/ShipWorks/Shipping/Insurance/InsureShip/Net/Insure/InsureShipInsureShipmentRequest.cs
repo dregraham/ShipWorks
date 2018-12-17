@@ -46,7 +46,7 @@ namespace ShipWorks.Shipping.Insurance.InsureShip.Net.Insure
                 CreatedWithApi = false
             };
 
-            return webClient.Submit<InsureShipNewPolicyResponse>("new_policy", CreatePostData(shipment))
+            return webClient.Submit<InsureShipNewPolicyResponse>("new_policy", shipment.Order.Store, CreatePostData(shipment))
                 .Do(x =>
                 {
                     shipment.InsurancePolicy.InsureShipPolicyID = x.PolicyID;

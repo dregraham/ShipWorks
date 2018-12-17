@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Interapptive.Shared.Utility;
+using ShipWorks.Data.Model.EntityInterfaces;
 
 namespace ShipWorks.Shipping.Insurance.InsureShip.Net
 {
@@ -11,6 +12,6 @@ namespace ShipWorks.Shipping.Insurance.InsureShip.Net
         /// <summary>
         /// Submits this request to InsureShip
         /// </summary>
-        GenericResult<T> Submit<T>(string endpoint, Dictionary<string, string> postData);
+        GenericResult<T> Submit<T>(string endpoint, IStoreEntity store, Dictionary<string, string> postData);
     }
 }

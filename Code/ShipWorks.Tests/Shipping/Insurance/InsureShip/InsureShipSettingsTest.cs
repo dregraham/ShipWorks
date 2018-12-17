@@ -38,54 +38,6 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip
         }
 
         [Fact]
-        public void Username_IsCorrect_WhenUsingTestServer()
-        {
-            testObject.UseTestServer = true;
-
-            Assert.Equal("77351", testObject.ClientID);
-        }
-
-        [Fact]
-        public void Username_IsCorrect_WhenUsingProductionServer()
-        {
-            testObject.UseTestServer = false;
-
-            Assert.Equal("77351", testObject.ClientID);
-        }
-
-        [Fact]
-        public void Password_IsCorrect_WhenUsingTestServer()
-        {
-            testObject.UseTestServer = true;
-
-            Assert.Equal("879ed0612b6e1a5084effb6fa6769ba72cf6ef19f4413536a694d0f06ffed09c615d95cc65dcb22a865ddbb4b942460fea481dd1384e19dc6886cca67fac0229", testObject.ApiKey);
-        }
-
-        [Fact]
-        public void Password_IsCorrect_WhenUsingProductionServer()
-        {
-            testObject.UseTestServer = false;
-
-            Assert.Equal("879ed0612b6e1a5084effb6fa6769ba72cf6ef19f4413536a694d0f06ffed09c615d95cc65dcb22a865ddbb4b942460fea481dd1384e19dc6886cca67fac0229", testObject.ApiKey);
-        }
-
-        [Fact]
-        public void DistributorID_IsCorrect_WhenUsingTestServer()
-        {
-            testObject.UseTestServer = true;
-
-            Assert.Equal("D00050", testObject.DistributorID);
-        }
-
-        [Fact]
-        public void DistributorID_IsCorrect_WhenUsingProductionServer()
-        {
-            testObject.UseTestServer = false;
-
-            Assert.Equal("D00050", testObject.DistributorID);
-        }
-
-        [Fact]
         public void Url_IsCorrect_WhenUsingTestServer()
         {
             testObject.UseTestServer = true;

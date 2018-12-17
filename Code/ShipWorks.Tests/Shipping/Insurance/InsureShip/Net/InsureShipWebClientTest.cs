@@ -8,6 +8,7 @@ using Interapptive.Shared.Net;
 using Moq;
 using Newtonsoft.Json;
 using ShipWorks.ApplicationCore.Logging;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Insurance.InsureShip;
 using ShipWorks.Shipping.Insurance.InsureShip.Net;
 using ShipWorks.Shipping.Insurance.InsureShip.Net.Void;
@@ -38,11 +39,15 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip.Net
         [Fact]
         public void Submit_ConfiguresRequestSubmitter()
         {
-            mock.Mock<IInsureShipSettings>().SetupGet(x => x.ClientID).Returns("abc123");
-            mock.Mock<IInsureShipSettings>().SetupGet(x => x.ApiKey).Returns("xyx987");
+            var store = mock.Build<IStoreEntity>();
+
+            var credentials = mock.FromFactory<IInsureShipCredentialRetriever>()
+                .Mock(x => x.Get(store));
+            credentials.SetupGet(x => x.ClientID).Returns("abc123");
+            credentials.SetupGet(x => x.ApiKey).Returns("xyx987");
             var testObject = mock.Create<InsureShipWebClient>();
 
-            testObject.Submit<InsureShipVoidPolicyResponse>("foo", new Dictionary<string, string> { { "foo", "bar" } });
+            testObject.Submit<InsureShipVoidPolicyResponse>("foo", store, new Dictionary<string, string> { { "foo", "bar" } });
 
             submitter.VerifySet(x => x.Uri = new Uri("https://www.example.com/foo"));
             submitter.Verify(x => x.AddHeader("Accept", "application/json"));
@@ -56,7 +61,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip.Net
         {
             var testObject = mock.Create<InsureShipWebClient>();
 
-            testObject.Submit<InsureShipVoidPolicyResponse>("foo", new Dictionary<string, string> { { "foo", "bar" }, { "baz", "quux" } });
+            testObject.Submit<InsureShipVoidPolicyResponse>("foo", mock.Build<IStoreEntity>(), new Dictionary<string, string> { { "foo", "bar" }, { "baz", "quux" } });
 
             submitter.Verify(x => x.AddVariable("foo", "bar"));
             submitter.Verify(x => x.AddVariable("baz", "quux"));
@@ -68,7 +73,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip.Net
             var logEntry = mock.FromFactory<ILogEntryFactory>().Mock(x => x.GetLogEntry(ApiLogSource.InsureShip, "foo", LogActionType.Other));
             var testObject = mock.Create<InsureShipWebClient>();
 
-            testObject.Submit<InsureShipVoidPolicyResponse>("foo", new Dictionary<string, string>());
+            testObject.Submit<InsureShipVoidPolicyResponse>("foo", mock.Build<IStoreEntity>(), new Dictionary<string, string>());
 
             logEntry.Verify(x => x.LogRequest(submitter.Object));
         }
@@ -81,7 +86,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip.Net
             submitter.Setup(x => x.GetResponse()).Returns(reader);
             var testObject = mock.Create<InsureShipWebClient>();
 
-            var result = testObject.Submit<InsureShipVoidPolicyResponse>(AnyString, new Dictionary<string, string>());
+            var result = testObject.Submit<InsureShipVoidPolicyResponse>(AnyString, mock.Build<IStoreEntity>(), new Dictionary<string, string>());
 
             result
                 .Do(x => Assert.Equal("bar", x.Status))
@@ -97,7 +102,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip.Net
             var logEntry = mock.FromFactory<ILogEntryFactory>().Mock(x => x.GetLogEntry(ApiLogSource.InsureShip, "foo", LogActionType.Other));
             var testObject = mock.Create<InsureShipWebClient>();
 
-            testObject.Submit<InsureShipVoidPolicyResponse>("foo", new Dictionary<string, string>());
+            testObject.Submit<InsureShipVoidPolicyResponse>("foo", mock.Build<IStoreEntity>(), new Dictionary<string, string>());
 
             logEntry.Verify(x => x.LogResponse(It.Is<string>(s => s.Contains("bar")), "log"));
         }
@@ -111,7 +116,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip.Net
             var logEntry = mock.FromFactory<ILogEntryFactory>().Mock(x => x.GetLogEntry(ApiLogSource.InsureShip, "foo", LogActionType.Other));
             var testObject = mock.Create<InsureShipWebClient>();
 
-            var result = testObject.Submit<InsureShipVoidPolicyResponse>("foo", new Dictionary<string, string>());
+            var result = testObject.Submit<InsureShipVoidPolicyResponse>("foo", mock.Build<IStoreEntity>(), new Dictionary<string, string>());
 
             result
                 .Do(x => Assert.True(false))
@@ -124,7 +129,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip.Net
             var logEntry = mock.FromFactory<ILogEntryFactory>().Mock(x => x.GetLogEntry(ApiLogSource.InsureShip, "foo", LogActionType.Other));
             var testObject = mock.Create<InsureShipWebClient>();
 
-            var result = testObject.Submit<InsureShipVoidPolicyResponse>("foo", new Dictionary<string, string>());
+            var result = testObject.Submit<InsureShipVoidPolicyResponse>("foo", mock.Build<IStoreEntity>(), new Dictionary<string, string>());
 
             result
                 .Do(x => Assert.True(false))
@@ -141,7 +146,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip.Net
             var logEntry = mock.FromFactory<ILogEntryFactory>().Mock(x => x.GetLogEntry(ApiLogSource.InsureShip, "foo", LogActionType.Other));
             var testObject = mock.Create<InsureShipWebClient>();
 
-            testObject.Submit<InsureShipVoidPolicyResponse>("foo", new Dictionary<string, string>());
+            testObject.Submit<InsureShipVoidPolicyResponse>("foo", mock.Build<IStoreEntity>(), new Dictionary<string, string>());
 
             logEntry.Verify(x => x.LogResponse(It.Is<string>(s => s.Contains("Failure")), "log"));
         }
@@ -155,7 +160,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip.Net
             var logEntry = mock.FromFactory<ILogEntryFactory>().Mock(x => x.GetLogEntry(ApiLogSource.InsureShip, "foo", LogActionType.Other));
             var testObject = mock.Create<InsureShipWebClient>();
 
-            var result = testObject.Submit<InsureShipVoidPolicyResponse>("foo", new Dictionary<string, string>());
+            var result = testObject.Submit<InsureShipVoidPolicyResponse>("foo", mock.Build<IStoreEntity>(), new Dictionary<string, string>());
 
             result
                 .Do(x => Assert.True(false))

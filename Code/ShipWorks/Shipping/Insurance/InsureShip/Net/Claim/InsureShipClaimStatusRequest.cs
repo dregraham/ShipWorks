@@ -29,7 +29,7 @@ namespace ShipWorks.Shipping.Insurance.InsureShip.Net.Claim
         /// Submits this request to InsureShip
         /// </summary>
         public GenericResult<string> GetClaimStatus(IShipmentEntity shipment) =>
-            webClient.Submit<InsureShipGetClaimStatusResponse>("get_claim_status", CreatePostData(shipment))
+            webClient.Submit<InsureShipGetClaimStatusResponse>("get_claim_status", shipment.Order.Store, CreatePostData(shipment))
                 .Map(x => x.Status);
 
         /// <summary>

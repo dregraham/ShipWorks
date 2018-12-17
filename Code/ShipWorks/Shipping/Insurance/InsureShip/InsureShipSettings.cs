@@ -1,6 +1,5 @@
 ﻿using System;
 using Interapptive.Shared.ComponentRegistration;
-using Interapptive.Shared.Security;
 using ShipWorks.ApplicationCore;
 
 namespace ShipWorks.Shipping.Insurance.InsureShip
@@ -11,8 +10,6 @@ namespace ShipWorks.Shipping.Insurance.InsureShip
     [Component]
     public class InsureShipSettings : IInsureShipSettings
     {
-        private const string salt = "InsureShip7458";
-
         /// <summary>
         /// Gets or sets a value indicating whether [use test server] based on a registry setting.
         /// </summary>
@@ -30,33 +27,6 @@ namespace ShipWorks.Shipping.Insurance.InsureShip
                 InterapptiveOnly.Registry.SetValue("InsureShipTestServer", value);
             }
         }
-
-        /// <summary>
-        /// InsureShip Distributor ID
-        /// </summary>
-        public string DistributorID
-        {
-            get
-            {
-                return "D00050";
-            }
-        }
-
-        /// <summary>
-        /// InsureShip Username
-        /// </summary>
-        public string ClientID =>
-            UseTestServer ?
-                SecureText.Decrypt("tc7+yEwpdGE=", salt) :
-                SecureText.Decrypt("tc7+yEwpdGE=", salt);
-
-        /// <summary>
-        /// InsureShip Password
-        /// </summary>
-        public string ApiKey =>
-            UseTestServer ?
-                SecureText.Decrypt("18VbfzIHoxT2lVYwuCXLF+FXVzokfhjKhUrq3Y2AEoO6tCcznbDtttovCAohTkbaXkIXE/YviEtMnwvDmlGzmfj1XWqNs0WO2WBb+rWfU88MhzxwRAug8ifivvVPpwylJn/VXV+boehh4dmjv+e8VPpEd5Td3hTkF0P7212c6ooGcRYaJYjKIQ==", salt) :
-                SecureText.Decrypt("18VbfzIHoxT2lVYwuCXLF+FXVzokfhjKhUrq3Y2AEoO6tCcznbDtttovCAohTkbaXkIXE/YviEtMnwvDmlGzmfj1XWqNs0WO2WBb+rWfU88MhzxwRAug8ifivvVPpwylJn/VXV+boehh4dmjv+e8VPpEd5Td3hTkF0P7212c6ooGcRYaJYjKIQ==", salt);
 
         /// <summary>
         /// InsureShip Url

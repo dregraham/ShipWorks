@@ -30,7 +30,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip.Net.Claim
             testObject.CreateInsuranceClaim(shipment);
 
             mock.Mock<IInsureShipWebClient>()
-                .Verify(x => x.Submit<InsureShipSubmitClaimResponse>("submit_claim", It.Is<Dictionary<string, string>>(y => y["policy_id"] == "1234")));
+                .Verify(x => x.Submit<InsureShipSubmitClaimResponse>("submit_claim", AnyIStore, It.Is<Dictionary<string, string>>(y => y["policy_id"] == "1234")));
         }
 
         [Fact]
@@ -38,7 +38,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip.Net.Claim
         {
             var shipment = CreateShipment();
             mock.Mock<IInsureShipWebClient>()
-                .Setup(x => x.Submit<InsureShipSubmitClaimResponse>(AnyString, It.IsAny<Dictionary<string, string>>()))
+                .Setup(x => x.Submit<InsureShipSubmitClaimResponse>(AnyString, AnyIStore, It.IsAny<Dictionary<string, string>>()))
                 .Returns(new InsureShipSubmitClaimResponse { Status = "Created" });
 
             var testObject = mock.Create<InsureShipSubmitClaimRequest>();
@@ -53,7 +53,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip.Net.Claim
         {
             var shipment = CreateShipment();
             mock.Mock<IInsureShipWebClient>()
-                .Setup(x => x.Submit<InsureShipSubmitClaimResponse>(AnyString, It.IsAny<Dictionary<string, string>>()))
+                .Setup(x => x.Submit<InsureShipSubmitClaimResponse>(AnyString, AnyIStore, It.IsAny<Dictionary<string, string>>()))
                 .Returns(new InsureShipSubmitClaimResponse { Status = "Created", ClaimID = 987 });
 
             var testObject = mock.Create<InsureShipSubmitClaimRequest>();
@@ -68,7 +68,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip.Net.Claim
         {
             var shipment = CreateShipment();
             mock.Mock<IInsureShipWebClient>()
-                .Setup(x => x.Submit<InsureShipSubmitClaimResponse>(AnyString, It.IsAny<Dictionary<string, string>>()))
+                .Setup(x => x.Submit<InsureShipSubmitClaimResponse>(AnyString, AnyIStore, It.IsAny<Dictionary<string, string>>()))
                 .Returns(GenericResult.FromError<InsureShipSubmitClaimResponse>("Foo"));
 
             var testObject = mock.Create<InsureShipSubmitClaimRequest>();

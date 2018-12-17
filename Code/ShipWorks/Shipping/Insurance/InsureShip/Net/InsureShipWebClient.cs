@@ -10,6 +10,7 @@ using Interapptive.Shared.Utility;
 using log4net;
 using Newtonsoft.Json;
 using ShipWorks.ApplicationCore.Logging;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Carriers;
 
 namespace ShipWorks.Shipping.Insurance.InsureShip.Net
@@ -24,12 +25,19 @@ namespace ShipWorks.Shipping.Insurance.InsureShip.Net
         private readonly IInsureShipSettings settings;
         private readonly ILogEntryFactory logEntryFactory;
         private readonly IHttpRequestSubmitterFactory requestSubmitterFactory;
+        private readonly IInsureShipCredentialRetriever credentialRetriever;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public InsureShipWebClient(IInsureShipSettings settings, IHttpRequestSubmitterFactory requestSubmitterFactory, ILogEntryFactory logEntryFactory, Func<Type, ILog> createLog)
+        public InsureShipWebClient(
+            IInsureShipSettings settings,
+            IHttpRequestSubmitterFactory requestSubmitterFactory,
+            IInsureShipCredentialRetriever credentialRetriever,
+            ILogEntryFactory logEntryFactory,
+            Func<Type, ILog> createLog)
         {
+            this.credentialRetriever = credentialRetriever;
             this.requestSubmitterFactory = requestSubmitterFactory;
             this.settings = settings;
             this.logEntryFactory = logEntryFactory;
@@ -39,7 +47,7 @@ namespace ShipWorks.Shipping.Insurance.InsureShip.Net
         /// <summary>
         /// Submits this request to InsureShip
         /// </summary>
-        public GenericResult<T> Submit<T>(string endpoint, Dictionary<string, string> postData)
+        public GenericResult<T> Submit<T>(string endpoint, IStoreEntity store, Dictionary<string, string> postData)
         {
 #if !DEBUG
             // Confirm that the connection with InsureShip has not been compromised
@@ -47,7 +55,7 @@ namespace ShipWorks.Shipping.Insurance.InsureShip.Net
 #endif
 
             Uri uri = new Uri(settings.ApiUrl.AbsoluteUri + endpoint);
-            var requestSubmitter = ConfigureNewRequestSubmitter(uri);
+            var requestSubmitter = ConfigureNewRequestSubmitter(store, uri);
 
             foreach (string key in postData.Keys)
             {
@@ -93,17 +101,19 @@ namespace ShipWorks.Shipping.Insurance.InsureShip.Net
         /// the allowable HTTP status codes.
         /// </summary>
         /// <param name="uri">The URI.</param>
-        protected IHttpVariableRequestSubmitter ConfigureNewRequestSubmitter(Uri uri)
+        protected IHttpVariableRequestSubmitter ConfigureNewRequestSubmitter(IStoreEntity store, Uri uri)
         {
             var requestSubmitter = requestSubmitterFactory.GetHttpVariableRequestSubmitter();
 
             requestSubmitter.Uri = uri;
             requestSubmitter.AllowHttpStatusCodes(GetAllowedCodes());
 
+            var credentials = credentialRetriever.Get(store);
+
             return requestSubmitter
                 .AddHeader("Accept", "application/json")
-                .AddVariable("client_id", settings.ClientID)
-                .AddVariable("api_key", settings.ApiKey); ;
+                .AddVariable("client_id", credentials.ClientID)
+                .AddVariable("api_key", credentials.ApiKey);
         }
 
         /// <summary>
