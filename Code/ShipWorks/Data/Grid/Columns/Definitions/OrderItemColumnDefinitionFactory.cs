@@ -97,6 +97,34 @@ namespace ShipWorks.Data.Grid.Columns.Definitions
                              new GridColumnFunctionValueProvider(FormatDimensions),
                              new GridColumnSortProvider(OrderItemFields.Length)),
 
+                         new GridColumnDefinition("{0B860209-2206-4DE6-BD3B-FF63656F5EA5}", false,
+                            new GridTextDisplayType(), "Brand", "Nike",
+                            OrderItemFields.Brand),
+
+                         new GridColumnDefinition("{40E061A2-4A17-436E-9C7E-04DEC418F7D7}", false,
+                            new GridTextDisplayType(), "MPN", "Y-R0011",
+                            OrderItemFields.MPN),
+
+                         new GridColumnDefinition("{E44EE6C5-A97A-48DF-A459-46EBCE009ABF}", false,
+                             new GridTextDisplayType(), "Custom Field 1", "Custom Field 1",
+                             OrderItemFields.Custom1),
+
+                         new GridColumnDefinition("{85240BD3-DDCC-4375-A135-6AC28D6A64D1}", false,
+                             new GridTextDisplayType(), "Custom Field 2", "Custom Field 2",
+                             OrderItemFields.Custom2),
+
+                         new GridColumnDefinition("{D6B1FB86-1BCC-45FE-ACDD-28971D3B10EE}", false,
+                             new GridTextDisplayType(), "Custom Field 3", "Custom Field 3",
+                             OrderItemFields.Custom3),
+
+                         new GridColumnDefinition("{05379D78-B169-42E8-8182-42FC9D5305F9}", false,
+                             new GridTextDisplayType(), "Custom Field 4", "Custom Field 4",
+                             OrderItemFields.Custom4),
+
+                         new GridColumnDefinition("{02870994-3692-4842-B59C-3624B9A4F97B}", false,
+                             new GridTextDisplayType(), "Custom Field 5", "Custom Field 5",
+                             OrderItemFields.Custom5),
+
                         #region Infopia
 
                         new GridColumnDefinition("{E0286DBF-5663-46cc-A368-2C9898360B03}",
