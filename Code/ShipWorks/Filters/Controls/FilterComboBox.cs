@@ -102,6 +102,22 @@ namespace ShipWorks.Filters.Controls
             }
         }
 
+        /// <summary>
+        /// Controls if the my filters should be displayed
+        /// </summary>
+        [DefaultValue(false)]
+        [Category("Behavior")]
+        public bool AllowMyFilters
+        {
+            get
+            {
+                return filterTree.AllowMyFilters;
+            }
+            set
+            {
+                filterTree.AllowMyFilters = value;
+            }
+        }
 
         /// <summary>
         /// Indicates if the active search node - if any - will be displayed in the grid.

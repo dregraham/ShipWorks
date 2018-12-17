@@ -56,6 +56,8 @@ namespace ShipWorks.Shipping.Settings.Defaults
         {
             InitializeComponent();
 
+            filterCombo.AllowMyFilters = false;
+
             toolStipDelete.Renderer = new NoBorderToolStripRenderer();
             originalFilterID = NoFilterSelectedID;
         }

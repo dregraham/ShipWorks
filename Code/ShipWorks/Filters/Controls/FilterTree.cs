@@ -186,6 +186,12 @@ namespace ShipWorks.Filters.Controls
         public bool AlwaysShowMyFilters { get; set; } = false;
 
         /// <summary>
+        /// Indicates if the "My Filters" should be shown
+        /// </summary>
+        [Category("Behavior")]
+        public bool AllowMyFilters { get; set; } = true;
+
+        /// <summary>
         /// Should disabled filters be hidden
         /// </summary>
         [DefaultValue(false)]
@@ -976,7 +982,7 @@ namespace ShipWorks.Filters.Controls
             FilterNodeEntity filterNode = myLayout.FilterNode;
 
             // Only show "My Filters" if there are any
-            if (filterNode.ChildNodes.Count > 0 || FilterScope == FilterScope.MyFilters || AlwaysShowMyFilters)
+            if (filterNode.ChildNodes.Count > 0 && AllowMyFilters && AlwaysShowMyFilters)
             {
                 // We are not already showing it
                 if (!nodeOwnerMap.ContainsKey(filterNode))
