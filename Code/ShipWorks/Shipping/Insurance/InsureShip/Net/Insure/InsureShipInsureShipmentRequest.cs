@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using Interapptive.Shared.Business;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
 using log4net;
@@ -59,10 +60,6 @@ namespace ShipWorks.Shipping.Insurance.InsureShip.Net.Insure
         /// </summary>
         private Dictionary<string, string> CreatePostData(ShipmentEntity shipment)
         {
-            // TODO: Verify that iParcel always saves to InsuranceValue
-
-            // PopulateShipmentOrder();
-
             ShipmentType shipmentType = shipmentTypeManager.Get(shipment);
             Dictionary<string, string> postData = new Dictionary<string, string>();
             postData.Add("customer_name", shipment.ShipPerson.ParsedName.FullName);
@@ -70,12 +67,14 @@ namespace ShipWorks.Shipping.Insurance.InsureShip.Net.Insure
             postData.Add("lastname", shipment.ShipLastName);
             postData.Add("items_ordered", string.Join(",", shipment.Order.OrderItems.Select(oi => oi.Name)));
             postData.Add("order_total", shipment.Order.OrderTotal.ToString("#0.##"));
-            postData.Add("subtotal", shipment.Order.SubTotal.ToString("#0.##"));
+            postData.Add("subtotal", insuranceUtility.GetInsuredValue(shipment).ToString("#0.##"));
             postData.Add("currency", "USD");
-            postData.Add("coverage_amount", insuranceUtility.GetInsuredValue(shipment).ToString(CultureInfo.InvariantCulture));
+
+            // The 100 amount is arbitrary, and doesn't matter since we're only interested in the rate, not the total cost
+            postData.Add("coverage_amount", insuranceUtility.GetInsuranceCost(shipment, 100).ShipWorksRate?.ToString("#0.##"));
             postData.Add("shipping_amount", shipment.ShipmentCost.ToString("#0.##"));
             postData.Add("order_number", InsureShipShipmentIdentifier.GetUniqueShipmentId(shipment));
-            //postData.Add("offer_id", ""); // Is this the same as rate_id??
+            postData.Add("offer_id", "57611"); // This is the type of insurance coverage, and the value came from InsureShip
             //postData.Add("rate_id", "11");
             postData.Add("email", shipment.ShipEmail);
             postData.Add("phone", shipment.ShipPhone);
@@ -84,20 +83,23 @@ namespace ShipWorks.Shipping.Insurance.InsureShip.Net.Insure
             postData.Add("order_date", shipment.Order.OrderDate.ToString(CultureInfo.InvariantCulture));
             postData.Add("ship_date", shipment.ShipDate.ToString(CultureInfo.InvariantCulture));
 
-            postData.Add("shipping_address1", shipment.ShipStreet1);
-            postData.Add("shipping_address2", shipment.ShipStreet2);
-            postData.Add("shipping_city", shipment.ShipCity);
-            postData.Add("shipping_state", shipment.ShipStateProvCode);
-            postData.Add("shipping_zip", shipment.ShipPostalCode);
-            postData.Add("shipping_country", shipment.ShipPerson.AdjustedCountryCode(ShipmentTypeCode.None));
-            postData.Add("billing_address1", shipment.Order.BillStreet1);
-            postData.Add("billing_address2", shipment.Order.BillStreet2);
-            postData.Add("billing_city", shipment.Order.BillCity);
-            postData.Add("billing_state", shipment.Order.BillStateProvCode);
-            postData.Add("billing_zip", shipment.Order.BillPostalCode);
-            postData.Add("billing_country", shipment.Order.BillPerson.AdjustedCountryCode(ShipmentTypeCode.None));
+            AddAddress("shipping", shipment.ShipPerson, postData);
+            AddAddress("billing", shipment.Order.BillPerson, postData);
 
             return postData;
+        }
+
+        /// <summary>
+        /// Add an address to the post data
+        /// </summary>
+        private static void AddAddress(string prefix, PersonAdapter person, Dictionary<string, string> postData)
+        {
+            postData.Add(prefix + "_address1", person.Street1);
+            postData.Add(prefix + "_address2", person.Street2);
+            postData.Add(prefix + "_city", person.City);
+            postData.Add(prefix + "_state", person.StateProvCode);
+            postData.Add(prefix + "_zip", person.PostalCode);
+            postData.Add(prefix + "_country", person.AdjustedCountryCode(ShipmentTypeCode.None));
         }
     }
 }
