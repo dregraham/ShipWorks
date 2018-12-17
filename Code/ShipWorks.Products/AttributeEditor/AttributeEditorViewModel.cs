@@ -138,6 +138,7 @@ namespace ShipWorks.Products.AttributeEditor
 
             foreach (ProductVariantAttributeValueEntity attribute in ProductAttributes)
             {
+                productVariant.Product.Attributes.Add(attribute.ProductAttribute);
                 productVariant.Attributes.Add(attribute);
             }
         }
