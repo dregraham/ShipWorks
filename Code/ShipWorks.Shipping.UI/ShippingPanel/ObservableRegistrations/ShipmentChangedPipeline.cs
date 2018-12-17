@@ -50,7 +50,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations
         /// </summary>
         private void OnShipmentChanged(ShipmentChangedMessage shipmentChangedMessage, ShippingPanelViewModel viewModel)
         {
-            if (IsSenderViewModelOrDescendant(shipmentChangedMessage, viewModel))
+            if (IsSenderViewModelOrDescendant(shipmentChangedMessage, viewModel) || shipmentChangedMessage.Sender is ShippingProfilePipeline)
             {
                 return;
             }
