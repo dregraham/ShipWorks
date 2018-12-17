@@ -211,7 +211,7 @@
                     Height="23"
                     Margin="0,0,5,0"
                     IsEnabled="{Binding IsProfileSelected, Converter={StaticResource InvertBoolean}}"
-                    MaxLength="3"
+                    MaxLength="5"
                     Style="{StaticResource FormTextBox}"
                     Text="{Binding ShipmentModel.ShipmentAdapter.Shipment.Postal.DimsLength,
                             Converter={StaticResource StringEmptyWhenEqualToParameter},
@@ -222,7 +222,7 @@
                     Height="23"
                     Margin="0,0,5,0"
                     IsEnabled="{Binding IsProfileSelected, Converter={StaticResource InvertBoolean}}"
-                    MaxLength="3"
+                    MaxLength="5"
                     Style="{StaticResource FormTextBox}"
                     Text="{Binding ShipmentModel.ShipmentAdapter.Shipment.Postal.DimsWidth,
                             Converter={StaticResource StringEmptyWhenEqualToParameter},
@@ -233,7 +233,7 @@
                     Height="23"
                     Margin="0,0,5,0"
                     IsEnabled="{Binding IsProfileSelected, Converter={StaticResource InvertBoolean}}"
-                    MaxLength="3"
+                    MaxLength="5"
                     Style="{StaticResource FormTextBox}"
                     Text="{Binding ShipmentModel.ShipmentAdapter.Shipment.Postal.DimsHeight,
                             Converter={StaticResource StringEmptyWhenEqualToParameter},
