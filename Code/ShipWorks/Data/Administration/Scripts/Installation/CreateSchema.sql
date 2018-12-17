@@ -956,7 +956,9 @@ CREATE TABLE [dbo].[Store]
 [ManualOrderPrefix] [nvarchar] (10) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [ManualOrderPostfix] [nvarchar] (10) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [InitialDownloadDays] [int] NULL,
-[InitialDownloadOrder] [bigint] NULL
+[InitialDownloadOrder] [bigint] NULL,
+[InsureShipClientID] [bigint] NULL,
+[InsureShipApiKey] [nvarchar] (255) NULL
 )
 GO
 PRINT N'Creating primary key [PK_Store] on [dbo].[Store]'

@@ -161,7 +161,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// <summary>
         /// Log the given insurance claim to Tango.
         /// </summary>
-        public virtual void LogSubmitInsuranceClaim(ShipmentEntity shipment) { }
+        public override void LogSubmitInsuranceClaim(ShipmentEntity shipment) { }
 
         /// <summary>
         /// Get an xml document from the given file
