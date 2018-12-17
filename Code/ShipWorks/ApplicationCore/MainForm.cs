@@ -953,11 +953,19 @@ namespace ShipWorks
         /// </summary>
         private void UpdateUIMode(IUserEntity user, bool startHeartbeat)
         {
+            bool hasProductsPermissions = UserSession.Security.HasPermission(PermissionType.ManageProducts);
+            mainMenuItemProducts.Visible = hasProductsPermissions;
+
             heartBeat?.Stop();
-            var currentMode = currentUserSettings.GetUIMode();
 
             UnloadOrderLookupMode();
             UnloadProductsMode();
+
+            UIMode currentMode = currentUserSettings.GetUIMode();
+            if (currentMode == UIMode.Products && !hasProductsPermissions)
+            {
+                currentMode = UIMode.Batch;
+            }
 
             ToggleUiModeCheckbox(currentMode);
 
