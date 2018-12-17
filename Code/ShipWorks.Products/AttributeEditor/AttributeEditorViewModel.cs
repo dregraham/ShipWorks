@@ -135,6 +135,7 @@ namespace ShipWorks.Products.AttributeEditor
         {
             productVariant.Attributes.RemovedEntitiesTracker = new ProductAttributeCollection();
             productVariant.Attributes.Clear();
+            productVariant.Product.Attributes.Clear();
 
             foreach (ProductVariantAttributeValueEntity attribute in ProductAttributes)
             {
