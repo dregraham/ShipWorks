@@ -44,11 +44,14 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
         private static bool started = false;
         // WS returns the names of the packages differently, so create a mapping of WS package type names 
 
+        private static ITangoLogShipmentProcessor tangoLogShipmentProcessor;
+
         /// <summary>
         /// Starts monitoring for WorldShip shipments processed from WorldShip
         /// </summary>
         public static void Start()
         {
+            tangoLogShipmentProcessor = IoC.UnsafeGlobalLifetimeScope.Resolve<ITangoLogShipmentProcessor>();
             started = true;
         }
 
@@ -183,15 +186,15 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
                         (i.VoidIndicator != null && i.VoidIndicator.ToUpperInvariant() == "N"));
 
             List<WorldShipProcessedGrouping> worldShipProcessedGroupings =
-    worldShipShipments.GroupBy(import => long.Parse(import.ShipmentID),
-        (shipmentId, importEntries) =>
-            new WorldShipProcessedGrouping(shipmentId,
-                importEntries.Where(
-                    i =>
-                        (i.ShipmentIdCalculated == shipmentId || i.ShipmentID == shipmentId.ToString()) &&
-                        ((i.VoidIndicator == null) ||
-                         (i.VoidIndicator != null && i.VoidIndicator.ToUpperInvariant() == "N"))).ToList())
-        ).ToList();
+                worldShipShipments.GroupBy(import => long.Parse(import.ShipmentID),
+                    (shipmentId, importEntries) =>
+                        new WorldShipProcessedGrouping(shipmentId,
+                            importEntries.Where(
+                                i =>
+                                    (i.ShipmentIdCalculated == shipmentId || i.ShipmentID == shipmentId.ToString()) &&
+                                    ((i.VoidIndicator == null) ||
+                                     (i.VoidIndicator != null && i.VoidIndicator.ToUpperInvariant() == "N"))).ToList())
+                    ).ToList();
 
             // Process each shipped entry
             foreach (WorldShipProcessedGrouping worldShipProcessGroup in worldShipProcessedGroupings)
@@ -458,14 +461,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
                 {
                     try
                     {
-                        ITangoWebClient tangoWebClient = new TangoWebClientFactory().CreateWebClient();
-                        shipmentForTango.OnlineShipmentID = tangoWebClient.LogShipment(store, shipmentForTango);
-
-                        using (SqlAdapter adapter = new SqlAdapter())
-                        {
-                            adapter.SaveAndRefetch(shipmentForTango);
-                            adapter.Commit();
-                        }
+                        tangoLogShipmentProcessor.Add(store, shipmentForTango);
                     }
                     catch (ShipWorksLicenseException ex)
                     {

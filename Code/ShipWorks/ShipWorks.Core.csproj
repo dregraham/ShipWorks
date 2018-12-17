@@ -763,6 +763,8 @@
     <Compile Include="ApplicationCore\Interaction\SelectionDependentEntry.cs" />
     <Compile Include="ApplicationCore\IoCLogRequestModule.cs" />
     <Compile Include="ApplicationCore\IRegistrationOverride.cs" />
+    <Compile Include="ApplicationCore\Licensing\ITangoLogShipmentProcessor.cs" />
+    <Compile Include="ApplicationCore\Licensing\TangoLogShipmentProcessor.cs" />
     <Compile Include="ApplicationCore\MainForm.BasicUIHeartbeat.cs">
       <SubType>Form</SubType>
     </Compile>

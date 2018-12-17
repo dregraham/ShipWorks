@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -40,10 +39,9 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// insured did not make it up into tango, but the shipment did actually process.
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public override string LogShipment(StoreEntity store, ShipmentEntity shipment, bool isRetry = false)
+        public override void LogShipment(StoreEntity store, ShipmentEntity shipment)
         {
             log.Fatal($"Shipment logged to Tango for shipment id: {shipment.ShipmentID}");
-            return Guid.NewGuid().ToString("D");
         }
 
         /// <summary>
