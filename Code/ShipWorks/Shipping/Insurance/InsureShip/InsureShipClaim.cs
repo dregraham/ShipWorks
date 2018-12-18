@@ -14,7 +14,6 @@ namespace ShipWorks.Shipping.Insurance.InsureShip
     [Component]
     public class InsureShipClaim : IInsureShipClaim
     {
-        private readonly IInsureShipSettings settings;
         private readonly ILog log;
         private readonly IInsureShipSubmitClaimRequest createClaimRequest;
         private readonly IInsureShipClaimStatusRequest getStatusRequest;
@@ -37,7 +36,6 @@ namespace ShipWorks.Shipping.Insurance.InsureShip
             this.claimValidator = claimValidator;
             this.getStatusRequest = getStatusRequest;
             this.createClaimRequest = createClaimRequest;
-            this.settings = settings;
             this.log = createLog(GetType());
         }
 
