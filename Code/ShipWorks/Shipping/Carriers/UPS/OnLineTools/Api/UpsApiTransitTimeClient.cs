@@ -25,7 +25,20 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
     public class UpsApiTransitTimeClient
     {
         static readonly ILog log = LogManager.GetLogger(typeof(UpsApiTransitTimeClient));
-
+        
+        private const string TwoDayAirSaturdayTransitCode = "2DAS";
+        private const string NextDayAirSaturdayTransitCode = "1DAS";
+        private const string NextDayAirAMSaturdayTransitCode = "1DMS";
+              
+        // These codes are found on page 52 of this doc 
+        // V:/Partners/Shipping/UPS/Time in Transit/Time_In_Transit2018/TimeInTransit/Developers Guide/Time In Transit XML Developer Guide.pdf
+        private static readonly List<string> saturdayTransitCodes = new List<string>
+        {
+            TwoDayAirSaturdayTransitCode,
+            NextDayAirSaturdayTransitCode,
+            NextDayAirAMSaturdayTransitCode
+        };
+        
         /// <summary>
         /// Get transit times for the given shipment
         /// Uses counter rates if specified
@@ -201,7 +214,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
                     // treat the service the same everywhere else.
                     if (shipment.Ups.SaturdayDelivery &&
                         UpsUtility.CanDeliverOnSaturday((UpsServiceType) shipment.Ups.Service, shipment.ShipDate) &&
-                        (transitCode == "2DAS" || transitCode == "1DAS" || transitCode == "1DMS"))
+                        saturdayTransitCodes.Contains(transitCode))
                     {
                         transitCode = transitCode.Remove(transitCode.Length - 1);
                     }
