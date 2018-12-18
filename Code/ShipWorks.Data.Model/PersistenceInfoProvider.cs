@@ -2240,11 +2240,11 @@ namespace ShipWorks.Data.Model
 			this.AddElementFieldMapping("OdbcStoreEntity", "ImportMap", "ImportMap", false, "NVarChar", 2147483647, 0, 0, false, "", null, typeof(System.String), 2);
 			this.AddElementFieldMapping("OdbcStoreEntity", "ImportStrategy", "ImportStrategy", false, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 3);
 			this.AddElementFieldMapping("OdbcStoreEntity", "ImportColumnSourceType", "ImportColumnSourceType", false, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 4);
-			this.AddElementFieldMapping("OdbcStoreEntity", "ImportColumnSource", "ImportColumnSource", false, "NVarChar", 2048, 0, 0, false, "", null, typeof(System.String), 5);
+			this.AddElementFieldMapping("OdbcStoreEntity", "ImportColumnSource", "ImportColumnSource", false, "NVarChar", 2147483647, 0, 0, false, "", null, typeof(System.String), 5);
 			this.AddElementFieldMapping("OdbcStoreEntity", "UploadStrategy", "UploadStrategy", false, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 6);
 			this.AddElementFieldMapping("OdbcStoreEntity", "UploadMap", "UploadMap", false, "NVarChar", 2147483647, 0, 0, false, "", null, typeof(System.String), 7);
 			this.AddElementFieldMapping("OdbcStoreEntity", "UploadColumnSourceType", "UploadColumnSourceType", false, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 8);
-			this.AddElementFieldMapping("OdbcStoreEntity", "UploadColumnSource", "UploadColumnSource", false, "NVarChar", 2048, 0, 0, false, "", null, typeof(System.String), 9);
+			this.AddElementFieldMapping("OdbcStoreEntity", "UploadColumnSource", "UploadColumnSource", false, "NVarChar", 2147483647, 0, 0, false, "", null, typeof(System.String), 9);
 			this.AddElementFieldMapping("OdbcStoreEntity", "UploadConnectionString", "UploadConnectionString", false, "NVarChar", 2048, 0, 0, false, "", null, typeof(System.String), 10);
 			this.AddElementFieldMapping("OdbcStoreEntity", "ImportOrderItemStrategy", "ImportOrderItemStrategy", false, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 11);
 		}

@@ -6160,12 +6160,12 @@ CREATE TABLE [dbo].[OdbcStore]
     [ImportMap] [nvarchar](max) NOT NULL,
     [ImportStrategy] [int] NOT NULL,
     [ImportColumnSourceType] [int] NOT NULL,
-    [ImportColumnSource] [nvarchar](2048) NOT NULL,
+    [ImportColumnSource] [nvarchar](max) NOT NULL,
     [ImportOrderItemStrategy] [int] NOT NULL,
     [UploadStrategy] [int] NOT NULL,
     [UploadMap] [nvarchar](max) NOT NULL,
     [UploadColumnSourceType] [int] NOT NULL,
-    [UploadColumnSource] [nvarchar](2048) NOT NULL,
+    [UploadColumnSource] [nvarchar](max) NOT NULL,
     [UploadConnectionString] [nvarchar](2048) NOT NULL,
 )
 GO
