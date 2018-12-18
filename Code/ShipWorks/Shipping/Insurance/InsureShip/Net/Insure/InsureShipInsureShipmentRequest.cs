@@ -60,6 +60,8 @@ namespace ShipWorks.Shipping.Insurance.InsureShip.Net.Insure
         /// </summary>
         private Dictionary<string, string> CreatePostData(ShipmentEntity shipment)
         {
+            var insuredAmount = insuranceUtility.GetInsuredValue(shipment);
+
             ShipmentType shipmentType = shipmentTypeManager.Get(shipment);
             Dictionary<string, string> postData = new Dictionary<string, string>();
             postData.Add("customer_name", shipment.ShipPerson.ParsedName.FullName);
@@ -67,15 +69,12 @@ namespace ShipWorks.Shipping.Insurance.InsureShip.Net.Insure
             postData.Add("lastname", shipment.ShipLastName);
             postData.Add("items_ordered", string.Join(",", shipment.Order.OrderItems.Select(oi => oi.Name)));
             postData.Add("order_total", shipment.Order.OrderTotal.ToString("#0.##"));
-            postData.Add("subtotal", insuranceUtility.GetInsuredValue(shipment).ToString("#0.##"));
+            postData.Add("subtotal", insuredAmount.ToString("#0.##"));
             postData.Add("currency", "USD");
-
-            // The 100 amount is arbitrary, and doesn't matter since we're only interested in the rate, not the total cost
-            postData.Add("coverage_amount", insuranceUtility.GetInsuranceCost(shipment, 100).ShipWorksRate?.ToString("#0.##"));
+            postData.Add("coverage_amount", insuranceUtility.GetInsuranceCost(shipment, insuredAmount).ShipWorks?.ToString("#0.##"));
             postData.Add("shipping_amount", shipment.ShipmentCost.ToString("#0.##"));
             postData.Add("order_number", InsureShipShipmentIdentifier.GetUniqueShipmentId(shipment));
             postData.Add("offer_id", "57611"); // This is the type of insurance coverage, and the value came from InsureShip
-            //postData.Add("rate_id", "11");
             postData.Add("email", shipment.ShipEmail);
             postData.Add("phone", shipment.ShipPhone);
             postData.Add("carrier", shipmentType.ShipmentTypeName);
