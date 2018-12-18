@@ -537,6 +537,7 @@
     <Compile Include="Shipping\Insurance\InsuranceChoiceTest.cs" />
     <Compile Include="Shipping\Insurance\InsureShip\InsureShipCarrierCodeTest.cs" />
     <Compile Include="Shipping\Insurance\InsureShip\InsureShipClaimTest.cs" />
+    <Compile Include="Shipping\Insurance\InsureShip\InsureShipClaimValidatorTest.cs" />
     <Compile Include="Shipping\Insurance\InsureShip\Net\Claim\InsureShipClaimStatusRequestTest.cs" />
     <Compile Include="Shipping\Insurance\InsureShip\Net\Claim\InsureShipSubmitClaimRequestTest.cs" />
     <Compile Include="Shipping\Insurance\InsureShip\Net\InsureShipWebClientTest.cs" />

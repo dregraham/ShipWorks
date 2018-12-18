@@ -18,6 +18,7 @@ namespace ShipWorks.Shipping.Insurance.InsureShip
         private readonly ILog log;
         private readonly IInsureShipSubmitClaimRequest createClaimRequest;
         private readonly IInsureShipClaimStatusRequest getStatusRequest;
+        private readonly IInsureShipClaimValidator claimValidator;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="InsureShipClaim" /> class.
@@ -27,8 +28,13 @@ namespace ShipWorks.Shipping.Insurance.InsureShip
         /// <param name="requestFactory">The request factory.</param>
         /// <param name="settings">The settings.</param>
         /// <param name="log">The log.</param>
-        public InsureShipClaim(IInsureShipSubmitClaimRequest createClaimRequest, IInsureShipClaimStatusRequest getStatusRequest, IInsureShipSettings settings, Func<Type, ILog> createLog)
+        public InsureShipClaim(
+            IInsureShipClaimValidator claimValidator,
+            IInsureShipSubmitClaimRequest createClaimRequest,
+            IInsureShipClaimStatusRequest getStatusRequest,
+            Func<Type, ILog> createLog)
         {
+            this.claimValidator = claimValidator;
             this.getStatusRequest = getStatusRequest;
             this.createClaimRequest = createClaimRequest;
             this.settings = settings;
@@ -44,7 +50,7 @@ namespace ShipWorks.Shipping.Insurance.InsureShip
         /// <param name="items">The items.</param>
         /// <param name="damageAmount">The damage amount.</param>
         public Result Submit(InsureShipClaimType claimType, ShipmentEntity shipment, Action<InsurancePolicyEntity> updatePolicy) =>
-            IsShipmentEligibleToSubmitClaim(claimType, shipment)
+            claimValidator.IsShipmentEligibleToSubmitClaim(claimType, shipment)
                 .Do(() =>
                 {
                     shipment.InsurancePolicy.ClaimType = (int) claimType;
@@ -65,49 +71,6 @@ namespace ShipWorks.Shipping.Insurance.InsureShip
                            shipment.ShipmentID);
 
             log.Error(message, ex);
-        }
-
-        /// <summary>
-        /// Determines whether a shipment is eligible for a claim to be submitted.
-        /// </summary>
-        private Result IsShipmentEligibleToSubmitClaim(InsureShipClaimType claimType, IShipmentEntity shipment)
-        {
-            if (shipment.InsurancePolicy?.CreatedWithApi != true)
-            {
-                // To keep the logic for submitting a claim simpler, don't allow any shipments through
-                // that haven't had a claim submitted via the API.
-                return Result.FromError(string.Format("A claim cannot be made through ShipWorks for this shipment. Please contact InsureShip at {0} for help submitting a claim.", settings.InsureShipPhoneNumber));
-            }
-
-            if (shipment.InsurancePolicy.ClaimID.HasValue)
-            {
-                return Result.FromError("A claim has already been made for this shipment.");
-            }
-
-            DateTime allowedSubmitClaimDate = shipment.ShipDate.Date + settings.ClaimSubmissionWaitingPeriod;
-            if (shipment.Processed)
-            {
-                if (claimType == InsureShipClaimType.Damage || DateTime.Now > allowedSubmitClaimDate)
-                {
-                    // The appropriate amount of time has passed since the shipment was shipped
-                    log.InfoFormat("Shipment {0} is eligible for submitting a claim to InsureShip.", shipment.ShipmentID);
-                    return Result.FromSuccess();
-                }
-                else
-                {
-                    log.InfoFormat("A claim cannot be submitted for shipment {0}. It hasn't been {1} days since the ship date.", shipment.ShipmentID, settings.ClaimSubmissionWaitingPeriod.TotalDays);
-                }
-            }
-            else
-            {
-                log.InfoFormat("Shipment {0} has not been processed. A claim cannot be submitted for an unprocessed shipment.", shipment.ShipmentID);
-            }
-
-            var userMessage = string.Format(
-                "The shipment may still be in transit. You may submit a \"Lost\" or \"Stolen\" claim on or after {0}.",
-                allowedSubmitClaimDate.ToString("MMMM dd, yyyy"));
-
-            return new InsureShipException(userMessage);
         }
 
         /// <summary>

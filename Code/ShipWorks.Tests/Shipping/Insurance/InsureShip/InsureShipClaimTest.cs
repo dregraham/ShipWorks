@@ -1,463 +1,163 @@
 ﻿using System;
 using Autofac.Extras.Moq;
+using Interapptive.Shared.Utility;
 using log4net;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Insurance.InsureShip;
+using ShipWorks.Shipping.Insurance.InsureShip.Net.Claim;
 using ShipWorks.Tests.Shared;
+using ShipWorks.Tests.Shared.EntityBuilders;
 using Xunit;
+using static ShipWorks.Tests.Shared.ExtensionMethods.ParameterShorteners;
 
 namespace ShipWorks.Tests.Shipping.Insurance.InsureShip
 {
     public class InsureShipClaimTest
     {
         private readonly AutoMock mock;
-
-        //private InsureShipClaim testObject;
-
-        //private Mock<IInsureShipSettings> settings;
-        //private Mock<IInsureShipRequestFactory> requestFactory;
-        //private Mock<IInsureShipResponseFactory> responseFactory;
-
-        //private Mock<InsureShipRequestBase> request;
-        //private Mock<IInsureShipResponse> response;
-
-        //private Mock<ILog> log;
-
-        //private ShipmentEntity shipment;
-        //private InsureShipAffiliate affiliate;
+        private readonly ShipmentEntity shipment;
 
         public InsureShipClaimTest()
         {
             mock = AutoMockExtensions.GetLooseThatReturnsMocks();
 
-            //settings = new Mock<IInsureShipSettings>();
-            //settings.Setup(s => s.DistributorID).Returns("D00002");
-            //settings.Setup(s => s.ClientID).Returns("test2");
-            //settings.Setup(s => s.ApiKey).Returns("password");
-            //settings.Setup(s => s.ApiUrl).Returns(new Uri("https://osisstagingapi.insureship.com/api/"));
-            //settings.Setup(s => s.ClaimSubmissionWaitingPeriod).Returns(TimeSpan.FromDays(7));
-
-            // Create a shipment that is eligible for submitting a claim
-            //shipment = new ShipmentEntity(100031)
-            //{
-            //    Processed = true,
-            //    ShipDate = DateTime.UtcNow.Subtract(TimeSpan.FromDays(8)),
-            //    InsurancePolicy = new InsurancePolicyEntity()
-            //    {
-            //        CreatedWithApi = true
-            //    }
-            //};
-
-            //affiliate = new InsureShipAffiliate("test", "test");
-
-            //log = new Mock<ILog>();
-            //log.Setup(l => l.Error(It.IsAny<object>(), It.IsAny<InsureShipResponseException>()));
-            //log.Setup(l => l.Error(It.IsAny<string>()));
-            //log.Setup(l => l.InfoFormat(It.IsAny<string>(), It.IsAny<int>()));
-            //log.Setup(l => l.InfoFormat(It.IsAny<string>(), It.IsAny<string>()));
-            //log.Setup(l => l.InfoFormat(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()));
-
-            //responseFactory = new Mock<IInsureShipResponseFactory>();
-            //response = new Mock<IInsureShipResponse>();
-
-            //request = new Mock<InsureShipRequestBase>(responseFactory.Object, shipment, affiliate, settings.Object, log.Object, "Sample");
-            //request.Setup(r => r.Submit()).Returns(response.Object);
-
-            //requestFactory = new Mock<IInsureShipRequestFactory>();
-            //requestFactory.Setup(f => f.CreateSubmitClaimRequest(It.IsAny<ShipmentEntity>(), It.IsAny<InsureShipAffiliate>())).Returns(request.Object);
-            //requestFactory.Setup(f => f.CreateClaimStatusRequest(It.IsAny<ShipmentEntity>(), It.IsAny<InsureShipAffiliate>())).Returns(request.Object);
-
-            //response.Setup(r => r.Process()).Returns(InsureShipResponseCode.Success);
-
-            //testObject = new InsureShipClaim(shipment, affiliate, requestFactory.Object, settings.Object, log.Object);
+            mock.Mock<IInsureShipClaimValidator>()
+                .Setup(x => x.IsShipmentEligibleToSubmitClaim(It.IsAny<InsureShipClaimType>(), AnyIShipment))
+                .Returns(Result.FromSuccess());
+            shipment = Create.Shipment()
+                .Set(x => x.InsurancePolicy = Create.Entity<InsurancePolicyEntity>().Build())
+                .Build();
         }
 
         [Fact]
-        public void Submit_ReturnsFailure_WhenClaimHasAlreadyBeenMade()
+        public void Submit_DelegatesToValidator()
         {
-            var shipment = CreateShipment();
-            shipment.InsurancePolicy.ClaimID = 1;
             var testObject = mock.Create<InsureShipClaim>();
 
-            var result = testObject.Submit(InsureShipClaimType.Damage, shipment, x => { });
+            testObject.Submit(InsureShipClaimType.Damage, shipment, _ => { });
+
+            mock.Mock<IInsureShipClaimValidator>()
+                .Verify(x => x.IsShipmentEligibleToSubmitClaim(InsureShipClaimType.Damage, shipment));
+        }
+
+        [Fact]
+        public void Submit_LogsError_WhenShipmentIsNotValidForClaim()
+        {
+            mock.Mock<IInsureShipClaimValidator>()
+                .Setup(x => x.IsShipmentEligibleToSubmitClaim(It.IsAny<InsureShipClaimType>(), AnyIShipment))
+                .Returns(Result.FromError("Foo"));
+            var testObject = mock.Create<InsureShipClaim>();
+
+            testObject.Submit(InsureShipClaimType.Damage, Create.Shipment().Build(), _ => { });
+
+            mock.Mock<ILog>()
+                .Verify(x => x.Error("An error occurred trying to submit a claim to InsureShip on shipment 0.", It.IsAny<Exception>()));
+        }
+
+        [Fact]
+        public void Submit_ReturnsFailure_WhenShipmentIsNotValidForClaim()
+        {
+            mock.Mock<IInsureShipClaimValidator>()
+                .Setup(x => x.IsShipmentEligibleToSubmitClaim(It.IsAny<InsureShipClaimType>(), AnyIShipment))
+                .Returns(Result.FromError("Foo"));
+            var testObject = mock.Create<InsureShipClaim>();
+
+            var result = testObject.Submit(InsureShipClaimType.Damage, Create.Shipment().Build(), _ => { });
 
             Assert.False(result.Success);
         }
 
         [Fact]
-        public void Submit_LogsMessage_WhenClaimHasAlreadyBeenMade()
+        public void Submit_CallsUpdateMethod_WithClaimTypeSet()
         {
-            var shipment = CreateShipment();
-            shipment.InsurancePolicy.ClaimID = 1;
             var testObject = mock.Create<InsureShipClaim>();
+            var called = false;
 
-            testObject.Submit(InsureShipClaimType.Damage, shipment, x => { });
-
-            mock.Mock<ILog>()
-                .Verify(l => l.Error(
-                    $"An error occurred trying to submit a claim to InsureShip on shipment {shipment.ShipmentID}.",
-                    It.Is<Exception>(e => e.Message == "A claim has already been made for this shipment.")));
-        }
-
-        [Fact]
-        public void Submit_ThrowsInsureShipException_WhenShipmentIsNotProcessed()
-        {
-            var shipment = CreateShipment();
-            shipment.Processed = false;
-            var testObject = mock.Create<InsureShipClaim>();
-
-            var result = testObject.Submit(InsureShipClaimType.Damage, shipment, x => { });
-
-            Assert.False(result.Success);
-        }
-
-        [Fact]
-        public void Submit_LogsMessage_WhenShipmentIsNotProcessed()
-        {
-            var shipment = CreateShipment();
-            shipment.Processed = false;
-            var testObject = mock.Create<InsureShipClaim>();
-
-            var result = testObject.Submit(InsureShipClaimType.Damage, shipment, x => { });
-
-            mock.Mock<ILog>()
-                .Verify(l => l.InfoFormat(
-                    "Shipment {0} has not been processed. A claim cannot be submitted for an unprocessed shipment.", shipment.ShipmentID));
-        }
-
-        //[Fact]
-        //public void Submit_LogsMessage_WhenShipmentIsProcessed()
-        //{
-        //    shipment.Processed = false;
-
-        //    try
-        //    {
-        //        testObject.Submit(InsureShipClaimType.Damage, "item 1", "desc", 1.00M, "email@shipworks.com");
-        //    }
-        //    catch (InsureShipException)
-        //    { }
-
-        //    log.Verify(l => l.InfoFormat("Shipment {0} has not been processed. A claim cannot be submitted for an unprocessed shipment.", shipment.ShipmentID), Times.Once());
-        //}
-
-        //[Fact]
-        //public void Submit_ThrowsInsureShipException_WhenShipDateDoesNotExceedWaitPeriod()
-        //{
-        //    // Set the ship date to be a day short of the wait period
-        //    shipment.ShipDate = DateTime.UtcNow.Subtract(settings.Object.ClaimSubmissionWaitingPeriod).AddDays(1);
-
-        //    Assert.Throws<InsureShipException>(() => testObject.Submit(InsureShipClaimType.Missing, "item 1", "desc", 1.00M, "email@shipworks.com"));
-        //}
-
-        //[Fact]
-        //public void Submit_DoesNotThrowInsureShipException_WhenShipDateDoesNotExceedWaitPeriod()
-        //{
-        //    // Set the ship date to be a day short of the wait period
-        //    shipment.ShipDate = DateTime.UtcNow.Subtract(settings.Object.ClaimSubmissionWaitingPeriod).AddDays(1);
-
-        //    testObject.Submit(InsureShipClaimType.Damage, "item 1", "desc", 1.00M, "email@shipworks.com");
-        //}
-
-        //[Fact]
-        //public void Submit_LogsMessage_WhenShipDateDoesNotExceedWaitPeriod()
-        //{
-        //    // Set the ship date to be a day short of the wait period
-        //    shipment.ShipDate = DateTime.UtcNow.Subtract(settings.Object.ClaimSubmissionWaitingPeriod).AddDays(1);
-
-        //    try
-        //    {
-        //        testObject.Submit(InsureShipClaimType.Lost, "item 1", "desc", 1.00M, "email@shipworks.com");
-        //    }
-        //    catch (InsureShipException)
-        //    { }
-
-        //    log.Verify(l => l.InfoFormat("A claim cannot be submitted for shipment {0}. It hasn't been {1} days since the ship date.", shipment.ShipmentID, settings.Object.ClaimSubmissionWaitingPeriod.TotalDays), Times.Once());
-        //}
-
-        //[Fact]
-        //public void Submit_LogsSuccessMessage_WhenClaimTypeIsDamageAndShipDateDoesNotExceedWaitPeriod()
-        //{
-        //    // Set the ship date to be a day short of the wait period
-        //    shipment.ShipDate = DateTime.UtcNow.Subtract(settings.Object.ClaimSubmissionWaitingPeriod).AddDays(1);
-
-        //    try
-        //    {
-        //        testObject.Submit(InsureShipClaimType.Damage, "item 1", "desc", 1.00M, "email@shipworks.com");
-        //    }
-        //    catch (InsureShipException)
-        //    { }
-
-        //    log.Verify(l => l.InfoFormat("Response code from InsureShip for claim submission on shipment {0} was {1} successful (response code {2}).",
-        //                           shipment.ShipmentID, string.Empty, EnumHelper.GetApiValue(InsureShipResponseCode.Success)), Times.Once());
-        //}
-
-        //[Fact]
-        //public void Submit_LogsMessage_WhenShipmentIsEligible()
-        //{
-        //    testObject.Submit(InsureShipClaimType.Damage, "item 1", "desc", 1.00M, "email@shipworks.com");
-
-        //    log.Verify(l => l.InfoFormat("Shipment {0} is eligible for submitting a claim to InsureShip.", shipment.ShipmentID), Times.Once());
-        //}
-
-        //[Fact]
-        //public void Submit_SetsClaimType_WhenShipmentIsEligible()
-        //{
-        //    testObject.Submit(InsureShipClaimType.Damage, "item 1", "desc", 1.00M, "email@shipworks.com");
-
-        //    Assert.Equal((int) InsureShipClaimType.Damage, shipment.InsurancePolicy.ClaimType);
-        //}
-
-        //[Fact]
-        //public void Submit_SetsItemName_WhenShipmentIsEligible()
-        //{
-        //    testObject.Submit(InsureShipClaimType.Damage, "item 1", "desc", 1.00M, "email@shipworks.com");
-
-        //    Assert.Equal("item 1", shipment.InsurancePolicy.ItemName);
-        //}
-
-        //[Fact]
-        //public void Submit_SetsDamageValue_WhenShipmentIsEligible()
-        //{
-        //    testObject.Submit(InsureShipClaimType.Damage, "item 1", "desc", 1.00M, "email@shipworks.com");
-
-        //    Assert.Equal(1.00M, shipment.InsurancePolicy.DamageValue);
-        //}
-
-        //[Fact]
-        //public void Submit_SetsSubmissionDate_WhenShipmentIsEligible()
-        //{
-        //    DateTime testBegin = DateTime.UtcNow;
-
-        //    testObject.Submit(InsureShipClaimType.Damage, "item 1", "desc", 1.00M, "email@shipworks.com");
-
-        //    DateTime testEnd = DateTime.UtcNow;
-
-
-        //    // Make sure the recorded time the test was began and the time of the submission is positive;
-        //    // Same for time recorded after the submission and the time of the submission
-        //    TimeSpan beginToSubmission = shipment.InsurancePolicy.SubmissionDate.Value.Subtract(testBegin);
-        //    TimeSpan endFromSubmission = testEnd.Subtract(shipment.InsurancePolicy.SubmissionDate.Value);
-
-        //    Assert.True(beginToSubmission.TotalMilliseconds >= 0 && endFromSubmission.TotalMilliseconds >= 0);
-        //}
-
-        //[Fact]
-        //public void Submit_SetsEmail_WhenShipmentIsEligible()
-        //{
-        //    testObject.Submit(InsureShipClaimType.Damage, "item 1", "desc", 1.00M, "email@shipworks.com");
-
-        //    Assert.Equal("email@shipworks.com", shipment.InsurancePolicy.EmailAddress);
-        //}
-
-        //[Fact]
-        //public void Submit_LogsMessage_WhenSubmittingRequest()
-        //{
-        //    testObject.Submit(InsureShipClaimType.Damage, "item 1", "desc", 1.00M, "email@shipworks.com");
-
-        //    log.Verify(l => l.InfoFormat("Submitting claim to InsureShip for shipment {0}.", shipment.ShipmentID), Times.Once());
-        //}
-
-        //[Fact]
-        //public void Submit_DelegatesToRequestFactory_WhenShipmentIsEligible()
-        //{
-        //    testObject.Submit(InsureShipClaimType.Damage, "item 1", "desc", 1.00M, "email@shipworks.com");
-
-        //    requestFactory.Verify(f => f.CreateSubmitClaimRequest(shipment, affiliate), Times.Once());
-        //}
-
-        //[Fact]
-        //public void Submit_DelegatesToRequest_WhenShipmentIsEligible()
-        //{
-        //    testObject.Submit(InsureShipClaimType.Damage, "item 1", "desc", 1.00M, "email@shipworks.com");
-
-        //    request.Verify(r => r.Submit(), Times.Once());
-        //}
-
-        //[Fact]
-        //public void Submit_LogsMessage_WhenProcessingResponse()
-        //{
-        //    testObject.Submit(InsureShipClaimType.Damage, "item 1", "desc", 1.00M, "email@shipworks.com");
-
-        //    log.Verify(l => l.InfoFormat("Processing claim response from InsureShip for shipment {0}.", shipment.ShipmentID), Times.Once());
-        //}
-
-        //[Fact]
-        //public void Submit_DelegatesToResponse_WhenShipmentIsEligible()
-        //{
-        //    testObject.Submit(InsureShipClaimType.Damage, "item 1", "desc", 1.00M, "email@shipworks.com");
-
-        //    response.Verify(r => r.Process(), Times.Once());
-        //}
-
-        //[Fact]
-        //public void Submit_LogsMessage_WhenProcessingIsSuccessful()
-        //{
-        //    testObject.Submit(InsureShipClaimType.Damage, "item 1", "desc", 1.00M, "email@shipworks.com");
-
-        //    log.Verify(l => l.InfoFormat("Response code from InsureShip for claim submission on shipment {0} was {1} successful (response code {2}).",
-        //                           shipment.ShipmentID, string.Empty, EnumHelper.GetApiValue(InsureShipResponseCode.Success)), Times.Once());
-        //}
-
-        //[Fact]
-        //public void Submit_CatchesInsureShipResponseException_AndThrowsInsureShipException()
-        //{
-        //    InsureShipResponseException responseException = new InsureShipResponseException(InsureShipResponseCode.MissingRequiredParameter);
-        //    response.Setup(r => r.Process()).Throws(responseException);
-
-        //    Assert.Throws<InsureShipException>(() => testObject.Submit(InsureShipClaimType.Damage, "item 1", "desc", 1.00M, "email@shipworks.com"));
-        //}
-
-        //[Fact]
-        //public void Submit_LogsErrorMessage_WhenInsureShipResponseExceptionIsCaught()
-        //{
-        //    InsureShipResponseException responseException = new InsureShipResponseException(InsureShipResponseCode.MissingRequiredParameter);
-        //    response.Setup(r => r.Process()).Throws(responseException);
-
-        //    try
-        //    {
-        //        testObject.Submit(InsureShipClaimType.Damage, "item 1", "desc", 1.00M, "email@shipworks.com");
-        //    }
-        //    catch (InsureShipException)
-        //    { }
-
-        //    log.Verify(l => l.Error($"An error occurred trying to submit a claim to InsureShip on shipment 100031. A(n) {InsureShipResponseCode.MissingRequiredParameter} response code was received from InsureShip.", responseException), Times.Once());
-        //}
-
-        //[Fact]
-        //public void CheckStatus_ThrowsException_WhenClaimIDIsNull()
-        //{
-        //    shipment.InsurancePolicy.ClaimID = null;
-
-        //    Assert.Throws<InsureShipException>(() => testObject.CheckStatus());
-        //}
-
-        //[Fact]
-        //public void CheckStatus_LogsMessage_WhenClaimIDIsNull()
-        //{
-        //    shipment.InsurancePolicy.ClaimID = null;
-
-        //    try
-        //    {
-        //        testObject.CheckStatus();
-        //    }
-        //    catch (InsureShipException)
-        //    { }
-
-        //    log.Verify(l => l.Error("Unable to check claim status for shipment 100031. A claim has not been submitted yet."), Times.Once());
-        //}
-
-        //[Fact]
-        //public void CheckStatus_LogsMessage_WhenMakingRequest()
-        //{
-        //    shipment.InsurancePolicy.ClaimID = 939;
-
-        //    testObject.CheckStatus();
-
-        //    log.Verify(l => l.InfoFormat("Checking claim status with InsureShip for shipment {0}.", shipment.ShipmentID), Times.Once());
-        //}
-
-        //[Fact]
-        //public void CheckStatus_DelegatesToRequestFactory()
-        //{
-        //    shipment.InsurancePolicy.ClaimID = 939;
-
-        //    testObject.CheckStatus();
-
-        //    requestFactory.Verify(r => r.CreateClaimStatusRequest(shipment, affiliate), Times.Once());
-        //}
-
-        //[Fact]
-        //public void CheckStatus_DelegatesToClaimStatusRequest()
-        //{
-        //    shipment.InsurancePolicy.ClaimID = 939;
-
-        //    testObject.CheckStatus();
-
-        //    request.Verify(r => r.Submit(), Times.Once());
-        //}
-
-        //[Fact]
-        //public void CheckStatus_LogsMessage_WhenProcessingResponse()
-        //{
-        //    shipment.InsurancePolicy.ClaimID = 939;
-
-        //    testObject.CheckStatus();
-
-        //    log.Verify(l => l.InfoFormat("Processing claim status response from InsureShip for shipment {0}.", shipment.ShipmentID), Times.Once());
-        //}
-
-        //[Fact]
-        //public void CheckStatus_DelegatesToResponse()
-        //{
-        //    shipment.InsurancePolicy.ClaimID = 939;
-
-        //    testObject.CheckStatus();
-
-        //    response.Verify(r => r.Process(), Times.Once());
-        //}
-
-        //[Fact]
-        //public void CheckStatus_LogsMessage_WhenProcessingIsSuccessful()
-        //{
-        //    shipment.InsurancePolicy.ClaimID = 939;
-
-        //    testObject.CheckStatus();
-
-        //    log.Verify(l => l.InfoFormat("Response code from InsureShip for claim status on shipment {0} was {1} successful (response code {2}).",
-        //                           shipment.ShipmentID, string.Empty, EnumHelper.GetApiValue(InsureShipResponseCode.Success)), Times.Once());
-        //}
-
-        //[Fact]
-        //public void CheckStatus_LogsErrorMessage_WhenInsureShipResponseExceptionIsCaught()
-        //{
-        //    shipment.InsurancePolicy.ClaimID = 939;
-
-        //    InsureShipResponseException responseException = new InsureShipResponseException(InsureShipResponseCode.MissingRequiredParameter);
-        //    response.Setup(r => r.Process()).Throws(responseException);
-
-        //    try
-        //    {
-        //        testObject.CheckStatus();
-        //    }
-        //    catch (InsureShipException)
-        //    { }
-
-        //    log.Verify(l => l.Error($"An error occurred trying to check the claim status with InsureShip on shipment 100031. A(n) {InsureShipResponseCode.MissingRequiredParameter} response code was received from InsureShip.", responseException), Times.Once());
-        //}
-
-        //[Fact]
-        //public void CheckStatus_CatchesInsureShipResponseException_AndThrowsInsureShipException()
-        //{
-        //    shipment.InsurancePolicy.ClaimID = 939;
-
-        //    InsureShipResponseException responseException = new InsureShipResponseException(InsureShipResponseCode.MissingRequiredParameter);
-        //    response.Setup(r => r.Process()).Throws(responseException);
-
-        //    Assert.Throws<InsureShipException>(() => testObject.CheckStatus());
-        //}
-
-        //[Fact]
-        //public void CheckStatus_ReturnsClaimStatusOnPolicy()
-        //{
-        //    shipment.InsurancePolicy.ClaimID = 939;
-        //    shipment.InsurancePolicy.ClaimStatus = "Created";
-
-        //    string status = testObject.CheckStatus();
-
-        //    Assert.Equal(shipment.InsurancePolicy.ClaimStatus, status);
-        //}
-
-        private static ShipmentEntity CreateShipment() =>
-            new ShipmentEntity(100031)
-            {
-                Processed = true,
-                ShipDate = DateTime.UtcNow.Subtract(TimeSpan.FromDays(8)),
-                InsurancePolicy = new InsurancePolicyEntity()
+            var result = testObject.Submit(InsureShipClaimType.Damage, shipment,
+                x =>
                 {
-                    InsureShipPolicyID = 1234,
-                    CreatedWithApi = true
-                }
-            };
+                    Assert.Equal((int) InsureShipClaimType.Damage, x.ClaimType);
+                    called = true;
+                });
+
+            Assert.True(called);
+        }
+
+        [Fact]
+        public void Submit_LogsMessage_WhenShipmentIsValidForClaim()
+        {
+            var testObject = mock.Create<InsureShipClaim>();
+
+            testObject.Submit(InsureShipClaimType.Damage, shipment, _ => { });
+
+            mock.Mock<ILog>()
+                .Verify(x => x.InfoFormat("Submitting claim to InsureShip for shipment {0}.", shipment.ShipmentID));
+        }
+
+        [Fact]
+        public void Submit_DelegatesToClaimRequest_WhenShipmentIsValidForClaim()
+        {
+            var testObject = mock.Create<InsureShipClaim>();
+
+            testObject.Submit(InsureShipClaimType.Damage, shipment, _ => { });
+
+            mock.Mock<IInsureShipSubmitClaimRequest>()
+                .Verify(x => x.CreateInsuranceClaim(shipment));
+        }
+
+        [Fact]
+        public void Submit_LogsError_WhenClaimRequestFails()
+        {
+            mock.Mock<IInsureShipSubmitClaimRequest>()
+                .Setup(x => x.CreateInsuranceClaim(AnyShipment))
+                .Returns(Result.FromError("Foo"));
+            var testObject = mock.Create<InsureShipClaim>();
+
+            testObject.Submit(InsureShipClaimType.Damage, shipment, _ => { });
+
+            mock.Mock<ILog>()
+                .Verify(x => x.Error("An error occurred trying to submit a claim to InsureShip on shipment 0.", It.IsAny<Exception>()));
+        }
+
+        [Fact]
+        public void Submit_ReturnsFailure_WhenClaimRequestFails()
+        {
+            mock.Mock<IInsureShipSubmitClaimRequest>()
+                .Setup(x => x.CreateInsuranceClaim(AnyShipment))
+                .Returns(Result.FromError("Foo"));
+            var testObject = mock.Create<InsureShipClaim>();
+
+            var result = testObject.Submit(InsureShipClaimType.Damage, shipment, _ => { });
+
+            Assert.True(result.Failure);
+        }
+
+        [Fact]
+        public void Submit_LogsInfo_WhenClaimRequestSucceeds()
+        {
+            mock.Mock<IInsureShipSubmitClaimRequest>()
+                .Setup(x => x.CreateInsuranceClaim(AnyShipment))
+                .Returns(Result.FromSuccess());
+            var testObject = mock.Create<InsureShipClaim>();
+
+            testObject.Submit(InsureShipClaimType.Damage, shipment, _ => { });
+
+            mock.Mock<ILog>()
+                .Verify(x => x.InfoFormat("Response code from InsureShip for claim submission on shipment {0} was successful.", shipment.ShipmentID));
+        }
+
+        [Fact]
+        public void Submit_ReturnsSuccess_WhenClaimRequestSucceeds()
+        {
+            mock.Mock<IInsureShipSubmitClaimRequest>()
+                .Setup(x => x.CreateInsuranceClaim(AnyShipment))
+                .Returns(Result.FromSuccess());
+            var testObject = mock.Create<InsureShipClaim>();
+
+            var result = testObject.Submit(InsureShipClaimType.Damage, shipment, _ => { });
+
+            Assert.True(result.Success);
+        }
     }
 }

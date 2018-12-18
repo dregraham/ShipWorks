@@ -1011,6 +1011,8 @@
     <Compile Include="OrderLookup\OrderLookupSearchMessage.cs" />
     <Compile Include="OrderLookup\ShipmentModelPipelines\IOrderLookupShipmentModelPipeline.cs" />
     <Compile Include="Shipping\Insurance\InsureShip\IInsureShipClaim.cs" />
+    <Compile Include="Shipping\Insurance\InsureShip\IInsureShipClaimValidator.cs" />
+    <Compile Include="Shipping\Insurance\InsureShip\InsureShipClaimValidator.cs" />
     <Compile Include="Shipping\Insurance\InsureShip\Net\Claim\IInsureShipClaimStatusRequest.cs" />
     <Compile Include="Shipping\Insurance\InsureShip\Net\Claim\IInsureShipSubmitClaimRequest.cs" />
     <Compile Include="Shipping\Insurance\InsureShip\Net\Claim\InsureShipGetClaimStatusResponse.cs" />
