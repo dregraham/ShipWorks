@@ -128,7 +128,7 @@ namespace ShipWorks.Products.AttributeEditor
             }
 
             AttributeNames = new ObservableCollection<string>(productVariant.Product.Attributes.Select(x => x.AttributeName));
-            ProductAttributes = new ObservableCollection<ProductVariantAttributeValueEntity>(productVariant.Attributes);
+            ProductAttributes = new ObservableCollection<ProductVariantAttributeValueEntity>(productVariant.AttributeValues);
         }
 
         /// <summary>
@@ -136,20 +136,20 @@ namespace ShipWorks.Products.AttributeEditor
         /// </summary>
         public void Save()
         {
-            var variantAttributesToRemove = productVariant.Attributes
+            var variantAttributesToRemove = productVariant.AttributeValues
                 .Where(a => ProductAttributes.None(selectedAttribute => selectedAttribute.ProductVariantAttributeValueID == a.ProductVariantAttributeValueID))
                 .ToEntityCollection();
 
-            productVariant.Attributes.RemovedEntitiesTracker = new EntityCollection<ProductVariantAttributeValueEntity>();
+            productVariant.AttributeValues.RemovedEntitiesTracker = new EntityCollection<ProductVariantAttributeValueEntity>();
 
-            productVariant.Attributes.RemoveRange(variantAttributesToRemove.ToList());
+            productVariant.AttributeValues.RemoveRange(variantAttributesToRemove.ToList());
             
-            var productsToAdd = ProductAttributes.Where(selectedAttribute => productVariant.Attributes.None(currentAttribute => currentAttribute.ProductVariantAttributeValueID == selectedAttribute.ProductVariantAttributeValueID));
+            var productsToAdd = ProductAttributes.Where(selectedAttribute => productVariant.AttributeValues.None(currentAttribute => currentAttribute.ProductVariantAttributeValueID == selectedAttribute.ProductVariantAttributeValueID));
 
             foreach (ProductVariantAttributeValueEntity attribute in productsToAdd)
             {
                 productVariant.Product.Attributes.Add(attribute.ProductAttribute);
-                productVariant.Attributes.Add(attribute);
+                productVariant.AttributeValues.Add(attribute);
             }
         }
 

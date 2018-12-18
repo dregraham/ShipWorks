@@ -243,7 +243,7 @@ namespace ShipWorks.Products
                 ProductVariantEntity.PrefetchPathProduct.WithSubPath(ProductEntity.PrefetchPathAttributes),
                 ProductVariantEntity.PrefetchPathAliases,
                 ProductVariantEntity.PrefetchPathIncludedInBundles,
-                ProductVariantEntity.PrefetchPathAttributes.WithSubPath(ProductVariantAttributeValueEntity.PrefetchPathProductAttribute)
+                ProductVariantEntity.PrefetchPathAttributeValues.WithSubPath(ProductVariantAttributeValueEntity.PrefetchPathProductAttribute)
             };
 
             return prefetchPath;
@@ -322,7 +322,7 @@ namespace ShipWorks.Products
         /// </summary>
         private async Task DeleteRemovedVariantAttributeValues(ISqlAdapter sqlAdapter, ProductVariantEntity productVariant)
         {
-            foreach (ProductVariantAttributeValueEntity removedAttribute in productVariant.Attributes.RemovedEntitiesTracker)
+            foreach (ProductVariantAttributeValueEntity removedAttribute in productVariant.AttributeValues.RemovedEntitiesTracker)
             {
                 await sqlAdapter.DeleteEntityAsync(removedAttribute).ConfigureAwait(false);
             }
