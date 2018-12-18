@@ -177,7 +177,7 @@
                          Text="{Binding CustomQuery,
                                         UpdateSourceTrigger=LostFocus}"
                          TextWrapping="Wrap"
-                         ui:EntityFieldLength.FieldName="OdbcStoreCustomQuery" />
+                         MaxLength="2048" />
             </ScrollViewer>
 
             <Label Grid.Row="2"
