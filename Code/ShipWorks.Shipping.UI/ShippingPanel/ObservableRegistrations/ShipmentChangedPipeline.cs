@@ -50,7 +50,9 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations
         /// </summary>
         private void OnShipmentChanged(ShipmentChangedMessage shipmentChangedMessage, ShippingPanelViewModel viewModel)
         {
-            if (IsSenderViewModelOrDescendant(shipmentChangedMessage, viewModel))
+            // Including shipmentChangedMessage.Sender because the ShippingProfilePipeline calls apply profile which in turns calls sends a
+            // OnShimentChangedMessage, so this code was being called twice.
+            if (IsSenderViewModelOrDescendant(shipmentChangedMessage, viewModel) || shipmentChangedMessage.Sender is ShippingProfilePipeline)
             {
                 return;
             }
