@@ -299,7 +299,7 @@ namespace ShipWorks.Products
                     }
 
                     await DeleteRemovedBundleItems(sqlAdapter, product).ConfigureAwait(true);
-                    await DeleteRemovedAttributes(sqlAdapter, productVariant).ConfigureAwait(true);
+                    await DeleteRemovedVariantAttributeValues(sqlAdapter, productVariant).ConfigureAwait(true);
 
                     sqlAdapter.SaveEntity(product);
 
@@ -318,9 +318,9 @@ namespace ShipWorks.Products
         }
 
         /// <summary>
-        /// Delete removed attributes
+        /// Delete removed variant attribute values
         /// </summary>
-        private async Task DeleteRemovedAttributes(ISqlAdapter sqlAdapter, ProductVariantEntity productVariant)
+        private async Task DeleteRemovedVariantAttributeValues(ISqlAdapter sqlAdapter, ProductVariantEntity productVariant)
         {
             foreach (ProductVariantAttributeValueEntity removedAttribute in productVariant.Attributes.RemovedEntitiesTracker)
             {
@@ -329,24 +329,15 @@ namespace ShipWorks.Products
         }
 
         /// <summary>
-        /// Delete unused attributes
+        /// Delete unused attributes (this deletes all unused attributes, not just for this product)
         /// </summary>
         private async Task DeleteUnusedAttributes(ISqlAdapter sqlAdapter)
         {
-            QueryFactory factory = new QueryFactory();
-            InnerOuterJoin join = factory.ProductAttribute
-                .LeftJoin(factory.ProductVariantAttributeValue)
-                .On(ProductAttributeFields.ProductAttributeID == ProductVariantAttributeValueFields.ProductAttributeID);
+            RelationPredicateBucket bucket = new RelationPredicateBucket();
+            bucket.Relations.Add(ProductAttributeEntity.Relations.ProductVariantAttributeValueEntityUsingProductAttributeID, JoinHint.Left);
+            bucket.PredicateExpression.Add(ProductVariantAttributeValueFields.ProductVariantAttributeValueID.IsNull());
 
-            EntityQuery<ProductAttributeEntity> query = factory.ProductAttribute.From(join)
-                .Where(ProductVariantAttributeValueFields.ProductAttributeID.IsNull());
-
-            IEntityCollection2 unusedAttributes = sqlAdapter.FetchQuery(query);
-
-            foreach (ProductAttributeEntity unusedAttribute in unusedAttributes)
-            {
-                await sqlAdapter.DeleteEntityAsync(unusedAttribute).ConfigureAwait(false);
-            }                
+            await sqlAdapter.DeleteEntitiesDirectlyAsync(typeof(ProductAttributeEntity), bucket).ConfigureAwait(false);
         }
 
         /// <summary>
