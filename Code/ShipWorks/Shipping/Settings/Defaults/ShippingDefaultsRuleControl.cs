@@ -24,6 +24,7 @@ namespace ShipWorks.Shipping.Settings.Defaults
     {
         private static readonly ILog log = LogManager.GetLogger(typeof(ShippingDefaultsRuleControl));
         private const long NoFilterSelectedID = long.MinValue;
+        private const long NoneShippingProfileID = 0;
 
         private int position;
 
@@ -48,6 +49,7 @@ namespace ShipWorks.Shipping.Settings.Defaults
         public event EventHandler MangeProfilesClicked;
 
         private long originalFilterID;
+        private long originalFilterNodeID;
 
         /// <summary>
         /// Constructor
@@ -60,6 +62,7 @@ namespace ShipWorks.Shipping.Settings.Defaults
 
             toolStipDelete.Renderer = new NoBorderToolStripRenderer();
             originalFilterID = NoFilterSelectedID;
+            originalFilterNodeID = NoneShippingProfileID;
         }
 
         /// <summary>
@@ -73,10 +76,20 @@ namespace ShipWorks.Shipping.Settings.Defaults
         public bool IsFilterDisabled => filterCombo.IsSelectedFilterDisabled;
 
         /// <summary>
+        /// Gets a value indicating whether this instance is a my filter.
+        /// </summary>
+        public bool IsMyFilter => filterCombo.IsSelectedFilterMyFilter;
+
+        /// <summary>
+        /// Gets the selected filter name
+        /// </summary>
+        public string SelectedFilterName => filterCombo.SelectedFilterNode?.Filter?.Name;
+
+        /// <summary>
         /// Gets a value indicating whether this the filter being used for this rule has changed.
         /// </summary>
         /// <value>
-        /// <c>true</c> if the filter filter changed; otherwise, <c>false</c>.
+        /// <c>true</c> if the filter changed; otherwise, <c>false</c>.
         /// </value>
         public bool HasFilterChanged => originalFilterID != filterCombo.SelectedFilterNode.FilterID;
 
@@ -86,6 +99,9 @@ namespace ShipWorks.Shipping.Settings.Defaults
         public void Initialize(ShippingDefaultsRuleEntity rule)
         {
             Rule = rule;
+            originalFilterNodeID = Rule.FilterNodeID;
+
+            filterCombo.AllowMyFilters = Rule.FilterNodeID != 0 && FilterHelper.IsMyFilter(Rule.FilterNodeID);
 
             filterCombo.LoadLayouts(FilterTarget.Orders);
 
@@ -109,7 +125,7 @@ namespace ShipWorks.Shipping.Settings.Defaults
         private void UpdateProfileDisplay(IShippingProfileEntity profile)
         {
             linkProfile.Text = profile?.Name ?? "(none)";
-            linkProfile.Tag = profile?.ShippingProfileID ?? 0;
+            linkProfile.Tag = profile?.ShippingProfileID ?? NoneShippingProfileID;
         }
 
         /// <summary>
@@ -292,12 +308,63 @@ namespace ShipWorks.Shipping.Settings.Defaults
         }
 
         /// <summary>
+        /// Return a list of validation errors
+        /// </summary>
+        public string ValidationErrors
+        {
+            get
+            {
+                if (IsMyFilter)
+                {
+                    return $"Rule at position {position} is using a My Filter, which is not allowed.  Any changes to this rule will not be saved.";
+                }
+
+                if (FilterHelper.IsMyFilter(originalFilterNodeID))
+                {
+                    return $"Rule at position {position} was using a My Filter, which is not allowed.  " +
+                           $"It has been changed to use a filter that is not a My Filter and the profile will be changed to \"none\".  ";
+                }
+
+                return string.Empty;
+            }
+        }
+
+        /// <summary>
         /// Save the settings for the rule line
         /// </summary>
         public void SaveSettings()
         {
+            bool isOriginalFilterNodeAMyFilter = originalFilterNodeID != 0 && FilterHelper.IsMyFilter(originalFilterNodeID);
+
+            // If the selected filter node is not a my filter and the original was not a my filter, just carry on as usual.
+            if (!FilterHelper.IsMyFilter(filterCombo.SelectedFilterNode) && !isOriginalFilterNodeAMyFilter)
+            {
+                SaveRule((long) linkProfile.Tag);
+            }
+
+            // The selected filter is a my filter, so it must by this user's filter (we don't show other user's my filters).
+            // In this case we want to tell the user we will not be saving this shipping rule because a my filter
+            // is still selected.
+            if (IsMyFilter)
+            {
+                return;
+            }
+
+            // If the original filter node id was a my filter, set the profile to the "none" profile and save
+            if (isOriginalFilterNodeAMyFilter)
+            {
+                SaveRule(NoneShippingProfileID);
+            }
+        }
+
+        /// <summary>
+        /// Save the shipping rule with the given shipping profile id
+        /// </summary>
+        private void SaveRule(long shippingProfileID)
+        {
             Rule.FilterNodeID = filterCombo.SelectedFilterNodeID;
-            Rule.ShippingProfileID = (long) linkProfile.Tag;
+            Rule.ShippingProfileID = shippingProfileID;
+
             Rule.Position = position;
 
             using (SqlAdapter adapter = new SqlAdapter(true))
@@ -323,6 +390,8 @@ namespace ShipWorks.Shipping.Settings.Defaults
             // prior to showing the control. This will prevent a false positive in the
             // HasFilterChanged property.
             originalFilterID = filterCombo.SelectedFilterNode?.FilterID ?? NoFilterSelectedID;
+
+            originalFilterNodeID = Rule.FilterNodeID;
         }
     }
 }

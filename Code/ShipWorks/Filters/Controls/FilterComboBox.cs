@@ -1,23 +1,16 @@
 using System;
-using System.Collections.Generic;
-using System.Text;
-using ShipWorks.Core.Messaging;
-using ShipWorks.Filters.Management;
 using ShipWorks.UI.Controls;
 using System.Windows.Forms;
 using System.Drawing;
 using ShipWorks.Data.Model.EntityClasses;
 using Divelements.SandGrid.Rendering;
-using ShipWorks.Filters;
 using ShipWorks.Users;
-using System.Drawing.Imaging;
 using System.ComponentModel;
 using Interapptive.Shared;
 using ShipWorks.UI;
 using ShipWorks.Properties;
 using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore.Appearance;
-using ShipWorks.Data;
 
 namespace ShipWorks.Filters.Controls
 {
@@ -246,7 +239,23 @@ namespace ShipWorks.Filters.Controls
             {
                 if (selectedNode != null)
                 {
-                    return selectedNode.Filter.State == (byte)FilterState.Disabled;                    
+                    return selectedNode.Filter.State == (byte) FilterState.Disabled;
+                }
+
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// Gets a value indicating whether this instance is selected filter disabled.
+        /// </summary>
+        public bool IsSelectedFilterMyFilter
+        {
+            get
+            {
+                if (selectedNode != null)
+                {
+                    return FilterHelper.IsMyFilter(selectedNode);
                 }
 
                 return false;

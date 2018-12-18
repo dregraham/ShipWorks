@@ -982,7 +982,7 @@ namespace ShipWorks.Filters.Controls
             FilterNodeEntity filterNode = myLayout.FilterNode;
 
             // Only show "My Filters" if there are any
-            if (filterNode.ChildNodes.Count > 0 && AllowMyFilters && AlwaysShowMyFilters)
+            if (filterNode.ChildNodes.Count > 0 && (AllowMyFilters || AlwaysShowMyFilters))
             {
                 // We are not already showing it
                 if (!nodeOwnerMap.ContainsKey(filterNode))
