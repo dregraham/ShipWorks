@@ -286,7 +286,7 @@ namespace ShipWorks.Products
                 productVariant.CreatedDate = now;
             }
 
-            using (ISqlAdapter adapter = sqlAdapterFactory.CreateTransacted())
+            using (ISqlAdapter sqlAdapter = sqlAdapterFactory.CreateTransacted())
             {
                 try
                 {
@@ -294,24 +294,59 @@ namespace ShipWorks.Products
                     {
                         foreach(var bundle in productVariant.IncludedInBundles)
                         {
-                            await adapter.DeleteEntityAsync(bundle).ConfigureAwait(true);
+                            await sqlAdapter.DeleteEntityAsync(bundle).ConfigureAwait(true);
                         }
                     }
 
-                    await DeleteRemovedBundleItems(adapter, product).ConfigureAwait(true);
+                    await DeleteRemovedBundleItems(sqlAdapter, product).ConfigureAwait(true);
+                    await DeleteRemovedAttributes(sqlAdapter, productVariant).ConfigureAwait(true);
 
-                    adapter.SaveEntity(product);
+                    sqlAdapter.SaveEntity(product);
 
-                    adapter.Commit();
+                    await DeleteUnusedAttributes(sqlAdapter).ConfigureAwait(false);
+
+                    sqlAdapter.Commit();
                 }
                 catch (ORMQueryExecutionException ex)
                 {
-                    adapter.Rollback();
+                    sqlAdapter.Rollback();
                     return Result.FromError(ex);
                 }
             }
 
             return Result.FromSuccess();
+        }
+
+        /// <summary>
+        /// Delete removed attributes
+        /// </summary>
+        private async Task DeleteRemovedAttributes(ISqlAdapter sqlAdapter, ProductVariantEntity productVariant)
+        {
+            foreach (ProductVariantAttributeValueEntity removedAttribute in productVariant.Attributes.RemovedEntitiesTracker)
+            {
+                await sqlAdapter.DeleteEntityAsync(removedAttribute).ConfigureAwait(false);
+            }
+        }
+
+        /// <summary>
+        /// Delete unused attributes
+        /// </summary>
+        private async Task DeleteUnusedAttributes(ISqlAdapter sqlAdapter)
+        {
+            QueryFactory factory = new QueryFactory();
+            InnerOuterJoin join = factory.ProductAttribute
+                .LeftJoin(factory.ProductVariantAttributeValue)
+                .On(ProductAttributeFields.ProductAttributeID == ProductVariantAttributeValueFields.ProductAttributeID);
+
+            EntityQuery<ProductAttributeEntity> query = factory.ProductAttribute.From(join)
+                .Where(ProductVariantAttributeValueFields.ProductAttributeID.IsNull());
+
+            IEntityCollection2 unusedAttributes = sqlAdapter.FetchQuery(query);
+
+            foreach (ProductAttributeEntity unusedAttribute in unusedAttributes)
+            {
+                await sqlAdapter.DeleteEntityAsync(unusedAttribute).ConfigureAwait(false);
+            }                
         }
 
         /// <summary>

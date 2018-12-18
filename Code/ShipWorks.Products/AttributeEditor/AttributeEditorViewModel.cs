@@ -7,12 +7,15 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
+using Interapptive.Shared.Collections;
 using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.Extensions;
 using Interapptive.Shared.UI;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.Custom;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
+using ShipWorks.Data.Model.HelperClasses;
 
 namespace ShipWorks.Products.AttributeEditor
 {
@@ -133,11 +136,17 @@ namespace ShipWorks.Products.AttributeEditor
         /// </summary>
         public void Save()
         {
-            productVariant.Attributes.RemovedEntitiesTracker = new ProductAttributeCollection();
-            productVariant.Attributes.Clear();
-            productVariant.Product.Attributes.Clear();
+            var variantAttributesToRemove = productVariant.Attributes
+                .Where(a => ProductAttributes.None(selectedAttribute => selectedAttribute.ProductVariantAttributeValueID == a.ProductVariantAttributeValueID))
+                .ToEntityCollection();
 
-            foreach (ProductVariantAttributeValueEntity attribute in ProductAttributes)
+            productVariant.Attributes.RemovedEntitiesTracker = new EntityCollection<ProductVariantAttributeValueEntity>();
+
+            productVariant.Attributes.RemoveRange(variantAttributesToRemove.ToList());
+            
+            var productsToAdd = ProductAttributes.Where(selectedAttribute => productVariant.Attributes.None(currentAttribute => currentAttribute.ProductVariantAttributeValueID == selectedAttribute.ProductVariantAttributeValueID));
+
+            foreach (ProductVariantAttributeValueEntity attribute in productsToAdd)
             {
                 productVariant.Product.Attributes.Add(attribute.ProductAttribute);
                 productVariant.Attributes.Add(attribute);
