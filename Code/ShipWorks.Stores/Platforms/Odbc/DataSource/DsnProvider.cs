@@ -21,7 +21,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.DataSource
 
         private const int SqlAttrOdbcVersion = 200;
         private const int SqlOvOdbc3 = 3;
-        private const int MaxDsnLength = 32;
+        private const int MaxDsnLength = 33;
         private Odbc32.Direction direction = Odbc32.Direction.SqlFetchFirst;
 
         /// <summary>
