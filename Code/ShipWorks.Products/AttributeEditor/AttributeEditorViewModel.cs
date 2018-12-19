@@ -144,7 +144,9 @@ namespace ShipWorks.Products.AttributeEditor
 
             productVariant.AttributeValues.RemoveRange(variantAttributesToRemove.ToList());
             
-            var productsToAdd = ProductAttributes.Where(selectedAttribute => productVariant.AttributeValues.None(currentAttribute => currentAttribute.ProductVariantAttributeValueID == selectedAttribute.ProductVariantAttributeValueID));
+            var productsToAdd = ProductAttributes
+                .Where(selectedAttribute => productVariant.AttributeValues.None(currentAttribute => currentAttribute.ProductVariantAttributeValueID == selectedAttribute.ProductVariantAttributeValueID))
+                .ToList();
 
             foreach (ProductVariantAttributeValueEntity attribute in productsToAdd)
             {
