@@ -322,8 +322,6 @@ namespace ShipWorks.Products
             if (productVariant.Aliases.Any(a => string.IsNullOrWhiteSpace(a.Sku)))
             {
                 string message = $"The following field is required: {Environment.NewLine}SKU";
-
-                messageHelper.ShowError(message);
                 return Result.FromError(message);
             }
 
@@ -350,7 +348,7 @@ namespace ShipWorks.Products
                     DialogResult answer = messageHelper.ShowQuestion(question);
                     if (answer != DialogResult.OK)
                     {
-                        return Result.FromError("A Bundle cannot contain a nother bundle");
+                        return Result.FromError("A Bundle cannot contain another bundle");
                     }
                 }
             }
@@ -422,7 +420,7 @@ namespace ShipWorks.Products
             secondHeaderRow[10] = "inches";
             dt.Rows.InsertAt(secondHeaderRow, 0);
         }
-		
+
         /// <summary>
         /// Fetch variants of the same product as the passed in variant.
         /// </summary>
@@ -441,7 +439,7 @@ namespace ShipWorks.Products
         /// </summary>
         public GenericResult<ProductVariantEntity> CloneVariant(ProductVariantEntity productVariant)
         {
-            return productVariant.Product.IsBundle ? 
+            return productVariant.Product.IsBundle ?
                 GenericResult.FromError<ProductVariantEntity>("You cannot create a variant from a bundle.") :
                 GenericResult.FromSuccess(EntityUtility.CloneAsNew(productVariant));
         }
