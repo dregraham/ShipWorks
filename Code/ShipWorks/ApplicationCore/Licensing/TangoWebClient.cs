@@ -16,11 +16,13 @@ using Interapptive.Shared.Net;
 using Interapptive.Shared.Security;
 using Interapptive.Shared.Utility;
 using log4net;
+using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.ApplicationCore.Licensing.Activation.WebServices;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.ApplicationCore.Nudges;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Editions;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers;
@@ -581,7 +583,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// <returns>OnlineShipmentID from Tango.</returns>
         /// <exception cref="System.ArgumentNullException">store</exception>
         /// <exception cref="TangoException"></exception>
-        public static string LogShipment(StoreEntity store, ShipmentEntity shipment, bool isRetry = false)
+        public static void LogShipment(StoreEntity store, ShipmentEntity shipment)
         {
             if (store == null)
             {
@@ -612,7 +614,7 @@ namespace ShipWorks.ApplicationCore.Licensing
             // Regular shipment logging
             else
             {
-                PrepareLogShipmentRequest(shipment, isRetry, shipmentType, postRequest);
+                PrepareLogShipmentRequest(shipment, shipmentType, postRequest);
                 XmlDocument xmlResponse = ProcessXmlRequest(postRequest, "LogShipmentDetails", true);
 
                 // Check for error
@@ -625,7 +627,19 @@ namespace ShipWorks.ApplicationCore.Licensing
                 onlineShipmentID = xmlResponse.SelectSingleNode("//OnlineShipmentID")?.InnerText;
             }
 
-            return onlineShipmentID;
+            shipment.OnlineShipmentID = onlineShipmentID;
+
+            log.InfoFormat("Shipment {0}  - Accounted", shipment.ShipmentID);
+
+            using (ISqlAdapter adapter = new SqlAdapter(true))
+            {
+                // So as to not deal with out of sync issues, only update the OnlineShipmentID
+                ShipmentEntity shipmentToUpdate = new ShipmentEntity();
+                shipmentToUpdate.OnlineShipmentID = onlineShipmentID;
+                adapter.UpdateEntitiesDirectly(shipmentToUpdate, new RelationPredicateBucket(new PredicateExpression(ShipmentFields.ShipmentID == shipment.ShipmentID)));
+
+                adapter.Commit();
+            }
         }
 
         /// <summary>
@@ -645,7 +659,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// <summary>
         /// Prepare the log shipment request
         /// </summary>
-        private static void PrepareLogShipmentRequest(ShipmentEntity shipment, bool isRetry,
+        private static void PrepareLogShipmentRequest(ShipmentEntity shipment,
                                                       ShipmentType shipmentType,
                                                       HttpVariableRequestSubmitter postRequest)
         {
@@ -656,11 +670,6 @@ namespace ShipWorks.ApplicationCore.Licensing
                 !shipment.ShipPerson.IsDomesticCountry())
             {
                 tracking = "";
-            }
-
-            if (isRetry)
-            {
-                postRequest.Variables.Add("isretry", "1");
             }
 
             postRequest.Variables.Add("action", "logshipmentdetails");
