@@ -2,6 +2,7 @@
 using System.Reactive;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Xml;
 using Interapptive.Shared.Extensions;
 using log4net;
 
@@ -138,6 +139,17 @@ namespace Interapptive.Shared.Utility
             Enum.TryParse(value, out T result) ?
                 result :
                 GenericResult.FromError<T>($"Could not parse {value} as enum");
+
+        /// <summary>
+        /// Parse a string value into XML
+        /// </summary>
+        public static GenericResult<XmlDocument> ParseXml(string value) =>
+            Try(() =>
+            {
+                XmlDocument xmlResponse = new XmlDocument();
+                xmlResponse.LoadXml(value);
+                return xmlResponse;
+            });
 
         /// <summary>
         /// Try executing a function

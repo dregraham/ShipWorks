@@ -35,16 +35,6 @@ namespace ShipWorks.ApplicationCore.Licensing
         }
 
         /// <summary>
-        /// Log the given processed shipment to Tango.  isRetry is only for internal interapptive purposes to handle rare cases where shipments a customer
-        /// insured did not make it up into tango, but the shipment did actually process.
-        /// </summary>
-        [Obfuscation(Exclude = true)]
-        public override void LogShipment(StoreEntity store, ShipmentEntity shipment)
-        {
-            log.Fatal($"Shipment logged to Tango for shipment id: {shipment.ShipmentID}");
-        }
-
-        /// <summary>
         /// Void the given processed shipment to Tango
         /// </summary>
         [Obfuscation(Exclude = true)]

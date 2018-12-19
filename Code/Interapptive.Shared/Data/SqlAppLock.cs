@@ -2,6 +2,7 @@
 using System.Data;
 using System.Data.Common;
 using System.Data.SqlClient;
+using System.Reactive.Disposables;
 using Interapptive.Shared.ComponentRegistration;
 
 namespace Interapptive.Shared.Data
@@ -12,48 +13,23 @@ namespace Interapptive.Shared.Data
     [Component]
     public class SqlAppLock : ISqlAppLock
     {
-        private readonly DbConnection con;
-        private readonly string name;
-
-        /// <summary>
-        /// Constructor
-        /// </summary>
-        public SqlAppLock(DbConnection con, string name) : this(con, name, TimeSpan.Zero)
-        {
-        }
-
-        /// <summary>
-        /// Constructor
-        /// </summary>
-        public SqlAppLock(DbConnection con, string name, TimeSpan wait)
-        {
-            this.con = con;
-            this.name = name;
-            LockAcquired = AcquireLock(wait);
-        }
-
-        /// <summary>
-        /// Was the lock acquired?
-        /// </summary>
-        public bool LockAcquired { get; set; }
-
         /// <summary>
         /// Acquire a session, exclusive lock with the specified name.  If the lock cannot be obtained,
         /// the method waits for the specified time before returning false.
         /// </summary>
-        private bool AcquireLock(TimeSpan wait)
+        public IDisposable Take(DbConnection connection, string name, TimeSpan wait)
         {
-            if (con == null)
+            if (connection == null)
             {
                 throw new ArgumentNullException("con");
             }
 
-            if (con.State != ConnectionState.Open)
+            if (connection.State != ConnectionState.Open)
             {
                 throw new ArgumentException("The given connection is not open.");
             }
 
-            DbCommand cmd = con.CreateCommand();
+            DbCommand cmd = connection.CreateCommand();
             cmd.CommandType = CommandType.StoredProcedure;
             cmd.CommandText = "sp_getapplock";
 
@@ -77,13 +53,15 @@ namespace Interapptive.Shared.Data
                 throw new InvalidOperationException("SQL Server returns -999 from sp_getapplock.");
             }
 
-            return result >= 0;
+            return result >= 0 ?
+                Disposable.Create(() => ReleaseLock(connection, name)) :
+                Disposable.Empty;
         }
 
         /// <summary>
         /// Release the lock previously taken
         /// </summary>
-        private void ReleaseLock()
+        private void ReleaseLock(DbConnection con, string name)
         {
             if (con == null)
             {
@@ -126,14 +104,6 @@ namespace Interapptive.Shared.Data
             {
                 throw new InvalidOperationException("SQL Server returns -999 from sp_releaseapplock.");
             }
-        }
-
-        /// <summary>
-        /// Dispose and release the SQL app lock
-        /// </summary>
-        public void Dispose()
-        {
-            ReleaseLock();
         }
     }
 }

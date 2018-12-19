@@ -9,6 +9,7 @@ using Interapptive.Shared.ComponentRegistration.Ordering;
 using Interapptive.Shared.Data;
 using log4net;
 using SD.LLBLGen.Pro.QuerySpec;
+using ShipWorks.ApplicationCore.Licensing.TangoRequests;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.FactoryClasses;
@@ -28,12 +29,13 @@ namespace ShipWorks.ApplicationCore.Licensing
         private const string AppLockName = "TangoLogShipmentProcessorRunning";
         private static readonly ILog log = LogManager.GetLogger(typeof(TangoLogShipmentProcessor));
         private static readonly BlockingCollection<(StoreEntity Store, ShipmentEntity Shipment)> shipmentsToLog;
-        private static int runInterval = 1 * 60 * 1000;
+        private static readonly int runInterval = 1 * 60 * 1000;
         private readonly ISqlSession sqlSession;
         private readonly IShippingManager shippingManager;
         private readonly IStoreManager storeManager;
         private readonly ISqlAdapterFactory sqlAdapterFactory;
-        private readonly ITangoWebClient tangoWebClient;
+        private readonly ITangoLogShipmentRequest tangoWebClient;
+        private readonly ISqlAppLock sqlAppLock;
         private CancellationTokenSource cancellationTokenSource;
         private CancellationToken cancellationToken;
 
@@ -48,14 +50,20 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// <summary>
         /// Constructor
         /// </summary>
-        public TangoLogShipmentProcessor(ITangoWebClientFactory tangoWebClientFactory, ISqlSession sqlSession,
-            IShippingManager shippingManager, IStoreManager storeManager, ISqlAdapterFactory sqlAdapterFactory)
+        public TangoLogShipmentProcessor(
+            ITangoLogShipmentRequest tangoWebClient,
+            ISqlSession sqlSession,
+            IShippingManager shippingManager,
+            IStoreManager storeManager,
+            ISqlAdapterFactory sqlAdapterFactory,
+            ISqlAppLock sqlAppLock)
         {
+            this.sqlAppLock = sqlAppLock;
             this.sqlSession = sqlSession;
             this.shippingManager = shippingManager;
             this.storeManager = storeManager;
             this.sqlAdapterFactory = sqlAdapterFactory;
-            tangoWebClient = tangoWebClientFactory.CreateWebClient();
+            this.tangoWebClient = tangoWebClient;
         }
 
         /// <summary>
@@ -105,30 +113,34 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// </summary>
         private async Task Process()
         {
-            if (SqlSession.Current != null)
+            if (sqlSession == null)
             {
-                using (DbConnection connection = sqlSession.OpenConnection())
+                return;
+            }
+
+            using (DbConnection connection = sqlSession.OpenConnection())
+            {
+                using (IDisposable sqlLock = sqlAppLock.Take(connection, AppLockName, TimeSpan.FromMilliseconds(10)))
                 {
-                    using (SqlAppLock sqlAppLock = new SqlAppLock(connection, AppLockName, TimeSpan.FromMilliseconds(10)))
+                    if (sqlLock == null)
                     {
-                        if (sqlAppLock.LockAcquired)
+                        return;
+                    }
+
+                    try
+                    {
+                        do
                         {
-                            try
-                            {
-                                do
-                                {
-                                    LogShipmentsToTango();
+                            LogShipmentsToTango(connection);
 
-                                    // Get the next page
-                                    await AddFailedShipments().ConfigureAwait(false);
+                            // Get the next page
+                            await AddFailedShipments(connection).ConfigureAwait(false);
 
-                                } while (shipmentsToLog.Any() && !cancellationToken.IsCancellationRequested);
-                            }
-                            catch (Exception ex)
-                            {
-                                log.Error("Error while Processing", ex);
-                            }
-                        }
+                        } while (shipmentsToLog.Any() && !cancellationToken.IsCancellationRequested);
+                    }
+                    catch (Exception ex)
+                    {
+                        log.Error("Error while Processing", ex);
                     }
                 }
             }
@@ -154,7 +166,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// <summary>
         /// Process the queue
         /// </summary>
-        private void LogShipmentsToTango()
+        private void LogShipmentsToTango(DbConnection connection)
         {
             // Process each task synchronously
             while (shipmentsToLog.TryTake(out (StoreEntity Store, ShipmentEntity Shipment) shipmentToLog))
@@ -164,31 +176,32 @@ namespace ShipWorks.ApplicationCore.Licensing
                     return;
                 }
 
-                try
-                {
-                    tangoWebClient.LogShipment(shipmentToLog.Store, shipmentToLog.Shipment);
+                tangoWebClient.LogShipment(connection, shipmentToLog.Store, shipmentToLog.Shipment)
+                    .Do(() => log.InfoFormat("Logged shipment {0}", shipmentToLog.Shipment.ShipmentID))
+                    .OnFailure(ex => LogException(ex, shipmentToLog.Shipment.ShipmentID));
+            }
+        }
 
-                    log.Info($"Logged shipment {shipmentToLog.Shipment.ShipmentID}");
-                }
-                catch (Exception ex)
-                {
-                    // If a cancellation is requested while processing, a sql exception will most likely be thrown
-                    // so just ignore 
-                    if (!cancellationToken.IsCancellationRequested)
-                    {
-                        // We want to continue to the next shipment to log, so just put a message in the log file.
-                        log.Error($"Logging shipment {shipmentToLog.Shipment.ShipmentID} FAILED.", ex);
-                    }
-                }
+        /// <summary>
+        /// Log an exception raised while processing
+        /// </summary>
+        private void LogException(Exception ex, long shipmentID)
+        {
+            // If a cancellation is requested while processing, a sql exception will most likely be thrown
+            // so just ignore
+            if (!cancellationToken.IsCancellationRequested)
+            {
+                // We want to continue to the next shipment to log, so just put a message in the log file.
+                log.Error($"Logging shipment {shipmentID} FAILED.", ex);
             }
         }
 
         /// <summary>
         /// Add shipments that need logged to the list
         /// </summary>
-        private async Task AddFailedShipments()
+        private async Task AddFailedShipments(DbConnection connection)
         {
-            using (ISqlAdapter sqlAdapter = sqlAdapterFactory.Create())
+            using (ISqlAdapter sqlAdapter = sqlAdapterFactory.Create(connection))
             {
                 var query = new QueryFactory().Shipment
                     .Where(ShipmentFields.OnlineShipmentID.IsNull().Or(ShipmentFields.OnlineShipmentID == string.Empty))

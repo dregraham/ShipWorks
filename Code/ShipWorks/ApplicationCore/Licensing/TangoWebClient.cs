@@ -2,40 +2,32 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using System.Net;
-using System.Reactive;
 using System.Reflection;
-using System.Security.Cryptography.X509Certificates;
 using System.Web.Services.Protocols;
 using System.Xml;
 using System.Xml.Linq;
+using Autofac;
 using Interapptive.Shared;
 using Interapptive.Shared.Business;
-using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Security;
 using Interapptive.Shared.Utility;
 using log4net;
-using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.ApplicationCore.Licensing.Activation.WebServices;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.ApplicationCore.Nudges;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Editions;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers;
-using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Environment;
-using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Shipping.Carriers.Postal.Endicia.Account;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Contracts;
 using ShipWorks.Shipping.Carriers.Postal.Usps.WebServices;
 using ShipWorks.Shipping.Insurance;
 using ShipWorks.Shipping.Insurance.InsureShip;
 using ShipWorks.Stores;
-using ShipWorks.Stores.Content;
 
 namespace ShipWorks.ApplicationCore.Licensing
 {
@@ -52,31 +44,24 @@ namespace ShipWorks.ApplicationCore.Licensing
 
         private static InsureShipAffiliateProvider insureShipAffiliateProvider = new InsureShipAffiliateProvider();
 
-        private static Version version;
-        private static DateTime nextSecureConnectionValidation = DateTime.MinValue;
+        private readonly static Lazy<Version> version = new Lazy<Version>(() =>
+        {
+            // Tango requires a specific version in order to know when to return
+            // legacy responses or new response for the customer license. This is
+            // primarily for debug/internal versions of ShipWorks that have 0.0.0.x
+            // version number.
+            Version assemblyVersion = Assembly.GetExecutingAssembly().GetName().Version;
+            Version minimumVersion = new Version(5, 0, 0, 0);
+
+            return assemblyVersion.Major == 0 ? minimumVersion : assemblyVersion;
+        });
+
+        private static readonly DateTime nextSecureConnectionValidation = DateTime.MinValue;
 
         /// <summary>
         /// Gets the version - If version is under 5.0.0.0, return 5.0.0.0
         /// </summary>
-        private static string Version
-        {
-            get
-            {
-                if (version == null)
-                {
-                    // Tango requires a specific version in order to know when to return
-                    // legacy responses or new response for the customer license. This is
-                    // primarily for debug/internal versions of ShipWorks that have 0.0.0.x
-                    // version number.
-                    Version assemblyVersion = Assembly.GetExecutingAssembly().GetName().Version;
-                    Version minimumVersion = new Version(5, 0, 0, 0);
-
-                    version = assemblyVersion.Major == 0 ? minimumVersion : assemblyVersion;
-                }
-
-                return version.ToString(4);
-            }
-        }
+        public static string Version => version.Value.ToString(4);
 
         /// <summary>
         /// Activate the given license key to the specified store identifier
@@ -577,242 +562,6 @@ namespace ShipWorks.ApplicationCore.Licensing
         }
 
         /// <summary>
-        /// Log the given processed shipment to Tango.  isRetry is only for internal interapptive purposes to handle rare cases where shipments a customer
-        /// insured did not make it up into tango, but the shipment did actually process.
-        /// </summary>
-        /// <returns>OnlineShipmentID from Tango.</returns>
-        /// <exception cref="System.ArgumentNullException">store</exception>
-        /// <exception cref="TangoException"></exception>
-        public static void LogShipment(StoreEntity store, ShipmentEntity shipment)
-        {
-            if (store == null)
-            {
-                throw new ArgumentNullException("store");
-            }
-
-            string onlineShipmentID = string.Empty;
-
-            // Get the license from the store so we know how to log
-            ShipWorksLicense license = new ShipWorksLicense(store.License);
-
-            // Create the request
-            HttpVariableRequestSubmitter postRequest = new HttpVariableRequestSubmitter();
-
-            // Get the shipment and store types
-            ShipmentType shipmentType = ShipmentTypeManager.GetType(shipment);
-            StoreType storeType = StoreTypeManager.GetType(store);
-
-            // Both methods use the license key
-            postRequest.Variables.Add("license", license.Key);
-
-            // Trial shipment logging
-            if (license.IsTrial)
-            {
-                PrepareLogTrialShipmentRequest(postRequest, shipmentType, storeType);
-                ProcessXmlRequest(postRequest, "LogTrialShipments", true);
-            }
-            // Regular shipment logging
-            else
-            {
-                PrepareLogShipmentRequest(shipment, shipmentType, postRequest);
-                XmlDocument xmlResponse = ProcessXmlRequest(postRequest, "LogShipmentDetails", true);
-
-                // Check for error
-                XmlNode errorNode = xmlResponse.SelectSingleNode("//Error");
-                if (errorNode != null)
-                {
-                    throw new TangoException(errorNode.InnerText);
-                }
-
-                onlineShipmentID = xmlResponse.SelectSingleNode("//OnlineShipmentID")?.InnerText;
-            }
-
-            shipment.OnlineShipmentID = onlineShipmentID;
-
-            log.InfoFormat("Shipment {0}  - Accounted", shipment.ShipmentID);
-
-            using (ISqlAdapter adapter = new SqlAdapter(true))
-            {
-                // So as to not deal with out of sync issues, only update the OnlineShipmentID
-                ShipmentEntity shipmentToUpdate = new ShipmentEntity();
-                shipmentToUpdate.OnlineShipmentID = onlineShipmentID;
-                adapter.UpdateEntitiesDirectly(shipmentToUpdate, new RelationPredicateBucket(new PredicateExpression(ShipmentFields.ShipmentID == shipment.ShipmentID)));
-
-                adapter.Commit();
-            }
-        }
-
-        /// <summary>
-        /// Prepare the log shipment request for a trial shipment
-        /// </summary>
-        private static void PrepareLogTrialShipmentRequest(HttpVariableRequestSubmitter postRequest,
-                                                           ShipmentType shipmentType,
-                                                           StoreType storeType)
-        {
-            postRequest.Variables.Add("action", "logtrialshipments");
-            postRequest.Variables.Add("shipments", "1");
-            postRequest.Variables.Add("service", shipmentType.ShipmentTypeName);
-            postRequest.Variables.Add("storecode", storeType.TangoCode);
-            postRequest.Variables.Add("identifier", storeType.LicenseIdentifier);
-        }
-
-        /// <summary>
-        /// Prepare the log shipment request
-        /// </summary>
-        private static void PrepareLogShipmentRequest(ShipmentEntity shipment,
-                                                      ShipmentType shipmentType,
-                                                      HttpVariableRequestSubmitter postRequest)
-        {
-            string tracking = shipment.TrackingNumber;
-
-            // For the purposes of U-PIC logging, CustomsNumber cannot be counted as a true TrackingNumber
-            if (PostalUtility.IsPostalShipmentType(shipmentType.ShipmentTypeCode) &&
-                !shipment.ShipPerson.IsDomesticCountry())
-            {
-                tracking = "";
-            }
-
-            postRequest.Variables.Add("action", "logshipmentdetails");
-            postRequest.Variables.Add("swshipmentid", shipment.ShipmentID.ToString());
-            postRequest.Variables.Add("shipdate", shipment.ShipDate.ToString("yyyy-MM-dd HH:mm:ss"));
-            postRequest.Variables.Add("labelFormat", shipment.ActualLabelFormat == null ? "9" : shipment.ActualLabelFormat.Value.ToString());
-            postRequest.Variables.Add("returnShipment", shipment.ReturnShipment ? "1" : "0");
-            postRequest.Variables.Add("carrierCost", shipment.ShipmentCost.ToString());
-
-            // Send best rate usage data to Tango
-            BestRateEventsDescription bestRateEventsDescription = new BestRateEventsDescription((BestRateEventTypes) shipment.BestRateEvents);
-            postRequest.Variables.Add("bestrateevents", bestRateEventsDescription.ToString());
-
-            ShipmentCommonDetail shipmentDetail = shipmentType.GetShipmentCommonDetail(shipment);
-            AddOrderDetailsToLogShipmentRequest(shipment, postRequest);
-            AddAddressDetailsToLogShipmentRequest(shipment, postRequest);
-            AddInsuranceDetailsToLogShipmentRequest(shipment, postRequest, shipmentType);
-            AddPackageDetailsToLogShipmentRequest(shipment, postRequest, shipmentType, shipmentDetail);
-            AddCarrierDetailsToLogShipmentRequest(shipment, postRequest, shipmentType, shipmentDetail, tracking);
-        }
-
-        /// <summary>
-        /// Add carrier and service details from the given shipment to the log shipment request
-        /// </summary>
-        private static void AddCarrierDetailsToLogShipmentRequest(ShipmentEntity shipment,
-                                                                  HttpVariableRequestSubmitter postRequest,
-                                                                  ShipmentType shipmentType,
-                                                                  ShipmentCommonDetail shipmentDetail,
-                                                                  string tracking)
-        {
-            postRequest.Variables.Add("swtype", shipment.ShipmentType.ToString());
-            postRequest.Variables.Add("swtypeOriginal", shipmentDetail.OriginalShipmentType != null ?
-                                          ((int) shipmentDetail.OriginalShipmentType).ToString() :
-                                          string.Empty);
-            postRequest.Variables.Add("swServiceType", shipmentDetail.ServiceType.ToString());
-
-            postRequest.Variables.Add("carrier", ShippingManager.GetCarrierName(shipmentType.ShipmentTypeCode));
-            postRequest.Variables.Add("service", ShippingManager.GetActualServiceUsed(shipment));
-            postRequest.Variables.Add("tracking", tracking);
-            postRequest.Variables.Add("originAccount", shipmentDetail.OriginAccount);
-
-        }
-
-        /// <summary>
-        /// Add package details from the given shipment to the log shipment request
-        /// </summary>
-        private static void AddPackageDetailsToLogShipmentRequest(ShipmentEntity shipment,
-                                                                  HttpVariableRequestSubmitter postRequest,
-                                                                  ShipmentType shipmentType,
-                                                                  ShipmentCommonDetail shipmentDetail)
-        {
-            postRequest.Variables.Add("packageCount", shipmentType.GetParcelCount(shipment).ToString());
-            postRequest.Variables.Add("swPackagingType", shipmentDetail.PackagingType.ToString());
-
-            postRequest.Variables.Add("weight", shipment.TotalWeight.ToString());
-            postRequest.Variables.Add("packageLength", shipmentDetail.PackageLength.ToString());
-            postRequest.Variables.Add("packageWidth", shipmentDetail.PackageWidth.ToString());
-            postRequest.Variables.Add("packageHeight", shipmentDetail.PackageHeight.ToString());
-        }
-
-        /// <summary>
-        /// Add address details from the given shipment to the log shipment request
-        /// </summary>
-        private static void AddAddressDetailsToLogShipmentRequest(ShipmentEntity shipment,
-                                                                  HttpVariableRequestSubmitter postRequest)
-        {
-            postRequest.Variables.Add("firstname", shipment.ShipFirstName);
-            postRequest.Variables.Add("lastname", shipment.ShipLastName);
-            postRequest.Variables.Add("country", shipment.ShipPerson.AdjustedCountryCode(ShipmentTypeCode.None));
-            postRequest.Variables.Add("email", shipment.ShipEmail);
-            postRequest.Variables.Add("recipientCompany", shipment.ShipCompany);
-            postRequest.Variables.Add("recipientPhone", shipment.ShipPhone);
-            postRequest.Variables.Add("recipientPostalCode", shipment.ShipPostalCode);
-
-            postRequest.Variables.Add("originPostalCode", shipment.OriginPostalCode);
-            postRequest.Variables.Add("originCountry", shipment.OriginCountryCode);
-        }
-
-        /// <summary>
-        /// Add order details from the given shipment to the log shipment request
-        /// </summary>
-        private static void AddOrderDetailsToLogShipmentRequest(ShipmentEntity shipment,
-                                                                HttpVariableRequestSubmitter postRequest)
-        {
-            postRequest.Variables.Add("swordernumber", shipment.Order.OrderNumberComplete);
-            postRequest.Variables.Add("orderSubTotal", OrderUtility.CalculateTotal(shipment.Order, false).ToString());
-            postRequest.Variables.Add("orderTotal", shipment.Order.OrderTotal.ToString());
-        }
-
-        /// <summary>
-        /// Add insurance details from the given shipment to the log shipment request
-        /// </summary>
-        private static void AddInsuranceDetailsToLogShipmentRequest(ShipmentEntity shipment,
-                                                                    HttpVariableRequestSubmitter postRequest,
-                                                                    ShipmentType shipmentType)
-        {
-            bool shipWorksInsured = false;
-            bool carrierInsured = false;
-            bool pennyOne = false;
-            decimal insuredValue = 0;
-
-            List<IInsuranceChoice> insuredPackages = Enumerable.Range(0, shipmentType.GetParcelCount(shipment))
-                .Select(parcelIndex => shipmentType.GetParcelDetail(shipment, parcelIndex).Insurance)
-                .Where(choice => choice.Insured && choice.InsuranceProvider == InsuranceProvider.ShipWorks &&
-                                 choice.InsuranceValue > 0)
-                .ToList();
-
-            if (insuredPackages.Count > 0)
-            {
-                IInsuranceChoice insuranceChoice = insuredPackages[0];
-
-                shipWorksInsured = true;
-                pennyOne = insuranceChoice.InsurancePennyOne ?? false;
-                insuredValue = insuranceChoice.InsuranceValue;
-            }
-            else
-            {
-                carrierInsured = Enumerable.Range(0, shipmentType.GetParcelCount(shipment))
-                    .Select(parcelIndex => shipmentType.GetParcelDetail(shipment, parcelIndex).Insurance)
-                    .Any(choice => choice.Insured && choice.InsuranceProvider == InsuranceProvider.Carrier &&
-                                   choice.InsuranceValue > 0);
-            }
-
-            postRequest.Variables.Add("declaredvalue", insuredValue.ToString());
-            postRequest.Variables.Add("swinsurance", shipWorksInsured ? "1" : "0");
-
-            if (shipment.InsurancePolicy == null)
-            {
-                postRequest.Variables.Add("insuredwith", EnumHelper.GetApiValue(InsuredWith.NotWithApi));
-            }
-            else
-            {
-                InsuredWith insuredWith = shipment.InsurancePolicy.CreatedWithApi ?
-                    InsuredWith.SuccessfullyInsuredViaApi :
-                    InsuredWith.FailedToInsureViaApi;
-                postRequest.Variables.Add("insuredwith", EnumHelper.GetApiValue(insuredWith));
-            }
-
-            postRequest.Variables.Add("pennyone", pennyOne ? "1" : "0");
-            postRequest.Variables.Add("carrierInsured", carrierInsured ? "1" : "0");
-        }
-
-        /// <summary>
         /// Void the given processed shipment to Tango
         /// </summary>
         public static void VoidShipment(StoreEntity store, ShipmentEntity shipment)
@@ -1129,154 +878,53 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// <summary>
         /// Process the given request against the interapptive license server
         /// </summary>
-        private static XmlDocument ProcessXmlRequest(HttpVariableRequestSubmitter postRequest, string logEntryName, bool collectTelemetry)
+        private static XmlDocument ProcessXmlRequest(IHttpVariableRequestSubmitter postRequest, string logEntryName, bool collectTelemetry)
         {
-            XmlDocument xmlResponse = new XmlDocument();
+            using (var lifetimeScope = IoC.BeginLifetimeScope())
+            {
+                var client = lifetimeScope.Resolve<ITangoWebRequestClient>();
+                return client.ProcessXmlRequest(postRequest, logEntryName, collectTelemetry)
+                    .Match(x => x,
+                    ex =>
+                    {
+                        if (ex is XmlException xmlEx)
+                        {
+                            throw new TangoException(
+                                "The ShipWorks server returned an invalid response. \n\n" +
+                                "Details: " + xmlEx.Message, xmlEx);
+                        }
 
-            try
-            {
-                string resultXml = ProcessRequest(postRequest, logEntryName, collectTelemetry);
-                xmlResponse.LoadXml(resultXml);
-                return xmlResponse;
-            }
-            catch (XmlException ex)
-            {
-                throw new TangoException(
-                    "The ShipWorks server returned an invalid response. \n\n" +
-                    "Details: " + ex.Message, ex);
+                        if (WebHelper.IsWebException(ex))
+                        {
+                            throw new TangoException("An error occurred connecting to the ShipWorks server:\n\n" + ex.Message, ex);
+                        }
+
+                        throw ex;
+                    });
             }
         }
 
         /// <summary>
         /// Process the given request against the interapptive license server
         /// </summary>
-        private static string ProcessRequest(HttpVariableRequestSubmitter postRequest, string logEntryName, bool collectTelemetry)
+        private static string ProcessRequest(IHttpVariableRequestSubmitter postRequest, string logEntryName, bool collectTelemetry)
         {
-            ApiLogEntry logEntry = new ApiLogEntry(ApiLogSource.ShipWorks, logEntryName);
-            ConfigureRequest(postRequest, logEntry);
-
-            IHttpResponseReader postResponse = null;
-            TrackedDurationEvent telemetryEvent = null;
-
-            try
+            using (var lifetimeScope = IoC.BeginLifetimeScope())
             {
-                if (collectTelemetry)
-                {
-                    telemetryEvent = new TrackedDurationEvent("Tango.Request");
-                }
+                var client = lifetimeScope.Resolve<ITangoWebRequestClient>();
+                return client.ProcessRequest(postRequest, logEntryName, collectTelemetry)
+                    .Match(x => x,
+                    ex =>
+                    {
+                        if (WebHelper.IsWebException(ex))
+                        {
+                            throw new TangoException("An error occurred connecting to the ShipWorks server:\n\n" + ex.Message, ex);
+                        }
 
-                TelemetricResult<Unit> telemetricResult = new TelemetricResult<Unit>("Tango.Request");
-
-                string action = postRequest.Variables.FirstOrDefault(v => v.Name.Equals("action", StringComparison.InvariantCultureIgnoreCase))?.Value ?? logEntryName;
-                telemetryEvent?.AddProperty("Tango.Request.Action", action);
-
-                // First validate that we are connecting to interapptive, and not a fake redirect to steal passwords and such.  Doing this pre-call
-                // also prevents stealing the headers user\pass with fiddler
-                if (nextSecureConnectionValidation < DateTime.UtcNow)
-                {
-                    telemetricResult.RunTimedEvent("ValidateSecureConnection", () => ValidateSecureConnection(postRequest.Uri));
-                    nextSecureConnectionValidation = DateTime.UtcNow.AddMinutes(15);
-                }
-
-                telemetricResult.RunTimedEvent("ActualRequest", () => postResponse = postRequest.GetResponse());
-
-                // Ensure the site has a valid interapptive secure certificate
-                telemetricResult.RunTimedEvent("ValidateInterapptiveCertificate", () => ValidateInterapptiveCertificate(postResponse.HttpWebRequest));
-
-                string result = postResponse.ReadResult().Trim();
-
-                telemetricResult.RunTimedEvent("LogResponse", () => logEntry.LogResponse(result));
-
-                telemetricResult.WriteTo(telemetryEvent);
-
-                return result;
-            }
-            catch (Exception ex)
-            {
-                if (WebHelper.IsWebException(ex))
-                {
-                    throw new TangoException("An error occurred connecting to the ShipWorks server:\n\n" + ex.Message, ex);
-                }
-
-                throw;
-            }
-            finally
-            {
-                postResponse?.Dispose();
-                telemetryEvent?.Dispose();
+                        throw ex;
+                    });
             }
         }
-
-        /// <summary>
-        /// configure the post request
-        /// </summary>
-        private static void ConfigureRequest(HttpVariableRequestSubmitter postRequest, ApiLogEntry logEntry)
-        {
-            postRequest.Timeout = TimeSpan.FromSeconds(60);
-            postRequest.Uri = new Uri("https://www.interapptive.com/ShipWorksNet/ShipWorksV1.svc/account/shipworks");
-
-            logEntry.LogRequest(postRequest);
-
-            postRequest.RequestSubmitting += delegate (object sender, HttpRequestSubmittingEventArgs e)
-            {
-                e.HttpWebRequest.KeepAlive = false;
-
-                e.HttpWebRequest.UserAgent = "shipworks";
-                e.HttpWebRequest.Headers.Add("X-SHIPWORKS-VERSION", Version);
-
-                e.HttpWebRequest.Headers.Add("X-SHIPWORKS-USER", SecureText.Decrypt("C5NOiKdNaM/324R7sIjFUA==", "interapptive"));
-                e.HttpWebRequest.Headers.Add("X-SHIPWORKS-PASS", SecureText.Decrypt("lavEgsQoKGM=", "interapptive"));
-                e.HttpWebRequest.Headers.Add("SOAPAction", "http://stamps.com/xml/namespace/2015/06/shipworks/shipworksv1/IShipWorks/ShipworksPost");
-            };
-        }
-
-        /// <summary>
-        /// Ensure the connection to the given URI is a valid interapptive secure connection
-        /// </summary>
-        public static void ValidateSecureConnection(Uri uri)
-        {
-#if !DEBUG
-            HttpWebRequest request = (HttpWebRequest) WebRequest.Create(uri);
-            request.KeepAlive = false;
-            request.UserAgent = "shipworks";
-
-            using (WebResponse response = request.GetResponse())
-            {
-                ValidateInterapptiveCertificate(request);
-            }
-#endif
-        }
-
-        /// <summary>
-        /// Validate that there is an accurate interapptive certificate attached to the web request
-        /// </summary>
-        private static void ValidateInterapptiveCertificate(HttpWebRequest httpWebRequest)
-        {
-#pragma warning disable 168
-            X509Certificate certificate;
-#pragma warning restore 168
-
-#if !DEBUG
-            if (httpWebRequest.ServicePoint == null)
-            {
-                throw new TangoException("The SSL certificate on the server is invalid.");
-            }
-
-            certificate = httpWebRequest.ServicePoint.Certificate;
-
-            if (certificate == null)
-            {
-                throw new TangoException("The SSL certificate on the server is invalid.");
-            }
-
-            if (certificate.Subject.IndexOf("www.interapptive.com") == -1 ||
-                certificate.Subject.IndexOf("Interapptive, Inc") == -1)
-            {
-                throw new TangoException("The SSL certificate on the server is invalid.");
-            }
-#endif
-        }
-
 
         /// <summary>
         /// Indicates if the test server should be used instead of the live server

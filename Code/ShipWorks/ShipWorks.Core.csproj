@@ -764,7 +764,13 @@
     <Compile Include="ApplicationCore\IoCLogRequestModule.cs" />
     <Compile Include="ApplicationCore\IRegistrationOverride.cs" />
     <Compile Include="ApplicationCore\Licensing\ITangoLogShipmentProcessor.cs" />
+    <Compile Include="ApplicationCore\Licensing\ITangoSecurityValidator.cs" />
+    <Compile Include="ApplicationCore\Licensing\ITangoWebRequestClient.cs" />
     <Compile Include="ApplicationCore\Licensing\TangoLogShipmentProcessor.cs" />
+    <Compile Include="ApplicationCore\Licensing\TangoRequests\ITangoLogShipmentRequest.cs" />
+    <Compile Include="ApplicationCore\Licensing\TangoRequests\TangoLogShipmentRequest.cs" />
+    <Compile Include="ApplicationCore\Licensing\TangoSecurityValidator.cs" />
+    <Compile Include="ApplicationCore\Licensing\TangoWebRequestClient.cs" />
     <Compile Include="ApplicationCore\MainForm.BasicUIHeartbeat.cs">
       <SubType>Form</SubType>
     </Compile>
