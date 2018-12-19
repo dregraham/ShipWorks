@@ -1,10 +1,12 @@
-﻿using Newtonsoft.Json;
+﻿using System.Reflection;
+using Newtonsoft.Json;
 
 namespace ShipWorks.Shipping.Insurance.InsureShip.Net.Insure
 {
     /// <summary>
     /// Response for a new_policy request
     /// </summary>
+    [Obfuscation(Exclude = true, ApplyToMembers = true)]
     public class InsureShipNewPolicyResponse
     {
         /// <summary>
