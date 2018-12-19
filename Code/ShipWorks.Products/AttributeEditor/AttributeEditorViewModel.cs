@@ -7,12 +7,15 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
+using Interapptive.Shared.Collections;
 using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.Extensions;
 using Interapptive.Shared.UI;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.Custom;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
+using ShipWorks.Data.Model.HelperClasses;
 
 namespace ShipWorks.Products.AttributeEditor
 {
@@ -125,7 +128,7 @@ namespace ShipWorks.Products.AttributeEditor
             }
 
             AttributeNames = new ObservableCollection<string>(productVariant.Product.Attributes.Select(x => x.AttributeName));
-            ProductAttributes = new ObservableCollection<ProductVariantAttributeValueEntity>(productVariant.Attributes);
+            ProductAttributes = new ObservableCollection<ProductVariantAttributeValueEntity>(productVariant.AttributeValues);
         }
 
         /// <summary>
@@ -133,12 +136,22 @@ namespace ShipWorks.Products.AttributeEditor
         /// </summary>
         public void Save()
         {
-            productVariant.Attributes.RemovedEntitiesTracker = new ProductAttributeCollection();
-            productVariant.Attributes.Clear();
+            var variantAttributesToRemove = productVariant.AttributeValues
+                .Where(a => ProductAttributes.None(selectedAttribute => selectedAttribute.ProductVariantAttributeValueID == a.ProductVariantAttributeValueID))
+                .ToEntityCollection();
 
-            foreach (ProductVariantAttributeValueEntity attribute in ProductAttributes)
+            productVariant.AttributeValues.RemovedEntitiesTracker = new EntityCollection<ProductVariantAttributeValueEntity>();
+
+            productVariant.AttributeValues.RemoveRange(variantAttributesToRemove.ToList());
+            
+            var productsToAdd = ProductAttributes
+                .Where(selectedAttribute => productVariant.AttributeValues.None(currentAttribute => currentAttribute.ProductVariantAttributeValueID == selectedAttribute.ProductVariantAttributeValueID))
+                .ToList();
+
+            foreach (ProductVariantAttributeValueEntity attribute in productsToAdd)
             {
-                productVariant.Attributes.Add(attribute);
+                productVariant.Product.Attributes.Add(attribute.ProductAttribute);
+                productVariant.AttributeValues.Add(attribute);
             }
         }
 
@@ -183,6 +196,9 @@ namespace ShipWorks.Products.AttributeEditor
                 ProductAttribute = attribute,
                 AttributeValue = AttributeValue ?? string.Empty
             });
+
+            AttributeValue = string.Empty;
+            SelectedAttributeName = string.Empty;
         }
 
         /// <summary>
