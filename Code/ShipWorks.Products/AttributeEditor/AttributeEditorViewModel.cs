@@ -194,6 +194,9 @@ namespace ShipWorks.Products.AttributeEditor
                 ProductAttribute = attribute,
                 AttributeValue = AttributeValue ?? string.Empty
             });
+
+            AttributeValue = string.Empty;
+            SelectedAttributeName = string.Empty;
         }
 
         /// <summary>
