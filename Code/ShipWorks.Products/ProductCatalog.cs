@@ -243,7 +243,7 @@ namespace ShipWorks.Products
                 ProductVariantEntity.PrefetchPathProduct.WithSubPath(ProductEntity.PrefetchPathAttributes),
                 ProductVariantEntity.PrefetchPathAliases,
                 ProductVariantEntity.PrefetchPathIncludedInBundles,
-                ProductVariantEntity.PrefetchPathAttributes.WithSubPath(ProductVariantAttributeValueEntity.PrefetchPathProductAttribute)
+                ProductVariantEntity.PrefetchPathAttributeValues.WithSubPath(ProductVariantAttributeValueEntity.PrefetchPathProductAttribute)
             };
 
             return prefetchPath;
@@ -286,7 +286,7 @@ namespace ShipWorks.Products
                 productVariant.CreatedDate = now;
             }
 
-            using (ISqlAdapter adapter = sqlAdapterFactory.CreateTransacted())
+            using (ISqlAdapter sqlAdapter = sqlAdapterFactory.CreateTransacted())
             {
                 try
                 {
@@ -294,24 +294,50 @@ namespace ShipWorks.Products
                     {
                         foreach(var bundle in productVariant.IncludedInBundles)
                         {
-                            await adapter.DeleteEntityAsync(bundle).ConfigureAwait(true);
+                            await sqlAdapter.DeleteEntityAsync(bundle).ConfigureAwait(true);
                         }
                     }
 
-                    await DeleteRemovedBundleItems(adapter, product).ConfigureAwait(true);
+                    await DeleteRemovedBundleItems(sqlAdapter, product).ConfigureAwait(true);
+                    await DeleteRemovedVariantAttributeValues(sqlAdapter, productVariant).ConfigureAwait(true);
 
-                    adapter.SaveEntity(product);
+                    sqlAdapter.SaveEntity(product);
 
-                    adapter.Commit();
+                    await DeleteUnusedAttributes(sqlAdapter).ConfigureAwait(false);
+
+                    sqlAdapter.Commit();
                 }
                 catch (ORMQueryExecutionException ex)
                 {
-                    adapter.Rollback();
+                    sqlAdapter.Rollback();
                     return Result.FromError(ex);
                 }
             }
 
             return Result.FromSuccess();
+        }
+
+        /// <summary>
+        /// Delete removed variant attribute values
+        /// </summary>
+        private async Task DeleteRemovedVariantAttributeValues(ISqlAdapter sqlAdapter, ProductVariantEntity productVariant)
+        {
+            foreach (ProductVariantAttributeValueEntity removedAttribute in productVariant.AttributeValues.RemovedEntitiesTracker)
+            {
+                await sqlAdapter.DeleteEntityAsync(removedAttribute).ConfigureAwait(false);
+            }
+        }
+
+        /// <summary>
+        /// Delete unused attributes (this deletes all unused attributes, not just for this product)
+        /// </summary>
+        private async Task DeleteUnusedAttributes(ISqlAdapter sqlAdapter)
+        {
+            RelationPredicateBucket bucket = new RelationPredicateBucket();
+            bucket.Relations.Add(ProductAttributeEntity.Relations.ProductVariantAttributeValueEntityUsingProductAttributeID, JoinHint.Left);
+            bucket.PredicateExpression.Add(ProductVariantAttributeValueFields.ProductVariantAttributeValueID.IsNull());
+
+            await sqlAdapter.DeleteEntitiesDirectlyAsync(typeof(ProductAttributeEntity), bucket).ConfigureAwait(false);
         }
 
         /// <summary>

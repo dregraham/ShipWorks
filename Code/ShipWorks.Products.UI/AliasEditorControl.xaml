@@ -5,7 +5,9 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:aliasEditor="clr-namespace:ShipWorks.Products.AliasEditor;assembly=ShipWorks.Products"
              mc:Ignorable="d"
-             d:DesignHeight="300" d:DesignWidth="400">
+             d:DesignHeight="300" d:DesignWidth="400"
+             d:DataContext="{d:DesignInstance aliasEditor:AliasEditorViewModel}"
+             FontFamily="/ShipWorks.UI;component/Styles/BlueSteel/#Roboto">
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>

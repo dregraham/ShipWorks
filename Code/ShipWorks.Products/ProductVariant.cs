@@ -61,9 +61,9 @@ namespace ShipWorks.Products
             outline.AddElement("DeclaredValue", () => variant.DeclaredValue);
             outline.AddElement("Quantity", () => quantity, ElementOutline.If(() => quantity.HasValue));
 
-            if (variant.Attributes.Any())
+            if (variant.AttributeValues.Any())
             {
-                foreach (IProductVariantAttributeValueEntity attribute in variant.Attributes)
+                foreach (IProductVariantAttributeValueEntity attribute in variant.AttributeValues)
                 {
                     ElementOutline attributeOutline = new ElementOutline(outline.Context);
                     attributeOutline.AddElement("Name", () => attribute.ProductAttribute.AttributeName);

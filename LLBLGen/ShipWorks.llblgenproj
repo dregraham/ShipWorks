@@ -4050,7 +4050,7 @@
           <FieldFieldRelationship FkField="ProductAttributeID" PkField="ProductAttributeID" />
         </FieldRelationships>
       </NormalRelationship>
-      <NormalRelationship Name="ProductVariantAttributeValue.ProductVariant-ProductVariant.Attributes" Start=":ProductVariantAttributeValue" End=":ProductVariant" StartNavigator="ProductVariant" EndNavigator="Attributes" Type="4">
+      <NormalRelationship Name="ProductVariantAttributeValue.ProductVariant-ProductVariant.AttributeValues" Start=":ProductVariantAttributeValue" End=":ProductVariant" StartNavigator="ProductVariant" EndNavigator="AttributeValues" Type="4">
         <FieldRelationships>
           <FieldFieldRelationship FkField="ProductVariantID" PkField="ProductVariantID" />
         </FieldRelationships>
