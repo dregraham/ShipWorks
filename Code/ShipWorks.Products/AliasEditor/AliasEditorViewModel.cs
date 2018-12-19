@@ -38,8 +38,9 @@ namespace ShipWorks.Products.AliasEditor
             this.messageHelper = messageHelper;
             this.productCatalog = productCatalog;
             this.sqlAdapterFactory = sqlAdapterFactory;
+            
+            ResetFields();
             ProductAliases = new ObservableCollection<ProductVariantAliasEntity>();
-
             AddAliasCommand = new RelayCommand(AddAliasToProduct);
         }
 
@@ -161,6 +162,14 @@ namespace ShipWorks.Products.AliasEditor
                 Sku = AliasSku
             });
 
+            ResetFields();
+        }
+
+        /// <summary>
+        /// Reset the input fields
+        /// </summary>
+        private void ResetFields()
+        {
             AliasName = string.Empty;
             AliasSku = string.Empty;
         }
