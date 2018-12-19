@@ -7959,7 +7959,7 @@ ALTER TABLE [dbo].[ProductVariantAlias] ADD CONSTRAINT [FK_ProductVariantAlias_P
 GO
 PRINT N'Adding foreign keys to [dbo].[ProductVariantAttributeValue]'
 GO
-ALTER TABLE [dbo].[ProductVariantAttributeValue] ADD CONSTRAINT [FK_ProductVariantAttribute_ProductVariant] FOREIGN KEY ([ProductVariantID]) REFERENCES [dbo].[ProductVariant] ([ProductVariantID])
+ALTER TABLE [dbo].[ProductVariantAttributeValue] ADD CONSTRAINT [FK_ProductVariantAttributeValue_ProductVariant] FOREIGN KEY ([ProductVariantID]) REFERENCES [dbo].[ProductVariant] ([ProductVariantID])
 GO
 PRINT N'Adding foreign keys to [dbo].[ProductVariantAttributeValue]'
 GO
