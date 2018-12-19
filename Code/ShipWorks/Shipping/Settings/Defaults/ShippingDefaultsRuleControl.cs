@@ -316,13 +316,14 @@ namespace ShipWorks.Shipping.Settings.Defaults
             {
                 if (IsMyFilter)
                 {
-                    return $"Rule at position {position} is using a My Filter, which is not allowed.  Any changes to this rule will not be saved.";
+                    return $"Rule at position {position} is using a My Filter. Shipping Rules can no longer use a My Filter. Any changes to this rule will not be saved.";
                 }
 
                 if (FilterHelper.IsMyFilter(originalFilterNodeID))
                 {
-                    return $"Rule at position {position} was using a My Filter, which is not allowed.  " +
-                           $"It has been changed to use a filter that is not a My Filter and the profile will be changed to \"none\".  ";
+                    return $"Rule at position {position} was using a My Filter that is not available to this user account. " +
+                           $"Shipping Rules can no longer use a My filter.  " +
+                           $"This rule has been updated to use a filter that is not a My Filter and the profile will be changed to \"none\".";
                 }
 
                 return string.Empty;
