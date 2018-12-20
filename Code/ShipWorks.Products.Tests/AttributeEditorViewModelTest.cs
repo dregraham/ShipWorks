@@ -43,7 +43,7 @@ namespace ShipWorks.Products.Tests
             ProductVariantAttributeValueEntity variantAttributeEntity = new ProductVariantAttributeValueEntity();
 
             ProductVariantEntity productVariant = new ProductVariantEntity();
-            productVariant.Attributes.Add(variantAttributeEntity);
+            productVariant.AttributeValues.Add(variantAttributeEntity);
 
             ProductEntity productEntity = new ProductEntity();
             productEntity.Variants.Add(productVariant);
@@ -60,14 +60,18 @@ namespace ShipWorks.Products.Tests
             ProductEntity productEntity = new ProductEntity();
             productEntity.Variants.Add(productVariant);
 
+            ProductVariantAttributeValueEntity variantAttributeEntity = new ProductVariantAttributeValueEntity()
+            {
+                ProductAttribute = new ProductAttributeEntity()
+            };
+
             await testObject.Load(productVariant);
 
-            ProductVariantAttributeValueEntity variantAttributeEntity = new ProductVariantAttributeValueEntity();
             testObject.ProductAttributes.Add(variantAttributeEntity);
 
             testObject.Save();
 
-            Assert.Equal(variantAttributeEntity, productVariant.Attributes.SingleOrDefault());
+            Assert.Equal(variantAttributeEntity, productVariant.AttributeValues.SingleOrDefault());
         }
 
         [Fact]
@@ -90,7 +94,7 @@ namespace ShipWorks.Products.Tests
             ProductVariantAttributeValueEntity variantAttributeEntity = new ProductVariantAttributeValueEntity();
             variantAttributeEntity.ProductAttribute = productAttributeEntity;
             ProductVariantEntity productVariant = new ProductVariantEntity();
-            productVariant.Attributes.Add(variantAttributeEntity);
+            productVariant.AttributeValues.Add(variantAttributeEntity);
 
             ProductEntity productEntity = new ProductEntity();
             productEntity.Variants.Add(productVariant);
@@ -138,7 +142,7 @@ namespace ShipWorks.Products.Tests
             testObject.AttributeValue = "value";
             testObject.AddAttributeToProductCommand.Execute(null);
 
-            mock.Mock<IProductCatalog>().Verify(x => x.FetchProductAttribute(It.IsAny<ISqlAdapter>(), testObject.SelectedAttributeName, AnyLong));
+            mock.Mock<IProductCatalog>().Verify(x => x.FetchProductAttribute(It.IsAny<ISqlAdapter>(), "foo", AnyLong));
         }
 
         [Fact]
@@ -147,7 +151,7 @@ namespace ShipWorks.Products.Tests
             ProductVariantAttributeValueEntity variantAttributeEntity = new ProductVariantAttributeValueEntity();
 
             ProductVariantEntity productVariant = new ProductVariantEntity();
-            productVariant.Attributes.Add(variantAttributeEntity);
+            productVariant.AttributeValues.Add(variantAttributeEntity);
 
             ProductEntity productEntity = new ProductEntity();
             productEntity.Variants.Add(productVariant);

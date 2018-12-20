@@ -7836,7 +7836,7 @@ PRINT N'Creating [dbo].[Product]'
 GO
 CREATE TABLE [dbo].[Product]
 (
-[ProductID] [bigint] NOT NULL IDENTITY(1, 1),
+[ProductID] [bigint] NOT NULL IDENTITY(1201, 1000),
 [CreatedDate] [datetime] NOT NULL,
 [IsActive] [bit] NOT NULL,
 [IsBundle] [bit] NOT NULL
@@ -7863,7 +7863,7 @@ PRINT N'Creating [dbo].[ProductVariant]'
 GO
 CREATE TABLE [dbo].[ProductVariant]
 (
-[ProductVariantID] [bigint] NOT NULL IDENTITY(1, 1),
+[ProductVariantID] [bigint] NOT NULL IDENTITY(1202, 1000),
 [ProductID] [bigint] NOT NULL,
 [CreatedDate] [datetime] NOT NULL,
 [Name] [nvarchar] (300) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
@@ -7890,7 +7890,7 @@ PRINT N'Creating [dbo].[ProductVariantAlias]'
 GO
 CREATE TABLE [dbo].[ProductVariantAlias]
 (
-[ProductVariantAliasID] [bigint] NOT NULL IDENTITY(1, 1),
+[ProductVariantAliasID] [bigint] NOT NULL IDENTITY(1203, 1000),
 [ProductVariantID] [bigint] NOT NULL,
 [AliasName] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [Sku] [nvarchar] (300) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
@@ -7919,7 +7919,7 @@ GO
 IF OBJECT_ID(N'[dbo].[ProductAttribute]', 'U') IS NULL
 CREATE TABLE [dbo].[ProductAttribute]
 (
-[ProductAttributeID] [bigint] IDENTITY(1,1) NOT NULL,
+[ProductAttributeID] [bigint] IDENTITY(1204, 1000) NOT NULL,
 [ProductID] [bigint] NOT NULL,
 [AttributeName] [nvarchar](50) NOT NULL
 )
@@ -7933,7 +7933,7 @@ PRINT N'Creating [dbo].[ProductVariantAttributeValue]'
 GO
 CREATE TABLE [dbo].[ProductVariantAttributeValue]
 (
-[ProductVariantAttributeValueID] [bigint] NOT NULL IDENTITY(1, 1),
+[ProductVariantAttributeValueID] [bigint] NOT NULL IDENTITY(1205, 1000),
 [ProductVariantID] [bigint] NOT NULL,
 [ProductAttributeID] [bigint] NOT NULL,
 [AttributeValue] [nvarchar] (300) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL
@@ -7959,7 +7959,7 @@ ALTER TABLE [dbo].[ProductVariantAlias] ADD CONSTRAINT [FK_ProductVariantAlias_P
 GO
 PRINT N'Adding foreign keys to [dbo].[ProductVariantAttributeValue]'
 GO
-ALTER TABLE [dbo].[ProductVariantAttributeValue] ADD CONSTRAINT [FK_ProductVariantAttribute_ProductVariant] FOREIGN KEY ([ProductVariantID]) REFERENCES [dbo].[ProductVariant] ([ProductVariantID])
+ALTER TABLE [dbo].[ProductVariantAttributeValue] ADD CONSTRAINT [FK_ProductVariantAttributeValue_ProductVariant] FOREIGN KEY ([ProductVariantID]) REFERENCES [dbo].[ProductVariant] ([ProductVariantID])
 GO
 PRINT N'Adding foreign keys to [dbo].[ProductVariantAttributeValue]'
 GO

@@ -953,26 +953,22 @@ namespace ShipWorks
         /// </summary>
         private void UpdateUIMode(IUserEntity user, bool startHeartbeat)
         {
+            bool hasProductsPermissions = UserSession.Security.HasPermission(PermissionType.ManageProducts);
+            mainMenuItemProducts.Visible = hasProductsPermissions;
+
             heartBeat?.Stop();
-            var currentMode = currentUserSettings.GetUIMode();
 
             UnloadOrderLookupMode();
             UnloadProductsMode();
 
-            ToggleUiModeCheckbox(currentMode);
+            UIMode currentMode = currentUserSettings.GetUIMode();
+            if (currentMode == UIMode.Products && !hasProductsPermissions)
+            {
+                currentMode = UIMode.Batch;
+            }
 
-            if (currentMode == UIMode.OrderLookup)
-            {
-                EnableOrderLookupMode();
-            }
-            else if (currentMode == UIMode.Products)
-            {
-                EnableProductsMode(user);
-            }
-            else
-            {
-                EnableBatchMode(user);
-            }
+            ToggleUiModeCheckbox(currentMode);
+            EnableUiMode(currentMode, user);
 
             UIMode = currentMode;
 
@@ -994,6 +990,25 @@ namespace ShipWorks
             }
 
             panelDockingArea.Visible = true;
+        }
+
+        /// <summary>
+        /// Enables the given UI mode
+        /// </summary>
+        private void EnableUiMode(UIMode mode, IUserEntity user)
+        {
+            if (mode == UIMode.OrderLookup)
+            {
+                EnableOrderLookupMode();
+            }
+            else if (mode == UIMode.Products)
+            {
+                EnableProductsMode(user);
+            }
+            else
+            {
+                EnableBatchMode(user);
+            }
         }
 
         /// <summary>
