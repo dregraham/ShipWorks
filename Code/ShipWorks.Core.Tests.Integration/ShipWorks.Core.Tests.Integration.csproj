@@ -9,11 +9,14 @@
     <Product />
     <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
   </PropertyGroup>
-  <PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <CodeAnalysisRuleSet>..\..\Build\Interapptive.Strict.ruleset</CodeAnalysisRuleSet>
+    <WarningsAsErrors />
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug %28No Analyzers%29|AnyCPU'">
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug (No Analyzers)|AnyCPU'">
     <CodeAnalysisRuleSet>..\..\Build\Empty.ruleset</CodeAnalysisRuleSet>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <WarningsAsErrors />
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="**/*.cs" Exclude="**/*.Designer.cs" />

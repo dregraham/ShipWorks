@@ -2,6 +2,7 @@
 using System.Collections.Concurrent;
 using System.Data.Common;
 using System.Linq;
+using System.Reactive;
 using System.Threading;
 using System.Threading.Tasks;
 using Interapptive.Shared.ComponentRegistration;
@@ -34,10 +35,11 @@ namespace ShipWorks.ApplicationCore.Licensing
         private readonly IShippingManager shippingManager;
         private readonly IStoreManager storeManager;
         private readonly ISqlAdapterFactory sqlAdapterFactory;
-        private readonly ITangoLogShipmentRequest tangoWebClient;
+        private readonly ITangoLogShipmentRequest tangoLogShipmentRequest;
         private readonly ISqlAppLock sqlAppLock;
         private CancellationTokenSource cancellationTokenSource;
         private CancellationToken cancellationToken;
+        private TaskCompletionSource<Unit> delayTaskCompletionSource = new TaskCompletionSource<Unit>();
 
         /// <summary>
         /// Static constructor
@@ -51,7 +53,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// Constructor
         /// </summary>
         public TangoLogShipmentProcessor(
-            ITangoLogShipmentRequest tangoWebClient,
+            ITangoLogShipmentRequest tangoLogShipmentRequest,
             ISqlSession sqlSession,
             IShippingManager shippingManager,
             IStoreManager storeManager,
@@ -63,7 +65,7 @@ namespace ShipWorks.ApplicationCore.Licensing
             this.shippingManager = shippingManager;
             this.storeManager = storeManager;
             this.sqlAdapterFactory = sqlAdapterFactory;
-            this.tangoWebClient = tangoWebClient;
+            this.tangoLogShipmentRequest = tangoLogShipmentRequest;
         }
 
         /// <summary>
@@ -104,8 +106,18 @@ namespace ShipWorks.ApplicationCore.Licensing
                     log.Error("Error while Processing", ex);
                 }
 
-                await Task.Delay(runInterval, cancellationToken).ConfigureAwait(false);
+                delayTaskCompletionSource = new TaskCompletionSource<Unit>();
+                await Task.WhenAny(Task.Delay(runInterval, cancellationToken), delayTaskCompletionSource.Task).ConfigureAwait(false);
+                delayTaskCompletionSource = null;
             }
+        }
+
+        /// <summary>
+        /// Skip the delay and run now
+        /// </summary>
+        public void RunNow()
+        {
+            delayTaskCompletionSource?.SetResult(Unit.Default);
         }
 
         /// <summary>
@@ -176,7 +188,7 @@ namespace ShipWorks.ApplicationCore.Licensing
                     return;
                 }
 
-                tangoWebClient.LogShipment(connection, shipmentToLog.Store, shipmentToLog.Shipment)
+                tangoLogShipmentRequest.LogShipment(connection, shipmentToLog.Store, shipmentToLog.Shipment)
                     .Do(() => log.InfoFormat("Logged shipment {0}", shipmentToLog.Shipment.ShipmentID))
                     .OnFailure(ex => LogException(ex, shipmentToLog.Shipment.ShipmentID));
             }
