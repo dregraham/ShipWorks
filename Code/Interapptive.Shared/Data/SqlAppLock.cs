@@ -14,6 +14,11 @@ namespace Interapptive.Shared.Data
     public class SqlAppLock : ISqlAppLock
     {
         /// <summary>
+        /// Has a lock been acquired?
+        /// </summary>
+        public bool LockAcquired { get; private set; }
+
+        /// <summary>
         /// Acquire a session, exclusive lock with the specified name.  If the lock cannot be obtained,
         /// the method waits for the specified time before returning false.
         /// </summary>
@@ -53,7 +58,9 @@ namespace Interapptive.Shared.Data
                 throw new InvalidOperationException("SQL Server returns -999 from sp_getapplock.");
             }
 
-            return result >= 0 ?
+            LockAcquired = result >= 0;
+
+            return LockAcquired ?
                 Disposable.Create(() => ReleaseLock(connection, name)) :
                 Disposable.Empty;
         }
@@ -89,6 +96,8 @@ namespace Interapptive.Shared.Data
             }
             catch (SqlException ex)
             {
+                LockAcquired = false;
+
                 if (ex.Message.IndexOf("because it is not currently held.", StringComparison.OrdinalIgnoreCase) == -1)
                 {
                     throw;
@@ -99,6 +108,7 @@ namespace Interapptive.Shared.Data
             }
 
             int result = Convert.ToInt32(returnValue.Value);
+            LockAcquired = false;
 
             if (result == -999)
             {

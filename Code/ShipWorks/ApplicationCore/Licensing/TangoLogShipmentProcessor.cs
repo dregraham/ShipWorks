@@ -132,9 +132,9 @@ namespace ShipWorks.ApplicationCore.Licensing
 
             using (DbConnection connection = sqlSession.OpenConnection())
             {
-                using (IDisposable sqlLock = sqlAppLock.Take(connection, AppLockName, TimeSpan.FromMilliseconds(10)))
+                using (sqlAppLock.Take(connection, AppLockName, TimeSpan.FromMilliseconds(10)))
                 {
-                    if (sqlLock == null)
+                    if (!sqlAppLock.LockAcquired)
                     {
                         return;
                     }

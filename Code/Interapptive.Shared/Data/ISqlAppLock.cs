@@ -12,5 +12,10 @@ namespace Interapptive.Shared.Data
         /// Take a SqlAppLock
         /// </summary>
         IDisposable Take(DbConnection connection, string appLockName, TimeSpan timeSpan);
+
+        /// <summary>
+        /// Has a lock been acquired?
+        /// </summary>
+        bool LockAcquired { get; }
     }
 }
