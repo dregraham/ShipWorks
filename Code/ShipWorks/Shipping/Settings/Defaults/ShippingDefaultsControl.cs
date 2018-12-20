@@ -1,8 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
-using System.Reactive.Linq;
 using System.Windows.Forms;
 using Autofac;
+using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Data.Model.EntityClasses;
@@ -42,6 +43,20 @@ namespace ShipWorks.Shipping.Settings.Defaults
             get
             {
                 return panelSettingsArea.Controls.OfType<ShippingDefaultsRuleControl>().Any(x => x.IsFilterDisabled);
+            }
+        }
+
+        /// <summary>
+        /// Gets a list of shipping rules validation errors.
+        /// </summary>
+        public List<string> GetFilterValidationErrors
+        {
+            get
+            {
+                return panelSettingsArea.Controls.OfType<ShippingDefaultsRuleControl>()
+                    .Select(x => x.ValidationErrors)
+                    .Where(x => !x.IsNullOrWhiteSpace())
+                    .ToList();
             }
         }
 
