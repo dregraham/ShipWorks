@@ -11,7 +11,7 @@
         xmlns:productEditor="clr-namespace:ShipWorks.Products.ProductEditor;assembly=ShipWorks.Products"
         mc:Ignorable="d"        
         Title="{Binding DialogTitle}" 
-        Height="743"               
+        Height="765"               
         Width="700"
         FontFamily="/ShipWorks.UI;component/Styles/BlueSteel/#Roboto"
         d:DataContext="{d:DesignInstance productEditor:ProductEditorViewModel}">
@@ -34,8 +34,8 @@
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="*"/>
             <RowDefinition Height="auto"/>
+            <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <Grid Grid.Column="0"
               Grid.Row="0"
