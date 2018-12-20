@@ -63,12 +63,6 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         /// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         System.Boolean IsFBA { get; }
-        /// <summary> The MPN property of the Entity ChannelAdvisorOrderItem<br/><br/>
-        /// </summary>
-        /// <remarks>Mapped on table field: "ChannelAdvisorOrderItem"."MPN"<br/>
-        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
-        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-        System.String MPN { get; }
         /// <summary> The DistributionCenterID property of the Entity ChannelAdvisorOrderItem<br/><br/>
         /// </summary>
         /// <remarks>Mapped on table field: "ChannelAdvisorOrderItem"."DistributionCenterID"<br/>

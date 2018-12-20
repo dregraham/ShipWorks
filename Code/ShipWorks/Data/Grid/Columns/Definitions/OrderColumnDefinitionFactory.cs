@@ -793,6 +793,29 @@ namespace ShipWorks.Data.Grid.Columns.Definitions
                     {
                         StoreTypeCode = StoreTypeCode.Overstock
                     },
+
+                    new GridColumnDefinition("{5C7C3411-6B22-4DB5-BFCC-5131AFABD3DC}", 
+                        new GridTextDisplayType(), "Channel Order ID", "ABC123", OrderFields.ChannelOrderID),
+
+                    new GridColumnDefinition("{13F8DD60-0104-4575-9B9C-E3DCE4573FB0}",
+                        new GridDateDisplayType { UseDescriptiveDates = true, TimeDisplayFormat = TimeDisplayFormat.None, DateFormat = "MMMM dd, yyyy"},
+                        "Ship By Date", DateTimeUtility.ParseEnUS("01/01/9999 12:00 AM").ToUniversalTime(),
+                        OrderFields.ShipByDate),
+
+                    new GridColumnDefinition("{E4E7DC99-5FC4-46B7-93FA-4FB983B84EBC}",
+                        new GridTextDisplayType(), "Custom Field 1", "Custom Field 1", OrderFields.Custom1),
+
+                    new GridColumnDefinition("{8D37F80C-A435-44A3-AD61-B3E66B99FE5B}",
+                        new GridTextDisplayType(), "Custom Field 2", "Custom Field 2", OrderFields.Custom2),
+
+                    new GridColumnDefinition("{B8F1A84C-4AF0-4A4E-9F6E-C9BB37E8B4FD}",
+                        new GridTextDisplayType(), "Custom Field 3", "Custom Field 3", OrderFields.Custom3),
+
+                    new GridColumnDefinition("{E676687E-EFFA-42CD-AD59-210F0F6E2071}",
+                        new GridTextDisplayType(), "Custom Field 4", "Custom Field 4", OrderFields.Custom4),
+
+                    new GridColumnDefinition("{C5DFE9A8-B4DF-4308-88D4-87FD089F093C}",
+                        new GridTextDisplayType(), "Custom Field 5", "Custom Field 5", OrderFields.Custom5)
                 };
 
             return definitions;

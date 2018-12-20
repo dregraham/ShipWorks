@@ -774,6 +774,20 @@
     <Compile Include="ApplicationCore\MainForm.BasicUIHeartbeat.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Filters\Content\Conditions\OrderItems\Custom1Condition.cs" />
+    <Compile Include="Filters\Content\Conditions\OrderItems\Custom2Condition.cs" />
+    <Compile Include="Filters\Content\Conditions\OrderItems\Custom3Condition.cs" />
+    <Compile Include="Filters\Content\Conditions\OrderItems\Custom4Condition.cs" />
+    <Compile Include="Filters\Content\Conditions\OrderItems\Custom5Condition.cs" />
+    <Compile Include="Filters\Content\Conditions\OrderItems\MpnCondition.cs" />
+    <Compile Include="Filters\Content\Conditions\OrderItems\BrandCondition.cs" />
+    <Compile Include="Filters\Content\Conditions\Orders\ChannelOrderIdCondition.cs" />
+    <Compile Include="Filters\Content\Conditions\Orders\Custom1Condition.cs" />
+    <Compile Include="Filters\Content\Conditions\Orders\Custom5Condition.cs" />
+    <Compile Include="Filters\Content\Conditions\Orders\Custom3Condition.cs" />
+    <Compile Include="Filters\Content\Conditions\Orders\Custom2Condition.cs" />
+    <Compile Include="Filters\Content\Conditions\Orders\Custom4Condition.cs" />
+    <Compile Include="Filters\Content\Conditions\Orders\ShipByDateCondition.cs" />
     <Compile Include="Common\Threading\ProgressFactory.cs" />
     <Compile Include="Data\ProductCatalogTelemetryService.cs" />
     <Compile Include="OrderLookup\CoreOrderLookupRegistrationOverride.cs" />

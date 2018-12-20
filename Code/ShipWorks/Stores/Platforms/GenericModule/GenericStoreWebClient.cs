@@ -33,7 +33,7 @@ namespace ShipWorks.Stores.Platforms.GenericModule
         private Version requiredModuleVersion;
 
         // Current schema version
-        private Version currentSchemaVersion = new Version("1.2.0");
+        private Version currentSchemaVersion = new Version("1.3.0");
 
         /// <summary>
         /// Constructor for using the client to talk to a given store

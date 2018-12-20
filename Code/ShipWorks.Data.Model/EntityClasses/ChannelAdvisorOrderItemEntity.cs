@@ -348,8 +348,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("IsFBA", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
-			_fieldsCustomProperties.Add("MPN", fieldHashtable);
-			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("DistributionCenterID", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("DistributionCenterName", fieldHashtable);
@@ -474,16 +472,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.Boolean)GetValue((int)ChannelAdvisorOrderItemFieldIndex.IsFBA, true); }
 			set	{ SetValue((int)ChannelAdvisorOrderItemFieldIndex.IsFBA, value); }
-		}
-
-		/// <summary> The MPN property of the Entity ChannelAdvisorOrderItem<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "ChannelAdvisorOrderItem"."MPN"<br/>
-		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.String MPN
-		{
-			get { return (System.String)GetValue((int)ChannelAdvisorOrderItemFieldIndex.MPN, true); }
-			set	{ SetValue((int)ChannelAdvisorOrderItemFieldIndex.MPN, value); }
 		}
 
 		/// <summary> The DistributionCenterID property of the Entity ChannelAdvisorOrderItem<br/><br/></summary>

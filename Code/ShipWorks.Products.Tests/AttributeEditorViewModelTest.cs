@@ -43,7 +43,7 @@ namespace ShipWorks.Products.Tests
             ProductVariantAttributeValueEntity variantAttributeEntity = new ProductVariantAttributeValueEntity();
 
             ProductVariantEntity productVariant = new ProductVariantEntity();
-            productVariant.Attributes.Add(variantAttributeEntity);
+            productVariant.AttributeValues.Add(variantAttributeEntity);
 
             ProductEntity productEntity = new ProductEntity();
             productEntity.Variants.Add(productVariant);
@@ -67,7 +67,7 @@ namespace ShipWorks.Products.Tests
 
             testObject.Save();
 
-            Assert.Equal(variantAttributeEntity, productVariant.Attributes.SingleOrDefault());
+            Assert.Equal(variantAttributeEntity, productVariant.AttributeValues.SingleOrDefault());
         }
 
         [Fact]
@@ -90,7 +90,7 @@ namespace ShipWorks.Products.Tests
             ProductVariantAttributeValueEntity variantAttributeEntity = new ProductVariantAttributeValueEntity();
             variantAttributeEntity.ProductAttribute = productAttributeEntity;
             ProductVariantEntity productVariant = new ProductVariantEntity();
-            productVariant.Attributes.Add(variantAttributeEntity);
+            productVariant.AttributeValues.Add(variantAttributeEntity);
 
             ProductEntity productEntity = new ProductEntity();
             productEntity.Variants.Add(productVariant);
@@ -147,7 +147,7 @@ namespace ShipWorks.Products.Tests
             ProductVariantAttributeValueEntity variantAttributeEntity = new ProductVariantAttributeValueEntity();
 
             ProductVariantEntity productVariant = new ProductVariantEntity();
-            productVariant.Attributes.Add(variantAttributeEntity);
+            productVariant.AttributeValues.Add(variantAttributeEntity);
 
             ProductEntity productEntity = new ProductEntity();
             productEntity.Variants.Add(productVariant);

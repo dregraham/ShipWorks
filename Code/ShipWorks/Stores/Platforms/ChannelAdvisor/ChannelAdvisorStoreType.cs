@@ -355,7 +355,6 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
             outline.AddElement("DistributionCenterName", () => item.Value.DistributionCenterName);
             outline.AddElement("HarmonizedCode", () => item.Value.HarmonizedCode);
             outline.AddElement("FulfilledByAmazon", () => item.Value.IsFBA);
-            outline.AddElement("MPN", () => item.Value.MPN);
 
             // These are a child of the "ChannelAdvisor" element
             ElementOutline marketplace = outline.AddElement("Marketplace");
