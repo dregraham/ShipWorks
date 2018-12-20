@@ -7836,7 +7836,7 @@ PRINT N'Creating [dbo].[Product]'
 GO
 CREATE TABLE [dbo].[Product]
 (
-[ProductID] [bigint] NOT NULL IDENTITY(1101, 1000),
+[ProductID] [bigint] NOT NULL IDENTITY(1201, 1000),
 [CreatedDate] [datetime] NOT NULL,
 [IsActive] [bit] NOT NULL,
 [IsBundle] [bit] NOT NULL
@@ -7863,7 +7863,7 @@ PRINT N'Creating [dbo].[ProductVariant]'
 GO
 CREATE TABLE [dbo].[ProductVariant]
 (
-[ProductVariantID] [bigint] NOT NULL IDENTITY(1102, 1000),
+[ProductVariantID] [bigint] NOT NULL IDENTITY(1202, 1000),
 [ProductID] [bigint] NOT NULL,
 [CreatedDate] [datetime] NOT NULL,
 [Name] [nvarchar] (300) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
@@ -7890,7 +7890,7 @@ PRINT N'Creating [dbo].[ProductVariantAlias]'
 GO
 CREATE TABLE [dbo].[ProductVariantAlias]
 (
-[ProductVariantAliasID] [bigint] NOT NULL IDENTITY(1103, 1000),
+[ProductVariantAliasID] [bigint] NOT NULL IDENTITY(1203, 1000),
 [ProductVariantID] [bigint] NOT NULL,
 [AliasName] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [Sku] [nvarchar] (300) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
@@ -7919,7 +7919,7 @@ GO
 IF OBJECT_ID(N'[dbo].[ProductAttribute]', 'U') IS NULL
 CREATE TABLE [dbo].[ProductAttribute]
 (
-[ProductAttributeID] [bigint] IDENTITY(1104, 1000) NOT NULL,
+[ProductAttributeID] [bigint] IDENTITY(1204, 1000) NOT NULL,
 [ProductID] [bigint] NOT NULL,
 [AttributeName] [nvarchar](50) NOT NULL
 )
@@ -7933,7 +7933,7 @@ PRINT N'Creating [dbo].[ProductVariantAttributeValue]'
 GO
 CREATE TABLE [dbo].[ProductVariantAttributeValue]
 (
-[ProductVariantAttributeValueID] [bigint] NOT NULL IDENTITY(1105, 1000),
+[ProductVariantAttributeValueID] [bigint] NOT NULL IDENTITY(1205, 1000),
 [ProductVariantID] [bigint] NOT NULL,
 [ProductAttributeID] [bigint] NOT NULL,
 [AttributeValue] [nvarchar] (300) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL
