@@ -5,7 +5,6 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:geography="clr-namespace:Interapptive.Shared.Business.Geography;assembly=Interapptive.Shared"
     xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
-    xmlns:local="clr-namespace:ShipWorks.OrderLookup.Controls.Customs"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:ui="http://schemas.shipworks.com/ui"
     d:DesignHeight="450"
@@ -14,7 +13,7 @@
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="/ShipWorks.OrderLookup;component/Styles/OrderLookupStyle.xaml" />
+                <ResourceDictionary Source="/ShipWorks.UI;component/Styles/BlueSteel/BlueSteelStyle.xaml" />
                 <ResourceDictionary Source="/ShipWorks.OrderLookup;component/Controls/Weight/WeightControl.xaml" />
             </ResourceDictionary.MergedDictionaries>
             <ui:EmptyMoneyConverter x:Key="EmptyMoney" />

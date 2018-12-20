@@ -16,11 +16,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// <summary>
         /// Constructor
         /// </summary>
-        public UspsShippingProfileApplicationStrategy(IShipmentTypeManager shipmentTypeManager) : 
+        public UspsShippingProfileApplicationStrategy(IShipmentTypeManager shipmentTypeManager) :
             base(shipmentTypeManager)
         {
         }
-        
+
         /// <summary>
         /// Apply the given shipping profile to the shipment
         /// </summary>

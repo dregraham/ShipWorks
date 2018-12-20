@@ -517,7 +517,14 @@ CREATE TABLE [dbo].[Order]
 [ShipSenseHashKey] [nvarchar] (64) COLLATE SQL_Latin1_General_CP1_CS_AS NOT NULL,
 [ShipSenseRecognitionStatus] int NOT NULL,
 [ShipAddressType] [int] NOT NULL,
-[CombineSplitStatus] [INT] NOT NULL
+[CombineSplitStatus] [INT] NOT NULL,
+[ChannelOrderID] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_Order_ChannelOrderID] DEFAULT (''),
+[ShipByDate] [datetime] NULL,
+[Custom1] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_Order_Custom1] DEFAULT (''),
+[Custom2] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_Order_Custom2] DEFAULT (''),
+[Custom3] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_Order_Custom3] DEFAULT (''),
+[Custom4] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_Order_Custom4] DEFAULT (''),
+[Custom5] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_Order_Custom5] DEFAULT ('')
 )
 GO
 PRINT N'Creating primary key [PK_Order] on [dbo].[Order]'
@@ -781,7 +788,14 @@ CREATE TABLE [dbo].[OrderItem]
 [OriginalOrderID] [BIGINT] NOT NULL,
 [Length] [decimal] (10, 2) NOT NULL,
 [Width] [decimal] (10, 2) NOT NULL,
-[Height] [decimal] (10, 2) NOT NULL
+[Height] [decimal] (10, 2) NOT NULL,
+[Brand] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_OrderItem_Brand] DEFAULT (''),
+[MPN] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_OrderItem_MPN] DEFAULT (''),
+[Custom1] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_OrderItem_Custom1] DEFAULT (''),
+[Custom2] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_OrderItem_Custom2] DEFAULT (''),
+[Custom3] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_OrderItem_Custom3] DEFAULT (''),
+[Custom4] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_OrderItem_Custom4] DEFAULT (''),
+[Custom5] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_OrderItem_Custom5] DEFAULT ('')
 )
 GO
 PRINT N'Creating primary key [PK_OrderItem] on [dbo].[OrderItem]'
@@ -1436,7 +1450,6 @@ CREATE TABLE [dbo].[ChannelAdvisorOrderItem]
 [Classification] [nvarchar] (30) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [DistributionCenter] [nvarchar] (80) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [IsFBA] [bit] NOT NULL,
-[MPN] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [DistributionCenterID] [bigint] NOT NULL,
 [DistributionCenterName] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL
 )
@@ -4451,8 +4464,7 @@ CREATE TABLE [dbo].[Configuration]
 [UseParallelActionQueue] [bit] NOT NULL CONSTRAINT [DF_Configuration_UseParallelActionQueue] DEFAULT ((1)),
 [AllowEbayCombineLocally] [bit] NOT NULL CONSTRAINT [DF_Configuration_AllowEbayCombineLocally] DEFAULT ((0)),
 [ArchivalSettingsXml] [xml] NOT NULL CONSTRAINT [DF_Configuration_ArchivalSettingsXml] DEFAULT ('<ArchivalSettings/>'),
-[AuditEnabled] [bit] NOT NULL CONSTRAINT [DF_Configuration_AuditEnabled] DEFAULT ((1)),
-[AllowUIModeToggle] [bit] NOT NULL
+[AuditEnabled] [bit] NOT NULL CONSTRAINT [DF_Configuration_AuditEnabled] DEFAULT ((1))
 )
 GO
 PRINT N'Creating primary key [PK_Configuration] on [dbo].[Configuration]'
@@ -7822,4 +7834,148 @@ BEGIN
 		EXECUTE sp_executesql @sql, N'@ExistsQueryObjectID bigint, @filterNodeID bigint', @ExistsQueryObjectID = @entityID, @filterNodeID = @filterNodeID
 	END
 END
+GO
+
+PRINT N'Creating [dbo].[Product]'
+GO
+CREATE TABLE [dbo].[Product]
+(
+[ProductID] [bigint] NOT NULL IDENTITY(1201, 1000),
+[CreatedDate] [datetime] NOT NULL,
+[IsActive] [bit] NOT NULL,
+[IsBundle] [bit] NOT NULL
+)
+GO
+PRINT N'Creating primary key [PK_Product] on [dbo].[Product]'
+GO
+ALTER TABLE [dbo].[Product] ADD CONSTRAINT [PK_Product] PRIMARY KEY CLUSTERED  ([ProductID])
+GO
+PRINT N'Creating [dbo].[ProductBundle]'
+GO
+CREATE TABLE [dbo].[ProductBundle]
+(
+[ProductID] [bigint] NOT NULL,
+[ChildProductVariantID] [bigint] NOT NULL,
+[Quantity] [int] NOT NULL
+)
+GO
+PRINT N'Creating primary key [PK_ProductBundle] on [dbo].[ProductBundle]'
+GO
+ALTER TABLE [dbo].[ProductBundle] ADD CONSTRAINT [PK_ProductBundle] PRIMARY KEY CLUSTERED  ([ProductID], [ChildProductVariantID])
+GO
+PRINT N'Creating [dbo].[ProductVariant]'
+GO
+CREATE TABLE [dbo].[ProductVariant]
+(
+[ProductVariantID] [bigint] NOT NULL IDENTITY(1202, 1000),
+[ProductID] [bigint] NOT NULL,
+[CreatedDate] [datetime] NOT NULL,
+[Name] [nvarchar] (300) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+[IsActive] [bit] NOT NULL,
+[UPC] [nvarchar] (30) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+[ASIN] [nvarchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+[ISBN] [nvarchar] (30) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+[Weight] [decimal] (29, 9) NULL,
+[Length] [decimal] (10, 2) NULL,
+[Width] [decimal] (10, 2) NULL,
+[Height] [decimal] (10, 2) NULL,
+[ImageUrl] [nvarchar] (500) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+[BinLocation] [nvarchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+[HarmonizedCode] [nvarchar] (20) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+[DeclaredValue] [money] NULL,
+[CountryOfOrigin] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL
+)
+GO
+PRINT N'Creating primary key [PK_ProductVariant] on [dbo].[ProductVariant]'
+GO
+ALTER TABLE [dbo].[ProductVariant] ADD CONSTRAINT [PK_ProductVariant] PRIMARY KEY CLUSTERED  ([ProductVariantID])
+GO
+PRINT N'Creating [dbo].[ProductVariantAlias]'
+GO
+CREATE TABLE [dbo].[ProductVariantAlias]
+(
+[ProductVariantAliasID] [bigint] NOT NULL IDENTITY(1203, 1000),
+[ProductVariantID] [bigint] NOT NULL,
+[AliasName] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[Sku] [nvarchar] (300) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[IsDefault] [bit] NOT NULL CONSTRAINT [DF_ProductVariantAlias_IsDefault] DEFAULT ((0))
+)
+GO
+PRINT N'Creating primary key [PK_ProductVariantAlias] on [dbo].[ProductVariantAlias]'
+GO
+ALTER TABLE [dbo].[ProductVariantAlias] ADD CONSTRAINT [PK_ProductVariantAlias] PRIMARY KEY CLUSTERED  ([ProductVariantAliasID])
+GO
+PRINT N'Creating index [IX_SWDefault_ProductVariantAlias_Sku] on [dbo].[ProductVariantAlias]'
+GO
+CREATE UNIQUE NONCLUSTERED INDEX [IX_SWDefault_ProductVariantAlias_Sku] ON [dbo].[ProductVariantAlias] ([Sku]) INCLUDE ([ProductVariantID])
+GO
+PRINT N'Creating index [IX_SWDefault_ProductVariantAlias_ProductVariantIDIsDefaultSku] on [dbo].[ProductVariantAlias]'
+GO
+CREATE NONCLUSTERED INDEX [IX_SWDefault_ProductVariantAlias_ProductVariantIDIsDefaultSku] ON [dbo].[ProductVariantAlias]
+(
+	[ProductVariantID] ASC,
+	[IsDefault] ASC
+)
+INCLUDE ([Sku])  ON [PRIMARY]
+GO
+PRINT N'Creating [dbo].[ProductAttribute]'
+GO
+IF OBJECT_ID(N'[dbo].[ProductAttribute]', 'U') IS NULL
+CREATE TABLE [dbo].[ProductAttribute]
+(
+[ProductAttributeID] [bigint] IDENTITY(1204, 1000) NOT NULL,
+[ProductID] [bigint] NOT NULL,
+[AttributeName] [nvarchar](50) NOT NULL
+)
+GO
+PRINT N'Creating primary key [PK_ProductAttribute] on [dbo].[ProductAttribute]'
+GO
+IF NOT EXISTS (SELECT 1 FROM sys.indexes WHERE name = N'PK_ProductAttribute' AND object_id = OBJECT_ID(N'[dbo].[ProductAttribute]'))
+ALTER TABLE [dbo].[ProductAttribute] ADD CONSTRAINT [PK_ProductAttribute] PRIMARY KEY CLUSTERED  ([ProductAttributeID])
+GO
+PRINT N'Creating [dbo].[ProductVariantAttributeValue]'
+GO
+CREATE TABLE [dbo].[ProductVariantAttributeValue]
+(
+[ProductVariantAttributeValueID] [bigint] NOT NULL IDENTITY(1205, 1000),
+[ProductVariantID] [bigint] NOT NULL,
+[ProductAttributeID] [bigint] NOT NULL,
+[AttributeValue] [nvarchar] (300) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL
+)
+GO
+PRINT N'Creating primary key [PK_ProductVariantAttributeValue] on [dbo].[ProductVariantAttributeValue]'
+GO
+ALTER TABLE [dbo].[ProductVariantAttributeValue] ADD CONSTRAINT [PK_ProductVariantAttributeValue] PRIMARY KEY CLUSTERED  ([ProductVariantAttributeValueID])
+GO
+PRINT N'Creating index [IX_SWDefault_ProductVariantAttributeValue_ProductVariantID] on [dbo].[ProductVariantAttributeValue]'
+GO
+CREATE NONCLUSTERED INDEX [IX_SWDefault_ProductVariantAttributeValue_ProductVariantID] ON [dbo].[ProductVariantAttributeValue] ([ProductVariantID])
+GO
+PRINT N'Adding foreign keys to [dbo].[ProductBundle]'
+GO
+ALTER TABLE [dbo].[ProductBundle] ADD CONSTRAINT [FK_ProductBundle_Product] FOREIGN KEY ([ProductID]) REFERENCES [dbo].[Product] ([ProductID])
+GO
+ALTER TABLE [dbo].[ProductBundle] ADD CONSTRAINT [FK_ProductBundle_ProductVariant] FOREIGN KEY ([ChildProductVariantID]) REFERENCES [dbo].[ProductVariant] ([ProductVariantID])
+GO
+PRINT N'Adding foreign keys to [dbo].[ProductVariantAlias]'
+GO
+ALTER TABLE [dbo].[ProductVariantAlias] ADD CONSTRAINT [FK_ProductVariantAlias_ProductVariant] FOREIGN KEY ([ProductVariantID]) REFERENCES [dbo].[ProductVariant] ([ProductVariantID])
+GO
+PRINT N'Adding foreign keys to [dbo].[ProductVariantAttributeValue]'
+GO
+ALTER TABLE [dbo].[ProductVariantAttributeValue] ADD CONSTRAINT [FK_ProductVariantAttributeValue_ProductVariant] FOREIGN KEY ([ProductVariantID]) REFERENCES [dbo].[ProductVariant] ([ProductVariantID])
+GO
+PRINT N'Adding foreign keys to [dbo].[ProductVariantAttributeValue]'
+GO
+IF NOT EXISTS (SELECT 1 FROM sys.foreign_keys WHERE object_id = OBJECT_ID(N'[dbo].[FK_ProductVariantAttributeValue_ProductAttribute]', 'F') AND parent_object_id = OBJECT_ID(N'[dbo].[ProductVariantAttributeValue]', 'U'))
+ALTER TABLE [dbo].[ProductVariantAttributeValue] ADD CONSTRAINT [FK_ProductVariantAttributeValue_ProductAttribute] FOREIGN KEY ([ProductAttributeID]) REFERENCES [dbo].[ProductAttribute] ([ProductAttributeID])
+GO
+PRINT N'Adding foreign keys to [dbo].[ProductVariant]'
+GO
+ALTER TABLE [dbo].[ProductVariant] ADD CONSTRAINT [FK_ProductVariant_Product] FOREIGN KEY ([ProductID]) REFERENCES [dbo].[Product] ([ProductID])
+GO
+PRINT N'Adding foreign keys to [dbo].[ProductAttribute]'
+GO
+IF NOT EXISTS (SELECT 1 FROM sys.foreign_keys WHERE object_id = OBJECT_ID(N'[dbo].[FK_ProductAttribute_Product]', 'F') AND parent_object_id = OBJECT_ID(N'[dbo].[ProductAttribute]', 'U'))
+ALTER TABLE [dbo].[ProductAttribute] ADD CONSTRAINT [FK_ProductAttribute_Product] FOREIGN KEY ([ProductID]) REFERENCES [dbo].[Product] ([ProductID])
 GO

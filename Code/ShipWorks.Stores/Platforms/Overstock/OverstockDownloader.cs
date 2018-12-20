@@ -161,7 +161,10 @@ namespace ShipWorks.Stores.Platforms.Overstock
 
             order.OrderDate = order.OnlineLastModified;
             order.OnlineStatus = orderElement.GetValue("status");
-            order.RequestedShipping = orderElement.Element("shippingSpecifications")?.Descendants("shippingServiceLevel")?.First().GetValue("code");
+            order.RequestedShipping =
+                orderElement.Element("shippingSpecifications")?.Descendants("shippingServiceLevel")?.FirstOrDefault()?.GetValue("code") ??
+                orderElement.Element("shippingSpecifications")?.Descendants("ltlServiceLevel")?.FirstOrDefault()?.GetValue("code") ??
+                string.Empty;
 
             // Load Address info
             LoadAddressInfo(order, orderElement);
@@ -189,7 +192,7 @@ namespace ShipWorks.Stores.Platforms.Overstock
         }
 
         /// <summary>
-        /// Instantiate the Overstock order 
+        /// Instantiate the Overstock order
         /// </summary>
         protected Task<GenericResult<OrderEntity>> InstantiateOrder(string salesChannelOrderNumber)
         {
@@ -207,7 +210,7 @@ namespace ShipWorks.Stores.Platforms.Overstock
         }
 
         /// <summary>
-        /// Loads the Billing or Shipping address detail into the order entity, depending on the 
+        /// Loads the Billing or Shipping address detail into the order entity, depending on the
         /// prefix specified by the caller.
         /// </summary>
         private static void LoadAddress(PersonAdapter person, XElement address)
@@ -235,7 +238,7 @@ namespace ShipWorks.Stores.Platforms.Overstock
         }
 
         /// <summary>
-        /// Loads notes 
+        /// Loads notes
         /// </summary>
         private static async Task LoadNotes(IOrderElementFactory factory, OrderEntity order, IEnumerable<XElement> items)
         {

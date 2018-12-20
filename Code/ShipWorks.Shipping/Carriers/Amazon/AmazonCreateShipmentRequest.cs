@@ -51,10 +51,11 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             }
 
             // Send a max of $100 in insured value for carriers who aren't Stamps.  Send $0 for Stamps
+            // OR, if insurance is not selected, send $0
             requestDetails.ShippingServiceOptions.DeclaredValue.Amount =
-                IsCarrierUsps(shipment) ?
-                0 :
-                Math.Min(shipment.Amazon.InsuranceValue, 100M);
+                IsCarrierUsps(shipment) || !shipment.Insurance ?
+                    0 :
+                    Math.Min(shipment.Amazon.InsuranceValue, 100M);
 
             return webClient.CreateShipment(requestDetails, shipment.Amazon);
         }

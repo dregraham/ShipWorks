@@ -382,6 +382,7 @@ namespace ShipWorks.Stores.Platforms.PayPal
                     // fill it
                     item.Name = paymentItem.Name;
                     item.Code = paymentItem.Number;
+                    item.SKU = paymentItem.Number;
                     item.Quantity = Parse(paymentItem.Quantity, 1);
                     item.UnitPrice = GetAmount(paymentItem.Amount) / Math.Max(1, Convert.ToDecimal(item.Quantity));
 

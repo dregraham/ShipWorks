@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Linq;
+using Autofac;
 using Interapptive.Shared.Utility;
+using ShipWorks.ApplicationCore;
 using ShipWorks.Data;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.Custom;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Products;
 using ShipWorks.Stores.Content;
 
 namespace ShipWorks.Shipping
@@ -95,32 +98,24 @@ namespace ShipWorks.Shipping
                 shipment.CustomsItems.RemoveAt(i);
             }
 
-            decimal customsValue = 0m;
-
-            // By default create one content item representing each item in the order
-            foreach (OrderItemEntity item in shipment.Order.OrderItems)
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
-                decimal attributePrice = item.OrderItemAttributes.Sum(oia => oia.UnitPrice);
+                IProductCatalog productCatalog = lifetimeScope.Resolve<IProductCatalog>();
+                ISqlAdapterFactory sqlAdapterFactory = lifetimeScope.Resolve<ISqlAdapterFactory>();
 
-                decimal priceAndValue = item.UnitPrice + attributePrice;
-
-                ShipmentCustomsItemEntity customsItem = new ShipmentCustomsItemEntity
+                using (ISqlAdapter sqlAdapter = sqlAdapterFactory.Create())
                 {
-                    Shipment = shipment,
-                    Description = item.Name,
-                    Quantity = item.Quantity,
-                    Weight = item.Weight,
-                    UnitValue = priceAndValue,
-                    CountryOfOrigin = "US",
-                    HarmonizedCode = item.HarmonizedCode,
-                    NumberOfPieces = 0,
-                    UnitPriceAmount = priceAndValue
-                };
-
-                customsValue += ((decimal) customsItem.Quantity * customsItem.UnitValue);
+                    // By default create one content item representing each item in the order
+                    foreach (OrderItemEntity item in shipment.Order.OrderItems)
+                    {
+                        IProductVariant productVariant = productCatalog.FetchProductVariant(sqlAdapter, item.SKU);
+                        
+                        productVariant.ApplyCustoms(item, shipment);
+                    }
+                }
             }
-
-            shipment.CustomsValue = customsValue;
+            
+            shipment.CustomsValue = shipment.CustomsItems.Sum(i => (decimal) i.Quantity * i.UnitValue);
             shipment.CustomsGenerated = true;
 
             // Set the removed tracker for tracking deletions in the UI until saved

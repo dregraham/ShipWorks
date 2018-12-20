@@ -13,7 +13,7 @@
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="/ShipWorks.OrderLookup;component/Styles/OrderLookupStyle.xaml" />
+                <ResourceDictionary Source="/ShipWorks.UI;component/Styles/BlueSteel/BlueSteelStyle.xaml" />
                 <ResourceDictionary Source="/ShipWorks.OrderLookup;component/Controls/Weight/WeightControl.xaml" />
             </ResourceDictionary.MergedDictionaries>
             <ui:InvertBooleanConverter x:Key="InvertBooleanConverter" />
@@ -242,7 +242,7 @@
                 Height="23"
                 Margin="0,0,5,0"
                 IsEnabled="{Binding IsProfileSelected, Converter={StaticResource InvertBooleanConverter}}"
-                MaxLength="3"
+                MaxLength="5"
                 Style="{StaticResource FormTextBox}"
                 Text="{Binding SelectedPackage.DimsLength, Converter={StaticResource StringEmptyWhenEqualToParameter}, ConverterParameter=0}" />
 
@@ -251,7 +251,7 @@
                 Height="23"
                 Margin="0,0,5,0"
                 IsEnabled="{Binding IsProfileSelected, Converter={StaticResource InvertBooleanConverter}}"
-                MaxLength="3"
+                MaxLength="5"
                 Style="{StaticResource FormTextBox}"
                 Text="{Binding SelectedPackage.DimsWidth, Converter={StaticResource StringEmptyWhenEqualToParameter}, ConverterParameter=0}" />
 
@@ -260,7 +260,7 @@
                 Height="23"
                 Margin="0,0,5,0"
                 IsEnabled="{Binding IsProfileSelected, Converter={StaticResource InvertBooleanConverter}}"
-                MaxLength="3"
+                MaxLength="5"
                 Style="{StaticResource FormTextBox}"
                 Text="{Binding SelectedPackage.DimsHeight, Converter={StaticResource StringEmptyWhenEqualToParameter}, ConverterParameter=0}" />
 

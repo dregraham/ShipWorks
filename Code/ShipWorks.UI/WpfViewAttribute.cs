@@ -21,5 +21,11 @@ namespace ShipWorks.UI
         /// Type that will be used for the view
         /// </summary>
         public Type ViewType { get; }
+
+        /// <summary>
+        /// Get the view for the given type
+        /// </summary>
+        public static Type GetViewFor(Type itemType) =>
+            (Attribute.GetCustomAttribute(itemType, typeof(WpfViewAttribute)) as WpfViewAttribute)?.ViewType;
     }
 }

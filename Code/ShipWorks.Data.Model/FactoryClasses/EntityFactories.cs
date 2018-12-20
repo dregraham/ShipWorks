@@ -3059,6 +3059,146 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		#endregion
 	}
 
+	/// <summary>Factory to create new, empty ProductEntity objects.</summary>
+	[Serializable]
+	public partial class ProductEntityFactory : EntityFactoryBase2<ProductEntity> {
+		/// <summary>CTor</summary>
+		public ProductEntityFactory() : base("ProductEntity", ShipWorks.Data.Model.EntityType.ProductEntity, false) { }
+		
+		/// <summary>Creates a new ProductEntity instance but uses a special constructor which will set the Fields object of the new IEntity2 instance to the passed in fields object.</summary>
+		/// <param name="fields">Populated IEntityFields2 object for the new IEntity2 to create</param>
+		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
+		public override IEntity2 Create(IEntityFields2 fields) {
+			IEntity2 toReturn = new ProductEntity(fields);
+			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewProductUsingFields
+			// __LLBLGENPRO_USER_CODE_REGION_END
+			return toReturn;
+		}
+		#region Included Code
+
+		#endregion
+	}
+
+	/// <summary>Factory to create new, empty ProductAttributeEntity objects.</summary>
+	[Serializable]
+	public partial class ProductAttributeEntityFactory : EntityFactoryBase2<ProductAttributeEntity> {
+		/// <summary>CTor</summary>
+		public ProductAttributeEntityFactory() : base("ProductAttributeEntity", ShipWorks.Data.Model.EntityType.ProductAttributeEntity, false) { }
+		
+		/// <summary>Creates a new ProductAttributeEntity instance but uses a special constructor which will set the Fields object of the new IEntity2 instance to the passed in fields object.</summary>
+		/// <param name="fields">Populated IEntityFields2 object for the new IEntity2 to create</param>
+		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
+		public override IEntity2 Create(IEntityFields2 fields) {
+			IEntity2 toReturn = new ProductAttributeEntity(fields);
+			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewProductAttributeUsingFields
+			// __LLBLGENPRO_USER_CODE_REGION_END
+			return toReturn;
+		}
+		#region Included Code
+
+		#endregion
+	}
+
+	/// <summary>Factory to create new, empty ProductBundleEntity objects.</summary>
+	[Serializable]
+	public partial class ProductBundleEntityFactory : EntityFactoryBase2<ProductBundleEntity> {
+		/// <summary>CTor</summary>
+		public ProductBundleEntityFactory() : base("ProductBundleEntity", ShipWorks.Data.Model.EntityType.ProductBundleEntity, false) { }
+		
+		/// <summary>Creates a new ProductBundleEntity instance but uses a special constructor which will set the Fields object of the new IEntity2 instance to the passed in fields object.</summary>
+		/// <param name="fields">Populated IEntityFields2 object for the new IEntity2 to create</param>
+		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
+		public override IEntity2 Create(IEntityFields2 fields) {
+			IEntity2 toReturn = new ProductBundleEntity(fields);
+			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewProductBundleUsingFields
+			// __LLBLGENPRO_USER_CODE_REGION_END
+			return toReturn;
+		}
+		#region Included Code
+
+		#endregion
+	}
+
+	/// <summary>Factory to create new, empty ProductListItemEntity objects.</summary>
+	[Serializable]
+	public partial class ProductListItemEntityFactory : EntityFactoryBase2<ProductListItemEntity> {
+		/// <summary>CTor</summary>
+		public ProductListItemEntityFactory() : base("ProductListItemEntity", ShipWorks.Data.Model.EntityType.ProductListItemEntity, false) { }
+		
+		/// <summary>Creates a new ProductListItemEntity instance but uses a special constructor which will set the Fields object of the new IEntity2 instance to the passed in fields object.</summary>
+		/// <param name="fields">Populated IEntityFields2 object for the new IEntity2 to create</param>
+		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
+		public override IEntity2 Create(IEntityFields2 fields) {
+			IEntity2 toReturn = new ProductListItemEntity(fields);
+			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewProductListItemUsingFields
+			// __LLBLGENPRO_USER_CODE_REGION_END
+			return toReturn;
+		}
+		#region Included Code
+
+		#endregion
+	}
+
+	/// <summary>Factory to create new, empty ProductVariantEntity objects.</summary>
+	[Serializable]
+	public partial class ProductVariantEntityFactory : EntityFactoryBase2<ProductVariantEntity> {
+		/// <summary>CTor</summary>
+		public ProductVariantEntityFactory() : base("ProductVariantEntity", ShipWorks.Data.Model.EntityType.ProductVariantEntity, false) { }
+		
+		/// <summary>Creates a new ProductVariantEntity instance but uses a special constructor which will set the Fields object of the new IEntity2 instance to the passed in fields object.</summary>
+		/// <param name="fields">Populated IEntityFields2 object for the new IEntity2 to create</param>
+		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
+		public override IEntity2 Create(IEntityFields2 fields) {
+			IEntity2 toReturn = new ProductVariantEntity(fields);
+			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewProductVariantUsingFields
+			// __LLBLGENPRO_USER_CODE_REGION_END
+			return toReturn;
+		}
+		#region Included Code
+
+		#endregion
+	}
+
+	/// <summary>Factory to create new, empty ProductVariantAliasEntity objects.</summary>
+	[Serializable]
+	public partial class ProductVariantAliasEntityFactory : EntityFactoryBase2<ProductVariantAliasEntity> {
+		/// <summary>CTor</summary>
+		public ProductVariantAliasEntityFactory() : base("ProductVariantAliasEntity", ShipWorks.Data.Model.EntityType.ProductVariantAliasEntity, false) { }
+		
+		/// <summary>Creates a new ProductVariantAliasEntity instance but uses a special constructor which will set the Fields object of the new IEntity2 instance to the passed in fields object.</summary>
+		/// <param name="fields">Populated IEntityFields2 object for the new IEntity2 to create</param>
+		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
+		public override IEntity2 Create(IEntityFields2 fields) {
+			IEntity2 toReturn = new ProductVariantAliasEntity(fields);
+			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewProductVariantAliasUsingFields
+			// __LLBLGENPRO_USER_CODE_REGION_END
+			return toReturn;
+		}
+		#region Included Code
+
+		#endregion
+	}
+
+	/// <summary>Factory to create new, empty ProductVariantAttributeValueEntity objects.</summary>
+	[Serializable]
+	public partial class ProductVariantAttributeValueEntityFactory : EntityFactoryBase2<ProductVariantAttributeValueEntity> {
+		/// <summary>CTor</summary>
+		public ProductVariantAttributeValueEntityFactory() : base("ProductVariantAttributeValueEntity", ShipWorks.Data.Model.EntityType.ProductVariantAttributeValueEntity, false) { }
+		
+		/// <summary>Creates a new ProductVariantAttributeValueEntity instance but uses a special constructor which will set the Fields object of the new IEntity2 instance to the passed in fields object.</summary>
+		/// <param name="fields">Populated IEntityFields2 object for the new IEntity2 to create</param>
+		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
+		public override IEntity2 Create(IEntityFields2 fields) {
+			IEntity2 toReturn = new ProductVariantAttributeValueEntity(fields);
+			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewProductVariantAttributeValueUsingFields
+			// __LLBLGENPRO_USER_CODE_REGION_END
+			return toReturn;
+		}
+		#region Included Code
+
+		#endregion
+	}
+
 	/// <summary>Factory to create new, empty ProStoresOrderEntity objects.</summary>
 	[Serializable]
 	public partial class ProStoresOrderEntityFactory : EntityFactoryBase2<ProStoresOrderEntity> {
@@ -5094,6 +5234,27 @@ namespace ShipWorks.Data.Model.FactoryClasses
 					break;
 				case ShipWorks.Data.Model.EntityType.ProcessedShipmentEntity:
 					factoryToUse = new ProcessedShipmentEntityFactory();
+					break;
+				case ShipWorks.Data.Model.EntityType.ProductEntity:
+					factoryToUse = new ProductEntityFactory();
+					break;
+				case ShipWorks.Data.Model.EntityType.ProductAttributeEntity:
+					factoryToUse = new ProductAttributeEntityFactory();
+					break;
+				case ShipWorks.Data.Model.EntityType.ProductBundleEntity:
+					factoryToUse = new ProductBundleEntityFactory();
+					break;
+				case ShipWorks.Data.Model.EntityType.ProductListItemEntity:
+					factoryToUse = new ProductListItemEntityFactory();
+					break;
+				case ShipWorks.Data.Model.EntityType.ProductVariantEntity:
+					factoryToUse = new ProductVariantEntityFactory();
+					break;
+				case ShipWorks.Data.Model.EntityType.ProductVariantAliasEntity:
+					factoryToUse = new ProductVariantAliasEntityFactory();
+					break;
+				case ShipWorks.Data.Model.EntityType.ProductVariantAttributeValueEntity:
+					factoryToUse = new ProductVariantAttributeValueEntityFactory();
 					break;
 				case ShipWorks.Data.Model.EntityType.ProStoresOrderEntity:
 					factoryToUse = new ProStoresOrderEntityFactory();

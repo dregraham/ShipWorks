@@ -37,7 +37,7 @@ namespace ShipWorks.Shipping.Carriers.Dhl
         {
             DhlExpressShipmentEntity dhlShipment = shipment.DhlExpress;
             ShipmentType shipmentType = shipmentTypeManager.Get(shipment);
-            
+
             bool changedPackageWeights = ApplyDhlExpressPackageProfile(dhlShipment, profile);
             int profilePackageCount = profile.Packages.Count();
 
@@ -77,7 +77,7 @@ namespace ShipWorks.Shipping.Carriers.Dhl
 
             shipmentType.UpdateDynamicShipmentData(shipment);
         }
-        
+
          /// <summary>
         /// Apply the dhl express package profile
         /// </summary>
@@ -114,9 +114,22 @@ namespace ShipWorks.Shipping.Carriers.Dhl
                 ApplyProfileValue(packageProfile.DimsProfileID, package, DhlExpressPackageFields.DimsProfileID);
                 if (packageProfile.DimsProfileID != null)
                 {
-                    ApplyProfileValue(packageProfile.DimsLength, package, DhlExpressPackageFields.DimsLength);
-                    ApplyProfileValue(packageProfile.DimsWidth, package, DhlExpressPackageFields.DimsWidth);
-                    ApplyProfileValue(packageProfile.DimsHeight, package, DhlExpressPackageFields.DimsHeight);
+
+                    if (packageProfile.DimsLength.GetValueOrDefault() > 0)
+                    {
+                        ApplyProfileValue(packageProfile.DimsLength, package, DhlExpressPackageFields.DimsLength);
+                    }
+
+                    if (packageProfile.DimsWidth.GetValueOrDefault() > 0)
+                    {
+                        ApplyProfileValue(packageProfile.DimsWidth, package, DhlExpressPackageFields.DimsWidth);
+                    }
+
+                    if (packageProfile.DimsHeight.GetValueOrDefault() > 0)
+                    {
+                        ApplyProfileValue(packageProfile.DimsHeight, package, DhlExpressPackageFields.DimsHeight);
+                    }
+
                     ApplyProfileValue(packageProfile.DimsWeight, package, DhlExpressPackageFields.DimsWeight);
                     ApplyProfileValue(packageProfile.DimsAddWeight, package, DhlExpressPackageFields.DimsAddWeight);
                 }
@@ -124,7 +137,7 @@ namespace ShipWorks.Shipping.Carriers.Dhl
 
             return changedPackageWeights;
         }
-        
+
         /// <summary>
         /// Apply the DHL Express profile
         /// </summary>

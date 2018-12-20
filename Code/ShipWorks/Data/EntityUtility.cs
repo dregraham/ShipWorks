@@ -84,6 +84,11 @@ namespace ShipWorks.Data
             entitySeedValues[EntityType.EndiciaAccountEntity] = 66;
             entitySeedValues[EntityType.ScanFormBatchEntity] = 95;
             entitySeedValues[EntityType.ServiceStatusEntity] = 96;
+            entitySeedValues[EntityType.ProductEntity] = 101;
+            entitySeedValues[EntityType.ProductVariantEntity] = 102;
+            entitySeedValues[EntityType.ProductVariantAliasEntity] = 103;
+            entitySeedValues[EntityType.ProductAttributeEntity] = 104;
+            entitySeedValues[EntityType.ProductVariantAttributeValueEntity] = 105;
         }
 
         /// <summary>

@@ -4,8 +4,9 @@ using Autofac;
 using Interapptive.Shared.Net;
 using ShipWorks.ApplicationCore;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.OrderLookup.Controls;
 using ShipWorks.OrderLookup.Controls.OrderLookup;
+using ShipWorks.Products;
+using ShipWorks.Products.UI;
 using ShipWorks.Shipping.Services.Dialogs;
 using ShipWorks.Shipping.UI;
 using ShipWorks.SingleScan;
@@ -100,7 +101,11 @@ namespace ShipWorks.Startup
             // ShipWorks.Data.Model
             typeof(CommonEntityBase).Assembly,
             // ShipWorks.OrderLookup
-            typeof(OrderLookupControlHost).Assembly
+            typeof(OrderLookupControlHost).Assembly,
+            // ShipWorks.Products
+            typeof(ProductsMode).Assembly,
+            // ShipWOrks.Products.UI
+            typeof(ProductsViewHost).Assembly
         };
     }
 }
