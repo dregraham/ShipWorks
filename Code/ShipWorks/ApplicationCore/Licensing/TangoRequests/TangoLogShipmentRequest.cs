@@ -102,21 +102,21 @@ namespace ShipWorks.ApplicationCore.Licensing.TangoRequests
                 // Trial shipment logging
                 PrepareLogTrialShipmentRequest(postRequest, shipmentType, storeEntity);
                 return client.ProcessXmlRequest(postRequest, "LogTrialShipments", true)
-                    .Map(_ => string.Empty);
+                    .Map(_ => shipment.ShipmentID.ToString());
             }
             else
             {
                 // Regular shipment logging
                 PrepareLogShipmentRequest(shipment, shipmentType, postRequest);
                 return client.ProcessXmlRequest(postRequest, "LogShipmentDetails", true)
-                    .Bind(GetShipmentID);
+                    .Bind(GetOnlineShipmentID);
             }
         }
 
         /// <summary>
-        /// Get a shipment ID from Tango's response
+        /// Get the OnlineShipmentID from Tango's response
         /// </summary>
-        private GenericResult<string> GetShipmentID(XmlDocument xmlResponse)
+        private GenericResult<string> GetOnlineShipmentID(XmlDocument xmlResponse)
         {
             // Check for error
             XmlNode errorNode = xmlResponse.SelectSingleNode("//Error");
