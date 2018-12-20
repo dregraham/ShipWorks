@@ -27,14 +27,7 @@ namespace ShipWorks.Core.Tests.Integration.ApplicationCore.Licensing
     {
         private readonly DataContext context;
         private TangoLogShipmentProcessor testObject;
-        private Mock<ISqlSession> sqlSession;
-        private Mock<IShippingManager> shippingManager;
-        private Mock<IStoreManager> storeManager;
-        private Mock<ISqlAdapterFactory> sqlAdapterFactory;
-        private Mock<ITangoLogShipmentRequest> tangoLogShipmentRequest;
-
-
-
+        private readonly Mock<ITangoLogShipmentRequest> tangoLogShipmentRequest;
         public TangoLogShipmentProcessorTest(DatabaseFixture db)
         {
             tangoLogShipmentRequest = new Mock<ITangoLogShipmentRequest>();
@@ -42,10 +35,6 @@ namespace ShipWorks.Core.Tests.Integration.ApplicationCore.Licensing
             context = db.CreateDataContext(x => ContainerInitializer.Initialize(x), (mock) =>
             {
                 mock.Provide(tangoLogShipmentRequest.Object);
-                //sqlSession = builder.RegisterMock<ISqlSession>(mock);
-                //shippingManager = builder.RegisterMock<IShippingManager>(mock);
-                //storeManager = builder.RegisterMock<IStoreManager>(mock);
-                //sqlAdapterFactory = builder.RegisterMock<ISqlAdapterFactory>(mock);
             });
 
 
@@ -67,7 +56,6 @@ namespace ShipWorks.Core.Tests.Integration.ApplicationCore.Licensing
 
             await Task.Delay(1000);
 
-            testObject.Add(context.Store, shipment);
             testObject.Add(context.Store, shipment);
 
             testObject.RunNow();
