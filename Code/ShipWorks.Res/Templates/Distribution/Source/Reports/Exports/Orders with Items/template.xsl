@@ -45,7 +45,7 @@
             <xsl:text>"</xsl:text><xsl:value-of select="$ship/CountryCode" /><xsl:text>",</xsl:text>
     
             <xsl:text>"</xsl:text><xsl:value-of select="$ship/Phone" /><xsl:text>",</xsl:text>
-            <xsl:text>"</xsl:text><xsl:value-of select="$ship/Email" /><xsl:text>"</xsl:text>
+            <xsl:text>"</xsl:text><xsl:value-of select="$ship/Email" /><xsl:text>",</xsl:text>
                        
             <!-- billing address info -->
         
