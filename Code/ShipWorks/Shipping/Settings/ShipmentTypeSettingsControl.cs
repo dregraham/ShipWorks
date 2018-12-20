@@ -263,6 +263,17 @@ namespace ShipWorks.Shipping.Settings
         }
 
         /// <summary>
+        /// Gets a list of shipping rules validation errors.
+        /// </summary>
+        public List<string> GetFilterValidationErrors
+        {
+            get
+            {
+                return defaultsControl.GetFilterValidationErrors;
+            }
+        }
+
+        /// <summary>
         /// Gets a value indicating whether there [are any ship rule filters changed].
         /// </summary>
         /// <value>

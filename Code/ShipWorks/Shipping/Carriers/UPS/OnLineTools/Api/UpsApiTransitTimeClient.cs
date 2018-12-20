@@ -25,7 +25,20 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
     public class UpsApiTransitTimeClient
     {
         static readonly ILog log = LogManager.GetLogger(typeof(UpsApiTransitTimeClient));
-
+        
+        private const string TwoDayAirSaturdayTransitCode = "2DAS";
+        private const string NextDayAirSaturdayTransitCode = "1DAS";
+        private const string NextDayAirAMSaturdayTransitCode = "1DMS";
+              
+        // These codes are found on page 52 of this doc 
+        // V:/Partners/Shipping/UPS/Time in Transit/Time_In_Transit2018/TimeInTransit/Developers Guide/Time In Transit XML Developer Guide.pdf
+        private static readonly List<string> saturdayTransitCodes = new List<string>
+        {
+            TwoDayAirSaturdayTransitCode,
+            NextDayAirSaturdayTransitCode,
+            NextDayAirAMSaturdayTransitCode
+        };
+        
         /// <summary>
         /// Get transit times for the given shipment
         /// Uses counter rates if specified
@@ -180,7 +193,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
                 XPathNavigator summaryNode = summaryNodes.Current.Clone();
 
                 // Extract the data
-                string serviceCode = XPathUtility.Evaluate(summaryNode, "Service/Code", "");
+                string transitCode = XPathUtility.Evaluate(summaryNode, "Service/Code", "");
                 string businessDays = XPathUtility.Evaluate(summaryNode, "EstimatedArrival/BusinessTransitDays", "");
                 string date = XPathUtility.Evaluate(summaryNode, "EstimatedArrival/Date", "");
                 string localTime = XPathUtility.Evaluate(summaryNode, "EstimatedArrival/Time", "");
@@ -193,9 +206,22 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
                     // Use the service manager to try to identify the service by the transit code
                     IUpsServiceManagerFactory serviceManagerFactory = new UpsServiceManagerFactory(shipment);
                     IUpsServiceManager serviceManager = serviceManagerFactory.Create(shipment);
-                    UpsServiceType service = serviceManager.GetServiceByTransitCode(serviceCode, shipment.AdjustedShipCountryCode()).UpsServiceType;
+                    
+                    // UPS has different transit service codes for air services with saturday delivery. 
+                    // When the shipment is marked for saturday delivery, replace the saturday code with the regular one.
+                    // The api returns the results in order of quickest to slowest service and we use the first transit
+                    // time we find for a given transit code. This way, we use the correct delivery date/time, but still
+                    // treat the service the same everywhere else.
+                    if (shipment.Ups.SaturdayDelivery &&
+                        UpsUtility.CanDeliverOnSaturday((UpsServiceType) shipment.Ups.Service, shipment.ShipDate) &&
+                        saturdayTransitCodes.Contains(transitCode))
+                    {
+                        transitCode = transitCode.Remove(transitCode.Length - 1);
+                    }
 
-                    if (!transitTimes.Any(t => t.Service == service))
+                    UpsServiceType service = serviceManager.GetServiceByTransitCode(transitCode, shipment.AdjustedShipCountryCode()).UpsServiceType;
+
+                    if (transitTimes.All(t => t.Service != service))
                     {
                         // Only add the service if we haven't seen it before
                         transitTimes.Add(new UpsTransitTime(service, Convert.ToInt32(businessDays), arrivalDate.ToUniversalTime()));
@@ -205,12 +231,11 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
                 {
                     // There are some codes we don't account for (i.e. codes for freight services), so just log
                     // these and continue
-                    log.WarnFormat("Could not lookup service for TNT code {0}", serviceCode);
+                    log.WarnFormat("Could not lookup service for TNT code {0}", transitCode);
                 }
             }
 
             return transitTimes;
         }
-
     }
 }
