@@ -30,7 +30,9 @@ namespace ShipWorks.Data
                         UNION
                         SELECT 'ProductCatalog.ProductVariantAlias.Count' AS [Key], count(*) as [Value] FROM ProductVariantAlias
                         UNION
-                        SELECT 'ProductCatalog.ProductVariantAttribute.Count' AS [Key], count(*) as [Value] FROM ProductVariantAttribute
+                        SELECT 'ProductCatalog.ProductVariantAttributeValue.Count' AS [Key], count(*) as [Value] FROM ProductVariantAttributeValue
+                        UNION
+                        SELECT 'ProductCatalog.ProductAttribute.Count' AS [Key], count(*) as [Value] FROM ProductAttribute
                         ";
 
                     using (DbDataReader reader = DbCommandProvider.ExecuteReader(cmd))
