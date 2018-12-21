@@ -133,19 +133,19 @@ namespace ShipWorks.Products.AliasEditor
         {
             if (string.IsNullOrWhiteSpace(AliasSku))
             {
-                messageHelper.ShowError("Please enter an alias sku.");
+                messageHelper.ShowError("Please enter an alias SKU.");
                 return;
             }
 
             if (defaultAlias?.Sku == AliasSku)
             {
-                messageHelper.ShowError($"\"{AliasSku}\" is already the default sku for this product.");
+                messageHelper.ShowError($"\"{AliasSku}\" is already the default SKU for this product.");
                 return;
             }
 
             if (ProductAliases.Any(x => x.Sku == AliasSku))
             {
-                messageHelper.ShowError($"This product already contains an alias with the sku \"{AliasSku}\".");
+                messageHelper.ShowError($"This product already contains an alias with the SKU \"{AliasSku}\".");
                 return;
             }
 
