@@ -40,7 +40,7 @@
   <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
   <triggers/>
   <concurrentBuild>false</concurrentBuild>
-  <customWorkspace>c:\jenkins-builds\@@BRANCH_NAME@@</customWorkspace>
+  <customWorkspace>d:\jenkins-builds\@@BRANCH_NAME@@</customWorkspace>
   <builders>
     <hudson.tasks.Shell>
       <command>bundle exec rake build:public_installer[0.0.0]</command>
@@ -59,7 +59,7 @@
       <unstableOnWarning>false</unstableOnWarning>
       <failBuildOnError>false</failBuildOnError>
       <showGraphs>false</showGraphs>
-      <parsingRulesPath>c:\jenkins-builds\ShipWorksParseRules.txt</parsingRulesPath>
+      <parsingRulesPath>d:\jenkins-builds\ShipWorksParseRules.txt</parsingRulesPath>
       <useProjectRule>false</useProjectRule>
     </hudson.plugins.logparser.LogParserPublisher>
     <hudson.tasks.Mailer plugin="mailer@1.20">

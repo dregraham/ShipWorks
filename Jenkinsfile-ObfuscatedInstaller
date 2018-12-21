@@ -4,7 +4,7 @@ pipeline {
 	agent {
 		node {
 			label 'windows'
-			customWorkspace "c:/jenkins-builds/SOI_${BUILD_FOLDER}"
+			customWorkspace "d:/jenkins-builds/SOI_${BUILD_FOLDER}"
 		}
 	}
 	options {
