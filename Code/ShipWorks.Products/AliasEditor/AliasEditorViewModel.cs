@@ -133,7 +133,7 @@ namespace ShipWorks.Products.AliasEditor
         {
             if (string.IsNullOrWhiteSpace(AliasSku))
             {
-                messageHelper.ShowError("Please enter an alias SKU.");
+                messageHelper.ShowError("Please enter an Alias SKU.");
                 return;
             }
 
