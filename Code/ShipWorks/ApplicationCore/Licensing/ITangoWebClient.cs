@@ -63,12 +63,6 @@ namespace ShipWorks.ApplicationCore.Licensing
         void SendAccountUsername(string email, string username);
 
         /// <summary>
-        /// Log the given processed shipment to Tango.  isRetry is only for internal interapptive purposes to handle rare cases where shipments a customer
-        /// insured did not make it up into tango, but the shipment did actually process.
-        /// </summary>
-        string LogShipment(StoreEntity store, ShipmentEntity shipment, bool isRetry = false);
-
-        /// <summary>
         /// Void the given processed shipment to Tango
         /// </summary>
         void VoidShipment(StoreEntity store, ShipmentEntity shipment);
@@ -107,11 +101,6 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// Upgrade the given trial to not be in an 'Edition' mode
         /// </summary>
         void UpgradeEditionTrial(StoreEntity store);
-
-        /// <summary>
-        /// Ensure the connection to the given URI is a valid interapptive secure connection
-        /// </summary>
-        void ValidateSecureConnection(Uri uri);
 
         /// <summary>
         /// Gets a collection of nudges from Tango.
