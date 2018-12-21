@@ -44,7 +44,7 @@
                       Text="{Binding AliasName}"/>
             <TextBlock Grid.Row="1"
                        Grid.Column="0"
-                       Text="Alias Sku"
+                       Text="Alias SKU"
                        Style="{StaticResource FieldLabel}"/>
             <TextBox Grid.Row="1"
                      Grid.Column="1"
