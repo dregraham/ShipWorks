@@ -14,6 +14,7 @@ using Interapptive.Shared.Security;
 using Interapptive.Shared.Utility;
 using log4net;
 using ShipWorks.ApplicationCore.Licensing.Activation.WebServices;
+using ShipWorks.ApplicationCore.Licensing.TangoRequests;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.ApplicationCore.Nudges;
 using ShipWorks.Data.Connection;
@@ -576,6 +577,24 @@ namespace ShipWorks.ApplicationCore.Licensing
 
             if (!license.IsTrial)
             {
+                if (shipment.OnlineShipmentID.IsNullOrWhiteSpace())
+                {
+                    // To void, Tango needs a shipment in its db, so since we don't have an OnlineShipmentID, we must
+                    // assume that there isn't one, so log it now.
+                    using (var lifetimeScope = IoC.BeginLifetimeScope())
+                    {
+                        ISqlSession sqlSession = lifetimeScope.Resolve<ISqlSession>();
+                        ITangoLogShipmentRequest logShipmentRequest = lifetimeScope.Resolve<ITangoLogShipmentRequest>();
+
+                        Result logShipmentResult = logShipmentRequest.LogShipment(sqlSession.OpenConnection(), store, shipment);
+                        if (logShipmentResult.Failure)
+                        {
+                            log.Error($"ShipWorks was unable to void the shipment.  {logShipmentResult.Message}", logShipmentResult.Exception);
+                            throw new TangoException("ShipWorks was unable to void the shipment.");
+                        }
+                    }
+                }
+
                 // Create the request
                 HttpVariableRequestSubmitter postRequest = new HttpVariableRequestSubmitter();
 

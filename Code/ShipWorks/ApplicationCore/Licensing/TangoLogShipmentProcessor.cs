@@ -219,6 +219,7 @@ namespace ShipWorks.ApplicationCore.Licensing
                     .Where(ShipmentFields.OnlineShipmentID.IsNull().Or(ShipmentFields.OnlineShipmentID == string.Empty))
                     .AndWhere(ShipmentFields.Processed == true)
                     .AndWhere(ShipmentFields.Voided == false)
+                    .AndWhere(ShipmentFields.ShipmentType != (int) ShipmentTypeCode.UpsWorldShip)
                     .WithPath(ShipmentEntity.PrefetchPathOrder)
                     .OrderBy(ShipmentFields.ProcessedDate.Descending())
                     .Limit(20);
