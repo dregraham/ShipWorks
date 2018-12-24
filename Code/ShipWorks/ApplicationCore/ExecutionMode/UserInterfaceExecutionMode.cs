@@ -11,6 +11,7 @@ using System.Windows.Forms;
 using System.Windows.Interop;
 using ActiproSoftware.SyntaxEditor;
 using CefSharp;
+using CefSharp.WinForms;
 using Interapptive.Shared.Data;
 using Interapptive.Shared.IO.Hardware.Scales;
 using Interapptive.Shared.Metrics;
