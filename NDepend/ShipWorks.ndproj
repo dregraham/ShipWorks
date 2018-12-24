@@ -4229,7 +4229,9 @@ from  m in JustMyCode.Methods where !m.ParentAssembly.Name.Contains("ShipWorks.S
 
 select new { m, m.NbLinesOfCode }]]></Query>
       <Query Active="True" DisplayList="True" DisplayStat="True" DisplaySelectionView="False" IsCriticalRule="True"><![CDATA[// <Name>Jenkins Build Rules: # of methods w/ too many parameters exceeded</Name>
-warnif count > 16 from  m in JustMyCode.Methods where !m.ParentAssembly.Name.Contains("ShipWorks.SqlServer") &&
+warnif count > 16 from  m in JustMyCode.Methods 
+where !m.ParentAssembly.Name.Contains("ShipWorks.SqlServer") &&
+ !m.FullName.StartsWith("Interapptive.Shared.Win32") &&
  m.NbParameters > 5  &&
   !(m.HasAttribute("Interapptive.Shared.NDependIgnoreTooManyParamsAttribute") ||
     m.ParentType.HasAttribute("Interapptive.Shared.NDependIgnoreAttribute"))

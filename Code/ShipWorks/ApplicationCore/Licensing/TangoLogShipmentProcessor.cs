@@ -5,6 +5,7 @@ using System.Linq;
 using System.Reactive;
 using System.Threading;
 using System.Threading.Tasks;
+using Interapptive.Shared;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.ComponentRegistration.Ordering;
 using Interapptive.Shared.Data;
@@ -52,6 +53,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// <summary>
         /// Constructor
         /// </summary>
+        [NDependIgnoreTooManyParams]
         public TangoLogShipmentProcessor(
             ITangoLogShipmentRequest tangoLogShipmentRequest,
             ISqlSession sqlSession,
