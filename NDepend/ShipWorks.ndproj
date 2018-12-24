@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <NDepend AppName="ShipWorks" Platform="DotNet">
   <OutputDir KeepXmlFiles="False">.\NDependOut</OutputDir>
   <Assemblies>
@@ -4251,7 +4251,8 @@ select new { t, t.NbLinesOfCode }]]></Query>
 warnif count > 20
 
 from m in JustMyCode.Types.Where(m=> 
-        m.HasAttribute("*.NDependIgnoreAttribute*") 
+  !m.FullName.StartsWith("Interapptive.Shared.Win32") &&
+   m.HasAttribute("*.NDependIgnoreAttribute*") 
 )
 orderby m.FullName
 select new { m }
