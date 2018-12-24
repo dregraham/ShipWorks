@@ -254,7 +254,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// </summary>
         public void Dispose()
         {
-            cancellationTokenSource.Cancel(true);
+            cancellationTokenSource?.Cancel(true);
         }
     }
 }
