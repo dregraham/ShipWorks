@@ -4913,6 +4913,22 @@ namespace ShipWorks
             }
         }
 
+        /// <summary>
+        /// Action when the user clicks the print pick slip button
+        /// </summary>
+        private void OnPrintPickSlip(object sender, EventArgs e)
+        {
+            // Ensure orders are selected (they should be for this button to be clicked, but just in case)
+            
+            // get default pick slip template
+            
+            // if default exists, print it with selected orders
+            
+            // if not default, prompt user to select one
+            
+            // save new default
+        }
+
         #region Ribbon Popup Handlers
 
         /// <summary>
