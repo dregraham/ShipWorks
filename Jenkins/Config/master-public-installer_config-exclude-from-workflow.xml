@@ -34,7 +34,7 @@
   <blockBuildWhenDownstreamBuilding>true</blockBuildWhenDownstreamBuilding>
   <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
   <concurrentBuild>false</concurrentBuild>
-  <customWorkspace>c:\jenkins-builds\master-public</customWorkspace>
+  <customWorkspace>d:\jenkins-builds\master-public</customWorkspace>
   <builders>
     <hudson.tasks.Shell>
       <command>bundle exec rake build:public_installer[4.4.0]</command>
@@ -54,7 +54,7 @@
     <hudson.plugins.logparser.LogParserPublisher plugin="log-parser@1.0.8">
       <unstableOnWarning>false</unstableOnWarning>
       <failBuildOnError>false</failBuildOnError>
-      <parsingRulesPath>c:\jenkins-builds\ShipWorksParseRules.txt</parsingRulesPath>
+      <parsingRulesPath>d:\jenkins-builds\ShipWorksParseRules.txt</parsingRulesPath>
     </hudson.plugins.logparser.LogParserPublisher>
     <org.jenkinsci.plugins.artifactdeployer.ArtifactDeployerPublisher plugin="artifactdeployer@0.33">
       <entries>

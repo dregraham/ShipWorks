@@ -28,7 +28,7 @@
   <blockBuildWhenUpstreamBuilding>true</blockBuildWhenUpstreamBuilding>
   <triggers/>
   <concurrentBuild>false</concurrentBuild>
-  <customWorkspace>C:\jenkins-builds\@@BRANCH_NAME@@</customWorkspace>
+  <customWorkspace>d:\jenkins-builds\@@BRANCH_NAME@@</customWorkspace>
   <builders>
     <hudson.tasks.Shell>
       <command>bundle exec rake test:integration[ContinuousIntegration]</command>
@@ -39,7 +39,7 @@
       <unstableOnWarning>false</unstableOnWarning>
       <failBuildOnError>false</failBuildOnError>
       <showGraphs>false</showGraphs>
-      <parsingRulesPath>c:\jenkins-builds\ShipWorksParseRules.txt</parsingRulesPath>
+      <parsingRulesPath>d:\jenkins-builds\ShipWorksParseRules.txt</parsingRulesPath>
       <useProjectRule>false</useProjectRule>
     </hudson.plugins.logparser.LogParserPublisher>
     <xunit plugin="xunit@1.102">

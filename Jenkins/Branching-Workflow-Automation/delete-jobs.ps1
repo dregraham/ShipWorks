@@ -37,7 +37,7 @@ $jobNames | ForEach-Object {
 Post-ToUrl "http://intdev1201:8080/view/$env:FEATURE_NAME/doDelete"
 
 # Delete the source code directory from disk for the common prefixes (feature, defect, spike)
-Delete-JobDirectory "\\intdev1201\C$\jenkins-builds\feature-$env:FEATURE_NAME"
-Delete-JobDirectory "\\intdev1201\C$\jenkins-builds\defect-$env:FEATURE_NAME"
-Delete-JobDirectory "\\intdev1201\C$\jenkins-builds\spike-$env:FEATURE_NAME"
-Delete-JobDirectory "\\intdev1201\C$\jenkins-builds\$env:FEATURE_NAME"
+Delete-JobDirectory "\\intdev1201\d$\jenkins-builds\feature-$env:FEATURE_NAME"
+Delete-JobDirectory "\\intdev1201\d$\jenkins-builds\defect-$env:FEATURE_NAME"
+Delete-JobDirectory "\\intdev1201\d$\jenkins-builds\spike-$env:FEATURE_NAME"
+Delete-JobDirectory "\\intdev1201\d$\jenkins-builds\$env:FEATURE_NAME"

@@ -21,7 +21,7 @@
   <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
   <triggers/>
   <concurrentBuild>false</concurrentBuild>
-  <customWorkspace>c:\jenkins-builds\delete-branch-workflow</customWorkspace>
+  <customWorkspace>d:\jenkins-builds\delete-branch-workflow</customWorkspace>
   <builders>
     <hudson.plugins.powershell.PowerShell plugin="powershell@1.2">
       <command>echo &quot;Deleting jobs for $env:FEATURE_NAME&quot;
@@ -63,7 +63,7 @@ $request.getResponse()
 # Delete the source code directory from disk for the common prefixes (feature, defect, spike)
 
 # Try deleting for the feature- prefix
-$jobSourceDirectory = &quot;\\intdev1201\C$\jenkins-builds\feature-&quot; + $env:FEATURE_NAME
+$jobSourceDirectory = &quot;\\intdev1201\d$\jenkins-builds\feature-&quot; + $env:FEATURE_NAME
 echo &quot;Trying to delete from $jobSourceDirectory&quot;
 if (Test-Path -Path $jobSourceDirectory)
 {
@@ -73,7 +73,7 @@ if (Test-Path -Path $jobSourceDirectory)
 }
 
 # Try deleting for the defect- prefix
-$jobSourceDirectory = &quot;\\intdev1201\C$\jenkins-builds\defect-&quot; + $env:FEATURE_NAME
+$jobSourceDirectory = &quot;\\intdev1201\d$\jenkins-builds\defect-&quot; + $env:FEATURE_NAME
 echo &quot;Trying to delete from $jobSourceDirectory&quot;
 if (Test-Path -Path $jobSourceDirectory)
 {
@@ -83,7 +83,7 @@ if (Test-Path -Path $jobSourceDirectory)
 }
 
 # Try deleting for the spike- prefix
-$jobSourceDirectory = &quot;\\intdev1201\C$\jenkins-builds\spike-&quot; + $env:FEATURE_NAME
+$jobSourceDirectory = &quot;\\intdev1201\d$\jenkins-builds\spike-&quot; + $env:FEATURE_NAME
 echo &quot;Trying to delete from $jobSourceDirectory&quot;
 if (Test-Path -Path $jobSourceDirectory)
 {
@@ -94,7 +94,7 @@ if (Test-Path -Path $jobSourceDirectory)
 
 
 # Try deleting without any prefix
-$jobSourceDirectory = &quot;\\intdev1201\C$\jenkins-builds\&quot; + $env:FEATURE_NAME
+$jobSourceDirectory = &quot;\\intdev1201\d$\jenkins-builds\&quot; + $env:FEATURE_NAME
 echo &quot;Trying to delete from $jobSourceDirectory&quot;
 if (Test-Path -Path $jobSourceDirectory)
 {

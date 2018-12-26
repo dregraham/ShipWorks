@@ -51,7 +51,7 @@
     </hudson.triggers.SCMTrigger>
   </triggers>
   <concurrentBuild>false</concurrentBuild>
-  <customWorkspace>C:\jenkins-builds\@@BRANCH_NAME@@</customWorkspace>
+  <customWorkspace>d:\jenkins-builds\@@BRANCH_NAME@@</customWorkspace>
   <builders>
     <hudson.tasks.Shell>
       <command>bundle exec rake rebuild[true]</command>
@@ -65,7 +65,7 @@
       <unstableOnWarning>false</unstableOnWarning>
       <failBuildOnError>false</failBuildOnError>
       <showGraphs>false</showGraphs>
-      <parsingRulesPath>C:\jenkins-builds\ShipWorksParseRules.txt</parsingRulesPath>
+      <parsingRulesPath>d:\jenkins-builds\ShipWorksParseRules.txt</parsingRulesPath>
       <useProjectRule>false</useProjectRule>
     </hudson.plugins.logparser.LogParserPublisher>
     <join.JoinTrigger plugin="join@1.21">

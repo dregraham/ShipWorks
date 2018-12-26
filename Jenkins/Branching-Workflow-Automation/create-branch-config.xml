@@ -41,7 +41,7 @@
   <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
   <triggers/>
   <concurrentBuild>false</concurrentBuild>
-  <customWorkspace>C:\jenkins-builds\create-branch-workflow</customWorkspace>
+  <customWorkspace>D:\jenkins-builds\create-branch-workflow</customWorkspace>
   <builders>
     <hudson.tasks.Shell>
       <command># Create View
