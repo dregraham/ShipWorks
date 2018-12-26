@@ -4460,12 +4460,17 @@ CREATE TABLE [dbo].[Configuration]
 [UseParallelActionQueue] [bit] NOT NULL CONSTRAINT [DF_Configuration_UseParallelActionQueue] DEFAULT ((1)),
 [AllowEbayCombineLocally] [bit] NOT NULL CONSTRAINT [DF_Configuration_AllowEbayCombineLocally] DEFAULT ((0)),
 [ArchivalSettingsXml] [xml] NOT NULL CONSTRAINT [DF_Configuration_ArchivalSettingsXml] DEFAULT ('<ArchivalSettings/>'),
-[AuditEnabled] [bit] NOT NULL CONSTRAINT [DF_Configuration_AuditEnabled] DEFAULT ((1))
+[AuditEnabled] [bit] NOT NULL CONSTRAINT [DF_Configuration_AuditEnabled] DEFAULT ((1)),
+[DefaultPickListTemplateID] [bigint] NULL
 )
 GO
 PRINT N'Creating primary key [PK_Configuration] on [dbo].[Configuration]'
 GO
 ALTER TABLE [dbo].[Configuration] ADD CONSTRAINT [PK_Configuration] PRIMARY KEY CLUSTERED  ([ConfigurationID])
+GO
+PRINT N'Adding foreign keys to [dbo].[Configuration]'
+GO
+ALTER TABLE [dbo].[Configuration] ADD CONSTRAINT [FK_Configuration_DefaultPickListTemplate] FOREIGN KEY ([DefaultPickListTemplateID]) REFERENCES [dbo].[Template] ([TemplateID])
 GO
 PRINT N'Creating [dbo].[DimensionsProfile]'
 GO
