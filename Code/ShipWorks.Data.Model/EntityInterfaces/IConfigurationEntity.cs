@@ -123,8 +123,15 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         /// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         System.Boolean AuditEnabled { get; }
+        /// <summary> The DefaultPickListTemplateID property of the Entity Configuration<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "Configuration"."DefaultPickListTemplateID"<br/>
+        /// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+        Nullable<System.Int64> DefaultPickListTemplateID { get; }
         
         
+        ITemplateEntity Template { get; }
         
 
         
@@ -153,6 +160,7 @@ namespace ShipWorks.Data.Model.EntityClasses
     public partial class ConfigurationEntity : IConfigurationEntity
     {
         
+        ITemplateEntity IConfigurationEntity.Template => Template;
         
 
         /// <summary>

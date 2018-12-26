@@ -53,8 +53,10 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             AllowEbayCombineLocally = source.AllowEbayCombineLocally;
             ArchivalSettingsXml = source.ArchivalSettingsXml;
             AuditEnabled = source.AuditEnabled;
+            DefaultPickListTemplateID = source.DefaultPickListTemplateID;
             
             
+            Template = (ITemplateEntity) source.Template?.AsReadOnly(objectMap);
             
 
             CopyCustomConfigurationData(source);
@@ -163,7 +165,15 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         public System.Boolean AuditEnabled { get; }
+        /// <summary> The DefaultPickListTemplateID property of the Entity Configuration<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "Configuration"."DefaultPickListTemplateID"<br/>
+        /// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+        public Nullable<System.Int64> DefaultPickListTemplateID { get; }
         
+        
+        public ITemplateEntity Template { get; }
         
         
         /// <summary>

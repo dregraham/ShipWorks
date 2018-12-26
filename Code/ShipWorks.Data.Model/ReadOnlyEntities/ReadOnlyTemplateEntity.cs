@@ -63,6 +63,8 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             
             ParentFolder = (ITemplateFolderEntity) source.ParentFolder?.AsReadOnly(objectMap);
             
+            Configuration = source.Configuration?.Select(x => x.AsReadOnly(objectMap)).OfType<IConfigurationEntity>().ToReadOnly() ??
+                Enumerable.Empty<IConfigurationEntity>();
             ComputerSettings = source.ComputerSettings?.Select(x => x.AsReadOnly(objectMap)).OfType<ITemplateComputerSettingsEntity>().ToReadOnly() ??
                 Enumerable.Empty<ITemplateComputerSettingsEntity>();
             StoreSettings = source.StoreSettings?.Select(x => x.AsReadOnly(objectMap)).OfType<ITemplateStoreSettingsEntity>().ToReadOnly() ??
@@ -216,6 +218,8 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         
         public ITemplateFolderEntity ParentFolder { get; }
         
+        
+        public IEnumerable<IConfigurationEntity> Configuration { get; }
         
         public IEnumerable<ITemplateComputerSettingsEntity> ComputerSettings { get; }
         

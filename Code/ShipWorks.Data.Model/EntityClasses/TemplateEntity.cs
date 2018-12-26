@@ -32,6 +32,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		// __LLBLGENPRO_USER_CODE_REGION_END	
 	{
 		#region Class Member Declarations
+		private EntityCollection<ConfigurationEntity> _configuration;
 		private EntityCollection<TemplateComputerSettingsEntity> _computerSettings;
 		private EntityCollection<TemplateStoreSettingsEntity> _storeSettings;
 		private EntityCollection<TemplateUserSettingsEntity> _userSettings;
@@ -50,6 +51,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			/// <summary>Member name ParentFolder</summary>
 			public static readonly string ParentFolder = "ParentFolder";
+			/// <summary>Member name Configuration</summary>
+			public static readonly string Configuration = "Configuration";
 			/// <summary>Member name ComputerSettings</summary>
 			public static readonly string ComputerSettings = "ComputerSettings";
 			/// <summary>Member name StoreSettings</summary>
@@ -113,6 +116,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			if(SerializationHelper.Optimization != SerializationOptimization.Fast) 
 			{
+				_configuration = (EntityCollection<ConfigurationEntity>)info.GetValue("_configuration", typeof(EntityCollection<ConfigurationEntity>));
 				_computerSettings = (EntityCollection<TemplateComputerSettingsEntity>)info.GetValue("_computerSettings", typeof(EntityCollection<TemplateComputerSettingsEntity>));
 				_storeSettings = (EntityCollection<TemplateStoreSettingsEntity>)info.GetValue("_storeSettings", typeof(EntityCollection<TemplateStoreSettingsEntity>));
 				_userSettings = (EntityCollection<TemplateUserSettingsEntity>)info.GetValue("_userSettings", typeof(EntityCollection<TemplateUserSettingsEntity>));
@@ -154,6 +158,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 				case "ParentFolder":
 					this.ParentFolder = (TemplateFolderEntity)entity;
 					break;
+				case "Configuration":
+					this.Configuration.Add((ConfigurationEntity)entity);
+					break;
 				case "ComputerSettings":
 					this.ComputerSettings.Add((TemplateComputerSettingsEntity)entity);
 					break;
@@ -187,6 +194,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 			{
 				case "ParentFolder":
 					toReturn.Add(Relations.TemplateFolderEntityUsingParentFolderID);
+					break;
+				case "Configuration":
+					toReturn.Add(Relations.ConfigurationEntityUsingDefaultPickListTemplateID);
 					break;
 				case "ComputerSettings":
 					toReturn.Add(Relations.TemplateComputerSettingsEntityUsingTemplateID);
@@ -228,6 +238,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 				case "ParentFolder":
 					SetupSyncParentFolder(relatedEntity);
 					break;
+				case "Configuration":
+					this.Configuration.Add((ConfigurationEntity)relatedEntity);
+					break;
 				case "ComputerSettings":
 					this.ComputerSettings.Add((TemplateComputerSettingsEntity)relatedEntity);
 					break;
@@ -252,6 +265,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 			{
 				case "ParentFolder":
 					DesetupSyncParentFolder(false, true);
+					break;
+				case "Configuration":
+					this.PerformRelatedEntityRemoval(this.Configuration, relatedEntity, signalRelatedEntityManyToOne);
 					break;
 				case "ComputerSettings":
 					this.PerformRelatedEntityRemoval(this.ComputerSettings, relatedEntity, signalRelatedEntityManyToOne);
@@ -293,6 +309,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		protected override List<IEntityCollection2> GetMemberEntityCollections()
 		{
 			List<IEntityCollection2> toReturn = new List<IEntityCollection2>();
+			toReturn.Add(this.Configuration);
 			toReturn.Add(this.ComputerSettings);
 			toReturn.Add(this.StoreSettings);
 			toReturn.Add(this.UserSettings);
@@ -307,6 +324,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			if (SerializationHelper.Optimization != SerializationOptimization.Fast) 
 			{
+				info.AddValue("_configuration", ((_configuration!=null) && (_configuration.Count>0) && !this.MarkedForDeletion)?_configuration:null);
 				info.AddValue("_computerSettings", ((_computerSettings!=null) && (_computerSettings.Count>0) && !this.MarkedForDeletion)?_computerSettings:null);
 				info.AddValue("_storeSettings", ((_storeSettings!=null) && (_storeSettings.Count>0) && !this.MarkedForDeletion)?_storeSettings:null);
 				info.AddValue("_userSettings", ((_userSettings!=null) && (_userSettings.Count>0) && !this.MarkedForDeletion)?_userSettings:null);
@@ -324,6 +342,15 @@ namespace ShipWorks.Data.Model.EntityClasses
 		protected override List<IEntityRelation> GetAllRelations()
 		{
 			return new TemplateRelations().GetAllRelations();
+		}
+
+		/// <summary> Creates a new IRelationPredicateBucket object which contains the predicate expression and relation collection to fetch the related entities of type 'Configuration' to this entity.</summary>
+		/// <returns></returns>
+		public virtual IRelationPredicateBucket GetRelationInfoConfiguration()
+		{
+			IRelationPredicateBucket bucket = new RelationPredicateBucket();
+			bucket.PredicateExpression.Add(new FieldCompareValuePredicate(ConfigurationFields.DefaultPickListTemplateID, null, ComparisonOperator.Equal, this.TemplateID));
+			return bucket;
 		}
 
 		/// <summary> Creates a new IRelationPredicateBucket object which contains the predicate expression and relation collection to fetch the related entities of type 'TemplateComputerSettings' to this entity.</summary>
@@ -374,6 +401,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		protected override void AddToMemberEntityCollectionsQueue(Queue<IEntityCollection2> collectionsQueue) 
 		{
 			base.AddToMemberEntityCollectionsQueue(collectionsQueue);
+			collectionsQueue.Enqueue(this._configuration);
 			collectionsQueue.Enqueue(this._computerSettings);
 			collectionsQueue.Enqueue(this._storeSettings);
 			collectionsQueue.Enqueue(this._userSettings);
@@ -384,6 +412,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		protected override void GetFromMemberEntityCollectionsQueue(Queue<IEntityCollection2> collectionsQueue)
 		{
 			base.GetFromMemberEntityCollectionsQueue(collectionsQueue);
+			this._configuration = (EntityCollection<ConfigurationEntity>) collectionsQueue.Dequeue();
 			this._computerSettings = (EntityCollection<TemplateComputerSettingsEntity>) collectionsQueue.Dequeue();
 			this._storeSettings = (EntityCollection<TemplateStoreSettingsEntity>) collectionsQueue.Dequeue();
 			this._userSettings = (EntityCollection<TemplateUserSettingsEntity>) collectionsQueue.Dequeue();
@@ -395,6 +424,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		protected override bool HasPopulatedMemberEntityCollections()
 		{
 			bool toReturn = false;
+			toReturn |=(this._configuration != null);
 			toReturn |=(this._computerSettings != null);
 			toReturn |=(this._storeSettings != null);
 			toReturn |=(this._userSettings != null);
@@ -407,6 +437,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		protected override void CreateMemberEntityCollectionsQueue(Queue<IEntityCollection2> collectionsQueue, Queue<bool> requiredQueue) 
 		{
 			base.CreateMemberEntityCollectionsQueue(collectionsQueue, requiredQueue);
+			collectionsQueue.Enqueue(requiredQueue.Dequeue() ? new EntityCollection<ConfigurationEntity>(EntityFactoryCache2.GetEntityFactory(typeof(ConfigurationEntityFactory))) : null);
 			collectionsQueue.Enqueue(requiredQueue.Dequeue() ? new EntityCollection<TemplateComputerSettingsEntity>(EntityFactoryCache2.GetEntityFactory(typeof(TemplateComputerSettingsEntityFactory))) : null);
 			collectionsQueue.Enqueue(requiredQueue.Dequeue() ? new EntityCollection<TemplateStoreSettingsEntity>(EntityFactoryCache2.GetEntityFactory(typeof(TemplateStoreSettingsEntityFactory))) : null);
 			collectionsQueue.Enqueue(requiredQueue.Dequeue() ? new EntityCollection<TemplateUserSettingsEntity>(EntityFactoryCache2.GetEntityFactory(typeof(TemplateUserSettingsEntityFactory))) : null);
@@ -418,6 +449,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			Dictionary<string, object> toReturn = new Dictionary<string, object>();
 			toReturn.Add("ParentFolder", _parentFolder);
+			toReturn.Add("Configuration", _configuration);
 			toReturn.Add("ComputerSettings", _computerSettings);
 			toReturn.Add("StoreSettings", _storeSettings);
 			toReturn.Add("UserSettings", _userSettings);
@@ -553,6 +585,13 @@ namespace ShipWorks.Data.Model.EntityClasses
 		public  static Dictionary<string, string> CustomProperties
 		{
 			get { return _customProperties;}
+		}
+
+		/// <summary> Creates a new PrefetchPathElement2 object which contains all the information to prefetch the related entities of type 'Configuration' for this entity.</summary>
+		/// <returns>Ready to use IPrefetchPathElement2 implementation.</returns>
+		public static IPrefetchPathElement2 PrefetchPathConfiguration
+		{
+			get	{ return new PrefetchPathElement2( new EntityCollection<ConfigurationEntity>(EntityFactoryCache2.GetEntityFactory(typeof(ConfigurationEntityFactory))), (IEntityRelation)GetRelationsForField("Configuration")[0], (int)ShipWorks.Data.Model.EntityType.TemplateEntity, (int)ShipWorks.Data.Model.EntityType.ConfigurationEntity, 0, null, null, null, null, "Configuration", SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToMany);	}
 		}
 
 		/// <summary> Creates a new PrefetchPathElement2 object which contains all the information to prefetch the related entities of type 'TemplateComputerSettings' for this entity.</summary>
@@ -835,6 +874,13 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.Boolean)GetValue((int)TemplateFieldIndex.SaveFileOnlineResources, true); }
 			set	{ SetValue((int)TemplateFieldIndex.SaveFileOnlineResources, value); }
+		}
+
+		/// <summary> Gets the EntityCollection with the related entities of type 'ConfigurationEntity' which are related to this entity via a relation of type '1:n'. If the EntityCollection hasn't been fetched yet, the collection returned will be empty.<br/><br/></summary>
+		[TypeContainedAttribute(typeof(ConfigurationEntity))]
+		public virtual EntityCollection<ConfigurationEntity> Configuration
+		{
+			get { return GetOrCreateEntityCollection<ConfigurationEntity, ConfigurationEntityFactory>("Template", true, false, ref _configuration);	}
 		}
 
 		/// <summary> Gets the EntityCollection with the related entities of type 'TemplateComputerSettingsEntity' which are related to this entity via a relation of type '1:n'. If the EntityCollection hasn't been fetched yet, the collection returned will be empty.<br/><br/></summary>

@@ -30,6 +30,7 @@ namespace ShipWorks.Data.Model.RelationClasses
 		public virtual List<IEntityRelation> GetAllRelations()
 		{
 			List<IEntityRelation> toReturn = new List<IEntityRelation>();
+			toReturn.Add(this.TemplateEntityUsingDefaultPickListTemplateID);
 			return toReturn;
 		}
 
@@ -37,6 +38,20 @@ namespace ShipWorks.Data.Model.RelationClasses
 
 
 
+		/// <summary>Returns a new IEntityRelation object, between ConfigurationEntity and TemplateEntity over the m:1 relation they have, using the relation between the fields:
+		/// Configuration.DefaultPickListTemplateID - Template.TemplateID
+		/// </summary>
+		public virtual IEntityRelation TemplateEntityUsingDefaultPickListTemplateID
+		{
+			get
+			{
+				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.ManyToOne, "Template", false);
+				relation.AddEntityFieldPair(TemplateFields.TemplateID, ConfigurationFields.DefaultPickListTemplateID);
+				relation.InheritanceInfoPkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("TemplateEntity", false);
+				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("ConfigurationEntity", true);
+				return relation;
+			}
+		}
 		/// <summary>stub, not used in this entity, only for TargetPerEntity entities.</summary>
 		public virtual IEntityRelation GetSubTypeRelation(string subTypeEntityName) { return null; }
 		/// <summary>stub, not used in this entity, only for TargetPerEntity entities.</summary>
@@ -51,6 +66,7 @@ namespace ShipWorks.Data.Model.RelationClasses
 	/// <summary>Static class which is used for providing relationship instances which are re-used internally for syncing</summary>
 	internal static class StaticConfigurationRelations
 	{
+		internal static readonly IEntityRelation TemplateEntityUsingDefaultPickListTemplateIDStatic = new ConfigurationRelations().TemplateEntityUsingDefaultPickListTemplateID;
 
 		/// <summary>CTor</summary>
 		static StaticConfigurationRelations()

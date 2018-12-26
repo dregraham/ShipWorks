@@ -32,6 +32,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		// __LLBLGENPRO_USER_CODE_REGION_END	
 	{
 		#region Class Member Declarations
+		private TemplateEntity _template;
 
 		// __LLBLGENPRO_USER_CODE_REGION_START PrivateMembers
 		// __LLBLGENPRO_USER_CODE_REGION_END
@@ -44,6 +45,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <summary>All names of fields mapped onto a relation. Usable for in-memory filtering</summary>
 		public static partial class MemberNames
 		{
+			/// <summary>Member name Template</summary>
+			public static readonly string Template = "Template";
 		}
 		#endregion
 		
@@ -101,12 +104,32 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			if(SerializationHelper.Optimization != SerializationOptimization.Fast) 
 			{
+				_template = (TemplateEntity)info.GetValue("_template", typeof(TemplateEntity));
+				if(_template!=null)
+				{
+					_template.AfterSave+=new EventHandler(OnEntityAfterSave);
+				}
 				this.FixupDeserialization(FieldInfoProviderSingleton.GetInstance());
 			}
 			// __LLBLGENPRO_USER_CODE_REGION_START DeserializationConstructor
 			// __LLBLGENPRO_USER_CODE_REGION_END
 		}
 
+		
+		/// <summary>Performs the desync setup when an FK field has been changed. The entity referenced based on the FK field will be dereferenced and sync info will be removed.</summary>
+		/// <param name="fieldIndex">The fieldindex.</param>
+		protected override void PerformDesyncSetupFKFieldChange(int fieldIndex)
+		{
+			switch((ConfigurationFieldIndex)fieldIndex)
+			{
+				case ConfigurationFieldIndex.DefaultPickListTemplateID:
+					DesetupSyncTemplate(true, false);
+					break;
+				default:
+					base.PerformDesyncSetupFKFieldChange(fieldIndex);
+					break;
+			}
+		}
 
 		/// <summary> Sets the related entity property to the entity specified. If the property is a collection, it will add the entity specified to that collection.</summary>
 		/// <param name="propertyName">Name of the property.</param>
@@ -116,6 +139,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			switch(propertyName)
 			{
+				case "Template":
+					this.Template = (TemplateEntity)entity;
+					break;
 				default:
 					this.OnSetRelatedEntityProperty(propertyName, entity);
 					break;
@@ -138,6 +164,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 			RelationCollection toReturn = new RelationCollection();
 			switch(fieldName)
 			{
+				case "Template":
+					toReturn.Add(Relations.TemplateEntityUsingDefaultPickListTemplateID);
+					break;
 				default:
 					break;				
 			}
@@ -166,6 +195,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			switch(fieldName)
 			{
+				case "Template":
+					SetupSyncTemplate(relatedEntity);
+					break;
 				default:
 					break;
 			}
@@ -179,6 +211,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			switch(fieldName)
 			{
+				case "Template":
+					DesetupSyncTemplate(false, true);
+					break;
 				default:
 					break;
 			}
@@ -198,6 +233,10 @@ namespace ShipWorks.Data.Model.EntityClasses
 		protected override List<IEntity2> GetDependentRelatedEntities()
 		{
 			List<IEntity2> toReturn = new List<IEntity2>();
+			if(_template!=null)
+			{
+				toReturn.Add(_template);
+			}
 			return toReturn;
 		}
 		
@@ -217,6 +256,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			if (SerializationHelper.Optimization != SerializationOptimization.Fast) 
 			{
+				info.AddValue("_template", (!this.MarkedForDeletion?_template:null));
 			}
 			// __LLBLGENPRO_USER_CODE_REGION_START GetObjectInfo
 			// __LLBLGENPRO_USER_CODE_REGION_END
@@ -230,6 +270,15 @@ namespace ShipWorks.Data.Model.EntityClasses
 		protected override List<IEntityRelation> GetAllRelations()
 		{
 			return new ConfigurationRelations().GetAllRelations();
+		}
+
+		/// <summary> Creates a new IRelationPredicateBucket object which contains the predicate expression and relation collection to fetch the related entity of type 'Template' to this entity.</summary>
+		/// <returns></returns>
+		public virtual IRelationPredicateBucket GetRelationInfoTemplate()
+		{
+			IRelationPredicateBucket bucket = new RelationPredicateBucket();
+			bucket.PredicateExpression.Add(new FieldCompareValuePredicate(TemplateFields.TemplateID, null, ComparisonOperator.Equal, this.DefaultPickListTemplateID));
+			return bucket;
 		}
 		
 
@@ -275,6 +324,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		protected override Dictionary<string, object> GetRelatedData()
 		{
 			Dictionary<string, object> toReturn = new Dictionary<string, object>();
+			toReturn.Add("Template", _template);
 			return toReturn;
 		}
 
@@ -330,8 +380,43 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("ArchivalSettingsXml", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("AuditEnabled", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("DefaultPickListTemplateID", fieldHashtable);
 		}
 		#endregion
+
+		/// <summary> Removes the sync logic for member _template</summary>
+		/// <param name="signalRelatedEntity">If set to true, it will call the related entity's UnsetRelatedEntity method</param>
+		/// <param name="resetFKFields">if set to true it will also reset the FK fields pointing to the related entity</param>
+		private void DesetupSyncTemplate(bool signalRelatedEntity, bool resetFKFields)
+		{
+			this.PerformDesetupSyncRelatedEntity( _template, new PropertyChangedEventHandler( OnTemplatePropertyChanged ), "Template", ShipWorks.Data.Model.RelationClasses.StaticConfigurationRelations.TemplateEntityUsingDefaultPickListTemplateIDStatic, true, signalRelatedEntity, "Configuration", resetFKFields, new int[] { (int)ConfigurationFieldIndex.DefaultPickListTemplateID } );
+			_template = null;
+		}
+
+		/// <summary> setups the sync logic for member _template</summary>
+		/// <param name="relatedEntity">Instance to set as the related entity of type entityType</param>
+		private void SetupSyncTemplate(IEntityCore relatedEntity)
+		{
+			if(_template!=relatedEntity)
+			{
+				DesetupSyncTemplate(true, true);
+				_template = (TemplateEntity)relatedEntity;
+				this.PerformSetupSyncRelatedEntity( _template, new PropertyChangedEventHandler( OnTemplatePropertyChanged ), "Template", ShipWorks.Data.Model.RelationClasses.StaticConfigurationRelations.TemplateEntityUsingDefaultPickListTemplateIDStatic, true, new string[] {  } );
+			}
+		}
+		
+		/// <summary>Handles property change events of properties in a related entity.</summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		private void OnTemplatePropertyChanged( object sender, PropertyChangedEventArgs e )
+		{
+			switch( e.PropertyName )
+			{
+				default:
+					break;
+			}
+		}
 
 		/// <summary> Initializes the class with empty data, as if it is a new Entity.</summary>
 		/// <param name="validator">The validator object for this ConfigurationEntity</param>
@@ -362,6 +447,13 @@ namespace ShipWorks.Data.Model.EntityClasses
 		public  static Dictionary<string, string> CustomProperties
 		{
 			get { return _customProperties;}
+		}
+
+		/// <summary> Creates a new PrefetchPathElement2 object which contains all the information to prefetch the related entities of type 'Template' for this entity.</summary>
+		/// <returns>Ready to use IPrefetchPathElement2 implementation.</returns>
+		public static IPrefetchPathElement2 PrefetchPathTemplate
+		{
+			get	{ return new PrefetchPathElement2(new EntityCollection(EntityFactoryCache2.GetEntityFactory(typeof(TemplateEntityFactory))),	(IEntityRelation)GetRelationsForField("Template")[0], (int)ShipWorks.Data.Model.EntityType.ConfigurationEntity, (int)ShipWorks.Data.Model.EntityType.TemplateEntity, 0, null, null, null, null, "Template", SD.LLBLGen.Pro.ORMSupportClasses.RelationType.ManyToOne); }
 		}
 
 
@@ -556,6 +648,34 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.Boolean)GetValue((int)ConfigurationFieldIndex.AuditEnabled, true); }
 			set	{ SetValue((int)ConfigurationFieldIndex.AuditEnabled, value); }
+		}
+
+		/// <summary> The DefaultPickListTemplateID property of the Entity Configuration<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "Configuration"."DefaultPickListTemplateID"<br/>
+		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual Nullable<System.Int64> DefaultPickListTemplateID
+		{
+			get { return (Nullable<System.Int64>)GetValue((int)ConfigurationFieldIndex.DefaultPickListTemplateID, false); }
+			set	{ SetValue((int)ConfigurationFieldIndex.DefaultPickListTemplateID, value); }
+		}
+
+		/// <summary> Gets / sets related entity of type 'TemplateEntity' which has to be set using a fetch action earlier. If no related entity is set for this property, null is returned..<br/><br/></summary>
+		[Browsable(true)]
+		public virtual TemplateEntity Template
+		{
+			get	{ return _template; }
+			set
+			{
+				if(this.IsDeserializing)
+				{
+					SetupSyncTemplate(value);
+				}
+				else
+				{
+					SetSingleRelatedEntityNavigator(value, "Configuration", "Template", _template, true); 
+				}
+			}
 		}
 	
 		/// <summary> Gets the type of the hierarchy this entity is in. </summary>

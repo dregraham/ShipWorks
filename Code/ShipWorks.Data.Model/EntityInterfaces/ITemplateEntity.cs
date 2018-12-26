@@ -163,6 +163,7 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         
         ITemplateFolderEntity ParentFolder { get; }
         
+        IEnumerable<IConfigurationEntity> Configuration { get; }
         IEnumerable<ITemplateComputerSettingsEntity> ComputerSettings { get; }
         IEnumerable<ITemplateStoreSettingsEntity> StoreSettings { get; }
         IEnumerable<ITemplateUserSettingsEntity> UserSettings { get; }
@@ -195,6 +196,7 @@ namespace ShipWorks.Data.Model.EntityClasses
         
         ITemplateFolderEntity ITemplateEntity.ParentFolder => ParentFolder;
         
+        IEnumerable<IConfigurationEntity> ITemplateEntity.Configuration => Configuration;
         IEnumerable<ITemplateComputerSettingsEntity> ITemplateEntity.ComputerSettings => ComputerSettings;
         IEnumerable<ITemplateStoreSettingsEntity> ITemplateEntity.StoreSettings => StoreSettings;
         IEnumerable<ITemplateUserSettingsEntity> ITemplateEntity.UserSettings => UserSettings;
