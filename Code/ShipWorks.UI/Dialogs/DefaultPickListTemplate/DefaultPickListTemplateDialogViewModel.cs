@@ -29,7 +29,7 @@ namespace ShipWorks.UI.Dialogs.DefaultPickListTemplate
         {
             this.configurationData = configurationData;
 
-            SavePickListTemplateCommand = new RelayCommand(SavePickListTemplate);
+            SavePickListTemplateCommand = new RelayCommand(SavePickListTemplate, () => SelectedPickListTemplate != null);
 
             PickListTemplates = templateManager.Tree.AllTemplates.Where(t => t.ParentFolder.Name == PickListsFolderName);
             if (PickListTemplates.None())
@@ -41,7 +41,7 @@ namespace ShipWorks.UI.Dialogs.DefaultPickListTemplate
         /// <summary>
         /// Link to support article regarding changing the default template after it has been selected
         /// </summary>
-        public Uri SupportArticleLink { get; } = new Uri("http://support.shipworks.com");
+        public Uri SupportArticleLink { get; } = new Uri("http://support.shipworks.com/");
 
         /// <summary>
         /// All of the templates in the pick list folder
