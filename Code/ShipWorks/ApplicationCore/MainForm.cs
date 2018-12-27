@@ -4920,7 +4920,7 @@ namespace ShipWorks
         private void OnPrintPickList(object sender, EventArgs e)
         {
             IEnumerable<long> selectedOrderIDs = gridControl.Selection.OrderedKeys;
-            
+
             // Ensure orders are selected (they should be for this button to be clicked, but just in case)
             if (selectedOrderIDs.None())
             {
@@ -4928,8 +4928,12 @@ namespace ShipWorks
             }
 
             // get default pick list template
-            TemplateEntity pickListTemplate = (TemplateEntity) ConfigurationData.FetchReadOnly().Template;
-            
+            long? pickListTemplateId = ConfigurationData.FetchReadOnly().DefaultPickListTemplateID;
+
+            TemplateEntity pickListTemplate = (pickListTemplateId != null) ?
+                TemplateManager.Tree.AllTemplates.FirstOrDefault(t => t.TemplateID == pickListTemplateId) :
+                null;
+
             // if no default, prompt user to select one
             if (pickListTemplate == null)
             {
@@ -4944,7 +4948,7 @@ namespace ShipWorks
                     pickListTemplateDialog.ShowDialog();
                 }
             }
-            
+
             // print default template if it exists
             if (pickListTemplate != null)
             {
@@ -4952,9 +4956,9 @@ namespace ShipWorks
 
                 // Create the print job using the default settings from the template
                 PrintJob job = PrintJob.Create(pickListTemplate, selectedOrderIDs);
-                    
+
                 // Start the printing of the job
-                StartPrintJob(job, PrintAction.Print);    
+                StartPrintJob(job, PrintAction.Print);
             }
         }
 
