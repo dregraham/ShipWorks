@@ -4468,10 +4468,6 @@ PRINT N'Creating primary key [PK_Configuration] on [dbo].[Configuration]'
 GO
 ALTER TABLE [dbo].[Configuration] ADD CONSTRAINT [PK_Configuration] PRIMARY KEY CLUSTERED  ([ConfigurationID])
 GO
-PRINT N'Adding foreign keys to [dbo].[Configuration]'
-GO
-ALTER TABLE [dbo].[Configuration] ADD CONSTRAINT [FK_Configuration_DefaultPickListTemplate] FOREIGN KEY ([DefaultPickListTemplateID]) REFERENCES [dbo].[Template] ([TemplateID])
-GO
 PRINT N'Creating [dbo].[DimensionsProfile]'
 GO
 CREATE TABLE [dbo].[DimensionsProfile]

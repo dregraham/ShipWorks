@@ -56,7 +56,6 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             DefaultPickListTemplateID = source.DefaultPickListTemplateID;
             
             
-            Template = (ITemplateEntity) source.Template?.AsReadOnly(objectMap);
             
 
             CopyCustomConfigurationData(source);
@@ -172,8 +171,6 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
         public Nullable<System.Int64> DefaultPickListTemplateID { get; }
         
-        
-        public ITemplateEntity Template { get; }
         
         
         /// <summary>

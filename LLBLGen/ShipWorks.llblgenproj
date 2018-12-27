@@ -598,7 +598,7 @@
           <Field Name="CustomerUpdateModifiedBilling" Type="int" FieldIndex="8" />
           <Field Name="CustomerUpdateModifiedShipping" Type="int" FieldIndex="9" />
           <Field Name="CustomerUpdateShipping" Type="bool" FieldIndex="7" />
-          <Field Name="DefaultPickListTemplateID" Type="long" IsOptional="true" IsAutoCreated="true" FieldIndex="17" />
+          <Field Name="DefaultPickListTemplateID" Type="long" IsOptional="true" Precision="19" FieldIndex="17" />
           <Field Name="LogOnMethod" Type="int" FieldIndex="2" />
           <Field Name="RowVersion" Type="byte[]" IsReadOnly="true" FieldIndex="1" />
           <Field Name="UseParallelActionQueue" Type="bool" FieldIndex="13" />
@@ -3676,11 +3676,6 @@
           <FieldFieldRelationship FkField="OrderID" PkField="OrderID" />
         </FieldRelationships>
       </NormalRelationship>
-      <NormalRelationship Name="Configuration.Template-Template.Configuration" Start=":Configuration" End=":Template" StartNavigator="Template" EndNavigator="Configuration" Type="4" EndIsOptional="true">
-        <FieldRelationships>
-          <FieldFieldRelationship FkField="DefaultPickListTemplateID" PkField="TemplateID" />
-        </FieldRelationships>
-      </NormalRelationship>
       <NormalRelationship Name="DhlExpressPackage.DhlExpressShipment-DhlExpressShipment.Packages" Start=":DhlExpressPackage" End=":DhlExpressShipment" StartNavigator="DhlExpressShipment" EndNavigator="Packages" Type="4" DeleteRuleAction="1">
         <FieldRelationships>
           <FieldFieldRelationship FkField="ShipmentID" PkField="ShipmentID" />
@@ -4480,7 +4475,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2018-12-26T18:50:41.4932848Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2018-12-27T17:09:33.5512363Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -9763,11 +9758,6 @@
             <ForeignKeyConstraint Name="dbo:CommerceInterfaceOrderSearch:FK_CommerceInterfaceOrderSearch_CommerceInterfaceOrder" DeleteRuleAction="1">
               <FieldPairs>
                 <FieldPair PkField="dbo:CommerceInterfaceOrder:OrderID" FkField="dbo:CommerceInterfaceOrderSearch:OrderID" />
-              </FieldPairs>
-            </ForeignKeyConstraint>
-            <ForeignKeyConstraint Name="dbo:Configuration:FK_Configuration_DefaultPickListTemplate">
-              <FieldPairs>
-                <FieldPair PkField="dbo:Template:TemplateID" FkField="dbo:Configuration:DefaultPickListTemplateID" />
               </FieldPairs>
             </ForeignKeyConstraint>
             <ForeignKeyConstraint Name="dbo:DhlExpressPackage:FK_DhlExpressPackage_DhlExpressShipment" DeleteRuleAction="1">

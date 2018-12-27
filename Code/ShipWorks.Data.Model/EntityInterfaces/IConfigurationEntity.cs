@@ -131,7 +131,6 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         Nullable<System.Int64> DefaultPickListTemplateID { get; }
         
         
-        ITemplateEntity Template { get; }
         
 
         
@@ -160,7 +159,6 @@ namespace ShipWorks.Data.Model.EntityClasses
     public partial class ConfigurationEntity : IConfigurationEntity
     {
         
-        ITemplateEntity IConfigurationEntity.Template => Template;
         
 
         /// <summary>

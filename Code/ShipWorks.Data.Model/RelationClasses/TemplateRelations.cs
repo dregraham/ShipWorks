@@ -30,7 +30,6 @@ namespace ShipWorks.Data.Model.RelationClasses
 		public virtual List<IEntityRelation> GetAllRelations()
 		{
 			List<IEntityRelation> toReturn = new List<IEntityRelation>();
-			toReturn.Add(this.ConfigurationEntityUsingDefaultPickListTemplateID);
 			toReturn.Add(this.TemplateComputerSettingsEntityUsingTemplateID);
 			toReturn.Add(this.TemplateStoreSettingsEntityUsingTemplateID);
 			toReturn.Add(this.TemplateUserSettingsEntityUsingTemplateID);
@@ -39,21 +38,6 @@ namespace ShipWorks.Data.Model.RelationClasses
 		}
 
 		#region Class Property Declarations
-
-		/// <summary>Returns a new IEntityRelation object, between TemplateEntity and ConfigurationEntity over the 1:n relation they have, using the relation between the fields:
-		/// Template.TemplateID - Configuration.DefaultPickListTemplateID
-		/// </summary>
-		public virtual IEntityRelation ConfigurationEntityUsingDefaultPickListTemplateID
-		{
-			get
-			{
-				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToMany, "Configuration" , true);
-				relation.AddEntityFieldPair(TemplateFields.TemplateID, ConfigurationFields.DefaultPickListTemplateID);
-				relation.InheritanceInfoPkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("TemplateEntity", true);
-				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("ConfigurationEntity", false);
-				return relation;
-			}
-		}
 
 		/// <summary>Returns a new IEntityRelation object, between TemplateEntity and TemplateComputerSettingsEntity over the 1:n relation they have, using the relation between the fields:
 		/// Template.TemplateID - TemplateComputerSettings.TemplateID
@@ -129,7 +113,6 @@ namespace ShipWorks.Data.Model.RelationClasses
 	/// <summary>Static class which is used for providing relationship instances which are re-used internally for syncing</summary>
 	internal static class StaticTemplateRelations
 	{
-		internal static readonly IEntityRelation ConfigurationEntityUsingDefaultPickListTemplateIDStatic = new TemplateRelations().ConfigurationEntityUsingDefaultPickListTemplateID;
 		internal static readonly IEntityRelation TemplateComputerSettingsEntityUsingTemplateIDStatic = new TemplateRelations().TemplateComputerSettingsEntityUsingTemplateID;
 		internal static readonly IEntityRelation TemplateStoreSettingsEntityUsingTemplateIDStatic = new TemplateRelations().TemplateStoreSettingsEntityUsingTemplateID;
 		internal static readonly IEntityRelation TemplateUserSettingsEntityUsingTemplateIDStatic = new TemplateRelations().TemplateUserSettingsEntityUsingTemplateID;
