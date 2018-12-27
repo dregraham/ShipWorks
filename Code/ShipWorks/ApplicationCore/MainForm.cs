@@ -4952,6 +4952,11 @@ namespace ShipWorks
             // print default template if it exists
             if (pickListTemplate != null)
             {
+                if (!TemplatePrinterSelectionDlg.EnsureConfigured(this, pickListTemplate))
+                {
+                    return;
+                }
+
                 Cursor.Current = Cursors.WaitCursor;
 
                 // Create the print job using the default settings from the template
