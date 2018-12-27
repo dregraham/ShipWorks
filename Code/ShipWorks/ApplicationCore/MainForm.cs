@@ -4928,11 +4928,7 @@ namespace ShipWorks
             }
 
             // get default pick list template
-            long? pickListTemplateId = ConfigurationData.FetchReadOnly().DefaultPickListTemplateID;
-
-            TemplateEntity pickListTemplate = (pickListTemplateId != null) ?
-                TemplateManager.Tree.AllTemplates.FirstOrDefault(t => t.TemplateID == pickListTemplateId) :
-                null;
+            TemplateEntity pickListTemplate = TemplateManager.FetchDefaultPickListTemplate();
 
             // if no default, prompt user to select one
             if (pickListTemplate == null)
@@ -4945,7 +4941,10 @@ namespace ShipWorks
                         lifetimeScope.Resolve<IDefaultPickListTemplateDialog>(
                             new TypedParameter(typeof(IWin32Window), this),
                             new TypedParameter(typeof(IDefaultPickListTemplateDialogViewModel), pickListTemplateDialogViewModel));
-                    pickListTemplateDialog.ShowDialog();
+                    if (pickListTemplateDialog.ShowDialog() == true)
+                    {
+                        pickListTemplate = TemplateManager.FetchDefaultPickListTemplate();        
+                    }
                 }
             }
 

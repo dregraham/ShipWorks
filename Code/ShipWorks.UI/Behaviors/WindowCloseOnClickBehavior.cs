@@ -36,7 +36,12 @@ namespace ShipWorks.UI.Behaviors
                 return;
             }
 
-            Window.GetWindow(button)?.Close();
+            Window window = Window.GetWindow(button);
+            if (window != null)
+            {
+                window.DialogResult = true;
+                window.Close();
+            }
         }
     }
 }

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using log4net;
 using ShipWorks.Data;
 using ShipWorks.Data.Connection;
@@ -132,5 +133,21 @@ namespace ShipWorks.Templates
                 return deletedTemplateLabels;
             }
         }
+
+        /// <summary>
+        /// Fetch the default pick list template or null if none found
+        /// </summary>
+        public static TemplateEntity FetchDefaultPickListTemplate()
+        {
+            long? pickListTemplateId = ConfigurationData.FetchReadOnly().DefaultPickListTemplateID;
+
+            return pickListTemplateId.HasValue ? FetchTemplateByID(pickListTemplateId.Value) : null;
+        }
+
+        /// <summary>
+        /// Fetch the first template with a TemplateID that matches the given id. Returns null if none found.
+        /// </summary>
+        private static TemplateEntity FetchTemplateByID(long pickListTemplateId) =>
+            Tree.AllTemplates.FirstOrDefault(t => t.TemplateID == pickListTemplateId);
     }
 }
