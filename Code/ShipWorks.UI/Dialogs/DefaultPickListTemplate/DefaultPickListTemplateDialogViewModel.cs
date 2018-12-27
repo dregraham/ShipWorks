@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Windows.Input;
 using GalaSoft.MvvmLight.CommandWpf;
+using Interapptive.Shared.Collections;
 using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Templates;
 using ShipWorks.Templates.Controls.DefaultPickListTemplate;
 
 namespace ShipWorks.UI.Dialogs.DefaultPickListTemplate
@@ -16,15 +19,23 @@ namespace ShipWorks.UI.Dialogs.DefaultPickListTemplate
     public class DefaultPickListTemplateDialogViewModel : IDefaultPickListTemplateDialogViewModel
     {
         private readonly IConfigurationData configurationData;
+        private const string PickListsFolderName = "Pick Lists";
+        private const string ReportsFolderName = "Reports";
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public DefaultPickListTemplateDialogViewModel(IConfigurationData configurationData)
+        public DefaultPickListTemplateDialogViewModel(IConfigurationData configurationData, ITemplateManager templateManager)
         {
             this.configurationData = configurationData;
-            
+
             SavePickListTemplateCommand = new RelayCommand(SavePickListTemplate);
+
+            PickListTemplates = templateManager.Tree.AllTemplates.Where(t => t.ParentFolder.Name == PickListsFolderName);
+            if (PickListTemplates.None())
+            {
+                PickListTemplates = templateManager.Tree.AllTemplates.Where(t => t.ParentFolder.Name == ReportsFolderName);
+            }
         }
 
         /// <summary>
@@ -36,7 +47,7 @@ namespace ShipWorks.UI.Dialogs.DefaultPickListTemplate
         /// All of the templates in the pick list folder
         /// </summary>
         public IEnumerable<TemplateEntity> PickListTemplates { get; set; }
-        
+
         /// <summary>
         /// The currently selected template
         /// </summary>
@@ -46,7 +57,7 @@ namespace ShipWorks.UI.Dialogs.DefaultPickListTemplate
         /// Command for saving the pick list template
         /// </summary>
         public ICommand SavePickListTemplateCommand { get; set; }
-        
+
         /// <summary>
         /// Save the id of the selected pick list template as the DefaultPickListTemplateID on the Configuration table
         /// </summary>

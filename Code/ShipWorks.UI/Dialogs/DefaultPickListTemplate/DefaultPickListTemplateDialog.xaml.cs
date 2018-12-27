@@ -7,7 +7,7 @@ namespace ShipWorks.UI.Dialogs.DefaultPickListTemplate
     /// <summary>
     /// Interaction logic for DefaultPickListTemplateDialog.xaml
     /// </summary>
-    [Component]
+    [Component(RegistrationType.SpecificService, Service = typeof(IDefaultPickListTemplateDialog))]
     public partial class DefaultPickListTemplateDialog : IDefaultPickListTemplateDialog
     {
         /// <summary>
