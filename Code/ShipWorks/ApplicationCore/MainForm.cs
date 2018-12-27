@@ -92,6 +92,7 @@ using ShipWorks.Stores.Orders.Archive;
 using ShipWorks.Stores.Orders.Split;
 using ShipWorks.Templates;
 using ShipWorks.Templates.Controls;
+using ShipWorks.Templates.Controls.DefaultPickListTemplate;
 using ShipWorks.Templates.Distribution;
 using ShipWorks.Templates.Emailing;
 using ShipWorks.Templates.Management;
@@ -4914,19 +4915,47 @@ namespace ShipWorks
         }
 
         /// <summary>
-        /// Action when the user clicks the print pick slip button
+        /// Action when the user clicks the print pick list button
         /// </summary>
-        private void OnPrintPickSlip(object sender, EventArgs e)
+        private void OnPrintPickList(object sender, EventArgs e)
         {
+            IEnumerable<long> selectedOrderIDs = gridControl.Selection.OrderedKeys;
+            
             // Ensure orders are selected (they should be for this button to be clicked, but just in case)
+            if (selectedOrderIDs.None())
+            {
+                return;
+            }
+
+            // get default pick list template
+            TemplateEntity pickListTemplate = (TemplateEntity) ConfigurationData.FetchReadOnly().Template;
             
-            // get default pick slip template
+            // if no default, prompt user to select one
+            if (pickListTemplate == null)
+            {
+                using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+                {
+                    IDefaultPickListTemplateDialogViewModel pickListTemplateDialogViewModel =
+                        lifetimeScope.Resolve<IDefaultPickListTemplateDialogViewModel>();
+                    IDefaultPickListTemplateDialog pickListTemplateDialog =
+                        lifetimeScope.Resolve<IDefaultPickListTemplateDialog>(
+                            new TypedParameter(typeof(IWin32Window), this),
+                            new TypedParameter(typeof(IDefaultPickListTemplateDialogViewModel), pickListTemplateDialogViewModel));
+                    pickListTemplateDialog.ShowDialog();
+                }
+            }
             
-            // if default exists, print it with selected orders
-            
-            // if not default, prompt user to select one
-            
-            // save new default
+            // print default template if it exists
+            if (pickListTemplate != null)
+            {
+                Cursor.Current = Cursors.WaitCursor;
+
+                // Create the print job using the default settings from the template
+                PrintJob job = PrintJob.Create(pickListTemplate, selectedOrderIDs);
+                    
+                // Start the printing of the job
+                StartPrintJob(job, PrintAction.Print);    
+            }
         }
 
         #region Ribbon Popup Handlers

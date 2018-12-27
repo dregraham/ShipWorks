@@ -2286,6 +2286,8 @@
     <Compile Include="Stores\Platforms\Yahoo\OnlineUpdating\IYahooCombineOrderSearchProvider.cs" />
     <Compile Include="Stores\StoreFilterRepository.cs" />
     <Compile Include="Stores\StoreFilterRepositorySaveResult.cs" />
+    <Compile Include="Templates\Controls\DefaultPickListTemplate\IDefaultPickListTemplateDialog.cs" />
+    <Compile Include="Templates\Controls\DefaultPickListTemplate\IDefaultPickListTemplateDialogViewModel.cs" />
     <Compile Include="Templates\Printing\BarcodePage.cs" />
     <Compile Include="Templates\Printing\BarcodePrintJob.cs" />
     <Compile Include="Templates\Printing\IPrinterSetting.cs" />

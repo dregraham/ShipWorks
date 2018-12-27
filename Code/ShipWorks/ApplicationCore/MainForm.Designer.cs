@@ -2500,7 +2500,7 @@ namespace ShipWorks
             this.buttonPickList.QuickAccessKey = "PL";
             this.buttonPickList.Text = "Print Pick List";
             this.buttonPickList.TextContentRelation = Divelements.SandRibbon.TextContentRelation.Underneath;
-            this.buttonPickList.Activate += new System.EventHandler(this.OnPrintPickSlip);
+            this.buttonPickList.Activate += new System.EventHandler(this.OnPrintPickList);
             //
             // ribbonTabGridViewCreate
             //
