@@ -43,11 +43,14 @@
                        Text="Pick List Template:"
                        VerticalAlignment="Center"
                        HorizontalAlignment="Right"
-                       Margin="0 0 10 0"/>
+                       Margin="15 0 10 0"/>
             <ComboBox Grid.Column="1"
                       VerticalAlignment="Center"
+                      VerticalContentAlignment="Center"
                       ItemsSource="{Binding PickListTemplates}"
-                      SelectedItem="{Binding SelectedPickListTemplate}"/>
+                      SelectedItem="{Binding SelectedPickListTemplate}"
+                      DisplayMemberPath="Name"
+                      Height="23"/>
         </Grid>
         <UniformGrid Grid.Row="2"
                      Columns="2" Rows="1"
@@ -58,9 +61,11 @@
                     Foreground="{StaticResource Blue}"
                     VerticalAlignment="Center"
                     Margin="0 0 10 0"
+                    Padding="8 4"
                     IsCancel="True"/>
             <Button Content="Save"
                     IsDefault="True"
+                    Padding="8 4"
                     Command="{Binding SavePickListTemplateCommand}"/>
         </UniformGrid>
     </Grid>
