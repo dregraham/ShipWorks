@@ -6,6 +6,8 @@
         xmlns:local="clr-namespace:ShipWorks.UI.Dialogs.DefaultPickListTemplate"
         xmlns:attachedProperties="clr-namespace:ShipWorks.UI.AttachedProperties"
         xmlns:ui="clr-namespace:Interapptive.Shared.UI;assembly=Interapptive.Shared"
+        xmlns:behaviors="clr-namespace:ShipWorks.UI.Behaviors"
+        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         mc:Ignorable="d"
         SizeToContent="Height"
         Width="500"
@@ -66,7 +68,11 @@
             <Button Content="Save"
                     IsDefault="True"
                     Padding="8 4"
-                    Command="{Binding SavePickListTemplateCommand}"/>
+                    Command="{Binding SavePickListTemplateCommand}">
+                <i:Interaction.Behaviors>
+                    <behaviors:WindowCloseOnClickBehavior/>
+                </i:Interaction.Behaviors>
+            </Button>
         </UniformGrid>
     </Grid>
 </ui:InteropWindow>
