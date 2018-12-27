@@ -43,7 +43,7 @@ namespace ShipWorks.ApplicationCore.ExecutionMode
 
         // Mutex used to indicate the application is alive. The installer uses this to know the app needs
         // shutdown before the installation can continue.
-        Mutex appMutex;
+        private Mutex appMutex;
         private int recoveryCount;
 
         /// <summary>
