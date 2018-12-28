@@ -1,16 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Interapptive.Shared.ComponentRegistration;
+﻿using System.Collections.Generic;
+using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.Templates
 {
     /// <summary>
     /// Wrapper for static TemplateManager
     /// </summary>
-    [Component]
     public class TemplateManagerWrapper : ITemplateManager
     {
         /// <summary>
@@ -18,5 +13,10 @@ namespace ShipWorks.Templates
         /// </summary>
         public TemplateTree Tree =>
             TemplateManager.Tree;
+
+        /// <summary>
+        /// Fetch all of the pick list templates
+        /// </summary>
+        public IEnumerable<TemplateEntity> FetchPickListTemplates() => TemplateManager.FetchPickListTemplates();
     }
 }
