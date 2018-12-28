@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Windows.Input;
 using GalaSoft.MvvmLight.CommandWpf;
 using Interapptive.Shared.Collections;
@@ -41,21 +42,25 @@ namespace ShipWorks.UI.Dialogs.DefaultPickListTemplate
         /// <summary>
         /// Link to support article regarding changing the default template after it has been selected
         /// </summary>
+        [Obfuscation(Exclude = true)]
         public Uri SupportArticleLink { get; } = new Uri("http://support.shipworks.com/");
 
         /// <summary>
         /// All of the templates in the pick list folder
         /// </summary>
+        [Obfuscation(Exclude = true)]
         public IEnumerable<TemplateEntity> PickListTemplates { get; set; }
 
         /// <summary>
         /// The currently selected template
         /// </summary>
+        [Obfuscation(Exclude = true)]
         public TemplateEntity SelectedPickListTemplate { get; set; }
 
         /// <summary>
         /// Command for saving the pick list template
         /// </summary>
+        [Obfuscation(Exclude = true)]
         public ICommand SavePickListTemplateCommand { get; set; }
 
         /// <summary>
