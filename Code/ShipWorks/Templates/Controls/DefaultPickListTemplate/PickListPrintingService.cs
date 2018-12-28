@@ -8,6 +8,7 @@ using System.Windows.Forms;
 using Autofac;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.ComponentRegistration;
+using log4net;
 using ShipWorks.ApplicationCore;
 using ShipWorks.Common.IO.KeyboardShortcuts.Messages;
 using ShipWorks.Core.Messaging;
@@ -27,13 +28,23 @@ namespace ShipWorks.Templates.Controls.DefaultPickListTemplate
         private readonly IDefaultPickListTemplateDialog pickListTemplateDialog;
         private readonly ITemplateManager templateManager;
         private readonly IMessenger messenger;
+        private readonly ILog log;
 
-        public PickListPrintingService(IMainForm mainForm, IDefaultPickListTemplateDialog pickListTemplateDialog, ITemplateManager templateManager, IMessenger messenger)
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public PickListPrintingService(
+            IMainForm mainForm,
+            IDefaultPickListTemplateDialog pickListTemplateDialog,
+            ITemplateManager templateManager,
+            IMessenger messenger,
+            Func<Type, ILog> logFactory)
         {
             this.mainForm = mainForm;
             this.pickListTemplateDialog = pickListTemplateDialog;
             this.templateManager = templateManager;
             this.messenger = messenger;
+            this.log = logFactory(typeof(PickListPrintingService));
         }
 
         /// <summary>
@@ -43,7 +54,9 @@ namespace ShipWorks.Templates.Controls.DefaultPickListTemplate
         {
             return messenger.OfType<ShortcutMessage>()
                 .Where(m => m.AppliesTo(KeyboardShortcutCommand.PrintPickList))
-                .Subscribe(message => PrintPickList(mainGridControl.Selection.OrderedKeys));
+                .Do(message => PrintPickList(mainGridControl.Selection.OrderedKeys))
+                .CatchAndContinue((Exception ex) => log.Error("Error occurred while printing pick list.", ex))
+                .Subscribe();
         }
 
         public void PrintPickList(IEnumerable<long> selectedOrderIDs)
@@ -56,7 +69,6 @@ namespace ShipWorks.Templates.Controls.DefaultPickListTemplate
 
             // get default pick list template
             TemplateEntity pickListTemplate = templateManager.FetchDefaultPickListTemplate();
-
 
             // if no default, prompt user to select one
             if (pickListTemplate == null)
