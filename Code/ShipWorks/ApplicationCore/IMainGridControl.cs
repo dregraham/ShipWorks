@@ -1,4 +1,5 @@
 ﻿using System;
+using ShipWorks.Data.Grid;
 
 namespace ShipWorks.ApplicationCore
 {
@@ -39,10 +40,15 @@ namespace ShipWorks.ApplicationCore
         bool CanFocus { get; }
 
         /// <summary>
+        /// The current grid selection
+        /// </summary>
+        IGridSelection Selection { get; }
+
+        /// <summary>
         /// Get the normalized text of the basic search box.
         /// </summary>
         string GetBasicSearchText();
-        
+
         /// <summary>
         /// Performs the search.
         /// </summary>

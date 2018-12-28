@@ -2288,6 +2288,8 @@
     <Compile Include="Stores\StoreFilterRepositorySaveResult.cs" />
     <Compile Include="Templates\Controls\DefaultPickListTemplate\IDefaultPickListTemplateDialog.cs" />
     <Compile Include="Templates\Controls\DefaultPickListTemplate\IDefaultPickListTemplateDialogViewModel.cs" />
+    <Compile Include="Templates\Controls\DefaultPickListTemplate\IPickListPrintingService.cs" />
+    <Compile Include="Templates\Controls\DefaultPickListTemplate\PickListPrintingService.cs" />
     <Compile Include="Templates\ITemplateManager.cs" />
     <Compile Include="Templates\Printing\BarcodePage.cs" />
     <Compile Include="Templates\Printing\BarcodePrintJob.cs" />

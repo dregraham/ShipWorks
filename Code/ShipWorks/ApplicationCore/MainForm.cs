@@ -4466,7 +4466,7 @@ namespace ShipWorks
         /// <summary>
         /// Start the printing or previewing of the given print job
         /// </summary>
-        private void StartPrintJob(PrintJob job, PrintAction action)
+        public void StartPrintJob(IPrintJob job, PrintAction action)
         {
             // Show the progress window
             ProgressDlg progressDlg = new ProgressDlg(job.ProgressProvider);
@@ -4921,44 +4921,11 @@ namespace ShipWorks
         {
             IEnumerable<long> selectedOrderIDs = gridControl.Selection.OrderedKeys;
 
-            // Ensure orders are selected (they should be for this button to be clicked, but just in case)
-            if (selectedOrderIDs.None())
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
-                return;
-            }
-
-            // get default pick list template
-            TemplateEntity pickListTemplate = TemplateManager.FetchDefaultPickListTemplate();
-
-            // if no default, prompt user to select one
-            if (pickListTemplate == null)
-            {
-                using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
-                {
-                    IDefaultPickListTemplateDialog pickListTemplateDialog =
-                        lifetimeScope.Resolve<IDefaultPickListTemplateDialog>();
-                    if (pickListTemplateDialog.ShowDialog() == true)
-                    {
-                        pickListTemplate = TemplateManager.FetchDefaultPickListTemplate();
-                    }
-                }
-            }
-
-            // print default template if it exists
-            if (pickListTemplate != null)
-            {
-                if (!TemplatePrinterSelectionDlg.EnsureConfigured(this, pickListTemplate))
-                {
-                    return;
-                }
-
-                Cursor.Current = Cursors.WaitCursor;
-
-                // Create the print job using the default settings from the template
-                PrintJob job = PrintJob.Create(pickListTemplate, selectedOrderIDs);
-
-                // Start the printing of the job
-                StartPrintJob(job, PrintAction.Print);
+                IPickListPrintingService pickListPrintingService =
+                    lifetimeScope.Resolve<IPickListPrintingService>();
+                pickListPrintingService.PrintPickList(selectedOrderIDs);
             }
         }
 

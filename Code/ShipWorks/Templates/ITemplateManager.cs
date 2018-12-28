@@ -1,4 +1,6 @@
-﻿using Interapptive.Shared.ComponentRegistration;
+﻿using System.Windows.Forms;
+using Interapptive.Shared.ComponentRegistration;
+using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.Templates
 {
@@ -11,5 +13,15 @@ namespace ShipWorks.Templates
         /// The global default live ReadOnly TemplateTree
         /// </summary>
         TemplateTree Tree { get; }
+
+        /// <summary>
+        /// Fetch the default pick list template
+        /// </summary>
+        TemplateEntity FetchDefaultPickListTemplate();
+
+        /// <summary>
+        /// Ensure the given template is configured
+        /// </summary>
+        bool EnsureTemplateConfigured(IWin32Window owner, TemplateEntity template);
     }
 }
