@@ -4935,15 +4935,11 @@ namespace ShipWorks
             {
                 using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
                 {
-                    IDefaultPickListTemplateDialogViewModel pickListTemplateDialogViewModel =
-                        lifetimeScope.Resolve<IDefaultPickListTemplateDialogViewModel>();
                     IDefaultPickListTemplateDialog pickListTemplateDialog =
-                        lifetimeScope.Resolve<IDefaultPickListTemplateDialog>(
-                            new TypedParameter(typeof(IWin32Window), this),
-                            new TypedParameter(typeof(IDefaultPickListTemplateDialogViewModel), pickListTemplateDialogViewModel));
+                        lifetimeScope.Resolve<IDefaultPickListTemplateDialog>();
                     if (pickListTemplateDialog.ShowDialog() == true)
                     {
-                        pickListTemplate = TemplateManager.FetchDefaultPickListTemplate();        
+                        pickListTemplate = TemplateManager.FetchDefaultPickListTemplate();
                     }
                 }
             }

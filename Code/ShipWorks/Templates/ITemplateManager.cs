@@ -5,7 +5,6 @@ namespace ShipWorks.Templates
     /// <summary>
     /// Represents the TemplateManager
     /// </summary>
-    [Service]
     public interface ITemplateManager
     {
         /// <summary>

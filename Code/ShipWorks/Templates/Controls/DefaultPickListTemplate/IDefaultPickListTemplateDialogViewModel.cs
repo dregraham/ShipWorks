@@ -5,6 +5,9 @@ using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.Templates.Controls.DefaultPickListTemplate
 {
+    /// <summary>
+    /// Represents the view model for the default pick list template
+    /// </summary>
     public interface IDefaultPickListTemplateDialogViewModel
     {
         /// <summary>
@@ -16,7 +19,7 @@ namespace ShipWorks.Templates.Controls.DefaultPickListTemplate
         /// All of the templates in the pick list folder
         /// </summary>
         IEnumerable<TemplateEntity> PickListTemplates { get; set; }
-        
+
         /// <summary>
         /// The currently selected template
         /// </summary>
