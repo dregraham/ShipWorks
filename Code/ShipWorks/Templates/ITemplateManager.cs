@@ -1,4 +1,5 @@
-﻿using System.Windows.Forms;
+﻿using System.Collections.Generic;
+using System.Windows.Forms;
 using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.Data.Model.EntityClasses;
 
@@ -23,7 +24,7 @@ namespace ShipWorks.Templates
         /// Ensure the given template is configured
         /// </summary>
         bool EnsureTemplateConfigured(IWin32Window owner, TemplateEntity template);
-		
+
         /// <summary>
         /// Fetch all of the pick list templates
         /// </summary>
