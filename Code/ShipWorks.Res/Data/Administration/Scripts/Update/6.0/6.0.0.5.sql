@@ -70,18 +70,22 @@ CREATE TABLE [dbo].[ProductVariantAlias]
 [IsDefault] [bit] NOT NULL CONSTRAINT [DF_ProductVariantAlias_IsDefault] DEFAULT ((0))
 )
 GO
+
 PRINT N'Creating primary key [PK_ProductVariantAlias] on [dbo].[ProductVariantAlias]'
 GO
 IF NOT EXISTS (SELECT 1 FROM sys.indexes WHERE name = N'PK_ProductVariantAlias' AND object_id = OBJECT_ID(N'[dbo].[ProductVariantAlias]'))
 ALTER TABLE [dbo].[ProductVariantAlias] ADD CONSTRAINT [PK_ProductVariantAlias] PRIMARY KEY CLUSTERED  ([ProductVariantAliasID])
 GO
+
 PRINT N'Creating index [IX_SWDefault_ProductVariantAlias_Sku] on [dbo].[ProductVariantAlias]'
 GO
 IF NOT EXISTS (SELECT 1 FROM sys.indexes WHERE name = N'IX_SWDefault_ProductVariantAlias_Sku' AND object_id = OBJECT_ID(N'[dbo].[ProductVariantAlias]'))
 CREATE UNIQUE NONCLUSTERED INDEX [IX_SWDefault_ProductVariantAlias_Sku] ON [dbo].[ProductVariantAlias] ([Sku]) INCLUDE ([ProductVariantID])
 GO
+
 PRINT N'Creating index [IX_SWDefault_ProductVariantAlias_ProductVariantIDIsDefaultSku] on [dbo].[ProductVariantAlias]'
 GO
+IF NOT EXISTS (SELECT 1 FROM sys.indexes WHERE name = N'IX_SWDefault_ProductVariantAlias_ProductVariantIDIsDefaultSku' AND object_id = OBJECT_ID(N'[dbo].[ProductVariantAlias]'))
 CREATE NONCLUSTERED INDEX [IX_SWDefault_ProductVariantAlias_ProductVariantIDIsDefaultSku] ON [dbo].[ProductVariantAlias]
 (
 	[ProductVariantID] ASC,
@@ -89,6 +93,7 @@ CREATE NONCLUSTERED INDEX [IX_SWDefault_ProductVariantAlias_ProductVariantIDIsDe
 )
 INCLUDE ([Sku])  ON [PRIMARY]
 GO
+
 PRINT N'Creating [dbo].[ProductAttribute]'
 GO
 IF OBJECT_ID(N'[dbo].[ProductAttribute]', 'U') IS NULL

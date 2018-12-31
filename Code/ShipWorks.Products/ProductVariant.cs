@@ -84,8 +84,8 @@ namespace ShipWorks.Products
                 return;
             }
 
-            // "Attempting to apply product dimensions to item 00001 for sku ABCD"
-            log.InfoFormat("Attempting to apply product dimensions to item {0} for sku {1}",
+            // "Attempting to apply product dimensions to item 00001 for SKU ABCD"
+            log.InfoFormat("Attempting to apply product dimensions to item {0} for SKU {1}",
                 item.OrderItemID, sku);
 
             ApplyValue(variant.Weight, () => item.Weight = (double) variant.Weight.Value);
@@ -99,7 +99,7 @@ namespace ShipWorks.Products
         /// </summary>
         public virtual void ApplyCustoms(OrderItemEntity item, ShipmentEntity shipment)
         {
-            log.InfoFormat("Applying product information to customs item for sku {0}", sku);
+            log.InfoFormat("Applying product information to customs item for SKU {0}", sku);
 
             ApplyCustoms(item, shipment, variant);
         }

@@ -86,7 +86,7 @@ namespace ShipWorks.Products.Tests
         {
             testObject.AddAliasCommand.Execute(null);
 
-            mock.Mock<IMessageHelper>().Verify(x => x.ShowError("Please enter an alias sku."));
+            mock.Mock<IMessageHelper>().Verify(x => x.ShowError("Please enter an Alias SKU."));
         }
 
         [Fact]
@@ -107,7 +107,7 @@ namespace ShipWorks.Products.Tests
 
             testObject.AddAliasCommand.Execute(null);
 
-            mock.Mock<IMessageHelper>().Verify(x => x.ShowError("\"foo\" is already the default sku for this product."));
+            mock.Mock<IMessageHelper>().Verify(x => x.ShowError("\"foo\" is already the default SKU for this product."));
         }
 
         [Fact]
@@ -128,7 +128,7 @@ namespace ShipWorks.Products.Tests
 
             testObject.AddAliasCommand.Execute(null);
 
-            mock.Mock<IMessageHelper>().Verify(x => x.ShowError("This product already contains an alias with the sku \"foo\"."));
+            mock.Mock<IMessageHelper>().Verify(x => x.ShowError("This product already contains an alias with the SKU \"foo\"."));
         }
 
         [Fact]

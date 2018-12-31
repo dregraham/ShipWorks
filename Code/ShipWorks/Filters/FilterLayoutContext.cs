@@ -299,6 +299,31 @@ namespace ShipWorks.Filters
         }
 
         /// <summary>
+        /// Determines if the given filterNodeID is a child of a my filter
+        /// </summary>
+        public bool IsMyFilterNode(long filterNodeID)
+        {
+            if (filterNodeID == 0)
+            {
+                return false;
+            }
+
+            FilterNodeEntity node = FindNode(filterNodeID);
+
+            if (node != null)
+            {
+                while (node.ParentNode != null)
+                {
+                    node = node.ParentNode;
+                }
+
+                return layouts.Any(l => l.FilterNodeID == node.FilterNodeID && l.UserID.HasValue);
+            }
+
+            return false;
+        }
+
+        /// <summary>
         /// Find the node with the given ID with the layout.  Returns null if not found.  If the nodeID represents a Quick Filter, it will
         /// be returned regardless of whether it is contained in this layout.
         /// </summary>

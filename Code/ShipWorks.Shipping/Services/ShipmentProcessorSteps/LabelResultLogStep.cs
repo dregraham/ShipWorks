@@ -21,11 +21,10 @@ namespace ShipWorks.Shipping.Services.ShipmentProcessorSteps
     {
         private readonly ILog log;
         private readonly IShippingErrorManager errorManager;
-        private readonly ITangoWebClient tangoWebClient;
-        private readonly ISqlAdapterFactory sqlAdapterFactory;
         private readonly IShipmentTypeManager shipmentTypeFactory;
         private readonly IShippingManager shippingManager;
         private readonly IKnowledgebase knowledgebase;
+        private readonly ITangoLogShipmentProcessor tangoLogShipmentProcessor;
 
         /// <summary>
         /// Constructor
@@ -34,17 +33,15 @@ namespace ShipWorks.Shipping.Services.ShipmentProcessorSteps
         public LabelResultLogStep(IShipmentTypeManager shipmentTypeFactory,
             IShippingManager shippingManager,
             IShippingErrorManager errorManager,
-            ISqlAdapterFactory sqlAdapterFactory,
-            ITangoWebClient tangoWebClient,
             IKnowledgebase knowledgebase,
+            ITangoLogShipmentProcessor tangoLogShipmentProcessor,
             Func<Type, ILog> createLogger)
         {
             this.knowledgebase = knowledgebase;
             this.shippingManager = shippingManager;
             this.shipmentTypeFactory = shipmentTypeFactory;
-            this.sqlAdapterFactory = sqlAdapterFactory;
-            this.tangoWebClient = tangoWebClient;
             this.errorManager = errorManager;
+            this.tangoLogShipmentProcessor = tangoLogShipmentProcessor;
             log = createLogger(GetType());
         }
 
@@ -168,15 +165,7 @@ namespace ShipWorks.Shipping.Services.ShipmentProcessorSteps
             // Now log the result to tango.  For WorldShip we can't do this until the shipment comes back in to ShipWorks
             if (!shipment.ProcessingCompletesExternally())
             {
-                tangoWebClient.LogShipment(store, shipmentForTango);
-
-                log.InfoFormat("Shipment {0}  - Accounted", shipment.ShipmentID);
-
-                using (ISqlAdapter adapter = sqlAdapterFactory.Create())
-                {
-                    adapter.SaveAndRefetch(shipment);
-                    adapter.Commit();
-                }
+                tangoLogShipmentProcessor.Add(store, shipmentForTango);
             }
         }
 

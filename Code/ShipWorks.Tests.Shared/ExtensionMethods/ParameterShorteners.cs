@@ -84,5 +84,10 @@ namespace ShipWorks.Tests.Shared.ExtensionMethods
         /// </summary>
         public static IEnumerable<T> UnorderedEnumerable<T>(params T[] actual) =>
             It.Is<IEnumerable<T>>(l => l.UnorderedSequenceEquals(actual));
+
+        /// <summary>
+        /// Any store
+        /// </summary>
+        public static StoreEntity AnyStore => It.IsAny<StoreEntity>();
     }
 }

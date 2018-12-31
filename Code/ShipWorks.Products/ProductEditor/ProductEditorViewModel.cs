@@ -317,7 +317,7 @@ namespace ShipWorks.Products.ProductEditor
             {
                 if ((saveResult.Exception?.GetBaseException() as SqlException)?.Number == 2601)
                 {
-                    messageHelper.ShowError($"A specified SKU or SKU Alias already exists. Please enter a unique value for all SKUs.", saveResult.Exception);
+                    messageHelper.ShowError($"A specified SKU or Alias SKU already exists. Please enter a unique value for all SKUs.", saveResult.Exception);
                 }
                 else if (!string.IsNullOrWhiteSpace(saveResult.Message))
                 {
