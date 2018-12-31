@@ -179,9 +179,17 @@
       <Link>Properties\AssemblyInfoCommon.cs</Link>
     </Compile>
     <Compile Include="Business\Geography\CurrencyCode.cs" />
+    <Compile Include="Collections\DataVirtualization\DataPage.cs" />
+    <Compile Include="Collections\DataVirtualization\DataWrapper.cs" />
+    <Compile Include="Collections\DataVirtualization\IDataWrapper.cs" />
+    <Compile Include="Collections\DataVirtualization\IItemsProvider.cs" />
+    <Compile Include="Collections\DataVirtualization\IVirtualizingCollection.cs" />
+    <Compile Include="Collections\DataVirtualization\VirtualizingCollection.cs" />
     <Compile Include="Collections\DictionaryExtensions.cs" />
+    <Compile Include="Collections\IBasicSortDefinition.cs" />
     <Compile Include="Collections\LambdaComparer.cs" />
     <Compile Include="Collections\ListExtensions.cs" />
+    <Compile Include="Collections\BasicSortDefinition.cs" />
     <Compile Include="ComponentRegistration\ComponentAttribute.cs" />
     <Compile Include="ComponentRegistration\KeyedComponent.cs" />
     <Compile Include="ComponentRegistration\NamedComponentAttribute.cs" />
@@ -196,7 +204,9 @@
     <Compile Include="Data\DbConnectionExtensions.cs" />
     <Compile Include="Data\DbDataReaderExtensions.cs" />
     <Compile Include="Data\IConnectionSensitiveScope.cs" />
+    <Compile Include="Data\ISqlAppLock.cs" />
     <Compile Include="Data\ISqlScript.cs" />
+    <Compile Include="Data\SqlAppLock.cs" />
     <Compile Include="Data\SqlScriptWithMetadata.cs" />
     <Compile Include="Enums\AddressValidationStoreSettingType.cs" />
     <Compile Include="Enums\AmazonIsPrime.cs" />
@@ -204,8 +214,10 @@
     <Compile Include="Enums\BigCommerceAuthenticationType.cs" />
     <Compile Include="Enums\CombineSplitStatusType.cs" />
     <Compile Include="Enums\ShopSiteAuthenticationType.cs" />
+    <Compile Include="Enums\UnitType.cs" />
     <Compile Include="Extensions\CharExtensions.cs" />
     <Compile Include="Extensions\CollectionExtensions.cs" />
+    <Compile Include="Extensions\IntExtensions.cs" />
     <Compile Include="Extensions\ObjectExtensions.cs" />
     <Compile Include="Extensions\SemaphoreExtensions.cs" />
     <Compile Include="Extensions\WindowExtensions.cs" />
@@ -219,10 +231,12 @@
     <Compile Include="Extensions\TaskExtensions.cs" />
     <Compile Include="Extensions\XElementExtensions.cs" />
     <Compile Include="Extensions\XmlTextWriterExtensions.cs" />
+    <Compile Include="IO\FileSelector.cs" />
     <Compile Include="IO\Hardware\IVirtualKeyboard.cs" />
     <Compile Include="IO\Hardware\Scales\IScaleReader.cs" />
     <Compile Include="IO\Hardware\Scales\ScaleReaderWrapper.cs" />
     <Compile Include="IO\Hardware\VirtualKeyboard.cs" />
+    <Compile Include="IO\IFileSelector.cs" />
     <Compile Include="Messaging\Logging\DumpOperation.cs" />
     <Compile Include="Messaging\Logging\SelectManyOperation.cs" />
     <Compile Include="Messaging\Logging\TypeConverter.cs" />
@@ -328,6 +342,7 @@
     <Compile Include="Threading\AsyncSemaphore.cs" />
     <Compile Include="Threading\DetailProgressUpdater.cs" />
     <Compile Include="Threading\EmptyProgressUpdater.cs" />
+    <Compile Include="Threading\IProgressFactory.cs" />
     <Compile Include="Threading\IProgressReporter.cs" />
     <Compile Include="Threading\IProgressUpdater.cs" />
     <Compile Include="Threading\ISchedulerProvider.cs" />
@@ -875,6 +890,7 @@
     <Analyzer Include="..\..\packages\System.Security.Cryptography.Hashing.Algorithms.Analyzers.1.1.0\analyzers\dotnet\cs\System.Security.Cryptography.Hashing.Algorithms.Analyzers.dll" />
     <Analyzer Include="..\..\packages\System.Security.Cryptography.Hashing.Algorithms.Analyzers.1.1.0\analyzers\dotnet\cs\System.Security.Cryptography.Hashing.Algorithms.CSharp.Analyzers.dll" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

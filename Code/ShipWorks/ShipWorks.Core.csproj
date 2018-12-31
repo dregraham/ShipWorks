@@ -160,8 +160,8 @@
       <HintPath>..\..\packages\Common.Logging.Log4Net1213.3.3.1\lib\net40\Common.Logging.Log4Net1213.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="CommonServiceLocator, Version=2.0.1.0, Culture=neutral, PublicKeyToken=489b6accfaf20ef0, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\CommonServiceLocator.2.0.1\lib\net45\CommonServiceLocator.dll</HintPath>
+    <Reference Include="CommonServiceLocator, Version=2.0.4.0, Culture=neutral, PublicKeyToken=489b6accfaf20ef0, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\CommonServiceLocator.2.0.4\lib\net46\CommonServiceLocator.dll</HintPath>
     </Reference>
     <Reference Include="ComponentFactory.Krypton.Toolkit, Version=2.8.5.0, Culture=neutral, PublicKeyToken=a87e673e9ecb6e8e, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -308,6 +308,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Components\SpreadsheetGear.dll</HintPath>
     </Reference>
+    <Reference Include="Syncfusion.Compression.Base, Version=16.1460.0.26, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Syncfusion.Compression.Base46.16.1.0.26\lib\net46\Syncfusion.Compression.Base.dll</HintPath>
+    </Reference>
     <Reference Include="Syncfusion.Grid.Base, Version=16.1460.0.32, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Syncfusion.Grid.Base.16.1.0.32\lib\net46\Syncfusion.Grid.Base.dll</HintPath>
     </Reference>
@@ -331,6 +334,9 @@
     </Reference>
     <Reference Include="Syncfusion.Tools.Windows, Version=16.1460.0.32, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Syncfusion.Tools.Windows.16.1.0.32\lib\net46\Syncfusion.Tools.Windows.dll</HintPath>
+    </Reference>
+    <Reference Include="Syncfusion.XlsIO.Base, Version=16.1460.0.26, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Syncfusion.XlsIO.Base46.16.1.0.26\lib\net46\Syncfusion.XlsIO.Base.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Collections.Immutable, Version=1.2.2.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
@@ -757,9 +763,33 @@
     <Compile Include="ApplicationCore\Interaction\SelectionDependentEntry.cs" />
     <Compile Include="ApplicationCore\IoCLogRequestModule.cs" />
     <Compile Include="ApplicationCore\IRegistrationOverride.cs" />
-    <Compile Include="ApplicationCore\MainForm.OrderLookupHeartbeat.cs">
+    <Compile Include="ApplicationCore\Licensing\ITangoLogShipmentProcessor.cs" />
+    <Compile Include="ApplicationCore\Licensing\ITangoSecurityValidator.cs" />
+    <Compile Include="ApplicationCore\Licensing\ITangoWebRequestClient.cs" />
+    <Compile Include="ApplicationCore\Licensing\TangoLogShipmentProcessor.cs" />
+    <Compile Include="ApplicationCore\Licensing\TangoRequests\ITangoLogShipmentRequest.cs" />
+    <Compile Include="ApplicationCore\Licensing\TangoRequests\TangoLogShipmentRequest.cs" />
+    <Compile Include="ApplicationCore\Licensing\TangoSecurityValidator.cs" />
+    <Compile Include="ApplicationCore\Licensing\TangoWebRequestClient.cs" />
+    <Compile Include="ApplicationCore\MainForm.BasicUIHeartbeat.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Filters\Content\Conditions\OrderItems\Custom1Condition.cs" />
+    <Compile Include="Filters\Content\Conditions\OrderItems\Custom2Condition.cs" />
+    <Compile Include="Filters\Content\Conditions\OrderItems\Custom3Condition.cs" />
+    <Compile Include="Filters\Content\Conditions\OrderItems\Custom4Condition.cs" />
+    <Compile Include="Filters\Content\Conditions\OrderItems\Custom5Condition.cs" />
+    <Compile Include="Filters\Content\Conditions\OrderItems\MpnCondition.cs" />
+    <Compile Include="Filters\Content\Conditions\OrderItems\BrandCondition.cs" />
+    <Compile Include="Filters\Content\Conditions\Orders\ChannelOrderIdCondition.cs" />
+    <Compile Include="Filters\Content\Conditions\Orders\Custom1Condition.cs" />
+    <Compile Include="Filters\Content\Conditions\Orders\Custom5Condition.cs" />
+    <Compile Include="Filters\Content\Conditions\Orders\Custom3Condition.cs" />
+    <Compile Include="Filters\Content\Conditions\Orders\Custom2Condition.cs" />
+    <Compile Include="Filters\Content\Conditions\Orders\Custom4Condition.cs" />
+    <Compile Include="Filters\Content\Conditions\Orders\ShipByDateCondition.cs" />
+    <Compile Include="Common\Threading\ProgressFactory.cs" />
+    <Compile Include="Data\ProductCatalogTelemetryService.cs" />
     <Compile Include="OrderLookup\CoreOrderLookupRegistrationOverride.cs" />
     <Compile Include="OrderLookup\FieldManager\IOrderLookupFieldLayoutProvider.cs" />
     <Compile Include="OrderLookup\FieldManager\IOrderLookupFieldLayoutRepository.cs" />
@@ -878,7 +908,7 @@
     <Compile Include="ApplicationCore\Logging\LogActionType.cs" />
     <Compile Include="ApplicationCore\Logging\LogEntryFactory.cs" />
     <Compile Include="ApplicationCore\Logging\NullApiLogEntry.cs" />
-    <Compile Include="ApplicationCore\MainForm.UIHeartbeat.cs">
+    <Compile Include="ApplicationCore\MainForm.BatchModeUIHeartbeat.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="ApplicationCore\MainGridControlPipeline.cs" />
@@ -1010,6 +1040,16 @@
     <Compile Include="OrderLookup\OrderLookupClearOrderMessage.cs" />
     <Compile Include="OrderLookup\OrderLookupSearchMessage.cs" />
     <Compile Include="OrderLookup\ShipmentModelPipelines\IOrderLookupShipmentModelPipeline.cs" />
+    <Compile Include="Products\Export\IProductExcelWriter.cs" />
+    <Compile Include="Products\Import\FailedProductImportException.cs" />
+    <Compile Include="Products\Import\IImportProductsResult.cs" />
+    <Compile Include="Products\Import\IProductExcelReader.cs" />
+    <Compile Include="Products\Import\IProductImporter.cs" />
+    <Compile Include="Products\Import\ProductImportException.cs" />
+    <Compile Include="Products\Import\ProductToImportDto.cs" />
+    <Compile Include="Products\IProductVariant.cs" />
+    <Compile Include="Products\IProductCatalog.cs" />
+    <Compile Include="Products\IProductsMode.cs" />
     <Compile Include="Shipping\Profiles\EditableShippingProfile.cs" />
     <Compile Include="Shipping\Profiles\IEditableShippingProfile.cs" />
     <Compile Include="Shipping\Profiles\IProfilePopupService.cs" />
@@ -2255,11 +2295,14 @@
     <Compile Include="Templates\Printing\PrinterSetting.cs" />
     <Compile Include="Templates\Printing\PrinterSettingsFactory.cs" />
     <Compile Include="Templates\Printing\PrintJobFactory.cs" />
+    <Compile Include="Templates\Processing\TemplateXml\ElementOutlines\OrderItemProductBundleOutline.cs" />
+    <Compile Include="Templates\Processing\TemplateXml\ElementOutlines\OrderItemProductOutline.cs" />
     <Compile Include="Templates\Processing\TemplateXml\ElementOutlines\ReturnItemOutline.cs" />
     <Compile Include="Templates\Tokens\ITemplateTokenProcessor.cs" />
     <Compile Include="Templates\Tokens\TemplateTokenProcessorWrapper.cs" />
     <Compile Include="UI\Controls\IOrderLookup.cs" />
     <Compile Include="UI\Controls\IWeightConverter.cs" />
+    <Compile Include="UI\Controls\LengthConverter.cs" />
     <Compile Include="UI\Controls\MultiValueBinders\CheckboxMultiValueBinder.cs" />
     <Compile Include="UI\Controls\MultiValueBinders\GenericMultiValueBinder.cs" />
     <Compile Include="UI\Controls\ResizingRichTextBox.cs">
@@ -8671,7 +8714,6 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="ApplicationCore\Licensing\WSDL\Activation_v1.wsdl" />
-    <None Include="ClassDiagram1.cd" />
     <None Include="packages.config" />
     <None Include="Properties\interapptive_public.snk" />
     <None Include="Properties\Settings.settings">
@@ -10870,6 +10912,7 @@
     <None Include="Resources\asendia.png" />
     <Resource Include="Resources\box_closed_with_label_32_32.png" />
     <None Include="Resources\bonanza.png" />
+    <Content Include="Resources\box_tall_32.png" />
     <Content Include="Resources\data_16.png" />
     <Content Include="Resources\data_error_16.png" />
     <Content Include="Resources\data_ok_16.png" />

@@ -20,23 +20,36 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             base(shipmentTypeManager)
         {
         }
-        
+
         /// <summary>
         /// Apply the specified shipment profile to the given shipment.
         /// </summary>
         public override void ApplyProfile(IShippingProfileEntity profile, ShipmentEntity shipment)
         {
             base.ApplyProfile(profile, shipment);
- 
+
             BestRateShipmentEntity bestRateShipment = shipment.BestRate;
             IBestRateProfileEntity bestRateProfile = profile.BestRate;
             IPackageProfileEntity packageProfileEntity = profile.Packages.Single();
 
             ApplyProfileValue(packageProfileEntity.DimsProfileID, bestRateShipment, BestRateShipmentFields.DimsProfileID);
             ApplyProfileValue(packageProfileEntity.DimsWeight, bestRateShipment, BestRateShipmentFields.DimsWeight);
-            ApplyProfileValue(packageProfileEntity.DimsLength, bestRateShipment, BestRateShipmentFields.DimsLength);
-            ApplyProfileValue(packageProfileEntity.DimsHeight, bestRateShipment, BestRateShipmentFields.DimsHeight);
-            ApplyProfileValue(packageProfileEntity.DimsWidth, bestRateShipment, BestRateShipmentFields.DimsWidth);
+
+            if (packageProfileEntity.DimsLength.GetValueOrDefault() > 0)
+            {
+                ApplyProfileValue(packageProfileEntity.DimsLength, bestRateShipment, BestRateShipmentFields.DimsLength);
+            }
+
+            if (packageProfileEntity.DimsWidth.GetValueOrDefault() > 0)
+            {
+                ApplyProfileValue(packageProfileEntity.DimsWidth, bestRateShipment, BestRateShipmentFields.DimsWidth);
+            }
+
+            if (packageProfileEntity.DimsHeight.GetValueOrDefault() > 0)
+            {
+                ApplyProfileValue(packageProfileEntity.DimsHeight, bestRateShipment, BestRateShipmentFields.DimsHeight);
+            }
+
             ApplyProfileValue(packageProfileEntity.DimsAddWeight, bestRateShipment, BestRateShipmentFields.DimsAddWeight);
 
             ApplyProfileValue(bestRateProfile.ServiceLevel, bestRateShipment, BestRateShipmentFields.ServiceLevel);

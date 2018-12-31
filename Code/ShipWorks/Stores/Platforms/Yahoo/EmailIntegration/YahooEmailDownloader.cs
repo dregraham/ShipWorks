@@ -398,6 +398,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo.EmailIntegration
 
             item.YahooProductID = XPathUtility.Evaluate(xpath, "Id", "");
             item.Code = QuoteClean(XPathUtility.Evaluate(xpath, "Code", ""));
+            item.SKU = item.Code;
             item.Name = QuoteClean(XPathUtility.Evaluate(xpath, "Description", ""));
             item.Quantity = XPathUtility.Evaluate(xpath, "Quantity", 0);
             item.UnitPrice = XPathUtility.Evaluate(xpath, "Unit-Price", (decimal) 0.0);

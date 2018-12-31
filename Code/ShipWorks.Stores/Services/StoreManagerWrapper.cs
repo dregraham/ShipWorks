@@ -14,7 +14,7 @@ namespace ShipWorks.Stores.Services
     /// Algorithms and functions for working with stores.
     /// </summary>
     /// <remarks>This is an instance that wraps the static StoreManager until we can replace that class</remarks>
-    [Order(typeof(IInitializeForCurrentSession), Order.Unordered)]
+    [Order(typeof(IInitializeForCurrentSession), 2)]
     [Component]
     public class StoreManagerWrapper : IStoreManager, IInitializeForCurrentSession
     {

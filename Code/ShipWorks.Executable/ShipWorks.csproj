@@ -144,8 +144,8 @@
       <HintPath>..\..\packages\Common.Logging.Log4Net1213.3.3.1\lib\net40\Common.Logging.Log4Net1213.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="CommonServiceLocator, Version=2.0.1.0, Culture=neutral, PublicKeyToken=489b6accfaf20ef0, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\CommonServiceLocator.2.0.1\lib\net45\CommonServiceLocator.dll</HintPath>
+    <Reference Include="CommonServiceLocator, Version=2.0.4.0, Culture=neutral, PublicKeyToken=489b6accfaf20ef0, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\CommonServiceLocator.2.0.4\lib\net46\CommonServiceLocator.dll</HintPath>
     </Reference>
     <Reference Include="ComponentFactory.Krypton.Toolkit, Version=2.8.5.0, Culture=neutral, PublicKeyToken=a87e673e9ecb6e8e, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -358,6 +358,14 @@
       <Project>{d5b2cf61-e6c6-4a91-a4e5-9aa2515e70c4}</Project>
       <Name>ShipWorks.OrderLookup</Name>
     </ProjectReference>
+    <ProjectReference Include="..\ShipWorks.Products.UI\ShipWorks.Products.UI.csproj">
+      <Project>{08d0cfd7-59df-4e3d-ac43-0b44423c1dd9}</Project>
+      <Name>ShipWorks.Products.UI</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ShipWorks.Products\ShipWorks.Products.csproj">
+      <Project>{048883f2-e6a2-4302-9e84-378876b51a43}</Project>
+      <Name>ShipWorks.Products</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ShipWorks.Res\ShipWorks.Res.csproj">
       <Project>{3451502d-c78c-44ec-86ac-8f50a6531f5c}</Project>
       <Name>ShipWorks.Res</Name>
@@ -445,11 +453,6 @@
     <Copy SourceFiles="..\..\Components\Win32\ShipWorks.Native.dll" DestinationFolder="$(MSBuildProjectPath)..\..\Artifacts\Application\\Win32" />
     <Copy SourceFiles="..\..\Components\x64\ShipWorks.Native.dll" DestinationFolder="$(MSBuildProjectPath)..\..\Artifacts\Application\" />
   </Target>
-  <ProjectExtensions>
-    <VisualStudio>
-      <UserProperties DebugDemeanorObfuscationEnabled="False" DebugDemeanorKeyFile="" DebugDemeanorKeyContainer="" DebugDemeanorConfigFile="" DebugDemeanorPrefix="" DebugDemeanorVerbose="True" DebugDemeanorEncryptStrings="False" DebugOverloadOnStatic="False" DebugDemeanorNoTypes="False" DebugDemeanorNoFields="False" DebugDemeanorNoMethods="False" DebugDemeanorNoProperties="False" DebugDemeanorNoEvents="False" DebugDemeanorNoEnumerations="False" DebugDemeanorNoResources="False" DebugDemeanorNoSerializable="False" DebugDemeanorNoLogo="False" DebugDemeanorNames="Alpha" DebugDemeanorFlow="None" DebugDemeanorRootAssemblyFileName="" DebugDemeanorObfuscateAllTypes="False" DebugDemeanorCompilerControlledAccessibility="False" DebugDemeanorEnableReport="False" DebugDemeanorReportName="" DebugDemeanorExcludeCount="0" DebugDemeanorExcludeRegularExpCount="0" DebugDemeanorInsitu="False" DebugDemeanorApplication="False" DebugDemeanorForceParameters="False" DebugDemeanorNoParameters="False" DebugDemeanorOut="Demeanor" DebugDemeanorAdditionalAssemblyNamesCount="0" DebugDemeanorExcludedAssemblyNamesCount="0" DebugDemeanorAllSatelliteAssemblies="False" />
-    </VisualStudio>
-  </ProjectExtensions>
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>

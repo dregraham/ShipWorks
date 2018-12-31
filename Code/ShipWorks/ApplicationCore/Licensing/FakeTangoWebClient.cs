@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -33,17 +32,6 @@ namespace ShipWorks.ApplicationCore.Licensing
             XmlDocument doc = new XmlDocument();
             doc.LoadXml("<?xml version=\"1.0\" standalone=\"yes\" ?><License><Error><Description>Invalid Authentication</Description></Error></License>");
             return new AddStoreResponse(doc);
-        }
-
-        /// <summary>
-        /// Log the given processed shipment to Tango.  isRetry is only for internal interapptive purposes to handle rare cases where shipments a customer
-        /// insured did not make it up into tango, but the shipment did actually process.
-        /// </summary>
-        [Obfuscation(Exclude = true)]
-        public override string LogShipment(StoreEntity store, ShipmentEntity shipment, bool isRetry = false)
-        {
-            log.Fatal($"Shipment logged to Tango for shipment id: {shipment.ShipmentID}");
-            return Guid.NewGuid().ToString("D");
         }
 
         /// <summary>

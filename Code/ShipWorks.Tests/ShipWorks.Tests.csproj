@@ -642,6 +642,7 @@
     <Compile Include="Templates\Printing\BarcodePrintJobTest.cs" />
     <Compile Include="Templates\Printing\PrintableBarcodeTest.cs" />
     <Compile Include="Templates\Printing\PrintJobFactoryTest.cs" />
+    <Compile Include="UI\Controls\LengthConverterTest.cs" />
     <Compile Include="UI\Controls\WeightConverterTest.cs" />
     <Compile Include="UI\PropertyChangedHandlerTest.cs" />
     <Compile Include="Users\Audit\ImmutableStackContainerTest.cs" />

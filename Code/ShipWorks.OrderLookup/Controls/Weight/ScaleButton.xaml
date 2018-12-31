@@ -4,7 +4,7 @@
     xmlns:ui="http://schemas.shipworks.com/ui">
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="/ShipWorks.UI;component/Styles/Controls/ImageStyle.xaml" />
-        <ResourceDictionary Source="/ShipWorks.OrderLookup;component/Styles/OrderLookupStyle.xaml" />
+        <ResourceDictionary Source="/ShipWorks.UI;component/Styles/BlueSteel/BlueSteelStyle.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
     <ui:BooleanToVisibilityConverter x:Key="BooleanToVisibility" />

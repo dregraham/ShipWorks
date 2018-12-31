@@ -46,6 +46,8 @@ namespace ShipWorks.Users.Security
 
         [PermissionScope(PermissionScope.Store)] ShipmentsCreateEditProcess = 80,
         [PermissionScope(PermissionScope.Store)] ShipmentsVoidDelete = 81,
-        [PermissionScope(PermissionScope.Global)] ShipmentsManageSettings = 82
+        [PermissionScope(PermissionScope.Global)] ShipmentsManageSettings = 82,
+
+        [PermissionScope(PermissionScope.Global)] ManageProducts = 83
     }
 }

@@ -342,6 +342,20 @@ namespace ShipWorks.Data.Model
 		ShipAddressType,
 		///<summary>CombineSplitStatus. Inherited from Order</summary>
 		CombineSplitStatus,
+		///<summary>ChannelOrderID. Inherited from Order</summary>
+		ChannelOrderID,
+		///<summary>ShipByDate. Inherited from Order</summary>
+		ShipByDate,
+		///<summary>Custom1. Inherited from Order</summary>
+		Custom1,
+		///<summary>Custom2. Inherited from Order</summary>
+		Custom2,
+		///<summary>Custom3. Inherited from Order</summary>
+		Custom3,
+		///<summary>Custom4. Inherited from Order</summary>
+		Custom4,
+		///<summary>Custom5. Inherited from Order</summary>
+		Custom5,
 		///<summary>OrderID. </summary>
 		OrderID,
 		///<summary>AmazonOrderID. </summary>
@@ -410,6 +424,20 @@ namespace ShipWorks.Data.Model
 		Width,
 		///<summary>Height. Inherited from OrderItem</summary>
 		Height,
+		///<summary>Brand. Inherited from OrderItem</summary>
+		Brand,
+		///<summary>MPN. Inherited from OrderItem</summary>
+		MPN,
+		///<summary>Custom1. Inherited from OrderItem</summary>
+		Custom1,
+		///<summary>Custom2. Inherited from OrderItem</summary>
+		Custom2,
+		///<summary>Custom3. Inherited from OrderItem</summary>
+		Custom3,
+		///<summary>Custom4. Inherited from OrderItem</summary>
+		Custom4,
+		///<summary>Custom5. Inherited from OrderItem</summary>
+		Custom5,
 		///<summary>OrderItemID. </summary>
 		OrderItemID,
 		///<summary>AmazonOrderItemCode. </summary>
@@ -936,6 +964,20 @@ namespace ShipWorks.Data.Model
 		Width,
 		///<summary>Height. Inherited from OrderItem</summary>
 		Height,
+		///<summary>Brand. Inherited from OrderItem</summary>
+		Brand,
+		///<summary>MPN. Inherited from OrderItem</summary>
+		MPN,
+		///<summary>Custom1. Inherited from OrderItem</summary>
+		Custom1,
+		///<summary>Custom2. Inherited from OrderItem</summary>
+		Custom2,
+		///<summary>Custom3. Inherited from OrderItem</summary>
+		Custom3,
+		///<summary>Custom4. Inherited from OrderItem</summary>
+		Custom4,
+		///<summary>Custom5. Inherited from OrderItem</summary>
+		Custom5,
 		///<summary>OrderItemID. </summary>
 		OrderItemID,
 		///<summary>OrderAddressID. </summary>
@@ -1092,6 +1134,20 @@ namespace ShipWorks.Data.Model
 		Width,
 		///<summary>Height. Inherited from OrderItem</summary>
 		Height,
+		///<summary>Brand. Inherited from OrderItem</summary>
+		Brand,
+		///<summary>MPN. Inherited from OrderItem</summary>
+		MPN,
+		///<summary>Custom1. Inherited from OrderItem</summary>
+		Custom1,
+		///<summary>Custom2. Inherited from OrderItem</summary>
+		Custom2,
+		///<summary>Custom3. Inherited from OrderItem</summary>
+		Custom3,
+		///<summary>Custom4. Inherited from OrderItem</summary>
+		Custom4,
+		///<summary>Custom5. Inherited from OrderItem</summary>
+		Custom5,
 		///<summary>OrderItemID. </summary>
 		OrderItemID,
 		///<summary>ReceiptItemID. </summary>
@@ -1336,6 +1392,20 @@ namespace ShipWorks.Data.Model
 		ShipAddressType,
 		///<summary>CombineSplitStatus. Inherited from Order</summary>
 		CombineSplitStatus,
+		///<summary>ChannelOrderID. Inherited from Order</summary>
+		ChannelOrderID,
+		///<summary>ShipByDate. Inherited from Order</summary>
+		ShipByDate,
+		///<summary>Custom1. Inherited from Order</summary>
+		Custom1,
+		///<summary>Custom2. Inherited from Order</summary>
+		Custom2,
+		///<summary>Custom3. Inherited from Order</summary>
+		Custom3,
+		///<summary>Custom4. Inherited from Order</summary>
+		Custom4,
+		///<summary>Custom5. Inherited from Order</summary>
+		Custom5,
 		///<summary>OrderID. </summary>
 		OrderID,
 		///<summary>CustomOrderIdentifier. </summary>
@@ -1410,6 +1480,20 @@ namespace ShipWorks.Data.Model
 		Width,
 		///<summary>Height. Inherited from OrderItem</summary>
 		Height,
+		///<summary>Brand. Inherited from OrderItem</summary>
+		Brand,
+		///<summary>MPN. Inherited from OrderItem</summary>
+		MPN,
+		///<summary>Custom1. Inherited from OrderItem</summary>
+		Custom1,
+		///<summary>Custom2. Inherited from OrderItem</summary>
+		Custom2,
+		///<summary>Custom3. Inherited from OrderItem</summary>
+		Custom3,
+		///<summary>Custom4. Inherited from OrderItem</summary>
+		Custom4,
+		///<summary>Custom5. Inherited from OrderItem</summary>
+		Custom5,
 		///<summary>OrderItemID. </summary>
 		OrderItemID,
 		///<summary>MarketplaceName. </summary>
@@ -1426,8 +1510,6 @@ namespace ShipWorks.Data.Model
 		DistributionCenter,
 		///<summary>IsFBA. </summary>
 		IsFBA,
-		///<summary>MPN. </summary>
-		MPN,
 		///<summary>DistributionCenterID. </summary>
 		DistributionCenterID,
 		///<summary>DistributionCenterName. </summary>
@@ -1690,6 +1772,20 @@ namespace ShipWorks.Data.Model
 		ShipAddressType,
 		///<summary>CombineSplitStatus. Inherited from Order</summary>
 		CombineSplitStatus,
+		///<summary>ChannelOrderID. Inherited from Order</summary>
+		ChannelOrderID,
+		///<summary>ShipByDate. Inherited from Order</summary>
+		ShipByDate,
+		///<summary>Custom1. Inherited from Order</summary>
+		Custom1,
+		///<summary>Custom2. Inherited from Order</summary>
+		Custom2,
+		///<summary>Custom3. Inherited from Order</summary>
+		Custom3,
+		///<summary>Custom4. Inherited from Order</summary>
+		Custom4,
+		///<summary>Custom5. Inherited from Order</summary>
+		Custom5,
 		///<summary>OrderID. </summary>
 		OrderID,
 		///<summary>ClickCartProOrderID. </summary>
@@ -1864,6 +1960,20 @@ namespace ShipWorks.Data.Model
 		ShipAddressType,
 		///<summary>CombineSplitStatus. Inherited from Order</summary>
 		CombineSplitStatus,
+		///<summary>ChannelOrderID. Inherited from Order</summary>
+		ChannelOrderID,
+		///<summary>ShipByDate. Inherited from Order</summary>
+		ShipByDate,
+		///<summary>Custom1. Inherited from Order</summary>
+		Custom1,
+		///<summary>Custom2. Inherited from Order</summary>
+		Custom2,
+		///<summary>Custom3. Inherited from Order</summary>
+		Custom3,
+		///<summary>Custom4. Inherited from Order</summary>
+		Custom4,
+		///<summary>Custom5. Inherited from Order</summary>
+		Custom5,
 		///<summary>OrderID. </summary>
 		OrderID,
 		///<summary>CommerceInterfaceOrderNumber. </summary>
@@ -1936,8 +2046,6 @@ namespace ShipWorks.Data.Model
 		ArchivalSettingsXml,
 		///<summary>AuditEnabled. </summary>
 		AuditEnabled,
-		///<summary>AllowUIModeToggle. </summary>
-		AllowUIModeToggle,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -2374,6 +2482,20 @@ namespace ShipWorks.Data.Model
 		ShipAddressType,
 		///<summary>CombineSplitStatus. Inherited from Order</summary>
 		CombineSplitStatus,
+		///<summary>ChannelOrderID. Inherited from Order</summary>
+		ChannelOrderID,
+		///<summary>ShipByDate. Inherited from Order</summary>
+		ShipByDate,
+		///<summary>Custom1. Inherited from Order</summary>
+		Custom1,
+		///<summary>Custom2. Inherited from Order</summary>
+		Custom2,
+		///<summary>Custom3. Inherited from Order</summary>
+		Custom3,
+		///<summary>Custom4. Inherited from Order</summary>
+		Custom4,
+		///<summary>Custom5. Inherited from Order</summary>
+		Custom5,
 		///<summary>OrderID. </summary>
 		OrderID,
 		///<summary>EbayOrderID. </summary>
@@ -2476,6 +2598,20 @@ namespace ShipWorks.Data.Model
 		Width,
 		///<summary>Height. Inherited from OrderItem</summary>
 		Height,
+		///<summary>Brand. Inherited from OrderItem</summary>
+		Brand,
+		///<summary>MPN. Inherited from OrderItem</summary>
+		MPN,
+		///<summary>Custom1. Inherited from OrderItem</summary>
+		Custom1,
+		///<summary>Custom2. Inherited from OrderItem</summary>
+		Custom2,
+		///<summary>Custom3. Inherited from OrderItem</summary>
+		Custom3,
+		///<summary>Custom4. Inherited from OrderItem</summary>
+		Custom4,
+		///<summary>Custom5. Inherited from OrderItem</summary>
+		Custom5,
 		///<summary>OrderItemID. </summary>
 		OrderItemID,
 		///<summary>LocalEbayOrderID. </summary>
@@ -3032,6 +3168,20 @@ namespace ShipWorks.Data.Model
 		ShipAddressType,
 		///<summary>CombineSplitStatus. Inherited from Order</summary>
 		CombineSplitStatus,
+		///<summary>ChannelOrderID. Inherited from Order</summary>
+		ChannelOrderID,
+		///<summary>ShipByDate. Inherited from Order</summary>
+		ShipByDate,
+		///<summary>Custom1. Inherited from Order</summary>
+		Custom1,
+		///<summary>Custom2. Inherited from Order</summary>
+		Custom2,
+		///<summary>Custom3. Inherited from Order</summary>
+		Custom3,
+		///<summary>Custom4. Inherited from Order</summary>
+		Custom4,
+		///<summary>Custom5. Inherited from Order</summary>
+		Custom5,
 		///<summary>OrderID. </summary>
 		OrderID,
 		///<summary>WasPaid. </summary>
@@ -3090,6 +3240,20 @@ namespace ShipWorks.Data.Model
 		Width,
 		///<summary>Height. Inherited from OrderItem</summary>
 		Height,
+		///<summary>Brand. Inherited from OrderItem</summary>
+		Brand,
+		///<summary>MPN. Inherited from OrderItem</summary>
+		MPN,
+		///<summary>Custom1. Inherited from OrderItem</summary>
+		Custom1,
+		///<summary>Custom2. Inherited from OrderItem</summary>
+		Custom2,
+		///<summary>Custom3. Inherited from OrderItem</summary>
+		Custom3,
+		///<summary>Custom4. Inherited from OrderItem</summary>
+		Custom4,
+		///<summary>Custom5. Inherited from OrderItem</summary>
+		Custom5,
 		///<summary>OrderItemID. </summary>
 		OrderItemID,
 		///<summary>ListingID. </summary>
@@ -4266,6 +4430,20 @@ namespace ShipWorks.Data.Model
 		ShipAddressType,
 		///<summary>CombineSplitStatus. Inherited from Order</summary>
 		CombineSplitStatus,
+		///<summary>ChannelOrderID. Inherited from Order</summary>
+		ChannelOrderID,
+		///<summary>ShipByDate. Inherited from Order</summary>
+		ShipByDate,
+		///<summary>Custom1. Inherited from Order</summary>
+		Custom1,
+		///<summary>Custom2. Inherited from Order</summary>
+		Custom2,
+		///<summary>Custom3. Inherited from Order</summary>
+		Custom3,
+		///<summary>Custom4. Inherited from Order</summary>
+		Custom4,
+		///<summary>Custom5. Inherited from Order</summary>
+		Custom5,
 		///<summary>OrderID. </summary>
 		OrderID,
 		///<summary>AmazonOrderID. </summary>
@@ -4328,6 +4506,20 @@ namespace ShipWorks.Data.Model
 		Width,
 		///<summary>Height. Inherited from OrderItem</summary>
 		Height,
+		///<summary>Brand. Inherited from OrderItem</summary>
+		Brand,
+		///<summary>MPN. Inherited from OrderItem</summary>
+		MPN,
+		///<summary>Custom1. Inherited from OrderItem</summary>
+		Custom1,
+		///<summary>Custom2. Inherited from OrderItem</summary>
+		Custom2,
+		///<summary>Custom3. Inherited from OrderItem</summary>
+		Custom3,
+		///<summary>Custom4. Inherited from OrderItem</summary>
+		Custom4,
+		///<summary>Custom5. Inherited from OrderItem</summary>
+		Custom5,
 		///<summary>OrderItemID. </summary>
 		OrderItemID,
 		///<summary>AmazonOrderItemCode. </summary>
@@ -4656,6 +4848,20 @@ namespace ShipWorks.Data.Model
 		ShipAddressType,
 		///<summary>CombineSplitStatus. Inherited from Order</summary>
 		CombineSplitStatus,
+		///<summary>ChannelOrderID. Inherited from Order</summary>
+		ChannelOrderID,
+		///<summary>ShipByDate. Inherited from Order</summary>
+		ShipByDate,
+		///<summary>Custom1. Inherited from Order</summary>
+		Custom1,
+		///<summary>Custom2. Inherited from Order</summary>
+		Custom2,
+		///<summary>Custom3. Inherited from Order</summary>
+		Custom3,
+		///<summary>Custom4. Inherited from Order</summary>
+		Custom4,
+		///<summary>Custom5. Inherited from Order</summary>
+		Custom5,
 		///<summary>OrderID. </summary>
 		OrderID,
 		///<summary>GrouponOrderID. </summary>
@@ -4714,6 +4920,20 @@ namespace ShipWorks.Data.Model
 		Width,
 		///<summary>Height. Inherited from OrderItem</summary>
 		Height,
+		///<summary>Brand. Inherited from OrderItem</summary>
+		Brand,
+		///<summary>MPN. Inherited from OrderItem</summary>
+		MPN,
+		///<summary>Custom1. Inherited from OrderItem</summary>
+		Custom1,
+		///<summary>Custom2. Inherited from OrderItem</summary>
+		Custom2,
+		///<summary>Custom3. Inherited from OrderItem</summary>
+		Custom3,
+		///<summary>Custom4. Inherited from OrderItem</summary>
+		Custom4,
+		///<summary>Custom5. Inherited from OrderItem</summary>
+		Custom5,
 		///<summary>OrderItemID. </summary>
 		OrderItemID,
 		///<summary>Permalink. </summary>
@@ -4870,6 +5090,20 @@ namespace ShipWorks.Data.Model
 		Width,
 		///<summary>Height. Inherited from OrderItem</summary>
 		Height,
+		///<summary>Brand. Inherited from OrderItem</summary>
+		Brand,
+		///<summary>MPN. Inherited from OrderItem</summary>
+		MPN,
+		///<summary>Custom1. Inherited from OrderItem</summary>
+		Custom1,
+		///<summary>Custom2. Inherited from OrderItem</summary>
+		Custom2,
+		///<summary>Custom3. Inherited from OrderItem</summary>
+		Custom3,
+		///<summary>Custom4. Inherited from OrderItem</summary>
+		Custom4,
+		///<summary>Custom5. Inherited from OrderItem</summary>
+		Custom5,
 		///<summary>OrderItemID. </summary>
 		OrderItemID,
 		///<summary>Marketplace. </summary>
@@ -5256,6 +5490,20 @@ namespace ShipWorks.Data.Model
 		ShipAddressType,
 		///<summary>CombineSplitStatus. Inherited from Order</summary>
 		CombineSplitStatus,
+		///<summary>ChannelOrderID. Inherited from Order</summary>
+		ChannelOrderID,
+		///<summary>ShipByDate. Inherited from Order</summary>
+		ShipByDate,
+		///<summary>Custom1. Inherited from Order</summary>
+		Custom1,
+		///<summary>Custom2. Inherited from Order</summary>
+		Custom2,
+		///<summary>Custom3. Inherited from Order</summary>
+		Custom3,
+		///<summary>Custom4. Inherited from Order</summary>
+		Custom4,
+		///<summary>Custom5. Inherited from Order</summary>
+		Custom5,
 		///<summary>OrderID. </summary>
 		OrderID,
 		///<summary>MerchantOrderId. </summary>
@@ -5312,6 +5560,20 @@ namespace ShipWorks.Data.Model
 		Width,
 		///<summary>Height. Inherited from OrderItem</summary>
 		Height,
+		///<summary>Brand. Inherited from OrderItem</summary>
+		Brand,
+		///<summary>MPN. Inherited from OrderItem</summary>
+		MPN,
+		///<summary>Custom1. Inherited from OrderItem</summary>
+		Custom1,
+		///<summary>Custom2. Inherited from OrderItem</summary>
+		Custom2,
+		///<summary>Custom3. Inherited from OrderItem</summary>
+		Custom3,
+		///<summary>Custom4. Inherited from OrderItem</summary>
+		Custom4,
+		///<summary>Custom5. Inherited from OrderItem</summary>
+		Custom5,
 		///<summary>OrderItemID. </summary>
 		OrderItemID,
 		///<summary>MerchantSku. </summary>
@@ -5594,6 +5856,20 @@ namespace ShipWorks.Data.Model
 		ShipAddressType,
 		///<summary>CombineSplitStatus. Inherited from Order</summary>
 		CombineSplitStatus,
+		///<summary>ChannelOrderID. Inherited from Order</summary>
+		ChannelOrderID,
+		///<summary>ShipByDate. Inherited from Order</summary>
+		ShipByDate,
+		///<summary>Custom1. Inherited from Order</summary>
+		Custom1,
+		///<summary>Custom2. Inherited from Order</summary>
+		Custom2,
+		///<summary>Custom3. Inherited from Order</summary>
+		Custom3,
+		///<summary>Custom4. Inherited from Order</summary>
+		Custom4,
+		///<summary>Custom5. Inherited from Order</summary>
+		Custom5,
 		///<summary>OrderID. </summary>
 		OrderID,
 		///<summary>LemonStandOrderID. </summary>
@@ -5650,6 +5926,20 @@ namespace ShipWorks.Data.Model
 		Width,
 		///<summary>Height. Inherited from OrderItem</summary>
 		Height,
+		///<summary>Brand. Inherited from OrderItem</summary>
+		Brand,
+		///<summary>MPN. Inherited from OrderItem</summary>
+		MPN,
+		///<summary>Custom1. Inherited from OrderItem</summary>
+		Custom1,
+		///<summary>Custom2. Inherited from OrderItem</summary>
+		Custom2,
+		///<summary>Custom3. Inherited from OrderItem</summary>
+		Custom3,
+		///<summary>Custom4. Inherited from OrderItem</summary>
+		Custom4,
+		///<summary>Custom5. Inherited from OrderItem</summary>
+		Custom5,
 		///<summary>OrderItemID. </summary>
 		OrderItemID,
 		///<summary>UrlName. </summary>
@@ -5904,6 +6194,20 @@ namespace ShipWorks.Data.Model
 		ShipAddressType,
 		///<summary>CombineSplitStatus. Inherited from Order</summary>
 		CombineSplitStatus,
+		///<summary>ChannelOrderID. Inherited from Order</summary>
+		ChannelOrderID,
+		///<summary>ShipByDate. Inherited from Order</summary>
+		ShipByDate,
+		///<summary>Custom1. Inherited from Order</summary>
+		Custom1,
+		///<summary>Custom2. Inherited from Order</summary>
+		Custom2,
+		///<summary>Custom3. Inherited from Order</summary>
+		Custom3,
+		///<summary>Custom4. Inherited from Order</summary>
+		Custom4,
+		///<summary>Custom5. Inherited from Order</summary>
+		Custom5,
 		///<summary>OrderID. Inherited from GenericModuleOrder</summary>
 		OrderID_GenericModuleOrder,
 		///<summary>AmazonOrderID. Inherited from GenericModuleOrder</summary>
@@ -6212,6 +6516,20 @@ namespace ShipWorks.Data.Model
 		ShipAddressType,
 		///<summary>CombineSplitStatus. Inherited from Order</summary>
 		CombineSplitStatus,
+		///<summary>ChannelOrderID. Inherited from Order</summary>
+		ChannelOrderID,
+		///<summary>ShipByDate. Inherited from Order</summary>
+		ShipByDate,
+		///<summary>Custom1. Inherited from Order</summary>
+		Custom1,
+		///<summary>Custom2. Inherited from Order</summary>
+		Custom2,
+		///<summary>Custom3. Inherited from Order</summary>
+		Custom3,
+		///<summary>Custom4. Inherited from Order</summary>
+		Custom4,
+		///<summary>Custom5. Inherited from Order</summary>
+		Custom5,
 		///<summary>OrderID. </summary>
 		OrderID,
 		///<summary>BuyerNumber. </summary>
@@ -6630,6 +6948,20 @@ namespace ShipWorks.Data.Model
 		ShipAddressType,
 		///<summary>CombineSplitStatus. Inherited from Order</summary>
 		CombineSplitStatus,
+		///<summary>ChannelOrderID. Inherited from Order</summary>
+		ChannelOrderID,
+		///<summary>ShipByDate. Inherited from Order</summary>
+		ShipByDate,
+		///<summary>Custom1. Inherited from Order</summary>
+		Custom1,
+		///<summary>Custom2. Inherited from Order</summary>
+		Custom2,
+		///<summary>Custom3. Inherited from Order</summary>
+		Custom3,
+		///<summary>Custom4. Inherited from Order</summary>
+		Custom4,
+		///<summary>Custom5. Inherited from Order</summary>
+		Custom5,
 		///<summary>OrderID. </summary>
 		OrderID,
 		///<summary>NetworkSolutionsOrderID. </summary>
@@ -6882,6 +7214,20 @@ namespace ShipWorks.Data.Model
 		ShipAddressType,
 		///<summary>CombineSplitStatus. Inherited from Order</summary>
 		CombineSplitStatus,
+		///<summary>ChannelOrderID. Inherited from Order</summary>
+		ChannelOrderID,
+		///<summary>ShipByDate. Inherited from Order</summary>
+		ShipByDate,
+		///<summary>Custom1. Inherited from Order</summary>
+		Custom1,
+		///<summary>Custom2. Inherited from Order</summary>
+		Custom2,
+		///<summary>Custom3. Inherited from Order</summary>
+		Custom3,
+		///<summary>Custom4. Inherited from Order</summary>
+		Custom4,
+		///<summary>Custom5. Inherited from Order</summary>
+		Custom5,
 		///<summary>OrderID. </summary>
 		OrderID,
 		///<summary>InvoiceNumber. </summary>
@@ -6942,6 +7288,20 @@ namespace ShipWorks.Data.Model
 		Width,
 		///<summary>Height. Inherited from OrderItem</summary>
 		Height,
+		///<summary>Brand. Inherited from OrderItem</summary>
+		Brand,
+		///<summary>MPN. Inherited from OrderItem</summary>
+		MPN,
+		///<summary>Custom1. Inherited from OrderItem</summary>
+		Custom1,
+		///<summary>Custom2. Inherited from OrderItem</summary>
+		Custom2,
+		///<summary>Custom3. Inherited from OrderItem</summary>
+		Custom3,
+		///<summary>Custom4. Inherited from OrderItem</summary>
+		Custom4,
+		///<summary>Custom5. Inherited from OrderItem</summary>
+		Custom5,
 		///<summary>OrderItemID. </summary>
 		OrderItemID,
 		///<summary>SellerPartNumber. </summary>
@@ -7454,6 +7814,20 @@ namespace ShipWorks.Data.Model
 		ShipAddressType,
 		///<summary>CombineSplitStatus. </summary>
 		CombineSplitStatus,
+		///<summary>ChannelOrderID. </summary>
+		ChannelOrderID,
+		///<summary>ShipByDate. </summary>
+		ShipByDate,
+		///<summary>Custom1. </summary>
+		Custom1,
+		///<summary>Custom2. </summary>
+		Custom2,
+		///<summary>Custom3. </summary>
+		Custom3,
+		///<summary>Custom4. </summary>
+		Custom4,
+		///<summary>Custom5. </summary>
+		Custom5,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -7524,6 +7898,20 @@ namespace ShipWorks.Data.Model
 		Width,
 		///<summary>Height. </summary>
 		Height,
+		///<summary>Brand. </summary>
+		Brand,
+		///<summary>MPN. </summary>
+		MPN,
+		///<summary>Custom1. </summary>
+		Custom1,
+		///<summary>Custom2. </summary>
+		Custom2,
+		///<summary>Custom3. </summary>
+		Custom3,
+		///<summary>Custom4. </summary>
+		Custom4,
+		///<summary>Custom5. </summary>
+		Custom5,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -7700,6 +8088,20 @@ namespace ShipWorks.Data.Model
 		ShipAddressType,
 		///<summary>CombineSplitStatus. Inherited from Order</summary>
 		CombineSplitStatus,
+		///<summary>ChannelOrderID. Inherited from Order</summary>
+		ChannelOrderID,
+		///<summary>ShipByDate. Inherited from Order</summary>
+		ShipByDate,
+		///<summary>Custom1. Inherited from Order</summary>
+		Custom1,
+		///<summary>Custom2. Inherited from Order</summary>
+		Custom2,
+		///<summary>Custom3. Inherited from Order</summary>
+		Custom3,
+		///<summary>Custom4. Inherited from Order</summary>
+		Custom4,
+		///<summary>Custom5. Inherited from Order</summary>
+		Custom5,
 		///<summary>OrderID. </summary>
 		OrderID,
 		///<summary>OrderMotionShipmentID. </summary>
@@ -8016,6 +8418,20 @@ namespace ShipWorks.Data.Model
 		ShipAddressType,
 		///<summary>CombineSplitStatus. Inherited from Order</summary>
 		CombineSplitStatus,
+		///<summary>ChannelOrderID. Inherited from Order</summary>
+		ChannelOrderID,
+		///<summary>ShipByDate. Inherited from Order</summary>
+		ShipByDate,
+		///<summary>Custom1. Inherited from Order</summary>
+		Custom1,
+		///<summary>Custom2. Inherited from Order</summary>
+		Custom2,
+		///<summary>Custom3. Inherited from Order</summary>
+		Custom3,
+		///<summary>Custom4. Inherited from Order</summary>
+		Custom4,
+		///<summary>Custom5. Inherited from Order</summary>
+		Custom5,
 		///<summary>OrderID. </summary>
 		OrderID,
 		///<summary>WarehouseCode. </summary>
@@ -8076,6 +8492,20 @@ namespace ShipWorks.Data.Model
 		Width,
 		///<summary>Height. Inherited from OrderItem</summary>
 		Height,
+		///<summary>Brand. Inherited from OrderItem</summary>
+		Brand,
+		///<summary>MPN. Inherited from OrderItem</summary>
+		MPN,
+		///<summary>Custom1. Inherited from OrderItem</summary>
+		Custom1,
+		///<summary>Custom2. Inherited from OrderItem</summary>
+		Custom2,
+		///<summary>Custom3. Inherited from OrderItem</summary>
+		Custom3,
+		///<summary>Custom4. Inherited from OrderItem</summary>
+		Custom4,
+		///<summary>Custom5. Inherited from OrderItem</summary>
+		Custom5,
 		///<summary>OrderItemID. </summary>
 		OrderItemID,
 		///<summary>SalesChannelLineNumber. </summary>
@@ -8350,6 +8780,20 @@ namespace ShipWorks.Data.Model
 		ShipAddressType,
 		///<summary>CombineSplitStatus. Inherited from Order</summary>
 		CombineSplitStatus,
+		///<summary>ChannelOrderID. Inherited from Order</summary>
+		ChannelOrderID,
+		///<summary>ShipByDate. Inherited from Order</summary>
+		ShipByDate,
+		///<summary>Custom1. Inherited from Order</summary>
+		Custom1,
+		///<summary>Custom2. Inherited from Order</summary>
+		Custom2,
+		///<summary>Custom3. Inherited from Order</summary>
+		Custom3,
+		///<summary>Custom4. Inherited from Order</summary>
+		Custom4,
+		///<summary>Custom5. Inherited from Order</summary>
+		Custom5,
 		///<summary>OrderID. </summary>
 		OrderID,
 		///<summary>TransactionID. </summary>
@@ -8677,6 +9121,140 @@ namespace ShipWorks.Data.Model
 		/// <summary></summary>
 		AmountOfFields
 	}
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: Product.</summary>
+	public enum ProductFieldIndex
+	{
+		///<summary>ProductID. </summary>
+		ProductID,
+		///<summary>CreatedDate. </summary>
+		CreatedDate,
+		///<summary>IsActive. </summary>
+		IsActive,
+		///<summary>IsBundle. </summary>
+		IsBundle,
+		/// <summary></summary>
+		AmountOfFields
+	}
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: ProductAttribute.</summary>
+	public enum ProductAttributeFieldIndex
+	{
+		///<summary>ProductAttributeID. </summary>
+		ProductAttributeID,
+		///<summary>ProductID. </summary>
+		ProductID,
+		///<summary>AttributeName. </summary>
+		AttributeName,
+		/// <summary></summary>
+		AmountOfFields
+	}
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: ProductBundle.</summary>
+	public enum ProductBundleFieldIndex
+	{
+		///<summary>ProductID. </summary>
+		ProductID,
+		///<summary>ChildProductVariantID. </summary>
+		ChildProductVariantID,
+		///<summary>Quantity. </summary>
+		Quantity,
+		/// <summary></summary>
+		AmountOfFields
+	}
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: ProductListItem.</summary>
+	public enum ProductListItemFieldIndex
+	{
+		///<summary>ProductVariantID. </summary>
+		ProductVariantID,
+		///<summary>SKU. </summary>
+		SKU,
+		///<summary>Name. </summary>
+		Name,
+		///<summary>Length. </summary>
+		Length,
+		///<summary>Width. </summary>
+		Width,
+		///<summary>Height. </summary>
+		Height,
+		///<summary>Weight. </summary>
+		Weight,
+		///<summary>BinLocation. </summary>
+		BinLocation,
+		///<summary>ImageUrl. </summary>
+		ImageUrl,
+		///<summary>IsActive. </summary>
+		IsActive,
+		/// <summary></summary>
+		AmountOfFields
+	}
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: ProductVariant.</summary>
+	public enum ProductVariantFieldIndex
+	{
+		///<summary>ProductVariantID. </summary>
+		ProductVariantID,
+		///<summary>ProductID. </summary>
+		ProductID,
+		///<summary>CreatedDate. </summary>
+		CreatedDate,
+		///<summary>Name. </summary>
+		Name,
+		///<summary>IsActive. </summary>
+		IsActive,
+		///<summary>UPC. </summary>
+		UPC,
+		///<summary>ASIN. </summary>
+		ASIN,
+		///<summary>ISBN. </summary>
+		ISBN,
+		///<summary>Weight. </summary>
+		Weight,
+		///<summary>Length. </summary>
+		Length,
+		///<summary>Width. </summary>
+		Width,
+		///<summary>Height. </summary>
+		Height,
+		///<summary>ImageUrl. </summary>
+		ImageUrl,
+		///<summary>BinLocation. </summary>
+		BinLocation,
+		///<summary>HarmonizedCode. </summary>
+		HarmonizedCode,
+		///<summary>DeclaredValue. </summary>
+		DeclaredValue,
+		///<summary>CountryOfOrigin. </summary>
+		CountryOfOrigin,
+		/// <summary></summary>
+		AmountOfFields
+	}
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: ProductVariantAlias.</summary>
+	public enum ProductVariantAliasFieldIndex
+	{
+		///<summary>ProductVariantAliasID. </summary>
+		ProductVariantAliasID,
+		///<summary>ProductVariantID. </summary>
+		ProductVariantID,
+		///<summary>AliasName. </summary>
+		AliasName,
+		///<summary>Sku. </summary>
+		Sku,
+		///<summary>IsDefault. </summary>
+		IsDefault,
+		/// <summary></summary>
+		AmountOfFields
+	}
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: ProductVariantAttributeValue.</summary>
+	public enum ProductVariantAttributeValueFieldIndex
+	{
+		///<summary>ProductVariantAttributeValueID. </summary>
+		ProductVariantAttributeValueID,
+		///<summary>ProductVariantID. </summary>
+		ProductVariantID,
+		///<summary>AttributeValue. </summary>
+		AttributeValue,
+		///<summary>ProductAttributeID. </summary>
+		ProductAttributeID,
+		/// <summary></summary>
+		AmountOfFields
+	}
 	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: ProStoresOrder.</summary>
 	public enum ProStoresOrderFieldIndex
 	{
@@ -8830,6 +9408,20 @@ namespace ShipWorks.Data.Model
 		ShipAddressType,
 		///<summary>CombineSplitStatus. Inherited from Order</summary>
 		CombineSplitStatus,
+		///<summary>ChannelOrderID. Inherited from Order</summary>
+		ChannelOrderID,
+		///<summary>ShipByDate. Inherited from Order</summary>
+		ShipByDate,
+		///<summary>Custom1. Inherited from Order</summary>
+		Custom1,
+		///<summary>Custom2. Inherited from Order</summary>
+		Custom2,
+		///<summary>Custom3. Inherited from Order</summary>
+		Custom3,
+		///<summary>Custom4. Inherited from Order</summary>
+		Custom4,
+		///<summary>Custom5. Inherited from Order</summary>
+		Custom5,
 		///<summary>OrderID. </summary>
 		OrderID,
 		///<summary>ConfirmationNumber. </summary>
@@ -9158,6 +9750,20 @@ namespace ShipWorks.Data.Model
 		ShipAddressType,
 		///<summary>CombineSplitStatus. Inherited from Order</summary>
 		CombineSplitStatus,
+		///<summary>ChannelOrderID. Inherited from Order</summary>
+		ChannelOrderID,
+		///<summary>ShipByDate. Inherited from Order</summary>
+		ShipByDate,
+		///<summary>Custom1. Inherited from Order</summary>
+		Custom1,
+		///<summary>Custom2. Inherited from Order</summary>
+		Custom2,
+		///<summary>Custom3. Inherited from Order</summary>
+		Custom3,
+		///<summary>Custom4. Inherited from Order</summary>
+		Custom4,
+		///<summary>Custom5. Inherited from Order</summary>
+		Custom5,
 		///<summary>OrderID. </summary>
 		OrderID,
 		///<summary>PoNumber. </summary>
@@ -9222,6 +9828,20 @@ namespace ShipWorks.Data.Model
 		Width,
 		///<summary>Height. Inherited from OrderItem</summary>
 		Height,
+		///<summary>Brand. Inherited from OrderItem</summary>
+		Brand,
+		///<summary>MPN. Inherited from OrderItem</summary>
+		MPN,
+		///<summary>Custom1. Inherited from OrderItem</summary>
+		Custom1,
+		///<summary>Custom2. Inherited from OrderItem</summary>
+		Custom2,
+		///<summary>Custom3. Inherited from OrderItem</summary>
+		Custom3,
+		///<summary>Custom4. Inherited from OrderItem</summary>
+		Custom4,
+		///<summary>Custom5. Inherited from OrderItem</summary>
+		Custom5,
 		///<summary>OrderItemID. </summary>
 		OrderItemID,
 		///<summary>LineNumber. </summary>
@@ -10026,6 +10646,20 @@ namespace ShipWorks.Data.Model
 		ShipAddressType,
 		///<summary>CombineSplitStatus. Inherited from Order</summary>
 		CombineSplitStatus,
+		///<summary>ChannelOrderID. Inherited from Order</summary>
+		ChannelOrderID,
+		///<summary>ShipByDate. Inherited from Order</summary>
+		ShipByDate,
+		///<summary>Custom1. Inherited from Order</summary>
+		Custom1,
+		///<summary>Custom2. Inherited from Order</summary>
+		Custom2,
+		///<summary>Custom3. Inherited from Order</summary>
+		Custom3,
+		///<summary>Custom4. Inherited from Order</summary>
+		Custom4,
+		///<summary>Custom5. Inherited from Order</summary>
+		Custom5,
 		///<summary>OrderID. </summary>
 		OrderID,
 		///<summary>ShopifyOrderID. </summary>
@@ -10086,6 +10720,20 @@ namespace ShipWorks.Data.Model
 		Width,
 		///<summary>Height. Inherited from OrderItem</summary>
 		Height,
+		///<summary>Brand. Inherited from OrderItem</summary>
+		Brand,
+		///<summary>MPN. Inherited from OrderItem</summary>
+		MPN,
+		///<summary>Custom1. Inherited from OrderItem</summary>
+		Custom1,
+		///<summary>Custom2. Inherited from OrderItem</summary>
+		Custom2,
+		///<summary>Custom3. Inherited from OrderItem</summary>
+		Custom3,
+		///<summary>Custom4. Inherited from OrderItem</summary>
+		Custom4,
+		///<summary>Custom5. Inherited from OrderItem</summary>
+		Custom5,
 		///<summary>OrderItemID. </summary>
 		OrderItemID,
 		///<summary>ShopifyOrderItemID. </summary>
@@ -10764,6 +11412,20 @@ namespace ShipWorks.Data.Model
 		ShipAddressType,
 		///<summary>CombineSplitStatus. Inherited from Order</summary>
 		CombineSplitStatus,
+		///<summary>ChannelOrderID. Inherited from Order</summary>
+		ChannelOrderID,
+		///<summary>ShipByDate. Inherited from Order</summary>
+		ShipByDate,
+		///<summary>Custom1. Inherited from Order</summary>
+		Custom1,
+		///<summary>Custom2. Inherited from Order</summary>
+		Custom2,
+		///<summary>Custom3. Inherited from Order</summary>
+		Custom3,
+		///<summary>Custom4. Inherited from Order</summary>
+		Custom4,
+		///<summary>Custom5. Inherited from Order</summary>
+		Custom5,
 		///<summary>OrderID. </summary>
 		OrderID,
 		///<summary>ThreeDCartOrderID. </summary>
@@ -10820,6 +11482,20 @@ namespace ShipWorks.Data.Model
 		Width,
 		///<summary>Height. Inherited from OrderItem</summary>
 		Height,
+		///<summary>Brand. Inherited from OrderItem</summary>
+		Brand,
+		///<summary>MPN. Inherited from OrderItem</summary>
+		MPN,
+		///<summary>Custom1. Inherited from OrderItem</summary>
+		Custom1,
+		///<summary>Custom2. Inherited from OrderItem</summary>
+		Custom2,
+		///<summary>Custom3. Inherited from OrderItem</summary>
+		Custom3,
+		///<summary>Custom4. Inherited from OrderItem</summary>
+		Custom4,
+		///<summary>Custom5. Inherited from OrderItem</summary>
+		Custom5,
 		///<summary>OrderItemID. </summary>
 		OrderItemID,
 		///<summary>ThreeDCartShipmentID. </summary>
@@ -11888,6 +12564,20 @@ namespace ShipWorks.Data.Model
 		ShipAddressType,
 		///<summary>CombineSplitStatus. Inherited from Order</summary>
 		CombineSplitStatus,
+		///<summary>ChannelOrderID. Inherited from Order</summary>
+		ChannelOrderID,
+		///<summary>ShipByDate. Inherited from Order</summary>
+		ShipByDate,
+		///<summary>Custom1. Inherited from Order</summary>
+		Custom1,
+		///<summary>Custom2. Inherited from Order</summary>
+		Custom2,
+		///<summary>Custom3. Inherited from Order</summary>
+		Custom3,
+		///<summary>Custom4. Inherited from Order</summary>
+		Custom4,
+		///<summary>Custom5. Inherited from Order</summary>
+		Custom5,
 		///<summary>OrderID. </summary>
 		OrderID,
 		///<summary>PurchaseOrderID. </summary>
@@ -11952,6 +12642,20 @@ namespace ShipWorks.Data.Model
 		Width,
 		///<summary>Height. Inherited from OrderItem</summary>
 		Height,
+		///<summary>Brand. Inherited from OrderItem</summary>
+		Brand,
+		///<summary>MPN. Inherited from OrderItem</summary>
+		MPN,
+		///<summary>Custom1. Inherited from OrderItem</summary>
+		Custom1,
+		///<summary>Custom2. Inherited from OrderItem</summary>
+		Custom2,
+		///<summary>Custom3. Inherited from OrderItem</summary>
+		Custom3,
+		///<summary>Custom4. Inherited from OrderItem</summary>
+		Custom4,
+		///<summary>Custom5. Inherited from OrderItem</summary>
+		Custom5,
 		///<summary>OrderItemID. </summary>
 		OrderItemID,
 		///<summary>LineNumber. </summary>
@@ -12508,6 +13212,20 @@ namespace ShipWorks.Data.Model
 		ShipAddressType,
 		///<summary>CombineSplitStatus. Inherited from Order</summary>
 		CombineSplitStatus,
+		///<summary>ChannelOrderID. Inherited from Order</summary>
+		ChannelOrderID,
+		///<summary>ShipByDate. Inherited from Order</summary>
+		ShipByDate,
+		///<summary>Custom1. Inherited from Order</summary>
+		Custom1,
+		///<summary>Custom2. Inherited from Order</summary>
+		Custom2,
+		///<summary>Custom3. Inherited from Order</summary>
+		Custom3,
+		///<summary>Custom4. Inherited from Order</summary>
+		Custom4,
+		///<summary>Custom5. Inherited from Order</summary>
+		Custom5,
 		///<summary>OrderID. </summary>
 		OrderID,
 		///<summary>YahooOrderID. </summary>
@@ -12564,6 +13282,20 @@ namespace ShipWorks.Data.Model
 		Width,
 		///<summary>Height. Inherited from OrderItem</summary>
 		Height,
+		///<summary>Brand. Inherited from OrderItem</summary>
+		Brand,
+		///<summary>MPN. Inherited from OrderItem</summary>
+		MPN,
+		///<summary>Custom1. Inherited from OrderItem</summary>
+		Custom1,
+		///<summary>Custom2. Inherited from OrderItem</summary>
+		Custom2,
+		///<summary>Custom3. Inherited from OrderItem</summary>
+		Custom3,
+		///<summary>Custom4. Inherited from OrderItem</summary>
+		Custom4,
+		///<summary>Custom5. Inherited from OrderItem</summary>
+		Custom5,
 		///<summary>OrderItemID. </summary>
 		OrderItemID,
 		///<summary>YahooProductID. </summary>
@@ -13021,6 +13753,20 @@ namespace ShipWorks.Data.Model
 		PrintResultEntity,
 		///<summary>ProcessedShipment</summary>
 		ProcessedShipmentEntity,
+		///<summary>Product</summary>
+		ProductEntity,
+		///<summary>ProductAttribute</summary>
+		ProductAttributeEntity,
+		///<summary>ProductBundle</summary>
+		ProductBundleEntity,
+		///<summary>ProductListItem</summary>
+		ProductListItemEntity,
+		///<summary>ProductVariant</summary>
+		ProductVariantEntity,
+		///<summary>ProductVariantAlias</summary>
+		ProductVariantAliasEntity,
+		///<summary>ProductVariantAttributeValue</summary>
+		ProductVariantAttributeValueEntity,
 		///<summary>ProStoresOrder</summary>
 		ProStoresOrderEntity,
 		///<summary>ProStoresOrderSearch</summary>

@@ -18,8 +18,7 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/ShipWorks.UI;component/Styles/GlobalStyle.xaml" />
                 <ResourceDictionary Source="/ShipWorks.Shipping.UI;component/RatingPanel/FootnoteTemplates/FootnoteTemplates.xaml" />
-                <ResourceDictionary Source="/ShipWorks.OrderLookup;component/Styles/Colors.xaml" />
-                <ResourceDictionary Source="/ShipWorks.OrderLookup;component/Styles/OrderLookupDataGridStyle.xaml" />
+                <ResourceDictionary Source="/ShipWorks.UI;component/Styles/BlueSteel/BlueSteelStyle.xaml" />
             </ResourceDictionary.MergedDictionaries>
 
             <ui:ImageToBitmapSourceConverter x:Key="ImageToBitmapSource" />

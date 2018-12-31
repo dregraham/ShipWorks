@@ -40,7 +40,7 @@ namespace ShipWorks.Shipping.Carriers.Asendia
                 accountRepository.AccountsReadOnly.First().AsendiaAccountID :
                 asendiaProfile.AsendiaAccountID;
             ApplyProfileValue(accountID, asendiaShipment, AsendiaShipmentFields.AsendiaAccountID);
-            
+
             ApplyProfileValue(asendiaProfile.Service, asendiaShipment, AsendiaShipmentFields.Service);
             ApplyProfileValue(asendiaProfile.ShippingProfile.Insurance, asendiaShipment, AsendiaShipmentFields.Insurance);
             ApplyProfileValue(asendiaProfile.NonMachinable, asendiaShipment, AsendiaShipmentFields.NonMachinable);
@@ -54,9 +54,22 @@ namespace ShipWorks.Shipping.Carriers.Asendia
             }
             ApplyProfileValue(packageProfile.DimsProfileID, asendiaShipment, AsendiaShipmentFields.DimsProfileID);
             ApplyProfileValue(packageProfile.DimsWeight, asendiaShipment, AsendiaShipmentFields.DimsWeight);
-            ApplyProfileValue(packageProfile.DimsLength, asendiaShipment, AsendiaShipmentFields.DimsLength);
-            ApplyProfileValue(packageProfile.DimsHeight, asendiaShipment, AsendiaShipmentFields.DimsHeight);
-            ApplyProfileValue(packageProfile.DimsWidth, asendiaShipment, AsendiaShipmentFields.DimsWidth);
+
+            if (packageProfile.DimsLength.GetValueOrDefault() > 0)
+            {
+                ApplyProfileValue(packageProfile.DimsLength, asendiaShipment, AsendiaShipmentFields.DimsLength);
+            }
+
+            if (packageProfile.DimsWidth.GetValueOrDefault() > 0)
+            {
+                ApplyProfileValue(packageProfile.DimsWidth, asendiaShipment, AsendiaShipmentFields.DimsWidth);
+            }
+
+            if (packageProfile.DimsHeight.GetValueOrDefault() > 0)
+            {
+                ApplyProfileValue(packageProfile.DimsHeight, asendiaShipment, AsendiaShipmentFields.DimsHeight);
+            }
+
             ApplyProfileValue(packageProfile.DimsAddWeight, asendiaShipment, AsendiaShipmentFields.DimsAddWeight);
 
             ShipmentType shipmentType = shipmentTypeManager.Get(shipment);

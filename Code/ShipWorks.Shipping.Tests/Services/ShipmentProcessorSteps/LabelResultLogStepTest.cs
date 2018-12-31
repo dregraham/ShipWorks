@@ -54,7 +54,7 @@ namespace ShipWorks.Shipping.Tests.Services.ShipmentProcessorSteps
         {
             testObject.Complete(input.Object);
 
-            mock.Mock<ITangoWebClient>().Verify(x => x.LogShipment(store, shipmentForTango, false));
+            mock.Mock<ITangoLogShipmentProcessor>().Verify(x => x.Add(store, shipmentForTango));
         }
 
         [Fact]
@@ -65,8 +65,8 @@ namespace ShipWorks.Shipping.Tests.Services.ShipmentProcessorSteps
 
             testObject.Complete(input.Object);
 
-            sqlAdapter.Verify(x => x.SaveAndRefetch(shipment));
-            sqlAdapter.Verify(x => x.Commit());
+            sqlAdapter.Verify(x => x.SaveAndRefetch(shipment), Times.Never);
+            sqlAdapter.Verify(x => x.Commit(), Times.Never);
         }
 
         [Theory]
@@ -84,41 +84,12 @@ namespace ShipWorks.Shipping.Tests.Services.ShipmentProcessorSteps
             mock.Mock<IShippingErrorManager>().Verify(x => x.SetShipmentErrorMessage(1234, exception, "processed"));
         }
 
-        [Theory]
-        [InlineData(typeof(ORMConcurrencyException))]
-        [InlineData(typeof(ObjectDeletedException))]
-        [InlineData(typeof(SqlForeignKeyException))]
-        public void Finish_SetsError_WhenSavingThrows(Type exceptionType)
-        {
-            var exception = CreateException(exceptionType);
-
-            var sqlAdapter = mock.CreateMock<ISqlAdapter>(a => a.Setup(x => x.Commit()).Throws(exception));
-            mock.Mock<ISqlAdapterFactory>().Setup(x => x.Create()).Returns(sqlAdapter);
-
-            testObject.Complete(input.Object);
-
-            mock.Mock<IShippingErrorManager>().Verify(x => x.SetShipmentErrorMessage(1234, exception, "processed"));
-        }
-
         [Fact]
         public void Finish_SetsError_WhenInputHasShippingException()
         {
             var exception = new ShippingException();
             input.SetupGet(x => x.Exception).Returns(exception);
             input.SetupGet(x => x.Success).Returns(false);
-
-            testObject.Complete(input.Object);
-
-            mock.Mock<IShippingErrorManager>().Verify(x => x.SetShipmentErrorMessage(1234, exception));
-        }
-
-        [Fact]
-        public void Finish_SetsError_WhenFinishingThrowsShippingException()
-        {
-            var exception = new ShippingException();
-
-            var sqlAdapter = mock.CreateMock<ISqlAdapter>(a => a.Setup(x => x.Commit()).Throws(exception));
-            mock.Mock<ISqlAdapterFactory>().Setup(x => x.Create()).Returns(sqlAdapter);
 
             testObject.Complete(input.Object);
 

@@ -52,7 +52,7 @@
     <PackageReference Include="Autofac.Extras.Moq" Version="4.2.1-sw3" />
     <PackageReference Include="Autofac.Mef" Version="4.0.0" />
     <PackageReference Include="Castle.Core" Version="4.2.1" />
-    <PackageReference Include="CommonServiceLocator" Version="2.0.1" />
+    <PackageReference Include="CommonServiceLocator" Version="2.0.4" />
     <PackageReference Include="Desktop.Analyzers" Version="1.1.0" />
     <PackageReference Include="InterapptiveAnalyzers" Version="1.0.5714.23531" />
     <PackageReference Include="log4net" Version="2.0.7" />
@@ -67,7 +67,7 @@
     <PackageReference Include="SD.LLBLGen.Pro.ORMSupportClasses" Version="5.1.2" />
     <PackageReference Include="SonarAnalyzer.CSharp" Version="6.8.1.4648" />
     <PackageReference Include="SQL.LocalDB.Test" Version="1.1.2" />
-    <PackageReference Include="Syncfusion.XlsIO.Base46" Version="15.1.0.41" />
+    <PackageReference Include="Syncfusion.XlsIO.Base46" Version="16.1.0.26" />
     <PackageReference Include="System.Collections.Immutable" Version="1.4.0" />
     <PackageReference Include="System.ComponentModel.Primitives" Version="4.3.0" />
     <PackageReference Include="System.ComponentModel.TypeConverter" Version="4.3.0" />

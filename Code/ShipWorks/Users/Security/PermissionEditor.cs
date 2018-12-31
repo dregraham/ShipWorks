@@ -72,6 +72,7 @@ namespace ShipWorks.Users.Security
             bindingController.AddBinding(manageActions, PermissionType.ManageActions);
             bindingController.AddBinding(manageFilters, PermissionType.ManageFilters);
             bindingController.AddBinding(manageTemplates, PermissionType.ManageTemplates);
+            bindingController.AddBinding(manageProducts, PermissionType.ManageProducts);
 
             List<StoreEntity> stores = StoreManager.GetAllStores();
 

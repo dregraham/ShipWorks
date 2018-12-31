@@ -25,8 +25,8 @@ namespace ShipWorks.Shipping.Carriers.Ups
         /// Constructor
         /// </summary>
         /// <param name="shipmentTypeManager"></param>
-        public UpsShippingProfileApplicationStrategy(IShipmentTypeManager shipmentTypeManager, 
-            ICarrierAccountRetriever<UpsAccountEntity, IUpsAccountEntity> accountRetriever, 
+        public UpsShippingProfileApplicationStrategy(IShipmentTypeManager shipmentTypeManager,
+            ICarrierAccountRetriever<UpsAccountEntity, IUpsAccountEntity> accountRetriever,
             ISqlAdapterFactory sqlAdapterFactory,
             IInsuranceUtility insuranceUtility)
             : base(shipmentTypeManager)
@@ -35,7 +35,7 @@ namespace ShipWorks.Shipping.Carriers.Ups
             this.sqlAdapterFactory = sqlAdapterFactory;
             this.insuranceUtility = insuranceUtility;
         }
-        
+
         /// <summary>
         /// Apply the profile to the shipment
         /// </summary>
@@ -43,7 +43,7 @@ namespace ShipWorks.Shipping.Carriers.Ups
         {
             bool changedPackageWeights = ApplyProfilesPackages(profile, shipment);
             changedPackageWeights |= RemoveExcessPackages(shipment.Ups, profile.Packages.Count());
-            
+
             base.ApplyProfile(profile, shipment);
             ApplyProfileValue(profile.Ups.ResidentialDetermination, shipment, ShipmentFields.ResidentialDetermination);
 
@@ -66,7 +66,7 @@ namespace ShipWorks.Shipping.Carriers.Ups
         private void ApplyProfile(IUpsProfileEntity upsProfile, UpsShipmentEntity upsShipment)
         {
             ApplyProfileValue(GetAccountID(upsProfile), upsShipment, UpsShipmentFields.UpsAccountID);
-            
+
             ApplyProfileValue(upsProfile.DeliveryConfirmation, upsShipment, UpsShipmentFields.DeliveryConfirmation);
             ApplyProfileValue(upsProfile.ReferenceNumber, upsShipment, UpsShipmentFields.ReferenceNumber);
             ApplyProfileValue(upsProfile.ReferenceNumber2, upsShipment, UpsShipmentFields.ReferenceNumber2);
@@ -213,9 +213,21 @@ namespace ShipWorks.Shipping.Carriers.Ups
         /// </summary>
         private static void ApplyProfilePackageDims(IUpsProfilePackageEntity packageProfile, UpsPackageEntity package)
         {
-            ApplyProfileValue(packageProfile.DimsLength, package, UpsPackageFields.DimsLength);
-            ApplyProfileValue(packageProfile.DimsWidth, package, UpsPackageFields.DimsWidth);
-            ApplyProfileValue(packageProfile.DimsHeight, package, UpsPackageFields.DimsHeight);
+            if (packageProfile.DimsLength.GetValueOrDefault() > 0)
+            {
+                ApplyProfileValue(packageProfile.DimsLength, package, UpsPackageFields.DimsLength);
+            }
+
+            if (packageProfile.DimsWidth.GetValueOrDefault() > 0)
+            {
+                ApplyProfileValue(packageProfile.DimsWidth, package, UpsPackageFields.DimsWidth);
+            }
+
+            if (packageProfile.DimsHeight.GetValueOrDefault() > 0)
+            {
+                ApplyProfileValue(packageProfile.DimsHeight, package, UpsPackageFields.DimsHeight);
+            }
+
             ApplyProfileValue(packageProfile.DimsWeight, package, UpsPackageFields.DimsWeight);
             ApplyProfileValue(packageProfile.DimsAddWeight, package, UpsPackageFields.DimsAddWeight);
         }
@@ -258,7 +270,7 @@ namespace ShipWorks.Shipping.Carriers.Ups
         /// <summary>
         /// Get the AccountID to use for the profile
         /// </summary>
-        private long? GetAccountID(IUpsProfileEntity upsProfile) => 
+        private long? GetAccountID(IUpsProfileEntity upsProfile) =>
             (upsProfile.UpsAccountID == 0 && accountRetriever.AccountsReadOnly.Any()) ?
                 accountRetriever.AccountsReadOnly.First().UpsAccountID :
                 upsProfile.UpsAccountID;

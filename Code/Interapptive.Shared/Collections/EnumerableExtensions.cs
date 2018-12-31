@@ -514,5 +514,11 @@ namespace Interapptive.Shared.Collections
         /// Flatten an enumerable of enumerables
         /// </summary>
         public static IEnumerable<T> Flatten<T>(this IEnumerable<IEnumerable<T>> source) => source.SelectMany(x => x);
+
+        /// <summary>
+        /// Filters the collection to items that are not null
+        /// </summary>
+        public static IEnumerable<T> WhereNotNull<T>(this IEnumerable<T> source) where T : class =>
+            source.Where(x => x != null);
     }
 }

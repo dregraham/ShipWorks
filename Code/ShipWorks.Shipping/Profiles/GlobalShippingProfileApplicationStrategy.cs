@@ -45,17 +45,17 @@ namespace ShipWorks.Shipping.Profiles
                     package.DimsProfileID = packageProfile.DimsProfileID.Value;
                 }
 
-                if (packageProfile.DimsLength.HasValue)
+                if (packageProfile.DimsLength.GetValueOrDefault() > 0)
                 {
                     package.DimsLength = packageProfile.DimsLength.Value;
                 }
 
-                if (packageProfile.DimsWidth.HasValue)
+                if (packageProfile.DimsWidth.GetValueOrDefault() > 0)
                 {
                     package.DimsWidth = packageProfile.DimsWidth.Value;
                 }
 
-                if (packageProfile.DimsHeight.HasValue)
+                if (packageProfile.DimsHeight.GetValueOrDefault() > 0)
                 {
                     package.DimsHeight = packageProfile.DimsHeight.Value;
                 }
