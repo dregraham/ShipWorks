@@ -33,5 +33,11 @@ namespace ShipWorks.Templates
         /// </summary>
         public TemplateEntity FetchDefaultPickListTemplate() =>
             TemplateManager.FetchDefaultPickListTemplate();
+			
+		/// <summary>
+        /// Fetch all of the pick list templates
+        /// </summary>
+        public IEnumerable<TemplateEntity> FetchPickListTemplates() => 
+			TemplateManager.FetchPickListTemplates();
     }
 }

@@ -23,5 +23,10 @@ namespace ShipWorks.Templates
         /// Ensure the given template is configured
         /// </summary>
         bool EnsureTemplateConfigured(IWin32Window owner, TemplateEntity template);
+		
+        /// <summary>
+        /// Fetch all of the pick list templates
+        /// </summary>
+        IEnumerable<TemplateEntity> FetchPickListTemplates();
     }
 }

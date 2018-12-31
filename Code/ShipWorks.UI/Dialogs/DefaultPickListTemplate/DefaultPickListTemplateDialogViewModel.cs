@@ -20,8 +20,6 @@ namespace ShipWorks.UI.Dialogs.DefaultPickListTemplate
     public class DefaultPickListTemplateDialogViewModel : IDefaultPickListTemplateDialogViewModel
     {
         private readonly IConfigurationData configurationData;
-        private const string PickListsFolderName = "Pick Lists";
-        private const string ReportsFolderName = "Reports";
 
         /// <summary>
         /// Constructor
@@ -32,11 +30,7 @@ namespace ShipWorks.UI.Dialogs.DefaultPickListTemplate
 
             SavePickListTemplateCommand = new RelayCommand(SavePickListTemplate, () => SelectedPickListTemplate != null);
 
-            PickListTemplates = templateManager.Tree.AllTemplates.Where(t => t.ParentFolder.Name == PickListsFolderName);
-            if (PickListTemplates.None())
-            {
-                PickListTemplates = templateManager.Tree.AllTemplates.Where(t => t.ParentFolder.Name == ReportsFolderName);
-            }
+            PickListTemplates = templateManager.FetchPickListTemplates();
         }
 
         /// <summary>
