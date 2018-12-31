@@ -37,7 +37,7 @@ namespace ShipWorks.UI.Dialogs.DefaultPickListTemplate
         /// Link to support article regarding changing the default template after it has been selected
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public Uri SupportArticleLink { get; } = new Uri("http://support.shipworks.com/");
+        public Uri SupportArticleLink { get; } = new Uri("http://support.shipworks.com/support/solutions/articles/4000135212-printing-pick-lists/");
 
         /// <summary>
         /// All of the templates in the pick list folder
