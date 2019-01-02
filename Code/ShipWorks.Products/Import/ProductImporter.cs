@@ -246,8 +246,8 @@ namespace ShipWorks.Products.Import
             if (productVariantDto.AliasSkuList.Any())
             {
                 newAliases.AddRange(productVariantDto.AliasSkuList
-                    .Where(s => !s.IsNullOrWhiteSpace())
-                    .Select(s => new ProductVariantAliasEntity() { IsDefault = false, Sku = s, AliasName = s }));
+                    .Where(s => !s.Sku.IsNullOrWhiteSpace())
+                    .Select(s => new ProductVariantAliasEntity() { IsDefault = false, Sku = s.Sku, AliasName = s.Name }));
             }
 
             // Aliases that didn't exist that need to be created.
@@ -257,7 +257,7 @@ namespace ShipWorks.Products.Import
                     {
                         ProductVariant = productVariant,
                         Sku = a.Sku,
-                        AliasName = a.Sku,
+                        AliasName = a.AliasName,
                         IsDefault = a.IsDefault
                     }));
         }
@@ -268,7 +268,7 @@ namespace ShipWorks.Products.Import
         private async Task ImportProductVariantBundles(ProductVariantEntity bundleProductVariant, ProductToImportDto productVariantDto,
             ISqlAdapter sqlAdapter)
         {
-            if (productVariantDto.BundleSkuList.Any(s => productVariantDto.AliasSkuList.Any(a => a == s.Sku)))
+            if (productVariantDto.BundleSkuList.Any(s => productVariantDto.AliasSkuList.Any(a => a.Sku == s.Sku)))
             {
                 throw new ProductImportException($"Bundles cannot reference themselves.  Product SKU: {productVariantDto.Sku}");
             }
@@ -340,9 +340,10 @@ namespace ShipWorks.Products.Import
             ValidateFieldLength(row.CountryOfOrigin, ProductVariantFields.CountryOfOrigin.MaxLength, "Country of Origin");
             ValidateFieldLength(row.HarmonizedCode, ProductVariantFields.HarmonizedCode.MaxLength, "Harmonized Code");
 
-            foreach (string aliasSku in row.AliasSkuList)
+            foreach ((string Name, string Sku) aliasSku in row?.AliasSkuList)
             {
-                ValidateFieldLength(aliasSku, ProductVariantAliasFields.Sku.MaxLength, "Alias SKU");
+                ValidateFieldLength(aliasSku.Sku, ProductVariantAliasFields.Sku.MaxLength, "Alias SKU");
+                ValidateFieldLength(aliasSku.Name, ProductVariantAliasFields.AliasName.MaxLength, "Alias Name");
             }
 
             foreach (var (Sku, _) in row.BundleSkuList)

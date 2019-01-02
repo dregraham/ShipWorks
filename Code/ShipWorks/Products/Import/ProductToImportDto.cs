@@ -72,7 +72,7 @@ namespace ShipWorks.Products.Import
 
         public bool IsActive => ActiveValues.Contains(Active?.ToUpperInvariant());
 
-        public IEnumerable<string> AliasSkuList { get; set; }
+        public IEnumerable<(string Name, string Sku)> AliasSkuList { get; set; }
 
         public IEnumerable<(string Sku, int Quantity)> BundleSkuList { get; set; }
 
@@ -91,7 +91,7 @@ namespace ShipWorks.Products.Import
                         return (T) converter.ConvertFromString(text);
                     }
                 }
-                catch 
+                catch
                 {
                 }
 
