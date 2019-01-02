@@ -121,7 +121,7 @@ namespace ShipWorks.Templates.Distribution
                 InstallTemplate(@"Packing Slips\Standard with SKU");
             });
 
-            ifVersionIsLessThan("5.32.0.0000", () =>
+            ifVersionIsLessThan("6.1.0.0000", () =>
             {
                 InstallTemplate(@"Reports\Pick Lists\Pick List by Location");
                 InstallTemplate(@"Reports\Pick Lists\Pick List by Name");
