@@ -65,20 +65,16 @@ namespace ShipWorks.ApplicationCore.Licensing
                 string action = postRequest.Variables.FirstOrDefault(v => v.Name.Equals("action", StringComparison.InvariantCultureIgnoreCase))?.Value ?? logEntryName;
                 telemetryEvent?.AddProperty("Tango.Request.Action", action);
 
-                securityValidator.ValidateSecureConnection(telemetricResult, postRequest.Uri);
-
-                telemetricResult.RunTimedEvent("ActualRequest", () => postResponse = postRequest.GetResponse());
-
-                // Ensure the site has a valid interapptive secure certificate
-                securityValidator.ValidateCertificate(telemetricResult, postResponse.HttpWebRequest);
-
-                string result = postResponse.ReadResult().Trim();
-
-                telemetricResult.RunTimedEvent("LogResponse", () => logEntry.LogResponse(result));
-
-                telemetricResult.WriteTo(telemetryEvent);
-
-                return result;
+                return securityValidator
+                    .ValidateSecureConnection(telemetricResult, postRequest.Uri)
+                    .Map(() => telemetricResult.RunTimedEvent("ActualRequest", postRequest.GetResponse))
+                    .Bind(response => securityValidator.ValidateCertificate(telemetricResult, response))
+                    .Map(response => response.ReadResult().Trim())
+                    .Do(response =>
+                    {
+                        telemetricResult.RunTimedEvent("LogResponse", () => logEntry.LogResponse(response));
+                        telemetricResult.WriteTo(telemetryEvent);
+                    });
             }
             catch (Exception ex)
             {
