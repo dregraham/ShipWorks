@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System;
+using System.Text;
 
 namespace ShipWorks.Templates.Printing
 {
@@ -62,6 +63,52 @@ namespace ShipWorks.Templates.Printing
 
             builder.AppendLine("</div>");
             return builder.ToString();
+        }
+
+        /// <summary>
+        /// Override equals
+        /// </summary>
+        public override bool Equals(object obj)
+        {
+            if (obj is PrintableBarcode)
+            {
+                return this.Equals((PrintableBarcode) obj);
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// Override equals
+        /// </summary>
+        public bool Equals(PrintableBarcode barcode)
+        {
+            return (Name == barcode.Name) &&
+                (Barcode == barcode.Barcode) &&
+                (KeyboardHotkey == barcode.KeyboardHotkey);
+        }
+
+        /// <summary>
+        /// Override equals
+        /// </summary>
+        public static bool operator ==(PrintableBarcode lhs, PrintableBarcode rhs)
+        {
+            return lhs.Equals(rhs);
+        }
+
+        /// <summary>
+        /// Override not equals
+        /// </summary>
+        public static bool operator !=(PrintableBarcode lhs, PrintableBarcode rhs)
+        {
+            return !lhs.Equals(rhs);
+        }
+
+        /// <summary>
+        /// Override GetHashCode for equals and not equals
+        /// </summary>
+        public override int GetHashCode()
+        {
+            return (Name, Barcode, KeyboardHotkey).GetHashCode();
         }
     }
 }
