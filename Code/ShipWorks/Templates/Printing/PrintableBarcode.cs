@@ -80,35 +80,27 @@ namespace ShipWorks.Templates.Printing
         /// <summary>
         /// Override equals
         /// </summary>
-        public bool Equals(PrintableBarcode barcode)
-        {
-            return (Name == barcode.Name) &&
-                (Barcode == barcode.Barcode) &&
-                (KeyboardHotkey == barcode.KeyboardHotkey);
-        }
+        public bool Equals(PrintableBarcode barcode) =>
+            (Name == barcode.Name) &&
+            (Barcode == barcode.Barcode) &&
+            (KeyboardHotkey == barcode.KeyboardHotkey);
 
         /// <summary>
         /// Override equals
         /// </summary>
-        public static bool operator ==(PrintableBarcode lhs, PrintableBarcode rhs)
-        {
-            return lhs.Equals(rhs);
-        }
+        public static bool operator ==(PrintableBarcode lhs, PrintableBarcode rhs) =>
+            lhs.Equals(rhs);
 
         /// <summary>
         /// Override not equals
         /// </summary>
-        public static bool operator !=(PrintableBarcode lhs, PrintableBarcode rhs)
-        {
-            return !lhs.Equals(rhs);
-        }
+        public static bool operator !=(PrintableBarcode lhs, PrintableBarcode rhs) =>
+            !lhs.Equals(rhs);
 
         /// <summary>
         /// Override GetHashCode for equals and not equals
         /// </summary>
-        public override int GetHashCode()
-        {
-            return (Name, Barcode, KeyboardHotkey).GetHashCode();
-        }
+        public override int GetHashCode() =>
+            (Name, Barcode, KeyboardHotkey).GetHashCode();
     }
 }
