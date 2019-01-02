@@ -540,6 +540,7 @@
     <Compile Include="Shipping\Insurance\InsureShip\InsureShipClaimValidatorTest.cs" />
     <Compile Include="Shipping\Insurance\InsureShip\Net\Claim\InsureShipClaimStatusRequestTest.cs" />
     <Compile Include="Shipping\Insurance\InsureShip\Net\Claim\InsureShipSubmitClaimRequestTest.cs" />
+    <Compile Include="Shipping\Insurance\InsureShip\Net\InsureShipCredentialRetrieverTest.cs" />
     <Compile Include="Shipping\Insurance\InsureShip\Net\InsureShipWebClientTest.cs" />
     <Compile Include="Shipping\Insurance\InsureShip\Net\Insure\InsureShipInsureShipmentRequestTest.cs" />
     <Compile Include="Shipping\Insurance\InsureShip\InsureShipSettingsTest.cs" />

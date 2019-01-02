@@ -21,7 +21,7 @@ namespace ShipWorks.ApplicationCore.Licensing
     [Obfuscation(Exclude = true, ApplyToMembers = true, StripAfterObfuscation = false)]
     public class FakeTangoWebClient : TangoWebClientWrapper, ITangoWebClient
     {
-        private const string CustomizedTangoFilesKeyName = "TangoWebClientDataPath";
+        public const string CustomizedTangoFilesKeyName = "TangoWebClientDataPath";
         private ILog log = LogManager.GetLogger(typeof(FakeTangoWebClient));
 
         /// <summary>

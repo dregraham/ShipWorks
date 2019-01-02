@@ -9,6 +9,7 @@ using Interapptive.Shared.Net;
 using Interapptive.Shared.Utility;
 using log4net;
 using Newtonsoft.Json;
+using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Carriers;
@@ -112,6 +113,7 @@ namespace ShipWorks.Shipping.Insurance.InsureShip.Net
 
             return requestSubmitter
                 .AddHeader("Accept", "application/json")
+                .AddHeader("X-ShipWorks-Version", TangoWebClient.Version)
                 .AddVariable("client_id", credentials.ClientID)
                 .AddVariable("api_key", credentials.ApiKey);
         }
