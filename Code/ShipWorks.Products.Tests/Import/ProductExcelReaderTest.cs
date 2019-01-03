@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using Autofac.Extras.Moq;
 using ShipWorks.Products.Import;
 using ShipWorks.Tests.Shared;
@@ -102,6 +103,23 @@ namespace ShipWorks.Products.Tests.Import
             var results = testObject.LoadImportFile(filename);
 
             Assert.True(results.Success);
+        }
+
+        [Fact]
+        public void LoadImportFile_SetsProductToImportDtoAliasSkuAndName()
+        {
+            File.WriteAllLines(filename, new[]
+            {
+                "SKU ,Alias SKUs,Bundled SKUs,Name, UPC , ASIN ,ISBN , Weight,Length,Width,Height,Image URL,Warehouse-Bin Location,Declared Value,Country of Origin,Harmonized Code,Active",
+                ",SKU : Name | SKU : Name ,SKU: Qty | SKU: Qty ,,,,,lbs,inches,inches,inches,,,,,,",
+                "2,AliasSku:AliasName,1,Pink,111,222,333,xxx,xxxx,xxx,xxx,https://www.com/1,bin 2,xxxxx,US,420212,active"
+            });
+
+            var results = testObject.LoadImportFile(filename);
+
+            Assert.True(results.Success);
+            Assert.Equal("AliasName", results.Value.BundleRows.First().AliasSkuList.First().Name);
+            Assert.Equal("AliasSku", results.Value.BundleRows.First().AliasSkuList.First().Sku);
         }
 
         public void Dispose()

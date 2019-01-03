@@ -1,4 +1,4 @@
-﻿select  SKU.Sku as [SKU], 
+﻿select  SKU.Sku as [SKU],
 			rtrim(ltrim(substring(aliases.AliasSkus, 1, len(aliases.AliasSkus) - 1))) as [Alias SKUs],
 			rtrim(ltrim(substring(Bundles.[BundleSkus], 1, len(Bundles.[BundleSkus]) - 1))) as  [Bundled SKUs],
 			pv.[Name] as [Name],
@@ -16,10 +16,10 @@
 			pv.[HarmonizedCode] AS [Harmonized Code],
 			pv.[IsActive] AS [Active]
 	from Product p, ProductVariant pv
-	cross apply 
+	cross apply
 	(
 		select ISNULL(
-			(select REPLACE(REPLACE(a.Sku, '|', '\|'), ':', '\:') + '|' AS [text()]
+			(select REPLACE(REPLACE(a.Sku, '|', '\|'), ':', '\:') + ':' + REPLACE(REPLACE(a.AliasName, '|', '\|'), ':', '\:') + '|' AS [text()]
 			from ProductVariantAlias a
 			where a.ProductVariantID = pv.ProductVariantID
 			  and a.IsDefault = 0
@@ -33,7 +33,7 @@
 			where a.ProductVariantID = pv.ProductVariantID
 			  and a.IsDefault = 1
 	) as [SKU]
-	cross apply 
+	cross apply
 	(
 		select ISNULL(
 			(
