@@ -337,12 +337,53 @@ namespace ShipWorks.Products.Tests.Integration.Import
             }
         }
 
+        [Fact]
+        public async Task LoadImportFile_ReturnsSuccess_WhenSpacesAroundAliasSeparators()
+        {
+            List<string> badAliasTexts = new List<string>()
+            {
+                "1 : 3|9 : 4 ",
+                "2 : 3 |10 : 4 ",
+                "3 : 3| 11 : 4 ",
+                "4: 3 | 12 : 4 ",
+                "5 :3 | 13 : 4 ",
+                "6 : 3 | 14: 4 ",
+                "7 : 3 | 15 :4 ",
+                "8:3 | 16:4 "
+            };
+
+            foreach (string badAliasText in badAliasTexts)
+            {
+                List<ProductToImportDto> skuProducts = new List<ProductToImportDto>() { GetFullProduct("99", badAliasText) };
+                List<ProductToImportDto> bundleProducts = new List<ProductToImportDto>();
+
+                var result = await RunTest(skuProducts, bundleProducts, false);
+
+                Assert.True(result.Success);
+            }
+        }
+
+        [Theory]
+        [InlineData("1 :", @"1 \:: 3 |\| 2\:: 4 ")]
+        [InlineData("1 :", @"1 \:: 3 |\| 2 \::4 ")]
+        [InlineData("1:", @"1\::3 |\| 2\::4 ")]
+        [InlineData("1 \\ :", @"1 \\ \::3 |\| 2\::4 ")]
+        public async Task LoadImportFile_ReturnsSuccess_WhenAliasDelimiterIsEscaped(string sku1, string aliasText)
+        {
+            List<ProductToImportDto> skuProducts = new List<ProductToImportDto>() { GetFullProduct(sku1, aliasText)};
+            List<ProductToImportDto> bundleProducts = new List<ProductToImportDto>();
+
+            var result = await RunTest(skuProducts, bundleProducts, false);
+
+            Assert.Equal(1, result.Value.SuccessCount);
+        }
+
         [Theory]
         [InlineData("1 :", "| 2:", @"1 \:: 3 |\| 2\:: 4 ")]
         [InlineData("1 :", "| 2 :", @"1 \:: 3 |\| 2 \::4 ")]
         [InlineData("1:", "| 2:", @"1\::3 |\| 2\::4 ")]
         [InlineData("1 \\ :", "| 2:", @"1 \\ \::3 |\| 2\::4 ")]
-        public async Task LoadImportFile_ReturnsSuccess_WhenDelimiterIsEscaped(string sku1, string sku2, string bundleText)
+        public async Task LoadImportFile_ReturnsSuccess_WhenBundleDelimiterIsEscaped(string sku1, string sku2, string bundleText)
         {
             List<ProductToImportDto> skuProducts = new List<ProductToImportDto>() { GetFullProduct(sku1, "1-a:A | 1-b:b"), GetFullProduct(sku2, "2-a:a") };
             List<ProductToImportDto> bundleProducts = new List<ProductToImportDto>() { GetFullProduct("3", "3-a:A | 3-b:b | 3-c:c", bundleText) };
