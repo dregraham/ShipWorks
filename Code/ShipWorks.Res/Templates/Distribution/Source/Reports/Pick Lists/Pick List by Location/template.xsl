@@ -6,7 +6,7 @@
     <xsl:output method="html" encoding="utf-8" />
     <!-- This can be changed to false to turn off thumbnails -->
     <xsl:variable name="showThumbnails" select="false()" />
-    
+
     <xsl:key name="items-specific" match="Item" use="SKU" />
     <xsl:variable name="keyTable" select="'items-specific'" />
 
@@ -31,7 +31,7 @@
         </style>
     </head>
     <body style="{$pageFont}">
-        <h3><xsl:value-of select="//Template/Name" /> - <xsl:value-of select="count(Customer/Order)" /> Orders</h3>
+        <h3><xsl:value-of select="//Template/Name" /></h3>
 
         <table style="width:{$pageWidth}; margin: 0px 0px -6px 0px; border-collapse: collapse;" cellspacing="0">
             <tr>
@@ -77,7 +77,7 @@
 
         <xsl:variable name="groupQuantity" select="sum(key($keyTable,SKU)/Quantity)" />
         <xsl:variable name="groupTotal" select="sum(key($keyTable,SKU)/Total)" />
-        
+
         <!-- We shouldn't have to conditionally apply the topborder... but IE is broken. -->
         <xsl:variable name="orderDetailContentStyle">
             padding: 4px 8px 4px 8px;
@@ -108,11 +108,13 @@
                         <xsl:value-of select="SKU" />
                     </xsl:otherwise>
                 </xsl:choose>
-                
+
                 <br />
-                
+
                 <xsl:if test="Code != '' and SKU != Code">
-                    Code: <xsl:value-of select="Code" />
+                    <div style="padding-left:10px">
+                        Code: <xsl:value-of select="Code" />
+					</div>
 				</xsl:if>
             </td>
             <td style="{$orderDetailContentStyle};">
@@ -123,26 +125,26 @@
                         <xsl:otherwise><xsl:value-of select="Name" />
                     </xsl:otherwise>
                 </xsl:choose>
-                
+
                 <xsl:for-each select="Option">
                     <table style="width: 75%;" cellspacing="0">
                         <tr>
-                            <td nowrap="nowrap"><xsl:value-of select="Name" />: </td>
+                            <td nowrap="nowrap" style="padding-left:10px"><xsl:value-of select="Name" />: </td>
                             <td style="width: 100%;"><xsl:value-of select="Description" /></td>
                         </tr>
                     </table>
                 </xsl:for-each>
-                
+
                 <xsl:for-each select="Product/Attribute">
                     <table style="width: 75%;" cellspacing="0">
                         <tr>
-                            <td nowrap="nowrap"><xsl:value-of select="Name" />: </td>
+                            <td nowrap="nowrap" style="padding-left:10px"><xsl:value-of select="Name" />: </td>
                             <td style="width: 100%;"><xsl:value-of select="Value" /></td>
                         </tr>
                     </table>
                 </xsl:for-each>
             </td>
-            <td style="{$orderDetailContentStyle};" align="right">
+            <td style="{$orderDetailContentStyle};">
                 <xsl:choose>
                     <xsl:when test="Product/Location != ''">
                         <xsl:value-of select="Product/Location" />
