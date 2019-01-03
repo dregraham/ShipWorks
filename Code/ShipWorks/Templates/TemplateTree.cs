@@ -271,7 +271,7 @@ namespace ShipWorks.Templates
             List<TemplateEntity> templates = EntityUtility.CloneEntityCollection(sourceTemplates, false);
 
             snippetsImportTemplate = null;
-            snippetsImportList = null; ;
+            snippetsImportList = null;
 
             // Go through each folder
             foreach (TemplateFolderEntity folder in folders)

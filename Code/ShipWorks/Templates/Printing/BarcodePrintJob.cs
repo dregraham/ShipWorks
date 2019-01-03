@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 using Interapptive.Shared.Metrics;
+using ShipWorks.Common.Threading;
 using ShipWorks.Templates.Processing;
 
 namespace ShipWorks.Templates.Printing
@@ -17,9 +18,14 @@ namespace ShipWorks.Templates.Printing
         private Form owner;
         private readonly IPrintJob printJob;
 
+        public ProgressProvider ProgressProvider => throw new NotImplementedException();
+
         public event PrintActionCompletedEventHandler PreviewCompleted;
         public event PrintActionCompletedEventHandler PrintCompleted;
 
+        #pragma warning disable 67
+        public event PrintPreviewShownEventHandler PreviewShown;
+        #pragma warning restore 67
 
         /// <summary>
         /// Constructor
@@ -56,15 +62,15 @@ namespace ShipWorks.Templates.Printing
             }
 
             printJob.PreviewCompleted -= PreviewCompleted;
-            
+
             if (!e.Cancelled)
             {
                 PrintAsync();
             }
         }
-        
+
         /// <summary>
-        /// Create a list of template results to display 
+        /// Create a list of template results to display
         /// </summary>
         private IList<TemplateResult> CreateTemplateResults() =>
             barcodePages.Where(p => p.Barcodes.Any()).Select(p => p.GetTemplateResult()).ToList();
@@ -110,5 +116,17 @@ namespace ShipWorks.Templates.Printing
                 }
             }
         }
+
+        /// <summary>
+        /// Preview the job asynchronously.  The userState is passed when the PreviewCompleted callback is invoked.
+        /// </summary>
+        public void PreviewAsync(Form parent, object userState) =>
+            printJob.PreviewAsync(parent, userState);
+
+        /// <summary>
+        /// Print the job asynchronously.  The userState is passed when the PrintCompleted callback is invoked.
+        /// </summary>
+        public void PrintAsync(object userState) =>
+            printJob.PrintAsync(userState);
     }
 }
