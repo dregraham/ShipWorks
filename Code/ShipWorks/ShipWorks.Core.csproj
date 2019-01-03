@@ -2341,7 +2341,6 @@
     <Compile Include="Shipping\Insurance\InsureShip\Net\InsureShipShipmentIdentifier.cs" />
     <Compile Include="Shipping\Insurance\InsureShip\IInsureShipSettings.cs" />
     <Compile Include="Shipping\Insurance\InsureShip\Net\Insure\InsureShipInsureShipmentRequest.cs" />
-    <Compile Include="Shipping\Insurance\InsureShip\Net\InsureShipResponseException.cs" />
     <Compile Include="Shipping\Insurance\InsureShip\Net\InsureShipResponseCode.cs" />
     <Compile Include="Shipping\Insurance\InsureShip\InsureShipException.cs" />
     <Compile Include="Shipping\Insurance\InsureShip\InsureShipSettings.cs" />
