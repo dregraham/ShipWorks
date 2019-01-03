@@ -438,7 +438,7 @@ namespace ShipWorks.Products
             dt.Columns[dt.Columns["Name"].Ordinal].AllowDBNull = true;
             dt.Columns[dt.Columns["Active"].Ordinal].AllowDBNull = true;
             secondHeaderRow[0] = "";
-            secondHeaderRow[1] = "SKU | SKU";
+            secondHeaderRow[1] = "SKU : Name | SKU : Name";
             secondHeaderRow[2] = "SKU : Qty | SKU : Qty";
             secondHeaderRow[7] = "lbs";
             secondHeaderRow[8] = "inches";
