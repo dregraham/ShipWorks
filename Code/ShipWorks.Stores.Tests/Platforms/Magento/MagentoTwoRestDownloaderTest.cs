@@ -202,6 +202,30 @@ namespace ShipWorks.Stores.Tests.Platforms.Magento
             await LoadOrder("BadMagentoOrder");
 
             Assert.Equal(1, orderEntity.OrderItems.Count);
+        }        
+        
+        [Fact]
+        public async Task LoadOrder_SetsOnlineCustomerID()
+        {
+            await LoadOrder("MagentoOrder");
+
+            Assert.Equal(200, orderEntity.OnlineCustomerID);
+        }
+        
+        [Fact]
+        public async Task LoadOrder_SetsOnlineCustomerIDToNull_WhenCustomerIDIsNullInResponse()
+        {
+            await LoadOrder("MagentoOrderWithNullCustomerID");
+
+            Assert.Equal(null, orderEntity.OnlineCustomerID);
+        }
+        
+        [Fact]
+        public async Task LoadOrder_SetsOnlineCustomerIDToNull_WhenCustomerIDIsMissingFromResponse()
+        {
+            await LoadOrder("MagentoOrderWithConfigurableProduct");
+
+            Assert.Equal(null, orderEntity.OnlineCustomerID);
         }
 
         public void Dispose()
