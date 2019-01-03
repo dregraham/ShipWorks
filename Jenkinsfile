@@ -7,7 +7,7 @@ pipeline {
 	agent {
 		node {
 			label 'windows'
-			customWorkspace "./SB_${BUILD_FOLDER}"
+			customWorkspace "d:/jenkins-builds/SB_${BUILD_FOLDER}"
 		}
 	}
 	stages {
