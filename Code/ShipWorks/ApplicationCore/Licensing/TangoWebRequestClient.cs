@@ -65,8 +65,7 @@ namespace ShipWorks.ApplicationCore.Licensing
                 string action = postRequest.Variables.FirstOrDefault(v => v.Name.Equals("action", StringComparison.InvariantCultureIgnoreCase))?.Value ?? logEntryName;
                 telemetryEvent?.AddProperty("Tango.Request.Action", action);
 
-                return securityValidator
-                    .ValidateSecureConnection(telemetricResult, postRequest.Uri)
+                return ValidateSecureConnection(telemetricResult, postRequest)
                     .Map(() => telemetricResult.RunTimedEvent("ActualRequest", postRequest.GetResponse))
                     .Bind(response => securityValidator.ValidateCertificate(telemetricResult, response))
                     .Map(response => response.ReadResult().Trim())
@@ -91,6 +90,14 @@ namespace ShipWorks.ApplicationCore.Licensing
                 telemetryEvent?.Dispose();
             }
         }
+
+        /// <summary>
+        /// Validate a secure connection, forcing it if necessary
+        /// </summary>
+        private Result ValidateSecureConnection(TelemetricResult<Unit> telemetricResult, IHttpVariableRequestSubmitter postRequest) =>
+            postRequest.ForcePreCallCertificateValidation ?
+                securityValidator.ForceValidateSecureConnection(telemetricResult, postRequest.Uri) :
+                securityValidator.ValidateSecureConnection(telemetricResult, postRequest.Uri);
 
         /// <summary>
         /// configure the post request

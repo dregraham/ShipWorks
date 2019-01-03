@@ -29,20 +29,30 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// <summary>
         /// Validate a secure connection
         /// </summary>
+        /// <remarks>
+        /// First validate that we are connecting to interapptive, and not a fake redirect to steal passwords and such.  Doing this pre-call
+        /// also prevents stealing the headers user\pass with fiddler
+        /// </remarks>
         public Result ValidateSecureConnection(TelemetricResult<Unit> telemetricResult, Uri uri)
         {
-            // First validate that we are connecting to interapptive, and not a fake redirect to steal passwords and such.  Doing this pre-call
-            // also prevents stealing the headers user\pass with fiddler
             if (nextSecureConnectionValidation < dateTimeProvider.UtcNow)
             {
-                return telemetricResult.RunTimedEvent("ValidateSecureConnection", () => ValidateSecureConnection(uri))
-                    .Do(() => nextSecureConnectionValidation = dateTimeProvider.UtcNow.AddMinutes(throttlePeriod))
-                    .Do(() => telemetricResult.AddProperty("ValidateSecureConnection.IsValidCertificate", "Yes"))
-                    .OnFailure(_ => telemetricResult.AddProperty("ValidateSecureConnection.IsValidCertificate", "No"));
+                return ForceValidateSecureConnection(telemetricResult, uri)
+                    .Do(() => nextSecureConnectionValidation = dateTimeProvider.UtcNow.AddMinutes(throttlePeriod));
             }
 
             return Result.FromSuccess();
         }
+
+        /// <summary>
+        /// Validate a secure connection
+        /// </summary>
+        /// <remarks>
+        /// First validate that we are connecting to interapptive, and not a fake redirect to steal passwords and such.  Doing this pre-call
+        /// also prevents stealing the headers user\pass with fiddler
+        /// </remarks>
+        public Result ForceValidateSecureConnection(TelemetricResult<Unit> telemetricResult, Uri uri) =>
+            telemetricResult.RunTimedEvent("ValidateSecureConnection", () => ValidateSecureConnection(uri));
 
         /// <summary>
         /// Validate the certificate of a response
@@ -57,20 +67,21 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// <summary>
         /// Ensure the connection to the given URI is a valid interapptive secure connection
         /// </summary>
-        public static Result ValidateSecureConnection(Uri uri)
+        public Result ValidateSecureConnection(Uri uri)
         {
-#if !DEBUG
+            //#if !DEBUG
             HttpWebRequest request = (HttpWebRequest) WebRequest.Create(uri);
             request.KeepAlive = false;
             request.UserAgent = "shipworks";
 
             using (WebResponse response = request.GetResponse())
             {
-                return ValidateInterapptiveCertificate(request);
+                return ValidateInterapptiveCertificate(request)
+                    .OnFailure(ex => nextSecureConnectionValidation = DateTime.MinValue);
             }
-#else
-            return Result.FromSuccess();
-#endif
+            //#else
+            //            return Result.FromSuccess();
+            //#endif
         }
 
         /// <summary>
@@ -82,7 +93,7 @@ namespace ShipWorks.ApplicationCore.Licensing
             X509Certificate certificate;
 #pragma warning restore 168
 
-#if !DEBUG
+            //#if !DEBUG
             if (httpWebRequest.ServicePoint == null)
             {
                 return new TangoException("The SSL certificate on the server is invalid.");
@@ -100,7 +111,7 @@ namespace ShipWorks.ApplicationCore.Licensing
             {
                 return new TangoException("The SSL certificate on the server is invalid.");
             }
-#endif
+            //#endif
             return Result.FromSuccess();
         }
     }
