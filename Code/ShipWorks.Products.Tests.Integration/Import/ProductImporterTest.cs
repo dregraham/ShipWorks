@@ -188,7 +188,7 @@ namespace ShipWorks.Products.Tests.Integration.Import
         [Fact]
         public async Task LoadImportFile_ReturnsTrueAndDoesNotCreateDuplicateAlias_WhenAliasReferencesItself()
         {
-            List<ProductToImportDto> skuProducts = new List<ProductToImportDto>() { GetFullProduct("1", "1 | 1") };
+            List<ProductToImportDto> skuProducts = new List<ProductToImportDto>() { GetFullProduct("1", "1:1 | 1:1") };
             List<ProductToImportDto> bundleProducts = Enumerable.Empty<ProductToImportDto>().ToList();
 
             var result = await RunTest(skuProducts, bundleProducts, true);
@@ -201,7 +201,7 @@ namespace ShipWorks.Products.Tests.Integration.Import
         [Fact]
         public async Task LoadImportFile_ConvertsProductToBundle()
         {
-            List<ProductToImportDto> skuProducts = new List<ProductToImportDto>() { GetFullProduct("1", "1-a | 1-b"), GetFullProduct("2", "2-a") };
+            List<ProductToImportDto> skuProducts = new List<ProductToImportDto>() { GetFullProduct("1", "1-a:1 | 1-b:1"), GetFullProduct("2", "2-a:2") };
             List<ProductToImportDto> bundleProducts = Enumerable.Empty<ProductToImportDto>().ToList();
 
             var result = await RunTest(skuProducts, bundleProducts, true);
@@ -209,7 +209,7 @@ namespace ShipWorks.Products.Tests.Integration.Import
             Assert.Equal(2, result.Value.SuccessCount);
             Assert.Equal(0, result.Value.FailedCount);
 
-            skuProducts = new List<ProductToImportDto>() { GetFullProduct("3", "3-a | 3-b"), GetFullProduct("1", "1-a | 1-b", "2 : 3 | 3 : 4") };
+            skuProducts = new List<ProductToImportDto>() { GetFullProduct("3", "3-a:3 | 3-b:3"), GetFullProduct("1", "1-a:1 | 1-b:2", "2 : 3 | 3 : 4") };
 
             result = await RunTest(skuProducts, bundleProducts, true);
 
@@ -221,14 +221,14 @@ namespace ShipWorks.Products.Tests.Integration.Import
         [Fact]
         public async Task LoadImportFile_ConvertsBundleToProduct()
         {
-            List<ProductToImportDto> skuProducts = new List<ProductToImportDto>() { GetFullProduct("1", "1-a | 1-b"), GetFullProduct("2", "2-a | 2-b") };
-            List<ProductToImportDto> bundleProducts = new List<ProductToImportDto>() { GetFullProduct("3", "3-a | 3-b", "1 : 4 | 2 : 5") };
+            List<ProductToImportDto> skuProducts = new List<ProductToImportDto>() { GetFullProduct("1", "1-a:1 | 1-b:2"), GetFullProduct("2", "2-a:1 | 2-b:2") };
+            List<ProductToImportDto> bundleProducts = new List<ProductToImportDto>() { GetFullProduct("3", "3-a:3 | 3-b:4", "1 : 4 | 2 : 5") };
 
             var result = await RunTest(skuProducts, bundleProducts, true);
             Assert.True(result.Success);
             Assert.Equal(3, result.Value.SuccessCount);
 
-            skuProducts = new List<ProductToImportDto>() { GetFullProduct("3", "3-a | 3-b") };
+            skuProducts = new List<ProductToImportDto>() { GetFullProduct("3", "3-a:a | 3-b:b") };
             bundleProducts = Enumerable.Empty<ProductToImportDto>().ToList();
 
             result = await RunTest(skuProducts, bundleProducts, true);
@@ -246,13 +246,13 @@ namespace ShipWorks.Products.Tests.Integration.Import
                 GetFullProduct("2", "2-a | 2-b"),
                 GetFullProduct("4")
             };
-            List<ProductToImportDto> bundleProducts = new List<ProductToImportDto>() { GetFullProduct("3", "3-a | 3-b", "1 : 4 | 2 : 5") };
+            List<ProductToImportDto> bundleProducts = new List<ProductToImportDto>() { GetFullProduct("3", "3-a:a | 3-b:b", "1 : 4 | 2 : 5") };
 
             var result = await RunTest(skuProducts, bundleProducts, true);
             Assert.True(result.Success);
             Assert.Equal(4, result.Value.SuccessCount);
 
-            skuProducts = new List<ProductToImportDto>() { GetFullProduct("3", "3-a | 3-b", "1 : 4 | 2 : 5 | 4 : 1") };
+            skuProducts = new List<ProductToImportDto>() { GetFullProduct("3", "3-a:a | 3-b:b", "1 : 4 | 2 : 5 | 4 : 1") };
             bundleProducts = Enumerable.Empty<ProductToImportDto>().ToList();
 
             result = await RunTest(skuProducts, bundleProducts, true);
@@ -266,9 +266,9 @@ namespace ShipWorks.Products.Tests.Integration.Import
         {
             List<ProductToImportDto> skuProducts = new List<ProductToImportDto>()
             {
-                GetFullProduct("1", "1-a"),
-                GetFullProduct("2", "2-a", "2 : 1"), // This should fail as it is a bundle referencing itself.
-                GetFullProduct("3", "3-a")
+                GetFullProduct("1", "1-a:a"),
+                GetFullProduct("2", "2-a:a", "2 : 1"), // This should fail as it is a bundle referencing itself.
+                GetFullProduct("3", "3-a:a")
             };
             List<ProductToImportDto> bundleProducts = Enumerable.Empty<ProductToImportDto>().ToList();
 
@@ -298,8 +298,8 @@ namespace ShipWorks.Products.Tests.Integration.Import
 
             foreach (string badBundleText in badBundleTexts)
             {
-                List<ProductToImportDto> skuProducts = new List<ProductToImportDto>() { GetFullProduct("1", "1-a | 1-b"), GetFullProduct("2", "2-a") };
-                List<ProductToImportDto> bundleProducts = new List<ProductToImportDto>() { GetFullProduct("3", "3-a | 3-b | 3-c", badBundleText) };
+                List<ProductToImportDto> skuProducts = new List<ProductToImportDto>() { GetFullProduct("1", "1-a:a | 1-b:a"), GetFullProduct("2", "2-a:a") };
+                List<ProductToImportDto> bundleProducts = new List<ProductToImportDto>() { GetFullProduct("3", "3-a:a | 3-b:b | 3-c:c", badBundleText) };
 
                 var result = await RunTest(skuProducts, bundleProducts, false);
 
@@ -326,8 +326,8 @@ namespace ShipWorks.Products.Tests.Integration.Import
 
             foreach (string badBundleText in badBundleTexts)
             {
-                List<ProductToImportDto> skuProducts = new List<ProductToImportDto>() { GetFullProduct("1", "1-a | 1-b"), GetFullProduct("2", "2-a") };
-                List<ProductToImportDto> bundleProducts = new List<ProductToImportDto>() { GetFullProduct("3", "3-a | 3-b | 3-c", badBundleText) };
+                List<ProductToImportDto> skuProducts = new List<ProductToImportDto>() { GetFullProduct("1", "1-a:a | 1-b:b"), GetFullProduct("2", "2-a:a") };
+                List<ProductToImportDto> bundleProducts = new List<ProductToImportDto>() { GetFullProduct("3", "3-a:a | 3-b:b | 3-c:c", badBundleText) };
 
                 var result = await RunTest(skuProducts, bundleProducts, false);
 
@@ -344,8 +344,8 @@ namespace ShipWorks.Products.Tests.Integration.Import
         [InlineData("1 \\ :", "| 2:", @"1 \\ \::3 |\| 2\::4 ")]
         public async Task LoadImportFile_ReturnsSuccess_WhenDelimiterIsEscaped(string sku1, string sku2, string bundleText)
         {
-            List<ProductToImportDto> skuProducts = new List<ProductToImportDto>() { GetFullProduct(sku1, "1-a | 1-b"), GetFullProduct(sku2, "2-a") };
-            List<ProductToImportDto> bundleProducts = new List<ProductToImportDto>() { GetFullProduct("3", "3-a | 3-b | 3-c", bundleText) };
+            List<ProductToImportDto> skuProducts = new List<ProductToImportDto>() { GetFullProduct(sku1, "1-a:A | 1-b:b"), GetFullProduct(sku2, "2-a:a") };
+            List<ProductToImportDto> bundleProducts = new List<ProductToImportDto>() { GetFullProduct("3", "3-a:A | 3-b:b | 3-c:c", bundleText) };
 
             var result = await RunTest(skuProducts, bundleProducts, false);
 
@@ -367,7 +367,7 @@ namespace ShipWorks.Products.Tests.Integration.Import
             foreach (string badAliasText in badAliasTexts)
             {
                 List<ProductToImportDto> skuProducts = new List<ProductToImportDto>() { GetFullProduct("1", badAliasText), GetFullProduct("2") };
-                List<ProductToImportDto> bundleProducts = new List<ProductToImportDto>() { GetFullProduct("3", "3-a | 3-b | 3-c", "1 : 3 | 2 : 4") };
+                List<ProductToImportDto> bundleProducts = new List<ProductToImportDto>() { GetFullProduct("3", "3-a:a | 3-b:b | 3-c:c", "1 : 3 | 2 : 4") };
 
                 var result = await RunTest(skuProducts, bundleProducts, true);
 
@@ -476,7 +476,7 @@ namespace ShipWorks.Products.Tests.Integration.Import
                 {
                     matches = matches &&
                               dto.AliasSkuList
-                                  .Any(asl => asl.Equals(aliasEntity.Sku, StringComparison.InvariantCultureIgnoreCase));
+                                  .Any(asl => asl.Sku.Equals(aliasEntity.Sku, StringComparison.InvariantCultureIgnoreCase));
                 }
             }
 
@@ -506,13 +506,14 @@ namespace ShipWorks.Products.Tests.Integration.Import
                 WarehouseBin = $"{sku}-warehouse/bin"
             };
 
-            dto.AliasSkuList = new List<string>();
+            dto.AliasSkuList = new List<(string Sku, string Name)>();
             if (!aliasSkus.IsNullOrWhiteSpace())
             {
-                dto.AliasSkuList = Regex.Split(dto.AliasSkus, ProductExcelReader.SkuSeparatorRegex, RegexOptions.IgnoreCase)
-                    .Where(s => !s.IsNullOrWhiteSpace() && !s.Equals(dto.Sku.Trim(), StringComparison.InvariantCultureIgnoreCase))
+                dto.AliasSkuList = Regex.Split(dto.AliasSkus, ProductExcelReader.SkuNameSeparatorRegex, RegexOptions.IgnoreCase)
+                    .Select(aliasNameAndSku => Regex.Split(aliasNameAndSku, ProductExcelReader.SkuNameSeparatorRegex, RegexOptions.IgnoreCase))
+                    .Where(s => s.Length == 2 && !s[1].IsNullOrWhiteSpace() && !s[1].Equals(dto.Sku.Trim(), StringComparison.InvariantCultureIgnoreCase))
                     .Distinct()
-                    .Select(s => Regex.Unescape(s).Trim());
+                    .Select(s => (Regex.Unescape(s[0]).Trim(), Regex.Unescape(s[1]).Trim()));
             }
 
             dto.BundleSkuList = GetBundleSkuList(dto.Sku, dto.BundleSkus, dto.AliasSkuList);
@@ -523,7 +524,7 @@ namespace ShipWorks.Products.Tests.Integration.Import
         /// <summary>
         /// Build the list of product bundle sku and quantity
         /// </summary>
-        private IEnumerable<(string Sku, int Quantity)> GetBundleSkuList(string sku, string bundleSkus, IEnumerable<string> aliasSkuList)
+        private IEnumerable<(string Sku, int Quantity)> GetBundleSkuList(string sku, string bundleSkus, IEnumerable<(string Sku, string Name)> aliasSkuList)
         {
             if (bundleSkus.IsNullOrWhiteSpace())
             {
@@ -543,7 +544,7 @@ namespace ShipWorks.Products.Tests.Integration.Import
                     string testSku = Regex.Unescape(values[0]);
                     string testQty = Regex.Unescape(values[1]);
                     if (testSku.Equals(sku, StringComparison.InvariantCultureIgnoreCase) ||
-                        aliasSkuList.Any(a => a.Equals(testSku, StringComparison.CurrentCultureIgnoreCase)))
+                        aliasSkuList.Any(a => a.Sku.Equals(testSku, StringComparison.CurrentCultureIgnoreCase)))
                     {
                         throw new ProductImportException($"Bundles may not be composed of its SKU or any of its alias SKUs.  Problem SKU: {testSku}");
                     }

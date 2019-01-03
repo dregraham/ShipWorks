@@ -340,10 +340,10 @@ namespace ShipWorks.Products.Import
             ValidateFieldLength(row.CountryOfOrigin, ProductVariantFields.CountryOfOrigin.MaxLength, "Country of Origin");
             ValidateFieldLength(row.HarmonizedCode, ProductVariantFields.HarmonizedCode.MaxLength, "Harmonized Code");
 
-            foreach ((string Name, string Sku) aliasSku in row?.AliasSkuList)
+            foreach ((string Sku, string Name) aliasSku in row?.AliasSkuList)
             {
-                ValidateFieldLength(aliasSku.Sku, ProductVariantAliasFields.Sku.MaxLength, "Alias SKU");
                 ValidateFieldLength(aliasSku.Name, ProductVariantAliasFields.AliasName.MaxLength, "Alias Name");
+                ValidateFieldLength(aliasSku.Sku, ProductVariantAliasFields.Sku.MaxLength, "Alias SKU");
             }
 
             foreach (var (Sku, _) in row.BundleSkuList)

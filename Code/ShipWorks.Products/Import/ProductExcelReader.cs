@@ -18,7 +18,7 @@ namespace ShipWorks.Products.Import
     {
         public static readonly string SkuSeparatorRegex = @"(?<!($|[^\\])(\\\\)*?\\)\|";
         public static readonly string SkuQuantitySeparatorRegex = @"(?<!($|[^\\])(\\\\)*?\\):";
-        public static readonly string NameValueSeparatorRegex = @"(?<!($|[^\\])(\\\\)*?\\):";
+        public static readonly string SkuNameSeparatorRegex = @"(?<!($|[^\\])(\\\\)*?\\):";
         private readonly List<ProductToImportDto> skuRows = new List<ProductToImportDto>();
         private readonly List<ProductToImportDto> bundleRows = new List<ProductToImportDto>();
 
@@ -101,7 +101,7 @@ namespace ShipWorks.Products.Import
                 if (!r.AliasSkus.IsNullOrWhiteSpace())
                 {
                     var aliasSkus = Regex.Split(r.AliasSkus, SkuSeparatorRegex, RegexOptions.IgnoreCase)
-                        .Select(aliasNameAndSku => Regex.Split(aliasNameAndSku, NameValueSeparatorRegex, RegexOptions.IgnoreCase))
+                        .Select(aliasNameAndSku => Regex.Split(aliasNameAndSku, SkuNameSeparatorRegex, RegexOptions.IgnoreCase))
                         .Where(s => s.Length == 2 && !s[1].IsNullOrWhiteSpace() && !s[1].Equals(r.Sku.Trim(), StringComparison.InvariantCultureIgnoreCase))
                         .Distinct()
                         .Select(s => (Regex.Unescape(s[0]).Trim(), Regex.Unescape(s[1]).Trim()));

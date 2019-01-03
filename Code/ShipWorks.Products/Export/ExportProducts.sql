@@ -19,7 +19,7 @@
 	cross apply
 	(
 		select ISNULL(
-			(select REPLACE(REPLACE(a.AliasName, '|', '\|'), ':', '\:') + ':' + REPLACE(REPLACE(a.Sku, '|', '\|'), ':', '\:') + '|' AS [text()]
+			(select REPLACE(REPLACE(a.Sku, '|', '\|'), ':', '\:') + ':' + REPLACE(REPLACE(a.AliasName, '|', '\|'), ':', '\:') + '|' AS [text()]
 			from ProductVariantAlias a
 			where a.ProductVariantID = pv.ProductVariantID
 			  and a.IsDefault = 0
