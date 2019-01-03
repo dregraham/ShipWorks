@@ -13,7 +13,7 @@
 //----------------------------------------------------------------
 function GetChromiumFileName(): String;
 begin
-	Result := 'renderer_63_' + GetArchName() + '.zip';
+	Result := 'renderer_69_' + GetArchName() + '.zip';
 end;
 
 //----------------------------------------------------------------
@@ -53,7 +53,7 @@ begin
 	then begin
 		if (GetVersionNumbersString(GetChromiumDestinationTestFile(), FileVersion))
 		then begin
-			Result := not (FileVersion = '63.0.3.0');
+			Result := not (FileVersion = '69.0.0.0');
 		end;
 	end;
 end;

@@ -18,7 +18,7 @@ var
 //----------------------------------------------------------------
 function GetVCRedistFileName(): String;
 begin
-	Result := 'vcredist_' + GetArchName() + '.exe';
+	Result := 'vc_redist.' + GetArchName() + '.exe';
 end;
 
 //----------------------------------------------------------------
@@ -26,7 +26,7 @@ end;
 //----------------------------------------------------------------
 function GetVCRedistDownloadURL(): String;
 begin
-	Result := 'https://www.interapptive.com/download/components/chromium/VC12/' + GetVCRedistFileName();
+	Result := 'https://www.interapptive.com/download/components/chromium/VC14/' + GetVCRedistFileName();
 end;
 
 //----------------------------------------------------------------
@@ -43,7 +43,7 @@ begin
 	// Try to read the registry to see if this version of .NET is installed
 	if (RegQueryDWordValue(
 		HKEY_LOCAL_MACHINE,
-		'SOFTWARE\Microsoft\VisualStudio\12.0\VC\Runtimes\' + GetArchName(),
+		'SOFTWARE\Microsoft\VisualStudio\14.0\VC\Runtimes\' + GetArchName(),
 		'Installed',
 		Installed))
 	then begin
@@ -56,7 +56,7 @@ begin
 	// Try to read the registry to see if this version of .NET is installed
 	if (RegQueryDWordValue(
 		HKEY_LOCAL_MACHINE,
-		'SOFTWARE\WOW6432Node\Microsoft\VisualStudio\12.0\VC\Runtimes\' + GetArchName(),
+		'SOFTWARE\WOW6432Node\Microsoft\VisualStudio\14.0\VC\Runtimes\' + GetArchName(),
 		'Installed',
 		Installed))
 	then begin
