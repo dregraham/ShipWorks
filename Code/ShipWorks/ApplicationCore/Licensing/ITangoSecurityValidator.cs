@@ -1,6 +1,6 @@
 ﻿using System;
+using System.Net;
 using System.Reactive;
-using Interapptive.Shared.Net;
 using Interapptive.Shared.Utility;
 
 namespace ShipWorks.ApplicationCore.Licensing
@@ -16,8 +16,13 @@ namespace ShipWorks.ApplicationCore.Licensing
         Result ValidateSecureConnection(TelemetricResult<Unit> telemetricResult, Uri uri);
 
         /// <summary>
+        /// Validate a secure connection
+        /// </summary>
+        Result ForceValidateSecureConnection(TelemetricResult<Unit> telemetricResult, Uri uri);
+
+        /// <summary>
         /// Ensure the connection to the given URI is a valid interapptive secure connection
         /// </summary>
-        GenericResult<IHttpResponseReader> ValidateCertificate(TelemetricResult<Unit> telemetricResult, IHttpResponseReader responseReader);
+        Result ValidateCertificate(TelemetricResult<Unit> telemetricResult, HttpWebRequest request);
     }
 }
