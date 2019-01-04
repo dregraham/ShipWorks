@@ -1,6 +1,6 @@
 ﻿using System;
-using System.Linq;
 using System.Reactive;
+using System.Reactive.Disposables;
 using System.Xml;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Metrics;
@@ -50,30 +50,14 @@ namespace ShipWorks.ApplicationCore.Licensing
             ApiLogEntry logEntry = new ApiLogEntry(ApiLogSource.ShipWorks, logEntryName);
             ConfigureRequest(postRequest, logEntry);
 
-            IHttpResponseReader postResponse = null;
-            TrackedDurationEvent telemetryEvent = null;
+            string getActionName() => postRequest.Variables["action"] ?? logEntryName;
+            TelemetricResult<Unit> telemetricResult = new TelemetricResult<Unit>("Tango.Request");
 
             try
             {
-                if (collectTelemetry)
-                {
-                    telemetryEvent = new TrackedDurationEvent("Tango.Request");
-                }
-
-                TelemetricResult<Unit> telemetricResult = new TelemetricResult<Unit>("Tango.Request");
-
-                string action = postRequest.Variables.FirstOrDefault(v => v.Name.Equals("action", StringComparison.InvariantCultureIgnoreCase))?.Value ?? logEntryName;
-                telemetryEvent?.AddProperty("Tango.Request.Action", action);
-
-                return ValidateSecureConnection(telemetricResult, postRequest)
-                    .Map(() => telemetricResult.RunTimedEvent("ActualRequest", postRequest.GetResponse))
-                    .Bind(response => securityValidator.ValidateCertificate(telemetricResult, response))
-                    .Map(response => response.ReadResult().Trim())
-                    .Do(response =>
-                    {
-                        telemetricResult.RunTimedEvent("LogResponse", () => logEntry.LogResponse(response));
-                        telemetricResult.WriteTo(telemetryEvent);
-                    });
+                return Using(
+                    GetTelemetryEvent(getActionName, collectTelemetry, telemetricResult),
+                    _ => PerformRequest(postRequest, logEntry, telemetricResult));
             }
             catch (Exception ex)
             {
@@ -84,12 +68,46 @@ namespace ShipWorks.ApplicationCore.Licensing
 
                 return ex;
             }
-            finally
-            {
-                postResponse?.Dispose();
-                telemetryEvent?.Dispose();
-            }
         }
+
+        /// <summary>
+        /// Get the telemetry event
+        /// </summary>
+        private static IDisposable GetTelemetryEvent(Func<string> getActionName, bool collectTelemetry, TelemetricResult<Unit> telemetryResult) =>
+            collectTelemetry ? BuildTrackedDurationEvent(getActionName, telemetryResult) : null;
+
+        /// <summary>
+        /// Build the tracked duration event for telemetry
+        /// </summary>
+        private static IDisposable BuildTrackedDurationEvent(Func<string> getActionName, TelemetricResult<Unit> telemetryResult)
+        {
+            var trackedDurationEvent = new TrackedDurationEvent("Tango.Request");
+            trackedDurationEvent?.AddProperty("Tango.Request.Action", getActionName());
+
+            return Disposable.Create(() => telemetryResult.WriteTo(trackedDurationEvent));
+        }
+
+        /// <summary>
+        /// Perform the actual request
+        /// </summary>
+        private GenericResult<string> PerformRequest(IHttpVariableRequestSubmitter postRequest, ApiLogEntry logEntry, TelemetricResult<Unit> telemetricResult) =>
+            securityValidator
+                .ValidateSecureConnection(telemetricResult, postRequest.Uri)
+                .Map(() => telemetricResult.RunTimedEvent("ActualRequest", postRequest.GetResponse))
+                .Bind(result => ParseValidatedResponse(telemetricResult, result))
+                .Do(response => telemetricResult.RunTimedEvent("LogResponse", () => logEntry.LogResponse(response)));
+
+        /// <summary>
+        /// Parse the validated response
+        /// </summary>
+        private GenericResult<string> ParseValidatedResponse(TelemetricResult<Unit> telemetricResult, IHttpResponseReader responseReader) =>
+            Using(responseReader,
+                x =>
+                {
+                    var result = x.ReadResult().Trim();
+                    return securityValidator.ValidateCertificate(telemetricResult, x.HttpWebRequest)
+                        .Map(() => result);
+                });
 
         /// <summary>
         /// Validate a secure connection, forcing it if necessary

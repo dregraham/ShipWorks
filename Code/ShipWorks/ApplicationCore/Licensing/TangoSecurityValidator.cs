@@ -3,7 +3,6 @@ using System.Net;
 using System.Reactive;
 using System.Security.Cryptography.X509Certificates;
 using Interapptive.Shared.ComponentRegistration;
-using Interapptive.Shared.Net;
 using Interapptive.Shared.Utility;
 
 namespace ShipWorks.ApplicationCore.Licensing
@@ -52,17 +51,26 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// also prevents stealing the headers user\pass with fiddler
         /// </remarks>
         public Result ForceValidateSecureConnection(TelemetricResult<Unit> telemetricResult, Uri uri) =>
-            telemetricResult.RunTimedEvent("ValidateSecureConnection", () => ValidateSecureConnection(uri));
+            PerformValidation("ValidateSecureConnection", telemetricResult, () => ValidateSecureConnection(uri));
 
         /// <summary>
         /// Validate the certificate of a response
         /// </summary>
-        public GenericResult<IHttpResponseReader> ValidateCertificate(TelemetricResult<Unit> telemetricResult, IHttpResponseReader responseReader) =>
+        public Result ValidateCertificate(TelemetricResult<Unit> telemetricResult, HttpWebRequest request) =>
+            PerformValidation("ValidateInterapptiveCertificate", telemetricResult, () => ValidateInterapptiveCertificate(request));
+
+        /// <summary>
+        /// Perform the validation on an action that returns a response
+        /// </summary>
+        /// <param name="checkName"></param>
+        /// <param name="telemetricResult"></param>
+        /// <param name="func"></param>
+        /// <returns></returns>
+        private Result PerformValidation(string checkName, TelemetricResult<Unit> telemetricResult, Func<Result> func) =>
             telemetricResult
-                .RunTimedEvent("ValidateInterapptiveCertificate", () => ValidateInterapptiveCertificate(responseReader.HttpWebRequest))
-                .Do(() => telemetricResult.AddProperty("ValidateInterapptiveCertificate.IsValidCertificate", "Yes"))
-                .OnFailure(_ => telemetricResult.AddProperty("ValidateInterapptiveCertificate.IsValidCertificate", "No"))
-                .Map(() => responseReader);
+                .RunTimedEvent(checkName, func)
+                .Do(() => telemetricResult.AddProperty($"{checkName}.IsValidCertificate", "Yes"))
+                .OnFailure(_ => telemetricResult.AddProperty($"{checkName}.IsValidCertificate", "No"));
 
         /// <summary>
         /// Ensure the connection to the given URI is a valid interapptive secure connection
