@@ -18,6 +18,7 @@ namespace ShipWorks.Products.Import
     {
         public static readonly string SkuSeparatorRegex = @"(?<!($|[^\\])(\\\\)*?\\)\|";
         public static readonly string SkuQuantitySeparatorRegex = @"(?<!($|[^\\])(\\\\)*?\\):";
+        public static readonly string SkuNameSeparatorRegex = @"(?<!($|[^\\])(\\\\)*?\\):";
         private readonly List<ProductToImportDto> skuRows = new List<ProductToImportDto>();
         private readonly List<ProductToImportDto> bundleRows = new List<ProductToImportDto>();
 
@@ -100,15 +101,16 @@ namespace ShipWorks.Products.Import
                 if (!r.AliasSkus.IsNullOrWhiteSpace())
                 {
                     var aliasSkus = Regex.Split(r.AliasSkus, SkuSeparatorRegex, RegexOptions.IgnoreCase)
-                        .Where(s => !s.IsNullOrWhiteSpace() && !s.Equals(r.Sku.Trim(), StringComparison.InvariantCultureIgnoreCase))
+                        .Select(aliasNameAndSku => Regex.Split(aliasNameAndSku, SkuNameSeparatorRegex, RegexOptions.IgnoreCase))
+                        .Where(s => s.Length == 2 && !s[1].IsNullOrWhiteSpace() && !s[1].Equals(r.Sku.Trim(), StringComparison.InvariantCultureIgnoreCase))
                         .Distinct()
-                        .Select(s => Regex.Unescape(s).Trim());
+                        .Select(s => (Regex.Unescape(s[0]).Trim(), Regex.Unescape(s[1]).Trim()));
 
                     r.AliasSkuList = aliasSkus;
                 }
                 else
                 {
-                    r.AliasSkuList = Enumerable.Empty<string>();
+                    r.AliasSkuList = Enumerable.Empty<(string, string)>();
                 }
 
                 r.BundleSkuList = GetBundleSkuList(r.Sku, r.BundleSkus, r.AliasSkuList);
@@ -121,7 +123,7 @@ namespace ShipWorks.Products.Import
         /// <summary>
         /// Build the list of product bundle sku and quantity
         /// </summary>
-        private IEnumerable<(string Sku, int Quantity)> GetBundleSkuList(string sku, string bundleSkus, IEnumerable<string> aliasSkuList)
+        private IEnumerable<(string Sku, int Quantity)> GetBundleSkuList(string sku, string bundleSkus, IEnumerable<(string Name,string Sku)> aliasSkuList)
         {
             if (bundleSkus.IsNullOrWhiteSpace())
             {
@@ -141,7 +143,7 @@ namespace ShipWorks.Products.Import
                     string testSku = Regex.Unescape(values[0]);
                     string testQty = Regex.Unescape(values[1]);
                     if (testSku.Equals(sku, StringComparison.InvariantCultureIgnoreCase) ||
-                        aliasSkuList.Any(a => a.Equals(testSku, StringComparison.CurrentCultureIgnoreCase)))
+                        aliasSkuList.Any(a => a.Sku.Equals(testSku, StringComparison.CurrentCultureIgnoreCase)))
                     {
                         throw new ProductImportException($"Bundles may not be composed of its SKU or any of its alias SKUs.  Problem SKU: {testSku}");
                     }

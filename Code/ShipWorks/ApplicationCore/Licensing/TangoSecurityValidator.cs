@@ -3,6 +3,7 @@ using System.Net;
 using System.Reactive;
 using System.Security.Cryptography.X509Certificates;
 using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.Net;
 using Interapptive.Shared.Utility;
 
 namespace ShipWorks.ApplicationCore.Licensing
@@ -44,8 +45,10 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// <summary>
         /// Validate the certificate of a response
         /// </summary>
-        public Result ValidateCertificate(TelemetricResult<Unit> telemetricResult, HttpWebRequest httpWebRequest) =>
-            telemetricResult.RunTimedEvent("ValidateInterapptiveCertificate", () => ValidateInterapptiveCertificate(httpWebRequest));
+        public GenericResult<IHttpResponseReader> ValidateCertificate(TelemetricResult<Unit> telemetricResult, IHttpResponseReader responseReader) =>
+            telemetricResult
+                .RunTimedEvent("ValidateInterapptiveCertificate", () => ValidateInterapptiveCertificate(responseReader.HttpWebRequest))
+                .Map(() => responseReader);
 
         /// <summary>
         /// Ensure the connection to the given URI is a valid interapptive secure connection
@@ -93,7 +96,6 @@ namespace ShipWorks.ApplicationCore.Licensing
             {
                 return new TangoException("The SSL certificate on the server is invalid.");
             }
-
 #endif
             return Result.FromSuccess();
         }
