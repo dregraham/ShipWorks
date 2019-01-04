@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Net;
 using System.Reactive;
+using System.Reactive.Disposables;
 using System.Security.Cryptography.X509Certificates;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
+using static Interapptive.Shared.Utility.Functional;
 
 namespace ShipWorks.ApplicationCore.Licensing
 {
@@ -85,7 +87,8 @@ namespace ShipWorks.ApplicationCore.Licensing
 
             return Using(request.GetResponse(), _ => ValidateInterapptiveCertificate(request));
 #else
-            return Result.FromSuccess();
+            // This is wonky, but it's here so that a required namespace for the code above isn't removed by VS when saving
+            return Using(Disposable.Empty, _ => Result.FromSuccess());
 #endif
         }
 
