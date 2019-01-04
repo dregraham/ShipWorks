@@ -2286,6 +2286,11 @@
     <Compile Include="Stores\Platforms\Yahoo\OnlineUpdating\IYahooCombineOrderSearchProvider.cs" />
     <Compile Include="Stores\StoreFilterRepository.cs" />
     <Compile Include="Stores\StoreFilterRepositorySaveResult.cs" />
+    <Compile Include="Templates\Controls\DefaultPickListTemplate\IDefaultPickListTemplateDialog.cs" />
+    <Compile Include="Templates\Controls\DefaultPickListTemplate\IDefaultPickListTemplateDialogViewModel.cs" />
+    <Compile Include="Templates\Controls\DefaultPickListTemplate\IPickListPrintingService.cs" />
+    <Compile Include="Templates\Controls\DefaultPickListTemplate\PickListPrintingService.cs" />
+    <Compile Include="Templates\ITemplateManager.cs" />
     <Compile Include="Templates\Printing\BarcodePage.cs" />
     <Compile Include="Templates\Printing\BarcodePrintJob.cs" />
     <Compile Include="Templates\Printing\IPrinterSetting.cs" />
@@ -2298,6 +2303,7 @@
     <Compile Include="Templates\Processing\TemplateXml\ElementOutlines\OrderItemProductBundleOutline.cs" />
     <Compile Include="Templates\Processing\TemplateXml\ElementOutlines\OrderItemProductOutline.cs" />
     <Compile Include="Templates\Processing\TemplateXml\ElementOutlines\ReturnItemOutline.cs" />
+    <Compile Include="Templates\TemplateManagerWrapper.cs" />
     <Compile Include="Templates\Tokens\ITemplateTokenProcessor.cs" />
     <Compile Include="Templates\Tokens\TemplateTokenProcessorWrapper.cs" />
     <Compile Include="UI\Controls\IOrderLookup.cs" />

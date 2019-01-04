@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reactive;
 using System.Threading.Tasks;
@@ -18,6 +19,7 @@ using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping.ShipSense;
 using ShipWorks.Shipping.ShipSense.Population;
 using ShipWorks.Shipping.ShipSense.Settings;
+using ShipWorks.Templates;
 using ShipWorks.Users;
 using ShipWorks.Users.Audit;
 using ShipWorks.Users.Logon;
@@ -83,8 +85,10 @@ namespace ShipWorks.ApplicationCore.Options
             useParallelActionProcessing.Checked = config.UseParallelActionQueue;
 
             SetupShipmentEditLimit(settings);
-        }
 
+            LoadPickListTemplates(config.DefaultPickListTemplateID);
+        }
+        
         /// <summary>
         /// Setup the shipment edit limit dropdown
         /// </summary>
@@ -121,7 +125,8 @@ namespace ShipWorks.ApplicationCore.Options
             SaveAuditSettings();
 
             config.UseParallelActionQueue = useParallelActionProcessing.Checked;
-
+            config.DefaultPickListTemplateID = ((TemplateEntity) pickListTemplate.SelectedItem)?.TemplateID;
+            
             ShippingSettingsWrapper shippingSettingsWrapper = new ShippingSettingsWrapper(Messenger.Current);
             ShippingSettingsEntity settings = shippingSettingsWrapper.Fetch();
             settings.ShipSenseEnabled = enableShipSense.Checked;
@@ -338,6 +343,18 @@ namespace ShipWorks.ApplicationCore.Options
         private void OnAuditInfoClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             WebHelper.OpenUrl("http://support.shipworks.com/support/solutions/articles/4000125442-audit-records-in-shipworks", this);
+        }
+
+        /// <summary>
+        /// Load the pick list template combobox
+        /// </summary>
+        /// <param name="defaultPickListTemplateID"></param>
+        private void LoadPickListTemplates(long? defaultPickListTemplateID)
+        {
+            List<TemplateEntity> templates = TemplateManager.FetchPickListTemplates().ToList();
+            pickListTemplate.DataSource = templates;
+            pickListTemplate.DisplayMember = "Name";
+            pickListTemplate.SelectedItem = templates.FirstOrDefault(t => t.TemplateID == defaultPickListTemplateID);
         }
     }
 }
