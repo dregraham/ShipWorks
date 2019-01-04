@@ -36,7 +36,9 @@ namespace ShipWorks.ApplicationCore.Licensing
             if (nextSecureConnectionValidation < dateTimeProvider.UtcNow)
             {
                 return telemetricResult.RunTimedEvent("ValidateSecureConnection", () => ValidateSecureConnection(uri))
-                    .Do(() => nextSecureConnectionValidation = dateTimeProvider.UtcNow.AddMinutes(throttlePeriod));
+                    .Do(() => nextSecureConnectionValidation = dateTimeProvider.UtcNow.AddMinutes(throttlePeriod))
+                    .Do(() => telemetricResult.AddProperty("ValidateSecureConnection.IsValidCertificate", "Yes"))
+                    .OnFailure(_ => telemetricResult.AddProperty("ValidateSecureConnection.IsValidCertificate", "No"));
             }
 
             return Result.FromSuccess();
@@ -48,6 +50,8 @@ namespace ShipWorks.ApplicationCore.Licensing
         public GenericResult<IHttpResponseReader> ValidateCertificate(TelemetricResult<Unit> telemetricResult, IHttpResponseReader responseReader) =>
             telemetricResult
                 .RunTimedEvent("ValidateInterapptiveCertificate", () => ValidateInterapptiveCertificate(responseReader.HttpWebRequest))
+                .Do(() => telemetricResult.AddProperty("ValidateInterapptiveCertificate.IsValidCertificate", "Yes"))
+                .OnFailure(_ => telemetricResult.AddProperty("ValidateInterapptiveCertificate.IsValidCertificate", "No"))
                 .Map(() => responseReader);
 
         /// <summary>

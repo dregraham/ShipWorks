@@ -45,7 +45,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         public async Task<TelemetricResult<IDownloadedLabelData>> Create(ShipmentEntity shipment)
         {
             TelemetricResult<IDownloadedLabelData> telemetricResult = new TelemetricResult<IDownloadedLabelData>("API.ResponseTimeInMilliseconds");
-            
+
             IUspsShipmentType uspsShipmentType = uspsShipmentTypes[ShipmentTypeCode.Usps];
             uspsShipmentType.ValidateShipment(shipment);
 
@@ -62,7 +62,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
 
                     TelemetricResult<UspsLabelResponse> telemetricLabelResponse =
                         await uspsShipmentType.CreateWebClient().ProcessShipment(shipment).ConfigureAwait(false);
-                    
+
                     telemetricLabelResponse.CopyTo(telemetricResult);
 
                     IDownloadedLabelData uspsDownloadedLabelData = createDownloadedLabelData(telemetricLabelResponse.Value);
@@ -129,7 +129,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                 {
                     if (account.UspsReseller == (int) UspsResellerType.Express1)
                     {
-                        
+
                         await CreateUspsExpress1Label(shipment, uspsShipmentType, account, telemetricResult);
                     }
                     else
@@ -139,9 +139,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                         uspsShipmentType.UseAccountForShipment(account, shipment);
 
                         IUspsWebClient client = uspsShipmentType.CreateWebClient();
-                        
+
                         TelemetricResult<UspsLabelResponse> telemetricUspsLabelResponse = await client.ProcessShipment(shipment).ConfigureAwait(false);
-                        
+
                         telemetricUspsLabelResponse.CopyTo(telemetricResult);
                         telemetricResult.SetValue(createDownloadedLabelData(telemetricUspsLabelResponse.Value));
                     }
@@ -176,7 +176,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
 
             TelemetricResult<IDownloadedLabelData> uspsDownloadedLabelData =
                 await labelServices[ShipmentTypeCode.Express1Usps].Create(shipment).ConfigureAwait(false);
-            telemetricResult.CopyFrom<int>(uspsDownloadedLabelData, true);
+            telemetricResult.CopyFrom(uspsDownloadedLabelData, true);
         }
     }
 }
