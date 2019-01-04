@@ -44,16 +44,28 @@
             </Grid.ColumnDefinitions>
             <TextBlock Grid.Column="0"
                        Text="Pick List Template:"
-                       VerticalAlignment="Center"
+                       VerticalAlignment="Top"
                        HorizontalAlignment="Right"
                        Margin="15 0 10 0"/>
-            <ComboBox Grid.Column="1"
+            <StackPanel Grid.Column="1">
+                <ComboBox
                       VerticalAlignment="Center"
                       VerticalContentAlignment="Center"
                       ItemsSource="{Binding PickListTemplates}"
                       SelectedItem="{Binding SelectedPickListTemplate}"
                       DisplayMemberPath="Name"
                       Height="23"/>
+                <TextBlock>
+                    <Run>
+                        Not seeing your pick list?
+                    </Run>
+                    <Hyperlink NavigateUri="{Binding SelectingAPickListLink}" attachedProperties:Link.OpenInBrowser="true">
+                        Click here.
+                    </Hyperlink>
+                </TextBlock>
+            </StackPanel>
+
+
         </Grid>
         <UniformGrid Grid.Row="2"
                      Columns="2" Rows="1"

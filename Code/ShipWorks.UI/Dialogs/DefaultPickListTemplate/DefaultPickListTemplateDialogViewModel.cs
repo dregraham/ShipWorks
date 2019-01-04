@@ -40,6 +40,12 @@ namespace ShipWorks.UI.Dialogs.DefaultPickListTemplate
         public Uri SupportArticleLink { get; } = new Uri("http://support.shipworks.com/support/solutions/articles/4000135212-printing-pick-lists/");
 
         /// <summary>
+        /// Link to support article explaining where ShipWorks looks for templates
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public Uri SelectingAPickListLink { get; } = new Uri("http://support.shipworks.com/support/solutions/articles/4000135506-selecting-a-pick-list/");
+
+        /// <summary>
         /// All of the templates in the pick list folder
         /// </summary>
         [Obfuscation(Exclude = true)]
