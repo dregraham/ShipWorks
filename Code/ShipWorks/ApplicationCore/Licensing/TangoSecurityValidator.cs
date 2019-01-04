@@ -70,26 +70,23 @@ namespace ShipWorks.ApplicationCore.Licensing
             telemetricResult
                 .RunTimedEvent(checkName, func)
                 .Do(() => telemetricResult.AddProperty($"{checkName}.IsValidCertificate", "Yes"))
-                .OnFailure(_ => telemetricResult.AddProperty($"{checkName}.IsValidCertificate", "No"));
+                .OnFailure(_ => telemetricResult.AddProperty($"{checkName}.IsValidCertificate", "No"))
+                .OnFailure(ex => nextSecureConnectionValidation = DateTime.MinValue);
 
         /// <summary>
         /// Ensure the connection to the given URI is a valid interapptive secure connection
         /// </summary>
         public Result ValidateSecureConnection(Uri uri)
         {
-            //#if !DEBUG
+#if !DEBUG
             HttpWebRequest request = (HttpWebRequest) WebRequest.Create(uri);
             request.KeepAlive = false;
             request.UserAgent = "shipworks";
 
-            using (WebResponse response = request.GetResponse())
-            {
-                return ValidateInterapptiveCertificate(request)
-                    .OnFailure(ex => nextSecureConnectionValidation = DateTime.MinValue);
-            }
-            //#else
-            //            return Result.FromSuccess();
-            //#endif
+            return Using(request.GetResponse(), _ => ValidateInterapptiveCertificate(request));
+#else
+            return Result.FromSuccess();
+#endif
         }
 
         /// <summary>
@@ -101,7 +98,7 @@ namespace ShipWorks.ApplicationCore.Licensing
             X509Certificate certificate;
 #pragma warning restore 168
 
-            //#if !DEBUG
+#if !DEBUG
             if (httpWebRequest.ServicePoint == null)
             {
                 return new TangoException("The SSL certificate on the server is invalid.");
@@ -119,7 +116,7 @@ namespace ShipWorks.ApplicationCore.Licensing
             {
                 return new TangoException("The SSL certificate on the server is invalid.");
             }
-            //#endif
+#endif
             return Result.FromSuccess();
         }
     }
