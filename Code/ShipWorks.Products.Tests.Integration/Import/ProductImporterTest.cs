@@ -364,16 +364,16 @@ namespace ShipWorks.Products.Tests.Integration.Import
         }
 
         [Theory]
-        [InlineData("1 :", @"1 \:: 3 |\| 2\:: 4 ")]
-        [InlineData("1 :", @"1 \:: 3 |\| 2 \::4 ")]
-        [InlineData("1:", @"1\::3 |\| 2\::4 ")]
-        [InlineData("1 \\ :", @"1 \\ \::3 |\| 2\::4 ")]
+        [InlineData("42 :", @"1 \:: 3 |\| 2\:: 4 ")]
+        [InlineData("42 :", @"1 \:: 3 |\| 2 \::4 ")]
+        [InlineData("42:", @"1\::3 |\| 2\::4 ")]
+        [InlineData("42 \\ :", @"1 \\ \::3 |\| 2\::4 ")]
         public async Task LoadImportFile_ReturnsSuccess_WhenAliasDelimiterIsEscaped(string sku1, string aliasText)
         {
             List<ProductToImportDto> skuProducts = new List<ProductToImportDto>() { GetFullProduct(sku1, aliasText)};
             List<ProductToImportDto> bundleProducts = new List<ProductToImportDto>();
 
-            var result = await RunTest(skuProducts, bundleProducts, false);
+            var result = await RunTest(skuProducts, bundleProducts, true);
 
             Assert.Equal(1, result.Value.SuccessCount);
         }
@@ -550,7 +550,7 @@ namespace ShipWorks.Products.Tests.Integration.Import
             dto.AliasSkuList = new List<(string Sku, string Name)>();
             if (!aliasSkus.IsNullOrWhiteSpace())
             {
-                dto.AliasSkuList = Regex.Split(dto.AliasSkus, ProductExcelReader.SkuNameSeparatorRegex, RegexOptions.IgnoreCase)
+                dto.AliasSkuList = Regex.Split(dto.AliasSkus, ProductExcelReader.SkuSeparatorRegex, RegexOptions.IgnoreCase)
                     .Select(aliasNameAndSku => Regex.Split(aliasNameAndSku, ProductExcelReader.SkuNameSeparatorRegex, RegexOptions.IgnoreCase))
                     .Where(s => s.Length == 2 && !s[1].IsNullOrWhiteSpace() && !s[1].Equals(dto.Sku.Trim(), StringComparison.InvariantCultureIgnoreCase))
                     .Distinct()
