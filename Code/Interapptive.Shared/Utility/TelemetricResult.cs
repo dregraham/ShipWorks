@@ -17,6 +17,7 @@ namespace Interapptive.Shared.Utility
     {
         private readonly string baseTelemetryName;
         private readonly Dictionary<string, List<long>> telemetry;
+        private readonly Dictionary<string, string> properties = new Dictionary<string, string>();
         private readonly string currentEventName;
 
         /// <summary>
@@ -156,7 +157,7 @@ namespace Interapptive.Shared.Utility
         /// <summary>
         /// Copy another telemetric result's properties and totalElapsedTime and add them to this one
         /// </summary>
-        public void CopyFrom<A>(TelemetricResult<T> resultToAdd, bool useNewResultsValue)
+        public void CopyFrom(TelemetricResult<T> resultToAdd, bool useNewResultsValue)
         {
             resultToAdd.telemetry.ForEach(entries => entries.Value.ForEach(time => AddEntry(entries.Key, time)));
 
@@ -207,6 +208,8 @@ namespace Interapptive.Shared.Utility
             }
 
             trackedDurationEvent.AddMetric(baseTelemetryName, overallTime);
+
+            properties.ForEach(x => trackedDurationEvent.AddProperty(x.Key, x.Value));
         }
 
         /// <summary>
@@ -221,5 +224,10 @@ namespace Interapptive.Shared.Utility
 
             telemetry[name].Add(time);
         }
+
+        /// <summary>
+        /// Add a custom property
+        /// </summary>
+        public void AddProperty(string key, string value) => properties[key] = value;
     }
 }
