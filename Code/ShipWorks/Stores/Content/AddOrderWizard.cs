@@ -90,6 +90,24 @@ namespace ShipWorks.Stores.Content
         }
 
         /// <summary>
+        /// The order number of the order that was created.  Only valid if DialogResult is OK.
+        /// </summary>
+        public string OrderNmberComplete
+        {
+            get
+            {
+                if (DialogResult == DialogResult.OK)
+                {
+                    return order.OrderNumberComplete;
+                }
+                else
+                {
+                    return string.Empty;
+                }
+            }
+        }
+
+        /// <summary>
         /// Initialization
         /// </summary>
         [NDependIgnoreLongMethod]
