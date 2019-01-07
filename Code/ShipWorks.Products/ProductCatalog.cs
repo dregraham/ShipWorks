@@ -450,7 +450,7 @@ namespace ShipWorks.Products
         /// <summary>
         /// Fetch variants of the same product as the passed in variant.
         /// </summary>
-        private async Task<IEnumerable<IProductVariantEntity>> FetchSiblingVariants(IProductVariantEntity productVariant, ISqlAdapter sqlAdapter)
+        public async Task<IEnumerable<IProductVariantEntity>> FetchSiblingVariants(IProductVariantEntity productVariant, ISqlAdapter sqlAdapter)
         {
             QueryFactory factory = new QueryFactory();
             EntityQuery<ProductVariantEntity> query = factory.ProductVariant.Where(ProductVariantFields.ProductID == productVariant.ProductID)
