@@ -285,7 +285,7 @@ namespace ShipWorks.Products.Import
                 return;
             }
 
-            if ((await productCatalog.FetchSiblingVariants(bundleProductVariant, sqlAdapter)).Any())
+            if ((await productCatalog.FetchSiblingVariants(bundleProductVariant, sqlAdapter).ConfigureAwait(false)).Any())
             {
                 // If the product has siblings it cannot be a bundle
                 bundleProductVariant.Product.IsBundle = false;
