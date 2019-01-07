@@ -465,9 +465,15 @@ namespace ShipWorks.Products
         /// </summary>
         public GenericResult<ProductVariantEntity> CloneVariant(ProductVariantEntity productVariant)
         {
-            return productVariant.Product.IsBundle ?
-                GenericResult.FromError<ProductVariantEntity>("You cannot create a variant from a bundle.") :
-                GenericResult.FromSuccess(EntityUtility.CloneAsNew(productVariant));
+            if (productVariant.Product.IsBundle)
+            {
+                return GenericResult.FromError<ProductVariantEntity>("You cannot create a variant from a bundle.");
+            }
+
+            ProductVariantEntity clone = EntityUtility.CloneAsNew(productVariant);
+            clone.ProductVariantID = 0;
+
+            return clone;
         }
     }
 }
