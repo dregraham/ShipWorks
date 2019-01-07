@@ -92,7 +92,6 @@ using ShipWorks.Stores.Orders.Archive;
 using ShipWorks.Stores.Orders.Split;
 using ShipWorks.Templates;
 using ShipWorks.Templates.Controls;
-using ShipWorks.Templates.Controls.DefaultPickListTemplate;
 using ShipWorks.Templates.Distribution;
 using ShipWorks.Templates.Emailing;
 using ShipWorks.Templates.Management;
@@ -3478,7 +3477,7 @@ namespace ShipWorks
             {
                 if (dlg.ShowDialog(this) == DialogResult.OK)
                 {
-                    Messenger.Current.Send(new OrderLookupSearchMessage(this, dlg.OrderID.ToString()));
+                    Messenger.Current.Send(new OrderLookupSearchMessage(this, dlg.OrderNmberComplete));
                 }
             }
         }
@@ -4466,7 +4465,7 @@ namespace ShipWorks
         /// <summary>
         /// Start the printing or previewing of the given print job
         /// </summary>
-        public void StartPrintJob(IPrintJob job, PrintAction action)
+        private void StartPrintJob(PrintJob job, PrintAction action)
         {
             // Show the progress window
             ProgressDlg progressDlg = new ProgressDlg(job.ProgressProvider);
@@ -4911,21 +4910,6 @@ namespace ShipWorks
                 {
                     MessageHelper.ShowError(this, "There was an error opening a file.\n\n" + ex.Message);
                 }
-            }
-        }
-
-        /// <summary>
-        /// Action when the user clicks the print pick list button
-        /// </summary>
-        private void OnPrintPickList(object sender, EventArgs e)
-        {
-            IEnumerable<long> selectedOrderIDs = gridControl.Selection.OrderedKeys;
-
-            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
-            {
-                IPickListPrintingService pickListPrintingService =
-                    lifetimeScope.Resolve<IPickListPrintingService>();
-                pickListPrintingService.PrintPickList(selectedOrderIDs);
             }
         }
 

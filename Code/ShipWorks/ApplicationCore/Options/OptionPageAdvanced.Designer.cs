@@ -71,9 +71,6 @@ namespace ShipWorks.ApplicationCore.Options
             this.printingPriorityInfoTip = new ShipWorks.UI.Controls.InfoTip();
             this.auditEnabled = new System.Windows.Forms.CheckBox();
             this.linkAuditInfo = new System.Windows.Forms.LinkLabel();
-            this.pickListTemplateInfoTip = new ShipWorks.UI.Controls.InfoTip();
-            this.pickListTemplateLabel = new System.Windows.Forms.Label();
-            this.pickListTemplate = new System.Windows.Forms.ComboBox();
             this.SuspendLayout();
             // 
             // addressCasing
@@ -509,46 +506,12 @@ namespace ShipWorks.ApplicationCore.Options
             this.linkAuditInfo.Text = "more info...";
             this.linkAuditInfo.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.OnAuditInfoClicked);
             // 
-            // pickListTemplateInfoTip
-            // 
-            this.pickListTemplateInfoTip.Caption = "This is the template that will print when you click the Print Pick List button in" +
-    " the home tab.";
-            this.pickListTemplateInfoTip.Location = new System.Drawing.Point(430, 1053);
-            this.pickListTemplateInfoTip.Name = "pickListTemplateInfoTip";
-            this.pickListTemplateInfoTip.Size = new System.Drawing.Size(12, 12);
-            this.pickListTemplateInfoTip.TabIndex = 63;
-            this.pickListTemplateInfoTip.Title = "Pick List Template";
-            // 
-            // pickListTemplateLabel
-            // 
-            this.pickListTemplateLabel.AutoSize = true;
-            this.pickListTemplateLabel.Location = new System.Drawing.Point(32, 1052);
-            this.pickListTemplateLabel.Name = "pickListTemplateLabel";
-            this.pickListTemplateLabel.Size = new System.Drawing.Size(93, 13);
-            this.pickListTemplateLabel.TabIndex = 62;
-            this.pickListTemplateLabel.Text = "Pick List template:";
-            // 
-            // pickListTemplate
-            // 
-            this.pickListTemplate.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.pickListTemplate.FormattingEnabled = true;
-            this.pickListTemplate.Items.AddRange(new object[] {
-            "Type username",
-            "Select username from dropdown"});
-            this.pickListTemplate.Location = new System.Drawing.Point(131, 1049);
-            this.pickListTemplate.Name = "pickListTemplate";
-            this.pickListTemplate.Size = new System.Drawing.Size(293, 21);
-            this.pickListTemplate.TabIndex = 61;
-            // 
             // OptionPageAdvanced
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoScrollMargin = new System.Drawing.Size(0, 8);
             this.BackColor = System.Drawing.Color.White;
-            this.Controls.Add(this.pickListTemplateInfoTip);
-            this.Controls.Add(this.pickListTemplateLabel);
-            this.Controls.Add(this.pickListTemplate);
             this.Controls.Add(this.linkAuditInfo);
             this.Controls.Add(this.auditEnabled);
             this.Controls.Add(this.printingPriorityInfoTip);
@@ -594,7 +557,7 @@ namespace ShipWorks.ApplicationCore.Options
             this.Controls.Add(this.logOnMethod);
             this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Name = "OptionPageAdvanced";
-            this.Size = new System.Drawing.Size(505, 1080);
+            this.Size = new System.Drawing.Size(505, 1060);
             this.Load += new System.EventHandler(this.OnLoad);
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -646,8 +609,5 @@ namespace ShipWorks.ApplicationCore.Options
         private UI.Controls.InfoTip printingPriorityInfoTip;
         private System.Windows.Forms.CheckBox auditEnabled;
         private System.Windows.Forms.LinkLabel linkAuditInfo;
-        private UI.Controls.InfoTip pickListTemplateInfoTip;
-        private System.Windows.Forms.Label pickListTemplateLabel;
-        private System.Windows.Forms.ComboBox pickListTemplate;
     }
 }

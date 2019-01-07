@@ -89,6 +89,7 @@ namespace ShipWorks.ApplicationCore.Licensing
 #else
             // This is wonky, but it's here so that a required namespace for the code above isn't removed by VS when saving
             return Using(Disposable.Empty, _ => Result.FromSuccess());
+
 #endif
         }
 

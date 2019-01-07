@@ -84,7 +84,11 @@ namespace ShipWorks.ApplicationCore.Licensing
             var trackedDurationEvent = new TrackedDurationEvent("Tango.Request");
             trackedDurationEvent?.AddProperty("Tango.Request.Action", getActionName());
 
-            return Disposable.Create(() => telemetryResult.WriteTo(trackedDurationEvent));
+            return Disposable.Create(() =>
+            {
+                telemetryResult.WriteTo(trackedDurationEvent);
+                trackedDurationEvent.Dispose();
+            });
         }
 
         /// <summary>
