@@ -15,10 +15,10 @@ namespace Interapptive.Shared.Utility
         /// <summary>
         /// Copy another telemetric result's properties and totalElapsedTime and add them to this one
         /// </summary>
-        void CopyFrom(TelemetricResult<T> resultToAdd, bool useNewResultsValue);
+        void CopyFrom<A>(TelemetricResult<T> resultToAdd, bool useNewResultsValue);
 
         /// <summary>
-        /// Copy to the destination
+        /// Copy to the destination 
         /// </summary>
         void CopyTo<A>(ITelemetryCollection<A> destination);
 

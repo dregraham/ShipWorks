@@ -157,7 +157,6 @@
     <Compile Include="Behaviors\TextBoxInputRegExBehavior.cs" />
     <Compile Include="Behaviors\WebBrowserRunStartupScriptBehavior.cs" />
     <Compile Include="Behaviors\WebBrowserSuppressPopupBehavior.cs" />
-    <Compile Include="Behaviors\WindowCloseOnClickBehavior.cs" />
     <Compile Include="BindingProxy.cs" />
     <Compile Include="Controls\AnimatedContentControl.cs" />
     <Compile Include="Controls\ChannelConfirmDelete\ChannelConfirmDeleteFactory.cs" />
@@ -229,10 +228,6 @@
     <Compile Include="Controls\Weight\WeightControl.cs" />
     <Compile Include="Controls\Weight\WeightInput.cs" />
     <Compile Include="Controls\Weight\WeightValidationRule.cs" />
-    <Compile Include="Dialogs\DefaultPickListTemplate\DefaultPickListTemplateDialog.xaml.cs">
-      <DependentUpon>DefaultPickListTemplateDialog.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Dialogs\DefaultPickListTemplate\DefaultPickListTemplateDialogViewModel.cs" />
     <Compile Include="Dialogs\Popup\IPopup.cs" />
     <Compile Include="Dialogs\Popup\IPopupViewModel.cs" />
     <Compile Include="Dialogs\Popup\Popup.xaml.cs">
@@ -374,10 +369,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Controls\WebBrowser\WebBrowserDlg.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Dialogs\DefaultPickListTemplate\DefaultPickListTemplateDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

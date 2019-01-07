@@ -42,7 +42,7 @@ namespace ShipWorks.Shipping.Carriers.iParcel
 
             packagesCount.Items.Clear();
 
-            for (int i = 1; i <= 25; i++)
+            for (int i = 1; i <= 5; i++)
             {
                 packagesCount.Items.Add(i);
             }

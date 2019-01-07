@@ -9,6 +9,12 @@ namespace Interapptive.Shared.Net
     [Component]
     public class HttpVariableRequestSubmitter : HttpRequestSubmitter, IHttpVariableRequestSubmitter
     {
+        // The variables to be posted
+        IHttpVariableCollection variables = new HttpVariableCollection();
+
+        // Casing to be used for query string encoding
+        QueryStringEncodingCasing encodingCasing = QueryStringEncodingCasing.Default;
+
         /// <summary>
         /// Constructor
         /// </summary>
@@ -21,13 +27,20 @@ namespace Interapptive.Shared.Net
         /// <summary>
         /// The variables to be posted
         /// </summary>
-        public IHttpVariableCollection Variables { get; } = new HttpVariableCollection();
+        public IHttpVariableCollection Variables
+        {
+            get { return variables; }
+        }
 
         /// <summary>
         /// The casing to use when encoding query string values (like '%2c' vs '%2C').  According to the web rules
         /// this shouldn't matter but in practice sometimes it does.
         /// </summary>
-        public QueryStringEncodingCasing VariableEncodingCasing { get; set; } = QueryStringEncodingCasing.Default;
+        public QueryStringEncodingCasing VariableEncodingCasing
+        {
+            get { return encodingCasing; }
+            set { encodingCasing = value; }
+        }
 
         /// <summary>
         /// Gets the Uri for the request

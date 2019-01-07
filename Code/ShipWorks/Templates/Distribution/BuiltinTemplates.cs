@@ -120,14 +120,6 @@ namespace ShipWorks.Templates.Distribution
                 InstallTemplate(@"Reports\Product Trends\Items by SKU");
                 InstallTemplate(@"Packing Slips\Standard with SKU");
             });
-
-            ifVersionIsLessThan("6.1.0.0000", () =>
-            {
-                InstallTemplate(@"Reports\Pick Lists\Pick List by Location");
-                InstallTemplate(@"Reports\Pick Lists\Pick List by Name");
-                InstallTemplate(@"Reports\Pick Lists\Pick List by Quantity");
-                InstallTemplate(@"Reports\Pick Lists\Pick List by SKU");
-            });
         }
 
         /// <summary>

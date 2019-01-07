@@ -1,6 +1,4 @@
 using System.Collections.Generic;
-using System.Linq;
-using Interapptive.Shared.Collections;
 using log4net;
 using ShipWorks.Data;
 using ShipWorks.Data.Connection;
@@ -17,18 +15,15 @@ namespace ShipWorks.Templates
     /// </summary>
     public static class TemplateManager
     {
-        private static readonly ILog log = LogManager.GetLogger(typeof(TemplateManager));
+        static readonly ILog log = LogManager.GetLogger(typeof(TemplateManager));
 
-        private static bool needCheckForChanges = false;
+        static bool needCheckForChanges = false;
 
-        private static TableSynchronizer<TemplateFolderEntity> folderSynchronizer;
-        private static TableSynchronizer<TemplateEntity> templateSynchronizer;
-        private static TemplateTree templateTree;
+        static TableSynchronizer<TemplateFolderEntity> folderSynchronizer;
+        static TableSynchronizer<TemplateEntity> templateSynchronizer;
+        static TemplateTree templateTree;
 
-        private static List<ObjectLabelEntity> deletedTemplateLabels;
-        
-        private const string PickListsFolderName = "Pick Lists";
-        private const string ReportsFolderName = "Reports";
+        static List<ObjectLabelEntity> deletedTemplateLabels;
 
         /// <summary>
         /// Initialize TemplateManager
@@ -137,36 +132,5 @@ namespace ShipWorks.Templates
                 return deletedTemplateLabels;
             }
         }
-
-        /// <summary>
-        /// Fetch all of the pick list templates from the pick list folder. If the folder does not exist, return
-        /// templates from the reports folder
-        /// </summary>
-        public static IEnumerable<TemplateEntity> FetchPickListTemplates()
-        {
-            IEnumerable<TemplateEntity> pickListTemplates = Tree.AllTemplates.Where(t => t.ParentFolder.Name == PickListsFolderName);
-            if (pickListTemplates.None())
-            {
-                pickListTemplates = Tree.AllTemplates.Where(t => t.ParentFolder.Name == ReportsFolderName);
-            }
-
-            return pickListTemplates;
-        }
-
-        /// <summary>
-        /// Fetch the default pick list template or null if none found
-        /// </summary>
-        public static TemplateEntity FetchDefaultPickListTemplate()
-        {
-            long? pickListTemplateId = ConfigurationData.FetchReadOnly().DefaultPickListTemplateID;
-
-            return pickListTemplateId.HasValue ? FetchTemplateByID(pickListTemplateId.Value) : null;
-        }
-
-        /// <summary>
-        /// Fetch the first template with a TemplateID that matches the given id. Returns null if none found.
-        /// </summary>
-        private static TemplateEntity FetchTemplateByID(long pickListTemplateId) =>
-            Tree.AllTemplates.FirstOrDefault(t => t.TemplateID == pickListTemplateId);
     }
 }

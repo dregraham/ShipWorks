@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Net;
 using System.Reactive;
-using System.Reactive.Disposables;
 using System.Security.Cryptography.X509Certificates;
 using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.Net;
 using Interapptive.Shared.Utility;
-using static Interapptive.Shared.Utility.Functional;
 
 namespace ShipWorks.ApplicationCore.Licensing
 {
@@ -30,15 +29,13 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// <summary>
         /// Validate a secure connection
         /// </summary>
-        /// <remarks>
-        /// First validate that we are connecting to interapptive, and not a fake redirect to steal passwords and such.  Doing this pre-call
-        /// also prevents stealing the headers user\pass with fiddler
-        /// </remarks>
         public Result ValidateSecureConnection(TelemetricResult<Unit> telemetricResult, Uri uri)
         {
+            // First validate that we are connecting to interapptive, and not a fake redirect to steal passwords and such.  Doing this pre-call
+            // also prevents stealing the headers user\pass with fiddler
             if (nextSecureConnectionValidation < dateTimeProvider.UtcNow)
             {
-                return ForceValidateSecureConnection(telemetricResult, uri)
+                return telemetricResult.RunTimedEvent("ValidateSecureConnection", () => ValidateSecureConnection(uri))
                     .Do(() => nextSecureConnectionValidation = dateTimeProvider.UtcNow.AddMinutes(throttlePeriod));
             }
 
@@ -46,49 +43,29 @@ namespace ShipWorks.ApplicationCore.Licensing
         }
 
         /// <summary>
-        /// Validate a secure connection
-        /// </summary>
-        /// <remarks>
-        /// First validate that we are connecting to interapptive, and not a fake redirect to steal passwords and such.  Doing this pre-call
-        /// also prevents stealing the headers user\pass with fiddler
-        /// </remarks>
-        public Result ForceValidateSecureConnection(TelemetricResult<Unit> telemetricResult, Uri uri) =>
-            PerformValidation("ValidateSecureConnection", telemetricResult, () => ValidateSecureConnection(uri));
-
-        /// <summary>
         /// Validate the certificate of a response
         /// </summary>
-        public Result ValidateCertificate(TelemetricResult<Unit> telemetricResult, HttpWebRequest request) =>
-            PerformValidation("ValidateInterapptiveCertificate", telemetricResult, () => ValidateInterapptiveCertificate(request));
-
-        /// <summary>
-        /// Perform the validation on an action that returns a response
-        /// </summary>
-        /// <param name="checkName"></param>
-        /// <param name="telemetricResult"></param>
-        /// <param name="func"></param>
-        /// <returns></returns>
-        private Result PerformValidation(string checkName, TelemetricResult<Unit> telemetricResult, Func<Result> func) =>
+        public GenericResult<IHttpResponseReader> ValidateCertificate(TelemetricResult<Unit> telemetricResult, IHttpResponseReader responseReader) =>
             telemetricResult
-                .RunTimedEvent(checkName, func)
-                .Do(() => telemetricResult.AddProperty($"{checkName}.IsValidCertificate", "Yes"))
-                .OnFailure(_ => telemetricResult.AddProperty($"{checkName}.IsValidCertificate", "No"))
-                .OnFailure(ex => nextSecureConnectionValidation = DateTime.MinValue);
+                .RunTimedEvent("ValidateInterapptiveCertificate", () => ValidateInterapptiveCertificate(responseReader.HttpWebRequest))
+                .Map(() => responseReader);
 
         /// <summary>
         /// Ensure the connection to the given URI is a valid interapptive secure connection
         /// </summary>
-        public Result ValidateSecureConnection(Uri uri)
+        public static Result ValidateSecureConnection(Uri uri)
         {
 #if !DEBUG
             HttpWebRequest request = (HttpWebRequest) WebRequest.Create(uri);
             request.KeepAlive = false;
             request.UserAgent = "shipworks";
 
-            return Using(request.GetResponse(), _ => ValidateInterapptiveCertificate(request));
+            using (WebResponse response = request.GetResponse())
+            {
+                return ValidateInterapptiveCertificate(request);
+            }
 #else
-            // This is wonky, but it's here so that a required namespace for the code above isn't removed by VS when saving
-            return Using(Disposable.Empty, _ => Result.FromSuccess());
+            return Result.FromSuccess();
 #endif
         }
 

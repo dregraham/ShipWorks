@@ -84,11 +84,6 @@ namespace Interapptive.Shared.Net
         }
 
         /// <summary>
-        /// Force certificate validation for any client that supports it
-        /// </summary>
-        public bool ForcePreCallCertificateValidation { get; set; }
-
-        /// <summary>
         /// Raised when the request is about to be submitted
         /// </summary>
         public event HttpRequestSubmittingEventHandler RequestSubmitting;

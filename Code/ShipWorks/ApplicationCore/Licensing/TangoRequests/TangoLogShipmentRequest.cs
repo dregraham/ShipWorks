@@ -59,7 +59,10 @@ namespace ShipWorks.ApplicationCore.Licensing.TangoRequests
         /// </summary>
         public Result LogShipment(DbConnection connection, StoreEntity store, ShipmentEntity shipment)
         {
-            MethodConditions.EnsureArgumentIsNotNull(store, nameof(store));
+            if (store == null)
+            {
+                return new ArgumentNullException("store");
+            }
 
             // Get the license from the store so we know how to log
             ShipWorksLicense license = new ShipWorksLicense(store.License);
@@ -72,7 +75,6 @@ namespace ShipWorks.ApplicationCore.Licensing.TangoRequests
 
             // Both methods use the license key
             postRequest.Variables.Add("license", license.Key);
-            postRequest.ForcePreCallCertificateValidation = true;
 
             return ProcessRequest(shipment, license, postRequest, shipmentType, store)
                 .Do(x =>
