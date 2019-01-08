@@ -89,28 +89,7 @@ namespace ShipWorks.ApplicationCore.Licensing
                 telemetryResult.WriteTo(trackedDurationEvent);
                 trackedDurationEvent.Dispose();
             });
-
-        /// <summary>
-        /// Perform the actual request
-        /// </summary>
-        private GenericResult<string> PerformRequest(IHttpVariableRequestSubmitter postRequest, ApiLogEntry logEntry, TelemetricResult<Unit> telemetricResult) =>
-            securityValidator
-                .ValidateSecureConnection(telemetricResult, postRequest.Uri)
-                .Map(() => telemetricResult.RunTimedEvent("ActualRequest", postRequest.GetResponse))
-                .Bind(result => ParseValidatedResponse(telemetricResult, result))
-                .Do(response => telemetricResult.RunTimedEvent("LogResponse", () => logEntry.LogResponse(response)));
-
-        /// <summary>
-        /// Parse the validated response
-        /// </summary>
-        private GenericResult<string> ParseValidatedResponse(TelemetricResult<Unit> telemetricResult, IHttpResponseReader responseReader) =>
-            Using(responseReader,
-                x =>
-                {
-                    var result = x.ReadResult().Trim();
-                    return securityValidator.ValidateCertificate(telemetricResult, x.HttpWebRequest)
-                        .Map(() => result);
-                });
+        }
 
         /// <summary>
         /// Perform the actual request
