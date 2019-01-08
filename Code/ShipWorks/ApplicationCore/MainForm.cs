@@ -3478,7 +3478,7 @@ namespace ShipWorks
             {
                 if (dlg.ShowDialog(this) == DialogResult.OK)
                 {
-                    Messenger.Current.Send(new OrderLookupSearchMessage(this, dlg.OrderID.ToString()));
+                    Messenger.Current.Send(new OrderLookupSearchMessage(this, dlg.OrderNmberComplete));
                 }
             }
         }

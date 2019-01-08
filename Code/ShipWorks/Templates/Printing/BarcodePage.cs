@@ -33,7 +33,7 @@ namespace ShipWorks.Templates.Printing
         public TemplateResult GetTemplateResult()
         {
             StringBuilder htmlBuilder = new StringBuilder();
-            PrintableBarcode lastBarcode = Barcodes.Last();
+            PrintableBarcode lastBarcode = Barcodes.LastOrDefault();
             foreach (PrintableBarcode barcode in Barcodes)
             {
                 string barcodeBlock = barcode.GetHtmlBlock();
