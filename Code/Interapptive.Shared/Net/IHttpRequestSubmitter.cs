@@ -55,6 +55,11 @@ namespace Interapptive.Shared.Net
         HttpVerb Verb { get; set; }
 
         /// <summary>
+        /// Force certificate validation for any client that supports it
+        /// </summary>
+        bool ForcePreCallCertificateValidation { get; set; }
+
+        /// <summary>
         /// Raised when the request is about to be submitted
         /// </summary>
         event HttpRequestSubmittingEventHandler RequestSubmitting;
