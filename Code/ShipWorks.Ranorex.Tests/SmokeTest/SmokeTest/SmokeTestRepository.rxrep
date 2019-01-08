@@ -1244,6 +1244,46 @@ XrLp0EM2aG+RntUiB+ZT6fxfIsRPbYnQgbXhGFYAAAAASUVORK5CYII=
 				searchtimeout="30000ms">
 					/form[@controlname='UpsSetupWizard']/container[@controlname='mainPanel']//text[@controlname='postalCode']/text[@accessiblerole='Text' and @visible='True']
 				</item>
+				<item
+				addcaps="text,accessible"
+				capname="text"
+				id="1411c2fe-d3a3-47b3-b48c-6168e4f4ce3b"
+				name="InvoiceNumber"
+				refimgid="265dd2ee-1455-4789-a97a-d88c043fe1cd"
+				refpath="/form[@controlname='UpsSetupWizard']/container[@controlname='mainPanel']/container/container/text[@controlname='authInvoiceNumber']/text[@accessiblename='Invoice number:']"
+				searchtimeout="30000ms">
+					/form[@controlname='UpsSetupWizard']/container[@controlname='mainPanel']//text[@controlname='authInvoiceNumber']/text[@accessiblename='Invoice number:']
+				</item>
+				<item
+				addcaps="list,accessible"
+				capname="list"
+				id="32356c63-af76-4fe9-ba35-a4178f10f193"
+				name="List172019"
+				refimgid="c6f8de9f-f215-48a5-8394-d0c0dda87469"
+				refpath="/form[@controlname='UpsSetupWizard']/container[@controlname='mainPanel']/container/container/datetime/list[@accessiblename='1/7/2019']"
+				searchtimeout="30000ms">
+					/form[@controlname='UpsSetupWizard']/container[@controlname='mainPanel']//datetime[@controlname='authInvoiceDate']/list[@accessiblename='1/7/2019']
+				</item>
+				<item
+				addcaps="text,accessible"
+				capname="text"
+				id="bfd39353-a2d6-428f-9af6-98f58a8d0801"
+				name="InvoiceAmount"
+				refimgid="2e84d57b-60eb-4758-b295-bbe82e48da92"
+				refpath="/form[@controlname='UpsSetupWizard']/container[@controlname='mainPanel']/container/container/text[@controlname='authInvoiceAmount']/text[@accessiblename='Invoice amount:']"
+				searchtimeout="30000ms">
+					/form[@controlname='UpsSetupWizard']/container[@controlname='mainPanel']//text[@controlname='authInvoiceAmount']/text[@accessiblename='Invoice amount:']
+				</item>
+				<item
+				addcaps="text,accessible"
+				capname="text"
+				id="578c005b-1203-4520-98fc-881cb9f94efd"
+				name="ControlID"
+				refimgid="abcfffd7-ba34-435d-8f9e-0a9a5b707b0a"
+				refpath="/form[@controlname='UpsSetupWizard']/container[@controlname='mainPanel']/container/container/text[@controlname='authControlID']/text[@accessiblename='Control ID:']"
+				searchtimeout="30000ms">
+					/form[@controlname='UpsSetupWizard']/container[@controlname='mainPanel']//text[@controlname='authControlID']/text[@accessiblename='Control ID:']
+				</item>
 				<basepath>
 					/form[@controlname='UpsSetupWizard']/container[@controlname='mainPanel']
 				</basepath>
