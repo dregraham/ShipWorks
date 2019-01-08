@@ -3347,6 +3347,10 @@ namespace SmokeTest
             RepoItemInfo _worldshipagree2Info;
             RepoItemInfo _launchworldshipInfo;
             RepoItemInfo _postalcodeInfo;
+            RepoItemInfo _invoicenumberInfo;
+            RepoItemInfo _list172019Info;
+            RepoItemInfo _invoiceamountInfo;
+            RepoItemInfo _controlidInfo;
 
             /// <summary>
             /// Creates a new MainPanel  folder.
@@ -3371,6 +3375,10 @@ namespace SmokeTest
                 _worldshipagree2Info = new RepoItemInfo(this, "WorldShipAgree2", "?/?/checkbox[@controlname='worldShipAgree2']", 30000, null, "02c2f807-da04-4dde-9bdc-0a6279b14c74");
                 _launchworldshipInfo = new RepoItemInfo(this, "LaunchWorldShip", ".//checkbox[@controlname='launchWorldShip']", 30000, null, "331fccbc-a4ea-41a2-8848-708511748760");
                 _postalcodeInfo = new RepoItemInfo(this, "PostalCode", ".//text[@controlname='postalCode']/text[@accessiblerole='Text' and @visible='True']", 30000, null, "18ea8ce2-883b-438d-a359-02382c63832f");
+                _invoicenumberInfo = new RepoItemInfo(this, "InvoiceNumber", ".//text[@controlname='authInvoiceNumber']/text[@accessiblename='Invoice number:']", 30000, null, "1411c2fe-d3a3-47b3-b48c-6168e4f4ce3b");
+                _list172019Info = new RepoItemInfo(this, "List172019", ".//datetime[@controlname='authInvoiceDate']/list[@accessiblename='1/7/2019']", 30000, null, "32356c63-af76-4fe9-ba35-a4178f10f193");
+                _invoiceamountInfo = new RepoItemInfo(this, "InvoiceAmount", ".//text[@controlname='authInvoiceAmount']/text[@accessiblename='Invoice amount:']", 30000, null, "bfd39353-a2d6-428f-9af6-98f58a8d0801");
+                _controlidInfo = new RepoItemInfo(this, "ControlID", ".//text[@controlname='authControlID']/text[@accessiblename='Control ID:']", 30000, null, "578c005b-1203-4520-98fc-881cb9f94efd");
             }
 
             /// <summary>
@@ -3802,6 +3810,102 @@ namespace SmokeTest
                 get
                 {
                     return _postalcodeInfo;
+                }
+            }
+
+            /// <summary>
+            /// The InvoiceNumber item.
+            /// </summary>
+            [RepositoryItem("1411c2fe-d3a3-47b3-b48c-6168e4f4ce3b")]
+            public virtual Ranorex.Text InvoiceNumber
+            {
+                get
+                {
+                    return _invoicenumberInfo.CreateAdapter<Ranorex.Text>(true);
+                }
+            }
+
+            /// <summary>
+            /// The InvoiceNumber item info.
+            /// </summary>
+            [RepositoryItemInfo("1411c2fe-d3a3-47b3-b48c-6168e4f4ce3b")]
+            public virtual RepoItemInfo InvoiceNumberInfo
+            {
+                get
+                {
+                    return _invoicenumberInfo;
+                }
+            }
+
+            /// <summary>
+            /// The List172019 item.
+            /// </summary>
+            [RepositoryItem("32356c63-af76-4fe9-ba35-a4178f10f193")]
+            public virtual Ranorex.List List172019
+            {
+                get
+                {
+                    return _list172019Info.CreateAdapter<Ranorex.List>(true);
+                }
+            }
+
+            /// <summary>
+            /// The List172019 item info.
+            /// </summary>
+            [RepositoryItemInfo("32356c63-af76-4fe9-ba35-a4178f10f193")]
+            public virtual RepoItemInfo List172019Info
+            {
+                get
+                {
+                    return _list172019Info;
+                }
+            }
+
+            /// <summary>
+            /// The InvoiceAmount item.
+            /// </summary>
+            [RepositoryItem("bfd39353-a2d6-428f-9af6-98f58a8d0801")]
+            public virtual Ranorex.Text InvoiceAmount
+            {
+                get
+                {
+                    return _invoiceamountInfo.CreateAdapter<Ranorex.Text>(true);
+                }
+            }
+
+            /// <summary>
+            /// The InvoiceAmount item info.
+            /// </summary>
+            [RepositoryItemInfo("bfd39353-a2d6-428f-9af6-98f58a8d0801")]
+            public virtual RepoItemInfo InvoiceAmountInfo
+            {
+                get
+                {
+                    return _invoiceamountInfo;
+                }
+            }
+
+            /// <summary>
+            /// The ControlID item.
+            /// </summary>
+            [RepositoryItem("578c005b-1203-4520-98fc-881cb9f94efd")]
+            public virtual Ranorex.Text ControlID
+            {
+                get
+                {
+                    return _controlidInfo.CreateAdapter<Ranorex.Text>(true);
+                }
+            }
+
+            /// <summary>
+            /// The ControlID item info.
+            /// </summary>
+            [RepositoryItemInfo("578c005b-1203-4520-98fc-881cb9f94efd")]
+            public virtual RepoItemInfo ControlIDInfo
+            {
+                get
+                {
+                    return _controlidInfo;
                 }
             }
         }
