@@ -16,8 +16,13 @@ namespace ShipWorks.ApplicationCore.Licensing
         Result ValidateSecureConnection(TelemetricResult<Unit> telemetricResult, Uri uri);
 
         /// <summary>
+        /// Validate a secure connection
+        /// </summary>
+        Result ForceValidateSecureConnection(TelemetricResult<Unit> telemetricResult, Uri uri);
+
+        /// <summary>
         /// Ensure the connection to the given URI is a valid interapptive secure connection
         /// </summary>
-        Result ValidateCertificate(TelemetricResult<Unit> telemetricResult, HttpWebRequest httpWebRequest);
+        Result ValidateCertificate(TelemetricResult<Unit> telemetricResult, HttpWebRequest request);
     }
 }

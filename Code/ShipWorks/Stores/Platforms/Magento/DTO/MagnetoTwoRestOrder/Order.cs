@@ -9,7 +9,7 @@ namespace ShipWorks.Stores.Platforms.Magento.DTO.MagnetoTwoRestOrder
         public string CreatedAt { get; set; }
 
         [JsonProperty("customer_id")]
-        public int CustomerId { get; set; }
+        public int? CustomerId { get; set; }
 
         [JsonProperty("discount_amount")]
         public double DiscountAmount { get; set; }

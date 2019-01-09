@@ -438,7 +438,7 @@ namespace ShipWorks.Products
             dt.Columns[dt.Columns["Name"].Ordinal].AllowDBNull = true;
             dt.Columns[dt.Columns["Active"].Ordinal].AllowDBNull = true;
             secondHeaderRow[0] = "";
-            secondHeaderRow[1] = "SKU | SKU";
+            secondHeaderRow[1] = "SKU : Name | SKU : Name";
             secondHeaderRow[2] = "SKU : Qty | SKU : Qty";
             secondHeaderRow[7] = "lbs";
             secondHeaderRow[8] = "inches";
@@ -450,7 +450,7 @@ namespace ShipWorks.Products
         /// <summary>
         /// Fetch variants of the same product as the passed in variant.
         /// </summary>
-        private async Task<IEnumerable<IProductVariantEntity>> FetchSiblingVariants(IProductVariantEntity productVariant, ISqlAdapter sqlAdapter)
+        public async Task<IEnumerable<IProductVariantEntity>> FetchSiblingVariants(IProductVariantEntity productVariant, ISqlAdapter sqlAdapter)
         {
             QueryFactory factory = new QueryFactory();
             EntityQuery<ProductVariantEntity> query = factory.ProductVariant.Where(ProductVariantFields.ProductID == productVariant.ProductID)
@@ -465,9 +465,15 @@ namespace ShipWorks.Products
         /// </summary>
         public GenericResult<ProductVariantEntity> CloneVariant(ProductVariantEntity productVariant)
         {
-            return productVariant.Product.IsBundle ?
-                GenericResult.FromError<ProductVariantEntity>("You cannot create a variant from a bundle.") :
-                GenericResult.FromSuccess(EntityUtility.CloneAsNew(productVariant));
+            if (productVariant.Product.IsBundle)
+            {
+                return GenericResult.FromError<ProductVariantEntity>("You cannot create a variant from a bundle.");
+            }
+
+            ProductVariantEntity clone = EntityUtility.CloneAsNew(productVariant);
+            clone.ProductVariantID = 0;
+
+            return clone;
         }
     }
 }

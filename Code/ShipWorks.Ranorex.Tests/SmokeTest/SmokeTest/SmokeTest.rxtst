@@ -446,6 +446,12 @@ rxversion="8.1">
 			type="Recording">
 			</testmodule>
 			<testmodule
+			id="3a8380b1-68e0-4ee2-b3f1-b157ba41ee95"
+			name="SwitchFromBatchGridModeToOrderLookupMode"
+			ref="85da62f5-0034-4c89-a0b7-93329b0429a7"
+			type="Recording">
+			</testmodule>
+			<testmodule
 			id="3a8418ce-3c24-4152-bf4c-a6e8976086c3"
 			name="ShipOrders_ToAddress_Domestic2"
 			ref="f33922fa-b9ac-411c-8e07-c21d2e74d518"
@@ -771,6 +777,12 @@ rxversion="8.1">
 			id="792f0f22-95a8-49e9-8b92-0a8ca034793f"
 			name="ProcessUSPSInternationalPriority"
 			ref="415b3cad-6f52-47fe-8977-dc89cf9e9c71"
+			type="Recording">
+			</testmodule>
+			<testmodule
+			id="7af492d8-d3bc-46a6-9124-2b2ca2a6a367"
+			name="LookupAnOrder"
+			ref="7bb9e37a-0c6b-4a4d-98f7-d2aa040ae9d9"
 			type="Recording">
 			</testmodule>
 			<testmodule
@@ -1215,10 +1227,20 @@ rxversion="8.1">
 					</var>
 				</databinding>
 			</testmodule>
+			<smartfoldernode
+			id="d2cf3132-974a-411c-80b9-c27155a96f40"
+			name="OrderLookupModeLookupAnOrder">
+			</smartfoldernode>
 			<testmodule
 			id="d406caf6-db45-4eb9-9645-cdd38edd6fd7"
 			name="AllOrdersFilter_SelectFirstRow_ShipOrders2"
 			ref="525dbf63-47dc-43d1-813c-3932018894b3"
+			type="Recording">
+			</testmodule>
+			<testmodule
+			id="d42e908e-dca9-4eb2-b613-55dca0b7e9b4"
+			name="SwitchFromOrderLookupModeToBatchGridMode"
+			ref="c7bf8c82-6009-412b-88a7-7d4808d2a878"
 			type="Recording">
 			</testmodule>
 			<testmodule
@@ -1628,6 +1650,22 @@ rxversion="8.1">
 							<testmodule
 							id="85803b48-fc28-4bb9-a136-b33e1bf1571a"
 							name="SetupOther">
+							</testmodule>
+						</smartfoldernode>
+						<smartfoldernode
+						id="d2cf3132-974a-411c-80b9-c27155a96f40"
+						name="OrderLookupModeLookupAnOrder">
+							<testmodule
+							id="3a8380b1-68e0-4ee2-b3f1-b157ba41ee95"
+							name="SwitchFromBatchGridModeToOrderLookupMode">
+							</testmodule>
+							<testmodule
+							id="7af492d8-d3bc-46a6-9124-2b2ca2a6a367"
+							name="LookupAnOrder">
+							</testmodule>
+							<testmodule
+							id="d42e908e-dca9-4eb2-b613-55dca0b7e9b4"
+							name="SwitchFromOrderLookupModeToBatchGridMode">
 							</testmodule>
 						</smartfoldernode>
 						<smartfoldernode
@@ -2555,6 +2593,9 @@ rxversion="8.1">
 			id="cfea8d06-1bda-4e5e-a3a7-52a894247f32">
 			</testcontainer>
 			<testcontainer
+			id="d2cf3132-974a-411c-80b9-c27155a96f40">
+			</testcontainer>
+			<testcontainer
 			id="d7c4ed90-2e16-4d27-94e5-1c2bcc241263">
 			</testcontainer>
 			<testcontainer
@@ -2585,7 +2626,7 @@ rxversion="8.1">
 			id="14ee1c1c-0353-469d-84ea-e800f3a3addb">
 			</testcontainer>
 			<testcontainer
-			id="cfea8d06-1bda-4e5e-a3a7-52a894247f32">
+			id="d2cf3132-974a-411c-80b9-c27155a96f40">
 			</testcontainer>
 			<testcontainer
 			id="f875647d-7a5c-46d1-bda6-83a5075d93c7">

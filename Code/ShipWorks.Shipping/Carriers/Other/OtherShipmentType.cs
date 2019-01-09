@@ -26,7 +26,10 @@ namespace ShipWorks.Shipping.Carriers.Other
         /// </summary>
         public override IEnumerable<IPackageAdapter> GetPackageAdapters(ShipmentEntity shipment)
         {
-            ShippingManager.EnsureShipmentLoaded(shipment);
+            if (shipment.Other == null)
+            {
+                ShippingManager.EnsureShipmentLoaded(shipment);
+            }
             return new List<IPackageAdapter> { new OtherPackageAdapter(shipment) };
         }
 

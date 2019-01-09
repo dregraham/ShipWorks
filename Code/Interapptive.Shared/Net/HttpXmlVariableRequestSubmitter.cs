@@ -28,7 +28,7 @@ namespace Interapptive.Shared.Net
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="Interapptive.Shared.Net.HttpRequestSubmittingEventArgs"/> instance containing the event data.</param>
-        void OnRequestSubmitting(object sender, HttpRequestSubmittingEventArgs e)
+        private void OnRequestSubmitting(object sender, HttpRequestSubmittingEventArgs e)
         {
             e.HttpWebRequest.Accept = ResponseFormat;
         }
@@ -40,7 +40,7 @@ namespace Interapptive.Shared.Net
         public override byte[] GetPostContent()
         {
             StringBuilder content = new StringBuilder();
-            foreach(HttpVariable variable in Variables)
+            foreach (HttpVariable variable in Variables)
             {
                 if (variable.Name.Length > 0)
                 {
