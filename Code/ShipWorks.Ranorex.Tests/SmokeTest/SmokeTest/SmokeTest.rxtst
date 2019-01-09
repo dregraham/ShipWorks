@@ -22,6 +22,12 @@ rxversion="8.1">
 			type="Recording">
 			</testmodule>
 			<testmodule
+			id="0389bab5-4b03-47f7-aeba-7f4049c4e6cc"
+			name="CreateNewShipment"
+			ref="6f99f19f-d464-47ad-95f7-4ce6ffabf62f"
+			type="Recording">
+			</testmodule>
+			<testmodule
 			id="03df545f-ec24-4038-8d69-3c805cf12cd4"
 			name="SendInfoEmail"
 			ref="d8d6dccf-0f6f-4c0a-858c-874918cbd5a0"
@@ -774,6 +780,12 @@ rxversion="8.1">
 			type="Recording">
 			</testmodule>
 			<testmodule
+			id="7ce44da4-5e51-495d-9924-f58168d56233"
+			name="AllOrdersFilter_SelectFirstRow_ShipOrders2"
+			ref="525dbf63-47dc-43d1-813c-3932018894b3"
+			type="Recording">
+			</testmodule>
+			<testmodule
 			id="7ee29dfc-d2a1-4573-8c9e-6ce081a6d49b"
 			name="ProcessFedExDomesticHomeDelivery"
 			ref="73ce1308-cc90-45a2-8f99-38301a3c3c20"
@@ -847,6 +859,10 @@ rxversion="8.1">
 			ref="86985c63-65a2-49f8-a670-2ee220a5e1c1"
 			type="Recording">
 			</testmodule>
+			<smartfoldernode
+			id="8e67454a-6a29-4249-af98-6aab48b2ca70"
+			name="CreateShipmentsForOrderLookupMode">
+			</smartfoldernode>
 			<smartfoldernode
 			id="8ec23d74-2e54-47d0-bd3d-d725ada1d84f"
 			name="SetupOther">
@@ -985,6 +1001,12 @@ rxversion="8.1">
 			id="a7f0d35e-04e4-4e21-b4fe-dc8eae81c152"
 			name="ShipOrders_ToAddress_Domestic2"
 			ref="f33922fa-b9ac-411c-8e07-c21d2e74d518"
+			type="Recording">
+			</testmodule>
+			<testmodule
+			id="ad8b3c17-4601-4880-ba01-34c26cd074a7"
+			name="CreateNewShipment"
+			ref="6f99f19f-d464-47ad-95f7-4ce6ffabf62f"
 			type="Recording">
 			</testmodule>
 			<testmodule
@@ -1153,6 +1175,12 @@ rxversion="8.1">
 			id="c6a595be-30fd-4535-96e0-84ab2933024b"
 			name="CreateNewShipment_ProviderUSPSExpress1Endicia"
 			ref="19635344-6861-4d55-bc8e-c6868844b5a7"
+			type="Recording">
+			</testmodule>
+			<testmodule
+			id="c7fb5930-c113-40b2-a951-b4dc7942533e"
+			name="CloseShipOrdersDialog"
+			ref="93e031b6-a539-4f4b-8dd5-892ef64181fb"
 			type="Recording">
 			</testmodule>
 			<smartfoldernode
@@ -1548,6 +1576,26 @@ rxversion="8.1">
 							<testmodule
 							id="85c505fb-e16d-4ddd-b7e3-d09de3dfe228"
 							name="CreateAnOrder">
+							</testmodule>
+						</smartfoldernode>
+						<smartfoldernode
+						id="8e67454a-6a29-4249-af98-6aab48b2ca70"
+						name="CreateShipmentsForOrderLookupMode">
+							<testmodule
+							id="7ce44da4-5e51-495d-9924-f58168d56233"
+							name="AllOrdersFilter_SelectFirstRow_ShipOrders2">
+							</testmodule>
+							<testmodule
+							id="ad8b3c17-4601-4880-ba01-34c26cd074a7"
+							name="CreateNewShipment">
+							</testmodule>
+							<testmodule
+							id="0389bab5-4b03-47f7-aeba-7f4049c4e6cc"
+							name="CreateNewShipment">
+							</testmodule>
+							<testmodule
+							id="c7fb5930-c113-40b2-a951-b4dc7942533e"
+							name="CloseShipOrdersDialog">
 							</testmodule>
 						</smartfoldernode>
 						<smartfoldernode
@@ -2501,6 +2549,9 @@ rxversion="8.1">
 			id="73deaccb-9bd3-4035-ba77-6273c1f48753">
 			</testcontainer>
 			<testcontainer
+			id="8e67454a-6a29-4249-af98-6aab48b2ca70">
+			</testcontainer>
+			<testcontainer
 			id="8ec23d74-2e54-47d0-bd3d-d725ada1d84f">
 			</testcontainer>
 			<testcontainer
@@ -2583,6 +2634,9 @@ rxversion="8.1">
 		name="TestRun">
 			<testcontainer
 			id="14ee1c1c-0353-469d-84ea-e800f3a3addb">
+			</testcontainer>
+			<testcontainer
+			id="8e67454a-6a29-4249-af98-6aab48b2ca70">
 			</testcontainer>
 			<testcontainer
 			id="f875647d-7a5c-46d1-bda6-83a5075d93c7">
