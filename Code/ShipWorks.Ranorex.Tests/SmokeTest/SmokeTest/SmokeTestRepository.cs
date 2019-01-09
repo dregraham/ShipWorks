@@ -1678,6 +1678,7 @@ namespace SmokeTest
         [RepositoryFolder("d8e08831-156b-4262-a983-4977c7fbaeb1")]
         public partial class MainFormAppFolder : RepoGenBaseFolder
         {
+            SmokeTestRepositoryFolders.ToFirstLastDomesticFolder _tofirstlastdomestic;
             RepoItemInfo _manageInfo;
             RepoItemInfo _shippingInfo;
             RepoItemInfo _maingridrow2column1Info;
@@ -1693,6 +1694,7 @@ namespace SmokeTest
             public MainFormAppFolder(RepoGenBaseFolder parentFolder) :
                     base("MainForm", "/form[@controlname='MainForm']", parentFolder, 30000, null, true, "d8e08831-156b-4262-a983-4977c7fbaeb1", "")
             {
+                _tofirstlastdomestic = new SmokeTestRepositoryFolders.ToFirstLastDomesticFolder(this);
                 _manageInfo = new RepoItemInfo(this, "Manage", "?/?/rawtext[@rawtext='Manage' and @visible='True']", 30000, null, "2d5a292a-ea64-4286-afc3-9959d09ba6b9");
                 _shippingInfo = new RepoItemInfo(this, "Shipping", "?/?/element[@controlname='ribbonTabAdmin']/rawtext[@rawtext='Shipping' and @visible='True']", 30000, null, "d84819f3-58f2-4513-871c-2207e3f27994");
                 _maingridrow2column1Info = new RepoItemInfo(this, "MainGridRow2Column1", "container[@controlname='panelDockingArea']/?/?/container[@controlname='gridPanel']/?/?/rawtext[@row='2' and @visible='True']", 30000, null, "052a5561-23a7-463e-8fe5-dbb472252fec");
@@ -1916,6 +1918,133 @@ namespace SmokeTest
                 get
                 {
                     return _optionsInfo;
+                }
+            }
+
+            /// <summary>
+            /// The ToFirstLastDomestic folder.
+            /// </summary>
+            [RepositoryFolder("f5d93772-c1d3-441c-8c41-b933eaf73ad9")]
+            public virtual SmokeTestRepositoryFolders.ToFirstLastDomesticFolder ToFirstLastDomestic
+            {
+                get { return _tofirstlastdomestic; }
+            }
+        }
+
+        /// <summary>
+        /// The ToFirstLastDomesticFolder folder.
+        /// </summary>
+        [RepositoryFolder("f5d93772-c1d3-441c-8c41-b933eaf73ad9")]
+        public partial class ToFirstLastDomesticFolder : RepoGenBaseFolder
+        {
+            RepoItemInfo _citytextboxInfo;
+            RepoItemInfo _postaltextboxInfo;
+            RepoItemInfo _streettextboxInfo;
+
+            /// <summary>
+            /// Creates a new ToFirstLastDomestic  folder.
+            /// </summary>
+            public ToFirstLastDomesticFolder(RepoGenBaseFolder parentFolder) :
+                    base("ToFirstLastDomestic", "container[@controlname='panelDockingArea']//container[@classname='Pane']/?/?/element[@automationid='a']/?/?/element[@name='To First Last (Domestic)']/container[@name='To First Last (Domestic)']", parentFolder, 30000, null, false, "f5d93772-c1d3-441c-8c41-b933eaf73ad9", "")
+            {
+                _citytextboxInfo = new RepoItemInfo(this, "CityTextBox", "?/?/element/text[11]", 30000, null, "69bbe27d-3029-4cdf-a38b-1c44f09d256e");
+                _postaltextboxInfo = new RepoItemInfo(this, "PostalTextBox", "?/?/element/text[14]", 30000, null, "d6b66236-1e37-4455-8429-8889a2ffa574");
+                _streettextboxInfo = new RepoItemInfo(this, "StreetTextBox", "?/?/element/text[9]", 30000, null, "4ab31e97-bee6-4fd1-892b-d1758cc91178");
+            }
+
+            /// <summary>
+            /// The Self item.
+            /// </summary>
+            [RepositoryItem("f5d93772-c1d3-441c-8c41-b933eaf73ad9")]
+            public virtual Ranorex.Container Self
+            {
+                get
+                {
+                    return _selfInfo.CreateAdapter<Ranorex.Container>(true);
+                }
+            }
+
+            /// <summary>
+            /// The Self item info.
+            /// </summary>
+            [RepositoryItemInfo("f5d93772-c1d3-441c-8c41-b933eaf73ad9")]
+            public virtual RepoItemInfo SelfInfo
+            {
+                get
+                {
+                    return _selfInfo;
+                }
+            }
+
+            /// <summary>
+            /// The CityTextBox item.
+            /// </summary>
+            [RepositoryItem("69bbe27d-3029-4cdf-a38b-1c44f09d256e")]
+            public virtual Ranorex.Text CityTextBox
+            {
+                get
+                {
+                    return _citytextboxInfo.CreateAdapter<Ranorex.Text>(true);
+                }
+            }
+
+            /// <summary>
+            /// The CityTextBox item info.
+            /// </summary>
+            [RepositoryItemInfo("69bbe27d-3029-4cdf-a38b-1c44f09d256e")]
+            public virtual RepoItemInfo CityTextBoxInfo
+            {
+                get
+                {
+                    return _citytextboxInfo;
+                }
+            }
+
+            /// <summary>
+            /// The PostalTextBox item.
+            /// </summary>
+            [RepositoryItem("d6b66236-1e37-4455-8429-8889a2ffa574")]
+            public virtual Ranorex.Text PostalTextBox
+            {
+                get
+                {
+                    return _postaltextboxInfo.CreateAdapter<Ranorex.Text>(true);
+                }
+            }
+
+            /// <summary>
+            /// The PostalTextBox item info.
+            /// </summary>
+            [RepositoryItemInfo("d6b66236-1e37-4455-8429-8889a2ffa574")]
+            public virtual RepoItemInfo PostalTextBoxInfo
+            {
+                get
+                {
+                    return _postaltextboxInfo;
+                }
+            }
+
+            /// <summary>
+            /// The StreetTextBox item.
+            /// </summary>
+            [RepositoryItem("4ab31e97-bee6-4fd1-892b-d1758cc91178")]
+            public virtual Ranorex.Text StreetTextBox
+            {
+                get
+                {
+                    return _streettextboxInfo.CreateAdapter<Ranorex.Text>(true);
+                }
+            }
+
+            /// <summary>
+            /// The StreetTextBox item info.
+            /// </summary>
+            [RepositoryItemInfo("4ab31e97-bee6-4fd1-892b-d1758cc91178")]
+            public virtual RepoItemInfo StreetTextBoxInfo
+            {
+                get
+                {
+                    return _streettextboxInfo;
                 }
             }
         }
@@ -9905,15 +10034,17 @@ namespace SmokeTest
             RepoItemInfo _textbox1Info;
             RepoItemInfo _textbox2Info;
             RepoItemInfo _textbox3Info;
-            RepoItemInfo _comboboxInfo;
+            RepoItemInfo _statecomboboxInfo;
             RepoItemInfo _elementdlbInfo;
             RepoItemInfo _textbox4Info;
-            RepoItemInfo _comboboxaInfo;
-            RepoItemInfo _textbox5Info;
-            RepoItemInfo _textbox6Info;
+            RepoItemInfo _countrycomboboxInfo;
+            RepoItemInfo _emailtextboxInfo;
+            RepoItemInfo _phonetextboxInfo;
             RepoItemInfo _clearInfo;
             RepoItemInfo _ordernumberInfo;
             RepoItemInfo _kryptonheaderInfo;
+            RepoItemInfo _fullnametextboxInfo;
+            RepoItemInfo _companytextboxInfo;
 
             /// <summary>
             /// Creates a new PanelDockingArea  folder.
@@ -9922,23 +10053,25 @@ namespace SmokeTest
                     base("PanelDockingArea", "container[@controlname='panelDockingArea']", parentFolder, 30000, null, false, "aaddf6b9-1c58-4150-96fe-56fb04e2082d", "")
             {
                 _elementaInfo = new RepoItemInfo(this, "ElementA", ".//container[@classname='Pane']/?/?/element[@automationid='a']", 30000, null, "51d547e2-501d-41ed-a04c-f5da4efd7c4a");
-                _partcontenthostInfo = new RepoItemInfo(this, "PARTContentHost", ".//container[@classname='Pane']/?/?/element[@automationid='a']//text[@automationid='a']/container[@automationid='PART_ContentHost']", 30000, null, "88fa7e9c-da21-4a7e-ac34-8dfb5d040316");
+                _partcontenthostInfo = new RepoItemInfo(this, "PARTContentHost", ".//container[@classname='Pane']/?/?/element[@automationid='a']//text[@automationid='a']/container[1]", 30000, null, "88fa7e9c-da21-4a7e-ac34-8dfb5d040316");
                 _buttonInfo = new RepoItemInfo(this, "Button", "container[@controlname='OrderLookupControl']/?/?/container[@classname='Pane']/?/?/element[@automationid='a']/?/?/element/button[@classname='Button']", 30000, null, "df7b6905-67ec-489f-a697-3f26387674a4");
                 _partcontenthost1Info = new RepoItemInfo(this, "PARTContentHost1", ".//container[@classname='Pane']/?/?/element[@automationid='a']/?/?/element[@name='To First Last (Domestic)']/container[@name='To First Last (Domestic)']/?/?/element/text[3]/container[@automationid='PART_ContentHost']", 30000, null, "021d336f-c4a7-46c2-83e2-a7f546640115");
                 _fullnameInfo = new RepoItemInfo(this, "FullName", ".//container[@classname='Pane']/?/?/element[@automationid='a']/?/?/element[@name='To First Last (Domestic)']/container[@name='To First Last (Domestic)']//text[@name='Full Name']", 30000, null, "0863150f-162a-434e-a897-45f2324c3698");
-                _textboxInfo = new RepoItemInfo(this, "TextBox", ".//container[@classname='Pane']/?/?/element[@automationid='a']/?/?/element[@name='To First Last (Domestic)']/container[@name='To First Last (Domestic)']/?/?/element/text[3]", 30000, null, "711258cc-6b04-4c75-86c6-ece3ad55e727");
-                _textbox1Info = new RepoItemInfo(this, "TextBox1", ".//container[@classname='Pane']/?/?/element[@automationid='a']/?/?/element[@name='To First Last (Domestic)']/container[@name='To First Last (Domestic)']/?/?/element/text[5]", 30000, null, "e710737b-b4b4-484f-aa7c-9332cb912c10");
-                _textbox2Info = new RepoItemInfo(this, "TextBox2", ".//container[@classname='Pane']/?/?/element[@automationid='a']/?/?/element[@name='To First Last (Domestic)']/container[@name='To First Last (Domestic)']/?/?/element/text[9]", 30000, null, "39e776b5-fa2a-42e0-a8d9-f1c1de3adb98");
+                _textboxInfo = new RepoItemInfo(this, "TextBox", ".//container[@classname='Pane']/?/?/element[@automationid='a']/?/?/element[@name='To First Last (Domestic)']/container[@name='To First Last (Domestic)']/?/?/element/text[@caption='Name']", 30000, null, "711258cc-6b04-4c75-86c6-ece3ad55e727");
+                _textbox1Info = new RepoItemInfo(this, "TextBox1", ".//container[@classname='Pane']/?/?/element[@automationid='a']/?/?/element[@name='To First Last (Domestic)']/container[@name='To First Last (Domestic)']/?/?/element/text[@caption='Company']", 30000, null, "e710737b-b4b4-484f-aa7c-9332cb912c10");
+                _textbox2Info = new RepoItemInfo(this, "TextBox2", ".//container[@classname='Pane']/?/?/element[@automationid='a']/?/?/element[@name='To First Last (Domestic)']/container[@name='To First Last (Domestic)']/?/?/element/text[@caption='Street']", 30000, null, "39e776b5-fa2a-42e0-a8d9-f1c1de3adb98");
                 _textbox3Info = new RepoItemInfo(this, "TextBox3", ".//container[@classname='Pane']/?/?/element[@automationid='a']/?/?/element[@name='To First Last (Domestic)']/container[@name='To First Last (Domestic)']/?/?/element/text[11]", 30000, null, "9e23b900-31b2-421a-b540-747be89b3f13");
-                _comboboxInfo = new RepoItemInfo(this, "ComboBox", ".//container[@classname='Pane']/?/?/element[@automationid='a']/?/?/element[@name='To First Last (Domestic)']/container[@name='To First Last (Domestic)']/?/?/element/combobox[1]", 30000, null, "32ca6487-97d8-42a5-a0c1-ec09a48df665");
+                _statecomboboxInfo = new RepoItemInfo(this, "StateComboBox", ".//container[@classname='Pane']/?/?/element[@automationid='a']/?/?/element[@name='To First Last (Domestic)']/container[@name='To First Last (Domestic)']/?/?/element/combobox[1]", 30000, null, "32ca6487-97d8-42a5-a0c1-ec09a48df665");
                 _elementdlbInfo = new RepoItemInfo(this, "ElementDlb", ".//container[@classname='Pane']/?/?/element[@automationid='a']/?/?/element[@name='To First Last (Domestic)']/container[@name='To First Last (Domestic)']/?/?/element[@classname='dlb']", 30000, null, "2dc820b7-2de5-45bd-aaac-99d25267a48e");
                 _textbox4Info = new RepoItemInfo(this, "TextBox4", ".//container[@classname='Pane']/?/?/element[@automationid='a']/?/?/element[@name='To First Last (Domestic)']/container[@name='To First Last (Domestic)']/?/?/element/text[14]", 30000, null, "0f03f4f7-af05-4d52-b9d7-9b8b8c77e844");
-                _comboboxaInfo = new RepoItemInfo(this, "ComboBoxA", ".//container[@classname='Pane']/?/?/element[@automationid='a']/?/?/element[@name='To First Last (Domestic)']/container[@name='To First Last (Domestic)']//combobox[@automationid='a']", 30000, null, "af1d664f-4bf0-466c-b27f-a2d6a8b420b6");
-                _textbox5Info = new RepoItemInfo(this, "TextBox5", ".//container[@classname='Pane']/?/?/element[@automationid='a']/?/?/element[@name='To First Last (Domestic)']/container[@name='To First Last (Domestic)']/?/?/element/text[18]", 30000, null, "571c5298-465c-4743-918e-5063db89fa2e");
-                _textbox6Info = new RepoItemInfo(this, "TextBox6", ".//container[@classname='Pane']/?/?/element[@automationid='a']/?/?/element[@name='To First Last (Domestic)']/container[@name='To First Last (Domestic)']/?/?/element/text[20]", 30000, null, "2f5af693-8b4d-4fa8-afa1-72a0ceb20ef3");
+                _countrycomboboxInfo = new RepoItemInfo(this, "CountryComboBox", ".//container[@classname='Pane']/?/?/element[@automationid='a']/?/?/element[@name='To First Last (Domestic)']/container[@name='To First Last (Domestic)']//combobox[@automationid='a']", 30000, null, "af1d664f-4bf0-466c-b27f-a2d6a8b420b6");
+                _emailtextboxInfo = new RepoItemInfo(this, "EmailTextBox", ".//container[@classname='Pane']/?/?/element[@automationid='a']/?/?/element[@name='To First Last (Domestic)']/container[@name='To First Last (Domestic)']/?/?/element/text[18]", 30000, null, "571c5298-465c-4743-918e-5063db89fa2e");
+                _phonetextboxInfo = new RepoItemInfo(this, "PhoneTextBox", ".//container[@classname='Pane']/?/?/element[@automationid='a']/?/?/element[@name='To First Last (Domestic)']/container[@name='To First Last (Domestic)']/?/?/element/text[20]", 30000, null, "2f5af693-8b4d-4fa8-afa1-72a0ceb20ef3");
                 _clearInfo = new RepoItemInfo(this, "Clear", ".//container[@classname='Pane']/?/?/element[@automationid='a']/?/?/button[@name='Clear']/?/?/text[@name='Clear']", 30000, null, "1a864bd6-db18-4426-84c9-7946187195b7");
                 _ordernumberInfo = new RepoItemInfo(this, "OrderNumber", ".//container[@classname='Pane']/?/?/element[@automationid='a']/?/?/text[@name='Order Number']", 30000, null, "ed950ee2-2928-4689-ac4b-82d64cf59591");
                 _kryptonheaderInfo = new RepoItemInfo(this, "KryptonHeader", "container[@controlname='gridControl']//element[@controlname='kryptonHeader']", 30000, null, "aa0b3be3-6d91-44d5-8008-e06078e727b1");
+                _fullnametextboxInfo = new RepoItemInfo(this, "FullNameTextBox", ".//container[@classname='Pane']/?/?/element[@automationid='a']/?/?/element[@name='To First Last (Domestic)']/container[@name='To First Last (Domestic)']/?/?/element/text[3]", 30000, null, "e1078a14-b01b-4361-ba08-2abc850c727b");
+                _companytextboxInfo = new RepoItemInfo(this, "CompanyTextBox", ".//container[@classname='Pane']/?/?/element[@automationid='a']/?/?/element[@name='To First Last (Domestic)']/container[@name='To First Last (Domestic)']/?/?/element/text[5]", 30000, null, "43c05e8c-76ab-4875-954f-c583aef907e9");
             }
 
             /// <summary>
@@ -10182,26 +10315,26 @@ namespace SmokeTest
             }
 
             /// <summary>
-            /// The ComboBox item.
+            /// The StateComboBox item.
             /// </summary>
             [RepositoryItem("32ca6487-97d8-42a5-a0c1-ec09a48df665")]
-            public virtual Ranorex.ComboBox ComboBox
+            public virtual Ranorex.ComboBox StateComboBox
             {
                 get
                 {
-                    return _comboboxInfo.CreateAdapter<Ranorex.ComboBox>(true);
+                    return _statecomboboxInfo.CreateAdapter<Ranorex.ComboBox>(true);
                 }
             }
 
             /// <summary>
-            /// The ComboBox item info.
+            /// The StateComboBox item info.
             /// </summary>
             [RepositoryItemInfo("32ca6487-97d8-42a5-a0c1-ec09a48df665")]
-            public virtual RepoItemInfo ComboBoxInfo
+            public virtual RepoItemInfo StateComboBoxInfo
             {
                 get
                 {
-                    return _comboboxInfo;
+                    return _statecomboboxInfo;
                 }
             }
 
@@ -10254,74 +10387,74 @@ namespace SmokeTest
             }
 
             /// <summary>
-            /// The ComboBoxA item.
+            /// The CountryComboBox item.
             /// </summary>
             [RepositoryItem("af1d664f-4bf0-466c-b27f-a2d6a8b420b6")]
-            public virtual Ranorex.ComboBox ComboBoxA
+            public virtual Ranorex.ComboBox CountryComboBox
             {
                 get
                 {
-                    return _comboboxaInfo.CreateAdapter<Ranorex.ComboBox>(true);
+                    return _countrycomboboxInfo.CreateAdapter<Ranorex.ComboBox>(true);
                 }
             }
 
             /// <summary>
-            /// The ComboBoxA item info.
+            /// The CountryComboBox item info.
             /// </summary>
             [RepositoryItemInfo("af1d664f-4bf0-466c-b27f-a2d6a8b420b6")]
-            public virtual RepoItemInfo ComboBoxAInfo
+            public virtual RepoItemInfo CountryComboBoxInfo
             {
                 get
                 {
-                    return _comboboxaInfo;
+                    return _countrycomboboxInfo;
                 }
             }
 
             /// <summary>
-            /// The TextBox5 item.
+            /// The EmailTextBox item.
             /// </summary>
             [RepositoryItem("571c5298-465c-4743-918e-5063db89fa2e")]
-            public virtual Ranorex.Text TextBox5
+            public virtual Ranorex.Text EmailTextBox
             {
                 get
                 {
-                    return _textbox5Info.CreateAdapter<Ranorex.Text>(true);
+                    return _emailtextboxInfo.CreateAdapter<Ranorex.Text>(true);
                 }
             }
 
             /// <summary>
-            /// The TextBox5 item info.
+            /// The EmailTextBox item info.
             /// </summary>
             [RepositoryItemInfo("571c5298-465c-4743-918e-5063db89fa2e")]
-            public virtual RepoItemInfo TextBox5Info
+            public virtual RepoItemInfo EmailTextBoxInfo
             {
                 get
                 {
-                    return _textbox5Info;
+                    return _emailtextboxInfo;
                 }
             }
 
             /// <summary>
-            /// The TextBox6 item.
+            /// The PhoneTextBox item.
             /// </summary>
             [RepositoryItem("2f5af693-8b4d-4fa8-afa1-72a0ceb20ef3")]
-            public virtual Ranorex.Text TextBox6
+            public virtual Ranorex.Text PhoneTextBox
             {
                 get
                 {
-                    return _textbox6Info.CreateAdapter<Ranorex.Text>(true);
+                    return _phonetextboxInfo.CreateAdapter<Ranorex.Text>(true);
                 }
             }
 
             /// <summary>
-            /// The TextBox6 item info.
+            /// The PhoneTextBox item info.
             /// </summary>
             [RepositoryItemInfo("2f5af693-8b4d-4fa8-afa1-72a0ceb20ef3")]
-            public virtual RepoItemInfo TextBox6Info
+            public virtual RepoItemInfo PhoneTextBoxInfo
             {
                 get
                 {
-                    return _textbox6Info;
+                    return _phonetextboxInfo;
                 }
             }
 
@@ -10394,6 +10527,54 @@ namespace SmokeTest
                 get
                 {
                     return _kryptonheaderInfo;
+                }
+            }
+
+            /// <summary>
+            /// The FullNameTextBox item.
+            /// </summary>
+            [RepositoryItem("e1078a14-b01b-4361-ba08-2abc850c727b")]
+            public virtual Ranorex.Text FullNameTextBox
+            {
+                get
+                {
+                    return _fullnametextboxInfo.CreateAdapter<Ranorex.Text>(true);
+                }
+            }
+
+            /// <summary>
+            /// The FullNameTextBox item info.
+            /// </summary>
+            [RepositoryItemInfo("e1078a14-b01b-4361-ba08-2abc850c727b")]
+            public virtual RepoItemInfo FullNameTextBoxInfo
+            {
+                get
+                {
+                    return _fullnametextboxInfo;
+                }
+            }
+
+            /// <summary>
+            /// The CompanyTextBox item.
+            /// </summary>
+            [RepositoryItem("43c05e8c-76ab-4875-954f-c583aef907e9")]
+            public virtual Ranorex.Text CompanyTextBox
+            {
+                get
+                {
+                    return _companytextboxInfo.CreateAdapter<Ranorex.Text>(true);
+                }
+            }
+
+            /// <summary>
+            /// The CompanyTextBox item info.
+            /// </summary>
+            [RepositoryItemInfo("43c05e8c-76ab-4875-954f-c583aef907e9")]
+            public virtual RepoItemInfo CompanyTextBoxInfo
+            {
+                get
+                {
+                    return _companytextboxInfo;
                 }
             }
         }
