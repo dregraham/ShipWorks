@@ -10637,6 +10637,7 @@ namespace SmokeTest
             RepoItemInfo _priorityInfo;
             RepoItemInfo _domesticshipmentrateInfo;
             RepoItemInfo _internationalshipmentrateInfo;
+            RepoItemInfo _createnewInfo;
 
             /// <summary>
             /// Creates a new SplitContainer  folder.
@@ -10682,6 +10683,7 @@ namespace SmokeTest
                 _priorityInfo = new RepoItemInfo(this, "Priority", ".//tabpage[@controlname='tabPageService']/container[@controlname='serviceControlArea']/container[@controlname='UspsServiceControl']/container[@controlname='sectionShipment']//combobox[@controlname='service']/rawtext[1]", 30000, null, "6eb6de36-9761-4e56-a0c5-55761ec6e46a");
                 _domesticshipmentrateInfo = new RepoItemInfo(this, "DomesticShipmentRate", "container[@controlname='panel2']/?/?/container[@controlname='panel2']/container[@controlname='rateControl']/?/?/rawtext[@column='5' and @row='1']", 30000, null, "93b46b7b-210b-41e4-8f57-e658aad17012");
                 _internationalshipmentrateInfo = new RepoItemInfo(this, "InternationalShipmentRate", "container[@controlname='panel2']/?/?/container[@controlname='panel2']//rawtext[@column='4' and @row='1']", 30000, null, "a220f91f-7912-4eec-8d58-349f258d5bed");
+                _createnewInfo = new RepoItemInfo(this, "CreateNew", ".//toolbar[@controlname='shipmentsToolbar']/button[@accessiblename='Create New']", 30000, null, "27fc0a47-722b-4016-83f3-1f7f3645deb2");
             }
 
             /// <summary>
@@ -11617,6 +11619,30 @@ namespace SmokeTest
                 get
                 {
                     return _internationalshipmentrateInfo;
+                }
+            }
+
+            /// <summary>
+            /// The CreateNew item.
+            /// </summary>
+            [RepositoryItem("27fc0a47-722b-4016-83f3-1f7f3645deb2")]
+            public virtual Ranorex.Button CreateNew
+            {
+                get
+                {
+                    return _createnewInfo.CreateAdapter<Ranorex.Button>(true);
+                }
+            }
+
+            /// <summary>
+            /// The CreateNew item info.
+            /// </summary>
+            [RepositoryItemInfo("27fc0a47-722b-4016-83f3-1f7f3645deb2")]
+            public virtual RepoItemInfo CreateNewInfo
+            {
+                get
+                {
+                    return _createnewInfo;
                 }
             }
         }

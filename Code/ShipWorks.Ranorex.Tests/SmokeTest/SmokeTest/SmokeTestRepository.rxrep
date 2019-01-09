@@ -4259,6 +4259,16 @@ GORSxAAAAABJRU5ErkJggg==
 				searchtimeout="30000ms">
 					/form[@title='Ship Orders']/container[@controlname='splitContainer']/container[@controlname='panel2']/?/?/container[@controlname='panel2']//rawtext[@column='4' and @row='1']
 				</item>
+				<item
+				addcaps="button,accessible"
+				capname="button"
+				id="27fc0a47-722b-4016-83f3-1f7f3645deb2"
+				name="CreateNew"
+				refimgid="a8ec7675-8cb4-4494-8ff0-6f52ddbef71f"
+				refpath="/form[@controlname='ShippingDlg']/container[@controlname='splitContainer']/container[@controlname='panel1']/container/container[@controlname='panelTop']/toolbar/button[@accessiblename='Create New']"
+				searchtimeout="30000ms">
+					/form[@title='Ship Orders']/container[@controlname='splitContainer']//toolbar[@controlname='shipmentsToolbar']/button[@accessiblename='Create New']
+				</item>
 				<basepath>
 					/form[@title='Ship Orders']/container[@controlname='splitContainer']
 				</basepath>
