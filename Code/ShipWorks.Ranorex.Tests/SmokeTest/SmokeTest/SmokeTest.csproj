@@ -135,6 +135,18 @@
     <Compile Include="AssemblyInfo.cs">
       <id>df8a21ad-0eb7-4914-8808-6ca8338741a3</id>
     </Compile>
+    <Compile Include="ChangeCurrentShipment_ProviderUSPSExpress1.cs">
+      <BoundTo>c039c944-d057-4aa1-9aff-fe073ee3193c</BoundTo>
+      <DependentUpon>ChangeCurrentShipment_ProviderUSPSExpress1.rxrec</DependentUpon>
+      <RecorderCode>true</RecorderCode>
+      <id>0dfde857-bdb4-4172-9ef5-89fb91e73f31</id>
+    </Compile>
+    <Compile Include="ChangeCurrentShipment_ProviderUSPSExpress1.UserCode.cs">
+      <BoundTo>c039c944-d057-4aa1-9aff-fe073ee3193c</BoundTo>
+      <DependentUpon>ChangeCurrentShipment_ProviderUSPSExpress1.rxrec</DependentUpon>
+      <UserCode>true</UserCode>
+      <id>9f6a9fd6-2c50-41f5-816a-1f652a2f4d08</id>
+    </Compile>
     <Compile Include="CheckShipWorksVersion.cs">
       <BoundTo>8b5363c2-b4a5-40c2-89e6-6efd31173e12</BoundTo>
       <DependentUpon>CheckShipWorksVersion.rxrec</DependentUpon>
@@ -442,6 +454,18 @@
       <DependentUpon>InstallShipWorks.rxrec</DependentUpon>
       <id>aaf462fd-03c5-4bed-97b5-5d416646e3b9</id>
       <BoundTo>26007d92-977a-416a-9d21-6d0218e53ddc</BoundTo>
+      <UserCode>true</UserCode>
+    </Compile>
+    <Compile Include="LookupAnOrder.cs">
+      <DependentUpon>LookupAnOrder.rxrec</DependentUpon>
+      <id>f997ae6a-b7ac-4aeb-8ab2-f56777280d96</id>
+      <BoundTo>c69fd5a0-13e1-4e83-85f9-13c64405f87b</BoundTo>
+      <RecorderCode>true</RecorderCode>
+    </Compile>
+    <Compile Include="LookupAnOrder.UserCode.cs">
+      <DependentUpon>LookupAnOrder.rxrec</DependentUpon>
+      <id>3f8ff883-a353-46b1-887b-ade369bb36cc</id>
+      <BoundTo>c69fd5a0-13e1-4e83-85f9-13c64405f87b</BoundTo>
       <UserCode>true</UserCode>
     </Compile>
     <Compile Include="ModuleChecker.cs">
@@ -1179,6 +1203,30 @@
       <RepositoryCode>true</RepositoryCode>
       <id>305d9bf3-5856-4aa1-ad6d-cde684b9763e</id>
     </Compile>
+    <Compile Include="SwitchBatchGridToOrderLookup.cs">
+      <DependentUpon>SwitchBatchGridToOrderLookup.rxrec</DependentUpon>
+      <id>7e6531c0-949f-4fa2-a212-d67b2acac4f6</id>
+      <BoundTo>6492bd71-f293-4522-b21c-9c0694e31320</BoundTo>
+      <RecorderCode>true</RecorderCode>
+    </Compile>
+    <Compile Include="SwitchBatchGridToOrderLookup.UserCode.cs">
+      <DependentUpon>SwitchBatchGridToOrderLookup.rxrec</DependentUpon>
+      <id>fbb01e73-f45e-4bc3-9d09-6759c3ff20be</id>
+      <BoundTo>6492bd71-f293-4522-b21c-9c0694e31320</BoundTo>
+      <UserCode>true</UserCode>
+    </Compile>
+    <Compile Include="SwitchOrderLookupToBatchGrid.cs">
+      <DependentUpon>SwitchOrderLookupToBatchGrid.rxrec</DependentUpon>
+      <id>e3442bb1-0c4b-4b25-96f4-8a1b3df41cb6</id>
+      <BoundTo>e17d6998-1fa1-47b1-a0a9-6e3ee8f7022c</BoundTo>
+      <RecorderCode>true</RecorderCode>
+    </Compile>
+    <Compile Include="SwitchOrderLookupToBatchGrid.UserCode.cs">
+      <DependentUpon>SwitchOrderLookupToBatchGrid.rxrec</DependentUpon>
+      <id>1fa88af6-b1f8-4257-b7e9-ea26294976cc</id>
+      <BoundTo>e17d6998-1fa1-47b1-a0a9-6e3ee8f7022c</BoundTo>
+      <UserCode>true</UserCode>
+    </Compile>
     <Compile Include="UPSTestServerSetup.cs">
       <BoundTo>06a6246d-01ac-430d-96ec-902a03121b25</BoundTo>
       <DependentUpon>UPSTestServerSetup.rxrec</DependentUpon>
@@ -1267,6 +1315,11 @@
     </None>
     <None Include="BatchFile\SetDefaultPrinterMicrosoftPrintToPDF.bat">
       <id>b130d598-8d1b-4b32-baca-9e6699edd766</id>
+    </None>
+    <None Include="ChangeCurrentShipment_ProviderUSPSExpress1.rxrec">
+      <BoundTo>cc314fb4-f6c2-41c4-91da-4828b4fd7dee</BoundTo>
+      <id>c039c944-d057-4aa1-9aff-fe073ee3193c</id>
+      <recordtableid>f20599ee-ff69-4d67-aba1-b081da870a75</recordtableid>
     </None>
     <None Include="CheckShipWorksVersion.rxrec">
       <BoundTo>cc314fb4-f6c2-41c4-91da-4828b4fd7dee</BoundTo>
@@ -1390,6 +1443,11 @@
     </None>
     <None Include="Ionic.Zip.xml">
       <id>e22ebe65-7b6e-46e9-a925-13d969c13327</id>
+    </None>
+    <None Include="LookupAnOrder.rxrec">
+      <id>c69fd5a0-13e1-4e83-85f9-13c64405f87b</id>
+      <BoundTo>cc314fb4-f6c2-41c4-91da-4828b4fd7dee</BoundTo>
+      <recordtableid>7bb9e37a-0c6b-4a4d-98f7-d2aa040ae9d9</recordtableid>
     </None>
     <None Include="ModuleChecker.rxrec">
       <BoundTo>cc314fb4-f6c2-41c4-91da-4828b4fd7dee</BoundTo>
@@ -1727,6 +1785,16 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <id>5b447ead-a491-49d2-8ef3-5f55e5646911</id>
     </Content>
+    <None Include="SwitchBatchGridToOrderLookup.rxrec">
+      <id>6492bd71-f293-4522-b21c-9c0694e31320</id>
+      <BoundTo>cc314fb4-f6c2-41c4-91da-4828b4fd7dee</BoundTo>
+      <recordtableid>9edd78a8-1b4b-4035-af81-d5ac4f2f0ab9</recordtableid>
+    </None>
+    <None Include="SwitchOrderLookupToBatchGrid.rxrec">
+      <id>e17d6998-1fa1-47b1-a0a9-6e3ee8f7022c</id>
+      <BoundTo>cc314fb4-f6c2-41c4-91da-4828b4fd7dee</BoundTo>
+      <recordtableid>6a2b9112-4f1c-4dc2-869b-25a7f6c434b8</recordtableid>
+    </None>
     <None Include="UPSTestServerSetup.rxrec">
       <BoundTo>cc314fb4-f6c2-41c4-91da-4828b4fd7dee</BoundTo>
       <id>06a6246d-01ac-430d-96ec-902a03121b25</id>
