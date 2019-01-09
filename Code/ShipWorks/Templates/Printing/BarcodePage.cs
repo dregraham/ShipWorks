@@ -40,9 +40,19 @@ namespace ShipWorks.Templates.Printing
 
                 if (!string.IsNullOrWhiteSpace(barcodeBlock))
                 {
-                    htmlBuilder.AppendLine("<br/>");
+                    // dont start out with a line break
+                    if (htmlBuilder.Length > 0)
+                    {
+                        htmlBuilder.AppendLine("<br/>");
+                    }
+
                     htmlBuilder.AppendLine(barcodeBlock);
-                    htmlBuilder.AppendLine("<br/>");
+
+                    // dont end with a line break
+                    if (barcode != lastBarcode)
+                    {
+                        htmlBuilder.AppendLine("<br/>");
+                    }
                 }
             }
 

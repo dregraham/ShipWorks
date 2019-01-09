@@ -285,6 +285,13 @@ namespace ShipWorks.Products.Import
                 return;
             }
 
+            if ((await productCatalog.FetchSiblingVariants(bundleProductVariant, sqlAdapter).ConfigureAwait(false)).Any())
+            {
+                // If the product has siblings it cannot be a bundle
+                bundleProductVariant.Product.IsBundle = false;
+                throw new ProductImportException("A product with variants cannot be turned into a bundle");
+            }
+
             // Get a list of what the final bundle list should be
             List<ProductBundleEntity> bundlesToCreate = productVariantDto.BundleSkuList
                 .Where(s => !s.Sku.IsNullOrWhiteSpace())

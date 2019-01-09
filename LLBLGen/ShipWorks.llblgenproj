@@ -598,6 +598,7 @@
           <Field Name="CustomerUpdateModifiedBilling" Type="int" FieldIndex="8" />
           <Field Name="CustomerUpdateModifiedShipping" Type="int" FieldIndex="9" />
           <Field Name="CustomerUpdateShipping" Type="bool" FieldIndex="7" />
+          <Field Name="DefaultPickListTemplateID" Type="long" IsOptional="true" Precision="19" FieldIndex="17" />
           <Field Name="LogOnMethod" Type="int" FieldIndex="2" />
           <Field Name="RowVersion" Type="byte[]" IsReadOnly="true" FieldIndex="1" />
           <Field Name="UseParallelActionQueue" Type="bool" FieldIndex="13" />
@@ -4474,7 +4475,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2018-12-18T00:13:27.3400712Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2018-12-27T17:09:33.5512363Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -5039,6 +5040,7 @@
                     <Field Name="AllowEbayCombineLocally" Ordinal="15" HasDefaultValue="true" DefaultValue="(0)" DbType="2" />
                     <Field Name="ArchivalSettingsXml" Ordinal="16" HasDefaultValue="true" DefaultValue="'&lt;ArchivalSettings/&gt;'" DbType="26" Length="2147483647" />
                     <Field Name="AuditEnabled" Ordinal="17" HasDefaultValue="true" DefaultValue="(1)" DbType="2" />
+                    <Field Name="DefaultPickListTemplateID" Ordinal="18" IsOptional="true" DbType="0" Precision="19" />
                   </Fields>
                 </Table>
                 <Table Name="Customer">
@@ -11137,6 +11139,7 @@
             <FieldMapping FieldName="CustomerUpdateModifiedBilling" TargetFieldName="CustomerUpdateModifiedBilling" />
             <FieldMapping FieldName="CustomerUpdateModifiedShipping" TargetFieldName="CustomerUpdateModifiedShipping" />
             <FieldMapping FieldName="CustomerUpdateShipping" TargetFieldName="CustomerUpdateShipping" />
+            <FieldMapping FieldName="DefaultPickListTemplateID" TargetFieldName="DefaultPickListTemplateID" />
             <FieldMapping FieldName="LogOnMethod" TargetFieldName="LogOnMethod" />
             <FieldMapping FieldName="RowVersion" TargetFieldName="RowVersion" />
             <FieldMapping FieldName="UseParallelActionQueue" TargetFieldName="UseParallelActionQueue" />

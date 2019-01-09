@@ -92,6 +92,7 @@ using ShipWorks.Stores.Orders.Archive;
 using ShipWorks.Stores.Orders.Split;
 using ShipWorks.Templates;
 using ShipWorks.Templates.Controls;
+using ShipWorks.Templates.Controls.DefaultPickListTemplate;
 using ShipWorks.Templates.Distribution;
 using ShipWorks.Templates.Emailing;
 using ShipWorks.Templates.Management;
@@ -4465,7 +4466,7 @@ namespace ShipWorks
         /// <summary>
         /// Start the printing or previewing of the given print job
         /// </summary>
-        private void StartPrintJob(PrintJob job, PrintAction action)
+        public void StartPrintJob(IPrintJob job, PrintAction action)
         {
             // Show the progress window
             ProgressDlg progressDlg = new ProgressDlg(job.ProgressProvider);
@@ -4910,6 +4911,21 @@ namespace ShipWorks
                 {
                     MessageHelper.ShowError(this, "There was an error opening a file.\n\n" + ex.Message);
                 }
+            }
+        }
+
+        /// <summary>
+        /// Action when the user clicks the print pick list button
+        /// </summary>
+        private void OnPrintPickList(object sender, EventArgs e)
+        {
+            IEnumerable<long> selectedOrderIDs = gridControl.Selection.OrderedKeys;
+
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+            {
+                IPickListPrintingService pickListPrintingService =
+                    lifetimeScope.Resolve<IPickListPrintingService>();
+                pickListPrintingService.PrintPickList(selectedOrderIDs);
             }
         }
 
