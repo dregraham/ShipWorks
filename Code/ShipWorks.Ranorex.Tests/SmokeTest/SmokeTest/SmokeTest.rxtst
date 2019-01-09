@@ -889,6 +889,10 @@ rxversion="8.1">
 			ref="37e279ed-98cb-462a-8b30-11af8cf6ac4f"
 			type="Recording">
 			</testmodule>
+			<smartfoldernode
+			id="926fedfc-8262-452a-9f90-126438b76b2b"
+			name="OrderLookupModeLookupAnOrder">
+			</smartfoldernode>
 			<testmodule
 			id="9360bd4a-8480-49cf-b345-b62d1caccd77"
 			name="CreateNewShipment_ProviderDHLExpress"
@@ -943,6 +947,12 @@ rxversion="8.1">
 			id="9968a067-b031-47e2-b405-627c55838989"
 			name="CloseShipOrdersDialog"
 			ref="93e031b6-a539-4f4b-8dd5-892ef64181fb"
+			type="Recording">
+			</testmodule>
+			<testmodule
+			id="9971e707-4f76-49a4-b539-abdbfe034691"
+			name="SwitchBatchGridToOrderLookup"
+			ref="9edd78a8-1b4b-4035-af81-d5ac4f2f0ab9"
 			type="Recording">
 			</testmodule>
 			<testmodule
@@ -1178,6 +1188,12 @@ rxversion="8.1">
 			type="Recording">
 			</testmodule>
 			<testmodule
+			id="c6c1e03e-18c6-4252-8617-f88f173b6fd4"
+			name="LookupAnOrder"
+			ref="7bb9e37a-0c6b-4a4d-98f7-d2aa040ae9d9"
+			type="Recording">
+			</testmodule>
+			<testmodule
 			id="c7fb5930-c113-40b2-a951-b4dc7942533e"
 			name="CloseShipOrdersDialog"
 			ref="93e031b6-a539-4f4b-8dd5-892ef64181fb"
@@ -1305,6 +1321,12 @@ rxversion="8.1">
 			id="e3ddb8cd-84ba-4296-9109-f02ca5113a99"
 			name="CreateNewShipment_ProviderUSPSEndicia"
 			ref="d8f3dbae-61c3-4f34-9a85-420040041f8d"
+			type="Recording">
+			</testmodule>
+			<testmodule
+			id="e657c3ae-c888-4e44-9f90-c96d3f2582d9"
+			name="SwitchOrderLookupToBatchGrid"
+			ref="6a2b9112-4f1c-4dc2-869b-25a7f6c434b8"
 			type="Recording">
 			</testmodule>
 			<testmodule
@@ -1676,6 +1698,22 @@ rxversion="8.1">
 							<testmodule
 							id="85803b48-fc28-4bb9-a136-b33e1bf1571a"
 							name="SetupOther">
+							</testmodule>
+						</smartfoldernode>
+						<smartfoldernode
+						id="926fedfc-8262-452a-9f90-126438b76b2b"
+						name="OrderLookupModeLookupAnOrder">
+							<testmodule
+							id="9971e707-4f76-49a4-b539-abdbfe034691"
+							name="SwitchBatchGridToOrderLookup">
+							</testmodule>
+							<testmodule
+							id="c6c1e03e-18c6-4252-8617-f88f173b6fd4"
+							name="LookupAnOrder">
+							</testmodule>
+							<testmodule
+							id="e657c3ae-c888-4e44-9f90-c96d3f2582d9"
+							name="SwitchOrderLookupToBatchGrid">
 							</testmodule>
 						</smartfoldernode>
 						<smartfoldernode
@@ -2558,6 +2596,9 @@ rxversion="8.1">
 			id="8f30d63d-77ad-4ae9-b76f-0585e0b520d9">
 			</testcontainer>
 			<testcontainer
+			id="926fedfc-8262-452a-9f90-126438b76b2b">
+			</testcontainer>
+			<testcontainer
 			id="95eeff4e-218a-4f4b-a4a5-e92d3b071ca1">
 			</testcontainer>
 			<testcontainer
@@ -2636,7 +2677,7 @@ rxversion="8.1">
 			id="14ee1c1c-0353-469d-84ea-e800f3a3addb">
 			</testcontainer>
 			<testcontainer
-			id="8e67454a-6a29-4249-af98-6aab48b2ca70">
+			id="926fedfc-8262-452a-9f90-126438b76b2b">
 			</testcontainer>
 			<testcontainer
 			id="f875647d-7a5c-46d1-bda6-83a5075d93c7">
