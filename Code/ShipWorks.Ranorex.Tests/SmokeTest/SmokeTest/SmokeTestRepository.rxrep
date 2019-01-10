@@ -268,6 +268,7 @@ XrLp0EM2aG+RntUiB+ZT6fxfIsRPbYnQgbXhGFYAAAAASUVORK5CYII=
 		id="edb789cd-8c30-4bba-a2fb-39dc997e4082"
 		isrooted="True"
 		name="ShipWorks"
+		refimgid="7a92ac79-256e-49cc-a046-7514b10beb2d"
 		searchtimeout="30000ms"
 		usecache="True">
 			<item
@@ -625,6 +626,58 @@ MccVydhgafzKwmo3c6RCyF+QF9ssNPjvRAAAAABJRU5ErkJggg==
 				</item>
 				<basepath>
 					/form[@controlname='MainForm']/container[@controlname='panelDockingArea']//container[@classname='Pane']/?/?/element[@automationid='a']/?/?/element[@name='To First Last (Domestic)']/container[@name='To First Last (Domestic)']
+				</basepath>
+			</folder>
+			<folder
+			addcaps="container,control,nativewindow"
+			capname="container"
+			id="dd68ee91-2ec5-47ea-bed6-81a8e7cac251"
+			isrooted="True"
+			name="PanelDockingArea"
+			refpath="/form[@controlname='MainForm']/container[@controlname='panelDockingArea']"
+			searchtimeout="30000ms"
+			usecache="False">
+				<item
+				addcaps="button,uiautomation,uiautomationinvoke"
+				capname="button"
+				id="f12abb50-37f5-41b4-9cac-4f3321e4d308"
+				name="OLMCreateLabel"
+				refimgid="dd71143d-49c5-425b-b849-6945664c392b"
+				refpath="/form[@controlname='MainForm']/container[@controlname='panelDockingArea']/container/element/container/element/element/element/button[@name='Create Label']"
+				searchtimeout="30000ms">
+					/form[@controlname='MainForm']/container[@controlname='panelDockingArea']//container[@classname='Pane']/?/?/element[@automationid='a']/?/?/button[@name='Create Label']
+				</item>
+				<item
+				addcaps="text,uiautomation,uiautomationvalue"
+				capname="text"
+				id="094dde57-f2f6-45fc-aab2-1a9ce6744ab7"
+				name="TextA"
+				refimgid="86cd79f0-6f49-436b-abb8-d273849e7b9f"
+				searchtimeout="30000ms">
+					/form[@controlname='MainForm']/container[@controlname='panelDockingArea']/container[@controlname='OrderLookupControl']/?/?/container[@classname='Pane']/?/?/element[@automationid='a']//text[@automationid='a']
+				</item>
+				<item
+				addcaps="cell,uiautomation,uiautomationvalue"
+				capname="cell"
+				id="43d4a322-15d1-4625-a481-f02bebc7dbbc"
+				name="UPSGround"
+				refimgid="64ce4c27-49f6-4557-b238-1824d980da9b"
+				refpath="/form[@controlname='MainForm']/container[@controlname='panelDockingArea']/container/element/container/element/element/container/element[@name='Rates']/container/element/table/row[2]/cell[@name='UPS Ground']"
+				searchtimeout="30000ms">
+					/form[@controlname='MainForm']/container[@controlname='panelDockingArea']//container[@classname='Pane']//element[@name='Rates']/container[@name='Rates']/?/?/table[@classname='DataGrid']/row[2]/cell[@name='UPS Ground']
+				</item>
+				<item
+				addcaps="text,uiautomation"
+				capname="text"
+				id="78e95cec-618b-423f-868a-4cd15a75e42e"
+				name="ThisOrdersShipmentHasBeenProcessed"
+				refimgid="30eea37c-9b6f-4761-a656-0e48be461de3"
+				refpath="/form[@controlname='MainForm']/container[@controlname='panelDockingArea']/container/element/container/element/element/element/text[@name~'^This\ order''s\ shipment\ has']"
+				searchtimeout="30000ms">
+					/form[@controlname='MainForm']/container[@controlname='panelDockingArea']//container[@classname='Pane']/?/?/element[@automationid='a']/?/?/text[@name~'^This\ order''s\ shipment\ has']
+				</item>
+				<basepath>
+					/form[@controlname='MainForm']/container[@controlname='panelDockingArea']
 				</basepath>
 			</folder>
 			<basepath>
@@ -3854,6 +3907,16 @@ lpKZgpMF6Pw3M/MFayOlqIh43SSsYsIrayXz9q3r5Ra2vFFWLUXbtWRiANXcVpB6SHDZSEK3kcS7
 				refpath="/form[@controlname='MainForm']/container[@controlname='panelDockingArea']/container[@controlname='OrderLookupControl']/element[@controltypename='ElementHost']/container[@classname='Pane']/element[@orientation='None']/element[@automationid='a']/container[@classname='ScrollViewer']/element[@name='To First Last (Domestic)']/container[@name='To First Last (Domestic)']/element[@classname='dlk']/element[@classname='dlb']/text[5]"
 				searchtimeout="30000ms">
 					/form[@title~'ShipWorks']/container[@controlname='panelDockingArea']//container[@classname='Pane']/?/?/element[@automationid='a']/?/?/element[@name='To First Last (Domestic)']/container[@name='To First Last (Domestic)']/?/?/element/text[5]
+				</item>
+				<item
+				addcaps="text,uiautomation"
+				capname="text"
+				id="3ee051bf-4810-4b5b-86f1-334906ffc2a6"
+				name="TheOrderHasNoItems"
+				refimgid="b6a22465-59f3-42c1-9f42-f69d091a8cf5"
+				refpath="/form[@controlname='MainForm']/container[@controlname='panelDockingArea']/container[@controlname='OrderLookupControl']/element/container/element/element/container/element[@name='Order Items']/container/element/text/text[@name='The order has no items']"
+				searchtimeout="30000ms">
+					/form[@title~'ShipWorks']/container[@controlname='panelDockingArea']//container[@classname='Pane']//element[@name='Order Items']/container[@name='Order Items']/?/?/text[@name=' ']/text[@name='The order has no items']
 				</item>
 				<basepath>
 					/form[@title~'ShipWorks']/container[@controlname='panelDockingArea']

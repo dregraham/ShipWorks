@@ -1679,6 +1679,7 @@ namespace SmokeTest
         public partial class MainFormAppFolder : RepoGenBaseFolder
         {
             SmokeTestRepositoryFolders.ToFirstLastDomesticFolder _tofirstlastdomestic;
+            SmokeTestRepositoryFolders.PanelDockingAreaFolder _paneldockingarea;
             RepoItemInfo _manageInfo;
             RepoItemInfo _shippingInfo;
             RepoItemInfo _maingridrow2column1Info;
@@ -1695,6 +1696,7 @@ namespace SmokeTest
                     base("MainForm", "/form[@controlname='MainForm']", parentFolder, 30000, null, true, "d8e08831-156b-4262-a983-4977c7fbaeb1", "")
             {
                 _tofirstlastdomestic = new SmokeTestRepositoryFolders.ToFirstLastDomesticFolder(this);
+                _paneldockingarea = new SmokeTestRepositoryFolders.PanelDockingAreaFolder(this);
                 _manageInfo = new RepoItemInfo(this, "Manage", "?/?/rawtext[@rawtext='Manage' and @visible='True']", 30000, null, "2d5a292a-ea64-4286-afc3-9959d09ba6b9");
                 _shippingInfo = new RepoItemInfo(this, "Shipping", "?/?/element[@controlname='ribbonTabAdmin']/rawtext[@rawtext='Shipping' and @visible='True']", 30000, null, "d84819f3-58f2-4513-871c-2207e3f27994");
                 _maingridrow2column1Info = new RepoItemInfo(this, "MainGridRow2Column1", "container[@controlname='panelDockingArea']/?/?/container[@controlname='gridPanel']/?/?/rawtext[@row='2' and @visible='True']", 30000, null, "052a5561-23a7-463e-8fe5-dbb472252fec");
@@ -1929,6 +1931,15 @@ namespace SmokeTest
             {
                 get { return _tofirstlastdomestic; }
             }
+
+            /// <summary>
+            /// The PanelDockingArea folder.
+            /// </summary>
+            [RepositoryFolder("dd68ee91-2ec5-47ea-bed6-81a8e7cac251")]
+            public virtual SmokeTestRepositoryFolders.PanelDockingAreaFolder PanelDockingArea
+            {
+                get { return _paneldockingarea; }
+            }
         }
 
         /// <summary>
@@ -2045,6 +2056,150 @@ namespace SmokeTest
                 get
                 {
                     return _streettextboxInfo;
+                }
+            }
+        }
+
+        /// <summary>
+        /// The PanelDockingAreaFolder folder.
+        /// </summary>
+        [RepositoryFolder("dd68ee91-2ec5-47ea-bed6-81a8e7cac251")]
+        public partial class PanelDockingAreaFolder : RepoGenBaseFolder
+        {
+            RepoItemInfo _olmcreatelabelInfo;
+            RepoItemInfo _textaInfo;
+            RepoItemInfo _upsgroundInfo;
+            RepoItemInfo _thisordersshipmenthasbeenprocessedInfo;
+
+            /// <summary>
+            /// Creates a new PanelDockingArea  folder.
+            /// </summary>
+            public PanelDockingAreaFolder(RepoGenBaseFolder parentFolder) :
+                    base("PanelDockingArea", "container[@controlname='panelDockingArea']", parentFolder, 30000, null, false, "dd68ee91-2ec5-47ea-bed6-81a8e7cac251", "")
+            {
+                _olmcreatelabelInfo = new RepoItemInfo(this, "OLMCreateLabel", ".//container[@classname='Pane']/?/?/element[@automationid='a']/?/?/button[@name='Create Label']", 30000, null, "f12abb50-37f5-41b4-9cac-4f3321e4d308");
+                _textaInfo = new RepoItemInfo(this, "TextA", "container[@controlname='OrderLookupControl']/?/?/container[@classname='Pane']/?/?/element[@automationid='a']//text[@automationid='a']", 30000, null, "094dde57-f2f6-45fc-aab2-1a9ce6744ab7");
+                _upsgroundInfo = new RepoItemInfo(this, "UPSGround", ".//container[@classname='Pane']//element[@name='Rates']/container[@name='Rates']/?/?/table[@classname='DataGrid']/row[2]/cell[@name='UPS Ground']", 30000, null, "43d4a322-15d1-4625-a481-f02bebc7dbbc");
+                _thisordersshipmenthasbeenprocessedInfo = new RepoItemInfo(this, "ThisOrdersShipmentHasBeenProcessed", ".//container[@classname='Pane']/?/?/element[@automationid='a']/?/?/text[@name~'^This\\ order''s\\ shipment\\ has']", 30000, null, "78e95cec-618b-423f-868a-4cd15a75e42e");
+            }
+
+            /// <summary>
+            /// The Self item.
+            /// </summary>
+            [RepositoryItem("dd68ee91-2ec5-47ea-bed6-81a8e7cac251")]
+            public virtual Ranorex.Container Self
+            {
+                get
+                {
+                    return _selfInfo.CreateAdapter<Ranorex.Container>(true);
+                }
+            }
+
+            /// <summary>
+            /// The Self item info.
+            /// </summary>
+            [RepositoryItemInfo("dd68ee91-2ec5-47ea-bed6-81a8e7cac251")]
+            public virtual RepoItemInfo SelfInfo
+            {
+                get
+                {
+                    return _selfInfo;
+                }
+            }
+
+            /// <summary>
+            /// The OLMCreateLabel item.
+            /// </summary>
+            [RepositoryItem("f12abb50-37f5-41b4-9cac-4f3321e4d308")]
+            public virtual Ranorex.Button OLMCreateLabel
+            {
+                get
+                {
+                    return _olmcreatelabelInfo.CreateAdapter<Ranorex.Button>(true);
+                }
+            }
+
+            /// <summary>
+            /// The OLMCreateLabel item info.
+            /// </summary>
+            [RepositoryItemInfo("f12abb50-37f5-41b4-9cac-4f3321e4d308")]
+            public virtual RepoItemInfo OLMCreateLabelInfo
+            {
+                get
+                {
+                    return _olmcreatelabelInfo;
+                }
+            }
+
+            /// <summary>
+            /// The TextA item.
+            /// </summary>
+            [RepositoryItem("094dde57-f2f6-45fc-aab2-1a9ce6744ab7")]
+            public virtual Ranorex.Text TextA
+            {
+                get
+                {
+                    return _textaInfo.CreateAdapter<Ranorex.Text>(true);
+                }
+            }
+
+            /// <summary>
+            /// The TextA item info.
+            /// </summary>
+            [RepositoryItemInfo("094dde57-f2f6-45fc-aab2-1a9ce6744ab7")]
+            public virtual RepoItemInfo TextAInfo
+            {
+                get
+                {
+                    return _textaInfo;
+                }
+            }
+
+            /// <summary>
+            /// The UPSGround item.
+            /// </summary>
+            [RepositoryItem("43d4a322-15d1-4625-a481-f02bebc7dbbc")]
+            public virtual Ranorex.Cell UPSGround
+            {
+                get
+                {
+                    return _upsgroundInfo.CreateAdapter<Ranorex.Cell>(true);
+                }
+            }
+
+            /// <summary>
+            /// The UPSGround item info.
+            /// </summary>
+            [RepositoryItemInfo("43d4a322-15d1-4625-a481-f02bebc7dbbc")]
+            public virtual RepoItemInfo UPSGroundInfo
+            {
+                get
+                {
+                    return _upsgroundInfo;
+                }
+            }
+
+            /// <summary>
+            /// The ThisOrdersShipmentHasBeenProcessed item.
+            /// </summary>
+            [RepositoryItem("78e95cec-618b-423f-868a-4cd15a75e42e")]
+            public virtual Ranorex.Text ThisOrdersShipmentHasBeenProcessed
+            {
+                get
+                {
+                    return _thisordersshipmenthasbeenprocessedInfo.CreateAdapter<Ranorex.Text>(true);
+                }
+            }
+
+            /// <summary>
+            /// The ThisOrdersShipmentHasBeenProcessed item info.
+            /// </summary>
+            [RepositoryItemInfo("78e95cec-618b-423f-868a-4cd15a75e42e")]
+            public virtual RepoItemInfo ThisOrdersShipmentHasBeenProcessedInfo
+            {
+                get
+                {
+                    return _thisordersshipmenthasbeenprocessedInfo;
                 }
             }
         }
@@ -9198,7 +9353,7 @@ namespace SmokeTest
         {
             SmokeTestRepositoryFolders.SectionContainerFolder _sectioncontainer;
             SmokeTestRepositoryFolders.MainPanelFolder8 _mainpanel;
-            SmokeTestRepositoryFolders.PanelDockingAreaFolder _paneldockingarea;
+            SmokeTestRepositoryFolders.PanelDockingAreaFolder1 _paneldockingarea;
             RepoItemInfo _ordersInfo;
             RepoItemInfo _homeInfo;
             RepoItemInfo _newInfo;
@@ -9220,7 +9375,7 @@ namespace SmokeTest
             {
                 _sectioncontainer = new SmokeTestRepositoryFolders.SectionContainerFolder(this);
                 _mainpanel = new SmokeTestRepositoryFolders.MainPanelFolder8(this);
-                _paneldockingarea = new SmokeTestRepositoryFolders.PanelDockingAreaFolder(this);
+                _paneldockingarea = new SmokeTestRepositoryFolders.PanelDockingAreaFolder1(this);
                 _ordersInfo = new RepoItemInfo(this, "Orders", "container[@controlname='panelDockingArea']/?/?/rawtext[@rawtext='Orders' and @visible='True']", 30000, null, "fd615d0a-2c23-43d1-be86-efc843cce936");
                 _homeInfo = new RepoItemInfo(this, "Home", "?/?/tabpagelist[@accessiblename='Ribbon Tabs']/tabpage[@accessiblename='Home' and @visible='True']", 30000, null, "d4fc9afa-db0c-419c-a97b-5fd56605fc0d");
                 _newInfo = new RepoItemInfo(this, "New", "element[@controlname='ribbon']/?/?/rawtext[@rawtext='New' and @column='1']", 30000, null, "a7ccae7f-4e1b-4c7d-895a-5ba0b3dea9c1");
@@ -9569,7 +9724,7 @@ namespace SmokeTest
             /// The PanelDockingArea folder.
             /// </summary>
             [RepositoryFolder("aaddf6b9-1c58-4150-96fe-56fb04e2082d")]
-            public virtual SmokeTestRepositoryFolders.PanelDockingAreaFolder PanelDockingArea
+            public virtual SmokeTestRepositoryFolders.PanelDockingAreaFolder1 PanelDockingArea
             {
                 get { return _paneldockingarea; }
             }
@@ -10020,10 +10175,10 @@ namespace SmokeTest
         }
 
         /// <summary>
-        /// The PanelDockingAreaFolder folder.
+        /// The PanelDockingAreaFolder1 folder.
         /// </summary>
         [RepositoryFolder("aaddf6b9-1c58-4150-96fe-56fb04e2082d")]
-        public partial class PanelDockingAreaFolder : RepoGenBaseFolder
+        public partial class PanelDockingAreaFolder1 : RepoGenBaseFolder
         {
             RepoItemInfo _elementaInfo;
             RepoItemInfo _partcontenthostInfo;
@@ -10045,11 +10200,12 @@ namespace SmokeTest
             RepoItemInfo _kryptonheaderInfo;
             RepoItemInfo _fullnametextboxInfo;
             RepoItemInfo _companytextboxInfo;
+            RepoItemInfo _theorderhasnoitemsInfo;
 
             /// <summary>
             /// Creates a new PanelDockingArea  folder.
             /// </summary>
-            public PanelDockingAreaFolder(RepoGenBaseFolder parentFolder) :
+            public PanelDockingAreaFolder1(RepoGenBaseFolder parentFolder) :
                     base("PanelDockingArea", "container[@controlname='panelDockingArea']", parentFolder, 30000, null, false, "aaddf6b9-1c58-4150-96fe-56fb04e2082d", "")
             {
                 _elementaInfo = new RepoItemInfo(this, "ElementA", ".//container[@classname='Pane']/?/?/element[@automationid='a']", 30000, null, "51d547e2-501d-41ed-a04c-f5da4efd7c4a");
@@ -10072,6 +10228,7 @@ namespace SmokeTest
                 _kryptonheaderInfo = new RepoItemInfo(this, "KryptonHeader", "container[@controlname='gridControl']//element[@controlname='kryptonHeader']", 30000, null, "aa0b3be3-6d91-44d5-8008-e06078e727b1");
                 _fullnametextboxInfo = new RepoItemInfo(this, "FullNameTextBox", ".//container[@classname='Pane']/?/?/element[@automationid='a']/?/?/element[@name='To First Last (Domestic)']/container[@name='To First Last (Domestic)']/?/?/element/text[3]", 30000, null, "e1078a14-b01b-4361-ba08-2abc850c727b");
                 _companytextboxInfo = new RepoItemInfo(this, "CompanyTextBox", ".//container[@classname='Pane']/?/?/element[@automationid='a']/?/?/element[@name='To First Last (Domestic)']/container[@name='To First Last (Domestic)']/?/?/element/text[5]", 30000, null, "43c05e8c-76ab-4875-954f-c583aef907e9");
+                _theorderhasnoitemsInfo = new RepoItemInfo(this, "TheOrderHasNoItems", ".//container[@classname='Pane']//element[@name='Order Items']/container[@name='Order Items']/?/?/text[@name=' ']/text[@name='The order has no items']", 30000, null, "3ee051bf-4810-4b5b-86f1-334906ffc2a6");
             }
 
             /// <summary>
@@ -10575,6 +10732,30 @@ namespace SmokeTest
                 get
                 {
                     return _companytextboxInfo;
+                }
+            }
+
+            /// <summary>
+            /// The TheOrderHasNoItems item.
+            /// </summary>
+            [RepositoryItem("3ee051bf-4810-4b5b-86f1-334906ffc2a6")]
+            public virtual Ranorex.Text TheOrderHasNoItems
+            {
+                get
+                {
+                    return _theorderhasnoitemsInfo.CreateAdapter<Ranorex.Text>(true);
+                }
+            }
+
+            /// <summary>
+            /// The TheOrderHasNoItems item info.
+            /// </summary>
+            [RepositoryItemInfo("3ee051bf-4810-4b5b-86f1-334906ffc2a6")]
+            public virtual RepoItemInfo TheOrderHasNoItemsInfo
+            {
+                get
+                {
+                    return _theorderhasnoitemsInfo;
                 }
             }
         }
