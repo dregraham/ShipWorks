@@ -504,6 +504,18 @@
       <UserCode>true</UserCode>
       <id>c6347d02-2423-46ee-b3be-cb4c9966a905</id>
     </Compile>
+    <Compile Include="OLMProcessShipmentUPSInternational.cs">
+      <BoundTo>3aaf32b6-2edd-4e1d-a7d8-4a1c409f8e65</BoundTo>
+      <DependentUpon>OLMProcessShipmentUPSInternational.rxrec</DependentUpon>
+      <RecorderCode>true</RecorderCode>
+      <id>625c2175-145f-44cf-af98-c30762c81c48</id>
+    </Compile>
+    <Compile Include="OLMProcessShipmentUPSInternational.UserCode.cs">
+      <BoundTo>3aaf32b6-2edd-4e1d-a7d8-4a1c409f8e65</BoundTo>
+      <DependentUpon>OLMProcessShipmentUPSInternational.rxrec</DependentUpon>
+      <UserCode>true</UserCode>
+      <id>3165e6ee-e117-41b3-92ea-9772f80a5842</id>
+    </Compile>
     <Compile Include="OLMProcessUPSDomesticGround.cs">
       <BoundTo>48a6ef95-55ef-40d5-87ac-ac2c596e7021</BoundTo>
       <DependentUpon>OLMProcessUPSDomesticGround.rxrec</DependentUpon>
@@ -1251,6 +1263,18 @@
       <BoundTo>e17d6998-1fa1-47b1-a0a9-6e3ee8f7022c</BoundTo>
       <UserCode>true</UserCode>
     </Compile>
+    <Compile Include="OLMProcessUPSInternational.cs">
+      <BoundTo>3b6ea0d1-3a75-4430-bec1-d1f7e8b7fff2</BoundTo>
+      <DependentUpon>OLMProcessUPSInternational.rxrec</DependentUpon>
+      <RecorderCode>true</RecorderCode>
+      <id>8bf6e921-40ef-4d27-95d3-cc244f1fb290</id>
+    </Compile>
+    <Compile Include="OLMProcessUPSInternational.UserCode.cs">
+      <BoundTo>3b6ea0d1-3a75-4430-bec1-d1f7e8b7fff2</BoundTo>
+      <DependentUpon>OLMProcessUPSInternational.rxrec</DependentUpon>
+      <UserCode>true</UserCode>
+      <id>5fd81991-64fa-4ed4-955b-a3b35d1372da</id>
+    </Compile>
     <Compile Include="UPSTestServerSetup.cs">
       <BoundTo>06a6246d-01ac-430d-96ec-902a03121b25</BoundTo>
       <DependentUpon>UPSTestServerSetup.rxrec</DependentUpon>
@@ -1487,6 +1511,11 @@
       <BoundTo>cc314fb4-f6c2-41c4-91da-4828b4fd7dee</BoundTo>
       <id>64402740-4c4c-4e49-8b8d-6532f6d7a72c</id>
       <recordtableid>22998c35-06c4-4042-a8ef-503a180d855f</recordtableid>
+    </None>
+    <None Include="OLMProcessShipmentUPSInternational.rxrec">
+      <BoundTo>cc314fb4-f6c2-41c4-91da-4828b4fd7dee</BoundTo>
+      <id>3aaf32b6-2edd-4e1d-a7d8-4a1c409f8e65</id>
+      <recordtableid>c083640a-c0cb-4f7f-bfcb-bb41a1cf6a41</recordtableid>
     </None>
     <None Include="OLMProcessUPSDomesticGround.rxrec">
       <BoundTo>cc314fb4-f6c2-41c4-91da-4828b4fd7dee</BoundTo>
@@ -1828,6 +1857,11 @@
       <id>e17d6998-1fa1-47b1-a0a9-6e3ee8f7022c</id>
       <BoundTo>cc314fb4-f6c2-41c4-91da-4828b4fd7dee</BoundTo>
       <recordtableid>6a2b9112-4f1c-4dc2-869b-25a7f6c434b8</recordtableid>
+    </None>
+    <None Include="OLMProcessUPSInternational.rxrec">
+      <BoundTo>cc314fb4-f6c2-41c4-91da-4828b4fd7dee</BoundTo>
+      <id>3b6ea0d1-3a75-4430-bec1-d1f7e8b7fff2</id>
+      <recordtableid>bff3f326-bbe1-4f4e-a392-10348cbfbf05</recordtableid>
     </None>
     <None Include="UPSTestServerSetup.rxrec">
       <BoundTo>cc314fb4-f6c2-41c4-91da-4828b4fd7dee</BoundTo>

@@ -1,11 +1,11 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <recordtable
 embeddedrepository="False"
-id="22998c35-06c4-4042-a8ef-503a180d855f"
+id="c083640a-c0cb-4f7f-bfcb-bb41a1cf6a41"
 mode="Global"
 rxversion="8.1">
 	<name>
-		OLMProcessShipmentUPSDomesticGround
+		OLMProcessShipmentUPSInternational
 	</name>
 	<repeatcount>
 		1
@@ -23,7 +23,7 @@ rxversion="8.1">
 		True
 	</useDefaultItemLogging>
 	<codegen
-	classname="OLMProcessShipmentUPSDomesticGround"
+	classname="OLMProcessShipmentUPSInternational"
 	namespace="SmokeTest">
 	</codegen>
 	<variables>
@@ -932,10 +932,29 @@ fe7/AICu2gJMEZJySoyfwoooAkqsn/HxL9aKKaAlqUdBRRQxBRRRSGFFFFABRRRQAUUUUAFFFFAH
 			<bindings>
 			</bindings>
 			<info
-			id="43d4a322-15d1-4625-a481-f02bebc7dbbc"
+			id="940b6eb7-a050-45b5-b701-8e39d36a1c27"
 			sourcename="RepositoryEditor">
+				<element
+				capabilities="uiautomation, uiautomationvalue"
+				dontcache="False"
+				enabled="False"
+				flavor="uia"
+				hasfocus="False"
+				index="2"
+				prefcap="cell"
+				rect="0,0,0,0"
+				role="cell"
+				snapElem=""
+				valid="False"
+				visible="True">
+					<attribute
+					name="isheader"
+					type="System.Boolean">
+						False
+					</attribute>
+				</element>
 				<path>
-					/form[@controlname='MainForm']/container[@controlname='panelDockingArea']//container[@classname='Pane']//element[@name='Rates']/container[@name='Rates']/?/?/table[@classname='DataGrid']/row[2]/cell[@name='UPS Ground']
+					/form[@title~'ShipWorks']/container[@controlname='panelDockingArea']//container[@classname='Pane']//element[@name='Rates']/container[@name='Rates']/?/?/table[@classname='DataGrid']/row[2]/cell[@name='UPS Worldwide Express&#174;']
 				</path>
 			</info>
 		</WaitForRecordItem>
@@ -956,10 +975,29 @@ fe7/AICu2gJMEZJySoyfwoooAkqsn/HxL9aKKaAlqUdBRRQxBRRRSGFFFFABRRRQAUUUUAFFFFAH
 			<bindings>
 			</bindings>
 			<info
-			id="43d4a322-15d1-4625-a481-f02bebc7dbbc"
+			id="940b6eb7-a050-45b5-b701-8e39d36a1c27"
 			sourcename="RepositoryEditor">
+				<element
+				capabilities="uiautomation, uiautomationvalue"
+				dontcache="False"
+				enabled="False"
+				flavor="uia"
+				hasfocus="False"
+				index="2"
+				prefcap="cell"
+				rect="0,0,0,0"
+				role="cell"
+				snapElem=""
+				valid="False"
+				visible="True">
+					<attribute
+					name="isheader"
+					type="System.Boolean">
+						False
+					</attribute>
+				</element>
 				<path>
-					/form[@controlname='MainForm']/container[@controlname='panelDockingArea']//container[@classname='Pane']//element[@name='Rates']/container[@name='Rates']/?/?/table[@classname='DataGrid']/row[2]/cell[@name='UPS Ground']
+					/form[@title~'ShipWorks']/container[@controlname='panelDockingArea']//container[@classname='Pane']//element[@name='Rates']/container[@name='Rates']/?/?/table[@classname='DataGrid']/row[2]/cell[@name='UPS Worldwide Express&#174;']
 				</path>
 			</info>
 		</mouseitem>
@@ -1862,7 +1900,7 @@ Af/Z
 	</repository>
 	<usercodefile
 	lang="CSharp">
-		OLMProcessShipmentUPSDomesticGround.UserCode.cs
+		OLMProcessShipmentUPSInternational.UserCode.cs
 	</usercodefile>
 	<references>
 	</references>

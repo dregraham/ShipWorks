@@ -271,6 +271,10 @@ rxversion="8.1">
 			ref="83c62688-30ef-4ac0-aeb8-efa465a9162c"
 			type="Recording">
 			</testmodule>
+			<smartfoldernode
+			id="289ddd3f-2abc-4099-ab9d-b304ad433669"
+			name="OrderLookupModeProcessUPSInternational">
+			</smartfoldernode>
 			<testmodule
 			id="2944ed54-6b8e-4033-82dd-ea9346d4119e"
 			name="CheckShipWorksVersion"
@@ -660,6 +664,12 @@ rxversion="8.1">
 			type="Recording">
 			</testmodule>
 			<testmodule
+			id="57efde68-c195-4cf5-a062-fe5901d6320f"
+			name="SwitchOrderLookupToBatchGrid"
+			ref="6a2b9112-4f1c-4dc2-869b-25a7f6c434b8"
+			type="Recording">
+			</testmodule>
+			<testmodule
 			id="5a255059-3d22-4efb-996e-f80e25ae36dc"
 			name="ShipOrders_ToAddress_Domestic2"
 			ref="f33922fa-b9ac-411c-8e07-c21d2e74d518"
@@ -711,6 +721,12 @@ rxversion="8.1">
 			id="6663b8ec-4d73-4607-a15d-3901b307a178"
 			name="ComparePDFs">
 			</smartfoldernode>
+			<testmodule
+			id="66e14005-00a3-4798-b5b8-372be66e5ca8"
+			name="SwitchBatchGridToOrderLookup"
+			ref="9edd78a8-1b4b-4035-af81-d5ac4f2f0ab9"
+			type="Recording">
+			</testmodule>
 			<smartfoldernode
 			id="67a03e68-fe3c-49af-96c2-e7a286f3b633"
 			name="ProcessVoidExpress1InternationalShipment">
@@ -721,6 +737,12 @@ rxversion="8.1">
 			</smartfoldernode>
 			<testmodule
 			id="6be5e955-feb6-4e8a-b9a6-06fb5582c3f5"
+			name="AllOrdersFilter_SelectFirstRow_ShipOrders2"
+			ref="525dbf63-47dc-43d1-813c-3932018894b3"
+			type="Recording">
+			</testmodule>
+			<testmodule
+			id="6cf018fd-ce27-44ff-8f00-0974deb752d1"
 			name="AllOrdersFilter_SelectFirstRow_ShipOrders2"
 			ref="525dbf63-47dc-43d1-813c-3932018894b3"
 			type="Recording">
@@ -796,6 +818,12 @@ rxversion="8.1">
 			type="Recording">
 			</testmodule>
 			<testmodule
+			id="7e32748a-a46c-45f4-97a3-adb74be4eff8"
+			name="CloseShipOrdersDialog"
+			ref="93e031b6-a539-4f4b-8dd5-892ef64181fb"
+			type="Recording">
+			</testmodule>
+			<testmodule
 			id="7ee29dfc-d2a1-4573-8c9e-6ce081a6d49b"
 			name="ProcessFedExDomesticHomeDelivery"
 			ref="73ce1308-cc90-45a2-8f99-38301a3c3c20"
@@ -823,6 +851,12 @@ rxversion="8.1">
 			id="85c505fb-e16d-4ddd-b7e3-d09de3dfe228"
 			name="CreateAnOrder"
 			ref="652d033d-2a07-4dce-b445-aaa267330fbb"
+			type="Recording">
+			</testmodule>
+			<testmodule
+			id="86aa2e8b-463e-4674-b57a-ae81abc30471"
+			name="OLMProcessUPSInternational"
+			ref="bff3f326-bbe1-4f4e-a392-10348cbfbf05"
 			type="Recording">
 			</testmodule>
 			<testmodule
@@ -1032,6 +1066,18 @@ rxversion="8.1">
 			type="Recording">
 			</testmodule>
 			<testmodule
+			id="a97a8420-f2c8-4747-bc80-162e695c1cc8"
+			name="CreateNewShipment_ProviderUPS2"
+			ref="84dd3ba6-a779-4cec-81ce-33c6da2a4d7a"
+			type="Recording">
+			</testmodule>
+			<testmodule
+			id="a9df9264-af62-4bf0-963e-d751daf275d2"
+			name="OLMProcessShipmentUPSInternational"
+			ref="c083640a-c0cb-4f7f-bfcb-bb41a1cf6a41"
+			type="Recording">
+			</testmodule>
+			<testmodule
 			id="ad9e38fd-7a1b-4d77-af9a-333bd83793df"
 			name="ShipOrders_ToAddress_Domestic2"
 			ref="f33922fa-b9ac-411c-8e07-c21d2e74d518"
@@ -1145,6 +1191,12 @@ rxversion="8.1">
 			id="bfcd8057-3b6d-4874-aafe-aedc9da90ec3"
 			name="ProcessUPSDomestic">
 			</smartfoldernode>
+			<testmodule
+			id="c017660b-1659-4f0e-b909-ca6d3d800af5"
+			name="ShipOrders_ToAddress_International"
+			ref="86985c63-65a2-49f8-a670-2ee220a5e1c1"
+			type="Recording">
+			</testmodule>
 			<testmodule
 			id="c0391e49-cd22-4b69-8354-bce0c3b0fc10"
 			name="ProcessVoidShipment_Validate_CloseShipOrders2"
@@ -2045,6 +2097,42 @@ rxversion="8.1">
 							</testmodule>
 						</smartfoldernode>
 						<smartfoldernode
+						id="289ddd3f-2abc-4099-ab9d-b304ad433669"
+						name="OrderLookupModeProcessUPSInternational">
+							<testmodule
+							id="6cf018fd-ce27-44ff-8f00-0974deb752d1"
+							name="AllOrdersFilter_SelectFirstRow_ShipOrders2">
+							</testmodule>
+							<testmodule
+							id="a97a8420-f2c8-4747-bc80-162e695c1cc8"
+							name="CreateNewShipment_ProviderUPS2">
+							</testmodule>
+							<testmodule
+							id="c017660b-1659-4f0e-b909-ca6d3d800af5"
+							name="ShipOrders_ToAddress_International">
+							</testmodule>
+							<testmodule
+							id="86aa2e8b-463e-4674-b57a-ae81abc30471"
+							name="OLMProcessUPSInternational">
+							</testmodule>
+							<testmodule
+							id="7e32748a-a46c-45f4-97a3-adb74be4eff8"
+							name="CloseShipOrdersDialog">
+							</testmodule>
+							<testmodule
+							id="66e14005-00a3-4798-b5b8-372be66e5ca8"
+							name="SwitchBatchGridToOrderLookup">
+							</testmodule>
+							<testmodule
+							id="a9df9264-af62-4bf0-963e-d751daf275d2"
+							name="OLMProcessShipmentUPSInternational">
+							</testmodule>
+							<testmodule
+							id="57efde68-c195-4cf5-a062-fe5901d6320f"
+							name="SwitchOrderLookupToBatchGrid">
+							</testmodule>
+						</smartfoldernode>
+						<smartfoldernode
 						id="c63ecaad-2072-4eae-9658-8fe53b8774a3"
 						name="ProcessUSPSStampsDomestic">
 							<testmodule
@@ -2542,7 +2630,7 @@ rxversion="8.1">
 		</DataSource>
 	</datasources>
 	<testconfigurations
-	default="Complete">
+	default="TestRun">
 		<testconfiguration
 		name="BrettsTesting20160718">
 			<testcontainer
@@ -2580,6 +2668,9 @@ rxversion="8.1">
 			</testcontainer>
 			<testcontainer
 			id="254eaed6-bbd9-41f6-8551-df6d373e9aec">
+			</testcontainer>
+			<testcontainer
+			id="289ddd3f-2abc-4099-ab9d-b304ad433669">
 			</testcontainer>
 			<testcontainer
 			id="3097e203-0e96-435a-87f2-65c9d6fbb9dd">
@@ -2717,13 +2808,7 @@ rxversion="8.1">
 			id="14ee1c1c-0353-469d-84ea-e800f3a3addb">
 			</testcontainer>
 			<testcontainer
-			id="31138867-13df-4dce-ab56-5c72c8464d3e">
-			</testcontainer>
-			<testcontainer
-			id="5f877bea-a0cb-424b-b24d-9777e9c09669">
-			</testcontainer>
-			<testcontainer
-			id="c63ecaad-2072-4eae-9658-8fe53b8774a3">
+			id="289ddd3f-2abc-4099-ab9d-b304ad433669">
 			</testcontainer>
 			<testcontainer
 			id="f875647d-7a5c-46d1-bda6-83a5075d93c7">

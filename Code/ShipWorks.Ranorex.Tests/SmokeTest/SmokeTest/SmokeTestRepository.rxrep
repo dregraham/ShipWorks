@@ -268,7 +268,7 @@ XrLp0EM2aG+RntUiB+ZT6fxfIsRPbYnQgbXhGFYAAAAASUVORK5CYII=
 		id="edb789cd-8c30-4bba-a2fb-39dc997e4082"
 		isrooted="True"
 		name="ShipWorks"
-		refimgid="7a92ac79-256e-49cc-a046-7514b10beb2d"
+		refimgid="587d3f51-ebb6-4d15-8027-fa0120a96ad9"
 		searchtimeout="30000ms"
 		usecache="True">
 			<item
@@ -3917,6 +3917,16 @@ lpKZgpMF6Pw3M/MFayOlqIh43SSsYsIrayXz9q3r5Ra2vFFWLUXbtWRiANXcVpB6SHDZSEK3kcS7
 				refpath="/form[@controlname='MainForm']/container[@controlname='panelDockingArea']/container[@controlname='OrderLookupControl']/element/container/element/element/container/element[@name='Order Items']/container/element/text/text[@name='The order has no items']"
 				searchtimeout="30000ms">
 					/form[@title~'ShipWorks']/container[@controlname='panelDockingArea']//container[@classname='Pane']//element[@name='Order Items']/container[@name='Order Items']/?/?/text[@name=' ']/text[@name='The order has no items']
+				</item>
+				<item
+				addcaps="cell,uiautomation,uiautomationvalue"
+				capname="cell"
+				id="940b6eb7-a050-45b5-b701-8e39d36a1c27"
+				name="UPSWorldwideExpressR"
+				refimgid="584a88f1-1190-4c30-ac39-b05a027f2739"
+				refpath="/form[@controlname='MainForm']/container[@controlname='panelDockingArea']/container[@controlname='OrderLookupControl']/element/container/element/element/container/element[@name='Rates']/container/element/table/row[2]/cell[@name='UPS Worldwide Express®']"
+				searchtimeout="30000ms">
+					/form[@title~'ShipWorks']/container[@controlname='panelDockingArea']//container[@classname='Pane']//element[@name='Rates']/container[@name='Rates']/?/?/table[@classname='DataGrid']/row[2]/cell[@name='UPS Worldwide Express&#174;']
 				</item>
 				<basepath>
 					/form[@title~'ShipWorks']/container[@controlname='panelDockingArea']
