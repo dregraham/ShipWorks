@@ -5,11 +5,6 @@
   <Array name="bookmarks" />
   <Array name="files">
     <Element value="SmokeTest.rxtst" />
-    <Element value="SwitchBatchGridToOrderLookup.rxrec" />
-    <Element value="LookupAnOrder.rxrec" />
-    <Element value="SwitchOrderLookupToBatchGrid.rxrec" />
-    <Element value="SetupUPS.rxrec" />
-    <Element value="SetupUPS.UserCode.cs" />
   </Array>
   <Properties name="projectSavedData">
     <Properties name="customTool">
