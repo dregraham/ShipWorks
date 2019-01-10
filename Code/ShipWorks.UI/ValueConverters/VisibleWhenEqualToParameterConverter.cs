@@ -25,11 +25,16 @@ namespace ShipWorks.UI.ValueConverters
         /// </summary>
         public VisibleWhenEqualToParameterConverter(bool invert, bool isDesignMode) : base(invert, isDesignMode)
         {
-
+            FalseVisibility = Visibility.Collapsed;
         }
 
         /// <summary>
-        /// Return Visible if the bound value is equal to the converter parameter, else collapsed
+        /// The visibilty to return when not equal
+        /// </summary>
+        public Visibility FalseVisibility { get; set; }
+
+        /// <summary>
+        /// Return Visible if the bound value is equal to the converter parameter, else the FalseVisibility property
         /// </summary>
         public override object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
@@ -39,7 +44,7 @@ namespace ShipWorks.UI.ValueConverters
             }
 
             bool b = (bool)base.Convert(value, typeof(bool), parameter, culture);
-            Visibility viz = b ? Visibility.Visible : Visibility.Collapsed;
+            Visibility viz = b ? Visibility.Visible : FalseVisibility;
 
           return viz;
         }
