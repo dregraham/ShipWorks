@@ -5,6 +5,8 @@
   <Array name="bookmarks" />
   <Array name="files">
     <Element value="SmokeTest.rxtst" />
+    <Element value="OLMProcessShipmentUPSDomesticGround.rxrec" />
+    <Element value="OLMProcessShipmentUPSInternational.rxrec" />
   </Array>
   <Properties name="projectSavedData">
     <Properties name="customTool">
