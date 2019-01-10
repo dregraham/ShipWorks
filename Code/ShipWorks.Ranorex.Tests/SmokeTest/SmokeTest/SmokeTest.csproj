@@ -492,6 +492,30 @@
       <UserCode>true</UserCode>
       <id>1c737f93-5845-4620-aaa3-43cf40d5393f</id>
     </Compile>
+    <Compile Include="OLMProcessShipmentUPSDomesticGround.cs">
+      <BoundTo>64402740-4c4c-4e49-8b8d-6532f6d7a72c</BoundTo>
+      <DependentUpon>OLMProcessShipmentUPSDomesticGround.rxrec</DependentUpon>
+      <RecorderCode>true</RecorderCode>
+      <id>51d35474-8d48-43e3-a5f0-aa9bd97a2076</id>
+    </Compile>
+    <Compile Include="OLMProcessShipmentUPSDomesticGround.UserCode.cs">
+      <BoundTo>64402740-4c4c-4e49-8b8d-6532f6d7a72c</BoundTo>
+      <DependentUpon>OLMProcessShipmentUPSDomesticGround.rxrec</DependentUpon>
+      <UserCode>true</UserCode>
+      <id>c6347d02-2423-46ee-b3be-cb4c9966a905</id>
+    </Compile>
+    <Compile Include="OLMProcessUPSDomesticGround.cs">
+      <BoundTo>48a6ef95-55ef-40d5-87ac-ac2c596e7021</BoundTo>
+      <DependentUpon>OLMProcessUPSDomesticGround.rxrec</DependentUpon>
+      <RecorderCode>true</RecorderCode>
+      <id>95f6f880-9243-4195-8e75-03fc98068bb6</id>
+    </Compile>
+    <Compile Include="OLMProcessUPSDomesticGround.UserCode.cs">
+      <BoundTo>48a6ef95-55ef-40d5-87ac-ac2c596e7021</BoundTo>
+      <DependentUpon>OLMProcessUPSDomesticGround.rxrec</DependentUpon>
+      <UserCode>true</UserCode>
+      <id>8a994d70-26de-43e6-bc90-601b8efc66df</id>
+    </Compile>
     <Compile Include="OpenExecutable.cs">
       <BoundTo>d3d8d8fd-c530-43c0-a281-9f28c7007997</BoundTo>
       <DependentUpon>OpenExecutable.rxrec</DependentUpon>
@@ -1459,6 +1483,16 @@
       <id>720778dd-09c3-42cd-835f-6e604d3b41a4</id>
       <recordtableid>bf6c50ea-63d8-479e-90d1-6ec377b57cf7</recordtableid>
     </None>
+    <None Include="OLMProcessShipmentUPSDomesticGround.rxrec">
+      <BoundTo>cc314fb4-f6c2-41c4-91da-4828b4fd7dee</BoundTo>
+      <id>64402740-4c4c-4e49-8b8d-6532f6d7a72c</id>
+      <recordtableid>22998c35-06c4-4042-a8ef-503a180d855f</recordtableid>
+    </None>
+    <None Include="OLMProcessUPSDomesticGround.rxrec">
+      <BoundTo>cc314fb4-f6c2-41c4-91da-4828b4fd7dee</BoundTo>
+      <id>48a6ef95-55ef-40d5-87ac-ac2c596e7021</id>
+      <recordtableid>ded9d420-276c-4a3f-9a75-4931a4d2e065</recordtableid>
+    </None>
     <None Include="OpenExecutable.rxrec">
       <BoundTo>cc314fb4-f6c2-41c4-91da-4828b4fd7dee</BoundTo>
       <id>d3d8d8fd-c530-43c0-a281-9f28c7007997</id>
@@ -1544,9 +1578,9 @@
       <recordtableid>6cb750f1-dbc8-4486-8d2c-1d5568769456</recordtableid>
     </None>
     <None Include="ProcessUPSDomesticGround.rxrec">
-      <BoundTo>cc314fb4-f6c2-41c4-91da-4828b4fd7dee</BoundTo>
       <id>7735e487-249d-4298-acc0-b91ddb1e2158</id>
       <recordtableid>29d9a17b-3958-4e92-83fd-51e9ced26c19</recordtableid>
+      <BoundTo>cc314fb4-f6c2-41c4-91da-4828b4fd7dee</BoundTo>
     </None>
     <None Include="ProcessUPSDomesticMailInnovations.rxrec">
       <BoundTo>cc314fb4-f6c2-41c4-91da-4828b4fd7dee</BoundTo>
