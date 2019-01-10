@@ -1333,9 +1333,8 @@ XrLp0EM2aG+RntUiB+ZT6fxfIsRPbYnQgbXhGFYAAAAASUVORK5CYII=
 				id="32356c63-af76-4fe9-ba35-a4178f10f193"
 				name="List172019"
 				refimgid="c6f8de9f-f215-48a5-8394-d0c0dda87469"
-				refpath="/form[@controlname='UpsSetupWizard']/container[@controlname='mainPanel']/container/container/datetime/list[@accessiblename='1/7/2019']"
 				searchtimeout="30000ms">
-					/form[@controlname='UpsSetupWizard']/container[@controlname='mainPanel']//datetime[@controlname='authInvoiceDate']/list[@accessiblename='1/7/2019']
+					/form[@controlname='UpsSetupWizard']/container[@controlname='mainPanel']//datetime[@controlname='authInvoiceDate']/list[1]
 				</item>
 				<item
 				addcaps="text,accessible"
