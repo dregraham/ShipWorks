@@ -10201,6 +10201,8 @@ namespace SmokeTest
             RepoItemInfo _fullnametextboxInfo;
             RepoItemInfo _companytextboxInfo;
             RepoItemInfo _theorderhasnoitemsInfo;
+            RepoItemInfo _upsworldwideexpressrInfo;
+            RepoItemInfo _priorityInfo;
 
             /// <summary>
             /// Creates a new PanelDockingArea  folder.
@@ -10229,6 +10231,8 @@ namespace SmokeTest
                 _fullnametextboxInfo = new RepoItemInfo(this, "FullNameTextBox", ".//container[@classname='Pane']/?/?/element[@automationid='a']/?/?/element[@name='To First Last (Domestic)']/container[@name='To First Last (Domestic)']/?/?/element/text[3]", 30000, null, "e1078a14-b01b-4361-ba08-2abc850c727b");
                 _companytextboxInfo = new RepoItemInfo(this, "CompanyTextBox", ".//container[@classname='Pane']/?/?/element[@automationid='a']/?/?/element[@name='To First Last (Domestic)']/container[@name='To First Last (Domestic)']/?/?/element/text[5]", 30000, null, "43c05e8c-76ab-4875-954f-c583aef907e9");
                 _theorderhasnoitemsInfo = new RepoItemInfo(this, "TheOrderHasNoItems", ".//container[@classname='Pane']//element[@name='Order Items']/container[@name='Order Items']/?/?/text[@name=' ']/text[@name='The order has no items']", 30000, null, "3ee051bf-4810-4b5b-86f1-334906ffc2a6");
+                _upsworldwideexpressrInfo = new RepoItemInfo(this, "UPSWorldwideExpressR", ".//container[@classname='Pane']//element[@name='Rates']/container[@name='Rates']/?/?/table[@classname='DataGrid']/row[2]/cell[@name='UPS Worldwide Express®']", 30000, null, "940b6eb7-a050-45b5-b701-8e39d36a1c27");
+                _priorityInfo = new RepoItemInfo(this, "Priority", ".//container[@classname='Pane']//element[@name='Rates']/container[@name='Rates']/?/?/table[@classname='DataGrid']/row[2]/cell[@name='Priority']", 30000, null, "f5be3269-3fae-4257-b034-f13609b20a66");
             }
 
             /// <summary>
@@ -10756,6 +10760,54 @@ namespace SmokeTest
                 get
                 {
                     return _theorderhasnoitemsInfo;
+                }
+            }
+
+            /// <summary>
+            /// The UPSWorldwideExpressR item.
+            /// </summary>
+            [RepositoryItem("940b6eb7-a050-45b5-b701-8e39d36a1c27")]
+            public virtual Ranorex.Cell UPSWorldwideExpressR
+            {
+                get
+                {
+                    return _upsworldwideexpressrInfo.CreateAdapter<Ranorex.Cell>(true);
+                }
+            }
+
+            /// <summary>
+            /// The UPSWorldwideExpressR item info.
+            /// </summary>
+            [RepositoryItemInfo("940b6eb7-a050-45b5-b701-8e39d36a1c27")]
+            public virtual RepoItemInfo UPSWorldwideExpressRInfo
+            {
+                get
+                {
+                    return _upsworldwideexpressrInfo;
+                }
+            }
+
+            /// <summary>
+            /// The Priority item.
+            /// </summary>
+            [RepositoryItem("f5be3269-3fae-4257-b034-f13609b20a66")]
+            public virtual Ranorex.Cell Priority
+            {
+                get
+                {
+                    return _priorityInfo.CreateAdapter<Ranorex.Cell>(true);
+                }
+            }
+
+            /// <summary>
+            /// The Priority item info.
+            /// </summary>
+            [RepositoryItemInfo("f5be3269-3fae-4257-b034-f13609b20a66")]
+            public virtual RepoItemInfo PriorityInfo
+            {
+                get
+                {
+                    return _priorityInfo;
                 }
             }
         }

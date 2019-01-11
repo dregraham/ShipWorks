@@ -351,13 +351,6 @@ rxversion="8.1">
 					</dynamicattribute>
 					<dynamicattribute
 					description="No description available."
-					name="HeaderStyle"
-					readonly="False"
-					type="ComponentFactory.Krypton.Toolkit.HeaderStyle, ComponentFactory.Krypton.Toolkit, Version=4.4.0.0, Culture=neutral, PublicKeyToken=a87e673e9ecb6e8e">
-						Primary
-					</dynamicattribute>
-					<dynamicattribute
-					description="No description available."
 					name="Height"
 					readonly="False"
 					type="System.Int32">
@@ -457,24 +450,10 @@ rxversion="8.1">
 					</dynamicattribute>
 					<dynamicattribute
 					description="No description available."
-					name="Orientation"
-					readonly="False"
-					type="ComponentFactory.Krypton.Toolkit.VisualOrientation, ComponentFactory.Krypton.Toolkit, Version=4.4.0.0, Culture=neutral, PublicKeyToken=a87e673e9ecb6e8e">
-						Top
-					</dynamicattribute>
-					<dynamicattribute
-					description="No description available."
 					name="Padding"
 					readonly="False"
 					type="System.Windows.Forms.Padding, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089">
 						0, 0, 0, 0
-					</dynamicattribute>
-					<dynamicattribute
-					description="No description available."
-					name="PaletteMode"
-					readonly="False"
-					type="ComponentFactory.Krypton.Toolkit.PaletteMode, ComponentFactory.Krypton.Toolkit, Version=4.4.0.0, Culture=neutral, PublicKeyToken=a87e673e9ecb6e8e">
-						Global
 					</dynamicattribute>
 					<dynamicattribute
 					description="No description available."
@@ -881,7 +860,7 @@ rxversion="8.1">
 						<argument
 						description="No description available."
 						displayName="state"
-						type="ComponentFactory.Krypton.Toolkit.PaletteState, ComponentFactory.Krypton.Toolkit, Version=4.4.0.0, Culture=neutral, PublicKeyToken=a87e673e9ecb6e8e">
+						type="System.Object">
 						</argument>
 					</dynamicaction>
 					<dynamicaction
