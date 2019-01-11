@@ -174,6 +174,18 @@
       <UserCode>true</UserCode>
       <id>956afa12-ce89-4c0b-83e4-b547550f6786</id>
     </Compile>
+    <Compile Include="CloseShipWorks.cs">
+      <BoundTo>3b6dfba2-3d10-472c-98ca-0b7932df87b8</BoundTo>
+      <DependentUpon>CloseShipWorks.rxrec</DependentUpon>
+      <RecorderCode>true</RecorderCode>
+      <id>e9c34c10-819e-400e-b94d-b09bb0037bb0</id>
+    </Compile>
+    <Compile Include="CloseShipWorks.UserCode.cs">
+      <BoundTo>3b6dfba2-3d10-472c-98ca-0b7932df87b8</BoundTo>
+      <DependentUpon>CloseShipWorks.rxrec</DependentUpon>
+      <UserCode>true</UserCode>
+      <id>872d82e0-2670-4edf-9ec7-2d52f28045f3</id>
+    </Compile>
     <Compile Include="CopyStagingHosts.cs">
       <id>7e3919f9-7e57-4e61-8629-9ab72e1d8a2b</id>
     </Compile>
@@ -1402,6 +1414,11 @@
       <BoundTo>cc314fb4-f6c2-41c4-91da-4828b4fd7dee</BoundTo>
       <id>0cb7441f-2c75-4c22-924b-465de65760a3</id>
       <recordtableid>93e031b6-a539-4f4b-8dd5-892ef64181fb</recordtableid>
+    </None>
+    <None Include="CloseShipWorks.rxrec">
+      <BoundTo>cc314fb4-f6c2-41c4-91da-4828b4fd7dee</BoundTo>
+      <id>3b6dfba2-3d10-472c-98ca-0b7932df87b8</id>
+      <recordtableid>f9fc103a-6690-4bba-a0d1-217039d00993</recordtableid>
     </None>
     <None Include="CreateAnOrder.rxrec">
       <BoundTo>cc314fb4-f6c2-41c4-91da-4828b4fd7dee</BoundTo>

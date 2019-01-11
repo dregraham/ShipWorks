@@ -24,29 +24,29 @@ namespace SmokeTest
 {
 #pragma warning disable 0436 //(CS0436) The type 'type' in 'assembly' conflicts with the imported type 'type2' in 'assembly'. Using the type defined in 'assembly'.
     /// <summary>
-    ///The SendInfoEmail recording.
+    ///The CloseShipWorks recording.
     /// </summary>
-    [TestModule("d8d6dccf-0f6f-4c0a-858c-874918cbd5a0", ModuleType.Recording, 1)]
-    public partial class SendInfoEmail : ITestModule
+    [TestModule("f9fc103a-6690-4bba-a0d1-217039d00993", ModuleType.Recording, 1)]
+    public partial class CloseShipWorks : ITestModule
     {
         /// <summary>
         /// Holds an instance of the SmokeTestRepository repository.
         /// </summary>
         public static SmokeTestRepository repo = SmokeTestRepository.Instance;
 
-        static SendInfoEmail instance = new SendInfoEmail();
+        static CloseShipWorks instance = new CloseShipWorks();
 
         /// <summary>
         /// Constructs a new instance.
         /// </summary>
-        public SendInfoEmail()
+        public CloseShipWorks()
         {
         }
 
         /// <summary>
         /// Gets a static instance of this recording.
         /// </summary>
-        public static SendInfoEmail Instance
+        public static CloseShipWorks Instance
         {
             get { return instance; }
         }
@@ -79,8 +79,17 @@ namespace SmokeTest
 
             Init();
 
-            SendEmail();
+            Report.Log(ReportLevel.Info, "Keyboard", "Key sequence '{Escape}{Escape}{Escape}{Escape}{Escape}{Escape}{Escape}{Escape}{Escape}{Escape}'.", new RecordItemIndex(0));
+            Keyboard.Press("{Escape}{Escape}{Escape}{Escape}{Escape}{Escape}{Escape}{Escape}{Escape}{Escape}");
             Delay.Milliseconds(0);
+            
+            Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Move item 'ShipWorksSa.Application' at Center.", repo.ShipWorksSa.ApplicationInfo, new RecordItemIndex(1));
+            repo.ShipWorksSa.Application.MoveTo();
+            Delay.Milliseconds(200);
+            
+            Report.Log(ReportLevel.Info, "Mouse", "Mouse Left DoubleClick item 'ShipWorksSa.Application' at Center.", repo.ShipWorksSa.ApplicationInfo, new RecordItemIndex(2));
+            repo.ShipWorksSa.Application.DoubleClick();
+            Delay.Milliseconds(200);
             
         }
 
