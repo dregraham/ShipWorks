@@ -540,6 +540,18 @@
       <UserCode>true</UserCode>
       <id>84777d20-76a0-41e8-8423-3dbb95e11401</id>
     </Compile>
+    <Compile Include="OLMProcessShipmentUSPSInternational.cs">
+      <BoundTo>d6a40b4e-f1b0-4362-9cfc-900dd8df1b0b</BoundTo>
+      <DependentUpon>OLMProcessShipmentUSPSInternational.rxrec</DependentUpon>
+      <RecorderCode>true</RecorderCode>
+      <id>48531493-6ec0-48d2-b6b8-eca2281193b3</id>
+    </Compile>
+    <Compile Include="OLMProcessShipmentUSPSInternational.UserCode.cs">
+      <BoundTo>d6a40b4e-f1b0-4362-9cfc-900dd8df1b0b</BoundTo>
+      <DependentUpon>OLMProcessShipmentUSPSInternational.rxrec</DependentUpon>
+      <UserCode>true</UserCode>
+      <id>35e4d408-69fa-47e8-adee-a480e187dab3</id>
+    </Compile>
     <Compile Include="OLMProcessUPSDomesticGround.cs">
       <BoundTo>48a6ef95-55ef-40d5-87ac-ac2c596e7021</BoundTo>
       <DependentUpon>OLMProcessUPSDomesticGround.rxrec</DependentUpon>
@@ -551,6 +563,18 @@
       <DependentUpon>OLMProcessUPSDomesticGround.rxrec</DependentUpon>
       <UserCode>true</UserCode>
       <id>8a994d70-26de-43e6-bc90-601b8efc66df</id>
+    </Compile>
+    <Compile Include="OLMProcessUSPSInternationalPriority.cs">
+      <BoundTo>97791c4b-ac76-45f5-98f4-3a81c29337dd</BoundTo>
+      <DependentUpon>OLMProcessUSPSInternationalPriority.rxrec</DependentUpon>
+      <RecorderCode>true</RecorderCode>
+      <id>21ddf819-7529-446d-82e2-4e3e3be4f9b8</id>
+    </Compile>
+    <Compile Include="OLMProcessUSPSInternationalPriority.UserCode.cs">
+      <BoundTo>97791c4b-ac76-45f5-98f4-3a81c29337dd</BoundTo>
+      <DependentUpon>OLMProcessUSPSInternationalPriority.rxrec</DependentUpon>
+      <UserCode>true</UserCode>
+      <id>4b7d0d19-8b88-4ab9-a953-b34ba3c83192</id>
     </Compile>
     <Compile Include="OLMProcessUSPSPriority.cs">
       <BoundTo>d7bee37e-8aca-42f2-aa82-3510d6bd9272</BoundTo>
@@ -1563,10 +1587,20 @@
       <id>eeeb74dc-b6a4-484f-acda-cab45dafc853</id>
       <recordtableid>fc464890-1cbc-451a-a606-73d5b084606d</recordtableid>
     </None>
+    <None Include="OLMProcessShipmentUSPSInternational.rxrec">
+      <BoundTo>cc314fb4-f6c2-41c4-91da-4828b4fd7dee</BoundTo>
+      <id>d6a40b4e-f1b0-4362-9cfc-900dd8df1b0b</id>
+      <recordtableid>ccfe2d1f-0279-4d0c-af5a-3ccbe97a631f</recordtableid>
+    </None>
     <None Include="OLMProcessUPSDomesticGround.rxrec">
       <BoundTo>cc314fb4-f6c2-41c4-91da-4828b4fd7dee</BoundTo>
       <id>48a6ef95-55ef-40d5-87ac-ac2c596e7021</id>
       <recordtableid>ded9d420-276c-4a3f-9a75-4931a4d2e065</recordtableid>
+    </None>
+    <None Include="OLMProcessUSPSInternationalPriority.rxrec">
+      <BoundTo>cc314fb4-f6c2-41c4-91da-4828b4fd7dee</BoundTo>
+      <id>97791c4b-ac76-45f5-98f4-3a81c29337dd</id>
+      <recordtableid>c1543ca6-d719-45d4-a387-5b6ef72adf86</recordtableid>
     </None>
     <None Include="OLMProcessUSPSPriority.rxrec">
       <BoundTo>cc314fb4-f6c2-41c4-91da-4828b4fd7dee</BoundTo>
@@ -1728,9 +1762,9 @@
       <recordtableid>a287e480-29f9-42dd-9fad-2e6d2bea6dd4</recordtableid>
     </None>
     <None Include="ProcessUSPSInternationalPriority.rxrec">
-      <BoundTo>cc314fb4-f6c2-41c4-91da-4828b4fd7dee</BoundTo>
       <id>4a2a3ad8-5a71-4350-b93f-e31868462243</id>
       <recordtableid>415b3cad-6f52-47fe-8977-dc89cf9e9c71</recordtableid>
+      <BoundTo>cc314fb4-f6c2-41c4-91da-4828b4fd7dee</BoundTo>
     </None>
     <None Include="ProcessUSPSPriority.rxrec">
       <id>9d057a83-03e5-4cdd-923c-29d159dafc3e</id>

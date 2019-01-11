@@ -3938,6 +3938,16 @@ lpKZgpMF6Pw3M/MFayOlqIh43SSsYsIrayXz9q3r5Ra2vFFWLUXbtWRiANXcVpB6SHDZSEK3kcS7
 				searchtimeout="30000ms">
 					/form[@title~'ShipWorks']/container[@controlname='panelDockingArea']//container[@classname='Pane']//element[@name='Rates']/container[@name='Rates']/?/?/table[@classname='DataGrid']/row[2]/cell[@name='Priority']
 				</item>
+				<item
+				addcaps="cell,uiautomation,uiautomationvalue"
+				capname="cell"
+				id="333e3820-e9d0-4391-9ae8-71b7818a4c8f"
+				name="InternationalPriority"
+				refimgid="3a311020-f88f-4584-b27a-1840de9bc967"
+				refpath="/form[@controlname='MainForm']/container[@controlname='panelDockingArea']/container[@controlname='OrderLookupControl']/element/container/element/element/container/element[@name='Rates']/container/element/table/row[3]/cell[@name='International Priority']"
+				searchtimeout="30000ms">
+					/form[@title~'ShipWorks']/container[@controlname='panelDockingArea']//container[@classname='Pane']//element[@name='Rates']/container[@name='Rates']/?/?/table[@classname='DataGrid']/row[3]/cell[@name='International Priority']
+				</item>
 				<basepath>
 					/form[@title~'ShipWorks']/container[@controlname='panelDockingArea']
 				</basepath>

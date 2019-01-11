@@ -10203,6 +10203,7 @@ namespace SmokeTest
             RepoItemInfo _theorderhasnoitemsInfo;
             RepoItemInfo _upsworldwideexpressrInfo;
             RepoItemInfo _priorityInfo;
+            RepoItemInfo _internationalpriorityInfo;
 
             /// <summary>
             /// Creates a new PanelDockingArea  folder.
@@ -10233,6 +10234,7 @@ namespace SmokeTest
                 _theorderhasnoitemsInfo = new RepoItemInfo(this, "TheOrderHasNoItems", ".//container[@classname='Pane']//element[@name='Order Items']/container[@name='Order Items']/?/?/text[@name=' ']/text[@name='The order has no items']", 30000, null, "3ee051bf-4810-4b5b-86f1-334906ffc2a6");
                 _upsworldwideexpressrInfo = new RepoItemInfo(this, "UPSWorldwideExpressR", ".//container[@classname='Pane']//element[@name='Rates']/container[@name='Rates']/?/?/table[@classname='DataGrid']/row[2]/cell[@name='UPS Worldwide Express®']", 30000, null, "940b6eb7-a050-45b5-b701-8e39d36a1c27");
                 _priorityInfo = new RepoItemInfo(this, "Priority", ".//container[@classname='Pane']//element[@name='Rates']/container[@name='Rates']/?/?/table[@classname='DataGrid']/row[2]/cell[@name='Priority']", 30000, null, "f5be3269-3fae-4257-b034-f13609b20a66");
+                _internationalpriorityInfo = new RepoItemInfo(this, "InternationalPriority", ".//container[@classname='Pane']//element[@name='Rates']/container[@name='Rates']/?/?/table[@classname='DataGrid']/row[3]/cell[@name='International Priority']", 30000, null, "333e3820-e9d0-4391-9ae8-71b7818a4c8f");
             }
 
             /// <summary>
@@ -10808,6 +10810,30 @@ namespace SmokeTest
                 get
                 {
                     return _priorityInfo;
+                }
+            }
+
+            /// <summary>
+            /// The InternationalPriority item.
+            /// </summary>
+            [RepositoryItem("333e3820-e9d0-4391-9ae8-71b7818a4c8f")]
+            public virtual Ranorex.Cell InternationalPriority
+            {
+                get
+                {
+                    return _internationalpriorityInfo.CreateAdapter<Ranorex.Cell>(true);
+                }
+            }
+
+            /// <summary>
+            /// The InternationalPriority item info.
+            /// </summary>
+            [RepositoryItemInfo("333e3820-e9d0-4391-9ae8-71b7818a4c8f")]
+            public virtual RepoItemInfo InternationalPriorityInfo
+            {
+                get
+                {
+                    return _internationalpriorityInfo;
                 }
             }
         }
