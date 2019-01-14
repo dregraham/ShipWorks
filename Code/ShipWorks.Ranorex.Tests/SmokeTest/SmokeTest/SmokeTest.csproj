@@ -504,6 +504,54 @@
       <UserCode>true</UserCode>
       <id>1c737f93-5845-4620-aaa3-43cf40d5393f</id>
     </Compile>
+    <Compile Include="OLMProcessFedExDomesticGround.cs">
+      <BoundTo>a9f64a61-85d7-4eb1-bd89-f10ac2887541</BoundTo>
+      <DependentUpon>OLMProcessFedExDomesticGround.rxrec</DependentUpon>
+      <RecorderCode>true</RecorderCode>
+      <id>2224f6b1-763c-474f-829e-5c44c4f23b30</id>
+    </Compile>
+    <Compile Include="OLMProcessFedExDomesticGround.UserCode.cs">
+      <BoundTo>a9f64a61-85d7-4eb1-bd89-f10ac2887541</BoundTo>
+      <DependentUpon>OLMProcessFedExDomesticGround.rxrec</DependentUpon>
+      <UserCode>true</UserCode>
+      <id>b82bb374-6d8a-4396-afa5-5626b9ceb8f2</id>
+    </Compile>
+    <Compile Include="OLMProcessFedExInternational.cs">
+      <BoundTo>d8026bdf-dae6-40ab-8eeb-7a560ec5df35</BoundTo>
+      <DependentUpon>OLMProcessFedExInternational.rxrec</DependentUpon>
+      <RecorderCode>true</RecorderCode>
+      <id>a7efa64c-1800-41c8-a4d2-840bbd89375b</id>
+    </Compile>
+    <Compile Include="OLMProcessFedExInternational.UserCode.cs">
+      <BoundTo>d8026bdf-dae6-40ab-8eeb-7a560ec5df35</BoundTo>
+      <DependentUpon>OLMProcessFedExInternational.rxrec</DependentUpon>
+      <UserCode>true</UserCode>
+      <id>19a6251a-e068-4785-b632-1917fb56e1b4</id>
+    </Compile>
+    <Compile Include="OLMProcessShipmentFedExDomesticGround.cs">
+      <BoundTo>cef8f204-243b-4074-bb56-fd01a2d738fe</BoundTo>
+      <DependentUpon>OLMProcessShipmentFedExDomesticGround.rxrec</DependentUpon>
+      <RecorderCode>true</RecorderCode>
+      <id>819728a7-3174-4591-8cf6-08e6ba90dd82</id>
+    </Compile>
+    <Compile Include="OLMProcessShipmentFedExDomesticGround.UserCode.cs">
+      <BoundTo>cef8f204-243b-4074-bb56-fd01a2d738fe</BoundTo>
+      <DependentUpon>OLMProcessShipmentFedExDomesticGround.rxrec</DependentUpon>
+      <UserCode>true</UserCode>
+      <id>0acc260d-8a1a-492e-98af-7e4e9cd495ab</id>
+    </Compile>
+    <Compile Include="OLMProcessShipmentFedExInternational.cs">
+      <BoundTo>bbd96c63-e964-4384-8169-78b3d63dc8de</BoundTo>
+      <DependentUpon>OLMProcessShipmentFedExInternational.rxrec</DependentUpon>
+      <RecorderCode>true</RecorderCode>
+      <id>6cbfeeb8-20f8-47af-b8fd-8eff7777448e</id>
+    </Compile>
+    <Compile Include="OLMProcessShipmentFedExInternational.UserCode.cs">
+      <BoundTo>bbd96c63-e964-4384-8169-78b3d63dc8de</BoundTo>
+      <DependentUpon>OLMProcessShipmentFedExInternational.rxrec</DependentUpon>
+      <UserCode>true</UserCode>
+      <id>8e582578-1a3a-4f9b-9543-f3169eaa7f79</id>
+    </Compile>
     <Compile Include="OLMProcessShipmentUPSDomesticGround.cs">
       <BoundTo>64402740-4c4c-4e49-8b8d-6532f6d7a72c</BoundTo>
       <DependentUpon>OLMProcessShipmentUPSDomesticGround.rxrec</DependentUpon>
@@ -1572,6 +1620,26 @@
       <id>720778dd-09c3-42cd-835f-6e604d3b41a4</id>
       <recordtableid>bf6c50ea-63d8-479e-90d1-6ec377b57cf7</recordtableid>
     </None>
+    <None Include="OLMProcessFedExDomesticGround.rxrec">
+      <BoundTo>cc314fb4-f6c2-41c4-91da-4828b4fd7dee</BoundTo>
+      <id>a9f64a61-85d7-4eb1-bd89-f10ac2887541</id>
+      <recordtableid>356753fc-fe63-4d20-bf45-132510976a9c</recordtableid>
+    </None>
+    <None Include="OLMProcessFedExInternational.rxrec">
+      <BoundTo>cc314fb4-f6c2-41c4-91da-4828b4fd7dee</BoundTo>
+      <id>d8026bdf-dae6-40ab-8eeb-7a560ec5df35</id>
+      <recordtableid>87f22244-d5df-44e7-af32-11fea698f1f9</recordtableid>
+    </None>
+    <None Include="OLMProcessShipmentFedExDomesticGround.rxrec">
+      <BoundTo>cc314fb4-f6c2-41c4-91da-4828b4fd7dee</BoundTo>
+      <id>cef8f204-243b-4074-bb56-fd01a2d738fe</id>
+      <recordtableid>e096c6f4-2e20-44ec-b5e3-adb2b58f3e1f</recordtableid>
+    </None>
+    <None Include="OLMProcessShipmentFedExInternational.rxrec">
+      <BoundTo>cc314fb4-f6c2-41c4-91da-4828b4fd7dee</BoundTo>
+      <id>bbd96c63-e964-4384-8169-78b3d63dc8de</id>
+      <recordtableid>e27a4195-b534-4be6-b39d-d0b854d2597a</recordtableid>
+    </None>
     <None Include="OLMProcessShipmentUPSDomesticGround.rxrec">
       <BoundTo>cc314fb4-f6c2-41c4-91da-4828b4fd7dee</BoundTo>
       <id>64402740-4c4c-4e49-8b8d-6532f6d7a72c</id>
@@ -1642,9 +1710,9 @@
       <recordtableid>a733499e-aa87-4f80-abd4-cb052287241a</recordtableid>
     </None>
     <None Include="ProcessFedExDomesticGround.rxrec">
-      <BoundTo>cc314fb4-f6c2-41c4-91da-4828b4fd7dee</BoundTo>
       <id>74382204-7ab8-4df1-8d9f-cbbd8ba2254f</id>
       <recordtableid>109f44eb-8157-41cc-9d69-6160d3168314</recordtableid>
+      <BoundTo>cc314fb4-f6c2-41c4-91da-4828b4fd7dee</BoundTo>
     </None>
     <None Include="ProcessFedExDomesticHomeDelivery.rxrec">
       <BoundTo>cc314fb4-f6c2-41c4-91da-4828b4fd7dee</BoundTo>

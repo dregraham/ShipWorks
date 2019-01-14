@@ -92,6 +92,12 @@ rxversion="8.1">
 			type="Recording">
 			</testmodule>
 			<testmodule
+			id="0d370a8f-178e-4866-b143-cb0fa5cf04f6"
+			name="AllOrdersFilter_SelectFirstRow_ShipOrders2"
+			ref="525dbf63-47dc-43d1-813c-3932018894b3"
+			type="Recording">
+			</testmodule>
+			<testmodule
 			id="0d3fd9bc-e2ae-4849-bf03-e1d25a054dd4"
 			name="AllOrdersFilter_SelectFirstRow_ShipOrders2"
 			ref="525dbf63-47dc-43d1-813c-3932018894b3"
@@ -125,6 +131,12 @@ rxversion="8.1">
 			id="12ab1b13-6dcf-46d0-ae0f-212354126f1d"
 			name="EnableUPSMailInnovations"
 			ref="bd4418eb-6900-4b58-8694-2ab3473ead47"
+			type="Recording">
+			</testmodule>
+			<testmodule
+			id="13e15a9f-c346-4c8a-b620-f4a71a518fbe"
+			name="SwitchOrderLookupToBatchGrid"
+			ref="6a2b9112-4f1c-4dc2-869b-25a7f6c434b8"
 			type="Recording">
 			</testmodule>
 			<testcase
@@ -266,6 +278,12 @@ rxversion="8.1">
 			name="SetupUSPSEndicia">
 			</smartfoldernode>
 			<testmodule
+			id="26d70a90-1481-4644-842f-783c40312baf"
+			name="CreateNewShipment_ProviderFedEx"
+			ref="3abfd772-9a86-4cce-af3b-d6c68431f012"
+			type="Recording">
+			</testmodule>
+			<testmodule
 			id="26e7e569-8bbb-418c-a1a6-b3187a01a942"
 			name="ProcessUPSDomesticMailInnovations"
 			ref="cf301dcb-f23a-47b7-a113-0a6a051681ed"
@@ -311,6 +329,10 @@ rxversion="8.1">
 			id="2b6e5a28-5a6e-47b4-bb9e-9c90e3071a52"
 			name="setup">
 			</setup>
+			<smartfoldernode
+			id="2bd8cc72-d4f0-4e3c-bb18-18dce269ca2f"
+			name="OrderLookupModeProcessFedExDomestic">
+			</smartfoldernode>
 			<testmodule
 			id="2cb0ab3b-19df-4903-8444-9f58b316c82f"
 			name="AllOrdersFilter_SelectFirstRow_ShipOrders2"
@@ -538,6 +560,12 @@ rxversion="8.1">
 			name="DisabledPotentiallyUseful">
 			</smartfoldernode>
 			<testmodule
+			id="3eac9504-726c-4a9b-9939-c65561530897"
+			name="SwitchBatchGridToOrderLookup"
+			ref="9edd78a8-1b4b-4035-af81-d5ac4f2f0ab9"
+			type="Recording">
+			</testmodule>
+			<testmodule
 			id="3fb9fdee-9b09-4c87-87ec-2891aef7c77a"
 			name="SwitchOrderLookupToBatchGrid"
 			ref="6a2b9112-4f1c-4dc2-869b-25a7f6c434b8"
@@ -639,6 +667,12 @@ rxversion="8.1">
 			type="Recording">
 			</testmodule>
 			<testmodule
+			id="4d40960c-e9fc-4f9b-8992-edb610f4192d"
+			name="ShipOrders_ToAddress_International"
+			ref="86985c63-65a2-49f8-a670-2ee220a5e1c1"
+			type="Recording">
+			</testmodule>
+			<testmodule
 			id="4de37511-8d2f-430b-a84f-ac89917cfa97"
 			name="VoidAShipment"
 			ref="9e1509a8-d463-4537-84e6-f64ec819b98d"
@@ -720,6 +754,12 @@ rxversion="8.1">
 			name="ProcessUPSSurePost">
 			</smartfoldernode>
 			<testmodule
+			id="5cf44fca-5e5a-49e6-8811-8565ba814915"
+			name="OLMProcessShipmentFedExInternational"
+			ref="e27a4195-b534-4be6-b39d-d0b854d2597a"
+			type="Recording">
+			</testmodule>
+			<testmodule
 			id="5d47c04a-433d-452e-a1a7-08d3cdd541a9"
 			name="AllOrdersFilter_SelectFirstRow_ShipOrders2"
 			ref="525dbf63-47dc-43d1-813c-3932018894b3"
@@ -775,6 +815,12 @@ rxversion="8.1">
 			id="683a5e84-ddf6-4a1d-8aa7-07ba1b5c96f3"
 			name="ProcessFedExInternational">
 			</smartfoldernode>
+			<testmodule
+			id="6bb93c47-649f-41f6-a8e4-d804bf899f47"
+			name="CloseShipOrdersDialog"
+			ref="93e031b6-a539-4f4b-8dd5-892ef64181fb"
+			type="Recording">
+			</testmodule>
 			<testmodule
 			id="6be5e955-feb6-4e8a-b9a6-06fb5582c3f5"
 			name="AllOrdersFilter_SelectFirstRow_ShipOrders2"
@@ -1138,6 +1184,18 @@ rxversion="8.1">
 			type="Recording">
 			</testmodule>
 			<testmodule
+			id="a6269ece-287b-443b-9535-5ee66098fcb5"
+			name="OLMProcessFedExDomesticGround"
+			ref="356753fc-fe63-4d20-bf45-132510976a9c"
+			type="Recording">
+			</testmodule>
+			<testmodule
+			id="a6d317b2-4e83-41ff-bd5d-c2917e05614d"
+			name="AllOrdersFilter_SelectFirstRow_ShipOrders2"
+			ref="525dbf63-47dc-43d1-813c-3932018894b3"
+			type="Recording">
+			</testmodule>
+			<testmodule
 			id="a7b579c0-dae7-4232-8b23-3ea47d811f90"
 			name="ProcessUSPSExpress1InternationalPriority"
 			ref="f4934ba3-1f9c-4e62-b2a5-e813f41a4bf8"
@@ -1283,6 +1341,18 @@ rxversion="8.1">
 			ref="f33922fa-b9ac-411c-8e07-c21d2e74d518"
 			type="Recording">
 			</testmodule>
+			<testmodule
+			id="bb08d33c-5598-429f-b82d-c21f4d6c93d9"
+			name="CloseShipOrdersDialog"
+			ref="93e031b6-a539-4f4b-8dd5-892ef64181fb"
+			type="Recording">
+			</testmodule>
+			<testmodule
+			id="bcbc5dfe-aab5-4687-ade0-44d6c0f1df01"
+			name="OLMProcessShipmentFedExDomesticGround"
+			ref="e096c6f4-2e20-44ec-b5e3-adb2b58f3e1f"
+			type="Recording">
+			</testmodule>
 			<smartfoldernode
 			id="bfcd8057-3b6d-4874-aafe-aedc9da90ec3"
 			name="ProcessUPSDomestic">
@@ -1303,6 +1373,12 @@ rxversion="8.1">
 			id="c14a0f1e-fa5c-414c-8a04-a80f5bacaf92"
 			name="ProcessUPSInternational">
 			</smartfoldernode>
+			<testmodule
+			id="c1500193-5999-4b5d-9623-f0e7ab9d1775"
+			name="OLMProcessFedExInternational"
+			ref="87f22244-d5df-44e7-af32-11fea698f1f9"
+			type="Recording">
+			</testmodule>
 			<testmodule
 			id="c2b08f4c-bdd7-49b0-9908-ef42068da198"
 			name="CloseShipOrdersDialog"
@@ -1455,6 +1531,12 @@ rxversion="8.1">
 			ref="0f94d305-d1c7-4579-9b12-c139b3c5227a"
 			type="Recording">
 			</testmodule>
+			<testmodule
+			id="d7a2ab44-2e5b-4d6a-a3a7-ae959afe4263"
+			name="SwitchOrderLookupToBatchGrid"
+			ref="6a2b9112-4f1c-4dc2-869b-25a7f6c434b8"
+			type="Recording">
+			</testmodule>
 			<smartfoldernode
 			id="d7c4ed90-2e16-4d27-94e5-1c2bcc241263"
 			name="ProcessVoidExpress1EndiciaDomesticShipment">
@@ -1552,6 +1634,18 @@ rxversion="8.1">
 			name="SetupCarrierTestServers">
 			</smartfoldernode>
 			<testmodule
+			id="ed0c3902-779d-4a9c-a726-53070279035f"
+			name="ShipOrders_ToAddress_Domestic2"
+			ref="f33922fa-b9ac-411c-8e07-c21d2e74d518"
+			type="Recording">
+			</testmodule>
+			<testmodule
+			id="ed5c54f9-753c-4aa6-a2b6-4b087b80b838"
+			name="SwitchBatchGridToOrderLookup"
+			ref="9edd78a8-1b4b-4035-af81-d5ac4f2f0ab9"
+			type="Recording">
+			</testmodule>
+			<testmodule
 			id="ed899853-483b-487d-8f81-4c69bcb33944"
 			name="CreateNewShipment_ProviderUSPSStamps"
 			ref="fbcd56b7-8428-4b5c-910f-e4c3bca347c4"
@@ -1571,6 +1665,12 @@ rxversion="8.1">
 			id="ef15e5f1-b104-42c7-9905-cdf9aa9f032a"
 			name="ProcessFedExMultiPackageShipment"
 			ref="7188db74-75ce-41c9-907a-fe1b33d84702"
+			type="Recording">
+			</testmodule>
+			<testmodule
+			id="efc9e935-f3ed-4b62-8dfa-9bba4a392735"
+			name="CreateNewShipment_ProviderFedEx"
+			ref="3abfd772-9a86-4cce-af3b-d6c68431f012"
 			type="Recording">
 			</testmodule>
 			<testmodule
@@ -1655,6 +1755,10 @@ rxversion="8.1">
 			ref="993e5102-d2f4-4841-85b3-22aff3d709a8"
 			type="Recording">
 			</testmodule>
+			<smartfoldernode
+			id="fb31320e-b80b-4089-84b6-64477486bfea"
+			name="OrderLookupModeProcessFedExInternational">
+			</smartfoldernode>
 			<testmodule
 			id="fb33e179-fbb4-4a71-aa80-c27fb3ef59fc"
 			name="ProcessUSPSExpress1EndiciaPriority"
@@ -2587,6 +2691,78 @@ rxversion="8.1">
 							</testmodule>
 						</smartfoldernode>
 						<smartfoldernode
+						id="2bd8cc72-d4f0-4e3c-bb18-18dce269ca2f"
+						name="OrderLookupModeProcessFedExDomestic">
+							<testmodule
+							id="0d370a8f-178e-4866-b143-cb0fa5cf04f6"
+							name="AllOrdersFilter_SelectFirstRow_ShipOrders2">
+							</testmodule>
+							<testmodule
+							id="efc9e935-f3ed-4b62-8dfa-9bba4a392735"
+							name="CreateNewShipment_ProviderFedEx">
+							</testmodule>
+							<testmodule
+							id="ed0c3902-779d-4a9c-a726-53070279035f"
+							name="ShipOrders_ToAddress_Domestic2">
+							</testmodule>
+							<testmodule
+							id="a6269ece-287b-443b-9535-5ee66098fcb5"
+							name="OLMProcessFedExDomesticGround">
+							</testmodule>
+							<testmodule
+							id="bb08d33c-5598-429f-b82d-c21f4d6c93d9"
+							name="CloseShipOrdersDialog">
+							</testmodule>
+							<testmodule
+							id="ed5c54f9-753c-4aa6-a2b6-4b087b80b838"
+							name="SwitchBatchGridToOrderLookup">
+							</testmodule>
+							<testmodule
+							id="bcbc5dfe-aab5-4687-ade0-44d6c0f1df01"
+							name="OLMProcessShipmentFedExDomesticGround">
+							</testmodule>
+							<testmodule
+							id="d7a2ab44-2e5b-4d6a-a3a7-ae959afe4263"
+							name="SwitchOrderLookupToBatchGrid">
+							</testmodule>
+						</smartfoldernode>
+						<smartfoldernode
+						id="fb31320e-b80b-4089-84b6-64477486bfea"
+						name="OrderLookupModeProcessFedExInternational">
+							<testmodule
+							id="a6d317b2-4e83-41ff-bd5d-c2917e05614d"
+							name="AllOrdersFilter_SelectFirstRow_ShipOrders2">
+							</testmodule>
+							<testmodule
+							id="26d70a90-1481-4644-842f-783c40312baf"
+							name="CreateNewShipment_ProviderFedEx">
+							</testmodule>
+							<testmodule
+							id="4d40960c-e9fc-4f9b-8992-edb610f4192d"
+							name="ShipOrders_ToAddress_International">
+							</testmodule>
+							<testmodule
+							id="c1500193-5999-4b5d-9623-f0e7ab9d1775"
+							name="OLMProcessFedExInternational">
+							</testmodule>
+							<testmodule
+							id="6bb93c47-649f-41f6-a8e4-d804bf899f47"
+							name="CloseShipOrdersDialog">
+							</testmodule>
+							<testmodule
+							id="3eac9504-726c-4a9b-9939-c65561530897"
+							name="SwitchBatchGridToOrderLookup">
+							</testmodule>
+							<testmodule
+							id="5cf44fca-5e5a-49e6-8811-8565ba814915"
+							name="OLMProcessShipmentFedExInternational">
+							</testmodule>
+							<testmodule
+							id="13e15a9f-c346-4c8a-b620-f4a71a518fbe"
+							name="SwitchOrderLookupToBatchGrid">
+							</testmodule>
+						</smartfoldernode>
+						<smartfoldernode
 						id="4589bd11-842f-46a1-ba7d-75d7ae236236"
 						name="ProcessOnTracDomestic">
 							<testmodule
@@ -2867,6 +3043,9 @@ rxversion="8.1">
 			id="289ddd3f-2abc-4099-ab9d-b304ad433669">
 			</testcontainer>
 			<testcontainer
+			id="2bd8cc72-d4f0-4e3c-bb18-18dce269ca2f">
+			</testcontainer>
+			<testcontainer
 			id="3097e203-0e96-435a-87f2-65c9d6fbb9dd">
 			</testcontainer>
 			<testcontainer
@@ -2999,6 +3178,9 @@ rxversion="8.1">
 			id="f875647d-7a5c-46d1-bda6-83a5075d93c7">
 			</testcontainer>
 			<testcontainer
+			id="fb31320e-b80b-4089-84b6-64477486bfea">
+			</testcontainer>
+			<testcontainer
 			id="fc8e7a3e-1848-4705-a6d8-80654e66d8a8">
 			</testcontainer>
 		</testconfiguration>
@@ -3008,10 +3190,10 @@ rxversion="8.1">
 			id="14ee1c1c-0353-469d-84ea-e800f3a3addb">
 			</testcontainer>
 			<testcontainer
-			id="3cd7f37d-7cb4-432e-9961-d219597a852c">
+			id="f875647d-7a5c-46d1-bda6-83a5075d93c7">
 			</testcontainer>
 			<testcontainer
-			id="f875647d-7a5c-46d1-bda6-83a5075d93c7">
+			id="fb31320e-b80b-4089-84b6-64477486bfea">
 			</testcontainer>
 		</testconfiguration>
 	</testconfigurations>
