@@ -19,6 +19,9 @@ namespace ShipWorks.Shipping.Editing.Enums
         ThreeDays = 3, 
 
         [Description("4-7 Days")]
-        FourToSevenDays = 4
+        FourToSevenDays = 4,
+
+        [Description("2-7 Days")]
+        TwoToSevenDays = 5
     }
 }
