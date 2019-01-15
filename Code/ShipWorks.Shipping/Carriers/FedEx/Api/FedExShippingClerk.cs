@@ -792,7 +792,13 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
 
             if (transitDays != 0)
             {
-                if (deliveryDate.HasValue && serviceType != FedExServiceType.SmartPost)
+                if (!deliveryDate.HasValue)
+                {
+                    // If no delivery date, just show transit days
+                    return transitDays.ToString();
+                }
+
+                if (serviceType != FedExServiceType.SmartPost)
                 {
                     if (deliveryDate.Value.Hour == 0 && deliveryDate.Value.Minute == 0)
                     {
@@ -805,17 +811,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
                         transitDaysDescription = $"{transitDays} ({deliveryDate.Value.ToString("dddd h:mm tt")})";
                     }
                 }
-                else if (deliveryDate.HasValue && serviceType == FedExServiceType.SmartPost)
+                else
                 {
                     transitDaysDescription = "2-7 days";
                 }
-                else
-                {
-                    // If no delivery date, just show transit days
-                    transitDaysDescription = transitDays.ToString();
-                }
             }
-
             return transitDaysDescription;
         }
 
