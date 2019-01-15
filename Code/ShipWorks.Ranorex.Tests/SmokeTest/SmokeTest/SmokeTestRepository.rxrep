@@ -676,6 +676,16 @@ MccVydhgafzKwmo3c6RCyF+QF9ssNPjvRAAAAABJRU5ErkJggg==
 				searchtimeout="30000ms">
 					/form[@controlname='MainForm']/container[@controlname='panelDockingArea']//container[@classname='Pane']/?/?/element[@automationid='a']/?/?/text[@name~'^This\ order''s\ shipment\ has']
 				</item>
+				<item
+				addcaps="cell,uiautomation,uiautomationvalue"
+				capname="cell"
+				id="5032adc5-6d2e-4b83-bf68-bd6d75037cda"
+				name="FedExInternationalPriorityR"
+				refimgid="7d44370c-a813-4d70-9058-81ba7707a9ab"
+				refpath="/form[@controlname='MainForm']/container[@controlname='panelDockingArea']/container[@controlname='OrderLookupControl']/element/container/element/element/container/element[@name='Rates']/container/element/table/row[3]/cell[@name~'^FedEx\ International\ Prior']"
+				searchtimeout="30000ms">
+					/form[@controlname='MainForm']/container[@controlname='panelDockingArea']//container[@classname='Pane']//element[@name='Rates']/container[@name='Rates']/?/?/table[@classname='DataGrid']/row[3]/cell[@name~'^FedEx\ International\ Prior']
+				</item>
 				<basepath>
 					/form[@controlname='MainForm']/container[@controlname='panelDockingArea']
 				</basepath>
@@ -3947,6 +3957,16 @@ lpKZgpMF6Pw3M/MFayOlqIh43SSsYsIrayXz9q3r5Ra2vFFWLUXbtWRiANXcVpB6SHDZSEK3kcS7
 				refpath="/form[@controlname='MainForm']/container[@controlname='panelDockingArea']/container[@controlname='OrderLookupControl']/element/container/element/element/container/element[@name='Rates']/container/element/table/row[3]/cell[@name='International Priority']"
 				searchtimeout="30000ms">
 					/form[@title~'ShipWorks']/container[@controlname='panelDockingArea']//container[@classname='Pane']//element[@name='Rates']/container[@name='Rates']/?/?/table[@classname='DataGrid']/row[3]/cell[@name='International Priority']
+				</item>
+				<item
+				addcaps="cell,uiautomation,uiautomationvalue"
+				capname="cell"
+				id="f8d7fbb7-1e2a-4c94-90e9-c83d9baf3fc5"
+				name="FedExGroundR"
+				refimgid="28b12a85-48f4-4344-8bf7-a072d9ed6565"
+				refpath="/form[@controlname='MainForm']/container[@controlname='panelDockingArea']/container[@controlname='OrderLookupControl']/element/container/element/element/container/element[@name='Rates']/container/element/table/row[8]/cell[@name='FedEx Ground®']"
+				searchtimeout="30000ms">
+					/form[@title~'ShipWorks']/container[@controlname='panelDockingArea']//container[@classname='Pane']//element[@name='Rates']/container[@name='Rates']/?/?/table[@classname='DataGrid']/row[8]/cell[@name='FedEx Ground&#174;']
 				</item>
 				<basepath>
 					/form[@title~'ShipWorks']/container[@controlname='panelDockingArea']

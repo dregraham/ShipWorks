@@ -2070,6 +2070,7 @@ namespace SmokeTest
             RepoItemInfo _textaInfo;
             RepoItemInfo _upsgroundInfo;
             RepoItemInfo _thisordersshipmenthasbeenprocessedInfo;
+            RepoItemInfo _fedexinternationalpriorityrInfo;
 
             /// <summary>
             /// Creates a new PanelDockingArea  folder.
@@ -2081,6 +2082,7 @@ namespace SmokeTest
                 _textaInfo = new RepoItemInfo(this, "TextA", "container[@controlname='OrderLookupControl']/?/?/container[@classname='Pane']/?/?/element[@automationid='a']//text[@automationid='a']", 30000, null, "094dde57-f2f6-45fc-aab2-1a9ce6744ab7");
                 _upsgroundInfo = new RepoItemInfo(this, "UPSGround", ".//container[@classname='Pane']//element[@name='Rates']/container[@name='Rates']/?/?/table[@classname='DataGrid']/row[2]/cell[@name='UPS Ground']", 30000, null, "43d4a322-15d1-4625-a481-f02bebc7dbbc");
                 _thisordersshipmenthasbeenprocessedInfo = new RepoItemInfo(this, "ThisOrdersShipmentHasBeenProcessed", ".//container[@classname='Pane']/?/?/element[@automationid='a']/?/?/text[@name~'^This\\ order''s\\ shipment\\ has']", 30000, null, "78e95cec-618b-423f-868a-4cd15a75e42e");
+                _fedexinternationalpriorityrInfo = new RepoItemInfo(this, "FedExInternationalPriorityR", ".//container[@classname='Pane']//element[@name='Rates']/container[@name='Rates']/?/?/table[@classname='DataGrid']/row[3]/cell[@name~'^FedEx\\ International\\ Prior']", 30000, null, "5032adc5-6d2e-4b83-bf68-bd6d75037cda");
             }
 
             /// <summary>
@@ -2200,6 +2202,30 @@ namespace SmokeTest
                 get
                 {
                     return _thisordersshipmenthasbeenprocessedInfo;
+                }
+            }
+
+            /// <summary>
+            /// The FedExInternationalPriorityR item.
+            /// </summary>
+            [RepositoryItem("5032adc5-6d2e-4b83-bf68-bd6d75037cda")]
+            public virtual Ranorex.Cell FedExInternationalPriorityR
+            {
+                get
+                {
+                    return _fedexinternationalpriorityrInfo.CreateAdapter<Ranorex.Cell>(true);
+                }
+            }
+
+            /// <summary>
+            /// The FedExInternationalPriorityR item info.
+            /// </summary>
+            [RepositoryItemInfo("5032adc5-6d2e-4b83-bf68-bd6d75037cda")]
+            public virtual RepoItemInfo FedExInternationalPriorityRInfo
+            {
+                get
+                {
+                    return _fedexinternationalpriorityrInfo;
                 }
             }
         }
@@ -10204,6 +10230,7 @@ namespace SmokeTest
             RepoItemInfo _upsworldwideexpressrInfo;
             RepoItemInfo _priorityInfo;
             RepoItemInfo _internationalpriorityInfo;
+            RepoItemInfo _fedexgroundrInfo;
 
             /// <summary>
             /// Creates a new PanelDockingArea  folder.
@@ -10235,6 +10262,7 @@ namespace SmokeTest
                 _upsworldwideexpressrInfo = new RepoItemInfo(this, "UPSWorldwideExpressR", ".//container[@classname='Pane']//element[@name='Rates']/container[@name='Rates']/?/?/table[@classname='DataGrid']/row[2]/cell[@name='UPS Worldwide Express®']", 30000, null, "940b6eb7-a050-45b5-b701-8e39d36a1c27");
                 _priorityInfo = new RepoItemInfo(this, "Priority", ".//container[@classname='Pane']//element[@name='Rates']/container[@name='Rates']/?/?/table[@classname='DataGrid']/row[2]/cell[@name='Priority']", 30000, null, "f5be3269-3fae-4257-b034-f13609b20a66");
                 _internationalpriorityInfo = new RepoItemInfo(this, "InternationalPriority", ".//container[@classname='Pane']//element[@name='Rates']/container[@name='Rates']/?/?/table[@classname='DataGrid']/row[3]/cell[@name='International Priority']", 30000, null, "333e3820-e9d0-4391-9ae8-71b7818a4c8f");
+                _fedexgroundrInfo = new RepoItemInfo(this, "FedExGroundR", ".//container[@classname='Pane']//element[@name='Rates']/container[@name='Rates']/?/?/table[@classname='DataGrid']/row[8]/cell[@name='FedEx Ground®']", 30000, null, "f8d7fbb7-1e2a-4c94-90e9-c83d9baf3fc5");
             }
 
             /// <summary>
@@ -10834,6 +10862,30 @@ namespace SmokeTest
                 get
                 {
                     return _internationalpriorityInfo;
+                }
+            }
+
+            /// <summary>
+            /// The FedExGroundR item.
+            /// </summary>
+            [RepositoryItem("f8d7fbb7-1e2a-4c94-90e9-c83d9baf3fc5")]
+            public virtual Ranorex.Cell FedExGroundR
+            {
+                get
+                {
+                    return _fedexgroundrInfo.CreateAdapter<Ranorex.Cell>(true);
+                }
+            }
+
+            /// <summary>
+            /// The FedExGroundR item info.
+            /// </summary>
+            [RepositoryItemInfo("f8d7fbb7-1e2a-4c94-90e9-c83d9baf3fc5")]
+            public virtual RepoItemInfo FedExGroundRInfo
+            {
+                get
+                {
+                    return _fedexgroundrInfo;
                 }
             }
         }
