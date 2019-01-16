@@ -12,12 +12,12 @@
       <runOnBuild value="False" />
     </Properties>
     <Array name="recentusercodeselections">
+      <Element value="SmokeTest.GetExpress1EndiciaInternationalShipmentRate.CheckRates()" />
+      <Element value="SmokeTest.GetExpress1EndiciaDomesticShipmentRate.CheckRates()" />
+      <Element value="SmokeTest.GetExpress1InternationalShipmentRate.CheckRates()" />
+      <Element value="SmokeTest.GetExpress1DomesticShipmentRate.CheckRates()" />
       <Element value="SmokeTest.OLMProcessShipmentFedExInternational.ProcessFedexInternational()" />
       <Element value="SmokeTest.OLMProcessShipmentFedExDomesticGround.ProcessFedexDomesticGround()" />
-      <Element value="SmokeTest.OLMProcessShipmentFedExDomesticGround.SkipTestIf()" />
-      <Element value="SmokeTest.SetupUSPSStamps.RemoveWebRegUSPS()" />
-      <Element value="SmokeTest.SetupUSPSStamps.Key_sequence()" />
-      <Element value="SmokeTest.ResetHostsFile.ResetHosts()" />
     </Array>
   </Properties>
 </Properties>
