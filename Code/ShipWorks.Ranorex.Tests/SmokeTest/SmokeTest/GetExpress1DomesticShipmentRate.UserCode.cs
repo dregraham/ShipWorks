@@ -61,5 +61,34 @@ namespace SmokeTest
             Report.Log(ReportLevel.Info, "Get Value", "Get the postage value and store it in a variable\r\nGetting attribute 'RawText' from item 'rawtextInfo' and assigning its value to variable 'ExpOnePostage'.", rawtextInfo);
             ExpOneShipmentRate = rawtextInfo.FindAdapter<RawText>().Element.GetAttributeValueText("RawText");
         }
+
+        public void CheckRates()
+        {
+            Report.Log(ReportLevel.Info, "Wait", "Waiting 5s to exist. Associated repository item: 'ShipOrders1.SplitContainer.DomesticShipmentRate'", repo.ShipOrders1.SplitContainer.DomesticShipmentRateInfo, new ActionTimeout(5000), new RecordItemIndex(12));
+            repo.ShipOrders1.SplitContainer.DomesticShipmentRateInfo.WaitForExists(5000);
+            
+            if (repo.ShipOrders1.SplitContainer.DomesticShipmentRateInfo.Exists(30000) == false)
+            {
+	            Report.Log(ReportLevel.Info, "Keyboard", "Key sequence '{Escape}{Escape}{Escape}{Escape}{Escape}{Escape}{Escape}{Escape}{Escape}{Escape}'.", new RecordItemIndex(13));
+            	Keyboard.Press("{Escape}{Escape}{Escape}{Escape}{Escape}{Escape}{Escape}{Escape}{Escape}{Escape}");
+            	Delay.Milliseconds(0);
+            }
+            else
+            {
+	            // Move mouse to check the shipment rate
+	            Report.Log(ReportLevel.Info, "Mouse", "Move mouse to check the shipment rate\r\nMouse Left Move item 'ShipOrders1.SplitContainer.DomesticShipmentRate' at Center.", repo.ShipOrders1.SplitContainer.DomesticShipmentRateInfo, new RecordItemIndex(8));
+	            repo.ShipOrders1.SplitContainer.DomesticShipmentRate.MoveTo();
+	            Delay.Milliseconds(200);
+	            
+	            // Get the shipment rate and store it in a variable
+	            Report.Log(ReportLevel.Info, "Get Value", "Get the shipment rate and store it in a variable\r\nGetting attribute 'RawText' from item 'ShipOrders1.SplitContainer.DomesticShipmentRate' and assigning its value to variable 'ExpOneShipmentRate'.", repo.ShipOrders1.SplitContainer.DomesticShipmentRateInfo, new RecordItemIndex(9));
+	            ExpOneShipmentRate = repo.ShipOrders1.SplitContainer.DomesticShipmentRate.Element.GetAttributeValueText("RawText");
+	            Delay.Milliseconds(0);
+	            
+	            // Compare the available postage with the shipment rate and, if there is enough postage available, process the shipment.
+	            CheckPostageBalance();
+	            Delay.Milliseconds(0);
+            }
+        }
     }
 }

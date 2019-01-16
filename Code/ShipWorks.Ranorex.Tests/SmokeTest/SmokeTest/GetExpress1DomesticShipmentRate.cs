@@ -145,19 +145,22 @@ namespace SmokeTest
             repo.ShippingSettingsDlg.Close1.Click();
             Delay.Milliseconds(200);
             
+            CheckRates();
+            Delay.Milliseconds(0);
+            
             // Move mouse to check the shipment rate
-            Report.Log(ReportLevel.Info, "Mouse", "Move mouse to check the shipment rate\r\nMouse Left Move item 'ShipOrders1.SplitContainer.DomesticShipmentRate' at Center.", repo.ShipOrders1.SplitContainer.DomesticShipmentRateInfo, new RecordItemIndex(8));
-            repo.ShipOrders1.SplitContainer.DomesticShipmentRate.MoveTo();
-            Delay.Milliseconds(200);
+            //Report.Log(ReportLevel.Info, "Mouse", "Move mouse to check the shipment rate\r\nMouse Left Move item 'ShipOrders1.SplitContainer.DomesticShipmentRate' at Center.", repo.ShipOrders1.SplitContainer.DomesticShipmentRateInfo, new RecordItemIndex(9));
+            //repo.ShipOrders1.SplitContainer.DomesticShipmentRate.MoveTo();
+            //Delay.Milliseconds(200);
             
             // Get the shipment rate and store it in a variable
-            Report.Log(ReportLevel.Info, "Get Value", "Get the shipment rate and store it in a variable\r\nGetting attribute 'RawText' from item 'ShipOrders1.SplitContainer.DomesticShipmentRate' and assigning its value to variable 'ExpOneShipmentRate'.", repo.ShipOrders1.SplitContainer.DomesticShipmentRateInfo, new RecordItemIndex(9));
-            ExpOneShipmentRate = repo.ShipOrders1.SplitContainer.DomesticShipmentRate.Element.GetAttributeValueText("RawText");
-            Delay.Milliseconds(0);
+            //Report.Log(ReportLevel.Info, "Get Value", "Get the shipment rate and store it in a variable\r\nGetting attribute 'RawText' from item 'ShipOrders1.SplitContainer.DomesticShipmentRate' and assigning its value to variable 'ExpOneShipmentRate'.", repo.ShipOrders1.SplitContainer.DomesticShipmentRateInfo, new RecordItemIndex(10));
+            //ExpOneShipmentRate = repo.ShipOrders1.SplitContainer.DomesticShipmentRate.Element.GetAttributeValueText("RawText");
+            //Delay.Milliseconds(0);
             
             // Compare the available postage with the shipment rate and, if there is enough postage available, process the shipment.
-            CheckPostageBalance();
-            Delay.Milliseconds(0);
+            //CheckPostageBalance();
+            //Delay.Milliseconds(0);
             
         }
 

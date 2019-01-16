@@ -99,7 +99,7 @@ namespace SmokeTest
         [System.CodeDom.Compiler.GeneratedCode("Ranorex", "8.1")]
         void ITestModule.Run()
         {
-            Mouse.DefaultMoveTime = 1000;
+            Mouse.DefaultMoveTime = 300;
             Keyboard.DefaultKeyPressTime = 100;
             Delay.SpeedFactor = 1.00;
 
@@ -107,37 +107,37 @@ namespace SmokeTest
 
             // Move mouse to customs tab
             Report.Log(ReportLevel.Info, "Mouse", "Move mouse to customs tab\r\nMouse Left Move item 'ShippingDlg.SplitContainer.Customs' at Center.", repo.ShippingDlg.SplitContainer.CustomsInfo, new RecordItemIndex(0));
-            repo.ShippingDlg.SplitContainer.Customs.MoveTo(300);
+            repo.ShippingDlg.SplitContainer.Customs.MoveTo();
             Delay.Milliseconds(200);
             
             // Click the customs tab
             Report.Log(ReportLevel.Info, "Mouse", "Click the customs tab\r\nMouse Left Click item 'ShippingDlg.SplitContainer.Customs' at Center.", repo.ShippingDlg.SplitContainer.CustomsInfo, new RecordItemIndex(1));
-            repo.ShippingDlg.SplitContainer.Customs.Click(300);
+            repo.ShippingDlg.SplitContainer.Customs.Click();
             Delay.Milliseconds(200);
             
             // Move mouse to Shipping settings
             Report.Log(ReportLevel.Info, "Mouse", "Move mouse to Shipping settings\r\nMouse Left Move item 'ShippingDlg.ShippingSettings' at Center.", repo.ShippingDlg.ShippingSettingsInfo, new RecordItemIndex(2));
-            repo.ShippingDlg.ShippingSettings.MoveTo(300);
+            repo.ShippingDlg.ShippingSettings.MoveTo();
             Delay.Milliseconds(200);
             
             // Click shipping settings
             Report.Log(ReportLevel.Info, "Mouse", "Click shipping settings\r\nMouse Left Click item 'ShippingDlg.ShippingSettings' at Center.", repo.ShippingDlg.ShippingSettingsInfo, new RecordItemIndex(3));
-            repo.ShippingDlg.ShippingSettings.Click(300);
+            repo.ShippingDlg.ShippingSettings.Click();
             Delay.Milliseconds(200);
             
             // Move mouse to Express 1
             Report.Log(ReportLevel.Info, "Mouse", "Move mouse to Express 1\r\nMouse Left Move item 'ShippingSettingsDlg.USPSExpress11' at Center.", repo.ShippingSettingsDlg.USPSExpress11Info, new RecordItemIndex(4));
-            repo.ShippingSettingsDlg.USPSExpress11.MoveTo(300);
+            repo.ShippingSettingsDlg.USPSExpress11.MoveTo();
             Delay.Milliseconds(200);
             
             // Click Express 1
             Report.Log(ReportLevel.Info, "Mouse", "Click Express 1\r\nMouse Left Click item 'ShippingSettingsDlg.USPSExpress11' at Center.", repo.ShippingSettingsDlg.USPSExpress11Info, new RecordItemIndex(5));
-            repo.ShippingSettingsDlg.USPSExpress11.Click(300);
+            repo.ShippingSettingsDlg.USPSExpress11.Click();
             Delay.Milliseconds(200);
             
             // Move mouse to check postage
             Report.Log(ReportLevel.Info, "Mouse", "Move mouse to check postage\r\nMouse Left Move item 'ShippingSettingsDlg.Express1PostageBalance50' at 25;8.", repo.ShippingSettingsDlg.Express1PostageBalance50Info, new RecordItemIndex(6));
-            repo.ShippingSettingsDlg.Express1PostageBalance50.MoveTo("25;8", 300);
+            repo.ShippingSettingsDlg.Express1PostageBalance50.MoveTo("25;8");
             Delay.Milliseconds(200);
             
             // Get the postage value and store it in a variable
@@ -147,27 +147,30 @@ namespace SmokeTest
             
             // Move mouse to close button
             Report.Log(ReportLevel.Info, "Mouse", "Move mouse to close button\r\nMouse Left Move item 'ShippingSettingsDlg.Close1' at Center.", repo.ShippingSettingsDlg.Close1Info, new RecordItemIndex(8));
-            repo.ShippingSettingsDlg.Close1.MoveTo(300);
+            repo.ShippingSettingsDlg.Close1.MoveTo();
             Delay.Milliseconds(200);
             
             // Click on close button
             Report.Log(ReportLevel.Info, "Mouse", "Click on close button\r\nMouse Left Click item 'ShippingSettingsDlg.Close1' at Center.", repo.ShippingSettingsDlg.Close1Info, new RecordItemIndex(9));
-            repo.ShippingSettingsDlg.Close1.Click(300);
+            repo.ShippingSettingsDlg.Close1.Click();
             Delay.Milliseconds(200);
+            
+            CheckRates();
+            Delay.Milliseconds(0);
             
             // Move mouse to get the shipment rate
-            Report.Log(ReportLevel.Info, "Mouse", "Move mouse to get the shipment rate\r\nMouse Left Move item 'ShipOrders1.SplitContainer.InternationalShipmentRate' at Center.", repo.ShipOrders1.SplitContainer.InternationalShipmentRateInfo, new RecordItemIndex(10));
-            repo.ShipOrders1.SplitContainer.InternationalShipmentRate.MoveTo(300);
-            Delay.Milliseconds(200);
+            //Report.Log(ReportLevel.Info, "Mouse", "Move mouse to get the shipment rate\r\nMouse Left Move item 'ShipOrders1.SplitContainer.InternationalShipmentRate' at Center.", repo.ShipOrders1.SplitContainer.InternationalShipmentRateInfo, new RecordItemIndex(11));
+            //repo.ShipOrders1.SplitContainer.InternationalShipmentRate.MoveTo();
+            //Delay.Milliseconds(200);
             
             // Get the rate and store it in a variable
-            Report.Log(ReportLevel.Info, "Get Value", "Get the rate and store it in a variable\r\nGetting attribute 'RawText' from item 'ShipOrders1.SplitContainer.InternationalShipmentRate' and assigning its value to variable 'ExpOneShipmentRate'.", repo.ShipOrders1.SplitContainer.InternationalShipmentRateInfo, new RecordItemIndex(11));
-            ExpOneShipmentRate = repo.ShipOrders1.SplitContainer.InternationalShipmentRate.Element.GetAttributeValueText("RawText");
-            Delay.Milliseconds(0);
+            //Report.Log(ReportLevel.Info, "Get Value", "Get the rate and store it in a variable\r\nGetting attribute 'RawText' from item 'ShipOrders1.SplitContainer.InternationalShipmentRate' and assigning its value to variable 'ExpOneShipmentRate'.", repo.ShipOrders1.SplitContainer.InternationalShipmentRateInfo, new RecordItemIndex(12));
+            //ExpOneShipmentRate = repo.ShipOrders1.SplitContainer.InternationalShipmentRate.Element.GetAttributeValueText("RawText");
+            //Delay.Milliseconds(0);
             
             // Compare the available postage with the shipment rate and, if there is enough postage available, process the shipment.
-            CheckPostageBalance();
-            Delay.Milliseconds(0);
+            //CheckPostageBalance();
+            //Delay.Milliseconds(0);
             
         }
 

@@ -7,6 +7,6 @@
       <string>60513a05-eab7-41e7-8c10-e51c735edc2e</string>
     </ArrayOfString>
   </SerializedValue>
-  <ProjectBrowserState value="[Solution SmokeTest[SmokeTest[BatchFile[]Class[]ChangeCurrentShipment_ProviderUSPSExpress1.rxrec[]OLMProcessShipmentFedExDomesticGround.rxrec[]OLMProcessShipmentFedExInternational.rxrec[]OLMProcessShipmentUPSDomesticGround.rxrec[]SmokeTestRepository.rxrep[]]]]&#xD;&#xA;Solution SmokeTest\SmokeTest\CloseShipWorks.rxrec&#xD;&#xA;Solution SmokeTest" />
+  <ProjectBrowserState value="[Solution SmokeTest[SmokeTest[BatchFile[]Class[]ChangeCurrentShipment_ProviderUSPSExpress1.rxrec[]GetExpress1DomesticShipmentRate.rxrec[]GetExpress1EndiciaDomesticShipmentRate.rxrec[]GetExpress1EndiciaInternationalShipmentRate.rxrec[]GetExpress1InternationalShipmentRate.rxrec[]OLMProcessShipmentFedExDomesticGround.rxrec[]OLMProcessShipmentFedExInternational.rxrec[]OLMProcessShipmentUPSDomesticGround.rxrec[]SmokeTestRepository.rxrep[]]]]&#xD;&#xA;Solution SmokeTest\SmokeTest\GatherCurrentDateandTime.rxrec&#xD;&#xA;Solution SmokeTest\SmokeTest\ProcessUSPSExpress1Priority.rxrec" />
   <StartupProject value="{953B7E7C-91CC-440C-98A0-2F164A8E2CF0}" />
 </Properties>

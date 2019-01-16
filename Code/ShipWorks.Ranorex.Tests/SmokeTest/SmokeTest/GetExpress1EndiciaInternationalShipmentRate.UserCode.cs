@@ -50,5 +50,30 @@ namespace SmokeTest
         	}
         }
 
+        public void CheckRates()
+        {
+        	if (repo.ShipOrders1.SplitContainer.InternationalShipmentRateInfo.Exists(30000) == false)
+        	{
+        		Report.Log(ReportLevel.Info, "Keyboard", "Key sequence '{Escape}{Escape}{Escape}{Escape}{Escape}{Escape}{Escape}{Escape}{Escape}{Escape}'.", new RecordItemIndex(15));
+	            Keyboard.Press("{Escape}{Escape}{Escape}{Escape}{Escape}{Escape}{Escape}{Escape}{Escape}{Escape}");
+	            Delay.Milliseconds(0);        			
+        	}
+        	else
+        	{
+		        // Move mouse to get the shipment rate
+	            Report.Log(ReportLevel.Info, "Mouse", "Move mouse to get the shipment rate\r\nMouse Left Move item 'ShipOrders1.SplitContainer.InternationalShipmentRate' at Center.", repo.ShipOrders1.SplitContainer.InternationalShipmentRateInfo, new RecordItemIndex(10));
+	            repo.ShipOrders1.SplitContainer.InternationalShipmentRate.MoveTo();
+	            Delay.Milliseconds(200);
+	            
+	            // Get the rate and store it in a variable
+	            Report.Log(ReportLevel.Info, "Get Value", "Get the rate and store it in a variable\r\nGetting attribute 'RawText' from item 'ShipOrders1.SplitContainer.InternationalShipmentRate' and assigning its value to variable 'ExpOneEndiciaShipmentRate'.", repo.ShipOrders1.SplitContainer.InternationalShipmentRateInfo, new RecordItemIndex(11));
+	            ExpOneEndiciaShipmentRate = repo.ShipOrders1.SplitContainer.InternationalShipmentRate.Element.GetAttributeValueText("RawText");
+	            Delay.Milliseconds(0);
+	            
+	            // Compare the available postage with the shipment rate and, if there is enough postage available, process the shipment.
+	            CheckPostageBalance();
+	            Delay.Milliseconds(0);
+        	}   
+        }
     }
 }
