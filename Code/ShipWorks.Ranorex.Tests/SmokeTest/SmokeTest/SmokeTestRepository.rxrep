@@ -662,9 +662,8 @@ MccVydhgafzKwmo3c6RCyF+QF9ssNPjvRAAAAABJRU5ErkJggg==
 				id="43d4a322-15d1-4625-a481-f02bebc7dbbc"
 				name="UPSGround"
 				refimgid="64ce4c27-49f6-4557-b238-1824d980da9b"
-				refpath="/form[@controlname='MainForm']/container[@controlname='panelDockingArea']/container/element/container/element/element/container/element[@name='Rates']/container/element/table/row[2]/cell[@name='UPS Ground']"
 				searchtimeout="30000ms">
-					/form[@controlname='MainForm']/container[@controlname='panelDockingArea']//container[@classname='Pane']//element[@name='Rates']/container[@name='Rates']/?/?/table[@classname='DataGrid']/row[2]/cell[@name='UPS Ground']
+					/form[@controlname='MainForm']/container[@controlname='panelDockingArea']//container[@classname='Pane']//element[@name='Rates']/container[@name='Rates']/?/?/table[@classname='DataGrid']/?/cell[@name='UPS Ground']
 				</item>
 				<item
 				addcaps="text,uiautomation"
@@ -682,9 +681,8 @@ MccVydhgafzKwmo3c6RCyF+QF9ssNPjvRAAAAABJRU5ErkJggg==
 				id="5032adc5-6d2e-4b83-bf68-bd6d75037cda"
 				name="FedExInternationalPriorityR"
 				refimgid="7d44370c-a813-4d70-9058-81ba7707a9ab"
-				refpath="/form[@controlname='MainForm']/container[@controlname='panelDockingArea']/container[@controlname='OrderLookupControl']/element/container/element/element/container/element[@name='Rates']/container/element/table/row[3]/cell[@name~'^FedEx\ International\ Prior']"
 				searchtimeout="30000ms">
-					/form[@controlname='MainForm']/container[@controlname='panelDockingArea']//container[@classname='Pane']//element[@name='Rates']/container[@name='Rates']/?/?/table[@classname='DataGrid']/row[3]/cell[@name~'^FedEx\ International\ Prior']
+					/form[@controlname='MainForm']/container[@controlname='panelDockingArea']//container[@classname='Pane']//element[@name='Rates']/container[@name='Rates']/?/?/table[@classname='DataGrid']/?/cell[@name~'^FedEx\ International\ Prior']
 				</item>
 				<basepath>
 					/form[@controlname='MainForm']/container[@controlname='panelDockingArea']
@@ -3934,9 +3932,8 @@ lpKZgpMF6Pw3M/MFayOlqIh43SSsYsIrayXz9q3r5Ra2vFFWLUXbtWRiANXcVpB6SHDZSEK3kcS7
 				id="940b6eb7-a050-45b5-b701-8e39d36a1c27"
 				name="UPSWorldwideExpressR"
 				refimgid="584a88f1-1190-4c30-ac39-b05a027f2739"
-				refpath="/form[@controlname='MainForm']/container[@controlname='panelDockingArea']/container[@controlname='OrderLookupControl']/element/container/element/element/container/element[@name='Rates']/container/element/table/row[2]/cell[@name='UPS Worldwide Express®']"
 				searchtimeout="30000ms">
-					/form[@title~'ShipWorks']/container[@controlname='panelDockingArea']//container[@classname='Pane']//element[@name='Rates']/container[@name='Rates']/?/?/table[@classname='DataGrid']/row[2]/cell[@name='UPS Worldwide Express&#174;']
+					/form[@title~'ShipWorks']/container[@controlname='panelDockingArea']//container[@classname='Pane']//element[@name='Rates']/container[@name='Rates']/?/?/table[@classname='DataGrid']/?/cell[@name='UPS Worldwide Express&#174;']
 				</item>
 				<item
 				addcaps="cell,uiautomation,uiautomationvalue"
@@ -3944,9 +3941,8 @@ lpKZgpMF6Pw3M/MFayOlqIh43SSsYsIrayXz9q3r5Ra2vFFWLUXbtWRiANXcVpB6SHDZSEK3kcS7
 				id="f5be3269-3fae-4257-b034-f13609b20a66"
 				name="Priority"
 				refimgid="cd2f94f3-0d6d-44fd-951b-5ff528d13fa3"
-				refpath="/form[@controlname='MainForm']/container[@controlname='panelDockingArea']/container[@controlname='OrderLookupControl']/element/container/element/element/container/element[@name='Rates']/container/element/table/row[2]/cell[@name='Priority']"
 				searchtimeout="30000ms">
-					/form[@title~'ShipWorks']/container[@controlname='panelDockingArea']//container[@classname='Pane']//element[@name='Rates']/container[@name='Rates']/?/?/table[@classname='DataGrid']/row[2]/cell[@name='Priority']
+					/form[@title~'ShipWorks']/container[@controlname='panelDockingArea']//container[@classname='Pane']//element[@name='Rates']/container[@name='Rates']/?/?/table[@classname='DataGrid']/?/cell[@name='Priority']
 				</item>
 				<item
 				addcaps="cell,uiautomation,uiautomationvalue"
@@ -3954,9 +3950,8 @@ lpKZgpMF6Pw3M/MFayOlqIh43SSsYsIrayXz9q3r5Ra2vFFWLUXbtWRiANXcVpB6SHDZSEK3kcS7
 				id="333e3820-e9d0-4391-9ae8-71b7818a4c8f"
 				name="InternationalPriority"
 				refimgid="3a311020-f88f-4584-b27a-1840de9bc967"
-				refpath="/form[@controlname='MainForm']/container[@controlname='panelDockingArea']/container[@controlname='OrderLookupControl']/element/container/element/element/container/element[@name='Rates']/container/element/table/row[3]/cell[@name='International Priority']"
 				searchtimeout="30000ms">
-					/form[@title~'ShipWorks']/container[@controlname='panelDockingArea']//container[@classname='Pane']//element[@name='Rates']/container[@name='Rates']/?/?/table[@classname='DataGrid']/row[3]/cell[@name='International Priority']
+					/form[@title~'ShipWorks']/container[@controlname='panelDockingArea']//container[@classname='Pane']//element[@name='Rates']/container[@name='Rates']/?/?/table[@classname='DataGrid']/?/cell[@name='International Priority']
 				</item>
 				<item
 				addcaps="cell,uiautomation,uiautomationvalue"
@@ -3964,9 +3959,8 @@ lpKZgpMF6Pw3M/MFayOlqIh43SSsYsIrayXz9q3r5Ra2vFFWLUXbtWRiANXcVpB6SHDZSEK3kcS7
 				id="f8d7fbb7-1e2a-4c94-90e9-c83d9baf3fc5"
 				name="FedExGroundR"
 				refimgid="28b12a85-48f4-4344-8bf7-a072d9ed6565"
-				refpath="/form[@controlname='MainForm']/container[@controlname='panelDockingArea']/container[@controlname='OrderLookupControl']/element/container/element/element/container/element[@name='Rates']/container/element/table/row[8]/cell[@name='FedEx Ground®']"
 				searchtimeout="30000ms">
-					/form[@title~'ShipWorks']/container[@controlname='panelDockingArea']//container[@classname='Pane']//element[@name='Rates']/container[@name='Rates']/?/?/table[@classname='DataGrid']/row[8]/cell[@name='FedEx Ground&#174;']
+					/form[@title~'ShipWorks']/container[@controlname='panelDockingArea']//container[@classname='Pane']//element[@name='Rates']/container[@name='Rates']/?/?/table[@classname='DataGrid']/?/cell[@name='FedEx Ground&#174;']
 				</item>
 				<basepath>
 					/form[@title~'ShipWorks']/container[@controlname='panelDockingArea']
