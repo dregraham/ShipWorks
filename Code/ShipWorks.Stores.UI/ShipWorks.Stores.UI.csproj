@@ -474,6 +474,9 @@
       <DependentUpon>OverstockStoreSetupControlHost.cs</DependentUpon>
     </Compile>
     <Compile Include="Platforms\Overstock\OverstockStoreSetupControlViewModel.cs" />
+    <Compile Include="Platforms\Shopify\ShopifyCreateTokenDialog.xaml.cs">
+      <DependentUpon>ShopifyCreateTokenDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Platforms\ShopSite\ShopSiteAccountSettings.xaml.cs">
       <DependentUpon>ShopSiteAccountSettings.xaml</DependentUpon>
     </Compile>
@@ -858,6 +861,10 @@
     <Page Include="Platforms\Overstock\OverstockStoreSetupControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Platforms\Shopify\ShopifyCreateTokenDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Platforms\ShopSite\ShopSiteAccountSettings.xaml">
       <SubType>Designer</SubType>

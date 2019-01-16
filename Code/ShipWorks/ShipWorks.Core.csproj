@@ -1,9 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="14.0">
-  <Import Project="..\..\packages\CefSharp.WinForms.69.0.0\build\CefSharp.WinForms.props" Condition="Exists('..\..\packages\CefSharp.WinForms.69.0.0\build\CefSharp.WinForms.props')" />
-  <Import Project="..\..\packages\CefSharp.Common.69.0.0\build\CefSharp.Common.props" Condition="Exists('..\..\packages\CefSharp.Common.69.0.0\build\CefSharp.Common.props')" />
-  <Import Project="..\..\packages\cef.redist.x86.3.3497.1841\build\cef.redist.x86.props" Condition="Exists('..\..\packages\cef.redist.x86.3.3497.1841\build\cef.redist.x86.props')" />
-  <Import Project="..\..\packages\cef.redist.x64.3.3497.1841\build\cef.redist.x64.props" Condition="Exists('..\..\packages\cef.redist.x64.3.3497.1841\build\cef.redist.x64.props')" />
   <PropertyGroup>
     <ProjectTypeGuids>{60DC8134-EBA5-43B8-BCC9-BB4BC16C2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -2175,6 +2171,7 @@
     <Compile Include="Stores\Platforms\Shopify\DTOs\ShopifyProductVariant.cs" />
     <Compile Include="Stores\Platforms\Shopify\DTOs\ShopifyShop.cs" />
     <Compile Include="Stores\Platforms\Shopify\DTOs\ShopifyShopResponse.cs" />
+    <Compile Include="Stores\Platforms\Shopify\IShopifyCreateTokenViewModel.cs" />
     <Compile Include="Stores\Platforms\Shopify\IShopifyFraudDownloader.cs" />
     <Compile Include="Stores\Platforms\Shopify\IShopifyLocationService.cs" />
     <Compile Include="Stores\Platforms\Shopify\OnlineUpdating\IShopifyOnlineUpdater.cs" />
@@ -3898,12 +3895,6 @@
     <Compile Include="Stores\Platforms\Shopify\ShopifyAccountSettingsControl.Designer.cs">
       <DependentUpon>ShopifyAccountSettingsControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="Stores\Platforms\Shopify\ShopifyCreateTokenWizard.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Stores\Platforms\Shopify\ShopifyCreateTokenWizard.Designer.cs">
-      <DependentUpon>ShopifyCreateTokenWizard.cs</DependentUpon>
-    </Compile>
     <Compile Include="Stores\Platforms\Shopify\ShopifyStoreSettingsControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -3922,7 +3913,6 @@
     </Compile>
     <Compile Include="Stores\Platforms\Shopify\ShopifyWebClientRequestThrottle.cs" />
     <Compile Include="Stores\Platforms\Shopify\ShopifyWebClientThrottleWaitCancelException.cs" />
-    <Compile Include="Stores\Platforms\Shopify\WebBrowserControlEmulation.cs" />
     <Compile Include="Stores\Platforms\Shopify\WizardPages\ShopifyAssociateAccountPage.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -8539,9 +8529,6 @@
     <EmbeddedResource Include="Stores\Platforms\Shopify\ShopifyCreateTokenControl.resx">
       <DependentUpon>ShopifyCreateTokenControl.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Stores\Platforms\Shopify\ShopifyCreateTokenWizard.resx">
-      <DependentUpon>ShopifyCreateTokenWizard.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Stores\Platforms\Shopify\ShopifyStoreSettingsControl.resx">
       <DependentUpon>ShopifyStoreSettingsControl.cs</DependentUpon>
     </EmbeddedResource>
@@ -11366,19 +11353,6 @@
     <Analyzer Include="..\..\packages\System.Security.Cryptography.Hashing.Algorithms.Analyzers.1.1.0\analyzers\dotnet\cs\System.Security.Cryptography.Hashing.Algorithms.CSharp.Analyzers.dll" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
-  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
-    <PropertyGroup>
-      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
-    </PropertyGroup>
-    <Error Condition="!Exists('..\..\packages\cef.redist.x64.3.3497.1841\build\cef.redist.x64.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\cef.redist.x64.3.3497.1841\build\cef.redist.x64.props'))" />
-    <Error Condition="!Exists('..\..\packages\cef.redist.x86.3.3497.1841\build\cef.redist.x86.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\cef.redist.x86.3.3497.1841\build\cef.redist.x86.props'))" />
-    <Error Condition="!Exists('..\..\packages\CefSharp.Common.69.0.0\build\CefSharp.Common.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\CefSharp.Common.69.0.0\build\CefSharp.Common.props'))" />
-    <Error Condition="!Exists('..\..\packages\CefSharp.Common.69.0.0\build\CefSharp.Common.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\CefSharp.Common.69.0.0\build\CefSharp.Common.targets'))" />
-    <Error Condition="!Exists('..\..\packages\CefSharp.WinForms.69.0.0\build\CefSharp.WinForms.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\CefSharp.WinForms.69.0.0\build\CefSharp.WinForms.props'))" />
-    <Error Condition="!Exists('..\..\packages\CefSharp.WinForms.69.0.0\build\CefSharp.WinForms.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\CefSharp.WinForms.69.0.0\build\CefSharp.WinForms.targets'))" />
-  </Target>
-  <Import Project="..\..\packages\CefSharp.Common.69.0.0\build\CefSharp.Common.targets" Condition="Exists('..\..\packages\CefSharp.Common.69.0.0\build\CefSharp.Common.targets')" />
-  <Import Project="..\..\packages\CefSharp.WinForms.69.0.0\build\CefSharp.WinForms.targets" Condition="Exists('..\..\packages\CefSharp.WinForms.69.0.0\build\CefSharp.WinForms.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
