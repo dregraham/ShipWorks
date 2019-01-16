@@ -102,34 +102,12 @@ namespace SmokeTest
             repo.ShipWorksSa.PanelDockingArea.Button.Click();
             Delay.Milliseconds(0);
             
+            ProcessFedexDomesticGround();
+            Delay.Milliseconds(0);
+            
             // Checks if the UPS Ground rate is displayed
-            Report.Log(ReportLevel.Info, "Wait", "Checks if the UPS Ground rate is displayed\r\nWaiting 30s to exist. Associated repository item: 'ShipWorksSa.PanelDockingArea.FedExGroundR'", repo.ShipWorksSa.PanelDockingArea.FedExGroundRInfo, new ActionTimeout(30000), new RecordItemIndex(5));
-            repo.ShipWorksSa.PanelDockingArea.FedExGroundRInfo.WaitForExists(30000);
-            
-            Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Move item 'ShipWorksSa.PanelDockingArea.FedExGroundR' at Center.", repo.ShipWorksSa.PanelDockingArea.FedExGroundRInfo, new RecordItemIndex(6));
-            repo.ShipWorksSa.PanelDockingArea.FedExGroundR.MoveTo();
-            Delay.Milliseconds(200);
-            
-            Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Move item 'MainForm.PanelDockingArea.OLMCreateLabel' at Center.", repo.MainForm.PanelDockingArea.OLMCreateLabelInfo, new RecordItemIndex(7));
-            repo.MainForm.PanelDockingArea.OLMCreateLabel.MoveTo();
-            Delay.Milliseconds(200);
-            
-            // Clicks create label
-            Report.Log(ReportLevel.Info, "Mouse", "Clicks create label\r\nMouse Left Click item 'MainForm.PanelDockingArea.OLMCreateLabel' at Center.", repo.MainForm.PanelDockingArea.OLMCreateLabelInfo, new RecordItemIndex(8));
-            repo.MainForm.PanelDockingArea.OLMCreateLabel.Click();
-            Delay.Milliseconds(200);
-            
-            // Checks if the message is displayed
-            Report.Log(ReportLevel.Info, "Wait", "Checks if the message is displayed\r\nWaiting 30s to exist. Associated repository item: 'MainForm.PanelDockingArea.ThisOrdersShipmentHasBeenProcessed'", repo.MainForm.PanelDockingArea.ThisOrdersShipmentHasBeenProcessedInfo, new ActionTimeout(30000), new RecordItemIndex(9));
-            repo.MainForm.PanelDockingArea.ThisOrdersShipmentHasBeenProcessedInfo.WaitForExists(30000);
-            
-            Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Move item 'MainForm.PanelDockingArea.ThisOrdersShipmentHasBeenProcessed' at CenterLeft.", repo.MainForm.PanelDockingArea.ThisOrdersShipmentHasBeenProcessedInfo, new RecordItemIndex(10));
-            repo.MainForm.PanelDockingArea.ThisOrdersShipmentHasBeenProcessed.MoveTo(Location.CenterLeft);
-            Delay.Milliseconds(200);
-            
-            Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Click item 'MainForm.PanelDockingArea.ThisOrdersShipmentHasBeenProcessed' at CenterLeft.", repo.MainForm.PanelDockingArea.ThisOrdersShipmentHasBeenProcessedInfo, new RecordItemIndex(11));
-            repo.MainForm.PanelDockingArea.ThisOrdersShipmentHasBeenProcessed.Click(Location.CenterLeft);
-            Delay.Milliseconds(200);
+            //Report.Log(ReportLevel.Info, "Wait", "Checks if the UPS Ground rate is displayed\r\nWaiting 30s to exist. Associated repository item: 'ShipWorksSa.PanelDockingArea.FedExGroundR'", repo.ShipWorksSa.PanelDockingArea.FedExGroundRInfo, new ActionTimeout(30000), new RecordItemIndex(6));
+            //repo.ShipWorksSa.PanelDockingArea.FedExGroundRInfo.WaitForExists(30000);
             
         }
 

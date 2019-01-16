@@ -2080,9 +2080,9 @@ namespace SmokeTest
             {
                 _olmcreatelabelInfo = new RepoItemInfo(this, "OLMCreateLabel", ".//container[@classname='Pane']/?/?/element[@automationid='a']/?/?/button[@name='Create Label']", 30000, null, "f12abb50-37f5-41b4-9cac-4f3321e4d308");
                 _textaInfo = new RepoItemInfo(this, "TextA", "container[@controlname='OrderLookupControl']/?/?/container[@classname='Pane']/?/?/element[@automationid='a']//text[@automationid='a']", 30000, null, "094dde57-f2f6-45fc-aab2-1a9ce6744ab7");
-                _upsgroundInfo = new RepoItemInfo(this, "UPSGround", ".//container[@classname='Pane']//element[@name='Rates']/container[@name='Rates']/?/?/table[@classname='DataGrid']/row[2]/cell[@name='UPS Ground']", 30000, null, "43d4a322-15d1-4625-a481-f02bebc7dbbc");
+                _upsgroundInfo = new RepoItemInfo(this, "UPSGround", ".//container[@classname='Pane']//element[@name='Rates']/container[@name='Rates']/?/?/table[@classname='DataGrid']/?/cell[@name='UPS Ground']", 30000, null, "43d4a322-15d1-4625-a481-f02bebc7dbbc");
                 _thisordersshipmenthasbeenprocessedInfo = new RepoItemInfo(this, "ThisOrdersShipmentHasBeenProcessed", ".//container[@classname='Pane']/?/?/element[@automationid='a']/?/?/text[@name~'^This\\ order''s\\ shipment\\ has']", 30000, null, "78e95cec-618b-423f-868a-4cd15a75e42e");
-                _fedexinternationalpriorityrInfo = new RepoItemInfo(this, "FedExInternationalPriorityR", ".//container[@classname='Pane']//element[@name='Rates']/container[@name='Rates']/?/?/table[@classname='DataGrid']/row[3]/cell[@name~'^FedEx\\ International\\ Prior']", 30000, null, "5032adc5-6d2e-4b83-bf68-bd6d75037cda");
+                _fedexinternationalpriorityrInfo = new RepoItemInfo(this, "FedExInternationalPriorityR", ".//container[@classname='Pane']//element[@name='Rates']/container[@name='Rates']/?/?/table[@classname='DataGrid']/?/cell[@name~'^FedEx\\ International\\ Prior']", 30000, null, "5032adc5-6d2e-4b83-bf68-bd6d75037cda");
             }
 
             /// <summary>
@@ -10259,10 +10259,10 @@ namespace SmokeTest
                 _fullnametextboxInfo = new RepoItemInfo(this, "FullNameTextBox", ".//container[@classname='Pane']/?/?/element[@automationid='a']/?/?/element[@name='To First Last (Domestic)']/container[@name='To First Last (Domestic)']/?/?/element/text[3]", 30000, null, "e1078a14-b01b-4361-ba08-2abc850c727b");
                 _companytextboxInfo = new RepoItemInfo(this, "CompanyTextBox", ".//container[@classname='Pane']/?/?/element[@automationid='a']/?/?/element[@name='To First Last (Domestic)']/container[@name='To First Last (Domestic)']/?/?/element/text[5]", 30000, null, "43c05e8c-76ab-4875-954f-c583aef907e9");
                 _theorderhasnoitemsInfo = new RepoItemInfo(this, "TheOrderHasNoItems", ".//container[@classname='Pane']//element[@name='Order Items']/container[@name='Order Items']/?/?/text[@name=' ']/text[@name='The order has no items']", 30000, null, "3ee051bf-4810-4b5b-86f1-334906ffc2a6");
-                _upsworldwideexpressrInfo = new RepoItemInfo(this, "UPSWorldwideExpressR", ".//container[@classname='Pane']//element[@name='Rates']/container[@name='Rates']/?/?/table[@classname='DataGrid']/row[2]/cell[@name='UPS Worldwide Express®']", 30000, null, "940b6eb7-a050-45b5-b701-8e39d36a1c27");
-                _priorityInfo = new RepoItemInfo(this, "Priority", ".//container[@classname='Pane']//element[@name='Rates']/container[@name='Rates']/?/?/table[@classname='DataGrid']/row[2]/cell[@name='Priority']", 30000, null, "f5be3269-3fae-4257-b034-f13609b20a66");
-                _internationalpriorityInfo = new RepoItemInfo(this, "InternationalPriority", ".//container[@classname='Pane']//element[@name='Rates']/container[@name='Rates']/?/?/table[@classname='DataGrid']/row[3]/cell[@name='International Priority']", 30000, null, "333e3820-e9d0-4391-9ae8-71b7818a4c8f");
-                _fedexgroundrInfo = new RepoItemInfo(this, "FedExGroundR", ".//container[@classname='Pane']//element[@name='Rates']/container[@name='Rates']/?/?/table[@classname='DataGrid']/row[8]/cell[@name='FedEx Ground®']", 30000, null, "f8d7fbb7-1e2a-4c94-90e9-c83d9baf3fc5");
+                _upsworldwideexpressrInfo = new RepoItemInfo(this, "UPSWorldwideExpressR", ".//container[@classname='Pane']//element[@name='Rates']/container[@name='Rates']/?/?/table[@classname='DataGrid']/?/cell[@name='UPS Worldwide Express®']", 30000, null, "940b6eb7-a050-45b5-b701-8e39d36a1c27");
+                _priorityInfo = new RepoItemInfo(this, "Priority", ".//container[@classname='Pane']//element[@name='Rates']/container[@name='Rates']/?/?/table[@classname='DataGrid']/?/cell[@name='Priority']", 30000, null, "f5be3269-3fae-4257-b034-f13609b20a66");
+                _internationalpriorityInfo = new RepoItemInfo(this, "InternationalPriority", ".//container[@classname='Pane']//element[@name='Rates']/container[@name='Rates']/?/?/table[@classname='DataGrid']/?/cell[@name='International Priority']", 30000, null, "333e3820-e9d0-4391-9ae8-71b7818a4c8f");
+                _fedexgroundrInfo = new RepoItemInfo(this, "FedExGroundR", ".//container[@classname='Pane']//element[@name='Rates']/container[@name='Rates']/?/?/table[@classname='DataGrid']/?/cell[@name='FedEx Ground®']", 30000, null, "f8d7fbb7-1e2a-4c94-90e9-c83d9baf3fc5");
             }
 
             /// <summary>
