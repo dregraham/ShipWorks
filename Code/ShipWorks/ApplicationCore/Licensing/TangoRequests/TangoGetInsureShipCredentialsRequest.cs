@@ -3,6 +3,7 @@ using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.Insurance.InsureShip;
 
 namespace ShipWorks.ApplicationCore.Licensing.TangoRequests
 {
@@ -14,14 +15,17 @@ namespace ShipWorks.ApplicationCore.Licensing.TangoRequests
     {
         private readonly ITangoWebRequestClient webRequestClient;
         private readonly IHttpRequestSubmitterFactory requestSubmitterFactory;
+        private readonly IInsureShipSettings settings;
 
         /// <summary>
         /// Constructor
         /// </summary>
         public TangoGetInsureShipCredentialsRequest(
             IHttpRequestSubmitterFactory requestSubmitterFactory,
-            ITangoWebRequestClient webRequestClient)
+            ITangoWebRequestClient webRequestClient,
+            IInsureShipSettings settings)
         {
+            this.settings = settings;
             this.requestSubmitterFactory = requestSubmitterFactory;
             this.webRequestClient = webRequestClient;
         }
@@ -34,6 +38,11 @@ namespace ShipWorks.ApplicationCore.Licensing.TangoRequests
             var request = requestSubmitterFactory.GetHttpVariableRequestSubmitter();
             request.Variables.Add("action", "getinsureshipcredentials");
             request.Variables.Add("license", store.License);
+
+            if (settings.UseTestServer)
+            {
+                request.AddVariable("insureshiptestcreds", "true");
+            }
 
             webRequestClient.ProcessXmlRequest(request, "GetInsureShipCredentials", true)
                 .Do(x => SetCredentialsOnStore(x, store));
