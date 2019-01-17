@@ -48,6 +48,8 @@ namespace ShipWorks.Shipping.Carriers.OnTrac.BestRate
             // ConfigureNewShipment sets these fields, but we need to make sure they're what we expect
             currentShipment.OnTrac.DimsWeight = originalShipment.BestRate.DimsWeight;
             currentShipment.OnTrac.DimsAddWeight = originalShipment.BestRate.DimsAddWeight;
+            currentShipment.OnTrac.InsuranceValue = originalShipment.BestRate.InsuranceValue;
+            currentShipment.OnTrac.Insurance = originalShipment.BestRate.Insurance;
 
             // Update total weight
             ShipmentType.UpdateTotalWeight(currentShipment);
