@@ -59,6 +59,7 @@ namespace ShipWorks.Shipping.Settings
             shipmentTypeCombo.DisplayMember = "Key";
             shipmentTypeCombo.ValueMember = "Value";
 
+            filterCombo.AllowMyFilters = false;
             filterCombo.LoadLayouts(FilterTarget.Orders);
 
             originalFilterNodeID = rule.FilterNodeID;
