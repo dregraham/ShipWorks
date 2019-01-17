@@ -66,5 +66,17 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.BestRate
         {
             return account.Description;
         }
+
+        /// <summary>
+        /// Updates data on the postal child shipment that is required for checking best rate
+        /// </summary>
+        /// <param name="currentShipment">Shipment that we'll be working with</param>
+        /// <param name="originalShipment">The original shipment from which data can be copied.</param>
+        /// <param name="account">The Account Entity for this shipment.</param>
+        protected override void UpdateChildShipmentSettings(ShipmentEntity currentShipment, ShipmentEntity originalShipment, UspsAccountEntity account)
+        {
+            base.UpdateChildShipmentSettings(currentShipment, originalShipment, account);
+            currentShipment.Postal.Usps.Insurance = originalShipment.BestRate.Insurance;
+        }
     }
 }

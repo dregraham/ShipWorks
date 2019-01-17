@@ -1675,11 +1675,27 @@ JJneVJjLlQpAlChuf93jH69asG1haRndS5YEHcxYYPXAPA/CiC2it8+WGycZLMWOB0GSelAC44H0
 oxR2H0ooAYP9a3+6P60/FNH+tb/dH9adQAYoxRRQAUUUUAf/2Q==
 			</helperscreenshot>
 		</mouseitem>
+		<userrecorditem
+		classname="GetExpress1InternationalShipmentRate"
+		enabled="True"
+		isexternaltestmethod="False"
+		methodname="CheckRates"
+		namespace="SmokeTest"
+		optional="False"
+		varname="">
+			<comment>
+			</comment>
+			<bindings>
+			</bindings>
+			<arguments
+			id="c857a291-d988-4136-bee3-f76e51fedf60">
+			</arguments>
+		</userrecorditem>
 		<mouseitem
 		action="Move"
 		button="Left"
 		duration="500ms"
-		enabled="True"
+		enabled="False"
 		loc="Center"
 		movetime="300ms"
 		optional="False"
@@ -1751,7 +1767,7 @@ oxR2H0ooAYP9a3+6P60/FNH+tb/dH9adQAYoxRRQAUUUUAf/2Q==
 		</mouseitem>
 		<getvaluerecorditem
 		attrname="RawText"
-		enabled="True"
+		enabled="False"
 		optional="False"
 		searchpropertyid="e4562afa-9303-4769-9231-27fc945c3d97"
 		varname="ExpOneShipmentRate">
@@ -1820,7 +1836,7 @@ oxR2H0ooAYP9a3+6P60/FNH+tb/dH9adQAYoxRRQAUUUUAf/2Q==
 		<userrecorditem
 		autogenmethod="True"
 		classname="GetExpress1DomesticShipmentRate"
-		enabled="True"
+		enabled="False"
 		isexternaltestmethod="False"
 		methodname="CheckPostageBalance"
 		namespace="SmokeTest"
@@ -1840,7 +1856,7 @@ oxR2H0ooAYP9a3+6P60/FNH+tb/dH9adQAYoxRRQAUUUUAf/2Q==
 	id="e7742ed2-f8bc-429c-9794-64d8a30b8c72"
 	name="SmokeTestRepository"
 	relativepath="SmokeTestRepository.rxrep"
-	rxversion="8.0">
+	rxversion="8.1">
 		<codegen
 		classname="SmokeTestRepository"
 		namespace="SmokeTest">
