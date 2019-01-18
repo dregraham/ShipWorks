@@ -22,9 +22,6 @@
                 <ResourceDictionary Source="/ShipWorks.UI;component/Styles/GlobalStyle.xaml" />
                 <ResourceDictionary Source="/ShipWorks.UI;component/Styles/BlueSteel/BlueSteelStyle.xaml" />
             </ResourceDictionary.MergedDictionaries>
-            <ui:BooleanToVisibilityConverter x:Key="ShowWhenTrue" />
-            <ui:BooleanToVisibilityConverter x:Key="HideWhenTrue" Invert="True" />
-            <ui:PluralizingValueConverter x:Key="PluralizingValue" />
 
             <Style x:Key="StepBlock" TargetType="FrameworkElement">
                 <Setter Property="Margin" Value="0,0,0,16" />
@@ -72,6 +69,7 @@
                     Width="150"
                     Padding="8,4"
                     Style="{StaticResource BlueSteelTextBox}"
+                    IsEnabled="{Binding NameEnabled}"
                     Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" />
                 <TextBlock VerticalAlignment="Center">.myshopify.com</TextBlock>
             </StackPanel>

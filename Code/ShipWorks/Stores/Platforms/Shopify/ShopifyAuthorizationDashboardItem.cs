@@ -39,7 +39,7 @@ namespace ShipWorks.Stores.Platforms.Shopify
             using (var lifetimeScope = IoC.BeginLifetimeScope())
             {
                 lifetimeScope.Resolve<IShopifyCreateTokenViewModel>()
-                    .CreateToken()
+                    .RefreshToken(store.ShopifyShopUrlName)
                     .Bind(x => SaveTokenToStore(store, x))
                     .Do(_ => (owner as DashboardBar).Dismiss())
                     .OnFailure(ex => lifetimeScope.Resolve<IMessageHelper>().ShowError("Could not update token", ex));
@@ -50,13 +50,10 @@ namespace ShipWorks.Stores.Platforms.Shopify
         /// <summary>
         /// Save the token to store
         /// </summary>
-        private static Result SaveTokenToStore(ShopifyStoreEntity store, (string name, string token) result)
+        private static Result SaveTokenToStore(ShopifyStoreEntity store, string token)
         {
-            var (name, token) = result;
-
             store.SaveFields("");
 
-            store.ShopifyShopUrlName = name;
             store.ShopifyAccessToken = token;
 
             try

@@ -52,10 +52,26 @@ namespace ShipWorks.Stores.Platforms.Shopify
         public GenericResult<(string name, string token)> CreateToken()
         {
             dialog = createDialog(this);
+            NameEnabled = true;
 
             return messageHelper.ShowDialog(dialog) == true ?
                 GenericResult.FromSuccess((Name.Trim(), token)) :
                 GenericResult.FromError<(string, string)>("Canceled");
+        }
+
+        /// <summary>
+        /// Regenerate a Shopify token
+        /// </summary>
+        public GenericResult<string> RefreshToken(string name)
+        {
+            Name = name;
+            NameEnabled = false;
+
+            dialog = createDialog(this);
+
+            return messageHelper.ShowDialog(dialog) == true ?
+                GenericResult.FromSuccess(token) :
+                GenericResult.FromError<string>("Canceled");
         }
 
         /// <summary>
@@ -85,6 +101,12 @@ namespace ShipWorks.Stores.Platforms.Shopify
             get => name;
             set => Set(ref name, value);
         }
+
+        /// <summary>
+        /// Is the name entry box enabled
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public bool NameEnabled { get; set; }
 
         /// <summary>
         /// Code copied from Tango

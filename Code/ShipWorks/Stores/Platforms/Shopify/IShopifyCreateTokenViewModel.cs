@@ -11,5 +11,10 @@ namespace ShipWorks.Stores.Platforms.Shopify
         /// Create a Shopify token
         /// </summary>
         GenericResult<(string name, string token)> CreateToken();
+
+        /// <summary>
+        /// Regenerate a Shopify token
+        /// </summary>
+        GenericResult<string> RefreshToken(string name);
     }
 }
