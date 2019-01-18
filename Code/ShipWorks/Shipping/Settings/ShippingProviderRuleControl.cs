@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Linq;
 using System.Windows.Forms;
 using Autofac;
@@ -11,6 +10,7 @@ using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Filters;
 using ShipWorks.UI.Utility;
+using ShipWorks.Users;
 
 namespace ShipWorks.Shipping.Settings
 {
@@ -20,7 +20,7 @@ namespace ShipWorks.Shipping.Settings
     public partial class ShippingProviderRuleControl : UserControl
     {
         static readonly ILog log = LogManager.GetLogger(typeof(ShippingProviderRuleControl));
-        private const long NoFilterSelectedID = long.MinValue;
+        private readonly long noFilterSelectedID = BuiltinFilter.GetTopLevelKey(FilterTarget.Orders);
         private ShippingProviderRuleEntity rule;
         private long originalFilterNodeID;
         private readonly IShippingProviderRuleManager shippingProviderRuleManager;
@@ -41,7 +41,7 @@ namespace ShipWorks.Shipping.Settings
             filterCombo.AllowMyFilters = false;
 
             toolStipDelete.Renderer = new NoBorderToolStripRenderer();
-            originalFilterID = NoFilterSelectedID;
+            originalFilterID = noFilterSelectedID;
             originalFilterNodeID = 0;
             shippingProviderRuleManager = IoC.UnsafeGlobalLifetimeScope.Resolve<IShippingProviderRuleManager>();
         }
@@ -167,16 +167,32 @@ namespace ShipWorks.Shipping.Settings
         {
             get
             {
-                if (IsMyFilter)
+                // If there was an original filter, check it to see if it belongs to the current user.  If not, return error message.
+                if (originalFilterNodeID != filterCombo.SelectedFilterNodeID)
                 {
-                    return $"A Rule is using a My Filter, '{filterCombo.SelectedFilterNode.Filter.Name}'. Shipping Provider Rules can no longer use a My Filter. Any changes to this rule will not be saved.";
+                    FilterLayoutEntity originalLayout = FilterLayoutContext.Current.GetNodeLayout(originalFilterNodeID);
+                    if (originalLayout == null)
+                    {
+                        // The original filter node was another user's, so return the account msg.
+                        return $"A rule was using a My Filter that is not available to this user account. " +
+                               $"Shipping Provider Rules can no longer use a My filter.  " +
+                               $"This rule has been changed to use the \"None\" provider.";
+                    }
                 }
 
-                if (FilterHelper.IsMyFilter(originalFilterNodeID))
+                FilterLayoutEntity layout = FilterLayoutContext.Current.GetNodeLayout(filterCombo.SelectedFilterNodeID);
+                if (layout?.UserID != null)
                 {
-                    return $"A rule was using a My Filter, '{filterCombo.SelectedFilterNode.Filter.Name}', that is not available to this user account. " +
-                           $"Shipping Provider Rules can no longer use a My filter.  " +
-                           $"This rule has been updated to use a filter that is not a My Filter and the provider will be changed to \"none\".";
+                    // If the selected filter has a user ID that is NOT the current user.
+                    if (layout.UserID != UserSession.User.UserID)
+                    {
+                        return $"A rule was using a My Filter that is not available to this user account. " +
+                               $"Shipping Provider Rules can no longer use a My filter.  " +
+                               $"This rule has been changed to use the \"None\" provider.";
+                    }
+                 
+                    // If the selected filter has a user ID that IS the current user.
+                    return $"A Rule is using a My Filter, '{filterCombo.SelectedFilterNode.Filter.Name}'. Shipping Provider Rules can no longer use a My Filter. Any changes to this rule will not be saved.";
                 }
 
                 return string.Empty;
@@ -188,27 +204,32 @@ namespace ShipWorks.Shipping.Settings
         /// </summary>
         public void SaveSettings()
         {
-            bool isOriginalFilterNodeAMyFilter = originalFilterNodeID != 0 && FilterHelper.IsMyFilter(originalFilterNodeID);
-
-            // If the selected filter node is not a my filter and the original was not a my filter, just carry on as usual.
-            if (!FilterHelper.IsMyFilter(filterCombo.SelectedFilterNode) && !isOriginalFilterNodeAMyFilter)
+            // If there was an original filter, check it to see if it belongs to the current user.  If not, change to All and None provider.
+            if (originalFilterNodeID != filterCombo.SelectedFilterNodeID)
             {
-                SaveRule(filterCombo.SelectedFilterNodeID, (int) shipmentTypeCombo.SelectedValue);
+                FilterLayoutEntity originalLayout = FilterLayoutContext.Current.GetNodeLayout(originalFilterNodeID);
+                if (originalLayout == null)
+                {
+                    SaveRule(noFilterSelectedID, (int) ShipmentTypeCode.None);
+                    return;
+                }
             }
 
-            // The selected filter is a my filter, so it must by this user's filter (we don't show other user's my filters).
-            // In this case we want to tell the user we will not be saving this shipping rule because a my filter
-            // is still selected.
-            if (IsMyFilter)
+            FilterLayoutEntity layout = FilterLayoutContext.Current.GetNodeLayout(filterCombo.SelectedFilterNode);
+            if (layout?.UserID != null)
             {
+                // If the selected filter has a user ID that is NOT the current user, don't save.
+                if (layout.UserID != UserSession.User.UserID)
+                {
+                    SaveRule(noFilterSelectedID, (int) ShipmentTypeCode.None);
+                }
+
+                // If the selected filter has a user ID that IS the current user, don't save, just return.
                 return;
             }
-
-            // If the original filter node id was a my filter, set the profile to the "none" profile and save
-            if (isOriginalFilterNodeAMyFilter)
-            {
-                SaveRule(originalFilterNodeID, (int) ShipmentTypeCode.None);
-            }
+         
+            // If the selected filter does not have a user ID, save it.
+            SaveRule(filterCombo.SelectedFilterNodeID, (int) shipmentTypeCombo.SelectedValue);
         }
 
         /// <summary>
