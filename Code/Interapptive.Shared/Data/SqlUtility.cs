@@ -380,6 +380,31 @@ namespace Interapptive.Shared.Data
         }
 
         /// <summary>
+        /// Gets the number of hosts connected to the current database
+        /// </summary>
+        public static int GetConectedHostCount(DbConnection con)
+        {
+            string commandText = ResourceUtility.ReadString("Interapptive.Shared.Resources.DistinctUserCount.sql");
+            return (int) DbCommandProvider.ExecuteScalar(con, commandText);
+        }
+
+        /// <summary>
+        /// Gets two values: (used space, free space)
+        /// </summary>
+        public static (int?, int?) GetUsedAndFreeSpace(DbConnection con)
+        {
+            string commandText = ResourceUtility.ReadString("Interapptive.Shared.Resources.FreeSpace.sql");
+            using (var dbReader = DbCommandProvider.ExecuteReader(con, commandText))
+            {
+                while(dbReader.Read())
+                {
+                    return ((int) dbReader[0], (int) dbReader[1]);
+                }
+            }
+            return (null, null);
+        }
+
+        /// <summary>
         /// Queries the database for running queries, and returns a pipe delimited CSV of the results.
         /// </summary>
         /// <returns>Pipe delimited CSV of running queries.</returns>
