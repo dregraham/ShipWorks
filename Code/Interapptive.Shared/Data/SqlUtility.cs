@@ -391,7 +391,7 @@ namespace Interapptive.Shared.Data
         /// <summary>
         /// Gets two values: (used space, free space)
         /// </summary>
-        public static (int?, int?) GetUsedAndFreeSpace(DbConnection con)
+        public static (int? usedSpace, int? freeSpace) GetUsedAndFreeSpace(DbConnection con)
         {
             string commandText = ResourceUtility.ReadString("Interapptive.Shared.Resources.FreeSpace.sql");
             using (var dbReader = DbCommandProvider.ExecuteReader(con, commandText))
