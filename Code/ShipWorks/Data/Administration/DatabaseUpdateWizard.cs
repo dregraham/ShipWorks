@@ -11,8 +11,10 @@ using System.Xml.Linq;
 using Autofac;
 using Interapptive.Shared;
 using Interapptive.Shared.Data;
+using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Threading;
 using Interapptive.Shared.UI;
+using Interapptive.Shared.Utility;
 using Interapptive.Shared.Win32;
 using log4net;
 using ShipWorks.ApplicationCore;
@@ -58,6 +60,9 @@ namespace ShipWorks.Data.Administration
         // Indicates if the firewall has been opened'
         bool showFirewallPage = false;
         bool firewallOpened = false;
+
+        bool backupAttempated = false;
+        bool backupCompleted = false;
 
         /// <summary>
         /// Open the upgrade window and returns true if the wizard completed with an OK result.
@@ -386,6 +391,7 @@ namespace ShipWorks.Data.Administration
         {
             using (DatabaseBackupDlg dlg = new DatabaseBackupDlg(userID3x))
             {
+                backupAttempated = true;
                 dlg.ShowDialog(this);
 
                 if (dlg.BackupCompleted)
@@ -408,6 +414,11 @@ namespace ShipWorks.Data.Administration
         {
             pictureBackupComplete.Visible = true;
             labelBackupComplete.Visible = true;
+
+            if (backupAttempated)
+            {
+                backupCompleted = true;
+            }
         }
 
         #endregion
@@ -684,24 +695,37 @@ namespace ShipWorks.Data.Administration
             progressDlg.Show(this);
 
             // Used for async invoke
-            MethodInvoker<IProgressProvider> invoker = new MethodInvoker<IProgressProvider>(AsyncUpdateDatabase);
+            MethodInvoker<IProgressProvider, TelemetricResult<bool>> invoker = new MethodInvoker<IProgressProvider, TelemetricResult<bool>>(AsyncUpdateDatabase);
+
+            TelemetricResult<bool> databaseUpdateResult = new TelemetricResult<bool>("Database Update");
 
             // Pass along user state
             Dictionary<string, object> userState = new Dictionary<string, object>();
             userState["invoker"] = invoker;
             userState["progressDlg"] = progressDlg;
+            userState["databaseUpdateResult"] = databaseUpdateResult;
 
             // Kick off the async upgrade process
-            invoker.BeginInvoke(progressDlg.ProgressProvider, new AsyncCallback(OnAsyncUpdateComplete), userState);
+            invoker.BeginInvoke(progressDlg.ProgressProvider, databaseUpdateResult, new AsyncCallback(OnAsyncUpdateComplete), userState);
         }
 
         /// <summary>
         /// Method meant to be called from an async invoker to update the database in the background
         /// </summary>
-        private void AsyncUpdateDatabase(IProgressProvider progressProvider)
+        private void AsyncUpdateDatabase(IProgressProvider progressProvider, TelemetricResult<bool> databaseUpdateResult)
         {
-            // Update to the latest v3 schema
-            SqlSchemaUpdater.UpdateDatabase(progressProvider, noSingleUserMode.Checked);
+            databaseUpdateResult.AddProperty("BackupAttempted", backupAttempated.ToString());
+            if (backupAttempated)
+            {
+                databaseUpdateResult.AddProperty("BackupSucceeded", backupCompleted.ToString());
+            }
+
+            databaseUpdateResult.AddProperty("WindowsAuth", SqlSession.Current.Configuration.WindowsAuth.ToString());
+            databaseUpdateResult.AddProperty("ServerMachine", SqlSession.Current.IsLocalServer().ToString());
+
+            databaseUpdateResult.RunTimedEvent(TelemetricEventType.DatabaseUpdate,
+                // Update to the latest v3 schema
+                () => SqlSchemaUpdater.UpdateDatabase(progressProvider, noSingleUserMode.Checked));
         }
 
         /// <summary>
@@ -716,8 +740,9 @@ namespace ShipWorks.Data.Administration
             }
 
             Dictionary<string, object> userState = (Dictionary<string, object>) result.AsyncState;
-            MethodInvoker<IProgressProvider> invoker = (MethodInvoker<IProgressProvider>) userState["invoker"];
+            MethodInvoker<IProgressProvider, TelemetricResult<bool>> invoker = (MethodInvoker<IProgressProvider, TelemetricResult<bool>>) userState["invoker"];
             ProgressDlg progressDlg = (ProgressDlg) userState["progressDlg"];
+            TelemetricResult<bool> databaseUpdateResult = (TelemetricResult<bool>) userState["databaseUpdateResult"];
 
             try
             {
@@ -747,6 +772,7 @@ namespace ShipWorks.Data.Administration
             }
             catch (Exception ex)
             {
+                databaseUpdateResult.AddProperty("Error", ex.Message);
                 if (ex is SqlScriptException || ex is SqlException)
                 {
                     log.ErrorFormat("An error occurred during upgrade.", ex);
@@ -763,6 +789,13 @@ namespace ShipWorks.Data.Administration
                 else
                 {
                     throw;
+                }
+            }
+            finally
+            {
+                using (ITrackedEvent telementryEvent = new TrackedEvent("Database.Update"))
+                {
+                    databaseUpdateResult.WriteTo(telementryEvent);
                 }
             }
         }

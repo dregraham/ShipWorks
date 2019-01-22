@@ -184,7 +184,7 @@ namespace Interapptive.Shared.Utility
         /// <summary>
         /// Write telemetric events to the passed in TrackedDurationEvent
         /// </summary>
-        public void WriteTo(ITrackedDurationEvent trackedDurationEvent)
+        public void WriteTo(ITrackedEvent trackedDurationEvent)
         {
             if (trackedDurationEvent == null)
             {
