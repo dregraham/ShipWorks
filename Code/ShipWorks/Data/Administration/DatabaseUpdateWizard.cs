@@ -6,6 +6,7 @@ using System.Data.Common;
 using System.Data.SqlClient;
 using System.Diagnostics;
 using System.Linq;
+using System.Reactive;
 using System.Windows.Forms;
 using System.Xml.Linq;
 using Autofac;
@@ -61,8 +62,8 @@ namespace ShipWorks.Data.Administration
         bool showFirewallPage = false;
         bool firewallOpened = false;
 
-        bool backupAttempated = false;
-        bool backupCompleted = false;
+        private bool backupAttempted = false;
+        private bool backupCompleted = false;
 
         /// <summary>
         /// Open the upgrade window and returns true if the wizard completed with an OK result.
@@ -391,7 +392,7 @@ namespace ShipWorks.Data.Administration
         {
             using (DatabaseBackupDlg dlg = new DatabaseBackupDlg(userID3x))
             {
-                backupAttempated = true;
+                backupAttempted = true;
                 dlg.ShowDialog(this);
 
                 if (dlg.BackupCompleted)
@@ -415,7 +416,7 @@ namespace ShipWorks.Data.Administration
             pictureBackupComplete.Visible = true;
             labelBackupComplete.Visible = true;
 
-            if (backupAttempated)
+            if (backupAttempted)
             {
                 backupCompleted = true;
             }
@@ -695,9 +696,9 @@ namespace ShipWorks.Data.Administration
             progressDlg.Show(this);
 
             // Used for async invoke
-            MethodInvoker<IProgressProvider, TelemetricResult<bool>> invoker = new MethodInvoker<IProgressProvider, TelemetricResult<bool>>(AsyncUpdateDatabase);
+            MethodInvoker<IProgressProvider, TelemetricResult<Unit>> invoker = AsyncUpdateDatabase;
 
-            TelemetricResult<bool> databaseUpdateResult = new TelemetricResult<bool>("Database Update");
+            TelemetricResult<Unit> databaseUpdateResult = new TelemetricResult<Unit>("Database Update");
             using (DbConnection con = SqlSession.Current.OpenConnection())
             {
                 int hosts = SqlUtility.GetConectedHostCount(con);
@@ -715,16 +716,16 @@ namespace ShipWorks.Data.Administration
             userState["databaseUpdateResult"] = databaseUpdateResult;
 
             // Kick off the async upgrade process
-            invoker.BeginInvoke(progressDlg.ProgressProvider, databaseUpdateResult, new AsyncCallback(OnAsyncUpdateComplete), userState);
+            invoker.BeginInvoke(progressDlg.ProgressProvider, databaseUpdateResult, OnAsyncUpdateComplete, userState);
         }
 
         /// <summary>
         /// Method meant to be called from an async invoker to update the database in the background
         /// </summary>
-        private void AsyncUpdateDatabase(IProgressProvider progressProvider, TelemetricResult<bool> databaseUpdateResult)
+        private void AsyncUpdateDatabase(IProgressProvider progressProvider, TelemetricResult<Unit> databaseUpdateResult)
         {
-            databaseUpdateResult.AddProperty("BackupAttempted", backupAttempated.ToString());
-            if (backupAttempated)
+            databaseUpdateResult.AddProperty("BackupAttempted", backupAttempted.ToString());
+            if (backupAttempted)
             {
                 databaseUpdateResult.AddProperty("BackupSucceeded", backupCompleted.ToString());
             }
@@ -734,7 +735,7 @@ namespace ShipWorks.Data.Administration
 
             databaseUpdateResult.RunTimedEvent(TelemetricEventType.DatabaseUpdate,
                 // Update to the latest v3 schema
-                () => SqlSchemaUpdater.UpdateDatabase(progressProvider, noSingleUserMode.Checked));
+                () => SqlSchemaUpdater.UpdateDatabase(progressProvider, databaseUpdateResult, noSingleUserMode.Checked));
         }
 
         /// <summary>
