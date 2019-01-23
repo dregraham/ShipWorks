@@ -824,10 +824,9 @@ namespace ShipWorks.Data.Administration
         /// </summary>
         private static void ExtractErrorDataForTelemetry(TelemetricResult<Unit> telemetricResult, Exception ex)
         {
-            telemetricResult.AddProperty("ExceptionMessage", ex.Message);
-
             // if the exception is a SqlScriptException the message contains info about which
             // sql script caused the exception
+            telemetricResult.AddProperty("ExceptionMessage", ex.Message);
             telemetricResult.AddProperty("ExceptionType", ex.GetType().ToString());
 
             if (ex is SqlException sqlException)
