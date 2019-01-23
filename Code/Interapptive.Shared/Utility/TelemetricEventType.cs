@@ -18,7 +18,7 @@ namespace Interapptive.Shared.Utility
         [Description("GetRates")]
         GetRates = 2,
 
-        [Description("DatabaseUpdate")]
-        DatabaseUpdate = 3
+        [Description("SchemaUpdate")]
+        SchemaUpdate = 3
     }
 }

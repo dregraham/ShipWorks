@@ -182,11 +182,11 @@ namespace Interapptive.Shared.Utility
         }
 
         /// <summary>
-        /// Write telemetric events to the passed in TrackedDurationEvent
+        /// Write telemetric events to the passed in TrackedEvent
         /// </summary>
-        public void WriteTo(ITrackedEvent trackedDurationEvent)
+        public void WriteTo(ITrackedEvent trackedEvent)
         {
-            if (trackedDurationEvent == null)
+            if (trackedEvent == null)
             {
                 return;
             }
@@ -198,18 +198,18 @@ namespace Interapptive.Shared.Utility
                 {
                     for (int i = 0; i < telemetryEventType.Value.Count; i++)
                     {
-                        trackedDurationEvent.AddMetric($"{telemetryEventType.Key}.{i + 1}", telemetryEventType.Value[i]);
+                        trackedEvent.AddMetric($"{telemetryEventType.Key}.{i + 1}", telemetryEventType.Value[i]);
                     }
                 }
 
                 long totalTimeForEventType = telemetryEventType.Value.Sum(v => v);
                 overallTime += totalTimeForEventType;
-                trackedDurationEvent.AddMetric($"{telemetryEventType.Key}", totalTimeForEventType);
+                trackedEvent.AddMetric($"{telemetryEventType.Key}", totalTimeForEventType);
             }
 
-            trackedDurationEvent.AddMetric(baseTelemetryName, overallTime);
+            trackedEvent.AddMetric(baseTelemetryName, overallTime);
 
-            properties.ForEach(x => trackedDurationEvent.AddProperty(x.Key, x.Value));
+            properties.ForEach(x => trackedEvent.AddProperty(x.Key, x.Value));
         }
 
         /// <summary>

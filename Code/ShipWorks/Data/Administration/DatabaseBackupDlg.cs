@@ -13,6 +13,7 @@ using Interapptive.Shared.Utility;
 using ShipWorks.Common.Threading;
 using ShipWorks.Data.Connection;
 using Interapptive.Shared.UI;
+using System.Reactive;
 
 namespace ShipWorks.Data.Administration
 {
@@ -23,6 +24,7 @@ namespace ShipWorks.Data.Administration
     {
         // Logger
         static readonly ILog log = LogManager.GetLogger(typeof(DatabaseBackupDlg));
+        private readonly TelemetricResult<Unit> telemetricResult;
 
         // The user that is performing the backup
         long userID;
@@ -34,22 +36,24 @@ namespace ShipWorks.Data.Administration
         /// Constructor.  We take the user as input since the backup can be done as apart of an upgrade, in
         /// which it may be an old database, and thus no ShipWorksSession.User.
         /// </summary>
-        public DatabaseBackupDlg(UserEntity user)
+        public DatabaseBackupDlg(UserEntity user, TelemetricResult<Unit> telemetricResult)
         {
             InitializeComponent();
 
             this.userID = user.UserID;
+            this.telemetricResult = telemetricResult;
         }
 
         /// <summary>
         /// Constructor.  We take the user as input since the backup can be done as apart of an upgrade, in
         /// which it may be an old database, and thus no ShipWorksSession.User.
         /// </summary>
-        public DatabaseBackupDlg(long userID)
+        public DatabaseBackupDlg(long userID, TelemetricResult<Unit> telemetricResult)
         {
             InitializeComponent();
 
             this.userID = userID;
+            this.telemetricResult = telemetricResult;
         }
 
         /// <summary>
@@ -91,12 +95,20 @@ namespace ShipWorks.Data.Administration
 
             // Create the backup object
             ShipWorksBackup backup = new ShipWorksBackup(SqlSession.Current, userID, progressProvider);
-            
+
             // Create the delegate to use to get it on another thread
-            MethodInvoker<string> invoker = new MethodInvoker<string>(backup.CreateBackup);
+            MethodInvoker<string, ShipWorksBackup> invoker = new MethodInvoker<string, ShipWorksBackup>(CreateBackup);
 
             // Initiate the backup
-            invoker.BeginInvoke(backupFile.Text, new AsyncCallback(OnBackupComplete), new object[] { invoker, progressDlg });
+            invoker.BeginInvoke(backupFile.Text, backup, new AsyncCallback(OnBackupComplete), new object[] { invoker, progressDlg });
+        }
+
+        /// <summary>
+        /// Create a backup
+        /// </summary>
+        private void CreateBackup(string fileName, ShipWorksBackup backup)
+        {
+            telemetricResult.RunTimedEvent("CreateBackup", () => backup.CreateBackup(fileName));
         }
 
         /// <summary>

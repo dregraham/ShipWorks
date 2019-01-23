@@ -8,6 +8,7 @@ using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
+using System.Reactive;
 using System.Reactive.Disposables;
 using System.Text;
 using System.Threading;
@@ -2446,7 +2447,7 @@ namespace ShipWorks
                     return;
                 }
 
-                using (DatabaseBackupDlg dlg = new DatabaseBackupDlg(UserSession.User))
+                using (DatabaseBackupDlg dlg = new DatabaseBackupDlg(UserSession.User, new TelemetricResult<Unit>("Database.Backup")))
                 {
                     dlg.ShowDialog(this);
                 }
