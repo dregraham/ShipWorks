@@ -2574,9 +2574,10 @@ namespace ShipWorks
         /// </summary>
         private void OnAboutShipWorks(object sender, EventArgs e)
         {
-            using (ShipWorksAboutDlg dlg = new ShipWorksAboutDlg())
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
-                dlg.ShowDialog(this);
+                IAboutShipWorksDialog aboutDlg = lifetimeScope.Resolve<IAboutShipWorksDialog>();
+                aboutDlg.ShowDialog();
             }
         }
 
@@ -2585,11 +2586,6 @@ namespace ShipWorks
         /// </summary>
         private void OnRequestHelp(object sender, EventArgs e)
         {
-            /*using (SubmitHelpRequestDlg dlg = new SubmitHelpRequestDlg())
-            {
-                dlg.ShowDialog(this);
-            }*/
-
             WebHelper.OpenUrl("http://www.interapptive.com/company/contact.html", this);
         }
 

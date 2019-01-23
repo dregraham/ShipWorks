@@ -233,6 +233,10 @@
       <DependentUpon>DefaultPickListTemplateDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="Dialogs\DefaultPickListTemplate\DefaultPickListTemplateDialogViewModel.cs" />
+    <Compile Include="Dialogs\AboutShipWorks\AboutShipWorksDialog.xaml.cs">
+      <DependentUpon>AboutShipWorksDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Dialogs\AboutShipWorks\AboutShipWorksViewModel.cs" />
     <Compile Include="Dialogs\Popup\IPopup.cs" />
     <Compile Include="Dialogs\Popup\IPopupViewModel.cs" />
     <Compile Include="Dialogs\Popup\Popup.xaml.cs">
@@ -381,6 +385,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Dialogs\AboutShipWorks\AboutShipWorksDialog.xaml" />
     <Page Include="Dialogs\Popup\Popup.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
