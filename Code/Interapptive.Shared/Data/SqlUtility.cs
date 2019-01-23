@@ -3,6 +3,7 @@ using System.Data;
 using System.Data.Common;
 using System.Data.SqlClient;
 using System.IO;
+using System.Reactive;
 using System.Text;
 using System.Threading;
 using Interapptive.Shared.Utility;
@@ -380,28 +381,66 @@ namespace Interapptive.Shared.Data
         }
 
         /// <summary>
+        /// Update telemetry with ingormation about the sql server.
+        /// </summary>
+        /// <param name="databaseUpdateResult"></param>
+        public static void UpdateDatabaseTelemetry(DbConnection con, TelemetricResult<Unit> databaseUpdateResult)
+        {
+            int? hostCount = SqlUtility.GetConectedHostCount(con);
+            databaseUpdateResult.AddProperty("ConnectedHosts", hostCount?.ToString() ?? "unknown");
+
+            var (usedSpace, freeSpace) = SqlUtility.GetUsedAndFreeSpace(con);
+            databaseUpdateResult.AddProperty("UsedSpace", usedSpace?.ToString() ?? "unknown");
+            databaseUpdateResult.AddProperty("FreeSpace", freeSpace?.ToString() ?? "unknown");
+        }
+
+
+        /// <summary>
         /// Gets the number of hosts connected to the current database
         /// </summary>
-        public static int GetConectedHostCount(DbConnection con)
+        private static int? GetConectedHostCount(DbConnection con)
         {
+            int? hostCount = null;
             string commandText = ResourceUtility.ReadString("Interapptive.Shared.Resources.DistinctUserCount.sql");
-            return (int) DbCommandProvider.ExecuteScalar(con, commandText);
+            
+            try
+            {
+                hostCount = (int) DbCommandProvider.ExecuteScalar(con, commandText);
+            } 
+            catch(SqlException ex)
+            {
+                log.Error("Error getting ConnectedHostCount", ex);
+            }
+
+            return hostCount;
         }
 
         /// <summary>
         /// Gets two values: (used space, free space)
         /// </summary>
-        public static (int? usedSpace, int? freeSpace) GetUsedAndFreeSpace(DbConnection con)
+        private static (int? usedSpace, int? freeSpace) GetUsedAndFreeSpace(DbConnection con)
         {
+            int? usedSpace = null;
+            int? freeSpace = null;
             string commandText = ResourceUtility.ReadString("Interapptive.Shared.Resources.FreeSpace.sql");
-            using (var dbReader = DbCommandProvider.ExecuteReader(con, commandText))
+
+            try
             {
-                while(dbReader.Read())
+                using (DbDataReader dbReader = DbCommandProvider.ExecuteReader(con, commandText))
                 {
-                    return ((int) dbReader[0], (int) dbReader[1]);
+                    if (dbReader.Read())
+                    {
+                        usedSpace = (int) dbReader[0];
+                        freeSpace = (int) dbReader[1];
+                    }
                 }
             }
-            return (null, null);
+            catch (SqlException ex)
+            {
+                log.Error("Error getting GetUsedAndFreeSpace", ex);
+            }
+
+            return (usedSpace, freeSpace);
         }
 
         /// <summary>

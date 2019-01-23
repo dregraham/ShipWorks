@@ -2,12 +2,12 @@
 DECLARE @drive TABLE (drive CHAR, size INT)
 
 INSERT INTO @drive
-	SELECT distinct SUBSTRING(Physical_Name,1,1), mf.size
+	SELECT DISTINCT SUBSTRING(Physical_Name,1,1), mf.size
 	FROM
 		sys.master_files mf
 	INNER JOIN 
 		sys.databases db ON db.database_id = mf.database_id
-	WHERE db.name = DB_NAME() AND SUBSTRING(Physical_Name,2,1)=':'
+	WHERE db.name = DB_NAME() AND SUBSTRING(Physical_Name,2,1) = ':'
 
 -- Get the freespace on the drives
 DECLARE @FreeSpace TABLE(Drive CHAR(1), Free INT)

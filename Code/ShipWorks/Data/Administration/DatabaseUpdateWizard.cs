@@ -701,15 +701,11 @@ namespace ShipWorks.Data.Administration
             MethodInvoker<IProgressProvider, TelemetricResult<Unit>> invoker = AsyncUpdateDatabase;
 
             TelemetricResult<Unit> databaseUpdateResult = new TelemetricResult<Unit>("Database.Update");
+            
             using (DbConnection con = SqlSession.Current.OpenConnection())
             {
-                int hosts = SqlUtility.GetConectedHostCount(con);
-                databaseUpdateResult.AddProperty("ConnectedHosts", hosts.ToString());
-
-                var (usedSpace, freeSpace) = SqlUtility.GetUsedAndFreeSpace(con);
-                databaseUpdateResult.AddProperty("UsedSpace", usedSpace?.ToString() ?? "unknown");
-                databaseUpdateResult.AddProperty("FreeSpace", freeSpace?.ToString() ?? "unknown");
-            }
+                SqlUtility.UpdateDatabaseTelemetry(con, databaseUpdateResult);
+            }           
 
             // Pass along user state
             Dictionary<string, object> userState = new Dictionary<string, object>();
