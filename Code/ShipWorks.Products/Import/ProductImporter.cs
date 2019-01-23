@@ -232,7 +232,8 @@ namespace ShipWorks.Products.Import
 
             ImportProductVariantAliases(productVariant, row.Sku, row);
 
-            productVariant.Product.IsActive = productVariant.IsActive;
+            // force parent product to be active because there is nowhere in the UI where you can set this value
+            productVariant.Product.IsActive = true;
         }
 
         /// <summary>
