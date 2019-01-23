@@ -786,16 +786,7 @@ namespace ShipWorks.Data.Administration
                 ExtractErrorDataForTelemetry(databaseUpdateResult, ex);
                 if (ex is SqlScriptException || ex is SqlException)
                 {
-                    log.ErrorFormat("An error occurred during upgrade.", ex);
-                    progressDlg.ProgressProvider.Terminate(ex);
-
-                    MessageHelper.ShowError(progressDlg, string.Format("An error occurred: {0}", ex.Message));
-                    progressDlg.CloseForced();
-
-                    panelUpgradingDatabase.Visible = false;
-                    NextEnabled = true;
-                    BackEnabled = true;
-                    CanCancel = true;
+                    HandleSqlException(progressDlg, ex);
                 }
                 else
                 {
@@ -809,6 +800,23 @@ namespace ShipWorks.Data.Administration
                     databaseUpdateResult.WriteTo(telementryEvent);
                 }
             }
+        }
+
+        /// <summary>
+        /// Handle a SqlException
+        /// </summary>
+        private void HandleSqlException(ProgressDlg progressDlg, Exception ex)
+        {
+            log.ErrorFormat("An error occurred during upgrade.", ex);
+            progressDlg.ProgressProvider.Terminate(ex);
+
+            MessageHelper.ShowError(progressDlg, string.Format("An error occurred: {0}", ex.Message));
+            progressDlg.CloseForced();
+
+            panelUpgradingDatabase.Visible = false;
+            NextEnabled = true;
+            BackEnabled = true;
+            CanCancel = true;
         }
 
         /// <summary>
