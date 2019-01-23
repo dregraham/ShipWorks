@@ -23,7 +23,7 @@ namespace Interapptive.Shared.Utility
         void CopyTo<A>(ITelemetryCollection<A> destination);
 
         /// <summary>
-        /// Write telemetric events to the passed in TrackedDurationEvent
+        /// Write telemetric events to the passed in TrackedEvent
         /// </summary>
         void WriteTo(ITrackedEvent trackedEvent);
     }
