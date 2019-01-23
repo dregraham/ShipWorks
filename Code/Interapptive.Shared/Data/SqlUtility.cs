@@ -389,7 +389,7 @@ namespace Interapptive.Shared.Data
             int? hostCount = SqlUtility.GetConectedHostCount(con);
             databaseUpdateResult.AddProperty("ConnectedHosts", hostCount?.ToString() ?? "unknown");
 
-            var (usedSpace, freeSpace) = SqlUtility.GetUsedAndFreeSpace(con);
+            var (usedSpace, freeSpace) = GetUsedAndFreeSpace(con, databaseUpdateResult);
             databaseUpdateResult.AddProperty("UsedSpace", usedSpace?.ToString() ?? "unknown");
             databaseUpdateResult.AddProperty("FreeSpace", freeSpace?.ToString() ?? "unknown");
         }
@@ -418,20 +418,25 @@ namespace Interapptive.Shared.Data
         /// <summary>
         /// Gets two values: (used space, free space)
         /// </summary>
-        private static (int? usedSpace, int? freeSpace) GetUsedAndFreeSpace(DbConnection con)
+        private static void GetUsedAndFreeSpace(DbConnection con, TelemetricResult<Unit> databaseUpdateResult)
         {
-            int? usedSpace = null;
-            int? freeSpace = null;
             string commandText = ResourceUtility.ReadString("Interapptive.Shared.Resources.FreeSpace.sql");
 
             try
             {
+                int fileIndex = 0;
                 using (DbDataReader dbReader = DbCommandProvider.ExecuteReader(con, commandText))
                 {
-                    if (dbReader.Read())
+                    while (dbReader.Read())
                     {
-                        usedSpace = (int) dbReader[0];
-                        freeSpace = (int) dbReader[1];
+                        string filePath = (string) dbReader[2];
+
+                        databaseUpdateResult.AddProperty($"UsedSpace.{fileIndex}", (string) dbReader[0]);
+                        databaseUpdateResult.AddProperty($"FreeSpace.{fileIndex}", (string) dbReader[1]);
+                        databaseUpdateResult.AddProperty($"FilePath.{fileIndex}", filePath);
+                        databaseUpdateResult.AddProperty($"IsUnc.{fileIndex}", IsUnc(filePath));
+
+                        fileIndex++;
                     }
                 }
             }
@@ -439,8 +444,21 @@ namespace Interapptive.Shared.Data
             {
                 log.Error("Error getting GetUsedAndFreeSpace", ex);
             }
+        }
 
-            return (usedSpace, freeSpace);
+        /// <summary>
+        /// Returns "True", "False", or "Unknown".
+        /// </summary>
+        private static string IsUnc(string filePath)
+        {
+            if(Uri.TryCreate(filePath, UriKind.RelativeOrAbsolute, out Uri uri))
+            {
+                return uri.IsUnc.ToString();
+            }
+            else
+            {
+                return "unknown";
+            }
         }
 
         /// <summary>
