@@ -348,7 +348,7 @@ namespace ShipWorks.Data.Administration
             // Go through each update script (they are already sorted in version order)
             foreach (SqlUpdateScript script in updateScripts)
             {
-                telemetryEvent.RunTimedEvent($"DbUpdateTime.{script.SchemaVersion}",
+                telemetryEvent.RunTimedEvent($"ExecutionTimeInMilliseconds.{script.SchemaVersion}",
                                              () => ExecuteUpdateScript(progress, updateScripts, scriptProgressValue, script));
             }
 
