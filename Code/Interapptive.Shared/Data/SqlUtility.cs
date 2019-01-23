@@ -381,10 +381,9 @@ namespace Interapptive.Shared.Data
         }
 
         /// <summary>
-        /// Update telemetry with ingormation about the sql server.
+        /// Update telemetry with information about the sql server.
         /// </summary>
-        /// <param name="databaseUpdateResult"></param>
-        public static void UpdateDatabaseTelemetry(DbConnection con, TelemetricResult<Unit> databaseUpdateResult)
+        public static void RecordDatabaseTelemetry(DbConnection con, TelemetricResult<Unit> databaseUpdateResult)
         {
             int? hostCount = SqlUtility.GetConectedHostCount(con);
             databaseUpdateResult.AddProperty("ConnectedHosts", hostCount?.ToString() ?? "unknown");
@@ -392,8 +391,7 @@ namespace Interapptive.Shared.Data
             GetUsedAndFreeSpace(con, databaseUpdateResult);
             GetConnectionProperties(con, databaseUpdateResult);
         }
-
-
+        
         /// <summary>
         /// Gets the number of hosts connected to the current database
         /// </summary>

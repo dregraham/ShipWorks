@@ -704,7 +704,7 @@ namespace ShipWorks.Data.Administration
 
             using (DbConnection con = SqlSession.Current.OpenConnection())
             {
-                SqlUtility.UpdateDatabaseTelemetry(con, databaseUpdateResult);
+                SqlUtility.RecordDatabaseTelemetry(con, databaseUpdateResult);
             }
 
             // Pass along user state
