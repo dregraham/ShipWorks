@@ -725,7 +725,7 @@ namespace ShipWorks.Data.Administration
             databaseUpdateResult.AddProperty("IsBackupAttempted", backupAttempted.ToString());
             if (backupAttempted)
             {
-                databaseUpdateResult.AddProperty("IsBackupSucceeded", backupCompleted.ToString());
+                databaseUpdateResult.AddProperty("IsBackupSuccessful", backupCompleted.ToString());
                 if (backupTelemetry != null)
                 {
                     backupTelemetry.CopyTo(databaseUpdateResult);
