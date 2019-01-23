@@ -620,6 +620,7 @@
     </CodeAnalysisDictionary>
     <EmbeddedResource Include="Resources\DistinctUserCount.sql" />
     <EmbeddedResource Include="Resources\FreeSpace.sql" />
+    <EmbeddedResource Include="Resources\ConnectionProperties.sql" />
     <Content Include="Resources\flags\afghanistan.png" />
     <Content Include="Resources\flags\albania.png" />
     <Content Include="Resources\flags\algeria.png" />

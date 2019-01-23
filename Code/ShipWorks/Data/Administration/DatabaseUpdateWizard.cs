@@ -701,11 +701,11 @@ namespace ShipWorks.Data.Administration
             MethodInvoker<IProgressProvider, TelemetricResult<Unit>> invoker = AsyncUpdateDatabase;
 
             TelemetricResult<Unit> databaseUpdateResult = new TelemetricResult<Unit>("Database.Update");
-            
+
             using (DbConnection con = SqlSession.Current.OpenConnection())
             {
                 SqlUtility.UpdateDatabaseTelemetry(con, databaseUpdateResult);
-            }           
+            }
 
             // Pass along user state
             Dictionary<string, object> userState = new Dictionary<string, object>();

@@ -389,9 +389,8 @@ namespace Interapptive.Shared.Data
             int? hostCount = SqlUtility.GetConectedHostCount(con);
             databaseUpdateResult.AddProperty("ConnectedHosts", hostCount?.ToString() ?? "unknown");
 
-            var (usedSpace, freeSpace) = GetUsedAndFreeSpace(con, databaseUpdateResult);
-            databaseUpdateResult.AddProperty("UsedSpace", usedSpace?.ToString() ?? "unknown");
-            databaseUpdateResult.AddProperty("FreeSpace", freeSpace?.ToString() ?? "unknown");
+            GetUsedAndFreeSpace(con, databaseUpdateResult);
+            GetConnectionProperties(con, databaseUpdateResult);
         }
 
 
@@ -402,17 +401,44 @@ namespace Interapptive.Shared.Data
         {
             int? hostCount = null;
             string commandText = ResourceUtility.ReadString("Interapptive.Shared.Resources.DistinctUserCount.sql");
-            
+
             try
             {
                 hostCount = (int) DbCommandProvider.ExecuteScalar(con, commandText);
-            } 
+            }
             catch(SqlException ex)
             {
                 log.Error("Error getting ConnectedHostCount", ex);
             }
 
             return hostCount;
+        }
+
+        /// <summary>
+        /// Gets two values: (used space, free space)
+        /// </summary>
+        private static void GetConnectionProperties(DbConnection con, TelemetricResult<Unit> databaseUpdateResult)
+        {
+            string commandText = ResourceUtility.ReadString("Interapptive.Shared.Resources.ConnectionProperties.sql");
+
+            try
+            {
+                using (DbDataReader dbReader = DbCommandProvider.ExecuteReader(con, commandText))
+                {
+                    dbReader.Read();
+
+                    databaseUpdateResult.AddProperty($"NetTransport", dbReader["net_transport"].ToString());
+                    databaseUpdateResult.AddProperty($"ProtocolType", dbReader["protocol_type"].ToString());
+                    databaseUpdateResult.AddProperty($"AuthScheme", dbReader["auth_scheme"].ToString());
+                    databaseUpdateResult.AddProperty($"LocalNetAddress", dbReader["local_net_address"].ToString());
+                    databaseUpdateResult.AddProperty($"LocalTcpPort", dbReader["local_tcp_port"].ToString());
+                    databaseUpdateResult.AddProperty($"ClientNetAddress", dbReader["client_net_address"].ToString());
+                }
+            }
+            catch (SqlException ex)
+            {
+                log.Error("Error getting connection properties", ex);
+            }
         }
 
         /// <summary>
@@ -429,10 +455,10 @@ namespace Interapptive.Shared.Data
                 {
                     while (dbReader.Read())
                     {
-                        string filePath = (string) dbReader[2];
+                        string filePath = (string) dbReader[0];
 
-                        databaseUpdateResult.AddProperty($"UsedSpace.{fileIndex}", (string) dbReader[0]);
-                        databaseUpdateResult.AddProperty($"FreeSpace.{fileIndex}", (string) dbReader[1]);
+                        databaseUpdateResult.AddProperty($"UsedSpace.{fileIndex}", dbReader[1].ToString());
+                        databaseUpdateResult.AddProperty($"FreeSpace.{fileIndex}", dbReader[2].ToString());
                         databaseUpdateResult.AddProperty($"FilePath.{fileIndex}", filePath);
                         databaseUpdateResult.AddProperty($"IsUnc.{fileIndex}", IsUnc(filePath));
 
