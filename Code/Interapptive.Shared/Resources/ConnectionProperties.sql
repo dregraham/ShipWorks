@@ -4,5 +4,4 @@
    CONNECTIONPROPERTY('auth_scheme') AS auth_scheme,
    CONNECTIONPROPERTY('local_net_address') AS local_net_address,
    CONNECTIONPROPERTY('local_tcp_port') AS local_tcp_port,
-   CONNECTIONPROPERTY('client_net_address') AS client_net_address,
-   CONNECTIONPROPERTY('physical_net_transport') AS client_net_address
+   CONNECTIONPROPERTY('client_net_address') AS client_net_address
