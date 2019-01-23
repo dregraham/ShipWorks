@@ -123,7 +123,7 @@ namespace ShipWorks.Data.Administration
             }
 
             // Extract our stateful data
-            MethodInvoker<string> invoker = (MethodInvoker<string>) ((object[]) asyncResult.AsyncState)[0];
+            MethodInvoker<string, ShipWorksBackup> invoker = (MethodInvoker<string, ShipWorksBackup>) ((object[]) asyncResult.AsyncState)[0];
             ProgressDlg progressDlg = (ProgressDlg) ((object[]) asyncResult.AsyncState)[1];
 
             try
