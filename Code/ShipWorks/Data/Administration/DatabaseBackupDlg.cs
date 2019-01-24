@@ -14,6 +14,7 @@ using ShipWorks.Common.Threading;
 using ShipWorks.Data.Connection;
 using Interapptive.Shared.UI;
 using System.Reactive;
+using System.IO;
 
 namespace ShipWorks.Data.Administration
 {
@@ -108,7 +109,18 @@ namespace ShipWorks.Data.Administration
         /// </summary>
         private void CreateBackup(string fileName, ShipWorksBackup backup)
         {
-            telemetricResult.RunTimedEvent("CreateBackup", () => backup.CreateBackup(fileName));
+            telemetricResult.RunTimedEvent("CreateBackupTimeInMilliseconds", () => backup.CreateBackup(fileName));
+
+            try
+            {
+                // This can fail for multiple reasons like the file is missing or we dont have permissions
+                // ignore any failure
+                double backupSize = new FileInfo(fileName).Length / 1024f / 1024f;
+                telemetricResult.AddProperty("BackupSizeInMegabytes", backupSize.ToString("0.##"));
+            }
+            catch (Exception)
+            {
+            }
         }
 
         /// <summary>
