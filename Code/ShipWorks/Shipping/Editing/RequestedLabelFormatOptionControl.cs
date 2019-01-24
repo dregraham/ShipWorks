@@ -15,7 +15,7 @@ namespace ShipWorks.Shipping.Editing
     /// </summary>
     public partial class RequestedLabelFormatOptionControl : UserControl
     {
-        static readonly ILog log = LogManager.GetLogger(typeof(RequestedLabelFormatOptionControl));
+        private static readonly ILog log = LogManager.GetLogger(typeof(RequestedLabelFormatOptionControl));
 
         private ShipmentType shipmentType;
 
@@ -98,10 +98,10 @@ namespace ShipWorks.Shipping.Editing
                 ShippingProfileEntity profile = shippingProfileManager.GetOrCreatePrimaryProfile(shipmentType);
 
                 IShippingProfileService shippingProfileService = lifetimeScope.Resolve<IShippingProfileService>();
-                IShippingProfile shippingProfile = shippingProfileService.Get(profile.ShippingProfileID);
+                IEditableShippingProfile shippingProfile = shippingProfileService.GetEditable(profile.ShippingProfileID);
 
                 ShippingProfileEditorDlg profileEditor = lifetimeScope.Resolve<ShippingProfileEditorDlg>(
-                    new TypedParameter(typeof(IShippingProfile), shippingProfile)
+                    TypedParameter.From(shippingProfile)
                 );
                 profileEditor.ShowDialog(this);
             }

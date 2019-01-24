@@ -1,10 +1,23 @@
-﻿using System.Data.SqlClient;
+﻿using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Data.Common;
+using System.Data.SqlClient;
+using System.Linq;
+using System.Threading.Tasks;
 using SD.LLBLGen.Pro.ORMSupportClasses;
+using SD.LLBLGen.Pro.QuerySpec;
 using ShipWorks.Data.Administration.Recovery;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.FactoryClasses;
 using ShipWorks.Data.Model.HelperClasses;
+using ShipWorks.Filters;
+using ShipWorks.Filters.Content;
+using ShipWorks.Filters.Search;
+using ShipWorks.Stores.Communication;
 using ShipWorks.Stores.Content;
+using ShipWorks.Stores.Orders;
 
 namespace ShipWorks.Stores
 {
@@ -13,14 +26,19 @@ namespace ShipWorks.Stores
     /// </summary>
     public class OrderRepository : IOrderRepository
     {
+        private readonly ISqlSession sqlSession;
         private readonly ISqlAdapterFactory sqlAdapterFactory;
         private readonly ISqlAdapterRetryFactory sqlAdapterRetryFactory;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="OrderRepository"/> class.
         /// </summary>
-        public OrderRepository(ISqlAdapterFactory sqlAdapterFactory, ISqlAdapterRetryFactory sqlAdapterRetryFactory)
+        public OrderRepository(
+            ISqlSession sqlSession,
+            ISqlAdapterFactory sqlAdapterFactory, 
+            ISqlAdapterRetryFactory sqlAdapterRetryFactory)
         {
+            this.sqlSession = sqlSession;
             this.sqlAdapterFactory = sqlAdapterFactory;
             this.sqlAdapterRetryFactory = sqlAdapterRetryFactory;
         }

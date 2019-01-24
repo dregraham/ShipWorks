@@ -1,8 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
-using System.Reactive.Linq;
 using System.Windows.Forms;
 using Autofac;
+using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Data.Model.EntityClasses;
@@ -17,7 +18,7 @@ namespace ShipWorks.Shipping.Settings.Defaults
     /// </summary>
     public partial class ShippingDefaultsControl : UserControl
     {
-        ShipmentType shipmentType;
+        private ShipmentType shipmentType;
 
         /// <summary>
         /// A profile has been edited in some way
@@ -42,6 +43,20 @@ namespace ShipWorks.Shipping.Settings.Defaults
             get
             {
                 return panelSettingsArea.Controls.OfType<ShippingDefaultsRuleControl>().Any(x => x.IsFilterDisabled);
+            }
+        }
+
+        /// <summary>
+        /// Gets a list of shipping rules validation errors.
+        /// </summary>
+        public List<string> GetFilterValidationErrors
+        {
+            get
+            {
+                return panelSettingsArea.Controls.OfType<ShippingDefaultsRuleControl>()
+                    .Select(x => x.ValidationErrors)
+                    .Where(x => !x.IsNullOrWhiteSpace())
+                    .ToList();
             }
         }
 
@@ -119,10 +134,16 @@ namespace ShipWorks.Shipping.Settings.Defaults
                 ShippingProfileEntity profile = shippingProfileManager.GetOrCreatePrimaryProfile(shipmentType);
 
                 IShippingProfileService shippingProfileService = lifetimeScope.Resolve<IShippingProfileService>();
-                IShippingProfile shippingProfile = shippingProfileService.Get(profile.ShippingProfileID);
-                
+
+                if (shippingProfileService.Get(profile.ShippingProfileID) == null)
+                {
+                    ShippingProfileManager.SaveProfile(profile);
+                }
+
+                IEditableShippingProfile shippingProfile = shippingProfileService.GetEditable(profile.ShippingProfileID);
+
                 ShippingProfileEditorDlg profileEditor = lifetimeScope.Resolve<ShippingProfileEditorDlg>(
-                    new TypedParameter(typeof(IShippingProfile), shippingProfile)
+                    new TypedParameter(typeof(IEditableShippingProfile), shippingProfile)
                 );
                 profileEditor.ShowDialog(this);
             }
@@ -170,7 +191,7 @@ namespace ShipWorks.Shipping.Settings.Defaults
         /// <summary>
         /// Delete the rule that generated the event
         /// </summary>
-        void OnDeleteRule(object sender, EventArgs e)
+        private void OnDeleteRule(object sender, EventArgs e)
         {
             ShippingDefaultsRuleControl ruleControl = (ShippingDefaultsRuleControl) sender;
             ShippingDefaultsRuleEntity rule = ruleControl.Rule;
@@ -190,7 +211,7 @@ namespace ShipWorks.Shipping.Settings.Defaults
         /// <summary>
         /// Move the given rule down
         /// </summary>
-        void OnMoveDownRule(object sender, EventArgs e)
+        private void OnMoveDownRule(object sender, EventArgs e)
         {
             ShippingDefaultsRuleControl ruleControl = (ShippingDefaultsRuleControl) sender;
             int index = panelSettingsArea.Controls.IndexOf(ruleControl);
@@ -206,7 +227,7 @@ namespace ShipWorks.Shipping.Settings.Defaults
         /// <summary>
         /// Move the given rule up
         /// </summary>
-        void OnMoveUpRule(object sender, EventArgs e)
+        private void OnMoveUpRule(object sender, EventArgs e)
         {
             ShippingDefaultsRuleControl ruleControl = (ShippingDefaultsRuleControl) sender;
             int index = panelSettingsArea.Controls.IndexOf(ruleControl);

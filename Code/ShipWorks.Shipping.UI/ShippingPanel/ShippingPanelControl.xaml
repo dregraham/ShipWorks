@@ -6,7 +6,8 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:shipmentControl="clr-namespace:ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl"
              xmlns:local="clr-namespace:ShipWorks.Shipping.UI.ShippingPanel"
-             xmlns:vc="clr-namespace:ShipWorks.Shipping.UI.ShippingPanel.ValueConverters"
+             xmlns:vc="clr-namespace:ShipWorks.Shipping.UI.ValueConverters"
+             xmlns:localvc="clr-namespace:ShipWorks.Shipping.UI.ShippingPanel.ValueConverters"
              xmlns:ui="http://schemas.shipworks.com/ui"
              xmlns:sw="http://schemas.shipworks.com/sw"
              xmlns:customsControl="clr-namespace:ShipWorks.Shipping.UI.ShippingPanel.CustomsControl"
@@ -39,7 +40,7 @@
             <ui:BooleanToVisibilityConverter x:Key="BooleanToVisibility" />
             <ui:BooleanToVisibilityConverter x:Key="BooleanToVisibilityNegated" Invert="True" />
             <ui:BooleanComparisonConverter x:Key="BooleanAnd" BooleanOperator="{x:Static ui:BooleanOperator.And}" />
-            <vc:ShipmentTypeListConverter x:Key="ShipmentTypeList" />
+            <localvc:ShipmentTypeListConverter x:Key="ShipmentTypeList" />
             <vc:ShipmentTypeToOriginAddressesConverter x:Key="ShipmentTypeToOriginAddresses" />
             <vc:ShipmentTypeToAccountsConverter x:Key="ShipmentTypeToAccountsConverter" />
             <vc:OriginAddressListConverter x:Key="OriginAddressList" />

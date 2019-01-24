@@ -375,6 +375,10 @@ namespace ShipWorks.ApplicationCore.Licensing
                     rateResultCount.Apply(target);
                 }
             }
+            else if (shipmentTypeCode == ShipmentTypeCode.Amazon)
+            {
+                ShippingPolicies.Current.Apply(shipmentTypeCode, target);
+            }
         }
 
         /// <summary>

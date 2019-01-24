@@ -42,8 +42,11 @@ namespace ShipWorks.SingleScan.Tests
             scheduleProvider.Setup(s => s.Default).Returns(defaultScheduler);
             testObject = mock.Create<AutoPrintServicePipeline>();
 
+            Mock<IFilterNodeContentEntity> filterContent = mock.Mock<IFilterNodeContentEntity>();
+            filterContent.SetupGet(f => f.Count).Returns(1);
+
             singleScanFilterUpdateCompleteMessage = new SingleScanFilterUpdateCompleteMessage(this,
-                mock.Mock<IFilterNodeContentEntity>().Object, 5);
+                filterContent.Object, 5);
 
             SetAllowAutoPrint(true);
         }

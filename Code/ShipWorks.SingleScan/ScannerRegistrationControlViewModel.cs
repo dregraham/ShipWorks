@@ -4,9 +4,9 @@ using System.Reactive.Linq;
 using System.Reflection;
 using System.Windows.Input;
 using GalaSoft.MvvmLight.CommandWpf;
-using Interapptive.Shared.UI;
-using Interapptive.Shared.Utility;
 using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.UI;
+using log4net;
 using ShipWorks.Common.IO.Hardware.Scanner;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Core.UI;
@@ -23,6 +23,7 @@ namespace ShipWorks.SingleScan
         private readonly IScannerRegistrationListener scannerRegistrationListener;
         private readonly IScannerIdentifier scannerIdentifier;
         private readonly IMessageHelper messageHelper;
+        private readonly ILog log;
         private IntPtr deviceHandle;
         private readonly IDisposable scanSubscription;
         private readonly PropertyChangedHandler handler;
@@ -34,11 +35,17 @@ namespace ShipWorks.SingleScan
         /// <summary>
         /// Constructor
         /// </summary>
-        public ScannerRegistrationControlViewModel(IScannerRegistrationListener scannerRegistrationListener, IMessenger messenger, IScannerIdentifier scannerIdentifier, IMessageHelper messageHelper)
+        public ScannerRegistrationControlViewModel(
+            IScannerRegistrationListener scannerRegistrationListener,
+            IMessenger messenger,
+            IScannerIdentifier scannerIdentifier,
+            IMessageHelper messageHelper,
+            Func<Type, ILog> createLog)
         {
             this.scannerRegistrationListener = scannerRegistrationListener;
             this.scannerIdentifier = scannerIdentifier;
             this.messageHelper = messageHelper;
+            log = createLog(GetType());
             SaveScannerCommand = new RelayCommand(SaveScanner);
             CancelCommand = new RelayCommand(Close);
             handler = new PropertyChangedHandler(this, () => PropertyChanged);
@@ -115,19 +122,14 @@ namespace ShipWorks.SingleScan
         /// <summary>
         /// Saves the scanner.
         /// </summary>
-        private void SaveScanner()
-        {
-            GenericResult<string> result = scannerIdentifier.Save(deviceHandle);
-
-            if (!result.Success)
-            {
-                messageHelper.ShowError(result.Message);
-            }
-            else
-            {
-                Close();
-            }
-        }
+        private void SaveScanner() =>
+            scannerIdentifier.Save(deviceHandle)
+                .Do(_ => Close())
+                .OnFailure(ex =>
+                {
+                    log.Error(ex);
+                    messageHelper.ShowError(ex.Message);
+                });
 
         /// <summary>
         /// Executes the close action

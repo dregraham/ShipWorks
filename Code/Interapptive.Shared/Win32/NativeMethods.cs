@@ -1,10 +1,10 @@
-using Microsoft.Win32.SafeHandles;
 using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows.Forms;
+using Microsoft.Win32.SafeHandles;
 
 namespace Interapptive.Shared.Win32
 {
@@ -14,6 +14,8 @@ namespace Interapptive.Shared.Win32
     [NDependIgnore]
     [SuppressMessage("SonarLint", "S1104: Fields should not have public accessibility",
         Justification = "Most of the public fields are for COM interop and need to be that way")]
+    [SuppressMessage("SonarLint", "S4200: Native methods should be wrapped",
+            Justification = "This is legacy code. If there's time, we can address the issue.")]
     public static class NativeMethods
     {
         #region Methods
@@ -281,7 +283,7 @@ namespace Interapptive.Shared.Win32
         {
             using (Graphics g = Graphics.FromHwnd(IntPtr.Zero))
             {
-                return GetDeviceCaps(g.GetHdc(), (int)deviceCap);
+                return GetDeviceCaps(g.GetHdc(), (int) deviceCap);
             }
         }
 
@@ -291,7 +293,7 @@ namespace Interapptive.Shared.Win32
         /// <returns></returns>
         public static long GetPhysicallyInstalledSystemMemory()
         {
-            return (long)new Microsoft.VisualBasic.Devices.ComputerInfo().TotalPhysicalMemory;
+            return (long) new Microsoft.VisualBasic.Devices.ComputerInfo().TotalPhysicalMemory;
         }
 
         #region Constants
@@ -431,7 +433,7 @@ namespace Interapptive.Shared.Win32
         public const int RGN_COPY = 5;
 
         public const int SC_MANAGER_ALL_ACCESS = 0x000F003F;
-        public const int SERVICE_NO_CHANGE = unchecked((int)0xffffffff); //this value is found in winsvc.h
+        public const int SERVICE_NO_CHANGE = unchecked((int) 0xffffffff); //this value is found in winsvc.h
         public const int SERVICE_QUERY_CONFIG = 0x00000001;
         public const int SERVICE_CHANGE_CONFIG = 0x00000002;
 
@@ -472,10 +474,10 @@ namespace Interapptive.Shared.Win32
 
         public const int S_OK = 0;
         public const int S_FALSE = 1;
-        public const int E_NOTIMPL = unchecked((int)0x80004001);
-        public const int E_INVALIDARG = unchecked((int)0x80070057);
-        public const int E_NOINTERFACE = unchecked((int)0x80004002);
-        public const int E_POINTER = unchecked((int)0x80004003);
+        public const int E_NOTIMPL = unchecked((int) 0x80004001);
+        public const int E_INVALIDARG = unchecked((int) 0x80070057);
+        public const int E_NOINTERFACE = unchecked((int) 0x80004002);
+        public const int E_POINTER = unchecked((int) 0x80004003);
 
         public const int TBCD_TICS = 0x0001;
         public const int TBCD_THUMB = 0x0002;
@@ -714,7 +716,7 @@ namespace Interapptive.Shared.Win32
         public const int WM_REFLECT = WM_USER + 0x1C00;
 
         public const int WS_OVERLAPPED = 0x00000000;
-        public const int WS_POPUP = unchecked((int)0x80000000);
+        public const int WS_POPUP = unchecked((int) 0x80000000);
         public const int WS_CHILD = 0x40000000;
         public const int WS_MINIMIZE = 0x20000000;
         public const int WS_VISIBLE = 0x10000000;
@@ -736,7 +738,7 @@ namespace Interapptive.Shared.Win32
         public const int WS_TILED = 0x00000000;
         public const int WS_ICONIC = 0x20000000;
         public const int WS_SIZEBOX = 0x00040000;
-        public const int WS_POPUPWINDOW = unchecked((int)0x80880000);
+        public const int WS_POPUPWINDOW = unchecked((int) 0x80880000);
         public const int WS_OVERLAPPEDWINDOW = 0x00CF0000;
         public const int WS_TILEDWINDOW = 0x00CF0000;
         public const int WS_CHILDWINDOW = 0x40000000;
@@ -768,9 +770,9 @@ namespace Interapptive.Shared.Win32
         public const int SEM_NOGPFAULTERRORBOX = 0x0002;
         public const int SEM_NOOPENFILEERRORBOX = 0x8000;
 
-        public const int ATTACH_PARENT_PROCESS = unchecked((int)0xFFFFFFFF);
-        public const int STD_OUTPUT_HANDLE = unchecked((int)0xFFFFFFF5);
-        public const int STD_ERROR_HANDLE = unchecked((int)0xFFFFFFF4);
+        public const int ATTACH_PARENT_PROCESS = unchecked((int) 0xFFFFFFFF);
+        public const int STD_OUTPUT_HANDLE = unchecked((int) 0xFFFFFFF5);
+        public const int STD_ERROR_HANDLE = unchecked((int) 0xFFFFFFF4);
         public const int DUPLICATE_SAME_ACCESS = 2;
 
         public const int WHEEL_DELTA = 120;
@@ -959,7 +961,7 @@ namespace Interapptive.Shared.Win32
 
         public static int HIWORD(IntPtr n)
         {
-            return HIWORD((int)((long)n));
+            return HIWORD((int) ((long) n));
         }
 
         public static int HIWORD(int n)
@@ -974,27 +976,27 @@ namespace Interapptive.Shared.Win32
 
         public static int LOWORD(IntPtr n)
         {
-            return LOWORD((int)((long)n));
+            return LOWORD((int) ((long) n));
         }
 
         public static int SignedHIWORD(int n)
         {
-            return (short)((n >> 0x10) & 0xffff);
+            return (short) ((n >> 0x10) & 0xffff);
         }
 
         public static int SignedHIWORD(IntPtr n)
         {
-            return SignedHIWORD((int)((long)n));
+            return SignedHIWORD((int) ((long) n));
         }
 
         public static int SignedLOWORD(int n)
         {
-            return (short)(n & 0xffff);
+            return (short) (n & 0xffff);
         }
 
         public static int SignedLOWORD(IntPtr n)
         {
-            return SignedLOWORD((int)((long)n));
+            return SignedLOWORD((int) ((long) n));
         }
 
         #endregion

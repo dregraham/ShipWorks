@@ -4,6 +4,9 @@ using Interapptive.Shared.Collections;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
+using ShipWorks.ApplicationCore.Options;
+using ShipWorks.Data.Connection;
+using ShipWorks.Settings;
 using ShipWorks.Shared.Users;
 
 namespace ShipWorks.Users
@@ -16,15 +19,22 @@ namespace ShipWorks.Users
     {
         private readonly IUserSession userSession;
         private readonly IDateTimeProvider dateTimeProvider;
+        private readonly ISqlAdapterFactory sqlAdapterFactory;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public CurrentUserSettings(IUserSession userSession, IDateTimeProvider dateTimeProvider)
+        public CurrentUserSettings(IUserSession userSession, IDateTimeProvider dateTimeProvider, ISqlAdapterFactory sqlAdapterFactory)
         {
             this.dateTimeProvider = dateTimeProvider;
+            this.sqlAdapterFactory = sqlAdapterFactory;
             this.userSession = userSession;
         }
+
+        /// <summary>
+        /// Gets the current user session
+        /// </summary>
+        public IUserSession UserSession => userSession;
 
         /// <summary>
         /// Should the specified notification type be shown
@@ -62,7 +72,7 @@ namespace ShipWorks.Users
 
             return notificationSettings.CanShowAfter.HasValue && date > notificationSettings.CanShowAfter;
         }
-		
+
         /// <summary>
         /// Start showing the given notification for the user
         /// </summary>
@@ -86,11 +96,11 @@ namespace ShipWorks.Users
         {
             DialogSettings settings = userSession.Settings?.DialogSettingsObject;
 
-			if (settings == null)
-			{
-				return;
-			}
-			
+            if (settings == null)
+            {
+                return;
+            }
+
             settings.NotificationDialogSettings = settings.NotificationDialogSettings
                 .Where(x => x.Type != notificationType)
                 .Append(new NotificationDialogSetting(notificationType))
@@ -115,5 +125,30 @@ namespace ShipWorks.Users
 
             userSession.UpdateSettings(x => x.DialogSettingsObject = settings);
         }
+
+        /// <summary>
+        /// Returns the local UIMode of the current user
+        /// </summary>
+        public UIMode GetUIMode() => userSession.Settings.UIMode;
+
+        /// <summary>
+        /// Sets the UIMode for the current user
+        /// </summary>
+        public void SetUIMode(UIMode uiMode)
+        {
+            userSession.User.Settings.UIMode = uiMode;
+
+            // Save the settings
+            using (ISqlAdapter adapter = sqlAdapterFactory.Create())
+            {
+                adapter.SaveAndRefetch(userSession.User.Settings);
+            }
+        }
+
+        /// <summary>
+        /// Returns the current user's single scan settings.
+        /// </summary>
+        /// <returns></returns>
+        public SingleScanSettings? GetSingleScanSettings() => (SingleScanSettings?) userSession.Settings?.SingleScanSettings;
     }
 }

@@ -77,6 +77,12 @@ namespace ShipWorks.Tests.Core
                 }
                 else
                 {
+                    // If the enum doesn't need the Descrition attribute, just continue to the next enum.
+                    if (ignoreMissingDescriptionEnums.Contains(type.FullName.ToUpperInvariant()))
+                    {
+                        continue;
+                    }
+
                     foreach (var enumValueName in Enum.GetNames(type))
                     {
                         var memberInfos = type.GetMember(enumValueName);
@@ -102,6 +108,15 @@ namespace ShipWorks.Tests.Core
             type.GetCustomAttribute<ObfuscationAttribute>(false) != null;
 
         /// <summary>
+        /// Enums that don't need the description attribute
+        /// </summary>
+        private List<string> ignoreMissingDescriptionEnums = new List<string>()
+        {
+            "ShipWorks.OrderLookup.FieldManager.SectionLayoutFieldIDs".ToUpperInvariant(),
+            "ShipWorks.OrderLookup.FieldManager.SectionLayoutIDs".ToUpperInvariant()
+        };
+
+        /// <summary>
         /// If namespace begins with these values, they are ignored.
         /// </summary>
         private List<string> ignoreShipmentTypeNameParts = new List<string>
@@ -123,7 +138,7 @@ namespace ShipWorks.Tests.Core
                 "ShipWorks.Stores.Platforms.Walmart.DTO".ToUpperInvariant()
             };
 
-        private HashSet<Type> ignoreTypes = new HashSet<Type>
+        private readonly HashSet<Type> ignoreTypes = new HashSet<Type>
         {
             typeof(FedExRateRequestOptions),
         };
@@ -223,6 +238,7 @@ namespace ShipWorks.Tests.Core
                 "ShipWorks.Filters.Content.FilterDefinitionSourceType".ToUpperInvariant(),
                 "ShipWorks.Filters.FilterHelper+FilterImageType".ToUpperInvariant(),
                 "ShipWorks.Filters.Management.FilterEditingResult".ToUpperInvariant(),
+                "ShipWorks.OrderLookup.OrderClearReason".ToUpperInvariant(),
                 "ShipWorks.Shipping.ShipmentUpdateOperationResult".ToUpperInvariant(),
                 "ShipWorks.Shipping.Carriers.FedEx.Enums.FedExEmailNotificationType".ToUpperInvariant(),
                 "ShipWorks.Shipping.Carriers.FedEx.Enums.FedExMaskedDataType".ToUpperInvariant(),

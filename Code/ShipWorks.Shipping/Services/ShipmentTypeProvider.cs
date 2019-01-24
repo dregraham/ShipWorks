@@ -21,7 +21,6 @@ namespace ShipWorks.Shipping.Services
     {
         private readonly IShipmentTypeManager shipmentTypeManager;
         private IEnumerable<ShipmentTypeCode> available;
-        private static readonly IEnumerable<ShipmentTypeCode> amazonCarriers = new[] { ShipmentTypeCode.Amazon };
         private readonly IDisposable subscription;
 
         /// <summary>
@@ -40,12 +39,10 @@ namespace ShipWorks.Shipping.Services
         /// </summary>
         public IEnumerable<ShipmentTypeCode> GetAvailableShipmentTypes(ICarrierShipmentAdapter shipmentAdapter)
         {
-            if (shipmentAdapter.ShipmentTypeCode == ShipmentTypeCode.Amazon)
-            {
-                return amazonCarriers;
-            }
-
-            return available.Except(amazonCarriers);
+            return shipmentTypeManager.ShipmentTypes
+                .Where(s => available.Contains(s.ShipmentTypeCode))
+                .Where(t => t.IsAllowedFor(shipmentAdapter.Shipment))
+                .Select(t => t.ShipmentTypeCode).ToList();
         }
 
         /// <summary>

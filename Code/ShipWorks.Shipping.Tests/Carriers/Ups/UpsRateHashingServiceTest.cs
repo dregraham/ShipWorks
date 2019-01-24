@@ -68,7 +68,6 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS
         [InlineData("SaturdayDelivery", true)]
         [InlineData("CodEnabled", true)]
         [InlineData("CodPaymentType", 1)]
-        [InlineData("Service", 1)]
         [InlineData("DeliveryConfirmation", 1)]
         public void GetRatingHash_ReturnsDifferentHash_WhenUpsShipmentRatingFieldChanges(string field, object value)
         {

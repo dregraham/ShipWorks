@@ -448,7 +448,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 		/// <summary> The ImportColumnSource property of the Entity OdbcStore<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "OdbcStore"."ImportColumnSource"<br/>
-		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 2048<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 2147483647<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
 		public virtual System.String ImportColumnSource
 		{
@@ -488,7 +488,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 		/// <summary> The UploadColumnSource property of the Entity OdbcStore<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "OdbcStore"."UploadColumnSource"<br/>
-		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 2048<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 2147483647<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
 		public virtual System.String UploadColumnSource
 		{

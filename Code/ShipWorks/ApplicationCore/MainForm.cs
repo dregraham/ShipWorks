@@ -58,6 +58,7 @@ using ShipWorks.Data.Connection;
 using ShipWorks.Data.Grid.Columns;
 using ShipWorks.Data.Grid.DetailView;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Editions;
 using ShipWorks.Email;
@@ -71,15 +72,13 @@ using ShipWorks.Filters.Search;
 using ShipWorks.Messaging.Messages;
 using ShipWorks.Messaging.Messages.Dialogs;
 using ShipWorks.Messaging.Messages.Panels;
+using ShipWorks.OrderLookup;
+using ShipWorks.Products;
 using ShipWorks.Properties;
+using ShipWorks.Settings;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers.FedEx;
 using ShipWorks.Shipping.Carriers.FedEx.Api;
-using ShipWorks.Shipping.Carriers.Postal.Endicia;
-using ShipWorks.Shipping.Carriers.Postal.Endicia.Express1;
-using ShipWorks.Shipping.Carriers.Postal.Usps;
-using ShipWorks.Shipping.Carriers.Postal.Usps.Express1.ScanForm;
-using ShipWorks.Shipping.Carriers.Postal.Usps.ScanForm;
 using ShipWorks.Shipping.Carriers.UPS.WorldShip;
 using ShipWorks.Shipping.Profiles;
 using ShipWorks.Shipping.ScanForms;
@@ -99,11 +98,13 @@ using ShipWorks.Templates.Management;
 using ShipWorks.Templates.Printing;
 using ShipWorks.Templates.Saving;
 using ShipWorks.UI;
+using ShipWorks.UI.Controls;
 using ShipWorks.Users;
 using ShipWorks.Users.Audit;
 using ShipWorks.Users.Logon;
 using ShipWorks.Users.Security;
 using TD.SandDock;
+using static Interapptive.Shared.Utility.Functional;
 using Application = System.Windows.Forms.Application;
 using SandButton = Divelements.SandRibbon.Button;
 using SandComboBox = Divelements.SandRibbon.ComboBox;
@@ -119,29 +120,35 @@ namespace ShipWorks
     public partial class MainForm : RibbonForm, IMainForm
     {
         // Logger
-        static readonly ILog log = LogManager.GetLogger(typeof(MainForm));
+        private static readonly ILog log = LogManager.GetLogger(typeof(MainForm));
 
         // Indicates if the background async login was a success.  This is to make sure we don't keep going on the UI thread
         // if it failed.
-        bool logonAsyncLoadSuccess = false;
-
-        readonly ConcurrentQueue<Action> logonActions = new ConcurrentQueue<Action>();
+        private bool logonAsyncLoadSuccess = false;
+        private readonly ConcurrentQueue<Action> logonActions = new ConcurrentQueue<Action>();
 
         // We have to remember these so that we can restore them after blanking the UI
-        readonly List<RibbonTab> ribbonTabs = new List<RibbonTab>();
+        private readonly List<RibbonTab> ribbonTabs = new List<RibbonTab>();
+        private IDictionary<RibbonTab, Func<UIMode, bool>> shouldTabBeEnabled;
 
         // Used to manage the UI state of the online update commands
-        readonly OnlineUpdateCommandProvider onlineUpdateCommandProvider = new OnlineUpdateCommandProvider();
+        private readonly OnlineUpdateCommandProvider onlineUpdateCommandProvider = new OnlineUpdateCommandProvider();
 
         // Used to keep ShipWorks "pumping" looking for data changes
-        readonly UIHeartbeat heartBeat;
+        private Heartbeat heartBeat;
 
         // The FilterNode to restore if search is canceled
-        long searchRestoreFilterNodeID = 0;
-
-        readonly Lazy<DockControl> shipmentDock;
+        private long searchRestoreFilterNodeID = 0;
+        private readonly Lazy<DockControl> shipmentDock;
         private ILifetimeScope menuCommandLifetimeScope;
         private IArchiveNotificationManager archiveNotificationManager;
+        private ICurrentUserSettings currentUserSettings;
+        private ILifetimeScope orderLookupLifetimeScope;
+        private ILifetimeScope productsLifetimeScope;
+        private IOrderLookup orderLookupControl;
+        private IShipmentHistory shipmentHistory;
+
+        private readonly string unicodeCheckmark = $"    {'\u2714'.ToString()}";
 
         /// <summary>
         /// Constructor
@@ -150,7 +157,11 @@ namespace ShipWorks
             Justification = "The WindowStateSaver's constructor does the work, so we don't need to store the variable.")]
         public MainForm()
         {
+            currentUserSettings = IoC.UnsafeGlobalLifetimeScope.Resolve<ICurrentUserSettings>();
+
             InitializeComponent();
+
+            panelDockingArea.Visible = false;
 
             foreach (IMainFormElementRegistration registration in IoC.UnsafeGlobalLifetimeScope.Resolve<IEnumerable<IMainFormElementRegistration>>())
             {
@@ -158,13 +169,43 @@ namespace ShipWorks
             }
 
             // Create the heartbeat
-            heartBeat = new UIHeartbeat(this);
+            heartBeat = new BatchModeUIHeartbeat(this);
 
             // Persist size\position of the window
             WindowStateSaver.Manage(this, WindowStateSaverOptions.FullState | WindowStateSaverOptions.InitialMaximize, "MainForm");
             shipmentDock = new Lazy<DockControl>(GetShipmentDockControl);
 
             InitializeCustomEnablerComponents();
+
+            shouldTabBeEnabled = new Dictionary<RibbonTab, Func<UIMode, bool>>
+            {
+                { ribbonTabGridViewHome, x => x == UIMode.Batch },
+                { ribbonTabGridViewCreate, x => x == UIMode.Batch },
+                { ribbonTabView, x => x == UIMode.Batch },
+                { ribbonTabOrderLookupViewShipping, x => x == UIMode.OrderLookup },
+                { ribbonTabOrderLookupViewShipmentHistory, x => x == UIMode.OrderLookup },
+                { ribbonTabAdmin, x => x == UIMode.Batch || x == UIMode.OrderLookup },
+                { ribbonTabHelp, x => x == UIMode.Batch || x == UIMode.OrderLookup }
+            };
+
+            SetShipmentButonEnabledState();
+        }
+
+        /// <summary>
+        /// Wire up updating the CreateLabel and ApplyProfile enabled state
+        /// </summary>
+        private void SetShipmentButonEnabledState()
+        {
+            // Listen for message to enable Create Label button
+            Messenger.Current.Subscribe(x =>
+            {
+                if (x is ShipmentSelectionChangedMessage && currentUserSettings.GetUIMode() == UIMode.OrderLookup)
+                {
+                    var canProcess = orderLookupControl?.CreateLabelAllowed() == true;
+                    buttonOrderLookupViewCreateLabel.Enabled = canProcess;
+                    buttonOrderLookupViewApplyProfile.Enabled = canProcess;
+                }
+            });
         }
 
         /// <summary>
@@ -206,6 +247,55 @@ namespace ShipWorks
         /// Collection of panels on the main form
         /// </summary>
         public IEnumerable<DockControl> Panels => sandDockManager.GetDockControls();
+
+        /// <summary>
+        /// Get the current UIMode
+        /// </summary>
+        public UIMode UIMode { get; private set; }
+
+        /// <summary>
+        /// Reprint the last order lookup processed shipment
+        /// </summary>
+        private async void OnOrderLookupViewReprintLastShipment(object sender, System.EventArgs e)
+        {
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+            {
+                IPreviousShipmentReprintActionHandler previousShipmentActionManager = lifetimeScope.Resolve<IPreviousShipmentReprintActionHandler>();
+                await previousShipmentActionManager.ReprintLastShipment().ConfigureAwait(false);
+            }
+        }
+
+        /// <summary>
+        /// Void the last order lookup processed shipment
+        /// </summary>
+        private async void OnOrderLookupViewVoidLastShipment(object sender, System.EventArgs e)
+        {
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+            {
+                var messageHelper = lifetimeScope.Resolve<IMessageHelper>();
+                var voidHandler = lifetimeScope.Resolve<IPreviousShipmentVoidActionHandler>();
+
+                try
+                {
+                    await Functional.UsingAsync(
+                        messageHelper.ShowProgressDialog("Voiding", "Voiding last processed shipment"),
+                        _ => voidHandler.VoidLast())
+                    .ConfigureAwait(true);
+                }
+                catch
+                {
+                    // Just continue, as VoidLast already handled the exception
+                }
+            }
+        }
+
+        /// <summary>
+        /// User clicks the Create Label button in Order Lookup Mode
+        /// </summary>
+        private void OnButtonOrderLookupViewCreateLabel(object sender, System.EventArgs e)
+        {
+            orderLookupControl.CreateLabel().Forget();
+        }
 
         #region Initialization \ Shutdown
 
@@ -271,9 +361,12 @@ namespace ShipWorks
             // Initialize ribbon security
             ribbonSecurityProvider.AddAdditionalCondition(buttonUpdateOnline, () => OnlineUpdateCommandProvider.HasOnlineUpdateCommands());
             ribbonSecurityProvider.AddAdditionalCondition(buttonFedExClose, () => FedExAccountManager.Accounts.Count > 0);
-            ribbonSecurityProvider.AddAdditionalCondition(buttonEndiciaSCAN, () => (EndiciaAccountManager.EndiciaAccounts.Count + EndiciaAccountManager.Express1Accounts.Count + UspsAccountManager.Express1Accounts.Count + UspsAccountManager.UspsAccounts.Count) > 0);
-            ribbonSecurityProvider.AddAdditionalCondition(buttonFirewall, () => (SqlSession.IsConfigured && !SqlSession.Current.Configuration.IsLocalDb()));
-            ribbonSecurityProvider.AddAdditionalCondition(buttonChangeConnection, () => (SqlSession.IsConfigured && !SqlSession.Current.Configuration.IsLocalDb()));
+            ribbonSecurityProvider.AddAdditionalCondition(buttonOrderLookupViewFedExClose, () => FedExAccountManager.Accounts.Count > 0);
+            ribbonSecurityProvider.AddAdditionalCondition(buttonEndiciaSCAN, AreThereAnyPostalAccounts);
+            ribbonSecurityProvider.AddAdditionalCondition(buttonOrderLookupViewSCANForm, AreThereAnyPostalAccounts);
+            ribbonSecurityProvider.AddAdditionalCondition(buttonFirewall, () => SqlSession.IsConfigured && !SqlSession.Current.Configuration.IsLocalDb());
+            ribbonSecurityProvider.AddAdditionalCondition(buttonChangeConnection, () => SqlSession.IsConfigured && !SqlSession.Current.Configuration.IsLocalDb());
+            ribbonSecurityProvider.AddAdditionalCondition(buttonOrderLookupViewFields, () => UIMode == UIMode.OrderLookup);
 
             // Prepare stuff that needs prepare for dealing with UI changes for Editions
             PrepareEditionManagedUI();
@@ -288,6 +381,15 @@ namespace ShipWorks
 
             ApplyEditingContext();
         }
+
+        /// <summary>
+        /// Checks whether we have any postal accounts
+        /// </summary>
+        /// <returns></returns>
+        private static bool AreThereAnyPostalAccounts() =>
+            Using(
+                IoC.BeginLifetimeScope(),
+                scope => scope.Resolve<IEnumerable<IScanFormAccountRepository>>().Any(x => x.HasAccounts));
 
         /// <summary>
         /// Main form has been made visible
@@ -403,12 +505,6 @@ namespace ShipWorks
                 return;
             }
 
-            // This causes the shipping panel to lose focus, which causes it to save. If we don't do this, it will try
-            // to save later, after the user has logged out. This caused an exception because we couldn't audit the save.
-            // This was moved to its current location because if we're crashing, calling Focus can cause a cross-thread
-            // exception, preventing ShipWorks from shutting down. If we're crashing, we can't be sure a save is valid anyway.
-            Focus();
-
             using (ConnectionSensitiveScope scope = new ConnectionSensitiveScope("close ShipWorks", this))
             {
                 if (!scope.Acquired)
@@ -470,6 +566,13 @@ namespace ShipWorks
         /// </summary>
         public bool InitiateLogoff(bool clearRememberMe)
         {
+            // This causes the shipping panel to lose focus, which causes it to save. If we don't do this, it will try
+            // to save later, after the user has logged out. This caused an exception because we couldn't audit the save.
+            // This was moved to its current location because if we're crashing, calling Focus can cause a cross-thread
+            // exception, preventing ShipWorks from shutting down. If we're crashing, we can't be sure a save is valid anyway.
+            Focus();
+            UnloadOrderLookupMode();
+
             // Don't need a scope if we're already in one
             using (ConnectionSensitiveScope scope = (ConnectionSensitiveScope.IsActive ? null : new ConnectionSensitiveScope("log off", this)))
             {
@@ -479,6 +582,9 @@ namespace ShipWorks
                 }
 
                 SaveCurrentUserSettings();
+
+                shipmentHistory?.Dispose();
+                shipmentHistory = null;
 
                 UserSession.Logoff(clearRememberMe);
             }
@@ -749,21 +855,14 @@ namespace ShipWorks
 
             UserEntity user = UserSession.User;
 
-            // Initialize the grid
-            gridControl.InitializeForTarget(FilterTarget.Orders, contextMenuOrderGrid, contextOrderCopy);
-            gridControl.InitializeForTarget(FilterTarget.Customers, contextMenuCustomerGrid, contextCustomerCopy);
-
-            // Initialize any filter trees
-            InitializeFilterTrees(user);
-
             // Update the custom actions UI.  Has to come before applying the layout, so the QAT can pickup the buttons
             UpdateCustomButtonsActionsUI();
 
             // We can now show the normal UI
             ApplyCurrentUserLayout();
 
-            // Select the active filter
-            SelectInitialFilter(user.Settings);
+            // Display the appropriate UI mode for this user. Don't start heartbeat here, need other code to run first
+            UpdateUIMode(user, false);
 
             log.InfoFormat("UI shown");
 
@@ -774,9 +873,6 @@ namespace ShipWorks
 
             // Get all new\edited templates are installed
             BuiltinTemplates.UpdateTemplates(this);
-
-            // Update all UI items that are related to the current stores
-            UpdateStoreDependentUI();
 
             // Update the Detail View UI
             UpdateDetailViewSettingsUI();
@@ -806,12 +902,331 @@ namespace ShipWorks
         }
 
         /// <summary>
+        /// Show the batch view
+        /// </summary>
+        private void OnShowBatchView(object sender, EventArgs e)
+        {
+            if (UIMode != UIMode.Batch)
+            {
+                ChangeUIMode(UIMode.Batch);
+            }
+        }
+
+        /// <summary>
+        /// Show the order lookup view
+        /// </summary>
+        private void OnShowOrderLookupView(object sender, EventArgs e)
+        {
+            if (UIMode != UIMode.OrderLookup)
+            {
+                // Save the current layout just in case the user made changes to it
+                ChangeUIMode(UIMode.OrderLookup);
+            }
+        }
+
+        /// <summary>
+        /// Show the products view
+        /// </summary>
+        private void OnShowProductsView(object sender, EventArgs e)
+        {
+            if (UIMode != UIMode.Products)
+            {
+                // Save the current layout just in case the user made changes to it
+                ChangeUIMode(UIMode.Products);
+            }
+        }
+
+        /// <summary>
+        /// Change to the given UI mode
+        /// </summary>
+        private void ChangeUIMode(UIMode uiMode)
+        {
+            SaveCurrentUserSettings();
+
+            currentUserSettings.SetUIMode(uiMode);
+
+            UpdateUIMode(UserSession.User, true);
+        }
+
+        /// <summary>
+        /// Update the UI
+        /// </summary>
+        private void UpdateUIMode(IUserEntity user, bool startHeartbeat)
+        {
+            bool hasProductsPermissions = UserSession.Security.HasPermission(PermissionType.ManageProducts);
+            mainMenuItemProducts.Visible = hasProductsPermissions;
+
+            heartBeat?.Stop();
+
+            UnloadOrderLookupMode();
+            UnloadProductsMode();
+
+            UIMode currentMode = currentUserSettings.GetUIMode();
+            if (currentMode == UIMode.Products && !hasProductsPermissions)
+            {
+                currentMode = UIMode.Batch;
+            }
+
+            ToggleUiModeCheckbox(currentMode);
+            EnableUiMode(currentMode, user);
+
+            UIMode = currentMode;
+
+            ToggleQuickAccessToolbar(ribbon, quickAccessToolBar, UIMode);
+
+            ribbon.Tabs.Clear();
+            EnableRibbonTabs();
+
+            buttonManageFilters.Visible = UIMode == UIMode.Batch;
+
+            UpdateStatusBar();
+
+            // Notify telemetry of the UI Mode change
+            Telemetry.SetUserInterfaceView(EnumHelper.GetDescription(UIMode));
+
+            if (startHeartbeat)
+            {
+                heartBeat.Start();
+            }
+
+            panelDockingArea.Visible = true;
+        }
+
+        /// <summary>
+        /// Enables the given UI mode
+        /// </summary>
+        private void EnableUiMode(UIMode mode, IUserEntity user)
+        {
+            if (mode == UIMode.OrderLookup)
+            {
+                EnableOrderLookupMode();
+            }
+            else if (mode == UIMode.Products)
+            {
+                EnableProductsMode(user);
+            }
+            else
+            {
+                EnableBatchMode(user);
+            }
+        }
+
+        /// <summary>
+        /// Toggle the display of the quick access tool bar
+        /// </summary>
+        /// <remarks>We've got to remove and re-add the items when showing the tool bar because when showing it
+        /// in some circumstances, the buttons would appear on top of each other.</remarks>
+        private static void ToggleQuickAccessToolbar(Ribbon ribbon, QuickAccessToolBar quickAccessToolBar, UIMode uiMode)
+        {
+            ribbon.ToolBar = uiMode == UIMode.Batch ? quickAccessToolBar : null;
+
+            if (ribbon.ToolBar != null)
+            {
+                var items = ribbon.ToolBar.Items.OfType<WidgetBase>().ToArray();
+                ribbon.ToolBar.Items.Clear();
+                ribbon.ToolBar.Items.AddRange(items);
+            }
+        }
+
+        /// <summary>
+        /// Update the UI mode check boxes
+        /// </summary>
+        private void ToggleUiModeCheckbox(UIMode currentMode)
+        {
+            mainMenuItemBatchGrid.Text = GetTextForModeMenuItem("Batch Grid", currentMode == UIMode.Batch);
+            mainMenuItemOrderLookup.Text = GetTextForModeMenuItem("Order Lookup", currentMode == UIMode.OrderLookup);
+            mainMenuItemProducts.Text = GetTextForModeMenuItem("Products", currentMode == UIMode.Products);
+        }
+
+        /// <summary>
+        /// Get the text for a mode menu item
+        /// </summary>
+        private string GetTextForModeMenuItem(string text, bool isSelected) =>
+            isSelected ? text + unicodeCheckmark : text;
+
+        /// <summary>
+        /// Switch from order lookup to batch mode
+        /// </summary>
+        private void EnableBatchMode(IUserEntity user)
+        {
+            heartBeat = new BatchModeUIHeartbeat(this);
+
+            windowLayoutProvider.LoadLayout(user.Settings.WindowLayout);
+            gridMenuLayoutProvider.LoadLayout(user.Settings.GridMenuLayout);
+
+            foreach (DockingPanelContentHolder holder in GetDockingPanelContentHolders())
+            {
+                holder.InitializeForCurrentUser();
+            }
+
+            // Initialize the grid
+            gridControl.InitializeForTarget(FilterTarget.Orders, contextMenuOrderGrid, contextOrderCopy);
+            gridControl.InitializeForTarget(FilterTarget.Customers, contextMenuCustomerGrid, contextCustomerCopy);
+
+            // Initialize any filter trees
+            InitializeFilterTrees(user);
+
+            // Update all UI items that are related to the current stores
+            UpdateStoreDependentUI();
+
+            gridControl.Show();
+            orderFilterTree.Show();
+            customerFilterTree.Show();
+
+            // Select the active filter
+            SelectInitialFilter(user.Settings);
+
+            SendPanelStateMessages();
+        }
+
+        /// <summary>
+        /// Switch from order lookup to batch mode
+        /// </summary>
+        private void EnableProductsMode(IUserEntity user)
+        {
+            heartBeat = new BasicUIHeartbeat(this);
+
+            DisableBatchModeControls();
+
+            productsLifetimeScope = IoC.BeginLifetimeScope();
+
+            productsLifetimeScope.Resolve<IProductsMode>()
+                .Initialize(panelDockingArea.Controls.Add, panelDockingArea.Controls.Remove);
+        }
+
+        /// <summary>
+        /// Switch from batch to order lookup mode
+        /// </summary>
+        private void EnableOrderLookupMode()
+        {
+            // clear out any selected orders from the batch view
+            Messenger.Current.Send(new OrderSelectionChangingMessage(this, new long[0]));
+
+            heartBeat = new BasicUIHeartbeat(this);
+
+            DisableBatchModeControls();
+
+            orderLookupLifetimeScope = IoC.BeginLifetimeScopeWithOverrides<IOrderLookupRegistrationOverride>();
+
+            foreach (IOrderLookupPipeline service in orderLookupLifetimeScope.Resolve<IEnumerable<IOrderLookupPipeline>>())
+            {
+                service.InitializeForCurrentScope();
+            }
+
+            orderLookupControl = orderLookupLifetimeScope.Resolve<IOrderLookup>();
+
+            var profilePopupService = orderLookupLifetimeScope.Resolve<IProfilePopupService>();
+            orderLookupControl.RegisterProfileHandler(
+                (getShipmentType, onApply) => profilePopupService.BuildMenu(
+                    buttonOrderLookupViewApplyProfile,
+                    new Guid("98602808-B402-48F9-A5D1-EE10FCE16565"),
+                    getShipmentType,
+                    onApply));
+
+            panelDockingArea.Controls.Add(orderLookupControl.Control);
+            orderLookupControl.Control.BringToFront();
+        }
+
+        /// <summary>
+        /// Unload the Order Lookup Mode
+        /// </summary>
+        private void UnloadOrderLookupMode()
+        {
+            if (orderLookupLifetimeScope != null)
+            {
+                panelDockingArea.Controls.Remove(orderLookupControl.Control);
+                orderLookupControl.Unload();
+                orderLookupLifetimeScope.Dispose();
+                orderLookupLifetimeScope = null;
+            }
+        }
+
+        /// <summary>
+        /// Unload the Products Mode
+        /// </summary>
+        private void UnloadProductsMode()
+        {
+            productsLifetimeScope?.Dispose();
+            productsLifetimeScope = null;
+        }
+
+        /// <summary>
+        /// Disable the main batch mode controls
+        /// </summary>
+        private void DisableBatchModeControls()
+        {
+            // Hide all dock windows.  Hide them first so they don't attempt to save when the filter changes (due to the tree being cleared)
+            foreach (DockControl control in Panels)
+            {
+                control.Close();
+            }
+
+            // Grid has to be cleared first - otherwise the current settings will be saved in response to the filtertree clearing,
+            // and notifying the grid that the selected filter changed.
+            gridControl.Reset();
+            gridControl.Visible = false;
+
+            // Clear Filter Trees
+            ClearFilterTrees();
+        }
+
+        /// <summary>
+        /// Handle when the currently selected ribbon tab has changed
+        /// </summary>
+        private void OnRibbonSelectedTabChanged(object sender, System.EventArgs e)
+        {
+            if (ribbon.SelectedTab == ribbonTabOrderLookupViewShipping)
+            {
+                ToggleVisiblePanel(orderLookupControl?.Control, shipmentHistory?.Control);
+                shipmentHistory?.Deactivate();
+            }
+            else if (ribbon.SelectedTab == ribbonTabOrderLookupViewShipmentHistory)
+            {
+                ToggleVisiblePanel(shipmentHistory?.Control, orderLookupControl?.Control);
+                shipmentHistory.Activate(buttonOrderLookupViewVoid, buttonOrderLookupViewShipAgain);
+            }
+
+            UpdateStatusBar();
+        }
+
+        /// <summary>
+        /// True if shipping history control is active
+        /// </summary>
+        public bool IsShipmentHistoryActive()
+        {
+            return shipmentHistory != null && panelDockingArea.Controls.Contains(shipmentHistory.Control);
+        }
+
+        /// <summary>
+        /// Toggle which control is visible in the panel docking area
+        /// </summary>
+        private void ToggleVisiblePanel(Control toAdd, Control toRemove)
+        {
+            if (toRemove != null)
+            {
+                panelDockingArea.Controls.Remove(toRemove);
+            }
+
+            if (!panelDockingArea.Controls.Contains(toAdd) && toAdd != null)
+            {
+                panelDockingArea.Controls.Add(toAdd);
+            }
+        }
+
+        /// <summary>
+        /// Open the shipping settings window
+        /// </summary>
+        private void OnManageOrderLookupFields(object sender, EventArgs e) =>
+            Using(
+                IoC.BeginLifetimeScope(),
+                scope => scope.Resolve<IOrderLookupFieldManager>().ShowManager());
+
+        /// <summary>
         /// Execute any logon actions that have been queued
         /// </summary>
         private void ExecuteLogonActions()
         {
-            Action action = null;
-            while (logonActions.TryDequeue(out action))
+            while (logonActions.TryDequeue(out Action action))
             {
                 action();
             }
@@ -829,9 +1244,9 @@ namespace ShipWorks
         {
             using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
-                ISetupGuide SetupGuide = lifetimeScope.Resolve<ISetupGuide>();
-                SetupGuide.LoadOwner(this);
-                SetupGuide.ShowDialog();
+                ISetupGuide setupGuide = lifetimeScope.Resolve<ISetupGuide>();
+                setupGuide.LoadOwner(this);
+                setupGuide.ShowDialog();
             }
         }
 
@@ -843,7 +1258,7 @@ namespace ShipWorks
             foreach (DockControl panel in Panels)
             {
                 IShipWorksMessage message = panel.IsOpen ?
-                    (IShipWorksMessage) new PanelShownMessage(this, panel) :
+                     new PanelShownMessage(this, panel) :
                     (IShipWorksMessage) new PanelHiddenMessage(this, panel);
 
                 Messenger.Current.Send(message);
@@ -853,7 +1268,7 @@ namespace ShipWorks
         /// <summary>
         /// Initialize the filter trees for display
         /// </summary>
-        private void InitializeFilterTrees(UserEntity user)
+        private void InitializeFilterTrees(IUserEntity user)
         {
             orderFilterTree.LoadLayouts(FilterTarget.Orders);
             orderFilterTree.ApplyFolderState(new FolderExpansionState(user.Settings.OrderFilterExpandedFolders));
@@ -962,6 +1377,7 @@ namespace ShipWorks
                     .Union(ShippingProfileManager.GetTelemetryData())
                     .Union(ConfigurationData.GetTelemetryData())
                     .Union(FilterTelemetryService.GetTelemetryData())
+                    .Union(ProductCatalogTelemetryService.GetTelemetryData())
                     .ToDictionary(k => k.Key, v => v.Value);
             }
             catch (Exception ex)
@@ -1098,14 +1514,9 @@ namespace ShipWorks
             // Show the tool bar
             ribbon.ToolBar = quickAccessToolBar;
 
-            // Add back in the tabs
-            foreach (RibbonTab tab in ribbonTabs)
-            {
-                ribbon.Tabs.Add(tab);
+            EnableRibbonTabs();
 
-                // Preserve order
-                tab.SendToBack();
-            }
+            shipmentHistory = IoC.UnsafeGlobalLifetimeScope.Resolve<IShipmentHistory>();
 
             // Show all status bar strips
             statusBar.MainStrip.Visible = true;
@@ -1125,10 +1536,30 @@ namespace ShipWorks
             {
                 holder.InitializeForCurrentUser();
             }
-
-            // Show main UI areas
-            panelDockingArea.Visible = true;
         }
+
+        /// <summary>
+        /// Enable the ribbon tabs
+        /// </summary>
+        private void EnableRibbonTabs()
+        {
+            // Add back in the tabs
+            foreach (RibbonTab tab in ribbonTabs.Where(TabAppliesToUIMode))
+            {
+                ribbon.Tabs.Add(tab);
+
+                // Preserve order
+                tab.SendToBack();
+            }
+
+            ribbonSecurityProvider.UpdateSecurityUI();
+        }
+
+        /// <summary>
+        /// Does the specific tab apply to the current UI mode
+        /// </summary>
+        private bool TabAppliesToUIMode(RibbonTab tab) =>
+            shouldTabBeEnabled.TryGetValue(tab, out Func<UIMode, bool> func) ? func(UIMode) : true;
 
         /// <summary>
         /// Inspects the WindowLayout of the user settings to see if the user has upgraded from a
@@ -1256,35 +1687,42 @@ namespace ShipWorks
             settings.DisplaySystemTray = ShipWorksDisplay.HideInSystemTray;
 
             // Save the layout
-            settings.WindowLayout = windowLayoutProvider.SerializeLayout();
-            settings.GridMenuLayout = gridMenuLayoutProvider.SerializeLayout();
-
-            // Save the filter expand collapse state
-            settings.OrderFilterExpandedFolders = orderFilterTree.GetFolderState().GetState();
-            settings.CustomerFilterExpandedFolders = customerFilterTree.GetFolderState().GetState();
-
-            // Save the last active filter
-            if (gridControl.IsSearchActive)
+            if (UIMode == UIMode.Batch)
             {
-                if (gridControl.ActiveFilterTarget == FilterTarget.Customers)
+                settings.WindowLayout = windowLayoutProvider.SerializeLayout();
+                settings.GridMenuLayout = gridMenuLayoutProvider.SerializeLayout();
+
+                // Save the filter expand collapse state
+                settings.OrderFilterExpandedFolders = orderFilterTree.GetFolderState().GetState();
+                settings.CustomerFilterExpandedFolders = customerFilterTree.GetFolderState().GetState();
+
+                // Save the last active filter
+                if (gridControl.IsSearchActive)
                 {
-                    settings.CustomerFilterLastActive = searchRestoreFilterNodeID;
-                    settings.OrderFilterLastActive = 0;
+                    if (gridControl.ActiveFilterTarget == FilterTarget.Customers)
+                    {
+                        settings.CustomerFilterLastActive = searchRestoreFilterNodeID;
+                        settings.OrderFilterLastActive = 0;
+                    }
+                    else
+                    {
+                        settings.OrderFilterLastActive = searchRestoreFilterNodeID;
+                        settings.CustomerFilterLastActive = 0;
+                    }
                 }
                 else
                 {
-                    settings.OrderFilterLastActive = searchRestoreFilterNodeID;
-                    settings.CustomerFilterLastActive = 0;
+                    settings.CustomerFilterLastActive = customerFilterTree.SelectedFilterNodeID;
+                    settings.OrderFilterLastActive = orderFilterTree.SelectedFilterNodeID;
                 }
-            }
-            else
-            {
-                settings.CustomerFilterLastActive = customerFilterTree.SelectedFilterNodeID;
-                settings.OrderFilterLastActive = orderFilterTree.SelectedFilterNodeID;
-            }
 
-            // Save the grid column state
-            gridControl.SaveGridColumnState();
+                // Save the grid column state
+                gridControl.SaveGridColumnState();
+            }
+            else if (UIMode == UIMode.OrderLookup)
+            {
+                shipmentHistory.SaveGridColumnState();
+            }
 
             // Save the settings
             using (SqlAdapter adapter = new SqlAdapter())
@@ -1391,16 +1829,20 @@ namespace ShipWorks
 
             // Update the state of the ui for the update online commands
             buttonUpdateOnline.Visible = OnlineUpdateCommandProvider.HasOnlineUpdateCommands();
-            gridMenuLayoutProvider.UpdateStoreDependentUI();
 
-            // The available columns depend on the store types that exist
-            FilterNodeColumnManager.InitializeForCurrentSession();
-            gridControl.ReloadGridColumns();
-
-            // Update the panels based on the current store set
-            foreach (DockingPanelContentHolder holder in GetDockingPanelContentHolders())
+            if (UIMode != UIMode.OrderLookup)
             {
-                holder.UpdateStoreDependentUI();
+                gridMenuLayoutProvider.UpdateStoreDependentUI();
+
+                // The available columns depend on the store types that exist
+                FilterNodeColumnManager.InitializeForCurrentSession();
+                gridControl.ReloadGridColumns();
+
+                // Update the panels based on the current store set
+                foreach (DockingPanelContentHolder holder in GetDockingPanelContentHolders())
+                {
+                    holder.UpdateStoreDependentUI();
+                }
             }
 
             // Update the availability of ribbon items based on security
@@ -1433,6 +1875,7 @@ namespace ShipWorks
             editionGuiHelper.RegisterElement(buttonNewOrder, EditionFeature.AddOrderCustomer);
             editionGuiHelper.RegisterElement(buttonNewCustomer, EditionFeature.AddOrderCustomer);
             editionGuiHelper.RegisterElement(buttonEndiciaSCAN, EditionFeature.EndiciaScanForm);
+            editionGuiHelper.RegisterElement(buttonOrderLookupViewSCANForm, EditionFeature.EndiciaScanForm);
         }
 
         /// <summary>
@@ -1456,11 +1899,34 @@ namespace ShipWorks
         /// <summary>
         /// Update the contents of the status bar
         /// </summary>
-        private void UpdateStatusBar()
+        public void UpdateStatusBar()
         {
-            labelStatusTotal.Text = string.Format("{0}: {1:#,##0}", EnumHelper.GetDescription(gridControl.ActiveFilterTarget), gridControl.TotalCount);
-            labelStatusSelected.Text = string.Format("Selected: {0:#,##0}", gridControl.Selection.Count);
+            if (UIMode == UIMode.Batch)
+            {
+                labelStatusTotal.Visible = true;
+                labelStatusTotal.Text = string.Format("{0}: {1:#,##0}", EnumHelper.GetDescription(gridControl.ActiveFilterTarget), gridControl.TotalCount);
+
+                labelStatusSelected.Visible = true;
+                labelStatusSelected.Text = string.Format("Selected: {0:#,##0}", gridControl.Selection.Count);
+            }
+            else if (IsShipmentHistoryActive())
+            {
+                labelStatusTotal.Visible = true;
+                labelStatusTotal.Text = string.Format("Shipments: {0:#,##0}", shipmentHistory.RowCount);
+
+                labelStatusSelected.Visible = false;
+            }
+            else
+            {
+                labelStatusTotal.Visible = false;
+                labelStatusSelected.Visible = false;
+            }
         }
+
+        /// <summary>
+        /// Select the order lookup tab
+        /// </summary>
+        public void SelectOrderLookupTab() => ribbon.SelectedTab = ribbonTabOrderLookupViewShipping;
 
         /// <summary>
         /// Get the shipment dock control
@@ -1712,7 +2178,7 @@ namespace ShipWorks
             var ribbonActions = enabledActions.Where(a => a.Trigger.ShowOnRibbon);
 
             // Get the ribbon chunk that holds our action buttons
-            var actionChunk = ribbonTabHome.Chunks.Cast<RibbonChunk>().Where(c => c.Text == ribbonChunkName).SingleOrDefault();
+            var actionChunk = ribbonTabGridViewHome.Chunks.Cast<RibbonChunk>().Where(c => c.Text == ribbonChunkName).SingleOrDefault();
 
             // Maybe we need to remove it
             if (actionChunk != null)
@@ -1729,7 +2195,7 @@ namespace ShipWorks
                 // If there are no actions, kill the chunk
                 if (!ribbonActions.Any())
                 {
-                    ribbonTabHome.Chunks.Remove(actionChunk);
+                    ribbonTabGridViewHome.Chunks.Remove(actionChunk);
                 }
             }
 
@@ -1740,7 +2206,7 @@ namespace ShipWorks
                 if (actionChunk == null)
                 {
                     actionChunk = new RibbonChunk() { Text = ribbonChunkName, FurtherOptions = false, ItemJustification = ItemJustification.Near };
-                    ribbonTabHome.Chunks.Add(actionChunk);
+                    ribbonTabGridViewHome.Chunks.Add(actionChunk);
                 }
 
                 // Add all the buttons
@@ -1819,7 +2285,7 @@ namespace ShipWorks
         /// <summary>
         /// User has clicked a custom action button
         /// </summary>
-        void OnCustomActionButton(object sender, EventArgs e)
+        private void OnCustomActionButton(object sender, EventArgs e)
         {
             long actionID = (long) ((SandButton) sender).Tag;
 
@@ -1829,7 +2295,7 @@ namespace ShipWorks
         /// <summary>
         /// User has clicked a custom action menu
         /// </summary>
-        void OnCustomActionMenu(object sender, EventArgs e)
+        private void OnCustomActionMenu(object sender, EventArgs e)
         {
             long actionID = (long) ((ToolStripMenuItem) sender).Tag;
 
@@ -1856,6 +2322,8 @@ namespace ShipWorks
         private void OnBeforePopupApplicationMenu(object sender, BeforePopupEventArgs e)
         {
             UpdateLoginLogoffMenu();
+
+            mainMenuItemViewMode.Visible = UserSession.IsLoggedOn;
 
             // Only show backup \ restore if logged on
             if (!UserSession.IsLoggedOn)
@@ -2201,7 +2669,7 @@ namespace ShipWorks
         /// <summary>
         /// Called when items have been removed from the DataProvider.EntityCache b\c they are known to be dirty
         /// </summary>
-        void OnEntityChangeDetected(object sender, EventArgs e)
+        private void OnEntityChangeDetected(object sender, EventArgs e)
         {
             ForceHeartbeat(HeartbeatOptions.ForceReload);
         }
@@ -2237,7 +2705,7 @@ namespace ShipWorks
         /// <summary>
         /// Logic that happens when a modal window is opening
         /// </summary>
-        void OnEnterThreadModal(object sender, EventArgs e)
+        private void OnEnterThreadModal(object sender, EventArgs e)
         {
             if (IsDisposed || heartBeat.Pace == HeartbeatPace.Stopped)
             {
@@ -2250,7 +2718,7 @@ namespace ShipWorks
                 return;
             }
 
-            if (UserSession.IsLoggedOn)
+            if (UserSession.IsLoggedOn && UIMode == UIMode.Batch)
             {
                 gridControl.SaveGridColumnState();
             }
@@ -2259,7 +2727,7 @@ namespace ShipWorks
         /// <summary>
         /// Modal window is closing
         /// </summary>
-        void OnLeaveThreadModal(object sender, EventArgs e)
+        private void OnLeaveThreadModal(object sender, EventArgs e)
         {
             if (IsDisposed || heartBeat.Pace == HeartbeatPace.Stopped)
             {
@@ -2272,7 +2740,7 @@ namespace ShipWorks
                 return;
             }
 
-            if (UserSession.IsLoggedOn)
+            if (UserSession.IsLoggedOn && UIMode == UIMode.Batch)
             {
                 gridControl.ReloadGridColumns();
             }
@@ -2281,7 +2749,7 @@ namespace ShipWorks
         /// <summary>
         /// A connection sensitive scope is about to be acquired
         /// </summary>
-        void OnAcquiringConnectionSensitiveScope(object sender, EventArgs e)
+        private void OnAcquiringConnectionSensitiveScope(object sender, EventArgs e)
         {
             // Search has to be canceled before potential changing databases, otherwise it wouldn't have a chance to cleanup in the current database.
             gridControl.CancelSearch();
@@ -2290,7 +2758,7 @@ namespace ShipWorks
         /// <summary>
         /// When an action is ran it could cause filtering side affects so we force the heartbeat right away
         /// </summary>
-        void OnActionRan(object sender, EventArgs e)
+        private void OnActionRan(object sender, EventArgs e)
         {
             ForceHeartbeat(HeartbeatOptions.ChangesExpected);
         }
@@ -2358,7 +2826,7 @@ namespace ShipWorks
         /// <summary>
         /// Called when one of the filter windows gets displayed.  It then brings focus to the correct filter.
         /// </summary>
-        void OnFilterDockableWindowVisibleChanged(object sender, System.EventArgs e)
+        private void OnFilterDockableWindowVisibleChanged(object sender, System.EventArgs e)
         {
             // Get the dockable window so that we can get the filter tree
             DockControl dockableWindowFilters = (DockableWindow) sender;
@@ -2559,7 +3027,7 @@ namespace ShipWorks
         /// <summary>
         /// Select the initial filter based on the given user settings
         /// </summary>
-        private void SelectInitialFilter(UserSettingsEntity settings)
+        private void SelectInitialFilter(IUserSettingsEntity settings)
         {
             long initialID = settings.FilterInitialUseLastActive ?
                 settings.CustomerFilterLastActive : settings.FilterInitialSpecified;
@@ -2687,7 +3155,7 @@ namespace ShipWorks
         /// <summary>
         /// A download is starting
         /// </summary>
-        void OnDownloadStarting(object sender, EventArgs e)
+        private void OnDownloadStarting(object sender, EventArgs e)
         {
             if (InvokeRequired)
             {
@@ -2704,7 +3172,7 @@ namespace ShipWorks
         /// <summary>
         /// A download has ended
         /// </summary>
-        void OnDownloadComplete(object sender, DownloadCompleteEventArgs e)
+        private void OnDownloadComplete(object sender, DownloadCompleteEventArgs e)
         {
             if (InvokeRequired)
             {
@@ -2810,7 +3278,7 @@ namespace ShipWorks
         /// <summary>
         /// Emailing is beginning
         /// </summary>
-        void OnEmailStarting(object sender, EventArgs e)
+        private void OnEmailStarting(object sender, EventArgs e)
         {
             if (InvokeRequired)
             {
@@ -2826,7 +3294,7 @@ namespace ShipWorks
         /// <summary>
         /// Emailing has ended
         /// </summary>
-        void OnEmailComplete(object sender, EmailCommunicationCompleteEventArgs e)
+        private void OnEmailComplete(object sender, EmailCommunicationCompleteEventArgs e)
         {
             if (InvokeRequired)
             {
@@ -3001,6 +3469,20 @@ namespace ShipWorks
         }
 
         /// <summary>
+        /// Create a manual order from the order lookup panel
+        /// </summary>
+        private void OnOrderLookupManualOrder(object sender, EventArgs e)
+        {
+            using (AddOrderWizard dlg = new AddOrderWizard(null, null))
+            {
+                if (dlg.ShowDialog(this) == DialogResult.OK)
+                {
+                    Messenger.Current.Send(new OrderLookupSearchMessage(this, dlg.OrderID.ToString()));
+                }
+            }
+        }
+
+        /// <summary>
         /// Create a new combined order
         /// </summary>
         private async void OnCombineOrders(object sender, EventArgs e)
@@ -3125,6 +3607,17 @@ namespace ShipWorks
         }
 
         /// <summary>
+        /// Edit the customer associated with the selected order
+        /// </summary>
+        private void OnContextOrderEditCustomer(object sender, EventArgs e)
+        {
+            Cursor.Current = Cursors.WaitCursor;
+
+            OrderEntity order = (OrderEntity) DataProvider.GetEntity(gridControl.Selection.Keys.First());
+            EditCustomer(order.CustomerID);
+        }
+
+        /// <summary>
         /// Initiate the editing of the given customer
         /// </summary>
         private void EditCustomer(long customerID)
@@ -3222,7 +3715,7 @@ namespace ShipWorks
         /// <summary>
         /// When closing a order or customer filter, switch to the other one.
         /// </summary>
-        void OnDockControlClosing(object sender, DockControlClosingEventArgs e)
+        private void OnDockControlClosing(object sender, DockControlClosingEventArgs e)
         {
             if (UserSession.IsLoggedOn)
             {
@@ -3691,6 +4184,7 @@ namespace ShipWorks
                 using (ShippingSettingsDlg dlg = new ShippingSettingsDlg(lifetimeScope))
                 {
                     dlg.ShowDialog(this);
+                    ribbonSecurityProvider.UpdateSecurityUI();
                 }
             }
         }
@@ -3776,11 +4270,25 @@ namespace ShipWorks
         /// <summary>
         /// The FedEx Close popup menu is opening, so we need to dynamically populate it
         /// </summary>
-        private void OnFedExClosePopupOpening(object sender, BeforePopupEventArgs e)
-        {
-            FedExGroundClose.PopulatePrintReportsMenu(menuFedExPrintReports);
+        private void OnFedExClosePopupOpening(object sender, BeforePopupEventArgs e) =>
+            PopulateFedExCloseMenu(menuFedExPrintReports, menuFedExSmartPostClose);
 
-            menuFedExSmartPostClose.Visible = FedExUtility.GetSmartPostHubs().Count > 0;
+        /// <summary>
+        /// The FedEx Close popup menu is opening, so we need to dynamically populate it
+        /// </summary>
+        private void OnOrderLookupViewFedExClosePopupOpening(object sender, BeforePopupEventArgs e) =>
+            PopulateFedExCloseMenu(menuOrderLookupViewFedExPrintReports, menuOrderLookupViewFedExSmartPostClose);
+
+        /// <summary>
+        /// Populate the FedEx close menu
+        /// </summary>
+        /// <param name="printMenu"></param>
+        /// <param name="closeMenu"></param>
+        private void PopulateFedExCloseMenu(Divelements.SandRibbon.Menu printMenu, SandMenuItem closeMenu)
+        {
+            FedExGroundClose.PopulatePrintReportsMenu(printMenu);
+
+            closeMenu.Visible = FedExUtility.GetSmartPostHubs().Any();
         }
 
         /// <summary>
@@ -3857,16 +4365,27 @@ namespace ShipWorks
         /// <summary>
         /// The postal scan form popup is opening, we need to dynamically repopulate the print menu
         /// </summary>
-        private void OnPostalScanFormOpening(object sender, BeforePopupEventArgs e)
-        {
-            List<IScanFormAccountRepository> repositories = new List<IScanFormAccountRepository>();
-            repositories.Add(new EndiciaScanFormAccountRepository());
-            repositories.Add(new Express1EndiciaScanFormAccountRepository());
-            repositories.Add(new Express1UspsScanFormAccountRepository());
-            repositories.Add(new UspsScanFormAccountRepository());
+        private void OnPostalScanFormOpening(object sender, BeforePopupEventArgs e) =>
+            PopulatePostalSCANFormMenu(menuCreateEndiciaScanForm, menuPrintEndiciaScanForm);
 
-            ScanFormUtility.PopulateCreateScanFormMenu(menuCreateEndiciaScanForm, repositories);
-            ScanFormUtility.PopulatePrintScanFormMenu(menuPrintEndiciaScanForm, repositories);
+        /// <summary>
+        /// The postal scan form popup is opening, we need to dynamically repopulate the print menu
+        /// </summary>
+        private void OnOrderLookupViewPostalScanFormOpening(object sender, BeforePopupEventArgs e) =>
+            PopulatePostalSCANFormMenu(menuOrderLookupViewCreateEndiciaScanForm, menuOrderLookupViewPrintEndiciaScanForm);
+
+        /// <summary>
+        /// Populate the contents of the postal scan form menu
+        /// </summary>
+        private void PopulatePostalSCANFormMenu(SandMenuItem createMenu, Divelements.SandRibbon.Menu printMenu)
+        {
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+            {
+                var repositories = lifetimeScope.Resolve<IEnumerable<IScanFormAccountRepository>>();
+
+                ScanFormUtility.PopulateCreateScanFormMenu(createMenu, repositories);
+                ScanFormUtility.PopulatePrintScanFormMenu(printMenu, repositories);
+            }
         }
 
         #endregion
@@ -4113,7 +4632,7 @@ namespace ShipWorks
         /// <summary>
         /// User input is required to help resolve what email settings should be used during an email generation operation
         /// </summary>
-        void OnEmailResolveSettings(object sender, EmailSettingsResolveEventArgs e)
+        private void OnEmailResolveSettings(object sender, EmailSettingsResolveEventArgs e)
         {
             if (InvokeRequired)
             {
@@ -4265,7 +4784,7 @@ namespace ShipWorks
         /// <summary>
         /// It is necessary to prompt the user for a file or folder name during a save operation
         /// </summary>
-        void OnSavePromptForFile(object sender, SavePromptForFileEventArgs e)
+        private void OnSavePromptForFile(object sender, SavePromptForFileEventArgs e)
         {
             if (InvokeRequired)
             {

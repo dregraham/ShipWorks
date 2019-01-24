@@ -32,7 +32,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// </summary>
         public virtual ILicenseAccountDetail GetLicenseStatus(string licenseKey, StoreEntity store)
         {
-            return TangoWebClient.GetLicenseStatus(licenseKey, store);
+            return TangoWebClient.GetLicenseStatus(licenseKey, store, true);
         }
 
         /// <summary>
@@ -81,15 +81,6 @@ namespace ShipWorks.ApplicationCore.Licensing
         public virtual void SendAccountUsername(string email, string username)
         {
             TangoWebClient.SendAccountUsername(email, username);
-        }
-
-        /// <summary>
-        /// Log the given processed shipment to Tango.  isRetry is only for internal interapptive purposes to handle rare cases where shipments a customer
-        /// insured did not make it up into tango, but the shipment did actually process.
-        /// </summary>
-        public virtual string LogShipment(StoreEntity store, ShipmentEntity shipment, bool isRetry = false)
-        {
-            return TangoWebClient.LogShipment(store, shipment, isRetry);
         }
 
         /// <summary>
@@ -157,14 +148,6 @@ namespace ShipWorks.ApplicationCore.Licensing
         }
 
         /// <summary>
-        /// Ensure the connection to the given URI is a valid interapptive secure connection
-        /// </summary>
-        public virtual void ValidateSecureConnection(Uri uri)
-        {
-            TangoWebClient.ValidateSecureConnection(uri);
-        }
-
-        /// <summary>
         /// Gets the nudges.
         /// </summary>
         public virtual IEnumerable<Nudge> GetNudges(IEnumerable<StoreEntity> stores)
@@ -198,7 +181,7 @@ namespace ShipWorks.ApplicationCore.Licensing
             // in stale license data. Since customers aren't buying postage all the time, the additional overhead to ensure
             // accuracy may not be that big of a deal.
             List<StoreEntity> stores = StoreManager.GetAllStores();
-            IEnumerable<ILicenseAccountDetail> licenses = stores.Select(store => TangoWebClient.GetLicenseStatus(store.License, store)).Where(l => l.Active);
+            IEnumerable<ILicenseAccountDetail> licenses = stores.Select(store => TangoWebClient.GetLicenseStatus(store.License, store, true)).Where(l => l.Active);
 
             // We only need to send up one license for each distinct customer ID
             IEnumerable<ILicenseAccountDetail> licensesForLogging = licenses.GroupBy(l => l.TangoCustomerID).Select(grp => grp.First());
@@ -270,7 +253,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// <summary>
         /// Gets the Tango customer id for a license.
         /// </summary>
-        public string GetTangoCustomerId()
+        public virtual string GetTangoCustomerId()
         {
             return TangoWebClient.GetTangoCustomerId();
         }

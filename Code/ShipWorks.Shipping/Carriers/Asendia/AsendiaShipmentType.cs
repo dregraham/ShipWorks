@@ -140,10 +140,23 @@ namespace ShipWorks.Shipping.Carriers.Asendia
         /// Get the carrier specific description of the shipping service used. The carrier specific data must already exist
         /// when this method is called.
         /// </summary>
-        public override string GetServiceDescription(ShipmentEntity shipment)
-        {
-            return EnumHelper.GetDescription(shipment.Asendia.Service);
-        }
+        public override string GetServiceDescription(ShipmentEntity shipment) =>
+            GetServiceDescriptionInternal(shipment.Asendia.Service);
+
+        /// <summary>
+        /// Get the carrier specific description of the shipping service used. The carrier specific data must already exist
+        /// when this method is called.
+        /// </summary>
+        public override string GetServiceDescription(string serviceCode) =>
+            Functional.ParseInt(serviceCode)
+                .Match(x => GetServiceDescriptionInternal((AsendiaServiceType) x), _ => "Unknown");
+
+        /// <summary>
+        /// Get the carrier specific description of the shipping service used. The carrier specific data must already exist
+        /// when this method is called.
+        /// </summary>
+        private string GetServiceDescriptionInternal(AsendiaServiceType service) =>
+            EnumHelper.GetDescription(service);
 
         /// <summary>
         /// Gets the best rate shipping broker for Asendia
@@ -167,22 +180,10 @@ namespace ShipWorks.Shipping.Carriers.Asendia
         }
 
         /// <summary>
-        /// Update the total weight of the shipment
+        /// Get the dims weight from a shipment, if any
         /// </summary>
-        public override void UpdateTotalWeight(ShipmentEntity shipment)
-        {
-            if (shipment == null)
-            {
-                throw new ArgumentNullException("shipment");
-            }
-
-            shipment.TotalWeight = shipment.ContentWeight;
-
-            if (shipment.Asendia.DimsAddWeight)
-            {
-                shipment.TotalWeight += shipment.Asendia.DimsWeight;
-            }
-        }
+        protected override double GetDimsWeight(IShipmentEntity shipment) =>
+            shipment.Asendia?.DimsAddWeight == true ? shipment.Asendia.DimsWeight : 0;
 
         /// <summary>
         /// Get the shipment common detail for tango
@@ -248,7 +249,7 @@ namespace ShipWorks.Shipping.Carriers.Asendia
                 .Cast<int>()
                 .Except(GetExcludedServiceTypes(repository));
         }
-        
+
         /// <summary>
         /// Get the default profile for the shipment type
         /// </summary>
@@ -260,15 +261,15 @@ namespace ShipWorks.Shipping.Carriers.Asendia
             AsendiaProfileEntity asendia = profile.Asendia;
 
             asendia.AsendiaAccountID = accountRepository.AccountsReadOnly.Any() ?
-                accountRepository.AccountsReadOnly.First().AsendiaAccountID : 
+                accountRepository.AccountsReadOnly.First().AsendiaAccountID :
                 0;
 
             asendia.Service = (int) AsendiaServiceType.AsendiaPriorityTracked;
             asendia.Contents = (int) ShipEngineContentsType.Merchandise;
             asendia.NonDelivery = (int) ShipEngineNonDeliveryType.ReturnToSender;
-            asendia.NonMachinable = false;           
+            asendia.NonMachinable = false;
         }
-        
+
         /// Create the XML input to the XSL engine
         /// </summary>
         public override void GenerateTemplateElements(ElementOutline container, Func<ShipmentEntity> shipment, Func<ShipmentEntity> loaded)

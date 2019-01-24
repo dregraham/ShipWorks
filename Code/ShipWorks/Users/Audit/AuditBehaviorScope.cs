@@ -1,8 +1,11 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Transactions;
 using Interapptive.Shared.Collections;
+using log4net;
+
 
 namespace ShipWorks.Users.Audit
 {
@@ -18,6 +21,8 @@ namespace ShipWorks.Users.Audit
         static AsyncLocal<int> superUserCount = new AsyncLocal<int>();
         static AsyncLocal<ImmutableStackContainer<AuditReason>> reasonStack = new AsyncLocal<ImmutableStackContainer<AuditReason>>();
         static AsyncLocal<ImmutableStackContainer<AuditState>> stateStack = new AsyncLocal<ImmutableStackContainer<AuditState>>();
+
+        private static readonly ILog log = LogManager.GetLogger(typeof(AuditBehaviorScope));
 
         // The active user behavior
         AuditBehaviorUser userBehavior = AuditBehaviorUser.Default;
@@ -91,8 +96,6 @@ namespace ShipWorks.Users.Audit
                 return;
             }
 
-            ValidateScope(!IsSuperUserActive, "userBehavior");
-
             superUserCount.Value++;
         }
 
@@ -114,8 +117,6 @@ namespace ShipWorks.Users.Audit
             bool changingReason = (reasonStack.Value.None() ||
                 reasonStack.Value.Peek().ReasonType != reason.ReasonType ||
                 reasonStack.Value.Peek().ReasonDetail != reason.ReasonDetail);
-
-            ValidateScope(changingReason, "reason");
 
             reasonStack.Value.Push(reason);
             needPopReason = true;
@@ -139,21 +140,8 @@ namespace ShipWorks.Users.Audit
 
             bool changingState = (stateStack.Value.None() || stateStack.Value.Peek() != auditState);
 
-            ValidateScope(changingState, "state");
-
             stateStack.Value.Push(auditState);
             needPopState = true;
-        }
-
-        /// <summary>
-        /// Validates that it's OK to change the properties of the active scope
-        /// </summary>
-        private void ValidateScope(bool changing, string property)
-        {
-            if (changing && Transaction.Current != null)
-            {
-                throw new InvalidOperationException("Cannot change connection-altering property when transaction is already in progress: " + property);
-            }
         }
 
         /// <summary>

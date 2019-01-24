@@ -27,6 +27,19 @@ namespace ShipWorks.Data.Import.Xml
                 order.OrderDate = order.OrderDate.ToUniversalTime();
             }
 
+            // Channel Order ID
+            order.ChannelOrderID = XPathUtility.Evaluate(xpath, "ChannelOrderID", "");
+            
+            bool success = DateTime.TryParse(XPathUtility.Evaluate(xpath, "ShipByDate", ""), out DateTime result);
+
+            if (success)
+            {
+                // Ship By Date
+                order.ShipByDate = result;
+            }
+
+            LoadCustomFields(order, xpath);
+
             // shipping
             order.RequestedShipping = XPathUtility.Evaluate(xpath, "ShippingMethod", "");
 
@@ -39,43 +52,88 @@ namespace ShipWorks.Data.Import.Xml
             // only do the remainder for new orders
             if (order.IsNew)
             {
-                // Items
-                XPathNodeIterator itemNodes = xpath.Select("Items/Item");
-                while (itemNodes.MoveNext())
-                {
-                    LoadItem(factory, observer, order, itemNodes.Current);
-                }
-
-                // Charges
-                LoadOrderCharges(factory, order, xpath);
-
-                // Credit Card stuff
-                string cctype = XPathUtility.Evaluate(xpath, "Payment/CreditCard/Type", "");
-                if (cctype.Length > 0)
-                {
-                    LoadPaymentDetail(factory, order, "Card Owner", XPathUtility.Evaluate(xpath, "Payment/CreditCard/Owner", ""));
-                    LoadPaymentDetail(factory, order, "Card Expires", XPathUtility.Evaluate(xpath, "Payment/CreditCard/Expires", ""));
-                    LoadPaymentDetail(factory, order, "Card Number", XPathUtility.Evaluate(xpath, "Payment/CreditCard/Number", ""));
-                    LoadPaymentDetail(factory, order, "Card Type", XPathUtility.Evaluate(xpath, "Payment/CreditCard/Type", ""));
-                }
-
-                // Payment Details
-                LoadPaymentDetail(factory, order, "Payment Type", XPathUtility.Evaluate(xpath, "Payment/Method", ""));
-
-                // It's also possible to use name\value pairs in Payment/Detail nodes
-                foreach (XPathNavigator detailXPath in xpath.Select("Payment/Detail").Cast<XPathNavigator>().Reverse())
-                {
-                    LoadPaymentDetail(factory, order, XPathUtility.Evaluate(detailXPath, "@name", ""), XPathUtility.Evaluate(detailXPath, "@value", ""));
-                }
-
-                // Update the total
-                order.OrderTotal = OrderUtility.CalculateTotal(order);
+                LoadOrderDetails(order, factory, observer, xpath);
             }
 
             // notify listeners that the order was loaded
             if (observer != null)
             {
                 observer.OnOrderLoadComplete(order, xpath);
+            }
+        }
+
+        /// <summary>
+        /// Load the order details from the module XML
+        /// </summary>
+        private static void LoadOrderDetails(OrderEntity order, IOrderElementFactory factory, IGenericXmlOrderLoadObserver observer, XPathNavigator xpath)
+        {
+            // Items
+            XPathNodeIterator itemNodes = xpath.Select("Items/Item");
+            while (itemNodes.MoveNext())
+            {
+                LoadItem(factory, observer, order, itemNodes.Current);
+            }
+
+            // Charges
+            LoadOrderCharges(factory, order, xpath);
+
+            // Credit Card stuff
+            string cctype = XPathUtility.Evaluate(xpath, "Payment/CreditCard/Type", "");
+            if (cctype.Length > 0)
+            {
+                LoadPaymentDetail(factory, order, "Card Owner", XPathUtility.Evaluate(xpath, "Payment/CreditCard/Owner", ""));
+                LoadPaymentDetail(factory, order, "Card Expires",
+                    XPathUtility.Evaluate(xpath, "Payment/CreditCard/Expires", ""));
+                LoadPaymentDetail(factory, order, "Card Number", XPathUtility.Evaluate(xpath, "Payment/CreditCard/Number", ""));
+                LoadPaymentDetail(factory, order, "Card Type", XPathUtility.Evaluate(xpath, "Payment/CreditCard/Type", ""));
+            }
+
+            // Payment Details
+            LoadPaymentDetail(factory, order, "Payment Type", XPathUtility.Evaluate(xpath, "Payment/Method", ""));
+
+            // It's also possible to use name\value pairs in Payment/Detail nodes
+            foreach (XPathNavigator detailXPath in xpath.Select("Payment/Detail").Cast<XPathNavigator>().Reverse())
+            {
+                LoadPaymentDetail(factory, order, XPathUtility.Evaluate(detailXPath, "@name", ""),
+                    XPathUtility.Evaluate(detailXPath, "@value", ""));
+            }
+
+            // Update the total
+            order.OrderTotal = OrderUtility.CalculateTotal(order);
+        }
+
+        /// <summary>
+        /// Loads the custom fields from the module XML
+        /// </summary>
+        private static void LoadCustomFields(OrderEntity order, XPathNavigator xpath)
+        {
+            order.Custom1 = XPathUtility.Evaluate(xpath, "Custom1", "");
+            order.Custom2 = XPathUtility.Evaluate(xpath, "Custom2", "");
+            order.Custom3 = XPathUtility.Evaluate(xpath, "Custom3", "");
+            order.Custom4 = XPathUtility.Evaluate(xpath, "Custom4", "");
+            order.Custom5 = XPathUtility.Evaluate(xpath, "Custom5", "");
+        }
+
+        /// <summary>
+        /// Loads ShipByDate from the module XML
+        /// </summary>
+        private static void LoadShipByDate(OrderEntity order, XPathNavigator xpath)
+        {
+            bool success = DateTime.TryParse(XPathUtility.Evaluate(xpath, "ShipByDate", ""), out DateTime result);
+
+            if (success)
+            {
+                DateTime shipByDate = result;
+
+                // Convert to UTC
+                if (shipByDate.Kind == DateTimeKind.Local || shipByDate.Kind == DateTimeKind.Unspecified)
+                {
+                    order.ShipByDate = shipByDate.ToUniversalTime();
+                }
+                else
+                {
+                    order.ShipByDate = shipByDate;
+                }
             }
         }
 
@@ -170,7 +228,7 @@ namespace ShipWorks.Data.Import.Xml
         }
 
         /// <summary>
-        /// Populates the fields of hte OrderItemEntity from the xpathnavigator
+        /// Populates the fields of the OrderItemEntity from the xpathnavigator
         /// </summary>
         private static void LoadItemFields(OrderItemEntity item, XPathNavigator xpath)
         {
@@ -191,6 +249,13 @@ namespace ShipWorks.Data.Import.Xml
             item.Image = XPathUtility.Evaluate(xpath, "Image", "");
             item.Thumbnail = XPathUtility.Evaluate(xpath, "ThumbnailImage", item.Image);
             item.Location = XPathUtility.Evaluate(xpath, "Location", "");
+            item.Brand = XPathUtility.Evaluate(xpath, "Brand", "");
+            item.MPN = XPathUtility.Evaluate(xpath, "MPN", "");
+            item.Custom1 = XPathUtility.Evaluate(xpath, "Custom1", "");
+            item.Custom2 = XPathUtility.Evaluate(xpath, "Custom2", "");
+            item.Custom3 = XPathUtility.Evaluate(xpath, "Custom3", "");
+            item.Custom4 = XPathUtility.Evaluate(xpath, "Custom4", "");
+            item.Custom5 = XPathUtility.Evaluate(xpath, "Custom5", "");
         }
 
         /// <summary>

@@ -91,7 +91,6 @@ namespace SmokeTest
                 SmtpClient SmtpServer = new SmtpClient("smtp.gmail.com");
 
                 mail.From = new MailAddress("ShipWorksQA@gmail.com");
-                mail.To.Add("j.eman@shipworks.com");
                 mail.To.Add("k.gicona@shipworks.com");
                 mail.To.Add("b.berger@shipworks.com");
                 mail.To.Add("s.madke@shipworks.com");

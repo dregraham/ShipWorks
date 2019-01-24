@@ -54,6 +54,7 @@
       <Project>{a5eb7a6b-1600-4be2-aed6-3284c4e7987c}</Project>
       <Name>ShipWorks.Shipping</Name>
     </ProjectReference>
+    <ProjectReference Include="..\ShipWorks.SqlServer\ShipWorks.SqlServer.csproj" />
     <ProjectReference Include="..\ShipWorks.Stores.UI\ShipWorks.Stores.UI.csproj">
       <Project>{BBF456B8-8182-4FC1-8E59-3AAFAE5BFA53}</Project>
       <Name>ShipWorks.Stores.UI</Name>
@@ -87,7 +88,7 @@
     <PackageReference Include="Autofac.Extras.Moq" Version="4.2.1-sw3" />
     <PackageReference Include="Autofac.Mef" Version="4.0.0" />
     <PackageReference Include="Castle.Core" Version="4.2.1" />
-    <PackageReference Include="CommonServiceLocator" Version="2.0.1" />
+    <PackageReference Include="CommonServiceLocator" Version="2.0.4" />
     <PackageReference Include="InterapptiveAnalyzers" Version="1.0.5714.23531" />
     <PackageReference Include="log4net" Version="2.0.7" />
     <PackageReference Include="Microsoft.Reactive.Testing" Version="3.1.1" />
@@ -121,6 +122,9 @@
     <ProjectReference Include="..\ShipWorks.Tests.Shared\ShipWorks.Tests.Shared.csproj" />
   </ItemGroup>
   <ItemGroup>
+    <Reference Include="ActiproSoftware.Shared.Net20">
+      <HintPath>..\..\Components\ActiproSoftware.Shared.Net20.dll</HintPath>
+    </Reference>
     <Reference Include="PresentationFramework" />
     <Reference Include="System.Runtime.Serialization.Formatters.Soap" />
     <Reference Include="System.Windows.Forms" />

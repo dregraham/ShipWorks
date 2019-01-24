@@ -23,11 +23,19 @@
     <None Remove="obj\**" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Interapptive.Shared\Interapptive.Shared.csproj" />
+    <ProjectReference Include="..\ShipWorks.Data.Model\ShipWorks.Data.Model.csproj" />
     <ProjectReference Include="..\ShipWorks.Executable\ShipWorks.csproj" />
+    <ProjectReference Include="..\ShipWorks.Shared\ShipWorks.Shared.csproj" />
+    <ProjectReference Include="..\ShipWorks.Shipping\ShipWorks.Shipping.csproj" />
+    <ProjectReference Include="..\ShipWorks.Stores.UI\ShipWorks.Stores.UI.csproj" />
+    <ProjectReference Include="..\ShipWorks.Stores\ShipWorks.Stores.csproj" />
     <ProjectReference Include="..\ShipWorks.Tests.Shared\ShipWorks.Tests.Shared.csproj">
       <Project>{C12E4E75-63BC-4720-8BB2-5ACBA56285CA}</Project>
       <Name>ShipWorks.Tests.Shared</Name>
     </ProjectReference>
+    <ProjectReference Include="..\ShipWorks.ThirdPartyApi\ShipWorks.ThirdPartyApi.csproj" />
+    <ProjectReference Include="..\ShipWorks\ShipWorks.Core.csproj" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -37,7 +45,7 @@
     <PackageReference Include="Autofac.Extras.Moq" Version="4.2.1-sw3" />
     <PackageReference Include="Autofac.Mef" Version="4.0.0" />
     <PackageReference Include="Castle.Core" Version="4.2.1" />
-    <PackageReference Include="CommonServiceLocator" Version="2.0.1" />
+    <PackageReference Include="CommonServiceLocator" Version="2.0.4" />
     <PackageReference Include="Desktop.Analyzers" Version="1.1.0" />
     <PackageReference Include="HarSharp" Version="1.0.0" />
     <PackageReference Include="HelperSharp" Version="0.0.4.1" />
@@ -85,6 +93,9 @@
     <ProjectReference Include="..\ShipWorks.Tests.Shared\ShipWorks.Tests.Shared.csproj" />
   </ItemGroup>
   <ItemGroup>
+    <Reference Include="ActiproSoftware.Shared.Net20">
+      <HintPath>..\..\Components\ActiproSoftware.Shared.Net20.dll</HintPath>
+    </Reference>
     <Reference Include="PresentationFramework" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Runtime.Serialization.Formatters.Soap" />

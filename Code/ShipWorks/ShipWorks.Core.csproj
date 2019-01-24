@@ -1,9 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="14.0">
-  <Import Project="..\..\packages\CefSharp.WinForms.63.0.3\build\CefSharp.WinForms.props" Condition="Exists('..\..\packages\CefSharp.WinForms.63.0.3\build\CefSharp.WinForms.props')" />
-  <Import Project="..\..\packages\CefSharp.Common.63.0.3\build\CefSharp.Common.props" Condition="Exists('..\..\packages\CefSharp.Common.63.0.3\build\CefSharp.Common.props')" />
-  <Import Project="..\..\packages\cef.redist.x86.3.3239.1723\build\cef.redist.x86.props" Condition="Exists('..\..\packages\cef.redist.x86.3.3239.1723\build\cef.redist.x86.props')" />
-  <Import Project="..\..\packages\cef.redist.x64.3.3239.1723\build\cef.redist.x64.props" Condition="Exists('..\..\packages\cef.redist.x64.3.3239.1723\build\cef.redist.x64.props')" />
+  <Import Project="..\..\packages\CefSharp.WinForms.69.0.0\build\CefSharp.WinForms.props" Condition="Exists('..\..\packages\CefSharp.WinForms.69.0.0\build\CefSharp.WinForms.props')" />
+  <Import Project="..\..\packages\CefSharp.Common.69.0.0\build\CefSharp.Common.props" Condition="Exists('..\..\packages\CefSharp.Common.69.0.0\build\CefSharp.Common.props')" />
+  <Import Project="..\..\packages\cef.redist.x86.3.3497.1841\build\cef.redist.x86.props" Condition="Exists('..\..\packages\cef.redist.x86.3.3497.1841\build\cef.redist.x86.props')" />
+  <Import Project="..\..\packages\cef.redist.x64.3.3497.1841\build\cef.redist.x64.props" Condition="Exists('..\..\packages\cef.redist.x64.3.3497.1841\build\cef.redist.x64.props')" />
   <PropertyGroup>
     <ProjectTypeGuids>{60DC8134-EBA5-43B8-BCC9-BB4BC16C2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -160,8 +160,8 @@
       <HintPath>..\..\packages\Common.Logging.Log4Net1213.3.3.1\lib\net40\Common.Logging.Log4Net1213.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="CommonServiceLocator, Version=2.0.1.0, Culture=neutral, PublicKeyToken=489b6accfaf20ef0, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\CommonServiceLocator.2.0.1\lib\net45\CommonServiceLocator.dll</HintPath>
+    <Reference Include="CommonServiceLocator, Version=2.0.4.0, Culture=neutral, PublicKeyToken=489b6accfaf20ef0, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\CommonServiceLocator.2.0.4\lib\net46\CommonServiceLocator.dll</HintPath>
     </Reference>
     <Reference Include="ComponentFactory.Krypton.Toolkit, Version=2.8.5.0, Culture=neutral, PublicKeyToken=a87e673e9ecb6e8e, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -308,11 +308,17 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Components\SpreadsheetGear.dll</HintPath>
     </Reference>
+    <Reference Include="Syncfusion.Compression.Base, Version=16.1460.0.26, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Syncfusion.Compression.Base46.16.1.0.26\lib\net46\Syncfusion.Compression.Base.dll</HintPath>
+    </Reference>
     <Reference Include="Syncfusion.Grid.Base, Version=16.1460.0.32, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Syncfusion.Grid.Base.16.1.0.32\lib\net46\Syncfusion.Grid.Base.dll</HintPath>
     </Reference>
     <Reference Include="Syncfusion.Grid.Windows, Version=16.1460.0.32, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Syncfusion.Grid.Windows.16.1.0.32\lib\net46\Syncfusion.Grid.Windows.dll</HintPath>
+    </Reference>
+    <Reference Include="Syncfusion.Licensing, Version=16.3460.0.21, Culture=neutral, PublicKeyToken=632609b4d040f6b4, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Syncfusion.Licensing.16.3.0.21\lib\net46\Syncfusion.Licensing.dll</HintPath>
     </Reference>
     <Reference Include="Syncfusion.Shared.Base, Version=16.1460.0.32, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Syncfusion.Shared.Base.16.1.0.32\lib\net46\Syncfusion.Shared.Base.dll</HintPath>
@@ -328,6 +334,9 @@
     </Reference>
     <Reference Include="Syncfusion.Tools.Windows, Version=16.1460.0.32, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Syncfusion.Tools.Windows.16.1.0.32\lib\net46\Syncfusion.Tools.Windows.dll</HintPath>
+    </Reference>
+    <Reference Include="Syncfusion.XlsIO.Base, Version=16.1460.0.26, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Syncfusion.XlsIO.Base46.16.1.0.26\lib\net46\Syncfusion.XlsIO.Base.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Collections.Immutable, Version=1.2.2.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
@@ -753,6 +762,51 @@
     <Compile Include="ApplicationCore\Interaction\IMenuCommandExecutionContext.cs" />
     <Compile Include="ApplicationCore\Interaction\SelectionDependentEntry.cs" />
     <Compile Include="ApplicationCore\IoCLogRequestModule.cs" />
+    <Compile Include="ApplicationCore\IRegistrationOverride.cs" />
+    <Compile Include="ApplicationCore\Licensing\ITangoLogShipmentProcessor.cs" />
+    <Compile Include="ApplicationCore\Licensing\ITangoSecurityValidator.cs" />
+    <Compile Include="ApplicationCore\Licensing\ITangoWebRequestClient.cs" />
+    <Compile Include="ApplicationCore\Licensing\TangoLogShipmentProcessor.cs" />
+    <Compile Include="ApplicationCore\Licensing\TangoRequests\ITangoLogShipmentRequest.cs" />
+    <Compile Include="ApplicationCore\Licensing\TangoRequests\TangoLogShipmentRequest.cs" />
+    <Compile Include="ApplicationCore\Licensing\TangoSecurityValidator.cs" />
+    <Compile Include="ApplicationCore\Licensing\TangoWebRequestClient.cs" />
+    <Compile Include="ApplicationCore\MainForm.BasicUIHeartbeat.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Filters\Content\Conditions\OrderItems\Custom1Condition.cs" />
+    <Compile Include="Filters\Content\Conditions\OrderItems\Custom2Condition.cs" />
+    <Compile Include="Filters\Content\Conditions\OrderItems\Custom3Condition.cs" />
+    <Compile Include="Filters\Content\Conditions\OrderItems\Custom4Condition.cs" />
+    <Compile Include="Filters\Content\Conditions\OrderItems\Custom5Condition.cs" />
+    <Compile Include="Filters\Content\Conditions\OrderItems\MpnCondition.cs" />
+    <Compile Include="Filters\Content\Conditions\OrderItems\BrandCondition.cs" />
+    <Compile Include="Filters\Content\Conditions\Orders\ChannelOrderIdCondition.cs" />
+    <Compile Include="Filters\Content\Conditions\Orders\Custom1Condition.cs" />
+    <Compile Include="Filters\Content\Conditions\Orders\Custom5Condition.cs" />
+    <Compile Include="Filters\Content\Conditions\Orders\Custom3Condition.cs" />
+    <Compile Include="Filters\Content\Conditions\Orders\Custom2Condition.cs" />
+    <Compile Include="Filters\Content\Conditions\Orders\Custom4Condition.cs" />
+    <Compile Include="Filters\Content\Conditions\Orders\ShipByDateCondition.cs" />
+    <Compile Include="Common\Threading\ProgressFactory.cs" />
+    <Compile Include="Data\ProductCatalogTelemetryService.cs" />
+    <Compile Include="OrderLookup\CoreOrderLookupRegistrationOverride.cs" />
+    <Compile Include="OrderLookup\FieldManager\IOrderLookupFieldLayoutProvider.cs" />
+    <Compile Include="OrderLookup\FieldManager\IOrderLookupFieldLayoutRepository.cs" />
+    <Compile Include="OrderLookup\FieldManager\SectionFieldLayout.cs" />
+    <Compile Include="OrderLookup\FieldManager\SectionLayout.cs" />
+    <Compile Include="OrderLookup\FieldManager\SectionLayoutFieldIDs.cs" />
+    <Compile Include="OrderLookup\FieldManager\SectionLayoutIDs.cs" />
+    <Compile Include="Messaging\Messages\Shipping\FocusQuickSearchMessage.cs" />
+    <Compile Include="OrderLookup\IOrderLookupFieldManager.cs" />
+    <Compile Include="OrderLookup\IOrderLookupFieldLayoutProviderHost.cs" />
+    <Compile Include="OrderLookup\IOrderLookupPipeline.cs" />
+    <Compile Include="OrderLookup\IOrderLookupRegistrationOverride.cs" />
+    <Compile Include="OrderLookup\IOrderLookupShipmentModel.cs" />
+    <Compile Include="OrderLookup\IOrderLookupViewModel.cs" />
+    <Compile Include="OrderLookup\IPreviousShipmentReprintActionHandler.cs" />
+    <Compile Include="OrderLookup\IPreviousShipmentVoidActionHandler.cs" />
+    <Compile Include="OrderLookup\IShipmentHistory.cs" />
     <Compile Include="ApplicationCore\Licensing\Activation\CustomerLicenseActivationActivity.cs" />
     <Compile Include="ApplicationCore\Licensing\Activation\CustomerLicenseActivationService.cs" />
     <Compile Include="ApplicationCore\Licensing\Activation\ICustomerLicenseActivationActivity.cs" />
@@ -854,7 +908,7 @@
     <Compile Include="ApplicationCore\Logging\LogActionType.cs" />
     <Compile Include="ApplicationCore\Logging\LogEntryFactory.cs" />
     <Compile Include="ApplicationCore\Logging\NullApiLogEntry.cs" />
-    <Compile Include="ApplicationCore\MainForm.UIHeartbeat.cs">
+    <Compile Include="ApplicationCore\MainForm.BatchModeUIHeartbeat.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="ApplicationCore\MainGridControlPipeline.cs" />
@@ -972,11 +1026,38 @@
     <Compile Include="Common\Threading\BackgroundProgressDlg.cs" />
     <Compile Include="Common\Threading\BackgroundSingleItemProgressDialog.cs" />
     <Compile Include="Data\FilterTelemetryService.cs" />
+    <Compile Include="Data\Grid\Columns\Definitions\ShipmentsHistoryColumnDefinitionFactory.cs" />
+    <Compile Include="Data\Grid\Paging\EntityGatewayUtility.cs" />
+    <Compile Include="Data\Grid\Paging\PageDetails.cs" />
+    <Compile Include="Data\Grid\Paging\Pager.cs" />
     <Compile Include="Filters\Content\Conditions\OrderItems\OrderItemHeightCondition.cs" />
     <Compile Include="Filters\Content\Conditions\OrderItems\OrderItemLengthCondition.cs" />
     <Compile Include="Filters\Content\Conditions\OrderItems\OrderItemWidthCondition.cs" />
     <Compile Include="Filters\Content\SqlGeneration\FilterQueryType.cs" />
+    <Compile Include="Filters\Content\IFilterDefinition.cs" />
+    <Compile Include="Filters\Search\ISearchDefinitionProviderFactory.cs" />
+    <Compile Include="OrderLookup\OrderClearReason.cs" />
+    <Compile Include="OrderLookup\OrderLookupClearOrderMessage.cs" />
+    <Compile Include="OrderLookup\OrderLookupSearchMessage.cs" />
+    <Compile Include="OrderLookup\ShipmentModelPipelines\IOrderLookupShipmentModelPipeline.cs" />
+    <Compile Include="Products\Export\IProductExcelWriter.cs" />
+    <Compile Include="Products\Import\FailedProductImportException.cs" />
+    <Compile Include="Products\Import\IImportProductsResult.cs" />
+    <Compile Include="Products\Import\IProductExcelReader.cs" />
+    <Compile Include="Products\Import\IProductImporter.cs" />
+    <Compile Include="Products\Import\ProductImportException.cs" />
+    <Compile Include="Products\Import\ProductToImportDto.cs" />
+    <Compile Include="Products\IProductVariant.cs" />
+    <Compile Include="Products\IProductCatalog.cs" />
+    <Compile Include="Products\IProductsMode.cs" />
+    <Compile Include="Shipping\Profiles\EditableShippingProfile.cs" />
+    <Compile Include="Shipping\Profiles\IEditableShippingProfile.cs" />
+    <Compile Include="Shipping\Profiles\IProfilePopupService.cs" />
+    <Compile Include="Shipping\Services\IAppliableShippingProfileRepository.cs" />
     <Compile Include="Shipping\ShipmentUpdateOperationResult.cs" />
+    <Compile Include="Shipping\Policies\AmazonPrimeShippingPolicyTarget.cs" />
+    <Compile Include="Shipping\Policies\AmazonPrimeShippingRestrictionType.cs" />
+    <Compile Include="Shipping\Policies\AmazonShipmentShippingPolicy.cs" />
     <Compile Include="Shipping\ShipSense\IShipSenseSynchronizer.cs" />
     <Compile Include="Shipping\ShipSense\NullKnowledgebase.cs" />
     <Compile Include="Shipping\ShipSense\NullShipSenseSynchronizer.cs" />
@@ -1510,7 +1591,7 @@
     <Compile Include="Shipping\IShippingOriginManager.cs" />
     <Compile Include="Shipping\Services\IAutoPrintConfirmationDlgFactory.cs" />
     <Compile Include="Shipping\Services\IShipmentCustomsItemAdapter.cs" />
-    <Compile Include="Shipping\Services\IShippingProfileRepository.cs" />
+    <Compile Include="Shipping\Services\IEditableShippingProfileRepository.cs" />
     <Compile Include="Shipping\Services\ISingleScanOrderConfirmationService.cs" />
     <Compile Include="Shipping\Services\ISingleScanShipmentConfirmationService.cs" />
     <Compile Include="Shipping\Services\MessagingText.cs" />
@@ -1572,6 +1653,7 @@
     <Compile Include="Stores\Management\IDownloadSettingsControl.cs" />
     <Compile Include="Stores\Management\IStoreWizard.cs" />
     <Compile Include="Stores\Management\IStoreWizardFinishPageControlFactory.cs" />
+    <Compile Include="Stores\Orders\IOrderRepository.cs" />
     <Compile Include="Stores\Orders\Split\IOrderSplitOrchestrator.cs" />
     <Compile Include="Stores\Platforms\Amazon\IAmazonOnlineUpdater.cs" />
     <Compile Include="Stores\Platforms\Amazon\Mws\AmazonOrderUploadDetail.cs" />
@@ -2213,10 +2295,14 @@
     <Compile Include="Templates\Printing\PrinterSetting.cs" />
     <Compile Include="Templates\Printing\PrinterSettingsFactory.cs" />
     <Compile Include="Templates\Printing\PrintJobFactory.cs" />
+    <Compile Include="Templates\Processing\TemplateXml\ElementOutlines\OrderItemProductBundleOutline.cs" />
+    <Compile Include="Templates\Processing\TemplateXml\ElementOutlines\OrderItemProductOutline.cs" />
     <Compile Include="Templates\Processing\TemplateXml\ElementOutlines\ReturnItemOutline.cs" />
     <Compile Include="Templates\Tokens\ITemplateTokenProcessor.cs" />
     <Compile Include="Templates\Tokens\TemplateTokenProcessorWrapper.cs" />
+    <Compile Include="UI\Controls\IOrderLookup.cs" />
     <Compile Include="UI\Controls\IWeightConverter.cs" />
+    <Compile Include="UI\Controls\LengthConverter.cs" />
     <Compile Include="UI\Controls\MultiValueBinders\CheckboxMultiValueBinder.cs" />
     <Compile Include="UI\Controls\MultiValueBinders\GenericMultiValueBinder.cs" />
     <Compile Include="UI\Controls\ResizingRichTextBox.cs">
@@ -8761,6 +8847,12 @@
     </Compile>
     <Compile Include="Users\Security\SuperUser.cs" />
     <Compile Include="Users\BackgroundUserLoginWorkflow.cs" />
+    <Compile Include="Users\UIModeSelectionControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Users\UIModeSelectionControl.Designer.cs">
+      <DependentUpon>UIModeSelectionControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="Users\UserLoginWorkflow.cs" />
     <Compile Include="Users\UserManager.cs" />
     <Compile Include="Users\UserService.cs" />
@@ -10819,6 +10911,8 @@
     <None Include="Resources\infiplex.png" />
     <None Include="Resources\asendia.png" />
     <Resource Include="Resources\box_closed_with_label_32_32.png" />
+    <None Include="Resources\bonanza.png" />
+    <Content Include="Resources\box_tall_32.png" />
     <Content Include="Resources\data_16.png" />
     <Content Include="Resources\data_error_16.png" />
     <Content Include="Resources\data_ok_16.png" />
@@ -11027,6 +11121,8 @@
     <Resource Include="Resources\warning2.png" />
     <None Include="Resources\walmart.png" />
     <Content Include="Resources\Stores\Icons\zentail.png" />
+    <None Include="Resources\table_sql32.png" />
+    <None Include="Resources\windows.png" />
     <Content Include="Stores\Platforms\Magento\Modules\MagentoOne\MagentoConnectExtension\app\code\community\Interapptive\ShipWorks\etc\adminhtml.xml" />
     <Content Include="Stores\Platforms\Magento\Modules\MagentoOne\MagentoConnectExtension\app\code\community\Interapptive\ShipWorks\etc\api.xml" />
     <Content Include="Stores\Platforms\Magento\Modules\MagentoOne\MagentoConnectExtension\app\code\community\Interapptive\ShipWorks\etc\config.xml" />
@@ -11164,6 +11260,9 @@
       <SubType>Designer</SubType>
       <DependentUpon>UserChangePasswordDlg.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Users\UIModeSelectionControl.resx">
+      <DependentUpon>UIModeSelectionControl.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Users\UserManagerDlg.resx">
       <SubType>Designer</SubType>
       <DependentUpon>UserManagerDlg.cs</DependentUpon>
@@ -11271,15 +11370,15 @@
     <PropertyGroup>
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
-    <Error Condition="!Exists('..\..\packages\cef.redist.x64.3.3239.1723\build\cef.redist.x64.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\cef.redist.x64.3.3239.1723\build\cef.redist.x64.props'))" />
-    <Error Condition="!Exists('..\..\packages\cef.redist.x86.3.3239.1723\build\cef.redist.x86.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\cef.redist.x86.3.3239.1723\build\cef.redist.x86.props'))" />
-    <Error Condition="!Exists('..\..\packages\CefSharp.Common.63.0.3\build\CefSharp.Common.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\CefSharp.Common.63.0.3\build\CefSharp.Common.props'))" />
-    <Error Condition="!Exists('..\..\packages\CefSharp.Common.63.0.3\build\CefSharp.Common.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\CefSharp.Common.63.0.3\build\CefSharp.Common.targets'))" />
-    <Error Condition="!Exists('..\..\packages\CefSharp.WinForms.63.0.3\build\CefSharp.WinForms.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\CefSharp.WinForms.63.0.3\build\CefSharp.WinForms.props'))" />
-    <Error Condition="!Exists('..\..\packages\CefSharp.WinForms.63.0.3\build\CefSharp.WinForms.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\CefSharp.WinForms.63.0.3\build\CefSharp.WinForms.targets'))" />
+    <Error Condition="!Exists('..\..\packages\cef.redist.x64.3.3497.1841\build\cef.redist.x64.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\cef.redist.x64.3.3497.1841\build\cef.redist.x64.props'))" />
+    <Error Condition="!Exists('..\..\packages\cef.redist.x86.3.3497.1841\build\cef.redist.x86.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\cef.redist.x86.3.3497.1841\build\cef.redist.x86.props'))" />
+    <Error Condition="!Exists('..\..\packages\CefSharp.Common.69.0.0\build\CefSharp.Common.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\CefSharp.Common.69.0.0\build\CefSharp.Common.props'))" />
+    <Error Condition="!Exists('..\..\packages\CefSharp.Common.69.0.0\build\CefSharp.Common.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\CefSharp.Common.69.0.0\build\CefSharp.Common.targets'))" />
+    <Error Condition="!Exists('..\..\packages\CefSharp.WinForms.69.0.0\build\CefSharp.WinForms.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\CefSharp.WinForms.69.0.0\build\CefSharp.WinForms.props'))" />
+    <Error Condition="!Exists('..\..\packages\CefSharp.WinForms.69.0.0\build\CefSharp.WinForms.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\CefSharp.WinForms.69.0.0\build\CefSharp.WinForms.targets'))" />
   </Target>
-  <Import Project="..\..\packages\CefSharp.Common.63.0.3\build\CefSharp.Common.targets" Condition="Exists('..\..\packages\CefSharp.Common.63.0.3\build\CefSharp.Common.targets')" />
-  <Import Project="..\..\packages\CefSharp.WinForms.63.0.3\build\CefSharp.WinForms.targets" Condition="Exists('..\..\packages\CefSharp.WinForms.63.0.3\build\CefSharp.WinForms.targets')" />
+  <Import Project="..\..\packages\CefSharp.Common.69.0.0\build\CefSharp.Common.targets" Condition="Exists('..\..\packages\CefSharp.Common.69.0.0\build\CefSharp.Common.targets')" />
+  <Import Project="..\..\packages\CefSharp.WinForms.69.0.0\build\CefSharp.WinForms.targets" Condition="Exists('..\..\packages\CefSharp.WinForms.69.0.0\build\CefSharp.WinForms.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

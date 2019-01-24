@@ -22,7 +22,7 @@ namespace ShipWorks.Filters.Search
         /// <summary>
         /// Gets a filter definition based on the provided quick search string.
         /// </summary>
-        public FilterDefinition GetDefinition(string quickSearchString)
+        public IFilterDefinition GetDefinition(string quickSearchString)
         {
             FilterDefinition definition = new FilterDefinition(FilterTarget.Orders, FilterDefinitionSourceType.Search);
             definition.RootContainer.FirstGroup.JoinType = ConditionJoinType.Any;

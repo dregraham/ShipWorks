@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -23,7 +22,7 @@ namespace ShipWorks.ApplicationCore.Licensing
     public class FakeTangoWebClient : TangoWebClientWrapper, ITangoWebClient
     {
         private const string CustomizedTangoFilesKeyName = "TangoWebClientDataPath";
-        ILog log = LogManager.GetLogger(typeof(FakeTangoWebClient));
+        private ILog log = LogManager.GetLogger(typeof(FakeTangoWebClient));
 
         /// <summary>
         /// Makes a request to Tango to add a store
@@ -33,17 +32,6 @@ namespace ShipWorks.ApplicationCore.Licensing
             XmlDocument doc = new XmlDocument();
             doc.LoadXml("<?xml version=\"1.0\" standalone=\"yes\" ?><License><Error><Description>Invalid Authentication</Description></Error></License>");
             return new AddStoreResponse(doc);
-        }
-
-        /// <summary>
-        /// Log the given processed shipment to Tango.  isRetry is only for internal interapptive purposes to handle rare cases where shipments a customer
-        /// insured did not make it up into tango, but the shipment did actually process.
-        /// </summary>
-        [Obfuscation(Exclude = true)]
-        public override string LogShipment(StoreEntity store, ShipmentEntity shipment, bool isRetry = false)
-        {
-            log.Fatal($"Shipment logged to Tango for shipment id: {shipment.ShipmentID}");
-            return Guid.NewGuid().ToString("D");
         }
 
         /// <summary>
@@ -62,8 +50,8 @@ namespace ShipWorks.ApplicationCore.Licensing
         [Obfuscation(Exclude = true)]
         public override IEnumerable<Nudge> GetNudges(IEnumerable<StoreEntity> stores)
         {
-            // Build up a couple of dummy nudges for testing purposes. Null is being configured as the INudgeAction 
-            // until the actual implementations are ready. Null is a good test to ensure that this is accounted 
+            // Build up a couple of dummy nudges for testing purposes. Null is being configured as the INudgeAction
+            // until the actual implementations are ready. Null is a good test to ensure that this is accounted
             return Enumerable.Empty<Nudge>();
         }
 
@@ -135,6 +123,27 @@ namespace ShipWorks.ApplicationCore.Licensing
             XmlDocument xmlResponse = GetXmlDocumentFromFile("ActiveStores.xml", string.Empty);
 
             return new GetActiveStoresResponse(xmlResponse).ActiveStores;
+        }
+
+        /// <summary>
+        /// Gets the Tango customer id for a license.
+        /// </summary>
+        public override string GetTangoCustomerId()
+        {
+            StoreEntity store = StoreManager.GetEnabledStores()
+                                    .FirstOrDefault(s => new ShipWorksLicense(s.License).IsTrial == false) ??
+                                StoreManager.GetAllStores()
+                                    .FirstOrDefault(s => new ShipWorksLicense(s.License).IsTrial == false);
+
+            try
+            {
+                return store != null ? GetLicenseStatus(store.License, store).TangoCustomerID : string.Empty;
+            }
+            catch (TangoException ex)
+            {
+                log.Error(ex);
+                return string.Empty;
+            }
         }
 
         /// <summary>

@@ -1,6 +1,7 @@
 ﻿using System;
 using Interapptive.Shared.Messaging;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Settings;
 
 namespace ShipWorks.Messaging.Messages.Shipping
 {

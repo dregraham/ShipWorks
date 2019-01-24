@@ -1,4 +1,5 @@
-﻿using Autofac.Extras.Moq;
+﻿using Autofac;
+using Autofac.Extras.Moq;
 using Interapptive.Shared.Threading;
 using Interapptive.Shared.UI;
 using Microsoft.Reactive.Testing;
@@ -7,6 +8,7 @@ using ShipWorks.Common.IO.KeyboardShortcuts;
 using ShipWorks.Common.IO.KeyboardShortcuts.Messages;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.IO.KeyboardShortcuts;
 using ShipWorks.Messaging.Messages.SingleScan;
 using ShipWorks.Shipping.Profiles;
@@ -43,7 +45,7 @@ namespace ShipWorks.SingleScan.Tests
             scheduler = new TestScheduler();
             scheduleProvider.Setup(s => s.WindowsFormsEventLoop).Returns(scheduler);
             scheduleProvider.Setup(s => s.Default).Returns(scheduler);
-            
+
             testObject = mock.Create<ApplyProfileShortcutMessageIndicatorPipeline>();
         }
 
@@ -59,10 +61,7 @@ namespace ShipWorks.SingleScan.Tests
 
             ShortcutMessage shortcutMessage = new ShortcutMessage(scanMessageBroker, shortcut, ShortcutTriggerType.Barcode, "abcd");
             testMessenger.Send(shortcutMessage);
-
-            ShippingProfile profile = mock.Create<ShippingProfile>();
-            profile.Shortcut = shortcut;
-            profile.ShippingProfileEntity = new ShippingProfileEntity() { Name = "FooBar" };
+            ShippingProfile profile = CreateProfile(shortcut);
 
             testMessenger.Send(new ProfileAppliedMessage(profile, null, null));
 
@@ -84,9 +83,7 @@ namespace ShipWorks.SingleScan.Tests
             ShortcutMessage shortcutMessage = new ShortcutMessage(scanMessageBroker, shortcut, ShortcutTriggerType.Hotkey, "F5");
             testMessenger.Send(shortcutMessage);
 
-            ShippingProfile profile = mock.Create<ShippingProfile>();
-            profile.Shortcut = shortcut;
-            profile.ShippingProfileEntity = new ShippingProfileEntity() { Name = "FooBar" };
+            var profile = CreateProfile(shortcut);
 
             testMessenger.Send(new ProfileAppliedMessage(profile, null, null));
 
@@ -110,9 +107,7 @@ namespace ShipWorks.SingleScan.Tests
             ShortcutMessage shortcutMessage = new ShortcutMessage(scanMessageBroker, shortcut, ShortcutTriggerType.Hotkey, "F5");
             testMessenger.Send(shortcutMessage);
 
-            ShippingProfile profile = mock.Create<ShippingProfile>();
-            profile.Shortcut = shortcut;
-            profile.ShippingProfileEntity = new ShippingProfileEntity() { Name = "FooBar" };
+            ShippingProfile profile = CreateProfile(shortcut);
 
             testMessenger.Send(new ProfileAppliedMessage(profile, null, null));
 
@@ -133,7 +128,7 @@ namespace ShipWorks.SingleScan.Tests
 
             ShortcutMessage shortcutMessage = new ShortcutMessage(scanMessageBroker, shortcut, ShortcutTriggerType.Barcode, "abcd");
             testMessenger.Send(shortcutMessage);
-                        
+
             scheduler.Start();
 
             messageHelper.Verify(m => m.ShowBarcodePopup(It.IsAny<string>()), Times.Never);
@@ -158,5 +153,10 @@ namespace ShipWorks.SingleScan.Tests
             messageHelper.Verify(m => m.ShowBarcodePopup(It.IsAny<string>()), Times.Never);
             messageHelper.Verify(m => m.ShowKeyboardPopup(It.IsAny<string>()), Times.Never);
         }
+
+        private ShippingProfile CreateProfile(IShortcutEntity shortcut) =>
+            mock.Create<ShippingProfile>(
+                TypedParameter.From<IShippingProfileEntity>(new ShippingProfileEntity() { Name = "FooBar" }),
+                TypedParameter.From(shortcut));
     }
 }

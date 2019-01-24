@@ -1,5 +1,5 @@
 ﻿using System;
-using ShipWorks.Data.Model.EntityInterfaces;
+using ShipWorks.Shipping.Profiles;
 using ShipWorks.UI.Controls.SandRibbon;
 
 namespace ShipWorks.Shipping.UI.ShippingRibbon
@@ -9,7 +9,7 @@ namespace ShipWorks.Shipping.UI.ShippingRibbon
     /// </summary>
     internal class ApplyProfileButtonWrapper : IRibbonButton, IDisposable
     {
-        readonly RibbonButton actualApplyProfileButton;
+        private readonly RibbonButton actualApplyProfileButton;
 
         /// <summary>
         /// Constructor
@@ -23,7 +23,7 @@ namespace ShipWorks.Shipping.UI.ShippingRibbon
         /// <summary>
         /// Apply a specific profile
         /// </summary>
-        public void ApplyProfile(IShippingProfileEntity profile)
+        public void ApplyProfile(IShippingProfile profile)
         {
             actualApplyProfileButton.Tag = profile;
             Activate?.Invoke(this, EventArgs.Empty);

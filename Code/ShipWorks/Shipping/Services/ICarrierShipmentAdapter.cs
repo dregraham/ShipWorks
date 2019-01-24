@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Reflection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Editing.Rating;
@@ -130,9 +131,25 @@ namespace ShipWorks.Shipping.Services
         IPackageAdapter AddPackage();
 
         /// <summary>
+        /// Add a new package adapter
+        /// </summary>
+        /// <param name="manipulateEntity">
+        /// Pass in an action to manipulate the package that gets added to the shipment
+        /// </param>
+        IPackageAdapter AddPackage(Action<INotifyPropertyChanged> manipulateEntity);
+
+        /// <summary>
         /// Delete the specified package from the shipment
         /// </summary>
         void DeletePackage(IPackageAdapter package);
+
+        /// <summary>
+        /// Delete the specified package from the shipment
+        /// </summary>
+        /// <param name="manipulateEntity">
+        /// Pass in an action to manipulate the package that gets deleted from the shipment
+        /// </param>
+        void DeletePackage(IPackageAdapter package, Action<INotifyPropertyChanged> manipulateEntity);
 
         /// <summary>
         /// Add a new customs item
@@ -145,6 +162,11 @@ namespace ShipWorks.Shipping.Services
         void DeleteCustomsItem(IShipmentCustomsItemAdapter customsItem);
 
         /// <summary>
+        /// Send a notification if service related properties change
+        /// </summary>
+        IDisposable NotifyIfServiceRelatedPropertiesChange(Action<string> raisePropertyChanged);
+
+        /// <summary>
         /// Does the given rate match the service selected for the shipment
         /// </summary>
         bool DoesRateMatchSelectedService(RateResult rate);
@@ -153,5 +175,10 @@ namespace ShipWorks.Shipping.Services
         /// For rates that are not selectable, find their first child that is.
         /// </summary>
         RateResult GetChildRateForRate(RateResult parentRate, IEnumerable<RateResult> rates);
+
+        /// <summary>
+        /// Update the total weight of the shipment based on its ContentWeight and any packaging weight.
+        /// </summary>
+        void UpdateTotalWeight();
     }
 }

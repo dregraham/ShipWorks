@@ -50,7 +50,7 @@ namespace ShipWorks.Shipping
     public abstract class ShipmentType
     {
         // Logger
-        static readonly ILog log = LogManager.GetLogger(typeof(ShipmentType));
+        private static readonly ILog log = LogManager.GetLogger(typeof(ShipmentType));
 
         /// <summary>
         /// HTTPS certificate inspector to use.
@@ -58,8 +58,20 @@ namespace ShipWorks.Shipping
         private ICertificateInspector certificateInspector;
 
         private static object syncLock = new object();
+        private readonly IDataProvider dataProvider;
 
-        protected ShipmentType()
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        protected ShipmentType(IDataProvider dataProvider)
+        {
+            this.dataProvider = dataProvider;
+        }
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        protected ShipmentType() : this(new DataProviderWrapper(new SqlAdapterFactory()))
         {
             // Use the trusting inspector until told otherwise trusting so that calls will continue to work as expected.
             // Calls that require specific inspection should override the CertificateInspector property.
@@ -213,7 +225,7 @@ namespace ShipWorks.Shipping
             IAmazonOrder order;
             if (shipment.Order == null)
             {
-                order = DataProvider.GetEntity(shipment.OrderID) as IAmazonOrder;
+                order = dataProvider.GetEntity(shipment.OrderID) as IAmazonOrder;
             }
             else
             {
@@ -497,6 +509,31 @@ namespace ShipWorks.Shipping
         protected abstract void LoadShipmentDataInternal(ShipmentEntity shipment, bool refreshIfPresent);
 
         /// <summary>
+        /// Set the shipments dimensions
+        /// </summary>
+        private void SetPackageDimensions(ShipmentEntity shipment, ILifetimeScope lifetimeScope)
+        {
+            ICarrierShipmentAdapterFactory shipmentAdapterFactory = lifetimeScope.Resolve<ICarrierShipmentAdapterFactory>();
+            IPackageAdapter package = shipmentAdapterFactory.Get(shipment).GetPackageAdapters().Single();
+
+            package.DimsLength = 0;
+            package.DimsWidth = 0;
+            package.DimsHeight = 0;
+
+            if (shipment.Order.OrderItems.Count() == 1)
+            {
+                OrderItemEntity item = shipment.Order.OrderItems.Single();
+
+                if (item.Quantity.IsEquivalentTo(1))
+                {
+                    package.DimsLength = (double) item.Length;
+                    package.DimsWidth = (double) item.Width;
+                    package.DimsHeight = (double) item.Height;
+                }
+            }
+        }
+
+        /// <summary>
         /// Apply the configured defaults and profile rule settings to the given shipment
         /// </summary>
         public virtual void ConfigureNewShipment(ShipmentEntity shipment)
@@ -514,6 +551,8 @@ namespace ShipWorks.Shipping
                 IFilterHelper filterHelper = lifetimeScope.Resolve<IFilterHelper>();
                 IShippingProfileService shippingProfileService = lifetimeScope.Resolve<IShippingProfileService>();
 
+                SetPackageDimensions(shipment, lifetimeScope);
+
                 // LoadCustomsItems no longer automatically saves the shipment, so we can call it here
                 customsManager.LoadCustomsItems(shipment, false, x => true);
 
@@ -524,7 +563,7 @@ namespace ShipWorks.Shipping
                     shippingProfileManager.SaveProfile(primaryProfile);
                 }
 
-                IShippingProfile shippingProfile = shippingProfileService.Get(primaryProfile.ShippingProfileID);
+                var shippingProfile = shippingProfileService.Get(primaryProfile);
                 shippingProfile.Apply(shipment);
 
                 // Now apply ShipSense
@@ -539,7 +578,7 @@ namespace ShipWorks.Shipping
                         IShippingProfileEntity profile = shippingProfileManager.GetProfileReadOnly(rule.ShippingProfileID);
                         if (profile != null)
                         {
-                            shippingProfileService.Get(profile.ShippingProfileID)?.Apply(shipment);
+                            shippingProfileService.Get(profile).Apply(shipment);
                         }
                     }
                 }
@@ -694,7 +733,7 @@ namespace ShipWorks.Shipping
             if (!SupportsMultiplePackages)
             {
                 // LoadPackageProfile sets up the profile before ConfigurePrimaryProfile is called and creates
-                // an in memory PackageProfile with null fields. Let's clear it out and create a new one with initial vialues.
+                // an in memory PackageProfile with null fields. Let's clear it out and create a new one with initial values.
                 profile.Packages.Clear();
                 profile.Packages.Add(new PackageProfileEntity()
                 {
@@ -779,8 +818,7 @@ namespace ShipWorks.Shipping
         }
 
         /// <summary>
-        /// Update the total weight of the shipment based on its ContentWeight and any packaging weight.  The default
-        /// implementation is just to set the TotalWeight equal to the ContentWeight.
+        /// Update the total weight of the shipment based on its ContentWeight and any packaging weight.
         /// </summary>
         public virtual void UpdateTotalWeight(ShipmentEntity shipment)
         {
@@ -789,8 +827,83 @@ namespace ShipWorks.Shipping
                 throw new InvalidOperationException("Cannot update weight on a processed shipment.");
             }
 
-            shipment.TotalWeight = shipment.ContentWeight;
+            if (SupportsMultiplePackages)
+            {
+                UpdateMultiplePackageWeight(shipment);
+            }
+            else
+            {
+                UpdateSinglePackageWeight(shipment);
+            }
         }
+
+        /// <summary>
+        /// Update weight for multi-package shipments
+        /// </summary>
+        /// <remarks>
+        /// We don't want to update the weight unless it's actually different because we now use the notify property changed
+        /// event on the entities and it seems to fire regardless of whether the value has actually changed.  This could also
+        /// be caused by the fact that weight is a double, and 1.5 does not equal 1.500000001
+        /// </remarks>
+        private void UpdateMultiplePackageWeight(ShipmentEntity shipment)
+        {
+            MethodConditions.EnsureArgumentIsNotNull(shipment, nameof(shipment));
+
+            double contentWeight = 0;
+            double totalWeight = 0;
+
+            var packageDimensions = GetPackageWeights(shipment) ?? Enumerable.Empty<(double, bool, double)>();
+            foreach ((double weight, bool addDimsWeight, double dimsWeight) in packageDimensions)
+            {
+                contentWeight += weight;
+                totalWeight += weight;
+
+                if (addDimsWeight)
+                {
+                    totalWeight += dimsWeight;
+                }
+            }
+
+            if (!contentWeight.IsEquivalentTo(shipment.ContentWeight))
+            {
+                shipment.ContentWeight = contentWeight;
+            }
+
+            if (!totalWeight.IsEquivalentTo(shipment.TotalWeight))
+            {
+                shipment.TotalWeight = totalWeight;
+            }
+        }
+
+        /// <summary>
+        /// Update weight for a single-package shipments
+        /// </summary>
+        /// <remarks>
+        /// We don't want to update the weight unless it's actually different because we now use the notify property changed
+        /// event on the entities and it seems to fire regardless of whether the value has actually changed.  This could also
+        /// be caused by the fact that weight is a double, and 1.5 does not equal 1.500000001
+        /// </remarks>
+        private void UpdateSinglePackageWeight(ShipmentEntity shipment)
+        {
+            MethodConditions.EnsureArgumentIsNotNull(shipment, nameof(shipment));
+
+            var newWeight = shipment.ContentWeight + GetDimsWeight(shipment);
+            if (!newWeight.IsEquivalentTo(shipment.TotalWeight))
+            {
+                shipment.TotalWeight = newWeight;
+            }
+        }
+
+        /// <summary>
+        /// Get weights from packages
+        /// </summary>
+        protected virtual IEnumerable<(double weight, bool addDimsWeight, double dimsWeight)> GetPackageWeights(IShipmentEntity shipment) =>
+            Enumerable.Empty<(double, bool, double)>();
+
+        /// <summary>
+        /// Get the dims weight from a shipment, if any
+        /// </summary>
+        protected virtual double GetDimsWeight(IShipmentEntity shipment) => 0;
 
         /// <summary>
         /// Get the available origins for the ShipmentType.  This is used to display the origin address UI.
@@ -822,6 +935,12 @@ namespace ShipWorks.Shipping
         /// when this method is called.
         /// </summary>
         public abstract string GetServiceDescription(ShipmentEntity shipment);
+
+        /// <summary>
+        /// Get the carrier specific description of the shipping service used. The carrier specific data must already exist
+        /// when this method is called.
+        /// </summary>
+        public abstract string GetServiceDescription(string serviceCode);
 
         /// <summary>
         /// Get the carrier specific description of the shipping service used, overridden by shipment types to provide a
@@ -942,6 +1061,19 @@ namespace ShipWorks.Shipping
         /// Clear any data that should not be part of a shipment after it has been copied.
         /// </summary>
         public virtual void ClearDataForCopiedShipment(ShipmentEntity shipment)
+        {
+
+        }
+
+        /// <summary>
+        /// Rectifies carrier specific data on the shipment
+        /// </summary>
+        /// <remarks>
+        /// This allows the ShipmentType to fix any issues on the shipment
+        /// for example if the service is not valid for the ship to country
+        /// or if the packaging type is not valid for the service type
+        /// </remarks>
+        public virtual void RectifyCarrierSpecificData(ShipmentEntity shipment)
         {
 
         }

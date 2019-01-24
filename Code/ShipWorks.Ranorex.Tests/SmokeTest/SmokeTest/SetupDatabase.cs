@@ -99,34 +99,34 @@ namespace SmokeTest
         [System.CodeDom.Compiler.GeneratedCode("Ranorex", "8.1")]
         void ITestModule.Run()
         {
-            Mouse.DefaultMoveTime = 1000;
+            Mouse.DefaultMoveTime = 300;
             Keyboard.DefaultKeyPressTime = 100;
             Delay.SpeedFactor = 1.00;
 
             Init();
 
             Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Move item 'SimpleDatabaseSetupWizard.DetailedSetup' at Center.", repo.SimpleDatabaseSetupWizard.DetailedSetupInfo, new RecordItemIndex(0));
-            repo.SimpleDatabaseSetupWizard.DetailedSetup.MoveTo();
+            repo.SimpleDatabaseSetupWizard.DetailedSetup.MoveTo(1000);
             Delay.Milliseconds(0);
             
             Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Click item 'SimpleDatabaseSetupWizard.DetailedSetup' at Center.", repo.SimpleDatabaseSetupWizard.DetailedSetupInfo, new RecordItemIndex(1));
-            repo.SimpleDatabaseSetupWizard.DetailedSetup.Click();
+            repo.SimpleDatabaseSetupWizard.DetailedSetup.Click(1000);
             Delay.Milliseconds(0);
             
             //Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Move item 'SomeForm' at Center.", repo.SomeForm.SelfInfo, new RecordItemIndex(2));
-            //repo.SomeForm.Self.MoveTo();
+            //repo.SomeForm.Self.MoveTo(1000);
             //Delay.Milliseconds(0);
             
             //Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Click item 'SomeForm' at Center.", repo.SomeForm.SelfInfo, new RecordItemIndex(3));
-            //repo.SomeForm.Self.Click();
+            //repo.SomeForm.Self.Click(1000);
             //Delay.Milliseconds(0);
             
             Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Move item 'DetailedDatabaseSetupWizard.ShowAdvancedOptions' at Center.", repo.DetailedDatabaseSetupWizard.ShowAdvancedOptionsInfo, new RecordItemIndex(4));
-            repo.DetailedDatabaseSetupWizard.ShowAdvancedOptions.MoveTo();
+            repo.DetailedDatabaseSetupWizard.ShowAdvancedOptions.MoveTo(1000);
             Delay.Milliseconds(0);
             
             Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Click item 'DetailedDatabaseSetupWizard.ShowAdvancedOptions' at Center.", repo.DetailedDatabaseSetupWizard.ShowAdvancedOptionsInfo, new RecordItemIndex(5));
-            repo.DetailedDatabaseSetupWizard.ShowAdvancedOptions.Click();
+            repo.DetailedDatabaseSetupWizard.ShowAdvancedOptions.Click(1000);
             Delay.Milliseconds(0);
             
             //Report.Log(ReportLevel.Info, "Keyboard", "Key sequence '{Tab}{Tab}{Tab}{Return}'.", new RecordItemIndex(6));
@@ -134,51 +134,51 @@ namespace SmokeTest
             //Delay.Milliseconds(0);
             
             Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Move item 'DetailedDatabaseSetupWizard.MainPanel.RadioChooseRestore2012' at Center.", repo.DetailedDatabaseSetupWizard.MainPanel.RadioChooseRestore2012Info, new RecordItemIndex(7));
-            repo.DetailedDatabaseSetupWizard.MainPanel.RadioChooseRestore2012.MoveTo();
+            repo.DetailedDatabaseSetupWizard.MainPanel.RadioChooseRestore2012.MoveTo(1000);
             Delay.Milliseconds(0);
             
             Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Click item 'DetailedDatabaseSetupWizard.MainPanel.RadioChooseRestore2012' at Center.", repo.DetailedDatabaseSetupWizard.MainPanel.RadioChooseRestore2012Info, new RecordItemIndex(8));
-            repo.DetailedDatabaseSetupWizard.MainPanel.RadioChooseRestore2012.Click();
+            repo.DetailedDatabaseSetupWizard.MainPanel.RadioChooseRestore2012.Click(1000);
             Delay.Milliseconds(0);
             
             Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Move item 'DetailedDatabaseSetupWizard.Next' at Center.", repo.DetailedDatabaseSetupWizard.NextInfo, new RecordItemIndex(9));
-            repo.DetailedDatabaseSetupWizard.Next.MoveTo();
+            repo.DetailedDatabaseSetupWizard.Next.MoveTo(1000);
             Delay.Milliseconds(0);
             
             Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Click item 'DetailedDatabaseSetupWizard.Next' at Center.", repo.DetailedDatabaseSetupWizard.NextInfo, new RecordItemIndex(10));
-            repo.DetailedDatabaseSetupWizard.Next.Click();
+            repo.DetailedDatabaseSetupWizard.Next.Click(1000);
             Delay.Milliseconds(0);
             
             Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Move item 'DetailedDatabaseSetupWizard.Next' at Center.", repo.DetailedDatabaseSetupWizard.NextInfo, new RecordItemIndex(11));
-            repo.DetailedDatabaseSetupWizard.Next.MoveTo();
+            repo.DetailedDatabaseSetupWizard.Next.MoveTo(1000);
             Delay.Milliseconds(0);
             
             Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Click item 'DetailedDatabaseSetupWizard.Next' at Center.", repo.DetailedDatabaseSetupWizard.NextInfo, new RecordItemIndex(12));
-            repo.DetailedDatabaseSetupWizard.Next.Click();
+            repo.DetailedDatabaseSetupWizard.Next.Click(1000);
             Delay.Milliseconds(0);
             
             Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Move item 'DetailedDatabaseSetupWizard.MainPanel.RadioSqlServerRunning' at Center.", repo.DetailedDatabaseSetupWizard.MainPanel.RadioSqlServerRunningInfo, new RecordItemIndex(13));
-            repo.DetailedDatabaseSetupWizard.MainPanel.RadioSqlServerRunning.MoveTo();
+            repo.DetailedDatabaseSetupWizard.MainPanel.RadioSqlServerRunning.MoveTo(1000);
             Delay.Milliseconds(0);
             
             Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Click item 'DetailedDatabaseSetupWizard.MainPanel.RadioSqlServerRunning' at Center.", repo.DetailedDatabaseSetupWizard.MainPanel.RadioSqlServerRunningInfo, new RecordItemIndex(14));
-            repo.DetailedDatabaseSetupWizard.MainPanel.RadioSqlServerRunning.Click();
+            repo.DetailedDatabaseSetupWizard.MainPanel.RadioSqlServerRunning.Click(1000);
             Delay.Milliseconds(0);
             
             Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Move item 'DetailedDatabaseSetupWizard.Next' at Center.", repo.DetailedDatabaseSetupWizard.NextInfo, new RecordItemIndex(15));
-            repo.DetailedDatabaseSetupWizard.Next.MoveTo();
+            repo.DetailedDatabaseSetupWizard.Next.MoveTo(1000);
             Delay.Milliseconds(0);
             
             Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Click item 'DetailedDatabaseSetupWizard.Next' at Center.", repo.DetailedDatabaseSetupWizard.NextInfo, new RecordItemIndex(16));
-            repo.DetailedDatabaseSetupWizard.Next.Click();
+            repo.DetailedDatabaseSetupWizard.Next.Click(1000);
             Delay.Milliseconds(0);
             
             Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Move item 'DetailedDatabaseSetupWizard.SQLInstance' at Center.", repo.DetailedDatabaseSetupWizard.SQLInstanceInfo, new RecordItemIndex(17));
-            repo.DetailedDatabaseSetupWizard.SQLInstance.MoveTo();
+            repo.DetailedDatabaseSetupWizard.SQLInstance.MoveTo(1000);
             Delay.Milliseconds(0);
             
             Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Click item 'DetailedDatabaseSetupWizard.SQLInstance' at Center.", repo.DetailedDatabaseSetupWizard.SQLInstanceInfo, new RecordItemIndex(18));
-            repo.DetailedDatabaseSetupWizard.SQLInstance.Click();
+            repo.DetailedDatabaseSetupWizard.SQLInstance.Click(1000);
             Delay.Milliseconds(0);
             
             Report.Log(ReportLevel.Info, "Keyboard", "Key 'Ctrl+A' Press with focus on 'DetailedDatabaseSetupWizard.SQLInstance'.", repo.DetailedDatabaseSetupWizard.SQLInstanceInfo, new RecordItemIndex(19));
@@ -193,83 +193,91 @@ namespace SmokeTest
             Delay.Duration(20000, false);
             
             Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Move item 'DetailedDatabaseSetupWizard.Next' at Center.", repo.DetailedDatabaseSetupWizard.NextInfo, new RecordItemIndex(22));
-            repo.DetailedDatabaseSetupWizard.Next.MoveTo();
+            repo.DetailedDatabaseSetupWizard.Next.MoveTo(1000);
             Delay.Milliseconds(0);
             
             Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Click item 'DetailedDatabaseSetupWizard.Next' at Center.", repo.DetailedDatabaseSetupWizard.NextInfo, new RecordItemIndex(23));
-            repo.DetailedDatabaseSetupWizard.Next.Click();
+            repo.DetailedDatabaseSetupWizard.Next.Click(1000);
             Delay.Milliseconds(0);
             
             Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Move item 'DetailedDatabaseSetupWizard.MainPanel.RawTextEdit' at Center.", repo.DetailedDatabaseSetupWizard.MainPanel.RawTextEditInfo, new RecordItemIndex(24));
-            repo.DetailedDatabaseSetupWizard.MainPanel.RawTextEdit.MoveTo();
+            repo.DetailedDatabaseSetupWizard.MainPanel.RawTextEdit.MoveTo(1000);
             Delay.Milliseconds(0);
             
             Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Click item 'DetailedDatabaseSetupWizard.MainPanel.RawTextEdit' at Center.", repo.DetailedDatabaseSetupWizard.MainPanel.RawTextEditInfo, new RecordItemIndex(25));
-            repo.DetailedDatabaseSetupWizard.MainPanel.RawTextEdit.Click();
+            repo.DetailedDatabaseSetupWizard.MainPanel.RawTextEdit.Click(1000);
             Delay.Milliseconds(0);
             
             Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Move item 'DetailedDatabaseSetupWizard.MainPanel.DatabaseName1' at Center.", repo.DetailedDatabaseSetupWizard.MainPanel.DatabaseName1Info, new RecordItemIndex(26));
-            repo.DetailedDatabaseSetupWizard.MainPanel.DatabaseName1.MoveTo();
+            repo.DetailedDatabaseSetupWizard.MainPanel.DatabaseName1.MoveTo(1000);
             Delay.Milliseconds(0);
             
             Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Click item 'DetailedDatabaseSetupWizard.MainPanel.DatabaseName1' at Center.", repo.DetailedDatabaseSetupWizard.MainPanel.DatabaseName1Info, new RecordItemIndex(27));
-            repo.DetailedDatabaseSetupWizard.MainPanel.DatabaseName1.Click();
+            repo.DetailedDatabaseSetupWizard.MainPanel.DatabaseName1.Click(1000);
             Delay.Milliseconds(0);
             
             Key_sequence_DatabaseName(repo.DetailedDatabaseSetupWizard.MainPanel.DatabaseName1Info);
             Delay.Milliseconds(0);
             
             Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Move item 'DetailedDatabaseSetupWizard.Next' at Center.", repo.DetailedDatabaseSetupWizard.NextInfo, new RecordItemIndex(29));
-            repo.DetailedDatabaseSetupWizard.Next.MoveTo();
+            repo.DetailedDatabaseSetupWizard.Next.MoveTo(1000);
             Delay.Milliseconds(0);
             
             Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Click item 'DetailedDatabaseSetupWizard.Next' at Center.", repo.DetailedDatabaseSetupWizard.NextInfo, new RecordItemIndex(30));
-            repo.DetailedDatabaseSetupWizard.Next.Click();
+            repo.DetailedDatabaseSetupWizard.Next.Click(1000);
             Delay.Milliseconds(0);
             
             UnzipDatabase();
             Delay.Milliseconds(0);
             
             Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Move item 'DetailedDatabaseSetupWizard.MainPanel.BrowseForBackupFile' at Center.", repo.DetailedDatabaseSetupWizard.MainPanel.BrowseForBackupFileInfo, new RecordItemIndex(32));
-            repo.DetailedDatabaseSetupWizard.MainPanel.BrowseForBackupFile.MoveTo();
+            repo.DetailedDatabaseSetupWizard.MainPanel.BrowseForBackupFile.MoveTo(1000);
             Delay.Milliseconds(0);
             
             Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Click item 'DetailedDatabaseSetupWizard.MainPanel.BrowseForBackupFile' at Center.", repo.DetailedDatabaseSetupWizard.MainPanel.BrowseForBackupFileInfo, new RecordItemIndex(33));
-            repo.DetailedDatabaseSetupWizard.MainPanel.BrowseForBackupFile.Click();
+            repo.DetailedDatabaseSetupWizard.MainPanel.BrowseForBackupFile.Click(1000);
             Delay.Milliseconds(0);
             
             // Cursor moves to Desktop
-            Report.Log(ReportLevel.Info, "Mouse", "Cursor moves to Desktop\r\nMouse Left Move item 'Open.Desktop' at Center.", repo.Open.DesktopInfo, new RecordItemIndex(34));
-            repo.Open.Desktop.MoveTo();
-            Delay.Milliseconds(0);
+            //Report.Log(ReportLevel.Info, "Mouse", "Cursor moves to Desktop\r\nMouse Left Move item 'Open.Desktop' at Center.", repo.Open.DesktopInfo, new RecordItemIndex(34));
+            //repo.Open.Desktop.MoveTo(1000);
+            //Delay.Milliseconds(0);
             
             // Click Desktop
-            Report.Log(ReportLevel.Info, "Mouse", "Click Desktop\r\nMouse Left Click item 'Open.Desktop' at Center.", repo.Open.DesktopInfo, new RecordItemIndex(35));
-            repo.Open.Desktop.Click();
-            Delay.Milliseconds(0);
+            //Report.Log(ReportLevel.Info, "Mouse", "Click Desktop\r\nMouse Left Click item 'Open.Desktop' at Center.", repo.Open.DesktopInfo, new RecordItemIndex(35));
+            //repo.Open.Desktop.Click(1000);
+            //Delay.Milliseconds(0);
             
-            Report.Log(ReportLevel.Info, "Keyboard", "Key sequence '{LMenu down}{Dkey}{LMenu up}'.", new RecordItemIndex(36));
-            Keyboard.Press("{LMenu down}{Dkey}{LMenu up}");
-            Delay.Milliseconds(0);
+            //Report.Log(ReportLevel.Info, "Keyboard", "Key sequence '{LMenu down}{Dkey}{LMenu up}'.", new RecordItemIndex(36));
+            //Keyboard.Press("{LMenu down}{Dkey}{LMenu up}");
+            //Delay.Milliseconds(0);
+            
+            Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Move item 'Open.ToolBar1001' at Center.", repo.Open.ToolBar1001Info, new RecordItemIndex(37));
+            repo.Open.ToolBar1001.MoveTo();
+            Delay.Milliseconds(200);
+            
+            Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Click item 'Open.ToolBar1001' at CenterRight.", repo.Open.ToolBar1001Info, new RecordItemIndex(38));
+            repo.Open.ToolBar1001.Click(Location.CenterRight);
+            Delay.Milliseconds(200);
             
             // Key in path Desktop\Generic Performance
-            Report.Log(ReportLevel.Info, "Keyboard", "Key in path Desktop\\Generic Performance\r\nKey sequence 'Desktop\\'.", new RecordItemIndex(37));
+            Report.Log(ReportLevel.Info, "Keyboard", "Key in path Desktop\\Generic Performance\r\nKey sequence 'Desktop\\'.", new RecordItemIndex(39));
             Keyboard.Press("Desktop\\");
             Delay.Milliseconds(0);
             
             // Enter on the keyboard
-            Report.Log(ReportLevel.Info, "Keyboard", "Enter on the keyboard\r\nKey sequence '{Return}'.", new RecordItemIndex(38));
+            Report.Log(ReportLevel.Info, "Keyboard", "Enter on the keyboard\r\nKey sequence '{Return}'.", new RecordItemIndex(40));
             Keyboard.Press("{Return}");
             Delay.Milliseconds(0);
             
             // Cursor moves to the File Name Field
-            Report.Log(ReportLevel.Info, "Mouse", "Cursor moves to the File Name Field\r\nMouse Left Move item 'Open.ComboBox1148' at Center.", repo.Open.ComboBox1148Info, new RecordItemIndex(39));
-            repo.Open.ComboBox1148.MoveTo();
+            Report.Log(ReportLevel.Info, "Mouse", "Cursor moves to the File Name Field\r\nMouse Left Move item 'Open.ComboBox1148' at Center.", repo.Open.ComboBox1148Info, new RecordItemIndex(41));
+            repo.Open.ComboBox1148.MoveTo(1000);
             Delay.Milliseconds(0);
             
             // Click File Name Field
-            Report.Log(ReportLevel.Info, "Mouse", "Click File Name Field\r\nMouse Left Click item 'Open.ComboBox1148' at Center.", repo.Open.ComboBox1148Info, new RecordItemIndex(40));
-            repo.Open.ComboBox1148.Click();
+            Report.Log(ReportLevel.Info, "Mouse", "Click File Name Field\r\nMouse Left Click item 'Open.ComboBox1148' at Center.", repo.Open.ComboBox1148Info, new RecordItemIndex(42));
+            repo.Open.ComboBox1148.Click(1000);
             Delay.Milliseconds(0);
             
             // Key in text
@@ -277,79 +285,71 @@ namespace SmokeTest
             Delay.Milliseconds(0);
             
             // Press Enter on the keyboard > Window closes
-            Report.Log(ReportLevel.Info, "Keyboard", "Press Enter on the keyboard > Window closes\r\nKey sequence '{Return}'.", new RecordItemIndex(42));
+            Report.Log(ReportLevel.Info, "Keyboard", "Press Enter on the keyboard > Window closes\r\nKey sequence '{Return}'.", new RecordItemIndex(44));
             Keyboard.Press("{Return}");
             Delay.Milliseconds(0);
             
             // Tab to the Restore Button > Space on the Restore Button
-            Report.Log(ReportLevel.Info, "Keyboard", "Tab to the Restore Button > Space on the Restore Button\r\nKey sequence '{Tab}{Space}'.", new RecordItemIndex(43));
+            Report.Log(ReportLevel.Info, "Keyboard", "Tab to the Restore Button > Space on the Restore Button\r\nKey sequence '{Tab}{Space}'.", new RecordItemIndex(45));
             Keyboard.Press("{Tab}{Space}");
             Delay.Milliseconds(0);
             
-            Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Move item 'DetailedDatabaseSetupWizard.Next' at Center.", repo.DetailedDatabaseSetupWizard.NextInfo, new RecordItemIndex(44));
-            repo.DetailedDatabaseSetupWizard.Next.MoveTo();
+            Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Move item 'DetailedDatabaseSetupWizard.Next' at Center.", repo.DetailedDatabaseSetupWizard.NextInfo, new RecordItemIndex(46));
+            repo.DetailedDatabaseSetupWizard.Next.MoveTo(1000);
             Delay.Milliseconds(0);
             
-            Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Click item 'DetailedDatabaseSetupWizard.Next' at Center.", repo.DetailedDatabaseSetupWizard.NextInfo, new RecordItemIndex(45));
-            repo.DetailedDatabaseSetupWizard.Next.Click();
+            Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Click item 'DetailedDatabaseSetupWizard.Next' at Center.", repo.DetailedDatabaseSetupWizard.NextInfo, new RecordItemIndex(47));
+            repo.DetailedDatabaseSetupWizard.Next.Click(1000);
             Delay.Milliseconds(0);
             
             // Delay - Restore ShipWorks
-            Report.Log(ReportLevel.Info, "Delay", "Delay - Restore ShipWorks\r\nWaiting for 30s.", new RecordItemIndex(46));
+            Report.Log(ReportLevel.Info, "Delay", "Delay - Restore ShipWorks\r\nWaiting for 30s.", new RecordItemIndex(48));
             Delay.Duration(30000, false);
             
-            Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Move item 'ProgressDlg.ButtonOk' at Center.", repo.ProgressDlg.ButtonOkInfo, new RecordItemIndex(47));
-            repo.ProgressDlg.ButtonOk.MoveTo();
+            Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Move item 'ProgressDlg.ButtonOk' at Center.", repo.ProgressDlg.ButtonOkInfo, new RecordItemIndex(49));
+            repo.ProgressDlg.ButtonOk.MoveTo(1000);
             Delay.Milliseconds(0);
             
-            Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Click item 'ProgressDlg.ButtonOk' at Center.", repo.ProgressDlg.ButtonOkInfo, new RecordItemIndex(48));
-            repo.ProgressDlg.ButtonOk.Click();
+            Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Click item 'ProgressDlg.ButtonOk' at Center.", repo.ProgressDlg.ButtonOkInfo, new RecordItemIndex(50));
+            repo.ProgressDlg.ButtonOk.Click(1000);
             Delay.Milliseconds(0);
             
-            Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Move item 'DetailedDatabaseSetupWizard.Next' at Center.", repo.DetailedDatabaseSetupWizard.NextInfo, new RecordItemIndex(49));
-            repo.DetailedDatabaseSetupWizard.Next.MoveTo();
+            Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Move item 'DetailedDatabaseSetupWizard.Next' at Center.", repo.DetailedDatabaseSetupWizard.NextInfo, new RecordItemIndex(51));
+            repo.DetailedDatabaseSetupWizard.Next.MoveTo(1000);
             Delay.Milliseconds(0);
             
-            Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Click item 'DetailedDatabaseSetupWizard.Next' at Center.", repo.DetailedDatabaseSetupWizard.NextInfo, new RecordItemIndex(50));
-            repo.DetailedDatabaseSetupWizard.Next.Click();
+            Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Click item 'DetailedDatabaseSetupWizard.Next' at Center.", repo.DetailedDatabaseSetupWizard.NextInfo, new RecordItemIndex(52));
+            repo.DetailedDatabaseSetupWizard.Next.Click(1000);
             Delay.Milliseconds(0);
             
             // Database Update Require
-            Report.Log(ReportLevel.Info, "Wait", "Database Update Require\r\nWaiting 30s to exist. Associated repository item: 'DatabaseUpdateWizard'", repo.DatabaseUpdateWizard.SelfInfo, new ActionTimeout(30000), new RecordItemIndex(51));
+            Report.Log(ReportLevel.Info, "Wait", "Database Update Require\r\nWaiting 30s to exist. Associated repository item: 'DatabaseUpdateWizard'", repo.DatabaseUpdateWizard.SelfInfo, new ActionTimeout(30000), new RecordItemIndex(53));
             repo.DatabaseUpdateWizard.SelfInfo.WaitForExists(30000);
             
             // Press Space > Next
-            //Report.Log(ReportLevel.Info, "Keyboard", "Press Space > Next\r\nKey sequence '{Tab}{Space}'.", new RecordItemIndex(52));
+            //Report.Log(ReportLevel.Info, "Keyboard", "Press Space > Next\r\nKey sequence '{Tab}{Space}'.", new RecordItemIndex(54));
             //Keyboard.Press("{Tab}{Space}");
             //Delay.Milliseconds(0);
             
-            Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Move item 'DatabaseUpdateWizard.Next1' at Center.", repo.DatabaseUpdateWizard.Next1Info, new RecordItemIndex(53));
-            repo.DatabaseUpdateWizard.Next1.MoveTo();
+            Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Move item 'DatabaseUpdateWizard.Next1' at Center.", repo.DatabaseUpdateWizard.Next1Info, new RecordItemIndex(55));
+            repo.DatabaseUpdateWizard.Next1.MoveTo(1000);
             Delay.Milliseconds(0);
             
-            Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Click item 'DatabaseUpdateWizard.Next1' at Center.", repo.DatabaseUpdateWizard.Next1Info, new RecordItemIndex(54));
-            repo.DatabaseUpdateWizard.Next1.Click();
+            Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Click item 'DatabaseUpdateWizard.Next1' at Center.", repo.DatabaseUpdateWizard.Next1Info, new RecordItemIndex(56));
+            repo.DatabaseUpdateWizard.Next1.Click(1000);
             Delay.Milliseconds(0);
             
             // Entering credentials
             EnterUserEmail();
             Delay.Milliseconds(0);
             
-            Report.Log(ReportLevel.Info, "Keyboard", "Key sequence '{Tab}'.", new RecordItemIndex(56));
+            Report.Log(ReportLevel.Info, "Keyboard", "Key sequence '{Tab}'.", new RecordItemIndex(58));
             Keyboard.Press("{Tab}");
             Delay.Milliseconds(0);
             
             // Enterin credentials
             EnterUserPassword();
             Delay.Milliseconds(0);
-            
-            // Next
-            Report.Log(ReportLevel.Info, "Keyboard", "Next\r\nKey sequence '{Tab}{Space}'.", new RecordItemIndex(58));
-            Keyboard.Press("{Tab}{Space}");
-            Delay.Milliseconds(0);
-            
-            Report.Log(ReportLevel.Info, "Delay", "Waiting for 10s.", new RecordItemIndex(59));
-            Delay.Duration(10000, false);
             
             // Next
             Report.Log(ReportLevel.Info, "Keyboard", "Next\r\nKey sequence '{Tab}{Space}'.", new RecordItemIndex(60));
@@ -372,23 +372,31 @@ namespace SmokeTest
             Keyboard.Press("{Tab}{Space}");
             Delay.Milliseconds(0);
             
-            Report.Log(ReportLevel.Info, "Delay", "Waiting for 20s.", new RecordItemIndex(65));
-            Delay.Duration(20000, false);
+            Report.Log(ReportLevel.Info, "Delay", "Waiting for 30s.", new RecordItemIndex(65));
+            Delay.Duration(30000, false);
             
-            Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Move item 'DatabaseUpdateWizard.Next1' at Center.", repo.DatabaseUpdateWizard.Next1Info, new RecordItemIndex(66));
-            repo.DatabaseUpdateWizard.Next1.MoveTo();
+            // Next
+            Report.Log(ReportLevel.Info, "Keyboard", "Next\r\nKey sequence '{Tab}{Space}'.", new RecordItemIndex(66));
+            Keyboard.Press("{Tab}{Space}");
             Delay.Milliseconds(0);
             
-            Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Click item 'DatabaseUpdateWizard.Next1' at Center.", repo.DatabaseUpdateWizard.Next1Info, new RecordItemIndex(67));
-            repo.DatabaseUpdateWizard.Next1.Click();
+            Report.Log(ReportLevel.Info, "Delay", "Waiting for 20s.", new RecordItemIndex(67));
+            Delay.Duration(20000, false);
+            
+            Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Move item 'DatabaseUpdateWizard.Next1' at Center.", repo.DatabaseUpdateWizard.Next1Info, new RecordItemIndex(68));
+            repo.DatabaseUpdateWizard.Next1.MoveTo(1000);
+            Delay.Milliseconds(0);
+            
+            Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Click item 'DatabaseUpdateWizard.Next1' at Center.", repo.DatabaseUpdateWizard.Next1Info, new RecordItemIndex(69));
+            repo.DatabaseUpdateWizard.Next1.Click(1000);
             Delay.Milliseconds(0);
             
             // Finish
-            //Report.Log(ReportLevel.Info, "Keyboard", "Finish\r\nKey sequence '{Tab}{Space}'.", new RecordItemIndex(68));
+            //Report.Log(ReportLevel.Info, "Keyboard", "Finish\r\nKey sequence '{Tab}{Space}'.", new RecordItemIndex(70));
             //Keyboard.Press("{Tab}{Space}");
             //Delay.Milliseconds(0);
             
-            Report.Log(ReportLevel.Info, "Delay", "Waiting for 1m.", new RecordItemIndex(69));
+            Report.Log(ReportLevel.Info, "Delay", "Waiting for 1m.", new RecordItemIndex(71));
             Delay.Duration(60000, false);
             
         }

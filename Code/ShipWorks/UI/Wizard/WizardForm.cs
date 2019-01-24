@@ -26,7 +26,7 @@ namespace ShipWorks.UI.Wizard
         /// </summary>
         public sealed class WizardPageCollection : IList
         {
-            WizardForm owner = null;
+            private WizardForm owner = null;
 
             /// <summary>
             /// Constructor
@@ -318,22 +318,22 @@ namespace ShipWorks.UI.Wizard
         #endregion
 
         // If we are in WinForms initialization
-        bool loaded;
+        private bool loaded;
 
         // If we can currently be closed\canceled
-        bool canCancel = true;
+        private bool canCancel = true;
 
         // Internal collection actually holding the pages
-        List<WizardPage> pages = new List<WizardPage>();
+        private List<WizardPage> pages = new List<WizardPage>();
 
         // Exposed strongly typed collection of pages
-        WizardPageCollection pageCollection;
+        private WizardPageCollection pageCollection;
 
         // Used for back navigation
-        Dictionary<WizardPage, WizardPage> backNavigation = new Dictionary<WizardPage, WizardPage>();
+        private Dictionary<WizardPage, WizardPage> backNavigation = new Dictionary<WizardPage, WizardPage>();
 
         // List of pages that have been navigated to, so we know when its the first time or not
-        List<WizardPage> firstTimeStepInto = new List<WizardPage>();
+        private List<WizardPage> firstTimeStepInto = new List<WizardPage>();
 
         /// <summary>
         /// Constructor
@@ -936,6 +936,11 @@ namespace ShipWorks.UI.Wizard
                 {
                     backNavigation[shownPage] = fromPage;
                 }
+            }
+
+            if (args.OverrideResult.HasValue)
+            {
+                DialogResult = args.OverrideResult.Value;
             }
 
             if (DialogResult == DialogResult.None)

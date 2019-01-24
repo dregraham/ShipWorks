@@ -5,6 +5,7 @@ using System.Linq;
 using System.Reactive.Linq;
 using System.Windows.Forms;
 using Autofac;
+using Interapptive.Shared.Collections;
 using Interapptive.Shared.Metrics;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
@@ -14,6 +15,7 @@ using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Messaging.Messages;
 using ShipWorks.Shipping.Editing.Rating;
+using ShipWorks.Shipping.Settings.Defaults;
 using ShipWorks.Templates.Printing;
 using ShipWorks.UI.Controls;
 
@@ -322,6 +324,8 @@ namespace ShipWorks.Shipping.Settings
                 return;
             }
 
+            InformUserThatMyFiltersCantBeUsedFilters();
+
             SaveSettings();
 
             Messenger.Current.Send(new ShippingSettingsChangedMessage(this, ShippingSettings.Fetch()));
@@ -463,6 +467,32 @@ namespace ShipWorks.Shipping.Settings
             DialogResult result = MessageHelper.ShowQuestion(this, MessageBoxIcon.Warning, MessageBoxButtons.YesNo,
                 $"At least one {filterTypeDescription} rule uses a disabled filter, and will not match any shipment.\n\nSave anyway?");
             return result == DialogResult.Yes;
+        }
+
+        /// <summary>
+        /// Check to see if rules have my filters selected.  If so, display message to the user.
+        /// </summary>
+        public void InformUserThatMyFiltersCantBeUsedFilters()
+        {
+            ShipmentTypeSettingsControl settingsControl = optionControl.SelectedPage.Controls.OfType<ShipmentTypeSettingsControl>().FirstOrDefault();
+
+            List<string> validationErrors = settingsControl?.GetFilterValidationErrors;
+            string validationErrorText = string.Empty;
+            validationErrors?.ForEach(fn => validationErrorText += $"{fn}{Environment.NewLine}{Environment.NewLine}");
+
+            if (validationErrors?.Any() == true)
+            {
+                DialogResult result = MessageHelper.ShowQuestion(this, MessageBoxIcon.Warning, MessageBoxButtons.OK, validationErrorText);
+            }
+
+            validationErrors = providerRulesControl?.GetFilterValidationErrors;
+            validationErrorText = string.Empty;
+            validationErrors?.ForEach(fn => validationErrorText += $"{fn}{Environment.NewLine}{Environment.NewLine}");
+
+            if (validationErrors?.Any() == true)
+            {
+                DialogResult result = MessageHelper.ShowQuestion(this, MessageBoxIcon.Warning, MessageBoxButtons.OK, validationErrorText);
+            }
         }
 
         /// <summary>

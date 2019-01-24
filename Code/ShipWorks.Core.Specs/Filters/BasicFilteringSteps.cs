@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Data.Common;
 using System.IO;
 using System.Linq;
@@ -38,7 +39,7 @@ using Xunit;
 namespace ShipWorks.Core.Specs.Filters
 {
     [Binding]
-    public class BasicFilteringSteps
+    public class BasicFilteringSteps : IDisposable
     {
         private DataContext context;
         private List<TemplateEntity> templates;
@@ -298,6 +299,11 @@ namespace ShipWorks.Core.Specs.Filters
                 filterHelper.RegenerateFilters(connection);
                 filterHelper.CalculateInitialFilterCounts(connection, progressReporter, 0);
             }
+        }
+
+        public void Dispose()
+        {
+            context.Dispose();
         }
     }
 }

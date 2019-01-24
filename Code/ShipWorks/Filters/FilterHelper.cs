@@ -137,8 +137,15 @@ namespace ShipWorks.Filters
         public static bool IsMyFilter(FilterNodeEntity node)
         {
             FilterLayoutEntity layout = FilterLayoutContext.Current.GetNodeLayout(node);
-
             return layout != null && layout.UserID == UserSession.User.UserID;
+        }
+
+        /// <summary>
+        /// Indicates if the node is a filter that is in the My Filters collection 
+        /// </summary>
+        public static bool IsMyFilter(long filterNodeID)
+        {
+            return FilterLayoutContext.Current.IsMyFilterNode(filterNodeID);
         }
 
         /// <summary>

@@ -24,6 +24,7 @@ namespace ShipWorks.Users.Security
         [PermissionScope(PermissionScope.Global)] ManageFilters = 13,
         [PermissionScope(PermissionScope.Global)] ManageTemplates = 14,
         [PermissionScope(PermissionScope.Global)] ManageEmailAccounts = 15,
+        [PermissionScope(PermissionScope.Global)] ManageFields = 16,
 
         [PermissionScope(PermissionScope.Global)] CustomersSendEmail = 20,
         [PermissionScope(PermissionScope.Global)] CustomersCreateEdit = 21,
@@ -45,6 +46,8 @@ namespace ShipWorks.Users.Security
 
         [PermissionScope(PermissionScope.Store)] ShipmentsCreateEditProcess = 80,
         [PermissionScope(PermissionScope.Store)] ShipmentsVoidDelete = 81,
-        [PermissionScope(PermissionScope.Global)] ShipmentsManageSettings = 82
+        [PermissionScope(PermissionScope.Global)] ShipmentsManageSettings = 82,
+
+        [PermissionScope(PermissionScope.Global)] ManageProducts = 83
     }
 }

@@ -1,4 +1,7 @@
 ﻿<Properties>
+  <Array name="active">
+    <Element value="SmokeTest.rxtst" />
+  </Array>
   <Array name="bookmarks" />
   <Array name="files">
     <Element value="SmokeTest.rxtst" />
@@ -9,12 +12,12 @@
       <runOnBuild value="False" />
     </Properties>
     <Array name="recentusercodeselections">
-      <Element value="SmokeTest.SetupUSPSStamps.RemoveWebRegUSPS()" />
-      <Element value="SmokeTest.SetupUSPSStamps.Key_sequence()" />
-      <Element value="SmokeTest.ResetHostsFile.ResetHosts()" />
-      <Element value="SmokeTest.ModuleChecker.CopyHosts()" />
-      <Element value="SmokeTest.HostsConfiguration.CopyCorrectHosts()" />
-      <Element value="SmokeTest.SetupUSPSStamps.SelectTestServer()" />
+      <Element value="SmokeTest.GetExpress1EndiciaInternationalShipmentRate.CheckRates()" />
+      <Element value="SmokeTest.GetExpress1EndiciaDomesticShipmentRate.CheckRates()" />
+      <Element value="SmokeTest.GetExpress1InternationalShipmentRate.CheckRates()" />
+      <Element value="SmokeTest.GetExpress1DomesticShipmentRate.CheckRates()" />
+      <Element value="SmokeTest.OLMProcessShipmentFedExInternational.ProcessFedexInternational()" />
+      <Element value="SmokeTest.OLMProcessShipmentFedExDomesticGround.ProcessFedexDomesticGround()" />
     </Array>
   </Properties>
 </Properties>

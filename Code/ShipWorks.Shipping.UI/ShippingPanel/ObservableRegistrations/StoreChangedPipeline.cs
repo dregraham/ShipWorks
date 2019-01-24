@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Linq;
 using System.Reactive.Linq;
-using Interapptive.Shared.Enums;
 using Interapptive.Shared.Messaging;
 using Interapptive.Shared.Threading;
-using ShipWorks.AddressValidation.Enums;
+using ShipWorks.AddressValidation;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Messaging.Messages;
 using ShipWorks.Shipping.Settings.Origin;
@@ -16,8 +15,8 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations
     /// </summary>
     public class StoreChangedPipeline : IShippingPanelTransientPipeline
     {
-        readonly IObservable<IShipWorksMessage> messages;
-        IDisposable subscription;
+        private readonly IObservable<IShipWorksMessage> messages;
+        private IDisposable subscription;
         private readonly ISchedulerProvider schedulerProvider;
 
         /// <summary>
@@ -56,7 +55,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations
         {
             if (storeEntity.StoreID == viewModel.ShipmentAdapter.Store.StoreID)
             {
-                viewModel.Destination.IsAddressValidationEnabled = storeEntity.DomesticAddressValidationSetting != AddressValidationStoreSettingType.ValidationDisabled;
+                viewModel.Destination.IsAddressValidationEnabled = AddressValidationPolicy.IsValidationEnabled(storeEntity, viewModel.ShipmentAdapter);
             }
         }
 

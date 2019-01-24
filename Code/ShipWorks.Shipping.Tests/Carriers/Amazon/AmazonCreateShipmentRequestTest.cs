@@ -60,6 +60,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
         [InlineData("DYNAMEX")]
         public void Create_SetsDeclaredValueToSpecifiedValue_WhenCarrierIsNotUSPS(string carrier)
         {
+            defaultShipment.Insurance = true;
             defaultShipment.Amazon.InsuranceValue = 65;
             defaultShipment.Amazon.CarrierName = carrier;
 
@@ -78,8 +79,30 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
         [InlineData("DHLMX")]
         [InlineData("DHLM")]
         [InlineData("DYNAMEX")]
+        public void Create_DoesNotSetDeclaredValueToSpecifiedValue_WhenCarrierIsNotUSPS_AndInsuranceIsNotSelected(string carrier)
+        {
+            defaultShipment.Insurance = false;
+            defaultShipment.Amazon.InsuranceValue = 65;
+            defaultShipment.Amazon.CarrierName = carrier;
+
+            var testObject = mock.Create<AmazonCreateShipmentRequest>();
+            testObject.Submit(defaultShipment);
+
+            mock.Mock<IAmazonShippingWebClient>()
+                .Verify(x => x.CreateShipment(
+                    It.Is<ShipmentRequestDetails>(s => s.ShippingServiceOptions.DeclaredValue.Amount == 0),
+                    defaultShipment.Amazon));
+        }
+
+        [Theory]
+        [InlineData("FEDEX")]
+        [InlineData("UPS")]
+        [InlineData("DHLMX")]
+        [InlineData("DHLM")]
+        [InlineData("DYNAMEX")]
         public void Create_SetsDeclaredValueTo100_WhenCarrierIsNotUSPSAndDeclaredValueIsGreaterThan100(string carrier)
         {
+            defaultShipment.Insurance = true;
             defaultShipment.Amazon.InsuranceValue = 101;
             defaultShipment.Amazon.CarrierName = carrier;
 
@@ -89,6 +112,27 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
             mock.Mock<IAmazonShippingWebClient>()
                 .Verify(x => x.CreateShipment(
                     It.Is<ShipmentRequestDetails>(s => s.ShippingServiceOptions.DeclaredValue.Amount == 100),
+                    defaultShipment.Amazon));
+        }
+
+        [Theory]
+        [InlineData("FEDEX")]
+        [InlineData("UPS")]
+        [InlineData("DHLMX")]
+        [InlineData("DHLM")]
+        [InlineData("DYNAMEX")]
+        public void Create_SetsDeclaredValueTo0_WhenCarrierIsNotUSPSAndDeclaredValueIsGreaterThan100_ButInsuranceWasNotSelected(string carrier)
+        {
+            defaultShipment.Insurance = false;
+            defaultShipment.Amazon.InsuranceValue = 101;
+            defaultShipment.Amazon.CarrierName = carrier;
+
+            var testObject = mock.Create<AmazonCreateShipmentRequest>();
+            testObject.Submit(defaultShipment);
+
+            mock.Mock<IAmazonShippingWebClient>()
+                .Verify(x => x.CreateShipment(
+                    It.Is<ShipmentRequestDetails>(s => s.ShippingServiceOptions.DeclaredValue.Amount == 0),
                     defaultShipment.Amazon));
         }
 

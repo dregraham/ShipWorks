@@ -101,6 +101,7 @@ namespace ShipWorks.Tests.Shared.Database
         {
             UserSession.Reset();
             Mock.Dispose();
+            IoC.UnsafeGlobalLifetimeScope.Dispose();
         }
     }
 }

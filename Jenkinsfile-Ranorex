@@ -1,5 +1,6 @@
 def BUILD_FOLDER = env.BRANCH_NAME.replaceAll('/', '-').replaceAll(' ', '-')
-def WORKSPACE = 'c:/jenkins-builds/SR_' + BUILD_FOLDER
+def WORKSPACE = 'd:/jenkins-builds/SR_' + BUILD_FOLDER
+def WORKSPACE_RANOREX = 'c:/jenkins-builds/SR_' + BUILD_FOLDER
 def TIMESTAMP = new Date().format("YYYY-MM-dd-HHmmss")
 
 pipeline {
@@ -38,7 +39,7 @@ pipeline {
 			agent {
 				node {
 					label 'ranorex'
-					customWorkspace "${WORKSPACE}"
+					customWorkspace "${WORKSPACE_RANOREX}"
 				}
 			}
 			steps {
@@ -52,12 +53,12 @@ pipeline {
 			agent {
 				node {
 					label 'ranorex'
-					customWorkspace "${WORKSPACE}"
+					customWorkspace "${WORKSPACE_RANOREX}"
 				}
 			}
 			steps {
 				bat '(Taskkill -im Shipworks* -f 2>NUL) || type NUL>NUL'
-				bat "copy /Y ${WORKSPACE.replaceAll('/', '\\\\')}\\Artifacts\\Distribute\\ShipWorksSetup_${BUILT_VERSION}.exe ${WORKSPACE.replaceAll('/', '\\\\')}\\Artifacts\\Distribute\\ShipWorksSetup_test.exe"
+				bat "copy /Y ${WORKSPACE_RANOREX.replaceAll('/', '\\\\')}\\Artifacts\\Distribute\\ShipWorksSetup_${BUILT_VERSION}.exe ${WORKSPACE_RANOREX.replaceAll('/', '\\\\')}\\Artifacts\\Distribute\\ShipWorksSetup_test.exe"
 				bat 'powershell "mkdir -f ranorex"'
 				dir('Code/ShipWorks.Ranorex.Tests/SmokeTest') {
 					bat '"C:/Program Files (x86)/Microsoft Visual Studio/2017/BuildTools/MSBuild/15.0/Bin/MSBuild.exe" SmokeTest.sln'
@@ -67,7 +68,7 @@ pipeline {
 					bat """
 							SmokeTest.exe ^
 								/runconfig:Complete ^
-								/param:InstallDir=${WORKSPACE}\\Artifacts\\Distribute\\ShipWorksSetup_test.exe ^
+								/param:InstallDir=${WORKSPACE_RANOREX}\\Artifacts\\Distribute\\ShipWorksSetup_test.exe ^
 								/param:Environment=${params.Environment} ^
 								/param:SQLServ=localhost\\ranorex ^
 								/reportlevel:Debug ^
@@ -80,7 +81,7 @@ pipeline {
 			}
 			post {
 				always {
-					bat "copy /Y \"\\\\intfs01\\Development\\Testing\\Automated Smoketest Results\\${env.BRANCH_NAME}\\obfuscated\\${TIMESTAMP}.rxlog.junit.xml\" ${WORKSPACE.replaceAll('/', '\\\\')}\\results.junit.xml"
+					bat "copy /Y \"\\\\intfs01\\Development\\Testing\\Automated Smoketest Results\\${env.BRANCH_NAME}\\obfuscated\\${TIMESTAMP}.rxlog.junit.xml\" ${WORKSPACE_RANOREX.replaceAll('/', '\\\\')}\\results.junit.xml"
 					junit "results.junit.xml"
 				}
 			}

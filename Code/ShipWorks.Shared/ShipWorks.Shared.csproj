@@ -132,6 +132,7 @@
     <Compile Include="IO\KeyboardShortcuts\KeyboardShortcutCommand.cs" />
     <Compile Include="IO\KeyboardShortcuts\KeyboardShortcutModifiers.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Settings\UIMode.cs" />
     <Compile Include="Shipping\FedEx\FedExBatteryMaterialType.cs" />
     <Compile Include="Shipping\FedEx\FedExBatteryPackingType.cs" />
     <Compile Include="Shipping\FedEx\FedExBatteryRegulatorySubType.cs" />

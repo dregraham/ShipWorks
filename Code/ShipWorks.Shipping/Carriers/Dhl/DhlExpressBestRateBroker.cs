@@ -31,7 +31,7 @@ namespace ShipWorks.Shipping.Carriers.Dhl
         {
             return InsuranceProvider.ShipWorks;
         }
-        
+
         /// <summary>
         /// Gets the current entity state for the specified shipment's child
         /// </summary>
@@ -112,6 +112,9 @@ namespace ShipWorks.Shipping.Carriers.Dhl
             currentShipment.DhlExpress.Packages[0].Weight = originalShipment.ContentWeight;
             currentShipment.DhlExpress.Packages[0].DimsAddWeight = originalShipment.BestRate.DimsAddWeight;
             currentShipment.DhlExpress.Packages[0].DimsWeight = originalShipment.BestRate.DimsWeight;
+
+            currentShipment.DhlExpress.Packages[0].Insurance = originalShipment.Insurance;
+            currentShipment.DhlExpress.Packages[0].InsuranceValue = originalShipment.BestRate.InsuranceValue;
 
             // Update total weight
             ShipmentType.UpdateTotalWeight(currentShipment);

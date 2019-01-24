@@ -1,14 +1,11 @@
 ﻿using System.Collections.Generic;
-using System.Text.RegularExpressions;
 using Autofac;
 using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore;
-using ShipWorks.Data;
 using ShipWorks.Data.Model.Custom;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Editing.Rating;
-using ShipWorks.Stores;
 
 namespace ShipWorks.Shipping.Carriers.Postal.BestRate
 {
@@ -50,12 +47,10 @@ namespace ShipWorks.Shipping.Carriers.Postal.BestRate
         /// </summary>
         /// <param name="shipment">Shipment for which rates should be retrieved</param>
         /// <returns>List of RateResults</returns>
-        /// <remarks>This is overridden because Postal rates are returned in a pseudo-nested way and they need </remarks>
         protected override RateGroup GetRates(ShipmentEntity shipment)
         {
             RateGroup rates = base.GetRates(shipment);
 
-            rates = rates.CopyWithRates(MergeDescriptionsWithNonSelectableRates(rates.Rates));
             // If a postal counter provider, show USPS logo, otherwise show appropriate logo such as endicia:
             rates.Rates.ForEach(UseProperUspsLogo);
 
@@ -73,45 +68,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.BestRate
             {
                 rate.ProviderLogo = EnumHelper.GetImage(rate.ShipmentType);
             }
-        }
-
-        /// <summary>
-        /// Merge rate descriptions meant as headers with actual rate descriptions
-        /// </summary>
-        /// <param name="rates">Collection of rates to update</param>
-        /// <remarks>It is important that these rates are in the same order that they are returned from
-        /// the shipment type's GetRates method or the merging could be incorrect</remarks>
-        protected List<RateResult> MergeDescriptionsWithNonSelectableRates(IEnumerable<RateResult> rates)
-        {
-            Regex beginsWithSpaces = new Regex("^[ ]+");
-            Regex removeDeliveryConfirmation = new Regex(@" Delivery Confirmation \(\$\d*\.\d\d\)");
-
-            RateResult lastNonSelectable = null;
-
-            List<RateResult> RatesToReturn = new List<RateResult>();
-
-            foreach (RateResult originalRate in rates)
-            {
-                RateResult rate = originalRate.Copy();
-                RatesToReturn.Add(rate);
-
-                if (rate.Selectable)
-                {
-                    if (beginsWithSpaces.IsMatch(rate.Description) && lastNonSelectable != null)
-                    {
-                        rate.Description = lastNonSelectable.Description + beginsWithSpaces.Replace(rate.Description, " ");
-                        rate.Days = lastNonSelectable.Days;
-                    }
-                }
-                else
-                {
-                    lastNonSelectable = rate;
-                }
-
-                rate.Description = removeDeliveryConfirmation.Replace(rate.Description, string.Empty);
-            }
-
-            return RatesToReturn;
         }
 
         /// <summary>
@@ -151,6 +107,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.BestRate
             currentShipment.Postal.PackagingType = (int) PostalPackagingType.Package;
             currentShipment.Postal.Service = (int) PostalServiceType.PriorityMail;
             currentShipment.Postal.InsuranceValue = originalShipment.BestRate.InsuranceValue;
+            currentShipment.Postal.Insurance = originalShipment.BestRate.Insurance;
 
             // Update total weight
             ShipmentType.UpdateTotalWeight(currentShipment);
@@ -223,8 +180,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.BestRate
                 // Get rates without express1 rates
                 rates = ratingService.GetRates(shipment, false);
             }
-
-            rates = rates.CopyWithRates(MergeDescriptionsWithNonSelectableRates(rates.Rates));
 
             // If a postal counter provider, show USPS logo, otherwise show appropriate logo such as endicia:
             rates.Rates.ForEach(UseProperUspsLogo);

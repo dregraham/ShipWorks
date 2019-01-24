@@ -3,11 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Autofac.Features.Indexed;
-using Interapptive.Shared.Utility;
 using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
-using ShipWorks.Shipping.Carriers.Postal.Endicia.Account;
 using ShipWorks.Shipping.Carriers.Postal.Endicia.Express1;
 using ShipWorks.Shipping.Carriers.Postal.Endicia.WebServices.LabelService;
 using ShipWorks.Shipping.Carriers.Postal.Express1;
@@ -67,7 +66,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
 
             TelemetricResult<IDownloadedLabelData> telemetricResult =
                 new TelemetricResult<IDownloadedLabelData>("API.ResponseTimeInMilliseconds");
-            
+
             if (useExpress1)
             {
                 useExpress1 = CheckIfExpress1RateIsCheaper(shipment, express1Account, telemetricResult, endiciaApiClient);
@@ -87,7 +86,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                 LabelRequestResponse response = null;
                 telemetricResult.RunTimedEvent(TelemetricEventType.GetLabel, () => response = endiciaApiClient.ProcessShipment(shipment, endiciaShipmentType));
                 telemetricResult.SetValue(createDownloadedLabelData(shipment, response));
-                
+
                 return Task.FromResult(telemetricResult);
             }
             catch (EndiciaException ex)
@@ -121,7 +120,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                 // 5800 out of 3,600,000+ shipments that went through Express1 for the month of June.
                 RateResult endiciaRate = null;
                 telemetricResult.RunTimedEvent(TelemetricEventType.GetRates, () => endiciaRate = GetEndiciaRate(shipment, endiciaApiClient));
-                
+
                 // Change the shipment to Express1
                 shipment.ShipmentType = (int) ShipmentTypeCode.Express1Endicia;
                 shipment.Postal.Endicia.OriginalEndiciaAccountID = shipment.Postal.Endicia.EndiciaAccountID;
@@ -132,7 +131,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                 // 5800 out of 3,600,000+ shipments that went through Express1 for the month of June.
                 RateResult express1Rate = null;
                 telemetricResult.RunTimedEvent(TelemetricEventType.GetRates, () => express1Rate = GetExpress1Rate(shipment));
-                
+
                 useExpress1 = express1Rate?.AmountOrDefault <= endiciaRate?.AmountOrDefault;
             }
             catch (EndiciaApiException apiException)
@@ -182,7 +181,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             express1EndiciaShipmentType.UpdateDynamicShipmentData(shipment);
 
             Task<TelemetricResult<IDownloadedLabelData>> express1LabelData = express1EndiciaLabelService.Create(shipment);
-            telemetricResult.CopyFrom<int>(express1LabelData.Result, true);
+            telemetricResult.CopyFrom(express1LabelData.Result, true);
 
             return Task.FromResult(telemetricResult);
         }
@@ -222,8 +221,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             {
                 PostalRateSelection rateSelection = (PostalRateSelection) er.OriginalTag;
 
-                return rateSelection.ServiceType == (PostalServiceType) shipment.Postal.Service &&
-                       rateSelection.ConfirmationType == (PostalConfirmationType) shipment.Postal.Confirmation;
+                return rateSelection.ServiceType == (PostalServiceType) shipment.Postal.Service;
             };
         }
 

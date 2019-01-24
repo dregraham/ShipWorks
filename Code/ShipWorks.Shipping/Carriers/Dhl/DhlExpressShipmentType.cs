@@ -21,7 +21,6 @@ using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Insurance;
-using ShipWorks.Shipping.Profiles;
 using ShipWorks.Shipping.Services;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping.Settings.Origin;
@@ -223,28 +222,10 @@ namespace ShipWorks.Shipping.Carriers.Dhl
         }
 
         /// <summary>
-        /// Update the total weight of the shipment based on the individual package weights
+        /// Get weights from packages
         /// </summary>
-        public override void UpdateTotalWeight(ShipmentEntity shipment)
-        {
-            double contentWeight = 0;
-            double totalWeight = 0;
-
-            foreach (DhlExpressPackageEntity package in shipment.DhlExpress.Packages)
-            {
-                contentWeight += package.Weight;
-                totalWeight += package.Weight;
-
-                if (package.DimsAddWeight)
-                {
-                    totalWeight += package.DimsWeight;
-                }
-            }
-
-            shipment.ContentWeight = contentWeight;
-            shipment.TotalWeight = totalWeight;
-        }
-
+        protected override IEnumerable<(double weight, bool addDimsWeight, double dimsWeight)> GetPackageWeights(IShipmentEntity shipment) =>
+            shipment.DhlExpress?.Packages?.Select(x => (x.Weight, x.DimsAddWeight, x.DimsWeight));
 
         /// <summary>
         /// Get the shipment common detail for tango
@@ -313,10 +294,23 @@ namespace ShipWorks.Shipping.Carriers.Dhl
         /// Get the carrier specific description of the shipping service used. The carrier specific data must already exist
         /// when this method is called.
         /// </summary>
-        public override string GetServiceDescription(ShipmentEntity shipment)
-        {
-            return EnumHelper.GetDescription((DhlExpressServiceType) shipment.DhlExpress.Service);
-        }
+        public override string GetServiceDescription(ShipmentEntity shipment) =>
+            GetServiceDescriptionInternal((DhlExpressServiceType) shipment.DhlExpress.Service);
+
+        /// <summary>
+        /// Get the carrier specific description of the shipping service used. The carrier specific data must already exist
+        /// when this method is called.
+        /// </summary>
+        public override string GetServiceDescription(string serviceCode) =>
+            Functional.ParseInt(serviceCode)
+                .Match(x => GetServiceDescriptionInternal((DhlExpressServiceType) x), _ => "Unknown");
+
+        /// <summary>
+        /// Get the carrier specific description of the shipping service used. The carrier specific data must already exist
+        /// when this method is called.
+        /// </summary>
+        private string GetServiceDescriptionInternal(DhlExpressServiceType service) =>
+            EnumHelper.GetDescription(service);
 
         /// <summary>
         /// Get the total packages contained by the shipment
@@ -369,7 +363,7 @@ namespace ShipWorks.Shipping.Carriers.Dhl
             profile.DhlExpress.Contents = (int) ShipEngineContentsType.Merchandise;
             profile.DhlExpress.NonDelivery = (int) ShipEngineNonDeliveryType.ReturnToSender;
         }
-       
+
         /// <summary>
         /// Indicates if customs forms may be required to ship the shipment based on the
         /// shipping address and any store specific logic that may impact whether customs

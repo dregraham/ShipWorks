@@ -546,10 +546,12 @@
     <Compile Include="Shipping\Insurance\InsureShip\InsureShipPolicyTest.cs" />
     <Compile Include="Shipping\Insurance\InsureShip\Net\Void\InsureShipVoidPolicyResponseTest.cs" />
     <Compile Include="Shipping\IShipmentEntityExtensionsTest.cs" />
+    <Compile Include="Shipping\Policies\AmazonShipmentShippingPolicyTest.cs" />
     <Compile Include="Shipping\Policies\RateResultCountShippingPolicyTest.cs" />
     <Compile Include="Shipping\Policies\BestRateUpsRestrictionShippingPolicyTest.cs" />
     <Compile Include="Shipping\Policies\ShippingPoliciesTest.cs" />
     <Compile Include="Shipping\Policies\ShippingPolicyTypeEnumFactoryTest.cs" />
+    <Compile Include="Shipping\Profiles\EditableShippingProfileTest.cs" />
     <Compile Include="Shipping\Profiles\ShippingProfileTest.cs" />
     <Compile Include="Shipping\ScanForms\ScanFormBatchTest.cs" />
     <Compile Include="Shipping\ScanForms\ScanFormTest.cs" />
@@ -640,6 +642,7 @@
     <Compile Include="Templates\Printing\BarcodePrintJobTest.cs" />
     <Compile Include="Templates\Printing\PrintableBarcodeTest.cs" />
     <Compile Include="Templates\Printing\PrintJobFactoryTest.cs" />
+    <Compile Include="UI\Controls\LengthConverterTest.cs" />
     <Compile Include="UI\Controls\WeightConverterTest.cs" />
     <Compile Include="UI\PropertyChangedHandlerTest.cs" />
     <Compile Include="Users\Audit\ImmutableStackContainerTest.cs" />

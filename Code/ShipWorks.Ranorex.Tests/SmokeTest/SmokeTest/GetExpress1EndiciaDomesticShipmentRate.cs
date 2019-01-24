@@ -99,7 +99,7 @@ namespace SmokeTest
         [System.CodeDom.Compiler.GeneratedCode("Ranorex", "8.1")]
         void ITestModule.Run()
         {
-            Mouse.DefaultMoveTime = 1000;
+            Mouse.DefaultMoveTime = 300;
             Keyboard.DefaultKeyPressTime = 100;
             Delay.SpeedFactor = 1.00;
 
@@ -107,27 +107,27 @@ namespace SmokeTest
 
             // Move mouse to shipping settings
             Report.Log(ReportLevel.Info, "Mouse", "Move mouse to shipping settings\r\nMouse Left Move item 'ShippingDlg.ShippingSettings' at Center.", repo.ShippingDlg.ShippingSettingsInfo, new RecordItemIndex(0));
-            repo.ShippingDlg.ShippingSettings.MoveTo(300);
+            repo.ShippingDlg.ShippingSettings.MoveTo();
             Delay.Milliseconds(200);
             
             // Click shipping settings
             Report.Log(ReportLevel.Info, "Mouse", "Click shipping settings\r\nMouse Left Click item 'ShippingDlg.ShippingSettings' at Center.", repo.ShippingDlg.ShippingSettingsInfo, new RecordItemIndex(1));
-            repo.ShippingDlg.ShippingSettings.Click(300);
+            repo.ShippingDlg.ShippingSettings.Click();
             Delay.Milliseconds(200);
             
             // Move mouse to Express 1 Endicia
             Report.Log(ReportLevel.Info, "Mouse", "Move mouse to Express 1 Endicia\r\nMouse Left Move item 'ShippingSettingsDlg.USPSExpress1ForEndicia1' at Center.", repo.ShippingSettingsDlg.USPSExpress1ForEndicia1Info, new RecordItemIndex(2));
-            repo.ShippingSettingsDlg.USPSExpress1ForEndicia1.MoveTo(300);
+            repo.ShippingSettingsDlg.USPSExpress1ForEndicia1.MoveTo();
             Delay.Milliseconds(200);
             
             // Click on Express 1 Endicia
             Report.Log(ReportLevel.Info, "Mouse", "Click on Express 1 Endicia\r\nMouse Left Click item 'ShippingSettingsDlg.USPSExpress1ForEndicia1' at Center.", repo.ShippingSettingsDlg.USPSExpress1ForEndicia1Info, new RecordItemIndex(3));
-            repo.ShippingSettingsDlg.USPSExpress1ForEndicia1.Click(300);
+            repo.ShippingSettingsDlg.USPSExpress1ForEndicia1.Click();
             Delay.Milliseconds(200);
             
             // Move mouse to check postage
             Report.Log(ReportLevel.Info, "Mouse", "Move mouse to check postage\r\nMouse Left Move item 'ShippingSettingsDlg.Express1EndiciaPostageBalance50' at 25;8.", repo.ShippingSettingsDlg.Express1EndiciaPostageBalance50Info, new RecordItemIndex(4));
-            repo.ShippingSettingsDlg.Express1EndiciaPostageBalance50.MoveTo("25;8", 300);
+            repo.ShippingSettingsDlg.Express1EndiciaPostageBalance50.MoveTo("25;8");
             Delay.Milliseconds(200);
             
             // Get the postage value and store it in a variable
@@ -137,27 +137,30 @@ namespace SmokeTest
             
             // Move mouse to close button
             Report.Log(ReportLevel.Info, "Mouse", "Move mouse to close button\r\nMouse Left Move item 'ShippingSettingsDlg.Close1' at Center.", repo.ShippingSettingsDlg.Close1Info, new RecordItemIndex(6));
-            repo.ShippingSettingsDlg.Close1.MoveTo(300);
+            repo.ShippingSettingsDlg.Close1.MoveTo();
             Delay.Milliseconds(200);
             
             // Click the close button
             Report.Log(ReportLevel.Info, "Mouse", "Click the close button\r\nMouse Left Click item 'ShippingSettingsDlg.Close1' at Center.", repo.ShippingSettingsDlg.Close1Info, new RecordItemIndex(7));
-            repo.ShippingSettingsDlg.Close1.Click(300);
+            repo.ShippingSettingsDlg.Close1.Click();
             Delay.Milliseconds(200);
+            
+            CheckRates();
+            Delay.Milliseconds(0);
             
             // Move mouse to check the shipment rate
-            Report.Log(ReportLevel.Info, "Mouse", "Move mouse to check the shipment rate\r\nMouse Left Move item 'ShipOrders1.SplitContainer.DomesticShipmentRate' at 18;7.", repo.ShipOrders1.SplitContainer.DomesticShipmentRateInfo, new RecordItemIndex(8));
-            repo.ShipOrders1.SplitContainer.DomesticShipmentRate.MoveTo("18;7", 300);
-            Delay.Milliseconds(200);
+            //Report.Log(ReportLevel.Info, "Mouse", "Move mouse to check the shipment rate\r\nMouse Left Move item 'ShipOrders1.SplitContainer.DomesticShipmentRate' at 18;7.", repo.ShipOrders1.SplitContainer.DomesticShipmentRateInfo, new RecordItemIndex(9));
+            //repo.ShipOrders1.SplitContainer.DomesticShipmentRate.MoveTo("18;7");
+            //Delay.Milliseconds(200);
             
             // Get the shipment rate and store it in a variable
-            Report.Log(ReportLevel.Info, "Get Value", "Get the shipment rate and store it in a variable\r\nGetting attribute 'RawText' from item 'ShipOrders1.SplitContainer.DomesticShipmentRate' and assigning its value to variable 'ExpOneEndiciaShipmentRate'.", repo.ShipOrders1.SplitContainer.DomesticShipmentRateInfo, new RecordItemIndex(9));
-            ExpOneEndiciaShipmentRate = repo.ShipOrders1.SplitContainer.DomesticShipmentRate.Element.GetAttributeValueText("RawText");
-            Delay.Milliseconds(0);
+            //Report.Log(ReportLevel.Info, "Get Value", "Get the shipment rate and store it in a variable\r\nGetting attribute 'RawText' from item 'ShipOrders1.SplitContainer.DomesticShipmentRate' and assigning its value to variable 'ExpOneEndiciaShipmentRate'.", repo.ShipOrders1.SplitContainer.DomesticShipmentRateInfo, new RecordItemIndex(10));
+            //ExpOneEndiciaShipmentRate = repo.ShipOrders1.SplitContainer.DomesticShipmentRate.Element.GetAttributeValueText("RawText");
+            //Delay.Milliseconds(0);
             
             // Compare the available postage with the shipment rate and, if there is enough postage available, process the shipment.
-            CheckPostageBalance();
-            Delay.Milliseconds(0);
+            //CheckPostageBalance();
+            //Delay.Milliseconds(0);
             
         }
 

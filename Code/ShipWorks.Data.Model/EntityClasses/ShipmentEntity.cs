@@ -1047,6 +1047,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("BilledType", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("BilledWeight", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("ProcessedWithUiMode", fieldHashtable);
 		}
 		#endregion
 
@@ -2347,6 +2349,16 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.Double)GetValue((int)ShipmentFieldIndex.BilledWeight, true); }
 			set	{ SetValue((int)ShipmentFieldIndex.BilledWeight, value); }
+		}
+
+		/// <summary> The ProcessedWithUiMode property of the Entity Shipment<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "Shipment"."ProcessedWithUiMode"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual Nullable<ShipWorks.Settings.UIMode> ProcessedWithUiMode
+		{
+			get { return (Nullable<ShipWorks.Settings.UIMode>)GetValue((int)ShipmentFieldIndex.ProcessedWithUiMode, false); }
+			set	{ SetValue((int)ShipmentFieldIndex.ProcessedWithUiMode, value); }
 		}
 
 		/// <summary> Gets the EntityCollection with the related entities of type 'ShipmentCustomsItemEntity' which are related to this entity via a relation of type '1:n'. If the EntityCollection hasn't been fetched yet, the collection returned will be empty.<br/><br/></summary>

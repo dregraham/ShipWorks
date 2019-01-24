@@ -438,22 +438,22 @@ namespace ShipWorks.Stores.Platforms.Etsy
         private static void LoadOrderAddress(EtsyOrderEntity order, JToken orderFromEtsy)
         {
             PersonName buyer = PersonName.Parse(orderFromEtsy.GetValue("name", ""));
-            order.ShipFirstName = buyer.First;
-            order.ShipLastName = buyer.LastWithSuffix;
-            order.ShipMiddleName = buyer.Middle;
+            order.ShipFirstName = WebUtility.HtmlDecode(buyer.First);
+            order.ShipLastName = WebUtility.HtmlDecode(buyer.LastWithSuffix);
+            order.ShipMiddleName = WebUtility.HtmlDecode(buyer.Middle);
             order.ShipNameParseStatus = (int) buyer.ParseStatus;
-            order.ShipUnparsedName = buyer.UnparsedName;
+            order.ShipUnparsedName = WebUtility.HtmlDecode(buyer.UnparsedName);
 
             order.ShipCompany = string.Empty;
-            order.ShipStreet1 = orderFromEtsy.GetValue("first_line", "");
-            order.ShipStreet2 = orderFromEtsy.GetValue("second_line", "");
-            order.ShipCity = orderFromEtsy.GetValue("city", "");
-            order.ShipStateProvCode = Geography.GetStateProvCode(orderFromEtsy.GetValue("state", ""));
-            order.ShipPostalCode = orderFromEtsy.GetValue("zip", "");
-            order.ShipCountryCode = orderFromEtsy["Country"].GetValue("iso_country_code", "US");
+            order.ShipStreet1 = WebUtility.HtmlDecode(orderFromEtsy.GetValue("first_line", ""));
+            order.ShipStreet2 = WebUtility.HtmlDecode(orderFromEtsy.GetValue("second_line", ""));
+            order.ShipCity = WebUtility.HtmlDecode(orderFromEtsy.GetValue("city", ""));
+            order.ShipStateProvCode = WebUtility.HtmlDecode(Geography.GetStateProvCode(orderFromEtsy.GetValue("state", "")));
+            order.ShipPostalCode = WebUtility.HtmlDecode(orderFromEtsy.GetValue("zip", ""));
+            order.ShipCountryCode = WebUtility.HtmlDecode(orderFromEtsy["Country"].GetValue("iso_country_code", "US"));
 
             order.ShipPhone = string.Empty;
-            order.ShipEmail = orderFromEtsy.GetValue("buyer_email", "");
+            order.ShipEmail = WebUtility.HtmlDecode(orderFromEtsy.GetValue("buyer_email", ""));
 
             PersonAdapter shipAdapter = new PersonAdapter(order, "Ship");
             PersonAdapter billAdapter = new PersonAdapter(order, "Bill");
@@ -491,19 +491,19 @@ namespace ShipWorks.Stores.Platforms.Etsy
         {
             EtsyOrderItemEntity item = (EtsyOrderItemEntity) InstantiateOrderItem(order);
 
-            item.Name = transaction.GetValue("title", "");
-            string productId = transaction["product_data"].GetValue("product_id", "");
+            item.Name = WebUtility.HtmlDecode(transaction.GetValue("title", ""));
+            string productId = WebUtility.HtmlDecode(transaction["product_data"].GetValue("product_id", ""));
 
             if (productId.IsNumeric())
             {
-                item.ListingID = transaction.GetValue("listing_id", "");
+                item.ListingID = WebUtility.HtmlDecode(transaction.GetValue("listing_id", ""));
 
                 try
                 {
                     JToken product = webClient.GetProduct(item.ListingID, productId);
-                    item.SKU = product["results"]?.GetValue("sku", string.Empty) ?? string.Empty;
-                    item.Code = item.SKU;
-                    item.TransactionID = transaction.GetValue("transaction_id", "");
+                    item.SKU = WebUtility.HtmlDecode(product["results"]?.GetValue("sku", string.Empty) ?? string.Empty);
+                    item.Code = WebUtility.HtmlDecode(item.SKU);
+                    item.TransactionID = WebUtility.HtmlDecode(transaction.GetValue("transaction_id", ""));
                 }
                 catch (EtsyException ex)
                 {
@@ -515,15 +515,15 @@ namespace ShipWorks.Stores.Platforms.Etsy
                     if (httpWebReponse?.StatusCode == HttpStatusCode.BadRequest)
                     {
                         log.Info($"Etsy threw a GetProduct exception for OrderNumber {order.OrderNumber} ", ex);
-                        item.Code = transaction.GetValue("transaction_id", "");
-                        item.SKU = transaction.GetValue("listing_id", "");
+                        item.Code = WebUtility.HtmlDecode(transaction.GetValue("transaction_id", ""));
+                        item.SKU = WebUtility.HtmlDecode(transaction.GetValue("listing_id", ""));
                     }
                 }
             }
             else
             {
-                item.Code = transaction.GetValue("transaction_id", "");
-                item.SKU = transaction.GetValue("listing_id", "");
+                item.Code = WebUtility.HtmlDecode(transaction.GetValue("transaction_id", ""));
+                item.SKU = WebUtility.HtmlDecode(transaction.GetValue("listing_id", ""));
             }
 
             item.Quantity = transaction.GetValue("quantity", 0);
@@ -550,8 +550,8 @@ namespace ShipWorks.Stores.Platforms.Etsy
                 {
                     item.OrderItemAttributes.Add(new OrderItemAttributeEntity()
                     {
-                        Name = variation.GetValue("formatted_name", ""),
-                        Description = variation.GetValue("formatted_value", ""),
+                        Name = WebUtility.HtmlDecode(variation.GetValue("formatted_name", "")),
+                        Description = WebUtility.HtmlDecode(variation.GetValue("formatted_value", "")),
                         IsManual = false,
                         UnitPrice = 0
                     });

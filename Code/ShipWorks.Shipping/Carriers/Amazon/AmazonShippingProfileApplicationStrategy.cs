@@ -16,11 +16,11 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// <summary>
         /// Constructor
         /// </summary>
-        public AmazonShippingProfileApplicationStrategy(IShipmentTypeManager shipmentTypeManager) : 
+        public AmazonShippingProfileApplicationStrategy(IShipmentTypeManager shipmentTypeManager) :
             base(shipmentTypeManager)
         {
         }
-        
+
         /// <summary>
         /// Apply the given shipping profile to the shipment
         /// </summary>
@@ -35,7 +35,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
 
             AmazonShipmentEntity amazonShipment = shipment.Amazon;
             IAmazonProfileEntity amazonProfile = profile.Amazon;
-            
+
             ApplyProfileValue(amazonProfile.ShippingServiceID, amazonShipment, AmazonShipmentFields.ShippingServiceID);
             ApplyProfileValue(amazonProfile.DeliveryExperience, amazonShipment, AmazonShipmentFields.DeliveryExperience);
             ApplyProfileValue(amazonProfile.Reference1, amazonShipment, AmazonShipmentFields.Reference1);
@@ -52,9 +52,21 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             ApplyProfileValue(packageProfile.DimsProfileID, amazonShipment, AmazonShipmentFields.DimsProfileID);
             if (packageProfile.DimsProfileID != null)
             {
-                ApplyProfileValue(packageProfile.DimsLength, amazonShipment, AmazonShipmentFields.DimsLength);
-                ApplyProfileValue(packageProfile.DimsWidth, amazonShipment, AmazonShipmentFields.DimsWidth);
-                ApplyProfileValue(packageProfile.DimsHeight, amazonShipment, AmazonShipmentFields.DimsHeight);
+                if (packageProfile.DimsLength.GetValueOrDefault() > 0)
+                {
+                    ApplyProfileValue(packageProfile.DimsLength, amazonShipment, AmazonShipmentFields.DimsLength);
+                }
+
+                if (packageProfile.DimsWidth.GetValueOrDefault() > 0)
+                {
+                    ApplyProfileValue(packageProfile.DimsWidth, amazonShipment, AmazonShipmentFields.DimsWidth);
+                }
+
+                if (packageProfile.DimsHeight.GetValueOrDefault() > 0)
+                {
+                    ApplyProfileValue(packageProfile.DimsHeight, amazonShipment, AmazonShipmentFields.DimsHeight);
+                }
+
                 ApplyProfileValue(packageProfile.DimsWeight, amazonShipment, AmazonShipmentFields.DimsWeight);
                 ApplyProfileValue(packageProfile.DimsAddWeight, amazonShipment, AmazonShipmentFields.DimsAddWeight);
             }

@@ -11,9 +11,12 @@ using System.Windows.Forms;
 using System.Windows.Interop;
 using ActiproSoftware.SyntaxEditor;
 using CefSharp;
+using CefSharp.WinForms;
 using Interapptive.Shared.Data;
 using Interapptive.Shared.IO.Hardware.Scales;
+using Interapptive.Shared.Metrics;
 using Interapptive.Shared.UI;
+using Interapptive.Shared.Utility;
 using log4net;
 using NDesk.Options;
 using ShipWorks.ApplicationCore.Crashes;
@@ -40,7 +43,7 @@ namespace ShipWorks.ApplicationCore.ExecutionMode
 
         // Mutex used to indicate the application is alive. The installer uses this to know the app needs
         // shutdown before the installation can continue.
-        Mutex appMutex;
+        private Mutex appMutex;
         private int recoveryCount;
 
         /// <summary>
@@ -206,6 +209,7 @@ namespace ShipWorks.ApplicationCore.ExecutionMode
             // Start idle processing
             IdleWatcher.Initialize();
 
+            Telemetry.SetUserInterfaceView(EnumHelper.GetDescription(MainForm.UIMode));
             log.InfoFormat("Application activated.");
         }
 

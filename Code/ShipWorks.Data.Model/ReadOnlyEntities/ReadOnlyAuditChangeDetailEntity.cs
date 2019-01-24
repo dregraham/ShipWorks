@@ -48,6 +48,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             VariantNew = source.VariantNew;
             
             
+            Audit = (IAuditEntity) source.Audit?.AsReadOnly(objectMap);
             
 
             CopyCustomAuditChangeDetailData(source);
@@ -115,6 +116,8 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
         public System.Object VariantNew { get; }
         
+        
+        public IAuditEntity Audit { get; }
         
         
         /// <summary>

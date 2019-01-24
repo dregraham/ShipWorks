@@ -173,8 +173,8 @@ namespace ShipWorks.ApplicationCore
             this.buttonEndSearch.Edge = ComponentFactory.Krypton.Toolkit.PaletteRelativeEdgeAlign.Far;
             this.buttonEndSearch.Enabled = ComponentFactory.Krypton.Toolkit.ButtonEnabled.False;
             this.buttonEndSearch.ExtraText = "";
-            this.buttonEndSearch.Image = ((System.Drawing.Image) (resources.GetObject("buttonEndSearch.Image")));
-            this.buttonEndSearch.ImageStates.ImageDisabled = ((System.Drawing.Image) (resources.GetObject("buttonEndSearch.ImageStates.ImageDisabled")));
+            this.buttonEndSearch.Image = ShipWorks.Properties.Resources.buttonEndSearch;
+            this.buttonEndSearch.ImageStates.ImageDisabled = ShipWorks.Properties.Resources.buttonEndSearchDisabled;
             this.buttonEndSearch.Text = "";
             this.buttonEndSearch.Type = ComponentFactory.Krypton.Toolkit.PaletteButtonSpecStyle.Close;
             this.buttonEndSearch.UniqueName = "370ABDC6B9F24E16370ABDC6B9F24E16";

@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
+using System.Reactive.Disposables;
+using System.Reflection;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
@@ -15,6 +18,7 @@ namespace ShipWorks.Shipping.Services
     /// <summary>
     /// Base class for ICarrierShipmentAdapter that implements code that's the same across all shipment adapters
     /// </summary>
+    [Obfuscation(Exclude = true, ApplyToMembers = true, StripAfterObfuscation = false)]
     public abstract class CarrierShipmentAdapterBase : ICarrierShipmentAdapter
     {
         private ShipmentType shipmentType;
@@ -198,7 +202,15 @@ namespace ShipWorks.Shipping.Services
         /// <summary>
         /// Add a new package
         /// </summary>
-        public virtual IPackageAdapter AddPackage()
+        public IPackageAdapter AddPackage() => AddPackage(null);
+
+        /// <summary>
+        /// Add a new package
+        /// </summary>
+        /// <param name="manipulateEntity">
+        /// Pass in an action to manipulate the package that gets added to the shipment
+        /// </param>
+        public virtual IPackageAdapter AddPackage(Action<INotifyPropertyChanged> manipulateEntity)
         {
             throw new InvalidOperationException($"Adding a package is not supported");
         }
@@ -206,7 +218,15 @@ namespace ShipWorks.Shipping.Services
         /// <summary>
         /// Delete a package
         /// </summary>
-        public virtual void DeletePackage(IPackageAdapter package)
+        public void DeletePackage(IPackageAdapter package) => DeletePackage(package, null);
+
+        /// <summary>
+        /// Delete a package
+        /// </summary>
+        /// <param name="manipulateEntity">
+        /// Pass in an action to manipulate the package that gets added to the shipment
+        /// </param>
+        public virtual void DeletePackage(IPackageAdapter package, Action<INotifyPropertyChanged> manipulateEntity)
         {
             throw new InvalidOperationException($"Deleting a package is not supported");
         }
@@ -288,8 +308,11 @@ namespace ShipWorks.Shipping.Services
         /// <summary>
         /// Delete a package from the shipment
         /// </summary>
+        /// <param name="manipulateEntity">
+        /// Pass in an action to manipulate the package that gets deleted from the shipment
+        /// </param>
         protected void DeletePackageFromCollection<TPackage>(EntityCollection<TPackage> packageCollection,
-            Func<TPackage, bool> packagePredicate) where TPackage : EntityBase2
+            Func<TPackage, bool> packagePredicate, Action<INotifyPropertyChanged> manipulateEntityAfterDelete) where TPackage : EntityBase2
         {
             if (packageCollection.Count < 2)
             {
@@ -307,6 +330,9 @@ namespace ShipWorks.Shipping.Services
                 }
 
                 packageCollection.Remove(package);
+
+                manipulateEntityAfterDelete?.Invoke(package);
+
                 UpdateDynamicData();
             }
         }
@@ -358,6 +384,23 @@ namespace ShipWorks.Shipping.Services
 
             Shipment.CustomsItems.Remove(existingItem);
             UpdateDynamicData();
+        }
+
+        /// <summary>
+        /// Send a notification if service related properties change
+        /// </summary>
+        public virtual IDisposable NotifyIfServiceRelatedPropertiesChange(Action<string> raisePropertyChanged) =>
+            Disposable.Empty;
+
+        /// <summary>
+        /// Update the total weight of the shipment based on its ContentWeight and any packaging weight.
+        /// </summary>
+        public void UpdateTotalWeight()
+        {
+            if (Shipment.Processed)
+            {
+                shipmentType.UpdateTotalWeight(Shipment);
+            }
         }
 
         /// <summary>

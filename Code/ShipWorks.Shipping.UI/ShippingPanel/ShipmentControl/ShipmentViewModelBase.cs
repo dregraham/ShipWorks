@@ -11,7 +11,7 @@ using System.Windows.Input;
 using GalaSoft.MvvmLight.CommandWpf;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Core.UI;
-using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Messaging.Messages;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Services;
@@ -308,6 +308,13 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
             shipmentAdapter.ShipDate = ShipDate;
             shipmentAdapter.ServiceType = ServiceType;
             shipmentAdapter.ContentWeight = PackageAdapters.Sum(pa => pa.Weight);
+
+            if (shipmentAdapter.Shipment.ResidentialDetermination == (int) ResidentialDeterminationType.FedExAddressLookup &&
+                            shipmentAdapter.Shipment.ShipmentTypeCode !=  ShipmentTypeCode.FedEx)
+            {
+                // Prevent FedEx specific Residential Determination Type from being saved for non-FedEx shipment
+                shipmentAdapter.Shipment.ResidentialDetermination = (int) ResidentialDeterminationType.FromAddressValidation;
+            }
         }
 
         /// <summary>
@@ -386,8 +393,8 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
         /// </summary>
         private void RefreshDimensionsProfiles()
         {
-            DimensionsProfiles = new ObservableCollection<DimensionsProfileEntity>();
-            foreach (var dimensionsProfileEntity in dimensionsManager.Profiles(SelectedPackageAdapter))
+            DimensionsProfiles = new ObservableCollection<IDimensionsProfileEntity>();
+            foreach (var dimensionsProfileEntity in dimensionsManager.ProfilesReadOnly(SelectedPackageAdapter))
             {
                 DimensionsProfiles.Add(dimensionsProfileEntity);
             }

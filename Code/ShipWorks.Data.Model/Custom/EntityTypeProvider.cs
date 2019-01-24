@@ -167,6 +167,14 @@ namespace ShipWorks.Data.Model.Custom
 				case "PostalProfileEntity": return EntityType.PostalProfileEntity;
 				case "PostalShipmentEntity": return EntityType.PostalShipmentEntity;
 				case "PrintResultEntity": return EntityType.PrintResultEntity;
+				case "ProcessedShipmentEntity": return EntityType.ProcessedShipmentEntity;
+				case "ProductEntity": return EntityType.ProductEntity;
+				case "ProductAttributeEntity": return EntityType.ProductAttributeEntity;
+				case "ProductBundleEntity": return EntityType.ProductBundleEntity;
+				case "ProductListItemEntity": return EntityType.ProductListItemEntity;
+				case "ProductVariantEntity": return EntityType.ProductVariantEntity;
+				case "ProductVariantAliasEntity": return EntityType.ProductVariantAliasEntity;
+				case "ProductVariantAttributeValueEntity": return EntityType.ProductVariantAttributeValueEntity;
 				case "ProStoresOrderEntity": return EntityType.ProStoresOrderEntity;
 				case "ProStoresOrderSearchEntity": return EntityType.ProStoresOrderSearchEntity;
 				case "ProStoresStoreEntity": return EntityType.ProStoresStoreEntity;

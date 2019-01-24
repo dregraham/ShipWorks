@@ -6,12 +6,12 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Autofac;
 using Interapptive.Shared;
+using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Threading;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using ShipWorks.Actions;
 using ShipWorks.Actions.Tasks.Common;
-using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.ApplicationCore.Licensing.LicenseEnforcement;
 using ShipWorks.ApplicationCore.Nudges;
@@ -22,7 +22,6 @@ using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Editions;
 using ShipWorks.Messaging.Messages.Shipping;
-using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Shipping.Carriers.Postal.Usps;
 using ShipWorks.Shipping.Carriers.Ups.LocalRating.Validation;
 using ShipWorks.Shipping.Carriers.UPS.WorldShip;
@@ -50,17 +49,26 @@ namespace ShipWorks.Shipping.Services
         private readonly IActionDispatcher actionDispatcher;
         private Control owner;
         private readonly IUpsLocalRateValidator upsLocalRateValidator;
+        private readonly IMessenger messenger;
 
         /// <summary>
         /// Constructor
         /// </summary>
         [NDependIgnoreTooManyParams]
-        public ShipmentProcessor(Func<Control> ownerRetriever, IShippingErrorManager errorManager,
-            ILifetimeScope lifetimeScope, ILicenseService licenseService, IMessageHelper messageHelper,
-            IProcessShipmentsWorkflowFactory workflowFactory, IShippingSettings shippingSettings,
-            ISqlAdapterFactory sqlAdapterFactory, IActionDispatcher actionDispatcher,
-            IUpsLocalRateValidator upsLocalRateValidator)
+        public ShipmentProcessor(
+            Func<Control> ownerRetriever,
+            IShippingErrorManager errorManager,
+            ILifetimeScope lifetimeScope,
+            ILicenseService licenseService,
+            IMessageHelper messageHelper,
+            IProcessShipmentsWorkflowFactory workflowFactory,
+            IShippingSettings shippingSettings,
+            ISqlAdapterFactory sqlAdapterFactory,
+            IActionDispatcher actionDispatcher,
+            IUpsLocalRateValidator upsLocalRateValidator,
+            IMessenger messenger)
         {
+            this.messenger = messenger;
             this.upsLocalRateValidator = upsLocalRateValidator;
             this.actionDispatcher = actionDispatcher;
             this.sqlAdapterFactory = sqlAdapterFactory;
@@ -161,7 +169,6 @@ namespace ShipWorks.Shipping.Services
                 .Select(CreateResultFromShipment)
                 .ToList();
 
-            IMessenger messenger = lifetimeScope.Resolve<IMessenger>();
             messenger.Send(new ShipmentsProcessedMessage(this, results));
 
             return results;
@@ -224,7 +231,7 @@ namespace ShipWorks.Shipping.Services
         private void HandleProcessingException(IProcessShipmentsWorkflowResult workflowResult)
         {
             workflowResult.LocalRateValidationResult.HandleValidationFailure(workflowResult);
-            
+
             // If any accounts were out of funds we show that instead of the errors
             if (workflowResult.OutOfFundsException != null)
             {

@@ -11,6 +11,7 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Messaging.Messages;
 using ShipWorks.Messaging.Messages.Dialogs;
 using ShipWorks.Messaging.Messages.Shipping;
+using ShipWorks.Shipping.Profiles;
 using ShipWorks.Shipping.Services;
 using ShipWorks.Shipping.UI.ShippingRibbon;
 using ShipWorks.Tests.Shared;
@@ -883,7 +884,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingRibbon
             messenger.OfType<ApplyProfileMessage>().Subscribe(x => shipmentID = x.ShipmentID);
 
             Mock<IRibbonButton> applyProfileButton = Mock.Get(actions.Object.ApplyProfile);
-            applyProfileButton.SetupGet(x => x.Tag).Returns(new ShippingProfileEntity());
+            applyProfileButton.SetupGet(x => x.Tag).Returns(mock.Build<IShippingProfile>());
             applyProfileButton.Raise(x => x.Activate += null, EventArgs.Empty);
 
             Assert.Equal(1234, shipmentID);

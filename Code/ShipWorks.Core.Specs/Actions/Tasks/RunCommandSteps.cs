@@ -23,7 +23,7 @@ using static Interapptive.Shared.Utility.Functional;
 namespace ShipWorks.Core.Specs.Actions.Tasks
 {
     [Binding]
-    public class RunCommandSteps
+    public class RunCommandSteps : IDisposable
     {
         private ActionStepContext stepContext;
         private DataContext context;
@@ -135,5 +135,10 @@ namespace ShipWorks.Core.Specs.Actions.Tasks
                 .Take(count);
 
         private static string LatestLogFile() => LatestLogFiles(1).Single();
+
+        public void Dispose()
+        {
+            context.Dispose();
+        }
     }
 }

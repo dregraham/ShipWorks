@@ -95,7 +95,7 @@ namespace ShipWorks.Data.Import.Spreadsheet.OrderSchema
                     new GenericSpreadsheetTargetField("Order.Date",                 "Order Date",             typeof(DateTime)),
                     new GenericSpreadsheetTargetField("Order.Time",                 "Order Time",             typeof(TimeSpan)),
                     new GenericSpreadsheetTargetField("Order.LocalStatus",          "Local Status",           typeof(string)),
-                    new GenericSpreadsheetTargetField("Order.OnlineStatus",         "Store Status",          typeof(string)),
+                    new GenericSpreadsheetTargetField("Order.OnlineStatus",         "Store Status",           typeof(string)),
                     new GenericSpreadsheetTargetField("Order.RequestedShipping",    "Requested Shipping",     typeof(string)),
                     new GenericSpreadsheetTargetField("Order.CustomerNumber",       "Customer Number",        typeof(string)),
                     new GenericSpreadsheetTargetField("Order.NoteInternal",         "Note (Internal)",        typeof(string)),
@@ -112,6 +112,12 @@ namespace ShipWorks.Data.Import.Spreadsheet.OrderSchema
                     new GenericSpreadsheetTargetField("Order.CreditCardNumber",     "Credit Card Number",     typeof(string)),
                     new GenericSpreadsheetTargetField("Order.CreditCardExpiration", "Credit Card Expiration", typeof(string)),
                     new GenericSpreadsheetTargetField("Order.CreditCardName",       "Credit Card Name",       typeof(string)),
+                    new GenericSpreadsheetTargetField("Order.ShipByDate",           "Ship By Date",           typeof(DateTime)),
+                    new GenericSpreadsheetTargetField("Order.Custom1",              "Custom1",                typeof(string)),
+                    new GenericSpreadsheetTargetField("Order.Custom2",              "Custom2",                typeof(string)),
+                    new GenericSpreadsheetTargetField("Order.Custom3",              "Custom3",                typeof(string)),
+                    new GenericSpreadsheetTargetField("Order.Custom4",              "Custom4",                typeof(string)),
+                    new GenericSpreadsheetTargetField("Order.Custom5",              "Custom5",                typeof(string))
                 });
         }
 
@@ -195,7 +201,14 @@ namespace ShipWorks.Data.Import.Spreadsheet.OrderSchema
                 new GenericSpreadsheetTargetField("Item.Thumbnail",             "Thumbnail URL", typeof(string)),
                 new GenericSpreadsheetTargetField("Item.UPC",                   "UPC", typeof(string)),
                 new GenericSpreadsheetTargetField("Item.ISBN",                  "ISBN", typeof(string)),
-                new GenericSpreadsheetTargetField("Item.Attribute.Name",        "Attribute Name", typeof(string))
+                new GenericSpreadsheetTargetField("Item.Attribute.Name",        "Attribute Name", typeof(string)),
+                new GenericSpreadsheetTargetField("Item.Brand",                 "Brand", typeof(string)),
+                new GenericSpreadsheetTargetField("Item.MPN",                   "MPN", typeof(string)),
+                new GenericSpreadsheetTargetField("Item.Custom1",               "Custom1", typeof(string)),
+                new GenericSpreadsheetTargetField("Item.Custom2",               "Custom2", typeof(string)),
+                new GenericSpreadsheetTargetField("Item.Custom3",               "Custom3", typeof(string)),
+                new GenericSpreadsheetTargetField("Item.Custom4",               "Custom4", typeof(string)),
+                new GenericSpreadsheetTargetField("Item.Custom5",               "Custom5", typeof(string))
             };
         }
 

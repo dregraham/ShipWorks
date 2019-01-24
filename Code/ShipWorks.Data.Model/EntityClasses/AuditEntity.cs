@@ -33,6 +33,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 	{
 		#region Class Member Declarations
 		private EntityCollection<AuditChangeEntity> _auditChanges;
+		private EntityCollection<AuditChangeDetailEntity> _auditChangeDetail;
 		private ComputerEntity _computer;
 		private UserEntity _user;
 
@@ -53,6 +54,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 			public static readonly string User = "User";
 			/// <summary>Member name AuditChanges</summary>
 			public static readonly string AuditChanges = "AuditChanges";
+			/// <summary>Member name AuditChangeDetail</summary>
+			public static readonly string AuditChangeDetail = "AuditChangeDetail";
 		}
 		#endregion
 		
@@ -111,6 +114,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			if(SerializationHelper.Optimization != SerializationOptimization.Fast) 
 			{
 				_auditChanges = (EntityCollection<AuditChangeEntity>)info.GetValue("_auditChanges", typeof(EntityCollection<AuditChangeEntity>));
+				_auditChangeDetail = (EntityCollection<AuditChangeDetailEntity>)info.GetValue("_auditChangeDetail", typeof(EntityCollection<AuditChangeDetailEntity>));
 				_computer = (ComputerEntity)info.GetValue("_computer", typeof(ComputerEntity));
 				if(_computer!=null)
 				{
@@ -163,6 +167,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 				case "AuditChanges":
 					this.AuditChanges.Add((AuditChangeEntity)entity);
 					break;
+				case "AuditChangeDetail":
+					this.AuditChangeDetail.Add((AuditChangeDetailEntity)entity);
+					break;
 				default:
 					this.OnSetRelatedEntityProperty(propertyName, entity);
 					break;
@@ -193,6 +200,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 					break;
 				case "AuditChanges":
 					toReturn.Add(Relations.AuditChangeEntityUsingAuditID);
+					break;
+				case "AuditChangeDetail":
+					toReturn.Add(Relations.AuditChangeDetailEntityUsingAuditID);
 					break;
 				default:
 					break;				
@@ -233,6 +243,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 				case "AuditChanges":
 					this.AuditChanges.Add((AuditChangeEntity)relatedEntity);
 					break;
+				case "AuditChangeDetail":
+					this.AuditChangeDetail.Add((AuditChangeDetailEntity)relatedEntity);
+					break;
 				default:
 					break;
 			}
@@ -254,6 +267,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 					break;
 				case "AuditChanges":
 					this.PerformRelatedEntityRemoval(this.AuditChanges, relatedEntity, signalRelatedEntityManyToOne);
+					break;
+				case "AuditChangeDetail":
+					this.PerformRelatedEntityRemoval(this.AuditChangeDetail, relatedEntity, signalRelatedEntityManyToOne);
 					break;
 				default:
 					break;
@@ -291,6 +307,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			List<IEntityCollection2> toReturn = new List<IEntityCollection2>();
 			toReturn.Add(this.AuditChanges);
+			toReturn.Add(this.AuditChangeDetail);
 			return toReturn;
 		}
 
@@ -303,6 +320,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			if (SerializationHelper.Optimization != SerializationOptimization.Fast) 
 			{
 				info.AddValue("_auditChanges", ((_auditChanges!=null) && (_auditChanges.Count>0) && !this.MarkedForDeletion)?_auditChanges:null);
+				info.AddValue("_auditChangeDetail", ((_auditChangeDetail!=null) && (_auditChangeDetail.Count>0) && !this.MarkedForDeletion)?_auditChangeDetail:null);
 				info.AddValue("_computer", (!this.MarkedForDeletion?_computer:null));
 				info.AddValue("_user", (!this.MarkedForDeletion?_user:null));
 			}
@@ -326,6 +344,15 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			IRelationPredicateBucket bucket = new RelationPredicateBucket();
 			bucket.PredicateExpression.Add(new FieldCompareValuePredicate(AuditChangeFields.AuditID, null, ComparisonOperator.Equal, this.AuditID));
+			return bucket;
+		}
+
+		/// <summary> Creates a new IRelationPredicateBucket object which contains the predicate expression and relation collection to fetch the related entities of type 'AuditChangeDetail' to this entity.</summary>
+		/// <returns></returns>
+		public virtual IRelationPredicateBucket GetRelationInfoAuditChangeDetail()
+		{
+			IRelationPredicateBucket bucket = new RelationPredicateBucket();
+			bucket.PredicateExpression.Add(new FieldCompareValuePredicate(AuditChangeDetailFields.AuditID, null, ComparisonOperator.Equal, this.AuditID));
 			return bucket;
 		}
 
@@ -360,6 +387,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			base.AddToMemberEntityCollectionsQueue(collectionsQueue);
 			collectionsQueue.Enqueue(this._auditChanges);
+			collectionsQueue.Enqueue(this._auditChangeDetail);
 		}
 		
 		/// <summary>Gets the member collections queue from the queue (base first)</summary>
@@ -368,6 +396,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			base.GetFromMemberEntityCollectionsQueue(collectionsQueue);
 			this._auditChanges = (EntityCollection<AuditChangeEntity>) collectionsQueue.Dequeue();
+			this._auditChangeDetail = (EntityCollection<AuditChangeDetailEntity>) collectionsQueue.Dequeue();
 
 		}
 		
@@ -377,6 +406,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			bool toReturn = false;
 			toReturn |=(this._auditChanges != null);
+			toReturn |=(this._auditChangeDetail != null);
 			return toReturn ? true : base.HasPopulatedMemberEntityCollections();
 		}
 		
@@ -387,6 +417,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			base.CreateMemberEntityCollectionsQueue(collectionsQueue, requiredQueue);
 			collectionsQueue.Enqueue(requiredQueue.Dequeue() ? new EntityCollection<AuditChangeEntity>(EntityFactoryCache2.GetEntityFactory(typeof(AuditChangeEntityFactory))) : null);
+			collectionsQueue.Enqueue(requiredQueue.Dequeue() ? new EntityCollection<AuditChangeDetailEntity>(EntityFactoryCache2.GetEntityFactory(typeof(AuditChangeDetailEntityFactory))) : null);
 		}
 #endif
 		/// <summary>Gets all related data objects, stored by name. The name is the field name mapped onto the relation for that particular data element.</summary>
@@ -397,6 +428,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			toReturn.Add("Computer", _computer);
 			toReturn.Add("User", _user);
 			toReturn.Add("AuditChanges", _auditChanges);
+			toReturn.Add("AuditChangeDetail", _auditChangeDetail);
 			return toReturn;
 		}
 
@@ -545,6 +577,13 @@ namespace ShipWorks.Data.Model.EntityClasses
 		public static IPrefetchPathElement2 PrefetchPathAuditChanges
 		{
 			get	{ return new PrefetchPathElement2( new EntityCollection<AuditChangeEntity>(EntityFactoryCache2.GetEntityFactory(typeof(AuditChangeEntityFactory))), (IEntityRelation)GetRelationsForField("AuditChanges")[0], (int)ShipWorks.Data.Model.EntityType.AuditEntity, (int)ShipWorks.Data.Model.EntityType.AuditChangeEntity, 0, null, null, null, null, "AuditChanges", SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToMany);	}
+		}
+
+		/// <summary> Creates a new PrefetchPathElement2 object which contains all the information to prefetch the related entities of type 'AuditChangeDetail' for this entity.</summary>
+		/// <returns>Ready to use IPrefetchPathElement2 implementation.</returns>
+		public static IPrefetchPathElement2 PrefetchPathAuditChangeDetail
+		{
+			get	{ return new PrefetchPathElement2( new EntityCollection<AuditChangeDetailEntity>(EntityFactoryCache2.GetEntityFactory(typeof(AuditChangeDetailEntityFactory))), (IEntityRelation)GetRelationsForField("AuditChangeDetail")[0], (int)ShipWorks.Data.Model.EntityType.AuditEntity, (int)ShipWorks.Data.Model.EntityType.AuditChangeDetailEntity, 0, null, null, null, null, "AuditChangeDetail", SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToMany);	}
 		}
 
 		/// <summary> Creates a new PrefetchPathElement2 object which contains all the information to prefetch the related entities of type 'Computer' for this entity.</summary>
@@ -700,6 +739,13 @@ namespace ShipWorks.Data.Model.EntityClasses
 		public virtual EntityCollection<AuditChangeEntity> AuditChanges
 		{
 			get { return GetOrCreateEntityCollection<AuditChangeEntity, AuditChangeEntityFactory>("Audit", true, false, ref _auditChanges);	}
+		}
+
+		/// <summary> Gets the EntityCollection with the related entities of type 'AuditChangeDetailEntity' which are related to this entity via a relation of type '1:n'. If the EntityCollection hasn't been fetched yet, the collection returned will be empty.<br/><br/></summary>
+		[TypeContainedAttribute(typeof(AuditChangeDetailEntity))]
+		public virtual EntityCollection<AuditChangeDetailEntity> AuditChangeDetail
+		{
+			get { return GetOrCreateEntityCollection<AuditChangeDetailEntity, AuditChangeDetailEntityFactory>("Audit", true, false, ref _auditChangeDetail);	}
 		}
 
 		/// <summary> Gets / sets related entity of type 'ComputerEntity' which has to be set using a fetch action earlier. If no related entity is set for this property, null is returned..<br/><br/></summary>

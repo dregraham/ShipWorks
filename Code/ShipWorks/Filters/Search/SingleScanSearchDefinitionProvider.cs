@@ -1,4 +1,5 @@
-﻿using ShipWorks.Filters.Content;
+﻿using Interapptive.Shared.ComponentRegistration;
+using ShipWorks.Filters.Content;
 using ShipWorks.Filters.Content.Conditions;
 using ShipWorks.Filters.Content.Conditions.Orders;
 
@@ -22,7 +23,20 @@ namespace ShipWorks.Filters.Search
         /// <summary>
         /// Gets a filter definition that searches for an exact order number or OrderId based on the prefix
         /// </summary>
-        public FilterDefinition GetDefinition(string quickSearchString)
+        public IFilterDefinition GetDefinition(string quickSearchString)
+        {
+            Condition condition = GetCondition(quickSearchString);
+
+            FilterDefinition definition = new FilterDefinition(FilterTarget.Orders, FilterDefinitionSourceType.Scan);
+            definition.RootContainer.FirstGroup.Conditions.Add(condition);
+
+            return definition;
+        }
+
+        /// <summary>
+        /// Gets the search condition
+        /// </summary>
+        private Condition GetCondition(string quickSearchString)
         {
             Condition condition;
             if (singleScanShortcut.AppliesTo(quickSearchString))
@@ -39,10 +53,7 @@ namespace ShipWorks.Filters.Search
                 condition = new SingleScanSearchCondition(quickSearchString);
             }
 
-            FilterDefinition definition = new FilterDefinition(FilterTarget.Orders, FilterDefinitionSourceType.Scan);
-            definition.RootContainer.FirstGroup.Conditions.Add(condition);
-
-            return definition;
+            return condition;
         }
     }
 }

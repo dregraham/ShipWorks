@@ -41,23 +41,9 @@ namespace ShipWorks.Tests.Stores.Amazon
         }
 
         /// <summary>
-        /// Testing a method that was failing deep in WCF for no reason.  This stopped after a reboot, keeping here for
-        /// future diagnostics.
-        /// 
-        /// Failed with a COMException "logon failure"
-        /// </summary>
-        [Fact]
-        public void DomainTest()
-        {
-            Domain domain = Domain.GetCurrentDomain();
-
-            Assert.NotNull(domain);
-        }
-
-        /// <summary>
         /// Adding a certificate to the system cert store
         /// </summary>
-        [Fact]
+        [Fact (Skip = "This is a fragile test that does not work with our current CI tools.")]
         public void InstallCertificate()
         {
             clientCert.AddToCertificateStore(System.Security.Cryptography.X509Certificates.StoreName.My, System.Security.Cryptography.X509Certificates.StoreLocation.CurrentUser);

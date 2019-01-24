@@ -74,6 +74,20 @@
         <option>transformxaml</option>
         <file dir="${configdir}\Artifacts\Application" name="ShipWorks.SingleScan.dll" />
       </inputassembly>
+      <inputassembly refid="F82644B2-A787-4221-9D11-7D215D168909">
+        <option>honoroas</option>
+        <option>transformxaml</option>
+        <file dir="${configdir}\Artifacts\Application" name="ShipWorks.OrderLookup.dll" />
+      </inputassembly>
+      <inputassembly refid="7bf4f5d4-15de-4a60-b69d-1ce530b08be7">
+        <option>honoroas</option>
+        <file dir="${configdir}\Artifacts\Application" name="ShipWorks.Products.dll" />
+      </inputassembly>
+      <inputassembly refid="3b8b874b-4699-41bf-b28a-e1c06012c4bf">
+        <option>honoroas</option>
+        <option>transformxaml</option>
+        <file dir="${configdir}\Artifacts\Application" name="ShipWorks.Products.UI.dll" />
+      </inputassembly>
     </asmlist>
   </input>
   <output>
@@ -149,6 +163,8 @@
       </type>
       <type name="Interapptive.Shared.IO.Text.Csv.Resources.ExceptionMessage" />
       <type name="Interapptive.Shared.Properties.Flags" />
+      <type name="ShipWorks.UI.Controls.ShipWorksComboBox" />
+      <type name="*ShipmentAdapter*" regex="true" />
     </excludelist>
     <mapping>
       <mapoutput overwrite="true">
@@ -189,6 +205,9 @@
         <file dir="${configdir}\Artifacts\Application" name="ShipWorks.Shipping.UI.dll" />
       </assembly>
       <assembly>
+        <file dir="${configdir}\Artifacts\Application" name="ShipWorks.OrderLookup.dll" />
+      </assembly>
+      <assembly>
         <file dir="${configdir}\Artifacts\Application" name="ShipWorks.Stores.dll" />
       </assembly>
       <assembly>
@@ -196,6 +215,12 @@
       </assembly>
       <assembly>
         <file dir="${configdir}\Artifacts\Application" name="ShipWorks.UI.dll" />
+      </assembly>
+      <assembly>
+        <file dir="${configdir}\Artifacts\Application" name="ShipWorks.Products.dll" />
+      </assembly>
+      <assembly>
+        <file dir="${configdir}\Artifacts\Application" name="ShipWorks.Products.UI.dll" />
       </assembly>
     </includelist>
   </stringencrypt>

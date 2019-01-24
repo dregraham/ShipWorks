@@ -18,6 +18,11 @@ namespace Interapptive.Shared.UI
         /// <summary>
         /// Show an error
         /// </summary>
+        void ShowError(string message, Exception ex);
+
+        /// <summary>
+        /// Show an error
+        /// </summary>
         void ShowError(IWin32Window owner, string message);
 
         /// <summary>
@@ -49,6 +54,11 @@ namespace Interapptive.Shared.UI
         /// Show a popup message
         /// </summary>
         void ShowPopup(string message);
+
+        /// <summary>
+        /// Show a popup for specified amount of time
+        /// </summary>
+        void ShowPopup(string message, TimeSpan fadeTime);
 
         /// <summary>
         /// Show a popup message with a Keyboard image

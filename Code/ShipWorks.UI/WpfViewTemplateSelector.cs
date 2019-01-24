@@ -10,8 +10,8 @@ namespace ShipWorks.UI
     /// </summary>
     public class WpfViewTemplateSelector : DataTemplateSelector
     {
-        static readonly DataTemplate emptyTemplate = new DataTemplate();
-        readonly Dictionary<Type, DataTemplate> templates = new Dictionary<Type, DataTemplate>();
+        private static readonly DataTemplate emptyTemplate = new DataTemplate();
+        private readonly Dictionary<Type, DataTemplate> templates = new Dictionary<Type, DataTemplate>();
 
         /// <summary>
         /// Select a template for a given item
@@ -42,15 +42,18 @@ namespace ShipWorks.UI
         /// </summary>
         private DataTemplate CreateTemplate(Type itemType)
         {
-            var viewAttribute = Attribute.GetCustomAttribute(itemType, typeof(WpfViewAttribute)) as WpfViewAttribute;
-            if (viewAttribute == null)
+            var viewType =
+                WpfViewAttribute.GetViewFor(itemType) ??
+                WpfViewForAttribute.FindViewFor(itemType);
+
+            if (viewType == null)
             {
                 throw new InvalidOperationException($"A view must be specified for {itemType.Name}");
             }
 
             return new DataTemplate
             {
-                VisualTree = new FrameworkElementFactory(viewAttribute.ViewType)
+                VisualTree = new FrameworkElementFactory(viewType)
             };
         }
     }

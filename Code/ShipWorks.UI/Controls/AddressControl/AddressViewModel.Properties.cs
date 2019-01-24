@@ -1,8 +1,11 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
+using System.Windows;
 using System.Windows.Input;
 using ShipWorks.AddressValidation.Enums;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.OrderLookup.FieldManager;
 
 namespace ShipWorks.UI.Controls.AddressControl
 {
@@ -26,6 +29,16 @@ namespace ShipWorks.UI.Controls.AddressControl
         private IEnumerable<KeyValuePair<string, ValidatedAddressEntity>> addressSuggestions;
         private int suggestionCount;
         private bool isAddressValidationEnabled;
+
+        // Address validation fields.
+        SectionLayoutFieldIDs[] addressValidationFields = new SectionLayoutFieldIDs[]
+        {
+            SectionLayoutFieldIDs.Street,
+            SectionLayoutFieldIDs.City,
+            SectionLayoutFieldIDs.StateProvince,
+            SectionLayoutFieldIDs.PostalCode,
+            SectionLayoutFieldIDs.Country
+        };
 
         /// <summary>
         /// Validate address command
@@ -193,6 +206,22 @@ namespace ShipWorks.UI.Controls.AddressControl
         {
             get { return isAddressValidationEnabled; }
             set { handler.Set(nameof(IsAddressValidationEnabled), ref isAddressValidationEnabled, value); }
+        }
+
+        /// <summary>
+        /// Visibility of address validation
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public Visibility AddressValidationVisibility
+        {
+            get
+            {
+                var x = FieldLayoutProvider.Fetch()
+                    .SelectMany(l => l.SectionFields)
+                    .Any(f => f.Selected && addressValidationFields.Contains(f.Id));
+
+                return x ? Visibility.Visible : Visibility.Collapsed;
+            }
         }
     }
 }

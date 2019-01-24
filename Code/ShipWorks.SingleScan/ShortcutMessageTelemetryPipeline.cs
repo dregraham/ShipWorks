@@ -1,18 +1,18 @@
 ﻿using System;
 using System.Linq;
+using System.Reactive.Disposables;
 using System.Reactive.Linq;
+using Interapptive.Shared.Collections;
+using Interapptive.Shared.Messaging;
 using Interapptive.Shared.Metrics;
+using Interapptive.Shared.Threading;
+using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore;
 using ShipWorks.Common.IO.KeyboardShortcuts.Messages;
 using ShipWorks.Core.Messaging;
 using ShipWorks.IO.KeyboardShortcuts;
-using Interapptive.Shared.Collections;
-using ShipWorks.Shipping.Profiles;
-using Interapptive.Shared.Threading;
-using System.Reactive.Disposables;
-using Interapptive.Shared.Messaging;
-using Interapptive.Shared.Utility;
 using ShipWorks.Messaging.Messages.Shipping;
+using ShipWorks.Shipping.Profiles;
 
 namespace ShipWorks.SingleScan
 {
@@ -29,8 +29,8 @@ namespace ShipWorks.SingleScan
         /// <summary>
         /// Constructor
         /// </summary>
-        public ShortcutMessageTelemetryPipeline(IMessenger messenger, 
-            Func<string, ITrackedEvent> telemetryEventFactory, 
+        public ShortcutMessageTelemetryPipeline(IMessenger messenger,
+            Func<string, ITrackedEvent> telemetryEventFactory,
             ISchedulerProvider schedulerProvider)
         {
             this.messenger = messenger;
@@ -75,15 +75,15 @@ namespace ShipWorks.SingleScan
         /// </summary>
         private IObservable<ProfileAppliedMessage> ProfileAppliedSignal(ShortcutMessage shortcutMessage) =>
              messenger.OfType<ProfileAppliedMessage>()
-                .Where(profileAppliedMessage => ((ShippingProfile) profileAppliedMessage.Sender).Shortcut.Equals(shortcutMessage.Shortcut));
+                .Where(profileAppliedMessage => ((IShippingProfile) profileAppliedMessage.Sender).Shortcut.Equals(shortcutMessage.Shortcut));
 
         /// <summary>
         /// Signal that the shipment is being processed
         /// </summary>
         private IObservable<ProcessShipmentsMessage> LabelCreatedSignal(ShortcutMessage shortcutMessage) => messenger.OfType<ProcessShipmentsMessage>();
-        
+
         /// <summary>
-        /// Handle telemetry for a profile being applied via shortcut 
+        /// Handle telemetry for a profile being applied via shortcut
         /// </summary>
         private void CollectTelemetryWithResult(ShortcutMessage shortcutMessage, IShipWorksMessage actionMessage)
         {
@@ -96,7 +96,7 @@ namespace ShipWorks.SingleScan
         }
 
         /// <summary>
-        /// Handle telemetry for a weight being applied via shortcut 
+        /// Handle telemetry for a weight being applied via shortcut
         /// </summary>
         private void CollectTelemetryWithoutResult(ShortcutMessage shortcutMessage)
         {
@@ -116,7 +116,7 @@ namespace ShipWorks.SingleScan
             telemetryEvent.AddProperty("Shortcuts.Applied.Value", shortcutMessage.Value);
             telemetryEvent.AddProperty("Shortcuts.Applied.Action", GetShortcutMessageAction(shortcutMessage));
         }
-                
+
         /// <summary>
         /// Get the shortcutMessage action
         /// </summary>

@@ -1,0 +1,119 @@
+﻿<UserControl
+    x:Class="ShipWorks.OrderLookup.Controls.LabelOptions.PostalLabelOptionsControl"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:ShipWorks.OrderLookup.Controls.LabelOptions"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:ui="http://schemas.shipworks.com/ui"
+    xmlns:ns="clr-namespace:ShipWorks.OrderLookup.FieldManager;assembly=ShipWorks.Core"
+    d:DataContext="{d:DesignInstance local:PostalLabelOptionsViewModel}"
+    d:DesignHeight="150"
+    d:DesignWidth="500"
+    FontFamily="/ShipWorks.OrderLookup;component/#Roboto"
+    FontSize="12"
+    mc:Ignorable="d">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/ShipWorks.UI;component/Styles/BlueSteel/BlueSteelStyle.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
+    <Grid IsEnabled="{Binding ShipmentModel.ShipmentAllowEditing}">
+        <Grid.RowDefinitions>
+            <ui:FieldLayoutRowDefinition FieldID="{x:Static ns:SectionLayoutFieldIDs.LabelOptionsShipDate}" />
+            <ui:FieldLayoutRowDefinition FieldID="{x:Static ns:SectionLayoutFieldIDs.LabelOptionsUspsHideStealth}" />
+            <ui:FieldLayoutRowDefinition FieldID="{x:Static ns:SectionLayoutFieldIDs.LabelOptionsNoPostage}" />
+            <ui:FieldLayoutRowDefinition FieldID="{x:Static ns:SectionLayoutFieldIDs.LabelOptionsRequestedLabelFormat}" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <TextBlock
+            Grid.Row="0"
+            Grid.Column="1"
+            Style="{StaticResource FieldLabel}"
+            Text="Ship Date" />
+
+        <DatePicker
+            Grid.Row="0"
+            Grid.Column="2"
+            Margin="10,0,0,10"
+            SelectedDate="{Binding ShipDate, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=true, NotifyOnValidationError=true}"
+            Style="{StaticResource DatePicker}">
+        </DatePicker>
+
+        <TextBlock
+            Grid.Row="1"
+            Grid.Column="1"
+            Style="{StaticResource FieldLabel}"
+            Text="Stealth" />
+
+        <CheckBox 
+            Grid.Row="1"
+            Grid.Column="2"
+            Content="Hide Postage"
+            IsChecked="{Binding ShipmentModel.ShipmentAdapter.Shipment.Postal.Usps.HidePostage, UpdateSourceTrigger=PropertyChanged}"
+            Style="{StaticResource FormCheckBox}" />
+
+        <TextBlock
+            Grid.Row="2"
+            Grid.Column="1"
+            Style="{StaticResource FieldLabel}"
+            Text="No Postage" />
+
+        <CheckBox
+            Grid.Row="2"
+            Grid.Column="2"
+            Content="Generate label that is not postage-paid"
+            IsChecked="{Binding ShipmentModel.ShipmentAdapter.Shipment.Postal.NoPostage, UpdateSourceTrigger=PropertyChanged}"
+            Style="{StaticResource FormCheckBox}" />
+        
+        <ContentControl
+            Grid.Row="3"
+            Grid.Column="0"
+            Width="15"
+            Height="15"
+            Margin="0,0,3,0"
+            Background="Transparent"
+            Focusable="False">
+            <Hyperlink
+                ui:Link.OpenInBrowser="True"
+                Background="Transparent"
+                NavigateUri="http://support.shipworks.com/support/solutions/articles/140916-what-printer-should-i"
+                Style="{StaticResource LinkButton}"
+                Focusable="False">
+                <Border Background="Transparent" BorderBrush="{x:Null}"
+                        Focusable="False">
+                    <Path
+                        Focusable="False"
+                        Fill="Gray"
+                        Stretch="Fill"
+                        Style="{StaticResource InformationIcon}" />
+                </Border>
+            </Hyperlink>
+        </ContentControl>
+
+        <TextBlock
+            Grid.Row="3"
+            Grid.Column="1"
+            Margin="0"
+            Style="{StaticResource FieldLabel}"
+            Text="Requested Label Format"
+            TextWrapping="Wrap" />
+
+        <ComboBox
+            Grid.Row="3"
+            Grid.Column="2"
+            MinWidth="100"
+            Margin="10,0,0,0"
+            DisplayMemberPath="Value"
+            ItemsSource="{Binding LabelFormats, UpdateSourceTrigger=PropertyChanged}"
+            SelectedValue="{Binding ShipmentModel.ShipmentAdapter.Shipment.RequestedLabelFormat}"
+            SelectedValuePath="Key"
+            Style="{StaticResource FormComboBox}" />
+    </Grid>
+</UserControl>

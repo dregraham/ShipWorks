@@ -988,6 +988,54 @@ namespace ShipWorks.Data.Model.FactoryClasses
 			get { return Create<PrintResultEntity>(); }
 		}
 
+		/// <summary>Creates and returns a new EntityQuery for the ProcessedShipment entity</summary>
+		public EntityQuery<ProcessedShipmentEntity> ProcessedShipment
+		{
+			get { return Create<ProcessedShipmentEntity>(); }
+		}
+
+		/// <summary>Creates and returns a new EntityQuery for the Product entity</summary>
+		public EntityQuery<ProductEntity> Product
+		{
+			get { return Create<ProductEntity>(); }
+		}
+
+		/// <summary>Creates and returns a new EntityQuery for the ProductAttribute entity</summary>
+		public EntityQuery<ProductAttributeEntity> ProductAttribute
+		{
+			get { return Create<ProductAttributeEntity>(); }
+		}
+
+		/// <summary>Creates and returns a new EntityQuery for the ProductBundle entity</summary>
+		public EntityQuery<ProductBundleEntity> ProductBundle
+		{
+			get { return Create<ProductBundleEntity>(); }
+		}
+
+		/// <summary>Creates and returns a new EntityQuery for the ProductListItem entity</summary>
+		public EntityQuery<ProductListItemEntity> ProductListItem
+		{
+			get { return Create<ProductListItemEntity>(); }
+		}
+
+		/// <summary>Creates and returns a new EntityQuery for the ProductVariant entity</summary>
+		public EntityQuery<ProductVariantEntity> ProductVariant
+		{
+			get { return Create<ProductVariantEntity>(); }
+		}
+
+		/// <summary>Creates and returns a new EntityQuery for the ProductVariantAlias entity</summary>
+		public EntityQuery<ProductVariantAliasEntity> ProductVariantAlias
+		{
+			get { return Create<ProductVariantAliasEntity>(); }
+		}
+
+		/// <summary>Creates and returns a new EntityQuery for the ProductVariantAttributeValue entity</summary>
+		public EntityQuery<ProductVariantAttributeValueEntity> ProductVariantAttributeValue
+		{
+			get { return Create<ProductVariantAttributeValueEntity>(); }
+		}
+
 		/// <summary>Creates and returns a new EntityQuery for the ProStoresOrder entity</summary>
 		public EntityQuery<ProStoresOrderEntity> ProStoresOrder
 		{

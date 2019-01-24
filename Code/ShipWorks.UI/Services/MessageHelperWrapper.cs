@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Reactive.Concurrency;
 using System.Reactive.Disposables;
+using System.Windows;
 using System.Windows.Forms;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Threading;
 using Interapptive.Shared.UI;
 using ShipWorks.Common.Threading;
-using ShipWorks.UI.Dialogs;
 using ShipWorks.UI.Dialogs.Popup;
 using ShipWorks.Users;
 
@@ -40,12 +40,46 @@ namespace ShipWorks.UI.Services
         /// <summary>
         /// Show an error message box with the given error text.
         /// </summary>
-        public void ShowError(string message) => MessageHelper.ShowError(ownerFactory(), message);
+        public void ShowError(string message, Exception ex)
+        {
+            Control owner = ownerFactory();
+
+            if (owner.InvokeRequired)
+            {
+                owner.Invoke((Action<string, Exception>) ShowError, message, ex);
+            }
+            else
+            {
+                MessageHelper.ShowError(ownerFactory(), message, ex);
+            }
+        }
 
         /// <summary>
         /// Show an error message box with the given error text.
         /// </summary>
-        public void ShowError(IWin32Window owner, string message) => MessageHelper.ShowError(owner, message);
+        public void ShowError(IWin32Window owner, string message)
+        {
+            if (owner is Window ownerWindow && !ownerWindow.Dispatcher.CheckAccess())
+            {
+                ownerWindow.Dispatcher.Invoke((Action<string>) ShowError, message);
+            }
+            else if (owner is Control ownerControl && ownerControl.InvokeRequired)
+            {
+                ownerControl.Invoke((Action<string>) ShowError, message);
+            }
+            else
+            {
+                MessageHelper.ShowError(owner, message);
+            }
+        }
+
+        /// <summary>
+        /// Show an error message box with the given error text.
+        /// </summary>
+        public void ShowError(string message)
+        {
+            ShowError(ownerFactory(), message);
+        }
 
         /// <summary>
         /// Show an information message
@@ -73,7 +107,16 @@ namespace ShipWorks.UI.Services
         /// </summary>
         public DialogResult ShowQuestion(string message)
         {
-            return MessageHelper.ShowQuestion(ownerFactory(), message);
+            Control owner = ownerFactory();
+
+            if (owner.InvokeRequired)
+            {
+                return (DialogResult) owner.Invoke((Func<string, DialogResult>) ShowQuestion, message);
+            }
+            else
+            {
+                return MessageHelper.ShowQuestion(ownerFactory(), message);
+            }
         }
 
         /// <summary>
@@ -90,6 +133,23 @@ namespace ShipWorks.UI.Services
             else
             {
                 popupViewModelFactory().Show(message, owner);
+            }
+        }
+
+        /// <summary>
+        /// Show a popup message
+        /// </summary>
+        public void ShowPopup(string message, TimeSpan fadeTime)
+        {
+            Control owner = ownerFactory();
+
+            if (owner.InvokeRequired)
+            {
+                owner.Invoke((Action<string, TimeSpan>) ShowPopup, message, fadeTime);
+            }
+            else
+            {
+                popupViewModelFactory().Show(message, owner, fadeTime);
             }
         }
 
@@ -157,7 +217,7 @@ namespace ShipWorks.UI.Services
             };
 
             return schedulerProvider.WindowsFormsEventLoop
-                .Schedule(Tuple.Create(progressDialog, ownerFactory()), timeSpan, OpenProgressDialog);
+                            .Schedule(Tuple.Create(progressDialog, ownerFactory()), timeSpan, OpenProgressDialog);
         }
 
         /// <summary>

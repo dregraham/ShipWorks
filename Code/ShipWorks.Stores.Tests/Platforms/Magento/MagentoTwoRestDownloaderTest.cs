@@ -149,6 +149,14 @@ namespace ShipWorks.Stores.Tests.Platforms.Magento
         }
 
         [Fact]
+        public async Task LoadOrder_LoadsOrderTotalWeight()
+        {
+            await LoadOrder("MagentoOrderWithItemAttributes");
+
+            Assert.Equal(5.25, orderEntity.OrderItems.First().Weight);
+        }
+
+        [Fact]
         public async Task LoadOrder_LoadsOrderCharges()
         {
             await LoadOrder("MagentoOrder");
@@ -194,6 +202,30 @@ namespace ShipWorks.Stores.Tests.Platforms.Magento
             await LoadOrder("BadMagentoOrder");
 
             Assert.Equal(1, orderEntity.OrderItems.Count);
+        }        
+        
+        [Fact]
+        public async Task LoadOrder_SetsOnlineCustomerID()
+        {
+            await LoadOrder("MagentoOrder");
+
+            Assert.Equal(200, orderEntity.OnlineCustomerID);
+        }
+        
+        [Fact]
+        public async Task LoadOrder_SetsOnlineCustomerIDToNull_WhenCustomerIDIsNullInResponse()
+        {
+            await LoadOrder("MagentoOrderWithNullCustomerID");
+
+            Assert.Equal(null, orderEntity.OnlineCustomerID);
+        }
+        
+        [Fact]
+        public async Task LoadOrder_SetsOnlineCustomerIDToNull_WhenCustomerIDIsMissingFromResponse()
+        {
+            await LoadOrder("MagentoOrderWithConfigurableProduct");
+
+            Assert.Equal(null, orderEntity.OnlineCustomerID);
         }
 
         public void Dispose()

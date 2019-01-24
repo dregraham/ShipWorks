@@ -25,6 +25,7 @@ using ShipWorks.Data.Utility;
 using ShipWorks.Editions;
 using ShipWorks.Editions.Freemium;
 using ShipWorks.Filters;
+using ShipWorks.Settings;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.UI.Controls;
@@ -461,6 +462,7 @@ namespace ShipWorks.Stores.Management
 
                 // Fill in non-null values for anything the store is not yet configured for
                 store.InitializeNullsToDefault();
+                store.StartSetup();
 
                 // Save it right away It is marked as SetupComplete = false so it doesn't show up
                 // to the rest of ShipWorks.  We save it right away so we can get a PK for wizard steps that create FK tables.
@@ -995,6 +997,7 @@ namespace ShipWorks.Stores.Management
                 using (SqlAdapter adapter = new SqlAdapter(true))
                 {
                     SaveStore(adapter);
+                    SaveUIMode(adapter);
 
                     adapter.Commit();
                 }
@@ -1023,6 +1026,22 @@ namespace ShipWorks.Stores.Management
         }
 
         /// <summary>
+        /// Saves the selected UIMode 
+        /// </summary>
+        private void SaveUIMode(SqlAdapter adapter)
+        {
+            UserSettingsEntity settings = UserSession.User.Settings;
+
+            // The only time the user will be presented with the uiModeSelectionControl is
+            // when the user is first created signified by UIMode being set to Pending.
+            if (settings.UIMode == UIMode.Pending)
+            {
+                uiModeSelectionControl.SaveTo(settings);
+                adapter.SaveAndRefetch(settings);
+            }
+        }
+
+        /// <summary>
         /// Save the store using the given adapter
         /// </summary>
         private void SaveStore(SqlAdapter adapter)
@@ -1037,7 +1056,7 @@ namespace ShipWorks.Stores.Management
             AdjustShipmentType();
 
             // Mark that this store is now ready
-            store.SetupComplete = true;
+            store.CompleteSetup();
             StoreManager.SaveStore(store, adapter);
 
             if (wasStoreSelectionSkipped && OpenedFrom == OpenedFromSource.InitialSetup)
@@ -1205,6 +1224,18 @@ namespace ShipWorks.Stores.Management
         private void ManualStoreHelpLinkLabel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             WebHelper.OpenUrl("http://support.shipworks.com/support/solutions/articles/4000120126-bypassing-the-store-setup", this);
+        }
+
+        /// <summary>
+        /// The only time the user will be presented with the uiModeSelectionControl is
+        /// when the user is first created signified by UIMode being set to Pending.
+        /// </summary>
+        private void OnSteppingIntoWizardPageUIMode(object sender, WizardSteppingIntoEventArgs e)
+        {
+            if (UserSession.User.Settings.UIMode != UIMode.Pending)
+            {
+                e.Skip = true;
+            }
         }
     }
 }

@@ -20,6 +20,7 @@ using Interapptive.Shared.UI;
 using ShipWorks.Editions;
 using ShipWorks.Messaging.Messages;
 using System.Reactive.Linq;
+using ShipWorks.Data.Model.EntityInterfaces;
 
 namespace ShipWorks.Filters.Controls
 {
@@ -183,6 +184,12 @@ namespace ShipWorks.Filters.Controls
         /// </summary>
         [Category("Behavior")]
         public bool AlwaysShowMyFilters { get; set; } = false;
+
+        /// <summary>
+        /// Indicates if the "My Filters" should be shown
+        /// </summary>
+        [Category("Behavior")]
+        public bool AllowMyFilters { get; set; } = true;
 
         /// <summary>
         /// Should disabled filters be hidden
@@ -467,7 +474,7 @@ namespace ShipWorks.Filters.Controls
         /// <summary>
         /// Select the initial filter based on the given user settings
         /// </summary>
-        public void SelectInitialFilter(UserSettingsEntity settings, FilterTarget target)
+        public void SelectInitialFilter(IUserSettingsEntity settings, FilterTarget target)
         {
             // Get last used or initial specified filter based on user settings
             long initialID = settings.FilterInitialUseLastActive ?
@@ -799,9 +806,9 @@ namespace ShipWorks.Filters.Controls
         /// Gets the FilterLastActive for the current target type.  Defaults to Order value if more than one target is specified
         /// or if only one target and Customers is not it.
         /// </summary>
-        private long FilterLastActive(UserSettingsEntity settings)
+        private long FilterLastActive(IUserSettingsEntity settings)
         {
-            if (Targets.Count() == 1 && Targets.Contains(FilterTarget.Customers))
+            if (Targets?.Count() == 1 && Targets.Contains(FilterTarget.Customers))
             {
                 return settings.CustomerFilterLastActive;
             }
@@ -975,7 +982,7 @@ namespace ShipWorks.Filters.Controls
             FilterNodeEntity filterNode = myLayout.FilterNode;
 
             // Only show "My Filters" if there are any
-            if (filterNode.ChildNodes.Count > 0 || FilterScope == FilterScope.MyFilters || AlwaysShowMyFilters)
+            if (AllowMyFilters && (filterNode.ChildNodes.Count > 0 || FilterScope == FilterScope.MyFilters || AlwaysShowMyFilters || AllowMyFilters))
             {
                 // We are not already showing it
                 if (!nodeOwnerMap.ContainsKey(filterNode))

@@ -54,7 +54,7 @@ namespace ShipWorks.Filters.Search
         private readonly object searchCmdLock = new object();
 
         // Scheduling
-        private FilterDefinition scheduledDefinition = null;
+        private IFilterDefinition scheduledDefinition = null;
         private bool isScheduled = false;
         private readonly object scheduleLock = new object();
 
@@ -118,7 +118,7 @@ namespace ShipWorks.Filters.Search
         /// <summary>
         /// The filter definition to search for.
         /// </summary>
-        public void Search(FilterDefinition definition)
+        public void Search(IFilterDefinition definition)
         {
             Debug.Assert(!Program.MainForm.InvokeRequired, "Designed to be called from the UI thread.");
 
@@ -176,7 +176,7 @@ namespace ShipWorks.Filters.Search
         /// <summary>
         /// Start the search thread, to be searched with the given definition
         /// </summary>
-        private void StartSearch(FilterDefinition definition)
+        private void StartSearch(IFilterDefinition definition)
         {
             isSearching = true;
             isCancelRequested = false;

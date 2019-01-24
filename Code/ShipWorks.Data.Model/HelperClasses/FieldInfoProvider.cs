@@ -49,7 +49,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 		/// <summary>Method which initializes the internal datastores.</summary>
 		private void Init()
 		{
-			this.InitClass( (226 + 2));
+			this.InitClass( (234 + 2));
 			InitActionEntityInfos();
 			InitActionFilterTriggerEntityInfos();
 			InitActionQueueEntityInfos();
@@ -197,6 +197,14 @@ namespace ShipWorks.Data.Model.HelperClasses
 			InitPostalProfileEntityInfos();
 			InitPostalShipmentEntityInfos();
 			InitPrintResultEntityInfos();
+			InitProcessedShipmentEntityInfos();
+			InitProductEntityInfos();
+			InitProductAttributeEntityInfos();
+			InitProductBundleEntityInfos();
+			InitProductListItemEntityInfos();
+			InitProductVariantEntityInfos();
+			InitProductVariantAliasEntityInfos();
+			InitProductVariantAttributeValueEntityInfos();
 			InitProStoresOrderEntityInfos();
 			InitProStoresOrderSearchEntityInfos();
 			InitProStoresStoreEntityInfos();
@@ -573,7 +581,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddFieldIndexEnumForElementName(typeof(AuditChangeDetailFieldIndex), "AuditChangeDetailEntity");
 			this.AddElementFieldInfo("AuditChangeDetailEntity", "AuditChangeDetailID", typeof(System.Int64), true, false, true, false,  (int)AuditChangeDetailFieldIndex.AuditChangeDetailID, 0, 0, 19);
 			this.AddElementFieldInfo("AuditChangeDetailEntity", "AuditChangeID", typeof(System.Int64), false, true, false, false,  (int)AuditChangeDetailFieldIndex.AuditChangeID, 0, 0, 19);
-			this.AddElementFieldInfo("AuditChangeDetailEntity", "AuditID", typeof(System.Int64), false, false, false, false,  (int)AuditChangeDetailFieldIndex.AuditID, 0, 0, 19);
+			this.AddElementFieldInfo("AuditChangeDetailEntity", "AuditID", typeof(System.Int64), false, true, false, false,  (int)AuditChangeDetailFieldIndex.AuditID, 0, 0, 19);
 			this.AddElementFieldInfo("AuditChangeDetailEntity", "DisplayName", typeof(System.String), false, false, false, false,  (int)AuditChangeDetailFieldIndex.DisplayName, 50, 0, 0);
 			this.AddElementFieldInfo("AuditChangeDetailEntity", "DisplayFormat", typeof(System.Byte), false, false, false, false,  (int)AuditChangeDetailFieldIndex.DisplayFormat, 0, 0, 3);
 			this.AddElementFieldInfo("AuditChangeDetailEntity", "DataType", typeof(System.Byte), false, false, false, false,  (int)AuditChangeDetailFieldIndex.DataType, 0, 0, 3);
@@ -681,7 +689,6 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("ChannelAdvisorOrderItemEntity", "Classification", typeof(System.String), false, false, false, false,  (int)ChannelAdvisorOrderItemFieldIndex.Classification, 30, 0, 0);
 			this.AddElementFieldInfo("ChannelAdvisorOrderItemEntity", "DistributionCenter", typeof(System.String), false, false, false, false,  (int)ChannelAdvisorOrderItemFieldIndex.DistributionCenter, 80, 0, 0);
 			this.AddElementFieldInfo("ChannelAdvisorOrderItemEntity", "IsFBA", typeof(System.Boolean), false, false, false, false,  (int)ChannelAdvisorOrderItemFieldIndex.IsFBA, 0, 0, 0);
-			this.AddElementFieldInfo("ChannelAdvisorOrderItemEntity", "MPN", typeof(System.String), false, false, false, false,  (int)ChannelAdvisorOrderItemFieldIndex.MPN, 50, 0, 0);
 			this.AddElementFieldInfo("ChannelAdvisorOrderItemEntity", "DistributionCenterID", typeof(System.Int64), false, false, false, false,  (int)ChannelAdvisorOrderItemFieldIndex.DistributionCenterID, 0, 0, 19);
 			this.AddElementFieldInfo("ChannelAdvisorOrderItemEntity", "DistributionCenterName", typeof(System.String), false, false, false, false,  (int)ChannelAdvisorOrderItemFieldIndex.DistributionCenterName, 100, 0, 0);
 		}
@@ -1582,7 +1589,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("FilterNodeContentEntity", "JoinMask", typeof(System.Int32), false, false, false, false,  (int)FilterNodeContentFieldIndex.JoinMask, 0, 0, 10);
 			this.AddElementFieldInfo("FilterNodeContentEntity", "Cost", typeof(System.Int32), false, false, false, false,  (int)FilterNodeContentFieldIndex.Cost, 0, 0, 10);
 			this.AddElementFieldInfo("FilterNodeContentEntity", "Count", typeof(System.Int32), false, false, false, false,  (int)FilterNodeContentFieldIndex.Count, 0, 0, 10);
-			this.AddElementFieldInfo("FilterNodeContentEntity", "EntityExistsQuery", typeof(System.String), false, false, false, true,  (int)FilterNodeContentFieldIndex.EntityExistsQuery, 2147483647, 0, 0);
+			this.AddElementFieldInfo("FilterNodeContentEntity", "EntityExistsQuery", typeof(System.String), false, false, false, false,  (int)FilterNodeContentFieldIndex.EntityExistsQuery, 2147483647, 0, 0);
 		}
 		/// <summary>Inits FilterNodeContentDetailEntity's FieldInfo objects</summary>
 		private void InitFilterNodeContentDetailEntityInfos()
@@ -2117,11 +2124,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("OdbcStoreEntity", "ImportMap", typeof(System.String), false, false, false, false,  (int)OdbcStoreFieldIndex.ImportMap, 2147483647, 0, 0);
 			this.AddElementFieldInfo("OdbcStoreEntity", "ImportStrategy", typeof(System.Int32), false, false, false, false,  (int)OdbcStoreFieldIndex.ImportStrategy, 0, 0, 10);
 			this.AddElementFieldInfo("OdbcStoreEntity", "ImportColumnSourceType", typeof(System.Int32), false, false, false, false,  (int)OdbcStoreFieldIndex.ImportColumnSourceType, 0, 0, 10);
-			this.AddElementFieldInfo("OdbcStoreEntity", "ImportColumnSource", typeof(System.String), false, false, false, false,  (int)OdbcStoreFieldIndex.ImportColumnSource, 2048, 0, 0);
+			this.AddElementFieldInfo("OdbcStoreEntity", "ImportColumnSource", typeof(System.String), false, false, false, false,  (int)OdbcStoreFieldIndex.ImportColumnSource, 2147483647, 0, 0);
 			this.AddElementFieldInfo("OdbcStoreEntity", "UploadStrategy", typeof(System.Int32), false, false, false, false,  (int)OdbcStoreFieldIndex.UploadStrategy, 0, 0, 10);
 			this.AddElementFieldInfo("OdbcStoreEntity", "UploadMap", typeof(System.String), false, false, false, false,  (int)OdbcStoreFieldIndex.UploadMap, 2147483647, 0, 0);
 			this.AddElementFieldInfo("OdbcStoreEntity", "UploadColumnSourceType", typeof(System.Int32), false, false, false, false,  (int)OdbcStoreFieldIndex.UploadColumnSourceType, 0, 0, 10);
-			this.AddElementFieldInfo("OdbcStoreEntity", "UploadColumnSource", typeof(System.String), false, false, false, false,  (int)OdbcStoreFieldIndex.UploadColumnSource, 2048, 0, 0);
+			this.AddElementFieldInfo("OdbcStoreEntity", "UploadColumnSource", typeof(System.String), false, false, false, false,  (int)OdbcStoreFieldIndex.UploadColumnSource, 2147483647, 0, 0);
 			this.AddElementFieldInfo("OdbcStoreEntity", "UploadConnectionString", typeof(System.String), false, false, false, false,  (int)OdbcStoreFieldIndex.UploadConnectionString, 2048, 0, 0);
 			this.AddElementFieldInfo("OdbcStoreEntity", "ImportOrderItemStrategy", typeof(System.Int32), false, false, false, false,  (int)OdbcStoreFieldIndex.ImportOrderItemStrategy, 0, 0, 10);
 		}
@@ -2268,6 +2275,13 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("OrderEntity", "ShipSenseRecognitionStatus", typeof(System.Int32), false, false, false, false,  (int)OrderFieldIndex.ShipSenseRecognitionStatus, 0, 0, 10);
 			this.AddElementFieldInfo("OrderEntity", "ShipAddressType", typeof(System.Int32), false, false, false, false,  (int)OrderFieldIndex.ShipAddressType, 0, 0, 10);
 			this.AddElementFieldInfo("OrderEntity", "CombineSplitStatus", typeof(Interapptive.Shared.Enums.CombineSplitStatusType), false, false, false, false,  (int)OrderFieldIndex.CombineSplitStatus, 0, 0, 10);
+			this.AddElementFieldInfo("OrderEntity", "ChannelOrderID", typeof(System.String), false, false, false, false,  (int)OrderFieldIndex.ChannelOrderID, 50, 0, 0);
+			this.AddElementFieldInfo("OrderEntity", "ShipByDate", typeof(Nullable<System.DateTime>), false, false, false, true,  (int)OrderFieldIndex.ShipByDate, 0, 0, 0);
+			this.AddElementFieldInfo("OrderEntity", "Custom1", typeof(System.String), false, false, false, false,  (int)OrderFieldIndex.Custom1, 50, 0, 0);
+			this.AddElementFieldInfo("OrderEntity", "Custom2", typeof(System.String), false, false, false, false,  (int)OrderFieldIndex.Custom2, 50, 0, 0);
+			this.AddElementFieldInfo("OrderEntity", "Custom3", typeof(System.String), false, false, false, false,  (int)OrderFieldIndex.Custom3, 50, 0, 0);
+			this.AddElementFieldInfo("OrderEntity", "Custom4", typeof(System.String), false, false, false, false,  (int)OrderFieldIndex.Custom4, 50, 0, 0);
+			this.AddElementFieldInfo("OrderEntity", "Custom5", typeof(System.String), false, false, false, false,  (int)OrderFieldIndex.Custom5, 50, 0, 0);
 		}
 		/// <summary>Inits OrderChargeEntity's FieldInfo objects</summary>
 		private void InitOrderChargeEntityInfos()
@@ -2307,6 +2321,13 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("OrderItemEntity", "Length", typeof(System.Decimal), false, false, false, false,  (int)OrderItemFieldIndex.Length, 0, 2, 10);
 			this.AddElementFieldInfo("OrderItemEntity", "Width", typeof(System.Decimal), false, false, false, false,  (int)OrderItemFieldIndex.Width, 0, 2, 10);
 			this.AddElementFieldInfo("OrderItemEntity", "Height", typeof(System.Decimal), false, false, false, false,  (int)OrderItemFieldIndex.Height, 0, 2, 10);
+			this.AddElementFieldInfo("OrderItemEntity", "Brand", typeof(System.String), false, false, false, false,  (int)OrderItemFieldIndex.Brand, 50, 0, 0);
+			this.AddElementFieldInfo("OrderItemEntity", "MPN", typeof(System.String), false, false, false, false,  (int)OrderItemFieldIndex.MPN, 50, 0, 0);
+			this.AddElementFieldInfo("OrderItemEntity", "Custom1", typeof(System.String), false, false, false, false,  (int)OrderItemFieldIndex.Custom1, 50, 0, 0);
+			this.AddElementFieldInfo("OrderItemEntity", "Custom2", typeof(System.String), false, false, false, false,  (int)OrderItemFieldIndex.Custom2, 50, 0, 0);
+			this.AddElementFieldInfo("OrderItemEntity", "Custom3", typeof(System.String), false, false, false, false,  (int)OrderItemFieldIndex.Custom3, 50, 0, 0);
+			this.AddElementFieldInfo("OrderItemEntity", "Custom4", typeof(System.String), false, false, false, false,  (int)OrderItemFieldIndex.Custom4, 50, 0, 0);
+			this.AddElementFieldInfo("OrderItemEntity", "Custom5", typeof(System.String), false, false, false, false,  (int)OrderItemFieldIndex.Custom5, 50, 0, 0);
 		}
 		/// <summary>Inits OrderItemAttributeEntity's FieldInfo objects</summary>
 		private void InitOrderItemAttributeEntityInfos()
@@ -2551,6 +2572,120 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("PrintResultEntity", "PageWidth", typeof(System.Double), false, false, false, false,  (int)PrintResultFieldIndex.PageWidth, 0, 0, 38);
 			this.AddElementFieldInfo("PrintResultEntity", "PageHeight", typeof(System.Double), false, false, false, false,  (int)PrintResultFieldIndex.PageHeight, 0, 0, 38);
 		}
+		/// <summary>Inits ProcessedShipmentEntity's FieldInfo objects</summary>
+		private void InitProcessedShipmentEntityInfos()
+		{
+			this.AddFieldIndexEnumForElementName(typeof(ProcessedShipmentFieldIndex), "ProcessedShipmentEntity");
+			this.AddElementFieldInfo("ProcessedShipmentEntity", "ShipmentID", typeof(System.Int64), true, false, true, false,  (int)ProcessedShipmentFieldIndex.ShipmentID, 0, 0, 19);
+			this.AddElementFieldInfo("ProcessedShipmentEntity", "ShipmentType", typeof(ShipWorks.Shipping.ShipmentTypeCode), false, false, true, false,  (int)ProcessedShipmentFieldIndex.ShipmentType, 0, 0, 10);
+			this.AddElementFieldInfo("ProcessedShipmentEntity", "ShipDate", typeof(System.DateTime), false, false, true, false,  (int)ProcessedShipmentFieldIndex.ShipDate, 0, 0, 0);
+			this.AddElementFieldInfo("ProcessedShipmentEntity", "Insurance", typeof(System.Boolean), false, false, true, false,  (int)ProcessedShipmentFieldIndex.Insurance, 0, 0, 0);
+			this.AddElementFieldInfo("ProcessedShipmentEntity", "InsuranceProvider", typeof(System.Int32), false, false, true, false,  (int)ProcessedShipmentFieldIndex.InsuranceProvider, 0, 0, 10);
+			this.AddElementFieldInfo("ProcessedShipmentEntity", "ProcessedDate", typeof(Nullable<System.DateTime>), false, false, true, true,  (int)ProcessedShipmentFieldIndex.ProcessedDate, 0, 0, 0);
+			this.AddElementFieldInfo("ProcessedShipmentEntity", "ProcessedUserID", typeof(Nullable<System.Int64>), false, true, true, true,  (int)ProcessedShipmentFieldIndex.ProcessedUserID, 0, 0, 19);
+			this.AddElementFieldInfo("ProcessedShipmentEntity", "ProcessedComputerID", typeof(Nullable<System.Int64>), false, true, true, true,  (int)ProcessedShipmentFieldIndex.ProcessedComputerID, 0, 0, 19);
+			this.AddElementFieldInfo("ProcessedShipmentEntity", "Voided", typeof(System.Boolean), false, false, true, false,  (int)ProcessedShipmentFieldIndex.Voided, 0, 0, 0);
+			this.AddElementFieldInfo("ProcessedShipmentEntity", "VoidedDate", typeof(Nullable<System.DateTime>), false, false, true, true,  (int)ProcessedShipmentFieldIndex.VoidedDate, 0, 0, 0);
+			this.AddElementFieldInfo("ProcessedShipmentEntity", "VoidedUserID", typeof(Nullable<System.Int64>), false, true, true, true,  (int)ProcessedShipmentFieldIndex.VoidedUserID, 0, 0, 19);
+			this.AddElementFieldInfo("ProcessedShipmentEntity", "VoidedComputerID", typeof(Nullable<System.Int64>), false, true, true, true,  (int)ProcessedShipmentFieldIndex.VoidedComputerID, 0, 0, 19);
+			this.AddElementFieldInfo("ProcessedShipmentEntity", "TotalWeight", typeof(System.Decimal), false, false, true, false,  (int)ProcessedShipmentFieldIndex.TotalWeight, 0, 9, 29);
+			this.AddElementFieldInfo("ProcessedShipmentEntity", "TrackingNumber", typeof(System.String), false, false, true, false,  (int)ProcessedShipmentFieldIndex.TrackingNumber, 50, 0, 0);
+			this.AddElementFieldInfo("ProcessedShipmentEntity", "ShipmentCost", typeof(System.Decimal), false, false, true, false,  (int)ProcessedShipmentFieldIndex.ShipmentCost, 0, 4, 19);
+			this.AddElementFieldInfo("ProcessedShipmentEntity", "ShipSenseStatus", typeof(System.Int32), false, false, true, false,  (int)ProcessedShipmentFieldIndex.ShipSenseStatus, 0, 0, 10);
+			this.AddElementFieldInfo("ProcessedShipmentEntity", "ShipAddressValidationStatus", typeof(System.Int32), false, false, true, false,  (int)ProcessedShipmentFieldIndex.ShipAddressValidationStatus, 0, 0, 10);
+			this.AddElementFieldInfo("ProcessedShipmentEntity", "ShipResidentialStatus", typeof(System.Int32), false, false, true, false,  (int)ProcessedShipmentFieldIndex.ShipResidentialStatus, 0, 0, 10);
+			this.AddElementFieldInfo("ProcessedShipmentEntity", "ShipPOBox", typeof(System.Int32), false, false, true, false,  (int)ProcessedShipmentFieldIndex.ShipPOBox, 0, 0, 10);
+			this.AddElementFieldInfo("ProcessedShipmentEntity", "ShipMilitaryAddress", typeof(System.Int32), false, false, true, false,  (int)ProcessedShipmentFieldIndex.ShipMilitaryAddress, 0, 0, 10);
+			this.AddElementFieldInfo("ProcessedShipmentEntity", "RequestedLabelFormat", typeof(System.Int32), false, false, true, false,  (int)ProcessedShipmentFieldIndex.RequestedLabelFormat, 0, 0, 10);
+			this.AddElementFieldInfo("ProcessedShipmentEntity", "ActualLabelFormat", typeof(Nullable<System.Int32>), false, false, true, true,  (int)ProcessedShipmentFieldIndex.ActualLabelFormat, 0, 0, 10);
+			this.AddElementFieldInfo("ProcessedShipmentEntity", "OrderID", typeof(System.Int64), false, false, true, false,  (int)ProcessedShipmentFieldIndex.OrderID, 0, 0, 19);
+			this.AddElementFieldInfo("ProcessedShipmentEntity", "OrderNumberComplete", typeof(System.String), false, false, true, false,  (int)ProcessedShipmentFieldIndex.OrderNumberComplete, 50, 0, 0);
+			this.AddElementFieldInfo("ProcessedShipmentEntity", "Service", typeof(System.String), false, false, true, true,  (int)ProcessedShipmentFieldIndex.Service, 101, 0, 0);
+			this.AddElementFieldInfo("ProcessedShipmentEntity", "ShipUSTerritory", typeof(System.Int32), false, false, false, false,  (int)ProcessedShipmentFieldIndex.ShipUSTerritory, 0, 0, 10);
+			this.AddElementFieldInfo("ProcessedShipmentEntity", "ProcessedWithUiMode", typeof(Nullable<System.Int32>), false, false, false, true,  (int)ProcessedShipmentFieldIndex.ProcessedWithUiMode, 0, 0, 10);
+			this.AddElementFieldInfo("ProcessedShipmentEntity", "CombineSplitStatus", typeof(System.Int32), false, false, false, false,  (int)ProcessedShipmentFieldIndex.CombineSplitStatus, 0, 0, 10);
+		}
+		/// <summary>Inits ProductEntity's FieldInfo objects</summary>
+		private void InitProductEntityInfos()
+		{
+			this.AddFieldIndexEnumForElementName(typeof(ProductFieldIndex), "ProductEntity");
+			this.AddElementFieldInfo("ProductEntity", "ProductID", typeof(System.Int64), true, false, true, false,  (int)ProductFieldIndex.ProductID, 0, 0, 19);
+			this.AddElementFieldInfo("ProductEntity", "CreatedDate", typeof(System.DateTime), false, false, false, false,  (int)ProductFieldIndex.CreatedDate, 0, 0, 0);
+			this.AddElementFieldInfo("ProductEntity", "IsActive", typeof(System.Boolean), false, false, false, false,  (int)ProductFieldIndex.IsActive, 0, 0, 0);
+			this.AddElementFieldInfo("ProductEntity", "IsBundle", typeof(System.Boolean), false, false, false, false,  (int)ProductFieldIndex.IsBundle, 0, 0, 0);
+		}
+		/// <summary>Inits ProductAttributeEntity's FieldInfo objects</summary>
+		private void InitProductAttributeEntityInfos()
+		{
+			this.AddFieldIndexEnumForElementName(typeof(ProductAttributeFieldIndex), "ProductAttributeEntity");
+			this.AddElementFieldInfo("ProductAttributeEntity", "ProductAttributeID", typeof(System.Int64), true, false, true, false,  (int)ProductAttributeFieldIndex.ProductAttributeID, 0, 0, 19);
+			this.AddElementFieldInfo("ProductAttributeEntity", "ProductID", typeof(System.Int64), false, true, false, false,  (int)ProductAttributeFieldIndex.ProductID, 0, 0, 19);
+			this.AddElementFieldInfo("ProductAttributeEntity", "AttributeName", typeof(System.String), false, false, false, false,  (int)ProductAttributeFieldIndex.AttributeName, 50, 0, 0);
+		}
+		/// <summary>Inits ProductBundleEntity's FieldInfo objects</summary>
+		private void InitProductBundleEntityInfos()
+		{
+			this.AddFieldIndexEnumForElementName(typeof(ProductBundleFieldIndex), "ProductBundleEntity");
+			this.AddElementFieldInfo("ProductBundleEntity", "ProductID", typeof(System.Int64), true, true, false, false,  (int)ProductBundleFieldIndex.ProductID, 0, 0, 19);
+			this.AddElementFieldInfo("ProductBundleEntity", "ChildProductVariantID", typeof(System.Int64), true, true, false, false,  (int)ProductBundleFieldIndex.ChildProductVariantID, 0, 0, 19);
+			this.AddElementFieldInfo("ProductBundleEntity", "Quantity", typeof(System.Int32), false, false, false, false,  (int)ProductBundleFieldIndex.Quantity, 0, 0, 10);
+		}
+		/// <summary>Inits ProductListItemEntity's FieldInfo objects</summary>
+		private void InitProductListItemEntityInfos()
+		{
+			this.AddFieldIndexEnumForElementName(typeof(ProductListItemFieldIndex), "ProductListItemEntity");
+			this.AddElementFieldInfo("ProductListItemEntity", "ProductVariantID", typeof(System.Int64), false, false, false, false,  (int)ProductListItemFieldIndex.ProductVariantID, 0, 0, 19);
+			this.AddElementFieldInfo("ProductListItemEntity", "SKU", typeof(System.String), false, false, false, false,  (int)ProductListItemFieldIndex.SKU, 300, 0, 0);
+			this.AddElementFieldInfo("ProductListItemEntity", "Name", typeof(System.String), false, false, false, false,  (int)ProductListItemFieldIndex.Name, 300, 0, 0);
+			this.AddElementFieldInfo("ProductListItemEntity", "Length", typeof(Nullable<System.Decimal>), false, false, false, true,  (int)ProductListItemFieldIndex.Length, 0, 2, 10);
+			this.AddElementFieldInfo("ProductListItemEntity", "Width", typeof(Nullable<System.Decimal>), false, false, false, true,  (int)ProductListItemFieldIndex.Width, 0, 2, 10);
+			this.AddElementFieldInfo("ProductListItemEntity", "Height", typeof(Nullable<System.Decimal>), false, false, false, true,  (int)ProductListItemFieldIndex.Height, 0, 2, 10);
+			this.AddElementFieldInfo("ProductListItemEntity", "Weight", typeof(Nullable<System.Decimal>), false, false, false, true,  (int)ProductListItemFieldIndex.Weight, 0, 9, 29);
+			this.AddElementFieldInfo("ProductListItemEntity", "BinLocation", typeof(System.String), false, false, false, true,  (int)ProductListItemFieldIndex.BinLocation, 255, 0, 0);
+			this.AddElementFieldInfo("ProductListItemEntity", "ImageUrl", typeof(System.String), false, false, false, true,  (int)ProductListItemFieldIndex.ImageUrl, 500, 0, 0);
+			this.AddElementFieldInfo("ProductListItemEntity", "IsActive", typeof(System.Boolean), false, false, false, false,  (int)ProductListItemFieldIndex.IsActive, 0, 0, 0);
+		}
+		/// <summary>Inits ProductVariantEntity's FieldInfo objects</summary>
+		private void InitProductVariantEntityInfos()
+		{
+			this.AddFieldIndexEnumForElementName(typeof(ProductVariantFieldIndex), "ProductVariantEntity");
+			this.AddElementFieldInfo("ProductVariantEntity", "ProductVariantID", typeof(System.Int64), true, false, true, false,  (int)ProductVariantFieldIndex.ProductVariantID, 0, 0, 19);
+			this.AddElementFieldInfo("ProductVariantEntity", "ProductID", typeof(System.Int64), false, true, false, false,  (int)ProductVariantFieldIndex.ProductID, 0, 0, 19);
+			this.AddElementFieldInfo("ProductVariantEntity", "CreatedDate", typeof(System.DateTime), false, false, false, false,  (int)ProductVariantFieldIndex.CreatedDate, 0, 0, 0);
+			this.AddElementFieldInfo("ProductVariantEntity", "Name", typeof(System.String), false, false, false, true,  (int)ProductVariantFieldIndex.Name, 300, 0, 0);
+			this.AddElementFieldInfo("ProductVariantEntity", "IsActive", typeof(System.Boolean), false, false, false, false,  (int)ProductVariantFieldIndex.IsActive, 0, 0, 0);
+			this.AddElementFieldInfo("ProductVariantEntity", "UPC", typeof(System.String), false, false, false, true,  (int)ProductVariantFieldIndex.UPC, 30, 0, 0);
+			this.AddElementFieldInfo("ProductVariantEntity", "ASIN", typeof(System.String), false, false, false, true,  (int)ProductVariantFieldIndex.ASIN, 255, 0, 0);
+			this.AddElementFieldInfo("ProductVariantEntity", "ISBN", typeof(System.String), false, false, false, true,  (int)ProductVariantFieldIndex.ISBN, 30, 0, 0);
+			this.AddElementFieldInfo("ProductVariantEntity", "Weight", typeof(Nullable<System.Decimal>), false, false, false, true,  (int)ProductVariantFieldIndex.Weight, 0, 9, 29);
+			this.AddElementFieldInfo("ProductVariantEntity", "Length", typeof(Nullable<System.Decimal>), false, false, false, true,  (int)ProductVariantFieldIndex.Length, 0, 2, 10);
+			this.AddElementFieldInfo("ProductVariantEntity", "Width", typeof(Nullable<System.Decimal>), false, false, false, true,  (int)ProductVariantFieldIndex.Width, 0, 2, 10);
+			this.AddElementFieldInfo("ProductVariantEntity", "Height", typeof(Nullable<System.Decimal>), false, false, false, true,  (int)ProductVariantFieldIndex.Height, 0, 2, 10);
+			this.AddElementFieldInfo("ProductVariantEntity", "ImageUrl", typeof(System.String), false, false, false, true,  (int)ProductVariantFieldIndex.ImageUrl, 500, 0, 0);
+			this.AddElementFieldInfo("ProductVariantEntity", "BinLocation", typeof(System.String), false, false, false, true,  (int)ProductVariantFieldIndex.BinLocation, 255, 0, 0);
+			this.AddElementFieldInfo("ProductVariantEntity", "HarmonizedCode", typeof(System.String), false, false, false, true,  (int)ProductVariantFieldIndex.HarmonizedCode, 20, 0, 0);
+			this.AddElementFieldInfo("ProductVariantEntity", "DeclaredValue", typeof(Nullable<System.Decimal>), false, false, false, true,  (int)ProductVariantFieldIndex.DeclaredValue, 0, 4, 19);
+			this.AddElementFieldInfo("ProductVariantEntity", "CountryOfOrigin", typeof(System.String), false, false, false, true,  (int)ProductVariantFieldIndex.CountryOfOrigin, 50, 0, 0);
+		}
+		/// <summary>Inits ProductVariantAliasEntity's FieldInfo objects</summary>
+		private void InitProductVariantAliasEntityInfos()
+		{
+			this.AddFieldIndexEnumForElementName(typeof(ProductVariantAliasFieldIndex), "ProductVariantAliasEntity");
+			this.AddElementFieldInfo("ProductVariantAliasEntity", "ProductVariantAliasID", typeof(System.Int64), true, false, true, false,  (int)ProductVariantAliasFieldIndex.ProductVariantAliasID, 0, 0, 19);
+			this.AddElementFieldInfo("ProductVariantAliasEntity", "ProductVariantID", typeof(System.Int64), false, true, false, false,  (int)ProductVariantAliasFieldIndex.ProductVariantID, 0, 0, 19);
+			this.AddElementFieldInfo("ProductVariantAliasEntity", "AliasName", typeof(System.String), false, false, false, false,  (int)ProductVariantAliasFieldIndex.AliasName, 50, 0, 0);
+			this.AddElementFieldInfo("ProductVariantAliasEntity", "Sku", typeof(System.String), false, false, false, false,  (int)ProductVariantAliasFieldIndex.Sku, 300, 0, 0);
+			this.AddElementFieldInfo("ProductVariantAliasEntity", "IsDefault", typeof(System.Boolean), false, false, false, false,  (int)ProductVariantAliasFieldIndex.IsDefault, 0, 0, 0);
+		}
+		/// <summary>Inits ProductVariantAttributeValueEntity's FieldInfo objects</summary>
+		private void InitProductVariantAttributeValueEntityInfos()
+		{
+			this.AddFieldIndexEnumForElementName(typeof(ProductVariantAttributeValueFieldIndex), "ProductVariantAttributeValueEntity");
+			this.AddElementFieldInfo("ProductVariantAttributeValueEntity", "ProductVariantAttributeValueID", typeof(System.Int64), true, false, true, false,  (int)ProductVariantAttributeValueFieldIndex.ProductVariantAttributeValueID, 0, 0, 19);
+			this.AddElementFieldInfo("ProductVariantAttributeValueEntity", "ProductVariantID", typeof(System.Int64), false, true, false, false,  (int)ProductVariantAttributeValueFieldIndex.ProductVariantID, 0, 0, 19);
+			this.AddElementFieldInfo("ProductVariantAttributeValueEntity", "AttributeValue", typeof(System.String), false, false, false, false,  (int)ProductVariantAttributeValueFieldIndex.AttributeValue, 300, 0, 0);
+			this.AddElementFieldInfo("ProductVariantAttributeValueEntity", "ProductAttributeID", typeof(System.Int64), false, true, false, false,  (int)ProductVariantAttributeValueFieldIndex.ProductAttributeID, 0, 0, 19);
+		}
 		/// <summary>Inits ProStoresOrderEntity's FieldInfo objects</summary>
 		private void InitProStoresOrderEntityInfos()
 		{
@@ -2785,6 +2920,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("ShipmentEntity", "OnlineShipmentID", typeof(System.String), false, false, false, false,  (int)ShipmentFieldIndex.OnlineShipmentID, 128, 0, 0);
 			this.AddElementFieldInfo("ShipmentEntity", "BilledType", typeof(System.Int32), false, false, false, false,  (int)ShipmentFieldIndex.BilledType, 0, 0, 10);
 			this.AddElementFieldInfo("ShipmentEntity", "BilledWeight", typeof(System.Double), false, false, false, false,  (int)ShipmentFieldIndex.BilledWeight, 0, 0, 38);
+			this.AddElementFieldInfo("ShipmentEntity", "ProcessedWithUiMode", typeof(Nullable<ShipWorks.Settings.UIMode>), false, false, false, true,  (int)ShipmentFieldIndex.ProcessedWithUiMode, 0, 0, 10);
 		}
 		/// <summary>Inits ShipmentCustomsItemEntity's FieldInfo objects</summary>
 		private void InitShipmentCustomsItemEntityInfos()
@@ -2952,6 +3088,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("ShippingSettingsEntity", "ShipmentsLoaderEnsureFiltersLoadedTimeout", typeof(System.Int32), false, false, false, false,  (int)ShippingSettingsFieldIndex.ShipmentsLoaderEnsureFiltersLoadedTimeout, 0, 0, 10);
 			this.AddElementFieldInfo("ShippingSettingsEntity", "ShipEngineApiKey", typeof(System.String), false, false, false, false,  (int)ShippingSettingsFieldIndex.ShipEngineApiKey, 50, 0, 0);
 			this.AddElementFieldInfo("ShippingSettingsEntity", "ShipmentDateCutoffJson", typeof(System.String), false, false, false, false,  (int)ShippingSettingsFieldIndex.ShipmentDateCutoffJson, 1000, 0, 0);
+			this.AddElementFieldInfo("ShippingSettingsEntity", "OrderLookupFieldLayout", typeof(System.String), false, false, false, false,  (int)ShippingSettingsFieldIndex.OrderLookupFieldLayout, 2147483647, 0, 0);
 		}
 		/// <summary>Inits ShipSenseKnowledgebaseEntity's FieldInfo objects</summary>
 		private void InitShipSenseKnowledgebaseEntityInfos()
@@ -3499,6 +3636,8 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("UserSettingsEntity", "SingleScanSettings", typeof(System.Int32), false, false, false, false,  (int)UserSettingsFieldIndex.SingleScanSettings, 0, 0, 10);
 			this.AddElementFieldInfo("UserSettingsEntity", "AutoWeigh", typeof(System.Boolean), false, false, false, false,  (int)UserSettingsFieldIndex.AutoWeigh, 0, 0, 0);
 			this.AddElementFieldInfo("UserSettingsEntity", "DialogSettings", typeof(System.String), false, false, false, true,  (int)UserSettingsFieldIndex.DialogSettings, 2147483647, 0, 0);
+			this.AddElementFieldInfo("UserSettingsEntity", "UIMode", typeof(ShipWorks.Settings.UIMode), false, false, false, false,  (int)UserSettingsFieldIndex.UIMode, 0, 0, 10);
+			this.AddElementFieldInfo("UserSettingsEntity", "OrderLookupLayout", typeof(System.String), false, false, false, true,  (int)UserSettingsFieldIndex.OrderLookupLayout, 2147483647, 0, 0);
 		}
 		/// <summary>Inits UspsAccountEntity's FieldInfo objects</summary>
 		private void InitUspsAccountEntityInfos()

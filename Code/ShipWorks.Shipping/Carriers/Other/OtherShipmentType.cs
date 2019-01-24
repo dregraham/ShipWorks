@@ -2,12 +2,9 @@
 using System.Collections.Generic;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data.Model.EntityInterfaces;
-using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Insurance;
-using ShipWorks.Shipping.Profiles;
 using ShipWorks.Shipping.Services;
 using ShipWorks.Shipping.Settings.Origin;
 using ShipWorks.Templates.Processing.TemplateXml.ElementOutlines;
@@ -29,7 +26,10 @@ namespace ShipWorks.Shipping.Carriers.Other
         /// </summary>
         public override IEnumerable<IPackageAdapter> GetPackageAdapters(ShipmentEntity shipment)
         {
-            ShippingManager.EnsureShipmentLoaded(shipment);
+            if (shipment.Other == null)
+            {
+                ShippingManager.EnsureShipmentLoaded(shipment);
+            }
             return new List<IPackageAdapter> { new OtherPackageAdapter(shipment) };
         }
 
@@ -99,6 +99,12 @@ namespace ShipWorks.Shipping.Carriers.Other
         /// </summary>
         public override string GetServiceDescription(ShipmentEntity shipment) =>
             $"{shipment.Other.Carrier} {shipment.Other.Service}";
+
+        /// <summary>
+        /// Get the carrier specific description of the shipping service used. The carrier specific data must already exist
+        /// when this method is called.
+        /// </summary>
+        public override string GetServiceDescription(string serviceCode) => serviceCode;
 
         /// <summary>
         /// Get the parcel data for the shipment

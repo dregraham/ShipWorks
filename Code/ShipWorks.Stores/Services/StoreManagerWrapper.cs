@@ -14,11 +14,11 @@ namespace ShipWorks.Stores.Services
     /// Algorithms and functions for working with stores.
     /// </summary>
     /// <remarks>This is an instance that wraps the static StoreManager until we can replace that class</remarks>
-    [Order(typeof(IInitializeForCurrentSession), Order.Unordered)]
+    [Order(typeof(IInitializeForCurrentSession), 2)]
     [Component]
     public class StoreManagerWrapper : IStoreManager, IInitializeForCurrentSession
     {
-        readonly Func<ISecurityContext> getSecurityContext;
+        private readonly Func<ISecurityContext> getSecurityContext;
 
         /// <summary>
         /// Constructor
@@ -49,6 +49,11 @@ namespace ShipWorks.Stores.Services
         /// Get the store from Id
         /// </summary>
         public StoreEntity GetStore(long storeId) => StoreManager.GetStore(storeId);
+
+        /// <summary>
+        /// Get the store from Id
+        /// </summary>
+        public IStoreEntity GetStoreReadOnly(long storeId) => StoreManager.GetStoreReadOnly(storeId);
 
         /// <summary>
         /// Get the store for the related entity

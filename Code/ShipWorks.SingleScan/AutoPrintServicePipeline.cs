@@ -16,7 +16,9 @@ using ShipWorks.Messaging.Messages;
 using ShipWorks.Messaging.Messages.Filters;
 using ShipWorks.Messaging.Messages.Shipping;
 using ShipWorks.Messaging.Messages.SingleScan;
+using ShipWorks.Settings;
 using ShipWorks.Stores.Content.Panels.Selectors;
+using ShipWorks.Users;
 
 namespace ShipWorks.SingleScan
 {
@@ -34,6 +36,8 @@ namespace ShipWorks.SingleScan
         private readonly IMessenger messenger;
         private readonly ISchedulerProvider schedulerProvider;
         private readonly ISqlAdapterFactory sqlAdapterFactory;
+        private readonly IMainForm mainForm;
+        private readonly ICurrentUserSettings currentUserSettings;
         private readonly IAutoPrintService autoPrintService;
 
         private IDisposable scanMessagesConnection;
@@ -42,13 +46,20 @@ namespace ShipWorks.SingleScan
         /// <summary>
         /// Initializes a new instance of the <see cref="AutoPrintServicePipeline"/> class.
         /// </summary>
-        public AutoPrintServicePipeline(IAutoPrintService autoPrintService, IMessenger messenger,
-            ISchedulerProvider schedulerProvider, Func<Type, ILog> logFactory, ISqlAdapterFactory sqlAdapterFactory)
+        public AutoPrintServicePipeline(
+            IAutoPrintService autoPrintService,
+            IMessenger messenger,
+            ISchedulerProvider schedulerProvider,
+            Func<Type, ILog> logFactory,
+            ISqlAdapterFactory sqlAdapterFactory,
+            IMainForm mainForm,
+            ICurrentUserSettings currentUserSettings)
         {
             this.messenger = messenger;
             this.schedulerProvider = schedulerProvider;
             this.sqlAdapterFactory = sqlAdapterFactory;
-
+            this.mainForm = mainForm;
+            this.currentUserSettings = currentUserSettings;
             scanMessages = messenger.OfType<SingleScanMessage>().Publish();
             scanMessagesConnection = scanMessages.Connect();
             this.autoPrintService = autoPrintService;
@@ -71,25 +82,28 @@ namespace ShipWorks.SingleScan
             // picked up before we are finished with possessing the current order.
             // All exit points of the pipeline need to call ReconnectPipeline()
             filterCompletedMessageSubscription = scanMessages
-                .Where(autoPrintService.AllowAutoPrint)
+                .Where(_ => currentUserSettings.GetUIMode() == UIMode.Batch)
+                .Where(x => autoPrintService.AllowAutoPrint(x))
                 .Do(x => EndScanMessagesObservation())
                 .ContinueAfter(messenger.OfType<SingleScanFilterUpdateCompleteMessage>(),
                     TimeSpan.FromSeconds(FilterCountsUpdatedMessageTimeoutInSeconds),
                     schedulerProvider.Default,
                     (scanMsg, filterCountsUpdatedMessage) =>
                         new AutoPrintServiceDto(filterCountsUpdatedMessage, scanMsg))
+                .Where(x => x.OrderID != null)
                 .ObserveOn(schedulerProvider.WindowsFormsEventLoop)
                 .SelectMany(m => autoPrintService.Print(m).ToObservable())
                 .SelectMany(WaitForShipmentsProcessedMessage)
                 .Do(SaveUnprocessedShipments)
-                // Currently, MapPanel (and possibly other consumers of this message) assumes OrderSelectionChangingMessage to 
+                // Currently, MapPanel (and possibly other consumers of this message) assumes OrderSelectionChangingMessage to
                 // be sent on the UI thread. If the message isn't sent on the UI, the map panel throws a Cross Threaded Exception
-                // as it doesn't attempt to Invoke. This should be addressed in the future, but putting the message on the 
+                // as it doesn't attempt to Invoke. This should be addressed in the future, but putting the message on the
                 // WindowsFormsEventLoop is a safe workaround.
                 .ObserveOn(schedulerProvider.WindowsFormsEventLoop)
                 .Do(SendOrderSelectionChangingMessage)
+                .Do(x => StartScanMessagesObservation())
                 .CatchAndContinue((Exception ex) => HandleException(ex))
-                .Subscribe(x => StartScanMessagesObservation());
+                .Subscribe();
         }
 
         /// <summary>
@@ -107,7 +121,7 @@ namespace ShipWorks.SingleScan
                         .SpecificEntities(shipmentsProcessedResult.ProcessShipmentResults.Select(shipment => shipment.Shipment.ShipmentID).Distinct());
                 }
 
-                messenger.Send(new OrderSelectionChangingMessage(this, new[] {shipmentsProcessedResult.OrderID.Value}, shipmentRowSelector));
+                messenger.Send(new OrderSelectionChangingMessage(this, new[] { shipmentsProcessedResult.OrderID.Value }, shipmentRowSelector));
             }
             else
             {

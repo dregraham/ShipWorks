@@ -20,12 +20,13 @@ namespace ShipWorks.Data
     /// </summary>
     public static class ConfigurationData
     {
-        static object lockObj = new object();
-        static ConfigurationEntity config;
-        static IConfigurationEntity configReadOnly;
-        static bool needCheckForChanges;
+        private static readonly Func<ISqlAdapter> defaultGetSqlAdapter = () => SqlAdapter.Default;
+        private static readonly object lockObj = new object();
+        private static ConfigurationEntity config;
+        private static IConfigurationEntity configReadOnly;
+        private static bool needCheckForChanges;
 
-        private static Version archiveVersion = new Version(5, 23, 1, 6);
+        private static readonly Version archiveVersion = new Version(5, 23, 1, 6);
 
         /// <summary>
         /// Which version was archive functionality introduced
@@ -35,10 +36,8 @@ namespace ShipWorks.Data
         /// <summary>
         /// Completely reload the count cache
         /// </summary>
-        public static void InitializeForCurrentDatabase()
-        {
-            UpdateConfiguration();
-        }
+        public static void InitializeForCurrentDatabase() =>
+            UpdateConfiguration(defaultGetSqlAdapter);
 
         /// <summary>
         /// Load the configuration from the database
@@ -51,13 +50,19 @@ namespace ShipWorks.Data
         /// <summary>
         /// Get the current configuration instance
         /// </summary>
-        public static ConfigurationEntity Fetch()
+        public static ConfigurationEntity Fetch() =>
+            Fetch(defaultGetSqlAdapter);
+
+        /// <summary>
+        /// Get the current configuration instance
+        /// </summary>
+        public static ConfigurationEntity Fetch(Func<ISqlAdapter> getSqlAdapter)
         {
             lock (lockObj)
             {
                 if (needCheckForChanges)
                 {
-                    UpdateConfiguration();
+                    UpdateConfiguration(getSqlAdapter);
                 }
 
                 return EntityUtility.CloneEntity(config);
@@ -67,13 +72,19 @@ namespace ShipWorks.Data
         /// <summary>
         /// Get the current configuration instance
         /// </summary>
-        public static IConfigurationEntity FetchReadOnly()
+        public static IConfigurationEntity FetchReadOnly() =>
+            FetchReadOnly(defaultGetSqlAdapter);
+
+        /// <summary>
+        /// Get the current configuration instance
+        /// </summary>
+        public static IConfigurationEntity FetchReadOnly(Func<ISqlAdapter> getSqlAdapter)
         {
             lock (lockObj)
             {
                 if (needCheckForChanges)
                 {
-                    UpdateConfiguration();
+                    UpdateConfiguration(getSqlAdapter);
                 }
 
                 return configReadOnly;
@@ -83,12 +94,12 @@ namespace ShipWorks.Data
         /// <summary>
         /// Update the configuration stored in memory
         /// </summary>
-        private static void UpdateConfiguration()
+        private static void UpdateConfiguration(Func<ISqlAdapter> getSqlAdapter)
         {
             lock (lockObj)
             {
                 ConfigurationEntity newConfig = new ConfigurationEntity(true);
-                SqlAdapter.Default.FetchEntity(newConfig);
+                getSqlAdapter().FetchEntity(newConfig);
                 config = newConfig;
                 configReadOnly = newConfig.AsReadOnly();
                 needCheckForChanges = false;

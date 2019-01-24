@@ -15,6 +15,11 @@ namespace ShipWorks.UI.Dialogs.Popup
         void Show(string message, IWin32Window owner);
 
         /// <summary>
+        /// Shows the popup for a specified amount of time
+        /// </summary>
+        void Show(string message, IWin32Window owner, TimeSpan fadeTime);
+
+        /// <summary>
         /// Show the popup with a keyboard icon
         /// </summary>
         void ShowWithKeyboard(string message, Control owner);

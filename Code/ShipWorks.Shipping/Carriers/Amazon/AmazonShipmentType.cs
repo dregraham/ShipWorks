@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Drawing.Imaging;
 using System.Linq;
+using Interapptive.Shared.Collections;
 using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.ApplicationCore.Licensing;
@@ -10,10 +11,12 @@ using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Data;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Editions;
 using ShipWorks.Shipping.Carriers.Amazon.Enums;
 using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Editing;
+using ShipWorks.Shipping.Policies;
 using ShipWorks.Shipping.Services;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping.Tracking;
@@ -30,28 +33,22 @@ namespace ShipWorks.Shipping.Carriers.Amazon
     public class AmazonShipmentType : ShipmentType
     {
         private readonly IStoreManager storeManager;
-        private readonly IOrderManager orderManager;
         private readonly IShippingManager shippingManager;
         private readonly ILicenseService licenseService;
         private readonly IAmazonServiceTypeRepository serviceTypeRepository;
-
-        /// <summary>
-        /// Constructor for tests
-        /// </summary>
-        public AmazonShipmentType()
-        {
-        }
+        private readonly IOrderManager orderManager;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public AmazonShipmentType(IStoreManager storeManager, IOrderManager orderManager, IShippingManager shippingManager, ILicenseService licenseService, IAmazonServiceTypeRepository serviceTypeRepository)
+        public AmazonShipmentType(IStoreManager storeManager, IShippingManager shippingManager, ILicenseService licenseService, 
+            IAmazonServiceTypeRepository serviceTypeRepository, IOrderManager orderManager)
         {
             this.storeManager = storeManager;
-            this.orderManager = orderManager;
             this.shippingManager = shippingManager;
             this.licenseService = licenseService;
             this.serviceTypeRepository = serviceTypeRepository;
+            this.orderManager = orderManager;
         }
 
         /// <summary>
@@ -89,6 +86,11 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// </summary>
         public override string GetServiceDescription(ShipmentEntity shipment) =>
             shipment.Amazon.ShippingServiceName;
+
+        /// <summary>
+        /// Get the carrier specific description of the shipping service used.
+        /// </summary>
+        public override string GetServiceDescription(string serviceCode) => serviceCode;
 
         /// <summary>
         /// Get detailed information about the parcel in a generic way that can be used across shipment types
@@ -129,7 +131,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// <summary>
         /// Load all the label data for the given shipmentID
         /// </summary>
-        static List<TemplateLabelData> LoadLabelData(Func<ShipmentEntity> shipment)
+        private static List<TemplateLabelData> LoadLabelData(Func<ShipmentEntity> shipment)
         {
             MethodConditions.EnsureArgumentIsNotNull(shipment, nameof(shipment));
 
@@ -183,13 +185,25 @@ namespace ShipWorks.Shipping.Carriers.Amazon
                 return false;
             }
 
-            orderManager.PopulateOrderDetails(shipment);
+            if (shipment.Order == null)
+            {
+                orderManager.PopulateOrderDetails(shipment);
+            }
 
-            IAmazonOrder order = shipment.Order as IAmazonOrder;
+            IAmazonOrder amazonOrder = shipment.Order as IAmazonOrder;
 
-            IAmazonCredentials amazonCredentials = storeManager.GetStore(shipment.Order.StoreID) as IAmazonCredentials;
+            AmazonPrimeShippingPolicyTarget target = new AmazonPrimeShippingPolicyTarget()
+            {
+                Shipment = shipment,
+                Allowed = false,
+                AmazonOrder = amazonOrder,
+                AmazonCredentials = storeManager.GetStore(shipment.Order.StoreID) as IAmazonCredentials
+            };
 
-            return order != null && order.IsPrime && amazonCredentials != null;
+            ILicense license = licenseService.GetLicenses().FirstOrDefault();
+            license?.ApplyShippingPolicy(ShipmentTypeCode, target);
+
+            return target.Allowed;
         }
 
         /// <summary>
@@ -213,19 +227,12 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             amazon.Reference1 = "Order {//Order/Number}";
             amazon.ShippingProfile.RequestedLabelFormat = (int) ThermalLanguage.None;
         }
-       
-        /// <summary>
-        /// Updates the total weight of the shipment
-        /// </summary>
-        public override void UpdateTotalWeight(ShipmentEntity shipment)
-        {
-            shipment.TotalWeight = shipment.ContentWeight;
 
-            if (shipment.Amazon.DimsAddWeight)
-            {
-                shipment.TotalWeight += shipment.Amazon.DimsWeight;
-            }
-        }
+        /// <summary>
+        /// Get the dims weight from a shipment, if any
+        /// </summary>
+        protected override double GetDimsWeight(IShipmentEntity shipment) =>
+            shipment.Amazon?.DimsAddWeight == true ? shipment.Amazon.DimsWeight : 0;
 
         /// <summary>
         /// Tracks the shipment.

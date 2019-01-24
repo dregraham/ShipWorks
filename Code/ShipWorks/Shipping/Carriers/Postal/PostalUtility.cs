@@ -487,6 +487,17 @@ namespace ShipWorks.Shipping.Carriers.Postal
         }
 
         /// <summary>
+        /// Set service details and shipment type for rate
+        /// </summary>
+        public static RateResult SetServiceDetails(RateResult rate, PostalServiceType serviceType,
+                                             string deliveryDays, ShipmentTypeCode shipmentTypeCode)
+        {
+            SetServiceDetails(rate, serviceType, deliveryDays);
+            rate.ShipmentType = shipmentTypeCode;
+            return rate;
+        }
+
+        /// <summary>
         /// Gets a state adjusted for what the post office wants
         /// </summary>
         /// <param name="countryCode">Country code for the address</param>

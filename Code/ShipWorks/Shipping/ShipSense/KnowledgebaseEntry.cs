@@ -129,7 +129,7 @@ namespace ShipWorks.Shipping.ShipSense
         public bool AppliedCustoms { get; set; }
 
         /// <summary>
-        /// Gets a value indicating whether [consolidate multiple packages into single package]. This 
+        /// Gets a value indicating whether [consolidate multiple packages into single package]. This
         /// does not get serialized.
         /// </summary>
         /// <value>
@@ -192,7 +192,7 @@ namespace ShipWorks.Shipping.ShipSense
                 packageAdapters.ElementAt(0).DimsWidth = packages[0].Width;
                 packageAdapters.ElementAt(0).ApplyAdditionalWeight = packages[0].ApplyAdditionalWeight;
 
-                // Sum the package weights 
+                // Sum the package weights
                 packageAdapters.ElementAt(0).Weight = packages.Sum(p => p.Weight);
                 packageAdapters.ElementAt(0).AdditionalWeight = packages.Sum(p => p.AdditionalWeight);
             }
@@ -221,9 +221,9 @@ namespace ShipWorks.Shipping.ShipSense
         /// Applies the data in the Package collection of the knowledge base entry to each of the adapters
         /// provided, then applies the data in the Customs Items collection of the knowledge base entry to the
         /// ShipmentCustomsItemEntities.
-        /// 
+        ///
         /// ***NOTE***
-        /// The caller of this method must update the shipment values of any customs additions; 
+        /// The caller of this method must update the shipment values of any customs additions;
         /// i.e. shipment.CustomsValue, shipment.CustomsGenerated, etc...
         /// </summary>
         /// <param name="adapters">The adapters.</param>
@@ -233,7 +233,7 @@ namespace ShipWorks.Shipping.ShipSense
         {
             ApplyTo(adapters);
 
-            // Make a note that customs were applied that can be inspected when 
+            // Make a note that customs were applied that can be inspected when
             // writing out change sets.
             AppliedCustoms = true;
 
@@ -242,9 +242,9 @@ namespace ShipWorks.Shipping.ShipSense
 
             if (!CustomsItems.Any())
             {
-                // We don't have any customs items for this entry, but we do want the change set to 
+                // We don't have any customs items for this entry, but we do want the change set to
                 // reflect that the before/after are identical, so copy the customs items provided
-                // the the current items for this entry. These change are in memory only and only 
+                // the the current items for this entry. These change are in memory only and only
                 // apply until it is disposed of.
                 foreach (ShipmentCustomsItemEntity entity in shipmentCustomsItems)
                 {
@@ -334,12 +334,12 @@ namespace ShipWorks.Shipping.ShipSense
         /// <returns>Returns true if the data is the same, otherwise false.</returns>
         public bool Matches(ShipmentEntity shipment)
         {
-            // We're going to look at the hash of the package adapters to see if they match 
+            // We're going to look at the hash of the package adapters to see if they match
             // the package data in the knowledge base entry
             ShipmentType shipmentType = ShipmentTypeManager.GetType(shipment);
             List<IPackageAdapter> packageAdapters = shipmentType.GetPackageAdapters(shipment).ToList();
 
-            // The Store ID, packages, and customs must all coincide for the 
+            // The Store ID, packages, and customs must all coincide for the
             // shipment to match the entry
             bool matches = PackagesMatch(packageAdapters);
 
@@ -390,7 +390,7 @@ namespace ShipWorks.Shipping.ShipSense
         /// <returns>Returns true if the data is the same, otherwise false.</returns>
         private bool PackagesMatch(List<IPackageAdapter> packageAdapters)
         {
-            // Check that the package counts are equal and the hash of the package adapters 
+            // Check that the package counts are equal and the hash of the package adapters
             // matches those of the entry
             if (Packages.Count() != packageAdapters.Count())
             {
