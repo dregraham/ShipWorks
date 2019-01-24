@@ -672,8 +672,6 @@ namespace ShipWorks.Stores.Communication
 
                     ResetAddressIfRequired(order.IsNew, order, adapter);
 
-                    //using (ISqlAdapter adapter = sqlAdapterFactory.Create(connection, transaction))
-                    //{
                     if (order.IsNew)
                     {
                         await SaveNewOrder(order, adapter).ConfigureAwait(false);
@@ -683,7 +681,6 @@ namespace ShipWorks.Stores.Communication
                         await SaveExistingOrder(order, adapter).ConfigureAwait(false);
                     }
 
-                    //alreadyDownloaded.Wait();
                     isAlreadyDownloaded = await alreadyDownloaded.ConfigureAwait(false);
                     log.InfoFormat("{0} is {1} new", orderIdentifier, isAlreadyDownloaded ? "not " : "");
 
@@ -692,7 +689,6 @@ namespace ShipWorks.Stores.Communication
 
                     // Dispatch the order downloaded action
                     ActionDispatcher.DispatchOrderDownloaded(order.OrderID, Store.StoreID, !isAlreadyDownloaded, adapter);
-                    //}
 
                     return () =>
                     {

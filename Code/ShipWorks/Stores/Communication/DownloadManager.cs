@@ -41,7 +41,7 @@ namespace ShipWorks.Stores.Communication
         private static readonly ILog log = LogManager.GetLogger(typeof(DownloadManager));
 
         // Downloading flag
-        private static bool isDownloading;
+        private volatile static bool isDownloading;
 
         // The progress dlg currently displayed, or null if not displayed.
         private static ProgressDlg progressDlg;
