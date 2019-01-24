@@ -12,6 +12,8 @@ using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore.Logging;
 using Newtonsoft.Json;
 using ShipWorks.Stores.Platforms.ChannelAdvisor.DTO;
+using System.IO;
+using Newtonsoft.Json.Linq;
 
 namespace ShipWorks.Stores.Platforms.ChannelAdvisor
 {
@@ -264,15 +266,19 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
                 new Uri($"{ordersEndpoint}({channelAdvisorOrderID})/Ship?access_token={GetAccessToken(refreshToken, isRetry)}");
 
             // NoContent is the expected response form ChannelAdvisor for a sucessful upload
-            submitter.AllowHttpStatusCodes(HttpStatusCode.NoContent);
+            submitter.AllowHttpStatusCodes(HttpStatusCode.NoContent, HttpStatusCode.BadRequest);
 
             IApiLogEntry apiLogEntry = apiLogEntryFactory(ApiLogSource.ChannelAdvisor, "UploadShipmentDetails");
             apiLogEntry.LogRequest(submitter);
 
+            const string unknownError = "Error communicating with ChannelAdvisor REST API";
+            IHttpResponseReader httpResponseReader = null;
+            string result = string.Empty;
+
             try
             {
-                IHttpResponseReader httpResponseReader = submitter.GetResponse();
-                string result = httpResponseReader.ReadResult();
+                httpResponseReader = submitter.GetResponse();
+                result = httpResponseReader.ReadResult();
                 apiLogEntry.LogResponse(result, "json");
             }
             catch (WebException ex) when (((HttpWebResponse)ex.Response).StatusCode == HttpStatusCode.Unauthorized &&
@@ -284,8 +290,32 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
             catch (Exception ex)
             {
                 apiLogEntry.LogResponse(ex);
-                throw new ChannelAdvisorException("Error communicating with ChannelAdvisor REST API", ex);
+                throw new ChannelAdvisorException(unknownError, ex);
             }
+
+            if (httpResponseReader?.HttpWebResponse.StatusCode == HttpStatusCode.BadRequest)
+            {
+                throw new ChannelAdvisorException(GetErrorMessage(result) ?? unknownError);
+                return;
+            }
+        }
+
+        /// <summary>
+        /// Parse the channel advisor error message. Null if no error.message
+        /// </summary>
+        private string GetErrorMessage(string result)
+        {
+            string errorMessage;
+            try
+            {
+                errorMessage = JObject.Parse(result).SelectToken("error.message")?.Value<string>() ?? null;
+            }
+            catch (Exception ex)
+            {
+                errorMessage = null;
+            }
+
+            return errorMessage;
         }
 
         /// <summary>

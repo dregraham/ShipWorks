@@ -6,8 +6,11 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Security;
 using System.Text;
+using System.Text.RegularExpressions;
 using Interapptive.Shared.Extensions;
 using log4net;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace Interapptive.Shared.Utility
 {
@@ -356,6 +359,14 @@ namespace Interapptive.Shared.Utility
         public static string RemoveSymbols(this string value)
         {
             return value.Where(c => !char.IsSymbol(c)).CreateString();
+        }
+
+        /// <summary>
+        /// Replaces string with new string ignoring case.
+        /// </summary>
+        public static string ReplaceInsensitive(this string s, string from, string to)
+        {
+            return Regex.Replace(s, Regex.Escape(from), to.Replace("$", "$$"), RegexOptions.IgnoreCase);
         }
     }
 }
