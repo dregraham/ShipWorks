@@ -8,7 +8,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using Autofac;
 using Interapptive.Shared.Business;
-using Interapptive.Shared.Collections;
 using Interapptive.Shared.Enums;
 using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Threading;
@@ -611,14 +610,6 @@ namespace ShipWorks.Stores.Communication
         /// </summary>
         protected virtual async Task SaveDownloadedOrder(OrderEntity order)
         {
-            //using (DbTransaction transaction = connection.BeginTransaction())
-            //{
-            //    var postAction = await SaveDownloadedOrderWithoutPostAction(order, transaction).ConfigureAwait(false);
-
-            //    transaction.Commit();
-            //    postAction();
-            //}
-
             await connection.WithTransactionAsync(async adapter =>
             {
                 var postAction = await SaveDownloadedOrderWithoutPostAction(order, adapter).ConfigureAwait(false);
@@ -780,7 +771,7 @@ namespace ShipWorks.Stores.Communication
 
             log.Info($"StoreDownloader.SaveNewOrder UpdateItemsProductCatalog");
             UpdateItemsFromProductCatalog(adapter, order);
-            
+
             await PerformInitialOrderSave(order, customer, adapter).ConfigureAwait(false);
         }
 
@@ -796,7 +787,7 @@ namespace ShipWorks.Stores.Communication
                 foreach (OrderItemEntity orderItem in order.OrderItems)
                 {
                     productCatalog.FetchProductVariant(adapter, orderItem.SKU).Apply(orderItem);
-                }                
+                }
             }
         }
 
