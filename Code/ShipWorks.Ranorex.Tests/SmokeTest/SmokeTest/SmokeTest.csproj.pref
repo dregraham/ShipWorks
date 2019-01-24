@@ -8,16 +8,7 @@
   </Array>
   <Properties name="projectSavedData">
     <Properties name="customTool">
-      <fileNames value="" />
       <runOnBuild value="False" />
     </Properties>
-    <Array name="recentusercodeselections">
-      <Element value="SmokeTest.GetExpress1EndiciaInternationalShipmentRate.CheckRates()" />
-      <Element value="SmokeTest.GetExpress1EndiciaDomesticShipmentRate.CheckRates()" />
-      <Element value="SmokeTest.GetExpress1InternationalShipmentRate.CheckRates()" />
-      <Element value="SmokeTest.GetExpress1DomesticShipmentRate.CheckRates()" />
-      <Element value="SmokeTest.OLMProcessShipmentFedExInternational.ProcessFedexInternational()" />
-      <Element value="SmokeTest.OLMProcessShipmentFedExDomesticGround.ProcessFedexDomesticGround()" />
-    </Array>
   </Properties>
 </Properties>
