@@ -752,6 +752,7 @@
     <Compile Include="ApplicationCore\Factory.cs" />
     <Compile Include="ApplicationCore\Heartbeat.cs" />
     <Compile Include="ApplicationCore\HeartbeatPace.cs" />
+    <Compile Include="ApplicationCore\Help\IAboutShipWorksDialog.cs" />
     <Compile Include="ApplicationCore\ICheckForChangesNeeded.cs" />
     <Compile Include="ApplicationCore\IFactory.cs" />
     <Compile Include="ApplicationCore\IMainForm.cs" />
@@ -1011,12 +1012,6 @@
     </Compile>
     <Compile Include="ApplicationCore\Options\ResourceCleanup\ResourceCleanupDlg.Designer.cs">
       <DependentUpon>ResourceCleanupDlg.cs</DependentUpon>
-    </Compile>
-    <Compile Include="ApplicationCore\Help\ShipWorksAboutDlg.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="ApplicationCore\Help\ShipWorksAboutDlg.Designer.cs">
-      <DependentUpon>ShipWorksAboutDlg.cs</DependentUpon>
     </Compile>
     <Compile Include="ApplicationCore\Services\Hosting\IServiceRegistrar.cs" />
     <Compile Include="ApplicationCore\Services\Hosting\Windows\WindowsServiceRegistrar.cs" />
@@ -7086,9 +7081,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="ApplicationCore\Options\ResourceCleanup\ResourceCleanupDlg.resx">
       <DependentUpon>ResourceCleanupDlg.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="ApplicationCore\Help\ShipWorksAboutDlg.resx">
-      <DependentUpon>ShipWorksAboutDlg.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ApplicationCore\Services\Hosting\Windows\WindowsServiceCredentialsDlg.resx">
       <DependentUpon>WindowsServiceCredentialsDlg.cs</DependentUpon>
