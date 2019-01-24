@@ -12,6 +12,7 @@
 *.jfm
 *.idea
 *.playlist
+/ShipWorks.sln.vsext.disable
 
 # Build results
 

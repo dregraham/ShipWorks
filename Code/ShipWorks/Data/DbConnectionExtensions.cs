@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Data.Common;
 using System.Data.SqlClient;
+using System.Reactive;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using SD.Tools.OrmProfiler.Interceptor;
 using ShipWorks.Data.Connection;
@@ -35,21 +37,26 @@ namespace ShipWorks.Data
         /// <summary>
         /// Perform an action with a transaction
         /// </summary>
-        public static async Task WithTransactionAsync(this DbConnection connection, Func<DbTransaction, ISqlAdapter, Task> operation)
+        public static Task WithTransactionAsync(this DbConnection connection, Func<ISqlAdapter, Task> operation, [CallerMemberName] string name = "") =>
+            WithTransactionAsync(connection, async x => { await operation(x).ConfigureAwait(false); return Unit.Default; }, name);
+
+        /// <summary>
+        /// Perform an action with a transaction
+        /// </summary>
+        public static async Task<T> WithTransactionAsync<T>(this DbConnection connection, Func<ISqlAdapter, Task<T>> operation, [CallerMemberName] string name = "")
         {
-            using (DbTransaction transaction = connection.BeginTransaction())
+            using (ISqlAdapter adapter = new SqlAdapter(connection))
             {
-                using (ISqlAdapter adapter = new SqlAdapter(connection, transaction))
+                await adapter.StartTransactionAsync(System.Data.IsolationLevel.ReadCommitted, name).ConfigureAwait(false);
+
+                try
                 {
-                    try
-                    {
-                        await operation(transaction, adapter).ConfigureAwait(false);
-                    }
-                    catch (Exception)
-                    {
-                        transaction.Rollback();
-                        throw;
-                    }
+                    return await operation(adapter).ConfigureAwait(false);
+                }
+                catch (Exception)
+                {
+                    adapter.Rollback();
+                    throw;
                 }
             }
         }
@@ -57,43 +64,20 @@ namespace ShipWorks.Data
         /// <summary>
         /// Perform an action with a transaction
         /// </summary>
-        public static async Task<T> WithTransactionAsync<T>(this DbConnection connection, Func<DbTransaction, ISqlAdapter, Task<T>> operation)
+        public static void WithTransaction(this DbConnection connection, Action<ISqlAdapter> operation, [CallerMemberName] string name = "")
         {
-            using (DbTransaction transaction = connection.BeginTransaction())
+            using (ISqlAdapter adapter = new SqlAdapter(connection))
             {
-                using (ISqlAdapter adapter = new SqlAdapter(connection, transaction))
-                {
-                    try
-                    {
-                        return await operation(transaction, adapter).ConfigureAwait(false);
-                    }
-                    catch (Exception)
-                    {
-                        transaction.Rollback();
-                        throw;
-                    }
-                }
-            }
-        }
+                adapter.StartTransaction(System.Data.IsolationLevel.ReadCommitted, name);
 
-        /// <summary>
-        /// Perform an action with a transaction
-        /// </summary>
-        public static void WithTransaction(this DbConnection connection, Action<DbTransaction, ISqlAdapter> operation)
-        {
-            using (DbTransaction transaction = connection.BeginTransaction())
-            {
-                using (ISqlAdapter adapter = new SqlAdapter(connection, transaction))
+                try
                 {
-                    try
-                    {
-                        operation(transaction, adapter);
-                    }
-                    catch (Exception)
-                    {
-                        transaction.Rollback();
-                        throw;
-                    }
+                    operation(adapter);
+                }
+                catch (Exception)
+                {
+                    adapter.Rollback();
+                    throw;
                 }
             }
         }

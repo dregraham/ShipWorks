@@ -609,13 +609,21 @@ namespace ShipWorks.Stores.Communication
         /// </summary>
         protected virtual async Task SaveDownloadedOrder(OrderEntity order)
         {
-            using (DbTransaction transaction = connection.BeginTransaction())
-            {
-                var postAction = await SaveDownloadedOrderWithoutPostAction(order, transaction).ConfigureAwait(false);
+            //using (DbTransaction transaction = connection.BeginTransaction())
+            //{
+            //    var postAction = await SaveDownloadedOrderWithoutPostAction(order, transaction).ConfigureAwait(false);
 
-                transaction.Commit();
+            //    transaction.Commit();
+            //    postAction();
+            //}
+
+            await connection.WithTransactionAsync(async adapter =>
+            {
+                var postAction = await SaveDownloadedOrderWithoutPostAction(order, adapter).ConfigureAwait(false);
+
+                adapter.Commit();
                 postAction();
-            }
+            }).ConfigureAwait(false);
 
             // Updating order/order item statuses have to be done outside of a transaction,
             // so do that now.
@@ -634,7 +642,7 @@ namespace ShipWorks.Stores.Communication
         /// </returns>
         [SuppressMessage("ShipWorks", "SW0002",
             Justification = "The parameter name is not used for binding.")]
-        protected virtual async Task<Action> SaveDownloadedOrderWithoutPostAction(OrderEntity order, DbTransaction transaction)
+        protected virtual async Task<Action> SaveDownloadedOrderWithoutPostAction(OrderEntity order, ISqlAdapter adapter)
         {
             MethodConditions.EnsureArgumentIsNotNull(order, nameof(order));
 
@@ -669,29 +677,29 @@ namespace ShipWorks.Stores.Communication
                     Task<bool> alreadyDownloaded = HasDownloadHistory(orderIdentifier);
                     bool isAlreadyDownloaded = false;
 
-                    ResetAddressIfRequired(order.IsNew, order, transaction);
+                    ResetAddressIfRequired(order.IsNew, order, adapter);
 
-                    using (ISqlAdapter adapter = sqlAdapterFactory.Create(connection, transaction))
+                    //using (ISqlAdapter adapter = sqlAdapterFactory.Create(connection, transaction))
+                    //{
+                    if (order.IsNew)
                     {
-                        if (order.IsNew)
-                        {
-                            await SaveNewOrder(order, adapter).ConfigureAwait(false);
-                        }
-                        else
-                        {
-                            await SaveExistingOrder(order, adapter).ConfigureAwait(false);
-                        }
-
-                        //alreadyDownloaded.Wait();
-                        isAlreadyDownloaded = await alreadyDownloaded.ConfigureAwait(false);
-                        log.InfoFormat("{0} is {1} new", orderIdentifier, isAlreadyDownloaded ? "not " : "");
-
-                        // Log this download
-                        await AddToDownloadHistory(order.OrderID, orderIdentifier, isAlreadyDownloaded, adapter).ConfigureAwait(false);
-
-                        // Dispatch the order downloaded action
-                        ActionDispatcher.DispatchOrderDownloaded(order.OrderID, Store.StoreID, !isAlreadyDownloaded, adapter);
+                        await SaveNewOrder(order, adapter).ConfigureAwait(false);
                     }
+                    else
+                    {
+                        await SaveExistingOrder(order, adapter).ConfigureAwait(false);
+                    }
+
+                    //alreadyDownloaded.Wait();
+                    isAlreadyDownloaded = await alreadyDownloaded.ConfigureAwait(false);
+                    log.InfoFormat("{0} is {1} new", orderIdentifier, isAlreadyDownloaded ? "not " : "");
+
+                    // Log this download
+                    await AddToDownloadHistory(order.OrderID, orderIdentifier, isAlreadyDownloaded, adapter).ConfigureAwait(false);
+
+                    // Dispatch the order downloaded action
+                    ActionDispatcher.DispatchOrderDownloaded(order.OrderID, Store.StoreID, !isAlreadyDownloaded, adapter);
+                    //}
 
                     return () =>
                     {
@@ -812,11 +820,8 @@ namespace ShipWorks.Stores.Communication
                         "Please ensure that these values are between 1/1/1753 12:00:00 AM and 12/31/9999 11:59:59 PM.");
                 }
 
-                if (ex.Message.Contains("The entity is out of sync with its data in the database", StringComparison.OrdinalIgnoreCase))
-                {
-                    log.Error($"An order was not able to successfully download.  Please try downloading again.", ex);
-                    throw new DownloadException($"An order was not able to successfully download.  Please try downloading again.");
-                }
+                log.Error($"An order was not able to successfully download.  Please try downloading again.", ex);
+                throw new DownloadException($"An order was not able to successfully download.  Please try downloading again.");
             }
         }
 
@@ -1024,18 +1029,15 @@ namespace ShipWorks.Stores.Communication
         /// <summary>
         /// If an order's addresses change to the originally validated address, change it back.
         /// </summary>
-        private void ResetAddressIfRequired(bool isOrderNew, OrderEntity order, DbTransaction transaction)
+        private void ResetAddressIfRequired(bool isOrderNew, OrderEntity order, ISqlAdapter adapter)
         {
             if (!isOrderNew)
             {
-                using (ISqlAdapter adapter = sqlAdapterFactory.Create(connection, transaction))
+                bool shipAddressReset = ResetAddressIfRequired(order, "Ship", ShippingAddressBeforeDownload);
+                bool billAddressReset = ResetAddressIfRequired(order, "Bill", BillingAddressBeforeDownload);
+                if (shipAddressReset || billAddressReset)
                 {
-                    bool shipAddressReset = ResetAddressIfRequired(order, "Ship", ShippingAddressBeforeDownload);
-                    bool billAddressReset = ResetAddressIfRequired(order, "Bill", BillingAddressBeforeDownload);
-                    if (shipAddressReset || billAddressReset)
-                    {
-                        adapter.SaveAndRefetch(order);
-                    }
+                    adapter.SaveAndRefetch(order);
                 }
             }
         }
