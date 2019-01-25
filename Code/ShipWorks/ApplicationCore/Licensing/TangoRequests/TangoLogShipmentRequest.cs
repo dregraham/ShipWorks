@@ -140,6 +140,11 @@ namespace ShipWorks.ApplicationCore.Licensing.TangoRequests
             postRequest.Variables.Add("service", shipmentType.ShipmentTypeName);
             postRequest.Variables.Add("storecode", storeType.TangoCode);
             postRequest.Variables.Add("identifier", storeType.LicenseIdentifier);
+
+            // If isretry is true, Tango will check to see if the shipment exists, and if it does
+            // it will not insert it into the database.  If it doesn't exist, it will do the 
+            // insert.
+            postRequest.Variables.Add("isretry", "1");
         }
 
         /// <summary>
