@@ -116,7 +116,7 @@ namespace ShipWorks.Data.Administration
                 // This can fail for multiple reasons like the file is missing or we dont have permissions
                 // ignore any failure
                 double backupSize = new FileInfo(fileName).Length / 1024f / 1024f;
-                telemetricResult.AddProperty("BackupSizeInMegabytes", backupSize.ToString("0.##"));
+                telemetricResult.AddEntry("BackupSizeInMegabytes", Convert.ToInt64(backupSize));
             }
             catch (Exception)
             {
