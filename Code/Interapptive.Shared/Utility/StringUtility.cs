@@ -366,7 +366,7 @@ namespace Interapptive.Shared.Utility
         /// </summary>
         public static string ReplaceInsensitive(this string s, string from, string to)
         {
-            return Regex.Replace(s, Regex.Escape(from), to.Replace("$", "$$"), RegexOptions.IgnoreCase);
+            return Regex.Replace(s, Regex.Escape(from), to, RegexOptions.IgnoreCase);
         }
     }
 }
