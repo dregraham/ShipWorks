@@ -1425,11 +1425,27 @@ JJneVJjLlQpAlChuf93jH69asG1haRndS5YEHcxYYPXAPA/CiC2it8+WGycZLMWOB0GSelAC44H0
 oxR2H0ooAYP9a3+6P60/FNH+tb/dH9adQAYoxRRQAUUUUAf/2Q==
 			</helperscreenshot>
 		</mouseitem>
+		<userrecorditem
+		classname="GetExpress1DomesticShipmentRate"
+		enabled="True"
+		isexternaltestmethod="False"
+		methodname="CheckRates"
+		namespace="SmokeTest"
+		optional="False"
+		varname="">
+			<comment>
+			</comment>
+			<bindings>
+			</bindings>
+			<arguments
+			id="7b867e55-2eea-41db-8454-8a30a90b73f8">
+			</arguments>
+		</userrecorditem>
 		<mouseitem
 		action="Move"
 		button="Left"
 		duration="500ms"
-		enabled="True"
+		enabled="False"
 		loc="Center"
 		movetime="300ms"
 		optional="False"
@@ -1501,7 +1517,7 @@ oxR2H0ooAYP9a3+6P60/FNH+tb/dH9adQAYoxRRQAUUUUAf/2Q==
 		</mouseitem>
 		<getvaluerecorditem
 		attrname="RawText"
-		enabled="True"
+		enabled="False"
 		optional="False"
 		searchpropertyid="e4562afa-9303-4769-9231-27fc945c3d97"
 		varname="ExpOneShipmentRate">
@@ -1569,7 +1585,7 @@ oxR2H0ooAYP9a3+6P60/FNH+tb/dH9adQAYoxRRQAUUUUAf/2Q==
 		</getvaluerecorditem>
 		<userrecorditem
 		classname="GetExpress1DomesticShipmentRate"
-		enabled="True"
+		enabled="False"
 		isexternaltestmethod="False"
 		methodname="CheckPostageBalance"
 		namespace="SmokeTest"

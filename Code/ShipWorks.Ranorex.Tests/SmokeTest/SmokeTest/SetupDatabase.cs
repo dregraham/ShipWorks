@@ -372,8 +372,8 @@ namespace SmokeTest
             Keyboard.Press("{Tab}{Space}");
             Delay.Milliseconds(0);
             
-            Report.Log(ReportLevel.Info, "Delay", "Waiting for 10s.", new RecordItemIndex(65));
-            Delay.Duration(10000, false);
+            Report.Log(ReportLevel.Info, "Delay", "Waiting for 30s.", new RecordItemIndex(65));
+            Delay.Duration(30000, false);
             
             // Next
             Report.Log(ReportLevel.Info, "Keyboard", "Next\r\nKey sequence '{Tab}{Space}'.", new RecordItemIndex(66));

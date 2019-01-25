@@ -38,17 +38,23 @@ namespace ShipWorks.OrderLookup
         /// <summary>
         /// Get the OrderId matching the order number
         /// </summary>
-        public List<long> GetOrderIDs(string orderNumber)
+        public List<long> GetOrderIDs(string orderNumberComplete)
         {
             using (DbConnection conn = sqlSession.OpenConnection())
             {
                 using (DbCommand cmd = conn.CreateCommand())
                 {
                     cmd.CommandType = CommandType.Text;
-                    cmd.Parameters.Add(new SqlParameter("orderNumber", orderNumber));
+                    cmd.Parameters.Add(new SqlParameter("orderNumberComplete", orderNumberComplete));
 
-                    cmd.CommandText = "SELECT OrderID FROM [Order] WHERE OrderNumberComplete = @orderNumber";
+                    string sql = "SELECT OrderID FROM [Order] WHERE OrderNumberComplete = @orderNumberComplete";
+                    if(long.TryParse(orderNumberComplete, out long orderNumber))
+                    {
+                        cmd.Parameters.Add(new SqlParameter("orderNumber", orderNumber));
+                        sql += " OR OrderNumber = @orderNumber";
+                    }
 
+                    cmd.CommandText = sql;
                     return GetOrders(cmd);
                 }
             }

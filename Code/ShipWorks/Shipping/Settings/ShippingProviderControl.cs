@@ -5,6 +5,7 @@ using System.Linq;
 using System.Reactive.Linq;
 using System.Windows.Forms;
 using Autofac;
+using Interapptive.Shared.Utility;
 using log4net;
 using ShipWorks.ApplicationCore;
 using ShipWorks.Core.Messaging;
@@ -177,6 +178,21 @@ namespace ShipWorks.Shipping.Settings
             panelBottom.Top = panelMain.Bottom;
 
             Height = panelBottom.Bottom;
+        }
+
+        /// <summary>
+        /// Gets a list of shipping rules validation errors.
+        /// </summary>
+        public List<string> GetFilterValidationErrors
+        {
+            get
+            {
+                var shippingProviderRuleErrors = panelMain.Controls.OfType<ShippingProviderRuleControl>()
+                    .Select(x => x.ValidationErrors)
+                    .Where(x => !x.IsNullOrWhiteSpace());
+
+                return shippingProviderRuleErrors.ToList();
+            }
         }
 
         /// <summary>

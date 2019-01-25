@@ -15,6 +15,7 @@ using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Messaging.Messages;
 using ShipWorks.Shipping.Editing.Rating;
+using ShipWorks.Shipping.Settings.Defaults;
 using ShipWorks.Templates.Printing;
 using ShipWorks.UI.Controls;
 
@@ -477,6 +478,15 @@ namespace ShipWorks.Shipping.Settings
 
             List<string> validationErrors = settingsControl?.GetFilterValidationErrors;
             string validationErrorText = string.Empty;
+            validationErrors?.ForEach(fn => validationErrorText += $"{fn}{Environment.NewLine}{Environment.NewLine}");
+
+            if (validationErrors?.Any() == true)
+            {
+                DialogResult result = MessageHelper.ShowQuestion(this, MessageBoxIcon.Warning, MessageBoxButtons.OK, validationErrorText);
+            }
+
+            validationErrors = providerRulesControl?.GetFilterValidationErrors;
+            validationErrorText = string.Empty;
             validationErrors?.ForEach(fn => validationErrorText += $"{fn}{Environment.NewLine}{Environment.NewLine}");
 
             if (validationErrors?.Any() == true)

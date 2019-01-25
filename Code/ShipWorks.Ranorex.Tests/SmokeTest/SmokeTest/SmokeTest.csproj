@@ -135,6 +135,18 @@
     <Compile Include="AssemblyInfo.cs">
       <id>df8a21ad-0eb7-4914-8808-6ca8338741a3</id>
     </Compile>
+    <Compile Include="ChangeCurrentShipment_ProviderUSPSExpress1.cs">
+      <BoundTo>c039c944-d057-4aa1-9aff-fe073ee3193c</BoundTo>
+      <DependentUpon>ChangeCurrentShipment_ProviderUSPSExpress1.rxrec</DependentUpon>
+      <RecorderCode>true</RecorderCode>
+      <id>0dfde857-bdb4-4172-9ef5-89fb91e73f31</id>
+    </Compile>
+    <Compile Include="ChangeCurrentShipment_ProviderUSPSExpress1.UserCode.cs">
+      <BoundTo>c039c944-d057-4aa1-9aff-fe073ee3193c</BoundTo>
+      <DependentUpon>ChangeCurrentShipment_ProviderUSPSExpress1.rxrec</DependentUpon>
+      <UserCode>true</UserCode>
+      <id>9f6a9fd6-2c50-41f5-816a-1f652a2f4d08</id>
+    </Compile>
     <Compile Include="CheckShipWorksVersion.cs">
       <BoundTo>8b5363c2-b4a5-40c2-89e6-6efd31173e12</BoundTo>
       <DependentUpon>CheckShipWorksVersion.rxrec</DependentUpon>
@@ -161,6 +173,18 @@
       <DependentUpon>CloseShipOrdersDialog.rxrec</DependentUpon>
       <UserCode>true</UserCode>
       <id>956afa12-ce89-4c0b-83e4-b547550f6786</id>
+    </Compile>
+    <Compile Include="CloseShipWorks.cs">
+      <BoundTo>3b6dfba2-3d10-472c-98ca-0b7932df87b8</BoundTo>
+      <DependentUpon>CloseShipWorks.rxrec</DependentUpon>
+      <RecorderCode>true</RecorderCode>
+      <id>e9c34c10-819e-400e-b94d-b09bb0037bb0</id>
+    </Compile>
+    <Compile Include="CloseShipWorks.UserCode.cs">
+      <BoundTo>3b6dfba2-3d10-472c-98ca-0b7932df87b8</BoundTo>
+      <DependentUpon>CloseShipWorks.rxrec</DependentUpon>
+      <UserCode>true</UserCode>
+      <id>872d82e0-2670-4edf-9ec7-2d52f28045f3</id>
     </Compile>
     <Compile Include="CopyStagingHosts.cs">
       <id>7e3919f9-7e57-4e61-8629-9ab72e1d8a2b</id>
@@ -444,6 +468,18 @@
       <BoundTo>26007d92-977a-416a-9d21-6d0218e53ddc</BoundTo>
       <UserCode>true</UserCode>
     </Compile>
+    <Compile Include="LookupAnOrder.cs">
+      <DependentUpon>LookupAnOrder.rxrec</DependentUpon>
+      <id>f997ae6a-b7ac-4aeb-8ab2-f56777280d96</id>
+      <BoundTo>c69fd5a0-13e1-4e83-85f9-13c64405f87b</BoundTo>
+      <RecorderCode>true</RecorderCode>
+    </Compile>
+    <Compile Include="LookupAnOrder.UserCode.cs">
+      <DependentUpon>LookupAnOrder.rxrec</DependentUpon>
+      <id>3f8ff883-a353-46b1-887b-ade369bb36cc</id>
+      <BoundTo>c69fd5a0-13e1-4e83-85f9-13c64405f87b</BoundTo>
+      <UserCode>true</UserCode>
+    </Compile>
     <Compile Include="ModuleChecker.cs">
       <BoundTo>be5c41cb-0b98-43e4-81cb-8fd048e0e39d</BoundTo>
       <DependentUpon>ModuleChecker.rxrec</DependentUpon>
@@ -467,6 +503,138 @@
       <DependentUpon>NewSetupUSPSStamps.rxrec</DependentUpon>
       <UserCode>true</UserCode>
       <id>1c737f93-5845-4620-aaa3-43cf40d5393f</id>
+    </Compile>
+    <Compile Include="OLMProcessFedExDomesticGround.cs">
+      <BoundTo>a9f64a61-85d7-4eb1-bd89-f10ac2887541</BoundTo>
+      <DependentUpon>OLMProcessFedExDomesticGround.rxrec</DependentUpon>
+      <RecorderCode>true</RecorderCode>
+      <id>2224f6b1-763c-474f-829e-5c44c4f23b30</id>
+    </Compile>
+    <Compile Include="OLMProcessFedExDomesticGround.UserCode.cs">
+      <BoundTo>a9f64a61-85d7-4eb1-bd89-f10ac2887541</BoundTo>
+      <DependentUpon>OLMProcessFedExDomesticGround.rxrec</DependentUpon>
+      <UserCode>true</UserCode>
+      <id>b82bb374-6d8a-4396-afa5-5626b9ceb8f2</id>
+    </Compile>
+    <Compile Include="OLMProcessFedExInternational.cs">
+      <BoundTo>d8026bdf-dae6-40ab-8eeb-7a560ec5df35</BoundTo>
+      <DependentUpon>OLMProcessFedExInternational.rxrec</DependentUpon>
+      <RecorderCode>true</RecorderCode>
+      <id>a7efa64c-1800-41c8-a4d2-840bbd89375b</id>
+    </Compile>
+    <Compile Include="OLMProcessFedExInternational.UserCode.cs">
+      <BoundTo>d8026bdf-dae6-40ab-8eeb-7a560ec5df35</BoundTo>
+      <DependentUpon>OLMProcessFedExInternational.rxrec</DependentUpon>
+      <UserCode>true</UserCode>
+      <id>19a6251a-e068-4785-b632-1917fb56e1b4</id>
+    </Compile>
+    <Compile Include="OLMProcessShipmentFedExDomesticGround.cs">
+      <BoundTo>cef8f204-243b-4074-bb56-fd01a2d738fe</BoundTo>
+      <DependentUpon>OLMProcessShipmentFedExDomesticGround.rxrec</DependentUpon>
+      <RecorderCode>true</RecorderCode>
+      <id>819728a7-3174-4591-8cf6-08e6ba90dd82</id>
+    </Compile>
+    <Compile Include="OLMProcessShipmentFedExDomesticGround.UserCode.cs">
+      <BoundTo>cef8f204-243b-4074-bb56-fd01a2d738fe</BoundTo>
+      <DependentUpon>OLMProcessShipmentFedExDomesticGround.rxrec</DependentUpon>
+      <UserCode>true</UserCode>
+      <id>0acc260d-8a1a-492e-98af-7e4e9cd495ab</id>
+    </Compile>
+    <Compile Include="OLMProcessShipmentFedExInternational.cs">
+      <BoundTo>bbd96c63-e964-4384-8169-78b3d63dc8de</BoundTo>
+      <DependentUpon>OLMProcessShipmentFedExInternational.rxrec</DependentUpon>
+      <RecorderCode>true</RecorderCode>
+      <id>6cbfeeb8-20f8-47af-b8fd-8eff7777448e</id>
+    </Compile>
+    <Compile Include="OLMProcessShipmentFedExInternational.UserCode.cs">
+      <BoundTo>bbd96c63-e964-4384-8169-78b3d63dc8de</BoundTo>
+      <DependentUpon>OLMProcessShipmentFedExInternational.rxrec</DependentUpon>
+      <UserCode>true</UserCode>
+      <id>8e582578-1a3a-4f9b-9543-f3169eaa7f79</id>
+    </Compile>
+    <Compile Include="OLMProcessShipmentUPSDomesticGround.cs">
+      <BoundTo>64402740-4c4c-4e49-8b8d-6532f6d7a72c</BoundTo>
+      <DependentUpon>OLMProcessShipmentUPSDomesticGround.rxrec</DependentUpon>
+      <RecorderCode>true</RecorderCode>
+      <id>51d35474-8d48-43e3-a5f0-aa9bd97a2076</id>
+    </Compile>
+    <Compile Include="OLMProcessShipmentUPSDomesticGround.UserCode.cs">
+      <BoundTo>64402740-4c4c-4e49-8b8d-6532f6d7a72c</BoundTo>
+      <DependentUpon>OLMProcessShipmentUPSDomesticGround.rxrec</DependentUpon>
+      <UserCode>true</UserCode>
+      <id>c6347d02-2423-46ee-b3be-cb4c9966a905</id>
+    </Compile>
+    <Compile Include="OLMProcessShipmentUPSInternational.cs">
+      <BoundTo>3aaf32b6-2edd-4e1d-a7d8-4a1c409f8e65</BoundTo>
+      <DependentUpon>OLMProcessShipmentUPSInternational.rxrec</DependentUpon>
+      <RecorderCode>true</RecorderCode>
+      <id>625c2175-145f-44cf-af98-c30762c81c48</id>
+    </Compile>
+    <Compile Include="OLMProcessShipmentUPSInternational.UserCode.cs">
+      <BoundTo>3aaf32b6-2edd-4e1d-a7d8-4a1c409f8e65</BoundTo>
+      <DependentUpon>OLMProcessShipmentUPSInternational.rxrec</DependentUpon>
+      <UserCode>true</UserCode>
+      <id>3165e6ee-e117-41b3-92ea-9772f80a5842</id>
+    </Compile>
+    <Compile Include="OLMProcessShipmentUSPSDomestic.cs">
+      <BoundTo>eeeb74dc-b6a4-484f-acda-cab45dafc853</BoundTo>
+      <DependentUpon>OLMProcessShipmentUSPSDomestic.rxrec</DependentUpon>
+      <RecorderCode>true</RecorderCode>
+      <id>01dae2ef-e434-49dd-a4a5-e7be44a6f8c5</id>
+    </Compile>
+    <Compile Include="OLMProcessShipmentUSPSDomestic.UserCode.cs">
+      <BoundTo>eeeb74dc-b6a4-484f-acda-cab45dafc853</BoundTo>
+      <DependentUpon>OLMProcessShipmentUSPSDomestic.rxrec</DependentUpon>
+      <UserCode>true</UserCode>
+      <id>84777d20-76a0-41e8-8423-3dbb95e11401</id>
+    </Compile>
+    <Compile Include="OLMProcessShipmentUSPSInternational.cs">
+      <BoundTo>d6a40b4e-f1b0-4362-9cfc-900dd8df1b0b</BoundTo>
+      <DependentUpon>OLMProcessShipmentUSPSInternational.rxrec</DependentUpon>
+      <RecorderCode>true</RecorderCode>
+      <id>48531493-6ec0-48d2-b6b8-eca2281193b3</id>
+    </Compile>
+    <Compile Include="OLMProcessShipmentUSPSInternational.UserCode.cs">
+      <BoundTo>d6a40b4e-f1b0-4362-9cfc-900dd8df1b0b</BoundTo>
+      <DependentUpon>OLMProcessShipmentUSPSInternational.rxrec</DependentUpon>
+      <UserCode>true</UserCode>
+      <id>35e4d408-69fa-47e8-adee-a480e187dab3</id>
+    </Compile>
+    <Compile Include="OLMProcessUPSDomesticGround.cs">
+      <BoundTo>48a6ef95-55ef-40d5-87ac-ac2c596e7021</BoundTo>
+      <DependentUpon>OLMProcessUPSDomesticGround.rxrec</DependentUpon>
+      <RecorderCode>true</RecorderCode>
+      <id>95f6f880-9243-4195-8e75-03fc98068bb6</id>
+    </Compile>
+    <Compile Include="OLMProcessUPSDomesticGround.UserCode.cs">
+      <BoundTo>48a6ef95-55ef-40d5-87ac-ac2c596e7021</BoundTo>
+      <DependentUpon>OLMProcessUPSDomesticGround.rxrec</DependentUpon>
+      <UserCode>true</UserCode>
+      <id>8a994d70-26de-43e6-bc90-601b8efc66df</id>
+    </Compile>
+    <Compile Include="OLMProcessUSPSInternationalPriority.cs">
+      <BoundTo>97791c4b-ac76-45f5-98f4-3a81c29337dd</BoundTo>
+      <DependentUpon>OLMProcessUSPSInternationalPriority.rxrec</DependentUpon>
+      <RecorderCode>true</RecorderCode>
+      <id>21ddf819-7529-446d-82e2-4e3e3be4f9b8</id>
+    </Compile>
+    <Compile Include="OLMProcessUSPSInternationalPriority.UserCode.cs">
+      <BoundTo>97791c4b-ac76-45f5-98f4-3a81c29337dd</BoundTo>
+      <DependentUpon>OLMProcessUSPSInternationalPriority.rxrec</DependentUpon>
+      <UserCode>true</UserCode>
+      <id>4b7d0d19-8b88-4ab9-a953-b34ba3c83192</id>
+    </Compile>
+    <Compile Include="OLMProcessUSPSPriority.cs">
+      <BoundTo>d7bee37e-8aca-42f2-aa82-3510d6bd9272</BoundTo>
+      <DependentUpon>OLMProcessUSPSPriority.rxrec</DependentUpon>
+      <RecorderCode>true</RecorderCode>
+      <id>f4dc6918-628d-4a14-b840-db27f2e225c6</id>
+    </Compile>
+    <Compile Include="OLMProcessUSPSPriority.UserCode.cs">
+      <BoundTo>d7bee37e-8aca-42f2-aa82-3510d6bd9272</BoundTo>
+      <DependentUpon>OLMProcessUSPSPriority.rxrec</DependentUpon>
+      <UserCode>true</UserCode>
+      <id>80b4ea56-656c-43be-86f1-454f34ff7ebd</id>
     </Compile>
     <Compile Include="OpenExecutable.cs">
       <BoundTo>d3d8d8fd-c530-43c0-a281-9f28c7007997</BoundTo>
@@ -1179,6 +1347,42 @@
       <RepositoryCode>true</RepositoryCode>
       <id>305d9bf3-5856-4aa1-ad6d-cde684b9763e</id>
     </Compile>
+    <Compile Include="SwitchBatchGridToOrderLookup.cs">
+      <DependentUpon>SwitchBatchGridToOrderLookup.rxrec</DependentUpon>
+      <id>7e6531c0-949f-4fa2-a212-d67b2acac4f6</id>
+      <BoundTo>6492bd71-f293-4522-b21c-9c0694e31320</BoundTo>
+      <RecorderCode>true</RecorderCode>
+    </Compile>
+    <Compile Include="SwitchBatchGridToOrderLookup.UserCode.cs">
+      <DependentUpon>SwitchBatchGridToOrderLookup.rxrec</DependentUpon>
+      <id>fbb01e73-f45e-4bc3-9d09-6759c3ff20be</id>
+      <BoundTo>6492bd71-f293-4522-b21c-9c0694e31320</BoundTo>
+      <UserCode>true</UserCode>
+    </Compile>
+    <Compile Include="SwitchOrderLookupToBatchGrid.cs">
+      <DependentUpon>SwitchOrderLookupToBatchGrid.rxrec</DependentUpon>
+      <id>e3442bb1-0c4b-4b25-96f4-8a1b3df41cb6</id>
+      <BoundTo>e17d6998-1fa1-47b1-a0a9-6e3ee8f7022c</BoundTo>
+      <RecorderCode>true</RecorderCode>
+    </Compile>
+    <Compile Include="SwitchOrderLookupToBatchGrid.UserCode.cs">
+      <DependentUpon>SwitchOrderLookupToBatchGrid.rxrec</DependentUpon>
+      <id>1fa88af6-b1f8-4257-b7e9-ea26294976cc</id>
+      <BoundTo>e17d6998-1fa1-47b1-a0a9-6e3ee8f7022c</BoundTo>
+      <UserCode>true</UserCode>
+    </Compile>
+    <Compile Include="OLMProcessUPSInternational.cs">
+      <BoundTo>3b6ea0d1-3a75-4430-bec1-d1f7e8b7fff2</BoundTo>
+      <DependentUpon>OLMProcessUPSInternational.rxrec</DependentUpon>
+      <RecorderCode>true</RecorderCode>
+      <id>8bf6e921-40ef-4d27-95d3-cc244f1fb290</id>
+    </Compile>
+    <Compile Include="OLMProcessUPSInternational.UserCode.cs">
+      <BoundTo>3b6ea0d1-3a75-4430-bec1-d1f7e8b7fff2</BoundTo>
+      <DependentUpon>OLMProcessUPSInternational.rxrec</DependentUpon>
+      <UserCode>true</UserCode>
+      <id>5fd81991-64fa-4ed4-955b-a3b35d1372da</id>
+    </Compile>
     <Compile Include="UPSTestServerSetup.cs">
       <BoundTo>06a6246d-01ac-430d-96ec-902a03121b25</BoundTo>
       <DependentUpon>UPSTestServerSetup.rxrec</DependentUpon>
@@ -1268,6 +1472,11 @@
     <None Include="BatchFile\SetDefaultPrinterMicrosoftPrintToPDF.bat">
       <id>b130d598-8d1b-4b32-baca-9e6699edd766</id>
     </None>
+    <None Include="ChangeCurrentShipment_ProviderUSPSExpress1.rxrec">
+      <BoundTo>cc314fb4-f6c2-41c4-91da-4828b4fd7dee</BoundTo>
+      <id>c039c944-d057-4aa1-9aff-fe073ee3193c</id>
+      <recordtableid>f20599ee-ff69-4d67-aba1-b081da870a75</recordtableid>
+    </None>
     <None Include="CheckShipWorksVersion.rxrec">
       <BoundTo>cc314fb4-f6c2-41c4-91da-4828b4fd7dee</BoundTo>
       <id>8b5363c2-b4a5-40c2-89e6-6efd31173e12</id>
@@ -1277,6 +1486,11 @@
       <BoundTo>cc314fb4-f6c2-41c4-91da-4828b4fd7dee</BoundTo>
       <id>0cb7441f-2c75-4c22-924b-465de65760a3</id>
       <recordtableid>93e031b6-a539-4f4b-8dd5-892ef64181fb</recordtableid>
+    </None>
+    <None Include="CloseShipWorks.rxrec">
+      <BoundTo>cc314fb4-f6c2-41c4-91da-4828b4fd7dee</BoundTo>
+      <id>3b6dfba2-3d10-472c-98ca-0b7932df87b8</id>
+      <recordtableid>f9fc103a-6690-4bba-a0d1-217039d00993</recordtableid>
     </None>
     <None Include="CreateAnOrder.rxrec">
       <BoundTo>cc314fb4-f6c2-41c4-91da-4828b4fd7dee</BoundTo>
@@ -1391,6 +1605,11 @@
     <None Include="Ionic.Zip.xml">
       <id>e22ebe65-7b6e-46e9-a925-13d969c13327</id>
     </None>
+    <None Include="LookupAnOrder.rxrec">
+      <id>c69fd5a0-13e1-4e83-85f9-13c64405f87b</id>
+      <BoundTo>cc314fb4-f6c2-41c4-91da-4828b4fd7dee</BoundTo>
+      <recordtableid>7bb9e37a-0c6b-4a4d-98f7-d2aa040ae9d9</recordtableid>
+    </None>
     <None Include="ModuleChecker.rxrec">
       <BoundTo>cc314fb4-f6c2-41c4-91da-4828b4fd7dee</BoundTo>
       <id>be5c41cb-0b98-43e4-81cb-8fd048e0e39d</id>
@@ -1400,6 +1619,61 @@
       <BoundTo>cc314fb4-f6c2-41c4-91da-4828b4fd7dee</BoundTo>
       <id>720778dd-09c3-42cd-835f-6e604d3b41a4</id>
       <recordtableid>bf6c50ea-63d8-479e-90d1-6ec377b57cf7</recordtableid>
+    </None>
+    <None Include="OLMProcessFedExDomesticGround.rxrec">
+      <BoundTo>cc314fb4-f6c2-41c4-91da-4828b4fd7dee</BoundTo>
+      <id>a9f64a61-85d7-4eb1-bd89-f10ac2887541</id>
+      <recordtableid>356753fc-fe63-4d20-bf45-132510976a9c</recordtableid>
+    </None>
+    <None Include="OLMProcessFedExInternational.rxrec">
+      <BoundTo>cc314fb4-f6c2-41c4-91da-4828b4fd7dee</BoundTo>
+      <id>d8026bdf-dae6-40ab-8eeb-7a560ec5df35</id>
+      <recordtableid>87f22244-d5df-44e7-af32-11fea698f1f9</recordtableid>
+    </None>
+    <None Include="OLMProcessShipmentFedExDomesticGround.rxrec">
+      <BoundTo>cc314fb4-f6c2-41c4-91da-4828b4fd7dee</BoundTo>
+      <id>cef8f204-243b-4074-bb56-fd01a2d738fe</id>
+      <recordtableid>e096c6f4-2e20-44ec-b5e3-adb2b58f3e1f</recordtableid>
+    </None>
+    <None Include="OLMProcessShipmentFedExInternational.rxrec">
+      <BoundTo>cc314fb4-f6c2-41c4-91da-4828b4fd7dee</BoundTo>
+      <id>bbd96c63-e964-4384-8169-78b3d63dc8de</id>
+      <recordtableid>e27a4195-b534-4be6-b39d-d0b854d2597a</recordtableid>
+    </None>
+    <None Include="OLMProcessShipmentUPSDomesticGround.rxrec">
+      <BoundTo>cc314fb4-f6c2-41c4-91da-4828b4fd7dee</BoundTo>
+      <id>64402740-4c4c-4e49-8b8d-6532f6d7a72c</id>
+      <recordtableid>22998c35-06c4-4042-a8ef-503a180d855f</recordtableid>
+    </None>
+    <None Include="OLMProcessShipmentUPSInternational.rxrec">
+      <BoundTo>cc314fb4-f6c2-41c4-91da-4828b4fd7dee</BoundTo>
+      <id>3aaf32b6-2edd-4e1d-a7d8-4a1c409f8e65</id>
+      <recordtableid>c083640a-c0cb-4f7f-bfcb-bb41a1cf6a41</recordtableid>
+    </None>
+    <None Include="OLMProcessShipmentUSPSDomestic.rxrec">
+      <BoundTo>cc314fb4-f6c2-41c4-91da-4828b4fd7dee</BoundTo>
+      <id>eeeb74dc-b6a4-484f-acda-cab45dafc853</id>
+      <recordtableid>fc464890-1cbc-451a-a606-73d5b084606d</recordtableid>
+    </None>
+    <None Include="OLMProcessShipmentUSPSInternational.rxrec">
+      <BoundTo>cc314fb4-f6c2-41c4-91da-4828b4fd7dee</BoundTo>
+      <id>d6a40b4e-f1b0-4362-9cfc-900dd8df1b0b</id>
+      <recordtableid>ccfe2d1f-0279-4d0c-af5a-3ccbe97a631f</recordtableid>
+    </None>
+    <None Include="OLMProcessUPSDomesticGround.rxrec">
+      <BoundTo>cc314fb4-f6c2-41c4-91da-4828b4fd7dee</BoundTo>
+      <id>48a6ef95-55ef-40d5-87ac-ac2c596e7021</id>
+      <recordtableid>ded9d420-276c-4a3f-9a75-4931a4d2e065</recordtableid>
+    </None>
+    <None Include="OLMProcessUSPSInternationalPriority.rxrec">
+      <BoundTo>cc314fb4-f6c2-41c4-91da-4828b4fd7dee</BoundTo>
+      <id>97791c4b-ac76-45f5-98f4-3a81c29337dd</id>
+      <recordtableid>c1543ca6-d719-45d4-a387-5b6ef72adf86</recordtableid>
+    </None>
+    <None Include="OLMProcessUSPSPriority.rxrec">
+      <BoundTo>cc314fb4-f6c2-41c4-91da-4828b4fd7dee</BoundTo>
+      <id>d7bee37e-8aca-42f2-aa82-3510d6bd9272</id>
+      <recordtableid>c4583a87-98c8-45ba-8ca6-872d2757f62c</recordtableid>
     </None>
     <None Include="OpenExecutable.rxrec">
       <BoundTo>cc314fb4-f6c2-41c4-91da-4828b4fd7dee</BoundTo>
@@ -1436,9 +1710,9 @@
       <recordtableid>a733499e-aa87-4f80-abd4-cb052287241a</recordtableid>
     </None>
     <None Include="ProcessFedExDomesticGround.rxrec">
-      <BoundTo>cc314fb4-f6c2-41c4-91da-4828b4fd7dee</BoundTo>
       <id>74382204-7ab8-4df1-8d9f-cbbd8ba2254f</id>
       <recordtableid>109f44eb-8157-41cc-9d69-6160d3168314</recordtableid>
+      <BoundTo>cc314fb4-f6c2-41c4-91da-4828b4fd7dee</BoundTo>
     </None>
     <None Include="ProcessFedExDomesticHomeDelivery.rxrec">
       <BoundTo>cc314fb4-f6c2-41c4-91da-4828b4fd7dee</BoundTo>
@@ -1486,9 +1760,9 @@
       <recordtableid>6cb750f1-dbc8-4486-8d2c-1d5568769456</recordtableid>
     </None>
     <None Include="ProcessUPSDomesticGround.rxrec">
-      <BoundTo>cc314fb4-f6c2-41c4-91da-4828b4fd7dee</BoundTo>
       <id>7735e487-249d-4298-acc0-b91ddb1e2158</id>
       <recordtableid>29d9a17b-3958-4e92-83fd-51e9ced26c19</recordtableid>
+      <BoundTo>cc314fb4-f6c2-41c4-91da-4828b4fd7dee</BoundTo>
     </None>
     <None Include="ProcessUPSDomesticMailInnovations.rxrec">
       <BoundTo>cc314fb4-f6c2-41c4-91da-4828b4fd7dee</BoundTo>
@@ -1556,9 +1830,9 @@
       <recordtableid>a287e480-29f9-42dd-9fad-2e6d2bea6dd4</recordtableid>
     </None>
     <None Include="ProcessUSPSInternationalPriority.rxrec">
-      <BoundTo>cc314fb4-f6c2-41c4-91da-4828b4fd7dee</BoundTo>
       <id>4a2a3ad8-5a71-4350-b93f-e31868462243</id>
       <recordtableid>415b3cad-6f52-47fe-8977-dc89cf9e9c71</recordtableid>
+      <BoundTo>cc314fb4-f6c2-41c4-91da-4828b4fd7dee</BoundTo>
     </None>
     <None Include="ProcessUSPSPriority.rxrec">
       <id>9d057a83-03e5-4cdd-923c-29d159dafc3e</id>
@@ -1727,6 +2001,21 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <id>5b447ead-a491-49d2-8ef3-5f55e5646911</id>
     </Content>
+    <None Include="SwitchBatchGridToOrderLookup.rxrec">
+      <id>6492bd71-f293-4522-b21c-9c0694e31320</id>
+      <BoundTo>cc314fb4-f6c2-41c4-91da-4828b4fd7dee</BoundTo>
+      <recordtableid>9edd78a8-1b4b-4035-af81-d5ac4f2f0ab9</recordtableid>
+    </None>
+    <None Include="SwitchOrderLookupToBatchGrid.rxrec">
+      <id>e17d6998-1fa1-47b1-a0a9-6e3ee8f7022c</id>
+      <BoundTo>cc314fb4-f6c2-41c4-91da-4828b4fd7dee</BoundTo>
+      <recordtableid>6a2b9112-4f1c-4dc2-869b-25a7f6c434b8</recordtableid>
+    </None>
+    <None Include="OLMProcessUPSInternational.rxrec">
+      <BoundTo>cc314fb4-f6c2-41c4-91da-4828b4fd7dee</BoundTo>
+      <id>3b6ea0d1-3a75-4430-bec1-d1f7e8b7fff2</id>
+      <recordtableid>bff3f326-bbe1-4f4e-a392-10348cbfbf05</recordtableid>
+    </None>
     <None Include="UPSTestServerSetup.rxrec">
       <BoundTo>cc314fb4-f6c2-41c4-91da-4828b4fd7dee</BoundTo>
       <id>06a6246d-01ac-430d-96ec-902a03121b25</id>

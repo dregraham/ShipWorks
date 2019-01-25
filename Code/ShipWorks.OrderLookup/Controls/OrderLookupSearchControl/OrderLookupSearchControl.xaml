@@ -21,7 +21,9 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/ShipWorks.UI;component/Styles/BlueSteel/BlueSteelStyle.xaml" />
             </ResourceDictionary.MergedDictionaries>
-            <ui:BooleanToVisibilityConverter x:Key="BoolToVis" />
+            <ui:BooleanToVisibilityConverter x:Key="BoolToVis" Invert="False"/>
+            <ui:BooleanToVisibilityConverter x:Key="BoolToVisHidden" Invert="False" False="Hidden"/>
+            <ui:VisibleWhenEqualToParameterConverter x:Key="VisibleWhenNotEqualToParameter" Invert="true" FalseVisibility="Hidden"/>
 
             <Style TargetType="{x:Type TextBlock}">
                 <Setter Property="VerticalAlignment" Value="Center" />
@@ -32,37 +34,31 @@
             </Style>
         </ResourceDictionary>
     </UserControl.Resources>
+
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="auto" />
-            <RowDefinition Height="*" />
-        </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="*" />
-        </Grid.ColumnDefinitions>
-
-        <Grid
-            Grid.Row="0"
-            Grid.Column="0"
-            Margin="0,0,8,0">
+            <RowDefinition Height="auto" />
+        </Grid.RowDefinitions>        
+        <Grid>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="auto" />
-                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width=".2*" MaxWidth="140" />
+                <ColumnDefinition Width=".3*" />
+                <ColumnDefinition Width=".05*" />
+                <ColumnDefinition Width=".15*" />
+                <ColumnDefinition Width=".3*" />
             </Grid.ColumnDefinitions>
-            <TextBlock
-                Grid.Row="0"
-                Grid.Column="0"
-                Margin="0,0,10,0"
-                FontSize="20"
-                FontWeight="Bold"
-                Foreground="Black"
-                Text="Order Number" />
+            <TextBlock Grid.Column="0"
+                       FontSize="20"
+                       FontWeight="Bold"
+                       Foreground="Black"
+                       Text="Order Number" 
+                       TextTrimming="CharacterEllipsis" 
+                       HorizontalAlignment="Left"/>
 
-            <UserControl Grid.Column="1">
-                <Border
-                    HorizontalAlignment="Stretch"
+            <UserControl Grid.Column="1" 
+                         HorizontalAlignment="Stretch">
+                <Border                    
                     BorderBrush="{StaticResource BorderColor}"
                     BorderThickness="1"
                     CornerRadius="1">
@@ -76,7 +72,6 @@
                             x:Name="SearchBox"
                             Grid.Column="0"
                             Height="32"
-                            MinWidth="100"
                             VerticalContentAlignment="Center"
                             ui:Focus.WhenMessageReceived="{x:Type sw:FocusQuickSearchMessage}"
                             Background="{StaticResource InputControlBackgroundGradient}"
@@ -88,13 +83,12 @@
                                 <KeyBinding Key="Enter" Command="{Binding Path=GetOrderCommand}" />
                             </TextBox.InputBindings>
                         </TextBox>
-                        <StackPanel Grid.Column="1" Orientation="Vertical">
-                            <Separator
+                        <Separator
+                                Grid.Column="1" 
                                 Height="32"
                                 Margin="0"
                                 Background="{StaticResource BorderColor}"
                                 Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" />
-                        </StackPanel>
                         <Button
                             Grid.Column="2"
                             Background="#e6e6e6"
@@ -124,24 +118,16 @@
                     </Grid>
                 </Border>
             </UserControl>
-        </Grid>
 
-        <Grid
-            Grid.Row="0"
-            Grid.Column="1"
-            Margin="3,0,10,0">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="auto" />
-                <ColumnDefinition Width="*" />
-            </Grid.ColumnDefinitions>
             <Button
-                Grid.Column="0"
-                Margin="0,0,10,0"
-                HorizontalAlignment="Left"
+                Width="auto"
+                Margin="10 0 0 0"
+                Grid.Column="2"
                 VerticalAlignment="Center"
                 Command="{Binding ResetCommand}"
                 Content="Clear"
                 FontSize="14"
+                HorizontalAlignment="Left"
                 Style="{StaticResource Link}">
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="Click">
@@ -150,50 +136,37 @@
                 </i:Interaction.Triggers>
             </Button>
 
-            <Grid Grid.Column="1" HorizontalAlignment="Right">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*" />
-                </Grid.ColumnDefinitions>
+            <TextBlock
+                Margin="10 0 10 0"
+                Grid.Column="3"
+                HorizontalAlignment="Right"
+                FontWeight="Bold"
+                Text="{Binding ShipmentModel.TotalCost, StringFormat='Total Cost: {0:c}', Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
 
-                <TextBlock
-                    Grid.Column="0"
-                    MinWidth="75"
-                    HorizontalAlignment="Right"
-                    FontWeight="Bold"
-                    Text="{Binding ShipmentModel.TotalCost, StringFormat='Total Cost: {0:c}', Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
+                <TextBlock.Visibility>
+                    <Binding Converter="{StaticResource VisibleWhenNotEqualToParameter}" Path="ShipmentModel.TotalCost">
+                        <Binding.ConverterParameter>
+                            <system:Decimal>0</system:Decimal>
+                        </Binding.ConverterParameter>
+                    </Binding>
+                </TextBlock.Visibility>
+            </TextBlock>
 
-                    <TextBlock.Visibility>
-                        <Binding Converter="{StaticResource VisibleWhenNotEqualToParameter}" Path="ShipmentModel.TotalCost">
-                            <Binding.ConverterParameter>
-                                <system:Decimal>0</system:Decimal>
-                            </Binding.ConverterParameter>
-                        </Binding>
-                    </TextBlock.Visibility>
-                </TextBlock>
-            </Grid>
-        </Grid>
-        <Grid
-            Grid.Row="0"
-            Grid.Column="2"
-            Margin="9,0,0,0">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="auto" />
-                <ColumnDefinition Width="*" />
-            </Grid.ColumnDefinitions>
-            <Button
-                HorizontalAlignment="Left"
-                Command="{Binding CreateLabelCommand}"
-                Content="Create Label"
-                Style="{StaticResource LargePrimaryButton}"
-                Visibility="{Binding ShowCreateLabel, Converter={StaticResource BoolToVis}}" />
-        </Grid>
-
+            <Button Grid.Row="0"
+                    Grid.Column="4"
+                    Width="auto"
+                    Command="{Binding CreateLabelCommand}"
+                    Content="Create Label"
+                    Style="{StaticResource LargePrimaryButton}"
+                    Visibility="{Binding ShowCreateLabel, Converter={StaticResource BoolToVisHidden}}" />
+        </Grid>        
+        <!-- Search Error Message -->
         <TextBlock
             Grid.Row="1"
             Grid.Column="0"
             Grid.ColumnSpan="3"
             Margin="0,8,0,0"
             Text="{Binding SearchErrorMessage}"
-            Visibility="{Binding SearchError, Converter={StaticResource BoolToVis}}" />
+            Visibility="{Binding SearchError, Converter={StaticResource BoolToVis}}" />        
     </Grid>
 </UserControl>
