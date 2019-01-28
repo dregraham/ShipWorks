@@ -16,7 +16,7 @@ namespace ShipWorks.UI.Dialogs.AboutShipWorks
         /// </summary>
         public AboutShipWorksViewModel()
         {
-            ShipWorksVersion = Assembly.GetExecutingAssembly().GetName().Version.ToString(4);
+            ShipWorksVersion = typeof(AboutShipWorksViewModel).Assembly.GetName().Version.ToString(4);
             BuildDate = AssemblyDateAttribute.Read(Assembly.GetEntryAssembly()).ToLocalTime().ToLongDateString();
             SupportWebsite = "support.shipworks.com";
             SupportWebsiteUri = new Uri($"http://{SupportWebsite}");
