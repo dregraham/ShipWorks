@@ -8,6 +8,7 @@ using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
+using System.Reactive;
 using System.Reactive.Disposables;
 using System.Text;
 using System.Threading;
@@ -92,6 +93,7 @@ using ShipWorks.Stores.Orders.Archive;
 using ShipWorks.Stores.Orders.Split;
 using ShipWorks.Templates;
 using ShipWorks.Templates.Controls;
+using ShipWorks.Templates.Controls.DefaultPickListTemplate;
 using ShipWorks.Templates.Distribution;
 using ShipWorks.Templates.Emailing;
 using ShipWorks.Templates.Management;
@@ -2446,7 +2448,7 @@ namespace ShipWorks
                     return;
                 }
 
-                using (DatabaseBackupDlg dlg = new DatabaseBackupDlg(UserSession.User))
+                using (DatabaseBackupDlg dlg = new DatabaseBackupDlg(UserSession.User, new TelemetricResult<Unit>("Database.Backup")))
                 {
                     dlg.ShowDialog(this);
                 }
@@ -2573,9 +2575,10 @@ namespace ShipWorks
         /// </summary>
         private void OnAboutShipWorks(object sender, EventArgs e)
         {
-            using (ShipWorksAboutDlg dlg = new ShipWorksAboutDlg())
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
-                dlg.ShowDialog(this);
+                IAboutShipWorksDialog aboutDlg = lifetimeScope.Resolve<IAboutShipWorksDialog>();
+                aboutDlg.ShowDialog();
             }
         }
 
@@ -2584,11 +2587,6 @@ namespace ShipWorks
         /// </summary>
         private void OnRequestHelp(object sender, EventArgs e)
         {
-            /*using (SubmitHelpRequestDlg dlg = new SubmitHelpRequestDlg())
-            {
-                dlg.ShowDialog(this);
-            }*/
-
             WebHelper.OpenUrl("http://www.interapptive.com/company/contact.html", this);
         }
 
@@ -3477,7 +3475,7 @@ namespace ShipWorks
             {
                 if (dlg.ShowDialog(this) == DialogResult.OK)
                 {
-                    Messenger.Current.Send(new OrderLookupSearchMessage(this, dlg.OrderID.ToString()));
+                    Messenger.Current.Send(new OrderLookupSearchMessage(this, dlg.OrderNmberComplete));
                 }
             }
         }
@@ -4465,7 +4463,7 @@ namespace ShipWorks
         /// <summary>
         /// Start the printing or previewing of the given print job
         /// </summary>
-        private void StartPrintJob(PrintJob job, PrintAction action)
+        public void StartPrintJob(IPrintJob job, PrintAction action)
         {
             // Show the progress window
             ProgressDlg progressDlg = new ProgressDlg(job.ProgressProvider);
@@ -4910,6 +4908,21 @@ namespace ShipWorks
                 {
                     MessageHelper.ShowError(this, "There was an error opening a file.\n\n" + ex.Message);
                 }
+            }
+        }
+
+        /// <summary>
+        /// Action when the user clicks the print pick list button
+        /// </summary>
+        private void OnPrintPickList(object sender, EventArgs e)
+        {
+            IEnumerable<long> selectedOrderIDs = gridControl.Selection.OrderedKeys;
+
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+            {
+                IPickListPrintingService pickListPrintingService =
+                    lifetimeScope.Resolve<IPickListPrintingService>();
+                pickListPrintingService.PrintPickList(selectedOrderIDs);
             }
         }
 

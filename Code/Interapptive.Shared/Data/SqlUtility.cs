@@ -3,6 +3,7 @@ using System.Data;
 using System.Data.Common;
 using System.Data.SqlClient;
 using System.IO;
+using System.Reactive;
 using System.Text;
 using System.Threading;
 using Interapptive.Shared.Utility;
@@ -377,6 +378,111 @@ namespace Interapptive.Shared.Data
             deleteCmd.ExecuteNonQuery();
 
             truncateWithDelete = true;
+        }
+
+        /// <summary>
+        /// Update telemetry with information about the sql server.
+        /// </summary>
+        public static void RecordDatabaseTelemetry(DbConnection con, TelemetricResult<Unit> databaseUpdateResult)
+        {
+            int? hostCount = SqlUtility.GetConectedHostCount(con);
+            databaseUpdateResult.AddProperty("ConnectedHosts", hostCount?.ToString() ?? "unknown");
+
+            GetUsedAndFreeSpace(con, databaseUpdateResult);
+            GetConnectionProperties(con, databaseUpdateResult);
+        }
+        
+        /// <summary>
+        /// Gets the number of hosts connected to the current database
+        /// </summary>
+        private static int? GetConectedHostCount(DbConnection con)
+        {
+            int? hostCount = null;
+            string commandText = ResourceUtility.ReadString("Interapptive.Shared.Resources.DistinctUserCount.sql");
+
+            try
+            {
+                hostCount = (int) DbCommandProvider.ExecuteScalar(con, commandText);
+            }
+            catch(SqlException ex)
+            {
+                log.Error("Error getting ConnectedHostCount", ex);
+            }
+
+            return hostCount;
+        }
+
+        /// <summary>
+        /// Gets two values: (used space, free space)
+        /// </summary>
+        private static void GetConnectionProperties(DbConnection con, TelemetricResult<Unit> databaseUpdateResult)
+        {
+            string commandText = ResourceUtility.ReadString("Interapptive.Shared.Resources.ConnectionProperties.sql");
+
+            try
+            {
+                using (DbDataReader dbReader = DbCommandProvider.ExecuteReader(con, commandText))
+                {
+                    dbReader.Read();
+
+                    databaseUpdateResult.AddProperty($"NetTransport", dbReader["net_transport"].ToString());
+                    databaseUpdateResult.AddProperty($"ProtocolType", dbReader["protocol_type"].ToString());
+                    databaseUpdateResult.AddProperty($"AuthScheme", dbReader["auth_scheme"].ToString());
+                    databaseUpdateResult.AddProperty($"LocalNetAddress", dbReader["local_net_address"].ToString());
+                    databaseUpdateResult.AddProperty($"LocalTcpPort", dbReader["local_tcp_port"].ToString());
+                    databaseUpdateResult.AddProperty($"ClientNetAddress", dbReader["client_net_address"].ToString());
+                }
+            }
+            catch (SqlException ex)
+            {
+                log.Error("Error getting connection properties", ex);
+            }
+        }
+
+        /// <summary>
+        /// Gets two values: (used space, free space)
+        /// </summary>
+        private static void GetUsedAndFreeSpace(DbConnection con, TelemetricResult<Unit> databaseUpdateResult)
+        {
+            string commandText = ResourceUtility.ReadString("Interapptive.Shared.Resources.FreeSpace.sql");
+
+            try
+            {
+                int fileIndex = 0;
+                using (DbDataReader dbReader = DbCommandProvider.ExecuteReader(con, commandText))
+                {
+                    while (dbReader.Read())
+                    {
+                        string filePath = (string) dbReader[0];
+
+                        databaseUpdateResult.AddProperty($"UsedSpace.{fileIndex}", dbReader[1].ToString());
+                        databaseUpdateResult.AddProperty($"FreeSpace.{fileIndex}", dbReader[2].ToString());
+                        databaseUpdateResult.AddProperty($"FilePath.{fileIndex}", filePath);
+                        databaseUpdateResult.AddProperty($"IsUnc.{fileIndex}", IsUnc(filePath));
+
+                        fileIndex++;
+                    }
+                }
+            }
+            catch (SqlException ex)
+            {
+                log.Error("Error getting GetUsedAndFreeSpace", ex);
+            }
+        }
+
+        /// <summary>
+        /// Returns "True", "False", or "Unknown".
+        /// </summary>
+        private static string IsUnc(string filePath)
+        {
+            if(Uri.TryCreate(filePath, UriKind.RelativeOrAbsolute, out Uri uri))
+            {
+                return uri.IsUnc.ToString();
+            }
+            else
+            {
+                return "unknown";
+            }
         }
 
         /// <summary>

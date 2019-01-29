@@ -6,13 +6,16 @@ using System.Data.Common;
 using System.Data.SqlClient;
 using System.Diagnostics;
 using System.Linq;
+using System.Reactive;
 using System.Windows.Forms;
 using System.Xml.Linq;
 using Autofac;
 using Interapptive.Shared;
 using Interapptive.Shared.Data;
+using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Threading;
 using Interapptive.Shared.UI;
+using Interapptive.Shared.Utility;
 using Interapptive.Shared.Win32;
 using log4net;
 using ShipWorks.ApplicationCore;
@@ -58,6 +61,10 @@ namespace ShipWorks.Data.Administration
         // Indicates if the firewall has been opened'
         bool showFirewallPage = false;
         bool firewallOpened = false;
+
+        private bool backupAttempted = false;
+        private bool backupCompleted = false;
+        TelemetricResult<Unit> backupTelemetry = null;
 
         /// <summary>
         /// Open the upgrade window and returns true if the wizard completed with an OK result.
@@ -384,8 +391,10 @@ namespace ShipWorks.Data.Administration
         /// </summary>
         private void OnBackup(object sender, EventArgs e)
         {
-            using (DatabaseBackupDlg dlg = new DatabaseBackupDlg(userID3x))
+            backupTelemetry = new TelemetricResult<Unit>("Database.Backup");
+            using (DatabaseBackupDlg dlg = new DatabaseBackupDlg(userID3x, backupTelemetry))
             {
+                backupAttempted = true;
                 dlg.ShowDialog(this);
 
                 if (dlg.BackupCompleted)
@@ -408,6 +417,11 @@ namespace ShipWorks.Data.Administration
         {
             pictureBackupComplete.Visible = true;
             labelBackupComplete.Visible = true;
+
+            if (backupAttempted)
+            {
+                backupCompleted = true;
+            }
         }
 
         #endregion
@@ -684,24 +698,45 @@ namespace ShipWorks.Data.Administration
             progressDlg.Show(this);
 
             // Used for async invoke
-            MethodInvoker<IProgressProvider> invoker = new MethodInvoker<IProgressProvider>(AsyncUpdateDatabase);
+            MethodInvoker<IProgressProvider, TelemetricResult<Unit>> invoker = AsyncUpdateDatabase;
+
+            TelemetricResult<Unit> databaseUpdateResult = new TelemetricResult<Unit>("Database.Update");
+
+            using (DbConnection con = SqlSession.Current.OpenConnection())
+            {
+                SqlUtility.RecordDatabaseTelemetry(con, databaseUpdateResult);
+            }
 
             // Pass along user state
             Dictionary<string, object> userState = new Dictionary<string, object>();
             userState["invoker"] = invoker;
             userState["progressDlg"] = progressDlg;
+            userState["databaseUpdateResult"] = databaseUpdateResult;
 
             // Kick off the async upgrade process
-            invoker.BeginInvoke(progressDlg.ProgressProvider, new AsyncCallback(OnAsyncUpdateComplete), userState);
+            invoker.BeginInvoke(progressDlg.ProgressProvider, databaseUpdateResult, OnAsyncUpdateComplete, userState);
         }
 
         /// <summary>
         /// Method meant to be called from an async invoker to update the database in the background
         /// </summary>
-        private void AsyncUpdateDatabase(IProgressProvider progressProvider)
+        private void AsyncUpdateDatabase(IProgressProvider progressProvider, TelemetricResult<Unit> databaseUpdateResult)
         {
-            // Update to the latest v3 schema
-            SqlSchemaUpdater.UpdateDatabase(progressProvider, noSingleUserMode.Checked);
+            databaseUpdateResult.AddProperty("IsBackupAttempted", backupAttempted.ToString());
+            if (backupAttempted)
+            {
+                databaseUpdateResult.AddProperty("IsBackupSuccessful", backupCompleted.ToString());
+                if (backupTelemetry != null)
+                {
+                    backupTelemetry.CopyTo(databaseUpdateResult);
+                }
+            }
+
+            databaseUpdateResult.AddProperty("IsWindowsAuth", SqlSession.Current.Configuration.WindowsAuth.ToString());
+            databaseUpdateResult.AddProperty("IsServerMachine", SqlSession.Current.IsLocalServer().ToString());
+
+            databaseUpdateResult.RunTimedEvent(TelemetricEventType.SchemaUpdate,
+                () => SqlSchemaUpdater.UpdateDatabase(progressProvider, databaseUpdateResult, noSingleUserMode.Checked));
         }
 
         /// <summary>
@@ -716,8 +751,9 @@ namespace ShipWorks.Data.Administration
             }
 
             Dictionary<string, object> userState = (Dictionary<string, object>) result.AsyncState;
-            MethodInvoker<IProgressProvider> invoker = (MethodInvoker<IProgressProvider>) userState["invoker"];
+            MethodInvoker<IProgressProvider, TelemetricResult<Unit>> invoker = (MethodInvoker<IProgressProvider, TelemetricResult<Unit>>) userState["invoker"];
             ProgressDlg progressDlg = (ProgressDlg) userState["progressDlg"];
+            TelemetricResult<Unit> databaseUpdateResult = (TelemetricResult<Unit>) userState["databaseUpdateResult"];
 
             try
             {
@@ -747,23 +783,55 @@ namespace ShipWorks.Data.Administration
             }
             catch (Exception ex)
             {
+                ExtractErrorDataForTelemetry(databaseUpdateResult, ex);
                 if (ex is SqlScriptException || ex is SqlException)
                 {
-                    log.ErrorFormat("An error occurred during upgrade.", ex);
-                    progressDlg.ProgressProvider.Terminate(ex);
-
-                    MessageHelper.ShowError(progressDlg, string.Format("An error occurred: {0}", ex.Message));
-                    progressDlg.CloseForced();
-
-                    panelUpgradingDatabase.Visible = false;
-                    NextEnabled = true;
-                    BackEnabled = true;
-                    CanCancel = true;
+                    HandleSqlException(progressDlg, ex);
                 }
                 else
                 {
                     throw;
                 }
+            }
+            finally
+            {
+                using (ITrackedEvent telementryEvent = new TrackedEvent("Database.Update"))
+                {
+                    databaseUpdateResult.WriteTo(telementryEvent);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Handle a SqlException
+        /// </summary>
+        private void HandleSqlException(ProgressDlg progressDlg, Exception ex)
+        {
+            log.ErrorFormat("An error occurred during upgrade.", ex);
+            progressDlg.ProgressProvider.Terminate(ex);
+
+            MessageHelper.ShowError(progressDlg, string.Format("An error occurred: {0}", ex.Message));
+            progressDlg.CloseForced();
+
+            panelUpgradingDatabase.Visible = false;
+            NextEnabled = true;
+            BackEnabled = true;
+            CanCancel = true;
+        }
+
+        /// <summary>
+        /// Extract data from the exception for telemetry
+        /// </summary>
+        private static void ExtractErrorDataForTelemetry(TelemetricResult<Unit> telemetricResult, Exception ex)
+        {
+            // if the exception is a SqlScriptException the message contains info about which
+            // sql script caused the exception
+            telemetricResult.AddProperty("ExceptionMessage", ex.Message);
+            telemetricResult.AddProperty("ExceptionType", ex.GetType().ToString());
+
+            if (ex is SqlException sqlException)
+            {
+                telemetricResult.AddProperty("ErrorCode", sqlException.ErrorCode.ToString());
             }
         }
 
