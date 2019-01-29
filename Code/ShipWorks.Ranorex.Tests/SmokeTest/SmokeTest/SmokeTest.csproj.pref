@@ -4,9 +4,9 @@
   </Array>
   <Array name="bookmarks" />
   <Array name="files">
+    <Element value="SendInfoEmail.UserCode.cs" />
     <Element value="SmokeTest.rxtst" />
     <Element value="SendInfoEmail.rxrec" />
-    <Element value="SendInfoEmail.UserCode.cs" />
   </Array>
   <Properties name="projectSavedData">
     <Properties name="customTool">

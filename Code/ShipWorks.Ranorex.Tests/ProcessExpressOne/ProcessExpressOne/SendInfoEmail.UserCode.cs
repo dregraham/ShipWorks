@@ -44,7 +44,7 @@ namespace ProcessExpressOne
             
             
             
-            if (Environment.MachineName != "V-QA-AVG-CUSTOM" && /*Environment.MachineName != "V-QA-BEEFCAKE1" &&*/ Environment.MachineName != "KGICONA-4WX3JH2" && Environment.MachineName != "BERGER-PC" && Environment.MachineName != "MADKE-PC" && Environment.MachineName != "JEMAN-PC")
+            if (Environment.MachineName != "V-QA-AVG-CUSTOM" && Environment.MachineName != "V-QA-BEEFCAKE1" && Environment.MachineName != "KGICONA-4WX3JH2" && Environment.MachineName != "BERGER-PC" && Environment.MachineName != "MADKE-PC" && Environment.MachineName != "JEMAN-PC")
                 
 
             
@@ -91,8 +91,8 @@ namespace ProcessExpressOne
                 SmtpClient SmtpServer = new SmtpClient("smtp.gmail.com");
 
                 mail.From = new MailAddress("ShipWorksQA@gmail.com");
-                /*mail.To.Add("k.gicona@shipworks.com");
-                mail.To.Add("b.berger@shipworks.com");*/
+                mail.To.Add("k.gicona@shipworks.com");
+                mail.To.Add("b.berger@shipworks.com");
                 mail.To.Add("s.madke@shipworks.com");
                 mail.Subject = "Smoke Test 2 of 2 (Process Express One and Express One Endicia Successful)";
                 mail.Body = "The smoketest was ran on: " + Environment.MachineName + ". " + System.Environment.NewLine
