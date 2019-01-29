@@ -15,13 +15,6 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor.CoreExtensions.Filters
         /// <summary>
         /// Generate the filter SQL
         /// </summary>
-        public override string GenerateSql(SqlGenerationContext context)
-        {
-            // First we have to get from OrderItem -> ChannelAdvisorOrderItem
-            using (SqlGenerationScope scope = context.PushScope(OrderItemFields.OrderItemID, ChannelAdvisorOrderItemFields.OrderItemID, SqlGenerationScopeType.AnyChild))
-            {
-                return scope.Adorn(GenerateSql(context.GetColumnReference(ChannelAdvisorOrderItemFields.MPN), context));
-            }
-        }
+        public override string GenerateSql(SqlGenerationContext context) => GenerateSql(context.GetColumnReference(OrderItemFields.MPN), context);
     }
 }
