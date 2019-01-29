@@ -38,20 +38,15 @@ namespace ShipWorks.ApplicationCore.CommandLineOptions
             try
             {
                 SqlSession.Initialize();
-                using (DbConnection con = SqlSession.Current.OpenConnection())
-                {
-                    SqlUtility.RecordDatabaseTelemetry(con, databaseUpdateResult);
-                }
 
-                databaseUpdateResult.AddProperty("IsWindowsAuth", SqlSession.Current.Configuration.WindowsAuth.ToString());
-                databaseUpdateResult.AddProperty("IsServerMachine", SqlSession.Current.IsLocalServer().ToString());
+                DatabaseUpgradeTelemetry.RecordDatabaseTelemetry(databaseUpdateResult);
 
                 databaseUpdateResult.RunTimedEvent(TelemetricEventType.SchemaUpdate,
                     () => SqlSchemaUpdater.UpdateDatabase(new ProgressProvider(), databaseUpdateResult));
             }
             catch (SqlException ex)
             {
-                ExtractErrorDataForTelemetry(databaseUpdateResult, ex);
+                DatabaseUpgradeTelemetry.ExtractErrorDataForTelemetry(databaseUpdateResult, ex);
                 log.Error("Failed to upgrade database schema", ex);
                 Environment.ExitCode = ex.ErrorCode;
             }
@@ -64,22 +59,6 @@ namespace ShipWorks.ApplicationCore.CommandLineOptions
             }
 
             return Task.CompletedTask;
-        }
-
-        /// <summary>
-        /// Extract data from the exception for telemetry
-        /// </summary>
-        private static void ExtractErrorDataForTelemetry(TelemetricResult<Unit> telemetricResult, Exception ex)
-        {
-            // if the exception is a SqlScriptException the message contains info about which
-            // sql script caused the exception
-            telemetricResult.AddProperty("ExceptionMessage", ex.Message);
-            telemetricResult.AddProperty("ExceptionType", ex.GetType().ToString());
-
-            if (ex is SqlException sqlException)
-            {
-                telemetricResult.AddProperty("ErrorCode", sqlException.ErrorCode.ToString());
-            }
         }
     }
 }
