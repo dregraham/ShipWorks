@@ -33,7 +33,7 @@ namespace ShipWorks.ApplicationCore.CommandLineOptions
         public Task Execute(List<string> args)
         {
             TelemetricResult<Unit> databaseUpdateResult = new TelemetricResult<Unit>("Database.Update");
-            databaseUpdateResult.AddProperty("Mode", "UI");
+            databaseUpdateResult.AddProperty("Mode", "CommandLine");
 
             try
             {

@@ -701,6 +701,7 @@ namespace ShipWorks.Data.Administration
             MethodInvoker<IProgressProvider, TelemetricResult<Unit>> invoker = AsyncUpdateDatabase;
 
             TelemetricResult<Unit> databaseUpdateResult = new TelemetricResult<Unit>("Database.Update");
+            databaseUpdateResult.AddProperty("Mode", "UI");
 
             using (DbConnection con = SqlSession.Current.OpenConnection())
             {
