@@ -20,33 +20,33 @@ using Ranorex.Core;
 using Ranorex.Core.Testing;
 using Ranorex.Core.Repository;
 
-namespace SmokeTest
+namespace ProcessExpressOne
 {
 #pragma warning disable 0436 //(CS0436) The type 'type' in 'assembly' conflicts with the imported type 'type2' in 'assembly'. Using the type defined in 'assembly'.
     /// <summary>
-    ///The ResetHostsFile recording.
+    ///The SendInfoEmail recording.
     /// </summary>
-    [TestModule("195f9e46-4670-4b43-8c35-ac85b8b47198", ModuleType.Recording, 1)]
-    public partial class ResetHostsFile : ITestModule
+    [TestModule("d55205cc-9f04-4494-8348-5eb36d3761aa", ModuleType.Recording, 1)]
+    public partial class SendInfoEmail : ITestModule
     {
         /// <summary>
         /// Holds an instance of the SmokeTestRepository repository.
         /// </summary>
         public static SmokeTestRepository repo = SmokeTestRepository.Instance;
 
-        static ResetHostsFile instance = new ResetHostsFile();
+        static SendInfoEmail instance = new SendInfoEmail();
 
         /// <summary>
         /// Constructs a new instance.
         /// </summary>
-        public ResetHostsFile()
+        public SendInfoEmail()
         {
         }
 
         /// <summary>
         /// Gets a static instance of this recording.
         /// </summary>
-        public static ResetHostsFile Instance
+        public static SendInfoEmail Instance
         {
             get { return instance; }
         }
@@ -79,7 +79,7 @@ namespace SmokeTest
 
             Init();
 
-            ResetHosts();
+            SendEmail();
             Delay.Milliseconds(0);
             
         }

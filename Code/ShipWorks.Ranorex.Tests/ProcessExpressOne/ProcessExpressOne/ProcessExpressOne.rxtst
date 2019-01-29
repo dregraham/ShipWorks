@@ -187,6 +187,10 @@ rxversion="8.1">
 			ref="e73842e9-2089-4f70-9671-52b29e00a448"
 			type="Recording">
 			</testmodule>
+			<teardown
+			id="3260a0eb-940a-4d93-8003-070b13a2548c"
+			name="teardown">
+			</teardown>
 			<testmodule
 			id="32bedd39-ddc3-4494-b37c-d429b84a2f64"
 			name="GetExpress1EndiciaDomesticShipmentRate"
@@ -414,6 +418,12 @@ rxversion="8.1">
 			reportwriteinterval="30000ms"
 			showinvisiblechars="True">
 			</testsuite>
+			<testmodule
+			id="90f9dfcd-994d-4be9-8d19-012e33be6a38"
+			name="SendInfoEmail"
+			ref="d55205cc-9f04-4494-8348-5eb36d3761aa"
+			type="Recording">
+			</testmodule>
 			<testmodule
 			id="971dc34d-11aa-48a3-b847-14d5da4f1e24"
 			name="ProcessUPSDomesticMultiPackageShipment"
@@ -663,6 +673,12 @@ rxversion="8.1">
 			id="ee98c17f-c266-42ac-82f7-7650b6c294d3"
 			name="ProcessVoidShipment_Validate_CloseShipOrders2"
 			ref="856a0902-986a-4383-8102-c02772188bfe"
+			type="Recording">
+			</testmodule>
+			<testmodule
+			id="ef760650-bbf6-4af9-8b72-93542b193e4c"
+			name="ResetHostsFile"
+			ref="daaf593b-e42f-405c-accd-8d2ef8b308dd"
 			type="Recording">
 			</testmodule>
 			<testmodule
@@ -1075,6 +1091,18 @@ rxversion="8.1">
 							</testmodule>
 						</smartfoldernode>
 					</testcase>
+					<teardown
+					id="3260a0eb-940a-4d93-8003-070b13a2548c"
+					name="teardown">
+						<testmodule
+						id="90f9dfcd-994d-4be9-8d19-012e33be6a38"
+						name="SendInfoEmail">
+						</testmodule>
+						<testmodule
+						id="ef760650-bbf6-4af9-8b72-93542b193e4c"
+						name="ResetHostsFile">
+						</testmodule>
+					</teardown>
 				</testcase>
 			</testsuite>
 		</childhierarchy>

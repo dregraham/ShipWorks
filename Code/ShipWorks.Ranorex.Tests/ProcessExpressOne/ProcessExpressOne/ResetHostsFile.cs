@@ -20,13 +20,13 @@ using Ranorex.Core;
 using Ranorex.Core.Testing;
 using Ranorex.Core.Repository;
 
-namespace SmokeTest
+namespace ProcessExpressOne
 {
 #pragma warning disable 0436 //(CS0436) The type 'type' in 'assembly' conflicts with the imported type 'type2' in 'assembly'. Using the type defined in 'assembly'.
     /// <summary>
     ///The ResetHostsFile recording.
     /// </summary>
-    [TestModule("195f9e46-4670-4b43-8c35-ac85b8b47198", ModuleType.Recording, 1)]
+    [TestModule("daaf593b-e42f-405c-accd-8d2ef8b308dd", ModuleType.Recording, 1)]
     public partial class ResetHostsFile : ITestModule
     {
         /// <summary>

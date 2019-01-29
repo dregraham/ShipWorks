@@ -140,6 +140,18 @@
       <BoundTo>be311635-46d2-467e-b2aa-11355287b425</BoundTo>
       <UserCode>true</UserCode>
     </Compile>
+    <Compile Include="CheckShipWorksVersion.cs">
+      <DependentUpon>CheckShipWorksVersion.rxrec</DependentUpon>
+      <id>e146323c-0797-4841-b77f-c2dfc6fec28c</id>
+      <BoundTo>07b6245d-f4ef-4cf0-94b1-b49319f46bbf</BoundTo>
+      <RecorderCode>true</RecorderCode>
+    </Compile>
+    <Compile Include="CheckShipWorksVersion.UserCode.cs">
+      <DependentUpon>CheckShipWorksVersion.rxrec</DependentUpon>
+      <id>51bdb488-7c4f-43f3-b606-269a8269b6c6</id>
+      <BoundTo>07b6245d-f4ef-4cf0-94b1-b49319f46bbf</BoundTo>
+      <UserCode>true</UserCode>
+    </Compile>
     <Compile Include="Class\FileName.cs">
       <id>cbc00e40-daf7-425a-ad7a-514a00438e0e</id>
     </Compile>
@@ -225,6 +237,30 @@
       <DependentUpon>EnableUPSMailInnovations.rxrec</DependentUpon>
       <id>543f0a6a-ee9f-425f-a332-c5d9681b2a3b</id>
       <BoundTo>a9579bef-f415-424f-a6cf-8c71052ff33a</BoundTo>
+      <UserCode>true</UserCode>
+    </Compile>
+    <Compile Include="GatherCurrentDateandTime.cs">
+      <DependentUpon>GatherCurrentDateandTime.rxrec</DependentUpon>
+      <id>2353d25d-052a-43e8-b576-45fb11686894</id>
+      <BoundTo>01ace15c-106b-4f54-b3ee-2e30d5ec03bc</BoundTo>
+      <RecorderCode>true</RecorderCode>
+    </Compile>
+    <Compile Include="GatherCurrentDateandTime.UserCode.cs">
+      <DependentUpon>GatherCurrentDateandTime.rxrec</DependentUpon>
+      <id>5f43320a-9946-434d-b5ab-034cbc9b2000</id>
+      <BoundTo>01ace15c-106b-4f54-b3ee-2e30d5ec03bc</BoundTo>
+      <UserCode>true</UserCode>
+    </Compile>
+    <Compile Include="GetComparisonReportDirectory.cs">
+      <DependentUpon>GetComparisonReportDirectory.rxrec</DependentUpon>
+      <id>ca47b245-e045-451d-a977-73f643af7059</id>
+      <BoundTo>3147950e-acb4-4bb9-b5c1-013568e93608</BoundTo>
+      <RecorderCode>true</RecorderCode>
+    </Compile>
+    <Compile Include="GetComparisonReportDirectory.UserCode.cs">
+      <DependentUpon>GetComparisonReportDirectory.rxrec</DependentUpon>
+      <id>c785d8ef-a35c-410f-b633-3abe29373530</id>
+      <BoundTo>3147950e-acb4-4bb9-b5c1-013568e93608</BoundTo>
       <UserCode>true</UserCode>
     </Compile>
     <Compile Include="GetExpress1DomesticShipmentRate.cs">
@@ -464,6 +500,30 @@
     <Compile Include="Program.cs">
       <id>fd8dba06-54dd-4a3d-8a9e-3bc76fb371fb</id>
     </Compile>
+    <Compile Include="ResetHostsFile.cs">
+      <DependentUpon>ResetHostsFile.rxrec</DependentUpon>
+      <id>578cb0e9-fca7-44bd-b1f7-913320463951</id>
+      <BoundTo>573bef2f-c36d-4101-b4a7-0394a0dba34d</BoundTo>
+      <RecorderCode>true</RecorderCode>
+    </Compile>
+    <Compile Include="ResetHostsFile.UserCode.cs">
+      <DependentUpon>ResetHostsFile.rxrec</DependentUpon>
+      <id>ad5ea560-479f-42ef-967d-a5daa3248148</id>
+      <BoundTo>573bef2f-c36d-4101-b4a7-0394a0dba34d</BoundTo>
+      <UserCode>true</UserCode>
+    </Compile>
+    <Compile Include="SendInfoEmail.cs">
+      <DependentUpon>SendInfoEmail.rxrec</DependentUpon>
+      <id>cad9cf70-5446-4b95-90a9-0daaec05f397</id>
+      <BoundTo>353f88f2-36ba-4d3b-a839-251ca524de05</BoundTo>
+      <RecorderCode>true</RecorderCode>
+    </Compile>
+    <Compile Include="SendInfoEmail.UserCode.cs">
+      <DependentUpon>SendInfoEmail.rxrec</DependentUpon>
+      <id>e119cab9-62d0-493b-9342-16ace3f599b1</id>
+      <BoundTo>353f88f2-36ba-4d3b-a839-251ca524de05</BoundTo>
+      <UserCode>true</UserCode>
+    </Compile>
     <Compile Include="SetDefaultPrinterEpson4640.cs">
       <DependentUpon>SetDefaultPrinterEpson4640.rxrec</DependentUpon>
       <id>31962cf0-eca8-4073-8209-47aed2c4535f</id>
@@ -584,6 +644,11 @@
       <BoundTo>1103489a-ab12-46a1-866e-051ea781690f</BoundTo>
       <recordtableid>2067a726-3773-4d5c-b69a-e76841b01211</recordtableid>
     </None>
+    <None Include="CheckShipWorksVersion.rxrec">
+      <id>07b6245d-f4ef-4cf0-94b1-b49319f46bbf</id>
+      <BoundTo>1103489a-ab12-46a1-866e-051ea781690f</BoundTo>
+      <recordtableid>4be2dfac-028a-497b-8425-7c193e2dfb06</recordtableid>
+    </None>
     <None Include="CloseShipOrdersDialog.rxrec">
       <id>a151ffe7-d547-43ba-bf91-023c57451d0a</id>
       <BoundTo>1103489a-ab12-46a1-866e-051ea781690f</BoundTo>
@@ -618,6 +683,16 @@
       <id>a9579bef-f415-424f-a6cf-8c71052ff33a</id>
       <BoundTo>1103489a-ab12-46a1-866e-051ea781690f</BoundTo>
       <recordtableid>f18b3d5a-64e0-4140-94c9-ab12cfa52b83</recordtableid>
+    </None>
+    <None Include="GatherCurrentDateandTime.rxrec">
+      <id>01ace15c-106b-4f54-b3ee-2e30d5ec03bc</id>
+      <BoundTo>1103489a-ab12-46a1-866e-051ea781690f</BoundTo>
+      <recordtableid>aaa990ea-d5ba-405d-a77c-146325e13e0f</recordtableid>
+    </None>
+    <None Include="GetComparisonReportDirectory.rxrec">
+      <id>3147950e-acb4-4bb9-b5c1-013568e93608</id>
+      <BoundTo>1103489a-ab12-46a1-866e-051ea781690f</BoundTo>
+      <recordtableid>32848785-67ee-47dc-ba82-b22da5eda84e</recordtableid>
     </None>
     <None Include="GetExpress1DomesticShipmentRate.rxrec">
       <id>d1ea21fb-bf64-49e9-9348-631b9d793fe6</id>
@@ -724,6 +799,16 @@
       <id>75774f82-ecd3-44c1-bb0f-3ef758d39a15</id>
       <BoundTo>1103489a-ab12-46a1-866e-051ea781690f</BoundTo>
       <recordtableid>856a0902-986a-4383-8102-c02772188bfe</recordtableid>
+    </None>
+    <None Include="ResetHostsFile.rxrec">
+      <id>573bef2f-c36d-4101-b4a7-0394a0dba34d</id>
+      <BoundTo>1103489a-ab12-46a1-866e-051ea781690f</BoundTo>
+      <recordtableid>daaf593b-e42f-405c-accd-8d2ef8b308dd</recordtableid>
+    </None>
+    <None Include="SendInfoEmail.rxrec">
+      <id>353f88f2-36ba-4d3b-a839-251ca524de05</id>
+      <BoundTo>1103489a-ab12-46a1-866e-051ea781690f</BoundTo>
+      <recordtableid>d55205cc-9f04-4494-8348-5eb36d3761aa</recordtableid>
     </None>
     <None Include="SetDefaultPrinterEpson4640.rxrec">
       <id>7dba07cb-cdec-4782-83eb-b17556f4e90f</id>

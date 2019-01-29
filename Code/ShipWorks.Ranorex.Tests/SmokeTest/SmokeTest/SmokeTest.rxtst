@@ -1260,6 +1260,7 @@ rxversion="8.1">
 			type="Recording">
 			</testmodule>
 			<testmodule
+			enabled="False"
 			id="b26bdcce-ee15-4e94-a977-75e3c21f1fe2"
 			name="ResetHostsFile"
 			ref="195f9e46-4670-4b43-8c35-ac85b8b47198"
