@@ -117,7 +117,7 @@ pipeline {
 					bat "copy /Y \"\\\\intfs01\\Development\\Tango\\ChromiumArtifacts\\renderer_63_x64.zip\" renderer_63_x64.zip"
 					bat """
 					ProcessExpressOne.exe ^
-					/runconfig:Complete ^
+					/runconfig:CompleteExpressOne ^
 					/param:InstallDir=${WORKSPACE_RANOREX}\\Artifacts\\Distribute\\ShipWorksSetup_test.exe ^
 					/param:Environment=${params.Environment} ^
 					/param:SQLServ=localhost\\ranorex ^
