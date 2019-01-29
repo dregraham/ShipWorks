@@ -94,7 +94,7 @@ namespace ProcessExpressOne
                 mail.To.Add("k.gicona@shipworks.com");
                 mail.To.Add("b.berger@shipworks.com");
                 mail.To.Add("s.madke@shipworks.com");
-                mail.Subject = "Smoke Test 2 of 2 (Process Express One and Express One Endicia Successful)";
+                mail.Subject = "Smoke Test 2 of 2 (Process Express One and Express One Endicia)";
                 mail.Body = "The smoketest was ran on: " + Environment.MachineName + ". " + System.Environment.NewLine
                 			+ "It was ran on: " + gdt.localDate  + ". " + System.Environment.NewLine;
                 if(SWVersion.SWVersionNumber != null)

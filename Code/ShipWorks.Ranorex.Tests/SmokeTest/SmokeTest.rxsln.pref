@@ -4,6 +4,6 @@
   <SerializedValue name="ModuleBrowserState">
     <ArrayOfString xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" />
   </SerializedValue>
-  <ProjectBrowserState value="[Solution SmokeTest[SmokeTest[BatchFile[]ChangeCurrentShipment_ProviderUSPSExpress1.rxrec[]GatherCurrentDateandTime.rxrec[]GetExpress1DomesticShipmentRate.rxrec[]GetExpress1EndiciaDomesticShipmentRate.rxrec[]GetExpress1EndiciaInternationalShipmentRate.rxrec[]GetExpress1InternationalShipmentRate.rxrec[]OLMProcessShipmentFedExDomesticGround.rxrec[]OLMProcessShipmentFedExInternational.rxrec[]OLMProcessShipmentUPSDomesticGround.rxrec[]SmokeTestRepository.rxrep[]]]]&#xD;&#xA;Solution SmokeTest\SmokeTest\SendInfoEmail.rxrec&#xD;&#xA;Solution SmokeTest\SmokeTest\ProcessUSPSExpress1InternationalPriority.rxrec" />
+  <ProjectBrowserState value="[Solution SmokeTest[SmokeTest[BatchFile[]ChangeCurrentShipment_ProviderUSPSExpress1.rxrec[]GatherCurrentDateandTime.rxrec[]GetExpress1DomesticShipmentRate.rxrec[]GetExpress1EndiciaDomesticShipmentRate.rxrec[]GetExpress1EndiciaInternationalShipmentRate.rxrec[]GetExpress1InternationalShipmentRate.rxrec[]OLMProcessShipmentFedExDomesticGround.rxrec[]OLMProcessShipmentFedExInternational.rxrec[]OLMProcessShipmentUPSDomesticGround.rxrec[]SmokeTestRepository.rxrep[]]]]&#xD;&#xA;Solution SmokeTest\SmokeTest\SendInfoEmail.rxrec&#xD;&#xA;Solution SmokeTest\SmokeTest\SetDefaultPrinterBullZip.rxrec" />
   <StartupProject value="{953B7E7C-91CC-440C-98A0-2F164A8E2CF0}" />
 </Properties>
