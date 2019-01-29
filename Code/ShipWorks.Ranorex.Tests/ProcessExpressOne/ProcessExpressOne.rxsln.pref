@@ -7,6 +7,6 @@
       <string>60513a05-eab7-41e7-8c10-e51c735edc2e</string>
     </ArrayOfString>
   </SerializedValue>
-  <ProjectBrowserState value="[Solution ProcessExpressOne[ProcessExpressOne[References[]BatchFile[]]]]&#xD;&#xA;Solution ProcessExpressOne\ProcessExpressOne\ProcessExpressOne.rxtst&#xD;&#xA;Solution ProcessExpressOne\ProcessExpressOne\ProcessExpressOneRepository.rxrep" />
+  <ProjectBrowserState value="[Solution ProcessExpressOne[ProcessExpressOne[References[]BatchFile[]]]]&#xD;&#xA;Solution ProcessExpressOne\ProcessExpressOne\SendInfoEmail.rxrec&#xD;&#xA;Solution ProcessExpressOne\ProcessExpressOne\SetDefaultPrinterEpson4640.rxrec" />
   <StartupProject value="{B5FDA454-B28C-447F-B7A9-20C361B78EC8}" />
 </Properties>
