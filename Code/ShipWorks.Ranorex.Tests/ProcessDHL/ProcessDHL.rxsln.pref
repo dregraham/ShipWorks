@@ -1,0 +1,12 @@
+﻿<Properties>
+  <ActiveConfiguration value="Debug" />
+  <ActivePlatform value="x86" />
+  <SerializedValue name="ModuleBrowserState">
+    <ArrayOfString xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+      <string>{86BC5408-91B0-417E-9834-08EC4F874601}</string>
+      <string>60513a05-eab7-41e7-8c10-e51c735edc2e</string>
+    </ArrayOfString>
+  </SerializedValue>
+  <ProjectBrowserState value="[Solution ProcessDHL[ProcessDHL[Class[]CloseShipWorks.rxrec[]GetComparisonReportDirectory.rxrec[]]]]&#xD;&#xA;Solution ProcessDHL\ProcessDHL\ProcessDHL.rxtst&#xD;&#xA;Solution ProcessDHL" />
+  <StartupProject value="{86BC5408-91B0-417E-9834-08EC4F874601}" />
+</Properties>
