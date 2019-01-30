@@ -1,0 +1,23 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+# Ranorex Studio 8.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProcessDHL", "ProcessDHL\ProcessDHL.csproj", "{0BA3E6A8-E2BE-4AA4-92B3-C2F765BC90E5}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{C3FF0021-FC6B-4149-90EB-E27B9E4981A5}"
+	ProjectSection(SolutionItems) = postProject
+		Ranorex = .\Ranorex.rxsettings
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x86 = Debug|x86
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{0BA3E6A8-E2BE-4AA4-92B3-C2F765BC90E5}.Debug|x86.Build.0 = Debug|x86
+		{0BA3E6A8-E2BE-4AA4-92B3-C2F765BC90E5}.Debug|x86.ActiveCfg = Debug|x86
+		{0BA3E6A8-E2BE-4AA4-92B3-C2F765BC90E5}.Release|x86.Build.0 = Release|x86
+		{0BA3E6A8-E2BE-4AA4-92B3-C2F765BC90E5}.Release|x86.ActiveCfg = Release|x86
+	EndGlobalSection
+EndGlobal
