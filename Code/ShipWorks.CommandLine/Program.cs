@@ -1,6 +1,6 @@
 ﻿using System;
 using Interapptive.Shared.Metrics;
-using ShipWorks.Startup;
+using ShipWorks.ApplicationCore;
 
 namespace ShipWorks.CommandLine
 {
@@ -18,7 +18,7 @@ namespace ShipWorks.CommandLine
                 return;
             }
 
-            ContainerInitializer.Initialize();
+            ShipWorks.Startup.ContainerInitializer.Initialize();
 
             ShipWorks.Program.Main().GetAwaiter().GetResult();
 
