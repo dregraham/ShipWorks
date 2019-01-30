@@ -405,6 +405,12 @@
       <Project>{dfcf14ea-6596-4b9c-b743-d7ce9e5f4348}</Project>
       <Name>ShipWorks.Shared</Name>
     </ProjectReference>
+    <ProjectReference Include="..\ShipWorks.Escalator\ShipWorks.Escalator.csproj">
+      <Project>{e63d098c-7c6d-4b5b-9a0f-ceca60bfd035}</Project>
+      <Name>ShipWorks.Escalator</Name>
+      <OutputItemType>Content</OutputItemType>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Analyzer Include="..\..\packages\Desktop.Analyzers.1.1.0\analyzers\dotnet\cs\Desktop.Analyzers.dll" />
