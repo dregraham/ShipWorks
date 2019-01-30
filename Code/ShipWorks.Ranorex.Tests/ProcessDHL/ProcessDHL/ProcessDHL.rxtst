@@ -253,9 +253,9 @@ rxversion="8.1">
 	<datasources>
 	</datasources>
 	<testconfigurations
-	default="TestRun">
+	default="CompleteDHL">
 		<testconfiguration
-		name="TestRun">
+		name="CompleteDHL">
 			<testcontainer
 			id="20edc39a-3fca-4568-b7c9-a80a94f71d4a">
 			</testcontainer>
