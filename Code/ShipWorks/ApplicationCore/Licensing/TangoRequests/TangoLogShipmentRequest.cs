@@ -170,6 +170,11 @@ namespace ShipWorks.ApplicationCore.Licensing.TangoRequests
             postRequest.Variables.Add("returnShipment", shipment.ReturnShipment ? "1" : "0");
             postRequest.Variables.Add("carrierCost", shipment.ShipmentCost.ToString());
 
+            // If isretry is true, Tango will check to see if the shipment exists, and if it does
+            // it will not insert it into the database.  If it doesn't exist, it will do the 
+            // insert.
+            postRequest.Variables.Add("isretry", "1");
+
             // Send best rate usage data to Tango
             BestRateEventsDescription bestRateEventsDescription = new BestRateEventsDescription((BestRateEventTypes) shipment.BestRateEvents);
             postRequest.Variables.Add("bestrateevents", bestRateEventsDescription.ToString());
