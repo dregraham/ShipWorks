@@ -1,0 +1,69 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<recordtable
+embeddedrepository="False"
+id="92798f37-1521-4dbb-8982-eaf533068723"
+mode="Global"
+rxversion="8.1">
+	<name>
+		ResetHostsFile
+	</name>
+	<repeatcount>
+		1
+	</repeatcount>
+	<turbomode>
+		False
+	</turbomode>
+	<genreport>
+		True
+	</genreport>
+	<speedfactor>
+		1
+	</speedfactor>
+	<useDefaultItemLogging>
+		True
+	</useDefaultItemLogging>
+	<codegen
+	classname="ResetHostsFile"
+	namespace="ProcessDHL">
+	</codegen>
+	<variables>
+	</variables>
+	<recorditems>
+		<userrecorditem
+		classname="ResetHostsFile"
+		enabled="True"
+		isexternaltestmethod="False"
+		methodname="ResetHosts"
+		namespace="ProcessDHL"
+		optional="False"
+		varname="">
+			<comment>
+			</comment>
+			<bindings>
+			</bindings>
+			<arguments
+			id="ced21388-7909-4e47-88f5-b0cd86cc8734">
+			</arguments>
+		</userrecorditem>
+	</recorditems>
+	<repository
+	id="75e27c97-69ed-40c3-ac5e-3faf513cd3be"
+	name="SmokeTestRepository"
+	relativepath="SmokeTestRepository.rxrep"
+	rxversion="8.1">
+		<codegen
+		classname="SmokeTestRepository"
+		namespace="ProcessDHL">
+		</codegen>
+		<rootfolder
+		id="4aacfef1-6402-4ba7-b3c9-270ac9a4db4a"
+		name="_rootdummy_">
+		</rootfolder>
+	</repository>
+	<usercodefile
+	lang="CSharp">
+		ResetHostsFile.UserCode.cs
+	</usercodefile>
+	<references>
+	</references>
+</recordtable>

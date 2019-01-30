@@ -63,8 +63,8 @@ pipeline {
 				dir('Code/ShipWorks.Ranorex.Tests/SmokeTest') {
 					bat '"C:/Program Files (x86)/Microsoft Visual Studio/2017/BuildTools/MSBuild/15.0/Bin/MSBuild.exe" SmokeTest.sln'
 				}
-				dir('Code/ShipWorks.Ranorex.Tests/ProcessExpressOne') {
-					bat '"C:/Program Files (x86)/Microsoft Visual Studio/2017/BuildTools/MSBuild/15.0/Bin/MSBuild.exe" ProcessExpressOne.sln'
+				dir('Code/ShipWorks.Ranorex.Tests/ProcessDHL') {
+					bat '"C:/Program Files (x86)/Microsoft Visual Studio/2017/BuildTools/MSBuild/15.0/Bin/MSBuild.exe" ProcessDHL.sln'
 				}
 			}
 		}
@@ -102,7 +102,7 @@ pipeline {
 				}
 			}
 		}
-		stage('Process Express One') {
+		stage('Process DHL') {
 			environment {
 				BUILT_VERSION = readFile('.build-label').replaceAll("\\.", '_').trim()
 			}
@@ -113,26 +113,26 @@ pipeline {
 				}
 			}
 			steps {
-				dir('Code/ShipWorks.Ranorex.Tests/ProcessExpressOne/ProcessExpressOne/bin/Debug') {
+				dir('Code/ShipWorks.Ranorex.Tests/ProcessDHL/ProcessDHL/bin/Debug') {
 					bat "copy /Y \"\\\\intfs01\\Development\\Tango\\ChromiumArtifacts\\renderer_63_x64.zip\" renderer_63_x64.zip"
 					bat """
-					ProcessExpressOne.exe ^
-					/runconfig:CompleteExpressOne ^
+					ProcessDHL.exe ^
+					/runconfig:CompleteDHL ^
 					/param:InstallDir=${WORKSPACE_RANOREX}\\Artifacts\\Distribute\\ShipWorksSetup_test.exe ^
 					/param:Environment=${params.Environment} ^
 					/param:SQLServ=localhost\\ranorex ^
 					/reportlevel:Debug ^
 					/zr ^
-					/zrf:"\\\\intfs01\\Development\\Testing\\Automated ProcessExpressOne Results\\${env.BRANCH_NAME}\\obfuscated\\${TIMESTAMP}" ^
-					/rf:"\\\\intfs01\\Development\\Testing\\Automated ProcessExpressOne Results\\${env.BRANCH_NAME}\\obfuscated\\${TIMESTAMP}" ^
+					/zrf:"\\\\intfs01\\Development\\Testing\\Automated ProcessDHL Results\\${env.BRANCH_NAME}\\obfuscated\\${TIMESTAMP}" ^
+					/rf:"\\\\intfs01\\Development\\Testing\\Automated ProcessDHL Results\\${env.BRANCH_NAME}\\obfuscated\\${TIMESTAMP}" ^
 					/ju
 					"""
 				}
 			}
 			post {
 				always {
-					bat "copy /Y \"\\\\intfs01\\Development\\Testing\\Automated ProcessExpressOne Results\\${env.BRANCH_NAME}\\obfuscated\\${TIMESTAMP}.rxlog.junit.xml\" ${WORKSPACE_RANOREX.replaceAll('/', '\\\\')}\\processexpressone.results.junit.xml"
-					junit "processexpressone.results.junit.xml"
+					bat "copy /Y \"\\\\intfs01\\Development\\Testing\\Automated ProcessDHL Results\\${env.BRANCH_NAME}\\obfuscated\\${TIMESTAMP}.rxlog.junit.xml\" ${WORKSPACE_RANOREX.replaceAll('/', '\\\\')}\\processdhl.results.junit.xml"
+					junit "processdhl.results.junit.xml"
 				}
 			}
 		}

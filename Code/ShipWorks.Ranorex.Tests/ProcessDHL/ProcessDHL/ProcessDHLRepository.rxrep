@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<repository
+name="ProcessDHLRepository"
+id="af9f22fe-538c-4d4e-b778-49fff0fbbae8"
+rxversion="8.1">
+  <codegen
+  classname="ProcessDHLRepository"
+  namespace="ProcessDHL"/>
+  <rootfolder
+  name="Root"
+  id="b956bf82-2a6c-4bce-9148-ccf35abd8bb7"
+  searchtimeout="30000ms"
+  capname="unknown"
+  isrooted="True"
+  usecache="True">
+    <basepath/>
+  </rootfolder>
+  <variables/>
+</repository>
