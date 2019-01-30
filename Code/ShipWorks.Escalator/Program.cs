@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+using System.Reflection;
 using System.ServiceProcess;
-using System.Text;
-using System.Threading.Tasks;
+using System.Configuration.Install;
 
 namespace ShipWorks.Escalator
 {
@@ -12,10 +10,32 @@ namespace ShipWorks.Escalator
         /// <summary>
         /// The main entry point for the application.
         /// </summary>
-        static void Main()
+        static void Main(string[] args)
         {
-            ServiceBase[] ServicesToRun;
-            ServicesToRun = new ServiceBase[]
+            if (Environment.UserInteractive)
+            {
+                string parameter = string.Concat(args);
+                switch (parameter)
+                {
+                    case "--install":
+                        ManagedInstallerClass.InstallHelper(new string[] {"/ServiceName=ShipWorks.Escalator", Assembly.GetExecutingAssembly().Location });
+                        var sc = new ServiceController("ShipWorksEscalator");
+                        sc.Start();
+                        break;
+                    case "--uninstall":
+                        ManagedInstallerClass.InstallHelper(new string[] { "/u", Assembly.GetExecutingAssembly().Location });
+                        break;
+                }
+            }
+            else
+            {
+                RunService();
+            }
+        }
+
+        private static void RunService()
+        {
+            ServiceBase[] ServicesToRun = new ServiceBase[]
             {
                 new Escalator()
             };
