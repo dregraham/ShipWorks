@@ -14,7 +14,7 @@ namespace ShipWorks.Data.Connection
     /// <summary>
     /// Collects DatabaseUpgrade specific telemetry
     /// </summary>
-    public class DatabaseUpgradeTelemetry
+    public static class DatabaseUpgradeTelemetry
     {
         /// <summary>
         /// Record database telemetry data to the telemetric result
