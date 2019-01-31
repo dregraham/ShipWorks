@@ -43,15 +43,15 @@ namespace ShipWorks.Templates.Printing
                     // dont start out with a line break
                     if (htmlBuilder.Length > 0)
                     {
-                        htmlBuilder.AppendLine("<br/>");
+                        htmlBuilder.Append("<br/>");
                     }
 
-                    htmlBuilder.AppendLine(barcodeBlock);
+                    htmlBuilder.Append(barcodeBlock);
 
                     // dont end with a line break
                     if (barcode != lastBarcode)
                     {
-                        htmlBuilder.AppendLine("<br/>");
+                        htmlBuilder.Append("<br/>");
                     }
                 }
             }

@@ -44,24 +44,24 @@ namespace ShipWorks.Templates.Printing
             }
 
             StringBuilder builder = new StringBuilder();
-            builder.AppendLine("<div>");
+            builder.Append("<div>");
 
             if (!string.IsNullOrWhiteSpace(Name))
             {
-                builder.AppendLine($"<b>{Name}</b><br/>");
+                builder.Append($"<b>{Name}</b><br/>");
             }
 
             if (!string.IsNullOrWhiteSpace(Barcode))
             {
-                builder.AppendLine($"<span class='barcode'>*{Barcode}*</span><br/>");
+                builder.Append($"<span class='barcode'>*{Barcode}*</span><br/>");
             }
 
             if (!string.IsNullOrWhiteSpace(KeyboardHotkey))
             {
-                builder.AppendLine($"{KeyboardHotkey}");
+                builder.Append($"{KeyboardHotkey}");
             }
 
-            builder.AppendLine("</div>");
+            builder.Append("</div>");
             return builder.ToString();
         }
 
