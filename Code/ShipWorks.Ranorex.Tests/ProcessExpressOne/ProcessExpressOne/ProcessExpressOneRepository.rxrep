@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<repository
+name="ProcessExpressOneRepository"
+id="b4010a25-57df-4c48-b803-54f4f5c5ad8f"
+rxversion="8.1">
+  <codegen
+  classname="ProcessExpressOneRepository"
+  namespace="ProcessExpressOne"/>
+  <rootfolder
+  name="Root"
+  id="6a9712c6-0912-4f97-b9b4-870d473ae4a9"
+  searchtimeout="30000ms"
+  capname="unknown"
+  isrooted="True"
+  usecache="True">
+    <basepath/>
+  </rootfolder>
+  <variables/>
+</repository>
