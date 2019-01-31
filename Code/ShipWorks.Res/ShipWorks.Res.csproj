@@ -526,6 +526,7 @@
     <EmbeddedResource Include="Data\Administration\Scripts\Update\6.0\6.0.0.1.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\6.0\6.0.0.6.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\6.0\6.0.0.7.sql" />
+    <EmbeddedResource Include="Data\Administration\Scripts\Update\6.1\6.1.0.0.sql" />
     <Content Include="Templates\Distribution\Source\Emails\Shipment Notification\settings.xml" />
     <Content Include="Templates\Distribution\Source\Emails\Shipment Notification\template.xsl" />
     <Content Include="Templates\Distribution\Source\Invoices\Blue\invoiceHeaderBlue.jpg" />
@@ -587,6 +588,14 @@
     <Content Include="Templates\Distribution\Source\Packing Slips\Green\packingSlipHeaderGreen.jpg" />
     <Content Include="Templates\Distribution\Source\Packing Slips\Green\settings.xml" />
     <Content Include="Templates\Distribution\Source\Packing Slips\Green\template.xsl" />
+    <Content Include="Templates\Distribution\Source\Reports\Pick Lists\Pick List by Location\settings.xml" />
+    <Content Include="Templates\Distribution\Source\Reports\Pick Lists\Pick List by Location\template.xsl" />
+    <Content Include="Templates\Distribution\Source\Reports\Pick Lists\Pick List by Name\settings.xml" />
+    <Content Include="Templates\Distribution\Source\Reports\Pick Lists\Pick List by Name\template.xsl" />
+    <Content Include="Templates\Distribution\Source\Reports\Pick Lists\Pick List by Quantity\settings.xml" />
+    <Content Include="Templates\Distribution\Source\Reports\Pick Lists\Pick List by Quantity\template.xsl" />
+    <Content Include="Templates\Distribution\Source\Reports\Pick Lists\Pick List by SKU\settings.xml" />
+    <Content Include="Templates\Distribution\Source\Reports\Pick Lists\Pick List by SKU\template.xsl" />
     <Content Include="Templates\Distribution\Source\Reports\Product Trends\Items by SKU\settings.xml" />
     <Content Include="Templates\Distribution\Source\Reports\Product Trends\Items by SKU\template.xsl" />
     <Content Include="Templates\Distribution\Source\Packing Slips\Red\packingSlipHeaderRed.jpg" />
