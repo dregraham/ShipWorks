@@ -1,6 +1,6 @@
 ﻿<Properties>
   <Array name="active">
-    <Element value="SendInfoEmail.UserCode.cs" />
+    <Element value="SmokeTest.rxtst" />
   </Array>
   <Array name="bookmarks" />
   <Array name="files">
