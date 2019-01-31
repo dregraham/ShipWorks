@@ -54,7 +54,7 @@ namespace ShipWorks.Escalator
 
                 if (guid == Guid.Empty)
                 {
-                    throw new Exception(errorMessage);
+                    throw new InvalidOperationException(errorMessage);
                 }
             }
 

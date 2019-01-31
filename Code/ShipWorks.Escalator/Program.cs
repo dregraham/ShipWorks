@@ -23,13 +23,13 @@ namespace ShipWorks.Escalator
                 {
                     case "--install":
                         string serviceName = ServiceName.Resolve();
-                        ManagedInstallerClass.InstallHelper(new string[] {$"/ServiceName={serviceName}", Assembly.GetExecutingAssembly().Location });
+                        ManagedInstallerClass.InstallHelper(new string[] {$"/ServiceName={serviceName}", typeof(Program).Assembly.Location });
                         SetRecoveryOptions(serviceName);
                         var sc = new ServiceController(serviceName);
                         sc.Start();                        
                         break;
                     case "--uninstall":
-                        ManagedInstallerClass.InstallHelper(new string[] { "/u", Assembly.GetExecutingAssembly().Location });
+                        ManagedInstallerClass.InstallHelper(new string[] { "/u", typeof(Program).Assembly.Location });
                         break;
                 }
             }

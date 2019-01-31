@@ -88,7 +88,7 @@ Type: files; Name: {app}\eBay.SDK.dll
 
 [Files]
 Source: License.rtf; DestDir: {app}; Flags: overwritereadonly ignoreversion
-Source: {#AppArtifacts}\ShipWorks.exe; DestDir: {app}; Flags: overwritereadonly ignoreversion
+Source: {#AppArtifacts}\*.exe; DestDir: {app}; Flags: overwritereadonly ignoreversion
 Source: {#AppArtifacts}\{#= EditionAppConfig}; DestDir: {app}; DestName: "ShipWorks.exe.config"; Flags: overwritereadonly ignoreversion
 Source: {#AppArtifacts}\*.dll; DestDir: {app}; Flags: overwritereadonly ignoreversion
 Source: {#AppArtifacts}\x64\ShipWorks.Native.dll; DestDir: {app}; Flags: overwritereadonly ignoreversion; Check: Is64BitInstallMode
@@ -97,7 +97,6 @@ Source: {#AppArtifacts}\fre3of9x.ttf; DestDir: {fonts}; FontInstall: Free 3 of 9
 Source: {#AppArtifacts}\FontLicense.txt; DestDir: {app}; Flags: overwritereadonly ignoreversion
 Source: {#AppArtifacts}\SingleScanPanels.swe; DestDir: {app}; Flags: overwritereadonly ignoreversion
 Source: {#AppArtifacts}\BouncyCastle.Crypto.dll; DestDir: {app}; Flags: overwritereadonly ignoreversion
-Source: {#AppArtifacts}\ShipWorks.Escalator.exe; DestDir: {app}; Flags: overwritereadonly ignoreversion
 
 #ifdef IncludeSymbols
     Source: {#AppArtifacts}\ShipWorks.pdb; DestDir: {app}; Flags: overwritereadonly ignoreversion
