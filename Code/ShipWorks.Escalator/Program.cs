@@ -2,6 +2,7 @@
 using System.Reflection;
 using System.ServiceProcess;
 using System.Configuration.Install;
+using System.Diagnostics;
 
 namespace ShipWorks.Escalator
 {
@@ -21,9 +22,11 @@ namespace ShipWorks.Escalator
                 switch (parameter)
                 {
                     case "--install":
-                        ManagedInstallerClass.InstallHelper(new string[] {$"/ServiceName={ServiceName.Resolve()}", Assembly.GetExecutingAssembly().Location });
-                        var sc = new ServiceController(ServiceName.Resolve());
-                        sc.Start();
+                        string serviceName = ServiceName.Resolve();
+                        ManagedInstallerClass.InstallHelper(new string[] {$"/ServiceName={serviceName}", Assembly.GetExecutingAssembly().Location });
+                        SetRecoveryOptions(serviceName);
+                        var sc = new ServiceController(serviceName);
+                        sc.Start();                        
                         break;
                     case "--uninstall":
                         ManagedInstallerClass.InstallHelper(new string[] { "/u", Assembly.GetExecutingAssembly().Location });
@@ -42,6 +45,30 @@ namespace ShipWorks.Escalator
         private static void RunService()
         {
             ServiceBase.Run(new Escalator());
+        }
+
+        static void SetRecoveryOptions(string serviceName)
+        {
+            int exitCode;
+            using (var process = new Process())
+            {
+                var startInfo = process.StartInfo;
+                startInfo.FileName = "sc";
+                startInfo.WindowStyle = ProcessWindowStyle.Hidden;
+
+                // tell Windows that the service should restart if it fails (the spacing in the below args looks weird but is correct)
+                startInfo.Arguments = string.Format("failure \"{0}\" reset= 0 actions= restart/60000", serviceName);
+
+                process.Start();
+                process.WaitForExit();
+
+                exitCode = process.ExitCode;
+            }
+
+            if (exitCode != 0)
+            {
+                throw new InvalidOperationException();
+            }
         }
     }
 }
