@@ -88,6 +88,10 @@
         <option>transformxaml</option>
         <file dir="${configdir}\Artifacts\Application" name="ShipWorks.Products.UI.dll" />
       </inputassembly>
+      <inputassembly refid="589f4c9d-0b42-41af-88bf-c491db68545b">
+        <option>honoroas</option>
+        <file dir="${configdir}\Artifacts\Application" name="swc.exe" />
+      </inputassembly>
     </asmlist>
   </input>
   <output>
