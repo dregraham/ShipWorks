@@ -1,10 +1,12 @@
 ﻿<Properties>
   <Array name="active">
-    <Element value="ProcessDHL.rxtst" />
+    <Element value="SendInfoEmail.UserCode.cs" />
   </Array>
   <Array name="bookmarks" />
   <Array name="files">
     <Element value="ProcessDHL.rxtst" />
+    <Element value="SendInfoEmail.rxrec" />
+    <Element value="SendInfoEmail.UserCode.cs" />
   </Array>
   <Properties name="projectSavedData">
     <Properties name="customTool">

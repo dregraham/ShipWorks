@@ -324,6 +324,21 @@
     <None Include="app.config">
       <id>63f44f12-f85c-4c39-ae02-dc98ad89aac2</id>
     </None>
+    <None Include="BatchFile\auto_print.ini">
+      <id>eb341c2d-0892-4e6e-a979-f4a996c6e425</id>
+    </None>
+    <None Include="BatchFile\SetDefaultPrinter.bat">
+      <id>50d44418-e3d1-4b34-b82a-1877c01edac3</id>
+    </None>
+    <None Include="BatchFile\SetDefaultPrinterBullZip.bat">
+      <id>a66eeef2-7de3-4093-bf6e-49097c8fbee5</id>
+    </None>
+    <None Include="BatchFile\SetDefaultPrinterEpson4640.bat">
+      <id>1c8569c3-7094-49f4-9733-2640b99dacc0</id>
+    </None>
+    <None Include="BatchFile\SetDefaultPrinterMicrosoftPrintToPDF.bat">
+      <id>7e3e4bf4-698f-4844-862a-08021c738213</id>
+    </None>
     <None Include="CheckShipWorksVersion.rxrec">
       <id>c5fb0cef-94ce-4995-8ada-8f4895df2961</id>
       <BoundTo>1f37675c-3e64-44f9-bde4-648a4c857c68</BoundTo>
@@ -428,6 +443,9 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="BatchFile">
+      <id>8dc419e8-f826-4bb4-901a-3f81c233b3ff</id>
+    </Folder>
     <Folder Include="Class">
       <id>c4c99bed-8616-4452-8f12-0e2cf1faeb1a</id>
     </Folder>
