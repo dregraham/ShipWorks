@@ -25,10 +25,10 @@
 #define CurrentYear GetDateTimeString('yyyy', '', '');
 
 [Setup]
-AppName=ShipWorks®
+AppName=ShipWorksï¿½
 AppVersion={#= Version} {#= EditionName}
-AppVerName=ShipWorks® {#= Version} {#= EditionName}
-AppPublisher=Interapptive®, Inc.
+AppVerName=ShipWorksï¿½ {#= Version} {#= EditionName}
+AppPublisher=Interapptiveï¿½, Inc.
 AppPublisherURL=http://www.shipworks.com
 AppSupportURL=http://www.shipworks.com
 AppUpdatesURL=http://www.shipworks.com
@@ -56,10 +56,10 @@ AlwaysRestart=false
 ShowLanguageDialog=no
 AllowUNCPath=false
 VersionInfoVersion={#= Version}
-VersionInfoCompany=Interapptive®, Inc.
-VersionInfoDescription=Interapptive® ShipWorks®
-VersionInfoTextVersion=ShipWorks® {#= Version}
-VersionInfoCopyright=Copyright © Interapptive®, Inc. 2003-{#= CurrentYear}
+VersionInfoCompany=Interapptiveï¿½, Inc.
+VersionInfoDescription=Interapptiveï¿½ ShipWorksï¿½
+VersionInfoTextVersion=ShipWorksï¿½ {#= Version}
+VersionInfoCopyright=Copyright ï¿½ Interapptiveï¿½, Inc. 2003-{#= CurrentYear}
 ArchitecturesInstallIn64BitMode=x64
 AppendDefaultDirName=false
 DisableDirPage=no
@@ -88,9 +88,9 @@ Type: files; Name: {app}\eBay.SDK.dll
 
 [Files]
 Source: License.rtf; DestDir: {app}; Flags: overwritereadonly ignoreversion
-Source: {#AppArtifacts}\ShipWorks.exe; DestDir: {app}; Flags: overwritereadonly ignoreversion
 Source: {#AppArtifacts}\{#= EditionAppConfig}; DestDir: {app}; DestName: "ShipWorks.exe.config"; Flags: overwritereadonly ignoreversion
 Source: {#AppArtifacts}\*.dll; DestDir: {app}; Flags: overwritereadonly ignoreversion
+Source: {#AppArtifacts}\*.exe; DestDir: {app}; Flags: overwritereadonly ignoreversion
 Source: {#AppArtifacts}\x64\ShipWorks.Native.dll; DestDir: {app}; Flags: overwritereadonly ignoreversion; Check: Is64BitInstallMode
 Source: {#AppArtifacts}\Win32\ShipWorks.Native.dll; DestDir: {app}; Flags: overwritereadonly ignoreversion; Check: not Is64BitInstallMode
 Source: {#AppArtifacts}\fre3of9x.ttf; DestDir: {fonts}; FontInstall: Free 3 of 9 Extended; Flags: onlyifdoesntexist uninsneveruninstall
