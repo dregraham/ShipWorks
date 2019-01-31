@@ -16,6 +16,9 @@ namespace Interapptive.Shared.Utility
         CleanseAddress = 1,
 
         [Description("GetRates")]
-        GetRates = 2
+        GetRates = 2,
+
+        [Description("SchemaUpdate")]
+        SchemaUpdate = 3
     }
 }
