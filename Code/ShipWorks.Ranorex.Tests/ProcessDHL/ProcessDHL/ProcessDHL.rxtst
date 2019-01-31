@@ -10,12 +10,6 @@ rxversion="8.1">
 			type="Recording">
 			</testmodule>
 			<testmodule
-			id="18020032-8327-41dd-ba39-a86ea527beab"
-			name="SetupDHLExpress"
-			ref="701b4085-4d69-4d6a-baf9-5a2b85907101"
-			type="Recording">
-			</testmodule>
-			<testmodule
 			id="1ca34d43-aa42-43cf-9087-bc04370d8757"
 			name="VoidShipments"
 			ref="45f9ed43-a997-461f-960e-f577d1543657"
@@ -52,10 +46,6 @@ rxversion="8.1">
 			id="6c76295c-6b80-40e6-83a8-120669b95e02"
 			name="TestCase">
 			</testcase>
-			<smartfoldernode
-			id="73deaccb-9bd3-4035-ba77-6273c1f48753"
-			name="SetupDHLExpress">
-			</smartfoldernode>
 			<teardown
 			id="8d30ad44-e6e7-4352-9157-9adf5a09bb62"
 			name="teardown">
@@ -170,14 +160,6 @@ rxversion="8.1">
 					id="6c76295c-6b80-40e6-83a8-120669b95e02"
 					name="TestCase">
 						<smartfoldernode
-						id="73deaccb-9bd3-4035-ba77-6273c1f48753"
-						name="SetupDHLExpress">
-							<testmodule
-							id="18020032-8327-41dd-ba39-a86ea527beab"
-							name="SetupDHLExpress">
-							</testmodule>
-						</smartfoldernode>
-						<smartfoldernode
 						id="e027f34e-09ab-4355-8d19-b2d6f72a6c54"
 						name="ProcessDHLExpress">
 							<testmodule
@@ -264,9 +246,6 @@ rxversion="8.1">
 			</testcontainer>
 			<testcontainer
 			id="6c76295c-6b80-40e6-83a8-120669b95e02">
-			</testcontainer>
-			<testcontainer
-			id="73deaccb-9bd3-4035-ba77-6273c1f48753">
 			</testcontainer>
 			<testcontainer
 			id="9c8b0921-a7c4-4d83-b9d7-1baede3cdfa2">
