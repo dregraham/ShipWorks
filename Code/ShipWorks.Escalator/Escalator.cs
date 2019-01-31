@@ -1,32 +1,39 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Diagnostics;
-using System.Linq;
 using System.ServiceProcess;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ShipWorks.Escalator
 {
+    /// <summary>
+    /// Logic of the Escalator service
+    /// </summary>
     public partial class Escalator : ServiceBase
     {
+        /// <summary>
+        /// Constructor
+        /// </summary>
         public Escalator()
         {
             InitializeComponent();
         }
 
+        /// <summary>
+        /// Code that runs when the service starts
+        /// </summary>
         protected override void OnStart(string[] args)
         {
-            using (System.IO.StreamWriter file = new System.IO.StreamWriter(@"\hereIam.txt"))
+            System.IO.Directory.SetCurrentDirectory(System.AppDomain.CurrentDomain.BaseDirectory);
+            using (System.IO.StreamWriter file = new System.IO.StreamWriter(@"hereIam.txt"))
             {
                 file.WriteLine(DateTime.Now.ToString());
             }
         }
 
+        /// <summary>
+        /// Code that runs when the service stops
+        /// </summary>
         protected override void OnStop()
         {
+            // Do nothing
         }
     }
 }

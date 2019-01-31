@@ -5,6 +5,9 @@ using System.Configuration.Install;
 
 namespace ShipWorks.Escalator
 {
+    /// <summary>
+    /// The Escalator program file
+    /// </summary>
     static class Program
     {
         /// <summary>
@@ -18,8 +21,8 @@ namespace ShipWorks.Escalator
                 switch (parameter)
                 {
                     case "--install":
-                        ManagedInstallerClass.InstallHelper(new string[] {"/ServiceName=ShipWorks.Escalator", Assembly.GetExecutingAssembly().Location });
-                        var sc = new ServiceController("ShipWorksEscalator");
+                        ManagedInstallerClass.InstallHelper(new string[] {$"/ServiceName={ServiceName.Resolve()}", Assembly.GetExecutingAssembly().Location });
+                        var sc = new ServiceController(ServiceName.Resolve());
                         sc.Start();
                         break;
                     case "--uninstall":
@@ -33,13 +36,12 @@ namespace ShipWorks.Escalator
             }
         }
 
+        /// <summary>
+        /// Method to run the actual service
+        /// </summary>
         private static void RunService()
         {
-            ServiceBase[] ServicesToRun = new ServiceBase[]
-            {
-                new Escalator()
-            };
-            ServiceBase.Run(ServicesToRun);
+            ServiceBase.Run(new Escalator());
         }
     }
 }
