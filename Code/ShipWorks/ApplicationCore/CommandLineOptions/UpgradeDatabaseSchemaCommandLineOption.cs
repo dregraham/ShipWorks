@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data.Common;
 using System.Data.SqlClient;
 using System.Reactive;
+using System.Threading;
 using System.Threading.Tasks;
 using Interapptive.Shared.Data;
 using Interapptive.Shared.Metrics;
@@ -57,6 +58,12 @@ namespace ShipWorks.ApplicationCore.CommandLineOptions
                     databaseUpdateResult.WriteTo(telementryEvent);
                 }
             }
+
+            // force all the telemetry data from above to flushed
+            Telemetry.Flush();
+            
+            // Give it time to finish flushing
+            Thread.Sleep(5000);
 
             return Task.CompletedTask;
         }
