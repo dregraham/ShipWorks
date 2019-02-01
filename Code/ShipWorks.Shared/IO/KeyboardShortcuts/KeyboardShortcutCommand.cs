@@ -61,6 +61,12 @@ namespace ShipWorks.IO.KeyboardShortcuts
         /// Clears the quick search box
         /// </summary>
         [Description("Clear Quick Search")]
-        ClearQuickSearch = 8
+        ClearQuickSearch = 8,
+
+        /// <summary>
+        /// Print Pick List
+        /// </summary>
+        [Description("Print Pick List")]
+        PrintPickList = 9
     }
 }

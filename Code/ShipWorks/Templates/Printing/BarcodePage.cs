@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using ShipWorks.Templates.Processing;
 
@@ -32,15 +33,26 @@ namespace ShipWorks.Templates.Printing
         public TemplateResult GetTemplateResult()
         {
             StringBuilder htmlBuilder = new StringBuilder();
+            PrintableBarcode lastBarcode = Barcodes.LastOrDefault();
             foreach (PrintableBarcode barcode in Barcodes)
             {
                 string barcodeBlock = barcode.GetHtmlBlock();
 
                 if (!string.IsNullOrWhiteSpace(barcodeBlock))
                 {
-                    htmlBuilder.AppendLine("<br/>");
-                    htmlBuilder.AppendLine(barcodeBlock);
-                    htmlBuilder.AppendLine("<br/>");
+                    // dont start out with a line break
+                    if (htmlBuilder.Length > 0)
+                    {
+                        htmlBuilder.Append("<br/>");
+                    }
+
+                    htmlBuilder.Append(barcodeBlock);
+
+                    // dont end with a line break
+                    if (barcode != lastBarcode)
+                    {
+                        htmlBuilder.Append("<br/>");
+                    }
                 }
             }
 
