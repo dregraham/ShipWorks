@@ -196,6 +196,9 @@
       <assembly>
         <file dir="${configdir}\Artifacts\Application" name="ShipWorks.exe" />
       </assembly>
+	  <assembly>
+        <file dir="${configdir}\Artifacts\Application" name="swc.exe" />
+      </assembly>
       <assembly>
         <file dir="${configdir}\Artifacts\Application" name="Interapptive.Shared.dll" />
       </assembly>
