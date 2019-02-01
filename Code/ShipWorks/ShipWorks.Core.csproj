@@ -15,7 +15,6 @@
     <AssemblyOriginatorKeyFile>Properties\interapptive_public.snk</AssemblyOriginatorKeyFile>
     <DelaySign>true</DelaySign>
     <ApplicationIcon>Resources\shipworks.ico</ApplicationIcon>
-    <CefSharpAnyCpuSupport>true</CefSharpAnyCpuSupport>
     <SccProjectName>
     </SccProjectName>
     <SccLocalPath>
