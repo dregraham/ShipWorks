@@ -25,10 +25,10 @@
 #define CurrentYear GetDateTimeString('yyyy', '', '');
 
 [Setup]
-AppName=ShipWorks�
+AppName=ShipWorks®
 AppVersion={#= Version} {#= EditionName}
-AppVerName=ShipWorks� {#= Version} {#= EditionName}
-AppPublisher=Interapptive�, Inc.
+AppVerName=ShipWorks® {#= Version} {#= EditionName}
+AppPublisher=Interapptive®, Inc.
 AppPublisherURL=http://www.shipworks.com
 AppSupportURL=http://www.shipworks.com
 AppUpdatesURL=http://www.shipworks.com
@@ -56,10 +56,10 @@ AlwaysRestart=false
 ShowLanguageDialog=no
 AllowUNCPath=false
 VersionInfoVersion={#= Version}
-VersionInfoCompany=Interapptive�, Inc.
-VersionInfoDescription=Interapptive� ShipWorks�
-VersionInfoTextVersion=ShipWorks� {#= Version}
-VersionInfoCopyright=Copyright � Interapptive�, Inc. 2003-{#= CurrentYear}
+VersionInfoCompany=Interapptive®, Inc.
+VersionInfoDescription=Interapptive® ShipWorks®
+VersionInfoTextVersion=ShipWorks® {#= Version}
+VersionInfoCopyright=Copyright © Interapptive®, Inc. 2003-{#= CurrentYear}
 ArchitecturesInstallIn64BitMode=x64
 AppendDefaultDirName=false
 DisableDirPage=no
