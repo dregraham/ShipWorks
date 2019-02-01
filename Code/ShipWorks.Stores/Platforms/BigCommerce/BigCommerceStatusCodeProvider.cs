@@ -34,11 +34,10 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
         /// </summary>
         protected override Dictionary<int, string> GetCodeMapFromOnline()
         {
-            return Task.Run(() => 
-            Result.Handle<BigCommerceException>()
-                .LogError(ex => log.ErrorFormat("Failed to fetch online status codes from BigCommerce: {0}", ex))
-                .ExecuteAsync(() => GetCodeMapAsync(Store as BigCommerceStoreEntity))
-            ).Result.Value;
+            return Task.Run(() =>
+                Result.Handle<BigCommerceException>()
+                    .LogError(ex => log.ErrorFormat("Failed to fetch online status codes from BigCommerce: {0}", ex))
+                    .ExecuteAsync(() => GetCodeMapAsync(Store as BigCommerceStoreEntity))).Result.Value;
         }
 
         /// <summary>
@@ -48,15 +47,21 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
         {
             IBigCommerceWebClient client = webClientFactory.Create(store);
             IEnumerable<BigCommerceOrderStatus> codes = await client.FetchOrderStatuses().ConfigureAwait(false);
-            Dictionary<int, string> codeMap = codes.ToDictionary(x => x.StatusID, x => x.StatusText);
 
-            // BigCommerce has "Deleted" status, but does not return it via the api.  So manually add it here.
-            if (!codeMap.Keys.Contains(BigCommerceConstants.OnlineStatusDeletedCode))
+            if (codes != null)
             {
-                codeMap.Add(BigCommerceConstants.OnlineStatusDeletedCode, BigCommerceConstants.OnlineStatusDeletedName);
+                Dictionary<int, string> codeMap = codes.ToDictionary(x => x.StatusID, x => x.StatusText);
+
+                // BigCommerce has "Deleted" status, but does not return it via the api.  So manually add it here.
+                if (!codeMap.Keys.Contains(BigCommerceConstants.OnlineStatusDeletedCode))
+                {
+                    codeMap.Add(BigCommerceConstants.OnlineStatusDeletedCode, BigCommerceConstants.OnlineStatusDeletedName);
+                }
+
+                return codeMap;
             }
 
-            return codeMap;
+            throw new BigCommerceException("Invalid response");
         }
     }
 }
