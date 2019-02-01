@@ -1,19 +1,20 @@
 ﻿using System;
 using System.ServiceProcess;
+using System.IO;
 
 namespace ShipWorks.Escalator
 {
     /// <summary>
     /// Logic of the Escalator service
     /// </summary>
-    public partial class Escalator : ServiceBase
+    public class Escalator : ServiceBase
     {
         /// <summary>
         /// Constructor
         /// </summary>
         public Escalator()
         {
-            InitializeComponent();
+            this.ServiceName = ShipWorks.Escalator.ServiceName.Resolve();
         }
 
         /// <summary>
@@ -21,8 +22,8 @@ namespace ShipWorks.Escalator
         /// </summary>
         protected override void OnStart(string[] args)
         {
-            System.IO.Directory.SetCurrentDirectory(System.AppDomain.CurrentDomain.BaseDirectory);
-            using (System.IO.StreamWriter file = new System.IO.StreamWriter(@"hereIam.txt"))
+            Directory.SetCurrentDirectory(AppDomain.CurrentDomain.BaseDirectory);
+            using (StreamWriter file = new StreamWriter(@"hereIam.txt"))
             {
                 file.WriteLine(DateTime.Now.ToString());
             }

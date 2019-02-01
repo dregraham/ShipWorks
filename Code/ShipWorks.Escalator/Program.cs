@@ -47,6 +47,9 @@ namespace ShipWorks.Escalator
             ServiceBase.Run(new Escalator());
         }
 
+        /// <summary>
+        /// Set service to restart after 3 crashses
+        /// </summary>
         static void SetRecoveryOptions(string serviceName)
         {
             int exitCode;
