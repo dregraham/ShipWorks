@@ -1,0 +1,1 @@
+wmic printer where name='Microsoft Print to PDF' call setdefaultprinter

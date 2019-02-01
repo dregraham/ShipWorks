@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Data.Common;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using Interapptive.Shared.ComponentRegistration;
 
@@ -29,11 +30,11 @@ namespace ShipWorks.Data.Connection
         /// <summary>
         /// Execute a block of code using a SqlAdapter that is part of a physical transaction
         /// </summary>
-        public async Task<T> WithPhysicalTransactionAsync<T>(Func<DbTransaction, ISqlAdapter, Task<T>> withAdapter)
+        public async Task<T> WithPhysicalTransactionAsync<T>(Func<ISqlAdapter, Task<T>> withAdapter, [CallerMemberName] string name = "")
         {
             using (DbConnection connection = SqlSession.Current.OpenConnection())
             {
-                return await connection.WithTransactionAsync(withAdapter).ConfigureAwait(false);
+                return await connection.WithTransactionAsync(withAdapter, name).ConfigureAwait(false);
             }
         }
 

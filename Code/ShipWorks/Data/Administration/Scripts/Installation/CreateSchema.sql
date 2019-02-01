@@ -1271,6 +1271,16 @@ PRINT N'Creating index [IX_SWDefault_Shipment_ProcessedOrderID] on [dbo].[Shipme
 GO
 CREATE NONCLUSTERED INDEX [IX_SWDefault_Shipment_ProcessedOrderID] ON [dbo].[Shipment] ([Processed] DESC, [ProcessedDate]) INCLUDE ([OrderID], [Voided])
 GO
+PRINT N'Creating Shipment.[IX_SWDefault_Shipment_ProcessedVoidedOnlineShipmentIDShipmentType] index'
+GO
+CREATE NONCLUSTERED INDEX [IX_SWDefault_Shipment_ProcessedVoidedOnlineShipmentIDShipmentType] ON [dbo].[Shipment]
+(
+	[Processed] ASC,
+	[Voided] ASC,
+	[OnlineShipmentID] ASC,
+	[ShipmentType] ASC
+)
+GO
 PRINT N'Creating index [IX_SWDefault_Shipment_ReturnShipment] on [dbo].[Shipment]'
 GO
 CREATE NONCLUSTERED INDEX [IX_SWDefault_Shipment_ReturnShipment] ON [dbo].[Shipment] ([ReturnShipment]) INCLUDE ([OrderID])

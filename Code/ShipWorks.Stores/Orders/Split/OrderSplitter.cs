@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Data.Common;
 using System.Linq;
 using System.Reactive;
 using System.Threading.Tasks;
@@ -144,11 +143,11 @@ namespace ShipWorks.Stores.Orders.Split
         /// </summary>
         private async Task<(OrderEntity original, OrderEntity split)> SaveOrders(OrderEntity originalOrder, OrderEntity newOrderEntity, IProgressReporter progressProvider)
         {
-            return await sqlAdapterFactory.WithPhysicalTransactionAsync(async (transaction, sqlAdapter) =>
+            return await sqlAdapterFactory.WithPhysicalTransactionAsync(async sqlAdapter =>
             {
                 await SaveOrder(newOrderEntity, sqlAdapter)
                     .Bind(x => SaveOrder(originalOrder, sqlAdapter).Map(y => x && y))
-                    .Bind(x => CompleteTransaction(x, transaction, sqlAdapter, progressProvider))
+                    .Bind(x => CompleteTransaction(x, sqlAdapter, progressProvider))
                     .Map(_ => newOrderEntity)
                     .ConfigureAwait(false);
 
@@ -159,20 +158,20 @@ namespace ShipWorks.Stores.Orders.Split
         /// <summary>
         /// Complete the transaction
         /// </summary>
-        private Task<Unit> CompleteTransaction(bool saveSucceeded, DbTransaction transaction, ISqlAdapter sqlAdapter, IProgressReporter progressProvider)
+        private Task<Unit> CompleteTransaction(bool saveSucceeded, ISqlAdapter sqlAdapter, IProgressReporter progressProvider)
         {
             var cancelRequested = progressProvider.IsCancelRequested;
             progressProvider.CanCancel = false;
 
             if (!saveSucceeded || cancelRequested)
             {
-                transaction.Rollback();
+                sqlAdapter.Rollback();
                 return Result.FromError(cancelRequested ? Error.Canceled : Error.SaveFailed);
             }
 
             progressProvider.PercentComplete = 50;
 
-            transaction.Commit();
+            sqlAdapter.Commit();
             return Result.FromSuccess();
         }
 
@@ -211,7 +210,7 @@ namespace ShipWorks.Stores.Orders.Split
         }
 
         /// <summary>
-        /// Save the values for the order to the database, including OrderItems 
+        /// Save the values for the order to the database, including OrderItems
         /// and OrderCharges (that may have been deleted)
         /// </summary>
         private async Task<bool> SaveOrder(OrderEntity order, ISqlAdapter sqlAdapter)

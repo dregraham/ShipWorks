@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<modulegroupdoc
+rxversion="8.1">
+  <testsuiteentryhierarchy>
+    <flatlistofchildren>
+      <modulegroups
+      name="ProcessExpressOne"
+      id="b025b540-ea8e-403f-a2b0-6d04108f35c3"/>
+    </flatlistofchildren>
+    <childhierarchy>
+      <modulegroups
+      name="ProcessExpressOne"
+      id="b025b540-ea8e-403f-a2b0-6d04108f35c3"/>
+    </childhierarchy>
+  </testsuiteentryhierarchy>
+</modulegroupdoc>

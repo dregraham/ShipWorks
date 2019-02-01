@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Data.Common;
-using System.Data.Odbc;
 using System.Data.SqlClient;
 using System.Diagnostics;
 using System.Linq;
@@ -10,10 +9,8 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Autofac;
 using Interapptive.Shared;
-using Interapptive.Shared.Collections;
 using Interapptive.Shared.Extensions;
 using Interapptive.Shared.Threading;
-using Interapptive.Shared.Utility;
 using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Actions;
@@ -41,27 +38,27 @@ namespace ShipWorks.Stores.Communication
     public static class DownloadManager
     {
         // Logger
-        static readonly ILog log = LogManager.GetLogger(typeof(DownloadManager));
+        private static readonly ILog log = LogManager.GetLogger(typeof(DownloadManager));
 
         // Downloading flag
-        static volatile bool isDownloading;
+        private volatile static bool isDownloading;
 
         // The progress dlg currently displayed, or null if not displayed.
-        static ProgressDlg progressDlg;
+        private static ProgressDlg progressDlg;
 
         // The busy token
-        static ApplicationBusyToken busyToken;
+        private static ApplicationBusyToken busyToken;
 
         // The progress item container
-        static ProgressProvider progressProvider;
+        private static ProgressProvider progressProvider;
 
         // The current queue of items to be downloaded and its locking features
-        static List<PendingDownload> downloadQueue;
-        static readonly object downloadQueueLock = new object();
+        private static List<PendingDownload> downloadQueue;
+        private static readonly object downloadQueueLock = new object();
 
         #region class PendingDownload
 
-        class PendingDownload
+        private class PendingDownload
         {
             public long StoreID { get; set; }
             public ProgressItem ProgressItem { get; set; }
@@ -81,9 +78,9 @@ namespace ShipWorks.Stores.Communication
         public static event DownloadCompleteEventHandler DownloadComplete;
 
         // Data for controlling auto-download
-        static Dictionary<long, DateTime?> lastDownloadTimesCache = null;
-        static readonly object lastDownloadTimesLock = new object();
-        static DateTime lastAutoDownloadCheck;
+        private static Dictionary<long, DateTime?> lastDownloadTimesCache = null;
+        private static readonly object lastDownloadTimesLock = new object();
+        private static DateTime lastAutoDownloadCheck;
 
         /// <summary>
         /// Initialize the DownloadManager
@@ -176,7 +173,7 @@ namespace ShipWorks.Stores.Communication
                 try
                 {
                     storeDownloaders = GetOnDemandStoreDownloaders(orderNumber, lifetimeScope);
-                
+
                     if (storeDownloaders.Any())
                     {
                         using (DbConnection con = SqlSession.Current.OpenConnection())
@@ -198,7 +195,7 @@ namespace ShipWorks.Stores.Communication
                 return caughtExceptions;
             }
         }
-        
+
         /// <summary>
         /// Download from all stores by order number
         /// </summary>
@@ -245,7 +242,7 @@ namespace ShipWorks.Stores.Communication
                 if (StoreTypeManager.GetType(store).IsOnDemandDownloadEnabled)
                 {
                     IStoreDownloader downloader = lifetimeScope.ResolveKeyed<IStoreDownloader>(store.StoreTypeCode, TypedParameter.From(store));
-                    
+
                     if (downloader.ShouldDownload(orderNumber))
                     {
                         storeDownloaders.Add(downloader);
@@ -659,7 +656,7 @@ namespace ShipWorks.Stores.Communication
         /// Save Download Log
         /// </summary>
         private static async Task SaveDownloadLog(DownloadEntity downloadLog)
-        { 
+        {
             // Save the updated log
             using (ISqlAdapter adapter = new SqlAdapter())
             {

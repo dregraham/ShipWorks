@@ -42,7 +42,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
 
         // Indicates if the monitor has been started
         private static bool started = false;
-        // WS returns the names of the packages differently, so create a mapping of WS package type names 
+        // WS returns the names of the packages differently, so create a mapping of WS package type names
 
         private static ITangoLogShipmentProcessor tangoLogShipmentProcessor;
 
@@ -311,7 +311,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
                 // where the Action Processor uses the ambient transaction, which causes DTC promotion.
                 using (DbConnection connection = SqlSession.Current.OpenConnection())
                 {
-                    connection.WithTransaction((transaction, adapter) =>
+                    connection.WithTransaction(adapter =>
                     {
                         worldShipProcessedGrouping.OrderedWorldShipProcessedEntries.ForEach(worldShipProcessedEntry => adapter.DeleteEntity(new WorldShipProcessedEntity(worldShipProcessedEntry.WorldShipProcessedID)));
 
@@ -473,7 +473,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
                     }
                 }
             }
-            // If we are mail innovations, set the tracking number to what WS set UspsTrackingNumber to.  
+            // If we are mail innovations, set the tracking number to what WS set UspsTrackingNumber to.
         }
 
         /// <summary>
