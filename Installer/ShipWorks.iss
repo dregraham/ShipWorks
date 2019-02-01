@@ -90,6 +90,8 @@ Type: files; Name: {app}\eBay.SDK.dll
 Source: License.rtf; DestDir: {app}; Flags: overwritereadonly ignoreversion; BeforeInstall: BackupInstallingFile
 Source: {#AppArtifacts}\ShipWorks.exe; DestDir: {app}; Flags: overwritereadonly ignoreversion; BeforeInstall: BackupInstallingFile
 Source: {#AppArtifacts}\{#= EditionAppConfig}; DestDir: {app}; DestName: "ShipWorks.exe.config"; Flags: overwritereadonly ignoreversion; BeforeInstall: BackupInstallingFile
+Source: {#AppArtifacts}\swc.exe.config; DestDir: {app}; Flags: overwritereadonly ignoreversion
+Source: {#AppArtifacts}\*.exe; DestDir: {app}; Flags: overwritereadonly ignoreversion
 Source: {#AppArtifacts}\*.dll; DestDir: {app}; Excludes: "ShipWorks.Native.dll"; Flags: overwritereadonly ignoreversion; BeforeInstall: BackupInstallingFile
 Source: {#AppArtifacts}\x64\ShipWorks.Native.dll; DestDir: {app}; Flags: overwritereadonly ignoreversion; Check: Is64BitInstallMode; BeforeInstall: BackupInstallingFile
 Source: {#AppArtifacts}\Win32\ShipWorks.Native.dll; DestDir: {app}; Flags: overwritereadonly ignoreversion; Check: not Is64BitInstallMode; BeforeInstall: BackupInstallingFile
