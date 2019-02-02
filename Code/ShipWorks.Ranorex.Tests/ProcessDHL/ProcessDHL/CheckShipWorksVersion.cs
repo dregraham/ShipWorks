@@ -26,7 +26,7 @@ namespace ProcessDHL
     /// <summary>
     ///The CheckShipWorksVersion recording.
     /// </summary>
-    [TestModule("60e80fe4-a6ae-47c6-b34f-7833d314e5cc", ModuleType.Recording, 1)]
+    [TestModule("d08798de-c10b-4ebc-bbd1-7ae559261ef8", ModuleType.Recording, 1)]
     public partial class CheckShipWorksVersion : ITestModule
     {
         /// <summary>
@@ -59,7 +59,7 @@ namespace ProcessDHL
         /// <summary>
         /// Gets or sets the value of variable ShipWorksVersion.
         /// </summary>
-        [TestVariable("23509cc8-cb62-4212-a34c-e86ce6e9d937")]
+        [TestVariable("3eee7fcd-2a47-4034-885d-44f78bc28ff7")]
         public string ShipWorksVersion
         {
             get { return _ShipWorksVersion; }
@@ -112,20 +112,20 @@ namespace ProcessDHL
             Keyboard.Press("{Tab}");
             Delay.Milliseconds(0);
             
-            Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Move item 'ShipWorksSa.Version' at Center.", repo.ShipWorksSa.VersionInfo, new RecordItemIndex(5));
-            repo.ShipWorksSa.Version.MoveTo();
+            Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Move item 'ShipWorks.TextBox' at Center.", repo.ShipWorks.TextBoxInfo, new RecordItemIndex(5));
+            repo.ShipWorks.TextBox.MoveTo();
             Delay.Milliseconds(200);
             
-            Report.Log(ReportLevel.Info, "Get Value", "Getting attribute 'AccessibleValue' from item 'ShipWorksSa.Version' and assigning its value to variable 'ShipWorksVersion'.", repo.ShipWorksSa.VersionInfo, new RecordItemIndex(6));
-            ShipWorksVersion = repo.ShipWorksSa.Version.Element.GetAttributeValueText("AccessibleValue");
+            Report.Log(ReportLevel.Info, "Get Value", "Getting attribute 'Text' from item 'ShipWorks.TextBox' and assigning its value to variable 'ShipWorksVersion'.", repo.ShipWorks.TextBoxInfo, new RecordItemIndex(6));
+            ShipWorksVersion = repo.ShipWorks.TextBox.Element.GetAttributeValueText("Text");
             Delay.Milliseconds(0);
             
-            Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Move item 'ShipWorksSa.Close' at Center.", repo.ShipWorksSa.CloseInfo, new RecordItemIndex(7));
-            repo.ShipWorksSa.Close.MoveTo();
+            Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Move item 'ShipWorks.Close' at Center.", repo.ShipWorks.CloseInfo, new RecordItemIndex(7));
+            repo.ShipWorks.Close.MoveTo();
             Delay.Milliseconds(200);
             
-            Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Click item 'ShipWorksSa.Close' at Center.", repo.ShipWorksSa.CloseInfo, new RecordItemIndex(8));
-            repo.ShipWorksSa.Close.Click();
+            Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Click item 'ShipWorks.Close' at Center.", repo.ShipWorks.CloseInfo, new RecordItemIndex(8));
+            repo.ShipWorks.Close.Click();
             Delay.Milliseconds(200);
             
             GrabVersion();

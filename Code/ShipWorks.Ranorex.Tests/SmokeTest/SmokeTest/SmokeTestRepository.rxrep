@@ -480,6 +480,26 @@ XrLp0EM2aG+RntUiB+ZT6fxfIsRPbYnQgbXhGFYAAAAASUVORK5CYII=
 			searchtimeout="30000ms">
 				/form[@processname='ShipWorks']/?/?/toolbar[@accessiblerole='ToolBar']/?/?/element[@accessiblename='Batch Grid']
 			</item>
+			<item
+			addcaps="text,uiautomation,uiautomationvalue"
+			capname="text"
+			id="53702649-6ea9-40b0-a23a-ccb4401eaeee"
+			name="TextBox"
+			refimgid="fb7f9f4c-02a1-4747-be2f-70e8223555b7"
+			refpath="/form[@name='About ShipWorks']/text[@classname='TextBox']"
+			searchtimeout="30000ms">
+				/form[@processname='ShipWorks']/text[@classname='TextBox']
+			</item>
+			<item
+			addcaps="button,uiautomation,uiautomationinvoke"
+			capname="button"
+			id="f7071221-4ed3-4ebd-b204-9361e2b0af39"
+			name="Close"
+			refimgid="eaee5c62-f64f-443e-9a0c-4c7d509941b8"
+			refpath="/form[@name='About ShipWorks']/button[@name='Close']"
+			searchtimeout="30000ms">
+				/form[@processname='ShipWorks']/button[@name='Close']
+			</item>
 			<basepath>
 				/form[@processname='ShipWorks']
 			</basepath>
@@ -688,6 +708,16 @@ MccVydhgafzKwmo3c6RCyF+QF9ssNPjvRAAAAABJRU5ErkJggg==
 					/form[@controlname='MainForm']/container[@controlname='panelDockingArea']
 				</basepath>
 			</folder>
+			<item
+			addcaps="unknown,control,nativewindow"
+			capname="unknown"
+			id="5effb9b3-ac3c-465b-bd05-d169dde9c2aa"
+			name="RibbonTabHelp"
+			refimgid="c578ca97-71d8-4c82-a1e6-107a5245811d"
+			refpath="/form[@controlname='MainForm']/element[@controlname='ribbon']/element[@controlname='ribbonTabHelp']"
+			searchtimeout="30000ms">
+				/form[@controlname='MainForm']/?/?/element[@controlname='ribbonTabHelp']
+			</item>
 			<basepath>
 				/form[@controlname='MainForm']
 			</basepath>
@@ -3975,6 +4005,16 @@ lpKZgpMF6Pw3M/MFayOlqIh43SSsYsIrayXz9q3r5Ra2vFFWLUXbtWRiANXcVpB6SHDZSEK3kcS7
 			refpath="/form[@controlname='MainForm']/element[@controlname='ribbon']/button[@accessiblename='Application']"
 			searchtimeout="30000ms">
 				/form[@title~'ShipWorks']/?/?/button[@accessiblename='Application']
+			</item>
+			<item
+			addcaps="container,uiautomation"
+			capname="container"
+			id="9d45a334-cd7a-41c1-877a-0a8a77e38446"
+			name="PARTContentHost"
+			refimgid="a992bc38-c352-4d30-8186-4c274e9fb3a0"
+			refpath="/form[@name='About ShipWorks']/text[@classname='TextBox']/container[@automationid='PART_ContentHost']"
+			searchtimeout="30000ms">
+				/form[@title~'ShipWorks']/?/?/container[@automationid='PART_ContentHost']
 			</item>
 			<basepath>
 				/form[@title~'ShipWorks']

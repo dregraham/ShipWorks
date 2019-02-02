@@ -80,6 +80,20 @@ rxversion="8.1">
 			ref="8b217c21-c37f-4dea-90ad-4e8c830a75ab"
 			type="Recording">
 			</testmodule>
+			<testmodule
+			id="bcdb2b51-0fd0-4485-ae63-ba7eb6ba2dad"
+			name="CheckShipWorksVersion"
+			ref="d08798de-c10b-4ebc-bbd1-7ae559261ef8"
+			type="Recording">
+				<databinding>
+					<var
+					dataname="ShipWorksVersion"
+					datasourceid="20edc39a-3fca-4568-b7c9-a80a94f71d4a"
+					variableid="3eee7fcd-2a47-4034-885d-44f78bc28ff7"
+					variablename="ShipWorksVersion">
+					</var>
+				</databinding>
+			</testmodule>
 			<smartfoldernode
 			id="c9fc4850-5c41-4bdb-afd0-e78d7a7e2b11"
 			name="VoidAllShipments">
@@ -121,20 +135,6 @@ rxversion="8.1">
 			type="Recording">
 			</testmodule>
 			<testmodule
-			id="ecb921ea-10f5-4702-9167-a2ec19a0ba3b"
-			name="CheckShipWorksVersion"
-			ref="60e80fe4-a6ae-47c6-b34f-7833d314e5cc"
-			type="Recording">
-				<databinding>
-					<var
-					dataname="ShipWorksVersion"
-					datasourceid="20edc39a-3fca-4568-b7c9-a80a94f71d4a"
-					variableid="23509cc8-cb62-4212-a34c-e86ce6e9d937"
-					variablename="ShipWorksVersion">
-					</var>
-				</databinding>
-			</testmodule>
-			<testmodule
 			id="ff945693-ec76-41bd-8413-35df0a1ecb81"
 			name="ShipOrders_ToAddress_International"
 			ref="1bd4d992-dadd-4b88-904e-dbe52fd6e03c"
@@ -152,7 +152,7 @@ rxversion="8.1">
 					id="9eaa75aa-1c56-4838-b8b6-5eb182062df1"
 					name="setup">
 						<testmodule
-						id="ecb921ea-10f5-4702-9167-a2ec19a0ba3b"
+						id="bcdb2b51-0fd0-4485-ae63-ba7eb6ba2dad"
 						name="CheckShipWorksVersion">
 						</testmodule>
 					</setup>
