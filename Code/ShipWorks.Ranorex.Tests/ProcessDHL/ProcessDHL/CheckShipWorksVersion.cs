@@ -26,7 +26,7 @@ namespace ProcessDHL
     /// <summary>
     ///The CheckShipWorksVersion recording.
     /// </summary>
-    [TestModule("d08798de-c10b-4ebc-bbd1-7ae559261ef8", ModuleType.Recording, 1)]
+    [TestModule("4dfee956-d61f-4ea3-afd0-8c27f1cdcad2", ModuleType.Recording, 1)]
     public partial class CheckShipWorksVersion : ITestModule
     {
         /// <summary>
@@ -59,7 +59,7 @@ namespace ProcessDHL
         /// <summary>
         /// Gets or sets the value of variable ShipWorksVersion.
         /// </summary>
-        [TestVariable("3eee7fcd-2a47-4034-885d-44f78bc28ff7")]
+        [TestVariable("74aa69c6-5365-4800-bc09-16ab59ae3ec3")]
         public string ShipWorksVersion
         {
             get { return _ShipWorksVersion; }
@@ -111,22 +111,6 @@ namespace ProcessDHL
             Report.Log(ReportLevel.Info, "Keyboard", "Key sequence '{Tab}'.", new RecordItemIndex(4));
             Keyboard.Press("{Tab}");
             Delay.Milliseconds(0);
-            
-            Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Move item 'ShipWorks.TextBox' at Center.", repo.ShipWorks.TextBoxInfo, new RecordItemIndex(5));
-            repo.ShipWorks.TextBox.MoveTo();
-            Delay.Milliseconds(200);
-            
-            Report.Log(ReportLevel.Info, "Get Value", "Getting attribute 'Text' from item 'ShipWorks.TextBox' and assigning its value to variable 'ShipWorksVersion'.", repo.ShipWorks.TextBoxInfo, new RecordItemIndex(6));
-            ShipWorksVersion = repo.ShipWorks.TextBox.Element.GetAttributeValueText("Text");
-            Delay.Milliseconds(0);
-            
-            Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Move item 'ShipWorks.Close' at Center.", repo.ShipWorks.CloseInfo, new RecordItemIndex(7));
-            repo.ShipWorks.Close.MoveTo();
-            Delay.Milliseconds(200);
-            
-            Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Click item 'ShipWorks.Close' at Center.", repo.ShipWorks.CloseInfo, new RecordItemIndex(8));
-            repo.ShipWorks.Close.Click();
-            Delay.Milliseconds(200);
             
             GrabVersion();
             Delay.Milliseconds(0);

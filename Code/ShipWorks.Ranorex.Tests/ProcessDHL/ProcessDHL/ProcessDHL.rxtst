@@ -81,15 +81,15 @@ rxversion="8.1">
 			type="Recording">
 			</testmodule>
 			<testmodule
-			id="bcdb2b51-0fd0-4485-ae63-ba7eb6ba2dad"
+			id="bf4f5d9e-edb4-483a-a152-f78851bbf846"
 			name="CheckShipWorksVersion"
-			ref="d08798de-c10b-4ebc-bbd1-7ae559261ef8"
+			ref="4dfee956-d61f-4ea3-afd0-8c27f1cdcad2"
 			type="Recording">
 				<databinding>
 					<var
 					dataname="ShipWorksVersion"
 					datasourceid="20edc39a-3fca-4568-b7c9-a80a94f71d4a"
-					variableid="3eee7fcd-2a47-4034-885d-44f78bc28ff7"
+					variableid="74aa69c6-5365-4800-bc09-16ab59ae3ec3"
 					variablename="ShipWorksVersion">
 					</var>
 				</databinding>
@@ -152,7 +152,7 @@ rxversion="8.1">
 					id="9eaa75aa-1c56-4838-b8b6-5eb182062df1"
 					name="setup">
 						<testmodule
-						id="bcdb2b51-0fd0-4485-ae63-ba7eb6ba2dad"
+						id="bf4f5d9e-edb4-483a-a152-f78851bbf846"
 						name="CheckShipWorksVersion">
 						</testmodule>
 					</setup>

@@ -430,11 +430,27 @@ puaM0WC47NGabmjNFguOzRmm5ozRYLjs0ZpuaM0WC5//2Q==
 			<bindings>
 			</bindings>
 		</keysequenceitem>
+		<userrecorditem
+		classname="CheckShipWorksVersion"
+		enabled="True"
+		isexternaltestmethod="False"
+		methodname="GrabVersion"
+		namespace="SmokeTest"
+		optional="False"
+		varname="">
+			<comment>
+			</comment>
+			<bindings>
+			</bindings>
+			<arguments
+			id="a7b8c402-5111-46b9-a81a-1bbdd2342919">
+			</arguments>
+		</userrecorditem>
 		<mouseitem
 		action="Move"
 		button="Left"
 		duration="500ms"
-		enabled="True"
+		enabled="False"
 		loc="Center"
 		movetime="300ms"
 		optional="False"
@@ -447,30 +463,90 @@ puaM0WC47NGabmjNFguOzRmm5ozRYLjs0ZpuaM0WC5//2Q==
 			<bindings>
 			</bindings>
 			<info
-			id="53702649-6ea9-40b0-a23a-ccb4401eaeee"
+			id="9d45a334-cd7a-41c1-877a-0a8a77e38446"
 			sourcename="RepositoryEditor">
 				<element
-				capabilities="uiautomation, uiautomationvalue"
+				capabilities="uiautomation"
 				dontcache="False"
-				enabled="False"
+				enabled="True"
 				flavor="uia"
 				hasfocus="False"
-				index="4"
-				prefcap="text"
-				rect="0,0,0,0"
-				role="text"
+				index="0"
+				prefcap="container"
+				rect="625,215,73,19"
+				role="container"
 				snapElem=""
-				valid="False"
+				valid="True"
 				visible="True">
+					<attribute
+					name="automationid"
+					type="System.String">
+						PART_ContentHost
+					</attribute>
+					<attribute
+					name="classname"
+					type="System.String">
+						ScrollViewer
+					</attribute>
+					<attribute
+					name="controltype"
+					type="System.String">
+						Pane
+					</attribute>
+					<attribute
+					name="frameworkid"
+					type="System.String">
+						WPF
+					</attribute>
+					<attribute
+					name="iscontentelement"
+					type="System.Boolean">
+						False
+					</attribute>
+					<attribute
+					name="iscontrolelement"
+					type="System.Boolean">
+						False
+					</attribute>
+					<attribute
+					name="iskeyboardfocusable"
+					type="System.Boolean">
+						False
+					</attribute>
+					<attribute
+					name="ispassword"
+					type="System.Boolean">
+						False
+					</attribute>
+					<attribute
+					name="isrequiredforform"
+					type="System.Boolean">
+						False
+					</attribute>
+					<attribute
+					name="localizedcontroltype"
+					type="System.String">
+						pane
+					</attribute>
+					<attribute
+					name="orientation"
+					type="System.Windows.Automation.OrientationType, UIAutomationTypes, Culture=neutral, PublicKeyToken=31bf3856ad364e35">
+						None
+					</attribute>
+					<attribute
+					name="processid"
+					type="System.Int32">
+						8032
+					</attribute>
 				</element>
 				<path>
-					/form[@processname='ShipWorks']/text[@classname='TextBox']
+					/form[@title~'ShipWorks']/?/?/container[@automationid='PART_ContentHost']
 				</path>
 			</info>
 		</mouseitem>
 		<getvaluerecorditem
 		attrname="Text"
-		enabled="True"
+		enabled="False"
 		optional="False"
 		searchpropertyid="cb82be89-eac1-4dd1-aef2-d99d14a8a8c3"
 		varname="ShipWorksVersion">
@@ -479,24 +555,84 @@ puaM0WC47NGabmjNFguOzRmm5ozRYLjs0ZpuaM0WC5//2Q==
 			<bindings>
 			</bindings>
 			<info
-			id="53702649-6ea9-40b0-a23a-ccb4401eaeee"
+			id="9d45a334-cd7a-41c1-877a-0a8a77e38446"
 			sourcename="RepositoryEditor">
 				<element
-				capabilities="uiautomation, uiautomationvalue"
+				capabilities="uiautomation"
 				dontcache="False"
-				enabled="False"
+				enabled="True"
 				flavor="uia"
 				hasfocus="False"
-				index="4"
-				prefcap="text"
-				rect="0,0,0,0"
-				role="text"
+				index="0"
+				prefcap="container"
+				rect="625,215,73,19"
+				role="container"
 				snapElem=""
-				valid="False"
+				valid="True"
 				visible="True">
+					<attribute
+					name="automationid"
+					type="System.String">
+						PART_ContentHost
+					</attribute>
+					<attribute
+					name="classname"
+					type="System.String">
+						ScrollViewer
+					</attribute>
+					<attribute
+					name="controltype"
+					type="System.String">
+						Pane
+					</attribute>
+					<attribute
+					name="frameworkid"
+					type="System.String">
+						WPF
+					</attribute>
+					<attribute
+					name="iscontentelement"
+					type="System.Boolean">
+						False
+					</attribute>
+					<attribute
+					name="iscontrolelement"
+					type="System.Boolean">
+						False
+					</attribute>
+					<attribute
+					name="iskeyboardfocusable"
+					type="System.Boolean">
+						False
+					</attribute>
+					<attribute
+					name="ispassword"
+					type="System.Boolean">
+						False
+					</attribute>
+					<attribute
+					name="isrequiredforform"
+					type="System.Boolean">
+						False
+					</attribute>
+					<attribute
+					name="localizedcontroltype"
+					type="System.String">
+						pane
+					</attribute>
+					<attribute
+					name="orientation"
+					type="System.Windows.Automation.OrientationType, UIAutomationTypes, Culture=neutral, PublicKeyToken=31bf3856ad364e35">
+						None
+					</attribute>
+					<attribute
+					name="processid"
+					type="System.Int32">
+						8032
+					</attribute>
 				</element>
 				<path>
-					/form[@processname='ShipWorks']/text[@classname='TextBox']
+					/form[@title~'ShipWorks']/?/?/container[@automationid='PART_ContentHost']
 				</path>
 			</info>
 		</getvaluerecorditem>
@@ -504,7 +640,7 @@ puaM0WC47NGabmjNFguOzRmm5ozRYLjs0ZpuaM0WC5//2Q==
 		action="Move"
 		button="Left"
 		duration="500ms"
-		enabled="True"
+		enabled="False"
 		loc="Center"
 		movetime="300ms"
 		optional="False"
@@ -547,7 +683,7 @@ puaM0WC47NGabmjNFguOzRmm5ozRYLjs0ZpuaM0WC5//2Q==
 		action="Click"
 		button="Left"
 		duration="500ms"
-		enabled="True"
+		enabled="False"
 		loc="Center"
 		movetime="300ms"
 		optional="False"
@@ -586,22 +722,6 @@ puaM0WC47NGabmjNFguOzRmm5ozRYLjs0ZpuaM0WC5//2Q==
 				</path>
 			</info>
 		</mouseitem>
-		<userrecorditem
-		classname="CheckShipWorksVersion"
-		enabled="True"
-		isexternaltestmethod="False"
-		methodname="GrabVersion"
-		namespace="SmokeTest"
-		optional="False"
-		varname="">
-			<comment>
-			</comment>
-			<bindings>
-			</bindings>
-			<arguments
-			id="a7b8c402-5111-46b9-a81a-1bbdd2342919">
-			</arguments>
-		</userrecorditem>
 	</recorditems>
 	<repository
 	id="e7742ed2-f8bc-429c-9794-64d8a30b8c72"
