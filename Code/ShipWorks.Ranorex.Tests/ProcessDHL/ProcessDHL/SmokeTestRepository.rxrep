@@ -268,7 +268,7 @@ XrLp0EM2aG+RntUiB+ZT6fxfIsRPbYnQgbXhGFYAAAAASUVORK5CYII=
 		id="edb789cd-8c30-4bba-a2fb-39dc997e4082"
 		isrooted="True"
 		name="ShipWorks"
-		refimgid="587d3f51-ebb6-4d15-8027-fa0120a96ad9"
+		refimgid="31dcfe21-c70a-465d-b364-fe10bfca53fe"
 		searchtimeout="30000ms"
 		usecache="True">
 			<item
@@ -479,6 +479,36 @@ XrLp0EM2aG+RntUiB+ZT6fxfIsRPbYnQgbXhGFYAAAAASUVORK5CYII=
 			refpath="/form[@title='' and @processname='ShipWorks' and @controltypename='xbc4f5b163cf61008' and @instance='0']/element/toolbar/container/element[@accessiblename='Batch Grid']"
 			searchtimeout="30000ms">
 				/form[@processname='ShipWorks']/?/?/toolbar[@accessiblerole='ToolBar']/?/?/element[@accessiblename='Batch Grid']
+			</item>
+			<item
+			addcaps="container,uiautomation"
+			capname="container"
+			id="84cc61a7-d947-4b0a-b913-9ed258dac3aa"
+			name="PARTContentHost"
+			refimgid="214a07ce-237a-4011-baa3-f791587c981d"
+			refpath="/form[@name='About ShipWorks']/text[@classname='TextBox']/container[@automationid='PART_ContentHost']"
+			searchtimeout="30000ms">
+				/form[@processname='ShipWorks']/?/?/container[@automationid='PART_ContentHost']
+			</item>
+			<item
+			addcaps="text,uiautomation,uiautomationvalue"
+			capname="text"
+			id="e7dba246-1994-476e-9f87-aa3e908a2d71"
+			name="TextBox"
+			refimgid="2db30fbe-cf2d-4b8c-b249-fd335d4ef02b"
+			refpath="/form[@name='About ShipWorks']/text[@classname='TextBox']"
+			searchtimeout="30000ms">
+				/form[@processname='ShipWorks']/text[@classname='TextBox']
+			</item>
+			<item
+			addcaps="button,uiautomation,uiautomationinvoke"
+			capname="button"
+			id="1d4966b2-0331-4b7a-a0a7-c48c072f6992"
+			name="Close"
+			refimgid="99feafbf-e869-4ffd-b7bc-ac9b8da7672b"
+			refpath="/form[@name='About ShipWorks']/button[@name='Close']"
+			searchtimeout="30000ms">
+				/form[@processname='ShipWorks']/button[@name='Close']
 			</item>
 			<basepath>
 				/form[@processname='ShipWorks']
@@ -3975,6 +4005,16 @@ lpKZgpMF6Pw3M/MFayOlqIh43SSsYsIrayXz9q3r5Ra2vFFWLUXbtWRiANXcVpB6SHDZSEK3kcS7
 			refpath="/form[@controlname='MainForm']/element[@controlname='ribbon']/button[@accessiblename='Application']"
 			searchtimeout="30000ms">
 				/form[@title~'ShipWorks']/?/?/button[@accessiblename='Application']
+			</item>
+			<item
+			addcaps="unknown,control,nativewindow"
+			capname="unknown"
+			id="ac32261b-d24e-4450-bd3a-59d51631b515"
+			name="RibbonTabHelp"
+			refimgid="b5a68307-a0ca-4ebb-87cd-a48107d44adc"
+			refpath="/form[@controlname='MainForm']/element[@controlname='ribbon']/element[@controlname='ribbonTabHelp']"
+			searchtimeout="30000ms">
+				/form[@title~'ShipWorks']/?/?/element[@controlname='ribbonTabHelp']
 			</item>
 			<basepath>
 				/form[@title~'ShipWorks']

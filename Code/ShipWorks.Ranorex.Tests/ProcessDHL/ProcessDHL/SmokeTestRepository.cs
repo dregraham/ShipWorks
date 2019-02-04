@@ -1081,6 +1081,9 @@ namespace ProcessDHL
             RepoItemInfo _viewmodeInfo;
             RepoItemInfo _orderlookupInfo;
             RepoItemInfo _batchgridInfo;
+            RepoItemInfo _partcontenthostInfo;
+            RepoItemInfo _textboxInfo;
+            RepoItemInfo _closeInfo;
 
             /// <summary>
             /// Creates a new ShipWorks  folder.
@@ -1102,6 +1105,9 @@ namespace ProcessDHL
                 _viewmodeInfo = new RepoItemInfo(this, "ViewMode", "?/?/toolbar[@accessiblerole='ToolBar']/element[@accessiblename='View Mode']", 30000, null, "4fa1853a-03d5-42e7-a6b3-f8f6fcdaeba7");
                 _orderlookupInfo = new RepoItemInfo(this, "OrderLookup", "?/?/toolbar[@accessiblerole='ToolBar']/?/?/element[@accessiblename='Order Lookup']", 30000, null, "e58e2306-847d-4f76-86f7-2440fceaed24");
                 _batchgridInfo = new RepoItemInfo(this, "BatchGrid", "?/?/toolbar[@accessiblerole='ToolBar']/?/?/element[@accessiblename='Batch Grid']", 30000, null, "f5275b13-17d2-4474-b39c-031591597b29");
+                _partcontenthostInfo = new RepoItemInfo(this, "PARTContentHost", "?/?/container[@automationid='PART_ContentHost']", 30000, null, "84cc61a7-d947-4b0a-b913-9ed258dac3aa");
+                _textboxInfo = new RepoItemInfo(this, "TextBox", "text[@classname='TextBox']", 30000, null, "e7dba246-1994-476e-9f87-aa3e908a2d71");
+                _closeInfo = new RepoItemInfo(this, "Close", "button[@name='Close']", 30000, null, "1d4966b2-0331-4b7a-a0a7-c48c072f6992");
             }
 
             /// <summary>
@@ -1437,6 +1443,78 @@ namespace ProcessDHL
                 get
                 {
                     return _batchgridInfo;
+                }
+            }
+
+            /// <summary>
+            /// The PARTContentHost item.
+            /// </summary>
+            [RepositoryItem("84cc61a7-d947-4b0a-b913-9ed258dac3aa")]
+            public virtual Ranorex.Container PARTContentHost
+            {
+                get
+                {
+                    return _partcontenthostInfo.CreateAdapter<Ranorex.Container>(true);
+                }
+            }
+
+            /// <summary>
+            /// The PARTContentHost item info.
+            /// </summary>
+            [RepositoryItemInfo("84cc61a7-d947-4b0a-b913-9ed258dac3aa")]
+            public virtual RepoItemInfo PARTContentHostInfo
+            {
+                get
+                {
+                    return _partcontenthostInfo;
+                }
+            }
+
+            /// <summary>
+            /// The TextBox item.
+            /// </summary>
+            [RepositoryItem("e7dba246-1994-476e-9f87-aa3e908a2d71")]
+            public virtual Ranorex.Text TextBox
+            {
+                get
+                {
+                    return _textboxInfo.CreateAdapter<Ranorex.Text>(true);
+                }
+            }
+
+            /// <summary>
+            /// The TextBox item info.
+            /// </summary>
+            [RepositoryItemInfo("e7dba246-1994-476e-9f87-aa3e908a2d71")]
+            public virtual RepoItemInfo TextBoxInfo
+            {
+                get
+                {
+                    return _textboxInfo;
+                }
+            }
+
+            /// <summary>
+            /// The Close item.
+            /// </summary>
+            [RepositoryItem("1d4966b2-0331-4b7a-a0a7-c48c072f6992")]
+            public virtual Ranorex.Button Close
+            {
+                get
+                {
+                    return _closeInfo.CreateAdapter<Ranorex.Button>(true);
+                }
+            }
+
+            /// <summary>
+            /// The Close item info.
+            /// </summary>
+            [RepositoryItemInfo("1d4966b2-0331-4b7a-a0a7-c48c072f6992")]
+            public virtual RepoItemInfo CloseInfo
+            {
+                get
+                {
+                    return _closeInfo;
                 }
             }
 
@@ -9392,6 +9470,7 @@ namespace ProcessDHL
             RepoItemInfo _closeInfo;
             RepoItemInfo _version1Info;
             RepoItemInfo _applicationInfo;
+            RepoItemInfo _ribbontabhelpInfo;
 
             /// <summary>
             /// Creates a new ShipWorksSa  folder.
@@ -9414,6 +9493,7 @@ namespace ProcessDHL
                 _closeInfo = new RepoItemInfo(this, "Close", "button[@controlname='close']", 30000, null, "dd438bee-a495-4880-b15e-fdab3a0c3e8d");
                 _version1Info = new RepoItemInfo(this, "Version1", "text[@controlname='version']", 30000, null, "4a87041e-3ecb-4e88-bd9c-a1c41d095420");
                 _applicationInfo = new RepoItemInfo(this, "Application", "?/?/button[@accessiblename='Application']", 30000, null, "7dd01edd-1bc9-45f5-b402-bb08e575c5f0");
+                _ribbontabhelpInfo = new RepoItemInfo(this, "RibbonTabHelp", "?/?/element[@controlname='ribbonTabHelp']", 30000, null, "ac32261b-d24e-4450-bd3a-59d51631b515");
             }
 
             /// <summary>
@@ -9725,6 +9805,30 @@ namespace ProcessDHL
                 get
                 {
                     return _applicationInfo;
+                }
+            }
+
+            /// <summary>
+            /// The RibbonTabHelp item.
+            /// </summary>
+            [RepositoryItem("ac32261b-d24e-4450-bd3a-59d51631b515")]
+            public virtual Ranorex.Unknown RibbonTabHelp
+            {
+                get
+                {
+                    return _ribbontabhelpInfo.CreateAdapter<Ranorex.Unknown>(true);
+                }
+            }
+
+            /// <summary>
+            /// The RibbonTabHelp item info.
+            /// </summary>
+            [RepositoryItemInfo("ac32261b-d24e-4450-bd3a-59d51631b515")]
+            public virtual RepoItemInfo RibbonTabHelpInfo
+            {
+                get
+                {
+                    return _ribbontabhelpInfo;
                 }
             }
 
