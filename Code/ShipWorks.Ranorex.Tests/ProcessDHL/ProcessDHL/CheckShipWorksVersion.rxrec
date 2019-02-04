@@ -1,0 +1,626 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<recordtable
+embeddedrepository="False"
+id="d08798de-c10b-4ebc-bbd1-7ae559261ef8"
+mode="Global"
+rxversion="8.1">
+	<name>
+		CheckShipWorksVersion
+	</name>
+	<repeatcount>
+		1
+	</repeatcount>
+	<turbomode>
+		False
+	</turbomode>
+	<genreport>
+		True
+	</genreport>
+	<speedfactor>
+		1
+	</speedfactor>
+	<useDefaultItemLogging>
+		True
+	</useDefaultItemLogging>
+	<codegen
+	classname="CheckShipWorksVersion"
+	namespace="ProcessDHL">
+	</codegen>
+	<variables>
+		<var
+		id="3eee7fcd-2a47-4034-885d-44f78bc28ff7"
+		name="ShipWorksVersion">
+			ShipWorksVersion
+		</var>
+	</variables>
+	<recorditems>
+		<mouseitem
+		action="Move"
+		button="Left"
+		duration="500ms"
+		enabled="True"
+		loc="Center"
+		movetime="300ms"
+		optional="False"
+		searchpropertyid="43cee62c-b004-4ae1-8470-74d426beb504"
+		sx="2232"
+		sy="39"
+		warnoutofbounds="False">
+			<comment>
+			</comment>
+			<bindings>
+			</bindings>
+			<info
+			id="2a0ec5a6-9ce9-4801-b2c4-268a6d873f08"
+			sourcename="Recorder">
+				<element
+				capabilities="rawtext"
+				dontcache="False"
+				enabled="True"
+				flavor="rawtext"
+				hasfocus="False"
+				index="5"
+				prefcap="rawtext"
+				rect="2217,31,21,13"
+				role="unknown"
+				snapElem=""
+				valid="True"
+				visible="True">
+					<attribute
+					name="column"
+					type="System.Int32">
+						5
+					</attribute>
+					<attribute
+					name="fontname"
+					type="System.String">
+						Tahoma
+					</attribute>
+					<attribute
+					name="fontsize"
+					type="System.Int32">
+						13
+					</attribute>
+					<attribute
+					name="fontstyle"
+					type="System.String">
+						Normal
+					</attribute>
+					<attribute
+					name="rawtext"
+					type="System.String">
+						Help
+					</attribute>
+					<attribute
+					name="row"
+					type="System.Int32">
+						2
+					</attribute>
+					<attribute
+					name="textcolor"
+					type="System.String">
+						#15428B
+					</attribute>
+				</element>
+				<path>
+					/form[@title~'ShipWorks']/?/?/rawtext[@rawtext='Help']
+				</path>
+			</info>
+			<helperscreenshot
+			guid="68026227-f971-4c74-99a0-569ad20c6285">
+				/9j/4AAQSkZJRgABAQEAYABgAAD/2wBDABwTFRgVERwYFhgfHRwhKUUtKSYmKVQ8QDJFZFhpZ2JY
+YF9ufJ6GbnWWd19giruLlqOpsbOxa4TC0MGszp6usar/2wBDAR0fHykkKVEtLVGqcmByqqqqqqqq
+qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqr/wAARCABVAGADASIA
+AhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQA
+AAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3
+ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWm
+p6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEA
+AwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSEx
+BhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElK
+U1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3
+uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwDpKKKK
+ACiiigAooooAKKKKACiiigAooooAKKrb2/vGje3941fIyeYs0VW3t/eNJ5khJw3Sk42DmLVFZV1f
+zQTrEiGRmXIx17/4VH/aN5/z5yfkf8Ki67m6o1Gr2/FGzRWN/aN5/wA+cn5H/ChdTuPNjSSBo97A
+Atkf0o5o9x+wqdvxX+Zs0VV8yQdWzS72/vGrUbnPzFmiq29v7xo3t/eNPkYcxUN1gkFORnv3Gcfn
+irNRmGMkkrySCee4qStCAoTq31/pRSL1b61nPYqO5nXztHq0DICTtAwMc8n1qy906SMDEw+6FU8+
+vPy59KqX8iRanDJICVVM4H1OKc+oWkhJaOXJxyODx+PvWcKkY3udlSjUmouK6f5k/wBrYSjKhTJt
+UK7bQD83qO+PSobuTzbiyYjaRKVIznBBApiyWl9d28BidlZiG8w5yNjd8+9JdQzWl3aRS/PEJf3c
+3c5I4b39+/505yUo6EUoOnUXPpv+Rqv938R/Oikbp+Ipaum7o5pbhRRRVkjvKX1P6/40eUvqf1/x
+pc0ZqLsvQTyl9T+v+NHlJ6n9f8aM8ZzTDIR70rsLD/KX1P6/40eUvqf1/wAaUNkUZoAq3bw2strN
+K+1FlOSc/wBx6guL172MQGFI0eTypVmUsy7hlDgEYz09jWjmomtopbhZXDbgV6OQDg5GQDg80WHc
+WGALDGjMzsqjLknnHfrT/KX1P6/40qnj/gP+FGaeohPKX1P6/wCNHlL6n9f8aXNRl2JO3oKLsBcm
+jJoooEROaEIxT2Td3xSCIDuaBjDlfmAxUobPemk7WpqnLUAS5NKh+dfrSU5Pvr9aAEXof93+opMm
+lTof93+opKADJpBwMUp4GajLHNAEtFFFABRRRQAxl6n2oVQQDRRQA+lT74+tFFACJ0/4D/UUUUUA
+Nk4Q1Gp70UUAf//Z
+			</helperscreenshot>
+		</mouseitem>
+		<mouseitem
+		action="Click"
+		button="Left"
+		duration="500ms"
+		enabled="True"
+		loc="Center"
+		movetime="300ms"
+		optional="False"
+		searchpropertyid="6aeb3430-f548-4e7d-86c0-cb972878fd92"
+		sx="0"
+		sy="0"
+		warnoutofbounds="False">
+			<comment>
+			</comment>
+			<bindings>
+			</bindings>
+			<info
+			id="2a0ec5a6-9ce9-4801-b2c4-268a6d873f08"
+			sourcename="RepositoryEditor">
+				<path>
+					/form[@title~'ShipWorks']/?/?/rawtext[@rawtext='Help']
+				</path>
+			</info>
+		</mouseitem>
+		<mouseitem
+		action="Move"
+		button="Left"
+		duration="500ms"
+		enabled="True"
+		loc="Center"
+		movetime="300ms"
+		optional="False"
+		searchpropertyid="23aa90e1-e7ef-459a-b37b-527c8dc7b444"
+		sx="2450"
+		sy="101"
+		warnoutofbounds="False">
+			<comment>
+			</comment>
+			<bindings>
+			</bindings>
+			<info
+			id="6136428e-2569-41dd-8959-a07ef2a4a8e3"
+			sourcename="Recorder">
+				<element
+				capabilities="rawtext"
+				dontcache="False"
+				enabled="True"
+				flavor="rawtext"
+				hasfocus="False"
+				index="9"
+				prefcap="rawtext"
+				rect="2409,97,82,13"
+				role="unknown"
+				snapElem=""
+				valid="True"
+				visible="True">
+					<attribute
+					name="column"
+					type="System.Int32">
+						9
+					</attribute>
+					<attribute
+					name="fontname"
+					type="System.String">
+						Tahoma
+					</attribute>
+					<attribute
+					name="fontsize"
+					type="System.Int32">
+						13
+					</attribute>
+					<attribute
+					name="fontstyle"
+					type="System.String">
+						Normal
+					</attribute>
+					<attribute
+					name="rawtext"
+					type="System.String">
+						About ShipWorks
+					</attribute>
+					<attribute
+					name="row"
+					type="System.Int32">
+						1
+					</attribute>
+					<attribute
+					name="textcolor"
+					type="System.String">
+						#15428B
+					</attribute>
+				</element>
+				<path>
+					/form[@title~'ShipWorks']/?/?/element[@controlname='ribbonTabHelp']/rawtext[@rawtext='About ShipWorks']
+				</path>
+			</info>
+			<helperscreenshot
+			guid="1c282839-b4a3-4d7d-9760-e41711a924da">
+				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
+			</helperscreenshot>
+		</mouseitem>
+		<mouseitem
+		action="Click"
+		button="Left"
+		duration="500ms"
+		enabled="True"
+		loc="Center"
+		movetime="300ms"
+		optional="False"
+		searchpropertyid="1f4a858a-3be3-4aea-9fcb-ca24980beb14"
+		sx="2450"
+		sy="101"
+		warnoutofbounds="False">
+			<comment>
+			</comment>
+			<bindings>
+			</bindings>
+			<info
+			id="6136428e-2569-41dd-8959-a07ef2a4a8e3"
+			sourcename="Recorder">
+				<element
+				capabilities="rawtext"
+				dontcache="False"
+				enabled="True"
+				flavor="rawtext"
+				hasfocus="False"
+				index="9"
+				prefcap="rawtext"
+				rect="2409,97,82,13"
+				role="unknown"
+				snapElem=""
+				valid="True"
+				visible="True">
+					<attribute
+					name="column"
+					type="System.Int32">
+						9
+					</attribute>
+					<attribute
+					name="fontname"
+					type="System.String">
+						Tahoma
+					</attribute>
+					<attribute
+					name="fontsize"
+					type="System.Int32">
+						13
+					</attribute>
+					<attribute
+					name="fontstyle"
+					type="System.String">
+						Normal
+					</attribute>
+					<attribute
+					name="rawtext"
+					type="System.String">
+						About ShipWorks
+					</attribute>
+					<attribute
+					name="row"
+					type="System.Int32">
+						1
+					</attribute>
+					<attribute
+					name="textcolor"
+					type="System.String">
+						#15428B
+					</attribute>
+				</element>
+				<path>
+					/form[@title~'ShipWorks']/?/?/element[@controlname='ribbonTabHelp']/rawtext[@rawtext='About ShipWorks']
+				</path>
+			</info>
+			<helperscreenshot
+			guid="1c282839-b4a3-4d7d-9760-e41711a924da">
+				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
+			</helperscreenshot>
+		</mouseitem>
+		<keysequenceitem
+		KeySequence="{Tab}"
+		duration="100ms"
+		enabled="True"
+		optional="False"
+		presstime="100ms"
+		searchpropertyid="48f2ca2c-3b98-4d9a-84df-356931f0f222">
+			<comment>
+			</comment>
+			<bindings>
+			</bindings>
+		</keysequenceitem>
+		<mouseitem
+		action="Move"
+		button="Left"
+		duration="500ms"
+		enabled="True"
+		loc="Center"
+		movetime="300ms"
+		optional="False"
+		searchpropertyid="f32b99e7-3d91-43ea-93bd-46d592d3e48f"
+		sx="0"
+		sy="0"
+		warnoutofbounds="False">
+			<comment>
+			</comment>
+			<bindings>
+			</bindings>
+			<info
+			id="e7dba246-1994-476e-9f87-aa3e908a2d71"
+			sourcename="RepositoryEditor">
+				<element
+				capabilities="uiautomation, uiautomationvalue"
+				dontcache="False"
+				enabled="False"
+				flavor="uia"
+				hasfocus="False"
+				index="4"
+				prefcap="text"
+				rect="0,0,0,0"
+				role="text"
+				snapElem=""
+				valid="False"
+				visible="True">
+				</element>
+				<path>
+					/form[@processname='ShipWorks']/text[@classname='TextBox']
+				</path>
+			</info>
+		</mouseitem>
+		<getvaluerecorditem
+		attrname="Text"
+		enabled="True"
+		optional="False"
+		searchpropertyid="cb82be89-eac1-4dd1-aef2-d99d14a8a8c3"
+		varname="ShipWorksVersion">
+			<comment>
+			</comment>
+			<bindings>
+			</bindings>
+			<info
+			id="e7dba246-1994-476e-9f87-aa3e908a2d71"
+			sourcename="RepositoryEditor">
+				<element
+				capabilities="uiautomation, uiautomationvalue"
+				dontcache="False"
+				enabled="False"
+				flavor="uia"
+				hasfocus="False"
+				index="4"
+				prefcap="text"
+				rect="0,0,0,0"
+				role="text"
+				snapElem=""
+				valid="False"
+				visible="True">
+				</element>
+				<path>
+					/form[@processname='ShipWorks']/text[@classname='TextBox']
+				</path>
+			</info>
+		</getvaluerecorditem>
+		<mouseitem
+		action="Move"
+		button="Left"
+		duration="500ms"
+		enabled="True"
+		loc="Center"
+		movetime="300ms"
+		optional="False"
+		searchpropertyid="ccf44a6d-9143-48ee-8949-52c00804daaa"
+		sx="2858"
+		sy="378"
+		warnoutofbounds="False">
+			<comment>
+			</comment>
+			<bindings>
+			</bindings>
+			<info
+			id="1d4966b2-0331-4b7a-a0a7-c48c072f6992"
+			sourcename="RepositoryEditor">
+				<element
+				capabilities="uiautomation, uiautomationinvoke"
+				dontcache="False"
+				enabled="False"
+				flavor="uia"
+				hasfocus="False"
+				index="17"
+				prefcap="button"
+				rect="0,0,0,0"
+				role="button"
+				snapElem=""
+				valid="False"
+				visible="True">
+					<attribute
+					name="pressed"
+					type="System.Boolean">
+						False
+					</attribute>
+				</element>
+				<path>
+					/form[@processname='ShipWorks']/button[@name='Close']
+				</path>
+			</info>
+		</mouseitem>
+		<mouseitem
+		action="Click"
+		button="Left"
+		duration="500ms"
+		enabled="True"
+		loc="Center"
+		movetime="300ms"
+		optional="False"
+		searchpropertyid="be746cfa-fae7-48b6-9dbe-b5e51e0e2537"
+		sx="2877"
+		sy="381"
+		warnoutofbounds="False">
+			<comment>
+			</comment>
+			<bindings>
+			</bindings>
+			<info
+			id="1d4966b2-0331-4b7a-a0a7-c48c072f6992"
+			sourcename="RepositoryEditor">
+				<element
+				capabilities="uiautomation, uiautomationinvoke"
+				dontcache="False"
+				enabled="False"
+				flavor="uia"
+				hasfocus="False"
+				index="17"
+				prefcap="button"
+				rect="0,0,0,0"
+				role="button"
+				snapElem=""
+				valid="False"
+				visible="True">
+					<attribute
+					name="pressed"
+					type="System.Boolean">
+						False
+					</attribute>
+				</element>
+				<path>
+					/form[@processname='ShipWorks']/button[@name='Close']
+				</path>
+			</info>
+		</mouseitem>
+		<userrecorditem
+		classname="CheckShipWorksVersion"
+		enabled="True"
+		isexternaltestmethod="False"
+		methodname="GrabVersion"
+		namespace="ProcessDHL"
+		optional="False"
+		varname="">
+			<comment>
+			</comment>
+			<bindings>
+			</bindings>
+			<arguments
+			id="a7b8c402-5111-46b9-a81a-1bbdd2342919">
+			</arguments>
+		</userrecorditem>
+	</recorditems>
+	<repository
+	id="cbae2dae-15ff-45e7-b7e9-3d7c549c469a"
+	name="SmokeTestRepository"
+	relativepath="SmokeTestRepository.rxrep"
+	rxversion="8.1">
+		<codegen
+		classname="SmokeTestRepository"
+		namespace="ProcessDHL">
+		</codegen>
+		<rootfolder
+		id="4aacfef1-6402-4ba7-b3c9-270ac9a4db4a"
+		name="_rootdummy_">
+		</rootfolder>
+	</repository>
+	<usercodefile
+	lang="CSharp">
+		CheckShipWorksVersion.UserCode.cs
+	</usercodefile>
+	<references>
+	</references>
+</recordtable>

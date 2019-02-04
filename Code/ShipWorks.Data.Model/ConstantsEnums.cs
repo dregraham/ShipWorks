@@ -2046,6 +2046,8 @@ namespace ShipWorks.Data.Model
 		ArchivalSettingsXml,
 		///<summary>AuditEnabled. </summary>
 		AuditEnabled,
+		///<summary>DefaultPickListTemplateID. </summary>
+		DefaultPickListTemplateID,
 		/// <summary></summary>
 		AmountOfFields
 	}

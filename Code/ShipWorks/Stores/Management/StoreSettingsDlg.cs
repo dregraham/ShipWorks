@@ -158,17 +158,22 @@ namespace ShipWorks.Stores.Management
         {
             if (storeEntity.StoreTypeCode == StoreTypeCode.Manual)
             {
+                // Initialize the download section but disable it
+                // Manual Store does not allow downloading
                 downloadSettingsControl = storeType.CreateDownloadSettingsControl();
                 downloadSettingsControl.LoadStore(store);
-                optionControl.Controls.Remove(optionPageOnlineAccount);
-                sectionAutoDownloads.Visible = false;
+                downloadSettingsControl.Location = new Point(17, sectionAutoDownloads.Bottom + VerticalSpaceBetweenSections);
+                downloadSettingsControl.Width = optionPageSettings.Width - downloadSettingsControl.Location.X - 10;
+                downloadSettingsControl.Anchor = AnchorStyles.Left | AnchorStyles.Top | AnchorStyles.Right;
+                panelDownloading.Controls.Add(downloadSettingsControl as Control);
+                panelDownloading.Enabled = false;
 
+                // Initialize and display the manual orders section
                 manualOrderSettingsControl = storeType.CreateManualOrderSettingsControl();
-                manualOrderSettingsControl.Location = new Point(32, 45);
+                manualOrderSettingsControl.Location = new Point(19, sectionTitleManualOrders.Bottom + VerticalSpaceBetweenSections);
                 manualOrderSettingsControl.Width = optionPageSettings.Width - manualOrderSettingsControl.Location.X - 10;
                 manualOrderSettingsControl.Anchor = AnchorStyles.Left | AnchorStyles.Top | AnchorStyles.Right;
-                optionPageSettings.Controls.Add(manualOrderSettingsControl);
-                sectionTitleManualOrders.Location = new Point(15, 15);
+                panelManualOrders.Controls.Add(manualOrderSettingsControl);
             }
             else
             {
@@ -316,6 +321,7 @@ namespace ShipWorks.Stores.Management
 
             // store-specific settings control
             storeSettingsControl = storeType.CreateStoreSettingsControl();
+
             if (storeSettingsControl != null)
             {
                 storeSettingsControl.LoadStore(store);
@@ -327,13 +333,13 @@ namespace ShipWorks.Stores.Management
                 storeSettingsControl.Anchor = AnchorStyles.Left | AnchorStyles.Top | AnchorStyles.Right;
                 optionPageSettings.Controls.Add(storeSettingsControl);
 
-                UpdatPanelPositions();
+                UpdatePanelPositions();
 
-                storeSettingsControl.SizeChanged += (sender, args) => UpdatPanelPositions();
+                storeSettingsControl.SizeChanged += (sender, args) => UpdatePanelPositions();
             }
             else
             {
-                UpdatPanelPositions();
+                UpdatePanelPositions();
             }
 
             panelAddressValidation.Top = panelStoreStatus.Bottom + VerticalSpaceBetweenSections;
@@ -354,7 +360,7 @@ namespace ShipWorks.Stores.Management
         /// <summary>
         /// Update the location of controls below the specified control
         /// </summary>
-        private void UpdatPanelPositions()
+        private void UpdatePanelPositions()
         {
             panelManualOrders.Top = panelDownloading.Bottom + VerticalSpaceBetweenSections;
 

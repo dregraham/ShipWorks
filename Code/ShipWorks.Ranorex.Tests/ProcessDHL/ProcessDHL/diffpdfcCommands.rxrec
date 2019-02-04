@@ -1,0 +1,78 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<recordtable
+embeddedrepository="False"
+id="d10f1de8-c100-46fa-a9e0-aa3aa8914df5"
+mode="Global"
+rxversion="8.1">
+	<name>
+		diffpdfcCommands
+	</name>
+	<repeatcount>
+		1
+	</repeatcount>
+	<turbomode>
+		False
+	</turbomode>
+	<genreport>
+		True
+	</genreport>
+	<speedfactor>
+		1
+	</speedfactor>
+	<useDefaultItemLogging>
+		True
+	</useDefaultItemLogging>
+	<codegen
+	classname="diffpdfcCommands"
+	namespace="ProcessDHL">
+	</codegen>
+	<variables>
+	</variables>
+	<recorditems>
+		<explicitdelayitem
+		duration="30000ms"
+		enabled="True"
+		optional="False">
+			<comment>
+			</comment>
+			<bindings>
+			</bindings>
+		</explicitdelayitem>
+		<userrecorditem
+		classname="diffpdfcCommands"
+		enabled="True"
+		isexternaltestmethod="False"
+		methodname="diffpdfc"
+		namespace="ProcessDHL"
+		optional="False"
+		varname="">
+			<comment>
+			</comment>
+			<bindings>
+			</bindings>
+			<arguments
+			id="189bb950-b0b4-4974-9dba-a685c0517f04">
+			</arguments>
+		</userrecorditem>
+	</recorditems>
+	<repository
+	id="cbae2dae-15ff-45e7-b7e9-3d7c549c469a"
+	name="SmokeTestRepository"
+	relativepath="SmokeTestRepository.rxrep"
+	rxversion="8.1">
+		<codegen
+		classname="SmokeTestRepository"
+		namespace="ProcessDHL">
+		</codegen>
+		<rootfolder
+		id="4aacfef1-6402-4ba7-b3c9-270ac9a4db4a"
+		name="_rootdummy_">
+		</rootfolder>
+	</repository>
+	<usercodefile
+	lang="CSharp">
+		diffpdfcCommands.UserCode.cs
+	</usercodefile>
+	<references>
+	</references>
+</recordtable>

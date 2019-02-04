@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
+using log4net;
 using Microsoft.ApplicationInsights.DataContracts;
 
 namespace Interapptive.Shared.Metrics
@@ -68,10 +70,10 @@ namespace Interapptive.Shared.Metrics
                 try
                 {
                     Telemetry.TrackEvent(eventTelemetry);
-                } catch
+                }
+                catch (Exception ex)
                 {
-                    // If for some reason the code throws, we don't want to stop the user from
-                    // doing their work, so ignoring all exceptions here.
+                    LogManager.GetLogger(typeof(TrackedEvent)).Debug("Failed to write telemetry", ex);
                 }
 
                 disposed = true;

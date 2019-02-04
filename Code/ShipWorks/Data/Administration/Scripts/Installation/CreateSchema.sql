@@ -1271,6 +1271,16 @@ PRINT N'Creating index [IX_SWDefault_Shipment_ProcessedOrderID] on [dbo].[Shipme
 GO
 CREATE NONCLUSTERED INDEX [IX_SWDefault_Shipment_ProcessedOrderID] ON [dbo].[Shipment] ([Processed] DESC, [ProcessedDate]) INCLUDE ([OrderID], [Voided])
 GO
+PRINT N'Creating Shipment.[IX_SWDefault_Shipment_ProcessedVoidedOnlineShipmentIDShipmentType] index'
+GO
+CREATE NONCLUSTERED INDEX [IX_SWDefault_Shipment_ProcessedVoidedOnlineShipmentIDShipmentType] ON [dbo].[Shipment]
+(
+	[Processed] ASC,
+	[Voided] ASC,
+	[OnlineShipmentID] ASC,
+	[ShipmentType] ASC
+)
+GO
 PRINT N'Creating index [IX_SWDefault_Shipment_ReturnShipment] on [dbo].[Shipment]'
 GO
 CREATE NONCLUSTERED INDEX [IX_SWDefault_Shipment_ReturnShipment] ON [dbo].[Shipment] ([ReturnShipment]) INCLUDE ([OrderID])
@@ -4460,7 +4470,8 @@ CREATE TABLE [dbo].[Configuration]
 [UseParallelActionQueue] [bit] NOT NULL CONSTRAINT [DF_Configuration_UseParallelActionQueue] DEFAULT ((1)),
 [AllowEbayCombineLocally] [bit] NOT NULL CONSTRAINT [DF_Configuration_AllowEbayCombineLocally] DEFAULT ((0)),
 [ArchivalSettingsXml] [xml] NOT NULL CONSTRAINT [DF_Configuration_ArchivalSettingsXml] DEFAULT ('<ArchivalSettings/>'),
-[AuditEnabled] [bit] NOT NULL CONSTRAINT [DF_Configuration_AuditEnabled] DEFAULT ((1))
+[AuditEnabled] [bit] NOT NULL CONSTRAINT [DF_Configuration_AuditEnabled] DEFAULT ((1)),
+[DefaultPickListTemplateID] [bigint] NULL
 )
 GO
 PRINT N'Creating primary key [PK_Configuration] on [dbo].[Configuration]'

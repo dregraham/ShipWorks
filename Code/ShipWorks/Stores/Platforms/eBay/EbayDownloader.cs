@@ -372,10 +372,10 @@ namespace ShipWorks.Stores.Platforms.Ebay
             var clonedAffectedOrders = affectedOrders.Select(EntityUtility.CloneEntity).ToList();
             var clonedAbandonedItems = abandonedItems.Select(EntityUtility.CloneEntity).ToList();
 
-            await connection.WithTransactionAsync(async (transaction, adapter) =>
+            await connection.WithTransactionAsync(async adapter =>
             {
                 // Save the new order
-                var postAction = await SaveDownloadedOrderWithoutPostAction(clonedOrder, transaction).ConfigureAwait(false);
+                var postAction = await SaveDownloadedOrderWithoutPostAction(clonedOrder, adapter).ConfigureAwait(false);
 
                 // Remove the abandoned items
                 DeleteAbandonedItems(clonedAbandonedItems, clonedAffectedOrders, adapter);
@@ -390,7 +390,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
                 // delete the affected orders
                 await ConsolidateOrderResources(clonedOrder, clonedAffectedOrders, adapter).ConfigureAwait(false);
 
-                transaction.Commit();
+                adapter.Commit();
 
                 postAction();
             }).ConfigureAwait(false);

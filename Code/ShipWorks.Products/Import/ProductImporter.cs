@@ -144,7 +144,7 @@ namespace ShipWorks.Products.Import
             foreach (ProductToImportDto row in rows.Where(x => !x.Sku.IsNullOrWhiteSpace()))
             {
                 await sqlAdapterFactory
-                    .WithPhysicalTransactionAsync((transaction, sqlAdapter) => ImportProduct(updateProductAction, sqlAdapter, row))
+                    .WithPhysicalTransactionAsync(sqlAdapter => ImportProduct(updateProductAction, sqlAdapter, row))
                     .Do(result.ProductSucceeded, ex =>
                     {
                         string message = ex.Message;
@@ -232,7 +232,8 @@ namespace ShipWorks.Products.Import
 
             ImportProductVariantAliases(productVariant, row.Sku, row);
 
-            productVariant.Product.IsActive = productVariant.IsActive;
+            // force parent product to be active because there is nowhere in the UI where you can set this value
+            productVariant.Product.IsActive = true;
         }
 
         /// <summary>
