@@ -3,6 +3,7 @@ using System.Reflection;
 using System.ServiceProcess;
 using System.Configuration.Install;
 using System.Diagnostics;
+using System.Linq;
 
 namespace ShipWorks.Escalator
 {
@@ -18,24 +19,60 @@ namespace ShipWorks.Escalator
         {
             if (Environment.UserInteractive)
             {
-                string parameter = string.Concat(args);
+                string serviceName = ServiceName.Resolve();
+                string parameter = string.Concat(args);                
+
                 switch (parameter)
                 {
                     case "--install":
-                        string serviceName = ServiceName.Resolve();
-                        ManagedInstallerClass.InstallHelper(new string[] {$"/ServiceName={serviceName}", typeof(Program).Assembly.Location });
-                        SetRecoveryOptions(serviceName);
-                        var sc = new ServiceController(serviceName);
-                        sc.Start();                        
+                        InstallService(serviceName);
                         break;
+
                     case "--uninstall":
-                        ManagedInstallerClass.InstallHelper(new string[] { "/u", typeof(Program).Assembly.Location });
+                        UninstallService(serviceName);
+                        break;
+
+                    case "--stop":
+                        ServiceController service = ServiceController.GetServices().SingleOrDefault(s => s.ServiceName == serviceName);
+                        service?.Stop();
                         break;
                 }
             }
             else
             {
                 RunService();
+            }
+        }
+
+        /// <summary>
+        /// Uninstall the ShipWorks escalator service
+        /// </summary>
+        private static void UninstallService(string serviceName)
+        {
+            ServiceController service = ServiceController.GetServices().SingleOrDefault(s => s.ServiceName == serviceName);
+            if (service != null)
+            {
+                service.Stop();
+                ManagedInstallerClass.InstallHelper(new string[] { "/u", typeof(Program).Assembly.Location });
+            }
+        }
+
+        /// <summary>
+        /// Installs the service
+        /// </summary>
+        private static void InstallService(string serviceName)
+        {
+            ServiceController service = ServiceController.GetServices().SingleOrDefault(s => s.ServiceName == serviceName);
+            if (service == null)
+            {
+                ManagedInstallerClass.InstallHelper(new string[] { $"/ServiceName={serviceName}", typeof(Program).Assembly.Location });
+                SetRecoveryOptions(serviceName);
+                service = new ServiceController(serviceName);
+            }
+
+            if (service.Status == ServiceControllerStatus.Stopped)
+            {
+                service.Start();
             }
         }
 

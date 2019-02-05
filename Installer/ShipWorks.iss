@@ -106,6 +106,11 @@ Source: {#AppArtifacts}\SingleScanPanels.swe; DestDir: {app}; Flags: overwritere
     Source: {#AppArtifacts}\Interapptive.Shared.pdb; DestDir: {app}; Flags: overwritereadonly ignoreversion
 #endif
 
+[UninstallDelete]
+Type: files; Name: {app}\InstallUtil.InstallLog
+Type: files; Name: {app}\ShipWorks.Escalator.InstallLog
+Type: files; Name: {app}\ShipWorks.Escalator.InstallState
+
 [Tasks]
 Name: desktopicon; Description: Create a &Desktop icon; GroupDescription: Additional shortcuts:
 
@@ -371,6 +376,17 @@ begin
     Result := 'ShipWorksScheduler$' + processName;
 end;
 
+//-------------------------------------------------------------------------
+// Does Escelator Service Exists
+//-------------------------------------------------------------------------
+function ShipWorksEscalatorServiceExists(): Boolean;
+var 
+	TargetExe: string;
+begin
+	TargetExe := ExpandConstant('{app}') + '\ShipWorks.Escalator.exe';
+	Result := (FileExists(TargetExe));
+end;
+
 //----------------------------------------------------------------
 // Was the scheduler included in installed version of ShipWorks
 //----------------------------------------------------------------
@@ -531,8 +547,12 @@ begin
             DeleteFile(ExpandConstant('{userdesktop}\ShipWorks 3.lnk'));
         end;
 
-  end;
+        if(ShipWorksEscalatorServiceExists())
+        then begin
+            Exec(ExpandConstant(ExpandConstant('{app}') + '\ShipWorks.Escalator.exe'), '--stop', '', SW_SHOW, ewWaitUntilTerminated, serviceWasStopped)
+        end;
 
+    end;
 end;
 
 //----------------------------------------------------------------
