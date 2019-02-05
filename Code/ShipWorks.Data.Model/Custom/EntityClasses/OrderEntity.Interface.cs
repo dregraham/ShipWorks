@@ -1,5 +1,4 @@
 ﻿using Interapptive.Shared.Business;
-using ShipWorks.Shipping;
 
 namespace ShipWorks.Data.Model.EntityInterfaces
 {
@@ -17,5 +16,10 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         /// Shipping address as a person adapter
         /// </summary>
         PersonAdapter ShipPerson { get; }
+
+        /// <summary>
+        /// Total cost of the items of the order
+        /// </summary>
+        decimal SubTotal { get; }
     }
 }

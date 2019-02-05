@@ -970,7 +970,9 @@ CREATE TABLE [dbo].[Store]
 [ManualOrderPrefix] [nvarchar] (10) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [ManualOrderPostfix] [nvarchar] (10) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [InitialDownloadDays] [int] NULL,
-[InitialDownloadOrder] [bigint] NULL
+[InitialDownloadOrder] [bigint] NULL,
+[InsureShipClientID] [bigint] NULL,
+[InsureShipApiKey] [nvarchar] (255) NULL
 )
 GO
 PRINT N'Creating primary key [PK_Store] on [dbo].[Store]'
@@ -2509,7 +2511,9 @@ CREATE TABLE [dbo].[InsurancePolicy]
 [DamageValue] [money] NULL,
 [SubmissionDate] [datetime] NULL,
 [ClaimID] [bigint] NULL,
-[EmailAddress] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NULL
+[EmailAddress] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+[InsureShipPolicyID] [bigint] NULL,
+[DateOfIssue] [datetime] NULL
 )
 GO
 PRINT N'Creating primary key [PK_InsurancePolicy] on [dbo].[InsurancePolicy]'

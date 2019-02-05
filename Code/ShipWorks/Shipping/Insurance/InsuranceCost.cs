@@ -1,17 +1,35 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace ShipWorks.Shipping.Insurance
+﻿namespace ShipWorks.Shipping.Insurance
 {
+    /// <summary>
+    /// Cost of insurance
+    /// </summary>
     public class InsuranceCost
     {
-        string infoMessage;
+        private string infoMessage;
 
+        /// <summary>
+        /// Total cost of ShipWorks insurance
+        /// </summary>
         public decimal? ShipWorks { get; set; }
+
+        /// <summary>
+        /// Rate of ShipWorks insurance per $100
+        /// </summary>
+        public decimal? ShipWorksRate { get; set; }
+
+        /// <summary>
+        /// Carrier
+        /// </summary>
         public decimal? Carrier { get; set; }
+
+        /// <summary>
+        /// Info message
+        /// </summary>
         public string InfoMessage { get { return infoMessage; } }
+
+        /// <summary>
+        /// Should PennyOne be advertised
+        /// </summary>
         public bool AdvertisePennyOne { get; set; }
 
         /// <summary>

@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
-using System.Collections.Concurrent;
 using System.Linq;
 using System.Windows.Forms;
+using Autofac;
 using log4net;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Data.Model.EntityClasses;
@@ -14,7 +14,7 @@ namespace ShipWorks.ApplicationCore.Nudges
     /// </summary>
     public static class NudgeManager
     {
-        private static readonly ILog log = LogManager.GetLogger(typeof (NudgeManager));
+        private static readonly ILog log = LogManager.GetLogger(typeof(NudgeManager));
         private static readonly object lockObject = new object();
         private static List<Nudge> nudges = new List<Nudge>();
 
@@ -39,14 +39,17 @@ namespace ShipWorks.ApplicationCore.Nudges
 
             try
             {
-                ITangoWebClient tangoWebClient = new TangoWebClientFactory().CreateWebClient();
-
-                lock (lockObject)
+                using (var lifetimeScope = IoC.BeginLifetimeScope())
                 {
-                    nudges = tangoWebClient.GetNudges(stores).ToList();
+                    var tangoWebClient = lifetimeScope.Resolve<ITangoWebClient>();
+
+                    lock (lockObject)
+                    {
+                        nudges = tangoWebClient.GetNudges(stores).ToList();
+                    }
+
+                    log.InfoFormat("Found {0} nudges", nudges.Count);
                 }
-                
-                log.InfoFormat("Found {0} nudges", nudges.Count);
             }
             catch (TangoException exception)
             {

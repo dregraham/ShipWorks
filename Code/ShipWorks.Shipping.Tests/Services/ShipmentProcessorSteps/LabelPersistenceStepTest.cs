@@ -13,16 +13,17 @@ using ShipWorks.Tests.Shared;
 using ShipWorks.Tests.Shared.EntityBuilders;
 using ShipWorks.Users;
 using Xunit;
+using static ShipWorks.Tests.Shared.ExtensionMethods.ParameterShorteners;
 
 namespace ShipWorks.Shipping.Tests.Services.ShipmentProcessorSteps
 {
     public class LabelPersistenceStepTest : IDisposable
     {
-        readonly AutoMock mock;
-        readonly LabelPersistenceStep testObject;
-        readonly Mock<ILabelRetrievalResult> input;
-        readonly ShipmentEntity shipment;
-        readonly StoreEntity store;
+        private readonly AutoMock mock;
+        private readonly LabelPersistenceStep testObject;
+        private readonly Mock<ILabelRetrievalResult> input;
+        private readonly ShipmentEntity shipment;
+        private readonly StoreEntity store;
 
         public LabelPersistenceStepTest()
         {
@@ -90,7 +91,7 @@ namespace ShipWorks.Shipping.Tests.Services.ShipmentProcessorSteps
 
             testObject.SaveLabel(input.Object);
 
-            insurance.Verify(x => x.Insure(shipment, store));
+            insurance.Verify(x => x.Insure(shipment));
         }
 
         [Fact]
@@ -101,7 +102,7 @@ namespace ShipWorks.Shipping.Tests.Services.ShipmentProcessorSteps
 
             testObject.SaveLabel(input.Object);
 
-            insurance.Verify(x => x.Insure(It.IsAny<ShipmentEntity>(), It.IsAny<StoreEntity>()), Times.Never);
+            insurance.Verify(x => x.Insure(AnyShipment), Times.Never);
         }
 
         [Fact]

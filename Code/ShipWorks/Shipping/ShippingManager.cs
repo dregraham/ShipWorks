@@ -51,10 +51,10 @@ namespace ShipWorks.Shipping
     public static class ShippingManager
     {
         // Logger
-        static readonly ILog log = LogManager.GetLogger(typeof(ShippingManager));
+        private static readonly ILog log = LogManager.GetLogger(typeof(ShippingManager));
 
         // Cache of sibling data, mapped from order -> shipment -> data
-        static LruCache<long, List<long>> siblingData;
+        private static LruCache<long, List<long>> siblingData;
 
         /// <summary>
         /// Initialize whenever a new database is loaded
@@ -658,7 +658,7 @@ namespace ShipWorks.Shipping
             {
                 Debug.Fail("Unhandled shipping type in GetCarrierName");
                 return "Other";
-            }            
+            }
         }
 
         /// <summary>
@@ -814,30 +814,7 @@ namespace ShipWorks.Shipping
 
                             adapter.SaveAndRefetch(shipment);
 
-                            if (lifetimeScope.Resolve<IInsureShipService>().IsInsuredByInsureShip(shipment))
-                            {
-                                log.InfoFormat("Shipment {0}  - Void Shipment Start", shipment.ShipmentID);
-                                InsureShipPolicy insureShipPolicy = new InsureShipPolicy(TangoWebClient.GetInsureShipAffiliate(store));
-
-                                try
-                                {
-                                    if (shipment.InsurancePolicy == null)
-                                    {
-                                        // Make sure the insurance policy has been loaded prior to voiding the policy
-                                        ShipmentTypeDataService.LoadInsuranceData(shipment);
-                                    }
-
-                                    insureShipPolicy.Void(shipment);
-                                }
-                                catch (InsureShipException ex)
-                                {
-                                    // If there was an error voiding the insurance policy, save the exception so we can re-throw at the
-                                    // very end of the voiding process to ensure that any other code for voiding can run
-                                    voidInsuranceException = ex;
-                                }
-
-                                log.InfoFormat("Shipment {0}  - Void Shipment Complete", shipment.ShipmentID);
-                            }
+                            voidInsuranceException = VoidInsurancePolicy(shipment, lifetimeScope.Resolve<IInsureShipService>());
 
                             // Dispatch the shipment voided event
                             ActionDispatcher.DispatchShipmentVoided(shipment, adapter);
@@ -880,6 +857,29 @@ namespace ShipWorks.Shipping
             }
 
             return shipment;
+        }
+
+        /// <summary>
+        /// Void an insurance policy
+        /// </summary>
+        private static InsureShipException VoidInsurancePolicy(ShipmentEntity shipment, IInsureShipService insureShipService)
+        {
+            if (!insureShipService.IsInsuredByInsureShip(shipment))
+            {
+                return null;
+            }
+
+            log.InfoFormat("Shipment {0}  - Void Shipment Start", shipment.ShipmentID);
+
+            if (shipment.InsurancePolicy == null)
+            {
+                // Make sure the insurance policy has been loaded prior to voiding the policy
+                ShipmentTypeDataService.LoadInsuranceData(shipment);
+            }
+
+            return insureShipService.Void(shipment)
+                .Do(() => log.InfoFormat("Shipment {0}  - Void Shipment Complete", shipment.ShipmentID))
+                .Match(() => null, ex => new InsureShipException(ex.Message, ex));
         }
 
         /// <summary>

@@ -1,9 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="14.0">
-  <Import Project="..\..\packages\CefSharp.WinForms.69.0.0\build\CefSharp.WinForms.props" Condition="Exists('..\..\packages\CefSharp.WinForms.69.0.0\build\CefSharp.WinForms.props')" />
-  <Import Project="..\..\packages\CefSharp.Common.69.0.0\build\CefSharp.Common.props" Condition="Exists('..\..\packages\CefSharp.Common.69.0.0\build\CefSharp.Common.props')" />
-  <Import Project="..\..\packages\cef.redist.x86.3.3497.1841\build\cef.redist.x86.props" Condition="Exists('..\..\packages\cef.redist.x86.3.3497.1841\build\cef.redist.x86.props')" />
-  <Import Project="..\..\packages\cef.redist.x64.3.3497.1841\build\cef.redist.x64.props" Condition="Exists('..\..\packages\cef.redist.x64.3.3497.1841\build\cef.redist.x64.props')" />
   <PropertyGroup>
     <ProjectTypeGuids>{60DC8134-EBA5-43B8-BCC9-BB4BC16C2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -19,7 +15,6 @@
     <AssemblyOriginatorKeyFile>Properties\interapptive_public.snk</AssemblyOriginatorKeyFile>
     <DelaySign>true</DelaySign>
     <ApplicationIcon>Resources\shipworks.ico</ApplicationIcon>
-    <CefSharpAnyCpuSupport>true</CefSharpAnyCpuSupport>
     <SccProjectName>
     </SccProjectName>
     <SccLocalPath>
@@ -764,11 +759,14 @@
     <Compile Include="ApplicationCore\Interaction\SelectionDependentEntry.cs" />
     <Compile Include="ApplicationCore\IoCLogRequestModule.cs" />
     <Compile Include="ApplicationCore\IRegistrationOverride.cs" />
+    <Compile Include="ApplicationCore\Licensing\FakeTangoWebRequestClient.cs" />
     <Compile Include="ApplicationCore\Licensing\ITangoLogShipmentProcessor.cs" />
     <Compile Include="ApplicationCore\Licensing\ITangoSecurityValidator.cs" />
     <Compile Include="ApplicationCore\Licensing\ITangoWebRequestClient.cs" />
     <Compile Include="ApplicationCore\Licensing\TangoLogShipmentProcessor.cs" />
+    <Compile Include="ApplicationCore\Licensing\TangoRequests\ITangoGetInsureShipCredentialsRequest.cs" />
     <Compile Include="ApplicationCore\Licensing\TangoRequests\ITangoLogShipmentRequest.cs" />
+    <Compile Include="ApplicationCore\Licensing\TangoRequests\TangoGetInsureShipCredentialsRequest.cs" />
     <Compile Include="ApplicationCore\Licensing\TangoRequests\TangoLogShipmentRequest.cs" />
     <Compile Include="ApplicationCore\Licensing\TangoSecurityValidator.cs" />
     <Compile Include="ApplicationCore\Licensing\TangoWebRequestClient.cs" />
@@ -1038,6 +1036,21 @@
     <Compile Include="Products\Export\IProductExcelWriter.cs" />
     <Compile Include="Products\Import\FailedProductImportException.cs" />
     <Compile Include="Products\Import\IImportProductsResult.cs" />
+    <Compile Include="Shipping\Insurance\InsureShip\IInsureShipClaim.cs" />
+    <Compile Include="Shipping\Insurance\InsureShip\IInsureShipClaimValidator.cs" />
+    <Compile Include="Shipping\Insurance\InsureShip\InsureShipClaimValidator.cs" />
+    <Compile Include="Shipping\Insurance\InsureShip\Net\Claim\IInsureShipClaimStatusRequest.cs" />
+    <Compile Include="Shipping\Insurance\InsureShip\Net\Claim\IInsureShipSubmitClaimRequest.cs" />
+    <Compile Include="Shipping\Insurance\InsureShip\Net\Claim\InsureShipGetClaimStatusResponse.cs" />
+    <Compile Include="Shipping\Insurance\InsureShip\Net\Claim\InsureShipSubmitClaimResponse.cs" />
+    <Compile Include="Shipping\Insurance\InsureShip\Net\IInsureShipCredentialRetriever.cs" />
+    <Compile Include="Shipping\Insurance\InsureShip\Net\IInsureShipCredentials.cs" />
+    <Compile Include="Shipping\Insurance\InsureShip\Net\IInsureShipWebClient.cs" />
+    <Compile Include="Shipping\Insurance\InsureShip\Net\InsureShipCredentialRetriever.cs" />
+    <Compile Include="Shipping\Insurance\InsureShip\Net\InsureShipCredentials.cs" />
+    <Compile Include="Shipping\Insurance\InsureShip\Net\InsureShipWebClient.cs" />
+    <Compile Include="Shipping\Insurance\InsureShip\Net\Insure\IInsureShipInsureShipmentRequest.cs" />
+    <Compile Include="Shipping\Insurance\InsureShip\Net\Insure\InsureShipNewPolicyResponse.cs" />
     <Compile Include="Products\Import\IProductExcelReader.cs" />
     <Compile Include="Products\Import\IProductImporter.cs" />
     <Compile Include="Products\Import\ProductImportException.cs" />
@@ -1045,6 +1058,10 @@
     <Compile Include="Products\IProductVariant.cs" />
     <Compile Include="Products\IProductCatalog.cs" />
     <Compile Include="Products\IProductsMode.cs" />
+    <Compile Include="Shipping\Insurance\InsureShip\Net\Void\IInsureShipVoidPolicyRequest.cs" />
+    <Compile Include="Shipping\Insurance\InsureShip\Net\Void\IInsureShipVoidValidator.cs" />
+    <Compile Include="Shipping\Insurance\InsureShip\Net\Void\InsureShipVoidPolicyResponse.cs" />
+    <Compile Include="Shipping\Insurance\InsureShip\Net\Void\InsureShipVoidValidator.cs" />
     <Compile Include="Shipping\Profiles\EditableShippingProfile.cs" />
     <Compile Include="Shipping\Profiles\IEditableShippingProfile.cs" />
     <Compile Include="Shipping\Profiles\IProfilePopupService.cs" />
@@ -2170,6 +2187,7 @@
     <Compile Include="Stores\Platforms\Shopify\DTOs\ShopifyProductVariant.cs" />
     <Compile Include="Stores\Platforms\Shopify\DTOs\ShopifyShop.cs" />
     <Compile Include="Stores\Platforms\Shopify\DTOs\ShopifyShopResponse.cs" />
+    <Compile Include="Stores\Platforms\Shopify\IShopifyCreateTokenViewModel.cs" />
     <Compile Include="Stores\Platforms\Shopify\IShopifyFraudDownloader.cs" />
     <Compile Include="Stores\Platforms\Shopify\IShopifyLocationService.cs" />
     <Compile Include="Stores\Platforms\Shopify\OnlineUpdating\IShopifyOnlineUpdater.cs" />
@@ -2317,32 +2335,14 @@
     <Compile Include="Shipping\Insurance\InsureShip\InsureShipClaimType.cs" />
     <Compile Include="Shipping\Insurance\InsureShip\InsureShipClaim.cs" />
     <Compile Include="Shipping\Insurance\InsureShip\Net\Claim\InsureShipClaimStatusRequest.cs" />
-    <Compile Include="Shipping\Insurance\InsureShip\Net\Claim\InsureShipClaimStatusResponse.cs" />
-    <Compile Include="Shipping\Insurance\InsureShip\Net\Claim\InsureShipSubmitClaimResponse.cs" />
     <Compile Include="Shipping\Insurance\InsureShip\Net\InsureShipShipmentIdentifier.cs" />
-    <Compile Include="Shipping\Insurance\InsureShip\Net\Insure\InsureShipInsureShipmentResponse.cs" />
-    <Compile Include="Shipping\Insurance\InsureShip\Net\IInsureShipRequestFactory.cs" />
-    <Compile Include="Shipping\Insurance\InsureShip\Net\IInsureShipResponseFactory.cs" />
     <Compile Include="Shipping\Insurance\InsureShip\IInsureShipSettings.cs" />
-    <Compile Include="Shipping\Insurance\InsureShip\InsureShipAffiliate.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Shipping\Insurance\InsureShip\InsureShipAffiliateProvider.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Shipping\Insurance\InsureShip\Net\Insure\InsureShipInsureShipmentRequest.cs" />
-    <Compile Include="Shipping\Insurance\InsureShip\Net\InsureShipRequestBase.cs" />
-    <Compile Include="Shipping\Insurance\InsureShip\Net\InsureShipRequestFactory.cs" />
-    <Compile Include="Shipping\Insurance\InsureShip\Net\InsureShipResponseException.cs" />
     <Compile Include="Shipping\Insurance\InsureShip\Net\InsureShipResponseCode.cs" />
-    <Compile Include="Shipping\Insurance\InsureShip\Net\IInsureShipResponse.cs" />
     <Compile Include="Shipping\Insurance\InsureShip\InsureShipException.cs" />
-    <Compile Include="Shipping\Insurance\InsureShip\Net\InsureShipResponseFactory.cs" />
     <Compile Include="Shipping\Insurance\InsureShip\InsureShipSettings.cs" />
-    <Compile Include="Shipping\Insurance\InsureShip\InsureShipPolicy.cs" />
     <Compile Include="Shipping\Insurance\InsureShip\Net\Claim\InsureShipSubmitClaimRequest.cs" />
     <Compile Include="Shipping\Insurance\InsureShip\Net\Void\InsureShipVoidPolicyRequest.cs" />
-    <Compile Include="Shipping\Insurance\InsureShip\Net\Void\InsureShipVoidPolicyResponse.cs" />
     <Compile Include="Shipping\InvalidPackageDimensionsException.cs" />
     <Compile Include="Shipping\Policies\BestRateUpsRestrictionShippingPolicy.cs" />
     <Compile Include="Shipping\Policies\IShippingPolicy.cs" />
@@ -3899,12 +3899,6 @@
     <Compile Include="Stores\Platforms\Shopify\ShopifyAccountSettingsControl.Designer.cs">
       <DependentUpon>ShopifyAccountSettingsControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="Stores\Platforms\Shopify\ShopifyCreateTokenWizard.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Stores\Platforms\Shopify\ShopifyCreateTokenWizard.Designer.cs">
-      <DependentUpon>ShopifyCreateTokenWizard.cs</DependentUpon>
-    </Compile>
     <Compile Include="Stores\Platforms\Shopify\ShopifyStoreSettingsControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -3923,7 +3917,6 @@
     </Compile>
     <Compile Include="Stores\Platforms\Shopify\ShopifyWebClientRequestThrottle.cs" />
     <Compile Include="Stores\Platforms\Shopify\ShopifyWebClientThrottleWaitCancelException.cs" />
-    <Compile Include="Stores\Platforms\Shopify\WebBrowserControlEmulation.cs" />
     <Compile Include="Stores\Platforms\Shopify\WizardPages\ShopifyAssociateAccountPage.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -8537,9 +8530,6 @@
     <EmbeddedResource Include="Stores\Platforms\Shopify\ShopifyCreateTokenControl.resx">
       <DependentUpon>ShopifyCreateTokenControl.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Stores\Platforms\Shopify\ShopifyCreateTokenWizard.resx">
-      <DependentUpon>ShopifyCreateTokenWizard.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Stores\Platforms\Shopify\ShopifyStoreSettingsControl.resx">
       <DependentUpon>ShopifyStoreSettingsControl.cs</DependentUpon>
     </EmbeddedResource>
@@ -11364,19 +11354,6 @@
     <Analyzer Include="..\..\packages\System.Security.Cryptography.Hashing.Algorithms.Analyzers.1.1.0\analyzers\dotnet\cs\System.Security.Cryptography.Hashing.Algorithms.CSharp.Analyzers.dll" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
-  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
-    <PropertyGroup>
-      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
-    </PropertyGroup>
-    <Error Condition="!Exists('..\..\packages\cef.redist.x64.3.3497.1841\build\cef.redist.x64.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\cef.redist.x64.3.3497.1841\build\cef.redist.x64.props'))" />
-    <Error Condition="!Exists('..\..\packages\cef.redist.x86.3.3497.1841\build\cef.redist.x86.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\cef.redist.x86.3.3497.1841\build\cef.redist.x86.props'))" />
-    <Error Condition="!Exists('..\..\packages\CefSharp.Common.69.0.0\build\CefSharp.Common.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\CefSharp.Common.69.0.0\build\CefSharp.Common.props'))" />
-    <Error Condition="!Exists('..\..\packages\CefSharp.Common.69.0.0\build\CefSharp.Common.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\CefSharp.Common.69.0.0\build\CefSharp.Common.targets'))" />
-    <Error Condition="!Exists('..\..\packages\CefSharp.WinForms.69.0.0\build\CefSharp.WinForms.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\CefSharp.WinForms.69.0.0\build\CefSharp.WinForms.props'))" />
-    <Error Condition="!Exists('..\..\packages\CefSharp.WinForms.69.0.0\build\CefSharp.WinForms.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\CefSharp.WinForms.69.0.0\build\CefSharp.WinForms.targets'))" />
-  </Target>
-  <Import Project="..\..\packages\CefSharp.Common.69.0.0\build\CefSharp.Common.targets" Condition="Exists('..\..\packages\CefSharp.Common.69.0.0\build\CefSharp.Common.targets')" />
-  <Import Project="..\..\packages\CefSharp.WinForms.69.0.0\build\CefSharp.WinForms.targets" Condition="Exists('..\..\packages\CefSharp.WinForms.69.0.0\build\CefSharp.WinForms.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

@@ -67,6 +67,8 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             ManualOrderPostfix = source.ManualOrderPostfix;
             InitialDownloadDays = source.InitialDownloadDays;
             InitialDownloadOrder = source.InitialDownloadOrder;
+            InsureShipClientID = source.InsureShipClientID;
+            InsureShipApiKey = source.InsureShipApiKey;
             
             
             
@@ -263,6 +265,18 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
         public Nullable<System.Int64> InitialDownloadOrder { get; }
+        /// <summary> The InsureShipClientID property of the Entity Store<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "Store"."InsureShipClientID"<br/>
+        /// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+        public Nullable<System.Int64> InsureShipClientID { get; }
+        /// <summary> The InsureShipApiKey property of the Entity Store<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "Store"."InsureShipApiKey"<br/>
+        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 255<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+        public System.String InsureShipApiKey { get; }
         
         
         

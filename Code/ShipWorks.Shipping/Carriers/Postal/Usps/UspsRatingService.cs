@@ -411,8 +411,12 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                         RateCache.Instance.Clear();
 
                         // Only notify Tango of changes so it has the latest information (and cuts down on traffic)
-                        ITangoWebClient tangoWebClient = new TangoWebClientFactory().CreateWebClient();
-                        tangoWebClient.LogUspsAccount(account);
+                        using (var lifetimeScope = IoC.BeginLifetimeScope())
+                        {
+                            var tangoWebClient = lifetimeScope.Resolve<ITangoWebClient>();
+
+                            tangoWebClient.LogUspsAccount(account);
+                        }
                     }
                 }
                 catch (Exception exception)

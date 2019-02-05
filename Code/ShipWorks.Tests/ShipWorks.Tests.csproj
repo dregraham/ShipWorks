@@ -98,9 +98,6 @@
       <HintPath>..\..\packages\Microsoft.Reactive.Testing.3.1.1\lib\net46\Microsoft.Reactive.Testing.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <Private>False</Private>
-    </Reference>
     <Reference Include="Moq, Version=4.7.145.0, Culture=neutral, PublicKeyToken=69f491c39445e920, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Moq.4.7.145\lib\net45\Moq.dll</HintPath>
     </Reference>
@@ -535,16 +532,17 @@
     <Compile Include="Shipping\Carriers\UPS\WorldShip\WorldShipShipmentTypeTest.cs" />
     <Compile Include="Shipping\Editing\Rating\RateResultTest.cs" />
     <Compile Include="Shipping\Insurance\InsuranceChoiceTest.cs" />
-    <Compile Include="Shipping\Insurance\InsureShip\InsureShipAffiliateProviderTest.cs" />
-    <Compile Include="Shipping\Insurance\InsureShip\InsureShipAffiliateTest.cs" />
     <Compile Include="Shipping\Insurance\InsureShip\InsureShipCarrierCodeTest.cs" />
     <Compile Include="Shipping\Insurance\InsureShip\InsureShipClaimTest.cs" />
-    <Compile Include="Shipping\Insurance\InsureShip\Net\Claim\InsureShipClaimStatusResponseTest.cs" />
-    <Compile Include="Shipping\Insurance\InsureShip\Net\Claim\InsureShipSubmitClaimResponseTest.cs" />
-    <Compile Include="Shipping\Insurance\InsureShip\Net\Insure\InsureShipInsureShipmentResponseTest.cs" />
+    <Compile Include="Shipping\Insurance\InsureShip\InsureShipClaimValidatorTest.cs" />
+    <Compile Include="Shipping\Insurance\InsureShip\Net\Claim\InsureShipClaimStatusRequestTest.cs" />
+    <Compile Include="Shipping\Insurance\InsureShip\Net\Claim\InsureShipSubmitClaimRequestTest.cs" />
+    <Compile Include="Shipping\Insurance\InsureShip\Net\InsureShipCredentialRetrieverTest.cs" />
+    <Compile Include="Shipping\Insurance\InsureShip\Net\InsureShipWebClientTest.cs" />
+    <Compile Include="Shipping\Insurance\InsureShip\Net\Insure\InsureShipInsureShipmentRequestTest.cs" />
     <Compile Include="Shipping\Insurance\InsureShip\InsureShipSettingsTest.cs" />
-    <Compile Include="Shipping\Insurance\InsureShip\InsureShipPolicyTest.cs" />
-    <Compile Include="Shipping\Insurance\InsureShip\Net\Void\InsureShipVoidPolicyResponseTest.cs" />
+    <Compile Include="Shipping\Insurance\InsureShip\Net\Void\InsureShipVoidPolicyRequestTest.cs" />
+    <Compile Include="Shipping\Insurance\InsureShip\Net\Void\InsureShipVoidValidatorTest.cs" />
     <Compile Include="Shipping\IShipmentEntityExtensionsTest.cs" />
     <Compile Include="Shipping\Policies\AmazonShipmentShippingPolicyTest.cs" />
     <Compile Include="Shipping\Policies\RateResultCountShippingPolicyTest.cs" />

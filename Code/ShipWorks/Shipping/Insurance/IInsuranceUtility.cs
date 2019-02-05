@@ -18,6 +18,11 @@ namespace ShipWorks.Shipping.Insurance
         decimal GetInsuranceValue(ShipmentEntity shipment);
 
         /// <summary>
+        /// Determines how much the shipment was insured for.
+        /// </summary>
+        decimal GetInsuredValue(ShipmentEntity shipment);
+
+        /// <summary>
         /// Show the InsurancePennyOneDlg and save values if necessary
         /// </summary>
         void ShowInsurancePennyOneDlg(ShipmentTypeCode shipmentTypeCode);
