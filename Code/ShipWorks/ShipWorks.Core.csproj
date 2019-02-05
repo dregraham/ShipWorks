@@ -775,6 +775,7 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Data\Administration\ISqlSchemaUpdater.cs" />
+    <Compile Include="Data\Administration\IUpdateService.cs" />
     <Compile Include="Data\Administration\SqlSchemaUpdaterWrapper.cs" />
     <Compile Include="Data\Administration\UpdateService.cs" />
     <Compile Include="Data\Connection\DatabaseUpgradeTelemetry.cs" />

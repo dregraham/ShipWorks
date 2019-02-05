@@ -10,18 +10,16 @@ namespace ShipWorks.Data.Administration
     /// <summary>
     /// Service for updating shipworks
     /// </summary>
-    public class UpdateService : IDisposable
+    public class UpdateService : IUpdateService
     {
         private NamedPipeClientStream updaterPipe;
-        private readonly ISqlSchemaUpdater sqlSchemaUpdater;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public UpdateService(IShipWorksSession shipWorksSession, ISqlSchemaUpdater sqlSchemaUpdater)
+        public UpdateService(IShipWorksSession shipWorksSession)
         {
             updaterPipe = new NamedPipeClientStream(shipWorksSession.InstanceID.ToString());
-            this.sqlSchemaUpdater = sqlSchemaUpdater;
         }
 
         /// <summary>
@@ -53,12 +51,12 @@ namespace ShipWorks.Data.Administration
         /// <summary>
         /// Kick off the update
         /// </summary>
-        public Result Update()
+        public Result Update(Version version)
         {
             if (IsAvailable)
             {
-                string version = sqlSchemaUpdater.GetInstalledSchemaVersion().ToString();
-                updaterPipe.Write(Encoding.UTF8.GetBytes(version), 0, version.Length);
+                string versionString = version.ToString();
+                updaterPipe.Write(Encoding.UTF8.GetBytes(versionString), 0, versionString.Length);
                 return Result.FromSuccess();
             }
 

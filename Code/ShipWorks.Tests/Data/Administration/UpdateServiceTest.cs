@@ -28,9 +28,6 @@ namespace ShipWorks.Tests.Data.Administration
             var session = mock.Mock<IShipWorksSession>();
             session.SetupGet(s => s.InstanceID).Returns(sessionGuid);
 
-            var sqlSchema = mock.Mock<ISqlSchemaUpdater>();
-            sqlSchema.Setup(s => s.GetInstalledSchemaVersion()).Returns(new Version(0, 0, 123));
-
             testObject = mock.Create<UpdateService>();
         }
 
@@ -53,7 +50,7 @@ namespace ShipWorks.Tests.Data.Administration
         public void Update_WritesUpdateInfoToStream()
         {
             var serverTask = StartServer();
-            Assert.True(testObject.Update().Success);
+            Assert.True(testObject.Update(new Version(0, 0, 123)).Success);
             Assert.Equal("0.0.123", serverTask.Result);
         }
 

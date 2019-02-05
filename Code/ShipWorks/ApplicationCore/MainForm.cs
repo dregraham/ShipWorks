@@ -308,6 +308,20 @@ namespace ShipWorks
         [NDependIgnoreLongMethod]
         private void OnLoad(object sender, EventArgs e)
         {
+            SqlSession.Initialize();
+            Version databaseVersion = SqlSchemaUpdater.GetInstalledSchemaVersion();
+
+            if (databaseVersion > SqlSchemaUpdater.GetRequiredSchemaVersion())
+            {
+                using (IUpdateService updateService = IoC.UnsafeGlobalLifetimeScope.Resolve<IUpdateService>())
+                {
+                    if (updateService.IsAvailable && updateService.Update(databaseVersion).Success)
+                    {
+                        Close();
+                    }
+                }
+            }
+
             log.Info("Loading main application window.");
 
             DataProvider.InitializeForApplication();
@@ -400,9 +414,6 @@ namespace ShipWorks
         {
             // Its visible, but possibly not completely drawn
             Refresh();
-
-            // Initialize the last saved session
-            SqlSession.Initialize();
 
             // If the action is to open the DB setup, we can do that now - no need to logon first.
             if (StartupController.StartupAction == StartupAction.OpenDatabaseSetup)
