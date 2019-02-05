@@ -3001,7 +3001,7 @@ rxversion="8.1">
 		</DataSource>
 	</datasources>
 	<testconfigurations
-	default="Complete">
+	default="TestRun">
 		<testconfiguration
 		name="BrettsTesting20160718">
 			<testcontainer
@@ -3057,9 +3057,6 @@ rxversion="8.1">
 			</testcontainer>
 			<testcontainer
 			id="37ed76eb-3c0b-464e-a8f7-2eccaf2cfc98">
-			</testcontainer>
-			<testcontainer
-			id="39771e1c-c880-4a5d-9ba9-b13acb5d2b8a">
 			</testcontainer>
 			<testcontainer
 			id="3cd7f37d-7cb4-432e-9961-d219597a852c">
@@ -3174,6 +3171,9 @@ rxversion="8.1">
 		name="TestRun">
 			<testcontainer
 			id="14ee1c1c-0353-469d-84ea-e800f3a3addb">
+			</testcontainer>
+			<testcontainer
+			id="37ed76eb-3c0b-464e-a8f7-2eccaf2cfc98">
 			</testcontainer>
 			<testcontainer
 			id="95eeff4e-218a-4f4b-a4a5-e92d3b071ca1">
