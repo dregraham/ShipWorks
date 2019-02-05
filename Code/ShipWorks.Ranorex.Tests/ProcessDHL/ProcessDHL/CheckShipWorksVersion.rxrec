@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <recordtable
 embeddedrepository="False"
-id="d08798de-c10b-4ebc-bbd1-7ae559261ef8"
+id="4dfee956-d61f-4ea3-afd0-8c27f1cdcad2"
 mode="Global"
 rxversion="8.1">
 	<name>
@@ -28,7 +28,7 @@ rxversion="8.1">
 	</codegen>
 	<variables>
 		<var
-		id="3eee7fcd-2a47-4034-885d-44f78bc28ff7"
+		id="74aa69c6-5365-4800-bc09-16ab59ae3ec3"
 		name="ShipWorksVersion">
 			ShipWorksVersion
 		</var>
@@ -430,162 +430,6 @@ puaM0WC47NGabmjNFguOzRmm5ozRYLjs0ZpuaM0WC5//2Q==
 			<bindings>
 			</bindings>
 		</keysequenceitem>
-		<mouseitem
-		action="Move"
-		button="Left"
-		duration="500ms"
-		enabled="True"
-		loc="Center"
-		movetime="300ms"
-		optional="False"
-		searchpropertyid="f32b99e7-3d91-43ea-93bd-46d592d3e48f"
-		sx="0"
-		sy="0"
-		warnoutofbounds="False">
-			<comment>
-			</comment>
-			<bindings>
-			</bindings>
-			<info
-			id="e7dba246-1994-476e-9f87-aa3e908a2d71"
-			sourcename="RepositoryEditor">
-				<element
-				capabilities="uiautomation, uiautomationvalue"
-				dontcache="False"
-				enabled="False"
-				flavor="uia"
-				hasfocus="False"
-				index="4"
-				prefcap="text"
-				rect="0,0,0,0"
-				role="text"
-				snapElem=""
-				valid="False"
-				visible="True">
-				</element>
-				<path>
-					/form[@processname='ShipWorks']/text[@classname='TextBox']
-				</path>
-			</info>
-		</mouseitem>
-		<getvaluerecorditem
-		attrname="Text"
-		enabled="True"
-		optional="False"
-		searchpropertyid="cb82be89-eac1-4dd1-aef2-d99d14a8a8c3"
-		varname="ShipWorksVersion">
-			<comment>
-			</comment>
-			<bindings>
-			</bindings>
-			<info
-			id="e7dba246-1994-476e-9f87-aa3e908a2d71"
-			sourcename="RepositoryEditor">
-				<element
-				capabilities="uiautomation, uiautomationvalue"
-				dontcache="False"
-				enabled="False"
-				flavor="uia"
-				hasfocus="False"
-				index="4"
-				prefcap="text"
-				rect="0,0,0,0"
-				role="text"
-				snapElem=""
-				valid="False"
-				visible="True">
-				</element>
-				<path>
-					/form[@processname='ShipWorks']/text[@classname='TextBox']
-				</path>
-			</info>
-		</getvaluerecorditem>
-		<mouseitem
-		action="Move"
-		button="Left"
-		duration="500ms"
-		enabled="True"
-		loc="Center"
-		movetime="300ms"
-		optional="False"
-		searchpropertyid="ccf44a6d-9143-48ee-8949-52c00804daaa"
-		sx="2858"
-		sy="378"
-		warnoutofbounds="False">
-			<comment>
-			</comment>
-			<bindings>
-			</bindings>
-			<info
-			id="1d4966b2-0331-4b7a-a0a7-c48c072f6992"
-			sourcename="RepositoryEditor">
-				<element
-				capabilities="uiautomation, uiautomationinvoke"
-				dontcache="False"
-				enabled="False"
-				flavor="uia"
-				hasfocus="False"
-				index="17"
-				prefcap="button"
-				rect="0,0,0,0"
-				role="button"
-				snapElem=""
-				valid="False"
-				visible="True">
-					<attribute
-					name="pressed"
-					type="System.Boolean">
-						False
-					</attribute>
-				</element>
-				<path>
-					/form[@processname='ShipWorks']/button[@name='Close']
-				</path>
-			</info>
-		</mouseitem>
-		<mouseitem
-		action="Click"
-		button="Left"
-		duration="500ms"
-		enabled="True"
-		loc="Center"
-		movetime="300ms"
-		optional="False"
-		searchpropertyid="be746cfa-fae7-48b6-9dbe-b5e51e0e2537"
-		sx="2877"
-		sy="381"
-		warnoutofbounds="False">
-			<comment>
-			</comment>
-			<bindings>
-			</bindings>
-			<info
-			id="1d4966b2-0331-4b7a-a0a7-c48c072f6992"
-			sourcename="RepositoryEditor">
-				<element
-				capabilities="uiautomation, uiautomationinvoke"
-				dontcache="False"
-				enabled="False"
-				flavor="uia"
-				hasfocus="False"
-				index="17"
-				prefcap="button"
-				rect="0,0,0,0"
-				role="button"
-				snapElem=""
-				valid="False"
-				visible="True">
-					<attribute
-					name="pressed"
-					type="System.Boolean">
-						False
-					</attribute>
-				</element>
-				<path>
-					/form[@processname='ShipWorks']/button[@name='Close']
-				</path>
-			</info>
-		</mouseitem>
 		<userrecorditem
 		classname="CheckShipWorksVersion"
 		enabled="True"
