@@ -91,10 +91,10 @@ namespace SmokeTest
                 SmtpClient SmtpServer = new SmtpClient("smtp.gmail.com");
 
                 mail.From = new MailAddress("ShipWorksQA@gmail.com");
-                mail.To.Add("k.gicona@shipworks.com");
-                mail.To.Add("b.berger@shipworks.com");
+                /*mail.To.Add("k.gicona@shipworks.com");
+                mail.To.Add("b.berger@shipworks.com");*/
                 mail.To.Add("s.madke@shipworks.com");
-                mail.Subject = "Smoke Test 1 of 2 (ShipWorks Installation and Carrier Setup)";
+                mail.Subject = "Smoke Test 1 of 4 (ShipWorks Installation and Carrier Setup)";
                 mail.Body = "The smoketest was ran on: " + Environment.MachineName + ". " + System.Environment.NewLine
                 			+ "It was ran on: " + gdt.localDate  + ". " + System.Environment.NewLine;
                 if(SWVersion.SWVersionNumber != null)

@@ -7,6 +7,6 @@
       <string>60513a05-eab7-41e7-8c10-e51c735edc2e</string>
     </ArrayOfString>
   </SerializedValue>
-  <ProjectBrowserState value="[Solution ProcessOther[ProcessOther[References[]Class[]ProcessOtherShipment.rxrec[]]]]&#xD;&#xA;Solution ProcessOther\ProcessOther\ProcessOther.rxtst&#xD;&#xA;Solution ProcessOther\ProcessOther\ProcessOtherRepository.rxrep" />
+  <ProjectBrowserState value="[Solution ProcessOther[ProcessOther[References[]Class[]ProcessOtherShipment.rxrec[]]]]&#xD;&#xA;Solution ProcessOther\ProcessOther\SendInfoEmail.rxrec&#xD;&#xA;Solution ProcessOther\ProcessOther\References\Ranorex.Core" />
   <StartupProject value="{EAB6FE57-8DB5-43E4-9B70-108C40C930A3}" />
 </Properties>

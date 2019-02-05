@@ -5,6 +5,7 @@
   <Array name="bookmarks" />
   <Array name="files">
     <Element value="ProcessOnTrac.rxtst" />
+    <Element value="SendInfoEmail.rxrec" />
   </Array>
   <Properties name="projectSavedData">
     <Properties name="customTool">

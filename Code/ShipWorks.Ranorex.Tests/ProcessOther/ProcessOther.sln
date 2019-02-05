@@ -2,12 +2,12 @@
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
 # Ranorex Studio 8.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProcessOther", "ProcessOther\ProcessOther.csproj", "{EAB6FE57-8DB5-43E4-9B70-108C40C930A3}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{00AB1ACD-1881-451A-9AC6-1C6A38C719ED}"
 	ProjectSection(SolutionItems) = postProject
 		Ranorex = .\Ranorex.rxsettings
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProcessOther", "ProcessOther\ProcessOther.csproj", "{EAB6FE57-8DB5-43E4-9B70-108C40C930A3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

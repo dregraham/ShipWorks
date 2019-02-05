@@ -91,8 +91,8 @@ namespace ProcessOther
                 SmtpClient SmtpServer = new SmtpClient("smtp.gmail.com");
 
                 mail.From = new MailAddress("ShipWorksQA@gmail.com");
-                mail.To.Add("k.gicona@shipworks.com");
-                mail.To.Add("b.berger@shipworks.com");
+                /*mail.To.Add("k.gicona@shipworks.com");
+                mail.To.Add("b.berger@shipworks.com");*/
                 mail.To.Add("s.madke@shipworks.com");
                 mail.Subject = "Smoke Test 3 of 4 (Process Other)";
                 mail.Body = "The smoketest was ran on: " + Environment.MachineName + ". " + System.Environment.NewLine
