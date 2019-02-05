@@ -31,10 +31,10 @@ namespace ShipWorks.Data.Administration
             {
                 if (!updaterPipe.IsConnected)
                 {
-                    // Give it 5 seconds to connect
+                    // Give it 1 second to connect
                     try
                     {
-                        updaterPipe.Connect(5000);
+                        updaterPipe.Connect(1000);
                     }
                     catch (Exception)
                     {
