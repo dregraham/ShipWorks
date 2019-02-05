@@ -130,14 +130,14 @@
     </Compile>
     <Compile Include="CheckShipWorksVersion.cs">
       <DependentUpon>CheckShipWorksVersion.rxrec</DependentUpon>
-      <id>5259c428-dd8d-41be-a8dd-afc14b8c04bf</id>
-      <BoundTo>bc3afc24-9b7e-4481-9a54-023b3ca044df</BoundTo>
+      <id>076cdbb3-09a8-4d58-bdfb-55e75db18224</id>
+      <BoundTo>078e2678-772d-4953-96b4-da7332521075</BoundTo>
       <RecorderCode>true</RecorderCode>
     </Compile>
     <Compile Include="CheckShipWorksVersion.UserCode.cs">
       <DependentUpon>CheckShipWorksVersion.rxrec</DependentUpon>
-      <id>ff238f3c-8b77-4822-899e-f32d40c6fd74</id>
-      <BoundTo>bc3afc24-9b7e-4481-9a54-023b3ca044df</BoundTo>
+      <id>9648fa32-f5d8-4170-81b2-adfe5576eeba</id>
+      <BoundTo>078e2678-772d-4953-96b4-da7332521075</BoundTo>
       <UserCode>true</UserCode>
     </Compile>
     <Compile Include="Class\FileName.cs">
@@ -340,9 +340,9 @@
       <id>7e3e4bf4-698f-4844-862a-08021c738213</id>
     </None>
     <None Include="CheckShipWorksVersion.rxrec">
-      <id>bc3afc24-9b7e-4481-9a54-023b3ca044df</id>
+      <id>078e2678-772d-4953-96b4-da7332521075</id>
       <BoundTo>1f37675c-3e64-44f9-bde4-648a4c857c68</BoundTo>
-      <recordtableid>d08798de-c10b-4ebc-bbd1-7ae559261ef8</recordtableid>
+      <recordtableid>4dfee956-d61f-4ea3-afd0-8c27f1cdcad2</recordtableid>
     </None>
     <None Include="CloseShipWorks.rxrec">
       <id>9b8e34c1-663f-4bd4-9816-cf07df37687e</id>
