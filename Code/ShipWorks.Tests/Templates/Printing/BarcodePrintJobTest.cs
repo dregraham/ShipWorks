@@ -35,7 +35,8 @@ namespace ShipWorks.Tests.Templates.Printing
 
             var testObject = mock.Create<BarcodePrintJob>(new TypedParameter(typeof(IEnumerable<BarcodePage>), new[] { page }));
 
-            mock.Mock<IPrintJobFactory>().Verify(f => f.CreatePrintJob(It.Is<List<TemplateResult>>(t => t.First().ReadResult() == "<html><head><title></title><style>body {font-family:Arial; text-align:center;}table {margin-bottom:40px;} td {text-align:center;} .barcode {font-family:'Free 3 of 9 Extended';font-size:36pt;} </style></head><body><h1>Some Test Data</h1><br/>\r\n<div>\r\n<b>shortcut name</b><br/>\r\n<span class='barcode'>*shortcut barcode*</span><br/>\r\nshortcut keyboard\r\n</div>\r\n\r\n<br/>\r\n</body></html>")));
+            mock.Mock<IPrintJobFactory>().Verify(f => f.CreatePrintJob(It.Is<List<TemplateResult>>(t => t.First().ReadResult() == 
+                "<html><head><title></title><style>body {font-family:Arial; text-align:center;}table {margin-bottom:40px;} td {text-align:center;} .barcode {font-family:'Free 3 of 9 Extended';font-size:36pt;} </style></head><body><h1>Some Test Data</h1><div><b>shortcut name</b><br/><span class='barcode'>*shortcut barcode*</span><br/>shortcut keyboard</div></body></html>")));
         }
 
         [Fact]

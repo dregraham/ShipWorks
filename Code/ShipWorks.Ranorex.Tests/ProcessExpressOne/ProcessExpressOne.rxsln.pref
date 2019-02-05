@@ -1,0 +1,12 @@
+﻿<Properties>
+  <ActiveConfiguration value="Debug" />
+  <ActivePlatform value="x86" />
+  <SerializedValue name="ModuleBrowserState">
+    <ArrayOfString xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+      <string>{B5FDA454-B28C-447F-B7A9-20C361B78EC8}</string>
+      <string>60513a05-eab7-41e7-8c10-e51c735edc2e</string>
+    </ArrayOfString>
+  </SerializedValue>
+  <ProjectBrowserState value="[Solution ProcessExpressOne[ProcessExpressOne[]]]&#xD;&#xA;Solution ProcessExpressOne\ProcessExpressOne\ProcessExpressOne.rxtst&#xD;&#xA;Solution ProcessExpressOne\ProcessExpressOne\ProcessExpressOne.rxtst" />
+  <StartupProject value="{B5FDA454-B28C-447F-B7A9-20C361B78EC8}" />
+</Properties>

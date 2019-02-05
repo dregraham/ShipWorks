@@ -717,18 +717,20 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
                     // Transite time
                     deliveryDate = rateDetail.DeliveryTimestamp;
                     transitDays = (deliveryDate.Value.Date - shipment.ShipDate.Date).Days;
-                    transitDaysDescription = GetTransitDaysDescription(transitDays, deliveryDate);
+                    transitDaysDescription = GetTransitDaysDescription(transitDays, deliveryDate, serviceType);
                     serviceLevel = GetServiceLevel(serviceType, transitDays);
                 }
                 else if (rateDetail.TransitTimeSpecified)
                 {
                     transitDays = GetTransitDays(rateDetail.TransitTime);
 
-                    deliveryDate = serviceType == FedExServiceType.GroundHomeDelivery ? ShippingManager.CalculateExpectedDeliveryDate(transitDays, DayOfWeek.Sunday, DayOfWeek.Monday) : ShippingManager.CalculateExpectedDeliveryDate(transitDays, DayOfWeek.Saturday, DayOfWeek.Sunday);
+                    deliveryDate = serviceType == FedExServiceType.GroundHomeDelivery ? 
+                        ShippingManager.CalculateExpectedDeliveryDate(transitDays, DayOfWeek.Sunday, DayOfWeek.Monday) : 
+                        ShippingManager.CalculateExpectedDeliveryDate(transitDays, DayOfWeek.Saturday, DayOfWeek.Sunday);
 
-                    transitDaysDescription = GetTransitDaysDescription(transitDays, deliveryDate);
+                    transitDaysDescription = GetTransitDaysDescription(transitDays, deliveryDate, serviceType);
+
                     serviceLevel = GetServiceLevel(serviceType, transitDays);
-
                     serviceLevel = DetermineSmartPostDeliveryInfo(serviceType, rateDetail, serviceLevel, ref deliveryDate);
                 }
 
@@ -784,13 +786,19 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         /// <summary>
         /// Gets the transit days and delivery timestamp (if given) to be displayed for rating
         /// </summary>
-        private string GetTransitDaysDescription(int transitDays, DateTime? deliveryDate)
+        private string GetTransitDaysDescription(int transitDays, DateTime? deliveryDate, FedExServiceType serviceType)
         {
             string transitDaysDescription = string.Empty;
 
             if (transitDays != 0)
             {
-                if (deliveryDate.HasValue)
+                if (!deliveryDate.HasValue)
+                {
+                    // If no delivery date, just show transit days
+                    return transitDays.ToString();
+                }
+
+                if (serviceType != FedExServiceType.SmartPost)
                 {
                     if (deliveryDate.Value.Hour == 0 && deliveryDate.Value.Minute == 0)
                     {
@@ -805,11 +813,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
                 }
                 else
                 {
-                    // If no delivery date, just show transit days
-                    transitDaysDescription = transitDays.ToString();
+                    transitDaysDescription = "2-7 days";
                 }
             }
-
             return transitDaysDescription;
         }
 
@@ -902,6 +908,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
                 case FedExServiceType.InternationalEconomy:
                     return ServiceLevelType.FourToSevenDays;
 
+                case FedExServiceType.SmartPost:
+                    return ServiceLevelType.TwoToSevenDays;
+
                 default:
                 case FedExServiceType.InternationalPriority:
                 case FedExServiceType.InternationalPriorityExpress:
@@ -909,7 +918,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
                 case FedExServiceType.GroundHomeDelivery:
                 case FedExServiceType.InternationalPriorityFreight:
                 case FedExServiceType.InternationalEconomyFreight:
-                case FedExServiceType.SmartPost:
                 case FedExServiceType.FedExInternationalGround:
                     return ShippingManager.GetServiceLevel(transitDays);
             }

@@ -4787,6 +4787,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ConfigurationFieldIndex.AuditEnabled);}
 		}
+		/// <summary>Creates a new ConfigurationEntity.DefaultPickListTemplateID field instance</summary>
+		public static EntityField2 DefaultPickListTemplateID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ConfigurationFieldIndex.DefaultPickListTemplateID);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity CustomerEntity</summary>

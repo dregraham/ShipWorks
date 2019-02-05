@@ -1,20 +1,15 @@
 ﻿<Properties>
+  <Array name="active">
+    <Element value="SmokeTest.rxtst" />
+  </Array>
   <Array name="bookmarks" />
   <Array name="files">
     <Element value="SmokeTest.rxtst" />
   </Array>
   <Properties name="projectSavedData">
     <Properties name="customTool">
-      <fileNames value="" />
       <runOnBuild value="False" />
     </Properties>
-    <Array name="recentusercodeselections">
-      <Element value="SmokeTest.SetupUSPSStamps.RemoveWebRegUSPS()" />
-      <Element value="SmokeTest.SetupUSPSStamps.Key_sequence()" />
-      <Element value="SmokeTest.ResetHostsFile.ResetHosts()" />
-      <Element value="SmokeTest.ModuleChecker.CopyHosts()" />
-      <Element value="SmokeTest.HostsConfiguration.CopyCorrectHosts()" />
-      <Element value="SmokeTest.SetupUSPSStamps.SelectTestServer()" />
-    </Array>
+    <Array name="recentusercodeselections" />
   </Properties>
 </Properties>

@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel;
 using System.Windows.Forms;
 using ShipWorks.Settings;
+using ShipWorks.Templates.Printing;
 
 namespace ShipWorks.ApplicationCore
 {
@@ -43,5 +44,10 @@ namespace ShipWorks.ApplicationCore
         /// Select the order lookup tab
         /// </summary>
         void SelectOrderLookupTab();
+
+        /// <summary>
+        /// Start the printing or previewing of the given print job
+        /// </summary>
+        void StartPrintJob(IPrintJob job, PrintAction action);
     }
 }

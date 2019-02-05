@@ -270,6 +270,14 @@ namespace ShipWorks.Filters
         /// <summary>
         /// Get the filter layout that ultimately contains this node.  Null if the node is a quick filter.
         /// </summary>
+        public FilterLayoutEntity GetNodeLayout(long filterNodeID)
+        {
+            return GetNodeLayout(FindNode(filterNodeID));
+        }
+
+        /// <summary>
+        /// Get the filter layout that ultimately contains this node.  Null if the node is a quick filter.
+        /// </summary>
         public FilterLayoutEntity GetNodeLayout(FilterNodeEntity node)
         {
             while (node.ParentNode != null)

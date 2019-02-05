@@ -268,6 +268,7 @@ XrLp0EM2aG+RntUiB+ZT6fxfIsRPbYnQgbXhGFYAAAAASUVORK5CYII=
 		id="edb789cd-8c30-4bba-a2fb-39dc997e4082"
 		isrooted="True"
 		name="ShipWorks"
+		refimgid="706c9826-48c2-49b8-b76d-ef3d73f46971"
 		searchtimeout="30000ms"
 		usecache="True">
 			<item
@@ -479,6 +480,25 @@ XrLp0EM2aG+RntUiB+ZT6fxfIsRPbYnQgbXhGFYAAAAASUVORK5CYII=
 			searchtimeout="30000ms">
 				/form[@processname='ShipWorks']/?/?/toolbar[@accessiblerole='ToolBar']/?/?/element[@accessiblename='Batch Grid']
 			</item>
+			<item
+			addcaps="text,uiautomation,uiautomationvalue"
+			capname="text"
+			id="53702649-6ea9-40b0-a23a-ccb4401eaeee"
+			name="TextBox"
+			refimgid="fb7f9f4c-02a1-4747-be2f-70e8223555b7"
+			searchtimeout="30000ms">
+				/form[@processname='ShipWorks']/text
+			</item>
+			<item
+			addcaps="button,uiautomation,uiautomationinvoke"
+			capname="button"
+			id="f7071221-4ed3-4ebd-b204-9361e2b0af39"
+			name="Close"
+			refimgid="eaee5c62-f64f-443e-9a0c-4c7d509941b8"
+			refpath="/form[@name='About ShipWorks']/button[@name='Close']"
+			searchtimeout="30000ms">
+				/form[@processname='ShipWorks']/button[@name='Close']
+			</item>
 			<basepath>
 				/form[@processname='ShipWorks']
 			</basepath>
@@ -583,6 +603,119 @@ MccVydhgafzKwmo3c6RCyF+QF9ssNPjvRAAAAABJRU5ErkJggg==
 			refimgid="32ac7a1d-680a-4ca3-a500-27ea35071733"
 			searchtimeout="30000ms">
 				/form[@controlname='MainForm']/?/?/element[@controlname='ribbonTabAdmin']/rawtext[@rawtext='Options' and @visible='True']
+			</item>
+			<folder
+			addcaps="container,uiautomation"
+			capname="container"
+			id="f5d93772-c1d3-441c-8c41-b933eaf73ad9"
+			isrooted="True"
+			name="ToFirstLastDomestic"
+			refpath="/form[@controlname='MainForm']/container[@controlname='panelDockingArea']/container[@controlname='OrderLookupControl']/element[@controltypename='ElementHost']/container[@classname='Pane']/element[@orientation='None']/element[@automationid='a']/container[@classname='ScrollViewer']/element[@name='To First Last (Domestic)']/container[@name='To First Last (Domestic)']"
+			searchtimeout="30000ms"
+			usecache="False">
+				<item
+				addcaps="text,uiautomation,uiautomationvalue"
+				capname="text"
+				id="69bbe27d-3029-4cdf-a38b-1c44f09d256e"
+				name="CityTextBox"
+				refimgid="1f8c5bf9-cb70-4f53-86d4-999dc297887f"
+				refpath="/form[@controlname='MainForm']/container[@controlname='panelDockingArea']/container[@controlname='OrderLookupControl']/element[@controltypename='ElementHost']/container[@classname='Pane']/element[@orientation='None']/element[@automationid='a']/container[@classname='ScrollViewer']/element[@name='To First Last (Domestic)']/container[@name='To First Last (Domestic)']/element[@classname='dlk']/element[@classname='dlb']/text[11]"
+				searchtimeout="30000ms">
+					/form[@controlname='MainForm']/container[@controlname='panelDockingArea']//container[@classname='Pane']/?/?/element[@automationid='a']/?/?/element[@name='To First Last (Domestic)']/container[@name='To First Last (Domestic)']/?/?/element/text[11]
+				</item>
+				<item
+				addcaps="text,uiautomation,uiautomationvalue"
+				capname="text"
+				id="d6b66236-1e37-4455-8429-8889a2ffa574"
+				name="PostalTextBox"
+				refimgid="eaa164e7-c722-494c-a67c-e2d0ecd5a892"
+				refpath="/form[@controlname='MainForm']/container[@controlname='panelDockingArea']/container[@controlname='OrderLookupControl']/element[@controltypename='ElementHost']/container[@classname='Pane']/element[@orientation='None']/element[@automationid='a']/container[@classname='ScrollViewer']/element[@name='To First Last (Domestic)']/container[@name='To First Last (Domestic)']/element[@classname='dlk']/element[@classname='dlb']/text[14]"
+				searchtimeout="30000ms">
+					/form[@controlname='MainForm']/container[@controlname='panelDockingArea']//container[@classname='Pane']/?/?/element[@automationid='a']/?/?/element[@name='To First Last (Domestic)']/container[@name='To First Last (Domestic)']/?/?/element/text[14]
+				</item>
+				<item
+				addcaps="text,uiautomation,uiautomationvalue"
+				capname="text"
+				id="4ab31e97-bee6-4fd1-892b-d1758cc91178"
+				name="StreetTextBox"
+				refimgid="8903ef09-b481-4f3e-acfc-f640f8542f88"
+				refpath="/form[@controlname='MainForm']/container[@controlname='panelDockingArea']/container[@controlname='OrderLookupControl']/element[@controltypename='ElementHost']/container[@classname='Pane']/element[@orientation='None']/element[@automationid='a']/container[@classname='ScrollViewer']/element[@name='To First Last (Domestic)']/container[@name='To First Last (Domestic)']/element[@classname='dlk']/element[@classname='dlb']/text[9]"
+				searchtimeout="30000ms">
+					/form[@controlname='MainForm']/container[@controlname='panelDockingArea']//container[@classname='Pane']/?/?/element[@automationid='a']/?/?/element[@name='To First Last (Domestic)']/container[@name='To First Last (Domestic)']/?/?/element/text[9]
+				</item>
+				<basepath>
+					/form[@controlname='MainForm']/container[@controlname='panelDockingArea']//container[@classname='Pane']/?/?/element[@automationid='a']/?/?/element[@name='To First Last (Domestic)']/container[@name='To First Last (Domestic)']
+				</basepath>
+			</folder>
+			<folder
+			addcaps="container,control,nativewindow"
+			capname="container"
+			id="dd68ee91-2ec5-47ea-bed6-81a8e7cac251"
+			isrooted="True"
+			name="PanelDockingArea"
+			refpath="/form[@controlname='MainForm']/container[@controlname='panelDockingArea']"
+			searchtimeout="30000ms"
+			usecache="False">
+				<item
+				addcaps="button,uiautomation,uiautomationinvoke"
+				capname="button"
+				id="f12abb50-37f5-41b4-9cac-4f3321e4d308"
+				name="OLMCreateLabel"
+				refimgid="dd71143d-49c5-425b-b849-6945664c392b"
+				refpath="/form[@controlname='MainForm']/container[@controlname='panelDockingArea']/container/element/container/element/element/element/button[@name='Create Label']"
+				searchtimeout="30000ms">
+					/form[@controlname='MainForm']/container[@controlname='panelDockingArea']//container[@classname='Pane']/?/?/element[@automationid='a']/?/?/button[@name='Create Label']
+				</item>
+				<item
+				addcaps="text,uiautomation,uiautomationvalue"
+				capname="text"
+				id="094dde57-f2f6-45fc-aab2-1a9ce6744ab7"
+				name="TextA"
+				refimgid="86cd79f0-6f49-436b-abb8-d273849e7b9f"
+				searchtimeout="30000ms">
+					/form[@controlname='MainForm']/container[@controlname='panelDockingArea']/container[@controlname='OrderLookupControl']/?/?/container[@classname='Pane']/?/?/element[@automationid='a']//text[@automationid='a']
+				</item>
+				<item
+				addcaps="cell,uiautomation,uiautomationvalue"
+				capname="cell"
+				id="43d4a322-15d1-4625-a481-f02bebc7dbbc"
+				name="UPSGround"
+				refimgid="64ce4c27-49f6-4557-b238-1824d980da9b"
+				searchtimeout="30000ms">
+					/form[@controlname='MainForm']/container[@controlname='panelDockingArea']//container[@classname='Pane']//element[@name='Rates']/container[@name='Rates']/?/?/table[@classname='DataGrid']/?/cell[@name='UPS Ground']
+				</item>
+				<item
+				addcaps="text,uiautomation"
+				capname="text"
+				id="78e95cec-618b-423f-868a-4cd15a75e42e"
+				name="ThisOrdersShipmentHasBeenProcessed"
+				refimgid="30eea37c-9b6f-4761-a656-0e48be461de3"
+				refpath="/form[@controlname='MainForm']/container[@controlname='panelDockingArea']/container/element/container/element/element/element/text[@name~'^This\ order''s\ shipment\ has']"
+				searchtimeout="30000ms">
+					/form[@controlname='MainForm']/container[@controlname='panelDockingArea']//container[@classname='Pane']/?/?/element[@automationid='a']/?/?/text[@name~'^This\ order''s\ shipment\ has']
+				</item>
+				<item
+				addcaps="cell,uiautomation,uiautomationvalue"
+				capname="cell"
+				id="5032adc5-6d2e-4b83-bf68-bd6d75037cda"
+				name="FedExInternationalPriorityR"
+				refimgid="7d44370c-a813-4d70-9058-81ba7707a9ab"
+				searchtimeout="30000ms">
+					/form[@controlname='MainForm']/container[@controlname='panelDockingArea']//container[@classname='Pane']//element[@name='Rates']/container[@name='Rates']/?/?/table[@classname='DataGrid']/?/cell[@name~'^FedEx\ International\ Prior']
+				</item>
+				<basepath>
+					/form[@controlname='MainForm']/container[@controlname='panelDockingArea']
+				</basepath>
+			</folder>
+			<item
+			addcaps="unknown,control,nativewindow"
+			capname="unknown"
+			id="5effb9b3-ac3c-465b-bd05-d169dde9c2aa"
+			name="RibbonTabHelp"
+			refimgid="c578ca97-71d8-4c82-a1e6-107a5245811d"
+			refpath="/form[@controlname='MainForm']/element[@controlname='ribbon']/element[@controlname='ribbonTabHelp']"
+			searchtimeout="30000ms">
+				/form[@controlname='MainForm']/?/?/element[@controlname='ribbonTabHelp']
 			</item>
 			<basepath>
 				/form[@controlname='MainForm']
@@ -1290,9 +1423,8 @@ XrLp0EM2aG+RntUiB+ZT6fxfIsRPbYnQgbXhGFYAAAAASUVORK5CYII=
 				id="32356c63-af76-4fe9-ba35-a4178f10f193"
 				name="List172019"
 				refimgid="c6f8de9f-f215-48a5-8394-d0c0dda87469"
-				refpath="/form[@controlname='UpsSetupWizard']/container[@controlname='mainPanel']/container/container/datetime/list[@accessiblename='1/7/2019']"
 				searchtimeout="30000ms">
-					/form[@controlname='UpsSetupWizard']/container[@controlname='mainPanel']//datetime[@controlname='authInvoiceDate']/list[@accessiblename='1/7/2019']
+					/form[@controlname='UpsSetupWizard']/container[@controlname='mainPanel']//datetime[@controlname='authInvoiceDate']/list[1]
 				</item>
 				<item
 				addcaps="text,accessible"
@@ -3633,9 +3765,8 @@ lpKZgpMF6Pw3M/MFayOlqIh43SSsYsIrayXz9q3r5Ra2vFFWLUXbtWRiANXcVpB6SHDZSEK3kcS7
 				id="88fa7e9c-da21-4a7e-ac34-8dfb5d040316"
 				name="PARTContentHost"
 				refimgid="aff58400-d4d6-49fd-a313-469f07aab115"
-				refpath="/form[@controlname='MainForm']/container[@controlname='panelDockingArea']/container[@controlname='OrderLookupControl']/element/container/element/element/element/element/text/container[@automationid='PART_ContentHost']"
 				searchtimeout="30000ms">
-					/form[@title~'ShipWorks']/container[@controlname='panelDockingArea']//container[@classname='Pane']/?/?/element[@automationid='a']//text[@automationid='a']/container[@automationid='PART_ContentHost']
+					/form[@title~'ShipWorks']/container[@controlname='panelDockingArea']//container[@classname='Pane']/?/?/element[@automationid='a']//text[@automationid='a']/container[1]
 				</item>
 				<item
 				addcaps="button,uiautomation,uiautomationinvoke"
@@ -3673,9 +3804,8 @@ lpKZgpMF6Pw3M/MFayOlqIh43SSsYsIrayXz9q3r5Ra2vFFWLUXbtWRiANXcVpB6SHDZSEK3kcS7
 				id="711258cc-6b04-4c75-86c6-ece3ad55e727"
 				name="TextBox"
 				refimgid="084d38a0-9876-42eb-96b4-3816d301a799"
-				refpath="/form[@controlname='MainForm']/container[@controlname='panelDockingArea']/container[@controlname='OrderLookupControl']/element/container/element/element/container/element[@name='To First Last (Domestic)']/container/element/element/text[3]"
 				searchtimeout="30000ms">
-					/form[@title~'ShipWorks']/container[@controlname='panelDockingArea']//container[@classname='Pane']/?/?/element[@automationid='a']/?/?/element[@name='To First Last (Domestic)']/container[@name='To First Last (Domestic)']/?/?/element/text[3]
+					/form[@title~'ShipWorks']/container[@controlname='panelDockingArea']//container[@classname='Pane']/?/?/element[@automationid='a']/?/?/element[@name='To First Last (Domestic)']/container[@name='To First Last (Domestic)']/?/?/element/text[@caption='Name']
 				</item>
 				<item
 				addcaps="text,uiautomation,uiautomationvalue"
@@ -3683,9 +3813,8 @@ lpKZgpMF6Pw3M/MFayOlqIh43SSsYsIrayXz9q3r5Ra2vFFWLUXbtWRiANXcVpB6SHDZSEK3kcS7
 				id="e710737b-b4b4-484f-aa7c-9332cb912c10"
 				name="TextBox1"
 				refimgid="bfd33835-4855-45fd-8582-71df60edd853"
-				refpath="/form[@controlname='MainForm']/container[@controlname='panelDockingArea']/container[@controlname='OrderLookupControl']/element/container/element/element/container/element[@name='To First Last (Domestic)']/container/element/element/text[5]"
 				searchtimeout="30000ms">
-					/form[@title~'ShipWorks']/container[@controlname='panelDockingArea']//container[@classname='Pane']/?/?/element[@automationid='a']/?/?/element[@name='To First Last (Domestic)']/container[@name='To First Last (Domestic)']/?/?/element/text[5]
+					/form[@title~'ShipWorks']/container[@controlname='panelDockingArea']//container[@classname='Pane']/?/?/element[@automationid='a']/?/?/element[@name='To First Last (Domestic)']/container[@name='To First Last (Domestic)']/?/?/element/text[@caption='Company']
 				</item>
 				<item
 				addcaps="text,uiautomation,uiautomationvalue"
@@ -3693,9 +3822,8 @@ lpKZgpMF6Pw3M/MFayOlqIh43SSsYsIrayXz9q3r5Ra2vFFWLUXbtWRiANXcVpB6SHDZSEK3kcS7
 				id="39e776b5-fa2a-42e0-a8d9-f1c1de3adb98"
 				name="TextBox2"
 				refimgid="4a440fec-3e65-4183-b906-1d799b19693a"
-				refpath="/form[@controlname='MainForm']/container[@controlname='panelDockingArea']/container[@controlname='OrderLookupControl']/element/container/element/element/container/element[@name='To First Last (Domestic)']/container/element/element/text[9]"
 				searchtimeout="30000ms">
-					/form[@title~'ShipWorks']/container[@controlname='panelDockingArea']//container[@classname='Pane']/?/?/element[@automationid='a']/?/?/element[@name='To First Last (Domestic)']/container[@name='To First Last (Domestic)']/?/?/element/text[9]
+					/form[@title~'ShipWorks']/container[@controlname='panelDockingArea']//container[@classname='Pane']/?/?/element[@automationid='a']/?/?/element[@name='To First Last (Domestic)']/container[@name='To First Last (Domestic)']/?/?/element/text[@caption='Street']
 				</item>
 				<item
 				addcaps="text,uiautomation,uiautomationvalue"
@@ -3711,7 +3839,7 @@ lpKZgpMF6Pw3M/MFayOlqIh43SSsYsIrayXz9q3r5Ra2vFFWLUXbtWRiANXcVpB6SHDZSEK3kcS7
 				addcaps="combobox,uiautomation,uiautomationvalue"
 				capname="combobox"
 				id="32ca6487-97d8-42a5-a0c1-ec09a48df665"
-				name="ComboBox"
+				name="StateComboBox"
 				refimgid="7b884bbf-0286-4cfa-a38d-57d91b933563"
 				refpath="/form[@controlname='MainForm']/container[@controlname='panelDockingArea']/container[@controlname='OrderLookupControl']/element/container/element/element/container/element[@name='To First Last (Domestic)']/container/element/element/combobox[1]"
 				searchtimeout="30000ms">
@@ -3741,7 +3869,7 @@ lpKZgpMF6Pw3M/MFayOlqIh43SSsYsIrayXz9q3r5Ra2vFFWLUXbtWRiANXcVpB6SHDZSEK3kcS7
 				addcaps="combobox,uiautomation"
 				capname="combobox"
 				id="af1d664f-4bf0-466c-b27f-a2d6a8b420b6"
-				name="ComboBoxA"
+				name="CountryComboBox"
 				refimgid="5a9dc569-bc3a-41e3-b67b-c951408fa677"
 				refpath="/form[@controlname='MainForm']/container[@controlname='panelDockingArea']/container[@controlname='OrderLookupControl']/element/container/element/element/container/element[@name='To First Last (Domestic)']/container/element/element/combobox[@automationid='a']"
 				searchtimeout="30000ms">
@@ -3751,7 +3879,7 @@ lpKZgpMF6Pw3M/MFayOlqIh43SSsYsIrayXz9q3r5Ra2vFFWLUXbtWRiANXcVpB6SHDZSEK3kcS7
 				addcaps="text,uiautomation,uiautomationvalue"
 				capname="text"
 				id="571c5298-465c-4743-918e-5063db89fa2e"
-				name="TextBox5"
+				name="EmailTextBox"
 				refimgid="d13068d6-1a97-4f43-bb3c-4019ee32b9d5"
 				refpath="/form[@controlname='MainForm']/container[@controlname='panelDockingArea']/container[@controlname='OrderLookupControl']/element/container/element/element/container/element[@name='To First Last (Domestic)']/container/element/element/text[18]"
 				searchtimeout="30000ms">
@@ -3761,7 +3889,7 @@ lpKZgpMF6Pw3M/MFayOlqIh43SSsYsIrayXz9q3r5Ra2vFFWLUXbtWRiANXcVpB6SHDZSEK3kcS7
 				addcaps="text,uiautomation,uiautomationvalue"
 				capname="text"
 				id="2f5af693-8b4d-4fa8-afa1-72a0ceb20ef3"
-				name="TextBox6"
+				name="PhoneTextBox"
 				refimgid="c14a361e-8fd2-405e-88ec-80bf51dbda36"
 				refpath="/form[@controlname='MainForm']/container[@controlname='panelDockingArea']/container[@controlname='OrderLookupControl']/element[@controltypename='ElementHost']/container[@classname='Pane']/element[@orientation='None']/element[@automationid='a']/container[@classname='ScrollViewer']/element[@name='To First Last (Domestic)']/container[@name='To First Last (Domestic)']/element[@classname='dlk']/element[@classname='dlb']/text[20]"
 				searchtimeout="30000ms">
@@ -3797,6 +3925,72 @@ lpKZgpMF6Pw3M/MFayOlqIh43SSsYsIrayXz9q3r5Ra2vFFWLUXbtWRiANXcVpB6SHDZSEK3kcS7
 				searchtimeout="30000ms">
 					/form[@title~'ShipWorks']/container[@controlname='panelDockingArea']/container[@controlname='gridControl']//element[@controlname='kryptonHeader']
 				</item>
+				<item
+				addcaps="text,uiautomation,uiautomationvalue"
+				capname="text"
+				id="e1078a14-b01b-4361-ba08-2abc850c727b"
+				name="FullNameTextBox"
+				refimgid="f0c7f5a6-15bb-4750-96a3-68e777d5ed4f"
+				refpath="/form[@controlname='MainForm']/container[@controlname='panelDockingArea']/container[@controlname='OrderLookupControl']/element[@controltypename='ElementHost']/container[@classname='Pane']/element[@orientation='None']/element[@automationid='a']/container[@classname='ScrollViewer']/element[@name='To First Last (Domestic)']/container[@name='To First Last (Domestic)']/element[@classname='dlk']/element[@classname='dlb']/text[3]"
+				searchtimeout="30000ms">
+					/form[@title~'ShipWorks']/container[@controlname='panelDockingArea']//container[@classname='Pane']/?/?/element[@automationid='a']/?/?/element[@name='To First Last (Domestic)']/container[@name='To First Last (Domestic)']/?/?/element/text[3]
+				</item>
+				<item
+				addcaps="text,uiautomation,uiautomationvalue"
+				capname="text"
+				id="43c05e8c-76ab-4875-954f-c583aef907e9"
+				name="CompanyTextBox"
+				refimgid="caf55790-6df8-4c03-97e3-0fd5530e34a8"
+				refpath="/form[@controlname='MainForm']/container[@controlname='panelDockingArea']/container[@controlname='OrderLookupControl']/element[@controltypename='ElementHost']/container[@classname='Pane']/element[@orientation='None']/element[@automationid='a']/container[@classname='ScrollViewer']/element[@name='To First Last (Domestic)']/container[@name='To First Last (Domestic)']/element[@classname='dlk']/element[@classname='dlb']/text[5]"
+				searchtimeout="30000ms">
+					/form[@title~'ShipWorks']/container[@controlname='panelDockingArea']//container[@classname='Pane']/?/?/element[@automationid='a']/?/?/element[@name='To First Last (Domestic)']/container[@name='To First Last (Domestic)']/?/?/element/text[5]
+				</item>
+				<item
+				addcaps="text,uiautomation"
+				capname="text"
+				id="3ee051bf-4810-4b5b-86f1-334906ffc2a6"
+				name="TheOrderHasNoItems"
+				refimgid="b6a22465-59f3-42c1-9f42-f69d091a8cf5"
+				refpath="/form[@controlname='MainForm']/container[@controlname='panelDockingArea']/container[@controlname='OrderLookupControl']/element/container/element/element/container/element[@name='Order Items']/container/element/text/text[@name='The order has no items']"
+				searchtimeout="30000ms">
+					/form[@title~'ShipWorks']/container[@controlname='panelDockingArea']//container[@classname='Pane']//element[@name='Order Items']/container[@name='Order Items']/?/?/text[@name=' ']/text[@name='The order has no items']
+				</item>
+				<item
+				addcaps="cell,uiautomation,uiautomationvalue"
+				capname="cell"
+				id="940b6eb7-a050-45b5-b701-8e39d36a1c27"
+				name="UPSWorldwideExpressR"
+				refimgid="584a88f1-1190-4c30-ac39-b05a027f2739"
+				searchtimeout="30000ms">
+					/form[@title~'ShipWorks']/container[@controlname='panelDockingArea']//container[@classname='Pane']//element[@name='Rates']/container[@name='Rates']/?/?/table[@classname='DataGrid']/?/cell[@name='UPS Worldwide Express&#174;']
+				</item>
+				<item
+				addcaps="cell,uiautomation,uiautomationvalue"
+				capname="cell"
+				id="f5be3269-3fae-4257-b034-f13609b20a66"
+				name="Priority"
+				refimgid="cd2f94f3-0d6d-44fd-951b-5ff528d13fa3"
+				searchtimeout="30000ms">
+					/form[@title~'ShipWorks']/container[@controlname='panelDockingArea']//container[@classname='Pane']//element[@name='Rates']/container[@name='Rates']/?/?/table[@classname='DataGrid']/?/cell[@name='Priority']
+				</item>
+				<item
+				addcaps="cell,uiautomation,uiautomationvalue"
+				capname="cell"
+				id="333e3820-e9d0-4391-9ae8-71b7818a4c8f"
+				name="InternationalPriority"
+				refimgid="3a311020-f88f-4584-b27a-1840de9bc967"
+				searchtimeout="30000ms">
+					/form[@title~'ShipWorks']/container[@controlname='panelDockingArea']//container[@classname='Pane']//element[@name='Rates']/container[@name='Rates']/?/?/table[@classname='DataGrid']/?/cell[@name='International Priority']
+				</item>
+				<item
+				addcaps="cell,uiautomation,uiautomationvalue"
+				capname="cell"
+				id="f8d7fbb7-1e2a-4c94-90e9-c83d9baf3fc5"
+				name="FedExGroundR"
+				refimgid="28b12a85-48f4-4344-8bf7-a072d9ed6565"
+				searchtimeout="30000ms">
+					/form[@title~'ShipWorks']/container[@controlname='panelDockingArea']//container[@classname='Pane']//element[@name='Rates']/container[@name='Rates']/?/?/table[@classname='DataGrid']/?/cell[@name='FedEx Ground&#174;']
+				</item>
 				<basepath>
 					/form[@title~'ShipWorks']/container[@controlname='panelDockingArea']
 				</basepath>
@@ -3810,6 +4004,16 @@ lpKZgpMF6Pw3M/MFayOlqIh43SSsYsIrayXz9q3r5Ra2vFFWLUXbtWRiANXcVpB6SHDZSEK3kcS7
 			refpath="/form[@controlname='MainForm']/element[@controlname='ribbon']/button[@accessiblename='Application']"
 			searchtimeout="30000ms">
 				/form[@title~'ShipWorks']/?/?/button[@accessiblename='Application']
+			</item>
+			<item
+			addcaps="container,uiautomation"
+			capname="container"
+			id="9d45a334-cd7a-41c1-877a-0a8a77e38446"
+			name="PARTContentHost"
+			refimgid="a992bc38-c352-4d30-8186-4c274e9fb3a0"
+			refpath="/form[@name='About ShipWorks']/text[@classname='TextBox']/container[@automationid='PART_ContentHost']"
+			searchtimeout="30000ms">
+				/form[@title~'ShipWorks']/?/?/container[@automationid='PART_ContentHost']
 			</item>
 			<basepath>
 				/form[@title~'ShipWorks']
@@ -4258,6 +4462,16 @@ GORSxAAAAABJRU5ErkJggg==
 				refimgid="cd6ea4dc-bd8b-48e2-8544-9bc18e8d8067"
 				searchtimeout="30000ms">
 					/form[@title='Ship Orders']/container[@controlname='splitContainer']/container[@controlname='panel2']/?/?/container[@controlname='panel2']//rawtext[@column='4' and @row='1']
+				</item>
+				<item
+				addcaps="button,accessible"
+				capname="button"
+				id="27fc0a47-722b-4016-83f3-1f7f3645deb2"
+				name="CreateNew"
+				refimgid="a8ec7675-8cb4-4494-8ff0-6f52ddbef71f"
+				refpath="/form[@controlname='ShippingDlg']/container[@controlname='splitContainer']/container[@controlname='panel1']/container/container[@controlname='panelTop']/toolbar/button[@accessiblename='Create New']"
+				searchtimeout="30000ms">
+					/form[@title='Ship Orders']/container[@controlname='splitContainer']//toolbar[@controlname='shipmentsToolbar']/button[@accessiblename='Create New']
 				</item>
 				<basepath>
 					/form[@title='Ship Orders']/container[@controlname='splitContainer']
@@ -4832,6 +5046,36 @@ QVyBLgcznOHMyZ1gBrkY7oKP7x+AMbqCt6/vYIjBMDgMQC5AD3FSMNwF5GKsqYsUjFWQFIxVkBSM
 VZB4/J8BADyZI3kwAy98AAAAAElFTkSuQmCC
 			</icon>
 		</appfolder>
+		<appfolder
+		addcaps="form,nativewindow"
+		capname="form"
+		id="bbd3c228-0a70-4625-a5b5-727c3aaa861e"
+		isrooted="True"
+		name="Explorer1"
+		refpath="/form[@title='' and @processname='explorer' and @class='TaskListThumbnailWnd']"
+		searchtimeout="30000ms"
+		usecache="True">
+			<item
+			addcaps="listitem,accessible"
+			capname="listitem"
+			id="d0fb004b-02bc-491c-9ef7-921e74bc166b"
+			name="ShipWorksBbenterprise3AtfakeCom"
+			refimgid="fc09fc70-8eff-4269-afb0-3c3699b0f0a8"
+			refpath="/form[@title='' and @processname='explorer' and @class='TaskListThumbnailWnd']/list/listitem[@accessiblename~'^ShipWorks\ -\ bbenterprise3']"
+			searchtimeout="30000ms">
+				/form[@processname='explorer' and @class='TaskListThumbnailWnd']/?/?/listitem[@accessiblename~'^ShipWorks\ -\ bbenterprise3']
+			</item>
+			<basepath>
+				/form[@processname='explorer' and @class='TaskListThumbnailWnd']
+			</basepath>
+			<icon>
+				iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACx
+jwv8YQUAAAAJcEhZcwAADsQAAA7EAZUrDhsAAACCSURBVDhPY6AY/L5gf+H3RYf/6PjXBfsN/8/b
+C0CV4QYgxVZbn/1HBnCDgIYTNASuGA3/ueL1/9+Dyv//n0/Gif89m3yBAZsEKXi4GbD1yiZwjODD
+IDXIelAMwKYBG0bWQzsDkMXxyVFuACg1EVKESw6cEpEBsiKoEBzgk6MAMDAAAHhShcghofWfAAAA
+AElFTkSuQmCC
+			</icon>
+		</appfolder>
 		<basepath>
 		</basepath>
 	</rootfolder>
@@ -4840,6 +5084,11 @@ VZB4/J8BADyZI3kwAy98AAAAAElFTkSuQmCC
 		id="bdc85d09-e827-478c-af88-b8e85794bedf"
 		name="TrackingTabIndex">
 			3
+		</var>
+		<var
+		id="631cd7c2-d975-4f55-8de7-b0754cbcbcb4"
+		name="ShipWorksVersion">
+			ShipWorksVersion
 		</var>
 	</variables>
 </repository>

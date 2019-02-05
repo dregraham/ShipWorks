@@ -136,34 +136,28 @@ namespace ShipWorks.Tests.Shared.EntityBuilders
         /// <returns></returns>
         public virtual T Save()
         {
-            T retVal = null;
-            SqlAdapterRetry<Exception> sqlAdapterRetry = new SqlAdapterRetry<Exception>(5, -6, "Integration Test EntityBuilder.Save()");
-
-            sqlAdapterRetry.ExecuteWithRetry(() =>
+            using (SqlAdapter sqlAdapter = SqlAdapter.Create(false))
             {
-                using (SqlAdapter sqlAdapter = SqlAdapter.Create(false))
-                {
-                    retVal = Save(sqlAdapter);
-                }
-            });
-
-            return retVal;
+                return Save(sqlAdapter);
+            }
         }
 
         /// <summary>
         /// Save the built entity to the database
         /// </summary>
+        /// <returns></returns>
         public virtual T Save(SqlAdapter adapter)
         {
-            T entity = Build();
-
-            entity.Fields.IsDirty = true;
-            entity.IsDirty = true;
-
-            SqlAdapterRetry<Exception> sqlAdapterRetry = new SqlAdapterRetry<Exception>(5, -6, "Integration Test EntityBuilder.Save(SqlAdapter)");
+            T entity = null;
+            SqlAdapterRetry<Exception> sqlAdapterRetry = new SqlAdapterRetry<Exception>(5, -6, "Integration Test EntityBuilder.Save()");
 
             sqlAdapterRetry.ExecuteWithRetry(() =>
             {
+                entity = Build();
+
+                entity.Fields.IsDirty = true;
+                entity.IsDirty = true;
+
                 // We can't refetch if the entity doesn't have a PK
                 if (entity.Fields.OfType<IEntityField2>().Any(x => x.IsPrimaryKey))
                 {

@@ -73,7 +73,7 @@ namespace SmokeTest
         [System.CodeDom.Compiler.GeneratedCode("Ranorex", "8.1")]
         void ITestModule.Run()
         {
-            Mouse.DefaultMoveTime = 1000;
+            Mouse.DefaultMoveTime = 300;
             Keyboard.DefaultKeyPressTime = 100;
             Delay.SpeedFactor = 1.00;
 
@@ -86,7 +86,7 @@ namespace SmokeTest
             
             // Mouse Move to avoid click inconsistency
             Report.Log(ReportLevel.Info, "Mouse", "Mouse Move to avoid click inconsistency\r\nMouse Left Move item 'ShippingDlg.SplitContainer.Service' at Center.", repo.ShippingDlg.SplitContainer.ServiceInfo, new RecordItemIndex(1));
-            repo.ShippingDlg.SplitContainer.Service.MoveTo(300);
+            repo.ShippingDlg.SplitContainer.Service.MoveTo();
             Delay.Milliseconds(200);
             
             // Set Service: Priority
@@ -101,7 +101,7 @@ namespace SmokeTest
             
             // Mouse Move to avoid click inconsistency
             Report.Log(ReportLevel.Info, "Mouse", "Mouse Move to avoid click inconsistency\r\nMouse Left Move item 'ShipOrders1.SplitContainer.WeightUSPS' at Center.", repo.ShipOrders1.SplitContainer.WeightUSPSInfo, new RecordItemIndex(4));
-            repo.ShipOrders1.SplitContainer.WeightUSPS.MoveTo(300);
+            repo.ShipOrders1.SplitContainer.WeightUSPS.MoveTo();
             Delay.Milliseconds(200);
             
             // Select All (CTRL+A)
@@ -122,7 +122,7 @@ namespace SmokeTest
             
             // Mouse Move to avoid click inconsistency
             Report.Log(ReportLevel.Info, "Mouse", "Mouse Move to avoid click inconsistency\r\nMouse Left Move item 'ShipOrders1.SplitContainer.LengthUSPS' at Center.", repo.ShipOrders1.SplitContainer.LengthUSPSInfo, new RecordItemIndex(8));
-            repo.ShipOrders1.SplitContainer.LengthUSPS.MoveTo(300);
+            repo.ShipOrders1.SplitContainer.LengthUSPS.MoveTo();
             Delay.Milliseconds(200);
             
             // Select All
@@ -143,7 +143,7 @@ namespace SmokeTest
             
             // Mouse Move to avoid click inconsistency
             Report.Log(ReportLevel.Info, "Mouse", "Mouse Move to avoid click inconsistency\r\nMouse Left Move item 'ShipOrders1.SplitContainer.WidthUSPS' at Center.", repo.ShipOrders1.SplitContainer.WidthUSPSInfo, new RecordItemIndex(12));
-            repo.ShipOrders1.SplitContainer.WidthUSPS.MoveTo(300);
+            repo.ShipOrders1.SplitContainer.WidthUSPS.MoveTo();
             Delay.Milliseconds(200);
             
             // Set Width: 7
@@ -164,7 +164,7 @@ namespace SmokeTest
             
             // Mouse Move to avoid click inconsistency
             Report.Log(ReportLevel.Info, "Mouse", "Mouse Move to avoid click inconsistency\r\nMouse Left Move item 'ShipOrders1.SplitContainer.HeightUSPS' at Center.", repo.ShipOrders1.SplitContainer.HeightUSPSInfo, new RecordItemIndex(16));
-            repo.ShipOrders1.SplitContainer.HeightUSPS.MoveTo(300);
+            repo.ShipOrders1.SplitContainer.HeightUSPS.MoveTo();
             Delay.Milliseconds(200);
             
             // Select All

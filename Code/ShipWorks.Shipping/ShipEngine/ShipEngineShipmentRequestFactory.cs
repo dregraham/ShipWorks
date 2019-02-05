@@ -39,6 +39,7 @@ namespace ShipWorks.Shipping.ShipEngine
             PurchaseLabelRequest request = shipmentElementFactory.CreatePurchaseLabelRequest(shipment, packages, serviceApiValue);
             request.Shipment.CarrierId = GetShipEngineCarrierID(shipment);
             request.Shipment.AdvancedOptions = CreateAdvancedOptions(shipment);
+            request.ValidateAddress = PurchaseLabelRequest.ValidateAddressEnum.NoValidation;
 
             if (shipmentTypeManager.Get(shipment.ShipmentTypeCode).IsCustomsRequired(shipment))
             {

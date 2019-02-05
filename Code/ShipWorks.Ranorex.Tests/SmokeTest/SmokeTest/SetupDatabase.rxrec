@@ -30156,7 +30156,7 @@ q4QAAAAASUVORK5CYII=
 			</bindings>
 		</keysequenceitem>
 		<explicitdelayitem
-		duration="10000ms"
+		duration="30000ms"
 		enabled="True"
 		optional="False">
 			<comment>

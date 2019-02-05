@@ -96,8 +96,6 @@ namespace ShipWorks.Users.Audit
                 return;
             }
 
-            ValidateScope(!IsSuperUserActive, "userBehavior");
-
             superUserCount.Value++;
         }
 
@@ -119,8 +117,6 @@ namespace ShipWorks.Users.Audit
             bool changingReason = (reasonStack.Value.None() ||
                 reasonStack.Value.Peek().ReasonType != reason.ReasonType ||
                 reasonStack.Value.Peek().ReasonDetail != reason.ReasonDetail);
-
-            ValidateScope(changingReason, "reason");
 
             reasonStack.Value.Push(reason);
             needPopReason = true;
@@ -144,22 +140,8 @@ namespace ShipWorks.Users.Audit
 
             bool changingState = (stateStack.Value.None() || stateStack.Value.Peek() != auditState);
 
-            ValidateScope(changingState, "state");
-
             stateStack.Value.Push(auditState);
             needPopState = true;
-        }
-
-        /// <summary>
-        /// Validates that it's OK to change the properties of the active scope
-        /// </summary>
-        private void ValidateScope(bool changing, string property)
-        {
-            if (changing && Transaction.Current != null)
-            {
-                Debug.Fail("Cannot change connection-altering property when transaction is already in progress");
-                log.Error("Cannot change connection-altering property when transaction is already in progress");
-            }
         }
 
         /// <summary>

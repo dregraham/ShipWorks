@@ -191,7 +191,7 @@ namespace ShipWorks.Stores.Orders.Archive
                 actionAndTask.action.TriggerSettings = actionTrigger.GetXml();
 
                 // Transacted since we affect multiple action tables
-                await sqlAdapterFactory.WithPhysicalTransactionAsync((transaction, sqlAdapter) =>
+                await sqlAdapterFactory.WithPhysicalTransactionAsync(sqlAdapter =>
                 {
                     SqlAdapter adapter = (SqlAdapter) sqlAdapter;
                     actionAndTask.autoArchiveTask.Save(actionAndTask.action, adapter);
@@ -202,7 +202,7 @@ namespace ShipWorks.Stores.Orders.Archive
                     // Save the action
                     actionManager.SaveAction(actionAndTask.action, adapter);
 
-                    transaction.Commit();
+                    sqlAdapter.Commit();
 
                     return Task.FromResult(true);
                 }).ConfigureAwait(false);
@@ -272,7 +272,7 @@ namespace ShipWorks.Stores.Orders.Archive
             actionTask.ExecuteOnDayOfWeek = DayOfWeek;
 
             // Transacted since we affect multiple action tables
-            await sqlAdapterFactory.WithPhysicalTransactionAsync((transaction, sqlAdapter) =>
+            await sqlAdapterFactory.WithPhysicalTransactionAsync(sqlAdapter =>
             {
                 SqlAdapter adapter = (SqlAdapter) sqlAdapter;
 
@@ -297,7 +297,7 @@ namespace ShipWorks.Stores.Orders.Archive
                 // Save the action
                 actionManager.SaveAction(action, adapter);
 
-                transaction.Commit();
+                sqlAdapter.Commit();
 
                 return Task.FromResult(true);
             }).ConfigureAwait(false);

@@ -73,7 +73,7 @@ namespace SmokeTest
         [System.CodeDom.Compiler.GeneratedCode("Ranorex", "8.1")]
         void ITestModule.Run()
         {
-            Mouse.DefaultMoveTime = 1000;
+            Mouse.DefaultMoveTime = 300;
             Keyboard.DefaultKeyPressTime = 100;
             Delay.SpeedFactor = 1.00;
 
