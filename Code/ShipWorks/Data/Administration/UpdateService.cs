@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.IO.Pipes;
+using System.Text;
 using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore;
 
@@ -12,13 +13,15 @@ namespace ShipWorks.Data.Administration
     public class UpdateService : IDisposable
     {
         private NamedPipeClientStream updaterPipe;
+        private readonly ISqlSchemaUpdater sqlSchemaUpdater;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public UpdateService()
+        public UpdateService(IShipWorksSession shipWorksSession, ISqlSchemaUpdater sqlSchemaUpdater)
         {
-            updaterPipe = new NamedPipeClientStream(ShipWorksSession.InstanceID.ToString());
+            updaterPipe = new NamedPipeClientStream(shipWorksSession.InstanceID.ToString());
+            this.sqlSchemaUpdater = sqlSchemaUpdater;
         }
 
         /// <summary>
@@ -35,16 +38,16 @@ namespace ShipWorks.Data.Administration
                     {
                         updaterPipe.Connect(5000);
                     }
-                    catch (TimeoutException)
+                    catch (Exception)
                     {
+                        // Connection can fail if something else is connected
+                        // or if the timeout has elapsed
                         return false;
                     }
-
                 }
 
                 return updaterPipe.IsConnected;
             }
-
         }
 
         /// <summary>
@@ -54,10 +57,9 @@ namespace ShipWorks.Data.Administration
         {
             if (IsAvailable)
             {
-                using (StreamWriter writer = new StreamWriter(updaterPipe))
-                {
-                    writer.Write(SqlSchemaUpdater.GetRequiredSchemaVersion());
-                }
+                string version = sqlSchemaUpdater.GetInstalledSchemaVersion().ToString();
+                updaterPipe.Write(Encoding.UTF8.GetBytes(version), 0, version.Length);
+                return Result.FromSuccess();
             }
 
             return Result.FromError("Could not connect to update service.");
