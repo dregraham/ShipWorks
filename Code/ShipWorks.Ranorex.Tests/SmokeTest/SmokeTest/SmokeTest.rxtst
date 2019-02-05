@@ -3001,7 +3001,7 @@ rxversion="8.1">
 		</DataSource>
 	</datasources>
 	<testconfigurations
-	default="TestRun">
+	default="Complete">
 		<testconfiguration
 		name="BrettsTesting20160718">
 			<testcontainer
