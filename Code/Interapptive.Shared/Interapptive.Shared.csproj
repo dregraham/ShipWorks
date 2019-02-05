@@ -254,6 +254,8 @@
     <Compile Include="Net\IHttpRequestSubmitter.cs" />
     <Compile Include="Net\IHttpVariableCollection.cs" />
     <Compile Include="Net\IHttpVariableRequestSubmitter.cs" />
+    <Compile Include="Net\IWebHelper.cs" />
+    <Compile Include="Net\WebHelperWrapper.cs" />
     <Compile Include="Pdf\IPdfDocument.cs" />
     <Compile Include="Pdf\IPdfDocumentFactory.cs" />
     <Compile Include="Pdf\PdfColorDocument.cs" />

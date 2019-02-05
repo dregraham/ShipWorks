@@ -1,11 +1,9 @@
 using System;
 using System.Collections.Generic;
-using System.Collections.Specialized;
 using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
-using System.Web;
 using Interapptive.Shared.Business.Geography;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.ComponentRegistration;
@@ -123,23 +121,15 @@ namespace ShipWorks.Stores.Platforms.Shopify
         /// Make the call to Shopify to get an AccessToken for accessing the API
         /// </summary>
         /// <param name="shopUrlName">The shop url name.</param>
-        /// <param name="requestTokenUrl">The url returned from the Shopify Callback</param>
+        /// <param name="accessCode">The code returned from the Shopify Callback</param>
         /// <returns>The access token needed to access the api</returns>
-        public static string GetAccessToken(string shopUrlName, Uri requestTokenUrl)
+        public static string GetAccessToken(string shopUrlName, string accessCode)
         {
-            if (requestTokenUrl == null)
-            {
-                throw new ArgumentNullException("requestTokenUrl", "requestTokenUrl is required");
-            }
-
             try
             {
-                // Get the request token needed for requesting the access token
-                string requestToken = ExtractRequestToken(requestTokenUrl);
-
                 // Create the variable request submitter with default params
                 HttpVariableRequestSubmitter request = new HttpVariableRequestSubmitter();
-                request.Uri = new Uri(new ShopifyEndpoints(shopUrlName).GetApiAccessTokenUrl(requestToken));
+                request.Uri = new Uri(new ShopifyEndpoints(shopUrlName).GetApiAccessTokenUrl(accessCode));
                 request.Verb = HttpVerb.Post;
 
                 // Get the response from the call.
@@ -155,7 +145,7 @@ namespace ShipWorks.Stores.Platforms.Shopify
             }
             catch (JsonException ex)
             {
-                string msg = $"An error occurred in GetAccessToken({requestTokenUrl}).{Environment.NewLine}     ";
+                string msg = $"An error occurred in GetAccessToken({accessCode}).{Environment.NewLine}     ";
                 log.ErrorFormat("{0}An error occurred during JObect.Parse. {1}", msg, ex);
 
                 throw new ShopifyException("Shopify did not return a valid access token to ShipWorks.", ex);
@@ -629,44 +619,6 @@ namespace ShipWorks.Stores.Platforms.Shopify
             }
 
             return null;
-        }
-
-        /// <summary>
-        /// Make the call to Shopify to get a RequestToken.  This will be used by GetAccessToken later.
-        /// Sets the RequestToken for future use.
-        /// </summary>
-        /// <param name="requestTokenUrl">The url returned from the Shopify Callback</param>
-        private static string ExtractRequestToken(Uri requestTokenUrl)
-        {
-            // Now get the value of the request token param if it exists
-            if (UriHasRequestToken(requestTokenUrl))
-            {
-                // Get the query string from the uri
-                NameValueCollection queryStringParams = HttpUtility.ParseQueryString(requestTokenUrl.Query);
-
-                return queryStringParams[ShopifyConstants.RequestTokenParamName];
-            }
-
-            throw new InvalidOperationException($"The requestToken could not be extracted from {requestTokenUrl}");
-        }
-
-        /// <summary>
-        /// Checks the given Uri to determine if the RequestTokenParamName exists.
-        /// </summary>
-        /// <param name="requestTokenUrl">The url returned from the Shopify Callback</param>
-        public static bool UriHasRequestToken(Uri requestTokenUrl)
-        {
-            if (requestTokenUrl == null)
-            {
-                throw new ArgumentNullException("requestTokenUrl", "requestTokenUrl is required");
-            }
-
-            // Get the query string from the uri
-            NameValueCollection queryStringParams = HttpUtility.ParseQueryString(requestTokenUrl.Query);
-
-            // Now get the value of the request token param
-            return queryStringParams?[ShopifyConstants.RequestTokenParamName] != null &&
-                   !string.IsNullOrEmpty(queryStringParams[ShopifyConstants.RequestTokenParamName]);
         }
 
         /// <summary>
