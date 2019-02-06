@@ -1438,6 +1438,8 @@ namespace ShipWorks
 
             log.InfoFormat("CheckDatabaseVersion: Installed: {0}, Required {1}", installedVersion, SqlSchemaUpdater.GetRequiredSchemaVersion());
 
+            UpdateDatabaseBuildNumber();
+
             // See if it needs upgraded
             if (SqlSchemaUpdater.IsUpgradeRequired() || !SqlSession.Current.IsSqlServer2008OrLater())
             {
@@ -1478,6 +1480,26 @@ namespace ShipWorks
             }
 
             return true;
+        }
+
+        /// <summary>
+        /// Update the database build number if its out of date
+        /// </summary>
+        private void UpdateDatabaseBuildNumber()
+        {
+            Version localBuildVersion = typeof(MainForm).Assembly.GetName().Version;
+            Version databaseBuildVersion = SqlSchemaUpdater.GetBuildVersion();
+
+            if (localBuildVersion > databaseBuildVersion)
+            {
+                using (DbConnection con = SqlSession.Current.OpenConnection())
+                {
+                    using (DbCommand command = con.CreateCommand())
+                    {
+                        SqlSchemaUpdater.UpdateBuildVersionProcedure(command);
+                    }
+                }
+            }
         }
 
         #endregion

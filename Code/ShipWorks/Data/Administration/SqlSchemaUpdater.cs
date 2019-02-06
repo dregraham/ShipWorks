@@ -67,16 +67,28 @@ namespace ShipWorks.Data.Administration
         /// <summary>
         /// Get the version of the installed assembly
         /// </summary>
-        private static Version GetInstalledAssemblyVersion()
+        private static Version GetInstalledAssemblyVersion() =>
+            GetVersionFromStoredProcedure("GetAssemblySchemaVersion");
+
+        /// <summary>
+        /// Get the version from GetBuildVersion in the database
+        /// </summary>
+        /// <returns></returns>
+        public static Version GetBuildVersion() =>
+            GetVersionFromStoredProcedure("GetBuildVersion");
+
+        /// <summary>
+        /// Execute the given stored procedure and return a version
+        /// </summary>
+        private static Version GetVersionFromStoredProcedure(string procedureName)
         {
             using (DbConnection con = SqlSession.Current.OpenConnection())
             {
                 try
                 {
-                    using (DbCommand cmd = DbCommandProvider.Create(con, "GetAssemblySchemaVersion"))
+                    using (DbCommand cmd = DbCommandProvider.Create(con, procedureName))
                     {
                         cmd.CommandType = CommandType.StoredProcedure;
-
                         return new Version((string) DbCommandProvider.ExecuteScalar(cmd));
                     }
                 }
