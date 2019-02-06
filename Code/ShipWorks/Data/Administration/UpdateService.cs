@@ -1,8 +1,10 @@
 ﻿using System;
 using System.IO;
 using System.IO.Pipes;
+using System.Security.Principal;
 using System.Text;
 using Interapptive.Shared.Utility;
+using Newtonsoft.Json.Linq;
 using ShipWorks.ApplicationCore;
 
 namespace ShipWorks.Data.Administration
@@ -19,7 +21,7 @@ namespace ShipWorks.Data.Administration
         /// </summary>
         public UpdateService(IShipWorksSession shipWorksSession)
         {
-            updaterPipe = new NamedPipeClientStream(shipWorksSession.InstanceID.ToString());
+            updaterPipe = new NamedPipeClientStream(".", shipWorksSession.InstanceID.ToString(), PipeDirection.Out);
         }
 
         /// <summary>
