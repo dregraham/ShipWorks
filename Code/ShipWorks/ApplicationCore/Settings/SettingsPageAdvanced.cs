@@ -5,6 +5,7 @@ using System.Reactive;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Autofac;
+using Interapptive.Shared.Collections;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
@@ -87,6 +88,20 @@ namespace ShipWorks.ApplicationCore.Settings
             SetupShipmentEditLimit(settings);
 
             LoadPickListTemplates(config.DefaultPickListTemplateID);
+
+            LoadAutoUpdateSettings(config.AutoUpdateHourOfDay, config.AutoUpdateDayOfWeek);
+        }
+
+        /// <summary>
+        /// Load the auto update settings
+        /// </summary>
+        private void LoadAutoUpdateSettings(int autoUpdateHourOfDay, DayOfWeek autoUpdateDayOfWeek)
+        {
+            autoUpdateHourOfDayDropDown.DataSource = new[] { "AM", "PM" }.SelectMany(x => Enumerable.Range(1, 11).Prepend(12).Select(y => $"{y}:00 {x}")).ToList();
+            autoUpdateHourOfDayDropDown.SelectedIndex = autoUpdateHourOfDay;
+
+            autoUpdateDayOfWeekDropDown.DataSource = Enum.GetValues(typeof(DayOfWeek));
+            autoUpdateDayOfWeekDropDown.SelectedItem = autoUpdateDayOfWeek;
         }
 
         /// <summary>
@@ -127,6 +142,8 @@ namespace ShipWorks.ApplicationCore.Settings
             config.UseParallelActionQueue = useParallelActionProcessing.Checked;
             config.DefaultPickListTemplateID = ((TemplateEntity) pickListTemplate.SelectedItem)?.TemplateID;
 
+            SaveAutoUpdateSettings(config);
+
             ShippingSettingsWrapper shippingSettingsWrapper = new ShippingSettingsWrapper(Messenger.Current);
             ShippingSettingsEntity settings = shippingSettingsWrapper.Fetch();
             settings.ShipSenseEnabled = enableShipSense.Checked;
@@ -135,6 +152,15 @@ namespace ShipWorks.ApplicationCore.Settings
             shippingSettingsWrapper.Save(settings);
 
             ConfigurationData.Save(config);
+        }
+
+        /// <summary>
+        /// Save the auto update settings
+        /// </summary>
+        private void SaveAutoUpdateSettings(ConfigurationEntity config)
+        {
+            config.AutoUpdateHourOfDay = autoUpdateHourOfDayDropDown.SelectedIndex;
+            config.AutoUpdateDayOfWeek = (DayOfWeek) autoUpdateDayOfWeekDropDown.SelectedItem;
         }
 
         /// <summary>

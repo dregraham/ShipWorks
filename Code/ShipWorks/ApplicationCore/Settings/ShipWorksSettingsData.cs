@@ -5,34 +5,23 @@ namespace ShipWorks.ApplicationCore.Settings
     /// </summary>
     public class ShipWorksSettingsData
     {
-        private bool showQatBelowRibbon;
-        private bool minimizeRibbon;
-
         /// <summary>
         /// Constructor
         /// </summary>
         public ShipWorksSettingsData(bool showQatBelowRibbon, bool minimizeRibbon)
         {
-            this.showQatBelowRibbon = showQatBelowRibbon;
-            this.minimizeRibbon = minimizeRibbon;
+            ShowQatBelowRibbon = showQatBelowRibbon;
+            MinimizeRibbon = minimizeRibbon;
         }
 
         /// <summary>
         /// Indicates that the Quick Access Toolbar is shown under the ribbon
         /// </summary>
-        public bool ShowQatBelowRibbon
-        {
-            get { return showQatBelowRibbon; }
-            set { showQatBelowRibbon = value; }
-        }
+        public bool ShowQatBelowRibbon { get; set; }
 
         /// <summary>
         /// Indicates if the ribbon is show minimized
         /// </summary>
-        public bool MinimizeRibbon
-        {
-            get { return minimizeRibbon; }
-            set { minimizeRibbon = value; }
-        }
+        public bool MinimizeRibbon { get; set; }
     }
 }
