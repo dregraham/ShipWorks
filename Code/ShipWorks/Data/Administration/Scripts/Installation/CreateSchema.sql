@@ -4471,7 +4471,9 @@ CREATE TABLE [dbo].[Configuration]
 [AllowEbayCombineLocally] [bit] NOT NULL CONSTRAINT [DF_Configuration_AllowEbayCombineLocally] DEFAULT ((0)),
 [ArchivalSettingsXml] [xml] NOT NULL CONSTRAINT [DF_Configuration_ArchivalSettingsXml] DEFAULT ('<ArchivalSettings/>'),
 [AuditEnabled] [bit] NOT NULL CONSTRAINT [DF_Configuration_AuditEnabled] DEFAULT ((1)),
-[DefaultPickListTemplateID] [bigint] NULL
+[DefaultPickListTemplateID] [bigint] NULL,
+[AutoUpdateDayOfWeek] [int] NOT NULL,
+[AutoUpdateHourOfDay] [int] NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_Configuration] on [dbo].[Configuration]'

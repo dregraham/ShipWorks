@@ -779,6 +779,8 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("ConfigurationEntity", "ArchivalSettingsXml", typeof(System.String), false, false, false, false,  (int)ConfigurationFieldIndex.ArchivalSettingsXml, 2147483647, 0, 0);
 			this.AddElementFieldInfo("ConfigurationEntity", "AuditEnabled", typeof(System.Boolean), false, false, false, false,  (int)ConfigurationFieldIndex.AuditEnabled, 0, 0, 0);
 			this.AddElementFieldInfo("ConfigurationEntity", "DefaultPickListTemplateID", typeof(Nullable<System.Int64>), false, false, false, true,  (int)ConfigurationFieldIndex.DefaultPickListTemplateID, 0, 0, 19);
+			this.AddElementFieldInfo("ConfigurationEntity", "AutoUpdateDayOfWeek", typeof(System.DayOfWeek), false, false, false, false,  (int)ConfigurationFieldIndex.AutoUpdateDayOfWeek, 0, 0, 10);
+			this.AddElementFieldInfo("ConfigurationEntity", "AutoUpdateHourOfDay", typeof(System.Int32), false, false, false, false,  (int)ConfigurationFieldIndex.AutoUpdateHourOfDay, 0, 0, 10);
 		}
 		/// <summary>Inits CustomerEntity's FieldInfo objects</summary>
 		private void InitCustomerEntityInfos()
@@ -2637,7 +2639,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddFieldIndexEnumForElementName(typeof(ProductListItemFieldIndex), "ProductListItemEntity");
 			this.AddElementFieldInfo("ProductListItemEntity", "ProductVariantID", typeof(System.Int64), false, false, false, false,  (int)ProductListItemFieldIndex.ProductVariantID, 0, 0, 19);
 			this.AddElementFieldInfo("ProductListItemEntity", "SKU", typeof(System.String), false, false, false, false,  (int)ProductListItemFieldIndex.SKU, 300, 0, 0);
-			this.AddElementFieldInfo("ProductListItemEntity", "Name", typeof(System.String), false, false, false, false,  (int)ProductListItemFieldIndex.Name, 300, 0, 0);
+			this.AddElementFieldInfo("ProductListItemEntity", "Name", typeof(System.String), false, false, false, true,  (int)ProductListItemFieldIndex.Name, 300, 0, 0);
 			this.AddElementFieldInfo("ProductListItemEntity", "Length", typeof(Nullable<System.Decimal>), false, false, false, true,  (int)ProductListItemFieldIndex.Length, 0, 2, 10);
 			this.AddElementFieldInfo("ProductListItemEntity", "Width", typeof(Nullable<System.Decimal>), false, false, false, true,  (int)ProductListItemFieldIndex.Width, 0, 2, 10);
 			this.AddElementFieldInfo("ProductListItemEntity", "Height", typeof(Nullable<System.Decimal>), false, false, false, true,  (int)ProductListItemFieldIndex.Height, 0, 2, 10);

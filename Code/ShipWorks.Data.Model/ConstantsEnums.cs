@@ -2048,6 +2048,10 @@ namespace ShipWorks.Data.Model
 		AuditEnabled,
 		///<summary>DefaultPickListTemplateID. </summary>
 		DefaultPickListTemplateID,
+		///<summary>AutoUpdateDayOfWeek. </summary>
+		AutoUpdateDayOfWeek,
+		///<summary>AutoUpdateHourOfDay. </summary>
+		AutoUpdateHourOfDay,
 		/// <summary></summary>
 		AmountOfFields
 	}

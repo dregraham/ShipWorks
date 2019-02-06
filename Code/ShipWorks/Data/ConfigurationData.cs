@@ -152,7 +152,10 @@ namespace ShipWorks.Data
                 CustomerKey = string.Empty,
 
                 UseParallelActionQueue = true,
-                AllowEbayCombineLocally = false
+                AllowEbayCombineLocally = false,
+
+                AutoUpdateDayOfWeek = DayOfWeek.Thursday,
+                AutoUpdateHourOfDay = 23
             };
 
             adapter.SaveEntity(newConfig);
