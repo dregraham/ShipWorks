@@ -168,13 +168,13 @@ namespace SmokeTest
             //repo.SomeForm.InstallOtherComponents.Click();
             //Delay.Milliseconds(200);
             
-            Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Move item 'SomeForm.Next' at Center.", repo.SomeForm.NextInfo, new RecordItemIndex(22));
-            repo.SomeForm.Next.MoveTo();
-            Delay.Milliseconds(200);
+            //Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Move item 'SomeForm.Next' at Center.", repo.SomeForm.NextInfo, new RecordItemIndex(22));
+            //repo.SomeForm.Next.MoveTo();
+            //Delay.Milliseconds(200);
             
-            Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Click item 'SomeForm.Next' at Center.", repo.SomeForm.NextInfo, new RecordItemIndex(23));
-            repo.SomeForm.Next.Click();
-            Delay.Milliseconds(200);
+            //Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Click item 'SomeForm.Next' at Center.", repo.SomeForm.NextInfo, new RecordItemIndex(23));
+            //repo.SomeForm.Next.Click();
+            //Delay.Milliseconds(200);
             
             //ClickFinish();
             //Delay.Milliseconds(0);
