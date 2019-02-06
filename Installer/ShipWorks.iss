@@ -125,11 +125,11 @@ Root: HKLM; Subkey: Software\Microsoft\Windows\CurrentVersion\Run; ValueType: st
 [Run]
 Filename: {app}\ShipWorks.exe; Description: Launch ShipWorks; Flags: nowait postinstall skipifsilent
 Filename: {app}\ShipWorks.exe; Parameters: "/s=scheduler"; Flags: nowait; Check: not NeedRestart
-Filename: {app}\ShipWorks.Escalator.exe; Parameters: "--install"
+Filename: {app}\ShipWorks.Escalator.exe; Parameters: "--install"; Flags: runhidden
 
 [UninstallRun]
-Filename: {app}\ShipWorks.exe; Parameters: "/command:uninstall"
-Filename: {app}\ShipWorks.Escalator.exe; Parameters: "--uninstall"
+Filename: {app}\ShipWorks.exe; Parameters: "/command:uninstall"; Flags: runhidden
+Filename: {app}\ShipWorks.Escalator.exe; Parameters: "--uninstall"; Flags: runhidden
 
 [Dirs]
 Name: {app}
@@ -533,7 +533,7 @@ begin
 
         if (ShipWorksVersionHasScheduler())
         then begin
-            Exec(ExpandConstant(ExpandConstant('{app}') + '\ShipWorks.exe'), '/s=scheduler /stop', '', SW_SHOW, ewWaitUntilTerminated, serviceWasStopped)
+            Exec(ExpandConstant(ExpandConstant('{app}') + '\ShipWorks.exe'), '/s=scheduler /stop', '', SW_HIDE, ewWaitUntilTerminated, serviceWasStopped)
         end;
 
         if IsTaskSelected('desktopicon')
@@ -544,7 +544,7 @@ begin
 
         if(ShipWorksEscalatorServiceExists())
         then begin
-            Exec(ExpandConstant(ExpandConstant('{app}') + '\ShipWorks.Escalator.exe'), '--stop', '', SW_SHOW, ewWaitUntilTerminated, serviceWasStopped)
+            Exec(ExpandConstant(ExpandConstant('{app}') + '\ShipWorks.Escalator.exe'), '--stop', '', SW_HIDE, ewWaitUntilTerminated, serviceWasStopped)
         end;
 
     end;
