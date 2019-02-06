@@ -53,7 +53,7 @@ namespace ShipWorks.Escalator
             if (service != null)
             {
                 service.Stop();
-                ManagedInstallerClass.InstallHelper(new string[] { "/u", typeof(Program).Assembly.Location });
+                ManagedInstallerClass.InstallHelper(new string[] { "/u", "/LogFile=", typeof(Program).Assembly.Location });
             }
         }
 
@@ -65,7 +65,7 @@ namespace ShipWorks.Escalator
             ServiceController service = ServiceController.GetServices().SingleOrDefault(s => s.ServiceName == serviceName);
             if (service == null)
             {
-                ManagedInstallerClass.InstallHelper(new string[] { $"/ServiceName={serviceName}", typeof(Program).Assembly.Location });
+                ManagedInstallerClass.InstallHelper(new string[] { $"/ServiceName={serviceName}", "/LogFile=", typeof(Program).Assembly.Location });
                 SetRecoveryOptions(serviceName);
                 service = new ServiceController(serviceName);
             }
@@ -85,7 +85,7 @@ namespace ShipWorks.Escalator
         }
 
         /// <summary>
-        /// Set service to restart after 3 crashses
+        /// Set service to restart after 3 crashes
         /// </summary>
         static void SetRecoveryOptions(string serviceName)
         {

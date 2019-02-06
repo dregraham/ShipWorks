@@ -106,11 +106,6 @@ Source: {#AppArtifacts}\SingleScanPanels.swe; DestDir: {app}; Flags: overwritere
     Source: {#AppArtifacts}\Interapptive.Shared.pdb; DestDir: {app}; Flags: overwritereadonly ignoreversion
 #endif
 
-[UninstallDelete]
-Type: files; Name: {app}\InstallUtil.InstallLog
-Type: files; Name: {app}\ShipWorks.Escalator.InstallLog
-Type: files; Name: {app}\ShipWorks.Escalator.InstallState
-
 [Tasks]
 Name: desktopicon; Description: Create a &Desktop icon; GroupDescription: Additional shortcuts:
 
