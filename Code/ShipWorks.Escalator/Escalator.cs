@@ -1,6 +1,5 @@
 ﻿using System;
 using System.ServiceProcess;
-using System.IO;
 
 namespace ShipWorks.Escalator
 {
@@ -22,11 +21,17 @@ namespace ShipWorks.Escalator
         /// </summary>
         protected override void OnStart(string[] args)
         {
-            Directory.SetCurrentDirectory(AppDomain.CurrentDomain.BaseDirectory);
-            using (StreamWriter file = new StreamWriter(@"hereIam.txt"))
-            {
-                file.WriteLine(DateTime.Now.ToString());
-            }
+            // Start a communication bridge to listen for messages from ShipWorks
+            ShipWorksCommunicationBridge communicationBridge = new ShipWorksCommunicationBridge(ShipWorks.Escalator.ServiceName.GetInstanceID().ToString());
+            communicationBridge.OnMessage += OnShipWorksMessage;
+        }
+
+        /// <summary>
+        /// React to a message from ShipWorks
+        /// </summary>
+        private void OnShipWorksMessage(string message)
+        {
+            Console.WriteLine(message);
         }
 
         /// <summary>

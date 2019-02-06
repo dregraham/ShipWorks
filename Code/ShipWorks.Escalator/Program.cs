@@ -20,7 +20,7 @@ namespace ShipWorks.Escalator
             if (Environment.UserInteractive)
             {
                 string serviceName = ServiceName.Resolve();
-                string parameter = string.Concat(args);                
+                string parameter = string.Concat(args);
 
                 switch (parameter)
                 {
