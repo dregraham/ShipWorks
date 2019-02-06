@@ -128,11 +128,11 @@ Root: HKLM; Subkey: Software\Microsoft\Windows\CurrentVersion\Run; ValueType: st
 [Run]
 Filename: {app}\ShipWorks.exe; Description: Launch ShipWorks; Flags: nowait postinstall skipifsilent
 Filename: {app}\ShipWorks.exe; Parameters: "/s=scheduler"; Flags: nowait; Check: not NeedRestart
-Filename: {app}\ShipWorks.Escalator.exe; Parameters: "--install"
+Filename: {app}\ShipWorks.Escalator.exe; Parameters: "--install"; Flags: runhidden
 
 [UninstallRun]
-Filename: {app}\ShipWorks.exe; Parameters: "/command:uninstall"
-Filename: {app}\ShipWorks.Escalator.exe; Parameters: "--uninstall"
+Filename: {app}\ShipWorks.exe; Parameters: "/command:uninstall"; Flags: runhidden
+Filename: {app}\ShipWorks.Escalator.exe; Parameters: "--uninstall"; Flags: runhidden
 
 [Dirs]
 Name: {app}
@@ -379,6 +379,17 @@ begin
     Result := 'ShipWorksScheduler$' + processName;
 end;
 
+//-------------------------------------------------------------------------
+// Does Escelator Service Exists
+//-------------------------------------------------------------------------
+function ShipWorksEscalatorServiceExists(): Boolean;
+var 
+	TargetExe: string;
+begin
+	TargetExe := ExpandConstant('{app}') + '\ShipWorks.Escalator.exe';
+	Result := (FileExists(TargetExe));
+end;
+
 //----------------------------------------------------------------
 // Was the scheduler included in installed version of ShipWorks
 //----------------------------------------------------------------
@@ -530,7 +541,7 @@ begin
 
         if (ShipWorksVersionHasScheduler())
         then begin
-            Exec(ExpandConstant(ExpandConstant('{app}') + '\ShipWorks.exe'), '/s=scheduler /stop', '', SW_SHOW, ewWaitUntilTerminated, serviceWasStopped)
+            Exec(ExpandConstant(ExpandConstant('{app}') + '\ShipWorks.exe'), '/s=scheduler /stop', '', SW_HIDE, ewWaitUntilTerminated, serviceWasStopped)
         end;
 
         if IsTaskSelected('desktopicon')
@@ -539,8 +550,12 @@ begin
             DeleteFile(ExpandConstant('{userdesktop}\ShipWorks 3.lnk'));
         end;
 
-  end;
+        if(ShipWorksEscalatorServiceExists())
+        then begin
+            Exec(ExpandConstant(ExpandConstant('{app}') + '\ShipWorks.Escalator.exe'), '--stop', '', SW_HIDE, ewWaitUntilTerminated, serviceWasStopped)
+        end;
 
+    end;
 end;
 
 //----------------------------------------------------------------
