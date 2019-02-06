@@ -1,4 +1,6 @@
 ﻿using System;
+using System.IO;
+using System.Reflection;
 using System.Runtime.InteropServices;
 
 namespace ShipWorks.Escalator
@@ -9,7 +11,7 @@ namespace ShipWorks.Escalator
         {
             try
             {
-                StartProcessAsCurrentUser("C:\\Work\\Shipworks3x\\Artifacts\\Application\\ShipWorks.exe");
+                StartProcessAsCurrentUser($"{Path.GetDirectoryName(Assembly.GetEntryAssembly().Location)}\\ShipWorks.exe");
             }
             catch
             {
@@ -17,7 +19,7 @@ namespace ShipWorks.Escalator
             }
         }
 
-        #region Win32 Constantsf
+        #region Win32 Constants
 
         private const int CREATE_UNICODE_ENVIRONMENT = 0x00000400;
         private const int CREATE_NO_WINDOW = 0x08000000;

@@ -4,8 +4,6 @@ using System.IO;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.ServiceProcess;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 
 namespace ShipWorks.Escalator
 {
@@ -27,8 +25,6 @@ namespace ShipWorks.Escalator
         /// </summary>
         protected override void OnStart(string[] args)
         {
-            System.Diagnostics.Debugger.Launch();
-
             ResumeFromDisk();
 
             // Start a communication bridge to listen for messages from ShipWorks
@@ -73,9 +69,18 @@ namespace ShipWorks.Escalator
         /// <summary>
         /// React to a message from ShipWorks
         /// </summary>
-        private void OnShipWorksMessage(string message)
+        private async void OnShipWorksMessage(string message)
         {
-            // Download and install the latest version of shipworks
+            UpdaterWebClient updaterWebClient = new UpdaterWebClient();
+
+            InstallFile newVersion = await updaterWebClient.Download(new Version(message));
+
+            if (newVersion.IsValid)
+            {
+                ShipWorksInstaller installer = new ShipWorksInstaller();
+
+                installer.Install(newVersion);
+            }
         }
 
         /// <summary>
