@@ -106,6 +106,9 @@ Source: {#AppArtifacts}\SingleScanPanels.swe; DestDir: {app}; Flags: overwritere
     Source: {#AppArtifacts}\Interapptive.Shared.pdb; DestDir: {app}; Flags: overwritereadonly ignoreversion
 #endif
 
+[UninstallDelete]
+Type: files; Name: {app}\install.status
+
 [Tasks]
 Name: desktopicon; Description: Create a &Desktop icon; GroupDescription: Additional shortcuts:
 
@@ -286,6 +289,9 @@ begin
   	begin
     	UpgradeDatabase();
     end;
+    
+    SaveStringToFile(ExpandConstant('{app}\install.status'), 'success', False);
+    
   end;
 end;
 
@@ -304,6 +310,7 @@ begin
 		begin
 			Log('BACKUP: Install failed, rolling back...')
 			DirectoryCopy(tempDir, ExpandConstant('{app}'));
+	        SaveStringToFile(ExpandConstant('{app}\install.status'), 'failure', False);
 		end;
 
 		DelTree(tempDir, True, True, True);
@@ -311,6 +318,7 @@ begin
 	else
 	begin
 		Log('BACKUP: Install failed, nothing to roll back');
+		SaveStringToFile(ExpandConstant('{app}\install.status'), 'failure', False);
 	end;
 end;
 
