@@ -10,7 +10,7 @@ using Interapptive.Shared.Utility;
 using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.ApplicationCore.Appearance;
-using ShipWorks.ApplicationCore.Options;
+using ShipWorks.ApplicationCore.Settings;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.Custom;

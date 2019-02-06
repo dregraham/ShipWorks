@@ -956,14 +956,14 @@
     <Compile Include="ApplicationCore\Nudges\NudgeOptionActionType.cs" />
     <Compile Include="ApplicationCore\Nudges\NudgeOptionDeserializer.cs" />
     <Compile Include="ApplicationCore\Nudges\NudgeType.cs" />
-    <Compile Include="ApplicationCore\Options\ModifiedOrderCustomerUpdateBehavior.cs" />
-    <Compile Include="ApplicationCore\Options\OptionPageShortcuts.cs">
+    <Compile Include="ApplicationCore\Settings\ModifiedOrderCustomerUpdateBehavior.cs" />
+    <Compile Include="ApplicationCore\Settings\SettingsPageShortcuts.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="ApplicationCore\Options\OptionPageShortcuts.Designer.cs">
-      <DependentUpon>OptionPageShortcuts.cs</DependentUpon>
+    <Compile Include="ApplicationCore\Settings\SettingsPageShortcuts.Designer.cs">
+      <DependentUpon>SettingsPageShortcuts.cs</DependentUpon>
     </Compile>
-    <Compile Include="ApplicationCore\Options\SingleScanSettings.cs" />
+    <Compile Include="ApplicationCore\Settings\SingleScanSettings.cs" />
     <Compile Include="ApplicationCore\Security\CipherContext.cs" />
     <Compile Include="ApplicationCore\Security\EncryptionProviderFactory.cs" />
     <Compile Include="ApplicationCore\Security\LicenseEncryptionProvider.cs" />
@@ -999,16 +999,16 @@
     <Compile Include="ApplicationCore\MessageBoxes\EnglishCultureRequiredDlg.Designer.cs">
       <DependentUpon>EnglishCultureRequiredDlg.cs</DependentUpon>
     </Compile>
-    <Compile Include="ApplicationCore\Options\PrintResultCleanup\PrintJobCleanupDlg.cs">
+    <Compile Include="ApplicationCore\Settings\PrintResultCleanup\PrintJobCleanupDlg.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ApplicationCore\Options\PrintResultCleanup\PrintJobCleanupDlg.Designer.cs">
+    <Compile Include="ApplicationCore\Settings\PrintResultCleanup\PrintJobCleanupDlg.Designer.cs">
       <DependentUpon>PrintJobCleanupDlg.cs</DependentUpon>
     </Compile>
-    <Compile Include="ApplicationCore\Options\ResourceCleanup\ResourceCleanupDlg.cs">
+    <Compile Include="ApplicationCore\Settings\ResourceCleanup\ResourceCleanupDlg.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ApplicationCore\Options\ResourceCleanup\ResourceCleanupDlg.Designer.cs">
+    <Compile Include="ApplicationCore\Settings\ResourceCleanup\ResourceCleanupDlg.Designer.cs">
       <DependentUpon>ResourceCleanupDlg.cs</DependentUpon>
     </Compile>
     <Compile Include="ApplicationCore\Services\Hosting\IServiceRegistrar.cs" />
@@ -4905,11 +4905,11 @@
     <Compile Include="ApplicationCore\MessageBoxes\DeleteObjectReferenceDlg.Designer.cs">
       <DependentUpon>DeleteObjectReferenceDlg.cs</DependentUpon>
     </Compile>
-    <Compile Include="ApplicationCore\Options\OptionPageInterapptive.cs">
+    <Compile Include="ApplicationCore\Settings\SettingsPageInterapptive.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="ApplicationCore\Options\OptionPageInterapptive.Designer.cs">
-      <DependentUpon>OptionPageInterapptive.cs</DependentUpon>
+    <Compile Include="ApplicationCore\Settings\SettingsPageInterapptive.Designer.cs">
+      <DependentUpon>SettingsPageInterapptive.cs</DependentUpon>
     </Compile>
     <Compile Include="Common\Threading\BackgroundIssue.cs" />
     <Compile Include="Common\Threading\BackgroundIssueAdder.cs" />
@@ -6785,11 +6785,11 @@
     <Compile Include="ApplicationCore\MessageBoxes\InstallationProblemDlg.Designer.cs">
       <DependentUpon>InstallationProblemDlg.cs</DependentUpon>
     </Compile>
-    <Compile Include="ApplicationCore\Options\OptionPageAdvanced.cs">
+    <Compile Include="ApplicationCore\Settings\SettingsPageAdvanced.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="ApplicationCore\Options\OptionPageAdvanced.Designer.cs">
-      <DependentUpon>OptionPageAdvanced.cs</DependentUpon>
+    <Compile Include="ApplicationCore\Settings\SettingsPageAdvanced.Designer.cs">
+      <DependentUpon>SettingsPageAdvanced.cs</DependentUpon>
     </Compile>
     <Compile Include="ApplicationCore\Interaction\IdleWatcher.cs" />
     <Compile Include="ApplicationCore\Licensing\LicenseAccountDetail.cs" />
@@ -6849,31 +6849,31 @@
     <Compile Include="ApplicationCore\MessageBoxes\NeedWindowsXPSP2.Designer.cs">
       <DependentUpon>NeedWindowsXPSP2.cs</DependentUpon>
     </Compile>
-    <Compile Include="ApplicationCore\Options\OptionPageLogging.cs">
+    <Compile Include="ApplicationCore\Settings\SettingsPageLogging.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="ApplicationCore\Options\OptionPageLogging.Designer.cs">
-      <DependentUpon>OptionPageLogging.cs</DependentUpon>
+    <Compile Include="ApplicationCore\Settings\SettingsPageLogging.Designer.cs">
+      <DependentUpon>SettingsPageLogging.cs</DependentUpon>
     </Compile>
-    <Compile Include="ApplicationCore\Options\OptionPageBase.cs">
+    <Compile Include="ApplicationCore\Settings\SettingsPageBase.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="ApplicationCore\Options\OptionPageBase.Designer.cs">
-      <DependentUpon>OptionPageBase.cs</DependentUpon>
+    <Compile Include="ApplicationCore\Settings\SettingsPageBase.Designer.cs">
+      <DependentUpon>SettingsPageBase.cs</DependentUpon>
     </Compile>
-    <Compile Include="ApplicationCore\Options\OptionPagePersonal.cs">
+    <Compile Include="ApplicationCore\Settings\SettingsPagePersonal.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="ApplicationCore\Options\OptionPagePersonal.Designer.cs">
-      <DependentUpon>OptionPagePersonal.cs</DependentUpon>
+    <Compile Include="ApplicationCore\Settings\SettingsPagePersonal.Designer.cs">
+      <DependentUpon>SettingsPagePersonal.cs</DependentUpon>
     </Compile>
-    <Compile Include="ApplicationCore\Options\ShipWorksOptions.cs">
+    <Compile Include="ApplicationCore\Settings\ShipWorksSettings.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ApplicationCore\Options\ShipWorksOptions.Designer.cs">
-      <DependentUpon>ShipWorksOptions.cs</DependentUpon>
+    <Compile Include="ApplicationCore\Settings\ShipWorksSettings.Designer.cs">
+      <DependentUpon>ShipWorksSettings.cs</DependentUpon>
     </Compile>
-    <Compile Include="ApplicationCore\Options\ShipWorksOptionsData.cs" />
+    <Compile Include="ApplicationCore\Settings\ShipWorksSettingsData.cs" />
     <Compile Include="Data\Administration\InitialDataLoader.cs" />
     <Compile Include="Data\Connection\ConnectionLostDlg.cs">
       <SubType>Form</SubType>
@@ -7065,13 +7065,13 @@
     <EmbeddedResource Include="ApplicationCore\Nudges\NudgeDlg.resx">
       <DependentUpon>NudgeDlg.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="ApplicationCore\Options\OptionPageShortcuts.resx">
-      <DependentUpon>OptionPageShortcuts.cs</DependentUpon>
+    <EmbeddedResource Include="ApplicationCore\Settings\SettingsPageShortcuts.resx">
+      <DependentUpon>SettingsPageShortcuts.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="ApplicationCore\Options\PrintResultCleanup\PrintJobCleanupDlg.resx">
+    <EmbeddedResource Include="ApplicationCore\Settings\PrintResultCleanup\PrintJobCleanupDlg.resx">
       <DependentUpon>PrintJobCleanupDlg.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="ApplicationCore\Options\ResourceCleanup\ResourceCleanupDlg.resx">
+    <EmbeddedResource Include="ApplicationCore\Settings\ResourceCleanup\ResourceCleanupDlg.resx">
       <DependentUpon>ResourceCleanupDlg.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ApplicationCore\Services\Hosting\Windows\WindowsServiceCredentialsDlg.resx">
@@ -7894,17 +7894,17 @@
       <SubType>Designer</SubType>
       <DependentUpon>NeedWindowsXPSP2.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="ApplicationCore\Options\OptionPageBase.resx">
+    <EmbeddedResource Include="ApplicationCore\Settings\SettingsPageBase.resx">
       <SubType>Designer</SubType>
-      <DependentUpon>OptionPageBase.cs</DependentUpon>
+      <DependentUpon>SettingsPageBase.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="ApplicationCore\Options\OptionPagePersonal.resx">
+    <EmbeddedResource Include="ApplicationCore\Settings\SettingsPagePersonal.resx">
       <SubType>Designer</SubType>
-      <DependentUpon>OptionPagePersonal.cs</DependentUpon>
+      <DependentUpon>SettingsPagePersonal.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="ApplicationCore\Options\ShipWorksOptions.resx">
+    <EmbeddedResource Include="ApplicationCore\Settings\ShipWorksSettings.resx">
       <SubType>Designer</SubType>
-      <DependentUpon>ShipWorksOptions.cs</DependentUpon>
+      <DependentUpon>ShipWorksSettings.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Data\Administration\DetailedDatabaseSetupWizard.resx">
       <SubType>Designer</SubType>
@@ -9321,12 +9321,12 @@
       <SubType>Designer</SubType>
       <DependentUpon>NeedEnableClr.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="ApplicationCore\Options\OptionPageInterapptive.resx">
-      <DependentUpon>OptionPageInterapptive.cs</DependentUpon>
+    <EmbeddedResource Include="ApplicationCore\Settings\SettingsPageInterapptive.resx">
+      <DependentUpon>SettingsPageInterapptive.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="ApplicationCore\Options\OptionPageAdvanced.resx">
-      <DependentUpon>OptionPageAdvanced.cs</DependentUpon>
+    <EmbeddedResource Include="ApplicationCore\Settings\SettingsPageAdvanced.resx">
+      <DependentUpon>SettingsPageAdvanced.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Data\Administration\SqlServerSetup\WindowsInstallerDownloadPage.resx">
@@ -9451,8 +9451,8 @@
     <Resource Include="Resources\InfoTip.png" />
     <Resource Include="Resources\check.png" />
     <None Include="Resources\information.png" />
-    <EmbeddedResource Include="ApplicationCore\Options\OptionPageLogging.resx">
-      <DependentUpon>OptionPageLogging.cs</DependentUpon>
+    <EmbeddedResource Include="ApplicationCore\Settings\SettingsPageLogging.resx">
+      <DependentUpon>SettingsPageLogging.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Data\Administration\DatabaseBackupDlg.resx">
@@ -10733,9 +10733,9 @@
       <Link>Properties\AnalysisDictionary.xml</Link>
       <SubType>Designer</SubType>
     </CodeAnalysisDictionary>
-    <EmbeddedResource Include="ApplicationCore\Options\ResourceCleanup\Estimate.sql" />
-    <EmbeddedResource Include="ApplicationCore\Options\ResourceCleanup\ResourceCleanup.sql" />
-    <EmbeddedResource Include="ApplicationCore\Options\PrintResultCleanup\Estimate.sql" />
+    <EmbeddedResource Include="ApplicationCore\Settings\ResourceCleanup\Estimate.sql" />
+    <EmbeddedResource Include="ApplicationCore\Settings\ResourceCleanup\ResourceCleanup.sql" />
+    <EmbeddedResource Include="ApplicationCore\Settings\PrintResultCleanup\Estimate.sql" />
     <None Include="Resources\about.png" />
     <EmbeddedResource Include="Data\Administration\Scripts\Maintenance\ShrinkDatabase.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Installation\InitialData.sql" />
