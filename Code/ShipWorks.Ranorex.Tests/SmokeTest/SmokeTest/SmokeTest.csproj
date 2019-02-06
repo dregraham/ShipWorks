@@ -1293,6 +1293,18 @@
       <UserCode>true</UserCode>
       <id>a909919c-1c90-40a1-b516-a024366f1405</id>
     </Compile>
+    <Compile Include="SetupUSPSStampsCleanUp.cs">
+      <BoundTo>91257278-7a26-42ed-af3b-71223743fbb7</BoundTo>
+      <DependentUpon>SetupUSPSStampsCleanUp.rxrec</DependentUpon>
+      <RecorderCode>true</RecorderCode>
+      <id>4fefb10d-ceb4-4644-86f3-e85d8d6564ad</id>
+    </Compile>
+    <Compile Include="SetupUSPSStampsCleanUp.UserCode.cs">
+      <BoundTo>91257278-7a26-42ed-af3b-71223743fbb7</BoundTo>
+      <DependentUpon>SetupUSPSStampsCleanUp.rxrec</DependentUpon>
+      <UserCode>true</UserCode>
+      <id>49547a5d-522a-462e-bf9f-63eaa406983f</id>
+    </Compile>
     <Compile Include="ShipOrders_FromAddress_OnTracDomestic.cs">
       <BoundTo>ded50d3f-545b-4f05-a26d-bd8373ad47cc</BoundTo>
       <DependentUpon>ShipOrders_FromAddress_OnTracDomestic.rxrec</DependentUpon>
@@ -1958,6 +1970,11 @@
       <BoundTo>cc314fb4-f6c2-41c4-91da-4828b4fd7dee</BoundTo>
       <id>058d0643-ec9c-465a-b8c9-e8ecf7a28e58</id>
       <recordtableid>54534012-f2e8-4bb3-a043-d12addb16f70</recordtableid>
+    </None>
+    <None Include="SetupUSPSStampsCleanUp.rxrec">
+      <BoundTo>cc314fb4-f6c2-41c4-91da-4828b4fd7dee</BoundTo>
+      <id>91257278-7a26-42ed-af3b-71223743fbb7</id>
+      <recordtableid>3d822982-ba90-42d1-b376-da20de22caf4</recordtableid>
     </None>
     <None Include="ShipOrders_FromAddress_OnTracDomestic.rxrec">
       <BoundTo>cc314fb4-f6c2-41c4-91da-4828b4fd7dee</BoundTo>

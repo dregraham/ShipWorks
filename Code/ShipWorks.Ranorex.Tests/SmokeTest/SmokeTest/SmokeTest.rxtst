@@ -358,6 +358,10 @@ rxversion="8.1">
 			type="Recording">
 			</testmodule>
 			<smartfoldernode
+			id="3024c7f6-e5d0-4bfc-85f2-870f553fdc14"
+			name="USPSStampsSetupCleanUp">
+			</smartfoldernode>
+			<smartfoldernode
 			id="3097e203-0e96-435a-87f2-65c9d6fbb9dd"
 			name="Create_Orders">
 				<parameters>
@@ -827,6 +831,10 @@ rxversion="8.1">
 			ref="525dbf63-47dc-43d1-813c-3932018894b3"
 			type="Recording">
 			</testmodule>
+			<smartfoldernode
+			id="6c1a9992-8046-4a52-a166-4608aed02264"
+			name="USPSStampsSetup">
+			</smartfoldernode>
 			<testmodule
 			id="6cf018fd-ce27-44ff-8f00-0974deb752d1"
 			name="AllOrdersFilter_SelectFirstRow_ShipOrders2"
@@ -911,6 +919,12 @@ rxversion="8.1">
 			id="780ece01-be8d-4665-ab82-800a6f991236"
 			name="VoidAShipment"
 			ref="9e1509a8-d463-4537-84e6-f64ec819b98d"
+			type="Recording">
+			</testmodule>
+			<testmodule
+			id="78c25710-321e-447c-8ea3-256ba20f3446"
+			name="SetupUSPSStampsCleanUp"
+			ref="3d822982-ba90-42d1-b376-da20de22caf4"
 			type="Recording">
 			</testmodule>
 			<testmodule
@@ -1914,10 +1928,22 @@ rxversion="8.1">
 						<smartfoldernode
 						id="8f30d63d-77ad-4ae9-b76f-0585e0b520d9"
 						name="SetupUSPSStamps">
-							<testmodule
-							id="8802fccf-f0dd-4224-8d55-c05285d15db4"
-							name="SetupUSPSStamps">
-							</testmodule>
+							<smartfoldernode
+							id="6c1a9992-8046-4a52-a166-4608aed02264"
+							name="USPSStampsSetup">
+								<testmodule
+								id="8802fccf-f0dd-4224-8d55-c05285d15db4"
+								name="SetupUSPSStamps">
+								</testmodule>
+							</smartfoldernode>
+							<smartfoldernode
+							id="3024c7f6-e5d0-4bfc-85f2-870f553fdc14"
+							name="USPSStampsSetupCleanUp">
+								<testmodule
+								id="78c25710-321e-447c-8ea3-256ba20f3446"
+								name="SetupUSPSStampsCleanUp">
+								</testmodule>
+							</smartfoldernode>
 						</smartfoldernode>
 						<smartfoldernode
 						id="254eaed6-bbd9-41f6-8551-df6d373e9aec"
@@ -3047,6 +3073,9 @@ rxversion="8.1">
 			id="2bd8cc72-d4f0-4e3c-bb18-18dce269ca2f">
 			</testcontainer>
 			<testcontainer
+			id="3024c7f6-e5d0-4bfc-85f2-870f553fdc14">
+			</testcontainer>
+			<testcontainer
 			id="3097e203-0e96-435a-87f2-65c9d6fbb9dd">
 			</testcontainer>
 			<testcontainer
@@ -3078,6 +3107,9 @@ rxversion="8.1">
 			</testcontainer>
 			<testcontainer
 			id="683a5e84-ddf6-4a1d-8aa7-07ba1b5c96f3">
+			</testcontainer>
+			<testcontainer
+			id="6c1a9992-8046-4a52-a166-4608aed02264">
 			</testcontainer>
 			<testcontainer
 			id="7206cb2e-f7d2-4a9f-ab9a-6a9762a410ea">
@@ -3173,13 +3205,58 @@ rxversion="8.1">
 			id="14ee1c1c-0353-469d-84ea-e800f3a3addb">
 			</testcontainer>
 			<testcontainer
-			id="37ed76eb-3c0b-464e-a8f7-2eccaf2cfc98">
+			id="21c1fa07-4c36-48a5-a7ce-583e03d7f79e">
+			</testcontainer>
+			<testcontainer
+			id="3024c7f6-e5d0-4bfc-85f2-870f553fdc14">
+			</testcontainer>
+			<testcontainer
+			id="3097e203-0e96-435a-87f2-65c9d6fbb9dd">
+			</testcontainer>
+			<testcontainer
+			id="3cd7f37d-7cb4-432e-9961-d219597a852c">
+			</testcontainer>
+			<testcontainer
+			id="6c1a9992-8046-4a52-a166-4608aed02264">
+			</testcontainer>
+			<testcontainer
+			id="7401058e-5686-4439-9e54-1d7efc8b42fd">
+			</testcontainer>
+			<testcontainer
+			id="8f30d63d-77ad-4ae9-b76f-0585e0b520d9">
 			</testcontainer>
 			<testcontainer
 			id="95eeff4e-218a-4f4b-a4a5-e92d3b071ca1">
 			</testcontainer>
 			<testcontainer
+			id="978d48b1-7016-4c09-b8c0-ae69ebe75418">
+			</testcontainer>
+			<testcontainer
+			id="99cc2751-f78c-4108-a0e4-54ce2fe2fb51">
+			</testcontainer>
+			<testcontainer
+			id="a5271e47-96a7-41c9-b5e2-3dc0ec43957c">
+			</testcontainer>
+			<testcontainer
+			id="af913ff5-d5e2-4876-b33a-260847569b5e">
+			</testcontainer>
+			<testcontainer
+			id="c63ecaad-2072-4eae-9658-8fe53b8774a3">
+			</testcontainer>
+			<testcontainer
+			id="cfea8d06-1bda-4e5e-a3a7-52a894247f32">
+			</testcontainer>
+			<testcontainer
+			id="ebe55009-40a6-4334-a2f7-4bb16b1e5c68">
+			</testcontainer>
+			<testcontainer
+			id="f4926276-b766-4900-b377-38c84df66e02">
+			</testcontainer>
+			<testcontainer
 			id="f875647d-7a5c-46d1-bda6-83a5075d93c7">
+			</testcontainer>
+			<testcontainer
+			id="fc8e7a3e-1848-4705-a6d8-80654e66d8a8">
 			</testcontainer>
 		</testconfiguration>
 	</testconfigurations>

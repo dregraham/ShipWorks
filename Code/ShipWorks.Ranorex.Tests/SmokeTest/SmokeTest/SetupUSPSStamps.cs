@@ -112,31 +112,31 @@ namespace SmokeTest
         [System.CodeDom.Compiler.GeneratedCode("Ranorex", "8.1")]
         void ITestModule.Run()
         {
-            Mouse.DefaultMoveTime = 1000;
+            Mouse.DefaultMoveTime = 300;
             Keyboard.DefaultKeyPressTime = 100;
             Delay.SpeedFactor = 1.00;
 
             Init();
 
             Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Move item 'MainForm.Manage' at Center.", repo.MainForm.ManageInfo, new RecordItemIndex(0));
-            repo.MainForm.Manage.MoveTo(300);
+            repo.MainForm.Manage.MoveTo();
             Delay.Milliseconds(200);
             
             Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Click item 'MainForm.Manage' at Center.", repo.MainForm.ManageInfo, new RecordItemIndex(1));
-            repo.MainForm.Manage.Click(300);
+            repo.MainForm.Manage.Click();
             Delay.Milliseconds(200);
             
             Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Move item 'MainForm.Shipping' at Center.", repo.MainForm.ShippingInfo, new RecordItemIndex(2));
-            repo.MainForm.Shipping.MoveTo(300);
+            repo.MainForm.Shipping.MoveTo();
             Delay.Milliseconds(200);
             
             Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Click item 'MainForm.Shipping' at Center.", repo.MainForm.ShippingInfo, new RecordItemIndex(3));
-            repo.MainForm.Shipping.Click(300);
+            repo.MainForm.Shipping.Click();
             Delay.Milliseconds(200);
             
             // Move to the USPS Checkbox on teh Shipping Settings Window
             Report.Log(ReportLevel.Info, "Mouse", "Move to the USPS Checkbox on teh Shipping Settings Window\r\nMouse Left Move item 'ShippingSettingsDlg.USPS' at Center.", repo.ShippingSettingsDlg.USPSInfo, new RecordItemIndex(4));
-            repo.ShippingSettingsDlg.USPS.MoveTo(300);
+            repo.ShippingSettingsDlg.USPS.MoveTo();
             Delay.Milliseconds(200);
             
             // Select the USPS Checkbox on the Shipping Settings Window
@@ -146,69 +146,69 @@ namespace SmokeTest
             
             // Move to the USPS button the sidebar of the Shipping Settings window
             Report.Log(ReportLevel.Info, "Mouse", "Move to the USPS button the sidebar of the Shipping Settings window\r\nMouse Left Move item 'ShippingSettingsDlg.USPS1' at Center.", repo.ShippingSettingsDlg.USPS1Info, new RecordItemIndex(6));
-            repo.ShippingSettingsDlg.USPS1.MoveTo(300);
+            repo.ShippingSettingsDlg.USPS1.MoveTo();
             Delay.Milliseconds(200);
             
             Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Click item 'ShippingSettingsDlg.USPS1' at Center.", repo.ShippingSettingsDlg.USPS1Info, new RecordItemIndex(7));
-            repo.ShippingSettingsDlg.USPS1.Click(300);
+            repo.ShippingSettingsDlg.USPS1.Click();
             Delay.Milliseconds(200);
             
             // Move to the Setup button in the USPS section of the Shipping Settings window
             Report.Log(ReportLevel.Info, "Mouse", "Move to the Setup button in the USPS section of the Shipping Settings window\r\nMouse Left Move item 'ShippingSettingsDlg.Setup13' at Center.", repo.ShippingSettingsDlg.Setup13Info, new RecordItemIndex(8));
-            repo.ShippingSettingsDlg.Setup13.MoveTo(300);
+            repo.ShippingSettingsDlg.Setup13.MoveTo();
             Delay.Milliseconds(200);
             
             Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Click item 'ShippingSettingsDlg.Setup12' at Center.", repo.ShippingSettingsDlg.Setup12Info, new RecordItemIndex(9));
-            repo.ShippingSettingsDlg.Setup12.Click(300);
+            repo.ShippingSettingsDlg.Setup12.Click();
             Delay.Milliseconds(200);
             
             // Move to the Setup button in the USPS section of the Shipping Settings window
             Report.Log(ReportLevel.Info, "Mouse", "Move to the Setup button in the USPS section of the Shipping Settings window\r\nMouse Left Move item 'UspsSetupWizard.Next2' at Center.", repo.UspsSetupWizard.Next2Info, new RecordItemIndex(10));
-            repo.UspsSetupWizard.Next2.MoveTo(300);
+            repo.UspsSetupWizard.Next2.MoveTo();
             Delay.Milliseconds(200);
             
             Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Click item 'UspsSetupWizard.Next2' at Center.", repo.UspsSetupWizard.Next2Info, new RecordItemIndex(11));
-            repo.UspsSetupWizard.Next2.Click(300);
+            repo.UspsSetupWizard.Next2.Click();
             Delay.Milliseconds(200);
             
             // Move to the Setup button in the USPS section of the Shipping Settings window
             Report.Log(ReportLevel.Info, "Mouse", "Move to the Setup button in the USPS section of the Shipping Settings window\r\nMouse Left Move item 'UspsSetupWizard.Next2' at Center.", repo.UspsSetupWizard.Next2Info, new RecordItemIndex(12));
-            repo.UspsSetupWizard.Next2.MoveTo(300);
+            repo.UspsSetupWizard.Next2.MoveTo();
             Delay.Milliseconds(200);
             
             Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Click item 'UspsSetupWizard.Next2' at Center.", repo.UspsSetupWizard.Next2Info, new RecordItemIndex(13));
-            repo.UspsSetupWizard.Next2.Click(300);
+            repo.UspsSetupWizard.Next2.Click();
             Delay.Milliseconds(200);
             
             // Move to the Setup button in the USPS section of the Shipping Settings window
             Report.Log(ReportLevel.Info, "Mouse", "Move to the Setup button in the USPS section of the Shipping Settings window\r\nMouse Left Move item 'UspsSetupWizard.Next2' at Center.", repo.UspsSetupWizard.Next2Info, new RecordItemIndex(14));
-            repo.UspsSetupWizard.Next2.MoveTo(300);
+            repo.UspsSetupWizard.Next2.MoveTo();
             Delay.Milliseconds(200);
             
             Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Click item 'UspsSetupWizard.Next2' at Center.", repo.UspsSetupWizard.Next2Info, new RecordItemIndex(15));
-            repo.UspsSetupWizard.Next2.Click(300);
+            repo.UspsSetupWizard.Next2.Click();
             Delay.Milliseconds(200);
             
             Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Move item 'UspsSetupWizard.Next2' at Center.", repo.UspsSetupWizard.Next2Info, new RecordItemIndex(16));
-            repo.UspsSetupWizard.Next2.MoveTo(300);
+            repo.UspsSetupWizard.Next2.MoveTo();
             Delay.Milliseconds(200);
             
             Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Click item 'UspsSetupWizard.Next2' at Center.", repo.UspsSetupWizard.Next2Info, new RecordItemIndex(17));
-            repo.UspsSetupWizard.Next2.Click(300);
+            repo.UspsSetupWizard.Next2.Click();
             Delay.Milliseconds(200);
             
             // Move to the Setup button in the USPS section of the Shipping Settings window
             Report.Log(ReportLevel.Info, "Mouse", "Move to the Setup button in the USPS section of the Shipping Settings window\r\nMouse Left Move item 'UspsSetupWizard.Next2' at Center.", repo.UspsSetupWizard.Next2Info, new RecordItemIndex(18));
-            repo.UspsSetupWizard.Next2.MoveTo(300);
+            repo.UspsSetupWizard.Next2.MoveTo();
             Delay.Milliseconds(200);
             
             Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Click item 'UspsSetupWizard.Next2' at Center.", repo.UspsSetupWizard.Next2Info, new RecordItemIndex(19));
-            repo.UspsSetupWizard.Next2.Click(300);
+            repo.UspsSetupWizard.Next2.Click();
             Delay.Milliseconds(200);
             
             // Move to the Setup button in the USPS section of the Shipping Settings window
             Report.Log(ReportLevel.Info, "Mouse", "Move to the Setup button in the USPS section of the Shipping Settings window\r\nMouse Left Move item 'UspsSetupWizard.MainPanel.PrintActionBox' at Center.", repo.UspsSetupWizard.MainPanel.PrintActionBoxInfo, new RecordItemIndex(20));
-            repo.UspsSetupWizard.MainPanel.PrintActionBox.MoveTo(300);
+            repo.UspsSetupWizard.MainPanel.PrintActionBox.MoveTo();
             Delay.Milliseconds(200);
             
             Report.Log(ReportLevel.Info, "Invoke action", "Invoking Uncheck() on item 'UspsSetupWizard.MainPanel.PrintActionBox'.", repo.UspsSetupWizard.MainPanel.PrintActionBoxInfo, new RecordItemIndex(21));
@@ -217,87 +217,87 @@ namespace SmokeTest
             
             // Move to the Setup button in the USPS section of the Shipping Settings window
             Report.Log(ReportLevel.Info, "Mouse", "Move to the Setup button in the USPS section of the Shipping Settings window\r\nMouse Left Move item 'UspsSetupWizard.Next2' at Center.", repo.UspsSetupWizard.Next2Info, new RecordItemIndex(22));
-            repo.UspsSetupWizard.Next2.MoveTo(300);
+            repo.UspsSetupWizard.Next2.MoveTo();
             Delay.Milliseconds(200);
             
             Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Click item 'UspsSetupWizard.Next2' at Center.", repo.UspsSetupWizard.Next2Info, new RecordItemIndex(23));
-            repo.UspsSetupWizard.Next2.Click(300);
+            repo.UspsSetupWizard.Next2.Click();
             Delay.Milliseconds(200);
             
             // Move to the Setup button in the USPS section of the Shipping Settings window
             Report.Log(ReportLevel.Info, "Mouse", "Move to the Setup button in the USPS section of the Shipping Settings window\r\nMouse Left Move item 'UspsSetupWizard.Next2' at Center.", repo.UspsSetupWizard.Next2Info, new RecordItemIndex(24));
-            repo.UspsSetupWizard.Next2.MoveTo(300);
+            repo.UspsSetupWizard.Next2.MoveTo();
             Delay.Milliseconds(200);
             
             Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Click item 'UspsSetupWizard.Next2' at Center.", repo.UspsSetupWizard.Next2Info, new RecordItemIndex(25));
-            repo.UspsSetupWizard.Next2.Click(300);
+            repo.UspsSetupWizard.Next2.Click();
             Delay.Milliseconds(200);
             
             // Move to the Setup button in the USPS section of the Shipping Settings window
             Report.Log(ReportLevel.Info, "Mouse", "Move to the Setup button in the USPS section of the Shipping Settings window\r\nMouse Left Move item 'UspsSetupWizard.Next3' at Center.", repo.UspsSetupWizard.Next3Info, new RecordItemIndex(26));
-            repo.UspsSetupWizard.Next3.MoveTo(300);
+            repo.UspsSetupWizard.Next3.MoveTo();
             Delay.Milliseconds(200);
             
             Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Click item 'UspsSetupWizard.Next3' at Center.", repo.UspsSetupWizard.Next3Info, new RecordItemIndex(27));
-            repo.UspsSetupWizard.Next3.Click(300);
+            repo.UspsSetupWizard.Next3.Click();
             Delay.Milliseconds(200);
             
             // Move to the Setup button in the USPS section of the Shipping Settings window
             Report.Log(ReportLevel.Info, "Mouse", "Move to the Setup button in the USPS section of the Shipping Settings window\r\nMouse Left Move item 'ShippingSettingsDlg.Close' at Center.", repo.ShippingSettingsDlg.CloseInfo, new RecordItemIndex(28));
-            repo.ShippingSettingsDlg.Close.MoveTo(300);
+            repo.ShippingSettingsDlg.Close.MoveTo();
             Delay.Milliseconds(200);
             
             Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Click item 'ShippingSettingsDlg.Close' at Center.", repo.ShippingSettingsDlg.CloseInfo, new RecordItemIndex(29));
-            repo.ShippingSettingsDlg.Close.Click(300);
+            repo.ShippingSettingsDlg.Close.Click();
             Delay.Milliseconds(200);
             
             // Move to the Setup button in the USPS section of the Shipping Settings window
             Report.Log(ReportLevel.Info, "Mouse", "Move to the Setup button in the USPS section of the Shipping Settings window\r\nMouse Left Move item 'MainForm.Manage' at Center.", repo.MainForm.ManageInfo, new RecordItemIndex(30));
-            repo.MainForm.Manage.MoveTo(300);
+            repo.MainForm.Manage.MoveTo();
             Delay.Milliseconds(200);
             
             Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Click item 'MainForm.Manage' at Center.", repo.MainForm.ManageInfo, new RecordItemIndex(31));
-            repo.MainForm.Manage.Click(300);
+            repo.MainForm.Manage.Click();
             Delay.Milliseconds(200);
             
             Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Move item 'MainForm.Shipping' at Center.", repo.MainForm.ShippingInfo, new RecordItemIndex(32));
-            repo.MainForm.Shipping.MoveTo(300);
+            repo.MainForm.Shipping.MoveTo();
             Delay.Milliseconds(200);
             
             Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Click item 'MainForm.Shipping' at Center.", repo.MainForm.ShippingInfo, new RecordItemIndex(33));
-            repo.MainForm.Shipping.Click(300);
+            repo.MainForm.Shipping.Click();
             Delay.Milliseconds(200);
             
             Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Move item 'ShippingSettingsDlg.USPS1' at Center.", repo.ShippingSettingsDlg.USPS1Info, new RecordItemIndex(34));
-            repo.ShippingSettingsDlg.USPS1.MoveTo(300);
+            repo.ShippingSettingsDlg.USPS1.MoveTo();
             Delay.Milliseconds(200);
             
             Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Click item 'ShippingSettingsDlg.USPS1' at Center.", repo.ShippingSettingsDlg.USPS1Info, new RecordItemIndex(35));
-            repo.ShippingSettingsDlg.USPS1.Click(300);
+            repo.ShippingSettingsDlg.USPS1.Click();
             Delay.Milliseconds(200);
             
             Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Move item 'ShippingSettingsDlg.Remove' at Center.", repo.ShippingSettingsDlg.RemoveInfo, new RecordItemIndex(36));
-            repo.ShippingSettingsDlg.Remove.MoveTo(300);
+            repo.ShippingSettingsDlg.Remove.MoveTo();
             Delay.Milliseconds(200);
             
             Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Click item 'ShippingSettingsDlg.Remove' at Center.", repo.ShippingSettingsDlg.RemoveInfo, new RecordItemIndex(37));
-            repo.ShippingSettingsDlg.Remove.Click(300);
+            repo.ShippingSettingsDlg.Remove.Click();
             Delay.Milliseconds(200);
             
             Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Move item 'ShipWorks.ButtonOK' at Center.", repo.ShipWorks.ButtonOKInfo, new RecordItemIndex(38));
-            repo.ShipWorks.ButtonOK.MoveTo(300);
+            repo.ShipWorks.ButtonOK.MoveTo();
             Delay.Milliseconds(200);
             
             Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Click item 'ShipWorks.ButtonOK' at Center.", repo.ShipWorks.ButtonOKInfo, new RecordItemIndex(39));
-            repo.ShipWorks.ButtonOK.Click(300);
+            repo.ShipWorks.ButtonOK.Click();
             Delay.Milliseconds(200);
             
             Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Move item 'ShippingSettingsDlg.Close' at Center.", repo.ShippingSettingsDlg.CloseInfo, new RecordItemIndex(40));
-            repo.ShippingSettingsDlg.Close.MoveTo(300);
+            repo.ShippingSettingsDlg.Close.MoveTo();
             Delay.Milliseconds(200);
             
             Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Click item 'ShippingSettingsDlg.Close' at Center.", repo.ShippingSettingsDlg.CloseInfo, new RecordItemIndex(41));
-            repo.ShippingSettingsDlg.Close.Click(300);
+            repo.ShippingSettingsDlg.Close.Click();
             Delay.Milliseconds(200);
             
             SelectTestServer();
@@ -305,65 +305,65 @@ namespace SmokeTest
             
             // Move to the Setup button in the USPS section of the Shipping Settings window
             Report.Log(ReportLevel.Info, "Mouse", "Move to the Setup button in the USPS section of the Shipping Settings window\r\nMouse Left Move item 'MainForm.Manage' at Center.", repo.MainForm.ManageInfo, new RecordItemIndex(43));
-            repo.MainForm.Manage.MoveTo(300);
+            repo.MainForm.Manage.MoveTo();
             Delay.Milliseconds(200);
             
             Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Click item 'MainForm.Manage' at Center.", repo.MainForm.ManageInfo, new RecordItemIndex(44));
-            repo.MainForm.Manage.Click(300);
+            repo.MainForm.Manage.Click();
             Delay.Milliseconds(200);
             
             Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Move item 'MainForm.Shipping' at Center.", repo.MainForm.ShippingInfo, new RecordItemIndex(45));
-            repo.MainForm.Shipping.MoveTo(300);
+            repo.MainForm.Shipping.MoveTo();
             Delay.Milliseconds(200);
             
             Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Click item 'MainForm.Shipping' at Center.", repo.MainForm.ShippingInfo, new RecordItemIndex(46));
-            repo.MainForm.Shipping.Click(300);
+            repo.MainForm.Shipping.Click();
             Delay.Milliseconds(200);
             
             Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Move item 'ShippingSettingsDlg.USPS1' at Center.", repo.ShippingSettingsDlg.USPS1Info, new RecordItemIndex(47));
-            repo.ShippingSettingsDlg.USPS1.MoveTo(300);
+            repo.ShippingSettingsDlg.USPS1.MoveTo();
             Delay.Milliseconds(200);
             
             Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Click item 'ShippingSettingsDlg.USPS1' at Center.", repo.ShippingSettingsDlg.USPS1Info, new RecordItemIndex(48));
-            repo.ShippingSettingsDlg.USPS1.Click(300);
+            repo.ShippingSettingsDlg.USPS1.Click();
             Delay.Milliseconds(200);
             
             Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Move item 'ShippingSettingsDlg.ButtonAdd' at Center.", repo.ShippingSettingsDlg.ButtonAddInfo, new RecordItemIndex(49));
-            repo.ShippingSettingsDlg.ButtonAdd.MoveTo(300);
+            repo.ShippingSettingsDlg.ButtonAdd.MoveTo();
             Delay.Milliseconds(200);
             
             Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Click item 'ShippingSettingsDlg.ButtonAdd' at Center.", repo.ShippingSettingsDlg.ButtonAddInfo, new RecordItemIndex(50));
-            repo.ShippingSettingsDlg.ButtonAdd.Click(300);
+            repo.ShippingSettingsDlg.ButtonAdd.Click();
             Delay.Milliseconds(200);
             
             // Move to the Use an existing Stamps.com account radio button
             Report.Log(ReportLevel.Info, "Mouse", "Move to the Use an existing Stamps.com account radio button\r\nMouse Left Move item 'UspsSetupWizard.MainPanel.UseAnExistingStampsComAccount' at Center.", repo.UspsSetupWizard.MainPanel.UseAnExistingStampsComAccountInfo, new RecordItemIndex(51));
-            repo.UspsSetupWizard.MainPanel.UseAnExistingStampsComAccount.MoveTo(300);
+            repo.UspsSetupWizard.MainPanel.UseAnExistingStampsComAccount.MoveTo();
             Delay.Milliseconds(200);
             
             // Select the Use an existing Stamps.com account radio button
             Report.Log(ReportLevel.Info, "Mouse", "Select the Use an existing Stamps.com account radio button\r\nMouse Left Click item 'UspsSetupWizard.MainPanel.UseAnExistingStampsComAccount' at Center.", repo.UspsSetupWizard.MainPanel.UseAnExistingStampsComAccountInfo, new RecordItemIndex(52));
-            repo.UspsSetupWizard.MainPanel.UseAnExistingStampsComAccount.Click(300);
+            repo.UspsSetupWizard.MainPanel.UseAnExistingStampsComAccount.Click();
             Delay.Milliseconds(200);
             
             // Move to th Next on the Setup Stamps.com Shipping Setup ShipWorks to work with your Stamp.com account page
             Report.Log(ReportLevel.Info, "Mouse", "Move to th Next on the Setup Stamps.com Shipping Setup ShipWorks to work with your Stamp.com account page\r\nMouse Left Move item 'UspsSetupWizard.Next' at Center.", repo.UspsSetupWizard.NextInfo, new RecordItemIndex(53));
-            repo.UspsSetupWizard.Next.MoveTo(300);
+            repo.UspsSetupWizard.Next.MoveTo();
             Delay.Milliseconds(200);
             
             // Click Next on the Setup Stamps.com Shipping Setup ShipWorks to work with your Stamp.com account page
             Report.Log(ReportLevel.Info, "Mouse", "Click Next on the Setup Stamps.com Shipping Setup ShipWorks to work with your Stamp.com account page\r\nMouse Left Click item 'UspsSetupWizard.Next' at Center.", repo.UspsSetupWizard.NextInfo, new RecordItemIndex(54));
-            repo.UspsSetupWizard.Next.Click(300);
+            repo.UspsSetupWizard.Next.Click();
             Delay.Milliseconds(200);
             
             // Move to the Full Name field
             Report.Log(ReportLevel.Info, "Mouse", "Move to the Full Name field\r\nMouse Left Move item 'UspsSetupWizard.MainPanel.FullNameUSPS' at Center.", repo.UspsSetupWizard.MainPanel.FullNameUSPSInfo, new RecordItemIndex(55));
-            repo.UspsSetupWizard.MainPanel.FullNameUSPS.MoveTo(300);
+            repo.UspsSetupWizard.MainPanel.FullNameUSPS.MoveTo();
             Delay.Milliseconds(200);
             
             // Click the Full Name field
             Report.Log(ReportLevel.Info, "Mouse", "Click the Full Name field\r\nMouse Left Click item 'UspsSetupWizard.MainPanel.FullNameUSPS' at Center.", repo.UspsSetupWizard.MainPanel.FullNameUSPSInfo, new RecordItemIndex(56));
-            repo.UspsSetupWizard.MainPanel.FullNameUSPS.Click(300);
+            repo.UspsSetupWizard.MainPanel.FullNameUSPS.Click();
             Delay.Milliseconds(200);
             
             // Enter the Full Name
@@ -373,12 +373,12 @@ namespace SmokeTest
             
             // Move to the Company Field
             Report.Log(ReportLevel.Info, "Mouse", "Move to the Company Field\r\nMouse Left Move item 'UspsSetupWizard.MainPanel.Company' at Center.", repo.UspsSetupWizard.MainPanel.CompanyInfo, new RecordItemIndex(58));
-            repo.UspsSetupWizard.MainPanel.Company.MoveTo(300);
+            repo.UspsSetupWizard.MainPanel.Company.MoveTo();
             Delay.Milliseconds(200);
             
             // Click the Company Field
             Report.Log(ReportLevel.Info, "Mouse", "Click the Company Field\r\nMouse Left Click item 'UspsSetupWizard.MainPanel.Company' at Center.", repo.UspsSetupWizard.MainPanel.CompanyInfo, new RecordItemIndex(59));
-            repo.UspsSetupWizard.MainPanel.Company.Click(300);
+            repo.UspsSetupWizard.MainPanel.Company.Click();
             Delay.Milliseconds(200);
             
             // Enter the Company
@@ -388,12 +388,12 @@ namespace SmokeTest
             
             // Move to the Street field
             Report.Log(ReportLevel.Info, "Mouse", "Move to the Street field\r\nMouse Left Move item 'UspsSetupWizard.MainPanel.Street' at Center.", repo.UspsSetupWizard.MainPanel.StreetInfo, new RecordItemIndex(61));
-            repo.UspsSetupWizard.MainPanel.Street.MoveTo(300);
+            repo.UspsSetupWizard.MainPanel.Street.MoveTo();
             Delay.Milliseconds(200);
             
             // Click the Street field
             Report.Log(ReportLevel.Info, "Mouse", "Click the Street field\r\nMouse Left Click item 'UspsSetupWizard.MainPanel.Street' at Center.", repo.UspsSetupWizard.MainPanel.StreetInfo, new RecordItemIndex(62));
-            repo.UspsSetupWizard.MainPanel.Street.Click(300);
+            repo.UspsSetupWizard.MainPanel.Street.Click();
             Delay.Milliseconds(200);
             
             // Enter the Street
@@ -403,12 +403,12 @@ namespace SmokeTest
             
             // Move to the City field
             Report.Log(ReportLevel.Info, "Mouse", "Move to the City field\r\nMouse Left Move item 'UspsSetupWizard.MainPanel.City' at Center.", repo.UspsSetupWizard.MainPanel.CityInfo, new RecordItemIndex(64));
-            repo.UspsSetupWizard.MainPanel.City.MoveTo(300);
+            repo.UspsSetupWizard.MainPanel.City.MoveTo();
             Delay.Milliseconds(200);
             
             // Click the City field
             Report.Log(ReportLevel.Info, "Mouse", "Click the City field\r\nMouse Left Click item 'UspsSetupWizard.MainPanel.City' at Center.", repo.UspsSetupWizard.MainPanel.CityInfo, new RecordItemIndex(65));
-            repo.UspsSetupWizard.MainPanel.City.Click(300);
+            repo.UspsSetupWizard.MainPanel.City.Click();
             Delay.Milliseconds(200);
             
             // Enter the City
@@ -418,12 +418,12 @@ namespace SmokeTest
             
             // Move to the State field
             Report.Log(ReportLevel.Info, "Mouse", "Move to the State field\r\nMouse Left Move item 'UspsSetupWizard.MainPanel.State' at Center.", repo.UspsSetupWizard.MainPanel.StateInfo, new RecordItemIndex(67));
-            repo.UspsSetupWizard.MainPanel.State.MoveTo(300);
+            repo.UspsSetupWizard.MainPanel.State.MoveTo();
             Delay.Milliseconds(200);
             
             // Click the State field
             Report.Log(ReportLevel.Info, "Mouse", "Click the State field\r\nMouse Left Click item 'UspsSetupWizard.MainPanel.State' at Center.", repo.UspsSetupWizard.MainPanel.StateInfo, new RecordItemIndex(68));
-            repo.UspsSetupWizard.MainPanel.State.Click(300);
+            repo.UspsSetupWizard.MainPanel.State.Click();
             Delay.Milliseconds(200);
             
             // Enter the State
@@ -433,12 +433,12 @@ namespace SmokeTest
             
             // Move to the Postal Code field
             Report.Log(ReportLevel.Info, "Mouse", "Move to the Postal Code field\r\nMouse Left Move item 'UspsSetupWizard.MainPanel.PostalCode' at Center.", repo.UspsSetupWizard.MainPanel.PostalCodeInfo, new RecordItemIndex(70));
-            repo.UspsSetupWizard.MainPanel.PostalCode.MoveTo(300);
+            repo.UspsSetupWizard.MainPanel.PostalCode.MoveTo();
             Delay.Milliseconds(200);
             
             // Click the Postal Code field
             Report.Log(ReportLevel.Info, "Mouse", "Click the Postal Code field\r\nMouse Left Click item 'UspsSetupWizard.MainPanel.PostalCode' at Center.", repo.UspsSetupWizard.MainPanel.PostalCodeInfo, new RecordItemIndex(71));
-            repo.UspsSetupWizard.MainPanel.PostalCode.Click(300);
+            repo.UspsSetupWizard.MainPanel.PostalCode.Click();
             Delay.Milliseconds(200);
             
             // Enter the Postal Code
@@ -448,12 +448,12 @@ namespace SmokeTest
             
             // Move to the Email field
             Report.Log(ReportLevel.Info, "Mouse", "Move to the Email field\r\nMouse Left Move item 'UspsSetupWizard.MainPanel.Email' at Center.", repo.UspsSetupWizard.MainPanel.EmailInfo, new RecordItemIndex(73));
-            repo.UspsSetupWizard.MainPanel.Email.MoveTo(300);
+            repo.UspsSetupWizard.MainPanel.Email.MoveTo();
             Delay.Milliseconds(200);
             
             // Click the Email field
             Report.Log(ReportLevel.Info, "Mouse", "Click the Email field\r\nMouse Left Click item 'UspsSetupWizard.MainPanel.Email' at Center.", repo.UspsSetupWizard.MainPanel.EmailInfo, new RecordItemIndex(74));
-            repo.UspsSetupWizard.MainPanel.Email.Click(300);
+            repo.UspsSetupWizard.MainPanel.Email.Click();
             Delay.Milliseconds(200);
             
             // Enter the Email
@@ -463,12 +463,12 @@ namespace SmokeTest
             
             // Move to the Phone field
             Report.Log(ReportLevel.Info, "Mouse", "Move to the Phone field\r\nMouse Left Move item 'UspsSetupWizard.MainPanel.Phone' at Center.", repo.UspsSetupWizard.MainPanel.PhoneInfo, new RecordItemIndex(76));
-            repo.UspsSetupWizard.MainPanel.Phone.MoveTo(300);
+            repo.UspsSetupWizard.MainPanel.Phone.MoveTo();
             Delay.Milliseconds(200);
             
             // Click the Phone field
             Report.Log(ReportLevel.Info, "Mouse", "Click the Phone field\r\nMouse Left Click item 'UspsSetupWizard.MainPanel.Phone' at Center.", repo.UspsSetupWizard.MainPanel.PhoneInfo, new RecordItemIndex(77));
-            repo.UspsSetupWizard.MainPanel.Phone.Click(300);
+            repo.UspsSetupWizard.MainPanel.Phone.Click();
             Delay.Milliseconds(200);
             
             // Enter the Phone
@@ -478,22 +478,22 @@ namespace SmokeTest
             
             // Move to the Next on the Account Registration Enter the address for your Stamps.com account page
             Report.Log(ReportLevel.Info, "Mouse", "Move to the Next on the Account Registration Enter the address for your Stamps.com account page\r\nMouse Left Move item 'UspsSetupWizard.Next' at Center.", repo.UspsSetupWizard.NextInfo, new RecordItemIndex(79));
-            repo.UspsSetupWizard.Next.MoveTo(300);
+            repo.UspsSetupWizard.Next.MoveTo();
             Delay.Milliseconds(200);
             
             // Click Next on the Account Registration Enter the address for your Stamps.com account page
             Report.Log(ReportLevel.Info, "Mouse", "Click Next on the Account Registration Enter the address for your Stamps.com account page\r\nMouse Left Click item 'UspsSetupWizard.Next' at Center.", repo.UspsSetupWizard.NextInfo, new RecordItemIndex(80));
-            repo.UspsSetupWizard.Next.Click(300);
+            repo.UspsSetupWizard.Next.Click();
             Delay.Milliseconds(200);
             
             // Move to the Username field
             Report.Log(ReportLevel.Info, "Mouse", "Move to the Username field\r\nMouse Left Move item 'UspsSetupWizard.MainPanel.Username' at Center.", repo.UspsSetupWizard.MainPanel.UsernameInfo, new RecordItemIndex(81));
-            repo.UspsSetupWizard.MainPanel.Username.MoveTo(300);
+            repo.UspsSetupWizard.MainPanel.Username.MoveTo();
             Delay.Milliseconds(200);
             
             // Click the Username field
             Report.Log(ReportLevel.Info, "Mouse", "Click the Username field\r\nMouse Left Click item 'UspsSetupWizard.MainPanel.Username' at Center.", repo.UspsSetupWizard.MainPanel.UsernameInfo, new RecordItemIndex(82));
-            repo.UspsSetupWizard.MainPanel.Username.Click(300);
+            repo.UspsSetupWizard.MainPanel.Username.Click();
             Delay.Milliseconds(200);
             
             // Enter the Username
@@ -502,12 +502,12 @@ namespace SmokeTest
             
             // Move to the Password field
             Report.Log(ReportLevel.Info, "Mouse", "Move to the Password field\r\nMouse Left Move item 'UspsSetupWizard.MainPanel.Password' at Center.", repo.UspsSetupWizard.MainPanel.PasswordInfo, new RecordItemIndex(84));
-            repo.UspsSetupWizard.MainPanel.Password.MoveTo(300);
+            repo.UspsSetupWizard.MainPanel.Password.MoveTo();
             Delay.Milliseconds(200);
             
             // Click the Password field
             Report.Log(ReportLevel.Info, "Mouse", "Click the Password field\r\nMouse Left Click item 'UspsSetupWizard.MainPanel.Password' at Center.", repo.UspsSetupWizard.MainPanel.PasswordInfo, new RecordItemIndex(85));
-            repo.UspsSetupWizard.MainPanel.Password.Click(300);
+            repo.UspsSetupWizard.MainPanel.Password.Click();
             Delay.Milliseconds(200);
             
             // Enter the Password
@@ -516,27 +516,27 @@ namespace SmokeTest
             
             // Move to the Next on the Stamps.com Credentials page
             Report.Log(ReportLevel.Info, "Mouse", "Move to the Next on the Stamps.com Credentials page\r\nMouse Left Move item 'UspsSetupWizard.Next' at Center.", repo.UspsSetupWizard.NextInfo, new RecordItemIndex(87));
-            repo.UspsSetupWizard.Next.MoveTo(300);
+            repo.UspsSetupWizard.Next.MoveTo();
             Delay.Milliseconds(200);
             
             // Click Next on the Stamps.com Credentials page
             Report.Log(ReportLevel.Info, "Mouse", "Click Next on the Stamps.com Credentials page\r\nMouse Left Click item 'UspsSetupWizard.Next' at Center.", repo.UspsSetupWizard.NextInfo, new RecordItemIndex(88));
-            repo.UspsSetupWizard.Next.Click(300);
+            repo.UspsSetupWizard.Next.Click();
             Delay.Milliseconds(200);
             
             // Move to Buy Postage
             Report.Log(ReportLevel.Info, "Mouse", "Move to Buy Postage\r\nMouse Left Move item 'UspsSetupWizard.MainPanel.Purchase' at Center.", repo.UspsSetupWizard.MainPanel.PurchaseInfo, new RecordItemIndex(89));
-            repo.UspsSetupWizard.MainPanel.Purchase.MoveTo(300);
+            repo.UspsSetupWizard.MainPanel.Purchase.MoveTo();
             Delay.Milliseconds(200);
             
             // Click: Buy Postage...
             Report.Log(ReportLevel.Info, "Mouse", "Click: Buy Postage...\r\nMouse Left Click item 'UspsSetupWizard.MainPanel.Purchase' at Center.", repo.UspsSetupWizard.MainPanel.PurchaseInfo, new RecordItemIndex(90));
-            repo.UspsSetupWizard.MainPanel.Purchase.Click(300);
+            repo.UspsSetupWizard.MainPanel.Purchase.Click();
             Delay.Milliseconds(200);
             
             // Move to Purchase amount textbox
             Report.Log(ReportLevel.Info, "Mouse", "Move to Purchase amount textbox\r\nMouse Left Move item 'UspsPurchasePostageDlg.Postage' at Center.", repo.UspsPurchasePostageDlg.PostageInfo, new RecordItemIndex(91));
-            repo.UspsPurchasePostageDlg.Postage.MoveTo(300);
+            repo.UspsPurchasePostageDlg.Postage.MoveTo();
             Delay.Milliseconds(200);
             
             // Give Focus: Purchase amount textbox
@@ -565,37 +565,37 @@ namespace SmokeTest
             
             // Move to the Next button on the Stamps.com Acount Your Stamps.com account information page
             Report.Log(ReportLevel.Info, "Mouse", "Move to the Next button on the Stamps.com Acount Your Stamps.com account information page\r\nMouse Left Move item 'UspsSetupWizard.Next' at Center.", repo.UspsSetupWizard.NextInfo, new RecordItemIndex(97));
-            repo.UspsSetupWizard.Next.MoveTo(300);
+            repo.UspsSetupWizard.Next.MoveTo();
             Delay.Milliseconds(200);
             
             // Click next on the Stamps.com Account Your Stamps.com account information page
             Report.Log(ReportLevel.Info, "Mouse", "Click next on the Stamps.com Account Your Stamps.com account information page\r\nMouse Left Click item 'UspsSetupWizard.Next' at Center.", repo.UspsSetupWizard.NextInfo, new RecordItemIndex(98));
-            repo.UspsSetupWizard.Next.Click(300);
+            repo.UspsSetupWizard.Next.Click();
             Delay.Milliseconds(200);
             
             // Move to the next on the Origin Addresses page
             Report.Log(ReportLevel.Info, "Mouse", "Move to the next on the Origin Addresses page\r\nMouse Left Move item 'UspsSetupWizard.Next' at Center.", repo.UspsSetupWizard.NextInfo, new RecordItemIndex(99));
-            repo.UspsSetupWizard.Next.MoveTo(300);
+            repo.UspsSetupWizard.Next.MoveTo();
             Delay.Milliseconds(200);
             
             // Click next on the Origin Addresses page
             Report.Log(ReportLevel.Info, "Mouse", "Click next on the Origin Addresses page\r\nMouse Left Click item 'UspsSetupWizard.Next' at Center.", repo.UspsSetupWizard.NextInfo, new RecordItemIndex(100));
-            repo.UspsSetupWizard.Next.Click(300);
+            repo.UspsSetupWizard.Next.Click();
             Delay.Milliseconds(200);
             
             // Move to the Next on the Shipment Default page
             Report.Log(ReportLevel.Info, "Mouse", "Move to the Next on the Shipment Default page\r\nMouse Left Move item 'UspsSetupWizard.Next' at Center.", repo.UspsSetupWizard.NextInfo, new RecordItemIndex(101));
-            repo.UspsSetupWizard.Next.MoveTo(300);
+            repo.UspsSetupWizard.Next.MoveTo();
             Delay.Milliseconds(200);
             
             // Click Next on the Shipment Default page
             Report.Log(ReportLevel.Info, "Mouse", "Click Next on the Shipment Default page\r\nMouse Left Click item 'UspsSetupWizard.Next' at Center.", repo.UspsSetupWizard.NextInfo, new RecordItemIndex(102));
-            repo.UspsSetupWizard.Next.Click(300);
+            repo.UspsSetupWizard.Next.Click();
             Delay.Milliseconds(200);
             
             // Move to the Automatically print labels after processing checkbox
             Report.Log(ReportLevel.Info, "Mouse", "Move to the Automatically print labels after processing checkbox\r\nMouse Left Move item 'UspsSetupWizard.MainPanel.PrintActionBox' at Center.", repo.UspsSetupWizard.MainPanel.PrintActionBoxInfo, new RecordItemIndex(103));
-            repo.UspsSetupWizard.MainPanel.PrintActionBox.MoveTo(300);
+            repo.UspsSetupWizard.MainPanel.PrintActionBox.MoveTo();
             Delay.Milliseconds(200);
             
             // Check the Automatically print labels after processing checkbox
@@ -605,42 +605,42 @@ namespace SmokeTest
             
             // Move to the next on the Printing Setup page
             Report.Log(ReportLevel.Info, "Mouse", "Move to the next on the Printing Setup page\r\nMouse Left Move item 'UspsSetupWizard.Next' at Center.", repo.UspsSetupWizard.NextInfo, new RecordItemIndex(105));
-            repo.UspsSetupWizard.Next.MoveTo(300);
+            repo.UspsSetupWizard.Next.MoveTo();
             Delay.Milliseconds(200);
             
             // Click next on the Printing Setup page
             Report.Log(ReportLevel.Info, "Mouse", "Click next on the Printing Setup page\r\nMouse Left Click item 'UspsSetupWizard.Next' at Center.", repo.UspsSetupWizard.NextInfo, new RecordItemIndex(106));
-            repo.UspsSetupWizard.Next.Click(300);
+            repo.UspsSetupWizard.Next.Click();
             Delay.Milliseconds(200);
             
             // Move to the next on the Processing Setup page
             Report.Log(ReportLevel.Info, "Mouse", "Move to the next on the Processing Setup page\r\nMouse Left Move item 'UspsSetupWizard.Next' at Center.", repo.UspsSetupWizard.NextInfo, new RecordItemIndex(107));
-            repo.UspsSetupWizard.Next.MoveTo(300);
+            repo.UspsSetupWizard.Next.MoveTo();
             Delay.Milliseconds(200);
             
             // Click next on the Processing Setup page
             Report.Log(ReportLevel.Info, "Mouse", "Click next on the Processing Setup page\r\nMouse Left Click item 'UspsSetupWizard.Next' at Center.", repo.UspsSetupWizard.NextInfo, new RecordItemIndex(108));
-            repo.UspsSetupWizard.Next.Click(300);
+            repo.UspsSetupWizard.Next.Click();
             Delay.Milliseconds(200);
             
             // Move to the Finish on the ShipWorks is now set up to ship with USPS page
             Report.Log(ReportLevel.Info, "Mouse", "Move to the Finish on the ShipWorks is now set up to ship with USPS page\r\nMouse Left Move item 'UspsSetupWizard.Finish' at Center.", repo.UspsSetupWizard.FinishInfo, new RecordItemIndex(109));
-            repo.UspsSetupWizard.Finish.MoveTo(300);
+            repo.UspsSetupWizard.Finish.MoveTo();
             Delay.Milliseconds(200);
             
             // Click Finish on the ShipWorks is now set up to ship with USPS page
             Report.Log(ReportLevel.Info, "Mouse", "Click Finish on the ShipWorks is now set up to ship with USPS page\r\nMouse Left Click item 'UspsSetupWizard.Finish' at Center.", repo.UspsSetupWizard.FinishInfo, new RecordItemIndex(110));
-            repo.UspsSetupWizard.Finish.Click(300);
+            repo.UspsSetupWizard.Finish.Click();
             Delay.Milliseconds(200);
             
             // Move to the Close on the Shipping Setting window
             Report.Log(ReportLevel.Info, "Mouse", "Move to the Close on the Shipping Setting window\r\nMouse Left Move item 'ShippingSettingsDlg.Close1' at Center.", repo.ShippingSettingsDlg.Close1Info, new RecordItemIndex(111));
-            repo.ShippingSettingsDlg.Close1.MoveTo(300);
+            repo.ShippingSettingsDlg.Close1.MoveTo();
             Delay.Milliseconds(200);
             
             // Click Close on the Shipping Setting window
             Report.Log(ReportLevel.Info, "Mouse", "Click Close on the Shipping Setting window\r\nMouse Left Click item 'ShippingSettingsDlg.Close1' at Center.", repo.ShippingSettingsDlg.Close1Info, new RecordItemIndex(112));
-            repo.ShippingSettingsDlg.Close1.Click(300);
+            repo.ShippingSettingsDlg.Close1.Click();
             Delay.Milliseconds(200);
             
         }
