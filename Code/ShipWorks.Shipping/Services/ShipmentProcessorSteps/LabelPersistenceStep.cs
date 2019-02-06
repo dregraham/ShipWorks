@@ -228,7 +228,7 @@ namespace ShipWorks.Shipping.Services.ShipmentProcessorSteps
             if (insureShipService.IsInsuredByInsureShip(shipment))
             {
                 log.InfoFormat("Shipment {0}  - Insure Shipment Start", shipment.ShipmentID);
-                insureShipService.Insure(shipment, result.Store);
+                insureShipService.Insure(shipment);
                 log.InfoFormat("Shipment {0}  - Insure Shipment Complete", shipment.ShipmentID);
             }
         }

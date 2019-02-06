@@ -5,6 +5,7 @@ using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Autofac;
 using Common.Logging;
 using Interapptive.Shared;
 using Interapptive.Shared.Data;
@@ -169,9 +170,12 @@ namespace ShipWorks.ApplicationCore.ExecutionMode
         {
             try
             {
-                ITangoWebClient tangoWebClient = new TangoWebClientFactory().CreateWebClient();
-                string customerID = tangoWebClient.GetTangoCustomerId();
-                return string.IsNullOrEmpty(customerID) ? null : customerID;
+                using (var lifetimeScope = IoC.BeginLifetimeScope())
+                {
+                    var tangoWebClient = lifetimeScope.Resolve<ITangoWebClient>();
+                    string customerID = tangoWebClient.GetTangoCustomerId();
+                    return string.IsNullOrEmpty(customerID) ? null : customerID;
+                }
             }
             catch (Exception ex)
             {

@@ -1,4 +1,5 @@
-﻿using ShipWorks.ApplicationCore.Licensing;
+﻿using Autofac;
+using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.ApplicationCore.Nudges.Buttons;
 
 namespace ShipWorks.ApplicationCore.Nudges
@@ -47,8 +48,8 @@ namespace ShipWorks.ApplicationCore.Nudges
         public NudgeOptionActionType Action { get; private set; }
 
         /// <summary>
-        /// Result to be returned to Tango. This can be customized to contain a value that is specific to the 
-        /// context that the option was selected within (e.g. a shipping account was created, declined to create a 
+        /// Result to be returned to Tango. This can be customized to contain a value that is specific to the
+        /// context that the option was selected within (e.g. a shipping account was created, declined to create a
         /// shipping account, etc.).
         /// </summary>
         public string Result { get; set; }
@@ -58,8 +59,12 @@ namespace ShipWorks.ApplicationCore.Nudges
         /// </summary>
         public void Log()
         {
-            ITangoWebClient webClient = new TangoWebClientFactory().CreateWebClient();
-            webClient.LogNudgeOption(this);
+            using (var lifetimeScope = IoC.BeginLifetimeScope())
+            {
+                var tangoWebClient = lifetimeScope.Resolve<ITangoWebClient>();
+
+                tangoWebClient.LogNudgeOption(this);
+            }
         }
 
         /// <summary>
@@ -74,27 +79,27 @@ namespace ShipWorks.ApplicationCore.Nudges
             switch (Action)
             {
                 case NudgeOptionActionType.None:
-                {
-                    button = new AcknowledgeNudgeOptionButton(this);
-                    break;
-                }
+                    {
+                        button = new AcknowledgeNudgeOptionButton(this);
+                        break;
+                    }
 
                 case NudgeOptionActionType.Shutdown:
-                {
-                    button = new ShutdownNudgeOptionButton(this);
-                    break;
-                }
-                
+                    {
+                        button = new ShutdownNudgeOptionButton(this);
+                        break;
+                    }
+
                 case NudgeOptionActionType.RegisterUspsAccount:
-                {
-                    button = new RegisterUspsAccountNudgeOptionButton(this);
-                    break;
-                }
+                    {
+                        button = new RegisterUspsAccountNudgeOptionButton(this);
+                        break;
+                    }
 
                 default:
-                {
-                    throw new NudgeException(string.Format("Unable to create a button for the {0} nudge option. The {1} action was not resolved.", Text, Action));
-                }
+                    {
+                        throw new NudgeException(string.Format("Unable to create a button for the {0} nudge option. The {1} action was not resolved.", Text, Action));
+                    }
             }
 
             button.Text = Text;

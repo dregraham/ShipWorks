@@ -254,6 +254,8 @@
     <Compile Include="Net\IHttpRequestSubmitter.cs" />
     <Compile Include="Net\IHttpVariableCollection.cs" />
     <Compile Include="Net\IHttpVariableRequestSubmitter.cs" />
+    <Compile Include="Net\IWebHelper.cs" />
+    <Compile Include="Net\WebHelperWrapper.cs" />
     <Compile Include="Pdf\IPdfDocument.cs" />
     <Compile Include="Pdf\IPdfDocumentFactory.cs" />
     <Compile Include="Pdf\PdfColorDocument.cs" />
@@ -534,6 +536,7 @@
     <Compile Include="Utility\IEnvironmentWrapper.cs" />
     <Compile Include="Utility\IResult.cs" />
     <Compile Include="Utility\ITelemetryCollection.cs" />
+    <Compile Include="Utility\Maybe.cs" />
     <Compile Include="Utility\NDesk.Options.cs" />
     <Compile Include="Utility\NDesk.Options.Extensions.cs" />
     <Compile Include="Utility\MethodConditions.cs" />
@@ -618,6 +621,9 @@
     <CodeAnalysisDictionary Include="..\..\Build\AnalysisDictionary.xml">
       <Link>Properties\AnalysisDictionary.xml</Link>
     </CodeAnalysisDictionary>
+    <EmbeddedResource Include="Resources\DistinctUserCount.sql" />
+    <EmbeddedResource Include="Resources\FreeSpace.sql" />
+    <EmbeddedResource Include="Resources\ConnectionProperties.sql" />
     <Content Include="Resources\flags\afghanistan.png" />
     <Content Include="Resources\flags\albania.png" />
     <Content Include="Resources\flags\algeria.png" />

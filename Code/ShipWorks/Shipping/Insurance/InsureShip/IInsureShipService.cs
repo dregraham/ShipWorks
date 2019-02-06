@@ -1,4 +1,5 @@
-﻿using ShipWorks.Data.Model.EntityClasses;
+﻿using Interapptive.Shared.Utility;
+using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.Shipping.Insurance.InsureShip
 {
@@ -11,7 +12,12 @@ namespace ShipWorks.Shipping.Insurance.InsureShip
         /// Insures the shipment with InsureShip and sets the InsuredWith property of the shipment based
         /// on the response from InsureShip.
         /// </summary>
-        void Insure(ShipmentEntity shipment, StoreEntity store);
+        void Insure(ShipmentEntity shipment);
+
+        /// <summary>
+        /// Void the policy for the given shipment
+        /// </summary>
+        Result Void(ShipmentEntity shipment);
 
         /// <summary>
         /// Is the given shipment insured by InsureShip

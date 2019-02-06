@@ -369,6 +369,10 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("ClaimID", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("EmailAddress", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("InsureShipPolicyID", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("DateOfIssue", fieldHashtable);
 		}
 		#endregion
 
@@ -565,6 +569,26 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.String)GetValue((int)InsurancePolicyFieldIndex.EmailAddress, true); }
 			set	{ SetValue((int)InsurancePolicyFieldIndex.EmailAddress, value); }
+		}
+
+		/// <summary> The InsureShipPolicyID property of the Entity InsurancePolicy<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "InsurancePolicy"."InsureShipPolicyID"<br/>
+		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual Nullable<System.Int64> InsureShipPolicyID
+		{
+			get { return (Nullable<System.Int64>)GetValue((int)InsurancePolicyFieldIndex.InsureShipPolicyID, false); }
+			set	{ SetValue((int)InsurancePolicyFieldIndex.InsureShipPolicyID, value); }
+		}
+
+		/// <summary> The DateOfIssue property of the Entity InsurancePolicy<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "InsurancePolicy"."DateOfIssue"<br/>
+		/// Table field type characteristics (type, precision, scale, length): DateTime, 0, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual Nullable<System.DateTime> DateOfIssue
+		{
+			get { return (Nullable<System.DateTime>)GetValue((int)InsurancePolicyFieldIndex.DateOfIssue, false); }
+			set	{ SetValue((int)InsurancePolicyFieldIndex.DateOfIssue, value); }
 		}
 
 		/// <summary> Gets / sets related entity of type 'ShipmentEntity' which has to be set using a fetch action earlier. If no related entity is set for this property, null is returned.<br/><br/>

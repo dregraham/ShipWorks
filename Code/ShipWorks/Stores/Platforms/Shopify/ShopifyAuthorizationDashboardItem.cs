@@ -1,6 +1,10 @@
 ﻿using System;
 using System.Windows.Forms;
+using Autofac;
 using Interapptive.Shared.Net;
+using Interapptive.Shared.UI;
+using Interapptive.Shared.Utility;
+using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Dashboard;
 using ShipWorks.ApplicationCore.Dashboard.Content;
 using ShipWorks.Data.Model.EntityClasses;
@@ -32,33 +36,40 @@ namespace ShipWorks.Stores.Platforms.Shopify
         /// </summary>
         private static void OnUpdateToken(Control owner, ShopifyStoreEntity store)
         {
-            using (ShopifyCreateTokenWizard wizard = new ShopifyCreateTokenWizard())
+            using (var lifetimeScope = IoC.BeginLifetimeScope())
             {
-                wizard.Store = store;
+                lifetimeScope.Resolve<IShopifyCreateTokenViewModel>()
+                    .RefreshToken(store.ShopifyShopUrlName)
+                    .Bind(x => SaveTokenToStore(store, x))
+                    .Do(_ => (owner as DashboardBar).Dismiss())
+                    .OnFailure(ex => lifetimeScope.Resolve<IMessageHelper>().ShowError("Could not update token", ex));
 
-                if (wizard.ShowDialog(owner) == DialogResult.OK)
-                {
-                    store.SaveFields("");
+            }
+        }
 
-                    store.ShopifyShopUrlName = wizard.ShopUrlName;
-                    store.ShopifyAccessToken = wizard.ShopAccessToken;
+        /// <summary>
+        /// Save the token to store
+        /// </summary>
+        private static Result SaveTokenToStore(ShopifyStoreEntity store, string token)
+        {
+            store.SaveFields("");
 
-                    try
-                    {
-                        ShopifyWebClient webClient = new ShopifyWebClient(store, null);
-                        webClient.RetrieveShopInformation();
+            store.ShopifyAccessToken = token;
 
-                        StoreManager.SaveStore(store);
+            try
+            {
+                ShopifyWebClient webClient = new ShopifyWebClient(store, null);
+                webClient.RetrieveShopInformation();
 
-                        (owner as DashboardBar).Dismiss();
-                    }
-                    catch (Exception ex)
-                    {
-                        store.RollbackFields("");
+                StoreManager.SaveStore(store);
 
-                        throw WebHelper.TranslateWebException(ex, typeof(ShopifyException));
-                    }
-                }
+                return Result.FromSuccess();
+            }
+            catch (Exception ex)
+            {
+                store.RollbackFields("");
+
+                return Result.FromError(WebHelper.TranslateWebException(ex, typeof(ShopifyException)));
             }
         }
     }

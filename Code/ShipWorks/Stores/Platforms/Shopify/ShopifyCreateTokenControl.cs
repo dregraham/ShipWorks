@@ -1,18 +1,11 @@
 ﻿using System;
 using System.ComponentModel;
-using System.Linq;
 using System.Windows.Forms;
-using Interapptive.Shared.Net;
-using Interapptive.Shared.UI;
-using Interapptive.Shared.Utility;
-using Newtonsoft.Json.Linq;
-using ShipWorks.Data.Model;
+using Autofac;
+using log4net;
+using ShipWorks.ApplicationCore;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Properties;
-using ShipWorks.Stores.Management;
-using ShipWorks.UI.Controls.Html;
-using log4net;
-using System.Net;
 
 namespace ShipWorks.Stores.Platforms.Shopify
 {
@@ -21,11 +14,9 @@ namespace ShipWorks.Stores.Platforms.Shopify
     /// </summary>
     public partial class ShopifyCreateTokenControl : UserControl
     {
-        static readonly ILog log = LogManager.GetLogger(typeof(ShopifyCreateTokenControl));
-
-        ShopifyStoreEntity store = null;
-
-        bool showTokenInfo = true;
+        private static readonly ILog log = LogManager.GetLogger(typeof(ShopifyCreateTokenControl));
+        private ShopifyStoreEntity store = null;
+        private bool showTokenInfo = true;
 
         /// <summary>
         /// Raised when a new token has been created and the store entity updated
@@ -94,34 +85,44 @@ namespace ShipWorks.Stores.Platforms.Shopify
                 throw new InvalidOperationException("The control has not been initialized with a store");
             }
 
-            // Wrap the token wizard in a WebBrowserControlEmulation object so that we emulate the latest IE version
-            // so that Shopify doesn't give version errors.
-            using (new WebBrowserControlEmulation())
+            using (var lifetimeScope = IoC.BeginLifetimeScope())
             {
-                using (ShopifyCreateTokenWizard wizard = new ShopifyCreateTokenWizard())
-                {
-                    if (wizard.ShowDialog(this) == DialogResult.OK)
-                    {
-                        store.SaveFields("");
+                lifetimeScope.Resolve<IShopifyCreateTokenViewModel>()
+                    .CreateToken()
+                    .Do(x => SaveTokenToStore(x));
+            }
+        }
 
-                        store.ShopifyShopUrlName = wizard.ShopUrlName;
-                        store.ShopifyAccessToken = wizard.ShopAccessToken;
+        /// <summary>
+        /// Save the token and name to store
+        /// </summary>
+        private void SaveTokenToStore((string name, string token) result)
+        {
+            var (name, token) = result;
 
-                        try
-                        {
-                            ShopifyWebClient webClient = new ShopifyWebClient(store, null);
-                            webClient.RetrieveShopInformation();
+            store.SaveFields("");
 
-                            OnTokenCreate();
-                        }
-                        catch (Exception ex)
-                        {
-                            store.RollbackFields("");
+            store.ShopifyShopUrlName = name;
+            store.ShopifyAccessToken = token;
 
-                            throw WebHelper.TranslateWebException(ex, typeof(ShopifyException));
-                        }
-                    }
-                }
+            try
+            {
+                ShopifyWebClient webClient = new ShopifyWebClient(store, null);
+                webClient.RetrieveShopInformation();
+
+                OnTokenCreate();
+            }
+            catch (Exception ex)
+            {
+                store.RollbackFields("");
+
+
+                labelStatus.Text = ex.GetBaseException().Message;
+                imageStatus.Image = Resources.error16;
+
+                labelStatus.Visible = true;
+                imageStatus.Visible = true;
+                //throw WebHelper.TranslateWebException(ex, typeof(ShopifyException));
             }
         }
 

@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System;
+using System.Text;
 
 namespace ShipWorks.Templates.Printing
 {
@@ -43,25 +44,63 @@ namespace ShipWorks.Templates.Printing
             }
 
             StringBuilder builder = new StringBuilder();
-            builder.AppendLine("<div>");
+            builder.Append("<div>");
 
             if (!string.IsNullOrWhiteSpace(Name))
             {
-                builder.AppendLine($"<b>{Name}</b><br/>");
+                builder.Append($"<b>{Name}</b><br/>");
             }
 
             if (!string.IsNullOrWhiteSpace(Barcode))
             {
-                builder.AppendLine($"<span class='barcode'>*{Barcode}*</span><br/>");
+                builder.Append($"<span class='barcode'>*{Barcode}*</span><br/>");
             }
 
             if (!string.IsNullOrWhiteSpace(KeyboardHotkey))
             {
-                builder.AppendLine($"{KeyboardHotkey}");
+                builder.Append($"{KeyboardHotkey}");
             }
 
-            builder.AppendLine("</div>");
+            builder.Append("</div>");
             return builder.ToString();
         }
+
+        /// <summary>
+        /// Override equals
+        /// </summary>
+        public override bool Equals(object obj)
+        {
+            if (obj is PrintableBarcode)
+            {
+                return this.Equals((PrintableBarcode) obj);
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// Override equals
+        /// </summary>
+        public bool Equals(PrintableBarcode barcode) =>
+            (Name == barcode.Name) &&
+            (Barcode == barcode.Barcode) &&
+            (KeyboardHotkey == barcode.KeyboardHotkey);
+
+        /// <summary>
+        /// Override equals
+        /// </summary>
+        public static bool operator ==(PrintableBarcode lhs, PrintableBarcode rhs) =>
+            lhs.Equals(rhs);
+
+        /// <summary>
+        /// Override not equals
+        /// </summary>
+        public static bool operator !=(PrintableBarcode lhs, PrintableBarcode rhs) =>
+            !lhs.Equals(rhs);
+
+        /// <summary>
+        /// Override GetHashCode for equals and not equals
+        /// </summary>
+        public override int GetHashCode() =>
+            (Name, Barcode, KeyboardHotkey).GetHashCode();
     }
 }

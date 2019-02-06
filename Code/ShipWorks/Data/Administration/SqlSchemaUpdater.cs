@@ -4,10 +4,12 @@ using System.Data;
 using System.Data.Common;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Reactive;
 using System.Threading.Tasks;
 using Autofac;
 using Interapptive.Shared.Data;
 using Interapptive.Shared.Threading;
+using Interapptive.Shared.Utility;
 using log4net;
 using NDesk.Options;
 using ShipWorks.ApplicationCore;
@@ -139,7 +141,7 @@ namespace ShipWorks.Data.Administration
         /// Upgrade the current database to the latest version.  debuggingMode is only provided as an option for debugging purposes, and should always be false in
         /// customer or production scenarios.
         /// </summary>
-        public static void UpdateDatabase(IProgressProvider progressProvider, bool debuggingMode = false)
+        public static void UpdateDatabase(IProgressProvider progressProvider, TelemetricResult<Unit> telemetryEvent, bool debuggingMode = false)
         {
             Version installedSchema = GetInstalledSchemaVersion();
             Version installedAssembly = GetInstalledAssemblyVersion();
@@ -177,7 +179,7 @@ namespace ShipWorks.Data.Administration
                             using (new OrderArchiveUpgradeDatabaseScope(ExistingConnectionScope.ScopedConnection))
                             {
                                 // Update the tables
-                                UpdateScripts(installedSchema, progressScripts);
+                                UpdateScripts(installedSchema, progressScripts, telemetryEvent);
 
                                 // Functionality starting
                                 progressFunctionality.Starting();
@@ -319,7 +321,7 @@ namespace ShipWorks.Data.Administration
         /// <summary>
         /// Upgrade a 3.x database to the current version.
         /// </summary>
-        private static void UpdateScripts(Version installed, ProgressItem progress)
+        private static void UpdateScripts(Version installed, ProgressItem progress, TelemetricResult<Unit> telemetryEvent)
         {
             progress.Starting();
             progress.Detail = "Preparing...";
@@ -346,7 +348,8 @@ namespace ShipWorks.Data.Administration
             // Go through each update script (they are already sorted in version order)
             foreach (SqlUpdateScript script in updateScripts)
             {
-                ExecuteUpdateScript(progress, updateScripts, scriptProgressValue, script);
+                telemetryEvent.RunTimedEvent($"ExecutionTimeInMilliseconds.{script.SchemaVersion}",
+                                             () => ExecuteUpdateScript(progress, updateScripts, scriptProgressValue, script));
             }
 
             // Since we have a single, long-lived connection, we want to remove the message handler so future messages
