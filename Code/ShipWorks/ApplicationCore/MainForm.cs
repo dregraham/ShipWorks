@@ -301,6 +301,30 @@ namespace ShipWorks
 
         #region Initialization \ Shutdown
 
+        /// <summary>
+        /// Attempt to auto update
+        /// </summary>
+        /// <returns>true if we kicked off the auto update process</returns>
+        private bool AutoUpdate()
+        {
+            if (SqlSession.IsConfigured && SqlSession.Current.CanConnect())
+            {
+                Version databaseVersion = SqlSchemaUpdater.GetInstalledSchemaVersion();
+
+                if (databaseVersion > SqlSchemaUpdater.GetRequiredSchemaVersion())
+                {
+                    using (IUpdateService updateService = IoC.UnsafeGlobalLifetimeScope.Resolve<IUpdateService>())
+                    {
+                        if (updateService.IsAvailable && updateService.Update(databaseVersion).Success)
+                        {
+                            return true;
+                        }
+                    }
+                }
+            }
+
+            return false;
+        }
 
         /// <summary>
         /// Form is loading, this is before its visible
@@ -309,17 +333,10 @@ namespace ShipWorks
         private void OnLoad(object sender, EventArgs e)
         {
             SqlSession.Initialize();
-            Version databaseVersion = SqlSchemaUpdater.GetInstalledSchemaVersion();
 
-            if (databaseVersion > SqlSchemaUpdater.GetRequiredSchemaVersion())
+            if (AutoUpdate())
             {
-                using (IUpdateService updateService = IoC.UnsafeGlobalLifetimeScope.Resolve<IUpdateService>())
-                {
-                    if (updateService.IsAvailable && updateService.Update(databaseVersion).Success)
-                    {
-                        Close();
-                    }
-                }
+                Close();
             }
 
             log.Info("Loading main application window.");

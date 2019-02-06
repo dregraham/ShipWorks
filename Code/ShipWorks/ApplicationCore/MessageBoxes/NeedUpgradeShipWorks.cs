@@ -83,7 +83,7 @@ namespace ShipWorks.ApplicationCore.MessageBoxes
             }
             else
             {
-                Close();
+                Application.Exit();
             }
         }
 
