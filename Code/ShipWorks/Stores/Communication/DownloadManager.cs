@@ -154,9 +154,12 @@ namespace ShipWorks.Stores.Communication
 
             List<StoreEntity> readyToDownload = GetStoresForAutoDownloading();
 
-            if (readyToDownload.Count > 0)
+            if (readyToDownload != null)
             {
-                StartDownload(readyToDownload, DownloadInitiatedBy.ShipWorks);
+                if (readyToDownload.Count > 0)
+                {
+                    StartDownload(readyToDownload, DownloadInitiatedBy.ShipWorks);
+                }
             }
         }
 
