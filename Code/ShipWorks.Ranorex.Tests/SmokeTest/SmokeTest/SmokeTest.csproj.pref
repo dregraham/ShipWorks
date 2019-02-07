@@ -11,6 +11,8 @@
       <runOnBuild value="False" />
     </Properties>
     <Array name="recentusercodeselections">
+      <Element value="SmokeTest.FedExInternationalCleanup.UncheckFedExInternationalCleanup()" />
+      <Element value="SmokeTest.UPSSurePostCleanUp.UncheckCleanUp()" />
       <Element value="SmokeTest.SetupUSPSStamps.UncheckUSPSStampsSetupCleanup()" />
       <Element value="SmokeTest.SetupFedex.UncheckFedExSetupCleanup()" />
       <Element value="SmokeTest.FedExSetupCleanUp.SkipAllFedExTestCases()" />
