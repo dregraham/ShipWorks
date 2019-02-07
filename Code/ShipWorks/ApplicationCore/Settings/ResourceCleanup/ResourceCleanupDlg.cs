@@ -85,7 +85,7 @@ namespace ShipWorks.ApplicationCore.Settings.ResourceCleanup
 
             progressItem.Starting();
             progressItem.Detail = "Loading script...";
-            string script = LoadScript($"{GetType().Namespace}.ResourceCleanup.sql");
+            string script = LoadScript("ShipWorks.ApplicationCore.Settings.ResourceCleanup.ResourceCleanup.sql");
 
             script = script.Replace("{CUTOFFDATE}", deleteDate.Value.ToShortDateString());
             script = script.Replace("{DATABASENAME}", SqlSession.Current.Configuration.DatabaseName);
@@ -201,7 +201,7 @@ namespace ShipWorks.ApplicationCore.Settings.ResourceCleanup
         {
             DateTime selectedDate = (DateTime) e.Argument;
 
-            string estimateScript = LoadScript($"{GetType().Namespace}.Estimate.sql");
+            string estimateScript = LoadScript("ShipWorks.ApplicationCore.Settings.ResourceCleanup.Estimate.sql");
 
             estimateScript = estimateScript.Replace("{CUTOFFDATE}", selectedDate.ToShortDateString());
 

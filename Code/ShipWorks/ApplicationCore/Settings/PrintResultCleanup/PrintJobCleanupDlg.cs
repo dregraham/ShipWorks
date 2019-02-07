@@ -277,7 +277,7 @@ namespace ShipWorks.ApplicationCore.Settings.PrintResultCleanup
         {
             DateTime selectedDate = (DateTime) e.Argument;
 
-            string estimateScript = LoadScript($"{GetType().Namespace}.Estimate.sql");
+            string estimateScript = LoadScript("ShipWorks.ApplicationCore.Settings.PrintResultCleanup.Estimate.sql");
 
             estimateScript = estimateScript.Replace("{CUTOFFDATE}", selectedDate.ToShortDateString());
 
