@@ -30,6 +30,9 @@ namespace ShipWorks.Escalator
             // Start a communication bridge to listen for messages from ShipWorks
             ShipWorksCommunicationBridge communicationBridge = new ShipWorksCommunicationBridge(ShipWorks.Escalator.ServiceName.GetInstanceID().ToString());
             communicationBridge.OnMessage += OnShipWorksMessage;
+
+            System.Diagnostics.Debugger.Launch();
+            OnShipWorksMessage("6.1.2.3");
         }
 
         /// <summary>

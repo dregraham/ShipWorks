@@ -34,7 +34,7 @@ namespace ShipWorks.Escalator
 
                     case "--stop":
                         ServiceController service = ServiceController.GetServices().SingleOrDefault(s => s.ServiceName == serviceName);
-                        service?.Stop();
+                        StopService(service);
                         break;
                 }
             }
@@ -52,8 +52,19 @@ namespace ShipWorks.Escalator
             ServiceController service = ServiceController.GetServices().SingleOrDefault(s => s.ServiceName == serviceName);
             if (service != null)
             {
-                service.Stop();
+                StopService(service);
                 ManagedInstallerClass.InstallHelper(new string[] { "/u", "/LogFile=", typeof(Program).Assembly.Location });
+            }
+        }
+        
+        /// <summary>
+        /// Stops the service exists and is currently running
+        /// </summary>
+        private static void StopService(ServiceController service)
+        {
+            if (service != null && service.Status == ServiceControllerStatus.Running)
+            {
+                service.Stop();
             }
         }
 

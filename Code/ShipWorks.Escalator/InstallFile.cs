@@ -54,7 +54,7 @@ namespace ShipWorks.Escalator
                     }
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 return null;
             }

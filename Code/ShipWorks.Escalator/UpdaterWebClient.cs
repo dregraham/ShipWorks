@@ -28,9 +28,20 @@ namespace ShipWorks.Escalator
         {
             (Uri url, string sha) = await GetVersionToDownload(version).ConfigureAwait(false);
 
-            downloadClient.DownloadFile(url, Path.GetFileName(url.LocalPath));
+            string fileName = GetSaveAsPath(url);
+            downloadClient.DownloadFile(url, fileName);
 
-            return new InstallFile(url.LocalPath, sha);
+            return new InstallFile(fileName, sha);
+        }
+
+        /// <summary>
+        /// Get path to save upgrade file
+        /// </summary>
+        private static string GetSaveAsPath(Uri url)
+        {
+            string fileName = Path.GetFileName(url.LocalPath);
+            string appData = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData);
+            return Path.Combine(appData, "Interapptive\\ShipWorks\\Instances", ServiceName.GetInstanceID().ToString("B"), fileName);
         }
 
         /// <summary>
@@ -68,13 +79,24 @@ namespace ShipWorks.Escalator
         /// </summary>
         private static HttpClient GetHttpClient()
         {
-            HttpClient client = new HttpClient();
+            HttpClientHandler handler = new HttpClientHandler();
+#if DEBUG
+            handler.ClientCertificateOptions = ClientCertificateOption.Manual;
+            handler.ServerCertificateCustomValidationCallback =
+                (httpRequestMessage, cert, cetChain, policyErrors) =>
+                {
+                    return true;
+                };
+#endif
+            HttpClient client = new HttpClient(handler);
             client.DefaultRequestHeaders.Add("X-SHIPWORKS-VERSION", "5.0.0.0");
             client.DefaultRequestHeaders.Add("X-SHIPWORKS-USER", "$h1pw0rks");
             client.DefaultRequestHeaders.Add("X-SHIPWORKS-PASS", "q2*lrft");
             client.DefaultRequestHeaders.Add("SOAPAction", "http://stamps.com/xml/namespace/2015/06/shipworks/shipworksv1/IShipWorks/ShipworksPost");
-            client.DefaultRequestHeaders.UserAgent.Add(new ProductInfoHeaderValue("shipworks"));
-            client.DefaultRequestHeaders.Add("Content-Type", "application/x-www-form-urlencoded");
+            client.DefaultRequestHeaders.UserAgent.ParseAdd("shipworks");
+            //client.DefaultRequestHeaders.Add("Content-Type", "application/x-www-form-urlencoded");
+            
+
 
             return client;
         }
