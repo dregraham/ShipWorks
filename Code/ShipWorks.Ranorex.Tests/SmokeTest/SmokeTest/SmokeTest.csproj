@@ -360,6 +360,18 @@
       <UserCode>true</UserCode>
       <id>33db5867-de70-4696-9641-2ea9eee3d964</id>
     </Compile>
+    <Compile Include="FedExInternationalCleanup.cs">
+      <BoundTo>2e1c0aa1-d432-40cd-a734-36788a2cedc1</BoundTo>
+      <DependentUpon>FedExInternationalCleanup.rxrec</DependentUpon>
+      <RecorderCode>true</RecorderCode>
+      <id>46cc9582-ac59-4f27-82d6-28b38e9fb5c4</id>
+    </Compile>
+    <Compile Include="FedExInternationalCleanup.UserCode.cs">
+      <BoundTo>2e1c0aa1-d432-40cd-a734-36788a2cedc1</BoundTo>
+      <DependentUpon>FedExInternationalCleanup.rxrec</DependentUpon>
+      <UserCode>true</UserCode>
+      <id>2ad092da-2a38-48aa-8211-43a21d608eaa</id>
+    </Compile>
     <Compile Include="FedExSetupCleanUp.cs">
       <BoundTo>8965e38b-57bc-4dd7-b415-80010a0d04c0</BoundTo>
       <DependentUpon>FedExSetupCleanUp.rxrec</DependentUpon>
@@ -1065,6 +1077,18 @@
       <UserCode>true</UserCode>
       <id>03dbea74-42c7-4f92-ae8d-6db0d2b15231</id>
     </Compile>
+    <Compile Include="ReturnToOrderGrid.cs">
+      <BoundTo>fd6203ce-0ee9-470b-9ab0-90588da7372e</BoundTo>
+      <DependentUpon>ReturnToOrderGrid.rxrec</DependentUpon>
+      <RecorderCode>true</RecorderCode>
+      <id>2438de1a-2db2-4318-85e4-54f4451f6041</id>
+    </Compile>
+    <Compile Include="ReturnToOrderGrid.UserCode.cs">
+      <BoundTo>fd6203ce-0ee9-470b-9ab0-90588da7372e</BoundTo>
+      <DependentUpon>ReturnToOrderGrid.rxrec</DependentUpon>
+      <UserCode>true</UserCode>
+      <id>24ede099-e1ef-4776-b885-f4fb11e3d59b</id>
+    </Compile>
     <Compile Include="SavePrintOutputAsPDF.cs">
       <DependentUpon>SavePrintOutputAsPDF.rxrec</DependentUpon>
       <id>be04f3f6-d1fa-4ba6-b520-7cf9ebe35c04</id>
@@ -1407,6 +1431,18 @@
       <UserCode>true</UserCode>
       <id>5fd81991-64fa-4ed4-955b-a3b35d1372da</id>
     </Compile>
+    <Compile Include="UPSSurePostCleanUp.cs">
+      <BoundTo>71824c02-c3c8-4be7-9cc0-90bb1679d9dd</BoundTo>
+      <DependentUpon>UPSSurePostCleanUp.rxrec</DependentUpon>
+      <RecorderCode>true</RecorderCode>
+      <id>b4b28661-0433-486b-8a53-56264a48d86f</id>
+    </Compile>
+    <Compile Include="UPSSurePostCleanUp.UserCode.cs">
+      <BoundTo>71824c02-c3c8-4be7-9cc0-90bb1679d9dd</BoundTo>
+      <DependentUpon>UPSSurePostCleanUp.rxrec</DependentUpon>
+      <UserCode>true</UserCode>
+      <id>0246550e-07d9-46aa-a24b-ab8585a367ac</id>
+    </Compile>
     <Compile Include="UPSTestServerSetup.cs">
       <BoundTo>06a6246d-01ac-430d-96ec-902a03121b25</BoundTo>
       <DependentUpon>UPSTestServerSetup.rxrec</DependentUpon>
@@ -1580,6 +1616,11 @@
       <BoundTo>cc314fb4-f6c2-41c4-91da-4828b4fd7dee</BoundTo>
       <id>8f6fb003-966f-4f61-8e6b-ae338480b761</id>
       <recordtableid>cde62441-e141-4211-bde4-f1b12a005284</recordtableid>
+    </None>
+    <None Include="FedExInternationalCleanup.rxrec">
+      <BoundTo>cc314fb4-f6c2-41c4-91da-4828b4fd7dee</BoundTo>
+      <id>2e1c0aa1-d432-40cd-a734-36788a2cedc1</id>
+      <recordtableid>8c210156-3c19-47dd-a6ef-d86993d2a230</recordtableid>
     </None>
     <None Include="FedExSetupCleanUp.rxrec">
       <BoundTo>cc314fb4-f6c2-41c4-91da-4828b4fd7dee</BoundTo>
@@ -1888,6 +1929,11 @@
       <id>ad92cd5c-2272-44e4-8da0-42e620bb33c1</id>
       <recordtableid>195f9e46-4670-4b43-8c35-ac85b8b47198</recordtableid>
     </None>
+    <None Include="ReturnToOrderGrid.rxrec">
+      <BoundTo>cc314fb4-f6c2-41c4-91da-4828b4fd7dee</BoundTo>
+      <id>fd6203ce-0ee9-470b-9ab0-90588da7372e</id>
+      <recordtableid>3e138ac8-f1ba-471e-9239-ac2a33db9dd3</recordtableid>
+    </None>
     <None Include="SavePrintOutputAsPDF.rxrec">
       <id>2f12d8b6-2549-43c8-aa29-eab4b11a037d</id>
       <BoundTo>cc314fb4-f6c2-41c4-91da-4828b4fd7dee</BoundTo>
@@ -2049,6 +2095,11 @@
       <BoundTo>cc314fb4-f6c2-41c4-91da-4828b4fd7dee</BoundTo>
       <id>3b6ea0d1-3a75-4430-bec1-d1f7e8b7fff2</id>
       <recordtableid>bff3f326-bbe1-4f4e-a392-10348cbfbf05</recordtableid>
+    </None>
+    <None Include="UPSSurePostCleanUp.rxrec">
+      <BoundTo>cc314fb4-f6c2-41c4-91da-4828b4fd7dee</BoundTo>
+      <id>71824c02-c3c8-4be7-9cc0-90bb1679d9dd</id>
+      <recordtableid>6c4327b3-d2bd-45b9-938d-2400d93271df</recordtableid>
     </None>
     <None Include="UPSTestServerSetup.rxrec">
       <BoundTo>cc314fb4-f6c2-41c4-91da-4828b4fd7dee</BoundTo>
