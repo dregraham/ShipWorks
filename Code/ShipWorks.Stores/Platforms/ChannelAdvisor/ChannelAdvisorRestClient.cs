@@ -296,7 +296,6 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
             if (httpResponseReader?.HttpWebResponse.StatusCode == HttpStatusCode.BadRequest)
             {
                 throw new ChannelAdvisorException(GetErrorMessage(result) ?? unknownError);
-                return;
             }
         }
 
@@ -310,7 +309,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
             {
                 errorMessage = JObject.Parse(result).SelectToken("error.message")?.Value<string>() ?? null;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 errorMessage = null;
             }
