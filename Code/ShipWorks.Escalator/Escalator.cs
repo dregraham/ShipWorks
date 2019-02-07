@@ -38,7 +38,7 @@ namespace ShipWorks.Escalator
         {
             string status = GetResumeStatus();
 
-            if (status == "SUCCESS")
+            if (status.Equals("SUCCESS", StringComparison.InvariantCultureIgnoreCase))
             {
                 ShipWorksLauncher.StartShipWorks();
             }
