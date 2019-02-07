@@ -360,6 +360,18 @@
       <UserCode>true</UserCode>
       <id>33db5867-de70-4696-9641-2ea9eee3d964</id>
     </Compile>
+    <Compile Include="FedExSetupCleanUp.cs">
+      <BoundTo>8965e38b-57bc-4dd7-b415-80010a0d04c0</BoundTo>
+      <DependentUpon>FedExSetupCleanUp.rxrec</DependentUpon>
+      <RecorderCode>true</RecorderCode>
+      <id>d9ea9196-0976-47b0-be09-b958ea52c137</id>
+    </Compile>
+    <Compile Include="FedExSetupCleanUp.UserCode.cs">
+      <BoundTo>8965e38b-57bc-4dd7-b415-80010a0d04c0</BoundTo>
+      <DependentUpon>FedExSetupCleanUp.rxrec</DependentUpon>
+      <UserCode>true</UserCode>
+      <id>a710e245-7bac-4e3d-91ce-3036d2d6c12e</id>
+    </Compile>
     <Compile Include="GatherCurrentDateandTime.cs">
       <BoundTo>0ade6575-3e73-4e2d-a724-eada111fbf3e</BoundTo>
       <DependentUpon>GatherCurrentDateandTime.rxrec</DependentUpon>
@@ -1568,6 +1580,11 @@
       <BoundTo>cc314fb4-f6c2-41c4-91da-4828b4fd7dee</BoundTo>
       <id>8f6fb003-966f-4f61-8e6b-ae338480b761</id>
       <recordtableid>cde62441-e141-4211-bde4-f1b12a005284</recordtableid>
+    </None>
+    <None Include="FedExSetupCleanUp.rxrec">
+      <BoundTo>cc314fb4-f6c2-41c4-91da-4828b4fd7dee</BoundTo>
+      <id>8965e38b-57bc-4dd7-b415-80010a0d04c0</id>
+      <recordtableid>e21bce2a-afd1-4e42-9b0c-5665c2d10552</recordtableid>
     </None>
     <None Include="GatherCurrentDateandTime.rxrec">
       <BoundTo>cc314fb4-f6c2-41c4-91da-4828b4fd7dee</BoundTo>

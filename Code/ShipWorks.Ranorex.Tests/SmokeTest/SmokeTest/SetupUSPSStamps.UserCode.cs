@@ -158,7 +158,10 @@ namespace SmokeTest
             Keyboard.Press("{Tab}{Tab}{Tab}{Tab}");	
         	}
         }
-       
-    }
- 
+
+        public void UncheckUSPSStampsSetupCleanup()
+        {
+            TestSuite.Current.GetTestContainer("USPSStampsSetupCleanUp").Checked = false;
+        }       
+    } 
 }

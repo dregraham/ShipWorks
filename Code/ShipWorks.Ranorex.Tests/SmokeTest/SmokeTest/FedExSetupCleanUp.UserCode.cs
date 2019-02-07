@@ -4,14 +4,14 @@
 // Your custom recording code should go in this file.
 // The designer will only add methods to this file, so your custom code won't be overwritten.
 // http://www.ranorex.com
-// 
+//
 ///////////////////////////////////////////////////////////////////////////////
 
 using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Drawing;
 using System.Threading;
 using WinForms = System.Windows.Forms;
 
@@ -22,7 +22,7 @@ using Ranorex.Core.Testing;
 
 namespace SmokeTest
 {
-    public partial class SetupFedex
+    public partial class FedExSetupCleanUp
     {
         /// <summary>
         /// This method gets called right after the recording has been started.
@@ -33,9 +33,16 @@ namespace SmokeTest
             // Your recording specific initialization code goes here.
         }
 
-        public void UncheckFedExSetupCleanup()
+        public void SkipAllFedExTestCases()
         {
-            TestSuite.Current.GetTestContainer("SetupFedexCleanup").Checked = false;
+            TestSuite.Current.GetTestContainer("ProcessFedExInternational").Checked = false;
+        	TestSuite.Current.GetTestContainer("ProcessFedExDomestic").Checked = false;
+        	TestSuite.Current.GetTestContainer("ProcessFedExExpress").Checked = false;
+        	TestSuite.Current.GetTestContainer("ProcessFedExHomeDelivery").Checked = false;
+        	TestSuite.Current.GetTestContainer("ProcessFedExMultiPackageShipment").Checked = false;
+        	TestSuite.Current.GetTestContainer("OrderLookupModeProcessFedExDomestic").Checked = false;
+        	TestSuite.Current.GetTestContainer("OrderLookupModeProcessFedExInternational").Checked = false;
         }
+
     }
 }

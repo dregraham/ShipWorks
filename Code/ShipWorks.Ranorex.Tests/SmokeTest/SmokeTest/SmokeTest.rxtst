@@ -259,6 +259,10 @@ rxversion="8.1">
 			ref="6a2b9112-4f1c-4dc2-869b-25a7f6c434b8"
 			type="Recording">
 			</testmodule>
+			<smartfoldernode
+			id="22ad4353-9ddd-49cb-952f-c9d395aa90e0"
+			name="FedExSetup">
+			</smartfoldernode>
 			<testmodule
 			id="243336b0-8029-4b9c-8b4e-14a86ee91768"
 			name="ModuleChecker"
@@ -1095,6 +1099,10 @@ rxversion="8.1">
 			ref="525dbf63-47dc-43d1-813c-3932018894b3"
 			type="Recording">
 			</testmodule>
+			<smartfoldernode
+			id="964d7b5b-a119-4f48-99aa-b5fe08fd64f3"
+			name="SetupFedexCleanup">
+			</smartfoldernode>
 			<testmodule
 			id="97152442-fcb9-4375-806b-e49fedbfc47e"
 			name="ShipOrders_ToAddress_International"
@@ -1526,6 +1534,12 @@ rxversion="8.1">
 			id="d406caf6-db45-4eb9-9645-cdd38edd6fd7"
 			name="AllOrdersFilter_SelectFirstRow_ShipOrders2"
 			ref="525dbf63-47dc-43d1-813c-3932018894b3"
+			type="Recording">
+			</testmodule>
+			<testmodule
+			id="d4d2e43e-f892-4d15-a20d-ef1df5654992"
+			name="FedExSetupCleanUp"
+			ref="e21bce2a-afd1-4e42-9b0c-5665c2d10552"
 			type="Recording">
 			</testmodule>
 			<testmodule
@@ -1980,10 +1994,22 @@ rxversion="8.1">
 						<smartfoldernode
 						id="7206cb2e-f7d2-4a9f-ab9a-6a9762a410ea"
 						name="SetupFedex">
-							<testmodule
-							id="a59c361e-a24d-4c4f-9cdd-0068de4411fb"
-							name="SetupFedex">
-							</testmodule>
+							<smartfoldernode
+							id="22ad4353-9ddd-49cb-952f-c9d395aa90e0"
+							name="FedExSetup">
+								<testmodule
+								id="a59c361e-a24d-4c4f-9cdd-0068de4411fb"
+								name="SetupFedex">
+								</testmodule>
+							</smartfoldernode>
+							<smartfoldernode
+							id="964d7b5b-a119-4f48-99aa-b5fe08fd64f3"
+							name="SetupFedexCleanup">
+								<testmodule
+								id="d4d2e43e-f892-4d15-a20d-ef1df5654992"
+								name="FedExSetupCleanUp">
+								</testmodule>
+							</smartfoldernode>
 						</smartfoldernode>
 						<smartfoldernode
 						id="73deaccb-9bd3-4035-ba77-6273c1f48753"
@@ -3064,6 +3090,9 @@ rxversion="8.1">
 			id="21c1fa07-4c36-48a5-a7ce-583e03d7f79e">
 			</testcontainer>
 			<testcontainer
+			id="22ad4353-9ddd-49cb-952f-c9d395aa90e0">
+			</testcontainer>
+			<testcontainer
 			id="254eaed6-bbd9-41f6-8551-df6d373e9aec">
 			</testcontainer>
 			<testcontainer
@@ -3134,6 +3163,9 @@ rxversion="8.1">
 			</testcontainer>
 			<testcontainer
 			id="95eeff4e-218a-4f4b-a4a5-e92d3b071ca1">
+			</testcontainer>
+			<testcontainer
+			id="964d7b5b-a119-4f48-99aa-b5fe08fd64f3">
 			</testcontainer>
 			<testcontainer
 			id="978d48b1-7016-4c09-b8c0-ae69ebe75418">

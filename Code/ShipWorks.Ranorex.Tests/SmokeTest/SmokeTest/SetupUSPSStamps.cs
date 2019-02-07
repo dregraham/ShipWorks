@@ -643,6 +643,9 @@ namespace SmokeTest
             repo.ShippingSettingsDlg.Close1.Click();
             Delay.Milliseconds(200);
             
+            UncheckUSPSStampsSetupCleanup();
+            Delay.Milliseconds(0);
+            
         }
 
 #region Image Feature Data
