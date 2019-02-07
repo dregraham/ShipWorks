@@ -80,14 +80,7 @@ namespace ShipWorks.Escalator
         private static HttpClient GetHttpClient()
         {
             HttpClientHandler handler = new HttpClientHandler();
-#if DEBUG
-            handler.ClientCertificateOptions = ClientCertificateOption.Manual;
-            handler.ServerCertificateCustomValidationCallback =
-                (httpRequestMessage, cert, cetChain, policyErrors) =>
-                {
-                    return true;
-                };
-#endif
+
             HttpClient client = new HttpClient(handler);
             client.DefaultRequestHeaders.Add("X-SHIPWORKS-VERSION", "5.0.0.0");
             client.DefaultRequestHeaders.Add("X-SHIPWORKS-USER", "$h1pw0rks");
