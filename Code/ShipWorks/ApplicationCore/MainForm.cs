@@ -332,13 +332,6 @@ namespace ShipWorks
         [NDependIgnoreLongMethod]
         private void OnLoad(object sender, EventArgs e)
         {
-            SqlSession.Initialize();
-
-            if (AutoUpdate())
-            {
-                Close();
-            }
-
             log.Info("Loading main application window.");
 
             DataProvider.InitializeForApplication();
@@ -413,6 +406,13 @@ namespace ShipWorks
             ApplyDisplaySettings();
 
             ApplyEditingContext();
+
+            SqlSession.Initialize();
+
+            if (AutoUpdate())
+            {
+                Close();
+            }
         }
 
         /// <summary>
