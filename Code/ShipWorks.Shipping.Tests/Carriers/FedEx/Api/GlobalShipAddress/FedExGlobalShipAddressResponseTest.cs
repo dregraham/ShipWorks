@@ -51,13 +51,13 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.GlobalShipAddress
         [Fact]
         public void Process_TwoAddressesReturned()
         {
-            var reply = new SearchLocationsReply()
+            var reply = new SearchLocationsReply
             {
                 HighestSeverity = NotificationSeverityType.SUCCESS,
                 ResultsReturned = "2",
                 AddressToLocationRelationships = new[]
                 {
-                    new AddressToLocationRelationshipDetail()
+                    new AddressToLocationRelationshipDetail
                     {
                         DistanceAndLocationDetails = new []
                         {
@@ -72,6 +72,39 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.GlobalShipAddress
             var result = testObject.Process();
 
             Assert.Equal(2, result.Value.Count());
+        }
+
+        [Fact]
+        public void Process_ReturnsSuccess_StoreNumberIsString()
+        {
+            var reply = new SearchLocationsReply
+            {
+                HighestSeverity = NotificationSeverityType.SUCCESS,
+                ResultsReturned = "1",
+
+                AddressToLocationRelationships = new[]
+                {
+                    new AddressToLocationRelationshipDetail
+                    {
+                        DistanceAndLocationDetails = new[]
+                        {
+                            new DistanceAndLocationDetail
+                            {
+                                Distance = null,
+                                LocationDetail = new LocationDetail
+                                {
+                                    StoreNumber = "Foo"
+                                }
+
+                            }
+                        }
+                    }
+                }
+            };
+            var testObject = new FedExGlobalShipAddressResponse(reply);
+            var result = testObject.Process();
+
+            Assert.True(result.Success);
         }
     }
 }
