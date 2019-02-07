@@ -2,6 +2,7 @@
 using System.IO;
 using System.Reflection;
 using System.ServiceProcess;
+using System.Threading.Tasks;
 
 namespace ShipWorks.Escalator
 {
@@ -68,6 +69,14 @@ namespace ShipWorks.Escalator
         /// React to a message from ShipWorks
         /// </summary>
         private async void OnShipWorksMessage(string message)
+        {
+            await ProcessMessage(message);
+        }
+
+        /// <summary>
+        /// Processes message - internal so it can be tested outside the service via Program.cs
+        /// </summary>
+        internal static async Task ProcessMessage(string message)
         {
             if (Version.TryParse(message, out Version version))
             {

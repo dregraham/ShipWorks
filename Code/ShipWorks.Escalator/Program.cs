@@ -36,6 +36,11 @@ namespace ShipWorks.Escalator
                         ServiceController service = ServiceController.GetServices().SingleOrDefault(s => s.ServiceName == serviceName);
                         StopService(service);
                         break;
+#if DEBUG
+                    case "--debugupdate":
+                        Escalator.ProcessMessage("6.2.2.2").Wait();
+                        break;
+#endif
                 }
             }
             else
