@@ -724,6 +724,7 @@
     <Compile Include="AddressValidation\ValidatedShipAddressBase.cs" />
     <Compile Include="AddressValidation\ValidatedAddressManager.cs" />
     <Compile Include="AddressValidation\ValidatedAddressScope.cs" />
+    <Compile Include="ApplicationCore\CommandLineOptions\CreateBackupCommandLineOption.cs" />
     <Compile Include="ApplicationCore\CommandLineOptions\RedeployAssembliesCommandLineOption.cs" />
     <Compile Include="ApplicationCore\CommandLineOptions\RegenerateAllFiltersCommandLineOption.cs" />
     <Compile Include="ApplicationCore\CommandLineOptions\UninstallShipWorksCommandLineOption.cs" />
