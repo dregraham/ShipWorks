@@ -107,14 +107,14 @@ namespace ShipWorks.ApplicationCore.Licensing.TangoRequests
                 // Regular shipment logging
                 PrepareLogShipmentRequest(shipment, shipmentType, postRequest);
                 return client.ProcessXmlRequest(postRequest, "LogShipmentDetails", true)
-                    .Bind(GetOnlineShipmentID);
+                    .Bind(x => GetOnlineShipmentID(x, shipment.ShipmentID));
             }
         }
 
         /// <summary>
         /// Get the OnlineShipmentID from Tango's response
         /// </summary>
-        private GenericResult<string> GetOnlineShipmentID(XmlDocument xmlResponse)
+        private GenericResult<string> GetOnlineShipmentID(XmlDocument xmlResponse, long shipmentID)
         {
             // Check for error
             XmlNode errorNode = xmlResponse.SelectSingleNode("//Error");
@@ -123,7 +123,16 @@ namespace ShipWorks.ApplicationCore.Licensing.TangoRequests
                 return new TangoException(errorNode.InnerText);
             }
 
-            return xmlResponse.SelectSingleNode("//OnlineShipmentID")?.InnerText;
+            string result = xmlResponse.SelectSingleNode("//OnlineShipmentID")?.InnerText;
+
+            // If OnlineShipmentID is null or empty, that means its already been logged to tango.
+            // So we need to set our own number to keep from trying to send it up.
+            if (result.IsNullOrWhiteSpace())
+            {
+                result = $"SWSet_{shipmentID}";
+            }
+
+            return result;
         }
 
         /// <summary>
@@ -140,6 +149,11 @@ namespace ShipWorks.ApplicationCore.Licensing.TangoRequests
             postRequest.Variables.Add("service", shipmentType.ShipmentTypeName);
             postRequest.Variables.Add("storecode", storeType.TangoCode);
             postRequest.Variables.Add("identifier", storeType.LicenseIdentifier);
+
+            // If isretry is true, Tango will check to see if the shipment exists, and if it does
+            // it will not insert it into the database.  If it doesn't exist, it will do the 
+            // insert.
+            postRequest.Variables.Add("isretry", "1");
         }
 
         /// <summary>
@@ -164,6 +178,11 @@ namespace ShipWorks.ApplicationCore.Licensing.TangoRequests
             postRequest.Variables.Add("labelFormat", shipment.ActualLabelFormat == null ? "9" : shipment.ActualLabelFormat.Value.ToString());
             postRequest.Variables.Add("returnShipment", shipment.ReturnShipment ? "1" : "0");
             postRequest.Variables.Add("carrierCost", shipment.ShipmentCost.ToString());
+
+            // If isretry is true, Tango will check to see if the shipment exists, and if it does
+            // it will not insert it into the database.  If it doesn't exist, it will do the 
+            // insert.
+            postRequest.Variables.Add("isretry", "1");
 
             // Send best rate usage data to Tango
             BestRateEventsDescription bestRateEventsDescription = new BestRateEventsDescription((BestRateEventTypes) shipment.BestRateEvents);

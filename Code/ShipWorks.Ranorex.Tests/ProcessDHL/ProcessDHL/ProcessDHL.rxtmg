@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<modulegroupdoc
+rxversion="8.1">
+  <testsuiteentryhierarchy>
+    <flatlistofchildren>
+      <modulegroups
+      name="ProcessDHL"
+      id="80fd9691-317e-4873-9862-7b45dffa7d62"/>
+    </flatlistofchildren>
+    <childhierarchy>
+      <modulegroups
+      name="ProcessDHL"
+      id="80fd9691-317e-4873-9862-7b45dffa7d62"/>
+    </childhierarchy>
+  </testsuiteentryhierarchy>
+</modulegroupdoc>

@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using ShipWorks.Data.Model.EntityClasses;
+﻿using ShipWorks.Data.Model.EntityClasses;
 using Xunit;
 
 namespace ShipWorks.Data.Modal.Tests.Custom
@@ -56,6 +51,19 @@ namespace ShipWorks.Data.Modal.Tests.Custom
         public void PreProcessValueToSet_RoundsWeightField(double value, double expectedResult)
         {
             Assert.Equal(expectedResult, new OrderItemEntity { Weight = value }.Weight);
+        }
+
+        [Theory]
+        [InlineData(0, 0, 0)]
+        [InlineData(1, 0, 0)]
+        [InlineData(0, 1, 0)]
+        [InlineData(1, 1, 1)]
+        [InlineData(12.2, 3, 36.6)]
+        public void TotalPrice_ReturnsQuantityTimesUnitPrice(double quantity, decimal unitPrice, decimal expectedTotalPrice)
+        {
+            var testObject = new OrderItemEntity { Quantity = quantity, UnitPrice = unitPrice };
+
+            Assert.Equal(expectedTotalPrice, testObject.TotalPrice);
         }
     }
 }

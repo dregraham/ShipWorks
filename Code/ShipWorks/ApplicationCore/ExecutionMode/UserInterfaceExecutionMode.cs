@@ -234,7 +234,7 @@ namespace ShipWorks.ApplicationCore.ExecutionMode
 
                 try
                 {
-                    new WindowInteropHelper(crashDialog).Owner = Program.MainForm.Handle;
+                    new WindowInteropHelper(crashDialog).Owner = Program.MainForm?.Handle ?? IntPtr.Zero;
                 }
                 catch (ObjectDisposedException)
                 {

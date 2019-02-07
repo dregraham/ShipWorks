@@ -218,7 +218,14 @@ namespace ShipWorks.Tests.Shared.Database
                 Guid.Parse("{00000000-0000-0000-0000-000000000003}"),
                 null);
 
-            DataPath.Initialize();
+            try
+            {
+                DataPath.Initialize();
+            }
+            catch (IOException)
+            {
+                // Just ignore if we get an IOException as we don't care about the running lock.
+            }
 
             return new DataContext(mock, context.Item1, context.Item2, container);
         }

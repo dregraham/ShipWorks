@@ -1542,8 +1542,10 @@
           <Field Name="ClaimType" Type="int" IsOptional="true" FieldIndex="5" />
           <Field Name="CreatedWithApi" Type="bool" FieldIndex="2" />
           <Field Name="DamageValue" Type="decimal" IsOptional="true" Precision="19" Scale="4" FieldIndex="6" />
+          <Field Name="DateOfIssue" Type="datetime" IsOptional="true" FieldIndex="11" />
           <Field Name="Description" Type="string" IsOptional="true" MaxLength="255" FieldIndex="4" />
           <Field Name="EmailAddress" Type="string" IsOptional="true" MaxLength="100" FieldIndex="9" />
+          <Field Name="InsureShipPolicyID" Type="long" IsOptional="true" Precision="19" FieldIndex="10" />
           <Field Name="InsureShipStoreName" Type="string" MaxLength="75" FieldIndex="1" />
           <Field Name="ItemName" Type="string" IsOptional="true" MaxLength="255" FieldIndex="3" />
           <Field Name="ShipmentID" Type="long" IsPrimaryKey="true" IsAutoCreated="true" FieldIndex="0" />
@@ -2833,6 +2835,8 @@
           <Field Name="Fax" Type="string" MaxLength="35" FieldIndex="17" />
           <Field Name="InitialDownloadDays" Type="int" IsOptional="true" FieldIndex="29" />
           <Field Name="InitialDownloadOrder" Type="long" IsOptional="true" FieldIndex="30" />
+          <Field Name="InsureShipApiKey" Type="string" IsOptional="true" MaxLength="255" FieldIndex="32" />
+          <Field Name="InsureShipClientID" Type="long" IsOptional="true" Precision="19" FieldIndex="31" />
           <Field Name="InternationalAddressValidationSetting" Type="AddressValidationStoreSettingType" FieldIndex="24" />
           <Field Name="License" Type="string" MaxLength="150" FieldIndex="2" />
           <Field Name="ManualOrderPostfix" Type="string" MaxLength="10" FieldIndex="28" />
@@ -6516,7 +6520,7 @@
                     <Field Name="JoinMask" Ordinal="8" DbType="8" Precision="10" />
                     <Field Name="Cost" Ordinal="9" DbType="8" Precision="10" />
                     <Field Name="Count" Ordinal="10" DbType="8" Precision="10" />
-                    <Field Name="EntityExistsQuery" Ordinal="11" IsOptional="true" HasDefaultValue="true" DefaultValue="''" DbType="12" Length="2147483647" />
+                    <Field Name="EntityExistsQuery" Ordinal="11" DbType="12" Length="2147483647" />
                   </Fields>
                 </Table>
                 <Table Name="FilterNodeContentDetail">
@@ -6789,6 +6793,8 @@
                     <Field Name="SubmissionDate" Ordinal="8" IsOptional="true" DbType="4" />
                     <Field Name="ClaimID" Ordinal="9" IsOptional="true" DbType="0" Precision="19" />
                     <Field Name="EmailAddress" Ordinal="10" IsOptional="true" DbType="12" Length="100" />
+                    <Field Name="InsureShipPolicyID" Ordinal="11" IsOptional="true" DbType="0" Precision="19" />
+                    <Field Name="DateOfIssue" Ordinal="12" IsOptional="true" DbType="4" />
                   </Fields>
                 </Table>
                 <Table Name="iParcelAccount">
@@ -6815,7 +6821,7 @@
                   </Fields>
                 </Table>
                 <Table Name="iParcelPackage">
-                  <PkConstraintName Name="PK_iParcelPackageNew" />
+                  <PkConstraintName Name="PK_iParcelPackage" />
                   <Fields>
                     <Field Name="iParcelPackageID" Ordinal="1" IsIdentity="true" IsPrimaryKey="true" DbType="0" Precision="19" />
                     <Field Name="ShipmentID" Ordinal="2" DbType="0" Precision="19" />
@@ -8547,6 +8553,8 @@
                     <Field Name="ManualOrderPostfix" Ordinal="29" DbType="12" Length="10" />
                     <Field Name="InitialDownloadDays" Ordinal="30" IsOptional="true" DbType="8" Precision="10" />
                     <Field Name="InitialDownloadOrder" Ordinal="31" IsOptional="true" DbType="0" Precision="19" />
+                    <Field Name="InsureShipClientID" Ordinal="32" IsOptional="true" DbType="0" Precision="19" />
+                    <Field Name="InsureShipApiKey" Ordinal="33" IsOptional="true" DbType="12" Length="255" />
                   </Fields>
                 </Table>
                 <Table Name="SystemData">
@@ -12099,8 +12107,10 @@
             <FieldMapping FieldName="ClaimType" TargetFieldName="ClaimType" />
             <FieldMapping FieldName="CreatedWithApi" TargetFieldName="CreatedWithApi" />
             <FieldMapping FieldName="DamageValue" TargetFieldName="DamageValue" />
+            <FieldMapping FieldName="DateOfIssue" TargetFieldName="DateOfIssue" />
             <FieldMapping FieldName="Description" TargetFieldName="Description" />
             <FieldMapping FieldName="EmailAddress" TargetFieldName="EmailAddress" />
+            <FieldMapping FieldName="InsureShipPolicyID" TargetFieldName="InsureShipPolicyID" />
             <FieldMapping FieldName="InsureShipStoreName" TargetFieldName="InsureShipStoreName" />
             <FieldMapping FieldName="ItemName" TargetFieldName="ItemName" />
             <FieldMapping FieldName="ShipmentID" TargetFieldName="ShipmentID" />
@@ -13419,6 +13429,8 @@
             <FieldMapping FieldName="Fax" TargetFieldName="Fax" />
             <FieldMapping FieldName="InitialDownloadDays" TargetFieldName="InitialDownloadDays" />
             <FieldMapping FieldName="InitialDownloadOrder" TargetFieldName="InitialDownloadOrder" />
+            <FieldMapping FieldName="InsureShipApiKey" TargetFieldName="InsureShipApiKey" />
+            <FieldMapping FieldName="InsureShipClientID" TargetFieldName="InsureShipClientID" />
             <FieldMapping FieldName="InternationalAddressValidationSetting" TargetFieldName="InternationalAddressValidationSetting" />
             <FieldMapping FieldName="License" TargetFieldName="License" />
             <FieldMapping FieldName="ManualOrderPostfix" TargetFieldName="ManualOrderPostfix" />

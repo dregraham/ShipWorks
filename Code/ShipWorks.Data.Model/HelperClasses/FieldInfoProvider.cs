@@ -1794,6 +1794,8 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("InsurancePolicyEntity", "SubmissionDate", typeof(Nullable<System.DateTime>), false, false, false, true,  (int)InsurancePolicyFieldIndex.SubmissionDate, 0, 0, 0);
 			this.AddElementFieldInfo("InsurancePolicyEntity", "ClaimID", typeof(Nullable<System.Int64>), false, false, false, true,  (int)InsurancePolicyFieldIndex.ClaimID, 0, 0, 19);
 			this.AddElementFieldInfo("InsurancePolicyEntity", "EmailAddress", typeof(System.String), false, false, false, true,  (int)InsurancePolicyFieldIndex.EmailAddress, 100, 0, 0);
+			this.AddElementFieldInfo("InsurancePolicyEntity", "InsureShipPolicyID", typeof(Nullable<System.Int64>), false, false, false, true,  (int)InsurancePolicyFieldIndex.InsureShipPolicyID, 0, 0, 19);
+			this.AddElementFieldInfo("InsurancePolicyEntity", "DateOfIssue", typeof(Nullable<System.DateTime>), false, false, false, true,  (int)InsurancePolicyFieldIndex.DateOfIssue, 0, 0, 0);
 		}
 		/// <summary>Inits IParcelAccountEntity's FieldInfo objects</summary>
 		private void InitIParcelAccountEntityInfos()
@@ -3222,6 +3224,8 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("StoreEntity", "ManualOrderPostfix", typeof(System.String), false, false, false, false,  (int)StoreFieldIndex.ManualOrderPostfix, 10, 0, 0);
 			this.AddElementFieldInfo("StoreEntity", "InitialDownloadDays", typeof(Nullable<System.Int32>), false, false, false, true,  (int)StoreFieldIndex.InitialDownloadDays, 0, 0, 10);
 			this.AddElementFieldInfo("StoreEntity", "InitialDownloadOrder", typeof(Nullable<System.Int64>), false, false, false, true,  (int)StoreFieldIndex.InitialDownloadOrder, 0, 0, 19);
+			this.AddElementFieldInfo("StoreEntity", "InsureShipClientID", typeof(Nullable<System.Int64>), false, false, false, true,  (int)StoreFieldIndex.InsureShipClientID, 0, 0, 19);
+			this.AddElementFieldInfo("StoreEntity", "InsureShipApiKey", typeof(System.String), false, false, false, true,  (int)StoreFieldIndex.InsureShipApiKey, 255, 0, 0);
 		}
 		/// <summary>Inits SystemDataEntity's FieldInfo objects</summary>
 		private void InitSystemDataEntityInfos()

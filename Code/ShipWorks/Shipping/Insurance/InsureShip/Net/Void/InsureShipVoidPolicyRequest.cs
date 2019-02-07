@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
+using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.Utility;
 using log4net;
 using ShipWorks.Data.Model.EntityClasses;
 
@@ -10,47 +10,51 @@ namespace ShipWorks.Shipping.Insurance.InsureShip.Net.Void
     /// <summary>
     /// InsureShip request class for voiding a policy
     /// </summary>
-    public class InsureShipVoidPolicyRequest : InsureShipRequestBase
+    [Component]
+    public class InsureShipVoidPolicyRequest : IInsureShipVoidPolicyRequest
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="InsureShipVoidPolicyRequest"/> class.
-        /// </summary>
-        public InsureShipVoidPolicyRequest(ShipmentEntity shipment, InsureShipAffiliate affiliate) :
-            this(new InsureShipResponseFactory(), shipment, affiliate, new InsureShipSettings(), LogManager.GetLogger(typeof(InsureShipVoidPolicyRequest)))
-        { }
+        private readonly IInsureShipWebClient webClient;
+        private readonly ILog log;
+        private readonly IInsureShipVoidValidator validator;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="InsureShipVoidPolicyRequest"/> class.
+        /// Initializes a new instance of the <see cref="InsureShipRequestBase"/> class.
         /// </summary>
-        public InsureShipVoidPolicyRequest(IInsureShipResponseFactory responseFactory, ShipmentEntity shipment, InsureShipAffiliate affiliate, IInsureShipSettings insureShipSettings, ILog log) : 
-            base(responseFactory, shipment, affiliate, insureShipSettings, log, "VoidPolicy")
-        { }
+        public InsureShipVoidPolicyRequest(IInsureShipWebClient webClient, IInsureShipVoidValidator validator, Func<Type, ILog> createLog)
+        {
+            this.validator = validator;
+            this.webClient = webClient;
+            log = createLog(GetType());
+        }
 
         /// <summary>
         /// Submits this request to InsureShip
         /// </summary>
-        public override IInsureShipResponse Submit()
-        {
-            Uri uri = new Uri(string.Format("{0}distributors/{1}/void_policy", Settings.ApiUrl.AbsoluteUri, Settings.DistributorID));
-            SubmitPost(uri, CreatePostData());
-            return ResponseFactory.CreateVoidPolicyResponse(this);
-        }
+        public Result VoidInsurancePolicy(ShipmentEntity shipment) =>
+            validator.IsVoidable(shipment)
+                .Bind(x => PerformVoid(x, shipment));
 
         /// <summary>
-        /// Builds a string of all the data that needs to be sent to InsureShip to void a policy.
+        /// Perform the actual void
         /// </summary>
-        private Dictionary<string, string> CreatePostData()
+        private Result PerformVoid(bool isVoidable, ShipmentEntity shipment) =>
+            isVoidable ?
+                webClient.Submit<InsureShipVoidPolicyResponse>("void_policy", shipment.Order.Store, CreatePostData(shipment)) :
+                Result.FromSuccess();
+
+        /// <summary>
+        /// Builds a string of all the data that needs to be sent to InsureShip to insure a shipment.
+        /// </summary>
+        private Dictionary<string, string> CreatePostData(ShipmentEntity shipment)
         {
-            PopulateShipmentOrder();
+            // PopulateShipmentOrder();
 
             Dictionary<string, string> postData = new Dictionary<string, string>();
-            postData.Add("distributor_id", Settings.DistributorID);
-            postData.Add("store_id", Affiliate.InsureShipStoreID);
-            postData.Add("store_name", Affiliate.InsureShipPolicyID);
-            postData.Add("order_id", new InsureShipShipmentIdentifier(Shipment).GetUniqueShipmentId());
-            postData.Add("firstname", Shipment.ShipFirstName);
-            postData.Add("lastname", Shipment.ShipLastName);
-            
+
+            postData.Add("policy_id", shipment.InsurancePolicy.InsureShipPolicyID.ToString());
+            postData.Add("email", shipment.ShipEmail);
+            postData.Add("order_number", InsureShipShipmentIdentifier.GetUniqueShipmentId(shipment));
+
             return postData;
         }
     }

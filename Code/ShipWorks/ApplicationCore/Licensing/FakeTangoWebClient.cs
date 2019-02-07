@@ -21,7 +21,7 @@ namespace ShipWorks.ApplicationCore.Licensing
     [Obfuscation(Exclude = true, ApplyToMembers = true, StripAfterObfuscation = false)]
     public class FakeTangoWebClient : TangoWebClientWrapper, ITangoWebClient
     {
-        private const string CustomizedTangoFilesKeyName = "TangoWebClientDataPath";
+        public const string CustomizedTangoFilesKeyName = "TangoWebClientDataPath";
         private ILog log = LogManager.GetLogger(typeof(FakeTangoWebClient));
 
         /// <summary>
@@ -145,6 +145,11 @@ namespace ShipWorks.ApplicationCore.Licensing
                 return string.Empty;
             }
         }
+
+        /// <summary>
+        /// Log the given insurance claim to Tango.
+        /// </summary>
+        public override void LogSubmitInsuranceClaim(ShipmentEntity shipment) { }
 
         /// <summary>
         /// Get an xml document from the given file

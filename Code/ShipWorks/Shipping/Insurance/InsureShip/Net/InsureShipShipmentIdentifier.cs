@@ -1,9 +1,10 @@
 ﻿using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 
 namespace ShipWorks.Shipping.Insurance.InsureShip.Net
 {
     /// <summary>
-    /// A class for generating a unique identifer for a shipment (based on the order ID and 
+    /// A class for generating a unique identifier for a shipment (based on the order ID and
     /// shipment ID) that gets insured with InsureShip.
     /// </summary>
     public class InsureShipShipmentIdentifier
@@ -22,9 +23,12 @@ namespace ShipWorks.Shipping.Insurance.InsureShip.Net
         /// <summary>
         /// Uses the Order ID and the Shipment ID to create the unique shipment identifier for InsureShip.
         /// </summary>
-        public string GetUniqueShipmentId()
-        {
-            return string.Format("{0}-{1}", shipment.OrderID, shipment.ShipmentID);
-        }
+        public string GetUniqueShipmentId() => GetUniqueShipmentId(shipment);
+
+        /// <summary>
+        /// Uses the Order ID and the Shipment ID to create the unique shipment identifier for InsureShip.
+        /// </summary>
+        public static string GetUniqueShipmentId(IShipmentEntity shipment) =>
+            string.Format("{0}-{1}", shipment.OrderID, shipment.ShipmentID);
     }
 }
