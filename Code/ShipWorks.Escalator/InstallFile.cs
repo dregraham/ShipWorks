@@ -10,7 +10,7 @@ namespace ShipWorks.Escalator
     public class InstallFile
     {
         private readonly string downloadedHash;
-        
+
         /// <summary>
         /// Constructor
         /// </summary>
@@ -34,10 +34,16 @@ namespace ShipWorks.Escalator
             {
                 string computedHash = ComputeSHA256CheckSum(Path);
 
+                if (string.IsNullOrWhiteSpace(computedHash)||
+                    string.IsNullOrWhiteSpace(downloadedHash))
+                {
+                    return false;
+                }
+
                 return computedHash == downloadedHash;
             }
         }
-        
+
         /// <summary>
         /// Compute the SHA256 checksum of the file at the given path
         /// </summary>
@@ -45,7 +51,7 @@ namespace ShipWorks.Escalator
         {
             try
             {
-                using (SHA256 sha = SHA256Managed.Create())
+                using (SHA256 sha = SHA256.Create())
                 {
                     using (FileStream fileStream = File.OpenRead(filePath))
                     {
@@ -54,7 +60,7 @@ namespace ShipWorks.Escalator
                     }
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return null;
             }
