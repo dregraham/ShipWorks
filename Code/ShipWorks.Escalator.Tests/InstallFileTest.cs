@@ -4,9 +4,9 @@ namespace ShipWorks.Escalator.Tests
 {
     public class InstallFileTest
     {
-        private string filePath = @"Artifacts\ChecksumTestFile.txt";
-        private string goodHash = "820EB62B7660A216F711BD0DF37AC8A176B662A159959870EDC200B857262DAF";
-        private string badHash = "bad hash";
+        private readonly string filePath = @"Artifacts\ChecksumTestFile.txt";
+        private readonly string goodHash = "820EB62B7660A216F711BD0DF37AC8A176B662A159959870EDC200B857262DAF";
+        private readonly string badHash = "bad hash";
 
         [Fact]
         public void Constructor_SetsFilePath()
