@@ -4,6 +4,7 @@ using System.IO;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.ServiceProcess;
+using System.Text.RegularExpressions;
 
 namespace ShipWorks.Escalator
 {
@@ -71,15 +72,14 @@ namespace ShipWorks.Escalator
         /// </summary>
         private async void OnShipWorksMessage(string message)
         {
-            UpdaterWebClient updaterWebClient = new UpdaterWebClient();
-
-            InstallFile newVersion = await updaterWebClient.Download(new Version(message));
-
-            if (newVersion.IsValid)
+            if (Version.TryParse(message, out Version version))
             {
-                ShipWorksInstaller installer = new ShipWorksInstaller();
+                InstallFile newVersion = await new UpdaterWebClient().Download(new Version(message));
 
-                installer.Install(newVersion);
+                if (newVersion.IsValid)
+                {
+                    new ShipWorksInstaller().Install(newVersion);
+                }
             }
         }
 
