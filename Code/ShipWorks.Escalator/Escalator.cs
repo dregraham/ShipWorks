@@ -2,7 +2,6 @@
 using System.IO;
 using System.Reflection;
 using System.ServiceProcess;
-using System.Text.RegularExpressions;
 
 namespace ShipWorks.Escalator
 {
