@@ -94,9 +94,7 @@ namespace ShipWorks.Escalator
             client.DefaultRequestHeaders.Add("X-SHIPWORKS-PASS", "q2*lrft");
             client.DefaultRequestHeaders.Add("SOAPAction", "http://stamps.com/xml/namespace/2015/06/shipworks/shipworksv1/IShipWorks/ShipworksPost");
             client.DefaultRequestHeaders.UserAgent.ParseAdd("shipworks");
-            //client.DefaultRequestHeaders.Add("Content-Type", "application/x-www-form-urlencoded");
-            
-
+            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/x-www-form-urlencoded"));           
 
             return client;
         }
