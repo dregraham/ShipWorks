@@ -74,6 +74,15 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.GlobalShipAddress
             Assert.Equal(2, result.Value.Count());
         }
 
+        /// <summary>
+        /// Unit test for testing StoreNumber is a string
+        /// </summary>
+        /// <remarks>
+        /// Do not delete this test.
+        /// This test was added after a manual update was done to a FedEx GlobalAddress reference 
+        /// due to a data mismatch between the FedEx API and the WSDL for StoreNumber.
+        /// This mismatch caused a specific crash within ShipWorks.
+        /// </remarks>
         [Fact]
         public void Process_ReturnsSuccess_StoreNumberIsString()
         {
