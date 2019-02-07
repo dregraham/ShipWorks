@@ -1,0 +1,1051 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<recordtable
+embeddedrepository="False"
+id="b36def68-4eda-45f5-83df-680c662b3fd6"
+mode="Global"
+rxversion="8.1">
+	<name>
+		GetExpress1EndiciaInternationalShipmentRate
+	</name>
+	<repeatcount>
+		1
+	</repeatcount>
+	<turbomode>
+		False
+	</turbomode>
+	<genreport>
+		True
+	</genreport>
+	<speedfactor>
+		1
+	</speedfactor>
+	<useDefaultItemLogging>
+		True
+	</useDefaultItemLogging>
+	<codegen
+	classname="GetExpress1EndiciaInternationalShipmentRate"
+	namespace="ProcessExpressOne">
+	</codegen>
+	<variables>
+		<var
+		id="aefc1fbb-d4b2-423b-aac5-e0e9583e0258"
+		name="ExpOneEndiciaAvailablePostage">
+			50
+		</var>
+		<var
+		id="782f2da6-951d-4e7b-b56b-b02d8e1e2d15"
+		name="ExpOneEndiciaShipmentRate">
+			50
+		</var>
+	</variables>
+	<recorditems>
+		<mouseitem
+		action="Move"
+		button="Left"
+		duration="500ms"
+		enabled="True"
+		loc="Center"
+		movetime="300ms"
+		optional="False"
+		searchpropertyid="2d2f0143-672b-4753-9d32-942412d0ba04"
+		sx="786"
+		sy="160"
+		warnoutofbounds="False">
+			<comment>
+				Move mouse to customs tab
+			</comment>
+			<bindings>
+			</bindings>
+			<info
+			id="dcac8830-20ee-4154-9351-750e5250935c"
+			sourcename="Recorder">
+				<element
+				capabilities="rawtext"
+				dontcache="False"
+				enabled="True"
+				flavor="rawtext"
+				hasfocus="False"
+				index="2"
+				prefcap="rawtext"
+				rect="771,154,39,13"
+				role="unknown"
+				snapElem=""
+				valid="True"
+				visible="True">
+					<attribute
+					name="column"
+					type="System.Int32">
+						0
+					</attribute>
+					<attribute
+					name="fontname"
+					type="System.String">
+						Tahoma
+					</attribute>
+					<attribute
+					name="fontsize"
+					type="System.Int32">
+						13
+					</attribute>
+					<attribute
+					name="fontstyle"
+					type="System.String">
+						Normal
+					</attribute>
+					<attribute
+					name="rawtext"
+					type="System.String">
+						Service
+					</attribute>
+					<attribute
+					name="row"
+					type="System.Int32">
+						1
+					</attribute>
+					<attribute
+					name="textcolor"
+					type="System.String">
+						#000000
+					</attribute>
+				</element>
+				<path>
+					/form[@controlname='ShippingDlg']/container[@controlname='splitContainer']/?/?/container[@controlname='ratesSplitContainer']/container[@controlname='panel1' and @visible='True']/tabpagelist/rawtext[1]
+				</path>
+			</info>
+			<helperscreenshot
+			guid="222267b0-977d-4bf8-9986-34893593e1cb">
+				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
+			</helperscreenshot>
+		</mouseitem>
+		<mouseitem
+		action="Click"
+		button="Left"
+		duration="500ms"
+		enabled="True"
+		loc="Center"
+		movetime="300ms"
+		optional="False"
+		searchpropertyid="2d2f0143-672b-4753-9d32-942412d0ba04"
+		sx="786"
+		sy="160"
+		warnoutofbounds="False">
+			<comment>
+				Click the customs tab
+			</comment>
+			<bindings>
+			</bindings>
+			<info
+			id="dcac8830-20ee-4154-9351-750e5250935c"
+			sourcename="Recorder">
+				<element
+				capabilities="rawtext"
+				dontcache="False"
+				enabled="True"
+				flavor="rawtext"
+				hasfocus="False"
+				index="2"
+				prefcap="rawtext"
+				rect="771,154,39,13"
+				role="unknown"
+				snapElem=""
+				valid="True"
+				visible="True">
+					<attribute
+					name="column"
+					type="System.Int32">
+						0
+					</attribute>
+					<attribute
+					name="fontname"
+					type="System.String">
+						Tahoma
+					</attribute>
+					<attribute
+					name="fontsize"
+					type="System.Int32">
+						13
+					</attribute>
+					<attribute
+					name="fontstyle"
+					type="System.String">
+						Normal
+					</attribute>
+					<attribute
+					name="rawtext"
+					type="System.String">
+						Service
+					</attribute>
+					<attribute
+					name="row"
+					type="System.Int32">
+						1
+					</attribute>
+					<attribute
+					name="textcolor"
+					type="System.String">
+						#000000
+					</attribute>
+				</element>
+				<path>
+					/form[@controlname='ShippingDlg']/container[@controlname='splitContainer']/?/?/container[@controlname='ratesSplitContainer']/container[@controlname='panel1' and @visible='True']/tabpagelist/rawtext[1]
+				</path>
+			</info>
+			<helperscreenshot
+			guid="222267b0-977d-4bf8-9986-34893593e1cb">
+				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
+			</helperscreenshot>
+		</mouseitem>
+		<mouseitem
+		action="Move"
+		button="Left"
+		duration="500ms"
+		enabled="True"
+		loc="Center"
+		movetime="300ms"
+		optional="False"
+		searchpropertyid="8ceda1af-4c25-4fcf-91a2-3d0ec83be42c"
+		sx="1375"
+		sy="305"
+		warnoutofbounds="False">
+			<comment>
+				Move mouse to Shipping settings
+			</comment>
+			<bindings>
+			</bindings>
+			<info
+			id="d07e6328-d350-4414-942d-a200c4f7610a"
+			sourcename="Recorder">
+				<element
+				capabilities="rawtext"
+				dontcache="False"
+				enabled="True"
+				flavor="rawtext"
+				hasfocus="False"
+				index="0"
+				prefcap="rawtext"
+				rect="1329,299,94,13"
+				role="unknown"
+				snapElem=""
+				valid="True"
+				visible="True">
+					<attribute
+					name="column"
+					type="System.Int32">
+						0
+					</attribute>
+					<attribute
+					name="fontname"
+					type="System.String">
+						Tahoma
+					</attribute>
+					<attribute
+					name="fontsize"
+					type="System.Int32">
+						13
+					</attribute>
+					<attribute
+					name="fontstyle"
+					type="System.String">
+						Normal
+					</attribute>
+					<attribute
+					name="rawtext"
+					type="System.String">
+						Shipping Settings...
+					</attribute>
+					<attribute
+					name="row"
+					type="System.Int32">
+						0
+					</attribute>
+					<attribute
+					name="textcolor"
+					type="System.String">
+						#000000
+					</attribute>
+				</element>
+				<path>
+					/form[@controlname='ShippingDlg']//button[@controlname='shippingServices']/rawtext[@rawtext='Shipping Settings...']
+				</path>
+			</info>
+			<helperscreenshot
+			guid="683849d4-5c9d-4394-ad17-61f46fb2e982">
+				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
+			</helperscreenshot>
+		</mouseitem>
+		<mouseitem
+		action="Click"
+		button="Left"
+		duration="500ms"
+		enabled="True"
+		loc="Center"
+		movetime="300ms"
+		optional="False"
+		searchpropertyid="8ceda1af-4c25-4fcf-91a2-3d0ec83be42c"
+		sx="1375"
+		sy="305"
+		warnoutofbounds="False">
+			<comment>
+				Click shipping settings
+			</comment>
+			<bindings>
+			</bindings>
+			<info
+			id="d07e6328-d350-4414-942d-a200c4f7610a"
+			sourcename="Recorder">
+				<element
+				capabilities="rawtext"
+				dontcache="False"
+				enabled="True"
+				flavor="rawtext"
+				hasfocus="False"
+				index="0"
+				prefcap="rawtext"
+				rect="1329,299,94,13"
+				role="unknown"
+				snapElem=""
+				valid="True"
+				visible="True">
+					<attribute
+					name="column"
+					type="System.Int32">
+						0
+					</attribute>
+					<attribute
+					name="fontname"
+					type="System.String">
+						Tahoma
+					</attribute>
+					<attribute
+					name="fontsize"
+					type="System.Int32">
+						13
+					</attribute>
+					<attribute
+					name="fontstyle"
+					type="System.String">
+						Normal
+					</attribute>
+					<attribute
+					name="rawtext"
+					type="System.String">
+						Shipping Settings...
+					</attribute>
+					<attribute
+					name="row"
+					type="System.Int32">
+						0
+					</attribute>
+					<attribute
+					name="textcolor"
+					type="System.String">
+						#000000
+					</attribute>
+				</element>
+				<path>
+					/form[@controlname='ShippingDlg']//button[@controlname='shippingServices']/rawtext[@rawtext='Shipping Settings...']
+				</path>
+			</info>
+			<helperscreenshot
+			guid="683849d4-5c9d-4394-ad17-61f46fb2e982">
+				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
+			</helperscreenshot>
+		</mouseitem>
+		<mouseitem
+		action="Move"
+		button="Left"
+		duration="500ms"
+		enabled="True"
+		loc="Center"
+		movetime="300ms"
+		optional="False"
+		searchpropertyid="8dd0c86f-f20e-4335-b936-ef90a115e428"
+		sx="670"
+		sy="376"
+		warnoutofbounds="False">
+			<comment>
+				Move mouse to Express 1 Endicia
+			</comment>
+			<bindings>
+			</bindings>
+			<info
+			id="610ad0ef-274e-4a3a-b9ae-fdfef23e9c4d"
+			sourcename="RepositoryEditor">
+				<path>
+					/form[@controlname='ShippingSettingsDlg']/?/?/?/?/?/listitem[@accessiblename~'^USPS\ \(Express1\ for\ Endici' and @visible='True']
+				</path>
+			</info>
+		</mouseitem>
+		<mouseitem
+		action="Click"
+		button="Left"
+		duration="500ms"
+		enabled="True"
+		loc="Center"
+		movetime="300ms"
+		optional="False"
+		searchpropertyid="8dd0c86f-f20e-4335-b936-ef90a115e428"
+		sx="670"
+		sy="376"
+		warnoutofbounds="False">
+			<comment>
+				Click Express 1 Endicia
+			</comment>
+			<bindings>
+			</bindings>
+			<info
+			id="610ad0ef-274e-4a3a-b9ae-fdfef23e9c4d"
+			sourcename="RepositoryEditor">
+				<path>
+					/form[@controlname='ShippingSettingsDlg']/?/?/?/?/?/listitem[@accessiblename~'^USPS\ \(Express1\ for\ Endici' and @visible='True']
+				</path>
+			</info>
+		</mouseitem>
+		<mouseitem
+		action="Move"
+		button="Left"
+		duration="500ms"
+		enabled="True"
+		loc="25;8"
+		movetime="300ms"
+		optional="False"
+		searchpropertyid="62a1fada-a6c2-4ebf-9c41-dd955fd12482"
+		sx="1075"
+		sy="469"
+		warnoutofbounds="False">
+			<comment>
+				Move mouse to check postage
+			</comment>
+			<bindings>
+			</bindings>
+			<info
+			id="c0e251fb-2270-44c9-a362-59c23dc59835"
+			sourcename="RepositoryEditor">
+				<path>
+					/form[@controlname='ShippingSettingsDlg']/?/?/container[@caption~'^USPS\ \(Express1\ for\ Endici']//tabpage[@controlname='tabPageSettings']/?/?/container[@controlname='panelBottom']/container[@controlname='accountControl']/?/?/rawtext[@column='1' and @row='1']
+				</path>
+			</info>
+		</mouseitem>
+		<getvaluerecorditem
+		attrname="RawText"
+		enabled="True"
+		optional="False"
+		searchpropertyid="b00b26ca-f250-4dc5-aa85-137b22ad2a79"
+		varname="ExpOneEndiciaAvailablePostage">
+			<comment>
+				Get the postage value and store it in a variable
+			</comment>
+			<bindings>
+			</bindings>
+			<info
+			id="c0e251fb-2270-44c9-a362-59c23dc59835"
+			sourcename="RepositoryEditor">
+				<path>
+					/form[@controlname='ShippingSettingsDlg']/?/?/container[@caption~'^USPS\ \(Express1\ for\ Endici']//tabpage[@controlname='tabPageSettings']/?/?/container[@controlname='panelBottom']/container[@controlname='accountControl']/?/?/rawtext[@column='1' and @row='1']
+				</path>
+			</info>
+		</getvaluerecorditem>
+		<mouseitem
+		action="Move"
+		button="Left"
+		duration="500ms"
+		enabled="True"
+		loc="Center"
+		movetime="300ms"
+		optional="False"
+		searchpropertyid="60f6e66e-8ceb-485e-ba61-e42272c0b8c1"
+		sx="1278"
+		sy="791"
+		warnoutofbounds="False">
+			<comment>
+				Move mouse to close button
+			</comment>
+			<bindings>
+			</bindings>
+			<info
+			id="d1a91c44-5b8e-4c4a-982e-dbfb4f5594f1"
+			sourcename="Recorder">
+				<element
+				capabilities="rawtext"
+				dontcache="False"
+				enabled="True"
+				flavor="rawtext"
+				hasfocus="False"
+				index="0"
+				prefcap="rawtext"
+				rect="1268,785,26,13"
+				role="unknown"
+				snapElem=""
+				valid="True"
+				visible="True">
+					<attribute
+					name="column"
+					type="System.Int32">
+						0
+					</attribute>
+					<attribute
+					name="fontname"
+					type="System.String">
+						Tahoma
+					</attribute>
+					<attribute
+					name="fontsize"
+					type="System.Int32">
+						13
+					</attribute>
+					<attribute
+					name="fontstyle"
+					type="System.String">
+						Normal
+					</attribute>
+					<attribute
+					name="rawtext"
+					type="System.String">
+						Close
+					</attribute>
+					<attribute
+					name="row"
+					type="System.Int32">
+						0
+					</attribute>
+					<attribute
+					name="textcolor"
+					type="System.String">
+						#000000
+					</attribute>
+				</element>
+				<path>
+					/form[@controlname='ShippingSettingsDlg']/?/?/rawtext[@rawtext='Close' and @visible='True']
+				</path>
+			</info>
+			<helperscreenshot
+			guid="15437740-bd32-469c-ba13-b194eba9292d">
+				/9j/4AAQSkZJRgABAQEAYABgAAD/2wBDABwTFRgVERwYFhgfHRwhKUUtKSYmKVQ8QDJFZFhpZ2JY
+YF9ufJ6GbnWWd19giruLlqOpsbOxa4TC0MGszp6usar/2wBDAR0fHykkKVEtLVGqcmByqqqqqqqq
+qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqr/wAARCABsAGwDASIA
+AhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQA
+AAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3
+ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWm
+p6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEA
+AwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSEx
+BhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElK
+U1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3
+uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwDpKKj8
+hPWT/v43+NHkJ6yf9/G/xoAkoqPyE9ZP+/jf40eQnrJ/38b/ABoAIv8AWTf7/wD7KKkpqRrGDtzy
+cnJJ/nTqACiiigBH6Uynv0plADk6031+ppydab6/U0AFULf/AFCf7oq/VC3/ANQn+6KfQXU06KKK
+QwooooAKKKKACiiigBH6VnyXro7w+STPuxGOzDsf8/8A6tBhkUzZznAyOM0AOTrTfX6mnKCDTfX6
+mgAqhb/6hP8AdFX6oW/+oT/dFPoLqaG5vb8qNze35UlFIYu5vb8qNze35VB5krSOscaEIcZZyM8A
++nvS7rj/AJ5Rf9/D/wDE1XKyeZE25vb8qNze35VUuLma3gaV4UKrjOJDnrj0ql/bg/59z/33/wDW
+qXpuawpzmrxVzY3N7flRub2/Ksf+3B/z7n/vv/61H9uD/n3P/ff/ANalddyvYVP5WbG5vb8qNze3
+5Vkx6z5sqRrb8sQoy/r+FaG64/55Rf8Afw//ABNNa7Gc4yh8SsTbm9vypBUW64/55Rf9/D/8TSxS
+M+8OoVkbBwcjoD6e9OzJuiSqFv8A6hP90Vfqhb/6hP8AdFHQOpfooopDIof9bP8A9dB/6CtS1FD/
+AK2f/roP/QVqWrZCKerf8g2X8P5io7KS5ltI3jMSxqAu1lJY44Jznjv2NSat/wAg2X8P5iqdtPZx
+wxgXksYwC8ajjOOe2fyNZNpSOpQlKiuVX1/QsW+pxFo4X3GTYhdsDALdPfr6DuKd/akIgExRwjHC
+ElQH69DnA6d8VDZQWdzPcJESyrHEQ/dWG4AjI68CmtHDav8A6ZcSpckgrMFHzAcZGBjvgg5I/Im7
+rcx5HfltqF3OlzNp8sZyrSH09R6VrVi3FxFNdWSxzNMUk+ZmXB5I9gK2qmLu3Y1qxcYQT8/zCoof
+9bP/ANdB/wCgrUtRQ/62f/roP/QVq+jOfqiWqFv/AKhP90Vfqhb/AOoT/dFLoPqX6Kh+1w+r/wDf
+tv8ACj7XD6v/AN+2/wAKLMLoc0ELsWeKNmPUlQTSfZbf/nhF/wB8Cm/a4c43Nn02N/hS/a4fV/8A
+v23+FP3he6L9lt/+eEX/AHwKT7Jbf8+8X/fAo+1w+r/9+2/wo+1w+r/9+2/wpNN7lKfLsyv5Usd5
+OlpGsIkiQebsG1SC/bueR/X0LEjivLndcq7Fv3iIZGKoy/K64zg4Pfvuq19rh9W/74b/AAqHdbfa
+PN3yfe37dhxuxt3dM5xx6e2aOV9g5tb3J/slt/z7xf8AfApfstv/AM8Iv++BTftcP95v++G/wo+1
+w+rf98N/hQk1sJyUt2O+y2//ADwi/wC+BT0jSMYjRVHXCjFRfa4fVv8Avhv8KRrqIjhmB9fLb/Cn
+7wvdJt3zADBz71St/wDUJ/uiphcRbs7m6k/6o/4VHApECAjB2ilayHe7JtlGyptp9B+dG0+g/OkM
+x2ZV1bDPvPTashBXjuvce/vS6f5EIZVaB0AQebEmMknAB65P+Na3l/PuwM4xnNLtPoPzoQGUfsra
+kFRolmVvnJIDMcfdHc/5/CSyMTS3KRyByJM437j0H/160dp9B+dG0+g/OgCvs6fSjZU23p9KNtAF
+YJ+8b6D+tP2U8L+9b/dH9aftoAh2Umyp9tG2gCIJTgtPxS4oAmxVHUp5oTF5Z2IT8z+WXA9sAj3q
+9VW+t45jGXDZ3BeHK5HocHmgBpMou4wlwZA3zMgUbVXHXOM9ff1qS1eRnnWVlYpJgYXHGAf60q2c
+CTGVA6sTkgSMFPGOmcUgsoAWOHO9g53SMeQcg8n2FAFSW6minO53UlnGx4z5YUAkEMBz0HfueKms
+JJneVJjLlQpAlChuf93jH69asG1haRndS5YEHcxYYPXAPA/CiC2it8+WGycZLMWOB0GSelAC44H0
+oxR2H0ooAYP9a3+6P60/FNH+tb/dH9adQAYoxRRQAUUUUAf/2Q==
+			</helperscreenshot>
+		</mouseitem>
+		<mouseitem
+		action="Click"
+		button="Left"
+		duration="500ms"
+		enabled="True"
+		loc="Center"
+		movetime="300ms"
+		optional="False"
+		searchpropertyid="60f6e66e-8ceb-485e-ba61-e42272c0b8c1"
+		sx="1278"
+		sy="791"
+		warnoutofbounds="False">
+			<comment>
+				Click on close button
+			</comment>
+			<bindings>
+			</bindings>
+			<info
+			id="d1a91c44-5b8e-4c4a-982e-dbfb4f5594f1"
+			sourcename="Recorder">
+				<element
+				capabilities="rawtext"
+				dontcache="False"
+				enabled="True"
+				flavor="rawtext"
+				hasfocus="False"
+				index="0"
+				prefcap="rawtext"
+				rect="1268,785,26,13"
+				role="unknown"
+				snapElem=""
+				valid="True"
+				visible="True">
+					<attribute
+					name="column"
+					type="System.Int32">
+						0
+					</attribute>
+					<attribute
+					name="fontname"
+					type="System.String">
+						Tahoma
+					</attribute>
+					<attribute
+					name="fontsize"
+					type="System.Int32">
+						13
+					</attribute>
+					<attribute
+					name="fontstyle"
+					type="System.String">
+						Normal
+					</attribute>
+					<attribute
+					name="rawtext"
+					type="System.String">
+						Close
+					</attribute>
+					<attribute
+					name="row"
+					type="System.Int32">
+						0
+					</attribute>
+					<attribute
+					name="textcolor"
+					type="System.String">
+						#000000
+					</attribute>
+				</element>
+				<path>
+					/form[@controlname='ShippingSettingsDlg']/?/?/rawtext[@rawtext='Close' and @visible='True']
+				</path>
+			</info>
+			<helperscreenshot
+			guid="15437740-bd32-469c-ba13-b194eba9292d">
+				/9j/4AAQSkZJRgABAQEAYABgAAD/2wBDABwTFRgVERwYFhgfHRwhKUUtKSYmKVQ8QDJFZFhpZ2JY
+YF9ufJ6GbnWWd19giruLlqOpsbOxa4TC0MGszp6usar/2wBDAR0fHykkKVEtLVGqcmByqqqqqqqq
+qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqr/wAARCABsAGwDASIA
+AhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQA
+AAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3
+ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWm
+p6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEA
+AwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSEx
+BhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElK
+U1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3
+uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwDpKKj8
+hPWT/v43+NHkJ6yf9/G/xoAkoqPyE9ZP+/jf40eQnrJ/38b/ABoAIv8AWTf7/wD7KKkpqRrGDtzy
+cnJJ/nTqACiiigBH6Uynv0plADk6031+ppydab6/U0AFULf/AFCf7oq/VC3/ANQn+6KfQXU06KKK
+QwooooAKKKKACiiigBH6VnyXro7w+STPuxGOzDsf8/8A6tBhkUzZznAyOM0AOTrTfX6mnKCDTfX6
+mgAqhb/6hP8AdFX6oW/+oT/dFPoLqaG5vb8qNze35UlFIYu5vb8qNze35VB5krSOscaEIcZZyM8A
++nvS7rj/AJ5Rf9/D/wDE1XKyeZE25vb8qNze35VUuLma3gaV4UKrjOJDnrj0ql/bg/59z/33/wDW
+qXpuawpzmrxVzY3N7flRub2/Ksf+3B/z7n/vv/61H9uD/n3P/ff/ANalddyvYVP5WbG5vb8qNze3
+5Vkx6z5sqRrb8sQoy/r+FaG64/55Rf8Afw//ABNNa7Gc4yh8SsTbm9vypBUW64/55Rf9/D/8TSxS
+M+8OoVkbBwcjoD6e9OzJuiSqFv8A6hP90Vfqhb/6hP8AdFHQOpfooopDIof9bP8A9dB/6CtS1FD/
+AK2f/roP/QVqWrZCKerf8g2X8P5io7KS5ltI3jMSxqAu1lJY44Jznjv2NSat/wAg2X8P5iqdtPZx
+wxgXksYwC8ajjOOe2fyNZNpSOpQlKiuVX1/QsW+pxFo4X3GTYhdsDALdPfr6DuKd/akIgExRwjHC
+ElQH69DnA6d8VDZQWdzPcJESyrHEQ/dWG4AjI68CmtHDav8A6ZcSpckgrMFHzAcZGBjvgg5I/Im7
+rcx5HfltqF3OlzNp8sZyrSH09R6VrVi3FxFNdWSxzNMUk+ZmXB5I9gK2qmLu3Y1qxcYQT8/zCoof
+9bP/ANdB/wCgrUtRQ/62f/roP/QVq+jOfqiWqFv/AKhP90Vfqhb/AOoT/dFLoPqX6Kh+1w+r/wDf
+tv8ACj7XD6v/AN+2/wAKLMLoc0ELsWeKNmPUlQTSfZbf/nhF/wB8Cm/a4c43Nn02N/hS/a4fV/8A
+v23+FP3he6L9lt/+eEX/AHwKT7Jbf8+8X/fAo+1w+r/9+2/wo+1w+r/9+2/wpNN7lKfLsyv5Usd5
+OlpGsIkiQebsG1SC/bueR/X0LEjivLndcq7Fv3iIZGKoy/K64zg4Pfvuq19rh9W/74b/AAqHdbfa
+PN3yfe37dhxuxt3dM5xx6e2aOV9g5tb3J/slt/z7xf8AfApfstv/AM8Iv++BTftcP95v++G/wo+1
+w+rf98N/hQk1sJyUt2O+y2//ADwi/wC+BT0jSMYjRVHXCjFRfa4fVv8Avhv8KRrqIjhmB9fLb/Cn
+7wvdJt3zADBz71St/wDUJ/uiphcRbs7m6k/6o/4VHApECAjB2ilayHe7JtlGyptp9B+dG0+g/OkM
+x2ZV1bDPvPTashBXjuvce/vS6f5EIZVaB0AQebEmMknAB65P+Na3l/PuwM4xnNLtPoPzoQGUfsra
+kFRolmVvnJIDMcfdHc/5/CSyMTS3KRyByJM437j0H/160dp9B+dG0+g/OgCvs6fSjZU23p9KNtAF
+YJ+8b6D+tP2U8L+9b/dH9aftoAh2Umyp9tG2gCIJTgtPxS4oAmxVHUp5oTF5Z2IT8z+WXA9sAj3q
+9VW+t45jGXDZ3BeHK5HocHmgBpMou4wlwZA3zMgUbVXHXOM9ff1qS1eRnnWVlYpJgYXHGAf60q2c
+CTGVA6sTkgSMFPGOmcUgsoAWOHO9g53SMeQcg8n2FAFSW6minO53UlnGx4z5YUAkEMBz0HfueKms
+JJneVJjLlQpAlChuf93jH69asG1haRndS5YEHcxYYPXAPA/CiC2it8+WGycZLMWOB0GSelAC44H0
+oxR2H0ooAYP9a3+6P60/FNH+tb/dH9adQAYoxRRQAUUUUAf/2Q==
+			</helperscreenshot>
+		</mouseitem>
+		<userrecorditem
+		classname="GetExpress1EndiciaInternationalShipmentRate"
+		enabled="True"
+		isexternaltestmethod="False"
+		methodname="CheckRates"
+		namespace="ProcessExpressOne"
+		optional="False"
+		varname="">
+			<comment>
+			</comment>
+			<bindings>
+			</bindings>
+			<arguments
+			id="7ef9861d-9713-47cd-be18-8067cdb1f4d4">
+			</arguments>
+		</userrecorditem>
+		<mouseitem
+		action="Move"
+		button="Left"
+		duration="500ms"
+		enabled="False"
+		loc="Center"
+		movetime="300ms"
+		optional="False"
+		searchpropertyid="54ce2be5-8434-46f4-902b-3d160bc4cb44"
+		sx="1279"
+		sy="694"
+		warnoutofbounds="False">
+			<comment>
+				Move mouse to get the shipment rate
+			</comment>
+			<bindings>
+			</bindings>
+			<info
+			id="a220f91f-7912-4eec-8d58-349f258d5bed"
+			sourcename="RepositoryEditor">
+				<element
+				capabilities="rawtext"
+				dontcache="False"
+				enabled="True"
+				flavor="rawtext"
+				hasfocus="False"
+				index="2"
+				prefcap="rawtext"
+				rect="1255,688,34,13"
+				role="unknown"
+				snapElem=""
+				valid="True"
+				visible="True">
+					<attribute
+					name="column"
+					type="System.Int32">
+						4
+					</attribute>
+					<attribute
+					name="fontname"
+					type="System.String">
+						Tahoma
+					</attribute>
+					<attribute
+					name="fontsize"
+					type="System.Int32">
+						13
+					</attribute>
+					<attribute
+					name="fontstyle"
+					type="System.String">
+						Normal
+					</attribute>
+					<attribute
+					name="rawtext"
+					type="System.String">
+						$40.14
+					</attribute>
+					<attribute
+					name="row"
+					type="System.Int32">
+						1
+					</attribute>
+					<attribute
+					name="textcolor"
+					type="System.String">
+						#000000
+					</attribute>
+				</element>
+				<path>
+					/form[@title='Ship Orders']/container[@controlname='splitContainer']/container[@controlname='panel2']/?/?/container[@controlname='panel2']//rawtext[@column='4' and @row='1']
+				</path>
+			</info>
+		</mouseitem>
+		<getvaluerecorditem
+		attrname="RawText"
+		enabled="False"
+		optional="False"
+		searchpropertyid="e4562afa-9303-4769-9231-27fc945c3d97"
+		varname="ExpOneEndiciaShipmentRate">
+			<comment>
+				Get the rate and store it in a variable
+			</comment>
+			<bindings>
+			</bindings>
+			<info
+			id="a220f91f-7912-4eec-8d58-349f258d5bed"
+			sourcename="RepositoryEditor">
+				<element
+				capabilities="rawtext"
+				dontcache="False"
+				enabled="True"
+				flavor="rawtext"
+				hasfocus="False"
+				index="2"
+				prefcap="rawtext"
+				rect="1255,688,34,13"
+				role="unknown"
+				snapElem=""
+				valid="True"
+				visible="True">
+					<attribute
+					name="column"
+					type="System.Int32">
+						4
+					</attribute>
+					<attribute
+					name="fontname"
+					type="System.String">
+						Tahoma
+					</attribute>
+					<attribute
+					name="fontsize"
+					type="System.Int32">
+						13
+					</attribute>
+					<attribute
+					name="fontstyle"
+					type="System.String">
+						Normal
+					</attribute>
+					<attribute
+					name="rawtext"
+					type="System.String">
+						$43.70
+					</attribute>
+					<attribute
+					name="row"
+					type="System.Int32">
+						1
+					</attribute>
+					<attribute
+					name="textcolor"
+					type="System.String">
+						#000000
+					</attribute>
+				</element>
+				<path>
+					/form[@title='Ship Orders']/container[@controlname='splitContainer']/container[@controlname='panel2']/?/?/container[@controlname='panel2']//rawtext[@column='4' and @row='1']
+				</path>
+			</info>
+		</getvaluerecorditem>
+		<userrecorditem
+		autogenmethod="True"
+		classname="GetExpress1DomesticShipmentRate"
+		enabled="False"
+		isexternaltestmethod="False"
+		methodname="CheckPostageBalance"
+		namespace="SmokeTest"
+		optional="False"
+		varname="">
+			<comment>
+				Compare the available postage with the shipment rate and, if there is enough postage available, process the shipment.
+			</comment>
+			<bindings>
+			</bindings>
+			<arguments
+			id="9e942732-5481-4e58-ac80-33865a9cbaec">
+			</arguments>
+		</userrecorditem>
+	</recorditems>
+	<repository
+	id="76f6e44b-a455-45a5-853b-77d1cfb128df"
+	name="SmokeTestRepository"
+	relativepath="SmokeTestRepository.rxrep"
+	rxversion="8.1">
+		<codegen
+		classname="SmokeTestRepository"
+		namespace="ProcessExpressOne">
+		</codegen>
+		<rootfolder
+		id="4aacfef1-6402-4ba7-b3c9-270ac9a4db4a"
+		name="_rootdummy_">
+		</rootfolder>
+	</repository>
+	<usercodefile
+	lang="CSharp">
+		GetExpress1EndiciaInternationalShipmentRate.UserCode.cs
+	</usercodefile>
+	<references>
+	</references>
+</recordtable>

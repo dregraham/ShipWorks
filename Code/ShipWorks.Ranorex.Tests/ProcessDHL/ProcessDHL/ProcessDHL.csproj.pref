@@ -1,0 +1,16 @@
+﻿<Properties>
+  <Array name="active">
+    <Element value="ProcessDHL.rxtst" />
+  </Array>
+  <Array name="bookmarks" />
+  <Array name="files">
+    <Element value="ProcessDHL.rxtst" />
+    <Element value="CheckShipWorksVersion.rxrec" />
+  </Array>
+  <Properties name="projectSavedData">
+    <Properties name="customTool">
+      <runOnBuild value="False" />
+    </Properties>
+    <Array name="recentusercodeselections" />
+  </Properties>
+</Properties>

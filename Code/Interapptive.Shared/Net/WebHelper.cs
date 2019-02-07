@@ -20,10 +20,10 @@ namespace Interapptive.Shared.Net
     public static class WebHelper
     {
         // Logger
-        static readonly ILog log = LogManager.GetLogger(typeof(WebHelper));
+        private static readonly ILog log = LogManager.GetLogger(typeof(WebHelper));
 
         // Reflected method for preserving StackTrace when doing a rethrow
-        static MethodInfo exceptionInternalPreserverStackTrace = null;
+        private static MethodInfo exceptionInternalPreserverStackTrace = null;
 
         /// <summary>
         /// Static Constructor

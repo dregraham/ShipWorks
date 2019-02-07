@@ -1,0 +1,86 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<recordtable
+embeddedrepository="False"
+id="4e0c0a1c-f1be-4a0d-a6ed-9639ab3607c0"
+mode="Global"
+rxversion="8.1">
+	<name>
+		CloseShipOrdersDialog
+	</name>
+	<repeatcount>
+		1
+	</repeatcount>
+	<turbomode>
+		False
+	</turbomode>
+	<genreport>
+		True
+	</genreport>
+	<speedfactor>
+		1
+	</speedfactor>
+	<useDefaultItemLogging>
+		True
+	</useDefaultItemLogging>
+	<codegen
+	classname="CloseShipOrdersDialog"
+	namespace="ProcessExpressOne">
+	</codegen>
+	<variables>
+	</variables>
+	<recorditems>
+		<userrecorditem
+		classname="CloseShipOrdersDialog"
+		enabled="True"
+		isexternaltestmethod="False"
+		methodname="Mouse_Click_Close"
+		namespace="ProcessExpressOne"
+		optional="False"
+		varname="">
+			<comment>
+				Closes Ship Orders dialog if open
+			</comment>
+			<bindings>
+			</bindings>
+			<arguments
+			id="3cce9bf7-44d9-4feb-b60f-e08c73affddb">
+				<argument
+				argname="buttonInfo"
+				id="d54c3bc5-60ec-413d-af28-75d27d93266e">
+					<argvaluetype>
+						Ranorex.Core.Repository.RepoItemInfo, Ranorex.Core, Culture=neutral
+					</argvaluetype>
+					<argvalue>
+					</argvalue>
+					<info
+					id="fdd6907b-6426-45ff-921c-4f3ad2d0c35d"
+					sourcename="ItemRecorderEditor">
+						<path>
+							/form[@controlname='ShippingDlg']/button[@controlname='close' and @visible='True']
+						</path>
+					</info>
+				</argument>
+			</arguments>
+		</userrecorditem>
+	</recorditems>
+	<repository
+	id="76f6e44b-a455-45a5-853b-77d1cfb128df"
+	name="SmokeTestRepository"
+	relativepath="SmokeTestRepository.rxrep"
+	rxversion="8.1">
+		<codegen
+		classname="SmokeTestRepository"
+		namespace="ProcessExpressOne">
+		</codegen>
+		<rootfolder
+		id="4aacfef1-6402-4ba7-b3c9-270ac9a4db4a"
+		name="_rootdummy_">
+		</rootfolder>
+	</repository>
+	<usercodefile
+	lang="CSharp">
+		CloseShipOrdersDialog.UserCode.cs
+	</usercodefile>
+	<references>
+	</references>
+</recordtable>

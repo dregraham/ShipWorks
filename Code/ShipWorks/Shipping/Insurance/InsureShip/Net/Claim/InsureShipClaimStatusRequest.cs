@@ -1,54 +1,44 @@
 ﻿using System;
-using System.Net;
-using Interapptive.Shared.Net;
-using ShipWorks.Data.Model.EntityClasses;
+using System.Collections.Generic;
+using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.Utility;
 using log4net;
+using ShipWorks.Data.Model.EntityInterfaces;
 
 namespace ShipWorks.Shipping.Insurance.InsureShip.Net.Claim
 {
     /// <summary>
     /// InsureShip request class for checking the status of a claim
     /// </summary>
-    public class InsureShipClaimStatusRequest : InsureShipRequestBase
+    [Component]
+    public class InsureShipClaimStatusRequest : IInsureShipClaimStatusRequest
     {
-        private readonly Uri uri;
+        private readonly IInsureShipWebClient webClient;
+        private readonly ILog log;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="InsureShipClaimStatusRequest"/> class.
+        /// Initializes a new instance of the <see cref="InsureShipRequestBase"/> class.
         /// </summary>
-        public InsureShipClaimStatusRequest(ShipmentEntity shipment, InsureShipAffiliate affiliate) :
-            this(new InsureShipResponseFactory(), shipment, affiliate, new InsureShipSettings(), LogManager.GetLogger(typeof(InsureShipSubmitClaimRequest)))
-        { }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="InsureShipClaimStatusRequest"/> class.
-        /// </summary>
-        public InsureShipClaimStatusRequest(IInsureShipResponseFactory responseFactory, ShipmentEntity shipment, InsureShipAffiliate affiliate, IInsureShipSettings insureShipSettings, ILog log)
-            : base(responseFactory, shipment, affiliate, insureShipSettings, log, "ClaimStatus")
+        public InsureShipClaimStatusRequest(IInsureShipWebClient webClient, Func<Type, ILog> createLog)
         {
-            uri = new Uri(string.Format("{0}claims/status/{1}/{2}", Settings.ApiUrl.AbsoluteUri, Settings.DistributorID, Shipment.InsurancePolicy.ClaimID));
+            this.webClient = webClient;
+            log = createLog(GetType());
         }
 
         /// <summary>
         /// Submits this request to InsureShip
         /// </summary>
-        /// <returns>An instance of IInsureShipResponse for processing the response.</returns>
-        public override IInsureShipResponse Submit()
-        {
-            EnsureSecureConnection();
-            
-            ConfigureNewRequestSubmitter(uri);
-            RequestSubmitter.Verb = HttpVerb.Get;
+        public GenericResult<string> GetClaimStatus(IShipmentEntity shipment) =>
+            webClient.Submit<InsureShipGetClaimStatusResponse>("get_claim_status", shipment.Order.Store, CreatePostData(shipment))
+                .Map(x => x.Status);
 
-            // Log the request before submitting to InsureShip
-            LogRequest(RequestSubmitter);
-            HttpWebResponse webResponse = RequestSubmitter.GetResponse().HttpWebResponse;
-
-            // Read the raw response and log 
-            ReadResponse(webResponse);
-            LogInsureShipResponse(webResponse);
-            
-            return ResponseFactory.CreateClaimStatusResponse(this);
-        }
+        /// <summary>
+        /// Builds a string of all the data that needs to be sent to InsureShip to insure a shipment.
+        /// </summary>
+        private Dictionary<string, string> CreatePostData(IShipmentEntity shipment) =>
+            new Dictionary<string, string>
+            {
+                { "claim_id", shipment.InsurancePolicy?.ClaimID?.ToString() }
+            };
     }
 }

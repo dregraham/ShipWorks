@@ -1,5 +1,5 @@
 ﻿using System;
-using Interapptive.Shared.Security;
+using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.ApplicationCore;
 
 namespace ShipWorks.Shipping.Insurance.InsureShip
@@ -7,6 +7,7 @@ namespace ShipWorks.Shipping.Insurance.InsureShip
     /// <summary>
     /// Class to get InsureShip settings.
     /// </summary>
+    [Component]
     public class InsureShipSettings : IInsureShipSettings
     {
         /// <summary>
@@ -28,56 +29,14 @@ namespace ShipWorks.Shipping.Insurance.InsureShip
         }
 
         /// <summary>
-        /// InsureShip Distributor ID
-        /// </summary>
-        public string DistributorID
-        {
-            get
-            {
-                return "D00050";
-            }
-        }
-
-        /// <summary>
-        /// InsureShip Username
-        /// </summary>
-        public string Username
-        {
-            get
-            {
-                return SecureText.Decrypt("xYGNUSctosMN3kr2vZw1cg==", "InsureShip7458");
-            }
-        }
-
-        /// <summary>
-        /// InsureShip Password
-        /// </summary>
-        public string Password
-        {
-            get
-            {
-                return UseTestServer ? SecureText.Decrypt("xYGNUSctosMiU8bYJtpOOA==", "InsureShip7458") : SecureText.Decrypt("byJ2OXi5odKK0PVy7VPB6zKGm6aI++SX", "InsureShip7458");
-            }
-        }
-
-        /// <summary>
         /// InsureShip Url
         /// </summary>
-        public Uri ApiUrl
-        {
-            get { return new Uri(CertificateUrl.AbsoluteUri + "api/"); }
-        }
+        public Uri ApiUrl => CertificateUrl;
 
         /// <summary>
         /// Gets the URL to use when inspecting the certificate data for authenticity.
         /// </summary>
-        public Uri CertificateUrl
-        {
-            get
-            {
-                return UseTestServer ? new Uri("https://osisstagingapi.insureship.com") : new Uri("https://api2.insureship.com");
-            }
-        }
+        public Uri CertificateUrl => new Uri("https://api.insureship.com");
 
         /// <summary>
         /// Gets the amount of time after a shipment has been processed before a claim can be submitted.
@@ -92,13 +51,7 @@ namespace ShipWorks.Shipping.Insurance.InsureShip
         /// <summary>
         /// Gets the maximum age of a policy that is allowed to be voided.
         /// </summary>
-        public TimeSpan VoidPolicyMaximumAge
-        {
-            get
-            {
-                return TimeSpan.FromHours(24);
-            }
-        }
+        public static TimeSpan VoidPolicyMaximumAge => TimeSpan.FromHours(24);
 
         /// <summary>
         /// Gets the phone number that should be used for a customer to contact InsureShip.

@@ -25,6 +25,11 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// <remarks>Because we don't have a readonly person adapter, we'll copy it each time it's requested.
         /// This is a relatively light operation so it shouldn't be a big deal.</remarks>
         public PersonAdapter ShipPerson => shipPerson.CopyToNew();
+        
+        /// <summary>
+        /// Total cost of the items of the order
+        /// </summary>
+        public decimal SubTotal { get; private set; }
 
         /// <summary>
         /// Copy extra data defined in the custom Order entity
@@ -33,6 +38,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         {
             billPerson = source.BillPerson.CopyToNew();
             shipPerson = source.ShipPerson.CopyToNew();
+            SubTotal = source.SubTotal;
         }
     }
 }

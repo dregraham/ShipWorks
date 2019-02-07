@@ -10,9 +10,9 @@ namespace ShipWorks.SqlServer.Filters.DirtyCounts
     /// </summary>
     public static class FilterNodeColumnMaskUtility
     {
-        readonly static int[] tableBitCount;
-        readonly static int[] tableBitOffset;
-        readonly static int totalBytes;
+        private static readonly int[] tableBitCount;
+        private static readonly int[] tableBitOffset;
+        private static readonly int totalBytes;
 
         /// <summary>
         /// Static constructor
@@ -51,7 +51,7 @@ namespace ShipWorks.SqlServer.Filters.DirtyCounts
             tableBitCount[(int) FilterNodeColumnMaskTable.BuyDotComOrderItem] = 7;
             tableBitCount[(int) FilterNodeColumnMaskTable.SearsOrder] = 6;
             tableBitCount[(int) FilterNodeColumnMaskTable.BigCommerceOrderItem] = 7;
-            tableBitCount[(int) FilterNodeColumnMaskTable.InsurancePolicy] = 10;
+            tableBitCount[(int) FilterNodeColumnMaskTable.InsurancePolicy] = 12;
             tableBitCount[(int) FilterNodeColumnMaskTable.GrouponOrder] = 3;
             tableBitCount[(int) FilterNodeColumnMaskTable.LemonStandOrder] = 2;
             tableBitCount[(int) FilterNodeColumnMaskTable.WalmartOrder] = 6;

@@ -1337,6 +1337,16 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(AmazonStoreFieldIndex.InitialDownloadOrder);}
 		}
+		/// <summary>Creates a new AmazonStoreEntity.InsureShipClientID field instance</summary>
+		public static EntityField2 InsureShipClientID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(AmazonStoreFieldIndex.InsureShipClientID);}
+		}
+		/// <summary>Creates a new AmazonStoreEntity.InsureShipApiKey field instance</summary>
+		public static EntityField2 InsureShipApiKey
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(AmazonStoreFieldIndex.InsureShipApiKey);}
+		}
 		/// <summary>Creates a new AmazonStoreEntity.StoreID field instance</summary>
 		public static EntityField2 StoreID
 		{
@@ -1591,6 +1601,16 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 InitialDownloadOrder
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(AmeriCommerceStoreFieldIndex.InitialDownloadOrder);}
+		}
+		/// <summary>Creates a new AmeriCommerceStoreEntity.InsureShipClientID field instance</summary>
+		public static EntityField2 InsureShipClientID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(AmeriCommerceStoreFieldIndex.InsureShipClientID);}
+		}
+		/// <summary>Creates a new AmeriCommerceStoreEntity.InsureShipApiKey field instance</summary>
+		public static EntityField2 InsureShipApiKey
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(AmeriCommerceStoreFieldIndex.InsureShipApiKey);}
 		}
 		/// <summary>Creates a new AmeriCommerceStoreEntity.StoreID field instance</summary>
 		public static EntityField2 StoreID
@@ -2392,6 +2412,16 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(BigCommerceStoreFieldIndex.InitialDownloadOrder);}
 		}
+		/// <summary>Creates a new BigCommerceStoreEntity.InsureShipClientID field instance</summary>
+		public static EntityField2 InsureShipClientID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(BigCommerceStoreFieldIndex.InsureShipClientID);}
+		}
+		/// <summary>Creates a new BigCommerceStoreEntity.InsureShipApiKey field instance</summary>
+		public static EntityField2 InsureShipApiKey
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(BigCommerceStoreFieldIndex.InsureShipApiKey);}
+		}
 		/// <summary>Creates a new BigCommerceStoreEntity.StoreID field instance</summary>
 		public static EntityField2 StoreID
 		{
@@ -2796,6 +2826,16 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 InitialDownloadOrder
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(BuyDotComStoreFieldIndex.InitialDownloadOrder);}
+		}
+		/// <summary>Creates a new BuyDotComStoreEntity.InsureShipClientID field instance</summary>
+		public static EntityField2 InsureShipClientID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(BuyDotComStoreFieldIndex.InsureShipClientID);}
+		}
+		/// <summary>Creates a new BuyDotComStoreEntity.InsureShipApiKey field instance</summary>
+		public static EntityField2 InsureShipApiKey
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(BuyDotComStoreFieldIndex.InsureShipApiKey);}
 		}
 		/// <summary>Creates a new BuyDotComStoreEntity.StoreID field instance</summary>
 		public static EntityField2 StoreID
@@ -3671,6 +3711,16 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 InitialDownloadOrder
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ChannelAdvisorStoreFieldIndex.InitialDownloadOrder);}
+		}
+		/// <summary>Creates a new ChannelAdvisorStoreEntity.InsureShipClientID field instance</summary>
+		public static EntityField2 InsureShipClientID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ChannelAdvisorStoreFieldIndex.InsureShipClientID);}
+		}
+		/// <summary>Creates a new ChannelAdvisorStoreEntity.InsureShipApiKey field instance</summary>
+		public static EntityField2 InsureShipApiKey
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ChannelAdvisorStoreFieldIndex.InsureShipApiKey);}
 		}
 		/// <summary>Creates a new ChannelAdvisorStoreEntity.StoreID field instance</summary>
 		public static EntityField2 StoreID
@@ -4736,6 +4786,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 AuditEnabled
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ConfigurationFieldIndex.AuditEnabled);}
+		}
+		/// <summary>Creates a new ConfigurationEntity.DefaultPickListTemplateID field instance</summary>
+		public static EntityField2 DefaultPickListTemplateID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ConfigurationFieldIndex.DefaultPickListTemplateID);}
 		}
 	}
 
@@ -6327,6 +6382,16 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(EbayStoreFieldIndex.InitialDownloadOrder);}
 		}
+		/// <summary>Creates a new EbayStoreEntity.InsureShipClientID field instance</summary>
+		public static EntityField2 InsureShipClientID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(EbayStoreFieldIndex.InsureShipClientID);}
+		}
+		/// <summary>Creates a new EbayStoreEntity.InsureShipApiKey field instance</summary>
+		public static EntityField2 InsureShipApiKey
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(EbayStoreFieldIndex.InsureShipApiKey);}
+		}
 		/// <summary>Creates a new EbayStoreEntity.StoreID field instance</summary>
 		public static EntityField2 StoreID
 		{
@@ -7711,6 +7776,16 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 InitialDownloadOrder
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(EtsyStoreFieldIndex.InitialDownloadOrder);}
+		}
+		/// <summary>Creates a new EtsyStoreEntity.InsureShipClientID field instance</summary>
+		public static EntityField2 InsureShipClientID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(EtsyStoreFieldIndex.InsureShipClientID);}
+		}
+		/// <summary>Creates a new EtsyStoreEntity.InsureShipApiKey field instance</summary>
+		public static EntityField2 InsureShipApiKey
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(EtsyStoreFieldIndex.InsureShipApiKey);}
 		}
 		/// <summary>Creates a new EtsyStoreEntity.StoreID field instance</summary>
 		public static EntityField2 StoreID
@@ -9807,6 +9882,16 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(GenericFileStoreFieldIndex.InitialDownloadOrder);}
 		}
+		/// <summary>Creates a new GenericFileStoreEntity.InsureShipClientID field instance</summary>
+		public static EntityField2 InsureShipClientID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(GenericFileStoreFieldIndex.InsureShipClientID);}
+		}
+		/// <summary>Creates a new GenericFileStoreEntity.InsureShipApiKey field instance</summary>
+		public static EntityField2 InsureShipApiKey
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(GenericFileStoreFieldIndex.InsureShipApiKey);}
+		}
 		/// <summary>Creates a new GenericFileStoreEntity.StoreID field instance</summary>
 		public static EntityField2 StoreID
 		{
@@ -10671,6 +10756,16 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 InitialDownloadOrder
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(GenericModuleStoreFieldIndex.InitialDownloadOrder);}
+		}
+		/// <summary>Creates a new GenericModuleStoreEntity.InsureShipClientID field instance</summary>
+		public static EntityField2 InsureShipClientID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(GenericModuleStoreFieldIndex.InsureShipClientID);}
+		}
+		/// <summary>Creates a new GenericModuleStoreEntity.InsureShipApiKey field instance</summary>
+		public static EntityField2 InsureShipApiKey
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(GenericModuleStoreFieldIndex.InsureShipApiKey);}
 		}
 		/// <summary>Creates a new GenericModuleStoreEntity.StoreID field instance</summary>
 		public static EntityField2 StoreID
@@ -11702,6 +11797,16 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(GrouponStoreFieldIndex.InitialDownloadOrder);}
 		}
+		/// <summary>Creates a new GrouponStoreEntity.InsureShipClientID field instance</summary>
+		public static EntityField2 InsureShipClientID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(GrouponStoreFieldIndex.InsureShipClientID);}
+		}
+		/// <summary>Creates a new GrouponStoreEntity.InsureShipApiKey field instance</summary>
+		public static EntityField2 InsureShipApiKey
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(GrouponStoreFieldIndex.InsureShipApiKey);}
+		}
 		/// <summary>Creates a new GrouponStoreEntity.StoreID field instance</summary>
 		public static EntityField2 StoreID
 		{
@@ -12052,6 +12157,16 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(InfopiaStoreFieldIndex.InitialDownloadOrder);}
 		}
+		/// <summary>Creates a new InfopiaStoreEntity.InsureShipClientID field instance</summary>
+		public static EntityField2 InsureShipClientID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(InfopiaStoreFieldIndex.InsureShipClientID);}
+		}
+		/// <summary>Creates a new InfopiaStoreEntity.InsureShipApiKey field instance</summary>
+		public static EntityField2 InsureShipApiKey
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(InfopiaStoreFieldIndex.InsureShipApiKey);}
+		}
 		/// <summary>Creates a new InfopiaStoreEntity.StoreID field instance</summary>
 		public static EntityField2 StoreID
 		{
@@ -12116,6 +12231,16 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 EmailAddress
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(InsurancePolicyFieldIndex.EmailAddress);}
+		}
+		/// <summary>Creates a new InsurancePolicyEntity.InsureShipPolicyID field instance</summary>
+		public static EntityField2 InsureShipPolicyID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(InsurancePolicyFieldIndex.InsureShipPolicyID);}
+		}
+		/// <summary>Creates a new InsurancePolicyEntity.DateOfIssue field instance</summary>
+		public static EntityField2 DateOfIssue
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(InsurancePolicyFieldIndex.DateOfIssue);}
 		}
 	}
 
@@ -13167,6 +13292,16 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(JetStoreFieldIndex.InitialDownloadOrder);}
 		}
+		/// <summary>Creates a new JetStoreEntity.InsureShipClientID field instance</summary>
+		public static EntityField2 InsureShipClientID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(JetStoreFieldIndex.InsureShipClientID);}
+		}
+		/// <summary>Creates a new JetStoreEntity.InsureShipApiKey field instance</summary>
+		public static EntityField2 InsureShipApiKey
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(JetStoreFieldIndex.InsureShipApiKey);}
+		}
 		/// <summary>Creates a new JetStoreEntity.StoreID field instance</summary>
 		public static EntityField2 StoreID
 		{
@@ -14037,6 +14172,16 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(LemonStandStoreFieldIndex.InitialDownloadOrder);}
 		}
+		/// <summary>Creates a new LemonStandStoreEntity.InsureShipClientID field instance</summary>
+		public static EntityField2 InsureShipClientID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(LemonStandStoreFieldIndex.InsureShipClientID);}
+		}
+		/// <summary>Creates a new LemonStandStoreEntity.InsureShipApiKey field instance</summary>
+		public static EntityField2 InsureShipApiKey
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(LemonStandStoreFieldIndex.InsureShipApiKey);}
+		}
 		/// <summary>Creates a new LemonStandStoreEntity.StoreID field instance</summary>
 		public static EntityField2 StoreID
 		{
@@ -14691,6 +14836,16 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 InitialDownloadOrder
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(MagentoStoreFieldIndex.InitialDownloadOrder);}
+		}
+		/// <summary>Creates a new MagentoStoreEntity.InsureShipClientID field instance</summary>
+		public static EntityField2 InsureShipClientID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(MagentoStoreFieldIndex.InsureShipClientID);}
+		}
+		/// <summary>Creates a new MagentoStoreEntity.InsureShipApiKey field instance</summary>
+		public static EntityField2 InsureShipApiKey
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(MagentoStoreFieldIndex.InsureShipApiKey);}
 		}
 		/// <summary>Creates a new MagentoStoreEntity.StoreID field instance</summary>
 		public static EntityField2 StoreID_GenericModuleStore
@@ -15462,6 +15617,16 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(MarketplaceAdvisorStoreFieldIndex.InitialDownloadOrder);}
 		}
+		/// <summary>Creates a new MarketplaceAdvisorStoreEntity.InsureShipClientID field instance</summary>
+		public static EntityField2 InsureShipClientID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(MarketplaceAdvisorStoreFieldIndex.InsureShipClientID);}
+		}
+		/// <summary>Creates a new MarketplaceAdvisorStoreEntity.InsureShipApiKey field instance</summary>
+		public static EntityField2 InsureShipApiKey
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(MarketplaceAdvisorStoreFieldIndex.InsureShipApiKey);}
+		}
 		/// <summary>Creates a new MarketplaceAdvisorStoreEntity.StoreID field instance</summary>
 		public static EntityField2 StoreID
 		{
@@ -15706,6 +15871,16 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 InitialDownloadOrder
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(MivaStoreFieldIndex.InitialDownloadOrder);}
+		}
+		/// <summary>Creates a new MivaStoreEntity.InsureShipClientID field instance</summary>
+		public static EntityField2 InsureShipClientID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(MivaStoreFieldIndex.InsureShipClientID);}
+		}
+		/// <summary>Creates a new MivaStoreEntity.InsureShipApiKey field instance</summary>
+		public static EntityField2 InsureShipApiKey
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(MivaStoreFieldIndex.InsureShipApiKey);}
 		}
 		/// <summary>Creates a new MivaStoreEntity.StoreID field instance</summary>
 		public static EntityField2 StoreID_GenericModuleStore
@@ -16471,6 +16646,16 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 InitialDownloadOrder
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(NetworkSolutionsStoreFieldIndex.InitialDownloadOrder);}
+		}
+		/// <summary>Creates a new NetworkSolutionsStoreEntity.InsureShipClientID field instance</summary>
+		public static EntityField2 InsureShipClientID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(NetworkSolutionsStoreFieldIndex.InsureShipClientID);}
+		}
+		/// <summary>Creates a new NetworkSolutionsStoreEntity.InsureShipApiKey field instance</summary>
+		public static EntityField2 InsureShipApiKey
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(NetworkSolutionsStoreFieldIndex.InsureShipApiKey);}
 		}
 		/// <summary>Creates a new NetworkSolutionsStoreEntity.StoreID field instance</summary>
 		public static EntityField2 StoreID
@@ -17282,6 +17467,16 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(NeweggStoreFieldIndex.InitialDownloadOrder);}
 		}
+		/// <summary>Creates a new NeweggStoreEntity.InsureShipClientID field instance</summary>
+		public static EntityField2 InsureShipClientID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(NeweggStoreFieldIndex.InsureShipClientID);}
+		}
+		/// <summary>Creates a new NeweggStoreEntity.InsureShipApiKey field instance</summary>
+		public static EntityField2 InsureShipApiKey
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(NeweggStoreFieldIndex.InsureShipApiKey);}
+		}
 		/// <summary>Creates a new NeweggStoreEntity.StoreID field instance</summary>
 		public static EntityField2 StoreID
 		{
@@ -17576,6 +17771,16 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 InitialDownloadOrder
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(OdbcStoreFieldIndex.InitialDownloadOrder);}
+		}
+		/// <summary>Creates a new OdbcStoreEntity.InsureShipClientID field instance</summary>
+		public static EntityField2 InsureShipClientID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OdbcStoreFieldIndex.InsureShipClientID);}
+		}
+		/// <summary>Creates a new OdbcStoreEntity.InsureShipApiKey field instance</summary>
+		public static EntityField2 InsureShipApiKey
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OdbcStoreFieldIndex.InsureShipApiKey);}
 		}
 		/// <summary>Creates a new OdbcStoreEntity.StoreID field instance</summary>
 		public static EntityField2 StoreID
@@ -19162,6 +19367,16 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(OrderMotionStoreFieldIndex.InitialDownloadOrder);}
 		}
+		/// <summary>Creates a new OrderMotionStoreEntity.InsureShipClientID field instance</summary>
+		public static EntityField2 InsureShipClientID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OrderMotionStoreFieldIndex.InsureShipClientID);}
+		}
+		/// <summary>Creates a new OrderMotionStoreEntity.InsureShipApiKey field instance</summary>
+		public static EntityField2 InsureShipApiKey
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OrderMotionStoreFieldIndex.InsureShipApiKey);}
+		}
 		/// <summary>Creates a new OrderMotionStoreEntity.StoreID field instance</summary>
 		public static EntityField2 StoreID
 		{
@@ -20087,6 +20302,16 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(OverstockStoreFieldIndex.InitialDownloadOrder);}
 		}
+		/// <summary>Creates a new OverstockStoreEntity.InsureShipClientID field instance</summary>
+		public static EntityField2 InsureShipClientID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OverstockStoreFieldIndex.InsureShipClientID);}
+		}
+		/// <summary>Creates a new OverstockStoreEntity.InsureShipApiKey field instance</summary>
+		public static EntityField2 InsureShipApiKey
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OverstockStoreFieldIndex.InsureShipApiKey);}
+		}
 		/// <summary>Creates a new OverstockStoreEntity.StoreID field instance</summary>
 		public static EntityField2 StoreID
 		{
@@ -20776,6 +21001,16 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 InitialDownloadOrder
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(PayPalStoreFieldIndex.InitialDownloadOrder);}
+		}
+		/// <summary>Creates a new PayPalStoreEntity.InsureShipClientID field instance</summary>
+		public static EntityField2 InsureShipClientID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(PayPalStoreFieldIndex.InsureShipClientID);}
+		}
+		/// <summary>Creates a new PayPalStoreEntity.InsureShipApiKey field instance</summary>
+		public static EntityField2 InsureShipApiKey
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(PayPalStoreFieldIndex.InsureShipApiKey);}
 		}
 		/// <summary>Creates a new PayPalStoreEntity.StoreID field instance</summary>
 		public static EntityField2 StoreID
@@ -22192,6 +22427,16 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ProStoresStoreFieldIndex.InitialDownloadOrder);}
 		}
+		/// <summary>Creates a new ProStoresStoreEntity.InsureShipClientID field instance</summary>
+		public static EntityField2 InsureShipClientID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ProStoresStoreFieldIndex.InsureShipClientID);}
+		}
+		/// <summary>Creates a new ProStoresStoreEntity.InsureShipApiKey field instance</summary>
+		public static EntityField2 InsureShipApiKey
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ProStoresStoreFieldIndex.InsureShipApiKey);}
+		}
 		/// <summary>Creates a new ProStoresStoreEntity.StoreID field instance</summary>
 		public static EntityField2 StoreID
 		{
@@ -23181,6 +23426,16 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 InitialDownloadOrder
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(SearsStoreFieldIndex.InitialDownloadOrder);}
+		}
+		/// <summary>Creates a new SearsStoreEntity.InsureShipClientID field instance</summary>
+		public static EntityField2 InsureShipClientID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(SearsStoreFieldIndex.InsureShipClientID);}
+		}
+		/// <summary>Creates a new SearsStoreEntity.InsureShipApiKey field instance</summary>
+		public static EntityField2 InsureShipApiKey
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(SearsStoreFieldIndex.InsureShipApiKey);}
 		}
 		/// <summary>Creates a new SearsStoreEntity.StoreID field instance</summary>
 		public static EntityField2 StoreID
@@ -25222,6 +25477,16 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ShopifyStoreFieldIndex.InitialDownloadOrder);}
 		}
+		/// <summary>Creates a new ShopifyStoreEntity.InsureShipClientID field instance</summary>
+		public static EntityField2 InsureShipClientID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShopifyStoreFieldIndex.InsureShipClientID);}
+		}
+		/// <summary>Creates a new ShopifyStoreEntity.InsureShipApiKey field instance</summary>
+		public static EntityField2 InsureShipApiKey
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShopifyStoreFieldIndex.InsureShipApiKey);}
+		}
 		/// <summary>Creates a new ShopifyStoreEntity.StoreID field instance</summary>
 		public static EntityField2 StoreID
 		{
@@ -25421,6 +25686,16 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 InitialDownloadOrder
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ShopSiteStoreFieldIndex.InitialDownloadOrder);}
+		}
+		/// <summary>Creates a new ShopSiteStoreEntity.InsureShipClientID field instance</summary>
+		public static EntityField2 InsureShipClientID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShopSiteStoreFieldIndex.InsureShipClientID);}
+		}
+		/// <summary>Creates a new ShopSiteStoreEntity.InsureShipApiKey field instance</summary>
+		public static EntityField2 InsureShipApiKey
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShopSiteStoreFieldIndex.InsureShipApiKey);}
 		}
 		/// <summary>Creates a new ShopSiteStoreEntity.StoreID field instance</summary>
 		public static EntityField2 StoreID
@@ -25682,6 +25957,16 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(SparkPayStoreFieldIndex.InitialDownloadOrder);}
 		}
+		/// <summary>Creates a new SparkPayStoreEntity.InsureShipClientID field instance</summary>
+		public static EntityField2 InsureShipClientID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(SparkPayStoreFieldIndex.InsureShipClientID);}
+		}
+		/// <summary>Creates a new SparkPayStoreEntity.InsureShipApiKey field instance</summary>
+		public static EntityField2 InsureShipApiKey
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(SparkPayStoreFieldIndex.InsureShipApiKey);}
+		}
 		/// <summary>Creates a new SparkPayStoreEntity.StoreID field instance</summary>
 		public static EntityField2 StoreID
 		{
@@ -25896,6 +26181,16 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 InitialDownloadOrder
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(StoreFieldIndex.InitialDownloadOrder);}
+		}
+		/// <summary>Creates a new StoreEntity.InsureShipClientID field instance</summary>
+		public static EntityField2 InsureShipClientID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(StoreFieldIndex.InsureShipClientID);}
+		}
+		/// <summary>Creates a new StoreEntity.InsureShipApiKey field instance</summary>
+		public static EntityField2 InsureShipApiKey
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(StoreFieldIndex.InsureShipApiKey);}
 		}
 	}
 
@@ -26966,6 +27261,16 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 InitialDownloadOrder
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ThreeDCartStoreFieldIndex.InitialDownloadOrder);}
+		}
+		/// <summary>Creates a new ThreeDCartStoreEntity.InsureShipClientID field instance</summary>
+		public static EntityField2 InsureShipClientID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ThreeDCartStoreFieldIndex.InsureShipClientID);}
+		}
+		/// <summary>Creates a new ThreeDCartStoreEntity.InsureShipApiKey field instance</summary>
+		public static EntityField2 InsureShipApiKey
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ThreeDCartStoreFieldIndex.InsureShipApiKey);}
 		}
 		/// <summary>Creates a new ThreeDCartStoreEntity.StoreID field instance</summary>
 		public static EntityField2 StoreID
@@ -28752,6 +29057,16 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(VolusionStoreFieldIndex.InitialDownloadOrder);}
 		}
+		/// <summary>Creates a new VolusionStoreEntity.InsureShipClientID field instance</summary>
+		public static EntityField2 InsureShipClientID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(VolusionStoreFieldIndex.InsureShipClientID);}
+		}
+		/// <summary>Creates a new VolusionStoreEntity.InsureShipApiKey field instance</summary>
+		public static EntityField2 InsureShipApiKey
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(VolusionStoreFieldIndex.InsureShipApiKey);}
+		}
 		/// <summary>Creates a new VolusionStoreEntity.StoreID field instance</summary>
 		public static EntityField2 StoreID
 		{
@@ -29606,6 +29921,16 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 InitialDownloadOrder
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(WalmartStoreFieldIndex.InitialDownloadOrder);}
+		}
+		/// <summary>Creates a new WalmartStoreEntity.InsureShipClientID field instance</summary>
+		public static EntityField2 InsureShipClientID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(WalmartStoreFieldIndex.InsureShipClientID);}
+		}
+		/// <summary>Creates a new WalmartStoreEntity.InsureShipApiKey field instance</summary>
+		public static EntityField2 InsureShipApiKey
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(WalmartStoreFieldIndex.InsureShipApiKey);}
 		}
 		/// <summary>Creates a new WalmartStoreEntity.StoreID field instance</summary>
 		public static EntityField2 StoreID
@@ -31141,6 +31466,16 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 InitialDownloadOrder
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(YahooStoreFieldIndex.InitialDownloadOrder);}
+		}
+		/// <summary>Creates a new YahooStoreEntity.InsureShipClientID field instance</summary>
+		public static EntityField2 InsureShipClientID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(YahooStoreFieldIndex.InsureShipClientID);}
+		}
+		/// <summary>Creates a new YahooStoreEntity.InsureShipApiKey field instance</summary>
+		public static EntityField2 InsureShipApiKey
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(YahooStoreFieldIndex.InsureShipApiKey);}
 		}
 		/// <summary>Creates a new YahooStoreEntity.StoreID field instance</summary>
 		public static EntityField2 StoreID

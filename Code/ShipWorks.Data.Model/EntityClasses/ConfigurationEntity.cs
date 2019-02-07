@@ -330,6 +330,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("ArchivalSettingsXml", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("AuditEnabled", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("DefaultPickListTemplateID", fieldHashtable);
 		}
 		#endregion
 
@@ -556,6 +558,16 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.Boolean)GetValue((int)ConfigurationFieldIndex.AuditEnabled, true); }
 			set	{ SetValue((int)ConfigurationFieldIndex.AuditEnabled, value); }
+		}
+
+		/// <summary> The DefaultPickListTemplateID property of the Entity Configuration<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "Configuration"."DefaultPickListTemplateID"<br/>
+		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual Nullable<System.Int64> DefaultPickListTemplateID
+		{
+			get { return (Nullable<System.Int64>)GetValue((int)ConfigurationFieldIndex.DefaultPickListTemplateID, false); }
+			set	{ SetValue((int)ConfigurationFieldIndex.DefaultPickListTemplateID, value); }
 		}
 	
 		/// <summary> Gets the type of the hierarchy this entity is in. </summary>

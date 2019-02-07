@@ -1,11 +1,20 @@
-﻿using Interapptive.Shared.Business;
+﻿using Autofac.Extras.Moq;
+using Interapptive.Shared.Business;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Tests.Shared;
 using Xunit;
 
 namespace ShipWorks.Data.Modal.Tests
 {
     public class OrderEntityTest
     {
+        private readonly AutoMock mock;
+
+        public OrderEntityTest()
+        {
+            mock = AutoMockExtensions.GetLooseThatReturnsMocks();
+        }
+
         [Fact]
         public void ShipPersonAdapter_HasCorrecPersonNameValues()
         {
@@ -95,6 +104,29 @@ namespace ShipWorks.Data.Modal.Tests
 
             Assert.Equal(expectedOrderNumber, order.OrderNumber);
             Assert.Equal(expectedOrderNumberComplete, order.OrderNumberComplete);
+        }
+
+        [Fact]
+        public void SubTotal_ReturnsSumOfItemTotalPrice()
+        {
+            var testObject = new OrderEntity
+            {
+                OrderItems =
+                {
+                    mock.CreateMock<OrderItemEntity>(x => x.SetupGet(y => y.TotalPrice).Returns(1)).Object,
+                    mock.CreateMock<OrderItemEntity>(x => x.SetupGet(y => y.TotalPrice).Returns(2)).Object
+                }
+            };
+
+            Assert.Equal(3, testObject.SubTotal);
+        }
+
+        [Fact]
+        public void SubTotal_ReturnsZero_WhenOrderHasNoItems()
+        {
+            var testObject = new OrderEntity();
+
+            Assert.Equal(0, testObject.SubTotal);
         }
     }
 }

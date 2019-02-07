@@ -6,6 +6,7 @@ using System.Reactive;
 using System.Threading;
 using System.Threading.Tasks;
 using Interapptive.Shared;
+using Interapptive.Shared.Collections;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.ComponentRegistration.Ordering;
 using Interapptive.Shared.Data;
@@ -32,6 +33,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         private static readonly ILog log = LogManager.GetLogger(typeof(TangoLogShipmentProcessor));
         private static readonly BlockingCollection<(StoreEntity Store, ShipmentEntity Shipment)> shipmentsToLog;
         private static readonly int runInterval = 1 * 60 * 1000;
+        private static readonly object collectionLock = new object();
         private readonly ISqlSession sqlSession;
         private readonly IShippingManager shippingManager;
         private readonly IStoreManager storeManager;
@@ -174,7 +176,24 @@ namespace ShipWorks.ApplicationCore.Licensing
         private static void Add((StoreEntity Store, ShipmentEntity Shipment) shipmentToLog)
         {
             // Add the shipment to the list.  If it fails, we'll process it during recovery.
-            shipmentsToLog.TryAdd(shipmentToLog);
+            lock (collectionLock)
+            {
+                if (shipmentsToLog.None(s => s.Shipment.ShipmentID == shipmentToLog.Shipment.ShipmentID))
+                {
+                    shipmentsToLog.TryAdd(shipmentToLog);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Try to take one of the entries
+        /// </summary>
+        public bool TryTake(out (StoreEntity Store, ShipmentEntity Shipment) shipmentToLog)
+        {
+            lock (collectionLock)
+            {
+                return shipmentsToLog.TryTake(out shipmentToLog);
+            }
         }
 
         /// <summary>
@@ -183,7 +202,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         private void LogShipmentsToTango(DbConnection connection)
         {
             // Process each task synchronously
-            while (shipmentsToLog.TryTake(out (StoreEntity Store, ShipmentEntity Shipment) shipmentToLog))
+            while (TryTake(out (StoreEntity Store, ShipmentEntity Shipment) shipmentToLog))
             {
                 if (cancellationToken.IsCancellationRequested)
                 {

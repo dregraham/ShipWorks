@@ -11,14 +11,14 @@ pipeline {
 		}
 	}
 	parameters {
-        choice(
-            name: 'Environment',
-            choices:"Staging\nProduction",
-            description: "Run against which Stamps environment?")
-    }
+		choice(
+			name: 'Environment',
+			choices:"Staging\nProduction",
+			description: "Run against which Stamps environment?")
+	}
 	options {
-    	disableConcurrentBuilds()
-  	}
+		disableConcurrentBuilds()
+	}
 	stages {
 		stage('Build') {
 			agent {
@@ -46,7 +46,7 @@ pipeline {
 				unstash 'installer'
 			}
 		}
-		stage('Test') {
+		stage('Test Preparation') {
 			environment {
 				BUILT_VERSION = readFile('.build-label').replaceAll("\\.", '_').trim()
 			}
@@ -63,26 +63,76 @@ pipeline {
 				dir('Code/ShipWorks.Ranorex.Tests/SmokeTest') {
 					bat '"C:/Program Files (x86)/Microsoft Visual Studio/2017/BuildTools/MSBuild/15.0/Bin/MSBuild.exe" SmokeTest.sln'
 				}
+				dir('Code/ShipWorks.Ranorex.Tests/ProcessDHL') {
+					bat '"C:/Program Files (x86)/Microsoft Visual Studio/2017/BuildTools/MSBuild/15.0/Bin/MSBuild.exe" ProcessDHL.sln'
+				}
+			}
+		}
+		stage('Smoke Test') {
+			environment {
+				BUILT_VERSION = readFile('.build-label').replaceAll("\\.", '_').trim()
+			}
+			agent {
+				node {
+					label 'ranorex'
+					customWorkspace "${WORKSPACE_RANOREX}"
+				}
+			}
+			steps {
 				dir('Code/ShipWorks.Ranorex.Tests/SmokeTest/SmokeTest/bin/Debug') {
 					bat "copy /Y \"\\\\intfs01\\Development\\Tango\\ChromiumArtifacts\\renderer_63_x64.zip\" renderer_63_x64.zip"
 					bat """
-							SmokeTest.exe ^
-								/runconfig:Complete ^
-								/param:InstallDir=${WORKSPACE_RANOREX}\\Artifacts\\Distribute\\ShipWorksSetup_test.exe ^
-								/param:Environment=${params.Environment} ^
-								/param:SQLServ=localhost\\ranorex ^
-								/reportlevel:Debug ^
-								/zr ^
-								/zrf:"\\\\intfs01\\Development\\Testing\\Automated Smoketest Results\\${env.BRANCH_NAME}\\obfuscated\\${TIMESTAMP}" ^
-								/rf:"\\\\intfs01\\Development\\Testing\\Automated Smoketest Results\\${env.BRANCH_NAME}\\obfuscated\\${TIMESTAMP}" ^
-								/ju
-						"""
+					SmokeTest.exe ^
+					/runconfig:Complete ^
+					/param:InstallDir=${WORKSPACE_RANOREX}\\Artifacts\\Distribute\\ShipWorksSetup_test.exe ^
+					/param:Environment=${params.Environment} ^
+					/param:SQLServ=localhost\\ranorex ^
+					/reportlevel:Debug ^
+					/zr ^
+					/zrf:"\\\\intfs01\\Development\\Testing\\Automated Smoketest Results\\${env.BRANCH_NAME}\\obfuscated\\${TIMESTAMP}" ^
+					/rf:"\\\\intfs01\\Development\\Testing\\Automated Smoketest Results\\${env.BRANCH_NAME}\\obfuscated\\${TIMESTAMP}" ^
+					/ju
+					"""
 				}
 			}
 			post {
 				always {
-					bat "copy /Y \"\\\\intfs01\\Development\\Testing\\Automated Smoketest Results\\${env.BRANCH_NAME}\\obfuscated\\${TIMESTAMP}.rxlog.junit.xml\" ${WORKSPACE_RANOREX.replaceAll('/', '\\\\')}\\results.junit.xml"
-					junit "results.junit.xml"
+					bat "copy /Y \"\\\\intfs01\\Development\\Testing\\Automated Smoketest Results\\${env.BRANCH_NAME}\\obfuscated\\${TIMESTAMP}.rxlog.junit.xml\" ${WORKSPACE_RANOREX.replaceAll('/', '\\\\')}\\smoketest.results.junit.xml"
+					junit "smoketest.results.junit.xml"
+				}
+			}
+		}
+		stage('Process DHL') {
+			environment {
+				BUILT_VERSION = readFile('.build-label').replaceAll("\\.", '_').trim()
+			}
+			agent {
+				node {
+					label 'ranorex'
+					customWorkspace "${WORKSPACE_RANOREX}"
+				}
+			}
+			steps {
+				dir('Code/ShipWorks.Ranorex.Tests/ProcessDHL/ProcessDHL/bin/Debug') {
+					bat "copy /Y \"\\\\intfs01\\Development\\Tango\\ChromiumArtifacts\\renderer_63_x64.zip\" renderer_63_x64.zip"
+					bat """
+					ProcessDHL.exe ^
+					/runconfig:CompleteDHL ^
+					/param:InstallDir=${WORKSPACE_RANOREX}\\Artifacts\\Distribute\\ShipWorksSetup_test.exe ^
+					/param:Environment=${params.Environment} ^
+					/param:SQLServ=localhost\\ranorex ^
+					/reportlevel:Debug ^
+					/zr ^
+					/zrf:"\\\\intfs01\\Development\\Testing\\Automated ProcessDHL Results\\${env.BRANCH_NAME}\\obfuscated\\${TIMESTAMP}" ^
+					/rf:"\\\\intfs01\\Development\\Testing\\Automated ProcessDHL Results\\${env.BRANCH_NAME}\\obfuscated\\${TIMESTAMP}" ^
+					/ju
+					"""
+				}
+			}
+			post {
+				always {
+					bat "copy /Y \"\\\\intfs01\\Development\\Testing\\Automated ProcessDHL Results\\${env.BRANCH_NAME}\\obfuscated\\${TIMESTAMP}.rxlog.junit.xml\" ${WORKSPACE_RANOREX.replaceAll('/', '\\\\')}\\processdhl.results.junit.xml"
+					junit "processdhl.results.junit.xml"
 				}
 			}
 		}

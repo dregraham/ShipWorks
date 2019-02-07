@@ -378,6 +378,7 @@ namespace ShipWorks.Templates.Distribution
                     folder.TemplateTree = tree;
 
                     TemplateEditingService.SaveFolder(folder);
+                    TemplateManager.CheckForChangesNeeded();
                     log.InfoFormat("Created template folder [{0}]", folder.FullName);
 
                     // This is the new parent

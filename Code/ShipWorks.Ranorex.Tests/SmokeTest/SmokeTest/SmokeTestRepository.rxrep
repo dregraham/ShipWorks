@@ -268,7 +268,7 @@ XrLp0EM2aG+RntUiB+ZT6fxfIsRPbYnQgbXhGFYAAAAASUVORK5CYII=
 		id="edb789cd-8c30-4bba-a2fb-39dc997e4082"
 		isrooted="True"
 		name="ShipWorks"
-		refimgid="587d3f51-ebb6-4d15-8027-fa0120a96ad9"
+		refimgid="706c9826-48c2-49b8-b76d-ef3d73f46971"
 		searchtimeout="30000ms"
 		usecache="True">
 			<item
@@ -480,6 +480,25 @@ XrLp0EM2aG+RntUiB+ZT6fxfIsRPbYnQgbXhGFYAAAAASUVORK5CYII=
 			searchtimeout="30000ms">
 				/form[@processname='ShipWorks']/?/?/toolbar[@accessiblerole='ToolBar']/?/?/element[@accessiblename='Batch Grid']
 			</item>
+			<item
+			addcaps="text,uiautomation,uiautomationvalue"
+			capname="text"
+			id="53702649-6ea9-40b0-a23a-ccb4401eaeee"
+			name="TextBox"
+			refimgid="fb7f9f4c-02a1-4747-be2f-70e8223555b7"
+			searchtimeout="30000ms">
+				/form[@processname='ShipWorks']/text
+			</item>
+			<item
+			addcaps="button,uiautomation,uiautomationinvoke"
+			capname="button"
+			id="f7071221-4ed3-4ebd-b204-9361e2b0af39"
+			name="Close"
+			refimgid="eaee5c62-f64f-443e-9a0c-4c7d509941b8"
+			refpath="/form[@name='About ShipWorks']/button[@name='Close']"
+			searchtimeout="30000ms">
+				/form[@processname='ShipWorks']/button[@name='Close']
+			</item>
 			<basepath>
 				/form[@processname='ShipWorks']
 			</basepath>
@@ -688,6 +707,16 @@ MccVydhgafzKwmo3c6RCyF+QF9ssNPjvRAAAAABJRU5ErkJggg==
 					/form[@controlname='MainForm']/container[@controlname='panelDockingArea']
 				</basepath>
 			</folder>
+			<item
+			addcaps="unknown,control,nativewindow"
+			capname="unknown"
+			id="5effb9b3-ac3c-465b-bd05-d169dde9c2aa"
+			name="RibbonTabHelp"
+			refimgid="c578ca97-71d8-4c82-a1e6-107a5245811d"
+			refpath="/form[@controlname='MainForm']/element[@controlname='ribbon']/element[@controlname='ribbonTabHelp']"
+			searchtimeout="30000ms">
+				/form[@controlname='MainForm']/?/?/element[@controlname='ribbonTabHelp']
+			</item>
 			<basepath>
 				/form[@controlname='MainForm']
 			</basepath>
@@ -3976,6 +4005,16 @@ lpKZgpMF6Pw3M/MFayOlqIh43SSsYsIrayXz9q3r5Ra2vFFWLUXbtWRiANXcVpB6SHDZSEK3kcS7
 			searchtimeout="30000ms">
 				/form[@title~'ShipWorks']/?/?/button[@accessiblename='Application']
 			</item>
+			<item
+			addcaps="container,uiautomation"
+			capname="container"
+			id="9d45a334-cd7a-41c1-877a-0a8a77e38446"
+			name="PARTContentHost"
+			refimgid="a992bc38-c352-4d30-8186-4c274e9fb3a0"
+			refpath="/form[@name='About ShipWorks']/text[@classname='TextBox']/container[@automationid='PART_ContentHost']"
+			searchtimeout="30000ms">
+				/form[@title~'ShipWorks']/?/?/container[@automationid='PART_ContentHost']
+			</item>
 			<basepath>
 				/form[@title~'ShipWorks']
 			</basepath>
@@ -5007,6 +5046,36 @@ QVyBLgcznOHMyZ1gBrkY7oKP7x+AMbqCt6/vYIjBMDgMQC5AD3FSMNwF5GKsqYsUjFWQFIxVkBSM
 VZB4/J8BADyZI3kwAy98AAAAAElFTkSuQmCC
 			</icon>
 		</appfolder>
+		<appfolder
+		addcaps="form,nativewindow"
+		capname="form"
+		id="bbd3c228-0a70-4625-a5b5-727c3aaa861e"
+		isrooted="True"
+		name="Explorer1"
+		refpath="/form[@title='' and @processname='explorer' and @class='TaskListThumbnailWnd']"
+		searchtimeout="30000ms"
+		usecache="True">
+			<item
+			addcaps="listitem,accessible"
+			capname="listitem"
+			id="d0fb004b-02bc-491c-9ef7-921e74bc166b"
+			name="ShipWorksBbenterprise3AtfakeCom"
+			refimgid="fc09fc70-8eff-4269-afb0-3c3699b0f0a8"
+			refpath="/form[@title='' and @processname='explorer' and @class='TaskListThumbnailWnd']/list/listitem[@accessiblename~'^ShipWorks\ -\ bbenterprise3']"
+			searchtimeout="30000ms">
+				/form[@processname='explorer' and @class='TaskListThumbnailWnd']/?/?/listitem[@accessiblename~'^ShipWorks\ -\ bbenterprise3']
+			</item>
+			<basepath>
+				/form[@processname='explorer' and @class='TaskListThumbnailWnd']
+			</basepath>
+			<icon>
+				iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACx
+jwv8YQUAAAAJcEhZcwAADsQAAA7EAZUrDhsAAACCSURBVDhPY6AY/L5gf+H3RYf/6PjXBfsN/8/b
+C0CV4QYgxVZbn/1HBnCDgIYTNASuGA3/ueL1/9+Dyv//n0/Gif89m3yBAZsEKXi4GbD1yiZwjODD
+IDXIelAMwKYBG0bWQzsDkMXxyVFuACg1EVKESw6cEpEBsiKoEBzgk6MAMDAAAHhShcghofWfAAAA
+AElFTkSuQmCC
+			</icon>
+		</appfolder>
 		<basepath>
 		</basepath>
 	</rootfolder>
@@ -5015,6 +5084,11 @@ VZB4/J8BADyZI3kwAy98AAAAAElFTkSuQmCC
 		id="bdc85d09-e827-478c-af88-b8e85794bedf"
 		name="TrackingTabIndex">
 			3
+		</var>
+		<var
+		id="631cd7c2-d975-4f55-8de7-b0754cbcbcb4"
+		name="ShipWorksVersion">
+			ShipWorksVersion
 		</var>
 	</variables>
 </repository>

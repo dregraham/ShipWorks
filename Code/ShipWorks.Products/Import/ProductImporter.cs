@@ -144,7 +144,7 @@ namespace ShipWorks.Products.Import
             foreach (ProductToImportDto row in rows.Where(x => !x.Sku.IsNullOrWhiteSpace()))
             {
                 await sqlAdapterFactory
-                    .WithPhysicalTransactionAsync((transaction, sqlAdapter) => ImportProduct(updateProductAction, sqlAdapter, row))
+                    .WithPhysicalTransactionAsync(sqlAdapter => ImportProduct(updateProductAction, sqlAdapter, row))
                     .Do(result.ProductSucceeded, ex =>
                     {
                         string message = ex.Message;
