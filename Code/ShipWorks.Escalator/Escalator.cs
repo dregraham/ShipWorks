@@ -24,46 +24,10 @@ namespace ShipWorks.Escalator
         /// </summary>
         protected override void OnStart(string[] args)
         {
-            ResumeFromDisk();
-
             // Start a communication bridge to listen for messages from ShipWorks
             ShipWorksCommunicationBridge communicationBridge = new ShipWorksCommunicationBridge(ShipWorks.Escalator.ServiceName.GetInstanceID().ToString());
             communicationBridge.OnMessage += OnShipWorksMessage;
-        }
-
-        /// <summary>
-        /// Check to see if we need to resume any operations from disk
-        /// </summary>
-        private void ResumeFromDisk()
-        {
-            string status = GetResumeStatus();
-
-            if (status.Equals("SUCCESS", StringComparison.InvariantCultureIgnoreCase))
-            {
-                ShipWorksLauncher.StartShipWorks();
-            }
-        }
-
-        /// <summary>
-        /// Read the resume status from disk
-        /// </summary>
-        private string GetResumeStatus()
-        {
-            string pathToStatusFile = $"{Path.GetDirectoryName(Assembly.GetEntryAssembly().Location)}\\install.status";
-
-            string status = string.Empty;
-            try
-            {
-                status = File.ReadAllText(pathToStatusFile).Trim();
-                File.Delete(pathToStatusFile);
-            }
-            catch
-            {
-                // reading the file failed
-            }
-
-            return status;
-        }
+        }     
 
         /// <summary>
         /// React to a message from ShipWorks

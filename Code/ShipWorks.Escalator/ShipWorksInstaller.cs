@@ -22,7 +22,7 @@ namespace ShipWorks.Escalator
 
             ProcessStartInfo start = new ProcessStartInfo();
             start.FileName = file.Path;
-            start.Arguments = $"/VERYSILENT /DIR={Path.GetDirectoryName(Assembly.GetEntryAssembly().Location)}";
+            start.Arguments = $"/SILENT /DIR={Path.GetDirectoryName(Assembly.GetEntryAssembly().Location)}";
 
             start.WindowStyle = ProcessWindowStyle.Hidden;
             start.CreateNoWindow = true;

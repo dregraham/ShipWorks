@@ -17,35 +17,41 @@ namespace ShipWorks.Escalator
         /// </summary>
         static void Main(string[] args)
         {
-            if (Environment.UserInteractive)
+            string serviceName = ServiceName.Resolve();
+            string parameter = string.Concat(args);
+
+            // The service is calling itself via the installer, so we may have a parameter and
+            // be not in UserInteractive mode. That is why we do the check at the default branch
+            // of the switch statement.
+            switch (parameter)
             {
-                string serviceName = ServiceName.Resolve();
-                string parameter = string.Concat(args);
+                case "--launchshipworks":
+                    ShipWorksLauncher.StartShipWorks();
+                    break;
 
-                switch (parameter)
-                {
-                    case "--install":
-                        InstallService(serviceName);
-                        break;
+                case "--install":
+                    InstallService(serviceName);
+                    break;
 
-                    case "--uninstall":
-                        UninstallService(serviceName);
-                        break;
+                case "--uninstall":
+                    UninstallService(serviceName);
+                    break;
 
-                    case "--stop":
-                        ServiceController service = ServiceController.GetServices().SingleOrDefault(s => s.ServiceName == serviceName);
-                        StopService(service);
-                        break;
+                case "--stop":
+                    ServiceController service = ServiceController.GetServices().SingleOrDefault(s => s.ServiceName == serviceName);
+                    StopService(service);
+                    break;
 #if DEBUG
                     case "--debugupdate":
                         Escalator.ProcessMessage("6.2.2.2").Wait();
                         break;
 #endif
-                }
-            }
-            else
-            {
-                RunService();
+                default:
+                    if (!Environment.UserInteractive)
+                    {
+                        RunService();
+                    }
+                    break;
             }
         }
 
