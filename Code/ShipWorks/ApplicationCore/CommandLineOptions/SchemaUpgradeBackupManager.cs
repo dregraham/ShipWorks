@@ -19,8 +19,6 @@ namespace ShipWorks.ApplicationCore.CommandLineOptions
         private static readonly ILog log = LogManager.GetLogger(typeof(UpgradeDatabaseSchemaCommandLineOption));
         private const string BackupNameFormat = "{0}_AutomaticUpgradeBackup.bak";
         private readonly string database;
-        private readonly string backupPath;
-        private readonly string backupName;
         private readonly string backupPathAndName;
 
         /// <summary>
@@ -29,10 +27,7 @@ namespace ShipWorks.ApplicationCore.CommandLineOptions
         public SchemaUpgradeBackupManager()
         {
             database = SqlSession.Current.DatabaseName;
-            backupPath = GetBackupPath(); ;
-            backupName = string.Format(BackupNameFormat, database);
-            
-            backupPathAndName = Path.Combine(backupPath, backupName);
+            backupPathAndName = Path.Combine(GetBackupPath(), string.Format(BackupNameFormat, database));
         }
 
         /// <summary>
