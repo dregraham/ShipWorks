@@ -31,8 +31,8 @@ namespace ShipWorks.ApplicationCore.CommandLineOptions
             database = SqlSession.Current.DatabaseName;
             backupPath = GetBackupPath(); ;
             backupName = string.Format(BackupNameFormat, database);
-
-            backupPathAndName = $"{backupPath}\\{backupName}";
+            
+            backupPathAndName = Path.Combine(backupPath, backupName);
         }
 
         /// <summary>
@@ -44,24 +44,20 @@ namespace ShipWorks.ApplicationCore.CommandLineOptions
             telemetricResult.SetValue(backupPathAndName);
             telemetricResult.RunTimedEvent("CreateBackupTimeInMilliseconds", () => CreateBackup(database, backupPathAndName));
 
+            ValidateBackup(telemetricResult, backupPathAndName);
+
             return telemetricResult;
         }
 
         /// <summary>
-        /// Record the file size to telemetry
+        /// ensure the backup got created
         /// </summary>
-        private static void RecordFileSize(TelemetricResult<string> telemetricResult, string fileName)
+        private static void ValidateBackup(TelemetricResult<string> telemetricResult, string fileName)
         {
-            try
-            {
-                // This can fail for multiple reasons like the file is missing or we dont have permissions
-                // ignore any failure
-                double backupSize = new FileInfo(fileName).Length / 1024f / 1024f;
-                telemetricResult.AddEntry("BackupSizeInMegabytes", Convert.ToInt64(backupSize));
-            }
-            catch (Exception)
-            {
-            }
+            // This can fail for multiple reasons like the file is missing or we dont have permissions
+            // 
+            double backupSize = new FileInfo(fileName).Length / 1024f / 1024f;
+            telemetricResult.AddEntry("BackupSizeInMegabytes", Convert.ToInt64(backupSize));
         }
 
         /// <summary>
