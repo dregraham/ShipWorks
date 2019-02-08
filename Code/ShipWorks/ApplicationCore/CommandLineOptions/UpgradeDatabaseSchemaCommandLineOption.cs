@@ -38,7 +38,7 @@ namespace ShipWorks.ApplicationCore.CommandLineOptions
                 TelemetricResult<Unit> databaseUpdateResult = new TelemetricResult<Unit>("Database.Update");
                 TelemetricResult<string> backupResult = null;
 
-                SchemaUpgradeBackupManager backupManager = new SchemaUpgradeBackupManager();
+                DatabaseUpgradeBackupManager backupManager = new DatabaseUpgradeBackupManager();
                 try
                 {
                     // If an upgrade is required create a backup first
@@ -70,7 +70,7 @@ namespace ShipWorks.ApplicationCore.CommandLineOptions
         /// <summary>
         /// Try to upgrade the database, restore if it fails
         /// </summary>
-        private TelemetricResult<Unit> TryDatabaseUpgrade(SchemaUpgradeBackupManager backupManager, TelemetricResult<Unit> databaseUpdateResult)
+        private TelemetricResult<Unit> TryDatabaseUpgrade(DatabaseUpgradeBackupManager backupManager, TelemetricResult<Unit> databaseUpdateResult)
         {
             
             try

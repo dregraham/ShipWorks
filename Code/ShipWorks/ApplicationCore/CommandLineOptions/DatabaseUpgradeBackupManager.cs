@@ -14,7 +14,7 @@ namespace ShipWorks.ApplicationCore.CommandLineOptions
     /// <summary>
     /// Manages backups for the SchemaUpgrade
     /// </summary>
-    public class SchemaUpgradeBackupManager
+    public class DatabaseUpgradeBackupManager
     {
         private static readonly ILog log = LogManager.GetLogger(typeof(UpgradeDatabaseSchemaCommandLineOption));
         private const string BackupNameFormat = "{0}_AutomaticUpgradeBackup.bak";
@@ -24,7 +24,7 @@ namespace ShipWorks.ApplicationCore.CommandLineOptions
         /// <summary>
         /// constructor
         /// </summary>
-        public SchemaUpgradeBackupManager()
+        public DatabaseUpgradeBackupManager()
         {
             database = SqlSession.Current.DatabaseName;
             backupPathAndName = Path.Combine(GetBackupPath(), string.Format(BackupNameFormat, database));
@@ -49,29 +49,24 @@ namespace ShipWorks.ApplicationCore.CommandLineOptions
         /// </summary>
         private static void ValidateBackup(TelemetricResult<string> telemetricResult, string fileName)
         {
-            // This can fail for multiple reasons like the file is missing or we dont have permissions
-            // 
-            double backupSize = new FileInfo(fileName).Length / 1024f / 1024f;
-            telemetricResult.AddEntry("BackupSizeInMegabytes", Convert.ToInt64(backupSize));
+            //RESTORE VERIFYONLY FROM DISK = C:\AdventureWorks.BAK
+            throw new NotImplementedException();
         }
 
         /// <summary>
         /// Creates the Restore DbCommand
         /// </summary>
-        private DbCommand CreateRestoreCommand(DbConnection con)
+        private void ConfigureRestoreCommand(DbCommand command)
         {
-            DbCommand cmdRestore = DbCommandProvider.Create(con);
-            cmdRestore.CommandText =
-                "RESTORE DATABASE @Database  " +
-                " FROM DISK = @FilePath      " +
-                " WITH STATS = 3, RECOVERY, REPLACE";
+            command.CommandTimeout = (int) TimeSpan.FromHours(2).TotalSeconds;
+            command.CommandText = 
+                $"ALTER DATABASE [{database}] SET SINGLE_USER WITH ROLLBACK IMMEDIATE " +
+                $"RESTORE DATABASE [{database}] " +
+                "FROM DISK = @FilePath      " +
+                "WITH STATS = 3, RECOVERY, REPLACE " +
+                $"ALTER DATABASE [{database}] SET MULTI_USER ";
 
-            cmdRestore.AddParameterWithValue("@FilePath", backupPathAndName);
-            cmdRestore.AddParameterWithValue("@Database", database);
-
-            cmdRestore.CommandTimeout = 1800;
-
-            return cmdRestore;
+            command.AddParameterWithValue("@FilePath", backupPathAndName);
         }
 
         /// <summary>
@@ -81,12 +76,6 @@ namespace ShipWorks.ApplicationCore.CommandLineOptions
         {
             using (DbConnection con = SqlSession.Current.OpenConnection())
             {
-                // Disconnect all other users
-                SqlUtility.SetSingleUser(con);
-
-                // Get out of the database we are restoring to
-                con.ChangeDatabase("master");
-
                 try
                 {
                     Regex percentRegex = new Regex(@"(\d+) percent processed.");
@@ -107,9 +96,20 @@ namespace ShipWorks.ApplicationCore.CommandLineOptions
 
                     log.Info("Initiating restore");
 
-                    // The InfoMessage events only come back in real-time when using ExecuteScalar - NOT ExecuteNonQuery
-                    DbCommandProvider.ExecuteScalar(CreateRestoreCommand(con));
-                    return Result.FromSuccess();
+                    // Disconnect all other users
+                    SqlUtility.SetSingleUser(con);
+
+                    // Get out of the database we are restoring to
+                    con.ChangeDatabase("master");
+
+                    using (DbCommand command = con.CreateCommand())
+                    {
+                        ConfigureRestoreCommand(command);
+
+                        // The InfoMessage events only come back in real-time when using ExecuteScalar - NOT ExecuteNonQuery
+                        DbCommandProvider.ExecuteScalar(command);
+                        return Result.FromSuccess();
+                    }
                 }
                 finally
                 {
@@ -157,10 +157,11 @@ namespace ShipWorks.ApplicationCore.CommandLineOptions
             
             using (DbConnection con = SqlSession.Current.OpenConnection())
             {
-                DbCommand cmd = DbCommandProvider.Create(con);
-                cmd.CommandTimeout = (int) TimeSpan.FromHours(2).TotalSeconds;
+                using (DbCommand cmd = con.CreateCommand())
+                {
+                    cmd.CommandTimeout = (int) TimeSpan.FromHours(2).TotalSeconds;
 
-                cmd.CommandText = $@"
+                    cmd.CommandText = $@"
                     DECLARE @EditionTypeId sql_variant
 
                     set @EditionTypeId = serverproperty('EditionID')
@@ -191,27 +192,28 @@ namespace ShipWorks.ApplicationCore.CommandLineOptions
 		                    WITH INIT, NOUNLOAD, SKIP, STATS = 2, FORMAT
 	                    END";
 
-                cmd.AddParameterWithValue("@Database", database);
-                cmd.AddParameterWithValue("@FilePath", backupFile);
+                    cmd.AddParameterWithValue("@Database", database);
+                    cmd.AddParameterWithValue("@FilePath", backupFile);
 
-                Regex percentRegex = new Regex(@"(\d+) percent processed.");
+                    Regex percentRegex = new Regex(@"(\d+) percent processed.");
 
-                // InfoMessage will provide progress updates
-                SqlConnection sqlConn = con.AsSqlConnection();
-                if (sqlConn != null)
-                {
-                    sqlConn.InfoMessage += delegate (object sender, SqlInfoMessageEventArgs e)
+                    // InfoMessage will provide progress updates
+                    SqlConnection sqlConn = con.AsSqlConnection();
+                    if (sqlConn != null)
                     {
-                        Match match = percentRegex.Match(e.Message);
-                        if (match.Success)
+                        sqlConn.InfoMessage += delegate (object sender, SqlInfoMessageEventArgs e)
                         {
-                            log.InfoFormat("{0}% complete", Convert.ToInt32(match.Groups[1].Value));
-                        }
-                    };
-                }
+                            Match match = percentRegex.Match(e.Message);
+                            if (match.Success)
+                            {
+                                log.InfoFormat("{0}% complete", Convert.ToInt32(match.Groups[1].Value));
+                            }
+                        };
+                    }
 
-                // The InfoMessage events only come back in real-time when using ExecuteScalar - NOT ExecuteNonQuery
-                DbCommandProvider.ExecuteScalar(cmd);
+                    // The InfoMessage events only come back in real-time when using ExecuteScalar - NOT ExecuteNonQuery
+                    DbCommandProvider.ExecuteScalar(cmd);
+                }
             }
         }
     }
