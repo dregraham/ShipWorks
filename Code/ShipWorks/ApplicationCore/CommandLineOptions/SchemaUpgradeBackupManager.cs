@@ -1,37 +1,45 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data.Common;
 using System.Data.SqlClient;
 using System.IO;
-using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using Common.Logging;
 using Interapptive.Shared.Data;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data;
-using ShipWorks.Data.Administration;
 using ShipWorks.Data.Connection;
 
 namespace ShipWorks.ApplicationCore.CommandLineOptions
 {
+    /// <summary>
+    /// Manages backups for the SchemaUpgrade
+    /// </summary>
     public class SchemaUpgradeBackupManager
     {
         private static readonly ILog log = LogManager.GetLogger(typeof(UpgradeDatabaseSchemaCommandLineOption));
         private const string BackupNameFormat = "{0}_AutomaticUpgradeBackup.bak";
+        private readonly string database;
+        private readonly string backupPath;
+        private readonly string backupName;
+        private readonly string backupPathAndName;
+
+        /// <summary>
+        /// constructor
+        /// </summary>
+        public SchemaUpgradeBackupManager()
+        {
+            database = SqlSession.Current.DatabaseName;
+            backupPath = GetBackupPath(); ;
+            backupName = string.Format(BackupNameFormat, database);
+
+            backupPathAndName = $"{backupPath}\\{backupName}";
+        }
 
         /// <summary>
         /// Create the backup
         /// </summary>
         public TelemetricResult<string> CreateBackup()
         {
-            string database = SqlSession.Current.DatabaseName;
-            string path = GetBackupPath(); ;
-            string backupName = string.Format(BackupNameFormat, database);
-
-            string backupPathAndName = $"{path}\\{backupName}";
-
             TelemetricResult<string> telemetricResult = new TelemetricResult<string>("Database.Backup");
             telemetricResult.SetValue(backupPathAndName);
             telemetricResult.RunTimedEvent("CreateBackupTimeInMilliseconds", () => CreateBackup(database, backupPathAndName));
@@ -57,11 +65,79 @@ namespace ShipWorks.ApplicationCore.CommandLineOptions
         }
 
         /// <summary>
+        /// Creates the Restore DbCommand
+        /// </summary>
+        private DbCommand CreateRestoreCommand(DbConnection con)
+        {
+            DbCommand cmdRestore = DbCommandProvider.Create(con);
+            cmdRestore.CommandText =
+                "RESTORE DATABASE @Database  " +
+                " FROM DISK = @FilePath      " +
+                " WITH STATS = 3, RECOVERY, REPLACE";
+
+            cmdRestore.AddParameterWithValue("@FilePath", backupPathAndName);
+            cmdRestore.AddParameterWithValue("@Database", database);
+
+            cmdRestore.CommandTimeout = 1800;
+
+            return cmdRestore;
+        }
+
+        /// <summary>
         /// Restore the backup
         /// </summary>
         public Result RestoreBackup()
         {
-            return Result.FromSuccess();
+            using (DbConnection con = SqlSession.Current.OpenConnection())
+            {
+                // Disconnect all other users
+                SqlUtility.SetSingleUser(con);
+
+                // Get out of the database we are restoring to
+                con.ChangeDatabase("master");
+
+                try
+                {
+                    Regex percentRegex = new Regex(@"(\d+) percent processed.");
+
+                    // InfoMessage will provide progress updates
+                    SqlConnection sqlConn = con.AsSqlConnection();
+                    if (sqlConn != null)
+                    {
+                        sqlConn.InfoMessage += delegate (object sender, SqlInfoMessageEventArgs e)
+                        {
+                            Match match = percentRegex.Match(e.Message);
+                            if (match.Success)
+                            {
+                                log.InfoFormat("{0}% complete", Convert.ToInt32(match.Groups[1].Value));
+                            }
+                        };
+                    }
+
+                    log.Info("Initiating restore");
+
+                    // The InfoMessage events only come back in real-time when using ExecuteScalar - NOT ExecuteNonQuery
+                    DbCommandProvider.ExecuteScalar(CreateRestoreCommand(con));
+                    return Result.FromSuccess();
+                }
+                finally
+                {
+                    try
+                    {
+                        SqlUtility.ConfigureSql2017ForClr(con, database, SqlUtility.GetUsername(con));
+                        con.ChangeDatabase(database);
+
+                        // Allow multiple connections again
+                        SqlUtility.SetMultiUser(con);
+                    }
+                    catch (SqlException ex)
+                    {
+                        log.Error("Failed to set database back to multi-user mode.", ex);
+                    }
+
+                    SqlConnection.ClearAllPools();
+                }
+            }
         }
 
         /// <summary>

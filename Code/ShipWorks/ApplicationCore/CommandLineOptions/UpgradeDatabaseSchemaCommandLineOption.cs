@@ -31,59 +31,81 @@ namespace ShipWorks.ApplicationCore.CommandLineOptions
         /// </summary>
         public Task Execute(List<string> args)
         {
-            SchemaUpgradeBackupManager backupManager = new SchemaUpgradeBackupManager();
-
-            TelemetricResult<Unit> databaseUpdateResult = new TelemetricResult<Unit>("Database.Update");
-            databaseUpdateResult.AddProperty("Mode", "CommandLine");
-
-            TelemetricResult<string> backupResult = null;
-
-            try
+            // before doing anything make sure we can connect to the database and an upgrade is required
+            SqlSession.Initialize();
+            if (SqlSchemaUpdater.IsUpgradeRequired())
             {
-                SqlSession.Initialize();
+                TelemetricResult<Unit> databaseUpdateResult = new TelemetricResult<Unit>("Database.Update");
+                TelemetricResult<string> backupResult = null;
 
-                DatabaseUpgradeTelemetry.RecordDatabaseTelemetry(databaseUpdateResult);
-
-                // If an upgrade is required create a backup first
-                if (SqlSchemaUpdater.IsUpgradeRequired())
+                SchemaUpgradeBackupManager backupManager = new SchemaUpgradeBackupManager();
+                try
                 {
+                    // If an upgrade is required create a backup first
                     backupResult = backupManager.CreateBackup();
+                    TryDatabaseUpgrade(backupManager, databaseUpdateResult);
 
-                    databaseUpdateResult.RunTimedEvent(TelemetricEventType.SchemaUpdate,
-                        () => SqlSchemaUpdater.UpdateDatabase(new ProgressProvider(), databaseUpdateResult));
-                    
+                }
+                catch (Exception ex)
+                {
+                    DatabaseUpgradeTelemetry.ExtractErrorDataForTelemetry(databaseUpdateResult, ex);
+                    log.Error("Failed to upgrade database schema", ex);
 
-                    // If it fails call 
-                    // backupManager.RestoreBackup();
+                    if (ex is SqlException sqlEx)
+                    {
+                        Environment.ExitCode = sqlEx.Number;
+                    }
+
+                    Environment.ExitCode = -1;
+                }
+                finally
+                {
+                    SubmitTelemetryTelemetry(databaseUpdateResult, backupResult);
                 }
             }
-            catch (Exception ex)
-            {
-                DatabaseUpgradeTelemetry.ExtractErrorDataForTelemetry(databaseUpdateResult, ex);
-                log.Error("Failed to upgrade database schema", ex);
-
-                if (ex is SqlException sqlEx)
-                {
-                    Environment.ExitCode = sqlEx.Number;
-                }
-
-                Environment.ExitCode = -1;
-            }
-            finally
-            {
-                using (ITrackedEvent telementryEvent = new TrackedEvent("Database.Update"))
-                {
-                    databaseUpdateResult.WriteTo(telementryEvent);
-                    backupResult?.WriteTo(telementryEvent);
-                }
-
-				// force all the telemetry data from above to flushed
-				Telemetry.Flush();
-				// Give it time to finish flushing
-				Thread.Sleep(5000);
-			}
 
             return Task.CompletedTask;
+        }
+
+        /// <summary>
+        /// Try to upgrade the database, restore if it fails
+        /// </summary>
+        private TelemetricResult<Unit> TryDatabaseUpgrade(SchemaUpgradeBackupManager backupManager, TelemetricResult<Unit> databaseUpdateResult)
+        {
+            
+            try
+            {
+                databaseUpdateResult.RunTimedEvent(TelemetricEventType.SchemaUpdate,
+                    () => SqlSchemaUpdater.UpdateDatabase(new ProgressProvider(), databaseUpdateResult));
+            }
+            catch (Exception)
+            {
+                // Upgrading the schema failed, restore
+                databaseUpdateResult.RunTimedEvent("RestoreBackupTimeInMilliseconds", () => backupManager.RestoreBackup());
+                throw;
+            }
+
+            return databaseUpdateResult;
+        }
+
+        /// <summary>
+        /// Submits telemetry for the operation
+        /// </summary>
+        private void SubmitTelemetryTelemetry(TelemetricResult<Unit> databaseUpdateResult, TelemetricResult<string> backupResult)
+        {
+            DatabaseUpgradeTelemetry.RecordDatabaseTelemetry(databaseUpdateResult);
+
+            using (ITrackedEvent telementryEvent = new TrackedEvent("Database.Update"))
+            {
+                telementryEvent.AddProperty("Mode", "CommandLine");
+                databaseUpdateResult.WriteTo(telementryEvent);
+                backupResult?.WriteTo(telementryEvent);
+            }
+
+            // force all the telemetry data from above to flushed
+            Telemetry.Flush();
+            // Give it time to finish flushing
+            Thread.Sleep(5000);
         }
     }
 }
