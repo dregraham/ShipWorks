@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Interapptive.Shared.ComponentRegistration;
-using ShipWorks.ApplicationCore.Options;
+using ShipWorks.ApplicationCore.Settings;
 using ShipWorks.Filters.Content;
 using ShipWorks.Filters.Content.Conditions.QuickSearch;
 using ShipWorks.Stores;

@@ -332,6 +332,10 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("AuditEnabled", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("DefaultPickListTemplateID", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("AutoUpdateDayOfWeek", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("AutoUpdateHourOfDay", fieldHashtable);
 		}
 		#endregion
 
@@ -568,6 +572,26 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (Nullable<System.Int64>)GetValue((int)ConfigurationFieldIndex.DefaultPickListTemplateID, false); }
 			set	{ SetValue((int)ConfigurationFieldIndex.DefaultPickListTemplateID, value); }
+		}
+
+		/// <summary> The AutoUpdateDayOfWeek property of the Entity Configuration<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "Configuration"."AutoUpdateDayOfWeek"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.DayOfWeek AutoUpdateDayOfWeek
+		{
+			get { return (System.DayOfWeek)GetValue((int)ConfigurationFieldIndex.AutoUpdateDayOfWeek, true); }
+			set	{ SetValue((int)ConfigurationFieldIndex.AutoUpdateDayOfWeek, value); }
+		}
+
+		/// <summary> The AutoUpdateHourOfDay property of the Entity Configuration<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "Configuration"."AutoUpdateHourOfDay"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.Int32 AutoUpdateHourOfDay
+		{
+			get { return (System.Int32)GetValue((int)ConfigurationFieldIndex.AutoUpdateHourOfDay, true); }
+			set	{ SetValue((int)ConfigurationFieldIndex.AutoUpdateHourOfDay, value); }
 		}
 	
 		/// <summary> Gets the type of the hierarchy this entity is in. </summary>

@@ -1,6 +1,6 @@
 ﻿using System;
 using Interapptive.Shared.UI;
-using ShipWorks.ApplicationCore.Options;
+using ShipWorks.ApplicationCore.Settings;
 using ShipWorks.Settings;
 
 namespace ShipWorks.Users

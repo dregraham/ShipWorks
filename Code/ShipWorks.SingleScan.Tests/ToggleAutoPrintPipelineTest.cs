@@ -5,7 +5,7 @@ using Interapptive.Shared.Threading;
 using Interapptive.Shared.UI;
 using Microsoft.Reactive.Testing;
 using Moq;
-using ShipWorks.ApplicationCore.Options;
+using ShipWorks.ApplicationCore.Settings;
 using ShipWorks.Common.IO.KeyboardShortcuts;
 using ShipWorks.Common.IO.KeyboardShortcuts.Messages;
 using ShipWorks.Core.Messaging;

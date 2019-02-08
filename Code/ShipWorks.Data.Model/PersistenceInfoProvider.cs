@@ -792,7 +792,7 @@ namespace ShipWorks.Data.Model
 		/// <summary>Inits ConfigurationEntity's mappings</summary>
 		private void InitConfigurationEntityMappings()
 		{
-			this.AddElementMapping("ConfigurationEntity", @"ShipWorksLocal", @"dbo", "Configuration", 18, 0);
+			this.AddElementMapping("ConfigurationEntity", @"ShipWorksLocal", @"dbo", "Configuration", 20, 0);
 			this.AddElementFieldMapping("ConfigurationEntity", "ConfigurationID", "ConfigurationID", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 0);
 			this.AddElementFieldMapping("ConfigurationEntity", "RowVersion", "RowVersion", false, "Timestamp", 2147483647, 0, 0, false, "", null, typeof(System.Byte[]), 1);
 			this.AddElementFieldMapping("ConfigurationEntity", "LogOnMethod", "LogOnMethod", false, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 2);
@@ -811,6 +811,8 @@ namespace ShipWorks.Data.Model
 			this.AddElementFieldMapping("ConfigurationEntity", "ArchivalSettingsXml", "ArchivalSettingsXml", false, "Xml", 2147483647, 0, 0, false, "", null, typeof(System.String), 15);
 			this.AddElementFieldMapping("ConfigurationEntity", "AuditEnabled", "AuditEnabled", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 16);
 			this.AddElementFieldMapping("ConfigurationEntity", "DefaultPickListTemplateID", "DefaultPickListTemplateID", true, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 17);
+			this.AddElementFieldMapping("ConfigurationEntity", "AutoUpdateDayOfWeek", "AutoUpdateDayOfWeek", false, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 18);
+			this.AddElementFieldMapping("ConfigurationEntity", "AutoUpdateHourOfDay", "AutoUpdateHourOfDay", false, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 19);
 		}
 
 		/// <summary>Inits CustomerEntity's mappings</summary>
@@ -2786,7 +2788,7 @@ namespace ShipWorks.Data.Model
 			this.AddElementMapping("ProductListItemEntity", @"ShipWorksLocal", @"dbo", "ProductListView", 10, 4);
 			this.AddElementFieldMapping("ProductListItemEntity", "ProductVariantID", "ProductVariantID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 0);
 			this.AddElementFieldMapping("ProductListItemEntity", "SKU", "SKU", false, "NVarChar", 300, 0, 0, false, "", null, typeof(System.String), 1);
-			this.AddElementFieldMapping("ProductListItemEntity", "Name", "Name", false, "NVarChar", 300, 0, 0, false, "", null, typeof(System.String), 2);
+			this.AddElementFieldMapping("ProductListItemEntity", "Name", "Name", true, "NVarChar", 300, 0, 0, false, "", null, typeof(System.String), 2);
 			this.AddElementFieldMapping("ProductListItemEntity", "Length", "Length", true, "Decimal", 0, 10, 2, false, "", null, typeof(System.Decimal), 3);
 			this.AddElementFieldMapping("ProductListItemEntity", "Width", "Width", true, "Decimal", 0, 10, 2, false, "", null, typeof(System.Decimal), 4);
 			this.AddElementFieldMapping("ProductListItemEntity", "Height", "Height", true, "Decimal", 0, 10, 2, false, "", null, typeof(System.Decimal), 5);

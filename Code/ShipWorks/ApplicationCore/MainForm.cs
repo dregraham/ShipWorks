@@ -47,7 +47,7 @@ using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.ApplicationCore.Licensing.LicenseEnforcement;
 using ShipWorks.ApplicationCore.MessageBoxes;
 using ShipWorks.ApplicationCore.Nudges;
-using ShipWorks.ApplicationCore.Options;
+using ShipWorks.ApplicationCore.Settings;
 using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Common.Threading;
 using ShipWorks.Core.Common.Threading;
@@ -2509,16 +2509,16 @@ namespace ShipWorks
         }
 
         /// <summary>
-        /// Show the ShipWorks options window
+        /// Show the ShipWorks settings window
         /// </summary>
-        private void OnShowOptions(object sender, EventArgs e)
+        private void OnShowSettings(object sender, EventArgs e)
         {
-            // Create the data structure to send to options
-            ShipWorksOptionsData data = new ShipWorksOptionsData(ribbon.ToolBarPosition == QuickAccessPosition.Below, ribbon.Minimized);
+            // Create the data structure to send to settings
+            ShipWorksSettingsData data = new ShipWorksSettingsData(ribbon.ToolBarPosition == QuickAccessPosition.Below, ribbon.Minimized);
 
             using (ILifetimeScope scope = IoC.BeginLifetimeScope())
             {
-                using (ShipWorksOptions dlg = new ShipWorksOptions(data, scope))
+                using (ShipWorksSettings dlg = new ShipWorksSettings(data, scope))
                 {
                     if (dlg.ShowDialog(this) == DialogResult.OK)
                     {

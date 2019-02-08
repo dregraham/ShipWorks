@@ -3,7 +3,7 @@ using Interapptive.Shared.Threading;
 using Microsoft.Reactive.Testing;
 using Moq;
 using ShipWorks.ApplicationCore;
-using ShipWorks.ApplicationCore.Options;
+using ShipWorks.ApplicationCore.Settings;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Messaging.Messages.SingleScan;
 using ShipWorks.Stores.Communication;
