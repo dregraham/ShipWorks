@@ -322,7 +322,7 @@ begin
 		Exec(ExpandConstant(ExpandConstant('{app}') + '\ShipWorks.Escalator.exe'), '--launchshipworks', '', SW_HIDE, ewWaitUntilTerminated, serviceWasStarted)
     end;   
 
-	Exec(ExpandConstant(ExpandConstant('{app}') + '\ShipWorks.Escalator.exe'), '--install', '', SW_HIDE, ewWaitUntilTerminated, serviceWasStarted)
+	Exec(ExpandConstant(WizardDirValue + '\ShipWorks.Escalator.exe'), '--install', '', SW_HIDE, ewWaitUntilTerminated, serviceWasStarted)
 end;
 
 //----------------------------------------------------------------
