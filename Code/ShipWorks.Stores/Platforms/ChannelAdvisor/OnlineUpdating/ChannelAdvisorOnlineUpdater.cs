@@ -546,8 +546,10 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor.OnlineUpdating
                 case "USPS":
                 case "STAMPS_DOT_COM":
                     return "USPS";
+                case "ONTRAC":
+                    return "OnTrac";
                 default:
-                    return "None";
+                    return shipment.Amazon.CarrierName;
             }
         }
 
@@ -579,7 +581,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor.OnlineUpdating
             // If it wasn't, default to NONE
             if (string.IsNullOrWhiteSpace(shippingServiceName))
             {
-                shippingServiceName = "NONE";
+                shippingServiceName = shipment.Amazon.ShippingServiceName.ReplaceInsensitive($"{shipment.Amazon.CarrierName} ", "");
             }
 
             return shippingServiceName;
@@ -654,7 +656,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor.OnlineUpdating
         /// <returns></returns>
         private static string GetAmazonShipmentClassCodeFedEx(string amazonShippingServiceName)
         {
-            switch (amazonShippingServiceName)
+            switch (amazonShippingServiceName.Replace(" One Rate",""))
             {
                 case "FedEx Priority Overnight®":
                     return "PRIORITY";

@@ -335,7 +335,8 @@ namespace ShipWorks.Tests.Stores.Platforms.ChannelAdvisor
         [InlineData("UPS", "UPS Next Day Air Saver", "NDAS")]
         [InlineData("UPS", "UPS 2nd Day Air", "2DAY")]
         [InlineData("UPS", "UPS 3 Day Select", "3DS")]
-        [InlineData("asdfasdfasdf", "asdfasdfasdf", "NONE")]
+        [InlineData("unknowncarrier", "unknownservice", "unknownservice")]
+        [InlineData("unknowncarrier", "UnknownCarrier unknownservice", "unknownservice")]
         public void GetShipmentClassCode_ReturnsCorrectValue_WhenAmazonShipment(string carrierName, string shippingServiceName, string expectedValue)
         {
             amazonShipmentEntity.CarrierName = carrierName;
@@ -357,7 +358,7 @@ namespace ShipWorks.Tests.Stores.Platforms.ChannelAdvisor
         [InlineData("Usps", "USPS")]
         [InlineData("Stamps_Dot_Com", "USPS")]
         [InlineData("STAMPS_DOT_COM", "USPS")]
-        [InlineData("asdfasdfasdf", "None")]
+        [InlineData("asdfasdfasdf", "asdfasdfasdf")]
         public void GetCarrierCode_ReturnsCorrectValue_WhenAmazonShipment(string carrierName, string expectedValue)
         {
             amazonShipmentEntity.CarrierName = carrierName;

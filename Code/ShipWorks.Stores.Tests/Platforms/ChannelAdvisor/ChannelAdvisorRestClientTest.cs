@@ -51,7 +51,7 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
             mock.Provide(logFactory.Object);
 
             responseReader = mock.CreateMock<IHttpResponseReader>();
-            variableRequestSubmitter.Setup(s => s.GetResponse()).Returns(responseReader);
+            variableRequestSubmitter.Setup(s => s.GetResponse()).Returns(responseReader.Object);
 
             responseReader.Setup(r => r.ReadResult()).Returns(getTokenResult);
         }
@@ -303,7 +303,7 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
         }
 
         [Fact]
-        public void UploadShipmentDetails_SetsSubmitterToAllowNoContentCode()
+        public void UploadShipmentDetails_SetsSubmitterToAllowNoContentAndBadRequestCodes()
         {
             ChannelAdvisorShipment shipment = new ChannelAdvisorShipment();
 
@@ -312,7 +312,7 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
             testObject.UploadShipmentDetails(shipment, "refresh", "1");
 
             // No content is the expected response from ChannelAdvisor
-            postRequestSubmitter.Verify(s=>s.AllowHttpStatusCodes(HttpStatusCode.NoContent));
+            postRequestSubmitter.Verify(s => s.AllowHttpStatusCodes(HttpStatusCode.NoContent, HttpStatusCode.BadRequest));
         }
 
         [Fact]
@@ -332,6 +332,26 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
             Assert.Throws<ChannelAdvisorException>(() => testObject.UploadShipmentDetails(shipment, "refresh", "1"));
 
             variableRequestSubmitter.Verify(s => s.Variables.Add("grant_type", "refresh_token"), Times.Exactly(2));
+        }
+
+        [Fact]
+        public void UploadShipmentDetails_ReturnsErrorMessage()
+        {
+            ChannelAdvisorShipment shipment = new ChannelAdvisorShipment();
+
+            var response = mock.CreateMock<HttpWebResponse>();
+            response.Setup(r => r.StatusCode).Returns(HttpStatusCode.BadRequest);
+
+            var postResponseReader = mock.CreateMock<IHttpResponseReader>();
+            postResponseReader.Setup(r => r.ReadResult()).Returns("{\r\n  \"error\":{\r\n    \"code\":\"\",\"message\":\"Carrier and Class is invalid.\"\r\n  }\r\n}");
+            postResponseReader.SetupGet(r => r.HttpWebResponse).Returns(response.Object);
+            postRequestSubmitter.Setup(s => s.GetResponse()).Returns(postResponseReader.Object);
+
+            var testObject = mock.Create<ChannelAdvisorRestClient>();
+
+            // Since we are throwing a 401 for both attempts of uploading, the final result is throwing a CA exception
+            var ex = Assert.Throws<ChannelAdvisorException>(() => testObject.UploadShipmentDetails(shipment, "refresh", "1"));
+            Assert.Equal("Carrier and Class is invalid.", ex.Message);
         }
 
         [Fact]
