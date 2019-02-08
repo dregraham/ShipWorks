@@ -36,15 +36,18 @@ namespace ShipWorks.ApplicationCore.CommandLineOptions
             if (SqlSchemaUpdater.IsUpgradeRequired())
             {
                 TelemetricResult<Unit> databaseUpdateResult = new TelemetricResult<Unit>("Database.Update");
-                TelemetricResult<string> backupResult = null;
+                TelemetricResult<Result> backupResult = null;
 
                 DatabaseUpgradeBackupManager backupManager = new DatabaseUpgradeBackupManager();
                 try
                 {
                     // If an upgrade is required create a backup first
                     backupResult = backupManager.CreateBackup();
-                    TryDatabaseUpgrade(backupManager, databaseUpdateResult);
 
+                    if (backupResult.Value.Success)
+                    {
+                        TryDatabaseUpgrade(backupManager, databaseUpdateResult);
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -91,7 +94,7 @@ namespace ShipWorks.ApplicationCore.CommandLineOptions
         /// <summary>
         /// Submits telemetry for the operation
         /// </summary>
-        private void SubmitTelemetryTelemetry(TelemetricResult<Unit> databaseUpdateResult, TelemetricResult<string> backupResult)
+        private void SubmitTelemetryTelemetry(TelemetricResult<Unit> databaseUpdateResult, TelemetricResult<Result> backupResult)
         {
             DatabaseUpgradeTelemetry.RecordDatabaseTelemetry(databaseUpdateResult);
 

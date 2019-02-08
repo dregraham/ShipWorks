@@ -33,13 +33,12 @@ namespace ShipWorks.ApplicationCore.CommandLineOptions
         /// <summary>
         /// Create the backup
         /// </summary>
-        public TelemetricResult<string> CreateBackup()
+        public TelemetricResult<Result> CreateBackup()
         {
-            TelemetricResult<string> telemetricResult = new TelemetricResult<string>("Database.Backup");
-            telemetricResult.SetValue(backupPathAndName);
+            TelemetricResult<Result> telemetricResult = new TelemetricResult<Result>("Database.Backup");
             telemetricResult.RunTimedEvent("CreateBackupTimeInMilliseconds", () => CreateBackup(database, backupPathAndName));
-
-            ValidateBackup(telemetricResult, backupPathAndName);
+            
+            telemetricResult.SetValue(ValidateBackup(backupPathAndName));
 
             return telemetricResult;
         }
@@ -47,10 +46,20 @@ namespace ShipWorks.ApplicationCore.CommandLineOptions
         /// <summary>
         /// ensure the backup got created
         /// </summary>
-        private static void ValidateBackup(TelemetricResult<string> telemetricResult, string fileName)
+        private static Result ValidateBackup(string fileName)
         {
-            //RESTORE VERIFYONLY FROM DISK = C:\AdventureWorks.BAK
-            throw new NotImplementedException();
+            using (var con = SqlSession.Current.OpenConnection())
+            {
+                using (DbCommand command = con.CreateCommand())
+                {
+                    command.CommandTimeout = (int) TimeSpan.FromHours(1).TotalSeconds;
+                    command.CommandText = "RESTORE VERIFYONLY FROM DISK = @FilePath";
+                    command.AddParameterWithValue("@FilePath", fileName);
+
+                    DbCommandProvider.ExecuteNonQuery(command);
+                    return Result.FromSuccess();
+                }
+            }
         }
 
         /// <summary>
