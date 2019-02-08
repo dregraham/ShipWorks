@@ -2,20 +2,24 @@
 using System.IO;
 using System.Reflection;
 using System.Runtime.InteropServices;
+using log4net;
 
 namespace ShipWorks.Escalator
 {
     public static class ShipWorksLauncher
     {
+        private static readonly ILog log = LogManager.GetLogger(typeof(ShipWorksLauncher));
+
         public static void StartShipWorks()
         {
             try
             {
                 StartProcessAsCurrentUser($"{Path.GetDirectoryName(Assembly.GetEntryAssembly().Location)}\\ShipWorks.exe");
             }
-            catch
+            catch(Exception ex)
             {
                 // This is a fire and forget, if it fails dont throw
+                log.Error("Error starting shipworks", ex);
             }
         }
 

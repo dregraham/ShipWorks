@@ -1,9 +1,11 @@
 ﻿using System;
-using System.Reflection;
 using System.ServiceProcess;
 using System.Configuration.Install;
 using System.Diagnostics;
 using System.Linq;
+using System.IO;
+using log4net;
+using log4net.Config;
 
 namespace ShipWorks.Escalator
 {
@@ -12,6 +14,8 @@ namespace ShipWorks.Escalator
     /// </summary>
     static class Program
     {
+        static ILog log;
+
         /// <summary>
         /// The main entry point for the application.
         /// </summary>
@@ -19,6 +23,8 @@ namespace ShipWorks.Escalator
         {
             string serviceName = ServiceName.Resolve();
             string parameter = string.Concat(args);
+
+            SetupLogging(parameter);
 
             // The service is calling itself via the installer, so we may have a parameter and
             // be not in UserInteractive mode. That is why we do the check at the default branch
@@ -42,9 +48,13 @@ namespace ShipWorks.Escalator
                     StopService(service);
                     break;
 #if DEBUG
-                    case "--debugupdate":
-                        Escalator.ProcessMessage("6.2.2.2").Wait();
-                        break;
+                case "--debugupdate":
+                    Escalator.ProcessMessage("6.2.2.2").Wait();
+                    break;
+
+                case "--log":
+                    log.Error("test message");
+                    break;
 #endif
                 default:
                     if (!Environment.UserInteractive)
@@ -56,14 +66,42 @@ namespace ShipWorks.Escalator
         }
 
         /// <summary>
+        /// Configure log4net
+        /// </summary>
+        private static void SetupLogging(string parameter)
+        {            
+            string appData = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData);
+            string logFolder = $"{DateTime.Now.ToString(DateTime.Now.ToString("yyyy-MM-dd HH.mm.ss"))} - Escalator{parameter.Replace("--"," - ")}";
+
+            string logName = Path.Combine(appData,
+                "Interapptive\\ShipWorks\\Instances",
+                ServiceName.GetInstanceID().ToString("B"),
+                "Log",
+                logFolder,
+                "ShipWorks.Escelator.log");
+
+            GlobalContext.Properties["LogName"] = logName;
+             
+            XmlConfigurator.Configure();
+
+            log = LogManager.GetLogger(typeof(Program));
+            log.Info("Logging initialized");
+        }
+
+        /// <summary>
         /// Uninstall the ShipWorks escalator service
         /// </summary>
         private static void UninstallService(string serviceName)
         {
+            log.Info($"Uninstalling Service: {serviceName}");
             ServiceController service = ServiceController.GetServices().SingleOrDefault(s => s.ServiceName == serviceName);
+
             if (service != null)
             {
+                log.Info("Service found.");
                 StopService(service);
+
+                log.Info("Uninstalling service");
                 ManagedInstallerClass.InstallHelper(new string[] { "/u", "/LogFile=", typeof(Program).Assembly.Location });
             }
         }
@@ -73,9 +111,16 @@ namespace ShipWorks.Escalator
         /// </summary>
         private static void StopService(ServiceController service)
         {
+            log.Info("Stopping service");
+
             if (service != null && service.Status == ServiceControllerStatus.Running)
             {
                 service.Stop();
+                log.Info("Service Stopped");
+            }
+            else
+            {
+                log.Info($"Service \"{service?.DisplayName ?? "NoServiceFound"}\" not running. No action taken");
             }
         }
 
@@ -84,17 +129,26 @@ namespace ShipWorks.Escalator
         /// </summary>
         private static void InstallService(string serviceName)
         {
+            log.Info($"InstallService({serviceName} called");
             ServiceController service = ServiceController.GetServices().SingleOrDefault(s => s.ServiceName == serviceName);
             if (service == null)
             {
+                log.Info("Service not previously installed. Installing.");
                 ManagedInstallerClass.InstallHelper(new string[] { $"/ServiceName={serviceName}", "/LogFile=", typeof(Program).Assembly.Location });
+                log.Info("Service installed");
                 SetRecoveryOptions(serviceName);
                 service = new ServiceController(serviceName);
+            }
+            else
+            {
+                log.Info("Service already installed");
             }
 
             if (service.Status == ServiceControllerStatus.Stopped)
             {
+                log.Info("Starting Service");
                 service.Start();
+                log.Info("Service started");
             }
         }
 
@@ -103,6 +157,7 @@ namespace ShipWorks.Escalator
         /// </summary>
         private static void RunService()
         {
+            log.Info("Starting as a service");
             ServiceBase.Run(new Escalator());
         }
 
@@ -111,6 +166,8 @@ namespace ShipWorks.Escalator
         /// </summary>
         static void SetRecoveryOptions(string serviceName)
         {
+            log.Info("Setting recovery options");
+
             int exitCode;
             using (var process = new Process())
             {
@@ -129,8 +186,11 @@ namespace ShipWorks.Escalator
 
             if (exitCode != 0)
             {
+                log.Error($"Recovery option failed with ExitCode {exitCode}");
                 throw new InvalidOperationException();
             }
+
+            log.Info("Recovery options set");
         }
     }
 }

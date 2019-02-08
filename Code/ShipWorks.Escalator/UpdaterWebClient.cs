@@ -7,6 +7,7 @@ using System.Xml;
 using System.Net;
 using System.IO;
 using System.Security.Cryptography;
+using log4net;
 
 namespace ShipWorks.Escalator
 {
@@ -15,21 +16,27 @@ namespace ShipWorks.Escalator
     /// </summary>
     public class UpdaterWebClient
     {
+        private static readonly ILog log = LogManager.GetLogger(typeof(UpdaterWebClient));
+
         private static readonly Lazy<HttpClient> tangoClient = new Lazy<HttpClient>(GetHttpClient);
         private static readonly WebClient downloadClient = new WebClient();
 
-        string tangoUrl = "https://www.interapptive.com/ShipWorksNet/ShipWorksV1.svc/account/shipworks";
+        string tangoUrl = "http://www.interapptive.com/ShipWorksNet/ShipWorksV1.svc/account/shipworks";
         SHA256 SHA256 = SHA256.Create();
-
+        
         /// <summary>
         /// Download the requested version
         /// </summary>
         public async Task<InstallFile> Download(Version version)
         {
+            log.Info("Download called");
             (Uri url, string sha) = await GetVersionToDownload(version).ConfigureAwait(false);
 
             string fileName = GetSaveAsPath(url);
+
+            log.Info($"Downloading file to {fileName}");
             downloadClient.DownloadFile(url, fileName);
+            log.Info($"File Downloaded");
 
             return new InstallFile(fileName, sha);
         }
@@ -49,6 +56,8 @@ namespace ShipWorks.Escalator
         /// </summary>
         private async Task<(Uri url, string sha)> GetVersionToDownload(Version version)
         {
+            log.Info($"Attempting to get version {version}");
+
             var values = new Dictionary<string, string>
             {
                 { "action", "getreleasebyversion" },
@@ -62,6 +71,7 @@ namespace ShipWorks.Escalator
             {
                 response = await responseMessage.Content.ReadAsStringAsync();
             }
+            log.Info($"Response received: {response}");
 
             XmlDocument xmlResponse = new XmlDocument();
             xmlResponse.LoadXml(response);
@@ -71,6 +81,8 @@ namespace ShipWorks.Escalator
 
             string sha = xmlResponse.SelectSingleNode("//Update//SHA256")?.InnerText ?? string.Empty;
 
+            log.Info($"Url: {url}");
+            log.Info($"sha: {sha}");
             return (uri, sha);
         }
 
@@ -79,6 +91,8 @@ namespace ShipWorks.Escalator
         /// </summary>
         private static HttpClient GetHttpClient()
         {
+            log.Info("Configuring Client");
+
             HttpClientHandler handler = new HttpClientHandler();
 
             HttpClient client = new HttpClient(handler);
