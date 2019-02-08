@@ -2,63 +2,66 @@
 using System.Collections.Generic;
 using System.Data.Common;
 using System.Data.SqlClient;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Common.Logging;
 using Interapptive.Shared.Data;
-using ShipWorks.ApplicationCore.Interaction;
+using Interapptive.Shared.Utility;
 using ShipWorks.Data;
 using ShipWorks.Data.Administration;
 using ShipWorks.Data.Connection;
 
 namespace ShipWorks.ApplicationCore.CommandLineOptions
 {
-    /// <summary>
-    /// Command line option for taking a backup prior to upgrade
-    /// </summary>
-    public class CreateBackupCommandLineOption : ICommandLineCommandHandler
+    public class SchemaUpgradeBackupManager
     {
         private static readonly ILog log = LogManager.GetLogger(typeof(UpgradeDatabaseSchemaCommandLineOption));
         private const string BackupNameFormat = "{0}_AutomaticUpgradeBackup.bak";
 
         /// <summary>
-        /// the command name
+        /// Create the backup
         /// </summary>
-        public string CommandName => "createdefaultbackup";
-
-        /// <summary>
-        /// Execute the backup
-        /// </summary>
-        /// <param name="args"></param>
-        public Task Execute(List<string> args)
+        public TelemetricResult<string> CreateBackup()
         {
-            if (!SqlSession.IsConfigured)
-            {
-                SqlSession.Initialize();
-            }
-
             string database = SqlSession.Current.DatabaseName;
             string path = GetBackupPath(); ;
             string backupName = string.Format(BackupNameFormat, database);
 
+            string backupPathAndName = $"{path}\\{backupName}";
+
+            TelemetricResult<string> telemetricResult = new TelemetricResult<string>("Database.Backup");
+            telemetricResult.SetValue(backupPathAndName);
+            telemetricResult.RunTimedEvent("CreateBackupTimeInMilliseconds", () => CreateBackup(database, backupPathAndName));
+
+            return telemetricResult;
+        }
+
+        /// <summary>
+        /// Record the file size to telemetry
+        /// </summary>
+        private static void RecordFileSize(TelemetricResult<string> telemetricResult, string fileName)
+        {
             try
             {
-                CreateBackup(database, $"{path}\\{backupName}");
+                // This can fail for multiple reasons like the file is missing or we dont have permissions
+                // ignore any failure
+                double backupSize = new FileInfo(fileName).Length / 1024f / 1024f;
+                telemetricResult.AddEntry("BackupSizeInMegabytes", Convert.ToInt64(backupSize));
             }
-            catch (SqlException ex)
+            catch (Exception)
             {
-                log.Error(ex);
-                Environment.ExitCode = ex.Number;
             }
-            catch (Exception ex)
-            {
-                log.Error(ex);
-                Environment.ExitCode = -1;
-            }
+        }
 
-            return Task.CompletedTask;
+        /// <summary>
+        /// Restore the backup
+        /// </summary>
+        public Result RestoreBackup()
+        {
+            return Result.FromSuccess();
         }
 
         /// <summary>
@@ -78,12 +81,13 @@ namespace ShipWorks.ApplicationCore.CommandLineOptions
             }
         }
 
+        /// <summary>
+        /// Create a backup for the given database to the file
+        /// </summary>
         private void CreateBackup(string database, string backupFile)
         {
             log.InfoFormat("Backuping up '{0}' to '{1}'", database, backupFile);
-
-            SqlServerEditionIdType sqlServerEditionId = SqlServerEditionIdType.Express;
-
+            
             using (DbConnection con = SqlSession.Current.OpenConnection())
             {
                 DbCommand cmd = DbCommandProvider.Create(con);
@@ -118,9 +122,7 @@ namespace ShipWorks.ApplicationCore.CommandLineOptions
 		                    BACKUP DATABASE @Database 
 		                    TO DISK = @FilePath      
 		                    WITH INIT, NOUNLOAD, SKIP, STATS = 2, FORMAT
-	                    END
-
-                    SELECT serverproperty('EditionID')";
+	                    END";
 
                 cmd.AddParameterWithValue("@Database", database);
                 cmd.AddParameterWithValue("@FilePath", backupFile);
@@ -142,8 +144,7 @@ namespace ShipWorks.ApplicationCore.CommandLineOptions
                 }
 
                 // The InfoMessage events only come back in real-time when using ExecuteScalar - NOT ExecuteNonQuery
-                object commandResult = DbCommandProvider.ExecuteScalar(cmd);
-                sqlServerEditionId = sqlServerEditionId.Parse(commandResult.ToString(), SqlServerEditionIdType.Express);
+                DbCommandProvider.ExecuteScalar(cmd);
             }
         }
     }
