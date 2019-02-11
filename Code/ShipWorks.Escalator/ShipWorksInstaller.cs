@@ -48,7 +48,7 @@ namespace ShipWorks.Escalator
         {
             ProcessStartInfo start = new ProcessStartInfo();
             start.FileName = file.Path;
-            start.Arguments = $"/VERYSILENT /DIR={Path.GetDirectoryName(Assembly.GetEntryAssembly().Location)} /log /FORCECLOSEAPPLICATIONS";
+            start.Arguments = $"/VERYSILENT /DIR=\"{Path.GetDirectoryName(Assembly.GetEntryAssembly().Location)}\" /log /FORCECLOSEAPPLICATIONS ";
 
             int exitCode;
 
