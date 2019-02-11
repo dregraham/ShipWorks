@@ -54,16 +54,14 @@ namespace SmokeTest
 
 #region Variables
 
-        string _ShipWorksVersion;
-
         /// <summary>
         /// Gets or sets the value of variable ShipWorksVersion.
         /// </summary>
         [TestVariable("7a2a729a-5507-459a-91eb-9dc1bc6ba357")]
         public string ShipWorksVersion
         {
-            get { return _ShipWorksVersion; }
-            set { _ShipWorksVersion = value; }
+            get { return repo.ShipWorksVersion; }
+            set { repo.ShipWorksVersion = value; }
         }
 
 #endregion
@@ -86,50 +84,50 @@ namespace SmokeTest
         [System.CodeDom.Compiler.GeneratedCode("Ranorex", "8.1")]
         void ITestModule.Run()
         {
-            Mouse.DefaultMoveTime = 1000;
+            Mouse.DefaultMoveTime = 300;
             Keyboard.DefaultKeyPressTime = 100;
             Delay.SpeedFactor = 1.00;
 
             Init();
 
             Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Move item 'ShipWorksSa.Help' at Center.", repo.ShipWorksSa.HelpInfo, new RecordItemIndex(0));
-            repo.ShipWorksSa.Help.MoveTo(300);
+            repo.ShipWorksSa.Help.MoveTo();
             Delay.Milliseconds(200);
             
             Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Click item 'ShipWorksSa.Help' at Center.", repo.ShipWorksSa.HelpInfo, new RecordItemIndex(1));
-            repo.ShipWorksSa.Help.Click(300);
+            repo.ShipWorksSa.Help.Click();
             Delay.Milliseconds(200);
             
             Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Move item 'ShipWorksSa.AboutShipWorks' at Center.", repo.ShipWorksSa.AboutShipWorksInfo, new RecordItemIndex(2));
-            repo.ShipWorksSa.AboutShipWorks.MoveTo(300);
+            repo.ShipWorksSa.AboutShipWorks.MoveTo();
             Delay.Milliseconds(200);
             
             Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Click item 'ShipWorksSa.AboutShipWorks' at Center.", repo.ShipWorksSa.AboutShipWorksInfo, new RecordItemIndex(3));
-            repo.ShipWorksSa.AboutShipWorks.Click(300);
+            repo.ShipWorksSa.AboutShipWorks.Click();
             Delay.Milliseconds(200);
             
             Report.Log(ReportLevel.Info, "Keyboard", "Key sequence '{Tab}'.", new RecordItemIndex(4));
             Keyboard.Press("{Tab}");
             Delay.Milliseconds(0);
             
-            Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Move item 'ShipWorksSa.Version' at Center.", repo.ShipWorksSa.VersionInfo, new RecordItemIndex(5));
-            repo.ShipWorksSa.Version.MoveTo(300);
-            Delay.Milliseconds(200);
-            
-            Report.Log(ReportLevel.Info, "Get Value", "Getting attribute 'AccessibleValue' from item 'ShipWorksSa.Version' and assigning its value to variable 'ShipWorksVersion'.", repo.ShipWorksSa.VersionInfo, new RecordItemIndex(6));
-            ShipWorksVersion = repo.ShipWorksSa.Version.Element.GetAttributeValueText("AccessibleValue");
-            Delay.Milliseconds(0);
-            
-            Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Move item 'ShipWorksSa.Close' at Center.", repo.ShipWorksSa.CloseInfo, new RecordItemIndex(7));
-            repo.ShipWorksSa.Close.MoveTo(300);
-            Delay.Milliseconds(200);
-            
-            Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Click item 'ShipWorksSa.Close' at Center.", repo.ShipWorksSa.CloseInfo, new RecordItemIndex(8));
-            repo.ShipWorksSa.Close.Click(300);
-            Delay.Milliseconds(200);
-            
             GrabVersion();
             Delay.Milliseconds(0);
+            
+            //Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Move item 'ShipWorksSa.PARTContentHost' at Center.", repo.ShipWorksSa.PARTContentHostInfo, new RecordItemIndex(6));
+            //repo.ShipWorksSa.PARTContentHost.MoveTo();
+            //Delay.Milliseconds(200);
+            
+            //Report.Log(ReportLevel.Info, "Get Value", "Getting attribute 'Text' from item 'ShipWorksSa.PARTContentHost' and assigning its value to variable 'ShipWorksVersion'.", repo.ShipWorksSa.PARTContentHostInfo, new RecordItemIndex(7));
+            //ShipWorksVersion = repo.ShipWorksSa.PARTContentHost.Element.GetAttributeValueText("Text");
+            //Delay.Milliseconds(0);
+            
+            //Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Move item 'ShipWorks.Close' at Center.", repo.ShipWorks.CloseInfo, new RecordItemIndex(8));
+            //repo.ShipWorks.Close.MoveTo();
+            //Delay.Milliseconds(200);
+            
+            //Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Click item 'ShipWorks.Close' at Center.", repo.ShipWorks.CloseInfo, new RecordItemIndex(9));
+            //repo.ShipWorks.Close.Click();
+            //Delay.Milliseconds(200);
             
         }
 

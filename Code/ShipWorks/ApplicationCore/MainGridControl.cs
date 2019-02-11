@@ -12,7 +12,7 @@ using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Utility;
 using log4net;
 using ShipWorks.ApplicationCore.Appearance;
-using ShipWorks.ApplicationCore.Options;
+using ShipWorks.ApplicationCore.Settings;
 using ShipWorks.Data;
 using ShipWorks.Data.Grid;
 using ShipWorks.Data.Grid.DetailView;

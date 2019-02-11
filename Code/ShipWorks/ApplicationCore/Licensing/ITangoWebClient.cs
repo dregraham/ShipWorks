@@ -5,7 +5,6 @@ using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore.Nudges;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Postal.Endicia.Account;
-using ShipWorks.Shipping.Insurance.InsureShip;
 
 namespace ShipWorks.ApplicationCore.Licensing
 {
@@ -25,12 +24,6 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// Get the status of the specified license
         /// </summary>
         Dictionary<string, string> GetCounterRatesCredentials(StoreEntity store);
-
-        /// <summary>
-        /// Returns an InsureShipAffiliate for the specified store.
-        /// If one cannot be found, an InsureShipException is thrown.
-        /// </summary>
-        InsureShipAffiliate GetInsureShipAffiliate(StoreEntity store);
 
         /// <summary>
         /// Get the status of the specified license
@@ -152,5 +145,10 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// Gets the Tango customer id for a license.
         /// </summary>
         string GetTangoCustomerId();
+
+        /// <summary>
+        /// Log the given insurance claim to Tango.
+        /// </summary>
+        void LogSubmitInsuranceClaim(ShipmentEntity shipment);
     }
 }

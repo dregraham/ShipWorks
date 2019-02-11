@@ -54,6 +54,8 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             ArchivalSettingsXml = source.ArchivalSettingsXml;
             AuditEnabled = source.AuditEnabled;
             DefaultPickListTemplateID = source.DefaultPickListTemplateID;
+            AutoUpdateDayOfWeek = source.AutoUpdateDayOfWeek;
+            AutoUpdateHourOfDay = source.AutoUpdateHourOfDay;
             
             
             
@@ -170,6 +172,18 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
         public Nullable<System.Int64> DefaultPickListTemplateID { get; }
+        /// <summary> The AutoUpdateDayOfWeek property of the Entity Configuration<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "Configuration"."AutoUpdateDayOfWeek"<br/>
+        /// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+        public System.DayOfWeek AutoUpdateDayOfWeek { get; }
+        /// <summary> The AutoUpdateHourOfDay property of the Entity Configuration<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "Configuration"."AutoUpdateHourOfDay"<br/>
+        /// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+        public System.Int32 AutoUpdateHourOfDay { get; }
         
         
         

@@ -10,7 +10,7 @@ namespace ShipWorks.Data.Model.EntityClasses
     public partial class OrderItemEntity
     {
         // We cache this so we only have to look it up once
-        static string baseObjectName = ((IEntityCore) new OrderItemEntity()).LLBLGenProEntityName;
+        private static string baseObjectName = ((IEntityCore) new OrderItemEntity()).LLBLGenProEntityName;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="OrderItemEntity"/> class.
@@ -37,6 +37,11 @@ namespace ShipWorks.Data.Model.EntityClasses
         }
 
         /// <summary>
+        /// Total cost of the order item
+        /// </summary>
+        public virtual decimal TotalPrice => UnitPrice * (decimal) Quantity;
+
+        /// <summary>
         /// PreProcess a value before it gets set.
         /// </summary>
         protected override void PreProcessValueToSet(IFieldInfo fieldToSet, ref object valueToSet)
@@ -50,7 +55,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 
             base.PreProcessValueToSet(fieldToSet, ref valueToSet);
         }
-        
+
         /// <summary>
         /// Trying to set a value of a field
         /// </summary>
@@ -77,7 +82,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 
             base.OnSetValue(fieldIndex, valueToSet, out cancel);
         }
-        
+
         /// <summary>
         /// Special processing before saving to ensure base table gets hit when derived tables change
         /// </summary>

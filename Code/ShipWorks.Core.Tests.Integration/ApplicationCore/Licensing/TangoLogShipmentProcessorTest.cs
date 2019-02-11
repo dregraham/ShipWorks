@@ -47,12 +47,18 @@ namespace ShipWorks.Core.Tests.Integration.ApplicationCore.Licensing
         }
 
         [Fact]
-        public async Task EnforceCapabilities_Refresh_MakesTangoCallFirstTimeAndSecondTime_WhenNextFireDatePassed()
+        public async Task EnforceCapabilities_Refresh_MakesTangoCallOnlyOnce_WhenAddedMoreThanOnce()
         {
             testObject = context.Mock.Create<TangoLogShipmentProcessor>();
             testObject.InitializeForCurrentSession();
 
             var shipment = Create.Shipment(context.Order).AsOther().Save();
+            Modify.Shipment(shipment)
+                .Set(s => s.Processed = true)
+                .Set(s => s.Voided = false)
+                .Set(s => s.OnlineShipmentID = string.Empty)
+                .Save();
+            testObject.Add(context.Store, shipment);
 
             await Task.Delay(1000);
 

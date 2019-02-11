@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Windows.Forms;
-using Interapptive.Shared.Net;
+using Autofac;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using log4net;
+using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
@@ -18,7 +19,7 @@ namespace ShipWorks.Shipping.Insurance
     public partial class InsuranceSubmitClaimControl : UserControl
     {
         private ShipmentEntity shipment;
-        static readonly ILog log = LogManager.GetLogger(typeof(InsuranceSubmitClaimControl));
+        private static readonly ILog log = LogManager.GetLogger(typeof(InsuranceSubmitClaimControl));
 
         /// <summary>
         /// Initializes a new instance of the <see cref="InsuranceSubmitClaimControl"/> class.
@@ -48,6 +49,7 @@ namespace ShipWorks.Shipping.Insurance
             itemName.Text = shipment.InsurancePolicy.ItemName;
             description.Text = shipment.InsurancePolicy.Description;
             email.Text = shipment.InsurancePolicy.EmailAddress ?? shipment.OriginEmail;
+            issueDate.Value = DateTime.Now;
         }
 
         /// <summary>
@@ -79,44 +81,73 @@ namespace ShipWorks.Shipping.Insurance
                 return;
             }
 
-            try
+            Cursor.Current = Cursors.WaitCursor;
+
+            // Disable the button to provide some feedback to the user that something is happening.
+            // Maybe change this to use a progress provider if it takes more than a few seconds.
+            submitClaim.Enabled = false;
+
+            using (var lifetimeScope = IoC.BeginLifetimeScope())
             {
-                Cursor.Current = Cursors.WaitCursor;
+                var claim = lifetimeScope.Resolve<IInsureShipClaim>();
 
-                // Disable the button to provide some feedback to the user that something is happening.
-                // Maybe change this to use a progress provider if it takes more than a few seconds.
-                submitClaim.Enabled = false;
-
-                StoreEntity storeEntity = StoreManager.GetStore(shipment.Order.StoreID);
-                if (storeEntity == null)
-                {
-                    throw new InsureShipException("The store the shipment was in has been deleted.");
-                }
-
-                InsureShipAffiliate insureShipAffiliate = TangoWebClient.GetInsureShipAffiliate(storeEntity);
-                InsureShipClaim claim = new InsureShipClaim(shipment, insureShipAffiliate);
-
-                claim.Submit((InsureShipClaimType) claimType.SelectedValue, itemName.Text, description.Text, damageValue.Amount, email.Text);
-                LogClaimToTango();
-
-                using (SqlAdapter adapter = new SqlAdapter(true))
-                {
-                    adapter.SaveAndRefetch(shipment);
-                    adapter.Commit();
-                }
-
-                ClaimSubmitted.Invoke();
+                EnsureStoreExists(lifetimeScope.Resolve<IStoreManager>())
+                    .Bind(() => claim.Submit((InsureShipClaimType) claimType.SelectedValue, shipment, UpdateInsurancePolicy))
+                    .Do(() => CompleteClaimSubmission(lifetimeScope))
+                    .OnFailure(ex =>
+                    {
+                        log.Error(ex);
+                        lifetimeScope.Resolve<IMessageHelper>().ShowError(ex.Message);
+                    });
             }
-            catch (InsureShipException ex)
+
+            // Re-enable the button in the event an error occurred
+            submitClaim.Enabled = true;
+        }
+
+        /// <summary>
+        /// Update the given policy with data from customer
+        /// </summary>
+        private void UpdateInsurancePolicy(InsurancePolicyEntity policy)
+        {
+            policy.ItemName = itemName.Text;
+            policy.DamageValue = damageValue.Amount;
+            policy.SubmissionDate = DateTime.UtcNow;
+            policy.Description = description.Text;
+            policy.EmailAddress = email.Text;
+            policy.DateOfIssue = issueDate.Value;
+        }
+
+        /// <summary>
+        /// Ensure the store for the shipment exists
+        /// </summary>
+        private Result EnsureStoreExists(IStoreManager storeManager)
+        {
+            var storeEntity = storeManager.GetStoreReadOnly(shipment.Order.StoreID);
+            if (storeEntity == null)
             {
-                log.Error(ex);
-                MessageHelper.ShowError(this, ex.Message);
+                return new InsureShipException("The store the shipment was in has been deleted.");
             }
-            finally
+
+            return Result.FromSuccess();
+        }
+
+        /// <summary>
+        /// Complete the claim submission
+        /// </summary>
+        private void CompleteClaimSubmission(ILifetimeScope lifetimeScope)
+        {
+            LogClaimToTango(lifetimeScope.Resolve<ITangoWebClient>(), shipment);
+
+            var sqlAdapterFactory = lifetimeScope.Resolve<ISqlAdapterFactory>();
+
+            using (var adapter = sqlAdapterFactory.CreateTransacted())
             {
-                // Renable the button in the event an error occurred
-                submitClaim.Enabled = true;
+                adapter.SaveAndRefetch(shipment);
+                adapter.Commit();
             }
+
+            ClaimSubmitted.Invoke();
         }
 
         /// <summary>
@@ -134,35 +165,16 @@ namespace ShipWorks.Shipping.Insurance
         /// <summary>
         /// Logs the claim to tango.
         /// </summary>
-        public void LogClaimToTango()
+        public void LogClaimToTango(ITangoWebClient tangoWebClient, ShipmentEntity shipment)
         {
             try
             {
-                TangoWebClient.LogSubmitInsuranceClaim(shipment);
+                tangoWebClient.LogSubmitInsuranceClaim(shipment);
             }
             catch (InsureShipException ex)
             {
-                log.Error("While attempting to log the insurance claim with Tango, an error occured.", ex);
+                log.Error("While attempting to log the insurance claim with Tango, an error occurred.", ex);
             }
-        }
-
-        /// <summary>
-        /// Called when [submit claim link clicked].
-        /// </summary>
-        private void OnSubmitClaimLinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
-        {
-            StoreEntity store = StoreManager.GetStore(shipment.Order.StoreID);
-
-            InsureShipAffiliate insureShipAffiliate = TangoWebClient.GetInsureShipAffiliate(store);
-
-            string onlineStoreID = insureShipAffiliate.InsureShipStoreID;
-
-            string url = string.Format(
-                "https://www.interapptive.com/account/insuranceclaim.php?id={0}&shipment={1}",
-                onlineStoreID,
-                shipment.OnlineShipmentID);
-
-            WebHelper.OpenUrl(url, this);
         }
     }
 }

@@ -414,6 +414,10 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("InitialDownloadDays", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("InitialDownloadOrder", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("InsureShipClientID", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("InsureShipApiKey", fieldHashtable);
 		}
 		#endregion
 
@@ -787,6 +791,26 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (Nullable<System.Int64>)GetValue((int)StoreFieldIndex.InitialDownloadOrder, false); }
 			set	{ SetValue((int)StoreFieldIndex.InitialDownloadOrder, value); }
+		}
+
+		/// <summary> The InsureShipClientID property of the Entity Store<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "Store"."InsureShipClientID"<br/>
+		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual Nullable<System.Int64> InsureShipClientID
+		{
+			get { return (Nullable<System.Int64>)GetValue((int)StoreFieldIndex.InsureShipClientID, false); }
+			set	{ SetValue((int)StoreFieldIndex.InsureShipClientID, value); }
+		}
+
+		/// <summary> The InsureShipApiKey property of the Entity Store<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "Store"."InsureShipApiKey"<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 255<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual System.String InsureShipApiKey
+		{
+			get { return (System.String)GetValue((int)StoreFieldIndex.InsureShipApiKey, true); }
+			set	{ SetValue((int)StoreFieldIndex.InsureShipApiKey, value); }
 		}
 
 		/// <summary> Gets the EntityCollection with the related entities of type 'OrderSearchEntity' which are related to this entity via a relation of type '1:n'. If the EntityCollection hasn't been fetched yet, the collection returned will be empty.<br/><br/></summary>

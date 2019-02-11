@@ -594,6 +594,10 @@ namespace ShipWorks.Data.Model
 		InitialDownloadDays,
 		///<summary>InitialDownloadOrder. Inherited from Store</summary>
 		InitialDownloadOrder,
+		///<summary>InsureShipClientID. Inherited from Store</summary>
+		InsureShipClientID,
+		///<summary>InsureShipApiKey. Inherited from Store</summary>
+		InsureShipApiKey,
 		///<summary>StoreID. </summary>
 		StoreID,
 		///<summary>AmazonApi. </summary>
@@ -700,6 +704,10 @@ namespace ShipWorks.Data.Model
 		InitialDownloadDays,
 		///<summary>InitialDownloadOrder. Inherited from Store</summary>
 		InitialDownloadOrder,
+		///<summary>InsureShipClientID. Inherited from Store</summary>
+		InsureShipClientID,
+		///<summary>InsureShipApiKey. Inherited from Store</summary>
+		InsureShipApiKey,
 		///<summary>StoreID. </summary>
 		StoreID,
 		///<summary>Username. </summary>
@@ -1060,6 +1068,10 @@ namespace ShipWorks.Data.Model
 		InitialDownloadDays,
 		///<summary>InitialDownloadOrder. Inherited from Store</summary>
 		InitialDownloadOrder,
+		///<summary>InsureShipClientID. Inherited from Store</summary>
+		InsureShipClientID,
+		///<summary>InsureShipApiKey. Inherited from Store</summary>
+		InsureShipApiKey,
 		///<summary>StoreID. </summary>
 		StoreID,
 		///<summary>ApiUrl. </summary>
@@ -1230,6 +1242,10 @@ namespace ShipWorks.Data.Model
 		InitialDownloadDays,
 		///<summary>InitialDownloadOrder. Inherited from Store</summary>
 		InitialDownloadOrder,
+		///<summary>InsureShipClientID. Inherited from Store</summary>
+		InsureShipClientID,
+		///<summary>InsureShipApiKey. Inherited from Store</summary>
+		InsureShipApiKey,
 		///<summary>StoreID. </summary>
 		StoreID,
 		///<summary>FtpUsername. </summary>
@@ -1596,6 +1612,10 @@ namespace ShipWorks.Data.Model
 		InitialDownloadDays,
 		///<summary>InitialDownloadOrder. Inherited from Store</summary>
 		InitialDownloadOrder,
+		///<summary>InsureShipClientID. Inherited from Store</summary>
+		InsureShipClientID,
+		///<summary>InsureShipApiKey. Inherited from Store</summary>
+		InsureShipApiKey,
 		///<summary>StoreID. </summary>
 		StoreID,
 		///<summary>AccountKey. </summary>
@@ -2048,6 +2068,10 @@ namespace ShipWorks.Data.Model
 		AuditEnabled,
 		///<summary>DefaultPickListTemplateID. </summary>
 		DefaultPickListTemplateID,
+		///<summary>AutoUpdateDayOfWeek. </summary>
+		AutoUpdateDayOfWeek,
+		///<summary>AutoUpdateHourOfDay. </summary>
+		AutoUpdateHourOfDay,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -2736,6 +2760,10 @@ namespace ShipWorks.Data.Model
 		InitialDownloadDays,
 		///<summary>InitialDownloadOrder. Inherited from Store</summary>
 		InitialDownloadOrder,
+		///<summary>InsureShipClientID. Inherited from Store</summary>
+		InsureShipClientID,
+		///<summary>InsureShipApiKey. Inherited from Store</summary>
+		InsureShipApiKey,
 		///<summary>StoreID. </summary>
 		StoreID,
 		///<summary>EBayUserID. </summary>
@@ -3330,6 +3358,10 @@ namespace ShipWorks.Data.Model
 		InitialDownloadDays,
 		///<summary>InitialDownloadOrder. Inherited from Store</summary>
 		InitialDownloadOrder,
+		///<summary>InsureShipClientID. Inherited from Store</summary>
+		InsureShipClientID,
+		///<summary>InsureShipApiKey. Inherited from Store</summary>
+		InsureShipApiKey,
 		///<summary>StoreID. </summary>
 		StoreID,
 		///<summary>EtsyShopID. </summary>
@@ -4236,6 +4268,10 @@ namespace ShipWorks.Data.Model
 		InitialDownloadDays,
 		///<summary>InitialDownloadOrder. Inherited from Store</summary>
 		InitialDownloadOrder,
+		///<summary>InsureShipClientID. Inherited from Store</summary>
+		InsureShipClientID,
+		///<summary>InsureShipApiKey. Inherited from Store</summary>
+		InsureShipApiKey,
 		///<summary>StoreID. </summary>
 		StoreID,
 		///<summary>FileFormat. </summary>
@@ -4594,6 +4630,10 @@ namespace ShipWorks.Data.Model
 		InitialDownloadDays,
 		///<summary>InitialDownloadOrder. Inherited from Store</summary>
 		InitialDownloadOrder,
+		///<summary>InsureShipClientID. Inherited from Store</summary>
+		InsureShipClientID,
+		///<summary>InsureShipApiKey. Inherited from Store</summary>
+		InsureShipApiKey,
 		///<summary>StoreID. </summary>
 		StoreID,
 		///<summary>ModuleUsername. </summary>
@@ -5034,6 +5074,10 @@ namespace ShipWorks.Data.Model
 		InitialDownloadDays,
 		///<summary>InitialDownloadOrder. Inherited from Store</summary>
 		InitialDownloadOrder,
+		///<summary>InsureShipClientID. Inherited from Store</summary>
+		InsureShipClientID,
+		///<summary>InsureShipApiKey. Inherited from Store</summary>
+		InsureShipApiKey,
 		///<summary>StoreID. </summary>
 		StoreID,
 		///<summary>SupplierID. </summary>
@@ -5182,6 +5226,10 @@ namespace ShipWorks.Data.Model
 		InitialDownloadDays,
 		///<summary>InitialDownloadOrder. Inherited from Store</summary>
 		InitialDownloadOrder,
+		///<summary>InsureShipClientID. Inherited from Store</summary>
+		InsureShipClientID,
+		///<summary>InsureShipApiKey. Inherited from Store</summary>
+		InsureShipApiKey,
 		///<summary>StoreID. </summary>
 		StoreID,
 		///<summary>ApiToken. </summary>
@@ -5212,6 +5260,10 @@ namespace ShipWorks.Data.Model
 		ClaimID,
 		///<summary>EmailAddress. </summary>
 		EmailAddress,
+		///<summary>InsureShipPolicyID. </summary>
+		InsureShipPolicyID,
+		///<summary>DateOfIssue. </summary>
+		DateOfIssue,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -5664,6 +5716,10 @@ namespace ShipWorks.Data.Model
 		InitialDownloadDays,
 		///<summary>InitialDownloadOrder. Inherited from Store</summary>
 		InitialDownloadOrder,
+		///<summary>InsureShipClientID. Inherited from Store</summary>
+		InsureShipClientID,
+		///<summary>InsureShipApiKey. Inherited from Store</summary>
+		InsureShipApiKey,
 		///<summary>StoreID. </summary>
 		StoreID,
 		///<summary>ApiUser. </summary>
@@ -6032,6 +6088,10 @@ namespace ShipWorks.Data.Model
 		InitialDownloadDays,
 		///<summary>InitialDownloadOrder. Inherited from Store</summary>
 		InitialDownloadOrder,
+		///<summary>InsureShipClientID. Inherited from Store</summary>
+		InsureShipClientID,
+		///<summary>InsureShipApiKey. Inherited from Store</summary>
+		InsureShipApiKey,
 		///<summary>StoreID. </summary>
 		StoreID,
 		///<summary>Token. </summary>
@@ -6306,6 +6366,10 @@ namespace ShipWorks.Data.Model
 		InitialDownloadDays,
 		///<summary>InitialDownloadOrder. Inherited from Store</summary>
 		InitialDownloadOrder,
+		///<summary>InsureShipClientID. Inherited from Store</summary>
+		InsureShipClientID,
+		///<summary>InsureShipApiKey. Inherited from Store</summary>
+		InsureShipApiKey,
 		///<summary>StoreID. Inherited from GenericModuleStore</summary>
 		StoreID_GenericModuleStore,
 		///<summary>ModuleUsername. Inherited from GenericModuleStore</summary>
@@ -6626,6 +6690,10 @@ namespace ShipWorks.Data.Model
 		InitialDownloadDays,
 		///<summary>InitialDownloadOrder. Inherited from Store</summary>
 		InitialDownloadOrder,
+		///<summary>InsureShipClientID. Inherited from Store</summary>
+		InsureShipClientID,
+		///<summary>InsureShipApiKey. Inherited from Store</summary>
+		InsureShipApiKey,
 		///<summary>StoreID. </summary>
 		StoreID,
 		///<summary>Username. </summary>
@@ -6732,6 +6800,10 @@ namespace ShipWorks.Data.Model
 		InitialDownloadDays,
 		///<summary>InitialDownloadOrder. Inherited from Store</summary>
 		InitialDownloadOrder,
+		///<summary>InsureShipClientID. Inherited from Store</summary>
+		InsureShipClientID,
+		///<summary>InsureShipApiKey. Inherited from Store</summary>
+		InsureShipApiKey,
 		///<summary>StoreID. Inherited from GenericModuleStore</summary>
 		StoreID_GenericModuleStore,
 		///<summary>ModuleUsername. Inherited from GenericModuleStore</summary>
@@ -7050,6 +7122,10 @@ namespace ShipWorks.Data.Model
 		InitialDownloadDays,
 		///<summary>InitialDownloadOrder. Inherited from Store</summary>
 		InitialDownloadOrder,
+		///<summary>InsureShipClientID. Inherited from Store</summary>
+		InsureShipClientID,
+		///<summary>InsureShipApiKey. Inherited from Store</summary>
+		InsureShipApiKey,
 		///<summary>StoreID. </summary>
 		StoreID,
 		///<summary>UserToken. </summary>
@@ -7386,6 +7462,10 @@ namespace ShipWorks.Data.Model
 		InitialDownloadDays,
 		///<summary>InitialDownloadOrder. Inherited from Store</summary>
 		InitialDownloadOrder,
+		///<summary>InsureShipClientID. Inherited from Store</summary>
+		InsureShipClientID,
+		///<summary>InsureShipApiKey. Inherited from Store</summary>
+		InsureShipApiKey,
 		///<summary>StoreID. </summary>
 		StoreID,
 		///<summary>SellerID. </summary>
@@ -7520,6 +7600,10 @@ namespace ShipWorks.Data.Model
 		InitialDownloadDays,
 		///<summary>InitialDownloadOrder. Inherited from Store</summary>
 		InitialDownloadOrder,
+		///<summary>InsureShipClientID. Inherited from Store</summary>
+		InsureShipClientID,
+		///<summary>InsureShipApiKey. Inherited from Store</summary>
+		InsureShipApiKey,
 		///<summary>StoreID. </summary>
 		StoreID,
 		///<summary>ImportConnectionString. </summary>
@@ -8194,6 +8278,10 @@ namespace ShipWorks.Data.Model
 		InitialDownloadDays,
 		///<summary>InitialDownloadOrder. Inherited from Store</summary>
 		InitialDownloadOrder,
+		///<summary>InsureShipClientID. Inherited from Store</summary>
+		InsureShipClientID,
+		///<summary>InsureShipApiKey. Inherited from Store</summary>
+		InsureShipApiKey,
 		///<summary>StoreID. </summary>
 		StoreID,
 		///<summary>OrderMotionEmailAccountID. </summary>
@@ -8596,6 +8684,10 @@ namespace ShipWorks.Data.Model
 		InitialDownloadDays,
 		///<summary>InitialDownloadOrder. Inherited from Store</summary>
 		InitialDownloadOrder,
+		///<summary>InsureShipClientID. Inherited from Store</summary>
+		InsureShipClientID,
+		///<summary>InsureShipApiKey. Inherited from Store</summary>
+		InsureShipApiKey,
 		///<summary>StoreID. </summary>
 		StoreID,
 		///<summary>Username. </summary>
@@ -8888,6 +8980,10 @@ namespace ShipWorks.Data.Model
 		InitialDownloadDays,
 		///<summary>InitialDownloadOrder. Inherited from Store</summary>
 		InitialDownloadOrder,
+		///<summary>InsureShipClientID. Inherited from Store</summary>
+		InsureShipClientID,
+		///<summary>InsureShipApiKey. Inherited from Store</summary>
+		InsureShipApiKey,
 		///<summary>StoreID. </summary>
 		StoreID,
 		///<summary>ApiCredentialType. </summary>
@@ -9514,6 +9610,10 @@ namespace ShipWorks.Data.Model
 		InitialDownloadDays,
 		///<summary>InitialDownloadOrder. Inherited from Store</summary>
 		InitialDownloadOrder,
+		///<summary>InsureShipClientID. Inherited from Store</summary>
+		InsureShipClientID,
+		///<summary>InsureShipApiKey. Inherited from Store</summary>
+		InsureShipApiKey,
 		///<summary>StoreID. </summary>
 		StoreID,
 		///<summary>ShortName. </summary>
@@ -9938,6 +10038,10 @@ namespace ShipWorks.Data.Model
 		InitialDownloadDays,
 		///<summary>InitialDownloadOrder. Inherited from Store</summary>
 		InitialDownloadOrder,
+		///<summary>InsureShipClientID. Inherited from Store</summary>
+		InsureShipClientID,
+		///<summary>InsureShipApiKey. Inherited from Store</summary>
+		InsureShipApiKey,
 		///<summary>StoreID. </summary>
 		StoreID,
 		///<summary>SearsEmail. </summary>
@@ -10826,6 +10930,10 @@ namespace ShipWorks.Data.Model
 		InitialDownloadDays,
 		///<summary>InitialDownloadOrder. Inherited from Store</summary>
 		InitialDownloadOrder,
+		///<summary>InsureShipClientID. Inherited from Store</summary>
+		InsureShipClientID,
+		///<summary>InsureShipApiKey. Inherited from Store</summary>
+		InsureShipApiKey,
 		///<summary>StoreID. </summary>
 		StoreID,
 		///<summary>ShopifyShopUrlName. </summary>
@@ -10910,6 +11018,10 @@ namespace ShipWorks.Data.Model
 		InitialDownloadDays,
 		///<summary>InitialDownloadOrder. Inherited from Store</summary>
 		InitialDownloadOrder,
+		///<summary>InsureShipClientID. Inherited from Store</summary>
+		InsureShipClientID,
+		///<summary>InsureShipApiKey. Inherited from Store</summary>
+		InsureShipApiKey,
 		///<summary>StoreID. </summary>
 		StoreID,
 		///<summary>Username. </summary>
@@ -11022,6 +11134,10 @@ namespace ShipWorks.Data.Model
 		InitialDownloadDays,
 		///<summary>InitialDownloadOrder. Inherited from Store</summary>
 		InitialDownloadOrder,
+		///<summary>InsureShipClientID. Inherited from Store</summary>
+		InsureShipClientID,
+		///<summary>InsureShipApiKey. Inherited from Store</summary>
+		InsureShipApiKey,
 		///<summary>StoreID. </summary>
 		StoreID,
 		///<summary>Token. </summary>
@@ -11116,6 +11232,10 @@ namespace ShipWorks.Data.Model
 		InitialDownloadDays,
 		///<summary>InitialDownloadOrder. </summary>
 		InitialDownloadOrder,
+		///<summary>InsureShipClientID. </summary>
+		InsureShipClientID,
+		///<summary>InsureShipApiKey. </summary>
+		InsureShipApiKey,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -11584,6 +11704,10 @@ namespace ShipWorks.Data.Model
 		InitialDownloadDays,
 		///<summary>InitialDownloadOrder. Inherited from Store</summary>
 		InitialDownloadOrder,
+		///<summary>InsureShipClientID. Inherited from Store</summary>
+		InsureShipClientID,
+		///<summary>InsureShipApiKey. Inherited from Store</summary>
+		InsureShipApiKey,
 		///<summary>StoreID. </summary>
 		StoreID,
 		///<summary>StoreUrl. </summary>
@@ -12390,6 +12514,10 @@ namespace ShipWorks.Data.Model
 		InitialDownloadDays,
 		///<summary>InitialDownloadOrder. Inherited from Store</summary>
 		InitialDownloadOrder,
+		///<summary>InsureShipClientID. Inherited from Store</summary>
+		InsureShipClientID,
+		///<summary>InsureShipApiKey. Inherited from Store</summary>
+		InsureShipApiKey,
 		///<summary>StoreID. </summary>
 		StoreID,
 		///<summary>StoreUrl. </summary>
@@ -12748,6 +12876,10 @@ namespace ShipWorks.Data.Model
 		InitialDownloadDays,
 		///<summary>InitialDownloadOrder. Inherited from Store</summary>
 		InitialDownloadOrder,
+		///<summary>InsureShipClientID. Inherited from Store</summary>
+		InsureShipClientID,
+		///<summary>InsureShipApiKey. Inherited from Store</summary>
+		InsureShipApiKey,
 		///<summary>StoreID. </summary>
 		StoreID,
 		///<summary>ConsumerID. </summary>
@@ -13398,6 +13530,10 @@ namespace ShipWorks.Data.Model
 		InitialDownloadDays,
 		///<summary>InitialDownloadOrder. Inherited from Store</summary>
 		InitialDownloadOrder,
+		///<summary>InsureShipClientID. Inherited from Store</summary>
+		InsureShipClientID,
+		///<summary>InsureShipApiKey. Inherited from Store</summary>
+		InsureShipApiKey,
 		///<summary>StoreID. </summary>
 		StoreID,
 		///<summary>YahooEmailAccountID. </summary>

@@ -89,6 +89,7 @@
     <TypeShortcut Shortcut="AsendiaServiceType" Type="Interapptive.Shared.Enums.AsendiaServiceType, Interapptive.Shared, Version=0.0.0.0, Culture=neutral, PublicKeyToken=6a464ecbd35cd6df" />
     <TypeShortcut Shortcut="BigCommerceAuthenticationType" Type="Interapptive.Shared.Enums.BigCommerceAuthenticationType, Interapptive.Shared, Version=0.0.0.0, Culture=neutral, PublicKeyToken=6a464ecbd35cd6df" />
     <TypeShortcut Shortcut="CombineSplitStatusType" Type="Interapptive.Shared.Enums.CombineSplitStatusType, Interapptive.Shared, Version=0.0.0.0, Culture=neutral, PublicKeyToken=6a464ecbd35cd6df" />
+    <TypeShortcut Shortcut="DayOfWeek" Type="System.DayOfWeek" />
     <TypeShortcut Shortcut="FedExBatteryMaterialType" Type="ShipWorks.Shipping.FedEx.FedExBatteryMaterialType, ShipWorks.Shared, Version=0.0.0.0, Culture=neutral, PublicKeyToken=6a464ecbd35cd6df" />
     <TypeShortcut Shortcut="FedExBatteryPackingType" Type="ShipWorks.Shipping.FedEx.FedExBatteryPackingType, ShipWorks.Shared, Version=0.0.0.0, Culture=neutral, PublicKeyToken=6a464ecbd35cd6df" />
     <TypeShortcut Shortcut="FedExBatteryRegulatorySubType" Type="ShipWorks.Shipping.FedEx.FedExBatteryRegulatorySubType, ShipWorks.Shared, Version=0.0.0.0, Culture=neutral, PublicKeyToken=6a464ecbd35cd6df" />
@@ -590,6 +591,8 @@
           <Field Name="AuditDeletedOrders" Type="bool" FieldIndex="11" />
           <Field Name="AuditEnabled" Type="bool" FieldIndex="16" />
           <Field Name="AuditNewOrders" Type="bool" FieldIndex="10" />
+          <Field Name="AutoUpdateDayOfWeek" Type="DayOfWeek" FieldIndex="18" />
+          <Field Name="AutoUpdateHourOfDay" Type="int" Precision="10" FieldIndex="19" />
           <Field Name="ConfigurationID" Type="bool" IsPrimaryKey="true" FieldIndex="0" />
           <Field Name="CustomerCompareAddress" Type="bool" FieldIndex="5" />
           <Field Name="CustomerCompareEmail" Type="bool" FieldIndex="4" />
@@ -1542,8 +1545,10 @@
           <Field Name="ClaimType" Type="int" IsOptional="true" FieldIndex="5" />
           <Field Name="CreatedWithApi" Type="bool" FieldIndex="2" />
           <Field Name="DamageValue" Type="decimal" IsOptional="true" Precision="19" Scale="4" FieldIndex="6" />
+          <Field Name="DateOfIssue" Type="datetime" IsOptional="true" FieldIndex="11" />
           <Field Name="Description" Type="string" IsOptional="true" MaxLength="255" FieldIndex="4" />
           <Field Name="EmailAddress" Type="string" IsOptional="true" MaxLength="100" FieldIndex="9" />
+          <Field Name="InsureShipPolicyID" Type="long" IsOptional="true" Precision="19" FieldIndex="10" />
           <Field Name="InsureShipStoreName" Type="string" MaxLength="75" FieldIndex="1" />
           <Field Name="ItemName" Type="string" IsOptional="true" MaxLength="255" FieldIndex="3" />
           <Field Name="ShipmentID" Type="long" IsPrimaryKey="true" IsAutoCreated="true" FieldIndex="0" />
@@ -2307,7 +2312,7 @@
           <Field Name="ImageUrl" Type="string" IsOptional="true" MaxLength="500" FieldIndex="8" />
           <Field Name="IsActive" Type="bool" FieldIndex="9" />
           <Field Name="Length" Type="decimal" IsOptional="true" Precision="10" Scale="2" FieldIndex="3" />
-          <Field Name="Name" Type="string" MaxLength="300" FieldIndex="2" />
+          <Field Name="Name" Type="string" IsOptional="true" MaxLength="300" FieldIndex="2" />
           <Field Name="ProductVariantID" Type="long" Precision="19" FieldIndex="0" />
           <Field Name="SKU" Type="string" MaxLength="300" FieldIndex="1" />
           <Field Name="Weight" Type="decimal" IsOptional="true" Precision="29" Scale="9" FieldIndex="6" />
@@ -2833,6 +2838,8 @@
           <Field Name="Fax" Type="string" MaxLength="35" FieldIndex="17" />
           <Field Name="InitialDownloadDays" Type="int" IsOptional="true" FieldIndex="29" />
           <Field Name="InitialDownloadOrder" Type="long" IsOptional="true" FieldIndex="30" />
+          <Field Name="InsureShipApiKey" Type="string" IsOptional="true" MaxLength="255" FieldIndex="32" />
+          <Field Name="InsureShipClientID" Type="long" IsOptional="true" Precision="19" FieldIndex="31" />
           <Field Name="InternationalAddressValidationSetting" Type="AddressValidationStoreSettingType" FieldIndex="24" />
           <Field Name="License" Type="string" MaxLength="150" FieldIndex="2" />
           <Field Name="ManualOrderPostfix" Type="string" MaxLength="10" FieldIndex="28" />
@@ -4475,7 +4482,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2018-12-27T17:09:33.5512363Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2019-02-06T17:53:18.387616Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -4847,7 +4854,7 @@
                     <Field Name="OrderItemID" Ordinal="1" IsPrimaryKey="true" DbType="0" Precision="19" />
                     <Field Name="OrderAddressID" Ordinal="2" DbType="0" Precision="19" />
                     <Field Name="OrderProductID" Ordinal="3" DbType="0" Precision="19" />
-                    <Field Name="IsDigitalItem" Ordinal="4" DbType="2" />
+                    <Field Name="IsDigitalItem" Ordinal="4" HasDefaultValue="true" DefaultValue="(0)" DbType="2" />
                     <Field Name="EventDate" Ordinal="5" IsOptional="true" DbType="4" />
                     <Field Name="EventName" Ordinal="6" IsOptional="true" DbType="12" Length="255" />
                     <Field Name="ParentOrderProductID" Ordinal="7" IsOptional="true" DbType="0" Precision="19" />
@@ -5041,6 +5048,8 @@
                     <Field Name="ArchivalSettingsXml" Ordinal="16" HasDefaultValue="true" DefaultValue="'&lt;ArchivalSettings/&gt;'" DbType="26" Length="2147483647" />
                     <Field Name="AuditEnabled" Ordinal="17" HasDefaultValue="true" DefaultValue="(1)" DbType="2" />
                     <Field Name="DefaultPickListTemplateID" Ordinal="18" IsOptional="true" DbType="0" Precision="19" />
+                    <Field Name="AutoUpdateDayOfWeek" Ordinal="19" DbType="8" Precision="10" />
+                    <Field Name="AutoUpdateHourOfDay" Ordinal="20" DbType="8" Precision="10" />
                   </Fields>
                 </Table>
                 <Table Name="Customer">
@@ -6516,7 +6525,7 @@
                     <Field Name="JoinMask" Ordinal="8" DbType="8" Precision="10" />
                     <Field Name="Cost" Ordinal="9" DbType="8" Precision="10" />
                     <Field Name="Count" Ordinal="10" DbType="8" Precision="10" />
-                    <Field Name="EntityExistsQuery" Ordinal="11" IsOptional="true" HasDefaultValue="true" DefaultValue="''" DbType="12" Length="2147483647" />
+                    <Field Name="EntityExistsQuery" Ordinal="11" DbType="12" Length="2147483647" />
                   </Fields>
                 </Table>
                 <Table Name="FilterNodeContentDetail">
@@ -6789,6 +6798,8 @@
                     <Field Name="SubmissionDate" Ordinal="8" IsOptional="true" DbType="4" />
                     <Field Name="ClaimID" Ordinal="9" IsOptional="true" DbType="0" Precision="19" />
                     <Field Name="EmailAddress" Ordinal="10" IsOptional="true" DbType="12" Length="100" />
+                    <Field Name="InsureShipPolicyID" Ordinal="11" IsOptional="true" DbType="0" Precision="19" />
+                    <Field Name="DateOfIssue" Ordinal="12" IsOptional="true" DbType="4" />
                   </Fields>
                 </Table>
                 <Table Name="iParcelAccount">
@@ -6815,7 +6826,7 @@
                   </Fields>
                 </Table>
                 <Table Name="iParcelPackage">
-                  <PkConstraintName Name="PK_iParcelPackageNew" />
+                  <PkConstraintName Name="PK_iParcelPackage" />
                   <Fields>
                     <Field Name="iParcelPackageID" Ordinal="1" IsIdentity="true" IsPrimaryKey="true" DbType="0" Precision="19" />
                     <Field Name="ShipmentID" Ordinal="2" DbType="0" Precision="19" />
@@ -8547,6 +8558,8 @@
                     <Field Name="ManualOrderPostfix" Ordinal="29" DbType="12" Length="10" />
                     <Field Name="InitialDownloadDays" Ordinal="30" IsOptional="true" DbType="8" Precision="10" />
                     <Field Name="InitialDownloadOrder" Ordinal="31" IsOptional="true" DbType="0" Precision="19" />
+                    <Field Name="InsureShipClientID" Ordinal="32" IsOptional="true" DbType="0" Precision="19" />
+                    <Field Name="InsureShipApiKey" Ordinal="33" IsOptional="true" DbType="12" Length="255" />
                   </Fields>
                 </Table>
                 <Table Name="SystemData">
@@ -9492,7 +9505,7 @@
                   <Fields>
                     <Field Name="ProductVariantID" Ordinal="1" DbType="0" Precision="19" />
                     <Field Name="SKU" Ordinal="2" DbType="12" Length="300" />
-                    <Field Name="Name" Ordinal="3" DbType="12" Length="300" />
+                    <Field Name="Name" Ordinal="3" IsOptional="true" DbType="12" Length="300" />
                     <Field Name="Length" Ordinal="4" IsOptional="true" DbType="5" Precision="10" Scale="2" />
                     <Field Name="Width" Ordinal="5" IsOptional="true" DbType="5" Precision="10" Scale="2" />
                     <Field Name="Height" Ordinal="6" IsOptional="true" DbType="5" Precision="10" Scale="2" />
@@ -11131,6 +11144,8 @@
             <FieldMapping FieldName="AuditDeletedOrders" TargetFieldName="AuditDeletedOrders" />
             <FieldMapping FieldName="AuditEnabled" TargetFieldName="AuditEnabled" />
             <FieldMapping FieldName="AuditNewOrders" TargetFieldName="AuditNewOrders" />
+            <FieldMapping FieldName="AutoUpdateDayOfWeek" TargetFieldName="AutoUpdateDayOfWeek" />
+            <FieldMapping FieldName="AutoUpdateHourOfDay" TargetFieldName="AutoUpdateHourOfDay" />
             <FieldMapping FieldName="ConfigurationID" TargetFieldName="ConfigurationID" />
             <FieldMapping FieldName="CustomerCompareAddress" TargetFieldName="CustomerCompareAddress" />
             <FieldMapping FieldName="CustomerCompareEmail" TargetFieldName="CustomerCompareEmail" />
@@ -12099,8 +12114,10 @@
             <FieldMapping FieldName="ClaimType" TargetFieldName="ClaimType" />
             <FieldMapping FieldName="CreatedWithApi" TargetFieldName="CreatedWithApi" />
             <FieldMapping FieldName="DamageValue" TargetFieldName="DamageValue" />
+            <FieldMapping FieldName="DateOfIssue" TargetFieldName="DateOfIssue" />
             <FieldMapping FieldName="Description" TargetFieldName="Description" />
             <FieldMapping FieldName="EmailAddress" TargetFieldName="EmailAddress" />
+            <FieldMapping FieldName="InsureShipPolicyID" TargetFieldName="InsureShipPolicyID" />
             <FieldMapping FieldName="InsureShipStoreName" TargetFieldName="InsureShipStoreName" />
             <FieldMapping FieldName="ItemName" TargetFieldName="ItemName" />
             <FieldMapping FieldName="ShipmentID" TargetFieldName="ShipmentID" />
@@ -13419,6 +13436,8 @@
             <FieldMapping FieldName="Fax" TargetFieldName="Fax" />
             <FieldMapping FieldName="InitialDownloadDays" TargetFieldName="InitialDownloadDays" />
             <FieldMapping FieldName="InitialDownloadOrder" TargetFieldName="InitialDownloadOrder" />
+            <FieldMapping FieldName="InsureShipApiKey" TargetFieldName="InsureShipApiKey" />
+            <FieldMapping FieldName="InsureShipClientID" TargetFieldName="InsureShipClientID" />
             <FieldMapping FieldName="InternationalAddressValidationSetting" TargetFieldName="InternationalAddressValidationSetting" />
             <FieldMapping FieldName="License" TargetFieldName="License" />
             <FieldMapping FieldName="ManualOrderPostfix" TargetFieldName="ManualOrderPostfix" />

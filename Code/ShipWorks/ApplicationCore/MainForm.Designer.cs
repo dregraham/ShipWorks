@@ -50,7 +50,7 @@ namespace ShipWorks
             this.buttonManageActions = new Divelements.SandRibbon.Button();
             this.buttonShippingSettings = new Divelements.SandRibbon.Button();
             this.buttonShippingProfiles = new Divelements.SandRibbon.Button();
-            this.buttonOptions = new Divelements.SandRibbon.Button();
+            this.buttonSettings = new Divelements.SandRibbon.Button();
             this.buttonOrderLookupViewFields = new Divelements.SandRibbon.Button();
             this.buttonManageStores = new Divelements.SandRibbon.Button();
             this.buttonManageUsers = new Divelements.SandRibbon.Button();
@@ -538,7 +538,7 @@ namespace ShipWorks
             this.buttonManageActions,
             this.buttonShippingSettings,
             this.buttonShippingProfiles,
-            this.buttonOptions,
+            this.buttonSettings,
             this.buttonOrderLookupViewFields});
             //
             // buttonManageFilters
@@ -591,12 +591,12 @@ namespace ShipWorks
             //
             // buttonOptions
             //
-            this.buttonOptions.Guid = new System.Guid("cf121122-bbfb-4eb0-aa60-6d41d1128b12");
-            this.buttonOptions.Image = global::ShipWorks.Properties.Resources.preferences;
-            this.buttonOptions.QuickAccessKey = "O";
-            this.buttonOptions.Text = "Options";
-            this.buttonOptions.TextContentRelation = Divelements.SandRibbon.TextContentRelation.Underneath;
-            this.buttonOptions.Activate += new System.EventHandler(this.OnShowOptions);
+            this.buttonSettings.Guid = new System.Guid("cf121122-bbfb-4eb0-aa60-6d41d1128b12");
+            this.buttonSettings.Image = global::ShipWorks.Properties.Resources.preferences;
+            this.buttonSettings.QuickAccessKey = "O";
+            this.buttonSettings.Text = "Settings";
+            this.buttonSettings.TextContentRelation = Divelements.SandRibbon.TextContentRelation.Underneath;
+            this.buttonSettings.Activate += new System.EventHandler(this.OnShowSettings);
             //
             // buttonOrderLookupViewFields
             //
@@ -2276,7 +2276,7 @@ namespace ShipWorks
             this.applicationMenu.OptionsButtonText = "ShipWorks Opt&ions";
             this.applicationMenu.OptionsButtonVisible = false;
             this.applicationMenu.RecentDocumentsHeading = "";
-            this.applicationMenu.ShowOptions += new System.EventHandler(this.OnShowOptions);
+            this.applicationMenu.ShowOptions += new System.EventHandler(this.OnShowSettings);
             this.applicationMenu.BeforePopup += new Divelements.SandRibbon.BeforePopupEventHandler(this.OnBeforePopupApplicationMenu);
             //
             // mainMenuItemOptions
@@ -2285,7 +2285,7 @@ namespace ShipWorks
             this.mainMenuItemOptions.Image = global::ShipWorks.Properties.Resources.preferences;
             this.mainMenuItemOptions.QuickAccessKey = "O";
             this.mainMenuItemOptions.Text = "&Options";
-            this.mainMenuItemOptions.Activate += new System.EventHandler(this.OnShowOptions);
+            this.mainMenuItemOptions.Activate += new System.EventHandler(this.OnShowSettings);
             //
             // mainMenuItemSupport
             //
@@ -3316,7 +3316,7 @@ namespace ShipWorks
         private Divelements.SandRibbon.RibbonChunk ribbonChunkShipping;
         private Divelements.SandRibbon.Button buttonShipOrders;
         private Divelements.SandRibbon.Button buttonTrackOrders;
-        private Divelements.SandRibbon.Button buttonOptions;
+        private Divelements.SandRibbon.Button buttonSettings;
         private TD.SandDock.DockableWindow dockableWindowOrderFilters;
         private TD.SandDock.DockableWindow dockableWindowCustomerFilters;
         private TD.SandDock.SandDockManager sandDockManager;

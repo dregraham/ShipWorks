@@ -15,5 +15,15 @@
         /// The variables to be posted
         /// </summary>
         IHttpVariableCollection Variables { get; }
+
+        /// <summary>
+        /// Add a header
+        /// </summary>
+        IHttpVariableRequestSubmitter AddHeader(string key, string value);
+
+        /// <summary>
+        /// Add a variable
+        /// </summary>
+        IHttpVariableRequestSubmitter AddVariable(string key, string value);
     }
 }

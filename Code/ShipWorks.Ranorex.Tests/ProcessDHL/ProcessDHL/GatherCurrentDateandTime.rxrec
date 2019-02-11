@@ -1,0 +1,69 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<recordtable
+embeddedrepository="False"
+id="d067a6d3-aecf-48ef-ab28-00998ab00bad"
+mode="Global"
+rxversion="8.1">
+	<name>
+		GatherCurrentDateandTime
+	</name>
+	<repeatcount>
+		1
+	</repeatcount>
+	<turbomode>
+		False
+	</turbomode>
+	<genreport>
+		True
+	</genreport>
+	<speedfactor>
+		1
+	</speedfactor>
+	<useDefaultItemLogging>
+		True
+	</useDefaultItemLogging>
+	<codegen
+	classname="GatherCurrentDateandTime"
+	namespace="ProcessDHL">
+	</codegen>
+	<variables>
+	</variables>
+	<recorditems>
+		<userrecorditem
+		classname="GatherCurrentDateandTime"
+		enabled="True"
+		isexternaltestmethod="False"
+		methodname="DateandTime"
+		namespace="ProcessDHL"
+		optional="False"
+		varname="">
+			<comment>
+			</comment>
+			<bindings>
+			</bindings>
+			<arguments
+			id="229ecfb3-9a28-49cc-94d6-fafb53e56478">
+			</arguments>
+		</userrecorditem>
+	</recorditems>
+	<repository
+	id="cbae2dae-15ff-45e7-b7e9-3d7c549c469a"
+	name="SmokeTestRepository"
+	relativepath="SmokeTestRepository.rxrep"
+	rxversion="8.1">
+		<codegen
+		classname="SmokeTestRepository"
+		namespace="ProcessDHL">
+		</codegen>
+		<rootfolder
+		id="4aacfef1-6402-4ba7-b3c9-270ac9a4db4a"
+		name="_rootdummy_">
+		</rootfolder>
+	</repository>
+	<usercodefile
+	lang="CSharp">
+		GatherCurrentDateandTime.UserCode.cs
+	</usercodefile>
+	<references>
+	</references>
+</recordtable>

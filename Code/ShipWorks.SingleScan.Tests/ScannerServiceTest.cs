@@ -5,7 +5,7 @@ using Interapptive.Shared.Win32;
 using Interapptive.Shared.Win32.Native;
 using Moq;
 using ShipWorks.ApplicationCore;
-using ShipWorks.ApplicationCore.Options;
+using ShipWorks.ApplicationCore.Settings;
 using ShipWorks.Common;
 using ShipWorks.Common.IO.Hardware.Scanner;
 using ShipWorks.Data.Model.EntityClasses;

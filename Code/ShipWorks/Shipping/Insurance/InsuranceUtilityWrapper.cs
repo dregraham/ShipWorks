@@ -119,5 +119,10 @@ namespace ShipWorks.Shipping.Insurance
         /// Get the default insurance value to use based on the shipment contents
         /// </summary>
         public decimal GetInsuranceValue(ShipmentEntity shipment) => InsuranceUtility.GetInsuranceValue(shipment);
+
+        /// <summary>
+        /// Determines how much the shipment was insured for.
+        /// </summary>
+        public decimal GetInsuredValue(ShipmentEntity shipment) => InsuranceUtility.GetInsuredValue(shipment);
     }
 }

@@ -15,6 +15,7 @@ using System.Drawing;
 using System.Threading;
 using WinForms = System.Windows.Forms;
 using System.Net.Mail;
+using System.Windows.Forms;
 
 using Ranorex;
 using Ranorex.Core;
@@ -47,8 +48,15 @@ namespace SmokeTest
 
         public void GrabVersion()
         {
+        	Clipboard.Clear();
+        	
+        	Report.Log(ReportLevel.Info, "Keyboard", "Key sequence '{LControlKey down}{Akey}{LControlKey up}{LControlKey down}{Ckey}{LControlKey up}{Return}'.", new RecordItemIndex(5));
+            Keyboard.Press("{LControlKey down}{Akey}{LControlKey up}{LControlKey down}{Ckey}{LControlKey up}{Return}");
+            Delay.Milliseconds(0);
+            
             //Output the version number to the report
-            SWVersion.SWVersionNumber = ShipWorksVersion;
+            SWVersion.SWVersionNumber = Clipboard.GetText();
+            //SWVersion.SWVersionNumber = ShipWorksVersion;
              Report.Log(ReportLevel.Info, "Get Value", "The version number is " + SWVersion.SWVersionNumber, repo.ShipWorksSa.VersionInfo, new RecordItemIndex(6));
         }
 

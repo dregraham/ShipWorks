@@ -16,17 +16,14 @@ using ShipWorks.Data;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
-using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Carriers.Postal.Express1;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net;
 using ShipWorks.Shipping.Carriers.Postal.Usps.BestRate;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Contracts;
-using ShipWorks.Shipping.Carriers.Postal.WebTools;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Insurance;
-using ShipWorks.Shipping.Profiles;
 using ShipWorks.Shipping.Services;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping.Settings.Origin;
@@ -123,7 +120,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         {
             return new UspsServiceControl(ShipmentTypeCode, rateControl);
         }
-                
+
         /// <summary>
         /// Ensure that all USPS accounts have up to date contract information
         /// </summary>
@@ -296,7 +293,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
 
             profile.Postal.Usps.RateShop = true;
         }
-        
+
         /// <summary>
         /// Generate the carrier specific template xml
         /// </summary>
@@ -417,8 +414,12 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                             RateCache.Instance.Clear();
 
                             // Only notify Tango of changes so it has the latest information (and cuts down on traffic)
-                            ITangoWebClient tangoWebClient = new TangoWebClientFactory().CreateWebClient();
-                            tangoWebClient.LogUspsAccount(account);
+                            using (var lifetimeScope = IoC.BeginLifetimeScope())
+                            {
+                                var tangoWebClient = lifetimeScope.Resolve<ITangoWebClient>();
+
+                                tangoWebClient.LogUspsAccount(account);
+                            }
                         }
                     }
                     catch (Exception exception)

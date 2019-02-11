@@ -643,9 +643,10 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
             {
                 RequestThrottleParameters requestThrottleArgs = new RequestThrottleParameters(BigCommerceWebClientApiCall.GetOrderStatuses, request, ProgressReporter);
 
-                var response = await throttler.ExecuteRequestAsync<RestRequest, List<BigCommerceApiOrderStatus>>(requestThrottleArgs,
+                List<BigCommerceApiOrderStatus> response = await throttler.ExecuteRequestAsync<RestRequest, List<BigCommerceApiOrderStatus>>(requestThrottleArgs,
                         MakeRequest<RestRequest, List<BigCommerceApiOrderStatus>>).ConfigureAwait(false);
-                return response
+
+                return response?
                     .Where(x => !string.IsNullOrWhiteSpace(x.name))
                     .Select(x => new BigCommerceOrderStatus(x.id, x.name))
                     .ToList();

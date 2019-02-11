@@ -383,6 +383,7 @@ namespace ShipWorks.Shipping.Insurance
 
             // Set the shipworks cost
             cost.ShipWorks = quantity * rate;
+            cost.ShipWorksRate = rate;
         }
 
         /// <summary>

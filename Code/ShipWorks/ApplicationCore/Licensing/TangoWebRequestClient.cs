@@ -15,7 +15,7 @@ namespace ShipWorks.ApplicationCore.Licensing
     /// <summary>
     /// Client for making Tango web requests
     /// </summary>
-    [Component]
+    [Component(RegistrationType.Self)]
     public class TangoWebRequestClient : ITangoWebRequestClient
     {
         private readonly IEncryptionProvider encryptionProvider;

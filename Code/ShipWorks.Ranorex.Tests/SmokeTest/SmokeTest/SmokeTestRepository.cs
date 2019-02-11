@@ -57,6 +57,7 @@ namespace SmokeTest
         SmokeTestRepositoryFolders.BullzipPDFPrinterOptionsAppFolder _bullzippdfprinteroptions;
         SmokeTestRepositoryFolders.PDFPrinterAppFolder _pdfprinter;
         SmokeTestRepositoryFolders.ExplorerAppFolder _explorer;
+        SmokeTestRepositoryFolders.Explorer1AppFolder _explorer1;
 
         /// <summary>
         /// Gets the singleton class instance representing the SmokeTestRepository element repository.
@@ -103,6 +104,7 @@ namespace SmokeTest
             _bullzippdfprinteroptions = new SmokeTestRepositoryFolders.BullzipPDFPrinterOptionsAppFolder(this);
             _pdfprinter = new SmokeTestRepositoryFolders.PDFPrinterAppFolder(this);
             _explorer = new SmokeTestRepositoryFolders.ExplorerAppFolder(this);
+            _explorer1 = new SmokeTestRepositoryFolders.Explorer1AppFolder(this);
         }
 
 #region Variables
@@ -117,6 +119,18 @@ namespace SmokeTest
         {
             get { return _TrackingTabIndex; }
             set { _TrackingTabIndex = value; }
+        }
+
+        string _ShipWorksVersion = "ShipWorksVersion";
+
+        /// <summary>
+        /// Gets or sets the value of variable ShipWorksVersion.
+        /// </summary>
+        [TestVariable("631cd7c2-d975-4f55-8de7-b0754cbcbcb4")]
+        public string ShipWorksVersion
+        {
+            get { return _ShipWorksVersion; }
+            set { _ShipWorksVersion = value; }
         }
 
 #endregion
@@ -401,6 +415,15 @@ namespace SmokeTest
         public virtual SmokeTestRepositoryFolders.ExplorerAppFolder Explorer
         {
             get { return _explorer; }
+        }
+
+        /// <summary>
+        /// The Explorer1 folder.
+        /// </summary>
+        [RepositoryFolder("bbd3c228-0a70-4625-a5b5-727c3aaa861e")]
+        public virtual SmokeTestRepositoryFolders.Explorer1AppFolder Explorer1
+        {
+            get { return _explorer1; }
         }
     }
 
@@ -1081,6 +1104,8 @@ namespace SmokeTest
             RepoItemInfo _viewmodeInfo;
             RepoItemInfo _orderlookupInfo;
             RepoItemInfo _batchgridInfo;
+            RepoItemInfo _textboxInfo;
+            RepoItemInfo _closeInfo;
 
             /// <summary>
             /// Creates a new ShipWorks  folder.
@@ -1102,6 +1127,8 @@ namespace SmokeTest
                 _viewmodeInfo = new RepoItemInfo(this, "ViewMode", "?/?/toolbar[@accessiblerole='ToolBar']/element[@accessiblename='View Mode']", 30000, null, "4fa1853a-03d5-42e7-a6b3-f8f6fcdaeba7");
                 _orderlookupInfo = new RepoItemInfo(this, "OrderLookup", "?/?/toolbar[@accessiblerole='ToolBar']/?/?/element[@accessiblename='Order Lookup']", 30000, null, "e58e2306-847d-4f76-86f7-2440fceaed24");
                 _batchgridInfo = new RepoItemInfo(this, "BatchGrid", "?/?/toolbar[@accessiblerole='ToolBar']/?/?/element[@accessiblename='Batch Grid']", 30000, null, "f5275b13-17d2-4474-b39c-031591597b29");
+                _textboxInfo = new RepoItemInfo(this, "TextBox", "text", 30000, null, "53702649-6ea9-40b0-a23a-ccb4401eaeee");
+                _closeInfo = new RepoItemInfo(this, "Close", "button[@name='Close']", 30000, null, "f7071221-4ed3-4ebd-b204-9361e2b0af39");
             }
 
             /// <summary>
@@ -1441,6 +1468,54 @@ namespace SmokeTest
             }
 
             /// <summary>
+            /// The TextBox item.
+            /// </summary>
+            [RepositoryItem("53702649-6ea9-40b0-a23a-ccb4401eaeee")]
+            public virtual Ranorex.Text TextBox
+            {
+                get
+                {
+                    return _textboxInfo.CreateAdapter<Ranorex.Text>(true);
+                }
+            }
+
+            /// <summary>
+            /// The TextBox item info.
+            /// </summary>
+            [RepositoryItemInfo("53702649-6ea9-40b0-a23a-ccb4401eaeee")]
+            public virtual RepoItemInfo TextBoxInfo
+            {
+                get
+                {
+                    return _textboxInfo;
+                }
+            }
+
+            /// <summary>
+            /// The Close item.
+            /// </summary>
+            [RepositoryItem("f7071221-4ed3-4ebd-b204-9361e2b0af39")]
+            public virtual Ranorex.Button Close
+            {
+                get
+                {
+                    return _closeInfo.CreateAdapter<Ranorex.Button>(true);
+                }
+            }
+
+            /// <summary>
+            /// The Close item info.
+            /// </summary>
+            [RepositoryItemInfo("f7071221-4ed3-4ebd-b204-9361e2b0af39")]
+            public virtual RepoItemInfo CloseInfo
+            {
+                get
+                {
+                    return _closeInfo;
+                }
+            }
+
+            /// <summary>
             /// The PersonControl folder.
             /// </summary>
             [RepositoryFolder("9b24ecda-5919-43ca-bec2-cf809ad5090d")]
@@ -1688,6 +1763,7 @@ namespace SmokeTest
             RepoItemInfo _filterallordersInfo;
             RepoItemInfo _amazonamazonInfo;
             RepoItemInfo _optionsInfo;
+            RepoItemInfo _ribbontabhelpInfo;
 
             /// <summary>
             /// Creates a new MainForm  folder.
@@ -1705,6 +1781,7 @@ namespace SmokeTest
                 _filterallordersInfo = new RepoItemInfo(this, "FilterAllOrders", "container[@controlname='panelDockingArea']/?/?/container[@controlname='dockableWindowOrderFilters']//rawtext[@rawtext='All' and @visible='True']", 30000, null, "e1819c8c-6919-4a24-8e69-02f09a08df0a");
                 _amazonamazonInfo = new RepoItemInfo(this, "AmazonAmazon", "container[@controlname='panelDockingArea']/?/?/container[@controlname='dockableWindowOrderFilters']//rawtext[@rawtext='Amazon (Amazon)']", 30000, null, "1e53e598-2cad-4902-89a6-043166bc2656");
                 _optionsInfo = new RepoItemInfo(this, "Options", "?/?/element[@controlname='ribbonTabAdmin']/rawtext[@rawtext='Options' and @visible='True']", 30000, null, "07561b64-77df-4b43-8284-8345dabdb591");
+                _ribbontabhelpInfo = new RepoItemInfo(this, "RibbonTabHelp", "?/?/element[@controlname='ribbonTabHelp']", 30000, null, "5effb9b3-ac3c-465b-bd05-d169dde9c2aa");
             }
 
             /// <summary>
@@ -1920,6 +1997,30 @@ namespace SmokeTest
                 get
                 {
                     return _optionsInfo;
+                }
+            }
+
+            /// <summary>
+            /// The RibbonTabHelp item.
+            /// </summary>
+            [RepositoryItem("5effb9b3-ac3c-465b-bd05-d169dde9c2aa")]
+            public virtual Ranorex.Unknown RibbonTabHelp
+            {
+                get
+                {
+                    return _ribbontabhelpInfo.CreateAdapter<Ranorex.Unknown>(true);
+                }
+            }
+
+            /// <summary>
+            /// The RibbonTabHelp item info.
+            /// </summary>
+            [RepositoryItemInfo("5effb9b3-ac3c-465b-bd05-d169dde9c2aa")]
+            public virtual RepoItemInfo RibbonTabHelpInfo
+            {
+                get
+                {
+                    return _ribbontabhelpInfo;
                 }
             }
 
@@ -9392,6 +9493,7 @@ namespace SmokeTest
             RepoItemInfo _closeInfo;
             RepoItemInfo _version1Info;
             RepoItemInfo _applicationInfo;
+            RepoItemInfo _partcontenthostInfo;
 
             /// <summary>
             /// Creates a new ShipWorksSa  folder.
@@ -9414,6 +9516,7 @@ namespace SmokeTest
                 _closeInfo = new RepoItemInfo(this, "Close", "button[@controlname='close']", 30000, null, "dd438bee-a495-4880-b15e-fdab3a0c3e8d");
                 _version1Info = new RepoItemInfo(this, "Version1", "text[@controlname='version']", 30000, null, "4a87041e-3ecb-4e88-bd9c-a1c41d095420");
                 _applicationInfo = new RepoItemInfo(this, "Application", "?/?/button[@accessiblename='Application']", 30000, null, "7dd01edd-1bc9-45f5-b402-bb08e575c5f0");
+                _partcontenthostInfo = new RepoItemInfo(this, "PARTContentHost", "?/?/container[@automationid='PART_ContentHost']", 30000, null, "9d45a334-cd7a-41c1-877a-0a8a77e38446");
             }
 
             /// <summary>
@@ -9725,6 +9828,30 @@ namespace SmokeTest
                 get
                 {
                     return _applicationInfo;
+                }
+            }
+
+            /// <summary>
+            /// The PARTContentHost item.
+            /// </summary>
+            [RepositoryItem("9d45a334-cd7a-41c1-877a-0a8a77e38446")]
+            public virtual Ranorex.Container PARTContentHost
+            {
+                get
+                {
+                    return _partcontenthostInfo.CreateAdapter<Ranorex.Container>(true);
+                }
+            }
+
+            /// <summary>
+            /// The PARTContentHost item info.
+            /// </summary>
+            [RepositoryItemInfo("9d45a334-cd7a-41c1-877a-0a8a77e38446")]
+            public virtual RepoItemInfo PARTContentHostInfo
+            {
+                get
+                {
+                    return _partcontenthostInfo;
                 }
             }
 
@@ -13260,6 +13387,72 @@ namespace SmokeTest
                 get
                 {
                     return _ranorexstudio1runningwindowInfo;
+                }
+            }
+        }
+
+        /// <summary>
+        /// The Explorer1AppFolder folder.
+        /// </summary>
+        [RepositoryFolder("bbd3c228-0a70-4625-a5b5-727c3aaa861e")]
+        public partial class Explorer1AppFolder : RepoGenBaseFolder
+        {
+            RepoItemInfo _shipworksbbenterprise3atfakecomInfo;
+
+            /// <summary>
+            /// Creates a new Explorer1  folder.
+            /// </summary>
+            public Explorer1AppFolder(RepoGenBaseFolder parentFolder) :
+                    base("Explorer1", "/form[@processname='explorer' and @class='TaskListThumbnailWnd']", parentFolder, 30000, null, true, "bbd3c228-0a70-4625-a5b5-727c3aaa861e", "")
+            {
+                _shipworksbbenterprise3atfakecomInfo = new RepoItemInfo(this, "ShipWorksBbenterprise3AtfakeCom", "?/?/listitem[@accessiblename~'^ShipWorks\\ -\\ bbenterprise3']", 30000, null, "d0fb004b-02bc-491c-9ef7-921e74bc166b");
+            }
+
+            /// <summary>
+            /// The Self item.
+            /// </summary>
+            [RepositoryItem("bbd3c228-0a70-4625-a5b5-727c3aaa861e")]
+            public virtual Ranorex.Form Self
+            {
+                get
+                {
+                    return _selfInfo.CreateAdapter<Ranorex.Form>(true);
+                }
+            }
+
+            /// <summary>
+            /// The Self item info.
+            /// </summary>
+            [RepositoryItemInfo("bbd3c228-0a70-4625-a5b5-727c3aaa861e")]
+            public virtual RepoItemInfo SelfInfo
+            {
+                get
+                {
+                    return _selfInfo;
+                }
+            }
+
+            /// <summary>
+            /// The ShipWorksBbenterprise3AtfakeCom item.
+            /// </summary>
+            [RepositoryItem("d0fb004b-02bc-491c-9ef7-921e74bc166b")]
+            public virtual Ranorex.ListItem ShipWorksBbenterprise3AtfakeCom
+            {
+                get
+                {
+                    return _shipworksbbenterprise3atfakecomInfo.CreateAdapter<Ranorex.ListItem>(true);
+                }
+            }
+
+            /// <summary>
+            /// The ShipWorksBbenterprise3AtfakeCom item info.
+            /// </summary>
+            [RepositoryItemInfo("d0fb004b-02bc-491c-9ef7-921e74bc166b")]
+            public virtual RepoItemInfo ShipWorksBbenterprise3AtfakeComInfo
+            {
+                get
+                {
+                    return _shipworksbbenterprise3atfakecomInfo;
                 }
             }
         }

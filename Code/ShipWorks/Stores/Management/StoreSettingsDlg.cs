@@ -142,10 +142,10 @@ namespace ShipWorks.Stores.Management
         private void CheckLicense(StoreEntity storeEntity)
         {
             ILicenseService licenseService = IoC.UnsafeGlobalLifetimeScope.Resolve<ILicenseService>();
-            ILicense license = licenseService.GetLicense(storeEntity);
+            ILicense storeLicense = licenseService.GetLicense(storeEntity);
 
             // If legacy customer or magic keys down, display license
-            if (!license.IsLegacy && !InterapptiveOnly.MagicKeysDown)
+            if (!storeLicense.IsLegacy && !InterapptiveOnly.MagicKeysDown)
             {
                 optionControl.Controls.Remove(optionPageLicense);
             }
@@ -443,9 +443,13 @@ namespace ShipWorks.Stores.Management
 
                     if (!storeDisabled.Checked)
                     {
-                        accountDetail = new TangoWebClientFactory().CreateWebClient().GetLicenseStatus(license.Key, store);
-                        licenseStatus.Text = accountDetail.Description;
+                        using (var lifetimeScope = IoC.BeginLifetimeScope())
+                        {
+                            var tangoWebClient = lifetimeScope.Resolve<ITangoWebClient>();
 
+                            accountDetail = tangoWebClient.GetLicenseStatus(license.Key, store);
+                            licenseStatus.Text = accountDetail.Description;
+                        }
                         UpdateChangeLicenseText();
                     }
                 }
