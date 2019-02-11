@@ -201,7 +201,7 @@ namespace ShipWorks.Stores
         /// </summary>
         public static List<StoreEntity> GetEnabledStores()
         {
-            return GetAllStores().Where(s => s.Enabled).ToList();
+            return GetAllStores()?.Where(s => s.Enabled).ToList();
         }
 
         /// <summary>

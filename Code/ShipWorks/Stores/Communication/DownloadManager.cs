@@ -265,12 +265,13 @@ namespace ShipWorks.Stores.Communication
             bool wereTimesCached = lastDownloadTimesCache != null;
 
             // Find each store that is ready for an auto-download
-            List<StoreEntity> readyToDownload = StoreManager.GetAllStores().Where(ShouldDownload).ToList();
+            List<StoreEntity> readyToDownload = StoreManager.GetAllStores()?.Where(ShouldDownload).ToList();
+
 
             // We checked the ready-to-download with cached download times. If there are any that are ready to download it
-            // could be that they've recently been downloaded since we cached the values.  So check again after refetching
+            // could be that they've recently been downloaded since we cached the values.  So check again after re-fetching.
             // the latest last download times.
-            if (wereTimesCached && readyToDownload.Count > 0)
+            if (wereTimesCached && readyToDownload?.Count > 0)
             {
                 lock (lastDownloadTimesLock)
                 {
