@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using Autofac.Extras.Moq;
 using ShipWorks.ApplicationCore;
 using ShipWorks.Data.Administration;
+using ShipWorks.Escalator;
 using ShipWorks.Tests.Shared;
 using Xunit;
 
@@ -49,23 +50,12 @@ namespace ShipWorks.Tests.Data.Administration
         [Fact]
         public void Update_WritesUpdateInfoToStream()
         {
-            var serverTask = StartServer();
-            Assert.True(testObject.Update(new Version(0, 0, 123)).Success);
-            Assert.Equal("0.0.123", serverTask.Result);
-        }
+            var communictionBridge = new ShipWorksCommunicationBridge(sessionGuid.ToString());
 
-        private Task<string> StartServer()
-        {
-            return Task.Factory.StartNew(() =>
-            {
-                var server = new NamedPipeServerStream(sessionGuid.ToString());
-                server.WaitForConnection();
-                StreamReader reader = new StreamReader(server);
-                while (true)
-                {
-                    return reader.ReadLine();
-                }
-            });
+            communictionBridge.OnMessage += (m) => Assert.Equal("0.0.123", m);
+
+            Assert.True(testObject.IsAvailable);
+            Assert.True(testObject.Update(new Version(0, 0, 123)).Success);
         }
 
         public void Dispose()
