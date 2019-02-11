@@ -697,6 +697,10 @@
       <Project>{6F05267C-1883-4526-8D83-E46B7B2D2FAF}</Project>
       <Name>ShipWorks.Data.Model</Name>
     </ProjectReference>
+    <ProjectReference Include="..\ShipWorks.Escalator\ShipWorks.Escalator.csproj">
+      <Project>{E63D098C-7C6D-4B5B-9A0F-CECA60BFD035}</Project>
+      <Name>ShipWorks.Escalator</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ShipWorks.Executable\ShipWorks.csproj">
       <Project>{fcd9a0e9-0954-4249-8bac-3bcbf93e6e10}</Project>
       <Name>ShipWorks</Name>
