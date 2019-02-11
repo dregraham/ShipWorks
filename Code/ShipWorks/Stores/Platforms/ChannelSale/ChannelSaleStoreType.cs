@@ -60,7 +60,7 @@ namespace ShipWorks.Stores.Platforms.ChannelSale
         /// <summary>
         /// Get the account settings help url
         /// </summary>
-        public override string AccountSettingsHelpUrl => "http://support.shipworks.com/support/solutions/articles/4000023678";
+        public override string AccountSettingsHelpUrl => "https://shipworks.zendesk.com/hc/en-us/articles/360022652851";
 
         /// <summary>
         /// Use the username, since the integration url will be the same for all customers.

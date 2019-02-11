@@ -18,12 +18,12 @@ namespace ShipWorks.Shipping.UI.Carriers.Postal.Usps
         // Global Post Advantage Program stuff
         private const string StampsGlobalPostAdvantageProgramDisplayUrl = "https://stamps.custhelp.com/app/answers/detail/a_id/5174";
         private const string EndiciaGlobalPostAdvantageProgramDisplayUrl = "https://stamps.custhelp.com/app/answers/detail/a_id/5175";
-        private const string GlobalPostAdvantageProgramMoreInfoUrl = "http://support.shipworks.com/support/solutions/articles/4000114989";
+        private const string GlobalPostAdvantageProgramMoreInfoUrl = "https://shipworks.zendesk.com/hc/en-us/articles/360022649931";
         private const string GlobalPostAdvantageProgramBrowserDlgTitle = "Your First-Class International Envelope Label";
 
         // Presort info
         private const string PresortDisplayUrl = "https://stamps.custhelp.com/app/answers/detail/a_id/5229";
-        private const string PresortMoreInfoUrl = "http://support.shipworks.com/support/solutions/articles/4000121488-presort-labels";
+        private const string PresortMoreInfoUrl = "https://shipworks.zendesk.com/hc/en-us/articles/360022468332";
         private const string PresortDialogTitle = "Your International Label";
 
         /// <summary>

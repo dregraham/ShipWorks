@@ -199,8 +199,7 @@ namespace ShipWorks.Stores.Platforms.Groupon
         /// <summary>
         /// Gets the help URL to use in the account settings.
         /// </summary>
-        public static string AccountSettingsHelpUrl =>
-            "http://support.shipworks.com/support/solutions/articles/4000046208";
+        public static string AccountSettingsHelpUrl => "https://shipworks.zendesk.com/hc/en-us/articles/360022653291";
 
         /// <summary>
         /// Get any filters that should be created as an initial filter set when the store is first created.  If the list is non-empty they will

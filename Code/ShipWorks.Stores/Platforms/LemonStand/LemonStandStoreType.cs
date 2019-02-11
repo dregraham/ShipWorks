@@ -65,7 +65,7 @@ namespace ShipWorks.Stores.Platforms.LemonStand
         /// <summary>
         /// Gets the help URL to use in the account settings.
         /// </summary>
-        public static Uri AccountSettingsHelpUrl => new Uri("http://support.shipworks.com/support/solutions/articles/4000062623");
+        public static Uri AccountSettingsHelpUrl => new Uri("https://shipworks.zendesk.com/hc/en-us/articles/360022465632");
 
         /// <summary>
         /// The initial download policy

@@ -35,6 +35,6 @@ namespace ShipWorks.Stores.Platforms.SellerActive
         /// Gets the account settings help URL.
         /// </summary>
         public override string AccountSettingsHelpUrl =>
-            "http://support.shipworks.com/support/solutions/articles/4000098529-adding-a-selleractive-store";
+            "https://shipworks.zendesk.com/hc/en-us/articles/360022654071";
     }
 }

@@ -120,8 +120,7 @@
             this.helpLink.Size = new System.Drawing.Size(55, 13);
             this.helpLink.TabIndex = 14;
             this.helpLink.Text = "click here.";
-            this.helpLink.Url = "http://support.shipworks.com/support/solutions/articles/4000067468-adding-a-sears" +
-    "-marketplace-store";
+            this.helpLink.Url = "https://shipworks.zendesk.com/hc/en-us/articles/360022466312";
             // 
             // SearsAccountSettingsControl
             // 

@@ -32,7 +32,7 @@
             a special ChannelAdvisor page, granting ShipWorks access, and
             copying and pasting the code on the last page into the Access
             Code field below. For help,
-            <Hyperlink NavigateUri="http://support.shipworks.com/support/solutions/articles/4000105565-adding-a-channeladvisor-store-oauth-" ui:Link.OpenInBrowser="true">click here.</Hyperlink>
+            <Hyperlink NavigateUri="https://shipworks.zendesk.com/hc/en-us/articles/360022652811" ui:Link.OpenInBrowser="true">click here.</Hyperlink>
         </TextBlock>
         <Button Grid.Row="2"
                 Grid.Column="0"

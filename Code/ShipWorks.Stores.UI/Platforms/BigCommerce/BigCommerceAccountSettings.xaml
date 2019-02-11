@@ -47,7 +47,7 @@
             </Image>
             <TextBlock TextAlignment="Left" VerticalAlignment="Center"
                        Margin="6, 0, 0, 0">
-                <Hyperlink NavigateUri="http://support.shipworks.com/support/solutions/articles/4000101573-converting-bigcommerce-to-oauth-api" ui:Link.OpenInBrowser="true">More info...</Hyperlink>
+                <Hyperlink NavigateUri="https://shipworks.zendesk.com/hc/en-us/articles/360022649091" ui:Link.OpenInBrowser="true">More info...</Hyperlink>
             </TextBlock>
         </StackPanel>
         

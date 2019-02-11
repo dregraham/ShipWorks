@@ -37,7 +37,7 @@
                 <TextBlock>2. Modify your products list to match the sample, or add your products to the sample.</TextBlock>
                 <TextBlock>3. Click the import button to choose the file and start the import.</TextBlock>
             </StackPanel>
-            <TextBlock><Hyperlink ui:Link.OpenInBrowser="True" NavigateUri="http://support.shipworks.com/support/solutions/articles/4000133916-creating-a-product-import-file">Click here</Hyperlink>
+            <TextBlock><Hyperlink ui:Link.OpenInBrowser="True" NavigateUri="https://shipworks.zendesk.com/hc/en-us/articles/360022648171">Click here</Hyperlink>
                 for more details about the format required for importing products.</TextBlock>
         </StackPanel>
 

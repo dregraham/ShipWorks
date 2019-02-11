@@ -93,7 +93,7 @@
                                             Converter={StaticResource BooleanToVisibility},
                                             UpdateSourceTrigger=PropertyChanged}">
                 <Run>For help adding your Walmart store,</Run>
-                <Hyperlink NavigateUri="http://support.shipworks.com/support/solutions/articles/4000098182-adding-walmart-to-shipworks" ui:Link.OpenInBrowser="true">click here.</Hyperlink>
+                <Hyperlink NavigateUri="https://shipworks.zendesk.com/hc/en-us/articles/360022654531" ui:Link.OpenInBrowser="true">click here.</Hyperlink>
             </TextBlock>
         </Grid>
     </StackPanel>

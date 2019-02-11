@@ -36,7 +36,7 @@
                 are familiar with SQL, databases, etc. The software does not validate
                 the queries used and incorrectly specified queries may adversely affect
                 or corrupt your data.
-                <Hyperlink NavigateUri="http://support.shipworks.com/support/solutions/articles/4000083207" RequestNavigate="OpenLink">More info...</Hyperlink>
+                <Hyperlink NavigateUri="https://shipworks.zendesk.com/hc/en-us/articles/360022649391" RequestNavigate="OpenLink">More info...</Hyperlink>
             </TextBlock>
         </Grid>
         <Button Grid.Row="1"

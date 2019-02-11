@@ -45,7 +45,7 @@ namespace ShipWorks.Stores.UI.Platforms.SparkPay.WizardPages
         /// The token
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public string HelpUrl => "http://support.shipworks.com/helpdesk";
+        public string HelpUrl => "https://shipworks.zendesk.com/hc/en-us";
 
         /// <summary>
         /// The token

@@ -54,7 +54,7 @@ namespace ShipWorks.Stores.Management
         /// </summary>
         private void OnLinkGettingStartedGuide(object sender, EventArgs e)
         {
-            WebHelper.OpenUrl("http://support.shipworks.com/support/solutions/articles/104800-getting-started-with-shipworks", this);
+            WebHelper.OpenUrl("https://shipworks.zendesk.com/hc/en-us/articles/360022464752-ShipWorks-User-Manual", this);
         }
     }
 }

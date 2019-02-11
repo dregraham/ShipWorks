@@ -203,7 +203,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OpenAccount
         /// </summary>
         private void OnFeeLinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            WebHelper.OpenUrl("http://support.shipworks.com/solution/articles/4000035267-installing-ups-using-the-ups-setup-wizard", this);
+            WebHelper.OpenUrl("https://shipworks.zendesk.com/hc/en-us/articles/360022654931", this);
         }
     }
 }

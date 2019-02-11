@@ -35,6 +35,6 @@ namespace ShipWorks.Stores.Platforms.CreLoaded
         /// <summary>
         /// Account settings help url
         /// </summary>
-        public override string AccountSettingsHelpUrl => "http://support.shipworks.com/support/solutions/articles/129328";
+        public override string AccountSettingsHelpUrl => "https://shipworks.zendesk.com/hc/en-us/articles/360022653091";
     }
 }

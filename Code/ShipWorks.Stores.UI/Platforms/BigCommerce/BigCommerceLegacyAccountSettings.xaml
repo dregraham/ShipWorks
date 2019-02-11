@@ -57,7 +57,7 @@
                     Grid.Column="1"
                     Margin="0 0 3 3">
             <Run>For help finding your API Path, Username or Token, </Run>
-            <Hyperlink NavigateUri="http://support.shipworks.com/support/solutions/articles/155262-adding-a-bigcommerce-store-" ui:Link.OpenInBrowser="true">click here.</Hyperlink>
+            <Hyperlink NavigateUri="https://shipworks.zendesk.com/hc/en-us/articles/360022464912" ui:Link.OpenInBrowser="true">click here.</Hyperlink>
         </TextBlock>
     </Grid>
 </UserControl>

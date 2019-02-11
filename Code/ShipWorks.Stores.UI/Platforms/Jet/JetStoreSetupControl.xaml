@@ -58,7 +58,7 @@
                    TextWrapping="WrapWithOverflow">
             For help finding your API User or Secret, 
             <Hyperlink
-                NavigateUri="http://support.shipworks.com/support/solutions/articles/4000106557-adding-jet-com-to-shipworks" ui:Link.OpenInBrowser="true">
+                NavigateUri="https://shipworks.zendesk.com/hc/en-us/articles/360022653411" ui:Link.OpenInBrowser="true">
                 click here.
             </Hyperlink>
         </TextBlock>

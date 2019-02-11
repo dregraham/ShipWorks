@@ -116,7 +116,7 @@
                                Grid.ColumnSpan="2"
                                Margin="3 4 4 4">
                         <Run>For help adding your Magento store,</Run>
-                        <Hyperlink NavigateUri="http://support.shipworks.com/support/solutions/articles/4000049745" ui:Link.OpenInBrowser="true">click here.</Hyperlink>
+                        <Hyperlink NavigateUri="https://shipworks.zendesk.com/hc/en-us/articles/360022653711" ui:Link.OpenInBrowser="true">click here.</Hyperlink>
                     </TextBlock>
                 </Grid>
             </StackPanel>

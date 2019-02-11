@@ -127,8 +127,7 @@
             this.helpLink.Size = new System.Drawing.Size(55, 13);
             this.helpLink.TabIndex = 24;
             this.helpLink.Text = "click here.";
-            this.helpLink.Url = "http://support.shipworks.com/support/solutions/articles/167787-adding-a-3dcart-st" +
-    "ore-";
+            this.helpLink.Url = "https://shipworks.zendesk.com/hc/en-us/articles/360022652611";
             // 
             // buttonUpgradeToRest
             // 
@@ -197,8 +196,7 @@
             this.helpLinkUpgrade.Size = new System.Drawing.Size(55, 13);
             this.helpLinkUpgrade.TabIndex = 33;
             this.helpLinkUpgrade.Text = "click here.";
-            this.helpLinkUpgrade.Url = "http://support.shipworks.com/support/solutions/articles/167787-adding-a-3dcart-st" +
-    "ore-";
+            this.helpLinkUpgrade.Url = "https://shipworks.zendesk.com/hc/en-us/articles/360022652611";
             // 
             // ThreeDCartAccountSettingsControl
             // 

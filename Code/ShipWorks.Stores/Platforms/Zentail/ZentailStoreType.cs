@@ -43,7 +43,7 @@ namespace ShipWorks.Stores.Platforms.Zentail
         /// <summary>
         /// Gets the account settings help URL
         /// </summary>
-        public override string AccountSettingsHelpUrl => "http://support.shipworks.com/support/solutions/articles/4000125142-adding-zentail-to-shipworks";
+        public override string AccountSettingsHelpUrl => "https://shipworks.zendesk.com/hc/en-us/articles/360022654791";
 
         /// <summary>
         /// Get carrier name to upload to ZenTail

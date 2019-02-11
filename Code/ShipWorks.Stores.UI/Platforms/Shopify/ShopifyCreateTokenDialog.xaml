@@ -58,7 +58,7 @@
             to your Shopify account. This is done by logging into
             a special Shopify page, granting ShipWorks access, and
             copying and pasting the code on the last page into the Access
-            Code field below. For help,&#160;<Hyperlink ui:Link.OpenInBrowser="true" NavigateUri="http://support.shipworks.com/support/solutions/articles/4000136131-adding-shopify-to-shipworks">click here.</Hyperlink>
+            Code field below. For help,&#160;<Hyperlink ui:Link.OpenInBrowser="true" NavigateUri="https://shipworks.zendesk.com/hc/en-us/articles/360022466392">click here.</Hyperlink>
         </TextBlock>
 
         <StackPanel Grid.Row="1" Style="{StaticResource StepBlock}">

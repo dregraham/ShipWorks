@@ -48,15 +48,9 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
         /// <summary>
         /// Link to article on adding a 3dcart store
         /// </summary>
-        public string AccountSettingsHelpUrl
-        {
-            get
-            {
-                return RestUser ?
-                    "http://support.shipworks.com/solution/articles/4000076906-adding-3dcart-using-rest-api" :
-                    "http://support.shipworks.com/support/solutions/articles/167787-adding-a-3dcart-store-";
-            }
-        }
+        public string AccountSettingsHelpUrl => RestUser ? 
+            "https://shipworks.zendesk.com/hc/en-us/articles/360022464832" : 
+            "https://shipworks.zendesk.com/hc/en-us/articles/360022652611";
 
         /// <summary>
         /// This is a string that uniquely identifies the store.

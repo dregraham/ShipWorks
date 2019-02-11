@@ -36,7 +36,7 @@ namespace ShipWorks.Stores.Platforms.SellerCloud
         /// Gets the account settings help URL.
         /// </summary>
         public override string AccountSettingsHelpUrl =>
-            "http://support.shipworks.com/support/solutions/articles/4000097089-adding-a-sellercloud-store";
+            "https://shipworks.zendesk.com/hc/en-us/articles/360022654091";
 
         /// <summary>
         /// Get value entered in Carrier Name field

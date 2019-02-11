@@ -539,8 +539,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
             this.linkWorldShipMaps.Size = new System.Drawing.Size(82, 13);
             this.linkWorldShipMaps.TabIndex = 14;
             this.linkWorldShipMaps.Text = "explained here.";
-            this.linkWorldShipMaps.Url = "http://support.shipworks.com/support/solutions/articles/104799-setting-up-worldsh" +
-    "ip";
+            this.linkWorldShipMaps.Url = "https://shipworks.zendesk.com/hc/en-us/articles/360022466952";
             // 
             // worldShipAgree2
             // 

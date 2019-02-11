@@ -63,7 +63,7 @@
                 but other order details will be copied from the selected order below:
                 <Hyperlink ui:Link.OpenInBrowser="True"
                            FontStyle="Italic"
-                           NavigateUri="http://support.shipworks.com/support/solutions/articles/4000106629-combining-orders-in-shipworks">more info...</Hyperlink>
+                           NavigateUri="https://shipworks.zendesk.com/hc/en-us/articles/360022469852">more info...</Hyperlink>
             </TextBlock>
         </StackPanel>
 

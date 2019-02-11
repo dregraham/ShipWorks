@@ -331,11 +331,11 @@ namespace ShipWorks.AddressValidation
         {
             if (entityAdapter.IsDomesticCountry())
             {
-                WebHelper.OpenUrl("http://support.shipworks.com/support/solutions/articles/4000051969-using-address-validation", null);
+                WebHelper.OpenUrl("https://shipworks.zendesk.com/hc/en-us/articles/360022648771", null);
             }
             else
             {
-                WebHelper.OpenUrl("http://support.shipworks.com/support/solutions/articles/4000113490-international-address-validation", null);
+                WebHelper.OpenUrl("https://shipworks.zendesk.com/hc/en-us/articles/360022460612", null);
             }
         }
 

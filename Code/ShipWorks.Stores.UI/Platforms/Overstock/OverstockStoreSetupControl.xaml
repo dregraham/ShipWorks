@@ -68,7 +68,7 @@
                    TextWrapping="WrapWithOverflow">
             For help finding your user name or password, 
             <Hyperlink
-                NavigateUri="http://support.shipworks.com/support/solutions/articles/4000122601-adding-an-overstock-store" ui:Link.OpenInBrowser="true">
+                NavigateUri="https://shipworks.zendesk.com/hc/en-us/articles/360022653991" ui:Link.OpenInBrowser="true">
                 click here.
             </Hyperlink>
         </TextBlock>

@@ -47,6 +47,6 @@ namespace ShipWorks.Stores.Platforms.Amosoft
         /// Gets the help URL to use in the account settings.
         /// </summary>
         public override string AccountSettingsHelpUrl =>
-            "http://support.shipworks.com/support/solutions/articles/4000097763-adding-an-amosoft-store";
+            "https://shipworks.zendesk.com/hc/en-us/articles/360022464892";
     }
 }

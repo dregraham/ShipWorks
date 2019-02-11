@@ -51,7 +51,7 @@ namespace ShipWorks.Stores.Platforms.OrderDynamics
         /// <summary>
         /// Account settings help url
         /// </summary>
-        public override string AccountSettingsHelpUrl => "http://support.shipworks.com/support/solutions/articles/4000065047";
+        public override string AccountSettingsHelpUrl => "https://shipworks.zendesk.com/hc/en-us/articles/360022466152";
 
         /// <summary>
         /// Required module version

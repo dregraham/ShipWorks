@@ -110,7 +110,7 @@
         <ui:AlignmentWrapPanel Grid.Row="4">
             <TextBlock VerticalAlignment="Center">
                 <Run>Want to learn more about archiving?</Run>
-                <Hyperlink ui:Link.OpenInBrowser="True" NavigateUri="http://support.shipworks.com/support/solutions/articles/4000119388-archiving-orders-in-shipworks">More info...</Hyperlink>
+                <Hyperlink ui:Link.OpenInBrowser="True" NavigateUri="https://shipworks.zendesk.com/hc/en-us/articles/360022650671">More info...</Hyperlink>
             </TextBlock>
 
             <StackPanel Grid.Row="1"

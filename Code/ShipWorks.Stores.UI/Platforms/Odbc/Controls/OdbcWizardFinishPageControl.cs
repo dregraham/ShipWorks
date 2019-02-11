@@ -24,7 +24,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.Controls
         /// </summary>
         private void OnClickLinkUseABarcodeScanner(object sender, EventArgs e)
         {
-            WebHelper.OpenUrl("http://support.shipworks.com/support/solutions/articles/4000096210-searching-for-orders-using-single-scan-v5-10-or-greater-", this);
+            WebHelper.OpenUrl("https://shipworks.zendesk.com/hc/en-us/articles/360022459692", this);
         }
     }
 }

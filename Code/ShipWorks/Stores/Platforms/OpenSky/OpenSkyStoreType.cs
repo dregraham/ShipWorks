@@ -38,7 +38,7 @@ namespace ShipWorks.Stores.Platforms.OpenSky
         /// <summary>
         /// Gets the account settings help URL.
         /// </summary>
-        public override string AccountSettingsHelpUrl => "http://support.shipworks.com/support/solutions/articles/4000062791";
+        public override string AccountSettingsHelpUrl => "https://shipworks.zendesk.com/hc/en-us/articles/360022653971";
 
         /// <summary>
         /// Gets the online store's carrier name

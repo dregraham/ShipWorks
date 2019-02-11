@@ -1223,7 +1223,7 @@ namespace ShipWorks.Stores.Management
         /// </summary>
         private void ManualStoreHelpLinkLabel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            WebHelper.OpenUrl("http://support.shipworks.com/support/solutions/articles/4000120126-bypassing-the-store-setup", this);
+            WebHelper.OpenUrl("https://shipworks.zendesk.com/hc/en-us/articles/360022464792", this);
         }
 
         /// <summary>

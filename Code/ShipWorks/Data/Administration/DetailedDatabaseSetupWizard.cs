@@ -384,7 +384,7 @@ namespace ShipWorks.Data.Administration
         /// </summary>
         private void OnLinkLearnEnableRemoteConnections(object sender, EventArgs e)
         {
-            WebHelper.OpenUrl("http://support.shipworks.com/support/solutions/articles/4000059021-enabling-remote-connections?", this);
+            WebHelper.OpenUrl("https://shipworks.zendesk.com/hc/en-us/articles/360022647251", this);
         }
 
         #endregion
@@ -1446,7 +1446,7 @@ namespace ShipWorks.Data.Administration
         /// </summary>
         private void OnLinkSqlTroubleshooting(object sender, EventArgs e)
         {
-            WebHelper.OpenUrl("http://support.shipworks.com/support/solutions/articles/4000096365-troubleshooting-database-and-sql-issues-with-shipworks", this);
+            WebHelper.OpenUrl("https://shipworks.zendesk.com/hc/en-us/articles/360022462812", this);
         }
 
         #endregion

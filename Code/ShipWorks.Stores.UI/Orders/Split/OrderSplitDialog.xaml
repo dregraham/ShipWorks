@@ -55,8 +55,12 @@
                          Text="{Binding OrderNumberPostfix}" />
             </StackPanel>
 
-            <TextBlock TextWrapping="Wrap"
-                       Margin="0, 8, 0, 0"><Run Text="You may select the item quantities and order charges for the new order.  Other order details will be copied from the selected order. "/><Hyperlink FontStyle="Italic" NavigateUri="http://support.shipworks.com/support/solutions/articles/4000114647-splitting-orders-in-shipworks" ui:Link.OpenInBrowser="True"><Run Text="more info..."/></Hyperlink></TextBlock>
+            <TextBlock TextWrapping="Wrap" Margin="0, 8, 0, 0">
+                <Run Text="You may select the item quantities and order charges for the new order.  Other order details will be copied from the selected order. "/>
+                <Hyperlink FontStyle="Italic" NavigateUri="https://shipworks.zendesk.com/hc/en-us/articles/360022469872" ui:Link.OpenInBrowser="True">
+                    <Run Text="more info..."/>
+                </Hyperlink>
+            </TextBlock>
         </StackPanel>
 
         <ScrollViewer Grid.Row="1" 

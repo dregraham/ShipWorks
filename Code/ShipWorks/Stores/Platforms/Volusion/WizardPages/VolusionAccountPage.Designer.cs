@@ -198,8 +198,7 @@
             this.linkHelpPassword.Size = new System.Drawing.Size(55, 13);
             this.linkHelpPassword.TabIndex = 1;
             this.linkHelpPassword.Text = "click here.";
-            this.linkHelpPassword.Url = "http://support.shipworks.com/support/solutions/articles/129345-adding-a-volusion-" +
-    "store-";
+            this.linkHelpPassword.Url = "https://shipworks.zendesk.com/hc/en-us/articles/360022654511";
             // 
             // label8
             // 

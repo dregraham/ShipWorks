@@ -245,7 +245,7 @@ namespace ShipWorks.Stores.Platforms.GenericFile.Formats.Xml
         /// </summary>
         private void OnLinkSchemaDocumentation(object sender, EventArgs e)
         {
-            WebHelper.OpenUrl("http://support.shipworks.com/support/solutions/articles/4000101693-shipworks-xsd-file", this);
+            WebHelper.OpenUrl("https://shipworks.zendesk.com/hc/en-us/articles/360022460732", this);
         }
     }
 }
