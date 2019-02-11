@@ -91,6 +91,7 @@ Source: License.rtf; DestDir: {app}; Flags: overwritereadonly ignoreversion; Bef
 Source: {#AppArtifacts}\*.exe; DestDir: {app}; Flags: overwritereadonly ignoreversion; BeforeInstall: BackupInstallingFile
 Source: {#AppArtifacts}\{#= EditionAppConfig}; DestDir: {app}; DestName: "ShipWorks.exe.config"; Flags: overwritereadonly ignoreversion; BeforeInstall: BackupInstallingFile
 Source: {#AppArtifacts}\swc.exe.config; DestDir: {app}; Flags: overwritereadonly ignoreversion; BeforeInstall: BackupInstallingFile
+Source: {#AppArtifacts}\ShipWorks.Escalator.exe.config; DestDir: {app}; Flags: overwritereadonly ignoreversion; BeforeInstall: BackupInstallingFile
 Source: {#AppArtifacts}\*.dll; DestDir: {app}; Excludes: "ShipWorks.Native.dll"; Flags: overwritereadonly ignoreversion; BeforeInstall: BackupInstallingFile
 Source: {#AppArtifacts}\x64\ShipWorks.Native.dll; DestDir: {app}; Flags: overwritereadonly ignoreversion; Check: Is64BitInstallMode; BeforeInstall: BackupInstallingFile
 Source: {#AppArtifacts}\Win32\ShipWorks.Native.dll; DestDir: {app}; Flags: overwritereadonly ignoreversion; Check: not Is64BitInstallMode; BeforeInstall: BackupInstallingFile
@@ -105,9 +106,6 @@ Source: {#AppArtifacts}\SingleScanPanels.swe; DestDir: {app}; Flags: overwritere
     Source: {#AppArtifacts}\ShipWorks.SqlServer.pdb; DestDir: {app}; Flags: overwritereadonly ignoreversion
     Source: {#AppArtifacts}\Interapptive.Shared.pdb; DestDir: {app}; Flags: overwritereadonly ignoreversion
 #endif
-
-[UninstallDelete]
-Type: files; Name: {app}\install.status
 
 [Tasks]
 Name: desktopicon; Description: Create a &Desktop icon; GroupDescription: Additional shortcuts:
@@ -128,7 +126,6 @@ Root: HKLM; Subkey: Software\Microsoft\Windows\CurrentVersion\Run; ValueType: st
 [Run]
 Filename: {app}\ShipWorks.exe; Description: Launch ShipWorks; Flags: nowait postinstall skipifsilent
 Filename: {app}\ShipWorks.exe; Parameters: "/s=scheduler"; Flags: nowait; Check: not NeedRestart
-Filename: {app}\ShipWorks.Escalator.exe; Parameters: "--install"; Flags: runhidden
 
 [UninstallRun]
 Filename: {app}\ShipWorks.exe; Parameters: "/command:uninstall"; Flags: runhidden
@@ -288,10 +285,7 @@ begin
   	if WizardSilent then
   	begin
     	UpgradeDatabase();
-    end;
-    
-    SaveStringToFile(ExpandConstant('{app}\install.status'), 'success', False);
-    
+    end;    
   end;
 end;
 
@@ -301,8 +295,11 @@ end;
 procedure DeinitializeSetup();
 var
 	tempDir: string;
+	installStatus: string;
+	serviceWasStarted: Integer;
 begin
 	tempDir := GetTempDir + '\InstallBackup';
+	installStatus := 'success';
 
 	if DirExists(tempDir)
 	then begin
@@ -310,7 +307,7 @@ begin
 		begin
 			Log('BACKUP: Install failed, rolling back...')
 			DirectoryCopy(tempDir, ExpandConstant('{app}'));
-	        SaveStringToFile(ExpandConstant('{app}\install.status'), 'failure', False);
+			installStatus := 'failure';
 		end;
 
 		DelTree(tempDir, True, True, True);
@@ -318,8 +315,15 @@ begin
 	else
 	begin
 		Log('BACKUP: Install failed, nothing to roll back');
-		SaveStringToFile(ExpandConstant('{app}\install.status'), 'failure', False);
+		installStatus := 'failure';
 	end;
+
+	if WizardSilent then
+  	begin
+		Exec(ExpandConstant(ExpandConstant('{app}') + '\ShipWorks.Escalator.exe'), '--launchshipworks', '', SW_HIDE, ewWaitUntilTerminated, serviceWasStarted)
+    end;   
+
+	Exec(ExpandConstant(WizardDirValue + '\ShipWorks.Escalator.exe'), '--install', '', SW_HIDE, ewWaitUntilTerminated, serviceWasStarted)
 end;
 
 //----------------------------------------------------------------
@@ -512,7 +516,6 @@ begin
 
         end;
     end;
-
 end;
 
 //----------------------------------------------------------------

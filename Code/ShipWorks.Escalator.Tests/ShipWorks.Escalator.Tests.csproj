@@ -21,6 +21,9 @@
     <EmbeddedResource Include="**/*.json;**/*.js;**/*.xml" />
     <EmbeddedResource Remove="obj\**" />
     <None Remove="obj\**" />
+    <None Update="Artifacts\ChecksumTestFile.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
@@ -43,7 +46,9 @@
     <PackageReference Include="xunit.runner.visualstudio" Version="2.4.0" PrivateAssets="all" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Interapptive.Shared\Interapptive.Shared.csproj" />
     <ProjectReference Include="..\ShipWorks.Escalator\ShipWorks.Escalator.csproj" />
     <ProjectReference Include="..\ShipWorks.Tests.Shared\ShipWorks.Tests.Shared.csproj" />
+    <ProjectReference Include="..\ShipWorks\ShipWorks.Core.csproj" />
   </ItemGroup>
 </Project>
