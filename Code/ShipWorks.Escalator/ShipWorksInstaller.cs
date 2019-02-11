@@ -26,9 +26,29 @@ namespace ShipWorks.Escalator
             }
             log.Info($"Install {file.Path} file validated");
 
+            KillShipWorks();
+            RunSetup(file);
+        }
+
+        /// <summary>
+        /// Kill any instance of Shipworks running.
+        /// </summary>
+        private void KillShipWorks()
+        {
+            foreach (Process process in Process.GetProcessesByName("shipworks"))
+            {
+                process.Kill();
+            }
+        }
+
+        /// <summary>
+        /// Run ShipWorks setup
+        /// </summary>
+        private static void RunSetup(InstallFile file)
+        {
             ProcessStartInfo start = new ProcessStartInfo();
             start.FileName = file.Path;
-            start.Arguments = $"/SILENT /DIR={Path.GetDirectoryName(Assembly.GetEntryAssembly().Location)}";
+            start.Arguments = $"/VERYSILENT /DIR={Path.GetDirectoryName(Assembly.GetEntryAssembly().Location)} /log /FORCECLOSEAPPLICATIONS";
 
             int exitCode;
 
