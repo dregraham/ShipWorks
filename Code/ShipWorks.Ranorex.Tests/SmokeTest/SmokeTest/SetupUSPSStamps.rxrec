@@ -28355,6 +28355,22 @@ f8ag+y+1H2X2oAn/ALZg/wCeM/8A3yv+NRvrJ3furRmX1Zwp/LmmfZfanC246UAaXlCjyhUtFAEX
 lCjyhUtFAEXlCjyhUtFAEXlCjyhUtFAEXlCjyhUtFAEXlCjyhUtFAEXlCl8sVJRQB//Z
 			</helperscreenshot>
 		</mouseitem>
+		<userrecorditem
+		classname="SetupUSPSStamps"
+		enabled="True"
+		isexternaltestmethod="False"
+		methodname="UncheckUSPSStampsSetupCleanup"
+		namespace="SmokeTest"
+		optional="False"
+		varname="">
+			<comment>
+			</comment>
+			<bindings>
+			</bindings>
+			<arguments
+			id="db278310-bd91-4d8b-8a44-6751a7c1260c">
+			</arguments>
+		</userrecorditem>
 	</recorditems>
 	<repository
 	id="e7742ed2-f8bc-429c-9794-64d8a30b8c72"

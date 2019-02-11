@@ -73,7 +73,7 @@ namespace SmokeTest
         [System.CodeDom.Compiler.GeneratedCode("Ranorex", "8.1")]
         void ITestModule.Run()
         {
-            Mouse.DefaultMoveTime = 1000;
+            Mouse.DefaultMoveTime = 300;
             Keyboard.DefaultKeyPressTime = 100;
             Delay.SpeedFactor = 1.00;
 
@@ -81,27 +81,27 @@ namespace SmokeTest
 
             // Mouse Move to avoid click inconsistency
             Report.Log(ReportLevel.Info, "Mouse", "Mouse Move to avoid click inconsistency\r\nMouse Left Move item 'MainForm.Manage' at Center.", repo.MainForm.ManageInfo, new RecordItemIndex(0));
-            repo.MainForm.Manage.MoveTo(300);
+            repo.MainForm.Manage.MoveTo();
             Delay.Milliseconds(200);
             
             // Click the Manage Ribbon
             Report.Log(ReportLevel.Info, "Mouse", "Click the Manage Ribbon\r\nMouse Left Click item 'MainForm.Manage' at Center.", repo.MainForm.ManageInfo, new RecordItemIndex(1));
-            repo.MainForm.Manage.Click(300);
+            repo.MainForm.Manage.Click();
             Delay.Milliseconds(200);
             
             // Mouse Move to avoid click inconsistency
             Report.Log(ReportLevel.Info, "Mouse", "Mouse Move to avoid click inconsistency\r\nMouse Left Move item 'MainForm.Shipping' at Center.", repo.MainForm.ShippingInfo, new RecordItemIndex(2));
-            repo.MainForm.Shipping.MoveTo(300);
+            repo.MainForm.Shipping.MoveTo();
             Delay.Milliseconds(200);
             
             // Click the Shipping Settings button
             Report.Log(ReportLevel.Info, "Mouse", "Click the Shipping Settings button\r\nMouse Left Click item 'MainForm.Shipping' at Center.", repo.MainForm.ShippingInfo, new RecordItemIndex(3));
-            repo.MainForm.Shipping.Click(300);
+            repo.MainForm.Shipping.Click();
             Delay.Milliseconds(200);
             
             // Mouse Move to avoid click inconsistency
             Report.Log(ReportLevel.Info, "Mouse", "Mouse Move to avoid click inconsistency\r\nMouse Left Move item 'ShippingSettingsDlg.OnTrac' at Center.", repo.ShippingSettingsDlg.OnTracInfo, new RecordItemIndex(4));
-            repo.ShippingSettingsDlg.OnTrac.MoveTo(300);
+            repo.ShippingSettingsDlg.OnTrac.MoveTo();
             Delay.Milliseconds(200);
             
             // Check the OnTrac checkbox on the Shipping Settings Window
@@ -111,42 +111,42 @@ namespace SmokeTest
             
             // Mouse Move to avoid click inconsistency
             Report.Log(ReportLevel.Info, "Mouse", "Mouse Move to avoid click inconsistency\r\nMouse Left Move item 'ShippingSettingsDlg.OnTrac1' at Center.", repo.ShippingSettingsDlg.OnTrac1Info, new RecordItemIndex(6));
-            repo.ShippingSettingsDlg.OnTrac1.MoveTo(300);
+            repo.ShippingSettingsDlg.OnTrac1.MoveTo();
             Delay.Milliseconds(200);
             
             // Click the OnTrac button on the sidebar of the Shipping Settings Window
             Report.Log(ReportLevel.Info, "Mouse", "Click the OnTrac button on the sidebar of the Shipping Settings Window\r\nMouse Left Click item 'ShippingSettingsDlg.OnTrac1' at Center.", repo.ShippingSettingsDlg.OnTrac1Info, new RecordItemIndex(7));
-            repo.ShippingSettingsDlg.OnTrac1.Click(300);
+            repo.ShippingSettingsDlg.OnTrac1.Click();
             Delay.Milliseconds(200);
             
             // Mouse Move to avoid click inconsistency
             Report.Log(ReportLevel.Info, "Mouse", "Mouse Move to avoid click inconsistency\r\nMouse Left Move item 'ShippingSettingsDlg.Setup7' at Center.", repo.ShippingSettingsDlg.Setup7Info, new RecordItemIndex(8));
-            repo.ShippingSettingsDlg.Setup7.MoveTo(300);
+            repo.ShippingSettingsDlg.Setup7.MoveTo();
             Delay.Milliseconds(200);
             
             // Click the Setup button on the OnTrac section of the Shipping Settings window
             Report.Log(ReportLevel.Info, "Mouse", "Click the Setup button on the OnTrac section of the Shipping Settings window\r\nMouse Left Click item 'ShippingSettingsDlg.Setup7' at Center.", repo.ShippingSettingsDlg.Setup7Info, new RecordItemIndex(9));
-            repo.ShippingSettingsDlg.Setup7.Click(300);
+            repo.ShippingSettingsDlg.Setup7.Click();
             Delay.Milliseconds(200);
             
             // Mouse Move to avoid click inconsistency
             Report.Log(ReportLevel.Info, "Mouse", "Mouse Move to avoid click inconsistency\r\nMouse Left Move item 'OnTracSetupWizard.Next' at Center.", repo.OnTracSetupWizard.NextInfo, new RecordItemIndex(10));
-            repo.OnTracSetupWizard.Next.MoveTo(300);
+            repo.OnTracSetupWizard.Next.MoveTo();
             Delay.Milliseconds(200);
             
             // Click Next on the Setup OnTrac Shipping Page
             Report.Log(ReportLevel.Info, "Mouse", "Click Next on the Setup OnTrac Shipping Page\r\nMouse Left Click item 'OnTracSetupWizard.Next' at Center.", repo.OnTracSetupWizard.NextInfo, new RecordItemIndex(11));
-            repo.OnTracSetupWizard.Next.Click(300);
+            repo.OnTracSetupWizard.Next.Click();
             Delay.Milliseconds(200);
             
             // Mouse Move to avoid click inconsistency
             Report.Log(ReportLevel.Info, "Mouse", "Mouse Move to avoid click inconsistency\r\nMouse Left Move item 'OnTracSetupWizard.MainPanel.EnterTheAccountNumberAndAPIPasswor' at Center.", repo.OnTracSetupWizard.MainPanel.EnterTheAccountNumberAndAPIPassworInfo, new RecordItemIndex(12));
-            repo.OnTracSetupWizard.MainPanel.EnterTheAccountNumberAndAPIPasswor.MoveTo(300);
+            repo.OnTracSetupWizard.MainPanel.EnterTheAccountNumberAndAPIPasswor.MoveTo();
             Delay.Milliseconds(200);
             
             // Click the Account field
             Report.Log(ReportLevel.Info, "Mouse", "Click the Account field\r\nMouse Left Click item 'OnTracSetupWizard.MainPanel.EnterTheAccountNumberAndAPIPasswor' at Center.", repo.OnTracSetupWizard.MainPanel.EnterTheAccountNumberAndAPIPassworInfo, new RecordItemIndex(13));
-            repo.OnTracSetupWizard.MainPanel.EnterTheAccountNumberAndAPIPasswor.Click(300);
+            repo.OnTracSetupWizard.MainPanel.EnterTheAccountNumberAndAPIPasswor.Click();
             Delay.Milliseconds(200);
             
             // Enter the Account
@@ -156,37 +156,37 @@ namespace SmokeTest
             
             // Mouse Move to avoid click inconsistency
             Report.Log(ReportLevel.Info, "Mouse", "Mouse Move to avoid click inconsistency\r\nMouse Left Move item 'OnTracSetupWizard.MainPanel.Password' at Center.", repo.OnTracSetupWizard.MainPanel.PasswordInfo, new RecordItemIndex(15));
-            repo.OnTracSetupWizard.MainPanel.Password.MoveTo(300);
+            repo.OnTracSetupWizard.MainPanel.Password.MoveTo();
             Delay.Milliseconds(200);
             
             // Click the Password field
             Report.Log(ReportLevel.Info, "Mouse", "Click the Password field\r\nMouse Left Click item 'OnTracSetupWizard.MainPanel.Password' at Center.", repo.OnTracSetupWizard.MainPanel.PasswordInfo, new RecordItemIndex(16));
-            repo.OnTracSetupWizard.MainPanel.Password.Click(300);
+            repo.OnTracSetupWizard.MainPanel.Password.Click();
             Delay.Milliseconds(200);
             
             // Enter the Password field
-            Report.Log(ReportLevel.Info, "Keyboard", "Enter the Password field\r\nKey sequence '{LControlKey down}{Akey}{LControlKey up}4testshipping' with focus on 'OnTracSetupWizard.MainPanel.Password'.", repo.OnTracSetupWizard.MainPanel.PasswordInfo, new RecordItemIndex(17));
-            repo.OnTracSetupWizard.MainPanel.Password.PressKeys("{LControlKey down}{Akey}{LControlKey up}4testshipping");
+            Report.Log(ReportLevel.Info, "Keyboard", "Enter the Password field\r\nKey sequence '{LControlKey down}{Akey}{LControlKey up}testshipping1' with focus on 'OnTracSetupWizard.MainPanel.Password'.", repo.OnTracSetupWizard.MainPanel.PasswordInfo, new RecordItemIndex(17));
+            repo.OnTracSetupWizard.MainPanel.Password.PressKeys("{LControlKey down}{Akey}{LControlKey up}testshipping1");
             Delay.Milliseconds(0);
             
             // Mouse Move to avoid click inconsistency
             Report.Log(ReportLevel.Info, "Mouse", "Mouse Move to avoid click inconsistency\r\nMouse Left Move item 'OnTracSetupWizard.Next1' at Center.", repo.OnTracSetupWizard.Next1Info, new RecordItemIndex(18));
-            repo.OnTracSetupWizard.Next1.MoveTo(300);
+            repo.OnTracSetupWizard.Next1.MoveTo();
             Delay.Milliseconds(200);
             
             // Click Next on the OnTrac Credentials page
             Report.Log(ReportLevel.Info, "Mouse", "Click Next on the OnTrac Credentials page\r\nMouse Left Click item 'OnTracSetupWizard.Next1' at Center.", repo.OnTracSetupWizard.Next1Info, new RecordItemIndex(19));
-            repo.OnTracSetupWizard.Next1.Click(300);
+            repo.OnTracSetupWizard.Next1.Click();
             Delay.Milliseconds(200);
             
             // Mouse Move to avoid click inconsistency
             Report.Log(ReportLevel.Info, "Mouse", "Mouse Move to avoid click inconsistency\r\nMouse Left Move item 'OnTracSetupWizard.MainPanel.FullName' at Center.", repo.OnTracSetupWizard.MainPanel.FullNameInfo, new RecordItemIndex(20));
-            repo.OnTracSetupWizard.MainPanel.FullName.MoveTo(300);
+            repo.OnTracSetupWizard.MainPanel.FullName.MoveTo();
             Delay.Milliseconds(200);
             
             // Click the Full Name field
             Report.Log(ReportLevel.Info, "Mouse", "Click the Full Name field\r\nMouse Left Click item 'OnTracSetupWizard.MainPanel.FullName' at Center.", repo.OnTracSetupWizard.MainPanel.FullNameInfo, new RecordItemIndex(21));
-            repo.OnTracSetupWizard.MainPanel.FullName.Click(300);
+            repo.OnTracSetupWizard.MainPanel.FullName.Click();
             Delay.Milliseconds(200);
             
             // Enter the Full Name
@@ -196,12 +196,12 @@ namespace SmokeTest
             
             // Mouse Move to avoid click inconsistency
             Report.Log(ReportLevel.Info, "Mouse", "Mouse Move to avoid click inconsistency\r\nMouse Left Move item 'OnTracSetupWizard.MainPanel.Company' at Center.", repo.OnTracSetupWizard.MainPanel.CompanyInfo, new RecordItemIndex(23));
-            repo.OnTracSetupWizard.MainPanel.Company.MoveTo(300);
+            repo.OnTracSetupWizard.MainPanel.Company.MoveTo();
             Delay.Milliseconds(200);
             
             // Click the Company field
             Report.Log(ReportLevel.Info, "Mouse", "Click the Company field\r\nMouse Left Click item 'OnTracSetupWizard.MainPanel.Company' at Center.", repo.OnTracSetupWizard.MainPanel.CompanyInfo, new RecordItemIndex(24));
-            repo.OnTracSetupWizard.MainPanel.Company.Click(300);
+            repo.OnTracSetupWizard.MainPanel.Company.Click();
             Delay.Milliseconds(200);
             
             // Enter the Company
@@ -211,12 +211,12 @@ namespace SmokeTest
             
             // Mouse Move to avoid click inconsistency
             Report.Log(ReportLevel.Info, "Mouse", "Mouse Move to avoid click inconsistency\r\nMouse Left Move item 'OnTracSetupWizard.MainPanel.Street' at Center.", repo.OnTracSetupWizard.MainPanel.StreetInfo, new RecordItemIndex(26));
-            repo.OnTracSetupWizard.MainPanel.Street.MoveTo(300);
+            repo.OnTracSetupWizard.MainPanel.Street.MoveTo();
             Delay.Milliseconds(200);
             
             // Click the Street field
             Report.Log(ReportLevel.Info, "Mouse", "Click the Street field\r\nMouse Left Click item 'OnTracSetupWizard.MainPanel.Street' at Center.", repo.OnTracSetupWizard.MainPanel.StreetInfo, new RecordItemIndex(27));
-            repo.OnTracSetupWizard.MainPanel.Street.Click(300);
+            repo.OnTracSetupWizard.MainPanel.Street.Click();
             Delay.Milliseconds(200);
             
             // Enter the Street
@@ -226,12 +226,12 @@ namespace SmokeTest
             
             // Mouse Move to avoid click inconsistency
             Report.Log(ReportLevel.Info, "Mouse", "Mouse Move to avoid click inconsistency\r\nMouse Left Move item 'OnTracSetupWizard.MainPanel.City' at Center.", repo.OnTracSetupWizard.MainPanel.CityInfo, new RecordItemIndex(29));
-            repo.OnTracSetupWizard.MainPanel.City.MoveTo(300);
+            repo.OnTracSetupWizard.MainPanel.City.MoveTo();
             Delay.Milliseconds(200);
             
             // Click the City field
             Report.Log(ReportLevel.Info, "Mouse", "Click the City field\r\nMouse Left Click item 'OnTracSetupWizard.MainPanel.City' at Center.", repo.OnTracSetupWizard.MainPanel.CityInfo, new RecordItemIndex(30));
-            repo.OnTracSetupWizard.MainPanel.City.Click(300);
+            repo.OnTracSetupWizard.MainPanel.City.Click();
             Delay.Milliseconds(200);
             
             // Enter the City
@@ -241,12 +241,12 @@ namespace SmokeTest
             
             // Mouse Move to avoid click inconsistency
             Report.Log(ReportLevel.Info, "Mouse", "Mouse Move to avoid click inconsistency\r\nMouse Left Move item 'OnTracSetupWizard.MainPanel.State' at Center.", repo.OnTracSetupWizard.MainPanel.StateInfo, new RecordItemIndex(32));
-            repo.OnTracSetupWizard.MainPanel.State.MoveTo(300);
+            repo.OnTracSetupWizard.MainPanel.State.MoveTo();
             Delay.Milliseconds(200);
             
             // Click the State
             Report.Log(ReportLevel.Info, "Mouse", "Click the State\r\nMouse Left Click item 'OnTracSetupWizard.MainPanel.State' at Center.", repo.OnTracSetupWizard.MainPanel.StateInfo, new RecordItemIndex(33));
-            repo.OnTracSetupWizard.MainPanel.State.Click(300);
+            repo.OnTracSetupWizard.MainPanel.State.Click();
             Delay.Milliseconds(200);
             
             // Enter the State
@@ -256,12 +256,12 @@ namespace SmokeTest
             
             // Mouse Move to avoid click inconsistency
             Report.Log(ReportLevel.Info, "Mouse", "Mouse Move to avoid click inconsistency\r\nMouse Left Move item 'OnTracSetupWizard.MainPanel.PostalCode' at Center.", repo.OnTracSetupWizard.MainPanel.PostalCodeInfo, new RecordItemIndex(35));
-            repo.OnTracSetupWizard.MainPanel.PostalCode.MoveTo(300);
+            repo.OnTracSetupWizard.MainPanel.PostalCode.MoveTo();
             Delay.Milliseconds(200);
             
             // Click the Postal Code
             Report.Log(ReportLevel.Info, "Mouse", "Click the Postal Code\r\nMouse Left Click item 'OnTracSetupWizard.MainPanel.PostalCode' at Center.", repo.OnTracSetupWizard.MainPanel.PostalCodeInfo, new RecordItemIndex(36));
-            repo.OnTracSetupWizard.MainPanel.PostalCode.Click(300);
+            repo.OnTracSetupWizard.MainPanel.PostalCode.Click();
             Delay.Milliseconds(200);
             
             // Enter the Postal Code
@@ -271,12 +271,12 @@ namespace SmokeTest
             
             // Mouse Move to avoid click inconsistency
             Report.Log(ReportLevel.Info, "Mouse", "Mouse Move to avoid click inconsistency\r\nMouse Left Move item 'OnTracSetupWizard.MainPanel.Email' at Center.", repo.OnTracSetupWizard.MainPanel.EmailInfo, new RecordItemIndex(38));
-            repo.OnTracSetupWizard.MainPanel.Email.MoveTo(300);
+            repo.OnTracSetupWizard.MainPanel.Email.MoveTo();
             Delay.Milliseconds(200);
             
             // Click the Email
             Report.Log(ReportLevel.Info, "Mouse", "Click the Email\r\nMouse Left Click item 'OnTracSetupWizard.MainPanel.Email' at Center.", repo.OnTracSetupWizard.MainPanel.EmailInfo, new RecordItemIndex(39));
-            repo.OnTracSetupWizard.MainPanel.Email.Click(300);
+            repo.OnTracSetupWizard.MainPanel.Email.Click();
             Delay.Milliseconds(200);
             
             // Enter the Email
@@ -286,12 +286,12 @@ namespace SmokeTest
             
             // Mouse Move to avoid click inconsistency
             Report.Log(ReportLevel.Info, "Mouse", "Mouse Move to avoid click inconsistency\r\nMouse Left Move item 'OnTracSetupWizard.MainPanel.Phone' at Center.", repo.OnTracSetupWizard.MainPanel.PhoneInfo, new RecordItemIndex(41));
-            repo.OnTracSetupWizard.MainPanel.Phone.MoveTo(300);
+            repo.OnTracSetupWizard.MainPanel.Phone.MoveTo();
             Delay.Milliseconds(200);
             
             // Click the Phone
             Report.Log(ReportLevel.Info, "Mouse", "Click the Phone\r\nMouse Left Click item 'OnTracSetupWizard.MainPanel.Phone' at Center.", repo.OnTracSetupWizard.MainPanel.PhoneInfo, new RecordItemIndex(42));
-            repo.OnTracSetupWizard.MainPanel.Phone.Click(300);
+            repo.OnTracSetupWizard.MainPanel.Phone.Click();
             Delay.Milliseconds(200);
             
             // Enter the Phone
@@ -301,12 +301,12 @@ namespace SmokeTest
             
             // Mouse Move to avoid click inconsistency
             Report.Log(ReportLevel.Info, "Mouse", "Mouse Move to avoid click inconsistency\r\nMouse Left Move item 'OnTracSetupWizard.MainPanel.Website' at Center.", repo.OnTracSetupWizard.MainPanel.WebsiteInfo, new RecordItemIndex(44));
-            repo.OnTracSetupWizard.MainPanel.Website.MoveTo(300);
+            repo.OnTracSetupWizard.MainPanel.Website.MoveTo();
             Delay.Milliseconds(200);
             
             // Click the Website
             Report.Log(ReportLevel.Info, "Mouse", "Click the Website\r\nMouse Left Click item 'OnTracSetupWizard.MainPanel.Website' at Center.", repo.OnTracSetupWizard.MainPanel.WebsiteInfo, new RecordItemIndex(45));
-            repo.OnTracSetupWizard.MainPanel.Website.Click(300);
+            repo.OnTracSetupWizard.MainPanel.Website.Click();
             Delay.Milliseconds(200);
             
             // Enter the Website
@@ -316,37 +316,37 @@ namespace SmokeTest
             
             // Mouse Move to avoid click inconsistency
             Report.Log(ReportLevel.Info, "Mouse", "Mouse Move to avoid click inconsistency\r\nMouse Left Move item 'OnTracSetupWizard.Next1' at Center.", repo.OnTracSetupWizard.Next1Info, new RecordItemIndex(47));
-            repo.OnTracSetupWizard.Next1.MoveTo(300);
+            repo.OnTracSetupWizard.Next1.MoveTo();
             Delay.Milliseconds(200);
             
             // Click Next on the Contact Information page
             Report.Log(ReportLevel.Info, "Mouse", "Click Next on the Contact Information page\r\nMouse Left Click item 'OnTracSetupWizard.Next1' at Center.", repo.OnTracSetupWizard.Next1Info, new RecordItemIndex(48));
-            repo.OnTracSetupWizard.Next1.Click(300);
+            repo.OnTracSetupWizard.Next1.Click();
             Delay.Milliseconds(200);
             
             // Mouse Move to avoid click inconsistency
             Report.Log(ReportLevel.Info, "Mouse", "Mouse Move to avoid click inconsistency\r\nMouse Left Move item 'OnTracSetupWizard.Next1' at Center.", repo.OnTracSetupWizard.Next1Info, new RecordItemIndex(49));
-            repo.OnTracSetupWizard.Next1.MoveTo(300);
+            repo.OnTracSetupWizard.Next1.MoveTo();
             Delay.Milliseconds(200);
             
             // Click Next on the OnTrac Settings Page
             Report.Log(ReportLevel.Info, "Mouse", "Click Next on the OnTrac Settings Page\r\nMouse Left Click item 'OnTracSetupWizard.Next1' at Center.", repo.OnTracSetupWizard.Next1Info, new RecordItemIndex(50));
-            repo.OnTracSetupWizard.Next1.Click(300);
+            repo.OnTracSetupWizard.Next1.Click();
             Delay.Milliseconds(200);
             
             // Mouse Move to avoid click inconsistency
             Report.Log(ReportLevel.Info, "Mouse", "Mouse Move to avoid click inconsistency\r\nMouse Left Move item 'OnTracSetupWizard.Next1' at Center.", repo.OnTracSetupWizard.Next1Info, new RecordItemIndex(51));
-            repo.OnTracSetupWizard.Next1.MoveTo(300);
+            repo.OnTracSetupWizard.Next1.MoveTo();
             Delay.Milliseconds(200);
             
             // Click Next on the Shipment Defaults Page
             Report.Log(ReportLevel.Info, "Mouse", "Click Next on the Shipment Defaults Page\r\nMouse Left Click item 'OnTracSetupWizard.Next1' at Center.", repo.OnTracSetupWizard.Next1Info, new RecordItemIndex(52));
-            repo.OnTracSetupWizard.Next1.Click(300);
+            repo.OnTracSetupWizard.Next1.Click();
             Delay.Milliseconds(200);
             
             // Mouse Move to avoid click inconsistency
             Report.Log(ReportLevel.Info, "Mouse", "Mouse Move to avoid click inconsistency\r\nMouse Left Move item 'OnTracSetupWizard.MainPanel.PrintActionBox' at Center.", repo.OnTracSetupWizard.MainPanel.PrintActionBoxInfo, new RecordItemIndex(53));
-            repo.OnTracSetupWizard.MainPanel.PrintActionBox.MoveTo(300);
+            repo.OnTracSetupWizard.MainPanel.PrintActionBox.MoveTo();
             Delay.Milliseconds(200);
             
             // Check the Automatically print labels afer processing checkbox
@@ -356,42 +356,42 @@ namespace SmokeTest
             
             // Mouse Move to avoid click inconsistency
             Report.Log(ReportLevel.Info, "Mouse", "Mouse Move to avoid click inconsistency\r\nMouse Left Move item 'OnTracSetupWizard.Next1' at Center.", repo.OnTracSetupWizard.Next1Info, new RecordItemIndex(55));
-            repo.OnTracSetupWizard.Next1.MoveTo(300);
+            repo.OnTracSetupWizard.Next1.MoveTo();
             Delay.Milliseconds(200);
             
             // Click Next on the Printing Setup page
             Report.Log(ReportLevel.Info, "Mouse", "Click Next on the Printing Setup page\r\nMouse Left Click item 'OnTracSetupWizard.Next1' at Center.", repo.OnTracSetupWizard.Next1Info, new RecordItemIndex(56));
-            repo.OnTracSetupWizard.Next1.Click(300);
+            repo.OnTracSetupWizard.Next1.Click();
             Delay.Milliseconds(200);
             
             // Mouse Move to avoid click inconsistency
             Report.Log(ReportLevel.Info, "Mouse", "Mouse Move to avoid click inconsistency\r\nMouse Left Move item 'OnTracSetupWizard.Next1' at Center.", repo.OnTracSetupWizard.Next1Info, new RecordItemIndex(57));
-            repo.OnTracSetupWizard.Next1.MoveTo(300);
+            repo.OnTracSetupWizard.Next1.MoveTo();
             Delay.Milliseconds(200);
             
             // Click Next on the Processing Setup page
             Report.Log(ReportLevel.Info, "Mouse", "Click Next on the Processing Setup page\r\nMouse Left Click item 'OnTracSetupWizard.Next1' at Center.", repo.OnTracSetupWizard.Next1Info, new RecordItemIndex(58));
-            repo.OnTracSetupWizard.Next1.Click(300);
+            repo.OnTracSetupWizard.Next1.Click();
             Delay.Milliseconds(200);
             
             // Mouse Move to avoid click inconsistency
             Report.Log(ReportLevel.Info, "Mouse", "Mouse Move to avoid click inconsistency\r\nMouse Left Move item 'OnTracSetupWizard.Finish' at Center.", repo.OnTracSetupWizard.FinishInfo, new RecordItemIndex(59));
-            repo.OnTracSetupWizard.Finish.MoveTo(300);
+            repo.OnTracSetupWizard.Finish.MoveTo();
             Delay.Milliseconds(200);
             
             // Click Finish on the Setup Complete page
             Report.Log(ReportLevel.Info, "Mouse", "Click Finish on the Setup Complete page\r\nMouse Left Click item 'OnTracSetupWizard.Finish' at Center.", repo.OnTracSetupWizard.FinishInfo, new RecordItemIndex(60));
-            repo.OnTracSetupWizard.Finish.Click(300);
+            repo.OnTracSetupWizard.Finish.Click();
             Delay.Milliseconds(200);
             
             // Mouse Move to avoid click inconsistency
             Report.Log(ReportLevel.Info, "Mouse", "Mouse Move to avoid click inconsistency\r\nMouse Left Move item 'ShippingSettingsDlg.Close' at Center.", repo.ShippingSettingsDlg.CloseInfo, new RecordItemIndex(61));
-            repo.ShippingSettingsDlg.Close.MoveTo(300);
+            repo.ShippingSettingsDlg.Close.MoveTo();
             Delay.Milliseconds(200);
             
             // Click Close on the Shipping Settings window
             Report.Log(ReportLevel.Info, "Mouse", "Click Close on the Shipping Settings window\r\nMouse Left Click item 'ShippingSettingsDlg.Close' at Center.", repo.ShippingSettingsDlg.CloseInfo, new RecordItemIndex(62));
-            repo.ShippingSettingsDlg.Close.Click(300);
+            repo.ShippingSettingsDlg.Close.Click();
             Delay.Milliseconds(200);
             
         }

@@ -360,6 +360,30 @@
       <UserCode>true</UserCode>
       <id>33db5867-de70-4696-9641-2ea9eee3d964</id>
     </Compile>
+    <Compile Include="FedExInternationalCleanup.cs">
+      <BoundTo>2e1c0aa1-d432-40cd-a734-36788a2cedc1</BoundTo>
+      <DependentUpon>FedExInternationalCleanup.rxrec</DependentUpon>
+      <RecorderCode>true</RecorderCode>
+      <id>46cc9582-ac59-4f27-82d6-28b38e9fb5c4</id>
+    </Compile>
+    <Compile Include="FedExInternationalCleanup.UserCode.cs">
+      <BoundTo>2e1c0aa1-d432-40cd-a734-36788a2cedc1</BoundTo>
+      <DependentUpon>FedExInternationalCleanup.rxrec</DependentUpon>
+      <UserCode>true</UserCode>
+      <id>2ad092da-2a38-48aa-8211-43a21d608eaa</id>
+    </Compile>
+    <Compile Include="FedExSetupCleanUp.cs">
+      <BoundTo>8965e38b-57bc-4dd7-b415-80010a0d04c0</BoundTo>
+      <DependentUpon>FedExSetupCleanUp.rxrec</DependentUpon>
+      <RecorderCode>true</RecorderCode>
+      <id>d9ea9196-0976-47b0-be09-b958ea52c137</id>
+    </Compile>
+    <Compile Include="FedExSetupCleanUp.UserCode.cs">
+      <BoundTo>8965e38b-57bc-4dd7-b415-80010a0d04c0</BoundTo>
+      <DependentUpon>FedExSetupCleanUp.rxrec</DependentUpon>
+      <UserCode>true</UserCode>
+      <id>a710e245-7bac-4e3d-91ce-3036d2d6c12e</id>
+    </Compile>
     <Compile Include="GatherCurrentDateandTime.cs">
       <BoundTo>0ade6575-3e73-4e2d-a724-eada111fbf3e</BoundTo>
       <DependentUpon>GatherCurrentDateandTime.rxrec</DependentUpon>
@@ -1053,6 +1077,18 @@
       <UserCode>true</UserCode>
       <id>03dbea74-42c7-4f92-ae8d-6db0d2b15231</id>
     </Compile>
+    <Compile Include="ReturnToOrderGrid.cs">
+      <BoundTo>fd6203ce-0ee9-470b-9ab0-90588da7372e</BoundTo>
+      <DependentUpon>ReturnToOrderGrid.rxrec</DependentUpon>
+      <RecorderCode>true</RecorderCode>
+      <id>2438de1a-2db2-4318-85e4-54f4451f6041</id>
+    </Compile>
+    <Compile Include="ReturnToOrderGrid.UserCode.cs">
+      <BoundTo>fd6203ce-0ee9-470b-9ab0-90588da7372e</BoundTo>
+      <DependentUpon>ReturnToOrderGrid.rxrec</DependentUpon>
+      <UserCode>true</UserCode>
+      <id>24ede099-e1ef-4776-b885-f4fb11e3d59b</id>
+    </Compile>
     <Compile Include="SavePrintOutputAsPDF.cs">
       <DependentUpon>SavePrintOutputAsPDF.rxrec</DependentUpon>
       <id>be04f3f6-d1fa-4ba6-b520-7cf9ebe35c04</id>
@@ -1293,6 +1329,18 @@
       <UserCode>true</UserCode>
       <id>a909919c-1c90-40a1-b516-a024366f1405</id>
     </Compile>
+    <Compile Include="SetupUSPSStampsCleanUp.cs">
+      <BoundTo>91257278-7a26-42ed-af3b-71223743fbb7</BoundTo>
+      <DependentUpon>SetupUSPSStampsCleanUp.rxrec</DependentUpon>
+      <RecorderCode>true</RecorderCode>
+      <id>4fefb10d-ceb4-4644-86f3-e85d8d6564ad</id>
+    </Compile>
+    <Compile Include="SetupUSPSStampsCleanUp.UserCode.cs">
+      <BoundTo>91257278-7a26-42ed-af3b-71223743fbb7</BoundTo>
+      <DependentUpon>SetupUSPSStampsCleanUp.rxrec</DependentUpon>
+      <UserCode>true</UserCode>
+      <id>49547a5d-522a-462e-bf9f-63eaa406983f</id>
+    </Compile>
     <Compile Include="ShipOrders_FromAddress_OnTracDomestic.cs">
       <BoundTo>ded50d3f-545b-4f05-a26d-bd8373ad47cc</BoundTo>
       <DependentUpon>ShipOrders_FromAddress_OnTracDomestic.rxrec</DependentUpon>
@@ -1382,6 +1430,18 @@
       <DependentUpon>OLMProcessUPSInternational.rxrec</DependentUpon>
       <UserCode>true</UserCode>
       <id>5fd81991-64fa-4ed4-955b-a3b35d1372da</id>
+    </Compile>
+    <Compile Include="UPSSurePostCleanUp.cs">
+      <BoundTo>71824c02-c3c8-4be7-9cc0-90bb1679d9dd</BoundTo>
+      <DependentUpon>UPSSurePostCleanUp.rxrec</DependentUpon>
+      <RecorderCode>true</RecorderCode>
+      <id>b4b28661-0433-486b-8a53-56264a48d86f</id>
+    </Compile>
+    <Compile Include="UPSSurePostCleanUp.UserCode.cs">
+      <BoundTo>71824c02-c3c8-4be7-9cc0-90bb1679d9dd</BoundTo>
+      <DependentUpon>UPSSurePostCleanUp.rxrec</DependentUpon>
+      <UserCode>true</UserCode>
+      <id>0246550e-07d9-46aa-a24b-ab8585a367ac</id>
     </Compile>
     <Compile Include="UPSTestServerSetup.cs">
       <BoundTo>06a6246d-01ac-430d-96ec-902a03121b25</BoundTo>
@@ -1556,6 +1616,16 @@
       <BoundTo>cc314fb4-f6c2-41c4-91da-4828b4fd7dee</BoundTo>
       <id>8f6fb003-966f-4f61-8e6b-ae338480b761</id>
       <recordtableid>cde62441-e141-4211-bde4-f1b12a005284</recordtableid>
+    </None>
+    <None Include="FedExInternationalCleanup.rxrec">
+      <BoundTo>cc314fb4-f6c2-41c4-91da-4828b4fd7dee</BoundTo>
+      <id>2e1c0aa1-d432-40cd-a734-36788a2cedc1</id>
+      <recordtableid>8c210156-3c19-47dd-a6ef-d86993d2a230</recordtableid>
+    </None>
+    <None Include="FedExSetupCleanUp.rxrec">
+      <BoundTo>cc314fb4-f6c2-41c4-91da-4828b4fd7dee</BoundTo>
+      <id>8965e38b-57bc-4dd7-b415-80010a0d04c0</id>
+      <recordtableid>e21bce2a-afd1-4e42-9b0c-5665c2d10552</recordtableid>
     </None>
     <None Include="GatherCurrentDateandTime.rxrec">
       <BoundTo>cc314fb4-f6c2-41c4-91da-4828b4fd7dee</BoundTo>
@@ -1859,6 +1929,11 @@
       <id>ad92cd5c-2272-44e4-8da0-42e620bb33c1</id>
       <recordtableid>195f9e46-4670-4b43-8c35-ac85b8b47198</recordtableid>
     </None>
+    <None Include="ReturnToOrderGrid.rxrec">
+      <BoundTo>cc314fb4-f6c2-41c4-91da-4828b4fd7dee</BoundTo>
+      <id>fd6203ce-0ee9-470b-9ab0-90588da7372e</id>
+      <recordtableid>3e138ac8-f1ba-471e-9239-ac2a33db9dd3</recordtableid>
+    </None>
     <None Include="SavePrintOutputAsPDF.rxrec">
       <id>2f12d8b6-2549-43c8-aa29-eab4b11a037d</id>
       <BoundTo>cc314fb4-f6c2-41c4-91da-4828b4fd7dee</BoundTo>
@@ -1959,6 +2034,11 @@
       <id>058d0643-ec9c-465a-b8c9-e8ecf7a28e58</id>
       <recordtableid>54534012-f2e8-4bb3-a043-d12addb16f70</recordtableid>
     </None>
+    <None Include="SetupUSPSStampsCleanUp.rxrec">
+      <BoundTo>cc314fb4-f6c2-41c4-91da-4828b4fd7dee</BoundTo>
+      <id>91257278-7a26-42ed-af3b-71223743fbb7</id>
+      <recordtableid>3d822982-ba90-42d1-b376-da20de22caf4</recordtableid>
+    </None>
     <None Include="ShipOrders_FromAddress_OnTracDomestic.rxrec">
       <BoundTo>cc314fb4-f6c2-41c4-91da-4828b4fd7dee</BoundTo>
       <id>ded50d3f-545b-4f05-a26d-bd8373ad47cc</id>
@@ -2015,6 +2095,11 @@
       <BoundTo>cc314fb4-f6c2-41c4-91da-4828b4fd7dee</BoundTo>
       <id>3b6ea0d1-3a75-4430-bec1-d1f7e8b7fff2</id>
       <recordtableid>bff3f326-bbe1-4f4e-a392-10348cbfbf05</recordtableid>
+    </None>
+    <None Include="UPSSurePostCleanUp.rxrec">
+      <BoundTo>cc314fb4-f6c2-41c4-91da-4828b4fd7dee</BoundTo>
+      <id>71824c02-c3c8-4be7-9cc0-90bb1679d9dd</id>
+      <recordtableid>6c4327b3-d2bd-45b9-938d-2400d93271df</recordtableid>
     </None>
     <None Include="UPSTestServerSetup.rxrec">
       <BoundTo>cc314fb4-f6c2-41c4-91da-4828b4fd7dee</BoundTo>

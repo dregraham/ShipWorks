@@ -33,5 +33,9 @@ namespace SmokeTest
             // Your recording specific initialization code goes here.
         }
 
+        public void UncheckFedExSetupCleanup()
+        {
+            TestSuite.Current.GetTestContainer("SetupFedexCleanup").Checked = false;
+        }
     }
 }
