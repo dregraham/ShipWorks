@@ -3097,9 +3097,9 @@ namespace ShipWorks
         /// </summary>
         private void OnDownloadOrders(object sender, EventArgs e)
         {
-            List<StoreEntity> stores = GetDownloadEnabledStores()?.ToList();
+            List<StoreEntity> stores = GetDownloadEnabledStores().ToList();
 
-            if (stores?.Count > 0)
+            if (stores.Count > 0)
             {
                 using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
                 {
@@ -3125,7 +3125,7 @@ namespace ShipWorks
         private IEnumerable<StoreEntity> GetDownloadEnabledStores()
         {
             // Get the list of stores that we will download for.
-            return StoreManager.GetEnabledStores()?
+            return StoreManager.GetEnabledStores()
                 .Where(s => ComputerDownloadPolicy.Load(s).IsThisComputerAllowed)
                 .Where(x => x.StoreTypeCode != StoreTypeCode.Manual);
         }

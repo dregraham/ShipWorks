@@ -154,7 +154,7 @@ namespace ShipWorks.Stores.Communication
 
             List<StoreEntity> readyToDownload = GetStoresForAutoDownloading();
 
-            if (readyToDownload?.Count > 0)
+            if (readyToDownload.Count > 0)
             {
                 StartDownload(readyToDownload, DownloadInitiatedBy.ShipWorks);
             }
@@ -264,11 +264,16 @@ namespace ShipWorks.Stores.Communication
             // Find each store that is ready for an auto-download
             List<StoreEntity> readyToDownload = StoreManager.GetAllStores()?.Where(ShouldDownload).ToList();
 
+            if (readyToDownload == null)
+            {
+                return Enumerable.Empty<StoreEntity>().ToList();
+            }
+
 
             // We checked the ready-to-download with cached download times. If there are any that are ready to download it
             // could be that they've recently been downloaded since we cached the values.  So check again after re-fetching.
             // the latest last download times.
-            if (wereTimesCached && readyToDownload?.Count > 0)
+            if (wereTimesCached && readyToDownload.Count > 0)
             {
                 lock (lastDownloadTimesLock)
                 {

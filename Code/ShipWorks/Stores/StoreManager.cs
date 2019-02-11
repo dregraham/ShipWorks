@@ -185,8 +185,12 @@ namespace ShipWorks.Stores
             lock (storeSynchronizer)
             {
                 List<StoreEntity> collectionToClone = storeSynchronizer.EntityCollection.ToList();
+                List<StoreEntity> stores = EntityUtility.CloneEntityCollection(collectionToClone)?.Where(s => s.SetupComplete).ToList();
 
-                List<StoreEntity> stores = EntityUtility.CloneEntityCollection(collectionToClone).Where(s => s.SetupComplete).ToList();
+                if (stores == null)
+                {
+                    return Enumerable.Empty<StoreEntity>().ToList();
+                }
                 return stores;
             }
         }
@@ -201,7 +205,7 @@ namespace ShipWorks.Stores
         /// </summary>
         public static List<StoreEntity> GetEnabledStores()
         {
-            return GetAllStores()?.Where(s => s.Enabled).ToList();
+            return GetAllStores().Where(s => s.Enabled).ToList();
         }
 
         /// <summary>
