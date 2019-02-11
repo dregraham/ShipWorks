@@ -162,7 +162,7 @@ namespace ShipWorks.Data.Administration
                         // Create the archive to be zipped
                         ZipWriter zipWriter = new ZipWriter();
 
-                        // If the edition supports SQL backup compression we will only store the backup in the zip file.  If 
+                        // If the edition supports SQL backup compression we will only store the backup in the zip file.  If
                         // SQL backup compression is not supported, we need to compression it.
                         zipWriter.CompressionLevel = sqlServerEditionId.SupportsCompression() ? 0 : 1;
 
@@ -299,15 +299,15 @@ namespace ShipWorks.Data.Administration
 
         /// <summary>
         /// Create a backup of SQL Server to the specified backup file
-        /// 
+        ///
         /// For EditionIDs, see https://docs.microsoft.com/en-us/sql/t-sql/functions/serverproperty-transact-sql?view=sql-server-2017
-        /// 
+        ///
         /// For compression support, see https://technet.microsoft.com/en-us/library/cc645993(v=sql.105).aspx
         /// Then change the "Other Versions" drop down to see each SQL Server version's features.
         /// </summary>
         private SqlServerEditionIdType CreateSqlBackup(ProgressItem progressItem, string database, string backupFile)
         {
-            log.InfoFormat("Backuping up '{0}' to '{1}'", database, backupFile);
+            log.InfoFormat("Backing up '{0}' to '{1}'", database, backupFile);
 
             SqlServerEditionIdType sqlServerEditionId = SqlServerEditionIdType.Express;
 
@@ -318,7 +318,7 @@ namespace ShipWorks.Data.Administration
             {
                 DbCommand cmd = DbCommandProvider.Create(con);
                 cmd.CommandTimeout = (int) TimeSpan.FromHours(2).TotalSeconds;
-                
+
                 cmd.CommandText = $@"
                     DECLARE @EditionTypeId sql_variant
 
@@ -630,7 +630,7 @@ namespace ShipWorks.Data.Administration
                 DbCommand cmdRestore = CreateRestoreCommand(sourceDb, sourceLog, targetDb, targetLog, con);
                 SetupRestoreParameters(database, cmdRestore);
                 ExecuteSqlRestore(con, cmdRestore, database.DatabaseName, progress);
-  
+
                 progress.Detail = "Done";
                 progress.Completed();
             }

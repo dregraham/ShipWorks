@@ -37,7 +37,7 @@ namespace ShipWorks.ApplicationCore.CommandLineOptions
         {
             TelemetricResult<Result> telemetricResult = new TelemetricResult<Result>("Database.Backup");
             telemetricResult.RunTimedEvent("CreateBackupTimeInMilliseconds", () => CreateBackup(database, backupPathAndName));
-            
+
             telemetricResult.SetValue(ValidateBackup(backupPathAndName));
 
             return telemetricResult;
@@ -68,7 +68,7 @@ namespace ShipWorks.ApplicationCore.CommandLineOptions
         private void ConfigureRestoreCommand(DbCommand command)
         {
             command.CommandTimeout = (int) TimeSpan.FromHours(2).TotalSeconds;
-            command.CommandText = 
+            command.CommandText =
                 $"ALTER DATABASE [{database}] SET SINGLE_USER WITH ROLLBACK IMMEDIATE " +
                 $"RESTORE DATABASE [{database}] " +
                 "FROM DISK = @FilePath      " +
@@ -162,8 +162,8 @@ namespace ShipWorks.ApplicationCore.CommandLineOptions
         /// </summary>
         private void CreateBackup(string database, string backupFile)
         {
-            log.InfoFormat("Backuping up '{0}' to '{1}'", database, backupFile);
-            
+            log.InfoFormat("Backing up '{0}' to '{1}'", database, backupFile);
+
             using (DbConnection con = SqlSession.Current.OpenConnection())
             {
                 using (DbCommand cmd = con.CreateCommand())
