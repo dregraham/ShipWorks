@@ -448,7 +448,7 @@ namespace ShipWorks.Shipping.UI.Carriers.Ups.LocalRating
                     UploadMessage =
                         "Warning: ShipWorks found a discrepancy between your local rates and rates retrieved from UPS. ShipWorks uses recently shipped orders when doing this comparison.\n\n" +
                         validationResult.GetUserFriendlyMessage();
-                    UploadMessageMoreInfoLink = new Uri("http://support.shipworks.com/support/solutions/articles/4000103804-ups-local-rating-troubleshooting-guide");
+                    UploadMessageMoreInfoLink = new Uri("https://shipworks.zendesk.com/hc/en-us/articles/360022462152");
                     ErrorUploading = true;
                     log.Error(validationResult.GetUserFriendlyMessage());
                     return false;
