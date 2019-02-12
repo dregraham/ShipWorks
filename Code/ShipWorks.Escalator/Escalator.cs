@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ServiceProcess;
 using System.Threading.Tasks;
+using Interapptive.Shared.Utility;
 using log4net;
 
 namespace ShipWorks.Escalator
@@ -27,17 +28,20 @@ namespace ShipWorks.Escalator
         {
             log.Info("OnStart");
             // Start a communication bridge to listen for messages from ShipWorks
-            ShipWorksCommunicationBridge communicationBridge = new ShipWorksCommunicationBridge(ShipWorks.Escalator.ServiceName.GetInstanceID().ToString());
+            ShipWorksCommunicationBridge communicationBridge =
+                new ShipWorksCommunicationBridge(ShipWorks.Escalator.ServiceName.GetInstanceID().ToString(),
+                LogManager.GetLogger(typeof(ShipWorksCommunicationBridge)));
+
             communicationBridge.OnMessage += OnShipWorksMessage;
-        }     
+        }
 
         /// <summary>
         /// React to a message from ShipWorks
         /// </summary>
         private async void OnShipWorksMessage(string message)
         {
-            log.Info($"Message \"{message}\" received from ShipWorksCommunicationBridge.");
-            await ProcessMessage(message);
+            log.InfoFormat("Message \"{0}\" received from ShipWorksCommunicationBridge.", message);
+            await ProcessMessage(message).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -49,14 +53,18 @@ namespace ShipWorks.Escalator
             {
                 if (Version.TryParse(message, out Version version))
                 {
-                    InstallFile newVersion = await new UpdaterWebClient().Download(new Version(message));
+                    InstallFile newVersion = await new UpdaterWebClient().Download(new Version(message)).ConfigureAwait(false);
 
                     log.Info("Attempting to install new version");
-                    new ShipWorksInstaller().Install(newVersion);
+                    Result installationResult = new ShipWorksInstaller().Install(newVersion);
+                    if (installationResult.Failure)
+                    {
+                        log.ErrorFormat("An error occured while installing the new version of ShipWorks: {0}", installationResult.Message);
+                    }
                 }
                 else
                 {
-                    log.Info($"\"{message}\" could not be parsed as version.");
+                    log.InfoFormat("\"{0}\" could not be parsed as version.", message);
                 }
             }
             catch (Exception ex)

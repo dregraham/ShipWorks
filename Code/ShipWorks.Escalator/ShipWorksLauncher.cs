@@ -6,10 +6,20 @@ using log4net;
 
 namespace ShipWorks.Escalator
 {
+    /// <summary>
+    /// Launch ShipWorks
+    /// </summary>
     public static class ShipWorksLauncher
     {
         private static readonly ILog log = LogManager.GetLogger(typeof(ShipWorksLauncher));
 
+        /// <summary>
+        /// Start ShipWorks for the last active windows user
+        /// </summary>
+        /// <remarks>
+        /// The purpose of this method is to start the shipworks UI as a windows user, this
+        /// can be called from the escalator service which is running as local system
+        /// </remarks>
         public static void StartShipWorks()
         {
             try
@@ -23,6 +33,31 @@ namespace ShipWorks.Escalator
             }
         }
 
+        /// <summary>
+        /// Pulled from https://github.com/murrayju/CreateProcessAsUser
+        ///
+        /// The MIT License (MIT)
+        //
+        //  Copyright(c) 2014 Justin Murray
+        //
+        //  Permission is hereby granted, free of charge, to any person obtaining a copy
+        //  of this software and associated documentation files(the "Software"), to deal
+        //  in the Software without restriction, including without limitation the rights
+        //  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+        //  copies of the Software, and to permit persons to whom the Software is
+        //  furnished to do so, subject to the following conditions:
+
+        //  The above copyright notice and this permission notice shall be included in all
+        //  copies or substantial portions of the Software.
+
+        //  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+        //  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+        //  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.IN NO EVENT SHALL THE
+        //  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+        //  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+        //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+        //  SOFTWARE.
+        /// </summary>
         #region Win32 Constants
 
         private const int CREATE_UNICODE_ENVIRONMENT = 0x00000400;
@@ -179,20 +214,22 @@ namespace ShipWorks.Escalator
 
         #endregion
 
-        // Gets the user token from the currently active session
+        /// <summary>
+        /// Gets the user token from the currently active session
+        /// </summary>
         private static bool GetSessionUserToken(ref IntPtr phUserToken)
         {
-            var bResult = false;
-            var hImpersonationToken = IntPtr.Zero;
+            var result = false;
+            var impersonationToken = IntPtr.Zero;
             var activeSessionId = INVALID_SESSION_ID;
-            var pSessionInfo = IntPtr.Zero;
+            var sessionInfo = IntPtr.Zero;
             var sessionCount = 0;
 
             // Get a handle to the user access token for the current active session.
-            if (WTSEnumerateSessions(WTS_CURRENT_SERVER_HANDLE, 0, 1, ref pSessionInfo, ref sessionCount) != 0)
+            if (WTSEnumerateSessions(WTS_CURRENT_SERVER_HANDLE, 0, 1, ref sessionInfo, ref sessionCount) != 0)
             {
                 var arrayElementSize = Marshal.SizeOf(typeof(WTS_SESSION_INFO));
-                var current = pSessionInfo;
+                var current = sessionInfo;
 
                 for (var i = 0; i < sessionCount; i++)
                 {
@@ -212,32 +249,35 @@ namespace ShipWorks.Escalator
                 activeSessionId = WTSGetActiveConsoleSessionId();
             }
 
-            if (WTSQueryUserToken(activeSessionId, ref hImpersonationToken) != 0)
+            if (WTSQueryUserToken(activeSessionId, ref impersonationToken) != 0)
             {
                 // Convert the impersonation token to a primary token
-                bResult = DuplicateTokenEx(hImpersonationToken, 0, IntPtr.Zero,
+                result = DuplicateTokenEx(impersonationToken, 0, IntPtr.Zero,
                     (int) SECURITY_IMPERSONATION_LEVEL.SecurityImpersonation, (int) TOKEN_TYPE.TokenPrimary,
                     ref phUserToken);
 
-                CloseHandle(hImpersonationToken);
+                CloseHandle(impersonationToken);
             }
 
-            return bResult;
+            return result;
         }
 
+        /// <summary>
+        /// Start the given appPath as the current active user
+        /// </summary>
         private static bool StartProcessAsCurrentUser(string appPath, string cmdLine = null, string workDir = null, bool visible = true)
         {
-            var hUserToken = IntPtr.Zero;
+            var userToken = IntPtr.Zero;
             var startInfo = new STARTUPINFO();
             var procInfo = new PROCESS_INFORMATION();
-            var pEnv = IntPtr.Zero;
-            int iResultOfCreateProcessAsUser;
+            var env = IntPtr.Zero;
+            int resultOfCreateProcessAsUser;
 
             startInfo.cb = Marshal.SizeOf(typeof(STARTUPINFO));
 
             try
             {
-                if (!GetSessionUserToken(ref hUserToken))
+                if (!GetSessionUserToken(ref userToken))
                 {
                     throw new Exception("StartProcessAsCurrentUser: GetSessionUserToken failed.");
                 }
@@ -246,35 +286,35 @@ namespace ShipWorks.Escalator
                 startInfo.wShowWindow = (short) (visible ? SW.SW_SHOW : SW.SW_HIDE);
                 startInfo.lpDesktop = "winsta0\\default";
 
-                if (!CreateEnvironmentBlock(ref pEnv, hUserToken, false))
+                if (!CreateEnvironmentBlock(ref env, userToken, false))
                 {
                     throw new Exception("StartProcessAsCurrentUser: CreateEnvironmentBlock failed.");
                 }
 
-                if (!CreateProcessAsUser(hUserToken,
+                if (!CreateProcessAsUser(userToken,
                     appPath, // Application Name
                     cmdLine, // Command Line
                     IntPtr.Zero,
                     IntPtr.Zero,
                     false,
                     dwCreationFlags,
-                    pEnv,
+                    env,
                     workDir, // Working directory
                     ref startInfo,
                     out procInfo))
                 {
-                    iResultOfCreateProcessAsUser = Marshal.GetLastWin32Error();
-                    throw new Exception("StartProcessAsCurrentUser: CreateProcessAsUser failed.  Error Code -" + iResultOfCreateProcessAsUser);
+                    resultOfCreateProcessAsUser = Marshal.GetLastWin32Error();
+                    throw new Exception("StartProcessAsCurrentUser: CreateProcessAsUser failed.  Error Code -" + resultOfCreateProcessAsUser);
                 }
 
-                iResultOfCreateProcessAsUser = Marshal.GetLastWin32Error();
+                resultOfCreateProcessAsUser = Marshal.GetLastWin32Error();
             }
             finally
             {
-                CloseHandle(hUserToken);
-                if (pEnv != IntPtr.Zero)
+                CloseHandle(userToken);
+                if (env != IntPtr.Zero)
                 {
-                    DestroyEnvironmentBlock(pEnv);
+                    DestroyEnvironmentBlock(env);
                 }
                 CloseHandle(procInfo.hThread);
                 CloseHandle(procInfo.hProcess);

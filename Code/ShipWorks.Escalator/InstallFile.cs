@@ -28,20 +28,17 @@ namespace ShipWorks.Escalator
         /// <summary>
         /// Whether or not the file is valid based on its SHA256 checksum
         /// </summary>
-        public bool IsValid
+        public bool IsValid()
         {
-            get
+            string computedHash = ComputeSHA256CheckSum(Path);
+
+            if (string.IsNullOrWhiteSpace(computedHash)||
+                string.IsNullOrWhiteSpace(downloadedHash))
             {
-                string computedHash = ComputeSHA256CheckSum(Path);
-
-                if (string.IsNullOrWhiteSpace(computedHash)||
-                    string.IsNullOrWhiteSpace(downloadedHash))
-                {
-                    return false;
-                }
-
-                return computedHash == downloadedHash;
+                return false;
             }
+
+            return computedHash == downloadedHash;
         }
 
         /// <summary>

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using log4net;
 using ShipWorks.ApplicationCore;
 using ShipWorks.Data.Administration;
 using ShipWorks.Tests.Shared;
@@ -19,7 +20,7 @@ namespace ShipWorks.Escalator.Tests
             mock = AutoMockExtensions.GetLooseThatReturnsMocks();
             sessionGuid = Guid.NewGuid();
 
-            testObject = new ShipWorksCommunicationBridge(sessionGuid.ToString());
+            testObject = new ShipWorksCommunicationBridge(sessionGuid.ToString(), mock.Mock<ILog>().Object);
 
             var session = mock.Mock<IShipWorksSession>();
             session.SetupGet(s => s.InstanceID).Returns(sessionGuid);

@@ -47,15 +47,7 @@ namespace ShipWorks.Escalator
                     ServiceController service = ServiceController.GetServices().SingleOrDefault(s => s.ServiceName == serviceName);
                     StopService(service);
                     break;
-#if DEBUG
-                case "--debugupdate":
-                    Escalator.ProcessMessage("6.2.2.2").Wait();
-                    break;
 
-                case "--log":
-                    log.Error("test message");
-                    break;
-#endif
                 default:
                     if (!Environment.UserInteractive)
                     {
@@ -71,7 +63,7 @@ namespace ShipWorks.Escalator
         private static void SetupLogging(string parameter)
         {            
             string appData = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData);
-            string logFolder = $"{DateTime.Now.ToString(DateTime.Now.ToString("yyyy-MM-dd HH.mm.ss"))} - Escalator{parameter.Replace("--"," - ")}";
+            string logFolder = $"{DateTime.Now.ToString("yyyy-MM-dd HH.mm.ss")} - Escalator{parameter.Replace("--"," - ")}";
 
             string logName = Path.Combine(appData,
                 "Interapptive\\ShipWorks\\Instances",
@@ -93,7 +85,7 @@ namespace ShipWorks.Escalator
         /// </summary>
         private static void UninstallService(string serviceName)
         {
-            log.Info($"Uninstalling Service: {serviceName}");
+            log.InfoFormat("Uninstalling Service: {0}", serviceName);
             ServiceController service = ServiceController.GetServices().SingleOrDefault(s => s.ServiceName == serviceName);
 
             if (service != null)
@@ -113,14 +105,14 @@ namespace ShipWorks.Escalator
         {
             log.Info("Stopping service");
 
-            if (service != null && service.Status == ServiceControllerStatus.Running)
+            if (service?.Status == ServiceControllerStatus.Running)
             {
                 service.Stop();
                 log.Info("Service Stopped");
             }
             else
             {
-                log.Info($"Service \"{service?.DisplayName ?? "NoServiceFound"}\" not running. No action taken");
+                log.InfoFormat("Service \"{0}\" not running. No action taken", service?.DisplayName ?? "NoServiceFound");
             }
         }
 
@@ -129,7 +121,7 @@ namespace ShipWorks.Escalator
         /// </summary>
         private static void InstallService(string serviceName)
         {
-            log.Info($"InstallService({serviceName} called");
+            log.InfoFormat("InstallService({0}) called", serviceName);
             ServiceController service = ServiceController.GetServices().SingleOrDefault(s => s.ServiceName == serviceName);
             if (service == null)
             {
@@ -162,11 +154,11 @@ namespace ShipWorks.Escalator
         }
 
         /// <summary>
-        /// Set service to restart after 3 crashes
+        /// Set service to restart the service in 1 minute if it crashes 
         /// </summary>
         static void SetRecoveryOptions(string serviceName)
         {
-            log.Info("Setting recovery options");
+            log.Info("Setting recovery options to restart the service in 1 minute if it crashes.");
 
             int exitCode;
             using (var process = new Process())
@@ -186,7 +178,7 @@ namespace ShipWorks.Escalator
 
             if (exitCode != 0)
             {
-                log.Error($"Recovery option failed with ExitCode {exitCode}");
+                log.ErrorFormat("Recovery option failed with ExitCode {0}", exitCode);
                 throw new InvalidOperationException();
             }
 

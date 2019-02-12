@@ -13,7 +13,7 @@ namespace ShipWorks.Data.Administration
         /// <summary>
         /// Check to see if the update service is available
         /// </summary>
-        bool IsAvailable { get; }
+        bool IsAvailable();
 
         /// <summary>
         /// Tell the service to update ShipWorks

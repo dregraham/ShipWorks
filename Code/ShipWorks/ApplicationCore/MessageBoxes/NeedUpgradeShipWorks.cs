@@ -33,7 +33,7 @@ namespace ShipWorks.ApplicationCore.MessageBoxes
 
             updateService = IoC.UnsafeGlobalLifetimeScope.Resolve<IUpdateService>();
 
-            if (updateService.IsAvailable)
+            if (updateService.IsAvailable())
             {
                 close.Text = "Cancel";
                 update.Visible = true;
@@ -109,16 +109,35 @@ namespace ShipWorks.ApplicationCore.MessageBoxes
         }
 
         /// <summary>
-        ///
+        /// Dispose on close
         /// </summary>
         private void OnClose(object sender, EventArgs e)
         {
             timer?.Dispose();
         }
 
-        private void OnUpdate(object sender, EventArgs e)
+        /// <summary>
+        /// Updates Shipworks when user clicks update
+        /// </summary>
+        private void OnClickUpdate(object sender, EventArgs e)
         {
             UpdateShipWorks();
+        }
+
+        /// <summary>
+        /// Clean up any resources being used.
+        /// </summary>
+        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        protected override void Dispose(bool disposing)
+        {
+            updateService?.Dispose();
+            timer?.Dispose();
+
+            if (disposing && (components != null))
+            {
+                components.Dispose();
+            }
+            base.Dispose(disposing);
         }
     }
 }

@@ -125,7 +125,7 @@ Root: HKLM; Subkey: Software\Microsoft\Windows\CurrentVersion\Run; ValueType: st
 
 [Run]
 Filename: {app}\ShipWorks.exe; Description: Launch ShipWorks; Flags: nowait postinstall skipifsilent
-Filename: {app}\ShipWorks.exe; Parameters: "/s=scheduler"; Flags: nowait; Check: not NeedRestart
+Filename: {app}\ShipWorks.exe; Parameters: "/s=scheduler"; Flags: nowait skipifsilent; Check: not NeedRestart
 
 [UninstallRun]
 Filename: {app}\ShipWorks.exe; Parameters: "/command:uninstall"; Flags: runhidden
@@ -148,6 +148,45 @@ var
   newAppID: string;
   DatabaseUpgradeFailed: Boolean;
   CopyFilesSucceeded: Boolean;
+  ShouldUpgradeDatabase: Boolean;
+
+//----------------------------------------------------------------
+// Convert a bool to a string
+//----------------------------------------------------------------
+
+function BoolToStr(B: Boolean): string;
+var 
+	retVal: string;
+begin
+	if B then begin
+		retVal := 'True';
+	end
+	else
+	begin
+		retVal := 'False';
+	end
+	Result := retVal;
+end;
+
+//----------------------------------------------------------------
+// Initialize setup
+//----------------------------------------------------------------
+function InitializeSetup(): Boolean;
+var
+  j: Integer;
+begin
+  ShouldUpgradeDatabase := False;
+  for j := 1 to ParamCount do
+    if CompareText(ParamStr(j), '/upgradedb') = 0 then
+    begin
+      ShouldUpgradeDatabase := True;
+      Break;
+    end; 
+
+	Log('ShouldUpgradeDatabase= ' + BoolToStr(ShouldUpgradeDatabase));
+
+	Result := True;
+end;
 
 //----------------------------------------------------------------
 // Copy the contents of one directory to another
@@ -282,7 +321,7 @@ end;
 procedure CurStepChanged(CurStep: TSetupStep);
 begin
   if CurStep = ssPostInstall then begin
-  	if WizardSilent then
+  	if ShouldUpgradeDatabase then
   	begin
     	UpgradeDatabase();
     end;    
@@ -305,7 +344,9 @@ begin
 	then begin
 		if DatabaseUpgradeFailed or not CopyFilesSucceeded then
 		begin
-			Log('BACKUP: Install failed, rolling back...')
+			Log('DatabaseUpgradeFailed = ' + BoolToStr(DatabaseUpgradeFailed));
+			Log('CopyFilesSucceeded = ' + BoolToStr(CopyFilesSucceeded));
+			Log('BACKUP: Install failed, rolling back...');
 			DirectoryCopy(tempDir, ExpandConstant('{app}'));
 			installStatus := 'failure';
 		end;
@@ -318,6 +359,7 @@ begin
 		installStatus := 'failure';
 	end;
 
+	Log('Install Status = ' + installStatus);
 	if WizardSilent then
   	begin
 		Exec(ExpandConstant(ExpandConstant('{app}') + '\ShipWorks.Escalator.exe'), '--launchshipworks', '', SW_HIDE, ewWaitUntilTerminated, serviceWasStarted)

@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Autofac.Extras.Moq;
+using log4net;
 using ShipWorks.ApplicationCore;
 using ShipWorks.Data.Administration;
 using ShipWorks.Escalator;
@@ -37,24 +38,24 @@ namespace ShipWorks.Tests.Data.Administration
         {
             using (NamedPipeServerStream pipeServer = new NamedPipeServerStream(sessionGuid.ToString()))
             {
-                Assert.True(testObject.IsAvailable);
+                Assert.True(testObject.IsAvailable());
             }
         }
 
         [Fact]
         public void IsAvailable_ReturnsFalse_WhenConnectionIsNotSuccessful()
         {
-            Assert.False(testObject.IsAvailable);
+            Assert.False(testObject.IsAvailable());
         }
 
         [Fact]
         public void Update_WritesUpdateInfoToStream()
         {
-            var communictionBridge = new ShipWorksCommunicationBridge(sessionGuid.ToString());
+            var communictionBridge = new ShipWorksCommunicationBridge(sessionGuid.ToString(), mock.Mock<ILog>().Object);
 
             communictionBridge.OnMessage += (m) => Assert.Equal("0.0.123", m);
 
-            Assert.True(testObject.IsAvailable);
+            Assert.True(testObject.IsAvailable());
             Assert.True(testObject.Update(new Version(0, 0, 123)).Success);
         }
 
