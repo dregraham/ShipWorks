@@ -2,6 +2,7 @@
 using System.IO.Pipes;
 using System.Security.AccessControl;
 using System.Text;
+using log4net;
 
 namespace ShipWorks.Escalator
 {
@@ -13,13 +14,15 @@ namespace ShipWorks.Escalator
         public delegate void DelegateMessage(string message);
         public event DelegateMessage OnMessage;
         private string instance;
+        private readonly ILog log;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public ShipWorksCommunicationBridge(string instance)
+        public ShipWorksCommunicationBridge(string instance, ILog log)
         {
             this.instance = instance;
+            this.log = log;
             StartPipeServer();
         }
 
@@ -41,6 +44,8 @@ namespace ShipWorks.Escalator
                     255,
                     0,
                     pipeSecurity);
+
+            log.DebugFormat("Starting named pipe server {0}", instance);
 
             pipeServer.BeginWaitForConnection(
                    new AsyncCallback(WaitForConnectionCallBack), pipeServer);
@@ -68,11 +73,14 @@ namespace ShipWorks.Escalator
                 // Convert byte buffer to string
                 string stringData = Encoding.UTF8.GetString(buffer, 0, buffer.Length);
 
+                log.InfoFormat("Received Message {0}", stringData);
+
                 // Pass message back to calling form
                 OnMessage?.Invoke(stringData.Trim());
             }
-            catch
+            catch (Exception ex)
             {
+                log.ErrorFormat("An error occurred while receiving message from communication bridge. {0}", ex.Message);
                 return;
             }
 
