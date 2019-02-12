@@ -20,7 +20,7 @@ namespace ShipWorks.Escalator
         public Result Install(InstallFile file)
         {
             log.Info("Starting Install");
-            if (!file.IsValid)
+            if (!file.IsValid())
             {
                 log.InfoFormat("Install File {0} has an invalid hash", file.Path);
                 return Result.FromError("Install file is invalid");

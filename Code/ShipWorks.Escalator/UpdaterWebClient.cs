@@ -44,19 +44,19 @@ namespace ShipWorks.Escalator
             log.Info("Download called");
             (Uri url, string sha) = await GetVersionToDownload(version).ConfigureAwait(false);
 
-            string fileName = GetSaveAsPath(url);
+            string installationFileSavePath = GetInstallationFileSavePath(url);
 
-            log.InfoFormat("Downloading file to {0}", fileName);
-            await downloadClient.DownloadFileTaskAsync(url, fileName).ConfigureAwait(false);
+            log.InfoFormat("Downloading file to {0}", installationFileSavePath);
+            await downloadClient.DownloadFileTaskAsync(url, installationFileSavePath).ConfigureAwait(false);
             log.Info("File Downloaded");
 
-            return new InstallFile(fileName, sha);
+            return new InstallFile(installationFileSavePath, sha);
         }
 
         /// <summary>
-        /// Get path to save upgrade file
+        /// Get the path to save the install file to
         /// </summary>
-        private static string GetSaveAsPath(Uri url)
+        private static string GetInstallationFileSavePath(Uri url)
         {
             string fileName = Path.GetFileName(url.LocalPath);
             string appData = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData);

@@ -22,7 +22,7 @@ namespace ShipWorks.Escalator.Tests
         {
             InstallFile testObject = new InstallFile(filePath, goodHash);
 
-            Assert.True(testObject.IsValid);
+            Assert.True(testObject.IsValid());
         }
 
         [Fact]
@@ -30,7 +30,7 @@ namespace ShipWorks.Escalator.Tests
         {
             InstallFile testObject = new InstallFile(filePath, badHash);
 
-            Assert.False(testObject.IsValid);
+            Assert.False(testObject.IsValid());
         }
 
         [Fact]
@@ -38,7 +38,7 @@ namespace ShipWorks.Escalator.Tests
         {
             InstallFile testObject = new InstallFile(string.Empty, goodHash);
 
-            Assert.False(testObject.IsValid);
+            Assert.False(testObject.IsValid());
         }
     }
 }
