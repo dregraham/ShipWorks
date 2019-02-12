@@ -36,7 +36,7 @@ namespace ShipWorks.Escalator
         /// </summary>
         private async void OnShipWorksMessage(string message)
         {
-            log.Info($"Message \"{message}\" received from ShipWorksCommunicationBridge.");
+            log.InfoFormat("Message \"{0}\" received from ShipWorksCommunicationBridge.", message);
             await ProcessMessage(message);
         }
 
@@ -56,7 +56,7 @@ namespace ShipWorks.Escalator
                 }
                 else
                 {
-                    log.Info($"\"{message}\" could not be parsed as version.");
+                    log.InfoFormat("\"{0}\" could not be parsed as version.", message);
                 }
             }
             catch (Exception ex)

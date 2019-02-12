@@ -21,10 +21,10 @@ namespace ShipWorks.Escalator
             log.Info("Starting Install");
             if (!file.IsValid)
             {
-                log.Info($"Install File {file.Path} has an invalid hash");
+                log.InfoFormat("Install File {0} has an invalid hash", file.Path);
                 throw new InvalidOperationException("Install file is invalid");
             }
-            log.Info($"Install {file.Path} file validated");
+            log.InfoFormat("Install {0} file validated", file.Path);
 
             KillShipWorks();
             RunSetup(file);
@@ -57,9 +57,9 @@ namespace ShipWorks.Escalator
             {
                 log.Info("Waiting for install to finish");
                 proc.WaitForExit();
-                log.Info($"Install process finished.");
+                log.Info("Install process finished.");
                 exitCode = proc.ExitCode;
-                log.Info($"Install process exit code {exitCode}");
+                log.InfoFormat("Install process exit code {0}", exitCode);
             }
 
             if (exitCode > 0)

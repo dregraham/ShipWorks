@@ -34,9 +34,9 @@ namespace ShipWorks.Escalator
 
             string fileName = GetSaveAsPath(url);
 
-            log.Info($"Downloading file to {fileName}");
+            log.InfoFormat("Downloading file to {0}", fileName);
             downloadClient.DownloadFile(url, fileName);
-            log.Info($"File Downloaded");
+            log.Info("File Downloaded");
 
             return new InstallFile(fileName, sha);
         }
@@ -56,7 +56,7 @@ namespace ShipWorks.Escalator
         /// </summary>
         private async Task<(Uri url, string sha)> GetVersionToDownload(Version version)
         {
-            log.Info($"Attempting to get version {version}");
+            log.InfoFormat($"Attempting to get version {0}", version);
 
             var values = new Dictionary<string, string>
             {
@@ -71,7 +71,7 @@ namespace ShipWorks.Escalator
             {
                 response = await responseMessage.Content.ReadAsStringAsync();
             }
-            log.Info($"Response received: {response}");
+            log.InfoFormat("Response received: {0}", response);
 
             XmlDocument xmlResponse = new XmlDocument();
             xmlResponse.LoadXml(response);
@@ -81,8 +81,8 @@ namespace ShipWorks.Escalator
 
             string sha = xmlResponse.SelectSingleNode("//Update//SHA256")?.InnerText ?? string.Empty;
 
-            log.Info($"Url: {url}");
-            log.Info($"sha: {sha}");
+            log.InfoFormat("Url: {0}", url);
+            log.InfoFormat("sha: {0}", sha);
             return (uri, sha);
         }
 

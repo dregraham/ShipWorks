@@ -71,7 +71,7 @@ namespace ShipWorks.Escalator
         private static void SetupLogging(string parameter)
         {            
             string appData = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData);
-            string logFolder = $"{DateTime.Now.ToString(DateTime.Now.ToString("yyyy-MM-dd HH.mm.ss"))} - Escalator{parameter.Replace("--"," - ")}";
+            string logFolder = $"{DateTime.Now.ToString("yyyy-MM-dd HH.mm.ss")} - Escalator{parameter.Replace("--"," - ")}";
 
             string logName = Path.Combine(appData,
                 "Interapptive\\ShipWorks\\Instances",
@@ -93,7 +93,7 @@ namespace ShipWorks.Escalator
         /// </summary>
         private static void UninstallService(string serviceName)
         {
-            log.Info($"Uninstalling Service: {serviceName}");
+            log.InfoFormat("Uninstalling Service: {0}", serviceName);
             ServiceController service = ServiceController.GetServices().SingleOrDefault(s => s.ServiceName == serviceName);
 
             if (service != null)
@@ -120,7 +120,7 @@ namespace ShipWorks.Escalator
             }
             else
             {
-                log.Info($"Service \"{service?.DisplayName ?? "NoServiceFound"}\" not running. No action taken");
+                log.InfoFormat("Service \"{0}\" not running. No action taken", service?.DisplayName ?? "NoServiceFound");
             }
         }
 
@@ -129,7 +129,7 @@ namespace ShipWorks.Escalator
         /// </summary>
         private static void InstallService(string serviceName)
         {
-            log.Info($"InstallService({serviceName} called");
+            log.InfoFormat("InstallService({0}) called", serviceName);
             ServiceController service = ServiceController.GetServices().SingleOrDefault(s => s.ServiceName == serviceName);
             if (service == null)
             {
@@ -186,7 +186,7 @@ namespace ShipWorks.Escalator
 
             if (exitCode != 0)
             {
-                log.Error($"Recovery option failed with ExitCode {exitCode}");
+                log.ErrorFormat("Recovery option failed with ExitCode {0}", exitCode);
                 throw new InvalidOperationException();
             }
 
