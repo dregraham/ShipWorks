@@ -7,19 +7,6 @@
         /// </summary>
         private System.ComponentModel.IContainer components = null;
 
-        /// <summary>
-        /// Clean up any resources being used.
-        /// </summary>
-        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing && (components != null))
-            {
-                components.Dispose();
-            }
-            base.Dispose(disposing);
-        }
-
         #region Windows Form Designer generated code
 
         /// <summary>
@@ -96,7 +83,6 @@
             this.close.TabIndex = 18;
             this.close.Text = "Close";
             this.close.UseVisualStyleBackColor = true;
-            this.close.Click += new System.EventHandler(this.OnClose);
             //
             // restart
             //
@@ -107,7 +93,7 @@
             this.update.Text = "Update (30)";
             this.update.UseVisualStyleBackColor = true;
             this.update.Visible = false;
-            this.update.Click += new System.EventHandler(this.OnUpdate);
+            this.update.Click += new System.EventHandler(this.OnClickUpdate);
             //
             // NeedUpgradeShipWorks
             //

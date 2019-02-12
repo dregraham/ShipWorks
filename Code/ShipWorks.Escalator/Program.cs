@@ -113,7 +113,7 @@ namespace ShipWorks.Escalator
         {
             log.Info("Stopping service");
 
-            if (service != null && service.Status == ServiceControllerStatus.Running)
+            if (service?.Status == ServiceControllerStatus.Running)
             {
                 service.Stop();
                 log.Info("Service Stopped");
@@ -162,11 +162,11 @@ namespace ShipWorks.Escalator
         }
 
         /// <summary>
-        /// Set service to restart after 3 crashes
+        /// Set service to restart the service in 1 minute if it crashes 
         /// </summary>
         static void SetRecoveryOptions(string serviceName)
         {
-            log.Info("Setting recovery options");
+            log.Info("Setting recovery options to restart the service in 1 minute if it crashes.");
 
             int exitCode;
             using (var process = new Process())
