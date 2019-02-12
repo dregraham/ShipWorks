@@ -301,6 +301,30 @@ namespace ShipWorks
 
         #region Initialization \ Shutdown
 
+        /// <summary>
+        /// Attempt to auto update
+        /// </summary>
+        /// <returns>true if we kicked off the auto update process</returns>
+        private bool AutoUpdate()
+        {
+            if (SqlSession.IsConfigured && SqlSession.Current.CanConnect())
+            {
+                Version databaseVersion = SqlSchemaUpdater.GetInstalledSchemaVersion();
+
+                if (databaseVersion > SqlSchemaUpdater.GetRequiredSchemaVersion())
+                {
+                    using (IUpdateService updateService = IoC.UnsafeGlobalLifetimeScope.Resolve<IUpdateService>())
+                    {
+                        if (updateService.IsAvailable && updateService.Update(databaseVersion).Success)
+                        {
+                            return true;
+                        }
+                    }
+                }
+            }
+
+            return false;
+        }
 
         /// <summary>
         /// Form is loading, this is before its visible
@@ -382,6 +406,13 @@ namespace ShipWorks
             ApplyDisplaySettings();
 
             ApplyEditingContext();
+
+            SqlSession.Initialize();
+
+            if (AutoUpdate())
+            {
+                Close();
+            }
         }
 
         /// <summary>
@@ -400,9 +431,6 @@ namespace ShipWorks
         {
             // Its visible, but possibly not completely drawn
             Refresh();
-
-            // Initialize the last saved session
-            SqlSession.Initialize();
 
             // If the action is to open the DB setup, we can do that now - no need to logon first.
             if (StartupController.StartupAction == StartupAction.OpenDatabaseSetup)
@@ -1410,6 +1438,8 @@ namespace ShipWorks
 
             log.InfoFormat("CheckDatabaseVersion: Installed: {0}, Required {1}", installedVersion, SqlSchemaUpdater.GetRequiredSchemaVersion());
 
+            UpdateDatabaseBuildNumber();
+
             // See if it needs upgraded
             if (SqlSchemaUpdater.IsUpgradeRequired() || !SqlSession.Current.IsSqlServer2008OrLater())
             {
@@ -1450,6 +1480,26 @@ namespace ShipWorks
             }
 
             return true;
+        }
+
+        /// <summary>
+        /// Update the database build number if its out of date
+        /// </summary>
+        private void UpdateDatabaseBuildNumber()
+        {
+            Version localBuildVersion = typeof(MainForm).Assembly.GetName().Version;
+            Version databaseBuildVersion = SqlSchemaUpdater.GetBuildVersion();
+
+            if (localBuildVersion > databaseBuildVersion)
+            {
+                using (DbConnection con = SqlSession.Current.OpenConnection())
+                {
+                    using (DbCommand command = con.CreateCommand())
+                    {
+                        SqlSchemaUpdater.UpdateBuildVersionProcedure(command);
+                    }
+                }
+            }
         }
 
         #endregion

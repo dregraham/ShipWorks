@@ -158,6 +158,12 @@ namespace ShipWorks.Data.Administration
                 command.Transaction = transaction;
                 SqlSchemaUpdater.UpdateAssemblyVersionStoredProcedure(command);
             }
+
+            using (DbCommand command = con.CreateCommand())
+            {
+                command.Transaction = transaction;
+                SqlSchemaUpdater.UpdateBuildVersionProcedure(command);
+            }
         }
 
         /// <summary>

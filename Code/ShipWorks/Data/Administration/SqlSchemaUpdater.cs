@@ -67,16 +67,28 @@ namespace ShipWorks.Data.Administration
         /// <summary>
         /// Get the version of the installed assembly
         /// </summary>
-        private static Version GetInstalledAssemblyVersion()
+        private static Version GetInstalledAssemblyVersion() =>
+            GetVersionFromStoredProcedure("GetAssemblySchemaVersion");
+
+        /// <summary>
+        /// Get the version from GetBuildVersion in the database
+        /// </summary>
+        /// <returns></returns>
+        public static Version GetBuildVersion() =>
+            GetVersionFromStoredProcedure("GetBuildVersion");
+
+        /// <summary>
+        /// Execute the given stored procedure and return a version
+        /// </summary>
+        private static Version GetVersionFromStoredProcedure(string procedureName)
         {
             using (DbConnection con = SqlSession.Current.OpenConnection())
             {
                 try
                 {
-                    using (DbCommand cmd = DbCommandProvider.Create(con, "GetAssemblySchemaVersion"))
+                    using (DbCommand cmd = DbCommandProvider.Create(con, procedureName))
                     {
                         cmd.CommandType = CommandType.StoredProcedure;
-
                         return new Version((string) DbCommandProvider.ExecuteScalar(cmd));
                     }
                 }
@@ -278,7 +290,7 @@ namespace ShipWorks.Data.Administration
         /// </summary>
         public static void UpdateSchemaVersionStoredProcedure(DbCommand cmd, Version version)
         {
-            UpdateVersionStoredProcedure(cmd, version, "GetSchemaVersion");
+            UpdateVersionStoredProcedure(cmd, version, "GetSchemaVersion", true);
         }
 
         /// <summary>
@@ -286,13 +298,22 @@ namespace ShipWorks.Data.Administration
         /// </summary>
         public static void UpdateAssemblyVersionStoredProcedure(DbCommand cmd)
         {
-            UpdateVersionStoredProcedure(cmd, GetRequiredSchemaVersion(), "GetAssemblySchemaVersion");
+            UpdateVersionStoredProcedure(cmd, GetRequiredSchemaVersion(), "GetAssemblySchemaVersion", true);
+        }
+
+        /// <summary>
+        /// Update the stored procedure that specifies the schema version to which the installed assembly applies
+        /// </summary>
+        public static void UpdateBuildVersionProcedure(DbCommand cmd)
+        {
+            Version assemblyVersion = typeof(SqlSchemaUpdater).Assembly.GetName().Version;
+            UpdateVersionStoredProcedure(cmd, assemblyVersion, "GetBuildVersion", false);
         }
 
         /// <summary>
         /// Update a stored procedure for checking a version
         /// </summary>
-        private static void UpdateVersionStoredProcedure(DbCommand cmd, Version version, string procedureName)
+        private static void UpdateVersionStoredProcedure(DbCommand cmd, Version version, string procedureName, bool trimVersion)
         {
             if (version == null)
             {
@@ -310,11 +331,13 @@ namespace ShipWorks.Data.Administration
                 string withEncryption = "WITH ENCRYPTION";
 #endif
 
+            string versionString = trimVersion ? version.ToString(4) : version.ToString();
+
             cmd.CommandText = string.Format(@"
                 CREATE PROCEDURE dbo.{2}
                 {0}
                 AS
-                SELECT '{1}' AS 'SchemaVersion'", withEncryption, version.ToString(4), procedureName);
+                SELECT '{1}' AS 'SchemaVersion'", withEncryption, versionString, procedureName);
             DbCommandProvider.ExecuteNonQuery(cmd);
         }
 

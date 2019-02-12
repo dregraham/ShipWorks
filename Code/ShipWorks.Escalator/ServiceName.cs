@@ -19,7 +19,7 @@ namespace ShipWorks.Escalator
         /// Gets the instance id of the service based on registry value. Throws if it cannot find the registry value.
         /// </summary>
         /// <returns></returns>
-        private static Guid GetInstanceID()
+        public static Guid GetInstanceID()
         {
             return GetRegistryLocalMachineValue(@"Software\Interapptive\ShipWorks\Instances",
              Path.GetDirectoryName(Assembly.GetEntryAssembly().Location),
@@ -30,7 +30,7 @@ namespace ShipWorks.Escalator
         }
 
         /// <summary>
-        /// Queries Registry.LocalMachine for a Guid to return.  
+        /// Queries Registry.LocalMachine for a Guid to return.
         /// </summary>
         /// <param name="subKeyPath">The path to the key starting from registryBaseKey.</param>
         /// <param name="keyName">The name of the key to parse into a Guid.</param>
@@ -63,7 +63,7 @@ namespace ShipWorks.Escalator
 
 
         /// <summary>
-        /// Queries the registry for a Guid to return.  
+        /// Queries the registry for a Guid to return.
         /// </summary>
         /// <param name="registryBaseKey">The base key from which to start.</param>
         /// <param name="subKeyPath">The path to the key starting from registryBaseKey.</param>
