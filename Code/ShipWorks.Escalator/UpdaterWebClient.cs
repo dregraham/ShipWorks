@@ -35,7 +35,6 @@ namespace ShipWorks.Escalator
         private static readonly WebClient downloadClient = new WebClient();
 
         string tangoUrl = "http://www.interapptive.com/ShipWorksNet/ShipWorksV1.svc/account/shipworks";
-        SHA256 SHA256 = SHA256.Create();
 
         /// <summary>
         /// Download the requested version
@@ -48,7 +47,7 @@ namespace ShipWorks.Escalator
             string fileName = GetSaveAsPath(url);
 
             log.InfoFormat("Downloading file to {0}", fileName);
-            downloadClient.DownloadFile(url, fileName);
+            await downloadClient.DownloadFileTaskAsync(url, fileName).ConfigureAwait(false);
             log.Info("File Downloaded");
 
             return new InstallFile(fileName, sha);
@@ -69,7 +68,7 @@ namespace ShipWorks.Escalator
         /// </summary>
         private async Task<(Uri url, string sha)> GetVersionToDownload(Version version)
         {
-            log.InfoFormat($"Attempting to get version {0}", version);
+            log.InfoFormat("Attempting to get version {0}", version);
 
             var values = new Dictionary<string, string>
             {
@@ -82,7 +81,7 @@ namespace ShipWorks.Escalator
             string response;
             using (HttpResponseMessage responseMessage = await tangoClient.Value.PostAsync(tangoUrl, content).ConfigureAwait(false))
             {
-                response = await responseMessage.Content.ReadAsStringAsync();
+                response = await responseMessage.Content.ReadAsStringAsync().ConfigureAwait(false);
             }
             log.InfoFormat("Response received: {0}", response);
 
