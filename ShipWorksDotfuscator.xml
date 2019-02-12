@@ -92,6 +92,10 @@
         <option>honoroas</option>
         <file dir="${configdir}\Artifacts\Application" name="swc.exe" />
       </inputassembly>
+      <inputassembly refid="ce2d0323-f39b-4004-9e10-ea8d4823f5ad">
+        <option>honoroas</option>
+        <file dir="${configdir}\Artifacts\Application" name="ShipWorks.Escalator.exe" />
+      </inputassembly>
     </asmlist>
   </input>
   <output>
@@ -127,8 +131,8 @@
       <namespace name="ShipWorks\.Stores\.Platforms\.ChannelAdvisor\.DTO\.*" regex="true" />
       <namespace name="ShipWorks\.Stores\.Platforms\.Jet\.DTO\.*.*" regex="true" />
       <namespace name="ShipWorks\.Stores\.Platforms\.ChannelAdvisor\.Enums\.*" regex="true" />
-      <namespace name="ShipWorks.UI.Controls.Weight" />
       <namespace name="Interapptive\.Shared\.StackTraceHelper\.*.*" regex="true" />
+      <namespace name="ShipWorks.UI.Controls.Weight" />
       <type name=".*" regex="true">
         <customattribute name="ShipWorks.Filters.Content.ConditionElementAttribute" />
       </type>
@@ -162,13 +166,13 @@
       <type name=".*" regex="true" applytoderivedtypes="true">
         <supertype name="System.Exception" regex="true" />
       </type>
+      <type name="*ShipmentAdapter*" regex="true" />
       <type name="ShipWorks.Data.Model.EntityClasses.PostalProfileEntity" excludetype="false">
         <method name="get_Usps" signature="ShipWorks.Data.Model.EntityClasses.UspsProfileEntity()" />
       </type>
       <type name="Interapptive.Shared.IO.Text.Csv.Resources.ExceptionMessage" />
       <type name="Interapptive.Shared.Properties.Flags" />
       <type name="ShipWorks.UI.Controls.ShipWorksComboBox" />
-      <type name="*ShipmentAdapter*" regex="true" />
     </excludelist>
     <mapping>
       <mapoutput overwrite="true">
@@ -194,10 +198,19 @@
         <file dir="${configdir}\Artifacts\Application" name="ShipWorks.Data.Model.dll" />
       </assembly>
       <assembly>
+        <file dir="${configdir}\Artifacts\Application" name="ShipWorks.Escalator.exe" />
+      </assembly>
+      <assembly>
         <file dir="${configdir}\Artifacts\Application" name="ShipWorks.exe" />
       </assembly>
-	  <assembly>
-        <file dir="${configdir}\Artifacts\Application" name="swc.exe" />
+      <assembly>
+        <file dir="${configdir}\Artifacts\Application" name="ShipWorks.OrderLookup.dll" />
+      </assembly>
+      <assembly>
+        <file dir="${configdir}\Artifacts\Application" name="ShipWorks.Products.dll" />
+      </assembly>
+      <assembly>
+        <file dir="${configdir}\Artifacts\Application" name="ShipWorks.Products.UI.dll" />
       </assembly>
       <assembly>
         <file dir="${configdir}\Artifacts\Application" name="Interapptive.Shared.dll" />
@@ -212,9 +225,6 @@
         <file dir="${configdir}\Artifacts\Application" name="ShipWorks.Shipping.UI.dll" />
       </assembly>
       <assembly>
-        <file dir="${configdir}\Artifacts\Application" name="ShipWorks.OrderLookup.dll" />
-      </assembly>
-      <assembly>
         <file dir="${configdir}\Artifacts\Application" name="ShipWorks.Stores.dll" />
       </assembly>
       <assembly>
@@ -224,10 +234,7 @@
         <file dir="${configdir}\Artifacts\Application" name="ShipWorks.UI.dll" />
       </assembly>
       <assembly>
-        <file dir="${configdir}\Artifacts\Application" name="ShipWorks.Products.dll" />
-      </assembly>
-      <assembly>
-        <file dir="${configdir}\Artifacts\Application" name="ShipWorks.Products.UI.dll" />
+        <file dir="${configdir}\Artifacts\Application" name="swc.exe" />
       </assembly>
     </includelist>
   </stringencrypt>
