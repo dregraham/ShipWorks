@@ -8,6 +8,7 @@ using System.Net;
 using System.IO;
 using System.Security.Cryptography;
 using log4net;
+using System.Reflection;
 
 namespace ShipWorks.Escalator
 {
@@ -16,6 +17,18 @@ namespace ShipWorks.Escalator
     /// </summary>
     public class UpdaterWebClient
     {
+        private readonly static Lazy<Version> version = new Lazy<Version>(() =>
+        {
+            // Tango requires a specific version in order to know when to return
+            // legacy responses or new response for the customer license. This is
+            // primarily for debug/internal versions of ShipWorks that have 0.0.0.x
+            // version number.
+            Version assemblyVersion = Assembly.GetExecutingAssembly().GetName().Version;
+            Version minimumVersion = new Version(5, 0, 0, 0);
+
+            return assemblyVersion.Major == 0 ? minimumVersion : assemblyVersion;
+        });
+
         private static readonly ILog log = LogManager.GetLogger(typeof(UpdaterWebClient));
 
         private static readonly Lazy<HttpClient> tangoClient = new Lazy<HttpClient>(GetHttpClient);
@@ -23,7 +36,7 @@ namespace ShipWorks.Escalator
 
         string tangoUrl = "http://www.interapptive.com/ShipWorksNet/ShipWorksV1.svc/account/shipworks";
         SHA256 SHA256 = SHA256.Create();
-        
+
         /// <summary>
         /// Download the requested version
         /// </summary>
@@ -96,12 +109,12 @@ namespace ShipWorks.Escalator
             HttpClientHandler handler = new HttpClientHandler();
 
             HttpClient client = new HttpClient(handler);
-            client.DefaultRequestHeaders.Add("X-SHIPWORKS-VERSION", "5.0.0.0");
+            client.DefaultRequestHeaders.Add("X-SHIPWORKS-VERSION", version.ToString());
             client.DefaultRequestHeaders.Add("X-SHIPWORKS-USER", "$h1pw0rks");
             client.DefaultRequestHeaders.Add("X-SHIPWORKS-PASS", "q2*lrft");
             client.DefaultRequestHeaders.Add("SOAPAction", "http://stamps.com/xml/namespace/2015/06/shipworks/shipworksv1/IShipWorks/ShipworksPost");
             client.DefaultRequestHeaders.UserAgent.ParseAdd("shipworks");
-            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/x-www-form-urlencoded"));           
+            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/x-www-form-urlencoded"));
 
             return client;
         }
