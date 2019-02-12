@@ -1,10 +1,7 @@
 ﻿using System;
-using System.IO;
 using System.IO.Pipes;
-using System.Security.Principal;
 using System.Text;
 using Interapptive.Shared.Utility;
-using Newtonsoft.Json.Linq;
 using ShipWorks.ApplicationCore;
 
 namespace ShipWorks.Data.Administration
@@ -27,27 +24,24 @@ namespace ShipWorks.Data.Administration
         /// <summary>
         /// Check if the updater is available
         /// </summary>
-        public bool IsAvailable
+        public bool IsAvailable()
         {
-            get
+            if (!updaterPipe.IsConnected)
             {
-                if (!updaterPipe.IsConnected)
+                // Give it 1 second to connect
+                try
                 {
-                    // Give it 1 second to connect
-                    try
-                    {
-                        updaterPipe.Connect(1000);
-                    }
-                    catch (Exception)
-                    {
-                        // Connection can fail if something else is connected
-                        // or if the timeout has elapsed
-                        return false;
-                    }
+                    updaterPipe.Connect(1000);
                 }
-
-                return updaterPipe.IsConnected;
+                catch (Exception)
+                {
+                    // Connection can fail if something else is connected
+                    // or if the timeout has elapsed
+                    return false;
+                }
             }
+
+            return updaterPipe.IsConnected;
         }
 
         /// <summary>
@@ -55,7 +49,7 @@ namespace ShipWorks.Data.Administration
         /// </summary>
         public Result Update(Version version)
         {
-            if (IsAvailable)
+            if (IsAvailable())
             {
                 string versionString = version.ToString();
                 updaterPipe.Write(Encoding.UTF8.GetBytes(versionString), 0, versionString.Length);
@@ -70,7 +64,7 @@ namespace ShipWorks.Data.Administration
         /// </summary>
         public void Dispose()
         {
-            updaterPipe?.Dispose();
+            updaterPipe.Dispose();
         }
     }
 }

@@ -33,7 +33,7 @@ namespace ShipWorks.ApplicationCore.MessageBoxes
 
             updateService = IoC.UnsafeGlobalLifetimeScope.Resolve<IUpdateService>();
 
-            if (updateService.IsAvailable)
+            if (updateService.IsAvailable())
             {
                 close.Text = "Cancel";
                 update.Visible = true;

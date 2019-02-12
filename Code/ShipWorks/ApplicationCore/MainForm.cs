@@ -315,7 +315,7 @@ namespace ShipWorks
                 {
                     using (IUpdateService updateService = IoC.UnsafeGlobalLifetimeScope.Resolve<IUpdateService>())
                     {
-                        if (updateService.IsAvailable && updateService.Update(databaseVersion).Success)
+                        if (updateService.IsAvailable() && updateService.Update(databaseVersion).Success)
                         {
                             return true;
                         }
@@ -1438,6 +1438,7 @@ namespace ShipWorks
 
             log.InfoFormat("CheckDatabaseVersion: Installed: {0}, Required {1}", installedVersion, SqlSchemaUpdater.GetRequiredSchemaVersion());
 
+            // update the build  number stored in the database, this has nothing to do with the database's schema
             UpdateDatabaseBuildNumber();
 
             // See if it needs upgraded
