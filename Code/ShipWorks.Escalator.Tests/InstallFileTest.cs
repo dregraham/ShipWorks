@@ -15,13 +15,13 @@ namespace ShipWorks.Escalator.Tests
 
             Assert.Equal(filePath, testObject.Path);
         }
-            
+
         [Fact]
-        
+
         public void IsValid_ReturnsTrue_WhenChecksumIsCorrect()
         {
             InstallFile testObject = new InstallFile(filePath, goodHash);
-            
+
             Assert.True(testObject.IsValid);
         }
 
@@ -29,15 +29,15 @@ namespace ShipWorks.Escalator.Tests
         public void IsValid_ReturnsFalse_WhenChecksumIsIncorrect()
         {
             InstallFile testObject = new InstallFile(filePath, badHash);
-            
+
             Assert.False(testObject.IsValid);
         }
-        
+
         [Fact]
         public void IsValid_ReturnsFalse_WhenAnExceptionOccursCalculatingChecksum()
         {
             InstallFile testObject = new InstallFile(string.Empty, goodHash);
-            
+
             Assert.False(testObject.IsValid);
         }
     }
