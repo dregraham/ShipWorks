@@ -40,7 +40,7 @@ namespace ShipWorks.Escalator
         private async void OnShipWorksMessage(string message)
         {
             log.InfoFormat("Message \"{0}\" received from ShipWorksCommunicationBridge.", message);
-            await ProcessMessage(message);
+            await ProcessMessage(message).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -52,7 +52,7 @@ namespace ShipWorks.Escalator
             {
                 if (Version.TryParse(message, out Version version))
                 {
-                    InstallFile newVersion = await new UpdaterWebClient().Download(new Version(message));
+                    InstallFile newVersion = await new UpdaterWebClient().Download(new Version(message)).ConfigureAwait(false);
 
                     log.Info("Attempting to install new version");
                     new ShipWorksInstaller().Install(newVersion);
