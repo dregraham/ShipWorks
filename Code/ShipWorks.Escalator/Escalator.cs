@@ -27,9 +27,12 @@ namespace ShipWorks.Escalator
         {
             log.Info("OnStart");
             // Start a communication bridge to listen for messages from ShipWorks
-            ShipWorksCommunicationBridge communicationBridge = new ShipWorksCommunicationBridge(ShipWorks.Escalator.ServiceName.GetInstanceID().ToString());
+            ShipWorksCommunicationBridge communicationBridge =
+                new ShipWorksCommunicationBridge(ShipWorks.Escalator.ServiceName.GetInstanceID().ToString(),
+                LogManager.GetLogger(typeof(ShipWorksCommunicationBridge)));
+
             communicationBridge.OnMessage += OnShipWorksMessage;
-        }     
+        }
 
         /// <summary>
         /// React to a message from ShipWorks
