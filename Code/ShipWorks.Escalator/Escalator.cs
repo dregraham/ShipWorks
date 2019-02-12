@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ServiceProcess;
 using System.Threading.Tasks;
+using Interapptive.Shared.Utility;
 using log4net;
 
 namespace ShipWorks.Escalator
@@ -55,7 +56,11 @@ namespace ShipWorks.Escalator
                     InstallFile newVersion = await new UpdaterWebClient().Download(new Version(message)).ConfigureAwait(false);
 
                     log.Info("Attempting to install new version");
-                    new ShipWorksInstaller().Install(newVersion);
+                    Result installationResult = new ShipWorksInstaller().Install(newVersion);
+                    if (installationResult.Failure)
+                    {
+                        log.ErrorFormat("An error occured while installing the new version of ShipWorks: {0}", installationResult.Message);
+                    }
                 }
                 else
                 {

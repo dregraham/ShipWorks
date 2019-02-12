@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.IO;
 using System.Reflection;
+using Interapptive.Shared.Utility;
 using log4net;
 
 namespace ShipWorks.Escalator
@@ -16,18 +17,18 @@ namespace ShipWorks.Escalator
         /// <summary>
         /// Installs ShipWorks
         /// </summary>
-        public void Install(InstallFile file)
+        public Result Install(InstallFile file)
         {
             log.Info("Starting Install");
             if (!file.IsValid)
             {
                 log.InfoFormat("Install File {0} has an invalid hash", file.Path);
-                throw new InvalidOperationException("Install file is invalid");
+                return Result.FromError("Install file is invalid");
             }
             log.InfoFormat("Install {0} file validated", file.Path);
 
             KillShipWorks();
-            RunSetup(file);
+            return RunSetup(file);
         }
 
         /// <summary>
@@ -44,7 +45,7 @@ namespace ShipWorks.Escalator
         /// <summary>
         /// Run ShipWorks setup
         /// </summary>
-        private static void RunSetup(InstallFile file)
+        private static Result RunSetup(InstallFile file)
         {
             ProcessStartInfo start = new ProcessStartInfo();
             start.FileName = file.Path;
@@ -62,10 +63,9 @@ namespace ShipWorks.Escalator
                 log.InfoFormat("Install process exit code {0}", exitCode);
             }
 
-            if (exitCode > 0)
-            {
-                throw new InvalidOperationException($"Update failed with exit code {exitCode}");
-            }
+            return exitCode > 0 ? 
+                Result.FromError($"Update failed with exit code {exitCode}") :
+                Result.FromSuccess();
         }
     }
 }
