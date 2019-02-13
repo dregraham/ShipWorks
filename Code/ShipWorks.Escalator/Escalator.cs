@@ -101,7 +101,7 @@ namespace ShipWorks.Escalator
         /// </summary>
         private static bool IsInstallRunning(Uri newVersion)
         {
-            string fileName = Path.GetFileNameWithoutExtension(newVersion.ToString());
+            string fileName = Path.GetFileNameWithoutExtension(newVersion.LocalPath);
             return Process.GetProcessesByName(fileName).Any();
         }
 
