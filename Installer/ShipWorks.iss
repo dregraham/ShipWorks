@@ -149,6 +149,7 @@ var
   DatabaseUpgradeFailed: Boolean;
   CopyFilesSucceeded: Boolean;
   ShouldUpgradeDatabase: Boolean;
+  InstallStarted: Boolean;
 
 //----------------------------------------------------------------
 // Convert a bool to a string
@@ -175,6 +176,7 @@ function InitializeSetup(): Boolean;
 var
   j: Integer;
 begin
+  InstallStarted := False;
   ShouldUpgradeDatabase := False;
   for j := 1 to ParamCount do
     if CompareText(ParamStr(j), '/upgradedb') = 0 then
@@ -360,12 +362,16 @@ begin
 	end;
 
 	Log('Install Status = ' + installStatus);
-	if WizardSilent then
-  	begin
-		Exec(ExpandConstant(ExpandConstant('{app}') + '\ShipWorks.Escalator.exe'), '--launchshipworks', '', SW_HIDE, ewWaitUntilTerminated, serviceWasStarted)
-    end;   
 
-	Exec(ExpandConstant(WizardDirValue + '\ShipWorks.Escalator.exe'), '--install', '', SW_HIDE, ewWaitUntilTerminated, serviceWasStarted)
+	if InstallStarted then
+	begin
+		if WizardSilent then
+  		begin
+			Exec(ExpandConstant(ExpandConstant('{app}') + '\ShipWorks.Escalator.exe'), '--launchshipworks', '', SW_HIDE, ewWaitUntilTerminated, serviceWasStarted)
+		end;   
+
+		Exec(ExpandConstant(WizardDirValue + '\ShipWorks.Escalator.exe'), '--install', '', SW_HIDE, ewWaitUntilTerminated, serviceWasStarted)
+	end;
 end;
 
 //----------------------------------------------------------------
@@ -583,6 +589,8 @@ begin
 
     if (CurPage = wpReady)
     then begin
+		Log('Setting InstallStarted to True');
+		InstallStarted := True;
 
         if (ShipWorksVersionHasScheduler())
         then begin
