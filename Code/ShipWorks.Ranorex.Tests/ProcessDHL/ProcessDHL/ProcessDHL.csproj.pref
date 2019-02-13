@@ -5,7 +5,6 @@
   <Array name="bookmarks" />
   <Array name="files">
     <Element value="ProcessDHL.rxtst" />
-    <Element value="CheckShipWorksVersion.rxrec" />
   </Array>
   <Properties name="projectSavedData">
     <Properties name="customTool">

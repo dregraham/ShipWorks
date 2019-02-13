@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<repository
+name="ProcessOnTracRepository"
+id="42cf421d-eafe-426c-a749-053fe3c63188"
+rxversion="8.1">
+  <codegen
+  classname="ProcessOnTracRepository"
+  namespace="ProcessOnTrac"/>
+  <rootfolder
+  name="Root"
+  id="aeff2ef3-0f9a-4c12-88f2-ddbe6c669674"
+  searchtimeout="30000ms"
+  capname="unknown"
+  isrooted="True"
+  usecache="True">
+    <basepath/>
+  </rootfolder>
+  <variables/>
+</repository>

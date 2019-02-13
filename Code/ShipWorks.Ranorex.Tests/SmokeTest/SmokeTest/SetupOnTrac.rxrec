@@ -2423,7 +2423,7 @@ AUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAf/2Q==
 			</helperscreenshot>
 		</mouseitem>
 		<keysequenceitem
-		KeySequence="{LControlKey down}{Akey}{LControlKey up}4testshipping"
+		KeySequence="{LControlKey down}{Akey}{LControlKey up}testshipping1"
 		duration="100ms"
 		enabled="True"
 		optional="False"
@@ -9935,7 +9935,7 @@ AUUUUAFFFFABRRRQAUUUUAf/2Q==
 	id="e7742ed2-f8bc-429c-9794-64d8a30b8c72"
 	name="SmokeTestRepository"
 	relativepath="SmokeTestRepository.rxrep"
-	rxversion="8.0">
+	rxversion="8.1">
 		<codegen
 		classname="SmokeTestRepository"
 		namespace="SmokeTest">

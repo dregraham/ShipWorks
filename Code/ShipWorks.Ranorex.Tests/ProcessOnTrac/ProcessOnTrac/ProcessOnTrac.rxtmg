@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<modulegroupdoc
+rxversion="8.1">
+  <testsuiteentryhierarchy>
+    <flatlistofchildren>
+      <modulegroups
+      name="ProcessOnTrac"
+      id="9fb6debf-6165-460d-9810-aa5e49646ea2"/>
+    </flatlistofchildren>
+    <childhierarchy>
+      <modulegroups
+      name="ProcessOnTrac"
+      id="9fb6debf-6165-460d-9810-aa5e49646ea2"/>
+    </childhierarchy>
+  </testsuiteentryhierarchy>
+</modulegroupdoc>
