@@ -103,19 +103,13 @@ namespace ShipWorks.Stores.Communication
             {
                 return isDownloading;
             }
-            else
-            {
-                return downloadQueue.Any(d => d.StoreID == storeID);
-            }
+            return downloadQueue.Any(d => d.StoreID == storeID);
         }
 
         /// <summary>
         /// Indicates if the progress window is currently visible
         /// </summary>
-        public static bool IsProgressVisible
-        {
-            get { return progressDlg != null; }
-        }
+        public static bool IsProgressVisible => progressDlg != null;
 
         /// <summary>
         /// Show the progress window modally
@@ -154,7 +148,7 @@ namespace ShipWorks.Stores.Communication
 
             List<StoreEntity> readyToDownload = GetStoresForAutoDownloading();
 
-            if (readyToDownload.Count > 0)
+            if (readyToDownload.Any())
             {
                 StartDownload(readyToDownload, DownloadInitiatedBy.ShipWorks);
             }
@@ -263,9 +257,9 @@ namespace ShipWorks.Stores.Communication
 
             // Find each store that is ready for an auto-download
             List<StoreEntity> readyToDownload = StoreManager.GetAllStores().Where(ShouldDownload).ToList();
-
+            
             // We checked the ready-to-download with cached download times. If there are any that are ready to download it
-            // could be that they've recently been downloaded since we cached the values.  So check again after refetching
+            // could be that they've recently been downloaded since we cached the values.  So check again after re-fetching.
             // the latest last download times.
             if (wereTimesCached && readyToDownload.Count > 0)
             {
@@ -285,7 +279,6 @@ namespace ShipWorks.Stores.Communication
                     }
                 }
             }
-
             return readyToDownload;
         }
 
