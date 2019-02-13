@@ -2551,7 +2551,7 @@ namespace ShipWorks
         /// </summary>
         private void OnSupportForum(object sender, EventArgs e)
         {
-            WebHelper.OpenUrl("http://www.interapptive.com/support", this);
+            WebHelper.OpenUrl("https://shipworks.zendesk.com/hc/en-us/community/topics", this);
         }
 
         /// <summary>
@@ -2567,7 +2567,7 @@ namespace ShipWorks
         /// </summary>
         private void OnViewHelp(object sender, EventArgs e)
         {
-            WebHelper.OpenUrl("http://www.interapptive.com/shipworks/help", this);
+            WebHelper.OpenUrl("https://shipworks.zendesk.com/hc/en-us", this);
         }
 
         /// <summary>
@@ -2583,11 +2583,11 @@ namespace ShipWorks
         }
 
         /// <summary>
-        /// Submit a support case to interapptive
+        /// Submit a support case to ShipWorks
         /// </summary>
         private void OnRequestHelp(object sender, EventArgs e)
         {
-            WebHelper.OpenUrl("http://www.interapptive.com/company/contact.html", this);
+            WebHelper.OpenUrl("https://www.shipworks.com/contact-us/", this);
         }
 
         /// <summary>
