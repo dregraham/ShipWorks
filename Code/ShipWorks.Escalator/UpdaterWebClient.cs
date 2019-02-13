@@ -38,10 +38,9 @@ namespace ShipWorks.Escalator
         /// <summary>
         /// Download the requested version
         /// </summary>
-        public async Task<InstallFile> Download(Version version)
+        public async Task<InstallFile> Download(Uri url, string sha)
         {
             log.Info("Download called");
-            (Uri url, string sha) = await GetVersionToDownload(version).ConfigureAwait(false);
 
             string installationFileSavePath = GetInstallationFileSavePath(url);
 
@@ -65,7 +64,7 @@ namespace ShipWorks.Escalator
         /// <summary>
         /// Get the url and sha of requested version
         /// </summary>
-        private async Task<(Uri url, string sha)> GetVersionToDownload(Version version)
+        public async Task<(Uri url, string sha)> GetVersionToDownload(Version version)
         {
             log.InfoFormat("Attempting to get version {0}", version);
 

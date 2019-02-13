@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Diagnostics;
+using System.IO;
+using System.Linq;
 using System.ServiceProcess;
 using System.Threading.Tasks;
 using Interapptive.Shared.Utility;
@@ -53,13 +56,17 @@ namespace ShipWorks.Escalator
             {
                 if (Version.TryParse(message, out Version version))
                 {
-                    InstallFile newVersion = await new UpdaterWebClient().Download(new Version(message)).ConfigureAwait(false);
 
-                    log.Info("Attempting to install new version");
-                    Result installationResult = new ShipWorksInstaller().Install(newVersion);
-                    if (installationResult.Failure)
+                    UpdaterWebClient updaterWebClient = new UpdaterWebClient();
+                    (Uri url, string sha) newVersionInfo = await updaterWebClient.GetVersionToDownload(new Version(message)).ConfigureAwait(false);
+
+                    if (IsInstallRunning(newVersionInfo.url))
                     {
-                        log.ErrorFormat("An error occured while installing the new version of ShipWorks: {0}", installationResult.Message);
+                        log.ErrorFormat("The installer {0} is already running", newVersionInfo.url);
+                    }
+                    else
+                    {
+                        await Install(updaterWebClient, newVersionInfo);
                     }
                 }
                 else
@@ -71,6 +78,31 @@ namespace ShipWorks.Escalator
             {
                 log.Error("An exception was thrown when attempting to download and install a new version of SW", ex);
             }
+        }
+
+        /// <summary>
+        /// Download and install new version of Shipworks
+        /// </summary>
+        private static async Task Install(UpdaterWebClient updaterWebClient, (Uri url, string sha) newVersionInfo)
+        {
+            log.InfoFormat("The installer {0} is not already running. Beginning Download...", newVersionInfo.url);
+            InstallFile newVersion = await updaterWebClient.Download(newVersionInfo.url, newVersionInfo.sha).ConfigureAwait(false);
+
+            log.Info("Attempting to install new version");
+            Result installationResult = new ShipWorksInstaller().Install(newVersion);
+            if (installationResult.Failure)
+            {
+                log.ErrorFormat("An error occured while installing the new version of ShipWorks: {0}", installationResult.Message);
+            }
+        }
+
+        /// <summary>
+        /// Detects that the installer is already running
+        /// </summary>
+        private static bool IsInstallRunning(Uri newVersion)
+        {
+            string fileName = Path.GetFileNameWithoutExtension(newVersion.ToString());
+            return Process.GetProcessesByName(fileName).Any();
         }
 
         /// <summary>
