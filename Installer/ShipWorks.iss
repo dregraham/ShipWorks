@@ -150,6 +150,7 @@ var
   CopyFilesSucceeded: Boolean;
   ShouldUpgradeDatabase: Boolean;
   InstallStarted: Boolean;
+  ShouldLaunchShipWorks: Boolean;
 
 //----------------------------------------------------------------
 // Convert a bool to a string
@@ -175,19 +176,28 @@ end;
 function InitializeSetup(): Boolean;
 var
   j: Integer;
-begin
+begin	
   InstallStarted := False;
   ShouldUpgradeDatabase := False;
+  ShouldLaunchShipWorks := False;
+  
   for j := 1 to ParamCount do
+  begin
     if CompareText(ParamStr(j), '/upgradedb') = 0 then
     begin
       ShouldUpgradeDatabase := True;
-      Break;
-    end; 
+    end;
+    
+    if CompareText(ParamStr(j), '/launchafterinstall') = 0 then
+    begin
+      ShouldLaunchShipWorks := True;
+    end;
+  end
+  
+  Log('ShouldUpgradeDatabase= ' + BoolToStr(ShouldUpgradeDatabase));
+  Log('ShouldLaunchShipWorks= ' + BoolToStr(ShouldLaunchShipWorks));
 
-	Log('ShouldUpgradeDatabase= ' + BoolToStr(ShouldUpgradeDatabase));
-
-	Result := True;
+  Result := True;
 end;
 
 //----------------------------------------------------------------
@@ -365,7 +375,7 @@ begin
 
 	if InstallStarted then
 	begin
-		if WizardSilent then
+		if WizardSilent AND ShouldLaunchShipWorks then
   		begin
 			Exec(ExpandConstant(ExpandConstant('{app}') + '\ShipWorks.Escalator.exe'), '--launchshipworks', '', SW_HIDE, ewWaitUntilTerminated, serviceWasStarted)
 		end;   
