@@ -47,6 +47,8 @@ namespace ShipWorks.Tests.Shared.Database
         private readonly Checkpoint checkpoint;
         private readonly SqlSessionScope sqlSessionScope;
         private readonly ExecutionModeScope executionModeScope;
+        private readonly string databaseName;
+        private readonly string databaseSource = @"localhost\Development";
 
         /// <summary>
         /// Constructor
@@ -79,7 +81,7 @@ namespace ShipWorks.Tests.Shared.Database
                 Console.WriteLine(ex.Message);
             }
 
-            string databaseName = AppDomain.CurrentDomain
+            databaseName = AppDomain.CurrentDomain
                 .GetAssemblies()
                 .Select(x => x.GetName().Name)
                 .FirstOrDefault(x => (x.Contains("Integration") || x.Contains("Specs")) && x.Contains("ShipWorks"))
@@ -91,7 +93,7 @@ namespace ShipWorks.Tests.Shared.Database
             if (clearTestData)
             {
                 checkpoint = new Checkpoint();
-                TempIntegrationDB db = new TempIntegrationDB(databaseName, @"localhost\Development");
+                TempIntegrationDB db = new TempIntegrationDB(databaseName, databaseSource);
 
                 sqlSessionScope = CreateSqlSessionScope(db.ConnectionString);
 
@@ -107,7 +109,7 @@ namespace ShipWorks.Tests.Shared.Database
             }
             else
             {
-                string connectionString = $"Data Source = localhost\\Development; Initial Catalog = {databaseName}";
+                string connectionString = $"Data Source = {databaseSource}; Initial Catalog = {databaseName}";
 
                 sqlSessionScope = CreateSqlSessionScope(connectionString);
             }
@@ -364,6 +366,11 @@ DROP PROCEDURE [dbo].[GetDatabaseGuid]";
             FilterContentManager.WaitForFiltersToComplete(TimeSpan.FromSeconds(5));
             sqlSessionScope.Dispose();
             executionModeScope.Dispose();
+            var db = new IntegrationDB.IntegrationDB(databaseName, databaseSource);
+            if (db.CheckExists())
+            {
+                db.DeleteDatabase();
+            }
         }
     }
 }
