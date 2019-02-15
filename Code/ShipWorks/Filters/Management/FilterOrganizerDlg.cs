@@ -2,31 +2,17 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
-using System.Drawing;
-using System.Text;
-using System.Windows.Forms;
-using System.Collections;
-using ShipWorks.Users;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Properties;
-using ShipWorks.UI.Controls;
-using ShipWorks.Data.Model.HelperClasses;
-using Interapptive.Shared;
-using System.Data.SqlClient;
-using ShipWorks.Data;
-using ShipWorks.Filters.Management;
-using ShipWorks.UI;
-using System.Transactions;
-using SD.LLBLGen.Pro.ORMSupportClasses;
-using System.Diagnostics;
-using ShipWorks.Filters.Controls;
-using Interapptive.Shared.Utility;
-using ShipWorks.ApplicationCore.MessageBoxes;
 using System.Linq;
-using ShipWorks.Data.Connection;
-using ShipWorks.Users.Security;
-using ShipWorks.ApplicationCore.Appearance;
+using System.Windows.Forms;
+using Interapptive.Shared;
 using Interapptive.Shared.UI;
+using ShipWorks.ApplicationCore.Appearance;
+using ShipWorks.ApplicationCore.MessageBoxes;
+using ShipWorks.Data;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Filters.Controls;
+using ShipWorks.Users;
+using ShipWorks.Users.Security;
 
 namespace ShipWorks.Filters.Management
 {
@@ -35,14 +21,14 @@ namespace ShipWorks.Filters.Management
     /// </summary>
     public partial class FilterOrganizerDlg : Form
     {
-        FilterLayoutContext layoutContext;
+        private FilterLayoutContext layoutContext;
 
-        // Maintains folder state so it remains consistant as you select what applies to
-        Dictionary<FilterTarget, FolderExpansionState> folderState = new Dictionary<FilterTarget, FolderExpansionState>();
+        // Maintains folder state so it remains consistent as you select what applies to
+        private Dictionary<FilterTarget, FolderExpansionState> folderState = new Dictionary<FilterTarget, FolderExpansionState>();
 
         // Saved state
-        long lastSelectedNodeIDFallback = 0;
-        long lastSelectedNodeID = 0;
+        private long lastSelectedNodeIDFallback = 0;
+        private long lastSelectedNodeID = 0;
 
         /// <summary>
         /// Constructor
@@ -53,7 +39,7 @@ namespace ShipWorks.Filters.Management
 
             //filterTreeOrders.HideDisabledFilters = !showDisabledFilters.Checked;
             //filterTreeCustomers.HideDisabledFilters = !showDisabledFilters.Checked;
-            
+
             WindowStateSaver.Manage(this);
 
             folderState[FilterTarget.Orders] = initialState;
@@ -74,10 +60,10 @@ namespace ShipWorks.Filters.Management
         /// </summary>
         private void OnLoad(object sender, EventArgs e)
         {
-            // We have to push a new FilterLayoutContext, since we are going to be editing and moving and deleting.  If 
+            // We have to push a new FilterLayoutContext, since we are going to be editing and moving and deleting.  If
             // we deleted stuff from the main FilterLayoutContext that the MainForm has reference to, then as it does its
-            // background stuff it could fail pretty badly.  Pusing a new scope essentially makes managing the filters as if
-            // it was being done by a totally seperate ShipWorks process - which the MainForm of course handles just fine.
+            // background stuff it could fail pretty badly.  Pushing a new scope essentially makes managing the filters as if
+            // it was being done by a totally separate ShipWorks process - which the MainForm of course handles just fine.
             FilterLayoutContext.PushScope();
             layoutContext = FilterLayoutContext.Current;
 
@@ -212,11 +198,11 @@ namespace ShipWorks.Filters.Management
             folderState[ActiveFilterTarget] = ActiveFilterTree.GetFolderState();
             lastSelectedNodeID = ActiveFilterTree.SelectedFilterNodeID;
 
-            // What to fallback on if this node is deleted
+            // What to fall back on if this node is deleted
             lastSelectedNodeIDFallback = 0;
             FilterNodeEntity selected = ActiveFilterTree.SelectedFilterNode;
 
-            // First try to fallback on the following sibling
+            // First try to fall back on the following sibling
             if (selected.ParentNode != null)
             {
                 if (selected.ParentNode.ChildNodes.Count > selected.FilterSequence.Position + 1)
@@ -230,7 +216,7 @@ namespace ShipWorks.Filters.Management
                     lastSelectedNodeIDFallback = selected.ParentNode.ChildNodes[selected.FilterSequence.Position - 1].FilterNodeID;
                 }
 
-                // If that doesnt work, then go to the parent
+                // If that doesn't work, then go to the parent
                 else
                 {
                     lastSelectedNodeIDFallback = selected.ParentNode.FilterNodeID;
@@ -261,7 +247,7 @@ namespace ShipWorks.Filters.Management
             // Try to select the last
             ActiveFilterTree.SelectedFilterNodeID = lastSelectedNodeID;
 
-            // If that didn't work, try the fallback
+            // If that didn't work, try the fall back
             if (ActiveFilterTree.SelectedFilterNode == null)
             {
                 ActiveFilterTree.SelectedFilterNodeID = lastSelectedNodeIDFallback;
@@ -303,16 +289,13 @@ namespace ShipWorks.Filters.Management
         {
             SaveSelectionState();
 
-            // Creating a filter can create more than one node (if the parent is linked), but 
+            // Creating a filter can create more than one node (if the parent is linked), but
             // this one will be the one that should be selected
-            FilterNodeEntity primaryNode;
-
-            FilterEditingResult result = FilterEditingService.NewFilter(
+            var (result, primaryNode) = FilterEditingService.NewFilter(
                 isFolder,
                 ActiveFilterTree.SelectedLocation.ParentNode,
                 ActiveFilterTree.GetFolderState(),
-                this,
-                out primaryNode);
+                this);
 
             if (result == FilterEditingResult.OK)
             {
@@ -416,7 +399,7 @@ namespace ShipWorks.Filters.Management
         }
 
         /// <summary>
-        /// Move the selected filter down among its sibilngs
+        /// Move the selected filter down among its siblings
         /// </summary>
         private void OnMoveDown(object sender, EventArgs e)
         {
@@ -510,7 +493,7 @@ namespace ShipWorks.Filters.Management
         /// <summary>
         /// A user has confirmed where he wants to move the filter
         /// </summary>
-        void OnMovingFilter(object sender, CancelEventArgs e)
+        private void OnMovingFilter(object sender, CancelEventArgs e)
         {
             ChooseFilterLocationDlg locationDlg = (ChooseFilterLocationDlg) sender;
             FilterNodeEntity selected = locationDlg.SubjectNode;
@@ -597,7 +580,7 @@ namespace ShipWorks.Filters.Management
         /// <summary>
         /// User has confirmed where a filter should be linked
         /// </summary>
-        void OnLinkingFilter(object sender, CancelEventArgs e)
+        private void OnLinkingFilter(object sender, CancelEventArgs e)
         {
             ChooseFilterLocationDlg dlg = (ChooseFilterLocationDlg) sender;
             FilterNodeEntity selected = dlg.SubjectNode;
@@ -649,7 +632,7 @@ namespace ShipWorks.Filters.Management
                 if (!FilterHelper.IsFilterHardLinked(filter))
                 {
                     using (DeleteObjectReferenceDlg dlg = new DeleteObjectReferenceDlg(
-                        string.Format("Delete the filter '{0}'?", filter.Name), 
+                        string.Format("Delete the filter '{0}'?", filter.Name),
                         FilterHelper.GetNodesUsingFilter(filter).Select(n => n.FilterNodeID).ToList()))
                     {
                         if (dlg.ShowDialog(this) != DialogResult.OK)
@@ -717,7 +700,7 @@ namespace ShipWorks.Filters.Management
 
                 FilterContentManager.CheckForChanges();
 
-                // Easist way is to just rebuild the tree completely
+                // Easiest way is to just rebuild the tree completely
                 Reload(false);
             }
             catch (FilterException ex)
@@ -885,7 +868,7 @@ namespace ShipWorks.Filters.Management
         /// <summary>
         /// A user has confirmed where he wants to move the filter
         /// </summary>
-        void OnCopyingFilter(object sender, CancelEventArgs e)
+        private void OnCopyingFilter(object sender, CancelEventArgs e)
         {
             ChooseFilterLocationDlg dlg = (ChooseFilterLocationDlg) sender;
             FilterNodeEntity selected = dlg.SubjectNode;
@@ -914,7 +897,7 @@ namespace ShipWorks.Filters.Management
                 Reload(true);
             }
         }
-        
+
         /// <summary>
         /// The window is closing
         /// </summary>
@@ -940,9 +923,9 @@ namespace ShipWorks.Filters.Management
         {
             if (!showDisabledFilters.Checked &&
                 filterTree.SelectedFilterNode != null &&
-                filterTree.SelectedFilterNode.Filter.State != (int)FilterState.Enabled)
+                filterTree.SelectedFilterNode.Filter.State != (int) FilterState.Enabled)
             {
-                filterTree.SelectFirstNode();    
+                filterTree.SelectFirstNode();
             }
 
             filterTree.HideDisabledFilters = !showDisabledFilters.Checked;

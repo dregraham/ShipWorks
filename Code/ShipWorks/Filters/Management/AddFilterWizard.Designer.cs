@@ -49,43 +49,43 @@ namespace ShipWorks.Filters.Management
             this.wizardPageGridColumns.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize) (this.fieldLengthProvider)).BeginInit();
             this.SuspendLayout();
-            // 
+            //
             // next
-            // 
+            //
             this.next.Location = new System.Drawing.Point(436, 455);
-            // 
+            //
             // cancel
-            // 
+            //
             this.cancel.Location = new System.Drawing.Point(517, 455);
-            // 
+            //
             // back
-            // 
+            //
             this.back.Location = new System.Drawing.Point(355, 455);
-            // 
+            //
             // mainPanel
-            // 
+            //
             this.mainPanel.Controls.Add(this.wizardPageNameLocation);
             this.mainPanel.Size = new System.Drawing.Size(604, 383);
-            // 
+            //
             // etchBottom
-            // 
+            //
             this.etchBottom.Location = new System.Drawing.Point(0, 445);
             this.etchBottom.Size = new System.Drawing.Size(608, 2);
-            // 
+            //
             // pictureBox
-            // 
+            //
             this.pictureBox.Image = global::ShipWorks.Properties.Resources.funnel_add1;
             this.pictureBox.InitialImage = global::ShipWorks.Properties.Resources.funnel_add;
             this.pictureBox.Location = new System.Drawing.Point(544, 3);
             this.pictureBox.Size = new System.Drawing.Size(48, 48);
             this.pictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
-            // 
+            //
             // topPanel
-            // 
+            //
             this.topPanel.Size = new System.Drawing.Size(604, 56);
-            // 
+            //
             // wizardPageNameLocation
-            // 
+            //
             this.wizardPageNameLocation.Controls.Add(this.labelLocation);
             this.wizardPageNameLocation.Controls.Add(this.filterTree);
             this.wizardPageNameLocation.Controls.Add(this.name);
@@ -98,18 +98,18 @@ namespace ShipWorks.Filters.Management
             this.wizardPageNameLocation.TabIndex = 0;
             this.wizardPageNameLocation.Title = "Name and Location";
             this.wizardPageNameLocation.StepNext += new System.EventHandler<ShipWorks.UI.Wizard.WizardStepEventArgs>(this.OnStepNextNameAndLocation);
-            // 
+            //
             // labelLocation
-            // 
+            //
             this.labelLocation.AutoSize = true;
             this.labelLocation.Location = new System.Drawing.Point(21, 58);
             this.labelLocation.Name = "labelLocation";
             this.labelLocation.Size = new System.Drawing.Size(200, 13);
             this.labelLocation.TabIndex = 2;
             this.labelLocation.Text = "Select the folder to put the new filter in:";
-            // 
+            //
             // filterTree
-            // 
+            //
             this.filterTree.Anchor = ((System.Windows.Forms.AnchorStyles) ((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
                         | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
@@ -121,26 +121,26 @@ namespace ShipWorks.Filters.Management
             this.filterTree.Name = "filterTree";
             this.filterTree.Size = new System.Drawing.Size(557, 296);
             this.filterTree.TabIndex = 3;
-            // 
+            //
             // name
-            // 
+            //
             this.name.Location = new System.Drawing.Point(22, 25);
             this.fieldLengthProvider.SetMaxLengthSource(this.name, ShipWorks.Data.Utility.EntityFieldLengthSource.FilterName);
             this.name.Name = "name";
             this.name.Size = new System.Drawing.Size(199, 21);
             this.name.TabIndex = 1;
-            // 
+            //
             // labelName
-            // 
+            //
             this.labelName.AutoSize = true;
             this.labelName.Location = new System.Drawing.Point(19, 9);
             this.labelName.Name = "labelName";
             this.labelName.Size = new System.Drawing.Size(65, 13);
             this.labelName.TabIndex = 0;
             this.labelName.Text = "Filter Name:";
-            // 
+            //
             // wizardPageCondition
-            // 
+            //
             this.wizardPageCondition.Controls.Add(this.conditionControl);
             this.wizardPageCondition.Description = "Configure the condition that determines the filter contents.";
             this.wizardPageCondition.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -149,19 +149,20 @@ namespace ShipWorks.Filters.Management
             this.wizardPageCondition.Size = new System.Drawing.Size(604, 383);
             this.wizardPageCondition.TabIndex = 0;
             this.wizardPageCondition.Title = "Filter Condition";
+            this.wizardPageCondition.SteppingInto += WizardPageCondition_SteppingInto;
             this.wizardPageCondition.StepNext += new System.EventHandler<ShipWorks.UI.Wizard.WizardStepEventArgs>(this.OnStepNextCondition);
-            // 
+            //
             // conditionControl
-            // 
+            //
             this.conditionControl.Dock = System.Windows.Forms.DockStyle.Fill;
             this.conditionControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
             this.conditionControl.Location = new System.Drawing.Point(0, 0);
             this.conditionControl.Name = "conditionControl";
             this.conditionControl.Size = new System.Drawing.Size(604, 383);
             this.conditionControl.TabIndex = 0;
-            // 
+            //
             // wizardPageGridColumns
-            // 
+            //
             this.wizardPageGridColumns.Controls.Add(this.label1);
             this.wizardPageGridColumns.Controls.Add(this.gridColumns);
             this.wizardPageGridColumns.Description = "Configure the default grid columns of the filter.";
@@ -172,17 +173,17 @@ namespace ShipWorks.Filters.Management
             this.wizardPageGridColumns.TabIndex = 0;
             this.wizardPageGridColumns.Title = "Grid Columns";
             this.wizardPageGridColumns.StepNext += new System.EventHandler<ShipWorks.UI.Wizard.WizardStepEventArgs>(this.OnStepNextGridColumns);
-            // 
+            //
             // label1
-            // 
+            //
             this.label1.Location = new System.Drawing.Point(26, 8);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(454, 46);
             this.label1.TabIndex = 4;
             this.label1.Text = resources.GetString("label1.Text");
-            // 
+            //
             // gridColumns
-            // 
+            //
             this.gridColumns.Anchor = ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
                         | System.Windows.Forms.AnchorStyles.Left)));
             this.gridColumns.EnableParentEditing = false;
@@ -192,9 +193,9 @@ namespace ShipWorks.Filters.Management
             this.gridColumns.Name = "gridColumns";
             this.gridColumns.Size = new System.Drawing.Size(384, 323);
             this.gridColumns.TabIndex = 3;
-            // 
+            //
             // AddFilterWizard
-            // 
+            //
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(604, 490);

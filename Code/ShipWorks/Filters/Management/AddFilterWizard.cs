@@ -1,21 +1,21 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Windows.Forms;
 using Autofac;
-using ShipWorks.UI.Wizard;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Properties;
-using ShipWorks.Filters.Controls;
-using ShipWorks.Data.Connection;
-using ShipWorks.Users;
-using ShipWorks.Users.Security;
-using ShipWorks.ApplicationCore.Appearance;
 using Interapptive.Shared.UI;
 using ShipWorks.ApplicationCore;
+using ShipWorks.ApplicationCore.Appearance;
 using ShipWorks.ApplicationCore.Licensing;
-using ShipWorks.Filters.Grid;
+using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Editions;
+using ShipWorks.Filters.Content;
+using ShipWorks.Filters.Controls;
+using ShipWorks.Filters.Grid;
+using ShipWorks.Properties;
+using ShipWorks.UI.Wizard;
+using ShipWorks.Users;
+using ShipWorks.Users.Security;
 
 namespace ShipWorks.Filters.Management
 {
@@ -24,18 +24,12 @@ namespace ShipWorks.Filters.Management
     /// </summary>
     public partial class AddFilterWizard : WizardForm
     {
-        // Filter being created
-        FilterEntity filter;
-
-        // Nodes created when filter is successfully creatd
-        List<FilterNodeEntity> createdNodes;
-
         // Fake FilterNode used until we create the real one
-        FilterNodeEntity fakeFilterNode;
+        private FilterNodeEntity fakeFilterNode;
 
         // The folder selected to start off with
-        FolderExpansionState initialState;
-        FilterNodeEntity browserInitialParent;
+        private FolderExpansionState initialState;
+        private FilterNodeEntity browserInitialParent;
 
         /// <summary>
         /// Constructor
@@ -52,10 +46,12 @@ namespace ShipWorks.Filters.Management
             this.initialState = initialState;
             this.browserInitialParent = browserInitialParent;
 
-            filter = new FilterEntity();
-            filter.Name = "";
-            filter.IsFolder = isFolder;
-            filter.FilterTarget = browserInitialParent.Filter.FilterTarget;
+            Filter = new FilterEntity()
+            {
+                Name = "",
+                IsFolder = isFolder,
+                FilterTarget = browserInitialParent.Filter.FilterTarget
+            };
 
             if (isFolder)
             {
@@ -91,35 +87,26 @@ namespace ShipWorks.Filters.Management
         /// <summary>
         /// The filter being created
         /// </summary>
-        public FilterEntity Filter
-        {
-            get
-            {
-                return filter;
-            }
-        }
+        public FilterEntity Filter { get; private set; }
 
         /// <summary>
         /// The filter node selected to be the parent node.
         /// </summary>
-        public FilterNodeEntity ParentFilterNode
-        {
-            get
-            {
-                return filterTree.SelectedFilterNode;
-            }
-        }
+        public FilterNodeEntity ParentFilterNode => filterTree.SelectedFilterNode;
 
         /// <summary>
         /// If the result is OK, this is the list of nodes that were created
         /// </summary>
-        public List<FilterNodeEntity> CreatedNodes
-        {
-            get
-            {
-                return createdNodes;
-            }
-        }
+        public List<FilterNodeEntity> CreatedNodes { get; private set; }
+
+        /// <summary>
+        /// Default definition for the new filter
+        /// </summary>
+        /// <summary>
+        /// If this is set, the wizard will use it as the definition of the new filter instead
+        /// of prompting the user to create the definition in the wizard
+        /// </summary>
+        public FilterDefinition DefaultFilterDefinition { get; set; }
 
         /// <summary>
         /// Initialization
@@ -135,7 +122,7 @@ namespace ShipWorks.Filters.Management
             filterTree.SelectedFilterNode = browserInitialParent;
 
             // Load the editor
-            conditionControl.LoadFilter(filter);
+            conditionControl.LoadFilter(Filter);
         }
 
         /// <summary>
@@ -172,7 +159,7 @@ namespace ShipWorks.Filters.Management
                 }
             }
 
-            filter.Name = filterName;
+            Filter.Name = filterName;
 
             if (fakeFilterNode == null || !ReferenceEquals(fakeFilterNode.ParentNode, filterTree.SelectedFilterNode))
             {
@@ -180,10 +167,22 @@ namespace ShipWorks.Filters.Management
 
                 // Go ahead and load the grid column editor
                 FilterNodeColumnSettings gridLayout = new FilterNodeColumnSettings(
-                    fakeFilterNode, 
+                    fakeFilterNode,
                     null);
 
                 gridColumns.LoadSettings(gridLayout);
+            }
+        }
+
+        /// <summary>
+        /// Skip the filter definition screen if we already have one
+        /// </summary>
+        private void WizardPageCondition_SteppingInto(object sender, UI.Wizard.WizardSteppingIntoEventArgs e)
+        {
+            if (DefaultFilterDefinition != null)
+            {
+                Filter.Definition = DefaultFilterDefinition.GetXml();
+                e.Skip = true;
             }
         }
 
@@ -207,14 +206,14 @@ namespace ShipWorks.Filters.Management
         {
             CleanupFakeFilterNode();
 
-            // We need a FilterNodeEntity to hold the Filter, since the editor uses a node.  We will end up throwing it away - 
+            // We need a FilterNodeEntity to hold the Filter, since the editor uses a node.  We will end up throwing it away -
             // its just a placeholder to be able to open the editor.
             FilterSequenceEntity sequence = new FilterSequenceEntity();
-            sequence.Filter = filter;
+            sequence.Filter = Filter;
 
             fakeFilterNode = new FilterNodeEntity();
             fakeFilterNode.FilterSequence = sequence;
-            fakeFilterNode.Filter.State = (int)FilterState.Enabled;
+            fakeFilterNode.Filter.State = (int) FilterState.Enabled;
 
             // Have to set this for GridLayout defaults to work
             fakeFilterNode.ParentNode = filterTree.SelectedFilterNode;
@@ -230,7 +229,7 @@ namespace ShipWorks.Filters.Management
                 fakeFilterNode.ParentNode = null;
                 fakeFilterNode.FilterSequence.Filter = null;
                 fakeFilterNode.FilterSequence = null;
-                fakeFilterNode = null;                
+                fakeFilterNode = null;
             }
         }
 
@@ -256,13 +255,13 @@ namespace ShipWorks.Filters.Management
                 using (SqlAdapter adapter = new SqlAdapter(true))
                 {
                     // Add the filter
-                    createdNodes = FilterLayoutContext.Current.AddFilter(filter, filterTree.SelectedFilterNode, 0, adapter);
+                    CreatedNodes = FilterLayoutContext.Current.AddFilter(Filter, filterTree.SelectedFilterNode, 0, adapter);
 
                     // Get the grid layout
                     FilterNodeColumnSettings columnSettings = gridColumns.Settings;
 
                     // We have to save the default layout for each of the created nodes
-                    foreach (FilterNodeEntity node in createdNodes)
+                    foreach (FilterNodeEntity node in CreatedNodes)
                     {
                         columnSettings.SaveAs(node, adapter);
                     }

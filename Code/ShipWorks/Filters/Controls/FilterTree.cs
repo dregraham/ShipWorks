@@ -2,25 +2,25 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
+using System.Linq;
+using System.Reactive.Linq;
 using System.Windows.Forms;
 using Divelements.SandGrid;
-using ShipWorks.Core.Messaging;
-using ShipWorks.Properties;
-using ShipWorks.Data.Model.EntityClasses;
+using Interapptive.Shared;
+using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
+using ShipWorks.ApplicationCore.Appearance;
+using ShipWorks.Core.Messaging;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
+using ShipWorks.Editions;
+using ShipWorks.Filters.Management;
+using ShipWorks.Messaging.Messages;
+using ShipWorks.Properties;
 using ShipWorks.UI.Controls.SandGrid;
 using ShipWorks.UI.Utility;
-using ShipWorks.Filters.Management;
 using ShipWorks.Users;
 using ShipWorks.Users.Security;
-using System.Linq;
-using Interapptive.Shared;
-using ShipWorks.ApplicationCore.Appearance;
-using Interapptive.Shared.UI;
-using ShipWorks.Editions;
-using ShipWorks.Messaging.Messages;
-using System.Reactive.Linq;
-using ShipWorks.Data.Model.EntityInterfaces;
 
 namespace ShipWorks.Filters.Controls
 {
@@ -46,6 +46,11 @@ namespace ShipWorks.Filters.Controls
 
         // Raised when the selected node changes
         public event EventHandler SelectedFilterNodeChanged;
+
+        /// <summary>
+        /// Load the filter as an advanced search in the grid
+        /// </summary>
+        public event EventHandler<FilterNodeEntity> LoadAsAdvancedSearch;
 
         // Raised during the rename of filters
         public event FilterNodeRenameEventHandler FilterRenaming;
@@ -74,6 +79,7 @@ namespace ShipWorks.Filters.Controls
         private ToolStripMenuItem menuItemNewFolder;
         private ToolStripSeparator toolStripSeparator;
         private ToolStripMenuItem menuItemOrganizeFilters;
+        private ToolStripMenuItem menuLoadFilterAsSearch;
 
         // Edition helper for UI updates
         private EditionGuiHelper editionGuiHelper;
@@ -211,7 +217,7 @@ namespace ShipWorks.Filters.Controls
             }
             set
             {
-                if (value != null && value.Purpose != (int)FilterNodePurpose.Search)
+                if (value != null && value.Purpose != (int) FilterNodePurpose.Search)
                 {
                     throw new InvalidOperationException("Only search nodes can be set as ActiveSearchNode");
                 }
@@ -333,7 +339,7 @@ namespace ShipWorks.Filters.Controls
                 }
 
                 FilterNodeEntity potential = layoutContext?.FindNode(value);
-                if (potential != null && potential.Purpose == (int)FilterNodePurpose.Quick && Array.IndexOf(Targets, (FilterTarget)potential.Filter.FilterTarget) >= 0)
+                if (potential != null && potential.Purpose == (int) FilterNodePurpose.Quick && Array.IndexOf(Targets, (FilterTarget) potential.Filter.FilterTarget) >= 0)
                 {
                     SelectedFilterNode = potential;
                     return;
@@ -400,7 +406,7 @@ namespace ShipWorks.Filters.Controls
                 {
                     lastSelectedRow = null;
 
-                    if (value.Purpose == (int)FilterNodePurpose.Quick)
+                    if (value.Purpose == (int) FilterNodePurpose.Quick)
                     {
                         // This quick filter is already selected
                         if (quickFilterSelected && quickFilterNode.FilterNodeID == value.FilterNodeID)
@@ -486,7 +492,7 @@ namespace ShipWorks.Filters.Controls
 
             // If there is nothing selected or the filter initial specified is not for this target,
             // select the top level filter for this target
-            if (SelectedFilterNode?.Filter.FilterTarget != (int)target || SelectedFilterNode == null)
+            if (SelectedFilterNode?.Filter.FilterTarget != (int) target || SelectedFilterNode == null)
             {
                 SelectedFilterNodeID = BuiltinFilter.GetTopLevelKey(target);
             }
@@ -598,7 +604,7 @@ namespace ShipWorks.Filters.Controls
             }
 
             // If there was local node, it has to match the new targets
-            if (quickFilterNode != null && Array.IndexOf(targets, (FilterTarget)quickFilterNode.Filter.FilterTarget) < 0)
+            if (quickFilterNode != null && Array.IndexOf(targets, (FilterTarget) quickFilterNode.Filter.FilterTarget) < 0)
             {
                 quickFilterNode = null;
             }
@@ -640,7 +646,7 @@ namespace ShipWorks.Filters.Controls
             // Update the state of each row
             foreach (FilterTreeGridRow row in sandGrid.GetAllRows())
             {
-                row.Expanded = folderState.IsExpanded(row.FilterNode);
+                row.Expanded = folderState?.IsExpanded(row.FilterNode) ?? true;
             }
         }
 
@@ -676,7 +682,7 @@ namespace ShipWorks.Filters.Controls
                 {
                     FilterTreeGridRow gridRow = GetGridRow(node);
 
-                    if (filter.State != (int)FilterState.Enabled && HideDisabledFilters)
+                    if (filter.State != (int) FilterState.Enabled && HideDisabledFilters)
                     {
                         if (gridRow.Selected)
                         {
@@ -723,7 +729,7 @@ namespace ShipWorks.Filters.Controls
         {
             if (sandGrid.Rows.Count > 0)
             {
-                SelectedFilterNode = ((FilterTreeGridRow)sandGrid.Rows[0]).FilterNode;
+                SelectedFilterNode = ((FilterTreeGridRow) sandGrid.Rows[0]).FilterNode;
             }
         }
 
@@ -740,12 +746,14 @@ namespace ShipWorks.Filters.Controls
             menuItemNewFolder = new ToolStripMenuItem();
             toolStripSeparator = new ToolStripSeparator();
             menuItemOrganizeFilters = new ToolStripMenuItem();
+            menuLoadFilterAsSearch = new ToolStripMenuItem();
 
             ContextMenuStrip = contextMenuFilterTree;
 
             contextMenuFilterTree.Font = new Font("Segoe UI", 9F);
             contextMenuFilterTree.Items.AddRange(new ToolStripItem[] {
                 menuItemEditFilter,
+                menuLoadFilterAsSearch,
                 menuItemEditFilterSep,
                 menuItemNewFilter,
                 menuItemNewFolder,
@@ -800,7 +808,20 @@ namespace ShipWorks.Filters.Controls
             menuItemOrganizeFilters.Size = new Size(151, 22);
             menuItemOrganizeFilters.Text = "Manage Filters";
             menuItemOrganizeFilters.Click += OnManageFilters;
+
+            // menuItemOrganizeFilters
+            menuLoadFilterAsSearch.Image = Resources.view;
+            menuLoadFilterAsSearch.Name = "menuLoadFilterAsSearch";
+            menuLoadFilterAsSearch.Size = new Size(151, 22);
+            menuLoadFilterAsSearch.Text = "Load as Advanced Search";
+            menuLoadFilterAsSearch.Click += OnLoadAsAdvancedSearch;
         }
+
+        /// <summary>
+        /// Handle the LoadAsAdvancedSearch context menu click
+        /// </summary>
+        private void OnLoadAsAdvancedSearch(object sender, EventArgs e) =>
+            LoadAsAdvancedSearch?.Invoke(this, SelectedFilterNode);
 
         /// <summary>
         /// Gets the FilterLastActive for the current target type.  Defaults to Order value if more than one target is specified
@@ -832,6 +853,11 @@ namespace ShipWorks.Filters.Controls
             {
                 menuItemEditFilter.Available = false;
             }
+
+            menuLoadFilterAsSearch.Available = filterSelected &&
+                !BuiltinFilter.IsSearchPlaceholderKey(SelectedFilterNode.FilterID) &&
+                !BuiltinFilter.IsTopLevelKey(SelectedFilterNode.FilterID) &&
+                SelectedFilterNode?.Filter?.IsFolder != true;
 
             menuItemEditFilterSep.Available = menuItemEditFilter.Available;
         }
@@ -872,14 +898,11 @@ namespace ShipWorks.Filters.Controls
         {
             // Creating a filter can create more than one node (if the parent is linked), but
             // this one will be the one that should be selected
-            FilterNodeEntity primaryNode;
-
-            FilterEditingResult result = FilterEditingService.NewFilter(
+            var (result, primaryNode) = FilterEditingService.NewFilter(
                 isFolder,
                 parent,
                 GetFolderState(),
-                this,
-                out primaryNode);
+                this);
 
             if (result == FilterEditingResult.OK)
             {
@@ -995,7 +1018,7 @@ namespace ShipWorks.Filters.Controls
                     {
                         FilterTreeGridRow parentRow = sandGrid.Rows.Cast<FilterTreeGridRow>().Single(r =>
                             r.FilterNode.Filter.FilterTarget == (int) target &&
-                            BuiltinFilter.IsTopLevelKey(r.FilterNode.FilterID) );
+                            BuiltinFilter.IsTopLevelKey(r.FilterNode.FilterID));
 
                         parentRow.NestedRows.Insert(0, myRow);
                     }
@@ -1310,7 +1333,7 @@ namespace ShipWorks.Filters.Controls
             {
                 if (row.NextVisibleRow != null)
                 {
-                    row = (FilterTreeGridRow)row.NextVisibleRow;
+                    row = (FilterTreeGridRow) row.NextVisibleRow;
                 }
             }
 
@@ -1401,7 +1424,7 @@ namespace ShipWorks.Filters.Controls
                 FilterCount count = FilterContentManager.GetCount(quickFilterNode.FilterNodeID);
                 if (count != null)
                 {
-                    quickFilterDisplayManager.ToggleDisplay(quickFilterNode.Filter.State == (int)FilterState.Enabled);
+                    quickFilterDisplayManager.ToggleDisplay(quickFilterNode.Filter.State == (int) FilterState.Enabled);
 
                     if (count.Status == FilterCountStatus.Ready)
                     {

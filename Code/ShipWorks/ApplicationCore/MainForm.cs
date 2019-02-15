@@ -2864,6 +2864,14 @@ namespace ShipWorks
         }
 
         /// <summary>
+        /// Handle when the filter tree wants to load a filter as an advanced search
+        /// </summary>
+        private void OnFilterTreeLoadAsAdvancedSearch(object sender, FilterNodeEntity e)
+        {
+            gridControl.LoadFilterInAdvancedSearch(e);
+        }
+
+        /// <summary>
         /// Called when the user selects a different filter.
         /// </summary>
         private void OnSelectedFilterNodeChanged(object sender, EventArgs e)

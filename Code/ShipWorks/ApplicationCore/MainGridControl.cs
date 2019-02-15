@@ -34,16 +34,16 @@ namespace ShipWorks.ApplicationCore
     public partial class MainGridControl : UserControl, IMainGridControl
     {
         // Logger
-        static readonly ILog log = LogManager.GetLogger(typeof(MainGridControl));
+        private static readonly ILog log = LogManager.GetLogger(typeof(MainGridControl));
 
         // Active target.  Or last target, if there is no active node
 
         // The grids
-        readonly Dictionary<FilterTarget, FilterEntityGrid> entityGrids =
+        private readonly Dictionary<FilterTarget, FilterEntityGrid> entityGrids =
             new Dictionary<FilterTarget, FilterEntityGrid>();
 
         // Text that is displayed when a search is in progress
-        readonly string searchingText;
+        private readonly string searchingText;
 
         /// <summary>
         /// Raised when the selection in the grid changes.  Does not get raised when the selection changes due to changing the current filter.
@@ -76,18 +76,17 @@ namespace ShipWorks.ApplicationCore
         public event EventHandler SearchQueryChanged;
 
         // Indicates if the user is currently searching
-        SearchProvider searchProvider;
+        private SearchProvider searchProvider;
 
         // Indicates if advanced search has been initiated during the current search round
-        bool initiatedAdvanced;
+        private bool initiatedAdvanced;
 
         // Cached list of selected store keys.  So if it's asked for more than once and the selection hasn't changed,
         // we don't have to refigure it out
 
         // Observable subscriptions
         private IDisposable subscriptions;
-
-        List<long> selectedStoreKeys;
+        private List<long> selectedStoreKeys;
 
         // Keeps track of the latest search being via barcode or not
         private bool isBarcodeSearch = false;
@@ -678,7 +677,7 @@ namespace ShipWorks.ApplicationCore
         /// <summary>
         /// The sort changed in the grid
         /// </summary>
-        void OnGridSortChanged(object sender, GridEventArgs e)
+        private void OnGridSortChanged(object sender, GridEventArgs e)
         {
             PagedEntityGrid grid = (PagedEntityGrid) sender;
             if (!grid.Visible)
@@ -701,7 +700,7 @@ namespace ShipWorks.ApplicationCore
         /// <summary>
         /// Key was pressed in the active grid
         /// </summary>
-        void OnGridKeyDown(object sender, KeyEventArgs e)
+        private void OnGridKeyDown(object sender, KeyEventArgs e)
         {
             // This used to be a bitwise comparison, but the MSDN docs discourage that: http://msdn.microsoft.com/en-us/library/system.windows.forms.keys(v=vs.110).aspx
             // We had a situation where a customer's volume keys were triggering the delete, and the period key would cause it as well.
@@ -714,7 +713,7 @@ namespace ShipWorks.ApplicationCore
         /// <summary>
         /// Row was double-clicked or hit enter on
         /// </summary>
-        void OnGridRowActivated(object sender, GridRowEventArgs e)
+        private void OnGridRowActivated(object sender, GridRowEventArgs e)
         {
             RowActivated?.Invoke(this, e);
         }
@@ -883,7 +882,7 @@ namespace ShipWorks.ApplicationCore
         /// <summary>
         /// The status of the current search operation has changed
         /// </summary>
-        void OnSearchStatusChanged(object sender, EventArgs e)
+        private void OnSearchStatusChanged(object sender, EventArgs e)
         {
             if (IsDisposed)
             {
@@ -1057,9 +1056,18 @@ namespace ShipWorks.ApplicationCore
         /// </summary>
         public void FocusSearch() => searchBox.Focus();
 
-        /// <summary> 
+        /// <summary>
         /// Clear the searchbox text
         /// </summary>
         public void ClearSearch() => searchBox.Clear();
+
+        /// <summary>
+        /// Load a filter in the advanced search
+        /// </summary>
+        public void LoadFilterInAdvancedSearch(FilterNodeEntity filterNode)
+        {
+            OnAdvancedSearch(this, EventArgs.Empty);
+            filterEditor.LoadDefinition(new FilterDefinition(filterNode.Filter.Definition));
+        }
     }
 }
