@@ -47,12 +47,24 @@ namespace ShipWorks.Data.Administration
         /// <summary>
         /// Kick off the update
         /// </summary>
-        public Result Update(Version version)
+        public Result Update(Version version) =>
+            SendMessage(version.ToString());
+        
+        /// <summary>
+        /// Send the update window information to the updater pipe
+        /// </summary>
+        public Result SendMessage(string message)
         {
             if (IsAvailable())
             {
-                string versionString = version.ToString();
-                updaterPipe.Write(Encoding.UTF8.GetBytes(versionString), 0, versionString.Length);
+                try
+                {
+                    updaterPipe.Write(Encoding.UTF8.GetBytes(message), 0, message.Length);
+                }
+                catch (Exception ex)
+                {
+                    return Result.FromError(ex);
+                }
                 return Result.FromSuccess();
             }
 
@@ -66,5 +78,6 @@ namespace ShipWorks.Data.Administration
         {
             updaterPipe.Dispose();
         }
+
     }
 }
