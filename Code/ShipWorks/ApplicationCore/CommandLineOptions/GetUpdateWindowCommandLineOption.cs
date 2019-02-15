@@ -1,7 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Autofac;
+using Interapptive.Shared.AutoUpdate;
 using Newtonsoft.Json;
 using ShipWorks.ApplicationCore.Interaction;
 using ShipWorks.Data;
@@ -43,15 +43,6 @@ namespace ShipWorks.ApplicationCore.CommandLineOptions
             }
 
             return Task.CompletedTask;
-        }
-
-        /// <summary>
-        /// struct to hold the data we send
-        /// </summary>
-        private struct UpdateWindowData
-        {
-            public DayOfWeek AutoUpdateDayOfWeek { get; set; }
-            public int AutoUpdateHourOfDay { get; set; }
         }
     }
 }

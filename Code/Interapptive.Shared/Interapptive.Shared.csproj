@@ -178,6 +178,7 @@
     <Compile Include="..\ShipWorks\Properties\AssemblyInfoCommon.cs">
       <Link>Properties\AssemblyInfoCommon.cs</Link>
     </Compile>
+    <Compile Include="AutoUpdate\UpdateWindowData.cs" />
     <Compile Include="Business\Geography\CurrencyCode.cs" />
     <Compile Include="Collections\DataVirtualization\DataPage.cs" />
     <Compile Include="Collections\DataVirtualization\DataWrapper.cs" />
