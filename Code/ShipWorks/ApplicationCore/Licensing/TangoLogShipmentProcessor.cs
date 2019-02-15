@@ -127,7 +127,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// <summary>
         /// Process any shipments that need lo
         /// </summary>
-        private async Task Process()
+        public async Task Process()
         {
             if (sqlSession == null)
             {
