@@ -17,7 +17,7 @@ namespace ShipWorks.Escalator
         /// <summary>
         /// Installs ShipWorks
         /// </summary>
-        public Result Install(InstallFile file)
+        public Result Install(InstallFile file, bool upgradeDatabase)
         {
             log.Info("Starting Install");
             if (!file.IsValid())
@@ -28,7 +28,7 @@ namespace ShipWorks.Escalator
             log.InfoFormat("Install {0} file validated", file.Path);
 
             KillShipWorks();
-            return RunSetup(file);
+            return RunSetup(file, upgradeDatabase);
         }
 
         /// <summary>
@@ -45,11 +45,12 @@ namespace ShipWorks.Escalator
         /// <summary>
         /// Run ShipWorks setup
         /// </summary>
-        private static Result RunSetup(InstallFile file)
+        private static Result RunSetup(InstallFile file, bool upgradeDatabase)
         {
+            string upgradeDbParameter = upgradeDatabase ? "/upgradedb" : string.Empty;
             ProcessStartInfo start = new ProcessStartInfo();
             start.FileName = file.Path;
-            start.Arguments = $"/VERYSILENT /DIR=\"{Path.GetDirectoryName(Assembly.GetEntryAssembly().Location)}\" /log /FORCECLOSEAPPLICATIONS ";
+            start.Arguments = $"/VERYSILENT /DIR=\"{Path.GetDirectoryName(Assembly.GetEntryAssembly().Location)}\" /log /FORCECLOSEAPPLICATIONS {upgradeDbParameter}";
 
             int exitCode;
 

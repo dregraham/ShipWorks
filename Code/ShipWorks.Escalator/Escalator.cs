@@ -15,6 +15,7 @@ namespace ShipWorks.Escalator
     public class Escalator : ServiceBase
     {
         private static ILog log = LogManager.GetLogger(typeof(ServiceBase));
+        ShipWorksUpgrade shipWorksUpgrade;
 
         /// <summary>
         /// Constructor
@@ -22,6 +23,7 @@ namespace ShipWorks.Escalator
         public Escalator()
         {
             this.ServiceName = ShipWorks.Escalator.ServiceName.Resolve();
+            shipWorksUpgrade = new ShipWorksUpgrade();
         }
 
         /// <summary>
@@ -50,14 +52,13 @@ namespace ShipWorks.Escalator
         /// <summary>
         /// Processes message - internal so it can be tested outside the service via Program.cs
         /// </summary>
-        internal static async Task ProcessMessage(string message)
+        internal async Task ProcessMessage(string message)
         {
             try
             {
                 if (Version.TryParse(message, out Version version))
                 {
-
-                   
+                    await shipWorksUpgrade.Upgrade(version).ConfigureAwait(false);
                 }
                 else
                 {

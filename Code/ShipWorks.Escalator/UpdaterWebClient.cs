@@ -8,6 +8,7 @@ using System.Net;
 using System.IO;
 using log4net;
 using System.Reflection;
+using Interapptive.Shared.Extensions;
 
 namespace ShipWorks.Escalator
 {
@@ -63,7 +64,7 @@ namespace ShipWorks.Escalator
         /// <summary>
         /// Get the url and sha of requesting customer id
         /// </summary>
-        public async Task<(Uri url, string sha)> GetVersionToDownload(string tangoCustomerId)
+        public async Task<ShipWorksRelease> GetVersionToDownload(string tangoCustomerId)
         {
             log.InfoFormat("Attempting to get version for customer {0}", tangoCustomerId);
 
@@ -79,7 +80,7 @@ namespace ShipWorks.Escalator
         /// <summary>
         /// Get the url and sha of requested version 
         /// </summary>
-        public async Task<(Uri url, string sha)> GetVersionToDownload(Version version)
+        public async Task<ShipWorksRelease> GetVersionToDownload(Version version)
         {
             log.InfoFormat("Attempting to get version {0}", version);
 
@@ -95,7 +96,7 @@ namespace ShipWorks.Escalator
         /// <summary>
         /// Get the url and sha for the requested form values
         /// </summary>
-        private async Task<(Uri url, string sha)> GetVersionToDownload(Dictionary<string, string> formValues)
+        private async Task<ShipWorksRelease> GetVersionToDownload(Dictionary<string, string> formValues)
         {
             FormUrlEncodedContent content = new FormUrlEncodedContent(formValues);
 
@@ -106,17 +107,16 @@ namespace ShipWorks.Escalator
             }
             log.InfoFormat("Response received: {0}", response);
 
-            XmlDocument xmlResponse = new XmlDocument();
-            xmlResponse.LoadXml(response);
-
-            string url = xmlResponse.SelectSingleNode("//Update//Url")?.InnerText ?? string.Empty;
-            Uri.TryCreate(url, UriKind.Absolute, out Uri uri);
-
-            string sha = xmlResponse.SelectSingleNode("//Update//SHA256")?.InnerText ?? string.Empty;
-
-            log.InfoFormat("Url: {0}", url);
-            log.InfoFormat("sha: {0}", sha);
-            return (uri, sha);
+            if (response.TryParseXml(out ShipWorksRelease result))
+            {
+                log.Info("Desearialized result to ShipWorksRelease.");
+                return result;
+            }
+            else
+            {
+                log.Info("Could not deserialize result to ShipWorksRelease.");
+                return null;
+            }
         }
 
         /// <summary>
