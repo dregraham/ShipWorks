@@ -6,7 +6,6 @@ using System.Net.Http.Headers;
 using System.Xml;
 using System.Net;
 using System.IO;
-using System.Security.Cryptography;
 using log4net;
 using System.Reflection;
 
@@ -17,7 +16,7 @@ namespace ShipWorks.Escalator
     /// </summary>
     public class UpdaterWebClient
     {
-        private readonly static Lazy<Version> version = new Lazy<Version>(() =>
+        private readonly static Lazy<Version> assemblyVersion = new Lazy<Version>(() =>
         {
             // Tango requires a specific version in order to know when to return
             // legacy responses or new response for the customer license. This is
@@ -62,7 +61,23 @@ namespace ShipWorks.Escalator
         }
 
         /// <summary>
-        /// Get the url and sha of requested version
+        /// Get the url and sha of requesting customer id
+        /// </summary>
+        public async Task<(Uri url, string sha)> GetVersionToDownload(string tangoCustomerId)
+        {
+            log.InfoFormat("Attempting to get version for customer {0}", tangoCustomerId);
+
+            var values = new Dictionary<string, string>
+            {
+                { "action", "getreleasebyuser" },
+                { "customerid", tangoCustomerId }
+            };
+
+            return await GetVersionToDownload(values).ConfigureAwait(false);
+        }
+
+        /// <summary>
+        /// Get the url and sha of requested version 
         /// </summary>
         public async Task<(Uri url, string sha)> GetVersionToDownload(Version version)
         {
@@ -74,7 +89,15 @@ namespace ShipWorks.Escalator
                 { "version", version.ToString() }
             };
 
-            FormUrlEncodedContent content = new FormUrlEncodedContent(values);
+            return await GetVersionToDownload(values).ConfigureAwait(false);
+        }
+
+        /// <summary>
+        /// Get the url and sha for the requested form values
+        /// </summary>
+        private async Task<(Uri url, string sha)> GetVersionToDownload(Dictionary<string, string> formValues)
+        {
+            FormUrlEncodedContent content = new FormUrlEncodedContent(formValues);
 
             string response;
             using (HttpResponseMessage responseMessage = await tangoClient.Value.PostAsync(tangoUrl, content).ConfigureAwait(false))
@@ -106,7 +129,7 @@ namespace ShipWorks.Escalator
             HttpClientHandler handler = new HttpClientHandler();
 
             HttpClient client = new HttpClient(handler);
-            client.DefaultRequestHeaders.Add("X-SHIPWORKS-VERSION", version.ToString());
+            client.DefaultRequestHeaders.Add("X-SHIPWORKS-VERSION", assemblyVersion.ToString());
             client.DefaultRequestHeaders.Add("X-SHIPWORKS-USER", "$h1pw0rks");
             client.DefaultRequestHeaders.Add("X-SHIPWORKS-PASS", "q2*lrft");
             client.DefaultRequestHeaders.Add("SOAPAction", "http://stamps.com/xml/namespace/2015/06/shipworks/shipworksv1/IShipWorks/ShipworksPost");
