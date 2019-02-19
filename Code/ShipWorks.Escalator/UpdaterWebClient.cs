@@ -87,8 +87,6 @@ namespace ShipWorks.Escalator
         /// </summary>
         private async Task<ShipWorksRelease> GetVersionToDownload(Dictionary<string, string> formValues)
         {
-            System.Diagnostics.Debugger.Launch();
-
             FormUrlEncodedContent content = new FormUrlEncodedContent(formValues);
 
             string response;

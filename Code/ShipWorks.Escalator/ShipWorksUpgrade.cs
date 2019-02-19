@@ -59,7 +59,7 @@ namespace ShipWorks.Escalator
                 return;
             }
 
-            log.InfoFormat("New Version {0} found. Attempting upgrade.");
+            log.InfoFormat("New Version {0} found. Attempting upgrade.", shipWorksRelease.ReleaseVersion);
 
             await Install(shipWorksRelease, true);
         }

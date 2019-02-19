@@ -14,6 +14,7 @@ namespace ShipWorks.Escalator
     /// </summary>
     internal class UpgradeTimeWindow
     {
+        int minutesBetweenWindowChecks = 15;
         private ShipWorksUpgrade shipWorksUpgrade;
         Timer upgradeTimer;
         Timer checkUpgradeWindowTimer;
@@ -27,7 +28,7 @@ namespace ShipWorks.Escalator
         {
             log.Info("Constructing UpgradeTimeWindow");
             this.shipWorksUpgrade = shipWorksUpgrade;
-            checkUpgradeWindowTimer = new Timer(TimeSpan.FromMinutes(1).TotalMilliseconds);
+            checkUpgradeWindowTimer = new Timer(TimeSpan.FromMinutes(minutesBetweenWindowChecks).TotalMilliseconds);
             checkUpgradeWindowTimer.Elapsed += OnCheckUpgradeWindowTimerElapsed;
             checkUpgradeWindowTimer.AutoReset = true;
             checkUpgradeWindowTimer.Enabled = true;
@@ -65,19 +66,21 @@ namespace ShipWorks.Escalator
                 updateWindowData.AutoUpdateHourOfDay);
 
             DateTime dateOfNextUpgrade;
-            if (DateTime.Now.Hour >= updateWindowData.AutoUpdateHourOfDay)
-            {
-                dateOfNextUpgrade = DateTime.Today.Next(updateWindowData.AutoUpdateDayOfWeek);
-            }
-            else
-            {
-                dateOfNextUpgrade = DateTime.Today.TodayOrNext(updateWindowData.AutoUpdateDayOfWeek);
-            }
+
+            dateOfNextUpgrade = DateTime.Today.TodayOrNext(updateWindowData.AutoUpdateDayOfWeek);
+            
             log.InfoFormat("Date before adding hours: {0}", dateOfNextUpgrade);
 
             dateOfNextUpgrade = dateOfNextUpgrade.AddHours(updateWindowData.AutoUpdateHourOfDay);
-            dateOfNextUpgrade = dateOfNextUpgrade.AddMinutes(30);
-            log.InfoFormat("Update set for {0}", dateOfNextUpgrade);
+            dateOfNextUpgrade = dateOfNextUpgrade.AddMinutes(46);
+            log.InfoFormat("After updating hours: {0}", dateOfNextUpgrade);
+
+            if (dateOfNextUpgrade < DateTime.Now)
+            {
+                dateOfNextUpgrade = dateOfNextUpgrade.AddDays(7);
+            }
+
+            log.InfoFormat("Resetting for next week (if needed): {0}", dateOfNextUpgrade);
 
             upgradeTimer?.Dispose();
             double millisecondsToOpenWindow = (dateOfNextUpgrade - DateTime.Now).TotalMilliseconds;

@@ -10,6 +10,8 @@ using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Data;
 using ShipWorks.Data.Administration;
 using ShipWorks.Data.Connection;
+using ShipWorks.Stores;
+using ShipWorks.Users.Security;
 
 namespace ShipWorks.ApplicationCore.CommandLineOptions
 {
@@ -18,7 +20,7 @@ namespace ShipWorks.ApplicationCore.CommandLineOptions
     /// </summary>
     public class GetUpdateWindowCommandLineOption : ICommandLineCommandHandler
     {
-        private static readonly ILog log = LogManager.GetLogger(typeof(TangoWebClient));
+        private static readonly ILog log = LogManager.GetLogger(typeof(GetUpdateWindowCommandLineOption));
 
         /// <summary>
         /// getupdatewindow
@@ -38,6 +40,8 @@ namespace ShipWorks.ApplicationCore.CommandLineOptions
             Data.Model.EntityClasses.ConfigurationEntity config = ConfigurationData.Fetch();
 
             log.Info("Fetching customer id");
+            DataProvider.InitializeForApplication();
+            StoreManager.InitializeForCurrentSession(SecurityContext.EmptySecurityContext);
             string tangoCustomerId = TangoWebClient.GetTangoCustomerId();
 
             UpdateWindowData updateData = new UpdateWindowData()
