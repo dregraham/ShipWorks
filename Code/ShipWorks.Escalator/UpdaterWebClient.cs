@@ -6,29 +6,18 @@ using System.Net.Http.Headers;
 using System.Xml;
 using System.Net;
 using System.IO;
-using System.Security.Cryptography;
 using log4net;
 using System.Reflection;
+using Interapptive.Shared.Extensions;
+using Interapptive.Shared.Utility;
 
 namespace ShipWorks.Escalator
 {
     /// <summary>
     /// Communicates with tango to download the requested version
     /// </summary>
-    public class UpdaterWebClient
+    public class UpdaterWebClient : IDisposable
     {
-        private readonly static Lazy<Version> version = new Lazy<Version>(() =>
-        {
-            // Tango requires a specific version in order to know when to return
-            // legacy responses or new response for the customer license. This is
-            // primarily for debug/internal versions of ShipWorks that have 0.0.0.x
-            // version number.
-            Version assemblyVersion = Assembly.GetExecutingAssembly().GetName().Version;
-            Version minimumVersion = new Version(5, 0, 0, 0);
-
-            return assemblyVersion.Major == 0 ? minimumVersion : assemblyVersion;
-        });
-
         private static readonly ILog log = LogManager.GetLogger(typeof(UpdaterWebClient));
 
         private static readonly Lazy<HttpClient> tangoClient = new Lazy<HttpClient>(GetHttpClient);
@@ -62,9 +51,25 @@ namespace ShipWorks.Escalator
         }
 
         /// <summary>
-        /// Get the url and sha of requested version
+        /// Get the url and sha of requesting customer id
         /// </summary>
-        public async Task<(Uri url, string sha)> GetVersionToDownload(Version version)
+        public async Task<ShipWorksRelease> GetVersionToDownload(string tangoCustomerId)
+        {
+            log.InfoFormat("Attempting to get version for customer {0}", tangoCustomerId);
+
+            var values = new Dictionary<string, string>
+            {
+                { "action", "getreleasebyuser" },
+                { "customerid", tangoCustomerId }
+            };
+
+            return await GetVersionToDownload(values).ConfigureAwait(false);
+        }
+
+        /// <summary>
+        /// Get the url and sha of requested version 
+        /// </summary>
+        public async Task<ShipWorksRelease> GetVersionToDownload(Version version)
         {
             log.InfoFormat("Attempting to get version {0}", version);
 
@@ -74,7 +79,15 @@ namespace ShipWorks.Escalator
                 { "version", version.ToString() }
             };
 
-            FormUrlEncodedContent content = new FormUrlEncodedContent(values);
+            return await GetVersionToDownload(values).ConfigureAwait(false);
+        }
+
+        /// <summary>
+        /// Get the url and sha for the requested form values
+        /// </summary>
+        private async Task<ShipWorksRelease> GetVersionToDownload(Dictionary<string, string> formValues)
+        {
+            FormUrlEncodedContent content = new FormUrlEncodedContent(formValues);
 
             string response;
             using (HttpResponseMessage responseMessage = await tangoClient.Value.PostAsync(tangoUrl, content).ConfigureAwait(false))
@@ -83,17 +96,16 @@ namespace ShipWorks.Escalator
             }
             log.InfoFormat("Response received: {0}", response);
 
-            XmlDocument xmlResponse = new XmlDocument();
-            xmlResponse.LoadXml(response);
-
-            string url = xmlResponse.SelectSingleNode("//Update//Url")?.InnerText ?? string.Empty;
-            Uri.TryCreate(url, UriKind.Absolute, out Uri uri);
-
-            string sha = xmlResponse.SelectSingleNode("//Update//SHA256")?.InnerText ?? string.Empty;
-
-            log.InfoFormat("Url: {0}", url);
-            log.InfoFormat("sha: {0}", sha);
-            return (uri, sha);
+            if (response.TryParseXml(out ShipWorksRelease result))
+            {
+                log.Info("Desearialized result to ShipWorksRelease.");
+                return result;
+            }
+            else
+            {
+                log.Info("Could not deserialize result to ShipWorksRelease.");
+                return null;
+            }
         }
 
         /// <summary>
@@ -106,7 +118,7 @@ namespace ShipWorks.Escalator
             HttpClientHandler handler = new HttpClientHandler();
 
             HttpClient client = new HttpClient(handler);
-            client.DefaultRequestHeaders.Add("X-SHIPWORKS-VERSION", version.ToString());
+            client.DefaultRequestHeaders.Add("X-SHIPWORKS-VERSION", VersionUtility.AssemblyVersion.ToString());
             client.DefaultRequestHeaders.Add("X-SHIPWORKS-USER", "$h1pw0rks");
             client.DefaultRequestHeaders.Add("X-SHIPWORKS-PASS", "q2*lrft");
             client.DefaultRequestHeaders.Add("SOAPAction", "http://stamps.com/xml/namespace/2015/06/shipworks/shipworksv1/IShipWorks/ShipworksPost");
@@ -114,6 +126,14 @@ namespace ShipWorks.Escalator
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/x-www-form-urlencoded"));
 
             return client;
+        }
+
+        /// <summary>
+        /// Dispose
+        /// </summary>
+        public void Dispose()
+        {
+            downloadClient?.Dispose();
         }
     }
 }

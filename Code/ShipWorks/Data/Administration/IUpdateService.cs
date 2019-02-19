@@ -19,5 +19,10 @@ namespace ShipWorks.Data.Administration
         /// Tell the service to update ShipWorks
         /// </summary>
         Result Update(Version version);
+
+        /// <summary>
+        /// Send a message to the update service
+        /// </summary>
+        Result SendMessage(string message);
     }
 }

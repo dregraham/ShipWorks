@@ -4,6 +4,8 @@ using System.IO;
 using System.Linq;
 using System.ServiceProcess;
 using System.Threading.Tasks;
+using Interapptive.Shared.AutoUpdate;
+using Interapptive.Shared.Extensions;
 using Interapptive.Shared.Utility;
 using log4net;
 
@@ -15,6 +17,8 @@ namespace ShipWorks.Escalator
     public class Escalator : ServiceBase
     {
         private static ILog log = LogManager.GetLogger(typeof(ServiceBase));
+        ShipWorksUpgrade shipWorksUpgrade;
+        UpgradeTimeWindow upgradeTimeWindow;
 
         /// <summary>
         /// Constructor
@@ -22,6 +26,8 @@ namespace ShipWorks.Escalator
         public Escalator()
         {
             this.ServiceName = ShipWorks.Escalator.ServiceName.Resolve();
+            shipWorksUpgrade = new ShipWorksUpgrade();
+            upgradeTimeWindow = new UpgradeTimeWindow(shipWorksUpgrade);
         }
 
         /// <summary>
@@ -50,24 +56,17 @@ namespace ShipWorks.Escalator
         /// <summary>
         /// Processes message - internal so it can be tested outside the service via Program.cs
         /// </summary>
-        internal static async Task ProcessMessage(string message)
+        internal async Task ProcessMessage(string message)
         {
             try
             {
                 if (Version.TryParse(message, out Version version))
                 {
-
-                    UpdaterWebClient updaterWebClient = new UpdaterWebClient();
-                    (Uri url, string sha) newVersionInfo = await updaterWebClient.GetVersionToDownload(new Version(message)).ConfigureAwait(false);
-
-                    if (IsInstallRunning(newVersionInfo.url))
-                    {
-                        log.ErrorFormat("The installer {0} is already running", newVersionInfo.url);
-                    }
-                    else
-                    {
-                        await Install(updaterWebClient, newVersionInfo);
-                    }
+                    await shipWorksUpgrade.Upgrade(version).ConfigureAwait(false);
+                }
+                else if (message.TryParseJson(out UpdateWindowData updateWindowData))
+                {
+                    upgradeTimeWindow.UpdateWindow(updateWindowData);
                 }
                 else
                 {
@@ -78,31 +77,6 @@ namespace ShipWorks.Escalator
             {
                 log.Error("An exception was thrown when attempting to download and install a new version of SW", ex);
             }
-        }
-
-        /// <summary>
-        /// Download and install new version of Shipworks
-        /// </summary>
-        private static async Task Install(UpdaterWebClient updaterWebClient, (Uri url, string sha) newVersionInfo)
-        {
-            log.InfoFormat("The installer {0} is not already running. Beginning Download...", newVersionInfo.url);
-            InstallFile newVersion = await updaterWebClient.Download(newVersionInfo.url, newVersionInfo.sha).ConfigureAwait(false);
-
-            log.Info("Attempting to install new version");
-            Result installationResult = new ShipWorksInstaller().Install(newVersion);
-            if (installationResult.Failure)
-            {
-                log.ErrorFormat("An error occured while installing the new version of ShipWorks: {0}", installationResult.Message);
-            }
-        }
-
-        /// <summary>
-        /// Detects that the installer is already running
-        /// </summary>
-        private static bool IsInstallRunning(Uri newVersion)
-        {
-            string fileName = Path.GetFileNameWithoutExtension(newVersion.LocalPath);
-            return Process.GetProcessesByName(fileName).Any();
         }
 
         /// <summary>

@@ -17,7 +17,7 @@ namespace ShipWorks.Escalator
         /// <summary>
         /// Installs ShipWorks
         /// </summary>
-        public Result Install(InstallFile file)
+        public Result Install(InstallFile file, bool upgradeDatabase)
         {
             log.Info("Starting Install");
             if (!file.IsValid())
@@ -27,29 +27,44 @@ namespace ShipWorks.Escalator
             }
             log.InfoFormat("Install {0} file validated", file.Path);
 
-            KillShipWorks();
-            return RunSetup(file);
+            bool shouldRelaunch = KillShipWorks();
+            return RunSetup(file, upgradeDatabase, shouldRelaunch);
         }
 
         /// <summary>
         /// Kill any instance of Shipworks running.
         /// </summary>
-        private void KillShipWorks()
+        /// <remarks>
+        /// Returns bool if any of the processes were UI
+        /// </remarks>
+        private bool KillShipWorks()
         {
+            bool shouldRelaunch = false;
+
             foreach (Process process in Process.GetProcessesByName("shipworks"))
             {
+                // The process has a main window, so we should relaunch
+                if (process.MainWindowHandle != IntPtr.Zero)
+                {
+                    shouldRelaunch = true;
+                }
+
                 process.Kill();
             }
+
+            return shouldRelaunch;
         }
 
         /// <summary>
         /// Run ShipWorks setup
         /// </summary>
-        private static Result RunSetup(InstallFile file)
+        private static Result RunSetup(InstallFile file, bool upgradeDatabase, bool relaunchShipWorks)
         {
+            string upgradeDbParameter = upgradeDatabase ? "/upgradedb" : string.Empty;
+            string relaunchParameter = relaunchShipWorks ? "/launchafterinstall" : string.Empty;
             ProcessStartInfo start = new ProcessStartInfo();
             start.FileName = file.Path;
-            start.Arguments = $"/VERYSILENT /DIR=\"{Path.GetDirectoryName(Assembly.GetEntryAssembly().Location)}\" /log /FORCECLOSEAPPLICATIONS ";
+            start.Arguments = $"/VERYSILENT /DIR=\"{Path.GetDirectoryName(Assembly.GetEntryAssembly().Location)}\" /log /FORCECLOSEAPPLICATIONS {upgradeDbParameter} {relaunchParameter}";
 
             int exitCode;
 
@@ -63,7 +78,7 @@ namespace ShipWorks.Escalator
                 log.InfoFormat("Install process exit code {0}", exitCode);
             }
 
-            return exitCode > 0 ? 
+            return exitCode > 0 ?
                 Result.FromError($"Update failed with exit code {exitCode}") :
                 Result.FromSuccess();
         }
