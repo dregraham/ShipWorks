@@ -4,6 +4,8 @@ using System.IO;
 using System.Linq;
 using System.ServiceProcess;
 using System.Threading.Tasks;
+using Interapptive.Shared.AutoUpdate;
+using Interapptive.Shared.Extensions;
 using Interapptive.Shared.Utility;
 using log4net;
 
@@ -16,6 +18,7 @@ namespace ShipWorks.Escalator
     {
         private static ILog log = LogManager.GetLogger(typeof(ServiceBase));
         ShipWorksUpgrade shipWorksUpgrade;
+        UpgradeTimeWindow upgradeTimeWindow;
 
         /// <summary>
         /// Constructor
@@ -24,6 +27,7 @@ namespace ShipWorks.Escalator
         {
             this.ServiceName = ShipWorks.Escalator.ServiceName.Resolve();
             shipWorksUpgrade = new ShipWorksUpgrade();
+            upgradeTimeWindow = new UpgradeTimeWindow(shipWorksUpgrade);
         }
 
         /// <summary>
@@ -59,6 +63,10 @@ namespace ShipWorks.Escalator
                 if (Version.TryParse(message, out Version version))
                 {
                     await shipWorksUpgrade.Upgrade(version).ConfigureAwait(false);
+                }
+                else if (message.TryParseJson(out UpdateWindowData updateWindowData))
+                {
+                    upgradeTimeWindow.UpdateWindow(updateWindowData);
                 }
                 else
                 {

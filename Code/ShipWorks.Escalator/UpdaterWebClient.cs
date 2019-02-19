@@ -9,26 +9,15 @@ using System.IO;
 using log4net;
 using System.Reflection;
 using Interapptive.Shared.Extensions;
+using Interapptive.Shared.Utility;
 
 namespace ShipWorks.Escalator
 {
     /// <summary>
     /// Communicates with tango to download the requested version
     /// </summary>
-    public class UpdaterWebClient
+    public class UpdaterWebClient : IDisposable
     {
-        private readonly static Lazy<Version> assemblyVersion = new Lazy<Version>(() =>
-        {
-            // Tango requires a specific version in order to know when to return
-            // legacy responses or new response for the customer license. This is
-            // primarily for debug/internal versions of ShipWorks that have 0.0.0.x
-            // version number.
-            Version assemblyVersion = Assembly.GetExecutingAssembly().GetName().Version;
-            Version minimumVersion = new Version(5, 0, 0, 0);
-
-            return assemblyVersion.Major == 0 ? minimumVersion : assemblyVersion;
-        });
-
         private static readonly ILog log = LogManager.GetLogger(typeof(UpdaterWebClient));
 
         private static readonly Lazy<HttpClient> tangoClient = new Lazy<HttpClient>(GetHttpClient);
@@ -129,7 +118,7 @@ namespace ShipWorks.Escalator
             HttpClientHandler handler = new HttpClientHandler();
 
             HttpClient client = new HttpClient(handler);
-            client.DefaultRequestHeaders.Add("X-SHIPWORKS-VERSION", assemblyVersion.ToString());
+            client.DefaultRequestHeaders.Add("X-SHIPWORKS-VERSION", VersionUtility.AssemblyVersion.ToString());
             client.DefaultRequestHeaders.Add("X-SHIPWORKS-USER", "$h1pw0rks");
             client.DefaultRequestHeaders.Add("X-SHIPWORKS-PASS", "q2*lrft");
             client.DefaultRequestHeaders.Add("SOAPAction", "http://stamps.com/xml/namespace/2015/06/shipworks/shipworksv1/IShipWorks/ShipworksPost");
@@ -137,6 +126,14 @@ namespace ShipWorks.Escalator
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/x-www-form-urlencoded"));
 
             return client;
+        }
+
+        /// <summary>
+        /// Dispose
+        /// </summary>
+        public void Dispose()
+        {
+            downloadClient?.Dispose();
         }
     }
 }

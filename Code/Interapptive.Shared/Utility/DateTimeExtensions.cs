@@ -40,5 +40,23 @@ namespace Interapptive.Shared.Utility
 
             return value;
         }
+
+        /// <summary>
+        /// Gets the next day specified (if current day requested, returns the next one)
+        /// </summary>
+        public static DateTime Next(this DateTime value, DayOfWeek dayOfWeek)
+        {
+            return value.AddDays(1).TodayOrNext(dayOfWeek);
+        }
+
+        /// <summary>
+        /// Gets the next day specified (if the day requested is today, returns today)
+        /// </summary>
+        public static DateTime TodayOrNext(this DateTime value, DayOfWeek dayOfWeek)
+        {
+            int start = (int) value.DayOfWeek;
+            int target = (int) dayOfWeek;
+            return value.AddDays(target - start);
+        }
     }
 }

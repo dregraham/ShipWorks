@@ -26,6 +26,10 @@ namespace ShipWorks.Escalator
         /// Minimum allowed version
         /// </summary>
         public Version MinAllowedReleaseVersion { get; set; }
-        public Version Version { get; internal set; }
+
+        /// <summary>
+        /// ReleaseVersion
+        /// </summary>
+        public Version ReleaseVersion { get; internal set; }
     }
 }

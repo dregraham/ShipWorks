@@ -16,5 +16,10 @@ namespace Interapptive.Shared.AutoUpdate
         /// The hour of the day the update should kick off
         /// </summary>
         public int AutoUpdateHourOfDay { get; set; }
+
+        /// <summary>
+        /// The tango customer id
+        /// </summary>
+        public string TangoCustomerId { get; set; }
     }
 }
