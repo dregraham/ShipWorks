@@ -41,6 +41,9 @@ namespace ShipWorks.ApplicationCore
             this.kryptonBorderEdge3 = new ComponentFactory.Krypton.Toolkit.KryptonBorderEdge();
             this.borderAdvanced = new ComponentFactory.Krypton.Toolkit.KryptonBorderEdge();
             this.filterEditor = new ShipWorks.Filters.Controls.FilterDefinitionEditor();
+            this.filterEditorControlPanel = new System.Windows.Forms.Panel();
+            this.filterEditorSaveButton = new System.Windows.Forms.Button();
+            this.filterEditorName = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize) (this.kryptonGroup)).BeginInit();
             ((System.ComponentModel.ISupportInitialize) (this.kryptonGroup.Panel)).BeginInit();
             this.kryptonGroup.Panel.SuspendLayout();
@@ -262,12 +265,40 @@ namespace ShipWorks.ApplicationCore
             this.filterEditor.TabIndex = 2;
             this.filterEditor.RequiredHeightChanged += new System.EventHandler(this.OnAdvancedSearchRequiredHeightChanged);
             //
+            // filterEditorSaveButton
+            //
+            this.filterEditorName.Dock = System.Windows.Forms.DockStyle.Right;
+            this.filterEditorName.Name = "filterEditorName";
+            this.filterEditorName.Size = new System.Drawing.Size(75, 25);
+            this.filterEditorName.Text = "";
+            //
+            // filterEditorSaveButton
+            //
+            this.filterEditorSaveButton.Dock = System.Windows.Forms.DockStyle.Right;
+            this.filterEditorSaveButton.Name = "filterEditorSaveButton";
+            this.filterEditorSaveButton.Size = new System.Drawing.Size(75, 25);
+            this.filterEditorSaveButton.Text = "Save";
+            this.filterEditorSaveButton.Click += OnFilterEditorSaveButtonClick;
+            //
+            // filterEditorControlPanel
+            //
+            this.filterEditorControlPanel.BackColor = System.Drawing.Color.White;
+            this.filterEditorControlPanel.Dock = System.Windows.Forms.DockStyle.Top;
+            this.filterEditorControlPanel.Location = new System.Drawing.Point(1, 30);
+            this.filterEditorControlPanel.Name = "filterEditorControlPanel";
+            this.filterEditorControlPanel.Size = new System.Drawing.Size(731, 32);
+            this.filterEditorControlPanel.TabIndex = 2;
+            this.filterEditorControlPanel.Controls.Add(filterEditorSaveButton);
+            this.filterEditorControlPanel.Controls.Add(filterEditorName);
+
+            //
             // MainGridControl
             //
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.borderAdvanced);
             this.Controls.Add(this.gridPanel);
+            this.Controls.Add(this.filterEditorControlPanel);
             this.Controls.Add(this.filterEditor);
             this.Controls.Add(this.kryptonBorderEdge3);
             this.Controls.Add(this.kryptonBorderEdge2);
@@ -313,6 +344,9 @@ namespace ShipWorks.ApplicationCore
         private ComponentFactory.Krypton.Toolkit.KryptonHeader kryptonHeaderSearchContainer;
         private ComponentFactory.Krypton.Toolkit.ButtonSpecAny buttonAdvancedSearch;
         private ShipWorks.Filters.Controls.FilterDefinitionEditor filterEditor;
+        private System.Windows.Forms.Button filterEditorSaveButton;
+        private System.Windows.Forms.Label filterEditorName;
+        private System.Windows.Forms.Panel filterEditorControlPanel;
         private ComponentFactory.Krypton.Toolkit.KryptonBorderEdge borderAdvanced;
         private System.Windows.Forms.PictureBox pictureSearchHourglass;
     }

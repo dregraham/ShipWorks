@@ -9,11 +9,14 @@ using Autofac;
 using ComponentFactory.Krypton.Toolkit;
 using Divelements.SandGrid;
 using Interapptive.Shared.Metrics;
+using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using log4net;
 using ShipWorks.ApplicationCore.Appearance;
 using ShipWorks.ApplicationCore.Options;
+using ShipWorks.Core.Messaging;
 using ShipWorks.Data;
+using ShipWorks.Data.Connection;
 using ShipWorks.Data.Grid;
 using ShipWorks.Data.Grid.DetailView;
 using ShipWorks.Data.Grid.Paging;
@@ -21,7 +24,9 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Filters;
 using ShipWorks.Filters.Content;
 using ShipWorks.Filters.Grid;
+using ShipWorks.Filters.Management;
 using ShipWorks.Filters.Search;
+using ShipWorks.Messaging.Messages;
 using ShipWorks.Properties;
 using ShipWorks.UI.Controls.Design;
 using ShipWorks.Users;
@@ -90,6 +95,13 @@ namespace ShipWorks.ApplicationCore
 
         // Keeps track of the latest search being via barcode or not
         private bool isBarcodeSearch = false;
+
+        /// <summary>
+        /// The filter in the advanced search should be saved
+        /// </summary>
+        public event EventHandler<FilterNodeEntity> FilterSaved;
+
+        private FilterNodeEntity loadedFilter = null;
 
         /// <summary>
         /// Constructor
@@ -1012,9 +1024,13 @@ namespace ShipWorks.ApplicationCore
             }
             set
             {
+                loadedFilter = null;
+
                 filterEditor.Visible = value;
+                filterEditorControlPanel.Visible = value;
                 borderAdvanced.Visible = value;
 
+                filterEditorName.Text = string.Empty;
                 buttonAdvancedSearch.Type = value ? PaletteButtonSpecStyle.ArrowUp : PaletteButtonSpecStyle.ArrowDown;
 
                 UpdateHeaderColors();
@@ -1067,7 +1083,71 @@ namespace ShipWorks.ApplicationCore
         public void LoadFilterInAdvancedSearch(FilterNodeEntity filterNode)
         {
             OnAdvancedSearch(this, EventArgs.Empty);
+            loadedFilter = filterNode;
+            filterEditorName.Text = filterNode?.Filter?.Name;
             filterEditor.LoadDefinition(new FilterDefinition(filterNode.Filter.Definition));
+        }
+
+        /// <summary>
+        /// The filter was saved
+        /// </summary>
+        private void OnFilterSaved(object sender, FilterNodeEntity filterNode) =>
+            FilterSaved?.Invoke(sender, filterNode);
+
+        /// <summary>
+        /// The customer wants to save the search as a filter
+        /// </summary>
+        private void OnFilterEditorSaveButtonClick(object sender, System.EventArgs e)
+        {
+            if (filterEditor.SaveDefinition())
+            {
+                if (loadedFilter == null)
+                {
+                    var (result, createdNode) = FilterEditingService.NewFilter(this, filterEditor.FilterDefinition);
+                    if (result == FilterEditingResult.OK)
+                    {
+                        OnFilterSaved(this, createdNode);
+                        AdvancedSearchVisible = false;
+                    }
+
+                    return;
+                }
+
+                loadedFilter.Filter.Definition = filterEditor.FilterDefinition.GetXml();
+
+                try
+                {
+                    using (SqlAdapter adapter = new SqlAdapter(true))
+                    {
+                        // Save the filter
+                        FilterLayoutContext.Current.SaveFilter(loadedFilter.Filter, adapter);
+
+                        // Quick filter's should never be displayed as grid content
+                        if (loadedFilter.Purpose != (int) FilterNodePurpose.Quick)
+                        {
+                            // Get the grid layouts
+                            FilterNodeColumnSettings userSettings = FilterNodeColumnManager.GetUserSettings(loadedFilter);
+                            FilterNodeColumnSettings derfaultSettings = FilterNodeColumnManager.GetDefaultSettings(loadedFilter);
+
+                            userSettings.Save(adapter);
+                            derfaultSettings.Save(adapter);
+                        }
+
+                        adapter.Commit();
+                    }
+
+                    FilterContentManager.CheckForChanges();
+
+                    Messenger.Current.Send(new FilterNodeEditedMessage(loadedFilter.ParentNode, loadedFilter));
+
+                    OnFilterSaved(this, loadedFilter);
+                    AdvancedSearchVisible = false;
+                }
+                catch (FilterException ex)
+                {
+                    MessageHelper.ShowError(this, ex.Message);
+                }
+            }
         }
     }
 }

@@ -1006,6 +1006,7 @@ namespace ShipWorks
             this.gridControl.RowActivated += new Divelements.SandGrid.GridRowEventHandler(this.OnGridRowActivated);
             this.gridControl.SearchActiveChanged += new System.EventHandler(this.OnGridSearchActiveChanged);
             this.gridControl.SearchQueryChanged += new System.EventHandler(this.OnGridSearchQueryChanged);
+            this.gridControl.FilterSaved += OnGridControlFilterSaved;
             //
             // dockContainer1
             //

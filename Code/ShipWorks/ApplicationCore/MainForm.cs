@@ -2986,6 +2986,15 @@ namespace ShipWorks
         }
 
         /// <summary>
+        /// Handle when a filter is saved from the advanced search
+        /// </summary>
+        private void OnGridControlFilterSaved(object sender, FilterNodeEntity nodeEntity)
+        {
+            orderFilterTree.ReloadLayouts();
+            orderFilterTree.SelectedFilterNode = nodeEntity;
+        }
+
+        /// <summary>
         /// Determine and return the INactive filter tree based on the grid
         /// </summary>
         private FilterTree InActiveFilterTree()
