@@ -35,13 +35,23 @@ namespace ShipWorks.Escalator
         /// </summary>
         protected override void OnStart(string[] args)
         {
-            log.Info("OnStart");
-            // Start a communication bridge to listen for messages from ShipWorks
-            ShipWorksCommunicationBridge communicationBridge =
-                new ShipWorksCommunicationBridge(ShipWorks.Escalator.ServiceName.GetInstanceID().ToString(),
-                LogManager.GetLogger(typeof(ShipWorksCommunicationBridge)));
+            try
+            {
+                log.Info("OnStart");
+                // Start a communication bridge to listen for messages from ShipWorks
+                ShipWorksCommunicationBridge communicationBridge =
+                    new ShipWorksCommunicationBridge(ShipWorks.Escalator.ServiceName.GetInstanceID().ToString(),
+                    LogManager.GetLogger(typeof(ShipWorksCommunicationBridge)));
 
-            communicationBridge.OnMessage += OnShipWorksMessage;
+                communicationBridge.OnMessage += OnShipWorksMessage;
+
+                UpgradeTimeWindow.CallGetUpdateWindow();
+            }
+            catch (Exception ex)
+            {
+                log.Error(ex);
+                throw;
+            }
         }
 
         /// <summary>

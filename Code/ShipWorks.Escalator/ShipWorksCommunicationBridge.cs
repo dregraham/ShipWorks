@@ -73,10 +73,13 @@ namespace ShipWorks.Escalator
                 // Convert byte buffer to string
                 string stringData = Encoding.UTF8.GetString(buffer, 0, buffer.Length);
 
-                log.InfoFormat("Received Message {0}", stringData);
+                log.InfoFormat("Received Message '{0}'", stringData);
 
-                // Pass message back to calling form
-                OnMessage?.Invoke(stringData.Trim());
+                if (!string.IsNullOrWhiteSpace(stringData))
+                {
+                    // Pass message back to calling form
+                    OnMessage?.Invoke(stringData.Trim());
+                }                
             }
             catch (Exception ex)
             {
