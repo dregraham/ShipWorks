@@ -1,13 +1,9 @@
 ﻿using System;
-using System.Diagnostics;
-using System.IO;
-using System.Linq;
 using System.ServiceProcess;
 using System.Threading.Tasks;
 using Interapptive.Shared.AutoUpdate;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Extensions;
-using Interapptive.Shared.Utility;
 using log4net;
 
 namespace ShipWorks.Escalator
@@ -19,20 +15,23 @@ namespace ShipWorks.Escalator
     public class Escalator : ServiceBase
     {
         private static ILog log = LogManager.GetLogger(typeof(ServiceBase));
-        IShipWorksUpgrade shipWorksUpgrade;
+        private IShipWorksUpgrade shipWorksUpgrade;
         private readonly IShipWorksCommunicationBridge communicationBridge;
-        UpgradeTimeWindow upgradeTimeWindow;
+        private IUpgradeTimeWindow upgradeTimeWindow;
         private readonly IServiceName serviceName;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public Escalator(IServiceName serviceName, IShipWorksUpgrade shipWorksUpgrade, IShipWorksCommunicationBridge communicationBridge)
+        public Escalator(IServiceName serviceName, 
+            IShipWorksUpgrade shipWorksUpgrade, 
+            IShipWorksCommunicationBridge communicationBridge, 
+            IUpgradeTimeWindow upgradeTimeWindow)
         {
             ServiceName = serviceName.Resolve();
             this.shipWorksUpgrade = shipWorksUpgrade;
             this.communicationBridge = communicationBridge;
-            upgradeTimeWindow = new UpgradeTimeWindow(shipWorksUpgrade);
+            this.upgradeTimeWindow = upgradeTimeWindow;
             this.serviceName = serviceName;
         }
 
@@ -48,7 +47,7 @@ namespace ShipWorks.Escalator
                 communicationBridge.StartPipeServer();
                 communicationBridge.OnMessage += OnShipWorksMessage;
 
-                UpgradeTimeWindow.CallGetUpdateWindow();
+                upgradeTimeWindow.CallGetUpdateWindow();
             }
             catch (Exception ex)
             {

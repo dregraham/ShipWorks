@@ -48,9 +48,8 @@ namespace ShipWorks.Escalator
         /// <summary>
         /// Call swc.exe with getupdatewindow parameter
         /// </summary>
-        public static void CallGetUpdateWindow()
+        public void CallGetUpdateWindow()
         {
-
             string process = $"{Path.GetDirectoryName(Assembly.GetEntryAssembly().Location)}\\swc.exe";
             string arg = "/command=getupdatewindow";
             log.InfoFormat("Executing {0} {1}", process, arg);
@@ -60,7 +59,7 @@ namespace ShipWorks.Escalator
         /// <summary>
         /// Update the window
         /// </summary>
-        internal void UpdateWindow(UpdateWindowData updateWindowData)
+        public void UpdateWindow(UpdateWindowData updateWindowData)
         {
             log.Info("Updating Window");
             log.InfoFormat("Getting update window for Day {0} and Hour {1}",
