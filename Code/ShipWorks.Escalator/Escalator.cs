@@ -37,8 +37,6 @@ namespace ShipWorks.Escalator
         {
             try
             {
-                System.Diagnostics.Debugger.Launch();
-
                 log.Info("OnStart");
                 // Start a communication bridge to listen for messages from ShipWorks
                 ShipWorksCommunicationBridge communicationBridge =
