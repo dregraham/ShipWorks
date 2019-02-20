@@ -13,7 +13,7 @@ namespace ShipWorks.Escalator
         public string DownloadUrl { get; set; }
 
         /// <summary>
-        /// Download Url
+        /// Download Uri
         /// </summary>
         public Uri DownloadUri => new Uri(DownloadUrl);
 

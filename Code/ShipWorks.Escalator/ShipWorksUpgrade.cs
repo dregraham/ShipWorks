@@ -13,11 +13,14 @@ namespace ShipWorks.Escalator
     /// <summary>
     /// Upgrade ShipWorks
     /// </summary>
-    class ShipWorksUpgrade
+    public class ShipWorksUpgrade
     {
         private static ILog log = LogManager.GetLogger(typeof(ShipWorksUpgrade));
         private static UpdaterWebClient updaterWebClient;
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
         public ShipWorksUpgrade()
         {
             updaterWebClient = new UpdaterWebClient();
@@ -38,9 +41,12 @@ namespace ShipWorks.Escalator
                 return;
             }
 
-            await Install(shipWorksRelease, false);
+            await Install(shipWorksRelease, false).ConfigureAwait(false);
         }
 
+        /// <summary>
+        /// Download and install the next version of ShipWorks for the given customer if it is available
+        /// </summary>
         public async Task Upgrade(string tangoCustomerId)
         {
             Version currentVersion = VersionUtility.AssemblyVersion;
@@ -48,7 +54,7 @@ namespace ShipWorks.Escalator
             ShipWorksRelease shipWorksRelease = await updaterWebClient.GetVersionToDownload(tangoCustomerId, currentVersion).ConfigureAwait(false);
             if (shipWorksRelease == null)
             {
-                log.InfoFormat("Version not found for tango customer {0}", tangoCustomerId);
+                log.InfoFormat("New version not found for tango customer {0} running version {1}", tangoCustomerId, currentVersion);
                 return;
             }
 
@@ -63,11 +69,11 @@ namespace ShipWorks.Escalator
 
             log.InfoFormat("New Version {0} found. Attempting upgrade.", shipWorksRelease.ReleaseVersion);
 
-            await Install(shipWorksRelease, true);
+            await Install(shipWorksRelease, true).ConfigureAwait(false);
         }
 
         /// <summary>
-        /// Download and install new version of Shipworks
+        /// Install new version of ShipWorks, optionally upgrading the database
         /// </summary>
         private static async Task Install(ShipWorksRelease shipWorksRelease, bool upgradeDatabase)
         {

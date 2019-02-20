@@ -55,7 +55,7 @@ namespace ShipWorks.Escalator
         /// </summary>
         public async Task<ShipWorksRelease> GetVersionToDownload(string tangoCustomerId, Version currentVersion)
         {
-            log.InfoFormat("Attempting to get version for customer {0}", tangoCustomerId);
+            log.InfoFormat("Attempting to get new version for tango customer {0} running version {1}", tangoCustomerId, currentVersion);
 
             var values = new Dictionary<string, string>
             {
