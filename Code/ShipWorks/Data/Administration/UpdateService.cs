@@ -78,6 +78,5 @@ namespace ShipWorks.Data.Administration
         {
             updaterPipe.Dispose();
         }
-
     }
 }

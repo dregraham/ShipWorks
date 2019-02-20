@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Autofac;
 using Interapptive.Shared.AutoUpdate;
@@ -10,6 +9,7 @@ using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Data;
 using ShipWorks.Data.Administration;
 using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores;
 using ShipWorks.Users.Security;
 
@@ -37,7 +37,7 @@ namespace ShipWorks.ApplicationCore.CommandLineOptions
             ConfigurationData.CheckForChangesNeeded();
 
             log.Info("Fetching config data");
-            Data.Model.EntityClasses.ConfigurationEntity config = ConfigurationData.Fetch();
+            ConfigurationEntity config = ConfigurationData.Fetch();
 
             log.Info("Fetching customer id");
             DataProvider.InitializeForApplication();
