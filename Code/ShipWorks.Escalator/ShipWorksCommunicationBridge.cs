@@ -23,8 +23,8 @@ namespace ShipWorks.Escalator
         /// </summary>
         public ShipWorksCommunicationBridge(IServiceName serviceName, Func<Type, ILog> logFactory)
         {
-            this.instance = serviceName.Resolve();
-            this.log = logFactory(this.GetType());
+            instance = serviceName.Resolve();
+            log = logFactory(GetType());
         }
 
         /// <summary>

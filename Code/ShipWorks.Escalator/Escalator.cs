@@ -14,7 +14,7 @@ namespace ShipWorks.Escalator
     [Component(RegisterAs = RegistrationType.Self)]
     public class Escalator
     {
-        private static ILog log = LogManager.GetLogger(typeof(ServiceBase));
+        private static ILog log;
         private IShipWorksUpgrade shipWorksUpgrade;
         private readonly IShipWorksCommunicationBridge communicationBridge;
         private IUpgradeTimeWindow upgradeTimeWindow;
@@ -26,12 +26,14 @@ namespace ShipWorks.Escalator
         public Escalator(IServiceName serviceName, 
             IShipWorksUpgrade shipWorksUpgrade, 
             IShipWorksCommunicationBridge communicationBridge, 
-            IUpgradeTimeWindow upgradeTimeWindow)
+            IUpgradeTimeWindow upgradeTimeWindow,
+            Func<Type, ILog> logFactory)
         {
             this.shipWorksUpgrade = shipWorksUpgrade;
             this.communicationBridge = communicationBridge;
             this.upgradeTimeWindow = upgradeTimeWindow;
             this.serviceName = serviceName;
+            log = logFactory(GetType());
         }
 
         /// <summary>
@@ -61,14 +63,6 @@ namespace ShipWorks.Escalator
         private async void OnShipWorksMessage(string message)
         {
             log.InfoFormat("Message \"{0}\" received from ShipWorksCommunicationBridge.", message);
-            await ProcessMessage(message).ConfigureAwait(false);
-        }
-
-        /// <summary>
-        /// Processes message - internal so it can be tested outside the service via Program.cs
-        /// </summary>
-        private async Task ProcessMessage(string message)
-        {
             try
             {
                 if (Version.TryParse(message, out Version version))
@@ -81,7 +75,7 @@ namespace ShipWorks.Escalator
                 }
                 else
                 {
-                    log.InfoFormat("\"{0}\" could not be parsed as version.", message);
+                    log.WarnFormat("\"{0}\" could not be parsed as version.", message);
                 }
             }
             catch (Exception ex)

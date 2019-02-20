@@ -11,11 +11,19 @@ namespace ShipWorks.Escalator
     /// <summary>
     /// Installs ShipWorks
     /// </summary>
-    [Component]
+    [Component(SingleInstance = true)]
     public class ShipWorksInstaller : IShipWorksInstaller
     {
-        private static readonly ILog log = LogManager.GetLogger(typeof(ShipWorksInstaller));
+        private readonly ILog log;
         private bool relaunchShipWorks;
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public ShipWorksInstaller(Func<Type, ILog> logFactory)
+        {
+            log = logFactory(GetType());
+        }
 
         /// <summary>
         /// Installs ShipWorks

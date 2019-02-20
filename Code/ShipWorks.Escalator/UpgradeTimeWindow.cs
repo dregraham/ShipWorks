@@ -20,14 +20,15 @@ namespace ShipWorks.Escalator
         private IShipWorksUpgrade shipWorksUpgrade;
         Timer upgradeTimer;
         Timer checkUpgradeWindowTimer;
-        private static readonly ILog log = LogManager.GetLogger(typeof(UpgradeTimeWindow));
+        private readonly ILog log;
 
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="shipWorksUpgrade"></param>
-        public UpgradeTimeWindow(IShipWorksUpgrade shipWorksUpgrade)
+        public UpgradeTimeWindow(IShipWorksUpgrade shipWorksUpgrade, Func<Type, ILog> logFactory)
         {
+            log = logFactory(GetType());
             log.Info("Constructing UpgradeTimeWindow");
             this.shipWorksUpgrade = shipWorksUpgrade;
             checkUpgradeWindowTimer = new Timer(TimeSpan.FromMinutes(minutesBetweenWindowChecks).TotalMilliseconds);

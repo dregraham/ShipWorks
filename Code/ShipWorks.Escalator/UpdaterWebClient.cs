@@ -18,7 +18,7 @@ namespace ShipWorks.Escalator
     [Component(SingleInstance = true)]
     public class UpdaterWebClient : IUpdaterWebClient
     {
-        private static readonly ILog log = LogManager.GetLogger(typeof(UpdaterWebClient));
+        private readonly ILog log;
 
         private static readonly Lazy<HttpClient> tangoClient = new Lazy<HttpClient>(GetHttpClient);
         private static readonly WebClient downloadClient = new WebClient();
@@ -28,9 +28,10 @@ namespace ShipWorks.Escalator
         /// <summary>
         /// Constructor
         /// </summary>
-        public UpdaterWebClient(IServiceName serviceName)
+        public UpdaterWebClient(IServiceName serviceName, Func<Type, ILog> logFactory)
         {
             this.serviceName = serviceName;
+            log = logFactory(GetType());
         }
 
         /// <summary>
@@ -123,8 +124,6 @@ namespace ShipWorks.Escalator
         /// </summary>
         private static HttpClient GetHttpClient()
         {
-            log.Info("Configuring Client");
-
             HttpClientHandler handler = new HttpClientHandler();
 
             HttpClient client = new HttpClient(handler);

@@ -1,10 +1,12 @@
 ﻿using System.ServiceProcess;
+using Interapptive.Shared.ComponentRegistration;
 
 namespace ShipWorks.Escalator
 {
     /// <summary>
     /// Service to start the Escalator
     /// </summary>
+    [Component(RegisterAs = RegistrationType.Self)]
     public class EscalatorService : ServiceBase
     {
         private readonly Escalator escalator;
