@@ -3,26 +3,35 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Net.Http;
 using System.Net.Http.Headers;
-using System.Xml;
 using System.Net;
 using System.IO;
 using log4net;
-using System.Reflection;
 using Interapptive.Shared.Extensions;
 using Interapptive.Shared.Utility;
+using Interapptive.Shared.ComponentRegistration;
 
 namespace ShipWorks.Escalator
 {
     /// <summary>
     /// Communicates with tango to download the requested version
     /// </summary>
-    public class UpdaterWebClient : IDisposable
+    [Component(SingleInstance = true)]
+    public class UpdaterWebClient : IUpdaterWebClient
     {
         private static readonly ILog log = LogManager.GetLogger(typeof(UpdaterWebClient));
 
         private static readonly Lazy<HttpClient> tangoClient = new Lazy<HttpClient>(GetHttpClient);
         private static readonly WebClient downloadClient = new WebClient();
         private readonly string tangoUrl = "http://www.interapptive.com/ShipWorksNet/ShipWorksV1.svc/account/shipworks";
+        private readonly IServiceName serviceName;
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public UpdaterWebClient(IServiceName serviceName)
+        {
+            this.serviceName = serviceName;
+        }
 
         /// <summary>
         /// Download the requested version
@@ -43,11 +52,11 @@ namespace ShipWorks.Escalator
         /// <summary>
         /// Get the path to save the install file to
         /// </summary>
-        private static string GetInstallationFileSavePath(Uri url)
+        private string GetInstallationFileSavePath(Uri url)
         {
             string fileName = Path.GetFileName(url.LocalPath);
             string appData = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData);
-            return Path.Combine(appData, "Interapptive\\ShipWorks\\Instances", ServiceName.GetInstanceID().ToString("B"), fileName);
+            return Path.Combine(appData, "Interapptive\\ShipWorks\\Instances", serviceName.GetInstanceID().ToString("B"), fileName);
         }
 
         /// <summary>

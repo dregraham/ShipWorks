@@ -5,6 +5,7 @@ using System.Linq;
 using System.ServiceProcess;
 using System.Threading.Tasks;
 using Interapptive.Shared.AutoUpdate;
+using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Extensions;
 using Interapptive.Shared.Utility;
 using log4net;
@@ -14,20 +15,25 @@ namespace ShipWorks.Escalator
     /// <summary>
     /// Logic of the Escalator service
     /// </summary>
+    [Component(RegisterAs = RegistrationType.Self)]
     public class Escalator : ServiceBase
     {
         private static ILog log = LogManager.GetLogger(typeof(ServiceBase));
-        ShipWorksUpgrade shipWorksUpgrade;
+        IShipWorksUpgrade shipWorksUpgrade;
+        private readonly IShipWorksCommunicationBridge communicationBridge;
         UpgradeTimeWindow upgradeTimeWindow;
+        private readonly IServiceName serviceName;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public Escalator()
+        public Escalator(IServiceName serviceName, IShipWorksUpgrade shipWorksUpgrade, IShipWorksCommunicationBridge communicationBridge)
         {
-            this.ServiceName = ShipWorks.Escalator.ServiceName.Resolve();
-            shipWorksUpgrade = new ShipWorksUpgrade();
+            ServiceName = serviceName.Resolve();
+            this.shipWorksUpgrade = shipWorksUpgrade;
+            this.communicationBridge = communicationBridge;
             upgradeTimeWindow = new UpgradeTimeWindow(shipWorksUpgrade);
+            this.serviceName = serviceName;
         }
 
         /// <summary>
@@ -39,10 +45,7 @@ namespace ShipWorks.Escalator
             {
                 log.Info("OnStart");
                 // Start a communication bridge to listen for messages from ShipWorks
-                ShipWorksCommunicationBridge communicationBridge =
-                    new ShipWorksCommunicationBridge(ShipWorks.Escalator.ServiceName.GetInstanceID().ToString(),
-                    LogManager.GetLogger(typeof(ShipWorksCommunicationBridge)));
-
+                communicationBridge.StartPipeServer();
                 communicationBridge.OnMessage += OnShipWorksMessage;
 
                 UpgradeTimeWindow.CallGetUpdateWindow();

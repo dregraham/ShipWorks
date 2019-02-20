@@ -4,6 +4,7 @@ using System.IO;
 using System.Reflection;
 using System.Timers;
 using Interapptive.Shared.AutoUpdate;
+using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
 using log4net;
 
@@ -12,10 +13,11 @@ namespace ShipWorks.Escalator
     /// <summary>
     /// Handles checking for updates during the upgrade window.
     /// </summary>
-    internal class UpgradeTimeWindow
+    [Component]
+    public class UpgradeTimeWindow : IUpgradeTimeWindow
     {
         int minutesBetweenWindowChecks = 15;
-        private ShipWorksUpgrade shipWorksUpgrade;
+        private IShipWorksUpgrade shipWorksUpgrade;
         Timer upgradeTimer;
         Timer checkUpgradeWindowTimer;
         private static readonly ILog log = LogManager.GetLogger(typeof(UpgradeTimeWindow));
@@ -24,7 +26,7 @@ namespace ShipWorks.Escalator
         /// Constructor
         /// </summary>
         /// <param name="shipWorksUpgrade"></param>
-        public UpgradeTimeWindow(ShipWorksUpgrade shipWorksUpgrade)
+        public UpgradeTimeWindow(IShipWorksUpgrade shipWorksUpgrade)
         {
             log.Info("Constructing UpgradeTimeWindow");
             this.shipWorksUpgrade = shipWorksUpgrade;

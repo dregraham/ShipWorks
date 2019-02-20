@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
 using log4net;
 
@@ -13,17 +14,18 @@ namespace ShipWorks.Escalator
     /// <summary>
     /// Upgrade ShipWorks
     /// </summary>
-    public class ShipWorksUpgrade
+    [Component(SingleInstance = true)]
+    public class ShipWorksUpgrade : IShipWorksUpgrade
     {
         private static ILog log = LogManager.GetLogger(typeof(ShipWorksUpgrade));
-        private static UpdaterWebClient updaterWebClient;
+        private IUpdaterWebClient updaterWebClient;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public ShipWorksUpgrade()
+        public ShipWorksUpgrade(IUpdaterWebClient updaterWebClient)
         {
-            updaterWebClient = new UpdaterWebClient();
+            this.updaterWebClient = updaterWebClient;
         }
 
         /// <summary>
@@ -75,7 +77,7 @@ namespace ShipWorks.Escalator
         /// <summary>
         /// Install new version of ShipWorks, optionally upgrading the database
         /// </summary>
-        private static async Task Install(ShipWorksRelease shipWorksRelease, bool upgradeDatabase)
+        private async Task Install(ShipWorksRelease shipWorksRelease, bool upgradeDatabase)
         {
             if (IsInstallRunning(shipWorksRelease.DownloadUri))
             {
