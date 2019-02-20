@@ -15,15 +15,18 @@ namespace ShipWorks.Escalator
     [Component(SingleInstance = true)]
     public class ShipWorksUpgrade : IShipWorksUpgrade
     {
-        private static ILog log = LogManager.GetLogger(typeof(ShipWorksUpgrade));
-        private IUpdaterWebClient updaterWebClient;
+        private readonly ILog log;
+        private readonly IUpdaterWebClient updaterWebClient;
+        private readonly IShipWorksInstaller shipWorksInstaller;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public ShipWorksUpgrade(IUpdaterWebClient updaterWebClient)
+        public ShipWorksUpgrade(IUpdaterWebClient updaterWebClient, IShipWorksInstaller shipWorksInstaller, Func<Type, ILog> logFactory)
         {
             this.updaterWebClient = updaterWebClient;
+            this.shipWorksInstaller = shipWorksInstaller;
+            log = logFactory(typeof(ShipWorksUpgrade));
         }
 
         /// <summary>
@@ -87,7 +90,7 @@ namespace ShipWorks.Escalator
                 InstallFile newVersion = await updaterWebClient.Download(shipWorksRelease.DownloadUri, shipWorksRelease.Hash).ConfigureAwait(false);
 
                 log.Info("Attempting to install new version");
-                Result installationResult = new ShipWorksInstaller().Install(newVersion, upgradeDatabase);
+                Result installationResult = shipWorksInstaller.Install(newVersion, upgradeDatabase);
                 if (installationResult.Failure)
                 {
                     log.ErrorFormat("An error occured while installing the new version of ShipWorks: {0}", installationResult.Message);

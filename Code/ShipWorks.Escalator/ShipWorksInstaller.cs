@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.IO;
 using System.Reflection;
+using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
 using log4net;
 
@@ -10,7 +11,8 @@ namespace ShipWorks.Escalator
     /// <summary>
     /// Installs ShipWorks
     /// </summary>
-    public class ShipWorksInstaller
+    [Component]
+    public class ShipWorksInstaller : IShipWorksInstaller
     {
         private static readonly ILog log = LogManager.GetLogger(typeof(ShipWorksInstaller));
         private bool relaunchShipWorks;
