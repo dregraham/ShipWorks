@@ -43,7 +43,9 @@ namespace ShipWorks.Escalator
 
         public async Task Upgrade(string tangoCustomerId)
         {
-            ShipWorksRelease shipWorksRelease = await updaterWebClient.GetVersionToDownload(tangoCustomerId).ConfigureAwait(false);
+            Version currentVersion = VersionUtility.AssemblyVersion;
+
+            ShipWorksRelease shipWorksRelease = await updaterWebClient.GetVersionToDownload(tangoCustomerId, currentVersion).ConfigureAwait(false);
             if (shipWorksRelease == null)
             {
                 log.InfoFormat("Version not found for tango customer {0}", tangoCustomerId);
@@ -51,10 +53,10 @@ namespace ShipWorks.Escalator
             }
 
             Version releaseVersion = Version.Parse(shipWorksRelease.ReleaseVersion);
-            if (releaseVersion <= VersionUtility.AssemblyVersion)
+            if (releaseVersion <= currentVersion)
             {
                 log.InfoFormat("No upgrade needed. ShipWorks client is on version {0} and version returned by tango was {1}.",
-                     VersionUtility.AssemblyVersion,
+                     currentVersion,
                     shipWorksRelease.ReleaseVersion);
                 return;
             }

@@ -72,6 +72,7 @@ namespace ShipWorks.Escalator
             log.InfoFormat("Date before adding hours: {0}", dateOfNextUpgrade);
 
             dateOfNextUpgrade = dateOfNextUpgrade.AddHours(updateWindowData.AutoUpdateHourOfDay);
+
             log.InfoFormat("After updating hours: {0}", dateOfNextUpgrade);
 
             if (dateOfNextUpgrade < DateTime.Now)

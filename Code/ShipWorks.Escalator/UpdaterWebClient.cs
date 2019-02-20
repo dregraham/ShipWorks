@@ -53,14 +53,15 @@ namespace ShipWorks.Escalator
         /// <summary>
         /// Get the url and sha of requesting customer id
         /// </summary>
-        public async Task<ShipWorksRelease> GetVersionToDownload(string tangoCustomerId)
+        public async Task<ShipWorksRelease> GetVersionToDownload(string tangoCustomerId, Version currentVersion)
         {
             log.InfoFormat("Attempting to get version for customer {0}", tangoCustomerId);
 
             var values = new Dictionary<string, string>
             {
                 { "action", "getreleasebyuser" },
-                { "customerid", tangoCustomerId }
+                { "customerid", tangoCustomerId },
+                { "currentversion", currentVersion.ToString() }
             };
 
             return await GetVersionToDownload(values).ConfigureAwait(false);
