@@ -49,10 +49,17 @@ namespace ShipWorks.Data.Connection
                     maximum   as 'SqlServer.PhysicalMemory.Allocated.Max', 
                     run_value as 'SqlServer.PhysicalMemory.Allocated.Running'
             from #MemoryValues
-        )
+        ),
+		TriggerInfo as
+		(
+			select count(*) as CustomTriggerCount 
+			from sys.triggers 
+			where type != 'TA' and is_ms_shipped = 0 and is_disabled = 0
+			  AND name != 'FilterNodeSetSwFilterNodeID'
+		)
 
-        select SqlInfo.*, CPUs.*, MemoryInfo.*
-        from SqlInfo, CPUs, MemoryInfo
+        select SqlInfo.*, CPUs.*, MemoryInfo.*, TriggerInfo.*
+        from SqlInfo, CPUs, MemoryInfo, TriggerInfo 
 
         drop TABLE #MemoryValues
         ";
