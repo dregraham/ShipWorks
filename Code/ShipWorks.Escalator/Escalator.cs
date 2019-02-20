@@ -12,7 +12,7 @@ namespace ShipWorks.Escalator
     /// Logic of the Escalator service
     /// </summary>
     [Component(RegisterAs = RegistrationType.Self)]
-    public class Escalator : ServiceBase
+    public class Escalator
     {
         private static ILog log = LogManager.GetLogger(typeof(ServiceBase));
         private IShipWorksUpgrade shipWorksUpgrade;
@@ -28,7 +28,6 @@ namespace ShipWorks.Escalator
             IShipWorksCommunicationBridge communicationBridge, 
             IUpgradeTimeWindow upgradeTimeWindow)
         {
-            ServiceName = serviceName.Resolve();
             this.shipWorksUpgrade = shipWorksUpgrade;
             this.communicationBridge = communicationBridge;
             this.upgradeTimeWindow = upgradeTimeWindow;
@@ -38,7 +37,7 @@ namespace ShipWorks.Escalator
         /// <summary>
         /// Code that runs when the service starts
         /// </summary>
-        protected override void OnStart(string[] args)
+        public void OnStart()
         {
             try
             {
@@ -68,7 +67,7 @@ namespace ShipWorks.Escalator
         /// <summary>
         /// Processes message - internal so it can be tested outside the service via Program.cs
         /// </summary>
-        internal async Task ProcessMessage(string message)
+        private async Task ProcessMessage(string message)
         {
             try
             {
@@ -89,14 +88,6 @@ namespace ShipWorks.Escalator
             {
                 log.Error("An exception was thrown when attempting to download and install a new version of SW", ex);
             }
-        }
-
-        /// <summary>
-        /// Code that runs when the service stops
-        /// </summary>
-        protected override void OnStop()
-        {
-            // Do nothing
         }
     }
 }
