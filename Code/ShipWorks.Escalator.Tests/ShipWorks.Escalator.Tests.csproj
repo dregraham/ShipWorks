@@ -21,9 +21,10 @@
     <EmbeddedResource Include="**/*.json;**/*.js;**/*.xml" />
     <EmbeddedResource Remove="obj\**" />
     <None Remove="obj\**" />
-    <None Update="Artifacts\ChecksumTestFile.txt">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
+    <None Remove="Artifacts\ChecksumTestFile.txt" />
+    <Content Include="Artifacts\ChecksumTestFile.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
