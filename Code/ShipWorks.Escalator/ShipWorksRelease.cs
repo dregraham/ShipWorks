@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Reflection;
 
 namespace ShipWorks.Escalator
 {
     /// <summary>
     /// ShipWorks Release DTO
     /// </summary>
+    [Obfuscation(Exclude = true)]
     public class ShipWorksRelease
     {
         /// <summary>
