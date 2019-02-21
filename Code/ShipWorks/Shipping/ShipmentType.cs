@@ -564,7 +564,15 @@ namespace ShipWorks.Shipping
                 }
 
                 var shippingProfile = shippingProfileService.Get(primaryProfile);
+
+                // Save the original ReturnShipment value 
+                bool originalReturnShipment = shipment.ReturnShipment;
+
+                // Apply the Shipping profile
                 shippingProfile.Apply(shipment);
+
+                // Reset ReturnShipment to the original value
+                shipment.ReturnShipment = originalReturnShipment;
 
                 // Now apply ShipSense
                 ApplyShipSense(shipment, lifetimeScope);
