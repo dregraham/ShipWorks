@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
+using System.Management;
 using System.Reflection;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
@@ -49,15 +51,39 @@ namespace ShipWorks.Escalator
         /// </summary>
         private void KillShipWorks()
         {
+            System.Diagnostics.Debugger.Launch();
+
             foreach (Process process in Process.GetProcessesByName("shipworks"))
             {
                 // The process has a main window, so we should relaunch
-                if (process.MainWindowHandle != IntPtr.Zero)
+                if (IsRunningWithoutArguments(process))
                 {
                     relaunchShipWorks = true;
                 }
 
                 process.Kill();
+            }
+        }
+
+        /// <summary>
+        /// If SW is running without arguments, it is open
+        /// </summary>
+        private bool IsRunningWithoutArguments(Process process)
+        {
+            string commandLine = GetCommandLine(process);
+
+            return commandLine.Trim().EndsWith("shipworks.exe\"", StringComparison.InvariantCultureIgnoreCase);
+        }
+
+        /// <summary>
+        /// Gets the command line that started the process
+        /// </summary>
+        private static string GetCommandLine(Process process)
+        {
+            using (ManagementObjectSearcher searcher = new ManagementObjectSearcher("SELECT CommandLine FROM Win32_Process WHERE ProcessId = " + process.Id))
+            using (ManagementObjectCollection objects = searcher.Get())
+            {
+                return objects.Cast<ManagementBaseObject>().SingleOrDefault()?["CommandLine"]?.ToString();
             }
         }
 
