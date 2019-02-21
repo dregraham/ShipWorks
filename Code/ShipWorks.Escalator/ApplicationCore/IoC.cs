@@ -17,14 +17,6 @@ namespace ShipWorks.Escalator.ApplicationCore
         private static IContainer current;
 
         /// <summary>
-        /// Get the current global lifetime scope
-        /// </summary>
-        /// <remarks>This should ONLY be used in situations where a new lifetime scope cannot be created or disposed.
-        /// Any dependency resolved through this will NEVER be released, which could cause a memory leak if the dependency
-        /// is not marked as ExternallyOwned or SingleInstance</remarks>
-        public static ILifetimeScope UnsafeGlobalLifetimeScope => current;
-
-        /// <summary>
         /// All ShipWorks assemblies
         /// </summary>
         public static Assembly[] AllAssemblies { get; private set; }
@@ -39,16 +31,6 @@ namespace ShipWorks.Escalator.ApplicationCore
         /// </summary>
         public static IContainer Initialize(Action<ContainerBuilder> addExtraRegistrations, params Assembly[] assemblies) =>
             current = Build(addExtraRegistrations, assemblies);
-
-        /// <summary>
-        /// Build the registrations
-        /// </summary>
-        /// <remarks>
-        /// This should be used for tests since the Initialize method sets the current container, which is not thread safe
-        /// </remarks>
-        public static IContainer InitializeForUnitTests(IContainer container) =>
-            current = container;
-
 
         /// <summary>
         /// Build the IoC container
