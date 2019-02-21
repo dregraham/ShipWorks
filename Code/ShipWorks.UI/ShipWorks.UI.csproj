@@ -85,6 +85,15 @@
       <HintPath>..\..\packages\SD.LLBLGen.Pro.ORMSupportClasses.5.1.2\lib\net45\SD.LLBLGen.Pro.ORMSupportClasses.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Syncfusion.Licensing, Version=16.3460.0.29, Culture=neutral, PublicKeyToken=632609b4d040f6b4, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Syncfusion.Licensing.16.3.0.29\lib\net46\Syncfusion.Licensing.dll</HintPath>
+    </Reference>
+    <Reference Include="Syncfusion.SfInput.Wpf, Version=16.3460.0.29, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Syncfusion.SfInput.WPF.16.3.0.29\lib\net46\Syncfusion.SfInput.Wpf.dll</HintPath>
+    </Reference>
+    <Reference Include="Syncfusion.SfShared.Wpf, Version=16.3460.0.29, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Syncfusion.SfShared.WPF.16.3.0.29\lib\net46\Syncfusion.SfShared.Wpf.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Collections.Immutable, Version=1.2.2.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\..\packages\System.Collections.Immutable.1.4.0\lib\portable-net45+win8+wp8+wpa81\System.Collections.Immutable.dll</HintPath>
@@ -198,6 +207,9 @@
     <Compile Include="Controls\CustomerLicenseActivation\CustomerLicenseActivationViewModel.cs" />
     <Compile Include="Controls\FieldLayoutRowDefinition.cs" />
     <Compile Include="Controls\KeyboardShortcutDisplay.cs" />
+    <Compile Include="Controls\MainGrid\MainGridHeader.xaml.cs">
+      <DependentUpon>MainGridHeader.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\TokenTextBox.cs" />
     <Compile Include="Controls\UnitTextBox.cs" />
     <Compile Include="Controls\WebBrowser\DismissableWebBrowserDlg.xaml.cs">
@@ -372,6 +384,10 @@
     <Page Include="Controls\CustomerLicenseActivation\CustomerLicenseActivationDlg.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\MainGrid\MainGridHeader.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Controls\WebBrowser\DismissableWebBrowserDlg.xaml">
       <SubType>Designer</SubType>

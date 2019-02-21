@@ -102,6 +102,7 @@ namespace ShipWorks.ApplicationCore
         public event EventHandler<FilterNodeEntity> FilterSaved;
 
         private FilterNodeEntity loadedFilter = null;
+        private MainGridHeaderViewModel headerViewModel = new MainGridHeaderViewModel();
 
         /// <summary>
         /// Constructor
@@ -135,9 +136,24 @@ namespace ShipWorks.ApplicationCore
                 searchBox.LostFocus += OnSearchBoxFocusChange;
             }
 
+            var mainGridHeader = IoC.UnsafeGlobalLifetimeScope.Resolve<IMainGridHeader>();
+            headerHost.Child = mainGridHeader.Control;
+            mainGridHeader.ViewModel = headerViewModel;
+            headerViewModel.PropertyChanged += OnHeaderViewModelPropertyChanged;
+
             // Register any IMainGridControlPipelines
             subscriptions = new CompositeDisposable(
                 IoC.UnsafeGlobalLifetimeScope.Resolve<IEnumerable<IMainGridControlPipeline>>().Select(p => p.Register(this)));
+        }
+
+        private void OnHeaderViewModelPropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            switch (e.PropertyName)
+            {
+                case nameof(headerViewModel.IsAdvancedSearchOpen):
+                    OnAdvancedSearch(headerViewModel, EventArgs.Empty);
+                    break;
+            }
         }
 
         /// <summary>
@@ -574,6 +590,7 @@ namespace ShipWorks.ApplicationCore
 
                 kryptonHeader.Values.Description = searchProvider.IsSearching ? searchingText : "";
                 pictureSearchHourglass.Visible = searchProvider.IsSearching;
+                headerViewModel.IsSearching = searchProvider.IsSearching;
 
                 if (searchProvider.IsSearching)
                 {
@@ -604,6 +621,7 @@ namespace ShipWorks.ApplicationCore
             {
                 kryptonHeader.Values.Description = "";
                 pictureSearchHourglass.Visible = false;
+                headerViewModel.IsSearching = false;
 
                 ActiveGrid.OverrideEmptyText = "";
 
@@ -623,6 +641,9 @@ namespace ShipWorks.ApplicationCore
             UpdateSearchBox();
 
             selectedStoreKeys = null;
+
+            headerViewModel.Text = kryptonHeader.Values.Heading;
+            headerViewModel.HeaderImage = kryptonHeader.Values.Image;
         }
 
         /// <summary>

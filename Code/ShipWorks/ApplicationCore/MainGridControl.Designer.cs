@@ -31,6 +31,7 @@ namespace ShipWorks.ApplicationCore
             this.gridColumnShipLastName = new Divelements.SandGrid.GridColumn();
             this.kryptonHeader = new ComponentFactory.Krypton.Toolkit.KryptonHeader();
             this.kryptonGroup = new ComponentFactory.Krypton.Toolkit.KryptonGroup();
+            this.headerHost = new System.Windows.Forms.Integration.ElementHost();
             this.pictureSearchHourglass = new System.Windows.Forms.PictureBox();
             this.searchBox = new ShipWorks.UI.Controls.Krypton.WatermarkKryptonTextBox();
             this.buttonEndSearch = new ComponentFactory.Krypton.Toolkit.ButtonSpecAny();
@@ -144,6 +145,14 @@ namespace ShipWorks.ApplicationCore
             this.kryptonGroup.Panel.Controls.Add(this.kryptonHeaderSearchContainer);
             this.kryptonGroup.Size = new System.Drawing.Size(733, 30);
             this.kryptonGroup.TabIndex = 1;
+            //
+            // HeaderHost
+            //
+            this.headerHost.Dock = System.Windows.Forms.DockStyle.Top;
+            this.headerHost.Location = new System.Drawing.Point(0, 0);
+            this.headerHost.Name = "headerHost";
+            this.headerHost.Size = new System.Drawing.Size(733, 30);
+            this.headerHost.TabIndex = 1;
             //
             // pictureSearchHourglass
             //
@@ -298,6 +307,7 @@ namespace ShipWorks.ApplicationCore
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.borderAdvanced);
             this.Controls.Add(this.gridPanel);
+            this.Controls.Add(this.headerHost);
             this.Controls.Add(this.filterEditorControlPanel);
             this.Controls.Add(this.filterEditor);
             this.Controls.Add(this.kryptonBorderEdge3);
@@ -336,6 +346,7 @@ namespace ShipWorks.ApplicationCore
         private Divelements.SandGrid.GridColumn gridColumnShipLastName;
         private ComponentFactory.Krypton.Toolkit.KryptonHeader kryptonHeader;
         private ComponentFactory.Krypton.Toolkit.KryptonGroup kryptonGroup;
+        private System.Windows.Forms.Integration.ElementHost headerHost;
         private ComponentFactory.Krypton.Toolkit.KryptonBorderEdge kryptonBorderEdge1;
         private ComponentFactory.Krypton.Toolkit.KryptonBorderEdge kryptonBorderEdge2;
         private ComponentFactory.Krypton.Toolkit.KryptonBorderEdge kryptonBorderEdge3;
