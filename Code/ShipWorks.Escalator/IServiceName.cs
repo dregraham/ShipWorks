@@ -15,7 +15,6 @@ namespace ShipWorks.Escalator
         /// <summary>
         /// Gets the instance id of the service based on registry value. Throws if it cannot find the registry value.
         /// </summary>
-        /// <returns></returns>
         Guid GetInstanceID();
     }
 }

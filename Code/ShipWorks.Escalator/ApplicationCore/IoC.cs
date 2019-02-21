@@ -9,6 +9,9 @@ using log4net;
 
 namespace ShipWorks.Escalator.ApplicationCore
 {
+    /// <summary>
+    /// Entry point for the Inversion of Control container
+    /// </summary>
     public static class IoC
     {
         /// <summary>
@@ -35,7 +38,7 @@ namespace ShipWorks.Escalator.ApplicationCore
         /// <summary>
         /// Build the IoC container
         /// </summary>
-        public static IContainer Build(Action<ContainerBuilder> addExtraRegistrations, params Assembly[] assemblies)
+        private static IContainer Build(Action<ContainerBuilder> addExtraRegistrations, params Assembly[] assemblies)
         {
             AllAssemblies = assemblies;
             var builder = new ContainerBuilder();
@@ -47,6 +50,9 @@ namespace ShipWorks.Escalator.ApplicationCore
             return builder.Build();
         }
 
+        /// <summary>
+        /// Add registrations to the container builder
+        /// </summary>
         private static void AddRegistrations(ContainerBuilder builder, Assembly[] allAssemblies)
         {
             IDictionary<Type, IRegistrationBuilder<object, ConcreteReflectionActivatorData, SingleRegistrationStyle>> registrationCache =
