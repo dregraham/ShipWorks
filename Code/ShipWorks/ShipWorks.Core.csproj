@@ -741,7 +741,11 @@
     <Compile Include="ApplicationCore\Dashboard\Content\DashboardLicenseItem.cs" />
     <Compile Include="ApplicationCore\Dashboard\Content\DashboardSchedulerServiceStoppedItem.cs" />
     <Compile Include="ApplicationCore\Dashboard\Content\DashboardStoreItem.cs" />
+    <Compile Include="ApplicationCore\Dashboard\Content\IReleaseNotesChecker.cs" />
+    <Compile Include="ApplicationCore\Dashboard\Content\ReleaseNotesChecker.cs" />
     <Compile Include="ApplicationCore\Dashboard\Content\ShipWorksOnlineVersion.cs" />
+    <Compile Include="ApplicationCore\Dashboard\DashboardManagerWrapper.cs" />
+    <Compile Include="ApplicationCore\Dashboard\IDashboardManager.cs" />
     <Compile Include="ApplicationCore\DockPanelIdentifiers.cs" />
     <Compile Include="ApplicationCore\Enums\HeartbeatOptions.cs" />
     <Compile Include="ApplicationCore\ExecutionModeScope.cs" />
@@ -764,6 +768,9 @@
     <Compile Include="ApplicationCore\IRegistrationOverride.cs" />
     <Compile Include="ApplicationCore\Licensing\FakeTangoWebRequestClient.cs" />
     <Compile Include="ApplicationCore\IShipWorksSession.cs" />
+    <Compile Include="ApplicationCore\Licensing\TangoRequests\ITangoGetReleaseByVersionRequest.cs" />
+    <Compile Include="ApplicationCore\Licensing\TangoRequests\ShipWorksReleaseInfo.cs" />
+    <Compile Include="ApplicationCore\Licensing\TangoRequests\TangoGetReleaseByVersionRequest.cs" />
     <Compile Include="ApplicationCore\ShipWorksSessionWrapper.cs" />
     <Compile Include="ApplicationCore\Licensing\ITangoLogShipmentProcessor.cs" />
     <Compile Include="ApplicationCore\Licensing\ITangoSecurityValidator.cs" />

@@ -3233,6 +3233,7 @@
           <Field Name="FilterInitialSpecified" Type="long" FieldIndex="6" />
           <Field Name="FilterInitialUseLastActive" Type="bool" FieldIndex="5" />
           <Field Name="GridMenuLayout" Type="string" IsOptional="true" MaxLength="2147483647" FieldIndex="4" />
+          <Field Name="LastReleaseNotesSeen" Type="string" MaxLength="25" FieldIndex="20" />
           <Field Name="OrderFilterExpandedFolders" Type="string" IsOptional="true" MaxLength="2147483647" FieldIndex="9" />
           <Field Name="OrderFilterLastActive" Type="long" FieldIndex="8" />
           <Field Name="OrderLookupLayout" Type="string" IsOptional="true" MaxLength="2147483647" FieldIndex="19" />
@@ -4482,7 +4483,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2019-02-06T17:53:18.387616Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2019-02-21T22:27:35.9667102Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -9100,6 +9101,7 @@
                     <Field Name="DialogSettings" Ordinal="18" IsOptional="true" DbType="26" Length="2147483647" />
                     <Field Name="UIMode" Ordinal="19" DbType="8" Precision="10" />
                     <Field Name="OrderLookupLayout" Ordinal="20" IsOptional="true" DbType="12" Length="2147483647" />
+                    <Field Name="LastReleaseNotesSeen" Ordinal="21" HasDefaultValue="true" DefaultValue="'0.0.0.0'" DbType="24" Length="25" />
                   </Fields>
                 </Table>
                 <Table Name="UspsAccount">
@@ -13835,6 +13837,7 @@
             <FieldMapping FieldName="FilterInitialSpecified" TargetFieldName="FilterInitialSpecified" />
             <FieldMapping FieldName="FilterInitialUseLastActive" TargetFieldName="FilterInitialUseLastActive" />
             <FieldMapping FieldName="GridMenuLayout" TargetFieldName="GridMenuLayout" />
+            <FieldMapping FieldName="LastReleaseNotesSeen" TargetFieldName="LastReleaseNotesSeen" />
             <FieldMapping FieldName="OrderFilterExpandedFolders" TargetFieldName="OrderFilterExpandedFolders" />
             <FieldMapping FieldName="OrderFilterLastActive" TargetFieldName="OrderFilterLastActive" />
             <FieldMapping FieldName="OrderLookupLayout" TargetFieldName="OrderLookupLayout" />

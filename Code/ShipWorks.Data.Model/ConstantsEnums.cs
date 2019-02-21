@@ -12274,6 +12274,8 @@ namespace ShipWorks.Data.Model
 		UIMode,
 		///<summary>OrderLookupLayout. </summary>
 		OrderLookupLayout,
+		///<summary>LastReleaseNotesSeen. </summary>
+		LastReleaseNotesSeen,
 		/// <summary></summary>
 		AmountOfFields
 	}

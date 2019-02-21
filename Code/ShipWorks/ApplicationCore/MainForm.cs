@@ -929,6 +929,12 @@ namespace ShipWorks
             }
 
             SendPanelStateMessages();
+
+            UsingAsync(
+                IoC.BeginLifetimeScope(),
+                lifetimeScope => lifetimeScope.Resolve<IReleaseNotesChecker>().ShowReleaseNotesIfNecessary(this, user))
+                .Do(x => { }, ex => Console.WriteLine(ex.Message))
+                .Forget();
         }
 
         /// <summary>
