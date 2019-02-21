@@ -162,7 +162,10 @@ namespace ShipWorks.Escalator
         private static void RunService()
         {
             log.Info("Starting as a service");
-            ServiceBase.Run(IoC.UnsafeGlobalLifetimeScope.Resolve<EscalatorService>());
+            using (ILifetimeScope scope = IoC.BeginLifetimeScope())
+            {
+                ServiceBase.Run(scope.Resolve<EscalatorService>());
+            }
         }
 
         /// <summary>
