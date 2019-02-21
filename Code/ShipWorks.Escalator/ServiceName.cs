@@ -94,6 +94,22 @@ namespace ShipWorks.Escalator
         }
 
         /// <summary>
+        /// Gets a filename for a log file
+        /// </summary>
+        public string GetLogFileName(string folderPostfix, string fileName)
+        {
+            string appData = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData);
+            string logFolder = $"{DateTime.Now.ToString("yyyy-MM-dd HH.mm.ss")} - {folderPostfix}";
+
+            return Path.Combine(appData,
+                "Interapptive\\ShipWorks\\Instances",
+                GetInstanceID().ToString("B"),
+                "Log",
+                logFolder,
+                fileName);
+        }
+
+        /// <summary>
         /// Indicates if the running version of windows is 64bit.  This works regardless of if we
         /// are running as 64bit or as 32bit Wow64.
         /// </summary>

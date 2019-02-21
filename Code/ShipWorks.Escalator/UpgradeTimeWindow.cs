@@ -74,6 +74,7 @@ namespace ShipWorks.Escalator
             log.InfoFormat("Date before adding hours: {0}", dateOfNextUpgrade);
 
             dateOfNextUpgrade = dateOfNextUpgrade.AddHours(updateWindowData.AutoUpdateHourOfDay);
+            dateOfNextUpgrade = dateOfNextUpgrade.AddMinutes(GetStartMinutesFromFile());
 
             log.InfoFormat("After updating hours: {0}", dateOfNextUpgrade);
 
@@ -95,6 +96,24 @@ namespace ShipWorks.Escalator
 
             upgradeTimer.AutoReset = false;
             upgradeTimer.Enabled = true;
-        }        
+        }
+
+        /// <summary>
+        /// Attempt to read file to add to the start of the window - For easier testing.
+        /// </summary>
+        private double GetStartMinutesFromFile()
+        {
+            try
+            {
+                string path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "UpgradeWindowMinutes.txt");
+                string text = File.ReadAllText(path);
+                return double.TryParse(text, out double result) ? result : 0;
+            }
+            catch (Exception ex)
+            {
+                log.InfoFormat("Not adjusting time for QA. {0}", ex.Message);
+                return 0;
+            }
+        }
     }
 }

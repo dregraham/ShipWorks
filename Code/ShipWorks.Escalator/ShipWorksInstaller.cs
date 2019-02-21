@@ -15,14 +15,16 @@ namespace ShipWorks.Escalator
     public class ShipWorksInstaller : IShipWorksInstaller
     {
         private readonly ILog log;
+        private readonly IServiceName serviceName;
         private bool relaunchShipWorks;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public ShipWorksInstaller(Func<Type, ILog> logFactory)
+        public ShipWorksInstaller(Func<Type, ILog> logFactory, IServiceName serviceName)
         {
             log = logFactory(GetType());
+            this.serviceName = serviceName;
         }
 
         /// <summary>
@@ -68,7 +70,10 @@ namespace ShipWorks.Escalator
             string relaunchParameter = relaunchShipWorks ? "/launchafterinstall" : string.Empty;
             ProcessStartInfo start = new ProcessStartInfo();
             start.FileName = file.Path;
-            start.Arguments = $"/VERYSILENT /DIR=\"{Path.GetDirectoryName(Assembly.GetEntryAssembly().Location)}\" /log /FORCECLOSEAPPLICATIONS {upgradeDbParameter} {relaunchParameter}";
+            string logFileName = serviceName.GetLogFileName("ShipWorks Installer", "install.log");
+            Directory.CreateDirectory(Path.GetDirectoryName(logFileName));
+            start.Arguments = $"/VERYSILENT /DIR=\"{Path.GetDirectoryName(Assembly.GetEntryAssembly().Location)}\" /LOG=\"{logFileName}\" /FORCECLOSEAPPLICATIONS {upgradeDbParameter} {relaunchParameter}";
+            log.InfoFormat("Command to run [{0} {1}]", start.FileName, start.Arguments);
 
             int exitCode;
 

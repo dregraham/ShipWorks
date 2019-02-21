@@ -53,8 +53,9 @@ namespace ShipWorks.ApplicationCore.CommandLineOptions
 
             using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
-                log.Info("Sending message");
-                lifetimeScope.Resolve<IUpdateService>().SendMessage(JsonConvert.SerializeObject(updateData));
+                string message = JsonConvert.SerializeObject(updateData);
+                log.InfoFormat("Sending message {0}", message);
+                lifetimeScope.Resolve<IUpdateService>().SendMessage(message);
                 log.Info("Message sent");
             }
 
