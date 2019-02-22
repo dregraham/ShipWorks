@@ -34,17 +34,25 @@ namespace ShipWorks.Escalator
         /// </summary>
         public async Task Upgrade(Version version)
         {
-            log.InfoFormat("ShipWorksUpgrade attempting to upgrade to version {0}", version);
-
-            ShipWorksRelease shipWorksRelease = await updaterWebClient.GetVersionToDownload(version).ConfigureAwait(false);
-
-            if (shipWorksRelease == null)
+            try
             {
-                log.InfoFormat("Version {0} not found by webclient.", version);
-                return;
-            }
+                log.InfoFormat("ShipWorksUpgrade attempting to upgrade to version {0}", version);
 
-            await Install(shipWorksRelease, false).ConfigureAwait(false);
+                ShipWorksRelease shipWorksRelease = await updaterWebClient.GetVersionToDownload(version).ConfigureAwait(false);
+
+                if (shipWorksRelease == null)
+                {
+                    log.InfoFormat("Version {0} not found by webclient.", version);
+                    return;
+                }
+
+                await Install(shipWorksRelease, false).ConfigureAwait(false);
+            }
+            catch (Exception ex)
+            {
+                log.Error("Error trying to upgrade by version", ex);
+                throw;
+            }
         }
 
         /// <summary>
@@ -52,27 +60,35 @@ namespace ShipWorks.Escalator
         /// </summary>
         public async Task Upgrade(string tangoCustomerId)
         {
-            Version currentVersion = VersionUtility.AssemblyVersion;
-
-            ShipWorksRelease shipWorksRelease = await updaterWebClient.GetVersionToDownload(tangoCustomerId, currentVersion).ConfigureAwait(false);
-            if (shipWorksRelease == null)
+            try
             {
-                log.InfoFormat("New version not found for tango customer {0} running version {1}", tangoCustomerId, currentVersion);
-                return;
-            }
+                Version currentVersion = VersionUtility.AssemblyVersion;
 
-            Version releaseVersion = Version.Parse(shipWorksRelease.ReleaseVersion);
-            if (releaseVersion <= currentVersion)
+                ShipWorksRelease shipWorksRelease = await updaterWebClient.GetVersionToDownload(tangoCustomerId, currentVersion).ConfigureAwait(false);
+                if (shipWorksRelease == null)
+                {
+                    log.InfoFormat("New version not found for tango customer {0} running version {1}", tangoCustomerId, currentVersion);
+                    return;
+                }
+
+                Version releaseVersion = Version.Parse(shipWorksRelease.ReleaseVersion);
+                if (releaseVersion <= currentVersion)
+                {
+                    log.InfoFormat("No upgrade needed. ShipWorks client is on version {0} and version returned by tango was {1}.",
+                         currentVersion,
+                        shipWorksRelease.ReleaseVersion);
+                    return;
+                }
+
+                log.InfoFormat("New Version {0} found. Attempting upgrade.", shipWorksRelease.ReleaseVersion);
+
+                await Install(shipWorksRelease, true).ConfigureAwait(false);
+            }
+            catch (Exception ex)
             {
-                log.InfoFormat("No upgrade needed. ShipWorks client is on version {0} and version returned by tango was {1}.",
-                     currentVersion,
-                    shipWorksRelease.ReleaseVersion);
-                return;
+                log.Error("Error trying to upgrade by customer id", ex);
+                throw;
             }
-
-            log.InfoFormat("New Version {0} found. Attempting upgrade.", shipWorksRelease.ReleaseVersion);
-
-            await Install(shipWorksRelease, true).ConfigureAwait(false);
         }
 
         /// <summary>
