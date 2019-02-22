@@ -756,58 +756,9 @@ namespace ShipWorks
             UserManager.InitializeForCurrentUser();
 
             // May already be logged on
-            if (!UserSession.IsLoggedOn)
+            if (!UserSession.IsLoggedOn && !AttemptLogin(logonAsUser))
             {
-                using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
-                {
-                    IUserService userService = lifetimeScope.Resolve<IUserService>();
-                    EnumResult<UserServiceLogonResultType> logonResult;
-
-                    try
-                    {
-                        logonResult = userService.Logon();
-                    }
-                    catch (EncryptionException ex)
-                    {
-                        log.Error("Error logging in", ex);
-
-                        IDialog customerLicenseActivation = lifetimeScope.ResolveNamed<IDialog>("CustomerLicenseActivationDlg");
-                        customerLicenseActivation.LoadOwner(this);
-                        customerLicenseActivation.DataContext =
-                            lifetimeScope.Resolve<ICustomerLicenseActivartionDlgViewModel>();
-
-                        if (customerLicenseActivation.ShowDialog() ?? false)
-                        {
-                            logonResult = userService.Logon();
-                        }
-                        else
-                        {
-                            return;
-                        }
-                    }
-
-                    if (logonResult.Value == UserServiceLogonResultType.TangoAccountDisabled)
-                    {
-                        MessageHelper.ShowError(this, logonResult.Message);
-                        return;
-                    }
-
-                    if (logonResult.Value == UserServiceLogonResultType.InvalidCredentials && logonAsUser != null)
-                    {
-                        logonResult = userService.Logon(logonAsUser, true);
-                    }
-
-                    if (logonResult.Value == UserServiceLogonResultType.InvalidCredentials)
-                    {
-                        using (LogonDlg dlg = new LogonDlg())
-                        {
-                            if (dlg.ShowDialog(this) != DialogResult.OK)
-                            {
-                                return;
-                            }
-                        }
-                    }
-                }
+                return;
             }
 
             log.InfoFormat("Logon to ShipWorks: Success");
@@ -935,6 +886,65 @@ namespace ShipWorks
                 lifetimeScope => lifetimeScope.Resolve<IReleaseNotesChecker>().ShowReleaseNotesIfNecessary(this, user))
                 .Do(x => { }, ex => Console.WriteLine(ex.Message))
                 .Forget();
+        }
+
+        /// <summary>
+        /// Attempt to logon
+        /// </summary>
+        private bool AttemptLogin(UserEntity logonAsUser)
+        {
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+            {
+                IUserService userService = lifetimeScope.Resolve<IUserService>();
+                EnumResult<UserServiceLogonResultType> logonResult;
+
+                try
+                {
+                    logonResult = userService.Logon();
+                }
+                catch (EncryptionException ex)
+                {
+                    log.Error("Error logging in", ex);
+
+                    IDialog customerLicenseActivation = lifetimeScope.ResolveNamed<IDialog>("CustomerLicenseActivationDlg");
+                    customerLicenseActivation.LoadOwner(this);
+                    customerLicenseActivation.DataContext =
+                        lifetimeScope.Resolve<ICustomerLicenseActivartionDlgViewModel>();
+
+                    if (customerLicenseActivation.ShowDialog() ?? false)
+                    {
+                        logonResult = userService.Logon();
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+
+                if (logonResult.Value == UserServiceLogonResultType.TangoAccountDisabled)
+                {
+                    MessageHelper.ShowError(this, logonResult.Message);
+                    return false;
+                }
+
+                if (logonResult.Value == UserServiceLogonResultType.InvalidCredentials && logonAsUser != null)
+                {
+                    logonResult = userService.Logon(logonAsUser, true);
+                }
+
+                if (logonResult.Value == UserServiceLogonResultType.InvalidCredentials)
+                {
+                    using (LogonDlg dlg = new LogonDlg())
+                    {
+                        if (dlg.ShowDialog(this) != DialogResult.OK)
+                        {
+                            return false;
+                        }
+                    }
+                }
+            }
+
+            return true;
         }
 
         /// <summary>
