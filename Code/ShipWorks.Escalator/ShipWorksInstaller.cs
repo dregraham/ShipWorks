@@ -51,8 +51,6 @@ namespace ShipWorks.Escalator
         /// </summary>
         private void KillShipWorks()
         {
-            System.Diagnostics.Debugger.Launch();
-
             foreach (Process process in Process.GetProcessesByName("shipworks"))
             {
                 // The process has a main window, so we should relaunch
