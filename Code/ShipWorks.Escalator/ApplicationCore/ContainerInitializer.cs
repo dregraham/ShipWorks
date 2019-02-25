@@ -4,7 +4,10 @@ using Interapptive.Shared.Net;
 
 namespace ShipWorks.Escalator.ApplicationCore
 {
-    class ContainerInitializer
+    /// <summary>
+    /// IoC container initializer
+    /// </summary>
+    public class ContainerInitializer
     {
         /// <summary>
         /// Initialize the IoC container

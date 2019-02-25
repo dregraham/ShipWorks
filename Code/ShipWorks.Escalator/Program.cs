@@ -19,7 +19,7 @@ namespace ShipWorks.Escalator
         static ILog log;
         static string serviceName;
         static Guid instanceId;
-
+        
         /// <summary>
         /// The main entry point for the application.
         /// </summary>
@@ -73,19 +73,13 @@ namespace ShipWorks.Escalator
         /// Configure log4net
         /// </summary>
         private static void SetupLogging(string parameter)
-        {            
-            string appData = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData);
-            string logFolder = $"{DateTime.Now.ToString("yyyy-MM-dd HH.mm.ss")} - Escalator{parameter.Replace("--"," - ")}";
+        {
+            using (var scope = IoC.BeginLifetimeScope())
+            {
+                var serviceNameResolver = scope.Resolve<IServiceName>();
+                GlobalContext.Properties["LogName"] = serviceNameResolver.GetLogFileName($"Escalator{parameter.Replace("--", " - ")}", "ShipWorks.Escalator.log");
+            }
 
-            string logName = Path.Combine(appData,
-                "Interapptive\\ShipWorks\\Instances",
-                instanceId.ToString("B"),
-                "Log",
-                logFolder,
-                "ShipWorks.Escelator.log");
-
-            GlobalContext.Properties["LogName"] = logName;
-             
             XmlConfigurator.Configure();
 
             log = LogManager.GetLogger(typeof(Program));
@@ -162,7 +156,10 @@ namespace ShipWorks.Escalator
         private static void RunService()
         {
             log.Info("Starting as a service");
-            ServiceBase.Run(IoC.UnsafeGlobalLifetimeScope.Resolve<EscalatorService>());
+            using (ILifetimeScope scope = IoC.BeginLifetimeScope())
+            {
+                ServiceBase.Run(scope.Resolve<EscalatorService>());
+            }
         }
 
         /// <summary>

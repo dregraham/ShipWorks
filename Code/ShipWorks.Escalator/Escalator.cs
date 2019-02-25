@@ -1,6 +1,4 @@
 ﻿using System;
-using System.ServiceProcess;
-using System.Threading.Tasks;
 using Interapptive.Shared.AutoUpdate;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Extensions;

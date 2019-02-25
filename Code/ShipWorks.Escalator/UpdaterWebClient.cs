@@ -22,7 +22,7 @@ namespace ShipWorks.Escalator
 
         private static readonly Lazy<HttpClient> tangoClient = new Lazy<HttpClient>(GetHttpClient);
         private static readonly WebClient downloadClient = new WebClient();
-        private readonly string tangoUrl = "http://www.interapptive.com/ShipWorksNet/ShipWorksV1.svc/account/shipworks";
+        private readonly string tangoUrl = "https://www.interapptive.com/ShipWorksNet/ShipWorksV1.svc/account/shipworks";
         private readonly IServiceName serviceName;
 
         /// <summary>
@@ -71,7 +71,7 @@ namespace ShipWorks.Escalator
             {
                 { "action", "getreleasebyuser" },
                 { "customerid", tangoCustomerId },
-                { "currentversion", currentVersion.ToString() }
+                { "version", currentVersion.ToString() }
             };
 
             return await GetVersionToDownload(values).ConfigureAwait(false);

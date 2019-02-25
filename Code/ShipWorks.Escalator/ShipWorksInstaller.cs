@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
+using System.Management;
 using System.Reflection;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
@@ -15,14 +17,16 @@ namespace ShipWorks.Escalator
     public class ShipWorksInstaller : IShipWorksInstaller
     {
         private readonly ILog log;
+        private readonly IServiceName serviceName;
         private bool relaunchShipWorks;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public ShipWorksInstaller(Func<Type, ILog> logFactory)
+        public ShipWorksInstaller(Func<Type, ILog> logFactory, IServiceName serviceName)
         {
             log = logFactory(GetType());
+            this.serviceName = serviceName;
         }
 
         /// <summary>
@@ -50,12 +54,34 @@ namespace ShipWorks.Escalator
             foreach (Process process in Process.GetProcessesByName("shipworks"))
             {
                 // The process has a main window, so we should relaunch
-                if (process.MainWindowHandle != IntPtr.Zero)
+                if (IsRunningWithoutArguments(process))
                 {
                     relaunchShipWorks = true;
                 }
 
                 process.Kill();
+            }
+        }
+
+        /// <summary>
+        /// If SW is running without arguments, it is open
+        /// </summary>
+        private bool IsRunningWithoutArguments(Process process)
+        {
+            string commandLine = GetCommandLine(process);
+
+            return commandLine.Trim().EndsWith("shipworks.exe\"", StringComparison.InvariantCultureIgnoreCase);
+        }
+
+        /// <summary>
+        /// Gets the command line that started the process
+        /// </summary>
+        private static string GetCommandLine(Process process)
+        {
+            using (ManagementObjectSearcher searcher = new ManagementObjectSearcher("SELECT CommandLine FROM Win32_Process WHERE ProcessId = " + process.Id))
+            using (ManagementObjectCollection objects = searcher.Get())
+            {
+                return objects.Cast<ManagementBaseObject>().SingleOrDefault()?["CommandLine"]?.ToString();
             }
         }
 
@@ -68,7 +94,10 @@ namespace ShipWorks.Escalator
             string relaunchParameter = relaunchShipWorks ? "/launchafterinstall" : string.Empty;
             ProcessStartInfo start = new ProcessStartInfo();
             start.FileName = file.Path;
-            start.Arguments = $"/VERYSILENT /DIR=\"{Path.GetDirectoryName(Assembly.GetEntryAssembly().Location)}\" /log /FORCECLOSEAPPLICATIONS {upgradeDbParameter} {relaunchParameter}";
+            string logFileName = serviceName.GetLogFileName("ShipWorks Installer", "install.log");
+            Directory.CreateDirectory(Path.GetDirectoryName(logFileName));
+            start.Arguments = $"/VERYSILENT /DIR=\"{Path.GetDirectoryName(Assembly.GetEntryAssembly().Location)}\" /LOG=\"{logFileName}\" /FORCECLOSEAPPLICATIONS {upgradeDbParameter} {relaunchParameter}";
+            log.InfoFormat("Command to run [{0} {1}]", start.FileName, start.Arguments);
 
             int exitCode;
 

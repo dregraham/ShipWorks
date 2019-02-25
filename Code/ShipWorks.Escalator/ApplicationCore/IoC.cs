@@ -9,20 +9,15 @@ using log4net;
 
 namespace ShipWorks.Escalator.ApplicationCore
 {
+    /// <summary>
+    /// Entry point for the Inversion of Control container
+    /// </summary>
     public static class IoC
     {
         /// <summary>
         /// Get the current IoC container
         /// </summary>
         private static IContainer current;
-
-        /// <summary>
-        /// Get the current global lifetime scope
-        /// </summary>
-        /// <remarks>This should ONLY be used in situations where a new lifetime scope cannot be created or disposed.
-        /// Any dependency resolved through this will NEVER be released, which could cause a memory leak if the dependency
-        /// is not marked as ExternallyOwned or SingleInstance</remarks>
-        public static ILifetimeScope UnsafeGlobalLifetimeScope => current;
 
         /// <summary>
         /// All ShipWorks assemblies
@@ -41,19 +36,9 @@ namespace ShipWorks.Escalator.ApplicationCore
             current = Build(addExtraRegistrations, assemblies);
 
         /// <summary>
-        /// Build the registrations
-        /// </summary>
-        /// <remarks>
-        /// This should be used for tests since the Initialize method sets the current container, which is not thread safe
-        /// </remarks>
-        public static IContainer InitializeForUnitTests(IContainer container) =>
-            current = container;
-
-
-        /// <summary>
         /// Build the IoC container
         /// </summary>
-        public static IContainer Build(Action<ContainerBuilder> addExtraRegistrations, params Assembly[] assemblies)
+        private static IContainer Build(Action<ContainerBuilder> addExtraRegistrations, params Assembly[] assemblies)
         {
             AllAssemblies = assemblies;
             var builder = new ContainerBuilder();
@@ -65,6 +50,9 @@ namespace ShipWorks.Escalator.ApplicationCore
             return builder.Build();
         }
 
+        /// <summary>
+        /// Add registrations to the container builder
+        /// </summary>
         private static void AddRegistrations(ContainerBuilder builder, Assembly[] allAssemblies)
         {
             IDictionary<Type, IRegistrationBuilder<object, ConcreteReflectionActivatorData, SingleRegistrationStyle>> registrationCache =
