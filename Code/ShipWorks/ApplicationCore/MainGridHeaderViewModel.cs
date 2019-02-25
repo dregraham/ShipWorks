@@ -1,6 +1,9 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Drawing;
 using System.Reflection;
+using System.Windows.Input;
 using GalaSoft.MvvmLight;
+using GalaSoft.MvvmLight.CommandWpf;
 using ShipWorks.UI.Controls.Design;
 
 namespace ShipWorks.ApplicationCore
@@ -11,9 +14,17 @@ namespace ShipWorks.ApplicationCore
     public class MainGridHeaderViewModel : ViewModelBase
     {
         private bool isAdvancedSearchOpen;
-        private string text;
+        private string title;
+        private string searchText;
+        private string watermarkText;
+        private string filterName;
         private Image headerImage;
+        private Image endSearchImage;
         private bool isSearching;
+        private bool isSearchActive;
+        
+        public event EventHandler SearchEndClicked;
+        public event EventHandler FilterSaveClicked;
 
         /// <summary>
         /// Constructor
@@ -22,25 +33,62 @@ namespace ShipWorks.ApplicationCore
         {
             if (DesignModeDetector.IsDesignerHosted())
             {
-                Text = "All";
+                Title = "All";
+                WatermarkText = "Search all orders...";
                 HeaderImage = ShipWorks.Properties.Resources.view;
+                isAdvancedSearchOpen = true;
             }
+
+            EndSearchImage = ShipWorks.Properties.Resources.buttonEndSearchDisabled;
+            EndSearch = new RelayCommand(EndSearchAction);
+            ToggleAdvancedSearch = new RelayCommand(ToggleAdvancedSearchAction);
+            SaveFilter = new RelayCommand(SaveFilterAction);
         }
 
+        /// <summary>
+        /// Command to end the search
+        /// </summary>
+        public ICommand EndSearch { get; }
+
+        /// <summary>
+        /// Command to toggle the advanced search
+        /// </summary>
+        public ICommand ToggleAdvancedSearch { get; }
+
+        /// <summary>
+        /// Command to save the filter
+        /// </summary>
+        public ICommand SaveFilter { get; }
+
+        /// <summary>
+        /// Is the advanced search open
+        /// </summary>
         [Obfuscation]
         public bool IsAdvancedSearchOpen
         {
             get => isAdvancedSearchOpen;
-            set => Set(ref isAdvancedSearchOpen, value);
+            set
+            {
+                if (Set(ref isAdvancedSearchOpen, value) && value)
+                {
+                    IsSearchActive = true;
+                }
+            }
         }
 
+        /// <summary>
+        /// Title of the header
+        /// </summary>
         [Obfuscation]
-        public string Text
+        public string Title
         {
-            get => text;
-            set => Set(ref text, value);
+            get => title;
+            set => Set(ref title, value);
         }
 
+        /// <summary>
+        /// Header image
+        /// </summary>
         [Obfuscation]
         public Image HeaderImage
         {
@@ -48,11 +96,87 @@ namespace ShipWorks.ApplicationCore
             set => Set(ref headerImage, value);
         }
 
+        /// <summary>
+        /// Is there a search in progress
+        /// </summary>
         [Obfuscation]
         public bool IsSearching
         {
             get => isSearching;
             set => Set(ref isSearching, value);
         }
+
+        /// <summary>
+        /// Is the search active
+        /// </summary>
+        [Obfuscation]
+        public bool IsSearchActive
+        {
+            get => isSearchActive;
+            set
+            {
+                if (Set(ref isSearchActive, value) && !value)
+                {
+                    EndSearchImage = ShipWorks.Properties.Resources.buttonEndSearchDisabled;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Text that's being searched
+        /// </summary>
+        [Obfuscation]
+        public string SearchText
+        {
+            get => searchText;
+            set => Set(ref searchText, value);
+        }
+
+        /// <summary>
+        /// Text to show in the watermark
+        /// </summary>
+        [Obfuscation]
+        public string WatermarkText
+        {
+            get => watermarkText;
+            set => Set(ref watermarkText, value);
+        }
+
+        /// <summary>
+        /// Name of the filter being edited
+        /// </summary>
+        [Obfuscation]
+        public string FilterName
+        {
+            get => filterName;
+            set => Set(ref filterName, value);
+        }
+
+        /// <summary>
+        /// Image to use for the end search button
+        /// </summary>
+        [Obfuscation]
+        public Image EndSearchImage
+        {
+            get => endSearchImage;
+            set => Set(ref endSearchImage, value);
+        }
+
+        /// <summary>
+        /// End the current search
+        /// </summary>
+        private void EndSearchAction() => SearchEndClicked?.Invoke(this, EventArgs.Empty);
+
+        /// <summary>
+        /// Toggle the advanced search
+        /// </summary>
+        private void ToggleAdvancedSearchAction() =>
+            IsAdvancedSearchOpen = !IsAdvancedSearchOpen;
+        
+        /// <summary>
+        /// Save the advanced search
+        /// </summary>
+        private void SaveFilterAction() =>
+            FilterSaveClicked?.Invoke(this, EventArgs.Empty);
     }
 }

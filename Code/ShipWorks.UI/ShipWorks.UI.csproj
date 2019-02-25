@@ -281,10 +281,13 @@
     <Compile Include="AttachedProperties\ExpanderState.cs" />
     <Compile Include="Selectors\ListStyleSelector.cs" />
     <Compile Include="Services\MessageHelperWrapper.cs" />
+    <Compile Include="ColorSchemeResourceDictionary.cs" />
     <Compile Include="Triggers\SetFocusTrigger.cs" />
     <Compile Include="UiModule.cs" />
     <Compile Include="ValueConverters\BooleanAndConverter.cs" />
     <Compile Include="ValueConverters\BooleanOperator.cs" />
+    <Compile Include="ValueConverters\BooleanToColorConverter.cs" />
+    <Compile Include="ValueConverters\BooleanToDoubleConverter.cs" />
     <Compile Include="ValueConverters\BooleanToIntConverter.cs" />
     <Compile Include="ValueConverters\BooleanToGridRowHeightConverter.cs" />
     <Compile Include="ValueConverters\BooleanLambdaConverter.cs" />
@@ -423,6 +426,18 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Filters\Content\Editors\ValueEditors\StringValueListEditorDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Styles\ColorSchemes\BlackColors.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Styles\ColorSchemes\SilverColors.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Styles\ColorSchemes\BlueColors.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -578,6 +593,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\printer.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\disk_blue1.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

@@ -2,10 +2,13 @@
     x:Class="ShipWorks.UI.Controls.MainGrid.MainGridHeader"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:ap="clr-namespace:ShipWorks.UI.AttachedProperties"
     xmlns:core="clr-namespace:ShipWorks.ApplicationCore;assembly=ShipWorks.Core"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:sw="http://schemas.shipworks.com/sw"
     xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
+    xmlns:ui="clr-namespace:ShipWorks.UI"
     xmlns:vc="clr-namespace:ShipWorks.UI.ValueConverters"
     d:DataContext="{d:DesignInstance core:MainGridHeaderViewModel,
                                      IsDesignTimeCreatable=True}"
@@ -13,97 +16,55 @@
     d:DesignWidth="800"
     mc:Ignorable="d">
     <UserControl.Resources>
-        <Color
-            x:Key="HeaderFontColor"
-            A="255"
-            B="139"
-            G="66"
-            R="21" />
-        <Color
-            x:Key="HeaderGradientStartColor"
-            A="255"
-            B="255"
-            G="238"
-            R="225" />
-        <Color
-            x:Key="HeaderGradientEndColor"
-            A="255"
-            B="255"
-            G="211"
-            R="177" />
-        <Color
-            x:Key="HeaderBorderColor"
-            A="255"
-            B="207"
-            G="147"
-            R="101" />
-        <Color
-            x:Key="HeaderHighlightBorderColor"
-            A="255"
-            B="255"
-            G="255"
-            R="255" />
-        <Color
-            x:Key="HeaderInputBorderColor"
-            A="255"
-            B="222"
-            G="193"
-            R="171" />
-        <Color
-            x:Key="HeaderButtonBorderColor"
-            A="255"
-            B="207"
-            G="189"
-            R="161" />
-        <Color
-            x:Key="HeaderButtonGradientHighlightStartColor"
-            A="255"
-            B="252"
-            G="248"
-            R="244" />
-        <Color
-            x:Key="HeaderButtonGradientHighlightEndColor"
-            A="255"
-            B="252"
-            G="246"
-            R="241" />
-        <Color
-            x:Key="HeaderButtonGradientPrimaryStartColor"
-            A="255"
-            B="244"
-            G="225"
-            R="210" />
-        <Color
-            x:Key="HeaderButtonGradientPrimaryEndColor"
-            A="255"
-            B="252"
-            G="239"
-            R="229" />
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <!-- This resource dictionary will be superseded by the skin resource dictionary below -->
+                <!-- It's here to help the designer look nice -->
+                <ResourceDictionary
+                    Source="/ShipWorks.UI;component/Styles/ColorSchemes/BlueColors.xaml"/>
+                <ui:ColorSchemeResourceDictionary
+                    BlackSource="/ShipWorks.UI;component/Styles/ColorSchemes/BlackColors.xaml"
+                    BlueSource="/ShipWorks.UI;component/Styles/ColorSchemes/BlueColors.xaml"
+                    SilverSource="/ShipWorks.UI;component/Styles/ColorSchemes/SilverColors.xaml" />
+            </ResourceDictionary.MergedDictionaries>
 
-        <!--  Generic colors  -->
-        <Color
-            x:Key="ActiveGradientStartColor"
-            A="255"
-            B="216"
-            G="253"
-            R="255" />
-        <Color
-            x:Key="ActiveGradientEndColor"
-            A="255"
-            B="98"
-            G="195"
-            R="247" />
-        <Color
-            x:Key="SearchingTextColor"
-            A="255"
-            B="51"
-            G="51"
-            R="51" />
+            <!--  Generic colors  -->
+            <Color
+                x:Key="ActiveGradientStartColor"
+                A="255"
+                B="220"
+                G="255"
+                R="255" />
+            <Color
+                x:Key="ActiveGradientEndColor"
+                A="255"
+                B="92"
+                G="192"
+                R="247" />
+            <Color
+                x:Key="SearchingTextColor"
+                A="255"
+                B="51"
+                G="51"
+                R="51" />
 
-        <vc:ImageToBitmapSourceConverter x:Key="ImageToBitmap" />
-        <vc:BooleanToVisibilityConverter x:Key="BooleanToVisibility" />
+            <vc:ImageToBitmapSourceConverter x:Key="ImageToBitmap" />
+            <vc:BooleanToVisibilityConverter x:Key="BooleanToVisibility" />
+            <vc:BooleanToColorConverter
+                x:Key="BooleanToStartColor"
+                False="{StaticResource HeaderGradientStartColor}"
+                True="{StaticResource ActiveGradientStartColor}" />
+            <vc:BooleanToColorConverter
+                x:Key="BooleanToEndColor"
+                False="{StaticResource HeaderGradientEndColor}"
+                True="{StaticResource ActiveGradientEndColor}" />
+            <vc:BooleanToDoubleConverter
+                x:Key="AdvancedSearchChevronAngle"
+                False="0"
+                True="180" />
+        </ResourceDictionary>
     </UserControl.Resources>
-    <Border BorderThickness="0,0,0,1">
+    <Border BorderThickness="1">
         <Border.BorderBrush>
             <SolidColorBrush Color="{StaticResource HeaderBorderColor}" />
         </Border.BorderBrush>
@@ -113,8 +74,8 @@
             </Border.BorderBrush>
             <Border.Background>
                 <LinearGradientBrush StartPoint="1,0" EndPoint="1,1">
-                    <GradientStop Offset="0" Color="{StaticResource HeaderGradientStartColor}" />
-                    <GradientStop Offset="1" Color="{StaticResource HeaderGradientEndColor}" />
+                    <GradientStop Offset="0" Color="{Binding IsSearchActive, Converter={StaticResource BooleanToStartColor}}" />
+                    <GradientStop Offset="1" Color="{Binding IsSearchActive, Converter={StaticResource BooleanToEndColor}}" />
                 </LinearGradientBrush>
             </Border.Background>
             <Grid>
@@ -143,7 +104,7 @@
                     FontSize="17"
                     FontWeight="Bold"
                     SnapsToDevicePixels="True"
-                    Text="{Binding Text}">
+                    Text="{Binding Title}">
                     <TextBlock.Foreground>
                         <SolidColorBrush Color="{StaticResource HeaderFontColor}" />
                     </TextBlock.Foreground>
@@ -166,11 +127,32 @@
                         Searching
                     </TextBlock>
                 </StackPanel>
+                <StackPanel
+                    Grid.Column="3"
+                    Margin="8,0"
+                    Orientation="Horizontal"
+                    Visibility="{Binding IsAdvancedSearchOpen, Converter={StaticResource BooleanToVisibility}}">
+                    <TextBlock
+                        Margin="0,0,4,0"
+                        VerticalAlignment="Center"
+                        FontSize="10"
+                        Text="{Binding FilterName}" />
+                    <Button
+                        Padding="2"
+                        VerticalAlignment="Center"
+                        Command="{Binding SaveFilter}">
+                        <Image
+                            Width="14"
+                            Height="14"
+                            Source="/ShipWorks.UI;component/Resources/disk_blue1.png" />
+                    </Button>
+                </StackPanel>
                 <Border
                     Grid.Column="4"
                     Margin="0,4"
                     Background="White"
-                    BorderThickness="1">
+                    BorderThickness="1"
+                    SnapsToDevicePixels="True">
                     <Border.BorderBrush>
                         <SolidColorBrush Color="{StaticResource HeaderInputBorderColor}" />
                     </Border.BorderBrush>
@@ -178,40 +160,47 @@
                         <syncfusion:SfTextBoxExt
                             MinWidth="160"
                             VerticalContentAlignment="Center"
+                            ap:Focus.WhenMessageReceived="{x:Type sw:FocusQuickSearchMessage}"
                             BorderThickness="0"
                             Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged, Delay=250}">
                             <syncfusion:SfTextBoxExt.Watermark>
                                 <TextBlock
                                     Margin="2"
                                     VerticalAlignment="Center"
-                                    Text="Search All Orders" />
+                                    Text="{Binding WatermarkText, Mode=OneWay}" />
                             </syncfusion:SfTextBoxExt.Watermark>
                         </syncfusion:SfTextBoxExt>
-                        <Image
-                            Width="11"
-                            Height="11"
-                            Margin="4,0,4,0"
-                            VerticalAlignment="Center"
-                            Source="/ShipWorks.Core;component/Resources/buttonEndSearchDisabled.png" />
+                        <Button
+                            Background="White"
+                            BorderThickness="0"
+                            Command="{Binding EndSearch}"
+                            IsEnabled="{Binding IsSearchActive}">
+                            <Image
+                                Width="11"
+                                Height="11"
+                                Margin="4,0,4,0"
+                                VerticalAlignment="Center"
+                                Source="{Binding EndSearchImage, Converter={StaticResource ImageToBitmap}}" />
+                        </Button>
                     </StackPanel>
                 </Border>
 
-                <ToggleButton
+                <Button
                     Grid.Column="5"
                     Margin="4,5"
                     Padding="4,0"
-                    IsChecked="{Binding IsAdvancedSearchOpen}">
-                    <ToggleButton.BorderBrush>
+                    Command="{Binding ToggleAdvancedSearch}">
+                    <Button.BorderBrush>
                         <SolidColorBrush Color="{StaticResource HeaderButtonBorderColor}" />
-                    </ToggleButton.BorderBrush>
-                    <ToggleButton.Background>
+                    </Button.BorderBrush>
+                    <Button.Background>
                         <LinearGradientBrush StartPoint="1,0" EndPoint="1,1">
                             <GradientStop Offset="0" Color="{StaticResource HeaderButtonGradientHighlightStartColor}" />
                             <GradientStop Offset=".4" Color="{StaticResource HeaderButtonGradientHighlightEndColor}" />
                             <GradientStop Offset=".4" Color="{StaticResource HeaderButtonGradientPrimaryStartColor}" />
                             <GradientStop Offset="1" Color="{StaticResource HeaderButtonGradientPrimaryEndColor}" />
                         </LinearGradientBrush>
-                    </ToggleButton.Background>
+                    </Button.Background>
                     <Viewbox
                         x:Name="ChevronViewbox"
                         Width="7"
@@ -220,22 +209,13 @@
                         <Path
                             Data="M0,0 L50,50 L100,0 M0,60 L50,110 L100,60"
                             Stroke="Black"
-                            StrokeThickness="20" />
+                            StrokeThickness="20">
+                            <Path.LayoutTransform>
+                                <RotateTransform Angle="{Binding IsAdvancedSearchOpen, Converter={StaticResource AdvancedSearchChevronAngle}}" />
+                            </Path.LayoutTransform>
+                        </Path>
                     </Viewbox>
-                    <ToggleButton.Style>
-                        <Style TargetType="ToggleButton">
-                            <Style.Triggers>
-                                <Trigger Property="IsChecked" Value="True">
-                                    <Setter Property="LayoutTransform">
-                                        <Setter.Value>
-                                            <RotateTransform Angle="180" />
-                                        </Setter.Value>
-                                    </Setter>
-                                </Trigger>
-                            </Style.Triggers>
-                        </Style>
-                    </ToggleButton.Style>
-                </ToggleButton>
+                </Button>
             </Grid>
         </Border>
     </Border>

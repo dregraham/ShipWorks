@@ -1,12 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Drawing;
 using System.Linq;
 using System.Reactive.Disposables;
 using System.Windows.Forms;
 using Autofac;
-using ComponentFactory.Krypton.Toolkit;
+using Autofac.Features.OwnedInstances;
 using Divelements.SandGrid;
 using Interapptive.Shared.Metrics;
 using Interapptive.Shared.UI;
@@ -41,14 +40,9 @@ namespace ShipWorks.ApplicationCore
         // Logger
         private static readonly ILog log = LogManager.GetLogger(typeof(MainGridControl));
 
-        // Active target.  Or last target, if there is no active node
-
         // The grids
         private readonly Dictionary<FilterTarget, FilterEntityGrid> entityGrids =
             new Dictionary<FilterTarget, FilterEntityGrid>();
-
-        // Text that is displayed when a search is in progress
-        private readonly string searchingText;
 
         /// <summary>
         /// Raised when the selection in the grid changes.  Does not get raised when the selection changes due to changing the current filter.
@@ -103,6 +97,8 @@ namespace ShipWorks.ApplicationCore
 
         private FilterNodeEntity loadedFilter = null;
         private MainGridHeaderViewModel headerViewModel = new MainGridHeaderViewModel();
+        private bool suppressTextChangeNotifications = false;
+        private EventHandler searchTextChanged;
 
         /// <summary>
         /// Constructor
@@ -112,8 +108,6 @@ namespace ShipWorks.ApplicationCore
             InitializeComponent();
 
             SetStyle(ControlStyles.ResizeRedraw, true);
-
-            searchingText = kryptonHeader.Values.Description;
         }
 
         /// <summary>
@@ -132,26 +126,52 @@ namespace ShipWorks.ApplicationCore
             {
                 AdvancedSearchVisible = false;
 
-                searchBox.GotFocus += OnSearchBoxFocusChange;
-                searchBox.LostFocus += OnSearchBoxFocusChange;
+                //searchBox.GotFocus += OnSearchBoxFocusChange;
+                //searchBox.LostFocus += OnSearchBoxFocusChange;
             }
 
-            var mainGridHeader = IoC.UnsafeGlobalLifetimeScope.Resolve<IMainGridHeader>();
-            headerHost.Child = mainGridHeader.Control;
-            mainGridHeader.ViewModel = headerViewModel;
+            CreateMainGridHeader();
+
+            // Update the height of the header based on the dpi of the screen
+            double factor = System.Windows.PresentationSource.FromVisual(headerHost.Child).CompositionTarget.TransformToDevice.M11;
+            headerHost.Height = (int) (headerHost.Height * factor);
+
             headerViewModel.PropertyChanged += OnHeaderViewModelPropertyChanged;
+            headerViewModel.SearchEndClicked += OnEndSearch;
+            headerViewModel.FilterSaveClicked += OnFilterEditorSaveButtonClick;
 
             // Register any IMainGridControlPipelines
             subscriptions = new CompositeDisposable(
                 IoC.UnsafeGlobalLifetimeScope.Resolve<IEnumerable<IMainGridControlPipeline>>().Select(p => p.Register(this)));
+
+            ShipWorksDisplay.ColorSchemeChanged += (_s, _e) => CreateMainGridHeader();
         }
 
+        /// <summary>
+        /// Create the main grid header
+        /// </summary>
+        private void CreateMainGridHeader()
+        {
+            var mainGridHeader = IoC.UnsafeGlobalLifetimeScope.Resolve<Owned<IMainGridHeader>>().Value;
+            headerHost.Child = mainGridHeader.Control;
+            mainGridHeader.ViewModel = headerViewModel;
+        }
+
+        /// <summary>
+        /// Translate property changed events from the header view model to actual events
+        /// </summary>
         private void OnHeaderViewModelPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             switch (e.PropertyName)
             {
                 case nameof(headerViewModel.IsAdvancedSearchOpen):
                     OnAdvancedSearch(headerViewModel, EventArgs.Empty);
+                    break;
+                case nameof(headerViewModel.SearchText):
+                    if (!suppressTextChangeNotifications)
+                    {
+                        searchTextChanged?.Invoke(this, EventArgs.Empty);
+                    }
                     break;
             }
         }
@@ -161,7 +181,7 @@ namespace ShipWorks.ApplicationCore
         /// </summary>
         public Action<EventHandler> SearchTextChangedAdd => h =>
         {
-            searchBox.TextChanged += h;
+            searchTextChanged += h;
         };
 
         /// <summary>
@@ -169,7 +189,7 @@ namespace ShipWorks.ApplicationCore
         /// </summary>
         public Action<EventHandler> SearchTextChangedRemove => h =>
         {
-            searchBox.TextChanged -= h;
+            searchTextChanged -= h;
         };
 
         /// <summary>
@@ -389,7 +409,7 @@ namespace ShipWorks.ApplicationCore
         }
 
         /// <summary>
-            // Auto select the row when doing a filter search and there is only 1 result
+        /// Auto select the row when doing a filter search and there is only 1 result
         /// </summary>
         private void AutoSelectSingleRow()
         {
@@ -585,10 +605,9 @@ namespace ShipWorks.ApplicationCore
         {
             if (IsSearchActive)
             {
-                kryptonHeader.Values.Heading = string.Format("Search {0}", EnumHelper.GetDescription(ActiveFilterTarget));
-                kryptonHeader.Values.Image = Resources.view;
+                headerViewModel.Title = string.Format("Search {0}", EnumHelper.GetDescription(ActiveFilterTarget));
+                headerViewModel.HeaderImage = Resources.view;
 
-                kryptonHeader.Values.Description = searchProvider.IsSearching ? searchingText : "";
                 pictureSearchHourglass.Visible = searchProvider.IsSearching;
                 headerViewModel.IsSearching = searchProvider.IsSearching;
 
@@ -619,7 +638,6 @@ namespace ShipWorks.ApplicationCore
             }
             else
             {
-                kryptonHeader.Values.Description = "";
                 pictureSearchHourglass.Visible = false;
                 headerViewModel.IsSearching = false;
 
@@ -627,41 +645,19 @@ namespace ShipWorks.ApplicationCore
 
                 if (ActiveGrid.ActiveFilterNode == null)
                 {
-                    kryptonHeader.Values.Heading = "";
+                    headerViewModel.Title = "";
                 }
                 else
                 {
-                    kryptonHeader.Values.Heading = ActiveGrid.ActiveFilterNode.Filter.Name;
+                    headerViewModel.Title = ActiveGrid.ActiveFilterNode.Filter.Name;
                 }
 
-                kryptonHeader.Values.Image = FilterHelper.GetFilterImage(ActiveFilterTarget);
+                headerViewModel.HeaderImage = FilterHelper.GetFilterImage(ActiveFilterTarget);
             }
 
-            UpdateHeaderColors();
             UpdateSearchBox();
 
             selectedStoreKeys = null;
-
-            headerViewModel.Text = kryptonHeader.Values.Heading;
-            headerViewModel.HeaderImage = kryptonHeader.Values.Image;
-        }
-
-        /// <summary>
-        /// Update the coloring of the header background.  Used to help indicate if search is active.
-        /// </summary>
-        private void UpdateHeaderColors()
-        {
-            List<PaletteBack> backgrounds = new List<PaletteBack> { kryptonHeader.StateCommon.Back, kryptonGroup.StateCommon.Back, kryptonHeaderSearchContainer.StateCommon.Back };
-
-            // Any time the user is even thinking about searching, its orange
-            if (IsSearchActive || searchBox.TextBox.Focused || AdvancedSearchVisible)
-            {
-                backgrounds.ForEach(b => { b.Color1 = Color.FromArgb(255, 255, 220); b.Color2 = Color.FromArgb(247, 192, 92); });
-            }
-            else
-            {
-                backgrounds.ForEach(b => { b.Color1 = Color.Empty; b.Color2 = Color.Empty; });
-            }
         }
 
         /// <summary>
@@ -669,16 +665,14 @@ namespace ShipWorks.ApplicationCore
         /// </summary>
         private void UpdateSearchBox()
         {
-            buttonEndSearch.Enabled = IsSearchActive ? ButtonEnabled.True : ButtonEnabled.False;
-
             if (IsSearchActive)
             {
-                buttonEndSearch.Image = searchProvider.IsSearching ? Resources.stop_small : Resources.clear_small;
-                searchBox.WaterText = AdvancedSearchResultsActive ? "Search these results" : "";
+                headerViewModel.EndSearchImage = searchProvider.IsSearching ? Resources.stop_small : Resources.clear_small;
+                headerViewModel.WatermarkText = AdvancedSearchResultsActive ? "Search these results" : "";
             }
             else
             {
-                searchBox.WaterText = string.Format("Search All {0}", EnumHelper.GetDescription(ActiveFilterTarget));
+                headerViewModel.WatermarkText = string.Format("Search All {0}", EnumHelper.GetDescription(ActiveFilterTarget));
             }
         }
 
@@ -764,7 +758,7 @@ namespace ShipWorks.ApplicationCore
                 filterEditor.LoadDefinition(new FilterDefinition(ActiveFilterTarget));
             }
 
-            AdvancedSearchVisible = !AdvancedSearchVisible;
+            AdvancedSearchVisible = headerViewModel.IsAdvancedSearchOpen;
 
             if (AdvancedSearchVisible && IsSearchActive && initiatedAdvanced)
             {
@@ -798,7 +792,7 @@ namespace ShipWorks.ApplicationCore
             using (ILifetimeScope scope = IoC.BeginLifetimeScope())
             {
                 ISingleScanOrderShortcut singleScanOrderShortcut = scope.Resolve<ISingleScanOrderShortcut>();
-                searchBox.SetTextWithoutTextChangedEvent(singleScanOrderShortcut.GetDisplayText(barcode));
+                SetSearchTextWithoutChangeNotification(singleScanOrderShortcut.GetDisplayText(barcode));
 
                 using (TrackedDurationEvent singleScanSearchTrackedDurationEvent =
                         new TrackedDurationEvent("SingleScan.Search"))
@@ -812,6 +806,22 @@ namespace ShipWorks.ApplicationCore
                     PerformSearch(barcode);
                 }
             }
+        }
+
+        /// <summary>
+        /// Set the search text in the header without raising text changed notifications
+        /// </summary>
+        private void SetSearchTextWithoutChangeNotification(string text) =>
+            Functional.Using(SuppressTextChangeNotifications(),
+                _ => headerViewModel.SearchText = text);
+
+        /// <summary>
+        /// Suppress text change notifications until disposed
+        /// </summary>
+        private IDisposable SuppressTextChangeNotifications()
+        {
+            suppressTextChangeNotifications = true;
+            return Disposable.Create(() => suppressTextChangeNotifications = false);
         }
 
         /// <summary>
@@ -969,10 +979,10 @@ namespace ShipWorks.ApplicationCore
                 {
                     EndSearch();
                 }
-                else if (searchBox.ContainsFocus)
-                {
-                    ActiveGrid.Focus();
-                }
+                //else if (searchBox.ContainsFocus)
+                //{
+                //    ActiveGrid.Focus();
+                //}
 
                 return true;
             }
@@ -1001,14 +1011,18 @@ namespace ShipWorks.ApplicationCore
                 searchProvider.Dispose();
                 searchProvider = null;
 
+                headerViewModel.IsAdvancedSearchOpen = false;
                 AdvancedSearchVisible = false;
                 initiatedAdvanced = false;
 
-                searchBox.Text = "";
+                headerViewModel.SearchText = string.Empty;
 
                 UpdateHeaderContent();
 
                 RaiseSearchActiveChanged();
+
+                headerViewModel.FilterName = string.Empty;
+                loadedFilter = null;
             }
         }
 
@@ -1018,6 +1032,7 @@ namespace ShipWorks.ApplicationCore
         private void RaiseSearchActiveChanged()
         {
             SearchActiveChanged?.Invoke(this, EventArgs.Empty);
+            headerViewModel.IsSearchActive = IsSearchActive;
         }
 
         /// <summary>
@@ -1029,10 +1044,8 @@ namespace ShipWorks.ApplicationCore
         /// <summary>
         /// Get the normalized text of the basic search box.
         /// </summary>
-        public string GetBasicSearchText()
-        {
-            return searchBox.Text.Trim().Trim(',');
-        }
+        public string GetBasicSearchText() =>
+            headerViewModel.SearchText?.Trim().Trim(',') ?? string.Empty;
 
         /// <summary>
         /// Gets \ sets whether Advanced Search is visible.
@@ -1045,16 +1058,8 @@ namespace ShipWorks.ApplicationCore
             }
             set
             {
-                loadedFilter = null;
-
                 filterEditor.Visible = value;
-                filterEditorControlPanel.Visible = value;
                 borderAdvanced.Visible = value;
-
-                filterEditorName.Text = string.Empty;
-                buttonAdvancedSearch.Type = value ? PaletteButtonSpecStyle.ArrowUp : PaletteButtonSpecStyle.ArrowDown;
-
-                UpdateHeaderColors();
             }
         }
 
@@ -1072,14 +1077,6 @@ namespace ShipWorks.ApplicationCore
         }
 
         /// <summary>
-        /// Called when focus enters or leaves the basic search box
-        /// </summary>
-        private void OnSearchBoxFocusChange(object sender, EventArgs e)
-        {
-            UpdateHeaderColors();
-        }
-
-        /// <summary>
         /// Ensure that search is active and use the specified definition as the advanced search criteria.
         /// </summary>
         public void LoadSearchCriteria(FilterDefinition definition)
@@ -1089,14 +1086,9 @@ namespace ShipWorks.ApplicationCore
         }
 
         /// <summary>
-        /// Focus the searchbox
-        /// </summary>
-        public void FocusSearch() => searchBox.Focus();
-
-        /// <summary>
         /// Clear the searchbox text
         /// </summary>
-        public void ClearSearch() => searchBox.Clear();
+        public void ClearSearch() => headerViewModel.SearchText = string.Empty;
 
         /// <summary>
         /// Load a filter in the advanced search
@@ -1104,9 +1096,10 @@ namespace ShipWorks.ApplicationCore
         public void LoadFilterInAdvancedSearch(FilterNodeEntity filterNode)
         {
             OnAdvancedSearch(this, EventArgs.Empty);
-            loadedFilter = filterNode;
-            filterEditorName.Text = filterNode?.Filter?.Name;
+            headerViewModel.IsAdvancedSearchOpen = true;
             filterEditor.LoadDefinition(new FilterDefinition(filterNode.Filter.Definition));
+            headerViewModel.FilterName = filterNode.Filter.Name;
+            loadedFilter = filterNode;
         }
 
         /// <summary>

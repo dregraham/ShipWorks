@@ -29,26 +29,13 @@ namespace ShipWorks.ApplicationCore
             this.gridColumnBillPhone = new Divelements.SandGrid.GridColumn();
             this.gridColumnBillEmail = new Divelements.SandGrid.GridColumn();
             this.gridColumnShipLastName = new Divelements.SandGrid.GridColumn();
-            this.kryptonHeader = new ComponentFactory.Krypton.Toolkit.KryptonHeader();
-            this.kryptonGroup = new ComponentFactory.Krypton.Toolkit.KryptonGroup();
             this.headerHost = new System.Windows.Forms.Integration.ElementHost();
             this.pictureSearchHourglass = new System.Windows.Forms.PictureBox();
-            this.searchBox = new ShipWorks.UI.Controls.Krypton.WatermarkKryptonTextBox();
-            this.buttonEndSearch = new ComponentFactory.Krypton.Toolkit.ButtonSpecAny();
-            this.kryptonHeaderSearchContainer = new ComponentFactory.Krypton.Toolkit.KryptonHeader();
-            this.buttonAdvancedSearch = new ComponentFactory.Krypton.Toolkit.ButtonSpecAny();
             this.kryptonBorderEdge1 = new ComponentFactory.Krypton.Toolkit.KryptonBorderEdge();
             this.kryptonBorderEdge2 = new ComponentFactory.Krypton.Toolkit.KryptonBorderEdge();
             this.kryptonBorderEdge3 = new ComponentFactory.Krypton.Toolkit.KryptonBorderEdge();
             this.borderAdvanced = new ComponentFactory.Krypton.Toolkit.KryptonBorderEdge();
             this.filterEditor = new ShipWorks.Filters.Controls.FilterDefinitionEditor();
-            this.filterEditorControlPanel = new System.Windows.Forms.Panel();
-            this.filterEditorSaveButton = new System.Windows.Forms.Button();
-            this.filterEditorName = new System.Windows.Forms.Label();
-            ((System.ComponentModel.ISupportInitialize) (this.kryptonGroup)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize) (this.kryptonGroup.Panel)).BeginInit();
-            this.kryptonGroup.Panel.SuspendLayout();
-            this.kryptonGroup.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize) (this.pictureSearchHourglass)).BeginInit();
             this.SuspendLayout();
             //
@@ -111,40 +98,7 @@ namespace ShipWorks.ApplicationCore
             // gridColumnShipLastName
             //
             this.gridColumnShipLastName.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
-            //
-            // kryptonHeader
-            //
-            this.kryptonHeader.Anchor = ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.kryptonHeader.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowOnly;
-            this.kryptonHeader.Location = new System.Drawing.Point(0, 0);
-            this.kryptonHeader.Name = "kryptonHeader";
-            this.kryptonHeader.Size = new System.Drawing.Size(518, 29);
-            this.kryptonHeader.StateCommon.Border.Draw = ComponentFactory.Krypton.Toolkit.InheritBool.False;
-            this.kryptonHeader.StateCommon.Border.DrawBorders = ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.None;
-            this.kryptonHeader.StateCommon.Content.LongText.Color1 = System.Drawing.SystemColors.ControlDarkDark;
-            this.kryptonHeader.StateCommon.Content.LongText.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
-            this.kryptonHeader.TabIndex = 0;
-            this.kryptonHeader.Text = "Orders";
-            this.kryptonHeader.Values.Description = "Searching";
-            this.kryptonHeader.Values.Heading = "Orders";
-            this.kryptonHeader.Values.Image = global::ShipWorks.Properties.Resources.order16;
-            //
-            // kryptonGroup
-            //
-            this.kryptonGroup.Dock = System.Windows.Forms.DockStyle.Top;
-            this.kryptonGroup.GroupBackStyle = ComponentFactory.Krypton.Toolkit.PaletteBackStyle.HeaderPrimary;
-            this.kryptonGroup.Location = new System.Drawing.Point(0, 0);
-            this.kryptonGroup.Name = "kryptonGroup";
-            //
-            // kryptonGroup.Panel
-            //
-            this.kryptonGroup.Panel.Controls.Add(this.pictureSearchHourglass);
-            this.kryptonGroup.Panel.Controls.Add(this.kryptonHeader);
-            this.kryptonGroup.Panel.Controls.Add(this.searchBox);
-            this.kryptonGroup.Panel.Controls.Add(this.kryptonHeaderSearchContainer);
-            this.kryptonGroup.Size = new System.Drawing.Size(733, 30);
-            this.kryptonGroup.TabIndex = 1;
+            
             //
             // HeaderHost
             //
@@ -165,63 +119,6 @@ namespace ShipWorks.ApplicationCore
             this.pictureSearchHourglass.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
             this.pictureSearchHourglass.TabIndex = 4;
             this.pictureSearchHourglass.TabStop = false;
-            //
-            // searchBox
-            //
-            this.searchBox.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.searchBox.ButtonSpecs.AddRange(new ComponentFactory.Krypton.Toolkit.ButtonSpecAny[] {
-            this.buttonEndSearch});
-            this.searchBox.Location = new System.Drawing.Point(526, 3);
-            this.searchBox.MaxLength = 3998;
-            this.searchBox.Name = "searchBox";
-            this.searchBox.Size = new System.Drawing.Size(181, 20);
-            this.searchBox.TabIndex = 0;
-            this.searchBox.WaterColor = System.Drawing.SystemColors.GrayText;
-            this.searchBox.WaterText = "Search All Orders";
-            this.searchBox.WordWrap = false;
-            //
-            // buttonEndSearch
-            //
-            this.buttonEndSearch.Edge = ComponentFactory.Krypton.Toolkit.PaletteRelativeEdgeAlign.Far;
-            this.buttonEndSearch.Enabled = ComponentFactory.Krypton.Toolkit.ButtonEnabled.False;
-            this.buttonEndSearch.ExtraText = "";
-            this.buttonEndSearch.Image = ShipWorks.Properties.Resources.buttonEndSearch;
-            this.buttonEndSearch.ImageStates.ImageDisabled = ShipWorks.Properties.Resources.buttonEndSearchDisabled;
-            this.buttonEndSearch.Text = "";
-            this.buttonEndSearch.Type = ComponentFactory.Krypton.Toolkit.PaletteButtonSpecStyle.Close;
-            this.buttonEndSearch.UniqueName = "370ABDC6B9F24E16370ABDC6B9F24E16";
-            this.buttonEndSearch.Click += new System.EventHandler(this.OnEndSearch);
-            //
-            // kryptonHeaderSearchContainer
-            //
-            this.kryptonHeaderSearchContainer.AllowButtonSpecToolTips = true;
-            this.kryptonHeaderSearchContainer.ButtonSpecs.AddRange(new ComponentFactory.Krypton.Toolkit.ButtonSpecAny[] {
-            this.buttonAdvancedSearch});
-            this.kryptonHeaderSearchContainer.Dock = System.Windows.Forms.DockStyle.Right;
-            this.kryptonHeaderSearchContainer.Location = new System.Drawing.Point(706, 0);
-            this.kryptonHeaderSearchContainer.Margin = new System.Windows.Forms.Padding(0, 1, 0, 0);
-            this.kryptonHeaderSearchContainer.Name = "kryptonHeaderSearchContainer";
-            this.kryptonHeaderSearchContainer.Size = new System.Drawing.Size(25, 28);
-            this.kryptonHeaderSearchContainer.StateCommon.Back.ColorStyle = ComponentFactory.Krypton.Toolkit.PaletteColorStyle.RoundedTopLight;
-            this.kryptonHeaderSearchContainer.StateCommon.Border.Draw = ComponentFactory.Krypton.Toolkit.InheritBool.False;
-            this.kryptonHeaderSearchContainer.StateCommon.Border.DrawBorders = ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.None;
-            this.kryptonHeaderSearchContainer.TabIndex = 1;
-            this.kryptonHeaderSearchContainer.Values.Description = "";
-            this.kryptonHeaderSearchContainer.Values.Heading = "";
-            this.kryptonHeaderSearchContainer.Values.Image = null;
-            //
-            // buttonAdvancedSearch
-            //
-            this.buttonAdvancedSearch.ExtraText = "";
-            this.buttonAdvancedSearch.Image = null;
-            this.buttonAdvancedSearch.Style = ComponentFactory.Krypton.Toolkit.PaletteButtonStyle.Standalone;
-            this.buttonAdvancedSearch.Text = "";
-            this.buttonAdvancedSearch.ToolTipBody = "Opens and closes the Advanced Search area.";
-            this.buttonAdvancedSearch.ToolTipStyle = ComponentFactory.Krypton.Toolkit.LabelStyle.SuperTip;
-            this.buttonAdvancedSearch.ToolTipTitle = "Advanced Search";
-            this.buttonAdvancedSearch.Type = ComponentFactory.Krypton.Toolkit.PaletteButtonSpecStyle.ArrowDown;
-            this.buttonAdvancedSearch.UniqueName = "0A0D0B4DF83C4A4A0A0D0B4DF83C4A4A";
-            this.buttonAdvancedSearch.Click += new System.EventHandler(this.OnAdvancedSearch);
             //
             // kryptonBorderEdge1
             //
@@ -274,55 +171,21 @@ namespace ShipWorks.ApplicationCore
             this.filterEditor.TabIndex = 2;
             this.filterEditor.RequiredHeightChanged += new System.EventHandler(this.OnAdvancedSearchRequiredHeightChanged);
             //
-            // filterEditorSaveButton
-            //
-            this.filterEditorName.Dock = System.Windows.Forms.DockStyle.Right;
-            this.filterEditorName.Name = "filterEditorName";
-            this.filterEditorName.Size = new System.Drawing.Size(75, 25);
-            this.filterEditorName.Text = "";
-            //
-            // filterEditorSaveButton
-            //
-            this.filterEditorSaveButton.Dock = System.Windows.Forms.DockStyle.Right;
-            this.filterEditorSaveButton.Name = "filterEditorSaveButton";
-            this.filterEditorSaveButton.Size = new System.Drawing.Size(75, 25);
-            this.filterEditorSaveButton.Text = "Save";
-            this.filterEditorSaveButton.Click += OnFilterEditorSaveButtonClick;
-            //
-            // filterEditorControlPanel
-            //
-            this.filterEditorControlPanel.BackColor = System.Drawing.Color.White;
-            this.filterEditorControlPanel.Dock = System.Windows.Forms.DockStyle.Top;
-            this.filterEditorControlPanel.Location = new System.Drawing.Point(1, 30);
-            this.filterEditorControlPanel.Name = "filterEditorControlPanel";
-            this.filterEditorControlPanel.Size = new System.Drawing.Size(731, 32);
-            this.filterEditorControlPanel.TabIndex = 2;
-            this.filterEditorControlPanel.Controls.Add(filterEditorSaveButton);
-            this.filterEditorControlPanel.Controls.Add(filterEditorName);
-
-            //
             // MainGridControl
             //
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.borderAdvanced);
             this.Controls.Add(this.gridPanel);
-            this.Controls.Add(this.headerHost);
-            this.Controls.Add(this.filterEditorControlPanel);
             this.Controls.Add(this.filterEditor);
             this.Controls.Add(this.kryptonBorderEdge3);
             this.Controls.Add(this.kryptonBorderEdge2);
             this.Controls.Add(this.kryptonBorderEdge1);
-            this.Controls.Add(this.kryptonGroup);
+            this.Controls.Add(this.headerHost);
             this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
             this.Name = "MainGridControl";
             this.Size = new System.Drawing.Size(733, 531);
             this.Load += new System.EventHandler(this.OnLoad);
-            ((System.ComponentModel.ISupportInitialize) (this.kryptonGroup.Panel)).EndInit();
-            this.kryptonGroup.Panel.ResumeLayout(false);
-            this.kryptonGroup.Panel.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize) (this.kryptonGroup)).EndInit();
-            this.kryptonGroup.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize) (this.pictureSearchHourglass)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -344,20 +207,11 @@ namespace ShipWorks.ApplicationCore
         private Divelements.SandGrid.GridColumn gridColumnBillPhone;
         private Divelements.SandGrid.GridColumn gridColumnBillEmail;
         private Divelements.SandGrid.GridColumn gridColumnShipLastName;
-        private ComponentFactory.Krypton.Toolkit.KryptonHeader kryptonHeader;
-        private ComponentFactory.Krypton.Toolkit.KryptonGroup kryptonGroup;
         private System.Windows.Forms.Integration.ElementHost headerHost;
         private ComponentFactory.Krypton.Toolkit.KryptonBorderEdge kryptonBorderEdge1;
         private ComponentFactory.Krypton.Toolkit.KryptonBorderEdge kryptonBorderEdge2;
         private ComponentFactory.Krypton.Toolkit.KryptonBorderEdge kryptonBorderEdge3;
-        private ShipWorks.UI.Controls.Krypton.WatermarkKryptonTextBox searchBox;
-        private ComponentFactory.Krypton.Toolkit.ButtonSpecAny buttonEndSearch;
-        private ComponentFactory.Krypton.Toolkit.KryptonHeader kryptonHeaderSearchContainer;
-        private ComponentFactory.Krypton.Toolkit.ButtonSpecAny buttonAdvancedSearch;
         private ShipWorks.Filters.Controls.FilterDefinitionEditor filterEditor;
-        private System.Windows.Forms.Button filterEditorSaveButton;
-        private System.Windows.Forms.Label filterEditorName;
-        private System.Windows.Forms.Panel filterEditorControlPanel;
         private ComponentFactory.Krypton.Toolkit.KryptonBorderEdge borderAdvanced;
         private System.Windows.Forms.PictureBox pictureSearchHourglass;
     }

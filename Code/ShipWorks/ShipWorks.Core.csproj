@@ -10593,7 +10593,7 @@
     <None Include="Resources\chart.png" />
     <None Include="Resources\preferences.png" />
     <Resource Include="Resources\add2.png" />
-    <None Include="Resources\disk_blue1.png" />
+    <Resource Include="Resources\disk_blue1.png" />
     <None Include="Resources\cut.png" />
     <Resource Include="Resources\copy.png" />
     <None Include="Resources\paste.png" />

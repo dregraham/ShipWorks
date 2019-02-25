@@ -4,7 +4,7 @@ using System.Text;
 
 namespace ShipWorks.ApplicationCore.Appearance
 {
-    enum ColorScheme
+    public enum ColorScheme
     {
         Blue,
         Silver,
