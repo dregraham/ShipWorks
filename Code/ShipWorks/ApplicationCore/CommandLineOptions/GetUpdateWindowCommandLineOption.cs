@@ -11,6 +11,7 @@ using ShipWorks.Data.Administration;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores;
+using ShipWorks.Users;
 using ShipWorks.Users.Security;
 
 namespace ShipWorks.ApplicationCore.CommandLineOptions
@@ -42,6 +43,7 @@ namespace ShipWorks.ApplicationCore.CommandLineOptions
             log.Info("Fetching customer id");
             DataProvider.InitializeForApplication();
             StoreManager.InitializeForCurrentSession(SecurityContext.EmptySecurityContext);
+            UserSession.InitializeForCurrentDatabase();
             string tangoCustomerId = TangoWebClient.GetTangoCustomerId();
 
             UpdateWindowData updateData = new UpdateWindowData()
