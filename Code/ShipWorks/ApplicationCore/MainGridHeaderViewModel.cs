@@ -22,7 +22,7 @@ namespace ShipWorks.ApplicationCore
         private Image endSearchImage;
         private bool isSearching;
         private bool isSearchActive;
-        
+
         public event EventHandler SearchEndClicked;
         public event EventHandler FilterSaveClicked;
 
@@ -48,22 +48,25 @@ namespace ShipWorks.ApplicationCore
         /// <summary>
         /// Command to end the search
         /// </summary>
+        [Obfuscation(Exclude = true)]
         public ICommand EndSearch { get; }
 
         /// <summary>
         /// Command to toggle the advanced search
         /// </summary>
+        [Obfuscation(Exclude = true)]
         public ICommand ToggleAdvancedSearch { get; }
 
         /// <summary>
         /// Command to save the filter
         /// </summary>
+        [Obfuscation(Exclude = true)]
         public ICommand SaveFilter { get; }
 
         /// <summary>
         /// Is the advanced search open
         /// </summary>
-        [Obfuscation]
+        [Obfuscation(Exclude = true)]
         public bool IsAdvancedSearchOpen
         {
             get => isAdvancedSearchOpen;
@@ -79,7 +82,7 @@ namespace ShipWorks.ApplicationCore
         /// <summary>
         /// Title of the header
         /// </summary>
-        [Obfuscation]
+        [Obfuscation(Exclude = true)]
         public string Title
         {
             get => title;
@@ -89,7 +92,7 @@ namespace ShipWorks.ApplicationCore
         /// <summary>
         /// Header image
         /// </summary>
-        [Obfuscation]
+        [Obfuscation(Exclude = true)]
         public Image HeaderImage
         {
             get => headerImage;
@@ -99,7 +102,7 @@ namespace ShipWorks.ApplicationCore
         /// <summary>
         /// Is there a search in progress
         /// </summary>
-        [Obfuscation]
+        [Obfuscation(Exclude = true)]
         public bool IsSearching
         {
             get => isSearching;
@@ -109,7 +112,7 @@ namespace ShipWorks.ApplicationCore
         /// <summary>
         /// Is the search active
         /// </summary>
-        [Obfuscation]
+        [Obfuscation(Exclude = true)]
         public bool IsSearchActive
         {
             get => isSearchActive;
@@ -125,7 +128,7 @@ namespace ShipWorks.ApplicationCore
         /// <summary>
         /// Text that's being searched
         /// </summary>
-        [Obfuscation]
+        [Obfuscation(Exclude = true)]
         public string SearchText
         {
             get => searchText;
@@ -135,7 +138,7 @@ namespace ShipWorks.ApplicationCore
         /// <summary>
         /// Text to show in the watermark
         /// </summary>
-        [Obfuscation]
+        [Obfuscation(Exclude = true)]
         public string WatermarkText
         {
             get => watermarkText;
@@ -145,7 +148,7 @@ namespace ShipWorks.ApplicationCore
         /// <summary>
         /// Name of the filter being edited
         /// </summary>
-        [Obfuscation]
+        [Obfuscation(Exclude = true)]
         public string FilterName
         {
             get => filterName;
@@ -155,7 +158,7 @@ namespace ShipWorks.ApplicationCore
         /// <summary>
         /// Image to use for the end search button
         /// </summary>
-        [Obfuscation]
+        [Obfuscation(Exclude = true)]
         public Image EndSearchImage
         {
             get => endSearchImage;
@@ -172,7 +175,7 @@ namespace ShipWorks.ApplicationCore
         /// </summary>
         private void ToggleAdvancedSearchAction() =>
             IsAdvancedSearchOpen = !IsAdvancedSearchOpen;
-        
+
         /// <summary>
         /// Save the advanced search
         /// </summary>
