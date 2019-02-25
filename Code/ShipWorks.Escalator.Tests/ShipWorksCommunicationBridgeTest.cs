@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Threading;
-using System.Threading.Tasks;
 using Autofac.Extras.Moq;
 using Interapptive.Shared.Utility;
-using log4net;
 using ShipWorks.ApplicationCore;
 using ShipWorks.Data.Administration;
 using ShipWorks.Tests.Shared;
@@ -24,7 +21,8 @@ namespace ShipWorks.Escalator.Tests
             mock = AutoMockExtensions.GetLooseThatReturnsMocks();
             sessionGuid = Guid.NewGuid();
 
-            mock.Mock<IServiceName>().Setup(s => s.Resolve()).Returns(sessionGuid.ToString());
+            mock.Mock<IServiceName>().Setup(s => s.GetInstanceID()).Returns(sessionGuid);
+
             testObject = mock.Create<ShipWorksCommunicationBridge>();
             testObject.StartPipeServer();
 

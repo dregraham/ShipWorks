@@ -51,7 +51,7 @@ namespace ShipWorks.Tests.Data.Administration
         [Fact]
         public void Update_WritesUpdateInfoToStream()
         {
-            mock.Mock<IServiceName>().Setup(s => s.Resolve()).Returns(sessionGuid.ToString());
+            mock.Mock<IServiceName>().Setup(s => s.GetInstanceID()).Returns(sessionGuid);
             var communictionBridge = mock.Create<ShipWorksCommunicationBridge>();
             communictionBridge.StartPipeServer();
 
