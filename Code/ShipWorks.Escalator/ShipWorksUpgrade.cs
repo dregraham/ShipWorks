@@ -1,10 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
+using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
 using log4net;
 
@@ -13,14 +12,21 @@ namespace ShipWorks.Escalator
     /// <summary>
     /// Upgrade ShipWorks
     /// </summary>
-    class ShipWorksUpgrade
+    [Component(SingleInstance = true)]
+    public class ShipWorksUpgrade : IShipWorksUpgrade
     {
-        private static ILog log = LogManager.GetLogger(typeof(ShipWorksUpgrade));
-        private static UpdaterWebClient updaterWebClient;
+        private readonly ILog log;
+        private readonly IUpdaterWebClient updaterWebClient;
+        private readonly IShipWorksInstaller shipWorksInstaller;
 
-        public ShipWorksUpgrade()
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public ShipWorksUpgrade(IUpdaterWebClient updaterWebClient, IShipWorksInstaller shipWorksInstaller, Func<Type, ILog> logFactory)
         {
-            updaterWebClient = new UpdaterWebClient();
+            this.updaterWebClient = updaterWebClient;
+            this.shipWorksInstaller = shipWorksInstaller;
+            log = logFactory(typeof(ShipWorksUpgrade));
         }
 
         /// <summary>
@@ -38,47 +44,53 @@ namespace ShipWorks.Escalator
                 return;
             }
 
-            await Install(shipWorksRelease, false);
+            await Install(shipWorksRelease, false).ConfigureAwait(false);
         }
 
+        /// <summary>
+        /// Download and install the next version of ShipWorks for the given customer if it is available
+        /// </summary>
         public async Task Upgrade(string tangoCustomerId)
         {
-            ShipWorksRelease shipWorksRelease = await updaterWebClient.GetVersionToDownload(tangoCustomerId).ConfigureAwait(false);
+            Version currentVersion = VersionUtility.AssemblyVersion;
+
+            ShipWorksRelease shipWorksRelease = await updaterWebClient.GetVersionToDownload(tangoCustomerId, currentVersion).ConfigureAwait(false);
             if (shipWorksRelease == null)
             {
-                log.InfoFormat("Version not found for tango customer {0}", tangoCustomerId);
+                log.InfoFormat("New version not found for tango customer {0} running version {1}", tangoCustomerId, currentVersion);
                 return;
             }
 
-            if (shipWorksRelease.ReleaseVersion <= VersionUtility.AssemblyVersion)
+            Version releaseVersion = Version.Parse(shipWorksRelease.ReleaseVersion);
+            if (releaseVersion <= currentVersion)
             {
                 log.InfoFormat("No upgrade needed. ShipWorks client is on version {0} and version returned by tango was {1}.",
-                     VersionUtility.AssemblyVersion,
+                     currentVersion,
                     shipWorksRelease.ReleaseVersion);
                 return;
             }
 
-            log.InfoFormat("New Version {0} found. Attempting upgrade.");
+            log.InfoFormat("New Version {0} found. Attempting upgrade.", shipWorksRelease.ReleaseVersion);
 
-            await Install(shipWorksRelease, true);
+            await Install(shipWorksRelease, true).ConfigureAwait(false);
         }
 
         /// <summary>
-        /// Download and install new version of Shipworks
+        /// Install new version of ShipWorks, optionally upgrading the database
         /// </summary>
-        private static async Task Install(ShipWorksRelease shipWorksRelease, bool upgradeDatabase)
+        private async Task Install(ShipWorksRelease shipWorksRelease, bool upgradeDatabase)
         {
-            if (IsInstallRunning(shipWorksRelease.DownloadUrl))
+            if (IsInstallRunning(shipWorksRelease.DownloadUri))
             {
                 log.ErrorFormat("The installer {0} is already running", shipWorksRelease.DownloadUrl);
             }
             else
             {
                 log.InfoFormat("The installer {0} is not already running. Beginning Download...", shipWorksRelease.DownloadUrl);
-                InstallFile newVersion = await updaterWebClient.Download(shipWorksRelease.DownloadUrl, shipWorksRelease.Hash).ConfigureAwait(false);
+                InstallFile newVersion = await updaterWebClient.Download(shipWorksRelease.DownloadUri, shipWorksRelease.Hash).ConfigureAwait(false);
 
                 log.Info("Attempting to install new version");
-                Result installationResult = new ShipWorksInstaller().Install(newVersion, upgradeDatabase);
+                Result installationResult = shipWorksInstaller.Install(newVersion, upgradeDatabase);
                 if (installationResult.Failure)
                 {
                     log.ErrorFormat("An error occured while installing the new version of ShipWorks: {0}", installationResult.Message);

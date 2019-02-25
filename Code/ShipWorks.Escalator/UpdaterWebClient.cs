@@ -3,26 +3,36 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Net.Http;
 using System.Net.Http.Headers;
-using System.Xml;
 using System.Net;
 using System.IO;
 using log4net;
-using System.Reflection;
 using Interapptive.Shared.Extensions;
 using Interapptive.Shared.Utility;
+using Interapptive.Shared.ComponentRegistration;
 
 namespace ShipWorks.Escalator
 {
     /// <summary>
     /// Communicates with tango to download the requested version
     /// </summary>
-    public class UpdaterWebClient : IDisposable
+    [Component(SingleInstance = true)]
+    public class UpdaterWebClient : IUpdaterWebClient
     {
-        private static readonly ILog log = LogManager.GetLogger(typeof(UpdaterWebClient));
+        private readonly ILog log;
 
         private static readonly Lazy<HttpClient> tangoClient = new Lazy<HttpClient>(GetHttpClient);
         private static readonly WebClient downloadClient = new WebClient();
         private readonly string tangoUrl = "http://www.interapptive.com/ShipWorksNet/ShipWorksV1.svc/account/shipworks";
+        private readonly IServiceName serviceName;
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public UpdaterWebClient(IServiceName serviceName, Func<Type, ILog> logFactory)
+        {
+            this.serviceName = serviceName;
+            log = logFactory(GetType());
+        }
 
         /// <summary>
         /// Download the requested version
@@ -43,24 +53,25 @@ namespace ShipWorks.Escalator
         /// <summary>
         /// Get the path to save the install file to
         /// </summary>
-        private static string GetInstallationFileSavePath(Uri url)
+        private string GetInstallationFileSavePath(Uri url)
         {
             string fileName = Path.GetFileName(url.LocalPath);
             string appData = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData);
-            return Path.Combine(appData, "Interapptive\\ShipWorks\\Instances", ServiceName.GetInstanceID().ToString("B"), fileName);
+            return Path.Combine(appData, "Interapptive\\ShipWorks\\Instances", serviceName.GetInstanceID().ToString("B"), fileName);
         }
 
         /// <summary>
         /// Get the url and sha of requesting customer id
         /// </summary>
-        public async Task<ShipWorksRelease> GetVersionToDownload(string tangoCustomerId)
+        public async Task<ShipWorksRelease> GetVersionToDownload(string tangoCustomerId, Version currentVersion)
         {
-            log.InfoFormat("Attempting to get version for customer {0}", tangoCustomerId);
+            log.InfoFormat("Attempting to get new version for tango customer {0} running version {1}", tangoCustomerId, currentVersion);
 
             var values = new Dictionary<string, string>
             {
                 { "action", "getreleasebyuser" },
-                { "customerid", tangoCustomerId }
+                { "customerid", tangoCustomerId },
+                { "currentversion", currentVersion.ToString() }
             };
 
             return await GetVersionToDownload(values).ConfigureAwait(false);
@@ -113,8 +124,6 @@ namespace ShipWorks.Escalator
         /// </summary>
         private static HttpClient GetHttpClient()
         {
-            log.Info("Configuring Client");
-
             HttpClientHandler handler = new HttpClientHandler();
 
             HttpClient client = new HttpClient(handler);

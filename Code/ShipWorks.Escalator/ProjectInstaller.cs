@@ -37,7 +37,7 @@ namespace ShipWorks.Escalator
             Installers.AddRange(new Installer[] {
             serviceProcessInstaller,
             serviceInstaller});
-            serviceInstaller.ServiceName = ServiceName.Resolve();
+            serviceInstaller.ServiceName = (new ServiceName()).Resolve();
         }
     }
 }

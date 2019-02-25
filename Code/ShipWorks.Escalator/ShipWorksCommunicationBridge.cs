@@ -2,6 +2,7 @@
 using System.IO.Pipes;
 using System.Security.AccessControl;
 using System.Text;
+using Interapptive.Shared.ComponentRegistration;
 using log4net;
 
 namespace ShipWorks.Escalator
@@ -9,7 +10,8 @@ namespace ShipWorks.Escalator
     /// <summary>
     /// Bridge for the ShipWorks exe to communicate with the ShipWorks Escalator service
     /// </summary>
-    public class ShipWorksCommunicationBridge
+    [Component]
+    public class ShipWorksCommunicationBridge : IShipWorksCommunicationBridge
     {
         public delegate void DelegateMessage(string message);
         public event DelegateMessage OnMessage;
@@ -19,17 +21,16 @@ namespace ShipWorks.Escalator
         /// <summary>
         /// Constructor
         /// </summary>
-        public ShipWorksCommunicationBridge(string instance, ILog log)
+        public ShipWorksCommunicationBridge(IServiceName serviceName, Func<Type, ILog> logFactory)
         {
-            this.instance = instance;
-            this.log = log;
-            StartPipeServer();
+            instance = serviceName.Resolve();
+            log = logFactory(GetType());
         }
 
         /// <summary>
         /// Generate a new pipe server and wait for connections
         /// </summary>
-        private void StartPipeServer()
+        public void StartPipeServer()
         {
             PipeSecurity pipeSecurity = new PipeSecurity();
             pipeSecurity.AddAccessRule(new PipeAccessRule(@"Everyone", PipeAccessRights.ReadWrite, AccessControlType.Allow));
@@ -73,10 +74,13 @@ namespace ShipWorks.Escalator
                 // Convert byte buffer to string
                 string stringData = Encoding.UTF8.GetString(buffer, 0, buffer.Length);
 
-                log.InfoFormat("Received Message {0}", stringData);
+                log.InfoFormat("Received Message '{0}'", stringData);
 
-                // Pass message back to calling form
-                OnMessage?.Invoke(stringData.Trim());
+                if (!string.IsNullOrWhiteSpace(stringData))
+                {
+                    // Pass message back to calling form
+                    OnMessage?.Invoke(stringData.Trim());
+                }                
             }
             catch (Exception ex)
             {

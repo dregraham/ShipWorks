@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.IO;
 using System.Reflection;
+using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
 using log4net;
 
@@ -10,9 +11,19 @@ namespace ShipWorks.Escalator
     /// <summary>
     /// Installs ShipWorks
     /// </summary>
-    public class ShipWorksInstaller
+    [Component(SingleInstance = true)]
+    public class ShipWorksInstaller : IShipWorksInstaller
     {
-        private static ILog log = LogManager.GetLogger(typeof(ShipWorksInstaller));
+        private readonly ILog log;
+        private bool relaunchShipWorks;
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public ShipWorksInstaller(Func<Type, ILog> logFactory)
+        {
+            log = logFactory(GetType());
+        }
 
         /// <summary>
         /// Installs ShipWorks
@@ -27,38 +38,31 @@ namespace ShipWorks.Escalator
             }
             log.InfoFormat("Install {0} file validated", file.Path);
 
-            bool shouldRelaunch = KillShipWorks();
-            return RunSetup(file, upgradeDatabase, shouldRelaunch);
+            KillShipWorks();
+            return RunSetup(file, upgradeDatabase);
         }
 
         /// <summary>
         /// Kill any instance of Shipworks running.
         /// </summary>
-        /// <remarks>
-        /// Returns bool if any of the processes were UI
-        /// </remarks>
-        private bool KillShipWorks()
+        private void KillShipWorks()
         {
-            bool shouldRelaunch = false;
-
             foreach (Process process in Process.GetProcessesByName("shipworks"))
             {
                 // The process has a main window, so we should relaunch
                 if (process.MainWindowHandle != IntPtr.Zero)
                 {
-                    shouldRelaunch = true;
+                    relaunchShipWorks = true;
                 }
 
                 process.Kill();
             }
-
-            return shouldRelaunch;
         }
 
         /// <summary>
         /// Run ShipWorks setup
         /// </summary>
-        private static Result RunSetup(InstallFile file, bool upgradeDatabase, bool relaunchShipWorks)
+        private Result RunSetup(InstallFile file, bool upgradeDatabase)
         {
             string upgradeDbParameter = upgradeDatabase ? "/upgradedb" : string.Empty;
             string relaunchParameter = relaunchShipWorks ? "/launchafterinstall" : string.Empty;
