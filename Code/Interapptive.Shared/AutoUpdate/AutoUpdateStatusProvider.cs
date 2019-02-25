@@ -7,14 +7,16 @@ using System.Reflection;
 using System.Security.AccessControl;
 using System.Security.Principal;
 using System.Text;
+using log4net;
 
 namespace Interapptive.Shared.AutoUpdate
 {
     /// <summary>
     /// Status provider for the auto update process
     /// </summary>
-    public class AutoUpdateStatusProvider
+    public static class AutoUpdateStatusProvider
     {
+        private static readonly ILog log = LogManager.GetLogger(typeof(AutoUpdateStatusProvider));
         private const string SplashScreenExe = "ShipWorks.SplashScreen";
         private const string ProcessName = "ShipWorks.SplashScreen.temp";
 
@@ -29,17 +31,18 @@ namespace Interapptive.Shared.AutoUpdate
                 {
                     ShowSplashScreen();
                 }
+            }
 
-                using (NamedPipeClientStream statusPipe = new NamedPipeClientStream(".", "ShipWorksUpgradeStatus", PipeDirection.Out))
+            using (NamedPipeClientStream statusPipe = new NamedPipeClientStream(".", "ShipWorksUpgradeStatus", PipeDirection.Out))
+            {
+                try
                 {
-                    try
-                    {
-                        statusPipe.Connect(100);
-                        statusPipe.Write(Encoding.UTF8.GetBytes(status), 0, status.Length);
-                    }
-                    catch (Exception)
-                    {
-                    }
+                    statusPipe.Connect(100);
+                    statusPipe.Write(Encoding.UTF8.GetBytes(status), 0, status.Length);
+                }
+                catch (Exception ex)
+                {
+                    log.Error("error updating status", ex);
                 }
             }
         }
@@ -63,10 +66,10 @@ namespace Interapptive.Shared.AutoUpdate
         /// </remarks>
         private static void ShowSplashScreen()
         {
-            string existingFil = $"{SplashScreenExe}.exe";
+            string existingFile = $"{SplashScreenExe}.exe";
             string newFile = $"{SplashScreenExe}.temp.exe";
 
-            string sourcePath = Path.Combine(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location), existingFil);
+            string sourcePath = Path.Combine(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location), existingFile);
             string destinationPath = Path.Combine(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location), newFile);
             File.Copy(sourcePath, destinationPath, true);
 

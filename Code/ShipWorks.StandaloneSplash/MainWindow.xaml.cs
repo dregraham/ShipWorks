@@ -15,6 +15,10 @@ namespace ShipWorks.SplashScreen
         private const string PipeName = "ShipWorksUpgradeStatus";
         private const int Timeout = 60000;
         private Timer timeoutTimer;
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
         public MainWindow()
         {
             InitializeComponent();
@@ -26,14 +30,17 @@ namespace ShipWorks.SplashScreen
             CenterWindowOnScreen();
         }
 
+        /// <summary>
+        /// Center the window on the screen
+        /// </summary>
         private void CenterWindowOnScreen()
         {
-            double screenWidth = System.Windows.SystemParameters.PrimaryScreenWidth;
-            double screenHeight = System.Windows.SystemParameters.PrimaryScreenHeight;
-            double windowWidth = this.Width;
-            double windowHeight = this.Height;
-            this.Left = (screenWidth / 2) - (windowWidth / 2);
-            this.Top = (screenHeight / 2) - (windowHeight / 2);
+            double screenWidth = SystemParameters.PrimaryScreenWidth;
+            double screenHeight = SystemParameters.PrimaryScreenHeight;
+            double windowWidth = Width;
+            double windowHeight = Height;
+            Left = (screenWidth / 2) - (windowWidth / 2);
+            Top = (screenHeight / 2) - (windowHeight / 2);
         }
 
         /// <summary>

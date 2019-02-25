@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Reflection;
 using System.Runtime.InteropServices;
@@ -155,6 +156,8 @@ namespace Interapptive.Shared.AutoUpdate
             WTSInit
         }
 
+        [SuppressMessage("SonarQube", "S3459:Remove unassigned field",
+            Justification = "This is a known issue with Sonar https://github.com/SonarSource/sonar-dotnet/issues/2236")]
         [StructLayout(LayoutKind.Sequential)]
         private struct PROCESS_INFORMATION
         {
@@ -201,6 +204,8 @@ namespace Interapptive.Shared.AutoUpdate
             TokenImpersonation = 2
         }
 
+        [SuppressMessage("SonarQube", "S3459:Remove unassigned field",
+            Justification = "This is a known issue with Sonar https://github.com/SonarSource/sonar-dotnet/issues/2236")]
         [StructLayout(LayoutKind.Sequential)]
         private struct WTS_SESSION_INFO
         {
