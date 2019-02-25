@@ -10,14 +10,6 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.Controls.Import
         public OdbcImportMapSettingsControl()
         {
             InitializeComponent();
-        }
-
-        /// <summary>
-        /// Delegates scrolling of the datagrid to the scrollviewer
-        /// </summary>
-        private void MouseWheelScrolled(object sender, MouseWheelEventArgs e)
-        {
-            ScrollViewer.ScrollToVerticalOffset(ScrollViewer.VerticalOffset - (float) e.Delta / 3);
-        }
+        }        
     }
 }

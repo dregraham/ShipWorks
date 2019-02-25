@@ -15,200 +15,169 @@
              d:DataContext="{d:DesignInstance import:OdbcImportMapSettingsControlViewModel}"
              mc:Ignorable="d">
     <Control.Resources>
-        <Style TargetType="{x:Type Label}">
-            <Setter Property="Margin" Value="0 5 0 5" />
-            <Setter Property="Padding" Value="0" />
-        </Style>
-        <Style TargetType="{x:Type TextBox}">
-            <Setter Property="Margin" Value="0 5 0 5" />
-            <Setter Property="Padding" Value="1 4 0 4" />
-        </Style>
-        <Style TargetType="{x:Type Button}">
-            <Setter Property="Margin" Value="5 5 0 5" />
-            <Setter Property="Padding" Value="5 2 5 2" />
-            <Setter Property="Width" Value="85" />
-            <Setter Property="Height" Value="24" />
-        </Style>
-        <Style TargetType="{x:Type ui:ShipWorksComboBox}">
-            <Setter Property="Margin" Value="0 5 0 5" />
-            <Setter Property="Padding" Value="4 4 0 4" />
-            <Setter Property="Height" Value="24" />
-        </Style>
-        <Style TargetType="{x:Type RadioButton}">
-            <Setter Property="HorizontalAlignment" Value="Center" />
-            <Setter Property="VerticalAlignment" Value="Center" />
-            <Setter Property="Margin" Value="0 0 15 0" />
-            <Setter Property="Padding" Value="0" />
-            <Setter Property="VerticalContentAlignment" Value="Center" />
-        </Style>
-        <ui:VisibleWhenEqualToParameterConverter x:Key="VisibleWhenEqualToParameterConverter" />
+        <ui:BooleanToVisibilityConverter x:Key="BoolToVisibilityConverter" />
+        <ui:BooleanToVisibilityConverter x:Key="InverseBoolToVisibilityConverter" Invert="True" />
         <ui:StringToVisibilityConverter x:Key="StringToVisibilityConverter" />
         <ui:RadioButtonCheckedConverter x:Key="RadioButtonCheckedConverter"/>
-
         <system:Boolean x:Key="True">True</system:Boolean>
         <system:Boolean x:Key="False">False</system:Boolean>
+
+        <Style TargetType="{x:Type Label}">
+            <Setter Property="Margin" Value="0 0 10 10" />
+            <Setter Property="Padding" Value="0" />
+            <Setter Property="HorizontalAlignment" Value="Right" />
+        </Style>
+        
+        <Style TargetType="{x:Type RadioButton}">
+            <Setter Property="HorizontalAlignment" Value="Left" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="Margin" Value="-1 0 0 10" />
+            <Setter Property="VerticalContentAlignment" Value="Center" />
+        </Style>
     </Control.Resources>
     <Grid Margin="20 10 10 10">
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="*" />
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="*"/>            
         </Grid.RowDefinitions>
-        <Grid Grid.Row="0">
+        <TextBlock Grid.Row="0"
+               Margin="0 0 -20 10"
+               Text="Import Settings"
+               FontWeight="Bold" 
+               HorizontalAlignment="Left"/>
+        <Grid Grid.Row="1">
             <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
+                <RowDefinition Height="auto"></RowDefinition>
+                <RowDefinition Height="auto"></RowDefinition>
+                <RowDefinition Height="auto"></RowDefinition>
+                <RowDefinition Height="auto"></RowDefinition>
+                <RowDefinition Height="auto"></RowDefinition>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="80" />
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            <Label Grid.Row="0"
-                   Grid.Column="0"
-                   Margin="3 0 -20 5"
-                   Content="Import Settings"
-                   FontWeight="Bold" />
+            
+            <Button Grid.Row="0"
+                    Grid.Column="1"
+                    Content="Load Existing Settings..." 
+                    Command="{Binding OpenMapSettingsFileCommand}"
+                    Height="23"
+                    Padding="10 0"
+                    HorizontalAlignment="Left"
+                    Margin="0 0 0 10"/>
+            
             <Label Grid.Row="1"
-                   Grid.Column="0"
-                   HorizontalAlignment="Right"
-                   VerticalAlignment="Center"
-                   Content="Name:" />
+                   Grid.Column="0"                
+                   Content="Name:" 
+                   VerticalAlignment="Center"/>
             <TextBox Grid.Row="1"
                      Grid.Column="1"
-                     Height="24"
-                     Margin="5 5 0 5"
-                     VerticalAlignment="Center"
-                     Text="{Binding MapName, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
-            <Button Grid.Row="1"
-                    Grid.Column="2"
-                    Content="Load Map..." 
-                    Command="{Binding OpenMapSettingsFileCommand}"/>
+                     Text="{Binding MapName, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                     VerticalContentAlignment="Center"
+                     Margin="0 0 0 10"
+                     Height="23"/>
+
             <Label Grid.Row="2"
                    Grid.Column="0"
-                   HorizontalAlignment="Right"
-                   VerticalAlignment="Center"
-                   Content="Download:" />
-            <StackPanel Grid.Row="2"
-                        Grid.Column="1"
-                        Grid.ColumnSpan="2"
-                        Margin="5 5 0 5"
-                        Orientation="Horizontal">
-                <RadioButton Content="Orders by last modified date"
+                   Content="Download:"/>
+            <Grid Grid.Row="2"
+                  Grid.Column="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                </Grid.RowDefinitions>
+                <RadioButton Grid.Row="0" 
+                             Content="Orders by last modified date"
                              GroupName="DownloadStrategy"
                              IsChecked="{Binding ImportStrategy,
                                         Converter={StaticResource RadioButtonCheckedConverter},
                                         ConverterParameter={x:Static odbcDownload:OdbcImportStrategy.ByModifiedTime}}" />
-                <RadioButton Content="All orders" GroupName="DownloadStrategy"
+                <RadioButton Grid.Row="1" 
+                             Content="All orders"
+                             GroupName="DownloadStrategy"
                              IsChecked="{Binding ImportStrategy,
                                         Converter={StaticResource RadioButtonCheckedConverter},
                                         ConverterParameter={x:Static odbcDownload:OdbcImportStrategy.All}}" />
-                <RadioButton Content="On order search only" GroupName="DownloadStrategy"
+                <RadioButton Grid.Row="2"
+                             Content="On order search only" 
+                             GroupName="DownloadStrategy"
                              IsChecked="{Binding ImportStrategy,
                                         Converter={StaticResource RadioButtonCheckedConverter},
                                         ConverterParameter={x:Static odbcDownload:OdbcImportStrategy.OnDemand}}" />
-            </StackPanel>
+            </Grid>
+
             <Label Grid.Row="3"
                    Grid.Column="0"
-                   HorizontalAlignment="Right"
-                   VerticalAlignment="Center"
                    Content="Column Source:" />
-            <StackPanel Grid.Row="3"
-                        Grid.Column="1"
-                        Margin="5 5 0 5"
-                        Orientation="Horizontal">
-                <RadioButton Content="Table"
+            <Grid Grid.Row="3"
+                  Grid.Column="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                </Grid.RowDefinitions>
+                <RadioButton Grid.Row="0"
+                             Content="Table"
                              GroupName="ColumnSource"
                              IsChecked="{Binding ColumnSourceIsTable,
                                         Converter={StaticResource RadioButtonCheckedConverter},
                                         ConverterParameter={StaticResource True}}" />
-                <RadioButton Content="Query" GroupName="ColumnSource"
+                <RadioButton Grid.Row="1"
+                             Content="Query"
+                             GroupName="ColumnSource"
                              IsChecked="{Binding ColumnSourceIsTable,
                                         Converter={StaticResource RadioButtonCheckedConverter},
                                         ConverterParameter={StaticResource False}}"/>
-            </StackPanel>
-        </Grid>
-        <DockPanel Grid.Row="1"
-                   VerticalAlignment="Top"
-                   d:IsHidden="false">
-            <DockPanel.Visibility>
-                <Binding Converter="{StaticResource VisibleWhenEqualToParameterConverter}" Path="ColumnSourceIsTable">
-                    <Binding.ConverterParameter>
-                        <system:Boolean>True</system:Boolean>
-                    </Binding.ConverterParameter>
-                </Binding>
-            </DockPanel.Visibility>
-            <Label Width="80"
-                   Margin="0"
-                   VerticalAlignment="Center"
-                   HorizontalContentAlignment="Right"
-                   Content="Table:" />
-            <ui:ShipWorksComboBox Margin="5 5 0 5"
-                                  VerticalAlignment="Center"
-                                  DisplayMemberPath="Name"
-                                  ItemsSource="{Binding Tables,
-                                                        UpdateSourceTrigger=PropertyChanged}"
-                                  SelectedValue="{Binding SelectedTable}" />
-        </DockPanel>
-        <Grid Grid.Row="1" d:IsHidden="true">
-            <Grid.Visibility>
-                <Binding Converter="{StaticResource VisibleWhenEqualToParameterConverter}" Path="ColumnSourceIsTable">
-                    <Binding.ConverterParameter>
-                        <system:Boolean>False</system:Boolean>
-                    </Binding.ConverterParameter>
-                </Binding>
-            </Grid.Visibility>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="*" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="*" />
-                <RowDefinition Height="Auto" />
-            </Grid.RowDefinitions>
-            <Label Grid.Row="0"
-                   Margin="0 5 0 5"
-                   Content="Your query for custom import:" />
-            <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
-                <TextBox x:Name="Query"
-                         Margin="0 5 0 5"
-                         AcceptsReturn="True"
-                         FontFamily="Courier New"
-                         Text="{Binding CustomQuery,
-                                        UpdateSourceTrigger=LostFocus}"
-                         TextWrapping="Wrap"
-                         ui:EntityFieldLength.FieldName="OdbcStoreCustomQuery" />
-            </ScrollViewer>
-
-            <Label Grid.Row="2"
-                   HorizontalAlignment="Left"
-                   VerticalAlignment="Center"
-                   Content="Query Results (Top 25)" />
-            <Button Grid.Row="2"
-                    HorizontalAlignment="Right"
-                    Command="{Binding ExecuteQueryCommand}"
-                    Content="Execute Query" />
-            <Grid Grid.Row="3" Margin="0 5 0 0">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="*" />
-                    <RowDefinition Height="Auto" />
-                </Grid.RowDefinitions>
-                <ScrollViewer x:Name="ScrollViewer"
-                              Grid.Row="0"
-                              HorizontalScrollBarVisibility="Auto"
-                              VerticalScrollBarVisibility="Auto">
-                    <DataGrid IsReadOnly="True"
-                              ItemsSource="{Binding QueryResults,
-                                                    UpdateSourceTrigger=PropertyChanged}"
-                              PreviewMouseWheel="MouseWheelScrolled" />
-                </ScrollViewer>
-
-                <Label Grid.Row="1"
-                       Content="{Binding ResultMessage,
-                                         UpdateSourceTrigger=PropertyChanged}"
-                       Visibility="{Binding ResultMessage,
-                                            Converter={StaticResource StringToVisibilityConverter}}" />
             </Grid>
-        </Grid>
+
+            <Label Grid.Row="4"
+                   Grid.Column="0"
+                   Content="Table:" 
+                   VerticalAlignment="Center"
+                   Visibility="{Binding ColumnSourceIsTable,
+                                Converter={StaticResource BoolToVisibilityConverter}}"/>
+            <ui:ShipWorksComboBox Grid.Row="4"
+                                  Grid.Column="1" 
+                                  Margin="0 0 0 10"
+                                  DisplayMemberPath="Name"
+                                  Height="23"
+                                  VerticalContentAlignment="Center"
+                                  ItemsSource="{Binding Tables, UpdateSourceTrigger=PropertyChanged}"
+                                  SelectedValue="{Binding SelectedTable}"
+                                  Visibility="{Binding ColumnSourceIsTable,
+                                               Converter={StaticResource BoolToVisibilityConverter}}"/>
+
+            <Label Grid.Row="4"
+                   Grid.Column="0"
+                   Content="Query Type:"
+                   Visibility="{Binding ColumnSourceIsTable,
+                                Converter={StaticResource InverseBoolToVisibilityConverter}}"/>
+            <Grid Grid.Row="4"
+                  Grid.Column="1"
+                  Visibility="{Binding ColumnSourceIsTable,
+                                Converter={StaticResource InverseBoolToVisibilityConverter}}">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                </Grid.RowDefinitions>
+                <RadioButton Grid.Row="0"
+                             Content="Subquery (Recommended)"
+                             GroupName="QueryType"
+                             IsChecked="{Binding IsSubquery,
+                                        Converter={StaticResource RadioButtonCheckedConverter},
+                                        ConverterParameter={StaticResource True}}" />
+                <RadioButton Grid.Row="1"
+                             Content="Parameterized Query"
+                             GroupName="QueryType"
+                             IsChecked="{Binding IsSubquery,
+                                        Converter={StaticResource RadioButtonCheckedConverter},
+                                        ConverterParameter={StaticResource False}}"/>
+                <TextBlock Grid.Row="2"
+                           Text="Some text explaining the difference and when you should use parameterized query"/>
+            </Grid>
+                  
+        </Grid>        
     </Grid>
 </UserControl>
