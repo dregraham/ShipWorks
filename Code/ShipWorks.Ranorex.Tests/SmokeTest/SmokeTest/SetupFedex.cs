@@ -347,6 +347,8 @@ namespace SmokeTest
             Report.Log(ReportLevel.Info, "Mouse", "Click close on the Shipping Settings page\r\nMouse Left Click item 'ShippingSettingsDlg.Close' at Center.", repo.ShippingSettingsDlg.CloseInfo, new RecordItemIndex(66));
             repo.ShippingSettingsDlg.Close.Click();
             
+            UncheckFedExSetupCleanup();
+            
         }
 
 #region Image Feature Data
