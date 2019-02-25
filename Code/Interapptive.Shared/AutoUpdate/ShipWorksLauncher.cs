@@ -4,7 +4,7 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 using log4net;
 
-namespace ShipWorks.Escalator
+namespace Interapptive.Shared.AutoUpdate
 {
     /// <summary>
     /// Launch ShipWorks
@@ -265,7 +265,7 @@ namespace ShipWorks.Escalator
         /// <summary>
         /// Start the given appPath as the current active user
         /// </summary>
-        private static bool StartProcessAsCurrentUser(string appPath, string cmdLine = null, string workDir = null, bool visible = true)
+        public static bool StartProcessAsCurrentUser(string appPath, string cmdLine = null, string workDir = null, bool visible = true)
         {
             var userToken = IntPtr.Zero;
             var startInfo = new STARTUPINFO();

@@ -9,7 +9,7 @@
         AllowsTransparency="True"
         WindowStartupLocation="CenterOwner"
         ResizeMode="NoResize"
-        Title="MainWindow" Height="255" Width="505">
+        Title="ShipWorks" Height="255" Width="505">
     <Window.Background>
         <ImageBrush ImageSource="/ShipWorks.SplashScreen;component/background.png"></ImageBrush>
         </Window.Background>

@@ -50,27 +50,9 @@ namespace ShipWorks.Data.Administration
         /// <summary>
         /// Kick off the update
         /// </summary>
-        public Result Update(Version version)
-        {
-            // before we send the update message make sure we can start a splash screen 
-            // because the update process will kill us
-            string fileName = "ShipWorks.SplashScreen.exe";
-            string sourcePath = Path.Combine(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location), fileName);
-            string destinationPath = Path.Combine(DataPath.InstanceRoot, fileName);
-            File.Copy(sourcePath, destinationPath, true);
+        public Result Update(Version version) =>
+            SendMessage(version.ToString());
 
-            var result = SendMessage(version.ToString());
-
-            if (result.Success && File.Exists(destinationPath))
-            {
-                // start the splash screen here
-                Process.Start(destinationPath);
-            }
-
-            return result;
-        }
-            
-        
         /// <summary>
         /// Send the update window information to the updater pipe
         /// </summary>

@@ -33,10 +33,10 @@ namespace ShipWorks.ApplicationCore.CommandLineOptions
         /// <summary>
         /// Create the backup
         /// </summary>
-        public TelemetricResult<Result> CreateBackup()
+        public TelemetricResult<Result> CreateBackup(Action<string> updateStatus)
         {
             TelemetricResult<Result> telemetricResult = new TelemetricResult<Result>("Database.Backup");
-            telemetricResult.RunTimedEvent("CreateBackupTimeInMilliseconds", () => CreateBackup(database, backupPathAndName));
+            telemetricResult.RunTimedEvent("CreateBackupTimeInMilliseconds", () => CreateBackup(database, backupPathAndName, updateStatus));
 
             telemetricResult.SetValue(ValidateBackup(backupPathAndName));
 
@@ -160,7 +160,7 @@ namespace ShipWorks.ApplicationCore.CommandLineOptions
         /// <summary>
         /// Create a backup for the given database to the file
         /// </summary>
-        private void CreateBackup(string database, string backupFile)
+        private void CreateBackup(string database, string backupFile, Action<string> updateStatus)
         {
             log.InfoFormat("Backing up '{0}' to '{1}'", database, backupFile);
 
@@ -215,7 +215,9 @@ namespace ShipWorks.ApplicationCore.CommandLineOptions
                             Match match = percentRegex.Match(e.Message);
                             if (match.Success)
                             {
-                                log.InfoFormat("{0}% complete", Convert.ToInt32(match.Groups[1].Value));
+                                string status = $"{Convert.ToInt32(match.Groups[1].Value)}% complete";
+                                log.Info(status);
+                                updateStatus(status);
                             }
                         };
                     }

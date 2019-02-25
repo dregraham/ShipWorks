@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
+using System.IO.Pipes;
 using System.Reactive;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Interapptive.Shared.AutoUpdate;
 using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Utility;
 using log4net;
@@ -41,11 +44,13 @@ namespace ShipWorks.ApplicationCore.CommandLineOptions
                 DatabaseUpgradeBackupManager backupManager = new DatabaseUpgradeBackupManager();
                 try
                 {
+                    AutoUpdateStatusProvider.UpdateStatus("Creating Backup");
                     // If an upgrade is required create a backup first
-                    backupResult = backupManager.CreateBackup();
+                    backupResult = backupManager.CreateBackup(AutoUpdateStatusProvider.UpdateStatus);
 
                     if (backupResult.Value.Success)
                     {
+                        AutoUpdateStatusProvider.UpdateStatus("Upgrading Database");
                         TryDatabaseUpgrade(backupManager, databaseUpdateResult);
                     }
                 }
@@ -64,6 +69,7 @@ namespace ShipWorks.ApplicationCore.CommandLineOptions
                 finally
                 {
                     SubmitTelemetryTelemetry(databaseUpdateResult, backupResult);
+                    AutoUpdateStatusProvider.CloseSplashScreen();
                 }
             }
 
@@ -75,7 +81,6 @@ namespace ShipWorks.ApplicationCore.CommandLineOptions
         /// </summary>
         private TelemetricResult<Unit> TryDatabaseUpgrade(DatabaseUpgradeBackupManager backupManager, TelemetricResult<Unit> databaseUpdateResult)
         {
-            
             try
             {
                 databaseUpdateResult.RunTimedEvent(TelemetricEventType.SchemaUpdate,
@@ -83,6 +88,7 @@ namespace ShipWorks.ApplicationCore.CommandLineOptions
             }
             catch (Exception)
             {
+                AutoUpdateStatusProvider.UpdateStatus("An error occurred during upgrade, rolling back.");
                 // Upgrading the schema failed, restore
                 databaseUpdateResult.RunTimedEvent("RestoreBackupTimeInMilliseconds", () => backupManager.RestoreBackup());
                 throw;

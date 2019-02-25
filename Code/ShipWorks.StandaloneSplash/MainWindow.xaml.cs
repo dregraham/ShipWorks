@@ -98,9 +98,9 @@ namespace ShipWorks.SplashScreen
 
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                return;
+
             }
 
             // Kill original sever and create new wait server
