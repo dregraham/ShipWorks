@@ -104,7 +104,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ShipWorks.CommandLine", "Co
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ShipWorks.Escalator.Tests", "Code\ShipWorks.Escalator.Tests\ShipWorks.Escalator.Tests.csproj", "{4B01AF3D-39C7-4FF5-9A3F-3B4ED79A8A43}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShipWorks.SplashScreen", "Code\ShipWorks.StandaloneSplash\ShipWorks.SplashScreen.csproj", "{380ED862-FD86-4F16-B82A-C00F7CCC6742}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShipWorks.SplashScreen", "Code\ShipWorks.SplashScreen\ShipWorks.SplashScreen.csproj", "{380ED862-FD86-4F16-B82A-C00F7CCC6742}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
