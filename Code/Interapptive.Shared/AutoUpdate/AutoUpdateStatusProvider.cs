@@ -60,9 +60,9 @@ namespace Interapptive.Shared.AutoUpdate
         {
             using (IDisposable process = Process.GetProcessesByName(ProcessName).FirstOrDefault())
             {
-                if (process == null)
+                if (process != null)
                 {
-                    ShowSplashScreen();
+                    return;
                 }
             }
 
