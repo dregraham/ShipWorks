@@ -32,5 +32,16 @@ namespace ShipWorks.UI.Controls.MainGrid
             get => (MainGridHeaderViewModel) DataContext;
             set => DataContext = value;
         }
+
+        /// <summary>
+        /// Handle key down of the search box to deal with esc key
+        /// </summary>
+        private void OnSearchBoxKeyDown(object sender, System.Windows.Input.KeyEventArgs e)
+        {
+            if (e.Key == System.Windows.Input.Key.Escape)
+            {
+                ViewModel?.QuickSearchClearFocus.Execute(null);
+            }
+        }
     }
 }

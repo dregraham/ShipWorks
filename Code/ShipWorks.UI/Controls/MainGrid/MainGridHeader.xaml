@@ -5,6 +5,7 @@
     xmlns:ap="clr-namespace:ShipWorks.UI.AttachedProperties"
     xmlns:core="clr-namespace:ShipWorks.ApplicationCore;assembly=ShipWorks.Core"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:ShipWorks.UI.Controls.MainGrid"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:sw="http://schemas.shipworks.com/sw"
     xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
@@ -18,10 +19,9 @@
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <!-- This resource dictionary will be superseded by the skin resource dictionary below -->
-                <!-- It's here to help the designer look nice -->
-                <ResourceDictionary
-                    Source="/ShipWorks.UI;component/Styles/ColorSchemes/BlueColors.xaml"/>
+                <!--  This resource dictionary will be superseded by the skin resource dictionary below  -->
+                <!--  It's here to help the designer look nice  -->
+                <ResourceDictionary Source="/ShipWorks.UI;component/Styles/ColorSchemes/BlueColors.xaml" />
                 <ui:ColorSchemeResourceDictionary
                     BlackSource="/ShipWorks.UI;component/Styles/ColorSchemes/BlackColors.xaml"
                     BlueSource="/ShipWorks.UI;component/Styles/ColorSchemes/BlueColors.xaml"
@@ -50,11 +50,11 @@
 
             <vc:ImageToBitmapSourceConverter x:Key="ImageToBitmap" />
             <vc:BooleanToVisibilityConverter x:Key="BooleanToVisibility" />
-            <vc:BooleanToColorConverter
+            <local:BooleanToColorMultiValueConverter
                 x:Key="BooleanToStartColor"
                 False="{StaticResource HeaderGradientStartColor}"
                 True="{StaticResource ActiveGradientStartColor}" />
-            <vc:BooleanToColorConverter
+            <local:BooleanToColorMultiValueConverter
                 x:Key="BooleanToEndColor"
                 False="{StaticResource HeaderGradientEndColor}"
                 True="{StaticResource ActiveGradientEndColor}" />
@@ -74,8 +74,22 @@
             </Border.BorderBrush>
             <Border.Background>
                 <LinearGradientBrush StartPoint="1,0" EndPoint="1,1">
-                    <GradientStop Offset="0" Color="{Binding IsSearchActive, Converter={StaticResource BooleanToStartColor}}" />
-                    <GradientStop Offset="1" Color="{Binding IsSearchActive, Converter={StaticResource BooleanToEndColor}}" />
+                    <GradientStop Offset="0">
+                        <GradientStop.Color>
+                            <MultiBinding Converter="{StaticResource BooleanToStartColor}">
+                                <Binding Path="IsSearchActive" />
+                                <Binding ElementName="SearchBox" Path="IsFocused" />
+                            </MultiBinding>
+                        </GradientStop.Color>
+                    </GradientStop>
+                    <GradientStop Offset="1">
+                        <GradientStop.Color>
+                            <MultiBinding Converter="{StaticResource BooleanToEndColor}">
+                                <Binding Path="IsSearchActive" />
+                                <Binding ElementName="SearchBox" Path="IsFocused" />
+                            </MultiBinding>
+                        </GradientStop.Color>
+                    </GradientStop>
                 </LinearGradientBrush>
             </Border.Background>
             <Grid>
@@ -158,10 +172,12 @@
                     </Border.BorderBrush>
                     <StackPanel Orientation="Horizontal">
                         <syncfusion:SfTextBoxExt
+                            x:Name="SearchBox"
                             MinWidth="160"
                             VerticalContentAlignment="Center"
                             ap:Focus.WhenMessageReceived="{x:Type sw:FocusQuickSearchMessage}"
                             BorderThickness="0"
+                            KeyDown="OnSearchBoxKeyDown"
                             Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged, Delay=250}">
                             <syncfusion:SfTextBoxExt.Watermark>
                                 <TextBlock

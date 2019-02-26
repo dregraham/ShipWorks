@@ -207,6 +207,7 @@
     <Compile Include="Controls\CustomerLicenseActivation\CustomerLicenseActivationViewModel.cs" />
     <Compile Include="Controls\FieldLayoutRowDefinition.cs" />
     <Compile Include="Controls\KeyboardShortcutDisplay.cs" />
+    <Compile Include="Controls\MainGrid\BooleanToColorMultiValueConverter.cs" />
     <Compile Include="Controls\MainGrid\MainGridHeader.xaml.cs">
       <DependentUpon>MainGridHeader.xaml</DependentUpon>
     </Compile>

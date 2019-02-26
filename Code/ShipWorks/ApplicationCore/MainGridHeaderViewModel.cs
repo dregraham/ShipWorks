@@ -25,6 +25,7 @@ namespace ShipWorks.ApplicationCore
 
         public event EventHandler SearchEndClicked;
         public event EventHandler FilterSaveClicked;
+        public event EventHandler QuickSearchFocusCleared;
 
         /// <summary>
         /// Constructor
@@ -43,6 +44,7 @@ namespace ShipWorks.ApplicationCore
             EndSearch = new RelayCommand(EndSearchAction);
             ToggleAdvancedSearch = new RelayCommand(ToggleAdvancedSearchAction);
             SaveFilter = new RelayCommand(SaveFilterAction);
+            QuickSearchClearFocus = new RelayCommand(QuickSearchClearFocusAction);
         }
 
         /// <summary>
@@ -62,6 +64,12 @@ namespace ShipWorks.ApplicationCore
         /// </summary>
         [Obfuscation(Exclude = true)]
         public ICommand SaveFilter { get; }
+
+        /// <summary>
+        /// Clear the quick search focus
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public ICommand QuickSearchClearFocus { get; }
 
         /// <summary>
         /// Is the advanced search open
@@ -181,5 +189,11 @@ namespace ShipWorks.ApplicationCore
         /// </summary>
         private void SaveFilterAction() =>
             FilterSaveClicked?.Invoke(this, EventArgs.Empty);
+
+        /// <summary>
+        /// Clear the quick search focus
+        /// </summary>
+        private void QuickSearchClearFocusAction() =>
+            QuickSearchFocusCleared?.Invoke(this, EventArgs.Empty);
     }
 }

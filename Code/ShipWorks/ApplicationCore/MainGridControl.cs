@@ -125,9 +125,6 @@ namespace ShipWorks.ApplicationCore
             if (entityGrids.Count == 0)
             {
                 AdvancedSearchVisible = false;
-
-                //searchBox.GotFocus += OnSearchBoxFocusChange;
-                //searchBox.LostFocus += OnSearchBoxFocusChange;
             }
 
             CreateMainGridHeader();
@@ -138,7 +135,8 @@ namespace ShipWorks.ApplicationCore
 
             headerViewModel.PropertyChanged += OnHeaderViewModelPropertyChanged;
             headerViewModel.SearchEndClicked += OnEndSearch;
-            headerViewModel.FilterSaveClicked += OnFilterEditorSaveButtonClick;
+            headerViewModel.FilterSaveClicked += OnFilterSaveClicked;
+            headerViewModel.QuickSearchFocusCleared += OnQuickSearchFocusCleared;
 
             // Register any IMainGridControlPipelines
             subscriptions = new CompositeDisposable(
@@ -963,10 +961,12 @@ namespace ShipWorks.ApplicationCore
         /// <summary>
         /// The button to end the active search has been clicked
         /// </summary>
-        private void OnEndSearch(object sender, EventArgs e)
-        {
-            EndSearch();
-        }
+        private void OnEndSearch(object sender, EventArgs e) => EndSearch();
+
+        /// <summary>
+        /// On quick search focus cleared
+        /// </summary>
+        private void OnQuickSearchFocusCleared(object sender, EventArgs e) => ActiveGrid.Focus();
 
         /// <summary>
         /// Handle search cancellation via the Escape key
@@ -979,10 +979,6 @@ namespace ShipWorks.ApplicationCore
                 {
                     EndSearch();
                 }
-                //else if (searchBox.ContainsFocus)
-                //{
-                //    ActiveGrid.Focus();
-                //}
 
                 return true;
             }
@@ -1111,7 +1107,7 @@ namespace ShipWorks.ApplicationCore
         /// <summary>
         /// The customer wants to save the search as a filter
         /// </summary>
-        private void OnFilterEditorSaveButtonClick(object sender, System.EventArgs e)
+        private void OnFilterSaveClicked(object sender, System.EventArgs e)
         {
             if (filterEditor.SaveDefinition())
             {
