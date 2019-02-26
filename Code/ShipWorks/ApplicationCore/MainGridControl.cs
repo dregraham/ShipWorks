@@ -321,6 +321,8 @@ namespace ShipWorks.ApplicationCore
                     // Advanced search isn't active, its just visible with no Filter Definition in it. (If there was, the IsSearchActive test would have been true)
                     // Close the Advanced Search, which will coincide with the functionality that ends the search if it was active
                     AdvancedSearchVisible = false;
+                    headerViewModel.IsAdvancedSearchOpen = false;
+                    headerViewModel.IsSearchActive = false;
                 }
 
                 if (ActiveGrid != null)

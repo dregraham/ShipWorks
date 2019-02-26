@@ -1,13 +1,7 @@
-using System;
-using System.Collections.Generic;
-using System.Text;
 using Divelements.SandGrid;
-using System.Drawing;
-using Divelements.SandGrid.Rendering;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Filters;
-using ShipWorks.UI.Controls.SandGrid;
 using log4net;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.UI.Controls.SandGrid;
 
 namespace ShipWorks.Filters.Controls
 {
@@ -16,10 +10,9 @@ namespace ShipWorks.Filters.Controls
     /// </summary>
     public class FilterTreeGridRow : SandGridTreeRow
     {
-        static readonly ILog log = LogManager.GetLogger(typeof(FilterTreeGridRow));
-
-        FilterNodeEntity filterNode;
-        FilterCount filterCount;
+        private static readonly ILog log = LogManager.GetLogger(typeof(FilterTreeGridRow));
+        private FilterNodeEntity filterNode;
+        private FilterCount filterCount;
 
         private FilterState? previousFilterState;
 
@@ -31,7 +24,7 @@ namespace ShipWorks.Filters.Controls
         {
             SetFilter(filterNode);
         }
-        
+
         /// <summary>
         /// The filter node that this row represents
         /// </summary>
@@ -66,6 +59,11 @@ namespace ShipWorks.Filters.Controls
                 return !FilterHelper.IsBuiltin(filterNode);
             }
         }
+
+        /// <summary>
+        /// Filter proxy for On-Demand filters
+        /// </summary>
+        public FilterNodeEntity FilterProxy { get; internal set; }
 
         /// <summary>
         /// Gets or sets whether the filter for the row has been flagged as a slow running
@@ -104,13 +102,13 @@ namespace ShipWorks.Filters.Controls
 
         /// <summary>
         /// Toggles the style of the cells based on the state of the filter: uses
-        /// the disabled font if the filter is disabled; otherwise the "normal" 
+        /// the disabled font if the filter is disabled; otherwise the "normal"
         /// font/color.
         /// </summary>
         /// <param name="filterState">State of the filter.</param>
         private void ToggleStyle(FilterState filterState)
         {
-            bool isFilterDisabled = filterState == (byte)FilterState.Disabled;
+            bool isFilterDisabled = filterState == (byte) FilterState.Disabled;
 
             // We need to use a new disabled font each time we toggle since it's disposable and the
             // FilterTreeGridRow is not
@@ -144,14 +142,21 @@ namespace ShipWorks.Filters.Controls
                 return;
             }
 
-            FilterCount count = FilterContentManager.GetCount(currentFilterNode.FilterNodeID);
-            if (count != filterCount)
+            if (filter.State == (int) FilterState.OnDemand && FilterProxy == null)
             {
-                filterCount = count;
-                RedrawNeeded();
+                filterCount = null;
+            }
+            else
+            {
+                FilterCount count = FilterContentManager.GetCount(FilterProxy?.FilterNodeID ?? currentFilterNode.FilterNodeID);
+                if (count != filterCount)
+                {
+                    filterCount = count;
+                    RedrawNeeded();
+                }
             }
 
-            UpdateLayoutForSpeed(filter, currentFilterNode, count);
+            UpdateLayoutForSpeed(filter, currentFilterNode, filterCount);
         }
 
         /// <summary>
@@ -176,10 +181,10 @@ namespace ShipWorks.Filters.Controls
         /// <summary>
         /// Inspects the cost of the filter to determine if the row should be flagged as slow
         /// running filter by adjusting the image and filter name if it took more than 10,000
-        /// milliseconds to calculate the filter; otherwise the standard filter image and filter 
+        /// milliseconds to calculate the filter; otherwise the standard filter image and filter
         /// name is used.
         /// </summary>
-        /// <remarks>This method uses arguments for the filter and filter node instead of using the properties to 
+        /// <remarks>This method uses arguments for the filter and filter node instead of using the properties to
         /// ensure that the null checks done earlier still apply</remarks>
         private void UpdateLayoutForSpeed(FilterEntity filter, FilterNodeEntity currentFilterNode, FilterCount currentFilterCount)
         {
@@ -191,6 +196,13 @@ namespace ShipWorks.Filters.Controls
 
             foreach (GridCell cell in Cells)
             {
+                if (filter.State == (int) FilterState.OnDemand)
+                {
+                    cell.Image = Properties.Resources.paperclip16;
+                    cell.Text = filter.Name;
+                    continue;
+                }
+
                 // Make a note whether the filter was already flagged as a slow running filter
                 bool previousFlag = IsFlaggedAsSlowRunning;
 
@@ -209,7 +221,7 @@ namespace ShipWorks.Filters.Controls
                 }
                 else
                 {
-                    // The filter does not exceed the warning threshold, so set the 
+                    // The filter does not exceed the warning threshold, so set the
                     // text and image to normal
                     IsFlaggedAsSlowRunning = false;
                     cell.Image = FilterHelper.GetFilterImage(currentFilterNode, false);
@@ -226,7 +238,7 @@ namespace ShipWorks.Filters.Controls
         }
 
         /// <summary>
-        /// Gets whether the filter associated with this row is disabled 
+        /// Gets whether the filter associated with this row is disabled
         /// </summary>
         public bool IsFilterDisabled()
         {
@@ -243,9 +255,22 @@ namespace ShipWorks.Filters.Controls
             {
                 FilterEntity filter = filterNode.Filter;
 
-                return filter != null ? 
-                    (FilterState)filter.State : 
+                return filter != null ?
+                    (FilterState) filter.State :
                     FilterState.Enabled;
+            }
+        }
+
+        /// <summary>
+        /// Clear the search proxy
+        /// </summary>
+        internal void ClearSearchProxy()
+        {
+            if (FilterProxy != null)
+            {
+                FilterProxy = null;
+                UpdateFilterCount();
+                UpdateStyle();
             }
         }
     }

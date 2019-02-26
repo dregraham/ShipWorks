@@ -21,13 +21,13 @@ namespace ShipWorks.Filters.Content.SqlGeneration
     /// </summary>
     public class FilterContentCalculation : IFilterContentSqlGenerator
     {
-        FilterNodeEntity node;
+        private FilterNodeEntity node;
 
         // For filters, this is the effective definition which takes into consideration
         // all parent restrictions.  Will be null for folders
-        FilterDefinition filterDefinition;
-        SqlGenerationContext filterSqlContext;
-        string filterSqlPredicate;
+        private FilterDefinition filterDefinition;
+        private SqlGenerationContext filterSqlContext;
+        private string filterSqlPredicate;
 
         /// <summary>
         /// Creates a new instance of the calculation generator for the given node
@@ -47,7 +47,7 @@ namespace ShipWorks.Filters.Content.SqlGeneration
                 filterDefinition = GetEffectiveFilterDefinition(node);
                 filterSqlContext = new SqlGenerationContext(filterDefinition.FilterTarget);
 
-                if (filterDefinition.IsEmpty() || node.Filter.State == (byte) FilterState.Disabled)
+                if (filterDefinition.IsEmpty() || node.Filter.State == (byte) FilterState.Disabled || node.Filter.State == (byte) FilterState.OnDemand)
                 {
                     filterSqlPredicate = "WHERE 1 = 2";
                 }

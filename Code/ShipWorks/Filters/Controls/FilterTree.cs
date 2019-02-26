@@ -7,6 +7,7 @@ using System.Reactive.Linq;
 using System.Windows.Forms;
 using Divelements.SandGrid;
 using Interapptive.Shared;
+using Interapptive.Shared.Collections;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore.Appearance;
@@ -203,6 +204,13 @@ namespace ShipWorks.Filters.Controls
         [DefaultValue(false)]
         [Category("Behavior")]
         public bool HideDisabledFilters { get; set; }
+
+        /// <summary>
+        /// Should on-demand filters be hidden
+        /// </summary>
+        [DefaultValue(false)]
+        [Category("Behavior")]
+        public bool HideOnDemandFilters { get; set; }
 
         /// <summary>
         /// Indicates if the active search node - if any - that will be displayed
@@ -1055,7 +1063,7 @@ namespace ShipWorks.Filters.Controls
         private void LoadChildren(FilterNodeEntity filterNode, FilterTreeGridRow parentRow)
         {
             // Go through each of the children in order
-            foreach (FilterNodeEntity childNode in filterNode.ChildNodes.Where(x => !HideDisabledFilters || x.Filter.State == (int) FilterState.Enabled))
+            foreach (FilterNodeEntity childNode in filterNode.ChildNodes.Where(ShouldFilterBeInTheList))
             {
                 FilterTreeGridRow row = CreateRow(childNode);
                 parentRow.NestedRows.Add(row);
@@ -1066,6 +1074,13 @@ namespace ShipWorks.Filters.Controls
             // By default, everything is expanded
             parentRow.Expanded = true;
         }
+
+        /// <summary>
+        /// Should the filter be shown in the list
+        /// </summary>
+        private bool ShouldFilterBeInTheList(FilterNodeEntity x) =>
+            (!HideDisabledFilters || x.Filter.State != (int) FilterState.Disabled) &&
+            (!HideOnDemandFilters || x.Filter.State != (int) FilterState.OnDemand);
 
         /// <summary>
         /// Get what is to be the parent of items that are moved \ inserted
@@ -1150,6 +1165,14 @@ namespace ShipWorks.Filters.Controls
         /// </summary>
         private void OnSelectedFilterNodeChanged()
         {
+            ClearSearchProxies();
+
+            if (SelectedFilterNode?.Filter?.State == (int) FilterState.OnDemand)
+            {
+                OnLoadAsAdvancedSearch(this, EventArgs.Empty);
+                return;
+            }
+
             if (SelectedFilterNode != null && SelectedFilterNode.Purpose == (int) FilterNodePurpose.Quick)
             {
                 quickFilterNode = SelectedFilterNode;
@@ -1698,5 +1721,39 @@ namespace ShipWorks.Filters.Controls
                 OnSelectedFilterNodeChanged();
             }
         }
+
+        /// <summary>
+        /// Set the search filter node
+        /// </summary>
+        internal long SetSearch(FilterNodeEntity activeFilterNode, EventHandler onSelectedFilterNodeChanged)
+        {
+            ClearSearchProxies();
+
+            var currentFilterNodeID = SelectedFilterNodeID;
+
+            SelectedFilterNodeChanged -= onSelectedFilterNodeChanged;
+
+            if (SelectedFilterNode?.Filter?.State == (int) FilterState.OnDemand)
+            {
+                lastSelectedRow.FilterProxy = activeFilterNode;
+            }
+            else
+            {
+                ActiveSearchNode = activeFilterNode;
+                SelectedFilterNode = activeFilterNode;
+            }
+
+            SelectedFilterNodeChanged += onSelectedFilterNodeChanged;
+
+            return currentFilterNodeID;
+        }
+
+        /// <summary>
+        /// Clear search proxies
+        /// </summary>
+        private void ClearSearchProxies() =>
+            sandGrid.FlatRows
+                .OfType<FilterTreeGridRow>()
+                .ForEach(x => x.ClearSearchProxy());
     }
 }

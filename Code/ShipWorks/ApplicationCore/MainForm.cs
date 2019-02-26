@@ -2955,14 +2955,7 @@ namespace ShipWorks
 
             if (gridControl.IsSearchActive)
             {
-                searchRestoreFilterNodeID = currentFilterTree.SelectedFilterNodeID;
-
-                currentFilterTree.SelectedFilterNodeChanged -= new EventHandler(OnSelectedFilterNodeChanged);
-
-                currentFilterTree.ActiveSearchNode = gridControl.ActiveFilterNode;
-                currentFilterTree.SelectedFilterNode = gridControl.ActiveFilterNode;
-
-                currentFilterTree.SelectedFilterNodeChanged += new EventHandler(OnSelectedFilterNodeChanged);
+                searchRestoreFilterNodeID = currentFilterTree.SetSearch(gridControl.ActiveFilterNode, OnSelectedFilterNodeChanged);
             }
             else
             {
