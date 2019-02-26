@@ -3,6 +3,7 @@ using System.Reflection;
 using System.Windows.Input;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
+using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
 using ShipWorks.Stores.Platforms.Odbc;
 using ShipWorks.Stores.Platforms.Odbc.DataAccess;
@@ -10,6 +11,7 @@ using ShipWorks.Stores.Platforms.Odbc.DataSource;
 
 namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Import
 {
+    [Component(RegistrationType.Self)]
     public class OdbcImportParameterizedQueryControlViewModel : ViewModelBase
     {
         private DataTable queryResults;
