@@ -55,7 +55,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.WizardPages.Import
             }
 
             viewModel = viewModelFactory();
-            viewModel.Load(dataSourceService.GetImportDataSource(store), (OdbcImportStrategy) store.ImportStrategy);
+            viewModel.Load(dataSourceService.GetImportDataSource(store), (OdbcImportStrategy) store.ImportStrategy, store.ImportColumnSource);
 
             parameterizedQueryControl.DataContext = viewModel;
         }

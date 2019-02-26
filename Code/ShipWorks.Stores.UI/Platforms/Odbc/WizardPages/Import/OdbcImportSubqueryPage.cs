@@ -52,7 +52,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.WizardPages.Import
             }
 
             viewModel = viewModelFactory();
-            viewModel.Load(dataSourceService.GetImportDataSource(store));
+            viewModel.Load(dataSourceService.GetImportDataSource(store), store.ImportColumnSource);
 
             subqueryControl.DataContext = viewModel;
         }

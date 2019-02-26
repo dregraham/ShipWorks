@@ -109,10 +109,11 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Import
         /// <summary>
         /// Load the odbc data source into the view model
         /// </summary>
-        public void Load(IOdbcDataSource odbcDataSource, OdbcImportStrategy odbcImportStrategy)
+        public void Load(IOdbcDataSource odbcDataSource, OdbcImportStrategy odbcImportStrategy, string query)
         {
             dataSource = odbcDataSource;
             importStrategy = odbcImportStrategy;
+            CustomQuery = query;
             
             IDialog warningDlg = dialogFactory("OdbcCustomQueryWarningDlg");
             warningDlg.ShowDialog();

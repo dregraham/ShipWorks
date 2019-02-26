@@ -74,9 +74,10 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Import
         /// <summary>
         /// Load the odbc data source into the view model
         /// </summary>
-        public void Load(IOdbcDataSource odbcDataSource)
+        public void Load(IOdbcDataSource odbcDataSource, string query)
         {
             dataSource = odbcDataSource;
+            CustomQuery = query;
             
             IDialog warningDlg = dialogFactory("OdbcCustomQueryWarningDlg");
             warningDlg.ShowDialog();
