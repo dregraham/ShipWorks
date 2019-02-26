@@ -385,8 +385,12 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Import
 
             IOdbcColumnSource columnSource = columnSourceFactory(columnSourceName);
 
-            columnSource.Load(selectedDataSource, store.ImportColumnSource,
-                              (OdbcColumnSourceType) store.ImportColumnSourceType);
+            string source = store.ImportColumnSourceType == (int) OdbcColumnSourceType.CustomParameterizedQuery ?
+                store.ImportColumnSource.Replace("?", "0") :
+                store.ImportColumnSource;
+
+            columnSource.Load(selectedDataSource, source,
+                (OdbcColumnSourceType) store.ImportColumnSourceType);
 
             ColumnSource = columnSource;
             Columns = new ObservableCollection<OdbcColumn>(ColumnSource.Columns);
@@ -418,7 +422,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Import
         public void Save(OdbcStoreEntity store)
         {
             MethodConditions.EnsureArgumentIsNotNull(store, nameof(store));
-            
+
             IOdbcFieldMap map = CreateMap();
             try
             {
