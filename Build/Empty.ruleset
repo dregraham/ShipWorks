@@ -1182,6 +1182,7 @@
 	<Rule Id="S3264" Action="None" />
 	<Rule Id="S3265" Action="None" />
 	<Rule Id="S3346" Action="None" />
+	<Rule Id="S3358" Action="None" />
 	<Rule Id="S3376" Action="None" />
 	<Rule Id="S3397" Action="None" />
 	<Rule Id="S3415" Action="None" />
@@ -1294,6 +1295,7 @@
 	<Rule Id="S4142" Action="None" />
 	<Rule Id="S4144" Action="None" />
 	<Rule Id="S4158" Action="None" />
+	<Rule Id="S4200" Action="None" />
 	<Rule Id="S4214" Action="None" />
 	<Rule Id="S4220" Action="None" />
 	<Rule Id="S4225" Action="None" />
