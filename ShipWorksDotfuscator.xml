@@ -206,6 +206,9 @@
         <file dir="${configdir}\Artifacts\Application" name="ShipWorks.Escalator.exe" />
       </assembly>
       <assembly>
+        <file dir="${configdir}\Artifacts\Application" name="ShipWorks.SplashScreen.exe" />
+      </assembly>
+      <assembly>
         <file dir="${configdir}\Artifacts\Application" name="ShipWorks.exe" />
       </assembly>
       <assembly>
