@@ -10,7 +10,7 @@ namespace ShipWorks.UI.Controls.MainGrid
     /// <summary>
     /// Boolean to Color multi value converter
     /// </summary>
-    [Obfuscation(Exclude = true)]
+    [Obfuscation]
     public class BooleanToColorMultiValueConverter : IMultiValueConverter
     {
         /// <summary>

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Reflection;
 using System.Windows;
 using ShipWorks.ApplicationCore.Appearance;
 
@@ -7,6 +8,7 @@ namespace ShipWorks.UI
     /// <summary>
     /// Resource dictionary that can handle ShipWorks skinning
     /// </summary>
+    [Obfuscation]
     public class ColorSchemeResourceDictionary : ResourceDictionary
     {
         private Uri silverSource;
