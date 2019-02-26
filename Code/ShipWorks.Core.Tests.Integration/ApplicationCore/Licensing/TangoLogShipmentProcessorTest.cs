@@ -64,7 +64,7 @@ namespace ShipWorks.Core.Tests.Integration.ApplicationCore.Licensing
 
             testObject.Add(context.Store, shipment);
 
-            await testObject.Process().ConfigureAwait(false);
+            testObject.RunNow();
 
             tangoLogShipmentRequest.Verify(c => c.LogShipment(It.IsAny<DbConnection>(), AnyStore, AnyShipment), Times.Once);
         }
