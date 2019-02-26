@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Windows.Forms;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
@@ -19,7 +20,9 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.WizardPages.Import
         private readonly IMessageHelper messageHelper;
         private OdbcStoreEntity store;
         
-        public OdbcImportParameterizedQueryPage(Func<OdbcImportParameterizedQueryControlViewModel> viewModelFactory, IOdbcDataSourceService dataSourceService, IMessageHelper messageHelper)
+        public OdbcImportParameterizedQueryPage(Func<OdbcImportParameterizedQueryControlViewModel> viewModelFactory, 
+                                                IOdbcDataSourceService dataSourceService, 
+                                                IMessageHelper messageHelper)
         {
             this.viewModelFactory = viewModelFactory;
             this.dataSourceService = dataSourceService;
@@ -30,7 +33,11 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.WizardPages.Import
             StepNext += OnNext;
             StepBack += OnBack;
         }
-        public int Position => 4;
+        
+        /// <summary>
+        /// The position in which to show this wizard page
+        /// </summary>
+        public int Position => 3;
         
         /// <summary>
         /// Called when [stepping into].
@@ -39,7 +46,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.WizardPages.Import
         {
             store = GetStore<OdbcStoreEntity>();
             
-            if (store.ImportColumnSourceType == (int) OdbcColumnSourceType.CustomSubQuery)
+            if (store.ImportColumnSourceType != (int) OdbcColumnSourceType.CustomParameterizedQuery)
             {
                 e.Skip = true;
                 e.RaiseStepEventWhenSkipping = false;

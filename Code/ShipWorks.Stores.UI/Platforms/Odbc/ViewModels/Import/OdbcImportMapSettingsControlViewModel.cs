@@ -26,23 +26,21 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Import
         private bool isSubquery = true; 
         private OdbcImportStrategy importStrategy = OdbcImportStrategy.ByModifiedTime;
         private OdbcImportOrderItemStrategy importOrderItemStrategy = OdbcImportOrderItemStrategy.SingleLine;
-        private readonly Func<string, IDialog> dialogFactory;
         private IOdbcFieldMap fieldMap;
         private readonly Func<IOpenFileDialog> openFileDialogFactory;
         private readonly IOdbcImportSettingsFile importSettingsFile;
+        private bool parameterizedQueryAllowed;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="OdbcImportMapSettingsControlViewModel"/> class.
         /// </summary>
-        public OdbcImportMapSettingsControlViewModel(Func<string, IDialog> dialogFactory,
-            IMessageHelper messageHelper,
+        public OdbcImportMapSettingsControlViewModel(IMessageHelper messageHelper,
             Func<string, IOdbcColumnSource> columnSourceFactory,
             IOdbcFieldMap fieldMap,
             Func<IOpenFileDialog> openFileDialogFactory,
             IOdbcImportSettingsFile importSettingsFile) :
                 base(messageHelper, columnSourceFactory)
         {
-            this.dialogFactory = dialogFactory;
             this.fieldMap = fieldMap;
             this.openFileDialogFactory = openFileDialogFactory;
             this.importSettingsFile = importSettingsFile;
@@ -66,14 +64,14 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Import
             {
                 Handler.Set(nameof(ColumnSourceIsTable), ref columnSourceIsTable, value);
 
-                // Show warning dlg when query is selected
+                // Set query type to subquery query is selected
                 if (!value)
                 {
-                    IDialog warningDlg = dialogFactory("OdbcCustomQueryWarningDlg");
-                    warningDlg.ShowDialog();
+                    IsSubquery = true;   
                 }
 
                 ColumnSource = value ? SelectedTable : CustomQueryColumnSource;
+                ParameterizedQueryAllowed = !value && ImportStrategy != OdbcImportStrategy.All;
             }
         }
 
@@ -84,7 +82,20 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Import
         public OdbcImportStrategy ImportStrategy
         {
             get => importStrategy;
-            set => Handler.Set(nameof(ImportStrategy), ref importStrategy, value);
+            set
+            {
+                Handler.Set(nameof(ImportStrategy), ref importStrategy, value);
+                
+                // Parameterized query is only allowed when not using all
+                ParameterizedQueryAllowed = value != OdbcImportStrategy.All && !ColumnSourceIsTable;
+                
+                // if the user changes their import strategy to all and they are using query, make sure we set it subquery
+                // since that is their only option
+                if (!ColumnSourceIsTable && value == OdbcImportStrategy.All)
+                {
+                    IsSubquery = true;
+                }
+            }
         }
 
         /// <summary>
@@ -95,6 +106,16 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Import
         {
             get => isSubquery;
             set => Handler.Set(nameof(IsSubquery), ref isSubquery, value);
+        }
+
+        /// <summary>
+        /// Whether or not a parameterized query is allowed
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public bool ParameterizedQueryAllowed
+        {
+            get => parameterizedQueryAllowed;
+            set => Handler.Set(nameof(ParameterizedQueryAllowed), ref parameterizedQueryAllowed, value);
         }
 
         /// <summary>

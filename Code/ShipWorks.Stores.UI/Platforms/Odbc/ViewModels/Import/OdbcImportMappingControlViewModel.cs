@@ -35,8 +35,9 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Import
         private readonly Func<string, IOdbcColumnSource> columnSourceFactory;
         private readonly IOdbcDataSourceService dataSourceService;
 
-        private const string CustomQueryColumnSourceName = "Custom Import";
         private const string EmptyColumnName = "(None)";
+        private const string CustomQueryColumnSourceName = "Custom Import";
+
         private bool isSingleLineOrder = true;
         private int numberOfAttributesPerItem;
         private int numberOfItemsPerOrder;
@@ -377,15 +378,15 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Import
         private void LoadColumnSource(OdbcStoreEntity store)
         {
             IOdbcDataSource selectedDataSource = dataSourceService.GetImportDataSource(store);
-
-            string columnSourceName = store.ImportColumnSourceType == (int) OdbcColumnSourceType.Table
-                ? store.ImportColumnSource
-                : CustomQueryColumnSourceName;
+            
+            string columnSourceName = store.ImportColumnSourceType == (int) OdbcColumnSourceType.Table ?
+                store.ImportColumnSource :
+                CustomQueryColumnSourceName;
 
             IOdbcColumnSource columnSource = columnSourceFactory(columnSourceName);
 
             columnSource.Load(selectedDataSource, store.ImportColumnSource,
-                (OdbcColumnSourceType) store.ImportColumnSourceType);
+                              (OdbcColumnSourceType) store.ImportColumnSourceType);
 
             ColumnSource = columnSource;
             Columns = new ObservableCollection<OdbcColumn>(ColumnSource.Columns);

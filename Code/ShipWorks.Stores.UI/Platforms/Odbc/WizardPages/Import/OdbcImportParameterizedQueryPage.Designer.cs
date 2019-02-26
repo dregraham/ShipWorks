@@ -47,8 +47,10 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.elementHost1);
+            this.Description = "Setup the ODBC custom import query.";
             this.Name = "OdbcImportParameterizedQueryPage";
             this.Size = new System.Drawing.Size(540, 500);
+            this.Title = "Parameterized Query";
             this.ResumeLayout(false);
 
         }

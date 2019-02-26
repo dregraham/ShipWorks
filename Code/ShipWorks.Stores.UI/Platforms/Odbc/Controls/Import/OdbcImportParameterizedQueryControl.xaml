@@ -15,7 +15,7 @@
     <UserControl.Resources>
         <ui:StringToVisibilityConverter x:Key="StringToVisibilityConverter" />
     </UserControl.Resources>
-    <Grid>
+    <Grid Margin="23 10 10 10">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
@@ -29,8 +29,8 @@
         </Grid.RowDefinitions>
 
         <TextBlock Grid.Row="0"
-                   Margin="0 0 -20 10"
-                   Text="Custom Import Query - Parameterized Query"
+                   Margin="0 0 0 10"
+                   Text="Custom Import Query"
                    FontWeight="Bold" 
                    HorizontalAlignment="Left"/>
         
@@ -64,7 +64,8 @@
 
             <TextBox Grid.Column="1"
                      Margin="10 0 15 0"
-                     Text="{Binding SampleParameterValue}"/>
+                     Text="{Binding SampleParameterValue}"
+                     VerticalContentAlignment="Center"/>
 
             <Button Grid.Column="2"
                 HorizontalAlignment="Right"

@@ -32,7 +32,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.WizardPages.Import
         /// <summary>
         /// The position in which to show this wizard page
         /// </summary>
-        public int Position => 2;
+        public int Position => 4;
 
         /// <summary>
         /// Load saved map from store

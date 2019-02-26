@@ -32,7 +32,10 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.WizardPages.Import
             StepBack += OnBack;
         }
 
-        public int Position => 3;
+        /// <summary>
+        /// The position in which to show this wizard page
+        /// </summary>
+        public int Position => 2;
         
         /// <summary>
         /// Called when [stepping into].
@@ -41,7 +44,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.WizardPages.Import
         {
             store = GetStore<OdbcStoreEntity>();
             
-            if (store.ImportColumnSourceType == (int) OdbcColumnSourceType.CustomSubQuery)
+            if (store.ImportColumnSourceType != (int) OdbcColumnSourceType.CustomSubQuery)
             {
                 e.Skip = true;
                 e.RaiseStepEventWhenSkipping = false;

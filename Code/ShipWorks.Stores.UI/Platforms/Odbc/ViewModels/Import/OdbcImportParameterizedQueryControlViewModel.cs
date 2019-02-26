@@ -1,9 +1,14 @@
+using System;
+using System.Collections.Generic;
 using System.Data;
+using System.Linq;
 using System.Reflection;
+using System.Text;
 using System.Windows.Input;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
 using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using ShipWorks.Stores.Platforms.Odbc;
 using ShipWorks.Stores.Platforms.Odbc.DataAccess;
@@ -18,6 +23,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Import
         private string resultMessage;
         private const int NumberOfSampleResults = 25;
         private readonly IOdbcSampleDataCommand sampleDataCommand;
+        private readonly Func<string, IDialog> dialogFactory;
         private string customQuery;
         private IOdbcDataSource dataSource;
         private string sampleParameterValue;
@@ -25,9 +31,10 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Import
         /// <summary>
         /// Constructor
         /// </summary>
-        public OdbcImportParameterizedQueryControlViewModel(IOdbcSampleDataCommand sampleDataCommand)
+        public OdbcImportParameterizedQueryControlViewModel(IOdbcSampleDataCommand sampleDataCommand, Func<string, IDialog> dialogFactory)
         {
             this.sampleDataCommand = sampleDataCommand;
+            this.dialogFactory = dialogFactory;
 
             ExecuteQueryCommand = new RelayCommand(() => ExecuteQuery(),
                                                    () => !string.IsNullOrWhiteSpace(CustomQuery) &&
@@ -86,6 +93,9 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Import
         public void Load(IOdbcDataSource odbcDataSource)
         {
             dataSource = odbcDataSource;
+            
+            IDialog warningDlg = dialogFactory("OdbcCustomQueryWarningDlg");
+            warningDlg.ShowDialog();
         }
 
         /// <summary>
@@ -95,16 +105,21 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Import
         {
             Result queryResult;
 
+            StringBuilder errors = new StringBuilder();
+            
+            if (string.IsNullOrWhiteSpace(CustomQuery))
+            {
+                errors.AppendLine("Please enter a valid query before continuing to the next page.");
+            }
+
             if (string.IsNullOrWhiteSpace(SampleParameterValue))
             {
-                queryResult = Result.FromSuccess();
+                errors.AppendLine("Please enter a sample parameter value to test the query with.");
             }
-            else
-            {
-                queryResult = string.IsNullOrWhiteSpace(CustomQuery) ?
-                    Result.FromError("Please enter a valid query before continuing to the next page.") :
-                    ExecuteQuery();
-            }
+
+            queryResult = errors.Length == 0 ? 
+                ExecuteQuery() : 
+                Result.FromError(errors.ToString());
 
             return queryResult;
         }

@@ -1,9 +1,11 @@
+using System;
 using System.Data;
 using System.Reflection;
 using System.Windows.Input;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
 using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using ShipWorks.Stores.Platforms.Odbc;
 using ShipWorks.Stores.Platforms.Odbc.DataAccess;
@@ -18,16 +20,18 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Import
         private string resultMessage;
         private const int NumberOfSampleResults = 25;
         private readonly IOdbcSampleDataCommand sampleDataCommand;
+        private readonly Func<string, IDialog> dialogFactory;
         private string customQuery;
         private IOdbcDataSource dataSource;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public OdbcImportSubqueryControlViewModel(IOdbcSampleDataCommand sampleDataCommand)
+        public OdbcImportSubqueryControlViewModel(IOdbcSampleDataCommand sampleDataCommand, Func<string, IDialog> dialogFactory)
         {
             this.sampleDataCommand = sampleDataCommand;
-            
+            this.dialogFactory = dialogFactory;
+
             ExecuteQueryCommand = new RelayCommand(() => ExecuteQuery());
         }
         
@@ -73,6 +77,9 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Import
         public void Load(IOdbcDataSource odbcDataSource)
         {
             dataSource = odbcDataSource;
+            
+            IDialog warningDlg = dialogFactory("OdbcCustomQueryWarningDlg");
+            warningDlg.ShowDialog();
         }
         
         /// <summary>
