@@ -24,6 +24,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Upload
         private IOdbcFieldMap fieldMap;
         private readonly Func<IOpenFileDialog> openFileDialogFactory;
         private readonly IOdbcSettingsFile uploadSettingsFile;
+        private string customQuery;
 
         private const string InitialQueryComment =
             "/**********************************************************************/\n" +
@@ -82,6 +83,16 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Upload
                 ColumnSource = value ? SelectedTable : CustomQueryColumnSource;
             }
         }
+        
+        /// <summary>
+        /// the custom query
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public string CustomQuery
+        {
+            get => customQuery;
+            set => Handler.Set(nameof(CustomQuery), ref customQuery, value);
+        }
 
         /// <summary>
         /// Gets the load map command.
@@ -111,7 +122,14 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Upload
                 if (openResult.Success)
                 {
                     ColumnSourceIsTable = uploadSettingsFile.ColumnSourceType == OdbcColumnSourceType.Table;
+                    
+                    
                     LoadAndSetColumnSource(uploadSettingsFile.ColumnSource);
+                    if (!string.IsNullOrWhiteSpace(uploadSettingsFile.ColumnSource))
+                    {
+                        CustomQuery = uploadSettingsFile.ColumnSource;
+                    }
+                    
                     MapName = uploadSettingsFile.OdbcFieldMap.Name;
 
                     fieldMap = uploadSettingsFile.OdbcFieldMap;
@@ -131,7 +149,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Upload
         {
             store.UploadColumnSourceType = ColumnSourceIsTable ?
                 (int) OdbcColumnSourceType.Table :
-                (int) OdbcColumnSourceType.CustomQuery;
+                (int) OdbcColumnSourceType.CustomSubQuery;
 
             store.UploadColumnSource = ColumnSourceIsTable ?
                 SelectedTable.Name :

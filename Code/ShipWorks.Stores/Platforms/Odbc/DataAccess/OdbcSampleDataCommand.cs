@@ -94,6 +94,11 @@ namespace ShipWorks.Stores.Platforms.Odbc.DataAccess
             }
         }
 
+        public DataTable Execute(IOdbcDataSource dataSource, string query, string parameterValue, int numberOfResults)
+        {
+            throw new NotImplementedException();
+        }
+
         /// <summary>
         /// Creates an empty result table from the reader
         /// </summary>

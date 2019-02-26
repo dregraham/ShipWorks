@@ -3,29 +3,32 @@ using System.Reflection;
 using System.Windows.Input;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
-using Interapptive.Shared.UI;
+using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.Utility;
 using ShipWorks.Stores.Platforms.Odbc;
 using ShipWorks.Stores.Platforms.Odbc.DataAccess;
 using ShipWorks.Stores.Platforms.Odbc.DataSource;
 
 namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Import
 {
+    [Component(RegistrationType.Self)]
     public class OdbcImportSubqueryControlViewModel : ViewModelBase
     {
         private DataTable queryResults;
         private string resultMessage;
         private const int NumberOfSampleResults = 25;
-        private bool isQueryValid;
         private readonly IOdbcSampleDataCommand sampleDataCommand;
-        private readonly IMessageHelper messageHelper;
         private string customQuery;
         private IOdbcDataSource dataSource;
 
-        public OdbcImportSubqueryControlViewModel(IOdbcSampleDataCommand sampleDataCommand, IMessageHelper messageHelper)
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public OdbcImportSubqueryControlViewModel(IOdbcSampleDataCommand sampleDataCommand)
         {
             this.sampleDataCommand = sampleDataCommand;
-            this.messageHelper = messageHelper;
-            ExecuteQueryCommand = new RelayCommand(ExecuteQuery);
+            
+            ExecuteQueryCommand = new RelayCommand(() => ExecuteQuery());
         }
         
         /// <summary>
@@ -75,26 +78,19 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Import
         /// <summary>
         /// Validate the custom query
         /// </summary>
-        public bool ValidateQuery()
+        public Result ValidateQuery()
         {
-            if (!string.IsNullOrWhiteSpace(CustomQuery))
-            {
+            Result queryResult = string.IsNullOrWhiteSpace(CustomQuery) ? 
+                Result.FromError("Please enter a valid query before continuing to the next page.") : 
                 ExecuteQuery();
-            }
 
-            if (!isQueryValid)
-            {
-                messageHelper.ShowError("Please enter a valid query before continuing to the next page.");
-                return false;
-            }
-
-            return true;
+            return queryResult;
         }
         
         /// <summary>
         /// Executes the query.
         /// </summary>
-        private void ExecuteQuery()
+        private Result ExecuteQuery()
         {
             QueryResults = null;
             ResultMessage = string.Empty;
@@ -108,12 +104,11 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Import
                     ResultMessage = "Query returned no results";
                 }
 
-                isQueryValid = true;
+                return Result.FromSuccess();
             }
             catch (ShipWorksOdbcException ex)
             {
-                messageHelper.ShowError(ex.Message);
-                isQueryValid = false;
+                return Result.FromError(ex.Message);
             }
         }
     }

@@ -28,7 +28,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels
 
         public event PropertyChangedEventHandler PropertyChanged;
         protected readonly PropertyChangedHandler Handler;
-        private readonly IMessageHelper messageHelper;
+        protected readonly IMessageHelper messageHelper;
         private readonly Func<string, IOdbcColumnSource> columnSourceFactory;
         private IOdbcSchema schema;
 
@@ -217,13 +217,6 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels
                 {
                     Tables = Tables.Concat(new[] { loadedColumnSource });
                     SelectedTable = loadedColumnSource;
-                }
-            }
-            else
-            {
-                if (!string.IsNullOrWhiteSpace(columnSourceFromStore))
-                {
-                    CustomQuery = columnSourceFromStore;
                 }
             }
         }

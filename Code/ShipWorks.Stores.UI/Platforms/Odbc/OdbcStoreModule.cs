@@ -158,6 +158,14 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
             builder.RegisterType<OdbcImportMappingPage>()
                 .As<IOdbcWizardPage>()
                 .AsSelf();
+            
+            builder.RegisterType<OdbcImportSubqueryPage>()
+                .As<IOdbcWizardPage>()
+                .AsSelf();
+            
+            builder.RegisterType<OdbcImportParameterizedQueryPage>()
+                .As<IOdbcWizardPage>()
+                .AsSelf();
 
             builder.RegisterType<OdbcUploadShipmentStrategyPage>()
                 .As<IOdbcWizardPage>()

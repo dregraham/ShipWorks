@@ -11,7 +11,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.WizardPages.Import
     /// <summary>
     /// Wizard page for choosing an import map to load or to start creating a new one
     /// </summary>
-    public partial class OdbcImportMappingPage : AddStoreWizardPage, IOdbcWizardPage, IWin32Window
+    public partial class OdbcImportMappingPage : AddStoreWizardPage, IOdbcWizardPage
     {
         private IOdbcImportMappingControlViewModel viewModel;
         private OdbcStoreEntity store;

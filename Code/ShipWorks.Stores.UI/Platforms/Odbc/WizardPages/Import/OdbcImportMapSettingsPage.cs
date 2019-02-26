@@ -7,11 +7,10 @@ using ShipWorks.Stores.Platforms.Odbc.DataSource.Schema;
 using ShipWorks.Stores.UI.Platforms.Odbc.ViewModels;
 using ShipWorks.UI.Wizard;
 using System;
-using IWin32Window = System.Windows.Interop.IWin32Window;
 
 namespace ShipWorks.Stores.UI.Platforms.Odbc.WizardPages.Import
 {
-    public partial class OdbcImportMapSettingsPage : AddStoreWizardPage, IOdbcWizardPage, IWin32Window
+    public partial class OdbcImportMapSettingsPage : AddStoreWizardPage, IOdbcWizardPage
     {
         private readonly IOdbcDataSourceService dataSourceService;
         private readonly IIndex<string, IOdbcMapSettingsControlViewModel> viewModelFactory;

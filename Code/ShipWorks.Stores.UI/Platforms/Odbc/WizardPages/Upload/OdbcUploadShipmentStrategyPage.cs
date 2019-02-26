@@ -24,7 +24,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.WizardPages.Upload
         /// <summary>
         /// Gets the position.
         /// </summary>
-        public int Position => 3;
+        public int Position => 5;
 
         /// <summary>
         /// Called when [stepping into].
