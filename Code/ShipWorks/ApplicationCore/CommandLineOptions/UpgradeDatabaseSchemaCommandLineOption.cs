@@ -69,7 +69,6 @@ namespace ShipWorks.ApplicationCore.CommandLineOptions
                 finally
                 {
                     SubmitTelemetryTelemetry(databaseUpdateResult, backupResult);
-                    AutoUpdateStatusProvider.CloseSplashScreen();
                 }
             }
 

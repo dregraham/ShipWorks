@@ -25,14 +25,6 @@ namespace Interapptive.Shared.AutoUpdate
         /// </summary>
         public static void UpdateStatus(string status)
         {
-            using (IDisposable process = Process.GetProcessesByName(ProcessName).FirstOrDefault())
-            {
-                if (process == null)
-                {
-                    ShowSplashScreen();
-                }
-            }
-
             using (NamedPipeClientStream statusPipe = new NamedPipeClientStream(".", "ShipWorksUpgradeStatus", PipeDirection.Out))
             {
                 try
@@ -64,8 +56,16 @@ namespace Interapptive.Shared.AutoUpdate
         /// <remarks>
         /// If the splash isnt shown this will show it
         /// </remarks>
-        private static void ShowSplashScreen()
+        public static void ShowSplashScreen()
         {
+            using (IDisposable process = Process.GetProcessesByName(ProcessName).FirstOrDefault())
+            {
+                if (process == null)
+                {
+                    ShowSplashScreen();
+                }
+            }
+
             string existingFile = $"{SplashScreenExe}.exe";
             string newFile = $"{SplashScreenExe}.temp.exe";
 

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO.Pipes;
 using System.Text;
+using Interapptive.Shared.AutoUpdate;
 using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore;
 
@@ -47,8 +48,11 @@ namespace ShipWorks.Data.Administration
         /// <summary>
         /// Kick off the update
         /// </summary>
-        public Result Update(Version version) =>
-            SendMessage(version.ToString());
+        public Result Update(Version version)
+        {
+            AutoUpdateStatusProvider.ShowSplashScreen();
+            return SendMessage(version.ToString());
+        }
 
         /// <summary>
         /// Send the update window information to the updater pipe

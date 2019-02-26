@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Management;
 using System.Reflection;
+using Interapptive.Shared.AutoUpdate;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
 using log4net;
@@ -59,6 +60,10 @@ namespace ShipWorks.Escalator
                     relaunchShipWorks = true;
                 }
 
+                // Show the splash screen to give users feedback that the update
+                // is kicking off
+                AutoUpdateStatusProvider.ShowSplashScreen();
+
                 process.Kill();
             }
         }
@@ -102,6 +107,7 @@ namespace ShipWorks.Escalator
             int exitCode;
 
             log.Info("Starting Install Process");
+            AutoUpdateStatusProvider.UpdateStatus("Installing Update");
             using (Process proc = Process.Start(start))
             {
                 log.Info("Waiting for install to finish");

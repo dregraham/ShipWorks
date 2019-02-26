@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
+using Interapptive.Shared.AutoUpdate;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
 using log4net;
@@ -113,6 +114,8 @@ namespace ShipWorks.Escalator
                     log.ErrorFormat("An error occured while installing the new version of ShipWorks: {0}", installationResult.Message);
                 }
             }
+
+            AutoUpdateStatusProvider.CloseSplashScreen();
         }
 
         /// <summary>
