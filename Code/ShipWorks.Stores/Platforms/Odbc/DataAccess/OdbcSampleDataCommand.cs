@@ -5,6 +5,8 @@ using System.Data.Odbc;
 using System.Linq;
 using log4net;
 using ShipWorks.Stores.Platforms.Odbc.DataSource;
+using ShipWorks.Stores.Platforms.Odbc.DataSource.Schema;
+using ShipWorks.Stores.Platforms.Odbc.Download;
 
 namespace ShipWorks.Stores.Platforms.Odbc.DataAccess
 {
@@ -29,7 +31,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.DataAccess
         /// Execute the query and return sample data
         /// </summary>
         /// <exception cref="ShipWorksOdbcException"></exception>
-        public DataTable Execute(IOdbcDataSource dataSource, string query, int numberOfResults)
+        public DataTable Execute(IOdbcDataSource dataSource, string query, int numberOfResults, OdbcImportStrategy odbcColumnSource)
         {
             try
             {
@@ -39,6 +41,8 @@ namespace ShipWorks.Stores.Platforms.Odbc.DataAccess
 
                     using (IShipWorksOdbcCommand cmd = dbProviderFactory.CreateOdbcCommand(query, connection))
                     {
+                        cmd.AddParameter(GetParameter(odbcColumnSource));
+
                         using (DbDataReader reader = cmd.ExecuteReader(CommandBehavior.KeyInfo))
                         {
                             // Get an empty table that matches the schema of the query
@@ -94,9 +98,21 @@ namespace ShipWorks.Stores.Platforms.Odbc.DataAccess
             }
         }
 
-        public DataTable Execute(IOdbcDataSource dataSource, string query, string parameterValue, int numberOfResults)
+        private OdbcParameter GetParameter(OdbcImportStrategy odbcImportStrategy)
         {
-            throw new NotImplementedException();
+            switch (odbcImportStrategy)
+            {
+                case OdbcImportStrategy.ByModifiedTime:
+                    DateTime onlineLastModifiedStartingPoint = DateTime.UtcNow.Add(TimeSpan.FromDays(-30));
+                    return new OdbcParameter("onlineLastModifiedStartingPoint", onlineLastModifiedStartingPoint);
+                case OdbcImportStrategy.OnDemand:
+                    int orderNumber = 0;
+                    return new OdbcParameter("orderNumber", orderNumber);
+                    break;
+                    case OdbcImportStrategy.All:
+                    default:
+                        return null;
+            }
         }
 
         /// <summary>
