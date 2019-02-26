@@ -411,6 +411,8 @@
     <Compile Include="Platforms\Odbc\ViewModels\Import\IOdbcImportMappingControlViewModel.cs" />
     <Compile Include="Platforms\Odbc\ViewModels\Import\OdbcImportMappingControlViewModel.cs" />
     <Compile Include="Platforms\Odbc\ViewModels\Import\OdbcImportMapSettingsControlViewModel.cs" />
+    <Compile Include="Platforms\Odbc\ViewModels\Import\OdbcImportParameterizedQueryControlViewModel.cs" />
+    <Compile Include="Platforms\Odbc\ViewModels\Import\OdbcImportSubqueryControlViewModel.cs" />
     <Compile Include="Platforms\Odbc\ViewModels\IOdbcMapSettingsControlViewModel.cs" />
     <Compile Include="Platforms\Odbc\ViewModels\OdbcMapSettingsControlViewModel.cs" />
     <Compile Include="Platforms\Odbc\ViewModels\Upload\IOdbcUploadMappingControlViewModel.cs" />

@@ -4,12 +4,14 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:ui="http://schemas.shipworks.com/ui"
+             xmlns:import="clr-namespace:ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Import"
              mc:Ignorable="d" 
              FontSize="11px"
              FontFamily="Tahoma"
              Width="540"
              Height="500"
-             Background="{x:Static SystemColors.ControlBrush}">
+             Background="{x:Static SystemColors.ControlBrush}"
+             d:DataContext="{d:DesignInstance import:OdbcImportSubqueryControlViewModel}">
     <UserControl.Resources>
         <ui:StringToVisibilityConverter x:Key="StringToVisibilityConverter" />
     </UserControl.Resources>
@@ -70,6 +72,6 @@
                    Margin="0 10 0 0"
                    Text="{Binding ResultMessage, UpdateSourceTrigger=PropertyChanged}"
                    Visibility="{Binding ResultMessage,
-                                    Converter={StaticResource StringToVisibilityConverter}}" />
+                                        Converter={StaticResource StringToVisibilityConverter}}" />
     </Grid>
 </UserControl>

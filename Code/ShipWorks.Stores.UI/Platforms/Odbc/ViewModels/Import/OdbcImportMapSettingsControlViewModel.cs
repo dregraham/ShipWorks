@@ -26,10 +26,8 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Import
         private OdbcImportStrategy importStrategy = OdbcImportStrategy.ByModifiedTime;
         private OdbcImportOrderItemStrategy importOrderItemStrategy = OdbcImportOrderItemStrategy.SingleLine;
         private readonly Func<string, IDialog> dialogFactory;
-        private readonly IOdbcSampleDataCommand sampleDataCommand;
         private IOdbcFieldMap fieldMap;
-        private const int NumberOfSampleResults = 25;
-        private bool isQueryValid;
+        private bool isSubquery;
         private readonly Func<IOpenFileDialog> openFileDialogFactory;
         private readonly IOdbcImportSettingsFile importSettingsFile;
 
@@ -37,7 +35,6 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Import
         /// Initializes a new instance of the <see cref="OdbcImportMapSettingsControlViewModel"/> class.
         /// </summary>
         public OdbcImportMapSettingsControlViewModel(Func<string, IDialog> dialogFactory,
-            IOdbcSampleDataCommand sampleDataCommand,
             IMessageHelper messageHelper,
             Func<string, IOdbcColumnSource> columnSourceFactory,
             IOdbcFieldMap fieldMap,
@@ -46,12 +43,10 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Import
                 base(messageHelper, columnSourceFactory)
         {
             this.dialogFactory = dialogFactory;
-            this.sampleDataCommand = sampleDataCommand;
             this.fieldMap = fieldMap;
             this.openFileDialogFactory = openFileDialogFactory;
             this.importSettingsFile = importSettingsFile;
             OpenMapSettingsFileCommand = new RelayCommand(OpenMapSettingsFile);
-            ExecuteQueryCommand = new RelayCommand(ExecuteQuery);
         }
 
         /// <summary>
@@ -66,7 +61,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Import
         [Obfuscation(Exclude = true)]
         public override bool ColumnSourceIsTable
         {
-            get { return columnSourceIsTable; }
+            get => columnSourceIsTable;
             set
             {
                 Handler.Set(nameof(ColumnSourceIsTable), ref columnSourceIsTable, value);
@@ -88,8 +83,18 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Import
         [Obfuscation(Exclude = true)]
         public OdbcImportStrategy ImportStrategy
         {
-            get { return importStrategy; }
-            set { Handler.Set(nameof(ImportStrategy), ref importStrategy, value); }
+            get => importStrategy;
+            set => Handler.Set(nameof(ImportStrategy), ref importStrategy, value);
+        }
+
+        /// <summary>
+        /// The stores import strategy
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public bool IsSubquery
+        {
+            get => isSubquery;
+            set => Handler.Set(nameof(IsSubquery), ref isSubquery, value);
         }
 
         /// <summary>
@@ -97,7 +102,6 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Import
         /// </summary>
         private void OpenMapSettingsFile()
         {
-
             IOpenFileDialog fileDialog = openFileDialogFactory();
             fileDialog.DefaultExt = importSettingsFile.Extension;
             fileDialog.Filter = importSettingsFile.Filter;
@@ -141,38 +145,15 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Import
                 (int) OdbcColumnSourceType.Table :
                 (int) OdbcColumnSourceType.CustomQuery;
 
-            store.ImportColumnSource = ColumnSourceIsTable ?
-                SelectedTable?.Name :
-                CustomQuery;
+            if (ColumnSourceIsTable)
+            {
+                store.ImportColumnSource = SelectedTable?.Name;
+            }
 
             store.ImportOrderItemStrategy = (int) importOrderItemStrategy;
 
             fieldMap.Name = MapName;
             store.ImportMap = fieldMap.Serialize();
-        }
-
-        /// <summary>
-        /// Validates the required map settings.
-        /// </summary>
-        public override bool ValidateRequiredMapSettings()
-        {
-            if (!base.ValidateRequiredMapSettings())
-            {
-                return false;
-            }
-
-            if (!ColumnSourceIsTable)
-            {
-                ExecuteQuery();
-
-                if (!isQueryValid)
-                {
-                    MessageHelper.ShowError("Please enter a valid query before continuing to the next page.");
-                    return false;
-                }
-            }
-
-            return true;
         }
 
         /// <summary>
@@ -194,31 +175,5 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Import
         /// The column source name to use for custom query
         /// </summary>
         public override string CustomQueryColumnSourceName => "Custom Import";
-
-        /// <summary>
-        /// Executes the query.
-        /// </summary>
-        private void ExecuteQuery()
-        {
-            QueryResults = null;
-            ResultMessage = string.Empty;
-
-            try
-            {
-                QueryResults = sampleDataCommand.Execute(DataSource, CustomQuery, NumberOfSampleResults);
-
-                if (QueryResults.Rows.Count == 0)
-                {
-                    ResultMessage = "Query returned no results";
-                }
-
-                isQueryValid = true;
-            }
-            catch (ShipWorksOdbcException ex)
-            {
-                MessageHelper.ShowError(ex.Message);
-                isQueryValid = false;
-            }
-        }
     }
 }

@@ -151,6 +151,26 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Upload
 
             ColumnSourceIsTable = store.UploadColumnSourceType == (int) OdbcColumnSourceType.Table;
         }
+        
+        /// <summary>
+        /// Validates the required map settings.
+        /// </summary>
+        public override bool ValidateRequiredMapSettings()
+        {
+            if (!base.ValidateRequiredMapSettings())
+            {
+                return false;
+            }
+
+            if (!ColumnSourceIsTable && string.IsNullOrWhiteSpace(CustomQuery))
+            {
+                messageHelper.ShowError("Please enter a valid query before continuing to the next page.");
+                return false;
+            }
+
+            return true;
+        }
+
 
         /// <summary>
         /// The column source name to use for custom query
