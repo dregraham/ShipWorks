@@ -9467,6 +9467,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(FilterFieldIndex.State);}
 		}
+		/// <summary>Creates a new FilterEntity.IsOnDemand field instance</summary>
+		public static EntityField2 IsOnDemand
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(FilterFieldIndex.IsOnDemand);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity FilterLayoutEntity</summary>

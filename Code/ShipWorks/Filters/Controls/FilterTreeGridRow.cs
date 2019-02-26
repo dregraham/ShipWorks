@@ -142,7 +142,7 @@ namespace ShipWorks.Filters.Controls
                 return;
             }
 
-            if (filter.State == (int) FilterState.OnDemand && FilterProxy == null)
+            if (filter.IsOnDemand && FilterProxy == null)
             {
                 filterCount = null;
             }
@@ -196,7 +196,7 @@ namespace ShipWorks.Filters.Controls
 
             foreach (GridCell cell in Cells)
             {
-                if (filter.State == (int) FilterState.OnDemand)
+                if (filter.IsOnDemand)
                 {
                     cell.Image = Properties.Resources.paperclip16;
                     cell.Text = filter.Name;

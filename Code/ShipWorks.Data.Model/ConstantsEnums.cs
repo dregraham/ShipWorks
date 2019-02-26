@@ -4066,6 +4066,8 @@ namespace ShipWorks.Data.Model
 		Definition,
 		///<summary>State. </summary>
 		State,
+		///<summary>IsOnDemand. </summary>
+		IsOnDemand,
 		/// <summary></summary>
 		AmountOfFields
 	}

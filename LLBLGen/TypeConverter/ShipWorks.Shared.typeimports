@@ -1,4 +1,5 @@
 <typeImports>
+	<typeImport typeName="ShipWorks.Filters.FilterType" assemblyFile="..\..\Artifacts\Application\ShipWorks.Shared.dll" />
     <typeImport typeName="ShipWorks.Shipping.FedEx.FedExBatteryMaterialType" assemblyFile="..\..\Artifacts\Application\ShipWorks.Shared.dll"/>
     <typeImport typeName="ShipWorks.Shipping.FedEx.FedExBatteryPackingType" assemblyFile="..\..\Artifacts\Application\ShipWorks.Shared.dll"/>
     <typeImport typeName="ShipWorks.Shipping.FedEx.FedExBatteryRegulatorySubtype" assemblyFile="..\..\Artifacts\Application\ShipWorks.Shared.dll"/>
@@ -9,8 +10,8 @@
     <typeImport typeName="ShipWorks.Shipping.FedEx.FedExFreightShipmentRoleType" assemblyFile="..\..\Artifacts\Application\ShipWorks.Shared.dll"/>
     <typeImport typeName="ShipWorks.Shipping.FedEx.FedExFreightSpecialServicesType" assemblyFile="..\..\Artifacts\Application\ShipWorks.Shared.dll"/>
     <typeImport typeName="ShipWorks.IO.KeyboardShortcuts.Hotkey"  assemblyFile="..\..\Artifacts\Application\ShipWorks.Shared.dll"/>
-    <typeImport typeName="ShipWorks.IO.KeyboardShortcuts.KeyboardShortcutCommand"  assemblyFile="..\..\Artifacts\Application\ShipWorks.Shared.dll"/>   
-    <typeImport typeName="ShipWorks.IO.KeyboardShortcuts.KeyboardShortcutModifiers"  assemblyFile="..\..\Artifacts\Application\ShipWorks.Shared.dll"/>        
-    <typeImport typeName="ShipWorks.Shipping.ShipmentTypeCode"  assemblyFile="..\..\Artifacts\Application\ShipWorks.Shared.dll"/>    
+    <typeImport typeName="ShipWorks.IO.KeyboardShortcuts.KeyboardShortcutCommand"  assemblyFile="..\..\Artifacts\Application\ShipWorks.Shared.dll"/>
+    <typeImport typeName="ShipWorks.IO.KeyboardShortcuts.KeyboardShortcutModifiers"  assemblyFile="..\..\Artifacts\Application\ShipWorks.Shared.dll"/>
+    <typeImport typeName="ShipWorks.Shipping.ShipmentTypeCode"  assemblyFile="..\..\Artifacts\Application\ShipWorks.Shared.dll"/>
     <typeImport typeName="ShipWorks.Settings.UIMode" assemblyFile="..\..\Artifacts\Application\ShipWorks.Shared.dll"/>
 </typeImports>

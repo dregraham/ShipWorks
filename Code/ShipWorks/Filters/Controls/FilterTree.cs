@@ -1080,7 +1080,7 @@ namespace ShipWorks.Filters.Controls
         /// </summary>
         private bool ShouldFilterBeInTheList(FilterNodeEntity x) =>
             (!HideDisabledFilters || x.Filter.State != (int) FilterState.Disabled) &&
-            (!HideOnDemandFilters || x.Filter.State != (int) FilterState.OnDemand);
+            (!HideOnDemandFilters || !x.Filter.IsOnDemand);
 
         /// <summary>
         /// Get what is to be the parent of items that are moved \ inserted
@@ -1167,7 +1167,7 @@ namespace ShipWorks.Filters.Controls
         {
             ClearSearchProxies();
 
-            if (SelectedFilterNode?.Filter?.State == (int) FilterState.OnDemand)
+            if (SelectedFilterNode?.Filter?.IsOnDemand == true)
             {
                 OnLoadAsAdvancedSearch(this, EventArgs.Empty);
                 return;
@@ -1733,7 +1733,7 @@ namespace ShipWorks.Filters.Controls
 
             SelectedFilterNodeChanged -= onSelectedFilterNodeChanged;
 
-            if (SelectedFilterNode?.Filter?.State == (int) FilterState.OnDemand)
+            if (SelectedFilterNode?.Filter?.IsOnDemand == true)
             {
                 lastSelectedRow.FilterProxy = activeFilterNode;
             }

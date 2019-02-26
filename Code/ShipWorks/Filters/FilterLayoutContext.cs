@@ -795,10 +795,7 @@ namespace ShipWorks.Filters
             // each link its parent has.  But Move will take care of that.
             FilterNodeEntity filterNode = new FilterNodeEntity();
             filterNode.FilterSequence = sequence;
-            if (filterNode.Filter.State == (int) FilterState.Disabled)
-            {
-                filterNode.Filter.State = (int) FilterState.Enabled;
-            }
+            filterNode.Filter.State = (int) FilterState.Enabled;
 
             // Since we don't exist anywhere yet, this doesn't actually add a link, its the first one
             return AddNodeToParent(filterNode, parentNode, position, adapter);

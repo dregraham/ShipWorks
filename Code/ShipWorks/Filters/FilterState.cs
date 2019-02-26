@@ -5,6 +5,5 @@ namespace ShipWorks.Filters
     {
         Disabled = 0,
         Enabled = 1,
-        OnDemand = 2,
     }
 }

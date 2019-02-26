@@ -63,6 +63,12 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         /// Table field type characteristics (type, precision, scale, length): TinyInt, 3, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         System.Byte State { get; }
+        /// <summary> The IsOnDemand property of the Entity Filter<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "Filter"."IsOnDemand"<br/>
+        /// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+        System.Boolean IsOnDemand { get; }
         
         
         
