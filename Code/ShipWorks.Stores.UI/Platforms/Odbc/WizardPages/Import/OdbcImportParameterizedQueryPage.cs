@@ -7,6 +7,7 @@ using ShipWorks.Stores.Management;
 using ShipWorks.Stores.Platforms.Odbc;
 using ShipWorks.Stores.Platforms.Odbc.DataSource;
 using ShipWorks.Stores.Platforms.Odbc.DataSource.Schema;
+using ShipWorks.Stores.Platforms.Odbc.Download;
 using ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Import;
 using ShipWorks.UI.Wizard;
 
@@ -54,7 +55,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.WizardPages.Import
             }
 
             viewModel = viewModelFactory();
-            viewModel.Load(dataSourceService.GetImportDataSource(store));
+            viewModel.Load(dataSourceService.GetImportDataSource(store), (OdbcImportStrategy) store.ImportStrategy);
 
             parameterizedQueryControl.DataContext = viewModel;
         }

@@ -175,7 +175,8 @@
                                         Converter={StaticResource RadioButtonCheckedConverter},
                                         ConverterParameter={StaticResource False}}"/>
                 <TextBlock Grid.Row="2"
-                           Text="Some text explaining the difference and when you should use parameterized query"/>
+                           Text="{Binding QueryInfo}"
+                           TextWrapping="Wrap"/>
             </Grid>
         </Grid>        
     </Grid>

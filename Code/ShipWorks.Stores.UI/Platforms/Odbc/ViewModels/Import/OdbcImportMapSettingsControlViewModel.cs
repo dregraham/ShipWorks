@@ -119,6 +119,14 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Import
         }
 
         /// <summary>
+        /// Info regarding the two query options
+        /// </summary>
+        public string QueryInfo =>
+            "When Subquery is selected, ShipWorks will use your query as a subquery in a parameterized query of our own. This parameterized query is based on the selected download option. \n\n" +
+            "When Parameterized Query is selected, ShipWorks will give you a parameter to use when writing your query, based on the selected download option. ShipWorks will run your query as is. " +
+            "This option is best for users who want full control over the import query or users whose ODBC Driver does not support subqueries.";
+
+        /// <summary>
         /// Loads the map from disk.
         /// </summary>
         private void OpenMapSettingsFile()

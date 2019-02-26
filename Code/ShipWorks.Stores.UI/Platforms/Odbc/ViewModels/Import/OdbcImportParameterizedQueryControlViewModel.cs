@@ -13,6 +13,7 @@ using Interapptive.Shared.Utility;
 using ShipWorks.Stores.Platforms.Odbc;
 using ShipWorks.Stores.Platforms.Odbc.DataAccess;
 using ShipWorks.Stores.Platforms.Odbc.DataSource;
+using ShipWorks.Stores.Platforms.Odbc.Download;
 
 namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Import
 {
@@ -27,6 +28,8 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Import
         private string customQuery;
         private IOdbcDataSource dataSource;
         private string sampleParameterValue;
+        private string parameterizedQueryInfo;
+        private OdbcImportStrategy importStrategy;
 
         /// <summary>
         /// Constructor
@@ -46,6 +49,22 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Import
         /// </summary>
         [Obfuscation(Exclude = true)]
         public ICommand ExecuteQueryCommand { get; set; }
+
+        /// <summary>
+        /// Info regarding parameterized queries
+        /// </summary>
+        public string ParameterizedQueryInfo
+        {
+            get
+            {
+                string parameterType = importStrategy == OdbcImportStrategy.OnDemand ?
+                    "Order Number" :
+                    "Last Modified Date";
+
+                return
+                    $"Enter a query below, using a ? to represent the {parameterType} parameter. Please also enter a sample parameter value to test the query with, below the query editor.";
+            }
+        }
 
         /// <summary>
         /// The query results.
@@ -90,9 +109,10 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Import
         /// <summary>
         /// Load the odbc data source into the view model
         /// </summary>
-        public void Load(IOdbcDataSource odbcDataSource)
+        public void Load(IOdbcDataSource odbcDataSource, OdbcImportStrategy odbcImportStrategy)
         {
             dataSource = odbcDataSource;
+            importStrategy = odbcImportStrategy;
             
             IDialog warningDlg = dialogFactory("OdbcCustomQueryWarningDlg");
             warningDlg.ShowDialog();
