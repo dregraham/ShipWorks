@@ -388,7 +388,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.ViewModels.Import
 
                 var testObject = mock.Create<OdbcImportMapSettingsControlViewModel>();
                 testObject.Load(dataSource.Object, schema.Object, "source", store);
-                
+
                 testObject.OpenMapSettingsFileCommand.Execute(null);
 
                 dialogMock.Verify(d => d.CreateFileStream(), Times.Once);
@@ -459,7 +459,8 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.ViewModels.Import
         }
 
         [Theory]
-        [InlineData(OdbcColumnSourceType.CustomQuery, false)]
+        [InlineData(OdbcColumnSourceType.CustomSubQuery, false)]
+        [InlineData(OdbcColumnSourceType.CustomParameterizedQuery, false)]
         [InlineData(OdbcColumnSourceType.Table, true)]
         public void OpenMapSettingsFileCommand_SetsColumnSourceIsTable(OdbcColumnSourceType sourceType, bool isTable)
         {

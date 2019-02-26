@@ -33,7 +33,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Import
                                                    () => !string.IsNullOrWhiteSpace(CustomQuery) &&
                                                          !string.IsNullOrWhiteSpace(SampleParameterValue));
         }
-        
+
         /// <summary>
         /// Command that executes the query
         /// </summary>
@@ -59,7 +59,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Import
             get => resultMessage;
             set => Set(ref resultMessage, value);
         }
-        
+
         /// <summary>
         /// the custom query
         /// </summary>
@@ -69,7 +69,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Import
             get => customQuery;
             set => Set(ref customQuery, value);
         }
-        
+
         /// <summary>
         /// The sample value to use in place of the parameter for testing the custom query
         /// </summary>
@@ -87,7 +87,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Import
         {
             dataSource = odbcDataSource;
         }
-        
+
         /// <summary>
         /// Validate the custom query
         /// </summary>
@@ -103,12 +103,12 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Import
             {
                 queryResult = string.IsNullOrWhiteSpace(CustomQuery) ?
                     Result.FromError("Please enter a valid query before continuing to the next page.") :
-                    ExecuteQuery();    
+                    ExecuteQuery();
             }
-            
+
             return queryResult;
         }
-        
+
         /// <summary>
         /// Executes the query.
         /// </summary>
@@ -119,7 +119,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Import
 
             try
             {
-                QueryResults = sampleDataCommand.Execute(dataSource, CustomQuery, SampleParameterValue, NumberOfSampleResults);
+                QueryResults = sampleDataCommand.Execute(dataSource, CustomQuery.Replace("?", SampleParameterValue), NumberOfSampleResults);
 
                 if (QueryResults.Rows.Count == 0)
                 {

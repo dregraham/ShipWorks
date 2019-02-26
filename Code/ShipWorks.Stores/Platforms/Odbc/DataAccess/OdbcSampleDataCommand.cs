@@ -31,7 +31,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.DataAccess
         /// Execute the query and return sample data
         /// </summary>
         /// <exception cref="ShipWorksOdbcException"></exception>
-        public DataTable Execute(IOdbcDataSource dataSource, string query, int numberOfResults, OdbcImportStrategy odbcColumnSource)
+        public DataTable Execute(IOdbcDataSource dataSource, string query, int numberOfResults)
         {
             try
             {
@@ -41,8 +41,6 @@ namespace ShipWorks.Stores.Platforms.Odbc.DataAccess
 
                     using (IShipWorksOdbcCommand cmd = dbProviderFactory.CreateOdbcCommand(query, connection))
                     {
-                        cmd.AddParameter(GetParameter(odbcColumnSource));
-
                         using (DbDataReader reader = cmd.ExecuteReader(CommandBehavior.KeyInfo))
                         {
                             // Get an empty table that matches the schema of the query
@@ -95,23 +93,6 @@ namespace ShipWorks.Stores.Platforms.Odbc.DataAccess
                 throw new ShipWorksOdbcException(
                     $"An error occurred while attempting to retrieve columns for the custom query.",
                     ex);
-            }
-        }
-
-        private OdbcParameter GetParameter(OdbcImportStrategy odbcImportStrategy)
-        {
-            switch (odbcImportStrategy)
-            {
-                case OdbcImportStrategy.ByModifiedTime:
-                    DateTime onlineLastModifiedStartingPoint = DateTime.UtcNow.Add(TimeSpan.FromDays(-30));
-                    return new OdbcParameter("onlineLastModifiedStartingPoint", onlineLastModifiedStartingPoint);
-                case OdbcImportStrategy.OnDemand:
-                    int orderNumber = 0;
-                    return new OdbcParameter("orderNumber", orderNumber);
-                    break;
-                    case OdbcImportStrategy.All:
-                    default:
-                        return null;
             }
         }
 

@@ -12,6 +12,6 @@ namespace ShipWorks.Stores.Platforms.Odbc.DataAccess
         /// <summary>
         /// Executes the command.
         /// </summary>
-        DataTable Execute(IOdbcDataSource dataSource, string query, int numberOfResults, OdbcImportStrategy importStrategy);
+        DataTable Execute(IOdbcDataSource dataSource, string query, int numberOfResults);
     }
 }
