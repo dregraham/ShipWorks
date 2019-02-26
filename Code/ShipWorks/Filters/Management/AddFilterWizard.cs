@@ -182,6 +182,7 @@ namespace ShipWorks.Filters.Management
             if (DefaultFilterDefinition != null)
             {
                 Filter.Definition = DefaultFilterDefinition.GetXml();
+                Filter.State = (int) FilterState.OnDemand;
                 e.Skip = true;
             }
         }

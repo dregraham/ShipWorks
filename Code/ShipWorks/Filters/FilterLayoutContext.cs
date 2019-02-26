@@ -32,19 +32,19 @@ namespace ShipWorks.Filters
     public class FilterLayoutContext
     {
         // Logger
-        static readonly ILog log = LogManager.GetLogger(typeof(FilterLayoutContext));
+        private static readonly ILog log = LogManager.GetLogger(typeof(FilterLayoutContext));
 
         // The loaded layouts
-        List<FilterLayoutEntity> layouts = new List<FilterLayoutEntity>();
+        private List<FilterLayoutEntity> layouts = new List<FilterLayoutEntity>();
 
         // The user used to load My Layout
-        UserEntity user;
+        private UserEntity user;
 
         // Backing LLBLGen context to make sure everything has identity correctly
-        Context context = new Context();
+        private Context context = new Context();
 
         // Scope stack
-        static List<FilterLayoutContext> instanceScope = new List<FilterLayoutContext>();
+        private static List<FilterLayoutContext> instanceScope = new List<FilterLayoutContext>();
 
         /// <summary>
         /// Initialize the global layout context instance for the currently logged on user
@@ -795,7 +795,10 @@ namespace ShipWorks.Filters
             // each link its parent has.  But Move will take care of that.
             FilterNodeEntity filterNode = new FilterNodeEntity();
             filterNode.FilterSequence = sequence;
-            filterNode.Filter.State = (int) FilterState.Enabled;
+            if (filterNode.Filter.State == (int) FilterState.Disabled)
+            {
+                filterNode.Filter.State = (int) FilterState.Enabled;
+            }
 
             // Since we don't exist anywhere yet, this doesn't actually add a link, its the first one
             return AddNodeToParent(filterNode, parentNode, position, adapter);

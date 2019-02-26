@@ -481,7 +481,6 @@ namespace ShipWorks.Filters.Management
             this.filterTreeOrders.Editable = true;
             this.filterTreeOrders.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
             this.filterTreeOrders.HideDisabledFilters = true;
-            this.filterTreeOrders.HideOnDemandFilters = true;
             this.filterTreeOrders.HotTrackNode = null;
             this.filterTreeOrders.Location = new System.Drawing.Point(3, 3);
             this.filterTreeOrders.Name = "filterTreeOrders";
@@ -502,7 +501,6 @@ namespace ShipWorks.Filters.Management
             this.filterTreeCustomers.Editable = true;
             this.filterTreeCustomers.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
             this.filterTreeCustomers.HideDisabledFilters = true;
-            this.filterTreeCustomers.HideOnDemandFilters = true;
             this.filterTreeCustomers.HotTrackNode = null;
             this.filterTreeCustomers.Location = new System.Drawing.Point(3, 3);
             this.filterTreeCustomers.Name = "filterTreeCustomers";
