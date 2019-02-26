@@ -1,0 +1,69 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<recordtable
+embeddedrepository="False"
+id="6c4327b3-d2bd-45b9-938d-2400d93271df"
+mode="Global"
+rxversion="8.1">
+	<name>
+		UPSSurePostCleanUp
+	</name>
+	<repeatcount>
+		1
+	</repeatcount>
+	<turbomode>
+		False
+	</turbomode>
+	<genreport>
+		True
+	</genreport>
+	<speedfactor>
+		1
+	</speedfactor>
+	<useDefaultItemLogging>
+		True
+	</useDefaultItemLogging>
+	<codegen
+	classname="UPSSurePostCleanUp"
+	namespace="SmokeTest">
+	</codegen>
+	<variables>
+	</variables>
+	<recorditems>
+		<userrecorditem
+		classname="UPSSurePostCleanUp"
+		enabled="True"
+		isexternaltestmethod="False"
+		methodname="UncheckCleanUp"
+		namespace="SmokeTest"
+		optional="False"
+		varname="">
+			<comment>
+			</comment>
+			<bindings>
+			</bindings>
+			<arguments
+			id="43c4a4f3-81d0-4220-b9b4-c1a447bb7238">
+			</arguments>
+		</userrecorditem>
+	</recorditems>
+	<repository
+	id="e7742ed2-f8bc-429c-9794-64d8a30b8c72"
+	name="SmokeTestRepository"
+	relativepath="SmokeTestRepository.rxrep"
+	rxversion="8.1">
+		<codegen
+		classname="SmokeTestRepository"
+		namespace="SmokeTest">
+		</codegen>
+		<rootfolder
+		id="4aacfef1-6402-4ba7-b3c9-270ac9a4db4a"
+		name="_rootdummy_">
+		</rootfolder>
+	</repository>
+	<usercodefile
+	lang="CSharp">
+		UPSSurePostCleanUp.UserCode.cs
+	</usercodefile>
+	<references>
+	</references>
+</recordtable>

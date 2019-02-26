@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
@@ -62,7 +63,7 @@ namespace ShipWorks.Escalator
         {
             try
             {
-                Version currentVersion = VersionUtility.AssemblyVersion;
+                Version currentVersion = Assembly.GetExecutingAssembly().GetName().Version;
 
                 ShipWorksRelease shipWorksRelease = await updaterWebClient.GetVersionToDownload(tangoCustomerId, currentVersion).ConfigureAwait(false);
                 if (shipWorksRelease == null)

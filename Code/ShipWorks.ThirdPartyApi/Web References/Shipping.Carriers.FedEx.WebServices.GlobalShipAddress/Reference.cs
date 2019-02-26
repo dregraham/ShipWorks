@@ -1285,7 +1285,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.GlobalShipAddress {
         
         private string locationIdField;
         
-        private int storeNumberField;
+        private string storeNumberField;
         
         private bool storeNumberFieldSpecified;
         
@@ -1328,7 +1328,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.GlobalShipAddress {
         }
         
         /// <remarks/>
-        public int StoreNumber {
+        public string StoreNumber {
             get {
                 return this.storeNumberField;
             }

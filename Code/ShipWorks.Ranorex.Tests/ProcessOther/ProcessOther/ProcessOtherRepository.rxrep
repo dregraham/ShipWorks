@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<repository
+name="ProcessOtherRepository"
+id="82365a3e-4cb0-42d3-90b5-176301673974"
+rxversion="8.1">
+  <codegen
+  classname="ProcessOtherRepository"
+  namespace="ProcessOther"/>
+  <rootfolder
+  name="Root"
+  id="e8f91a7e-e35b-466a-a904-121a07d083bf"
+  searchtimeout="30000ms"
+  capname="unknown"
+  isrooted="True"
+  usecache="True">
+    <basepath/>
+  </rootfolder>
+  <variables/>
+</repository>

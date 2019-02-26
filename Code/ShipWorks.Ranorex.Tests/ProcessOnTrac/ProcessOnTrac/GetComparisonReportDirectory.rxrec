@@ -1,0 +1,69 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<recordtable
+embeddedrepository="False"
+id="3f1bda2d-1c77-4add-ac5d-3560182fba76"
+mode="Global"
+rxversion="8.1">
+	<name>
+		GetComparisonReportDirectory
+	</name>
+	<repeatcount>
+		1
+	</repeatcount>
+	<turbomode>
+		False
+	</turbomode>
+	<genreport>
+		True
+	</genreport>
+	<speedfactor>
+		1
+	</speedfactor>
+	<useDefaultItemLogging>
+		True
+	</useDefaultItemLogging>
+	<codegen
+	classname="GetComparisonReportDirectory"
+	namespace="ProcessOnTrac">
+	</codegen>
+	<variables>
+	</variables>
+	<recorditems>
+		<userrecorditem
+		classname="GetComparisonReportDirectory"
+		enabled="True"
+		isexternaltestmethod="False"
+		methodname="GetDirectory"
+		namespace="ProcessOnTrac"
+		optional="False"
+		varname="">
+			<comment>
+			</comment>
+			<bindings>
+			</bindings>
+			<arguments
+			id="35e98a0b-d992-4c0c-b934-d90b37d68ccb">
+			</arguments>
+		</userrecorditem>
+	</recorditems>
+	<repository
+	id="5797eadb-06d5-45ab-bf39-2029ff49d97a"
+	name="SmokeTestRepository"
+	relativepath="SmokeTestRepository.rxrep"
+	rxversion="8.1">
+		<codegen
+		classname="SmokeTestRepository"
+		namespace="ProcessOnTrac">
+		</codegen>
+		<rootfolder
+		id="4aacfef1-6402-4ba7-b3c9-270ac9a4db4a"
+		name="_rootdummy_">
+		</rootfolder>
+	</repository>
+	<usercodefile
+	lang="CSharp">
+		GetComparisonReportDirectory.UserCode.cs
+	</usercodefile>
+	<references>
+	</references>
+</recordtable>

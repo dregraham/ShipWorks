@@ -9,6 +9,7 @@ using log4net;
 using Interapptive.Shared.Extensions;
 using Interapptive.Shared.Utility;
 using Interapptive.Shared.ComponentRegistration;
+using System.Reflection;
 
 namespace ShipWorks.Escalator
 {
@@ -127,7 +128,7 @@ namespace ShipWorks.Escalator
             HttpClientHandler handler = new HttpClientHandler();
 
             HttpClient client = new HttpClient(handler);
-            client.DefaultRequestHeaders.Add("X-SHIPWORKS-VERSION", VersionUtility.AssemblyVersion.ToString());
+            client.DefaultRequestHeaders.Add("X-SHIPWORKS-VERSION", Assembly.GetExecutingAssembly().GetName().Version.ToString());
             client.DefaultRequestHeaders.Add("X-SHIPWORKS-USER", "$h1pw0rks");
             client.DefaultRequestHeaders.Add("X-SHIPWORKS-PASS", "q2*lrft");
             client.DefaultRequestHeaders.Add("SOAPAction", "http://stamps.com/xml/namespace/2015/06/shipworks/shipworksv1/IShipWorks/ShipworksPost");
