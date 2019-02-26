@@ -2,8 +2,10 @@
 using System.Data.Common;
 using System.Data.Odbc;
 using System.Linq;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Stores.Platforms.Odbc.DataSource;
+using ShipWorks.Stores.Platforms.Odbc.DataSource.Schema;
 using ShipWorks.Stores.Platforms.Odbc.Mapping;
 
 namespace ShipWorks.Stores.Platforms.Odbc.DataAccess
@@ -13,6 +15,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.DataAccess
     /// </summary>
     public class OdbcOrderNumberDownloadQuery : IOdbcQuery
     {
+        private readonly OdbcStoreEntity store;
         private readonly IOdbcQuery downloadQuery;
         private readonly string orderNumber;
         private readonly IShipWorksDbProviderFactory dbProviderFactory;
@@ -25,12 +28,14 @@ namespace ShipWorks.Stores.Platforms.Odbc.DataAccess
         /// <summary>
         /// Constructor
         /// </summary>
-        public OdbcOrderNumberDownloadQuery(IOdbcQuery downloadQuery,
+        public OdbcOrderNumberDownloadQuery(OdbcStoreEntity store,
+            IOdbcQuery downloadQuery,
             string orderNumber,
             IOdbcFieldMap fieldMap,
             IShipWorksDbProviderFactory dbProviderFactory,
             IOdbcDataSource dataSource)
         {
+            this.store = store;
             this.downloadQuery = downloadQuery;
             this.orderNumber = orderNumber;
             this.dbProviderFactory = dbProviderFactory;
@@ -53,6 +58,10 @@ namespace ShipWorks.Stores.Platforms.Odbc.DataAccess
             string columnNameInQuotes = WrapColumnInQuoteIdentifier(orderNumberColumnName);
 
             // Generate the query
+            if (store.ImportColumnSourceType == (int) OdbcColumnSourceType.CustomParameterizedQuery)
+            {
+                return downloadQuery.GenerateSql();
+            }
 
             return $"SELECT sub.* FROM ({downloadQuery.GenerateSql()}) sub WHERE {columnNameInQuotes} = ?";
         }

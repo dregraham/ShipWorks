@@ -3,9 +3,11 @@ using System.Data;
 using System.Data.Common;
 using System.Data.Odbc;
 using System.Linq;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Stores.Platforms.Odbc.DataAccess;
 using ShipWorks.Stores.Platforms.Odbc.DataSource;
+using ShipWorks.Stores.Platforms.Odbc.DataSource.Schema;
 using ShipWorks.Stores.Platforms.Odbc.Mapping;
 
 namespace ShipWorks.Stores.Platforms.Odbc.Download
@@ -15,6 +17,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
     /// </summary>
     public class OdbcLastModifiedDownloadQuery : IOdbcQuery
     {
+        private readonly OdbcStoreEntity store;
         private readonly IOdbcQuery downloadQuery;
         private readonly DateTime onlineLastModifiedStartingPoint;
         private readonly IShipWorksDbProviderFactory dbProviderFactory;
@@ -26,13 +29,14 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
         /// </summary>
         /// <param name="downloadQuery">Query to limit</param>
         /// <param name="onlineLastModifiedStartingPoint">date to limit the query from </param>
-        public OdbcLastModifiedDownloadQuery(
+        public OdbcLastModifiedDownloadQuery(OdbcStoreEntity store,
             IOdbcQuery downloadQuery,
             DateTime onlineLastModifiedStartingPoint,
             IOdbcFieldMap fieldMap,
             IShipWorksDbProviderFactory dbProviderFactory,
             IOdbcDataSource dataSource)
         {
+            this.store = store;
             this.downloadQuery = downloadQuery;
             this.onlineLastModifiedStartingPoint = onlineLastModifiedStartingPoint;
             this.dbProviderFactory = dbProviderFactory;
@@ -55,6 +59,11 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
             }
 
             string columnNameInQuotes = WrapColumnInQuoteIdentifier(lastModifiedColumnName);
+
+            if (store.ImportColumnSourceType == (int) OdbcColumnSourceType.CustomParameterizedQuery)
+            {
+                return downloadQuery.GenerateSql();
+            }
 
             // Generate the query
             return $@"SELECT sub.* FROM({downloadQuery.GenerateSql()}) sub WHERE {columnNameInQuotes} > ? ORDER BY {columnNameInQuotes} ASC";
