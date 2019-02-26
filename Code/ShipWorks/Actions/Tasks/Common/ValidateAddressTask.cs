@@ -92,11 +92,11 @@ namespace ShipWorks.Actions.Tasks.Common
         /// <summary>
         /// Commit the database changes
         /// </summary>
-        public override async Task CommitAsync(List<long> inputKeys, ActionStepContext context, IDataAccessAdapter adapter)
+        public override void Commit(List<long> inputKeys, ActionStepContext context, IDataAccessAdapter adapter)
         {
             try
             {
-                await base.CommitAsync(inputKeys, context, adapter).ConfigureAwait(false);
+                base.Commit(inputKeys, context, adapter);
             }
             catch (ORMConcurrencyException ex)
             {
