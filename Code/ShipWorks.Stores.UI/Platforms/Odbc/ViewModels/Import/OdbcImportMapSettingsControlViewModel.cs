@@ -23,11 +23,11 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Import
     public class OdbcImportMapSettingsControlViewModel : OdbcMapSettingsControlViewModel
     {
         private bool columnSourceIsTable = true;
+        private bool isSubquery = true; 
         private OdbcImportStrategy importStrategy = OdbcImportStrategy.ByModifiedTime;
         private OdbcImportOrderItemStrategy importOrderItemStrategy = OdbcImportOrderItemStrategy.SingleLine;
         private readonly Func<string, IDialog> dialogFactory;
         private IOdbcFieldMap fieldMap;
-        private bool isSubquery;
         private readonly Func<IOpenFileDialog> openFileDialogFactory;
         private readonly IOdbcImportSettingsFile importSettingsFile;
 
@@ -141,13 +141,16 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Import
         {
             store.ImportStrategy = (int) ImportStrategy;
 
-            store.ImportColumnSourceType = ColumnSourceIsTable ?
-                (int) OdbcColumnSourceType.Table :
-                (int) OdbcColumnSourceType.CustomQuery;
-
             if (ColumnSourceIsTable)
             {
+                store.ImportColumnSourceType = (int) OdbcColumnSourceType.Table;
                 store.ImportColumnSource = SelectedTable?.Name;
+            }
+            else
+            {
+                store.ImportColumnSourceType = IsSubquery ?
+                    (int) OdbcColumnSourceType.CustomSubQuery :
+                    (int) OdbcColumnSourceType.CustomParameterizedQuery;
             }
 
             store.ImportOrderItemStrategy = (int) importOrderItemStrategy;
@@ -167,6 +170,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Import
             ImportStrategy = (OdbcImportStrategy) store.ImportStrategy;
             
             ColumnSourceIsTable = store.ImportColumnSourceType == (int) OdbcColumnSourceType.Table;
+            IsSubquery = store.ImportColumnSourceType == (int) OdbcColumnSourceType.CustomSubQuery;
 
             importOrderItemStrategy = (OdbcImportOrderItemStrategy) store.ImportOrderItemStrategy;
         }
