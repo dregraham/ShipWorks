@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<modulegroupdoc
+rxversion="8.1">
+  <testsuiteentryhierarchy>
+    <flatlistofchildren>
+      <modulegroups
+      name="ProcessOther"
+      id="31abcfd0-f6a6-4511-a1f8-e50f8e3fe30a"/>
+    </flatlistofchildren>
+    <childhierarchy>
+      <modulegroups
+      name="ProcessOther"
+      id="31abcfd0-f6a6-4511-a1f8-e50f8e3fe30a"/>
+    </childhierarchy>
+  </testsuiteentryhierarchy>
+</modulegroupdoc>

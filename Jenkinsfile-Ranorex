@@ -102,6 +102,74 @@ pipeline {
 				}
 			}
 		}
+		stage('Process OnTrac') {
+			environment {
+				BUILT_VERSION = readFile('.build-label').replaceAll("\\.", '_').trim()
+			}
+			agent {
+				node {
+					label 'ranorex'
+					customWorkspace "${WORKSPACE_RANOREX}"
+				}
+			}
+			steps {
+				dir('Code/ShipWorks.Ranorex.Tests/ProcessOnTrac/ProcessOnTrac/bin/Debug') {
+					bat "copy /Y \"\\\\intfs01\\Development\\Tango\\ChromiumArtifacts\\renderer_63_x64.zip\" renderer_63_x64.zip"
+					bat """
+					ProcessOnTrac.exe ^
+					/runconfig:CompleteOnTrac ^
+					/param:InstallDir=${WORKSPACE_RANOREX}\\Artifacts\\Distribute\\ShipWorksSetup_test.exe ^
+					/param:Environment=${params.Environment} ^
+					/param:SQLServ=localhost\\ranorex ^
+					/reportlevel:Debug ^
+					/zr ^
+					/zrf:"\\\\intfs01\\Development\\Testing\\Automated ProcessOnTrac Results\\${env.BRANCH_NAME}\\obfuscated\\${TIMESTAMP}" ^
+					/rf:"\\\\intfs01\\Development\\Testing\\Automated ProcessOnTrac Results\\${env.BRANCH_NAME}\\obfuscated\\${TIMESTAMP}" ^
+					/ju
+					"""
+				}
+			}
+			post {
+				always {
+					bat "copy /Y \"\\\\intfs01\\Development\\Testing\\Automated ProcessOnTrac Results\\${env.BRANCH_NAME}\\obfuscated\\${TIMESTAMP}.rxlog.junit.xml\" ${WORKSPACE_RANOREX.replaceAll('/', '\\\\')}\\processontrac.results.junit.xml"
+					junit "processontrac.results.junit.xml"
+				}
+			}
+		}
+		stage('Process Other') {
+			environment {
+				BUILT_VERSION = readFile('.build-label').replaceAll("\\.", '_').trim()
+			}
+			agent {
+				node {
+					label 'ranorex'
+					customWorkspace "${WORKSPACE_RANOREX}"
+				}
+			}
+			steps {
+				dir('Code/ShipWorks.Ranorex.Tests/ProcessOther/ProcessOther/bin/Debug') {
+					bat "copy /Y \"\\\\intfs01\\Development\\Tango\\ChromiumArtifacts\\renderer_63_x64.zip\" renderer_63_x64.zip"
+					bat """
+					ProcessOther.exe ^
+					/runconfig:CompleteOther ^
+					/param:InstallDir=${WORKSPACE_RANOREX}\\Artifacts\\Distribute\\ShipWorksSetup_test.exe ^
+					/param:Environment=${params.Environment} ^
+					/param:SQLServ=localhost\\ranorex ^
+					/reportlevel:Debug ^
+					/zr ^
+					/zrf:"\\\\intfs01\\Development\\Testing\\Automated ProcessOther Results\\${env.BRANCH_NAME}\\obfuscated\\${TIMESTAMP}" ^
+					/rf:"\\\\intfs01\\Development\\Testing\\Automated ProcessOther Results\\${env.BRANCH_NAME}\\obfuscated\\${TIMESTAMP}" ^
+					/ju
+					"""
+				}
+			}
+			post {
+				always {
+					bat "copy /Y \"\\\\intfs01\\Development\\Testing\\Automated ProcessOther Results\\${env.BRANCH_NAME}\\obfuscated\\${TIMESTAMP}.rxlog.junit.xml\" ${WORKSPACE_RANOREX.replaceAll('/', '\\\\')}\\processother.results.junit.xml"
+					junit "processother.results.junit.xml"
+				}
+			}
+		}
 		stage('Process DHL') {
 			environment {
 				BUILT_VERSION = readFile('.build-label').replaceAll("\\.", '_').trim()

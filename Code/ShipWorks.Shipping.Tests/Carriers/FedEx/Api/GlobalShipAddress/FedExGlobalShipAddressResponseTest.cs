@@ -51,13 +51,13 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.GlobalShipAddress
         [Fact]
         public void Process_TwoAddressesReturned()
         {
-            var reply = new SearchLocationsReply()
+            var reply = new SearchLocationsReply
             {
                 HighestSeverity = NotificationSeverityType.SUCCESS,
                 ResultsReturned = "2",
                 AddressToLocationRelationships = new[]
                 {
-                    new AddressToLocationRelationshipDetail()
+                    new AddressToLocationRelationshipDetail
                     {
                         DistanceAndLocationDetails = new []
                         {
@@ -72,6 +72,48 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.GlobalShipAddress
             var result = testObject.Process();
 
             Assert.Equal(2, result.Value.Count());
+        }
+
+        /// <summary>
+        /// Unit test for testing StoreNumber is a string
+        /// </summary>
+        /// <remarks>
+        /// Do not delete this test.
+        /// This test was added after a manual update was done to a FedEx GlobalAddress reference 
+        /// due to a data mismatch between the FedEx API and the WSDL for StoreNumber.
+        /// This mismatch caused a specific crash within ShipWorks.
+        /// </remarks>
+        [Fact]
+        public void Process_ReturnsSuccess_StoreNumberIsString()
+        {
+            var reply = new SearchLocationsReply
+            {
+                HighestSeverity = NotificationSeverityType.SUCCESS,
+                ResultsReturned = "1",
+
+                AddressToLocationRelationships = new[]
+                {
+                    new AddressToLocationRelationshipDetail
+                    {
+                        DistanceAndLocationDetails = new[]
+                        {
+                            new DistanceAndLocationDetail
+                            {
+                                Distance = null,
+                                LocationDetail = new LocationDetail
+                                {
+                                    StoreNumber = "Foo"
+                                }
+
+                            }
+                        }
+                    }
+                }
+            };
+            var testObject = new FedExGlobalShipAddressResponse(reply);
+            var result = testObject.Process();
+
+            Assert.True(result.Success);
         }
     }
 }
