@@ -20,14 +20,20 @@ namespace ShipWorks.Escalator
         private readonly ILog log;
         private readonly IUpdaterWebClient updaterWebClient;
         private readonly IShipWorksInstaller shipWorksInstaller;
+        private readonly IAutoUpdateStatusProvider autoUpdateStatusProvider;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public ShipWorksUpgrade(IUpdaterWebClient updaterWebClient, IShipWorksInstaller shipWorksInstaller, Func<Type, ILog> logFactory)
+        public ShipWorksUpgrade(
+            IUpdaterWebClient updaterWebClient,
+            IShipWorksInstaller shipWorksInstaller,
+            Func<Type, ILog> logFactory,
+            IAutoUpdateStatusProvider autoUpdateStatusProvider)
         {
             this.updaterWebClient = updaterWebClient;
             this.shipWorksInstaller = shipWorksInstaller;
+            this.autoUpdateStatusProvider = autoUpdateStatusProvider;
             log = logFactory(typeof(ShipWorksUpgrade));
         }
 
@@ -115,7 +121,7 @@ namespace ShipWorks.Escalator
                 }
             }
 
-            AutoUpdateStatusProvider.CloseSplashScreen();
+            autoUpdateStatusProvider.CloseSplashScreen();
         }
 
         /// <summary>

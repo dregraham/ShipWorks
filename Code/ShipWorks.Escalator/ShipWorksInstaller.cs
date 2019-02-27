@@ -19,15 +19,17 @@ namespace ShipWorks.Escalator
     {
         private readonly ILog log;
         private readonly IServiceName serviceName;
+        private readonly IAutoUpdateStatusProvider autoUpdateStatusProvider;
         private bool relaunchShipWorks;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public ShipWorksInstaller(Func<Type, ILog> logFactory, IServiceName serviceName)
+        public ShipWorksInstaller(Func<Type, ILog> logFactory, IServiceName serviceName, IAutoUpdateStatusProvider autoUpdateStatusProvider)
         {
             log = logFactory(GetType());
             this.serviceName = serviceName;
+            this.autoUpdateStatusProvider = autoUpdateStatusProvider;
         }
 
         /// <summary>
@@ -62,7 +64,7 @@ namespace ShipWorks.Escalator
 
                 // Show the splash screen to give users feedback that the update
                 // is kicking off
-                AutoUpdateStatusProvider.ShowSplashScreen();
+                autoUpdateStatusProvider.ShowSplashScreen();
 
                 process.Kill();
             }
@@ -107,7 +109,7 @@ namespace ShipWorks.Escalator
             int exitCode;
 
             log.Info("Starting Install Process");
-            AutoUpdateStatusProvider.UpdateStatus("Installing Update");
+            autoUpdateStatusProvider.UpdateStatus("Installing Update");
             using (Process proc = Process.Start(start))
             {
                 log.Info("Waiting for install to finish");

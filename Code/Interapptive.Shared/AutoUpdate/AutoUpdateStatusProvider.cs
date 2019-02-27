@@ -14,7 +14,7 @@ namespace Interapptive.Shared.AutoUpdate
     /// <summary>
     /// Status provider for the auto update process
     /// </summary>
-    public static class AutoUpdateStatusProvider
+    public class AutoUpdateStatusProvider : IAutoUpdateStatusProvider
     {
         private static readonly ILog log = LogManager.GetLogger(typeof(AutoUpdateStatusProvider));
         private const string SplashScreenExe = "ShipWorks.SplashScreen";
@@ -23,7 +23,7 @@ namespace Interapptive.Shared.AutoUpdate
         /// <summary>
         /// Update the AutoUpdate status
         /// </summary>
-        public static void UpdateStatus(string status)
+        public void UpdateStatus(string status)
         {
             using (NamedPipeClientStream statusPipe = new NamedPipeClientStream(".", "ShipWorksUpgradeStatus", PipeDirection.Out))
             {
@@ -42,7 +42,7 @@ namespace Interapptive.Shared.AutoUpdate
         /// <summary>
         /// Close the splash screen
         /// </summary>
-        public static void CloseSplashScreen()
+        public void CloseSplashScreen()
         {
             using (Process process = Process.GetProcessesByName(ProcessName).FirstOrDefault())
             {
@@ -56,7 +56,7 @@ namespace Interapptive.Shared.AutoUpdate
         /// <remarks>
         /// If the splash isnt shown this will show it
         /// </remarks>
-        public static void ShowSplashScreen()
+        public void ShowSplashScreen()
         {
             using (IDisposable process = Process.GetProcessesByName(ProcessName).FirstOrDefault())
             {

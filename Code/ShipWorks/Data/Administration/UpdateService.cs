@@ -13,13 +13,15 @@ namespace ShipWorks.Data.Administration
     public class UpdateService : IUpdateService
     {
         private NamedPipeClientStream updaterPipe;
+        private readonly IAutoUpdateStatusProvider autoUpdateStatusProvider;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public UpdateService(IShipWorksSession shipWorksSession)
+        public UpdateService(IShipWorksSession shipWorksSession, IAutoUpdateStatusProvider autoUpdateStatusProvider)
         {
             updaterPipe = new NamedPipeClientStream(".", shipWorksSession.InstanceID.ToString(), PipeDirection.Out);
+            this.autoUpdateStatusProvider = autoUpdateStatusProvider;
         }
 
         /// <summary>
@@ -50,8 +52,14 @@ namespace ShipWorks.Data.Administration
         /// </summary>
         public Result Update(Version version)
         {
-            AutoUpdateStatusProvider.ShowSplashScreen();
-            return SendMessage(version.ToString());
+            Result result = SendMessage(version.ToString());
+
+            if (result.Success)
+            {
+                autoUpdateStatusProvider.ShowSplashScreen();
+            }
+
+            return result;
         }
 
         /// <summary>

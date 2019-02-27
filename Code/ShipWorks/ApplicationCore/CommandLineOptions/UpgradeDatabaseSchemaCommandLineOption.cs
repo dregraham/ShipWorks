@@ -23,6 +23,7 @@ namespace ShipWorks.ApplicationCore.CommandLineOptions
     public class UpgradeDatabaseSchemaCommandLineOption : ICommandLineCommandHandler
     {
         static readonly ILog log = LogManager.GetLogger(typeof(UpgradeDatabaseSchemaCommandLineOption));
+        private IAutoUpdateStatusProvider autoUpdateStatusProvider = new AutoUpdateStatusProvider();
 
         /// <summary>
         /// The CommandName that can be sent to the ShipWorks.exe
@@ -34,6 +35,8 @@ namespace ShipWorks.ApplicationCore.CommandLineOptions
         /// </summary>
         public Task Execute(List<string> args)
         {
+
+
             // before doing anything make sure we can connect to the database and an upgrade is required
             SqlSession.Initialize();
             if (SqlSchemaUpdater.IsUpgradeRequired())
@@ -44,13 +47,13 @@ namespace ShipWorks.ApplicationCore.CommandLineOptions
                 DatabaseUpgradeBackupManager backupManager = new DatabaseUpgradeBackupManager();
                 try
                 {
-                    AutoUpdateStatusProvider.UpdateStatus("Creating Backup");
+                    autoUpdateStatusProvider.UpdateStatus("Creating Backup");
                     // If an upgrade is required create a backup first
-                    backupResult = backupManager.CreateBackup(AutoUpdateStatusProvider.UpdateStatus);
+                    backupResult = backupManager.CreateBackup(autoUpdateStatusProvider.UpdateStatus);
 
                     if (backupResult.Value.Success)
                     {
-                        AutoUpdateStatusProvider.UpdateStatus("Upgrading Database");
+                        autoUpdateStatusProvider.UpdateStatus("Upgrading Database");
                         TryDatabaseUpgrade(backupManager, databaseUpdateResult);
                     }
                 }
@@ -87,7 +90,7 @@ namespace ShipWorks.ApplicationCore.CommandLineOptions
             }
             catch (Exception)
             {
-                AutoUpdateStatusProvider.UpdateStatus("An error occurred during upgrade, rolling back.");
+                autoUpdateStatusProvider.UpdateStatus("An error occurred during upgrade, rolling back.");
                 // Upgrading the schema failed, restore
                 databaseUpdateResult.RunTimedEvent("RestoreBackupTimeInMilliseconds", () => backupManager.RestoreBackup());
                 throw;
