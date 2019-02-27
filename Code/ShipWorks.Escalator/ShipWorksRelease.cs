@@ -1,16 +1,23 @@
 ﻿using System;
+using System.Reflection;
 
 namespace ShipWorks.Escalator
 {
     /// <summary>
     /// ShipWorks Release DTO
     /// </summary>
+    [Obfuscation(Exclude = true)]
     public class ShipWorksRelease
     {
         /// <summary>
         /// Download Url
         /// </summary>
-        public Uri DownloadUrl { get; set; }
+        public string DownloadUrl { get; set; }
+
+        /// <summary>
+        /// Download Uri
+        /// </summary>
+        public Uri DownloadUri => new Uri(DownloadUrl);
 
         /// <summary>
         /// SHA hash of release
@@ -25,11 +32,11 @@ namespace ShipWorks.Escalator
         /// <summary>
         /// Minimum allowed version
         /// </summary>
-        public Version MinAllowedReleaseVersion { get; set; }
+        public string MinAllowedReleaseVersion { get; set; }
 
         /// <summary>
         /// ReleaseVersion
         /// </summary>
-        public Version ReleaseVersion { get; internal set; }
+        public string ReleaseVersion { get; set; }
     }
 }

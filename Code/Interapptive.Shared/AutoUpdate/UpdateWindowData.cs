@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Reflection;
 
 namespace Interapptive.Shared.AutoUpdate
 {
     /// <summary>
     /// struct to hold the data we send
     /// </summary>
+    [Obfuscation(Exclude = true)]
     public struct UpdateWindowData
     {
         /// <summary>

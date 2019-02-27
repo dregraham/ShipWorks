@@ -51,7 +51,9 @@ namespace ShipWorks.Tests.Data.Administration
         [Fact]
         public void Update_WritesUpdateInfoToStream()
         {
-            var communictionBridge = new ShipWorksCommunicationBridge(sessionGuid.ToString(), mock.Mock<ILog>().Object);
+            mock.Mock<IServiceName>().Setup(s => s.GetInstanceID()).Returns(sessionGuid);
+            var communictionBridge = mock.Create<ShipWorksCommunicationBridge>();
+            communictionBridge.StartPipeServer();
 
             communictionBridge.OnMessage += (m) => Assert.Equal("0.0.123", m);
 

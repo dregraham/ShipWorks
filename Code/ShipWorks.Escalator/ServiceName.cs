@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Reflection;
+using Interapptive.Shared.ComponentRegistration;
 using Microsoft.Win32;
 
 namespace ShipWorks.Escalator
@@ -8,18 +9,19 @@ namespace ShipWorks.Escalator
     /// <summary>
     /// Service Name resolver
     /// </summary>
-    public static class ServiceName
+    [Component(SingleInstance = true)]
+    public class ServiceName : IServiceName
     {
         /// <summary>
         /// Resolves the service name
         /// </summary>
-        public static string Resolve() => $"ShipWorksUpdater - {GetInstanceID()}";
+        public string Resolve() => $"ShipWorksUpdater - {GetInstanceID()}";
 
         /// <summary>
         /// Gets the instance id of the service based on registry value. Throws if it cannot find the registry value.
         /// </summary>
         /// <returns></returns>
-        public static Guid GetInstanceID()
+        public Guid GetInstanceID()
         {
             return GetRegistryLocalMachineValue(@"Software\Interapptive\ShipWorks\Instances",
              Path.GetDirectoryName(Assembly.GetEntryAssembly().Location),
@@ -89,6 +91,22 @@ namespace ShipWorks.Escalator
             }
 
             return Guid.Empty;
+        }
+
+        /// <summary>
+        /// Gets a filename for a log file
+        /// </summary>
+        public string GetLogFileName(string folderPostfix, string fileName)
+        {
+            string appData = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData);
+            string logFolder = $"{DateTime.Now.ToString("yyyy-MM-dd HH.mm.ss")} - {folderPostfix}";
+
+            return Path.Combine(appData,
+                "Interapptive\\ShipWorks\\Instances",
+                GetInstanceID().ToString("B"),
+                "Log",
+                logFolder,
+                fileName);
         }
 
         /// <summary>

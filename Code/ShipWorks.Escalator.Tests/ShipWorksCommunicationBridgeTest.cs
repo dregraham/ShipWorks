@@ -1,16 +1,17 @@
 ﻿using System;
-using System.Threading.Tasks;
-using log4net;
+using Autofac.Extras.Moq;
+using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore;
 using ShipWorks.Data.Administration;
 using ShipWorks.Tests.Shared;
 using Xunit;
 
+
 namespace ShipWorks.Escalator.Tests
 {
     public class ShipWorksCommunicationBridgeTest
     {
-        private readonly Autofac.Extras.Moq.AutoMock mock;
+        private readonly AutoMock mock;
         private readonly ShipWorksCommunicationBridge testObject;
         private readonly Guid sessionGuid;
         private readonly UpdateService updateService;
@@ -20,7 +21,10 @@ namespace ShipWorks.Escalator.Tests
             mock = AutoMockExtensions.GetLooseThatReturnsMocks();
             sessionGuid = Guid.NewGuid();
 
-            testObject = new ShipWorksCommunicationBridge(sessionGuid.ToString(), mock.Mock<ILog>().Object);
+            mock.Mock<IServiceName>().Setup(s => s.GetInstanceID()).Returns(sessionGuid);
+
+            testObject = mock.Create<ShipWorksCommunicationBridge>();
+            testObject.StartPipeServer();
 
             var session = mock.Mock<IShipWorksSession>();
             session.SetupGet(s => s.InstanceID).Returns(sessionGuid);
@@ -33,13 +37,22 @@ namespace ShipWorks.Escalator.Tests
         {
             Version version = new Version(1, 2, 3, 4567);
 
-            // spin up a task to simulate the shipworks UpdateService sending an update message
-            Task.Factory.StartNew(() =>
-            {
-                updateService.Update(version);
-            });
+            bool messageReceived = false;
 
-            testObject.OnMessage += (s) => Assert.Equal(version.ToString(), s);
+            testObject.OnMessage += (s) =>
+            {
+                Assert.Equal(version.ToString(), s.Trim('\0'));
+                messageReceived = true;
+            };
+
+            updateService.Update(version);
+
+            Functional.Retry(() => {
+                Assert.True(messageReceived);
+                return true;
+            }, 5, TimeSpan.FromMilliseconds(250), ex => messageReceived == false);
+
+            Assert.True(messageReceived);
         }
     }
 }
