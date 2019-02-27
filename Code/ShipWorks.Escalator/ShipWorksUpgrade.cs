@@ -88,7 +88,6 @@ namespace ShipWorks.Escalator
             catch (Exception ex)
             {
                 log.Error("Error trying to upgrade by customer id", ex);
-                throw;
             }
         }
 
