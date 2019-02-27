@@ -32,48 +32,14 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Download
 
             Mock<IOdbcQuery> downloadQuery = mock.Mock<IOdbcQuery>();
             downloadQuery.Setup(d => d.GenerateSql()).Returns(originalDownloadQuery);
-            Mock<IOdbcFieldMap> fieldMap = mock.Mock<IOdbcFieldMap>();
-            Mock<IShipWorksDbProviderFactory> dbProviderFactory = mock.Mock<IShipWorksDbProviderFactory>();
-            Mock<IOdbcDataSource> dataSource = mock.Mock<IOdbcDataSource>();
 
-            OdbcLastModifiedDownloadQuery testObject = new OdbcLastModifiedDownloadQuery(new OdbcStoreEntity(), downloadQuery.Object, onlineLastModifiedStartingPoint, fieldMap.Object, dbProviderFactory.Object, dataSource.Object);
-
-            ShipWorksOdbcException ex = Assert.Throws<ShipWorksOdbcException>(() => testObject.GenerateSql());
-
-            Assert.Contains("The OnlineLastModified column must be mapped to download by OnlineLastModified.", ex.Message);
-        }
-
-        [Fact]
-        public void GenerateSql_ThrowsOdbcException_WhenOnlineLastModifiedIsEmptyString()
-        {
-            string originalDownloadQuery = "SELECT * FROM FOO";
-            DateTime onlineLastModifiedStartingPoint = DateTime.UtcNow;
-            OdbcColumn column = new OdbcColumn("", "unknown");
-
-            Mock<IOdbcQuery> downloadQuery = mock.Mock<IOdbcQuery>();
-            downloadQuery.Setup(d => d.GenerateSql()).Returns(originalDownloadQuery);
-
-            Mock<IExternalOdbcMappableField> externalField = mock.Mock<IExternalOdbcMappableField>();
-            externalField.SetupGet(e => e.Column).Returns(column);
-
-            Mock<IOdbcFieldMapEntry> entry = mock.Mock<IOdbcFieldMapEntry>();
-            entry.SetupGet(e => e.ExternalField).Returns(externalField.Object);
-
-            Mock<IOdbcFieldMap> fieldMap = mock.Mock<IOdbcFieldMap>();
-            fieldMap.Setup(f => f.FindEntriesBy(It.IsAny<EntityField2>())).Returns(new[] { entry.Object });
-
-            Mock<IShipWorksOdbcCommandBuilder> cmdBuilder = mock.Mock<IShipWorksOdbcCommandBuilder>();
-
-            Mock<IShipWorksDbProviderFactory> dbProviderFactory = mock.Mock<IShipWorksDbProviderFactory>();
-            dbProviderFactory.Setup(d => d.CreateShipWorksOdbcCommandBuilder(It.IsAny<IShipWorksOdbcDataAdapter>())).Returns(cmdBuilder.Object);
-
-            Mock<DbConnection> connection = mock.Mock<DbConnection>();
-
-            Mock<IOdbcDataSource> dataSource = mock.Mock<IOdbcDataSource>();
-            dataSource.Setup(d => d.CreateConnection()).Returns(connection.Object);
-
-            OdbcLastModifiedDownloadQuery testObject = new OdbcLastModifiedDownloadQuery(new OdbcStoreEntity(), downloadQuery.Object, onlineLastModifiedStartingPoint, fieldMap.Object, dbProviderFactory.Object, dataSource.Object);
-
+            OdbcLastModifiedDownloadQuery testObject = new OdbcLastModifiedDownloadQuery(
+                OdbcColumnSourceType.CustomSubQuery,
+                downloadQuery.Object,
+                onlineLastModifiedStartingPoint,
+                "",
+                "");
+            
             ShipWorksOdbcException ex = Assert.Throws<ShipWorksOdbcException>(() => testObject.GenerateSql());
 
             Assert.Contains("The OnlineLastModified column must be mapped to download by OnlineLastModified.", ex.Message);
@@ -84,32 +50,17 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Download
         {
             string originalDownloadQuery = "SELECT * FROM FOO";
             DateTime onlineLastModifiedStartingPoint = DateTime.UtcNow;
-            OdbcColumn column = new OdbcColumn("OnlineLastModified", "unknown");
 
             Mock<IOdbcQuery> downloadQuery = mock.Mock<IOdbcQuery>();
             downloadQuery.Setup(d => d.GenerateSql()).Returns(originalDownloadQuery);
 
-            Mock<IExternalOdbcMappableField> externalField = mock.Mock<IExternalOdbcMappableField>();
-            externalField.SetupGet(e => e.Column).Returns(column);
-
-            Mock<IOdbcFieldMapEntry> entry = mock.Mock<IOdbcFieldMapEntry>();
-            entry.SetupGet(e => e.ExternalField).Returns(externalField.Object);
-
-            Mock<IOdbcFieldMap> fieldMap = mock.Mock<IOdbcFieldMap>();
-            fieldMap.Setup(f => f.FindEntriesBy(It.IsAny<EntityField2>())).Returns(new[] { entry.Object });
-
-            Mock<IShipWorksOdbcCommandBuilder> cmdBuilder = mock.Mock<IShipWorksOdbcCommandBuilder>();
-
-            Mock<IShipWorksDbProviderFactory> dbProviderFactory = mock.Mock<IShipWorksDbProviderFactory>();
-            dbProviderFactory.Setup(d => d.CreateShipWorksOdbcCommandBuilder(It.IsAny<IShipWorksOdbcDataAdapter>())).Returns(cmdBuilder.Object);
-
-            Mock<DbConnection> connection = mock.Mock<DbConnection>();
-
-            Mock<IOdbcDataSource> dataSource = mock.Mock<IOdbcDataSource>();
-            dataSource.Setup(d => d.CreateConnection()).Returns(connection.Object);
-
-            OdbcLastModifiedDownloadQuery testObject = new OdbcLastModifiedDownloadQuery(new OdbcStoreEntity(), downloadQuery.Object, onlineLastModifiedStartingPoint, fieldMap.Object, dbProviderFactory.Object, dataSource.Object);
-
+           OdbcLastModifiedDownloadQuery testObject = new OdbcLastModifiedDownloadQuery(
+                OdbcColumnSourceType.CustomSubQuery,
+                downloadQuery.Object,
+                onlineLastModifiedStartingPoint,
+                "OnlineLastModified",
+                "'OnlineLastModified'");
+            
             Assert.Contains(originalDownloadQuery, testObject.GenerateSql());
         }
 
@@ -118,34 +69,18 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Download
         {
             string originalDownloadQuery = "SELECT * FROM FOO";
             DateTime onlineLastModifiedStartingPoint = DateTime.UtcNow;
-            OdbcColumn column = new OdbcColumn("OnlineLastModified", "unknown");
 
             Mock<IOdbcQuery> downloadQuery = mock.Mock<IOdbcQuery>();
             downloadQuery.Setup(d => d.GenerateSql()).Returns(originalDownloadQuery);
 
-            Mock<IExternalOdbcMappableField> externalField = mock.Mock<IExternalOdbcMappableField>();
-            externalField.SetupGet(e => e.Column).Returns(column);
-
-            Mock<IOdbcFieldMapEntry> entry = mock.Mock<IOdbcFieldMapEntry>();
-            entry.SetupGet(e => e.ExternalField).Returns(externalField.Object);
-
-            Mock<IOdbcFieldMap> fieldMap = mock.Mock<IOdbcFieldMap>();
-            fieldMap.Setup(f => f.FindEntriesBy(It.IsAny<EntityField2>())).Returns(new[] { entry.Object });
-
-            Mock<IShipWorksOdbcCommandBuilder> cmdBuilder = mock.Mock<IShipWorksOdbcCommandBuilder>();
-            cmdBuilder.Setup(c => c.QuoteIdentifier(It.IsAny<string>())).Returns(column.Name);
-
-            Mock<IShipWorksDbProviderFactory> dbProviderFactory = mock.Mock<IShipWorksDbProviderFactory>();
-            dbProviderFactory.Setup(d => d.CreateShipWorksOdbcCommandBuilder(It.IsAny<IShipWorksOdbcDataAdapter>())).Returns(cmdBuilder.Object);
-
-            Mock<DbConnection> connection = mock.Mock<DbConnection>();
-
-            Mock<IOdbcDataSource> dataSource = mock.Mock<IOdbcDataSource>();
-            dataSource.Setup(d => d.CreateConnection()).Returns(connection.Object);
-
-            OdbcLastModifiedDownloadQuery testObject = new OdbcLastModifiedDownloadQuery(new OdbcStoreEntity(), downloadQuery.Object, onlineLastModifiedStartingPoint, fieldMap.Object, dbProviderFactory.Object, dataSource.Object);
-
-            Assert.EndsWith("ORDER BY OnlineLastModified ASC", testObject.GenerateSql());
+            OdbcLastModifiedDownloadQuery testObject = new OdbcLastModifiedDownloadQuery(
+                OdbcColumnSourceType.CustomSubQuery,
+                downloadQuery.Object,
+                onlineLastModifiedStartingPoint,
+                "OnlineLastModified",
+                "'OnlineLastModified'");
+            
+            Assert.EndsWith("ORDER BY 'OnlineLastModified' ASC", testObject.GenerateSql());
         }
 
         [Fact]
@@ -153,33 +88,17 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Download
         {
             string originalDownloadQuery = "SELECT * FROM FOO";
             DateTime onlineLastModifiedStartingPoint = DateTime.UtcNow;
-            OdbcColumn column = new OdbcColumn("OnlineLastModified", "unknown");
 
             Mock<IOdbcQuery> downloadQuery = mock.Mock<IOdbcQuery>();
             downloadQuery.Setup(d => d.GenerateSql()).Returns(originalDownloadQuery);
 
-            Mock<IExternalOdbcMappableField> externalField = mock.Mock<IExternalOdbcMappableField>();
-            externalField.SetupGet(e => e.Column).Returns(column);
-
-            Mock<IOdbcFieldMapEntry> entry = mock.Mock<IOdbcFieldMapEntry>();
-            entry.SetupGet(e => e.ExternalField).Returns(externalField.Object);
-
-            Mock<IOdbcFieldMap> fieldMap = mock.Mock<IOdbcFieldMap>();
-            fieldMap.Setup(f => f.FindEntriesBy(It.IsAny<EntityField2>())).Returns(new[] { entry.Object });
-
-            Mock<IShipWorksOdbcCommandBuilder> cmdBuilder = mock.Mock<IShipWorksOdbcCommandBuilder>();
-            cmdBuilder.Setup(c => c.QuoteIdentifier(It.IsAny<string>())).Returns(column.Name);
-
-            Mock<IShipWorksDbProviderFactory> dbProviderFactory = mock.Mock<IShipWorksDbProviderFactory>();
-            dbProviderFactory.Setup(d => d.CreateShipWorksOdbcCommandBuilder(It.IsAny<IShipWorksOdbcDataAdapter>())).Returns(cmdBuilder.Object);
-
-            Mock<DbConnection> connection = mock.Mock<DbConnection>();
-
-            Mock<IOdbcDataSource> dataSource = mock.Mock<IOdbcDataSource>();
-            dataSource.Setup(d => d.CreateConnection()).Returns(connection.Object);
-
-            OdbcLastModifiedDownloadQuery testObject = new OdbcLastModifiedDownloadQuery(new OdbcStoreEntity(), downloadQuery.Object, onlineLastModifiedStartingPoint, fieldMap.Object, dbProviderFactory.Object, dataSource.Object);
-
+            OdbcLastModifiedDownloadQuery testObject = new OdbcLastModifiedDownloadQuery(
+                OdbcColumnSourceType.CustomSubQuery,
+                downloadQuery.Object,
+                onlineLastModifiedStartingPoint,
+                "OnlineLastModified",
+                "'OnlineLastModified'");
+            
             Assert.Contains("OnlineLastModified", testObject.GenerateSql());
         }
 
@@ -188,35 +107,19 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Download
         {
             string originalDownloadQuery = "SELECT * FROM FOO";
             DateTime onlineLastModifiedStartingPoint = DateTime.UtcNow;
-            OdbcColumn column = new OdbcColumn("OnlineLastModified", "unknown");
 
             Mock<IOdbcQuery> downloadQuery = mock.Mock<IOdbcQuery>();
             downloadQuery.Setup(d => d.GenerateSql()).Returns(originalDownloadQuery);
 
-            Mock<IExternalOdbcMappableField> externalField = mock.Mock<IExternalOdbcMappableField>();
-            externalField.SetupGet(e => e.Column).Returns(column);
-
-            Mock<IOdbcFieldMapEntry> entry = mock.Mock<IOdbcFieldMapEntry>();
-            entry.SetupGet(e => e.ExternalField).Returns(externalField.Object);
-
-            Mock<IOdbcFieldMap> fieldMap = mock.Mock<IOdbcFieldMap>();
-            fieldMap.Setup(f => f.FindEntriesBy(It.IsAny<EntityField2>())).Returns(new[] { entry.Object });
-
-            Mock<IShipWorksOdbcCommandBuilder> cmdBuilder = mock.Mock<IShipWorksOdbcCommandBuilder>();
-            cmdBuilder.Setup(c => c.QuoteIdentifier(It.IsAny<string>())).Returns(column.Name);
-
-            Mock<IShipWorksDbProviderFactory> dbProviderFactory = mock.Mock<IShipWorksDbProviderFactory>();
-            dbProviderFactory.Setup(d => d.CreateShipWorksOdbcCommandBuilder(It.IsAny<IShipWorksOdbcDataAdapter>())).Returns(cmdBuilder.Object);
-
-            Mock<DbConnection> connection = mock.Mock<DbConnection>();
-
-            Mock<IOdbcDataSource> dataSource = mock.Mock<IOdbcDataSource>();
-            dataSource.Setup(d => d.CreateConnection()).Returns(connection.Object);
-
             Mock<IShipWorksOdbcCommand> command = mock.Mock<IShipWorksOdbcCommand>();
 
-            OdbcLastModifiedDownloadQuery testObject = new OdbcLastModifiedDownloadQuery(new OdbcStoreEntity(), downloadQuery.Object, onlineLastModifiedStartingPoint, fieldMap.Object, dbProviderFactory.Object, dataSource.Object);
-
+            OdbcLastModifiedDownloadQuery testObject = new OdbcLastModifiedDownloadQuery(
+                OdbcColumnSourceType.CustomSubQuery,
+                downloadQuery.Object,
+                onlineLastModifiedStartingPoint,
+                "OnlineLastModified",
+                "'OnlineLastModified'");
+            
             testObject.ConfigureCommand(command.Object);
 
             command.Verify(c => c.ChangeCommandText(testObject.GenerateSql()));
@@ -227,75 +130,20 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Download
         {
             string originalDownloadQuery = "SELECT * FROM FOO";
             DateTime onlineLastModifiedStartingPoint = DateTime.UtcNow;
-            OdbcColumn column = new OdbcColumn("", "unknown");
 
             Mock<IOdbcQuery> downloadQuery = mock.Mock<IOdbcQuery>();
             downloadQuery.Setup(d => d.GenerateSql()).Returns(originalDownloadQuery);
 
-            Mock<IExternalOdbcMappableField> externalField = mock.Mock<IExternalOdbcMappableField>();
-            externalField.SetupGet(e => e.Column).Returns(column);
-
-            Mock<IOdbcFieldMapEntry> entry = mock.Mock<IOdbcFieldMapEntry>();
-            entry.SetupGet(e => e.ExternalField).Returns(externalField.Object);
-
-            Mock<IOdbcFieldMap> fieldMap = mock.Mock<IOdbcFieldMap>();
-            fieldMap.Setup(f => f.FindEntriesBy(It.IsAny<EntityField2>())).Returns(new[] { entry.Object });
-
-            Mock<IShipWorksOdbcCommandBuilder> cmdBuilder = mock.Mock<IShipWorksOdbcCommandBuilder>();
-            cmdBuilder.Setup(c => c.QuoteIdentifier(It.IsAny<string>())).Returns(column.Name);
-
-            Mock<IShipWorksDbProviderFactory> dbProviderFactory = mock.Mock<IShipWorksDbProviderFactory>();
-            dbProviderFactory.Setup(d => d.CreateShipWorksOdbcCommandBuilder(It.IsAny<IShipWorksOdbcDataAdapter>())).Returns(cmdBuilder.Object);
-
-            Mock<DbConnection> connection = mock.Mock<DbConnection>();
-
-            Mock<IOdbcDataSource> dataSource = mock.Mock<IOdbcDataSource>();
-            dataSource.Setup(d => d.CreateConnection()).Returns(connection.Object);
-
             Mock<IShipWorksOdbcCommand> command = mock.Mock<IShipWorksOdbcCommand>();
 
-            OdbcLastModifiedDownloadQuery testObject = new OdbcLastModifiedDownloadQuery(new OdbcStoreEntity(), downloadQuery.Object, onlineLastModifiedStartingPoint, fieldMap.Object, dbProviderFactory.Object, dataSource.Object);
-
+            OdbcLastModifiedDownloadQuery testObject = new OdbcLastModifiedDownloadQuery(
+                OdbcColumnSourceType.CustomSubQuery,
+                downloadQuery.Object,
+                onlineLastModifiedStartingPoint,
+                string.Empty,
+                string.Empty);
+            
             Assert.Throws<ShipWorksOdbcException>(() => testObject.ConfigureCommand(command.Object));
-        }
-
-        [Fact]
-        public void PopulateCommandText_OpensConnection()
-        {
-            string originalDownloadQuery = "SELECT * FROM FOO";
-            DateTime onlineLastModifiedStartingPoint = DateTime.UtcNow;
-            OdbcColumn column = new OdbcColumn("OnlineLastModified", "unknown");
-
-            Mock<IOdbcQuery> downloadQuery = mock.Mock<IOdbcQuery>();
-            downloadQuery.Setup(d => d.GenerateSql()).Returns(originalDownloadQuery);
-
-            Mock<IExternalOdbcMappableField> externalField = mock.Mock<IExternalOdbcMappableField>();
-            externalField.SetupGet(e => e.Column).Returns(column);
-
-            Mock<IOdbcFieldMapEntry> entry = mock.Mock<IOdbcFieldMapEntry>();
-            entry.SetupGet(e => e.ExternalField).Returns(externalField.Object);
-
-            Mock<IOdbcFieldMap> fieldMap = mock.Mock<IOdbcFieldMap>();
-            fieldMap.Setup(f => f.FindEntriesBy(It.IsAny<EntityField2>())).Returns(new[] { entry.Object });
-
-            Mock<IShipWorksOdbcCommandBuilder> cmdBuilder = mock.Mock<IShipWorksOdbcCommandBuilder>();
-            cmdBuilder.Setup(c => c.QuoteIdentifier(It.IsAny<string>())).Returns(column.Name);
-
-            Mock<IShipWorksDbProviderFactory> dbProviderFactory = mock.Mock<IShipWorksDbProviderFactory>();
-            dbProviderFactory.Setup(d => d.CreateShipWorksOdbcCommandBuilder(It.IsAny<IShipWorksOdbcDataAdapter>())).Returns(cmdBuilder.Object);
-
-            Mock<DbConnection> connection = mock.Mock<DbConnection>();
-
-            Mock<IOdbcDataSource> dataSource = mock.Mock<IOdbcDataSource>();
-            dataSource.Setup(d => d.CreateConnection()).Returns(connection.Object);
-
-            Mock<IShipWorksOdbcCommand> command = mock.Mock<IShipWorksOdbcCommand>();
-
-            OdbcLastModifiedDownloadQuery testObject = new OdbcLastModifiedDownloadQuery(new OdbcStoreEntity(), downloadQuery.Object, onlineLastModifiedStartingPoint, fieldMap.Object, dbProviderFactory.Object, dataSource.Object);
-
-            testObject.ConfigureCommand(command.Object);
-
-            connection.Verify(c => c.Open());
         }
 
         [Fact]
@@ -303,34 +151,18 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Download
         {
             string originalDownloadQuery = "SELECT * FROM FOO";
             DateTime onlineLastModifiedStartingPoint = DateTime.UtcNow;
-            OdbcColumn column = new OdbcColumn("OnlineLastModified", "unknown");
 
             Mock<IOdbcQuery> downloadQuery = mock.Mock<IOdbcQuery>();
             downloadQuery.Setup(d => d.GenerateSql()).Returns(originalDownloadQuery);
-
-            Mock<IExternalOdbcMappableField> externalField = mock.Mock<IExternalOdbcMappableField>();
-            externalField.SetupGet(e => e.Column).Returns(column);
-
-            Mock<IOdbcFieldMapEntry> entry = mock.Mock<IOdbcFieldMapEntry>();
-            entry.SetupGet(e => e.ExternalField).Returns(externalField.Object);
-
-            Mock<IOdbcFieldMap> fieldMap = mock.Mock<IOdbcFieldMap>();
-            fieldMap.Setup(f => f.FindEntriesBy(It.IsAny<EntityField2>())).Returns(new[] { entry.Object });
-
-            Mock<IShipWorksOdbcCommandBuilder> cmdBuilder = mock.Mock<IShipWorksOdbcCommandBuilder>();
-            cmdBuilder.Setup(c => c.QuoteIdentifier(It.IsAny<string>())).Returns(column.Name);
-
-            Mock<IShipWorksDbProviderFactory> dbProviderFactory = mock.Mock<IShipWorksDbProviderFactory>();
-            dbProviderFactory.Setup(d => d.CreateShipWorksOdbcCommandBuilder(It.IsAny<IShipWorksOdbcDataAdapter>())).Returns(cmdBuilder.Object);
-
-            Mock<DbConnection> connection = mock.Mock<DbConnection>();
-
-            Mock<IOdbcDataSource> dataSource = mock.Mock<IOdbcDataSource>();
-            dataSource.Setup(d => d.CreateConnection()).Returns(connection.Object);
-
+           
             Mock<IShipWorksOdbcCommand> command = mock.Mock<IShipWorksOdbcCommand>();
 
-            OdbcLastModifiedDownloadQuery testObject = new OdbcLastModifiedDownloadQuery(new OdbcStoreEntity(), downloadQuery.Object, onlineLastModifiedStartingPoint, fieldMap.Object, dbProviderFactory.Object, dataSource.Object);
+            OdbcLastModifiedDownloadQuery testObject = new OdbcLastModifiedDownloadQuery(
+                OdbcColumnSourceType.CustomSubQuery,
+                downloadQuery.Object,
+                onlineLastModifiedStartingPoint,
+                "OnlineLastModified",
+                "'OnlineLastModified'");
 
             testObject.ConfigureCommand(command.Object);
 
