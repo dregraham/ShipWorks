@@ -1,5 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Data.SqlClient;
+using System.Reactive;
 using System.Data.SqlClient;
 using System.IO.Pipes;
 using System.Reactive;
@@ -35,8 +38,6 @@ namespace ShipWorks.ApplicationCore.CommandLineOptions
         /// </summary>
         public Task Execute(List<string> args)
         {
-
-
             // before doing anything make sure we can connect to the database and an upgrade is required
             SqlSession.Initialize();
             if (SqlSchemaUpdater.IsUpgradeRequired())
@@ -47,6 +48,12 @@ namespace ShipWorks.ApplicationCore.CommandLineOptions
                 DatabaseUpgradeBackupManager backupManager = new DatabaseUpgradeBackupManager();
                 try
                 {
+					autoUpdateStatusProvider.UpdateStatus("Creating Backup");
+				
+                    if (SqlServerInfo.HasCustomTriggers())
+                    {
+                        throw new Exception("Database has custom triggers and cannot be automatically upgraded.");
+                    }
                     autoUpdateStatusProvider.UpdateStatus("Creating Backup");
                     // If an upgrade is required create a backup first
                     backupResult = backupManager.CreateBackup(autoUpdateStatusProvider.UpdateStatus);

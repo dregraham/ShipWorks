@@ -52,10 +52,7 @@ namespace ShipWorks.Data.Connection
         ),
 		TriggerInfo as
 		(
-			select count(*) as CustomTriggerCount 
-			from sys.triggers 
-			where type != 'TA' and is_ms_shipped = 0 and is_disabled = 0
-			  AND name != 'FilterNodeSetSwFilterNodeID'
+			{1}
 		)
 
         select SqlInfo.*, CPUs.*, MemoryInfo.*, TriggerInfo.*
@@ -63,6 +60,12 @@ namespace ShipWorks.Data.Connection
 
         drop TABLE #MemoryValues
         ";
+
+        private const string TriggerCountQuery = @"
+			select count(*) as CustomTriggerCount 
+			from sys.triggers 
+			where type != 'TA' and is_ms_shipped = 0 and is_disabled = 0
+			  AND name != 'FilterNodeSetSwFilterNodeID'";
 
         /// <summary>
         /// Fetches a list of configuration properties from SQL Server
@@ -87,7 +90,7 @@ namespace ShipWorks.Data.Connection
                     using (SqlCommand cmd = connection.CreateCommand())
                     {
                         cmd.CommandType = CommandType.Text;
-                        cmd.CommandText = string.Format(FetchQuery, memoryColumn);
+                        cmd.CommandText = string.Format(string.Format(FetchQuery, memoryColumn, TriggerCountQuery), memoryColumn);
 
                         using (SqlDataReader reader = cmd.ExecuteReader(CommandBehavior.SingleRow))
                         {
@@ -116,6 +119,23 @@ namespace ShipWorks.Data.Connection
             }
 
             return values;
+        }
+
+        /// <summary>
+        /// Check the selected db to see if it has custom triggers.
+        /// </summary>
+        public static bool HasCustomTriggers()
+        {
+            using (IDbConnection connection = SqlSession.Current.OpenConnection())
+            {
+                using (IDbCommand cmd = connection.CreateCommand())
+                {
+                    cmd.CommandType = CommandType.Text;
+                    cmd.CommandText = TriggerCountQuery;
+                    int result = Int32.Parse(cmd.ExecuteScalar().ToString());
+                    return result > 0;
+                }
+            }
         }
     }
 }
