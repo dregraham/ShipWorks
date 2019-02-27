@@ -1,8 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 using System.Windows.Forms;
 using Interapptive.Shared.UI;
+using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore.Appearance;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Data.Connection;
@@ -87,42 +89,17 @@ namespace ShipWorks.Filters.Management
             FilterEditorDlg dlg = new FilterEditorDlg(filterNode);
             dlg.Saving += delegate (object sender, CancelEventArgs e)
             {
-                try
-                {
-                    using (SqlAdapter adapter = new SqlAdapter(true))
+                result = SaveFilter(parent, filterNode)
+                    .Match(_ => FilterEditingResult.OK, ex =>
                     {
-                        // Save the filter
-                        FilterLayoutContext.Current.SaveFilter(filter, adapter);
+                        MessageHelper.ShowError(dlg, ex.Message);
 
-                        // Quick filter's should never be displayed as grid content
-                        if (filterNode.Purpose != (int) FilterNodePurpose.Quick)
-                        {
-                            // Get the grid layouts
-                            FilterNodeColumnSettings userSettings = FilterNodeColumnManager.GetUserSettings(filterNode);
-                            FilterNodeColumnSettings derfaultSettings = FilterNodeColumnManager.GetDefaultSettings(filterNode);
+                        e.Cancel = true;
+                        dlg.DialogResult = DialogResult.Cancel;
 
-                            userSettings.Save(adapter);
-                            derfaultSettings.Save(adapter);
-                        }
+                        return FilterEditingResult.Error;
+                    });
 
-                        adapter.Commit();
-                    }
-
-                    FilterContentManager.CheckForChanges();
-
-                    result = FilterEditingResult.OK;
-
-                    Messenger.Current.Send(new FilterNodeEditedMessage(parent, filterNode));
-                }
-                catch (FilterException ex)
-                {
-                    MessageHelper.ShowError(dlg, ex.Message);
-
-                    e.Cancel = true;
-                    dlg.DialogResult = DialogResult.Cancel;
-
-                    result = FilterEditingResult.Error;
-                }
             };
 
             // This was added due to the "Create\Edit" links for editing the Quick Filter that you can get
@@ -146,20 +123,47 @@ namespace ShipWorks.Filters.Management
         }
 
         /// <summary>
-        /// Out of the given list of nodes, determine which one is a child of the given parent
+        /// Save the given filter
         /// </summary>
-        private static FilterNodeEntity FindChild(FilterNodeEntity parent, List<FilterNodeEntity> nodes)
+        public static GenericResult<FilterNodeEntity> SaveFilter(Control owner, FilterNodeEntity filterNode)
         {
-            foreach (FilterNodeEntity node in nodes)
+            try
             {
-                if (node.ParentNode == parent)
+                using (SqlAdapter adapter = new SqlAdapter(true))
                 {
-                    return node;
-                }
-            }
+                    // Save the filter
+                    FilterLayoutContext.Current.SaveFilter(filterNode.Filter, adapter);
 
-            return null;
+                    // Quick filter's should never be displayed as grid content
+                    if (filterNode.Purpose != (int) FilterNodePurpose.Quick)
+                    {
+                        // Get the grid layouts
+                        FilterNodeColumnSettings userSettings = FilterNodeColumnManager.GetUserSettings(filterNode);
+                        FilterNodeColumnSettings derfaultSettings = FilterNodeColumnManager.GetDefaultSettings(filterNode);
+
+                        userSettings.Save(adapter);
+                        derfaultSettings.Save(adapter);
+                    }
+
+                    adapter.Commit();
+                }
+
+                FilterContentManager.CheckForChanges();
+
+                Messenger.Current.Send(new FilterNodeEditedMessage(owner, filterNode));
+
+                return filterNode;
+            }
+            catch (Exception ex)
+            {
+                return ex;
+            }
         }
 
+        /// <summary>
+        /// Out of the given list of nodes, determine which one is a child of the given parent
+        /// </summary>
+        private static FilterNodeEntity FindChild(FilterNodeEntity parent, List<FilterNodeEntity> nodes) =>
+            nodes.Where(node => node.ParentNode == parent).FirstOrDefault();
     }
 }

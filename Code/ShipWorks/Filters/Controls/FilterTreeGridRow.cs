@@ -11,9 +11,6 @@ namespace ShipWorks.Filters.Controls
     public class FilterTreeGridRow : SandGridTreeRow
     {
         private static readonly ILog log = LogManager.GetLogger(typeof(FilterTreeGridRow));
-        private FilterNodeEntity filterNode;
-        private FilterCount filterCount;
-
         private FilterState? previousFilterState;
 
         /// <summary>
@@ -28,37 +25,22 @@ namespace ShipWorks.Filters.Controls
         /// <summary>
         /// The filter node that this row represents
         /// </summary>
-        public FilterNodeEntity FilterNode
-        {
-            get { return filterNode; }
-        }
+        public FilterNodeEntity FilterNode { get; private set; }
 
         /// <summary>
         /// The count as of its last update
         /// </summary>
-        public FilterCount FilterCount
-        {
-            get { return filterCount; }
-        }
+        public FilterCount FilterCount { get; private set; }
 
         /// <summary>
         /// Indicates if the row represents a folder that can contain other items
         /// </summary>
-        public override bool IsFolder
-        {
-            get { return filterNode.Filter.IsFolder; }
-        }
+        public override bool IsFolder => FilterNode.Filter.IsFolder;
 
         /// <summary>
         /// Indicates if the row can be dragged
         /// </summary>
-        public override bool IsDraggable
-        {
-            get
-            {
-                return !FilterHelper.IsBuiltin(filterNode);
-            }
-        }
+        public override bool IsDraggable => !FilterHelper.IsBuiltin(FilterNode);
 
         /// <summary>
         /// Filter proxy for On-Demand filters
@@ -77,7 +59,7 @@ namespace ShipWorks.Filters.Controls
         public override bool IsValidDrop(SandGridDragDropRow sourceRow, DropTargetState state)
         {
             // Cant drop things above or below a builtin item
-            if (FilterHelper.IsBuiltin(filterNode) && state != DropTargetState.DropInside)
+            if (FilterHelper.IsBuiltin(FilterNode) && state != DropTargetState.DropInside)
             {
                 return false;
             }
@@ -127,7 +109,7 @@ namespace ShipWorks.Filters.Controls
         /// </summary>
         public void UpdateFilterCount()
         {
-            FilterNodeEntity currentFilterNode = filterNode;
+            FilterNodeEntity currentFilterNode = FilterNode;
 
             if (currentFilterNode == null)
             {
@@ -135,28 +117,21 @@ namespace ShipWorks.Filters.Controls
                 return;
             }
 
-            FilterEntity filter = filterNode.Filter;
+            FilterEntity filter = FilterNode.Filter;
             if (filter == null)
             {
                 log.Warn("Cannot update filter count, no filter is set");
                 return;
             }
 
-            if (filter.IsOnDemand && FilterProxy == null)
+            FilterCount count = GetFilterCount(FilterNode);
+            if (count != FilterCount)
             {
-                filterCount = null;
-            }
-            else
-            {
-                FilterCount count = FilterContentManager.GetCount(FilterProxy?.FilterNodeID ?? currentFilterNode.FilterNodeID);
-                if (count != filterCount)
-                {
-                    filterCount = count;
-                    RedrawNeeded();
-                }
+                FilterCount = count;
+                RedrawNeeded();
             }
 
-            UpdateLayoutForSpeed(filter, currentFilterNode, filterCount);
+            UpdateLayoutForSpeed(filter, currentFilterNode, FilterCount);
         }
 
         /// <summary>
@@ -174,8 +149,21 @@ namespace ShipWorks.Filters.Controls
         /// </summary>
         private void SetFilter(FilterNodeEntity filterNodeEntity)
         {
-            filterNode = filterNodeEntity;
-            filterCount = FilterContentManager.GetCount(filterNode.FilterNodeID);
+            FilterNode = filterNodeEntity;
+            FilterCount = GetFilterCount(filterNodeEntity);
+        }
+
+        /// <summary>
+        /// Get the filter count
+        /// </summary>
+        private FilterCount GetFilterCount(FilterNodeEntity filterNodeEntity)
+        {
+            if (filterNodeEntity?.Filter?.IsOnDemand == true && FilterProxy == null)
+            {
+                return null;
+            }
+
+            return FilterContentManager.GetCount(FilterProxy?.FilterNodeID ?? filterNodeEntity.FilterNodeID);
         }
 
         /// <summary>
@@ -196,13 +184,6 @@ namespace ShipWorks.Filters.Controls
 
             foreach (GridCell cell in Cells)
             {
-                if (filter.IsOnDemand)
-                {
-                    cell.Image = Properties.Resources.paperclip16;
-                    cell.Text = filter.Name;
-                    continue;
-                }
-
                 // Make a note whether the filter was already flagged as a slow running filter
                 bool previousFlag = IsFlaggedAsSlowRunning;
 
@@ -240,10 +221,7 @@ namespace ShipWorks.Filters.Controls
         /// <summary>
         /// Gets whether the filter associated with this row is disabled
         /// </summary>
-        public bool IsFilterDisabled()
-        {
-            return CurrentFilterState == FilterState.Disabled;
-        }
+        public bool IsFilterDisabled() => CurrentFilterState == FilterState.Disabled;
 
         /// <summary>
         /// Gets the current state of the filter associated with this row
@@ -253,7 +231,7 @@ namespace ShipWorks.Filters.Controls
         {
             get
             {
-                FilterEntity filter = filterNode.Filter;
+                FilterEntity filter = FilterNode.Filter;
 
                 return filter != null ?
                     (FilterState) filter.State :

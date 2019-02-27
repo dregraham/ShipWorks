@@ -34,13 +34,11 @@ namespace ShipWorks.Filters
     /// </summary>
     public static class FilterHelper
     {
-        static readonly ILog log = LogManager.GetLogger(typeof(FilterHelper));
+        private static readonly ILog log = LogManager.GetLogger(typeof(FilterHelper));
+        private const string myFiltersName = "My Filters";
+        private static readonly Dictionary<FilterImageType, Image> filterImageCache = new Dictionary<FilterImageType, Image>();
 
-        const string myFiltersName = "My Filters";
-
-        static readonly Dictionary<FilterImageType, Image> filterImageCache = new Dictionary<FilterImageType, Image>();
-
-        enum FilterImageType
+        private enum FilterImageType
         {
             MyFilters,
             Orders,
@@ -54,6 +52,7 @@ namespace ShipWorks.Filters
             SoftLinkFilter,
             Folder,
             FolderWithCondition,
+            OnDemandFilter,
             Filter
         }
 
@@ -141,7 +140,7 @@ namespace ShipWorks.Filters
         }
 
         /// <summary>
-        /// Indicates if the node is a filter that is in the My Filters collection 
+        /// Indicates if the node is a filter that is in the My Filters collection
         /// </summary>
         public static bool IsMyFilter(long filterNodeID)
         {
@@ -325,6 +324,10 @@ namespace ShipWorks.Filters
                 {
                     return filter.Definition == null ? GetFilterImage(FilterImageType.Folder, createCopy) : GetFilterImage(FilterImageType.FolderWithCondition, createCopy);
                 }
+                else if (filter.IsOnDemand)
+                {
+                    return GetFilterImage(FilterImageType.OnDemandFilter, createCopy);
+                }
                 else
                 {
                     return GetFilterImage(FilterImageType.Filter, createCopy);
@@ -353,6 +356,7 @@ namespace ShipWorks.Filters
                     case FilterImageType.SoftLinkFilter: return Resources.funnel_linked_arrow;
                     case FilterImageType.Folder: return Resources.folderclosed;
                     case FilterImageType.FolderWithCondition: return Resources.folderfilter;
+                    case FilterImageType.OnDemandFilter: return Resources.paperclip16;
                     case FilterImageType.Filter: return Resources.filter;
                 }
 

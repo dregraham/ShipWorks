@@ -81,6 +81,7 @@ namespace ShipWorks.Filters.Controls
         private ToolStripSeparator toolStripSeparator;
         private ToolStripMenuItem menuItemOrganizeFilters;
         private ToolStripMenuItem menuLoadFilterAsSearch;
+        private ToolStripMenuItem menuConvertFilter;
 
         // Edition helper for UI updates
         private EditionGuiHelper editionGuiHelper;
@@ -755,6 +756,7 @@ namespace ShipWorks.Filters.Controls
             toolStripSeparator = new ToolStripSeparator();
             menuItemOrganizeFilters = new ToolStripMenuItem();
             menuLoadFilterAsSearch = new ToolStripMenuItem();
+            menuConvertFilter = new ToolStripMenuItem();
 
             ContextMenuStrip = contextMenuFilterTree;
 
@@ -762,6 +764,7 @@ namespace ShipWorks.Filters.Controls
             contextMenuFilterTree.Items.AddRange(new ToolStripItem[] {
                 menuItemEditFilter,
                 menuLoadFilterAsSearch,
+                menuConvertFilter,
                 menuItemEditFilterSep,
                 menuItemNewFilter,
                 menuItemNewFolder,
@@ -817,12 +820,53 @@ namespace ShipWorks.Filters.Controls
             menuItemOrganizeFilters.Text = "Manage Filters";
             menuItemOrganizeFilters.Click += OnManageFilters;
 
-            // menuItemOrganizeFilters
+            // menuLoadFilterAsSearch
             menuLoadFilterAsSearch.Image = Resources.view;
             menuLoadFilterAsSearch.Name = "menuLoadFilterAsSearch";
             menuLoadFilterAsSearch.Size = new Size(151, 22);
             menuLoadFilterAsSearch.Text = "Load as Advanced Search";
             menuLoadFilterAsSearch.Click += OnLoadAsAdvancedSearch;
+
+            // menuConvertFilter
+            menuConvertFilter.Image = Resources.view;
+            menuConvertFilter.Name = "menuConvertFilter";
+            menuConvertFilter.Size = new Size(151, 22);
+            menuConvertFilter.Text = "Convert to On-Demand Filter";
+            menuConvertFilter.Click += OnConvertFilter;
+        }
+
+        /// <summary>
+        /// Handle converting a filter to and from OnDemand
+        /// </summary>
+        private void OnConvertFilter(object sender, EventArgs e)
+        {
+            if (SelectedFilterNode?.Filter == null)
+            {
+                return;
+            }
+
+            if (!SelectedFilterNode.Filter.IsOnDemand)
+            {
+                var references = new FilterNodeReferenceRepository().Find(SelectedFilterNode);
+
+                if (references.Any())
+                {
+                    var message = "Cannot convert to an on-demand filter because it is in use." +
+                        Environment.NewLine +
+                        Environment.NewLine +
+                        "Usages:" +
+                        Environment.NewLine +
+                        references.Combine(Environment.NewLine);
+                    MessageHelper.ShowError(this, message);
+
+                    return;
+                }
+            }
+
+            SelectedFilterNode.Filter.IsOnDemand = !SelectedFilterNode.Filter.IsOnDemand;
+
+            FilterEditingService.SaveFilter(this, SelectedFilterNode)
+                .OnFailure(ex => MessageHelper.ShowError(this, ex.Message));
         }
 
         /// <summary>
@@ -866,6 +910,11 @@ namespace ShipWorks.Filters.Controls
                 !BuiltinFilter.IsSearchPlaceholderKey(SelectedFilterNode.FilterID) &&
                 !BuiltinFilter.IsTopLevelKey(SelectedFilterNode.FilterID) &&
                 SelectedFilterNode?.Filter?.IsFolder != true;
+
+            menuConvertFilter.Available = menuLoadFilterAsSearch.Available;
+            menuConvertFilter.Text = SelectedFilterNode?.Filter?.IsOnDemand == true ?
+                "Convert to standard filter" :
+                "Convert to on-demand filter";
 
             menuItemEditFilterSep.Available = menuItemEditFilter.Available;
         }

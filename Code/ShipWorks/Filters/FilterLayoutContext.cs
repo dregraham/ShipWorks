@@ -512,7 +512,9 @@ namespace ShipWorks.Filters
         {
             try
             {
-                bool filterDefinitionChanged = filter.Fields[(int) FilterFieldIndex.Definition].IsChanged || filter.Fields[(int) FilterFieldIndex.State].IsChanged;
+                bool filterDefinitionChanged = filter.Fields[(int) FilterFieldIndex.Definition].IsChanged ||
+                    filter.Fields[(int) FilterFieldIndex.State].IsChanged ||
+                    filter.Fields[(int) FilterFieldIndex.IsOnDemand].IsChanged;
 
                 // Fetch list of nodes before refetching.
                 List<FilterNodeEntity> nodesToUpdate = GetNodesAffectedByDefinition(filter);

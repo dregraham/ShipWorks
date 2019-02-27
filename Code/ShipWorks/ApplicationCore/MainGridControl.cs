@@ -13,9 +13,7 @@ using Interapptive.Shared.Utility;
 using log4net;
 using ShipWorks.ApplicationCore.Appearance;
 using ShipWorks.ApplicationCore.Options;
-using ShipWorks.Core.Messaging;
 using ShipWorks.Data;
-using ShipWorks.Data.Connection;
 using ShipWorks.Data.Grid;
 using ShipWorks.Data.Grid.DetailView;
 using ShipWorks.Data.Grid.Paging;
@@ -25,7 +23,6 @@ using ShipWorks.Filters.Content;
 using ShipWorks.Filters.Grid;
 using ShipWorks.Filters.Management;
 using ShipWorks.Filters.Search;
-using ShipWorks.Messaging.Messages;
 using ShipWorks.Properties;
 using ShipWorks.UI.Controls.Design;
 using ShipWorks.Users;
@@ -1127,38 +1124,13 @@ namespace ShipWorks.ApplicationCore
 
                 loadedFilter.Filter.Definition = filterEditor.FilterDefinition.GetXml();
 
-                try
-                {
-                    using (SqlAdapter adapter = new SqlAdapter(true))
+                FilterEditingService.SaveFilter(this, loadedFilter)
+                    .Do(f =>
                     {
-                        // Save the filter
-                        FilterLayoutContext.Current.SaveFilter(loadedFilter.Filter, adapter);
-
-                        // Quick filter's should never be displayed as grid content
-                        if (loadedFilter.Purpose != (int) FilterNodePurpose.Quick)
-                        {
-                            // Get the grid layouts
-                            FilterNodeColumnSettings userSettings = FilterNodeColumnManager.GetUserSettings(loadedFilter);
-                            FilterNodeColumnSettings derfaultSettings = FilterNodeColumnManager.GetDefaultSettings(loadedFilter);
-
-                            userSettings.Save(adapter);
-                            derfaultSettings.Save(adapter);
-                        }
-
-                        adapter.Commit();
-                    }
-
-                    FilterContentManager.CheckForChanges();
-
-                    Messenger.Current.Send(new FilterNodeEditedMessage(loadedFilter.ParentNode, loadedFilter));
-
-                    OnFilterSaved(this, loadedFilter);
-                    AdvancedSearchVisible = false;
-                }
-                catch (FilterException ex)
-                {
-                    MessageHelper.ShowError(this, ex.Message);
-                }
+                        OnFilterSaved(this, loadedFilter);
+                        AdvancedSearchVisible = false;
+                    })
+                    .OnFailure(ex => MessageHelper.ShowError(this, ex.Message));
             }
         }
     }
