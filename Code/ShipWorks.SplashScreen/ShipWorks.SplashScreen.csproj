@@ -104,11 +104,5 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Interapptive.Shared\Interapptive.Shared.csproj">
-      <Project>{1E53A000-FDEB-4E9E-8BE0-19CDC14A0282}</Project>
-      <Name>Interapptive.Shared</Name>
-    </ProjectReference>
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
