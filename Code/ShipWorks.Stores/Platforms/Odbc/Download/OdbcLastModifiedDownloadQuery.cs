@@ -13,35 +13,30 @@ using ShipWorks.Stores.Platforms.Odbc.Mapping;
 namespace ShipWorks.Stores.Platforms.Odbc.Download
 {
     /// <summary>
-    /// Download Query where the results are limited to rows greater than the onlinelastmodified date
+    /// Download Query where the results are limited to rows greater than the online last modified date
     /// </summary>
     public class OdbcLastModifiedDownloadQuery : IOdbcQuery
     {
-        private readonly OdbcStoreEntity store;
+        private readonly OdbcColumnSourceType importColumnSourceType;
         private readonly IOdbcQuery downloadQuery;
         private readonly DateTime onlineLastModifiedStartingPoint;
-        private readonly IShipWorksDbProviderFactory dbProviderFactory;
-        private readonly IOdbcDataSource dataSource;
         private readonly string lastModifiedColumnName;
+        private readonly string quotedLastModifiedColumnName;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        /// <param name="downloadQuery">Query to limit</param>
-        /// <param name="onlineLastModifiedStartingPoint">date to limit the query from </param>
-        public OdbcLastModifiedDownloadQuery(OdbcStoreEntity store,
+        public OdbcLastModifiedDownloadQuery(OdbcColumnSourceType importColumnSourceType,
             IOdbcQuery downloadQuery,
             DateTime onlineLastModifiedStartingPoint,
-            IOdbcFieldMap fieldMap,
-            IShipWorksDbProviderFactory dbProviderFactory,
-            IOdbcDataSource dataSource)
+            string lastModifiedColumnName,
+            string quotedLastModifiedColumnName)
         {
-            this.store = store;
+            this.importColumnSourceType = importColumnSourceType;
             this.downloadQuery = downloadQuery;
             this.onlineLastModifiedStartingPoint = onlineLastModifiedStartingPoint;
-            this.dbProviderFactory = dbProviderFactory;
-            this.dataSource = dataSource;
-            lastModifiedColumnName = fieldMap.FindEntriesBy(OrderFields.OnlineLastModified).FirstOrDefault()?.ExternalField.Column.Name;
+            this.lastModifiedColumnName = lastModifiedColumnName;
+            this.quotedLastModifiedColumnName = quotedLastModifiedColumnName;
         }
 
         /// <summary>
@@ -52,21 +47,19 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
         /// <exception cref="ShipWorksOdbcException">The OnlineLastModified column must be mapped to download by OnlineLastModified.</exception>
         public string GenerateSql()
         {
-            // If the onlinelastmodified column is not mapped we cannot generate the query
+            // If the online last modified column is not mapped we cannot generate the query
             if (string.IsNullOrWhiteSpace(lastModifiedColumnName))
             {
                 throw new ShipWorksOdbcException("The OnlineLastModified column must be mapped to download by OnlineLastModified.");
             }
 
-            string columnNameInQuotes = WrapColumnInQuoteIdentifier(lastModifiedColumnName);
-
-            if (store.ImportColumnSourceType == (int) OdbcColumnSourceType.CustomParameterizedQuery)
+            if (importColumnSourceType == OdbcColumnSourceType.CustomParameterizedQuery)
             {
                 return downloadQuery.GenerateSql();
             }
 
             // Generate the query
-            return $@"SELECT sub.* FROM({downloadQuery.GenerateSql()}) sub WHERE {columnNameInQuotes} > ? ORDER BY {columnNameInQuotes} ASC";
+            return $@"SELECT sub.* FROM({downloadQuery.GenerateSql()}) sub WHERE {quotedLastModifiedColumnName} > ? ORDER BY {quotedLastModifiedColumnName} ASC";
         }
 
         /// <summary>
@@ -76,25 +69,9 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
         public void ConfigureCommand(IShipWorksOdbcCommand command)
         {
             command.ChangeCommandText(GenerateSql());
-            string columnNameInQuotes = WrapColumnInQuoteIdentifier(lastModifiedColumnName);
 
-            OdbcParameter param = new OdbcParameter(columnNameInQuotes, OdbcType.DateTime, 23, ParameterDirection.Input, false, 1, 3, columnNameInQuotes, DataRowVersion.Current, onlineLastModifiedStartingPoint);
+            OdbcParameter param = new OdbcParameter(quotedLastModifiedColumnName, OdbcType.DateTime, 23, ParameterDirection.Input, false, 1, 3, quotedLastModifiedColumnName, DataRowVersion.Current, onlineLastModifiedStartingPoint);
             command.AddParameter(param);
-        }
-
-        /// <summary>
-        /// Wraps the given column string in the data sources quoted identifier
-        /// </summary>
-        /// <exception cref="ShipWorksOdbcException">The Connection string is not valid</exception>
-        private string WrapColumnInQuoteIdentifier(string column)
-        {
-            using (DbConnection connection = dataSource.CreateConnection())
-            using (IShipWorksOdbcDataAdapter adapter = dbProviderFactory.CreateShipWorksOdbcDataAdapter(string.Empty, connection))
-            using (IShipWorksOdbcCommandBuilder cmdBuilder = dbProviderFactory.CreateShipWorksOdbcCommandBuilder(adapter))
-            {
-                connection.Open();
-                return cmdBuilder.QuoteIdentifier(column);
-            }
         }
     }
 }
