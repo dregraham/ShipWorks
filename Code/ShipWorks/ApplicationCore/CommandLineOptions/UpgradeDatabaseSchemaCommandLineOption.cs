@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.SqlClient;
 using System.Reactive;
 using System.Threading;
@@ -41,6 +42,11 @@ namespace ShipWorks.ApplicationCore.CommandLineOptions
                 DatabaseUpgradeBackupManager backupManager = new DatabaseUpgradeBackupManager();
                 try
                 {
+                    if (SqlServerInfo.HasCustomTriggers())
+                    {
+                        throw new Exception("Database has custom triggers and cannot be automatically upgraded.");
+                    }
+
                     // If an upgrade is required create a backup first
                     backupResult = backupManager.CreateBackup();
 
