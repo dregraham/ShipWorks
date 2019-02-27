@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.Reactive;
 using System.Threading.Tasks;
 using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore.Licensing.TangoRequests;
 using ShipWorks.Data.Administration;
 using ShipWorks.Data.Model.EntityInterfaces;
@@ -48,7 +49,8 @@ namespace ShipWorks.ApplicationCore.Dashboard.Content
                     userSession.UpdateSettings(x => x.LastReleaseNotesSeenVersion = buildVersion);
 
                     versionRequest.GetReleaseInfo(buildVersion)
-                        .Do(x => invoker.Invoke((Action<string>) ShowDashboardItem, new[] { x.ReleaseNotes }));
+                        .Bind(x => Functional.Try(() => new Uri(x.ReleaseNotes)))
+                        .Do(x => invoker.Invoke((Action<Uri>) ShowDashboardItem, new[] { x }));
                 }
 
                 return Unit.Default;
@@ -57,11 +59,11 @@ namespace ShipWorks.ApplicationCore.Dashboard.Content
         /// <summary>
         /// Show the dashboard item
         /// </summary>
-        private void ShowDashboardItem(string releaseNotes) =>
+        private void ShowDashboardItem(Uri uri) =>
             dashboardManager.ShowLocalMessage("ReleaseNotes",
                 DashboardMessageImageType.LightBulb,
                 "ShipWorks was updated",
                 "ShipWorks was recently updated. See the release notes for more information",
-                new DashboardActionUrl("[link]View Release Notes[/link]", releaseNotes));
+                new DashboardActionUrl("[link]View Release Notes[/link]", uri));
     }
 }
