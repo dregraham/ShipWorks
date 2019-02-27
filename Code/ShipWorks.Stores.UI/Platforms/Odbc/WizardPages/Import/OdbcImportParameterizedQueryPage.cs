@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Windows.Forms;
-using Interapptive.Shared.UI;
-using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Management;
 using ShipWorks.Stores.Platforms.Odbc;
@@ -13,21 +10,24 @@ using ShipWorks.UI.Wizard;
 
 namespace ShipWorks.Stores.UI.Platforms.Odbc.WizardPages.Import
 {
+    /// <summary>
+    /// Wizard page for entering a parameterized Odbc import query
+    /// </summary>
     public partial class OdbcImportParameterizedQueryPage : AddStoreWizardPage, IOdbcWizardPage
     {
         private readonly Func<OdbcImportParameterizedQueryControlViewModel> viewModelFactory;
         private OdbcImportParameterizedQueryControlViewModel viewModel;
         private readonly IOdbcDataSourceService dataSourceService;
-        private readonly IMessageHelper messageHelper;
         private OdbcStoreEntity store;
         
+        /// <summary>
+        /// Constructor
+        /// </summary>
         public OdbcImportParameterizedQueryPage(Func<OdbcImportParameterizedQueryControlViewModel> viewModelFactory, 
-                                                IOdbcDataSourceService dataSourceService, 
-                                                IMessageHelper messageHelper)
+                                                IOdbcDataSourceService dataSourceService)
         {
             this.viewModelFactory = viewModelFactory;
             this.dataSourceService = dataSourceService;
-            this.messageHelper = messageHelper;
 
             InitializeComponent();
             SteppingInto += OnSteppingInto;

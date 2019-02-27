@@ -1,4 +1,3 @@
-using System;
 using System.Data;
 using System.Reflection;
 using System.Windows.Input;
@@ -6,13 +5,15 @@ using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.UI;
-using Interapptive.Shared.Utility;
 using ShipWorks.Stores.Platforms.Odbc;
 using ShipWorks.Stores.Platforms.Odbc.DataAccess;
 using ShipWorks.Stores.Platforms.Odbc.DataSource;
 
 namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Import
 {
+    /// <summary>
+    /// View model for the OdbcImportSubqueryControl
+    /// </summary>
     [Component(RegistrationType.Self)]
     public class OdbcImportSubqueryControlViewModel : ViewModelBase
     {

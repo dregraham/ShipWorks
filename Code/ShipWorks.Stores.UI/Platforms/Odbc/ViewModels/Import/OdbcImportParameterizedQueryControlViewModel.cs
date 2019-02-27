@@ -1,15 +1,11 @@
 using System;
-using System.Collections.Generic;
 using System.Data;
-using System.Linq;
 using System.Reflection;
-using System.Text;
 using System.Windows.Input;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.UI;
-using Interapptive.Shared.Utility;
 using ShipWorks.Stores.Platforms.Odbc;
 using ShipWorks.Stores.Platforms.Odbc.DataAccess;
 using ShipWorks.Stores.Platforms.Odbc.DataSource;
@@ -17,6 +13,9 @@ using ShipWorks.Stores.Platforms.Odbc.Download;
 
 namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Import
 {
+    /// <summary>
+    /// View model for the OdbcImportParameterizedQueryControl
+    /// </summary>
     [Component(RegistrationType.Self)]
     public class OdbcImportParameterizedQueryControlViewModel : ViewModelBase
     {
