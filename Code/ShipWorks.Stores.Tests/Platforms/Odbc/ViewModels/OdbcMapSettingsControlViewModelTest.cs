@@ -125,58 +125,5 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.ViewModels
                 messageHelperMock.Verify(m => m.ShowError("Please select a table before continuing to the next page."), Times.Once);
             }
         }
-
-        [Fact]
-        public void ValidateRequiredMapSettings_ShowsError_WhenCustomQueryIsEmpty_AndColumnSourceIsNotTable()
-        {
-            using (var mock = AutoMock.GetLoose())
-            {
-                var messageHelperMock = mock.Mock<IMessageHelper>();
-                var testObject = mock.Create<TestOdbcMapSettingsControlViewModel>();
-
-                var dataSourceMock = mock.MockRepository.Create<IOdbcDataSource>();
-                var schemaMock = mock.MockRepository.Create<IOdbcSchema>();
-                testObject.Load(dataSourceMock.Object, schemaMock.Object, "blah", new OdbcStoreEntity());
-                testObject.CustomQuery = string.Empty;
-                testObject.ColumnSourceIsTable = false;
-
-                testObject.ValidateRequiredMapSettings();
-
-                messageHelperMock.Verify(m => m.ShowError("Please enter a valid query before continuing to the next page."), Times.Once);
-            }
-        }
-
-        [Fact]
-        public void ValidateRequiredMapSettings_ReturnsFalse_WhenCustomQueryIsEmpty_AndColumnSourceIsNotTable()
-        {
-            using (var mock = AutoMock.GetLoose())
-            {
-                var testObject = mock.Create<TestOdbcMapSettingsControlViewModel>();
-
-                var dataSourceMock = mock.MockRepository.Create<IOdbcDataSource>();
-                var schemaMock = mock.MockRepository.Create<IOdbcSchema>();
-                testObject.Load(dataSourceMock.Object, schemaMock.Object, "blah", new OdbcStoreEntity());
-                testObject.CustomQuery = string.Empty;
-                testObject.ColumnSourceIsTable = false;
-
-                Assert.False(testObject.ValidateRequiredMapSettings());
-            }
-        }
-
-        [Fact]
-        public void ValidateRequiredMapSettings_ReturnsTrue_WhenCustomQueryIsNotNull_AndColumnSourceIsNotTable()
-        {
-            using (var mock = AutoMock.GetLoose())
-            {
-                var testObject = mock.Create<TestOdbcMapSettingsControlViewModel>();
-
-                var dataSourceMock = mock.MockRepository.Create<IOdbcDataSource>();
-                var schemaMock = mock.MockRepository.Create<IOdbcSchema>();
-                testObject.Load(dataSourceMock.Object, schemaMock.Object, "blah", new OdbcStoreEntity());
-                testObject.CustomQuery = "select *";
-                testObject.ColumnSourceIsTable = false;
-                Assert.True(testObject.ValidateRequiredMapSettings());
-            }
-        }
     }
 }

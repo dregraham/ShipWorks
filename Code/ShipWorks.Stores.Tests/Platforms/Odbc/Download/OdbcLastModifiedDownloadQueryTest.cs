@@ -4,6 +4,7 @@ using System.Data.Odbc;
 using Autofac.Extras.Moq;
 using Moq;
 using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Platforms.Odbc;
 using ShipWorks.Stores.Platforms.Odbc.DataAccess;
 using ShipWorks.Stores.Platforms.Odbc.DataSource;
@@ -35,7 +36,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Download
             Mock<IShipWorksDbProviderFactory> dbProviderFactory = mock.Mock<IShipWorksDbProviderFactory>();
             Mock<IOdbcDataSource> dataSource = mock.Mock<IOdbcDataSource>();
 
-            OdbcLastModifiedDownloadQuery testObject = new OdbcLastModifiedDownloadQuery(downloadQuery.Object, onlineLastModifiedStartingPoint, fieldMap.Object, dbProviderFactory.Object, dataSource.Object);
+            OdbcLastModifiedDownloadQuery testObject = new OdbcLastModifiedDownloadQuery(new OdbcStoreEntity(), downloadQuery.Object, onlineLastModifiedStartingPoint, fieldMap.Object, dbProviderFactory.Object, dataSource.Object);
 
             ShipWorksOdbcException ex = Assert.Throws<ShipWorksOdbcException>(() => testObject.GenerateSql());
 
@@ -71,7 +72,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Download
             Mock<IOdbcDataSource> dataSource = mock.Mock<IOdbcDataSource>();
             dataSource.Setup(d => d.CreateConnection()).Returns(connection.Object);
 
-            OdbcLastModifiedDownloadQuery testObject = new OdbcLastModifiedDownloadQuery(downloadQuery.Object, onlineLastModifiedStartingPoint, fieldMap.Object, dbProviderFactory.Object, dataSource.Object);
+            OdbcLastModifiedDownloadQuery testObject = new OdbcLastModifiedDownloadQuery(new OdbcStoreEntity(), downloadQuery.Object, onlineLastModifiedStartingPoint, fieldMap.Object, dbProviderFactory.Object, dataSource.Object);
 
             ShipWorksOdbcException ex = Assert.Throws<ShipWorksOdbcException>(() => testObject.GenerateSql());
 
@@ -107,7 +108,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Download
             Mock<IOdbcDataSource> dataSource = mock.Mock<IOdbcDataSource>();
             dataSource.Setup(d => d.CreateConnection()).Returns(connection.Object);
 
-            OdbcLastModifiedDownloadQuery testObject = new OdbcLastModifiedDownloadQuery(downloadQuery.Object, onlineLastModifiedStartingPoint, fieldMap.Object, dbProviderFactory.Object, dataSource.Object);
+            OdbcLastModifiedDownloadQuery testObject = new OdbcLastModifiedDownloadQuery(new OdbcStoreEntity(), downloadQuery.Object, onlineLastModifiedStartingPoint, fieldMap.Object, dbProviderFactory.Object, dataSource.Object);
 
             Assert.Contains(originalDownloadQuery, testObject.GenerateSql());
         }
@@ -142,7 +143,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Download
             Mock<IOdbcDataSource> dataSource = mock.Mock<IOdbcDataSource>();
             dataSource.Setup(d => d.CreateConnection()).Returns(connection.Object);
 
-            OdbcLastModifiedDownloadQuery testObject = new OdbcLastModifiedDownloadQuery(downloadQuery.Object, onlineLastModifiedStartingPoint, fieldMap.Object, dbProviderFactory.Object, dataSource.Object);
+            OdbcLastModifiedDownloadQuery testObject = new OdbcLastModifiedDownloadQuery(new OdbcStoreEntity(), downloadQuery.Object, onlineLastModifiedStartingPoint, fieldMap.Object, dbProviderFactory.Object, dataSource.Object);
 
             Assert.EndsWith("ORDER BY OnlineLastModified ASC", testObject.GenerateSql());
         }
@@ -177,7 +178,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Download
             Mock<IOdbcDataSource> dataSource = mock.Mock<IOdbcDataSource>();
             dataSource.Setup(d => d.CreateConnection()).Returns(connection.Object);
 
-            OdbcLastModifiedDownloadQuery testObject = new OdbcLastModifiedDownloadQuery(downloadQuery.Object, onlineLastModifiedStartingPoint, fieldMap.Object, dbProviderFactory.Object, dataSource.Object);
+            OdbcLastModifiedDownloadQuery testObject = new OdbcLastModifiedDownloadQuery(new OdbcStoreEntity(), downloadQuery.Object, onlineLastModifiedStartingPoint, fieldMap.Object, dbProviderFactory.Object, dataSource.Object);
 
             Assert.Contains("OnlineLastModified", testObject.GenerateSql());
         }
@@ -214,7 +215,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Download
 
             Mock<IShipWorksOdbcCommand> command = mock.Mock<IShipWorksOdbcCommand>();
 
-            OdbcLastModifiedDownloadQuery testObject = new OdbcLastModifiedDownloadQuery(downloadQuery.Object, onlineLastModifiedStartingPoint, fieldMap.Object, dbProviderFactory.Object, dataSource.Object);
+            OdbcLastModifiedDownloadQuery testObject = new OdbcLastModifiedDownloadQuery(new OdbcStoreEntity(), downloadQuery.Object, onlineLastModifiedStartingPoint, fieldMap.Object, dbProviderFactory.Object, dataSource.Object);
 
             testObject.ConfigureCommand(command.Object);
 
@@ -253,7 +254,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Download
 
             Mock<IShipWorksOdbcCommand> command = mock.Mock<IShipWorksOdbcCommand>();
 
-            OdbcLastModifiedDownloadQuery testObject = new OdbcLastModifiedDownloadQuery(downloadQuery.Object, onlineLastModifiedStartingPoint, fieldMap.Object, dbProviderFactory.Object, dataSource.Object);
+            OdbcLastModifiedDownloadQuery testObject = new OdbcLastModifiedDownloadQuery(new OdbcStoreEntity(), downloadQuery.Object, onlineLastModifiedStartingPoint, fieldMap.Object, dbProviderFactory.Object, dataSource.Object);
 
             Assert.Throws<ShipWorksOdbcException>(() => testObject.ConfigureCommand(command.Object));
         }
@@ -290,7 +291,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Download
 
             Mock<IShipWorksOdbcCommand> command = mock.Mock<IShipWorksOdbcCommand>();
 
-            OdbcLastModifiedDownloadQuery testObject = new OdbcLastModifiedDownloadQuery(downloadQuery.Object, onlineLastModifiedStartingPoint, fieldMap.Object, dbProviderFactory.Object, dataSource.Object);
+            OdbcLastModifiedDownloadQuery testObject = new OdbcLastModifiedDownloadQuery(new OdbcStoreEntity(), downloadQuery.Object, onlineLastModifiedStartingPoint, fieldMap.Object, dbProviderFactory.Object, dataSource.Object);
 
             testObject.ConfigureCommand(command.Object);
 
@@ -329,7 +330,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Download
 
             Mock<IShipWorksOdbcCommand> command = mock.Mock<IShipWorksOdbcCommand>();
 
-            OdbcLastModifiedDownloadQuery testObject = new OdbcLastModifiedDownloadQuery(downloadQuery.Object, onlineLastModifiedStartingPoint, fieldMap.Object, dbProviderFactory.Object, dataSource.Object);
+            OdbcLastModifiedDownloadQuery testObject = new OdbcLastModifiedDownloadQuery(new OdbcStoreEntity(), downloadQuery.Object, onlineLastModifiedStartingPoint, fieldMap.Object, dbProviderFactory.Object, dataSource.Object);
 
             testObject.ConfigureCommand(command.Object);
 
