@@ -5,7 +5,6 @@ namespace Interapptive.Shared.AutoUpdate
     /// <summary>
     /// Represents the AutoUpdateStatusProvider
     /// </summary>
-    [Service]
     public interface IAutoUpdateStatusProvider
     {
         /// <summary>

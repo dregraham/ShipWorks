@@ -7,6 +7,7 @@ using System.Reflection;
 using System.Security.AccessControl;
 using System.Security.Principal;
 using System.Text;
+using Interapptive.Shared.ComponentRegistration;
 using log4net;
 
 namespace Interapptive.Shared.AutoUpdate
@@ -14,6 +15,7 @@ namespace Interapptive.Shared.AutoUpdate
     /// <summary>
     /// Status provider for the auto update process
     /// </summary>
+    [Component]
     public class AutoUpdateStatusProvider : IAutoUpdateStatusProvider
     {
         private static readonly ILog log = LogManager.GetLogger(typeof(AutoUpdateStatusProvider));
