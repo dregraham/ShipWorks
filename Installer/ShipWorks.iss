@@ -592,7 +592,7 @@ begin
         CheckInstallConditions(CurPage);
     end;
 
-    if (CurPage = wpSelectDir)
+    if ((CurPage = wpSelectDir) and (not ShouldUpgradeDatabase))
     then begin
         Result := CheckUpgradeIssues();
     end;

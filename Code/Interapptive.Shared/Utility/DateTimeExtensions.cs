@@ -56,6 +56,10 @@ namespace Interapptive.Shared.Utility
         {
             int start = (int) value.DayOfWeek;
             int target = (int) dayOfWeek;
+            if (target < start)
+            {
+                target += 7;
+            }
             return value.AddDays(target - start);
         }
     }
