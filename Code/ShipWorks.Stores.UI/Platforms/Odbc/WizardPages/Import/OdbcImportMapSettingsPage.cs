@@ -7,6 +7,7 @@ using ShipWorks.Stores.Platforms.Odbc.DataSource.Schema;
 using ShipWorks.Stores.UI.Platforms.Odbc.ViewModels;
 using ShipWorks.UI.Wizard;
 using System;
+using Interapptive.Shared.UI;
 
 namespace ShipWorks.Stores.UI.Platforms.Odbc.WizardPages.Import
 {
@@ -15,6 +16,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.WizardPages.Import
         private readonly IOdbcDataSourceService dataSourceService;
         private readonly IIndex<string, IOdbcMapSettingsControlViewModel> viewModelFactory;
         private readonly IOdbcSchema schema;
+        private readonly Func<string, IDialog> dialogFactory;
         private IOdbcMapSettingsControlViewModel viewModel;
         private OdbcStoreEntity store;
 
@@ -23,11 +25,14 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.WizardPages.Import
         /// </summary>
         public OdbcImportMapSettingsPage(IOdbcDataSourceService dataSourceService,
             IIndex<string, IOdbcMapSettingsControlViewModel> viewModelFactory,
-            IOdbcSchema schema)
+            IOdbcSchema schema,
+            Func<string, IDialog> dialogFactory)
         {
             this.dataSourceService = dataSourceService;
             this.viewModelFactory = viewModelFactory;
             this.schema = schema;
+            this.dialogFactory = dialogFactory;
+            
             InitializeComponent();
             SteppingInto += OnSteppingInto;
             StepNext += OnNext;
@@ -56,6 +61,14 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.WizardPages.Import
             }
 
             viewModel.SaveMapSettings(store);
+            
+            // Display the query warning dlg if proceeding to a query page
+            if (store.ImportColumnSourceType != (int) OdbcColumnSourceType.Table)
+            {
+                IDialog warningDlg = dialogFactory("OdbcCustomQueryWarningDlg");
+                warningDlg.LoadOwner(Wizard);
+                warningDlg.ShowDialog();   
+            }
         }
 
         /// <summary>

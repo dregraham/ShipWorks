@@ -65,12 +65,11 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.WizardPages.Import
         /// </summary>
         private void OnNext(object sender, WizardStepEventArgs e)
         {
-            Result queryResult = viewModel.ValidateQuery();
+            bool isQueryValid = viewModel.ValidateQuery();
             
-            if (queryResult.Failure)
+            if (!isQueryValid)
             {
                 e.NextPage = this;
-                messageHelper.ShowError(this, queryResult.Message);
                 return;
             }
 

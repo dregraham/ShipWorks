@@ -24,24 +24,23 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Import
         private string resultMessage;
         private const int NumberOfSampleResults = 25;
         private readonly IOdbcSampleDataCommand sampleDataCommand;
-        private readonly Func<string, IDialog> dialogFactory;
+        private readonly IMessageHelper messageHelper;
         private string customQuery;
         private IOdbcDataSource dataSource;
         private string sampleParameterValue;
-        private string parameterizedQueryInfo;
         private OdbcImportStrategy importStrategy;
+        private const string DefaultOrderNumberParameter = "'0'";
+        private readonly string DefaultDateParameter = $"'{DateTime.Today:d}'";
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public OdbcImportParameterizedQueryControlViewModel(IOdbcSampleDataCommand sampleDataCommand, Func<string, IDialog> dialogFactory)
+        public OdbcImportParameterizedQueryControlViewModel(IOdbcSampleDataCommand sampleDataCommand, IMessageHelper messageHelper)
         {
             this.sampleDataCommand = sampleDataCommand;
-            this.dialogFactory = dialogFactory;
+            this.messageHelper = messageHelper;
 
-            ExecuteQueryCommand = new RelayCommand(() => ExecuteQuery(),
-                                                   () => !string.IsNullOrWhiteSpace(CustomQuery) &&
-                                                         !string.IsNullOrWhiteSpace(SampleParameterValue));
+            ExecuteQueryCommand = new RelayCommand(() => ValidateQuery());
         }
 
         /// <summary>
@@ -62,7 +61,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Import
                     "Last Modified Date";
 
                 return
-                    $"Enter a query below, using a ? to represent the {parameterType} parameter. Please also enter a sample parameter value to test the query with, below the query editor.";
+                    $"Enter a query below, using a ? to represent the {parameterType} parameter. If you would like to test your query, you can use the default value or enter your own sample parameter.";
             }
         }
 
@@ -114,44 +113,34 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Import
             dataSource = odbcDataSource;
             importStrategy = odbcImportStrategy;
             CustomQuery = query;
-            
-            IDialog warningDlg = dialogFactory("OdbcCustomQueryWarningDlg");
-            warningDlg.ShowDialog();
+
+            SetSampleParameterValue();
         }
 
         /// <summary>
-        /// Validate the custom query
+        /// Validate the custom query, returning true if valid and false if not
         /// </summary>
-        public Result ValidateQuery()
+        public bool ValidateQuery()
         {
-            Result queryResult;
-
-            StringBuilder errors = new StringBuilder();
-            
             if (string.IsNullOrWhiteSpace(CustomQuery))
             {
-                errors.AppendLine("Please enter a valid query before continuing to the next page.");
+                messageHelper.ShowError("Please enter a valid query.");
+                return false;
             }
 
-            if (string.IsNullOrWhiteSpace(SampleParameterValue))
-            {
-                errors.AppendLine("Please enter a sample parameter value to test the query with.");
-            }
-
-            queryResult = errors.Length == 0 ? 
-                ExecuteQuery() : 
-                Result.FromError(errors.ToString());
-
-            return queryResult;
+            return ExecuteQuery();
         }
 
         /// <summary>
-        /// Executes the query.
+        /// Executes the query, returning true if successful and false if not
         /// </summary>
-        private Result ExecuteQuery()
+        private bool ExecuteQuery()
         {
             QueryResults = null;
             ResultMessage = string.Empty;
+            
+            // Ensure we have a sample value to use
+            SetSampleParameterValue();
 
             try
             {
@@ -162,11 +151,26 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Import
                     ResultMessage = "Query returned no results";
                 }
 
-                return Result.FromSuccess();
+                return true;
             }
             catch (ShipWorksOdbcException ex)
             {
-                return Result.FromError(ex.Message);
+                ResultMessage = "Query returned an error";
+                messageHelper.ShowError(ex.Message);
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// Sets the Sample Parameter Value to the default if blank
+        /// </summary>
+        private void SetSampleParameterValue()
+        {
+            if (string.IsNullOrWhiteSpace(SampleParameterValue))
+            {
+                SampleParameterValue = importStrategy == OdbcImportStrategy.OnDemand
+                    ? DefaultOrderNumberParameter
+                    : DefaultDateParameter;
             }
         }
     }
