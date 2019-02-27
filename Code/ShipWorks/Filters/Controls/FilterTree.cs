@@ -854,9 +854,7 @@ namespace ShipWorks.Filters.Controls
                     var message = "Cannot convert to an on-demand filter because it is in use." +
                         Environment.NewLine +
                         Environment.NewLine +
-                        "Usages:" +
-                        Environment.NewLine +
-                        references.Combine(Environment.NewLine);
+                        references.Select(x => "- " + x).Combine(Environment.NewLine);
                     MessageHelper.ShowError(this, message);
 
                     return;
@@ -906,15 +904,16 @@ namespace ShipWorks.Filters.Controls
                 menuItemEditFilter.Available = false;
             }
 
-            menuLoadFilterAsSearch.Available = filterSelected &&
+            menuConvertFilter.Available = filterSelected &&
                 !BuiltinFilter.IsSearchPlaceholderKey(SelectedFilterNode.FilterID) &&
                 !BuiltinFilter.IsTopLevelKey(SelectedFilterNode.FilterID) &&
                 SelectedFilterNode?.Filter?.IsFolder != true;
-
-            menuConvertFilter.Available = menuLoadFilterAsSearch.Available;
             menuConvertFilter.Text = SelectedFilterNode?.Filter?.IsOnDemand == true ?
                 "Convert to standard filter" :
                 "Convert to on-demand filter";
+
+            menuLoadFilterAsSearch.Available = menuConvertFilter.Available &&
+                SelectedFilterNode?.Filter?.IsOnDemand != true;
 
             menuItemEditFilterSep.Available = menuItemEditFilter.Available;
         }

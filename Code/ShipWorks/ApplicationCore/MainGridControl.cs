@@ -1095,6 +1095,11 @@ namespace ShipWorks.ApplicationCore
             filterEditor.LoadDefinition(new FilterDefinition(filterNode.Filter.Definition));
             headerViewModel.FilterName = filterNode.Filter.Name;
             loadedFilter = filterNode;
+
+            if (filterNode?.Filter?.IsOnDemand == true)
+            {
+                RaiseSearchActiveChanged();
+            }
         }
 
         /// <summary>
@@ -1128,7 +1133,11 @@ namespace ShipWorks.ApplicationCore
                     .Do(f =>
                     {
                         OnFilterSaved(this, loadedFilter);
-                        AdvancedSearchVisible = false;
+                        AdvancedSearchVisible = loadedFilter.Filter.IsOnDemand;
+                        using (var lifetimeScope = IoC.BeginLifetimeScope())
+                        {
+                            lifetimeScope.Resolve<IMessageHelper>().ShowPopup("Filter saved");
+                        }
                     })
                     .OnFailure(ex => MessageHelper.ShowError(this, ex.Message));
             }
