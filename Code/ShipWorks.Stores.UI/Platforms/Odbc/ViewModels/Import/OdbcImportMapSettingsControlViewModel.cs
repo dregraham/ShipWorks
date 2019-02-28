@@ -121,6 +121,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Import
         /// <summary>
         /// Info regarding the two query options
         /// </summary>
+        [Obfuscation(Exclude = true)]
         public string QueryInfo =>
             "When Subquery is selected, ShipWorks will use your query and filter the results based on the selected download option. \n\n" +
             "When Parameterized Query is selected, ShipWorks will give you a parameter to use when writing your query, based on the selected download option. ShipWorks will run your query as is. " +

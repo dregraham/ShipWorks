@@ -51,6 +51,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Import
         /// <summary>
         /// Info regarding parameterized queries
         /// </summary>
+        [Obfuscation(Exclude = true)]
         public string ParameterizedQueryInfo
         {
             get
