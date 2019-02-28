@@ -1,12 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Data.SqlClient;
 using System.Reactive;
-using System.Data.SqlClient;
-using System.IO.Pipes;
-using System.Reactive;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Interapptive.Shared.AutoUpdate;
@@ -49,7 +44,7 @@ namespace ShipWorks.ApplicationCore.CommandLineOptions
                 try
                 {
 					autoUpdateStatusProvider.UpdateStatus("Creating Backup");
-				
+
                     if (SqlServerInfo.HasCustomTriggers())
                     {
                         throw new Exception("Database has custom triggers and cannot be automatically upgraded.");
