@@ -73,6 +73,7 @@ namespace Interapptive.Shared.AutoUpdate
 
         #region DllImports
 
+        [NDependIgnoreTooManyParamsAttribute]
         [DllImport("advapi32.dll", EntryPoint = "CreateProcessAsUser", SetLastError = true, CharSet = CharSet.Ansi, CallingConvention = CallingConvention.StdCall)]
         private static extern bool CreateProcessAsUser(
             IntPtr hToken,
@@ -87,6 +88,7 @@ namespace Interapptive.Shared.AutoUpdate
             ref STARTUPINFO lpStartupInfo,
             out PROCESS_INFORMATION lpProcessInformation);
 
+        [NDependIgnoreTooManyParamsAttribute]
         [DllImport("advapi32.dll", EntryPoint = "DuplicateTokenEx")]
         private static extern bool DuplicateTokenEx(
             IntPtr ExistingTokenHandle,
