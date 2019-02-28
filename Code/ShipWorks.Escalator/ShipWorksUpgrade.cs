@@ -120,8 +120,6 @@ namespace ShipWorks.Escalator
                     log.ErrorFormat("An error occured while installing the new version of ShipWorks: {0}", installationResult.Message);
                 }
             }
-
-            autoUpdateStatusProvider.CloseSplashScreen();
         }
 
         /// <summary>

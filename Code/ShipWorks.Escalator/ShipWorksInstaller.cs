@@ -62,11 +62,14 @@ namespace ShipWorks.Escalator
                     relaunchShipWorks = true;
                 }
 
+                process.Kill();
+            }
+
+            if (relaunchShipWorks)
+            {
                 // Show the splash screen to give users feedback that the update
                 // is kicking off
                 autoUpdateStatusProvider.ShowSplashScreen();
-
-                process.Kill();
             }
         }
 

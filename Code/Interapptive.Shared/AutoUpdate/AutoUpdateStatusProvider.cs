@@ -44,11 +44,18 @@ namespace Interapptive.Shared.AutoUpdate
         /// <summary>
         /// Close the splash screen
         /// </summary>
-        public void CloseSplashScreen()
+        public static void CloseSplashScreen()
         {
-            using (Process process = Process.GetProcessesByName(ProcessName).FirstOrDefault())
+            foreach (Process process in Process.GetProcessesByName(ProcessName))
             {
-                process?.Kill();
+                try
+                {
+                    process?.Kill();
+                }
+                catch (Exception)
+                {
+                    // if it fails ignore it
+                }
             }
         }
 

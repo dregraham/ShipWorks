@@ -45,6 +45,7 @@ namespace ShipWorks.Escalator
             switch (parameter)
             {
                 case "--launchshipworks":
+                    AutoUpdateStatusProvider.CloseSplashScreen();
                     ShipWorksLauncher.StartShipWorks();
                     break;
 
@@ -68,6 +69,7 @@ namespace ShipWorks.Escalator
                     }
                     break;
             }
+
         }
 
         /// <summary>
