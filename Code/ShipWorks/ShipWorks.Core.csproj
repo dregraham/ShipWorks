@@ -11120,6 +11120,8 @@
     <Content Include="Resources\Stores\Icons\zentail.png" />
     <None Include="Resources\table_sql32.png" />
     <None Include="Resources\windows.png" />
+    <Content Include="Resources\view_linked_arrow.png" />
+    <Content Include="Resources\view_linked_infinity.png" />
     <Content Include="Stores\Platforms\Magento\Modules\MagentoOne\MagentoConnectExtension\app\code\community\Interapptive\ShipWorks\etc\adminhtml.xml" />
     <Content Include="Stores\Platforms\Magento\Modules\MagentoOne\MagentoConnectExtension\app\code\community\Interapptive\ShipWorks\etc\api.xml" />
     <Content Include="Stores\Platforms\Magento\Modules\MagentoOne\MagentoConnectExtension\app\code\community\Interapptive\ShipWorks\etc\config.xml" />

@@ -47,12 +47,14 @@ namespace ShipWorks.Filters
             HardLinkFolder,
             HardLinkFodlerWithCondition,
             HardLinkFilter,
+            HardLinkSavedSearch,
             SoftLinkFolder,
             SoftLinkFodlerWithCondition,
             SoftLinkFilter,
+            SoftLinkSavedSearch,
             Folder,
             FolderWithCondition,
-            OnDemandFilter,
+            SavedSearch,
             Filter
         }
 
@@ -302,6 +304,10 @@ namespace ShipWorks.Filters
                 {
                     return filter.Definition == null ? GetFilterImage(FilterImageType.HardLinkFolder, createCopy) : GetFilterImage(FilterImageType.HardLinkFodlerWithCondition, createCopy);
                 }
+                else if (filter.IsSavedSearch)
+                {
+                    return GetFilterImage(FilterImageType.HardLinkSavedSearch, createCopy);
+                }
                 else
                 {
                     return GetFilterImage(FilterImageType.HardLinkFilter, createCopy);
@@ -312,6 +318,10 @@ namespace ShipWorks.Filters
                 if (filter.IsFolder)
                 {
                     return filter.Definition == null ? GetFilterImage(FilterImageType.SoftLinkFolder, createCopy) : GetFilterImage(FilterImageType.SoftLinkFodlerWithCondition, createCopy);
+                }
+                else if (filter.IsSavedSearch)
+                {
+                    return GetFilterImage(FilterImageType.SoftLinkSavedSearch, createCopy);
                 }
                 else
                 {
@@ -326,7 +336,7 @@ namespace ShipWorks.Filters
                 }
                 else if (filter.IsSavedSearch)
                 {
-                    return GetFilterImage(FilterImageType.OnDemandFilter, createCopy);
+                    return GetFilterImage(FilterImageType.SavedSearch, createCopy);
                 }
                 else
                 {
@@ -351,12 +361,14 @@ namespace ShipWorks.Filters
                     case FilterImageType.HardLinkFolder: return Resources.folderclosed_linked_infinity;
                     case FilterImageType.HardLinkFodlerWithCondition: return Resources.folderfilter_linked_infinity;
                     case FilterImageType.HardLinkFilter: return Resources.funnel_linked_infinity;
+                    case FilterImageType.HardLinkSavedSearch: return Resources.view_linked_infinity;
                     case FilterImageType.SoftLinkFolder: return Resources.folderclosed_linked_arrow;
                     case FilterImageType.SoftLinkFodlerWithCondition: return Resources.folderfilter_linked_arrow;
                     case FilterImageType.SoftLinkFilter: return Resources.funnel_linked_arrow;
+                    case FilterImageType.SoftLinkSavedSearch: return Resources.view_linked_arrow;
                     case FilterImageType.Folder: return Resources.folderclosed;
                     case FilterImageType.FolderWithCondition: return Resources.folderfilter;
-                    case FilterImageType.OnDemandFilter: return Resources.paperclip16;
+                    case FilterImageType.SavedSearch: return Resources.view;
                     case FilterImageType.Filter: return Resources.filter;
                 }
 
