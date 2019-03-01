@@ -768,8 +768,10 @@
     <Compile Include="ApplicationCore\IRegistrationOverride.cs" />
     <Compile Include="ApplicationCore\Licensing\FakeTangoWebRequestClient.cs" />
     <Compile Include="ApplicationCore\IShipWorksSession.cs" />
+    <Compile Include="ApplicationCore\Licensing\TangoRequests\ITangoGetReleaseByCustomerRequest.cs" />
     <Compile Include="ApplicationCore\Licensing\TangoRequests\ITangoGetReleaseByVersionRequest.cs" />
     <Compile Include="ApplicationCore\Licensing\TangoRequests\ShipWorksReleaseInfo.cs" />
+    <Compile Include="ApplicationCore\Licensing\TangoRequests\TangoGetReleaseByCustomerRequest.cs" />
     <Compile Include="ApplicationCore\Licensing\TangoRequests\TangoGetReleaseByVersionRequest.cs" />
     <Compile Include="ApplicationCore\ShipWorksSessionWrapper.cs" />
     <Compile Include="ApplicationCore\Licensing\ITangoLogShipmentProcessor.cs" />

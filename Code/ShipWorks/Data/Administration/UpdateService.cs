@@ -1,9 +1,11 @@
 ﻿using System;
+using System.IO;
 using System.IO.Pipes;
 using System.Text;
 using Interapptive.Shared.AutoUpdate;
 using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore;
+using ShipWorks.ApplicationCore.Licensing.TangoRequests;
 using ShipWorks.Data.Connection;
 
 namespace ShipWorks.Data.Administration
@@ -13,16 +15,25 @@ namespace ShipWorks.Data.Administration
     /// </summary>
     public class UpdateService : IUpdateService
     {
+        private const string UpdateInProgressFileName = "UpdateInProcess.txt";
         private NamedPipeClientStream updaterPipe;
         private readonly IAutoUpdateStatusProvider autoUpdateStatusProvider;
+        private readonly ISqlSession sqlSession;
+        private readonly ITangoGetReleaseByCustomerRequest tangoGetReleaseByCustomerRequest;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public UpdateService(IShipWorksSession shipWorksSession, IAutoUpdateStatusProvider autoUpdateStatusProvider)
+        public UpdateService(
+            IShipWorksSession shipWorksSession, 
+            IAutoUpdateStatusProvider autoUpdateStatusProvider, 
+            ISqlSession sqlSession, 
+            ITangoGetReleaseByCustomerRequest tangoGetReleaseByCustomerRequest)
         {
             updaterPipe = new NamedPipeClientStream(".", shipWorksSession.InstanceID.ToString(), PipeDirection.Out);
             this.autoUpdateStatusProvider = autoUpdateStatusProvider;
+            this.sqlSession = sqlSession;
+            this.tangoGetReleaseByCustomerRequest = tangoGetReleaseByCustomerRequest;
         }
 
         /// <summary>
@@ -54,26 +65,49 @@ namespace ShipWorks.Data.Administration
         /// <returns></returns>
         public Result TryUpdate()
         {
-
-            // Check to see if last update failed(if file exists and not the version we are on) and alert user.Then delete file
-            // Write file saying we are upgrading to version x.x.x.x
-            // get current logic from Mainform.AutoUpdate
-            //Add local DB check and see if there is a new version from ITangoGetReleaseByCustomer
-
-            // Check see if the database has been updated and we need to update
-            if (SqlSession.IsConfigured && SqlSession.Current.CanConnect())
+            Version databaseVersion = SqlSchemaUpdater.GetInstalledSchemaVersion();
+            
+            // Check to see if we just launched shipworks after attempting to update the exe
+            if (File.Exists(UpdateInProgressFileName))
             {
-                Version databaseVersion = SqlSchemaUpdater.GetInstalledSchemaVersion();
+                string version = File.ReadAllText(UpdateInProgressFileName);
+                File.Delete(UpdateInProgressFileName);
 
-                if (databaseVersion > SqlSchemaUpdater.GetRequiredSchemaVersion())
+                // if the version we are currently running is lower than the version we were trying to update to then something went wrong
+                // skip the rest of the update process here because we dont want to get stuck in a loop where we keep attempting
+                // to update and fail
+                if (Version.TryParse(version, out Version updateInProcessVersion) && databaseVersion > updateInProcessVersion)
                 {
-                    // need to update
-                    return Update(databaseVersion);
+                    return Result.FromError("The previous ShipWorks auto update failed. Restart ShipWorks to try again.");
                 }
             }
 
-            return Result.FromError("");
+            // For localdb we manually check to see if a new version is available, this is because
+            // the windows service that is running our update service does not have access to localdb
+            if (sqlSession.Configuration.IsLocalDb())
+            {
+                GenericResult<ShipWorksReleaseInfo> releaseInfo = tangoGetReleaseByCustomerRequest.GetReleaseInfo();
 
+                if (releaseInfo.Success)
+                {
+                    Version versionToUpgradeTo = releaseInfo.Value.MinAllowedReleaseVersion;
+
+                    if (versionToUpgradeTo > typeof(UpdateService).Assembly.GetName().Version)
+                    {
+                        return Update(releaseInfo.Value.MinAllowedReleaseVersion);
+                    }
+                }
+            }
+
+            // Check see if the database has been updated and we need to update
+            if (databaseVersion > SqlSchemaUpdater.GetRequiredSchemaVersion())
+            {
+                // need to update
+                return Update(databaseVersion);
+            }
+
+            // No updates return an empty error so the consumer doesnt think that an update is kicking off
+            return Result.FromError(string.Empty);
         }
 
         /// <summary>
@@ -82,9 +116,10 @@ namespace ShipWorks.Data.Administration
         public Result Update(Version version)
         {
             Result result = SendMessage(version.ToString());
-
+            
             if (result.Success)
             {
+                File.WriteAllText("UpdateInProcess.txt", version.ToString());
                 autoUpdateStatusProvider.ShowSplashScreen();
             }
 
