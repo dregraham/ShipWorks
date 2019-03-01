@@ -1,5 +1,6 @@
 ﻿using System.Data;
 using ShipWorks.Stores.Platforms.Odbc.DataSource;
+using ShipWorks.Stores.Platforms.Odbc.Download;
 
 namespace ShipWorks.Stores.Platforms.Odbc.DataAccess
 {

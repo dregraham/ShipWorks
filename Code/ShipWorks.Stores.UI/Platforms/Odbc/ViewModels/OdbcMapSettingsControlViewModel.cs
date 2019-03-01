@@ -23,15 +23,12 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels
         private string mapName = string.Empty;
         private IOdbcColumnSource selectedTable;
         private IEnumerable<IOdbcColumnSource> tables;
-        private DataTable queryResults;
-        private string resultMessage;
         private IOdbcColumnSource columnSource;
         private IOdbcColumnSource customQueryColumnSource;
-        private string customQuery;
 
         public event PropertyChangedEventHandler PropertyChanged;
         protected readonly PropertyChangedHandler Handler;
-        protected readonly IMessageHelper MessageHelper;
+        protected readonly IMessageHelper messageHelper;
         private readonly Func<string, IOdbcColumnSource> columnSourceFactory;
         private IOdbcSchema schema;
 
@@ -40,7 +37,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels
         /// </summary>
         protected OdbcMapSettingsControlViewModel(IMessageHelper messageHelper, Func<string, IOdbcColumnSource> columnSourceFactory)
         {
-            MessageHelper = messageHelper;
+            this.messageHelper = messageHelper;
             this.columnSourceFactory = columnSourceFactory;
 
             Handler = new PropertyChangedHandler(this, () => PropertyChanged);
@@ -66,7 +63,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels
 
                 return mapName;
             }
-            set { Handler.Set(nameof(MapName), ref mapName, value); }
+            set => Handler.Set(nameof(MapName), ref mapName, value);
         }
 
         /// <summary>
@@ -75,8 +72,8 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels
         [Obfuscation(Exclude = true)]
         public IEnumerable<IOdbcColumnSource> Tables
         {
-            get { return tables; }
-            set { Handler.Set(nameof(Tables), ref tables, value); }
+            get => tables;
+            set => Handler.Set(nameof(Tables), ref tables, value);
         }
 
         /// <summary>
@@ -85,7 +82,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels
         [Obfuscation(Exclude = true)]
         public IOdbcColumnSource SelectedTable
         {
-            get { return selectedTable; }
+            get => selectedTable;
             set
             {
                 Handler.Set(nameof(SelectedTable), ref selectedTable, value);
@@ -100,11 +97,10 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels
         [Obfuscation(Exclude = true)]
         public IOdbcColumnSource CustomQueryColumnSource
         {
-            get {
-                return customQueryColumnSource ??
-                       (customQueryColumnSource = columnSourceFactory(CustomQueryColumnSourceName));
-            }
-            set { Handler.Set(nameof(CustomQueryColumnSource), ref customQueryColumnSource, value); }
+            get =>
+                customQueryColumnSource ??
+                (customQueryColumnSource = columnSourceFactory(CustomQueryColumnSourceName));
+            set => Handler.Set(nameof(CustomQueryColumnSource), ref customQueryColumnSource, value);
         }
 
         /// <summary>
@@ -113,7 +109,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels
         [Obfuscation(Exclude = true)]
         public IOdbcColumnSource ColumnSource
         {
-            get { return columnSource; }
+            get => columnSource;
             set
             {
                 // Set map name for the user, if they have not altered it.
@@ -130,43 +126,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels
                 Handler.Set(nameof(ColumnSource), ref columnSource, value);
             }
         }
-
-        /// <summary>
-        /// the custom query
-        /// </summary>
-        [Obfuscation(Exclude = true)]
-        public string CustomQuery
-        {
-            get { return customQuery; }
-            set { Handler.Set(nameof(CustomQuery), ref customQuery, value); }
-        }
-
-        /// <summary>
-        /// Command that executes the query
-        /// </summary>
-        [Obfuscation(Exclude = true)]
-        public ICommand ExecuteQueryCommand { get; set; }
-
-        /// <summary>
-        /// The query results.
-        /// </summary>
-        [Obfuscation(Exclude = true)]
-        public DataTable QueryResults
-        {
-            get { return queryResults; }
-            set { Handler.Set(nameof(QueryResults), ref queryResults, value); }
-        }
-
-        /// <summary>
-        /// Message to indicate failed query execution or no results
-        /// </summary>
-        [Obfuscation(Exclude = true)]
-        public string ResultMessage
-        {
-            get { return resultMessage; }
-            set { Handler.Set(nameof(ResultMessage), ref resultMessage, value); }
-        }
-
+        
         /// <summary>
         /// Whether the column source selected is table
         /// </summary>
@@ -180,13 +140,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels
         {
             if (ColumnSourceIsTable && SelectedTable == null)
             {
-                MessageHelper.ShowError("Please select a table before continuing to the next page.");
-                return false;
-            }
-
-            if (!ColumnSourceIsTable && string.IsNullOrWhiteSpace(CustomQuery))
-            {
-                MessageHelper.ShowError("Please enter a valid query before continuing to the next page.");
+                messageHelper.ShowError("Please select a table before continuing to the next page.");
                 return false;
             }
 
@@ -197,7 +151,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels
 
                 if (currentTables.All(t => t.Name != SelectedTable.Name))
                 {
-                    MessageHelper.ShowError("The selected table does not exist in the current data source");
+                    messageHelper.ShowError("The selected table does not exist in the current data source");
                     return false;
                 }
             }
@@ -223,7 +177,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels
             }
             catch (ShipWorksOdbcException ex)
             {
-                MessageHelper.ShowError(ex.Message);
+                messageHelper.ShowError(ex.Message);
             }
 
             DataSource = dataSource;
@@ -246,7 +200,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels
             }
             catch (Exception)
             {
-                MessageHelper.ShowInformation("ShipWorks was unable to retrieve a list of tables from your ODBC source, you will have to write a query to map columns.");
+                messageHelper.ShowInformation("ShipWorks was unable to retrieve a list of tables from your ODBC source, you will have to write a query to map columns.");
                 ColumnSourceIsTable = false;
             }
             
@@ -263,13 +217,6 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels
                 {
                     Tables = Tables.Concat(new[] { loadedColumnSource });
                     SelectedTable = loadedColumnSource;
-                }
-            }
-            else
-            {
-                if (!string.IsNullOrWhiteSpace(columnSourceFromStore))
-                {
-                    CustomQuery = columnSourceFromStore;
                 }
             }
         }

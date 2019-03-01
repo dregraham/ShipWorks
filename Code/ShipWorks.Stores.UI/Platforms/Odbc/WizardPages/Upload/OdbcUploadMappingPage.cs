@@ -37,7 +37,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.WizardPages.Upload
         /// <summary>
         /// Gets the position.
         /// </summary>
-        public int Position => 6;
+        public int Position => 8;
 
         /// <summary>
         /// Called when [stepping into].
@@ -47,7 +47,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.WizardPages.Upload
             store = GetStore<OdbcStoreEntity>();
 
             if (store.UploadStrategy == (int)OdbcShipmentUploadStrategy.DoNotUpload ||
-                store.UploadColumnSourceType == (int)OdbcColumnSourceType.CustomQuery)
+                store.UploadColumnSourceType != (int) OdbcColumnSourceType.Table)
             {
                 e.Skip = true;
                 e.RaiseStepEventWhenSkipping = false;

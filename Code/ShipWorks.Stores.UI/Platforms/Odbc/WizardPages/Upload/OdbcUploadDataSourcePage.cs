@@ -36,7 +36,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.WizardPages.Upload
         /// <summary>
         /// The position of the wizard page in the collection of pages
         /// </summary>
-        public int Position => 4;
+        public int Position => 6;
 
         /// <summary>
         /// Called when [stepping into].

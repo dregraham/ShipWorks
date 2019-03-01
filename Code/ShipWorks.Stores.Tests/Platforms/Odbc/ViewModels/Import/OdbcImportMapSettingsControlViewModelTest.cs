@@ -94,7 +94,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.ViewModels.Import
             testObject.ColumnSourceIsTable = false;
             testObject.SaveMapSettings(store);
 
-            Assert.Equal((int) OdbcColumnSourceType.CustomQuery, store.ImportColumnSourceType);
+            Assert.Equal((int) OdbcColumnSourceType.CustomSubQuery, store.ImportColumnSourceType);
         }
 
         [Fact]
@@ -118,82 +118,6 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.ViewModels.Import
             testObject.SaveMapSettings(store);
 
             Assert.Equal((int)OdbcImportStrategy.All, store.ImportStrategy);
-        }
-
-        [Fact]
-        public void ValidateREquiredMapSettings_ReturnsFalse_WhenSampleDataCommandThrowsShipWorksOdbcException()
-        {
-            Mock<IOdbcDataSource> dataSource = mock.Mock<IOdbcDataSource>();
-            Mock<IOdbcSchema> schema = mock.Mock<IOdbcSchema>();
-            Mock<IOdbcColumnSource> columnSource = mock.Mock<IOdbcColumnSource>();
-            columnSource.Setup(c => c.Name).Returns("Orders");
-            Mock<IOdbcSampleDataCommand> sampleDataCommand = mock.Mock<IOdbcSampleDataCommand>();
-            sampleDataCommand.Setup(s => s.Execute(It.IsAny<IOdbcDataSource>(), It.IsAny<string>(), It.IsAny<int>()))
-                .Throws(new ShipWorksOdbcException("Something went wrong"));
-
-            OdbcStoreEntity store = new OdbcStoreEntity()
-            {
-                ImportStrategy = (int)OdbcImportStrategy.ByModifiedTime,
-                ImportColumnSourceType = (int)OdbcColumnSourceType.CustomQuery
-            };
-
-            OdbcImportMapSettingsControlViewModel testObject = mock.Create<OdbcImportMapSettingsControlViewModel>();
-
-            testObject.Load(dataSource.Object, schema.Object, "ColumnSource", store);
-            testObject.CustomQuery = "select *";
-            testObject.ColumnSourceIsTable = false;
-            testObject.SaveMapSettings(store);
-
-            Assert.False(testObject.ValidateRequiredMapSettings());
-        }
-
-        [Fact]
-        public void ValidateREquiredMapSettings_ReturnsTrue_WhenQueryIsValid()
-        {
-            Mock<IOdbcDataSource> dataSource = mock.Mock<IOdbcDataSource>();
-            Mock<IOdbcSchema> schema = mock.Mock<IOdbcSchema>();
-            Mock<IOdbcColumnSource> columnSource = mock.Mock<IOdbcColumnSource>();
-            columnSource.Setup(c => c.Name).Returns("Orders");
-            Mock<IOdbcSampleDataCommand> sampleDataCommand = mock.Mock<IOdbcSampleDataCommand>();
-            sampleDataCommand.Setup(s => s.Execute(It.IsAny<IOdbcDataSource>(), It.IsAny<string>(), It.IsAny<int>()))
-                .Returns(new DataTable());
-
-            OdbcStoreEntity store = new OdbcStoreEntity()
-            {
-                ImportStrategy = (int)OdbcImportStrategy.ByModifiedTime,
-                ImportColumnSourceType = (int)OdbcColumnSourceType.CustomQuery
-            };
-
-            OdbcImportMapSettingsControlViewModel testObject = mock.Create<OdbcImportMapSettingsControlViewModel>();
-
-            testObject.Load(dataSource.Object, schema.Object, "ColumnSource", store);
-            testObject.CustomQuery = "select *";
-            testObject.ColumnSourceIsTable = false;
-            testObject.SaveMapSettings(store);
-
-            Assert.True(testObject.ValidateRequiredMapSettings());
-        }
-
-        [Fact]
-        public void SetColumnSourceIsTable_ShowDialog_WhenFalse()
-        {
-            var mockDialog = mock.Mock<IDialog>();
-
-            var func = mock.MockRepository.Create<Func<string, IDialog>>();
-            func.Setup(x => x(It.IsAny<string>())).Returns(mockDialog.Object);
-            mock.Provide(func.Object);
-
-            var testObject = mock.Create<OdbcImportMapSettingsControlViewModel>();
-
-
-            var dataSourceMock = mock.MockRepository.Create<IOdbcDataSource>();
-            var schemaMock = mock.MockRepository.Create<IOdbcSchema>();
-
-            testObject.Load(dataSourceMock.Object, schemaMock.Object, "blah", new OdbcStoreEntity());
-            testObject.ColumnSourceIsTable = false;
-
-            func.Verify(f => f("OdbcCustomQueryWarningDlg"), Times.Once);
-            mockDialog.Verify(d => d.ShowDialog(), Times.Once);
         }
 
         [Fact]
@@ -388,7 +312,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.ViewModels.Import
 
                 var testObject = mock.Create<OdbcImportMapSettingsControlViewModel>();
                 testObject.Load(dataSource.Object, schema.Object, "source", store);
-                
+
                 testObject.OpenMapSettingsFileCommand.Execute(null);
 
                 dialogMock.Verify(d => d.CreateFileStream(), Times.Once);
@@ -459,7 +383,8 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.ViewModels.Import
         }
 
         [Theory]
-        [InlineData(OdbcColumnSourceType.CustomQuery, false)]
+        [InlineData(OdbcColumnSourceType.CustomSubQuery, false)]
+        [InlineData(OdbcColumnSourceType.CustomParameterizedQuery, false)]
         [InlineData(OdbcColumnSourceType.Table, true)]
         public void OpenMapSettingsFileCommand_SetsColumnSourceIsTable(OdbcColumnSourceType sourceType, bool isTable)
         {
@@ -524,35 +449,6 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.ViewModels.Import
         }
 
         [Fact]
-        public void OpenMapSettingsFileCommand_SetsCustomQuery()
-        {
-            using (var stream = new MemoryStream())
-            {
-                MockOpenFileDialog(DialogResult.OK, stream);
-                var fieldMapMock = MockFieldMap();
-
-                var settingsMock = mock.Mock<IOdbcImportSettingsFile>();
-                settingsMock.Setup(s => s.OdbcFieldMap).Returns(fieldMapMock.Object);
-                settingsMock.Setup(s => s.ColumnSourceType).Returns(OdbcColumnSourceType.CustomQuery);
-                settingsMock.Setup(s => s.ColumnSource).Returns("my query");
-                settingsMock.Setup(s => s.Open(It.IsAny<TextReader>())).Returns(GenericResult.FromSuccess(new JObject()));
-
-                Mock<IOdbcDataSource> dataSource = mock.Mock<IOdbcDataSource>();
-                Mock<IOdbcSchema> schema = mock.Mock<IOdbcSchema>();
-                Mock<IOdbcColumnSource> columnSource = mock.MockRepository.Create<IOdbcColumnSource>();
-                columnSource.Setup(c => c.Name).Returns("Orders");
-                OdbcStoreEntity store = new OdbcStoreEntity();
-
-                var testObject = mock.Create<OdbcImportMapSettingsControlViewModel>();
-                testObject.Load(dataSource.Object, schema.Object, "source", store);
-
-                testObject.OpenMapSettingsFileCommand.Execute(null);
-
-                Assert.Equal("my query", testObject.CustomQuery);
-            }
-        }
-
-        [Fact]
         public void OpenMapSettingsFileCommand_CallsUpgradeToAlphanumericOrderNumbers()
         {
             using (var stream = new MemoryStream())
@@ -562,7 +458,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.ViewModels.Import
 
                 var settingsMock = mock.Mock<IOdbcImportSettingsFile>();
                 settingsMock.Setup(s => s.OdbcFieldMap).Returns(fieldMapMock.Object);
-                settingsMock.Setup(s => s.ColumnSourceType).Returns(OdbcColumnSourceType.CustomQuery);
+                settingsMock.Setup(s => s.ColumnSourceType).Returns(OdbcColumnSourceType.CustomSubQuery);
                 settingsMock.Setup(s => s.ColumnSource).Returns("my query");
                 settingsMock.Setup(s => s.Open(It.IsAny<TextReader>())).Returns(GenericResult.FromSuccess(new JObject()));
 
@@ -594,7 +490,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.ViewModels.Import
 
                 var settingsMock = mock.Mock<IOdbcImportSettingsFile>();
                 settingsMock.Setup(s => s.OdbcFieldMap).Returns(fieldMapMock.Object);
-                settingsMock.Setup(s => s.ColumnSourceType).Returns(OdbcColumnSourceType.CustomQuery);
+                settingsMock.Setup(s => s.ColumnSourceType).Returns(OdbcColumnSourceType.CustomSubQuery);
                 settingsMock.Setup(s => s.ColumnSource).Returns("my query");
                 settingsMock.Setup(s => s.OdbcFieldMap).Returns(fieldMapFromDisk.Object);
                 settingsMock.Setup(s => s.Open(It.IsAny<TextReader>())).Returns(GenericResult.FromSuccess(new JObject()));
@@ -620,7 +516,6 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.ViewModels.Import
             fieldMap.SetupGet(f => f.Name).Returns(DefaultFileName);
             return fieldMap;
         }
-
 
         private Mock<IOpenFileDialog> MockOpenFileDialog(DialogResult result, MemoryStream stream)
         {
