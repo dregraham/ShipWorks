@@ -1113,7 +1113,7 @@ namespace ShipWorks.ApplicationCore
             {
                 if (loadedFilter == null)
                 {
-                    var (result, createdNode) = FilterEditingService.NewFilter(this, filterEditor.FilterDefinition);
+                    var (result, createdNode) = FilterEditingService.NewFilter(this, ActiveFilterTarget, filterEditor.FilterDefinition);
                     if (result == FilterEditingResult.OK)
                     {
                         OnFilterSaved(this, createdNode);

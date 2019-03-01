@@ -24,8 +24,9 @@ namespace ShipWorks.Filters.Management
         /// </summary>
         public static (FilterEditingResult result, FilterNodeEntity createdNode) NewFilter(
                 IWin32Window parent,
+                FilterTarget filterTarget,
                 FilterDefinition defaultFilterDefinition) =>
-            NewFilter(false, null, null, parent, defaultFilterDefinition);
+            NewFilter(false, FilterLayoutContext.Current.GetSharedLayout(filterTarget).FilterNode, null, parent, defaultFilterDefinition);
 
         /// <summary>
         /// Create a new filter or folder

@@ -2990,8 +2990,13 @@ namespace ShipWorks
         /// </summary>
         private void OnGridControlFilterSaved(object sender, FilterNodeEntity nodeEntity)
         {
-            orderFilterTree.ReloadLayouts();
-            orderFilterTree.SelectedFilterNode = nodeEntity;
+            var activeFilterTree = ActiveFilterTree();
+
+            if (activeFilterTree != null)
+            {
+                activeFilterTree.ReloadLayouts();
+                activeFilterTree.SelectedFilterNode = nodeEntity;
+            }
         }
 
         /// <summary>
