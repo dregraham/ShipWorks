@@ -257,7 +257,7 @@ namespace ShipWorks.Stores.Communication
 
             // Find each store that is ready for an auto-download
             List<StoreEntity> readyToDownload = StoreManager.GetAllStores().Where(ShouldDownload).ToList();
-            
+
             // We checked the ready-to-download with cached download times. If there are any that are ready to download it
             // could be that they've recently been downloaded since we cached the values.  So check again after re-fetching.
             // the latest last download times.

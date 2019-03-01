@@ -46,7 +46,7 @@ namespace ShipWorks.Filters.Controls
 
             // Create the filter tree that will be popped up
             filterTree = new FilterTree();
-            filterTree.HideOnDemandFilters = true;
+            filterTree.HideOnSavedSearches = true;
             filterTree.BorderStyle = BorderStyle.None;
             filterTree.HotTracking = true;
             filterTree.AutoRefreshCalculatingCounts = true;

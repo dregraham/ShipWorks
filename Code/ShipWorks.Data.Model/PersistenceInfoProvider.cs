@@ -1607,7 +1607,7 @@ namespace ShipWorks.Data.Model
 			this.AddElementFieldMapping("FilterEntity", "IsFolder", "IsFolder", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 4);
 			this.AddElementFieldMapping("FilterEntity", "Definition", "Definition", true, "Xml", 2147483647, 0, 0, false, "", null, typeof(System.String), 5);
 			this.AddElementFieldMapping("FilterEntity", "State", "State", false, "TinyInt", 0, 3, 0, false, "", null, typeof(System.Byte), 6);
-			this.AddElementFieldMapping("FilterEntity", "IsOnDemand", "IsOnDemand", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 7);
+			this.AddElementFieldMapping("FilterEntity", "IsSavedSearch", "IsSavedSearch", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 7);
 		}
 
 		/// <summary>Inits FilterLayoutEntity's mappings</summary>

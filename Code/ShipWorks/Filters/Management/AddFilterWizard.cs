@@ -182,7 +182,7 @@ namespace ShipWorks.Filters.Management
             if (DefaultFilterDefinition != null)
             {
                 Filter.Definition = DefaultFilterDefinition.GetXml();
-                Filter.IsOnDemand = true;
+                Filter.IsSavedSearch = true;
                 e.Skip = true;
             }
         }

@@ -1096,7 +1096,7 @@ namespace ShipWorks.ApplicationCore
             headerViewModel.FilterName = filterNode.Filter.Name;
             loadedFilter = filterNode;
 
-            if (filterNode?.Filter?.IsOnDemand == true)
+            if (filterNode?.Filter?.IsSavedSearch == true)
             {
                 RaiseSearchActiveChanged();
             }
@@ -1133,7 +1133,7 @@ namespace ShipWorks.ApplicationCore
                     .Do(f =>
                     {
                         OnFilterSaved(this, loadedFilter);
-                        AdvancedSearchVisible = loadedFilter.Filter.IsOnDemand;
+                        AdvancedSearchVisible = loadedFilter.Filter.IsSavedSearch;
                         using (var lifetimeScope = IoC.BeginLifetimeScope())
                         {
                             lifetimeScope.Resolve<IMessageHelper>().ShowPopup("Filter saved");

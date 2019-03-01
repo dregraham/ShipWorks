@@ -43,7 +43,7 @@ namespace ShipWorks.Filters.Controls
         public override bool IsDraggable => !FilterHelper.IsBuiltin(FilterNode);
 
         /// <summary>
-        /// Filter proxy for On-Demand filters
+        /// Filter proxy for saved searches
         /// </summary>
         public FilterNodeEntity FilterProxy { get; internal set; }
 
@@ -158,7 +158,7 @@ namespace ShipWorks.Filters.Controls
         /// </summary>
         private FilterCount GetFilterCount(FilterNodeEntity filterNodeEntity)
         {
-            if (filterNodeEntity?.Filter?.IsOnDemand == true && FilterProxy == null)
+            if (filterNodeEntity?.Filter?.IsSavedSearch == true && FilterProxy == null)
             {
                 return null;
             }

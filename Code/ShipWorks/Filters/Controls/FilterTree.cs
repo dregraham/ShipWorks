@@ -207,11 +207,11 @@ namespace ShipWorks.Filters.Controls
         public bool HideDisabledFilters { get; set; }
 
         /// <summary>
-        /// Should on-demand filters be hidden
+        /// Should saved searches be hidden
         /// </summary>
         [DefaultValue(false)]
         [Category("Behavior")]
-        public bool HideOnDemandFilters { get; set; }
+        public bool HideOnSavedSearches { get; set; }
 
         /// <summary>
         /// Indicates if the active search node - if any - that will be displayed
@@ -831,7 +831,7 @@ namespace ShipWorks.Filters.Controls
             menuConvertFilter.Image = Resources.view;
             menuConvertFilter.Name = "menuConvertFilter";
             menuConvertFilter.Size = new Size(151, 22);
-            menuConvertFilter.Text = "Convert to On-Demand Filter";
+            menuConvertFilter.Text = "Convert to Saved Search";
             menuConvertFilter.Click += OnConvertFilter;
         }
 
@@ -845,13 +845,13 @@ namespace ShipWorks.Filters.Controls
                 return;
             }
 
-            if (!SelectedFilterNode.Filter.IsOnDemand)
+            if (!SelectedFilterNode.Filter.IsSavedSearch)
             {
                 var references = new FilterNodeReferenceRepository().Find(SelectedFilterNode);
 
                 if (references.Any())
                 {
-                    var message = "Cannot convert to an on-demand filter because it is in use." +
+                    var message = "Cannot convert to a saved search because it is in use." +
                         Environment.NewLine +
                         Environment.NewLine +
                         references.Select(x => "- " + x).Combine(Environment.NewLine);
@@ -861,7 +861,7 @@ namespace ShipWorks.Filters.Controls
                 }
             }
 
-            SelectedFilterNode.Filter.IsOnDemand = !SelectedFilterNode.Filter.IsOnDemand;
+            SelectedFilterNode.Filter.IsSavedSearch = !SelectedFilterNode.Filter.IsSavedSearch;
 
             FilterEditingService.SaveFilter(this, SelectedFilterNode)
                 .OnFailure(ex => MessageHelper.ShowError(this, ex.Message));
@@ -908,12 +908,12 @@ namespace ShipWorks.Filters.Controls
                 !BuiltinFilter.IsSearchPlaceholderKey(SelectedFilterNode.FilterID) &&
                 !BuiltinFilter.IsTopLevelKey(SelectedFilterNode.FilterID) &&
                 SelectedFilterNode?.Filter?.IsFolder != true;
-            menuConvertFilter.Text = SelectedFilterNode?.Filter?.IsOnDemand == true ?
-                "Convert to standard filter" :
-                "Convert to on-demand filter";
+            menuConvertFilter.Text = SelectedFilterNode?.Filter?.IsSavedSearch == true ?
+                "Convert to filter" :
+                "Convert to saved search";
 
             menuLoadFilterAsSearch.Available = menuConvertFilter.Available &&
-                SelectedFilterNode?.Filter?.IsOnDemand != true;
+                SelectedFilterNode?.Filter?.IsSavedSearch != true;
 
             menuItemEditFilterSep.Available = menuItemEditFilter.Available;
         }
@@ -1128,7 +1128,7 @@ namespace ShipWorks.Filters.Controls
         /// </summary>
         private bool ShouldFilterBeInTheList(FilterNodeEntity x) =>
             (!HideDisabledFilters || x.Filter.State != (int) FilterState.Disabled) &&
-            (!HideOnDemandFilters || !x.Filter.IsOnDemand);
+            (!HideOnSavedSearches || !x.Filter.IsSavedSearch);
 
         /// <summary>
         /// Get what is to be the parent of items that are moved \ inserted
@@ -1215,7 +1215,7 @@ namespace ShipWorks.Filters.Controls
         {
             ClearSearchProxies();
 
-            if (SelectedFilterNode?.Filter?.IsOnDemand == true)
+            if (SelectedFilterNode?.Filter?.IsSavedSearch == true)
             {
                 OnLoadAsAdvancedSearch(this, EventArgs.Empty);
                 return;
@@ -1781,7 +1781,7 @@ namespace ShipWorks.Filters.Controls
 
             SelectedFilterNodeChanged -= onSelectedFilterNodeChanged;
 
-            if (SelectedFilterNode?.Filter?.IsOnDemand == true)
+            if (SelectedFilterNode?.Filter?.IsSavedSearch == true)
             {
                 lastSelectedRow.FilterProxy = activeFilterNode;
             }

@@ -324,7 +324,7 @@ namespace ShipWorks.Filters
                 {
                     return filter.Definition == null ? GetFilterImage(FilterImageType.Folder, createCopy) : GetFilterImage(FilterImageType.FolderWithCondition, createCopy);
                 }
-                else if (filter.IsOnDemand)
+                else if (filter.IsSavedSearch)
                 {
                     return GetFilterImage(FilterImageType.OnDemandFilter, createCopy);
                 }

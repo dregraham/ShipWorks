@@ -375,7 +375,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("State", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
-			_fieldsCustomProperties.Add("IsOnDemand", fieldHashtable);
+			_fieldsCustomProperties.Add("IsSavedSearch", fieldHashtable);
 		}
 		#endregion
 
@@ -518,14 +518,14 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)FilterFieldIndex.State, value); }
 		}
 
-		/// <summary> The IsOnDemand property of the Entity Filter<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "Filter"."IsOnDemand"<br/>
+		/// <summary> The IsSavedSearch property of the Entity Filter<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "Filter"."IsSavedSearch"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.Boolean IsOnDemand
+		public virtual System.Boolean IsSavedSearch
 		{
-			get { return (System.Boolean)GetValue((int)FilterFieldIndex.IsOnDemand, true); }
-			set	{ SetValue((int)FilterFieldIndex.IsOnDemand, value); }
+			get { return (System.Boolean)GetValue((int)FilterFieldIndex.IsSavedSearch, true); }
+			set	{ SetValue((int)FilterFieldIndex.IsSavedSearch, value); }
 		}
 
 		/// <summary> Gets the EntityCollection with the related entities of type 'FilterSequenceEntity' which are related to this entity via a relation of type '1:n'. If the EntityCollection hasn't been fetched yet, the collection returned will be empty.<br/><br/></summary>
