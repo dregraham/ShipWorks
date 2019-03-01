@@ -90,7 +90,7 @@ namespace ShipWorks.Data.Administration
 
                 if (releaseInfo.Success)
                 {
-                    Version versionToUpgradeTo = releaseInfo.Value.MinAllowedReleaseVersion;
+                    Version versionToUpgradeTo = releaseInfo.Value.ReleaseVersion;
 
                     if (versionToUpgradeTo > typeof(UpdateService).Assembly.GetName().Version)
                     {

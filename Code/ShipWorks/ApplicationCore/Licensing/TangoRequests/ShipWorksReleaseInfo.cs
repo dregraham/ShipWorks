@@ -23,6 +23,12 @@ namespace ShipWorks.ApplicationCore.Licensing.TangoRequests
         public string Hash { get; set; }
 
         /// <summary>
+        /// Release version
+        /// </summary>
+        [XmlElement("ReleaseVersion")]
+        public Version ReleaseVersion { get; set; }
+
+        /// <summary>
         /// Release notes
         /// </summary>
         [XmlElement("ReleaseNotes")]

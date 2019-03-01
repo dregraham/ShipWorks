@@ -22,6 +22,12 @@ namespace ShipWorks.Data.Administration
         Result TryUpdate();
 
         /// <summary>
+        /// update shipworks
+        /// </summary>
+        /// <returns></returns>
+        Result Update(Version version);
+
+        /// <summary>
         /// Send a message to the update service
         /// </summary>
         Result SendMessage(string message);

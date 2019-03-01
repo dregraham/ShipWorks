@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Autofac.Extras.Moq;
+using Interapptive.Shared.AutoUpdate;
 using Moq;
 using ShipWorks.Tests.Shared;
 using Xunit;
@@ -26,7 +27,7 @@ namespace ShipWorks.Escalator.Tests
         {
             Version version = new Version(1, 1, 1);
 
-            await testObject.Upgrade(version);
+            await testObject.Upgrade(new UpgradeToVersion() { Version = version });
 
             updaterWebClient.Verify(w => w.GetVersionToDownload(version));
         }
@@ -52,7 +53,7 @@ namespace ShipWorks.Escalator.Tests
             updaterWebClient.Setup(w => w.GetVersionToDownload(It.IsAny<Version>()))
                 .ReturnsAsync(shipworksRelease);
 
-            await testObject.Upgrade(new Version(1,1,1));
+            await testObject.Upgrade(new UpgradeToVersion() { Version = new Version(1, 1, 1) });
 
             updaterWebClient.Verify(u => u.Download(shipworksRelease.DownloadUri, shipworksRelease.Hash));
         }
