@@ -509,7 +509,7 @@ namespace ShipWorks.Actions
 
                                 // Here the task commits anything it needs saved.  If its a short task, then it could do its actual "Run" here too.
                                 log.InfoFormat("ActionStep - Start - Phase2 (Commit)");
-                                await actionTask.Commit(inputKeys, stepContext, adapter).ConfigureAwait(false);
+                                actionTask.Commit(inputKeys, stepContext, adapter);
                                 log.InfoFormat("ActionStep - Finished  - Phase2 (Commit)");
                             }
 

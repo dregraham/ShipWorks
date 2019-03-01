@@ -105,9 +105,20 @@ namespace ShipWorks.Actions.Tasks
         /// This should not perform any long-running operations, but should simply save to the database.
         ///
         /// </summary>
-        public virtual async Task Commit(List<long> inputKeys, ActionStepContext context, IDataAccessAdapter adapter)
+        public virtual async Task CommitAsync(List<long> inputKeys, ActionStepContext context, IDataAccessAdapter adapter)
         {
             await context.CommitWork.CommitAsync(adapter).ConfigureAwait(false);
+        }
+
+        /// <summary>
+        /// Commit the task.
+        ///
+        /// This should not perform any long-running operations, but should simply save to the database.
+        ///
+        /// </summary>
+        public virtual void Commit(List<long> inputKeys, ActionStepContext context, IDataAccessAdapter adapter)
+        {
+            context.CommitWork.Commit(adapter);
         }
 
         /// <summary>

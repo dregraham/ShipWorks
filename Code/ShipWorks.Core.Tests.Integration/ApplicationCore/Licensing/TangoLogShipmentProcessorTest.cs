@@ -46,7 +46,7 @@ namespace ShipWorks.Core.Tests.Integration.ApplicationCore.Licensing
                 .Save();
         }
 
-        //[Fact] 
+        //[Fact]
         // Skipping this for now until we can fix the deadlock...
         public async Task EnforceCapabilities_Refresh_MakesTangoCallOnlyOnce_WhenAddedMoreThanOnce()
         {
