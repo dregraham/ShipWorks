@@ -116,7 +116,7 @@ namespace ShipWorks.Data.Administration
         /// </summary>
         public Result Update(Version version)
         {
-            Result result = SendMessage(JsonConvert.SerializeObject(version));
+            Result result = SendMessage(version.ToString());
             
             if (result.Success)
             {
