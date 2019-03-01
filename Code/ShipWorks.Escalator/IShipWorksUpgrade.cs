@@ -17,6 +17,6 @@ namespace ShipWorks.Escalator
         /// <summary>
         /// Upgrade Shipworks to the requested version
         /// </summary>
-        Task Upgrade(UpgradeToVersion version);
+        Task Upgrade(Version version);
     }
 }

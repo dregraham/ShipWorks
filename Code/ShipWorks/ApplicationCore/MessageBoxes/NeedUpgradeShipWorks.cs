@@ -8,6 +8,7 @@ using System.Text;
 using System.Timers;
 using System.Windows.Forms;
 using Autofac;
+using Interapptive.Shared.AutoUpdate;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;

@@ -182,7 +182,6 @@
     <Compile Include="AutoUpdate\IAutoUpdateStatusProvider.cs" />
     <Compile Include="AutoUpdate\ShipWorksLauncher.cs" />
     <Compile Include="AutoUpdate\UpdateWindowData.cs" />
-    <Compile Include="AutoUpdate\UpgradeToVersion.cs" />
     <Compile Include="Business\Geography\CurrencyCode.cs" />
     <Compile Include="Collections\DataVirtualization\DataPage.cs" />
     <Compile Include="Collections\DataVirtualization\DataWrapper.cs" />

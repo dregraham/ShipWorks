@@ -4,6 +4,7 @@ using System.IO.Pipes;
 using System.Text;
 using Interapptive.Shared.AutoUpdate;
 using Interapptive.Shared.Utility;
+using Newtonsoft.Json;
 using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Licensing.TangoRequests;
 using ShipWorks.Data.Connection;
@@ -94,7 +95,7 @@ namespace ShipWorks.Data.Administration
 
                     if (versionToUpgradeTo > typeof(UpdateService).Assembly.GetName().Version)
                     {
-                        return Update(releaseInfo.Value.MinAllowedReleaseVersion);
+                        return Update(versionToUpgradeTo);
                     }
                 }
             }
@@ -115,7 +116,7 @@ namespace ShipWorks.Data.Administration
         /// </summary>
         public Result Update(Version version)
         {
-            Result result = SendMessage(version.ToString());
+            Result result = SendMessage(JsonConvert.SerializeObject(version));
             
             if (result.Success)
             {
