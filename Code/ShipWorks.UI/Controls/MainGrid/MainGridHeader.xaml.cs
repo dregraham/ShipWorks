@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System.Reflection;
+using System.Windows;
 using System.Windows.Controls;
 using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.ApplicationCore;
@@ -36,6 +37,7 @@ namespace ShipWorks.UI.Controls.MainGrid
         /// <summary>
         /// Handle key down of the search box to deal with esc key
         /// </summary>
+        [Obfuscation]
         private void OnSearchBoxKeyDown(object sender, System.Windows.Input.KeyEventArgs e)
         {
             if (e.Key == System.Windows.Input.Key.Escape)

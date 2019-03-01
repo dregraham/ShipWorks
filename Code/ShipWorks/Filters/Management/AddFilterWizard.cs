@@ -177,7 +177,7 @@ namespace ShipWorks.Filters.Management
         /// <summary>
         /// Skip the filter definition screen if we already have one
         /// </summary>
-        private void WizardPageCondition_SteppingInto(object sender, UI.Wizard.WizardSteppingIntoEventArgs e)
+        private void OnWizardPageConditionSteppingInto(object sender, UI.Wizard.WizardSteppingIntoEventArgs e)
         {
             if (DefaultFilterDefinition != null)
             {

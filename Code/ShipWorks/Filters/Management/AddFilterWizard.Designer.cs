@@ -149,7 +149,7 @@ namespace ShipWorks.Filters.Management
             this.wizardPageCondition.Size = new System.Drawing.Size(604, 383);
             this.wizardPageCondition.TabIndex = 0;
             this.wizardPageCondition.Title = "Filter Condition";
-            this.wizardPageCondition.SteppingInto += WizardPageCondition_SteppingInto;
+            this.wizardPageCondition.SteppingInto += OnWizardPageConditionSteppingInto;
             this.wizardPageCondition.StepNext += new System.EventHandler<ShipWorks.UI.Wizard.WizardStepEventArgs>(this.OnStepNextCondition);
             //
             // conditionControl
