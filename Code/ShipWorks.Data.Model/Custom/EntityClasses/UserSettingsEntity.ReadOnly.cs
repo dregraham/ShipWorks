@@ -1,4 +1,5 @@
-﻿using Interapptive.Shared.Utility;
+﻿using System;
+using Interapptive.Shared.Utility;
 using ShipWorks.Shared.Users;
 
 namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
@@ -15,5 +16,10 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             string.IsNullOrWhiteSpace(this.DialogSettings) ?
                 new DialogSettings() :
                 SerializationUtility.DeserializeFromXml<DialogSettings>(this.DialogSettings);
+
+        /// <summary>
+        /// Get the last version of release notes seen by the user
+        /// </summary>
+        public Version LastReleaseNotesSeenVersion => Version.Parse(LastReleaseNotesSeen);
     }
 }

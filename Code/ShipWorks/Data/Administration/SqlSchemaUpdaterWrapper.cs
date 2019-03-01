@@ -1,14 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Interapptive.Shared.ComponentRegistration;
 
 namespace ShipWorks.Data.Administration
 {
     /// <summary>
     /// Wrapper for the static SqlSchemaUpdater
     /// </summary>
+    [Component]
     public class SqlSchemaUpdaterWrapper : ISqlSchemaUpdater
     {
         /// <summary>
@@ -16,5 +14,12 @@ namespace ShipWorks.Data.Administration
         /// </summary>
         public Version GetInstalledSchemaVersion() =>
             SqlSchemaUpdater.GetInstalledSchemaVersion();
+
+        /// <summary>
+        /// Get the current build version
+        /// </summary>
+        /// <returns></returns>
+        public Version GetBuildVersion() =>
+            SqlSchemaUpdater.GetBuildVersion();
     }
 }

@@ -11,6 +11,7 @@ using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.ApplicationCore.Appearance;
 using ShipWorks.ApplicationCore.Settings;
+using ShipWorks.Data.Administration;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.Custom;
@@ -35,7 +36,7 @@ namespace ShipWorks.Users
     public static class UserUtility
     {
         // Logger
-        static readonly ILog log = LogManager.GetLogger(typeof(UserUtility));
+        private static readonly ILog log = LogManager.GetLogger(typeof(UserUtility));
 
         /// <summary>
         /// Determines if any admin users exist in the system.
@@ -217,7 +218,8 @@ namespace ShipWorks.Users
                 TemplateLastSelected = 0,
                 SingleScanSettings = (int) SingleScanSettings.Disabled,
                 AutoWeigh = false,
-                UIMode = UIMode.Batch
+                UIMode = UIMode.Batch,
+                LastReleaseNotesSeenVersion = SqlSchemaUpdater.GetBuildVersion(),
             };
 
             adapter.SaveAndRefetch(settings);

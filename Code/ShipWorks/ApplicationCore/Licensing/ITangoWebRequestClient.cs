@@ -18,5 +18,10 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// Process the given request against the interapptive license server
         /// </summary>
         GenericResult<XmlDocument> ProcessXmlRequest(IHttpVariableRequestSubmitter postRequest, string logEntryName, bool collectTelemetry);
+
+        /// <summary>
+        /// Process the given request against the interapptive license server
+        /// </summary>
+        GenericResult<T> ProcessXmlRequest<T>(IHttpVariableRequestSubmitter postRequest, string logEntryName, bool collectTelemetry);
     }
 }

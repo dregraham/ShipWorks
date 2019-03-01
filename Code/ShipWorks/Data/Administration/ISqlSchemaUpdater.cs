@@ -11,5 +11,11 @@ namespace ShipWorks.Data.Administration
         /// Get the schema version of the ShipWorks database
         /// </summary>
         Version GetInstalledSchemaVersion();
+
+        /// <summary>
+        /// Get the current build version
+        /// </summary>
+        /// <returns></returns>
+        Version GetBuildVersion();
     }
 }
