@@ -4,6 +4,7 @@ using System.Text;
 using Interapptive.Shared.AutoUpdate;
 using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore;
+using ShipWorks.Data.Connection;
 
 namespace ShipWorks.Data.Administration
 {
@@ -45,6 +46,34 @@ namespace ShipWorks.Data.Administration
             }
 
             return updaterPipe.IsConnected;
+        }
+
+        /// <summary>
+        /// Try to update ShipWorks
+        /// </summary>
+        /// <returns></returns>
+        public Result TryUpdate()
+        {
+
+            // Check to see if last update failed(if file exists and not the version we are on) and alert user.Then delete file
+            // Write file saying we are upgrading to version x.x.x.x
+            // get current logic from Mainform.AutoUpdate
+            //Add local DB check and see if there is a new version from ITangoGetReleaseByCustomer
+
+            // Check see if the database has been updated and we need to update
+            if (SqlSession.IsConfigured && SqlSession.Current.CanConnect())
+            {
+                Version databaseVersion = SqlSchemaUpdater.GetInstalledSchemaVersion();
+
+                if (databaseVersion > SqlSchemaUpdater.GetRequiredSchemaVersion())
+                {
+                    // need to update
+                    return Update(databaseVersion);
+                }
+            }
+
+            return Result.FromError("");
+
         }
 
         /// <summary>

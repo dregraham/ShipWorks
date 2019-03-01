@@ -307,23 +307,17 @@ namespace ShipWorks
         /// <returns>true if we kicked off the auto update process</returns>
         private bool AutoUpdate()
         {
-            if (SqlSession.IsConfigured && SqlSession.Current.CanConnect())
+            using (IUpdateService updateService = IoC.UnsafeGlobalLifetimeScope.Resolve<IUpdateService>())
             {
-                Version databaseVersion = SqlSchemaUpdater.GetInstalledSchemaVersion();
+                Result result = updateService.TryUpdate();
 
-                if (databaseVersion > SqlSchemaUpdater.GetRequiredSchemaVersion())
+                if (result.Failure && string.IsNullOrWhiteSpace(result.Message))
                 {
-                    using (IUpdateService updateService = IoC.UnsafeGlobalLifetimeScope.Resolve<IUpdateService>())
-                    {
-                        if (updateService.IsAvailable() && updateService.Update(databaseVersion).Success)
-                        {
-                            return true;
-                        }
-                    }
+                    MessageHelper.ShowError(this, result.Message);
                 }
-            }
 
-            return false;
+                return result.Success;
+            }
         }
 
         /// <summary>
