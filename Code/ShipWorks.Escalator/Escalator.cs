@@ -63,9 +63,9 @@ namespace ShipWorks.Escalator
             log.InfoFormat("Message \"{0}\" received from ShipWorksCommunicationBridge.", message);
             try
             {
-                if (Version.TryParse(message, out Version version))
+                if (message.TryParseJson(out UpgradeToVersion upgradeToversion))
                 {
-                    await shipWorksUpgrade.Upgrade(version).ConfigureAwait(false);
+                    await shipWorksUpgrade.Upgrade(upgradeToversion).ConfigureAwait(false);
                 }
                 else if (message.TryParseJson(out UpdateWindowData updateWindowData))
                 {

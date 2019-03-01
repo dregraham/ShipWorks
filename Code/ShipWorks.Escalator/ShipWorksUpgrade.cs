@@ -40,17 +40,17 @@ namespace ShipWorks.Escalator
         /// <summary>
         /// Upgrade Shipworks to the requested version
         /// </summary>
-        public async Task Upgrade(Version version)
+        public async Task Upgrade(UpgradeToVersion upgradeToVersion)
         {
             try
             {
-                log.InfoFormat("ShipWorksUpgrade attempting to upgrade to version {0}", version);
+                log.InfoFormat("ShipWorksUpgrade attempting to upgrade to version {0}", upgradeToVersion.Version);
 
-                ShipWorksRelease shipWorksRelease = await updaterWebClient.GetVersionToDownload(version).ConfigureAwait(false);
+                ShipWorksRelease shipWorksRelease = await updaterWebClient.GetVersionToDownload(upgradeToVersion.Version).ConfigureAwait(false);
 
                 if (shipWorksRelease == null)
                 {
-                    log.InfoFormat("Version {0} not found by webclient.", version);
+                    log.InfoFormat("Version {0} not found by webclient.", upgradeToVersion.Version);
                     return;
                 }
 

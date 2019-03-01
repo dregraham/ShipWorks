@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Interapptive.Shared.AutoUpdate;
 
 namespace ShipWorks.Escalator
 {
@@ -16,6 +17,6 @@ namespace ShipWorks.Escalator
         /// <summary>
         /// Upgrade Shipworks to the requested version
         /// </summary>
-        Task Upgrade(Version version);
+        Task Upgrade(UpgradeToVersion version);
     }
 }
