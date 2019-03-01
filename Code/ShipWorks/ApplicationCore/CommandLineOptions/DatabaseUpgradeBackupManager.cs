@@ -19,7 +19,7 @@ namespace ShipWorks.ApplicationCore.CommandLineOptions
         private static readonly ILog log = LogManager.GetLogger(typeof(UpgradeDatabaseSchemaCommandLineOption));
         private const string BackupNameFormat = "{0}_AutomaticUpgradeBackup.bak";
         private readonly string database;
-        private readonly string backupPathAndName;
+        private readonly string backupName;
 
         /// <summary>
         /// constructor
@@ -27,7 +27,7 @@ namespace ShipWorks.ApplicationCore.CommandLineOptions
         public DatabaseUpgradeBackupManager()
         {
             database = SqlSession.Current.DatabaseName;
-            backupPathAndName = Path.Combine(GetBackupPath(), string.Format(BackupNameFormat, database));
+            backupName = string.Format(BackupNameFormat, database);
         }
 
         /// <summary>
@@ -36,9 +36,9 @@ namespace ShipWorks.ApplicationCore.CommandLineOptions
         public TelemetricResult<Result> CreateBackup(Action<string> updateStatus)
         {
             TelemetricResult<Result> telemetricResult = new TelemetricResult<Result>("Database.Backup");
-            telemetricResult.RunTimedEvent("CreateBackupTimeInMilliseconds", () => CreateBackup(database, backupPathAndName, updateStatus));
+            telemetricResult.RunTimedEvent("CreateBackupTimeInMilliseconds", () => CreateBackup(database, backupName, updateStatus));
 
-            telemetricResult.SetValue(ValidateBackup(backupPathAndName));
+            telemetricResult.SetValue(ValidateBackup(backupName));
 
             return telemetricResult;
         }
@@ -75,7 +75,7 @@ namespace ShipWorks.ApplicationCore.CommandLineOptions
                 "WITH STATS = 3, RECOVERY, REPLACE " +
                 $"ALTER DATABASE [{database}] SET MULTI_USER ";
 
-            command.AddParameterWithValue("@FilePath", backupPathAndName);
+            command.AddParameterWithValue("@FilePath", backupName);
         }
 
         /// <summary>
@@ -136,23 +136,6 @@ namespace ShipWorks.ApplicationCore.CommandLineOptions
                     }
 
                     SqlConnection.ClearAllPools();
-                }
-            }
-        }
-
-        /// <summary>
-        /// Get the default backup path for the current SqlSessions database
-        /// </summary>
-        private string GetBackupPath()
-        {
-            string command = @"EXEC master.dbo.xp_instance_regread N'HKEY_LOCAL_MACHINE', N'Software\Microsoft\MSSQLServer\MSSQLServer',N'BackupDirectory'";
-
-            using (DbConnection con = SqlSession.Current.OpenConnection())
-            {
-                using (DbDataReader dbReader = DbCommandProvider.ExecuteReader(con, command))
-                {
-                    dbReader.Read();
-                    return dbReader["Data"].ToString();
                 }
             }
         }
