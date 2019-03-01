@@ -311,7 +311,7 @@ namespace ShipWorks
             {
                 Result result = updateService.TryUpdate();
 
-                if (result.Failure && string.IsNullOrWhiteSpace(result.Message))
+                if (result.Failure && !string.IsNullOrWhiteSpace(result.Message))
                 {
                     MessageHelper.ShowError(this, result.Message);
                 }
