@@ -72,8 +72,17 @@ namespace ShipWorks.Data.Administration
             if (File.Exists(UpdateInProgressFileName))
             {
                 string version = File.ReadAllText(UpdateInProgressFileName);
-                File.Delete(UpdateInProgressFileName);
 
+                try
+                {
+                    File.Delete(UpdateInProgressFileName);
+                }
+                catch (IOException)
+                {
+                    // this technically should never happen but if the file is in use
+                    // deleting it will fail, in that case ignore the error
+                }
+                
                 // if the version we are currently running is lower than the version we were trying to update to then something went wrong
                 // skip the rest of the update process here because we dont want to get stuck in a loop where we keep attempting
                 // to update and fail
@@ -116,14 +125,36 @@ namespace ShipWorks.Data.Administration
         /// </summary>
         public Result Update(Version version)
         {
+            try
+            {
+                File.WriteAllText(UpdateInProgressFileName, version.ToString());
+            }
+            catch (Exception)
+            {
+                // If we cant write a file to disk to signify that we are attempting
+                // upgrade then fail because it could get us stuck in an upgrade loop
+                return Result.FromError($"unable to write to {UpdateInProgressFileName}.");
+            }
+
             Result result = SendMessage(version.ToString());
             
             if (result.Success)
             {
-                File.WriteAllText("UpdateInProcess.txt", version.ToString());
                 autoUpdateStatusProvider.ShowSplashScreen();
             }
-
+            else
+            {
+                try
+                {
+                    File.Delete(UpdateInProgressFileName);
+                }
+                catch (Exception)
+                {
+                    // this failure wil be ignored because we created the file
+                    // above and it shall not fail
+                }
+            }
+             
             return result;
         }
 

@@ -45,7 +45,7 @@ namespace ShipWorks.Escalator.Tests
 
             mock.Mock<IShipWorksCommunicationBridge>().Raise(b => b.OnMessage += null, "1.2.3");
 
-            mock.Mock<IShipWorksUpgrade>().Verify(u => u.Upgrade(new Version(1,2,3)), Times.Once);
+            mock.Mock<IShipWorksUpgrade>().Verify(u => u.Upgrade(new Version(1, 2, 3)), Times.Once);
         }
 
         [Fact]
