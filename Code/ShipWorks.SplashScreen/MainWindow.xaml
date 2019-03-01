@@ -1,0 +1,43 @@
+﻿<Window x:Class="ShipWorks.SplashScreen.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ShipWorks.SplashScreen"
+        mc:Ignorable="d"
+        WindowStyle="None"
+        AllowsTransparency="True"
+        WindowStartupLocation="CenterOwner"
+        ResizeMode="NoResize"
+        Title="ShipWorks" Height="255" Width="505">
+    <Window.Background>
+        <ImageBrush ImageSource="/ShipWorks.SplashScreen;component/background.png"></ImageBrush>
+    </Window.Background>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="60" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+        </Grid.ColumnDefinitions>
+        <StackPanel Grid.Row="1" Margin="20 0 0 10">
+            <TextBlock>
+                <Run Foreground="Gray"
+                     Background="Transparent"
+                     FontFamily="Tahoma"
+                     FontSize="12">
+                    ShipWorks is currently upgrading please wait
+                </Run>
+            </TextBlock>
+            <TextBlock Margin="5 5 0 0">
+                <Run x:Name="Status"
+                     Foreground="Gray"
+                     Background="Transparent"
+                     FontFamily="Tahoma"
+                     FontSize="12">
+                </Run>
+            </TextBlock>
+        </StackPanel>
+
+    </Grid>
+</Window>

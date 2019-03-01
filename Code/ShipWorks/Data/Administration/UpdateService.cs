@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO.Pipes;
 using System.Text;
+using Interapptive.Shared.AutoUpdate;
 using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore;
 
@@ -12,13 +13,15 @@ namespace ShipWorks.Data.Administration
     public class UpdateService : IUpdateService
     {
         private NamedPipeClientStream updaterPipe;
+        private readonly IAutoUpdateStatusProvider autoUpdateStatusProvider;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public UpdateService(IShipWorksSession shipWorksSession)
+        public UpdateService(IShipWorksSession shipWorksSession, IAutoUpdateStatusProvider autoUpdateStatusProvider)
         {
             updaterPipe = new NamedPipeClientStream(".", shipWorksSession.InstanceID.ToString(), PipeDirection.Out);
+            this.autoUpdateStatusProvider = autoUpdateStatusProvider;
         }
 
         /// <summary>
@@ -47,9 +50,18 @@ namespace ShipWorks.Data.Administration
         /// <summary>
         /// Kick off the update
         /// </summary>
-        public Result Update(Version version) =>
-            SendMessage(version.ToString());
-        
+        public Result Update(Version version)
+        {
+            Result result = SendMessage(version.ToString());
+
+            if (result.Success)
+            {
+                autoUpdateStatusProvider.ShowSplashScreen();
+            }
+
+            return result;
+        }
+
         /// <summary>
         /// Send the update window information to the updater pipe
         /// </summary>

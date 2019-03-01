@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Data.SqlClient;
 using System.Reactive;
 using System.Threading;
 using System.Threading.Tasks;
+using Interapptive.Shared.AutoUpdate;
 using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Utility;
 using log4net;
@@ -21,6 +21,7 @@ namespace ShipWorks.ApplicationCore.CommandLineOptions
     public class UpgradeDatabaseSchemaCommandLineOption : ICommandLineCommandHandler
     {
         static readonly ILog log = LogManager.GetLogger(typeof(UpgradeDatabaseSchemaCommandLineOption));
+        private IAutoUpdateStatusProvider autoUpdateStatusProvider = new AutoUpdateStatusProvider();
 
         /// <summary>
         /// The CommandName that can be sent to the ShipWorks.exe
@@ -42,16 +43,19 @@ namespace ShipWorks.ApplicationCore.CommandLineOptions
                 DatabaseUpgradeBackupManager backupManager = new DatabaseUpgradeBackupManager();
                 try
                 {
+					autoUpdateStatusProvider.UpdateStatus("Creating Backup");
+
                     if (SqlServerInfo.HasCustomTriggers())
                     {
                         throw new Exception("Database has custom triggers and cannot be automatically upgraded.");
                     }
-
+                    autoUpdateStatusProvider.UpdateStatus("Creating Backup");
                     // If an upgrade is required create a backup first
-                    backupResult = backupManager.CreateBackup();
+                    backupResult = backupManager.CreateBackup(autoUpdateStatusProvider.UpdateStatus);
 
                     if (backupResult.Value.Success)
                     {
+                        autoUpdateStatusProvider.UpdateStatus("Upgrading Database");
                         TryDatabaseUpgrade(backupManager, databaseUpdateResult);
                     }
                 }
@@ -81,7 +85,6 @@ namespace ShipWorks.ApplicationCore.CommandLineOptions
         /// </summary>
         private TelemetricResult<Unit> TryDatabaseUpgrade(DatabaseUpgradeBackupManager backupManager, TelemetricResult<Unit> databaseUpdateResult)
         {
-            
             try
             {
                 databaseUpdateResult.RunTimedEvent(TelemetricEventType.SchemaUpdate,
@@ -89,6 +92,7 @@ namespace ShipWorks.ApplicationCore.CommandLineOptions
             }
             catch (Exception)
             {
+                autoUpdateStatusProvider.UpdateStatus("An error occurred during upgrade, rolling back.");
                 // Upgrading the schema failed, restore
                 databaseUpdateResult.RunTimedEvent("RestoreBackupTimeInMilliseconds", () => backupManager.RestoreBackup());
                 throw;
