@@ -33,7 +33,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Download
             downloadQuery.Setup(d => d.GenerateSql()).Returns(originalDownloadQuery);
 
             OdbcOrderNumberDownloadQuery testObject =new OdbcOrderNumberDownloadQuery(
-                OdbcColumnSourceType.CustomSubQuery,
+                OdbcColumnSourceType.CustomQuery,
                 downloadQuery.Object,
                 orderNumber,
                 string.Empty,
@@ -54,7 +54,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Download
             downloadQuery.Setup(d => d.GenerateSql()).Returns(originalDownloadQuery);
 
             OdbcOrderNumberDownloadQuery testObject =new OdbcOrderNumberDownloadQuery(
-                OdbcColumnSourceType.CustomSubQuery,
+                OdbcColumnSourceType.CustomQuery,
                 downloadQuery.Object,
                 orderNumber,
                 "OrderNumber",
@@ -73,7 +73,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Download
             downloadQuery.Setup(d => d.GenerateSql()).Returns(originalDownloadQuery);
 
             OdbcOrderNumberDownloadQuery testObject =new OdbcOrderNumberDownloadQuery(
-                OdbcColumnSourceType.CustomSubQuery,
+                OdbcColumnSourceType.CustomQuery,
                 downloadQuery.Object,
                 orderNumber,
                 "OrderNumber",
@@ -94,7 +94,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Download
             Mock<IShipWorksOdbcCommand> command = mock.Mock<IShipWorksOdbcCommand>();
 
             OdbcOrderNumberDownloadQuery testObject =new OdbcOrderNumberDownloadQuery(
-                OdbcColumnSourceType.CustomSubQuery,
+                OdbcColumnSourceType.CustomQuery,
                 downloadQuery.Object,
                 orderNumber,
                 "OrderNumber",
@@ -117,7 +117,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Download
             Mock<IShipWorksOdbcCommand> command = mock.Mock<IShipWorksOdbcCommand>();
 
             OdbcOrderNumberDownloadQuery testObject =new OdbcOrderNumberDownloadQuery(
-                OdbcColumnSourceType.CustomSubQuery,
+                OdbcColumnSourceType.CustomQuery,
                 downloadQuery.Object,
                 orderNumber,
                 "",
@@ -138,7 +138,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Download
             Mock<IShipWorksOdbcCommand> command = mock.Mock<IShipWorksOdbcCommand>();
 
             OdbcOrderNumberDownloadQuery testObject =new OdbcOrderNumberDownloadQuery(
-                OdbcColumnSourceType.CustomSubQuery,
+                OdbcColumnSourceType.CustomQuery,
                 downloadQuery.Object,
                 orderNumber,
                 "OrderNumber",

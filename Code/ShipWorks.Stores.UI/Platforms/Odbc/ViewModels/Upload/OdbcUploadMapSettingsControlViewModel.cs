@@ -149,7 +149,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Upload
         {
             store.UploadColumnSourceType = ColumnSourceIsTable ?
                 (int) OdbcColumnSourceType.Table :
-                (int) OdbcColumnSourceType.CustomSubQuery;
+                (int) OdbcColumnSourceType.CustomQuery;
 
             store.UploadColumnSource = ColumnSourceIsTable ?
                 SelectedTable.Name :

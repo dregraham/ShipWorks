@@ -139,7 +139,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Upload
         {
             OdbcStoreEntity store = new OdbcStoreEntity
             {
-                UploadColumnSourceType = (int) OdbcColumnSourceType.CustomSubQuery
+                UploadColumnSourceType = (int) OdbcColumnSourceType.CustomQuery
             };
             OdbcTableUploadQuery testObject = mock.Create<OdbcTableUploadQuery>(new TypedParameter(typeof(OdbcStoreEntity), store));
 

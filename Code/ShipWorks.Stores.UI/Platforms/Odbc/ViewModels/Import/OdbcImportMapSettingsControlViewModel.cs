@@ -179,7 +179,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Import
             else
             {
                 store.ImportColumnSourceType = IsSubquery ?
-                    (int) OdbcColumnSourceType.CustomSubQuery :
+                    (int) OdbcColumnSourceType.CustomQuery :
                     (int) OdbcColumnSourceType.CustomParameterizedQuery;
             }
 
@@ -200,7 +200,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Import
             ImportStrategy = (OdbcImportStrategy) store.ImportStrategy;
             
             ColumnSourceIsTable = store.ImportColumnSourceType == (int) OdbcColumnSourceType.Table;
-            IsSubquery = store.ImportColumnSourceType == (int) OdbcColumnSourceType.CustomSubQuery;
+            IsSubquery = store.ImportColumnSourceType == (int) OdbcColumnSourceType.CustomQuery;
 
             importOrderItemStrategy = (OdbcImportOrderItemStrategy) store.ImportOrderItemStrategy;
         }

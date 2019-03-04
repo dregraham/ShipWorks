@@ -195,7 +195,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.DataSource.Schema
 
             OdbcColumnSource table = mock.Create<OdbcColumnSource>(new TypedParameter(typeof(string), "Custom"));
 
-            Assert.Throws<ShipWorksOdbcException>(() => table.Load(dataSource.Object, "SELECT * FROM [Order]", OdbcColumnSourceType.CustomSubQuery));
+            Assert.Throws<ShipWorksOdbcException>(() => table.Load(dataSource.Object, "SELECT * FROM [Order]", OdbcColumnSourceType.CustomQuery));
 
             log.Verify(l => l.Error(exception.Object));
         }
@@ -218,7 +218,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.DataSource.Schema
 
             OdbcColumnSource table = mock.Create<OdbcColumnSource>(new TypedParameter(typeof(string), "Custom"));
 
-            Assert.Throws<ShipWorksOdbcException>(() => table.Load(dataSource.Object, "SELECT * FROM [Order]", OdbcColumnSourceType.CustomSubQuery));
+            Assert.Throws<ShipWorksOdbcException>(() => table.Load(dataSource.Object, "SELECT * FROM [Order]", OdbcColumnSourceType.CustomQuery));
 
             log.Verify(l => l.Error(ex));
         }
@@ -244,7 +244,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.DataSource.Schema
 
             OdbcColumnSource table = mock.Create<OdbcColumnSource>(new TypedParameter(typeof(string), "Custom"));
 
-            table.Load(dataSource.Object, "SELECT * FROM [Order]", OdbcColumnSourceType.CustomSubQuery);
+            table.Load(dataSource.Object, "SELECT * FROM [Order]", OdbcColumnSourceType.CustomQuery);
             dataTable.Dispose();
             connection.Verify(c => c.Open());
         }
@@ -274,7 +274,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.DataSource.Schema
 
             OdbcColumnSource table = mock.Create<OdbcColumnSource>(new TypedParameter(typeof(string), "Custom"));
 
-            table.Load(dataSource.Object, "SELECT * FROM [Order]", OdbcColumnSourceType.CustomSubQuery);
+            table.Load(dataSource.Object, "SELECT * FROM [Order]", OdbcColumnSourceType.CustomQuery);
 
             dataTable.Dispose();
 

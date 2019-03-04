@@ -34,7 +34,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Download
             downloadQuery.Setup(d => d.GenerateSql()).Returns(originalDownloadQuery);
 
             OdbcLastModifiedDownloadQuery testObject = new OdbcLastModifiedDownloadQuery(
-                OdbcColumnSourceType.CustomSubQuery,
+                OdbcColumnSourceType.CustomQuery,
                 downloadQuery.Object,
                 onlineLastModifiedStartingPoint,
                 "",
@@ -55,7 +55,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Download
             downloadQuery.Setup(d => d.GenerateSql()).Returns(originalDownloadQuery);
 
            OdbcLastModifiedDownloadQuery testObject = new OdbcLastModifiedDownloadQuery(
-                OdbcColumnSourceType.CustomSubQuery,
+                OdbcColumnSourceType.CustomQuery,
                 downloadQuery.Object,
                 onlineLastModifiedStartingPoint,
                 "OnlineLastModified",
@@ -74,7 +74,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Download
             downloadQuery.Setup(d => d.GenerateSql()).Returns(originalDownloadQuery);
 
             OdbcLastModifiedDownloadQuery testObject = new OdbcLastModifiedDownloadQuery(
-                OdbcColumnSourceType.CustomSubQuery,
+                OdbcColumnSourceType.CustomQuery,
                 downloadQuery.Object,
                 onlineLastModifiedStartingPoint,
                 "OnlineLastModified",
@@ -93,7 +93,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Download
             downloadQuery.Setup(d => d.GenerateSql()).Returns(originalDownloadQuery);
 
             OdbcLastModifiedDownloadQuery testObject = new OdbcLastModifiedDownloadQuery(
-                OdbcColumnSourceType.CustomSubQuery,
+                OdbcColumnSourceType.CustomQuery,
                 downloadQuery.Object,
                 onlineLastModifiedStartingPoint,
                 "OnlineLastModified",
@@ -114,7 +114,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Download
             Mock<IShipWorksOdbcCommand> command = mock.Mock<IShipWorksOdbcCommand>();
 
             OdbcLastModifiedDownloadQuery testObject = new OdbcLastModifiedDownloadQuery(
-                OdbcColumnSourceType.CustomSubQuery,
+                OdbcColumnSourceType.CustomQuery,
                 downloadQuery.Object,
                 onlineLastModifiedStartingPoint,
                 "OnlineLastModified",
@@ -137,7 +137,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Download
             Mock<IShipWorksOdbcCommand> command = mock.Mock<IShipWorksOdbcCommand>();
 
             OdbcLastModifiedDownloadQuery testObject = new OdbcLastModifiedDownloadQuery(
-                OdbcColumnSourceType.CustomSubQuery,
+                OdbcColumnSourceType.CustomQuery,
                 downloadQuery.Object,
                 onlineLastModifiedStartingPoint,
                 string.Empty,
@@ -158,7 +158,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Download
             Mock<IShipWorksOdbcCommand> command = mock.Mock<IShipWorksOdbcCommand>();
 
             OdbcLastModifiedDownloadQuery testObject = new OdbcLastModifiedDownloadQuery(
-                OdbcColumnSourceType.CustomSubQuery,
+                OdbcColumnSourceType.CustomQuery,
                 downloadQuery.Object,
                 onlineLastModifiedStartingPoint,
                 "OnlineLastModified",

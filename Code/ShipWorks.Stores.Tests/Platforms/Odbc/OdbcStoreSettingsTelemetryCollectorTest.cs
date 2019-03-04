@@ -103,7 +103,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
 
         [Theory]
         [InlineData(OdbcColumnSourceType.CustomParameterizedQuery)]
-        [InlineData(OdbcColumnSourceType.CustomSubQuery)]
+        [InlineData(OdbcColumnSourceType.CustomQuery)]
         [InlineData(OdbcColumnSourceType.Table)]
         public void CollectTelemetry_ImportColumnSourceTypeSetFromOdbcStore(OdbcColumnSourceType sourceType)
         {
@@ -217,7 +217,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
         }
 
         [Theory]
-        [InlineData(OdbcShipmentUploadStrategy.UseShipmentDataSource, OdbcColumnSourceType.CustomSubQuery, "CustomSubQuery")]
+        [InlineData(OdbcShipmentUploadStrategy.UseShipmentDataSource, OdbcColumnSourceType.CustomQuery, "CustomQuery")]
         [InlineData(OdbcShipmentUploadStrategy.UseShipmentDataSource, OdbcColumnSourceType.CustomParameterizedQuery, "CustomParameterizedQuery")]
         [InlineData(OdbcShipmentUploadStrategy.UseImportDataSource, OdbcColumnSourceType.Table, "Table")]
         [InlineData(OdbcShipmentUploadStrategy.DoNotUpload, OdbcColumnSourceType.Table, "None")]
