@@ -28537,6 +28537,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(UserSettingsFieldIndex.OrderLookupLayout);}
 		}
+		/// <summary>Creates a new UserSettingsEntity.LastReleaseNotesSeen field instance</summary>
+		public static EntityField2 LastReleaseNotesSeen
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(UserSettingsFieldIndex.LastReleaseNotesSeen);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity UspsAccountEntity</summary>
