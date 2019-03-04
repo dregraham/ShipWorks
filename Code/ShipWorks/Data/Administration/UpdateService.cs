@@ -8,6 +8,7 @@ using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Licensing.TangoRequests;
 using ShipWorks.Data.Connection;
 using ShipWorks.Stores;
+using ShipWorks.Users;
 using ShipWorks.Users.Security;
 
 namespace ShipWorks.Data.Administration
@@ -98,7 +99,9 @@ namespace ShipWorks.Data.Administration
             // the windows service that is running our update service does not have access to localdb
             if (sqlSession.Configuration.IsLocalDb())
             {
+                DataProvider.InitializeForApplication();
                 StoreManager.InitializeForCurrentSession(SecurityContext.EmptySecurityContext);
+                UserSession.InitializeForCurrentDatabase();
                 GenericResult<ShipWorksReleaseInfo> releaseInfo = tangoGetReleaseByCustomerRequest.GetReleaseInfo();
 
                 if (releaseInfo.Success)
