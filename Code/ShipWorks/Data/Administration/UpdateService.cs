@@ -4,7 +4,6 @@ using System.IO.Pipes;
 using System.Text;
 using Interapptive.Shared.AutoUpdate;
 using Interapptive.Shared.Utility;
-using Newtonsoft.Json;
 using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Licensing.TangoRequests;
 using ShipWorks.Data.Connection;
@@ -18,7 +17,7 @@ namespace ShipWorks.Data.Administration
     /// </summary>
     public class UpdateService : IUpdateService
     {
-        private const string UpdateInProgressFileName = "UpdateInProcess.txt";
+        private string UpdateInProgressFilePath;
         private NamedPipeClientStream updaterPipe;
         private readonly IAutoUpdateStatusProvider autoUpdateStatusProvider;
         private readonly ISqlSession sqlSession;
@@ -28,15 +27,16 @@ namespace ShipWorks.Data.Administration
         /// Constructor
         /// </summary>
         public UpdateService(
-            IShipWorksSession shipWorksSession, 
-            IAutoUpdateStatusProvider autoUpdateStatusProvider, 
-            ISqlSession sqlSession, 
+            IShipWorksSession shipWorksSession,
+            IAutoUpdateStatusProvider autoUpdateStatusProvider,
+            ISqlSession sqlSession,
             ITangoGetReleaseByCustomerRequest tangoGetReleaseByCustomerRequest)
         {
             updaterPipe = new NamedPipeClientStream(".", shipWorksSession.InstanceID.ToString(), PipeDirection.Out);
             this.autoUpdateStatusProvider = autoUpdateStatusProvider;
             this.sqlSession = sqlSession;
             this.tangoGetReleaseByCustomerRequest = tangoGetReleaseByCustomerRequest;
+            UpdateInProgressFilePath = Path.Combine(DataPath.InstanceSettings, "UpdateInProcess.txt");
         }
 
         /// <summary>
@@ -69,26 +69,26 @@ namespace ShipWorks.Data.Administration
         public Result TryUpdate()
         {
             Version databaseVersion = SqlSchemaUpdater.GetInstalledSchemaVersion();
-            
+
             // Check to see if we just launched shipworks after attempting to update the exe
-            if (File.Exists(UpdateInProgressFileName))
+            if (File.Exists(UpdateInProgressFilePath))
             {
-                string version = File.ReadAllText(UpdateInProgressFileName);
+                string version = File.ReadAllText(UpdateInProgressFilePath);
 
                 try
                 {
-                    File.Delete(UpdateInProgressFileName);
+                    File.Delete(UpdateInProgressFilePath);
                 }
                 catch (IOException)
                 {
                     // this technically should never happen but if the file is in use
                     // deleting it will fail, in that case ignore the error
                 }
-                
+
                 // if the version we are currently running is lower than the version we were trying to update to then something went wrong
                 // skip the rest of the update process here because we dont want to get stuck in a loop where we keep attempting
                 // to update and fail
-                if (Version.TryParse(version, out Version updateInProcessVersion) && databaseVersion > updateInProcessVersion)
+                if (Version.TryParse(version, out Version updateInProcessVersion) && databaseVersion < updateInProcessVersion)
                 {
                     return Result.FromError("The previous ShipWorks auto update failed. Restart ShipWorks to try again.");
                 }
@@ -130,17 +130,17 @@ namespace ShipWorks.Data.Administration
         {
             try
             {
-                File.WriteAllText(UpdateInProgressFileName, version.ToString());
+                File.WriteAllText(UpdateInProgressFilePath, version.ToString());
             }
             catch (Exception)
             {
                 // If we cant write a file to disk to signify that we are attempting
                 // upgrade then fail because it could get us stuck in an upgrade loop
-                return Result.FromError($"unable to write to {UpdateInProgressFileName}.");
+                return Result.FromError($"unable to write to {UpdateInProgressFilePath}.");
             }
 
             Result result = SendMessage(version.ToString());
-            
+
             if (result.Success)
             {
                 autoUpdateStatusProvider.ShowSplashScreen();
@@ -149,7 +149,7 @@ namespace ShipWorks.Data.Administration
             {
                 try
                 {
-                    File.Delete(UpdateInProgressFileName);
+                    File.Delete(UpdateInProgressFilePath);
                 }
                 catch (Exception)
                 {
@@ -157,7 +157,7 @@ namespace ShipWorks.Data.Administration
                     // above and it shall not fail
                 }
             }
-             
+
             return result;
         }
 
