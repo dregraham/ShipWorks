@@ -3,6 +3,7 @@ using System.Data.Common;
 using System.Xml;
 using System.Xml.Linq;
 using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.Utility;
 using ShipWorks.Actions;
 using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.ExecutionMode;
@@ -55,7 +56,7 @@ namespace ShipWorks.Data
         }
 
         /// <summary>
-        /// Should UI actions be included.  If the UI isn't running somewhere, 
+        /// Should UI actions be included.  If the UI isn't running somewhere,
         /// and we are the background process, go ahead and do UI actions too since it's not open
         /// </summary>
         public bool IncludeUserInterfaceActions => !Program.ExecutionMode.IsUISupported &&
@@ -97,6 +98,17 @@ namespace ShipWorks.Data
             setConfiguration(configuration);
 
             ConfigurationData.Save(configuration);
+        }
+
+
+        /// <summary>
+        /// Get the next update window after the given date
+        /// </summary>
+        public DateTime GetNextUpdateWindow(DateTime date)
+        {
+            var configuration = FetchReadOnly();
+            var nextUpdateWindowDay = date.TodayOrNext(configuration.AutoUpdateDayOfWeek);
+            return new DateTime(nextUpdateWindowDay.Year, nextUpdateWindowDay.Month, nextUpdateWindowDay.Day, configuration.AutoUpdateHourOfDay, 0, 0);
         }
     }
 }

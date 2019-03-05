@@ -179,6 +179,7 @@
       <Link>Properties\AssemblyInfoCommon.cs</Link>
     </Compile>
     <Compile Include="AutoUpdate\UpdateWindowData.cs" />
+    <Compile Include="AutoUpdate\UpgradeDetails.cs" />
     <Compile Include="Business\Geography\CurrencyCode.cs" />
     <Compile Include="Collections\DataVirtualization\DataPage.cs" />
     <Compile Include="Collections\DataVirtualization\DataWrapper.cs" />

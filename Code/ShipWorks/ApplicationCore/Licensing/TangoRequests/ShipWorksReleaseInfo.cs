@@ -29,6 +29,12 @@ namespace ShipWorks.ApplicationCore.Licensing.TangoRequests
         public string ReleaseNotes { get; set; }
 
         /// <summary>
+        /// Release version
+        /// </summary>
+        [XmlElement("ReleaseVersion")]
+        public string ReleaseVersion { get; set; }
+
+        /// <summary>
         /// Minimum allowed version of ShipWorks
         /// </summary>
         [XmlElement("MinAllowedReleaseVersion")]

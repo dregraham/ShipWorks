@@ -883,7 +883,7 @@ namespace ShipWorks
 
             UsingAsync(
                 IoC.BeginLifetimeScope(),
-                lifetimeScope => lifetimeScope.Resolve<IReleaseNotesChecker>().ShowReleaseNotesIfNecessary(this, user))
+                lifetimeScope => lifetimeScope.Resolve<IUpgradeResultsChecker>().ShowUpgradeNotificationIfNecessary(this, user))
                 .Do(x => { }, ex => Console.WriteLine(ex.Message))
                 .Forget();
         }
