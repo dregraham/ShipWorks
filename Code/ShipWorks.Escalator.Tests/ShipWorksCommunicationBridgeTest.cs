@@ -29,6 +29,9 @@ namespace ShipWorks.Escalator.Tests
             var session = mock.Mock<IShipWorksSession>();
             session.SetupGet(s => s.InstanceID).Returns(sessionGuid);
 
+            var dataPath = mock.Mock<IDataPath>();
+            dataPath.SetupGet(d => d.InstanceSettings).Returns(string.Empty);
+
             updateService = mock.Create<UpdateService>();
         }
 

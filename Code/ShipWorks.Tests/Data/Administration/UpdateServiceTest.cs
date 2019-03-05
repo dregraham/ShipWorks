@@ -24,6 +24,9 @@ namespace ShipWorks.Tests.Data.Administration
             var session = mock.Mock<IShipWorksSession>();
             session.SetupGet(s => s.InstanceID).Returns(sessionGuid);
 
+            var dataPath = mock.Mock<IDataPath>();
+            dataPath.SetupGet(d => d.InstanceSettings).Returns(string.Empty);
+
             testObject = mock.Create<UpdateService>();
         }
 

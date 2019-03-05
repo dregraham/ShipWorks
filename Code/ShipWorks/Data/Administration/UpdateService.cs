@@ -31,13 +31,14 @@ namespace ShipWorks.Data.Administration
             IShipWorksSession shipWorksSession,
             IAutoUpdateStatusProvider autoUpdateStatusProvider,
             ISqlSession sqlSession,
-            ITangoGetReleaseByCustomerRequest tangoGetReleaseByCustomerRequest)
+            ITangoGetReleaseByCustomerRequest tangoGetReleaseByCustomerRequest,
+            IDataPath dataPath)
         {
             updaterPipe = new NamedPipeClientStream(".", shipWorksSession.InstanceID.ToString(), PipeDirection.Out);
             this.autoUpdateStatusProvider = autoUpdateStatusProvider;
             this.sqlSession = sqlSession;
             this.tangoGetReleaseByCustomerRequest = tangoGetReleaseByCustomerRequest;
-            UpdateInProgressFilePath = Path.Combine(DataPath.InstanceSettings, "UpdateInProcess.txt");
+            UpdateInProgressFilePath = Path.Combine(dataPath.InstanceSettings, "UpdateInProcess.txt");
         }
 
         /// <summary>
