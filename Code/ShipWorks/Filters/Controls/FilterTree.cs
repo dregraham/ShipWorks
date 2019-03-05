@@ -854,7 +854,13 @@ namespace ShipWorks.Filters.Controls
                     var message = "Cannot convert to a saved search because it is in use." +
                         Environment.NewLine +
                         Environment.NewLine +
-                        references.Select(x => "- " + x).Combine(Environment.NewLine);
+                        references.Select(x => "- " + x).Take(5).Combine(Environment.NewLine);
+
+                    if (references.Count > 5)
+                    {
+                        message = $"{message}{Environment.NewLine}- More than 5 usages of this filter were found.";
+                    }
+
                     MessageHelper.ShowError(this, message);
 
                     return;
