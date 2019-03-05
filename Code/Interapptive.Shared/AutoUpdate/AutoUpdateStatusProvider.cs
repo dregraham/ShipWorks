@@ -64,8 +64,9 @@ namespace Interapptive.Shared.AutoUpdate
         /// </summary>
         /// <remarks>
         /// If the splash isnt shown this will show it
+        /// Path where to copy the splash screen
         /// </remarks>
-        public void ShowSplashScreen()
+        public void ShowSplashScreen(string instanceId)
         {
             using (IDisposable process = Process.GetProcessesByName(ProcessName).FirstOrDefault())
             {
@@ -79,7 +80,9 @@ namespace Interapptive.Shared.AutoUpdate
             string newFile = $"{SplashScreenExe}.temp.exe";
 
             string sourcePath = Path.Combine(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location), existingFile);
-            string destinationPath = Path.Combine(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location), newFile);
+
+            string appData = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+            string destinationPath = Path.Combine(appData, "Interapptive\\ShipWorks\\Instances", instanceId, newFile);
             File.Copy(sourcePath, destinationPath, true);
 
             // Ensure the process can be accessed by anyone

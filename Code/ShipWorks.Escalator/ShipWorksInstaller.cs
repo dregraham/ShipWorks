@@ -69,7 +69,7 @@ namespace ShipWorks.Escalator
             {
                 // Show the splash screen to give users feedback that the update
                 // is kicking off
-                autoUpdateStatusProvider.ShowSplashScreen();
+                autoUpdateStatusProvider.ShowSplashScreen(serviceName.GetInstanceID().ToString("B"));
             }
         }
 

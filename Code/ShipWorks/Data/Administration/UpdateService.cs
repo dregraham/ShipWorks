@@ -146,7 +146,7 @@ namespace ShipWorks.Data.Administration
 
             if (result.Success)
             {
-                autoUpdateStatusProvider.ShowSplashScreen();
+                autoUpdateStatusProvider.ShowSplashScreen(ShipWorksSession.InstanceID.ToString("B"));
             }
             else
             {

@@ -10,7 +10,7 @@ namespace Interapptive.Shared.AutoUpdate
         /// <summary>
         /// show the Splash Screen
         /// </summary>
-        void ShowSplashScreen();
+        void ShowSplashScreen(string instanceId);
 
         /// <summary>
         /// update the status on the Splash Screen
