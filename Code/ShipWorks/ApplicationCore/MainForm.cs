@@ -21,6 +21,7 @@ using Divelements.SandGrid;
 using Divelements.SandRibbon;
 using ICSharpCode.SharpZipLib.Zip;
 using Interapptive.Shared;
+using Interapptive.Shared.AutoUpdate;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.Data;
 using Interapptive.Shared.Extensions;
@@ -332,6 +333,8 @@ namespace ShipWorks
         [NDependIgnoreLongMethod]
         private void OnLoad(object sender, EventArgs e)
         {
+            AutoUpdateStatusProvider.CloseSplashScreen();
+
             log.Info("Loading main application window.");
 
             DataProvider.InitializeForApplication();
