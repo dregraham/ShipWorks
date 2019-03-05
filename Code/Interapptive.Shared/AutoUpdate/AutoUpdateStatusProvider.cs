@@ -81,7 +81,7 @@ namespace Interapptive.Shared.AutoUpdate
 
             string sourcePath = Path.Combine(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location), existingFile);
 
-            string appData = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+            string appData = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData);
             string destinationPath = Path.Combine(appData, "Interapptive\\ShipWorks\\Instances", instanceId, newFile);
             File.Copy(sourcePath, destinationPath, true);
 
