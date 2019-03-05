@@ -94,7 +94,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.ViewModels.Import
             testObject.ColumnSourceIsTable = false;
             testObject.SaveMapSettings(store);
 
-            Assert.Equal((int) OdbcColumnSourceType.CustomSubQuery, store.ImportColumnSourceType);
+            Assert.Equal((int) OdbcColumnSourceType.CustomQuery, store.ImportColumnSourceType);
         }
 
         [Fact]
@@ -383,7 +383,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.ViewModels.Import
         }
 
         [Theory]
-        [InlineData(OdbcColumnSourceType.CustomSubQuery, false)]
+        [InlineData(OdbcColumnSourceType.CustomQuery, false)]
         [InlineData(OdbcColumnSourceType.CustomParameterizedQuery, false)]
         [InlineData(OdbcColumnSourceType.Table, true)]
         public void OpenMapSettingsFileCommand_SetsColumnSourceIsTable(OdbcColumnSourceType sourceType, bool isTable)
@@ -458,7 +458,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.ViewModels.Import
 
                 var settingsMock = mock.Mock<IOdbcImportSettingsFile>();
                 settingsMock.Setup(s => s.OdbcFieldMap).Returns(fieldMapMock.Object);
-                settingsMock.Setup(s => s.ColumnSourceType).Returns(OdbcColumnSourceType.CustomSubQuery);
+                settingsMock.Setup(s => s.ColumnSourceType).Returns(OdbcColumnSourceType.CustomQuery);
                 settingsMock.Setup(s => s.ColumnSource).Returns("my query");
                 settingsMock.Setup(s => s.Open(It.IsAny<TextReader>())).Returns(GenericResult.FromSuccess(new JObject()));
 
@@ -490,7 +490,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.ViewModels.Import
 
                 var settingsMock = mock.Mock<IOdbcImportSettingsFile>();
                 settingsMock.Setup(s => s.OdbcFieldMap).Returns(fieldMapMock.Object);
-                settingsMock.Setup(s => s.ColumnSourceType).Returns(OdbcColumnSourceType.CustomSubQuery);
+                settingsMock.Setup(s => s.ColumnSourceType).Returns(OdbcColumnSourceType.CustomQuery);
                 settingsMock.Setup(s => s.ColumnSource).Returns("my query");
                 settingsMock.Setup(s => s.OdbcFieldMap).Returns(fieldMapFromDisk.Object);
                 settingsMock.Setup(s => s.Open(It.IsAny<TextReader>())).Returns(GenericResult.FromSuccess(new JObject()));
