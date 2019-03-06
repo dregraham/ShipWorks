@@ -788,51 +788,29 @@ namespace ShipWorks.Filters.Controls
         /// </summary>
         private void InitializeMenuItems()
         {
-            // menuItemEditFilter
-            menuItemEditFilter.Image = Resources.edit16;
-            menuItemEditFilter.Name = "menuItemEditFilter";
-            menuItemEditFilter.Size = new Size(151, 22);
-            menuItemEditFilter.Text = "Edit";
-            menuItemEditFilter.Click += OnEditFilter;
+            InitializeMenuItem(menuItemEditFilter, nameof(menuItemEditFilter), Resources.edit16, "Edit", OnEditFilter);
 
             // menuItemEditFilterSep
             menuItemEditFilterSep.Name = "menuItemEditFilterSep";
             menuItemEditFilterSep.Size = new Size(148, 6);
 
-            // meuItemNewFilter
-            menuItemNewFilter.Image = Resources.filter_add;
-            menuItemNewFilter.Name = "meuItemNewFilter";
-            menuItemNewFilter.Size = new Size(151, 22);
-            menuItemNewFilter.Text = "New Filter";
-            menuItemNewFilter.Click += OnNewFilter;
+            InitializeMenuItem(menuItemNewFilter, nameof(menuItemNewFilter), Resources.filter_add, "New Filter", OnNewFilter);
+            InitializeMenuItem(menuItemNewFolder, nameof(menuItemNewFolder), Resources.folderclosed_add, "New Folder", OnNewFolder);
+            InitializeMenuItem(menuItemOrganizeFilters, nameof(menuItemOrganizeFilters), Resources.funnel_properties_16, "Manage Filters", OnManageFilters);
+            InitializeMenuItem(menuLoadFilterAsSearch, nameof(menuLoadFilterAsSearch), Resources.view, "Load as Advanced Search", OnLoadAsAdvancedSearch);
+            InitializeMenuItem(menuConvertFilter, nameof(menuConvertFilter), Resources.view, "Convert to Saved Search", OnConvertFilter);
+        }
 
-            // menuItemNewFolder
-            menuItemNewFolder.Image = Resources.folderclosed_add;
-            menuItemNewFolder.Name = "menuItemNewFolder";
-            menuItemNewFolder.Size = new Size(151, 22);
-            menuItemNewFolder.Text = "New Folder";
-            menuItemNewFolder.Click += OnNewFolder;
-
-            // menuItemOrganizeFilters
-            menuItemOrganizeFilters.Image = Resources.funnel_properties_16;
-            menuItemOrganizeFilters.Name = "menuItemOrganizeFilters";
-            menuItemOrganizeFilters.Size = new Size(151, 22);
-            menuItemOrganizeFilters.Text = "Manage Filters";
-            menuItemOrganizeFilters.Click += OnManageFilters;
-
-            // menuLoadFilterAsSearch
-            menuLoadFilterAsSearch.Image = Resources.view;
-            menuLoadFilterAsSearch.Name = "menuLoadFilterAsSearch";
-            menuLoadFilterAsSearch.Size = new Size(151, 22);
-            menuLoadFilterAsSearch.Text = "Load as Advanced Search";
-            menuLoadFilterAsSearch.Click += OnLoadAsAdvancedSearch;
-
-            // menuConvertFilter
-            menuConvertFilter.Image = Resources.view;
-            menuConvertFilter.Name = "menuConvertFilter";
-            menuConvertFilter.Size = new Size(151, 22);
-            menuConvertFilter.Text = "Convert to Saved Search";
-            menuConvertFilter.Click += OnConvertFilter;
+        /// <summary>
+        /// Initialize an individual menu item
+        /// </summary>
+        private void InitializeMenuItem(ToolStripMenuItem menuItem, string name, Bitmap icon, string text, EventHandler onClick)
+        {
+            menuItem.Image = icon;
+            menuItem.Name = name;
+            menuItem.Size = new Size(151, 22);
+            menuItem.Text = text;
+            menuItem.Click += onClick;
         }
 
         /// <summary>
