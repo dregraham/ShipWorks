@@ -3,6 +3,7 @@ using System.IO.Pipes;
 using System.Security.AccessControl;
 using System.Text;
 using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.Utility;
 using log4net;
 
 namespace Interapptive.Shared.AutoUpdate
@@ -15,9 +16,9 @@ namespace Interapptive.Shared.AutoUpdate
     {
         public delegate void DelegateMessage(string message);
         public event DelegateMessage OnMessage;
-        private string instance;
+        private readonly string instance;
         private readonly ILog log;
-        private NamedPipeServerStream pipeServer;
+        private NamedPipeClientStream updaterPipe;
 
         /// <summary>
         /// Constructor
@@ -36,9 +37,9 @@ namespace Interapptive.Shared.AutoUpdate
             PipeSecurity pipeSecurity = new PipeSecurity();
             pipeSecurity.AddAccessRule(new PipeAccessRule(@"Everyone", PipeAccessRights.ReadWrite, AccessControlType.Allow));
 
-            pipeServer = new NamedPipeServerStream(
+            NamedPipeServerStream pipeServer = new NamedPipeServerStream(
                 instance,
-                PipeDirection.InOut,
+                PipeDirection.In,
                 1,
                 PipeTransmissionMode.Byte,
                 PipeOptions.Asynchronous,
@@ -48,17 +49,58 @@ namespace Interapptive.Shared.AutoUpdate
 
             log.DebugFormat("Starting named pipe server {0}", instance);
 
-            pipeServer.BeginWaitForConnection(
-                   new AsyncCallback(WaitForConnectionCallBack), pipeServer);
+            pipeServer.BeginWaitForConnection(WaitForConnectionCallBack, pipeServer);
         }
 
         /// <summary>
         /// Generate a new pipe server and wait for connections
         /// </summary>
-        public void SendAutoUpdateStartMessage()
+        public void SendAutoUpdateStartMessage() => SendMessage("KillMe");
+        
+        /// <summary>
+        /// Send a message
+        /// </summary>
+        public Result SendMessage(string message)
         {
-            string message = "KillMe";
-            pipeServer.Write(Encoding.UTF8.GetBytes(message), 0, message.Length);
+            updaterPipe = new NamedPipeClientStream(".", instance, PipeDirection.Out);
+
+            if (IsAvailable())
+            {
+                try
+                {
+                    updaterPipe.Write(Encoding.UTF8.GetBytes(message), 0, message.Length);
+                }
+                catch (Exception ex)
+                {
+                    return Result.FromError(ex);
+                }
+                return Result.FromSuccess();
+            }
+
+            return Result.FromError("Could not connect to update service.");
+        }
+
+        /// <summary>
+        /// Check if the communication bridge is available
+        /// </summary>
+        public bool IsAvailable()
+        {
+            if (!updaterPipe.IsConnected)
+            {
+                // Give it 1 second to connect
+                try
+                {
+                    updaterPipe.Connect(1000);
+                }
+                catch (Exception)
+                {
+                    // Connection can fail if something else is connected
+                    // or if the timeout has elapsed
+                    return false;
+                }
+            }
+
+            return updaterPipe.IsConnected;
         }
 
         /// <summary>
@@ -101,6 +143,14 @@ namespace Interapptive.Shared.AutoUpdate
             pipeServer?.Dispose();
 
             StartPipeServer();
+        }
+        
+        /// <summary>
+        /// Dispose
+        /// </summary>
+        public void Dispose()
+        {
+            updaterPipe.Dispose();
         }
     }
 }

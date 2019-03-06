@@ -20,10 +20,9 @@ namespace ShipWorks.Data.Administration
     /// </summary>
     public class UpdateService : IUpdateService
     {
-        private string UpdateInProgressFilePath;
-        private NamedPipeClientStream updaterPipe;
-        private IMainForm mainForm;
+        private readonly string updateInProgressFilePath;
         private IShipWorksCommunicationBridge autoUpdateStartPipe;
+        private readonly IShipWorksSession shipWorksSession;
         private readonly IAutoUpdateStatusProvider autoUpdateStatusProvider;
         private readonly ISqlSession sqlSession;
         private readonly ITangoGetReleaseByCustomerRequest tangoGetReleaseByCustomerRequest;
@@ -40,35 +39,12 @@ namespace ShipWorks.Data.Administration
             Func<string, IShipWorksCommunicationBridge> communicationBridgeFactory,
             IDataPath dataPath)
         {
-            updaterPipe = new NamedPipeClientStream(".", shipWorksSession.InstanceID.ToString(), PipeDirection.Out);
+            this.shipWorksSession = shipWorksSession;
             this.autoUpdateStatusProvider = autoUpdateStatusProvider;
             this.sqlSession = sqlSession;
             this.tangoGetReleaseByCustomerRequest = tangoGetReleaseByCustomerRequest;
             this.communicationBridgeFactory = communicationBridgeFactory;
-            UpdateInProgressFilePath = Path.Combine(dataPath.InstanceSettings, "UpdateInProcess.txt");
-        }
-
-        /// <summary>
-        /// Check if the updater is available
-        /// </summary>
-        public bool IsAvailable()
-        {
-            if (!updaterPipe.IsConnected)
-            {
-                // Give it 1 second to connect
-                try
-                {
-                    updaterPipe.Connect(1000);
-                }
-                catch (Exception)
-                {
-                    // Connection can fail if something else is connected
-                    // or if the timeout has elapsed
-                    return false;
-                }
-            }
-
-            return updaterPipe.IsConnected;
+            updateInProgressFilePath = Path.Combine(dataPath.InstanceSettings, "UpdateInProcess.txt");
         }
 
         /// <summary>
@@ -80,13 +56,13 @@ namespace ShipWorks.Data.Administration
             Version databaseVersion = SqlSchemaUpdater.GetInstalledSchemaVersion();
 
             // Check to see if we just launched shipworks after attempting to update the exe
-            if (File.Exists(UpdateInProgressFilePath))
+            if (File.Exists(updateInProgressFilePath))
             {
-                string version = File.ReadAllText(UpdateInProgressFilePath);
+                string version = File.ReadAllText(updateInProgressFilePath);
 
                 try
                 {
-                    File.Delete(UpdateInProgressFilePath);
+                    File.Delete(updateInProgressFilePath);
                 }
                 catch (IOException)
                 {
@@ -141,26 +117,27 @@ namespace ShipWorks.Data.Administration
         {
             try
             {
-                File.WriteAllText(UpdateInProgressFilePath, version.ToString());
+                File.WriteAllText(updateInProgressFilePath, version.ToString());
             }
             catch (Exception)
             {
                 // If we cant write a file to disk to signify that we are attempting
                 // upgrade then fail because it could get us stuck in an upgrade loop
-                return Result.FromError($"unable to write to {UpdateInProgressFilePath}.");
+                return Result.FromError($"unable to write to {updateInProgressFilePath}.");
             }
 
-            Result result = SendMessage(version.ToString());
+            IShipWorksCommunicationBridge communicationBridge = communicationBridgeFactory(shipWorksSession.InstanceID.ToString("B"));
+            Result result = communicationBridge.SendMessage(version.ToString());
 
             if (result.Success)
             {
-                autoUpdateStatusProvider.ShowSplashScreen(ShipWorksSession.InstanceID.ToString("B"));
+                autoUpdateStatusProvider.ShowSplashScreen(shipWorksSession.InstanceID.ToString("B"));
             }
             else
             {
                 try
                 {
-                    File.Delete(UpdateInProgressFilePath);
+                    File.Delete(updateInProgressFilePath);
                 }
                 catch (Exception)
                 {
@@ -170,27 +147,6 @@ namespace ShipWorks.Data.Administration
             }
 
             return result;
-        }
-
-        /// <summary>
-        /// Send the update window information to the updater pipe
-        /// </summary>
-        public Result SendMessage(string message)
-        {
-            if (IsAvailable())
-            {
-                try
-                {
-                    updaterPipe.Write(Encoding.UTF8.GetBytes(message), 0, message.Length);
-                }
-                catch (Exception ex)
-                {
-                    return Result.FromError(ex);
-                }
-                return Result.FromSuccess();
-            }
-
-            return Result.FromError("Could not connect to update service.");
         }
 
         /// <summary>
@@ -244,14 +200,6 @@ namespace ShipWorks.Data.Administration
                 timer.Interval = 2000;
                 timer.Start();
             }
-        }
-
-        /// <summary>
-        /// Dispose
-        /// </summary>
-        public void Dispose()
-        {
-            updaterPipe.Dispose();
         }
     }
 }

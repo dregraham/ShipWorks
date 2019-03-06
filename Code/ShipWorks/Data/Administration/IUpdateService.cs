@@ -9,13 +9,8 @@ namespace ShipWorks.Data.Administration
     /// Represents the UpdateService
     /// </summary>
     [Service]
-    public interface IUpdateService : IDisposable
+    public interface IUpdateService
     {
-        /// <summary>
-        /// Check to see if the update service is available
-        /// </summary>
-        bool IsAvailable();
-
         /// <summary>
         /// Try to update shipworks
         /// </summary>
@@ -27,11 +22,6 @@ namespace ShipWorks.Data.Administration
         /// </summary>
         /// <returns></returns>
         Result Update(Version version);
-
-        /// <summary>
-        /// Send a message to the update service
-        /// </summary>
-        Result SendMessage(string message);
 
         /// <summary>
         /// Listen for the auto update to start

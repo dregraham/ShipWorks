@@ -1,9 +1,12 @@
-﻿namespace Interapptive.Shared.AutoUpdate
+﻿using System;
+using Interapptive.Shared.Utility;
+
+namespace Interapptive.Shared.AutoUpdate
 {
     /// <summary>
     /// Bridge for the ShipWorks exe to communicate with the ShipWorks Escalator service
     /// </summary>
-    public interface IShipWorksCommunicationBridge
+    public interface IShipWorksCommunicationBridge : IDisposable
     {
         /// <summary>
         /// Event when bridge receives a message
@@ -19,5 +22,15 @@
         /// Send a message that auto update is starting
         /// </summary>
         void SendAutoUpdateStartMessage();
+
+        /// <summary>
+        /// Send a message
+        /// </summary>
+        Result SendMessage(string message);
+
+        /// <summary>
+        /// Check if the communication bridge is available
+        /// </summary>
+        bool IsAvailable();
     }
 }

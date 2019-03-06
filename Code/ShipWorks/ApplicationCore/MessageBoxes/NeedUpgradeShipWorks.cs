@@ -23,6 +23,7 @@ namespace ShipWorks.ApplicationCore.MessageBoxes
     {
         private int TimeLimit = 30;
         private System.Timers.Timer timer;
+        private IShipWorksCommunicationBridge communicationBridge;
         private IUpdateService updateService;
 
         /// <summary>
@@ -32,9 +33,10 @@ namespace ShipWorks.ApplicationCore.MessageBoxes
         {
             InitializeComponent();
 
+            communicationBridge = IoC.UnsafeGlobalLifetimeScope.Resolve<IShipWorksCommunicationBridge>();
             updateService = IoC.UnsafeGlobalLifetimeScope.Resolve<IUpdateService>();
 
-            if (updateService.IsAvailable())
+            if (communicationBridge.IsAvailable())
             {
                 close.Text = "Cancel";
                 update.Visible = true;
@@ -131,7 +133,7 @@ namespace ShipWorks.ApplicationCore.MessageBoxes
         /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
         protected override void Dispose(bool disposing)
         {
-            updateService?.Dispose();
+            communicationBridge?.Dispose();
             timer?.Dispose();
 
             if (disposing && (components != null))

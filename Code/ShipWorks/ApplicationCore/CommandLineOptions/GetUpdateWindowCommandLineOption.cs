@@ -57,7 +57,7 @@ namespace ShipWorks.ApplicationCore.CommandLineOptions
             {
                 string message = JsonConvert.SerializeObject(updateData);
                 log.InfoFormat("Sending message {0}", message);
-                lifetimeScope.Resolve<IUpdateService>().SendMessage(message);
+                lifetimeScope.Resolve<IShipWorksCommunicationBridge>().SendMessage(message);
                 log.Info("Message sent");
             }
 
