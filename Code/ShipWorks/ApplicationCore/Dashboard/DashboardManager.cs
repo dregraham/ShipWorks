@@ -406,7 +406,7 @@ namespace ShipWorks.ApplicationCore.Dashboard
 
                         lifetimeScope.Resolve<ITangoGetReleaseByUserRequest>()
                             .GetReleaseInfo(tangoCustomerId, currentVersion)
-                            .Map(x => Version.Parse(x.ReleaseVersion))
+                            .Map(x => x.ReleaseVersion)
                             .Filter(x => x > currentVersion)
                             .Filter(x => x > ShipWorksOnlineVersionChecker.CheckSignedOffVersion())
                             .Do(x => panel.BeginInvoke((MethodInvoker<DashboardOnlineVersionItem>) CheckShipWorksVersionComplete,

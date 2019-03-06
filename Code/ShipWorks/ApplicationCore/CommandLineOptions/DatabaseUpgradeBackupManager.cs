@@ -19,7 +19,7 @@ namespace ShipWorks.ApplicationCore.CommandLineOptions
         private static readonly ILog log = LogManager.GetLogger(typeof(UpgradeDatabaseSchemaCommandLineOption));
         private const string BackupNameFormat = "{0}_AutomaticUpgradeBackup.bak";
         private readonly string database;
-        private readonly string backupPathAndName;
+        private readonly string backupName;
 
         /// <summary>
         /// constructor
@@ -27,18 +27,18 @@ namespace ShipWorks.ApplicationCore.CommandLineOptions
         public DatabaseUpgradeBackupManager()
         {
             database = SqlSession.Current.DatabaseName;
-            backupPathAndName = Path.Combine(GetBackupPath(), string.Format(BackupNameFormat, database));
+            backupName = string.Format(BackupNameFormat, database);
         }
 
         /// <summary>
         /// Create the backup
         /// </summary>
-        public TelemetricResult<Result> CreateBackup()
+        public TelemetricResult<Result> CreateBackup(Action<string> updateStatus)
         {
             TelemetricResult<Result> telemetricResult = new TelemetricResult<Result>("Database.Backup");
-            telemetricResult.RunTimedEvent("CreateBackupTimeInMilliseconds", () => CreateBackup(database, backupPathAndName));
+            telemetricResult.RunTimedEvent("CreateBackupTimeInMilliseconds", () => CreateBackup(database, backupName, updateStatus));
 
-            telemetricResult.SetValue(ValidateBackup(backupPathAndName));
+            telemetricResult.SetValue(ValidateBackup(backupName));
 
             return telemetricResult;
         }
@@ -75,7 +75,7 @@ namespace ShipWorks.ApplicationCore.CommandLineOptions
                 "WITH STATS = 3, RECOVERY, REPLACE " +
                 $"ALTER DATABASE [{database}] SET MULTI_USER ";
 
-            command.AddParameterWithValue("@FilePath", backupPathAndName);
+            command.AddParameterWithValue("@FilePath", backupName);
         }
 
         /// <summary>
@@ -141,26 +141,9 @@ namespace ShipWorks.ApplicationCore.CommandLineOptions
         }
 
         /// <summary>
-        /// Get the default backup path for the current SqlSessions database
-        /// </summary>
-        private string GetBackupPath()
-        {
-            string command = @"EXEC master.dbo.xp_instance_regread N'HKEY_LOCAL_MACHINE', N'Software\Microsoft\MSSQLServer\MSSQLServer',N'BackupDirectory'";
-
-            using (DbConnection con = SqlSession.Current.OpenConnection())
-            {
-                using (DbDataReader dbReader = DbCommandProvider.ExecuteReader(con, command))
-                {
-                    dbReader.Read();
-                    return dbReader["Data"].ToString();
-                }
-            }
-        }
-
-        /// <summary>
         /// Create a backup for the given database to the file
         /// </summary>
-        private void CreateBackup(string database, string backupFile)
+        private void CreateBackup(string database, string backupFile, Action<string> updateStatus)
         {
             log.InfoFormat("Backing up '{0}' to '{1}'", database, backupFile);
 
@@ -215,7 +198,9 @@ namespace ShipWorks.ApplicationCore.CommandLineOptions
                             Match match = percentRegex.Match(e.Message);
                             if (match.Success)
                             {
-                                log.InfoFormat("{0}% complete", Convert.ToInt32(match.Groups[1].Value));
+                                string status = $"{Convert.ToInt32(match.Groups[1].Value)}% complete";
+                                log.Info(status);
+                                updateStatus(status);
                             }
                         };
                     }

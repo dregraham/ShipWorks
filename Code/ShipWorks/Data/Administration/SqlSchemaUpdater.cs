@@ -13,6 +13,7 @@ using Interapptive.Shared.Utility;
 using log4net;
 using NDesk.Options;
 using ShipWorks.ApplicationCore;
+using ShipWorks.ApplicationCore.CommandLineOptions;
 using ShipWorks.ApplicationCore.Interaction;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Common.Threading;
@@ -174,7 +175,7 @@ namespace ShipWorks.Data.Administration
             ProgressItem progressFilterCounts = new ProgressItem("Calculate Initial Filter Counts");
             progressFilterCounts.CanCancel = false;
             progressProvider.ProgressItems.Add(progressFilterCounts);
-
+                        
             // Start by disconnecting all users. Allow for a long timeout while trying to regain a connection when in single user mode
             // because reconnection to a very large database seems to take some time after running a big upgrade
             using (SingleUserModeScope singleUserScope = debuggingMode ? null : new SingleUserModeScope(TimeSpan.FromMinutes(1)))

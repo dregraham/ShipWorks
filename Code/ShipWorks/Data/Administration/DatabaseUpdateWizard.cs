@@ -19,6 +19,7 @@ using Interapptive.Shared.Utility;
 using Interapptive.Shared.Win32;
 using log4net;
 using ShipWorks.ApplicationCore;
+using ShipWorks.ApplicationCore.CommandLineOptions;
 using ShipWorks.ApplicationCore.Interaction;
 using ShipWorks.Common.Threading;
 using ShipWorks.Data.Administration.SqlServerSetup;
@@ -728,6 +729,12 @@ namespace ShipWorks.Data.Administration
                 {
                     backupTelemetry.CopyTo(databaseUpdateResult);
                 }
+            }
+
+            if (SqlSession.Current.Configuration.IsLocalDb())
+            {
+                DatabaseUpgradeBackupManager backupManger = new DatabaseUpgradeBackupManager();
+                backupManger.CreateBackup(_ => { });
             }
 
             databaseUpdateResult.RunTimedEvent(TelemetricEventType.SchemaUpdate,

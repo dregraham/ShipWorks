@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
+using Interapptive.Shared.AutoUpdate;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
 using log4net;
@@ -20,15 +21,22 @@ namespace ShipWorks.Escalator
         private readonly IUpdaterWebClient updaterWebClient;
         private readonly IShipWorksInstaller shipWorksInstaller;
         private readonly IFileWriter fileWriter;
+        private readonly IAutoUpdateStatusProvider autoUpdateStatusProvider;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public ShipWorksUpgrade(IUpdaterWebClient updaterWebClient, IShipWorksInstaller shipWorksInstaller, IFileWriter fileWriter, Func<Type, ILog> logFactory)
+        public ShipWorksUpgrade(
+            IUpdaterWebClient updaterWebClient,
+            IShipWorksInstaller shipWorksInstaller,
+			IFileWriter fileWriter,
+            Func<Type, ILog> logFactory,
+            IAutoUpdateStatusProvider autoUpdateStatusProvider)
         {
             this.updaterWebClient = updaterWebClient;
             this.shipWorksInstaller = shipWorksInstaller;
             this.fileWriter = fileWriter;
+            this.autoUpdateStatusProvider = autoUpdateStatusProvider;
             log = logFactory(typeof(ShipWorksUpgrade));
         }
 

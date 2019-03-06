@@ -16,8 +16,15 @@ namespace ShipWorks.Data.Administration
         bool IsAvailable();
 
         /// <summary>
-        /// Tell the service to update ShipWorks
+        /// Try to update shipworks
         /// </summary>
+        /// <returns></returns>
+        Result TryUpdate();
+
+        /// <summary>
+        /// update shipworks
+        /// </summary>
+        /// <returns></returns>
         Result Update(Version version);
 
         /// <summary>

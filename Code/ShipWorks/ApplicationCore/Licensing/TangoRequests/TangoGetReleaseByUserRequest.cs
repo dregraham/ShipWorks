@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Reflection;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Utility;
@@ -13,16 +14,35 @@ namespace ShipWorks.ApplicationCore.Licensing.TangoRequests
     {
         private readonly IHttpRequestSubmitterFactory requestSubmitterFactory;
         private readonly ITangoWebRequestClient webRequestClient;
+        private readonly ITangoWebClient tangoWebClient;
 
         /// <summary>
         /// Constructor
         /// </summary>
         public TangoGetReleaseByUserRequest(
             IHttpRequestSubmitterFactory requestSubmitterFactory,
-            ITangoWebRequestClient webRequestClient)
+            ITangoWebRequestClient webRequestClient,
+            ITangoWebClient tangoWebClient)
         {
+            this.tangoWebClient = tangoWebClient;
             this.webRequestClient = webRequestClient;
             this.requestSubmitterFactory = requestSubmitterFactory;
+        }
+
+        /// <summary>
+        /// Get release info for the current customer
+        /// </summary>
+        public GenericResult<ShipWorksReleaseInfo> GetReleaseInfo()
+        {
+            string customerID = tangoWebClient.GetTangoCustomerId();
+            if (string.IsNullOrEmpty(customerID))
+            {
+                throw new InvalidOperationException("Could not retrieve customer id");
+            }
+
+            Version currentVersion = Assembly.GetExecutingAssembly().GetName().Version;
+
+            return GetReleaseInfo(customerID, currentVersion);
         }
 
         /// <summary>
