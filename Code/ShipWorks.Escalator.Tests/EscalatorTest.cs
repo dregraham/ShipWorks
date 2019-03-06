@@ -1,12 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Autofac.Extras.Moq;
 using Interapptive.Shared.AutoUpdate;
 using Moq;
-using Newtonsoft.Json;
 using ShipWorks.Tests.Shared;
 using Xunit;
 

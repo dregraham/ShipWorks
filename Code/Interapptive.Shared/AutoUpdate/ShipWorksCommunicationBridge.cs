@@ -18,7 +18,7 @@ namespace Interapptive.Shared.AutoUpdate
         public event DelegateMessage OnMessage;
         private readonly string instance;
         private readonly ILog log;
-        private NamedPipeClientStream updaterPipe;
+        private readonly NamedPipeClientStream updaterPipe;
 
         /// <summary>
         /// Constructor
@@ -27,6 +27,7 @@ namespace Interapptive.Shared.AutoUpdate
         {
             this.instance = instance;
             log = logFactory(GetType());
+            
             updaterPipe = new NamedPipeClientStream(".", instance, PipeDirection.Out);
         }
 
@@ -134,7 +135,7 @@ namespace Interapptive.Shared.AutoUpdate
             }
 
             // Kill original sever and create new wait server
-            pipeServer?.Dispose();
+            pipeServer.Dispose();
 
             StartPipeServer();
         }
