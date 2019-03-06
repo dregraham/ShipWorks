@@ -30,7 +30,7 @@ namespace ShipWorks.Escalator
         {
             try
             {
-                var details = new UpgradeDetails { UpgradingTo = upgradingToVersion };
+                var details = new UpgradeDetails { UpgradingToVersion = upgradingToVersion };
                 var serializedDetails = SerializationUtility.SerializeToXml(details);
                 File.WriteAllText(Path.Combine(EscalatorDataPath.InstanceRoot, "upgradeDetails.xml"), serializedDetails);
             }
