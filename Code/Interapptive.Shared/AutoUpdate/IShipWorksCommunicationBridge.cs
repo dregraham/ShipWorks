@@ -14,5 +14,10 @@
         /// Generate a new pipe server and wait for connections
         /// </summary>
         void StartPipeServer();
+        
+        /// <summary>
+        /// Send a message that auto update is starting
+        /// </summary>
+        void SendAutoUpdateStartMessage();
     }
 }

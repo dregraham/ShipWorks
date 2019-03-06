@@ -17,6 +17,7 @@ namespace Interapptive.Shared.AutoUpdate
         public event DelegateMessage OnMessage;
         private string instance;
         private readonly ILog log;
+        private NamedPipeServerStream pipeServer;
 
         /// <summary>
         /// Constructor
@@ -35,21 +36,29 @@ namespace Interapptive.Shared.AutoUpdate
             PipeSecurity pipeSecurity = new PipeSecurity();
             pipeSecurity.AddAccessRule(new PipeAccessRule(@"Everyone", PipeAccessRights.ReadWrite, AccessControlType.Allow));
 
-            NamedPipeServerStream pipeServer =
-                new NamedPipeServerStream(
-                    instance,
-                    PipeDirection.In,
-                    1,
-                    PipeTransmissionMode.Byte,
-                    PipeOptions.Asynchronous,
-                    255,
-                    0,
-                    pipeSecurity);
+            pipeServer = new NamedPipeServerStream(
+                instance,
+                PipeDirection.InOut,
+                1,
+                PipeTransmissionMode.Byte,
+                PipeOptions.Asynchronous,
+                255,
+                0,
+                pipeSecurity);
 
             log.DebugFormat("Starting named pipe server {0}", instance);
 
             pipeServer.BeginWaitForConnection(
                    new AsyncCallback(WaitForConnectionCallBack), pipeServer);
+        }
+
+        /// <summary>
+        /// Generate a new pipe server and wait for connections
+        /// </summary>
+        public void SendAutoUpdateStartMessage()
+        {
+            string message = "KillMe";
+            pipeServer.Write(Encoding.UTF8.GetBytes(message), 0, message.Length);
         }
 
         /// <summary>
