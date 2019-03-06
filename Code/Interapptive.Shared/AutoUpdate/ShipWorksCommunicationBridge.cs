@@ -27,6 +27,7 @@ namespace Interapptive.Shared.AutoUpdate
         {
             this.instance = instance;
             log = logFactory(GetType());
+            updaterPipe = new NamedPipeClientStream(".", instance, PipeDirection.Out);
         }
 
         /// <summary>
@@ -56,14 +57,12 @@ namespace Interapptive.Shared.AutoUpdate
         /// Generate a new pipe server and wait for connections
         /// </summary>
         public void SendAutoUpdateStartMessage() => SendMessage("KillMe");
-        
+
         /// <summary>
         /// Send a message
         /// </summary>
         public Result SendMessage(string message)
         {
-            updaterPipe = new NamedPipeClientStream(".", instance, PipeDirection.Out);
-
             if (IsAvailable())
             {
                 try
@@ -144,7 +143,7 @@ namespace Interapptive.Shared.AutoUpdate
 
             StartPipeServer();
         }
-        
+
         /// <summary>
         /// Dispose
         /// </summary>
