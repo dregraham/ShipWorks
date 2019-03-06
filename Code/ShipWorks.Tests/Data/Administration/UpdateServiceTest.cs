@@ -1,12 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IO;
 using System.IO.Pipes;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Autofac.Extras.Moq;
-using log4net;
 using ShipWorks.ApplicationCore;
 using ShipWorks.Data.Administration;
 using ShipWorks.Escalator;
@@ -29,6 +23,9 @@ namespace ShipWorks.Tests.Data.Administration
 
             var session = mock.Mock<IShipWorksSession>();
             session.SetupGet(s => s.InstanceID).Returns(sessionGuid);
+
+            var dataPath = mock.Mock<IDataPath>();
+            dataPath.SetupGet(d => d.InstanceSettings).Returns(string.Empty);
 
             testObject = mock.Create<UpdateService>();
         }

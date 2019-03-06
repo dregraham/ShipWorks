@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Interapptive.Shared.AutoUpdate;
 
 namespace ShipWorks.Escalator
 {

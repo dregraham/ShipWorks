@@ -23,6 +23,17 @@ namespace ShipWorks.ApplicationCore.Licensing.TangoRequests
         public string Hash { get; set; }
 
         /// <summary>
+        /// Release version
+        /// </summary>
+        [XmlElement("ReleaseVersion")]
+        public string ReleaseVersionString { get; set; }
+
+        /// <summary>
+        /// Release version
+        /// </summary>
+        public Version ReleaseVersion => new Version(ReleaseVersionString);
+
+        /// <summary>
         /// Release notes
         /// </summary>
         [XmlElement("ReleaseNotes")]
@@ -32,6 +43,11 @@ namespace ShipWorks.ApplicationCore.Licensing.TangoRequests
         /// Minimum allowed version of ShipWorks
         /// </summary>
         [XmlElement("MinAllowedReleaseVersion")]
-        public Version MinAllowedReleaseVersion { get; set; }
+        public string MinAllowedReleaseVersionString { get; set; }
+
+        /// <summary>
+        /// Minimum allowed version of ShipWorks
+        /// </summary>
+        public Version MinAllowedReleaseVersion => new Version(MinAllowedReleaseVersionString);
     }
 }

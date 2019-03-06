@@ -8,6 +8,7 @@ using log4net;
 using log4net.Config;
 using ShipWorks.Escalator.ApplicationCore;
 using Autofac;
+using Interapptive.Shared.AutoUpdate;
 
 namespace ShipWorks.Escalator
 {
@@ -19,7 +20,7 @@ namespace ShipWorks.Escalator
         static ILog log;
         static string serviceName;
         static Guid instanceId;
-        
+
         /// <summary>
         /// The main entry point for the application.
         /// </summary>
@@ -35,7 +36,7 @@ namespace ShipWorks.Escalator
             }
 
             string parameter = string.Concat(args);
-            
+
             SetupLogging(parameter);
 
             // The service is calling itself via the installer, so we may have a parameter and
@@ -44,6 +45,7 @@ namespace ShipWorks.Escalator
             switch (parameter)
             {
                 case "--launchshipworks":
+                    AutoUpdateStatusProvider.CloseSplashScreen();
                     ShipWorksLauncher.StartShipWorks();
                     break;
 
@@ -67,6 +69,7 @@ namespace ShipWorks.Escalator
                     }
                     break;
             }
+
         }
 
         /// <summary>
@@ -103,7 +106,7 @@ namespace ShipWorks.Escalator
                 ManagedInstallerClass.InstallHelper(new string[] { "/u", "/LogFile=", typeof(Program).Assembly.Location });
             }
         }
-        
+
         /// <summary>
         /// Stops the service exists and is currently running
         /// </summary>
@@ -163,7 +166,7 @@ namespace ShipWorks.Escalator
         }
 
         /// <summary>
-        /// Set service to restart the service in 1 minute if it crashes 
+        /// Set service to restart the service in 1 minute if it crashes
         /// </summary>
         static void SetRecoveryOptions(string serviceName)
         {

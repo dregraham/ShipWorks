@@ -21,6 +21,7 @@ using Divelements.SandGrid;
 using Divelements.SandRibbon;
 using ICSharpCode.SharpZipLib.Zip;
 using Interapptive.Shared;
+using Interapptive.Shared.AutoUpdate;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.Data;
 using Interapptive.Shared.Extensions;
@@ -307,19 +308,19 @@ namespace ShipWorks
         /// <returns>true if we kicked off the auto update process</returns>
         private bool AutoUpdate()
         {
-            if (SqlSession.IsConfigured && SqlSession.Current.CanConnect())
+            if (SqlSession.IsConfigured)
             {
-                Version databaseVersion = SqlSchemaUpdater.GetInstalledSchemaVersion();
-
-                if (databaseVersion > SqlSchemaUpdater.GetRequiredSchemaVersion())
+                using (ILifetimeScope scope = IoC.BeginLifetimeScope())
                 {
-                    using (IUpdateService updateService = IoC.UnsafeGlobalLifetimeScope.Resolve<IUpdateService>())
+                    IUpdateService updateService = scope.Resolve<IUpdateService>();
+                    Result result = updateService.TryUpdate();
+
+                    if (result.Failure && !string.IsNullOrWhiteSpace(result.Message))
                     {
-                        if (updateService.IsAvailable() && updateService.Update(databaseVersion).Success)
-                        {
-                            return true;
-                        }
+                        MessageHelper.ShowError(this, result.Message);
                     }
+
+                    return result.Success;
                 }
             }
 
@@ -332,6 +333,8 @@ namespace ShipWorks
         [NDependIgnoreLongMethod]
         private void OnLoad(object sender, EventArgs e)
         {
+            AutoUpdateStatusProvider.CloseSplashScreen();
+
             log.Info("Loading main application window.");
 
             DataProvider.InitializeForApplication();

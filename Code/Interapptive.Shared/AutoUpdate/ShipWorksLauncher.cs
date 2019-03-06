@@ -1,10 +1,11 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using log4net;
 
-namespace ShipWorks.Escalator
+namespace Interapptive.Shared.AutoUpdate
 {
     /// <summary>
     /// Launch ShipWorks
@@ -72,6 +73,7 @@ namespace ShipWorks.Escalator
 
         #region DllImports
 
+        [NDependIgnoreTooManyParamsAttribute]
         [DllImport("advapi32.dll", EntryPoint = "CreateProcessAsUser", SetLastError = true, CharSet = CharSet.Ansi, CallingConvention = CallingConvention.StdCall)]
         private static extern bool CreateProcessAsUser(
             IntPtr hToken,
@@ -86,6 +88,7 @@ namespace ShipWorks.Escalator
             ref STARTUPINFO lpStartupInfo,
             out PROCESS_INFORMATION lpProcessInformation);
 
+        [NDependIgnoreTooManyParamsAttribute]
         [DllImport("advapi32.dll", EntryPoint = "DuplicateTokenEx")]
         private static extern bool DuplicateTokenEx(
             IntPtr ExistingTokenHandle,
@@ -155,6 +158,8 @@ namespace ShipWorks.Escalator
             WTSInit
         }
 
+        [SuppressMessage("SonarQube", "S3459:Remove unassigned field",
+            Justification = "This is a known issue with Sonar https://github.com/SonarSource/sonar-dotnet/issues/2236")]
         [StructLayout(LayoutKind.Sequential)]
         private struct PROCESS_INFORMATION
         {
@@ -201,6 +206,8 @@ namespace ShipWorks.Escalator
             TokenImpersonation = 2
         }
 
+        [SuppressMessage("SonarQube", "S3459:Remove unassigned field",
+            Justification = "This is a known issue with Sonar https://github.com/SonarSource/sonar-dotnet/issues/2236")]
         [StructLayout(LayoutKind.Sequential)]
         private struct WTS_SESSION_INFO
         {
@@ -265,7 +272,7 @@ namespace ShipWorks.Escalator
         /// <summary>
         /// Start the given appPath as the current active user
         /// </summary>
-        private static bool StartProcessAsCurrentUser(string appPath, string cmdLine = null, string workDir = null, bool visible = true)
+        public static bool StartProcessAsCurrentUser(string appPath, string cmdLine = null, string workDir = null, bool visible = true)
         {
             var userToken = IntPtr.Zero;
             var startInfo = new STARTUPINFO();

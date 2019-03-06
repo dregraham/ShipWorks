@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Management;
 using System.Reflection;
+using Interapptive.Shared.AutoUpdate;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
 using log4net;
@@ -18,15 +19,17 @@ namespace ShipWorks.Escalator
     {
         private readonly ILog log;
         private readonly IServiceName serviceName;
+        private readonly IAutoUpdateStatusProvider autoUpdateStatusProvider;
         private bool relaunchShipWorks;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public ShipWorksInstaller(Func<Type, ILog> logFactory, IServiceName serviceName)
+        public ShipWorksInstaller(Func<Type, ILog> logFactory, IServiceName serviceName, IAutoUpdateStatusProvider autoUpdateStatusProvider)
         {
             log = logFactory(GetType());
             this.serviceName = serviceName;
+            this.autoUpdateStatusProvider = autoUpdateStatusProvider;
         }
 
         /// <summary>
@@ -60,6 +63,13 @@ namespace ShipWorks.Escalator
                 }
 
                 process.Kill();
+            }
+
+            if (relaunchShipWorks)
+            {
+                // Show the splash screen to give users feedback that the update
+                // is kicking off
+                autoUpdateStatusProvider.ShowSplashScreen(serviceName.GetInstanceID().ToString("B"));
             }
         }
 
@@ -102,6 +112,7 @@ namespace ShipWorks.Escalator
             int exitCode;
 
             log.Info("Starting Install Process");
+            autoUpdateStatusProvider.UpdateStatus("Installing Update");
             using (Process proc = Process.Start(start))
             {
                 log.Info("Waiting for install to finish");
