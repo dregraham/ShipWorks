@@ -54,7 +54,7 @@ namespace ShipWorks.Escalator
                     return;
                 }
 
-                await Install(shipWorksRelease, false).ConfigureAwait(false);
+                await Install(shipWorksRelease, false, false).ConfigureAwait(false);
             }
             catch (Exception ex)
             {
@@ -90,7 +90,7 @@ namespace ShipWorks.Escalator
 
                 log.InfoFormat("New Version {0} found. Attempting upgrade.", shipWorksRelease.ReleaseVersion);
 
-                await Install(shipWorksRelease, true).ConfigureAwait(false);
+                await Install(shipWorksRelease, true, true).ConfigureAwait(false);
             }
             catch (Exception ex)
             {
@@ -101,7 +101,7 @@ namespace ShipWorks.Escalator
         /// <summary>
         /// Install new version of ShipWorks, optionally upgrading the database
         /// </summary>
-        private async Task Install(ShipWorksRelease shipWorksRelease, bool upgradeDatabase)
+        private async Task Install(ShipWorksRelease shipWorksRelease, bool upgradeDatabase, bool killShipWorksUI)
         {
             if (IsInstallRunning(shipWorksRelease.DownloadUri))
             {
@@ -113,7 +113,7 @@ namespace ShipWorks.Escalator
                 InstallFile newVersion = await updaterWebClient.Download(shipWorksRelease.DownloadUri, shipWorksRelease.Hash).ConfigureAwait(false);
 
                 log.Info("Attempting to install new version");
-                Result installationResult = shipWorksInstaller.Install(newVersion, upgradeDatabase);
+                Result installationResult = shipWorksInstaller.Install(newVersion, upgradeDatabase, true);
                 if (installationResult.Failure)
                 {
                     log.ErrorFormat("An error occured while installing the new version of ShipWorks: {0}", installationResult.Message);

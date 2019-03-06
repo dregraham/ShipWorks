@@ -21,7 +21,7 @@ namespace ShipWorks.Escalator
         private readonly ILog log;
         private readonly IServiceName serviceName;
         private readonly IAutoUpdateStatusProvider autoUpdateStatusProvider;
-        private readonly Func<string, ShipWorksCommunicationBridge> communicationBridgeFactory;
+        private readonly Func<string, IShipWorksCommunicationBridge> communicationBridgeFactory;
         private bool relaunchShipWorks;
 
         /// <summary>
@@ -31,7 +31,7 @@ namespace ShipWorks.Escalator
             Func<Type, ILog> logFactory,
             IServiceName serviceName,
             IAutoUpdateStatusProvider autoUpdateStatusProvider,
-            Func<string, ShipWorksCommunicationBridge> communicationBridgeFactory)
+            Func<string, IShipWorksCommunicationBridge> communicationBridgeFactory)
         {
             log = logFactory(GetType());
             this.serviceName = serviceName;
@@ -42,7 +42,7 @@ namespace ShipWorks.Escalator
         /// <summary>
         /// Installs ShipWorks
         /// </summary>
-        public Result Install(InstallFile file, bool upgradeDatabase)
+        public Result Install(InstallFile file, bool upgradeDatabase, bool killShipWorksUI)
         {
             log.Info("Starting Install");
             if (!file.IsValid())
@@ -52,7 +52,11 @@ namespace ShipWorks.Escalator
             }
             log.InfoFormat("Install {0} file validated", file.Path);
 
-            KillShipWorks();
+            if (killShipWorksUI)
+            {
+                KillShipWorks();
+            }
+
             return RunSetup(file, upgradeDatabase);
         }
 
