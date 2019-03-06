@@ -165,7 +165,7 @@ namespace ShipWorks.Data.Administration
         /// </summary>
         private void OnAutoUpdateStartmessage(string message, IMainForm mainForm)
         {
-            if (!message.StartsWith("KillMe"))
+            if (!message.StartsWith("CloseShipWorks"))
             {
                 return;
             }

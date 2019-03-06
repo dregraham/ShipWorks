@@ -54,11 +54,6 @@ namespace Interapptive.Shared.AutoUpdate
         }
 
         /// <summary>
-        /// Generate a new pipe server and wait for connections
-        /// </summary>
-        public void SendAutoUpdateStartMessage() => SendMessage("KillMe");
-
-        /// <summary>
         /// Send a message
         /// </summary>
         public Result SendMessage(string message)

@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Management;
 using System.Reflection;
+using System.Timers;
 using Interapptive.Shared.AutoUpdate;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
@@ -20,16 +21,22 @@ namespace ShipWorks.Escalator
         private readonly ILog log;
         private readonly IServiceName serviceName;
         private readonly IAutoUpdateStatusProvider autoUpdateStatusProvider;
+        private readonly Func<string, ShipWorksCommunicationBridge> communicationBridgeFactory;
         private bool relaunchShipWorks;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public ShipWorksInstaller(Func<Type, ILog> logFactory, IServiceName serviceName, IAutoUpdateStatusProvider autoUpdateStatusProvider)
+        public ShipWorksInstaller(
+            Func<Type, ILog> logFactory,
+            IServiceName serviceName,
+            IAutoUpdateStatusProvider autoUpdateStatusProvider,
+            Func<string, ShipWorksCommunicationBridge> communicationBridgeFactory)
         {
             log = logFactory(GetType());
             this.serviceName = serviceName;
             this.autoUpdateStatusProvider = autoUpdateStatusProvider;
+            this.communicationBridgeFactory = communicationBridgeFactory;
         }
 
         /// <summary>
@@ -54,23 +61,52 @@ namespace ShipWorks.Escalator
         /// </summary>
         private void KillShipWorks()
         {
-            foreach (Process process in Process.GetProcessesByName("shipworks"))
+            if (Process.GetProcessesByName("shipworks").Where(p => IsRunningWithoutArguments(p)).Any())
             {
-                // The process has a main window, so we should relaunch
-                if (IsRunningWithoutArguments(process))
+                relaunchShipWorks = true;
+
+                // show the splash screen and patiently wait to see if shipworks closes
+                ShowSplashScreenAndAttemptToCloseShipWorks(30000);
+
+                // at 60 seconds if shipworks has not closed kill it
+                Timer killShipWorksTimer = new Timer(60000);
+                killShipWorksTimer.Elapsed += (a, b) =>
                 {
-                    relaunchShipWorks = true;
-                }
-
-                process.Kill();
+                    foreach (Process process in Process.GetProcessesByName("shipworks").Where(p => IsRunningWithoutArguments(p)))
+                    {
+                        process.Kill();
+                    }
+                };
             }
+        }
 
-            if (relaunchShipWorks)
+        /// <summary>
+        /// Show the splash screen with a countdown, after the countdown attempt to close shipworks
+        /// </summary>
+        private void ShowSplashScreenAndAttemptToCloseShipWorks(int countDown)
+        {
+            // Show the splash screen to give users feedback that the update
+            // is kicking off
+            autoUpdateStatusProvider.ShowSplashScreen(serviceName.GetInstanceID().ToString("B"));
+
+            int timeRemaining = countDown;
+            Timer countDownTimer = new Timer(1000);
+            countDownTimer.Elapsed += (a, b) =>
             {
-                // Show the splash screen to give users feedback that the update
-                // is kicking off
-                autoUpdateStatusProvider.ShowSplashScreen(serviceName.GetInstanceID().ToString("B"));
-            }
+                if (timeRemaining < 0)
+                {
+                    // once the countdown has elapsed stop the timer, update the status on the splash
+                    // screen and then ask shipworks to close
+                    countDownTimer.Stop();
+                    autoUpdateStatusProvider.UpdateStatus("Installing Update");
+                    communicationBridgeFactory("AutoUpdateStart").SendMessage("CloseShipWorks");
+                }
+                else
+                {
+                    autoUpdateStatusProvider.UpdateStatus($"ShipWorks automatically close in {timeRemaining} seconds.");
+                    timeRemaining -= 1;
+                }
+            };
         }
 
         /// <summary>
