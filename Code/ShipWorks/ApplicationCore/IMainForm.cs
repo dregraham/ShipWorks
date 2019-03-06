@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
 using System.Windows.Forms;
 using ShipWorks.Settings;
 using ShipWorks.Templates.Printing;
@@ -49,5 +50,15 @@ namespace ShipWorks.ApplicationCore
         /// Start the printing or previewing of the given print job
         /// </summary>
         void StartPrintJob(IPrintJob job, PrintAction action);
+
+        /// <summary>
+        /// Close the main form
+        /// </summary>
+        void Close();
+
+        /// <summary>
+        /// BeinInvoke
+        /// </summary>
+        IAsyncResult BeginInvoke(Delegate method);
     }
 }

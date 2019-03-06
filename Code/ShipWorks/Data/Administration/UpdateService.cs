@@ -2,6 +2,8 @@
 using System.IO;
 using System.IO.Pipes;
 using System.Text;
+using System.Timers;
+using System.Windows.Forms;
 using Interapptive.Shared.AutoUpdate;
 using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore;
@@ -20,9 +22,12 @@ namespace ShipWorks.Data.Administration
     {
         private string UpdateInProgressFilePath;
         private NamedPipeClientStream updaterPipe;
+        private IMainForm mainForm;
+        private IShipWorksCommunicationBridge autoUpdateStartPipe;
         private readonly IAutoUpdateStatusProvider autoUpdateStatusProvider;
         private readonly ISqlSession sqlSession;
         private readonly ITangoGetReleaseByCustomerRequest tangoGetReleaseByCustomerRequest;
+        private readonly Func<string, IShipWorksCommunicationBridge> communicationBridgeFactory;
 
         /// <summary>
         /// Constructor
@@ -32,12 +37,14 @@ namespace ShipWorks.Data.Administration
             IAutoUpdateStatusProvider autoUpdateStatusProvider,
             ISqlSession sqlSession,
             ITangoGetReleaseByCustomerRequest tangoGetReleaseByCustomerRequest,
+            Func<string, IShipWorksCommunicationBridge> communicationBridgeFactory,
             IDataPath dataPath)
         {
             updaterPipe = new NamedPipeClientStream(".", shipWorksSession.InstanceID.ToString(), PipeDirection.Out);
             this.autoUpdateStatusProvider = autoUpdateStatusProvider;
             this.sqlSession = sqlSession;
             this.tangoGetReleaseByCustomerRequest = tangoGetReleaseByCustomerRequest;
+            this.communicationBridgeFactory = communicationBridgeFactory;
             UpdateInProgressFilePath = Path.Combine(dataPath.InstanceSettings, "UpdateInProcess.txt");
         }
 
@@ -184,6 +191,59 @@ namespace ShipWorks.Data.Administration
             }
 
             return Result.FromError("Could not connect to update service.");
+        }
+
+        /// <summary>
+        /// Listen for an auto update starting message
+        /// </summary>
+        public void ListenForAutoUpdateStart(IMainForm mainForm)
+        {
+            autoUpdateStartPipe = communicationBridgeFactory("AutoUpdateStart");
+            autoUpdateStartPipe.OnMessage += (s) => OnAutoUpdateStartmessage(s, mainForm);
+
+            autoUpdateStartPipe.StartPipeServer();
+        }
+
+        /// <summary>
+        /// Handle shipworks auto update starting
+        /// </summary>
+        private void OnAutoUpdateStartmessage(string message, IMainForm mainForm)
+        {
+            if (!message.StartsWith("KillMe"))
+            {
+                return;
+            }
+
+            if (!mainForm.AdditionalFormsOpen())
+            {
+                if (mainForm.InvokeRequired)
+                {
+                    mainForm.BeginInvoke(new MethodInvoker(mainForm.Close));
+                } else
+                {
+                    mainForm.Close();
+                }
+            }
+            else
+            {
+               var timer = new System.Timers.Timer();
+                timer.Elapsed += (a, b) =>
+                {
+                    if (!mainForm.AdditionalFormsOpen())
+                    {
+                        if (mainForm.InvokeRequired)
+                        {
+                            mainForm.BeginInvoke(new MethodInvoker(mainForm.Close));
+                        }
+                        else
+                        {
+                            mainForm.Close();
+                        }
+                    }
+                };
+                timer.Interval = 2000;
+                timer.Start();
+            }
         }
 
         /// <summary>

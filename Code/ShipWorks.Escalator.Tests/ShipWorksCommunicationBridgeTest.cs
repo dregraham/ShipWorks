@@ -1,5 +1,6 @@
 ﻿using System;
 using Autofac.Extras.Moq;
+using Interapptive.Shared.AutoUpdate;
 using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore;
 using ShipWorks.Data.Administration;

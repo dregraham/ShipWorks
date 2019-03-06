@@ -1,4 +1,4 @@
-﻿namespace ShipWorks.Escalator
+﻿namespace Interapptive.Shared.AutoUpdate
 {
     /// <summary>
     /// Bridge for the ShipWorks exe to communicate with the ShipWorks Escalator service

@@ -5,7 +5,7 @@ using System.Text;
 using Interapptive.Shared.ComponentRegistration;
 using log4net;
 
-namespace ShipWorks.Escalator
+namespace Interapptive.Shared.AutoUpdate
 {
     /// <summary>
     /// Bridge for the ShipWorks exe to communicate with the ShipWorks Escalator service
@@ -21,9 +21,9 @@ namespace ShipWorks.Escalator
         /// <summary>
         /// Constructor
         /// </summary>
-        public ShipWorksCommunicationBridge(IServiceName serviceName, Func<Type, ILog> logFactory)
+        public ShipWorksCommunicationBridge(string instance, Func<Type, ILog> logFactory)
         {
-            instance = serviceName.GetInstanceID().ToString();
+            this.instance = instance;
             log = logFactory(GetType());
         }
 
@@ -80,7 +80,7 @@ namespace ShipWorks.Escalator
                 {
                     // Pass message back to calling form
                     OnMessage?.Invoke(stringData.Trim());
-                }                
+                }
             }
             catch (Exception ex)
             {

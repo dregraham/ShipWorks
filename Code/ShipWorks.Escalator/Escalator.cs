@@ -21,14 +21,14 @@ namespace ShipWorks.Escalator
         /// <summary>
         /// Constructor
         /// </summary>
-        public Escalator(IServiceName serviceName, 
-            IShipWorksUpgrade shipWorksUpgrade, 
-            IShipWorksCommunicationBridge communicationBridge, 
+        public Escalator(IServiceName serviceName,
+            IShipWorksUpgrade shipWorksUpgrade,
+            Func<string, IShipWorksCommunicationBridge> communicationBridgeFactory,
             IUpgradeTimeWindow upgradeTimeWindow,
             Func<Type, ILog> logFactory)
         {
             this.shipWorksUpgrade = shipWorksUpgrade;
-            this.communicationBridge = communicationBridge;
+            this.communicationBridge = communicationBridgeFactory(serviceName.GetInstanceID().ToString());
             this.upgradeTimeWindow = upgradeTimeWindow;
             this.serviceName = serviceName;
             log = logFactory(GetType());
