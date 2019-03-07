@@ -4,6 +4,7 @@ using System.IO.Pipes;
 using System.Text;
 using System.Timers;
 using System.Windows.Forms;
+using Interapptive.Shared;
 using Interapptive.Shared.AutoUpdate;
 using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore;
@@ -31,6 +32,7 @@ namespace ShipWorks.Data.Administration
         /// <summary>
         /// Constructor
         /// </summary>
+        [NDependIgnoreTooManyParamsAttribute]
         public UpdateService(
             IShipWorksSession shipWorksSession,
             IAutoUpdateStatusProvider autoUpdateStatusProvider,
@@ -126,7 +128,7 @@ namespace ShipWorks.Data.Administration
                 return Result.FromError($"unable to write to {updateInProgressFilePath}.");
             }
 
-            IShipWorksCommunicationBridge communicationBridge = communicationBridgeFactory(shipWorksSession.InstanceID.ToString("B"));
+            IShipWorksCommunicationBridge communicationBridge = communicationBridgeFactory(shipWorksSession.InstanceID.ToString());
             Result result = communicationBridge.SendMessage(version.ToString());
 
             if (result.Success)
