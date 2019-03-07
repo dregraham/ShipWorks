@@ -8,10 +8,9 @@
         AllowsTransparency="True"
         WindowStartupLocation="CenterOwner"
         ResizeMode="NoResize"
-        Title="ShipWorks" 
-        Height="255" 
+        Title="ShipWorks"
+        Height="255"
         Width="505"
-        ShowInTaskbar="False"
         FontFamily="Tahoma"
         FontSize="12"
         Foreground="Gray">
@@ -24,11 +23,11 @@
             <RowDefinition Height="auto" />
             <RowDefinition Height="auto" />
         </Grid.RowDefinitions>
-        <TextBlock Background="Transparent"                  
+        <TextBlock Background="Transparent"
                    Text="ShipWorks is currently updating. Please wait."/>
         <TextBlock Margin="0 40 0 0">
-            <Run x:Name="Status"                 
+            <Run x:Name="Status"
                  Background="Transparent"/>
-        </TextBlock>        
+        </TextBlock>
     </Grid>
 </Window>

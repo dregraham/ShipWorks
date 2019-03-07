@@ -4,7 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Management;
 using System.Reflection;
-using System.Timers;
+using System.Threading;
 using Interapptive.Shared.AutoUpdate;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
@@ -57,12 +57,26 @@ namespace ShipWorks.Escalator
                 KillShipWorks();
             }
 
+            WaitForShipWorksUIToExit();
+
             return RunSetup(file, upgradeDatabase);
         }
 
         /// <summary>
-        /// Kill any instance of Shipworks running.
+        /// Wait for the UI to exit
         /// </summary>
+        private void WaitForShipWorksUIToExit()
+        {
+            while (Process.GetProcessesByName("shipworks").Where(p => IsRunningWithoutArguments(p)).Any())
+            {
+                Thread.Sleep(1000);
+            }
+        }
+
+        /// <summary>
+        /// Kill any instance of Shipworks UI running.
+        /// </summary>
+        /// <remarks>callback to invoke when shipworks is dead</remarks>
         private void KillShipWorks()
         {
             if (Process.GetProcessesByName("shipworks").Where(p => IsRunningWithoutArguments(p)).Any())
@@ -70,31 +84,33 @@ namespace ShipWorks.Escalator
                 relaunchShipWorks = true;
 
                 // show the splash screen and patiently wait to see if shipworks closes
-                ShowSplashScreenAndAttemptToCloseShipWorks(30000);
+                ShowSplashScreenAndAttemptToCloseShipWorks(30);
 
                 // at 60 seconds if shipworks has not closed kill it
-                Timer killShipWorksTimer = new Timer(60000);
+                var killShipWorksTimer = new System.Timers.Timer(60000);
                 killShipWorksTimer.Elapsed += (a, b) =>
                 {
                     foreach (Process process in Process.GetProcessesByName("shipworks").Where(p => IsRunningWithoutArguments(p)))
                     {
+                        log.Info($"Killing ShipWorks process.");
                         process.Kill();
                     }
                 };
+                killShipWorksTimer.Start();
             }
         }
 
         /// <summary>
         /// Show the splash screen with a countdown, after the countdown attempt to close shipworks
         /// </summary>
-        private void ShowSplashScreenAndAttemptToCloseShipWorks(int countDown)
+        private void ShowSplashScreenAndAttemptToCloseShipWorks(int countDownInSeconds)
         {
             // Show the splash screen to give users feedback that the update
             // is kicking off
             autoUpdateStatusProvider.ShowSplashScreen(serviceName.GetInstanceID().ToString("B"));
 
-            int timeRemaining = countDown;
-            Timer countDownTimer = new Timer(1000);
+            int timeRemaining = countDownInSeconds;
+            var countDownTimer = new System.Timers.Timer(1000);
             countDownTimer.Elapsed += (a, b) =>
             {
                 if (timeRemaining < 0)
@@ -103,14 +119,18 @@ namespace ShipWorks.Escalator
                     // screen and then ask shipworks to close
                     countDownTimer.Stop();
                     autoUpdateStatusProvider.UpdateStatus("Installing Update");
+                    log.Info($"Asking ShipWorks to close.");
                     communicationBridgeFactory("AutoUpdateStart").SendMessage("CloseShipWorks");
                 }
                 else
                 {
-                    autoUpdateStatusProvider.UpdateStatus($"ShipWorks automatically close in {timeRemaining} seconds.");
+                    autoUpdateStatusProvider.UpdateStatus($"ShipWorks will automatically close in {timeRemaining} seconds.");
+                    log.Info($"ShipWorks will automatically close in {timeRemaining} seconds.");
                     timeRemaining -= 1;
                 }
             };
+
+            countDownTimer.Start();
         }
 
         /// <summary>
