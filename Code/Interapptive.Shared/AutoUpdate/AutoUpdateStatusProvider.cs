@@ -4,7 +4,6 @@ using System.IO;
 using System.IO.Pipes;
 using System.Linq;
 using System.Reflection;
-using System.Security.AccessControl;
 using System.Security.Principal;
 using System.Text;
 using Interapptive.Shared.ComponentRegistration;
@@ -19,8 +18,7 @@ namespace Interapptive.Shared.AutoUpdate
     public class AutoUpdateStatusProvider : IAutoUpdateStatusProvider
     {
         private static readonly ILog log = LogManager.GetLogger(typeof(AutoUpdateStatusProvider));
-        private const string SplashScreenExe = "ShipWorks.SplashScreen";
-        private const string ProcessName = "ShipWorks.SplashScreen.temp";
+        private const string SplashScreenProcess = "ShipWorks.SplashScreen";
 
         /// <summary>
         /// Update the AutoUpdate status
@@ -46,7 +44,7 @@ namespace Interapptive.Shared.AutoUpdate
         /// </summary>
         public static void CloseSplashScreen()
         {
-            foreach (Process process in Process.GetProcessesByName(ProcessName))
+            foreach (Process process in Process.GetProcessesByName(SplashScreenProcess))
             {
                 try
                 {
@@ -68,7 +66,7 @@ namespace Interapptive.Shared.AutoUpdate
         /// </remarks>
         public void ShowSplashScreen(string instanceId)
         {
-            using (IDisposable process = Process.GetProcessesByName(ProcessName).FirstOrDefault())
+            using (IDisposable process = Process.GetProcessesByName(SplashScreenProcess).FirstOrDefault())
             {
                 if (process != null)
                 {
@@ -76,30 +74,26 @@ namespace Interapptive.Shared.AutoUpdate
                 }
             }
 
-            string existingFile = $"{SplashScreenExe}.exe";
-            string newFile = $"{SplashScreenExe}.temp.exe";
+            string existingFile = $"{SplashScreenProcess}.exe";
 
             string sourcePath = Path.Combine(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location), existingFile);
 
             string appData = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData);
-            string destinationPath = Path.Combine(appData, "Interapptive\\ShipWorks\\Instances", instanceId, newFile);
+            string destinationPath = Path.Combine(appData, "Interapptive\\ShipWorks\\Instances", instanceId, existingFile);
+
             File.Copy(sourcePath, destinationPath, true);
-
-            // Ensure the process can be accessed by anyone
-            FileSecurity fileSecurity = new FileSecurity();
-            fileSecurity.AddAccessRule(new FileSystemAccessRule("Everyone", FileSystemRights.FullControl, AccessControlType.Allow));
-
-            File.SetAccessControl(destinationPath, fileSecurity);
 
             using (WindowsIdentity identity = WindowsIdentity.GetCurrent())
             {
                 if (identity.IsSystem)
                 {
-                    ShipWorksLauncher.StartProcessAsCurrentUser(destinationPath);
+                    var result = ShipWorksLauncher.StartProcessAsCurrentUser(destinationPath);
+                }
+                else
+                {
+                    Process.Start(destinationPath);
                 }
             }
-
-            Process.Start(destinationPath);
         }
     }
 }

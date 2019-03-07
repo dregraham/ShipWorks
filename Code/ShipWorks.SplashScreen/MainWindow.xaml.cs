@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Diagnostics;
+using System.IO;
 using System.IO.Pipes;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Security.AccessControl;
+using System.Security.Principal;
 using System.Text;
 using System.Timers;
 using System.Windows;
@@ -87,12 +89,13 @@ namespace ShipWorks.SplashScreen
         {
             PipeSecurity pipeSecurity = new PipeSecurity();
             pipeSecurity.AddAccessRule(new PipeAccessRule(@"Everyone", PipeAccessRights.ReadWrite, AccessControlType.Allow));
+            pipeSecurity.AddAccessRule(new PipeAccessRule(WindowsIdentity.GetCurrent().Owner, PipeAccessRights.FullControl, AccessControlType.Allow));
 
             NamedPipeServerStream pipeServer =
                 new NamedPipeServerStream(
                     PipeName,
                     PipeDirection.In,
-                    1,
+                    10,
                     PipeTransmissionMode.Byte,
                     PipeOptions.Asynchronous,
                     255,
