@@ -3,42 +3,32 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:ShipWorks.SplashScreen"
         mc:Ignorable="d"
         WindowStyle="None"
         AllowsTransparency="True"
         WindowStartupLocation="CenterOwner"
         ResizeMode="NoResize"
-        Title="ShipWorks" Height="255" Width="505"
-        ShowInTaskbar="False">
+        Title="ShipWorks" 
+        Height="255" 
+        Width="505"
+        ShowInTaskbar="False"
+        FontFamily="Tahoma"
+        FontSize="12"
+        Foreground="Gray">
     <Window.Background>
-        <ImageBrush ImageSource="/ShipWorks.SplashScreen;component/background.png"></ImageBrush>
+        <ImageBrush ImageSource="/ShipWorks.SplashScreen;component/background.png"/>
     </Window.Background>
-    <Grid>
+    <Grid Margin="20 0 0 20"
+          VerticalAlignment="Bottom">
         <Grid.RowDefinitions>
-            <RowDefinition Height="*" />
-            <RowDefinition Height="60" />
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" />
         </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-        </Grid.ColumnDefinitions>
-        <StackPanel Grid.Row="1" Margin="20 0 0 10">
-            <TextBlock>
-                <Run Foreground="Gray"
-                     Background="Transparent"
-                     FontFamily="Tahoma"
-                     FontSize="12">
-                    ShipWorks is currently upgrading please wait
-                </Run>
-            </TextBlock>
-            <TextBlock Margin="5 5 0 0">
-                <Run x:Name="Status"
-                     Foreground="Gray"
-                     Background="Transparent"
-                     FontFamily="Tahoma"
-                     FontSize="12">
-                </Run>
-            </TextBlock>
-        </StackPanel>
-
+        <TextBlock Background="Transparent"                  
+                   Text="ShipWorks is currently updating. Please wait."/>
+        <TextBlock Margin="0 40 0 0">
+            <Run x:Name="Status"                 
+                 Background="Transparent"/>
+        </TextBlock>        
     </Grid>
 </Window>
