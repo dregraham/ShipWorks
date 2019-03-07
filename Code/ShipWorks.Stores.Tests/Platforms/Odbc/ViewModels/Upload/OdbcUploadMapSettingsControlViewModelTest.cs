@@ -248,6 +248,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.ViewModels.Upload
 
         [Theory]
         [InlineData(OdbcColumnSourceType.CustomQuery, false)]
+        [InlineData(OdbcColumnSourceType.CustomParameterizedQuery, false)]
         [InlineData(OdbcColumnSourceType.Table, true)]
         public void OpenMapSettingsFileCommand_SetsColumnSourceIsTable(OdbcColumnSourceType sourceType, bool isTable)
         {

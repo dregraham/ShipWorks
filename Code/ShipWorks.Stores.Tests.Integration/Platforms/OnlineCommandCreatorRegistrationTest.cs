@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using Autofac;
+using Autofac.Extras.Moq;
+using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Startup;
 using ShipWorks.Stores.Content;
@@ -32,6 +34,7 @@ using ShipWorks.Stores.Platforms.ThreeDCart.OnlineUpdating;
 using ShipWorks.Stores.Platforms.Volusion.OnlineUpdating;
 using ShipWorks.Stores.Platforms.Walmart.OnlineUpdating;
 using ShipWorks.Stores.Platforms.Yahoo.OnlineUpdating;
+using ShipWorks.Tests.Shared;
 using Xunit;
 
 namespace ShipWorks.Stores.Tests.Integration.Platforms
@@ -39,11 +42,19 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms
     [Trait("Category", "ContinuousIntegration")]
     public class OnlineCommandCreatorRegistrationTest : IDisposable
     {
-        readonly IContainer container;
+        private readonly AutoMock mock;
+        private readonly IContainer container;
 
         public OnlineCommandCreatorRegistrationTest()
         {
-            container = ContainerInitializer.Build();
+            mock = AutoMockExtensions.GetLooseThatReturnsMocks();
+
+            container = ContainerInitializer.Build(x =>
+            {
+                x.Register(c => mock.Build<ISqlSession>())
+                    .AsImplementedInterfaces()
+                    .ExternallyOwned();
+            });
         }
 
         /// <summary>

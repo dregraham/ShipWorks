@@ -35,8 +35,9 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Import
         private readonly Func<string, IOdbcColumnSource> columnSourceFactory;
         private readonly IOdbcDataSourceService dataSourceService;
 
-        private const string CustomQueryColumnSourceName = "Custom Import";
         private const string EmptyColumnName = "(None)";
+        private const string CustomQueryColumnSourceName = "Custom Import";
+
         private bool isSingleLineOrder = true;
         private int numberOfAttributesPerItem;
         private int numberOfItemsPerOrder;
@@ -84,22 +85,13 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Import
         public ObservableCollection<OdbcFieldMapDisplay> Items { get; set; }
 
         /// <summary>
-        /// Save Map Command
-        /// </summary>
-        /// <remarks>
-        /// selected table must not be null for it to be enabled
-        /// </remarks>
-        [Obfuscation(Exclude = true)]
-        public ICommand SaveMapCommand { get; private set; }
-
-        /// <summary>
         /// The columns from the selected external odbc table.
         /// </summary>
         [Obfuscation(Exclude = true)]
         public ObservableCollection<OdbcColumn> Columns
         {
-            get { return columns; }
-            set { handler.Set(nameof(Columns), ref columns, value); }
+            get => columns;
+            set => handler.Set(nameof(Columns), ref columns, value);
         }
 
         /// <summary>
@@ -108,8 +100,8 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Import
         [Obfuscation(Exclude = true)]
         public OdbcFieldMapDisplay SelectedFieldMap
         {
-            get { return selectedFieldMap; }
-            set { handler.Set(nameof(SelectedFieldMap), ref selectedFieldMap, value); }
+            get => selectedFieldMap;
+            set => handler.Set(nameof(SelectedFieldMap), ref selectedFieldMap, value);
         }
 
         /// <summary>
@@ -124,7 +116,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Import
         [Obfuscation(Exclude = true)]
         public bool IsSingleLineOrder
         {
-            get { return isSingleLineOrder; }
+            get => isSingleLineOrder;
             set
             {
                 if (value)
@@ -151,7 +143,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Import
         [Obfuscation(Exclude = true)]
         public int NumberOfItemsPerOrder
         {
-            get { return numberOfItemsPerOrder; }
+            get => numberOfItemsPerOrder;
             set
             {
                 Debug.Assert(IsSingleLineOrder || value == 1,
@@ -290,7 +282,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Import
             IsSingleLineOrder = store.ImportOrderItemStrategy == (int) OdbcImportOrderItemStrategy.SingleLine;
 
             // The store value may not be correct because this was introduced in v5.5, so just in case, correct it
-            // if, based on the map, it is not possibly a single line order (only 1 item per line and has a reccord identifier
+            // if, based on the map, it is not possibly a single line order (only 1 item per line and has a record identifier
             // that is not the order number).
             int calculatedNumberOfEntries = storeFieldMap.Entries.Select(e => e.Index).DefaultIfEmpty(0).Max() + 1;
 
@@ -377,15 +369,26 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Import
         private void LoadColumnSource(OdbcStoreEntity store)
         {
             IOdbcDataSource selectedDataSource = dataSourceService.GetImportDataSource(store);
-
-            string columnSourceName = store.ImportColumnSourceType == (int) OdbcColumnSourceType.Table
-                ? store.ImportColumnSource
-                : CustomQueryColumnSourceName;
+            
+            string columnSourceName = store.ImportColumnSourceType == (int) OdbcColumnSourceType.Table ?
+                store.ImportColumnSource :
+                CustomQueryColumnSourceName;
 
             IOdbcColumnSource columnSource = columnSourceFactory(columnSourceName);
 
-            columnSource.Load(selectedDataSource, store.ImportColumnSource,
-                (OdbcColumnSourceType) store.ImportColumnSourceType);
+            string source;
+            
+            if (store.ImportColumnSourceType == (int) OdbcColumnSourceType.CustomParameterizedQuery)
+            {
+                string testParameter = store.ImportStrategy == (int) OdbcImportStrategy.OnDemand ? "'0'" : "'1/1/2019'";
+                source = store.ImportColumnSource.Replace("?", testParameter);
+            }
+            else
+            {
+                source = store.ImportColumnSource;
+            }
+
+            columnSource.Load(selectedDataSource, source, (OdbcColumnSourceType) store.ImportColumnSourceType);
 
             ColumnSource = columnSource;
             Columns = new ObservableCollection<OdbcColumn>(ColumnSource.Columns);
@@ -417,7 +420,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Import
         public void Save(OdbcStoreEntity store)
         {
             MethodConditions.EnsureArgumentIsNotNull(store, nameof(store));
-            
+
             IOdbcFieldMap map = CreateMap();
             try
             {

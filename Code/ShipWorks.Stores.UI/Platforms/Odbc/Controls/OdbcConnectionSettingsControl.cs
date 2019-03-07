@@ -56,6 +56,8 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.Controls
                 {
                     scope.Resolve<OdbcImportDataSourcePage>(),
                     scope.Resolve<OdbcImportMapSettingsPage>(),
+                    scope.Resolve<OdbcImportSubqueryPage>(),
+                    scope.Resolve<OdbcImportParameterizedQueryPage>(),
                     scope.Resolve<OdbcImportMappingPage>(),
                     scope.Resolve<OdbcSetupFinishPage>()
                 };

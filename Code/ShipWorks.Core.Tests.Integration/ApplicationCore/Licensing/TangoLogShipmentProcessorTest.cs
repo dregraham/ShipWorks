@@ -46,9 +46,9 @@ namespace ShipWorks.Core.Tests.Integration.ApplicationCore.Licensing
                 .Save();
         }
 
-        //[Fact] 
+        //[Fact]
         // Skipping this for now until we can fix the deadlock...
-        public void EnforceCapabilities_Refresh_MakesTangoCallOnlyOnce_WhenAddedMoreThanOnce()
+        public async Task EnforceCapabilities_Refresh_MakesTangoCallOnlyOnce_WhenAddedMoreThanOnce()
         {
             testObject = context.Mock.Create<TangoLogShipmentProcessor>();
             testObject.InitializeForCurrentSession();
@@ -64,7 +64,7 @@ namespace ShipWorks.Core.Tests.Integration.ApplicationCore.Licensing
 
             testObject.Add(context.Store, shipment);
 
-            testObject.RunNow();
+            await testObject.Process().ConfigureAwait(false);
 
             tangoLogShipmentRequest.Verify(c => c.LogShipment(It.IsAny<DbConnection>(), AnyStore, AnyShipment), Times.Once);
         }

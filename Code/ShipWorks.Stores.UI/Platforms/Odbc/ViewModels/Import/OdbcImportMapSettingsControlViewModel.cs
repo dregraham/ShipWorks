@@ -23,35 +23,28 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Import
     public class OdbcImportMapSettingsControlViewModel : OdbcMapSettingsControlViewModel
     {
         private bool columnSourceIsTable = true;
+        private bool isSubquery = true; 
         private OdbcImportStrategy importStrategy = OdbcImportStrategy.ByModifiedTime;
         private OdbcImportOrderItemStrategy importOrderItemStrategy = OdbcImportOrderItemStrategy.SingleLine;
-        private readonly Func<string, IDialog> dialogFactory;
-        private readonly IOdbcSampleDataCommand sampleDataCommand;
         private IOdbcFieldMap fieldMap;
-        private const int NumberOfSampleResults = 25;
-        private bool isQueryValid;
         private readonly Func<IOpenFileDialog> openFileDialogFactory;
         private readonly IOdbcImportSettingsFile importSettingsFile;
+        private bool parameterizedQueryAllowed;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="OdbcImportMapSettingsControlViewModel"/> class.
         /// </summary>
-        public OdbcImportMapSettingsControlViewModel(Func<string, IDialog> dialogFactory,
-            IOdbcSampleDataCommand sampleDataCommand,
-            IMessageHelper messageHelper,
+        public OdbcImportMapSettingsControlViewModel(IMessageHelper messageHelper,
             Func<string, IOdbcColumnSource> columnSourceFactory,
             IOdbcFieldMap fieldMap,
             Func<IOpenFileDialog> openFileDialogFactory,
             IOdbcImportSettingsFile importSettingsFile) :
                 base(messageHelper, columnSourceFactory)
         {
-            this.dialogFactory = dialogFactory;
-            this.sampleDataCommand = sampleDataCommand;
             this.fieldMap = fieldMap;
             this.openFileDialogFactory = openFileDialogFactory;
             this.importSettingsFile = importSettingsFile;
             OpenMapSettingsFileCommand = new RelayCommand(OpenMapSettingsFile);
-            ExecuteQueryCommand = new RelayCommand(ExecuteQuery);
         }
 
         /// <summary>
@@ -66,19 +59,19 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Import
         [Obfuscation(Exclude = true)]
         public override bool ColumnSourceIsTable
         {
-            get { return columnSourceIsTable; }
+            get => columnSourceIsTable;
             set
             {
                 Handler.Set(nameof(ColumnSourceIsTable), ref columnSourceIsTable, value);
 
-                // Show warning dlg when query is selected
+                // Set query type to subquery query is selected
                 if (!value)
                 {
-                    IDialog warningDlg = dialogFactory("OdbcCustomQueryWarningDlg");
-                    warningDlg.ShowDialog();
+                    IsSubquery = true;   
                 }
 
                 ColumnSource = value ? SelectedTable : CustomQueryColumnSource;
+                ParameterizedQueryAllowed = !value && ImportStrategy != OdbcImportStrategy.All;
             }
         }
 
@@ -88,16 +81,57 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Import
         [Obfuscation(Exclude = true)]
         public OdbcImportStrategy ImportStrategy
         {
-            get { return importStrategy; }
-            set { Handler.Set(nameof(ImportStrategy), ref importStrategy, value); }
+            get => importStrategy;
+            set
+            {
+                Handler.Set(nameof(ImportStrategy), ref importStrategy, value);
+                
+                // Parameterized query is only allowed when not using all
+                ParameterizedQueryAllowed = value != OdbcImportStrategy.All && !ColumnSourceIsTable;
+                
+                // if the user changes their import strategy to all and they are using query, make sure we set it subquery
+                // since that is their only option
+                if (!ColumnSourceIsTable && value == OdbcImportStrategy.All)
+                {
+                    IsSubquery = true;
+                }
+            }
         }
+
+        /// <summary>
+        /// The stores import strategy
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public bool IsSubquery
+        {
+            get => isSubquery;
+            set => Handler.Set(nameof(IsSubquery), ref isSubquery, value);
+        }
+
+        /// <summary>
+        /// Whether or not a parameterized query is allowed
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public bool ParameterizedQueryAllowed
+        {
+            get => parameterizedQueryAllowed;
+            set => Handler.Set(nameof(ParameterizedQueryAllowed), ref parameterizedQueryAllowed, value);
+        }
+
+        /// <summary>
+        /// Info regarding the two query options
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public string QueryInfo =>
+            "When Subquery is selected, ShipWorks will use your query and filter the results based on the selected download option. \n\n" +
+            "When Parameterized Query is selected, ShipWorks will give you a parameter to use when writing your query, based on the selected download option. ShipWorks will run your query as is. " +
+            "This option is best for users who want full control over the import query or users whose ODBC Driver does not support subqueries.";
 
         /// <summary>
         /// Loads the map from disk.
         /// </summary>
         private void OpenMapSettingsFile()
         {
-
             IOpenFileDialog fileDialog = openFileDialogFactory();
             fileDialog.DefaultExt = importSettingsFile.Extension;
             fileDialog.Filter = importSettingsFile.Filter;
@@ -137,42 +171,22 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Import
         {
             store.ImportStrategy = (int) ImportStrategy;
 
-            store.ImportColumnSourceType = ColumnSourceIsTable ?
-                (int) OdbcColumnSourceType.Table :
-                (int) OdbcColumnSourceType.CustomQuery;
-
-            store.ImportColumnSource = ColumnSourceIsTable ?
-                SelectedTable?.Name :
-                CustomQuery;
+            if (ColumnSourceIsTable)
+            {
+                store.ImportColumnSourceType = (int) OdbcColumnSourceType.Table;
+                store.ImportColumnSource = SelectedTable?.Name;
+            }
+            else
+            {
+                store.ImportColumnSourceType = IsSubquery ?
+                    (int) OdbcColumnSourceType.CustomQuery :
+                    (int) OdbcColumnSourceType.CustomParameterizedQuery;
+            }
 
             store.ImportOrderItemStrategy = (int) importOrderItemStrategy;
 
             fieldMap.Name = MapName;
             store.ImportMap = fieldMap.Serialize();
-        }
-
-        /// <summary>
-        /// Validates the required map settings.
-        /// </summary>
-        public override bool ValidateRequiredMapSettings()
-        {
-            if (!base.ValidateRequiredMapSettings())
-            {
-                return false;
-            }
-
-            if (!ColumnSourceIsTable)
-            {
-                ExecuteQuery();
-
-                if (!isQueryValid)
-                {
-                    MessageHelper.ShowError("Please enter a valid query before continuing to the next page.");
-                    return false;
-                }
-            }
-
-            return true;
         }
 
         /// <summary>
@@ -186,6 +200,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Import
             ImportStrategy = (OdbcImportStrategy) store.ImportStrategy;
             
             ColumnSourceIsTable = store.ImportColumnSourceType == (int) OdbcColumnSourceType.Table;
+            IsSubquery = store.ImportColumnSourceType == (int) OdbcColumnSourceType.CustomQuery;
 
             importOrderItemStrategy = (OdbcImportOrderItemStrategy) store.ImportOrderItemStrategy;
         }
@@ -194,31 +209,5 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Import
         /// The column source name to use for custom query
         /// </summary>
         public override string CustomQueryColumnSourceName => "Custom Import";
-
-        /// <summary>
-        /// Executes the query.
-        /// </summary>
-        private void ExecuteQuery()
-        {
-            QueryResults = null;
-            ResultMessage = string.Empty;
-
-            try
-            {
-                QueryResults = sampleDataCommand.Execute(DataSource, CustomQuery, NumberOfSampleResults);
-
-                if (QueryResults.Rows.Count == 0)
-                {
-                    ResultMessage = "Query returned no results";
-                }
-
-                isQueryValid = true;
-            }
-            catch (ShipWorksOdbcException ex)
-            {
-                MessageHelper.ShowError(ex.Message);
-                isQueryValid = false;
-            }
-        }
     }
 }
