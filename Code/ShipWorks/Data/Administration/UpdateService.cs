@@ -104,7 +104,7 @@ namespace ShipWorks.Data.Administration
             }
 
             // Check see if the database has been updated and we need to update
-            if (databaseVersion > SqlSchemaUpdater.GetRequiredSchemaVersion())
+            if (databaseVersion > SqlSchemaUpdater.GetRequiredSchemaVersion() && !interapptiveOnly.DisableAutoUpdate)
             {
                 // need to update
                 return Update(databaseVersion);
