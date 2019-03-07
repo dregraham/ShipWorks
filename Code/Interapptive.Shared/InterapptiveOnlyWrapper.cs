@@ -14,6 +14,9 @@ namespace Interapptive.Shared
     [Component]
     public class InterapptiveOnlyWrapper : IInterapptiveOnly
     {
+        /// <summary>
+        /// Indicates if auto update is disabled.
+        /// </summary>
         public bool DisableAutoUpdate => InterapptiveOnly.DisableAutoUpdate;
     }
 }
