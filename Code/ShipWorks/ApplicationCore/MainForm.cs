@@ -333,7 +333,7 @@ namespace ShipWorks
         [NDependIgnoreLongMethod]
         private void OnLoad(object sender, EventArgs e)
         {
-            AutoUpdateStatusProvider.CloseSplashScreen();
+            new AutoUpdateStatusProvider().CloseSplashScreen();
 
             log.Info("Loading main application window.");
 

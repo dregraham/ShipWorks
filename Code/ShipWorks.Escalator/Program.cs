@@ -45,8 +45,8 @@ namespace ShipWorks.Escalator
             switch (parameter)
             {
                 case "--launchshipworks":
-                    AutoUpdateStatusProvider.CloseSplashScreen();
-                    ShipWorksLauncher.StartShipWorks();
+                    new AutoUpdateStatusProvider().CloseSplashScreen();
+                    new ShipWorksLauncher().StartShipWorks();
                     break;
 
                 case "--install":
