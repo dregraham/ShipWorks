@@ -27,7 +27,7 @@ namespace Interapptive.Shared.AutoUpdate
         {
             this.instance = instance;
             log = logFactory(GetType());
-            
+
             updaterPipe = new NamedPipeClientStream(".", instance, PipeDirection.Out);
         }
 
