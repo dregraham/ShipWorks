@@ -4,6 +4,7 @@ using System.IO.Pipes;
 using System.Text;
 using System.Timers;
 using System.Windows.Forms;
+using Interapptive.Shared;
 using Interapptive.Shared.AutoUpdate;
 using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore;
@@ -27,6 +28,7 @@ namespace ShipWorks.Data.Administration
         private readonly ISqlSession sqlSession;
         private readonly ITangoGetReleaseByCustomerRequest tangoGetReleaseByCustomerRequest;
         private readonly Func<string, IShipWorksCommunicationBridge> communicationBridgeFactory;
+        private readonly IInterapptiveOnly interapptiveOnly;
 
         /// <summary>
         /// Constructor
@@ -37,13 +39,15 @@ namespace ShipWorks.Data.Administration
             ISqlSession sqlSession,
             ITangoGetReleaseByCustomerRequest tangoGetReleaseByCustomerRequest,
             Func<string, IShipWorksCommunicationBridge> communicationBridgeFactory,
-            IDataPath dataPath)
+            IDataPath dataPath,
+            IInterapptiveOnly interapptiveOnly)
         {
             this.shipWorksSession = shipWorksSession;
             this.autoUpdateStatusProvider = autoUpdateStatusProvider;
             this.sqlSession = sqlSession;
             this.tangoGetReleaseByCustomerRequest = tangoGetReleaseByCustomerRequest;
             this.communicationBridgeFactory = communicationBridgeFactory;
+            this.interapptiveOnly = interapptiveOnly;
             updateInProgressFilePath = Path.Combine(dataPath.InstanceSettings, "UpdateInProcess.txt");
         }
 
@@ -81,7 +85,7 @@ namespace ShipWorks.Data.Administration
 
             // For localdb we manually check to see if a new version is available, this is because
             // the windows service that is running our update service does not have access to localdb
-            if (sqlSession.Configuration.IsLocalDb())
+            if (sqlSession.Configuration.IsLocalDb() && !interapptiveOnly.DisableAutoUpdate)
             {
                 DataProvider.InitializeForApplication();
                 StoreManager.InitializeForCurrentSession(SecurityContext.EmptySecurityContext);
