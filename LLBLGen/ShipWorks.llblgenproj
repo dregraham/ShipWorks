@@ -593,6 +593,7 @@
           <Field Name="AuditNewOrders" Type="bool" FieldIndex="10" />
           <Field Name="AutoUpdateDayOfWeek" Type="DayOfWeek" FieldIndex="18" />
           <Field Name="AutoUpdateHourOfDay" Type="int" Precision="10" FieldIndex="19" />
+          <Field Name="AutoUpdateStartDate" Type="datetime" Precision="7" FieldIndex="20" />
           <Field Name="ConfigurationID" Type="bool" IsPrimaryKey="true" FieldIndex="0" />
           <Field Name="CustomerCompareAddress" Type="bool" FieldIndex="5" />
           <Field Name="CustomerCompareEmail" Type="bool" FieldIndex="4" />
@@ -4483,7 +4484,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2019-02-21T22:27:35.9667102Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2019-03-08T20:04:38.5185414Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -4855,10 +4856,10 @@
                     <Field Name="OrderItemID" Ordinal="1" IsPrimaryKey="true" DbType="0" Precision="19" />
                     <Field Name="OrderAddressID" Ordinal="2" DbType="0" Precision="19" />
                     <Field Name="OrderProductID" Ordinal="3" DbType="0" Precision="19" />
-                    <Field Name="IsDigitalItem" Ordinal="4" HasDefaultValue="true" DefaultValue="(0)" DbType="2" />
-                    <Field Name="EventDate" Ordinal="5" IsOptional="true" DbType="4" />
-                    <Field Name="EventName" Ordinal="6" IsOptional="true" DbType="12" Length="255" />
-                    <Field Name="ParentOrderProductID" Ordinal="7" IsOptional="true" DbType="0" Precision="19" />
+                    <Field Name="ParentOrderProductID" Ordinal="4" IsOptional="true" DbType="0" Precision="19" />
+                    <Field Name="IsDigitalItem" Ordinal="5" HasDefaultValue="true" DefaultValue="(0)" DbType="2" />
+                    <Field Name="EventDate" Ordinal="6" IsOptional="true" DbType="4" />
+                    <Field Name="EventName" Ordinal="7" IsOptional="true" DbType="12" Length="255" />
                   </Fields>
                 </Table>
                 <Table Name="BigCommerceStore">
@@ -5051,6 +5052,7 @@
                     <Field Name="DefaultPickListTemplateID" Ordinal="18" IsOptional="true" DbType="0" Precision="19" />
                     <Field Name="AutoUpdateDayOfWeek" Ordinal="19" DbType="8" Precision="10" />
                     <Field Name="AutoUpdateHourOfDay" Ordinal="20" DbType="8" Precision="10" />
+                    <Field Name="AutoUpdateStartDate" Ordinal="21" HasDefaultValue="true" DefaultValue="'1900-01-01'" DbType="29" Precision="7" />
                   </Fields>
                 </Table>
                 <Table Name="Customer">
@@ -7549,9 +7551,9 @@
                   <Fields>
                     <Field Name="OverstockOrderSearchID" Ordinal="1" IsIdentity="true" IsPrimaryKey="true" DbType="0" Precision="19" />
                     <Field Name="OrderID" Ordinal="2" DbType="0" Precision="19" />
-                    <Field Name="OriginalOrderID" Ordinal="3" DbType="0" Precision="19" />
-                    <Field Name="SalesChannelName" Ordinal="4" DbType="12" Length="50" />
-                    <Field Name="WarehouseCode" Ordinal="5" IsOptional="true" DbType="12" Length="50" />
+                    <Field Name="SalesChannelName" Ordinal="3" DbType="12" Length="50" />
+                    <Field Name="WarehouseCode" Ordinal="4" IsOptional="true" DbType="12" Length="50" />
+                    <Field Name="OriginalOrderID" Ordinal="5" DbType="0" Precision="19" />
                   </Fields>
                 </Table>
                 <Table Name="OverstockStore">
@@ -11148,6 +11150,7 @@
             <FieldMapping FieldName="AuditNewOrders" TargetFieldName="AuditNewOrders" />
             <FieldMapping FieldName="AutoUpdateDayOfWeek" TargetFieldName="AutoUpdateDayOfWeek" />
             <FieldMapping FieldName="AutoUpdateHourOfDay" TargetFieldName="AutoUpdateHourOfDay" />
+            <FieldMapping FieldName="AutoUpdateStartDate" TargetFieldName="AutoUpdateStartDate" />
             <FieldMapping FieldName="ConfigurationID" TargetFieldName="ConfigurationID" />
             <FieldMapping FieldName="CustomerCompareAddress" TargetFieldName="CustomerCompareAddress" />
             <FieldMapping FieldName="CustomerCompareEmail" TargetFieldName="CustomerCompareEmail" />

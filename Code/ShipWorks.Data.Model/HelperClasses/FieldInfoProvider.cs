@@ -781,6 +781,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("ConfigurationEntity", "DefaultPickListTemplateID", typeof(Nullable<System.Int64>), false, false, false, true,  (int)ConfigurationFieldIndex.DefaultPickListTemplateID, 0, 0, 19);
 			this.AddElementFieldInfo("ConfigurationEntity", "AutoUpdateDayOfWeek", typeof(System.DayOfWeek), false, false, false, false,  (int)ConfigurationFieldIndex.AutoUpdateDayOfWeek, 0, 0, 10);
 			this.AddElementFieldInfo("ConfigurationEntity", "AutoUpdateHourOfDay", typeof(System.Int32), false, false, false, false,  (int)ConfigurationFieldIndex.AutoUpdateHourOfDay, 0, 0, 10);
+			this.AddElementFieldInfo("ConfigurationEntity", "AutoUpdateStartDate", typeof(System.DateTime), false, false, false, false,  (int)ConfigurationFieldIndex.AutoUpdateStartDate, 0, 0, 7);
 		}
 		/// <summary>Inits CustomerEntity's FieldInfo objects</summary>
 		private void InitCustomerEntityInfos()
