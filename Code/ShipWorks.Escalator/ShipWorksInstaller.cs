@@ -42,7 +42,7 @@ namespace ShipWorks.Escalator
         /// <summary>
         /// Installs ShipWorks
         /// </summary>
-        public Result Install(InstallFile file, bool upgradeDatabase, bool killShipWorksUI)
+        public Result Install(InstallFile file, bool upgradeDatabase)
         {
             log.Info("Starting Install");
             if (!file.IsValid())
@@ -52,25 +52,9 @@ namespace ShipWorks.Escalator
             }
             log.InfoFormat("Install {0} file validated", file.Path);
 
-            if (killShipWorksUI)
-            {
-                KillShipWorks();
-            }
-
-            WaitForShipWorksUIToExit();
+            KillShipWorks();
 
             return RunSetup(file, upgradeDatabase);
-        }
-
-        /// <summary>
-        /// Wait for the UI to exit
-        /// </summary>
-        private void WaitForShipWorksUIToExit()
-        {
-            while (Process.GetProcessesByName("shipworks").Where(p => IsRunningWithoutArguments(p)).Any())
-            {
-                Thread.Sleep(1000);
-            }
         }
 
         /// <summary>
@@ -86,17 +70,13 @@ namespace ShipWorks.Escalator
                 // show the splash screen and patiently wait to see if shipworks closes
                 ShowSplashScreenAndAttemptToCloseShipWorks(30);
 
-                // at 60 seconds if shipworks has not closed kill it
-                var killShipWorksTimer = new System.Timers.Timer(60000);
-                killShipWorksTimer.Elapsed += (a, b) =>
+                Thread.Sleep(30000);
+
+                foreach (Process process in Process.GetProcessesByName("shipworks").Where(p => IsRunningWithoutArguments(p)).ToList())
                 {
-                    foreach (Process process in Process.GetProcessesByName("shipworks").Where(p => IsRunningWithoutArguments(p)))
-                    {
-                        log.Info($"Killing ShipWorks process.");
-                        process.Kill();
-                    }
-                };
-                killShipWorksTimer.Start();
+                    log.Info($"Killing ShipWorks process.");
+                    process?.Kill();
+                }
             }
         }
 
@@ -108,39 +88,29 @@ namespace ShipWorks.Escalator
             // Show the splash screen to give users feedback that the update
             // is kicking off
             autoUpdateStatusProvider.ShowSplashScreen(serviceName.GetInstanceID().ToString("B"));
-
-            int timeRemaining = countDownInSeconds;
-            var countDownTimer = new System.Timers.Timer(1000);
-            countDownTimer.Elapsed += (a, b) =>
+            
+            for (int i = countDownInSeconds; i > 0; i--)
             {
-                if (timeRemaining < 0)
-                {
-                    // once the countdown has elapsed stop the timer, update the status on the splash
-                    // screen and then ask shipworks to close
-                    countDownTimer.Stop();
-                    autoUpdateStatusProvider.UpdateStatus("Installing Update");
-                    log.Info($"Asking ShipWorks to close.");
-                    communicationBridgeFactory("AutoUpdateStart").SendMessage("CloseShipWorks");
-                }
-                else
-                {
-                    autoUpdateStatusProvider.UpdateStatus($"ShipWorks will automatically close in {timeRemaining} seconds.");
-                    log.Info($"ShipWorks will automatically close in {timeRemaining} seconds.");
-                    timeRemaining -= 1;
-                }
-            };
+                autoUpdateStatusProvider.UpdateStatus($"ShipWorks will automatically close in {countDownInSeconds} seconds.");
+                log.Info($"ShipWorks will automatically close in {countDownInSeconds} seconds.");
+                Thread.Sleep(1000);
+            }
 
-            countDownTimer.Start();
+            // once the countdown has elapsed stop the timer, update the status on the splash
+            // screen and then ask shipworks to close
+            autoUpdateStatusProvider.UpdateStatus("Installing Update");
+            log.Info($"Asking ShipWorks to close.");
+            communicationBridgeFactory("AutoUpdateStart").SendMessage("CloseShipWorks");
         }
 
         /// <summary>
-        /// If SW is running without arguments, it is open
+        /// If SW is running without arguments, it is open in ui mode
         /// </summary>
         private bool IsRunningWithoutArguments(Process process)
         {
             string commandLine = GetCommandLine(process);
 
-            return commandLine.Trim().EndsWith("shipworks.exe\"", StringComparison.InvariantCultureIgnoreCase);
+            return commandLine?.Trim().EndsWith("shipworks.exe\"", StringComparison.InvariantCultureIgnoreCase) ?? false;
         }
 
         /// <summary>
