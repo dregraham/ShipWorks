@@ -1776,6 +1776,7 @@ namespace ShipWorks.Filters.Controls
             if (SelectedFilterNode?.Filter?.IsSavedSearch == true)
             {
                 lastSelectedRow.FilterProxy = activeFilterNode;
+                currentFilterNodeID = BuiltinFilter.GetTopLevelKey(Targets.First());
             }
             else
             {
