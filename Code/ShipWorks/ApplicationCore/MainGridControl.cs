@@ -1132,8 +1132,8 @@ namespace ShipWorks.ApplicationCore
                 FilterEditingService.SaveFilter(this, loadedFilter)
                     .Do(f =>
                     {
-                        OnFilterSaved(this, loadedFilter);
-                        AdvancedSearchVisible = loadedFilter.Filter.IsSavedSearch;
+                        OnFilterSaved(this, f);
+                        AdvancedSearchVisible = f.Filter.IsSavedSearch;
                         using (var lifetimeScope = IoC.BeginLifetimeScope())
                         {
                             lifetimeScope.Resolve<IMessageHelper>().ShowPopup("Filter saved");
