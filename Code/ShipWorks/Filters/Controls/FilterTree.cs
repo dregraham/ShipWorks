@@ -1206,7 +1206,7 @@ namespace ShipWorks.Filters.Controls
         private void OnSelectedFilterNodeChanged()
         {
             ClearSearchProxies();
-
+            
             if (SelectedFilterNode?.Filter?.IsSavedSearch == true)
             {
                 OnLoadAsAdvancedSearch(this, EventArgs.Empty);

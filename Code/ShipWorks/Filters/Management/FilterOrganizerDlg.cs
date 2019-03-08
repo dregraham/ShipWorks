@@ -99,6 +99,12 @@ namespace ShipWorks.Filters.Management
         /// <summary>
         /// The selected filter node has changed
         /// </summary>
+        private void OnLoadAsAdvancedSearch(object sender, FilterNodeEntity e) =>
+            OnChangeSelectedFilterNode(sender, EventArgs.Empty);
+
+        /// <summary>
+        /// The selected filter node has changed
+        /// </summary>
         private void OnChangeSelectedFilterNode(object sender, EventArgs e)
         {
             if (sender == ActiveFilterTree)

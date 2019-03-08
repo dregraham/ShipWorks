@@ -487,6 +487,7 @@ namespace ShipWorks.Filters.Management
             this.filterTreeOrders.Size = new System.Drawing.Size(291, 365);
             this.filterTreeOrders.TabIndex = 0;
             this.filterTreeOrders.SelectedFilterNodeChanged += new System.EventHandler(this.OnChangeSelectedFilterNode);
+            this.filterTreeOrders.LoadAsAdvancedSearch += new System.EventHandler<Data.Model.EntityClasses.FilterNodeEntity>(this.OnLoadAsAdvancedSearch);
             this.filterTreeOrders.FilterRenaming += new ShipWorks.Filters.Controls.FilterNodeRenameEventHandler(this.OnBeforeRename);
             this.filterTreeOrders.FilterRenamed += new ShipWorks.Filters.Controls.FilterNodeRenameEventHandler(this.OnAfterRename);
             this.filterTreeOrders.DeleteKeyPressed += new System.EventHandler(this.OnDelete);
@@ -507,6 +508,7 @@ namespace ShipWorks.Filters.Management
             this.filterTreeCustomers.Size = new System.Drawing.Size(291, 365);
             this.filterTreeCustomers.TabIndex = 1;
             this.filterTreeCustomers.SelectedFilterNodeChanged += new System.EventHandler(this.OnChangeSelectedFilterNode);
+            this.filterTreeCustomers.LoadAsAdvancedSearch += new System.EventHandler<Data.Model.EntityClasses.FilterNodeEntity>(this.OnLoadAsAdvancedSearch);
             this.filterTreeCustomers.FilterRenaming += new ShipWorks.Filters.Controls.FilterNodeRenameEventHandler(this.OnBeforeRename);
             this.filterTreeCustomers.FilterRenamed += new ShipWorks.Filters.Controls.FilterNodeRenameEventHandler(this.OnAfterRename);
             this.filterTreeCustomers.DeleteKeyPressed += new System.EventHandler(this.OnDelete);
