@@ -155,7 +155,8 @@ namespace ShipWorks.Data
                 AllowEbayCombineLocally = false,
 
                 AutoUpdateDayOfWeek = DayOfWeek.Thursday,
-                AutoUpdateHourOfDay = 23
+                AutoUpdateHourOfDay = 23,
+                AutoUpdateStartDate = DateTime.UtcNow.AddDays(-1)
             };
 
             adapter.SaveEntity(newConfig);
