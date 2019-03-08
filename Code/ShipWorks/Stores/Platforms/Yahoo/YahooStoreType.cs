@@ -262,7 +262,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo
         /// </summary>
         public override bool GridOnlineColumnSupported(OnlineGridColumnSupport column)
         {
-            YahooStoreEntity store = (YahooStoreEntity) Store;
+            var store = (IYahooStoreEntity) StoreReadOnly;
 
             if (store.YahooStoreID.IsNullOrWhiteSpace())
             {

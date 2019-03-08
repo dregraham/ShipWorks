@@ -456,7 +456,7 @@ namespace ShipWorks.Stores.Platforms.GenericModule
         /// </summary>
         public override bool GridOnlineColumnSupported(OnlineGridColumnSupport column)
         {
-            GenericModuleStoreEntity store = (GenericModuleStoreEntity) Store;
+            var store = (IGenericModuleStoreEntity) StoreReadOnly;
 
             if (column == OnlineGridColumnSupport.LastModified)
             {

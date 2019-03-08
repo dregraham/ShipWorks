@@ -37,6 +37,7 @@ namespace ShipWorks.Stores
     {
         // Store this instance is wrapping
         private readonly StoreEntity store;
+        private IStoreEntity storeReadOnly;
 
         /// <summary>
         /// Construction
@@ -60,6 +61,7 @@ namespace ShipWorks.Stores
             }
 
             this.store = store;
+            this.storeReadOnly = store;
         }
 
         /// <summary>
@@ -97,6 +99,32 @@ namespace ShipWorks.Stores
         protected virtual AddressValidationStoreSettingType GetDefaultDomesticValidationSetting()
         {
             return AddressValidationStoreSettingType.ValidateAndApply;
+        }
+
+        /// <summary>
+        /// Gets and sets a read-only store to use with this type
+        /// </summary>
+        /// <remarks>
+        /// This will only take effect if the Store property is null, which means a read only store
+        /// cannot be set on a store type that already has a full store attached to it.  This is useful
+        /// in situations where we need store data to make decisions but don't want to weight of doing
+        /// the full StoreEntity collection clone.
+        /// </remarks>
+        public IStoreEntity StoreReadOnly
+        {
+            get => storeReadOnly;
+            set
+            {
+                if (Store == null)
+                {
+                    if (value.StoreTypeCode != this.TypeCode)
+                    {
+                        throw new InvalidOperationException("Store type mismatch.");
+                    }
+
+                    storeReadOnly = value;
+                }
+            }
         }
 
         /// <summary>
@@ -484,8 +512,7 @@ namespace ShipWorks.Stores
         {
 
         }
-
-
+        
         /// <summary>
         /// This is used as a safe and friendly internal code for storing information.  For instance,
         /// registry key values and template exclusion names.
