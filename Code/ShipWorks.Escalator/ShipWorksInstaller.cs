@@ -52,6 +52,17 @@ namespace ShipWorks.Escalator
             }
             log.InfoFormat("Install {0} file validated", file.Path);
 
+            if (upgradeDatabase)
+            {
+                Result databaseLock = GetUpgradeLock();
+
+                if (databaseLock.Failure)
+                {
+                    log.Error(databaseLock.Message);
+                    return databaseLock;
+                }
+            }
+
             if (killShipWorksUI)
             {
                 KillShipWorks();
@@ -153,6 +164,27 @@ namespace ShipWorks.Escalator
             {
                 return objects.Cast<ManagementBaseObject>().SingleOrDefault()?["CommandLine"]?.ToString();
             }
+        }
+
+        /// <summary>
+        /// Get a database lock
+        /// </summary>
+        private Result GetUpgradeLock()
+        {
+            string process = $"{Path.GetDirectoryName(Assembly.GetEntryAssembly().Location)}\\swc.exe";
+            string arg = "/command=getupdatelock";
+
+            int exitCode;
+            log.InfoFormat("Executing {0} {1}", process, arg);
+
+            using (Process proc = Process.Start(process, arg))
+            {
+                exitCode = proc.ExitCode;
+            }
+
+            return exitCode > 0 ?
+                Result.FromError($"Could not obtain database lock with exit code {exitCode}") :
+                Result.FromSuccess();
         }
 
         /// <summary>
