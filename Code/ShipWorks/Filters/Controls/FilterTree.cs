@@ -892,10 +892,18 @@ namespace ShipWorks.Filters.Controls
                 !BuiltinFilter.IsSearchPlaceholderKey(SelectedFilterNode.FilterID) &&
                 !BuiltinFilter.IsTopLevelKey(SelectedFilterNode.FilterID) &&
                 SelectedFilterNode?.Filter?.IsFolder != true;
-            menuConvertFilter.Text = SelectedFilterNode?.Filter?.IsSavedSearch == true ?
-                "Convert to filter" :
-                "Convert to saved search";
 
+            if (SelectedFilterNode?.Filter?.IsSavedSearch == true)
+            {
+                menuConvertFilter.Text = "Convert to filter";
+                menuConvertFilter.Image = Resources.funnel;
+            }
+            else
+            {
+                menuConvertFilter.Text = "Convert to saved search";
+                menuConvertFilter.Image = Resources.view;
+            }
+            
             menuLoadFilterAsSearch.Available = menuConvertFilter.Available &&
                 SelectedFilterNode?.Filter?.IsSavedSearch != true;
 
