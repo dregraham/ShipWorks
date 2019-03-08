@@ -33,6 +33,7 @@ namespace ShipWorks.Data.Administration
         /// <summary>
         /// Constructor
         /// </summary>
+        [NDependIgnoreTooManyParamsAttribute]
         public UpdateService(
             IShipWorksSession shipWorksSession,
             IAutoUpdateStatusProvider autoUpdateStatusProvider,
@@ -130,7 +131,7 @@ namespace ShipWorks.Data.Administration
                 return Result.FromError($"unable to write to {updateInProgressFilePath}.");
             }
 
-            IShipWorksCommunicationBridge communicationBridge = communicationBridgeFactory(shipWorksSession.InstanceID.ToString("B"));
+            IShipWorksCommunicationBridge communicationBridge = communicationBridgeFactory(shipWorksSession.InstanceID.ToString());
             Result result = communicationBridge.SendMessage(version.ToString());
 
             if (result.Success)
