@@ -54,6 +54,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
 
         private const string standardEndiciaPartnerID = "lswk";
         private const string freemiumEndiciaPartnerID = "lseb";
+        private const string TestEndiciaPartnerID = "lxxx";
 
         /// <summary>
         /// Initializes a new instance of the <see cref="EndiciaApiClient"/> class.
@@ -130,15 +131,18 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                 case EndiciaReseller.None:
                 default:
                     {
+                        if (UseTestServer)
+                        {
+                            return TestEndiciaPartnerID;
+                        }
+
                         if (FreemiumFreeEdition.IsActive)
                         {
                             return freemiumEndiciaPartnerID;
                         }
-                        else
-                        {
-                            // non-freemium, and freemium-paid use our standard partnerID
-                            return standardEndiciaPartnerID;
-                        }
+
+                        // non-freemium, and freemium-paid use our standard partnerID
+                        return standardEndiciaPartnerID;
                     }
             }
         }
@@ -470,7 +474,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         }
 
         /// <summary>
-        /// Get parcel select rates and add them to rate result list, if needed 
+        /// Get parcel select rates and add them to rate result list, if needed
         /// </summary>
         private RateResult GetParcelSelectRates(ShipmentEntity shipment, EndiciaShipmentType endiciaShipmentType,
                                           EndiciaAccountEntity account, IEnumerable<PostalRateSelection> services)
@@ -776,7 +780,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         }
 
         /// <summary>
-        /// Add insurance details from the given shipment to the get rate request 
+        /// Add insurance details from the given shipment to the get rate request
         /// </summary>
         private static void AddInsuranceDetailsToGetRateRequest(ShipmentEntity shipment, PostageRateRequest request)
         {
