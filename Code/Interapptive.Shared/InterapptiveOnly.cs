@@ -57,13 +57,30 @@ namespace ShipWorks.ApplicationCore
         {
             get
             {
-                return Registry.GetValue("DisableAutoUpdate", false);
+                using (var localMachine = Microsoft.Win32.Registry.LocalMachine.OpenSubKey(@"Software\Interapptive\ShipWorks", false))
+                {
+                    return localMachine.GetValue("DisableAutoUpdate") != null;
+                }
             }
             set
             {
-                Registry.SetValue("DisableAutoUpdate", value);
+                if (DisableAutoUpdate != value)
+                {
+                    using (var localMachine = Microsoft.Win32.Registry.LocalMachine.OpenSubKey(@"Software\Interapptive\ShipWorks", true))
+                    {
+                        if (value)
+                        {
+                            localMachine.SetValue("DisableAutoUpdate", value);
+                        }
+                        else
+                        {
+                            localMachine.DeleteValue("DisableAutoUpdate");
+                        }
+                    }
+                }
             }
         }
+        
 
         /// <summary>
         /// Determines if a special key combination is active.  Can be used
