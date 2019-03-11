@@ -51,6 +51,21 @@ namespace ShipWorks.ApplicationCore
         }
 
         /// <summary>
+        /// Indicates if auto update is disabled.
+        /// </summary>
+        public static bool DisableAutoUpdate
+        {
+            get
+            {
+                return Registry.GetValue("DisableAutoUpdate", false);
+            }
+            set
+            {
+                Registry.SetValue("DisableAutoUpdate", value);
+            }
+        }
+
+        /// <summary>
         /// Determines if a special key combination is active.  Can be used
         /// for enabling "hidden" (but not secure!) functionality.
         /// </summary>

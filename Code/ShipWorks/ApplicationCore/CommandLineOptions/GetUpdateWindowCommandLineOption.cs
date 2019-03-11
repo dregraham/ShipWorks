@@ -34,6 +34,13 @@ namespace ShipWorks.ApplicationCore.CommandLineOptions
         public Task Execute(List<string> args)
         {
             log.Info("Executing getupdatewindow commandline");
+            if (InterapptiveOnly.DisableAutoUpdate)
+            {
+                log.Info("Autoupdate disabled in registry. Not sending window");
+                return Task.CompletedTask;
+            }
+
+            log.Info("Autoupdate enabled.");
             SqlSession.Initialize();
             ConfigurationData.CheckForChangesNeeded();
 

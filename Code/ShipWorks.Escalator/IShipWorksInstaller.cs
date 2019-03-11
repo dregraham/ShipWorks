@@ -10,6 +10,6 @@ namespace ShipWorks.Escalator
         /// <summary>
         /// Installs ShipWorks
         /// </summary>
-        Result Install(InstallFile file, bool upgradeDatabase, bool killShipWorksUI);
+        Result Install(InstallFile file, bool upgradeDatabase);
     }
 }

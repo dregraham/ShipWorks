@@ -91,7 +91,7 @@ namespace ShipWorks.Escalator.Tests
             updaterWebClient.Setup(w => w.GetVersionToDownload(It.IsAny<Version>()))
                 .ReturnsAsync(shipworksRelease);
 
-            mock.Mock<IShipWorksInstaller>().Setup(i => i.Install(It.IsAny<InstallFile>(), false, true))
+            mock.Mock<IShipWorksInstaller>().Setup(i => i.Install(It.IsAny<InstallFile>(), false))
                 .Returns(Result.FromSuccess());
 
             await testObject.Upgrade(new Version(1, 1, 1));
