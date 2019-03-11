@@ -149,6 +149,7 @@ namespace ShipWorks.Escalator
 
             using (Process proc = Process.Start(process, arg))
             {
+                proc.WaitForExit();
                 exitCode = proc.ExitCode;
             }
 
