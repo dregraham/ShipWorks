@@ -1,14 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Drawing;
-using System.Data;
 using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 using ShipWorks.Data.Model.EntityClasses;
 using System.Xml.Linq;
-using Interapptive.Shared.UI;
 using ShipWorks.Shipping.Carriers.Api;
 using System.Text.RegularExpressions;
 
@@ -19,6 +14,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx
     /// </summary>
     public partial class FedExAccountSettingsControl : UserControl
     {
+        private const string filter = "Image Files(*.jpg; *.jpeg; *.gif; *.bmp; *.png)|*.jpg; *.jpeg; *.gif; *.bmp; *.png";
+
         /// <summary>
         /// Constructor
         /// </summary>
@@ -76,6 +73,40 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             }
 
             account.SmartPostHubList = root.ToString();
+        }
+
+        /// <summary>
+        /// Browse for a letterhead image
+        /// </summary>
+        private void OnBrowseLetterhead(object sender, EventArgs e)
+        {
+            OpenFileDialog dlg = new OpenFileDialog();
+            dlg.Filter = filter;
+            using (dlg)
+            {
+                DialogResult result = dlg.ShowDialog();
+                if (result == DialogResult.OK)
+                {
+                    pictureBox1.Image = new Bitmap(dlg.FileName);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Browse for a signature image
+        /// </summary>
+        private void OnBrowseSignature(object sender, EventArgs e)
+        {
+            OpenFileDialog dlg = new OpenFileDialog();
+            dlg.Filter = filter;
+            using (dlg)
+            {
+                DialogResult result = dlg.ShowDialog();
+                if (result == DialogResult.OK)
+                {
+                    pictureBox2.Image = new Bitmap(dlg.FileName);
+                }
+            }
         }
     }
 }
