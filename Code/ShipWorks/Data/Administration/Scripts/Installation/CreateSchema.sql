@@ -4479,7 +4479,7 @@ CREATE TABLE [dbo].[Configuration]
 [DefaultPickListTemplateID] [bigint] NULL,
 [AutoUpdateDayOfWeek] [int] NOT NULL,
 [AutoUpdateHourOfDay] [int] NOT NULL,
-[AutoUpdateStartDatep] [datetime2] NOT NULL
+[AutoUpdateStartDate] [datetime2] NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_Configuration] on [dbo].[Configuration]'
