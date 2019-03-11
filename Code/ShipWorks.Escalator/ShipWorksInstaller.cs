@@ -88,11 +88,11 @@ namespace ShipWorks.Escalator
             // Show the splash screen to give users feedback that the update
             // is kicking off
             autoUpdateStatusProvider.ShowSplashScreen(serviceName.GetInstanceID().ToString("B"));
-            
-            for (int i = countDownInSeconds; i > 0; i--)
+
+            for (int secondsLeft = countDownInSeconds; secondsLeft > 0; secondsLeft--)
             {
-                autoUpdateStatusProvider.UpdateStatus($"ShipWorks will automatically close in {countDownInSeconds} seconds.");
-                log.Info($"ShipWorks will automatically close in {countDownInSeconds} seconds.");
+                autoUpdateStatusProvider.UpdateStatus($"ShipWorks will automatically close in {secondsLeft} seconds.");
+                log.Info($"ShipWorks will automatically close in {secondsLeft} seconds.");
                 Thread.Sleep(1000);
             }
 
