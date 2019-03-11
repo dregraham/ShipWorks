@@ -14,12 +14,14 @@ namespace ShipWorks.Escalator
     public class FileWriter : IFileWriter
     {
         private readonly ILog log;
+        private readonly IServiceName serviceName;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public FileWriter(Func<Type, ILog> createLogger)
+        public FileWriter(IServiceName serviceName, Func<Type, ILog> createLogger)
         {
+            this.serviceName = serviceName;
             log = createLogger(GetType());
         }
 
@@ -32,7 +34,7 @@ namespace ShipWorks.Escalator
             {
                 var details = new UpgradeDetails { UpgradingToVersion = upgradingToVersion };
                 var serializedDetails = SerializationUtility.SerializeToXml(details);
-                File.WriteAllText(Path.Combine(EscalatorDataPath.InstanceRoot, "upgradeDetails.xml"), serializedDetails);
+                File.WriteAllText(Path.Combine(EscalatorDataPath.InstanceRoot, serviceName.GetInstanceID().ToString("B"), "upgradeDetails.xml"), serializedDetails);
             }
             catch (IOException ex)
             {

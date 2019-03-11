@@ -1,30 +1,29 @@
 ﻿using System;
-using System.ServiceProcess;
 using System.Configuration.Install;
 using System.Diagnostics;
 using System.Linq;
-using System.IO;
+using System.ServiceProcess;
+using Autofac;
+using Interapptive.Shared.AutoUpdate;
 using log4net;
 using log4net.Config;
 using ShipWorks.Escalator.ApplicationCore;
-using Autofac;
-using Interapptive.Shared.AutoUpdate;
 
 namespace ShipWorks.Escalator
 {
     /// <summary>
     /// The Escalator program file
     /// </summary>
-    static class Program
+    internal static class Program
     {
-        static ILog log;
-        static string serviceName;
-        static Guid instanceId;
+        private static ILog log;
+        private static string serviceName;
+        private static Guid instanceId;
 
         /// <summary>
         /// The main entry point for the application.
         /// </summary>
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
             ContainerInitializer.Initialize();
 
@@ -61,6 +60,21 @@ namespace ShipWorks.Escalator
                     ServiceController service = ServiceController.GetServices().SingleOrDefault(s => s.ServiceName == serviceName);
                     StopService(service);
                     break;
+
+#if DEBUG
+                case "--checknow":
+                    // This is meant for debugging, and it will kick off the process of upgrading.  You'll want to set a few
+                    // breakpoints so that you can set the upgrade in milliseconds to 1 and set the assembly version to 0.0.0.1,
+                    // but that was simpler than trying to get everything set up just right to work normally.
+                    using (var scope = IoC.BeginLifetimeScope())
+                    {
+                        scope.Resolve<EscalatorService>().Start();
+                        Console.WriteLine("Checking for upgrade now...  Press any key to quit.");
+                        Console.ReadLine();
+                    }
+
+                    break;
+#endif
 
                 default:
                     if (!Environment.UserInteractive)
@@ -168,7 +182,7 @@ namespace ShipWorks.Escalator
         /// <summary>
         /// Set service to restart the service in 1 minute if it crashes
         /// </summary>
-        static void SetRecoveryOptions(string serviceName)
+        private static void SetRecoveryOptions(string serviceName)
         {
             log.Info("Setting recovery options to restart the service in 1 minute if it crashes.");
 

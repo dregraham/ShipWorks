@@ -19,6 +19,7 @@ namespace Interapptive.Shared.AutoUpdate
         /// <summary>
         /// Version ShipWorks is upgrading to
         /// </summary>
+        [XmlIgnore]
         public Version UpgradingToVersion
         {
             get => Version.TryParse(UpgradingTo, out Version parsedVersion) ? parsedVersion : new Version();

@@ -21,9 +21,9 @@ namespace ShipWorks.Escalator
         /// <summary>
         /// Constructor
         /// </summary>
-        public Escalator(IServiceName serviceName, 
-            IShipWorksUpgrade shipWorksUpgrade, 
-            IShipWorksCommunicationBridge communicationBridge, 
+        public Escalator(IServiceName serviceName,
+            IShipWorksUpgrade shipWorksUpgrade,
+            IShipWorksCommunicationBridge communicationBridge,
             IUpgradeTimeWindow upgradeTimeWindow,
             Func<Type, ILog> logFactory)
         {
