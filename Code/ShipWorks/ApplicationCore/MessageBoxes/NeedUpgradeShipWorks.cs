@@ -33,7 +33,7 @@ namespace ShipWorks.ApplicationCore.MessageBoxes
         {
             InitializeComponent();
 
-            communicationBridge = IoC.UnsafeGlobalLifetimeScope.Resolve<IShipWorksCommunicationBridge>(new TypedParameter(typeof(string), ShipWorksSession.InstanceID));
+            communicationBridge = IoC.UnsafeGlobalLifetimeScope.Resolve<IShipWorksCommunicationBridge>(new TypedParameter(typeof(string), ShipWorksSession.InstanceID.ToString()));
             updateService = IoC.UnsafeGlobalLifetimeScope.Resolve<IUpdateService>();
 
             if (communicationBridge.IsAvailable())
