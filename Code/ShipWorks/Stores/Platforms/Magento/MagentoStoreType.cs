@@ -56,7 +56,7 @@ namespace ShipWorks.Stores.Platforms.Magento
         /// <summary>
         /// The url to support article
         /// </summary>
-        public override string AccountSettingsHelpUrl => "http://support.shipworks.com/support/solutions/articles/4000049745";
+        public override string AccountSettingsHelpUrl => "https://shipworks.zendesk.com/hc/en-us/articles/360022653711";
 
         /// <summary>
         /// Gets the magento version for this store instance

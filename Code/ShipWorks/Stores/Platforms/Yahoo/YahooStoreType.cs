@@ -84,12 +84,12 @@ namespace ShipWorks.Stores.Platforms.Yahoo
         /// <summary>
         /// Link to article on adding a yahoo store
         /// </summary>
-        public string AccountSettingsHelpUrl => "http://support.shipworks.com/solution/articles/4000068682-adding-a-yahoo-store-using-api";
+        public string AccountSettingsHelpUrl => "https://shipworks.zendesk.com/hc/en-us/articles/360022654711";
 
         /// <summary>
         /// Link to article explaining how to renew an expired access token.
         /// </summary>
-        public string InvalidAccessTokenHelpUrl => "http://support.shipworks.com/solution/articles/4000069621-renewing-a-yahoo-access-token";
+        public string InvalidAccessTokenHelpUrl => "https://shipworks.zendesk.com/hc/en-us/articles/360022654711";
 
         /// <summary>
         /// Create a new default initialized instance of the store type

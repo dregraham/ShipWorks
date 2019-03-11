@@ -36,6 +36,6 @@ namespace ShipWorks.Stores.Platforms.RevolutionParts
         /// <summary>
         /// Gets the account settings help URL.
         /// </summary>
-        public override string AccountSettingsHelpUrl => "http://support.shipworks.com/support/solutions/articles/4000065048";
+        public override string AccountSettingsHelpUrl => "https://shipworks.zendesk.com/hc/en-us/articles/360022466292";
     }
 }

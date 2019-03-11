@@ -37,7 +37,7 @@ namespace ShipWorks.Stores.Platforms.GeekSeller
         /// Gets the account settings help URL.
         /// </summary>
         public override string AccountSettingsHelpUrl =>
-            "http://support.shipworks.com/support/solutions/articles/4000101692-adding-a-geekseller-store";
+            "https://shipworks.zendesk.com/hc/en-us/articles/360022465332";
 
         /// <summary>
         /// Create user control for configuring the tasks.

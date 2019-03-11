@@ -47,13 +47,13 @@ namespace ShipWorks.Stores.Tests.Platforms.ThreeDCart
         [Fact]
         public void AccountSettingsHelpUrl_ReturnsCorrectUrlString_WhenRestUser()
         {
-            Assert.Equal("http://support.shipworks.com/solution/articles/4000076906-adding-3dcart-using-rest-api", testObject.AccountSettingsHelpUrl);
+            Assert.Equal("https://shipworks.zendesk.com/hc/en-us/articles/360022464832", testObject.AccountSettingsHelpUrl);
         }
 
         [Fact]
         public void AccountSettingsHelpUrl_ReturnsCorrectUrlString_WhenSoapUser()
         {
-            Assert.Equal("http://support.shipworks.com/support/solutions/articles/167787-adding-a-3dcart-store-", soapTestObject.AccountSettingsHelpUrl);
+            Assert.Equal("https://shipworks.zendesk.com/hc/en-us/articles/360022652611", soapTestObject.AccountSettingsHelpUrl);
         }
 
         [Fact]

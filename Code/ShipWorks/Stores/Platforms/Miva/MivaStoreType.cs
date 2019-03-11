@@ -263,6 +263,6 @@ namespace ShipWorks.Stores.Platforms.Miva
             }
         }
 
-        public override string AccountSettingsHelpUrl => "http://support.shipworks.com/support/solutions/articles/129335";
+        public override string AccountSettingsHelpUrl => "https://shipworks.zendesk.com/hc/en-us/articles/360022653851";
     }
 }
