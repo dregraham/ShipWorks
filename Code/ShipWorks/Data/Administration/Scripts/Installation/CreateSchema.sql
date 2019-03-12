@@ -22,22 +22,22 @@ GO
 ALTER TABLE [dbo].[BigCommerceOrderItem] ADD CONSTRAINT [PK_BigCommerceOrderItem] PRIMARY KEY CLUSTERED  ([OrderItemID])
 GO
 
-PRINT N'Creating [dbo].[AmazonServiceType]'
+PRINT N'Creating [dbo].[AmazonSFPServiceType]'
 GO
-CREATE TABLE [dbo].[AmazonServiceType]
+CREATE TABLE [dbo].[AmazonSFPServiceType]
 (
-[AmazonServiceTypeID] [int] NOT NULL IDENTITY(1, 1),
+[AmazonSFPServiceTypeID] [int] NOT NULL IDENTITY(1, 1),
 [ApiValue] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [Description] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL
 )
 GO
-PRINT N'Creating primary key [PK_AmazonServiceTypeID] on [dbo].[AmazonServiceType]'
+PRINT N'Creating primary key [PK_AmazonSFPServiceTypeID] on [dbo].[AmazonSFPServiceType]'
 GO
-ALTER TABLE [dbo].[AmazonServiceType] ADD CONSTRAINT [PK_AmazonServiceTypeID] PRIMARY KEY CLUSTERED  ([AmazonServiceTypeID])
+ALTER TABLE [dbo].[AmazonSFPServiceType] ADD CONSTRAINT [PK_AmazonSFPServiceTypeID] PRIMARY KEY CLUSTERED  ([AmazonSFPServiceTypeID])
 GO
-PRINT N'Creating index [IX_SWDefault_AmazonServiceType_ApiValue] on [dbo].[AmazonServiceType]'
+PRINT N'Creating index [IX_SWDefault_AmazonSFPServiceType_ApiValue] on [dbo].[AmazonSFPServiceType]'
 GO
-CREATE UNIQUE NONCLUSTERED INDEX [IX_SWDefault_AmazonServiceType_ApiValue] ON [dbo].[AmazonServiceType] ([ApiValue])
+CREATE UNIQUE NONCLUSTERED INDEX [IX_SWDefault_AmazonSFPServiceType_ApiValue] ON [dbo].[AmazonSFPServiceType] ([ApiValue])
 GO
 
 PRINT N'Creating [dbo].[FedExPackage]'
@@ -1914,40 +1914,40 @@ SET NUMERIC_ROUNDABORT OFF
 GO
 SET ANSI_PADDING, ANSI_WARNINGS, CONCAT_NULL_YIELDS_NULL, ARITHABORT, QUOTED_IDENTIFIER, ANSI_NULLS ON
 GO
-PRINT N'Creating [dbo].[AmazonShipment]'
+PRINT N'Creating [dbo].[AmazonSFPShipment]'
 GO
-CREATE TABLE [dbo].[AmazonShipment]
+CREATE TABLE [dbo].[AmazonSFPShipment]
 (
 [ShipmentID] [bigint] NOT NULL,
-[CarrierName] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_AmazonShipment_CarrierName] DEFAULT (''),
-[ShippingServiceName] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_AmazonShipment_ShippingServiceName] DEFAULT (''),
-[ShippingServiceID] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_AmazonShipment_ShippingServiceId] DEFAULT (''),
-[InsuranceValue] [money] NOT NULL CONSTRAINT [DF_AmazonShipment_InsuranceValue] DEFAULT ((0)),
-[DimsProfileID] [bigint] NOT NULL CONSTRAINT [DF_AmazonShipment_DimsProfileID] DEFAULT ((0)),
-[DimsLength] [float] NOT NULL CONSTRAINT [DF_AmazonShipment_DimsLength] DEFAULT ((0)),
-[DimsWidth] [float] NOT NULL CONSTRAINT [DF_AmazonShipment_DimsWidth] DEFAULT ((0)),
-[DimsHeight] [float] NOT NULL CONSTRAINT [DF_AmazonShipment_DimsHeight] DEFAULT ((0)),
-[DimsWeight] [float] NOT NULL CONSTRAINT [DF_AmazonShipment_DimsWeight] DEFAULT ((0)),
-[DimsAddWeight] [bit] NOT NULL CONSTRAINT [DF_AmazonShipment_DimsAddWeight] DEFAULT ((0)),
-[DeliveryExperience] [int] NOT NULL CONSTRAINT [DF_AmazonShipment_DeliveryExperience] DEFAULT ((2)),
+[CarrierName] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_AmazonSFPShipment_CarrierName] DEFAULT (''),
+[ShippingServiceName] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_AmazonSFPShipment_ShippingServiceName] DEFAULT (''),
+[ShippingServiceID] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_AmazonSFPShipment_ShippingServiceId] DEFAULT (''),
+[InsuranceValue] [money] NOT NULL CONSTRAINT [DF_AmazonSFPShipment_InsuranceValue] DEFAULT ((0)),
+[DimsProfileID] [bigint] NOT NULL CONSTRAINT [DF_AmazonSFPShipment_DimsProfileID] DEFAULT ((0)),
+[DimsLength] [float] NOT NULL CONSTRAINT [DF_AmazonSFPShipment_DimsLength] DEFAULT ((0)),
+[DimsWidth] [float] NOT NULL CONSTRAINT [DF_AmazonSFPShipment_DimsWidth] DEFAULT ((0)),
+[DimsHeight] [float] NOT NULL CONSTRAINT [DF_AmazonSFPShipment_DimsHeight] DEFAULT ((0)),
+[DimsWeight] [float] NOT NULL CONSTRAINT [DF_AmazonSFPShipment_DimsWeight] DEFAULT ((0)),
+[DimsAddWeight] [bit] NOT NULL CONSTRAINT [DF_AmazonSFPShipment_DimsAddWeight] DEFAULT ((0)),
+[DeliveryExperience] [int] NOT NULL CONSTRAINT [DF_AmazonSFPShipment_DeliveryExperience] DEFAULT ((2)),
 [DeclaredValue] [money] NULL,
 [AmazonUniqueShipmentID] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 [Insurance] [bit] NOT NULL,
-[RequestedLabelFormat] [INT] NOT NULL CONSTRAINT [DF_AmazonShipment_RequestedLabelFormat] DEFAULT (-1),
-[Reference1] [nvarchar] (300) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_AmazonShipment_ReferenceNumber] DEFAULT ('')
+[RequestedLabelFormat] [INT] NOT NULL CONSTRAINT [DF_AmazonSFPShipment_RequestedLabelFormat] DEFAULT (-1),
+[Reference1] [nvarchar] (300) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_AmazonSFPShipment_ReferenceNumber] DEFAULT ('')
 )
 GO
-PRINT N'Creating primary key [PK_AmazonShipment] on [dbo].[AmazonShipment]'
+PRINT N'Creating primary key [PK_AmazonSFPShipment] on [dbo].[AmazonSFPShipment]'
 GO
-ALTER TABLE [dbo].[AmazonShipment] ADD CONSTRAINT [PK_AmazonShipment] PRIMARY KEY CLUSTERED  ([ShipmentID])
+ALTER TABLE [dbo].[AmazonSFPShipment] ADD CONSTRAINT [PK_AmazonSFPShipment] PRIMARY KEY CLUSTERED  ([ShipmentID])
 GO
 SET NUMERIC_ROUNDABORT OFF
 GO
 SET ANSI_PADDING, ANSI_WARNINGS, CONCAT_NULL_YIELDS_NULL, ARITHABORT, QUOTED_IDENTIFIER, ANSI_NULLS ON
 GO
-PRINT N'Creating [dbo].[AmazonProfile]'
+PRINT N'Creating [dbo].[AmazonSFPProfile]'
 GO
-CREATE TABLE [dbo].[AmazonProfile]
+CREATE TABLE [dbo].[AmazonSFPProfile]
 (
 [ShippingProfileID] [bigint] NOT NULL,
 [DeliveryExperience] [int] NULL,
@@ -1955,9 +1955,9 @@ CREATE TABLE [dbo].[AmazonProfile]
 [Reference1] [nvarchar] (300) COLLATE SQL_Latin1_General_CP1_CI_AS NULL
 )
 GO
-PRINT N'Creating primary key [PK_AmazonProfile] on [dbo].[AmazonProfile]'
+PRINT N'Creating primary key [PK_AmazonSFPProfile] on [dbo].[AmazonSFPProfile]'
 GO
-ALTER TABLE [dbo].[AmazonProfile] ADD CONSTRAINT [PK_AmazonProfile] PRIMARY KEY CLUSTERED  ([ShippingProfileID])
+ALTER TABLE [dbo].[AmazonSFPProfile] ADD CONSTRAINT [PK_AmazonSFPProfile] PRIMARY KEY CLUSTERED  ([ShippingProfileID])
 GO
 PRINT N'Creating [dbo].[FedExShipment]'
 GO
@@ -5663,13 +5663,13 @@ PRINT N'Adding foreign keys to [dbo].[FedExShipment]'
 GO
 ALTER TABLE [dbo].[FedExShipment] ADD CONSTRAINT [FK_FedExShipment_Shipment] FOREIGN KEY ([ShipmentID]) REFERENCES [dbo].[Shipment] ([ShipmentID]) ON DELETE CASCADE
 GO
-PRINT N'Adding foreign keys to [dbo].[AmazonShipment]'
+PRINT N'Adding foreign keys to [dbo].[AmazonSFPShipment]'
 GO
-ALTER TABLE [dbo].[AmazonShipment] ADD CONSTRAINT [FK_AmazonShipment_Shipment] FOREIGN KEY ([ShipmentID]) REFERENCES [dbo].[Shipment] ([ShipmentID]) ON DELETE CASCADE
+ALTER TABLE [dbo].[AmazonSFPShipment] ADD CONSTRAINT [FK_AmazonSFPShipment_Shipment] FOREIGN KEY ([ShipmentID]) REFERENCES [dbo].[Shipment] ([ShipmentID]) ON DELETE CASCADE
 GO
-PRINT N'Adding foreign keys to [dbo].[AmazonProfile]'
+PRINT N'Adding foreign keys to [dbo].[AmazonSFPProfile]'
 GO
-ALTER TABLE [dbo].[AmazonProfile] ADD CONSTRAINT [FK_AmazonProfile_ShippingProfile] FOREIGN KEY ([ShippingProfileID]) REFERENCES [dbo].[ShippingProfile] ([ShippingProfileID]) ON DELETE CASCADE
+ALTER TABLE [dbo].[AmazonSFPProfile] ADD CONSTRAINT [FK_AmazonSFPProfile_ShippingProfile] FOREIGN KEY ([ShippingProfileID]) REFERENCES [dbo].[ShippingProfile] ([ShippingProfileID]) ON DELETE CASCADE
 GO
 PRINT N'Adding foreign keys to [dbo].[FilterSequence]'
 GO
@@ -7663,21 +7663,21 @@ EXEC sp_addextendedproperty N'AuditFormat', N'4', 'SCHEMA', N'dbo', 'TABLE', N'U
 GO
 EXEC sp_addextendedproperty N'AuditFormat', N'1', 'SCHEMA', N'dbo', 'TABLE', N'UpsShipment', 'COLUMN', N'WorldShipStatus'
 GO
-EXEC sp_addextendedproperty N'AuditFormat', N'1', 'SCHEMA', N'dbo', 'TABLE', N'AmazonShipment', 'COLUMN', N'CarrierName'
+EXEC sp_addextendedproperty N'AuditFormat', N'1', 'SCHEMA', N'dbo', 'TABLE', N'AmazonSFPShipment', 'COLUMN', N'CarrierName'
 GO
-EXEC sp_addextendedproperty N'AuditFormat', N'1', 'SCHEMA', N'dbo', 'TABLE', N'AmazonShipment', 'COLUMN', N'ShippingServiceName'
+EXEC sp_addextendedproperty N'AuditFormat', N'1', 'SCHEMA', N'dbo', 'TABLE', N'AmazonSFPShipment', 'COLUMN', N'ShippingServiceName'
 GO
-EXEC sp_addextendedproperty N'AuditFormat', N'2', 'SCHEMA', N'dbo', 'TABLE', N'AmazonShipment', 'COLUMN', N'InsuranceValue'
+EXEC sp_addextendedproperty N'AuditFormat', N'2', 'SCHEMA', N'dbo', 'TABLE', N'AmazonSFPShipment', 'COLUMN', N'InsuranceValue'
 GO
-EXEC sp_addextendedproperty N'AuditFormat', N'1', 'SCHEMA', N'dbo', 'TABLE', N'AmazonShipment', 'COLUMN', N'DimsProfileID'
+EXEC sp_addextendedproperty N'AuditFormat', N'1', 'SCHEMA', N'dbo', 'TABLE', N'AmazonSFPShipment', 'COLUMN', N'DimsProfileID'
 GO
-EXEC sp_addextendedproperty N'AuditFormat', N'3', 'SCHEMA', N'dbo', 'TABLE', N'AmazonShipment', 'COLUMN', N'DimsWeight'
+EXEC sp_addextendedproperty N'AuditFormat', N'3', 'SCHEMA', N'dbo', 'TABLE', N'AmazonSFPShipment', 'COLUMN', N'DimsWeight'
 GO
-EXEC sp_addextendedproperty N'AuditFormat', N'1', 'SCHEMA', N'dbo', 'TABLE', N'AmazonShipment', 'COLUMN', N'DimsAddWeight'
+EXEC sp_addextendedproperty N'AuditFormat', N'1', 'SCHEMA', N'dbo', 'TABLE', N'AmazonSFPShipment', 'COLUMN', N'DimsAddWeight'
 GO
-EXEC sp_addextendedproperty N'AuditFormat', N'129', 'SCHEMA', N'dbo', 'TABLE', N'AmazonShipment', 'COLUMN', N'DeliveryExperience'
+EXEC sp_addextendedproperty N'AuditFormat', N'129', 'SCHEMA', N'dbo', 'TABLE', N'AmazonSFPShipment', 'COLUMN', N'DeliveryExperience'
 GO
-EXEC sp_addextendedproperty N'AuditFormat', N'1', 'SCHEMA', N'dbo', 'TABLE', N'AmazonShipment', 'COLUMN', N'DeclaredValue'
+EXEC sp_addextendedproperty N'AuditFormat', N'1', 'SCHEMA', N'dbo', 'TABLE', N'AmazonSFPShipment', 'COLUMN', N'DeclaredValue'
 GO
 EXEC sys.sp_addextendedproperty @name=N'AuditFormat', @value=N'4' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'AsendiaShipment', @level2type=N'COLUMN',@level2name=N'AsendiaAccountID'
 GO
