@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Linq;
 using System.Reflection;
+using log4net;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Queue;
 using Newtonsoft.Json;
+using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model.Custom;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Users;
 
@@ -16,19 +19,30 @@ namespace ShipWorks.ApplicationCore.CommandLineOptions
     /// </summary>
     public static class AutoUpgradeFailureSubmitter
     {
+        private static readonly ILog log = LogManager.GetLogger(typeof(AutoUpgradeFailureSubmitter));
+
         /// <summary>
         /// Submit the failure to the queue
         /// </summary>
         public static void Submit(string versionThatFailed, string failureReason)
         {
-            Version version = Assembly.GetExecutingAssembly().GetName().Version;
-
             try
             {
+                Version version = Assembly.GetExecutingAssembly().GetName().Version;
+
                 if (SqlSession.IsConfigured && SqlSession.Current != null)
                 {
                     UserManager.InitializeForCurrentUser();
                     UserEntity user = UserManager.GetUsers(false).OrderByDescending(u => u.IsAdmin).FirstOrDefault();
+
+                    string licenseKeys = string.Empty; 
+
+                    using (ISqlAdapter adapter = SqlAdapter.Default)
+                    {
+                        StoreCollection stores = new StoreCollection();
+                        adapter.FetchEntityCollection(stores, null, (IRelationPredicateBucket) null);
+                        licenseKeys = String.Join($"{Environment.NewLine}", stores?.Select(s => s.License));
+                    }
 
                     if (CloudStorageAccount.TryParse(GetConnectionString(version), out CloudStorageAccount storageAccount))
                     {
@@ -38,16 +52,18 @@ namespace ShipWorks.ApplicationCore.CommandLineOptions
                             CustomerEmail = user?.Email ?? "Unknown Email",
                             Version = versionThatFailed,
                             DbID = new DatabaseIdentifier().Get().ToString("N"),
-                            FailureReason = failureReason
+                            FailureReason = failureReason,
+                            StoreKeys = licenseKeys,
                         };
 
                         LogToQueue(storageAccount, details);
                     }
                 }
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                // Just carry on
+                // Just log and carry on
+                log.Error(ex);
             }
         }
 
@@ -101,6 +117,11 @@ namespace ShipWorks.ApplicationCore.CommandLineOptions
             /// The failure reason
             /// </summary>
             public string FailureReason { get; set; }
+
+            /// <summary>
+            /// The store license keys
+            /// </summary>
+            public string StoreKeys { get; set; }
         }
     }
 }

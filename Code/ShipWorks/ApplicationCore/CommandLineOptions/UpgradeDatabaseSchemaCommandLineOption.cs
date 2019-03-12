@@ -20,7 +20,7 @@ namespace ShipWorks.ApplicationCore.CommandLineOptions
     /// </summary>
     public class UpgradeDatabaseSchemaCommandLineOption : ICommandLineCommandHandler
     {
-        static readonly ILog log = LogManager.GetLogger(typeof(UpgradeDatabaseSchemaCommandLineOption));
+        private static readonly ILog log = LogManager.GetLogger(typeof(UpgradeDatabaseSchemaCommandLineOption));
         private IAutoUpdateStatusProvider autoUpdateStatusProvider = new AutoUpdateStatusProvider();
 
         /// <summary>

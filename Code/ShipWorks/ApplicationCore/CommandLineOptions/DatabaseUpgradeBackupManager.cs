@@ -16,7 +16,7 @@ namespace ShipWorks.ApplicationCore.CommandLineOptions
     /// </summary>
     public class DatabaseUpgradeBackupManager
     {
-        private static readonly ILog log = LogManager.GetLogger(typeof(UpgradeDatabaseSchemaCommandLineOption));
+        private static readonly ILog log = LogManager.GetLogger(typeof(DatabaseUpgradeBackupManager));
         private const string BackupNameFormat = "{0}_AutomaticUpgradeBackup.bak";
         private readonly string database;
         private readonly string backupName;
