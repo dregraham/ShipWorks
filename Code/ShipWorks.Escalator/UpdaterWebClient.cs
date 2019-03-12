@@ -79,7 +79,7 @@ namespace ShipWorks.Escalator
         }
 
         /// <summary>
-        /// Get the url and sha of requested version 
+        /// Get the url and sha of requested version
         /// </summary>
         public async Task<ShipWorksRelease> GetVersionToDownload(Version version)
         {

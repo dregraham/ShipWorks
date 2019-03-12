@@ -82,12 +82,12 @@ namespace ShipWorks.Escalator
                 ShowSplashScreenAndAttemptToCloseShipWorks(30);
 
                 Thread.Sleep(30000);
+            }
 
-                foreach (Process process in Process.GetProcessesByName("shipworks").Where(p => IsRunningWithoutArguments(p)).ToList())
-                {
-                    log.Info($"Killing ShipWorks process.");
-                    process?.Kill();
-                }
+            foreach (Process process in Process.GetProcessesByName("shipworks"))
+            {
+                log.Info($"Killing ShipWorks process.");
+                process?.Kill();
             }
         }
 
