@@ -47,7 +47,7 @@ namespace ShipWorks.Filters.Content.Conditions.Shipments
                     .Where(t => t.ShipmentTypeCode != ShipmentTypeCode.BestRate)
                     .Where(
                         t =>
-                            t.ShipmentTypeCode != ShipmentTypeCode.Amazon ||
+                            t.ShipmentTypeCode != ShipmentTypeCode.AmazonSFP ||
                             shippingManager.IsShipmentTypeConfigured(t.ShipmentTypeCode))
                     .Select(t => new ValueChoice<ShipmentTypeCode>(t.ShipmentTypeName, t.ShipmentTypeCode))
                     .ToArray();

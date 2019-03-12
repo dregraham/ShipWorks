@@ -1,12 +1,11 @@
 ﻿using System;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Platforms.Amazon.Mws;
-using ShipWorks.Shipping.Carriers.Amazon;
 using Autofac.Extras.Moq;
 using Xunit;
-using ShipWorks.Stores.Content;
 using Moq;
 using ShipWorks.Stores;
+using ShipWorks.Shipping.Carriers.Amazon.SFP;
 
 namespace ShipWorks.Tests.Shipping.Carriers.Amazon.Api
 {

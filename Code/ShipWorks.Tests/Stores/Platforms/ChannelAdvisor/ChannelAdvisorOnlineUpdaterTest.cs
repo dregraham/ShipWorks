@@ -342,7 +342,7 @@ namespace ShipWorks.Tests.Stores.Platforms.ChannelAdvisor
             amazonShipmentEntity.CarrierName = carrierName;
             amazonShipmentEntity.ShippingServiceName = shippingServiceName;
 
-            SetupShipmentDefaults(ShipmentTypeCode.Amazon);
+            SetupShipmentDefaults(ShipmentTypeCode.AmazonSFP);
 
             string code = ChannelAdvisorOnlineUpdater.GetShipmentClassCode(shipmentEntity, storeEntity);
 
@@ -363,7 +363,7 @@ namespace ShipWorks.Tests.Stores.Platforms.ChannelAdvisor
         {
             amazonShipmentEntity.CarrierName = carrierName;
 
-            SetupShipmentDefaults(ShipmentTypeCode.Amazon);
+            SetupShipmentDefaults(ShipmentTypeCode.AmazonSFP);
 
             string code = ChannelAdvisorOnlineUpdater.GetCarrierCode(shipmentEntity, storeEntity);
 
@@ -375,7 +375,7 @@ namespace ShipWorks.Tests.Stores.Platforms.ChannelAdvisor
         {
             amazonShipmentEntity = null;
 
-            SetupShipmentDefaults(ShipmentTypeCode.Amazon);
+            SetupShipmentDefaults(ShipmentTypeCode.AmazonSFP);
 
             Assert.Throws<ArgumentNullException>(
                 () => ChannelAdvisorOnlineUpdater.GetCarrierCode(shipmentEntity, storeEntity));
@@ -386,7 +386,7 @@ namespace ShipWorks.Tests.Stores.Platforms.ChannelAdvisor
         {
             amazonShipmentEntity = null;
 
-            SetupShipmentDefaults(ShipmentTypeCode.Amazon);
+            SetupShipmentDefaults(ShipmentTypeCode.AmazonSFP);
 
             Assert.Throws<ArgumentNullException>(
                 () => ChannelAdvisorOnlineUpdater.GetCarrierCode(shipmentEntity, storeEntity));

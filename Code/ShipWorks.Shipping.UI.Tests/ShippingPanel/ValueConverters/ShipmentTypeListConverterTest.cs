@@ -178,12 +178,12 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ValueConverters
                 ShipmentTypeCode.UpsWorldShip,
                 ShipmentTypeCode.UpsOnLineTools,
                 ShipmentTypeCode.FedEx,
-                ShipmentTypeCode.Amazon
+                ShipmentTypeCode.AmazonSFP
             };
 
             ShipmentTypeListConverter testObject = new ShipmentTypeListConverter(x => "foo");
-            IEnumerable<ShipmentTypeListItem> results = testObject.Convert(new object[] { allTypes, ShipmentTypeCode.Amazon }, null, null, null) as IEnumerable<ShipmentTypeListItem>;
-            Assert.Contains(ShipmentTypeCode.Amazon, results.Select(x => x.Value));
+            IEnumerable<ShipmentTypeListItem> results = testObject.Convert(new object[] { allTypes, ShipmentTypeCode.AmazonSFP }, null, null, null) as IEnumerable<ShipmentTypeListItem>;
+            Assert.Contains(ShipmentTypeCode.AmazonSFP, results.Select(x => x.Value));
         }
 
         [Fact]
@@ -204,12 +204,12 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ValueConverters
                 ShipmentTypeCode.UpsWorldShip,
                 ShipmentTypeCode.UpsOnLineTools,
                 ShipmentTypeCode.FedEx,
-                ShipmentTypeCode.Amazon
+                ShipmentTypeCode.AmazonSFP
             };
 
             ShipmentTypeListConverter testObject = new ShipmentTypeListConverter(x => "foo");
             IEnumerable<ShipmentTypeListItem> results = testObject.Convert(new object[] { allTypes, ShipmentTypeCode.FedEx }, null, null, null) as IEnumerable<ShipmentTypeListItem>;
-            Assert.DoesNotContain(ShipmentTypeCode.Amazon, results.Select(x => x.Value));
+            Assert.DoesNotContain(ShipmentTypeCode.AmazonSFP, results.Select(x => x.Value));
         }
     }
 }

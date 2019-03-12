@@ -375,7 +375,7 @@ namespace ShipWorks.ApplicationCore.Licensing
                     rateResultCount.Apply(target);
                 }
             }
-            else if (shipmentTypeCode == ShipmentTypeCode.Amazon)
+            else if (shipmentTypeCode == ShipmentTypeCode.AmazonSFP)
             {
                 ShippingPolicies.Current.Apply(shipmentTypeCode, target);
             }

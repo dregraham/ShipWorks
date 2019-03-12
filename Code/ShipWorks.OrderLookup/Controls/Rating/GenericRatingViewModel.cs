@@ -19,7 +19,7 @@ namespace ShipWorks.OrderLookup.Controls.Rating
     /// <summary>
     /// View model for the RatingPanelControl for use with Order lookup mode
     /// </summary>
-    [KeyedComponent(typeof(IRatingViewModel), ShipmentTypeCode.Amazon)]
+    [KeyedComponent(typeof(IRatingViewModel), ShipmentTypeCode.AmazonSFP)]
     [KeyedComponent(typeof(IRatingViewModel), ShipmentTypeCode.BestRate)]
     [KeyedComponent(typeof(IRatingViewModel), ShipmentTypeCode.Endicia)]
     [KeyedComponent(typeof(IRatingViewModel), ShipmentTypeCode.FedEx)]

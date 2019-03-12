@@ -10,7 +10,7 @@ namespace ShipWorks.OrderLookup.Controls.OrderItems
     /// <summary>
     /// View model for OrderItemsControl
     /// </summary>
-    [KeyedComponent(typeof(IOrderItemsViewModel), ShipmentTypeCode.Amazon)]
+    [KeyedComponent(typeof(IOrderItemsViewModel), ShipmentTypeCode.AmazonSFP)]
     [KeyedComponent(typeof(IOrderItemsViewModel), ShipmentTypeCode.BestRate)]
     [KeyedComponent(typeof(IOrderItemsViewModel), ShipmentTypeCode.Endicia)]
     [KeyedComponent(typeof(IOrderItemsViewModel), ShipmentTypeCode.FedEx)]

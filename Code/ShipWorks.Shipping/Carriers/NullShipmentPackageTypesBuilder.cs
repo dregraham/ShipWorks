@@ -14,7 +14,7 @@ namespace ShipWorks.Shipping.Carriers
     [KeyedComponent(typeof(IShipmentPackageTypesBuilder), ShipmentTypeCode.None, SingleInstance = true)]
     [KeyedComponent(typeof(IShipmentPackageTypesBuilder), ShipmentTypeCode.Other, SingleInstance = true)]
     [KeyedComponent(typeof(IShipmentPackageTypesBuilder), ShipmentTypeCode.BestRate, SingleInstance = true)]
-    [KeyedComponent(typeof(IShipmentPackageTypesBuilder), ShipmentTypeCode.Amazon, SingleInstance = true)]
+    [KeyedComponent(typeof(IShipmentPackageTypesBuilder), ShipmentTypeCode.AmazonSFP, SingleInstance = true)]
 
     public class NullShipmentPackageTypesBuilder : IShipmentPackageTypesBuilder
     {

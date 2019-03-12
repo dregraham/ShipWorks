@@ -11,7 +11,7 @@ namespace ShipWorks.OrderLookup.Controls.From
     /// <summary>
     /// Amazon address view model
     /// </summary>
-    [KeyedComponent(typeof(IFromViewModel), ShipmentTypeCode.Amazon)]
+    [KeyedComponent(typeof(IFromViewModel), ShipmentTypeCode.AmazonSFP)]
     [WpfView(typeof(AmazonFromControl))]
     public class AmazonFromViewModel : GenericFromViewModel
     {

@@ -53,14 +53,14 @@ namespace ShipWorks.Shipping.Tests.Services
             mock.Create<EditableShippingProfile>(TypedParameter.From(profile), TypedParameter.From(shortcut));
 
         [Theory]
-        [InlineData(ShipmentTypeCode.Amazon, 1)]
+        [InlineData(ShipmentTypeCode.AmazonSFP, 1)]
         [InlineData(ShipmentTypeCode.Asendia, 0)]
         public void GetEditableConfiguredShipmentTypeProfiles_ShippingProfileContainsShipmentType_WhenShipmentTypeConfigured(ShipmentTypeCode configuredType, int expectedShipmentProfileCount)
         {
             var profileEntity = new ShippingProfileEntity()
             {
                 ShippingProfileID = 42,
-                ShipmentType = ShipmentTypeCode.Amazon
+                ShipmentType = ShipmentTypeCode.AmazonSFP
             };
 
             var shortcut = new ShortcutEntity() { RelatedObjectID = 42, VirtualKey = null, ModifierKeys = null };

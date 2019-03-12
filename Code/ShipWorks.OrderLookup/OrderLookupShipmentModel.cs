@@ -48,7 +48,7 @@ namespace ShipWorks.OrderLookup
             new (Func<ICarrierShipmentAdapter, IEnumerable<INotifyPropertyChanged>>, Func<ShipmentTypeCode, bool>)[]
             {
                 RegisterEventEntity(x => x?.Shipment, x => true),
-                RegisterEventEntity(x => x?.Shipment?.Amazon, x => x == ShipmentTypeCode.Amazon),
+                RegisterEventEntity(x => x?.Shipment?.Amazon, x => x == ShipmentTypeCode.AmazonSFP),
                 RegisterEventEntity(x => x?.Shipment?.Asendia, x => x == ShipmentTypeCode.Asendia),
                 RegisterEventEntity(x => x?.Shipment?.BestRate, x => x == ShipmentTypeCode.BestRate),
                 RegisterEventEntity(x => x?.Shipment?.DhlExpress, x => x == ShipmentTypeCode.DhlExpress),

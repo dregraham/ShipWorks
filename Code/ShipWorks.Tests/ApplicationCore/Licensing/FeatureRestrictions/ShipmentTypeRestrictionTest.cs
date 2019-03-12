@@ -196,7 +196,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing.FeatureRestrictions
 
                 ShipmentTypeRestriction testObject = mock.Create<ShipmentTypeRestriction>();
 
-                EditionRestrictionLevel result = testObject.Check(licenseCapabilities.Object, ShipmentTypeCode.Amazon);
+                EditionRestrictionLevel result = testObject.Check(licenseCapabilities.Object, ShipmentTypeCode.AmazonSFP);
 
                 Assert.Equal(EditionRestrictionLevel.None, result);
             }
@@ -219,7 +219,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing.FeatureRestrictions
 
                 ShipmentTypeRestriction testObject = mock.Create<ShipmentTypeRestriction>();
 
-                EditionRestrictionLevel result = testObject.Check(licenseCapabilities.Object, ShipmentTypeCode.Amazon);
+                EditionRestrictionLevel result = testObject.Check(licenseCapabilities.Object, ShipmentTypeCode.AmazonSFP);
 
                 Assert.Equal(EditionRestrictionLevel.Hidden, result);
             }
@@ -293,7 +293,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing.FeatureRestrictions
 
                 ShipmentTypeRestriction testObject = mock.Create<ShipmentTypeRestriction>();
 
-                EditionRestrictionLevel result = testObject.Check(licenseCapabilities.Object, ShipmentTypeCode.Amazon);
+                EditionRestrictionLevel result = testObject.Check(licenseCapabilities.Object, ShipmentTypeCode.AmazonSFP);
 
                 Assert.Equal(EditionRestrictionLevel.None, result);
             }

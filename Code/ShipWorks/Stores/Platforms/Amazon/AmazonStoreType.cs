@@ -125,7 +125,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
                     CreateFilterFba(),
                 };
 
-            if (ShipmentTypeManager.EnabledShipmentTypeCodes.Contains(ShipmentTypeCode.Amazon))
+            if (ShipmentTypeManager.EnabledShipmentTypeCodes.Contains(ShipmentTypeCode.AmazonSFP))
             {
                 filters.Add(CreateFilterAmazonPrime());
             }
@@ -532,7 +532,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
         {
             ShippingAddressEditStateType editable = base.ShippingAddressEditableState(order, shipment);
 
-            if (editable == ShippingAddressEditStateType.Editable && shipment.ShipmentTypeCode == ShipmentTypeCode.Amazon)
+            if (editable == ShippingAddressEditStateType.Editable && shipment.ShipmentTypeCode == ShipmentTypeCode.AmazonSFP)
             {
                 return ShippingAddressEditStateType.AmazonSfp;
             }

@@ -19,7 +19,7 @@ namespace ShipWorks.Shipping.Carriers
     /// <summary>
     /// A preprocessor that can be called prior to processing a shipment.
     /// </summary>
-    [KeyedComponent(typeof(IShipmentPreProcessor), ShipmentTypeCode.Amazon)]
+    [KeyedComponent(typeof(IShipmentPreProcessor), ShipmentTypeCode.AmazonSFP)]
     [KeyedComponent(typeof(IShipmentPreProcessor), ShipmentTypeCode.Asendia)]
     [KeyedComponent(typeof(IShipmentPreProcessor), ShipmentTypeCode.DhlExpress)]
     [KeyedComponent(typeof(IShipmentPreProcessor), ShipmentTypeCode.Endicia)]

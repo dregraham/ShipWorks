@@ -240,8 +240,8 @@
       <DependentUpon>EndiciaReferenceControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\Reference\EndiciaReferenceViewModel.cs" />
-    <Compile Include="Controls\ShipmentDetails\AmazonShipmentDetailsControl.xaml.cs">
-      <DependentUpon>AmazonShipmentDetailsControl.xaml</DependentUpon>
+    <Compile Include="Controls\ShipmentDetails\AmazonSFPShipmentDetailsControl.xaml.cs">
+      <DependentUpon>AmazonSFPShipmentDetailsControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\ShipmentDetails\FedExShipmentDetailsControl.xaml.cs">
       <DependentUpon>FedExShipmentDetailsControl.xaml</DependentUpon>
@@ -267,7 +267,7 @@
     </Compile>
     <Compile Include="Controls\ShipmentDetails\CarrierShipmentAdapterOptionsProvider.cs" />
     <Compile Include="Controls\ShipmentDetails\BestRateShipmentDetailsViewModel.cs" />
-    <Compile Include="Controls\ShipmentDetails\AmazonShipmentDetailsViewModel.cs" />
+    <Compile Include="Controls\ShipmentDetails\AmazonSFPShipmentDetailsViewModel.cs" />
     <Compile Include="Controls\ShipmentDetails\UpsShipmentDetailsViewModel.cs" />
     <Compile Include="Controls\ShipmentDetails\UpsShipmentDetailsControl.xaml.cs">
       <DependentUpon>UpsShipmentDetailsControl.xaml</DependentUpon>
@@ -510,7 +510,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Controls\ShipmentDetails\AmazonShipmentDetailsControl.xaml">
+    <Page Include="Controls\ShipmentDetails\AmazonSFPShipmentDetailsControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

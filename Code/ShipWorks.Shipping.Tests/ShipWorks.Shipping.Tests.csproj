@@ -165,13 +165,13 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Carriers\Amazon\AmazonCreateShipmentRequestTest.cs" />
-    <Compile Include="Carriers\Amazon\AmazonDownloadedLabelDataTest.cs" />
-    <Compile Include="Carriers\Amazon\AmazonServiceTypeRepositoryTest.cs" />
-    <Compile Include="Carriers\Amazon\AmazonShipmentAdapterTest.cs" />
-    <Compile Include="Carriers\Amazon\AmazonShipmentServiceBuilderTest.cs" />
-    <Compile Include="Carriers\Amazon\AmazonShippingProfileApplicationStrategyTest.cs" />
-    <Compile Include="Carriers\Amazon\RateGroupFilters\AmazonAvailableServiceTypeRateGroupFilterTest.cs" />
+    <Compile Include="Carriers\Amazon\AmazonSFPCreateShipmentRequestTest.cs" />
+    <Compile Include="Carriers\Amazon\AmazonSFPDownloadedLabelDataTest.cs" />
+    <Compile Include="Carriers\Amazon\AmazonSFPServiceTypeRepositoryTest.cs" />
+    <Compile Include="Carriers\Amazon\AmazonSFPShipmentAdapterTest.cs" />
+    <Compile Include="Carriers\Amazon\AmazonSFPShipmentServiceBuilderTest.cs" />
+    <Compile Include="Carriers\Amazon\AmazonSFPShippingProfileApplicationStrategyTest.cs" />
+    <Compile Include="Carriers\Amazon\RateGroupFilters\AmazonSFPAvailableServiceTypeRateGroupFilterTest.cs" />
     <Compile Include="Carriers\Asendia\AsendiaLabelServiceTest.cs" />
     <Compile Include="Carriers\Asendia\AsendiaShipmentRequestFactoryTest.cs" />
     <Compile Include="Carriers\Asendia\AsendiaShipmentTypeTest.cs" />
@@ -384,16 +384,16 @@
     <Compile Include="Services\ShipmentTypeProviderTest.cs" />
     <Compile Include="Services\ShippingManagerWrapperTest.cs" />
     <Compile Include="Services\ShippingOriginManagerWrapperTest.cs" />
-    <Compile Include="Carriers\Amazon\RateGroupFilters\AmazonAllowedCarriersRateGroupFilterTest.cs" />
-    <Compile Include="Carriers\Amazon\AmazonCarrierTermsAndConditionsNotAcceptedFootnoteFactoryTest.cs" />
-    <Compile Include="Carriers\Amazon\AmazonInsuranceChoiceTest.cs" />
-    <Compile Include="Carriers\Amazon\AmazonLabelServiceTest.cs" />
+    <Compile Include="Carriers\Amazon\RateGroupFilters\AmazonSFPAllowedCarriersRateGroupFilterTest.cs" />
+    <Compile Include="Carriers\Amazon\AmazonSFPCarrierTermsAndConditionsNotAcceptedFootnoteFactoryTest.cs" />
+    <Compile Include="Carriers\Amazon\AmazonSFPInsuranceChoiceTest.cs" />
+    <Compile Include="Carriers\Amazon\AmazonSFPLabelServiceTest.cs" />
     <Compile Include="Carriers\Amazon\AmazonMwsWebClientSettingsFactoryTest.cs" />
-    <Compile Include="Carriers\Amazon\AmazonRateGroupFactoryTest.cs" />
-    <Compile Include="Carriers\Amazon\AmazonShipmentRequestDetailsFactoryTest.cs" />
-    <Compile Include="Carriers\Amazon\AmazonShipmentTypeTest.cs" />
-    <Compile Include="Carriers\Amazon\AmazonShippingWebClientTest.cs" />
-    <Compile Include="Carriers\Amazon\Api\AmazonRatingServiceTests.cs" />
+    <Compile Include="Carriers\Amazon\AmazonSFPRateGroupFactoryTest.cs" />
+    <Compile Include="Carriers\Amazon\AmazonSFPShipmentRequestDetailsFactoryTest.cs" />
+    <Compile Include="Carriers\Amazon\AmazonSFPShipmentTypeTest.cs" />
+    <Compile Include="Carriers\Amazon\AmazonSFPShippingWebClientTest.cs" />
+    <Compile Include="Carriers\Amazon\Api\AmazonSFPRatingServiceTests.cs" />
     <Compile Include="Carriers\Amazon\Api\GetEligibleShippingServicesResponseTest.cs" />
     <Compile Include="Carriers\BestRate\BestRateRatingServiceTest.cs" />
     <Compile Include="Carriers\BestRate\FakeExceptionHandlerBroker.cs" />

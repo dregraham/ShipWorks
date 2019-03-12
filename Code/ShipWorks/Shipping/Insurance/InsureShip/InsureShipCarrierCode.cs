@@ -23,7 +23,7 @@ namespace ShipWorks.Shipping.Insurance.InsureShip
 
             switch (shipment.ShipmentTypeCode)
             {
-                case ShipmentTypeCode.Amazon:
+                case ShipmentTypeCode.AmazonSFP:
                     carrierCode = GetCarrierCodeForAmazon(shipment);
                     break;
 

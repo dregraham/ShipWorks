@@ -183,7 +183,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor.OnlineUpdating
             // not going through ShippingManager.GetServiceDescription because we need to not include any prefixes like "USPS"
             ShipmentTypeCode type = (ShipmentTypeCode) shipment.ShipmentType;
 
-            if (type == ShipmentTypeCode.Amazon)
+            if (type == ShipmentTypeCode.AmazonSFP)
             {
                 return GetAmazonShipmentClassCode(shipment);
             }
@@ -476,7 +476,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor.OnlineUpdating
 
             switch ((ShipmentTypeCode) shipment.ShipmentType)
             {
-                case ShipmentTypeCode.Amazon:
+                case ShipmentTypeCode.AmazonSFP:
                     return GetAmazonCarrierName(shipment);
 
                 case ShipmentTypeCode.FedEx:

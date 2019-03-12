@@ -15,13 +15,13 @@ using Interapptive.Shared.Enums;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.Carriers.Amazon;
 using ShipWorks.Shipping.Carriers.FedEx;
 using ShipWorks.Shipping.Carriers.Other;
 using ShipWorks.Shipping.Carriers.Postal.Usps;
 using ShipWorks.Shipping.Policies;
 using ShipWorks.Stores;
 using ShipWorks.Stores.Platforms.Amazon;
+using ShipWorks.Shipping.Carriers.Amazon.SFP;
 
 namespace ShipWorks.Shipping.Tests.Services
 {
@@ -46,7 +46,7 @@ namespace ShipWorks.Shipping.Tests.Services
         private OtherShipmentType otherShipmentType;
         private UspsShipmentType uspsShipmentType;
         private FedExShipmentType fedExShipmentType;
-        private AmazonShipmentType amazonShipmentType;
+        private AmazonSFPShipmentType amazonShipmentType;
         private ShipmentEntity shipment;
 
         public ShipmentTypeProviderTest()
@@ -74,7 +74,7 @@ namespace ShipWorks.Shipping.Tests.Services
             otherShipmentType = mock.Create<OtherShipmentType>();
             uspsShipmentType = mock.Create<UspsShipmentType>();
             fedExShipmentType = mock.Create<FedExShipmentType>();
-            amazonShipmentType = mock.Create<AmazonShipmentType>();
+            amazonShipmentType = mock.Create<AmazonSFPShipmentType>();
 
             amazonOrder.IsPrime = (int) AmazonIsPrime.No;
             shipment = new ShipmentEntity
@@ -95,7 +95,7 @@ namespace ShipWorks.Shipping.Tests.Services
             amazonShipmentShippingPolicy.Apply(target);
 
             license
-                .Setup(l => l.ApplyShippingPolicy(ShipmentTypeCode.Amazon, It.IsAny<object>()))
+                .Setup(l => l.ApplyShippingPolicy(ShipmentTypeCode.AmazonSFP, It.IsAny<object>()))
                 .Callback((ShipmentTypeCode s, object t) => ((AmazonPrimeShippingPolicyTarget) t).Allowed = target.Allowed);
 
             amazonOrder.Store = amazonStore;
@@ -190,7 +190,7 @@ namespace ShipWorks.Shipping.Tests.Services
         public void GetAvailableShipmentTypes_ReturnsOnlyAmazon_WhenShipmentTypeCodeIsAmazon()
         {
             mock.Mock<IShipmentTypeManager>().SetupGet(x => x.EnabledShipmentTypeCodes)
-                .Returns(new List<ShipmentTypeCode> { ShipmentTypeCode.Other, ShipmentTypeCode.Usps, ShipmentTypeCode.Amazon });
+                .Returns(new List<ShipmentTypeCode> { ShipmentTypeCode.Other, ShipmentTypeCode.Usps, ShipmentTypeCode.AmazonSFP });
             mock.Mock<IShipmentTypeManager>().SetupGet(x => x.ShipmentTypes)
                 .Returns(new List<ShipmentType> { otherShipmentType, uspsShipmentType, amazonShipmentType });
 
@@ -202,12 +202,12 @@ namespace ShipWorks.Shipping.Tests.Services
             subject.OnNext(new EnabledCarriersChangedMessage(null, new[] { ShipmentTypeCode.Other }, new List<ShipmentTypeCode>()));
 
             var carrierAdapter = mock.Mock<ICarrierShipmentAdapter>();
-            carrierAdapter.SetupGet(c => c.ShipmentTypeCode).Returns(ShipmentTypeCode.Amazon);
+            carrierAdapter.SetupGet(c => c.ShipmentTypeCode).Returns(ShipmentTypeCode.AmazonSFP);
             carrierAdapter.SetupGet(c => c.Shipment).Returns(shipment);
 
             amazonShipmentShippingPolicy.Apply(target);
             Assert.Equal(1, testObject.GetAvailableShipmentTypes(carrierAdapter.Object).Count());
-            Assert.Equal(ShipmentTypeCode.Amazon, testObject.GetAvailableShipmentTypes(carrierAdapter.Object).First());
+            Assert.Equal(ShipmentTypeCode.AmazonSFP, testObject.GetAvailableShipmentTypes(carrierAdapter.Object).First());
         }
 
 
@@ -227,17 +227,17 @@ namespace ShipWorks.Shipping.Tests.Services
             carrierAdapter.SetupGet(c => c.ShipmentTypeCode).Returns(ShipmentTypeCode.Other);
 
             Assert.Equal(2, testObject.GetAvailableShipmentTypes(carrierAdapter.Object).Count());
-            Assert.True(testObject.GetAvailableShipmentTypes(carrierAdapter.Object).None(c => c == ShipmentTypeCode.Amazon));
+            Assert.True(testObject.GetAvailableShipmentTypes(carrierAdapter.Object).None(c => c == ShipmentTypeCode.AmazonSFP));
         }
 
         [Theory]
-        [InlineData(Ordertype.Amazon, ShipmentTypeCode.Amazon, RestrictionType.Hidden, AmazonIsPrime.Yes, false, false)]
-        [InlineData(Ordertype.Amazon, ShipmentTypeCode.Amazon, RestrictionType.Hidden, AmazonIsPrime.No, false, true)]
-        [InlineData(Ordertype.Amazon, ShipmentTypeCode.Amazon, RestrictionType.Hidden, AmazonIsPrime.Unknown, false, true)]
-        [InlineData(Ordertype.GenericModule, ShipmentTypeCode.Amazon, RestrictionType.Hidden, AmazonIsPrime.Yes, false, false)]
-        [InlineData(Ordertype.GenericModule, ShipmentTypeCode.Amazon, RestrictionType.Hidden, AmazonIsPrime.No, false, true)]
-        [InlineData(Ordertype.GenericModule, ShipmentTypeCode.Amazon, RestrictionType.Hidden, AmazonIsPrime.Unknown, false, true)]
-        [InlineData(Ordertype.BigCommerce, ShipmentTypeCode.Amazon, RestrictionType.Hidden, AmazonIsPrime.No, false, true)]
+        [InlineData(Ordertype.Amazon, ShipmentTypeCode.AmazonSFP, RestrictionType.Hidden, AmazonIsPrime.Yes, false, false)]
+        [InlineData(Ordertype.Amazon, ShipmentTypeCode.AmazonSFP, RestrictionType.Hidden, AmazonIsPrime.No, false, true)]
+        [InlineData(Ordertype.Amazon, ShipmentTypeCode.AmazonSFP, RestrictionType.Hidden, AmazonIsPrime.Unknown, false, true)]
+        [InlineData(Ordertype.GenericModule, ShipmentTypeCode.AmazonSFP, RestrictionType.Hidden, AmazonIsPrime.Yes, false, false)]
+        [InlineData(Ordertype.GenericModule, ShipmentTypeCode.AmazonSFP, RestrictionType.Hidden, AmazonIsPrime.No, false, true)]
+        [InlineData(Ordertype.GenericModule, ShipmentTypeCode.AmazonSFP, RestrictionType.Hidden, AmazonIsPrime.Unknown, false, true)]
+        [InlineData(Ordertype.BigCommerce, ShipmentTypeCode.AmazonSFP, RestrictionType.Hidden, AmazonIsPrime.No, false, true)]
         [InlineData(Ordertype.Amazon, ShipmentTypeCode.Other, RestrictionType.Hidden, AmazonIsPrime.Yes, false, false)]
         [InlineData(Ordertype.Amazon, ShipmentTypeCode.Other, RestrictionType.Hidden, AmazonIsPrime.No, false, true)]
         [InlineData(Ordertype.Amazon, ShipmentTypeCode.Other, RestrictionType.Hidden, AmazonIsPrime.Unknown, false, true)]
@@ -245,13 +245,13 @@ namespace ShipWorks.Shipping.Tests.Services
         [InlineData(Ordertype.GenericModule, ShipmentTypeCode.Other, RestrictionType.Hidden, AmazonIsPrime.No, false, true)]
         [InlineData(Ordertype.GenericModule, ShipmentTypeCode.Other, RestrictionType.Hidden, AmazonIsPrime.Unknown, false, true)]
         [InlineData(Ordertype.BigCommerce, ShipmentTypeCode.Other, RestrictionType.Hidden, AmazonIsPrime.No, false, true)]
-        [InlineData(Ordertype.Amazon, ShipmentTypeCode.Amazon, RestrictionType.PrimeOnly, AmazonIsPrime.Yes, true, false)]
-        [InlineData(Ordertype.Amazon, ShipmentTypeCode.Amazon, RestrictionType.PrimeOnly, AmazonIsPrime.No, false, true)]
-        [InlineData(Ordertype.Amazon, ShipmentTypeCode.Amazon, RestrictionType.PrimeOnly, AmazonIsPrime.Unknown, false, true)]
-        [InlineData(Ordertype.GenericModule, ShipmentTypeCode.Amazon, RestrictionType.PrimeOnly, AmazonIsPrime.Yes, true, false)]
-        [InlineData(Ordertype.GenericModule, ShipmentTypeCode.Amazon, RestrictionType.PrimeOnly, AmazonIsPrime.No, false, true)]
-        [InlineData(Ordertype.GenericModule, ShipmentTypeCode.Amazon, RestrictionType.PrimeOnly, AmazonIsPrime.Unknown, false, true)]
-        [InlineData(Ordertype.BigCommerce, ShipmentTypeCode.Amazon, RestrictionType.PrimeOnly, AmazonIsPrime.No, false, true)]
+        [InlineData(Ordertype.Amazon, ShipmentTypeCode.AmazonSFP, RestrictionType.PrimeOnly, AmazonIsPrime.Yes, true, false)]
+        [InlineData(Ordertype.Amazon, ShipmentTypeCode.AmazonSFP, RestrictionType.PrimeOnly, AmazonIsPrime.No, false, true)]
+        [InlineData(Ordertype.Amazon, ShipmentTypeCode.AmazonSFP, RestrictionType.PrimeOnly, AmazonIsPrime.Unknown, false, true)]
+        [InlineData(Ordertype.GenericModule, ShipmentTypeCode.AmazonSFP, RestrictionType.PrimeOnly, AmazonIsPrime.Yes, true, false)]
+        [InlineData(Ordertype.GenericModule, ShipmentTypeCode.AmazonSFP, RestrictionType.PrimeOnly, AmazonIsPrime.No, false, true)]
+        [InlineData(Ordertype.GenericModule, ShipmentTypeCode.AmazonSFP, RestrictionType.PrimeOnly, AmazonIsPrime.Unknown, false, true)]
+        [InlineData(Ordertype.BigCommerce, ShipmentTypeCode.AmazonSFP, RestrictionType.PrimeOnly, AmazonIsPrime.No, false, true)]
         [InlineData(Ordertype.Amazon, ShipmentTypeCode.Other, RestrictionType.PrimeOnly, AmazonIsPrime.Yes, true, false)]
         [InlineData(Ordertype.Amazon, ShipmentTypeCode.Other, RestrictionType.PrimeOnly, AmazonIsPrime.No, false, true)]
         [InlineData(Ordertype.Amazon, ShipmentTypeCode.Other, RestrictionType.PrimeOnly, AmazonIsPrime.Unknown, false, true)]
@@ -259,13 +259,13 @@ namespace ShipWorks.Shipping.Tests.Services
         [InlineData(Ordertype.GenericModule, ShipmentTypeCode.Other, RestrictionType.PrimeOnly, AmazonIsPrime.No, false, true)]
         [InlineData(Ordertype.GenericModule, ShipmentTypeCode.Other, RestrictionType.PrimeOnly, AmazonIsPrime.Unknown, false, true)]
         [InlineData(Ordertype.BigCommerce, ShipmentTypeCode.Other, RestrictionType.PrimeOnly, AmazonIsPrime.No, false, true)]
-        [InlineData(Ordertype.Amazon, ShipmentTypeCode.Amazon, RestrictionType.AnyAmazon, AmazonIsPrime.Yes, true, false)]
-        [InlineData(Ordertype.Amazon, ShipmentTypeCode.Amazon, RestrictionType.AnyAmazon, AmazonIsPrime.No, true, true)]
-        [InlineData(Ordertype.Amazon, ShipmentTypeCode.Amazon, RestrictionType.AnyAmazon, AmazonIsPrime.Unknown, true, true)]
-        [InlineData(Ordertype.GenericModule, ShipmentTypeCode.Amazon, RestrictionType.AnyAmazon, AmazonIsPrime.Yes, true, false)]
-        [InlineData(Ordertype.GenericModule, ShipmentTypeCode.Amazon, RestrictionType.AnyAmazon, AmazonIsPrime.No, false, true)]
-        [InlineData(Ordertype.GenericModule, ShipmentTypeCode.Amazon, RestrictionType.AnyAmazon, AmazonIsPrime.Unknown, false, true)]
-        [InlineData(Ordertype.BigCommerce, ShipmentTypeCode.Amazon, RestrictionType.AnyAmazon, AmazonIsPrime.No, false, true)]
+        [InlineData(Ordertype.Amazon, ShipmentTypeCode.AmazonSFP, RestrictionType.AnyAmazon, AmazonIsPrime.Yes, true, false)]
+        [InlineData(Ordertype.Amazon, ShipmentTypeCode.AmazonSFP, RestrictionType.AnyAmazon, AmazonIsPrime.No, true, true)]
+        [InlineData(Ordertype.Amazon, ShipmentTypeCode.AmazonSFP, RestrictionType.AnyAmazon, AmazonIsPrime.Unknown, true, true)]
+        [InlineData(Ordertype.GenericModule, ShipmentTypeCode.AmazonSFP, RestrictionType.AnyAmazon, AmazonIsPrime.Yes, true, false)]
+        [InlineData(Ordertype.GenericModule, ShipmentTypeCode.AmazonSFP, RestrictionType.AnyAmazon, AmazonIsPrime.No, false, true)]
+        [InlineData(Ordertype.GenericModule, ShipmentTypeCode.AmazonSFP, RestrictionType.AnyAmazon, AmazonIsPrime.Unknown, false, true)]
+        [InlineData(Ordertype.BigCommerce, ShipmentTypeCode.AmazonSFP, RestrictionType.AnyAmazon, AmazonIsPrime.No, false, true)]
         [InlineData(Ordertype.Amazon, ShipmentTypeCode.Other, RestrictionType.AnyAmazon, AmazonIsPrime.Yes, true, false)]
         [InlineData(Ordertype.Amazon, ShipmentTypeCode.Other, RestrictionType.AnyAmazon, AmazonIsPrime.No, true, true)]
         [InlineData(Ordertype.Amazon, ShipmentTypeCode.Other, RestrictionType.AnyAmazon, AmazonIsPrime.Unknown, true, true)]
@@ -284,7 +284,7 @@ namespace ShipWorks.Shipping.Tests.Services
             {
                 shipmentTypes.Add(amazonShipmentType);
             }
-            enabledShipmentTypeCodes.Add(ShipmentTypeCode.Amazon);
+            enabledShipmentTypeCodes.Add(ShipmentTypeCode.AmazonSFP);
 
             mock.Mock<IShipmentTypeManager>().SetupGet(x => x.EnabledShipmentTypeCodes)
                 .Returns(enabledShipmentTypeCodes);
@@ -317,7 +317,7 @@ namespace ShipWorks.Shipping.Tests.Services
             amazonShipmentShippingPolicy.Apply(target);
 
             license
-                .Setup(l => l.ApplyShippingPolicy(ShipmentTypeCode.Amazon, It.IsAny<object>()))
+                .Setup(l => l.ApplyShippingPolicy(ShipmentTypeCode.AmazonSFP, It.IsAny<object>()))
                 .Callback((ShipmentTypeCode s, object t) => ((AmazonPrimeShippingPolicyTarget) t).Allowed = target.Allowed);
 
             ShipmentTypeProvider testObject = mock.Create<ShipmentTypeProvider>();
@@ -328,7 +328,7 @@ namespace ShipWorks.Shipping.Tests.Services
 
             var availableTypes = testObject.GetAvailableShipmentTypes(carrierAdapter.Object);
 
-            Assert.Equal(expectedAmazonAllowed, availableTypes.Any(c => c == ShipmentTypeCode.Amazon));
+            Assert.Equal(expectedAmazonAllowed, availableTypes.Any(c => c == ShipmentTypeCode.AmazonSFP));
             Assert.Equal(otherCarriersAllowed, availableTypes.Count() > 1);
         }
 

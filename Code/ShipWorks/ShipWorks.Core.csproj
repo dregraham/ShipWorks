@@ -1381,19 +1381,19 @@
     <Compile Include="Shipping\BilledType.cs" />
     <Compile Include="Shipping\CarrierConfigurationShipmentRefresher.cs" />
     <Compile Include="Shipping\Carriers\AccountManagerBase.cs" />
-    <Compile Include="Shipping\Carriers\Amazon\AmazonCarrierTermsAndConditionsNotAcceptedFootnoteControl.cs">
+    <Compile Include="Shipping\Carriers\Amazon\SFP\AmazonSFPCarrierTermsAndConditionsNotAcceptedFootnoteControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Shipping\Carriers\Amazon\AmazonCarrierTermsAndConditionsNotAcceptedFootnoteControl.Designer.cs">
-      <DependentUpon>AmazonCarrierTermsAndConditionsNotAcceptedFootnoteControl.cs</DependentUpon>
+    <Compile Include="Shipping\Carriers\Amazon\SFP\AmazonSFPCarrierTermsAndConditionsNotAcceptedFootnoteControl.Designer.cs">
+      <DependentUpon>AmazonSFPCarrierTermsAndConditionsNotAcceptedFootnoteControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="Shipping\Carriers\Amazon\AmazonCarrierTermsAndConditionsNotAcceptedDialog.cs">
+    <Compile Include="Shipping\Carriers\Amazon\SFP\AmazonSFPCarrierTermsAndConditionsNotAcceptedDialog.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Shipping\Carriers\Amazon\AmazonCarrierTermsAndConditionsNotAcceptedDialog.Designer.cs">
-      <DependentUpon>AmazonCarrierTermsAndConditionsNotAcceptedDialog.cs</DependentUpon>
+    <Compile Include="Shipping\Carriers\Amazon\SFP\AmazonSFPCarrierTermsAndConditionsNotAcceptedDialog.Designer.cs">
+      <DependentUpon>AmazonSFPCarrierTermsAndConditionsNotAcceptedDialog.cs</DependentUpon>
     </Compile>
-    <Compile Include="Shipping\Carriers\Amazon\AmazonShippingException.cs" />
+    <Compile Include="Shipping\Carriers\Amazon\SFP\AmazonSFPShippingException.cs" />
     <Compile Include="Shipping\Carriers\Asendia\IAsendiaAccountRepository.cs" />
     <Compile Include="Shipping\Carriers\BestRate\Footnote\IBrokerExceptionsRateFootnoteViewModel.cs" />
     <Compile Include="Shipping\Carriers\BestRate\Footnote\ICounterRatesInvalidStoreAddressFootnoteViewModel.cs" />
@@ -2031,11 +2031,11 @@
     <Compile Include="Stores\Platforms\BuyDotCom\IBuyDotComFtpClient.cs" />
     <Compile Include="Stores\Platforms\BuyDotCom\IBuyDotComFtpClientFactory.cs" />
     <Compile Include="Stores\Platforms\BuyDotCom\OnlineUpdating\IBuyDotComShipmentDetailsUpdater.cs" />
-    <Compile Include="Shipping\Carriers\Amazon\AmazonShippingSettingsControl.cs">
+    <Compile Include="Shipping\Carriers\Amazon\SFP\AmazonSFPShippingSettingsControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Shipping\Carriers\Amazon\AmazonShippingSettingsControl.Designer.cs">
-      <DependentUpon>AmazonShippingSettingsControl.cs</DependentUpon>
+    <Compile Include="Shipping\Carriers\Amazon\SFP\AmazonSFPShippingSettingsControl.Designer.cs">
+      <DependentUpon>AmazonSFPShippingSettingsControl.cs</DependentUpon>
     </Compile>
     <Compile Include="Stores\Platforms\ChannelAdvisor\ChannelAdvisorConsolidatorSettingsControl.cs">
       <SubType>UserControl</SubType>
@@ -8049,11 +8049,11 @@
       <SubType>Designer</SubType>
       <LastGenOutput>ShippingIcons.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Include="Shipping\Carriers\Amazon\AmazonCarrierTermsAndConditionsNotAcceptedFootnoteControl.resx">
-      <DependentUpon>AmazonCarrierTermsAndConditionsNotAcceptedFootnoteControl.cs</DependentUpon>
+    <EmbeddedResource Include="Shipping\Carriers\Amazon\SFP\AmazonSFPCarrierTermsAndConditionsNotAcceptedFootnoteControl.resx">
+      <DependentUpon>AmazonSFPCarrierTermsAndConditionsNotAcceptedFootnoteControl.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Shipping\Carriers\Amazon\AmazonCarrierTermsAndConditionsNotAcceptedDialog.resx">
-      <DependentUpon>AmazonCarrierTermsAndConditionsNotAcceptedDialog.cs</DependentUpon>
+    <EmbeddedResource Include="Shipping\Carriers\Amazon\SFP\AmazonSFPCarrierTermsAndConditionsNotAcceptedDialog.resx">
+      <DependentUpon>AmazonSFPCarrierTermsAndConditionsNotAcceptedDialog.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Shipping\Carriers\BestRate\BestRateMissingRatesDialog.resx">
       <DependentUpon>BestRateMissingRatesDialog.cs</DependentUpon>
@@ -8368,8 +8368,8 @@
     <EmbeddedResource Include="Stores\Management\DownloadSettingsControl.resx">
       <DependentUpon>DownloadSettingsControl.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Shipping\Carriers\Amazon\AmazonShippingSettingsControl.resx">
-      <DependentUpon>AmazonShippingSettingsControl.cs</DependentUpon>
+    <EmbeddedResource Include="Shipping\Carriers\Amazon\SFP\AmazonSFPShippingSettingsControl.resx">
+      <DependentUpon>AmazonSFPShippingSettingsControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Stores\Platforms\ChannelAdvisor\ChannelAdvisorConsolidatorSettingsControl.resx">
       <DependentUpon>ChannelAdvisorConsolidatorSettingsControl.cs</DependentUpon>

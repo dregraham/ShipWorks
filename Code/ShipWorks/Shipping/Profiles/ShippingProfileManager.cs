@@ -372,7 +372,7 @@ namespace ShipWorks.Shipping.Profiles
                     return ("Other", typeof(OtherProfileEntity));
                 case ShipmentTypeCode.BestRate:
                     return ("BestRate", typeof(BestRateProfileEntity));
-                case ShipmentTypeCode.Amazon:
+                case ShipmentTypeCode.AmazonSFP:
                     return ("Amazon", typeof(AmazonProfileEntity));
                 case ShipmentTypeCode.DhlExpress:
                     return ("DhlExpress", typeof(DhlExpressProfileEntity));

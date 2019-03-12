@@ -95,7 +95,7 @@ namespace ShipWorks.Shipping
                 case ShipmentTypeCode.OnTrac: return 10;
                 case ShipmentTypeCode.iParcel: return 11;
                 case ShipmentTypeCode.DhlExpress: return 12;
-                case ShipmentTypeCode.Amazon: return 13;
+                case ShipmentTypeCode.AmazonSFP: return 13;
                 case ShipmentTypeCode.Asendia: return 14;
                 case ShipmentTypeCode.Other: return 15;
                 case ShipmentTypeCode.None: return 16;

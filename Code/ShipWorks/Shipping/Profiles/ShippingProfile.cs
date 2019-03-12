@@ -115,10 +115,10 @@ namespace ShipWorks.Shipping.Profiles
             {
                 case ShipmentTypeCode.None:
                     return ShippingProfileEntity.ShipmentType != null;
-                case ShipmentTypeCode.Amazon:
-                    return ShippingProfileEntity.ShipmentType == null || ShippingProfileEntity.ShipmentType == ShipmentTypeCode.Amazon;
+                case ShipmentTypeCode.AmazonSFP:
+                    return ShippingProfileEntity.ShipmentType == null || ShippingProfileEntity.ShipmentType == ShipmentTypeCode.AmazonSFP;
                 default:
-                    return ShippingProfileEntity.ShipmentType != ShipmentTypeCode.Amazon;
+                    return ShippingProfileEntity.ShipmentType != ShipmentTypeCode.AmazonSFP;
             }
         }
 
