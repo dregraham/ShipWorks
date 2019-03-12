@@ -81,7 +81,12 @@ namespace ShipWorks.Escalator
                 // show the splash screen and patiently wait to see if shipworks closes
                 ShowSplashScreenAndAttemptToCloseShipWorks(30);
 
-                Thread.Sleep(30000);
+                int countDown = 30;
+                while (Process.GetProcessesByName("shipworks").Where(p => IsRunningWithoutArguments(p)).Any() || countDown > 0)
+                {
+                    Thread.Sleep(1000);
+                    countDown -= 1;
+                }
             }
 
             foreach (Process process in Process.GetProcessesByName("shipworks"))
