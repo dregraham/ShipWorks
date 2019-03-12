@@ -336,6 +336,10 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("Email", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("Website", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("Letterhead", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("Signature", fieldHashtable);
 		}
 		#endregion
 
@@ -592,6 +596,26 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.String)GetValue((int)FedExAccountFieldIndex.Website, true); }
 			set	{ SetValue((int)FedExAccountFieldIndex.Website, value); }
+		}
+
+		/// <summary> The Letterhead property of the Entity FedExAccount<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "FedExAccount"."Letterhead"<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 100<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.String Letterhead
+		{
+			get { return (System.String)GetValue((int)FedExAccountFieldIndex.Letterhead, true); }
+			set	{ SetValue((int)FedExAccountFieldIndex.Letterhead, value); }
+		}
+
+		/// <summary> The Signature property of the Entity FedExAccount<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "FedExAccount"."Signature"<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 100<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.String Signature
+		{
+			get { return (System.String)GetValue((int)FedExAccountFieldIndex.Signature, true); }
+			set	{ SetValue((int)FedExAccountFieldIndex.Signature, value); }
 		}
 	
 		/// <summary> Gets the type of the hierarchy this entity is in. </summary>

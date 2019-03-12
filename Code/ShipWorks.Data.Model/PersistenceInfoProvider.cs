@@ -1262,7 +1262,7 @@ namespace ShipWorks.Data.Model
 		/// <summary>Inits FedExAccountEntity's mappings</summary>
 		private void InitFedExAccountEntityMappings()
 		{
-			this.AddElementMapping("FedExAccountEntity", @"ShipWorksLocal", @"dbo", "FedExAccount", 20, 0);
+			this.AddElementMapping("FedExAccountEntity", @"ShipWorksLocal", @"dbo", "FedExAccount", 22, 0);
 			this.AddElementFieldMapping("FedExAccountEntity", "FedExAccountID", "FedExAccountID", false, "BigInt", 0, 19, 0, true, "SCOPE_IDENTITY()", null, typeof(System.Int64), 0);
 			this.AddElementFieldMapping("FedExAccountEntity", "RowVersion", "RowVersion", false, "Timestamp", 2147483647, 0, 0, false, "", null, typeof(System.Byte[]), 1);
 			this.AddElementFieldMapping("FedExAccountEntity", "Description", "Description", false, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 2);
@@ -1283,6 +1283,8 @@ namespace ShipWorks.Data.Model
 			this.AddElementFieldMapping("FedExAccountEntity", "Phone", "Phone", false, "NVarChar", 25, 0, 0, false, "", null, typeof(System.String), 17);
 			this.AddElementFieldMapping("FedExAccountEntity", "Email", "Email", false, "NVarChar", 100, 0, 0, false, "", null, typeof(System.String), 18);
 			this.AddElementFieldMapping("FedExAccountEntity", "Website", "Website", false, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 19);
+			this.AddElementFieldMapping("FedExAccountEntity", "Letterhead", "Letterhead", false, "NVarChar", 100, 0, 0, false, "", null, typeof(System.String), 20);
+			this.AddElementFieldMapping("FedExAccountEntity", "Signature", "Signature", false, "NVarChar", 100, 0, 0, false, "", null, typeof(System.String), 21);
 		}
 
 		/// <summary>Inits FedExEndOfDayCloseEntity's mappings</summary>

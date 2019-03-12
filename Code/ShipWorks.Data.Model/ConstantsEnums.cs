@@ -3436,6 +3436,10 @@ namespace ShipWorks.Data.Model
 		Email,
 		///<summary>Website. </summary>
 		Website,
+		///<summary>Letterhead. </summary>
+		Letterhead,
+		///<summary>Signature. </summary>
+		Signature,
 		/// <summary></summary>
 		AmountOfFields
 	}

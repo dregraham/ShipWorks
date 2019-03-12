@@ -1005,11 +1005,13 @@
           <Field Name="FedExAccountID" Type="long" IsReadOnly="true" IsPrimaryKey="true" FieldIndex="0" />
           <Field Name="FirstName" Type="string" MaxLength="30" FieldIndex="7" />
           <Field Name="LastName" Type="string" MaxLength="30" FieldIndex="9" />
+          <Field Name="Letterhead" Type="string" MaxLength="100" FieldIndex="20" />
           <Field Name="MeterNumber" Type="string" MaxLength="50" FieldIndex="5" />
           <Field Name="MiddleName" Type="string" MaxLength="30" FieldIndex="8" />
           <Field Name="Phone" Type="string" MaxLength="25" FieldIndex="17" />
           <Field Name="PostalCode" Type="string" MaxLength="20" FieldIndex="15" />
           <Field Name="RowVersion" Type="byte[]" IsReadOnly="true" FieldIndex="1" />
+          <Field Name="Signature" Type="string" MaxLength="100" FieldIndex="21" />
           <Field Name="SignatureRelease" Type="string" MaxLength="10" FieldIndex="4" />
           <Field Name="SmartPostHubList" Type="string" MaxLength="2147483647" FieldIndex="6" />
           <Field Name="StateProvCode" Type="string" MaxLength="50" FieldIndex="14" />
@@ -2309,7 +2311,7 @@
           <Field Name="ImageUrl" Type="string" IsOptional="true" MaxLength="500" FieldIndex="8" />
           <Field Name="IsActive" Type="bool" FieldIndex="9" />
           <Field Name="Length" Type="decimal" IsOptional="true" Precision="10" Scale="2" FieldIndex="3" />
-          <Field Name="Name" Type="string" MaxLength="300" FieldIndex="2" />
+          <Field Name="Name" Type="string" IsOptional="true" MaxLength="300" FieldIndex="2" />
           <Field Name="ProductVariantID" Type="long" Precision="19" FieldIndex="0" />
           <Field Name="SKU" Type="string" MaxLength="300" FieldIndex="1" />
           <Field Name="Weight" Type="decimal" IsOptional="true" Precision="29" Scale="9" FieldIndex="6" />
@@ -4479,7 +4481,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2018-12-27T17:09:33.5512363Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2019-03-12T15:29:47.069234Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -4851,10 +4853,10 @@
                     <Field Name="OrderItemID" Ordinal="1" IsPrimaryKey="true" DbType="0" Precision="19" />
                     <Field Name="OrderAddressID" Ordinal="2" DbType="0" Precision="19" />
                     <Field Name="OrderProductID" Ordinal="3" DbType="0" Precision="19" />
-                    <Field Name="IsDigitalItem" Ordinal="4" DbType="2" />
-                    <Field Name="EventDate" Ordinal="5" IsOptional="true" DbType="4" />
-                    <Field Name="EventName" Ordinal="6" IsOptional="true" DbType="12" Length="255" />
-                    <Field Name="ParentOrderProductID" Ordinal="7" IsOptional="true" DbType="0" Precision="19" />
+                    <Field Name="ParentOrderProductID" Ordinal="4" IsOptional="true" DbType="0" Precision="19" />
+                    <Field Name="IsDigitalItem" Ordinal="5" HasDefaultValue="true" DefaultValue="(0)" DbType="2" />
+                    <Field Name="EventDate" Ordinal="6" IsOptional="true" DbType="4" />
+                    <Field Name="EventName" Ordinal="7" IsOptional="true" DbType="12" Length="255" />
                   </Fields>
                 </Table>
                 <Table Name="BigCommerceStore">
@@ -5602,6 +5604,8 @@
                     <Field Name="Phone" Ordinal="18" DbType="12" Length="25" />
                     <Field Name="Email" Ordinal="19" DbType="12" Length="100" />
                     <Field Name="Website" Ordinal="20" DbType="12" Length="50" />
+                    <Field Name="Letterhead" Ordinal="21" HasDefaultValue="true" DefaultValue="''" DbType="12" Length="100" />
+                    <Field Name="Signature" Ordinal="22" HasDefaultValue="true" DefaultValue="''" DbType="12" Length="100" />
                   </Fields>
                 </Table>
                 <Table Name="FedExEndOfDayClose">
@@ -7543,9 +7547,9 @@
                   <Fields>
                     <Field Name="OverstockOrderSearchID" Ordinal="1" IsIdentity="true" IsPrimaryKey="true" DbType="0" Precision="19" />
                     <Field Name="OrderID" Ordinal="2" DbType="0" Precision="19" />
-                    <Field Name="OriginalOrderID" Ordinal="3" DbType="0" Precision="19" />
-                    <Field Name="SalesChannelName" Ordinal="4" DbType="12" Length="50" />
-                    <Field Name="WarehouseCode" Ordinal="5" IsOptional="true" DbType="12" Length="50" />
+                    <Field Name="SalesChannelName" Ordinal="3" DbType="12" Length="50" />
+                    <Field Name="WarehouseCode" Ordinal="4" IsOptional="true" DbType="12" Length="50" />
+                    <Field Name="OriginalOrderID" Ordinal="5" DbType="0" Precision="19" />
                   </Fields>
                 </Table>
                 <Table Name="OverstockStore">
@@ -9500,7 +9504,7 @@
                   <Fields>
                     <Field Name="ProductVariantID" Ordinal="1" DbType="0" Precision="19" />
                     <Field Name="SKU" Ordinal="2" DbType="12" Length="300" />
-                    <Field Name="Name" Ordinal="3" DbType="12" Length="300" />
+                    <Field Name="Name" Ordinal="3" IsOptional="true" DbType="12" Length="300" />
                     <Field Name="Length" Ordinal="4" IsOptional="true" DbType="5" Precision="10" Scale="2" />
                     <Field Name="Width" Ordinal="5" IsOptional="true" DbType="5" Precision="10" Scale="2" />
                     <Field Name="Height" Ordinal="6" IsOptional="true" DbType="5" Precision="10" Scale="2" />
@@ -10313,14 +10317,14 @@
                 <FieldPair PkField="dbo:ProductVariant:ProductVariantID" FkField="dbo:ProductVariantAlias:ProductVariantID" />
               </FieldPairs>
             </ForeignKeyConstraint>
+            <ForeignKeyConstraint Name="dbo:ProductVariantAttributeValue:FK_ProductVariantAttribute_ProductVariant">
+              <FieldPairs>
+                <FieldPair PkField="dbo:ProductVariant:ProductVariantID" FkField="dbo:ProductVariantAttributeValue:ProductVariantID" />
+              </FieldPairs>
+            </ForeignKeyConstraint>
             <ForeignKeyConstraint Name="dbo:ProductVariantAttributeValue:FK_ProductVariantAttributeValue_ProductAttribute">
               <FieldPairs>
                 <FieldPair PkField="dbo:ProductAttribute:ProductAttributeID" FkField="dbo:ProductVariantAttributeValue:ProductAttributeID" />
-              </FieldPairs>
-            </ForeignKeyConstraint>
-            <ForeignKeyConstraint Name="dbo:ProductVariantAttributeValue:FK_ProductVariantAttributeValue_ProductVariant">
-              <FieldPairs>
-                <FieldPair PkField="dbo:ProductVariant:ProductVariantID" FkField="dbo:ProductVariantAttributeValue:ProductVariantID" />
               </FieldPairs>
             </ForeignKeyConstraint>
             <ForeignKeyConstraint Name="dbo:ProStoresOrder:FK_ProStoresOrder_Order">
@@ -11560,11 +11564,13 @@
             <FieldMapping FieldName="FedExAccountID" TargetFieldName="FedExAccountID" SequenceToUse="SCOPE_IDENTITY()" />
             <FieldMapping FieldName="FirstName" TargetFieldName="FirstName" />
             <FieldMapping FieldName="LastName" TargetFieldName="LastName" />
+            <FieldMapping FieldName="Letterhead" TargetFieldName="Letterhead" />
             <FieldMapping FieldName="MeterNumber" TargetFieldName="MeterNumber" />
             <FieldMapping FieldName="MiddleName" TargetFieldName="MiddleName" />
             <FieldMapping FieldName="Phone" TargetFieldName="Phone" />
             <FieldMapping FieldName="PostalCode" TargetFieldName="PostalCode" />
             <FieldMapping FieldName="RowVersion" TargetFieldName="RowVersion" />
+            <FieldMapping FieldName="Signature" TargetFieldName="Signature" />
             <FieldMapping FieldName="SignatureRelease" TargetFieldName="SignatureRelease" />
             <FieldMapping FieldName="SmartPostHubList" TargetFieldName="SmartPostHubList" />
             <FieldMapping FieldName="StateProvCode" TargetFieldName="StateProvCode" />

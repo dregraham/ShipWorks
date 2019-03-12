@@ -7952,6 +7952,16 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(FedExAccountFieldIndex.Website);}
 		}
+		/// <summary>Creates a new FedExAccountEntity.Letterhead field instance</summary>
+		public static EntityField2 Letterhead
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(FedExAccountFieldIndex.Letterhead);}
+		}
+		/// <summary>Creates a new FedExAccountEntity.Signature field instance</summary>
+		public static EntityField2 Signature
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(FedExAccountFieldIndex.Signature);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity FedExEndOfDayCloseEntity</summary>
