@@ -1,10 +1,4 @@
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Text;
 using System.Windows.Forms;
-using Interapptive.Shared.Utility;
-using Interapptive.Shared;
 using Interapptive.Shared.Win32;
 
 namespace ShipWorks.ApplicationCore
@@ -18,7 +12,7 @@ namespace ShipWorks.ApplicationCore
 
         /// <summary>
         /// Special section of the Registry for "Internal" Interapptive-Only scoped settings
-        /// </summary>
+        /// </summary> 
         public static RegistryHelper Registry
         {
             get { return internalRegistry; }

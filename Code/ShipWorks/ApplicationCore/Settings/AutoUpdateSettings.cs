@@ -11,7 +11,7 @@ namespace ShipWorks.ApplicationCore.Settings
         private static readonly string disableAutoUpdateFilePath = Path.Combine(DataPath.SharedSettings, "DisableAutoUpdate.txt");
         
         /// <summary>
-        /// Whether or not auto update is enabled for this machine/instance
+        /// Whether or not auto update is enabled for this machine
         /// </summary>
         public static bool IsAutoUpdateDisabled
         {
