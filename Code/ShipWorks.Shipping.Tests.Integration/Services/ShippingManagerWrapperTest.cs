@@ -109,7 +109,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
                 .AsOnTrac(o => o.Set(x => x.Reference2, "FOO"))
                 .SetDefaultsOnNullableFields()
                 .Save();
-               
+
             ShippingProfileManager.CheckForChangesNeeded();
 
             ShippingManagerWrapper wrapper = mock.Create<ShippingManagerWrapper>();
@@ -170,7 +170,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
             bool originalInsuredValue = true;
 
             IEnumerable<ShipmentTypeCode> shipmentTypeCodes = EnumHelper.GetEnumList<ShipmentTypeCode>()
-                .Where(x => x.Value != ShipmentTypeCode.None) 
+                .Where(x => x.Value != ShipmentTypeCode.None)
                 .Select(s => s.Value);
 
             // Assert if new shipment types were added to make sure they get updated for insurance changing on shipment type change.
@@ -242,7 +242,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
 
                 case ShipmentTypeCode.PostalWebTools:
                     return shipment.Postal.Insurance;
-                    
+
                 case ShipmentTypeCode.FedEx:
                     return shipment.FedEx.Packages.Any(p => p.Insurance);
 
@@ -262,7 +262,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
                 case ShipmentTypeCode.Express1Usps:
                     return shipment.Postal.Usps.Insurance;
 
-                case ShipmentTypeCode.Amazon:
+                case ShipmentTypeCode.AmazonSFP:
                     return shipment.Amazon.Insurance;
 
                 case ShipmentTypeCode.DhlExpress:
@@ -318,7 +318,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
                 case ShipmentTypeCode.Usps:
                     return Create.Shipment(context.Order).AsPostal(p => p.AsUsps(e => e.Set(es => es.Insurance, insured)))
                         .Set(s => s.Insurance = true).Save();
-                case ShipmentTypeCode.Amazon:
+                case ShipmentTypeCode.AmazonSFP:
                     return Create.Shipment(context.Order).AsAmazon(f => f.Set(pkg => pkg.Insurance, insured))
                         .Set(s => s.Insurance = true).Save();
 

@@ -25,7 +25,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
         {
             Mock<ISqlAdapterFactory> sqlAdapterFactory = null;
 
-            context = db.CreateDataContext(x => ContainerInitializer.Initialize(x), mock => 
+            context = db.CreateDataContext(x => ContainerInitializer.Initialize(x), mock =>
             {
                 sqlAdapter = mock.Override<ISqlAdapter>();
                 sqlAdapterFactory = mock.Override<ISqlAdapterFactory>();
@@ -248,7 +248,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
         [Fact]
         public void LoadProfileData_FetchesAmazonProfileEntity_WhenProfileIsAmazon()
         {
-            ShippingProfileEntity profile = new ShippingProfileEntity() { ShipmentType = ShipmentTypeCode.Amazon };
+            ShippingProfileEntity profile = new ShippingProfileEntity() { ShipmentType = ShipmentTypeCode.AmazonSFP };
 
             profile.IsNew = false;
             profile.Fields.State = EntityState.Fetched;
