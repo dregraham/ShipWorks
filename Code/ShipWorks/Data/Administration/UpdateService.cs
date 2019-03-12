@@ -9,6 +9,7 @@ using Interapptive.Shared.AutoUpdate;
 using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Licensing.TangoRequests;
+using ShipWorks.ApplicationCore.Settings;
 using ShipWorks.Data.Connection;
 using ShipWorks.Stores;
 using ShipWorks.Users;
@@ -28,7 +29,6 @@ namespace ShipWorks.Data.Administration
         private readonly ISqlSession sqlSession;
         private readonly ITangoGetReleaseByCustomerRequest tangoGetReleaseByCustomerRequest;
         private readonly Func<string, IShipWorksCommunicationBridge> communicationBridgeFactory;
-        private readonly IInterapptiveOnly interapptiveOnly;
 
         /// <summary>
         /// Constructor
@@ -40,15 +40,13 @@ namespace ShipWorks.Data.Administration
             ISqlSession sqlSession,
             ITangoGetReleaseByCustomerRequest tangoGetReleaseByCustomerRequest,
             Func<string, IShipWorksCommunicationBridge> communicationBridgeFactory,
-            IDataPath dataPath,
-            IInterapptiveOnly interapptiveOnly)
+            IDataPath dataPath)
         {
             this.shipWorksSession = shipWorksSession;
             this.autoUpdateStatusProvider = autoUpdateStatusProvider;
             this.sqlSession = sqlSession;
             this.tangoGetReleaseByCustomerRequest = tangoGetReleaseByCustomerRequest;
             this.communicationBridgeFactory = communicationBridgeFactory;
-            this.interapptiveOnly = interapptiveOnly;
             updateInProgressFilePath = Path.Combine(dataPath.InstanceSettings, "UpdateInProcess.txt");
         }
 
@@ -87,7 +85,7 @@ namespace ShipWorks.Data.Administration
             {
                 // For localdb we manually check to see if a new version is available, this is because
                 // the windows service that is running our update service does not have access to localdb
-                if (sqlSession.Configuration.IsLocalDb() && !interapptiveOnly.DisableAutoUpdate)
+                if (sqlSession.Configuration.IsLocalDb() && !AutoUpdateSettings.IsAutoUpdateDisabled)
                 {
                     DataProvider.InitializeForApplication();
                     StoreManager.InitializeForCurrentSession(SecurityContext.EmptySecurityContext);
@@ -111,7 +109,7 @@ namespace ShipWorks.Data.Administration
             }
 
             // Check see if the database has been updated and we need to update
-            if (databaseVersion > SqlSchemaUpdater.GetRequiredSchemaVersion() && !interapptiveOnly.DisableAutoUpdate)
+            if (databaseVersion > SqlSchemaUpdater.GetRequiredSchemaVersion() && !AutoUpdateSettings.IsAutoUpdateDisabled)
             {
                 // need to update
                 return Update(databaseVersion);

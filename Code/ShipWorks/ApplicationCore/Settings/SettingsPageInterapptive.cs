@@ -77,7 +77,7 @@ namespace ShipWorks.ApplicationCore.Settings
             searchFitDeleteAfterDownload.Checked = !SearchFitStoreType.LeaveOnServer;
 
             multipleInstances.Checked = InterapptiveOnly.AllowMultipleInstances;
-            disableAutoUpdate.Checked = InterapptiveOnly.DisableAutoUpdate;
+            disableAutoUpdate.Checked = AutoUpdateSettings.IsAutoUpdateDisabled;
 
             buyDotComMapChooser.Initialize(new BuyDotComOrderImportSchema());
 
@@ -119,7 +119,7 @@ namespace ShipWorks.ApplicationCore.Settings
             SearchFitStoreType.LeaveOnServer = !searchFitDeleteAfterDownload.Checked;
 
             InterapptiveOnly.AllowMultipleInstances = multipleInstances.Checked;
-            InterapptiveOnly.DisableAutoUpdate = disableAutoUpdate.Checked;
+            AutoUpdateSettings.IsAutoUpdateDisabled = disableAutoUpdate.Checked;
 
             EndiciaApiClient.UseTestServerUrl = (EndiciaTestServer) endiciaTestServers.SelectedValue;
 

@@ -6,6 +6,7 @@ using log4net;
 using Newtonsoft.Json;
 using ShipWorks.ApplicationCore.Interaction;
 using ShipWorks.ApplicationCore.Licensing;
+using ShipWorks.ApplicationCore.Settings;
 using ShipWorks.Data;
 using ShipWorks.Data.Administration;
 using ShipWorks.Data.Connection;
@@ -34,9 +35,9 @@ namespace ShipWorks.ApplicationCore.CommandLineOptions
         public Task Execute(List<string> args)
         {
             log.Info("Executing getupdatewindow commandline");
-            if (InterapptiveOnly.DisableAutoUpdate)
+            if (AutoUpdateSettings.IsAutoUpdateDisabled)
             {
-                log.Info("Autoupdate disabled in registry. Not sending window");
+                log.Info("Autoupdate disabled. Not sending window");
                 return Task.CompletedTask;
             }
 

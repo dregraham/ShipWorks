@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
 using System.Windows.Forms;
 using Interapptive.Shared.Utility;
@@ -49,38 +50,6 @@ namespace ShipWorks.ApplicationCore
                 Registry.SetValue("AllowMultipleInstances", value);
             }
         }
-
-        /// <summary>
-        /// Indicates if auto update is disabled.
-        /// </summary>
-        public static bool DisableAutoUpdate
-        {
-            get
-            {
-                using (var localMachine = Microsoft.Win32.Registry.LocalMachine.OpenSubKey(@"Software\Interapptive\ShipWorks", false))
-                {
-                    return localMachine.GetValue("DisableAutoUpdate") != null;
-                }
-            }
-            set
-            {
-                if (DisableAutoUpdate != value)
-                {
-                    using (var localMachine = Microsoft.Win32.Registry.LocalMachine.OpenSubKey(@"Software\Interapptive\ShipWorks", true))
-                    {
-                        if (value)
-                        {
-                            localMachine.SetValue("DisableAutoUpdate", value);
-                        }
-                        else
-                        {
-                            localMachine.DeleteValue("DisableAutoUpdate");
-                        }
-                    }
-                }
-            }
-        }
-        
 
         /// <summary>
         /// Determines if a special key combination is active.  Can be used
