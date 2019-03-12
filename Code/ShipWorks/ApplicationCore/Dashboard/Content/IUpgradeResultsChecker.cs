@@ -8,11 +8,11 @@ namespace ShipWorks.ApplicationCore.Dashboard.Content
     /// <summary>
     /// Check whether the release notes dashboard item should be displayed
     /// </summary>
-    public interface IReleaseNotesChecker
+    public interface IUpgradeResultsChecker
     {
         /// <summary>
         /// Show the release notes dashboard item, if necessary
         /// </summary>
-        Task<Unit> ShowReleaseNotesIfNecessary(ISynchronizeInvoke invoker, IUserEntity user);
+        Task<Unit> ShowUpgradeNotificationIfNecessary(ISynchronizeInvoke invoker, IUserEntity user);
     }
 }

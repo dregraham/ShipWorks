@@ -20,6 +20,7 @@ namespace ShipWorks.Escalator
         private readonly ILog log;
         private readonly IUpdaterWebClient updaterWebClient;
         private readonly IShipWorksInstaller shipWorksInstaller;
+        private readonly IFileWriter fileWriter;
         private readonly IAutoUpdateStatusProvider autoUpdateStatusProvider;
 
         /// <summary>
@@ -28,17 +29,19 @@ namespace ShipWorks.Escalator
         public ShipWorksUpgrade(
             IUpdaterWebClient updaterWebClient,
             IShipWorksInstaller shipWorksInstaller,
+			IFileWriter fileWriter,
             Func<Type, ILog> logFactory,
             IAutoUpdateStatusProvider autoUpdateStatusProvider)
         {
             this.updaterWebClient = updaterWebClient;
             this.shipWorksInstaller = shipWorksInstaller;
+            this.fileWriter = fileWriter;
             this.autoUpdateStatusProvider = autoUpdateStatusProvider;
             log = logFactory(typeof(ShipWorksUpgrade));
         }
 
         /// <summary>
-        /// Upgrade Shipworks to the requested version
+        /// Upgrade ShipWorks to the requested version
         /// </summary>
         public async Task Upgrade(Version version)
         {
@@ -109,6 +112,8 @@ namespace ShipWorks.Escalator
             }
             else
             {
+                fileWriter.WriteUpgradeDetailsToFile(Version.Parse(shipWorksRelease.ReleaseVersion));
+
                 log.InfoFormat("The installer {0} is not already running. Beginning Download...", shipWorksRelease.DownloadUrl);
                 InstallFile newVersion = await updaterWebClient.Download(shipWorksRelease.DownloadUri, shipWorksRelease.Hash).ConfigureAwait(false);
 
@@ -116,7 +121,7 @@ namespace ShipWorks.Escalator
                 Result installationResult = shipWorksInstaller.Install(newVersion, upgradeDatabase);
                 if (installationResult.Failure)
                 {
-                    log.ErrorFormat("An error occured while installing the new version of ShipWorks: {0}", installationResult.Message);
+                    log.ErrorFormat("An error occurred while installing the new version of ShipWorks: {0}", installationResult.Message);
                 }
             }
         }

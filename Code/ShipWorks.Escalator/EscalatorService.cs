@@ -21,6 +21,11 @@ namespace ShipWorks.Escalator
         }
 
         /// <summary>
+        /// Start the functionality manually
+        /// </summary>
+        public void Start() => OnStart(null);
+
+        /// <summary>
         /// Code that runs when the service starts
         /// </summary>
         protected override void OnStart(string[] args)

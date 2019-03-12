@@ -1,17 +1,16 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Utility;
 
 namespace ShipWorks.ApplicationCore.Licensing.TangoRequests
 {
+    /// <summary>
+    /// Get release info for a given version
+    /// </summary>
     [Component]
-    class TangoGetReleaseByCustomerRequest : ITangoGetReleaseByCustomerRequest
+    public class TangoGetReleaseByUserRequest : ITangoGetReleaseByUserRequest
     {
         private readonly IHttpRequestSubmitterFactory requestSubmitterFactory;
         private readonly ITangoWebRequestClient webRequestClient;
@@ -20,13 +19,13 @@ namespace ShipWorks.ApplicationCore.Licensing.TangoRequests
         /// <summary>
         /// Constructor
         /// </summary>
-        public TangoGetReleaseByCustomerRequest(
+        public TangoGetReleaseByUserRequest(
             IHttpRequestSubmitterFactory requestSubmitterFactory,
             ITangoWebRequestClient webRequestClient,
             ITangoWebClient tangoWebClient)
         {
-            this.webRequestClient = webRequestClient;
             this.tangoWebClient = tangoWebClient;
+            this.webRequestClient = webRequestClient;
             this.requestSubmitterFactory = requestSubmitterFactory;
         }
 
@@ -43,12 +42,20 @@ namespace ShipWorks.ApplicationCore.Licensing.TangoRequests
 
             Version currentVersion = Assembly.GetExecutingAssembly().GetName().Version;
 
+            return GetReleaseInfo(customerID, currentVersion);
+        }
+
+        /// <summary>
+        /// Get release info for a user
+        /// </summary>
+        public GenericResult<ShipWorksReleaseInfo> GetReleaseInfo(string tangoCustomerID, Version version)
+        {
             var request = requestSubmitterFactory.GetHttpVariableRequestSubmitter();
             request.Variables.Add("action", "getreleasebyuser");
-            request.Variables.Add("customerid", customerID);
-            request.Variables.Add("version", currentVersion.ToString());
-            
-            return webRequestClient.ProcessXmlRequest<ShipWorksReleaseInfo>(request, "GetReleaseByVersion", true);
+            request.Variables.Add("customerid", tangoCustomerID);
+            request.Variables.Add("version", version.ToString());
+
+            return webRequestClient.ProcessXmlRequest<ShipWorksReleaseInfo>(request, "GetReleaseByUser", true);
         }
     }
 }

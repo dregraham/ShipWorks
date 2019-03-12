@@ -32,7 +32,7 @@ namespace ShipWorks.Data
         ActionQueueType ExecutionModeActionQueueType { get; }
 
         /// <summary>
-        /// Should UI actions be included.  If the UI isn't running somewhere, 
+        /// Should UI actions be included.  If the UI isn't running somewhere,
         /// and we are the background process, go ahead and do UI actions too since it's not open
         /// </summary>
         bool IncludeUserInterfaceActions { get; }
@@ -46,5 +46,10 @@ namespace ShipWorks.Data
         /// Are we currently in an archive database?
         /// </summary>
         bool IsArchive();
+
+        /// <summary>
+        /// Get the next update window after the given date
+        /// </summary>
+        DateTime GetNextUpdateWindow(DateTime date);
     }
 }

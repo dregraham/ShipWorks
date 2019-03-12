@@ -1,15 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
+using System.IO;
+using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
-using System.Net;
-using System.IO;
-using log4net;
-using Interapptive.Shared.Extensions;
-using Interapptive.Shared.Utility;
-using Interapptive.Shared.ComponentRegistration;
 using System.Reflection;
+using System.Threading.Tasks;
+using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.Extensions;
+using log4net;
 
 namespace ShipWorks.Escalator
 {
@@ -57,8 +56,7 @@ namespace ShipWorks.Escalator
         private string GetInstallationFileSavePath(Uri url)
         {
             string fileName = Path.GetFileName(url.LocalPath);
-            string appData = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData);
-            return Path.Combine(appData, "Interapptive\\ShipWorks\\Instances", serviceName.GetInstanceID().ToString("B"), fileName);
+            return Path.Combine(EscalatorDataPath.InstanceRoot, serviceName.GetInstanceID().ToString("B"), fileName);
         }
 
         /// <summary>
@@ -79,7 +77,7 @@ namespace ShipWorks.Escalator
         }
 
         /// <summary>
-        /// Get the url and sha of requested version 
+        /// Get the url and sha of requested version
         /// </summary>
         public async Task<ShipWorksRelease> GetVersionToDownload(Version version)
         {

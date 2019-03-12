@@ -18,11 +18,11 @@ namespace ShipWorks.Data.Administration
     /// </summary>
     public class UpdateService : IUpdateService
     {
-        private string UpdateInProgressFilePath;
+        private readonly string UpdateInProgressFilePath;
         private NamedPipeClientStream updaterPipe;
         private readonly IAutoUpdateStatusProvider autoUpdateStatusProvider;
         private readonly ISqlSession sqlSession;
-        private readonly ITangoGetReleaseByCustomerRequest tangoGetReleaseByCustomerRequest;
+        private readonly ITangoGetReleaseByUserRequest tangoGetReleaseByCustomerRequest;
 
         /// <summary>
         /// Constructor
@@ -31,7 +31,7 @@ namespace ShipWorks.Data.Administration
             IShipWorksSession shipWorksSession,
             IAutoUpdateStatusProvider autoUpdateStatusProvider,
             ISqlSession sqlSession,
-            ITangoGetReleaseByCustomerRequest tangoGetReleaseByCustomerRequest,
+            ITangoGetReleaseByUserRequest tangoGetReleaseByCustomerRequest,
             IDataPath dataPath)
         {
             updaterPipe = new NamedPipeClientStream(".", shipWorksSession.InstanceID.ToString(), PipeDirection.Out);
@@ -88,7 +88,7 @@ namespace ShipWorks.Data.Administration
                 }
 
                 // if the version we are currently running is lower than the version we were trying to update to then something went wrong
-                // skip the rest of the update process here because we dont want to get stuck in a loop where we keep attempting
+                // skip the rest of the update process here because we don't want to get stuck in a loop where we keep attempting
                 // to update and fail
                 if (Version.TryParse(version, out Version updateInProcessVersion) && databaseVersion < updateInProcessVersion)
                 {
@@ -123,7 +123,7 @@ namespace ShipWorks.Data.Administration
                 return Update(databaseVersion);
             }
 
-            // No updates return an empty error so the consumer doesnt think that an update is kicking off
+            // No updates return an empty error so the consumer doesn't think that an update is kicking off
             return Result.FromError(string.Empty);
         }
 
@@ -157,7 +157,7 @@ namespace ShipWorks.Data.Administration
                 }
                 catch (Exception)
                 {
-                    // this failure wil be ignored because we created the file
+                    // this failure will be ignored because we created the file
                     // above and it shall not fail
                 }
             }
