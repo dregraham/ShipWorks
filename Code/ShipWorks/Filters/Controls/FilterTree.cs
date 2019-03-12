@@ -543,11 +543,22 @@ namespace ShipWorks.Filters.Controls
             // Don't listen to layout changes while we reload
             sandGrid.SelectionChanged -= OnGridSelectionChanged;
 
+            var (ID, Proxy) = sandGrid.FlatRows
+                .OfType<FilterTreeGridRow>()
+                .Where(x => x.FilterProxy != null)
+                .Select(x => (ID: x.FilterNode.FilterNodeID, Proxy: x.FilterProxy))
+                .FirstOrDefault();
+
             // We have to reload the context
             layoutContext.Reload();
 
             // Do the reload
             LoadLayouts(Targets);
+
+            sandGrid.FlatRows
+                .OfType<FilterTreeGridRow>()
+                .Where(x => x.FilterNode.FilterNodeID == ID)
+                .ForEach(x => x.FilterProxy = Proxy);
 
             // Reapply the state
             ApplyFolderState(state);
@@ -818,14 +829,16 @@ namespace ShipWorks.Filters.Controls
         /// </summary>
         private void OnConvertFilter(object sender, EventArgs e)
         {
-            if (SelectedFilterNode?.Filter == null)
+            var filterToConvert = SelectedFilterNode;
+
+            if (filterToConvert?.Filter == null)
             {
                 return;
             }
 
-            if (!SelectedFilterNode.Filter.IsSavedSearch)
+            if (!filterToConvert.Filter.IsSavedSearch)
             {
-                var references = new FilterNodeReferenceRepository().Find(SelectedFilterNode);
+                var references = new FilterNodeReferenceRepository().Find(filterToConvert);
 
                 if (references.Any())
                 {
@@ -845,9 +858,19 @@ namespace ShipWorks.Filters.Controls
                 }
             }
 
-            SelectedFilterNode.Filter.IsSavedSearch = !SelectedFilterNode.Filter.IsSavedSearch;
+            SelectFirstNode();
 
-            FilterEditingService.SaveFilter(this, SelectedFilterNode)
+            filterToConvert.Filter.IsSavedSearch = !filterToConvert.Filter.IsSavedSearch;
+
+            FilterEditingService.SaveFilter(this, filterToConvert)
+                .Do(x => this.BeginInvoke((Action) (() =>
+                {
+                    SelectedFilterNode = x;
+                    if (x.Filter.IsSavedSearch)
+                    {
+                        LoadAsAdvancedSearch?.Invoke(this, x);
+                    }
+                })))
                 .OnFailure(ex => MessageHelper.ShowError(this, ex.Message));
         }
 
@@ -903,7 +926,7 @@ namespace ShipWorks.Filters.Controls
                 menuConvertFilter.Text = "Convert to saved search";
                 menuConvertFilter.Image = Resources.view;
             }
-            
+
             menuLoadFilterAsSearch.Available = menuConvertFilter.Available &&
                 SelectedFilterNode?.Filter?.IsSavedSearch != true;
 
@@ -1206,7 +1229,7 @@ namespace ShipWorks.Filters.Controls
         private void OnSelectedFilterNodeChanged()
         {
             ClearSearchProxies();
-            
+
             if (SelectedFilterNode?.Filter?.IsSavedSearch == true)
             {
                 OnLoadAsAdvancedSearch(this, EventArgs.Empty);

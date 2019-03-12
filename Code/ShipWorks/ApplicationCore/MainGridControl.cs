@@ -300,13 +300,7 @@ namespace ShipWorks.ApplicationCore
             {
                 if (value != null)
                 {
-                    FilterTarget newTarget = (FilterTarget) value.Filter.FilterTarget;
-                    if (newTarget != ActiveFilterTarget)
-                    {
-                        ActiveFilterTarget = newTarget;
-
-                        SetupForTarget(ActiveFilterTarget);
-                    }
+                    UpdateFilterTarget(value);
                 }
 
                 if (IsSearchActive)
@@ -336,6 +330,20 @@ namespace ShipWorks.ApplicationCore
                             "Cannot update ActiveFilterNode when there is no active grid.");
                     }
                 }
+            }
+        }
+
+        /// <summary>
+        /// Update the filter target for the given filter node.
+        /// </summary>
+        private void UpdateFilterTarget(FilterNodeEntity value)
+        {
+            FilterTarget newTarget = (FilterTarget) value.Filter.FilterTarget;
+            if (newTarget != ActiveFilterTarget)
+            {
+                ActiveFilterTarget = newTarget;
+
+                SetupForTarget(ActiveFilterTarget);
             }
         }
 
@@ -889,6 +897,11 @@ namespace ShipWorks.ApplicationCore
             // Start the search
             ActiveGrid.ActiveFilterNode = searchProvider.SearchResultsNode;
 
+            //if (loadedFilter != null)
+            //{
+            //    UpdateFilterTarget(loadedFilter);
+            //}
+
             // Update the search icon to a clear icon
             UpdateHeaderContent();
 
@@ -1090,6 +1103,12 @@ namespace ShipWorks.ApplicationCore
         /// </summary>
         public void LoadFilterInAdvancedSearch(FilterNodeEntity filterNode)
         {
+            if (ActiveFilterTarget != (FilterTarget) filterNode.Filter.FilterTarget)
+            {
+                EndSearch();
+                UpdateFilterTarget(filterNode);
+            }
+
             OnAdvancedSearch(this, EventArgs.Empty);
             headerViewModel.IsAdvancedSearchOpen = true;
             filterEditor.LoadDefinition(new FilterDefinition(filterNode.Filter.Definition));

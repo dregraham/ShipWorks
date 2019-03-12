@@ -12,6 +12,7 @@ namespace ShipWorks.Filters.Controls
     {
         private static readonly ILog log = LogManager.GetLogger(typeof(FilterTreeGridRow));
         private FilterState? previousFilterState;
+        private FilterNodeEntity filterProxy;
 
         /// <summary>
         /// Constructor
@@ -45,7 +46,18 @@ namespace ShipWorks.Filters.Controls
         /// <summary>
         /// Filter proxy for saved searches
         /// </summary>
-        public FilterNodeEntity FilterProxy { get; internal set; }
+        public FilterNodeEntity FilterProxy
+        {
+            get => filterProxy;
+            internal set
+            {
+                if (filterProxy != value)
+                {
+                    filterProxy = value;
+                    UpdateFilterCount();
+                }
+            }
+        }
 
         /// <summary>
         /// Gets or sets whether the filter for the row has been flagged as a slow running
