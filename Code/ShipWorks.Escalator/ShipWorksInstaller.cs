@@ -102,8 +102,9 @@ namespace ShipWorks.Escalator
 
             for (int secondsLeft = countDownInSeconds; secondsLeft > 0; secondsLeft--)
             {
-                autoUpdateStatusProvider.UpdateStatus($"ShipWorks will automatically close in {secondsLeft} seconds.");
-                log.Info($"ShipWorks will automatically close in {secondsLeft} seconds.");
+                string message = $"The application will automatically close in {secondsLeft} seconds.";
+                autoUpdateStatusProvider.UpdateStatus(message);
+                log.Info(message);
                 Thread.Sleep(1000);
             }
 
