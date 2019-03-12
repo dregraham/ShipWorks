@@ -55,7 +55,7 @@ namespace ShipWorks.ApplicationCore.Dashboard.Content
 
                 if (upgradingToVersion > buildVersion)
                 {
-                    var nextUpdateWindow = configurationData.GetNextUpdateWindow(DateTime.Today);
+                    var nextUpdateWindow = configurationData.GetNextUpdateWindow(DateTime.Now);
                     invoker.Invoke((Action<DateTime>) ShowUpgradeError, new object[] { nextUpdateWindow });
                 }
                 else if (buildVersion > lastSeenVersion)

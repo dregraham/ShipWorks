@@ -396,8 +396,9 @@ namespace ShipWorks.ApplicationCore.Dashboard
             {
                 using (var lifetimeScope = IoC.BeginLifetimeScope())
                 {
-                    var nextUpdateWindow = lifetimeScope.Resolve<IConfigurationData>().GetNextUpdateWindow(DateTime.Today);
-                    var timeUntilUpdateWindow = nextUpdateWindow.Subtract(DateTime.Now);
+                    var now = DateTime.Now;
+                    var nextUpdateWindow = lifetimeScope.Resolve<IConfigurationData>().GetNextUpdateWindow(now);
+                    var timeUntilUpdateWindow = nextUpdateWindow.Subtract(now);
 
                     if (timeUntilUpdateWindow.TotalHours <= 24 && timeUntilUpdateWindow.TotalHours > 0)
                     {

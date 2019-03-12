@@ -100,7 +100,6 @@ namespace ShipWorks.Data
             ConfigurationData.Save(configuration);
         }
 
-
         /// <summary>
         /// Get the next update window after the given date
         /// </summary>
@@ -108,7 +107,9 @@ namespace ShipWorks.Data
         {
             var configuration = FetchReadOnly();
             var nextUpdateWindowDay = date.TodayOrNext(configuration.AutoUpdateDayOfWeek);
-            return new DateTime(nextUpdateWindowDay.Year, nextUpdateWindowDay.Month, nextUpdateWindowDay.Day, configuration.AutoUpdateHourOfDay, 0, 0);
+            var updateWindow = new DateTime(nextUpdateWindowDay.Year, nextUpdateWindowDay.Month, nextUpdateWindowDay.Day, configuration.AutoUpdateHourOfDay, 0, 0);
+
+            return updateWindow > date ? updateWindow : updateWindow.AddDays(7);
         }
     }
 }
