@@ -165,7 +165,7 @@ namespace ShipWorks.Data.Administration
         /// </summary>
         public void ListenForAutoUpdateStart(IMainForm mainForm)
         {
-            autoUpdateStartPipe = communicationBridgeFactory("AutoUpdateStart");
+            autoUpdateStartPipe = communicationBridgeFactory($"{shipWorksSession.InstanceID.ToString()}_AutoUpdateStart");
             autoUpdateStartPipe.OnMessage += (s) => OnAutoUpdateStartmessage(s, mainForm);
 
             autoUpdateStartPipe.StartPipeServer();

@@ -111,7 +111,7 @@ namespace ShipWorks.Escalator
             // screen and then ask shipworks to close
             autoUpdateStatusProvider.UpdateStatus("Installing Update");
             log.Info($"Asking ShipWorks to close.");
-            communicationBridgeFactory("AutoUpdateStart").SendMessage("CloseShipWorks");
+            communicationBridgeFactory($"{serviceName.GetInstanceID().ToString()}_AutoUpdateStart").SendMessage("CloseShipWorks");
         }
 
         /// <summary>

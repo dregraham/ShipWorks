@@ -42,7 +42,7 @@ namespace Interapptive.Shared.AutoUpdate
             NamedPipeServerStream pipeServer = new NamedPipeServerStream(
                 instance,
                 PipeDirection.In,
-                1,
+                10,
                 PipeTransmissionMode.Byte,
                 PipeOptions.Asynchronous,
                 255,
