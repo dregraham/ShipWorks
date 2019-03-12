@@ -87,7 +87,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 DialogResult result = dlg.ShowDialog();
                 if (result == DialogResult.OK)
                 {
-                    pictureBox1.Image = new Bitmap(dlg.FileName);
+                    letterheadPreview.Image = new Bitmap(dlg.FileName);
                 }
             }
         }
@@ -104,7 +104,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 DialogResult result = dlg.ShowDialog();
                 if (result == DialogResult.OK)
                 {
-                    pictureBox2.Image = new Bitmap(dlg.FileName);
+                    signaturePreview.Image = new Bitmap(dlg.FileName);
                 }
             }
         }
