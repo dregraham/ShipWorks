@@ -2048,17 +2048,6 @@
     <WebReferences Include="Web References\" />
   </ItemGroup>
   <ItemGroup>
-    <WebReferenceUrl Include="\\intfs01\development\Partners\Shipping\FedEx\FedEx 2017 Certification\vWS Software 2017\2017 WSDLs\UploadDocumentService_v11.wsdl">
-      <UrlBehavior>Static</UrlBehavior>
-      <RelPath>Web References\Shipping.Carriers.FedEx.WebServices.UploadDocument\</RelPath>
-      <UpdateFromURL>\\intfs01\development\Partners\Shipping\FedEx\FedEx 2017 Certification\vWS Software 2017\2017 WSDLs\UploadDocumentService_v11.wsdl</UpdateFromURL>
-      <ServiceLocationURL>
-      </ServiceLocationURL>
-      <CachedDynamicPropName>
-      </CachedDynamicPropName>
-      <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
-      <CachedSettingsPropName>ShipWorks_ThirdPartyApi_Shipping_Carriers_FedEx_WebServices_UploadDocument_UploadDocumentService</CachedSettingsPropName>
-    </WebReferenceUrl>
     <WebReferenceUrl Include="\\intfs01\development\Partners\Shipping\FedEx\FedEx 2017 Certification\vWS Software 2017\2017 WSDLs\OpenShipService_v13.wsdl">
       <UrlBehavior>Static</UrlBehavior>
       <RelPath>Web References\Shipping.Carriers.FedEx.WebServices.OpenShip\</RelPath>
@@ -2487,6 +2476,17 @@
       </CachedDynamicPropName>
       <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
       <CachedSettingsPropName>ShipWorks_Stores_Platforms_PayPal_WebServices_PayPalAPIInterfaceService</CachedSettingsPropName>
+    </WebReferenceUrl>
+    <WebReferenceUrl Include="\\intfs01\development\Partners\Shipping\FedEx\FedEx 2017 Certification\vWS Software 2017\2017 WSDLs\UploadDocumentService_v11.wsdl">
+      <UrlBehavior>Static</UrlBehavior>
+      <RelPath>Web References\Shipping.Carriers.FedEx.WebServices.UploadDocument\</RelPath>
+      <UpdateFromURL>\\intfs01\development\Partners\Shipping\FedEx\FedEx 2017 Certification\vWS Software 2017\2017 WSDLs\UploadDocumentService_v11.wsdl</UpdateFromURL>
+      <ServiceLocationURL>
+      </ServiceLocationURL>
+      <CachedDynamicPropName>
+      </CachedDynamicPropName>
+      <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
+      <CachedSettingsPropName>ShipWorks_ThirdPartyApi_Shipping_Carriers_FedEx_WebServices_UploadDocument_UploadDocumentService</CachedSettingsPropName>
     </WebReferenceUrl>
   </ItemGroup>
   <ItemGroup>
