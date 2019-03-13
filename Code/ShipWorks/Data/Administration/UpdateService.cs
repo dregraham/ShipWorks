@@ -61,8 +61,6 @@ namespace ShipWorks.Data.Administration
                 return Result.FromError(string.Empty);
             }
 
-            Version databaseVersion = SqlSchemaUpdater.GetInstalledSchemaVersion();
-
             // Check to see if we just launched shipworks after attempting to update the exe
             if (File.Exists(updateInProgressFilePath))
             {
@@ -81,7 +79,7 @@ namespace ShipWorks.Data.Administration
                 // if the version we are currently running is lower than the version we were trying to update to then something went wrong
                 // skip the rest of the update process here because we dont want to get stuck in a loop where we keep attempting
                 // to update and fail
-                if (Version.TryParse(version, out Version updateInProcessVersion) && databaseVersion < updateInProcessVersion)
+                if (Version.TryParse(version, out Version updateInProcessVersion) && typeof(UpdateService).Assembly.GetName().Version < updateInProcessVersion)
                 {
                     return Result.FromError("The previous ShipWorks auto update failed. Restart ShipWorks to try again.");
                 }
@@ -108,10 +106,10 @@ namespace ShipWorks.Data.Administration
             }
 
             // Check see if the database has been updated and we need to update
-            if (databaseVersion > SqlSchemaUpdater.GetRequiredSchemaVersion() && !AutoUpdateSettings.IsAutoUpdateDisabled)
+            if (SqlSchemaUpdater.GetInstalledSchemaVersion() > SqlSchemaUpdater.GetRequiredSchemaVersion() && !AutoUpdateSettings.IsAutoUpdateDisabled)
             {
                 // need to update
-                return Update(databaseVersion);
+                return Update(SqlSchemaUpdater.GetBuildVersion());
             }
 
             // No updates return an empty error so the consumer doesnt think that an update is kicking off
