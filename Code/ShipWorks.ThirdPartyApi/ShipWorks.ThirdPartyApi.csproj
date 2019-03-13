@@ -258,6 +258,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.map</DependentUpon>
     </Compile>
+    <Compile Include="Web References\Shipping.Carriers.FedEx.WebServices.UploadDocument\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.map</DependentUpon>
+    </Compile>
     <Compile Include="Web References\Shipping.Carriers.iParcel.WebServices\Reference.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -575,6 +580,17 @@
       <DependentUpon>Reference.map</DependentUpon>
     </None>
     <None Include="Web References\Shipping.Carriers.FedEx.WebServices.Track\TrackServiceDefinitions.wsdl" />
+    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.UploadDocument\Reference.map">
+      <Generator>MSDiscoCodeGenerator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.UploadDocument\UploadDocumentServiceDefinitions.wsdl" />
+    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.UploadDocument\UploadDocumentsReply.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.UploadDocument\UploadImagesReply.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
     <None Include="Web References\Shipping.Carriers.iParcel.WebServices\Reference.map">
       <Generator>MSDiscoCodeGenerator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
@@ -2032,6 +2048,17 @@
     <WebReferences Include="Web References\" />
   </ItemGroup>
   <ItemGroup>
+    <WebReferenceUrl Include="\\intfs01\development\Partners\Shipping\FedEx\FedEx 2017 Certification\vWS Software 2017\2017 WSDLs\UploadDocumentService_v11.wsdl">
+      <UrlBehavior>Static</UrlBehavior>
+      <RelPath>Web References\Shipping.Carriers.FedEx.WebServices.UploadDocument\</RelPath>
+      <UpdateFromURL>\\intfs01\development\Partners\Shipping\FedEx\FedEx 2017 Certification\vWS Software 2017\2017 WSDLs\UploadDocumentService_v11.wsdl</UpdateFromURL>
+      <ServiceLocationURL>
+      </ServiceLocationURL>
+      <CachedDynamicPropName>
+      </CachedDynamicPropName>
+      <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
+      <CachedSettingsPropName>ShipWorks_ThirdPartyApi_Shipping_Carriers_FedEx_WebServices_UploadDocument_UploadDocumentService</CachedSettingsPropName>
+    </WebReferenceUrl>
     <WebReferenceUrl Include="\\intfs01\development\Partners\Shipping\FedEx\FedEx 2017 Certification\vWS Software 2017\2017 WSDLs\OpenShipService_v13.wsdl">
       <UrlBehavior>Static</UrlBehavior>
       <RelPath>Web References\Shipping.Carriers.FedEx.WebServices.OpenShip\</RelPath>
