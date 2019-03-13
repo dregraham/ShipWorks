@@ -931,6 +931,7 @@ namespace ShipWorks.Filters.Controls
                 SelectedFilterNode?.Filter?.IsSavedSearch != true;
 
             menuItemEditFilterSep.Available = menuItemEditFilter.Available;
+            menuItemOrganizeFilters.Available = SelectedFilterNode?.Purpose == (int) FilterNodePurpose.Standard;
         }
 
         /// <summary>

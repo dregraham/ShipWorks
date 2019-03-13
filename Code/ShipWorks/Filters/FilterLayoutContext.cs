@@ -1268,7 +1268,7 @@ namespace ShipWorks.Filters
         /// </summary>
         public bool CanMoveDown(FilterNodeEntity node)
         {
-            return !FilterHelper.IsBuiltin(node) && node.FilterSequence.Position + 1 < node.ParentNode.ChildNodes.Count;
+            return !FilterHelper.IsBuiltin(node) && node.FilterSequence.Position + 1 < (node.ParentNode?.ChildNodes.Count ?? 0);
         }
 
         /// <summary>
