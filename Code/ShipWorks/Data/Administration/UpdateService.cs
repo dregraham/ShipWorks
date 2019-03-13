@@ -1,8 +1,5 @@
 ﻿using System;
 using System.IO;
-using System.IO.Pipes;
-using System.Text;
-using System.Timers;
 using System.Windows.Forms;
 using Interapptive.Shared;
 using Interapptive.Shared.AutoUpdate;
@@ -79,7 +76,7 @@ namespace ShipWorks.Data.Administration
                 // if the version we are currently running is lower than the version we were trying to update to then something went wrong
                 // skip the rest of the update process here because we dont want to get stuck in a loop where we keep attempting
                 // to update and fail
-                if (Version.TryParse(version, out Version updateInProcessVersion) && typeof(UpdateService).Assembly.GetName().Version < updateInProcessVersion)
+                if (Version.TryParse(version, out Version updateInProcessVersion) && typeof(UpdateService).Assembly.GetName().Version <= updateInProcessVersion)
                 {
                     return Result.FromError("The previous ShipWorks auto update failed. Restart ShipWorks to try again.");
                 }
