@@ -37,7 +37,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.UploadDocument {
         
         /// <remarks/>
         public UploadDocumentService() {
-            this.Url = global::ShipWorks.Properties.Settings.Default.ShipWorks_ThirdPartyApi_Shipping_Carriers_FedEx_WebServices_UploadDocument_UploadDocumentService;
+            this.Url = "https://wsbeta.fedex.com:443/web-services/uploaddocument";
             if ((this.IsLocalFileSystemWebService(this.Url) == true)) {
                 this.UseDefaultCredentials = true;
                 this.useDefaultCredentialsSetExplicitly = false;
