@@ -1105,7 +1105,11 @@ namespace ShipWorks.ApplicationCore
         {
             if (ActiveFilterTarget != (FilterTarget) filterNode.Filter.FilterTarget)
             {
-                EndSearch();
+                if (IsSearchActive)
+                {
+                    EndSearch();
+                }
+
                 UpdateFilterTarget(filterNode);
             }
 
