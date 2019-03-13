@@ -34,6 +34,7 @@ namespace ShipWorks.Data.Model.Custom
 				case "AmazonSFPServiceTypeEntity": return EntityType.AmazonSFPServiceTypeEntity;
 				case "AmazonSFPShipmentEntity": return EntityType.AmazonSFPShipmentEntity;
 				case "AmazonStoreEntity": return EntityType.AmazonStoreEntity;
+				case "AmazonSWAAccountEntity": return EntityType.AmazonSWAAccountEntity;
 				case "AmeriCommerceStoreEntity": return EntityType.AmeriCommerceStoreEntity;
 				case "AsendiaAccountEntity": return EntityType.AsendiaAccountEntity;
 				case "AsendiaProfileEntity": return EntityType.AsendiaProfileEntity;

@@ -1444,6 +1444,91 @@ namespace ShipWorks.Data.Model.HelperClasses
 		}
 	}
 
+	/// <summary>Field Creation Class for entity AmazonSWAAccountEntity</summary>
+	public partial class AmazonSWAAccountFields
+	{
+		/// <summary>Creates a new AmazonSWAAccountEntity.AmazonSWAAccountID field instance</summary>
+		public static EntityField2 AmazonSWAAccountID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(AmazonSWAAccountFieldIndex.AmazonSWAAccountID);}
+		}
+		/// <summary>Creates a new AmazonSWAAccountEntity.RowVersion field instance</summary>
+		public static EntityField2 RowVersion
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(AmazonSWAAccountFieldIndex.RowVersion);}
+		}
+		/// <summary>Creates a new AmazonSWAAccountEntity.AccountNumber field instance</summary>
+		public static EntityField2 AccountNumber
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(AmazonSWAAccountFieldIndex.AccountNumber);}
+		}
+		/// <summary>Creates a new AmazonSWAAccountEntity.ShipEngineCarrierId field instance</summary>
+		public static EntityField2 ShipEngineCarrierId
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(AmazonSWAAccountFieldIndex.ShipEngineCarrierId);}
+		}
+		/// <summary>Creates a new AmazonSWAAccountEntity.Description field instance</summary>
+		public static EntityField2 Description
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(AmazonSWAAccountFieldIndex.Description);}
+		}
+		/// <summary>Creates a new AmazonSWAAccountEntity.FirstName field instance</summary>
+		public static EntityField2 FirstName
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(AmazonSWAAccountFieldIndex.FirstName);}
+		}
+		/// <summary>Creates a new AmazonSWAAccountEntity.MiddleName field instance</summary>
+		public static EntityField2 MiddleName
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(AmazonSWAAccountFieldIndex.MiddleName);}
+		}
+		/// <summary>Creates a new AmazonSWAAccountEntity.LastName field instance</summary>
+		public static EntityField2 LastName
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(AmazonSWAAccountFieldIndex.LastName);}
+		}
+		/// <summary>Creates a new AmazonSWAAccountEntity.Company field instance</summary>
+		public static EntityField2 Company
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(AmazonSWAAccountFieldIndex.Company);}
+		}
+		/// <summary>Creates a new AmazonSWAAccountEntity.Street1 field instance</summary>
+		public static EntityField2 Street1
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(AmazonSWAAccountFieldIndex.Street1);}
+		}
+		/// <summary>Creates a new AmazonSWAAccountEntity.City field instance</summary>
+		public static EntityField2 City
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(AmazonSWAAccountFieldIndex.City);}
+		}
+		/// <summary>Creates a new AmazonSWAAccountEntity.StateProvCode field instance</summary>
+		public static EntityField2 StateProvCode
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(AmazonSWAAccountFieldIndex.StateProvCode);}
+		}
+		/// <summary>Creates a new AmazonSWAAccountEntity.PostalCode field instance</summary>
+		public static EntityField2 PostalCode
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(AmazonSWAAccountFieldIndex.PostalCode);}
+		}
+		/// <summary>Creates a new AmazonSWAAccountEntity.CountryCode field instance</summary>
+		public static EntityField2 CountryCode
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(AmazonSWAAccountFieldIndex.CountryCode);}
+		}
+		/// <summary>Creates a new AmazonSWAAccountEntity.Email field instance</summary>
+		public static EntityField2 Email
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(AmazonSWAAccountFieldIndex.Email);}
+		}
+		/// <summary>Creates a new AmazonSWAAccountEntity.Phone field instance</summary>
+		public static EntityField2 Phone
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(AmazonSWAAccountFieldIndex.Phone);}
+		}
+	}
+
 	/// <summary>Field Creation Class for entity AmeriCommerceStoreEntity</summary>
 	public partial class AmeriCommerceStoreFields
 	{

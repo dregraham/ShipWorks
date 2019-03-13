@@ -5292,6 +5292,34 @@ ALTER TABLE [dbo].[AsendiaAccount] ADD CONSTRAINT [PK_AsendiaAccount] PRIMARY KE
 GO
 ALTER TABLE [dbo].[AsendiaAccount] ENABLE CHANGE_TRACKING
 GO
+PRINT N'Creating [dbo].[AmazonSWAAccount]'
+GO
+CREATE TABLE [dbo].[AmazonSWAAccount]
+(
+[AmazonSWAAccountID] [bigint] NOT NULL IDENTITY(1106, 1000),
+[RowVersion] [timestamp] NOT NULL,
+[AccountNumber] [bigint] NOT NULL,
+[ShipEngineCarrierId] [nvarchar] (12) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[Description] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[FirstName] [nvarchar] (30) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[MiddleName] [nvarchar] (30) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[LastName] [nvarchar] (30) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[Company] [nvarchar] (30) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[Street1] [nvarchar] (43) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[City] [nvarchar] (25) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[StateProvCode] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[PostalCode] [nvarchar] (10) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[CountryCode] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[Email] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[Phone] [nvarchar] (15) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL
+)
+GO
+PRINT N'Creating primary key [PK_AmazonSWAAccount] on [dbo].[AmazonSWAAccount]'
+GO
+ALTER TABLE [dbo].[AmazonSWAAccount] ADD CONSTRAINT [PK_AmazonSWAAccount] PRIMARY KEY CLUSTERED  ([AmazonSWAAccountID])
+GO
+ALTER TABLE [dbo].[AmazonSWAAccount] ENABLE CHANGE_TRACKING
+GO
 PRINT N'Creating [dbo].[SystemData]'
 GO
 CREATE TABLE [dbo].[SystemData]

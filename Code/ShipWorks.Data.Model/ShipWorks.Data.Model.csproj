@@ -167,6 +167,8 @@
     <Compile Include="Custom\EntityClasses\ActionEntity.ReadOnly.cs" />
     <Compile Include="Custom\EntityClasses\CustomerEntity.ReadOnly.cs" />
     <Compile Include="Custom\EntityClasses\AsendiaAccountEntity.cs" />
+    <Compile Include="Custom\EntityClasses\AmazonSWAAccountEntity.Interface.cs" />
+    <Compile Include="Custom\EntityClasses\AmazonSWAAccountEntity.cs" />
     <Compile Include="Custom\EntityClasses\EbayOrderSearchEntityComparer.cs" />
     <Compile Include="Custom\EntityClasses\DhlExpressAccountEntity.cs" />
     <Compile Include="Custom\EntityClasses\AsendiaAccountEntity.Interface.cs" />
@@ -3135,6 +3137,18 @@
       <GeneratedBy>LLBLGen Pro</GeneratedBy>
     </Compile>
     <Compile Include=".\RelationClasses\AmazonSFPShipmentRelations.cs">
+      <GeneratedBy>LLBLGen Pro</GeneratedBy>
+    </Compile>
+    <Compile Include=".\EntityClasses\AmazonSWAAccountEntity.cs">
+      <GeneratedBy>LLBLGen Pro</GeneratedBy>
+    </Compile>
+    <Compile Include=".\EntityInterfaces\IAmazonSWAAccountEntity.cs">
+      <GeneratedBy>LLBLGen Pro</GeneratedBy>
+    </Compile>
+    <Compile Include=".\ReadOnlyEntities\ReadOnlyAmazonSWAAccountEntity.cs">
+      <GeneratedBy>LLBLGen Pro</GeneratedBy>
+    </Compile>
+    <Compile Include=".\RelationClasses\AmazonSWAAccountRelations.cs">
       <GeneratedBy>LLBLGen Pro</GeneratedBy>
     </Compile>
   </ItemGroup>

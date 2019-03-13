@@ -639,6 +639,44 @@ namespace ShipWorks.Data.Model
 		/// <summary></summary>
 		AmountOfFields
 	}
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: AmazonSWAAccount.</summary>
+	public enum AmazonSWAAccountFieldIndex
+	{
+		///<summary>AmazonSWAAccountID. </summary>
+		AmazonSWAAccountID,
+		///<summary>RowVersion. </summary>
+		RowVersion,
+		///<summary>AccountNumber. </summary>
+		AccountNumber,
+		///<summary>ShipEngineCarrierId. </summary>
+		ShipEngineCarrierId,
+		///<summary>Description. </summary>
+		Description,
+		///<summary>FirstName. </summary>
+		FirstName,
+		///<summary>MiddleName. </summary>
+		MiddleName,
+		///<summary>LastName. </summary>
+		LastName,
+		///<summary>Company. </summary>
+		Company,
+		///<summary>Street1. </summary>
+		Street1,
+		///<summary>City. </summary>
+		City,
+		///<summary>StateProvCode. </summary>
+		StateProvCode,
+		///<summary>PostalCode. </summary>
+		PostalCode,
+		///<summary>CountryCode. </summary>
+		CountryCode,
+		///<summary>Email. </summary>
+		Email,
+		///<summary>Phone. </summary>
+		Phone,
+		/// <summary></summary>
+		AmountOfFields
+	}
 	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: AmeriCommerceStore.</summary>
 	public enum AmeriCommerceStoreFieldIndex
 	{
@@ -13619,6 +13657,8 @@ namespace ShipWorks.Data.Model
 		AmazonSFPShipmentEntity,
 		///<summary>AmazonStore</summary>
 		AmazonStoreEntity,
+		///<summary>AmazonSWAAccount</summary>
+		AmazonSWAAccountEntity,
 		///<summary>AmeriCommerceStore</summary>
 		AmeriCommerceStoreEntity,
 		///<summary>AsendiaAccount</summary>

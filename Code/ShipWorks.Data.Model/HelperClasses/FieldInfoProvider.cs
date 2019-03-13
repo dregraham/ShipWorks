@@ -49,7 +49,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 		/// <summary>Method which initializes the internal datastores.</summary>
 		private void Init()
 		{
-			this.InitClass( (234 + 2));
+			this.InitClass( (235 + 2));
 			InitActionEntityInfos();
 			InitActionFilterTriggerEntityInfos();
 			InitActionQueueEntityInfos();
@@ -64,6 +64,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			InitAmazonSFPServiceTypeEntityInfos();
 			InitAmazonSFPShipmentEntityInfos();
 			InitAmazonStoreEntityInfos();
+			InitAmazonSWAAccountEntityInfos();
 			InitAmeriCommerceStoreEntityInfos();
 			InitAsendiaAccountEntityInfos();
 			InitAsendiaProfileEntityInfos();
@@ -485,6 +486,27 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("AmazonStoreEntity", "ExcludeFBA", typeof(System.Boolean), false, false, false, false,  (int)AmazonStoreFieldIndex.ExcludeFBA, 0, 0, 0);
 			this.AddElementFieldInfo("AmazonStoreEntity", "DomainName", typeof(System.String), false, false, false, false,  (int)AmazonStoreFieldIndex.DomainName, 50, 0, 0);
 			this.AddElementFieldInfo("AmazonStoreEntity", "AmazonVATS", typeof(System.Boolean), false, false, false, false,  (int)AmazonStoreFieldIndex.AmazonVATS, 0, 0, 0);
+		}
+		/// <summary>Inits AmazonSWAAccountEntity's FieldInfo objects</summary>
+		private void InitAmazonSWAAccountEntityInfos()
+		{
+			this.AddFieldIndexEnumForElementName(typeof(AmazonSWAAccountFieldIndex), "AmazonSWAAccountEntity");
+			this.AddElementFieldInfo("AmazonSWAAccountEntity", "AmazonSWAAccountID", typeof(System.Int64), true, false, true, false,  (int)AmazonSWAAccountFieldIndex.AmazonSWAAccountID, 0, 0, 19);
+			this.AddElementFieldInfo("AmazonSWAAccountEntity", "RowVersion", typeof(System.Byte[]), false, false, true, false,  (int)AmazonSWAAccountFieldIndex.RowVersion, 2147483647, 0, 0);
+			this.AddElementFieldInfo("AmazonSWAAccountEntity", "AccountNumber", typeof(System.Int64), false, false, false, false,  (int)AmazonSWAAccountFieldIndex.AccountNumber, 0, 0, 19);
+			this.AddElementFieldInfo("AmazonSWAAccountEntity", "ShipEngineCarrierId", typeof(System.String), false, false, false, false,  (int)AmazonSWAAccountFieldIndex.ShipEngineCarrierId, 12, 0, 0);
+			this.AddElementFieldInfo("AmazonSWAAccountEntity", "Description", typeof(System.String), false, false, false, false,  (int)AmazonSWAAccountFieldIndex.Description, 50, 0, 0);
+			this.AddElementFieldInfo("AmazonSWAAccountEntity", "FirstName", typeof(System.String), false, false, false, false,  (int)AmazonSWAAccountFieldIndex.FirstName, 30, 0, 0);
+			this.AddElementFieldInfo("AmazonSWAAccountEntity", "MiddleName", typeof(System.String), false, false, false, false,  (int)AmazonSWAAccountFieldIndex.MiddleName, 30, 0, 0);
+			this.AddElementFieldInfo("AmazonSWAAccountEntity", "LastName", typeof(System.String), false, false, false, false,  (int)AmazonSWAAccountFieldIndex.LastName, 30, 0, 0);
+			this.AddElementFieldInfo("AmazonSWAAccountEntity", "Company", typeof(System.String), false, false, false, false,  (int)AmazonSWAAccountFieldIndex.Company, 30, 0, 0);
+			this.AddElementFieldInfo("AmazonSWAAccountEntity", "Street1", typeof(System.String), false, false, false, false,  (int)AmazonSWAAccountFieldIndex.Street1, 43, 0, 0);
+			this.AddElementFieldInfo("AmazonSWAAccountEntity", "City", typeof(System.String), false, false, false, false,  (int)AmazonSWAAccountFieldIndex.City, 25, 0, 0);
+			this.AddElementFieldInfo("AmazonSWAAccountEntity", "StateProvCode", typeof(System.String), false, false, false, false,  (int)AmazonSWAAccountFieldIndex.StateProvCode, 50, 0, 0);
+			this.AddElementFieldInfo("AmazonSWAAccountEntity", "PostalCode", typeof(System.String), false, false, false, false,  (int)AmazonSWAAccountFieldIndex.PostalCode, 10, 0, 0);
+			this.AddElementFieldInfo("AmazonSWAAccountEntity", "CountryCode", typeof(System.String), false, false, false, false,  (int)AmazonSWAAccountFieldIndex.CountryCode, 50, 0, 0);
+			this.AddElementFieldInfo("AmazonSWAAccountEntity", "Email", typeof(System.String), false, false, false, false,  (int)AmazonSWAAccountFieldIndex.Email, 50, 0, 0);
+			this.AddElementFieldInfo("AmazonSWAAccountEntity", "Phone", typeof(System.String), false, false, false, false,  (int)AmazonSWAAccountFieldIndex.Phone, 15, 0, 0);
 		}
 		/// <summary>Inits AmeriCommerceStoreEntity's FieldInfo objects</summary>
 		private void InitAmeriCommerceStoreEntityInfos()

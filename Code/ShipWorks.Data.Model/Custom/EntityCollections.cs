@@ -804,6 +804,63 @@ namespace ShipWorks.Data.Model.Custom
 
 	
 	/// <summary>
+	/// Strongly typed collection of AmazonSWAAccountEntity
+	/// </summary>
+	public class AmazonSWAAccountCollection : EntityCollection<AmazonSWAAccountEntity>
+	{
+        /// <summary>
+        /// Gets the count of all AmazonSWAAccountEntity rows
+        /// </summary>
+        public static int GetCount(IDataAccessAdapter adapter)
+        {
+            return GetCount(adapter, null);
+        }
+
+        /// <summary>
+        /// Gets the count of all AmazonSWAAccountEntity rows filtered by the given predicate
+        /// </summary>
+        public static int GetCount(IDataAccessAdapter adapter, IPredicate filter)
+        {
+            RelationPredicateBucket bucket = null;
+
+            if (filter != null)
+            {
+                bucket = new RelationPredicateBucket(filter);
+            }
+
+            return adapter.GetDbCount(new AmazonSWAAccountEntityFactory().CreateFields(), bucket);
+        }
+
+        /// <summary>
+        /// Fetch a new collection object that matches the specified filter.
+        /// </summary>
+        public static AmazonSWAAccountCollection Fetch(IDataAccessAdapter adapter, IPredicate filter)
+        {
+			return Fetch(adapter, filter, null);
+        }
+
+		/// <summary>
+        /// Fetch a new collection object that matches the specified filter and uses the given prefetch.
+        /// </summary>
+        public static AmazonSWAAccountCollection Fetch(IDataAccessAdapter adapter, IPredicate filter, IPrefetchPath2 prefetchPath)
+        {
+            AmazonSWAAccountCollection collection = new AmazonSWAAccountCollection();
+
+            RelationPredicateBucket bucket = null;
+
+            if (filter != null)
+            {
+                bucket = new RelationPredicateBucket(filter);
+            }
+
+            adapter.FetchEntityCollection(collection, bucket, prefetchPath);
+
+            return collection;
+        }
+	}
+
+	
+	/// <summary>
 	/// Strongly typed collection of AmeriCommerceStoreEntity
 	/// </summary>
 	public class AmeriCommerceStoreCollection : EntityCollection<AmeriCommerceStoreEntity>
