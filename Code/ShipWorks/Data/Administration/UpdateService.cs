@@ -73,13 +73,9 @@ namespace ShipWorks.Data.Administration
                     // deleting it will fail, in that case ignore the error
                 }
 
-                // if the version we are currently running is lower than the version we were trying to update to then something went wrong
-                // skip the rest of the update process here because we dont want to get stuck in a loop where we keep attempting
-                // to update and fail
-                if (Version.TryParse(version, out Version updateInProcessVersion) && typeof(UpdateService).Assembly.GetName().Version <= updateInProcessVersion)
-                {
-                    return Result.FromError("The previous ShipWorks auto update failed. Restart ShipWorks to try again.");
-                }
+                // We are starting back up after installing an update, dont update again because that
+                // could get us stuck in an update loop
+                return Result.FromError("An update was just installed, skipping updates.");
             }
 
             // For localdb we manually check to see if a new version is available, this is because
