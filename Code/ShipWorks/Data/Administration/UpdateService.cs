@@ -86,31 +86,25 @@ namespace ShipWorks.Data.Administration
                     return Result.FromError("The previous ShipWorks auto update failed. Restart ShipWorks to try again.");
                 }
             }
-            try
+
+            // For localdb we manually check to see if a new version is available, this is because
+            // the windows service that is running our update service does not have access to localdb
+            if (sqlSession.Configuration.IsLocalDb() && !AutoUpdateSettings.IsAutoUpdateDisabled)
             {
-                // For localdb we manually check to see if a new version is available, this is because
-                // the windows service that is running our update service does not have access to localdb
-                if (sqlSession.Configuration.IsLocalDb() && !AutoUpdateSettings.IsAutoUpdateDisabled)
+                DataProvider.InitializeForApplication();
+                StoreManager.InitializeForCurrentSession(SecurityContext.EmptySecurityContext);
+                UserSession.InitializeForCurrentDatabase();
+                GenericResult<ShipWorksReleaseInfo> releaseInfo = tangoGetReleaseByCustomerRequest.GetReleaseInfo();
+
+                if (releaseInfo.Success)
                 {
-                    DataProvider.InitializeForApplication();
-                    StoreManager.InitializeForCurrentSession(SecurityContext.EmptySecurityContext);
-                    UserSession.InitializeForCurrentDatabase();
-                    GenericResult<ShipWorksReleaseInfo> releaseInfo = tangoGetReleaseByCustomerRequest.GetReleaseInfo();
+                    Version versionToUpgradeTo = releaseInfo.Value.ReleaseVersion;
 
-                    if (releaseInfo.Success)
+                    if (versionToUpgradeTo > typeof(UpdateService).Assembly.GetName().Version)
                     {
-                        Version versionToUpgradeTo = releaseInfo.Value.ReleaseVersion;
-
-                        if (versionToUpgradeTo > typeof(UpdateService).Assembly.GetName().Version)
-                        {
-                            return Update(versionToUpgradeTo);
-                        }
+                        return Update(versionToUpgradeTo);
                     }
                 }
-            }
-            catch (InvalidOperationException ex)
-            {
-                return Result.FromError(ex);
             }
 
             // Check see if the database has been updated and we need to update

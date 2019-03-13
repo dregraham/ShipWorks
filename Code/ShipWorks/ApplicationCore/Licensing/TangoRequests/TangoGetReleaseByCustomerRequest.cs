@@ -38,7 +38,7 @@ namespace ShipWorks.ApplicationCore.Licensing.TangoRequests
             string customerID = tangoWebClient.GetTangoCustomerId();
             if (string.IsNullOrEmpty(customerID))
             {
-                throw new InvalidOperationException("Could not retrieve customer id");
+                return GenericResult.FromError<ShipWorksReleaseInfo>("Could not retrieve customer id");
             }
 
             Version currentVersion = Assembly.GetExecutingAssembly().GetName().Version;
@@ -47,7 +47,7 @@ namespace ShipWorks.ApplicationCore.Licensing.TangoRequests
             request.Variables.Add("action", "getreleasebyuser");
             request.Variables.Add("customerid", customerID);
             request.Variables.Add("version", currentVersion.ToString());
-            
+
             return webRequestClient.ProcessXmlRequest<ShipWorksReleaseInfo>(request, "GetReleaseByVersion", true);
         }
     }

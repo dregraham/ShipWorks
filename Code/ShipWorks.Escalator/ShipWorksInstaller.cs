@@ -6,6 +6,7 @@ using System.Management;
 using System.Reflection;
 using System.Threading;
 using Interapptive.Shared.AutoUpdate;
+using Interapptive.Shared.Collections;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
 using log4net;
@@ -81,6 +82,11 @@ namespace ShipWorks.Escalator
                 // show the splash screen and patiently wait to see if shipworks closes
                 ShowSplashScreenAndAttemptToCloseShipWorks(30);
 
+                // update the status to say we are installing the update, secretly we will give the UI another 30 seconds to exit
+                autoUpdateStatusProvider.UpdateStatus("Installing Update");
+
+                // at this point shipworks was asked nicely to close, if it didnt close because there is a dialog open
+                // or its in the middle of doing something we are going to wait another 30 seconds before killing it
                 int countDown = 30;
                 while (Process.GetProcessesByName("shipworks").Where(p => IsRunningWithoutArguments(p)).Any() || countDown > 0)
                 {
@@ -89,6 +95,7 @@ namespace ShipWorks.Escalator
                 }
             }
 
+            // now that we have given the UI 60 seconds to close we are going to kill all shipworks processes
             foreach (Process process in Process.GetProcessesByName("shipworks"))
             {
                 log.Info($"Killing ShipWorks process.");
@@ -111,11 +118,15 @@ namespace ShipWorks.Escalator
                 autoUpdateStatusProvider.UpdateStatus(message);
                 log.Info(message);
                 Thread.Sleep(1000);
+
+                // Check to see if the UI has been closed, if so skip to the end
+                if (Process.GetProcessesByName("shipworks").Where(p => IsRunningWithoutArguments(p)).None())
+                {
+                    log.Info("It looks like ShipWorks has been closed, skipping the rest of the countdown.");
+                    return;
+                }
             }
 
-            // once the countdown has elapsed stop the timer, update the status on the splash
-            // screen and then ask shipworks to close
-            autoUpdateStatusProvider.UpdateStatus("Installing Update");
             log.Info($"Asking ShipWorks to close.");
             communicationBridgeFactory($"{serviceName.GetInstanceID().ToString()}_AutoUpdateStart").SendMessage("CloseShipWorks");
         }
