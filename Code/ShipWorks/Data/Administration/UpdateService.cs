@@ -56,6 +56,11 @@ namespace ShipWorks.Data.Administration
         /// <returns></returns>
         public Result TryUpdate()
         {
+            if (!sqlSession.CanConnect())
+            {
+                return Result.FromError(string.Empty);
+            }
+
             Version databaseVersion = SqlSchemaUpdater.GetInstalledSchemaVersion();
 
             // Check to see if we just launched shipworks after attempting to update the exe
