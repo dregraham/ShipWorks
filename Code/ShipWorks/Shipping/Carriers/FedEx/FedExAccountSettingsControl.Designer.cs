@@ -47,6 +47,8 @@
             this.signaturePreview = new System.Windows.Forms.PictureBox();
             this.infoTipExtraHubs = new ShipWorks.UI.Controls.InfoTip();
             this.infoTipHubID = new ShipWorks.UI.Controls.InfoTip();
+            this.openFileDialogLetterhead = new System.Windows.Forms.OpenFileDialog();
+            this.openFileDialogSignature = new System.Windows.Forms.OpenFileDialog();
             ((System.ComponentModel.ISupportInitialize)(this.letterheadPreview)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.signaturePreview)).BeginInit();
             this.SuspendLayout();
@@ -231,7 +233,16 @@
             this.infoTipHubID.Size = new System.Drawing.Size(12, 12);
             this.infoTipHubID.TabIndex = 23;
             this.infoTipHubID.Title = "Hub ID";
+            //
+            // openFileDialogLetterhead
+            //
+            this.openFileDialogLetterhead.Filter = 
+                "Image Files(*.jpg; *.jpeg; *.gif; *.bmp; *.png)|*.jpg; *.jpeg; *.gif; *.bmp; *.png";
+            //
+            // openFileDialogSignature
             // 
+            this.openFileDialogSignature.Filter =
+                "Image Files(*.jpg; *.jpeg; *.gif; *.bmp; *.png)|*.jpg; *.jpeg; *.gif; *.bmp; *.png";
             // FedExAccountSettingsControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -286,5 +297,7 @@
         private System.Windows.Forms.Button signatureBrowse;
         private System.Windows.Forms.PictureBox letterheadPreview;
         private System.Windows.Forms.PictureBox signaturePreview;
+        private System.Windows.Forms.OpenFileDialog openFileDialogLetterhead;
+        private System.Windows.Forms.OpenFileDialog openFileDialogSignature;
     }
 }

@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Drawing;
 using System.Linq;
-using System.Windows.Forms;
-using ShipWorks.Data.Model.EntityClasses;
-using System.Xml.Linq;
-using ShipWorks.Shipping.Carriers.Api;
 using System.Text.RegularExpressions;
+using System.Windows.Forms;
+using System.Xml.Linq;
+using Interapptive.Shared.Utility;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.Carriers.Api;
 
 namespace ShipWorks.Shipping.Carriers.FedEx
 {
@@ -73,6 +74,19 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             }
 
             account.SmartPostHubList = root.ToString();
+
+            Bitmap bitmapImageLetterhead = new Bitmap(openFileDialogLetterhead.FileName);
+            Bitmap bitmapImageSignature = new Bitmap(openFileDialogSignature.FileName);
+
+            try
+            {
+                account.Letterhead = bitmapImageLetterhead.ImageToBase64String(letterheadPreview.Image.RawFormat);
+                account.Signature = bitmapImageSignature.ImageToBase64String(signaturePreview.Image.RawFormat);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Something went wrong" + ex.Message);
+            }
         }
 
         /// <summary>
@@ -80,15 +94,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// </summary>
         private void OnBrowseLetterhead(object sender, EventArgs e)
         {
-            OpenFileDialog dlg = new OpenFileDialog();
-            dlg.Filter = filter;
-            using (dlg)
+            if (openFileDialogLetterhead.ShowDialog(this) == DialogResult.OK)
             {
-                DialogResult result = dlg.ShowDialog();
-                if (result == DialogResult.OK)
-                {
-                    letterheadPreview.Image = new Bitmap(dlg.FileName);
-                }
+                letterheadPreview.Image = new Bitmap(openFileDialogLetterhead.FileName);
             }
         }
 
@@ -97,15 +105,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// </summary>
         private void OnBrowseSignature(object sender, EventArgs e)
         {
-            OpenFileDialog dlg = new OpenFileDialog();
-            dlg.Filter = filter;
-            using (dlg)
+            if (openFileDialogSignature.ShowDialog(this) == DialogResult.OK)
             {
-                DialogResult result = dlg.ShowDialog();
-                if (result == DialogResult.OK)
-                {
-                    signaturePreview.Image = new Bitmap(dlg.FileName);
-                }
+                signaturePreview.Image = new Bitmap(openFileDialogSignature.FileName);
             }
         }
     }
