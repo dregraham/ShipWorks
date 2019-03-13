@@ -16,6 +16,7 @@ using ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Registration;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Track;
+using ShipWorks.Shipping.Carriers.FedEx.WebServices.UploadDocument;
 using ProcessShipmentRequest = ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship.ProcessShipmentRequest;
 
 namespace ShipWorks.Shipping.Carriers.FedEx.Api
@@ -460,6 +461,30 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
                 }
 
                 return trackReply;
+            }
+            catch (SoapException ex)
+            {
+                throw new FedExSoapCarrierException(ex);
+            }
+            catch (Exception ex)
+            {
+                throw WebHelper.TranslateWebException(ex, typeof(FedExException));
+            }
+        }
+        public UploadImagesReply UploadImages(UploadImagesRequest imageRequest)
+        {
+            try
+            {
+                UploadImagesReply imageReply;
+
+                using (UploadDocumentService service = new UploadDocumentService(new ApiLogEntry(ApiLogSource.FedEx, "UploadImages")))
+                {
+                    service.Url = settings.EndpointUrl;
+
+                    imageReply = service.uploadImages(imageRequest);
+                }
+
+                return imageReply;
             }
             catch (SoapException ex)
             {
