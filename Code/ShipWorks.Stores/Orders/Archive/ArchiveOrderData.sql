@@ -5,22 +5,22 @@ DECLARE @RaiseErrorMsg nvarchar(500) = ''
 
 USE [%databaseName%]
 
-SELECT @OriginalRecoveryModel = recovery_model_desc  
-   FROM sys.databases  
-   WHERE name = '%databaseName%'; 
+SELECT @OriginalRecoveryModel = recovery_model_desc
+   FROM sys.databases
+   WHERE name = '%databaseName%';
 
-SET @SetRecoveryModelSimpleSql = 
+SET @SetRecoveryModelSimpleSql =
 	'ALTER DATABASE [%databaseName%] SET RECOVERY SIMPLE WITH NO_WAIT';
 
-SET @SetRecoveryModelOriginalSql = 
+SET @SetRecoveryModelOriginalSql =
 	'ALTER DATABASE [%databaseName%] SET RECOVERY ' + @OriginalRecoveryModel + ' WITH NO_WAIT';
-	
+
 EXEC(@SetRecoveryModelSimpleSql)
 
 BEGIN TRAN
 
 SET NOCOUNT ON;
-	
+
 DECLARE @DisableAllTriggersSql NVARCHAR(MAX) = N'';
 DECLARE @EnableAllTriggersSql NVARCHAR(MAX) = N'';
 DECLARE @DisableAllIndexesSql NVARCHAR(MAX) = N'';
@@ -56,7 +56,7 @@ BEGIN
 	BEGIN
 		DROP TABLE [ShipmentIDsToDelete]
 	END
-	
+
 	/*******************************************************************/
 	/* Get static list of ShipmentIDs to delete.                       */
 	/* We won't delete or modify this list, it is only for joining to. */
@@ -124,11 +124,11 @@ BEGIN
 		DROP TABLE [EntityIDsToDelete]
 	END
 
-	SELECT DISTINCT EntityID 
+	SELECT DISTINCT EntityID
 		INTO dbo.[EntityIDsToDelete]
 		FROM dbo.[ShipmentIDsToDelete]
 		ORDER BY EntityID
-		
+
 	SET @RaiseErrorMsg = 'OrderArchiveInfo: (' + db_name() + ') - 10 percent processed.'
     RAISERROR (@RaiseErrorMsg, 0, 1) WITH NOWAIT
 	/*******************************************************************/
@@ -143,7 +143,7 @@ BEGIN
 	exec PurgeEntities 'UpsPackage', 'ShipmentID', 'UpsPackageID'
 	exec PurgeEntities 'UspsShipment', 'ShipmentID', 'ShipmentID'
 	exec PurgeEntities 'WorldShipShipment', 'ShipmentID', 'ShipmentID'
-	exec PurgeEntities 'AmazonShipment', 'ShipmentID', 'ShipmentID'
+	exec PurgeEntities 'AmazonSFPShipment', 'ShipmentID', 'ShipmentID'
 	exec PurgeEntities 'AsendiaShipment', 'ShipmentID', 'ShipmentID'
 	exec PurgeEntities 'BestRateShipment', 'ShipmentID', 'ShipmentID'
 	exec PurgeEntities 'DhlExpressShipment', 'ShipmentID', 'ShipmentID'
@@ -172,7 +172,7 @@ BEGIN
 
 	SET @RaiseErrorMsg = 'OrderArchiveInfo: (' + db_name() + ') - 20 percent processed.'
     RAISERROR (@RaiseErrorMsg, 0, 1) WITH NOWAIT
-	
+
 	/*******************************************************************/
 	/* Delete ScanForms based on deleted Shipments.                    */
 	/*******************************************************************/
@@ -183,19 +183,19 @@ BEGIN
 		UNION ALL
 		SELECT DISTINCT ScanFormBatchID FROM UspsShipment WHERE ScanFormBatchID IS NOT NULL
 
-	DELETE FROM EndiciaScanForm 
+	DELETE FROM EndiciaScanForm
 	WHERE ScanFormBatchID NOT IN
 	(
 		SELECT DISTINCT ScanFormBatchID FROM @ScanFormBatchesToKeep
 	)
 
-	DELETE FROM UspsScanForm 
+	DELETE FROM UspsScanForm
 	WHERE ScanFormBatchID NOT IN
 	(
 		SELECT DISTINCT ScanFormBatchID FROM @ScanFormBatchesToKeep
 	)
 
-	DELETE FROM ScanFormBatch 
+	DELETE FROM ScanFormBatch
 	WHERE ScanFormBatchID NOT IN
 	(
 		SELECT DISTINCT ScanFormBatchID FROM @ScanFormBatchesToKeep
@@ -206,23 +206,23 @@ BEGIN
 	SELECT DISTINCT a.AuditID as 'EntityID'
 		INTO    dbo.[EntityIDsToDelete]
 		FROM    [Audit] a, [ShipmentIDsToDelete] s
-		WHERE   s.EntityID = a.ObjectID 
-	
+		WHERE   s.EntityID = a.ObjectID
+
 	exec PurgeEntities 'AuditChangeDetail', 'AuditID', 'AuditChangeDetailID'
 	exec PurgeEntities 'AuditChange', 'AuditID', 'AuditChangeID'
 	exec PurgeEntities 'Audit', 'AuditID', 'AuditID'
-		
+
 	/* Now do matching AuditChange entries */
 	DROP TABLE  dbo.[EntityIDsToDelete]
 	SELECT DISTINCT a.AuditID as 'EntityID'
 		INTO    dbo.[EntityIDsToDelete]
 		FROM    [AuditChange] a, [ShipmentIDsToDelete] s
-		WHERE   s.EntityID = a.ObjectID 
-	
+		WHERE   s.EntityID = a.ObjectID
+
 	exec PurgeEntities 'AuditChangeDetail', 'AuditID', 'AuditChangeDetailID'
 	exec PurgeEntities 'AuditChange', 'AuditID', 'AuditChangeID'
 	exec PurgeEntities 'Audit', 'AuditID', 'AuditID'
-	
+
 	SET @RaiseErrorMsg = 'OrderArchiveInfo: (' + db_name() + ') - 30 percent processed.'
     RAISERROR (@RaiseErrorMsg, 0, 1) WITH NOWAIT
 
@@ -239,7 +239,7 @@ BEGIN
 	FROM    dbo.[OrderItem] oi inner join [OrderIDsToDelete] o on oi.OrderID = o.EntityID
 			inner join [OrderItemAttribute] oia on oia.OrderItemID = oi.OrderItemID
 	ORDER BY oia.OrderItemAttributeID
-	
+
 	/*******************************************************************/
 	/* Delete based on OrderItemAttributeIDs.                          */
 	/*******************************************************************/
@@ -248,10 +248,10 @@ BEGIN
 	exec PurgeEntities 'ObjectReference', 'ConsumerID', 'ObjectReferenceID'
 	exec PurgeEntities 'ObjectReference', 'ObjectID', 'ObjectReferenceID'
 	exec PurgeEntities 'MivaOrderItemAttribute', 'OrderItemAttributeID', 'OrderItemAttributeID'
-	
+
 	SET @RaiseErrorMsg = 'OrderArchiveInfo: (' + db_name() + ') - 40 percent processed.'
     RAISERROR (@RaiseErrorMsg, 0, 1) WITH NOWAIT
-	
+
 	/*******************************************************************/
 	/* Populate the list of OrderItemIDs to delete.                    */
 	/*******************************************************************/
@@ -265,7 +265,7 @@ BEGIN
 	FROM    dbo.[OrderItem] oi
 			inner join [OrderIDsToDelete] o on oi.OrderID = o.EntityID
 	ORDER BY oi.OrderItemID
-	
+
 	/*******************************************************************/
 	/* Delete based on OrderItemIDs.                                   */
 	/*******************************************************************/
@@ -293,10 +293,10 @@ BEGIN
 	exec PurgeEntities 'WalmartOrderItem', 'OrderItemID', 'OrderItemID'
 	exec PurgeEntities 'YahooOrderItem', 'OrderItemID', 'OrderItemID'
 	exec PurgeEntities 'OrderItem', 'OrderItemID', 'OrderItemID'
-	
+
 	SET @RaiseErrorMsg = 'OrderArchiveInfo: (' + db_name() + ') - 50 percent processed.'
     RAISERROR (@RaiseErrorMsg, 0, 1) WITH NOWAIT
-	
+
 	/*******************************************************************/
 	/* Populate the list of OrderIDs to delete.                        */
 	/*******************************************************************/
@@ -309,7 +309,7 @@ BEGIN
 	INTO    dbo.[EntityIDsToDelete]
 	FROM    dbo.[OrderIDsToDelete] o
 	ORDER BY o.EntityID
-	
+
 	/*******************************************************************/
 	/* Delete based on OrderIDs.                                       */
 	/*******************************************************************/
@@ -372,7 +372,7 @@ BEGIN
 	exec PurgeEntities 'EmailOutbound', 'ContextID', 'EmailOutboundID'
 	exec PurgeEntities 'DownloadDetail', 'OrderID', 'DownloadedDetailID'
 	exec PurgeEntities 'Order', 'OrderID', 'OrderID'
-	
+
 	SET @RaiseErrorMsg = 'OrderArchiveInfo: (' + db_name() + ') - 70 percent processed.'
     RAISERROR (@RaiseErrorMsg, 0, 1) WITH NOWAIT
 
@@ -382,21 +382,21 @@ BEGIN
 		INTO    dbo.[EntityIDsToDelete]
 		FROM    dbo.[OrderIDsToDelete] o, [Audit] a
 		WHERE   o.EntityID = a.ObjectID
-	
+
 	exec PurgeEntities 'AuditChangeDetail', 'AuditID', 'AuditChangeDetailID'
 	exec PurgeEntities 'AuditChange', 'AuditID', 'AuditChangeID'
 	exec PurgeEntities 'Audit', 'AuditID', 'AuditID'
-	
+
 	SET @RaiseErrorMsg = 'OrderArchiveInfo: (' + db_name() + ') - 80 percent processed.'
     RAISERROR (@RaiseErrorMsg, 0, 1) WITH NOWAIT
-		
+
 	/* Now do matching AuditChange entries */
 	DROP TABLE  dbo.[EntityIDsToDelete]
 	SELECT DISTINCT a.AuditID  as 'EntityID'
 		INTO    dbo.[EntityIDsToDelete]
 		FROM    dbo.[OrderIDsToDelete] o, [AuditChange] a
 		WHERE   o.EntityID = a.ObjectID
-	
+
 	exec PurgeEntities 'AuditChangeDetail', 'AuditID', 'AuditChangeDetailID'
 	exec PurgeEntities 'AuditChange', 'AuditID', 'AuditChangeID'
 	exec PurgeEntities 'Audit', 'AuditID', 'AuditID'
@@ -408,7 +408,7 @@ BEGIN
 	/*   Purge Abandoned Resources       */
 	/*************************************/
 	exec PurgeAbandonedResources @runUntil = null, @olderThan = NULL, @softDelete = 1
-    
+
 	/* The "All" Order filter does not get updated by filter regen, so force it's count to be correct. */
 	UPDATE FilterNodeContent SET [Count] = (SELECT COUNT(*) FROM [Order]) WHERE FilterNodeContentID = -26
 
@@ -432,7 +432,7 @@ BEGIN
 	SET @RaiseErrorMsg = 'OrderArchiveInfo: (' + db_name() + ') - Enable all foreign keys.'
     RAISERROR (@RaiseErrorMsg, 0, 1) WITH NOWAIT
 	exec (@EnableAllForeignKeysSql);
-	
+
 	SET @RaiseErrorMsg = 'OrderArchiveInfo: (' + db_name() + ') - 100 percent processed.'
     RAISERROR (@RaiseErrorMsg, 0, 1) WITH NOWAIT
 
@@ -451,10 +451,10 @@ BEGIN
 	BEGIN
 		DROP TABLE [ShipmentIDsToDelete]
 	END
-END	
+END
 
 COMMIT TRAN
-	
+
 /* THIS MUST BE DONE OUTSIDE THE TRAN!!! */
 /* Put the database back in its original recovery model */
 EXEC(@SetRecoveryModelOriginalSql)
