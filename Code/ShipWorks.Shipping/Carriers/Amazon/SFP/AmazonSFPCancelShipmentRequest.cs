@@ -30,8 +30,8 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SFP
         public AmazonShipment Submit(ShipmentEntity shipment)
         {
             MethodConditions.EnsureArgumentIsNotNull(shipment, nameof(shipment));
-            
-            CancelShipmentResponse cancelShipmentRresponse = webClient.CancelShipment(shipment.Amazon);
+
+            CancelShipmentResponse cancelShipmentRresponse = webClient.CancelShipment(shipment.AmazonSFP);
 
             return cancelShipmentRresponse.CancelShipmentResult.AmazonShipment;
         }

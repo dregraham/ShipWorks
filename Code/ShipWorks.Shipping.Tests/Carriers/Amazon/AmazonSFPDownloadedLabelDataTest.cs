@@ -21,7 +21,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
         readonly ShipmentEntity defaultShipment = new ShipmentEntity
         {
             Order = new AmazonOrderEntity(),
-            Amazon = new AmazonShipmentEntity { ShippingServiceID = "something", CarrierName = "Foo" }
+            AmazonSFP = new AmazonSFPShipmentEntity { ShippingServiceID = "something", CarrierName = "Foo" }
         };
 
         [SuppressMessage("SonarLint", "S103:Lines should not be too long",
@@ -62,7 +62,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
 
             Assert.Equal("123", defaultShipment.TrackingNumber);
             Assert.Equal(1, defaultShipment.ShipmentCost);
-            Assert.Equal("456", defaultShipment.Amazon.AmazonUniqueShipmentID);
+            Assert.Equal("456", defaultShipment.AmazonSFP.AmazonUniqueShipmentID);
         }
 
         [Fact]

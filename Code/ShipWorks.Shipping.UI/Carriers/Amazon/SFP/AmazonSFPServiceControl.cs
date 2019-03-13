@@ -26,7 +26,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SFP
     {
         private readonly IMessenger messenger;
         private readonly ICarrierShipmentAdapterFactory carrierShipmentAdapterFactory;
-        private List<AmazonServiceTypeEntity> allServices;
+        private List<AmazonSFPServiceTypeEntity> allServices;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AmazonSFPServiceControl"/> class.
@@ -35,7 +35,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SFP
         /// a change to the shipment, such as changing the service type, matches a rate in the control</param>
         /// <param name="serviceTypeRepository">Repository of Amazon service types</param>
         /// <param name="carrierShipmentAdapterFactory">Shipment adapter creation factory</param>
-        public AmazonSFPServiceControl(RateControl rateControl, IAmazonSFPServiceTypeRepository serviceTypeRepository, 
+        public AmazonSFPServiceControl(RateControl rateControl, IAmazonSFPServiceTypeRepository serviceTypeRepository,
             IMessenger messenger, ICarrierShipmentAdapterFactory carrierShipmentAdapterFactory)
             : base(ShipmentTypeCode.AmazonSFP, rateControl)
         {
@@ -130,18 +130,18 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SFP
                 {
                     weight.ApplyMultiWeight(shipment.ContentWeight);
 
-                    AmazonServiceTypeEntity serviceType = allServices.FirstOrDefault(s => s.ApiValue == shipment.Amazon.ShippingServiceID);
+                    AmazonSFPServiceTypeEntity serviceType = allServices.FirstOrDefault(s => s.ApiValue == shipment.AmazonSFP.ShippingServiceID);
                     if (serviceType != null)
                     {
                         service.ApplyMultiText(serviceType.Description);
                     }
 
                     shipDate.ApplyMultiDate(shipment.ShipDate);
-                    dimensions.Add(new DimensionsAdapter(shipment.Amazon));
+                    dimensions.Add(new DimensionsAdapter(shipment.AmazonSFP));
 
-                    referenceTemplateToken.ApplyMultiText(shipment.Amazon.Reference1);
+                    referenceTemplateToken.ApplyMultiText(shipment.AmazonSFP.Reference1);
 
-                    deliveryConfirmation.ApplyMultiValue((AmazonSFPDeliveryExperienceType) shipment.Amazon.DeliveryExperience);
+                    deliveryConfirmation.ApplyMultiValue((AmazonSFPDeliveryExperienceType) shipment.AmazonSFP.DeliveryExperience);
                 }
             }
 
@@ -169,9 +169,9 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SFP
         /// Is available service type
         /// </summary>
         /// <returns>If service is in list of available services or is a service for the selected shipment, return true. Else false.</returns>
-        private static bool IsAvailableServiceType(AmazonServiceTypeEntity service, List<ShipmentEntity> shipments, Dictionary<int, string> availableServices)
+        private static bool IsAvailableServiceType(AmazonSFPServiceTypeEntity service, List<ShipmentEntity> shipments, Dictionary<int, string> availableServices)
         {
-            return availableServices.ContainsKey(service.AmazonServiceTypeID) || shipments.Any(shipment => shipment.Amazon?.ShippingServiceID == service.ApiValue);
+            return availableServices.ContainsKey(service.AmazonSFPServiceTypeID) || shipments.Any(shipment => shipment.AmazonSFP?.ShippingServiceID == service.ApiValue);
         }
 
         /// <summary>
@@ -235,14 +235,14 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SFP
             // Save the other fields
             foreach (ShipmentEntity shipment in LoadedShipments)
             {
-                service.ReadMultiValue(v => shipment.Amazon.ShippingServiceID = v.ToString());
+                service.ReadMultiValue(v => shipment.AmazonSFP.ShippingServiceID = v.ToString());
                 shipDate.ReadMultiDate(v => shipment.ShipDate = v);
-                referenceTemplateToken.ReadMultiText(v => shipment.Amazon.Reference1 = v);
-                
+                referenceTemplateToken.ReadMultiText(v => shipment.AmazonSFP.Reference1 = v);
+
                 var shipmentAdapter = carrierShipmentAdapterFactory.Get(shipment);
                 shipmentAdapter?.SelectServiceFromRate(RateControl.SelectedRate);
 
-                deliveryConfirmation.ReadMultiValue(v => shipment.Amazon.DeliveryExperience = (int) v);
+                deliveryConfirmation.ReadMultiValue(v => shipment.AmazonSFP.DeliveryExperience = (int) v);
 
                 weight.ReadMultiWeight(v => shipment.ContentWeight = v);
             }
@@ -264,7 +264,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SFP
         /// </summary>
         private void UpdateSectionDescription()
         {
-            sectionShipment.ExtraText = service.MultiValued ? "(Multiple Services)" : (service.SelectedItem as AmazonServiceTypeEntity)?.Description ?? "";
+            sectionShipment.ExtraText = service.MultiValued ? "(Multiple Services)" : (service.SelectedItem as AmazonSFPServiceTypeEntity)?.Description ?? "";
         }
 
         /// <summary>
@@ -280,7 +280,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SFP
                 return;
             }
 
-            AmazonServiceTypeEntity selectedService = allServices.FirstOrDefault(s => s.ApiValue == rateTag.ShippingServiceId);
+            AmazonSFPServiceTypeEntity selectedService = allServices.FirstOrDefault(s => s.ApiValue == rateTag.ShippingServiceId);
 
             service.SelectedItem = selectedService;
             if (service.SelectedIndex == -1 && oldIndex != -1)

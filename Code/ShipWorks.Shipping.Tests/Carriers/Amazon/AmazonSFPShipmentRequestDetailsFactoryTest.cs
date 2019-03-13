@@ -23,7 +23,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
             OriginStreet3 = "789",
 
             TotalWeight = 1.23,
-            Amazon = new AmazonShipmentEntity
+            AmazonSFP = new AmazonSFPShipmentEntity
             {
                 DeclaredValue = 4,
                 DimsHeight = 7,
@@ -57,7 +57,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
         {
             ShipmentRequestDetails testObject = amazonShipmentRequestDetailsFactory.Create(shipmentEntity, order);
 
-            Assert.Equal(shipmentEntity.Amazon.Reference1.Truncate(25), testObject.LabelCustomization.CustomTextForLabel);
+            Assert.Equal(shipmentEntity.AmazonSFP.Reference1.Truncate(25), testObject.LabelCustomization.CustomTextForLabel);
         }
 
         [Theory]
@@ -65,7 +65,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
         [InlineData(ThermalLanguage.ZPL, "ZPL203")]
         public void CreateReturns_ShipmentRequestDetailsWith_RequestedLabelFormat(ThermalLanguage thermalLanguage, string expectedValue)
         {
-            shipmentEntity.Amazon.RequestedLabelFormat = (int) thermalLanguage;
+            shipmentEntity.AmazonSFP.RequestedLabelFormat = (int) thermalLanguage;
             ShipmentRequestDetails testObject = amazonShipmentRequestDetailsFactory.Create(shipmentEntity, order);
 
             Assert.Equal(expectedValue, testObject.ShippingServiceOptions.LabelFormat);

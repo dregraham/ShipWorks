@@ -47,15 +47,15 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SFP.Api
             {
                 foreach (ShippingService shippingService in serviceList.ShippingService.Where(x => x.Rate != null))
                 {
-                    AmazonServiceTypeEntity serviceType = serviceTypeRepository.Get().Single(s => s.ApiValue == shippingService.ShippingServiceId);
-                    
+                    AmazonSFPServiceTypeEntity serviceType = serviceTypeRepository.Get().Single(s => s.ApiValue == shippingService.ShippingServiceId);
+
                     AmazonRateTag tag = new AmazonRateTag()
                     {
                         Description = serviceType.Description ?? shippingService.ShippingServiceName ?? "Unknown",
                         ShippingServiceId = shippingService.ShippingServiceId,
                         CarrierName = shippingService.CarrierName,
-                        ServiceTypeID = serviceType.AmazonServiceTypeID
-                    };                    
+                        ServiceTypeID = serviceType.AmazonSFPServiceTypeID
+                    };
 
                     RateResult rateResult = new RateResult(tag.Description, "", shippingService.Rate.Amount, tag);
                     rateResult.ShipmentType = ShipmentTypeCode.AmazonSFP;

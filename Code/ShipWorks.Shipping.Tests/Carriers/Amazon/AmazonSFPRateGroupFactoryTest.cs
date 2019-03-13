@@ -28,11 +28,11 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
 
             mock.Mock<IAmazonSFPServiceTypeRepository>()
                 .Setup(f => f.Get())
-                .Returns(new List<AmazonServiceTypeEntity>()
+                .Returns(new List<AmazonSFPServiceTypeEntity>()
                 {
-                    new AmazonServiceTypeEntity()
+                    new AmazonSFPServiceTypeEntity()
                     {
-                        AmazonServiceTypeID = 1,
+                        AmazonSFPServiceTypeID = 1,
                         ApiValue = null
                     }
                 });
@@ -51,11 +51,11 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
 
             mock.Mock<IAmazonSFPServiceTypeRepository>()
                 .Setup(f => f.Get())
-                .Returns(new List<AmazonServiceTypeEntity>()
+                .Returns(new List<AmazonSFPServiceTypeEntity>()
                 {
-                                new AmazonServiceTypeEntity()
+                                new AmazonSFPServiceTypeEntity()
                                 {
-                                    AmazonServiceTypeID = 1,
+                                    AmazonSFPServiceTypeID = 1,
                                     ApiValue = "Foo"
                                 }
                 });
@@ -125,7 +125,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
             GetEligibleShippingServicesResponse response = GetEligibleShippingServicesResponse(tAndC, tAndC2);
 
             mock.Mock<IAmazonSFPShippingWebClient>()
-                .Setup(w => w.GetRates(It.IsAny<ShipmentRequestDetails>(), It.IsAny<AmazonShipmentEntity>()))
+                .Setup(w => w.GetRates(It.IsAny<ShipmentRequestDetails>(), It.IsAny<AmazonSFPShipmentEntity>()))
                 .Returns(response);
 
             AmazonSFPRateGroupFactory testObject = mock.Create<AmazonSFPRateGroupFactory>();
@@ -164,7 +164,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
             });
 
             AmazonSFPRateGroupFactory testObject = mock.Create<AmazonSFPRateGroupFactory>();
-            
+
             RateGroup result = testObject.GetRateGroupFromResponse(response);
             RateResult rateResult = result.Rates.FirstOrDefault();
 
@@ -186,11 +186,11 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
 
             mock.Mock<IAmazonSFPServiceTypeRepository>()
                 .Setup(f => f.Get())
-                .Returns(new List<AmazonServiceTypeEntity>()
+                .Returns(new List<AmazonSFPServiceTypeEntity>()
                 {
-                    new AmazonServiceTypeEntity()
+                    new AmazonSFPServiceTypeEntity()
                     {
-                        AmazonServiceTypeID = 1,
+                        AmazonSFPServiceTypeID = 1,
                         ApiValue = "Foo"
                     }
                 });
@@ -238,7 +238,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
                     AmazonOrderID = "10",
                     IsPrime = (int) isPrime
                 },
-                Amazon = new AmazonShipmentEntity()
+                AmazonSFP = new AmazonSFPShipmentEntity()
                 {
                     DeclaredValue = 12,
                     DimsHeight = 1,

@@ -31,7 +31,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SFP
         public AmazonSFPShipmentAdapter(ShipmentEntity shipment, IShipmentTypeManager shipmentTypeManager,
             IStoreManager storeManager, IAmazonSFPServiceTypeRepository serviceTypeRepository) : base(shipment, shipmentTypeManager, null, storeManager)
         {
-            MethodConditions.EnsureArgumentIsNotNull(shipment.Amazon, nameof(shipment.Amazon));
+            MethodConditions.EnsureArgumentIsNotNull(shipment.AmazonSFP, nameof(shipment.AmazonSFP));
             this.serviceTypeRepository = serviceTypeRepository;
         }
 
@@ -65,19 +65,19 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SFP
             get
             {
                 return serviceTypeRepository.Get()
-                    .FirstOrDefault(s => s.ApiValue == Shipment.Amazon.ShippingServiceID).AmazonServiceTypeID;
+                    .FirstOrDefault(s => s.ApiValue == Shipment.AmazonSFP.ShippingServiceID).AmazonSFPServiceTypeID;
             }
             set
             {
-                Shipment.Amazon.ShippingServiceID = serviceTypeRepository.Get()
-                    .FirstOrDefault(s => s.AmazonServiceTypeID == value).ApiValue;
+                Shipment.AmazonSFP.ShippingServiceID = serviceTypeRepository.Get()
+                    .FirstOrDefault(s => s.AmazonSFPServiceTypeID == value).ApiValue;
             }
         }
 
         /// <summary>
         /// Get the service type name
         /// </summary>
-        public override string ServiceTypeName => Shipment.Amazon.ShippingServiceName;
+        public override string ServiceTypeName => Shipment.AmazonSFP.ShippingServiceName;
 
         /// <summary>
         /// Perform the clone of the adapter using the cloned shipment
@@ -107,9 +107,9 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SFP
 
             if (rateTag != null)
             {
-                Shipment.Amazon.ShippingServiceName = rateTag.Description ?? string.Empty;
-                Shipment.Amazon.ShippingServiceID = rateTag.ShippingServiceId ?? string.Empty;
-                Shipment.Amazon.CarrierName = rateTag.CarrierName ?? string.Empty;
+                Shipment.AmazonSFP.ShippingServiceName = rateTag.Description ?? string.Empty;
+                Shipment.AmazonSFP.ShippingServiceID = rateTag.ShippingServiceId ?? string.Empty;
+                Shipment.AmazonSFP.CarrierName = rateTag.CarrierName ?? string.Empty;
                 ServiceType = rateTag.ServiceTypeID;
             }
         }
@@ -131,7 +131,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SFP
         {
             AmazonRateTag rateTag = rate.Tag as AmazonRateTag;
 
-            return rateTag?.ShippingServiceId == Shipment.Amazon.ShippingServiceID;
+            return rateTag?.ShippingServiceId == Shipment.AmazonSFP.ShippingServiceID;
         }
 
         /// <summary>

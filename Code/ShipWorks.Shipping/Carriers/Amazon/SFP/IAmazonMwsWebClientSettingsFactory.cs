@@ -12,7 +12,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SFP
         /// <summary>
         /// Creates AmazonMwsClientSettings based on shipment
         /// </summary>
-        IAmazonMwsWebClientSettings Create(AmazonShipmentEntity shipment);
+        IAmazonMwsWebClientSettings Create(AmazonSFPShipmentEntity shipment);
 
         /// <summary>
         /// Creates AmazonMwsClientSettings based on an IAmazonCredentials store

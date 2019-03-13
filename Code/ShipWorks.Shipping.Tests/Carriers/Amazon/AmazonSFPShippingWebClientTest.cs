@@ -72,7 +72,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
 
             var settingsFactory = mock.Mock<IAmazonMwsWebClientSettingsFactory>();
 
-            settingsFactory.Setup(f => f.Create(It.IsAny<AmazonShipmentEntity>())).Returns(settings);
+            settingsFactory.Setup(f => f.Create(It.IsAny<AmazonSFPShipmentEntity>())).Returns(settings);
         }
 
         [Fact]
@@ -83,14 +83,14 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
 
             var testObject = mock.Create<AmazonSFPShippingWebClient>();
 
-            Assert.Throws<AmazonSFPShippingException>(() => testObject.CreateShipment(request, new AmazonShipmentEntity()));
+            Assert.Throws<AmazonSFPShippingException>(() => testObject.CreateShipment(request, new AmazonSFPShipmentEntity()));
         }
 
         [Fact]
         public void CreateShipment_ReturnsShipment_WhenResponseIsValid()
         {
             var testObject = mock.Create<AmazonSFPShippingWebClient>();
-            var result = testObject.CreateShipment(request, new AmazonShipmentEntity());
+            var result = testObject.CreateShipment(request, new AmazonSFPShipmentEntity());
 
             Assert.NotNull(result);
         }

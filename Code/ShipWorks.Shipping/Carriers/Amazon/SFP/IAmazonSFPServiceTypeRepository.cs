@@ -12,7 +12,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SFP
         /// Gets a list of service types from the repository
         /// </summary>
         /// <returns></returns>
-        List<AmazonServiceTypeEntity> Get();
+        List<AmazonSFPServiceTypeEntity> Get();
 
         /// <summary>
         /// Creates and adds a new service to the repository

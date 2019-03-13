@@ -17,16 +17,16 @@ using ShipWorks.Data.Model.EntityInterfaces;
 namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
 {
     /// <summary>
-    /// Read-only representation of the entity 'AmazonProfile'. <br/><br/>
+    /// Read-only representation of the entity 'AmazonSFPProfile'. <br/><br/>
     /// 
     /// </summary>
     [Serializable]
-    public partial class ReadOnlyAmazonProfileEntity : IAmazonProfileEntity
+    public partial class ReadOnlyAmazonSFPProfileEntity : IAmazonSFPProfileEntity
     {
         /// <summary>
         /// Constructor
         /// </summary>
-        internal ReadOnlyAmazonProfileEntity(IAmazonProfileEntity source, IDictionary<object, object> objectMap)
+        internal ReadOnlyAmazonSFPProfileEntity(IAmazonSFPProfileEntity source, IDictionary<object, object> objectMap)
         {
             MethodConditions.EnsureArgumentIsNotNull(source, nameof(source));
             MethodConditions.EnsureArgumentIsNotNull(objectMap, nameof(objectMap));
@@ -45,31 +45,31 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             
             
 
-            CopyCustomAmazonProfileData(source);
+            CopyCustomAmazonSFPProfileData(source);
         }
 
         
-        /// <summary> The ShippingProfileID property of the Entity AmazonProfile<br/><br/>
+        /// <summary> The ShippingProfileID property of the Entity AmazonSFPProfile<br/><br/>
         /// </summary>
-        /// <remarks>Mapped on table field: "AmazonProfile"."ShippingProfileID"<br/>
+        /// <remarks>Mapped on table field: "AmazonSFPProfile"."ShippingProfileID"<br/>
         /// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, true, false</remarks>
         public System.Int64 ShippingProfileID { get; }
-        /// <summary> The DeliveryExperience property of the Entity AmazonProfile<br/><br/>
+        /// <summary> The DeliveryExperience property of the Entity AmazonSFPProfile<br/><br/>
         /// </summary>
-        /// <remarks>Mapped on table field: "AmazonProfile"."DeliveryExperience"<br/>
+        /// <remarks>Mapped on table field: "AmazonSFPProfile"."DeliveryExperience"<br/>
         /// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
         public Nullable<System.Int32> DeliveryExperience { get; }
-        /// <summary> The ShippingServiceID property of the Entity AmazonProfile<br/><br/>
+        /// <summary> The ShippingServiceID property of the Entity AmazonSFPProfile<br/><br/>
         /// </summary>
-        /// <remarks>Mapped on table field: "AmazonProfile"."ShippingServiceID"<br/>
+        /// <remarks>Mapped on table field: "AmazonSFPProfile"."ShippingServiceID"<br/>
         /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
         public System.String ShippingServiceID { get; }
-        /// <summary> The Reference1 property of the Entity AmazonProfile<br/><br/>
+        /// <summary> The Reference1 property of the Entity AmazonSFPProfile<br/><br/>
         /// </summary>
-        /// <remarks>Mapped on table field: "AmazonProfile"."Reference1"<br/>
+        /// <remarks>Mapped on table field: "AmazonSFPProfile"."Reference1"<br/>
         /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 300<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
         public System.String Reference1 { get; }
@@ -81,18 +81,18 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// <summary>
         /// Get a read only version of the entity
         /// </summary>
-        public virtual IAmazonProfileEntity AsReadOnly() => this;
+        public virtual IAmazonSFPProfileEntity AsReadOnly() => this;
 
         /// <summary>
         /// Get a read only version of the entity
         /// </summary>
-        public virtual IAmazonProfileEntity AsReadOnly(IDictionary<object, object> objectMap) => this;
+        public virtual IAmazonSFPProfileEntity AsReadOnly(IDictionary<object, object> objectMap) => this;
 
         
 
         /// <summary>
         /// Copy any custom data
         /// </summary>
-        partial void CopyCustomAmazonProfileData(IAmazonProfileEntity source);
+        partial void CopyCustomAmazonSFPProfileData(IAmazonSFPProfileEntity source);
     }
 }

@@ -122,7 +122,7 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
         /// True if a profile is selected
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public bool IsProfileSelected => ShipmentModel.ShipmentAdapter.Shipment.Amazon.DimsProfileID > 0;
+        public bool IsProfileSelected => ShipmentModel.ShipmentAdapter.Shipment.AmazonSFP.DimsProfileID > 0;
 
         /// <summary>
         /// Collection of ServiceTypes
@@ -187,12 +187,12 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
         {
             base.ShipmentModelPropertyChanged(sender, e);
 
-            if (e.PropertyName == nameof(AmazonShipmentFields.DimsProfileID))
+            if (e.PropertyName == nameof(AmazonSFPShipmentFields.DimsProfileID))
             {
                 ApplyDimensionalProfile();
             }
 
-            if (e.PropertyName == AmazonShipmentFields.ShippingServiceID.Name)
+            if (e.PropertyName == AmazonSFPShipmentFields.ShippingServiceID.Name)
             {
                 Handler.RaisePropertyChanged(nameof(ShipmentModel));
                 Handler.RaisePropertyChanged(nameof(ShipmentModel.ShipmentAdapter.ServiceType));
@@ -264,10 +264,10 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
         {
             DimensionProfiles = carrierShipmentAdapterOptionsProvider.GetDimensionsProfiles(null);
 
-            if (ShipmentModel.ShipmentAdapter.Shipment.Amazon != null &&
-                !DimensionProfiles.ContainsKey(ShipmentModel.ShipmentAdapter.Shipment.Amazon.DimsProfileID))
+            if (ShipmentModel.ShipmentAdapter.Shipment.AmazonSFP != null &&
+                !DimensionProfiles.ContainsKey(ShipmentModel.ShipmentAdapter.Shipment.AmazonSFP.DimsProfileID))
             {
-                ShipmentModel.ShipmentAdapter.Shipment.Amazon.DimsProfileID = 0;
+                ShipmentModel.ShipmentAdapter.Shipment.AmazonSFP.DimsProfileID = 0;
             }
 
             handler.RaisePropertyChanged(null);

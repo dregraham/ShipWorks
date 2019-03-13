@@ -17,15 +17,15 @@ using SD.LLBLGen.Pro.ORMSupportClasses;
 
 namespace ShipWorks.Data.Model.RelationClasses
 {
-	/// <summary>Implements the relations factory for the entity: AmazonServiceType. </summary>
-	public partial class AmazonServiceTypeRelations
+	/// <summary>Implements the relations factory for the entity: AmazonSFPServiceType. </summary>
+	public partial class AmazonSFPServiceTypeRelations
 	{
 		/// <summary>CTor</summary>
-		public AmazonServiceTypeRelations()
+		public AmazonSFPServiceTypeRelations()
 		{
 		}
 
-		/// <summary>Gets all relations of the AmazonServiceTypeEntity as a list of IEntityRelation objects.</summary>
+		/// <summary>Gets all relations of the AmazonSFPServiceTypeEntity as a list of IEntityRelation objects.</summary>
 		/// <returns>a list of IEntityRelation objects</returns>
 		public virtual List<IEntityRelation> GetAllRelations()
 		{
@@ -49,11 +49,11 @@ namespace ShipWorks.Data.Model.RelationClasses
 	}
 	
 	/// <summary>Static class which is used for providing relationship instances which are re-used internally for syncing</summary>
-	internal static class StaticAmazonServiceTypeRelations
+	internal static class StaticAmazonSFPServiceTypeRelations
 	{
 
 		/// <summary>CTor</summary>
-		static StaticAmazonServiceTypeRelations()
+		static StaticAmazonSFPServiceTypeRelations()
 		{
 		}
 	}

@@ -17,41 +17,41 @@ using SD.LLBLGen.Pro.ORMSupportClasses;
 
 namespace ShipWorks.Data.Model.RelationClasses
 {
-	/// <summary>Implements the relations factory for the entity: AmazonProfile. </summary>
-	public partial class AmazonProfileRelations
+	/// <summary>Implements the relations factory for the entity: AmazonSFPShipment. </summary>
+	public partial class AmazonSFPShipmentRelations
 	{
 		/// <summary>CTor</summary>
-		public AmazonProfileRelations()
+		public AmazonSFPShipmentRelations()
 		{
 		}
 
-		/// <summary>Gets all relations of the AmazonProfileEntity as a list of IEntityRelation objects.</summary>
+		/// <summary>Gets all relations of the AmazonSFPShipmentEntity as a list of IEntityRelation objects.</summary>
 		/// <returns>a list of IEntityRelation objects</returns>
 		public virtual List<IEntityRelation> GetAllRelations()
 		{
 			List<IEntityRelation> toReturn = new List<IEntityRelation>();
-			toReturn.Add(this.ShippingProfileEntityUsingShippingProfileID);
+			toReturn.Add(this.ShipmentEntityUsingShipmentID);
 			return toReturn;
 		}
 
 		#region Class Property Declarations
 
 
-		/// <summary>Returns a new IEntityRelation object, between AmazonProfileEntity and ShippingProfileEntity over the 1:1 relation they have, using the relation between the fields:
-		/// AmazonProfile.ShippingProfileID - ShippingProfile.ShippingProfileID
+		/// <summary>Returns a new IEntityRelation object, between AmazonSFPShipmentEntity and ShipmentEntity over the 1:1 relation they have, using the relation between the fields:
+		/// AmazonSFPShipment.ShipmentID - Shipment.ShipmentID
 		/// </summary>
-		public virtual IEntityRelation ShippingProfileEntityUsingShippingProfileID
+		public virtual IEntityRelation ShipmentEntityUsingShipmentID
 		{
 			get
 			{
-				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToOne, "ShippingProfile", false);
+				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToOne, "Shipment", false);
 
 
 
-				relation.AddEntityFieldPair(ShippingProfileFields.ShippingProfileID, AmazonProfileFields.ShippingProfileID);
+				relation.AddEntityFieldPair(ShipmentFields.ShipmentID, AmazonSFPShipmentFields.ShipmentID);
 
-				relation.InheritanceInfoPkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("ShippingProfileEntity", false);
-				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("AmazonProfileEntity", true);
+				relation.InheritanceInfoPkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("ShipmentEntity", false);
+				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("AmazonSFPShipmentEntity", true);
 				return relation;
 			}
 		}
@@ -68,12 +68,12 @@ namespace ShipWorks.Data.Model.RelationClasses
 	}
 	
 	/// <summary>Static class which is used for providing relationship instances which are re-used internally for syncing</summary>
-	internal static class StaticAmazonProfileRelations
+	internal static class StaticAmazonSFPShipmentRelations
 	{
-		internal static readonly IEntityRelation ShippingProfileEntityUsingShippingProfileIDStatic = new AmazonProfileRelations().ShippingProfileEntityUsingShippingProfileID;
+		internal static readonly IEntityRelation ShipmentEntityUsingShipmentIDStatic = new AmazonSFPShipmentRelations().ShipmentEntityUsingShipmentID;
 
 		/// <summary>CTor</summary>
-		static StaticAmazonProfileRelations()
+		static StaticAmazonSFPShipmentRelations()
 		{
 		}
 	}

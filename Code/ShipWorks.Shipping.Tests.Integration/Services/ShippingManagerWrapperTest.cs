@@ -263,7 +263,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
                     return shipment.Postal.Usps.Insurance;
 
                 case ShipmentTypeCode.AmazonSFP:
-                    return shipment.Amazon.Insurance;
+                    return shipment.AmazonSFP.Insurance;
 
                 case ShipmentTypeCode.DhlExpress:
                     return shipment.DhlExpress.Packages.Any(p => p.Insurance);

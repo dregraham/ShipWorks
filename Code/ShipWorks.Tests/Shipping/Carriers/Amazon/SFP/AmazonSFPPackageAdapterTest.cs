@@ -25,7 +25,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Amazon.SFP
         {
             ShipmentEntity shipment = new ShipmentEntity()
             {
-                Amazon = new AmazonShipmentEntity()
+                AmazonSFP = new AmazonSFPShipmentEntity()
             };
 
             AmazonSFPPackageAdapter testObject = new AmazonSFPPackageAdapter(shipment)
@@ -51,21 +51,21 @@ namespace ShipWorks.Tests.Shipping.Carriers.Amazon.SFP
         [Fact]
         public void Constructor_Throws_WhenAmazonShipmentEntityIsNull_Test()
         {
-            shipment.Amazon = null;
+            shipment.AmazonSFP = null;
 
-            Assert.Throws<ArgumentNullException>(nameof(shipment.Amazon), () => new AmazonSFPPackageAdapter(shipment));
+            Assert.Throws<ArgumentNullException>(nameof(shipment.AmazonSFP), () => new AmazonSFPPackageAdapter(shipment));
         }
 
         [Fact]
         public void Constructor_PopulatesValues_Correctly_Test()
         {
             Assert.Equal(1, testObject.Index);
-            Assert.Equal(shipment.Amazon.DimsLength, testObject.DimsLength);
-            Assert.Equal(shipment.Amazon.DimsWidth, testObject.DimsWidth);
-            Assert.Equal(shipment.Amazon.DimsHeight, testObject.DimsHeight);
-            Assert.Equal(shipment.Amazon.DimsWeight, testObject.AdditionalWeight);
-            Assert.Equal(shipment.Amazon.DimsAddWeight, testObject.ApplyAdditionalWeight);
-            Assert.Equal(shipment.Amazon.DimsProfileID, testObject.DimsProfileID);
+            Assert.Equal(shipment.AmazonSFP.DimsLength, testObject.DimsLength);
+            Assert.Equal(shipment.AmazonSFP.DimsWidth, testObject.DimsWidth);
+            Assert.Equal(shipment.AmazonSFP.DimsHeight, testObject.DimsHeight);
+            Assert.Equal(shipment.AmazonSFP.DimsWeight, testObject.AdditionalWeight);
+            Assert.Equal(shipment.AmazonSFP.DimsAddWeight, testObject.ApplyAdditionalWeight);
+            Assert.Equal(shipment.AmazonSFP.DimsProfileID, testObject.DimsProfileID);
         }
 
         [Fact]
@@ -81,15 +81,15 @@ namespace ShipWorks.Tests.Shipping.Carriers.Amazon.SFP
         {
             testObject.AdditionalWeight = 5.4;
 
-            Assert.Equal(testObject.AdditionalWeight, shipment.Amazon.DimsWeight);
+            Assert.Equal(testObject.AdditionalWeight, shipment.AmazonSFP.DimsWeight);
         }
 
         [Fact]
         public void Changing_ApplyAdditionalWeight_UpdatesCorrectly_Test()
         {
-            testObject.ApplyAdditionalWeight = !shipment.Amazon.DimsAddWeight;
+            testObject.ApplyAdditionalWeight = !shipment.AmazonSFP.DimsAddWeight;
 
-            Assert.Equal(testObject.ApplyAdditionalWeight, shipment.Amazon.DimsAddWeight);
+            Assert.Equal(testObject.ApplyAdditionalWeight, shipment.AmazonSFP.DimsAddWeight);
         }
 
         [Fact]
@@ -130,37 +130,37 @@ namespace ShipWorks.Tests.Shipping.Carriers.Amazon.SFP
         [Fact]
         public void Changing_DimsLength_UpdatesCorrectly_Test()
         {
-            double newValue = shipment.Amazon.DimsLength + 2.1;
-            testObject.DimsLength = shipment.Amazon.DimsLength + newValue;
+            double newValue = shipment.AmazonSFP.DimsLength + 2.1;
+            testObject.DimsLength = shipment.AmazonSFP.DimsLength + newValue;
 
-            Assert.Equal(testObject.DimsLength, shipment.Amazon.DimsLength);
+            Assert.Equal(testObject.DimsLength, shipment.AmazonSFP.DimsLength);
         }
 
         [Fact]
         public void Changing_DimsWidth_UpdatesCorrectly_Test()
         {
-            double newValue = shipment.Amazon.DimsWidth + 2.1;
-            testObject.DimsWidth = shipment.Amazon.DimsWidth + newValue;
+            double newValue = shipment.AmazonSFP.DimsWidth + 2.1;
+            testObject.DimsWidth = shipment.AmazonSFP.DimsWidth + newValue;
 
-            Assert.Equal(testObject.DimsWidth, shipment.Amazon.DimsWidth);
+            Assert.Equal(testObject.DimsWidth, shipment.AmazonSFP.DimsWidth);
         }
 
         [Fact]
         public void Changing_DimsHeight_UpdatesCorrectly_Test()
         {
-            double newValue = shipment.Amazon.DimsHeight + 2.1;
-            testObject.DimsHeight = shipment.Amazon.DimsHeight + newValue;
+            double newValue = shipment.AmazonSFP.DimsHeight + 2.1;
+            testObject.DimsHeight = shipment.AmazonSFP.DimsHeight + newValue;
 
-            Assert.Equal(testObject.DimsHeight, shipment.Amazon.DimsHeight);
+            Assert.Equal(testObject.DimsHeight, shipment.AmazonSFP.DimsHeight);
         }
 
         [Fact]
         public void Changing_DimsProfileID_UpdatesCorrectly_Test()
         {
-            long newValue = shipment.Amazon.DimsProfileID + 2;
-            testObject.DimsProfileID = shipment.Amazon.DimsProfileID + newValue;
+            long newValue = shipment.AmazonSFP.DimsProfileID + 2;
+            testObject.DimsProfileID = shipment.AmazonSFP.DimsProfileID + newValue;
 
-            Assert.Equal(testObject.DimsProfileID, shipment.Amazon.DimsProfileID);
+            Assert.Equal(testObject.DimsProfileID, shipment.AmazonSFP.DimsProfileID);
         }
 
         private void PopulateDefaultObjects()
@@ -170,7 +170,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Amazon.SFP
                 ContentWeight = 3,
                 Insurance = false,
                 InsuranceProvider = (int) InsuranceProvider.Carrier,
-                Amazon = new AmazonShipmentEntity()
+                AmazonSFP = new AmazonSFPShipmentEntity()
                 {
                     DimsLength = 6,
                     DimsWidth = 4,

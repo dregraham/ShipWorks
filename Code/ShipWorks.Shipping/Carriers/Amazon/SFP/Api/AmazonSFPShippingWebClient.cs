@@ -61,7 +61,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SFP.Api
         /// <summary>
         /// Gets rates for the given ShipmentRequestDetails
         /// </summary>
-        public GetEligibleShippingServicesResponse GetRates(ShipmentRequestDetails requestDetails, AmazonShipmentEntity shipment)
+        public GetEligibleShippingServicesResponse GetRates(ShipmentRequestDetails requestDetails, AmazonSFPShipmentEntity shipment)
         {
             AmazonMwsApiCall call = AmazonMwsApiCall.GetEligibleShippingServices;
 
@@ -80,7 +80,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SFP.Api
         /// <summary>
         /// Create a shipment for the given ShipmentRequestDetails
         /// </summary>
-        public AmazonShipment CreateShipment(ShipmentRequestDetails requestDetails, AmazonShipmentEntity shipment)
+        public AmazonShipment CreateShipment(ShipmentRequestDetails requestDetails, AmazonSFPShipmentEntity shipment)
         {
             AmazonMwsApiCall call = AmazonMwsApiCall.CreateShipment;
 
@@ -104,7 +104,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SFP.Api
         /// <summary>
         /// Cancel Shipment
         /// </summary>
-        public CancelShipmentResponse CancelShipment(AmazonShipmentEntity amazonShipment)
+        public CancelShipmentResponse CancelShipment(AmazonSFPShipmentEntity amazonShipment)
         {
             AmazonMwsApiCall call = AmazonMwsApiCall.CancelShipment;
 

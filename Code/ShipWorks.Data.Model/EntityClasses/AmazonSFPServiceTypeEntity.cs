@@ -25,9 +25,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 {
 	// __LLBLGENPRO_USER_CODE_REGION_START AdditionalNamespaces
 	// __LLBLGENPRO_USER_CODE_REGION_END
-	/// <summary>Entity class which represents the entity 'AmazonServiceType'.<br/><br/></summary>
+	/// <summary>Entity class which represents the entity 'AmazonSFPServiceType'.<br/><br/></summary>
 	[Serializable]
-	public partial class AmazonServiceTypeEntity : CommonEntityBase
+	public partial class AmazonSFPServiceTypeEntity : CommonEntityBase
 		// __LLBLGENPRO_USER_CODE_REGION_START AdditionalInterfaces
 		// __LLBLGENPRO_USER_CODE_REGION_END	
 	{
@@ -48,13 +48,13 @@ namespace ShipWorks.Data.Model.EntityClasses
 		#endregion
 		
 		/// <summary> Static CTor for setting up custom property hashtables. Is executed before the first instance of this entity class or derived classes is constructed. </summary>
-		static AmazonServiceTypeEntity()
+		static AmazonSFPServiceTypeEntity()
 		{
 			SetupCustomPropertyHashtables();
 		}
 		
 		/// <summary> CTor</summary>
-		public AmazonServiceTypeEntity():base("AmazonServiceTypeEntity")
+		public AmazonSFPServiceTypeEntity():base("AmazonSFPServiceTypeEntity")
 		{
 			InitClassEmpty(null, null);
 		}
@@ -62,42 +62,42 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <summary> CTor</summary>
 		/// <remarks>For framework usage.</remarks>
 		/// <param name="fields">Fields object to set as the fields for this entity.</param>
-		public AmazonServiceTypeEntity(IEntityFields2 fields):base("AmazonServiceTypeEntity")
+		public AmazonSFPServiceTypeEntity(IEntityFields2 fields):base("AmazonSFPServiceTypeEntity")
 		{
 			InitClassEmpty(null, fields);
 		}
 
 		/// <summary> CTor</summary>
-		/// <param name="validator">The custom validator object for this AmazonServiceTypeEntity</param>
-		public AmazonServiceTypeEntity(IValidator validator):base("AmazonServiceTypeEntity")
+		/// <param name="validator">The custom validator object for this AmazonSFPServiceTypeEntity</param>
+		public AmazonSFPServiceTypeEntity(IValidator validator):base("AmazonSFPServiceTypeEntity")
 		{
 			InitClassEmpty(validator, null);
 		}
 				
 		/// <summary> CTor</summary>
-		/// <param name="amazonServiceTypeID">PK value for AmazonServiceType which data should be fetched into this AmazonServiceType object</param>
+		/// <param name="amazonSFPServiceTypeID">PK value for AmazonSFPServiceType which data should be fetched into this AmazonSFPServiceType object</param>
 		/// <remarks>The entity is not fetched by this constructor. Use a DataAccessAdapter for that.</remarks>
-		public AmazonServiceTypeEntity(System.Int32 amazonServiceTypeID):base("AmazonServiceTypeEntity")
+		public AmazonSFPServiceTypeEntity(System.Int32 amazonSFPServiceTypeID):base("AmazonSFPServiceTypeEntity")
 		{
 			InitClassEmpty(null, null);
-			this.AmazonServiceTypeID = amazonServiceTypeID;
+			this.AmazonSFPServiceTypeID = amazonSFPServiceTypeID;
 		}
 
 		/// <summary> CTor</summary>
-		/// <param name="amazonServiceTypeID">PK value for AmazonServiceType which data should be fetched into this AmazonServiceType object</param>
-		/// <param name="validator">The custom validator object for this AmazonServiceTypeEntity</param>
+		/// <param name="amazonSFPServiceTypeID">PK value for AmazonSFPServiceType which data should be fetched into this AmazonSFPServiceType object</param>
+		/// <param name="validator">The custom validator object for this AmazonSFPServiceTypeEntity</param>
 		/// <remarks>The entity is not fetched by this constructor. Use a DataAccessAdapter for that.</remarks>
-		public AmazonServiceTypeEntity(System.Int32 amazonServiceTypeID, IValidator validator):base("AmazonServiceTypeEntity")
+		public AmazonSFPServiceTypeEntity(System.Int32 amazonSFPServiceTypeID, IValidator validator):base("AmazonSFPServiceTypeEntity")
 		{
 			InitClassEmpty(validator, null);
-			this.AmazonServiceTypeID = amazonServiceTypeID;
+			this.AmazonSFPServiceTypeID = amazonSFPServiceTypeID;
 		}
 
 		/// <summary> Protected CTor for deserialization</summary>
 		/// <param name="info"></param>
 		/// <param name="context"></param>
 		[EditorBrowsable(EditorBrowsableState.Never)]
-		protected AmazonServiceTypeEntity(SerializationInfo info, StreamingContext context) : base(info, context)
+		protected AmazonSFPServiceTypeEntity(SerializationInfo info, StreamingContext context) : base(info, context)
 		{
 			if(SerializationHelper.Optimization != SerializationOptimization.Fast) 
 			{
@@ -229,14 +229,14 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <returns>A list of all the EntityRelation objects the type of this instance has. Hierarchy relations are excluded.</returns>
 		protected override List<IEntityRelation> GetAllRelations()
 		{
-			return new AmazonServiceTypeRelations().GetAllRelations();
+			return new AmazonSFPServiceTypeRelations().GetAllRelations();
 		}
 		
 
 		/// <summary>Creates a new instance of the factory related to this entity</summary>
 		protected override IEntityFactory2 CreateEntityFactory()
 		{
-			return EntityFactoryCache2.GetEntityFactory(typeof(AmazonServiceTypeEntityFactory));
+			return EntityFactoryCache2.GetEntityFactory(typeof(AmazonSFPServiceTypeEntityFactory));
 		}
 #if !CF
 		/// <summary>Adds the member collections to the collections queue (base first)</summary>
@@ -297,7 +297,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties = new Dictionary<string, Dictionary<string, string>>();
 			Dictionary<string, string> fieldHashtable;
 			fieldHashtable = new Dictionary<string, string>();
-			_fieldsCustomProperties.Add("AmazonServiceTypeID", fieldHashtable);
+			_fieldsCustomProperties.Add("AmazonSFPServiceTypeID", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("ApiValue", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
@@ -306,7 +306,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		#endregion
 
 		/// <summary> Initializes the class with empty data, as if it is a new Entity.</summary>
-		/// <param name="validator">The validator object for this AmazonServiceTypeEntity</param>
+		/// <param name="validator">The validator object for this AmazonSFPServiceTypeEntity</param>
 		/// <param name="fields">Fields of this entity</param>
 		private void InitClassEmpty(IValidator validator, IEntityFields2 fields)
 		{
@@ -324,9 +324,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 		#region Class Property Declarations
 		/// <summary> The relations object holding all relations of this entity with other entity classes.</summary>
-		public  static AmazonServiceTypeRelations Relations
+		public  static AmazonSFPServiceTypeRelations Relations
 		{
-			get	{ return new AmazonServiceTypeRelations(); }
+			get	{ return new AmazonSFPServiceTypeRelations(); }
 		}
 		
 		/// <summary> The custom properties for this entity type.</summary>
@@ -360,34 +360,34 @@ namespace ShipWorks.Data.Model.EntityClasses
 			get { return FieldsCustomProperties;}
 		}
 
-		/// <summary> The AmazonServiceTypeID property of the Entity AmazonServiceType<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "AmazonServiceType"."AmazonServiceTypeID"<br/>
+		/// <summary> The AmazonSFPServiceTypeID property of the Entity AmazonSFPServiceType<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "AmazonSFPServiceType"."AmazonSFPServiceTypeID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, true, true</remarks>
-		public virtual System.Int32 AmazonServiceTypeID
+		public virtual System.Int32 AmazonSFPServiceTypeID
 		{
-			get { return (System.Int32)GetValue((int)AmazonServiceTypeFieldIndex.AmazonServiceTypeID, true); }
-			set	{ SetValue((int)AmazonServiceTypeFieldIndex.AmazonServiceTypeID, value); }
+			get { return (System.Int32)GetValue((int)AmazonSFPServiceTypeFieldIndex.AmazonSFPServiceTypeID, true); }
+			set	{ SetValue((int)AmazonSFPServiceTypeFieldIndex.AmazonSFPServiceTypeID, value); }
 		}
 
-		/// <summary> The ApiValue property of the Entity AmazonServiceType<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "AmazonServiceType"."ApiValue"<br/>
+		/// <summary> The ApiValue property of the Entity AmazonSFPServiceType<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "AmazonSFPServiceType"."ApiValue"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
 		public virtual System.String ApiValue
 		{
-			get { return (System.String)GetValue((int)AmazonServiceTypeFieldIndex.ApiValue, true); }
-			set	{ SetValue((int)AmazonServiceTypeFieldIndex.ApiValue, value); }
+			get { return (System.String)GetValue((int)AmazonSFPServiceTypeFieldIndex.ApiValue, true); }
+			set	{ SetValue((int)AmazonSFPServiceTypeFieldIndex.ApiValue, value); }
 		}
 
-		/// <summary> The Description property of the Entity AmazonServiceType<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "AmazonServiceType"."Description"<br/>
+		/// <summary> The Description property of the Entity AmazonSFPServiceType<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "AmazonSFPServiceType"."Description"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 100<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
 		public virtual System.String Description
 		{
-			get { return (System.String)GetValue((int)AmazonServiceTypeFieldIndex.Description, true); }
-			set	{ SetValue((int)AmazonServiceTypeFieldIndex.Description, value); }
+			get { return (System.String)GetValue((int)AmazonSFPServiceTypeFieldIndex.Description, true); }
+			set	{ SetValue((int)AmazonSFPServiceTypeFieldIndex.Description, value); }
 		}
 	
 		/// <summary> Gets the type of the hierarchy this entity is in. </summary>
@@ -406,7 +406,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		[Browsable(false), XmlIgnore]
 		protected override int LLBLGenProEntityTypeValue 
 		{ 
-			get { return (int)ShipWorks.Data.Model.EntityType.AmazonServiceTypeEntity; }
+			get { return (int)ShipWorks.Data.Model.EntityType.AmazonSFPServiceTypeEntity; }
 		}
 
 		#endregion

@@ -23,39 +23,39 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
             profile = new ShippingProfileEntity
             {
                 Packages = { new PackageProfileEntity()},
-                Amazon = new AmazonProfileEntity()
+                AmazonSFP = new AmazonSFPProfileEntity()
             };
-            
-            shipment = new ShipmentEntity { Amazon = new AmazonShipmentEntity() };
+
+            shipment = new ShipmentEntity { AmazonSFP = new AmazonSFPShipmentEntity() };
             packageProfile = profile.Packages.Single();
         }
 
         [Fact]
         public void ApplyProfile_SetsAmazonSpecificFields()
         {
-            profile.Amazon.ShippingServiceID = "id";
-            profile.Amazon.DeliveryExperience = 44;
-            profile.Amazon.Reference1 = "A ref 1";
-            profile.Amazon.ShippingProfile.RequestedLabelFormat = (int) ThermalLanguage.ZPL;
+            profile.AmazonSFP.ShippingServiceID = "id";
+            profile.AmazonSFP.DeliveryExperience = 44;
+            profile.AmazonSFP.Reference1 = "A ref 1";
+            profile.AmazonSFP.ShippingProfile.RequestedLabelFormat = (int) ThermalLanguage.ZPL;
 
             profile.Insurance = true;
 
             Apply();
-            
-            Assert.Equal("id", shipment.Amazon.ShippingServiceID);
-            Assert.Equal(44, shipment.Amazon.DeliveryExperience);
-            Assert.Equal("A ref 1", shipment.Amazon.Reference1);
-            Assert.Equal((int) ThermalLanguage.ZPL, shipment.Amazon.RequestedLabelFormat);
-            Assert.True(shipment.Amazon.Insurance);
+
+            Assert.Equal("id", shipment.AmazonSFP.ShippingServiceID);
+            Assert.Equal(44, shipment.AmazonSFP.DeliveryExperience);
+            Assert.Equal("A ref 1", shipment.AmazonSFP.Reference1);
+            Assert.Equal((int) ThermalLanguage.ZPL, shipment.AmazonSFP.RequestedLabelFormat);
+            Assert.True(shipment.AmazonSFP.Insurance);
         }
-        
+
         [Theory]
         [InlineData(null, 42)]
         [InlineData(0, 42)]
         [InlineData(5, 5)]
         public void ApplyProfile_WeightIsSetProperly(double? profileWeight, double expectedWeight)
         {
-            // Here just to make sure content weight changes or stays the same after apply 
+            // Here just to make sure content weight changes or stays the same after apply
             shipment.ContentWeight = 42;
             packageProfile.Weight = profileWeight;
 
@@ -63,7 +63,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
 
             Assert.Equal(expectedWeight, shipment.ContentWeight);
         }
-        
+
         [Fact]
         public void ApplyProfile_DimsProfileIDIsSet()
         {
@@ -71,7 +71,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
 
             Apply();
 
-            Assert.Equal(44, shipment.Amazon.DimsProfileID);
+            Assert.Equal(44, shipment.AmazonSFP.DimsProfileID);
         }
 
         [Fact]
@@ -86,14 +86,14 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
 
             Apply();
 
-            Assert.Equal(44, shipment.Amazon.DimsProfileID);
-            Assert.Equal(1, shipment.Amazon.DimsLength);
-            Assert.Equal(2, shipment.Amazon.DimsWidth);
-            Assert.Equal(3, shipment.Amazon.DimsHeight);
-            Assert.Equal(4, shipment.Amazon.DimsWeight);
-            Assert.True(shipment.Amazon.DimsAddWeight);
+            Assert.Equal(44, shipment.AmazonSFP.DimsProfileID);
+            Assert.Equal(1, shipment.AmazonSFP.DimsLength);
+            Assert.Equal(2, shipment.AmazonSFP.DimsWidth);
+            Assert.Equal(3, shipment.AmazonSFP.DimsHeight);
+            Assert.Equal(4, shipment.AmazonSFP.DimsWeight);
+            Assert.True(shipment.AmazonSFP.DimsAddWeight);
         }
-        
+
         [Fact]
         public void ApplyProfile_DelegatesToShipmentTypeManagerWithShipment()
         {
@@ -111,7 +111,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
         {
             var testObject = mock.Create<AmazonSFPShippingProfileApplicationStrategy>();
             profile.OriginID = 123;
-            
+
             testObject.ApplyProfile(profile, shipment);
 
             Assert.Equal(123, shipment.OriginOriginID);
@@ -122,7 +122,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
         {
             var testObject = mock.Create<AmazonSFPShippingProfileApplicationStrategy>();
             profile.ReturnShipment = true;
-            
+
             testObject.ApplyProfile(profile, shipment);
 
             Assert.True(shipment.ReturnShipment);
@@ -147,7 +147,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
             shipmentTypeManager.Setup(s => s.Get(shipment)).Returns(shipmentType);
 
             var testObject = mock.Create<AmazonSFPShippingProfileApplicationStrategy>();
-            
+
             profile.RequestedLabelFormat = (int) ThermalLanguage.EPL ;
 
             testObject.ApplyProfile(profile, shipment);
@@ -183,7 +183,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
             var testObject = mock.Create<AmazonSFPShippingProfileApplicationStrategy>();
             testObject.ApplyProfile(profile, shipment);
         }
-        
+
         public void Dispose()
         {
             mock.Dispose();

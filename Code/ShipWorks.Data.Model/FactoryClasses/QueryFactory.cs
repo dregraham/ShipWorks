@@ -166,22 +166,22 @@ namespace ShipWorks.Data.Model.FactoryClasses
 			get { return Create<AmazonOrderSearchEntity>(); }
 		}
 
-		/// <summary>Creates and returns a new EntityQuery for the AmazonProfile entity</summary>
-		public EntityQuery<AmazonProfileEntity> AmazonProfile
+		/// <summary>Creates and returns a new EntityQuery for the AmazonSFPProfile entity</summary>
+		public EntityQuery<AmazonSFPProfileEntity> AmazonSFPProfile
 		{
-			get { return Create<AmazonProfileEntity>(); }
+			get { return Create<AmazonSFPProfileEntity>(); }
 		}
 
-		/// <summary>Creates and returns a new EntityQuery for the AmazonServiceType entity</summary>
-		public EntityQuery<AmazonServiceTypeEntity> AmazonServiceType
+		/// <summary>Creates and returns a new EntityQuery for the AmazonSFPServiceType entity</summary>
+		public EntityQuery<AmazonSFPServiceTypeEntity> AmazonSFPServiceType
 		{
-			get { return Create<AmazonServiceTypeEntity>(); }
+			get { return Create<AmazonSFPServiceTypeEntity>(); }
 		}
 
-		/// <summary>Creates and returns a new EntityQuery for the AmazonShipment entity</summary>
-		public EntityQuery<AmazonShipmentEntity> AmazonShipment
+		/// <summary>Creates and returns a new EntityQuery for the AmazonSFPShipment entity</summary>
+		public EntityQuery<AmazonSFPShipmentEntity> AmazonSFPShipment
 		{
-			get { return Create<AmazonShipmentEntity>(); }
+			get { return Create<AmazonSFPShipmentEntity>(); }
 		}
 
 		/// <summary>Creates and returns a new EntityQuery for the AmazonStore entity</summary>

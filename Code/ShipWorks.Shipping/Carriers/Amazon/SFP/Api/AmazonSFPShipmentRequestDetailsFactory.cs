@@ -31,9 +31,9 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SFP.Api
                 ShipDate = shipment.ShipDate,
                 PackageDimensions = new PackageDimensions
                 {
-                    Height = shipment.Amazon.DimsHeight,
-                    Length = shipment.Amazon.DimsLength,
-                    Width = shipment.Amazon.DimsWidth
+                    Height = shipment.AmazonSFP.DimsHeight,
+                    Length = shipment.AmazonSFP.DimsLength,
+                    Width = shipment.AmazonSFP.DimsWidth
                 },
                 ShipFromAddress = new Address
                 {
@@ -51,17 +51,17 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SFP.Api
                 ShippingServiceOptions = new ShippingServiceOptions
                 {
                     CarrierWillPickUp = order.IsSameDay(),
-                    DeliveryExperience = EnumHelper.GetApiValue((AmazonSFPDeliveryExperienceType) shipment.Amazon.DeliveryExperience),
+                    DeliveryExperience = EnumHelper.GetApiValue((AmazonSFPDeliveryExperienceType) shipment.AmazonSFP.DeliveryExperience),
                     DeclaredValue = new DeclaredValue
                     {
                         Amount = 0,
                         CurrencyCode = "USD"
                     },
-                    LabelFormat = shipment.Amazon.RequestedLabelFormat == (int) ThermalLanguage.ZPL ? "ZPL203" : null
+                    LabelFormat = shipment.AmazonSFP.RequestedLabelFormat == (int) ThermalLanguage.ZPL ? "ZPL203" : null
                 },
                 LabelCustomization = new LabelCustomization
                 {
-                    CustomTextForLabel = ProcessReferenceNumber(shipment.Amazon.Reference1, shipment.ShipmentID),
+                    CustomTextForLabel = ProcessReferenceNumber(shipment.AmazonSFP.Reference1, shipment.ShipmentID),
                 },
                 Weight = shipment.TotalWeight
             };

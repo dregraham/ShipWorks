@@ -17,16 +17,16 @@ using ShipWorks.Data.Model.EntityInterfaces;
 namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
 {
     /// <summary>
-    /// Read-only representation of the entity 'AmazonServiceType'. <br/><br/>
+    /// Read-only representation of the entity 'AmazonSFPServiceType'. <br/><br/>
     /// 
     /// </summary>
     [Serializable]
-    public partial class ReadOnlyAmazonServiceTypeEntity : IAmazonServiceTypeEntity
+    public partial class ReadOnlyAmazonSFPServiceTypeEntity : IAmazonSFPServiceTypeEntity
     {
         /// <summary>
         /// Constructor
         /// </summary>
-        internal ReadOnlyAmazonServiceTypeEntity(IAmazonServiceTypeEntity source, IDictionary<object, object> objectMap)
+        internal ReadOnlyAmazonSFPServiceTypeEntity(IAmazonSFPServiceTypeEntity source, IDictionary<object, object> objectMap)
         {
             MethodConditions.EnsureArgumentIsNotNull(source, nameof(source));
             MethodConditions.EnsureArgumentIsNotNull(objectMap, nameof(objectMap));
@@ -36,32 +36,32 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
                 objectMap[source] = this;
             }
             
-            AmazonServiceTypeID = source.AmazonServiceTypeID;
+            AmazonSFPServiceTypeID = source.AmazonSFPServiceTypeID;
             ApiValue = source.ApiValue;
             Description = source.Description;
             
             
             
 
-            CopyCustomAmazonServiceTypeData(source);
+            CopyCustomAmazonSFPServiceTypeData(source);
         }
 
         
-        /// <summary> The AmazonServiceTypeID property of the Entity AmazonServiceType<br/><br/>
+        /// <summary> The AmazonSFPServiceTypeID property of the Entity AmazonSFPServiceType<br/><br/>
         /// </summary>
-        /// <remarks>Mapped on table field: "AmazonServiceType"."AmazonServiceTypeID"<br/>
+        /// <remarks>Mapped on table field: "AmazonSFPServiceType"."AmazonSFPServiceTypeID"<br/>
         /// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, true, true</remarks>
-        public System.Int32 AmazonServiceTypeID { get; }
-        /// <summary> The ApiValue property of the Entity AmazonServiceType<br/><br/>
+        public System.Int32 AmazonSFPServiceTypeID { get; }
+        /// <summary> The ApiValue property of the Entity AmazonSFPServiceType<br/><br/>
         /// </summary>
-        /// <remarks>Mapped on table field: "AmazonServiceType"."ApiValue"<br/>
+        /// <remarks>Mapped on table field: "AmazonSFPServiceType"."ApiValue"<br/>
         /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         public System.String ApiValue { get; }
-        /// <summary> The Description property of the Entity AmazonServiceType<br/><br/>
+        /// <summary> The Description property of the Entity AmazonSFPServiceType<br/><br/>
         /// </summary>
-        /// <remarks>Mapped on table field: "AmazonServiceType"."Description"<br/>
+        /// <remarks>Mapped on table field: "AmazonSFPServiceType"."Description"<br/>
         /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 100<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         public System.String Description { get; }
@@ -71,18 +71,18 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// <summary>
         /// Get a read only version of the entity
         /// </summary>
-        public virtual IAmazonServiceTypeEntity AsReadOnly() => this;
+        public virtual IAmazonSFPServiceTypeEntity AsReadOnly() => this;
 
         /// <summary>
         /// Get a read only version of the entity
         /// </summary>
-        public virtual IAmazonServiceTypeEntity AsReadOnly(IDictionary<object, object> objectMap) => this;
+        public virtual IAmazonSFPServiceTypeEntity AsReadOnly(IDictionary<object, object> objectMap) => this;
 
         
 
         /// <summary>
         /// Copy any custom data
         /// </summary>
-        partial void CopyCustomAmazonServiceTypeData(IAmazonServiceTypeEntity source);
+        partial void CopyCustomAmazonSFPServiceTypeData(IAmazonSFPServiceTypeEntity source);
     }
 }

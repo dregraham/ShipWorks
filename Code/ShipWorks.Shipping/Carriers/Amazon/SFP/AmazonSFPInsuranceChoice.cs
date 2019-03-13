@@ -17,7 +17,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SFP
         public AmazonSFPInsuranceChoice(ShipmentEntity shipment)
         {
             MethodConditions.EnsureArgumentIsNotNull(shipment, nameof(shipment));
-            MethodConditions.EnsureArgumentIsNotNull(shipment.Amazon, nameof(shipment.Amazon));
+            MethodConditions.EnsureArgumentIsNotNull(shipment.AmazonSFP, nameof(shipment.AmazonSFP));
 
             Shipment = shipment;
         }
@@ -31,7 +31,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SFP
         [Obfuscation(Exclude = true)]
         public bool? InsurancePennyOne
         {
-            get { return Shipment.Amazon.CarrierName == "STAMPS_DOT_COM" || Shipment.Amazon.CarrierName == "USPS"; }
+            get { return Shipment.AmazonSFP.CarrierName == "STAMPS_DOT_COM" || Shipment.AmazonSFP.CarrierName == "USPS"; }
             set
             {
                 // Since this is a derived field, we'll just ignore the setter
@@ -50,8 +50,8 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SFP
         [Obfuscation(Exclude = true)]
         public decimal InsuranceValue
         {
-            get { return Shipment.Amazon.InsuranceValue; }
-            set { Shipment.Amazon.InsuranceValue = value; }
+            get { return Shipment.AmazonSFP.InsuranceValue; }
+            set { Shipment.AmazonSFP.InsuranceValue = value; }
         }
 
         /// <summary>
@@ -60,8 +60,8 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SFP
         [Obfuscation(Exclude = true)]
         public bool Insured
         {
-            get { return Shipment.Amazon.Insurance; }
-            set { Shipment.Amazon.Insurance = value; }
+            get { return Shipment.AmazonSFP.Insurance; }
+            set { Shipment.AmazonSFP.Insurance = value; }
         }
 
         /// <summary>

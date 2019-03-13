@@ -32,7 +32,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SFP
         public AmazonSFPDownloadedLabelData(ShipmentEntity shipment,
             AmazonShipment labelResponse,
             IObjectReferenceManager objectReferenceManager,
-            IDataResourceManager resourceManager, 
+            IDataResourceManager resourceManager,
             ITemplateLabelUtility templateLabelUtility)
         {
             this.shipment = shipment;
@@ -61,10 +61,10 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SFP
         {
             shipment.TrackingNumber = amazonShipment.TrackingId;
             shipment.ShipmentCost = amazonShipment.ShippingService.Rate.Amount;
-            shipment.Amazon.AmazonUniqueShipmentID = amazonShipment.ShipmentId;
-            shipment.Amazon.CarrierName = amazonShipment.ShippingService?.CarrierName ?? string.Empty;
-            shipment.Amazon.ShippingServiceName = amazonShipment.ShippingService?.ShippingServiceName ?? string.Empty;
-            shipment.ActualLabelFormat = shipment.Amazon.RequestedLabelFormat == (int) ThermalLanguage.None ? (int?) null : shipment.Amazon.RequestedLabelFormat;
+            shipment.AmazonSFP.AmazonUniqueShipmentID = amazonShipment.ShipmentId;
+            shipment.AmazonSFP.CarrierName = amazonShipment.ShippingService?.CarrierName ?? string.Empty;
+            shipment.AmazonSFP.ShippingServiceName = amazonShipment.ShippingService?.ShippingServiceName ?? string.Empty;
+            shipment.ActualLabelFormat = shipment.AmazonSFP.RequestedLabelFormat == (int) ThermalLanguage.None ? (int?) null : shipment.AmazonSFP.RequestedLabelFormat;
         }
 
         /// <summary>

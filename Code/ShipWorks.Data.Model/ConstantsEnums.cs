@@ -463,8 +463,8 @@ namespace ShipWorks.Data.Model
 		/// <summary></summary>
 		AmountOfFields
 	}
-	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: AmazonProfile.</summary>
-	public enum AmazonProfileFieldIndex
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: AmazonSFPProfile.</summary>
+	public enum AmazonSFPProfileFieldIndex
 	{
 		///<summary>ShippingProfileID. </summary>
 		ShippingProfileID,
@@ -477,11 +477,11 @@ namespace ShipWorks.Data.Model
 		/// <summary></summary>
 		AmountOfFields
 	}
-	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: AmazonServiceType.</summary>
-	public enum AmazonServiceTypeFieldIndex
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: AmazonSFPServiceType.</summary>
+	public enum AmazonSFPServiceTypeFieldIndex
 	{
-		///<summary>AmazonServiceTypeID. </summary>
-		AmazonServiceTypeID,
+		///<summary>AmazonSFPServiceTypeID. </summary>
+		AmazonSFPServiceTypeID,
 		///<summary>ApiValue. </summary>
 		ApiValue,
 		///<summary>Description. </summary>
@@ -489,8 +489,8 @@ namespace ShipWorks.Data.Model
 		/// <summary></summary>
 		AmountOfFields
 	}
-	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: AmazonShipment.</summary>
-	public enum AmazonShipmentFieldIndex
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: AmazonSFPShipment.</summary>
+	public enum AmazonSFPShipmentFieldIndex
 	{
 		///<summary>ShipmentID. </summary>
 		ShipmentID,
@@ -13611,12 +13611,12 @@ namespace ShipWorks.Data.Model
 		AmazonOrderItemEntity,
 		///<summary>AmazonOrderSearch</summary>
 		AmazonOrderSearchEntity,
-		///<summary>AmazonProfile</summary>
-		AmazonProfileEntity,
-		///<summary>AmazonServiceType</summary>
-		AmazonServiceTypeEntity,
-		///<summary>AmazonShipment</summary>
-		AmazonShipmentEntity,
+		///<summary>AmazonSFPProfile</summary>
+		AmazonSFPProfileEntity,
+		///<summary>AmazonSFPServiceType</summary>
+		AmazonSFPServiceTypeEntity,
+		///<summary>AmazonSFPShipment</summary>
+		AmazonSFPShipmentEntity,
 		///<summary>AmazonStore</summary>
 		AmazonStoreEntity,
 		///<summary>AmeriCommerceStore</summary>

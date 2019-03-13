@@ -59,12 +59,12 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SFP.Api
             ShipmentRequestDetails requestDetails = requestFactory.Create(shipment, amazonOrder);
             bool wasSameDay = requestDetails.ShippingServiceOptions.CarrierWillPickUp;
 
-            RateGroup rateGroup = GetRates(shipment.Amazon, requestDetails);
+            RateGroup rateGroup = GetRates(shipment.AmazonSFP, requestDetails);
 
             if (rateGroup.Rates.None() && rateGroup.FootnoteFactories.None() && wasSameDay)
             {
                 requestDetails.ShippingServiceOptions.CarrierWillPickUp = false;
-                rateGroup = GetRates(shipment.Amazon, requestDetails);
+                rateGroup = GetRates(shipment.AmazonSFP, requestDetails);
                 rateGroup.AddFootnoteFactory(new AmazonSFPSameDayNotAvailableFootnoteFactory());
             }
 
@@ -82,7 +82,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SFP.Api
         /// <summary>
         /// Make the actual rate request
         /// </summary>
-        private RateGroup GetRates(AmazonShipmentEntity amazonShipment, ShipmentRequestDetails requestDetails)
+        private RateGroup GetRates(AmazonSFPShipmentEntity amazonShipment, ShipmentRequestDetails requestDetails)
         {
             GetEligibleShippingServicesResponse response = webClient.GetRates(requestDetails, amazonShipment);
 
@@ -96,7 +96,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SFP.Api
         /// </summary>
         private void SaveUnknownServiceTypes(GetEligibleShippingServicesResponse response)
         {
-            List<AmazonServiceTypeEntity> knownServiceTypes = serviceTypeRepository.Get();
+            List<AmazonSFPServiceTypeEntity> knownServiceTypes = serviceTypeRepository.Get();
 
             List<ShippingService> services = response.GetEligibleShippingServicesResult.ShippingServiceList.ShippingService;
             if (services != null)

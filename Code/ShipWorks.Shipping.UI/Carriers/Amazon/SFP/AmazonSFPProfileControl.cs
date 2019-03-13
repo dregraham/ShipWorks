@@ -44,19 +44,19 @@ namespace ShipWorks.Shipping.UI.Carriers.Amazon.SFP
 
             EnumHelper.BindComboBox<AmazonSFPDeliveryExperienceType>(deliveryExperience);
 
-            AmazonProfileEntity amazonProfile = profile.Amazon;
+            AmazonSFPProfileEntity amazonProfile = profile.AmazonSFP;
             PackageProfileEntity packageProfile = profile.Packages.Single();
 
             // Origin
             AddValueMapping(profile, ShippingProfileFields.OriginID, originState, originCombo, labelSender);
 
             // Shipment
-            AddValueMapping(amazonProfile, AmazonProfileFields.ShippingServiceID, serviceState, service, labelService);
-            AddValueMapping(amazonProfile, AmazonProfileFields.DeliveryExperience, deliveryExperienceState, deliveryExperience, labelDeliveryExperience);
+            AddValueMapping(amazonProfile, AmazonSFPProfileFields.ShippingServiceID, serviceState, service, labelService);
+            AddValueMapping(amazonProfile, AmazonSFPProfileFields.DeliveryExperience, deliveryExperienceState, deliveryExperience, labelDeliveryExperience);
             AddValueMapping(packageProfile, PackageProfileFields.Weight, weightState, weight, labelWeight);
             AddValueMapping(packageProfile, PackageProfileFields.DimsProfileID, dimensionsState, dimensionsControl, labelDimensions);
 
-            AddValueMapping(amazonProfile, AmazonProfileFields.Reference1, reference1State, reference1Token, labelReference1);
+            AddValueMapping(amazonProfile, AmazonSFPProfileFields.Reference1, reference1State, reference1Token, labelReference1);
             AddValueMapping(amazonProfile.ShippingProfile, ShippingProfileFields.RequestedLabelFormat, requestedLabelFormatState, requestedLabelFormat);
 
             // Insurance
@@ -77,7 +77,7 @@ namespace ShipWorks.Shipping.UI.Carriers.Amazon.SFP
                     .Select(serviceTypeEntity => new KeyValuePair<string, string>(serviceTypeEntity.Description, serviceTypeEntity.ApiValue))
                     .ToList();
             }
-            
+
             service.DisplayMember = "Key";
             service.ValueMember = "Value";
             service.DataSource = services;

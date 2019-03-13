@@ -22,13 +22,13 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SFP
 
                 ratingField = base.RatingFields;
 
-                ratingField.AddShipmentField(AmazonShipmentFields.DeclaredValue);
-                ratingField.AddShipmentField(AmazonShipmentFields.DeliveryExperience);
-                ratingField.AddShipmentField(AmazonShipmentFields.DimsAddWeight);
-                ratingField.AddShipmentField(AmazonShipmentFields.DimsHeight);
-                ratingField.AddShipmentField(AmazonShipmentFields.DimsLength);
-                ratingField.AddShipmentField(AmazonShipmentFields.DimsWeight);
-                ratingField.AddShipmentField(AmazonShipmentFields.DimsAddWeight);
+                ratingField.AddShipmentField(AmazonSFPShipmentFields.DeclaredValue);
+                ratingField.AddShipmentField(AmazonSFPShipmentFields.DeliveryExperience);
+                ratingField.AddShipmentField(AmazonSFPShipmentFields.DimsAddWeight);
+                ratingField.AddShipmentField(AmazonSFPShipmentFields.DimsHeight);
+                ratingField.AddShipmentField(AmazonSFPShipmentFields.DimsLength);
+                ratingField.AddShipmentField(AmazonSFPShipmentFields.DimsWeight);
+                ratingField.AddShipmentField(AmazonSFPShipmentFields.DimsAddWeight);
 
                 return ratingField;
             }

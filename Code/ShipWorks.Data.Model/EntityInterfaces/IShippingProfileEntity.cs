@@ -88,7 +88,7 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
         Nullable<System.Int32> RequestedLabelFormat { get; }
         
-        IAmazonProfileEntity Amazon { get; }
+        IAmazonSFPProfileEntity AmazonSFP { get; }
         IAsendiaProfileEntity Asendia { get; }
         IBestRateProfileEntity BestRate { get; }
         IDhlExpressProfileEntity DhlExpress { get; }
@@ -127,7 +127,7 @@ namespace ShipWorks.Data.Model.EntityClasses
     /// </summary>
     public partial class ShippingProfileEntity : IShippingProfileEntity
     {
-        IAmazonProfileEntity IShippingProfileEntity.Amazon => Amazon;
+        IAmazonSFPProfileEntity IShippingProfileEntity.AmazonSFP => AmazonSFP;
         IAsendiaProfileEntity IShippingProfileEntity.Asendia => Asendia;
         IBestRateProfileEntity IShippingProfileEntity.BestRate => BestRate;
         IDhlExpressProfileEntity IShippingProfileEntity.DhlExpress => DhlExpress;

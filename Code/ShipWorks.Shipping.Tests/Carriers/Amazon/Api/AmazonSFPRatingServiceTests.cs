@@ -37,7 +37,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Amazon.Api
             GetEligibleShippingServicesResponse response = ResponseWithService(new ShippingService());
 
             mock.Mock<IAmazonSFPShippingWebClient>()
-                    .Setup(w => w.GetRates(It.IsAny<ShipmentRequestDetails>(), It.IsAny<AmazonShipmentEntity>()))
+                    .Setup(w => w.GetRates(It.IsAny<ShipmentRequestDetails>(), It.IsAny<AmazonSFPShipmentEntity>()))
                     .Returns(response);
 
             AmazonSFPRatingService testObject = mock.Create<AmazonSFPRatingService>();
@@ -83,7 +83,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Amazon.Api
                 .Returns(filteredRate);
 
             mock.Mock<IAmazonSFPShippingWebClient>()
-                .Setup(w => w.GetRates(It.IsAny<ShipmentRequestDetails>(), It.IsAny<AmazonShipmentEntity>()))
+                .Setup(w => w.GetRates(It.IsAny<ShipmentRequestDetails>(), It.IsAny<AmazonSFPShipmentEntity>()))
                 .Returns(response);
 
             AmazonSFPRatingService testObject = mock.Create<AmazonSFPRatingService>();
@@ -122,7 +122,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Amazon.Api
             using (var mock = AutoMock.GetLoose())
             {
                 mock.Mock<IAmazonSFPShippingWebClient>()
-                    .Setup(w => w.GetRates(It.IsAny<ShipmentRequestDetails>(), It.IsAny<AmazonShipmentEntity>()))
+                    .Setup(w => w.GetRates(It.IsAny<ShipmentRequestDetails>(), It.IsAny<AmazonSFPShipmentEntity>()))
                     .Returns(ResponseWithService(new ShippingService()));
 
                 AmazonSFPRatingService testObject = mock.Create<AmazonSFPRatingService>();
@@ -130,7 +130,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Amazon.Api
                 testObject.GetRates(shipment);
 
                 mock.Mock<IAmazonSFPShippingWebClient>()
-                    .Verify(x => x.GetRates(It.Is(verifyCall), It.IsAny<AmazonShipmentEntity>()));
+                    .Verify(x => x.GetRates(It.Is(verifyCall), It.IsAny<AmazonSFPShipmentEntity>()));
             }
         }
 
@@ -171,7 +171,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Amazon.Api
                     AmazonOrderID = "10",
                     IsPrime = (int) isPrime
                 },
-                Amazon = new AmazonShipmentEntity()
+                AmazonSFP = new AmazonSFPShipmentEntity()
                 {
                     DeclaredValue = 12,
                     DimsHeight = 1,
@@ -192,7 +192,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Amazon.Api
                     {
                         Store = new EbayStoreEntity()
                     },
-                    Amazon = new AmazonShipmentEntity()
+                    AmazonSFP = new AmazonSFPShipmentEntity()
                     {
                         DeclaredValue = 12,
                         DimsHeight = 1,
@@ -213,7 +213,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Amazon.Api
                     IsPrime = (int) isPrime,
                     Store = new ChannelAdvisorStoreEntity()
                 },
-                Amazon = new AmazonShipmentEntity()
+                AmazonSFP = new AmazonSFPShipmentEntity()
                 {
                     DeclaredValue = 12,
                     DimsHeight = 1,

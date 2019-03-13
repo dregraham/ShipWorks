@@ -33,7 +33,7 @@ namespace ShipWorks.Data.Model.RelationClasses
 			toReturn.Add(this.ShipmentCustomsItemEntityUsingShipmentID);
 			toReturn.Add(this.ShipmentReturnItemEntityUsingShipmentID);
 			toReturn.Add(this.ValidatedAddressEntityUsingConsumerID);
-			toReturn.Add(this.AmazonShipmentEntityUsingShipmentID);
+			toReturn.Add(this.AmazonSFPShipmentEntityUsingShipmentID);
 			toReturn.Add(this.AsendiaShipmentEntityUsingShipmentID);
 			toReturn.Add(this.BestRateShipmentEntityUsingShipmentID);
 			toReturn.Add(this.DhlExpressShipmentEntityUsingShipmentID);
@@ -99,21 +99,21 @@ namespace ShipWorks.Data.Model.RelationClasses
 			}
 		}
 
-		/// <summary>Returns a new IEntityRelation object, between ShipmentEntity and AmazonShipmentEntity over the 1:1 relation they have, using the relation between the fields:
-		/// Shipment.ShipmentID - AmazonShipment.ShipmentID
+		/// <summary>Returns a new IEntityRelation object, between ShipmentEntity and AmazonSFPShipmentEntity over the 1:1 relation they have, using the relation between the fields:
+		/// Shipment.ShipmentID - AmazonSFPShipment.ShipmentID
 		/// </summary>
-		public virtual IEntityRelation AmazonShipmentEntityUsingShipmentID
+		public virtual IEntityRelation AmazonSFPShipmentEntityUsingShipmentID
 		{
 			get
 			{
-				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToOne, "Amazon", true);
+				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToOne, "AmazonSFP", true);
 
-				relation.AddEntityFieldPair(ShipmentFields.ShipmentID, AmazonShipmentFields.ShipmentID);
+				relation.AddEntityFieldPair(ShipmentFields.ShipmentID, AmazonSFPShipmentFields.ShipmentID);
 
 
 
 				relation.InheritanceInfoPkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("ShipmentEntity", true);
-				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("AmazonShipmentEntity", false);
+				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("AmazonSFPShipmentEntity", false);
 				return relation;
 			}
 		}
@@ -395,7 +395,7 @@ namespace ShipWorks.Data.Model.RelationClasses
 		internal static readonly IEntityRelation ShipmentCustomsItemEntityUsingShipmentIDStatic = new ShipmentRelations().ShipmentCustomsItemEntityUsingShipmentID;
 		internal static readonly IEntityRelation ShipmentReturnItemEntityUsingShipmentIDStatic = new ShipmentRelations().ShipmentReturnItemEntityUsingShipmentID;
 		internal static readonly IEntityRelation ValidatedAddressEntityUsingConsumerIDStatic = new ShipmentRelations().ValidatedAddressEntityUsingConsumerID;
-		internal static readonly IEntityRelation AmazonShipmentEntityUsingShipmentIDStatic = new ShipmentRelations().AmazonShipmentEntityUsingShipmentID;
+		internal static readonly IEntityRelation AmazonSFPShipmentEntityUsingShipmentIDStatic = new ShipmentRelations().AmazonSFPShipmentEntityUsingShipmentID;
 		internal static readonly IEntityRelation AsendiaShipmentEntityUsingShipmentIDStatic = new ShipmentRelations().AsendiaShipmentEntityUsingShipmentID;
 		internal static readonly IEntityRelation BestRateShipmentEntityUsingShipmentIDStatic = new ShipmentRelations().BestRateShipmentEntityUsingShipmentID;
 		internal static readonly IEntityRelation DhlExpressShipmentEntityUsingShipmentIDStatic = new ShipmentRelations().DhlExpressShipmentEntityUsingShipmentID;

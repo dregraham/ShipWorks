@@ -25,7 +25,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
         [InlineData("USPS")]
         public void InsurancePennyOne_ReturnsTrue_WhenCarrierIsUsps(string carrierName)
         {
-            AmazonSFPInsuranceChoice testObject = new AmazonSFPInsuranceChoice(new ShipmentEntity { Amazon = new AmazonShipmentEntity { CarrierName = carrierName } });
+            AmazonSFPInsuranceChoice testObject = new AmazonSFPInsuranceChoice(new ShipmentEntity { AmazonSFP = new AmazonSFPShipmentEntity { CarrierName = carrierName } });
             Assert.True(testObject.InsurancePennyOne);
         }
 
@@ -34,14 +34,14 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
         [InlineData("FedEx")]
         public void InsurancePennyOne_ReturnsFalse_WhenCarrierIsNotUsps(string carrierName)
         {
-            AmazonSFPInsuranceChoice testObject = new AmazonSFPInsuranceChoice(new ShipmentEntity { Amazon = new AmazonShipmentEntity { CarrierName = carrierName } });
+            AmazonSFPInsuranceChoice testObject = new AmazonSFPInsuranceChoice(new ShipmentEntity { AmazonSFP = new AmazonSFPShipmentEntity { CarrierName = carrierName } });
             Assert.False(testObject.InsurancePennyOne);
         }
 
         [Fact]
         public void InsuranceProvider_ReturnsShipWorks()
         {
-            AmazonSFPInsuranceChoice testObject = new AmazonSFPInsuranceChoice(new ShipmentEntity { Amazon = new AmazonShipmentEntity() });
+            AmazonSFPInsuranceChoice testObject = new AmazonSFPInsuranceChoice(new ShipmentEntity { AmazonSFP = new AmazonSFPShipmentEntity() });
             Assert.Equal(InsuranceProvider.ShipWorks, testObject.InsuranceProvider);
         }
 
@@ -51,7 +51,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
         [InlineData(123.45)]
         public void InsuranceValue_ReturnsAmazonInsuranceValue(decimal value)
         {
-            AmazonSFPInsuranceChoice testObject = new AmazonSFPInsuranceChoice(new ShipmentEntity { Amazon = new AmazonShipmentEntity { InsuranceValue = value } });
+            AmazonSFPInsuranceChoice testObject = new AmazonSFPInsuranceChoice(new ShipmentEntity { AmazonSFP = new AmazonSFPShipmentEntity { InsuranceValue = value } });
             Assert.Equal(value, testObject.InsuranceValue);
         }
 
@@ -60,14 +60,14 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
         [InlineData(false)]
         public void Insured_ReturnsInsuranceFromShipment(bool insured)
         {
-            AmazonSFPInsuranceChoice testObject = new AmazonSFPInsuranceChoice(new ShipmentEntity { Amazon = new AmazonShipmentEntity { Insurance = insured }});
+            AmazonSFPInsuranceChoice testObject = new AmazonSFPInsuranceChoice(new ShipmentEntity { AmazonSFP = new AmazonSFPShipmentEntity { Insurance = insured }});
             Assert.Equal(insured, testObject.Insured);
         }
 
         [Fact]
         public void Shipment_ReturnsShipment_FromConstructor()
         {
-            ShipmentEntity shipment = new ShipmentEntity { Amazon = new AmazonShipmentEntity() };
+            ShipmentEntity shipment = new ShipmentEntity { AmazonSFP = new AmazonSFPShipmentEntity() };
             AmazonSFPInsuranceChoice testObject = new AmazonSFPInsuranceChoice(shipment);
             Assert.Equal(shipment, testObject.Shipment);
         }

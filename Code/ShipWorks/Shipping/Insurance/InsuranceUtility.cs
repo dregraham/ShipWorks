@@ -399,13 +399,13 @@ namespace ShipWorks.Shipping.Insurance
             decimal adjustedValue = declaredValue;
             decimal rate;
 
-            if (string.IsNullOrEmpty(shipment.Amazon?.CarrierName))
+            if (string.IsNullOrEmpty(shipment.AmazonSFP?.CarrierName))
             {
                 return;
             }
 
             cost.AdvertisePennyOne = false;
-            if (shipment.Amazon.CarrierName == "STAMPS_DOT_COM" || shipment.Amazon.CarrierName == "USPS")
+            if (shipment.AmazonSFP.CarrierName == "STAMPS_DOT_COM" || shipment.AmazonSFP.CarrierName == "USPS")
             {
                 rate = GetUspsRate(shipment);
             }

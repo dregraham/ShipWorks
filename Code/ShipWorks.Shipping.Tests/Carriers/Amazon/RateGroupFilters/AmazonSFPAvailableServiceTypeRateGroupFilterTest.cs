@@ -29,10 +29,10 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon.RateGroupFilters
         {
             mock.Mock<IAmazonSFPServiceTypeRepository>()
                 .Setup(r => r.Get())
-                .Returns(new List<AmazonServiceTypeEntity>{
-                    new AmazonServiceTypeEntity()
+                .Returns(new List<AmazonSFPServiceTypeEntity>{
+                    new AmazonSFPServiceTypeEntity()
                     {
-                        AmazonServiceTypeID = 42,
+                        AmazonSFPServiceTypeID = 42,
                         ApiValue = "FEDEX_PTP_SECOND_DAY_AM"
                     }
                 });
@@ -54,10 +54,10 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon.RateGroupFilters
         {
             mock.Mock<IAmazonSFPServiceTypeRepository>()
                 .Setup(r => r.Get())
-                .Returns(new List<AmazonServiceTypeEntity>{
-                    new AmazonServiceTypeEntity()
+                .Returns(new List<AmazonSFPServiceTypeEntity>{
+                    new AmazonSFPServiceTypeEntity()
                     {
-                        AmazonServiceTypeID = 42,
+                        AmazonSFPServiceTypeID = 42,
                         ApiValue = "FEDEX_PTP_SECOND_DAY_AM"
                     }
                 });

@@ -29,7 +29,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
                 ContentWeight = 1,
                 TotalWeight = 1,
                 Insurance = true,
-                Amazon = new AmazonShipmentEntity()
+                AmazonSFP = new AmazonSFPShipmentEntity()
                 {
                     ShippingServiceID = "FEDEX_PTP_PRIORITY_OVERNIGHT"
                 }
@@ -186,7 +186,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
             };
 
             mock.Mock<IAmazonSFPServiceTypeRepository>().Setup(r => r.Get())
-                .Returns(new List<AmazonServiceTypeEntity>() { new AmazonServiceTypeEntity() { AmazonServiceTypeID = 2, Description = "Foo", ApiValue = "Bar" } });
+                .Returns(new List<AmazonSFPServiceTypeEntity>() { new AmazonSFPServiceTypeEntity() { AmazonSFPServiceTypeID = 2, Description = "Foo", ApiValue = "Bar" } });
 
             var testObject = mock.Create<AmazonSFPShipmentAdapter>(TypedParameter.From(shipment));
             testObject.SelectServiceFromRate(new RateResult("Foo", "1", 1M, rateTag)
@@ -195,9 +195,9 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
                 ShipmentType = ShipmentTypeCode.AmazonSFP
             });
 
-            Assert.Equal("Foo", shipment.Amazon.ShippingServiceName);
-            Assert.Equal("Bar", shipment.Amazon.ShippingServiceID);
-            Assert.Equal("Quux", shipment.Amazon.CarrierName);
+            Assert.Equal("Foo", shipment.AmazonSFP.ShippingServiceName);
+            Assert.Equal("Bar", shipment.AmazonSFP.ShippingServiceID);
+            Assert.Equal("Quux", shipment.AmazonSFP.CarrierName);
         }
 
         [Theory]
@@ -205,9 +205,9 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
         [InlineData("Foo")]
         public void UpdateServiceFromRate_DoesNotSetService_WhenTagIsNotValid(string value)
         {
-            shipment.Amazon.ShippingServiceName = "A";
-            shipment.Amazon.ShippingServiceID = "B";
-            shipment.Amazon.CarrierName = "D";
+            shipment.AmazonSFP.ShippingServiceName = "A";
+            shipment.AmazonSFP.ShippingServiceID = "B";
+            shipment.AmazonSFP.CarrierName = "D";
 
             var testObject = mock.Create<AmazonSFPShipmentAdapter>(TypedParameter.From(shipment));
             testObject.SelectServiceFromRate(new RateResult("Foo", "1", 1M, value)
@@ -216,9 +216,9 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
                 ShipmentType = ShipmentTypeCode.AmazonSFP
             });
 
-            Assert.Equal("A", shipment.Amazon.ShippingServiceName);
-            Assert.Equal("B", shipment.Amazon.ShippingServiceID);
-            Assert.Equal("D", shipment.Amazon.CarrierName);
+            Assert.Equal("A", shipment.AmazonSFP.ShippingServiceName);
+            Assert.Equal("B", shipment.AmazonSFP.ShippingServiceID);
+            Assert.Equal("D", shipment.AmazonSFP.CarrierName);
         }
     }
 }

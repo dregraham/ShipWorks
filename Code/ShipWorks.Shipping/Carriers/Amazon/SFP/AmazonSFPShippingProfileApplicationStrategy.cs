@@ -28,20 +28,20 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SFP
         {
             base.ApplyProfile(profile, shipment);
 
-            if (shipment.Amazon == null)
+            if (shipment.AmazonSFP == null)
             {
                 return;
             }
 
-            AmazonShipmentEntity amazonShipment = shipment.Amazon;
-            IAmazonProfileEntity amazonProfile = profile.Amazon;
+            AmazonSFPShipmentEntity amazonShipment = shipment.AmazonSFP;
+            IAmazonSFPProfileEntity amazonProfile = profile.AmazonSFP;
 
-            ApplyProfileValue(amazonProfile.ShippingServiceID, amazonShipment, AmazonShipmentFields.ShippingServiceID);
-            ApplyProfileValue(amazonProfile.DeliveryExperience, amazonShipment, AmazonShipmentFields.DeliveryExperience);
-            ApplyProfileValue(amazonProfile.Reference1, amazonShipment, AmazonShipmentFields.Reference1);
+            ApplyProfileValue(amazonProfile.ShippingServiceID, amazonShipment, AmazonSFPShipmentFields.ShippingServiceID);
+            ApplyProfileValue(amazonProfile.DeliveryExperience, amazonShipment, AmazonSFPShipmentFields.DeliveryExperience);
+            ApplyProfileValue(amazonProfile.Reference1, amazonShipment, AmazonSFPShipmentFields.Reference1);
 
-            ApplyProfileValue(amazonProfile.ShippingProfile.Insurance, amazonShipment, AmazonShipmentFields.Insurance);
-            ApplyProfileValue(amazonProfile.ShippingProfile.RequestedLabelFormat, amazonShipment, AmazonShipmentFields.RequestedLabelFormat);
+            ApplyProfileValue(amazonProfile.ShippingProfile.Insurance, amazonShipment, AmazonSFPShipmentFields.Insurance);
+            ApplyProfileValue(amazonProfile.ShippingProfile.RequestedLabelFormat, amazonShipment, AmazonSFPShipmentFields.RequestedLabelFormat);
 
             IPackageProfileEntity packageProfile = profile.Packages.First();
             if (packageProfile.Weight.GetValueOrDefault() > 0)
@@ -49,26 +49,26 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SFP
                 ApplyProfileValue(packageProfile.Weight, shipment, ShipmentFields.ContentWeight);
             }
 
-            ApplyProfileValue(packageProfile.DimsProfileID, amazonShipment, AmazonShipmentFields.DimsProfileID);
+            ApplyProfileValue(packageProfile.DimsProfileID, amazonShipment, AmazonSFPShipmentFields.DimsProfileID);
             if (packageProfile.DimsProfileID != null)
             {
                 if (packageProfile.DimsLength.GetValueOrDefault() > 0)
                 {
-                    ApplyProfileValue(packageProfile.DimsLength, amazonShipment, AmazonShipmentFields.DimsLength);
+                    ApplyProfileValue(packageProfile.DimsLength, amazonShipment, AmazonSFPShipmentFields.DimsLength);
                 }
 
                 if (packageProfile.DimsWidth.GetValueOrDefault() > 0)
                 {
-                    ApplyProfileValue(packageProfile.DimsWidth, amazonShipment, AmazonShipmentFields.DimsWidth);
+                    ApplyProfileValue(packageProfile.DimsWidth, amazonShipment, AmazonSFPShipmentFields.DimsWidth);
                 }
 
                 if (packageProfile.DimsHeight.GetValueOrDefault() > 0)
                 {
-                    ApplyProfileValue(packageProfile.DimsHeight, amazonShipment, AmazonShipmentFields.DimsHeight);
+                    ApplyProfileValue(packageProfile.DimsHeight, amazonShipment, AmazonSFPShipmentFields.DimsHeight);
                 }
 
-                ApplyProfileValue(packageProfile.DimsWeight, amazonShipment, AmazonShipmentFields.DimsWeight);
-                ApplyProfileValue(packageProfile.DimsAddWeight, amazonShipment, AmazonShipmentFields.DimsAddWeight);
+                ApplyProfileValue(packageProfile.DimsWeight, amazonShipment, AmazonSFPShipmentFields.DimsWeight);
+                ApplyProfileValue(packageProfile.DimsAddWeight, amazonShipment, AmazonSFPShipmentFields.DimsAddWeight);
             }
         }
     }

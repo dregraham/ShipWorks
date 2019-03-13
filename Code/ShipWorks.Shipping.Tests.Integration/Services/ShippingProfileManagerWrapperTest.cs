@@ -256,7 +256,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
             bool refreshIfPresent = true;
 
             testObject.LoadProfileData(profile, refreshIfPresent);
-            sqlAdapter.Verify(a => a.FetchEntity(It.IsAny<AmazonProfileEntity>()));
+            sqlAdapter.Verify(a => a.FetchEntity(It.IsAny<AmazonSFPProfileEntity>()));
         }
 
         [Fact]

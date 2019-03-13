@@ -299,38 +299,18 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		#endregion
 	}
 
-	/// <summary>Factory to create new, empty AmazonProfileEntity objects.</summary>
+	/// <summary>Factory to create new, empty AmazonSFPProfileEntity objects.</summary>
 	[Serializable]
-	public partial class AmazonProfileEntityFactory : EntityFactoryBase2<AmazonProfileEntity> {
+	public partial class AmazonSFPProfileEntityFactory : EntityFactoryBase2<AmazonSFPProfileEntity> {
 		/// <summary>CTor</summary>
-		public AmazonProfileEntityFactory() : base("AmazonProfileEntity", ShipWorks.Data.Model.EntityType.AmazonProfileEntity, false) { }
+		public AmazonSFPProfileEntityFactory() : base("AmazonSFPProfileEntity", ShipWorks.Data.Model.EntityType.AmazonSFPProfileEntity, false) { }
 		
-		/// <summary>Creates a new AmazonProfileEntity instance but uses a special constructor which will set the Fields object of the new IEntity2 instance to the passed in fields object.</summary>
+		/// <summary>Creates a new AmazonSFPProfileEntity instance but uses a special constructor which will set the Fields object of the new IEntity2 instance to the passed in fields object.</summary>
 		/// <param name="fields">Populated IEntityFields2 object for the new IEntity2 to create</param>
 		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
 		public override IEntity2 Create(IEntityFields2 fields) {
-			IEntity2 toReturn = new AmazonProfileEntity(fields);
-            // __LLBLGENPRO_USER_CODE_REGION_START CreateNewAmazonProfileUsingFields
-            // __LLBLGENPRO_USER_CODE_REGION_END
-			return toReturn;
-		}
-		#region Included Code
-
-		#endregion
-	}
-
-	/// <summary>Factory to create new, empty AmazonServiceTypeEntity objects.</summary>
-	[Serializable]
-	public partial class AmazonServiceTypeEntityFactory : EntityFactoryBase2<AmazonServiceTypeEntity> {
-		/// <summary>CTor</summary>
-		public AmazonServiceTypeEntityFactory() : base("AmazonServiceTypeEntity", ShipWorks.Data.Model.EntityType.AmazonServiceTypeEntity, false) { }
-		
-		/// <summary>Creates a new AmazonServiceTypeEntity instance but uses a special constructor which will set the Fields object of the new IEntity2 instance to the passed in fields object.</summary>
-		/// <param name="fields">Populated IEntityFields2 object for the new IEntity2 to create</param>
-		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
-		public override IEntity2 Create(IEntityFields2 fields) {
-			IEntity2 toReturn = new AmazonServiceTypeEntity(fields);
-			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewAmazonServiceTypeUsingFields
+			IEntity2 toReturn = new AmazonSFPProfileEntity(fields);
+			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewAmazonSFPProfileUsingFields
 			// __LLBLGENPRO_USER_CODE_REGION_END
 			return toReturn;
 		}
@@ -339,19 +319,39 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		#endregion
 	}
 
-	/// <summary>Factory to create new, empty AmazonShipmentEntity objects.</summary>
+	/// <summary>Factory to create new, empty AmazonSFPServiceTypeEntity objects.</summary>
 	[Serializable]
-	public partial class AmazonShipmentEntityFactory : EntityFactoryBase2<AmazonShipmentEntity> {
+	public partial class AmazonSFPServiceTypeEntityFactory : EntityFactoryBase2<AmazonSFPServiceTypeEntity> {
 		/// <summary>CTor</summary>
-		public AmazonShipmentEntityFactory() : base("AmazonShipmentEntity", ShipWorks.Data.Model.EntityType.AmazonShipmentEntity, false) { }
+		public AmazonSFPServiceTypeEntityFactory() : base("AmazonSFPServiceTypeEntity", ShipWorks.Data.Model.EntityType.AmazonSFPServiceTypeEntity, false) { }
 		
-		/// <summary>Creates a new AmazonShipmentEntity instance but uses a special constructor which will set the Fields object of the new IEntity2 instance to the passed in fields object.</summary>
+		/// <summary>Creates a new AmazonSFPServiceTypeEntity instance but uses a special constructor which will set the Fields object of the new IEntity2 instance to the passed in fields object.</summary>
 		/// <param name="fields">Populated IEntityFields2 object for the new IEntity2 to create</param>
 		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
 		public override IEntity2 Create(IEntityFields2 fields) {
-			IEntity2 toReturn = new AmazonShipmentEntity(fields);
-            // __LLBLGENPRO_USER_CODE_REGION_START CreateNewAmazonShipmentUsingFields
-            // __LLBLGENPRO_USER_CODE_REGION_END
+			IEntity2 toReturn = new AmazonSFPServiceTypeEntity(fields);
+			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewAmazonSFPServiceTypeUsingFields
+			// __LLBLGENPRO_USER_CODE_REGION_END
+			return toReturn;
+		}
+		#region Included Code
+
+		#endregion
+	}
+
+	/// <summary>Factory to create new, empty AmazonSFPShipmentEntity objects.</summary>
+	[Serializable]
+	public partial class AmazonSFPShipmentEntityFactory : EntityFactoryBase2<AmazonSFPShipmentEntity> {
+		/// <summary>CTor</summary>
+		public AmazonSFPShipmentEntityFactory() : base("AmazonSFPShipmentEntity", ShipWorks.Data.Model.EntityType.AmazonSFPShipmentEntity, false) { }
+		
+		/// <summary>Creates a new AmazonSFPShipmentEntity instance but uses a special constructor which will set the Fields object of the new IEntity2 instance to the passed in fields object.</summary>
+		/// <param name="fields">Populated IEntityFields2 object for the new IEntity2 to create</param>
+		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
+		public override IEntity2 Create(IEntityFields2 fields) {
+			IEntity2 toReturn = new AmazonSFPShipmentEntity(fields);
+			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewAmazonSFPShipmentUsingFields
+			// __LLBLGENPRO_USER_CODE_REGION_END
 			return toReturn;
 		}
 		#region Included Code
@@ -4821,14 +4821,14 @@ namespace ShipWorks.Data.Model.FactoryClasses
 				case ShipWorks.Data.Model.EntityType.AmazonOrderSearchEntity:
 					factoryToUse = new AmazonOrderSearchEntityFactory();
 					break;
-				case ShipWorks.Data.Model.EntityType.AmazonProfileEntity:
-					factoryToUse = new AmazonProfileEntityFactory();
+				case ShipWorks.Data.Model.EntityType.AmazonSFPProfileEntity:
+					factoryToUse = new AmazonSFPProfileEntityFactory();
 					break;
-				case ShipWorks.Data.Model.EntityType.AmazonServiceTypeEntity:
-					factoryToUse = new AmazonServiceTypeEntityFactory();
+				case ShipWorks.Data.Model.EntityType.AmazonSFPServiceTypeEntity:
+					factoryToUse = new AmazonSFPServiceTypeEntityFactory();
 					break;
-				case ShipWorks.Data.Model.EntityType.AmazonShipmentEntity:
-					factoryToUse = new AmazonShipmentEntityFactory();
+				case ShipWorks.Data.Model.EntityType.AmazonSFPShipmentEntity:
+					factoryToUse = new AmazonSFPShipmentEntityFactory();
 					break;
 				case ShipWorks.Data.Model.EntityType.AmazonStoreEntity:
 					factoryToUse = new AmazonStoreEntityFactory();

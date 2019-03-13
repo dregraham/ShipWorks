@@ -55,9 +55,9 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SFP
             requestDetails.ShippingServiceOptions.DeclaredValue.Amount =
                 IsCarrierUsps(shipment) || !shipment.Insurance ?
                     0 :
-                    Math.Min(shipment.Amazon.InsuranceValue, 100M);
+                    Math.Min(shipment.AmazonSFP.InsuranceValue, 100M);
 
-            return webClient.CreateShipment(requestDetails, shipment.Amazon);
+            return webClient.CreateShipment(requestDetails, shipment.AmazonSFP);
         }
 
         /// <summary>
@@ -68,8 +68,8 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SFP
         /// </remarks>
         private static bool IsCarrierUsps(ShipmentEntity shipment)
         {
-            return shipment.Amazon.CarrierName.Equals("STAMPS_DOT_COM", StringComparison.OrdinalIgnoreCase) ||
-                shipment.Amazon.CarrierName.Equals("USPS", StringComparison.OrdinalIgnoreCase);
+            return shipment.AmazonSFP.CarrierName.Equals("STAMPS_DOT_COM", StringComparison.OrdinalIgnoreCase) ||
+                shipment.AmazonSFP.CarrierName.Equals("USPS", StringComparison.OrdinalIgnoreCase);
         }
     }
 }

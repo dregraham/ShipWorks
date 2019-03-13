@@ -42,22 +42,22 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SFP
             MethodConditions.EnsureArgumentIsNotNull(shipment, nameof(shipment));
 
             TelemetricResult<IDownloadedLabelData> telemetricResult = new TelemetricResult<IDownloadedLabelData>("API.ResponseTimeInMilliseconds");
-            if (string.IsNullOrEmpty(shipment.Amazon.ShippingServiceID))
+            if (string.IsNullOrEmpty(shipment.AmazonSFP.ShippingServiceID))
             {
                 GenericResult<RateGroup> rateResult = new GenericResult<RateGroup>();
                 telemetricResult.RunTimedEvent(TelemetricEventType.GetRates, () => rateResult = ratesRetriever.GetRates(shipment));
-                
+
                 if (rateResult.Success)
                 {
                     string serviceId = ((AmazonRateTag) rateResult.Value?.Rates?.FirstOrDefault()?.Tag)?.ShippingServiceId ?? string.Empty;
-                    shipment.Amazon.ShippingServiceID = serviceId;
+                    shipment.AmazonSFP.ShippingServiceID = serviceId;
                 }
             }
 
             AmazonShipment labelResponse = null;
             telemetricResult.RunTimedEvent(TelemetricEventType.GetLabel, () => labelResponse = createShipmentRequest.Submit(shipment));
             telemetricResult.SetValue(createDownloadedLabelData(shipment, labelResponse));
-            
+
             return Task.FromResult(telemetricResult);
         }
 

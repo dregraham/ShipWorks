@@ -22,7 +22,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SFP
         private readonly object lockObject = new object();
         private readonly ILog log;
         private readonly ISqlAdapterFactory sqlAdapterFactory;
-        private List<AmazonServiceTypeEntity> serviceTypes;
+        private List<AmazonSFPServiceTypeEntity> serviceTypes;
 
         /// <summary>
         /// Constructor
@@ -36,7 +36,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SFP
         /// <summary>
         /// Get the list of AmazonServiceTypes
         /// </summary>
-        public List<AmazonServiceTypeEntity> Get()
+        public List<AmazonSFPServiceTypeEntity> Get()
         {
             lock (lockObject)
             {
@@ -55,11 +55,11 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SFP
         public void SaveNewService(string apiValue, string description)
         {
             // if for some reason the api value is greater than what we can store in the database ignore it
-            if (apiValue.Length > AmazonServiceTypeFields.ApiValue.MaxLength)
+            if (apiValue.Length > AmazonSFPServiceTypeFields.ApiValue.MaxLength)
             {
                 return;
             }
-            
+
             lock (lockObject)
             {
                 if (serviceTypes == null)
@@ -68,11 +68,11 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SFP
                 }
 
                 // We don't know about this type, create a new one and attempt to save it.
-                AmazonServiceTypeEntity newType = new AmazonServiceTypeEntity
+                AmazonSFPServiceTypeEntity newType = new AmazonSFPServiceTypeEntity
                 {
                     ApiValue = apiValue,
                     //keep the descripton truncated to whatever length we support in the database
-                    Description = CleanupServiceName(description.Truncate(AmazonServiceTypeFields.Description.MaxLength))
+                    Description = CleanupServiceName(description.Truncate(AmazonSFPServiceTypeFields.Description.MaxLength))
                 };
 
                 try
@@ -85,7 +85,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SFP
                 }
                 catch (ORMQueryExecutionException ex)
                 {
-                    // Saving failed. Refresh from database to see if the service is already in the DB. 
+                    // Saving failed. Refresh from database to see if the service is already in the DB.
                     // If not, throw.
                     log.Error($"Error inserting into AmazonServiceTypeTable with apiValue {apiValue}", ex);
 
@@ -116,14 +116,14 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SFP
         {
             using (ISqlAdapter sqlAdapter = sqlAdapterFactory.Create())
             {
-                EntityQuery<AmazonServiceTypeEntity> query = new QueryFactory().AmazonServiceType;
+                EntityQuery<AmazonSFPServiceTypeEntity> query = new QueryFactory().AmazonSFPServiceType;
 
                 IEntityCollection2 types = sqlAdapter.FetchQueryAsync(query).Result;
-                serviceTypes = types.OfType<AmazonServiceTypeEntity>().ToList();
+                serviceTypes = types.OfType<AmazonSFPServiceTypeEntity>().ToList();
 
-                serviceTypes.Insert(0, new AmazonServiceTypeEntity()
+                serviceTypes.Insert(0, new AmazonSFPServiceTypeEntity()
                 {
-                    AmazonServiceTypeID = 0,
+                    AmazonSFPServiceTypeID = 0,
                     ApiValue = string.Empty,
                     Description = "Least Expensive Rate"
                 });

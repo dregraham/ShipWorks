@@ -466,7 +466,7 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
         Nullable<ShipWorks.Settings.UIMode> ProcessedWithUiMode { get; }
         
-        IAmazonShipmentEntity Amazon { get; }
+        IAmazonSFPShipmentEntity AmazonSFP { get; }
         IAsendiaShipmentEntity Asendia { get; }
         IBestRateShipmentEntity BestRate { get; }
         IDhlExpressShipmentEntity DhlExpress { get; }
@@ -509,7 +509,7 @@ namespace ShipWorks.Data.Model.EntityClasses
     /// </summary>
     public partial class ShipmentEntity : IShipmentEntity
     {
-        IAmazonShipmentEntity IShipmentEntity.Amazon => Amazon;
+        IAmazonSFPShipmentEntity IShipmentEntity.AmazonSFP => AmazonSFP;
         IAsendiaShipmentEntity IShipmentEntity.Asendia => Asendia;
         IBestRateShipmentEntity IShipmentEntity.BestRate => BestRate;
         IDhlExpressShipmentEntity IShipmentEntity.DhlExpress => DhlExpress;

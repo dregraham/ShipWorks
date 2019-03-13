@@ -48,12 +48,12 @@ namespace ShipWorks.Shipping.UI.Carriers.Amazon.SFP
 
             List<int> excludedServices = shipmentType.GetExcludedServiceTypes().ToList();
 
-            List<AmazonServiceTypeEntity> amazonServices = serviceTypeRepository.Get().ToList();
+            List<AmazonSFPServiceTypeEntity> amazonServices = serviceTypeRepository.Get().ToList();
 
-            foreach (AmazonServiceTypeEntity service in amazonServices)
+            foreach (AmazonSFPServiceTypeEntity service in amazonServices)
             {
                 servicePicker.Items
-                    .Add(new KeyValuePair<string, int>(service.Description, service.AmazonServiceTypeID), !excludedServices.Contains(service.AmazonServiceTypeID));
+                    .Add(new KeyValuePair<string, int>(service.Description, service.AmazonSFPServiceTypeID), !excludedServices.Contains(service.AmazonSFPServiceTypeID));
             }
         }
 

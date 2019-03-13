@@ -15,7 +15,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
         readonly ShipmentEntity defaultShipment = new ShipmentEntity
         {
             Order = new AmazonOrderEntity(),
-            Amazon = new AmazonShipmentEntity { ShippingServiceID = "something", CarrierName = "Foo" }
+            AmazonSFP = new AmazonSFPShipmentEntity { ShippingServiceID = "something", CarrierName = "Foo" }
         };
 
         readonly AutoMock mock;

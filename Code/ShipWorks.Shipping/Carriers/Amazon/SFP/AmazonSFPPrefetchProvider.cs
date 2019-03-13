@@ -14,6 +14,6 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SFP
         /// Get the path
         /// </summary>
         public PrefetchPathContainer GetPath() =>
-            ShipmentEntity.PrefetchPathAmazon.ToContainer();
+            ShipmentEntity.PrefetchPathAmazonSFP.ToContainer();
     }
 }

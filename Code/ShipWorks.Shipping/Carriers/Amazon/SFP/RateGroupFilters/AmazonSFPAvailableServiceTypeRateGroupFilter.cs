@@ -22,8 +22,8 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SFP.RateGroupFilters
         /// <summary>
         /// Constructor
         /// </summary>
-        public AmazonSFPAvailableServiceTypeRateGroupFilter(IAmazonSFPServiceTypeRepository serviceTypeRepository, 
-            IExcludedServiceTypeRepository excludedServiceTypeRepository, 
+        public AmazonSFPAvailableServiceTypeRateGroupFilter(IAmazonSFPServiceTypeRepository serviceTypeRepository,
+            IExcludedServiceTypeRepository excludedServiceTypeRepository,
             IIndex<ShipmentTypeCode, ShipmentType> shipmentTypeFactory)
         {
             this.serviceTypeRepository = serviceTypeRepository;
@@ -67,7 +67,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SFP.RateGroupFilters
         {
             IEnumerable<int> availableServiceTypes = ShipmentTypeFactory[ShipmentTypeCode.AmazonSFP].GetAvailableServiceTypes();
             return serviceTypeRepository.Get()
-                .Where(knownServiceType => availableServiceTypes.Contains(knownServiceType.AmazonServiceTypeID))
+                .Where(knownServiceType => availableServiceTypes.Contains(knownServiceType.AmazonSFPServiceTypeID))
                 .Select(s => s.ApiValue).ToList();
         }
     }

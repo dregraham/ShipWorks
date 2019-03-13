@@ -23,7 +23,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SFP
         /// <param name="shipment">The shipment.</param>
         public AmazonSFPPackageAdapter(ShipmentEntity shipment)
         {
-            MethodConditions.EnsureArgumentIsNotNull(shipment.Amazon, nameof(shipment.Amazon));
+            MethodConditions.EnsureArgumentIsNotNull(shipment.AmazonSFP, nameof(shipment.AmazonSFP));
 
             this.shipment = shipment;
             InsuranceChoice = new AmazonSFPInsuranceChoice(shipment);
@@ -53,8 +53,8 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SFP
         [DoubleCompare(1, ValueCompareOperatorType.GreaterThanOrEqualTo, ErrorMessage = @"Length must be greater than 1.")]
         public double Length
         {
-            get { return shipment.Amazon.DimsLength; }
-            set { shipment.Amazon.DimsLength = value; }
+            get { return shipment.AmazonSFP.DimsLength; }
+            set { shipment.AmazonSFP.DimsLength = value; }
         }
 
         /// <summary>
@@ -64,8 +64,8 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SFP
         [DoubleCompare(1, ValueCompareOperatorType.GreaterThanOrEqualTo, ErrorMessage = @"Width must be greater than 1.")]
         public double Width
         {
-            get { return shipment.Amazon.DimsWidth; }
-            set { shipment.Amazon.DimsWidth = value; }
+            get { return shipment.AmazonSFP.DimsWidth; }
+            set { shipment.AmazonSFP.DimsWidth = value; }
         }
 
         /// <summary>
@@ -75,8 +75,8 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SFP
         [DoubleCompare(1, ValueCompareOperatorType.GreaterThanOrEqualTo, ErrorMessage = @"Height must be greater than 1.")]
         public double Height
         {
-            get { return shipment.Amazon.DimsHeight; }
-            set { shipment.Amazon.DimsHeight = value; }
+            get { return shipment.AmazonSFP.DimsHeight; }
+            set { shipment.AmazonSFP.DimsHeight = value; }
         }
 
         /// <summary>
@@ -97,8 +97,8 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SFP
         [Range(0, 999999, ErrorMessage = @"Please enter a valid additional weight.")]
         public double AdditionalWeight
         {
-            get { return shipment.Amazon.DimsWeight; }
-            set { shipment.Amazon.DimsWeight = value; }
+            get { return shipment.AmazonSFP.DimsWeight; }
+            set { shipment.AmazonSFP.DimsWeight = value; }
         }
 
         /// <summary>
@@ -107,8 +107,8 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SFP
         [Obfuscation(Exclude = true)]
         public bool ApplyAdditionalWeight
         {
-            get { return shipment.Amazon.DimsAddWeight; }
-            set { shipment.Amazon.DimsAddWeight = value; }
+            get { return shipment.AmazonSFP.DimsAddWeight; }
+            set { shipment.AmazonSFP.DimsAddWeight = value; }
         }
 
         /// <summary>
@@ -130,8 +130,8 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SFP
         [DoubleCompare(1, ValueCompareOperatorType.GreaterThanOrEqualTo, ErrorMessage = @"Length must be greater than 1.")]
         public double DimsLength
         {
-            get { return shipment.Amazon.DimsLength; }
-            set { shipment.Amazon.DimsLength = value; }
+            get { return shipment.AmazonSFP.DimsLength; }
+            set { shipment.AmazonSFP.DimsLength = value; }
         }
 
         /// <summary>
@@ -141,8 +141,8 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SFP
         [DoubleCompare(1, ValueCompareOperatorType.GreaterThanOrEqualTo, ErrorMessage = @"Width must be greater than 1.")]
         public double DimsWidth
         {
-            get { return shipment.Amazon.DimsWidth; }
-            set { shipment.Amazon.DimsWidth = value; }
+            get { return shipment.AmazonSFP.DimsWidth; }
+            set { shipment.AmazonSFP.DimsWidth = value; }
         }
 
         /// <summary>
@@ -152,8 +152,8 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SFP
         [DoubleCompare(1, ValueCompareOperatorType.GreaterThanOrEqualTo, ErrorMessage = @"Height must be greater than 1.")]
         public double DimsHeight
         {
-            get { return shipment.Amazon.DimsHeight; }
-            set { shipment.Amazon.DimsHeight = value; }
+            get { return shipment.AmazonSFP.DimsHeight; }
+            set { shipment.AmazonSFP.DimsHeight = value; }
         }
 
         /// <summary>
@@ -162,8 +162,8 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SFP
         [Obfuscation(Exclude = true)]
         public long DimsProfileID
         {
-            get { return shipment.Amazon.DimsProfileID; }
-            set { shipment.Amazon.DimsProfileID = value; }
+            get { return shipment.AmazonSFP.DimsProfileID; }
+            set { shipment.AmazonSFP.DimsProfileID = value; }
         }
 
         /// <summary>

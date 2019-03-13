@@ -41,7 +41,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SFP
         /// <summary>
         /// Constructor
         /// </summary>
-        public AmazonSFPShipmentType(IStoreManager storeManager, IShippingManager shippingManager, ILicenseService licenseService, 
+        public AmazonSFPShipmentType(IStoreManager storeManager, IShippingManager shippingManager, ILicenseService licenseService,
             IAmazonSFPServiceTypeRepository serviceTypeRepository, IOrderManager orderManager)
         {
             this.storeManager = storeManager;
@@ -61,7 +61,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SFP
         /// </summary>
         public override IEnumerable<IPackageAdapter> GetPackageAdapters(ShipmentEntity shipment)
         {
-            if (shipment.Amazon == null)
+            if (shipment.AmazonSFP == null)
             {
                 ShippingManager.EnsureShipmentLoaded(shipment);
             }
@@ -77,7 +77,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SFP
         /// </summary>
         protected override void LoadShipmentDataInternal(ShipmentEntity shipment, bool refreshIfPresent)
         {
-            ShipmentTypeDataService.LoadShipmentData(this, shipment, shipment, "Amazon", typeof(AmazonShipmentEntity), refreshIfPresent);
+            ShipmentTypeDataService.LoadShipmentData(this, shipment, shipment, "Amazon", typeof(AmazonSFPShipmentEntity), refreshIfPresent);
         }
 
         /// <summary>
@@ -85,7 +85,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SFP
         /// when this method is called.
         /// </summary>
         public override string GetServiceDescription(ShipmentEntity shipment) =>
-            shipment.Amazon.ShippingServiceName;
+            shipment.AmazonSFP.ShippingServiceName;
 
         /// <summary>
         /// Get the carrier specific description of the shipping service used.
@@ -101,7 +101,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SFP
 
             return new ShipmentParcel(shipment, null,
                 new AmazonSFPInsuranceChoice(shipment),
-                new DimensionsAdapter(shipment.Amazon))
+                new DimensionsAdapter(shipment.AmazonSFP))
             {
                 TotalWeight = shipment.TotalWeight
             };
@@ -122,10 +122,10 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SFP
 
             ElementOutline outline = container.AddElement("Amazon");
 
-            outline.AddElement("Carrier", () => loaded().Amazon.CarrierName);
-            outline.AddElement("Service", () => loaded().Amazon.ShippingServiceName);
-            outline.AddElement("AmazonUniqueShipmentID", () => loaded().Amazon.AmazonUniqueShipmentID);
-            outline.AddElement("ShippingServiceID", () => loaded().Amazon.ShippingServiceID);
+            outline.AddElement("Carrier", () => loaded().AmazonSFP.CarrierName);
+            outline.AddElement("Service", () => loaded().AmazonSFP.ShippingServiceName);
+            outline.AddElement("AmazonUniqueShipmentID", () => loaded().AmazonSFP.AmazonUniqueShipmentID);
+            outline.AddElement("ShippingServiceID", () => loaded().AmazonSFP.ShippingServiceID);
         }
 
         /// <summary>
@@ -155,12 +155,12 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SFP
         /// </summary>
         public override void ConfigureNewShipment(ShipmentEntity shipment)
         {
-            if (shipment.Amazon == null)
+            if (shipment.AmazonSFP == null)
             {
-                shipment.Amazon = new AmazonShipmentEntity(shipment.ShipmentID);
+                shipment.AmazonSFP = new AmazonSFPShipmentEntity(shipment.ShipmentID);
             }
 
-            AmazonShipmentEntity amazonShipment = shipment.Amazon;
+            AmazonSFPShipmentEntity amazonShipment = shipment.AmazonSFP;
 
             amazonShipment.DimsWeight = shipment.ContentWeight;
             amazonShipment.Insurance = false;
@@ -221,7 +221,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SFP
         {
             base.ConfigurePrimaryProfile(profile);
 
-            AmazonProfileEntity amazon = profile.Amazon;
+            AmazonSFPProfileEntity amazon = profile.AmazonSFP;
             amazon.DeliveryExperience = (int) AmazonSFPDeliveryExperienceType.DeliveryConfirmationWithoutSignature;
             amazon.ShippingServiceID = string.Empty;
             amazon.Reference1 = "Order {//Order/Number}";
@@ -232,7 +232,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SFP
         /// Get the dims weight from a shipment, if any
         /// </summary>
         protected override double GetDimsWeight(IShipmentEntity shipment) =>
-            shipment.Amazon?.DimsAddWeight == true ? shipment.Amazon.DimsWeight : 0;
+            shipment.AmazonSFP?.DimsAddWeight == true ? shipment.AmazonSFP.DimsWeight : 0;
 
         /// <summary>
         /// Tracks the shipment.
@@ -283,7 +283,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SFP
         {
             ShipmentCommonDetail commonDetail = new ShipmentCommonDetail();
 
-            AmazonShipmentEntity amazonShipment = shipment.Amazon;
+            AmazonSFPShipmentEntity amazonShipment = shipment.AmazonSFP;
 
             commonDetail.PackageLength = amazonShipment.DimsLength;
             commonDetail.PackageWidth = amazonShipment.DimsWidth;
@@ -299,7 +299,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SFP
         /// <param name="repository">The repository from which the excluded service types are fetched.</param>
         public override IEnumerable<int> GetAvailableServiceTypes(IExcludedServiceTypeRepository repository)
         {
-            IEnumerable<int> allServices = serviceTypeRepository.Get().Select(x => x.AmazonServiceTypeID);
+            IEnumerable<int> allServices = serviceTypeRepository.Get().Select(x => x.AmazonSFPServiceTypeID);
             return allServices.Except(GetExcludedServiceTypes(repository));
         }
 
@@ -308,9 +308,9 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SFP
         /// </summary>
         public override void SaveRequestedLabelFormat(ThermalLanguage requestedLabelFormat, ShipmentEntity shipment)
         {
-            if (shipment.Amazon != null)
+            if (shipment.AmazonSFP != null)
             {
-                shipment.Amazon.RequestedLabelFormat = (int) requestedLabelFormat;
+                shipment.AmazonSFP.RequestedLabelFormat = (int) requestedLabelFormat;
             }
         }
 
@@ -319,9 +319,9 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SFP
         /// </summary>
         public override void UpdateLabelFormatOfUnprocessedShipments(SqlAdapter adapter, int newLabelFormat, RelationPredicateBucket bucket)
         {
-            bucket.Relations.Add(ShipmentEntity.Relations.AmazonShipmentEntityUsingShipmentID);
+            bucket.Relations.Add(ShipmentEntity.Relations.AmazonSFPShipmentEntityUsingShipmentID);
 
-            adapter.UpdateEntitiesDirectly(new AmazonShipmentEntity { RequestedLabelFormat = newLabelFormat }, bucket);
+            adapter.UpdateEntitiesDirectly(new AmazonSFPShipmentEntity { RequestedLabelFormat = newLabelFormat }, bucket);
         }
 
         /// <summary>
@@ -331,7 +331,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SFP
         {
             base.UpdateDynamicShipmentData(shipment);
 
-            shipment.RequestedLabelFormat = shipment.Amazon.RequestedLabelFormat;
+            shipment.RequestedLabelFormat = shipment.AmazonSFP.RequestedLabelFormat;
         }
     }
 }

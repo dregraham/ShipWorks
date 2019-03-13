@@ -288,7 +288,7 @@ namespace ShipWorks.Stores.Platforms.GenericModule
             store.ModuleOnlineCustomerDataType = (int) capabilities.OnlineCustomerDataType;
             store.ModuleOnlineShipmentDetails = capabilities.OnlineShipmentDetails;
             store.IncludeMilliseconds = capabilities.IncludeMilliseconds;
-            
+
             // Read communications settings
             GenericModuleCommunications communications = ReadModuleCommunications(webResponse);
 
@@ -513,7 +513,7 @@ namespace ShipWorks.Stores.Platforms.GenericModule
         {
             if (shipment.ShipmentTypeCode == ShipmentTypeCode.AmazonSFP)
             {
-                return shipment.Amazon.CarrierName;
+                return shipment.AmazonSFP.CarrierName;
             }
 
             return ShippingManager.GetCarrierName((ShipmentTypeCode) shipment.ShipmentType);

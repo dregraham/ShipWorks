@@ -34,15 +34,15 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SFP
         public Dictionary<int, string> BuildServiceTypeDictionary(IEnumerable<ShipmentEntity> shipments)
         {
             // Get all of the services from the shipments
-            IEnumerable<string> shipmentsServices = shipments.Select(s => s.Amazon?.ShippingServiceID).Distinct();
+            IEnumerable<string> shipmentsServices = shipments.Select(s => s.AmazonSFP?.ShippingServiceID).Distinct();
 
             // Get all of the amazon services
-            List<AmazonServiceTypeEntity> allServiceTypes = amazonServiceTypeRepository.Get();
+            List<AmazonSFPServiceTypeEntity> allServiceTypes = amazonServiceTypeRepository.Get();
 
             // Build a dictionary of all of AmazonServiceTypeID and Description values using the given shipments ShippingServiceID
             Dictionary<int, string> shipmentsServiceTypes = allServiceTypes?
                 .Where(s => shipmentsServices.Contains(s.ApiValue))
-                .ToDictionary(s => s.AmazonServiceTypeID, s => s.Description) ?? new Dictionary<int, string>();
+                .ToDictionary(s => s.AmazonSFPServiceTypeID, s => s.Description) ?? new Dictionary<int, string>();
 
             // combine that with a a dictionary of available services
             IEnumerable<KeyValuePair<int, string>> services = GetAvailableServiceTypes(allServiceTypes).Union(shipmentsServiceTypes);
@@ -60,21 +60,21 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SFP
             IEnumerable<KeyValuePair<int, string>> everythingElse = serviceTypes.Where(s => !uspsServices.Contains(s)).OrderBy(v => v.Value.Split(' ')[0]);
 
             uspsServices.AddRange(everythingElse);
-            
+
             return uspsServices.ToDictionary(s => s.Key, s => s.Value);
         }
 
         /// <summary>
         /// Get all of the services which are available from the given list of services
         /// </summary>
-        private Dictionary<int, string> GetAvailableServiceTypes(List<AmazonServiceTypeEntity> allServiceTypes)
+        private Dictionary<int, string> GetAvailableServiceTypes(List<AmazonSFPServiceTypeEntity> allServiceTypes)
         {
             // Get all of the avaialble services from the shipment type (this excludes the ones that have been excluded by the user)
             IEnumerable<int> availableServices = shipmentType.GetAvailableServiceTypes(excludedServiceTypeRepository);
 
             // Build a dictionary of AmazonServiceTypeID and Description from the available service types
-            return allServiceTypes.Where(s => availableServices.Contains(s.AmazonServiceTypeID))
-                .ToDictionary(s => s.AmazonServiceTypeID, s => s.Description);
+            return allServiceTypes.Where(s => availableServices.Contains(s.AmazonSFPServiceTypeID))
+                .ToDictionary(s => s.AmazonSFPServiceTypeID, s => s.Description);
         }
     }
 }

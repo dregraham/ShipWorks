@@ -18,7 +18,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
         private readonly AmazonSFPShipmentType shipmentType;
         private readonly AmazonSFPShipmentServicesBuilder testObject;
         private readonly List<ExcludedServiceTypeEntity> excludedServices = new List<ExcludedServiceTypeEntity>();
-        private readonly List<AmazonServiceTypeEntity> amazonServiceTypes = new List<AmazonServiceTypeEntity>();
+        private readonly List<AmazonSFPServiceTypeEntity> amazonServiceTypes = new List<AmazonSFPServiceTypeEntity>();
 
         public AmazonSFPShipmentServiceBuilderTest()
         {
@@ -39,7 +39,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
         [Fact]
         public void BuildServiceTypeDictionary_DelegatesToAmazonServiceTypeRepository()
         {
-            ShipmentEntity[] shipments = {new ShipmentEntity {Amazon = new AmazonShipmentEntity()}};
+            ShipmentEntity[] shipments = {new ShipmentEntity { AmazonSFP = new AmazonSFPShipmentEntity()}};
 
             testObject.BuildServiceTypeDictionary(shipments);
 
@@ -49,7 +49,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
         [Fact]
         public void BuildServiceTypeDictionary_DelegatesToExcludedServiceTypeRepository()
         {
-            ShipmentEntity[] shipments = { new ShipmentEntity { Amazon = new AmazonShipmentEntity() } };
+            ShipmentEntity[] shipments = { new ShipmentEntity { AmazonSFP = new AmazonSFPShipmentEntity() } };
 
             testObject.BuildServiceTypeDictionary(shipments);
 
@@ -64,16 +64,16 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
             amazonServiceTypes.Clear();
             excludedServices.Clear();
 
-            amazonServiceTypes.Add(new AmazonServiceTypeEntity()
+            amazonServiceTypes.Add(new AmazonSFPServiceTypeEntity()
             {
-                AmazonServiceTypeID = 1,
+                AmazonSFPServiceTypeID = 1,
                 Description = "This is a random description",
                 ApiValue = "some random service"
             });
 
             excludedServices.Add(new ExcludedServiceTypeEntity { ServiceType = 1, ShipmentType = (int)ShipmentTypeCode.AmazonSFP });
 
-            ShipmentEntity[] shipments = { new ShipmentEntity { Amazon = new AmazonShipmentEntity(){ShippingServiceID = "some random service"} } };
+            ShipmentEntity[] shipments = { new ShipmentEntity { AmazonSFP = new AmazonSFPShipmentEntity(){ShippingServiceID = "some random service"} } };
 
             Dictionary<int, string> result = testObject.BuildServiceTypeDictionary(shipments);
             Assert.Equal("This is a random description", result[1]);
@@ -82,33 +82,33 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
         [Fact]
         public void BuildServiceTypeDictionary_ReturnsServices_WhenServiceIsNotDisabled()
         {
-            amazonServiceTypes.Add(new AmazonServiceTypeEntity()
+            amazonServiceTypes.Add(new AmazonSFPServiceTypeEntity()
             {
-                AmazonServiceTypeID = 1,
+                AmazonSFPServiceTypeID = 1,
                 Description = "1",
                 ApiValue = "1"
             });
 
-            amazonServiceTypes.Add(new AmazonServiceTypeEntity()
+            amazonServiceTypes.Add(new AmazonSFPServiceTypeEntity()
             {
-                AmazonServiceTypeID = 2,
+                AmazonSFPServiceTypeID = 2,
                 Description = "2",
                 ApiValue = "2"
             });
 
-            amazonServiceTypes.Add(new AmazonServiceTypeEntity()
+            amazonServiceTypes.Add(new AmazonSFPServiceTypeEntity()
             {
-                AmazonServiceTypeID = 3,
+                AmazonSFPServiceTypeID = 3,
                 Description = "3",
                 ApiValue = "3"
             });
 
             excludedServices.Add(new ExcludedServiceTypeEntity { ServiceType = 1, ShipmentType = (int)ShipmentTypeCode.AmazonSFP });
 
-            ShipmentEntity[] shipments = { new ShipmentEntity { Amazon = new AmazonShipmentEntity() { ShippingServiceID = "some random service" } } };
+            ShipmentEntity[] shipments = { new ShipmentEntity { AmazonSFP = new AmazonSFPShipmentEntity() { ShippingServiceID = "some random service" } } };
 
             Dictionary<int, string> result = testObject.BuildServiceTypeDictionary(shipments);
-            
+
             Assert.False(result.ContainsKey(1));
             Assert.True(result.ContainsKey(2));
             Assert.True(result.ContainsKey(3));
@@ -117,40 +117,40 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
         [Fact]
         public void BuildServiceTypeDictionary_ReturnsServices_WithUSPSFirst()
         {
-            amazonServiceTypes.Add(new AmazonServiceTypeEntity()
+            amazonServiceTypes.Add(new AmazonSFPServiceTypeEntity()
             {
-                AmazonServiceTypeID = 1,
+                AmazonSFPServiceTypeID = 1,
                 Description = "USPS - First",
                 ApiValue = "1"
             });
 
-            amazonServiceTypes.Add(new AmazonServiceTypeEntity()
+            amazonServiceTypes.Add(new AmazonSFPServiceTypeEntity()
             {
-                AmazonServiceTypeID = 2,
+                AmazonSFPServiceTypeID = 2,
                 Description = "UPS - Ground",
                 ApiValue = "2"
             });
 
-            amazonServiceTypes.Add(new AmazonServiceTypeEntity()
+            amazonServiceTypes.Add(new AmazonSFPServiceTypeEntity()
             {
-                AmazonServiceTypeID = 4,
+                AmazonSFPServiceTypeID = 4,
                 Description = "UPS - Express",
                 ApiValue = "4"
             });
 
-            amazonServiceTypes.Add(new AmazonServiceTypeEntity()
+            amazonServiceTypes.Add(new AmazonSFPServiceTypeEntity()
             {
-                AmazonServiceTypeID = 3,
+                AmazonSFPServiceTypeID = 3,
                 Description = "USPS - Priority",
                 ApiValue = "3"
             });
 
             excludedServices.Add(new ExcludedServiceTypeEntity { ServiceType = 1, ShipmentType = (int)ShipmentTypeCode.AmazonSFP });
 
-            ShipmentEntity[] shipments = { new ShipmentEntity { Amazon = new AmazonShipmentEntity() { ShippingServiceID = "some random service" } } };
+            ShipmentEntity[] shipments = { new ShipmentEntity { AmazonSFP = new AmazonSFPShipmentEntity() { ShippingServiceID = "some random service" } } };
 
             Dictionary<int, string> result = testObject.BuildServiceTypeDictionary(shipments);
-            
+
             var expectedResult = new Dictionary<int, string>();
             expectedResult.Add(1, "USPS - First");
             expectedResult.Add(3, "USPS - Priority");
