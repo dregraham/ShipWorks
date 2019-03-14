@@ -808,7 +808,7 @@ namespace ShipWorks.Filters.Controls
             InitializeMenuItem(menuItemNewFilter, nameof(menuItemNewFilter), Resources.filter_add, "New Filter", OnNewFilter);
             InitializeMenuItem(menuItemNewFolder, nameof(menuItemNewFolder), Resources.folderclosed_add, "New Folder", OnNewFolder);
             InitializeMenuItem(menuItemOrganizeFilters, nameof(menuItemOrganizeFilters), Resources.funnel_properties_16, "Manage Filters", OnManageFilters);
-            InitializeMenuItem(menuLoadFilterAsSearch, nameof(menuLoadFilterAsSearch), Resources.view, "Load as Advanced Search", OnLoadAsAdvancedSearch);
+            InitializeMenuItem(menuLoadFilterAsSearch, nameof(menuLoadFilterAsSearch), Resources.view_next, "Load as Advanced Search", OnLoadAsAdvancedSearch);
             InitializeMenuItem(menuConvertFilter, nameof(menuConvertFilter), Resources.view, "Convert to Saved Search", OnConvertFilter);
         }
 

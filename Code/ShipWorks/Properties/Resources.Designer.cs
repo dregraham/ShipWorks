@@ -4863,6 +4863,16 @@ namespace ShipWorks.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        public static System.Drawing.Bitmap view_next {
+            get {
+                object obj = ResourceManager.GetObject("view_next", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         public static System.Drawing.Bitmap viewofstreet {
             get {
                 object obj = ResourceManager.GetObject("viewofstreet", resourceCulture);

@@ -11122,6 +11122,7 @@
     <None Include="Resources\windows.png" />
     <Content Include="Resources\view_linked_arrow.png" />
     <Content Include="Resources\view_linked_infinity.png" />
+    <None Include="Resources\view_next.png" />
     <Content Include="Stores\Platforms\Magento\Modules\MagentoOne\MagentoConnectExtension\app\code\community\Interapptive\ShipWorks\etc\adminhtml.xml" />
     <Content Include="Stores\Platforms\Magento\Modules\MagentoOne\MagentoConnectExtension\app\code\community\Interapptive\ShipWorks\etc\api.xml" />
     <Content Include="Stores\Platforms\Magento\Modules\MagentoOne\MagentoConnectExtension\app\code\community\Interapptive\ShipWorks\etc\config.xml" />
