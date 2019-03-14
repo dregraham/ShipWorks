@@ -325,11 +325,6 @@
       <DependentUpon>ShippingProfileManagerDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="Profiles\ShippingProfileManagerDialogFactory.cs" />
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
     <Compile Include="RatingPanel\ObservableRegistrations\InitializeRatesRetrievedPipelineMessage.cs" />
     <Compile Include="RatingPanel\ObservableRegistrations\IRatingPanelGlobalPipeline.cs" />
     <Compile Include="RatingPanel\ObservableRegistrations\ShippingDialogOpeningPipeline.cs" />

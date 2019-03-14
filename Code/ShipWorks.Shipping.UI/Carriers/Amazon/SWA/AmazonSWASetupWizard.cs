@@ -30,7 +30,6 @@ namespace ShipWorks.Shipping.UI.Carriers.Amazon.SWA
         private readonly IShipEngineWebClient shipEngineClient;
         private ShippingWizardPageFinish shippingWizardPageFinish;
         private readonly AmazonSWAAccountEntity account;
-        private const string AmazonSWAAccountUrl = "http://www.AmazonSWA.com/contact";
 
         /// <summary>
         /// Constructor to be used by Visual Studio designer
@@ -100,7 +99,7 @@ namespace ShipWorks.Shipping.UI.Carriers.Amazon.SWA
         /// </summary>
         private async Task OnStepNextWelcome(object sender, WizardStepEventArgs e)
         {
-            throw new NotImplementedException();
+            await Task.FromException(new NotImplementedException());
         }
 
         /// <summary>
