@@ -467,6 +467,7 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         Nullable<ShipWorks.Settings.UIMode> ProcessedWithUiMode { get; }
         
         IAmazonSFPShipmentEntity AmazonSFP { get; }
+        IAmazonSWAShipmentEntity AmazonSWA { get; }
         IAsendiaShipmentEntity Asendia { get; }
         IBestRateShipmentEntity BestRate { get; }
         IDhlExpressShipmentEntity DhlExpress { get; }
@@ -510,6 +511,7 @@ namespace ShipWorks.Data.Model.EntityClasses
     public partial class ShipmentEntity : IShipmentEntity
     {
         IAmazonSFPShipmentEntity IShipmentEntity.AmazonSFP => AmazonSFP;
+        IAmazonSWAShipmentEntity IShipmentEntity.AmazonSWA => AmazonSWA;
         IAsendiaShipmentEntity IShipmentEntity.Asendia => Asendia;
         IBestRateShipmentEntity IShipmentEntity.BestRate => BestRate;
         IDhlExpressShipmentEntity IShipmentEntity.DhlExpress => DhlExpress;

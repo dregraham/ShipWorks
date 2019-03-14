@@ -154,6 +154,7 @@
     <Compile Include="Custom\EntityClasses\ActionFilterTriggerEntity.cs" />
     <Compile Include="Custom\EntityClasses\ActionQueueEntity.cs" />
     <Compile Include="Custom\EntityClasses\ActionTaskEntity.cs" />
+    <Compile Include="Custom\EntityClasses\AmazonSWAAccountEntity.ReadOnly.cs" />
     <Compile Include="Custom\EntityClasses\BuyDotComOrderItemEntity.cs" />
     <Compile Include="Custom\EntityClasses\ChannelAdvisorOrderItemEntity.cs" />
     <Compile Include="Custom\EntityClasses\AmazonOrderItemEntity.cs" />
@@ -3149,6 +3150,30 @@
       <GeneratedBy>LLBLGen Pro</GeneratedBy>
     </Compile>
     <Compile Include=".\RelationClasses\AmazonSWAAccountRelations.cs">
+      <GeneratedBy>LLBLGen Pro</GeneratedBy>
+    </Compile>
+    <Compile Include=".\EntityClasses\AmazonSWAShipmentEntity.cs">
+      <GeneratedBy>LLBLGen Pro</GeneratedBy>
+    </Compile>
+    <Compile Include=".\EntityInterfaces\IAmazonSWAShipmentEntity.cs">
+      <GeneratedBy>LLBLGen Pro</GeneratedBy>
+    </Compile>
+    <Compile Include=".\ReadOnlyEntities\ReadOnlyAmazonSWAShipmentEntity.cs">
+      <GeneratedBy>LLBLGen Pro</GeneratedBy>
+    </Compile>
+    <Compile Include=".\RelationClasses\AmazonSWAShipmentRelations.cs">
+      <GeneratedBy>LLBLGen Pro</GeneratedBy>
+    </Compile>
+    <Compile Include=".\EntityClasses\AmazonSWAProfileEntity.cs">
+      <GeneratedBy>LLBLGen Pro</GeneratedBy>
+    </Compile>
+    <Compile Include=".\EntityInterfaces\IAmazonSWAProfileEntity.cs">
+      <GeneratedBy>LLBLGen Pro</GeneratedBy>
+    </Compile>
+    <Compile Include=".\ReadOnlyEntities\ReadOnlyAmazonSWAProfileEntity.cs">
+      <GeneratedBy>LLBLGen Pro</GeneratedBy>
+    </Compile>
+    <Compile Include=".\RelationClasses\AmazonSWAProfileRelations.cs">
       <GeneratedBy>LLBLGen Pro</GeneratedBy>
     </Compile>
   </ItemGroup>

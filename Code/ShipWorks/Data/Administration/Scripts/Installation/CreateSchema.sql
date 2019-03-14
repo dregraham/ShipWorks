@@ -2988,6 +2988,58 @@ PRINT N'Creating index [IX_SWDefault_AsendiaShipment_Service] on [dbo].[AsendiaS
 GO
 CREATE NONCLUSTERED INDEX [IX_SWDefault_AsendiaShipment_Service] ON [dbo].[AsendiaShipment] ([Service])
 GO
+PRINT N'Creating [dbo].[AmazonSWAProfile]'
+GO
+CREATE TABLE [dbo].[AmazonSWAProfile](
+	[ShippingProfileID] [bigint] NOT NULL,
+	[AmazonSWAAccountID] [bigint] NULL,
+	[Service] [int] NULL,
+	[NonMachinable] [bit] NULL,
+	[Contents] [int] NULL,
+	[NonDelivery] [int] NULL
+)
+GO
+PRINT N'Creating primary key [PK_AmazonSWAProfile] on [dbo].[AmazonSWAProfile]'
+GO
+ALTER TABLE [dbo].[AmazonSWAProfile] ADD CONSTRAINT [PK_AmazonSWAProfile] PRIMARY KEY CLUSTERED  ([ShippingProfileID])
+GO
+PRINT N'Adding foreign keys to [dbo].[AmazonSWAProfile]'
+GO
+ALTER TABLE [dbo].[AmazonSWAProfile] ADD CONSTRAINT [FK_AmazonSWAProfile_ShippingProfile] FOREIGN KEY ([ShippingProfileID]) REFERENCES [dbo].[ShippingProfile] ([ShippingProfileID]) ON DELETE CASCADE
+GO
+PRINT N'Creating [dbo].[AmazonSWAShipment]'
+GO
+CREATE TABLE [dbo].[AmazonSWAShipment](
+	[ShipmentID] [bigint] NOT NULL,
+	[AmazonSWAAccountID] [bigint] NOT NULL,
+	[Service] [int] NOT NULL,
+	[NonMachinable] [bit] NOT NULL,
+	[RequestedLabelFormat] [int] NOT NULL,
+	[Contents][int] NOT NULL,
+	[NonDelivery] [int] NOT NULL,
+	[ShipEngineLabelID] [nvarchar] (12) NOT NULL,
+	[DimsProfileID] [bigint] NOT NULL,
+	[DimsLength] [float] NOT NULL,
+	[DimsWidth] [float] NOT NULL,
+	[DimsHeight] [float] NOT NULL,
+	[DimsAddWeight] [bit] NOT NULL,
+	[DimsWeight] [float] NOT NULL,
+	[InsuranceValue] [money] NOT NULL,
+	[Insurance] [bit] NOT NULL
+)
+GO
+PRINT N'Creating primary key [PK_AmazonSWAShipment] on [dbo].[AmazonSWAShipment]'
+GO
+ALTER TABLE [dbo].[AmazonSWAShipment] ADD CONSTRAINT [PK_AmazonSWAShipment] PRIMARY KEY CLUSTERED  ([ShipmentID])
+GO
+PRINT N'Adding foreign keys to [dbo].[AmazonSWAShipment]'
+GO
+ALTER TABLE [dbo].[AmazonSWAShipment] ADD CONSTRAINT [FK_AmazonSWAShipment_Shipment] FOREIGN KEY ([ShipmentID]) REFERENCES [dbo].[Shipment] ([ShipmentID]) ON DELETE CASCADE
+GO
+PRINT N'Creating index [IX_SWDefault_AmazonSWAShipment_Service] on [dbo].[AmazonSWAShipment]'
+GO
+CREATE NONCLUSTERED INDEX [IX_SWDefault_AmazonSWAShipment_Service] ON [dbo].[AmazonSWAShipment] ([Service])
+GO
 PRINT N'Creating [dbo].[Customer]'
 GO
 CREATE TABLE [dbo].[Customer]
@@ -7710,6 +7762,10 @@ GO
 EXEC sys.sp_addextendedproperty @name=N'AuditFormat', @value=N'4' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'AsendiaShipment', @level2type=N'COLUMN',@level2name=N'AsendiaAccountID'
 GO
 EXEC sys.sp_addextendedproperty @name=N'AuditFormat', @value=N'130' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'AsendiaShipment', @level2type=N'COLUMN',@level2name=N'Service'
+GO
+EXEC sys.sp_addextendedproperty @name=N'AuditFormat', @value=N'4' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'AmazonSWAShipment', @level2type=N'COLUMN',@level2name=N'AmazonSWAAccountID'
+GO
+EXEC sys.sp_addextendedproperty @name=N'AuditFormat', @value=N'132' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'AmazonSWAShipment', @level2type=N'COLUMN',@level2name=N'Service'
 GO
 EXEC sys.sp_addextendedproperty @name=N'AuditFormat', @value=N'4' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'DhlExpressShipment', @level2type=N'COLUMN',@level2name=N'DhlExpressAccountID'
 GO

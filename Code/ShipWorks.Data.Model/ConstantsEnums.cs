@@ -677,6 +677,62 @@ namespace ShipWorks.Data.Model
 		/// <summary></summary>
 		AmountOfFields
 	}
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: AmazonSWAProfile.</summary>
+	public enum AmazonSWAProfileFieldIndex
+	{
+		///<summary>ShippingProfileID. </summary>
+		ShippingProfileID,
+		///<summary>AmazonSWAAccountID. </summary>
+		AmazonSWAAccountID,
+		///<summary>Service. </summary>
+		Service,
+		///<summary>NonMachinable. </summary>
+		NonMachinable,
+		///<summary>Contents. </summary>
+		Contents,
+		///<summary>NonDelivery. </summary>
+		NonDelivery,
+		/// <summary></summary>
+		AmountOfFields
+	}
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: AmazonSWAShipment.</summary>
+	public enum AmazonSWAShipmentFieldIndex
+	{
+		///<summary>ShipmentID. </summary>
+		ShipmentID,
+		///<summary>AmazonSWAAccountID. </summary>
+		AmazonSWAAccountID,
+		///<summary>Service. </summary>
+		Service,
+		///<summary>NonMachinable. </summary>
+		NonMachinable,
+		///<summary>RequestedLabelFormat. </summary>
+		RequestedLabelFormat,
+		///<summary>Contents. </summary>
+		Contents,
+		///<summary>NonDelivery. </summary>
+		NonDelivery,
+		///<summary>ShipEngineLabelID. </summary>
+		ShipEngineLabelID,
+		///<summary>DimsProfileID. </summary>
+		DimsProfileID,
+		///<summary>DimsLength. </summary>
+		DimsLength,
+		///<summary>DimsWidth. </summary>
+		DimsWidth,
+		///<summary>DimsHeight. </summary>
+		DimsHeight,
+		///<summary>DimsAddWeight. </summary>
+		DimsAddWeight,
+		///<summary>DimsWeight. </summary>
+		DimsWeight,
+		///<summary>InsuranceValue. </summary>
+		InsuranceValue,
+		///<summary>Insurance. </summary>
+		Insurance,
+		/// <summary></summary>
+		AmountOfFields
+	}
 	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: AmeriCommerceStore.</summary>
 	public enum AmeriCommerceStoreFieldIndex
 	{
@@ -13659,6 +13715,10 @@ namespace ShipWorks.Data.Model
 		AmazonStoreEntity,
 		///<summary>AmazonSWAAccount</summary>
 		AmazonSWAAccountEntity,
+		///<summary>AmazonSWAProfile</summary>
+		AmazonSWAProfileEntity,
+		///<summary>AmazonSWAShipment</summary>
+		AmazonSWAShipmentEntity,
 		///<summary>AmeriCommerceStore</summary>
 		AmeriCommerceStoreEntity,
 		///<summary>AsendiaAccount</summary>

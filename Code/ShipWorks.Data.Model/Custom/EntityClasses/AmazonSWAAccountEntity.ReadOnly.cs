@@ -1,23 +1,20 @@
-﻿using ShipWorks.Data.Model.Custom;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Interapptive.Shared.Business;
+﻿using Interapptive.Shared.Business;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping;
+using System;
 
-namespace ShipWorks.Data.Model.EntityClasses
+namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
 {
     /// <summary>
-    /// Extra implementation of the DhlExpressAccountEntity
+    /// Extra implementation of the AmazonSWAAccountEntity
     /// </summary>
-    public partial class AmazonSWAAccountEntity : ICarrierAccount
+    public partial class ReadOnlyAmazonSWAAccountEntity
     {
         /// <summary>
         /// Gets the account id in a generic way
         /// </summary>
-        public long AccountId => this.AccountId;
+        public long AccountId => AmazonSWAAccountID;
 
         /// <summary>
         /// Get the shipment type to which this account applies
@@ -27,7 +24,7 @@ namespace ShipWorks.Data.Model.EntityClasses
         /// <summary>
         /// Get the address of the account
         /// </summary>
-        public PersonAdapter Address => new PersonAdapter(this, string.Empty);
+        public PersonAdapter Address { get; private set; }
 
         /// <summary>
         /// Gets the account description.
@@ -40,6 +37,14 @@ namespace ShipWorks.Data.Model.EntityClasses
         public void ApplyTo(ShipmentEntity shipment)
         {
             throw new NotImplementedException("ApplyTo");
+        }
+
+        /// <summary>
+        /// Copy custom data
+        /// </summary>
+        partial void CopyCustomAmazonSWAAccountData(IAmazonSWAAccountEntity source)
+        {
+            Address = source.Address.CopyToNew();
         }
     }
 }

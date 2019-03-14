@@ -196,6 +196,18 @@ namespace ShipWorks.Data.Model.FactoryClasses
 			get { return Create<AmazonSWAAccountEntity>(); }
 		}
 
+		/// <summary>Creates and returns a new EntityQuery for the AmazonSWAProfile entity</summary>
+		public EntityQuery<AmazonSWAProfileEntity> AmazonSWAProfile
+		{
+			get { return Create<AmazonSWAProfileEntity>(); }
+		}
+
+		/// <summary>Creates and returns a new EntityQuery for the AmazonSWAShipment entity</summary>
+		public EntityQuery<AmazonSWAShipmentEntity> AmazonSWAShipment
+		{
+			get { return Create<AmazonSWAShipmentEntity>(); }
+		}
+
 		/// <summary>Creates and returns a new EntityQuery for the AmeriCommerceStore entity</summary>
 		public EntityQuery<AmeriCommerceStoreEntity> AmeriCommerceStore
 		{

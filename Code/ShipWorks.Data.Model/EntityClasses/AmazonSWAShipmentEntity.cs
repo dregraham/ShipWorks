@@ -25,13 +25,14 @@ namespace ShipWorks.Data.Model.EntityClasses
 {
 	// __LLBLGENPRO_USER_CODE_REGION_START AdditionalNamespaces
 	// __LLBLGENPRO_USER_CODE_REGION_END
-	/// <summary>Entity class which represents the entity 'AmazonSWAAccount'.<br/><br/></summary>
+	/// <summary>Entity class which represents the entity 'AmazonSWAShipment'.<br/><br/></summary>
 	[Serializable]
-	public partial class AmazonSWAAccountEntity : CommonEntityBase
+	public partial class AmazonSWAShipmentEntity : CommonEntityBase
 		// __LLBLGENPRO_USER_CODE_REGION_START AdditionalInterfaces
 		// __LLBLGENPRO_USER_CODE_REGION_END	
 	{
 		#region Class Member Declarations
+		private ShipmentEntity _shipment;
 
 		// __LLBLGENPRO_USER_CODE_REGION_START PrivateMembers
 		// __LLBLGENPRO_USER_CODE_REGION_END
@@ -44,17 +45,19 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <summary>All names of fields mapped onto a relation. Usable for in-memory filtering</summary>
 		public static partial class MemberNames
 		{
+			/// <summary>Member name Shipment</summary>
+			public static readonly string Shipment = "Shipment";
 		}
 		#endregion
 		
 		/// <summary> Static CTor for setting up custom property hashtables. Is executed before the first instance of this entity class or derived classes is constructed. </summary>
-		static AmazonSWAAccountEntity()
+		static AmazonSWAShipmentEntity()
 		{
 			SetupCustomPropertyHashtables();
 		}
 		
 		/// <summary> CTor</summary>
-		public AmazonSWAAccountEntity():base("AmazonSWAAccountEntity")
+		public AmazonSWAShipmentEntity():base("AmazonSWAShipmentEntity")
 		{
 			InitClassEmpty(null, null);
 		}
@@ -62,51 +65,71 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <summary> CTor</summary>
 		/// <remarks>For framework usage.</remarks>
 		/// <param name="fields">Fields object to set as the fields for this entity.</param>
-		public AmazonSWAAccountEntity(IEntityFields2 fields):base("AmazonSWAAccountEntity")
+		public AmazonSWAShipmentEntity(IEntityFields2 fields):base("AmazonSWAShipmentEntity")
 		{
 			InitClassEmpty(null, fields);
 		}
 
 		/// <summary> CTor</summary>
-		/// <param name="validator">The custom validator object for this AmazonSWAAccountEntity</param>
-		public AmazonSWAAccountEntity(IValidator validator):base("AmazonSWAAccountEntity")
+		/// <param name="validator">The custom validator object for this AmazonSWAShipmentEntity</param>
+		public AmazonSWAShipmentEntity(IValidator validator):base("AmazonSWAShipmentEntity")
 		{
 			InitClassEmpty(validator, null);
 		}
 				
 		/// <summary> CTor</summary>
-		/// <param name="amazonSWAAccountID">PK value for AmazonSWAAccount which data should be fetched into this AmazonSWAAccount object</param>
+		/// <param name="shipmentID">PK value for AmazonSWAShipment which data should be fetched into this AmazonSWAShipment object</param>
 		/// <remarks>The entity is not fetched by this constructor. Use a DataAccessAdapter for that.</remarks>
-		public AmazonSWAAccountEntity(System.Int64 amazonSWAAccountID):base("AmazonSWAAccountEntity")
+		public AmazonSWAShipmentEntity(System.Int64 shipmentID):base("AmazonSWAShipmentEntity")
 		{
 			InitClassEmpty(null, null);
-			this.AmazonSWAAccountID = amazonSWAAccountID;
+			this.ShipmentID = shipmentID;
 		}
 
 		/// <summary> CTor</summary>
-		/// <param name="amazonSWAAccountID">PK value for AmazonSWAAccount which data should be fetched into this AmazonSWAAccount object</param>
-		/// <param name="validator">The custom validator object for this AmazonSWAAccountEntity</param>
+		/// <param name="shipmentID">PK value for AmazonSWAShipment which data should be fetched into this AmazonSWAShipment object</param>
+		/// <param name="validator">The custom validator object for this AmazonSWAShipmentEntity</param>
 		/// <remarks>The entity is not fetched by this constructor. Use a DataAccessAdapter for that.</remarks>
-		public AmazonSWAAccountEntity(System.Int64 amazonSWAAccountID, IValidator validator):base("AmazonSWAAccountEntity")
+		public AmazonSWAShipmentEntity(System.Int64 shipmentID, IValidator validator):base("AmazonSWAShipmentEntity")
 		{
 			InitClassEmpty(validator, null);
-			this.AmazonSWAAccountID = amazonSWAAccountID;
+			this.ShipmentID = shipmentID;
 		}
 
 		/// <summary> Protected CTor for deserialization</summary>
 		/// <param name="info"></param>
 		/// <param name="context"></param>
 		[EditorBrowsable(EditorBrowsableState.Never)]
-		protected AmazonSWAAccountEntity(SerializationInfo info, StreamingContext context) : base(info, context)
+		protected AmazonSWAShipmentEntity(SerializationInfo info, StreamingContext context) : base(info, context)
 		{
 			if(SerializationHelper.Optimization != SerializationOptimization.Fast) 
 			{
+				_shipment = (ShipmentEntity)info.GetValue("_shipment", typeof(ShipmentEntity));
+				if(_shipment!=null)
+				{
+					_shipment.AfterSave+=new EventHandler(OnEntityAfterSave);
+				}
 				this.FixupDeserialization(FieldInfoProviderSingleton.GetInstance());
 			}
 			// __LLBLGENPRO_USER_CODE_REGION_START DeserializationConstructor
 			// __LLBLGENPRO_USER_CODE_REGION_END
 		}
 
+		
+		/// <summary>Performs the desync setup when an FK field has been changed. The entity referenced based on the FK field will be dereferenced and sync info will be removed.</summary>
+		/// <param name="fieldIndex">The fieldindex.</param>
+		protected override void PerformDesyncSetupFKFieldChange(int fieldIndex)
+		{
+			switch((AmazonSWAShipmentFieldIndex)fieldIndex)
+			{
+				case AmazonSWAShipmentFieldIndex.ShipmentID:
+					DesetupSyncShipment(true, false);
+					break;
+				default:
+					base.PerformDesyncSetupFKFieldChange(fieldIndex);
+					break;
+			}
+		}
 
 		/// <summary> Sets the related entity property to the entity specified. If the property is a collection, it will add the entity specified to that collection.</summary>
 		/// <param name="propertyName">Name of the property.</param>
@@ -116,6 +139,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			switch(propertyName)
 			{
+				case "Shipment":
+					this.Shipment = (ShipmentEntity)entity;
+					break;
 				default:
 					this.OnSetRelatedEntityProperty(propertyName, entity);
 					break;
@@ -138,6 +164,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 			RelationCollection toReturn = new RelationCollection();
 			switch(fieldName)
 			{
+				case "Shipment":
+					toReturn.Add(Relations.ShipmentEntityUsingShipmentID);
+					break;
 				default:
 					break;				
 			}
@@ -166,6 +195,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			switch(fieldName)
 			{
+				case "Shipment":
+					SetupSyncShipment(relatedEntity);
+					break;
 				default:
 					break;
 			}
@@ -179,6 +211,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			switch(fieldName)
 			{
+				case "Shipment":
+					DesetupSyncShipment(false, true);
+					break;
 				default:
 					break;
 			}
@@ -189,6 +224,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 		protected override List<IEntity2> GetDependingRelatedEntities()
 		{
 			List<IEntity2> toReturn = new List<IEntity2>();
+
+
 			return toReturn;
 		}
 		
@@ -198,6 +235,11 @@ namespace ShipWorks.Data.Model.EntityClasses
 		protected override List<IEntity2> GetDependentRelatedEntities()
 		{
 			List<IEntity2> toReturn = new List<IEntity2>();
+			if(_shipment!=null)
+			{
+				toReturn.Add(_shipment);
+			}
+
 			return toReturn;
 		}
 		
@@ -217,6 +259,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			if (SerializationHelper.Optimization != SerializationOptimization.Fast) 
 			{
+				info.AddValue("_shipment", (!this.MarkedForDeletion?_shipment:null));
 			}
 			// __LLBLGENPRO_USER_CODE_REGION_START GetObjectInfo
 			// __LLBLGENPRO_USER_CODE_REGION_END
@@ -229,14 +272,23 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <returns>A list of all the EntityRelation objects the type of this instance has. Hierarchy relations are excluded.</returns>
 		protected override List<IEntityRelation> GetAllRelations()
 		{
-			return new AmazonSWAAccountRelations().GetAllRelations();
+			return new AmazonSWAShipmentRelations().GetAllRelations();
+		}
+
+		/// <summary> Creates a new IRelationPredicateBucket object which contains the predicate expression and relation collection to fetch the related entity of type 'Shipment' to this entity.</summary>
+		/// <returns></returns>
+		public virtual IRelationPredicateBucket GetRelationInfoShipment()
+		{
+			IRelationPredicateBucket bucket = new RelationPredicateBucket();
+			bucket.PredicateExpression.Add(new FieldCompareValuePredicate(ShipmentFields.ShipmentID, null, ComparisonOperator.Equal, this.ShipmentID));
+			return bucket;
 		}
 		
 
 		/// <summary>Creates a new instance of the factory related to this entity</summary>
 		protected override IEntityFactory2 CreateEntityFactory()
 		{
-			return EntityFactoryCache2.GetEntityFactory(typeof(AmazonSWAAccountEntityFactory));
+			return EntityFactoryCache2.GetEntityFactory(typeof(AmazonSWAShipmentEntityFactory));
 		}
 #if !CF
 		/// <summary>Adds the member collections to the collections queue (base first)</summary>
@@ -275,6 +327,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		protected override Dictionary<string, object> GetRelatedData()
 		{
 			Dictionary<string, object> toReturn = new Dictionary<string, object>();
+			toReturn.Add("Shipment", _shipment);
 			return toReturn;
 		}
 
@@ -297,42 +350,75 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties = new Dictionary<string, Dictionary<string, string>>();
 			Dictionary<string, string> fieldHashtable;
 			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("ShipmentID", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("AmazonSWAAccountID", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
-			_fieldsCustomProperties.Add("RowVersion", fieldHashtable);
+			_fieldsCustomProperties.Add("Service", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
-			_fieldsCustomProperties.Add("AccountNumber", fieldHashtable);
+			_fieldsCustomProperties.Add("NonMachinable", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
-			_fieldsCustomProperties.Add("ShipEngineCarrierId", fieldHashtable);
+			_fieldsCustomProperties.Add("RequestedLabelFormat", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
-			_fieldsCustomProperties.Add("Description", fieldHashtable);
+			_fieldsCustomProperties.Add("Contents", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
-			_fieldsCustomProperties.Add("FirstName", fieldHashtable);
+			_fieldsCustomProperties.Add("NonDelivery", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
-			_fieldsCustomProperties.Add("MiddleName", fieldHashtable);
+			_fieldsCustomProperties.Add("ShipEngineLabelID", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
-			_fieldsCustomProperties.Add("LastName", fieldHashtable);
+			_fieldsCustomProperties.Add("DimsProfileID", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
-			_fieldsCustomProperties.Add("Company", fieldHashtable);
+			_fieldsCustomProperties.Add("DimsLength", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
-			_fieldsCustomProperties.Add("Street1", fieldHashtable);
+			_fieldsCustomProperties.Add("DimsWidth", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
-			_fieldsCustomProperties.Add("City", fieldHashtable);
+			_fieldsCustomProperties.Add("DimsHeight", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
-			_fieldsCustomProperties.Add("StateProvCode", fieldHashtable);
+			_fieldsCustomProperties.Add("DimsAddWeight", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
-			_fieldsCustomProperties.Add("PostalCode", fieldHashtable);
+			_fieldsCustomProperties.Add("DimsWeight", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
-			_fieldsCustomProperties.Add("CountryCode", fieldHashtable);
+			_fieldsCustomProperties.Add("InsuranceValue", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
-			_fieldsCustomProperties.Add("Email", fieldHashtable);
-			fieldHashtable = new Dictionary<string, string>();
-			_fieldsCustomProperties.Add("Phone", fieldHashtable);
+			_fieldsCustomProperties.Add("Insurance", fieldHashtable);
 		}
 		#endregion
 
+		/// <summary> Removes the sync logic for member _shipment</summary>
+		/// <param name="signalRelatedEntity">If set to true, it will call the related entity's UnsetRelatedEntity method</param>
+		/// <param name="resetFKFields">if set to true it will also reset the FK fields pointing to the related entity</param>
+		private void DesetupSyncShipment(bool signalRelatedEntity, bool resetFKFields)
+		{
+			this.PerformDesetupSyncRelatedEntity( _shipment, new PropertyChangedEventHandler( OnShipmentPropertyChanged ), "Shipment", ShipWorks.Data.Model.RelationClasses.StaticAmazonSWAShipmentRelations.ShipmentEntityUsingShipmentIDStatic, true, signalRelatedEntity, "AmazonSWA", false, new int[] { (int)AmazonSWAShipmentFieldIndex.ShipmentID } );
+			_shipment = null;
+		}
+		
+		/// <summary> setups the sync logic for member _shipment</summary>
+		/// <param name="relatedEntity">Instance to set as the related entity of type entityType</param>
+		private void SetupSyncShipment(IEntityCore relatedEntity)
+		{
+			if(_shipment!=relatedEntity)
+			{
+				DesetupSyncShipment(true, true);
+				_shipment = (ShipmentEntity)relatedEntity;
+				this.PerformSetupSyncRelatedEntity( _shipment, new PropertyChangedEventHandler( OnShipmentPropertyChanged ), "Shipment", ShipWorks.Data.Model.RelationClasses.StaticAmazonSWAShipmentRelations.ShipmentEntityUsingShipmentIDStatic, true, new string[] {  } );
+			}
+		}
+		
+		/// <summary>Handles property change events of properties in a related entity.</summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		private void OnShipmentPropertyChanged( object sender, PropertyChangedEventArgs e )
+		{
+			switch( e.PropertyName )
+			{
+				default:
+					break;
+			}
+		}
+
 		/// <summary> Initializes the class with empty data, as if it is a new Entity.</summary>
-		/// <param name="validator">The validator object for this AmazonSWAAccountEntity</param>
+		/// <param name="validator">The validator object for this AmazonSWAShipmentEntity</param>
 		/// <param name="fields">Fields of this entity</param>
 		private void InitClassEmpty(IValidator validator, IEntityFields2 fields)
 		{
@@ -350,9 +436,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 		#region Class Property Declarations
 		/// <summary> The relations object holding all relations of this entity with other entity classes.</summary>
-		public  static AmazonSWAAccountRelations Relations
+		public  static AmazonSWAShipmentRelations Relations
 		{
-			get	{ return new AmazonSWAAccountRelations(); }
+			get	{ return new AmazonSWAShipmentRelations(); }
 		}
 		
 		/// <summary> The custom properties for this entity type.</summary>
@@ -360,6 +446,13 @@ namespace ShipWorks.Data.Model.EntityClasses
 		public  static Dictionary<string, string> CustomProperties
 		{
 			get { return _customProperties;}
+		}
+
+		/// <summary> Creates a new PrefetchPathElement2 object which contains all the information to prefetch the related entities of type 'Shipment' for this entity.</summary>
+		/// <returns>Ready to use IPrefetchPathElement2 implementation.</returns>
+		public static IPrefetchPathElement2 PrefetchPathShipment
+		{
+			get { return new PrefetchPathElement2(new EntityCollection(EntityFactoryCache2.GetEntityFactory(typeof(ShipmentEntityFactory))), (IEntityRelation)GetRelationsForField("Shipment")[0], (int)ShipWorks.Data.Model.EntityType.AmazonSWAShipmentEntity, (int)ShipWorks.Data.Model.EntityType.ShipmentEntity, 0, null, null, null, null, "Shipment", SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToOne);	}
 		}
 
 
@@ -386,164 +479,200 @@ namespace ShipWorks.Data.Model.EntityClasses
 			get { return FieldsCustomProperties;}
 		}
 
-		/// <summary> The AmazonSWAAccountID property of the Entity AmazonSWAAccount<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "AmazonSWAAccount"."AmazonSWAAccountID"<br/>
+		/// <summary> The ShipmentID property of the Entity AmazonSWAShipment<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "AmazonSWAShipment"."ShipmentID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): false, true, true</remarks>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, true, false</remarks>
+		public virtual System.Int64 ShipmentID
+		{
+			get { return (System.Int64)GetValue((int)AmazonSWAShipmentFieldIndex.ShipmentID, true); }
+			set	{ SetValue((int)AmazonSWAShipmentFieldIndex.ShipmentID, value); }
+		}
+
+		/// <summary> The AmazonSWAAccountID property of the Entity AmazonSWAShipment<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "AmazonSWAShipment"."AmazonSWAAccountID"<br/>
+		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
 		public virtual System.Int64 AmazonSWAAccountID
 		{
-			get { return (System.Int64)GetValue((int)AmazonSWAAccountFieldIndex.AmazonSWAAccountID, true); }
-			set	{ SetValue((int)AmazonSWAAccountFieldIndex.AmazonSWAAccountID, value); }
+			get { return (System.Int64)GetValue((int)AmazonSWAShipmentFieldIndex.AmazonSWAAccountID, true); }
+			set	{ SetValue((int)AmazonSWAShipmentFieldIndex.AmazonSWAAccountID, value); }
 		}
 
-		/// <summary> The RowVersion property of the Entity AmazonSWAAccount<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "AmazonSWAAccount"."RowVersion"<br/>
-		/// Table field type characteristics (type, precision, scale, length): Timestamp, 0, 0, 2147483647<br/>
+		/// <summary> The Service property of the Entity AmazonSWAShipment<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "AmazonSWAShipment"."Service"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.Byte[] RowVersion
+		public virtual System.Int32 Service
 		{
-			get { return (System.Byte[])GetValue((int)AmazonSWAAccountFieldIndex.RowVersion, true); }
-
+			get { return (System.Int32)GetValue((int)AmazonSWAShipmentFieldIndex.Service, true); }
+			set	{ SetValue((int)AmazonSWAShipmentFieldIndex.Service, value); }
 		}
 
-		/// <summary> The AccountNumber property of the Entity AmazonSWAAccount<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "AmazonSWAAccount"."AccountNumber"<br/>
-		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
+		/// <summary> The NonMachinable property of the Entity AmazonSWAShipment<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "AmazonSWAShipment"."NonMachinable"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.Int64 AccountNumber
+		public virtual System.Boolean NonMachinable
 		{
-			get { return (System.Int64)GetValue((int)AmazonSWAAccountFieldIndex.AccountNumber, true); }
-			set	{ SetValue((int)AmazonSWAAccountFieldIndex.AccountNumber, value); }
+			get { return (System.Boolean)GetValue((int)AmazonSWAShipmentFieldIndex.NonMachinable, true); }
+			set	{ SetValue((int)AmazonSWAShipmentFieldIndex.NonMachinable, value); }
 		}
 
-		/// <summary> The ShipEngineCarrierId property of the Entity AmazonSWAAccount<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "AmazonSWAAccount"."ShipEngineCarrierId"<br/>
+		/// <summary> The RequestedLabelFormat property of the Entity AmazonSWAShipment<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "AmazonSWAShipment"."RequestedLabelFormat"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.Int32 RequestedLabelFormat
+		{
+			get { return (System.Int32)GetValue((int)AmazonSWAShipmentFieldIndex.RequestedLabelFormat, true); }
+			set	{ SetValue((int)AmazonSWAShipmentFieldIndex.RequestedLabelFormat, value); }
+		}
+
+		/// <summary> The Contents property of the Entity AmazonSWAShipment<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "AmazonSWAShipment"."Contents"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.Int32 Contents
+		{
+			get { return (System.Int32)GetValue((int)AmazonSWAShipmentFieldIndex.Contents, true); }
+			set	{ SetValue((int)AmazonSWAShipmentFieldIndex.Contents, value); }
+		}
+
+		/// <summary> The NonDelivery property of the Entity AmazonSWAShipment<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "AmazonSWAShipment"."NonDelivery"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.Int32 NonDelivery
+		{
+			get { return (System.Int32)GetValue((int)AmazonSWAShipmentFieldIndex.NonDelivery, true); }
+			set	{ SetValue((int)AmazonSWAShipmentFieldIndex.NonDelivery, value); }
+		}
+
+		/// <summary> The ShipEngineLabelID property of the Entity AmazonSWAShipment<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "AmazonSWAShipment"."ShipEngineLabelID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 12<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.String ShipEngineCarrierId
+		public virtual System.String ShipEngineLabelID
 		{
-			get { return (System.String)GetValue((int)AmazonSWAAccountFieldIndex.ShipEngineCarrierId, true); }
-			set	{ SetValue((int)AmazonSWAAccountFieldIndex.ShipEngineCarrierId, value); }
+			get { return (System.String)GetValue((int)AmazonSWAShipmentFieldIndex.ShipEngineLabelID, true); }
+			set	{ SetValue((int)AmazonSWAShipmentFieldIndex.ShipEngineLabelID, value); }
 		}
 
-		/// <summary> The Description property of the Entity AmazonSWAAccount<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "AmazonSWAAccount"."Description"<br/>
-		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
+		/// <summary> The DimsProfileID property of the Entity AmazonSWAShipment<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "AmazonSWAShipment"."DimsProfileID"<br/>
+		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.String Description
+		public virtual System.Int64 DimsProfileID
 		{
-			get { return (System.String)GetValue((int)AmazonSWAAccountFieldIndex.Description, true); }
-			set	{ SetValue((int)AmazonSWAAccountFieldIndex.Description, value); }
+			get { return (System.Int64)GetValue((int)AmazonSWAShipmentFieldIndex.DimsProfileID, true); }
+			set	{ SetValue((int)AmazonSWAShipmentFieldIndex.DimsProfileID, value); }
 		}
 
-		/// <summary> The FirstName property of the Entity AmazonSWAAccount<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "AmazonSWAAccount"."FirstName"<br/>
-		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 30<br/>
+		/// <summary> The DimsLength property of the Entity AmazonSWAShipment<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "AmazonSWAShipment"."DimsLength"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Float, 38, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.String FirstName
+		public virtual System.Double DimsLength
 		{
-			get { return (System.String)GetValue((int)AmazonSWAAccountFieldIndex.FirstName, true); }
-			set	{ SetValue((int)AmazonSWAAccountFieldIndex.FirstName, value); }
+			get { return (System.Double)GetValue((int)AmazonSWAShipmentFieldIndex.DimsLength, true); }
+			set	{ SetValue((int)AmazonSWAShipmentFieldIndex.DimsLength, value); }
 		}
 
-		/// <summary> The MiddleName property of the Entity AmazonSWAAccount<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "AmazonSWAAccount"."MiddleName"<br/>
-		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 30<br/>
+		/// <summary> The DimsWidth property of the Entity AmazonSWAShipment<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "AmazonSWAShipment"."DimsWidth"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Float, 38, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.String MiddleName
+		public virtual System.Double DimsWidth
 		{
-			get { return (System.String)GetValue((int)AmazonSWAAccountFieldIndex.MiddleName, true); }
-			set	{ SetValue((int)AmazonSWAAccountFieldIndex.MiddleName, value); }
+			get { return (System.Double)GetValue((int)AmazonSWAShipmentFieldIndex.DimsWidth, true); }
+			set	{ SetValue((int)AmazonSWAShipmentFieldIndex.DimsWidth, value); }
 		}
 
-		/// <summary> The LastName property of the Entity AmazonSWAAccount<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "AmazonSWAAccount"."LastName"<br/>
-		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 30<br/>
+		/// <summary> The DimsHeight property of the Entity AmazonSWAShipment<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "AmazonSWAShipment"."DimsHeight"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Float, 38, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.String LastName
+		public virtual System.Double DimsHeight
 		{
-			get { return (System.String)GetValue((int)AmazonSWAAccountFieldIndex.LastName, true); }
-			set	{ SetValue((int)AmazonSWAAccountFieldIndex.LastName, value); }
+			get { return (System.Double)GetValue((int)AmazonSWAShipmentFieldIndex.DimsHeight, true); }
+			set	{ SetValue((int)AmazonSWAShipmentFieldIndex.DimsHeight, value); }
 		}
 
-		/// <summary> The Company property of the Entity AmazonSWAAccount<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "AmazonSWAAccount"."Company"<br/>
-		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 30<br/>
+		/// <summary> The DimsAddWeight property of the Entity AmazonSWAShipment<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "AmazonSWAShipment"."DimsAddWeight"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.String Company
+		public virtual System.Boolean DimsAddWeight
 		{
-			get { return (System.String)GetValue((int)AmazonSWAAccountFieldIndex.Company, true); }
-			set	{ SetValue((int)AmazonSWAAccountFieldIndex.Company, value); }
+			get { return (System.Boolean)GetValue((int)AmazonSWAShipmentFieldIndex.DimsAddWeight, true); }
+			set	{ SetValue((int)AmazonSWAShipmentFieldIndex.DimsAddWeight, value); }
 		}
 
-		/// <summary> The Street1 property of the Entity AmazonSWAAccount<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "AmazonSWAAccount"."Street1"<br/>
-		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 43<br/>
+		/// <summary> The DimsWeight property of the Entity AmazonSWAShipment<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "AmazonSWAShipment"."DimsWeight"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Float, 38, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.String Street1
+		public virtual System.Double DimsWeight
 		{
-			get { return (System.String)GetValue((int)AmazonSWAAccountFieldIndex.Street1, true); }
-			set	{ SetValue((int)AmazonSWAAccountFieldIndex.Street1, value); }
+			get { return (System.Double)GetValue((int)AmazonSWAShipmentFieldIndex.DimsWeight, true); }
+			set	{ SetValue((int)AmazonSWAShipmentFieldIndex.DimsWeight, value); }
 		}
 
-		/// <summary> The City property of the Entity AmazonSWAAccount<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "AmazonSWAAccount"."City"<br/>
-		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 25<br/>
+		/// <summary> The InsuranceValue property of the Entity AmazonSWAShipment<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "AmazonSWAShipment"."InsuranceValue"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Money, 19, 4, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.String City
+		public virtual System.Decimal InsuranceValue
 		{
-			get { return (System.String)GetValue((int)AmazonSWAAccountFieldIndex.City, true); }
-			set	{ SetValue((int)AmazonSWAAccountFieldIndex.City, value); }
+			get { return (System.Decimal)GetValue((int)AmazonSWAShipmentFieldIndex.InsuranceValue, true); }
+			set	{ SetValue((int)AmazonSWAShipmentFieldIndex.InsuranceValue, value); }
 		}
 
-		/// <summary> The StateProvCode property of the Entity AmazonSWAAccount<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "AmazonSWAAccount"."StateProvCode"<br/>
-		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
+		/// <summary> The Insurance property of the Entity AmazonSWAShipment<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "AmazonSWAShipment"."Insurance"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.String StateProvCode
+		public virtual System.Boolean Insurance
 		{
-			get { return (System.String)GetValue((int)AmazonSWAAccountFieldIndex.StateProvCode, true); }
-			set	{ SetValue((int)AmazonSWAAccountFieldIndex.StateProvCode, value); }
+			get { return (System.Boolean)GetValue((int)AmazonSWAShipmentFieldIndex.Insurance, true); }
+			set	{ SetValue((int)AmazonSWAShipmentFieldIndex.Insurance, value); }
 		}
 
-		/// <summary> The PostalCode property of the Entity AmazonSWAAccount<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "AmazonSWAAccount"."PostalCode"<br/>
-		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 10<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.String PostalCode
+		/// <summary> Gets / sets related entity of type 'ShipmentEntity' which has to be set using a fetch action earlier. If no related entity is set for this property, null is returned.<br/><br/>
+		/// </summary>
+		[Browsable(true)]
+		public virtual ShipmentEntity Shipment
 		{
-			get { return (System.String)GetValue((int)AmazonSWAAccountFieldIndex.PostalCode, true); }
-			set	{ SetValue((int)AmazonSWAAccountFieldIndex.PostalCode, value); }
-		}
-
-		/// <summary> The CountryCode property of the Entity AmazonSWAAccount<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "AmazonSWAAccount"."CountryCode"<br/>
-		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.String CountryCode
-		{
-			get { return (System.String)GetValue((int)AmazonSWAAccountFieldIndex.CountryCode, true); }
-			set	{ SetValue((int)AmazonSWAAccountFieldIndex.CountryCode, value); }
-		}
-
-		/// <summary> The Email property of the Entity AmazonSWAAccount<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "AmazonSWAAccount"."Email"<br/>
-		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.String Email
-		{
-			get { return (System.String)GetValue((int)AmazonSWAAccountFieldIndex.Email, true); }
-			set	{ SetValue((int)AmazonSWAAccountFieldIndex.Email, value); }
-		}
-
-		/// <summary> The Phone property of the Entity AmazonSWAAccount<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "AmazonSWAAccount"."Phone"<br/>
-		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 15<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.String Phone
-		{
-			get { return (System.String)GetValue((int)AmazonSWAAccountFieldIndex.Phone, true); }
-			set	{ SetValue((int)AmazonSWAAccountFieldIndex.Phone, value); }
+			get { return _shipment; }
+			set
+			{
+				if(this.IsDeserializing)
+				{
+					SetupSyncShipment(value);
+					CallSetRelatedEntityDuringDeserialization(value, "AmazonSWA");
+				}
+				else
+				{
+					if(value==null)
+					{
+						bool raisePropertyChanged = (_shipment !=null);
+						DesetupSyncShipment(true, true);
+						if(raisePropertyChanged)
+						{
+							OnPropertyChanged("Shipment");
+						}
+					}
+					else
+					{
+						if(_shipment!=value)
+						{
+							((IEntity2)value).SetRelatedEntity(this, "AmazonSWA");
+							SetupSyncShipment(value);
+						}
+					}
+				}
+			}
 		}
 	
 		/// <summary> Gets the type of the hierarchy this entity is in. </summary>
@@ -562,7 +691,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		[Browsable(false), XmlIgnore]
 		protected override int LLBLGenProEntityTypeValue 
 		{ 
-			get { return (int)ShipWorks.Data.Model.EntityType.AmazonSWAAccountEntity; }
+			get { return (int)ShipWorks.Data.Model.EntityType.AmazonSWAShipmentEntity; }
 		}
 
 		#endregion

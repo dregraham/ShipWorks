@@ -1036,6 +1036,8 @@
     <Compile Include="Products\Export\IProductExcelWriter.cs" />
     <Compile Include="Products\Import\FailedProductImportException.cs" />
     <Compile Include="Products\Import\IImportProductsResult.cs" />
+    <Compile Include="Shipping\Carriers\Amazon\SWA\AmazonSWAServiceType.cs" />
+    <Compile Include="Shipping\Carriers\Amazon\SWA\IAmazonSWAAccountRepository.cs" />
     <Compile Include="Shipping\Insurance\InsureShip\IInsureShipClaim.cs" />
     <Compile Include="Shipping\Insurance\InsureShip\IInsureShipClaimValidator.cs" />
     <Compile Include="Shipping\Insurance\InsureShip\InsureShipClaimValidator.cs" />

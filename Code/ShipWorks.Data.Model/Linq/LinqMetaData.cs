@@ -107,6 +107,12 @@ namespace ShipWorks.Data.Model.Linq
 				case ShipWorks.Data.Model.EntityType.AmazonSWAAccountEntity:
 					toReturn = this.AmazonSWAAccount;
 					break;
+				case ShipWorks.Data.Model.EntityType.AmazonSWAProfileEntity:
+					toReturn = this.AmazonSWAProfile;
+					break;
+				case ShipWorks.Data.Model.EntityType.AmazonSWAShipmentEntity:
+					toReturn = this.AmazonSWAShipment;
+					break;
 				case ShipWorks.Data.Model.EntityType.AmeriCommerceStoreEntity:
 					toReturn = this.AmeriCommerceStore;
 					break;
@@ -871,6 +877,18 @@ namespace ShipWorks.Data.Model.Linq
 		public DataSource2<AmazonSWAAccountEntity> AmazonSWAAccount
 		{
 			get { return new DataSource2<AmazonSWAAccountEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
+		}
+		
+		/// <summary>returns the datasource to use in a Linq query when targeting AmazonSWAProfileEntity instances in the database.</summary>
+		public DataSource2<AmazonSWAProfileEntity> AmazonSWAProfile
+		{
+			get { return new DataSource2<AmazonSWAProfileEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
+		}
+		
+		/// <summary>returns the datasource to use in a Linq query when targeting AmazonSWAShipmentEntity instances in the database.</summary>
+		public DataSource2<AmazonSWAShipmentEntity> AmazonSWAShipment
+		{
+			get { return new DataSource2<AmazonSWAShipmentEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
 		}
 		
 		/// <summary>returns the datasource to use in a Linq query when targeting AmeriCommerceStoreEntity instances in the database.</summary>

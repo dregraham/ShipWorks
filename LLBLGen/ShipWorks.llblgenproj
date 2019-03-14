@@ -358,6 +358,36 @@
           <Field Name="Street1" Type="string" MaxLength="43" FieldIndex="9" />
         </Fields>
       </EntityDefinition>
+      <EntityDefinition Name="AmazonSWAProfile" ObjectID="733701c5-2956-4896-a97c-24ba604083e4">
+        <Fields>
+          <Field Name="AmazonSWAAccountID" Type="long" IsOptional="true" Precision="19" FieldIndex="1" />
+          <Field Name="Contents" Type="int" IsOptional="true" Precision="10" FieldIndex="4" />
+          <Field Name="NonDelivery" Type="int" IsOptional="true" Precision="10" FieldIndex="5" />
+          <Field Name="NonMachinable" Type="bool" IsOptional="true" FieldIndex="3" />
+          <Field Name="Service" Type="int" IsOptional="true" Precision="10" FieldIndex="2" />
+          <Field Name="ShippingProfileID" Type="long" IsPrimaryKey="true" FieldIndex="0" />
+        </Fields>
+      </EntityDefinition>
+      <EntityDefinition Name="AmazonSWAShipment" ObjectID="4ccfc76b-84e0-42ad-a690-cc49b38246be">
+        <Fields>
+          <Field Name="AmazonSWAAccountID" Type="long" Precision="19" FieldIndex="1" />
+          <Field Name="Contents" Type="int" Precision="10" FieldIndex="5" />
+          <Field Name="DimsAddWeight" Type="bool" FieldIndex="12" />
+          <Field Name="DimsHeight" Type="double" Precision="38" FieldIndex="11" />
+          <Field Name="DimsLength" Type="double" Precision="38" FieldIndex="9" />
+          <Field Name="DimsProfileID" Type="long" Precision="19" FieldIndex="8" />
+          <Field Name="DimsWeight" Type="double" Precision="38" FieldIndex="13" />
+          <Field Name="DimsWidth" Type="double" Precision="38" FieldIndex="10" />
+          <Field Name="Insurance" Type="bool" FieldIndex="15" />
+          <Field Name="InsuranceValue" Type="decimal" Precision="19" Scale="4" FieldIndex="14" />
+          <Field Name="NonDelivery" Type="int" Precision="10" FieldIndex="6" />
+          <Field Name="NonMachinable" Type="bool" FieldIndex="3" />
+          <Field Name="RequestedLabelFormat" Type="int" Precision="10" FieldIndex="4" />
+          <Field Name="Service" Type="int" Precision="10" FieldIndex="2" />
+          <Field Name="ShipEngineLabelID" Type="string" MaxLength="12" FieldIndex="7" />
+          <Field Name="ShipmentID" Type="long" IsPrimaryKey="true" FieldIndex="0" />
+        </Fields>
+      </EntityDefinition>
       <EntityDefinition Name="AmeriCommerceStore" ObjectID="8bf58023-525f-4754-9192-e4c497ab6e82" InheritanceType="2">
         <Fields>
           <Field Name="Password" Type="string" MaxLength="70" FieldIndex="1" />
@@ -3640,6 +3670,16 @@
           <FieldFieldRelationship FkField="ShipmentID" PkField="ShipmentID" />
         </FieldRelationships>
       </NormalRelationship>
+      <NormalRelationship Name="AmazonSWAProfile.ShippingProfile-ShippingProfile.AmazonSWA" Start=":AmazonSWAProfile" End=":ShippingProfile" StartNavigator="ShippingProfile" EndNavigator="AmazonSWA" Type="1" StartIsOptional="true" DeleteRuleAction="1">
+        <FieldRelationships>
+          <FieldFieldRelationship FkField="ShippingProfileID" PkField="ShippingProfileID" />
+        </FieldRelationships>
+      </NormalRelationship>
+      <NormalRelationship Name="AmazonSWAShipment.Shipment-Shipment.AmazonSWA" Start=":AmazonSWAShipment" End=":Shipment" StartNavigator="Shipment" EndNavigator="AmazonSWA" Type="1" StartIsOptional="true" DeleteRuleAction="1">
+        <FieldRelationships>
+          <FieldFieldRelationship FkField="ShipmentID" PkField="ShipmentID" />
+        </FieldRelationships>
+      </NormalRelationship>
       <NormalRelationship Name="AsendiaProfile.ShippingProfile-ShippingProfile.Asendia" Start=":AsendiaProfile" End=":ShippingProfile" StartNavigator="ShippingProfile" EndNavigator="Asendia" Type="1" StartIsOptional="true" DeleteRuleAction="1">
         <FieldRelationships>
           <FieldFieldRelationship FkField="ShippingProfileID" PkField="ShippingProfileID" />
@@ -4499,7 +4539,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2019-03-13T22:00:05.6623518Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2019-03-14T02:16:47.2067286Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -4749,6 +4789,46 @@
                     <Field Name="CountryCode" Ordinal="14" DbType="12" Length="50" />
                     <Field Name="Email" Ordinal="15" DbType="12" Length="50" />
                     <Field Name="Phone" Ordinal="16" DbType="12" Length="15" />
+                  </Fields>
+                </Table>
+                <Table Name="AmazonSWAProfile">
+                  <PkConstraintName Name="PK_AmazonSWAProfile" />
+                  <Fields>
+                    <Field Name="ShippingProfileID" Ordinal="1" IsPrimaryKey="true" DbType="0" Precision="19" />
+                    <Field Name="AmazonSWAAccountID" Ordinal="2" IsOptional="true" DbType="0" Precision="19" />
+                    <Field Name="Service" Ordinal="3" IsOptional="true" DbType="8" Precision="10" />
+                    <Field Name="NonMachinable" Ordinal="4" IsOptional="true" DbType="2" />
+                    <Field Name="Contents" Ordinal="5" IsOptional="true" DbType="8" Precision="10" />
+                    <Field Name="NonDelivery" Ordinal="6" IsOptional="true" DbType="8" Precision="10" />
+                  </Fields>
+                </Table>
+                <Table Name="AmazonSWAShipment">
+                  <PkConstraintName Name="PK_AmazonSWAShipment" />
+                  <Fields>
+                    <Field Name="ShipmentID" Ordinal="1" IsPrimaryKey="true" DbType="0" Precision="19" />
+                    <Field Name="AmazonSWAAccountID" Ordinal="2" DbType="0" Precision="19">
+                      <CustomProperties>
+                        <CustomProperty Name="AuditFormat" Value="4" />
+                      </CustomProperties>
+                    </Field>
+                    <Field Name="Service" Ordinal="3" DbType="8" Precision="10">
+                      <CustomProperties>
+                        <CustomProperty Name="AuditFormat" Value="130" />
+                      </CustomProperties>
+                    </Field>
+                    <Field Name="NonMachinable" Ordinal="4" DbType="2" />
+                    <Field Name="RequestedLabelFormat" Ordinal="5" DbType="8" Precision="10" />
+                    <Field Name="Contents" Ordinal="6" DbType="8" Precision="10" />
+                    <Field Name="NonDelivery" Ordinal="7" DbType="8" Precision="10" />
+                    <Field Name="ShipEngineLabelID" Ordinal="8" DbType="12" Length="12" />
+                    <Field Name="DimsProfileID" Ordinal="9" DbType="0" Precision="19" />
+                    <Field Name="DimsLength" Ordinal="10" DbType="6" Precision="38" />
+                    <Field Name="DimsWidth" Ordinal="11" DbType="6" Precision="38" />
+                    <Field Name="DimsHeight" Ordinal="12" DbType="6" Precision="38" />
+                    <Field Name="DimsAddWeight" Ordinal="13" DbType="2" />
+                    <Field Name="DimsWeight" Ordinal="14" DbType="6" Precision="38" />
+                    <Field Name="InsuranceValue" Ordinal="15" DbType="9" Precision="19" Scale="4" />
+                    <Field Name="Insurance" Ordinal="16" DbType="2" />
                   </Fields>
                 </Table>
                 <Table Name="AmeriCommerceStore">
@@ -9699,6 +9779,16 @@
                 <FieldPair PkField="dbo:Store:StoreID" FkField="dbo:AmazonStore:StoreID" />
               </FieldPairs>
             </ForeignKeyConstraint>
+            <ForeignKeyConstraint Name="dbo:AmazonSWAProfile:FK_AmazonSWAProfile_ShippingProfile" DeleteRuleAction="1">
+              <FieldPairs>
+                <FieldPair PkField="dbo:ShippingProfile:ShippingProfileID" FkField="dbo:AmazonSWAProfile:ShippingProfileID" />
+              </FieldPairs>
+            </ForeignKeyConstraint>
+            <ForeignKeyConstraint Name="dbo:AmazonSWAShipment:FK_AmazonSWAShipment_Shipment" DeleteRuleAction="1">
+              <FieldPairs>
+                <FieldPair PkField="dbo:Shipment:ShipmentID" FkField="dbo:AmazonSWAShipment:ShipmentID" />
+              </FieldPairs>
+            </ForeignKeyConstraint>
             <ForeignKeyConstraint Name="dbo:AmeriCommerceStore:FK_AmeriCommerceStore_Store">
               <FieldPairs>
                 <FieldPair PkField="dbo:Store:StoreID" FkField="dbo:AmeriCommerceStore:StoreID" />
@@ -10941,6 +11031,36 @@
             <FieldMapping FieldName="ShipEngineCarrierId" TargetFieldName="ShipEngineCarrierId" />
             <FieldMapping FieldName="StateProvCode" TargetFieldName="StateProvCode" />
             <FieldMapping FieldName="Street1" TargetFieldName="Street1" />
+          </FieldMappings>
+        </EntityMapping>
+        <EntityMapping EntityName=":AmazonSWAProfile" TargetName="ShipWorksLocal:dbo:AmazonSWAProfile">
+          <FieldMappings>
+            <FieldMapping FieldName="AmazonSWAAccountID" TargetFieldName="AmazonSWAAccountID" />
+            <FieldMapping FieldName="Contents" TargetFieldName="Contents" />
+            <FieldMapping FieldName="NonDelivery" TargetFieldName="NonDelivery" />
+            <FieldMapping FieldName="NonMachinable" TargetFieldName="NonMachinable" />
+            <FieldMapping FieldName="Service" TargetFieldName="Service" />
+            <FieldMapping FieldName="ShippingProfileID" TargetFieldName="ShippingProfileID" />
+          </FieldMappings>
+        </EntityMapping>
+        <EntityMapping EntityName=":AmazonSWAShipment" TargetName="ShipWorksLocal:dbo:AmazonSWAShipment">
+          <FieldMappings>
+            <FieldMapping FieldName="AmazonSWAAccountID" TargetFieldName="AmazonSWAAccountID" />
+            <FieldMapping FieldName="Contents" TargetFieldName="Contents" />
+            <FieldMapping FieldName="DimsAddWeight" TargetFieldName="DimsAddWeight" />
+            <FieldMapping FieldName="DimsHeight" TargetFieldName="DimsHeight" />
+            <FieldMapping FieldName="DimsLength" TargetFieldName="DimsLength" />
+            <FieldMapping FieldName="DimsProfileID" TargetFieldName="DimsProfileID" />
+            <FieldMapping FieldName="DimsWeight" TargetFieldName="DimsWeight" />
+            <FieldMapping FieldName="DimsWidth" TargetFieldName="DimsWidth" />
+            <FieldMapping FieldName="Insurance" TargetFieldName="Insurance" />
+            <FieldMapping FieldName="InsuranceValue" TargetFieldName="InsuranceValue" />
+            <FieldMapping FieldName="NonDelivery" TargetFieldName="NonDelivery" />
+            <FieldMapping FieldName="NonMachinable" TargetFieldName="NonMachinable" />
+            <FieldMapping FieldName="RequestedLabelFormat" TargetFieldName="RequestedLabelFormat" />
+            <FieldMapping FieldName="Service" TargetFieldName="Service" />
+            <FieldMapping FieldName="ShipEngineLabelID" TargetFieldName="ShipEngineLabelID" />
+            <FieldMapping FieldName="ShipmentID" TargetFieldName="ShipmentID" />
           </FieldMappings>
         </EntityMapping>
         <EntityMapping EntityName=":AmeriCommerceStore" TargetName="ShipWorksLocal:dbo:AmeriCommerceStore">

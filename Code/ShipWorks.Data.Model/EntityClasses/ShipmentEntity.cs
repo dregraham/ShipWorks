@@ -38,6 +38,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		private EntityCollection<OrderEntity> _orderCollectionViaValidatedAddress;
 		private OrderEntity _order;
 		private AmazonSFPShipmentEntity _amazonSFP;
+		private AmazonSWAShipmentEntity _amazonSWA;
 		private AsendiaShipmentEntity _asendia;
 		private BestRateShipmentEntity _bestRate;
 		private DhlExpressShipmentEntity _dhlExpress;
@@ -72,6 +73,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 			public static readonly string OrderCollectionViaValidatedAddress = "OrderCollectionViaValidatedAddress";
 			/// <summary>Member name AmazonSFP</summary>
 			public static readonly string AmazonSFP = "AmazonSFP";
+			/// <summary>Member name AmazonSWA</summary>
+			public static readonly string AmazonSWA = "AmazonSWA";
 			/// <summary>Member name Asendia</summary>
 			public static readonly string Asendia = "Asendia";
 			/// <summary>Member name BestRate</summary>
@@ -162,6 +165,11 @@ namespace ShipWorks.Data.Model.EntityClasses
 				if(_amazonSFP!=null)
 				{
 					_amazonSFP.AfterSave+=new EventHandler(OnEntityAfterSave);
+				}
+				_amazonSWA = (AmazonSWAShipmentEntity)info.GetValue("_amazonSWA", typeof(AmazonSWAShipmentEntity));
+				if(_amazonSWA!=null)
+				{
+					_amazonSWA.AfterSave+=new EventHandler(OnEntityAfterSave);
 				}
 				_asendia = (AsendiaShipmentEntity)info.GetValue("_asendia", typeof(AsendiaShipmentEntity));
 				if(_asendia!=null)
@@ -275,6 +283,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 				case "AmazonSFP":
 					this.AmazonSFP = (AmazonSFPShipmentEntity)entity;
 					break;
+				case "AmazonSWA":
+					this.AmazonSWA = (AmazonSWAShipmentEntity)entity;
+					break;
 				case "Asendia":
 					this.Asendia = (AsendiaShipmentEntity)entity;
 					break;
@@ -345,6 +356,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 					break;
 				case "AmazonSFP":
 					toReturn.Add(Relations.AmazonSFPShipmentEntityUsingShipmentID);
+					break;
+				case "AmazonSWA":
+					toReturn.Add(Relations.AmazonSWAShipmentEntityUsingShipmentID);
 					break;
 				case "Asendia":
 					toReturn.Add(Relations.AsendiaShipmentEntityUsingShipmentID);
@@ -419,6 +433,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 				case "AmazonSFP":
 					SetupSyncAmazonSFP(relatedEntity);
 					break;
+				case "AmazonSWA":
+					SetupSyncAmazonSWA(relatedEntity);
+					break;
 				case "Asendia":
 					SetupSyncAsendia(relatedEntity);
 					break;
@@ -477,6 +494,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 				case "AmazonSFP":
 					DesetupSyncAmazonSFP(false, true);
 					break;
+				case "AmazonSWA":
+					DesetupSyncAmazonSWA(false, true);
+					break;
 				case "Asendia":
 					DesetupSyncAsendia(false, true);
 					break;
@@ -520,6 +540,11 @@ namespace ShipWorks.Data.Model.EntityClasses
 			if(_amazonSFP!=null)
 			{
 				toReturn.Add(_amazonSFP);
+			}
+
+			if(_amazonSWA!=null)
+			{
+				toReturn.Add(_amazonSWA);
 			}
 
 			if(_asendia!=null)
@@ -607,6 +632,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 
 
+
+
 			return toReturn;
 		}
 		
@@ -635,6 +662,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 				info.AddValue("_orderCollectionViaValidatedAddress", ((_orderCollectionViaValidatedAddress!=null) && (_orderCollectionViaValidatedAddress.Count>0) && !this.MarkedForDeletion)?_orderCollectionViaValidatedAddress:null);
 				info.AddValue("_order", (!this.MarkedForDeletion?_order:null));
 				info.AddValue("_amazonSFP", (!this.MarkedForDeletion?_amazonSFP:null));
+				info.AddValue("_amazonSWA", (!this.MarkedForDeletion?_amazonSWA:null));
 				info.AddValue("_asendia", (!this.MarkedForDeletion?_asendia:null));
 				info.AddValue("_bestRate", (!this.MarkedForDeletion?_bestRate:null));
 				info.AddValue("_dhlExpress", (!this.MarkedForDeletion?_dhlExpress:null));
@@ -712,6 +740,15 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			IRelationPredicateBucket bucket = new RelationPredicateBucket();
 			bucket.PredicateExpression.Add(new FieldCompareValuePredicate(AmazonSFPShipmentFields.ShipmentID, null, ComparisonOperator.Equal, this.ShipmentID));
+			return bucket;
+		}
+
+		/// <summary> Creates a new IRelationPredicateBucket object which contains the predicate expression and relation collection to fetch the related entity of type 'AmazonSWAShipment' to this entity.</summary>
+		/// <returns></returns>
+		public virtual IRelationPredicateBucket GetRelationInfoAmazonSWA()
+		{
+			IRelationPredicateBucket bucket = new RelationPredicateBucket();
+			bucket.PredicateExpression.Add(new FieldCompareValuePredicate(AmazonSWAShipmentFields.ShipmentID, null, ComparisonOperator.Equal, this.ShipmentID));
 			return bucket;
 		}
 
@@ -870,6 +907,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			toReturn.Add("ValidatedAddress", _validatedAddress);
 			toReturn.Add("OrderCollectionViaValidatedAddress", _orderCollectionViaValidatedAddress);
 			toReturn.Add("AmazonSFP", _amazonSFP);
+			toReturn.Add("AmazonSWA", _amazonSWA);
 			toReturn.Add("Asendia", _asendia);
 			toReturn.Add("BestRate", _bestRate);
 			toReturn.Add("DhlExpress", _dhlExpress);
@@ -1110,6 +1148,39 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
 		private void OnAmazonSFPPropertyChanged( object sender, PropertyChangedEventArgs e )
+		{
+			switch( e.PropertyName )
+			{
+				default:
+					break;
+			}
+		}
+
+		/// <summary> Removes the sync logic for member _amazonSWA</summary>
+		/// <param name="signalRelatedEntity">If set to true, it will call the related entity's UnsetRelatedEntity method</param>
+		/// <param name="resetFKFields">if set to true it will also reset the FK fields pointing to the related entity</param>
+		private void DesetupSyncAmazonSWA(bool signalRelatedEntity, bool resetFKFields)
+		{
+			this.PerformDesetupSyncRelatedEntity( _amazonSWA, new PropertyChangedEventHandler( OnAmazonSWAPropertyChanged ), "AmazonSWA", ShipWorks.Data.Model.RelationClasses.StaticShipmentRelations.AmazonSWAShipmentEntityUsingShipmentIDStatic, false, signalRelatedEntity, "Shipment", false, new int[] { (int)ShipmentFieldIndex.ShipmentID } );
+			_amazonSWA = null;
+		}
+		
+		/// <summary> setups the sync logic for member _amazonSWA</summary>
+		/// <param name="relatedEntity">Instance to set as the related entity of type entityType</param>
+		private void SetupSyncAmazonSWA(IEntityCore relatedEntity)
+		{
+			if(_amazonSWA!=relatedEntity)
+			{
+				DesetupSyncAmazonSWA(true, true);
+				_amazonSWA = (AmazonSWAShipmentEntity)relatedEntity;
+				this.PerformSetupSyncRelatedEntity( _amazonSWA, new PropertyChangedEventHandler( OnAmazonSWAPropertyChanged ), "AmazonSWA", ShipWorks.Data.Model.RelationClasses.StaticShipmentRelations.AmazonSWAShipmentEntityUsingShipmentIDStatic, false, new string[] {  } );
+			}
+		}
+		
+		/// <summary>Handles property change events of properties in a related entity.</summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		private void OnAmazonSWAPropertyChanged( object sender, PropertyChangedEventArgs e )
 		{
 			switch( e.PropertyName )
 			{
@@ -1525,6 +1596,13 @@ namespace ShipWorks.Data.Model.EntityClasses
 		public static IPrefetchPathElement2 PrefetchPathAmazonSFP
 		{
 			get { return new PrefetchPathElement2(new EntityCollection(EntityFactoryCache2.GetEntityFactory(typeof(AmazonSFPShipmentEntityFactory))), (IEntityRelation)GetRelationsForField("AmazonSFP")[0], (int)ShipWorks.Data.Model.EntityType.ShipmentEntity, (int)ShipWorks.Data.Model.EntityType.AmazonSFPShipmentEntity, 0, null, null, null, null, "AmazonSFP", SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToOne);	}
+		}
+
+		/// <summary> Creates a new PrefetchPathElement2 object which contains all the information to prefetch the related entities of type 'AmazonSWAShipment' for this entity.</summary>
+		/// <returns>Ready to use IPrefetchPathElement2 implementation.</returns>
+		public static IPrefetchPathElement2 PrefetchPathAmazonSWA
+		{
+			get { return new PrefetchPathElement2(new EntityCollection(EntityFactoryCache2.GetEntityFactory(typeof(AmazonSWAShipmentEntityFactory))), (IEntityRelation)GetRelationsForField("AmazonSWA")[0], (int)ShipWorks.Data.Model.EntityType.ShipmentEntity, (int)ShipWorks.Data.Model.EntityType.AmazonSWAShipmentEntity, 0, null, null, null, null, "AmazonSWA", SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToOne);	}
 		}
 
 		/// <summary> Creates a new PrefetchPathElement2 object which contains all the information to prefetch the related entities of type 'AsendiaShipment' for this entity.</summary>
@@ -2437,6 +2515,42 @@ namespace ShipWorks.Data.Model.EntityClasses
 						{
 							((IEntity2)value).SetRelatedEntity(this, "Shipment");
 							SetupSyncAmazonSFP(value);
+						}
+					}
+				}
+			}
+		}
+
+		/// <summary> Gets / sets related entity of type 'AmazonSWAShipmentEntity' which has to be set using a fetch action earlier. If no related entity is set for this property, null is returned.<br/><br/>
+		/// </summary>
+		[Browsable(true)]
+		public virtual AmazonSWAShipmentEntity AmazonSWA
+		{
+			get { return _amazonSWA; }
+			set
+			{
+				if(this.IsDeserializing)
+				{
+					SetupSyncAmazonSWA(value);
+					CallSetRelatedEntityDuringDeserialization(value, "Shipment");
+				}
+				else
+				{
+					if(value==null)
+					{
+						bool raisePropertyChanged = (_amazonSWA !=null);
+						DesetupSyncAmazonSWA(true, true);
+						if(raisePropertyChanged)
+						{
+							OnPropertyChanged("AmazonSWA");
+						}
+					}
+					else
+					{
+						if(_amazonSWA!=value)
+						{
+							((IEntity2)value).SetRelatedEntity(this, "Shipment");
+							SetupSyncAmazonSWA(value);
 						}
 					}
 				}

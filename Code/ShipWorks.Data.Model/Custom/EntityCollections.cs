@@ -861,6 +861,120 @@ namespace ShipWorks.Data.Model.Custom
 
 	
 	/// <summary>
+	/// Strongly typed collection of AmazonSWAProfileEntity
+	/// </summary>
+	public class AmazonSWAProfileCollection : EntityCollection<AmazonSWAProfileEntity>
+	{
+        /// <summary>
+        /// Gets the count of all AmazonSWAProfileEntity rows
+        /// </summary>
+        public static int GetCount(IDataAccessAdapter adapter)
+        {
+            return GetCount(adapter, null);
+        }
+
+        /// <summary>
+        /// Gets the count of all AmazonSWAProfileEntity rows filtered by the given predicate
+        /// </summary>
+        public static int GetCount(IDataAccessAdapter adapter, IPredicate filter)
+        {
+            RelationPredicateBucket bucket = null;
+
+            if (filter != null)
+            {
+                bucket = new RelationPredicateBucket(filter);
+            }
+
+            return adapter.GetDbCount(new AmazonSWAProfileEntityFactory().CreateFields(), bucket);
+        }
+
+        /// <summary>
+        /// Fetch a new collection object that matches the specified filter.
+        /// </summary>
+        public static AmazonSWAProfileCollection Fetch(IDataAccessAdapter adapter, IPredicate filter)
+        {
+			return Fetch(adapter, filter, null);
+        }
+
+		/// <summary>
+        /// Fetch a new collection object that matches the specified filter and uses the given prefetch.
+        /// </summary>
+        public static AmazonSWAProfileCollection Fetch(IDataAccessAdapter adapter, IPredicate filter, IPrefetchPath2 prefetchPath)
+        {
+            AmazonSWAProfileCollection collection = new AmazonSWAProfileCollection();
+
+            RelationPredicateBucket bucket = null;
+
+            if (filter != null)
+            {
+                bucket = new RelationPredicateBucket(filter);
+            }
+
+            adapter.FetchEntityCollection(collection, bucket, prefetchPath);
+
+            return collection;
+        }
+	}
+
+	
+	/// <summary>
+	/// Strongly typed collection of AmazonSWAShipmentEntity
+	/// </summary>
+	public class AmazonSWAShipmentCollection : EntityCollection<AmazonSWAShipmentEntity>
+	{
+        /// <summary>
+        /// Gets the count of all AmazonSWAShipmentEntity rows
+        /// </summary>
+        public static int GetCount(IDataAccessAdapter adapter)
+        {
+            return GetCount(adapter, null);
+        }
+
+        /// <summary>
+        /// Gets the count of all AmazonSWAShipmentEntity rows filtered by the given predicate
+        /// </summary>
+        public static int GetCount(IDataAccessAdapter adapter, IPredicate filter)
+        {
+            RelationPredicateBucket bucket = null;
+
+            if (filter != null)
+            {
+                bucket = new RelationPredicateBucket(filter);
+            }
+
+            return adapter.GetDbCount(new AmazonSWAShipmentEntityFactory().CreateFields(), bucket);
+        }
+
+        /// <summary>
+        /// Fetch a new collection object that matches the specified filter.
+        /// </summary>
+        public static AmazonSWAShipmentCollection Fetch(IDataAccessAdapter adapter, IPredicate filter)
+        {
+			return Fetch(adapter, filter, null);
+        }
+
+		/// <summary>
+        /// Fetch a new collection object that matches the specified filter and uses the given prefetch.
+        /// </summary>
+        public static AmazonSWAShipmentCollection Fetch(IDataAccessAdapter adapter, IPredicate filter, IPrefetchPath2 prefetchPath)
+        {
+            AmazonSWAShipmentCollection collection = new AmazonSWAShipmentCollection();
+
+            RelationPredicateBucket bucket = null;
+
+            if (filter != null)
+            {
+                bucket = new RelationPredicateBucket(filter);
+            }
+
+            adapter.FetchEntityCollection(collection, bucket, prefetchPath);
+
+            return collection;
+        }
+	}
+
+	
+	/// <summary>
 	/// Strongly typed collection of AmeriCommerceStoreEntity
 	/// </summary>
 	public class AmeriCommerceStoreCollection : EntityCollection<AmeriCommerceStoreEntity>

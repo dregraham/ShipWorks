@@ -1,24 +1,33 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing.Imaging;
+using System.Linq;
+using System.Threading.Tasks;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Enums;
+using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipEngine.ApiClient.Model;
+using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Common.IO.Hardware.Printers;
+using ShipWorks.Data;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Carriers.BestRate;
+using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Insurance;
 using ShipWorks.Shipping.Services;
 using ShipWorks.Shipping.Settings;
+using ShipWorks.Shipping.Settings.Origin;
 using ShipWorks.Shipping.ShipEngine;
 using ShipWorks.Shipping.Tracking;
 using ShipWorks.Templates.Processing.TemplateXml.ElementOutlines;
 
-namespace ShipWorks.Shipping.Carriers.Asendia
+namespace ShipWorks.Shipping.Carriers.Amazon.SWA
 {
     /// <summary>
-    /// Asendia implementation of shipment type
+    /// AmazonSWA implementation of shipment type
     /// </summary>
     [Component(RegistrationType.Self)]
     [KeyedComponent(typeof(ShipmentType), ShipmentTypeCode.AmazonSWA, SingleInstance = true)]
@@ -68,28 +77,27 @@ namespace ShipWorks.Shipping.Carriers.Asendia
         /// </summary>
         public override void ConfigureNewShipment(ShipmentEntity shipment)
         {
-            throw new NotImplementedException("ConfigureNewShipment");
-            //if (shipment.Asendia == null)
-            //{
-            //    shipment.Asendia = new AsendiaShipmentEntity(shipment.ShipmentID);
-            //}
+            if (shipment.AmazonSWA == null)
+            {
+                shipment.AmazonSWA = new AmazonSWAShipmentEntity(shipment.ShipmentID);
+            }
 
-            //AsendiaShipmentEntity asendiaShipment = shipment.Asendia;
-            //asendiaShipment.Service = AsendiaServiceType.AsendiaPriorityTracked;
-            //asendiaShipment.RequestedLabelFormat = (int) ThermalLanguage.None;
-            //asendiaShipment.Contents = (int) ShipEngineContentsType.Merchandise;
-            //asendiaShipment.NonDelivery = (int) ShipEngineNonDeliveryType.ReturnToSender;
-            //asendiaShipment.NonMachinable = false;
-            //asendiaShipment.AsendiaAccountID = 0;
-            //asendiaShipment.ShipEngineLabelID = string.Empty;
-            //asendiaShipment.DimsProfileID = 0;
-            //asendiaShipment.DimsLength = 0;
-            //asendiaShipment.DimsWidth = 0;
-            //asendiaShipment.DimsHeight = 0;
-            //asendiaShipment.DimsWeight = 0;
-            //asendiaShipment.DimsAddWeight = true;
-            //asendiaShipment.InsuranceValue = 0;
-            //asendiaShipment.Insurance = false;
+            AmazonSWAShipmentEntity swaShipment = shipment.AmazonSWA;
+            swaShipment.Service = (int) AmazonSWAServiceType.Standard;
+            swaShipment.RequestedLabelFormat = (int) ThermalLanguage.None;
+            swaShipment.Contents = (int) ShipEngineContentsType.Merchandise;
+            swaShipment.NonDelivery = (int) ShipEngineNonDeliveryType.ReturnToSender;
+            swaShipment.NonMachinable = false;
+            swaShipment.AmazonSWAAccountID = 0;
+            swaShipment.ShipEngineLabelID = string.Empty;
+            swaShipment.DimsProfileID = 0;
+            swaShipment.DimsLength = 0;
+            swaShipment.DimsWidth = 0;
+            swaShipment.DimsHeight = 0;
+            swaShipment.DimsWeight = 0;
+            swaShipment.DimsAddWeight = true;
+            swaShipment.InsuranceValue = 0;
+            swaShipment.Insurance = false;
 
             base.ConfigureNewShipment(shipment);
         }
@@ -99,17 +107,15 @@ namespace ShipWorks.Shipping.Carriers.Asendia
         /// </summary>
         public override IEnumerable<IPackageAdapter> GetPackageAdapters(ShipmentEntity shipment)
         {
-            throw new NotImplementedException("GetPackageAdapters");
+            if (shipment.AmazonSWA == null)
+            {
+                shippingManager.EnsureShipmentLoaded(shipment);
+            }
 
-            //if (shipment.Asendia == null)
-            //{
-            //    shippingManager.EnsureShipmentLoaded(shipment);
-            //}
-
-            //return new List<IPackageAdapter>()
-            //{
-            //    new AsendiaPackageAdapter(shipment)
-            //};
+            return new List<IPackageAdapter>()
+            {
+                new AmazonSWAPackageAdapter(shipment)
+            };
         }
 
         /// <summary>
@@ -117,19 +123,17 @@ namespace ShipWorks.Shipping.Carriers.Asendia
         /// </summary>
         public override ShipmentParcel GetParcelDetail(ShipmentEntity shipment, int parcelIndex)
         {
-            throw new NotImplementedException("GetParcelDetail");
+            if (shipment == null)
+            {
+                throw new ArgumentNullException("shipment");
+            }
 
-            //if (shipment == null)
-            //{
-            //    throw new ArgumentNullException("shipment");
-            //}
-
-            //return new ShipmentParcel(shipment, null,
-            //    new InsuranceChoice(shipment, shipment.Asendia, shipment.Asendia, null),
-            //    new DimensionsAdapter(shipment.Asendia))
-            //{
-            //    TotalWeight = shipment.TotalWeight
-            //};
+            return new ShipmentParcel(shipment, null,
+                new InsuranceChoice(shipment, shipment.AmazonSWA, shipment.AmazonSWA, null),
+                new DimensionsAdapter(shipment.AmazonSWA))
+            {
+                TotalWeight = shipment.TotalWeight
+            };
         }
 
         /// <summary>
@@ -137,28 +141,25 @@ namespace ShipWorks.Shipping.Carriers.Asendia
         /// when this method is called.
         /// </summary>
         public override string GetServiceDescription(ShipmentEntity shipment) =>
-            throw new NotImplementedException("GetServiceDescription");
-        // GetServiceDescriptionInternal(shipment.Asendia.Service);
+            GetServiceDescriptionInternal((AmazonSWAServiceType) shipment.AmazonSWA.Service);
 
         /// <summary>
         /// Get the carrier specific description of the shipping service used. The carrier specific data must already exist
         /// when this method is called.
         /// </summary>
         public override string GetServiceDescription(string serviceCode) =>
-            throw new NotImplementedException("GetServiceDescription");
-            //Functional.ParseInt(serviceCode)
-            //    .Match(x => GetServiceDescriptionInternal((AsendiaServiceType) x), _ => "Unknown");
+            Functional.ParseInt(serviceCode)
+                .Match(x => GetServiceDescriptionInternal((AmazonSWAServiceType) x), _ => "Unknown");
 
         /// <summary>
         /// Get the carrier specific description of the shipping service used. The carrier specific data must already exist
         /// when this method is called.
         /// </summary>
-        private string GetServiceDescriptionInternal(AsendiaServiceType service) =>
-            throw new NotImplementedException("GetServiceDescription");
-            // EnumHelper.GetDescription(service);
+        private string GetServiceDescriptionInternal(AmazonSWAServiceType service) =>
+            EnumHelper.GetDescription(service);
 
         /// <summary>
-        /// Gets the best rate shipping broker for Asendia
+        /// Gets the best rate shipping broker for AmazonSWA
         /// </summary>
         public override IBestRateShippingBroker GetShippingBroker(ShipmentEntity shipment)
         {
@@ -170,43 +171,40 @@ namespace ShipWorks.Shipping.Carriers.Asendia
         /// </summary>
         public override void UpdateDynamicShipmentData(ShipmentEntity shipment)
         {
-            throw new NotImplementedException("UpdateDynamicShipmentData");
             base.UpdateDynamicShipmentData(shipment);
 
             shipment.InsuranceProvider = (int) InsuranceProvider.ShipWorks;
 
-            shipment.RequestedLabelFormat = shipment.Asendia.RequestedLabelFormat;
-            shipment.Insurance = shipment.Asendia.Insurance;
+            shipment.RequestedLabelFormat = shipment.AmazonSWA.RequestedLabelFormat;
+            shipment.Insurance = shipment.AmazonSWA.Insurance;
         }
 
         /// <summary>
         /// Get the dims weight from a shipment, if any
         /// </summary>
         protected override double GetDimsWeight(IShipmentEntity shipment) =>
-            throw new NotImplementedException("GetDimsWeight");
-            // shipment.Asendia?.DimsAddWeight == true ? shipment.Asendia.DimsWeight : 0;
+            shipment.AmazonSWA?.DimsAddWeight == true ? shipment.AmazonSWA.DimsWeight : 0;
 
         /// <summary>
         /// Get the shipment common detail for tango
         /// </summary>
         public override ShipmentCommonDetail GetShipmentCommonDetail(ShipmentEntity shipment)
         {
-            throw new NotImplementedException("GetShipmentCommonDetail");
-            //ShipmentCommonDetail commonDetail = new ShipmentCommonDetail();
+            ShipmentCommonDetail commonDetail = new ShipmentCommonDetail();
 
-            //AsendiaShipmentEntity asendiaShipmentEntity = shipment.Asendia;
-            //AsendiaAccountEntity account = accountRepository.GetAccount(asendiaShipmentEntity.AsendiaAccountID);
+            AmazonSWAShipmentEntity swaShipment = shipment.AmazonSWA;
+            IAmazonSWAAccountEntity account = accountRepository.GetAccountReadOnly(shipment);
 
-            //commonDetail.OriginAccount = (account == null) ? "" : account.Description;
-            //commonDetail.ServiceType = (int) asendiaShipmentEntity.Service;
+            commonDetail.OriginAccount = (account == null) ? "" : account.Description;
+            commonDetail.ServiceType = swaShipment.Service;
 
-            //// Asendia doesn't have a packaging type concept, so default to 0
-            //commonDetail.PackagingType = 0;
-            //commonDetail.PackageLength = asendiaShipmentEntity.DimsLength;
-            //commonDetail.PackageWidth = asendiaShipmentEntity.DimsWidth;
-            //commonDetail.PackageHeight = asendiaShipmentEntity.DimsHeight;
+            // AmazonSWA doesn't have a packaging type concept, so default to 0
+            commonDetail.PackagingType = 0;
+            commonDetail.PackageLength = swaShipment.DimsLength;
+            commonDetail.PackageWidth = swaShipment.DimsWidth;
+            commonDetail.PackageHeight = swaShipment.DimsHeight;
 
-            //return commonDetail;
+            return commonDetail;
         }
 
         /// <summary>
@@ -214,10 +212,8 @@ namespace ShipWorks.Shipping.Carriers.Asendia
         /// </summary>
         public override void UpdateLabelFormatOfUnprocessedShipments(SqlAdapter adapter, int newLabelFormat, RelationPredicateBucket bucket)
         {
-            throw new NotImplementedException("UpdateLabelFormatOfUnprocessedShipments");
-            //bucket.Relations.Add(ShipmentEntity.Relations.AsendiaShipmentEntityUsingShipmentID);
-
-            //adapter.UpdateEntitiesDirectly(new AsendiaShipmentEntity { RequestedLabelFormat = newLabelFormat }, bucket);
+            bucket.Relations.Add(ShipmentEntity.Relations.AmazonSWAShipmentEntityUsingShipmentID);
+            adapter.UpdateEntitiesDirectly(new AmazonSWAShipmentEntity { RequestedLabelFormat = newLabelFormat }, bucket);
         }
 
         /// <summary>
@@ -225,69 +221,60 @@ namespace ShipWorks.Shipping.Carriers.Asendia
         /// shipping address and any store specific logic that may impact whether customs
         /// is required (i.e. eBay GSP).
         /// </summary>
-        /// <remarks>
-        /// Asendia only supports international shipments, so customs is always required
-        /// </remarks>
         protected override bool IsCustomsRequiredByShipment(IShipmentEntity shipment) => false;
 
         /// <summary>
-        /// Ensures that the carrier specific data for the shipment, such as the Asendia data, are loaded for the shipment.  If the data
+        /// Ensures that the carrier specific data for the shipment, such as the AmazonSWA data, are loaded for the shipment.  If the data
         /// already exists, nothing is done: it is not refreshed.  This method can throw SqlForeignKeyException if the root shipment
         /// or order has been deleted, ORMConcurrencyException if the shipment had been edited elsewhere, and ObjectDeletedException if the shipment
         /// had been deleted.
         /// </summary>
         protected override void LoadShipmentDataInternal(ShipmentEntity shipment, bool refreshIfPresent)
         {
-            throw new NotImplementedException("LoadShipmentDataInternal");
-            //ShipmentTypeDataService.LoadShipmentData(
-            //                this, shipment, shipment, "Asendia", typeof(AsendiaShipmentEntity), refreshIfPresent);
+            ShipmentTypeDataService.LoadShipmentData(
+                this, shipment, shipment, "AmazonSWA", typeof(AmazonSWAShipmentEntity), refreshIfPresent);
         }
 
         /// <summary>
         /// Gets the service types that are available for this shipment type (i.e have not been excluded).
         /// </summary>
-        public override IEnumerable<int> GetAvailableServiceTypes(IExcludedServiceTypeRepository repository)
-        {
-            throw new NotImplementedException("GetAvailableServiceTypes");
-            //return EnumHelper.GetEnumList<AsendiaServiceType>()
-            //    .Select(x => x.Value)
-            //    .Cast<int>()
-            //    .Except(GetExcludedServiceTypes(repository));
-        }
+        public override IEnumerable<int> GetAvailableServiceTypes(IExcludedServiceTypeRepository repository) =>
+            EnumHelper.GetEnumList<AmazonSWAServiceType>()
+                .Select(x => x.Value)
+                .Cast<int>()
+                .Except(GetExcludedServiceTypes(repository));
 
         /// <summary>
         /// Get the default profile for the shipment type
         /// </summary>
         public override void ConfigurePrimaryProfile(ShippingProfileEntity profile)
         {
-            throw new NotImplementedException("ConfigurePrimaryProfile");
-            //base.ConfigurePrimaryProfile(profile);
-            //profile.OriginID = (int) ShipmentOriginSource.Account;
+            base.ConfigurePrimaryProfile(profile);
+            profile.OriginID = (int) ShipmentOriginSource.Account;
 
-            //AsendiaProfileEntity asendia = profile.Asendia;
+            AmazonSWAProfileEntity swaProfile = profile.AmazonSWA;
 
-            //asendia.AsendiaAccountID = accountRepository.AccountsReadOnly.Any() ?
-            //    accountRepository.AccountsReadOnly.First().AsendiaAccountID :
-            //    0;
+            swaProfile.AmazonSWAAccountID = accountRepository.AccountsReadOnly.Any() ?
+                accountRepository.AccountsReadOnly.First().AmazonSWAAccountID :
+                0;
 
-            //asendia.Service = (int) AsendiaServiceType.AsendiaPriorityTracked;
-            //asendia.Contents = (int) ShipEngineContentsType.Merchandise;
-            //asendia.NonDelivery = (int) ShipEngineNonDeliveryType.ReturnToSender;
-            //asendia.NonMachinable = false;
+            swaProfile.Service = (int) AmazonSWAServiceType.Standard;
+            swaProfile.Contents = (int) ShipEngineContentsType.Merchandise;
+            swaProfile.NonDelivery = (int) ShipEngineNonDeliveryType.ReturnToSender;
+            swaProfile.NonMachinable = false;
         }
 
         /// Create the XML input to the XSL engine
         /// </summary>
         public override void GenerateTemplateElements(ElementOutline container, Func<ShipmentEntity> shipment, Func<ShipmentEntity> loaded)
         {
-            throw new NotImplementedException("GenerateTemplateElements");
-            //Lazy<List<TemplateLabelData>> labels = new Lazy<List<TemplateLabelData>>(() => LoadLabelData(shipment));
+            Lazy<List<TemplateLabelData>> labels = new Lazy<List<TemplateLabelData>>(() => LoadLabelData(shipment));
 
-            //// Add the labels content
-            //container.AddElement(
-            //    "Labels",
-            //    new LabelsOutline(container.Context, shipment, labels, ImageFormat.Png),
-            //    ElementOutline.If(() => shipment().Processed));
+            // Add the labels content
+            container.AddElement(
+                "Labels",
+                new LabelsOutline(container.Context, shipment, labels, ImageFormat.Png),
+                ElementOutline.If(() => shipment().Processed));
         }
 
         /// <summary>
@@ -295,14 +282,13 @@ namespace ShipWorks.Shipping.Carriers.Asendia
         /// </summary>
         private static List<TemplateLabelData> LoadLabelData(Func<ShipmentEntity> shipmentFactory)
         {
-            throw new NotImplementedException("LoadLabelData");
-            //MethodConditions.EnsureArgumentIsNotNull(shipmentFactory, nameof(shipmentFactory));
+            MethodConditions.EnsureArgumentIsNotNull(shipmentFactory, nameof(shipmentFactory));
 
-            //return DataResourceManager.GetConsumerResourceReferences(shipmentFactory().ShipmentID)
-            //    .Where(x => x.Label.StartsWith("LabelPrimary") || x.Label.StartsWith("LabelPart"))
-            //    .Select(x => new TemplateLabelData(null, "Label", x.Label.StartsWith("LabelPrimary") ?
-            //        TemplateLabelCategory.Primary : TemplateLabelCategory.Supplemental, x))
-            //    .ToList();
+            return DataResourceManager.GetConsumerResourceReferences(shipmentFactory().ShipmentID)
+                .Where(x => x.Label.StartsWith("LabelPrimary") || x.Label.StartsWith("LabelPart"))
+                .Select(x => new TemplateLabelData(null, "Label", x.Label.StartsWith("LabelPrimary") ?
+                    TemplateLabelCategory.Primary : TemplateLabelCategory.Supplemental, x))
+                .ToList();
         }
 
         /// <summary>
@@ -310,11 +296,10 @@ namespace ShipWorks.Shipping.Carriers.Asendia
         /// </summary>
         public override void SaveRequestedLabelFormat(ThermalLanguage requestedLabelFormat, ShipmentEntity shipment)
         {
-            throw new NotImplementedException("SaveRequestedLabelFormat");
-            //if (shipment.Asendia != null)
-            //{
-            //    shipment.Asendia.RequestedLabelFormat = (int) requestedLabelFormat;
-            //}
+            if (shipment.AmazonSWA != null)
+            {
+                shipment.AmazonSWA.RequestedLabelFormat = (int) requestedLabelFormat;
+            }
         }
 
         /// <summary>
@@ -322,20 +307,19 @@ namespace ShipWorks.Shipping.Carriers.Asendia
         /// </summary>
         public override TrackingResult TrackShipment(ShipmentEntity shipment)
         {
-            throw new NotImplementedException("TrackShipment");
-            //try
-            //{
-            //    TrackingInformation trackingInfo = Task.Run(() =>
-            //    {
-            //        return shipEngineWebClient.Track(shipment.Asendia.ShipEngineLabelID, ApiLogSource.Asendia);
-            //    }).Result;
+            try
+            {
+                TrackingInformation trackingInfo = Task.Run(() =>
+                {
+                    return shipEngineWebClient.Track(shipment.AmazonSWA.ShipEngineLabelID, ApiLogSource.AmazonSWA);
+                }).Result;
 
-            //    return trackingResultFactory.Create(trackingInfo);
-            //}
-            //catch (Exception)
-            //{
-            //    return new TrackingResult { Summary = $"<a href='http://tracking.asendiausa.com/t.aspx?p={shipment.TrackingNumber}' style='color:blue; background-color:white'>Click here to view tracking information online</a>" };
-            //}
+                return trackingResultFactory.Create(trackingInfo);
+            }
+            catch (Exception)
+            {
+                return new TrackingResult { Summary = $"<p>Tracking data is currently not available.</p>" };
+            }
         }
     }
 }

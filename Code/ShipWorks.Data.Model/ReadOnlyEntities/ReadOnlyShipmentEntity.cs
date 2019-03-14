@@ -112,6 +112,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             ProcessedWithUiMode = source.ProcessedWithUiMode;
             
             AmazonSFP = (IAmazonSFPShipmentEntity) source.AmazonSFP?.AsReadOnly(objectMap);
+            AmazonSWA = (IAmazonSWAShipmentEntity) source.AmazonSWA?.AsReadOnly(objectMap);
             Asendia = (IAsendiaShipmentEntity) source.Asendia?.AsReadOnly(objectMap);
             BestRate = (IBestRateShipmentEntity) source.BestRate?.AsReadOnly(objectMap);
             DhlExpress = (IDhlExpressShipmentEntity) source.DhlExpress?.AsReadOnly(objectMap);
@@ -582,6 +583,8 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         public Nullable<ShipWorks.Settings.UIMode> ProcessedWithUiMode { get; }
         
         public IAmazonSFPShipmentEntity AmazonSFP { get; }
+        
+        public IAmazonSWAShipmentEntity AmazonSWA { get; }
         
         public IAsendiaShipmentEntity Asendia { get; }
         
