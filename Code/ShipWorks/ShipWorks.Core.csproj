@@ -1036,6 +1036,12 @@
     <Compile Include="Products\Export\IProductExcelWriter.cs" />
     <Compile Include="Products\Import\FailedProductImportException.cs" />
     <Compile Include="Products\Import\IImportProductsResult.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\UploadDocuments\Request\FedExUploadImagesRequest.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\UploadDocuments\Request\Manipulators\FedExUploadImagesClientDetailManipulator.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\UploadDocuments\Request\Manipulators\FedExUploadImagesImageDetailManipulator.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\UploadDocuments\Request\Manipulators\FedExUploadImagesTransactionDetailManipulator.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\UploadDocuments\Request\Manipulators\FedExUploadImagesVersionManipulator.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\UploadDocuments\Request\Manipulators\FedExUploadImagesWebAuthenticationDetailManipulator.cs" />
     <Compile Include="Shipping\Insurance\InsureShip\IInsureShipClaim.cs" />
     <Compile Include="Shipping\Insurance\InsureShip\IInsureShipClaimValidator.cs" />
     <Compile Include="Shipping\Insurance\InsureShip\InsureShipClaimValidator.cs" />
@@ -11325,6 +11331,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Archiving\" />
+    <Folder Include="Shipping\Carriers\FedEx\Api\UploadDocuments\Response\" />
     <Folder Include="UI\Editors\" />
   </ItemGroup>
   <ItemGroup>
