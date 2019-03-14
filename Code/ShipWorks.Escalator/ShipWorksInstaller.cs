@@ -114,9 +114,6 @@ namespace ShipWorks.Escalator
 
             for (int secondsLeft = countDownInSeconds; secondsLeft > 0; secondsLeft--)
             {
-                string message = $"The application will automatically close in {secondsLeft} seconds.";
-                autoUpdateStatusProvider.UpdateStatus(message);
-                log.Info(message);
                 Thread.Sleep(1000);
 
                 // Check to see if the UI has been closed, if so skip to the end
@@ -125,6 +122,10 @@ namespace ShipWorks.Escalator
                     log.Info("It looks like ShipWorks has been closed, skipping the rest of the countdown.");
                     return;
                 }
+
+                string message = $"The application will automatically close in {secondsLeft} seconds.";
+                autoUpdateStatusProvider.UpdateStatus(message);
+                log.Info(message);
             }
 
             log.Info($"Asking ShipWorks to close.");
