@@ -166,6 +166,39 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Carriers\Amazon\SFP\AmazonSFPCarrierTermsAndConditionsNotAcceptedFootnoteViewModel.cs" />
+    <Compile Include="Carriers\Amazon\SWA\AmazonSWAAccountEditorDlg.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Carriers\Amazon\SWA\AmazonSWAAccountEditorDlg.Designer.cs">
+      <DependentUpon>AmazonSWAAccountEditorDlg.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Carriers\Amazon\SWA\AmazonSWAProfileControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Carriers\Amazon\SWA\AmazonSWAProfileControl.Designer.cs">
+      <DependentUpon>AmazonSWAProfileControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Carriers\Amazon\SWA\AmazonSWAServiceControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Carriers\Amazon\SWA\AmazonSWAServiceControl.Designer.cs">
+      <DependentUpon>AmazonSWAServiceControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Carriers\Amazon\SWA\AmazonSWAServicePickerControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Carriers\Amazon\SWA\AmazonSWASettingsControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Carriers\Amazon\SWA\AmazonSWASettingsControl.Designer.cs">
+      <DependentUpon>AmazonSWASettingsControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Carriers\Amazon\SWA\AmazonSWASetupWizard.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Carriers\Amazon\SWA\AmazonSWASetupWizard.Designer.cs">
+      <DependentUpon>AmazonSWASetupWizard.cs</DependentUpon>
+    </Compile>
     <Compile Include="Carriers\Asendia\AsendiaServiceControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -292,6 +325,11 @@
       <DependentUpon>ShippingProfileManagerDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="Profiles\ShippingProfileManagerDialogFactory.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <Compile Include="RatingPanel\ObservableRegistrations\InitializeRatesRetrievedPipelineMessage.cs" />
     <Compile Include="RatingPanel\ObservableRegistrations\IRatingPanelGlobalPipeline.cs" />
     <Compile Include="RatingPanel\ObservableRegistrations\ShippingDialogOpeningPipeline.cs" />
@@ -526,6 +564,22 @@
     <EmbeddedResource Include="Carriers\Amazon\SFP\AmazonSFPProfileControl.resx">
       <DependentUpon>AmazonSFPProfileControl.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Carriers\Amazon\SWA\AmazonSWAAccountEditorDlg.resx">
+      <DependentUpon>AmazonSWAAccountEditorDlg.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Carriers\Amazon\SWA\AmazonSWAProfileControl.resx">
+      <DependentUpon>AmazonSWAProfileControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Carriers\Amazon\SWA\AmazonSWAServiceControl.resx">
+      <DependentUpon>AmazonSWAServiceControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Carriers\Amazon\SWA\AmazonSWASettingsControl.resx">
+      <DependentUpon>AmazonSWASettingsControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Carriers\Amazon\SWA\AmazonSWASetupWizard.resx">
+      <DependentUpon>AmazonSWASetupWizard.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Carriers\Asendia\AsendiaServiceControl.resx">
       <DependentUpon>AsendiaServiceControl.cs</DependentUpon>
     </EmbeddedResource>
@@ -609,6 +663,10 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Carriers\Other\OtherSetupWizard.resx">
       <DependentUpon>OtherSetupWizard.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="RatingPanel\GenericRateFootnoteControl.resx">
       <DependentUpon>GenericRateFootnoteControl.cs</DependentUpon>

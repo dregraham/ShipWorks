@@ -174,6 +174,7 @@ namespace ShipWorks.Data.Utility
         ReturnItemNote,
 
         DhlExpressDescription,
-        AsendiaDescription
+        AsendiaDescription,
+        AmazonSWADescription
     }
 }

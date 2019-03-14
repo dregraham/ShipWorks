@@ -40,10 +40,10 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SFP
         /// <summary>
         /// Constructor
         /// </summary>
-        public AmazonSFPShipmentSetupWizard(AmazonSFPShipmentType shipmentType, 
-            IShippingSettings shippingSettings, 
-            IStoreManager storeManager, 
-            IShippingProfileManager shippingProfileManager) 
+        public AmazonSFPShipmentSetupWizard(AmazonSFPShipmentType shipmentType,
+            IShippingSettings shippingSettings,
+            IStoreManager storeManager,
+            IShippingProfileManager shippingProfileManager)
             : this()
         {
             this.shipmentType = shipmentType;
