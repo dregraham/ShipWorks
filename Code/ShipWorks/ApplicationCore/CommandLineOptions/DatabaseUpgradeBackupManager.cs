@@ -198,7 +198,7 @@ namespace ShipWorks.ApplicationCore.CommandLineOptions
                             Match match = percentRegex.Match(e.Message);
                             if (match.Success)
                             {
-                                string status = $"{Convert.ToInt32(match.Groups[1].Value)}% complete";
+                                string status = $"Backing up {Convert.ToInt32(match.Groups[1].Value)}% complete";
                                 log.Info(status);
                                 updateStatus(status);
                             }
