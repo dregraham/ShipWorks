@@ -18,7 +18,6 @@ namespace Interapptive.Shared.AutoUpdate
         public event DelegateMessage OnMessage;
         private readonly string instance;
         private readonly ILog log;
-        private readonly NamedPipeClientStream updaterPipe;
 
         /// <summary>
         /// Constructor
@@ -27,8 +26,6 @@ namespace Interapptive.Shared.AutoUpdate
         {
             this.instance = instance;
             log = logFactory(GetType());
-
-            updaterPipe = new NamedPipeClientStream(".", instance, PipeDirection.Out);
         }
 
         /// <summary>
@@ -59,20 +56,19 @@ namespace Interapptive.Shared.AutoUpdate
         /// </summary>
         public Result SendMessage(string message)
         {
-            if (IsAvailable())
+            using (NamedPipeClientStream updaterPipe = new NamedPipeClientStream(".", instance, PipeDirection.Out))
             {
                 try
                 {
+                    updaterPipe.Connect(1000);
                     updaterPipe.Write(Encoding.UTF8.GetBytes(message), 0, message.Length);
                 }
                 catch (Exception ex)
                 {
-                    return Result.FromError(ex);
+                    return Result.FromError($"Could not connect to update service.{Environment.NewLine}{ex.Message}");
                 }
                 return Result.FromSuccess();
             }
-
-            return Result.FromError("Could not connect to update service.");
         }
 
         /// <summary>
@@ -80,22 +76,25 @@ namespace Interapptive.Shared.AutoUpdate
         /// </summary>
         public bool IsAvailable()
         {
-            if (!updaterPipe.IsConnected)
+            using (NamedPipeClientStream updaterPipe = new NamedPipeClientStream(".", instance, PipeDirection.Out))
             {
-                // Give it 1 second to connect
-                try
+                if (!updaterPipe.IsConnected)
                 {
-                    updaterPipe.Connect(1000);
+                    // Give it 1 second to connect
+                    try
+                    {
+                        updaterPipe.Connect(1000);
+                    }
+                    catch (Exception)
+                    {
+                        // Connection can fail if something else is connected
+                        // or if the timeout has elapsed
+                        return false;
+                    }
                 }
-                catch (Exception)
-                {
-                    // Connection can fail if something else is connected
-                    // or if the timeout has elapsed
-                    return false;
-                }
-            }
 
-            return updaterPipe.IsConnected;
+                return updaterPipe.IsConnected;
+            }
         }
 
         /// <summary>
@@ -138,14 +137,6 @@ namespace Interapptive.Shared.AutoUpdate
             pipeServer.Dispose();
 
             StartPipeServer();
-        }
-
-        /// <summary>
-        /// Dispose
-        /// </summary>
-        public void Dispose()
-        {
-            updaterPipe.Dispose();
         }
     }
 }

@@ -51,7 +51,6 @@ namespace ShipWorks.Escalator.Tests
         public void Dispose()
         {
             mock?.Dispose();
-            testObject?.Dispose();
         }
     }
 }
