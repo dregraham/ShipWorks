@@ -918,12 +918,12 @@ namespace ShipWorks.Filters.Controls
 
             if (SelectedFilterNode?.Filter?.IsSavedSearch == true)
             {
-                menuConvertFilter.Text = "Convert to filter";
+                menuConvertFilter.Text = "Convert to Filter";
                 menuConvertFilter.Image = Resources.funnel;
             }
             else
             {
-                menuConvertFilter.Text = "Convert to saved search";
+                menuConvertFilter.Text = "Convert to Saved Search";
                 menuConvertFilter.Image = Resources.view;
             }
 

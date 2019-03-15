@@ -52,7 +52,11 @@ namespace ShipWorks.Filters.Management
         {
             using (AddFilterWizard wizard = new AddFilterWizard(isFolder, browserInitialState, browserInitialParent))
             {
-                wizard.DefaultFilterDefinition = defaultFilterDefinition;
+                if (defaultFilterDefinition != null)
+                {
+                    wizard.ConvertToSavedSearch(defaultFilterDefinition);
+                }
+                
                 DialogResult result = wizard.ShowDialog(parent);
 
                 if (result == DialogResult.OK)

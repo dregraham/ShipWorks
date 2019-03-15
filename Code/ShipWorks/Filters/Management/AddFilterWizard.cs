@@ -30,6 +30,7 @@ namespace ShipWorks.Filters.Management
         // The folder selected to start off with
         private FolderExpansionState initialState;
         private FilterNodeEntity browserInitialParent;
+        private FilterDefinition defaultFilterDefinition;
 
         /// <summary>
         /// Constructor
@@ -85,6 +86,22 @@ namespace ShipWorks.Filters.Management
         }
 
         /// <summary>
+        /// Convert the wizard to save a search instead of a filter
+        /// </summary>
+        internal void ConvertToSavedSearch(FilterDefinition defaultFilterDefinition)
+        {
+            this.defaultFilterDefinition = defaultFilterDefinition;
+
+            Text = "Add Saved Search Wizard";
+            wizardPageNameLocation.Description = wizardPageNameLocation.Description.Replace("filter", "saved search");
+            labelName.Text = "Saved Search Name:";
+            labelLocation.Text = labelLocation.Text.Replace("filter", "saved search");
+
+            Pages.Remove(wizardPageCondition);
+            Pages.Remove(wizardPageGridColumns);
+        }
+
+        /// <summary>
         /// The filter being created
         /// </summary>
         public FilterEntity Filter { get; private set; }
@@ -98,16 +115,7 @@ namespace ShipWorks.Filters.Management
         /// If the result is OK, this is the list of nodes that were created
         /// </summary>
         public List<FilterNodeEntity> CreatedNodes { get; private set; }
-
-        /// <summary>
-        /// Default definition for the new filter
-        /// </summary>
-        /// <summary>
-        /// If this is set, the wizard will use it as the definition of the new filter instead
-        /// of prompting the user to create the definition in the wizard
-        /// </summary>
-        public FilterDefinition DefaultFilterDefinition { get; set; }
-
+        
         /// <summary>
         /// Initialization
         /// </summary>
@@ -172,18 +180,12 @@ namespace ShipWorks.Filters.Management
 
                 gridColumns.LoadSettings(gridLayout);
             }
-        }
 
-        /// <summary>
-        /// Skip the filter definition screen if we already have one
-        /// </summary>
-        private void OnWizardPageConditionSteppingInto(object sender, UI.Wizard.WizardSteppingIntoEventArgs e)
-        {
-            if (DefaultFilterDefinition != null)
+            if (defaultFilterDefinition != null)
             {
-                Filter.Definition = DefaultFilterDefinition.GetXml();
+                Filter.Definition = defaultFilterDefinition.GetXml();
                 Filter.IsSavedSearch = true;
-                e.Skip = true;
+                FinishCreatingFilter();
             }
         }
 
@@ -245,7 +247,12 @@ namespace ShipWorks.Filters.Management
         /// <summary>
         /// Finishing
         /// </summary>
-        private void OnStepNextGridColumns(object sender, WizardStepEventArgs e)
+        private void OnStepNextGridColumns(object sender, WizardStepEventArgs e) => FinishCreatingFilter();
+
+        /// <summary>
+        /// Finish creating the filter
+        /// </summary>
+        private void FinishCreatingFilter()
         {
             Cursor.Current = Cursors.WaitCursor;
 

@@ -1,3 +1,6 @@
+using System;
+using ShipWorks.UI.Wizard;
+
 namespace ShipWorks.Filters.Management
 {
     partial class AddFilterWizard
@@ -149,7 +152,6 @@ namespace ShipWorks.Filters.Management
             this.wizardPageCondition.Size = new System.Drawing.Size(604, 383);
             this.wizardPageCondition.TabIndex = 0;
             this.wizardPageCondition.Title = "Filter Condition";
-            this.wizardPageCondition.SteppingInto += OnWizardPageConditionSteppingInto;
             this.wizardPageCondition.StepNext += new System.EventHandler<ShipWorks.UI.Wizard.WizardStepEventArgs>(this.OnStepNextCondition);
             //
             // conditionControl

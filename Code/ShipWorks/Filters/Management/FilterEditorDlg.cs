@@ -49,6 +49,11 @@ namespace ShipWorks.Filters.Management
             this.filterNode = filterNode;
             this.filter = filterNode.Filter;
             
+            if (filterNode.Filter.IsSavedSearch)
+            {
+                tabControl.Controls.Remove(tabPageGridColumns);
+            }
+
             // We will use these to restore the filter if the user cancels
             this.originalFields = filter.Fields.Clone();
         }

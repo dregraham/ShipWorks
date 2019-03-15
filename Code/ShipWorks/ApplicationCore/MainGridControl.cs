@@ -1159,7 +1159,8 @@ namespace ShipWorks.ApplicationCore
                         AdvancedSearchVisible = f.Filter.IsSavedSearch;
                         using (var lifetimeScope = IoC.BeginLifetimeScope())
                         {
-                            lifetimeScope.Resolve<IMessageHelper>().ShowPopup("Filter saved");
+                            var message = f.Filter.IsSavedSearch ? "Search saved" : "Filter saved";
+                            lifetimeScope.Resolve<IMessageHelper>().ShowPopup(message);
                         }
                     })
                     .OnFailure(ex => MessageHelper.ShowError(this, ex.Message));
