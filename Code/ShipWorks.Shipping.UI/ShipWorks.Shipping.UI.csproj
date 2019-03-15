@@ -199,6 +199,10 @@
     <Compile Include="Carriers\Amazon\SWA\AmazonSWASetupWizard.Designer.cs">
       <DependentUpon>AmazonSWASetupWizard.cs</DependentUpon>
     </Compile>
+    <Compile Include="Carriers\Amazon\SWA\AmazonSWAAuthorizationControl.xaml.cs">
+      <DependentUpon>AmazonSWAAuthorizationControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Carriers\Amazon\SWA\AmazonSWAAuthorizationViewModel.cs" />
     <Compile Include="Carriers\Asendia\AsendiaServiceControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -677,6 +681,10 @@
     <Page Include="Carriers\Amazon\SFP\AmazonSFPSameDayNotAvailableFootnote.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Carriers\Amazon\SWA\AmazonSWAAuthorizationControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Carriers\Postal\Usps\FirstClassInternationalWarningDialog.xaml">
       <SubType>Designer</SubType>
