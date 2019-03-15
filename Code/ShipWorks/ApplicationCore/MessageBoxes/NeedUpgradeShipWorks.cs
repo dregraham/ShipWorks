@@ -76,7 +76,7 @@ namespace ShipWorks.ApplicationCore.MessageBoxes
                 Invoke(new MethodInvoker(UpdateShipWorks));
             }
 
-            Result result = updateService.Update(SqlSchemaUpdater.GetInstalledSchemaVersion());
+            Result result = updateService.Update(SqlSchemaUpdater.GetBuildVersion());
 
             if (result.Failure)
             {
