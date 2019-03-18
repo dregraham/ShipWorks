@@ -7,11 +7,14 @@ using ShipWorks.Shipping.Carriers.FedEx.Api.Registration.Response;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Tracking.Response;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Tracking.Response.Manipulators;
+using ShipWorks.Shipping.Carriers.FedEx.Api.UploadDocuments.Request;
+using ShipWorks.Shipping.Carriers.FedEx.Api.UploadDocuments.Response;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Void.Response;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Close;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Registration;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Track;
+using ShipWorks.Shipping.Carriers.FedEx.WebServices.UploadDocument;
 
 namespace ShipWorks.Shipping.Carriers.FedEx.Api
 {
@@ -154,6 +157,18 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
             };
 
             return new FedExTrackingResponse(manipulators, request.ShipmentEntity, trackReply, request);
+        }
+
+        public ICarrierResponse CreateUploadImagesResponse(object nativeResponse, CarrierRequest request)
+        {
+            UploadImagesReply uploadImagesReply = nativeResponse as UploadImagesReply;
+
+            if (uploadImagesReply == null)
+            {
+                throw new CarrierException("An unexpected response type was provided to create a FedExUploadImagesResponse.");
+            }
+
+            return new FedExUploadImagesResponse(uploadImagesReply, request);
         }
     }
 }
