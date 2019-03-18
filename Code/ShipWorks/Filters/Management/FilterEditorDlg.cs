@@ -52,6 +52,8 @@ namespace ShipWorks.Filters.Management
             if (filterNode.Filter.IsSavedSearch)
             {
                 tabControl.Controls.Remove(tabPageGridColumns);
+                Text = "Saved Search Editor";
+                labelFilterName.Text = "Name:";
             }
 
             // We will use these to restore the filter if the user cancels
