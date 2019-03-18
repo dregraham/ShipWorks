@@ -115,7 +115,7 @@ namespace ShipWorks.Filters.Management
         /// If the result is OK, this is the list of nodes that were created
         /// </summary>
         public List<FilterNodeEntity> CreatedNodes { get; private set; }
-        
+
         /// <summary>
         /// Initialization
         /// </summary>
@@ -143,6 +143,7 @@ namespace ShipWorks.Filters.Management
             {
                 MessageHelper.ShowMessage(this, "Please enter a name.");
                 e.NextPage = CurrentPage;
+                e.OverrideResult = defaultFilterDefinition != null ? DialogResult.None : e.OverrideResult;
                 return;
             }
 
@@ -150,6 +151,7 @@ namespace ShipWorks.Filters.Management
             {
                 MessageHelper.ShowMessage(this, "Please select a folder.");
                 e.NextPage = CurrentPage;
+                e.OverrideResult = defaultFilterDefinition != null ? DialogResult.None : e.OverrideResult;
                 return;
             }
 

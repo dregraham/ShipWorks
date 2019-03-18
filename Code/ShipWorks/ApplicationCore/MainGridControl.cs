@@ -647,15 +647,7 @@ namespace ShipWorks.ApplicationCore
                 headerViewModel.IsSearching = false;
 
                 ActiveGrid.OverrideEmptyText = "";
-
-                if (ActiveGrid.ActiveFilterNode == null)
-                {
-                    headerViewModel.Title = "";
-                }
-                else
-                {
-                    headerViewModel.Title = ActiveGrid.ActiveFilterNode.Filter.Name;
-                }
+                headerViewModel.Title = ActiveGrid.ActiveFilterNode?.Filter?.Name ?? string.Empty;
 
                 headerViewModel.HeaderImage = FilterHelper.GetFilterImage(ActiveFilterTarget);
             }
