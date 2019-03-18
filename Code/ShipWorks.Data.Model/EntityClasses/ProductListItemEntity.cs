@@ -380,7 +380,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <summary> The Name property of the Entity ProductListItem<br/><br/></summary>
 		/// <remarks>Mapped on  view field: "ProductListView"."Name"<br/>
 		/// View field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 300<br/>
-		/// View field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		/// View field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual System.String Name
 		{
 			get { return (System.String)GetValue((int)ProductListItemFieldIndex.Name, true); }

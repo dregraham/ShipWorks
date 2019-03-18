@@ -43,6 +43,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             IsFolder = source.IsFolder;
             Definition = source.Definition;
             State = source.State;
+            IsSavedSearch = source.IsSavedSearch;
             
             
             
@@ -97,6 +98,12 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Table field type characteristics (type, precision, scale, length): TinyInt, 3, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         public System.Byte State { get; }
+        /// <summary> The IsSavedSearch property of the Entity Filter<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "Filter"."IsSavedSearch"<br/>
+        /// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+        public System.Boolean IsSavedSearch { get; }
         
         
         

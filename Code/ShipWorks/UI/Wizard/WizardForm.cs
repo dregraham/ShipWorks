@@ -942,8 +942,7 @@ namespace ShipWorks.UI.Wizard
             {
                 DialogResult = args.OverrideResult.Value;
             }
-
-            if (DialogResult == DialogResult.None)
+            else if (DialogResult == DialogResult.None)
             {
                 DialogResult = result;
             }

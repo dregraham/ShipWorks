@@ -2384,7 +2384,8 @@ CREATE TABLE [dbo].[Filter]
 [FilterTarget] [int] NOT NULL,
 [IsFolder] [bit] NOT NULL,
 [Definition] [xml] NULL,
-[State] [tinyint] NOT NULL
+[State] [tinyint] NOT NULL,
+[IsSavedSearch] [bit] NOT NULL CONSTRAINT [DF_Filter_IsSavedSearch] DEFAULT ((0))
 )
 GO
 PRINT N'Creating primary key [PK_Filter] on [dbo].[Filter]'

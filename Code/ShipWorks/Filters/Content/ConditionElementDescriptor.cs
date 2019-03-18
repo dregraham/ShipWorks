@@ -8,6 +8,7 @@ using System.Diagnostics;
 using ShipWorks.Stores;
 using System.Reflection;
 using ShipWorks.Stores.Platforms;
+using Interapptive.Shared.Collections;
 
 namespace ShipWorks.Filters.Content
 {
@@ -152,7 +153,7 @@ namespace ShipWorks.Filters.Content
         /// </summary>
         public bool IsApplicable(List<StoreType> storeTypes)
         {
-            if (storeTypesCodes.Count > 0 && storeTypes.Select(t => t.TypeCode).Intersect(storeTypesCodes).Count() == 0)
+            if (storeTypesCodes.Any() && storeTypes.Select(t => t.TypeCode).Intersect(storeTypesCodes).None())
             {
                 return false;
             }

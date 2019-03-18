@@ -1,17 +1,11 @@
 using System;
 using System.Collections.Generic;
-using System.Text;
+using System.Drawing;
 using Divelements.SandGrid;
 using Divelements.SandGrid.Rendering;
-using System.Drawing;
-using ShipWorks.Data.Model.EntityClasses;
-using System.Windows.Forms;
-using System.Drawing.Drawing2D;
-using ShipWorks.Filters;
-using ShipWorks.Properties;
-using log4net;
-using System.Diagnostics;
 using Interapptive.Shared;
+using log4net;
+using ShipWorks.Properties;
 using ShipWorks.UI.Controls.SandGrid;
 
 namespace ShipWorks.Filters.Controls
@@ -19,15 +13,14 @@ namespace ShipWorks.Filters.Controls
     /// <summary>
     /// Provides customized drawing for rows in the FilterTree
     /// </summary>
-    class FilterTreeGridColumn : SandGridTreeColumn
+    internal class FilterTreeGridColumn : SandGridTreeColumn
     {
         // Logger
-        static readonly ILog log = LogManager.GetLogger(typeof(FilterTreeGridColumn));
-
-        static List<FilterTreeGridRow> animatingRows = new List<FilterTreeGridRow>();
-        static Image loadingImage = Resources.arrows_blue;
-        static volatile bool isAnimating = false;
-        static bool pendingFrameUpdate = false;
+        private static readonly ILog log = LogManager.GetLogger(typeof(FilterTreeGridColumn));
+        private static List<FilterTreeGridRow> animatingRows = new List<FilterTreeGridRow>();
+        private static readonly Image loadingImage = Resources.arrows_blue;
+        private static bool isAnimating = false;
+        private static bool pendingFrameUpdate = false;
 
         #region Animation Control
 
@@ -185,48 +178,45 @@ namespace ShipWorks.Filters.Controls
             bool needAnimate = !(count == null || count.Status == FilterCountStatus.Ready);
             Animate(needAnimate, filterTreeRow);
 
-            // If we have a count at all
-            if (count != null)
+            Color countColor = Color.Blue;
+
+            SandGridTree sandTree = row.Grid.SandGrid as SandGridTree;
+            if (sandTree != null && sandTree.SelectFoldersOnly && !filterTreeRow.IsFolder)
             {
-                Color countColor = Color.Blue;
+                countColor = Color.CornflowerBlue;
+            }
 
-                SandGridTree sandTree = row.Grid.SandGrid as SandGridTree;
-                if (sandTree != null && sandTree.SelectFoldersOnly && !filterTreeRow.IsFolder)
+            // Adjust font for disabled nodes
+            if (filterTreeRow.IsFilterDisabled())
+            {
+                using (DisabledFilterFont disabledFont = new DisabledFilterFont(cellFont))
                 {
-                    countColor = Color.CornflowerBlue;
+                    countColor = disabledFont.TextColor;
+                    cellFont = disabledFont.Font;
                 }
+            }
 
-                // Adjust font for disabled nodes
-                if (filterTreeRow.IsFilterDisabled())
-                {
-                    using (DisabledFilterFont disabledFont = new DisabledFilterFont(cellFont))
-                    {
-                        countColor = disabledFont.TextColor;
-                        cellFont = disabledFont.Font;   
-                    }
-                }
+            // Allow the row a chance to update its style based on the state of the filter node. We want
+            // the styling the filter name to reflect whether it is enabled/disabled.
+            filterTreeRow.UpdateStyle();
 
-                // Allow the row a chance to update its style based on the state of the filter node. We want
-                // the styling the filter name to reflect whether it is enabled/disabled.
-                filterTreeRow.UpdateStyle();
+            // If its ready, we can draw a number.
+            if (count?.Status == FilterCountStatus.Ready)
+            {
+                IndependentText.DrawText(context.Graphics, string.Format("({0:#,##0})", count.Count), cellFont, countBounds, textFormat, countColor);
+            }
+            // Otherwise, we draw the animation if we have a count at all
+            else if (count != null)
+            {
+                Size parenSize = IndependentText.MeasureText(context.Graphics, "(", cellFont, textFormat);
+                IndependentText.DrawText(context.Graphics, "(", cellFont, countBounds, textFormat, countColor);
+                countBounds.Offset(parenSize.Width, 0);
 
-                // If its ready, we can draw a number.
-                if (count.Status == FilterCountStatus.Ready)
-                {
-                    IndependentText.DrawText(context.Graphics, string.Format("({0:#,##0})", count.Count), cellFont, countBounds, textFormat, countColor);
-                }
-                // Otherwise, we draw the animation
-                else
-                {
-                    Size parenSize = IndependentText.MeasureText(context.Graphics, "(", cellFont, textFormat);
-                    IndependentText.DrawText(context.Graphics, "(", cellFont, countBounds, textFormat, countColor);
-                    countBounds.Offset(parenSize.Width, 0);
+                context.Graphics.DrawImage(loadingImage, countBounds.Left, countBounds.Top + (countBounds.Height / 2) - 5, 10, 10);
+                countBounds.Offset(10, 0);
 
-                    context.Graphics.DrawImage(loadingImage, countBounds.Left, countBounds.Top + (countBounds.Height / 2) - 5, 10, 10);
-                    countBounds.Offset(10, 0);
+                IndependentText.DrawText(context.Graphics, ")", cellFont, countBounds, textFormat, countColor);
 
-                    IndependentText.DrawText(context.Graphics, ")", cellFont, countBounds, textFormat, countColor);
-                }
             }
         }
     }

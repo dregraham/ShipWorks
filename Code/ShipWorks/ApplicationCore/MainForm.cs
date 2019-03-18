@@ -2871,6 +2871,14 @@ namespace ShipWorks
         }
 
         /// <summary>
+        /// Handle when the filter tree wants to load a filter as an advanced search
+        /// </summary>
+        private void OnFilterTreeLoadAsAdvancedSearch(object sender, FilterNodeEntity e)
+        {
+            gridControl.LoadFilterInAdvancedSearch(e);
+        }
+
+        /// <summary>
         /// Called when the user selects a different filter.
         /// </summary>
         private void OnSelectedFilterNodeChanged(object sender, EventArgs e)
@@ -2954,14 +2962,7 @@ namespace ShipWorks
 
             if (gridControl.IsSearchActive)
             {
-                searchRestoreFilterNodeID = currentFilterTree.SelectedFilterNodeID;
-
-                currentFilterTree.SelectedFilterNodeChanged -= new EventHandler(OnSelectedFilterNodeChanged);
-
-                currentFilterTree.ActiveSearchNode = gridControl.ActiveFilterNode;
-                currentFilterTree.SelectedFilterNode = gridControl.ActiveFilterNode;
-
-                currentFilterTree.SelectedFilterNodeChanged += new EventHandler(OnSelectedFilterNodeChanged);
+                searchRestoreFilterNodeID = currentFilterTree.SetSearch(gridControl.ActiveFilterNode, OnSelectedFilterNodeChanged);
             }
             else
             {
@@ -2982,6 +2983,20 @@ namespace ShipWorks
 
             UpdateSelectionDependentUI();
             UpdateDetailViewSettingsUI();
+        }
+
+        /// <summary>
+        /// Handle when a filter is saved from the advanced search
+        /// </summary>
+        private void OnGridControlFilterSaved(object sender, FilterNodeEntity nodeEntity)
+        {
+            var activeFilterTree = ActiveFilterTree();
+
+            if (activeFilterTree != null)
+            {
+                activeFilterTree.ReloadLayouts();
+                activeFilterTree.SelectedFilterNode = nodeEntity;
+            }
         }
 
         /// <summary>
