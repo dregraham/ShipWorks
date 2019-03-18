@@ -8,12 +8,17 @@ namespace Interapptive.Shared.AutoUpdate
     public interface IAutoUpdateStatusProvider
     {
         /// <summary>
-        /// show the Splash Screen
+        /// Show the Splash Screen
         /// </summary>
         void ShowSplashScreen(string instanceId);
 
         /// <summary>
-        /// update the status on the Splash Screen
+        /// Close the splash screen
+        /// </summary>
+        void CloseSplashScreen();
+
+        /// <summary>
+        /// Update the status on the Splash Screen
         /// </summary>
         void UpdateStatus(string status);
     }

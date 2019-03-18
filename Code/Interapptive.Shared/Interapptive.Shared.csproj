@@ -180,6 +180,9 @@
     </Compile>
     <Compile Include="AutoUpdate\AutoUpdateStatusProvider.cs" />
     <Compile Include="AutoUpdate\IAutoUpdateStatusProvider.cs" />
+    <Compile Include="AutoUpdate\IShipWorksCommunicationBridge.cs" />
+    <Compile Include="AutoUpdate\IShipWorksLauncher.cs" />
+    <Compile Include="AutoUpdate\ShipWorksCommunicationBridge.cs" />
     <Compile Include="AutoUpdate\ShipWorksLauncher.cs" />
     <Compile Include="AutoUpdate\UpdateWindowData.cs" />
     <Compile Include="AutoUpdate\UpgradeDetails.cs" />

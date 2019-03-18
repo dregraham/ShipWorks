@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Autofac.Extras.Moq;
 using Interapptive.Shared.AutoUpdate;
+using Interapptive.Shared.Utility;
 using Moq;
 using ShipWorks.Tests.Shared;
 using Xunit;
@@ -56,6 +57,47 @@ namespace ShipWorks.Escalator.Tests
             await testObject.Upgrade(new Version(1, 1, 1));
 
             updaterWebClient.Verify(u => u.Download(shipworksRelease.DownloadUri, shipworksRelease.Hash));
+        }
+
+        [Fact]
+        public async Task Upgrade_ClosesSplashScreen_WhenInstallFails()
+        {
+            ShipWorksRelease shipworksRelease = new ShipWorksRelease()
+            {
+                ReleaseVersion = "9.9.9",
+                DownloadUrl = "http://www.google.com",
+                Hash = "hashbrowns"
+            };
+
+            updaterWebClient.Setup(w => w.GetVersionToDownload(It.IsAny<Version>()))
+                .ReturnsAsync(shipworksRelease);
+
+            await testObject.Upgrade(new Version(1, 1, 1));
+
+            mock.Mock<IAutoUpdateStatusProvider>().Verify(p => p.CloseSplashScreen(), Times.Once);
+            mock.Mock<IShipWorksLauncher>().Verify(l => l.StartShipWorks(), Times.Once);
+        }
+
+        [Fact]
+        public async Task Upgrade_DoesNotCloseSplashScreen_WhenInstallSucceeds()
+        {
+            ShipWorksRelease shipworksRelease = new ShipWorksRelease()
+            {
+                ReleaseVersion = "9.9.9",
+                DownloadUrl = "http://www.google.com",
+                Hash = "hashbrowns"
+            };
+
+            updaterWebClient.Setup(w => w.GetVersionToDownload(It.IsAny<Version>()))
+                .ReturnsAsync(shipworksRelease);
+
+            mock.Mock<IShipWorksInstaller>().Setup(i => i.Install(It.IsAny<InstallFile>(), false))
+                .Returns(Result.FromSuccess());
+
+            await testObject.Upgrade(new Version(1, 1, 1));
+
+            mock.Mock<IAutoUpdateStatusProvider>().Verify(p => p.CloseSplashScreen(), Times.Never);
+            mock.Mock<IShipWorksLauncher>().Verify(l => l.StartShipWorks(), Times.Never);
         }
     }
 }

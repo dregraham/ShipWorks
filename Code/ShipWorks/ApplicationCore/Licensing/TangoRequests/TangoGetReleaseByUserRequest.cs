@@ -37,7 +37,7 @@ namespace ShipWorks.ApplicationCore.Licensing.TangoRequests
             string customerID = tangoWebClient.GetTangoCustomerId();
             if (string.IsNullOrEmpty(customerID))
             {
-                throw new InvalidOperationException("Could not retrieve customer id");
+                return GenericResult.FromError<ShipWorksReleaseInfo>("Could not retrieve customer id");
             }
 
             Version currentVersion = Assembly.GetExecutingAssembly().GetName().Version;

@@ -16,3 +16,11 @@ GO
 IF EXISTS(SELECT * FROM sys.default_constraints WHERE name = 'DF_Configuration_AutoUpdateHourOfDay')
 	ALTER TABLE dbo.[Configuration] DROP CONSTRAINT [DF_Configuration_AutoUpdateHourOfDay]
 GO
+
+IF COL_LENGTH(N'[dbo].[Configuration]', N'AutoUpdateStartDate') IS NULL
+	ALTER TABLE dbo.[Configuration] ADD AutoUpdateStartDate datetime2 NOT NULL CONSTRAINT [DF_Configuration_AutoUpdateStartDate] DEFAULT ('1900-01-01')
+GO
+
+IF EXISTS(SELECT * FROM sys.default_constraints WHERE name = 'DF_Configuration_AutoUpdateStartDate')
+	ALTER TABLE dbo.[Configuration] DROP CONSTRAINT [DF_Configuration_AutoUpdateStartDate]
+GO

@@ -1,6 +1,10 @@
 ﻿using System;
 using System.IO.Pipes;
+using Autofac;
 using Autofac.Extras.Moq;
+using Interapptive.Shared.AutoUpdate;
+using Interapptive.Shared.Utility;
+using Moq;
 using ShipWorks.ApplicationCore;
 using ShipWorks.Data.Administration;
 using ShipWorks.Escalator;
@@ -31,36 +35,19 @@ namespace ShipWorks.Tests.Data.Administration
         }
 
         [Fact]
-        public void IsAvailable_ReturnsTrue_WhenConnectionSuccessful()
-        {
-            using (NamedPipeServerStream pipeServer = new NamedPipeServerStream(sessionGuid.ToString()))
-            {
-                Assert.True(testObject.IsAvailable());
-            }
-        }
-
-        [Fact]
-        public void IsAvailable_ReturnsFalse_WhenConnectionIsNotSuccessful()
-        {
-            Assert.False(testObject.IsAvailable());
-        }
-
-        [Fact]
-        public void Update_WritesUpdateInfoToStream()
+        public void Update_SendsMessageWithVersion()
         {
             mock.Mock<IServiceName>().Setup(s => s.GetInstanceID()).Returns(sessionGuid);
-            var communictionBridge = mock.Create<ShipWorksCommunicationBridge>();
-            communictionBridge.StartPipeServer();
-
-            communictionBridge.OnMessage += (m) => Assert.Equal("0.0.123", m);
-
-            Assert.True(testObject.IsAvailable());
-            Assert.True(testObject.Update(new Version(0, 0, 123)).Success);
+            var communicationBridge = mock.Mock<IShipWorksCommunicationBridge>();
+            Version version = new Version(0, 0, 123);
+            testObject.Update(version);
+            
+            communicationBridge.Verify(x => x.SendMessage(version.ToString()), Times.Once);
         }
 
         public void Dispose()
         {
-            testObject?.Dispose();
+            mock?.Dispose();
         }
     }
 }

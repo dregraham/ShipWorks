@@ -68,6 +68,7 @@ namespace ShipWorks.ApplicationCore.Settings
             this.sears = new System.Windows.Forms.CheckBox();
             this.reinstallTemplates = new System.Windows.Forms.Button();
             this.overstockServer = new System.Windows.Forms.CheckBox();
+            this.disableAutoUpdate = new System.Windows.Forms.CheckBox();
             this.panelBuyDotCom.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -125,7 +126,7 @@ namespace ShipWorks.ApplicationCore.Settings
             // 
             this.sectionDatabase.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.sectionDatabase.Location = new System.Drawing.Point(13, 675);
+            this.sectionDatabase.Location = new System.Drawing.Point(13, 694);
             this.sectionDatabase.Name = "sectionDatabase";
             this.sectionDatabase.Size = new System.Drawing.Size(350, 22);
             this.sectionDatabase.TabIndex = 9;
@@ -133,7 +134,7 @@ namespace ShipWorks.ApplicationCore.Settings
             // 
             // deployAssembly
             // 
-            this.deployAssembly.Location = new System.Drawing.Point(28, 703);
+            this.deployAssembly.Location = new System.Drawing.Point(28, 722);
             this.deployAssembly.Name = "deployAssembly";
             this.deployAssembly.Size = new System.Drawing.Size(119, 23);
             this.deployAssembly.TabIndex = 10;
@@ -294,7 +295,7 @@ namespace ShipWorks.ApplicationCore.Settings
             // 
             // regenerateFilters
             // 
-            this.regenerateFilters.Location = new System.Drawing.Point(28, 732);
+            this.regenerateFilters.Location = new System.Drawing.Point(28, 751);
             this.regenerateFilters.Name = "regenerateFilters";
             this.regenerateFilters.Size = new System.Drawing.Size(119, 23);
             this.regenerateFilters.TabIndex = 22;
@@ -304,7 +305,7 @@ namespace ShipWorks.ApplicationCore.Settings
             // 
             // deployChosenAssembly
             // 
-            this.deployChosenAssembly.Location = new System.Drawing.Point(153, 703);
+            this.deployChosenAssembly.Location = new System.Drawing.Point(153, 722);
             this.deployChosenAssembly.Name = "deployChosenAssembly";
             this.deployChosenAssembly.Size = new System.Drawing.Size(119, 23);
             this.deployChosenAssembly.TabIndex = 23;
@@ -324,7 +325,7 @@ namespace ShipWorks.ApplicationCore.Settings
             // 
             // purgeLabels
             // 
-            this.purgeLabels.Location = new System.Drawing.Point(154, 732);
+            this.purgeLabels.Location = new System.Drawing.Point(154, 751);
             this.purgeLabels.Name = "purgeLabels";
             this.purgeLabels.Size = new System.Drawing.Size(118, 23);
             this.purgeLabels.TabIndex = 25;
@@ -334,7 +335,7 @@ namespace ShipWorks.ApplicationCore.Settings
             // 
             // purgePrintJobsButton
             // 
-            this.purgePrintJobsButton.Location = new System.Drawing.Point(28, 761);
+            this.purgePrintJobsButton.Location = new System.Drawing.Point(28, 780);
             this.purgePrintJobsButton.Name = "purgePrintJobsButton";
             this.purgePrintJobsButton.Size = new System.Drawing.Size(119, 23);
             this.purgePrintJobsButton.TabIndex = 26;
@@ -367,7 +368,7 @@ namespace ShipWorks.ApplicationCore.Settings
             // 
             this.sectionBuyDotCom.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.sectionBuyDotCom.Location = new System.Drawing.Point(13, 791);
+            this.sectionBuyDotCom.Location = new System.Drawing.Point(13, 810);
             this.sectionBuyDotCom.Name = "sectionBuyDotCom";
             this.sectionBuyDotCom.Size = new System.Drawing.Size(350, 22);
             this.sectionBuyDotCom.TabIndex = 30;
@@ -378,7 +379,7 @@ namespace ShipWorks.ApplicationCore.Settings
             this.panelBuyDotCom.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.panelBuyDotCom.Controls.Add(this.buyDotComMapChooser);
-            this.panelBuyDotCom.Location = new System.Drawing.Point(13, 780);
+            this.panelBuyDotCom.Location = new System.Drawing.Point(13, 799);
             this.panelBuyDotCom.Name = "panelBuyDotCom";
             this.panelBuyDotCom.Size = new System.Drawing.Size(347, 113);
             this.panelBuyDotCom.TabIndex = 31;
@@ -458,7 +459,7 @@ namespace ShipWorks.ApplicationCore.Settings
             // 
             // reinstallTemplates
             // 
-            this.reinstallTemplates.Location = new System.Drawing.Point(154, 761);
+            this.reinstallTemplates.Location = new System.Drawing.Point(154, 780);
             this.reinstallTemplates.Name = "reinstallTemplates";
             this.reinstallTemplates.Size = new System.Drawing.Size(119, 23);
             this.reinstallTemplates.TabIndex = 38;
@@ -476,11 +477,23 @@ namespace ShipWorks.ApplicationCore.Settings
             this.overstockServer.Text = "Overstock";
             this.overstockServer.UseVisualStyleBackColor = true;
             // 
-            // OptionPageInterapptive
+            // disableAutoUpdate
+            // 
+            this.disableAutoUpdate.AutoSize = true;
+            this.disableAutoUpdate.Location = new System.Drawing.Point(47, 670);
+            this.disableAutoUpdate.Name = "disableAutoUpdate";
+            this.disableAutoUpdate.Size = new System.Drawing.Size(205, 17);
+            this.disableAutoUpdate.TabIndex = 40;
+            this.disableAutoUpdate.Text = "Disable auto update on this computer";
+            this.disableAutoUpdate.UseVisualStyleBackColor = true;
+            // 
+            // SettingsPageInterapptive
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
+            this.Controls.Add(this.disableAutoUpdate);
+            this.Controls.Add(this.purgePrintJobsButton);
             this.Controls.Add(this.overstockServer);
             this.Controls.Add(this.reinstallTemplates);
             this.Controls.Add(this.sears);
@@ -492,7 +505,6 @@ namespace ShipWorks.ApplicationCore.Settings
             this.Controls.Add(this.onTracTestServer);
             this.Controls.Add(this.panelBuyDotCom);
             this.Controls.Add(this.buyDotComArchiveOrderFile);
-            this.Controls.Add(this.purgePrintJobsButton);
             this.Controls.Add(this.purgeLabels);
             this.Controls.Add(this.express1EndiciaTestServer);
             this.Controls.Add(this.deployChosenAssembly);
@@ -521,7 +533,7 @@ namespace ShipWorks.ApplicationCore.Settings
             this.Controls.Add(this.postalWebTestServer);
             this.Controls.Add(this.sectionShipping);
             this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.Name = "OptionPageInterapptive";
+            this.Name = "SettingsPageInterapptive";
             this.Size = new System.Drawing.Size(374, 949);
             this.Load += new System.EventHandler(this.OnLoad);
             this.panelBuyDotCom.ResumeLayout(false);
@@ -572,5 +584,6 @@ namespace ShipWorks.ApplicationCore.Settings
         private System.Windows.Forms.CheckBox sears;
         private System.Windows.Forms.Button reinstallTemplates;
         private System.Windows.Forms.CheckBox overstockServer;
+        private System.Windows.Forms.CheckBox disableAutoUpdate;
     }
 }

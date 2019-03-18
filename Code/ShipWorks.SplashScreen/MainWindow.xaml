@@ -8,10 +8,9 @@
         AllowsTransparency="True"
         WindowStartupLocation="CenterOwner"
         ResizeMode="NoResize"
-        Title="ShipWorks" 
-        Height="255" 
+        Title="ShipWorks"
+        Height="255"
         Width="505"
-        ShowInTaskbar="False"
         FontFamily="Tahoma"
         FontSize="12"
         Foreground="Gray">
@@ -19,16 +18,23 @@
         <ImageBrush ImageSource="/ShipWorks.SplashScreen;component/background.png"/>
     </Window.Background>
     <Grid Margin="20 0 0 20"
-          VerticalAlignment="Bottom">
+          VerticalAlignment="Bottom"
+          HorizontalAlignment="Center">
         <Grid.RowDefinitions>
             <RowDefinition Height="auto" />
             <RowDefinition Height="auto" />
         </Grid.RowDefinitions>
-        <TextBlock Background="Transparent"                  
-                   Text="ShipWorks is currently updating. Please wait."/>
-        <TextBlock Margin="0 40 0 0">
-            <Run x:Name="Status"                 
+        <TextBlock Grid.Row="0"
+                   Background="Transparent"
+                   Text="ShipWorks is currently updating. Please wait."
+                   TextWrapping="Wrap"
+                   TextAlignment="Center"/>
+        <TextBlock Grid.Row="1"
+                   Margin="0 30 0 0"
+                   TextAlignment="Center"
+                   TextWrapping="Wrap">
+            <Run x:Name="Status"
                  Background="Transparent"/>
-        </TextBlock>        
+        </TextBlock>
     </Grid>
 </Window>

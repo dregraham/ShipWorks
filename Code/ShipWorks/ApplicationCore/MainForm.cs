@@ -150,7 +150,7 @@ namespace ShipWorks
         private ILifetimeScope productsLifetimeScope;
         private IOrderLookup orderLookupControl;
         private IShipmentHistory shipmentHistory;
-
+        private IUpdateService updateService;
         private readonly string unicodeCheckmark = $"    {'\u2714'.ToString()}";
 
         /// <summary>
@@ -310,18 +310,13 @@ namespace ShipWorks
         {
             if (SqlSession.IsConfigured)
             {
-                using (ILifetimeScope scope = IoC.BeginLifetimeScope())
-                {
-                    IUpdateService updateService = scope.Resolve<IUpdateService>();
-                    Result result = updateService.TryUpdate();
+                updateService = IoC.UnsafeGlobalLifetimeScope.Resolve<IUpdateService>();
 
-                    if (result.Failure && !string.IsNullOrWhiteSpace(result.Message))
-                    {
-                        MessageHelper.ShowError(this, result.Message);
-                    }
+                updateService.ListenForAutoUpdateStart(this);
 
-                    return result.Success;
-                }
+                Result result = updateService.TryUpdate();
+
+                return result.Success;
             }
 
             return false;
@@ -333,7 +328,7 @@ namespace ShipWorks
         [NDependIgnoreLongMethod]
         private void OnLoad(object sender, EventArgs e)
         {
-            AutoUpdateStatusProvider.CloseSplashScreen();
+            new AutoUpdateStatusProvider().CloseSplashScreen();
 
             log.Info("Loading main application window.");
 

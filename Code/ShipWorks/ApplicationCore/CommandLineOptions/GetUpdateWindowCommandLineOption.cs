@@ -6,6 +6,7 @@ using log4net;
 using Newtonsoft.Json;
 using ShipWorks.ApplicationCore.Interaction;
 using ShipWorks.ApplicationCore.Licensing;
+using ShipWorks.ApplicationCore.Settings;
 using ShipWorks.Data;
 using ShipWorks.Data.Administration;
 using ShipWorks.Data.Connection;
@@ -34,6 +35,13 @@ namespace ShipWorks.ApplicationCore.CommandLineOptions
         public Task Execute(List<string> args)
         {
             log.Info("Executing getupdatewindow commandline");
+            if (AutoUpdateSettings.IsAutoUpdateDisabled)
+            {
+                log.Info("Autoupdate disabled. Not sending window");
+                return Task.CompletedTask;
+            }
+
+            log.Info("Autoupdate enabled.");
             SqlSession.Initialize();
             ConfigurationData.CheckForChangesNeeded();
 
@@ -57,7 +65,7 @@ namespace ShipWorks.ApplicationCore.CommandLineOptions
             {
                 string message = JsonConvert.SerializeObject(updateData);
                 log.InfoFormat("Sending message {0}", message);
-                lifetimeScope.Resolve<IUpdateService>().SendMessage(message);
+                lifetimeScope.Resolve<IShipWorksCommunicationBridge>(new TypedParameter(typeof(string), ShipWorksSession.InstanceID.ToString())).SendMessage(message);
                 log.Info("Message sent");
             }
 

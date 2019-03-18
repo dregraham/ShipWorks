@@ -2072,6 +2072,8 @@ namespace ShipWorks.Data.Model
 		AutoUpdateDayOfWeek,
 		///<summary>AutoUpdateHourOfDay. </summary>
 		AutoUpdateHourOfDay,
+		///<summary>AutoUpdateStartDate. </summary>
+		AutoUpdateStartDate,
 		/// <summary></summary>
 		AmountOfFields
 	}

@@ -4478,7 +4478,8 @@ CREATE TABLE [dbo].[Configuration]
 [AuditEnabled] [bit] NOT NULL CONSTRAINT [DF_Configuration_AuditEnabled] DEFAULT ((1)),
 [DefaultPickListTemplateID] [bigint] NULL,
 [AutoUpdateDayOfWeek] [int] NOT NULL,
-[AutoUpdateHourOfDay] [int] NOT NULL
+[AutoUpdateHourOfDay] [int] NOT NULL,
+[AutoUpdateStartDate] [datetime2] NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_Configuration] on [dbo].[Configuration]'

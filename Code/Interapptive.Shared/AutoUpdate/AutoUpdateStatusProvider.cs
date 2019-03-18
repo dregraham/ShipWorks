@@ -42,7 +42,7 @@ namespace Interapptive.Shared.AutoUpdate
         /// <summary>
         /// Close the splash screen
         /// </summary>
-        public static void CloseSplashScreen()
+        public void CloseSplashScreen()
         {
             foreach (Process process in Process.GetProcessesByName(SplashScreenProcess))
             {

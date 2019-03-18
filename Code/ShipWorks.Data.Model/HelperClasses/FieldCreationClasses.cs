@@ -4802,6 +4802,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ConfigurationFieldIndex.AutoUpdateHourOfDay);}
 		}
+		/// <summary>Creates a new ConfigurationEntity.AutoUpdateStartDate field instance</summary>
+		public static EntityField2 AutoUpdateStartDate
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ConfigurationFieldIndex.AutoUpdateStartDate);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity CustomerEntity</summary>

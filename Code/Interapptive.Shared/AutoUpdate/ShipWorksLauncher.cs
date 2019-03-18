@@ -3,6 +3,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Reflection;
 using System.Runtime.InteropServices;
+using Interapptive.Shared.ComponentRegistration;
 using log4net;
 
 namespace Interapptive.Shared.AutoUpdate
@@ -10,7 +11,8 @@ namespace Interapptive.Shared.AutoUpdate
     /// <summary>
     /// Launch ShipWorks
     /// </summary>
-    public static class ShipWorksLauncher
+    [Component]
+    public class ShipWorksLauncher : IShipWorksLauncher
     {
         private static readonly ILog log = LogManager.GetLogger(typeof(ShipWorksLauncher));
 
@@ -21,7 +23,7 @@ namespace Interapptive.Shared.AutoUpdate
         /// The purpose of this method is to start the shipworks UI as a windows user, this
         /// can be called from the escalator service which is running as local system
         /// </remarks>
-        public static void StartShipWorks()
+        public void StartShipWorks()
         {
             try
             {

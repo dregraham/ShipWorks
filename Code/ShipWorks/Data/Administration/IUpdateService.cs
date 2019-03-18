@@ -1,6 +1,7 @@
 ﻿using System;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
+using ShipWorks.ApplicationCore;
 
 namespace ShipWorks.Data.Administration
 {
@@ -8,13 +9,8 @@ namespace ShipWorks.Data.Administration
     /// Represents the UpdateService
     /// </summary>
     [Service]
-    public interface IUpdateService : IDisposable
+    public interface IUpdateService
     {
-        /// <summary>
-        /// Check to see if the update service is available
-        /// </summary>
-        bool IsAvailable();
-
         /// <summary>
         /// Try to update shipworks
         /// </summary>
@@ -28,8 +24,8 @@ namespace ShipWorks.Data.Administration
         Result Update(Version version);
 
         /// <summary>
-        /// Send a message to the update service
+        /// Listen for the auto update to start
         /// </summary>
-        Result SendMessage(string message);
+        void ListenForAutoUpdateStart(IMainForm mainForm);
     }
 }

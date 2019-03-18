@@ -724,6 +724,7 @@
     <Compile Include="AddressValidation\ValidatedAddressManager.cs" />
     <Compile Include="AddressValidation\ValidatedAddressScope.cs" />
     <Compile Include="ApplicationCore\CommandLineOptions\GetUpdateWindowCommandLineOption.cs" />
+    <Compile Include="ApplicationCore\CommandLineOptions\GetUpgradeLockCommandLineOption.cs" />
     <Compile Include="ApplicationCore\CommandLineOptions\RedeployAssembliesCommandLineOption.cs" />
     <Compile Include="ApplicationCore\CommandLineOptions\RegenerateAllFiltersCommandLineOption.cs" />
     <Compile Include="ApplicationCore\CommandLineOptions\DatabaseUpgradeBackupManager.cs" />
@@ -775,6 +776,7 @@
     <Compile Include="ApplicationCore\Licensing\TangoRequests\ShipWorksReleaseInfo.cs" />
     <Compile Include="ApplicationCore\Licensing\TangoRequests\TangoGetReleaseByUserRequest.cs" />
     <Compile Include="ApplicationCore\Licensing\TangoRequests\TangoGetReleaseByVersionRequest.cs" />
+    <Compile Include="ApplicationCore\Settings\AutoUpdateSettings.cs" />
     <Compile Include="ApplicationCore\ShipWorksSessionWrapper.cs" />
     <Compile Include="ApplicationCore\Licensing\ITangoLogShipmentProcessor.cs" />
     <Compile Include="ApplicationCore\Licensing\ITangoSecurityValidator.cs" />

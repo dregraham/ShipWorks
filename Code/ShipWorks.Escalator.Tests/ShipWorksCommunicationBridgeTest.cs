@@ -1,5 +1,8 @@
 ﻿using System;
+using System.IO.Pipes;
+using Autofac;
 using Autofac.Extras.Moq;
+using Interapptive.Shared.AutoUpdate;
 using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore;
 using ShipWorks.Data.Administration;
@@ -9,12 +12,11 @@ using Xunit;
 
 namespace ShipWorks.Escalator.Tests
 {
-    public class ShipWorksCommunicationBridgeTest
+    public class ShipWorksCommunicationBridgeTest : IDisposable
     {
         private readonly AutoMock mock;
         private readonly ShipWorksCommunicationBridge testObject;
         private readonly Guid sessionGuid;
-        private readonly UpdateService updateService;
 
         public ShipWorksCommunicationBridgeTest()
         {
@@ -23,39 +25,32 @@ namespace ShipWorks.Escalator.Tests
 
             mock.Mock<IServiceName>().Setup(s => s.GetInstanceID()).Returns(sessionGuid);
 
-            testObject = mock.Create<ShipWorksCommunicationBridge>();
-            testObject.StartPipeServer();
+            testObject = mock.Create<ShipWorksCommunicationBridge>(new TypedParameter(typeof(string), "instance"));
 
             var session = mock.Mock<IShipWorksSession>();
             session.SetupGet(s => s.InstanceID).Returns(sessionGuid);
 
             var dataPath = mock.Mock<IDataPath>();
             dataPath.SetupGet(d => d.InstanceSettings).Returns(string.Empty);
-
-            updateService = mock.Create<UpdateService>();
         }
 
         [Fact]
-        public void CommunicationBridgeOnMessage_RecievesMessagesFromShipWorksUpdater()
+        public void IsAvailable_ReturnsTrue_WhenConnectionSuccessful()
         {
-            Version version = new Version(1, 2, 3, 4567);
+            testObject.StartPipeServer();
+    
+            Assert.True(testObject.IsAvailable());
+        }
 
-            bool messageReceived = false;
+        [Fact]
+        public void IsAvailable_ReturnsFalse_WhenConnectionIsNotSuccessful()
+        {
+            Assert.False(testObject.IsAvailable());
+        }
 
-            testObject.OnMessage += (s) =>
-            {
-                Assert.Equal(version.ToString(), s.Trim('\0'));
-                messageReceived = true;
-            };
-
-            updateService.Update(version);
-
-            Functional.Retry(() => {
-                Assert.True(messageReceived);
-                return true;
-            }, 5, TimeSpan.FromMilliseconds(250), ex => messageReceived == false);
-
-            Assert.True(messageReceived);
+        public void Dispose()
+        {
+            mock?.Dispose();
         }
     }
 }

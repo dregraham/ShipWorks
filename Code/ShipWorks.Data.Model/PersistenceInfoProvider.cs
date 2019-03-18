@@ -792,7 +792,7 @@ namespace ShipWorks.Data.Model
 		/// <summary>Inits ConfigurationEntity's mappings</summary>
 		private void InitConfigurationEntityMappings()
 		{
-			this.AddElementMapping("ConfigurationEntity", @"ShipWorksLocal", @"dbo", "Configuration", 20, 0);
+			this.AddElementMapping("ConfigurationEntity", @"ShipWorksLocal", @"dbo", "Configuration", 21, 0);
 			this.AddElementFieldMapping("ConfigurationEntity", "ConfigurationID", "ConfigurationID", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 0);
 			this.AddElementFieldMapping("ConfigurationEntity", "RowVersion", "RowVersion", false, "Timestamp", 2147483647, 0, 0, false, "", null, typeof(System.Byte[]), 1);
 			this.AddElementFieldMapping("ConfigurationEntity", "LogOnMethod", "LogOnMethod", false, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 2);
@@ -813,6 +813,7 @@ namespace ShipWorks.Data.Model
 			this.AddElementFieldMapping("ConfigurationEntity", "DefaultPickListTemplateID", "DefaultPickListTemplateID", true, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 17);
 			this.AddElementFieldMapping("ConfigurationEntity", "AutoUpdateDayOfWeek", "AutoUpdateDayOfWeek", false, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 18);
 			this.AddElementFieldMapping("ConfigurationEntity", "AutoUpdateHourOfDay", "AutoUpdateHourOfDay", false, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 19);
+			this.AddElementFieldMapping("ConfigurationEntity", "AutoUpdateStartDate", "AutoUpdateStartDate", false, "DateTime2", 0, 7, 0, false, "", null, typeof(System.DateTime), 20);
 		}
 
 		/// <summary>Inits CustomerEntity's mappings</summary>

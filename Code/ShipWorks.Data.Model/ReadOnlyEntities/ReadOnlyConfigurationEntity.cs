@@ -56,6 +56,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             DefaultPickListTemplateID = source.DefaultPickListTemplateID;
             AutoUpdateDayOfWeek = source.AutoUpdateDayOfWeek;
             AutoUpdateHourOfDay = source.AutoUpdateHourOfDay;
+            AutoUpdateStartDate = source.AutoUpdateStartDate;
             
             
             
@@ -184,6 +185,12 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         public System.Int32 AutoUpdateHourOfDay { get; }
+        /// <summary> The AutoUpdateStartDate property of the Entity Configuration<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "Configuration"."AutoUpdateStartDate"<br/>
+        /// Table field type characteristics (type, precision, scale, length): DateTime2, 7, 0, 0<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+        public System.DateTime AutoUpdateStartDate { get; }
         
         
         

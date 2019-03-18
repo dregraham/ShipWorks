@@ -23,6 +23,7 @@ namespace ShipWorks.ApplicationCore.MessageBoxes
     {
         private int TimeLimit = 30;
         private System.Timers.Timer timer;
+        private IShipWorksCommunicationBridge communicationBridge;
         private IUpdateService updateService;
 
         /// <summary>
@@ -32,9 +33,10 @@ namespace ShipWorks.ApplicationCore.MessageBoxes
         {
             InitializeComponent();
 
+            communicationBridge = IoC.UnsafeGlobalLifetimeScope.Resolve<IShipWorksCommunicationBridge>(new TypedParameter(typeof(string), ShipWorksSession.InstanceID.ToString()));
             updateService = IoC.UnsafeGlobalLifetimeScope.Resolve<IUpdateService>();
 
-            if (updateService.IsAvailable())
+            if (communicationBridge.IsAvailable())
             {
                 close.Text = "Cancel";
                 update.Visible = true;
@@ -74,7 +76,7 @@ namespace ShipWorks.ApplicationCore.MessageBoxes
                 Invoke(new MethodInvoker(UpdateShipWorks));
             }
 
-            Result result = updateService.Update(SqlSchemaUpdater.GetInstalledSchemaVersion());
+            Result result = updateService.Update(SqlSchemaUpdater.GetBuildVersion());
 
             if (result.Failure)
             {
@@ -131,7 +133,6 @@ namespace ShipWorks.ApplicationCore.MessageBoxes
         /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
         protected override void Dispose(bool disposing)
         {
-            updateService?.Dispose();
             timer?.Dispose();
 
             if (disposing && (components != null))

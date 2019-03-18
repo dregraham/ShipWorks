@@ -1,11 +1,12 @@
 ﻿using System;
 using System.IO;
-using System.IO.Pipes;
-using System.Text;
+using System.Windows.Forms;
+using Interapptive.Shared;
 using Interapptive.Shared.AutoUpdate;
 using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Licensing.TangoRequests;
+using ShipWorks.ApplicationCore.Settings;
 using ShipWorks.Data.Connection;
 using ShipWorks.Stores;
 using ShipWorks.Users;
@@ -18,50 +19,32 @@ namespace ShipWorks.Data.Administration
     /// </summary>
     public class UpdateService : IUpdateService
     {
-        private readonly string UpdateInProgressFilePath;
-        private NamedPipeClientStream updaterPipe;
+        private readonly string updateInProgressFilePath;
+        private IShipWorksCommunicationBridge autoUpdateStartPipe;
+        private readonly IShipWorksSession shipWorksSession;
         private readonly IAutoUpdateStatusProvider autoUpdateStatusProvider;
         private readonly ISqlSession sqlSession;
-        private readonly ITangoGetReleaseByUserRequest tangoGetReleaseByCustomerRequest;
+        private readonly ITangoGetReleaseByUserRequest tangoGetReleaseByUserRequest;
+        private readonly Func<string, IShipWorksCommunicationBridge> communicationBridgeFactory;
 
         /// <summary>
         /// Constructor
         /// </summary>
+        [NDependIgnoreTooManyParamsAttribute]
         public UpdateService(
             IShipWorksSession shipWorksSession,
             IAutoUpdateStatusProvider autoUpdateStatusProvider,
             ISqlSession sqlSession,
-            ITangoGetReleaseByUserRequest tangoGetReleaseByCustomerRequest,
+            ITangoGetReleaseByUserRequest tangoGetReleaseByUserRequest,
+            Func<string, IShipWorksCommunicationBridge> communicationBridgeFactory,
             IDataPath dataPath)
         {
-            updaterPipe = new NamedPipeClientStream(".", shipWorksSession.InstanceID.ToString(), PipeDirection.Out);
+            this.shipWorksSession = shipWorksSession;
             this.autoUpdateStatusProvider = autoUpdateStatusProvider;
             this.sqlSession = sqlSession;
-            this.tangoGetReleaseByCustomerRequest = tangoGetReleaseByCustomerRequest;
-            UpdateInProgressFilePath = Path.Combine(dataPath.InstanceSettings, "UpdateInProcess.txt");
-        }
-
-        /// <summary>
-        /// Check if the updater is available
-        /// </summary>
-        public bool IsAvailable()
-        {
-            if (!updaterPipe.IsConnected)
-            {
-                // Give it 1 second to connect
-                try
-                {
-                    updaterPipe.Connect(1000);
-                }
-                catch (Exception)
-                {
-                    // Connection can fail if something else is connected
-                    // or if the timeout has elapsed
-                    return false;
-                }
-            }
-
-            return updaterPipe.IsConnected;
+            this.tangoGetReleaseByUserRequest = tangoGetReleaseByUserRequest;
+            this.communicationBridgeFactory = communicationBridgeFactory;
+            updateInProgressFilePath = Path.Combine(dataPath.InstanceSettings, "UpdateInProcess.txt");
         }
 
         /// <summary>
@@ -70,16 +53,19 @@ namespace ShipWorks.Data.Administration
         /// <returns></returns>
         public Result TryUpdate()
         {
-            Version databaseVersion = SqlSchemaUpdater.GetInstalledSchemaVersion();
+            if (!sqlSession.CanConnect())
+            {
+                return Result.FromError(string.Empty);
+            }
 
             // Check to see if we just launched shipworks after attempting to update the exe
-            if (File.Exists(UpdateInProgressFilePath))
+            if (File.Exists(updateInProgressFilePath))
             {
-                string version = File.ReadAllText(UpdateInProgressFilePath);
+                string version = File.ReadAllText(updateInProgressFilePath);
 
                 try
                 {
-                    File.Delete(UpdateInProgressFilePath);
+                    File.Delete(updateInProgressFilePath);
                 }
                 catch (IOException)
                 {
@@ -87,23 +73,19 @@ namespace ShipWorks.Data.Administration
                     // deleting it will fail, in that case ignore the error
                 }
 
-                // if the version we are currently running is lower than the version we were trying to update to then something went wrong
-                // skip the rest of the update process here because we don't want to get stuck in a loop where we keep attempting
-                // to update and fail
-                if (Version.TryParse(version, out Version updateInProcessVersion) && databaseVersion < updateInProcessVersion)
-                {
-                    return Result.FromError("The previous ShipWorks auto update failed. Restart ShipWorks to try again.");
-                }
+                // We are starting back up after installing an update, dont update again because that
+                // could get us stuck in an update loop
+                return Result.FromError("An update was just installed, skipping updates.");
             }
 
             // For localdb we manually check to see if a new version is available, this is because
             // the windows service that is running our update service does not have access to localdb
-            if (sqlSession.Configuration.IsLocalDb())
+            if (sqlSession.Configuration.IsLocalDb() && !AutoUpdateSettings.IsAutoUpdateDisabled)
             {
                 DataProvider.InitializeForApplication();
                 StoreManager.InitializeForCurrentSession(SecurityContext.EmptySecurityContext);
                 UserSession.InitializeForCurrentDatabase();
-                GenericResult<ShipWorksReleaseInfo> releaseInfo = tangoGetReleaseByCustomerRequest.GetReleaseInfo();
+                GenericResult<ShipWorksReleaseInfo> releaseInfo = tangoGetReleaseByUserRequest.GetReleaseInfo();
 
                 if (releaseInfo.Success)
                 {
@@ -117,10 +99,10 @@ namespace ShipWorks.Data.Administration
             }
 
             // Check see if the database has been updated and we need to update
-            if (databaseVersion > SqlSchemaUpdater.GetRequiredSchemaVersion())
+            if (SqlSchemaUpdater.GetInstalledSchemaVersion() > SqlSchemaUpdater.GetRequiredSchemaVersion() && !AutoUpdateSettings.IsAutoUpdateDisabled)
             {
                 // need to update
-                return Update(databaseVersion);
+                return Update(SqlSchemaUpdater.GetBuildVersion());
             }
 
             // No updates return an empty error so the consumer doesn't think that an update is kicking off
@@ -134,26 +116,27 @@ namespace ShipWorks.Data.Administration
         {
             try
             {
-                File.WriteAllText(UpdateInProgressFilePath, version.ToString());
+                File.WriteAllText(updateInProgressFilePath, version.ToString());
             }
             catch (Exception)
             {
                 // If we cant write a file to disk to signify that we are attempting
                 // upgrade then fail because it could get us stuck in an upgrade loop
-                return Result.FromError($"unable to write to {UpdateInProgressFilePath}.");
+                return Result.FromError($"unable to write to {updateInProgressFilePath}.");
             }
 
-            Result result = SendMessage(version.ToString());
+            IShipWorksCommunicationBridge communicationBridge = communicationBridgeFactory(shipWorksSession.InstanceID.ToString());
+            Result result = communicationBridge.SendMessage(version.ToString());
 
             if (result.Success)
             {
-                autoUpdateStatusProvider.ShowSplashScreen(ShipWorksSession.InstanceID.ToString("B"));
+                autoUpdateStatusProvider.ShowSplashScreen(shipWorksSession.InstanceID.ToString("B"));
             }
             else
             {
                 try
                 {
-                    File.Delete(UpdateInProgressFilePath);
+                    File.Delete(updateInProgressFilePath);
                 }
                 catch (Exception)
                 {
@@ -166,32 +149,56 @@ namespace ShipWorks.Data.Administration
         }
 
         /// <summary>
-        /// Send the update window information to the updater pipe
+        /// Listen for an auto update starting message
         /// </summary>
-        public Result SendMessage(string message)
+        public void ListenForAutoUpdateStart(IMainForm mainForm)
         {
-            if (IsAvailable())
-            {
-                try
-                {
-                    updaterPipe.Write(Encoding.UTF8.GetBytes(message), 0, message.Length);
-                }
-                catch (Exception ex)
-                {
-                    return Result.FromError(ex);
-                }
-                return Result.FromSuccess();
-            }
+            autoUpdateStartPipe = communicationBridgeFactory($"{shipWorksSession.InstanceID.ToString()}_AutoUpdateStart");
+            autoUpdateStartPipe.OnMessage += (s) => OnAutoUpdateStartmessage(s, mainForm);
 
-            return Result.FromError("Could not connect to update service.");
+            autoUpdateStartPipe.StartPipeServer();
         }
 
         /// <summary>
-        /// Dispose
+        /// Handle shipworks auto update starting
         /// </summary>
-        public void Dispose()
+        private void OnAutoUpdateStartmessage(string message, IMainForm mainForm)
         {
-            updaterPipe.Dispose();
+            if (!message.StartsWith("CloseShipWorks"))
+            {
+                return;
+            }
+
+            if (!mainForm.AdditionalFormsOpen())
+            {
+                if (mainForm.InvokeRequired)
+                {
+                    mainForm.BeginInvoke(new MethodInvoker(mainForm.Close));
+                } else
+                {
+                    mainForm.Close();
+                }
+            }
+            else
+            {
+               var timer = new System.Timers.Timer();
+                timer.Elapsed += (a, b) =>
+                {
+                    if (!mainForm.AdditionalFormsOpen())
+                    {
+                        if (mainForm.InvokeRequired)
+                        {
+                            mainForm.BeginInvoke(new MethodInvoker(mainForm.Close));
+                        }
+                        else
+                        {
+                            mainForm.Close();
+                        }
+                    }
+                };
+                timer.Interval = 2000;
+                timer.Start();
+            }
         }
     }
 }

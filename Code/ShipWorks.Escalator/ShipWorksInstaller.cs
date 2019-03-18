@@ -4,7 +4,9 @@ using System.IO;
 using System.Linq;
 using System.Management;
 using System.Reflection;
+using System.Threading;
 using Interapptive.Shared.AutoUpdate;
+using Interapptive.Shared.Collections;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
 using log4net;
@@ -20,16 +22,22 @@ namespace ShipWorks.Escalator
         private readonly ILog log;
         private readonly IServiceName serviceName;
         private readonly IAutoUpdateStatusProvider autoUpdateStatusProvider;
+        private readonly Func<string, IShipWorksCommunicationBridge> communicationBridgeFactory;
         private bool relaunchShipWorks;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public ShipWorksInstaller(Func<Type, ILog> logFactory, IServiceName serviceName, IAutoUpdateStatusProvider autoUpdateStatusProvider)
+        public ShipWorksInstaller(
+            Func<Type, ILog> logFactory,
+            IServiceName serviceName,
+            IAutoUpdateStatusProvider autoUpdateStatusProvider,
+            Func<string, IShipWorksCommunicationBridge> communicationBridgeFactory)
         {
             log = logFactory(GetType());
             this.serviceName = serviceName;
             this.autoUpdateStatusProvider = autoUpdateStatusProvider;
+            this.communicationBridgeFactory = communicationBridgeFactory;
         }
 
         /// <summary>
@@ -45,42 +53,93 @@ namespace ShipWorks.Escalator
             }
             log.InfoFormat("Install {0} file validated", file.Path);
 
+            if (upgradeDatabase)
+            {
+                Result databaseLock = GetUpgradeLock();
+
+                if (databaseLock.Failure)
+                {
+                    log.Error(databaseLock.Message);
+                    return databaseLock;
+                }
+            }
+
             KillShipWorks();
+
             return RunSetup(file, upgradeDatabase);
         }
 
         /// <summary>
-        /// Kill any instance of Shipworks running.
+        /// Kill any instance of Shipworks UI running.
         /// </summary>
+        /// <remarks>callback to invoke when shipworks is dead</remarks>
         private void KillShipWorks()
         {
-            foreach (Process process in Process.GetProcessesByName("shipworks"))
+            if (Process.GetProcessesByName("shipworks").Where(p => IsRunningWithoutArguments(p)).Any())
             {
-                // The process has a main window, so we should relaunch
-                if (IsRunningWithoutArguments(process))
-                {
-                    relaunchShipWorks = true;
-                }
+                relaunchShipWorks = true;
 
-                process.Kill();
+                // show the splash screen and patiently wait to see if shipworks closes
+                ShowSplashScreenAndAttemptToCloseShipWorks(30);
+
+                // update the status to say we are installing the update, secretly we will give the UI another 30 seconds to exit
+                autoUpdateStatusProvider.UpdateStatus("Installing Update");
+
+                // at this point shipworks was asked nicely to close, if it didnt close because there is a dialog open
+                // or its in the middle of doing something we are going to wait another 30 seconds before killing it
+                int countDown = 30;
+                while (Process.GetProcessesByName("shipworks").Where(p => IsRunningWithoutArguments(p)).Any() || countDown > 0)
+                {
+                    Thread.Sleep(1000);
+                    countDown -= 1;
+                }
             }
 
-            if (relaunchShipWorks)
+            // now that we have given the UI 60 seconds to close we are going to kill all shipworks processes
+            foreach (Process process in Process.GetProcessesByName("shipworks"))
             {
-                // Show the splash screen to give users feedback that the update
-                // is kicking off
-                autoUpdateStatusProvider.ShowSplashScreen(serviceName.GetInstanceID().ToString("B"));
+                log.Info($"Killing ShipWorks process.");
+                process?.Kill();
             }
         }
 
         /// <summary>
-        /// If SW is running without arguments, it is open
+        /// Show the splash screen with a countdown, after the countdown attempt to close shipworks
+        /// </summary>
+        private void ShowSplashScreenAndAttemptToCloseShipWorks(int countDownInSeconds)
+        {
+            // Show the splash screen to give users feedback that the update
+            // is kicking off
+            autoUpdateStatusProvider.ShowSplashScreen(serviceName.GetInstanceID().ToString("B"));
+
+            for (int secondsLeft = countDownInSeconds; secondsLeft > 0; secondsLeft--)
+            {
+                Thread.Sleep(1000);
+
+                // Check to see if the UI has been closed, if so skip to the end
+                if (Process.GetProcessesByName("shipworks").Where(p => IsRunningWithoutArguments(p)).None())
+                {
+                    log.Info("It looks like ShipWorks has been closed, skipping the rest of the countdown.");
+                    return;
+                }
+
+                string message = $"The application will automatically close in {secondsLeft} seconds.";
+                autoUpdateStatusProvider.UpdateStatus(message);
+                log.Info(message);
+            }
+
+            log.Info($"Asking ShipWorks to close.");
+            communicationBridgeFactory($"{serviceName.GetInstanceID().ToString()}_AutoUpdateStart").SendMessage("CloseShipWorks");
+        }
+
+        /// <summary>
+        /// If SW is running without arguments, it is open in ui mode
         /// </summary>
         private bool IsRunningWithoutArguments(Process process)
         {
             string commandLine = GetCommandLine(process);
 
-            return commandLine.Trim().EndsWith("shipworks.exe\"", StringComparison.InvariantCultureIgnoreCase);
+            return commandLine?.Trim().EndsWith("shipworks.exe\"", StringComparison.InvariantCultureIgnoreCase) ?? false;
         }
 
         /// <summary>
@@ -93,6 +152,28 @@ namespace ShipWorks.Escalator
             {
                 return objects.Cast<ManagementBaseObject>().SingleOrDefault()?["CommandLine"]?.ToString();
             }
+        }
+
+        /// <summary>
+        /// Get a database lock
+        /// </summary>
+        private Result GetUpgradeLock()
+        {
+            string process = $"{Path.GetDirectoryName(Assembly.GetEntryAssembly().Location)}\\swc.exe";
+            string arg = "/command=getupdatelock";
+
+            int exitCode;
+            log.InfoFormat("Executing {0} {1}", process, arg);
+
+            using (Process proc = Process.Start(process, arg))
+            {
+                proc.WaitForExit();
+                exitCode = proc.ExitCode;
+            }
+
+            return exitCode > 0 ?
+                Result.FromError($"Could not obtain database lock with exit code {exitCode}") :
+                Result.FromSuccess();
         }
 
         /// <summary>

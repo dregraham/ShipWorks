@@ -22,6 +22,7 @@ namespace ShipWorks.Escalator
         private readonly IShipWorksInstaller shipWorksInstaller;
         private readonly IFileWriter fileWriter;
         private readonly IAutoUpdateStatusProvider autoUpdateStatusProvider;
+        private readonly IShipWorksLauncher shipWorksLauncher;
 
         /// <summary>
         /// Constructor
@@ -31,12 +32,14 @@ namespace ShipWorks.Escalator
             IShipWorksInstaller shipWorksInstaller,
 			IFileWriter fileWriter,
             Func<Type, ILog> logFactory,
-            IAutoUpdateStatusProvider autoUpdateStatusProvider)
+            IAutoUpdateStatusProvider autoUpdateStatusProvider,
+            IShipWorksLauncher shipWorksLauncher)
         {
             this.updaterWebClient = updaterWebClient;
             this.shipWorksInstaller = shipWorksInstaller;
             this.fileWriter = fileWriter;
             this.autoUpdateStatusProvider = autoUpdateStatusProvider;
+            this.shipWorksLauncher = shipWorksLauncher;
             log = logFactory(typeof(ShipWorksUpgrade));
         }
 
@@ -45,6 +48,8 @@ namespace ShipWorks.Escalator
         /// </summary>
         public async Task Upgrade(Version version)
         {
+            bool relaunchShipWorks = true;
+
             try
             {
                 log.InfoFormat("ShipWorksUpgrade attempting to upgrade to version {0}", version);
@@ -54,15 +59,22 @@ namespace ShipWorks.Escalator
                 if (shipWorksRelease == null)
                 {
                     log.InfoFormat("Version {0} not found by webclient.", version);
-                    return;
                 }
-
-                await Install(shipWorksRelease, false).ConfigureAwait(false);
+                else
+                {
+                    Result installResult = await Install(shipWorksRelease, false).ConfigureAwait(false);
+                    relaunchShipWorks = installResult.Failure;
+                }
             }
             catch (Exception ex)
             {
                 log.Error("Error trying to upgrade by version", ex);
-                throw;
+            }
+
+            if (relaunchShipWorks)
+            {
+                autoUpdateStatusProvider.CloseSplashScreen();
+                shipWorksLauncher.StartShipWorks();
             }
         }
 
@@ -104,11 +116,12 @@ namespace ShipWorks.Escalator
         /// <summary>
         /// Install new version of ShipWorks, optionally upgrading the database
         /// </summary>
-        private async Task Install(ShipWorksRelease shipWorksRelease, bool upgradeDatabase)
+        private async Task<Result> Install(ShipWorksRelease shipWorksRelease, bool upgradeDatabase)
         {
             if (IsInstallRunning(shipWorksRelease.DownloadUri))
             {
                 log.ErrorFormat("The installer {0} is already running", shipWorksRelease.DownloadUrl);
+                return Result.FromSuccess();
             }
             else
             {
@@ -123,6 +136,8 @@ namespace ShipWorks.Escalator
                 {
                     log.ErrorFormat("An error occurred while installing the new version of ShipWorks: {0}", installationResult.Message);
                 }
+
+                return installationResult;
             }
         }
 

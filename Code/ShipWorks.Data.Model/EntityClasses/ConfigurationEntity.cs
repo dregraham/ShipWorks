@@ -336,6 +336,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("AutoUpdateDayOfWeek", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("AutoUpdateHourOfDay", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("AutoUpdateStartDate", fieldHashtable);
 		}
 		#endregion
 
@@ -592,6 +594,16 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.Int32)GetValue((int)ConfigurationFieldIndex.AutoUpdateHourOfDay, true); }
 			set	{ SetValue((int)ConfigurationFieldIndex.AutoUpdateHourOfDay, value); }
+		}
+
+		/// <summary> The AutoUpdateStartDate property of the Entity Configuration<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "Configuration"."AutoUpdateStartDate"<br/>
+		/// Table field type characteristics (type, precision, scale, length): DateTime2, 7, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.DateTime AutoUpdateStartDate
+		{
+			get { return (System.DateTime)GetValue((int)ConfigurationFieldIndex.AutoUpdateStartDate, true); }
+			set	{ SetValue((int)ConfigurationFieldIndex.AutoUpdateStartDate, value); }
 		}
 	
 		/// <summary> Gets the type of the hierarchy this entity is in. </summary>
