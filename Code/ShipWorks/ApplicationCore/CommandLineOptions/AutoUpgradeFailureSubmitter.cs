@@ -109,6 +109,7 @@ namespace ShipWorks.ApplicationCore.CommandLineOptions
         /// <summary>
         /// DTO for sending upgrade failures to the queue
         /// </summary>
+        [Obfuscation(ApplyToMembers = true, Exclude = false, StripAfterObfuscation = false)]
         private struct UpgradeFailureDto
         {
             /// <summary>
