@@ -1042,6 +1042,7 @@
     <Compile Include="Shipping\Carriers\FedEx\Api\UploadDocuments\Request\Manipulators\FedExUploadImagesTransactionDetailManipulator.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Api\UploadDocuments\Request\Manipulators\FedExUploadImagesVersionManipulator.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Api\UploadDocuments\Request\Manipulators\FedExUploadImagesWebAuthenticationDetailManipulator.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\UploadDocuments\Response\FedExUploadImagesResponse.cs" />
     <Compile Include="Shipping\Insurance\InsureShip\IInsureShipClaim.cs" />
     <Compile Include="Shipping\Insurance\InsureShip\IInsureShipClaimValidator.cs" />
     <Compile Include="Shipping\Insurance\InsureShip\InsureShipClaimValidator.cs" />
@@ -11331,7 +11332,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Archiving\" />
-    <Folder Include="Shipping\Carriers\FedEx\Api\UploadDocuments\Response\" />
     <Folder Include="UI\Editors\" />
   </ItemGroup>
   <ItemGroup>
