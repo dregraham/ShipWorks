@@ -715,7 +715,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
 
                 if (rateDetail.DeliveryTimestampSpecified)
                 {
-                    // Transite time
+                    // Transit time
                     deliveryDate = rateDetail.DeliveryTimestamp;
                     transitDays = (deliveryDate.Value.Date - shipment.ShipDate.Date).Days;
                     transitDaysDescription = GetTransitDaysDescription(transitDays, deliveryDate, serviceType);
@@ -1228,7 +1228,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         {
             log.Info("Performing FedEx Image Upload");
             CarrierRequest uploadImagesRequest = requestFactory.CreateUploadImageRequest(account);
-            FedExUploadImagesResponse uploadImagesResponse = uploadImagesRequest.Submit() as FedExUploadImagesResponse;
+            FedExUploadImagesResponse uploadImagesResponse = (FedExUploadImagesResponse) uploadImagesRequest.Submit();
 
             if (uploadImagesResponse == null)
             {
