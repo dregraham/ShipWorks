@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using Autofac;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data;
 using ShipWorks.UI;
@@ -13,7 +14,11 @@ using ShipWorks.Data.Connection;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.UI;
+using ShipWorks.ApplicationCore;
+using ShipWorks.Data.Model;
+using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Shipping.Carriers.Api;
+using ShipWorks.Shipping.Carriers.FedEx.Api;
 
 namespace ShipWorks.Shipping.Carriers.FedEx
 {
@@ -102,6 +107,16 @@ namespace ShipWorks.Shipping.Carriers.FedEx
 
             try
             {
+                if (account.Fields[(int) FedExAccountFieldIndex.Letterhead].IsChanged || 
+                    account.Fields[(int) FedExAccountFieldIndex.Signature].IsChanged)
+                {
+                    using (ILifetimeScope scope = IoC.BeginLifetimeScope())
+                    {
+                        var shippingClerk = scope.Resolve<IFedExShippingClerk>();
+                        shippingClerk.PerformUploadImages(account);
+                    }
+                }
+
                 FedExAccountManager.SaveAccount(account);
 
                 DialogResult = DialogResult.OK;
