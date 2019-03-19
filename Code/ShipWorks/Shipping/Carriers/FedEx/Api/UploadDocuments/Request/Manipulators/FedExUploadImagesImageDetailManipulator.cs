@@ -11,7 +11,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.UploadDocuments.Request.Manipula
     /// </summary>
     public class FedExUploadImagesImageDetailManipulator : ICarrierRequestManipulator
     {
-        private List<UploadImageDetail> images;
 
         /// <summary>
         /// Manipulate the specified request.
@@ -19,15 +18,17 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.UploadDocuments.Request.Manipula
         /// <param name="request">The request being manipulated.</param>
         public void Manipulate(CarrierRequest request)
         {
+            List<UploadImageDetail> images = new List<UploadImageDetail>();
+
             // Make sure all of the properties we'll be accessing have been created
             ValidateRequest(request);
 
             FedExAccountEntity account = request.CarrierAccountEntity as FedExAccountEntity;
 
             // We can safely cast this since we've passed validation
-            UploadImagesRequest nativeRequest = request.NativeRequest as UploadImagesRequest;
+            UploadImagesRequest nativeRequest = (UploadImagesRequest) request.NativeRequest;
 
-            if (account.Letterhead != null)
+            if (account?.Letterhead != null)
             {
                 byte[] letterhead = Encoding.ASCII.GetBytes(account.Letterhead);
                 UploadImageDetail letterheadDetail = new UploadImageDetail
@@ -35,11 +36,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.UploadDocuments.Request.Manipula
                     Id = ImageId.IMAGE_1, 
                     Image = letterhead
                 };
-
+                
                 images.Add(letterheadDetail);
             }
 
-            if (account.Signature != null)
+            if (account?.Signature != null)
             {
                 byte[] signature = Encoding.ASCII.GetBytes(account.Signature);
 
