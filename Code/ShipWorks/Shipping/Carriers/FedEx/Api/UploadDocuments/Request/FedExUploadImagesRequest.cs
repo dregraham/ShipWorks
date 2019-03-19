@@ -19,12 +19,13 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.UploadDocuments.Request
 
         public FedExUploadImagesRequest(IEnumerable<ICarrierRequestManipulator> requestManipulators,
             IFedExServiceGateway fedExService, IFedExResponseFactory responseFactory, FedExAccountEntity accountEntity)
+            : base(requestManipulators, null)
         {
-            this.serviceGateway = fedExService;
+            serviceGateway = fedExService;
             this.responseFactory = responseFactory;
             this.accountEntity = accountEntity;
 
-            this.NativeRequest = new UploadImagesRequest();
+            NativeRequest = new UploadImagesRequest();
         }
 
         /// <summary>
