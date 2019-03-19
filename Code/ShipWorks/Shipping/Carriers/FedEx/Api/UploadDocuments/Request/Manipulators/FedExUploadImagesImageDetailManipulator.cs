@@ -33,7 +33,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.UploadDocuments.Request.Manipula
                 byte[] letterhead = Encoding.ASCII.GetBytes(account.Letterhead);
                 UploadImageDetail letterheadDetail = new UploadImageDetail
                 {
-                    Id = ImageId.IMAGE_1, 
+                    Id = ImageId.IMAGE_1,
+                    IdSpecified = true,
                     Image = letterhead
                 };
                 
@@ -47,6 +48,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.UploadDocuments.Request.Manipula
                 UploadImageDetail signatureDetail = new UploadImageDetail
                 {
                     Id = ImageId.IMAGE_2,
+                    IdSpecified = true,
                     Image = signature
                 };
 
