@@ -17,6 +17,13 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.UploadDocuments.Request
         private readonly IFedExResponseFactory responseFactory;
         private readonly FedExAccountEntity accountEntity;
 
+        /// <summary>
+        /// Initializes a new instance of the class.
+        /// </summary>
+        /// <param name="requestManipulators"></param>
+        /// <param name="fedExService"></param>
+        /// <param name="responseFactory"></param>
+        /// <param name="accountEntity"></param>
         public FedExUploadImagesRequest(IEnumerable<ICarrierRequestManipulator> requestManipulators,
             IFedExServiceGateway fedExService, IFedExResponseFactory responseFactory, FedExAccountEntity accountEntity)
             : base(requestManipulators, null)
@@ -43,7 +50,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.UploadDocuments.Request
             // Allow the manipulators to build the raw input request for the FedEx service
             ApplyManipulators();
 
-            UploadImagesReply nativeResponse = serviceGateway.UploadImages(NativeRequest as UploadImagesRequest);
+            UploadImagesReply nativeResponse = serviceGateway.UploadImages((UploadImagesRequest) NativeRequest);
             return responseFactory.CreateUploadImagesResponse(nativeResponse, this);
         }
     }
