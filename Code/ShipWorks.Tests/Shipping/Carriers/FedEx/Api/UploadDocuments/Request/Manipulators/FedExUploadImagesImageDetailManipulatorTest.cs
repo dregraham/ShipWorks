@@ -18,7 +18,6 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.UploadDocuments.Request.Ma
         private UploadImagesRequest nativeRequest;
 
         private FedExAccountEntity account;
-        private List<UploadImageDetail> images;
 
         public FedExUploadImagesImageDetailManipulatorTest()
         {
