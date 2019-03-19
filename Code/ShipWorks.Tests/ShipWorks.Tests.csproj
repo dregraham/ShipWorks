@@ -371,6 +371,13 @@
     <Compile Include="Shipping\Carriers\FedEx\Api\Fims\FimsCarrierResponseTest.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Api\Fims\FimsShippingClerkTest.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Api\Fims\FimsWebClientTest.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\UploadDocuments\Request\FedExUploadImagesRequestTest.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\UploadDocuments\Request\Manipulators\FedExUploadImagesClientDetailManipulatorTest.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\UploadDocuments\Request\Manipulators\FedExUploadImagesImageDetailManipulatorTest.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\UploadDocuments\Request\Manipulators\FedExUploadImagesTransactionDetailManipulatorTest.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\UploadDocuments\Request\Manipulators\FedExUploadImagesVersionManipulatorTest.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\UploadDocuments\Request\Manipulators\FedExUploadImagesWebAuthenticationDetailManipulatorTest.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\UploadDocuments\Response\FedExUploadingImagesResponseTest.cs" />
     <Compile Include="Shipping\Carriers\FedEx\FedExPackageAdapterTest.cs" />
     <Compile Include="Shipping\Carriers\FedEx\BestRate\FedExBestRateBrokerTest.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Api\CarrierRequestTest.cs" />
