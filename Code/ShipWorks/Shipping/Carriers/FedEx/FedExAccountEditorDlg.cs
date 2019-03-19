@@ -102,8 +102,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 {
                     using (ILifetimeScope scope = IoC.BeginLifetimeScope())
                     {
-                        var shippingClerk = scope.Resolve<IFedExShippingClerk>();
-                        shippingClerk.PerformUploadImages(account);
+                        var clerk = scope.Resolve<IFedExShippingClerkFactory>().Create(null);
+                        clerk.PerformUploadImages(account);
                     }
                 }
 
