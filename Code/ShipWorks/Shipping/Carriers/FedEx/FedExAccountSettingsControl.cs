@@ -50,6 +50,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// </summary>
         public void SaveToAccount(FedExAccountEntity account)
         {
+            var letterheadFilename = openFileDialogLetterhead.FileName;
+            var signatureFilename = openFileDialogSignature.FileName;
+
             account.SignatureRelease = signatureAuth.Text;
 
             XElement root = new XElement("Root");
@@ -75,17 +78,23 @@ namespace ShipWorks.Shipping.Carriers.FedEx
 
             account.SmartPostHubList = root.ToString();
 
-            Bitmap bitmapImageLetterhead = new Bitmap(openFileDialogLetterhead.FileName);
-            Bitmap bitmapImageSignature = new Bitmap(openFileDialogSignature.FileName);
-
             try
             {
-                account.Letterhead = bitmapImageLetterhead.ImageToBase64String(letterheadPreview.Image.RawFormat);
-                account.Signature = bitmapImageSignature.ImageToBase64String(signaturePreview.Image.RawFormat);
+                if (letterheadFilename.Length > 0)
+                {
+                    var bitmapImageLetterhead = new Bitmap(letterheadFilename);
+                    account.Letterhead = bitmapImageLetterhead.ImageToBase64String(letterheadPreview.Image.RawFormat);
+                }
+
+                if (signatureFilename.Length > 0)
+                {
+                    var bitmapImageSignature = new Bitmap(signatureFilename);
+                    account.Signature = bitmapImageSignature.ImageToBase64String(signaturePreview.Image.RawFormat);
+                }
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Something went wrong" + ex.Message);
+                MessageBox.Show(ex.Message);
             }
         }
 
