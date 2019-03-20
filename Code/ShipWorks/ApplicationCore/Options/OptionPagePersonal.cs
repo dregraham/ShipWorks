@@ -1,14 +1,14 @@
 using System;
 using System.Drawing;
 using System.Windows.Forms;
-using ShipWorks.ApplicationCore.Appearance;
-using ShipWorks.Users;
-using ShipWorks.Filters;
-using ShipWorks.Data.Model.EntityClasses;
 using Interapptive.Shared.Utility;
+using ShipWorks.ApplicationCore.Appearance;
 using ShipWorks.Data.Connection;
-using ShipWorks.UI.Controls;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Filters;
 using ShipWorks.Filters.Grid;
+using ShipWorks.UI.Controls;
+using ShipWorks.Users;
 
 namespace ShipWorks.ApplicationCore.Options
 {
@@ -54,7 +54,7 @@ namespace ShipWorks.ApplicationCore.Options
 
                 // Find the node we need in the layout
                 FilterNodeEntity filterNode = FilterLayoutContext.Current.FindNode(settings.FilterInitialSpecified);
-                if (filterNode == null)
+                if (filterNode == null || filterNode.Filter.IsSavedSearch)
                 {
                     filterNode = FilterLayoutContext.Current.GetSharedLayout(FilterTarget.Orders).FilterNode;
                 }
@@ -65,7 +65,7 @@ namespace ShipWorks.ApplicationCore.Options
                 // Set selected sort option
                 filterInitialSort.SelectedValue = (FilterInitialSortType) settings.FilterInitialSortType;
 
-                comboWeightFormat.SelectedValue = (WeightDisplayFormat) settings.ShippingWeightFormat;                
+                comboWeightFormat.SelectedValue = (WeightDisplayFormat) settings.ShippingWeightFormat;
             }
             else
             {
@@ -115,6 +115,6 @@ namespace ShipWorks.ApplicationCore.Options
         private void OnChangeInitialFilterSelection(object sender, EventArgs e)
         {
             filterComboBox.Enabled = radioInitialFilterAlways.Checked;
-        }        
+        }
     }
 }
