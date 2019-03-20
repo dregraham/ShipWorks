@@ -15,6 +15,8 @@ using ShipWorks.Settings;
 using ShipWorks.Users;
 using Xunit;
 using static ShipWorks.Tests.Shared.ExtensionMethods.ParameterShorteners;
+using System.Linq;
+using ShipWorks.Messaging.Messages.Shipping;
 
 namespace ShipWorks.SingleScan.Tests
 {
@@ -65,7 +67,7 @@ namespace ShipWorks.SingleScan.Tests
 
             scheduler.Start();
 
-            mainGridControl.Verify(m => m.FocusSearch(), Times.Once());
+            Assert.True(testMessenger.SentMessages.OfType<FocusQuickSearchMessage>().Any());
         }
 
         [Theory]

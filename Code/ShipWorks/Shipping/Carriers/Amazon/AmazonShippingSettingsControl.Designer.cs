@@ -99,8 +99,7 @@
             this.helpLink1.Size = new System.Drawing.Size(337, 13);
             this.helpLink1.TabIndex = 73;
             this.helpLink1.Text = "Click here for instructions on obtaining your Seller ID and Auth Token";
-            this.helpLink1.Url = 
-                "http://support.shipworks.com/support/solutions/articles/4000076106-get-your-amazon-seller-id-and-auth-token-for-channel-advisor";
+            this.helpLink1.Url = "https://shipworks.zendesk.com/hc/en-us/articles/360022461052";
             // 
             // AmazonShippingTitle
             // 

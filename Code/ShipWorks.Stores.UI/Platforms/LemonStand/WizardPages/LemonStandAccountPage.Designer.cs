@@ -95,7 +95,7 @@
             this.helpLink.TabIndex = 20;
             this.helpLink.TabStop = true;
             this.helpLink.Text = "click here.";
-            this.helpLink.Url = "http://support.shipworks.com/support/solutions/articles/4000062623";
+            this.helpLink.Url = "https://shipworks.zendesk.com/hc/en-us/articles/360022465632";
             this.helpLink.UseCompatibleTextRendering = true;
             // 
             // label3

@@ -1,13 +1,7 @@
-using System;
-using System.Collections.Generic;
-using System.Text;
 using Divelements.SandGrid;
-using System.Drawing;
-using Divelements.SandGrid.Rendering;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Filters;
-using ShipWorks.UI.Controls.SandGrid;
 using log4net;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.UI.Controls.SandGrid;
 
 namespace ShipWorks.Filters.Controls
 {
@@ -16,12 +10,9 @@ namespace ShipWorks.Filters.Controls
     /// </summary>
     public class FilterTreeGridRow : SandGridTreeRow
     {
-        static readonly ILog log = LogManager.GetLogger(typeof(FilterTreeGridRow));
-
-        FilterNodeEntity filterNode;
-        FilterCount filterCount;
-
+        private static readonly ILog log = LogManager.GetLogger(typeof(FilterTreeGridRow));
         private FilterState? previousFilterState;
+        private FilterNodeEntity filterProxy;
 
         /// <summary>
         /// Constructor
@@ -31,39 +22,40 @@ namespace ShipWorks.Filters.Controls
         {
             SetFilter(filterNode);
         }
-        
+
         /// <summary>
         /// The filter node that this row represents
         /// </summary>
-        public FilterNodeEntity FilterNode
-        {
-            get { return filterNode; }
-        }
+        public FilterNodeEntity FilterNode { get; private set; }
 
         /// <summary>
         /// The count as of its last update
         /// </summary>
-        public FilterCount FilterCount
-        {
-            get { return filterCount; }
-        }
+        public FilterCount FilterCount { get; private set; }
 
         /// <summary>
         /// Indicates if the row represents a folder that can contain other items
         /// </summary>
-        public override bool IsFolder
-        {
-            get { return filterNode.Filter.IsFolder; }
-        }
+        public override bool IsFolder => FilterNode.Filter.IsFolder;
 
         /// <summary>
         /// Indicates if the row can be dragged
         /// </summary>
-        public override bool IsDraggable
+        public override bool IsDraggable => !FilterHelper.IsBuiltin(FilterNode);
+
+        /// <summary>
+        /// Filter proxy for saved searches
+        /// </summary>
+        public FilterNodeEntity FilterProxy
         {
-            get
+            get => filterProxy;
+            internal set
             {
-                return !FilterHelper.IsBuiltin(filterNode);
+                if (filterProxy != value)
+                {
+                    filterProxy = value;
+                    UpdateFilterCount();
+                }
             }
         }
 
@@ -79,7 +71,7 @@ namespace ShipWorks.Filters.Controls
         public override bool IsValidDrop(SandGridDragDropRow sourceRow, DropTargetState state)
         {
             // Cant drop things above or below a builtin item
-            if (FilterHelper.IsBuiltin(filterNode) && state != DropTargetState.DropInside)
+            if (FilterHelper.IsBuiltin(FilterNode) && state != DropTargetState.DropInside)
             {
                 return false;
             }
@@ -104,13 +96,13 @@ namespace ShipWorks.Filters.Controls
 
         /// <summary>
         /// Toggles the style of the cells based on the state of the filter: uses
-        /// the disabled font if the filter is disabled; otherwise the "normal" 
+        /// the disabled font if the filter is disabled; otherwise the "normal"
         /// font/color.
         /// </summary>
         /// <param name="filterState">State of the filter.</param>
         private void ToggleStyle(FilterState filterState)
         {
-            bool isFilterDisabled = filterState == (byte)FilterState.Disabled;
+            bool isFilterDisabled = filterState == (byte) FilterState.Disabled;
 
             // We need to use a new disabled font each time we toggle since it's disposable and the
             // FilterTreeGridRow is not
@@ -129,7 +121,7 @@ namespace ShipWorks.Filters.Controls
         /// </summary>
         public void UpdateFilterCount()
         {
-            FilterNodeEntity currentFilterNode = filterNode;
+            FilterNodeEntity currentFilterNode = FilterNode;
 
             if (currentFilterNode == null)
             {
@@ -137,21 +129,21 @@ namespace ShipWorks.Filters.Controls
                 return;
             }
 
-            FilterEntity filter = filterNode.Filter;
+            FilterEntity filter = FilterNode.Filter;
             if (filter == null)
             {
                 log.Warn("Cannot update filter count, no filter is set");
                 return;
             }
 
-            FilterCount count = FilterContentManager.GetCount(currentFilterNode.FilterNodeID);
-            if (count != filterCount)
+            FilterCount count = GetFilterCount(FilterNode);
+            if (count != FilterCount)
             {
-                filterCount = count;
+                FilterCount = count;
                 RedrawNeeded();
             }
 
-            UpdateLayoutForSpeed(filter, currentFilterNode, count);
+            UpdateLayoutForSpeed(filter, currentFilterNode, FilterCount);
         }
 
         /// <summary>
@@ -169,17 +161,30 @@ namespace ShipWorks.Filters.Controls
         /// </summary>
         private void SetFilter(FilterNodeEntity filterNodeEntity)
         {
-            filterNode = filterNodeEntity;
-            filterCount = FilterContentManager.GetCount(filterNode.FilterNodeID);
+            FilterNode = filterNodeEntity;
+            FilterCount = GetFilterCount(filterNodeEntity);
+        }
+
+        /// <summary>
+        /// Get the filter count
+        /// </summary>
+        private FilterCount GetFilterCount(FilterNodeEntity filterNodeEntity)
+        {
+            if (filterNodeEntity?.Filter?.IsSavedSearch == true && FilterProxy == null)
+            {
+                return null;
+            }
+
+            return FilterContentManager.GetCount(FilterProxy?.FilterNodeID ?? filterNodeEntity.FilterNodeID);
         }
 
         /// <summary>
         /// Inspects the cost of the filter to determine if the row should be flagged as slow
         /// running filter by adjusting the image and filter name if it took more than 10,000
-        /// milliseconds to calculate the filter; otherwise the standard filter image and filter 
+        /// milliseconds to calculate the filter; otherwise the standard filter image and filter
         /// name is used.
         /// </summary>
-        /// <remarks>This method uses arguments for the filter and filter node instead of using the properties to 
+        /// <remarks>This method uses arguments for the filter and filter node instead of using the properties to
         /// ensure that the null checks done earlier still apply</remarks>
         private void UpdateLayoutForSpeed(FilterEntity filter, FilterNodeEntity currentFilterNode, FilterCount currentFilterCount)
         {
@@ -209,7 +214,7 @@ namespace ShipWorks.Filters.Controls
                 }
                 else
                 {
-                    // The filter does not exceed the warning threshold, so set the 
+                    // The filter does not exceed the warning threshold, so set the
                     // text and image to normal
                     IsFlaggedAsSlowRunning = false;
                     cell.Image = FilterHelper.GetFilterImage(currentFilterNode, false);
@@ -226,12 +231,9 @@ namespace ShipWorks.Filters.Controls
         }
 
         /// <summary>
-        /// Gets whether the filter associated with this row is disabled 
+        /// Gets whether the filter associated with this row is disabled
         /// </summary>
-        public bool IsFilterDisabled()
-        {
-            return CurrentFilterState == FilterState.Disabled;
-        }
+        public bool IsFilterDisabled() => CurrentFilterState == FilterState.Disabled;
 
         /// <summary>
         /// Gets the current state of the filter associated with this row
@@ -241,11 +243,24 @@ namespace ShipWorks.Filters.Controls
         {
             get
             {
-                FilterEntity filter = filterNode.Filter;
+                FilterEntity filter = FilterNode.Filter;
 
-                return filter != null ? 
-                    (FilterState)filter.State : 
+                return filter != null ?
+                    (FilterState) filter.State :
                     FilterState.Enabled;
+            }
+        }
+
+        /// <summary>
+        /// Clear the search proxy
+        /// </summary>
+        internal void ClearSearchProxy()
+        {
+            if (FilterProxy != null)
+            {
+                FilterProxy = null;
+                UpdateFilterCount();
+                UpdateStyle();
             }
         }
     }

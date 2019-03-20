@@ -34,13 +34,11 @@ namespace ShipWorks.Filters
     /// </summary>
     public static class FilterHelper
     {
-        static readonly ILog log = LogManager.GetLogger(typeof(FilterHelper));
+        private static readonly ILog log = LogManager.GetLogger(typeof(FilterHelper));
+        private const string myFiltersName = "My Filters";
+        private static readonly Dictionary<FilterImageType, Image> filterImageCache = new Dictionary<FilterImageType, Image>();
 
-        const string myFiltersName = "My Filters";
-
-        static readonly Dictionary<FilterImageType, Image> filterImageCache = new Dictionary<FilterImageType, Image>();
-
-        enum FilterImageType
+        private enum FilterImageType
         {
             MyFilters,
             Orders,
@@ -49,11 +47,14 @@ namespace ShipWorks.Filters
             HardLinkFolder,
             HardLinkFodlerWithCondition,
             HardLinkFilter,
+            HardLinkSavedSearch,
             SoftLinkFolder,
             SoftLinkFodlerWithCondition,
             SoftLinkFilter,
+            SoftLinkSavedSearch,
             Folder,
             FolderWithCondition,
+            SavedSearch,
             Filter
         }
 
@@ -141,7 +142,7 @@ namespace ShipWorks.Filters
         }
 
         /// <summary>
-        /// Indicates if the node is a filter that is in the My Filters collection 
+        /// Indicates if the node is a filter that is in the My Filters collection
         /// </summary>
         public static bool IsMyFilter(long filterNodeID)
         {
@@ -303,6 +304,10 @@ namespace ShipWorks.Filters
                 {
                     return filter.Definition == null ? GetFilterImage(FilterImageType.HardLinkFolder, createCopy) : GetFilterImage(FilterImageType.HardLinkFodlerWithCondition, createCopy);
                 }
+                else if (filter.IsSavedSearch)
+                {
+                    return GetFilterImage(FilterImageType.HardLinkSavedSearch, createCopy);
+                }
                 else
                 {
                     return GetFilterImage(FilterImageType.HardLinkFilter, createCopy);
@@ -314,6 +319,10 @@ namespace ShipWorks.Filters
                 {
                     return filter.Definition == null ? GetFilterImage(FilterImageType.SoftLinkFolder, createCopy) : GetFilterImage(FilterImageType.SoftLinkFodlerWithCondition, createCopy);
                 }
+                else if (filter.IsSavedSearch)
+                {
+                    return GetFilterImage(FilterImageType.SoftLinkSavedSearch, createCopy);
+                }
                 else
                 {
                     return GetFilterImage(FilterImageType.SoftLinkFilter, createCopy);
@@ -324,6 +333,10 @@ namespace ShipWorks.Filters
                 if (filter.IsFolder)
                 {
                     return filter.Definition == null ? GetFilterImage(FilterImageType.Folder, createCopy) : GetFilterImage(FilterImageType.FolderWithCondition, createCopy);
+                }
+                else if (filter.IsSavedSearch)
+                {
+                    return GetFilterImage(FilterImageType.SavedSearch, createCopy);
                 }
                 else
                 {
@@ -348,11 +361,14 @@ namespace ShipWorks.Filters
                     case FilterImageType.HardLinkFolder: return Resources.folderclosed_linked_infinity;
                     case FilterImageType.HardLinkFodlerWithCondition: return Resources.folderfilter_linked_infinity;
                     case FilterImageType.HardLinkFilter: return Resources.funnel_linked_infinity;
+                    case FilterImageType.HardLinkSavedSearch: return Resources.view_linked_infinity;
                     case FilterImageType.SoftLinkFolder: return Resources.folderclosed_linked_arrow;
                     case FilterImageType.SoftLinkFodlerWithCondition: return Resources.folderfilter_linked_arrow;
                     case FilterImageType.SoftLinkFilter: return Resources.funnel_linked_arrow;
+                    case FilterImageType.SoftLinkSavedSearch: return Resources.view_linked_arrow;
                     case FilterImageType.Folder: return Resources.folderclosed;
                     case FilterImageType.FolderWithCondition: return Resources.folderfilter;
+                    case FilterImageType.SavedSearch: return Resources.view;
                     case FilterImageType.Filter: return Resources.filter;
                 }
 

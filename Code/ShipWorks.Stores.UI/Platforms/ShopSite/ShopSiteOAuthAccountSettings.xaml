@@ -64,7 +64,7 @@
                    Grid.Column="1"
                    Margin="0 0 3 3">
             <Run>For help finding your authorization credentials, </Run>
-            <Hyperlink NavigateUri="http://support.shipworks.com/support/solutions/articles/4000102344-adding-a-shopsite-store-oauth-api-" ui:Link.OpenInBrowser="true">click here.</Hyperlink>
+            <Hyperlink NavigateUri="https://shipworks.zendesk.com/hc/en-us/articles/360022466412" ui:Link.OpenInBrowser="true">click here.</Hyperlink>
         </TextBlock>
     </Grid>
 </UserControl>

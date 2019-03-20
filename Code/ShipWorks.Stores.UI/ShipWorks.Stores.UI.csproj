@@ -360,6 +360,12 @@
     <Compile Include="Platforms\Odbc\Controls\Import\OdbcImportMapSettingsControl.xaml.cs">
       <DependentUpon>OdbcImportMapSettingsControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Platforms\Odbc\Controls\Import\OdbcImportParameterizedQueryControl.xaml.cs">
+      <DependentUpon>OdbcImportParameterizedQueryControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Platforms\Odbc\Controls\Import\OdbcImportSubqueryControl.xaml.cs">
+      <DependentUpon>OdbcImportSubqueryControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Platforms\Odbc\Controls\OdbcConnectionSettingsControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -405,6 +411,8 @@
     <Compile Include="Platforms\Odbc\ViewModels\Import\IOdbcImportMappingControlViewModel.cs" />
     <Compile Include="Platforms\Odbc\ViewModels\Import\OdbcImportMappingControlViewModel.cs" />
     <Compile Include="Platforms\Odbc\ViewModels\Import\OdbcImportMapSettingsControlViewModel.cs" />
+    <Compile Include="Platforms\Odbc\ViewModels\Import\OdbcImportParameterizedQueryControlViewModel.cs" />
+    <Compile Include="Platforms\Odbc\ViewModels\Import\OdbcImportSubqueryControlViewModel.cs" />
     <Compile Include="Platforms\Odbc\ViewModels\IOdbcMapSettingsControlViewModel.cs" />
     <Compile Include="Platforms\Odbc\ViewModels\OdbcMapSettingsControlViewModel.cs" />
     <Compile Include="Platforms\Odbc\ViewModels\Upload\IOdbcUploadMappingControlViewModel.cs" />
@@ -427,6 +435,18 @@
     </Compile>
     <Compile Include="Platforms\Odbc\WizardPages\Import\OdbcImportMapSettingsPage.Designer.cs">
       <DependentUpon>OdbcImportMapSettingsPage.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Platforms\Odbc\WizardPages\Import\OdbcImportParameterizedQueryPage.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Platforms\Odbc\WizardPages\Import\OdbcImportParameterizedQueryPage.Designer.cs">
+      <DependentUpon>OdbcImportParameterizedQueryPage.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Platforms\Odbc\WizardPages\Import\OdbcImportSubqueryPage.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Platforms\Odbc\WizardPages\Import\OdbcImportSubqueryPage.Designer.cs">
+      <DependentUpon>OdbcImportSubqueryPage.cs</DependentUpon>
     </Compile>
     <Compile Include="Platforms\Odbc\WizardPages\OdbcSetupFinishPage.cs">
       <SubType>UserControl</SubType>
@@ -671,6 +691,12 @@
     <EmbeddedResource Include="Platforms\Odbc\WizardPages\Import\OdbcImportMapSettingsPage.resx">
       <DependentUpon>OdbcImportMapSettingsPage.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Platforms\Odbc\WizardPages\Import\OdbcImportParameterizedQueryPage.resx">
+      <DependentUpon>OdbcImportParameterizedQueryPage.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Platforms\Odbc\WizardPages\Import\OdbcImportSubqueryPage.resx">
+      <DependentUpon>OdbcImportSubqueryPage.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Platforms\Odbc\WizardPages\OdbcSetupFinishPage.resx">
       <DependentUpon>OdbcSetupFinishPage.cs</DependentUpon>
     </EmbeddedResource>
@@ -845,6 +871,14 @@
     <Page Include="Platforms\Odbc\Controls\Import\OdbcImportMapSettingsControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Platforms\Odbc\Controls\Import\OdbcImportParameterizedQueryControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Platforms\Odbc\Controls\Import\OdbcImportSubqueryControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Platforms\Odbc\Controls\OdbcCustomQueryWarningDlg.xaml">
       <Generator>MSBuild:Compile</Generator>

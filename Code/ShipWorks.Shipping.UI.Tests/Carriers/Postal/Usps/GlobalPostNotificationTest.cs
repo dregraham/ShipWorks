@@ -82,7 +82,7 @@ namespace ShipWorks.Shipping.UI.Tests.Carriers.Postal.Usps
             testObject.Show(shipment);
 
             mock.Mock<IDismissableWebBrowserDlgViewModel>()
-                .Verify(v => v.Load(displayUri, "Your First-Class International Envelope Label", "http://support.shipworks.com/support/solutions/articles/4000114989"));
+                .Verify(v => v.Load(displayUri, "Your First-Class International Envelope Label", "https://shipworks.zendesk.com/hc/en-us/articles/360022649931"));
         }
 
         [Fact]
@@ -99,7 +99,7 @@ namespace ShipWorks.Shipping.UI.Tests.Carriers.Postal.Usps
             testObject.Show(shipment);
 
             mock.Mock<IDismissableWebBrowserDlgViewModel>()
-                .Verify(v => v.Load(displayUri, "Your First-Class International Envelope Label", "http://support.shipworks.com/support/solutions/articles/4000114989"));
+                .Verify(v => v.Load(displayUri, "Your First-Class International Envelope Label", "https://shipworks.zendesk.com/hc/en-us/articles/360022649931"));
         }
 
         [Theory]
@@ -114,7 +114,7 @@ namespace ShipWorks.Shipping.UI.Tests.Carriers.Postal.Usps
             testObject.Show(shipment);
 
             mock.Mock<IDismissableWebBrowserDlgViewModel>()
-                .Verify(v => v.Load(displayUri, "Your International Label", "http://support.shipworks.com/support/solutions/articles/4000121488-presort-labels"));
+                .Verify(v => v.Load(displayUri, "Your International Label", "https://shipworks.zendesk.com/hc/en-us/articles/360022468332"));
         }
 
         [Fact]

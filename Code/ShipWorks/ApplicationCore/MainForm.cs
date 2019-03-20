@@ -1538,6 +1538,13 @@ namespace ShipWorks
             {
                 holder.InitializeForCurrentUser();
             }
+
+            // Allows for the Shipment panel visibility to be initialized when starting 
+            // ShipWorks in Batch Mode.
+            if (UIMode == UIMode.Batch)
+            {
+                panelDockingArea.Visible = true;
+            }
         }
 
         /// <summary>
@@ -2551,7 +2558,7 @@ namespace ShipWorks
         /// </summary>
         private void OnSupportForum(object sender, EventArgs e)
         {
-            WebHelper.OpenUrl("http://www.interapptive.com/support", this);
+            WebHelper.OpenUrl("https://shipworks.zendesk.com/hc/en-us/community/topics", this);
         }
 
         /// <summary>
@@ -2567,7 +2574,7 @@ namespace ShipWorks
         /// </summary>
         private void OnViewHelp(object sender, EventArgs e)
         {
-            WebHelper.OpenUrl("http://www.interapptive.com/shipworks/help", this);
+            WebHelper.OpenUrl("https://shipworks.zendesk.com/hc/en-us", this);
         }
 
         /// <summary>
@@ -2583,11 +2590,11 @@ namespace ShipWorks
         }
 
         /// <summary>
-        /// Submit a support case to interapptive
+        /// Submit a support case to ShipWorks
         /// </summary>
         private void OnRequestHelp(object sender, EventArgs e)
         {
-            WebHelper.OpenUrl("http://www.interapptive.com/company/contact.html", this);
+            WebHelper.OpenUrl("https://www.shipworks.com/contact-us/", this);
         }
 
         /// <summary>
@@ -2864,6 +2871,14 @@ namespace ShipWorks
         }
 
         /// <summary>
+        /// Handle when the filter tree wants to load a filter as an advanced search
+        /// </summary>
+        private void OnFilterTreeLoadAsAdvancedSearch(object sender, FilterNodeEntity e)
+        {
+            gridControl.LoadFilterInAdvancedSearch(e);
+        }
+
+        /// <summary>
         /// Called when the user selects a different filter.
         /// </summary>
         private void OnSelectedFilterNodeChanged(object sender, EventArgs e)
@@ -2947,14 +2962,7 @@ namespace ShipWorks
 
             if (gridControl.IsSearchActive)
             {
-                searchRestoreFilterNodeID = currentFilterTree.SelectedFilterNodeID;
-
-                currentFilterTree.SelectedFilterNodeChanged -= new EventHandler(OnSelectedFilterNodeChanged);
-
-                currentFilterTree.ActiveSearchNode = gridControl.ActiveFilterNode;
-                currentFilterTree.SelectedFilterNode = gridControl.ActiveFilterNode;
-
-                currentFilterTree.SelectedFilterNodeChanged += new EventHandler(OnSelectedFilterNodeChanged);
+                searchRestoreFilterNodeID = currentFilterTree.SetSearch(gridControl.ActiveFilterNode, OnSelectedFilterNodeChanged);
             }
             else
             {
@@ -2975,6 +2983,20 @@ namespace ShipWorks
 
             UpdateSelectionDependentUI();
             UpdateDetailViewSettingsUI();
+        }
+
+        /// <summary>
+        /// Handle when a filter is saved from the advanced search
+        /// </summary>
+        private void OnGridControlFilterSaved(object sender, FilterNodeEntity nodeEntity)
+        {
+            var activeFilterTree = ActiveFilterTree();
+
+            if (activeFilterTree != null)
+            {
+                activeFilterTree.ReloadLayouts();
+                activeFilterTree.SelectedFilterNode = nodeEntity;
+            }
         }
 
         /// <summary>

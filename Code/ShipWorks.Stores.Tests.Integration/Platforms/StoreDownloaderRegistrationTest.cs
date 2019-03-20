@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using Autofac;
+using Autofac.Extras.Moq;
+using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Startup;
 using ShipWorks.Stores.Communication;
@@ -38,6 +40,7 @@ using ShipWorks.Stores.Platforms.ThreeDCart;
 using ShipWorks.Stores.Platforms.Volusion;
 using ShipWorks.Stores.Platforms.Walmart;
 using ShipWorks.Stores.Platforms.Yahoo;
+using ShipWorks.Tests.Shared;
 using Xunit;
 
 namespace ShipWorks.Stores.Tests.Integration.Platforms
@@ -45,11 +48,19 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms
     [Trait("Category", "ContinuousIntegration")]
     public class StoreDownloaderRegistrationTest : IDisposable
     {
-        readonly IContainer container;
+        private readonly AutoMock mock;
+        private readonly IContainer container;
 
         public StoreDownloaderRegistrationTest()
         {
-            container = ContainerInitializer.Build();
+            mock = AutoMockExtensions.GetLooseThatReturnsMocks();
+
+            container = ContainerInitializer.Build(x =>
+            {
+                x.Register(c => mock.Build<ISqlSession>())
+                    .AsImplementedInterfaces()
+                    .ExternallyOwned();
+            });
         }
 
         /// <summary>

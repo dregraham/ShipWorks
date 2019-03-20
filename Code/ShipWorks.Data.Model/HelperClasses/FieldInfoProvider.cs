@@ -1543,6 +1543,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("FilterEntity", "IsFolder", typeof(System.Boolean), false, false, false, false,  (int)FilterFieldIndex.IsFolder, 0, 0, 0);
 			this.AddElementFieldInfo("FilterEntity", "Definition", typeof(System.String), false, false, false, true,  (int)FilterFieldIndex.Definition, 2147483647, 0, 0);
 			this.AddElementFieldInfo("FilterEntity", "State", typeof(System.Byte), false, false, false, false,  (int)FilterFieldIndex.State, 0, 0, 3);
+			this.AddElementFieldInfo("FilterEntity", "IsSavedSearch", typeof(System.Boolean), false, false, false, false,  (int)FilterFieldIndex.IsSavedSearch, 0, 0, 0);
 		}
 		/// <summary>Inits FilterLayoutEntity's FieldInfo objects</summary>
 		private void InitFilterLayoutEntityInfos()
@@ -2639,7 +2640,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddFieldIndexEnumForElementName(typeof(ProductListItemFieldIndex), "ProductListItemEntity");
 			this.AddElementFieldInfo("ProductListItemEntity", "ProductVariantID", typeof(System.Int64), false, false, false, false,  (int)ProductListItemFieldIndex.ProductVariantID, 0, 0, 19);
 			this.AddElementFieldInfo("ProductListItemEntity", "SKU", typeof(System.String), false, false, false, false,  (int)ProductListItemFieldIndex.SKU, 300, 0, 0);
-			this.AddElementFieldInfo("ProductListItemEntity", "Name", typeof(System.String), false, false, false, false,  (int)ProductListItemFieldIndex.Name, 300, 0, 0);
+			this.AddElementFieldInfo("ProductListItemEntity", "Name", typeof(System.String), false, false, false, true,  (int)ProductListItemFieldIndex.Name, 300, 0, 0);
 			this.AddElementFieldInfo("ProductListItemEntity", "Length", typeof(Nullable<System.Decimal>), false, false, false, true,  (int)ProductListItemFieldIndex.Length, 0, 2, 10);
 			this.AddElementFieldInfo("ProductListItemEntity", "Width", typeof(Nullable<System.Decimal>), false, false, false, true,  (int)ProductListItemFieldIndex.Width, 0, 2, 10);
 			this.AddElementFieldInfo("ProductListItemEntity", "Height", typeof(Nullable<System.Decimal>), false, false, false, true,  (int)ProductListItemFieldIndex.Height, 0, 2, 10);

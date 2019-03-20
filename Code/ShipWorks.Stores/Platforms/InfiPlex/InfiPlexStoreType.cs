@@ -35,6 +35,6 @@ namespace ShipWorks.Stores.Platforms.InfiPlex
         /// Gets the account settings help URL.
         /// </summary>
         public override string AccountSettingsHelpUrl =>
-            "http://support.shipworks.com/support/solutions/articles/4000097090-adding-an-infiplex-store";
+            "https://shipworks.zendesk.com/hc/en-us/articles/360022653371";
     }
 }

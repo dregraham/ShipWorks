@@ -40,29 +40,29 @@ namespace ShipWorks.Stores.Management
     /// <summary>
     /// Wizard for adding a new store to ShipWorks
     /// </summary>
-    partial class AddStoreWizard : WizardForm, IStoreWizard
+    public partial class AddStoreWizard : WizardForm, IStoreWizard
     {
         private readonly ILifetimeScope scope;
 
         // State container for use by wizard pages
-        Dictionary<string, object> stateBag = new Dictionary<string, object>(StringComparer.InvariantCultureIgnoreCase);
+        private Dictionary<string, object> stateBag = new Dictionary<string, object>(StringComparer.InvariantCultureIgnoreCase);
 
         // The store that is being created
-        StoreEntity store;
-        StoreType storeOverride;
+        private StoreEntity store;
+        private StoreType storeOverride;
 
         // All of the store specific wizard pages currently added.
-        List<WizardPage> storePages = new List<WizardPage>();
+        private List<WizardPage> storePages = new List<WizardPage>();
 
         // If doing a trial, this is the current trial data
-        TrialDetail trialDetail;
+        private TrialDetail trialDetail;
 
         // So we know when to update the config of the pages
-        long initialDownloadConfiguredStoreID = 0;
-        long onlineUpdateConfiguredStoreID = 0;
+        private long initialDownloadConfiguredStoreID = 0;
+        private long onlineUpdateConfiguredStoreID = 0;
 
         // Indicates if we are in a freemium setup flow
-        bool isFreemiumMode = false;
+        private bool isFreemiumMode = false;
 
         /// <summary>
         /// Indicates if we show the activation page.
@@ -474,6 +474,7 @@ namespace ShipWorks.Stores.Management
                 // Add all the pages
                 for (int i = storePages.Count - 1; i >= 0; i--)
                 {
+                    storePages[i].Dock = DockStyle.Fill;
                     Pages.Insert(Pages.IndexOf(CurrentPage) + 1, storePages[i]);
                 }
             }
@@ -970,7 +971,7 @@ namespace ShipWorks.Stores.Management
 
         #endregion
 
-        #region Complete        
+        #region Complete
 
         /// <summary>
         /// Stepping into the complete page
@@ -1026,7 +1027,7 @@ namespace ShipWorks.Stores.Management
         }
 
         /// <summary>
-        /// Saves the selected UIMode 
+        /// Saves the selected UIMode
         /// </summary>
         private void SaveUIMode(SqlAdapter adapter)
         {
@@ -1223,7 +1224,7 @@ namespace ShipWorks.Stores.Management
         /// </summary>
         private void ManualStoreHelpLinkLabel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            WebHelper.OpenUrl("http://support.shipworks.com/support/solutions/articles/4000120126-bypassing-the-store-setup", this);
+            WebHelper.OpenUrl("https://shipworks.zendesk.com/hc/en-us/articles/360022464792", this);
         }
 
         /// <summary>

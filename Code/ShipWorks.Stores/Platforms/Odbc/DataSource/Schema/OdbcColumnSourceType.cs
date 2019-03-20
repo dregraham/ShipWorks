@@ -15,7 +15,11 @@ namespace ShipWorks.Stores.Platforms.Odbc.DataSource.Schema
         Table = 0,
 
         [ApiValue("CustomQuery")]
-        [Description("The column source is a custom query.")]
-        CustomQuery = 1
+        [Description("The column source is a custom sub query.")]
+        CustomQuery = 1,
+
+        [ApiValue("CustomParameterizedQuery")]
+        [Description("The column source is a custom parameterized query.")]
+        CustomParameterizedQuery = 2
     }
 }
