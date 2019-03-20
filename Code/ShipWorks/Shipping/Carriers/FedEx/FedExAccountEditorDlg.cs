@@ -97,6 +97,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
 
             try
             {
+                // Upload the images if the fields have been changed
                 if (account.Fields[(int) FedExAccountFieldIndex.Letterhead].IsChanged || 
                     account.Fields[(int) FedExAccountFieldIndex.Signature].IsChanged)
                 {
