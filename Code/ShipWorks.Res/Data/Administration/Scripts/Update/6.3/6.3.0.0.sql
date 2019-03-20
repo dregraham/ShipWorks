@@ -5,6 +5,6 @@ GO
 PRINT N'Altering [dbo].[FedExAccount]'
 GO
 ALTER TABLE [dbo].[FedExAccount] ADD
-[Letterhead] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_FedExAccount_Letterhead] DEFAULT (''),
-[Signature] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_FedExAccount_Signature] DEFAULT ('')
+[Letterhead] [nvarchar] (MAX) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_FedExAccount_Letterhead] DEFAULT (''),
+[Signature] [nvarchar] (MAX) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_FedExAccount_Signature] DEFAULT ('')
 GO
