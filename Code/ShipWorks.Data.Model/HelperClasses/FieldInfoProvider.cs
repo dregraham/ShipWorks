@@ -1225,8 +1225,8 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("FedExAccountEntity", "Phone", typeof(System.String), false, false, false, false,  (int)FedExAccountFieldIndex.Phone, 25, 0, 0);
 			this.AddElementFieldInfo("FedExAccountEntity", "Email", typeof(System.String), false, false, false, false,  (int)FedExAccountFieldIndex.Email, 100, 0, 0);
 			this.AddElementFieldInfo("FedExAccountEntity", "Website", typeof(System.String), false, false, false, false,  (int)FedExAccountFieldIndex.Website, 50, 0, 0);
-			this.AddElementFieldInfo("FedExAccountEntity", "Letterhead", typeof(System.String), false, false, false, false,  (int)FedExAccountFieldIndex.Letterhead, 100, 0, 0);
-			this.AddElementFieldInfo("FedExAccountEntity", "Signature", typeof(System.String), false, false, false, false,  (int)FedExAccountFieldIndex.Signature, 100, 0, 0);
+			this.AddElementFieldInfo("FedExAccountEntity", "Letterhead", typeof(System.String), false, false, false, false,  (int)FedExAccountFieldIndex.Letterhead, 2147483647, 0, 0);
+			this.AddElementFieldInfo("FedExAccountEntity", "Signature", typeof(System.String), false, false, false, false,  (int)FedExAccountFieldIndex.Signature, 2147483647, 0, 0);
 		}
 		/// <summary>Inits FedExEndOfDayCloseEntity's FieldInfo objects</summary>
 		private void InitFedExEndOfDayCloseEntityInfos()

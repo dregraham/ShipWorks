@@ -1005,13 +1005,13 @@
           <Field Name="FedExAccountID" Type="long" IsReadOnly="true" IsPrimaryKey="true" FieldIndex="0" />
           <Field Name="FirstName" Type="string" MaxLength="30" FieldIndex="7" />
           <Field Name="LastName" Type="string" MaxLength="30" FieldIndex="9" />
-          <Field Name="Letterhead" Type="string" MaxLength="100" FieldIndex="20" />
+          <Field Name="Letterhead" Type="string" MaxLength="2147483647" FieldIndex="20" />
           <Field Name="MeterNumber" Type="string" MaxLength="50" FieldIndex="5" />
           <Field Name="MiddleName" Type="string" MaxLength="30" FieldIndex="8" />
           <Field Name="Phone" Type="string" MaxLength="25" FieldIndex="17" />
           <Field Name="PostalCode" Type="string" MaxLength="20" FieldIndex="15" />
           <Field Name="RowVersion" Type="byte[]" IsReadOnly="true" FieldIndex="1" />
-          <Field Name="Signature" Type="string" MaxLength="100" FieldIndex="21" />
+          <Field Name="Signature" Type="string" MaxLength="2147483647" FieldIndex="21" />
           <Field Name="SignatureRelease" Type="string" MaxLength="10" FieldIndex="4" />
           <Field Name="SmartPostHubList" Type="string" MaxLength="2147483647" FieldIndex="6" />
           <Field Name="StateProvCode" Type="string" MaxLength="50" FieldIndex="14" />
@@ -4481,7 +4481,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2019-03-12T15:29:47.069234Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2019-03-20T19:44:36.6216681Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -5604,8 +5604,8 @@
                     <Field Name="Phone" Ordinal="18" DbType="12" Length="25" />
                     <Field Name="Email" Ordinal="19" DbType="12" Length="100" />
                     <Field Name="Website" Ordinal="20" DbType="12" Length="50" />
-                    <Field Name="Letterhead" Ordinal="21" HasDefaultValue="true" DefaultValue="''" DbType="12" Length="100" />
-                    <Field Name="Signature" Ordinal="22" HasDefaultValue="true" DefaultValue="''" DbType="12" Length="100" />
+                    <Field Name="Letterhead" Ordinal="21" HasDefaultValue="true" DefaultValue="''" DbType="12" Length="2147483647" />
+                    <Field Name="Signature" Ordinal="22" HasDefaultValue="true" DefaultValue="''" DbType="12" Length="2147483647" />
                   </Fields>
                 </Table>
                 <Table Name="FedExEndOfDayClose">
