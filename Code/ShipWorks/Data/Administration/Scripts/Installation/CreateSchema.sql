@@ -2603,6 +2603,10 @@ PRINT N'Creating primary key [PK_MagentoOrder] on [dbo].[MagentoOrder]'
 GO
 ALTER TABLE [dbo].[MagentoOrder] ADD CONSTRAINT [PK_MagentoOrder] PRIMARY KEY CLUSTERED  ([OrderID])
 GO
+PRINT N'Creating index [IX_SWDefault_MagentoOrder_MagentoOrderID] on [dbo].[MagentoOrder]'
+GO
+CREATE NONCLUSTERED INDEX [IX_SWDefault_MagentoOrder_MagentoOrderID] ON [dbo].[MagentoOrder] ([MagentoOrderID] ASC)
+GO
 PRINT N'Creating [dbo].[MagentoStore]'
 GO
 CREATE TABLE [dbo].[MagentoStore]
@@ -4378,7 +4382,7 @@ CREATE TABLE [dbo].[YahooOrderItem]
 (
 [OrderItemID] [bigint] NOT NULL,
 [YahooProductID] [nvarchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[Url] [nvarchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL Default ''
+[Url] [nvarchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_YahooOrderItem_Url] DEFAULT ('')
 )
 GO
 PRINT N'Creating primary key [PK_YahooOrderItem] on [dbo].[YahooOrderItem]'
@@ -4392,8 +4396,8 @@ CREATE TABLE [dbo].[YahooStore]
 [StoreID] [bigint] NOT NULL,
 [YahooEmailAccountID] [bigint] NOT NULL,
 [TrackingUpdatePassword] [varchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[YahooStoreID] [varchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL DEFAULT '',
-[AccessToken] [varchar] (200) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL DEFAULT '',
+[YahooStoreID] [varchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_YahooStore_YahooStoreID] DEFAULT (''),
+[AccessToken] [varchar] (200) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_YahooStore_AccessToken] DEFAULT (''),
 [BackupOrderNumber] [bigint] NULL
 )
 GO
@@ -4759,7 +4763,7 @@ CREATE TABLE [dbo].[FtpAccount]
 [SecurityType] [int] NOT NULL,
 [Passive] [bit] NOT NULL,
 [InternalOwnerID] [bigint] NULL,
-[ReuseControlConnectionSession] [bit] NOT NULL DEFAULT ((0))
+[ReuseControlConnectionSession] [bit] NOT NULL CONSTRAINT [DF_FtpAccount_ReuseControlConnectionSession] DEFAULT ((0))
 )
 GO
 PRINT N'Creating primary key [PK_FtpAccount] on [dbo].[FtpAccount]'
