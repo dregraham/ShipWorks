@@ -20,7 +20,7 @@ namespace ShipWorks.ApplicationCore.CommandLineOptions
     /// </summary>
     public class UpgradeDatabaseSchemaCommandLineOption : ICommandLineCommandHandler
     {
-        static readonly ILog log = LogManager.GetLogger(typeof(UpgradeDatabaseSchemaCommandLineOption));
+        private static readonly ILog log = LogManager.GetLogger(typeof(UpgradeDatabaseSchemaCommandLineOption));
         private IAutoUpdateStatusProvider autoUpdateStatusProvider = new AutoUpdateStatusProvider();
 
         /// <summary>
@@ -35,6 +35,8 @@ namespace ShipWorks.ApplicationCore.CommandLineOptions
         {
             // before doing anything make sure we can connect to the database and an upgrade is required
             SqlSession.Initialize();
+            Version versionRequired = SqlSchemaUpdater.GetRequiredSchemaVersion();
+
             if (SqlSchemaUpdater.IsUpgradeRequired())
             {
                 TelemetricResult<Unit> databaseUpdateResult = new TelemetricResult<Unit>("Database.Update");
@@ -49,6 +51,7 @@ namespace ShipWorks.ApplicationCore.CommandLineOptions
                     {
                         throw new Exception("Database has custom triggers and cannot be automatically upgraded.");
                     }
+
                     autoUpdateStatusProvider.UpdateStatus("Creating Backup");
                     // If an upgrade is required create a backup first
                     backupResult = backupManager.CreateBackup(autoUpdateStatusProvider.UpdateStatus);
@@ -70,6 +73,8 @@ namespace ShipWorks.ApplicationCore.CommandLineOptions
                     }
 
                     Environment.ExitCode = -1;
+
+                    AutoUpgradeFailureSubmitter.Submit(versionRequired.ToString(), ex.Message);
                 }
                 finally
                 {
