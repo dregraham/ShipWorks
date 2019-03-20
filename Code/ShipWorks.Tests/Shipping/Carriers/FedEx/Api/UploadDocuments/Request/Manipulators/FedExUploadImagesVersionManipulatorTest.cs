@@ -67,7 +67,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.UploadDocuments.Request.Ma
 
             // This assertion is based on the FedEx development guide.
             // Please advice this before making changes.
-            Assert.Equal(5, version.Major);
+            Assert.Equal(11, version.Major);
         }
 
         [Fact]
