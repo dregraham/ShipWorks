@@ -471,6 +471,12 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
                 throw WebHelper.TranslateWebException(ex, typeof(FedExException));
             }
         }
+
+        /// <summary>
+        /// Intended to interact with the FedEx API for uploading images.
+        /// </summary>
+        /// <param name="imageRequest"></param>
+        /// <returns></returns>
         public UploadImagesReply UploadImages(UploadImagesRequest imageRequest)
         {
             try
@@ -480,7 +486,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
                 using (UploadDocumentService service = new UploadDocumentService(new ApiLogEntry(ApiLogSource.FedEx, "UploadImages")))
                 {
                     service.Url = settings.EndpointUrl;
-
                     imageReply = service.uploadImages(imageRequest);
                 }
 
