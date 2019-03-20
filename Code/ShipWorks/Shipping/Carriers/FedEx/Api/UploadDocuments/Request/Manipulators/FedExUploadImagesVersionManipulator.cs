@@ -23,7 +23,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.UploadDocuments.Request.Manipula
             nativeRequest.Version = new VersionId
             {
                 ServiceId = "cdus",
-                Major = 5,
+                Major = 11,
                 Intermediate = 0,
                 Minor = 0
             };
