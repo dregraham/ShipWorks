@@ -15,8 +15,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx
     /// </summary>
     public partial class FedExAccountSettingsControl : UserControl
     {
-        private const string filter = "Image Files(*.jpg; *.jpeg; *.gif; *.bmp; *.png)|*.jpg; *.jpeg; *.gif; *.bmp; *.png";
-
         /// <summary>
         /// Constructor
         /// </summary>
