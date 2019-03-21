@@ -28,22 +28,23 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.UploadDocuments.Request.Manipula
             // We can safely cast this since we've passed validation
             UploadImagesRequest nativeRequest = (UploadImagesRequest) request.NativeRequest;
 
-            if (account?.Letterhead != null)
+            if (account?.Letterhead.Length > 0)
             {
-                byte[] letterhead = Encoding.ASCII.GetBytes(account.Letterhead);
+                byte[] letterhead = Convert.FromBase64String(account.Letterhead);
+
                 UploadImageDetail letterheadDetail = new UploadImageDetail
                 {
                     Id = ImageId.IMAGE_1,
                     IdSpecified = true,
                     Image = letterhead
                 };
-                
+
                 images.Add(letterheadDetail);
             }
 
-            if (account?.Signature != null)
+            if (account?.Signature.Length > 0)
             {
-                byte[] signature = Encoding.ASCII.GetBytes(account.Signature);
+                byte[] signature = Convert.FromBase64String(account.Signature);
 
                 UploadImageDetail signatureDetail = new UploadImageDetail
                 {
