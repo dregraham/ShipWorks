@@ -19,11 +19,11 @@ namespace Interapptive.Shared.Utility
             using (MemoryStream ms = new MemoryStream())
             {
                 bitmap.Save(ms, imageFormat);
+                ms.Close();
                 data = ms.ToArray();
             }
 
-            string base64String = Convert.ToBase64String(data);
-            return base64String;
+            return Convert.ToBase64String(data);
         }
     }
 }
