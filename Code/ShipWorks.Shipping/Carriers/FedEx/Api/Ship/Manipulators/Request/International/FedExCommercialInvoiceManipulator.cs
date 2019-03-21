@@ -43,6 +43,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Ship.Manipulators.Request.Intern
         /// </summary>
         public GenericResult<ProcessShipmentRequest> Manipulate(IShipmentEntity shipment, ProcessShipmentRequest request, int sequenceNumber)
         {
+            IFedExAccountEntity account = settings.GetAccountReadOnly(shipment);
+
             // Make sure all of the properties we'll be accessing have been created
             InitializeRequest(shipment, request);
 
@@ -65,7 +67,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Ship.Manipulators.Request.Intern
                     };
                     request.RequestedShipment.CustomsClearanceDetail = customsDetail;
 
-                    ConfigureEtd(fedExShipment, request);
+                    ConfigureEtd(fedExShipment, request, account);
                 })
                 .Map(() => request);
         }
@@ -73,7 +75,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Ship.Manipulators.Request.Intern
         /// <summary>
         /// Add Etd fields
         /// </summary>
-        private static void ConfigureEtd(IFedExShipmentEntity fedExShipment, IFedExNativeShipmentRequest request)
+        private static void ConfigureEtd(IFedExShipmentEntity fedExShipment, IFedExNativeShipmentRequest request, IFedExAccountEntity account)
         {
             // Return if the user chose no commercial invoice or not to file electronically.
             if (!fedExShipment.CommercialInvoice || !fedExShipment.CommercialInvoiceFileElectronically)
@@ -99,7 +101,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Ship.Manipulators.Request.Intern
             }
             shipmentSpecialServiceTypes.Add(ShipmentSpecialServiceType.ELECTRONIC_TRADE_DOCUMENTS);
 
-            ConfigureCustomsShippingDocumentSpecs(request);
+            ConfigureCustomsShippingDocumentSpecs(request, account);
 
             request.RequestedShipment.SpecialServicesRequested.SpecialServiceTypes = shipmentSpecialServiceTypes.ToArray();
             request.RequestedShipment.SpecialServicesRequested.EtdDetail = etdDetail;
@@ -108,7 +110,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Ship.Manipulators.Request.Intern
         /// <summary>
         /// Add ShippingDocumentSpecification if needed
         /// </summary>
-        private static void ConfigureCustomsShippingDocumentSpecs(IFedExNativeShipmentRequest request)
+        private static void ConfigureCustomsShippingDocumentSpecs(IFedExNativeShipmentRequest request, IFedExAccountEntity account)
         {
             ShippingDocumentSpecification shippingDocumentSpecification = request.RequestedShipment.ShippingDocumentSpecification;
 
@@ -142,8 +144,46 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Ship.Manipulators.Request.Intern
                 StockTypeSpecified = true
             };
 
+            // Initialize image detail list
+            List<CustomerImageUsage> images = new List<CustomerImageUsage>();
+
+            // if the user has uploaded letterhead
+            // Submit the image detail to the commercial invoice detail
+            if (account.Letterhead.Length > 0)
+            {
+                CustomerImageUsage letterheadDetail = new CustomerImageUsage
+                {
+                    TypeSpecified = true,
+                    Type = CustomerImageUsageType.LETTER_HEAD,
+                    IdSpecified = true,
+                    Id = ImageId.IMAGE_1
+                };
+
+                images.Add(letterheadDetail);
+            }
+
+            // if the user has uploaded letterhead
+            // Submit the image detail to the commercial invoice detail
+            if (account.Signature.Length > 0)
+            {
+                CustomerImageUsage signatureDetail = new CustomerImageUsage
+                {
+                    TypeSpecified = true,
+                    Type = CustomerImageUsageType.SIGNATURE,
+                    IdSpecified = true,
+                    Id = ImageId.IMAGE_2
+                };
+
+                images.Add(signatureDetail);
+            }
+
+            // Add image detail
+            commercialInvoiceDetail.CustomerImageUsages = images.ToArray();
+
+            // Add Commercial Invoice Detail
             shippingDocumentSpecification.CommercialInvoiceDetail = commercialInvoiceDetail;
 
+            // Add Shipping Document Specifications
             request.RequestedShipment.ShippingDocumentSpecification = shippingDocumentSpecification;
         }
 
