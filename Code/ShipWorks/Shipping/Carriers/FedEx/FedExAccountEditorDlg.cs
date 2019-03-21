@@ -98,20 +98,34 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             try
             {
                 // Upload the images if the fields have been changed
-                if (account.Fields[(int) FedExAccountFieldIndex.Letterhead].IsChanged || 
+                if (account.Fields[(int) FedExAccountFieldIndex.Letterhead].IsChanged ||
                     account.Fields[(int) FedExAccountFieldIndex.Signature].IsChanged)
                 {
-                    using (ILifetimeScope scope = IoC.BeginLifetimeScope())
+                    try
                     {
-                        var clerk = scope.Resolve<IFedExShippingClerkFactory>().Create(null);
-                        clerk.PerformUploadImages(account);
+                        using (ILifetimeScope scope = IoC.BeginLifetimeScope())
+                        {
+                            var clerk = scope.Resolve<IFedExShippingClerkFactory>().Create(null);
+                            clerk.PerformUploadImages(account);
+                        }
+                        FedExAccountManager.SaveAccount(account);
+                        DialogResult = DialogResult.OK;
+                    }
+                    catch (FedExApiCarrierException ex)
+                    {
+                        MessageHelper.ShowError(this, ex.Message);
                     }
                 }
-
-                FedExAccountManager.SaveAccount(account);
-
-                DialogResult = DialogResult.OK;
+                else if (account.Letterhead.Length > 0 || account.Signature.Length > 0)
+                {
+                    MessageHelper.ShowMessage(this, "The image you have selected has already been uploaded.");
+                }
+                else
+                {
+                    DialogResult = DialogResult.OK;
+                }
             }
+
             catch (ORMConcurrencyException)
             {
                 MessageHelper.ShowError(this, "Your changes cannot be saved because another user has deleted the shipper.");
