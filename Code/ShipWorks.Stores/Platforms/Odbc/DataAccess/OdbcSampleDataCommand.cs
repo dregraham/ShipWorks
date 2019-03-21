@@ -5,6 +5,8 @@ using System.Data.Odbc;
 using System.Linq;
 using log4net;
 using ShipWorks.Stores.Platforms.Odbc.DataSource;
+using ShipWorks.Stores.Platforms.Odbc.DataSource.Schema;
+using ShipWorks.Stores.Platforms.Odbc.Download;
 
 namespace ShipWorks.Stores.Platforms.Odbc.DataAccess
 {

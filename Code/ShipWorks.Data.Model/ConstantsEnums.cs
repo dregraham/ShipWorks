@@ -4072,6 +4072,8 @@ namespace ShipWorks.Data.Model
 		Definition,
 		///<summary>State. </summary>
 		State,
+		///<summary>IsSavedSearch. </summary>
+		IsSavedSearch,
 		/// <summary></summary>
 		AmountOfFields
 	}

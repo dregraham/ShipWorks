@@ -54,7 +54,7 @@ namespace ShipWorks.ApplicationCore.Settings
 
                 // Find the node we need in the layout
                 FilterNodeEntity filterNode = FilterLayoutContext.Current.FindNode(settings.FilterInitialSpecified);
-                if (filterNode == null)
+                if (filterNode == null || filterNode.Filter.IsSavedSearch)
                 {
                     filterNode = FilterLayoutContext.Current.GetSharedLayout(FilterTarget.Orders).FilterNode;
                 }

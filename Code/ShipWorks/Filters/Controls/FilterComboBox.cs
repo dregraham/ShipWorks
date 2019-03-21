@@ -1,43 +1,39 @@
 using System;
-using ShipWorks.UI.Controls;
-using System.Windows.Forms;
-using System.Drawing;
-using ShipWorks.Data.Model.EntityClasses;
-using Divelements.SandGrid.Rendering;
-using ShipWorks.Users;
 using System.ComponentModel;
+using System.Drawing;
+using System.Windows.Forms;
+using Divelements.SandGrid.Rendering;
 using Interapptive.Shared;
-using ShipWorks.UI;
-using ShipWorks.Properties;
 using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore.Appearance;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Properties;
+using ShipWorks.UI;
+using ShipWorks.UI.Controls;
+using ShipWorks.Users;
 
 namespace ShipWorks.Filters.Controls
 {
     /// <summary>
-    /// Custom combo box for displaying 
+    /// Custom combo box for displaying
     /// </summary>
     public class FilterComboBox : PopupComboBox
     {
-        PopupController popupController;
-
-        FilterTree filterTree;
-
-        FilterNodeEntity selectedNode;
-        byte[] selectedFilterVersion = null;
-        byte[] selectedNodeVersion = null;
-        FilterCount selectedNodeCount = null;
-
-        TextFormattingInformation textFormat;
-
-        bool sizeToContent = false;
-        string sizeToContentLastName = string.Empty;
+        private PopupController popupController;
+        private FilterTree filterTree;
+        private FilterNodeEntity selectedNode;
+        private byte[] selectedFilterVersion = null;
+        private byte[] selectedNodeVersion = null;
+        private FilterCount selectedNodeCount = null;
+        private TextFormattingInformation textFormat;
+        private bool sizeToContent = false;
+        private string sizeToContentLastName = string.Empty;
 
         public event EventHandler SelectedFilterNodeChanged;
 
-        Image countingImageNormal = Resources.arrows_blue;
-        Image countingImageSelected = Resources.arrows_white;
-        bool isAnimating = false;
+        private readonly Image countingImageNormal = Resources.arrows_blue;
+        private readonly Image countingImageSelected = Resources.arrows_white;
+        private bool isAnimating = false;
 
         /// <summary>
         /// Constructor
@@ -50,10 +46,11 @@ namespace ShipWorks.Filters.Controls
 
             // Create the filter tree that will be popped up
             filterTree = new FilterTree();
+            filterTree.HideOnSavedSearches = true;
             filterTree.BorderStyle = BorderStyle.None;
             filterTree.HotTracking = true;
             filterTree.AutoRefreshCalculatingCounts = true;
-            
+
             // When it becomes visible we want to move the selected item into view
             filterTree.VisibleChanged += new EventHandler(OnFilterTreeVisibleChanged);
 
@@ -344,7 +341,7 @@ namespace ShipWorks.Filters.Controls
         /// <summary>
         /// The visibility of the tree has changed
         /// </summary>
-        void OnFilterTreeVisibleChanged(object sender, EventArgs e)
+        private void OnFilterTreeVisibleChanged(object sender, EventArgs e)
         {
             if (filterTree.Visible)
             {
@@ -371,7 +368,7 @@ namespace ShipWorks.Filters.Controls
         /// <summary>
         /// The popup is closing
         /// </summary>
-        void OnPopupClosing(object sender, EventArgs e)
+        private void OnPopupClosing(object sender, EventArgs e)
         {
             // Save the folder state (could have crashed with it open - check to be sure)
             if (UserSession.IsLoggedOn)
@@ -408,7 +405,7 @@ namespace ShipWorks.Filters.Controls
         protected override void OnDrawSelectedItem(Graphics g, Color foreColor, Rectangle bounds)
         {
             bool selected = false;
-            
+
             if (selectedNode != null)
             {
                 if (sizeToContentLastName != selectedNode.Filter.Name)
@@ -434,9 +431,9 @@ namespace ShipWorks.Filters.Controls
 
                 Font itemFont = new Font(Font, Font.Style);
                 Color itemColor = foreColor;
-                
+
                 DisabledFilterFont disabledFont = new DisabledFilterFont(Font);
-                bool isFilterDisabled = selectedNode.Filter.State == (byte)FilterState.Disabled;
+                bool isFilterDisabled = selectedNode.Filter.State == (byte) FilterState.Disabled;
                 if (isFilterDisabled)
                 {
                     itemFont = disabledFont.Font;

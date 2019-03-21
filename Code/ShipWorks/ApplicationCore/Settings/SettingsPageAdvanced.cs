@@ -368,7 +368,7 @@ namespace ShipWorks.ApplicationCore.Settings
         /// </summary>
         private void OnAuditInfoClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            WebHelper.OpenUrl("http://support.shipworks.com/support/solutions/articles/4000125442-audit-records-in-shipworks", this);
+            WebHelper.OpenUrl("https://shipworks.zendesk.com/hc/en-us/articles/360022647351", this);
         }
 
         /// <summary>

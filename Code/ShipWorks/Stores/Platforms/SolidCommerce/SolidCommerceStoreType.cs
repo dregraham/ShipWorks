@@ -37,7 +37,7 @@ namespace ShipWorks.Stores.Platforms.SolidCommerce
         /// <summary>
         /// Gets the help URL to use in the account settings.
         /// </summary>
-        public override string AccountSettingsHelpUrl => "http://support.shipworks.com/support/solutions/articles/4000019078";
+        public override string AccountSettingsHelpUrl => "https://shipworks.zendesk.com/hc/en-us/articles/360022468792";
 
         /// <summary>
         /// Identifies this store type

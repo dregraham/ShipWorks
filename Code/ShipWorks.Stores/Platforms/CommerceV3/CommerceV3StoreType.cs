@@ -36,6 +36,6 @@ namespace ShipWorks.Stores.Platforms.CommerceV3
         /// <summary>
         /// Gets the account settings help URL.
         /// </summary>
-        public override string AccountSettingsHelpUrl => "http://support.shipworks.com/support/solutions/articles/4000124708-adding-a-commercev3-store";
+        public override string AccountSettingsHelpUrl => "https://shipworks.zendesk.com/hc/en-us/articles/360022653031";
     }
 }

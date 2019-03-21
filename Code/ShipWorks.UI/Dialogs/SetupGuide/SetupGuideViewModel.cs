@@ -140,7 +140,7 @@ namespace ShipWorks.UI.Dialogs.SetupGuide
         private void HowToPrintLabelsAction()
         {
             SelectedSection = SetupGuideSection.HowToPrintLabels;
-            Process.Start("http://support.shipworks.com/helpdesk/attachments/4050484348");
+            Process.Start("https://shipworks.zendesk.com/hc/article_attachments/360019871132/Shipping_an_Order.pdf");
         }
 
         /// <summary>

@@ -38,6 +38,6 @@ namespace ShipWorks.Stores.Platforms.osCommerce
         /// <value>
         /// The account settings help URL.
         /// </value>
-        public override string AccountSettingsHelpUrl => "http://support.shipworks.com/support/solutions/articles/129340";
+        public override string AccountSettingsHelpUrl => "https://shipworks.zendesk.com/hc/en-us/articles/360022466192";
     }
 }

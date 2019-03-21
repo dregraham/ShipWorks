@@ -338,7 +338,7 @@ namespace ShipWorks.Stores.Management
             this.internationalAddressValidationHelpLink.Size = new System.Drawing.Size(73, 13);
             this.internationalAddressValidationHelpLink.TabIndex = 7;
             this.internationalAddressValidationHelpLink.Text = "Learn more...";
-            this.internationalAddressValidationHelpLink.Url = "http://support.shipworks.com/support/solutions/articles/4000113490-international-" +
+            this.internationalAddressValidationHelpLink.Url = "https://shipworks.zendesk.com/hc/en-us/articles/360022460612" +
     "address-validation";
             // 
             // domesticAddressValidationHelpLink
@@ -352,7 +352,7 @@ namespace ShipWorks.Stores.Management
             this.domesticAddressValidationHelpLink.Size = new System.Drawing.Size(73, 13);
             this.domesticAddressValidationHelpLink.TabIndex = 5;
             this.domesticAddressValidationHelpLink.Text = "Learn more...";
-            this.domesticAddressValidationHelpLink.Url = "http://support.shipworks.com/support/solutions/articles/4000051969-using-address-" +
+            this.domesticAddressValidationHelpLink.Url = "https://shipworks.zendesk.com/hc/en-us/articles/360022648771" +
     "validation";
             // 
             // internationalAddressValidationSetting

@@ -166,7 +166,6 @@ namespace ShipWorks.Stores.Platforms.PayPal
         /// <summary>
         /// Gets the help URL to use in the account settings.
         /// </summary>
-        public static string AccountSettingsHelpUrl =>
-            "http://support.shipworks.com/support/solutions/articles/129331-ebay-setup-connecting-paypal-to-shipworks";
+        public static string AccountSettingsHelpUrl => "https://shipworks.zendesk.com/hc/en-us/articles/360022461312";
     }
 }

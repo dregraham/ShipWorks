@@ -37,13 +37,13 @@ namespace ShipWorks.UI.Dialogs.DefaultPickListTemplate
         /// Link to support article regarding changing the default template after it has been selected
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public Uri SupportArticleLink { get; } = new Uri("http://support.shipworks.com/support/solutions/articles/4000135212-printing-pick-lists/");
+        public Uri SupportArticleLink { get; } = new Uri("https://shipworks.zendesk.com/hc/en-us/articles/360022469252");
 
         /// <summary>
         /// Link to support article explaining where ShipWorks looks for templates
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public Uri SelectingAPickListLink { get; } = new Uri("http://support.shipworks.com/support/solutions/articles/4000135506-selecting-a-pick-list/");
+        public Uri SelectingAPickListLink { get; } = new Uri("https://shipworks.zendesk.com/hc/en-us/articles/360022657211");
 
         /// <summary>
         /// All of the templates in the pick list folder

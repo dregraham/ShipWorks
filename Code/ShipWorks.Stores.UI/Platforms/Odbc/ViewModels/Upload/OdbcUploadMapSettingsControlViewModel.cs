@@ -24,6 +24,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Upload
         private IOdbcFieldMap fieldMap;
         private readonly Func<IOpenFileDialog> openFileDialogFactory;
         private readonly IOdbcSettingsFile uploadSettingsFile;
+        private string customQuery;
 
         private const string InitialQueryComment =
             "/**********************************************************************/\n" +
@@ -35,7 +36,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Upload
             "/* For more samples and additional information on how to              */\n" +
             "/* leverage ShipWorks tokens when uploading shipment details          */\n" +
             "/* using a custom query, please visit                                 */\n" +
-            "/* http://support.shipworks.com/support/solutions/articles/4000085355 */\n" +
+            "/* https://shipworks.zendesk.com/hc/en-us/articles/360022649411       */\n" +
             "/*                                                                    */\n" +
             "/**********************************************************************/\n\n" +
             "UPDATE ShipmentDetails\n" +
@@ -82,6 +83,16 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Upload
                 ColumnSource = value ? SelectedTable : CustomQueryColumnSource;
             }
         }
+        
+        /// <summary>
+        /// the custom query
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public string CustomQuery
+        {
+            get => customQuery;
+            set => Handler.Set(nameof(CustomQuery), ref customQuery, value);
+        }
 
         /// <summary>
         /// Gets the load map command.
@@ -111,7 +122,14 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Upload
                 if (openResult.Success)
                 {
                     ColumnSourceIsTable = uploadSettingsFile.ColumnSourceType == OdbcColumnSourceType.Table;
+                    
+                    
                     LoadAndSetColumnSource(uploadSettingsFile.ColumnSource);
+                    if (!string.IsNullOrWhiteSpace(uploadSettingsFile.ColumnSource))
+                    {
+                        CustomQuery = uploadSettingsFile.ColumnSource;
+                    }
+                    
                     MapName = uploadSettingsFile.OdbcFieldMap.Name;
 
                     fieldMap = uploadSettingsFile.OdbcFieldMap;
@@ -151,6 +169,26 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Upload
 
             ColumnSourceIsTable = store.UploadColumnSourceType == (int) OdbcColumnSourceType.Table;
         }
+        
+        /// <summary>
+        /// Validates the required map settings.
+        /// </summary>
+        public override bool ValidateRequiredMapSettings()
+        {
+            if (!base.ValidateRequiredMapSettings())
+            {
+                return false;
+            }
+
+            if (!ColumnSourceIsTable && string.IsNullOrWhiteSpace(CustomQuery))
+            {
+                messageHelper.ShowError("Please enter a valid query before continuing to the next page.");
+                return false;
+            }
+
+            return true;
+        }
+
 
         /// <summary>
         /// The column source name to use for custom query

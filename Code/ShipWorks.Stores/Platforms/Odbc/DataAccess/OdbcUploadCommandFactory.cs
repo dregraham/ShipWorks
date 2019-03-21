@@ -72,6 +72,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.DataAccess
                 case (int) OdbcColumnSourceType.Table:
                     return CreateTableUploadQuery(store, shipment);
                 case (int) OdbcColumnSourceType.CustomQuery:
+                case (int) OdbcColumnSourceType.CustomParameterizedQuery:
                     return CreateCustomUploadQuery(store, shipment);
                 default:
                     string columnSource = EnumHelper.GetDescription((OdbcColumnSourceType) store.UploadColumnSourceType);

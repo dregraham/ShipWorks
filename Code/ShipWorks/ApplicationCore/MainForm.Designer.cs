@@ -1006,6 +1006,7 @@ namespace ShipWorks
             this.gridControl.RowActivated += new Divelements.SandGrid.GridRowEventHandler(this.OnGridRowActivated);
             this.gridControl.SearchActiveChanged += new System.EventHandler(this.OnGridSearchActiveChanged);
             this.gridControl.SearchQueryChanged += new System.EventHandler(this.OnGridSearchQueryChanged);
+            this.gridControl.FilterSaved += OnGridControlFilterSaved;
             //
             // dockContainer1
             //
@@ -1312,6 +1313,7 @@ namespace ShipWorks
             this.orderFilterTree.Size = new System.Drawing.Size(212, 202);
             this.orderFilterTree.TabIndex = 0;
             this.orderFilterTree.SelectedFilterNodeChanged += new System.EventHandler(this.OnSelectedFilterNodeChanged);
+            this.orderFilterTree.LoadAsAdvancedSearch += OnFilterTreeLoadAsAdvancedSearch;
             //
             // dockableWindowCustomerFilters
             //
@@ -1340,6 +1342,7 @@ namespace ShipWorks
             this.customerFilterTree.Size = new System.Drawing.Size(212, 229);
             this.customerFilterTree.TabIndex = 0;
             this.customerFilterTree.SelectedFilterNodeChanged += new System.EventHandler(this.OnSelectedFilterNodeChanged);
+            this.customerFilterTree.LoadAsAdvancedSearch += OnFilterTreeLoadAsAdvancedSearch;
             //
             // dockableWindowNotes
             //
@@ -3271,7 +3274,7 @@ namespace ShipWorks
         private Divelements.SandRibbon.RibbonChunk ribbonChunkDownload;
         private Divelements.SandRibbon.Button buttonDownload;
         private Divelements.SandRibbon.RibbonChunk ribbonChunkPickList;
-        private Divelements.SandRibbon.Button buttonPickList;        
+        private Divelements.SandRibbon.Button buttonPickList;
         private Divelements.SandRibbon.MainMenuItem mainMenuItemOptions;
         private Divelements.SandRibbon.Label statusStretcherPlaceholder;
         private ShipWorks.UI.Controls.SandRibbon.ImageLabel downloadingStatusLabel;

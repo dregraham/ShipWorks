@@ -1602,7 +1602,7 @@ namespace ShipWorks.Data.Model
 		/// <summary>Inits FilterEntity's mappings</summary>
 		private void InitFilterEntityMappings()
 		{
-			this.AddElementMapping("FilterEntity", @"ShipWorksLocal", @"dbo", "Filter", 7, 0);
+			this.AddElementMapping("FilterEntity", @"ShipWorksLocal", @"dbo", "Filter", 8, 0);
 			this.AddElementFieldMapping("FilterEntity", "FilterID", "FilterID", false, "BigInt", 0, 19, 0, true, "SCOPE_IDENTITY()", null, typeof(System.Int64), 0);
 			this.AddElementFieldMapping("FilterEntity", "RowVersion", "RowVersion", false, "Timestamp", 2147483647, 0, 0, false, "", null, typeof(System.Byte[]), 1);
 			this.AddElementFieldMapping("FilterEntity", "Name", "Name", false, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 2);
@@ -1610,6 +1610,7 @@ namespace ShipWorks.Data.Model
 			this.AddElementFieldMapping("FilterEntity", "IsFolder", "IsFolder", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 4);
 			this.AddElementFieldMapping("FilterEntity", "Definition", "Definition", true, "Xml", 2147483647, 0, 0, false, "", null, typeof(System.String), 5);
 			this.AddElementFieldMapping("FilterEntity", "State", "State", false, "TinyInt", 0, 3, 0, false, "", null, typeof(System.Byte), 6);
+			this.AddElementFieldMapping("FilterEntity", "IsSavedSearch", "IsSavedSearch", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 7);
 		}
 
 		/// <summary>Inits FilterLayoutEntity's mappings</summary>
@@ -2789,7 +2790,7 @@ namespace ShipWorks.Data.Model
 			this.AddElementMapping("ProductListItemEntity", @"ShipWorksLocal", @"dbo", "ProductListView", 10, 4);
 			this.AddElementFieldMapping("ProductListItemEntity", "ProductVariantID", "ProductVariantID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 0);
 			this.AddElementFieldMapping("ProductListItemEntity", "SKU", "SKU", false, "NVarChar", 300, 0, 0, false, "", null, typeof(System.String), 1);
-			this.AddElementFieldMapping("ProductListItemEntity", "Name", "Name", true, "NVarChar", 300, 0, 0, false, "", null, typeof(System.String), 2);
+			this.AddElementFieldMapping("ProductListItemEntity", "Name", "Name", false, "NVarChar", 300, 0, 0, false, "", null, typeof(System.String), 2);
 			this.AddElementFieldMapping("ProductListItemEntity", "Length", "Length", true, "Decimal", 0, 10, 2, false, "", null, typeof(System.Decimal), 3);
 			this.AddElementFieldMapping("ProductListItemEntity", "Width", "Width", true, "Decimal", 0, 10, 2, false, "", null, typeof(System.Decimal), 4);
 			this.AddElementFieldMapping("ProductListItemEntity", "Height", "Height", true, "Decimal", 0, 10, 2, false, "", null, typeof(System.Decimal), 5);

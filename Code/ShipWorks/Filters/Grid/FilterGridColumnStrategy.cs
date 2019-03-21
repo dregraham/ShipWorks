@@ -1,14 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using ShipWorks.Data.Grid;
-using System.Windows.Forms;
-using ShipWorks.Filters.Controls;
-using ShipWorks.Data.Grid.Columns;
-using ShipWorks.Data.Connection;
-using ShipWorks.Users;
 using System.ComponentModel;
+using System.Linq;
+using System.Windows.Forms;
+using ShipWorks.Data.Connection;
+using ShipWorks.Data.Grid;
+using ShipWorks.Data.Grid.Columns;
+using ShipWorks.Filters.Controls;
+using ShipWorks.Users;
 
 namespace ShipWorks.Filters.Grid
 {
@@ -18,30 +16,32 @@ namespace ShipWorks.Filters.Grid
     public class FilterGridColumnStrategy : EntityGridColumnStrategy
     {
         // Active column settings used for column generation
-        FilterNodeColumnSettings activeSettings;
+        private FilterNodeColumnSettings activeSettings;
 
         // Remember the last sort to support the user settings
-        Guid lastSortColumnID = Guid.Empty;
-        ListSortDirection lastSortOrder = ListSortDirection.Descending;
+        private Guid lastSortColumnID = Guid.Empty;
+        private ListSortDirection lastSortOrder = ListSortDirection.Descending;
 
         /// <summary>
         /// Load the full set of configured grid columns into the grid.
         /// </summary>
         public override void LoadColumns(EntityGrid grid)
         {
-            if (((FilterEntityGrid) grid).ActiveFilterNode == null)
+            var filterNode = ((FilterEntityGrid) grid).ActiveFilterNode;
+
+            if (filterNode?.Filter == null)
             {
                 return;
             }
 
             // Fetch the latest cached grid layout
-            activeSettings = FilterNodeColumnManager.GetUserSettings(((FilterEntityGrid) grid).ActiveFilterNode);
+            activeSettings = FilterNodeColumnManager.GetUserSettings(filterNode);
 
             GridColumnLayout layout = activeSettings.EffectiveLayout;
 
             // Add the columns
             grid.Columns.Clear();
-            grid.Columns.AddRange(layout.CreateSandGridColumns().OrderByDescending(c=>c.Visible).ToArray());
+            grid.Columns.AddRange(layout.CreateSandGridColumns().OrderByDescending(c => c.Visible).ToArray());
 
             // Apply the detail settings
             grid.DetailViewSettings = layout.DetailViewSettings;
@@ -145,7 +145,7 @@ namespace ShipWorks.Filters.Grid
             {
                 return null;
             }
-            
+
             FilterNodeColumnEditor editor = new FilterNodeColumnEditor();
             editor.LoadSettings(activeSettings);
 

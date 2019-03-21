@@ -517,7 +517,7 @@ CREATE TABLE [dbo].[Order]
 [ShipSenseHashKey] [nvarchar] (64) COLLATE SQL_Latin1_General_CP1_CS_AS NOT NULL,
 [ShipSenseRecognitionStatus] int NOT NULL,
 [ShipAddressType] [int] NOT NULL,
-[CombineSplitStatus] [INT] NOT NULL,
+[CombineSplitStatus] [int] NOT NULL CONSTRAINT [DF_Order_CombineSplitStatus] DEFAULT ((0)),
 [ChannelOrderID] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_Order_ChannelOrderID] DEFAULT (''),
 [ShipByDate] [datetime] NULL,
 [Custom1] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_Order_Custom1] DEFAULT (''),
@@ -783,9 +783,9 @@ CREATE TABLE [dbo].[OrderItem]
 [Quantity] [decimal] (29, 9) NOT NULL,
 [LocalStatus] [nvarchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [IsManual] [bit] NOT NULL,
-[TotalWeight] AS ([Weight]*[Quantity]),
 [HarmonizedCode] [nvarchar] (20) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [OriginalOrderID] [BIGINT] NOT NULL,
+[TotalWeight] AS ([Weight]*[Quantity]),
 [Length] [decimal] (10, 2) NOT NULL,
 [Width] [decimal] (10, 2) NOT NULL,
 [Height] [decimal] (10, 2) NOT NULL,
@@ -2384,7 +2384,8 @@ CREATE TABLE [dbo].[Filter]
 [FilterTarget] [int] NOT NULL,
 [IsFolder] [bit] NOT NULL,
 [Definition] [xml] NULL,
-[State] [tinyint] NOT NULL
+[State] [tinyint] NOT NULL,
+[IsSavedSearch] [bit] NOT NULL CONSTRAINT [DF_Filter_IsSavedSearch] DEFAULT ((0))
 )
 GO
 PRINT N'Creating primary key [PK_Filter] on [dbo].[Filter]'
@@ -2601,6 +2602,10 @@ GO
 PRINT N'Creating primary key [PK_MagentoOrder] on [dbo].[MagentoOrder]'
 GO
 ALTER TABLE [dbo].[MagentoOrder] ADD CONSTRAINT [PK_MagentoOrder] PRIMARY KEY CLUSTERED  ([OrderID])
+GO
+PRINT N'Creating index [IX_SWDefault_MagentoOrder_MagentoOrderID] on [dbo].[MagentoOrder]'
+GO
+CREATE NONCLUSTERED INDEX [IX_SWDefault_MagentoOrder_MagentoOrderID] ON [dbo].[MagentoOrder] ([MagentoOrderID] ASC)
 GO
 PRINT N'Creating [dbo].[MagentoStore]'
 GO
@@ -3540,7 +3545,7 @@ CREATE TABLE [dbo].[SearsStore]
 [SearsEmail] [nvarchar] (75) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [Password] [nvarchar] (75) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [SecretKey] [nvarchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[SellerID] [nvarchar] (15) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL
+[SellerID] [nvarchar] (15) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_SearsStore_SellerID] DEFAULT ('')
 )
 GO
 PRINT N'Creating primary key [PK_SearsStore] on [dbo].[SearsStore]'
@@ -4378,7 +4383,7 @@ CREATE TABLE [dbo].[YahooOrderItem]
 (
 [OrderItemID] [bigint] NOT NULL,
 [YahooProductID] [nvarchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[Url] [nvarchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL Default ''
+[Url] [nvarchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_YahooOrderItem_Url] DEFAULT ('')
 )
 GO
 PRINT N'Creating primary key [PK_YahooOrderItem] on [dbo].[YahooOrderItem]'
@@ -4392,8 +4397,8 @@ CREATE TABLE [dbo].[YahooStore]
 [StoreID] [bigint] NOT NULL,
 [YahooEmailAccountID] [bigint] NOT NULL,
 [TrackingUpdatePassword] [varchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[YahooStoreID] [varchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL DEFAULT '',
-[AccessToken] [varchar] (200) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL DEFAULT '',
+[YahooStoreID] [varchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_YahooStore_YahooStoreID] DEFAULT (''),
+[AccessToken] [varchar] (200) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_YahooStore_AccessToken] DEFAULT (''),
 [BackupOrderNumber] [bigint] NULL
 )
 GO
@@ -4762,7 +4767,7 @@ CREATE TABLE [dbo].[FtpAccount]
 [SecurityType] [int] NOT NULL,
 [Passive] [bit] NOT NULL,
 [InternalOwnerID] [bigint] NULL,
-[ReuseControlConnectionSession] [bit] NOT NULL DEFAULT ((0))
+[ReuseControlConnectionSession] [bit] NOT NULL CONSTRAINT [DF_FtpAccount_ReuseControlConnectionSession] DEFAULT ((0))
 )
 GO
 PRINT N'Creating primary key [PK_FtpAccount] on [dbo].[FtpAccount]'
@@ -6006,7 +6011,7 @@ CREATE TABLE [dbo].[GrouponOrder]
 (
 [OrderID] [bigint] NOT NULL,
 [GrouponOrderID] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[ParentOrderID] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL
+[ParentOrderID] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL  CONSTRAINT [DF_GrouponOrder_ParentOrderID] DEFAULT ('')
 )
 GO
 PRINT N'Creating primary key [PK_GrouponOrder] on [dbo].[GrouponOrder]'
@@ -6688,8 +6693,8 @@ CREATE TABLE [dbo].[GrouponOrderSearch]
 [GrouponOrderSearchID] [bigint] NOT NULL IDENTITY(1, 1),
 [OrderID] [bigint] NOT NULL,
 [GrouponOrderID] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
- [ParentOrderID] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[OriginalOrderID] [bigint] NOT NULL
+[OriginalOrderID] [bigint] NOT NULL,
+[ParentOrderID] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_GrouponOrderSearch_ParentOrderID] DEFAULT ('')
 )
 GO
 PRINT N'Creating primary key [PK_GrouponOrderSearch] on [dbo].[GrouponOrderSearch]'

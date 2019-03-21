@@ -148,7 +148,6 @@ namespace ShipWorks.Stores.Platforms.ClickCartPro
             outline.AddElement("ClickCartProOrderID", () => order.Value.ClickCartProOrderID);
         }
 
-        public override string AccountSettingsHelpUrl
-            => "http://support.shipworks.com/support/solutions/articles/146669";
+        public override string AccountSettingsHelpUrl => "https://shipworks.zendesk.com/hc/en-us/articles/360022652871";
     }
 }

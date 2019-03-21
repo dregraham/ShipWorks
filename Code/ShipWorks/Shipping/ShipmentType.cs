@@ -88,13 +88,7 @@ namespace ShipWorks.Shipping
         /// <summary>
         /// The user-displayable name of the shipment type
         /// </summary>
-        public virtual string ShipmentTypeName
-        {
-            get
-            {
-                return EnumHelper.GetDescription(ShipmentTypeCode);
-            }
-        }
+        public virtual string ShipmentTypeName => EnumHelper.GetDescription(ShipmentTypeCode);
 
         /// <summary>
         /// Overridden to provide the name of the shipment type
@@ -107,34 +101,22 @@ namespace ShipWorks.Shipping
         /// <summary>
         /// Indicates if the shipment service type supports getting rates
         /// </summary>
-        public virtual bool SupportsGetRates
-        {
-            get { return false; }
-        }
+        public virtual bool SupportsGetRates => false;
 
         /// <summary>
         /// Indicates if the shipment service type supports return shipments
         /// </summary>
-        public virtual bool SupportsReturns
-        {
-            get { return false; }
-        }
+        public virtual bool SupportsReturns => false;
 
         /// <summary>
         /// Supports using an origin address from a shipping account
         /// </summary>
-        public virtual bool SupportsAccountAsOrigin
-        {
-            get { return false; }
-        }
+        public virtual bool SupportsAccountAsOrigin => false;
 
         /// <summary>
         /// Supports getting counter rates.
         /// </summary>
-        public virtual bool SupportsCounterRates
-        {
-            get { return false; }
-        }
+        public virtual bool SupportsCounterRates => false;
 
         /// <summary>
         /// Gets a value indicating whether the shipment type [supports multiple packages].
@@ -142,10 +124,7 @@ namespace ShipWorks.Shipping
         /// <value>
         /// <c>true</c> if [supports multiple packages]; otherwise, <c>false</c>.
         /// </value>
-        public virtual bool SupportsMultiplePackages
-        {
-            get { return false; }
-        }
+        public virtual bool SupportsMultiplePackages => false;
 
         /// <summary>
         /// Indicates if the ShipmentType needs the ResidentialResult field determined for the given shipment.
@@ -160,48 +139,24 @@ namespace ShipWorks.Shipping
         /// </summary>
         public virtual ICertificateInspector CertificateInspector
         {
-            get
-            {
-                return certificateInspector;
-            }
-            set
-            {
-                certificateInspector = value;
-            }
+            get => certificateInspector;
+            set => certificateInspector = value;
         }
 
         /// <summary>
         /// Gets a value indicating whether account registration allowed for this shipment type.
         /// </summary>
-        public virtual bool IsAccountRegistrationAllowed
-        {
-            get
-            {
-                return GetRestrictionLevel(EditionFeature.ShipmentTypeRegistration) == EditionRestrictionLevel.None;
-            }
-        }
+        public virtual bool IsAccountRegistrationAllowed => GetRestrictionLevel(EditionFeature.ShipmentTypeRegistration) == EditionRestrictionLevel.None;
 
         /// <summary>
         /// Gets a value indicating whether this shipment type has been restricted.
         /// </summary>
-        public virtual bool IsShipmentTypeRestricted
-        {
-            get
-            {
-                return GetRestrictionLevel(EditionFeature.ShipmentType) != EditionRestrictionLevel.None;
-            }
-        }
+        public virtual bool IsShipmentTypeRestricted => GetRestrictionLevel(EditionFeature.ShipmentType) != EditionRestrictionLevel.None;
 
         /// <summary>
         /// Gets a value indicating whether this shipment type has rate discount messaging restricted. This will mean different things to different shipment types.
         /// </summary>
-        public bool IsRateDiscountMessagingRestricted
-        {
-            get
-            {
-                return GetRestrictionLevel(EditionFeature.RateDiscountMessaging) != EditionRestrictionLevel.None;
-            }
-        }
+        public bool IsRateDiscountMessagingRestricted => GetRestrictionLevel(EditionFeature.RateDiscountMessaging) != EditionRestrictionLevel.None;
 
         /// <summary>
         /// Gets the restriction level of the given feature for this shipment type.
@@ -239,13 +194,7 @@ namespace ShipWorks.Shipping
         /// <summary>
         /// Gets a value indicating whether this shipment type has accounts
         /// </summary>
-        public virtual bool HasAccounts
-        {
-            get
-            {
-                return false;
-            }
-        }
+        public virtual bool HasAccounts => false;
 
         /// <summary>
         /// Gets or sets a value indicating whether [should apply ship sense].
@@ -564,24 +513,20 @@ namespace ShipWorks.Shipping
                 }
 
                 var shippingProfile = shippingProfileService.Get(primaryProfile);
+
+                // Save the original ReturnShipment value 
+                bool originalReturnShipment = shipment.ReturnShipment;
+
+                // Apply the Shipping profile
                 shippingProfile.Apply(shipment);
+
+                // Reset ReturnShipment to the original value
+                shipment.ReturnShipment = originalReturnShipment;
 
                 // Now apply ShipSense
                 ApplyShipSense(shipment, lifetimeScope);
 
-                // Go through each additional profile and apply it as well
-                foreach (ShippingDefaultsRuleEntity rule in ShippingDefaultsRuleManager.GetRules(ShipmentTypeCode))
-                {
-                    if (shippingProfile.ShippingProfileEntity.ShippingProfileID != rule.ShippingProfileID &&
-                        FilterHelper.IsObjectInFilterContent(shipment.OrderID, rule.FilterNodeID))
-                    {
-                        IShippingProfileEntity profile = shippingProfileManager.GetProfileReadOnly(rule.ShippingProfileID);
-                        if (profile != null)
-                        {
-                            shippingProfileService.Get(profile).Apply(shipment);
-                        }
-                    }
-                }
+                ApplyShippingRules(shipment, shippingProfile, shippingProfileManager, shippingProfileService);
 
                 // This was brought in from LoadShipmentData.  Since we are no longer using that method for creating a new shipment,
                 // we still needed to do this logic.
@@ -589,6 +534,27 @@ namespace ShipWorks.Shipping
                 {
                     ICarrierAccount carrierAccount = accountRetriever.AccountsReadOnly.FirstOrDefault();
                     carrierAccount?.ApplyTo(shipment);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Attempts to apply shipping rules to the given shipment.
+        /// </summary>
+        private void ApplyShippingRules(ShipmentEntity shipment, IShippingProfile shippingProfile,
+            IShippingProfileManager shippingProfileManager, IShippingProfileService shippingProfileService)
+        {
+            // Go through each additional profile and apply it as well
+            foreach (ShippingDefaultsRuleEntity rule in ShippingDefaultsRuleManager.GetRules(ShipmentTypeCode))
+            {
+                if (shippingProfile.ShippingProfileEntity.ShippingProfileID != rule.ShippingProfileID &&
+                    FilterHelper.IsObjectInFilterContent(shipment.OrderID, rule.FilterNodeID))
+                {
+                    IShippingProfileEntity profile = shippingProfileManager.GetProfileReadOnly(rule.ShippingProfileID);
+                    if (profile != null)
+                    {
+                        shippingProfileService.Get(profile).Apply(shipment);
+                    }
                 }
             }
         }

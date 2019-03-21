@@ -55,7 +55,7 @@
             <Hyperlink
                 ui:Link.OpenInBrowser="True"
                 Background="Transparent"
-                NavigateUri="http://support.shipworks.com/support/solutions/articles/140916-what-printer-should-i"
+                NavigateUri="https://shipworks.zendesk.com/hc/en-us/articles/360022467092"
                 Style="{StaticResource LinkButton}"
                 Focusable="False">
                 <Border Background="Transparent" BorderBrush="{x:Null}"
