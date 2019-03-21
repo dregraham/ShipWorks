@@ -2787,7 +2787,7 @@ namespace ShipWorks.Data.Model
 			this.AddElementMapping("ProductListItemEntity", @"ShipWorksLocal", @"dbo", "ProductListView", 10, 4);
 			this.AddElementFieldMapping("ProductListItemEntity", "ProductVariantID", "ProductVariantID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 0);
 			this.AddElementFieldMapping("ProductListItemEntity", "SKU", "SKU", false, "NVarChar", 300, 0, 0, false, "", null, typeof(System.String), 1);
-			this.AddElementFieldMapping("ProductListItemEntity", "Name", "Name", true, "NVarChar", 300, 0, 0, false, "", null, typeof(System.String), 2);
+			this.AddElementFieldMapping("ProductListItemEntity", "Name", "Name", false, "NVarChar", 300, 0, 0, false, "", null, typeof(System.String), 2);
 			this.AddElementFieldMapping("ProductListItemEntity", "Length", "Length", true, "Decimal", 0, 10, 2, false, "", null, typeof(System.Decimal), 3);
 			this.AddElementFieldMapping("ProductListItemEntity", "Width", "Width", true, "Decimal", 0, 10, 2, false, "", null, typeof(System.Decimal), 4);
 			this.AddElementFieldMapping("ProductListItemEntity", "Height", "Height", true, "Decimal", 0, 10, 2, false, "", null, typeof(System.Decimal), 5);
