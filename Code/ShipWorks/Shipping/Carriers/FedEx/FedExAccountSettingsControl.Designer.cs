@@ -236,13 +236,12 @@
             //
             // openFileDialogLetterhead
             //
-            this.openFileDialogLetterhead.Filter = 
-                "Image Files(*.jpg; *.jpeg; *.gif; *.bmp; *.png)|*.jpg; *.jpeg; *.gif; *.bmp; *.png";
+            this.openFileDialogLetterhead.Filter = "Image Files(*.jpg; *.gif; *.png)|*.jpg; *.gif; *.png";
             //
             // openFileDialogSignature
             // 
-            this.openFileDialogSignature.Filter =
-                "Image Files(*.jpg; *.jpeg; *.gif; *.bmp; *.png)|*.jpg; *.jpeg; *.gif; *.bmp; *.png";
+            this.openFileDialogSignature.Filter = "Image Files(*.jpg; *.gif; *.png)|*.jpg; *.gif; *.png";
+            //
             // FedExAccountSettingsControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
