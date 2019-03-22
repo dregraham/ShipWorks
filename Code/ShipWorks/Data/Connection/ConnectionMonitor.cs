@@ -16,7 +16,9 @@ using Interapptive.Shared.Data;
 using Interapptive.Shared.Utility;
 using log4net;
 using ShipWorks.ApplicationCore.Crashes;
+using ShipWorks.ApplicationCore.MessageBoxes;
 using ShipWorks.Common.Threading;
+using ShipWorks.Data.Administration;
 using ShipWorks.Data.Model;
 using ShipWorks.UI;
 using ShipWorks.Users;
@@ -166,6 +168,24 @@ namespace ShipWorks.Data.Connection
                     // just that we are done trying
                     reconnectEvent.Set();
 
+                    if (SqlSchemaUpdater.GetInstalledSchemaVersion() > SqlSchemaUpdater.GetRequiredSchemaVersion())
+                    {
+                        // after reconnecting the database looks to have been updated
+                        // we cant reconnect, show a dialog saying that database has been
+                        // updated and close
+                        Program.MainForm.Invoke(new MethodInvoker(() =>
+                        {
+                            using (NeedUpgradeShipWorks dlg = new NeedUpgradeShipWorks())
+                            {
+                                dlg.ShowDialog(DisplayHelper.GetActiveForm());
+                            }
+
+                            connectionLost = true;
+
+                            Program.MainForm.Close();
+                        }));
+                    }
+
                     // throw the ConnectionLostException
                     if (connectionLost)
                     {
@@ -303,7 +323,7 @@ namespace ShipWorks.Data.Connection
 
                             if (isSingleUser)
                             {
-                                throw new SingleUserModeException();
+                                Reconnect(con);
                             }
                         }
                         else
