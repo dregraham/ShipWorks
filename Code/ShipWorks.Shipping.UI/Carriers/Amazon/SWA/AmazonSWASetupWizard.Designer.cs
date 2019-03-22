@@ -1,4 +1,6 @@
-﻿namespace ShipWorks.Shipping.UI.Carriers.Amazon.SWA
+﻿using ShipWorks.Shipping.UI.Amazon.SWA;
+
+namespace ShipWorks.Shipping.UI.Carriers.Amazon.SWA
 {
     partial class AmazonSWASetupWizard
     {
@@ -38,9 +40,10 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AmazonSWASetupWizard));
             this.wizardPageWelcome = new ShipWorks.UI.Wizard.WizardPage();
-            this.label1 = new System.Windows.Forms.Label();
             this.wizardPageContactInfo = new ShipWorks.UI.Wizard.WizardPage();
             this.contactInformation = new ShipWorks.Data.Controls.AutofillPersonControl();
+            this.elementHost1 = new System.Windows.Forms.Integration.ElementHost();
+            this.amazonSWAAuthorizationControl = new ShipWorks.Shipping.UI.Amazon.SWA.AmazonSWAAuthorizationControl();
             this.mainPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).BeginInit();
             this.topPanel.SuspendLayout();
@@ -83,7 +86,7 @@
             // 
             // wizardPageWelcome
             // 
-            this.wizardPageWelcome.Controls.Add(this.label1);
+            this.wizardPageWelcome.Controls.Add(this.elementHost1);
             this.wizardPageWelcome.Description = "Setup ShipWorks to work with your AmazonSWA account.";
             this.wizardPageWelcome.Dock = System.Windows.Forms.DockStyle.Fill;
             this.wizardPageWelcome.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -93,17 +96,6 @@
             this.wizardPageWelcome.TabIndex = 0;
             this.wizardPageWelcome.Title = "Setup AmazonSWA Shipping";
             // 
-            // label1
-            // 
-            this.label1.Location = new System.Drawing.Point(20, 10);
-            this.label1.Margin = new System.Windows.Forms.Padding(20, 10, 3, 0);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(508, 30);
-            this.label1.TabIndex = 0;
-            this.label1.Text = "This wizard will assist you in configuring your AmazonSWA account for use with Sh" +
-    "ipWorks. This enables you to begin shipping, tracking, and printing AmazonSWA la" +
-    "bels with your AmazonSWA account.";
-            // 
             // wizardPageContactInfo
             // 
             this.wizardPageContactInfo.Controls.Add(this.contactInformation);
@@ -112,7 +104,7 @@
             this.wizardPageContactInfo.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.wizardPageContactInfo.Location = new System.Drawing.Point(0, 0);
             this.wizardPageContactInfo.Name = "wizardPageContactInfo";
-            this.wizardPageContactInfo.Size = new System.Drawing.Size(557, 437);
+            this.wizardPageContactInfo.Size = new System.Drawing.Size(567, 437);
             this.wizardPageContactInfo.TabIndex = 0;
             this.wizardPageContactInfo.Title = "Contact Information";
             this.wizardPageContactInfo.StepNext += new System.EventHandler<ShipWorks.UI.Wizard.WizardStepEventArgs>(this.OnStepNextContactInfo);
@@ -143,6 +135,16 @@
             this.contactInformation.Size = new System.Drawing.Size(355, 381);
             this.contactInformation.TabIndex = 1;
             // 
+            // elementHost1
+            // 
+            this.elementHost1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.elementHost1.Location = new System.Drawing.Point(0, 0);
+            this.elementHost1.Name = "elementHost1";
+            this.elementHost1.Size = new System.Drawing.Size(567, 437);
+            this.elementHost1.TabIndex = 1;
+            this.elementHost1.Text = "elementHost1";
+            this.elementHost1.Child = this.amazonSWAAuthorizationControl;
+            // 
             // AmazonSWASetupWizard
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -170,6 +172,7 @@
         private ShipWorks.UI.Wizard.WizardPage wizardPageWelcome;
         private ShipWorks.UI.Wizard.WizardPage wizardPageContactInfo;
         private Data.Controls.AutofillPersonControl contactInformation;
-        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Integration.ElementHost elementHost1;
+        private AmazonSWAAuthorizationControl amazonSWAAuthorizationControl;
     }
 }

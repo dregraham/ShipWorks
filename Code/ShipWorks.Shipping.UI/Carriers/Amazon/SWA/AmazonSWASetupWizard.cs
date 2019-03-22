@@ -14,6 +14,7 @@ using ShipWorks.Shipping.ShipEngine;
 using ShipWorks.UI.Wizard;
 using System.Windows.Forms;
 using ShipWorks.Shipping.Carriers.Amazon.SWA;
+using ShipWorks.Shipping.UI.Amazon.SWA;
 
 namespace ShipWorks.Shipping.UI.Carriers.Amazon.SWA
 {
@@ -26,8 +27,8 @@ namespace ShipWorks.Shipping.UI.Carriers.Amazon.SWA
         private readonly AmazonSWAShipmentType shipmentType;
         private readonly IAmazonSWAAccountRepository accountRepository;
         private readonly IShippingSettings shippingSettings;
+        private readonly IAmazonSWAAuthorizationViewModel amazonSWAAuthorizationViewModel;
         private readonly IMessageHelper messageHelper;
-        private readonly IShipEngineWebClient shipEngineClient;
         private ShippingWizardPageFinish shippingWizardPageFinish;
         private readonly AmazonSWAAccountEntity account;
 
@@ -45,17 +46,17 @@ namespace ShipWorks.Shipping.UI.Carriers.Amazon.SWA
         public AmazonSWASetupWizard(
             AmazonSWAShipmentType shipmentType,
             IAmazonSWAAccountRepository accountRepository,
-            IShipEngineWebClient shipEngineClient,
             IShippingSettings shippingSettings,
+            IAmazonSWAAuthorizationViewModel amazonSWAAuthorizationViewModel,
             IMessageHelper messageHelper) : this()
         {
             this.shipmentType = shipmentType;
             this.accountRepository = accountRepository;
             this.shippingSettings = shippingSettings;
+            this.amazonSWAAuthorizationViewModel = amazonSWAAuthorizationViewModel;
             this.messageHelper = messageHelper;
-            this.shipEngineClient = shipEngineClient;
-
             account = new AmazonSWAAccountEntity();
+            amazonSWAAuthorizationControl.DataContext = this.amazonSWAAuthorizationViewModel;
         }
 
         /// <summary>
@@ -99,7 +100,17 @@ namespace ShipWorks.Shipping.UI.Carriers.Amazon.SWA
         /// </summary>
         private async Task OnStepNextWelcome(object sender, WizardStepEventArgs e)
         {
-            await Task.FromException(new NotImplementedException());
+            GenericResult<string> result =  await amazonSWAAuthorizationViewModel.ConnectToAmazonShipping();
+
+            if (result.Failure)
+            {
+                messageHelper.ShowError($"An error occurred while connecting to Amazon Shipping {result.Message}");
+                e.NextPage = CurrentPage;
+            }
+            else
+            {
+                account.ShipEngineCarrierId = result.Value;
+            }
         }
 
         /// <summary>

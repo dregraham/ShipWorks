@@ -23,17 +23,26 @@
             <ColumnDefinition Width="Auto" />
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
-        <TextBlock Grid.Row="0"
+        <StackPanel Grid.Row="0"
                    Grid.Column="0"
-                   Grid.ColumnSpan="3"
-                   TextWrapping="WrapWithOverflow">
-            Amazon requires you to authorize ShipWorks to connect
-            to your Amazon account. This is done by logging into
-            a special Amazon page, granting ShipWorks access, and
-            copying and pasting the code on the last page into the Access
-            Code field below. For help,
-            <Hyperlink NavigateUri="https://shipworks.zendesk.com/hc/en-us/articles/360022652811" ui:Link.OpenInBrowser="true">click here.</Hyperlink>
-        </TextBlock>
+                   Grid.ColumnSpan="3">
+            <TextBlock TextWrapping="WrapWithOverflow" Margin="0 0 0 10">
+                This wizard will assist you in configuring your Amazon
+                shipping account for use with ShipWorks. This enables
+                you to begin shipping, tracking, and printing Amazon
+                shipping labels with your Amazon shipping account.
+            </TextBlock>
+
+            <TextBlock TextWrapping="WrapWithOverflow">
+                Amazon requires you to authorize ShipWorks to connect
+                to your Amazon account. This is done by logging into
+                a special Amazon page, granting ShipWorks access, and
+                copying and pasting the code on the last page into the Access
+                Code field below. For help,
+                <Hyperlink NavigateUri="https://shipworks.zendesk.com/hc/en-us/articles/360022652811" ui:Link.OpenInBrowser="true">click here.</Hyperlink>
+            </TextBlock>
+        </StackPanel>
+
         <Button Grid.Row="2"
                 Grid.Column="0"
                 Height="23"

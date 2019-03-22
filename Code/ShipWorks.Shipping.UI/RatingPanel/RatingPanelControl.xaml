@@ -155,9 +155,9 @@
                 </ListBox.ItemContainerStyle>
                 <ui:TypeBasedTemplateSelector.Templates>
                     <ui:Template Value="{x:Type amz:AmazonSFPCarrierTermsAndConditionsNotAcceptedFootnoteViewModel}"
-                                 DataTemplate="{StaticResource AmazonCarrierTermsAndConditionsNotAcceptedFootnoteViewModelTemplate}" />
+                                 DataTemplate="{StaticResource AmazonSFPCarrierTermsAndConditionsNotAcceptedFootnoteViewModelTemplate}" />
                     <ui:Template Value="{x:Type amz:AmazonSFPSameDayNotAvailableFootnoteViewModel}"
-                                 DataTemplate="{StaticResource AmazonSameDayNotAvailableFootnoteViewModelTemplate}" />
+                                 DataTemplate="{StaticResource AmazonSFPSameDayNotAvailableFootnoteViewModelTemplate}" />
                     <ui:Template Value="{x:Type sw:BrokerExceptionsRateFootnoteViewModel}"
                                  DataTemplate="{StaticResource BrokerExceptionsRateFootnoteViewModelTemplate}" />
                     <ui:Template Value="{x:Type sw:CounterRatesInvalidStoreAddressFootnoteViewModel}"

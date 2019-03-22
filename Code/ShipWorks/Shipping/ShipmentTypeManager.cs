@@ -96,9 +96,10 @@ namespace ShipWorks.Shipping
                 case ShipmentTypeCode.iParcel: return 11;
                 case ShipmentTypeCode.DhlExpress: return 12;
                 case ShipmentTypeCode.AmazonSFP: return 13;
-                case ShipmentTypeCode.Asendia: return 14;
-                case ShipmentTypeCode.Other: return 15;
-                case ShipmentTypeCode.None: return 16;
+                case ShipmentTypeCode.AmazonSWA: return 14;
+                case ShipmentTypeCode.Asendia: return 15;
+                case ShipmentTypeCode.Other: return 16;
+                case ShipmentTypeCode.None: return 17;
             }
 
             throw new InvalidOperationException("Unhandled shipment type in GetSortValue");

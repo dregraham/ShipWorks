@@ -1,42 +1,40 @@
 ﻿using System.ComponentModel;
 using System.Reflection;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Input;
 using GalaSoft.MvvmLight.CommandWpf;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Net;
-using Interapptive.Shared.Security;
 using Interapptive.Shared.UI;
+using Interapptive.Shared.Utility;
 using ShipWorks.Core.UI;
-using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.ShipEngine;
 
 namespace ShipWorks.Shipping.UI.Amazon.SWA
 {
     /// <summary>
-    /// Account settings page for ChannelAdvisor
+    /// Amazon SWA Authorization Control
     /// </summary>
     [Component]
-    public class AmazonSWAAuthorizationViewModel : INotifyPropertyChanged
+    public class AmazonSWAAuthorizationViewModel : INotifyPropertyChanged, IAmazonSWAAuthorizationViewModel
     {
-        private readonly IEncryptionProviderFactory encryptionProviderFactory;
         private readonly IWin32Window window;
-        private readonly IMessageHelper messageHelper;
+        private readonly IShipEngineWebClient shipEngineClient;
+
         public event PropertyChangedEventHandler PropertyChanged;
         private readonly PropertyChangedHandler handler;
         private string accessCode;
-        private const string AmazonLWAClientId = "amzn1.application-oa2-client.d95db1232b1b411a9bafe026647eca94";
 
         /// <summary>
         /// Constructor
         /// </summary>
         public AmazonSWAAuthorizationViewModel(
-            IEncryptionProviderFactory encryptionProviderFactory,
             IWin32Window window,
-            IMessageHelper messageHelper)
+            IShipEngineWebClient shipEngineClient)
         {
-            this.encryptionProviderFactory = encryptionProviderFactory;
             this.window = window;
-            this.messageHelper = messageHelper;
+            this.shipEngineClient = shipEngineClient;
             handler = new PropertyChangedHandler(this, () => PropertyChanged);
 
             GetAccessCodeCommand = new RelayCommand(GetAccessCode);
@@ -59,24 +57,19 @@ namespace ShipWorks.Shipping.UI.Amazon.SWA
         public ICommand GetAccessCodeCommand { get; }
 
         /// <summary>
+        /// Use the access code to connect to amazon shipping
+        /// </summary>
+        /// <returns></returns>
+        public async Task<GenericResult<string>> ConnectToAmazonShipping() =>
+            await shipEngineClient.ConnectAmazonShippingAccount(accessCode);
+
+        /// <summary>
         /// Opens a browser window which will lead the user to the access token
         /// </summary>
         private void GetAccessCode()
         {
-            string authorizationUrl = $"https://www.amazon.com/ap/oa?client_id={AmazonLWAClientId}&scope=profile&response_type=token&redirect_uri=https://interapptive.com/amazon/authorize.php";
+            string authorizationUrl = $"";
             WebHelper.OpenUrl(authorizationUrl, window);
-        }
-
-        /// <summary>
-        /// Saves the specified store.
-        /// </summary>
-        /// <returns>True if successful</returns>
-        public bool ConnectToShipEngine(AmazonSWAAccountEntity store)
-        {
-            // send the access code to ShipEngine to add the account, they should return the ShipEngine accountID
-            // set that on the entity and return true
-
-            return true;
         }
     }
 }

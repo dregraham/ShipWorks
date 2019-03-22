@@ -11,6 +11,7 @@ using Newtonsoft.Json;
 using System;
 using System.Net;
 using Interapptive.Shared.Extensions;
+using Newtonsoft.Json.Linq;
 
 namespace ShipWorks.Shipping.ShipEngine
 {
@@ -41,8 +42,8 @@ namespace ShipWorks.Shipping.ShipEngine
         /// </summary>
         /// <returns>The CarrierId</returns>
         public async Task<GenericResult<string>> ConnectDhlAccount(string accountNumber)
-        {            
-            // Check to see if the account already exists in ShipEngine 
+        {
+            // Check to see if the account already exists in ShipEngine
             GenericResult<string> existingAccount = await GetCarrierId(accountNumber);
 
             if (existingAccount.Success)
@@ -66,11 +67,40 @@ namespace ShipWorks.Shipping.ShipEngine
         }
 
         /// <summary>
+        /// Connect an Amazon Shipping Account
+        /// </summary>
+        /// <remarks>
+        /// unlike the other methods in this class we are manually interacting
+        /// with the ShipEngine API because they have not added connecting to
+        /// Amazon to their DLL yet
+        /// </remarks>
+        public async Task<GenericResult<string>> ConnectAmazonShippingAccount(string authCode)
+        {
+            HttpJsonVariableRequestSubmitter submitter = new HttpJsonVariableRequestSubmitter();
+            submitter.Headers.Add($"Content-Type: application/json");
+            submitter.Headers.Add($"api-key: {await GetApiKey()}");
+            submitter.Verb = HttpVerb.Post;
+            submitter.Uri = new Uri($"https://api.shipengine.com/v1/connections/carriers/amazon_shipping_us");
+            submitter.RequestBody = $"{{\"nickname\": \"{authCode}\", \"auth_code\": \"{authCode}\"}}";
+
+            try
+            {
+                EnumResult<HttpStatusCode> result =
+                    submitter.ProcessRequest(new ApiLogEntry(ApiLogSource.ThreeDCart, "ConnectAmazonShipping"), typeof(ShipEngineException));
+                return GenericResult.FromSuccess(JObject.Parse(result.Message)["carrier_id"].ToString());
+            }
+            catch (Exception ex)
+            {
+                return GenericResult.FromError<string>(ex);
+            }
+        }
+
+        /// <summary>
         /// Connect an Asendia account
         /// </summary>
         public async Task<GenericResult<string>> ConnectAsendiaAccount(string accountNumber, string username, string password)
         {
-            // Check to see if the account already exists in ShipEngine 
+            // Check to see if the account already exists in ShipEngine
             GenericResult<string> existingAccount = await GetCarrierId(accountNumber);
 
             if (existingAccount.Success)
@@ -128,7 +158,7 @@ namespace ShipWorks.Shipping.ShipEngine
 
             return GenericResult.FromError<string>("Unable to find account");
         }
-        
+
         /// <summary>
         /// Connect to a ShipEngine Carrier Account
         /// </summary>
@@ -141,7 +171,7 @@ namespace ShipWorks.Shipping.ShipEngine
         {
             ConfigureLogging(apiInstance, logSource, action, LogActionType.Other);
             ConnectAccountResponseDTO result = await connect.ConfigureAwait(false);
-                
+
             return GenericResult.FromSuccess(result.CarrierId);
         }
 
@@ -162,7 +192,7 @@ namespace ShipWorks.Shipping.ShipEngine
                 return null;
             }
         }
-        
+
         /// <summary>
         /// Purchases a label from ShipEngine using the given request
         /// </summary>
@@ -216,7 +246,7 @@ namespace ShipWorks.Shipping.ShipEngine
                 throw new ShipEngineException(GetErrorMessage(ex));
             }
         }
-        
+
         /// <summary>
         /// Track a shipment using the label ID
         /// </summary>
@@ -260,7 +290,7 @@ namespace ShipWorks.Shipping.ShipEngine
             apiAccessor.Configuration.ApiClient.RequestLogger = apiLogEntry.LogRequest;
             apiAccessor.Configuration.ApiClient.ResponseLogger = apiLogEntry.LogResponse;
         }
-        
+
         /// <summary>
         /// Get the error message from an ApiException
         /// </summary>
