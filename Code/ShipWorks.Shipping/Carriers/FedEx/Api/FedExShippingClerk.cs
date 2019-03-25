@@ -1226,16 +1226,21 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         /// <param name="account"></param>
         public void PerformUploadImages(FedExAccountEntity account)
         {
-            log.Info("Performing FedEx Image Upload");
-            CarrierRequest uploadImagesRequest = requestFactory.CreateUploadImageRequest(account);
-            FedExUploadImagesResponse uploadImagesResponse = (FedExUploadImagesResponse) uploadImagesRequest.Submit();
-
-            if (uploadImagesResponse == null)
+            try
             {
-                throw new FedExException("An unexpected response type was received from the package movement request; expected type: FedExUploadImagesResponse.");
+                if (account == null)
+                {
+                    throw new FedExException("No FedEx account is selected");
+                }
+                log.Info("Performing FedEx Image Upload");
+                CarrierRequest uploadImagesRequest = requestFactory.CreateUploadImageRequest(account);
+                FedExUploadImagesResponse uploadImagesResponse = (FedExUploadImagesResponse) uploadImagesRequest.Submit();
+                uploadImagesResponse.Process();
             }
-
-            uploadImagesResponse.Process();
+            catch (Exception ex)
+            {
+                throw HandleException(ex);
+            }
         }
     }
 }
