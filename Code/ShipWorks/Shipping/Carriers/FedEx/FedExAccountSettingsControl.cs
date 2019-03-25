@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
@@ -40,6 +41,16 @@ namespace ShipWorks.Shipping.Carriers.FedEx
 
                 // Additional hubs
                 additionalHubs.Lines = hubs.Skip(1).Select(e => (string) e).ToArray();
+            }
+
+            if (account.Letterhead.Length > 0)
+            {
+                letterheadPreview.Image = account.Letterhead.Base64StringToImage();
+            }
+
+            if (account.Signature.Length > 0)
+            {
+                signaturePreview.Image = account.Signature.Base64StringToImage();
             }
         }
 
