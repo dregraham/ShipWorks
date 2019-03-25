@@ -476,20 +476,16 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         /// Intended to interact with the FedEx API for uploading images.
         /// </summary>
         /// <param name="imageRequest"></param>
-        /// <returns></returns>
+        /// <returns>The UploadImagesReply from FedEx</returns>
         public UploadImagesReply UploadImages(UploadImagesRequest imageRequest)
         {
             try
             {
-                UploadImagesReply imageReply;
-
                 using (UploadDocumentService service = new UploadDocumentService(new ApiLogEntry(ApiLogSource.FedEx, "UploadImages")))
                 {
                     service.Url = settings.EndpointUrl;
-                    imageReply = service.uploadImages(imageRequest);
+                    return service.uploadImages(imageRequest);
                 }
-
-                return imageReply;
             }
             catch (SoapException ex)
             {
