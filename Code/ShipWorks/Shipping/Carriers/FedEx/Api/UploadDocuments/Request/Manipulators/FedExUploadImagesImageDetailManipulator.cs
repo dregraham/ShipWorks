@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.UploadDocument;
@@ -10,24 +11,28 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.UploadDocuments.Request.Manipula
     /// </summary>
     public class FedExUploadImagesImageDetailManipulator : ICarrierRequestManipulator
     {
-
         /// <summary>
         /// Manipulate the specified request.
         /// </summary>
         /// <param name="request">The request being manipulated.</param>
         public void Manipulate(CarrierRequest request)
         {
-            List<UploadImageDetail> images = new List<UploadImageDetail>();
-
             // Make sure all of the properties we'll be accessing have been created
             ValidateRequest(request);
 
-            FedExAccountEntity account = request.CarrierAccountEntity as FedExAccountEntity;
+            FedExAccountEntity account = (FedExAccountEntity) request.CarrierAccountEntity;
 
             // We can safely cast this since we've passed validation
             UploadImagesRequest nativeRequest = (UploadImagesRequest) request.NativeRequest;
 
-            if (account?.Letterhead.Length > 0)
+            nativeRequest.Images = AddImages(account).ToArray();
+        }
+
+        private List<UploadImageDetail> AddImageDetail(FedExAccountEntity account)
+        {
+            List<UploadImageDetail> images = new List<UploadImageDetail>();
+
+            if (account.Fields[(int) FedExAccountFieldIndex.Letterhead].IsChanged)
             {
                 byte[] letterhead = Convert.FromBase64String(account.Letterhead);
 
@@ -41,7 +46,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.UploadDocuments.Request.Manipula
                 images.Add(letterheadDetail);
             }
 
-            if (account?.Signature.Length > 0)
+            if (account.Fields[(int) FedExAccountFieldIndex.Signature].IsChanged)
             {
                 byte[] signature = Convert.FromBase64String(account.Signature);
 
@@ -55,7 +60,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.UploadDocuments.Request.Manipula
                 images.Add(signatureDetail);
             }
 
-            nativeRequest.Images = images.ToArray();
+            return images;
         }
 
         /// <summary>
@@ -68,7 +73,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.UploadDocuments.Request.Manipula
         {
             if (request == null)
             {
-                throw new ArgumentNullException("request");
+                throw new ArgumentNullException(nameof(request));
             }
 
             // The native FedEx request type should be a UploadImagesRequest
