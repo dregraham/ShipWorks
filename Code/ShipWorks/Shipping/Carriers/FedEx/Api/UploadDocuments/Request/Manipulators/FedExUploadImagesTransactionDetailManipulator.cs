@@ -36,7 +36,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.UploadDocuments.Request.Manipula
         {
             if (request == null)
             {
-                throw new ArgumentNullException("request");
+                throw new ArgumentNullException(nameof(request));
             }
 
             UploadImagesRequest nativeRequest = request.NativeRequest as UploadImagesRequest;
