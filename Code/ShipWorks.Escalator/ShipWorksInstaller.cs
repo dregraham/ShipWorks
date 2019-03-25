@@ -88,7 +88,7 @@ namespace ShipWorks.Escalator
                 // at this point shipworks was asked nicely to close, if it didnt close because there is a dialog open
                 // or its in the middle of doing something we are going to wait another 30 seconds before killing it
                 int countDown = 30;
-                while (Process.GetProcessesByName("shipworks").Where(p => IsRunningWithoutArguments(p)).Any() || countDown > 0)
+                while (Process.GetProcessesByName("shipworks").Where(p => IsRunningWithoutArguments(p)).Any() && countDown > 0)
                 {
                     Thread.Sleep(1000);
                     countDown -= 1;
