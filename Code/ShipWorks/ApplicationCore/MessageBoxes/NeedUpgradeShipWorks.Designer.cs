@@ -83,8 +83,9 @@
             this.close.TabIndex = 18;
             this.close.Text = "Close";
             this.close.UseVisualStyleBackColor = true;
+            this.close.Click += new System.EventHandler(this.OnClose);
             //
-            // restart
+            // update
             //
             this.update.Location = new System.Drawing.Point(267, 149);
             this.update.Name = "update";

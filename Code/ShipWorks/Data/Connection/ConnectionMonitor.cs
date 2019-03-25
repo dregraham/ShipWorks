@@ -162,12 +162,6 @@ namespace ShipWorks.Data.Connection
                         connectionLost = true;
                     }
 
-                    LastReconnection = DateTime.Now;
-
-                    // signal to all waiting threads that the reconnect process has completed.  Completion doesn't not indicate a reconnect,
-                    // just that we are done trying
-                    reconnectEvent.Set();
-
                     if (SqlSchemaUpdater.GetInstalledSchemaVersion() > SqlSchemaUpdater.GetRequiredSchemaVersion())
                     {
                         // after reconnecting the database looks to have been updated
@@ -181,10 +175,15 @@ namespace ShipWorks.Data.Connection
                             }
 
                             connectionLost = true;
-
                             Program.MainForm.Close();
                         }));
                     }
+
+                    LastReconnection = DateTime.Now;
+
+                    // signal to all waiting threads that the reconnect process has completed.  Completion doesn't not indicate a reconnect,
+                    // just that we are done trying
+                    reconnectEvent.Set();
 
                     // throw the ConnectionLostException
                     if (connectionLost)

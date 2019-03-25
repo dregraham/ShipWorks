@@ -1494,7 +1494,11 @@ namespace ShipWorks
             {
                 using (NeedUpgradeShipWorks dlg = new NeedUpgradeShipWorks())
                 {
-                    dlg.ShowDialog(this);
+                    DialogResult result = dlg.ShowDialog(this);
+                    if (result == DialogResult.OK)
+                    {
+                        Close();
+                    }
                 }
 
                 return false;

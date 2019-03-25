@@ -86,7 +86,8 @@ namespace ShipWorks.ApplicationCore.MessageBoxes
             }
             else
             {
-                Application.Exit();
+                DialogResult = DialogResult.OK;
+                Close();
             }
         }
 
@@ -116,6 +117,7 @@ namespace ShipWorks.ApplicationCore.MessageBoxes
         /// </summary>
         private void OnClose(object sender, EventArgs e)
         {
+            DialogResult = DialogResult.Cancel;
             timer?.Dispose();
         }
 
