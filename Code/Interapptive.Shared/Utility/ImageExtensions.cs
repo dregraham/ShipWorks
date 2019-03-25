@@ -13,17 +13,27 @@ namespace Interapptive.Shared.Utility
         /// <summary>
         /// Converting a bitmap image into a base64 string
         /// </summary>
-        public static string ImageToBase64String(this Bitmap bitmap, ImageFormat imageFormat)
+        public static string ImageToBase64String(this Image image, ImageFormat imageFormat)
         {
             byte[] data;
             using (MemoryStream ms = new MemoryStream())
             {
-                bitmap.Save(ms, imageFormat);
+                image.Save(ms, imageFormat);
                 ms.Close();
                 data = ms.ToArray();
             }
 
             return Convert.ToBase64String(data);
+        }
+
+        public static Image Base64StringToImage(this string base64String)
+        {
+            byte[] imageBuffer = Convert.FromBase64String(base64String);
+            using (MemoryStream ms = new MemoryStream(imageBuffer, 0, imageBuffer.Length))
+            {
+                ms.Write(imageBuffer, 0, imageBuffer.Length);
+                return Image.FromStream(ms);
+            }
         }
     }
 }
