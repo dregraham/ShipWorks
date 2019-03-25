@@ -114,6 +114,6 @@ namespace ShipWorks.ApplicationCore.Dashboard.Content
             dashboardManager.ShowLocalMessage("UpgradeError",
                 DashboardMessageImageType.Error,
                 "ShipWorks was unable to update.",
-                $"Next update attempt: {updateWindow.ToString("MMMM d")} at {updateWindow.ToString("h: 00 tt")}");
+                $"Next update attempt: {updateWindow.ToString("MMMM d")} at {updateWindow.ToString("h:00 tt")}");
     }
 }
