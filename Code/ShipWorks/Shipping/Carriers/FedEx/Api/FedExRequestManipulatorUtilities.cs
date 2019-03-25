@@ -446,7 +446,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         /// Create the UploadImages client detail.
         /// </summary>
         /// <param name="account"></param>
-        /// <returns>A ClientDetail object for a track API request.</returns>
+        /// <returns>A ClientDetail object for an UploadImagesRequest.</returns>
         public static WebServices.UploadDocument.ClientDetail CreateUploadImagesClientDetail(FedExAccountEntity account)
         {
             return new WebServices.UploadDocument.ClientDetail

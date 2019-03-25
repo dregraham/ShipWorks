@@ -159,6 +159,13 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
             return new FedExTrackingResponse(manipulators, request.ShipmentEntity, trackReply, request);
         }
 
+        /// <summary>
+        /// Creates an ICarrierResponse that will be representing the carrier specific result
+        /// of a carrier request when uploading images.
+        /// </summary>
+        /// <param name="nativeResponse"></param>
+        /// <param name="request"></param>
+        /// <returns>An ICarrierResponse representing the response of an UploadImages request.</returns>
         public ICarrierResponse CreateUploadImagesResponse(object nativeResponse, CarrierRequest request)
         {
             UploadImagesReply uploadImagesReply = nativeResponse as UploadImagesReply;

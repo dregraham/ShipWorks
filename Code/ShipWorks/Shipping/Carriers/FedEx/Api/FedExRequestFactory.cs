@@ -247,8 +247,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         /// Creates the UploadImages request.
         /// </summary>
         /// <param name="accountEntity"></param>
-        /// <returns>A CarrierRequest object that can be used for submitting a request to
-        /// FedEx to retrieve UploadImage data.</returns>
+        /// <returns>A CarrierRequest object that can be used for submitting a request to FedEx to upload image data.</returns>
         public CarrierRequest CreateUploadImageRequest(FedExAccountEntity accountEntity)
         {
             List<ICarrierRequestManipulator> manipulators = new List<ICarrierRequestManipulator>

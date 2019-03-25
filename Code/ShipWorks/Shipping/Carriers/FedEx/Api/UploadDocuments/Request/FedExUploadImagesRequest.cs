@@ -9,7 +9,7 @@ using ShipWorks.Shipping.Carriers.FedEx.WebServices.UploadDocument;
 namespace ShipWorks.Shipping.Carriers.FedEx.Api.UploadDocuments.Request
 {
     /// <summary>
-    /// An implementation of the CarrierRequest that issues FedEx TrackRequest request types.
+    /// An implementation of the CarrierRequest that issues FedEx UploadImagesRequest request types.
     /// </summary>
     public class FedExUploadImagesRequest : CarrierRequest
     {
