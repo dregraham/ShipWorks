@@ -25,7 +25,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.UploadDocuments.Request.Manipula
             // We can safely cast this since we've passed validation
             UploadImagesRequest nativeRequest = (UploadImagesRequest) request.NativeRequest;
 
-            nativeRequest.Images = AddImages(account).ToArray();
+            nativeRequest.Images = AddImageDetail(account).ToArray();
         }
 
         private List<UploadImageDetail> AddImageDetail(FedExAccountEntity account)
