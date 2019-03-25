@@ -17,7 +17,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
     /// </summary>
     public partial class FedExAccountEditorDlg : Form
     {
-        FedExAccountEntity account;
+        readonly FedExAccountEntity account;
 
         /// <summary>
         /// Constructor
@@ -116,16 +116,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                         MessageHelper.ShowError(this, ex.Message);
                     }
                 }
-                else if (account.Letterhead.Length > 0 || account.Signature.Length > 0)
-                {
-                    MessageHelper.ShowMessage(this, "The image you have selected has already been uploaded.");
-                }
                 else
                 {
                     DialogResult = DialogResult.OK;
                 }
             }
-
             catch (ORMConcurrencyException)
             {
                 MessageHelper.ShowError(this, "Your changes cannot be saved because another user has deleted the shipper.");
