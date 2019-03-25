@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Diagnostics;
-using System.IO;
 using System.IO.Pipes;
 using System.Linq;
 using System.Runtime.InteropServices;
@@ -9,6 +8,7 @@ using System.Security.Principal;
 using System.Text;
 using System.Timers;
 using System.Windows;
+using System.Windows.Interop;
 
 namespace ShipWorks.SplashScreen
 {
@@ -30,6 +30,10 @@ namespace ShipWorks.SplashScreen
 
             timeoutTimer = new Timer(Timeout);
             timeoutTimer.Elapsed += (o,e) => Dispatcher.Invoke(() => Close());
+
+            Timer flashTimer = new Timer(1000);
+            flashTimer.Elapsed += (o, e) => Dispatcher.Invoke(() => FlashWindow.Start(new WindowInteropHelper(this).Handle));
+            flashTimer.Start();
 
             StartPipeServer();
             CenterWindowOnScreen();
