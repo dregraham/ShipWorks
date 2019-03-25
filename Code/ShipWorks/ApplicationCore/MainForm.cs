@@ -759,12 +759,6 @@ namespace ShipWorks
                 return;
             }
 
-            if (!CheckDatabaseVersion())
-            {
-                UserSession.Reset();
-                return;
-            }
-
             log.InfoFormat("Logon to ShipWorks: Success");
 
             // Load the display
@@ -897,6 +891,11 @@ namespace ShipWorks
         /// </summary>
         private bool AttemptLogin(UserEntity logonAsUser)
         {
+            if (!CheckDatabaseVersion())
+            {
+                return false;
+            }
+
             using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
                 IUserService userService = lifetimeScope.Resolve<IUserService>();
