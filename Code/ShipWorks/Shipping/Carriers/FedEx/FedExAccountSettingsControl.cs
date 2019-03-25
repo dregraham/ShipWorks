@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using System.Xml.Linq;
+using Interapptive.Shared.Net;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Api;
@@ -127,6 +128,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             {
                 signaturePreview.Image = new Bitmap(openFileDialogSignature.FileName);
             }
+        }
+
+        private void OnLearnMore(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            WebHelper.OpenUrl("https://support.shipworks.com/hc/en-us/articles/360025471432", null);
         }
     }
 }

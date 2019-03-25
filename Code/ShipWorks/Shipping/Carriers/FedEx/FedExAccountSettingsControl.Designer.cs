@@ -49,6 +49,7 @@
             this.infoTipHubID = new ShipWorks.UI.Controls.InfoTip();
             this.openFileDialogLetterhead = new System.Windows.Forms.OpenFileDialog();
             this.openFileDialogSignature = new System.Windows.Forms.OpenFileDialog();
+            this.InvoiceLinkLabel = new System.Windows.Forms.LinkLabel();
             ((System.ComponentModel.ISupportInitialize)(this.letterheadPreview)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.signaturePreview)).BeginInit();
             this.SuspendLayout();
@@ -233,19 +234,31 @@
             this.infoTipHubID.Size = new System.Drawing.Size(12, 12);
             this.infoTipHubID.TabIndex = 23;
             this.infoTipHubID.Title = "Hub ID";
-            //
+            // 
             // openFileDialogLetterhead
-            //
+            // 
             this.openFileDialogLetterhead.Filter = "Image Files(*.jpg; *.gif; *.png)|*.jpg; *.gif; *.png";
-            //
+            // 
             // openFileDialogSignature
             // 
             this.openFileDialogSignature.Filter = "Image Files(*.jpg; *.gif; *.png)|*.jpg; *.gif; *.png";
-            //
+            // 
+            // InvoiceLinkLabel
+            // 
+            this.InvoiceLinkLabel.AutoSize = true;
+            this.InvoiceLinkLabel.Location = new System.Drawing.Point(204, 206);
+            this.InvoiceLinkLabel.Name = "InvoiceLinkLabel";
+            this.InvoiceLinkLabel.Size = new System.Drawing.Size(61, 13);
+            this.InvoiceLinkLabel.TabIndex = 32;
+            this.InvoiceLinkLabel.TabStop = true;
+            this.InvoiceLinkLabel.Text = "Learn more";
+            this.InvoiceLinkLabel.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.OnLearnMore);
+            // 
             // FedExAccountSettingsControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.InvoiceLinkLabel);
             this.Controls.Add(this.signaturePreview);
             this.Controls.Add(this.letterheadPreview);
             this.Controls.Add(this.signatureBrowse);
@@ -298,5 +311,6 @@
         private System.Windows.Forms.PictureBox signaturePreview;
         private System.Windows.Forms.OpenFileDialog openFileDialogLetterhead;
         private System.Windows.Forms.OpenFileDialog openFileDialogSignature;
+        private System.Windows.Forms.LinkLabel InvoiceLinkLabel;
     }
 }
