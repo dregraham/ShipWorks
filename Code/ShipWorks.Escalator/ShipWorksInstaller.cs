@@ -171,9 +171,9 @@ namespace ShipWorks.Escalator
                 exitCode = proc.ExitCode;
             }
 
-            return exitCode > 0 ?
-                Result.FromError($"Could not obtain database lock with exit code {exitCode}") :
-                Result.FromSuccess();
+            return exitCode == 0 ?
+                Result.FromSuccess() :
+                Result.FromError($"Could not obtain database lock with exit code {exitCode}");
         }
 
         /// <summary>
