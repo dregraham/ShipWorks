@@ -17,9 +17,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx
     /// </summary>
     public partial class FedExAccountSettingsControl : UserControl
     {
-        private readonly long maxImageByteSize = 50000;
-        private readonly int maxImageWidth = 700;
-        private readonly int maxImageHeight = 50;
+        private const long MaxImageByteSize = 50000;
+        private const int MaxImageWidth = 700;
+        private const int MaxImageHeight = 50;
 
         /// <summary>
         /// Constructor
@@ -119,27 +119,24 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         {
             if (openFileDialogLetterhead.ShowDialog(this) == DialogResult.OK)
             {
-                if (openFileDialogLetterhead.FileName.ValidateFileIsImage())
+                try
                 {
-                    if (openFileDialogLetterhead.FileName.ValidateImageSize(maxImageByteSize))
+                    using (Image image = Image.FromFile(openFileDialogLetterhead.FileName))
                     {
-                        if (openFileDialogLetterhead.FileName.ValidateImageDimensions(maxImageWidth, maxImageHeight))
+                        if (image.Size.Width <= MaxImageWidth && image.Size.Height <= MaxImageHeight)
                         {
-                            letterheadPreview.Image = new Bitmap(openFileDialogLetterhead.FileName);
+                            letterheadPreview.Image = new Bitmap(image);
                         }
                         else
                         {
-                            MessageHelper.ShowMessage(this, "The selected image exceeds the max dimensions of 700x50.");
+                            MessageHelper.ShowError(this,
+                                "The selected image exceeds the max resolution of 700 pixels wide by 50 pixels long");
                         }
                     }
-                    else
-                    {
-                        MessageHelper.ShowMessage(this, "The selected image is too large.");
-                    }
                 }
-                else
+                catch (Exception)
                 {
-                    MessageHelper.ShowMessage(this, "The selected image is not valid.");
+                    MessageHelper.ShowError(this, "The selected image is invalid");
                 }
             }
         }
@@ -151,27 +148,24 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         {
             if (openFileDialogSignature.ShowDialog(this) == DialogResult.OK)
             {
-                if (openFileDialogSignature.FileName.ValidateFileIsImage())
+                try
                 {
-                    if (openFileDialogSignature.FileName.ValidateImageSize(maxImageByteSize))
+                    using (Image image = Image.FromFile(openFileDialogSignature.FileName))
                     {
-                        if (openFileDialogSignature.FileName.ValidateImageDimensions(maxImageWidth, maxImageHeight))
+                        if (image.Size.Width <= MaxImageWidth && image.Size.Height <= MaxImageHeight)
                         {
-                            signaturePreview.Image = new Bitmap(openFileDialogSignature.FileName);
+                            signaturePreview.Image = new Bitmap(image);
                         }
                         else
                         {
-                            MessageHelper.ShowMessage(this, "The selected image exceeds the max dimensions of 700x50.");
+                            MessageHelper.ShowError(this,
+                                "The selected image exceeds the max resolution of 700 pixels wide by 50 pixels long");
                         }
                     }
-                    else
-                    {
-                        MessageHelper.ShowMessage(this, "The selected image is too large.");
-                    }
                 }
-                else
+                catch (Exception)
                 {
-                    MessageHelper.ShowMessage(this, "The selected image is not valid.");
+                    MessageHelper.ShowError(this, "The selected image is invalid");
                 }
             }
         }

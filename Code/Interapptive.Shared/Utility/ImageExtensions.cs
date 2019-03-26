@@ -38,54 +38,5 @@ namespace Interapptive.Shared.Utility
                 return Image.FromStream(ms);
             }
         }
-
-        /// <summary>
-        /// Validates the size of a user selected image.
-        /// </summary>
-        public static bool ValidateImageSize(this string filename, long byteLimit)
-        {
-            var imageSize = new FileInfo(filename).Length;
-            if (imageSize > byteLimit)
-            {
-                return false;
-            }
-
-            return true;
-        }
-
-        /// <summary>
-        /// Validates the dimensions of a user selected image.
-        /// </summary>
-        public static bool ValidateImageDimensions(this string filename, int widthLimit, int heightLimit)
-        {
-            using (var image = new Bitmap(filename))
-            {
-                if (image.Width > widthLimit || image.Height > heightLimit)
-                {
-                    return false;
-                }
-            }
-
-            return true;
-        }
-
-        /// <summary>
-        /// Validates the user selected file is actually an image.
-        /// </summary>
-        public static bool ValidateFileIsImage(this string filename)
-        {
-            try
-            {
-                using (Image.FromFile(filename))
-                {
-                    return true;
-                }
-            }
-            catch(Exception)
-            {
-                return false;
-            }
-        }
-
     }
 }
