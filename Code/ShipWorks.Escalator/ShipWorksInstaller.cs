@@ -24,6 +24,7 @@ namespace ShipWorks.Escalator
         private readonly IAutoUpdateStatusProvider autoUpdateStatusProvider;
         private readonly Func<string, IShipWorksCommunicationBridge> communicationBridgeFactory;
         private bool relaunchShipWorks;
+        private const int secondsToKillShipWorks = 30;
 
         /// <summary>
         /// Constructor
@@ -64,7 +65,7 @@ namespace ShipWorks.Escalator
                 }
             }
 
-            KillShipWorks();
+            KillShipWorks(upgradeDatabase);
 
             return RunSetup(file, upgradeDatabase);
         }
@@ -73,14 +74,16 @@ namespace ShipWorks.Escalator
         /// Kill any instance of Shipworks UI running.
         /// </summary>
         /// <remarks>callback to invoke when shipworks is dead</remarks>
-        private void KillShipWorks()
+        private void KillShipWorks(bool upgradeDatabase)
         {
             if (Process.GetProcessesByName("shipworks").Where(p => IsRunningWithoutArguments(p)).Any())
             {
                 relaunchShipWorks = true;
 
                 // show the splash screen and patiently wait to see if shipworks closes
-                ShowSplashScreenAndAttemptToCloseShipWorks(30);
+                // If not upgrading DB (new version was detected for localdb or SW is out of date)
+                // pass in false to not provide a countdown.
+                ShowSplashScreenAndAttemptToCloseShipWorks(upgradeDatabase);
 
                 // update the status to say we are installing the update, secretly we will give the UI another 30 seconds to exit
                 autoUpdateStatusProvider.UpdateStatus("Installing Update");
@@ -106,8 +109,10 @@ namespace ShipWorks.Escalator
         /// <summary>
         /// Show the splash screen with a countdown, after the countdown attempt to close shipworks
         /// </summary>
-        private void ShowSplashScreenAndAttemptToCloseShipWorks(int countDownInSeconds)
+        private void ShowSplashScreenAndAttemptToCloseShipWorks(bool provideCountdown)
         {
+            int countDownInSeconds = provideCountdown ? secondsToKillShipWorks : 0;
+
             // Show the splash screen to give users feedback that the update
             // is kicking off
             autoUpdateStatusProvider.ShowSplashScreen(serviceName.GetInstanceID().ToString("B"));

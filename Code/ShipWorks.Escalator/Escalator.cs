@@ -65,6 +65,7 @@ namespace ShipWorks.Escalator
             {
                 if (Version.TryParse(message, out Version version))
                 {
+                    System.Diagnostics.Debugger.Launch();
                     await shipWorksUpgrade.Upgrade(version).ConfigureAwait(false);
                 }
                 else if (message.TryParseJson(out UpdateWindowData updateWindowData))

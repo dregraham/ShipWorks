@@ -50,9 +50,10 @@ namespace Interapptive.Shared.AutoUpdate
                 {
                     process?.Kill();
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
                     // if it fails ignore it
+                    log.Error("error closing splash screen", ex);
                 }
             }
         }
@@ -76,12 +77,10 @@ namespace Interapptive.Shared.AutoUpdate
 
             string existingFile = $"{SplashScreenProcess}.exe";
 
-            string sourcePath = Path.Combine(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location), existingFile);
-
             string appData = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData);
             string destinationPath = Path.Combine(appData, "Interapptive\\ShipWorks\\Instances", instanceId, existingFile);
 
-            File.Copy(sourcePath, destinationPath, true);
+            CopySplashScreenExe(existingFile, destinationPath);
 
             using (WindowsIdentity identity = WindowsIdentity.GetCurrent())
             {
@@ -93,6 +92,23 @@ namespace Interapptive.Shared.AutoUpdate
                 {
                     Process.Start(destinationPath);
                 }
+            }
+        }
+
+        /// <summary>
+        /// Copies ShipWorks.SplashScreen.exe to appData
+        /// </summary>
+        private static void CopySplashScreenExe(string existingFile, string destinationPath)
+        {
+            string sourcePath = Path.Combine(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location), existingFile);
+            try
+            {
+                File.Copy(sourcePath, destinationPath, true);
+            }
+            catch (Exception ex)
+            {
+                // if it fails ignore it
+                log.Error("error deleting shipworks.splashscreen.exe", ex);
             }
         }
     }
