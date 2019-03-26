@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Drawing;
-using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using System.Xml.Linq;
 using Interapptive.Shared.Net;
+using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Api;
@@ -17,6 +17,10 @@ namespace ShipWorks.Shipping.Carriers.FedEx
     /// </summary>
     public partial class FedExAccountSettingsControl : UserControl
     {
+        private readonly long maxImageByteSize = 50000;
+        private readonly int maxImageWidth = 700;
+        private readonly int maxImageHeight = 50;
+
         /// <summary>
         /// Constructor
         /// </summary>
@@ -115,7 +119,21 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         {
             if (openFileDialogLetterhead.ShowDialog(this) == DialogResult.OK)
             {
-                letterheadPreview.Image = new Bitmap(openFileDialogLetterhead.FileName);
+                if (openFileDialogLetterhead.FileName.ValidateImageSize(maxImageByteSize))
+                {
+                    if (openFileDialogLetterhead.FileName.ValidateImageDimensions(maxImageWidth, maxImageHeight))
+                    {
+                        letterheadPreview.Image = new Bitmap(openFileDialogLetterhead.FileName);
+                    }
+                    else
+                    {
+                        MessageHelper.ShowMessage(this, "The selected image exceeds the max dimensions of 700x50.");
+                    }
+                }
+                else
+                {
+                    MessageHelper.ShowMessage(this, "The selected image is too large.");
+                }
             }
         }
 
@@ -126,7 +144,21 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         {
             if (openFileDialogSignature.ShowDialog(this) == DialogResult.OK)
             {
-                signaturePreview.Image = new Bitmap(openFileDialogSignature.FileName);
+                if (openFileDialogSignature.FileName.ValidateImageSize(maxImageByteSize))
+                {
+                    if (openFileDialogSignature.FileName.ValidateImageDimensions(maxImageWidth, maxImageHeight))
+                    {
+                        letterheadPreview.Image = new Bitmap(openFileDialogSignature.FileName);
+                    }
+                    else
+                    {
+                        MessageHelper.ShowMessage(this, "The selected image exceeds the max dimensions of 700x50.");
+                    }
+                }
+                else
+                {
+                    MessageHelper.ShowMessage(this, "The selected image is too large.");
+                }
             }
         }
 

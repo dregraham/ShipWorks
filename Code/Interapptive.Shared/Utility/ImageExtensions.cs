@@ -42,5 +42,42 @@ namespace Interapptive.Shared.Utility
                 return Image.FromStream(ms);
             }
         }
+
+        /// <summary>
+        /// Validates the size of a user selected image.
+        /// </summary>
+        /// <param name="filename"></param>
+        /// <param name="byteLimit"></param>
+        /// <returns></returns>
+        public static bool ValidateImageSize(this string filename, long byteLimit)
+        {
+            var imageSize = new FileInfo(filename).Length;
+            if (imageSize > byteLimit)
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        /// <summary>
+        /// Validates the dimensions of a user selected image.
+        /// </summary>
+        /// <param name="filename"></param>
+        /// <param name="widthLimit"></param>
+        /// <param name="heightLimit"></param>
+        /// <returns></returns>
+        public static bool ValidateImageDimensions(this string filename, int widthLimit, int heightLimit)
+        {
+            using (var image = new Bitmap(filename))
+            {
+                if (image.Width > widthLimit || image.Height > heightLimit)
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
     }
 }
