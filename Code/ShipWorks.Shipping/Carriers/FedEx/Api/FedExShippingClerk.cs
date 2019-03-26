@@ -1237,7 +1237,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
                 FedExUploadImagesResponse uploadImagesResponse = (FedExUploadImagesResponse) uploadImagesRequest.Submit();
                 uploadImagesResponse.Process();
             }
-            catch (Exception ex)
+            catch (InvalidCastException ex)
             {
                 throw HandleException(ex);
             }
