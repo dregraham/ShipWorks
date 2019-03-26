@@ -70,7 +70,7 @@ namespace Interapptive.Shared.Utility
         }
 
         /// <summary>
-        /// 
+        /// Validates the user selected file is actually an image.
         /// </summary>
         public static bool ValidateFileIsImage(this string filename)
         {
