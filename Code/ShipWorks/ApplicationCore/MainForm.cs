@@ -944,7 +944,6 @@ namespace ShipWorks
 
             if (!CheckDatabaseVersion())
             {
-                UserSession.Reset();
                 return false;
             }
 
@@ -1492,6 +1491,7 @@ namespace ShipWorks
             // See if its too new
             if (!SqlSchemaUpdater.IsCorrectSchemaVersion())
             {
+                UserSession.Reset();
                 using (NeedUpgradeShipWorks dlg = new NeedUpgradeShipWorks())
                 {
                     DialogResult result = dlg.ShowDialog(this);
