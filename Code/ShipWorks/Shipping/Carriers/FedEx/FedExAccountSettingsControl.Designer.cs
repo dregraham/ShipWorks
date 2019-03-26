@@ -149,7 +149,7 @@
             // 
             this.invoice.AutoSize = true;
             this.invoice.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.invoice.Location = new System.Drawing.Point(0, 207);
+            this.invoice.Location = new System.Drawing.Point(-3, 210);
             this.invoice.Name = "invoice";
             this.invoice.Size = new System.Drawing.Size(197, 13);
             this.invoice.TabIndex = 25;
@@ -158,7 +158,7 @@
             // letterhead
             // 
             this.letterhead.AutoSize = true;
-            this.letterhead.Location = new System.Drawing.Point(21, 229);
+            this.letterhead.Location = new System.Drawing.Point(21, 236);
             this.letterhead.Name = "letterhead";
             this.letterhead.Size = new System.Drawing.Size(145, 13);
             this.letterhead.TabIndex = 26;
@@ -167,7 +167,7 @@
             // signature
             // 
             this.signature.AutoSize = true;
-            this.signature.Location = new System.Drawing.Point(76, 331);
+            this.signature.Location = new System.Drawing.Point(76, 327);
             this.signature.Name = "signature";
             this.signature.Size = new System.Drawing.Size(90, 13);
             this.signature.TabIndex = 27;
@@ -185,7 +185,7 @@
             // 
             // signatureBrowse
             // 
-            this.signatureBrowse.Location = new System.Drawing.Point(172, 331);
+            this.signatureBrowse.Location = new System.Drawing.Point(172, 320);
             this.signatureBrowse.Name = "signatureBrowse";
             this.signatureBrowse.Size = new System.Drawing.Size(78, 26);
             this.signatureBrowse.TabIndex = 29;
@@ -197,7 +197,7 @@
             // 
             this.letterheadPreview.BackColor = System.Drawing.SystemColors.Control;
             this.letterheadPreview.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.letterheadPreview.Location = new System.Drawing.Point(24, 261);
+            this.letterheadPreview.Location = new System.Drawing.Point(22, 261);
             this.letterheadPreview.Name = "letterheadPreview";
             this.letterheadPreview.Size = new System.Drawing.Size(250, 50);
             this.letterheadPreview.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -208,7 +208,7 @@
             // 
             this.signaturePreview.BackColor = System.Drawing.SystemColors.Control;
             this.signaturePreview.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.signaturePreview.Location = new System.Drawing.Point(22, 363);
+            this.signaturePreview.Location = new System.Drawing.Point(22, 352);
             this.signaturePreview.Name = "signaturePreview";
             this.signaturePreview.Size = new System.Drawing.Size(250, 50);
             this.signaturePreview.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -246,7 +246,7 @@
             // InvoiceLinkLabel
             // 
             this.InvoiceLinkLabel.AutoSize = true;
-            this.InvoiceLinkLabel.Location = new System.Drawing.Point(204, 206);
+            this.InvoiceLinkLabel.Location = new System.Drawing.Point(200, 210);
             this.InvoiceLinkLabel.Name = "InvoiceLinkLabel";
             this.InvoiceLinkLabel.Size = new System.Drawing.Size(61, 13);
             this.InvoiceLinkLabel.TabIndex = 32;
