@@ -119,20 +119,27 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         {
             if (openFileDialogLetterhead.ShowDialog(this) == DialogResult.OK)
             {
-                if (openFileDialogLetterhead.FileName.ValidateImageSize(maxImageByteSize))
+                if (openFileDialogLetterhead.FileName.ValidateFileIsImage())
                 {
-                    if (openFileDialogLetterhead.FileName.ValidateImageDimensions(maxImageWidth, maxImageHeight))
+                    if (openFileDialogLetterhead.FileName.ValidateImageSize(maxImageByteSize))
                     {
-                        letterheadPreview.Image = new Bitmap(openFileDialogLetterhead.FileName);
+                        if (openFileDialogLetterhead.FileName.ValidateImageDimensions(maxImageWidth, maxImageHeight))
+                        {
+                            letterheadPreview.Image = new Bitmap(openFileDialogLetterhead.FileName);
+                        }
+                        else
+                        {
+                            MessageHelper.ShowMessage(this, "The selected image exceeds the max dimensions of 700x50.");
+                        }
                     }
                     else
                     {
-                        MessageHelper.ShowMessage(this, "The selected image exceeds the max dimensions of 700x50.");
+                        MessageHelper.ShowMessage(this, "The selected image is too large.");
                     }
                 }
                 else
                 {
-                    MessageHelper.ShowMessage(this, "The selected image is too large.");
+                    MessageHelper.ShowMessage(this, "The selected image is not valid.");
                 }
             }
         }
@@ -144,20 +151,27 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         {
             if (openFileDialogSignature.ShowDialog(this) == DialogResult.OK)
             {
-                if (openFileDialogSignature.FileName.ValidateImageSize(maxImageByteSize))
+                if (openFileDialogSignature.FileName.ValidateFileIsImage())
                 {
-                    if (openFileDialogSignature.FileName.ValidateImageDimensions(maxImageWidth, maxImageHeight))
+                    if (openFileDialogSignature.FileName.ValidateImageSize(maxImageByteSize))
                     {
-                        signaturePreview.Image = new Bitmap(openFileDialogSignature.FileName);
+                        if (openFileDialogSignature.FileName.ValidateImageDimensions(maxImageWidth, maxImageHeight))
+                        {
+                            signaturePreview.Image = new Bitmap(openFileDialogSignature.FileName);
+                        }
+                        else
+                        {
+                            MessageHelper.ShowMessage(this, "The selected image exceeds the max dimensions of 700x50.");
+                        }
                     }
                     else
                     {
-                        MessageHelper.ShowMessage(this, "The selected image exceeds the max dimensions of 700x50.");
+                        MessageHelper.ShowMessage(this, "The selected image is too large.");
                     }
                 }
                 else
                 {
-                    MessageHelper.ShowMessage(this, "The selected image is too large.");
+                    MessageHelper.ShowMessage(this, "The selected image is not valid.");
                 }
             }
         }

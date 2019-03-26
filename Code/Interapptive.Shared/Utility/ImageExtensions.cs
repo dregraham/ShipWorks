@@ -13,9 +13,6 @@ namespace Interapptive.Shared.Utility
         /// <summary>
         /// Converting an image to a base64 string.
         /// </summary>
-        /// <param name="image"></param>
-        /// <param name="imageFormat"></param>
-        /// <returns></returns>
         public static string ImageToBase64String(this Image image, ImageFormat imageFormat)
         {
             byte[] data;
@@ -32,7 +29,6 @@ namespace Interapptive.Shared.Utility
         /// <summary>
         /// Converting a base64 string to an image.
         /// </summary>
-        /// <param name="base64String"></param>
         public static Image Base64StringToImage(this string base64String)
         {
             byte[] imageBuffer = Convert.FromBase64String(base64String);
@@ -46,9 +42,6 @@ namespace Interapptive.Shared.Utility
         /// <summary>
         /// Validates the size of a user selected image.
         /// </summary>
-        /// <param name="filename"></param>
-        /// <param name="byteLimit"></param>
-        /// <returns></returns>
         public static bool ValidateImageSize(this string filename, long byteLimit)
         {
             var imageSize = new FileInfo(filename).Length;
@@ -63,10 +56,6 @@ namespace Interapptive.Shared.Utility
         /// <summary>
         /// Validates the dimensions of a user selected image.
         /// </summary>
-        /// <param name="filename"></param>
-        /// <param name="widthLimit"></param>
-        /// <param name="heightLimit"></param>
-        /// <returns></returns>
         public static bool ValidateImageDimensions(this string filename, int widthLimit, int heightLimit)
         {
             using (var image = new Bitmap(filename))
@@ -79,5 +68,24 @@ namespace Interapptive.Shared.Utility
 
             return true;
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public static bool ValidateFileIsImage(this string filename)
+        {
+            try
+            {
+                using (Image.FromFile(filename))
+                {
+                    return true;
+                }
+            }
+            catch(Exception)
+            {
+                return false;
+            }
+        }
+
     }
 }
