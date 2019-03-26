@@ -11,8 +11,11 @@ namespace Interapptive.Shared.Utility
     public static class ImageExtensions
     {
         /// <summary>
-        /// Converting a bitmap image into a base64 string
+        /// Converting an image to a base64 string.
         /// </summary>
+        /// <param name="image"></param>
+        /// <param name="imageFormat"></param>
+        /// <returns></returns>
         public static string ImageToBase64String(this Image image, ImageFormat imageFormat)
         {
             byte[] data;
@@ -26,6 +29,10 @@ namespace Interapptive.Shared.Utility
             return Convert.ToBase64String(data);
         }
 
+        /// <summary>
+        /// Converting a base64 string to an image.
+        /// </summary>
+        /// <param name="base64String"></param>
         public static Image Base64StringToImage(this string base64String)
         {
             byte[] imageBuffer = Convert.FromBase64String(base64String);
