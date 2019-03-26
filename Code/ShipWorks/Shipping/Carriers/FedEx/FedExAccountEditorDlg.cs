@@ -118,6 +118,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 }
                 else
                 {
+                    FedExAccountManager.SaveAccount(account);
                     DialogResult = DialogResult.OK;
                 }
             }
