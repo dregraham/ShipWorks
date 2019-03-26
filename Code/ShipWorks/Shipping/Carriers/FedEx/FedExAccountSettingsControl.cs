@@ -148,7 +148,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 {
                     if (openFileDialogSignature.FileName.ValidateImageDimensions(maxImageWidth, maxImageHeight))
                     {
-                        letterheadPreview.Image = new Bitmap(openFileDialogSignature.FileName);
+                        signaturePreview.Image = new Bitmap(openFileDialogSignature.FileName);
                     }
                     else
                     {
