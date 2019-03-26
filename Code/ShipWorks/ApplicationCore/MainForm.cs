@@ -891,11 +891,6 @@ namespace ShipWorks
         /// </summary>
         private bool AttemptLogin(UserEntity logonAsUser)
         {
-            if (!CheckDatabaseVersion())
-            {
-                return false;
-            }
-
             using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
                 IUserService userService = lifetimeScope.Resolve<IUserService>();
@@ -945,6 +940,12 @@ namespace ShipWorks
                         }
                     }
                 }
+            }
+
+            if (!CheckDatabaseVersion())
+            {
+                UserSession.Reset();
+                return false;
             }
 
             return true;
