@@ -205,9 +205,8 @@ namespace ShipWorks.Data.Connection
         {
             log.InfoFormat("Background thread starting to wait for reconnect event.");
 
-            // Wait for the UI thread to reconnect
-            reconnectEvent.WaitOne();
-
+            // Wait for the UI thread to reconnect, give it 1 minute
+            reconnectEvent.WaitOne(60000);
             log.InfoFormat("Background thread, reconnect event received. Will try to connect now.");
 
             // close the connection in preparation of the retry
