@@ -42,6 +42,28 @@ namespace ShipWorks.Escalator
             log.Info("Download called");
 
             string installationFileSavePath = GetInstallationFileSavePath(url);
+            if (File.Exists(installationFileSavePath))
+            {
+                log.Info("File exists, attempting to use it");
+                InstallFile file = new InstallFile(installationFileSavePath, sha);
+
+                if (!file.IsValid())
+                {
+                    log.Info("File is not valid, deleting it.");
+                    try
+                    {
+                        File.Delete(installationFileSavePath);
+                    }
+                    catch (Exception ex)
+                    {
+                        log.Error($"Error deleting file {installationFileSavePath}", ex);
+                    }
+                }
+                else
+                {
+                    return file;
+                }
+            }
 
             log.InfoFormat("Downloading file to {0}", installationFileSavePath);
             await downloadClient.DownloadFileTaskAsync(url, installationFileSavePath).ConfigureAwait(false);

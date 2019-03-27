@@ -60,6 +60,11 @@ namespace ShipWorks.Escalator
         /// </summary>
         private async void OnShipWorksMessage(string message)
         {
+            if (string.IsNullOrWhiteSpace(message.Trim('\0')))
+            {
+                return;
+            }
+
             log.InfoFormat("Message \"{0}\" received from ShipWorksCommunicationBridge.", message);
             try
             {
