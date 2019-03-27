@@ -18,7 +18,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx
     /// </summary>
     public partial class FedExAccountSettingsControl : UserControl
     {
-        private const long MaxImageByteSize = 50000;
         private const int MaxImageWidth = 700;
         private const int MaxImageHeight = 50;
 
@@ -65,9 +64,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// </summary>
         public void SaveToAccount(FedExAccountEntity account)
         {
-            var letterheadFilename = openFileDialogLetterhead.FileName;
-            var signatureFilename = openFileDialogSignature.FileName;
-
             account.SignatureRelease = signatureAuth.Text;
 
             XElement root = new XElement("Root");
