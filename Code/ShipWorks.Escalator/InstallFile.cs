@@ -38,7 +38,7 @@ namespace ShipWorks.Escalator
                 return false;
             }
 
-            return computedHash == downloadedHash;
+            return computedHash.Equals(downloadedHash, StringComparison.OrdinalIgnoreCase);
         }
 
         /// <summary>

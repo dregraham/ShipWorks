@@ -76,6 +76,8 @@ namespace ShipWorks.Escalator
         /// <remarks>callback to invoke when shipworks is dead</remarks>
         private void KillShipWorks(bool upgradeDatabase)
         {
+            relaunchShipWorks = !upgradeDatabase;
+
             if (Process.GetProcessesByName("shipworks").Where(p => IsRunningWithoutArguments(p)).Any())
             {
                 relaunchShipWorks = true;
