@@ -1,9 +1,4 @@
 ﻿using ShipWorks.Data.Model.Custom;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Interapptive.Shared.Business;
 using ShipWorks.Shipping;
 
@@ -17,7 +12,7 @@ namespace ShipWorks.Data.Model.EntityClasses
         /// <summary>
         /// Gets the account id in a generic way
         /// </summary>
-        public long AccountId => this.AccountId;
+        public long AccountId => AmazonSWAAccountID;
 
         /// <summary>
         /// Get the shipment type to which this account applies
@@ -39,7 +34,7 @@ namespace ShipWorks.Data.Model.EntityClasses
         /// </summary>
         public void ApplyTo(ShipmentEntity shipment)
         {
-            throw new NotImplementedException("ApplyTo");
+            shipment.AmazonSWA.AmazonSWAAccountID = AccountId;
         }
     }
 }

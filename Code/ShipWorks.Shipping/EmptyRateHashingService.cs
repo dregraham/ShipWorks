@@ -8,6 +8,7 @@ namespace ShipWorks.Shipping
     /// Empty RateHashingService
     /// </summary>
     [KeyedComponent(typeof(IRateHashingService), ShipmentTypeCode.Asendia)]
+    [KeyedComponent(typeof(IRateHashingService), ShipmentTypeCode.AmazonSWA)]
     public class EmptyRateHashingService : IRateHashingService
     {
         /// <summary>

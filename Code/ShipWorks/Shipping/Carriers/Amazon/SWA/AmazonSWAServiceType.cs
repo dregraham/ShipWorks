@@ -11,7 +11,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SWA
     public enum AmazonSWAServiceType
     {
         [Description("Standard")]
-        [ApiValue("standard")]
+        [ApiValue("amazon_shipping_standard")]
         Standard = 0,
     }
 }

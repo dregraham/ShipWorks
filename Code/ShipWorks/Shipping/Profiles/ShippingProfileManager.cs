@@ -374,6 +374,8 @@ namespace ShipWorks.Shipping.Profiles
                     return ("BestRate", typeof(BestRateProfileEntity));
                 case ShipmentTypeCode.AmazonSFP:
                     return ("AmazonSFP", typeof(AmazonSFPProfileEntity));
+                case ShipmentTypeCode.AmazonSWA:
+                    return ("AmazonSWA", typeof(AmazonSWAProfileEntity));
                 case ShipmentTypeCode.DhlExpress:
                     return ("DhlExpress", typeof(DhlExpressProfileEntity));
                 case ShipmentTypeCode.Asendia:
