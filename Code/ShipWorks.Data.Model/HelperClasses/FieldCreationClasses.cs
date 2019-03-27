@@ -1457,11 +1457,6 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(AmazonSWAAccountFieldIndex.RowVersion);}
 		}
-		/// <summary>Creates a new AmazonSWAAccountEntity.AccountNumber field instance</summary>
-		public static EntityField2 AccountNumber
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(AmazonSWAAccountFieldIndex.AccountNumber);}
-		}
 		/// <summary>Creates a new AmazonSWAAccountEntity.ShipEngineCarrierId field instance</summary>
 		public static EntityField2 ShipEngineCarrierId
 		{

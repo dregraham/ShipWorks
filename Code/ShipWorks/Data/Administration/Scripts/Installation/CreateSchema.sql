@@ -5350,7 +5350,6 @@ CREATE TABLE [dbo].[AmazonSWAAccount]
 (
 [AmazonSWAAccountID] [bigint] NOT NULL IDENTITY(1106, 1000),
 [RowVersion] [timestamp] NOT NULL,
-[AccountNumber] [bigint] NOT NULL,
 [ShipEngineCarrierId] [nvarchar] (12) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [Description] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [FirstName] [nvarchar] (30) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,

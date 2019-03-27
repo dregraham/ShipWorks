@@ -1539,7 +1539,7 @@ namespace ShipWorks
                 holder.InitializeForCurrentUser();
             }
 
-            // Allows for the Shipment panel visibility to be initialized when starting 
+            // Allows for the Shipment panel visibility to be initialized when starting
             // ShipWorks in Batch Mode.
             if (UIMode == UIMode.Batch)
             {

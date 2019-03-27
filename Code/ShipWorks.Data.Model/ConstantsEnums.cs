@@ -646,8 +646,6 @@ namespace ShipWorks.Data.Model
 		AmazonSWAAccountID,
 		///<summary>RowVersion. </summary>
 		RowVersion,
-		///<summary>AccountNumber. </summary>
-		AccountNumber,
 		///<summary>ShipEngineCarrierId. </summary>
 		ShipEngineCarrierId,
 		///<summary>Description. </summary>

@@ -381,6 +381,7 @@ namespace ShipWorks.Data.Utility
                 case EntityFieldLengthSource.DhlExpressDescription: return DhlExpressAccountFields.Description;
 
                 case EntityFieldLengthSource.AsendiaDescription: return AsendiaAccountFields.Description;
+                case EntityFieldLengthSource.AmazonSWADescription: return AmazonSWAAccountFields.Description;
             }
 
             throw new InvalidOperationException("Unmapped EntityFieldLengthSource: " + source);

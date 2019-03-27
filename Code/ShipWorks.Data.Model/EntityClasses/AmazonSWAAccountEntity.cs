@@ -301,8 +301,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("RowVersion", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
-			_fieldsCustomProperties.Add("AccountNumber", fieldHashtable);
-			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("ShipEngineCarrierId", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("Description", fieldHashtable);
@@ -404,16 +402,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.Byte[])GetValue((int)AmazonSWAAccountFieldIndex.RowVersion, true); }
 
-		}
-
-		/// <summary> The AccountNumber property of the Entity AmazonSWAAccount<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "AmazonSWAAccount"."AccountNumber"<br/>
-		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.Int64 AccountNumber
-		{
-			get { return (System.Int64)GetValue((int)AmazonSWAAccountFieldIndex.AccountNumber, true); }
-			set	{ SetValue((int)AmazonSWAAccountFieldIndex.AccountNumber, value); }
 		}
 
 		/// <summary> The ShipEngineCarrierId property of the Entity AmazonSWAAccount<br/><br/></summary>

@@ -20,7 +20,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SWA
             AmazonSWAAccountEntity account = carrierAccount as AmazonSWAAccountEntity;
             MethodConditions.EnsureArgumentIsNotNull(account, "account");
 
-            string[] descriptionComponents = { account.AccountNumber.ToString(), account.Street1, account.PostalCode };
+            string[] descriptionComponents = { account.Street1, account.PostalCode };
 
             return string.Join(",", descriptionComponents.Where(s => !string.IsNullOrWhiteSpace(s)));
         }

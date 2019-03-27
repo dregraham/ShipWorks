@@ -46,8 +46,6 @@ namespace ShipWorks.Shipping.UI.Carriers.Amazon.SWA
         /// </summary>
         private void OnLoad(object sender, EventArgs e)
         {
-            accountNumber.Text = account.AccountNumber.ToString();
-
             if (account.Description != GetDescription(account))
             {
                 description.Text = account.Description;

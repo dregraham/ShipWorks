@@ -495,7 +495,6 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddFieldIndexEnumForElementName(typeof(AmazonSWAAccountFieldIndex), "AmazonSWAAccountEntity");
 			this.AddElementFieldInfo("AmazonSWAAccountEntity", "AmazonSWAAccountID", typeof(System.Int64), true, false, true, false,  (int)AmazonSWAAccountFieldIndex.AmazonSWAAccountID, 0, 0, 19);
 			this.AddElementFieldInfo("AmazonSWAAccountEntity", "RowVersion", typeof(System.Byte[]), false, false, true, false,  (int)AmazonSWAAccountFieldIndex.RowVersion, 2147483647, 0, 0);
-			this.AddElementFieldInfo("AmazonSWAAccountEntity", "AccountNumber", typeof(System.Int64), false, false, false, false,  (int)AmazonSWAAccountFieldIndex.AccountNumber, 0, 0, 19);
 			this.AddElementFieldInfo("AmazonSWAAccountEntity", "ShipEngineCarrierId", typeof(System.String), false, false, false, false,  (int)AmazonSWAAccountFieldIndex.ShipEngineCarrierId, 12, 0, 0);
 			this.AddElementFieldInfo("AmazonSWAAccountEntity", "Description", typeof(System.String), false, false, false, false,  (int)AmazonSWAAccountFieldIndex.Description, 50, 0, 0);
 			this.AddElementFieldInfo("AmazonSWAAccountEntity", "FirstName", typeof(System.String), false, false, false, false,  (int)AmazonSWAAccountFieldIndex.FirstName, 30, 0, 0);

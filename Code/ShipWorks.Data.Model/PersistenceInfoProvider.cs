@@ -502,23 +502,22 @@ namespace ShipWorks.Data.Model
 		/// <summary>Inits AmazonSWAAccountEntity's mappings</summary>
 		private void InitAmazonSWAAccountEntityMappings()
 		{
-			this.AddElementMapping("AmazonSWAAccountEntity", @"ShipWorksLocal", @"dbo", "AmazonSWAAccount", 16, 0);
+			this.AddElementMapping("AmazonSWAAccountEntity", @"ShipWorksLocal", @"dbo", "AmazonSWAAccount", 15, 0);
 			this.AddElementFieldMapping("AmazonSWAAccountEntity", "AmazonSWAAccountID", "AmazonSWAAccountID", false, "BigInt", 0, 19, 0, true, "SCOPE_IDENTITY()", null, typeof(System.Int64), 0);
 			this.AddElementFieldMapping("AmazonSWAAccountEntity", "RowVersion", "RowVersion", false, "Timestamp", 2147483647, 0, 0, false, "", null, typeof(System.Byte[]), 1);
-			this.AddElementFieldMapping("AmazonSWAAccountEntity", "AccountNumber", "AccountNumber", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 2);
-			this.AddElementFieldMapping("AmazonSWAAccountEntity", "ShipEngineCarrierId", "ShipEngineCarrierId", false, "NVarChar", 12, 0, 0, false, "", null, typeof(System.String), 3);
-			this.AddElementFieldMapping("AmazonSWAAccountEntity", "Description", "Description", false, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 4);
-			this.AddElementFieldMapping("AmazonSWAAccountEntity", "FirstName", "FirstName", false, "NVarChar", 30, 0, 0, false, "", null, typeof(System.String), 5);
-			this.AddElementFieldMapping("AmazonSWAAccountEntity", "MiddleName", "MiddleName", false, "NVarChar", 30, 0, 0, false, "", null, typeof(System.String), 6);
-			this.AddElementFieldMapping("AmazonSWAAccountEntity", "LastName", "LastName", false, "NVarChar", 30, 0, 0, false, "", null, typeof(System.String), 7);
-			this.AddElementFieldMapping("AmazonSWAAccountEntity", "Company", "Company", false, "NVarChar", 30, 0, 0, false, "", null, typeof(System.String), 8);
-			this.AddElementFieldMapping("AmazonSWAAccountEntity", "Street1", "Street1", false, "NVarChar", 43, 0, 0, false, "", null, typeof(System.String), 9);
-			this.AddElementFieldMapping("AmazonSWAAccountEntity", "City", "City", false, "NVarChar", 25, 0, 0, false, "", null, typeof(System.String), 10);
-			this.AddElementFieldMapping("AmazonSWAAccountEntity", "StateProvCode", "StateProvCode", false, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 11);
-			this.AddElementFieldMapping("AmazonSWAAccountEntity", "PostalCode", "PostalCode", false, "NVarChar", 10, 0, 0, false, "", null, typeof(System.String), 12);
-			this.AddElementFieldMapping("AmazonSWAAccountEntity", "CountryCode", "CountryCode", false, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 13);
-			this.AddElementFieldMapping("AmazonSWAAccountEntity", "Email", "Email", false, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 14);
-			this.AddElementFieldMapping("AmazonSWAAccountEntity", "Phone", "Phone", false, "NVarChar", 15, 0, 0, false, "", null, typeof(System.String), 15);
+			this.AddElementFieldMapping("AmazonSWAAccountEntity", "ShipEngineCarrierId", "ShipEngineCarrierId", false, "NVarChar", 12, 0, 0, false, "", null, typeof(System.String), 2);
+			this.AddElementFieldMapping("AmazonSWAAccountEntity", "Description", "Description", false, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 3);
+			this.AddElementFieldMapping("AmazonSWAAccountEntity", "FirstName", "FirstName", false, "NVarChar", 30, 0, 0, false, "", null, typeof(System.String), 4);
+			this.AddElementFieldMapping("AmazonSWAAccountEntity", "MiddleName", "MiddleName", false, "NVarChar", 30, 0, 0, false, "", null, typeof(System.String), 5);
+			this.AddElementFieldMapping("AmazonSWAAccountEntity", "LastName", "LastName", false, "NVarChar", 30, 0, 0, false, "", null, typeof(System.String), 6);
+			this.AddElementFieldMapping("AmazonSWAAccountEntity", "Company", "Company", false, "NVarChar", 30, 0, 0, false, "", null, typeof(System.String), 7);
+			this.AddElementFieldMapping("AmazonSWAAccountEntity", "Street1", "Street1", false, "NVarChar", 43, 0, 0, false, "", null, typeof(System.String), 8);
+			this.AddElementFieldMapping("AmazonSWAAccountEntity", "City", "City", false, "NVarChar", 25, 0, 0, false, "", null, typeof(System.String), 9);
+			this.AddElementFieldMapping("AmazonSWAAccountEntity", "StateProvCode", "StateProvCode", false, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 10);
+			this.AddElementFieldMapping("AmazonSWAAccountEntity", "PostalCode", "PostalCode", false, "NVarChar", 10, 0, 0, false, "", null, typeof(System.String), 11);
+			this.AddElementFieldMapping("AmazonSWAAccountEntity", "CountryCode", "CountryCode", false, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 12);
+			this.AddElementFieldMapping("AmazonSWAAccountEntity", "Email", "Email", false, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 13);
+			this.AddElementFieldMapping("AmazonSWAAccountEntity", "Phone", "Phone", false, "NVarChar", 15, 0, 0, false, "", null, typeof(System.String), 14);
 		}
 
 		/// <summary>Inits AmazonSWAProfileEntity's mappings</summary>

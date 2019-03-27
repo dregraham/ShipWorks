@@ -33,12 +33,6 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         /// Table field type characteristics (type, precision, scale, length): Timestamp, 0, 0, 2147483647<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         System.Byte[] RowVersion { get; }
-        /// <summary> The AccountNumber property of the Entity AmazonSWAAccount<br/><br/>
-        /// </summary>
-        /// <remarks>Mapped on table field: "AmazonSWAAccount"."AccountNumber"<br/>
-        /// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
-        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-        System.Int64 AccountNumber { get; }
         /// <summary> The ShipEngineCarrierId property of the Entity AmazonSWAAccount<br/><br/>
         /// </summary>
         /// <remarks>Mapped on table field: "AmazonSWAAccount"."ShipEngineCarrierId"<br/>
