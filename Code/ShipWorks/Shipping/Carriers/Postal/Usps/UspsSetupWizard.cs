@@ -749,19 +749,24 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
 
             ShippingProfileEntity newProfile = CreateCopy(profile);
 
-            newProfile.Name =
-                $"{profile.Name} (from {EnumHelper.GetDescription((ShipmentTypeCode) profile.ShipmentType)})";
-            newProfile.ShipmentType = ShipmentTypeCode.Usps;
-            newProfile.ShipmentTypePrimary = false;
+            // If the requested profile is 'no carrier', we will set it to (none)
+            if (profile.ShipmentType != null)
+            {
+                newProfile.Name =
+                    $"{profile.Name} (from {EnumHelper.GetDescription((ShipmentTypeCode) profile.ShipmentType)})";
+                newProfile.ShipmentType = ShipmentTypeCode.Usps;
+                newProfile.ShipmentTypePrimary = false;
 
-            newProfile.Postal = CreateCopy(profile.Postal);
-            newProfile.Postal.Usps = new UspsProfileEntity();
+                newProfile.Postal = CreateCopy(profile.Postal);
+                newProfile.Postal.Usps = new UspsProfileEntity();
 
-            EnsureUniqueName(newProfile, profile.Name);
+                EnsureUniqueName(newProfile, profile.Name);
 
-            ShippingProfileManager.SaveProfile(newProfile);
+                ShippingProfileManager.SaveProfile(newProfile);
 
-            return newProfile.ShippingProfileID;
+                return newProfile.ShippingProfileID;
+            }
+            return 0;
         }
 
         /// <summary>
