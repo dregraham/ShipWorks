@@ -7,6 +7,7 @@ using System.Xml.Linq;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
+using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Api;
 
@@ -94,16 +95,14 @@ namespace ShipWorks.Shipping.Carriers.FedEx
 
             try
             {
-                if (letterheadFilename.Length > 0)
+                if (account.Fields[(int) FedExAccountFieldIndex.Letterhead].IsChanged)
                 {
-                    var bitmapImageLetterhead = new Bitmap(letterheadFilename);
-                    account.Letterhead = bitmapImageLetterhead.ImageToBase64String(letterheadPreview.Image.RawFormat);
+                    account.Letterhead = letterheadPreview.Image.ImageToBase64String(letterheadPreview.Image.RawFormat);
                 }
 
-                if (signatureFilename.Length > 0)
+                if (account.Fields[(int) FedExAccountFieldIndex.Signature].IsChanged)
                 {
-                    var bitmapImageSignature = new Bitmap(signatureFilename);
-                    account.Signature = bitmapImageSignature.ImageToBase64String(signaturePreview.Image.RawFormat);
+                    account.Signature = signaturePreview.Image.ImageToBase64String(signaturePreview.Image.RawFormat);
                 }
             }
             catch (Exception ex)
