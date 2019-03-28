@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Drawing;
+using System.Drawing.Imaging;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
@@ -20,6 +21,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx
     {
         private const int MaxImageWidth = 700;
         private const int MaxImageHeight = 50;
+        private string letterheadString;
+        private string signatureString;
 
         /// <summary>
         /// Constructor
@@ -91,19 +94,19 @@ namespace ShipWorks.Shipping.Carriers.FedEx
 
             try
             {
-                if (account.Fields[(int) FedExAccountFieldIndex.Letterhead].IsChanged)
+                if (letterheadString != null && letterheadString != account.Letterhead)
                 {
-                    account.Letterhead = letterheadPreview.Image.ImageToBase64String(letterheadPreview.Image.RawFormat);
+                    account.Letterhead = letterheadString;
                 }
 
-                if (account.Fields[(int) FedExAccountFieldIndex.Signature].IsChanged)
+                if (signatureString != null && signatureString != account.Signature)
                 {
-                    account.Signature = signaturePreview.Image.ImageToBase64String(signaturePreview.Image.RawFormat);
+                    account.Signature = signatureString;
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                MessageHelper.ShowError(this, ex.Message);
             }
         }
 
@@ -116,17 +119,17 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             {
                 try
                 {
-                    using (Image image = Image.FromFile(openFileDialogLetterhead.FileName))
+                    var image = Image.FromFile(openFileDialogLetterhead.FileName);
+
+                    if (image.Size.Width <= MaxImageWidth && image.Size.Height <= MaxImageHeight)
                     {
-                        if (image.Size.Width <= MaxImageWidth && image.Size.Height <= MaxImageHeight)
-                        {
-                            letterheadPreview.Image = new Bitmap(image);
-                        }
-                        else
-                        {
-                            MessageHelper.ShowError(this,
-                                "The selected image exceeds the max resolution of 700 pixels wide by 50 pixels long");
-                        }
+                        letterheadString = image.ImageToBase64String(image.RawFormat);
+                        letterheadPreview.Image = image;
+                    }
+                    else
+                    {
+                        MessageHelper.ShowError(this,
+                            "The selected image exceeds the max resolution of 700 pixels wide by 50 pixels long");
                     }
                 }
                 catch (Exception)
@@ -145,17 +148,17 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             {
                 try
                 {
-                    using (Image image = Image.FromFile(openFileDialogSignature.FileName))
+                    var image = Image.FromFile(openFileDialogSignature.FileName);
+
+                    if (image.Size.Width <= MaxImageWidth && image.Size.Height <= MaxImageHeight)
                     {
-                        if (image.Size.Width <= MaxImageWidth && image.Size.Height <= MaxImageHeight)
-                        {
-                            signaturePreview.Image = new Bitmap(image);
-                        }
-                        else
-                        {
-                            MessageHelper.ShowError(this,
-                                "The selected image exceeds the max resolution of 700 pixels wide by 50 pixels long");
-                        }
+                        signatureString = image.ImageToBase64String(image.RawFormat);
+                        signaturePreview.Image = image;
+                    }
+                    else
+                    {
+                        MessageHelper.ShowError(this,
+                            "The selected image exceeds the max resolution of 700 pixels wide by 50 pixels long");
                     }
                 }
                 catch (Exception)
