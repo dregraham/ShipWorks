@@ -749,8 +749,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
 
             ShippingProfileEntity newProfile = CreateCopy(profile);
 
-            // If the requested profile is 'no carrier', we will set it to (none)
-            if (profile.ShipmentType != null)
+            // Create a new profile clone
+            if (newProfile.ShipmentType != null)
             {
                 newProfile.Name =
                     $"{profile.Name} (from {EnumHelper.GetDescription((ShipmentTypeCode) profile.ShipmentType)})";
