@@ -1,4 +1,7 @@
-﻿using Interapptive.Shared.Utility;
+﻿using System;
+using System.IO;
+using System.Xml.Serialization;
+using Interapptive.Shared.Utility;
 using Newtonsoft.Json;
 
 namespace Interapptive.Shared.Extensions
@@ -42,6 +45,23 @@ namespace Interapptive.Shared.Extensions
             };
             result = JsonConvert.DeserializeObject<T>(input, settings);
             return success && result != null;
+        }
+
+        /// <summary>
+        /// Try deserializing XML to an object
+        /// </summary>
+        public static bool TryParseXml<T>(this string objectData, out T result)
+        {
+            try
+            {
+                result = SerializationUtility.DeserializeFromXml<T>(objectData);
+                return true;
+            }
+            catch (InvalidOperationException)
+            {
+                result = default(T);
+                return false;
+            }
         }
     }
 }

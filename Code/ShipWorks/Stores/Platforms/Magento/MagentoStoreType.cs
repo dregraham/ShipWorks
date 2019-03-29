@@ -66,7 +66,7 @@ namespace ShipWorks.Stores.Platforms.Magento
         {
             get
             {
-                MagentoStoreEntity magentoStore = Store as MagentoStoreEntity;
+                var magentoStore = StoreReadOnly as IMagentoStoreEntity;
 
                 if (magentoStore == null)
                 {

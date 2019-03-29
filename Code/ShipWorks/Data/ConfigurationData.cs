@@ -5,7 +5,7 @@ using System.Xml;
 using System.Xml.Linq;
 using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
-using ShipWorks.ApplicationCore.Options;
+using ShipWorks.ApplicationCore.Settings;
 using ShipWorks.Data.Administration;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
@@ -152,7 +152,11 @@ namespace ShipWorks.Data
                 CustomerKey = string.Empty,
 
                 UseParallelActionQueue = true,
-                AllowEbayCombineLocally = false
+                AllowEbayCombineLocally = false,
+
+                AutoUpdateDayOfWeek = DayOfWeek.Thursday,
+                AutoUpdateHourOfDay = 23,
+                AutoUpdateStartDate = DateTime.UtcNow.AddDays(-1)
             };
 
             adapter.SaveEntity(newConfig);

@@ -2,25 +2,26 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
+using System.Linq;
+using System.Reactive.Linq;
 using System.Windows.Forms;
 using Divelements.SandGrid;
-using ShipWorks.Core.Messaging;
-using ShipWorks.Properties;
-using ShipWorks.Data.Model.EntityClasses;
+using Interapptive.Shared;
+using Interapptive.Shared.Collections;
+using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
+using ShipWorks.ApplicationCore.Appearance;
+using ShipWorks.Core.Messaging;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
+using ShipWorks.Editions;
+using ShipWorks.Filters.Management;
+using ShipWorks.Messaging.Messages;
+using ShipWorks.Properties;
 using ShipWorks.UI.Controls.SandGrid;
 using ShipWorks.UI.Utility;
-using ShipWorks.Filters.Management;
 using ShipWorks.Users;
 using ShipWorks.Users.Security;
-using System.Linq;
-using Interapptive.Shared;
-using ShipWorks.ApplicationCore.Appearance;
-using Interapptive.Shared.UI;
-using ShipWorks.Editions;
-using ShipWorks.Messaging.Messages;
-using System.Reactive.Linq;
-using ShipWorks.Data.Model.EntityInterfaces;
 
 namespace ShipWorks.Filters.Controls
 {
@@ -46,6 +47,11 @@ namespace ShipWorks.Filters.Controls
 
         // Raised when the selected node changes
         public event EventHandler SelectedFilterNodeChanged;
+
+        /// <summary>
+        /// Load the filter as an advanced search in the grid
+        /// </summary>
+        public event EventHandler<FilterNodeEntity> LoadAsAdvancedSearch;
 
         // Raised during the rename of filters
         public event FilterNodeRenameEventHandler FilterRenaming;
@@ -74,6 +80,8 @@ namespace ShipWorks.Filters.Controls
         private ToolStripMenuItem menuItemNewFolder;
         private ToolStripSeparator toolStripSeparator;
         private ToolStripMenuItem menuItemOrganizeFilters;
+        private ToolStripMenuItem menuLoadFilterAsSearch;
+        private ToolStripMenuItem menuConvertFilter;
 
         // Edition helper for UI updates
         private EditionGuiHelper editionGuiHelper;
@@ -199,6 +207,13 @@ namespace ShipWorks.Filters.Controls
         public bool HideDisabledFilters { get; set; }
 
         /// <summary>
+        /// Should saved searches be hidden
+        /// </summary>
+        [DefaultValue(false)]
+        [Category("Behavior")]
+        public bool HideOnSavedSearches { get; set; }
+
+        /// <summary>
         /// Indicates if the active search node - if any - that will be displayed
         /// </summary>
         [DefaultValue(null)]
@@ -211,7 +226,7 @@ namespace ShipWorks.Filters.Controls
             }
             set
             {
-                if (value != null && value.Purpose != (int)FilterNodePurpose.Search)
+                if (value != null && value.Purpose != (int) FilterNodePurpose.Search)
                 {
                     throw new InvalidOperationException("Only search nodes can be set as ActiveSearchNode");
                 }
@@ -333,7 +348,7 @@ namespace ShipWorks.Filters.Controls
                 }
 
                 FilterNodeEntity potential = layoutContext?.FindNode(value);
-                if (potential != null && potential.Purpose == (int)FilterNodePurpose.Quick && Array.IndexOf(Targets, (FilterTarget)potential.Filter.FilterTarget) >= 0)
+                if (potential != null && potential.Purpose == (int) FilterNodePurpose.Quick && Array.IndexOf(Targets, (FilterTarget) potential.Filter.FilterTarget) >= 0)
                 {
                     SelectedFilterNode = potential;
                     return;
@@ -400,7 +415,7 @@ namespace ShipWorks.Filters.Controls
                 {
                     lastSelectedRow = null;
 
-                    if (value.Purpose == (int)FilterNodePurpose.Quick)
+                    if (value.Purpose == (int) FilterNodePurpose.Quick)
                     {
                         // This quick filter is already selected
                         if (quickFilterSelected && quickFilterNode.FilterNodeID == value.FilterNodeID)
@@ -486,7 +501,7 @@ namespace ShipWorks.Filters.Controls
 
             // If there is nothing selected or the filter initial specified is not for this target,
             // select the top level filter for this target
-            if (SelectedFilterNode?.Filter.FilterTarget != (int)target || SelectedFilterNode == null)
+            if (SelectedFilterNode?.Filter.FilterTarget != (int) target || SelectedFilterNode == null)
             {
                 SelectedFilterNodeID = BuiltinFilter.GetTopLevelKey(target);
             }
@@ -528,11 +543,22 @@ namespace ShipWorks.Filters.Controls
             // Don't listen to layout changes while we reload
             sandGrid.SelectionChanged -= OnGridSelectionChanged;
 
+            var (ID, Proxy) = sandGrid.FlatRows
+                .OfType<FilterTreeGridRow>()
+                .Where(x => x.FilterProxy != null)
+                .Select(x => (ID: x.FilterNode.FilterNodeID, Proxy: x.FilterProxy))
+                .FirstOrDefault();
+
             // We have to reload the context
             layoutContext.Reload();
 
             // Do the reload
             LoadLayouts(Targets);
+
+            sandGrid.FlatRows
+                .OfType<FilterTreeGridRow>()
+                .Where(x => x.FilterNode.FilterNodeID == ID)
+                .ForEach(x => x.FilterProxy = Proxy);
 
             // Reapply the state
             ApplyFolderState(state);
@@ -598,7 +624,7 @@ namespace ShipWorks.Filters.Controls
             }
 
             // If there was local node, it has to match the new targets
-            if (quickFilterNode != null && Array.IndexOf(targets, (FilterTarget)quickFilterNode.Filter.FilterTarget) < 0)
+            if (quickFilterNode != null && Array.IndexOf(targets, (FilterTarget) quickFilterNode.Filter.FilterTarget) < 0)
             {
                 quickFilterNode = null;
             }
@@ -640,7 +666,7 @@ namespace ShipWorks.Filters.Controls
             // Update the state of each row
             foreach (FilterTreeGridRow row in sandGrid.GetAllRows())
             {
-                row.Expanded = folderState.IsExpanded(row.FilterNode);
+                row.Expanded = folderState?.IsExpanded(row.FilterNode) ?? true;
             }
         }
 
@@ -676,7 +702,7 @@ namespace ShipWorks.Filters.Controls
                 {
                     FilterTreeGridRow gridRow = GetGridRow(node);
 
-                    if (filter.State != (int)FilterState.Enabled && HideDisabledFilters)
+                    if (filter.State != (int) FilterState.Enabled && HideDisabledFilters)
                     {
                         if (gridRow.Selected)
                         {
@@ -723,7 +749,7 @@ namespace ShipWorks.Filters.Controls
         {
             if (sandGrid.Rows.Count > 0)
             {
-                SelectedFilterNode = ((FilterTreeGridRow)sandGrid.Rows[0]).FilterNode;
+                SelectedFilterNode = ((FilterTreeGridRow) sandGrid.Rows[0]).FilterNode;
             }
         }
 
@@ -740,12 +766,16 @@ namespace ShipWorks.Filters.Controls
             menuItemNewFolder = new ToolStripMenuItem();
             toolStripSeparator = new ToolStripSeparator();
             menuItemOrganizeFilters = new ToolStripMenuItem();
+            menuLoadFilterAsSearch = new ToolStripMenuItem();
+            menuConvertFilter = new ToolStripMenuItem();
 
             ContextMenuStrip = contextMenuFilterTree;
 
             contextMenuFilterTree.Font = new Font("Segoe UI", 9F);
             contextMenuFilterTree.Items.AddRange(new ToolStripItem[] {
                 menuItemEditFilter,
+                menuLoadFilterAsSearch,
+                menuConvertFilter,
                 menuItemEditFilterSep,
                 menuItemNewFilter,
                 menuItemNewFolder,
@@ -769,38 +799,86 @@ namespace ShipWorks.Filters.Controls
         /// </summary>
         private void InitializeMenuItems()
         {
-            // menuItemEditFilter
-            menuItemEditFilter.Image = Resources.edit16;
-            menuItemEditFilter.Name = "menuItemEditFilter";
-            menuItemEditFilter.Size = new Size(151, 22);
-            menuItemEditFilter.Text = "Edit";
-            menuItemEditFilter.Click += OnEditFilter;
+            InitializeMenuItem(menuItemEditFilter, nameof(menuItemEditFilter), Resources.edit16, "Edit", OnEditFilter);
 
             // menuItemEditFilterSep
             menuItemEditFilterSep.Name = "menuItemEditFilterSep";
             menuItemEditFilterSep.Size = new Size(148, 6);
 
-            // meuItemNewFilter
-            menuItemNewFilter.Image = Resources.filter_add;
-            menuItemNewFilter.Name = "meuItemNewFilter";
-            menuItemNewFilter.Size = new Size(151, 22);
-            menuItemNewFilter.Text = "New Filter";
-            menuItemNewFilter.Click += OnNewFilter;
-
-            // menuItemNewFolder
-            menuItemNewFolder.Image = Resources.folderclosed_add;
-            menuItemNewFolder.Name = "menuItemNewFolder";
-            menuItemNewFolder.Size = new Size(151, 22);
-            menuItemNewFolder.Text = "New Folder";
-            menuItemNewFolder.Click += OnNewFolder;
-
-            // menuItemOrganizeFilters
-            menuItemOrganizeFilters.Image = Resources.funnel_properties_16;
-            menuItemOrganizeFilters.Name = "menuItemOrganizeFilters";
-            menuItemOrganizeFilters.Size = new Size(151, 22);
-            menuItemOrganizeFilters.Text = "Manage Filters";
-            menuItemOrganizeFilters.Click += OnManageFilters;
+            InitializeMenuItem(menuItemNewFilter, nameof(menuItemNewFilter), Resources.filter_add, "New Filter", OnNewFilter);
+            InitializeMenuItem(menuItemNewFolder, nameof(menuItemNewFolder), Resources.folderclosed_add, "New Folder", OnNewFolder);
+            InitializeMenuItem(menuItemOrganizeFilters, nameof(menuItemOrganizeFilters), Resources.funnel_properties_16, "Manage Filters", OnManageFilters);
+            InitializeMenuItem(menuLoadFilterAsSearch, nameof(menuLoadFilterAsSearch), Resources.view_next, "Load as Advanced Search", OnLoadAsAdvancedSearch);
+            InitializeMenuItem(menuConvertFilter, nameof(menuConvertFilter), Resources.view, "Convert to Saved Search", OnConvertFilter);
         }
+
+        /// <summary>
+        /// Initialize an individual menu item
+        /// </summary>
+        private void InitializeMenuItem(ToolStripMenuItem menuItem, string name, Bitmap icon, string text, EventHandler onClick)
+        {
+            menuItem.Image = icon;
+            menuItem.Name = name;
+            menuItem.Size = new Size(151, 22);
+            menuItem.Text = text;
+            menuItem.Click += onClick;
+        }
+
+        /// <summary>
+        /// Handle converting a filter to and from OnDemand
+        /// </summary>
+        private void OnConvertFilter(object sender, EventArgs e)
+        {
+            var filterToConvert = SelectedFilterNode;
+
+            if (filterToConvert?.Filter == null)
+            {
+                return;
+            }
+
+            if (!filterToConvert.Filter.IsSavedSearch)
+            {
+                var references = new FilterNodeReferenceRepository().Find(filterToConvert);
+
+                if (references.Any())
+                {
+                    var message = "Cannot convert to a saved search because it is in use." +
+                        Environment.NewLine +
+                        Environment.NewLine +
+                        references.Select(x => "- " + x).Take(5).Combine(Environment.NewLine);
+
+                    if (references.Count > 5)
+                    {
+                        message = $"{message}{Environment.NewLine}- More than 5 usages of this filter were found.";
+                    }
+
+                    MessageHelper.ShowError(this, message);
+
+                    return;
+                }
+            }
+
+            SelectFirstNode();
+
+            filterToConvert.Filter.IsSavedSearch = !filterToConvert.Filter.IsSavedSearch;
+
+            FilterEditingService.SaveFilter(this, filterToConvert)
+                .Do(x => this.BeginInvoke((Action) (() =>
+                {
+                    SelectedFilterNode = x;
+                    if (x.Filter.IsSavedSearch)
+                    {
+                        LoadAsAdvancedSearch?.Invoke(this, x);
+                    }
+                })))
+                .OnFailure(ex => MessageHelper.ShowError(this, ex.Message));
+        }
+
+        /// <summary>
+        /// Handle the LoadAsAdvancedSearch context menu click
+        /// </summary>
+        private void OnLoadAsAdvancedSearch(object sender, EventArgs e) =>
+            LoadAsAdvancedSearch?.Invoke(this, SelectedFilterNode);
 
         /// <summary>
         /// Gets the FilterLastActive for the current target type.  Defaults to Order value if more than one target is specified
@@ -833,7 +911,27 @@ namespace ShipWorks.Filters.Controls
                 menuItemEditFilter.Available = false;
             }
 
+            menuConvertFilter.Available = filterSelected &&
+                !BuiltinFilter.IsSearchPlaceholderKey(SelectedFilterNode.FilterID) &&
+                !BuiltinFilter.IsTopLevelKey(SelectedFilterNode.FilterID) &&
+                SelectedFilterNode?.Filter?.IsFolder != true;
+
+            if (SelectedFilterNode?.Filter?.IsSavedSearch == true)
+            {
+                menuConvertFilter.Text = "Convert to Filter";
+                menuConvertFilter.Image = Resources.funnel;
+            }
+            else
+            {
+                menuConvertFilter.Text = "Convert to Saved Search";
+                menuConvertFilter.Image = Resources.view;
+            }
+
+            menuLoadFilterAsSearch.Available = menuConvertFilter.Available &&
+                SelectedFilterNode?.Filter?.IsSavedSearch != true;
+
             menuItemEditFilterSep.Available = menuItemEditFilter.Available;
+            menuItemOrganizeFilters.Available = SelectedFilterNode?.Purpose == (int) FilterNodePurpose.Standard;
         }
 
         /// <summary>
@@ -872,14 +970,11 @@ namespace ShipWorks.Filters.Controls
         {
             // Creating a filter can create more than one node (if the parent is linked), but
             // this one will be the one that should be selected
-            FilterNodeEntity primaryNode;
-
-            FilterEditingResult result = FilterEditingService.NewFilter(
+            var (result, primaryNode) = FilterEditingService.NewFilter(
                 isFolder,
                 parent,
                 GetFolderState(),
-                this,
-                out primaryNode);
+                this);
 
             if (result == FilterEditingResult.OK)
             {
@@ -995,7 +1090,7 @@ namespace ShipWorks.Filters.Controls
                     {
                         FilterTreeGridRow parentRow = sandGrid.Rows.Cast<FilterTreeGridRow>().Single(r =>
                             r.FilterNode.Filter.FilterTarget == (int) target &&
-                            BuiltinFilter.IsTopLevelKey(r.FilterNode.FilterID) );
+                            BuiltinFilter.IsTopLevelKey(r.FilterNode.FilterID));
 
                         parentRow.NestedRows.Insert(0, myRow);
                     }
@@ -1032,7 +1127,7 @@ namespace ShipWorks.Filters.Controls
         private void LoadChildren(FilterNodeEntity filterNode, FilterTreeGridRow parentRow)
         {
             // Go through each of the children in order
-            foreach (FilterNodeEntity childNode in filterNode.ChildNodes.Where(x => !HideDisabledFilters || x.Filter.State == (int) FilterState.Enabled))
+            foreach (FilterNodeEntity childNode in filterNode.ChildNodes.Where(ShouldFilterBeInTheList))
             {
                 FilterTreeGridRow row = CreateRow(childNode);
                 parentRow.NestedRows.Add(row);
@@ -1043,6 +1138,13 @@ namespace ShipWorks.Filters.Controls
             // By default, everything is expanded
             parentRow.Expanded = true;
         }
+
+        /// <summary>
+        /// Should the filter be shown in the list
+        /// </summary>
+        private bool ShouldFilterBeInTheList(FilterNodeEntity x) =>
+            (!HideDisabledFilters || x.Filter.State != (int) FilterState.Disabled) &&
+            (!HideOnSavedSearches || !x.Filter.IsSavedSearch);
 
         /// <summary>
         /// Get what is to be the parent of items that are moved \ inserted
@@ -1127,6 +1229,14 @@ namespace ShipWorks.Filters.Controls
         /// </summary>
         private void OnSelectedFilterNodeChanged()
         {
+            ClearSearchProxies();
+
+            if (SelectedFilterNode?.Filter?.IsSavedSearch == true)
+            {
+                OnLoadAsAdvancedSearch(this, EventArgs.Empty);
+                return;
+            }
+
             if (SelectedFilterNode != null && SelectedFilterNode.Purpose == (int) FilterNodePurpose.Quick)
             {
                 quickFilterNode = SelectedFilterNode;
@@ -1310,7 +1420,7 @@ namespace ShipWorks.Filters.Controls
             {
                 if (row.NextVisibleRow != null)
                 {
-                    row = (FilterTreeGridRow)row.NextVisibleRow;
+                    row = (FilterTreeGridRow) row.NextVisibleRow;
                 }
             }
 
@@ -1401,7 +1511,7 @@ namespace ShipWorks.Filters.Controls
                 FilterCount count = FilterContentManager.GetCount(quickFilterNode.FilterNodeID);
                 if (count != null)
                 {
-                    quickFilterDisplayManager.ToggleDisplay(quickFilterNode.Filter.State == (int)FilterState.Enabled);
+                    quickFilterDisplayManager.ToggleDisplay(quickFilterNode.Filter.State == (int) FilterState.Enabled);
 
                     if (count.Status == FilterCountStatus.Ready)
                     {
@@ -1675,5 +1785,40 @@ namespace ShipWorks.Filters.Controls
                 OnSelectedFilterNodeChanged();
             }
         }
+
+        /// <summary>
+        /// Set the search filter node
+        /// </summary>
+        internal long SetSearch(FilterNodeEntity activeFilterNode, EventHandler onSelectedFilterNodeChanged)
+        {
+            ClearSearchProxies();
+
+            var currentFilterNodeID = SelectedFilterNodeID;
+
+            SelectedFilterNodeChanged -= onSelectedFilterNodeChanged;
+
+            if (SelectedFilterNode?.Filter?.IsSavedSearch == true)
+            {
+                lastSelectedRow.FilterProxy = activeFilterNode;
+                currentFilterNodeID = BuiltinFilter.GetTopLevelKey(Targets.First());
+            }
+            else
+            {
+                ActiveSearchNode = activeFilterNode;
+                SelectedFilterNode = activeFilterNode;
+            }
+
+            SelectedFilterNodeChanged += onSelectedFilterNodeChanged;
+
+            return currentFilterNodeID;
+        }
+
+        /// <summary>
+        /// Clear search proxies
+        /// </summary>
+        private void ClearSearchProxies() =>
+            sandGrid.FlatRows
+                .OfType<FilterTreeGridRow>()
+                .ForEach(x => x.ClearSearchProxy());
     }
 }

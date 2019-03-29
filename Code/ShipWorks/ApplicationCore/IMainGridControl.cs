@@ -66,11 +66,6 @@ namespace ShipWorks.ApplicationCore
         IAsyncResult BeginInvoke(Delegate method, params object[] args);
 
         /// <summary>
-        /// Focus the searchbox
-        /// </summary>
-        void FocusSearch();
-
-        /// <summary>
         /// Clear the searchbox text
         /// </summary>
         void ClearSearch();

@@ -2068,6 +2068,12 @@ namespace ShipWorks.Data.Model
 		AuditEnabled,
 		///<summary>DefaultPickListTemplateID. </summary>
 		DefaultPickListTemplateID,
+		///<summary>AutoUpdateDayOfWeek. </summary>
+		AutoUpdateDayOfWeek,
+		///<summary>AutoUpdateHourOfDay. </summary>
+		AutoUpdateHourOfDay,
+		///<summary>AutoUpdateStartDate. </summary>
+		AutoUpdateStartDate,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -4070,6 +4076,8 @@ namespace ShipWorks.Data.Model
 		Definition,
 		///<summary>State. </summary>
 		State,
+		///<summary>IsSavedSearch. </summary>
+		IsSavedSearch,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -12274,6 +12282,8 @@ namespace ShipWorks.Data.Model
 		UIMode,
 		///<summary>OrderLookupLayout. </summary>
 		OrderLookupLayout,
+		///<summary>LastReleaseNotesSeen. </summary>
+		LastReleaseNotesSeen,
 		/// <summary></summary>
 		AmountOfFields
 	}

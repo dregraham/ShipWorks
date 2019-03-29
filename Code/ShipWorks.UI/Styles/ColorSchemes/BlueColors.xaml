@@ -1,0 +1,68 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Color
+        x:Key="HeaderFontColor"
+        A="255"
+        B="139"
+        G="66"
+        R="21" />
+    <Color
+        x:Key="HeaderGradientStartColor"
+        A="255"
+        B="255"
+        G="238"
+        R="225" />
+    <Color
+        x:Key="HeaderGradientEndColor"
+        A="255"
+        B="255"
+        G="211"
+        R="177" />
+    <Color
+        x:Key="HeaderBorderColor"
+        A="255"
+        B="207"
+        G="147"
+        R="101" />
+    <Color
+        x:Key="HeaderHighlightBorderColor"
+        A="255"
+        B="255"
+        G="255"
+        R="255" />
+    <Color
+        x:Key="HeaderInputBorderColor"
+        A="255"
+        B="222"
+        G="193"
+        R="171" />
+    <Color
+        x:Key="HeaderButtonBorderColor"
+        A="255"
+        B="207"
+        G="189"
+        R="161" />
+    <Color
+        x:Key="HeaderButtonGradientHighlightStartColor"
+        A="255"
+        B="252"
+        G="248"
+        R="244" />
+    <Color
+        x:Key="HeaderButtonGradientHighlightEndColor"
+        A="255"
+        B="252"
+        G="246"
+        R="241" />
+    <Color
+        x:Key="HeaderButtonGradientPrimaryStartColor"
+        A="255"
+        B="244"
+        G="225"
+        R="210" />
+    <Color
+        x:Key="HeaderButtonGradientPrimaryEndColor"
+        A="255"
+        B="252"
+        G="239"
+        R="229" />
+</ResourceDictionary>

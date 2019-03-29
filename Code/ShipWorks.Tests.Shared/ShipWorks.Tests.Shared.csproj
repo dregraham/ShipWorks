@@ -192,7 +192,6 @@
     <Compile Include="ExtensionMethods\ParameterShorteners.cs" />
     <Compile Include="Expressions\For.cs" />
     <Compile Include="UninitializeObjectCreator.cs" />
-    <Compile Include="ExtensionMethods\DateTimeExtensions.cs" />
     <Compile Include="ExtensionMethods\ItExtensions.cs" />
     <Compile Include="IKeyedMockCreator.cs" />
     <Compile Include="ImmediateSchedulerProvider.cs" />

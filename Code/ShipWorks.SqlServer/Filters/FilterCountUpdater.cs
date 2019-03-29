@@ -449,6 +449,7 @@ namespace ShipWorks.SqlServer.Filters
 						                    INNER JOIN Filter f ON s.FilterID = f.FilterID 
 						                    INNER JOIN FilterNodeContent c ON n.FilterNodeContentID = c.FilterNodeContentID
 	                      WHERE f.[State] = 1 
+                            AND f.[IsSavedSearch] = 0 
                             AND n.Purpose IN ({1})
                             AND c.UpdateCalculation != '' 
                             AND (c.Status != 0 AND c.Status != 2)

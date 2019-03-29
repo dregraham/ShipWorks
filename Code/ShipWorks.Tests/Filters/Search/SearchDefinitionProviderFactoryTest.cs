@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using Autofac.Extras.Moq;
 using Moq;
-using ShipWorks.ApplicationCore.Options;
+using ShipWorks.ApplicationCore.Settings;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Filters;

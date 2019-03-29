@@ -1,4 +1,5 @@
-﻿using Interapptive.Shared.Utility;
+﻿using System;
+using Interapptive.Shared.Utility;
 using ShipWorks.Shared.Users;
 
 namespace ShipWorks.Data.Model.EntityClasses
@@ -23,6 +24,15 @@ namespace ShipWorks.Data.Model.EntityClasses
             {
                 DialogSettings = SerializationUtility.SerializeToXml(value);
             }
+        }
+
+        /// <summary>
+        /// Get the last version of release notes seen by the user
+        /// </summary>
+        public Version LastReleaseNotesSeenVersion
+        {
+            get => Version.Parse(LastReleaseNotesSeen);
+            set => LastReleaseNotesSeen = value.ToString();
         }
     }
 }

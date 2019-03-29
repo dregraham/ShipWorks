@@ -1,41 +1,34 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using ShipWorks.Properties;
-using System.Reflection;
-using Autofac;
-using ShipWorks.Users;
 
 namespace ShipWorks.ApplicationCore.Dashboard.Content
 {
     /// <summary>
     /// An item in the dashboard that shows that there is a new version of ShipWorks available
     /// </summary>
-    class DashboardOnlineVersionItem : DashboardItem
+    internal class DashboardOnlineVersionItem : DashboardItem
     {
-        ShipWorksOnlineVersion online;
+        private Version onlineVersion;
+        private DateTime updateWindow;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public DashboardOnlineVersionItem(ShipWorksOnlineVersion online)
+        public DashboardOnlineVersionItem(Version onlineVersion, DateTime updateWindow)
         {
-            this.online = online;
+            this.updateWindow = updateWindow;
+            this.onlineVersion = onlineVersion;
         }
 
         /// <summary>
-        /// The version of ShipWorks the dashboard item is displaying
+        /// Set the date that will be displayed for the update window
         /// </summary>
-        public ShipWorksOnlineVersion OnlineVersion
+        public void CopyFrom(DashboardOnlineVersionItem item)
         {
-            get { return online; }
-            set
-            {
-                online = value;
+            updateWindow = item.updateWindow;
+            onlineVersion = item.onlineVersion;
 
-                UpdateVersionDisplay();
-            }
+            UpdateVersionDisplay();
         }
 
         /// <summary>
@@ -46,30 +39,16 @@ namespace ShipWorks.ApplicationCore.Dashboard.Content
             base.Initialize(dashboardBar);
 
             dashboardBar.Image = Resources.box_software;
-            dashboardBar.SecondaryText = "is now available.";
-            
-            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
-            {
-                if (lifetimeScope.Resolve<IUserSession>().User.IsAdmin)
-                {
-                    DashboardBar.ApplyActions(new[]
-                    {
-                        new DashboardActionUrl("[link]Download now [/link] or see", online.DownloadUrl),
-                        new DashboardActionUrl("[link]what's new[/link].", online.WhatsNewUrl)
-                    });
-                }
-            }
-            
+            dashboardBar.SecondaryText = string.Empty;
+
             UpdateVersionDisplay();
         }
 
         /// <summary>
         /// Update the version displayed in the bar
         /// </summary>
-        private void UpdateVersionDisplay()
-        {
-            DashboardBar.PrimaryText = "ShipWorks " + online.Version.ToString();
-        }
+        private void UpdateVersionDisplay() =>
+            DashboardBar.PrimaryText = $"ShipWorks will be updated on {updateWindow.ToString("MMMM d")} at {updateWindow.ToString("h:00 tt")}";
 
         /// <summary>
         /// The dashboard item is being dismissed
@@ -79,7 +58,7 @@ namespace ShipWorks.ApplicationCore.Dashboard.Content
             base.Dismiss();
 
             // Signoff on having seen this version
-            ShipWorksOnlineVersionChecker.Signoff(online.Version);
+            ShipWorksOnlineVersionChecker.Signoff(onlineVersion);
         }
     }
 }

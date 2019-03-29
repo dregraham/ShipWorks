@@ -8,6 +8,7 @@ using ShipWorks.Common.IO.KeyboardShortcuts;
 using ShipWorks.Common.IO.KeyboardShortcuts.Messages;
 using ShipWorks.Core.Messaging;
 using ShipWorks.IO.KeyboardShortcuts;
+using ShipWorks.Messaging.Messages.Shipping;
 using ShipWorks.Settings;
 using ShipWorks.Users;
 
@@ -85,7 +86,7 @@ namespace ShipWorks.SingleScan
         /// <summary>
         /// Clears or focuses quick search textbox
         /// </summary>
-        private static void UpdateQuickSearchTextbox(ShortcutMessage shortcutMessage, IMainGridControl mainGridControl)
+        private void UpdateQuickSearchTextbox(ShortcutMessage shortcutMessage, IMainGridControl mainGridControl)
         {
             if (shortcutMessage.AppliesTo(KeyboardShortcutCommand.ClearQuickSearch))
             {
@@ -93,7 +94,7 @@ namespace ShipWorks.SingleScan
             }
             else
             {
-                mainGridControl.FocusSearch();
+                messenger.Send(new FocusQuickSearchMessage(this));
             }
         }
     }

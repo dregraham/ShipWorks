@@ -2,7 +2,7 @@
 using System.Reactive.Linq;
 using Interapptive.Shared.UI;
 using ShipWorks.ApplicationCore;
-using ShipWorks.ApplicationCore.Options;
+using ShipWorks.ApplicationCore.Settings;
 using ShipWorks.Common.IO.KeyboardShortcuts;
 using ShipWorks.Common.IO.KeyboardShortcuts.Messages;
 using ShipWorks.Core.Messaging;
