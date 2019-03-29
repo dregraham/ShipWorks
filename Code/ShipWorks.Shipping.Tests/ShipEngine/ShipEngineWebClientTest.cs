@@ -42,7 +42,7 @@ namespace ShipWorks.Shipping.Tests.ShipEngine
             CarrierListResponse carriers =
                 new CarrierListResponse(new List<Carrier>()
                 {
-                    new Carrier(AccountNumber: "1234", CarrierId: "se-12345")
+                    new Carrier(accountNumber: "1234", carrierId: "se-12345")
                 });
 
             carriersApi.Setup(c => c.CarriersListAsync(It.IsAny<string>())).Returns(Task.FromResult(carriers));

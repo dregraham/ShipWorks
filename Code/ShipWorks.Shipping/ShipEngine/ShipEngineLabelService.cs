@@ -51,6 +51,9 @@ namespace ShipWorks.Shipping.ShipEngine
 
             PurchaseLabelRequest request = shipmentRequestFactory.CreatePurchaseLabelRequest(shipment);
 
+            request.Shipment.Items = new System.Collections.Generic.List<ShipmentItem>();
+            request.Shipment.Items.Add(new ShipmentItem(name: "noItem"));
+
             try
             {
                 TelemetricResult<IDownloadedLabelData> telemetricResult = new TelemetricResult<IDownloadedLabelData>("API.ResponseTimeInMilliseconds");

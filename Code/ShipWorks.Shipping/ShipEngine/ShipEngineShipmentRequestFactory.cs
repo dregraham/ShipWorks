@@ -96,7 +96,7 @@ namespace ShipWorks.Shipping.ShipEngine
         /// <summary>
         /// Creates the ShipEngine advanced options node
         /// </summary>
-        protected abstract Dictionary<string, object> CreateAdvancedOptions(ShipmentEntity shipment);
+        protected abstract AdvancedOptions CreateAdvancedOptions(ShipmentEntity shipment);
 
         /// <summary>
         /// Creates the ShipEngine customs node

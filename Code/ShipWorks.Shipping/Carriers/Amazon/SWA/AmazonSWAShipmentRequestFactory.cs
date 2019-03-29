@@ -66,12 +66,9 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SWA
         /// <summary>
         /// Creates the AmazonSWA advanced options node
         /// </summary>
-        protected override Dictionary<string, object> CreateAdvancedOptions(ShipmentEntity shipment)
+        protected override AdvancedOptions CreateAdvancedOptions(ShipmentEntity shipment)
         {
-            return new Dictionary<string, object>()
-            {
-                {"non_machinable", shipment.AmazonSWA.NonMachinable}
-            };
+            return new AdvancedOptions();
         }
 
         /// <summary>

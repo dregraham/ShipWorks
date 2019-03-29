@@ -124,10 +124,9 @@ namespace ShipWorks.Shipping.Tests.Carriers.DhlExpress
 
             var request = testObject.CreateRateShipmentRequest(shipment);
 
-            Assert.Equal(3, request.Shipment.AdvancedOptions.Count());
-            Assert.Equal(deliveryDutyPaid, request.Shipment.AdvancedOptions["delivered_duty_paid"]);
-            Assert.Equal(nonMachinable, request.Shipment.AdvancedOptions["non_machinable"]);
-            Assert.Equal(saturdayDelivery, request.Shipment.AdvancedOptions["saturday_delivery"]);
+            Assert.Equal(deliveryDutyPaid, request.Shipment.AdvancedOptions.DeliveredDutyPaid);
+            Assert.Equal(nonMachinable, request.Shipment.AdvancedOptions.NonMachinable);
+            Assert.Equal(saturdayDelivery, request.Shipment.AdvancedOptions.SaturdayDelivery);
         }
 
         [Fact]
@@ -247,11 +246,10 @@ namespace ShipWorks.Shipping.Tests.Carriers.DhlExpress
             };
 
             var request = testObject.CreatePurchaseLabelRequest(shipment);
-
-            Assert.Equal(3, request.Shipment.AdvancedOptions.Count());
-            Assert.Equal(deliveryDutyPaid, request.Shipment.AdvancedOptions["delivered_duty_paid"]);
-            Assert.Equal(nonMachinable, request.Shipment.AdvancedOptions["non_machinable"]);
-            Assert.Equal(saturdayDelivery, request.Shipment.AdvancedOptions["saturday_delivery"]);
+            
+            Assert.Equal(deliveryDutyPaid, request.Shipment.AdvancedOptions.DeliveredDutyPaid);
+            Assert.Equal(nonMachinable, request.Shipment.AdvancedOptions.NonMachinable);
+            Assert.Equal(saturdayDelivery, request.Shipment.AdvancedOptions.SaturdayDelivery);
         }
 
         [Fact]

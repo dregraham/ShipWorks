@@ -8,13 +8,20 @@ namespace ShipWorks.Shipping.ShipEngine
     public interface IShipEngineApiKey
     {
         /// <summary>
+        /// Actual API Key value
+        /// </summary>
+        string Value { get; }
+
+
+        /// <summary>
         /// Ensures the ApiKey contains a value
         /// </summary>
         Task Configure();
 
         /// <summary>
-        /// Actual API Key value
+        /// Get the partner api key
         /// </summary>
-        string Value { get; }
+        /// <returns></returns>
+        string GetPartnerApiKey();
     }
 }
