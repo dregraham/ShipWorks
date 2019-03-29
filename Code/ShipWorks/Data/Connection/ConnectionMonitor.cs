@@ -16,7 +16,9 @@ using Interapptive.Shared.Data;
 using Interapptive.Shared.Utility;
 using log4net;
 using ShipWorks.ApplicationCore.Crashes;
+using ShipWorks.ApplicationCore.MessageBoxes;
 using ShipWorks.Common.Threading;
+using ShipWorks.Data.Administration;
 using ShipWorks.Data.Model;
 using ShipWorks.UI;
 using ShipWorks.Users;
@@ -160,6 +162,23 @@ namespace ShipWorks.Data.Connection
                         connectionLost = true;
                     }
 
+                    if (SqlSchemaUpdater.GetInstalledSchemaVersion() > SqlSchemaUpdater.GetRequiredSchemaVersion())
+                    {
+                        // after reconnecting the database looks to have been updated
+                        // we cant reconnect, show a dialog saying that database has been
+                        // updated and close
+                        Program.MainForm.Invoke(new MethodInvoker(() =>
+                        {
+                            using (NeedUpgradeShipWorks dlg = new NeedUpgradeShipWorks())
+                            {
+                                dlg.ShowDialog(DisplayHelper.GetActiveForm());
+                            }
+
+                            connectionLost = true;
+                            Program.MainForm.Close();
+                        }));
+                    }
+
                     LastReconnection = DateTime.Now;
 
                     // signal to all waiting threads that the reconnect process has completed.  Completion doesn't not indicate a reconnect,
@@ -186,9 +205,8 @@ namespace ShipWorks.Data.Connection
         {
             log.InfoFormat("Background thread starting to wait for reconnect event.");
 
-            // Wait for the UI thread to reconnect
-            reconnectEvent.WaitOne();
-
+            // Wait for the UI thread to reconnect, give it 1 minute
+            reconnectEvent.WaitOne(60000);
             log.InfoFormat("Background thread, reconnect event received. Will try to connect now.");
 
             // close the connection in preparation of the retry
@@ -303,7 +321,7 @@ namespace ShipWorks.Data.Connection
 
                             if (isSingleUser)
                             {
-                                throw new SingleUserModeException();
+                                Reconnect(con);
                             }
                         }
                         else

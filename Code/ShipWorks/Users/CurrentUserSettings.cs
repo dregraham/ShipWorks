@@ -4,7 +4,7 @@ using Interapptive.Shared.Collections;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
-using ShipWorks.ApplicationCore.Options;
+using ShipWorks.ApplicationCore.Settings;
 using ShipWorks.Data.Connection;
 using ShipWorks.Settings;
 using ShipWorks.Shared.Users;

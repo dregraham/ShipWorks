@@ -1,6 +1,6 @@
 ﻿using ShipWorks.ApplicationCore;
 using Interapptive.Shared.ComponentRegistration;
-using ShipWorks.ApplicationCore.Options;
+using ShipWorks.ApplicationCore.Settings;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Users;
 

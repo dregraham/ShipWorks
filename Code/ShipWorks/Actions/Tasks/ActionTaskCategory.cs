@@ -38,7 +38,7 @@ namespace ShipWorks.Actions.Tasks
         External,
 
         /// <summary>
-        /// For admin type tasks, like backuping up the database
+        /// For admin type tasks, like backing up the database
         /// </summary>
         [Description("Administration")]
         Administration

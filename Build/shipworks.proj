@@ -313,7 +313,7 @@
   <!-- StrongName the assemblies -->
   <Target Name="StrongName">
 
-    <CreateItem Include="$(AppDirectory)\Interapptive*.dll;$(AppDirectory)\ShipWorks*.dll;$(AppDirectory)\ShipWorks.exe"
+    <CreateItem Include="$(AppDirectory)\Interapptive*.dll;$(AppDirectory)\ShipWorks*.dll;$(AppDirectory)\ShipWorks.exe;$(AppDirectory)\swc.exe"
 								Exclude="$(AppDirectory)\ShipWorks.Native.dll;$(AppDirectory)\ShipWorks.Tests.dll" >
       <Output TaskParameter="Include" ItemName="AssembliesToSign"/>
     </CreateItem>

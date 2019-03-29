@@ -157,8 +157,10 @@ namespace :build do
 
 		print "Running INNO compiler... "
 		`"#{@innoPath}" Installer/ShipWorks.iss /O"Artifacts/Installer" /F"ShipWorksSetup.Debug" /DEditionType="Standard" /DVersion="0.0.0.0" /DAppArtifacts="../Artifacts/Application" /DRequiredSchemaID="#{schemaID}"`
-		FileUtils.rm_f "InnoSetup.iss"
 		print "done.\r\n"
+		FileUtils.rm_f "InnoSetup.iss"
+		system("certutil -hashfile " + Dir.pwd + "\\Artifacts\\Installer\\ShipWorksSetup.Debug.exe sha256")
+
 	end
 
 	desc "Build ShipWorks and generate an MSI for internal testing. Usage: internal_installer[3.5.2] to label with a specific major/minor/patch number; otherwise 0.0.0 will be used"

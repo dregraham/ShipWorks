@@ -4792,6 +4792,21 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ConfigurationFieldIndex.DefaultPickListTemplateID);}
 		}
+		/// <summary>Creates a new ConfigurationEntity.AutoUpdateDayOfWeek field instance</summary>
+		public static EntityField2 AutoUpdateDayOfWeek
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ConfigurationFieldIndex.AutoUpdateDayOfWeek);}
+		}
+		/// <summary>Creates a new ConfigurationEntity.AutoUpdateHourOfDay field instance</summary>
+		public static EntityField2 AutoUpdateHourOfDay
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ConfigurationFieldIndex.AutoUpdateHourOfDay);}
+		}
+		/// <summary>Creates a new ConfigurationEntity.AutoUpdateStartDate field instance</summary>
+		public static EntityField2 AutoUpdateStartDate
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ConfigurationFieldIndex.AutoUpdateStartDate);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity CustomerEntity</summary>
@@ -28531,6 +28546,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 OrderLookupLayout
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(UserSettingsFieldIndex.OrderLookupLayout);}
+		}
+		/// <summary>Creates a new UserSettingsEntity.LastReleaseNotesSeen field instance</summary>
+		public static EntityField2 LastReleaseNotesSeen
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(UserSettingsFieldIndex.LastReleaseNotesSeen);}
 		}
 	}
 

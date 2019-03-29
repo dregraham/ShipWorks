@@ -1,11 +1,9 @@
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.ComponentModel;
-using System.Reflection;
+using System.IO;
+using System.Text;
 using System.Xml;
 using System.Xml.Serialization;
-using System.IO;
 
 namespace Interapptive.Shared.Utility
 {
@@ -23,7 +21,7 @@ namespace Interapptive.Shared.Utility
             {
                 throw new ArgumentNullException("value");
             }
-            
+
             if (value is Enum)
             {
                 value = (int) value;
@@ -33,7 +31,7 @@ namespace Interapptive.Shared.Utility
             // when "0" goes to "0.00" at some point after user making edits.
             if (value is decimal)
             {
-                value = 0.01m  + (decimal) value - 0.01m;
+                value = 0.01m + (decimal) value - 0.01m;
             }
 
             var serializableObject = value as SerializableObject;
@@ -88,7 +86,7 @@ namespace Interapptive.Shared.Utility
             }
 
             object result;
-            
+
             if (type == typeof(TimeSpan))
             {
                 result = TimeSpan.Parse(value);
@@ -169,7 +167,7 @@ namespace Interapptive.Shared.Utility
 
             serializedXml = XmlUtility.StripInvalidXmlCharacters(serializedXml);
 
-            // Check for common unescaped symbols 
+            // Check for common unescaped symbols
             serializedXml = serializedXml.Replace("®", "&#174;");
             serializedXml = serializedXml.Replace("©", "&#169;");
             serializedXml = serializedXml.Replace("™", "&#8482;");
@@ -177,7 +175,7 @@ namespace Interapptive.Shared.Utility
             using (TextReader reader = new StringReader(serializedXml))
             {
                 XmlSerializer serializer = new XmlSerializer(typeof(T));
-                obj = (T)serializer.Deserialize(reader);
+                obj = (T) serializer.Deserialize(reader);
             }
 
             return obj;

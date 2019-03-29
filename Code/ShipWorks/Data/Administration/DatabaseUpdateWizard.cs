@@ -19,6 +19,7 @@ using Interapptive.Shared.Utility;
 using Interapptive.Shared.Win32;
 using log4net;
 using ShipWorks.ApplicationCore;
+using ShipWorks.ApplicationCore.CommandLineOptions;
 using ShipWorks.ApplicationCore.Interaction;
 using ShipWorks.Common.Threading;
 using ShipWorks.Data.Administration.SqlServerSetup;
@@ -701,11 +702,9 @@ namespace ShipWorks.Data.Administration
             MethodInvoker<IProgressProvider, TelemetricResult<Unit>> invoker = AsyncUpdateDatabase;
 
             TelemetricResult<Unit> databaseUpdateResult = new TelemetricResult<Unit>("Database.Update");
+            databaseUpdateResult.AddProperty("Mode", "UI");
 
-            using (DbConnection con = SqlSession.Current.OpenConnection())
-            {
-                SqlUtility.RecordDatabaseTelemetry(con, databaseUpdateResult);
-            }
+            DatabaseUpgradeTelemetry.RecordDatabaseTelemetry(databaseUpdateResult);
 
             // Pass along user state
             Dictionary<string, object> userState = new Dictionary<string, object>();
@@ -732,8 +731,11 @@ namespace ShipWorks.Data.Administration
                 }
             }
 
-            databaseUpdateResult.AddProperty("IsWindowsAuth", SqlSession.Current.Configuration.WindowsAuth.ToString());
-            databaseUpdateResult.AddProperty("IsServerMachine", SqlSession.Current.IsLocalServer().ToString());
+            if (SqlSession.Current.Configuration.IsLocalDb())
+            {
+                DatabaseUpgradeBackupManager backupManger = new DatabaseUpgradeBackupManager();
+                backupManger.CreateBackup(_ => { });
+            }
 
             databaseUpdateResult.RunTimedEvent(TelemetricEventType.SchemaUpdate,
                 () => SqlSchemaUpdater.UpdateDatabase(progressProvider, databaseUpdateResult, noSingleUserMode.Checked));
@@ -783,7 +785,7 @@ namespace ShipWorks.Data.Administration
             }
             catch (Exception ex)
             {
-                ExtractErrorDataForTelemetry(databaseUpdateResult, ex);
+                DatabaseUpgradeTelemetry.ExtractErrorDataForTelemetry(databaseUpdateResult, ex);
                 if (ex is SqlScriptException || ex is SqlException)
                 {
                     HandleSqlException(progressDlg, ex);
@@ -817,22 +819,6 @@ namespace ShipWorks.Data.Administration
             NextEnabled = true;
             BackEnabled = true;
             CanCancel = true;
-        }
-
-        /// <summary>
-        /// Extract data from the exception for telemetry
-        /// </summary>
-        private static void ExtractErrorDataForTelemetry(TelemetricResult<Unit> telemetricResult, Exception ex)
-        {
-            // if the exception is a SqlScriptException the message contains info about which
-            // sql script caused the exception
-            telemetricResult.AddProperty("ExceptionMessage", ex.Message);
-            telemetricResult.AddProperty("ExceptionType", ex.GetType().ToString());
-
-            if (ex is SqlException sqlException)
-            {
-                telemetricResult.AddProperty("ErrorCode", sqlException.ErrorCode.ToString());
-            }
         }
 
         #endregion

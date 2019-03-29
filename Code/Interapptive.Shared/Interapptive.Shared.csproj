@@ -178,6 +178,14 @@
     <Compile Include="..\ShipWorks\Properties\AssemblyInfoCommon.cs">
       <Link>Properties\AssemblyInfoCommon.cs</Link>
     </Compile>
+    <Compile Include="AutoUpdate\AutoUpdateStatusProvider.cs" />
+    <Compile Include="AutoUpdate\IAutoUpdateStatusProvider.cs" />
+    <Compile Include="AutoUpdate\IShipWorksCommunicationBridge.cs" />
+    <Compile Include="AutoUpdate\IShipWorksLauncher.cs" />
+    <Compile Include="AutoUpdate\ShipWorksCommunicationBridge.cs" />
+    <Compile Include="AutoUpdate\ShipWorksLauncher.cs" />
+    <Compile Include="AutoUpdate\UpdateWindowData.cs" />
+    <Compile Include="AutoUpdate\UpgradeDetails.cs" />
     <Compile Include="Business\Geography\CurrencyCode.cs" />
     <Compile Include="Collections\DataVirtualization\DataPage.cs" />
     <Compile Include="Collections\DataVirtualization\DataWrapper.cs" />
@@ -896,7 +904,6 @@
     <Analyzer Include="..\..\packages\System.Security.Cryptography.Hashing.Algorithms.Analyzers.1.1.0\analyzers\dotnet\cs\System.Security.Cryptography.Hashing.Algorithms.Analyzers.dll" />
     <Analyzer Include="..\..\packages\System.Security.Cryptography.Hashing.Algorithms.Analyzers.1.1.0\analyzers\dotnet\cs\System.Security.Cryptography.Hashing.Algorithms.CSharp.Analyzers.dll" />
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

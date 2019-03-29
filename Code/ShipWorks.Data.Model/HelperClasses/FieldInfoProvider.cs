@@ -779,6 +779,9 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("ConfigurationEntity", "ArchivalSettingsXml", typeof(System.String), false, false, false, false,  (int)ConfigurationFieldIndex.ArchivalSettingsXml, 2147483647, 0, 0);
 			this.AddElementFieldInfo("ConfigurationEntity", "AuditEnabled", typeof(System.Boolean), false, false, false, false,  (int)ConfigurationFieldIndex.AuditEnabled, 0, 0, 0);
 			this.AddElementFieldInfo("ConfigurationEntity", "DefaultPickListTemplateID", typeof(Nullable<System.Int64>), false, false, false, true,  (int)ConfigurationFieldIndex.DefaultPickListTemplateID, 0, 0, 19);
+			this.AddElementFieldInfo("ConfigurationEntity", "AutoUpdateDayOfWeek", typeof(System.DayOfWeek), false, false, false, false,  (int)ConfigurationFieldIndex.AutoUpdateDayOfWeek, 0, 0, 10);
+			this.AddElementFieldInfo("ConfigurationEntity", "AutoUpdateHourOfDay", typeof(System.Int32), false, false, false, false,  (int)ConfigurationFieldIndex.AutoUpdateHourOfDay, 0, 0, 10);
+			this.AddElementFieldInfo("ConfigurationEntity", "AutoUpdateStartDate", typeof(System.DateTime), false, false, false, false,  (int)ConfigurationFieldIndex.AutoUpdateStartDate, 0, 0, 7);
 		}
 		/// <summary>Inits CustomerEntity's FieldInfo objects</summary>
 		private void InitCustomerEntityInfos()
@@ -3644,6 +3647,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("UserSettingsEntity", "DialogSettings", typeof(System.String), false, false, false, true,  (int)UserSettingsFieldIndex.DialogSettings, 2147483647, 0, 0);
 			this.AddElementFieldInfo("UserSettingsEntity", "UIMode", typeof(ShipWorks.Settings.UIMode), false, false, false, false,  (int)UserSettingsFieldIndex.UIMode, 0, 0, 10);
 			this.AddElementFieldInfo("UserSettingsEntity", "OrderLookupLayout", typeof(System.String), false, false, false, true,  (int)UserSettingsFieldIndex.OrderLookupLayout, 2147483647, 0, 0);
+			this.AddElementFieldInfo("UserSettingsEntity", "LastReleaseNotesSeen", typeof(System.String), false, false, false, false,  (int)UserSettingsFieldIndex.LastReleaseNotesSeen, 25, 0, 0);
 		}
 		/// <summary>Inits UspsAccountEntity's FieldInfo objects</summary>
 		private void InitUspsAccountEntityInfos()
