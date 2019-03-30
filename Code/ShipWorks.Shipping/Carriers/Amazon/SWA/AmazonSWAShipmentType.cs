@@ -83,7 +83,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SWA
             }
 
             AmazonSWAShipmentEntity swaShipment = shipment.AmazonSWA;
-            swaShipment.Service = (int) AmazonSWAServiceType.Standard;
+            swaShipment.Service = (int) AmazonSWAServiceType.Fastest;
             swaShipment.RequestedLabelFormat = (int) ThermalLanguage.None;
             swaShipment.Contents = (int) ShipEngineContentsType.Merchandise;
             swaShipment.NonDelivery = (int) ShipEngineNonDeliveryType.ReturnToSender;
@@ -258,7 +258,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SWA
                 accountRepository.AccountsReadOnly.First().AmazonSWAAccountID :
                 0;
 
-            swaProfile.Service = (int) AmazonSWAServiceType.Standard;
+            swaProfile.Service = (int) AmazonSWAServiceType.Fastest;
             swaProfile.Contents = (int) ShipEngineContentsType.Merchandise;
             swaProfile.NonDelivery = (int) ShipEngineNonDeliveryType.ReturnToSender;
             swaProfile.NonMachinable = false;

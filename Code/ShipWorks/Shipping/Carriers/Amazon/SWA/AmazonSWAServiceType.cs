@@ -10,8 +10,32 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SWA
     [Obfuscation(Feature = "PreserveLiteralValues", Exclude = false, StripAfterObfuscation = false)]
     public enum AmazonSWAServiceType
     {
-        [Description("Standard")]
+        [Description("Fastest Possible")]
         [ApiValue("amazon_shipping_standard")]
-        Standard = 0,
+        Fastest = 0,
+
+        [Description("1 Day")]
+        [ApiValue("1")]
+        OneDay = 1,
+
+        [Description("2 Days")]
+        [ApiValue("2")]
+        TwoDays = 2,
+
+        [Description("3 Days")]
+        [ApiValue("3")]
+        ThreeDays = 3,
+
+        [Description("4 Days")]
+        [ApiValue("4")]
+        FourDays = 4,
+
+        [Description("5 Days")]
+        [ApiValue("5")]
+        FiveDays = 5,
+
+        [Description("Lowest Price")]
+        [ApiValue("99")]
+        LowestPrice = 99,
     }
 }

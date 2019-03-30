@@ -40,6 +40,11 @@ namespace ShipWorks.Shipping.ShipEngine
         Task<RateShipmentResponse> RateShipment(RateShipmentRequest request, ApiLogSource apiLogSource);
 
         /// <summary>
+        /// purchase a label from ShipEngine using the given rateid
+        /// </summary>
+        Task<Label> PurchaseLabelWithRate(string rateId, PurchaseLabelWithoutShipmentRequest request, ApiLogSource apiLogSource);
+
+        /// <summary>
         /// Purchases a label from ShipEngine using the given request
         /// </summary>
         Task<Label> PurchaseLabel(PurchaseLabelRequest request, ApiLogSource apiLogSource);

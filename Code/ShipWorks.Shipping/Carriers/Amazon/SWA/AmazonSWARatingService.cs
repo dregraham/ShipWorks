@@ -21,7 +21,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SWA
     {
         private readonly ICarrierShipmentRequestFactory rateRequestFactory;
         private readonly IShipEngineWebClient shipEngineWebClient;
-        private readonly IShipEngineRateGroupFactory rateGroupFactory;
+        private readonly IAmazonSWARateGroupFactory rateGroupFactory;
         private readonly IAmazonSWAAccountRepository accountRepository;
         private readonly ShipmentType shipmentType;
 
@@ -31,7 +31,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SWA
         public AmazonSWARatingService(
             IIndex<ShipmentTypeCode, ICarrierShipmentRequestFactory> rateRequestFactory,
             IShipEngineWebClient shipEngineWebClient,
-            IShipEngineRateGroupFactory rateGroupFactory,
+            IAmazonSWARateGroupFactory rateGroupFactory,
             IAmazonSWAAccountRepository accountRepository,
             IShipmentTypeManager shipmentTypeManager)
         {
@@ -56,15 +56,14 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SWA
             try
             {
                 RateShipmentRequest request = rateRequestFactory.CreateRateShipmentRequest(shipment);
+
+                request.Shipment.Items = new List<ShipmentItem>();
+                request.Shipment.Items.Add(new ShipmentItem(name:"test item"));
+
                 RateShipmentResponse rateShipmentResponse = Task.Run(async () =>
                         await shipEngineWebClient.RateShipment(request, ApiLogSource.AmazonSWA).ConfigureAwait(false)).Result;
 
-                IEnumerable<string> availableServiceTypeApiCodes = shipmentType.GetAvailableServiceTypes()
-                    .Cast<AmazonSWAServiceType>()
-                    .Select(t => EnumHelper.GetApiValue(t))
-                    .Union(new List<string> { EnumHelper.GetApiValue((AmazonSWAServiceType) shipment.AmazonSWA.Service) });
-
-                return rateGroupFactory.Create(rateShipmentResponse.RateResponse, ShipmentTypeCode.AmazonSWA, availableServiceTypeApiCodes);
+                return rateGroupFactory.Create(rateShipmentResponse.RateResponse, ShipmentTypeCode.AmazonSWA, new[] { "amazon_shipping_standard" });
             }
             catch (Exception ex) when(ex.GetType() != typeof(ShippingException))
             {

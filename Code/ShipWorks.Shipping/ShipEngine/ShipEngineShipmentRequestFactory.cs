@@ -26,6 +26,14 @@ namespace ShipWorks.Shipping.ShipEngine
         }
 
         /// <summary>
+        /// Create a PurchaseLabelWithoutShipmentRequest
+        /// </summary>
+        public PurchaseLabelWithoutShipmentRequest CreatePurchaseLabelWithoutShipmentRequest(ShipmentEntity shipment)
+        {
+            return shipmentElementFactory.CreatePurchaseLabelWithoutShipmentRequest(shipment);
+        }
+
+        /// <summary>
         /// Creates a ShipEngine purchase label request
         /// </summary>
         public PurchaseLabelRequest CreatePurchaseLabelRequest(ShipmentEntity shipment)

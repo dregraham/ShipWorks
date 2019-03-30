@@ -76,14 +76,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SWA
         /// </summary>
         protected override InternationalOptions CreateCustoms(ShipmentEntity shipment)
         {
-            InternationalOptions customs = new InternationalOptions()
-            {
-                Contents = (InternationalOptions.ContentsEnum) shipment.AmazonSWA.Contents,
-                CustomsItems = shipmentElementFactory.CreateCustomsItems(shipment),
-                NonDelivery = (InternationalOptions.NonDeliveryEnum) shipment.AmazonSWA.NonDelivery
-            };
-
-            return customs;
+            return new InternationalOptions();
         }
     }
 }

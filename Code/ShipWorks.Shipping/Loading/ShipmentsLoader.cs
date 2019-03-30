@@ -206,6 +206,8 @@ namespace ShipWorks.Shipping.Loading
 
             shipmentsPath.SubPath.Add(ShipmentEntity.PrefetchPathAsendia);
 
+            shipmentsPath.SubPath.Add(ShipmentEntity.PrefetchPathAmazonSWA);
+
             shipmentsPath.SubPath.Add(ShipmentEntity.PrefetchPathAmazonSFP);
 
             shipmentsPath.SubPath.Add(ShipmentEntity.PrefetchPathBestRate);

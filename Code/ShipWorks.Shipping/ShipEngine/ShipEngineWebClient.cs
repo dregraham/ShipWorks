@@ -238,6 +238,23 @@ namespace ShipWorks.Shipping.ShipEngine
         }
 
         /// <summary>
+        /// Purchases a label from ShipEngine using the given rateid
+        /// </summary>
+        public async Task<Label> PurchaseLabelWithRate(string rateId, PurchaseLabelWithoutShipmentRequest request, ApiLogSource apiLogSource)
+        {
+            ILabelsApi labelsApi = shipEngineApiFactory.CreateLabelsApi();
+            ConfigureLogging(labelsApi, apiLogSource, "PurchaseLabel", LogActionType.Other);
+            try
+            {
+                return await labelsApi.LabelsPurchaseLabelWithRateAsync(rateId, request, await GetApiKey());
+            }
+            catch (ApiException ex)
+            {
+                throw new ShipEngineException(GetErrorMessage(ex));
+            }
+        }
+
+        /// <summary>
         /// Purchases a label from ShipEngine using the given request
         /// </summary>
         public async Task<Label> PurchaseLabel(PurchaseLabelRequest request, ApiLogSource apiLogSource)

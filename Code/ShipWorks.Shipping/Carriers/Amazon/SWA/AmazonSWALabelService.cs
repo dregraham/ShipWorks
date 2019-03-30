@@ -6,6 +6,10 @@ using ShipWorks.Shipping.ShipEngine;
 using ShipEngine.ApiClient.Model;
 using log4net;
 using Interapptive.Shared.ComponentRegistration;
+using System.Threading.Tasks;
+using Interapptive.Shared.Utility;
+using System.Linq;
+using ShipWorks.Shipping.Editing.Rating;
 
 namespace ShipWorks.Shipping.Carriers.Amazon.SWA
 {
@@ -16,6 +20,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SWA
     public class AmazonSWALabelService : ShipEngineLabelService
     {
         private readonly IAmazonSWAAccountRepository accountRepository;
+        private readonly IRatesRetriever ratesRetriever;
 
         /// <summary>
         /// Constructor
@@ -25,11 +30,13 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SWA
             IAmazonSWAAccountRepository accountRepository,
             IIndex<ShipmentTypeCode, ICarrierShipmentRequestFactory> shipmentRequestFactory,
             Func<ShipmentEntity, Label, AmazonSWADownloadedLabelData> createDownloadedLabelData,
+            IRatesRetriever ratesRetriever,
             Func<Type, ILog> logFactory)
             : base(shipEngineWebClient, shipmentRequestFactory, createDownloadedLabelData)
         {
             log = logFactory(typeof(AmazonSWALabelService));
             this.accountRepository = accountRepository;
+            this.ratesRetriever = ratesRetriever;
         }
 
         /// <summary>
@@ -41,6 +48,58 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SWA
         /// The shipment type code for this label service
         /// </summary>
         public override ShipmentTypeCode ShipmentTypeCode => ShipmentTypeCode.AmazonSWA;
+
+        /// <summary>
+        /// Create the label
+        /// </summary>
+        public async override Task<TelemetricResult<IDownloadedLabelData>> Create(ShipmentEntity shipment)
+        {
+            // Amazon does not have a concept of service types, instead they offer different services based on how
+            // many days it takes to deliver
+            // we have to get rates to get a list of rateIds and then request a label based on the rateid
+            // if no rate id is sent they will use the fasted rate
+
+            MethodConditions.EnsureArgumentIsNotNull(shipment, nameof(shipment));
+
+            PurchaseLabelRequest request = shipmentRequestFactory.CreatePurchaseLabelRequest(shipment);
+
+            request.Shipment.Items = new System.Collections.Generic.List<ShipmentItem>();
+            request.Shipment.Items.Add(new ShipmentItem(name: "noItem"));
+
+            AmazonSWAServiceType service = (AmazonSWAServiceType) shipment.AmazonSWA.Service;
+
+            // to get the quickest service option we can just process the label without a rateid
+            if (service == AmazonSWAServiceType.Fastest)
+            {
+                return await CreateLabelInternal(shipment,
+                    () => shipEngineWebClient.PurchaseLabel(request, ApiLogSource));
+            }
+
+            // to get a specific service we first have to get rates
+            GenericResult<RateGroup> rates = ratesRetriever.GetRates(shipment);
+            if (rates.Success && rates.Value.Rates.Any())
+            {
+                // Find the cheapest rate
+                if (service == AmazonSWAServiceType.LowestPrice)
+                {
+                    RateResult cheapestRate = rates.Value.Rates.OrderBy(r => r.Amount).First();
+                    return await CreateLabelInternal(shipment,
+                        () => shipEngineWebClient.PurchaseLabelWithRate(cheapestRate.Tag.ToString(),
+                        shipmentRequestFactory.CreatePurchaseLabelWithoutShipmentRequest(shipment), ApiLogSource));
+                }
+
+                // Select a specific rate
+                RateResult rateToUse = rates.Value.Rates.FirstOrDefault(r => r.Days == EnumHelper.GetApiValue((AmazonSWAServiceType) shipment.AmazonSWA.Service));
+                if (rateToUse != null)
+                {
+                    return await CreateLabelInternal(shipment,
+                        () => shipEngineWebClient.PurchaseLabelWithRate(rateToUse.Tag.ToString(),
+                        shipmentRequestFactory.CreatePurchaseLabelWithoutShipmentRequest(shipment), ApiLogSource));
+                }
+            }
+
+            throw new ShippingException("The selected service is not available for this shipment.");
+        }
 
         /// <summary>
         /// Get the ShipEngine carrier ID from the shipment

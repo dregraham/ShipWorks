@@ -196,6 +196,8 @@
     <Compile Include="Carriers\Amazon\SWA\AmazonSWAShipmentServicesBuilder.cs" />
     <Compile Include="Carriers\Amazon\SWA\AmazonSWAShippingProfileApplicationStrategy.cs" />
     <Compile Include="Carriers\Amazon\SWA\AmazonSWARatingService.cs" />
+    <Compile Include="Carriers\Amazon\SWA\AmazonSWARateGroupFactory.cs" />
+    <Compile Include="Carriers\Amazon\SWA\IAmazonSWARateGroupFactory.cs" />
     <Compile Include="Carriers\Asendia\AsendiaAccountRepository.cs" />
     <Compile Include="Carriers\Asendia\AsendiaDownloadedLabelData.cs" />
     <Compile Include="Carriers\Asendia\AsendiaException.cs" />

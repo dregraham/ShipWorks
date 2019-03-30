@@ -34,13 +34,25 @@ namespace ShipWorks.Shipping.ShipEngine
         }
 
         /// <summary>
+        /// Create a PurchaseLabelWithoutShipmentRequest from a shipment, packages and service code
+        /// </summary>
+        public PurchaseLabelWithoutShipmentRequest CreatePurchaseLabelWithoutShipmentRequest(ShipmentEntity shipment)
+        {
+            return new PurchaseLabelWithoutShipmentRequest()
+            {
+                LabelFormat = GetPurchaseLabelWithoutShipmentRequestLabelFormat((ThermalLanguage) shipment.RequestedLabelFormat),
+                LabelLayout = "4x6"
+            };
+        }
+
+        /// <summary>
         /// Create a PurchaseLabelRequest from a shipment, packages and service code
         /// </summary>
         public PurchaseLabelRequest CreatePurchaseLabelRequest(ShipmentEntity shipment, List<IPackageAdapter> packages, string serviceCode)
         {
             PurchaseLabelRequest request = new PurchaseLabelRequest()
             {
-                LabelFormat = GetLabelFormat((ThermalLanguage) shipment.RequestedLabelFormat),
+                LabelFormat = GetPurchaseLabelRequestLabelFormat((ThermalLanguage) shipment.RequestedLabelFormat),
                 LabelLayout = "4x6",
                 Shipment = new Shipment()
                 {
@@ -133,7 +145,7 @@ namespace ShipWorks.Shipping.ShipEngine
         /// <remarks>
         /// ShipEngine doesn't support EPL if recieved, a ShipEngineException is thrown
         /// </remarks>
-        private PurchaseLabelRequest.LabelFormatEnum? GetLabelFormat(ThermalLanguage requestedLabelFormat)
+        private PurchaseLabelRequest.LabelFormatEnum? GetPurchaseLabelRequestLabelFormat(ThermalLanguage requestedLabelFormat)
         {
             switch (requestedLabelFormat)
             {
@@ -143,6 +155,27 @@ namespace ShipWorks.Shipping.ShipEngine
                     throw new ShipEngineException("Carrier does not support EPL.");
                 case ThermalLanguage.ZPL:
                     return PurchaseLabelRequest.LabelFormatEnum.Zpl;
+            }
+
+            throw new ArgumentOutOfRangeException($"Invalid Thermal Language in GetLabelFormat: '{requestedLabelFormat}'");
+        }
+
+        /// <summary>
+        /// Return Api value for ThermalLanguage
+        /// </summary>
+        /// <remarks>
+        /// ShipEngine doesn't support EPL if recieved, a ShipEngineException is thrown
+        /// </remarks>
+        private PurchaseLabelWithoutShipmentRequest.LabelFormatEnum? GetPurchaseLabelWithoutShipmentRequestLabelFormat(ThermalLanguage requestedLabelFormat)
+        {
+            switch (requestedLabelFormat)
+            {
+                case ThermalLanguage.None:
+                    return PurchaseLabelWithoutShipmentRequest.LabelFormatEnum.Pdf;
+                case ThermalLanguage.EPL:
+                    throw new ShipEngineException("Carrier does not support EPL.");
+                case ThermalLanguage.ZPL:
+                    return PurchaseLabelWithoutShipmentRequest.LabelFormatEnum.Zpl;
             }
 
             throw new ArgumentOutOfRangeException($"Invalid Thermal Language in GetLabelFormat: '{requestedLabelFormat}'");
