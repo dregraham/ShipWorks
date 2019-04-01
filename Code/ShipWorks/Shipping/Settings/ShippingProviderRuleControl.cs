@@ -216,6 +216,7 @@ namespace ShipWorks.Shipping.Settings
                 // If the original filter node ID is 0, don't save, just return.
                 if (originalFilterNodeID == 0)
                 {
+                    SaveRule(noFilterSelectedID, (int) shipmentTypeCombo.SelectedValue);
                     return;
                 }
                 FilterLayoutEntity originalLayout = FilterLayoutContext.Current.GetNodeLayout(originalFilterNodeID);
