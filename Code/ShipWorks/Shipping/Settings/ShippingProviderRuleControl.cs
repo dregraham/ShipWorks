@@ -42,7 +42,7 @@ namespace ShipWorks.Shipping.Settings
 
             toolStipDelete.Renderer = new NoBorderToolStripRenderer();
             originalFilterID = noFilterSelectedID;
-            originalFilterNodeID = 0;
+            originalFilterNodeID = BuiltinFilter.GetTopLevelKey(FilterTarget.Orders);
             shippingProviderRuleManager = IoC.UnsafeGlobalLifetimeScope.Resolve<IShippingProviderRuleManager>();
         }
 
@@ -170,12 +170,6 @@ namespace ShipWorks.Shipping.Settings
                 // If there was an original filter, check it to see if it belongs to the current user.  If not, return error message.
                 if (originalFilterNodeID != filterCombo.SelectedFilterNodeID)
                 {
-                    // If the original filter node ID is 0, return an empty validation message.
-                    if (originalFilterNodeID == 0)
-                    {
-                        return string.Empty;
-                    }
-                    
                     FilterLayoutEntity originalLayout = FilterLayoutContext.Current.GetNodeLayout(originalFilterNodeID);
                     if (originalLayout == null)
                     {
@@ -213,12 +207,6 @@ namespace ShipWorks.Shipping.Settings
             // If there was an original filter, check it to see if it belongs to the current user.  If not, change to All and None provider.
             if (originalFilterNodeID != filterCombo.SelectedFilterNodeID)
             {
-                // If the original filter node ID is 0, don't save, just return.
-                if (originalFilterNodeID == 0)
-                {
-                    SaveRule(noFilterSelectedID, (int) shipmentTypeCombo.SelectedValue);
-                    return;
-                }
                 FilterLayoutEntity originalLayout = FilterLayoutContext.Current.GetNodeLayout(originalFilterNodeID);
                 if (originalLayout == null)
                 {
