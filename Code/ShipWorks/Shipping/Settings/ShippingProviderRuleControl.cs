@@ -42,7 +42,7 @@ namespace ShipWorks.Shipping.Settings
 
             toolStipDelete.Renderer = new NoBorderToolStripRenderer();
             originalFilterID = noFilterSelectedID;
-            originalFilterNodeID = 0;
+            originalFilterNodeID = BuiltinFilter.GetTopLevelKey(FilterTarget.Orders);
             shippingProviderRuleManager = IoC.UnsafeGlobalLifetimeScope.Resolve<IShippingProviderRuleManager>();
         }
 

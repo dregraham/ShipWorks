@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Windows.Forms;
@@ -10,6 +9,7 @@ using log4net;
 using ShipWorks.ApplicationCore;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Filters;
 using ShipWorks.Messaging.Messages;
 using ShipWorks.UI.Utility;
 
@@ -134,7 +134,7 @@ namespace ShipWorks.Shipping.Settings
         private void OnAddRule(object sender, EventArgs e)
         {
             ShippingProviderRuleEntity rule = new ShippingProviderRuleEntity();
-            rule.FilterNodeID = 0;
+            rule.FilterNodeID = BuiltinFilter.GetTopLevelKey(FilterTarget.Orders);
             rule.ShipmentType = (int) ShipmentTypeCode.None;
 
             shippingProviderRuleManager.SaveRule(rule);
