@@ -87,16 +87,17 @@ Type: files; Name: {app}\Microsoft.Web.Services2.dll
 Type: files; Name: {app}\eBay.SDK.dll
 
 [Files]
-Source: License.rtf; DestDir: {app}; Flags: overwritereadonly ignoreversion
-Source: {#AppArtifacts}\ShipWorks.exe; DestDir: {app}; Flags: overwritereadonly ignoreversion
-Source: {#AppArtifacts}\{#= EditionAppConfig}; DestDir: {app}; DestName: "ShipWorks.exe.config"; Flags: overwritereadonly ignoreversion
-Source: {#AppArtifacts}\*.dll; DestDir: {app}; Flags: overwritereadonly ignoreversion
-Source: {#AppArtifacts}\x64\ShipWorks.Native.dll; DestDir: {app}; Flags: overwritereadonly ignoreversion; Check: Is64BitInstallMode
-Source: {#AppArtifacts}\Win32\ShipWorks.Native.dll; DestDir: {app}; Flags: overwritereadonly ignoreversion; Check: not Is64BitInstallMode
+Source: License.rtf; DestDir: {app}; Flags: overwritereadonly ignoreversion; BeforeInstall: BackupInstallingFile
+Source: {#AppArtifacts}\*.exe; DestDir: {app}; Flags: overwritereadonly ignoreversion; BeforeInstall: BackupInstallingFile
+Source: {#AppArtifacts}\{#= EditionAppConfig}; DestDir: {app}; DestName: "ShipWorks.exe.config"; Flags: overwritereadonly ignoreversion; BeforeInstall: BackupInstallingFile
+Source: {#AppArtifacts}\swc.exe.config; DestDir: {app}; Flags: overwritereadonly ignoreversion; BeforeInstall: BackupInstallingFile
+Source: {#AppArtifacts}\ShipWorks.Escalator.exe.config; DestDir: {app}; Flags: overwritereadonly ignoreversion; BeforeInstall: BackupInstallingFile
+Source: {#AppArtifacts}\*.dll; DestDir: {app}; Excludes: "ShipWorks.Native.dll"; Flags: overwritereadonly ignoreversion; BeforeInstall: BackupInstallingFile
+Source: {#AppArtifacts}\x64\ShipWorks.Native.dll; DestDir: {app}; Flags: overwritereadonly ignoreversion; Check: Is64BitInstallMode; BeforeInstall: BackupInstallingFile
+Source: {#AppArtifacts}\Win32\ShipWorks.Native.dll; DestDir: {app}; Flags: overwritereadonly ignoreversion; Check: not Is64BitInstallMode; BeforeInstall: BackupInstallingFile
 Source: {#AppArtifacts}\fre3of9x.ttf; DestDir: {fonts}; FontInstall: Free 3 of 9 Extended; Flags: onlyifdoesntexist uninsneveruninstall
-Source: {#AppArtifacts}\FontLicense.txt; DestDir: {app}; Flags: overwritereadonly ignoreversion
-Source: {#AppArtifacts}\SingleScanPanels.swe; DestDir: {app}; Flags: overwritereadonly ignoreversion
-Source: {#AppArtifacts}\BouncyCastle.Crypto.dll; DestDir: {app}; Flags: overwritereadonly ignoreversion
+Source: {#AppArtifacts}\FontLicense.txt; DestDir: {app}; Flags: overwritereadonly ignoreversion; BeforeInstall: BackupInstallingFile
+Source: {#AppArtifacts}\SingleScanPanels.swe; DestDir: {app}; Flags: overwritereadonly ignoreversion; BeforeInstall: BackupInstallingFile
 
 #ifdef IncludeSymbols
     Source: {#AppArtifacts}\ShipWorks.pdb; DestDir: {app}; Flags: overwritereadonly ignoreversion
@@ -124,10 +125,11 @@ Root: HKLM; Subkey: Software\Microsoft\Windows\CurrentVersion\Run; ValueType: st
 
 [Run]
 Filename: {app}\ShipWorks.exe; Description: Launch ShipWorks; Flags: nowait postinstall skipifsilent
-Filename: {app}\ShipWorks.exe; Parameters: "/s=scheduler"; Flags: nowait; Check: not NeedRestart
+Filename: {app}\ShipWorks.exe; Parameters: "/s=scheduler"; Flags: nowait skipifsilent; Check: not NeedRestart
 
 [UninstallRun]
-Filename: {app}\ShipWorks.exe; Parameters: "/command:uninstall"
+Filename: {app}\ShipWorks.exe; Parameters: "/command:uninstall"; Flags: runhidden
+Filename: {app}\ShipWorks.Escalator.exe; Parameters: "--uninstall"; Flags: runhidden
 
 [Dirs]
 Name: {app}
@@ -143,7 +145,244 @@ Name: {commonappdata}\Interapptive; Permissions: everyone-modify; Check: not Com
 #include "Guid.iss"
 
 var
-   newAppID: string;
+  newAppID: string;
+  DatabaseUpgradeFailed: Boolean;
+  CopyFilesSucceeded: Boolean;
+  ShouldUpgradeDatabase: Boolean;
+  InstallStarted: Boolean;
+  ShouldLaunchShipWorks: Boolean;
+
+//----------------------------------------------------------------
+// Convert a bool to a string
+//----------------------------------------------------------------
+
+function BoolToStr(B: Boolean): string;
+var 
+	retVal: string;
+begin
+	if B then begin
+		retVal := 'True';
+	end
+	else
+	begin
+		retVal := 'False';
+	end
+	Result := retVal;
+end;
+
+//----------------------------------------------------------------
+// Initialize setup
+//----------------------------------------------------------------
+function InitializeSetup(): Boolean;
+var
+  j: Integer;
+begin	
+  InstallStarted := False;
+  ShouldUpgradeDatabase := False;
+  ShouldLaunchShipWorks := False;
+  
+  for j := 1 to ParamCount do
+  begin
+    if CompareText(ParamStr(j), '/upgradedb') = 0 then
+    begin
+      ShouldUpgradeDatabase := True;
+    end;
+    
+    if CompareText(ParamStr(j), '/launchafterinstall') = 0 then
+    begin
+      ShouldLaunchShipWorks := True;
+    end;
+  end
+  
+  Log('ShouldUpgradeDatabase= ' + BoolToStr(ShouldUpgradeDatabase));
+  Log('ShouldLaunchShipWorks= ' + BoolToStr(ShouldLaunchShipWorks));
+
+  Result := True;
+end;
+
+//----------------------------------------------------------------
+// Copy the contents of one directory to another
+//----------------------------------------------------------------
+procedure DirectoryCopy(SourcePath, DestPath: string);
+var
+  FindRec: TFindRec;
+  SourceFilePath: string;
+  DestFilePath: string;
+begin
+  if FindFirst(SourcePath + '\*', FindRec) then
+  begin
+    try
+      repeat
+        if (FindRec.Name <> '.') and (FindRec.Name <> '..') then
+        begin
+          SourceFilePath := SourcePath + '\' + FindRec.Name;
+          DestFilePath := DestPath + '\' + FindRec.Name;
+          if FindRec.Attributes and FILE_ATTRIBUTE_DIRECTORY = 0 then
+          begin
+            if FileCopy(SourceFilePath, DestFilePath, False) then
+            begin
+              Log(Format('Copied %s to %s', [SourceFilePath, DestFilePath]));
+            end
+              else
+            begin
+              Log(Format('Failed to copy %s to %s', [SourceFilePath, DestFilePath]));
+            end;
+          end
+            else
+          begin
+            if DirExists(DestFilePath) or CreateDir(DestFilePath) then
+            begin
+              Log(Format('Created %s', [DestFilePath]));
+              DirectoryCopy(SourceFilePath, DestFilePath);
+            end
+              else
+            begin
+              Log(Format('Failed to create %s', [DestFilePath]));
+            end;
+          end;
+        end;
+      until not FindNext(FindRec);
+    finally
+      FindClose(FindRec);
+    end;
+  end
+    else
+  begin
+    Log(Format('Failed to list %s', [SourcePath]));
+  end;
+end;
+
+//----------------------------------------------------------------
+// Get the exit code
+// -----------------
+// This is NOT called when the setup has failed, which is how we
+// can tell if setup succeeded or failed
+//----------------------------------------------------------------
+function GetCustomSetupExitCode: Integer;
+begin
+  CopyFilesSucceeded := True;
+
+  if DatabaseUpgradeFailed then
+  begin
+  	Result := 0;
+  end
+  else
+  begin
+  	Result := 1;
+  end;
+end;
+
+//----------------------------------------------------------------
+// Backup a file before installing the new version
+//----------------------------------------------------------------
+procedure BackupInstallingFile();
+var
+	tempDir: string;
+	existingFile: string;
+	backupFile: string;
+begin
+	existingFile := ExpandConstant(CurrentFileName);
+
+	if FileExists(existingFile)
+	then begin
+		tempDir := GetTempDir + '\InstallBackup';
+
+		backupFile := CurrentFileName;
+		StringChangeEx(backupFile, '{app}', tempDir, True);
+
+		Log('BACKUP: Copying ' + existingFile + ' to ' + backupFile);
+
+		CreateDir(tempDir);
+		FileCopy(existingFile, backupFile, False);
+	end
+	else
+	begin
+		Log('BACKUP: File ' + existingFile + ' does not exist');
+	end;
+end;
+
+//----------------------------------------------------------------
+// Attempt to upgrade the database
+//----------------------------------------------------------------
+procedure UpgradeDatabase();
+var
+	ExecResult: Boolean;
+	ResultCode: Integer;
+	TargetExe: String;
+begin
+	Log('Running DB upgrade...')
+	TargetExe := ExpandConstant('{app}') + '\swc.exe';
+
+	ExecResult := Exec(TargetExe, '/command=upgradedatabaseschema', '', SW_HIDE, ewWaitUntilTerminated, ResultCode);
+
+	if ExecResult and (ResultCode = 0) then
+	begin
+		Log('DB upgrade succeeded with exit code ' + IntToStr(ResultCode))
+		DatabaseUpgradeFailed := False;
+	end
+	else
+	begin
+		Log('DB upgrade failed with exit code ' + IntToStr(ResultCode))
+		DatabaseUpgradeFailed := True;
+	end;
+end;
+
+//----------------------------------------------------------------
+// The current wizard step has changed
+//----------------------------------------------------------------
+procedure CurStepChanged(CurStep: TSetupStep);
+begin
+  if CurStep = ssPostInstall then begin
+  	if ShouldUpgradeDatabase then
+  	begin
+    	UpgradeDatabase();
+    end;    
+  end;
+end;
+
+//----------------------------------------------------------------
+// Roll back the install at the end of setup, if necessary
+//----------------------------------------------------------------
+procedure DeinitializeSetup();
+var
+	tempDir: string;
+	installStatus: string;
+	serviceWasStarted: Integer;
+begin
+	tempDir := GetTempDir + '\InstallBackup';
+	installStatus := 'success';
+
+	if DirExists(tempDir)
+	then begin
+		if DatabaseUpgradeFailed or not CopyFilesSucceeded then
+		begin
+			Log('DatabaseUpgradeFailed = ' + BoolToStr(DatabaseUpgradeFailed));
+			Log('CopyFilesSucceeded = ' + BoolToStr(CopyFilesSucceeded));
+			Log('BACKUP: Install failed, rolling back...');
+			DirectoryCopy(tempDir, ExpandConstant('{app}'));
+			installStatus := 'failure';
+		end;
+
+		DelTree(tempDir, True, True, True);
+	end
+	else
+	begin
+		Log('BACKUP: Install failed, nothing to roll back');
+		installStatus := 'failure';
+	end;
+
+	Log('Install Status = ' + installStatus);
+
+	if InstallStarted then
+	begin
+		if WizardSilent AND ShouldLaunchShipWorks then
+  		begin
+			Exec(ExpandConstant(ExpandConstant('{app}') + '\ShipWorks.Escalator.exe'), '--launchshipworks', '', SW_HIDE, ewWaitUntilTerminated, serviceWasStarted)
+		end;   
+
+		Exec(ExpandConstant(WizardDirValue + '\ShipWorks.Escalator.exe'), '--install', '', SW_HIDE, ewWaitUntilTerminated, serviceWasStarted)
+	end;
+end;
 
 //----------------------------------------------------------------
 // Get the AppID - which is the unique string that identifies the uninstall key
@@ -202,6 +441,16 @@ begin
     Result := 'ShipWorksScheduler$' + processName;
 end;
 
+//-------------------------------------------------------------------------
+// Does Escelator Service Exists
+//-------------------------------------------------------------------------
+function ShipWorksEscalatorServiceExists(): Boolean;
+var 
+	TargetExe: string;
+begin
+	TargetExe := ExpandConstant('{app}') + '\ShipWorks.Escalator.exe';
+	Result := (FileExists(TargetExe));
+end;
 
 //----------------------------------------------------------------
 // Was the scheduler included in installed version of ShipWorks
@@ -325,7 +574,6 @@ begin
 
         end;
     end;
-
 end;
 
 //----------------------------------------------------------------
@@ -344,17 +592,19 @@ begin
         CheckInstallConditions(CurPage);
     end;
 
-    if (CurPage = wpSelectDir)
+    if ((CurPage = wpSelectDir) and (not ShouldUpgradeDatabase))
     then begin
         Result := CheckUpgradeIssues();
     end;
 
     if (CurPage = wpReady)
     then begin
+		Log('Setting InstallStarted to True');
+		InstallStarted := True;
 
         if (ShipWorksVersionHasScheduler())
         then begin
-            Exec(ExpandConstant(ExpandConstant('{app}') + '\ShipWorks.exe'), '/s=scheduler /stop', '', SW_SHOW, ewWaitUntilTerminated, serviceWasStopped)
+            Exec(ExpandConstant(ExpandConstant('{app}') + '\ShipWorks.exe'), '/s=scheduler /stop', '', SW_HIDE, ewWaitUntilTerminated, serviceWasStopped)
         end;
 
         if IsTaskSelected('desktopicon')
@@ -363,8 +613,12 @@ begin
             DeleteFile(ExpandConstant('{userdesktop}\ShipWorks 3.lnk'));
         end;
 
-  end;
+        if(ShipWorksEscalatorServiceExists())
+        then begin
+            Exec(ExpandConstant(ExpandConstant('{app}') + '\ShipWorks.Escalator.exe'), '--stop', '', SW_HIDE, ewWaitUntilTerminated, serviceWasStopped)
+        end;
 
+    end;
 end;
 
 //----------------------------------------------------------------

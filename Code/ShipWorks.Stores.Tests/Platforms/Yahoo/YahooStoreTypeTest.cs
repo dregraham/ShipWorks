@@ -65,7 +65,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Yahoo
         [Fact]
         public void AccountSettingsHelpUrl_ReturnsCorrectUrlString()
         {
-            Assert.Equal("http://support.shipworks.com/solution/articles/4000068682-adding-a-yahoo-store-using-api", apiTestObject.AccountSettingsHelpUrl);
+            Assert.Equal("https://shipworks.zendesk.com/hc/en-us/articles/360022654711", apiTestObject.AccountSettingsHelpUrl);
         }
 
         [Fact]

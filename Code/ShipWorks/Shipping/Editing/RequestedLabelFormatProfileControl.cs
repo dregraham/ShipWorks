@@ -80,7 +80,7 @@ namespace ShipWorks.Shipping.Editing
         /// </summary>
         private void OnHelpClick(object sender, System.EventArgs e)
         {
-            WebHelper.OpenUrl("http://support.shipworks.com/solution/articles/140916-what-printer-should-i", this);
+            WebHelper.OpenUrl("https://shipworks.zendesk.com/hc/en-us/articles/360022467092", this);
         }
     }
 }

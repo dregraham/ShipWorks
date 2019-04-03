@@ -6,7 +6,7 @@ using Autofac.Extras.Moq;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.Metrics;
 using Moq;
-using ShipWorks.ApplicationCore.Options;
+using ShipWorks.ApplicationCore.Settings;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;

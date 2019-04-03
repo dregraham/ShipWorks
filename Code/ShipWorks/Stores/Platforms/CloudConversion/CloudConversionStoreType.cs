@@ -37,6 +37,6 @@ namespace ShipWorks.Stores.Platforms.CloudConversion
         /// <summary>
         /// Gets the help URL to use in the account settings.
         /// </summary>
-        public override string AccountSettingsHelpUrl => "http://support.shipworks.com/support/solutions/articles/4000025166";
+        public override string AccountSettingsHelpUrl => "https://shipworks.zendesk.com/hc/en-us/articles/360022465152";
     }
 }

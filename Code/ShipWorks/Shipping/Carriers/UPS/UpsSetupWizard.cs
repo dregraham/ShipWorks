@@ -833,7 +833,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// </summary>
         private void OnHelpClick(object sender, EventArgs e)
         {
-            WebHelper.OpenUrl("http://support.shipworks.com/support/solutions/articles/4000098802-creating-a-new-ups-account-in-shipworks", this);
+            WebHelper.OpenUrl("https://shipworks.zendesk.com/hc/en-us/articles/360022654951", this);
         }
 
         /// <summary>

@@ -29,6 +29,13 @@ namespace ShipWorks.ApplicationCore.Licensing
         }
 
         /// <summary>
+        /// Process the given request against the interapptive license server
+        /// </summary>
+        public GenericResult<T> ProcessXmlRequest<T>(IHttpVariableRequestSubmitter postRequest, string logEntryName, bool collectTelemetry) =>
+            ProcessRequest(postRequest, logEntryName, collectTelemetry)
+                .Bind(Functional.DeserializeXml<T>);
+
+        /// <summary>
         /// Get an xml string from the given file
         /// </summary>
         private static string GetXmlStringFromFile(string fileName)

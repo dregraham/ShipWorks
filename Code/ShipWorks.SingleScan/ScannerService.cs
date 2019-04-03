@@ -5,7 +5,7 @@ using System.Reactive.Disposables;
 using Interapptive.Shared.Win32;
 using Interapptive.Shared.Win32.Native;
 using ShipWorks.ApplicationCore;
-using ShipWorks.ApplicationCore.Options;
+using ShipWorks.ApplicationCore.Settings;
 using ShipWorks.Common.IO.Hardware.Scanner;
 using ShipWorks.SingleScan.ScannerServicePipelines;
 using ShipWorks.Users;

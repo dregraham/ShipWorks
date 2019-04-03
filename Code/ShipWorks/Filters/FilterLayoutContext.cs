@@ -32,19 +32,19 @@ namespace ShipWorks.Filters
     public class FilterLayoutContext
     {
         // Logger
-        static readonly ILog log = LogManager.GetLogger(typeof(FilterLayoutContext));
+        private static readonly ILog log = LogManager.GetLogger(typeof(FilterLayoutContext));
 
         // The loaded layouts
-        List<FilterLayoutEntity> layouts = new List<FilterLayoutEntity>();
+        private List<FilterLayoutEntity> layouts = new List<FilterLayoutEntity>();
 
         // The user used to load My Layout
-        UserEntity user;
+        private UserEntity user;
 
         // Backing LLBLGen context to make sure everything has identity correctly
-        Context context = new Context();
+        private Context context = new Context();
 
         // Scope stack
-        static List<FilterLayoutContext> instanceScope = new List<FilterLayoutContext>();
+        private static List<FilterLayoutContext> instanceScope = new List<FilterLayoutContext>();
 
         /// <summary>
         /// Initialize the global layout context instance for the currently logged on user
@@ -512,7 +512,9 @@ namespace ShipWorks.Filters
         {
             try
             {
-                bool filterDefinitionChanged = filter.Fields[(int) FilterFieldIndex.Definition].IsChanged || filter.Fields[(int) FilterFieldIndex.State].IsChanged;
+                bool filterDefinitionChanged = filter.Fields[(int) FilterFieldIndex.Definition].IsChanged ||
+                    filter.Fields[(int) FilterFieldIndex.State].IsChanged ||
+                    filter.Fields[(int) FilterFieldIndex.IsSavedSearch].IsChanged;
 
                 // Fetch list of nodes before refetching.
                 List<FilterNodeEntity> nodesToUpdate = GetNodesAffectedByDefinition(filter);
@@ -1266,7 +1268,7 @@ namespace ShipWorks.Filters
         /// </summary>
         public bool CanMoveDown(FilterNodeEntity node)
         {
-            return !FilterHelper.IsBuiltin(node) && node.FilterSequence.Position + 1 < node.ParentNode.ChildNodes.Count;
+            return !FilterHelper.IsBuiltin(node) && node.FilterSequence.Position + 1 < (node.ParentNode?.ChildNodes.Count ?? 0);
         }
 
         /// <summary>

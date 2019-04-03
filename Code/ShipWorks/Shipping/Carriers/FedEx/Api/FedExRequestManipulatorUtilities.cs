@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using Interapptive.Shared;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
@@ -10,6 +9,10 @@ using ShipWorks.Shipping.Carriers.FedEx.Api.Enums;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Environment;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship;
+using ShipWorks.Shipping.Carriers.FedEx.WebServices.UploadDocument;
+using ClientDetail = ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship.ClientDetail;
+using WebAuthenticationCredential = ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship.WebAuthenticationCredential;
+using WebAuthenticationDetail = ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship.WebAuthenticationDetail;
 
 namespace ShipWorks.Shipping.Carriers.FedEx.Api
 {
@@ -420,10 +423,10 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         }
 
         /// <summary>
-        /// Creates the void API client detail.
+        /// Creates the track API client detail.
         /// </summary>
         /// <param name="account">The account.</param>
-        /// <returns>A ClientDetail object for a void API request.</returns>
+        /// <returns>A ClientDetail object for a track API request.</returns>
         public static WebServices.Track.ClientDetail CreateTrackClientDetail(FedExAccountEntity account)
         {
             return new WebServices.Track.ClientDetail
@@ -438,5 +441,42 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         /// </summary>
         public static bool IsGuam(string code) => code.Equals("GU", StringComparison.OrdinalIgnoreCase) ||
                                                    code.Equals("Guam", StringComparison.OrdinalIgnoreCase);
+
+        /// <summary>
+        /// Create the UploadImages client detail.
+        /// </summary>
+        /// <param name="account"></param>
+        /// <returns>A ClientDetail object for an UploadImagesRequest.</returns>
+        public static WebServices.UploadDocument.ClientDetail CreateUploadImagesClientDetail(FedExAccountEntity account)
+        {
+            return new WebServices.UploadDocument.ClientDetail
+            {
+                AccountNumber = account.AccountNumber,
+                MeterNumber = account.MeterNumber
+            };
+        }
+
+        /// <summary>
+        /// Creates the UploadImages authentication detail.
+        /// </summary>
+        /// <param name="settings">The settings.</param>
+        /// <returns>A WebAuthenticationDetail for an API request.</returns>
+        public static WebServices.UploadDocument.WebAuthenticationDetail CreateUploadImagesWebAuthenticationDetail(FedExSettings settings)
+        {
+            return new WebServices.UploadDocument.WebAuthenticationDetail
+            {
+                ParentCredential = new WebServices.UploadDocument.WebAuthenticationCredential
+                {
+                    Key = settings.CspCredentialKey,
+                    Password = settings.CspCredentialPassword
+                },
+
+                UserCredential = new WebServices.UploadDocument.WebAuthenticationCredential
+                {
+                    Key = settings.UserCredentialsKey,
+                    Password = settings.UserCredentialsPassword
+                }
+            };
+        }
     }
 }

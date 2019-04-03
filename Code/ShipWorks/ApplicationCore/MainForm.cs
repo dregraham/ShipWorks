@@ -21,6 +21,7 @@ using Divelements.SandGrid;
 using Divelements.SandRibbon;
 using ICSharpCode.SharpZipLib.Zip;
 using Interapptive.Shared;
+using Interapptive.Shared.AutoUpdate;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.Data;
 using Interapptive.Shared.Extensions;
@@ -47,7 +48,7 @@ using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.ApplicationCore.Licensing.LicenseEnforcement;
 using ShipWorks.ApplicationCore.MessageBoxes;
 using ShipWorks.ApplicationCore.Nudges;
-using ShipWorks.ApplicationCore.Options;
+using ShipWorks.ApplicationCore.Settings;
 using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Common.Threading;
 using ShipWorks.Core.Common.Threading;
@@ -149,7 +150,7 @@ namespace ShipWorks
         private ILifetimeScope productsLifetimeScope;
         private IOrderLookup orderLookupControl;
         private IShipmentHistory shipmentHistory;
-
+        private IUpdateService updateService;
         private readonly string unicodeCheckmark = $"    {'\u2714'.ToString()}";
 
         /// <summary>
@@ -301,6 +302,25 @@ namespace ShipWorks
 
         #region Initialization \ Shutdown
 
+        /// <summary>
+        /// Attempt to auto update
+        /// </summary>
+        /// <returns>true if we kicked off the auto update process</returns>
+        private bool AutoUpdate()
+        {
+            if (SqlSession.IsConfigured)
+            {
+                updateService = IoC.UnsafeGlobalLifetimeScope.Resolve<IUpdateService>();
+
+                updateService.ListenForAutoUpdateStart(this);
+
+                Result result = updateService.TryUpdate();
+
+                return result.Success;
+            }
+
+            return false;
+        }
 
         /// <summary>
         /// Form is loading, this is before its visible
@@ -308,6 +328,8 @@ namespace ShipWorks
         [NDependIgnoreLongMethod]
         private void OnLoad(object sender, EventArgs e)
         {
+            new AutoUpdateStatusProvider().CloseSplashScreen();
+
             log.Info("Loading main application window.");
 
             DataProvider.InitializeForApplication();
@@ -382,6 +404,13 @@ namespace ShipWorks
             ApplyDisplaySettings();
 
             ApplyEditingContext();
+
+            SqlSession.Initialize();
+
+            if (AutoUpdate())
+            {
+                Close();
+            }
         }
 
         /// <summary>
@@ -400,9 +429,6 @@ namespace ShipWorks
         {
             // Its visible, but possibly not completely drawn
             Refresh();
-
-            // Initialize the last saved session
-            SqlSession.Initialize();
 
             // If the action is to open the DB setup, we can do that now - no need to logon first.
             if (StartupController.StartupAction == StartupAction.OpenDatabaseSetup)
@@ -728,58 +754,9 @@ namespace ShipWorks
             UserManager.InitializeForCurrentUser();
 
             // May already be logged on
-            if (!UserSession.IsLoggedOn)
+            if (!UserSession.IsLoggedOn && !AttemptLogin(logonAsUser))
             {
-                using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
-                {
-                    IUserService userService = lifetimeScope.Resolve<IUserService>();
-                    EnumResult<UserServiceLogonResultType> logonResult;
-
-                    try
-                    {
-                        logonResult = userService.Logon();
-                    }
-                    catch (EncryptionException ex)
-                    {
-                        log.Error("Error logging in", ex);
-
-                        IDialog customerLicenseActivation = lifetimeScope.ResolveNamed<IDialog>("CustomerLicenseActivationDlg");
-                        customerLicenseActivation.LoadOwner(this);
-                        customerLicenseActivation.DataContext =
-                            lifetimeScope.Resolve<ICustomerLicenseActivartionDlgViewModel>();
-
-                        if (customerLicenseActivation.ShowDialog() ?? false)
-                        {
-                            logonResult = userService.Logon();
-                        }
-                        else
-                        {
-                            return;
-                        }
-                    }
-
-                    if (logonResult.Value == UserServiceLogonResultType.TangoAccountDisabled)
-                    {
-                        MessageHelper.ShowError(this, logonResult.Message);
-                        return;
-                    }
-
-                    if (logonResult.Value == UserServiceLogonResultType.InvalidCredentials && logonAsUser != null)
-                    {
-                        logonResult = userService.Logon(logonAsUser, true);
-                    }
-
-                    if (logonResult.Value == UserServiceLogonResultType.InvalidCredentials)
-                    {
-                        using (LogonDlg dlg = new LogonDlg())
-                        {
-                            if (dlg.ShowDialog(this) != DialogResult.OK)
-                            {
-                                return;
-                            }
-                        }
-                    }
-                }
+                return;
             }
 
             log.InfoFormat("Logon to ShipWorks: Success");
@@ -901,6 +878,76 @@ namespace ShipWorks
             }
 
             SendPanelStateMessages();
+
+            UsingAsync(
+                IoC.BeginLifetimeScope(),
+                lifetimeScope => lifetimeScope.Resolve<IUpgradeResultsChecker>().ShowUpgradeNotificationIfNecessary(this, user))
+                .Do(x => { }, ex => Console.WriteLine(ex.Message))
+                .Forget();
+        }
+
+        /// <summary>
+        /// Attempt to logon
+        /// </summary>
+        private bool AttemptLogin(UserEntity logonAsUser)
+        {
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+            {
+                IUserService userService = lifetimeScope.Resolve<IUserService>();
+                EnumResult<UserServiceLogonResultType> logonResult;
+
+                try
+                {
+                    logonResult = userService.Logon();
+                }
+                catch (EncryptionException ex)
+                {
+                    log.Error("Error logging in", ex);
+
+                    IDialog customerLicenseActivation = lifetimeScope.ResolveNamed<IDialog>("CustomerLicenseActivationDlg");
+                    customerLicenseActivation.LoadOwner(this);
+                    customerLicenseActivation.DataContext =
+                        lifetimeScope.Resolve<ICustomerLicenseActivartionDlgViewModel>();
+
+                    if (customerLicenseActivation.ShowDialog() ?? false)
+                    {
+                        logonResult = userService.Logon();
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+
+                if (logonResult.Value == UserServiceLogonResultType.TangoAccountDisabled)
+                {
+                    MessageHelper.ShowError(this, logonResult.Message);
+                    return false;
+                }
+
+                if (logonResult.Value == UserServiceLogonResultType.InvalidCredentials && logonAsUser != null)
+                {
+                    logonResult = userService.Logon(logonAsUser, true);
+                }
+
+                if (logonResult.Value == UserServiceLogonResultType.InvalidCredentials)
+                {
+                    using (LogonDlg dlg = new LogonDlg())
+                    {
+                        if (dlg.ShowDialog(this) != DialogResult.OK)
+                        {
+                            return false;
+                        }
+                    }
+                }
+            }
+
+            if (!CheckDatabaseVersion())
+            {
+                return false;
+            }
+
+            return true;
         }
 
         /// <summary>
@@ -1410,6 +1457,9 @@ namespace ShipWorks
 
             log.InfoFormat("CheckDatabaseVersion: Installed: {0}, Required {1}", installedVersion, SqlSchemaUpdater.GetRequiredSchemaVersion());
 
+            // update the build  number stored in the database, this has nothing to do with the database's schema
+            UpdateDatabaseBuildNumber();
+
             // See if it needs upgraded
             if (SqlSchemaUpdater.IsUpgradeRequired() || !SqlSession.Current.IsSqlServer2008OrLater())
             {
@@ -1441,15 +1491,40 @@ namespace ShipWorks
             // See if its too new
             if (!SqlSchemaUpdater.IsCorrectSchemaVersion())
             {
+                UserSession.Reset();
                 using (NeedUpgradeShipWorks dlg = new NeedUpgradeShipWorks())
                 {
-                    dlg.ShowDialog(this);
+                    DialogResult result = dlg.ShowDialog(this);
+                    if (result == DialogResult.OK)
+                    {
+                        Close();
+                    }
                 }
 
                 return false;
             }
 
             return true;
+        }
+
+        /// <summary>
+        /// Update the database build number if its out of date
+        /// </summary>
+        private void UpdateDatabaseBuildNumber()
+        {
+            Version localBuildVersion = typeof(MainForm).Assembly.GetName().Version;
+            Version databaseBuildVersion = SqlSchemaUpdater.GetBuildVersion();
+
+            if (localBuildVersion > databaseBuildVersion)
+            {
+                using (DbConnection con = SqlSession.Current.OpenConnection())
+                {
+                    using (DbCommand command = con.CreateCommand())
+                    {
+                        SqlSchemaUpdater.UpdateBuildVersionProcedure(command);
+                    }
+                }
+            }
         }
 
         #endregion
@@ -1539,7 +1614,7 @@ namespace ShipWorks
                 holder.InitializeForCurrentUser();
             }
 
-            // Allows for the Shipment panel visibility to be initialized when starting 
+            // Allows for the Shipment panel visibility to be initialized when starting
             // ShipWorks in Batch Mode.
             if (UIMode == UIMode.Batch)
             {
@@ -2516,16 +2591,16 @@ namespace ShipWorks
         }
 
         /// <summary>
-        /// Show the ShipWorks options window
+        /// Show the ShipWorks settings window
         /// </summary>
-        private void OnShowOptions(object sender, EventArgs e)
+        private void OnShowSettings(object sender, EventArgs e)
         {
-            // Create the data structure to send to options
-            ShipWorksOptionsData data = new ShipWorksOptionsData(ribbon.ToolBarPosition == QuickAccessPosition.Below, ribbon.Minimized);
+            // Create the data structure to send to settings
+            ShipWorksSettingsData data = new ShipWorksSettingsData(ribbon.ToolBarPosition == QuickAccessPosition.Below, ribbon.Minimized);
 
             using (ILifetimeScope scope = IoC.BeginLifetimeScope())
             {
-                using (ShipWorksOptions dlg = new ShipWorksOptions(data, scope))
+                using (ShipWorksSettings dlg = new ShipWorksSettings(data, scope))
                 {
                     if (dlg.ShowDialog(this) == DialogResult.OK)
                     {
@@ -2558,7 +2633,7 @@ namespace ShipWorks
         /// </summary>
         private void OnSupportForum(object sender, EventArgs e)
         {
-            WebHelper.OpenUrl("http://www.interapptive.com/support", this);
+            WebHelper.OpenUrl("https://shipworks.zendesk.com/hc/en-us/community/topics", this);
         }
 
         /// <summary>
@@ -2574,7 +2649,7 @@ namespace ShipWorks
         /// </summary>
         private void OnViewHelp(object sender, EventArgs e)
         {
-            WebHelper.OpenUrl("http://www.interapptive.com/shipworks/help", this);
+            WebHelper.OpenUrl("https://shipworks.zendesk.com/hc/en-us", this);
         }
 
         /// <summary>
@@ -2590,11 +2665,11 @@ namespace ShipWorks
         }
 
         /// <summary>
-        /// Submit a support case to interapptive
+        /// Submit a support case to ShipWorks
         /// </summary>
         private void OnRequestHelp(object sender, EventArgs e)
         {
-            WebHelper.OpenUrl("http://www.interapptive.com/company/contact.html", this);
+            WebHelper.OpenUrl("https://www.shipworks.com/contact-us/", this);
         }
 
         /// <summary>
@@ -2871,6 +2946,14 @@ namespace ShipWorks
         }
 
         /// <summary>
+        /// Handle when the filter tree wants to load a filter as an advanced search
+        /// </summary>
+        private void OnFilterTreeLoadAsAdvancedSearch(object sender, FilterNodeEntity e)
+        {
+            gridControl.LoadFilterInAdvancedSearch(e);
+        }
+
+        /// <summary>
         /// Called when the user selects a different filter.
         /// </summary>
         private void OnSelectedFilterNodeChanged(object sender, EventArgs e)
@@ -2954,14 +3037,7 @@ namespace ShipWorks
 
             if (gridControl.IsSearchActive)
             {
-                searchRestoreFilterNodeID = currentFilterTree.SelectedFilterNodeID;
-
-                currentFilterTree.SelectedFilterNodeChanged -= new EventHandler(OnSelectedFilterNodeChanged);
-
-                currentFilterTree.ActiveSearchNode = gridControl.ActiveFilterNode;
-                currentFilterTree.SelectedFilterNode = gridControl.ActiveFilterNode;
-
-                currentFilterTree.SelectedFilterNodeChanged += new EventHandler(OnSelectedFilterNodeChanged);
+                searchRestoreFilterNodeID = currentFilterTree.SetSearch(gridControl.ActiveFilterNode, OnSelectedFilterNodeChanged);
             }
             else
             {
@@ -2982,6 +3058,20 @@ namespace ShipWorks
 
             UpdateSelectionDependentUI();
             UpdateDetailViewSettingsUI();
+        }
+
+        /// <summary>
+        /// Handle when a filter is saved from the advanced search
+        /// </summary>
+        private void OnGridControlFilterSaved(object sender, FilterNodeEntity nodeEntity)
+        {
+            var activeFilterTree = ActiveFilterTree();
+
+            if (activeFilterTree != null)
+            {
+                activeFilterTree.ReloadLayouts();
+                activeFilterTree.SelectedFilterNode = nodeEntity;
+            }
         }
 
         /// <summary>

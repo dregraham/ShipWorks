@@ -154,7 +154,7 @@
             </ScrollViewer>
             <TextBlock Grid.Row="2">
                 For help writing your query,
-                <Hyperlink NavigateUri="http://support.shipworks.com/support/solutions/articles/4000085355" RequestNavigate="OpenLink">click here.</Hyperlink>
+                <Hyperlink NavigateUri="https://shipworks.zendesk.com/hc/en-us/articles/360022649411" RequestNavigate="OpenLink">click here.</Hyperlink>
             </TextBlock>
         </Grid>
     </Grid>

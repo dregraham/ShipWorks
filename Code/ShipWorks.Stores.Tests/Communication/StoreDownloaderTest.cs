@@ -1,7 +1,7 @@
 ﻿using System;
 using Autofac.Extras.Moq;
 using Interapptive.Shared.Business;
-using ShipWorks.ApplicationCore.Options;
+using ShipWorks.ApplicationCore.Settings;
 using ShipWorks.Stores.Communication;
 using ShipWorks.Tests.Shared;
 using Xunit;

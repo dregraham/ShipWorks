@@ -25,5 +25,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         /// Queries FedEx for HoldAtLocations near the destination address.
         /// </summary>
         DistanceAndLocationDetail[] PerformHoldAtLocationSearch(IShipmentEntity shipment);
+
+        /// <summary>
+        /// Upload images to FedEx
+        /// </summary>
+        /// <param name="account"></param>
+        void PerformUploadImages(FedExAccountEntity account);
     }
 }

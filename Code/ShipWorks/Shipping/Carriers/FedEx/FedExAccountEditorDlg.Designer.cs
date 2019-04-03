@@ -190,7 +190,7 @@
             this.settingsControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.settingsControl.Location = new System.Drawing.Point(10, 9);
             this.settingsControl.Name = "settingsControl";
-            this.settingsControl.Size = new System.Drawing.Size(331, 207);
+            this.settingsControl.Size = new System.Drawing.Size(331, 436);
             this.settingsControl.TabIndex = 8;
             // 
             // FedExAccountEditorDlg

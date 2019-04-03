@@ -6,6 +6,7 @@ using Autofac;
 using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Stores.Platforms.GenericModule;
 
 namespace ShipWorks.Stores
@@ -69,6 +70,18 @@ namespace ShipWorks.Stores
             }
 
             throw new InvalidOperationException("Invalid store type. " + typeCode);
+        }
+
+        /// <summary>
+        /// Get the StoreType instance of the specified StoreEntity
+        /// </summary>
+        public static StoreType GetTypeWithReadOnlyStore(IStoreEntity store)
+        {
+            MethodConditions.EnsureArgumentIsNotNull(store, nameof(store));
+
+            var storeType = GetType(store.StoreTypeCode, null);
+            storeType.StoreReadOnly = store;
+            return storeType;
         }
 
         /// <summary>

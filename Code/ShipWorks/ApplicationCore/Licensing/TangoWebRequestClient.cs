@@ -45,6 +45,13 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// <summary>
         /// Process the given request against the interapptive license server
         /// </summary>
+        public GenericResult<T> ProcessXmlRequest<T>(IHttpVariableRequestSubmitter postRequest, string logEntryName, bool collectTelemetry) =>
+            ProcessRequest(postRequest, logEntryName, collectTelemetry)
+                .Bind(DeserializeXml<T>);
+
+        /// <summary>
+        /// Process the given request against the interapptive license server
+        /// </summary>
         public GenericResult<string> ProcessRequest(IHttpVariableRequestSubmitter postRequest, string logEntryName, bool collectTelemetry)
         {
             ApiLogEntry logEntry = new ApiLogEntry(ApiLogSource.ShipWorks, logEntryName);
