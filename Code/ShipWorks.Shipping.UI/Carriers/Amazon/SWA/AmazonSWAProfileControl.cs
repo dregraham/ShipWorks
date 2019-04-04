@@ -48,8 +48,6 @@ namespace ShipWorks.Shipping.UI.Carriers.Amazon.SWA
             LoadAmazonSWAAccounts();
 
             EnumHelper.BindComboBox<AmazonSWAServiceType>(service);
-            EnumHelper.BindComboBox<ShipEngineContentsType>(contents);
-            EnumHelper.BindComboBox<ShipEngineNonDeliveryType>(nonDelivery);
 
             // From
             AddValueMapping(AmazonSWAProfile, AmazonSWAProfileFields.AmazonSWAAccountID, accountState, AmazonSWAAccount, labelAccount);
@@ -66,13 +64,6 @@ namespace ShipWorks.Shipping.UI.Carriers.Amazon.SWA
 
             // Insurance
             AddValueMapping(profile, ShippingProfileFields.Insurance, insuranceState, insuranceControl);
-
-            //Options
-            AddValueMapping(AmazonSWAProfile, AmazonSWAProfileFields.NonMachinable, nonMachinableState, nonMachinable, labelNonMachinable);
-
-            //Customs
-            AddValueMapping(AmazonSWAProfile, AmazonSWAProfileFields.Contents, contentsState, contents, labelContents);
-            AddValueMapping(AmazonSWAProfile, AmazonSWAProfileFields.NonDelivery, nonDeliveryState, nonDelivery, labelNonDelivery);
         }
 
         /// <summary>

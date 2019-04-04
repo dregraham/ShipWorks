@@ -356,13 +356,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("Service", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
-			_fieldsCustomProperties.Add("NonMachinable", fieldHashtable);
-			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("RequestedLabelFormat", fieldHashtable);
-			fieldHashtable = new Dictionary<string, string>();
-			_fieldsCustomProperties.Add("Contents", fieldHashtable);
-			fieldHashtable = new Dictionary<string, string>();
-			_fieldsCustomProperties.Add("NonDelivery", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("ShipEngineLabelID", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
@@ -509,16 +503,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)AmazonSWAShipmentFieldIndex.Service, value); }
 		}
 
-		/// <summary> The NonMachinable property of the Entity AmazonSWAShipment<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "AmazonSWAShipment"."NonMachinable"<br/>
-		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.Boolean NonMachinable
-		{
-			get { return (System.Boolean)GetValue((int)AmazonSWAShipmentFieldIndex.NonMachinable, true); }
-			set	{ SetValue((int)AmazonSWAShipmentFieldIndex.NonMachinable, value); }
-		}
-
 		/// <summary> The RequestedLabelFormat property of the Entity AmazonSWAShipment<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "AmazonSWAShipment"."RequestedLabelFormat"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
@@ -527,26 +511,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.Int32)GetValue((int)AmazonSWAShipmentFieldIndex.RequestedLabelFormat, true); }
 			set	{ SetValue((int)AmazonSWAShipmentFieldIndex.RequestedLabelFormat, value); }
-		}
-
-		/// <summary> The Contents property of the Entity AmazonSWAShipment<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "AmazonSWAShipment"."Contents"<br/>
-		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.Int32 Contents
-		{
-			get { return (System.Int32)GetValue((int)AmazonSWAShipmentFieldIndex.Contents, true); }
-			set	{ SetValue((int)AmazonSWAShipmentFieldIndex.Contents, value); }
-		}
-
-		/// <summary> The NonDelivery property of the Entity AmazonSWAShipment<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "AmazonSWAShipment"."NonDelivery"<br/>
-		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.Int32 NonDelivery
-		{
-			get { return (System.Int32)GetValue((int)AmazonSWAShipmentFieldIndex.NonDelivery, true); }
-			set	{ SetValue((int)AmazonSWAShipmentFieldIndex.NonDelivery, value); }
 		}
 
 		/// <summary> The ShipEngineLabelID property of the Entity AmazonSWAShipment<br/><br/></summary>

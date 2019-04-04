@@ -516,9 +516,6 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("AmazonSWAProfileEntity", "ShippingProfileID", typeof(System.Int64), true, true, false, false,  (int)AmazonSWAProfileFieldIndex.ShippingProfileID, 0, 0, 19);
 			this.AddElementFieldInfo("AmazonSWAProfileEntity", "AmazonSWAAccountID", typeof(Nullable<System.Int64>), false, false, false, true,  (int)AmazonSWAProfileFieldIndex.AmazonSWAAccountID, 0, 0, 19);
 			this.AddElementFieldInfo("AmazonSWAProfileEntity", "Service", typeof(Nullable<System.Int32>), false, false, false, true,  (int)AmazonSWAProfileFieldIndex.Service, 0, 0, 10);
-			this.AddElementFieldInfo("AmazonSWAProfileEntity", "NonMachinable", typeof(Nullable<System.Boolean>), false, false, false, true,  (int)AmazonSWAProfileFieldIndex.NonMachinable, 0, 0, 0);
-			this.AddElementFieldInfo("AmazonSWAProfileEntity", "Contents", typeof(Nullable<System.Int32>), false, false, false, true,  (int)AmazonSWAProfileFieldIndex.Contents, 0, 0, 10);
-			this.AddElementFieldInfo("AmazonSWAProfileEntity", "NonDelivery", typeof(Nullable<System.Int32>), false, false, false, true,  (int)AmazonSWAProfileFieldIndex.NonDelivery, 0, 0, 10);
 		}
 		/// <summary>Inits AmazonSWAShipmentEntity's FieldInfo objects</summary>
 		private void InitAmazonSWAShipmentEntityInfos()
@@ -527,10 +524,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("AmazonSWAShipmentEntity", "ShipmentID", typeof(System.Int64), true, true, false, false,  (int)AmazonSWAShipmentFieldIndex.ShipmentID, 0, 0, 19);
 			this.AddElementFieldInfo("AmazonSWAShipmentEntity", "AmazonSWAAccountID", typeof(System.Int64), false, false, false, false,  (int)AmazonSWAShipmentFieldIndex.AmazonSWAAccountID, 0, 0, 19);
 			this.AddElementFieldInfo("AmazonSWAShipmentEntity", "Service", typeof(System.Int32), false, false, false, false,  (int)AmazonSWAShipmentFieldIndex.Service, 0, 0, 10);
-			this.AddElementFieldInfo("AmazonSWAShipmentEntity", "NonMachinable", typeof(System.Boolean), false, false, false, false,  (int)AmazonSWAShipmentFieldIndex.NonMachinable, 0, 0, 0);
 			this.AddElementFieldInfo("AmazonSWAShipmentEntity", "RequestedLabelFormat", typeof(System.Int32), false, false, false, false,  (int)AmazonSWAShipmentFieldIndex.RequestedLabelFormat, 0, 0, 10);
-			this.AddElementFieldInfo("AmazonSWAShipmentEntity", "Contents", typeof(System.Int32), false, false, false, false,  (int)AmazonSWAShipmentFieldIndex.Contents, 0, 0, 10);
-			this.AddElementFieldInfo("AmazonSWAShipmentEntity", "NonDelivery", typeof(System.Int32), false, false, false, false,  (int)AmazonSWAShipmentFieldIndex.NonDelivery, 0, 0, 10);
 			this.AddElementFieldInfo("AmazonSWAShipmentEntity", "ShipEngineLabelID", typeof(System.String), false, false, false, false,  (int)AmazonSWAShipmentFieldIndex.ShipEngineLabelID, 12, 0, 0);
 			this.AddElementFieldInfo("AmazonSWAShipmentEntity", "DimsProfileID", typeof(System.Int64), false, false, false, false,  (int)AmazonSWAShipmentFieldIndex.DimsProfileID, 0, 0, 19);
 			this.AddElementFieldInfo("AmazonSWAShipmentEntity", "DimsLength", typeof(System.Double), false, false, false, false,  (int)AmazonSWAShipmentFieldIndex.DimsLength, 0, 0, 38);

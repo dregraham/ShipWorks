@@ -1542,21 +1542,6 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(AmazonSWAProfileFieldIndex.Service);}
 		}
-		/// <summary>Creates a new AmazonSWAProfileEntity.NonMachinable field instance</summary>
-		public static EntityField2 NonMachinable
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(AmazonSWAProfileFieldIndex.NonMachinable);}
-		}
-		/// <summary>Creates a new AmazonSWAProfileEntity.Contents field instance</summary>
-		public static EntityField2 Contents
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(AmazonSWAProfileFieldIndex.Contents);}
-		}
-		/// <summary>Creates a new AmazonSWAProfileEntity.NonDelivery field instance</summary>
-		public static EntityField2 NonDelivery
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(AmazonSWAProfileFieldIndex.NonDelivery);}
-		}
 	}
 
 	/// <summary>Field Creation Class for entity AmazonSWAShipmentEntity</summary>
@@ -1577,25 +1562,10 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(AmazonSWAShipmentFieldIndex.Service);}
 		}
-		/// <summary>Creates a new AmazonSWAShipmentEntity.NonMachinable field instance</summary>
-		public static EntityField2 NonMachinable
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(AmazonSWAShipmentFieldIndex.NonMachinable);}
-		}
 		/// <summary>Creates a new AmazonSWAShipmentEntity.RequestedLabelFormat field instance</summary>
 		public static EntityField2 RequestedLabelFormat
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(AmazonSWAShipmentFieldIndex.RequestedLabelFormat);}
-		}
-		/// <summary>Creates a new AmazonSWAShipmentEntity.Contents field instance</summary>
-		public static EntityField2 Contents
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(AmazonSWAShipmentFieldIndex.Contents);}
-		}
-		/// <summary>Creates a new AmazonSWAShipmentEntity.NonDelivery field instance</summary>
-		public static EntityField2 NonDelivery
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(AmazonSWAShipmentFieldIndex.NonDelivery);}
 		}
 		/// <summary>Creates a new AmazonSWAShipmentEntity.ShipEngineLabelID field instance</summary>
 		public static EntityField2 ShipEngineLabelID

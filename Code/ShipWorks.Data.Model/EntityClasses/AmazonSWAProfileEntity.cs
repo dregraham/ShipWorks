@@ -355,12 +355,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("AmazonSWAAccountID", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("Service", fieldHashtable);
-			fieldHashtable = new Dictionary<string, string>();
-			_fieldsCustomProperties.Add("NonMachinable", fieldHashtable);
-			fieldHashtable = new Dictionary<string, string>();
-			_fieldsCustomProperties.Add("Contents", fieldHashtable);
-			fieldHashtable = new Dictionary<string, string>();
-			_fieldsCustomProperties.Add("NonDelivery", fieldHashtable);
 		}
 		#endregion
 
@@ -487,36 +481,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (Nullable<System.Int32>)GetValue((int)AmazonSWAProfileFieldIndex.Service, false); }
 			set	{ SetValue((int)AmazonSWAProfileFieldIndex.Service, value); }
-		}
-
-		/// <summary> The NonMachinable property of the Entity AmazonSWAProfile<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "AmazonSWAProfile"."NonMachinable"<br/>
-		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
-		public virtual Nullable<System.Boolean> NonMachinable
-		{
-			get { return (Nullable<System.Boolean>)GetValue((int)AmazonSWAProfileFieldIndex.NonMachinable, false); }
-			set	{ SetValue((int)AmazonSWAProfileFieldIndex.NonMachinable, value); }
-		}
-
-		/// <summary> The Contents property of the Entity AmazonSWAProfile<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "AmazonSWAProfile"."Contents"<br/>
-		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
-		public virtual Nullable<System.Int32> Contents
-		{
-			get { return (Nullable<System.Int32>)GetValue((int)AmazonSWAProfileFieldIndex.Contents, false); }
-			set	{ SetValue((int)AmazonSWAProfileFieldIndex.Contents, value); }
-		}
-
-		/// <summary> The NonDelivery property of the Entity AmazonSWAProfile<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "AmazonSWAProfile"."NonDelivery"<br/>
-		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
-		public virtual Nullable<System.Int32> NonDelivery
-		{
-			get { return (Nullable<System.Int32>)GetValue((int)AmazonSWAProfileFieldIndex.NonDelivery, false); }
-			set	{ SetValue((int)AmazonSWAProfileFieldIndex.NonDelivery, value); }
 		}
 
 		/// <summary> Gets / sets related entity of type 'ShippingProfileEntity' which has to be set using a fetch action earlier. If no related entity is set for this property, null is returned.<br/><br/>

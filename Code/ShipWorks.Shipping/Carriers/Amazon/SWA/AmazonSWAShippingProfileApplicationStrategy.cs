@@ -43,9 +43,6 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SWA
 
             ApplyProfileValue(AmazonSWAProfile.Service, AmazonSWAShipment, AmazonSWAShipmentFields.Service);
             ApplyProfileValue(AmazonSWAProfile.ShippingProfile.Insurance, AmazonSWAShipment, AmazonSWAShipmentFields.Insurance);
-            ApplyProfileValue(AmazonSWAProfile.NonMachinable, AmazonSWAShipment, AmazonSWAShipmentFields.NonMachinable);
-            ApplyProfileValue(AmazonSWAProfile.NonDelivery, AmazonSWAShipment, AmazonSWAShipmentFields.NonDelivery);
-            ApplyProfileValue(AmazonSWAProfile.Contents, AmazonSWAShipment, AmazonSWAShipmentFields.Contents);
 
             IPackageProfileEntity packageProfile = profile.Packages.Single();
             if (packageProfile.Weight.HasValue && !packageProfile.Weight.Value.IsEquivalentTo(0))

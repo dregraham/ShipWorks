@@ -131,9 +131,6 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SWA
             AmazonSWAShipmentEntity swaShipment = shipment.AmazonSWA;
             swaShipment.Service = (int) AmazonSWAServiceType.OneDay;
             swaShipment.RequestedLabelFormat = (int) ThermalLanguage.None;
-            swaShipment.Contents = (int) ShipEngineContentsType.Merchandise;
-            swaShipment.NonDelivery = (int) ShipEngineNonDeliveryType.ReturnToSender;
-            swaShipment.NonMachinable = false;
             swaShipment.AmazonSWAAccountID = 0;
             swaShipment.ShipEngineLabelID = string.Empty;
             swaShipment.DimsProfileID = 0;
@@ -305,9 +302,6 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SWA
                 0;
 
             swaProfile.Service = (int) AmazonSWAServiceType.OneDay;
-            swaProfile.Contents = (int) ShipEngineContentsType.Merchandise;
-            swaProfile.NonDelivery = (int) ShipEngineNonDeliveryType.ReturnToSender;
-            swaProfile.NonMachinable = false;
         }
 
         /// Create the XML input to the XSL engine

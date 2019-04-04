@@ -684,12 +684,6 @@ namespace ShipWorks.Data.Model
 		AmazonSWAAccountID,
 		///<summary>Service. </summary>
 		Service,
-		///<summary>NonMachinable. </summary>
-		NonMachinable,
-		///<summary>Contents. </summary>
-		Contents,
-		///<summary>NonDelivery. </summary>
-		NonDelivery,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -702,14 +696,8 @@ namespace ShipWorks.Data.Model
 		AmazonSWAAccountID,
 		///<summary>Service. </summary>
 		Service,
-		///<summary>NonMachinable. </summary>
-		NonMachinable,
 		///<summary>RequestedLabelFormat. </summary>
 		RequestedLabelFormat,
-		///<summary>Contents. </summary>
-		Contents,
-		///<summary>NonDelivery. </summary>
-		NonDelivery,
 		///<summary>ShipEngineLabelID. </summary>
 		ShipEngineLabelID,
 		///<summary>DimsProfileID. </summary>

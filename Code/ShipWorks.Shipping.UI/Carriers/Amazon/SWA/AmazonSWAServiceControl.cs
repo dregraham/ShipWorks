@@ -145,7 +145,6 @@ namespace ShipWorks.Shipping.UI.Carriers.Amazon.SWA
                         service.ApplyMultiValue(AmazonSWAServiceType);
                     }
 
-                    nonMachinable.ApplyMultiCheck(shipment.AmazonSWA.NonMachinable);
                     shipDate.ApplyMultiDate(shipment.ShipDate);
                     dimensions.Add(new DimensionsAdapter(shipment.AmazonSWA));
                 }
@@ -241,7 +240,6 @@ namespace ShipWorks.Shipping.UI.Carriers.Amazon.SWA
                 AmazonSWAAccount.ReadMultiValue(v => shipment.AmazonSWA.AmazonSWAAccountID = (long) v);
 
                 service.ReadMultiValue(v => shipment.AmazonSWA.Service =  (int) v);
-                nonMachinable.ReadMultiCheck(c => shipment.AmazonSWA.NonMachinable = c);
                 shipDate.ReadMultiDate(v => shipment.ShipDate = v);
 
                 weight.ReadMultiWeight(v => shipment.ContentWeight = v);

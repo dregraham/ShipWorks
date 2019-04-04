@@ -39,9 +39,6 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             ShippingProfileID = source.ShippingProfileID;
             AmazonSWAAccountID = source.AmazonSWAAccountID;
             Service = source.Service;
-            NonMachinable = source.NonMachinable;
-            Contents = source.Contents;
-            NonDelivery = source.NonDelivery;
             
             ShippingProfile = (IShippingProfileEntity) source.ShippingProfile?.AsReadOnly(objectMap);
             
@@ -69,24 +66,6 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
         public Nullable<System.Int32> Service { get; }
-        /// <summary> The NonMachinable property of the Entity AmazonSWAProfile<br/><br/>
-        /// </summary>
-        /// <remarks>Mapped on table field: "AmazonSWAProfile"."NonMachinable"<br/>
-        /// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
-        /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
-        public Nullable<System.Boolean> NonMachinable { get; }
-        /// <summary> The Contents property of the Entity AmazonSWAProfile<br/><br/>
-        /// </summary>
-        /// <remarks>Mapped on table field: "AmazonSWAProfile"."Contents"<br/>
-        /// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
-        /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
-        public Nullable<System.Int32> Contents { get; }
-        /// <summary> The NonDelivery property of the Entity AmazonSWAProfile<br/><br/>
-        /// </summary>
-        /// <remarks>Mapped on table field: "AmazonSWAProfile"."NonDelivery"<br/>
-        /// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
-        /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
-        public Nullable<System.Int32> NonDelivery { get; }
         
         public IShippingProfileEntity ShippingProfile { get; }
         

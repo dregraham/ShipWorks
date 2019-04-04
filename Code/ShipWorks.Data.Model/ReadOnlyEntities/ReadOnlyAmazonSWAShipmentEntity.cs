@@ -39,10 +39,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             ShipmentID = source.ShipmentID;
             AmazonSWAAccountID = source.AmazonSWAAccountID;
             Service = source.Service;
-            NonMachinable = source.NonMachinable;
             RequestedLabelFormat = source.RequestedLabelFormat;
-            Contents = source.Contents;
-            NonDelivery = source.NonDelivery;
             ShipEngineLabelID = source.ShipEngineLabelID;
             DimsProfileID = source.DimsProfileID;
             DimsLength = source.DimsLength;
@@ -79,30 +76,12 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         public System.Int32 Service { get; }
-        /// <summary> The NonMachinable property of the Entity AmazonSWAShipment<br/><br/>
-        /// </summary>
-        /// <remarks>Mapped on table field: "AmazonSWAShipment"."NonMachinable"<br/>
-        /// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
-        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-        public System.Boolean NonMachinable { get; }
         /// <summary> The RequestedLabelFormat property of the Entity AmazonSWAShipment<br/><br/>
         /// </summary>
         /// <remarks>Mapped on table field: "AmazonSWAShipment"."RequestedLabelFormat"<br/>
         /// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         public System.Int32 RequestedLabelFormat { get; }
-        /// <summary> The Contents property of the Entity AmazonSWAShipment<br/><br/>
-        /// </summary>
-        /// <remarks>Mapped on table field: "AmazonSWAShipment"."Contents"<br/>
-        /// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
-        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-        public System.Int32 Contents { get; }
-        /// <summary> The NonDelivery property of the Entity AmazonSWAShipment<br/><br/>
-        /// </summary>
-        /// <remarks>Mapped on table field: "AmazonSWAShipment"."NonDelivery"<br/>
-        /// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
-        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-        public System.Int32 NonDelivery { get; }
         /// <summary> The ShipEngineLabelID property of the Entity AmazonSWAShipment<br/><br/>
         /// </summary>
         /// <remarks>Mapped on table field: "AmazonSWAShipment"."ShipEngineLabelID"<br/>
