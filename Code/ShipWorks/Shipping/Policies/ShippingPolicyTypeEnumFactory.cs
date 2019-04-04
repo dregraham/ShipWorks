@@ -38,7 +38,7 @@ namespace ShipWorks.Shipping.Policies
                     }
 
                 case ShippingPolicyType.AmazonShipmentRestriction:
-                    return new AmazonShipmentShippingPolicy();
+                    return new AmazonSFPShipmentShippingPolicy();
 
                 default:
                     throw new InvalidOperationException(string.Format("Could not create a policy for type {0}", policyType));

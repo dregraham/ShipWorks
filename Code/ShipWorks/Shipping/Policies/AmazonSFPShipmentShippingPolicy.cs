@@ -14,12 +14,12 @@ namespace ShipWorks.Shipping.Policies
     /// An implementation of the IShippingPolicy interface that will determine if
     /// a shipment can display Amazon as a carrier.
     /// </summary>
-    public class AmazonShipmentShippingPolicy : IShippingPolicy
+    public class AmazonSFPShipmentShippingPolicy : IShippingPolicy
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="AmazonShipmentShippingPolicy"/> class.
+        /// Initializes a new instance of the <see cref="AmazonSFPShipmentShippingPolicy"/> class.
         /// </summary>
-        public AmazonShipmentShippingPolicy()
+        public AmazonSFPShipmentShippingPolicy()
         {
             AllAmazonOrdersAllowed = false;
             OnlyAmazonPrimeOrdersAllowed = false;
@@ -40,10 +40,10 @@ namespace ShipWorks.Shipping.Policies
         /// </summary>
         public virtual void Configure(string configuration)
         {
-            if (AmazonPrimeShippingRestrictionType.TryParse(configuration, out AmazonPrimeShippingRestrictionType amazonPrimeShippingRestrictionType))
+            if (AmazonSFPShippingRestrictionType.TryParse(configuration, out AmazonSFPShippingRestrictionType amazonPrimeShippingRestrictionType))
             {
-                OnlyAmazonPrimeOrdersAllowed = amazonPrimeShippingRestrictionType.HasFlag(AmazonPrimeShippingRestrictionType.OnlyPrime);
-                AllAmazonOrdersAllowed = amazonPrimeShippingRestrictionType.HasFlag(AmazonPrimeShippingRestrictionType.AllOrders);
+                OnlyAmazonPrimeOrdersAllowed = amazonPrimeShippingRestrictionType.HasFlag(AmazonSFPShippingRestrictionType.OnlyPrime);
+                AllAmazonOrdersAllowed = amazonPrimeShippingRestrictionType.HasFlag(AmazonSFPShippingRestrictionType.AllOrders);
             }
             else
             {
@@ -58,7 +58,8 @@ namespace ShipWorks.Shipping.Policies
         /// <returns><c>true</c> if the specified target is applicable; otherwise, <c>false</c>.</returns>
         public virtual bool IsApplicable(object target)
         {
-            return target is AmazonPrimeShippingPolicyTarget;
+            AmazonShippingPolicyTarget policyTarget = target as AmazonShippingPolicyTarget;
+            return policyTarget != null && policyTarget.ShipmentType == ShipmentTypeCode.AmazonSFP;
         }
 
         /// <summary>
@@ -67,7 +68,7 @@ namespace ShipWorks.Shipping.Policies
         /// </summary>
         public virtual void Apply(object target)
         {
-            AmazonPrimeShippingPolicyTarget theTarget = target as AmazonPrimeShippingPolicyTarget;
+            AmazonShippingPolicyTarget theTarget = target as AmazonShippingPolicyTarget;
             MethodConditions.EnsureArgumentIsNotNull(theTarget, nameof(theTarget));
 
             if (IsApplicable(target))
@@ -77,7 +78,7 @@ namespace ShipWorks.Shipping.Policies
                     theTarget.Allowed = false;
                     return;
                 }
-                
+
                 if (AllAmazonOrdersAllowed || (OnlyAmazonPrimeOrdersAllowed && theTarget.AmazonOrder.IsPrime))
                 {
                     theTarget.Allowed = theTarget.AmazonCredentials != null;

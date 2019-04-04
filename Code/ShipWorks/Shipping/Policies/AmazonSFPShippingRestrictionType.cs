@@ -9,7 +9,7 @@ namespace ShipWorks.Shipping.Policies
     /// </summary>
     [Obfuscation(Exclude = true, ApplyToMembers = true, StripAfterObfuscation = false)]
     [Flags]
-    public enum AmazonPrimeShippingRestrictionType
+    public enum AmazonSFPShippingRestrictionType
     {
         // Only allow Amazon carrier for prime orders
         [Description("Only Amazon Prime Orders are allowed.")]

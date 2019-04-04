@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using Interapptive.Shared.Utility;
 using System.Linq;
 using ShipWorks.Shipping.Editing.Rating;
+using Interapptive.Shared.Collections;
 
 namespace ShipWorks.Shipping.Carriers.Amazon.SWA
 {
@@ -58,36 +59,35 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SWA
             // many days it takes to deliver
             // we have to get rates to get a list of rateIds and then request a label based on the rateid
             // if no rate id is sent they will use the fasted rate
-
             MethodConditions.EnsureArgumentIsNotNull(shipment, nameof(shipment));
-
             PurchaseLabelRequest request = shipmentRequestFactory.CreatePurchaseLabelRequest(shipment);
-
             request.Shipment.Items = new System.Collections.Generic.List<ShipmentItem>();
-            request.Shipment.Items.Add(new ShipmentItem(name: "noItem"));
 
-            AmazonSWAServiceType service = (AmazonSWAServiceType) shipment.AmazonSWA.Service;
-
-            // to get the quickest service option we can just process the label without a rateid
-            if (service == AmazonSWAServiceType.Fastest)
+            // If its an amazon order we have to populate it with the amazon order details
+            if (shipment.Order.Store.StoreTypeCode == Stores.StoreTypeCode.Amazon)
             {
-                return await CreateLabelInternal(shipment,
-                    () => shipEngineWebClient.PurchaseLabel(request, ApiLogSource));
+                AmazonOrderEntity amazonOrder = shipment.Order as AmazonOrderEntity;
+                foreach (OrderItemEntity item in amazonOrder.OrderItems)
+                {
+                    AmazonOrderItemEntity amazonItem = item as AmazonOrderItemEntity;
+                    request.Shipment.Items.Add(
+                        new ShipmentItem(
+                            externalOrderId: amazonOrder.AmazonOrderID,
+                            asin: amazonItem.ASIN,
+                            name: item.Name));
+                }
+            }
+
+            // ShipEngine will throw if there are no items, they recommended we add a fake item
+            if(request.Shipment.Items.None())
+            {
+                request.Shipment.Items.Add(new ShipmentItem(name: "NoItem"));
             }
 
             // to get a specific service we first have to get rates
             GenericResult<RateGroup> rates = ratesRetriever.GetRates(shipment);
             if (rates.Success && rates.Value.Rates.Any())
             {
-                // Find the cheapest rate
-                if (service == AmazonSWAServiceType.LowestPrice)
-                {
-                    RateResult cheapestRate = rates.Value.Rates.OrderBy(r => r.Amount).First();
-                    return await CreateLabelInternal(shipment,
-                        () => shipEngineWebClient.PurchaseLabelWithRate(cheapestRate.Tag.ToString(),
-                        shipmentRequestFactory.CreatePurchaseLabelWithoutShipmentRequest(shipment), ApiLogSource));
-                }
-
                 // Select a specific rate
                 RateResult rateToUse = rates.Value.Rates.FirstOrDefault(r => r.Days == EnumHelper.GetApiValue((AmazonSWAServiceType) shipment.AmazonSWA.Service));
                 if (rateToUse != null)

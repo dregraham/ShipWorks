@@ -8,13 +8,13 @@ namespace ShipWorks.Tests.Shipping.Policies
 {
     public class AmazonShipmentShippingPolicyTest
     {
-        private AmazonShipmentShippingPolicy testObject;
-        private AmazonPrimeShippingPolicyTarget testTarget;
+        private AmazonSFPShipmentShippingPolicy testObject;
+        private AmazonShippingPolicyTarget testTarget;
 
         public AmazonShipmentShippingPolicyTest()
         {
-            testObject = new AmazonShipmentShippingPolicy();
-            testTarget = new AmazonPrimeShippingPolicyTarget()
+            testObject = new AmazonSFPShipmentShippingPolicy();
+            testTarget = new AmazonShippingPolicyTarget()
             {
                 Shipment = new ShipmentEntity()
                 {

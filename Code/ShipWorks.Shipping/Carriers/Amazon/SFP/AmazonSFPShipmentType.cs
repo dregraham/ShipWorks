@@ -174,7 +174,6 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SFP
         /// </summary>
         public override bool SupportsGetRates => true;
 
-
         /// <summary>
         /// Checks whether this shipment type is allowed for the given shipment
         /// </summary>
@@ -192,8 +191,9 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SFP
 
             IAmazonOrder amazonOrder = shipment.Order as IAmazonOrder;
 
-            AmazonPrimeShippingPolicyTarget target = new AmazonPrimeShippingPolicyTarget()
+            AmazonShippingPolicyTarget target = new AmazonShippingPolicyTarget()
             {
+                ShipmentType = ShipmentTypeCode.AmazonSFP,
                 Shipment = shipment,
                 Allowed = false,
                 AmazonOrder = amazonOrder,

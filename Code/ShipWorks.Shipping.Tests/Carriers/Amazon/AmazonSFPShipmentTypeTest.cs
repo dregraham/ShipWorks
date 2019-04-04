@@ -31,9 +31,9 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
         private StoreEntity nonAmazonStore = new StoreEntity(nonAmazonStoreID);
         private AmazonOrderEntity amazonOrder = new AmazonOrderEntity(amazonOrderID);
         private AmazonStoreEntity amazonStore = new AmazonStoreEntity(amazonStoreID);
-        private AmazonPrimeShippingPolicyTarget target;
+        private AmazonShippingPolicyTarget target;
         private ShipmentEntity shipment;
-        private AmazonShipmentShippingPolicy amazonShipmentShippingPolicy;
+        private AmazonSFPShipmentShippingPolicy amazonShipmentShippingPolicy;
 
         public AmazonSFPShipmentTypeTest()
         {
@@ -62,7 +62,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
                 Order = amazonOrder
             };
 
-            target = new AmazonPrimeShippingPolicyTarget()
+            target = new AmazonShippingPolicyTarget()
             {
                 Shipment = shipment,
                 Allowed = false,
@@ -70,13 +70,13 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
                 AmazonCredentials = amazonStore as IAmazonCredentials
             };
 
-            amazonShipmentShippingPolicy = new AmazonShipmentShippingPolicy();
+            amazonShipmentShippingPolicy = new AmazonSFPShipmentShippingPolicy();
             amazonShipmentShippingPolicy.Configure("1");
             amazonShipmentShippingPolicy.Apply(target);
 
             license
                 .Setup(l => l.ApplyShippingPolicy(ShipmentTypeCode.AmazonSFP, It.IsAny<object>()))
-                .Callback((ShipmentTypeCode s, object t) => ((AmazonPrimeShippingPolicyTarget) t).Allowed = target.Allowed);
+                .Callback((ShipmentTypeCode s, object t) => ((AmazonShippingPolicyTarget) t).Allowed = target.Allowed);
         }
 
         [Fact]

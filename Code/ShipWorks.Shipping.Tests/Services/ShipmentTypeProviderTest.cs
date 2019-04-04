@@ -33,8 +33,8 @@ namespace ShipWorks.Shipping.Tests.Services
         private readonly Mock<IStoreManager> storeManager;
         private readonly Mock<ILicenseService> licenseService;
         private readonly Mock<ILicense> license;
-        private AmazonPrimeShippingPolicyTarget target;
-        private AmazonShipmentShippingPolicy amazonShipmentShippingPolicy;
+        private AmazonShippingPolicyTarget target;
+        private AmazonSFPShipmentShippingPolicy amazonShipmentShippingPolicy;
         private const long nonAmazonOrderID = 1;
         private const long amazonOrderID = 100;
         private const long nonAmazonStoreID = 1005;
@@ -82,7 +82,7 @@ namespace ShipWorks.Shipping.Tests.Services
                 Order = amazonOrder
             };
 
-            target = new AmazonPrimeShippingPolicyTarget()
+            target = new AmazonShippingPolicyTarget()
             {
                 Shipment = shipment,
                 Allowed = false,
@@ -90,13 +90,13 @@ namespace ShipWorks.Shipping.Tests.Services
                 AmazonCredentials = amazonStore as IAmazonCredentials
             };
 
-            amazonShipmentShippingPolicy = new AmazonShipmentShippingPolicy();
+            amazonShipmentShippingPolicy = new AmazonSFPShipmentShippingPolicy();
             amazonShipmentShippingPolicy.Configure("1");
             amazonShipmentShippingPolicy.Apply(target);
 
             license
                 .Setup(l => l.ApplyShippingPolicy(ShipmentTypeCode.AmazonSFP, It.IsAny<object>()))
-                .Callback((ShipmentTypeCode s, object t) => ((AmazonPrimeShippingPolicyTarget) t).Allowed = target.Allowed);
+                .Callback((ShipmentTypeCode s, object t) => ((AmazonShippingPolicyTarget) t).Allowed = target.Allowed);
 
             amazonOrder.Store = amazonStore;
             nonAmazonOrder.Store = nonAmazonStore;
@@ -301,7 +301,7 @@ namespace ShipWorks.Shipping.Tests.Services
                 ShipmentTypeCode = shipmentTypeCode
             };
 
-            target = new AmazonPrimeShippingPolicyTarget()
+            target = new AmazonShippingPolicyTarget()
             {
                 Shipment = shipment,
                 Allowed = false,
@@ -309,7 +309,7 @@ namespace ShipWorks.Shipping.Tests.Services
                 AmazonCredentials = orderToTest.Store as IAmazonCredentials
             };
 
-            amazonShipmentShippingPolicy = new AmazonShipmentShippingPolicy();
+            amazonShipmentShippingPolicy = new AmazonSFPShipmentShippingPolicy();
             if (restrictionType != RestrictionType.Hidden)
             {
                 amazonShipmentShippingPolicy.Configure(restrictionType == RestrictionType.PrimeOnly ? "1" : "2");
@@ -318,7 +318,7 @@ namespace ShipWorks.Shipping.Tests.Services
 
             license
                 .Setup(l => l.ApplyShippingPolicy(ShipmentTypeCode.AmazonSFP, It.IsAny<object>()))
-                .Callback((ShipmentTypeCode s, object t) => ((AmazonPrimeShippingPolicyTarget) t).Allowed = target.Allowed);
+                .Callback((ShipmentTypeCode s, object t) => ((AmazonShippingPolicyTarget) t).Allowed = target.Allowed);
 
             ShipmentTypeProvider testObject = mock.Create<ShipmentTypeProvider>();
 

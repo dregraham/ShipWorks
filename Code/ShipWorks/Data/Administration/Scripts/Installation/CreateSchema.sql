@@ -2993,10 +2993,7 @@ GO
 CREATE TABLE [dbo].[AmazonSWAProfile](
 	[ShippingProfileID] [bigint] NOT NULL,
 	[AmazonSWAAccountID] [bigint] NULL,
-	[Service] [int] NULL,
-	[NonMachinable] [bit] NULL,
-	[Contents] [int] NULL,
-	[NonDelivery] [int] NULL
+	[Service] [int] NULL
 )
 GO
 PRINT N'Creating primary key [PK_AmazonSWAProfile] on [dbo].[AmazonSWAProfile]'
@@ -3013,10 +3010,7 @@ CREATE TABLE [dbo].[AmazonSWAShipment](
 	[ShipmentID] [bigint] NOT NULL,
 	[AmazonSWAAccountID] [bigint] NOT NULL,
 	[Service] [int] NOT NULL,
-	[NonMachinable] [bit] NOT NULL,
 	[RequestedLabelFormat] [int] NOT NULL,
-	[Contents][int] NOT NULL,
-	[NonDelivery] [int] NOT NULL,
 	[ShipEngineLabelID] [nvarchar] (12) NOT NULL,
 	[DimsProfileID] [bigint] NOT NULL,
 	[DimsLength] [float] NOT NULL,

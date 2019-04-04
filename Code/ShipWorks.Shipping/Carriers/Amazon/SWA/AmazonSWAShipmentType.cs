@@ -8,6 +8,7 @@ using Interapptive.Shared.Enums;
 using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipEngine.ApiClient.Model;
+using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Data;
@@ -17,11 +18,15 @@ using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Insurance;
+using ShipWorks.Shipping.Policies;
 using ShipWorks.Shipping.Services;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping.Settings.Origin;
 using ShipWorks.Shipping.ShipEngine;
 using ShipWorks.Shipping.Tracking;
+using ShipWorks.Stores;
+using ShipWorks.Stores.Content;
+using ShipWorks.Stores.Platforms.Amazon;
 using ShipWorks.Templates.Processing.TemplateXml.ElementOutlines;
 
 namespace ShipWorks.Shipping.Carriers.Amazon.SWA
@@ -37,6 +42,9 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SWA
         private readonly IShipEngineWebClient shipEngineWebClient;
         private readonly IShipEngineTrackingResultFactory trackingResultFactory;
         private readonly IShippingManager shippingManager;
+        private readonly IOrderManager orderManager;
+        private readonly IStoreManager storeManager;
+        private readonly ILicenseService licenseService;
 
         /// <summary>
         /// Constructor
@@ -44,12 +52,18 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SWA
         public AmazonSWAShipmentType(ICarrierAccountRepository<AmazonSWAAccountEntity, IAmazonSWAAccountEntity> accountRepository,
             IShipEngineWebClient shipEngineWebClient,
             IShipEngineTrackingResultFactory trackingResultFactory,
-            IShippingManager shippingManager)
+            IShippingManager shippingManager,
+            IOrderManager orderManager,
+            IStoreManager storeManager,
+            ILicenseService licenseService)
         {
             this.accountRepository = accountRepository;
             this.shipEngineWebClient = shipEngineWebClient;
             this.trackingResultFactory = trackingResultFactory;
             this.shippingManager = shippingManager;
+            this.orderManager = orderManager;
+            this.storeManager = storeManager;
+            this.licenseService = licenseService;
         }
 
         /// <summary>
@@ -73,6 +87,38 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SWA
         public override bool SupportsGetRates => true;
 
         /// <summary>
+        /// Checks whether this shipment type is allowed for the given shipment
+        /// </summary>
+        public override bool IsAllowedFor(ShipmentEntity shipment)
+        {
+            if (IsShipmentTypeRestricted)
+            {
+                return false;
+            }
+
+            if (shipment.Order == null)
+            {
+                orderManager.PopulateOrderDetails(shipment);
+            }
+
+            IAmazonOrder amazonOrder = shipment.Order as IAmazonOrder;
+
+            AmazonShippingPolicyTarget target = new AmazonShippingPolicyTarget()
+            {
+                ShipmentType = ShipmentTypeCode.AmazonSWA,
+                Shipment = shipment,
+                Allowed = false,
+                AmazonOrder = amazonOrder,
+                AmazonCredentials = storeManager.GetStore(shipment.Order.StoreID) as IAmazonCredentials
+            };
+
+            ILicense license = licenseService.GetLicenses().FirstOrDefault();
+            license?.ApplyShippingPolicy(ShipmentTypeCode, target);
+
+            return target.Allowed;
+        }
+
+        /// <summary>
         /// Create and Initialize a new shipment
         /// </summary>
         public override void ConfigureNewShipment(ShipmentEntity shipment)
@@ -83,7 +129,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SWA
             }
 
             AmazonSWAShipmentEntity swaShipment = shipment.AmazonSWA;
-            swaShipment.Service = (int) AmazonSWAServiceType.Fastest;
+            swaShipment.Service = (int) AmazonSWAServiceType.OneDay;
             swaShipment.RequestedLabelFormat = (int) ThermalLanguage.None;
             swaShipment.Contents = (int) ShipEngineContentsType.Merchandise;
             swaShipment.NonDelivery = (int) ShipEngineNonDeliveryType.ReturnToSender;
@@ -258,7 +304,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SWA
                 accountRepository.AccountsReadOnly.First().AmazonSWAAccountID :
                 0;
 
-            swaProfile.Service = (int) AmazonSWAServiceType.Fastest;
+            swaProfile.Service = (int) AmazonSWAServiceType.OneDay;
             swaProfile.Contents = (int) ShipEngineContentsType.Merchandise;
             swaProfile.NonDelivery = (int) ShipEngineNonDeliveryType.ReturnToSender;
             swaProfile.NonMachinable = false;
