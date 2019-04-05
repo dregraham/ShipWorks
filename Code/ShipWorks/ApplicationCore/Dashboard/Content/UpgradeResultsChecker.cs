@@ -103,17 +103,23 @@ namespace ShipWorks.ApplicationCore.Dashboard.Content
         /// </summary>
         private void ShowDashboardItem() =>
             dashboardManager.ShowLocalMessage("ReleaseNotes",
-                DashboardMessageImageType.LightBulb,
-                "ShipWorks updated successfully",
-                string.Empty);
+                new DashboardLocalMessageDetails
+                {
+                    ImageType = DashboardMessageImageType.LightBulb,
+                    PrimaryText = "ShipWorks updated successfully",
+                    UseFriendlyDateTime = false
+                });
 
         /// <summary>
         /// Show the dashboard item
         /// </summary>
         private void ShowUpgradeError(DateTime updateWindow) =>
             dashboardManager.ShowLocalMessage("UpgradeError",
-                DashboardMessageImageType.Error,
-                "ShipWorks was unable to update.",
-                $"Next update attempt: {updateWindow.ToString("MMMM d")} at {updateWindow.ToString("h:00 tt")}");
+                new DashboardLocalMessageDetails
+                {
+                    ImageType = DashboardMessageImageType.Error,
+                    PrimaryText = "ShipWorks was unable to update.",
+                    SecondaryText = $"Next update attempt: {updateWindow.ToString("MMMM d")} at {updateWindow.ToString("h:00 tt")}"
+                });
     }
 }
