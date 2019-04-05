@@ -19,7 +19,7 @@ namespace ShipWorks.Shipping.Policies
             get => shipmentType;
             set
             {
-                if (value != ShipmentTypeCode.AmazonSFP ||
+                if (value != ShipmentTypeCode.AmazonSFP &&
                     value != ShipmentTypeCode.AmazonSWA)
                 {
                     throw new InvalidOperationException("cannot use non amazon ShipmentType for AmazonShippingPolicyTarget");

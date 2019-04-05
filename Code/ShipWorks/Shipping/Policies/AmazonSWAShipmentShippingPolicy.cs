@@ -64,18 +64,12 @@ namespace ShipWorks.Shipping.Policies
             AmazonShippingPolicyTarget theTarget = target as AmazonShippingPolicyTarget;
             MethodConditions.EnsureArgumentIsNotNull(theTarget, nameof(theTarget));
 
-            if (IsApplicable(target))
+            if (IsApplicable(target) && (AllOrdersAllowed || (OnlyAmazonOrdersAllowed && theTarget.AmazonOrder != null)))
             {
-                if (AllOrdersAllowed || (OnlyAmazonOrdersAllowed && theTarget.AmazonOrder != null))
-                {
-                    theTarget.Allowed = theTarget.AmazonCredentials != null;
-                    return;
-                }
+                theTarget.Allowed = true;
             }
-            else
-            {
-                theTarget.Allowed = false;
-            }
+
+            theTarget.Allowed = false;
         }
     }
 }
