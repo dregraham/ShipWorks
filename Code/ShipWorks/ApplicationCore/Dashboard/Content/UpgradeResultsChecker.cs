@@ -119,7 +119,8 @@ namespace ShipWorks.ApplicationCore.Dashboard.Content
                 {
                     ImageType = DashboardMessageImageType.Error,
                     PrimaryText = "ShipWorks was unable to update.",
-                    SecondaryText = $"Next update attempt: {updateWindow.ToString("MMMM d")} at {updateWindow.ToString("h:00 tt")}"
+                    SecondaryText = $"Next update attempt: {updateWindow.ToString("MMMM d")} at {updateWindow.ToString("h:00 tt")}",
+                    UseFriendlyDateTime = false
                 });
     }
 }
