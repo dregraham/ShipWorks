@@ -68,7 +68,7 @@ namespace ShipWorks.Shipping.UI.Amazon.SWA
         /// </summary>
         private void GetAccessCode()
         {
-            string authorizationUrl = $"";
+            string authorizationUrl = $"https://www.interapptive.com/amazon/shipping.subscribe.html";
             WebHelper.OpenUrl(authorizationUrl, window);
         }
     }
