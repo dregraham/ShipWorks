@@ -1,6 +1,7 @@
 ﻿using System;
 using Interapptive.Shared.Enums;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping;
 using ShipWorks.Shipping.Policies;
 using Xunit;
 
@@ -16,6 +17,7 @@ namespace ShipWorks.Tests.Shipping.Policies
             testObject = new AmazonSFPShipmentShippingPolicy();
             testTarget = new AmazonShippingPolicyTarget()
             {
+                ShipmentType = ShipmentTypeCode.AmazonSFP,
                 Shipment = new ShipmentEntity()
                 {
                     Order = new OrderEntity()
