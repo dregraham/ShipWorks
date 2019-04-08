@@ -64,6 +64,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
 
             target = new AmazonShippingPolicyTarget()
             {
+                ShipmentType = ShipmentTypeCode.AmazonSFP,
                 Shipment = shipment,
                 Allowed = false,
                 AmazonOrder = amazonOrder,
@@ -103,7 +104,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
             target.AmazonOrder = amazonOrder;
 
             MockShipmentTypeRestriction(EditionRestrictionLevel.None);
-            
+
             amazonShipmentShippingPolicy.Apply(target);
             AmazonSFPShipmentType testObject = mock.Create<AmazonSFPShipmentType>();
 

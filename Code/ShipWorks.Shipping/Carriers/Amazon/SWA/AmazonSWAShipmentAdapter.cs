@@ -1,4 +1,5 @@
-﻿using Interapptive.Shared.ComponentRegistration;
+﻿using System.Linq;
+using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Enums;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
@@ -30,7 +31,6 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SWA
             base(shipment, shipmentTypeManager, customsManager, storeManager)
         {
             MethodConditions.EnsureArgumentIsNotNull(shipment.AmazonSWA, nameof(shipment.AmazonSWA));
-            MethodConditions.EnsureArgumentIsNotNull(customsManager, nameof(customsManager));
         }
 
         /// <summary>
@@ -70,7 +70,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SWA
         /// <summary>
         /// Are customs allowed?
         /// </summary>
-        public override bool CustomsAllowed => true;
+        public override bool CustomsAllowed => false;
 
         /// <summary>
         /// Update the insurance fields on the shipment and packages
@@ -78,6 +78,22 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SWA
         public override void UpdateInsuranceFields(ShippingSettingsEntity shippingSettings)
         {
             Shipment.InsuranceProvider = (int) InsuranceProvider.ShipWorks;
+        }
+
+        /// <summary>
+        /// Does the given rate match the service selected for the shipment
+        /// </summary>
+        public override bool DoesRateMatchSelectedService(RateResult rate)
+        {
+            if (ShipmentTypeCode != rate.ShipmentType)
+            {
+                return false;
+            }
+
+            AmazonSWAServiceType selectedValue = EnumHelper.GetEnumList<AmazonSWAServiceType>()
+                .FirstOrDefault(f => f.ApiValue == rate.Days).Value;
+
+            return (int) selectedValue == ServiceType;
         }
 
         /// <summary>
@@ -95,11 +111,10 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SWA
         /// </summary>
         protected override void UpdateServiceFromRate(RateResult rate)
         {
-            int? service = GetServiceTypeAsIntFromTag(rate.Tag);
-            if (service.HasValue)
-            {
-                Shipment.AmazonSWA.Service = service.Value;
-            }
+            AmazonSWAServiceType selectedValue = EnumHelper.GetEnumList<AmazonSWAServiceType>()
+                .FirstOrDefault(f => f.ApiValue == rate.Days).Value;
+
+            Shipment.AmazonSWA.Service = (int) selectedValue;
         }
 
         /// <summary>

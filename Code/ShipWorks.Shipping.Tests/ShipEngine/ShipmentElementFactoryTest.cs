@@ -40,7 +40,7 @@ namespace ShipWorks.Shipping.Tests.ShipEngine
                 ShipPostalCode = "90210",
                 ShipCountryCode = "Westeros"
             };
-        
+
             var request = testObject.CreateRateRequest(shipment);
 
             Assert.Equal(shipment.ShipUnparsedName, request.Shipment.ShipTo.Name);
@@ -52,7 +52,7 @@ namespace ShipWorks.Shipping.Tests.ShipEngine
             Assert.Equal(shipment.ShipCity, request.Shipment.ShipTo.CityLocality);
             Assert.Equal(shipment.ShipStateProvCode, request.Shipment.ShipTo.StateProvince);
             Assert.Equal(shipment.ShipPostalCode, request.Shipment.ShipTo.PostalCode);
-            Assert.Equal(shipment.ShipCountryCode, request.Shipment.ShipTo.CountryCode);           
+            Assert.Equal(shipment.ShipCountryCode, request.Shipment.ShipTo.CountryCode);
         }
 
         [Fact]
@@ -86,7 +86,7 @@ namespace ShipWorks.Shipping.Tests.ShipEngine
             Assert.Equal(shipment.OriginPostalCode, request.Shipment.ShipFrom.PostalCode);
             Assert.Equal(shipment.OriginCountryCode, request.Shipment.ShipFrom.CountryCode);
         }
-        
+
         [Theory]
         [InlineData("US", "US")]
         [InlineData("GB", "GB")]
@@ -101,20 +101,6 @@ namespace ShipWorks.Shipping.Tests.ShipEngine
             var request = testObject.CreateRateRequest(shipment);
 
             Assert.Equal(expectedResulingCountryCode, request.Shipment.ShipFrom.CountryCode);
-        }
-
-        [Fact]
-        public void CreateRateRequest_PopulatesTotalWeight()
-        {
-            ShipmentEntity shipment = new ShipmentEntity()
-            {
-                TotalWeight = 42.42
-            };
-
-            var request = testObject.CreateRateRequest(shipment);
-
-            Assert.Equal(42.42D, request.Shipment.TotalWeight.Value);
-            Assert.Equal(Weight.UnitEnum.Pound, request.Shipment.TotalWeight.Unit);
         }
 
         [Fact]
@@ -179,21 +165,6 @@ namespace ShipWorks.Shipping.Tests.ShipEngine
             Assert.Equal(shipment.OriginStateProvCode, request.Shipment.ShipFrom.StateProvince);
             Assert.Equal(shipment.OriginPostalCode, request.Shipment.ShipFrom.PostalCode);
             Assert.Equal(shipment.OriginCountryCode, request.Shipment.ShipFrom.CountryCode);
-        }
-
-        [Fact]
-        public void CreatePurchaseLabelRequest_PopulatesTotalWeight()
-        {
-            ShipmentEntity shipment = new ShipmentEntity()
-            {
-                TotalWeight = 42.42,
-                RequestedLabelFormat = (int) ThermalLanguage.ZPL
-            };
-
-            var request = testObject.CreatePurchaseLabelRequest(shipment, new List<IPackageAdapter>(), string.Empty);
-
-            Assert.Equal(42.42D, request.Shipment.TotalWeight.Value);
-            Assert.Equal(Weight.UnitEnum.Pound, request.Shipment.TotalWeight.Unit);
         }
 
         [Theory]

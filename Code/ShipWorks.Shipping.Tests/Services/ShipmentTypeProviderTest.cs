@@ -84,6 +84,7 @@ namespace ShipWorks.Shipping.Tests.Services
 
             target = new AmazonShippingPolicyTarget()
             {
+                ShipmentType = ShipmentTypeCode.AmazonSFP,
                 Shipment = shipment,
                 Allowed = false,
                 AmazonOrder = amazonOrder,
@@ -273,8 +274,8 @@ namespace ShipWorks.Shipping.Tests.Services
         [InlineData(Ordertype.GenericModule, ShipmentTypeCode.Other, RestrictionType.AnyAmazon, AmazonIsPrime.No, false, true)]
         [InlineData(Ordertype.GenericModule, ShipmentTypeCode.Other, RestrictionType.AnyAmazon, AmazonIsPrime.Unknown, false, true)]
         [InlineData(Ordertype.BigCommerce, ShipmentTypeCode.Other, RestrictionType.AnyAmazon, AmazonIsPrime.No, false, true)]
-        public void GetAvailableShipmentTypes_ReturnsCorrectValues(Ordertype orderType, ShipmentTypeCode shipmentTypeCode, 
-                                                                   RestrictionType restrictionType, AmazonIsPrime isPrime, 
+        public void GetAvailableShipmentTypes_ReturnsCorrectValues(Ordertype orderType, ShipmentTypeCode shipmentTypeCode,
+                                                                   RestrictionType restrictionType, AmazonIsPrime isPrime,
                                                                    bool expectedAmazonAllowed, bool otherCarriersAllowed)
         {
             List<ShipmentTypeCode> enabledShipmentTypeCodes = new List<ShipmentTypeCode> { ShipmentTypeCode.Other, ShipmentTypeCode.Usps};
@@ -303,6 +304,7 @@ namespace ShipWorks.Shipping.Tests.Services
 
             target = new AmazonShippingPolicyTarget()
             {
+                ShipmentType = ShipmentTypeCode.AmazonSFP,
                 Shipment = shipment,
                 Allowed = false,
                 AmazonOrder = orderToTest as IAmazonOrder,

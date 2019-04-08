@@ -49,6 +49,7 @@ namespace ShipWorks.OrderLookup
             {
                 RegisterEventEntity(x => x?.Shipment, x => true),
                 RegisterEventEntity(x => x?.Shipment?.AmazonSFP, x => x == ShipmentTypeCode.AmazonSFP),
+                RegisterEventEntity(x => x?.Shipment?.AmazonSWA, x => x == ShipmentTypeCode.AmazonSWA),
                 RegisterEventEntity(x => x?.Shipment?.Asendia, x => x == ShipmentTypeCode.Asendia),
                 RegisterEventEntity(x => x?.Shipment?.BestRate, x => x == ShipmentTypeCode.BestRate),
                 RegisterEventEntity(x => x?.Shipment?.DhlExpress, x => x == ShipmentTypeCode.DhlExpress),

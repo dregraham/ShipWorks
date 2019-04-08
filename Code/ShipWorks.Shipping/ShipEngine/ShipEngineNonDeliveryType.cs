@@ -13,7 +13,7 @@ namespace ShipWorks.Shipping.ShipEngine
     /// Enumeration of instructions one could send with customs to ShipEngine
     /// </summary>
     /// <remarks>
-    /// The numeric values of the enum values correspond to the numeric values of the enum values 
+    /// The numeric values of the enum values correspond to the numeric values of the enum values
     /// of InternationalOptions.NonDeliveryEnum
     /// </remarks>
     [Obfuscation(Feature = "PreserveLiteralValues", Exclude = false, StripAfterObfuscation = false)]
@@ -21,10 +21,10 @@ namespace ShipWorks.Shipping.ShipEngine
     {
         [Description("Return To Sender")]
         [ApiValue("return_to_sender")]
-        ReturnToSender = 0,
+        ReturnToSender = 1,
 
         [Description("Treat As Abandoned")]
         [ApiValue("treat_as_abandoned")]
-        TreatAsAbandoned = 1,
+        TreatAsAbandoned = 2,
     }
 }

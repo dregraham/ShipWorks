@@ -77,9 +77,9 @@ namespace ShipWorks.Shipping.ShipEngine
         public async Task<GenericResult<string>> ConnectAmazonShippingAccount(string authCode)
         {
 #pragma warning disable S125
-            // Doug Wile (ShipEngine): So the root of the error is that we don't currently support connecting an Amazon Shipping account outside 
-            // of the partner workflow (partner key + on-behalf-of seller ID). The solution for you will be to use the `GET /v1/environment/whoami` 
-            // endpoint to retrieve a seller's ID given their API key. You will then use this ID(with the `se -` prefix) in the `on - behalf - of` 
+            // Doug Wile (ShipEngine): So the root of the error is that we don't currently support connecting an Amazon Shipping account outside
+            // of the partner workflow (partner key + on-behalf-of seller ID). The solution for you will be to use the `GET /v1/environment/whoami`
+            // endpoint to retrieve a seller's ID given their API key. You will then use this ID(with the `se -` prefix) in the `on - behalf - of`
             // header when making the `POST / v1 / connections / carriers / amazon_shipping_us` request
 
             // The request / response for whoami looks like this currently
@@ -97,7 +97,7 @@ namespace ShipWorks.Shipping.ShipEngine
             // "request_id": "cf3dad78-4c95-4763-bdad-1744e9f2b0fc"
             // }
 
-            // This endpoint is undocumented, but will work.We'll be adding another property which will just be the account ID with the `se-` 
+            // This endpoint is undocumented, but will work.We'll be adding another property which will just be the account ID with the `se-`
             // prefix to make it a bit cleaner to use. If we end up making a documented account endpoint with the same/similar functionality,
             // we'll let you know and work with you to help move you over.We definitely don't want to break any of your workflows :smiley:
 #pragma warning restore S125
@@ -116,7 +116,7 @@ namespace ShipWorks.Shipping.ShipEngine
                     whoAmIRequest.ProcessRequest(new ApiLogEntry(ApiLogSource.ShipEngine, "WhoAmI"), typeof(ShipEngineException));
                 string accountId = JObject.Parse(result.Message)["data"]["username"].ToString();
 
-                
+
                 // now we have to connect Amazon to the account id using our partner key
                 HttpJsonVariableRequestSubmitter submitter = new HttpJsonVariableRequestSubmitter();
                 submitter.Headers.Add($"Content-Type: application/json");

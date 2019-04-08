@@ -182,6 +182,7 @@
     <Compile Include="Carriers\Amazon\SFP\IAmazonSFPSameDayNotAvailableFootnoteViewModel.cs" />
     <Compile Include="Carriers\Amazon\SFP\IAmazonSFPServiceTypeRepository.cs" />
     <Compile Include="Carriers\Amazon\SFP\RateGroupFilters\AmazonSFPAvailableServiceTypeRateGroupFilter.cs" />
+    <Compile Include="Carriers\Amazon\SWA\AmazonSFPRateHashingService.cs" />
     <Compile Include="Carriers\Amazon\SWA\AmazonSWAShipmentType.cs" />
     <Compile Include="Carriers\Amazon\SWA\AmazonSWAPackageAdapter.cs" />
     <Compile Include="Carriers\Amazon\SWA\AmazonSWAAccountDescription.cs" />
