@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Drawing.Imaging;
 using System.Linq;
 using System.Threading.Tasks;
+using Interapptive.Shared;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Enums;
 using Interapptive.Shared.Utility;
@@ -49,6 +50,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SWA
         /// <summary>
         /// Constructor
         /// </summary>
+        [NDependIgnoreTooManyParams]
         public AmazonSWAShipmentType(ICarrierAccountRepository<AmazonSWAAccountEntity, IAmazonSWAAccountEntity> accountRepository,
             IShipEngineWebClient shipEngineWebClient,
             IShipEngineTrackingResultFactory trackingResultFactory,
