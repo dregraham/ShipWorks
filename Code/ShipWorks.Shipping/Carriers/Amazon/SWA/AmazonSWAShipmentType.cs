@@ -91,8 +91,6 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SWA
         /// </summary>
         public override bool IsAllowedFor(ShipmentEntity shipment)
         {
-            return true;
-
             if (IsShipmentTypeRestricted)
             {
                 return false;
