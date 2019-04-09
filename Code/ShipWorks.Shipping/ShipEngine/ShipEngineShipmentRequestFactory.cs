@@ -60,7 +60,7 @@ namespace ShipWorks.Shipping.ShipEngine
         /// <summary>
         /// Creates a ShipEngine rate request
         /// </summary>
-        public RateShipmentRequest CreateRateShipmentRequest(ShipmentEntity shipment)
+        public virtual RateShipmentRequest CreateRateShipmentRequest(ShipmentEntity shipment)
         {
             MethodConditions.EnsureArgumentIsNotNull(shipment, nameof(shipment));
             EnsureCarrierShipmentIsNotNull(shipment);
@@ -110,7 +110,7 @@ namespace ShipWorks.Shipping.ShipEngine
         /// Creates the ShipEngine customs node
         /// </summary>
         protected abstract InternationalOptions CreateCustoms(ShipmentEntity shipment);
-        
+
         /// <summary>
         /// Gets the carrier specific packages
         /// </summary>

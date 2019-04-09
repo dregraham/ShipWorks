@@ -6,6 +6,7 @@ using ShipWorks.Data.Model.EntityClasses;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
 using ShipWorks.Shipping.Services;
+using Interapptive.Shared.Collections;
 
 namespace ShipWorks.Shipping.Carriers.Amazon.SWA
 {
@@ -56,6 +57,47 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SWA
         }
 
         /// <summary>
+        /// Create RateShipmentRequest adds items which are required for amazon shipping
+        /// </summary>
+        public override RateShipmentRequest CreateRateShipmentRequest(ShipmentEntity shipment)
+        {
+            RateShipmentRequest request = base.CreateRateShipmentRequest(shipment);
+
+            request.Shipment.Items = GetShipmentItems(shipment);
+
+            return request;
+        }
+
+        /// <summary>
+        /// Get shipment items from the shipment
+        /// </summary>
+        private static List<ShipmentItem> GetShipmentItems(ShipmentEntity shipment)
+        {
+            List<ShipmentItem> result = new List<ShipmentItem>();
+
+            AmazonOrderEntity amazonOrder = shipment.Order as AmazonOrderEntity;
+            foreach (OrderItemEntity item in shipment.Order.OrderItems)
+            {
+                AmazonOrderItemEntity amazonItem = item as AmazonOrderItemEntity;
+                result.Add(
+                    new ShipmentItem(
+                        externalOrderId: amazonOrder?.AmazonOrderID ?? shipment.Order.OrderNumberComplete,
+                        asin: amazonItem?.ASIN ?? string.Empty,
+                        name: item.Name));
+            }
+
+            // ShipEngine will throw if there are no items, they recommended we add a fake item
+            if (result.None())
+            {
+                result.Add(new ShipmentItem(
+                    name: "NoItem",
+                    externalOrderId: shipment.Order.OrderNumberComplete));
+            }
+
+            return result;
+        }
+
+        /// <summary>
         /// Gets the api value for the AmazonSWA service
         /// </summary>
         protected override string GetServiceApiValue(ShipmentEntity shipment)
@@ -68,7 +110,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SWA
         /// </summary>
         protected override AdvancedOptions CreateAdvancedOptions(ShipmentEntity shipment)
         {
-            return new AdvancedOptions();
+            return null;
         }
 
         /// <summary>
@@ -76,7 +118,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SWA
         /// </summary>
         protected override InternationalOptions CreateCustoms(ShipmentEntity shipment)
         {
-            return new InternationalOptions();
+            return null;
         }
     }
 }

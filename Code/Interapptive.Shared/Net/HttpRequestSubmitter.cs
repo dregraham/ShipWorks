@@ -406,6 +406,10 @@ namespace Interapptive.Shared.Net
                     webRequest.Method = "PATCH";
                     break;
 
+                case HttpVerb.Delete:
+                    webRequest.Method = "DELETE";
+                    break;
+
                 default:
                     throw new InvalidOperationException("Invalid request verb: " + requestVerb);
             }

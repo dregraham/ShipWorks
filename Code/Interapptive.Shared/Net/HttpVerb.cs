@@ -19,6 +19,9 @@ namespace Interapptive.Shared.Net
         Put,
 
         [Description("PATCH")]
-        Patch
+        Patch,
+
+        [Description("DELETE")]
+        Delete
     }
 }

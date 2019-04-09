@@ -141,9 +141,9 @@
             this.labelThermalNote.ForeColor = System.Drawing.SystemColors.GrayText;
             this.labelThermalNote.Location = new System.Drawing.Point(35, 44);
             this.labelThermalNote.Name = "labelThermalNote";
-            this.labelThermalNote.Size = new System.Drawing.Size(259, 13);
+            this.labelThermalNote.Size = new System.Drawing.Size(236, 13);
             this.labelThermalNote.TabIndex = 103;
-            this.labelThermalNote.Text = "Note: AmazonSWA only supports ZPL thermal labels.";
+            this.labelThermalNote.Text = "Note: Amazon only supports ZPL thermal labels.";
             this.labelThermalNote.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // requestedLabelFormat

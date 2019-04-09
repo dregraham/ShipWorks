@@ -67,6 +67,34 @@ namespace ShipWorks.Shipping.ShipEngine
         }
 
         /// <summary>
+        /// Disconnect AmazonShipping
+        /// </summary>
+        /// <param name="accountId"></param>
+        /// <returns></returns>
+        public async Task<Result> DisconnectAmazonShippingAccount(string accountId)
+        {
+            try
+            {
+                // now we have to connect Amazon to the account id using our partner key
+                HttpJsonVariableRequestSubmitter submitter = new HttpJsonVariableRequestSubmitter();
+                submitter.Headers.Add($"Content-Type: application/json");
+                submitter.Headers.Add($"api-key: {await GetApiKey()}");
+                submitter.Verb = HttpVerb.Delete;
+                submitter.Uri = new Uri($"https://api.shipengine.com/v1/connections/carriers/amazon_shipping_us/{accountId}");
+
+                // Delete request returns no content, this is not an error
+                submitter.AllowHttpStatusCodes(HttpStatusCode.NoContent);
+
+                submitter.ProcessRequest(new ApiLogEntry(ApiLogSource.ShipEngine, "DisconnectAmazonShipping"), typeof(ShipEngineException));
+                return Result.FromSuccess();
+            }
+            catch (Exception ex)
+            {
+                return Result.FromError(ex);
+            }
+        }
+
+        /// <summary>
         /// Connect an Amazon Shipping Account
         /// </summary>
         /// <remarks>
@@ -128,7 +156,7 @@ namespace ShipWorks.Shipping.ShipEngine
 
 
                 EnumResult<HttpStatusCode> connectCarrierResponse =
-                    submitter.ProcessRequest(new ApiLogEntry(ApiLogSource.ShipEngine, "WhoAmI"), typeof(ShipEngineException));
+                    submitter.ProcessRequest(new ApiLogEntry(ApiLogSource.ShipEngine, "ConnectAmazonShipping"), typeof(ShipEngineException));
 
                 return GenericResult.FromSuccess(JObject.Parse(connectCarrierResponse.Message)["carrier_id"].ToString());
 

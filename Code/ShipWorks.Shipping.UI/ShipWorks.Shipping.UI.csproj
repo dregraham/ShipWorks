@@ -203,6 +203,12 @@
       <DependentUpon>AmazonSWAAuthorizationControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Carriers\Amazon\SWA\AmazonSWAAuthorizationViewModel.cs" />
+    <Compile Include="Carriers\Amazon\SWA\AmazonSWAAccountManagerControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Carriers\Amazon\SWA\AmazonSWAAccountManagerControl.Designer.cs">
+      <DependentUpon>AmazonSWAAccountManagerControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="Carriers\Amazon\SWA\IAmazonSWAAuthorizationViewModel.cs" />
     <Compile Include="Carriers\Asendia\AsendiaServiceControl.cs">
       <SubType>UserControl</SubType>
@@ -583,6 +589,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Carriers\Amazon\SWA\AmazonSWASetupWizard.resx">
       <DependentUpon>AmazonSWASetupWizard.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Carriers\Amazon\SWA\AmazonSWAAccountManagerControl.resx">
+      <DependentUpon>AmazonSWAAccountManagerControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Carriers\Asendia\AsendiaServiceControl.resx">
       <DependentUpon>AsendiaServiceControl.cs</DependentUpon>

@@ -57,9 +57,6 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SWA
             {
                 RateShipmentRequest request = rateRequestFactory.CreateRateShipmentRequest(shipment);
 
-                request.Shipment.Items = new List<ShipmentItem>();
-                request.Shipment.Items.Add(new ShipmentItem(name:"test item"));
-
                 RateShipmentResponse rateShipmentResponse = Task.Run(async () =>
                         await shipEngineWebClient.RateShipment(request, ApiLogSource.AmazonSWA).ConfigureAwait(false)).Result;
 

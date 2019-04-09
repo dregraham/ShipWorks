@@ -11,6 +11,7 @@ using Interapptive.Shared.Utility;
 using System.Linq;
 using ShipWorks.Shipping.Editing.Rating;
 using Interapptive.Shared.Collections;
+using System.Collections.Generic;
 
 namespace ShipWorks.Shipping.Carriers.Amazon.SWA
 {
@@ -60,29 +61,6 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SWA
             // we have to get rates to get a list of rateIds and then request a label based on the rateid
             // if no rate id is sent they will use the fasted rate
             MethodConditions.EnsureArgumentIsNotNull(shipment, nameof(shipment));
-            PurchaseLabelRequest request = shipmentRequestFactory.CreatePurchaseLabelRequest(shipment);
-            request.Shipment.Items = new System.Collections.Generic.List<ShipmentItem>();
-
-            // If its an amazon order we have to populate it with the amazon order details
-            if (shipment.Order.Store.StoreTypeCode == Stores.StoreTypeCode.Amazon)
-            {
-                AmazonOrderEntity amazonOrder = shipment.Order as AmazonOrderEntity;
-                foreach (OrderItemEntity item in amazonOrder.OrderItems)
-                {
-                    AmazonOrderItemEntity amazonItem = item as AmazonOrderItemEntity;
-                    request.Shipment.Items.Add(
-                        new ShipmentItem(
-                            externalOrderId: amazonOrder.AmazonOrderID,
-                            asin: amazonItem.ASIN,
-                            name: item.Name));
-                }
-            }
-
-            // ShipEngine will throw if there are no items, they recommended we add a fake item
-            if(request.Shipment.Items.None())
-            {
-                request.Shipment.Items.Add(new ShipmentItem(name: "NoItem"));
-            }
 
             // to get a specific service we first have to get rates
             GenericResult<RateGroup> rates = ratesRetriever.GetRates(shipment);

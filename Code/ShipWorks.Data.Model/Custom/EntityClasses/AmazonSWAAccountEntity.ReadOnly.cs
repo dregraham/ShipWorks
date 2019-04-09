@@ -36,7 +36,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// </summary>
         public void ApplyTo(ShipmentEntity shipment)
         {
-            throw new NotImplementedException("ApplyTo");
+            shipment.AmazonSWA.AmazonSWAAccountID = AccountId;
         }
 
         /// <summary>

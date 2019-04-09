@@ -23,6 +23,13 @@ namespace ShipWorks.Shipping.ShipEngine
         Task<GenericResult<string>> ConnectAsendiaAccount(string accountNumber, string username, string password);
 
         /// <summary>
+        /// Disconnect the given amazon shipping account
+        /// </summary>
+        /// <param name="accountId"></param>
+        /// <returns></returns>
+        Task<Result> DisconnectAmazonShippingAccount(string accountId);
+
+        /// <summary>
         /// Connect an Amazon Shipping Account
         /// </summary>
         /// <remarks>
