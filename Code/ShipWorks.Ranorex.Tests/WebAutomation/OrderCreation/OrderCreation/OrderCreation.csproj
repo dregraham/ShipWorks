@@ -113,8 +113,35 @@
     <Compile Include="AssemblyInfo.cs">
       <id>53c163cb-8795-43ce-8bfa-bcb2c2c5cc09</id>
     </Compile>
+    <Compile Include="CreateOrderCA.cs">
+      <BoundTo>7cafec8a-487b-4f02-bb63-fd01962cd526</BoundTo>
+      <DependentUpon>CreateOrderCA.rxrec</DependentUpon>
+      <RecorderCode>true</RecorderCode>
+      <id>31a1c742-8340-4a00-b0d8-92d86ca1fa72</id>
+    </Compile>
+    <Compile Include="CreateOrderCA.UserCode.cs">
+      <BoundTo>7cafec8a-487b-4f02-bb63-fd01962cd526</BoundTo>
+      <DependentUpon>CreateOrderCA.rxrec</DependentUpon>
+      <UserCode>true</UserCode>
+      <id>8f643853-1ba2-45ec-ae1d-fecfa9ef0db5</id>
+    </Compile>
     <Compile Include="CreateShopifyOrder.cs">
       <id>4ed544fe-c98e-4e2c-b600-bf473d88a1ac</id>
+    </Compile>
+    <Compile Include="LogInCA.cs">
+      <BoundTo>a6327e70-bbed-4cca-81a9-6ffbb4e6562e</BoundTo>
+      <DependentUpon>LogInCA.rxrec</DependentUpon>
+      <RecorderCode>true</RecorderCode>
+      <id>8ea2952c-527a-4fd8-a1b1-412e9e0c9bec</id>
+    </Compile>
+    <Compile Include="LogInCA.UserCode.cs">
+      <BoundTo>a6327e70-bbed-4cca-81a9-6ffbb4e6562e</BoundTo>
+      <DependentUpon>LogInCA.rxrec</DependentUpon>
+      <UserCode>true</UserCode>
+      <id>60ac0273-f87e-4255-8768-44e9d970d3d5</id>
+    </Compile>
+    <Compile Include="NumberOfOrders.cs">
+      <id>deec2c74-a5c6-4521-a107-c99c37c8e7a4</id>
     </Compile>
     <Compile Include="OrderCreationRepository.cs">
       <BoundTo>778ab290-ad5c-4c14-89ef-b3f343d19589</BoundTo>
@@ -125,10 +152,23 @@
     <Compile Include="Program.cs">
       <id>13343c6a-9101-4490-88cc-6309604b5571</id>
     </Compile>
+    <Compile Include="Variables.cs">
+      <id>e1545fd7-b9ac-4817-9a0b-65c29548872f</id>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config">
       <id>75eab0a9-92b0-4c50-b29e-3f349018ca92</id>
+    </None>
+    <None Include="CreateOrderCA.rxrec">
+      <BoundTo>778ab290-ad5c-4c14-89ef-b3f343d19589</BoundTo>
+      <id>7cafec8a-487b-4f02-bb63-fd01962cd526</id>
+      <recordtableid>80b139e0-112d-455d-b32b-04154b8bd1c1</recordtableid>
+    </None>
+    <None Include="LogInCA.rxrec">
+      <BoundTo>778ab290-ad5c-4c14-89ef-b3f343d19589</BoundTo>
+      <id>a6327e70-bbed-4cca-81a9-6ffbb4e6562e</id>
+      <recordtableid>12befaf9-7613-40af-a113-1d5337b62b49</recordtableid>
     </None>
     <None Include="OrderCreationRepository.rximg">
       <BoundTo>778ab290-ad5c-4c14-89ef-b3f343d19589</BoundTo>

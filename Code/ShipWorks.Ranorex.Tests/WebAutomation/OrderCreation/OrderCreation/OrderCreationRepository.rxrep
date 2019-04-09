@@ -1,19 +1,305 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<repository
-name="OrderCreationRepository"
+﻿<repository
 id="2432457d-3585-440f-a92f-3228cb5ab41a"
+name="OrderCreationRepository"
 rxversion="8.1">
-  <codegen
-  classname="OrderCreationRepository"
-  namespace="OrderCreation"/>
-  <rootfolder
-  name="Root"
-  id="ea7232e0-41f1-428f-b543-5dbda2f4d92e"
-  searchtimeout="30000ms"
-  capname="unknown"
-  isrooted="True"
-  usecache="True">
-    <basepath/>
-  </rootfolder>
-  <variables/>
+	<codegen
+	classname="OrderCreationRepository"
+	namespace="OrderCreation">
+	</codegen>
+	<rootfolder
+	capname="unknown"
+	id="ea7232e0-41f1-428f-b543-5dbda2f4d92e"
+	isrooted="True"
+	name="Root"
+	searchtimeout="0ms"
+	usecache="True">
+		<appfolder
+		capname="form"
+		id="43b3aaf3-c7d6-4a5c-b5c1-7a831c30fa58"
+		isrooted="True"
+		name="LogInMozillaFirefox"
+		refpath="/form[@title='Log In - Mozilla Firefox']"
+		searchtimeout="30000ms"
+		usecache="True">
+			<item
+			addcaps="link,accessible"
+			capname="link"
+			id="0da646eb-dacb-4f47-9582-93db9547e8f2"
+			name="CreateOrder"
+			refimgid="1cf9d3a3-089a-4739-b3d5-f105f2b44ee5"
+			refpath="/form[@title~'^All\ Sales\ -\ Mozilla\ Firef']/container/container/element/container/element[2]/list/listitem[@accessiblename='Create Order']/link[@accessiblename='Create Order']"
+			searchtimeout="30000ms">
+				/form[@title='Log In - Mozilla Firefox']//container[@accessiblename='All Sales']/?/?/list[@accessiblerole='List']/listitem[@accessiblename='Create Order']/link[@accessiblename='Create Order']
+			</item>
+			<folder
+			capname="container"
+			id="1bf18238-6533-4b0e-ac00-a3775d27230c"
+			isrooted="True"
+			name="Grouping"
+			refpath="/form[@title='Order Detail - Mozilla Firefox']/container[@accessiblerole='Grouping']"
+			searchtimeout="30000ms"
+			usecache="False">
+				<item
+				addcaps="button,accessible"
+				capname="button"
+				id="1537ffe8-84e1-492f-bf28-e3bbc75dd003"
+				name="ButtonMore"
+				refimgid="9ec82c71-b072-4c42-a545-af02e2471e32"
+				refpath="/form[@title~'^All\ Sales\ -\ Mozilla\ Firef']/container/container/element/container/element/element[2]/element[3]/element[2]/element/element[2]/element/element/element[1]/element[1]/button[@accessiblename=' More ']"
+				searchtimeout="30000ms">
+					/form[@title='Log In - Mozilla Firefox']/container[@accessiblerole='Grouping']/container[@accessiblerole='PropertyPage']/element[@accessiblerole='None']/container[@accessiblename='All Sales']/element/element[2]/element[3]/element[2]/element[@accessiblerole='None']/element[2]/element[@accessiblerole='None']/element[@accessiblerole='None']/element[1]/element[1]/button[@accessiblename='&#61614; More &#61655;']
+				</item>
+				<item
+				addcaps="text,accessible"
+				capname="text"
+				id="af4c688b-752d-4f80-8b5a-6b7408ecb5f9"
+				name="CreatePaidOrder"
+				refimgid="65eb9426-330d-4751-b9f3-24bb27019f30"
+				refpath="/form[@title~'^Create\ Order\ -\ Mozilla\ Fi']/container/container/element/container/element[1]/element[2]/element[3]/element[2]/element/element/element[1]/element[1]/element[2]/element[2]/text/element[2]/element/text[@accessiblename='Create Paid Order']"
+				searchtimeout="30000ms">
+					/form[@title='Log In - Mozilla Firefox']/container[@accessiblerole='Grouping']/container[@accessiblerole='PropertyPage']/?/?/container[@accessiblename='Create Order']/element[1]/element[2]/element[3]/element[2]//text[@accessiblename='Create Paid Order']//text[@accessiblerole='Text']
+				</item>
+				<item
+				addcaps="combobox,accessible"
+				capname="combobox"
+				id="831860bc-8215-489a-ba72-9e88f2c91ad8"
+				name="ComboBox"
+				refimgid="02468662-a69d-45de-8f16-981dc5ae8ec8"
+				refpath="/form[@title~'^Create\ Order\ -\ Mozilla\ Fi']/container/container/element/container/element[1]/element[2]/element[3]/element[2]/element/element/element[1]/element[1]/element[2]/element[2]/element/element/list/element[@accessiblename='Credit Card']/element/combobox[@accessiblerole='ComboBox']"
+				searchtimeout="30000ms">
+					/form[@title='Log In - Mozilla Firefox']/container[@accessiblerole='Grouping']/container[@accessiblerole='PropertyPage']/?/?/container[@accessiblename='Create Order']/element[1]/element[2]/element[3]/element[2]//list[@accessiblerole='List']/element[@accessiblename='Credit Card']/?/?/combobox[@accessiblerole='ComboBox']
+				</item>
+				<item
+				addcaps="text,accessible"
+				capname="text"
+				id="8042ca00-17e6-4921-8353-2fcbef1252a0"
+				name="Text"
+				refimgid="79c6e24b-a30c-4fa9-9793-99bd4c7f5e0d"
+				refpath="/form[@title~'^Create\ Order\ -\ Mozilla\ Fi']/container/container/element/container/element[1]/element[2]/element[3]/element[2]/element/element/element[1]/element[3]/element[2]/element[1]/element[2]/element/list/element[1]/element/text[@accessiblerole='Text']"
+				searchtimeout="30000ms">
+					/form[@title='Log In - Mozilla Firefox']/container[@accessiblerole='Grouping']/container[@accessiblerole='PropertyPage']/?/?/container[@accessiblename='Create Order']/element[1]/element[2]/element[3]/element[2]/element/element[@accessiblerole='None']/element[1]/element[3]/element[2]/element[1]/element[2]/element[@accessiblerole='None']/list[@accessiblerole='List']/element[1]/?/?/text[@accessiblerole='Text']
+				</item>
+				<item
+				addcaps="text,accessible"
+				capname="text"
+				id="545a9cf1-26ac-4298-a392-34a53d19da01"
+				name="Text1"
+				refimgid="33bbc86a-7da7-4216-a6eb-014336983b9b"
+				refpath="/form[@title~'^Create\ Order\ -\ Mozilla\ Fi']/container/container/element/container/element[1]/element[2]/element[3]/element[2]/element/element/element[1]/element[3]/element[2]/element[1]/element[2]/element/list/element[2]/element/text[@accessiblerole='Text']"
+				searchtimeout="30000ms">
+					/form[@title='Log In - Mozilla Firefox']/container[@accessiblerole='Grouping']/container[@accessiblerole='PropertyPage']/?/?/container[@accessiblename='Create Order']/element[1]/element[2]/element[3]/element[2]/element/element[@accessiblerole='None']/element[1]/element[3]/element[2]/element[1]/element[2]/element[@accessiblerole='None']/list[@accessiblerole='List']/element[2]/?/?/text[@accessiblerole='Text']
+				</item>
+				<item
+				addcaps="text,accessible"
+				capname="text"
+				id="defb687a-64ef-41a5-89fd-b304137fea34"
+				name="Text2"
+				refimgid="5bb4cda1-8de4-4585-a104-3f2e52614506"
+				refpath="/form[@title~'^Create\ Order\ -\ Mozilla\ Fi']/container/container/element/container/element[1]/element[2]/element[4]/element[2]/element/element/element[1]/element[3]/element[2]/element[1]/element[2]/element/list/element[3]/element/element/text[@accessiblerole='Text']"
+				searchtimeout="30000ms">
+					/form[@title='Log In - Mozilla Firefox']/container[@accessiblerole='Grouping']/container[@accessiblerole='PropertyPage']/?/?/container[@accessiblename='Create Order']/element[1]/element[2]/element[4]/element[2]/element/element[@accessiblerole='None']/element[1]/element[3]//list[@accessiblerole='List']/element[3]//text[@accessiblerole='Text']
+				</item>
+				<item
+				addcaps="text,accessible"
+				capname="text"
+				id="8fbc65e8-9fe7-450e-b5ce-0d25940aa3a7"
+				name="Text3"
+				refimgid="97997042-a8e3-4ff7-8c41-47d0430adba0"
+				refpath="/form[@title~'^Create\ Order\ -\ Mozilla\ Fi']/container/container/element/container/element[1]/element[2]/element[4]/element[2]/element/element/element[1]/element[3]/element[2]/element[1]/element[2]/element/list/element[4]/element/text[@accessiblerole='Text']"
+				searchtimeout="30000ms">
+					/form[@title='Log In - Mozilla Firefox']/container[@accessiblerole='Grouping']/container[@accessiblerole='PropertyPage']/?/?/container[@accessiblename='Create Order']/element[1]/element[2]/element[4]/element[2]/element/element[@accessiblerole='None']/element[1]/element[3]/element[2]/element[1]/element[2]/element[@accessiblerole='None']/list[@accessiblerole='List']/element[4]/?/?/text[@accessiblerole='Text']
+				</item>
+				<item
+				addcaps="text,accessible"
+				capname="text"
+				id="370064dc-a1a2-4fa9-8513-5955b076f6b0"
+				name="Text4"
+				refimgid="ceee4cc1-9900-49e9-8934-26db6fc5cb68"
+				refpath="/form[@title~'^Create\ Order\ -\ Mozilla\ Fi']/container/container/element/container/element[1]/element[2]/element[4]/element[2]/element/element/element[1]/element[3]/element[2]/element[1]/element[2]/element/list/element[5]/element/text[@accessiblerole='Text']"
+				searchtimeout="30000ms">
+					/form[@title='Log In - Mozilla Firefox']/container[@accessiblerole='Grouping']/container[@accessiblerole='PropertyPage']/?/?/container[@accessiblename='Create Order']/element[1]/element[2]/element[4]/element[2]/element/element[@accessiblerole='None']/element[1]/element[3]/element[2]/element[1]/element[2]/element[@accessiblerole='None']/list[@accessiblerole='List']/element[5]/?/?/text[@accessiblerole='Text']
+				</item>
+				<item
+				addcaps="text,accessible"
+				capname="text"
+				id="a27e9ef1-5d4e-4562-b3e6-0d2e229402fa"
+				name="Text5"
+				refimgid="862f82a2-e2e2-4cec-ad35-4e7886d76736"
+				refpath="/form[@title~'^Create\ Order\ -\ Mozilla\ Fi']/container/container/element/container/element[1]/element[2]/element[4]/element[2]/element/element/element[1]/element[3]/element[2]/element[1]/element[2]/element/list/element[7]/element/text[@accessiblerole='Text']"
+				searchtimeout="30000ms">
+					/form[@title='Log In - Mozilla Firefox']/container[@accessiblerole='Grouping']/container[@accessiblerole='PropertyPage']/?/?/container[@accessiblename='Create Order']/element[1]/element[2]/element[4]/element[2]/element/element[@accessiblerole='None']/element[1]/element[3]/element[2]/element[1]/element[2]/element[@accessiblerole='None']/list[@accessiblerole='List']/element[7]/?/?/text[@accessiblerole='Text']
+				</item>
+				<item
+				addcaps="combobox,accessible"
+				capname="combobox"
+				id="8476ba8c-6b9b-4e58-b837-8f539e5993bf"
+				name="ComboBox1"
+				refimgid="ac59088c-565b-432d-9f1f-2e90829bd871"
+				refpath="/form[@title~'^Create\ Order\ -\ Mozilla\ Fi']/container/container/element/container/element[1]/element[2]/element[4]/element[2]/element/element/element[1]/element[3]/element[2]/element[1]/element[2]/element/list/element[8]/combobox[@accessiblerole='ComboBox']"
+				searchtimeout="30000ms">
+					/form[@title='Log In - Mozilla Firefox']/container[@accessiblerole='Grouping']/container[@accessiblerole='PropertyPage']/?/?/container[@accessiblename='Create Order']/element[1]/element[2]/element[4]/element[2]/element/element[@accessiblerole='None']/element[1]/element[3]/element[2]/element[1]/element[2]/element[@accessiblerole='None']/list[@accessiblerole='List']/element[8]/combobox[@accessiblerole='ComboBox']
+				</item>
+				<item
+				addcaps="combobox,accessible"
+				capname="combobox"
+				id="b33b37be-0a81-466b-a168-7cf4831de1d8"
+				name="ComboBox2"
+				refimgid="10cfe1b2-5dae-47ce-ad83-f94adb1254aa"
+				refpath="/form[@title~'^Create\ Order\ -\ Mozilla\ Fi']/container/container/element/container/element[1]/element[2]/element[4]/element[2]/element/element/element[1]/element[3]/element[2]/element[1]/element[2]/element/list/element[@accessiblename='Please Select']/combobox[@accessiblerole='ComboBox']"
+				searchtimeout="30000ms">
+					/form[@title='Log In - Mozilla Firefox']/container[@accessiblerole='Grouping']/container[@accessiblerole='PropertyPage']/?/?/container[@accessiblename='Create Order']/element[1]/element[2]/element[4]/element[2]/element/element[@accessiblerole='None']/element[1]/element[3]/element[2]/element[1]/element[2]/element[@accessiblerole='None']/list[@accessiblerole='List']/element[@accessiblename='Please Select']/combobox[@accessiblerole='ComboBox']
+				</item>
+				<item
+				addcaps="text,accessible"
+				capname="text"
+				id="638040e8-b2d0-48ca-bb41-cb064125ada1"
+				name="Text6"
+				refimgid="20950c7f-ce34-4090-aa36-a7e3146ab468"
+				refpath="/form[@title~'^Create\ Order\ -\ Mozilla\ Fi']/container/container/element/container/element[1]/element[2]/element[4]/element[2]/element/element/element[1]/element[3]/element[2]/element[1]/element[2]/element/list/element[10]/element/text[@accessiblerole='Text']"
+				searchtimeout="30000ms">
+					/form[@title='Log In - Mozilla Firefox']/container[@accessiblerole='Grouping']/container[@accessiblerole='PropertyPage']/?/?/container[@accessiblename='Create Order']/element[1]/element[2]/element[4]/element[2]/element/element[@accessiblerole='None']/element[1]/element[3]/element[2]/element[1]/element[2]/element[@accessiblerole='None']/list[@accessiblerole='List']/element[10]/?/?/text[@accessiblerole='Text']
+				</item>
+				<item
+				addcaps="text,accessible"
+				capname="text"
+				id="f21e154e-de72-48bd-8d4c-278815bdf32c"
+				name="SearchInventory"
+				refimgid="17a7194a-cda3-4067-9df0-eac3c6a2916b"
+				refpath="/form[@title~'^Create\ Order\ -\ Mozilla\ Fi']/container/container/element/container/element[1]/element[2]/element[3]/element[2]/element/element/element[1]/element[2]/element[2]/element[2]/table/container[2]/row[@accessiblename='Search Inventory...']/cell[1]/element/element/element[1]/text[@accessiblename='Search Inventory...']"
+				searchtimeout="30000ms">
+					/form[@title='Log In - Mozilla Firefox']/container[@accessiblerole='Grouping']/container[@accessiblerole='PropertyPage']/?/?/container[@accessiblename='Create Order']/element[1]/element[2]/element[3]/element[2]//table[@accessiblerole='Table']/container[2]/row[@accessiblename='Search Inventory...']//text[@accessiblename='Search Inventory...']
+				</item>
+				<item
+				addcaps="text,accessible"
+				capname="text"
+				id="203c7b7c-7814-454c-a11c-81266247f193"
+				name="ACoolThing"
+				refimgid="8c846105-b947-4a5d-8e6a-6c28995bc613"
+				refpath="/form[@title~'^Create\ Order\ -\ Mozilla\ Fi']/container/container/element/container/element[1]/element[2]/element[3]/element[2]/element/element/element[1]/element[2]/element[2]/element[2]/table/container[2]/row[@accessiblename='Search Inventory... coo']/cell[1]/element/element/element[2]/element/element/element[2]/menubar/element/listitem/element/text[@accessiblename='A cool thing']"
+				searchtimeout="30000ms">
+					/form[@title='Log In - Mozilla Firefox']/container[@accessiblerole='Grouping']/container[@accessiblerole='PropertyPage']/?/?/container[@accessiblename='Create Order']/element[1]/element[2]/element[3]/element[2]/element/element[@accessiblerole='None']/element[1]/element[2]/element[2]/element[2]/table[@accessiblerole='Table']/container[2]/row[@accessiblename='Search Inventory... coo']//menubar[@accessiblerole='MenuBar']/?/?/listitem[@accessiblename='Cool-thing : A cool thing']/?/?/text[@accessiblename='A cool thing']
+				</item>
+				<item
+				addcaps="unknown,accessible"
+				capname="unknown"
+				id="4017ee79-6cad-4a75-a25f-f13d59ef1705"
+				name="None"
+				refimgid="9f49caee-ca07-4a29-bba1-f9be5513ce6a"
+				refpath="/form[@title~'^Create\ Order\ -\ Mozilla\ Fi']/container/container/element/container/element[1]/element[2]/element[3]/element[2]/element/element/element[1]/element[2]/element[2]/element[2]/table/container[2]/row[@accessiblename='Search Inventory... ship']/cell[1]/element/element/element[2]/element/element/element[2]/menubar/element[1]/listitem/element[@accessiblerole='None']"
+				searchtimeout="30000ms">
+					/form[@title='Log In - Mozilla Firefox']/container[@accessiblerole='Grouping']/container[@accessiblerole='PropertyPage']/?/?/container[@accessiblename='Create Order']/element[1]/element[2]/element[3]/element[2]/element/element[@accessiblerole='None']/element[1]/element[2]//table[@accessiblerole='Table']/container[2]/row[@accessiblename='Search Inventory... ship']//menubar[@accessiblerole='MenuBar']/?/?/listitem[@accessiblename~'^ShipWorks_123\ :\ ShipWorks']/element[@accessiblerole='None']
+				</item>
+				<item
+				addcaps="button,accessible"
+				capname="button"
+				id="44a55512-0fea-4b7f-99ec-b10971e43884"
+				name="Proceed"
+				refimgid="3f24a59e-16c5-423c-83da-db8f3d269cee"
+				refpath="/form[@title~'^Create\ Order\ -\ Mozilla\ Fi']/container/container/element/container/element[1]/element[2]/element[2]/element[3]/element/element[1]/button[@accessiblename='Proceed']"
+				searchtimeout="30000ms">
+					/form[@title='Log In - Mozilla Firefox']/container[@accessiblerole='Grouping']/container[@accessiblerole='PropertyPage']/?/?/container[@accessiblename='Create Order']/element[1]/element[2]/element[2]/element[3]//button[@accessiblename='Proceed']
+				</item>
+				<item
+				addcaps="text,accessible"
+				capname="text"
+				id="27bc0198-52ff-4bd6-939a-1bcdc787b391"
+				name="Orders"
+				refimgid="8703a358-aca5-46d3-b13c-36c6856b31eb"
+				refpath="/form[@title~'^Order\ Detail\ -\ Mozilla\ Fi']/container/container/element/container/element/element[2]/element[1]/element[6]/link/text[@accessiblename='Orders']"
+				searchtimeout="30000ms">
+					/form[@title='Log In - Mozilla Firefox']/container[@accessiblerole='Grouping']//container[@accessiblename='Order Detail']/element/element[2]/element[1]/element[6]/link[@accessiblename='Orders']/text[@accessiblename='Orders']
+				</item>
+				<item
+				addcaps="text,accessible"
+				capname="text"
+				id="3072f7dc-e7ef-4783-9c0d-749069b9d9ea"
+				name="Email"
+				refimgid="4e0a6da3-b059-4837-929d-efd6a2556c6b"
+				refpath="/form[@title='Log In - Mozilla Firefox']/container/container/element/container/element[2]/element[2]/element[2]/element[1]/element[2]/element[2]/element/text[@accessiblename='Email']"
+				searchtimeout="30000ms">
+					/form[@title='Log In - Mozilla Firefox']/container[@accessiblerole='Grouping']/container[@accessiblerole='PropertyPage']/?/?/container[@accessiblename='Log In']/element[2]/element[2]/element[2]/element[1]/element[2]/?/?/element/text[@accessiblename='Email']
+				</item>
+				<item
+				addcaps="button,accessible"
+				capname="button"
+				id="75bd2390-3491-4b84-b3ca-215b4ca8cde7"
+				name="LogIn"
+				refimgid="76a4497a-c9a5-4176-a067-6fc4c8ca9d36"
+				refpath="/form[@title='Log In - Mozilla Firefox']/container/container/element/container/element[2]/element[2]/element[2]/element[1]/element[4]/button[@accessiblename='Log In']"
+				searchtimeout="30000ms">
+					/form[@title='Log In - Mozilla Firefox']/container[@accessiblerole='Grouping']//container[@accessiblename='Log In']/element[2]/element[2]/element[2]/element[1]/element[4]/button[@accessiblename='Log In']
+				</item>
+				<basepath>
+					/form[@title='Log In - Mozilla Firefox']/container[@accessiblerole='Grouping']
+				</basepath>
+			</folder>
+			<basepath>
+				/form[@title='Log In - Mozilla Firefox']
+			</basepath>
+			<icon>
+				iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAALGPC/xhBQAAAAlwSFlz
+AAAOxAAADsQBlSsOGwAAAzRJREFUOE+Nkm1MlWUcxu8QPBoQivJyOEYHEGQIQZyYug4qhxBEcYqZ
+s3mCFF+WWqKmrMRDjWpYSms6/WA5p3PinBOmGybiTGGmsTSFiS/gMuCcKYI6TXh47l/3eTh98kvX
+du2/e7uva/+XS/xfyJr0dulOnOp7voy2YOc4b81I/D4hyXZot8XRcDe48IYmit1a0Y973fRNR/bO
+1GW9OUdWjQs2RP+h+dU16d1Rs05mTagotyXtGUrJrGHRkl0EFd1GfPaMs+ez4HG+4jzkIwd6Y0id
+TzqM30OL9vZYHbSn2GnKnYF7TTRffbIOsboXUT5I0+Up0OeA/gJVC1QnWcjWwMWG+Jxw+beGF94e
+jE+HdybC0nDYaqK8pIzXS1sRFRqbTmyDhzHwaA70qk4ezGbwfppuGDT4b17VZc5HT0gFh/pUEgqV
+AbAinL6dFvy+1BBVHjrbLeBOBE+uqjnQnY38M6xSnBu5odltyUVOehNmWWH1WNjux8G1Cxi//Dpi
+8z+IyiFGVd7E06LMOyPhfibcs6NfjXkoGgM2dPT4DLTsWG7Ni+fnD/NIm3uEwPfaECUPlMlzxEYP
+7367HxoFXA+Bdhvyj0m6ODOizPO3eY4xwr2MVO7MmEzZzBXETztOZO6vBC1sxc/ZhXDeIvKjOrik
+DLy8bIbf4hCnhKv+bthCBia+zdP0ZMi2om8M4nRpKld3xnDzUDR5K38iMKeenJUuaFHiBi9HI3+J
+0MRJsc11LaSYJ1Y7JE9G5lnpX2am+/NQWiqsrP/gY2xZ+zC/VU3T4Tg4q8R1irUByFrTEVErvog5
+P3K91hU1m6GENOOUL963sGN6NvkJpdhiXczPLKa5+g04rYTHFGsE8qCflAeEkV7VheubG2OcPLaq
+7SamqDHUOZ0qD5sCjYuwR4n2Kx7wcZ9A/870xBB7cVQsGnHGf0ttR3ghz2NV6tQohsmSCFirNl4+
+CqqU0Q9KXP0Kcru/rm0NnuuTD8ObyAumT7/ujCjQDRNvJ3aVzIIJw+lcNZZny8J4Whx1RZa+FuqT
+vYyLpnVxHWELdvRH29u0+LQBUpIYmBqr9Uyz/nUtI3mL75sPQvwLE+X+h7FRWjsAAAAASUVORK5C
+YII=
+			</icon>
+		</appfolder>
+		<appfolder
+		capname="form"
+		id="5e55cd0a-7214-497f-bddf-291ee0c71e38"
+		isrooted="True"
+		name="Firefox"
+		refpath="/form[@title='' and @processname='firefox']"
+		searchtimeout="30000ms"
+		usecache="True">
+			<item
+			addcaps="listitem,accessible"
+			capname="listitem"
+			id="c4c93d79-8a3d-4be8-84ee-ef86098e3e8a"
+			name="MoneyOrder"
+			refimgid="41a26a14-a579-4dfc-9de9-d4a6e253182e"
+			refpath="/form[@title='' and @processname='firefox']/list/listitem[@accessiblename='Money Order']"
+			searchtimeout="30000ms">
+				/form[@title='' and @processname='firefox']/?/?/listitem[@accessiblename='Money Order']
+			</item>
+			<basepath>
+				/form[@title='' and @processname='firefox']
+			</basepath>
+			<icon>
+				iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAALGPC/xhBQAAAAlwSFlz
+AAAOxAAADsQBlSsOGwAAAzRJREFUOE+Nkm1MlWUcxu8QPBoQivJyOEYHEGQIQZyYug4qhxBEcYqZ
+s3mCFF+WWqKmrMRDjWpYSms6/WA5p3PinBOmGybiTGGmsTSFiS/gMuCcKYI6TXh47l/3eTh98kvX
+du2/e7uva/+XS/xfyJr0dulOnOp7voy2YOc4b81I/D4hyXZot8XRcDe48IYmit1a0Y973fRNR/bO
+1GW9OUdWjQs2RP+h+dU16d1Rs05mTagotyXtGUrJrGHRkl0EFd1GfPaMs+ez4HG+4jzkIwd6Y0id
+TzqM30OL9vZYHbSn2GnKnYF7TTRffbIOsboXUT5I0+Up0OeA/gJVC1QnWcjWwMWG+Jxw+beGF94e
+jE+HdybC0nDYaqK8pIzXS1sRFRqbTmyDhzHwaA70qk4ezGbwfppuGDT4b17VZc5HT0gFh/pUEgqV
+AbAinL6dFvy+1BBVHjrbLeBOBE+uqjnQnY38M6xSnBu5odltyUVOehNmWWH1WNjux8G1Cxi//Dpi
+8z+IyiFGVd7E06LMOyPhfibcs6NfjXkoGgM2dPT4DLTsWG7Ni+fnD/NIm3uEwPfaECUPlMlzxEYP
+7367HxoFXA+Bdhvyj0m6ODOizPO3eY4xwr2MVO7MmEzZzBXETztOZO6vBC1sxc/ZhXDeIvKjOrik
+DLy8bIbf4hCnhKv+bthCBia+zdP0ZMi2om8M4nRpKld3xnDzUDR5K38iMKeenJUuaFHiBi9HI3+J
+0MRJsc11LaSYJ1Y7JE9G5lnpX2am+/NQWiqsrP/gY2xZ+zC/VU3T4Tg4q8R1irUByFrTEVErvog5
+P3K91hU1m6GENOOUL963sGN6NvkJpdhiXczPLKa5+g04rYTHFGsE8qCflAeEkV7VheubG2OcPLaq
+7SamqDHUOZ0qD5sCjYuwR4n2Kx7wcZ9A/870xBB7cVQsGnHGf0ttR3ghz2NV6tQohsmSCFirNl4+
+CqqU0Q9KXP0Kcru/rm0NnuuTD8ObyAumT7/ujCjQDRNvJ3aVzIIJw+lcNZZny8J4Whx1RZa+FuqT
+vYyLpnVxHWELdvRH29u0+LQBUpIYmBqr9Uyz/nUtI3mL75sPQvwLE+X+h7FRWjsAAAAASUVORK5C
+YII=
+			</icon>
+		</appfolder>
+		<basepath>
+		</basepath>
+	</rootfolder>
+	<variables>
+	</variables>
 </repository>
