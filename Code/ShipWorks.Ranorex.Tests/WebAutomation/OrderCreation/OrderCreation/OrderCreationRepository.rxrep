@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<repository
+name="OrderCreationRepository"
+id="2432457d-3585-440f-a92f-3228cb5ab41a"
+rxversion="8.1">
+  <codegen
+  classname="OrderCreationRepository"
+  namespace="OrderCreation"/>
+  <rootfolder
+  name="Root"
+  id="ea7232e0-41f1-428f-b543-5dbda2f4d92e"
+  searchtimeout="30000ms"
+  capname="unknown"
+  isrooted="True"
+  usecache="True">
+    <basepath/>
+  </rootfolder>
+  <variables/>
+</repository>
