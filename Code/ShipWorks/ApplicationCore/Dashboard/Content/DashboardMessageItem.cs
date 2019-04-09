@@ -32,6 +32,11 @@ namespace ShipWorks.ApplicationCore.Dashboard.Content
         }
 
         /// <summary>
+        /// Should the item try to use a friendly date/time for when the item was added.
+        /// </summary>
+        public bool UseFriendlyDateTime { get; set; } = true;
+
+        /// <summary>
         /// Format the secondary text to display to include the timestamp
         /// </summary>
         protected string FormatSecondaryText(string text)
@@ -39,16 +44,14 @@ namespace ShipWorks.ApplicationCore.Dashboard.Content
             DateTime local = timestamp.ToLocalTime();
             string timeText;
 
-            if (local.Date == DateTime.Now.Date)
+            if (UseFriendlyDateTime && local.Date == DateTime.Now.Date)
             {
                 timeText = string.Format("Today {0:t}", local);
             }
-
-            else if (local.Date == DateTime.Now.AddDays(-1).Date)
+            else if (UseFriendlyDateTime && local.Date == DateTime.Now.AddDays(-1).Date)
             {
                 timeText = string.Format("Yesterday {0:t}", local);
             }
-
             else
             {
                 timeText = local.ToString("g");

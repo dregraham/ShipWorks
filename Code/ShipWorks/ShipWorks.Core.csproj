@@ -754,6 +754,7 @@
     <Compile Include="ApplicationCore\Dashboard\Content\ShipWorksOnlineVersion.cs" />
     <Compile Include="ApplicationCore\Dashboard\DashboardManagerWrapper.cs" />
     <Compile Include="ApplicationCore\Dashboard\IDashboardManager.cs" />
+    <Compile Include="ApplicationCore\Dashboard\DashboardLocalMessageDetails.cs" />
     <Compile Include="ApplicationCore\DataPathWrapper.cs" />
     <Compile Include="ApplicationCore\DockPanelIdentifiers.cs" />
     <Compile Include="ApplicationCore\Enums\HeartbeatOptions.cs" />

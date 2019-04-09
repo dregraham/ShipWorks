@@ -175,15 +175,22 @@ namespace ShipWorks.ApplicationCore.Dashboard
         /// <summary>
         /// Add the given information message to the dashboard
         /// </summary>
-        public static void ShowLocalMessage(string identifier, DashboardMessageImageType imageType, string primaryText, string secondaryText, params DashboardAction[] actions)
+        public static void ShowLocalMessage(string identifier, DashboardLocalMessageDetails options, params DashboardAction[] actions)
         {
             // Dismiss it in case it already exists
             DismissLocalMessage(identifier);
 
             // Add it back in with the new values
-            DashboardLocalMessageItem messageItem = new DashboardLocalMessageItem(identifier, imageType, primaryText, secondaryText, actions);
+            DashboardLocalMessageItem messageItem = new DashboardLocalMessageItem(identifier, options.ImageType, options.PrimaryText, options.SecondaryText, actions);
+            messageItem.UseFriendlyDateTime = options.UseFriendlyDateTime;
             AddDashboardItem(messageItem);
         }
+
+        /// <summary>
+        /// Add the given information message to the dashboard
+        /// </summary>
+        public static void ShowLocalMessage(string identifier, DashboardMessageImageType imageType, string primaryText, string secondaryText, params DashboardAction[] actions) =>
+            ShowLocalMessage(identifier, new DashboardLocalMessageDetails { ImageType = imageType, PrimaryText = primaryText, SecondaryText = secondaryText }, actions);
 
         /// <summary>
         /// Dismiss the message with the given identifier.  If the message is not present, no action is taken.

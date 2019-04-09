@@ -12,7 +12,7 @@ namespace ShipWorks.ApplicationCore.Dashboard
         /// <summary>
         /// Show a local dashboard message
         /// </summary>
-        public void ShowLocalMessage(string identifier, DashboardMessageImageType imageType, string primaryText, string secondaryText, params DashboardAction[] actions) =>
-            DashboardManager.ShowLocalMessage(identifier, imageType, primaryText, secondaryText, actions);
+        public void ShowLocalMessage(string identifier, DashboardLocalMessageDetails messageDetails, params DashboardAction[] actions) =>
+            DashboardManager.ShowLocalMessage(identifier, messageDetails, actions);
     }
 }
