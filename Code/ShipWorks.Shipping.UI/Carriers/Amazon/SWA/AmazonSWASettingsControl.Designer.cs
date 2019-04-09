@@ -80,7 +80,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SWA
             this.requestedLabelFormatOptionControl.Font = new System.Drawing.Font("Tahoma", 8.25F);
             this.requestedLabelFormatOptionControl.Location = new System.Drawing.Point(22, 24);
             this.requestedLabelFormatOptionControl.Name = "requestedLabelFormatOptionControl";
-            this.requestedLabelFormatOptionControl.Size = new System.Drawing.Size(344, 23);
+            this.requestedLabelFormatOptionControl.Size = new System.Drawing.Size(465, 23);
             this.requestedLabelFormatOptionControl.TabIndex = 18;
             // 
             // excludedServiceControl
