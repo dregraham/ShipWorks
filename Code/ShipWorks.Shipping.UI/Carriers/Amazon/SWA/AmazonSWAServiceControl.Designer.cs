@@ -40,7 +40,6 @@
             this.service = new ShipWorks.UI.Controls.MultiValueComboBox();
             this.labelShipDate = new System.Windows.Forms.Label();
             this.shipDate = new ShipWorks.UI.Controls.MultiValueDateTimePicker();
-            this.insuranceControl = new ShipWorks.Shipping.Insurance.InsuranceSelectionControl();
             this.dimensionsControl = new ShipWorks.Shipping.Editing.DimensionsControl();
             this.dimensionsLabel = new System.Windows.Forms.Label();
             this.labelWeight = new System.Windows.Forms.Label();
@@ -98,7 +97,7 @@
             // 
             // sectionReturns
             // 
-            this.sectionReturns.Location = new System.Drawing.Point(3, 318);
+            this.sectionReturns.Location = new System.Drawing.Point(3, 269);
             this.sectionReturns.Size = new System.Drawing.Size(399, 24);
             // 
             // sectionShipment
@@ -106,7 +105,6 @@
             // 
             // sectionShipment.ContentPanel
             // 
-            this.sectionShipment.ContentPanel.Controls.Add(this.insuranceControl);
             this.sectionShipment.ContentPanel.Controls.Add(this.dimensionsControl);
             this.sectionShipment.ContentPanel.Controls.Add(this.dimensionsLabel);
             this.sectionShipment.ContentPanel.Controls.Add(this.labelWeight);
@@ -117,7 +115,7 @@
             this.sectionShipment.ContentPanel.Controls.Add(this.shipDate);
             this.sectionShipment.ContentPanel.Controls.Add(this.cutoffDateDisplay);
             this.sectionShipment.Location = new System.Drawing.Point(3, 63);
-            this.sectionShipment.Size = new System.Drawing.Size(399, 250);
+            this.sectionShipment.Size = new System.Drawing.Size(399, 201);
             this.sectionShipment.TabIndex = 2;
             // 
             // sectionLabelOptions
@@ -126,14 +124,16 @@
             // sectionLabelOptions.ContentPanel
             // 
             this.sectionLabelOptions.ContentPanel.Controls.Add(this.labelFormat);
-            this.sectionLabelOptions.Location = new System.Drawing.Point(3, 347);
+            this.sectionLabelOptions.Location = new System.Drawing.Point(3, 298);
             this.sectionLabelOptions.Size = new System.Drawing.Size(399, 24);
             // 
             // cutoffDateDisplay
             // 
             this.cutoffDateDisplay.AutoSize = true;
             this.cutoffDateDisplay.BackColor = System.Drawing.Color.White;
-            this.cutoffDateDisplay.Caption = "Cutoff time is 3:00 PM";
+            this.cutoffDateDisplay.Caption = "Shipments processed after 5:00 PM today will have a ship date of the next valid s" +
+    "hipping day.\r\nTo update this setting, go to Manage > Shipping Settings > Amazon " +
+    "Shipping > Settings.";
             this.cutoffDateDisplay.Location = new System.Drawing.Point(229, 43);
             this.cutoffDateDisplay.Name = "cutoffDateDisplay";
             this.cutoffDateDisplay.ShipmentType = ShipWorks.Shipping.ShipmentTypeCode.AmazonSWA;
@@ -255,17 +255,6 @@
             this.shipDate.Size = new System.Drawing.Size(144, 21);
             this.shipDate.TabIndex = 66;
             // 
-            // insuranceControl
-            // 
-            this.insuranceControl.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.insuranceControl.BackColor = System.Drawing.Color.Transparent;
-            this.insuranceControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.insuranceControl.Location = new System.Drawing.Point(11, 170);
-            this.insuranceControl.Name = "insuranceControl";
-            this.insuranceControl.Size = new System.Drawing.Size(521, 50);
-            this.insuranceControl.TabIndex = 74;
-            // 
             // dimensionsControl
             // 
             this.dimensionsControl.BackColor = System.Drawing.Color.Transparent;
@@ -360,7 +349,6 @@
         private ShipWorks.UI.Controls.MultiValueComboBox service;
         private System.Windows.Forms.Label labelShipDate;
         private ShipWorks.UI.Controls.MultiValueDateTimePicker shipDate;
-        protected ShipWorks.Shipping.Insurance.InsuranceSelectionControl insuranceControl;
         private Editing.DimensionsControl dimensionsControl;
         private System.Windows.Forms.Label labelWeight;
         private ShipWorks.UI.Controls.WeightControl weight;

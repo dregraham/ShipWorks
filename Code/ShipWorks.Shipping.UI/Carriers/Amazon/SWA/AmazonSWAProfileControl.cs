@@ -61,9 +61,6 @@ namespace ShipWorks.Shipping.UI.Carriers.Amazon.SWA
 
             // Labels
             AddValueMapping(profile, ShippingProfileFields.RequestedLabelFormat, requestedLabelFormatState, requestedLabelFormat, labelThermalNote);
-
-            // Insurance
-            AddValueMapping(profile, ShippingProfileFields.Insurance, insuranceState, insuranceControl);
         }
 
         /// <summary>

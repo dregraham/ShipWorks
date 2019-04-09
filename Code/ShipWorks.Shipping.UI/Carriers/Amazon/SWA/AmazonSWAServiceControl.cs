@@ -228,9 +228,6 @@ namespace ShipWorks.Shipping.UI.Carriers.Amazon.SWA
             // Save the origin
             originControl.SaveToEntities();
 
-            //Save insurance info
-            insuranceControl.SaveToInsuranceChoices();
-
             //Save dimensions
             dimensionsControl.SaveToEntities();
 
@@ -246,14 +243,6 @@ namespace ShipWorks.Shipping.UI.Carriers.Amazon.SWA
             }
 
             ResumeShipSenseFieldChangeEvent();
-        }
-
-        /// <summary>
-        /// Update the insurance rate display
-        /// </summary>
-        public override void UpdateInsuranceDisplay()
-        {
-            insuranceControl.LoadInsuranceChoices(LoadedShipments.Select(shipment => ShipmentTypeManager.GetType(shipment).GetParcelDetail(shipment, 0).Insurance));
         }
 
         /// <summary>

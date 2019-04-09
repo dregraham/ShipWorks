@@ -15,7 +15,6 @@ using ShipWorks.OrderLookup.FieldManager;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Services;
-using ShipWorks.Shipping.UI.ShippingPanel;
 using ShipWorks.UI;
 
 namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
@@ -41,7 +40,6 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
         /// </summary>
         public AmazonSWAShipmentDetailsViewModel(
             IOrderLookupShipmentModel shipmentModel,
-            IInsuranceViewModel insuranceViewModel,
             Func<DimensionsManagerDlg> getDimensionsManagerDlg,
             ICarrierShipmentAdapterOptionsProvider carrierShipmentAdapterOptionsProvider,
             IMessenger messenger,
@@ -52,12 +50,10 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
             this.carrierShipmentAdapterOptionsProvider = carrierShipmentAdapterOptionsProvider;
             this.messenger = messenger;
             this.schedulerProvider = schedulerProvider;
-            InsuranceViewModel = insuranceViewModel;
 
             ManageDimensionalProfiles = new RelayCommand(ManageDimensionalProfilesAction);
 
             RefreshDimensionalProfiles();
-            RefreshInsurance();
             RefreshServiceTypes();
             RefreshProviders();
 
@@ -93,12 +89,6 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
         /// </summary>
         [Obfuscation(Exclude = true)]
         public ICommand ManageDimensionalProfiles { get; set; }
-
-        /// <summary>
-        /// Insurance information
-        /// </summary>
-        [Obfuscation(Exclude = true)]
-        public IInsuranceViewModel InsuranceViewModel { get; }
 
         /// <summary>
         /// The dimension profiles
@@ -173,7 +163,6 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
             if (e.PropertyName == ShipmentFields.ShipCountryCode.Name)
             {
                 RefreshServiceTypes();
-                RefreshInsurance();
             }
         }
 
@@ -219,14 +208,6 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
             {
                 Providers = carrierShipmentAdapterOptionsProvider.GetProviders(ShipmentModel.ShipmentAdapter, ShipmentModel.OriginalShipmentTypeCode);
             }
-        }
-
-        /// <summary>
-        /// Refreshes Insurance
-        /// </summary>
-        private void RefreshInsurance()
-        {
-            InsuranceViewModel.Load(ShipmentModel.PackageAdapters, ShipmentModel.PackageAdapters.FirstOrDefault(), ShipmentModel.ShipmentAdapter);
         }
 
         /// <summary>

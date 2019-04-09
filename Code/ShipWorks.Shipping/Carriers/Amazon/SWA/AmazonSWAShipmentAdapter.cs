@@ -66,7 +66,6 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SWA
         /// </summary>
         public override string ServiceTypeName => EnumHelper.GetDescription((AmazonSWAServiceType) ServiceType);
 
-
         /// <summary>
         /// Are customs allowed?
         /// </summary>

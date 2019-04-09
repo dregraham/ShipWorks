@@ -33,7 +33,6 @@
                 <ui:FieldLayoutRowDefinition FieldID="{x:Static ns:SectionLayoutFieldIDs.ShipmentDetailsDimensions}" />
                 <ui:FieldLayoutRowDefinition FieldID="{x:Static ns:SectionLayoutFieldIDs.ShipmentDetailsDimensions}" />
                 <ui:FieldLayoutRowDefinition FieldID="{x:Static ns:SectionLayoutFieldIDs.ShipmentDetailsAddToWeight}" />
-                <ui:FieldLayoutRowDefinition FieldID="{x:Static ns:SectionLayoutFieldIDs.ShipmentDetailsInsurance}" />
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="85" />
@@ -223,11 +222,6 @@
                     Visibility="{Binding ShipmentModel.ShipmentAdapter.Shipment.AmazonSWA.DimsAddWeight, Converter={StaticResource BooleanToVisibility}}"
                     Weight="{Binding ShipmentModel.ShipmentAdapter.Shipment.AmazonSWA.DimsWeight}" />
             </Grid>
-            <local:OrderLookupInsuranceControl
-                Grid.Row="7"
-                Grid.Column="0"
-                Grid.ColumnSpan="2"
-                DataContext="{Binding InsuranceViewModel}" />
         </Grid>
     </StackPanel>
 </UserControl>

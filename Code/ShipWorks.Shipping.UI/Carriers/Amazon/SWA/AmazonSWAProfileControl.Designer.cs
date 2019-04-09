@@ -29,10 +29,6 @@
         private void InitializeComponent()
         {
             this.tabPageSettings = new System.Windows.Forms.TabPage();
-            this.groupInsurance = new System.Windows.Forms.GroupBox();
-            this.insuranceControl = new ShipWorks.Shipping.Insurance.InsuranceProfileControl();
-            this.insuranceState = new System.Windows.Forms.CheckBox();
-            this.insuranceBorderEdge = new ComponentFactory.Krypton.Toolkit.KryptonBorderEdge();
             this.groupLabels = new System.Windows.Forms.GroupBox();
             this.labelThermalNote = new System.Windows.Forms.Label();
             this.requestedLabelFormat = new ShipWorks.Shipping.Editing.RequestedLabelFormatProfileControl();
@@ -56,7 +52,6 @@
             this.fromBorderEdge = new ComponentFactory.Krypton.Toolkit.KryptonBorderEdge();
             this.tabControl = new System.Windows.Forms.TabControl();
             this.tabPageSettings.SuspendLayout();
-            this.groupInsurance.SuspendLayout();
             this.groupLabels.SuspendLayout();
             this.groupShipment.SuspendLayout();
             this.groupBoxFrom.SuspendLayout();
@@ -66,7 +61,6 @@
             // tabPageSettings
             // 
             this.tabPageSettings.AutoScroll = true;
-            this.tabPageSettings.Controls.Add(this.groupInsurance);
             this.tabPageSettings.Controls.Add(this.groupLabels);
             this.tabPageSettings.Controls.Add(this.groupShipment);
             this.tabPageSettings.Controls.Add(this.groupBoxFrom);
@@ -77,48 +71,6 @@
             this.tabPageSettings.TabIndex = 0;
             this.tabPageSettings.Text = "Settings";
             this.tabPageSettings.UseVisualStyleBackColor = true;
-            // 
-            // groupInsurance
-            // 
-            this.groupInsurance.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupInsurance.Controls.Add(this.insuranceControl);
-            this.groupInsurance.Controls.Add(this.insuranceState);
-            this.groupInsurance.Controls.Add(this.insuranceBorderEdge);
-            this.groupInsurance.Location = new System.Drawing.Point(6, 305);
-            this.groupInsurance.Name = "groupInsurance";
-            this.groupInsurance.Size = new System.Drawing.Size(405, 70);
-            this.groupInsurance.TabIndex = 3;
-            this.groupInsurance.TabStop = false;
-            this.groupInsurance.Text = "Insurance";
-            // 
-            // insuranceControl
-            // 
-            this.insuranceControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.insuranceControl.Location = new System.Drawing.Point(49, 14);
-            this.insuranceControl.Name = "insuranceControl";
-            this.insuranceControl.Size = new System.Drawing.Size(307, 50);
-            this.insuranceControl.TabIndex = 1;
-            // 
-            // insuranceState
-            // 
-            this.insuranceState.AutoSize = true;
-            this.insuranceState.Location = new System.Drawing.Point(9, 18);
-            this.insuranceState.Name = "insuranceState";
-            this.insuranceState.Size = new System.Drawing.Size(15, 14);
-            this.insuranceState.TabIndex = 0;
-            this.insuranceState.UseVisualStyleBackColor = true;
-            // 
-            // insuranceBorderEdge
-            // 
-            this.insuranceBorderEdge.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left)));
-            this.insuranceBorderEdge.AutoSize = false;
-            this.insuranceBorderEdge.BorderStyle = ComponentFactory.Krypton.Toolkit.PaletteBorderStyle.GridDataCellSheet;
-            this.insuranceBorderEdge.Location = new System.Drawing.Point(29, 18);
-            this.insuranceBorderEdge.Name = "insuranceBorderEdge";
-            this.insuranceBorderEdge.Size = new System.Drawing.Size(1, 40);
-            this.insuranceBorderEdge.Text = "insuranceBorderEdge";
             // 
             // groupLabels
             // 
@@ -383,8 +335,6 @@
             this.Name = "AmazonSWAProfileControl";
             this.Size = new System.Drawing.Size(425, 1127);
             this.tabPageSettings.ResumeLayout(false);
-            this.groupInsurance.ResumeLayout(false);
-            this.groupInsurance.PerformLayout();
             this.groupLabels.ResumeLayout(false);
             this.groupLabels.PerformLayout();
             this.groupShipment.ResumeLayout(false);
@@ -398,10 +348,6 @@
 
         #endregion
         private System.Windows.Forms.TabPage tabPageSettings;
-        private System.Windows.Forms.GroupBox groupInsurance;
-        private ShipWorks.Shipping.Insurance.InsuranceProfileControl insuranceControl;
-        private System.Windows.Forms.CheckBox insuranceState;
-        private ComponentFactory.Krypton.Toolkit.KryptonBorderEdge insuranceBorderEdge;
         protected System.Windows.Forms.GroupBox groupLabels;
         private System.Windows.Forms.Label labelThermalNote;
         protected Editing.RequestedLabelFormatProfileControl requestedLabelFormat;
