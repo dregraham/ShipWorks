@@ -942,6 +942,28 @@ namespace ShipWorks.ApplicationCore.Licensing
         }
 
         /// <summary>
+        /// Gets customer email.
+        /// </summary>
+        public static (string Email, string FirstAndLastName) GetCustomerEmail(string storeLicense, string customerKey)
+        {
+            HttpVariableRequestSubmitter postRequest = new HttpVariableRequestSubmitter();
+
+            postRequest.Variables.Add("action", "getcustomeremail");
+            postRequest.Variables.Add("customerlicense", customerKey);
+            postRequest.Variables.Add("license", storeLicense);
+            postRequest.Variables.Add("version", Version);
+
+            XmlDocument xmlResponse = ProcessXmlRequest(postRequest, "GetCustomerEmail", true);
+
+            CheckResponseForErrors(xmlResponse);
+
+            XPathNamespaceNavigator navigator = new XPathNamespaceNavigator(xmlResponse);
+
+            return (Email: XPathUtility.Evaluate(navigator, "//Email", string.Empty),
+                    FirstAndLastName: XPathUtility.Evaluate(navigator, "//FirstAndLastName", string.Empty));
+        }
+
+        /// <summary>
         /// Gets the license capabilities.
         /// </summary>
         public static ILicenseCapabilities GetLicenseCapabilities(ICustomerLicense license)

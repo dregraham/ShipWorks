@@ -38,8 +38,20 @@
             this.labelAuth = new System.Windows.Forms.Label();
             this.signatureAuth = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
-            this.infoTipHubID = new ShipWorks.UI.Controls.InfoTip();
+            this.invoice = new System.Windows.Forms.Label();
+            this.letterhead = new System.Windows.Forms.Label();
+            this.signature = new System.Windows.Forms.Label();
+            this.letterheadBrowse = new System.Windows.Forms.Button();
+            this.signatureBrowse = new System.Windows.Forms.Button();
+            this.letterheadPreview = new System.Windows.Forms.PictureBox();
+            this.signaturePreview = new System.Windows.Forms.PictureBox();
             this.infoTipExtraHubs = new ShipWorks.UI.Controls.InfoTip();
+            this.infoTipHubID = new ShipWorks.UI.Controls.InfoTip();
+            this.openFileDialogLetterhead = new System.Windows.Forms.OpenFileDialog();
+            this.openFileDialogSignature = new System.Windows.Forms.OpenFileDialog();
+            this.InvoiceLinkLabel = new System.Windows.Forms.LinkLabel();
+            ((System.ComponentModel.ISupportInitialize)(this.letterheadPreview)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.signaturePreview)).BeginInit();
             this.SuspendLayout();
             // 
             // additionalHubs
@@ -93,7 +105,7 @@
             this.labelSmartPost.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labelSmartPost.Location = new System.Drawing.Point(0, 60);
             this.labelSmartPost.Name = "labelSmartPost";
-            this.labelSmartPost.Size = new System.Drawing.Size(103, 13);
+            this.labelSmartPost.Size = new System.Drawing.Size(113, 13);
             this.labelSmartPost.TabIndex = 3;
             this.labelSmartPost.Text = "FedEx SmartPost®";
             // 
@@ -133,14 +145,75 @@
             this.label1.TabIndex = 22;
             this.label1.Text = "(optional)";
             // 
-            // infoTipHubID
+            // invoice
             // 
-            this.infoTipHubID.Caption = "This is assigned by FedEx when your account is approved for SmartPost.";
-            this.infoTipHubID.Location = new System.Drawing.Point(239, 83);
-            this.infoTipHubID.Name = "infoTipHubID";
-            this.infoTipHubID.Size = new System.Drawing.Size(12, 12);
-            this.infoTipHubID.TabIndex = 23;
-            this.infoTipHubID.Title = "Hub ID";
+            this.invoice.AutoSize = true;
+            this.invoice.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.invoice.Location = new System.Drawing.Point(-3, 210);
+            this.invoice.Name = "invoice";
+            this.invoice.Size = new System.Drawing.Size(197, 13);
+            this.invoice.TabIndex = 25;
+            this.invoice.Text = "International Commercial Invoice";
+            // 
+            // letterhead
+            // 
+            this.letterhead.AutoSize = true;
+            this.letterhead.Location = new System.Drawing.Point(21, 236);
+            this.letterhead.Name = "letterhead";
+            this.letterhead.Size = new System.Drawing.Size(145, 13);
+            this.letterhead.TabIndex = 26;
+            this.letterhead.Text = "Company Letterhead Image:";
+            // 
+            // signature
+            // 
+            this.signature.AutoSize = true;
+            this.signature.Location = new System.Drawing.Point(76, 327);
+            this.signature.Name = "signature";
+            this.signature.Size = new System.Drawing.Size(90, 13);
+            this.signature.TabIndex = 27;
+            this.signature.Text = "Signature Image:";
+            // 
+            // letterheadBrowse
+            // 
+            this.letterheadBrowse.Location = new System.Drawing.Point(172, 229);
+            this.letterheadBrowse.Name = "letterheadBrowse";
+            this.letterheadBrowse.Size = new System.Drawing.Size(78, 26);
+            this.letterheadBrowse.TabIndex = 28;
+            this.letterheadBrowse.Text = "Browse";
+            this.letterheadBrowse.UseVisualStyleBackColor = true;
+            this.letterheadBrowse.Click += new System.EventHandler(this.OnBrowseLetterhead);
+            // 
+            // signatureBrowse
+            // 
+            this.signatureBrowse.Location = new System.Drawing.Point(172, 320);
+            this.signatureBrowse.Name = "signatureBrowse";
+            this.signatureBrowse.Size = new System.Drawing.Size(78, 26);
+            this.signatureBrowse.TabIndex = 29;
+            this.signatureBrowse.Text = "Browse";
+            this.signatureBrowse.UseVisualStyleBackColor = true;
+            this.signatureBrowse.Click += new System.EventHandler(this.OnBrowseSignature);
+            // 
+            // letterheadPreview
+            // 
+            this.letterheadPreview.BackColor = System.Drawing.SystemColors.Control;
+            this.letterheadPreview.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.letterheadPreview.Location = new System.Drawing.Point(22, 261);
+            this.letterheadPreview.Name = "letterheadPreview";
+            this.letterheadPreview.Size = new System.Drawing.Size(250, 50);
+            this.letterheadPreview.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.letterheadPreview.TabIndex = 30;
+            this.letterheadPreview.TabStop = false;
+            // 
+            // signaturePreview
+            // 
+            this.signaturePreview.BackColor = System.Drawing.SystemColors.Control;
+            this.signaturePreview.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.signaturePreview.Location = new System.Drawing.Point(22, 352);
+            this.signaturePreview.Name = "signaturePreview";
+            this.signaturePreview.Size = new System.Drawing.Size(250, 50);
+            this.signaturePreview.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.signaturePreview.TabIndex = 31;
+            this.signaturePreview.TabStop = false;
             // 
             // infoTipExtraHubs
             // 
@@ -153,10 +226,46 @@
             this.infoTipExtraHubs.TabIndex = 24;
             this.infoTipExtraHubs.Title = "Additional Hub IDs";
             // 
+            // infoTipHubID
+            // 
+            this.infoTipHubID.Caption = "This is assigned by FedEx when your account is approved for SmartPost.";
+            this.infoTipHubID.Location = new System.Drawing.Point(239, 83);
+            this.infoTipHubID.Name = "infoTipHubID";
+            this.infoTipHubID.Size = new System.Drawing.Size(12, 12);
+            this.infoTipHubID.TabIndex = 23;
+            this.infoTipHubID.Title = "Hub ID";
+            // 
+            // openFileDialogLetterhead
+            // 
+            this.openFileDialogLetterhead.Filter = "Image Files(*.jpg; *.gif; *.png)|*.jpg; *.gif; *.png";
+            // 
+            // openFileDialogSignature
+            // 
+            this.openFileDialogSignature.Filter = "Image Files(*.jpg; *.gif; *.png)|*.jpg; *.gif; *.png";
+            // 
+            // InvoiceLinkLabel
+            // 
+            this.InvoiceLinkLabel.AutoSize = true;
+            this.InvoiceLinkLabel.Location = new System.Drawing.Point(200, 210);
+            this.InvoiceLinkLabel.Name = "InvoiceLinkLabel";
+            this.InvoiceLinkLabel.Size = new System.Drawing.Size(61, 13);
+            this.InvoiceLinkLabel.TabIndex = 32;
+            this.InvoiceLinkLabel.TabStop = true;
+            this.InvoiceLinkLabel.Text = "Learn more";
+            this.InvoiceLinkLabel.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.OnLearnMore);
+            // 
             // FedExAccountSettingsControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.InvoiceLinkLabel);
+            this.Controls.Add(this.signaturePreview);
+            this.Controls.Add(this.letterheadPreview);
+            this.Controls.Add(this.signatureBrowse);
+            this.Controls.Add(this.letterheadBrowse);
+            this.Controls.Add(this.signature);
+            this.Controls.Add(this.letterhead);
+            this.Controls.Add(this.invoice);
             this.Controls.Add(this.infoTipExtraHubs);
             this.Controls.Add(this.infoTipHubID);
             this.Controls.Add(this.label1);
@@ -171,7 +280,9 @@
             this.Controls.Add(this.labelSmartPost);
             this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Name = "FedExAccountSettingsControl";
-            this.Size = new System.Drawing.Size(345, 201);
+            this.Size = new System.Drawing.Size(345, 457);
+            ((System.ComponentModel.ISupportInitialize)(this.letterheadPreview)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.signaturePreview)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -191,5 +302,15 @@
         private System.Windows.Forms.Label label1;
         private UI.Controls.InfoTip infoTipHubID;
         private UI.Controls.InfoTip infoTipExtraHubs;
+        private System.Windows.Forms.Label invoice;
+        private System.Windows.Forms.Label letterhead;
+        private System.Windows.Forms.Label signature;
+        private System.Windows.Forms.Button letterheadBrowse;
+        private System.Windows.Forms.Button signatureBrowse;
+        private System.Windows.Forms.PictureBox letterheadPreview;
+        private System.Windows.Forms.PictureBox signaturePreview;
+        private System.Windows.Forms.OpenFileDialog openFileDialogLetterhead;
+        private System.Windows.Forms.OpenFileDialog openFileDialogSignature;
+        private System.Windows.Forms.LinkLabel InvoiceLinkLabel;
     }
 }

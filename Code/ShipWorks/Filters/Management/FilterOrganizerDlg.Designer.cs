@@ -1,4 +1,3 @@
-using ShipWorks.Data.Model.EntityClasses;
 namespace ShipWorks.Filters.Management
 {
     partial class FilterOrganizerDlg
@@ -81,43 +80,43 @@ namespace ShipWorks.Filters.Management
             this.tabPageOrders.SuspendLayout();
             this.tabPageCustomers.SuspendLayout();
             this.SuspendLayout();
-            // 
+            //
             // labelAdd
-            // 
-            this.labelAdd.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            //
+            this.labelAdd.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.labelAdd.AutoSize = true;
-            this.labelAdd.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelAdd.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
             this.labelAdd.Location = new System.Drawing.Point(323, 145);
             this.labelAdd.Name = "labelAdd";
             this.labelAdd.Size = new System.Drawing.Size(29, 13);
             this.labelAdd.TabIndex = 5;
             this.labelAdd.Text = "Add";
-            // 
+            //
             // labelMove
-            // 
-            this.labelMove.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            //
+            this.labelMove.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.labelMove.AutoSize = true;
-            this.labelMove.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelMove.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
             this.labelMove.Location = new System.Drawing.Point(323, 284);
             this.labelMove.Name = "labelMove";
             this.labelMove.Size = new System.Drawing.Size(38, 13);
             this.labelMove.TabIndex = 10;
             this.labelMove.Text = "Move";
-            // 
+            //
             // label4
-            // 
-            this.label4.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            //
+            this.label4.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.label4.AutoSize = true;
-            this.label4.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label4.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
             this.label4.Location = new System.Drawing.Point(323, 35);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(28, 13);
             this.label4.TabIndex = 1;
             this.label4.Text = "Edit";
-            // 
+            //
             // close
-            // 
-            this.close.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            //
+            this.close.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.close.DialogResult = System.Windows.Forms.DialogResult.OK;
             this.close.Location = new System.Drawing.Point(400, 433);
             this.close.Name = "close";
@@ -125,32 +124,32 @@ namespace ShipWorks.Filters.Management
             this.close.TabIndex = 15;
             this.close.Text = "Close";
             this.close.UseVisualStyleBackColor = true;
-            // 
+            //
             // contextMenuStripSort
-            // 
+            //
             this.contextMenuStripSort.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripMenuItemSortSelected,
             this.toolStripMenuItemSortAll});
             this.contextMenuStripSort.Name = "contextMenuStripRename";
             this.contextMenuStripSort.Size = new System.Drawing.Size(196, 48);
             this.contextMenuStripSort.Opening += new System.ComponentModel.CancelEventHandler(this.OnSortMenuOpening);
-            // 
+            //
             // toolStripMenuItemSortSelected
-            // 
+            //
             this.toolStripMenuItemSortSelected.Name = "toolStripMenuItemSortSelected";
             this.toolStripMenuItemSortSelected.Size = new System.Drawing.Size(195, 22);
             this.toolStripMenuItemSortSelected.Text = "Contents of \'Whatever\'";
             this.toolStripMenuItemSortSelected.Click += new System.EventHandler(this.OnSortSelectedFolder);
-            // 
+            //
             // toolStripMenuItemSortAll
-            // 
+            //
             this.toolStripMenuItemSortAll.Name = "toolStripMenuItemSortAll";
             this.toolStripMenuItemSortAll.Size = new System.Drawing.Size(195, 22);
             this.toolStripMenuItemSortAll.Text = "All Filters and Folders";
             this.toolStripMenuItemSortAll.Click += new System.EventHandler(this.OnSortAll);
-            // 
+            //
             // contextMenuDragDrop
-            // 
+            //
             this.contextMenuDragDrop.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.menuItemMove,
             this.menuItemCopy,
@@ -160,45 +159,45 @@ namespace ShipWorks.Filters.Management
             this.contextMenuDragDrop.Name = "contextMenuDragDrop";
             this.contextMenuDragDrop.Size = new System.Drawing.Size(133, 98);
             this.contextMenuDragDrop.Closed += new System.Windows.Forms.ToolStripDropDownClosedEventHandler(this.OnDragDropMenuClosed);
-            // 
+            //
             // menuItemMove
-            // 
+            //
             this.menuItemMove.Image = global::ShipWorks.Properties.Resources.arrow_right_blue;
             this.menuItemMove.Name = "menuItemMove";
             this.menuItemMove.Size = new System.Drawing.Size(132, 22);
             this.menuItemMove.Text = "Move Here";
             this.menuItemMove.Click += new System.EventHandler(this.OnDragDropMove);
-            // 
+            //
             // menuItemCopy
-            // 
+            //
             this.menuItemCopy.Image = global::ShipWorks.Properties.Resources.CopyHS;
             this.menuItemCopy.Name = "menuItemCopy";
             this.menuItemCopy.Size = new System.Drawing.Size(132, 22);
             this.menuItemCopy.Text = "Copy Here";
             this.menuItemCopy.Click += new System.EventHandler(this.OnDragDropCopy);
-            // 
+            //
             // menuItemLink
-            // 
+            //
             this.menuItemLink.Image = global::ShipWorks.Properties.Resources.paperclip16;
             this.menuItemLink.Name = "menuItemLink";
             this.menuItemLink.Size = new System.Drawing.Size(132, 22);
             this.menuItemLink.Text = "Link Here";
             this.menuItemLink.Click += new System.EventHandler(this.OnDragDropLink);
-            // 
+            //
             // toolStripSeparator2
-            // 
+            //
             this.toolStripSeparator2.Name = "toolStripSeparator2";
             this.toolStripSeparator2.Size = new System.Drawing.Size(129, 6);
-            // 
+            //
             // menuItemCancel
-            // 
+            //
             this.menuItemCancel.Name = "menuItemCancel";
             this.menuItemCancel.Size = new System.Drawing.Size(132, 22);
             this.menuItemCancel.Text = "Cancel";
-            // 
+            //
             // rename
-            // 
-            this.rename.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            //
+            this.rename.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.rename.Image = global::ShipWorks.Properties.Resources.rename;
             this.rename.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.rename.Location = new System.Drawing.Point(326, 80);
@@ -208,10 +207,10 @@ namespace ShipWorks.Filters.Management
             this.rename.Text = "Rename";
             this.rename.UseVisualStyleBackColor = true;
             this.rename.Click += new System.EventHandler(this.OnRename);
-            // 
+            //
             // moveIntoFolder
-            // 
-            this.moveIntoFolder.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            //
+            this.moveIntoFolder.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.moveIntoFolder.Image = global::ShipWorks.Properties.Resources.move_into_folder;
             this.moveIntoFolder.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.moveIntoFolder.Location = new System.Drawing.Point(326, 358);
@@ -221,10 +220,10 @@ namespace ShipWorks.Filters.Management
             this.moveIntoFolder.Text = "Move Into Folder";
             this.moveIntoFolder.UseVisualStyleBackColor = true;
             this.moveIntoFolder.Click += new System.EventHandler(this.OnMoveIntoFolder);
-            // 
+            //
             // delete
-            // 
-            this.delete.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            //
+            this.delete.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.delete.Image = global::ShipWorks.Properties.Resources.delete16;
             this.delete.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.delete.Location = new System.Drawing.Point(326, 109);
@@ -234,10 +233,10 @@ namespace ShipWorks.Filters.Management
             this.delete.Text = "Delete";
             this.delete.UseVisualStyleBackColor = true;
             this.delete.Click += new System.EventHandler(this.OnDelete);
-            // 
+            //
             // edit
-            // 
-            this.edit.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            //
+            this.edit.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.edit.Image = global::ShipWorks.Properties.Resources.edit16;
             this.edit.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.edit.Location = new System.Drawing.Point(326, 50);
@@ -247,10 +246,10 @@ namespace ShipWorks.Filters.Management
             this.edit.Text = "Edit";
             this.edit.UseVisualStyleBackColor = true;
             this.edit.Click += new System.EventHandler(this.OnEdit);
-            // 
+            //
             // moveDown
-            // 
-            this.moveDown.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            //
+            this.moveDown.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.moveDown.Image = global::ShipWorks.Properties.Resources.arrow_down_blue;
             this.moveDown.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.moveDown.Location = new System.Drawing.Point(326, 329);
@@ -260,10 +259,10 @@ namespace ShipWorks.Filters.Management
             this.moveDown.Text = "Move Down";
             this.moveDown.UseVisualStyleBackColor = true;
             this.moveDown.Click += new System.EventHandler(this.OnMoveDown);
-            // 
+            //
             // moveUp
-            // 
-            this.moveUp.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            //
+            this.moveUp.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.moveUp.Image = global::ShipWorks.Properties.Resources.arrow_up_blue;
             this.moveUp.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.moveUp.Location = new System.Drawing.Point(326, 300);
@@ -273,10 +272,10 @@ namespace ShipWorks.Filters.Management
             this.moveUp.Text = "Move Up";
             this.moveUp.UseVisualStyleBackColor = true;
             this.moveUp.Click += new System.EventHandler(this.OnMoveUp);
-            // 
+            //
             // newFolder
-            // 
-            this.newFolder.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            //
+            this.newFolder.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.newFolder.Image = global::ShipWorks.Properties.Resources.folderclosed_add;
             this.newFolder.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.newFolder.Location = new System.Drawing.Point(326, 190);
@@ -286,10 +285,10 @@ namespace ShipWorks.Filters.Management
             this.newFolder.Text = "New Folder";
             this.newFolder.UseVisualStyleBackColor = true;
             this.newFolder.Click += new System.EventHandler(this.OnNewFolder);
-            // 
+            //
             // createLink
-            // 
-            this.createLink.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            //
+            this.createLink.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.createLink.Image = global::ShipWorks.Properties.Resources.paperclip16;
             this.createLink.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.createLink.Location = new System.Drawing.Point(326, 248);
@@ -300,10 +299,10 @@ namespace ShipWorks.Filters.Management
             this.createLink.UseMnemonic = false;
             this.createLink.UseVisualStyleBackColor = true;
             this.createLink.Click += new System.EventHandler(this.OnCreateLink);
-            // 
+            //
             // copy
-            // 
-            this.copy.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            //
+            this.copy.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.copy.Image = global::ShipWorks.Properties.Resources.CopyHS;
             this.copy.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.copy.Location = new System.Drawing.Point(326, 219);
@@ -313,10 +312,10 @@ namespace ShipWorks.Filters.Management
             this.copy.Text = "Copy";
             this.copy.UseVisualStyleBackColor = true;
             this.copy.Click += new System.EventHandler(this.OnCopy);
-            // 
+            //
             // newFilter
-            // 
-            this.newFilter.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            //
+            this.newFilter.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.newFilter.Image = global::ShipWorks.Properties.Resources.filter_add;
             this.newFilter.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.newFilter.Location = new System.Drawing.Point(326, 161);
@@ -326,9 +325,9 @@ namespace ShipWorks.Filters.Management
             this.newFilter.Text = "New Filter";
             this.newFilter.UseVisualStyleBackColor = true;
             this.newFilter.Click += new System.EventHandler(this.OnNewFilter);
-            // 
+            //
             // contextMenuTree
-            // 
+            //
             this.contextMenuTree.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.menuItemEdit,
             this.toolStripSeparator3,
@@ -343,82 +342,82 @@ namespace ShipWorks.Filters.Management
             this.contextMenuTree.Name = "contextMenuTree";
             this.contextMenuTree.Size = new System.Drawing.Size(135, 176);
             this.contextMenuTree.Opening += new System.ComponentModel.CancelEventHandler(this.OnContextMenuOpening);
-            // 
+            //
             // menuItemEdit
-            // 
+            //
             this.menuItemEdit.Image = global::ShipWorks.Properties.Resources.edit16;
             this.menuItemEdit.Name = "menuItemEdit";
             this.menuItemEdit.Size = new System.Drawing.Size(134, 22);
             this.menuItemEdit.Text = "Edit";
             this.menuItemEdit.Click += new System.EventHandler(this.OnEdit);
-            // 
+            //
             // toolStripSeparator3
-            // 
+            //
             this.toolStripSeparator3.Name = "toolStripSeparator3";
             this.toolStripSeparator3.Size = new System.Drawing.Size(131, 6);
-            // 
+            //
             // menuItemNewFilter
-            // 
+            //
             this.menuItemNewFilter.Image = global::ShipWorks.Properties.Resources.filter_add;
             this.menuItemNewFilter.Name = "menuItemNewFilter";
             this.menuItemNewFilter.Size = new System.Drawing.Size(134, 22);
             this.menuItemNewFilter.Text = "New Filter";
             this.menuItemNewFilter.Click += new System.EventHandler(this.OnNewFilter);
-            // 
+            //
             // menuItemNewFolder
-            // 
+            //
             this.menuItemNewFolder.Image = global::ShipWorks.Properties.Resources.folderclosed_add;
             this.menuItemNewFolder.Name = "menuItemNewFolder";
             this.menuItemNewFolder.Size = new System.Drawing.Size(134, 22);
             this.menuItemNewFolder.Text = "New Folder";
             this.menuItemNewFolder.Click += new System.EventHandler(this.OnNewFolder);
-            // 
+            //
             // toolStripSeparator1
-            // 
+            //
             this.toolStripSeparator1.Name = "toolStripSeparator1";
             this.toolStripSeparator1.Size = new System.Drawing.Size(131, 6);
-            // 
+            //
             // menuItemContextMove
-            // 
+            //
             this.menuItemContextMove.Image = global::ShipWorks.Properties.Resources.move_into_folder;
             this.menuItemContextMove.Name = "menuItemContextMove";
             this.menuItemContextMove.Size = new System.Drawing.Size(134, 22);
             this.menuItemContextMove.Text = "Move";
             this.menuItemContextMove.Click += new System.EventHandler(this.OnMoveIntoFolder);
-            // 
+            //
             // menuItemContextCopy
-            // 
+            //
             this.menuItemContextCopy.Image = global::ShipWorks.Properties.Resources.CopyHS;
             this.menuItemContextCopy.Name = "menuItemContextCopy";
             this.menuItemContextCopy.Size = new System.Drawing.Size(134, 22);
             this.menuItemContextCopy.Text = "Copy";
             this.menuItemContextCopy.Click += new System.EventHandler(this.OnCopy);
-            // 
+            //
             // menuItemCreateLink
-            // 
+            //
             this.menuItemCreateLink.Image = global::ShipWorks.Properties.Resources.paperclip16;
             this.menuItemCreateLink.Name = "menuItemCreateLink";
             this.menuItemCreateLink.Size = new System.Drawing.Size(134, 22);
             this.menuItemCreateLink.Text = "Create Link";
             this.menuItemCreateLink.Click += new System.EventHandler(this.OnCreateLink);
-            // 
+            //
             // toolStripSeparator4
-            // 
+            //
             this.toolStripSeparator4.Name = "toolStripSeparator4";
             this.toolStripSeparator4.Size = new System.Drawing.Size(131, 6);
-            // 
+            //
             // deleteToolStripMenuItem
-            // 
+            //
             this.deleteToolStripMenuItem.Image = global::ShipWorks.Properties.Resources.delete16;
             this.deleteToolStripMenuItem.Name = "deleteToolStripMenuItem";
             this.deleteToolStripMenuItem.Size = new System.Drawing.Size(134, 22);
             this.deleteToolStripMenuItem.Text = "Delete";
             this.deleteToolStripMenuItem.Click += new System.EventHandler(this.OnDelete);
-            // 
+            //
             // tabControl
-            // 
-            this.tabControl.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
+            //
+            this.tabControl.Anchor = ((System.Windows.Forms.AnchorStyles) ((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.tabControl.Controls.Add(this.tabPageOrders);
             this.tabControl.Controls.Add(this.tabPageCustomers);
@@ -429,9 +428,9 @@ namespace ShipWorks.Filters.Management
             this.tabControl.Size = new System.Drawing.Size(305, 398);
             this.tabControl.TabIndex = 0;
             this.tabControl.SelectedIndexChanged += new System.EventHandler(this.OnTabChanged);
-            // 
+            //
             // tabPageOrders
-            // 
+            //
             this.tabPageOrders.Controls.Add(this.filterTreeOrders);
             this.tabPageOrders.ImageIndex = 1;
             this.tabPageOrders.Location = new System.Drawing.Point(4, 23);
@@ -441,9 +440,9 @@ namespace ShipWorks.Filters.Management
             this.tabPageOrders.TabIndex = 0;
             this.tabPageOrders.Text = "Orders";
             this.tabPageOrders.UseVisualStyleBackColor = true;
-            // 
+            //
             // tabPageCustomers
-            // 
+            //
             this.tabPageCustomers.Controls.Add(this.filterTreeCustomers);
             this.tabPageCustomers.ImageIndex = 0;
             this.tabPageCustomers.Location = new System.Drawing.Point(4, 23);
@@ -453,17 +452,17 @@ namespace ShipWorks.Filters.Management
             this.tabPageCustomers.TabIndex = 1;
             this.tabPageCustomers.Text = "Customers";
             this.tabPageCustomers.UseVisualStyleBackColor = true;
-            // 
+            //
             // imageListTabs
-            // 
-            this.imageListTabs.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imageListTabs.ImageStream")));
+            //
+            this.imageListTabs.ImageStream = ((System.Windows.Forms.ImageListStreamer) (resources.GetObject("imageListTabs.ImageStream")));
             this.imageListTabs.TransparentColor = System.Drawing.Color.Transparent;
             this.imageListTabs.Images.SetKeyName(0, "user11.png");
             this.imageListTabs.Images.SetKeyName(1, "form_blue.png");
-            // 
+            //
             // showDisabledFilters
-            // 
-            this.showDisabledFilters.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            //
+            this.showDisabledFilters.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.showDisabledFilters.AutoSize = true;
             this.showDisabledFilters.Location = new System.Drawing.Point(12, 416);
             this.showDisabledFilters.Name = "showDisabledFilters";
@@ -472,15 +471,15 @@ namespace ShipWorks.Filters.Management
             this.showDisabledFilters.Text = "Show disabled filters";
             this.showDisabledFilters.UseVisualStyleBackColor = true;
             this.showDisabledFilters.CheckedChanged += new System.EventHandler(this.OnShowDisabledFiltersCheckedChanged);
-            // 
+            //
             // filterTreeOrders
-            // 
+            //
             this.filterTreeOrders.AutoRefreshCalculatingCounts = true;
             this.filterTreeOrders.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.filterTreeOrders.ContextMenuStrip = this.contextMenuTree;
             this.filterTreeOrders.Dock = System.Windows.Forms.DockStyle.Fill;
             this.filterTreeOrders.Editable = true;
-            this.filterTreeOrders.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.filterTreeOrders.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
             this.filterTreeOrders.HideDisabledFilters = true;
             this.filterTreeOrders.HotTrackNode = null;
             this.filterTreeOrders.Location = new System.Drawing.Point(3, 3);
@@ -488,19 +487,20 @@ namespace ShipWorks.Filters.Management
             this.filterTreeOrders.Size = new System.Drawing.Size(291, 365);
             this.filterTreeOrders.TabIndex = 0;
             this.filterTreeOrders.SelectedFilterNodeChanged += new System.EventHandler(this.OnChangeSelectedFilterNode);
+            this.filterTreeOrders.LoadAsAdvancedSearch += new System.EventHandler<Data.Model.EntityClasses.FilterNodeEntity>(this.OnLoadAsAdvancedSearch);
             this.filterTreeOrders.FilterRenaming += new ShipWorks.Filters.Controls.FilterNodeRenameEventHandler(this.OnBeforeRename);
             this.filterTreeOrders.FilterRenamed += new ShipWorks.Filters.Controls.FilterNodeRenameEventHandler(this.OnAfterRename);
             this.filterTreeOrders.DeleteKeyPressed += new System.EventHandler(this.OnDelete);
             this.filterTreeOrders.DragDropComplete += new ShipWorks.Filters.Controls.FilterDragDropCompleteEventHandler(this.OnDragDropComplete);
-            // 
+            //
             // filterTreeCustomers
-            // 
+            //
             this.filterTreeCustomers.AutoRefreshCalculatingCounts = true;
             this.filterTreeCustomers.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.filterTreeCustomers.ContextMenuStrip = this.contextMenuTree;
             this.filterTreeCustomers.Dock = System.Windows.Forms.DockStyle.Fill;
             this.filterTreeCustomers.Editable = true;
-            this.filterTreeCustomers.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.filterTreeCustomers.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
             this.filterTreeCustomers.HideDisabledFilters = true;
             this.filterTreeCustomers.HotTrackNode = null;
             this.filterTreeCustomers.Location = new System.Drawing.Point(3, 3);
@@ -508,14 +508,15 @@ namespace ShipWorks.Filters.Management
             this.filterTreeCustomers.Size = new System.Drawing.Size(291, 365);
             this.filterTreeCustomers.TabIndex = 1;
             this.filterTreeCustomers.SelectedFilterNodeChanged += new System.EventHandler(this.OnChangeSelectedFilterNode);
+            this.filterTreeCustomers.LoadAsAdvancedSearch += new System.EventHandler<Data.Model.EntityClasses.FilterNodeEntity>(this.OnLoadAsAdvancedSearch);
             this.filterTreeCustomers.FilterRenaming += new ShipWorks.Filters.Controls.FilterNodeRenameEventHandler(this.OnBeforeRename);
             this.filterTreeCustomers.FilterRenamed += new ShipWorks.Filters.Controls.FilterNodeRenameEventHandler(this.OnAfterRename);
             this.filterTreeCustomers.DeleteKeyPressed += new System.EventHandler(this.OnDelete);
             this.filterTreeCustomers.DragDropComplete += new ShipWorks.Filters.Controls.FilterDragDropCompleteEventHandler(this.OnDragDropComplete);
-            // 
+            //
             // sortButton
-            // 
-            this.sortButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            //
+            this.sortButton.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.sortButton.AutoSize = true;
             this.sortButton.ContextMenuStrip = this.contextMenuStripSort;
             this.sortButton.Image = global::ShipWorks.Properties.Resources.sort_az_descending;
@@ -527,9 +528,9 @@ namespace ShipWorks.Filters.Management
             this.sortButton.Text = "Sort";
             this.sortButton.UseVisualStyleBackColor = true;
             this.sortButton.Click += new System.EventHandler(this.OnSortSelectedFolder);
-            // 
+            //
             // FilterOrganizerDlg
-            // 
+            //
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.close;
@@ -551,7 +552,7 @@ namespace ShipWorks.Filters.Management
             this.Controls.Add(this.createLink);
             this.Controls.Add(this.copy);
             this.Controls.Add(this.newFilter);
-            this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.MinimumSize = new System.Drawing.Size(486, 497);

@@ -389,6 +389,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("UIMode", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("OrderLookupLayout", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("LastReleaseNotesSeen", fieldHashtable);
 		}
 		#endregion
 
@@ -685,6 +687,16 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.String)GetValue((int)UserSettingsFieldIndex.OrderLookupLayout, true); }
 			set	{ SetValue((int)UserSettingsFieldIndex.OrderLookupLayout, value); }
+		}
+
+		/// <summary> The LastReleaseNotesSeen property of the Entity UserSettings<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "UserSettings"."LastReleaseNotesSeen"<br/>
+		/// Table field type characteristics (type, precision, scale, length): VarChar, 0, 0, 25<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.String LastReleaseNotesSeen
+		{
+			get { return (System.String)GetValue((int)UserSettingsFieldIndex.LastReleaseNotesSeen, true); }
+			set	{ SetValue((int)UserSettingsFieldIndex.LastReleaseNotesSeen, value); }
 		}
 
 		/// <summary> Gets / sets related entity of type 'UserEntity' which has to be set using a fetch action earlier. If no related entity is set for this property, null is returned.<br/><br/>

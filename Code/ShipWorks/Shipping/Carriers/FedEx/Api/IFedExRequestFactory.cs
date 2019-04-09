@@ -108,5 +108,13 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         /// <returns>A CarrierRequest object that can be used for submitting a request to
         /// FedEx searching drop-off location.</returns>
         IFedExGlobalShipAddressRequest CreateSearchLocationsRequest();
+
+        /// <summary>
+        /// Creates the UploadImages request.
+        /// </summary>
+        /// <param name="accountEntity"></param>
+        /// <returns>A CarrierRequest object that can be used for submitting a request to
+        /// FedEx to upload image data.</returns>
+        CarrierRequest CreateUploadImageRequest(FedExAccountEntity accountEntity);
     }
 }

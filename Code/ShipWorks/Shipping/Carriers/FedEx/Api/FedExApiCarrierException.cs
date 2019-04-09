@@ -72,6 +72,14 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         }
 
         /// <summary>
+        /// Constructor
+        /// </summary>
+        public FedExApiCarrierException(WebServices.UploadDocument.Notification[] notifications)
+            : base(GenerateMessage(GetOneError(notifications.Select(x => new KeyValuePair<string, string>(x.Code, x.Message)))))
+        {
+        }
+
+        /// <summary>
         /// Serialization constructor
         /// </summary>
         protected FedExApiCarrierException(SerializationInfo serializationInfo, StreamingContext streamingContext) : 

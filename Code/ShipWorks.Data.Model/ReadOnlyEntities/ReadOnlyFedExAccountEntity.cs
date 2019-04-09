@@ -56,6 +56,8 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             Phone = source.Phone;
             Email = source.Email;
             Website = source.Website;
+            Letterhead = source.Letterhead;
+            Signature = source.Signature;
             
             
             
@@ -184,6 +186,18 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         public System.String Website { get; }
+        /// <summary> The Letterhead property of the Entity FedExAccount<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "FedExAccount"."Letterhead"<br/>
+        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 2147483647<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+        public System.String Letterhead { get; }
+        /// <summary> The Signature property of the Entity FedExAccount<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "FedExAccount"."Signature"<br/>
+        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 2147483647<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+        public System.String Signature { get; }
         
         
         

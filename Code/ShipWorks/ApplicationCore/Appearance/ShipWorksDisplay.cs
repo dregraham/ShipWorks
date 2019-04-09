@@ -1,11 +1,7 @@
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.IO;
+using System.Reactive;
 using System.Xml;
-using ShipWorks.Users;
-using Interapptive.Shared;
-using ShipWorks.ApplicationCore;
 using log4net;
 
 namespace ShipWorks.ApplicationCore.Appearance
@@ -13,17 +9,18 @@ namespace ShipWorks.ApplicationCore.Appearance
     /// <summary>
     /// Display properties
     /// </summary>
-    static class ShipWorksDisplay
+    public static class ShipWorksDisplay
     {
-        static readonly ILog log = LogManager.GetLogger(typeof(ShipWorksDisplay));
-
-        const string defaultFile = "display.xml";
+        private static readonly ILog log = LogManager.GetLogger(typeof(ShipWorksDisplay));
+        private const string defaultFile = "display.xml";
 
         // Color ShipWorks should be
-        static ColorScheme defaultColorScheme = ColorScheme.Blue;
-        
+        private static ColorScheme defaultColorScheme = ColorScheme.Blue;
+
         // ShipWorks only shows in system tray when minimized
-        static bool deafultHideInTray = false;
+        private static bool deafultHideInTray = false;
+
+        public static event EventHandler ColorSchemeChanged;
 
         /// <summary>
         /// Loads the default display settings
@@ -69,7 +66,11 @@ namespace ShipWorks.ApplicationCore.Appearance
             }
             set
             {
-                defaultColorScheme = value;
+                if (defaultColorScheme != value)
+                {
+                    defaultColorScheme = value;
+                    ColorSchemeChanged?.Invoke(Unit.Default, EventArgs.Empty);
+                }
             }
         }
 

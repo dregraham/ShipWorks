@@ -184,7 +184,7 @@ namespace ShipWorks.Filters.Content.Editors
         private SandMenuItem CreateMenuItem(string identifier, string displayAs)
         {
             ConditionElementDescriptor descriptor = ConditionElementFactory.GetDescriptor(identifier);
-            if (!descriptor.IsApplicable(StoreManager.GetAllStores().Select(s => StoreTypeManager.GetType(s)).ToList()))
+            if (!descriptor.IsApplicable(StoreManager.GetAllStoresReadOnly().Select(StoreTypeManager.GetTypeWithReadOnlyStore).ToList()))
             {
                 return null;
             }

@@ -1,16 +1,16 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Drawing;
-using System.Data;
+using System.Drawing.Imaging;
 using System.Linq;
-using System.Text;
-using System.Windows.Forms;
-using ShipWorks.Data.Model.EntityClasses;
-using System.Xml.Linq;
-using Interapptive.Shared.UI;
-using ShipWorks.Shipping.Carriers.Api;
 using System.Text.RegularExpressions;
+using System.Windows.Forms;
+using System.Xml.Linq;
+using Interapptive.Shared.Net;
+using Interapptive.Shared.UI;
+using Interapptive.Shared.Utility;
+using ShipWorks.Data.Model;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.Carriers.Api;
 
 namespace ShipWorks.Shipping.Carriers.FedEx
 {
@@ -19,6 +19,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx
     /// </summary>
     public partial class FedExAccountSettingsControl : UserControl
     {
+        private const int MaxImageWidth = 700;
+        private const int MaxImageHeight = 50;
+        private string letterheadString;
+        private string signatureString;
+
         /// <summary>
         /// Constructor
         /// </summary>
@@ -44,6 +49,16 @@ namespace ShipWorks.Shipping.Carriers.FedEx
 
                 // Additional hubs
                 additionalHubs.Lines = hubs.Skip(1).Select(e => (string) e).ToArray();
+            }
+
+            if (account.Letterhead.Length > 0)
+            {
+                letterheadPreview.Image = account.Letterhead.Base64StringToImage();
+            }
+
+            if (account.Signature.Length > 0)
+            {
+                signaturePreview.Image = account.Signature.Base64StringToImage();
             }
         }
 
@@ -76,6 +91,86 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             }
 
             account.SmartPostHubList = root.ToString();
+
+            try
+            {
+                if (letterheadString != null && letterheadString != account.Letterhead)
+                {
+                    account.Letterhead = letterheadString;
+                }
+
+                if (signatureString != null && signatureString != account.Signature)
+                {
+                    account.Signature = signatureString;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageHelper.ShowError(this, ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// Browse for a letterhead image
+        /// </summary>
+        private void OnBrowseLetterhead(object sender, EventArgs e)
+        {
+            if (openFileDialogLetterhead.ShowDialog(this) == DialogResult.OK)
+            {
+                try
+                {
+                    var image = Image.FromFile(openFileDialogLetterhead.FileName);
+
+                    if (image.Size.Width <= MaxImageWidth && image.Size.Height <= MaxImageHeight)
+                    {
+                        letterheadString = image.ImageToBase64String(image.RawFormat);
+                        letterheadPreview.Image = image;
+                    }
+                    else
+                    {
+                        MessageHelper.ShowError(this,
+                            "The selected image exceeds the max resolution of 700 pixels wide by 50 pixels long");
+                    }
+                }
+                catch (Exception)
+                {
+                    MessageHelper.ShowError(this, "The selected image is invalid");
+                }
+            }
+        }
+
+        /// <summary>
+        /// Browse for a signature image
+        /// </summary>
+        private void OnBrowseSignature(object sender, EventArgs e)
+        {
+            if (openFileDialogSignature.ShowDialog(this) == DialogResult.OK)
+            {
+                try
+                {
+                    var image = Image.FromFile(openFileDialogSignature.FileName);
+
+                    if (image.Size.Width <= MaxImageWidth && image.Size.Height <= MaxImageHeight)
+                    {
+                        signatureString = image.ImageToBase64String(image.RawFormat);
+                        signaturePreview.Image = image;
+                    }
+                    else
+                    {
+                        MessageHelper.ShowError(this,
+                            "The selected image exceeds the max resolution of 700 pixels wide by 50 pixels long");
+                    }
+                }
+                catch (Exception)
+                {
+                    MessageHelper.ShowError(this, "The selected image is invalid");
+                }
+            }
+        }
+
+        private void OnLearnMore(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            WebHelper.OpenUrl("https://support.shipworks.com/hc/en-us/articles/360025471432", null);
         }
     }
 }

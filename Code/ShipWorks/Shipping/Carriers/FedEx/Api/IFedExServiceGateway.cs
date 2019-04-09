@@ -7,6 +7,7 @@ using ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Registration;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Track;
+using ShipWorks.Shipping.Carriers.FedEx.WebServices.UploadDocument;
 
 namespace ShipWorks.Shipping.Carriers.FedEx.Api
 {
@@ -88,5 +89,12 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         /// <param name="trackRequest">The track shipment request.</param>
         /// <returns>The TrackReply received from FedEx.</returns>
         TrackReply Track(TrackRequest trackRequest);
+
+        /// <summary>
+        /// Intended to interact with the FedEx API for uploading images
+        /// </summary>
+        /// <param name="imageRequest"></param>
+        /// <returns>The UploadImageReply received from FedEx.</returns>
+        UploadImagesReply UploadImages(UploadImagesRequest imageRequest);
     }
 }

@@ -56,6 +56,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             DialogSettings = source.DialogSettings;
             UIMode = source.UIMode;
             OrderLookupLayout = source.OrderLookupLayout;
+            LastReleaseNotesSeen = source.LastReleaseNotesSeen;
             
             User = (IUserEntity) source.User?.AsReadOnly(objectMap);
             
@@ -185,6 +186,12 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 2147483647<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
         public System.String OrderLookupLayout { get; }
+        /// <summary> The LastReleaseNotesSeen property of the Entity UserSettings<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "UserSettings"."LastReleaseNotesSeen"<br/>
+        /// Table field type characteristics (type, precision, scale, length): VarChar, 0, 0, 25<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+        public System.String LastReleaseNotesSeen { get; }
         
         public IUserEntity User { get; }
         

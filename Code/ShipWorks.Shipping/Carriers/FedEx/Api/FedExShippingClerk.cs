@@ -23,6 +23,7 @@ using ShipWorks.Shipping.Carriers.FedEx.Api.PackageMovement.Response;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Rate;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Tracking.Response;
+using ShipWorks.Shipping.Carriers.FedEx.Api.UploadDocuments.Response;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.GlobalShipAddress;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate;
@@ -714,7 +715,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
 
                 if (rateDetail.DeliveryTimestampSpecified)
                 {
-                    // Transite time
+                    // Transit time
                     deliveryDate = rateDetail.DeliveryTimestamp;
                     transitDays = (deliveryDate.Value.Date - shipment.ShipDate.Date).Days;
                     transitDaysDescription = GetTransitDaysDescription(transitDays, deliveryDate, serviceType);
@@ -1217,6 +1218,29 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
             return !(package.DimsLength.IsEquivalentTo(1) &&
                      package.DimsWidth.IsEquivalentTo(1) &&
                      package.DimsHeight.IsEquivalentTo(1));
+        }
+
+        /// <summary>
+        /// Upload images to FedEx
+        /// </summary>
+        /// <param name="account"></param>
+        public void PerformUploadImages(FedExAccountEntity account)
+        {
+            try
+            {
+                if (account == null)
+                {
+                    throw new FedExException("No FedEx account is selected");
+                }
+                log.Info("Performing FedEx Image Upload");
+                CarrierRequest uploadImagesRequest = requestFactory.CreateUploadImageRequest(account);
+                FedExUploadImagesResponse uploadImagesResponse = (FedExUploadImagesResponse) uploadImagesRequest.Submit();
+                uploadImagesResponse.Process();
+            }
+            catch (InvalidCastException ex)
+            {
+                throw HandleException(ex);
+            }
         }
     }
 }

@@ -17,6 +17,8 @@ using ShipWorks.Shipping.Carriers.FedEx.Api.Tracking.Request;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Tracking.Request.Manipulators;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Void.Request;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Void.Request.Manipulators;
+using ShipWorks.Shipping.Carriers.FedEx.Api.UploadDocuments.Request;
+using ShipWorks.Shipping.Carriers.FedEx.Api.UploadDocuments.Request.Manipulators;
 using System;
 using System.Collections.Generic;
 
@@ -239,6 +241,26 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         {
             Uri fedExEndpoint = new Uri(new FedExSettings(settingsRepository).EndpointUrl);
             return new CertificateRequest(fedExEndpoint, certificateInspector);
+        }
+
+        /// <summary>
+        /// Creates the UploadImages request.
+        /// </summary>
+        /// <param name="accountEntity"></param>
+        /// <returns>A CarrierRequest object that can be used for submitting a request to FedEx to upload image data.</returns>
+        public CarrierRequest CreateUploadImageRequest(FedExAccountEntity accountEntity)
+        {
+            List<ICarrierRequestManipulator> manipulators = new List<ICarrierRequestManipulator>
+            {
+                new FedExUploadImagesWebAuthenticationDetailManipulator(),
+                new FedExUploadImagesClientDetailManipulator(),
+                new FedExUploadImagesTransactionDetailManipulator(),
+                new FedExUploadImagesVersionManipulator(),
+                new FedExUploadImagesImageDetailManipulator()
+            };
+
+            return new FedExUploadImagesRequest(manipulators, serviceGatewayFactory.Create(settingsRepository),
+                responseFactory, accountEntity);
         }
     }
 }

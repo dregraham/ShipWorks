@@ -235,5 +235,14 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Fims
         {
             throw new NotImplementedException();
         }
+
+        /// <summary>
+        /// Not supported
+        /// </summary>
+        /// <param name="account"></param>
+        public void PerformUploadImages(FedExAccountEntity account)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

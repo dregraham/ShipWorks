@@ -4,20 +4,22 @@ using System.Data.SqlClient;
 using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
-using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Autofac;
 using Interapptive.Shared.Net;
+using Interapptive.Shared.Utility;
 using log4net;
 using ShipWorks.Actions;
 using ShipWorks.ApplicationCore.Dashboard.Content;
 using ShipWorks.ApplicationCore.Interaction;
 using ShipWorks.ApplicationCore.Licensing;
+using ShipWorks.ApplicationCore.Licensing.TangoRequests;
 using ShipWorks.ApplicationCore.Services;
 using ShipWorks.Common.Threading;
 using ShipWorks.Data;
+using ShipWorks.Data.Administration;
 using ShipWorks.Data.Administration.Recovery;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.Custom;
@@ -173,15 +175,22 @@ namespace ShipWorks.ApplicationCore.Dashboard
         /// <summary>
         /// Add the given information message to the dashboard
         /// </summary>
-        public static void ShowLocalMessage(string identifier, DashboardMessageImageType imageType, string primaryText, string secondaryText, params DashboardAction[] actions)
+        public static void ShowLocalMessage(string identifier, DashboardLocalMessageDetails options, params DashboardAction[] actions)
         {
             // Dismiss it in case it already exists
             DismissLocalMessage(identifier);
 
             // Add it back in with the new values
-            DashboardLocalMessageItem messageItem = new DashboardLocalMessageItem(identifier, imageType, primaryText, secondaryText, actions);
+            DashboardLocalMessageItem messageItem = new DashboardLocalMessageItem(identifier, options.ImageType, options.PrimaryText, options.SecondaryText, actions);
+            messageItem.UseFriendlyDateTime = options.UseFriendlyDateTime;
             AddDashboardItem(messageItem);
         }
+
+        /// <summary>
+        /// Add the given information message to the dashboard
+        /// </summary>
+        public static void ShowLocalMessage(string identifier, DashboardMessageImageType imageType, string primaryText, string secondaryText, params DashboardAction[] actions) =>
+            ShowLocalMessage(identifier, new DashboardLocalMessageDetails { ImageType = imageType, PrimaryText = primaryText, SecondaryText = secondaryText }, actions);
 
         /// <summary>
         /// Dismiss the message with the given identifier.  If the message is not present, no action is taken.
@@ -392,20 +401,25 @@ namespace ShipWorks.ApplicationCore.Dashboard
 
             try
             {
-                ShipWorksOnlineVersion online = ShipWorksOnlineVersionChecker.CheckOnlineVersion();
-                Version running = Assembly.GetEntryAssembly().GetName().Version;
-
-                // Online is a more recent version
-                if (running.CompareTo(online.Version) < 0)
+                using (var lifetimeScope = IoC.BeginLifetimeScope())
                 {
-                    // See if this newer version has already been acknowledged
-                    Version signoff = ShipWorksOnlineVersionChecker.CheckSignedOffVersion();
+                    var now = DateTime.Now;
+                    var nextUpdateWindow = lifetimeScope.Resolve<IConfigurationData>().GetNextUpdateWindow(now);
+                    var timeUntilUpdateWindow = nextUpdateWindow.Subtract(now);
 
-                    // If online is still more recent
-                    if (signoff.CompareTo(online.Version) < 0)
+                    if (timeUntilUpdateWindow.TotalHours <= 24 && timeUntilUpdateWindow.TotalHours > 0)
                     {
-                        panel.BeginInvoke((MethodInvoker<DashboardOnlineVersionItem>) CheckShipWorksVersionComplete,
-                            new DashboardOnlineVersionItem(online));
+                        var tangoCustomerId = lifetimeScope.Resolve<ITangoWebClient>().GetTangoCustomerId();
+                        var currentVersion = lifetimeScope.Resolve<ISqlSchemaUpdater>().GetBuildVersion();
+
+                        lifetimeScope.Resolve<ITangoGetReleaseByUserRequest>()
+                            .GetReleaseInfo(tangoCustomerId, currentVersion)
+                            .Map(x => x.ReleaseVersion)
+                            .Filter(x => x > currentVersion)
+                            .Filter(x => x > ShipWorksOnlineVersionChecker.CheckSignedOffVersion())
+                            .Do(x => panel.BeginInvoke((MethodInvoker<DashboardOnlineVersionItem>) CheckShipWorksVersionComplete,
+                                new DashboardOnlineVersionItem(x, nextUpdateWindow)));
+
                     }
                 }
             }
@@ -439,7 +453,7 @@ namespace ShipWorks.ApplicationCore.Dashboard
             // If we do, just update it
             if (existing != null)
             {
-                existing.OnlineVersion = versionItem.OnlineVersion;
+                existing.CopyFrom(versionItem);
             }
             else
             {

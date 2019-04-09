@@ -48,6 +48,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
 
         private Mock<CarrierRequest> packageMovementRequest;
         private Mock<CarrierRequest> versionCaptureRequest;
+        private Mock<CarrierRequest> uploadImagesRequest;
 
         private Mock<IFedExShipRequest> shippingRequest;
         private Mock<IFedExShipResponse> shipResponse;
@@ -109,6 +110,9 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
 
             versionCaptureRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), null);
             versionCaptureRequest.Setup(r => r.Submit());
+
+            uploadImagesRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), null);
+            uploadImagesRequest.Setup(r => r.Submit());
 
             shipResponse = new Mock<IFedExShipResponse>();
             shipResponse.Setup(r => r.Process());
@@ -1600,5 +1604,24 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         public void Dispose() => mock.Dispose();
 
         #endregion GetRates Tests
+
+        #region PerformUpload Test
+
+        [Fact]
+        public void PerformUploadImages_CatchesThrowsException_AndThrowsInvalidCastException()
+        {
+            uploadImagesRequest.Setup(r => r.Submit()).Throws(new InvalidCastException());
+
+            FedExAccountEntity account = new FedExAccountEntity();
+            Assert.Throws<InvalidCastException>(() => testObject.PerformUploadImages(account));
+        }
+
+        [Fact]
+        public void PerformUploadImages_ThrowsException_WhenAccountIsNull()
+        {
+            Assert.Throws<FedExException>(() => testObject.PerformUploadImages(null));
+        }
+
+        #endregion PerformUpload test
     }
 }

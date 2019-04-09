@@ -1,19 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
+using Autofac;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data;
-using ShipWorks.UI;
-using ShipWorks.Data.Connection;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.UI;
+using ShipWorks.ApplicationCore;
+using ShipWorks.Data.Model;
 using ShipWorks.Shipping.Carriers.Api;
+using ShipWorks.Shipping.Carriers.FedEx.Api;
 
 namespace ShipWorks.Shipping.Carriers.FedEx
 {
@@ -22,7 +17,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
     /// </summary>
     public partial class FedExAccountEditorDlg : Form
     {
-        FedExAccountEntity account;
+        readonly FedExAccountEntity account;
 
         /// <summary>
         /// Constructor
@@ -102,9 +97,30 @@ namespace ShipWorks.Shipping.Carriers.FedEx
 
             try
             {
-                FedExAccountManager.SaveAccount(account);
-
-                DialogResult = DialogResult.OK;
+                // Upload the images if the fields have been changed
+                if (account.Fields[(int) FedExAccountFieldIndex.Letterhead].IsChanged ||
+                    account.Fields[(int) FedExAccountFieldIndex.Signature].IsChanged)
+                {
+                    try
+                    {
+                        using (ILifetimeScope scope = IoC.BeginLifetimeScope())
+                        {
+                            var clerk = scope.Resolve<IFedExShippingClerkFactory>().Create(null);
+                            clerk.PerformUploadImages(account);
+                        }
+                        FedExAccountManager.SaveAccount(account);
+                        DialogResult = DialogResult.OK;
+                    }
+                    catch (FedExApiCarrierException ex)
+                    {
+                        MessageHelper.ShowError(this, ex.Message);
+                    }
+                }
+                else
+                {
+                    FedExAccountManager.SaveAccount(account);
+                    DialogResult = DialogResult.OK;
+                }
             }
             catch (ORMConcurrencyException)
             {
