@@ -77,7 +77,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SFP
         /// </summary>
         protected override void LoadShipmentDataInternal(ShipmentEntity shipment, bool refreshIfPresent)
         {
-            ShipmentTypeDataService.LoadShipmentData(this, shipment, shipment, "Amazon", typeof(AmazonSFPShipmentEntity), refreshIfPresent);
+            ShipmentTypeDataService.LoadShipmentData(this, shipment, shipment, "AmazonSFP", typeof(AmazonSFPShipmentEntity), refreshIfPresent);
         }
 
         /// <summary>

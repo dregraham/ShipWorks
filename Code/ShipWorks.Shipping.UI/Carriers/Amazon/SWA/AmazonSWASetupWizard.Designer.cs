@@ -50,56 +50,56 @@ namespace ShipWorks.Shipping.UI.Carriers.Amazon.SWA
             this.wizardPageWelcome.SuspendLayout();
             this.wizardPageContactInfo.SuspendLayout();
             this.SuspendLayout();
-            // 
+            //
             // next
-            // 
+            //
             this.next.Location = new System.Drawing.Point(399, 509);
-            // 
+            //
             // cancel
-            // 
+            //
             this.cancel.Location = new System.Drawing.Point(480, 509);
-            // 
+            //
             // back
-            // 
+            //
             this.back.Location = new System.Drawing.Point(318, 509);
-            // 
+            //
             // mainPanel
-            // 
+            //
             this.mainPanel.Controls.Add(this.wizardPageWelcome);
             this.mainPanel.Size = new System.Drawing.Size(567, 437);
-            // 
+            //
             // etchBottom
-            // 
+            //
             this.etchBottom.Location = new System.Drawing.Point(0, 499);
             this.etchBottom.Size = new System.Drawing.Size(571, 2);
-            // 
+            //
             // pictureBox
-            // 
+            //
             this.pictureBox.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox.Image")));
             this.pictureBox.Location = new System.Drawing.Point(399, 3);
             this.pictureBox.Size = new System.Drawing.Size(165, 50);
             this.pictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            // 
+            //
             // topPanel
-            // 
+            //
             this.topPanel.Size = new System.Drawing.Size(567, 56);
-            // 
+            //
             // wizardPageWelcome
-            // 
+            //
             this.wizardPageWelcome.Controls.Add(this.elementHost1);
-            this.wizardPageWelcome.Description = "Setup ShipWorks to work with your AmazonSWA account.";
+            this.wizardPageWelcome.Description = "Setup ShipWorks to work with your Amazon shipping account.";
             this.wizardPageWelcome.Dock = System.Windows.Forms.DockStyle.Fill;
             this.wizardPageWelcome.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.wizardPageWelcome.Location = new System.Drawing.Point(0, 0);
             this.wizardPageWelcome.Name = "wizardPageWelcome";
             this.wizardPageWelcome.Size = new System.Drawing.Size(567, 437);
             this.wizardPageWelcome.TabIndex = 0;
-            this.wizardPageWelcome.Title = "Setup AmazonSWA Shipping";
-            // 
+            this.wizardPageWelcome.Title = "Setup Amazon Shipping";
+            //
             // wizardPageContactInfo
-            // 
+            //
             this.wizardPageContactInfo.Controls.Add(this.contactInformation);
-            this.wizardPageContactInfo.Description = "Enter your AmazonSWA contact information";
+            this.wizardPageContactInfo.Description = "Enter your Amazon contact information";
             this.wizardPageContactInfo.Dock = System.Windows.Forms.DockStyle.Fill;
             this.wizardPageContactInfo.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.wizardPageContactInfo.Location = new System.Drawing.Point(0, 0);
@@ -108,35 +108,35 @@ namespace ShipWorks.Shipping.UI.Carriers.Amazon.SWA
             this.wizardPageContactInfo.TabIndex = 0;
             this.wizardPageContactInfo.Title = "Contact Information";
             this.wizardPageContactInfo.StepNext += new System.EventHandler<ShipWorks.UI.Wizard.WizardStepEventArgs>(this.OnStepNextContactInfo);
-            // 
+            //
             // contactInformation
-            // 
-            this.contactInformation.AvailableFields = ((ShipWorks.Data.Controls.PersonFields)((((((((((ShipWorks.Data.Controls.PersonFields.Name | ShipWorks.Data.Controls.PersonFields.Company) 
-            | ShipWorks.Data.Controls.PersonFields.Street) 
-            | ShipWorks.Data.Controls.PersonFields.City) 
-            | ShipWorks.Data.Controls.PersonFields.State) 
-            | ShipWorks.Data.Controls.PersonFields.Postal) 
-            | ShipWorks.Data.Controls.PersonFields.Country) 
-            | ShipWorks.Data.Controls.PersonFields.Email) 
-            | ShipWorks.Data.Controls.PersonFields.Phone) 
+            //
+            this.contactInformation.AvailableFields = ((ShipWorks.Data.Controls.PersonFields)((((((((((ShipWorks.Data.Controls.PersonFields.Name | ShipWorks.Data.Controls.PersonFields.Company)
+            | ShipWorks.Data.Controls.PersonFields.Street)
+            | ShipWorks.Data.Controls.PersonFields.City)
+            | ShipWorks.Data.Controls.PersonFields.State)
+            | ShipWorks.Data.Controls.PersonFields.Postal)
+            | ShipWorks.Data.Controls.PersonFields.Country)
+            | ShipWorks.Data.Controls.PersonFields.Email)
+            | ShipWorks.Data.Controls.PersonFields.Phone)
             | ShipWorks.Data.Controls.PersonFields.Website)));
             this.contactInformation.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.contactInformation.Location = new System.Drawing.Point(23, 10);
             this.contactInformation.MaxStreetLines = 1;
             this.contactInformation.Name = "contactInformation";
-            this.contactInformation.RequiredFields = ((ShipWorks.Data.Controls.PersonFields)(((((((((ShipWorks.Data.Controls.PersonFields.Name | ShipWorks.Data.Controls.PersonFields.Company) 
-            | ShipWorks.Data.Controls.PersonFields.Street) 
-            | ShipWorks.Data.Controls.PersonFields.City) 
-            | ShipWorks.Data.Controls.PersonFields.State) 
-            | ShipWorks.Data.Controls.PersonFields.Postal) 
-            | ShipWorks.Data.Controls.PersonFields.Country) 
-            | ShipWorks.Data.Controls.PersonFields.Email) 
+            this.contactInformation.RequiredFields = ((ShipWorks.Data.Controls.PersonFields)(((((((((ShipWorks.Data.Controls.PersonFields.Name | ShipWorks.Data.Controls.PersonFields.Company)
+            | ShipWorks.Data.Controls.PersonFields.Street)
+            | ShipWorks.Data.Controls.PersonFields.City)
+            | ShipWorks.Data.Controls.PersonFields.State)
+            | ShipWorks.Data.Controls.PersonFields.Postal)
+            | ShipWorks.Data.Controls.PersonFields.Country)
+            | ShipWorks.Data.Controls.PersonFields.Email)
             | ShipWorks.Data.Controls.PersonFields.Phone)));
             this.contactInformation.Size = new System.Drawing.Size(355, 381);
             this.contactInformation.TabIndex = 1;
-            // 
+            //
             // elementHost1
-            // 
+            //
             this.elementHost1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.elementHost1.Location = new System.Drawing.Point(0, 0);
             this.elementHost1.Name = "elementHost1";
@@ -144,9 +144,9 @@ namespace ShipWorks.Shipping.UI.Carriers.Amazon.SWA
             this.elementHost1.TabIndex = 1;
             this.elementHost1.Text = "elementHost1";
             this.elementHost1.Child = this.amazonSWAAuthorizationControl;
-            // 
+            //
             // AmazonSWASetupWizard
-            // 
+            //
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(567, 544);
@@ -156,7 +156,7 @@ namespace ShipWorks.Shipping.UI.Carriers.Amazon.SWA
             this.Pages.AddRange(new ShipWorks.UI.Wizard.WizardPage[] {
             this.wizardPageWelcome,
             this.wizardPageContactInfo});
-            this.Text = "AmazonSWA Setup Wizard";
+            this.Text = "Amazon Setup Wizard";
             this.Load += new System.EventHandler(this.OnLoad);
             this.mainPanel.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).EndInit();

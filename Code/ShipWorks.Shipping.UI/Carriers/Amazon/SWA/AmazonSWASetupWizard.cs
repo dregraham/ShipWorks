@@ -104,7 +104,7 @@ namespace ShipWorks.Shipping.UI.Carriers.Amazon.SWA
 
             if (result.Failure)
             {
-                messageHelper.ShowError($"An error occurred while connecting to Amazon Shipping {result.Message}");
+                messageHelper.ShowError($"An error occurred while connecting to Amazon Shipping. {Environment.NewLine}{result.Message}");
                 e.NextPage = CurrentPage;
             }
             else

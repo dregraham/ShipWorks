@@ -79,7 +79,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations
             }
 
             // Show the notification after the view model is fully loaded and saved to avoid race conditions with other pipelines
-            var newInsuranceSelection = adapter.GetPackageAdaptersAndEnsureShipmentIsLoaded().Any(p => p.InsuranceChoice.Insured);
+            var newInsuranceSelection = adapter.GetPackageAdaptersAndEnsureShipmentIsLoaded().Any(p => p.InsuranceChoice != null && p.InsuranceChoice.Insured);
             insuranceViewModel.Notify(originalInsuranceSelection, newInsuranceSelection);
         }
 

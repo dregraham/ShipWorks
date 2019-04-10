@@ -39,7 +39,7 @@
                 a special Amazon page, granting ShipWorks access, and
                 copying and pasting the code on the last page into the Access
                 Code field below. For help,
-                <Hyperlink NavigateUri="https://shipworks.zendesk.com/hc/en-us/articles/360022652811" ui:Link.OpenInBrowser="true">click here.</Hyperlink>
+                <Hyperlink NavigateUri="https://support.shipworks.com/hc/en-us/articles/360026415812" ui:Link.OpenInBrowser="true">click here.</Hyperlink>
             </TextBlock>
         </StackPanel>
 
