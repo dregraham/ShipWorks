@@ -27,6 +27,10 @@ namespace OrderCreation
     public partial class OrderCreationRepository : RepoGenBaseFolder
     {
         static OrderCreationRepository instance = new OrderCreationRepository();
+        OrderCreationRepositoryFolders.ShopifyLogInJoanieLovesTchotchkesAppFolder1 _shopifyloginjoanielovestchotchkes;
+        OrderCreationRepositoryFolders.JoanieLovesTchotchkesOrdersShopiAppFolder _joanielovestchotchkesordersshopi;
+        OrderCreationRepositoryFolders.JoanieLovesTchotchkesCreateOrderAppFolder _joanielovestchotchkescreateorder;
+        OrderCreationRepositoryFolders.FirefoxAppFolder _firefox;
 
         /// <summary>
         /// Gets the singleton class instance representing the OrderCreationRepository element repository.
@@ -43,6 +47,10 @@ namespace OrderCreation
         public OrderCreationRepository() 
             : base("OrderCreationRepository", "/", null, 0, false, "ea7232e0-41f1-428f-b543-5dbda2f4d92e", ".\\RepositoryImages\\OrderCreationRepositoryea7232e0.rximgres")
         {
+            _shopifyloginjoanielovestchotchkes = new OrderCreationRepositoryFolders.ShopifyLogInJoanieLovesTchotchkesAppFolder1(this);
+            _joanielovestchotchkesordersshopi = new OrderCreationRepositoryFolders.JoanieLovesTchotchkesOrdersShopiAppFolder(this);
+            _joanielovestchotchkescreateorder = new OrderCreationRepositoryFolders.JoanieLovesTchotchkesCreateOrderAppFolder(this);
+            _firefox = new OrderCreationRepositoryFolders.FirefoxAppFolder(this);
         }
 
 #region Variables
@@ -60,6 +68,42 @@ namespace OrderCreation
                 return _selfInfo;
             }
         }
+
+        /// <summary>
+        /// The ShopifyLogInJoanieLovesTchotchkes folder.
+        /// </summary>
+        [RepositoryFolder("a93853d1-bf6e-42d1-88ef-c6d72a1e4210")]
+        public virtual OrderCreationRepositoryFolders.ShopifyLogInJoanieLovesTchotchkesAppFolder1 ShopifyLogInJoanieLovesTchotchkes
+        {
+            get { return _shopifyloginjoanielovestchotchkes; }
+        }
+
+        /// <summary>
+        /// The JoanieLovesTchotchkesOrdersShopi folder.
+        /// </summary>
+        [RepositoryFolder("81d226df-f0c0-4dcc-bb5d-cc8ead6ebee0")]
+        public virtual OrderCreationRepositoryFolders.JoanieLovesTchotchkesOrdersShopiAppFolder JoanieLovesTchotchkesOrdersShopi
+        {
+            get { return _joanielovestchotchkesordersshopi; }
+        }
+
+        /// <summary>
+        /// The JoanieLovesTchotchkesCreateOrder folder.
+        /// </summary>
+        [RepositoryFolder("864a647f-d008-450c-af07-d6c0f245e500")]
+        public virtual OrderCreationRepositoryFolders.JoanieLovesTchotchkesCreateOrderAppFolder JoanieLovesTchotchkesCreateOrder
+        {
+            get { return _joanielovestchotchkescreateorder; }
+        }
+
+        /// <summary>
+        /// The Firefox folder.
+        /// </summary>
+        [RepositoryFolder("ec4830f2-177b-47fa-ad92-166d8f930303")]
+        public virtual OrderCreationRepositoryFolders.FirefoxAppFolder Firefox
+        {
+            get { return _firefox; }
+        }
     }
 
     /// <summary>
@@ -68,6 +112,970 @@ namespace OrderCreation
     [System.CodeDom.Compiler.GeneratedCode("Ranorex", "8.1")]
     public partial class OrderCreationRepositoryFolders
     {
+        /// <summary>
+        /// The ShopifyLogInJoanieLovesTchotchkesAppFolder1 folder.
+        /// </summary>
+        [RepositoryFolder("a93853d1-bf6e-42d1-88ef-c6d72a1e4210")]
+        public partial class ShopifyLogInJoanieLovesTchotchkesAppFolder1 : RepoGenBaseFolder
+        {
+            OrderCreationRepositoryFolders.ShopifyLogInJoanieLovesTchotchkesFolder _shopifyloginjoanielovestchotchkes;
+            OrderCreationRepositoryFolders.GroupingFolder _grouping;
+
+            /// <summary>
+            /// Creates a new ShopifyLogInJoanieLovesTchotchkes  folder.
+            /// </summary>
+            public ShopifyLogInJoanieLovesTchotchkesAppFolder1(RepoGenBaseFolder parentFolder) :
+                    base("ShopifyLogInJoanieLovesTchotchkes", "/form[@title~'^Shopify\\ Log\\ in\\ -\\ Joanie\\ L']", parentFolder, 30000, null, true, "a93853d1-bf6e-42d1-88ef-c6d72a1e4210", "")
+            {
+                _shopifyloginjoanielovestchotchkes = new OrderCreationRepositoryFolders.ShopifyLogInJoanieLovesTchotchkesFolder(this);
+                _grouping = new OrderCreationRepositoryFolders.GroupingFolder(this);
+            }
+
+            /// <summary>
+            /// The Self item.
+            /// </summary>
+            [RepositoryItem("a93853d1-bf6e-42d1-88ef-c6d72a1e4210")]
+            public virtual Ranorex.Form Self
+            {
+                get
+                {
+                    return _selfInfo.CreateAdapter<Ranorex.Form>(true);
+                }
+            }
+
+            /// <summary>
+            /// The Self item info.
+            /// </summary>
+            [RepositoryItemInfo("a93853d1-bf6e-42d1-88ef-c6d72a1e4210")]
+            public virtual RepoItemInfo SelfInfo
+            {
+                get
+                {
+                    return _selfInfo;
+                }
+            }
+
+            /// <summary>
+            /// The ShopifyLogInJoanieLovesTchotchkes folder.
+            /// </summary>
+            [RepositoryFolder("7dc8ac0c-596e-4dbe-bfa6-200299ed3d09")]
+            public virtual OrderCreationRepositoryFolders.ShopifyLogInJoanieLovesTchotchkesFolder ShopifyLogInJoanieLovesTchotchkes
+            {
+                get { return _shopifyloginjoanielovestchotchkes; }
+            }
+
+            /// <summary>
+            /// The Grouping folder.
+            /// </summary>
+            [RepositoryFolder("a9fe5006-7812-4aea-80f4-c1ca42b1a3f0")]
+            public virtual OrderCreationRepositoryFolders.GroupingFolder Grouping
+            {
+                get { return _grouping; }
+            }
+        }
+
+        /// <summary>
+        /// The ShopifyLogInJoanieLovesTchotchkesFolder folder.
+        /// </summary>
+        [RepositoryFolder("7dc8ac0c-596e-4dbe-bfa6-200299ed3d09")]
+        public partial class ShopifyLogInJoanieLovesTchotchkesFolder : RepoGenBaseFolder
+        {
+            RepoItemInfo _nextInfo;
+            RepoItemInfo _loginInfo;
+            RepoItemInfo _passwordpasswordInfo;
+            RepoItemInfo _emailInfo;
+
+            /// <summary>
+            /// Creates a new ShopifyLogInJoanieLovesTchotchkes  folder.
+            /// </summary>
+            public ShopifyLogInJoanieLovesTchotchkesFolder(RepoGenBaseFolder parentFolder) :
+                    base("ShopifyLogInJoanieLovesTchotchkes", "container[@accessiblerole='Grouping']/container[@accessiblerole='PropertyPage']/?/?/container[@accessiblename~'^Shopify\\ Log\\ in\\ -\\ Joanie\\ L']", parentFolder, 30000, null, false, "7dc8ac0c-596e-4dbe-bfa6-200299ed3d09", "")
+            {
+                _nextInfo = new RepoItemInfo(this, "Next", "element[1]//button[@accessiblename='Next']", 30000, null, "f4a0d108-1d1b-4d3f-bb14-0c932b9f8502");
+                _loginInfo = new RepoItemInfo(this, "LogIn", "element[1]/element[2]/element[@accessiblerole='None']/element[3]/button[@accessiblename='Log in']", 30000, null, "6cca2887-12fb-40ff-b13f-954568092565");
+                _passwordpasswordInfo = new RepoItemInfo(this, "PasswordPassword", "element[1]/element[2]/element[@accessiblerole='None']/element[3]/element[2]/?/?/text[@accessiblename='Password Password']", 30000, null, "30b76523-c180-41f0-b242-4c7b8ab4e98a");
+                _emailInfo = new RepoItemInfo(this, "Email", "element[1]/element[2]/element[@accessiblerole='None']/element[3]//text[@accessiblerole='Text']", 30000, null, "17a5fa11-f622-49a4-81a0-50fce9e16e11");
+            }
+
+            /// <summary>
+            /// The Self item.
+            /// </summary>
+            [RepositoryItem("7dc8ac0c-596e-4dbe-bfa6-200299ed3d09")]
+            public virtual Ranorex.Container Self
+            {
+                get
+                {
+                    return _selfInfo.CreateAdapter<Ranorex.Container>(true);
+                }
+            }
+
+            /// <summary>
+            /// The Self item info.
+            /// </summary>
+            [RepositoryItemInfo("7dc8ac0c-596e-4dbe-bfa6-200299ed3d09")]
+            public virtual RepoItemInfo SelfInfo
+            {
+                get
+                {
+                    return _selfInfo;
+                }
+            }
+
+            /// <summary>
+            /// The Next item.
+            /// </summary>
+            [RepositoryItem("f4a0d108-1d1b-4d3f-bb14-0c932b9f8502")]
+            public virtual Ranorex.Button Next
+            {
+                get
+                {
+                    return _nextInfo.CreateAdapter<Ranorex.Button>(true);
+                }
+            }
+
+            /// <summary>
+            /// The Next item info.
+            /// </summary>
+            [RepositoryItemInfo("f4a0d108-1d1b-4d3f-bb14-0c932b9f8502")]
+            public virtual RepoItemInfo NextInfo
+            {
+                get
+                {
+                    return _nextInfo;
+                }
+            }
+
+            /// <summary>
+            /// The LogIn item.
+            /// </summary>
+            [RepositoryItem("6cca2887-12fb-40ff-b13f-954568092565")]
+            public virtual Ranorex.Button LogIn
+            {
+                get
+                {
+                    return _loginInfo.CreateAdapter<Ranorex.Button>(true);
+                }
+            }
+
+            /// <summary>
+            /// The LogIn item info.
+            /// </summary>
+            [RepositoryItemInfo("6cca2887-12fb-40ff-b13f-954568092565")]
+            public virtual RepoItemInfo LogInInfo
+            {
+                get
+                {
+                    return _loginInfo;
+                }
+            }
+
+            /// <summary>
+            /// The PasswordPassword item.
+            /// </summary>
+            [RepositoryItem("30b76523-c180-41f0-b242-4c7b8ab4e98a")]
+            public virtual Ranorex.Text PasswordPassword
+            {
+                get
+                {
+                    return _passwordpasswordInfo.CreateAdapter<Ranorex.Text>(true);
+                }
+            }
+
+            /// <summary>
+            /// The PasswordPassword item info.
+            /// </summary>
+            [RepositoryItemInfo("30b76523-c180-41f0-b242-4c7b8ab4e98a")]
+            public virtual RepoItemInfo PasswordPasswordInfo
+            {
+                get
+                {
+                    return _passwordpasswordInfo;
+                }
+            }
+
+            /// <summary>
+            /// The Email item.
+            /// </summary>
+            [RepositoryItem("17a5fa11-f622-49a4-81a0-50fce9e16e11")]
+            public virtual Ranorex.Text Email
+            {
+                get
+                {
+                    return _emailInfo.CreateAdapter<Ranorex.Text>(true);
+                }
+            }
+
+            /// <summary>
+            /// The Email item info.
+            /// </summary>
+            [RepositoryItemInfo("17a5fa11-f622-49a4-81a0-50fce9e16e11")]
+            public virtual RepoItemInfo EmailInfo
+            {
+                get
+                {
+                    return _emailInfo;
+                }
+            }
+        }
+
+        /// <summary>
+        /// The GroupingFolder folder.
+        /// </summary>
+        [RepositoryFolder("a9fe5006-7812-4aea-80f4-c1ca42b1a3f0")]
+        public partial class GroupingFolder : RepoGenBaseFolder
+        {
+            RepoItemInfo _noneInfo;
+            RepoItemInfo _browseproductsInfo;
+            RepoItemInfo _searchproductsInfo;
+            RepoItemInfo _createorderInfo;
+
+            /// <summary>
+            /// Creates a new Grouping  folder.
+            /// </summary>
+            public GroupingFolder(RepoGenBaseFolder parentFolder) :
+                    base("Grouping", "container[@accessiblerole='Grouping']", parentFolder, 30000, null, false, "a9fe5006-7812-4aea-80f4-c1ca42b1a3f0", "")
+            {
+                _noneInfo = new RepoItemInfo(this, "None", ".//container[@accessiblename~'^Joanie\\ Loves\\ Tchotchkes\\ ~']/element[2]", 30000, null, "9aebeac7-d0d5-4f55-8dcb-c66b109903fc");
+                _browseproductsInfo = new RepoItemInfo(this, "BrowseProducts", "container[@accessiblerole='PropertyPage']/element[@accessiblerole='None']/container[@accessiblename~'^Joanie\\ Loves\\ Tchotchkes\\ ~']/element[1]/element/element[@accessiblerole='None']/element[5]/?/?/element/element[@accessiblerole='None']/element[@accessiblerole='None']/element[1]/?/?/element/element[@accessiblerole='None']/element[@accessiblerole='None']/element[@accessiblerole='None']/element[@accessiblerole='None']/element[2]/element[1]/element[1]/element/element[1]/element[2]/button[@accessiblename='Browse products']", 30000, null, "b3c13e12-3284-4dfb-900a-2afbff0b2a18");
+                _searchproductsInfo = new RepoItemInfo(this, "SearchProducts", "container[@accessiblerole='PropertyPage']/element[@accessiblerole='None']/container[@accessiblename~'^Joanie\\ Loves\\ Tchotchkes\\ ~']/element[1]/element/element[@accessiblerole='None']/element[5]/?/?/element/element[@accessiblerole='None']/element[@accessiblerole='None']/element[1]/?/?/element/element[@accessiblerole='None']/element[@accessiblerole='None']/element[@accessiblerole='None']/element[@accessiblerole='None']/element[2]/element[1]/element[1]/element/element[1]/element[2]/text[@accessiblename='Search products']", 30000, null, "265d435b-24e0-4d3d-bd83-f5d4be90b370");
+                _createorderInfo = new RepoItemInfo(this, "CreateOrder", "container[@accessiblerole='PropertyPage']/element[@accessiblerole='None']/container[@accessiblename~'^Joanie\\ Loves\\ Tchotchkes\\ ~']/element[1]/element[@accessiblerole='None']/element/element[4]/?/?/element/element[@accessiblerole='None']/element[@accessiblerole='None']/element[1]/?/?/element/element[@accessiblerole='None']/element[@accessiblerole='None']/element[@accessiblerole='None']/element[1]/link[@accessiblename='Create order']", 30000, null, "ddf95699-5640-479a-b443-c9a6c9a121be");
+            }
+
+            /// <summary>
+            /// The Self item.
+            /// </summary>
+            [RepositoryItem("a9fe5006-7812-4aea-80f4-c1ca42b1a3f0")]
+            public virtual Ranorex.Container Self
+            {
+                get
+                {
+                    return _selfInfo.CreateAdapter<Ranorex.Container>(true);
+                }
+            }
+
+            /// <summary>
+            /// The Self item info.
+            /// </summary>
+            [RepositoryItemInfo("a9fe5006-7812-4aea-80f4-c1ca42b1a3f0")]
+            public virtual RepoItemInfo SelfInfo
+            {
+                get
+                {
+                    return _selfInfo;
+                }
+            }
+
+            /// <summary>
+            /// The None item.
+            /// </summary>
+            [RepositoryItem("9aebeac7-d0d5-4f55-8dcb-c66b109903fc")]
+            public virtual Ranorex.Unknown None
+            {
+                get
+                {
+                    return _noneInfo.CreateAdapter<Ranorex.Unknown>(true);
+                }
+            }
+
+            /// <summary>
+            /// The None item info.
+            /// </summary>
+            [RepositoryItemInfo("9aebeac7-d0d5-4f55-8dcb-c66b109903fc")]
+            public virtual RepoItemInfo NoneInfo
+            {
+                get
+                {
+                    return _noneInfo;
+                }
+            }
+
+            /// <summary>
+            /// The BrowseProducts item.
+            /// </summary>
+            [RepositoryItem("b3c13e12-3284-4dfb-900a-2afbff0b2a18")]
+            public virtual Ranorex.Button BrowseProducts
+            {
+                get
+                {
+                    return _browseproductsInfo.CreateAdapter<Ranorex.Button>(true);
+                }
+            }
+
+            /// <summary>
+            /// The BrowseProducts item info.
+            /// </summary>
+            [RepositoryItemInfo("b3c13e12-3284-4dfb-900a-2afbff0b2a18")]
+            public virtual RepoItemInfo BrowseProductsInfo
+            {
+                get
+                {
+                    return _browseproductsInfo;
+                }
+            }
+
+            /// <summary>
+            /// The SearchProducts item.
+            /// </summary>
+            [RepositoryItem("265d435b-24e0-4d3d-bd83-f5d4be90b370")]
+            public virtual Ranorex.Text SearchProducts
+            {
+                get
+                {
+                    return _searchproductsInfo.CreateAdapter<Ranorex.Text>(true);
+                }
+            }
+
+            /// <summary>
+            /// The SearchProducts item info.
+            /// </summary>
+            [RepositoryItemInfo("265d435b-24e0-4d3d-bd83-f5d4be90b370")]
+            public virtual RepoItemInfo SearchProductsInfo
+            {
+                get
+                {
+                    return _searchproductsInfo;
+                }
+            }
+
+            /// <summary>
+            /// The CreateOrder item.
+            /// </summary>
+            [RepositoryItem("ddf95699-5640-479a-b443-c9a6c9a121be")]
+            public virtual Ranorex.Link CreateOrder
+            {
+                get
+                {
+                    return _createorderInfo.CreateAdapter<Ranorex.Link>(true);
+                }
+            }
+
+            /// <summary>
+            /// The CreateOrder item info.
+            /// </summary>
+            [RepositoryItemInfo("ddf95699-5640-479a-b443-c9a6c9a121be")]
+            public virtual RepoItemInfo CreateOrderInfo
+            {
+                get
+                {
+                    return _createorderInfo;
+                }
+            }
+        }
+
+        /// <summary>
+        /// The JoanieLovesTchotchkesOrdersShopiAppFolder folder.
+        /// </summary>
+        [RepositoryFolder("81d226df-f0c0-4dcc-bb5d-cc8ead6ebee0")]
+        public partial class JoanieLovesTchotchkesOrdersShopiAppFolder : RepoGenBaseFolder
+        {
+            RepoItemInfo _createorderInfo;
+            RepoItemInfo _pushbuttonInfo;
+            RepoItemInfo _joanielovestchotchkesordersshopiInfo;
+            RepoItemInfo _pagetablistInfo;
+            RepoItemInfo _searchwithgoogleorenteraddressInfo;
+
+            /// <summary>
+            /// Creates a new JoanieLovesTchotchkesOrdersShopi  folder.
+            /// </summary>
+            public JoanieLovesTchotchkesOrdersShopiAppFolder(RepoGenBaseFolder parentFolder) :
+                    base("JoanieLovesTchotchkesOrdersShopi", "/form[@title~'^Joanie\\ Loves\\ Tchotchkes\\ ~']", parentFolder, 30000, null, true, "81d226df-f0c0-4dcc-bb5d-cc8ead6ebee0", "")
+            {
+                _createorderInfo = new RepoItemInfo(this, "CreateOrder", "container[@accessiblerole='Grouping']/container[1]/element[@accessiblerole='None']/container[@accessiblename~'^Joanie\\ Loves\\ Tchotchkes\\ ~']/element[1]/element/element[@accessiblerole='None']/element[4]/?/?/element/element[@accessiblerole='None']/element[@accessiblerole='None']/element[1]/?/?/element/element[@accessiblerole='None']/element[@accessiblerole='None']/element[@accessiblerole='None']/element[1]/link[@accessiblename='Create order']/text[@accessiblename='Create order']", 30000, null, "7f5b4a40-1391-440f-aa0e-3ff6fab11d71");
+                _pushbuttonInfo = new RepoItemInfo(this, "PushButton", "toolbar[@accessiblename='Browser tabs']/button[3]", 30000, null, "a3bd8f90-3f40-4e97-bf7b-044a59a82505");
+                _joanielovestchotchkesordersshopiInfo = new RepoItemInfo(this, "JoanieLovesTchotchkesOrdersShopi", "toolbar[@accessiblename='Browser tabs']//text[@accessiblename~'^Joanie\\ Loves\\ Tchotchkes\\ ~']", 30000, null, "b98486fd-e3ff-4782-bbb1-114f40699ab4");
+                _pagetablistInfo = new RepoItemInfo(this, "PageTabList", "?/?/tabpagelist[@accessiblerole='PageTabList']", 30000, null, "b898860d-dc57-41b7-bbef-d1d2676a3f94");
+                _searchwithgoogleorenteraddressInfo = new RepoItemInfo(this, "SearchWithGoogleOrEnterAddress", "toolbar[@accessiblename='Navigation Toolbar']/?/?/text[@accessiblename~'^Search\\ with\\ Google\\ or\\ ent']", 30000, null, "6a879afd-f6ba-40c3-8a81-00a270d2329d");
+            }
+
+            /// <summary>
+            /// The Self item.
+            /// </summary>
+            [RepositoryItem("81d226df-f0c0-4dcc-bb5d-cc8ead6ebee0")]
+            public virtual Ranorex.Form Self
+            {
+                get
+                {
+                    return _selfInfo.CreateAdapter<Ranorex.Form>(true);
+                }
+            }
+
+            /// <summary>
+            /// The Self item info.
+            /// </summary>
+            [RepositoryItemInfo("81d226df-f0c0-4dcc-bb5d-cc8ead6ebee0")]
+            public virtual RepoItemInfo SelfInfo
+            {
+                get
+                {
+                    return _selfInfo;
+                }
+            }
+
+            /// <summary>
+            /// The CreateOrder item.
+            /// </summary>
+            [RepositoryItem("7f5b4a40-1391-440f-aa0e-3ff6fab11d71")]
+            public virtual Ranorex.Text CreateOrder
+            {
+                get
+                {
+                    return _createorderInfo.CreateAdapter<Ranorex.Text>(true);
+                }
+            }
+
+            /// <summary>
+            /// The CreateOrder item info.
+            /// </summary>
+            [RepositoryItemInfo("7f5b4a40-1391-440f-aa0e-3ff6fab11d71")]
+            public virtual RepoItemInfo CreateOrderInfo
+            {
+                get
+                {
+                    return _createorderInfo;
+                }
+            }
+
+            /// <summary>
+            /// The PushButton item.
+            /// </summary>
+            [RepositoryItem("a3bd8f90-3f40-4e97-bf7b-044a59a82505")]
+            public virtual Ranorex.Button PushButton
+            {
+                get
+                {
+                    return _pushbuttonInfo.CreateAdapter<Ranorex.Button>(true);
+                }
+            }
+
+            /// <summary>
+            /// The PushButton item info.
+            /// </summary>
+            [RepositoryItemInfo("a3bd8f90-3f40-4e97-bf7b-044a59a82505")]
+            public virtual RepoItemInfo PushButtonInfo
+            {
+                get
+                {
+                    return _pushbuttonInfo;
+                }
+            }
+
+            /// <summary>
+            /// The JoanieLovesTchotchkesOrdersShopi item.
+            /// </summary>
+            [RepositoryItem("b98486fd-e3ff-4782-bbb1-114f40699ab4")]
+            public virtual Ranorex.Text JoanieLovesTchotchkesOrdersShopi
+            {
+                get
+                {
+                    return _joanielovestchotchkesordersshopiInfo.CreateAdapter<Ranorex.Text>(true);
+                }
+            }
+
+            /// <summary>
+            /// The JoanieLovesTchotchkesOrdersShopi item info.
+            /// </summary>
+            [RepositoryItemInfo("b98486fd-e3ff-4782-bbb1-114f40699ab4")]
+            public virtual RepoItemInfo JoanieLovesTchotchkesOrdersShopiInfo
+            {
+                get
+                {
+                    return _joanielovestchotchkesordersshopiInfo;
+                }
+            }
+
+            /// <summary>
+            /// The PageTabList item.
+            /// </summary>
+            [RepositoryItem("b898860d-dc57-41b7-bbef-d1d2676a3f94")]
+            public virtual Ranorex.TabPageList PageTabList
+            {
+                get
+                {
+                    return _pagetablistInfo.CreateAdapter<Ranorex.TabPageList>(true);
+                }
+            }
+
+            /// <summary>
+            /// The PageTabList item info.
+            /// </summary>
+            [RepositoryItemInfo("b898860d-dc57-41b7-bbef-d1d2676a3f94")]
+            public virtual RepoItemInfo PageTabListInfo
+            {
+                get
+                {
+                    return _pagetablistInfo;
+                }
+            }
+
+            /// <summary>
+            /// The SearchWithGoogleOrEnterAddress item.
+            /// </summary>
+            [RepositoryItem("6a879afd-f6ba-40c3-8a81-00a270d2329d")]
+            public virtual Ranorex.Text SearchWithGoogleOrEnterAddress
+            {
+                get
+                {
+                    return _searchwithgoogleorenteraddressInfo.CreateAdapter<Ranorex.Text>(true);
+                }
+            }
+
+            /// <summary>
+            /// The SearchWithGoogleOrEnterAddress item info.
+            /// </summary>
+            [RepositoryItemInfo("6a879afd-f6ba-40c3-8a81-00a270d2329d")]
+            public virtual RepoItemInfo SearchWithGoogleOrEnterAddressInfo
+            {
+                get
+                {
+                    return _searchwithgoogleorenteraddressInfo;
+                }
+            }
+        }
+
+        /// <summary>
+        /// The JoanieLovesTchotchkesCreateOrderAppFolder folder.
+        /// </summary>
+        [RepositoryFolder("864a647f-d008-450c-af07-d6c0f245e500")]
+        public partial class JoanieLovesTchotchkesCreateOrderAppFolder : RepoGenBaseFolder
+        {
+            RepoItemInfo _browseproductsInfo;
+            RepoItemInfo _divtagallproductsInfo;
+            RepoItemInfo _uistackuistackalignmentcenteruisInfo;
+            RepoItemInfo _addproductsInfo;
+            RepoItemInfo _markaspaidmodalbtnInfo;
+            RepoItemInfo _markaspaidmodalcontentheadingInfo;
+            RepoItemInfo _paymentgatewayidInfo;
+            RepoItemInfo _createorderInfo;
+            RepoItemInfo _webelementuseInfo;
+            RepoItemInfo _aspectratioaspectratiosquareaspectInfo;
+            RepoItemInfo _createorder1Info;
+            RepoItemInfo _createorder2Info;
+            RepoItemInfo _ordersInfo;
+
+            /// <summary>
+            /// Creates a new JoanieLovesTchotchkesCreateOrder  folder.
+            /// </summary>
+            public JoanieLovesTchotchkesCreateOrderAppFolder(RepoGenBaseFolder parentFolder) :
+                    base("JoanieLovesTchotchkesCreateOrder", "/dom[@domain='joanie-loves-tchotchke.myshopify.com']", parentFolder, 30000, null, false, "864a647f-d008-450c-af07-d6c0f245e500", "")
+            {
+                _browseproductsInfo = new RepoItemInfo(this, "BrowseProducts", ".//form[#'draftForm']/div[1]/div/div[1]//section/section//button[@innertext='Browse products']", 30000, null, "2456937a-af75-41cf-8023-1faf339313c8");
+                _divtagallproductsInfo = new RepoItemInfo(this, "DivTagAllProducts", ".//div[#'product_picker_modal']//ul/li[1]//div[@innertext~'^\\ \\ \\ \\ \\ \\ \\ \\ \\ \\ All\\ products\\ ']", 30000, null, "e564225f-9e76-4839-b57e-51c5941e06cc");
+                _uistackuistackalignmentcenteruisInfo = new RepoItemInfo(this, "UiStackUiStackAlignmentCenterUiS", ".//div[#'product_picker_modal']//ul/li[6]/div/div", 30000, null, "0da64660-fb3c-401b-95f1-6dab10486861");
+                _addproductsInfo = new RepoItemInfo(this, "AddProducts", ".//button[#'add-products']", 30000, null, "14b520f8-7736-43d0-b2b7-1d5db2cbf99f");
+                _markaspaidmodalbtnInfo = new RepoItemInfo(this, "MarkAsPaidModalBtn", ".//button[#'markAsPaidModalBtn']", 30000, null, "a0dfb903-f442-4487-a58a-1597e99a8ce9");
+                _markaspaidmodalcontentheadingInfo = new RepoItemInfo(this, "MarkAsPaidModalContentHeading", ".//h2[#'markAsPaidModalContent_heading']", 30000, null, "9ea630bc-3d92-4649-9945-a2a0bb2b7751");
+                _paymentgatewayidInfo = new RepoItemInfo(this, "PaymentGatewayId", ".//select[#'payment_gateway_id']", 30000, null, "93c99ef2-a05f-4bc8-861f-5b5bd7f267b3");
+                _createorderInfo = new RepoItemInfo(this, "CreateOrder", ".//?/div[2]//button[@innertext='Create order']", 30000, null, "818e318e-501c-4787-919e-74f5c9eee382");
+                _webelementuseInfo = new RepoItemInfo(this, "WebElementUse", ".//div[#'order-notices']/div/div/div[1]/?/?/tag[@tagname='use']", 30000, null, "afeb1239-ea76-4484-b92b-baa783c445d7");
+                _aspectratioaspectratiosquareaspectInfo = new RepoItemInfo(this, "AspectRatioAspectRatioSquareAspect", ".//tbody[#'line_item_rows']//div", 30000, null, "26d88369-5a23-46a9-8098-e0aeb3cf393b");
+                _createorder1Info = new RepoItemInfo(this, "CreateOrder1", ".//form[#'edit_draft_order_195763601513']/div[2]//button[@innertext='Create order']", 30000, null, "0bb9627e-ce00-4a5d-b58a-36f3d7525d99");
+                _createorder2Info = new RepoItemInfo(this, "CreateOrder2", ".//div[#'orders-index']/header//a[@innertext='Create order']", 30000, null, "e44c2a66-3fb0-442b-910a-de271f5e78b4");
+                _ordersInfo = new RepoItemInfo(this, "Orders", ".//div[#'AppFrameNav']/nav/div[3]/ul[1]//span[@innertext='Orders']", 30000, null, "0a56e134-69dc-4136-a315-c40982ca7c00");
+            }
+
+            /// <summary>
+            /// The Self item.
+            /// </summary>
+            [RepositoryItem("864a647f-d008-450c-af07-d6c0f245e500")]
+            public virtual Ranorex.WebDocument Self
+            {
+                get
+                {
+                    return _selfInfo.CreateAdapter<Ranorex.WebDocument>(true);
+                }
+            }
+
+            /// <summary>
+            /// The Self item info.
+            /// </summary>
+            [RepositoryItemInfo("864a647f-d008-450c-af07-d6c0f245e500")]
+            public virtual RepoItemInfo SelfInfo
+            {
+                get
+                {
+                    return _selfInfo;
+                }
+            }
+
+            /// <summary>
+            /// The BrowseProducts item.
+            /// </summary>
+            [RepositoryItem("2456937a-af75-41cf-8023-1faf339313c8")]
+            public virtual Ranorex.ButtonTag BrowseProducts
+            {
+                get
+                {
+                    return _browseproductsInfo.CreateAdapter<Ranorex.ButtonTag>(true);
+                }
+            }
+
+            /// <summary>
+            /// The BrowseProducts item info.
+            /// </summary>
+            [RepositoryItemInfo("2456937a-af75-41cf-8023-1faf339313c8")]
+            public virtual RepoItemInfo BrowseProductsInfo
+            {
+                get
+                {
+                    return _browseproductsInfo;
+                }
+            }
+
+            /// <summary>
+            /// The DivTagAllProducts item.
+            /// </summary>
+            [RepositoryItem("e564225f-9e76-4839-b57e-51c5941e06cc")]
+            public virtual Ranorex.DivTag DivTagAllProducts
+            {
+                get
+                {
+                    return _divtagallproductsInfo.CreateAdapter<Ranorex.DivTag>(true);
+                }
+            }
+
+            /// <summary>
+            /// The DivTagAllProducts item info.
+            /// </summary>
+            [RepositoryItemInfo("e564225f-9e76-4839-b57e-51c5941e06cc")]
+            public virtual RepoItemInfo DivTagAllProductsInfo
+            {
+                get
+                {
+                    return _divtagallproductsInfo;
+                }
+            }
+
+            /// <summary>
+            /// The UiStackUiStackAlignmentCenterUiS item.
+            /// </summary>
+            [RepositoryItem("0da64660-fb3c-401b-95f1-6dab10486861")]
+            public virtual Ranorex.DivTag UiStackUiStackAlignmentCenterUiS
+            {
+                get
+                {
+                    return _uistackuistackalignmentcenteruisInfo.CreateAdapter<Ranorex.DivTag>(true);
+                }
+            }
+
+            /// <summary>
+            /// The UiStackUiStackAlignmentCenterUiS item info.
+            /// </summary>
+            [RepositoryItemInfo("0da64660-fb3c-401b-95f1-6dab10486861")]
+            public virtual RepoItemInfo UiStackUiStackAlignmentCenterUiSInfo
+            {
+                get
+                {
+                    return _uistackuistackalignmentcenteruisInfo;
+                }
+            }
+
+            /// <summary>
+            /// The AddProducts item.
+            /// </summary>
+            [RepositoryItem("14b520f8-7736-43d0-b2b7-1d5db2cbf99f")]
+            public virtual Ranorex.ButtonTag AddProducts
+            {
+                get
+                {
+                    return _addproductsInfo.CreateAdapter<Ranorex.ButtonTag>(true);
+                }
+            }
+
+            /// <summary>
+            /// The AddProducts item info.
+            /// </summary>
+            [RepositoryItemInfo("14b520f8-7736-43d0-b2b7-1d5db2cbf99f")]
+            public virtual RepoItemInfo AddProductsInfo
+            {
+                get
+                {
+                    return _addproductsInfo;
+                }
+            }
+
+            /// <summary>
+            /// The MarkAsPaidModalBtn item.
+            /// </summary>
+            [RepositoryItem("a0dfb903-f442-4487-a58a-1597e99a8ce9")]
+            public virtual Ranorex.ButtonTag MarkAsPaidModalBtn
+            {
+                get
+                {
+                    return _markaspaidmodalbtnInfo.CreateAdapter<Ranorex.ButtonTag>(true);
+                }
+            }
+
+            /// <summary>
+            /// The MarkAsPaidModalBtn item info.
+            /// </summary>
+            [RepositoryItemInfo("a0dfb903-f442-4487-a58a-1597e99a8ce9")]
+            public virtual RepoItemInfo MarkAsPaidModalBtnInfo
+            {
+                get
+                {
+                    return _markaspaidmodalbtnInfo;
+                }
+            }
+
+            /// <summary>
+            /// The MarkAsPaidModalContentHeading item.
+            /// </summary>
+            [RepositoryItem("9ea630bc-3d92-4649-9945-a2a0bb2b7751")]
+            public virtual Ranorex.H2Tag MarkAsPaidModalContentHeading
+            {
+                get
+                {
+                    return _markaspaidmodalcontentheadingInfo.CreateAdapter<Ranorex.H2Tag>(true);
+                }
+            }
+
+            /// <summary>
+            /// The MarkAsPaidModalContentHeading item info.
+            /// </summary>
+            [RepositoryItemInfo("9ea630bc-3d92-4649-9945-a2a0bb2b7751")]
+            public virtual RepoItemInfo MarkAsPaidModalContentHeadingInfo
+            {
+                get
+                {
+                    return _markaspaidmodalcontentheadingInfo;
+                }
+            }
+
+            /// <summary>
+            /// The PaymentGatewayId item.
+            /// </summary>
+            [RepositoryItem("93c99ef2-a05f-4bc8-861f-5b5bd7f267b3")]
+            public virtual Ranorex.SelectTag PaymentGatewayId
+            {
+                get
+                {
+                    return _paymentgatewayidInfo.CreateAdapter<Ranorex.SelectTag>(true);
+                }
+            }
+
+            /// <summary>
+            /// The PaymentGatewayId item info.
+            /// </summary>
+            [RepositoryItemInfo("93c99ef2-a05f-4bc8-861f-5b5bd7f267b3")]
+            public virtual RepoItemInfo PaymentGatewayIdInfo
+            {
+                get
+                {
+                    return _paymentgatewayidInfo;
+                }
+            }
+
+            /// <summary>
+            /// The CreateOrder item.
+            /// </summary>
+            [RepositoryItem("818e318e-501c-4787-919e-74f5c9eee382")]
+            public virtual Ranorex.ButtonTag CreateOrder
+            {
+                get
+                {
+                    return _createorderInfo.CreateAdapter<Ranorex.ButtonTag>(true);
+                }
+            }
+
+            /// <summary>
+            /// The CreateOrder item info.
+            /// </summary>
+            [RepositoryItemInfo("818e318e-501c-4787-919e-74f5c9eee382")]
+            public virtual RepoItemInfo CreateOrderInfo
+            {
+                get
+                {
+                    return _createorderInfo;
+                }
+            }
+
+            /// <summary>
+            /// The WebElementUse item.
+            /// </summary>
+            [RepositoryItem("afeb1239-ea76-4484-b92b-baa783c445d7")]
+            public virtual Ranorex.WebElement WebElementUse
+            {
+                get
+                {
+                    return _webelementuseInfo.CreateAdapter<Ranorex.WebElement>(true);
+                }
+            }
+
+            /// <summary>
+            /// The WebElementUse item info.
+            /// </summary>
+            [RepositoryItemInfo("afeb1239-ea76-4484-b92b-baa783c445d7")]
+            public virtual RepoItemInfo WebElementUseInfo
+            {
+                get
+                {
+                    return _webelementuseInfo;
+                }
+            }
+
+            /// <summary>
+            /// The AspectRatioAspectRatioSquareAspect item.
+            /// </summary>
+            [RepositoryItem("26d88369-5a23-46a9-8098-e0aeb3cf393b")]
+            public virtual Ranorex.DivTag AspectRatioAspectRatioSquareAspect
+            {
+                get
+                {
+                    return _aspectratioaspectratiosquareaspectInfo.CreateAdapter<Ranorex.DivTag>(true);
+                }
+            }
+
+            /// <summary>
+            /// The AspectRatioAspectRatioSquareAspect item info.
+            /// </summary>
+            [RepositoryItemInfo("26d88369-5a23-46a9-8098-e0aeb3cf393b")]
+            public virtual RepoItemInfo AspectRatioAspectRatioSquareAspectInfo
+            {
+                get
+                {
+                    return _aspectratioaspectratiosquareaspectInfo;
+                }
+            }
+
+            /// <summary>
+            /// The CreateOrder1 item.
+            /// </summary>
+            [RepositoryItem("0bb9627e-ce00-4a5d-b58a-36f3d7525d99")]
+            public virtual Ranorex.ButtonTag CreateOrder1
+            {
+                get
+                {
+                    return _createorder1Info.CreateAdapter<Ranorex.ButtonTag>(true);
+                }
+            }
+
+            /// <summary>
+            /// The CreateOrder1 item info.
+            /// </summary>
+            [RepositoryItemInfo("0bb9627e-ce00-4a5d-b58a-36f3d7525d99")]
+            public virtual RepoItemInfo CreateOrder1Info
+            {
+                get
+                {
+                    return _createorder1Info;
+                }
+            }
+
+            /// <summary>
+            /// The CreateOrder2 item.
+            /// </summary>
+            [RepositoryItem("e44c2a66-3fb0-442b-910a-de271f5e78b4")]
+            public virtual Ranorex.ATag CreateOrder2
+            {
+                get
+                {
+                    return _createorder2Info.CreateAdapter<Ranorex.ATag>(true);
+                }
+            }
+
+            /// <summary>
+            /// The CreateOrder2 item info.
+            /// </summary>
+            [RepositoryItemInfo("e44c2a66-3fb0-442b-910a-de271f5e78b4")]
+            public virtual RepoItemInfo CreateOrder2Info
+            {
+                get
+                {
+                    return _createorder2Info;
+                }
+            }
+
+            /// <summary>
+            /// The Orders item.
+            /// </summary>
+            [RepositoryItem("0a56e134-69dc-4136-a315-c40982ca7c00")]
+            public virtual Ranorex.SpanTag Orders
+            {
+                get
+                {
+                    return _ordersInfo.CreateAdapter<Ranorex.SpanTag>(true);
+                }
+            }
+
+            /// <summary>
+            /// The Orders item info.
+            /// </summary>
+            [RepositoryItemInfo("0a56e134-69dc-4136-a315-c40982ca7c00")]
+            public virtual RepoItemInfo OrdersInfo
+            {
+                get
+                {
+                    return _ordersInfo;
+                }
+            }
+        }
+
+        /// <summary>
+        /// The FirefoxAppFolder folder.
+        /// </summary>
+        [RepositoryFolder("ec4830f2-177b-47fa-ad92-166d8f930303")]
+        public partial class FirefoxAppFolder : RepoGenBaseFolder
+        {
+            RepoItemInfo _cashondeliverycodInfo;
+
+            /// <summary>
+            /// Creates a new Firefox  folder.
+            /// </summary>
+            public FirefoxAppFolder(RepoGenBaseFolder parentFolder) :
+                    base("Firefox", "/form[@title='' and @processname='firefox']", parentFolder, 30000, null, true, "ec4830f2-177b-47fa-ad92-166d8f930303", "")
+            {
+                _cashondeliverycodInfo = new RepoItemInfo(this, "CashOnDeliveryCOD", "?/?/listitem[@accessiblename='Cash on Delivery (COD)']", 30000, null, "9735273b-18b5-4310-8c47-16251855f71c");
+            }
+
+            /// <summary>
+            /// The Self item.
+            /// </summary>
+            [RepositoryItem("ec4830f2-177b-47fa-ad92-166d8f930303")]
+            public virtual Ranorex.Form Self
+            {
+                get
+                {
+                    return _selfInfo.CreateAdapter<Ranorex.Form>(true);
+                }
+            }
+
+            /// <summary>
+            /// The Self item info.
+            /// </summary>
+            [RepositoryItemInfo("ec4830f2-177b-47fa-ad92-166d8f930303")]
+            public virtual RepoItemInfo SelfInfo
+            {
+                get
+                {
+                    return _selfInfo;
+                }
+            }
+
+            /// <summary>
+            /// The CashOnDeliveryCOD item.
+            /// </summary>
+            [RepositoryItem("9735273b-18b5-4310-8c47-16251855f71c")]
+            public virtual Ranorex.ListItem CashOnDeliveryCOD
+            {
+                get
+                {
+                    return _cashondeliverycodInfo.CreateAdapter<Ranorex.ListItem>(true);
+                }
+            }
+
+            /// <summary>
+            /// The CashOnDeliveryCOD item info.
+            /// </summary>
+            [RepositoryItemInfo("9735273b-18b5-4310-8c47-16251855f71c")]
+            public virtual RepoItemInfo CashOnDeliveryCODInfo
+            {
+                get
+                {
+                    return _cashondeliverycodInfo;
+                }
+            }
+        }
+
     }
 #pragma warning restore 0436
 }

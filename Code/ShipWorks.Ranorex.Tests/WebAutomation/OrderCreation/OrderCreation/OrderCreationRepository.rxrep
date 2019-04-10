@@ -1,19 +1,437 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<repository
-name="OrderCreationRepository"
+﻿<repository
 id="2432457d-3585-440f-a92f-3228cb5ab41a"
+name="OrderCreationRepository"
 rxversion="8.1">
-  <codegen
-  classname="OrderCreationRepository"
-  namespace="OrderCreation"/>
-  <rootfolder
-  name="Root"
-  id="ea7232e0-41f1-428f-b543-5dbda2f4d92e"
-  searchtimeout="30000ms"
-  capname="unknown"
-  isrooted="True"
-  usecache="True">
-    <basepath/>
-  </rootfolder>
-  <variables/>
+	<codegen
+	classname="OrderCreationRepository"
+	namespace="OrderCreation">
+	</codegen>
+	<rootfolder
+	capname="unknown"
+	id="ea7232e0-41f1-428f-b543-5dbda2f4d92e"
+	isrooted="True"
+	name="Root"
+	searchtimeout="0ms"
+	usecache="True">
+		<appfolder
+		addcaps="form,nativewindow"
+		capname="form"
+		id="a93853d1-bf6e-42d1-88ef-c6d72a1e4210"
+		isrooted="True"
+		name="ShopifyLogInJoanieLovesTchotchkes"
+		refpath="/form[@title='Shopify Log in - Joanie Loves Tchotchkes - Mozilla Firefox']"
+		searchtimeout="30000ms"
+		usecache="True">
+			<folder
+			capname="container"
+			id="7dc8ac0c-596e-4dbe-bfa6-200299ed3d09"
+			isrooted="True"
+			name="ShopifyLogInJoanieLovesTchotchkes"
+			searchtimeout="30000ms"
+			usecache="False">
+				<item
+				addcaps="button,accessible"
+				capname="button"
+				id="f4a0d108-1d1b-4d3f-bb14-0c932b9f8502"
+				name="Next"
+				refimgid="b804dd10-d623-4ff7-bd78-ae611db7ce8b"
+				refpath="/form[@title~'^Shopify\ Log\ in\ -\ Joanie\ L']/container/container/element/container/element[1]/element[2]/element/element[3]/element/button[@accessiblename='Next']"
+				searchtimeout="30000ms">
+					/form[@title~'^Shopify\ Log\ in\ -\ Joanie\ L']/container[@accessiblerole='Grouping']/container[@accessiblerole='PropertyPage']/?/?/container[@accessiblename~'^Shopify\ Log\ in\ -\ Joanie\ L']/element[1]//button[@accessiblename='Next']
+				</item>
+				<item
+				addcaps="button,accessible"
+				capname="button"
+				id="6cca2887-12fb-40ff-b13f-954568092565"
+				name="LogIn"
+				refimgid="4cfa6435-d355-4a83-8237-3fc969182f3e"
+				refpath="/form[@title~'^Shopify\ Log\ in\ -\ Joanie\ L']/container/container/element/container/element[1]/element[2]/element/element[3]/button[@accessiblename='Log in']"
+				searchtimeout="30000ms">
+					/form[@title~'^Shopify\ Log\ in\ -\ Joanie\ L']/container[@accessiblerole='Grouping']/container[@accessiblerole='PropertyPage']/?/?/container[@accessiblename~'^Shopify\ Log\ in\ -\ Joanie\ L']/element[1]/element[2]/element[@accessiblerole='None']/element[3]/button[@accessiblename='Log in']
+				</item>
+				<item
+				addcaps="text,accessible"
+				capname="text"
+				id="30b76523-c180-41f0-b242-4c7b8ab4e98a"
+				name="PasswordPassword"
+				refimgid="b0f88737-53c9-4578-9e98-cd3cb5d84e4b"
+				refpath="/form[@title~'^Shopify\ Log\ in\ -\ Joanie\ L']/container/container/element/container/element[1]/element[2]/element/element[3]/element[2]/element/text[@accessiblename='Password Password']"
+				searchtimeout="30000ms">
+					/form[@title~'^Shopify\ Log\ in\ -\ Joanie\ L']/container[@accessiblerole='Grouping']/container[@accessiblerole='PropertyPage']/?/?/container[@accessiblename~'^Shopify\ Log\ in\ -\ Joanie\ L']/element[1]/element[2]/element[@accessiblerole='None']/element[3]/element[2]/?/?/text[@accessiblename='Password Password']
+				</item>
+				<item
+				addcaps="text,accessible"
+				capname="text"
+				id="17a5fa11-f622-49a4-81a0-50fce9e16e11"
+				name="Email"
+				refimgid="259f6f6b-bd57-47d3-a4ff-f2180327d08a"
+				refpath="/form[@title~'^Shopify\ Log\ in\ -\ Joanie\ L']/container/container/element/container/element[1]/element[2]/element/element[3]/element/element[1]/text[@accessiblename='Email' and @accessiblerole='Text']"
+				searchtimeout="30000ms">
+					/form[@title~'^Shopify\ Log\ in\ -\ Joanie\ L']/container[@accessiblerole='Grouping']/container[@accessiblerole='PropertyPage']/?/?/container[@accessiblename~'^Shopify\ Log\ in\ -\ Joanie\ L']/element[1]/element[2]/element[@accessiblerole='None']/element[3]//text[@accessiblerole='Text']
+				</item>
+				<basepath>
+					/form[@title~'^Shopify\ Log\ in\ -\ Joanie\ L']/container[@accessiblerole='Grouping']/container[@accessiblerole='PropertyPage']/?/?/container[@accessiblename~'^Shopify\ Log\ in\ -\ Joanie\ L']
+				</basepath>
+			</folder>
+			<folder
+			addcaps="container,accessible"
+			capname="container"
+			id="a9fe5006-7812-4aea-80f4-c1ca42b1a3f0"
+			isrooted="True"
+			name="Grouping"
+			refpath="/form[@title='Joanie Loves Tchotchkes ~ Create order ~ Shopify - Mozilla Firefox']/container[@accessiblerole='Grouping']"
+			searchtimeout="30000ms"
+			usecache="False">
+				<item
+				addcaps="unknown,accessible"
+				capname="unknown"
+				id="9aebeac7-d0d5-4f55-8dcb-c66b109903fc"
+				name="None"
+				refpath="/form[@title~'^Joanie\ Loves\ Tchotchkes\ ~']/container/container/element/container/element[2]"
+				searchtimeout="30000ms">
+					/form[@title~'^Shopify\ Log\ in\ -\ Joanie\ L']/container[@accessiblerole='Grouping']//container[@accessiblename~'^Joanie\ Loves\ Tchotchkes\ ~']/element[2]
+				</item>
+				<item
+				addcaps="button,accessible"
+				capname="button"
+				id="b3c13e12-3284-4dfb-900a-2afbff0b2a18"
+				name="BrowseProducts"
+				refimgid="c3bc4789-f637-4e5a-8007-c2176a89bb55"
+				refpath="/form[@title~'^Joanie\ Loves\ Tchotchkes\ ~']/container/container/element/container/element[1]/element/element/element[5]/element/element/element/element/element[1]/element/element/element/element/element/element/element[2]/element[1]/element[1]/element/element[1]/element[2]/button[@accessiblename='Browse products']"
+				searchtimeout="30000ms">
+					/form[@title~'^Shopify\ Log\ in\ -\ Joanie\ L']/container[@accessiblerole='Grouping']/container[@accessiblerole='PropertyPage']/element[@accessiblerole='None']/container[@accessiblename~'^Joanie\ Loves\ Tchotchkes\ ~']/element[1]/element/element[@accessiblerole='None']/element[5]/?/?/element/element[@accessiblerole='None']/element[@accessiblerole='None']/element[1]/?/?/element/element[@accessiblerole='None']/element[@accessiblerole='None']/element[@accessiblerole='None']/element[@accessiblerole='None']/element[2]/element[1]/element[1]/element/element[1]/element[2]/button[@accessiblename='Browse products']
+				</item>
+				<item
+				addcaps="text,accessible"
+				capname="text"
+				id="265d435b-24e0-4d3d-bd83-f5d4be90b370"
+				name="SearchProducts"
+				refimgid="57482d71-0089-49dd-9d4a-6bb7661db3ac"
+				refpath="/form[@title~'^Joanie\ Loves\ Tchotchkes\ ~']/container/container/element/container/element[1]/element/element/element[5]/element/element/element/element/element[1]/element/element/element/element/element/element/element[2]/element[1]/element[1]/element/element[1]/element[2]/text[@accessiblename='Search products']"
+				searchtimeout="30000ms">
+					/form[@title~'^Shopify\ Log\ in\ -\ Joanie\ L']/container[@accessiblerole='Grouping']/container[@accessiblerole='PropertyPage']/element[@accessiblerole='None']/container[@accessiblename~'^Joanie\ Loves\ Tchotchkes\ ~']/element[1]/element/element[@accessiblerole='None']/element[5]/?/?/element/element[@accessiblerole='None']/element[@accessiblerole='None']/element[1]/?/?/element/element[@accessiblerole='None']/element[@accessiblerole='None']/element[@accessiblerole='None']/element[@accessiblerole='None']/element[2]/element[1]/element[1]/element/element[1]/element[2]/text[@accessiblename='Search products']
+				</item>
+				<item
+				addcaps="link,accessible"
+				capname="link"
+				id="ddf95699-5640-479a-b443-c9a6c9a121be"
+				name="CreateOrder"
+				refimgid="51dc260a-b304-4ec6-86db-5689bb91ed41"
+				refpath="/form[@title~'^Joanie\ Loves\ Tchotchkes\ ~']/container/container/element/container/element[1]/element/element/element[4]/element/element/element/element/element[1]/element/element/element/element/element/element[1]/link[@accessiblename='Create order']"
+				searchtimeout="30000ms">
+					/form[@title~'^Shopify\ Log\ in\ -\ Joanie\ L']/container[@accessiblerole='Grouping']/container[@accessiblerole='PropertyPage']/element[@accessiblerole='None']/container[@accessiblename~'^Joanie\ Loves\ Tchotchkes\ ~']/element[1]/element[@accessiblerole='None']/element/element[4]/?/?/element/element[@accessiblerole='None']/element[@accessiblerole='None']/element[1]/?/?/element/element[@accessiblerole='None']/element[@accessiblerole='None']/element[@accessiblerole='None']/element[1]/link[@accessiblename='Create order']
+				</item>
+				<basepath>
+					/form[@title~'^Shopify\ Log\ in\ -\ Joanie\ L']/container[@accessiblerole='Grouping']
+				</basepath>
+			</folder>
+			<basepath>
+				/form[@title~'^Shopify\ Log\ in\ -\ Joanie\ L']
+			</basepath>
+			<icon>
+				iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACx
+jwv8YQUAAAAJcEhZcwAADsQAAA7EAZUrDhsAAAM0SURBVDhPjZJtTJVlHMbvEDwaEIrycjhGBxBk
+CEGcmLoOKocQRHGKmbN5ghRfllqipqzEQ41qWEprOv1gOadz4pwTphsm4kxhprE0hYkv4DLgnCmC
+Ok14eO5f93k4ffJL13btv3u7r2v/l0v8X8ia9HbpTpzqe76MtmDnOG/NSPw+Icl2aLfF0XA3uPCG
+JordWtGPe930TUf2ztRlvTlHVo0LNkT/ofnVNendUbNOZk2oKLcl7RlKyaxh0ZJdBBXdRnz2jLPn
+s+BxvuI85CMHemNInU86jN9Di/b2WB20p9hpyp2Be000X32yDrG6F1E+SNPlKdDngP4CVQtUJ1nI
+1sDFhviccPm3hhfeHoxPh3cmwtJw2GqivKSM10tbERUam05sg4cx8GgO9KpOHsxm8H6abhg0+G9e
+1WXOR09IBYf6VBIKlQGwIpy+nRb8vtQQVR462y3gTgRPrqo50J2N/DOsUpwbuaHZbclFTnoTZllh
+9VjY7sfBtQsYv/w6YvM/iMohRlXexNOizDsj4X4m3LOjX415KBoDNnT0+Ay07FhuzYvn5w/zSJt7
+hMD32hAlD5TJc8RGD+9+ux8aBVwPgXYb8o9Jujgzoszzt3mOMcK9jFTuzJhM2cwVxE87TmTurwQt
+bMXP2YVw3iLyozq4pAy8vGyG3+IQp4Sr/m7YQgYmvs3T9GTItqJvDOJ0aSpXd8Zw81A0eSt/IjCn
+npyVLmhR4gYvRyN/idDESbHNdS2kmCdWOyRPRuZZ6V9mpvvzUFoqrKz/4GNsWfswv1VN0+E4OKvE
+dYq1Acha0xFRK76IOT9yvdYVNZuhhDTjlC/et7Bjejb5CaXYYl3MzyymufoNOK2ExxRrBPKgn5QH
+hJFe1YXrmxtjnDy2qu0mpqgx1DmdKg+bAo2LsEeJ9ise8HGfQP/O9MQQe3FULBpxxn9LbUd4Ic9j
+VerUKIbJkghYqzZePgqqlNEPSlz9CnK7v65tDZ7rkw/Dm8gLpk+/7owo0A0Tbyd2lcyCCcPpXDWW
+Z8vCeFocdUWWvhbqk72Mi6Z1cR1hC3b0R9vbtPi0AVKSGJgaq/VMs/51LSN5i++bD0L8CxPl/oex
+UVo7AAAAAElFTkSuQmCC
+			</icon>
+		</appfolder>
+		<appfolder
+		addcaps="form,nativewindow"
+		capname="form"
+		id="81d226df-f0c0-4dcc-bb5d-cc8ead6ebee0"
+		isrooted="True"
+		name="JoanieLovesTchotchkesOrdersShopi"
+		refpath="/form[@title='Joanie Loves Tchotchkes ~ Orders ~ Shopify - Mozilla Firefox']"
+		searchtimeout="30000ms"
+		usecache="True">
+			<item
+			addcaps="text,accessible"
+			capname="text"
+			id="7f5b4a40-1391-440f-aa0e-3ff6fab11d71"
+			name="CreateOrder"
+			refimgid="088d7501-e268-4901-a464-a0b7c0095f8b"
+			refpath="/form[@title~'^Joanie\ Loves\ Tchotchkes\ ~']/container/container[1]/element/container/element[1]/element/element/element[4]/element/element/element/element/element[1]/element/element/element/element/element/element[1]/link/text[@accessiblename='Create order']"
+			searchtimeout="30000ms">
+				/form[@title~'^Joanie\ Loves\ Tchotchkes\ ~']/container[@accessiblerole='Grouping']/container[1]/element[@accessiblerole='None']/container[@accessiblename~'^Joanie\ Loves\ Tchotchkes\ ~']/element[1]/element/element[@accessiblerole='None']/element[4]/?/?/element/element[@accessiblerole='None']/element[@accessiblerole='None']/element[1]/?/?/element/element[@accessiblerole='None']/element[@accessiblerole='None']/element[@accessiblerole='None']/element[1]/link[@accessiblename='Create order']/text[@accessiblename='Create order']
+			</item>
+			<item
+			addcaps="button,accessible"
+			capname="button"
+			id="a3bd8f90-3f40-4e97-bf7b-044a59a82505"
+			name="PushButton"
+			refimgid="6aa84e9a-aca4-455d-b1c3-6b85e5e3f885"
+			refpath="/form[@title~'^Joanie\ Loves\ Tchotchkes\ ~' and @processname='firefox' and @class='MozillaWindowClass' and @instance='0']/toolbar[@accessiblename='Browser tabs']/button[3]"
+			searchtimeout="30000ms">
+				/form[@title~'^Joanie\ Loves\ Tchotchkes\ ~']/toolbar[@accessiblename='Browser tabs']/button[3]
+			</item>
+			<item
+			addcaps="text,accessible"
+			capname="text"
+			id="b98486fd-e3ff-4782-bbb1-114f40699ab4"
+			name="JoanieLovesTchotchkesOrdersShopi"
+			refimgid="d4f6330f-b121-4834-9c1a-1d226b8500a0"
+			refpath="/form[@title~'^Joanie\ Loves\ Tchotchkes\ ~']/toolbar[@accessiblename='Browser tabs']/tabpagelist/tabpage/text[@accessiblename~'^Joanie\ Loves\ Tchotchkes\ ~']"
+			searchtimeout="30000ms">
+				/form[@title~'^Joanie\ Loves\ Tchotchkes\ ~']/toolbar[@accessiblename='Browser tabs']//text[@accessiblename~'^Joanie\ Loves\ Tchotchkes\ ~']
+			</item>
+			<item
+			addcaps="tabpagelist,accessible"
+			capname="tabpagelist"
+			id="b898860d-dc57-41b7-bbef-d1d2676a3f94"
+			name="PageTabList"
+			refimgid="cd41af59-6f1e-4ec6-a5de-8861fd35eb44"
+			refpath="/form[@title~'^Joanie\ Loves\ Tchotchkes\ ~']/toolbar[@accessiblename='Browser tabs']/tabpagelist[@accessiblerole='PageTabList']"
+			searchtimeout="30000ms">
+				/form[@title~'^Joanie\ Loves\ Tchotchkes\ ~']/?/?/tabpagelist[@accessiblerole='PageTabList']
+			</item>
+			<item
+			addcaps="text,accessible"
+			capname="text"
+			id="6a879afd-f6ba-40c3-8a81-00a270d2329d"
+			name="SearchWithGoogleOrEnterAddress"
+			refimgid="af73d0a6-4f8f-4bf8-91f6-5cc7edac5e73"
+			refpath="/form[@title~'^Joanie\ Loves\ Tchotchkes\ ~']/toolbar[@accessiblename='Navigation Toolbar']/combobox/text[@accessiblename~'^Search\ with\ Google\ or\ ent']"
+			searchtimeout="30000ms">
+				/form[@title~'^Joanie\ Loves\ Tchotchkes\ ~']/toolbar[@accessiblename='Navigation Toolbar']/?/?/text[@accessiblename~'^Search\ with\ Google\ or\ ent']
+			</item>
+			<basepath>
+				/form[@title~'^Joanie\ Loves\ Tchotchkes\ ~']
+			</basepath>
+			<icon>
+				iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACx
+jwv8YQUAAAAJcEhZcwAADsQAAA7EAZUrDhsAAAM0SURBVDhPjZJtTJVlHMbvEDwaEIrycjhGBxBk
+CEGcmLoOKocQRHGKmbN5ghRfllqipqzEQ41qWEprOv1gOadz4pwTphsm4kxhprE0hYkv4DLgnCmC
+Ok14eO5f93k4ffJL13btv3u7r2v/l0v8X8ia9HbpTpzqe76MtmDnOG/NSPw+Icl2aLfF0XA3uPCG
+JordWtGPe930TUf2ztRlvTlHVo0LNkT/ofnVNendUbNOZk2oKLcl7RlKyaxh0ZJdBBXdRnz2jLPn
+s+BxvuI85CMHemNInU86jN9Di/b2WB20p9hpyp2Be000X32yDrG6F1E+SNPlKdDngP4CVQtUJ1nI
+1sDFhviccPm3hhfeHoxPh3cmwtJw2GqivKSM10tbERUam05sg4cx8GgO9KpOHsxm8H6abhg0+G9e
+1WXOR09IBYf6VBIKlQGwIpy+nRb8vtQQVR462y3gTgRPrqo50J2N/DOsUpwbuaHZbclFTnoTZllh
+9VjY7sfBtQsYv/w6YvM/iMohRlXexNOizDsj4X4m3LOjX415KBoDNnT0+Ay07FhuzYvn5w/zSJt7
+hMD32hAlD5TJc8RGD+9+ux8aBVwPgXYb8o9Jujgzoszzt3mOMcK9jFTuzJhM2cwVxE87TmTurwQt
+bMXP2YVw3iLyozq4pAy8vGyG3+IQp4Sr/m7YQgYmvs3T9GTItqJvDOJ0aSpXd8Zw81A0eSt/IjCn
+npyVLmhR4gYvRyN/idDESbHNdS2kmCdWOyRPRuZZ6V9mpvvzUFoqrKz/4GNsWfswv1VN0+E4OKvE
+dYq1Acha0xFRK76IOT9yvdYVNZuhhDTjlC/et7Bjejb5CaXYYl3MzyymufoNOK2ExxRrBPKgn5QH
+hJFe1YXrmxtjnDy2qu0mpqgx1DmdKg+bAo2LsEeJ9ise8HGfQP/O9MQQe3FULBpxxn9LbUd4Ic9j
+VerUKIbJkghYqzZePgqqlNEPSlz9CnK7v65tDZ7rkw/Dm8gLpk+/7owo0A0Tbyd2lcyCCcPpXDWW
+Z8vCeFocdUWWvhbqk72Mi6Z1cR1hC3b0R9vbtPi0AVKSGJgaq/VMs/51LSN5i++bD0L8CxPl/oex
+UVo7AAAAAElFTkSuQmCC
+			</icon>
+		</appfolder>
+		<appfolder
+		addcaps="container,webdocument"
+		capname="webdocument"
+		id="864a647f-d008-450c-af07-d6c0f245e500"
+		isrooted="True"
+		name="JoanieLovesTchotchkesCreateOrder"
+		refpath="/dom[@domain='joanie-loves-tchotchke.myshopify.com']"
+		searchtimeout="30000ms"
+		usecache="False">
+			<item
+			addcaps="unknown,webelement,buttontag"
+			capname="buttontag"
+			id="2456937a-af75-41cf-8023-1faf339313c8"
+			name="BrowseProducts"
+			refimgid="b4dfac43-0fa6-4229-8c04-6c4381a9abf2"
+			refpath="/dom[@domain='joanie-loves-tchotchke.myshopify.com']//form[#'draftForm']/div[1]/div/div[1]/div/div/section/section/div/div/div/button[@innertext='Browse products']"
+			searchtimeout="30000ms">
+				/dom[@domain='joanie-loves-tchotchke.myshopify.com']//form[#'draftForm']/div[1]/div/div[1]//section/section//button[@innertext='Browse products']
+			</item>
+			<item
+			addcaps="unknown,webelement,divtag"
+			capname="divtag"
+			id="e564225f-9e76-4839-b57e-51c5941e06cc"
+			name="DivTagAllProducts"
+			refimgid="b443c276-5186-405e-9597-eda8e9fda41e"
+			refpath="/dom[@domain='joanie-loves-tchotchke.myshopify.com']//div[#'product_picker_modal']/div[3]/div/ul/li[1]/a/div/div[@innertext~'^\ \ \ \ \ \ \ \ \ \ All\ products\ ']"
+			searchtimeout="30000ms">
+				/dom[@domain='joanie-loves-tchotchke.myshopify.com']//div[#'product_picker_modal']//ul/li[1]//div[@innertext~'^\ \ \ \ \ \ \ \ \ \ All\ products\ ']
+			</item>
+			<item
+			addcaps="unknown,webelement,divtag"
+			capname="divtag"
+			id="0da64660-fb3c-401b-95f1-6dab10486861"
+			name="UiStackUiStackAlignmentCenterUiS"
+			refimgid="ae7027ed-f1b8-46df-b37f-c326e7dd9edd"
+			refpath="/dom[@domain='joanie-loves-tchotchke.myshopify.com']//div[#'product_picker_modal']/div[3]/div/ul/li[6]/div/div"
+			searchtimeout="30000ms">
+				/dom[@domain='joanie-loves-tchotchke.myshopify.com']//div[#'product_picker_modal']//ul/li[6]/div/div
+			</item>
+			<item
+			addcaps="unknown,webelement,buttontag"
+			capname="buttontag"
+			id="14b520f8-7736-43d0-b2b7-1d5db2cbf99f"
+			name="AddProducts"
+			refimgid="42bbb03b-4fd2-432d-a89d-10babf8dc9b6"
+			refpath="/dom[@domain='joanie-loves-tchotchke.myshopify.com']//button[#'add-products']"
+			searchtimeout="30000ms">
+				/dom[@domain='joanie-loves-tchotchke.myshopify.com']//button[#'add-products']
+			</item>
+			<item
+			addcaps="unknown,webelement,buttontag"
+			capname="buttontag"
+			id="a0dfb903-f442-4487-a58a-1597e99a8ce9"
+			name="MarkAsPaidModalBtn"
+			refimgid="29fbde09-fef1-4744-b1d4-d172275a73c5"
+			refpath="/dom[@domain='joanie-loves-tchotchke.myshopify.com']//button[#'markAsPaidModalBtn']"
+			searchtimeout="30000ms">
+				/dom[@domain='joanie-loves-tchotchke.myshopify.com']//button[#'markAsPaidModalBtn']
+			</item>
+			<item
+			addcaps="unknown,webelement,h2tag"
+			capname="h2tag"
+			id="9ea630bc-3d92-4649-9945-a2a0bb2b7751"
+			name="MarkAsPaidModalContentHeading"
+			refimgid="2888c7f5-77dd-44d0-8627-fb2895a383dd"
+			refpath="/dom[@domain='joanie-loves-tchotchke.myshopify.com']//h2[#'markAsPaidModalContent_heading']"
+			searchtimeout="30000ms">
+				/dom[@domain='joanie-loves-tchotchke.myshopify.com']//h2[#'markAsPaidModalContent_heading']
+			</item>
+			<item
+			addcaps="unknown,webelement,selecttag"
+			capname="selecttag"
+			id="93c99ef2-a05f-4bc8-861f-5b5bd7f267b3"
+			name="PaymentGatewayId"
+			refimgid="a5729df8-4bb7-47f2-b92a-13f83f28b888"
+			refpath="/dom[@domain='joanie-loves-tchotchke.myshopify.com']//select[#'payment_gateway_id']"
+			searchtimeout="30000ms">
+				/dom[@domain='joanie-loves-tchotchke.myshopify.com']//select[#'payment_gateway_id']
+			</item>
+			<item
+			addcaps="unknown,webelement,buttontag"
+			capname="buttontag"
+			id="818e318e-501c-4787-919e-74f5c9eee382"
+			name="CreateOrder"
+			refimgid="24d5283e-8c8a-473a-985a-bd1bdcd0ff58"
+			searchtimeout="30000ms">
+				/dom[@domain='joanie-loves-tchotchke.myshopify.com']//?/div[2]//button[@innertext='Create order']
+			</item>
+			<item
+			addcaps="unknown,webelement"
+			capname="webelement"
+			id="afeb1239-ea76-4484-b92b-baa783c445d7"
+			name="WebElementUse"
+			refimgid="2004047c-189e-46ed-9b73-21af44d431c6"
+			refpath="/dom[@domain='joanie-loves-tchotchke.myshopify.com']//div[#'order-notices']/div/div/div[1]/tag/tag[@tagname='use']"
+			searchtimeout="30000ms">
+				/dom[@domain='joanie-loves-tchotchke.myshopify.com']//div[#'order-notices']/div/div/div[1]/?/?/tag[@tagname='use']
+			</item>
+			<item
+			addcaps="unknown,webelement,divtag"
+			capname="divtag"
+			id="26d88369-5a23-46a9-8098-e0aeb3cf393b"
+			name="AspectRatioAspectRatioSquareAspect"
+			refimgid="77740d02-43da-4c5c-8574-b4baf47cb6b3"
+			refpath="/dom[@domain='joanie-loves-tchotchke.myshopify.com']//tbody[#'line_item_rows']/tr/td[1]/div"
+			searchtimeout="30000ms">
+				/dom[@domain='joanie-loves-tchotchke.myshopify.com']//tbody[#'line_item_rows']//div
+			</item>
+			<item
+			addcaps="unknown,webelement,buttontag"
+			capname="buttontag"
+			id="0bb9627e-ce00-4a5d-b58a-36f3d7525d99"
+			name="CreateOrder1"
+			refimgid="3b420bba-7149-41fc-b31e-069977a70794"
+			refpath="/dom[@domain='joanie-loves-tchotchke.myshopify.com']//form[#'edit_draft_order_195763601513']/div[2]/div/div[2]/div/button[@innertext='Create order']"
+			searchtimeout="30000ms">
+				/dom[@domain='joanie-loves-tchotchke.myshopify.com']//form[#'edit_draft_order_195763601513']/div[2]//button[@innertext='Create order']
+			</item>
+			<item
+			addcaps="unknown,webelement,atag"
+			capname="atag"
+			id="e44c2a66-3fb0-442b-910a-de271f5e78b4"
+			name="CreateOrder2"
+			refimgid="5997787c-449a-4c5e-812e-798710e456d1"
+			refpath="/dom[@domain='joanie-loves-tchotchke.myshopify.com']//div[#'orders-index']/header/div[1]/div[2]/div/a[@innertext='Create order']"
+			searchtimeout="30000ms">
+				/dom[@domain='joanie-loves-tchotchke.myshopify.com']//div[#'orders-index']/header//a[@innertext='Create order']
+			</item>
+			<item
+			addcaps="unknown,webelement,spantag"
+			capname="spantag"
+			id="0a56e134-69dc-4136-a315-c40982ca7c00"
+			name="Orders"
+			refimgid="ed33d20f-46a2-4041-85e8-98e850694277"
+			refpath="/dom[@domain='joanie-loves-tchotchke.myshopify.com']//div[#'AppFrameNav']/nav/div[3]/ul[1]/li[2]/a/span[@innertext='Orders']"
+			searchtimeout="30000ms">
+				/dom[@domain='joanie-loves-tchotchke.myshopify.com']//div[#'AppFrameNav']/nav/div[3]/ul[1]//span[@innertext='Orders']
+			</item>
+			<basepath>
+				/dom[@domain='joanie-loves-tchotchke.myshopify.com']
+			</basepath>
+			<icon>
+				iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAALGPC/xhBQAAACBjSFJN
+AAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAAGHRFWHRTb2Z0d2FyZQBQYWlu
+dC5ORVQgdjMuMzE3g3eGAAACKklEQVQ4T43R20vTcRjHcS/6G4Kgyy6KKKjwJogIDBJjIBUt2YVD
+yoGVmWUWzozMC92YaWqeSE1s0dThOtjBWUlKkMxDudXU1lCU6XSepzu82+/nvNrX6APP1e95Xt/f
+9/vEbaWh7TO1xi4qmjspfWKhuLqN++VGtLqn5BTVk1lQRbRVHGn4X8nTNclYtD020smBYDjaHhsJ
+cIxPbY8YIr+9viEGgqGwDBxLvixXfGJaLCLdedUfCwRDyPDKWoiF5SAuT0AMSA+2BXhXZqmydFBu
+bkfbmkFpayPOyQW8CwHs7jUxIN1NOkEa1llLGA7bsYX7KbTd4GiuiUuVbxhyzTMwuiwGpFX5lkLU
+dFjJ+55Mw5yGGpsRtX6Kk2Ue9jWewtBRx9eRJTEg7XnWF+TBo25SzUmo3inINLjIKoPD1QXsbNvN
+6fxr9Az5xIDm9kOm5gLce+xEW/aF1BYlCmshSr2PMxm32HV3B8ez0/jQPycG1NklTMxsUGUaQaMD
+lc7EIcse4vXJJF18xX7FVUpq6njd5xUDKVeKcE2v4xib52bxIAdza9mbf4CE9OscUZo5q3nO295p
+zD0zYuBcegHOCb+8KpvDi6G5hRMX8klIKaei6b083PdjCdNHjxhQqO/gcPsj77CB27PO2OQa9j+r
+8tq+/VyODC/yaXBxeyBRlUPv8Dzt3eO86PrNs85Rml7+ot7soLrVTqVpsypMTjGQcD5L/vC/tTkV
+F/cXNG0rDkAnVtkAAAAASUVORK5CYII=
+			</icon>
+		</appfolder>
+		<appfolder
+		addcaps="form,nativewindow"
+		capname="form"
+		id="ec4830f2-177b-47fa-ad92-166d8f930303"
+		isrooted="True"
+		name="Firefox"
+		refpath="/form[@title='' and @processname='firefox']"
+		searchtimeout="30000ms"
+		usecache="True">
+			<item
+			addcaps="listitem,accessible"
+			capname="listitem"
+			id="9735273b-18b5-4310-8c47-16251855f71c"
+			name="CashOnDeliveryCOD"
+			refimgid="c91c91e0-60aa-4dc8-93f5-58699b84a85a"
+			refpath="/form[@title='' and @processname='firefox']/list/listitem[@accessiblename='Cash on Delivery (COD)']"
+			searchtimeout="30000ms">
+				/form[@title='' and @processname='firefox']/?/?/listitem[@accessiblename='Cash on Delivery (COD)']
+			</item>
+			<basepath>
+				/form[@title='' and @processname='firefox']
+			</basepath>
+			<icon>
+				iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACx
+jwv8YQUAAAAJcEhZcwAADsQAAA7EAZUrDhsAAAM0SURBVDhPjZJtTJVlHMbvEDwaEIrycjhGBxBk
+CEGcmLoOKocQRHGKmbN5ghRfllqipqzEQ41qWEprOv1gOadz4pwTphsm4kxhprE0hYkv4DLgnCmC
+Ok14eO5f93k4ffJL13btv3u7r2v/l0v8X8ia9HbpTpzqe76MtmDnOG/NSPw+Icl2aLfF0XA3uPCG
+JordWtGPe930TUf2ztRlvTlHVo0LNkT/ofnVNendUbNOZk2oKLcl7RlKyaxh0ZJdBBXdRnz2jLPn
+s+BxvuI85CMHemNInU86jN9Di/b2WB20p9hpyp2Be000X32yDrG6F1E+SNPlKdDngP4CVQtUJ1nI
+1sDFhviccPm3hhfeHoxPh3cmwtJw2GqivKSM10tbERUam05sg4cx8GgO9KpOHsxm8H6abhg0+G9e
+1WXOR09IBYf6VBIKlQGwIpy+nRb8vtQQVR462y3gTgRPrqo50J2N/DOsUpwbuaHZbclFTnoTZllh
+9VjY7sfBtQsYv/w6YvM/iMohRlXexNOizDsj4X4m3LOjX415KBoDNnT0+Ay07FhuzYvn5w/zSJt7
+hMD32hAlD5TJc8RGD+9+ux8aBVwPgXYb8o9Jujgzoszzt3mOMcK9jFTuzJhM2cwVxE87TmTurwQt
+bMXP2YVw3iLyozq4pAy8vGyG3+IQp4Sr/m7YQgYmvs3T9GTItqJvDOJ0aSpXd8Zw81A0eSt/IjCn
+npyVLmhR4gYvRyN/idDESbHNdS2kmCdWOyRPRuZZ6V9mpvvzUFoqrKz/4GNsWfswv1VN0+E4OKvE
+dYq1Acha0xFRK76IOT9yvdYVNZuhhDTjlC/et7Bjejb5CaXYYl3MzyymufoNOK2ExxRrBPKgn5QH
+hJFe1YXrmxtjnDy2qu0mpqgx1DmdKg+bAo2LsEeJ9ise8HGfQP/O9MQQe3FULBpxxn9LbUd4Ic9j
+VerUKIbJkghYqzZePgqqlNEPSlz9CnK7v65tDZ7rkw/Dm8gLpk+/7owo0A0Tbyd2lcyCCcPpXDWW
+Z8vCeFocdUWWvhbqk72Mi6Z1cR1hC3b0R9vbtPi0AVKSGJgaq/VMs/51LSN5i++bD0L8CxPl/oex
+UVo7AAAAAElFTkSuQmCC
+			</icon>
+		</appfolder>
+		<basepath>
+		</basepath>
+	</rootfolder>
+	<variables>
+	</variables>
 </repository>

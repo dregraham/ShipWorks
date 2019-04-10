@@ -5,11 +5,11 @@
   <Array name="bookmarks" />
   <Array name="files">
     <Element value="OrderCreation.rxtst" />
-    <Element value="CreateShopifyOrder.cs" />
   </Array>
   <Properties name="projectSavedData">
     <Properties name="customTool">
       <runOnBuild value="False" />
     </Properties>
+    <Array name="recentusercodeselections" />
   </Properties>
 </Properties>
