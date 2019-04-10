@@ -135,6 +135,8 @@ namespace ShipWorks.Shipping.UI.Carriers.Amazon.SWA
                 account.CountryCode = Geography.GetCountryCode(person.CountryCode);
                 account.Email = person.Email;
                 account.Phone = person.Phone;
+
+                AmazonSWAAccountManager.SaveAccount(account);
             }
             else
             {
@@ -172,6 +174,24 @@ namespace ShipWorks.Shipping.UI.Carriers.Amazon.SWA
         {
             messageHelper.ShowError(errorMessage);
             e.NextPage = CurrentPage;
+        }
+
+        /// <summary>
+        /// Window is closing
+        /// </summary>
+        private void OnFormClosing(object sender, FormClosingEventArgs e)
+        {
+            // If we are canceling - but had created an account - we need to undo that
+            if (DialogResult == DialogResult.Cancel && account != null && !account.IsNew)
+            {
+                AmazonSWAAccountManager.DeleteAccount(account);
+            }
+            else if (DialogResult == DialogResult.OK)
+            {
+                // We need to clear out the rate cache since rates (especially best rate) are no longer valid now
+                // that a new account has been added.
+                RateCache.Instance.Clear();
+            }
         }
     }
 }

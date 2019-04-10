@@ -157,6 +157,7 @@ namespace ShipWorks.Shipping.UI.Carriers.Amazon.SWA
             this.wizardPageWelcome,
             this.wizardPageContactInfo});
             this.Text = "Amazon Setup Wizard";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.OnFormClosing);
             this.Load += new System.EventHandler(this.OnLoad);
             this.mainPanel.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).EndInit();
