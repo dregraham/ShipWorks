@@ -10,6 +10,11 @@ rxversion="8.1">
 			<smartfoldernode
 			id="309d9aef-3f69-45d1-baea-d9c307c1bbc8"
 			name="CreateShopifyOrder">
+				<description>
+					<![CDATA[The script requires the user to manually login to 
+'JoanieLovesTchotchke' shopify store because of the 'reCAPTCHA' 
+requirement.]]>
+				</description>
 				<parameters>
 					<param
 					name="ShopifyOrders"
@@ -22,6 +27,9 @@ rxversion="8.1">
 			name="CreateShopifyOrder"
 			ref="d1430e56-bcdd-49bc-be78-bf03251cd60c"
 			type="UserCode">
+				<description>
+					<![CDATA[Enter the number of orders to be created in the "Data binding / Iterations" column. Change the value of "ShopifyOrders" to whatever is required.]]>
+				</description>
 				<databinding>
 					<var
 					dataname="ShopifyOrders"
@@ -102,19 +110,19 @@ rxversion="8.1">
 						<smartfoldernode
 						id="26e8859c-689e-4a4e-a5b4-4f16aa193caf"
 						name="CreateChannelAdvisorOrder">
+							<testmodule
+							id="9ca46b40-b9b6-4303-afab-b8ff2da33fe3"
+							name="NumberOfOrders">
+							</testmodule>
+							<testmodule
+							id="80845524-2317-4284-9c75-c24a3fdfd88f"
+							name="LogInCA">
+							</testmodule>
+							<testmodule
+							id="7c0da4d6-0fc2-4b0b-b254-4d0ecf929e48"
+							name="CreateOrderCA">
+							</testmodule>
 						</smartfoldernode>
-						<testmodule
-						id="9ca46b40-b9b6-4303-afab-b8ff2da33fe3"
-						name="NumberOfOrders">
-						</testmodule>
-						<testmodule
-						id="80845524-2317-4284-9c75-c24a3fdfd88f"
-						name="LogInCA">
-						</testmodule>
-						<testmodule
-						id="7c0da4d6-0fc2-4b0b-b254-4d0ecf929e48"
-						name="CreateOrderCA">
-						</testmodule>
 					</testcase>
 				</testcase>
 			</testsuite>
@@ -123,11 +131,14 @@ rxversion="8.1">
 	<datasources>
 	</datasources>
 	<testconfigurations
-	default="TestRun">
+	default="CreateOrders">
 		<testconfiguration
-		name="TestRun">
+		name="CreateOrders">
 			<testcontainer
 			id="26e8859c-689e-4a4e-a5b4-4f16aa193caf">
+			</testcontainer>
+			<testcontainer
+			id="309d9aef-3f69-45d1-baea-d9c307c1bbc8">
 			</testcontainer>
 			<testcontainer
 			id="aa11a569-e98a-42fd-b4fc-b2eacd2b8f71">
