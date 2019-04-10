@@ -210,3 +210,6 @@ PRINT N'Adding foreign keys to [dbo].[AmazonSWAProfile]'
 GO
 ALTER TABLE [dbo].[AmazonSWAProfile] ADD CONSTRAINT [FK_AmazonSWAProfile_ShippingProfile] FOREIGN KEY ([ShippingProfileID]) REFERENCES [dbo].[ShippingProfile] ([ShippingProfileID]) ON DELETE CASCADE
 GO
+
+UPDATE [dbo].[Store] SET Edition=''
+GO
