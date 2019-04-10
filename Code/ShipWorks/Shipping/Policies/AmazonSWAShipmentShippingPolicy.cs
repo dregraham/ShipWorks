@@ -68,8 +68,10 @@ namespace ShipWorks.Shipping.Policies
             {
                 theTarget.Allowed = true;
             }
-
-            theTarget.Allowed = false;
+            else
+            {
+                theTarget.Allowed = false;
+            }
         }
     }
 }
