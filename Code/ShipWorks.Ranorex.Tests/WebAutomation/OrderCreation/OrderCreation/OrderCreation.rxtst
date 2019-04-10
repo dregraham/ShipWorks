@@ -10,12 +10,26 @@ rxversion="8.1">
 			<smartfoldernode
 			id="309d9aef-3f69-45d1-baea-d9c307c1bbc8"
 			name="CreateShopifyOrder">
+				<parameters>
+					<param
+					name="ShopifyOrders"
+					value="1">
+					</param>
+				</parameters>
 			</smartfoldernode>
 			<testmodule
 			id="4371e1e4-4108-428e-9e53-4245f96b7875"
 			name="CreateShopifyOrder"
 			ref="d1430e56-bcdd-49bc-be78-bf03251cd60c"
 			type="UserCode">
+				<databinding>
+					<var
+					dataname="ShopifyOrders"
+					datasourceid="309d9aef-3f69-45d1-baea-d9c307c1bbc8"
+					variableid="6fa5363b-3ddd-4772-9143-070f5370a637"
+					variablename="OrderLimit">
+					</var>
+				</databinding>
 			</testmodule>
 			<testsuite
 			ReportTime="RelativeToTestSuiteStartTime"
