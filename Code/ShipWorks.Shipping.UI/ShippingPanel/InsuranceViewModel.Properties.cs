@@ -61,13 +61,17 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
                 if (SelectedPackageAdapter?.InsuranceChoice != null)
                 {
                     InsuranceChoice = SelectedPackageAdapter.InsuranceChoice;
-                    SupportsInsurance = Insurance != null;
                     Insurance = InsuranceChoice.Insured;
                     DeclaredValue = InsuranceChoice.InsuranceValue;
+                    SupportsInsurance = true;
 
                     UpdateInsuranceLabelDisplayText();
                     UpdateInsuranceTypeLabelDisplayText();
                     UpdateInsuranceValueLabelDisplayText();
+                }
+                else
+                {
+                    SupportsInsurance = false;
                 }
             }
         }
