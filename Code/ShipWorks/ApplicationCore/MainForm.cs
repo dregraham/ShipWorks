@@ -1457,9 +1457,6 @@ namespace ShipWorks
 
             log.InfoFormat("CheckDatabaseVersion: Installed: {0}, Required {1}", installedVersion, SqlSchemaUpdater.GetRequiredSchemaVersion());
 
-            // update the build  number stored in the database, this has nothing to do with the database's schema
-            UpdateDatabaseBuildNumber();
-
             // See if it needs upgraded
             if (SqlSchemaUpdater.IsUpgradeRequired() || !SqlSession.Current.IsSqlServer2008OrLater())
             {
@@ -1503,6 +1500,9 @@ namespace ShipWorks
 
                 return false;
             }
+
+            // update the build  number stored in the database, this has nothing to do with the database's schema
+            UpdateDatabaseBuildNumber();
 
             return true;
         }
