@@ -136,7 +136,7 @@ namespace ShipWorks.Shipping.UI.Carriers.Amazon.SWA
                 account.Email = person.Email;
                 account.Phone = person.Phone;
 
-                AmazonSWAAccountManager.SaveAccount(account);
+                SaveAccount();
             }
             else
             {
