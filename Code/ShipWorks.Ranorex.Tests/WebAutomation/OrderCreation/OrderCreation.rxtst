@@ -135,9 +135,6 @@ requirement.]]>
 		<testconfiguration
 		name="CreateOrders">
 			<testcontainer
-			id="26e8859c-689e-4a4e-a5b4-4f16aa193caf">
-			</testcontainer>
-			<testcontainer
 			id="309d9aef-3f69-45d1-baea-d9c307c1bbc8">
 			</testcontainer>
 			<testcontainer
