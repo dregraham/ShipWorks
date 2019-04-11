@@ -69,7 +69,7 @@ namespace ShipWorks.Shipping.Policies
             {
                 theTarget.Allowed = false;
             }
-            else if (IsApplicable(target) && (AllOrdersAllowed || (OnlyAmazonOrdersAllowed && theTarget.AmazonOrder != null)))
+            else if (IsApplicable(target) && (AllOrdersAllowed || (OnlyAmazonOrdersAllowed && !string.IsNullOrWhiteSpace(theTarget?.AmazonOrder?.AmazonOrderID))))
             {
                 theTarget.Allowed = true;
             }
