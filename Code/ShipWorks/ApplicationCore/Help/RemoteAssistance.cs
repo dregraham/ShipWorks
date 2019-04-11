@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Net;
 using System.Threading;
+using System.Windows.Forms;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Threading;
 using ShipWorks.Common.Threading;
@@ -11,7 +12,7 @@ using ShipWorks.Common.Threading;
 
 namespace ShipWorks.ApplicationCore.Help
 {
-    public class RemoteAssistance : IDisposable
+    public class RemoteAssistance
     {
         // Url to download the client
         private static Uri downloadUrl = new Uri("https://d17kmd0va0f0mp.cloudfront.net/sos/SplashtopSOS.exe");
@@ -19,7 +20,7 @@ namespace ShipWorks.ApplicationCore.Help
         /// <summary>
         /// Create progress dialog
         /// </summary>
-        public void InitiateRemoteAssistance()
+        public void InitiateRemoteAssistance(IWin32Window parent)
         {
             ProgressProvider progressProvider = new ProgressProvider();
 
@@ -28,7 +29,7 @@ namespace ShipWorks.ApplicationCore.Help
             progressDlg.Title = "Remote Assistance";
             progressDlg.Description = "Connecting to Interapptive support representative.";
             progressDlg.AutoCloseWhenComplete = true;
-            progressDlg.Show();
+            progressDlg.Show(parent);
 
             Dictionary<string, object> userState = new Dictionary<string, object>();
             userState["progressDlg"] = progressDlg;
@@ -92,6 +93,11 @@ namespace ShipWorks.ApplicationCore.Help
                 {
                     error = ex;
                 }
+                // Check by message because a Win32Exception could be caused by multiple things
+                else if (ex.Message.Contains("canceled"))
+                {
+                    error = ex;
+                }
                 else
                 {
                     throw;
@@ -122,7 +128,7 @@ namespace ShipWorks.ApplicationCore.Help
                 {
                     client.StartInfo.FileName = clientExe;
                     client.StartInfo.Verb = "runas";
-                    if(!client.Start())
+                    if (!client.Start())
                     {
                         throw new InvalidOperationException("ShipWorks was unable to initiate the support session.");
                     }
@@ -192,13 +198,8 @@ namespace ShipWorks.ApplicationCore.Help
                     }
                 }
             }
-
             progress.Detail = "Done";
             return clientExe;
         }
-
-        void IDisposable.Dispose() { Dispose(true); GC.SuppressFinalize(this); }
-        protected virtual void Dispose(bool disposing) { }
-        ~RemoteAssistance() { Dispose(false); }
     }
 }
