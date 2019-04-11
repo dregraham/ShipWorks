@@ -64,7 +64,12 @@ namespace ShipWorks.Shipping.Policies
             AmazonShippingPolicyTarget theTarget = target as AmazonShippingPolicyTarget;
             MethodConditions.EnsureArgumentIsNotNull(theTarget, nameof(theTarget));
 
-            if (IsApplicable(target) && (AllOrdersAllowed || (OnlyAmazonOrdersAllowed && theTarget.AmazonOrder != null)))
+            // currently we do not allow Amazon prime order to ship via amazon swa
+            if (theTarget?.AmazonOrder?.IsPrime ?? false)
+            {
+                theTarget.Allowed = false;
+            }
+            else if (IsApplicable(target) && (AllOrdersAllowed || (OnlyAmazonOrdersAllowed && theTarget.AmazonOrder != null)))
             {
                 theTarget.Allowed = true;
             }
