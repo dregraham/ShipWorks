@@ -2622,10 +2622,11 @@ namespace ShipWorks
         /// </summary>
         private void OnRemoteAssistance(object sender, EventArgs e)
         {
-            using (RemoteAssistanceDlg dlg = new RemoteAssistanceDlg())
+            using(RemoteAssistance remote = new RemoteAssistance())
             {
-                dlg.ShowDialog(this);
+                remote.InitiateRemoteAssistance();
             }
+            
         }
 
         /// <summary>
