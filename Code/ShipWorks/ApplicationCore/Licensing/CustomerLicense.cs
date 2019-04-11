@@ -174,7 +174,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// </summary>
         public void Refresh()
         {
-            // If the license capabilities is null ,possibly due to Tango returning an empty node, 
+            // If the license capabilities is null ,possibly due to Tango returning an empty node,
             // or we've passed our time limit, force a refresh
             if (LicenseCapabilities == null || DateTime.UtcNow.Subtract(lastRefreshTimeInUtc) > capabilitiesTimeToLive)
             {
@@ -375,7 +375,8 @@ namespace ShipWorks.ApplicationCore.Licensing
                     rateResultCount.Apply(target);
                 }
             }
-            else if (shipmentTypeCode == ShipmentTypeCode.AmazonSFP)
+            else if (shipmentTypeCode == ShipmentTypeCode.AmazonSFP ||
+                shipmentTypeCode == ShipmentTypeCode.AmazonSWA)
             {
                 ShippingPolicies.Current.Apply(shipmentTypeCode, target);
             }
