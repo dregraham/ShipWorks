@@ -41,7 +41,6 @@ namespace ShipWorks.Shipping.UI.Carriers.Amazon.SWA
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AmazonSWASetupWizard));
             this.wizardPageWelcome = new ShipWorks.UI.Wizard.WizardPage();
             this.elementHost1 = new System.Windows.Forms.Integration.ElementHost();
-            this.amazonSWAAuthorizationControl = new ShipWorks.Shipping.UI.Amazon.SWA.AmazonSWAAuthorizationControl();
             this.wizardPageContactInfo = new ShipWorks.UI.Wizard.WizardPage();
             this.contactInformation = new ShipWorks.Data.Controls.AutofillPersonControl();
             this.mainPanel.SuspendLayout();
@@ -76,8 +75,8 @@ namespace ShipWorks.Shipping.UI.Carriers.Amazon.SWA
             // pictureBox
             // 
             this.pictureBox.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox.Image")));
-            this.pictureBox.Location = new System.Drawing.Point(399, 3);
-            this.pictureBox.Size = new System.Drawing.Size(165, 50);
+            this.pictureBox.Location = new System.Drawing.Point(316, 3);
+            this.pictureBox.Size = new System.Drawing.Size(248, 50);
             this.pictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             // 
             // topPanel
@@ -104,7 +103,7 @@ namespace ShipWorks.Shipping.UI.Carriers.Amazon.SWA
             this.elementHost1.Size = new System.Drawing.Size(567, 437);
             this.elementHost1.TabIndex = 1;
             this.elementHost1.Text = "elementHost1";
-            this.elementHost1.Child = this.amazonSWAAuthorizationControl;
+            this.elementHost1.Child = null;
             // 
             // wizardPageContactInfo
             // 
