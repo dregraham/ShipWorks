@@ -76,8 +76,8 @@ namespace ShipWorks.Shipping.UI.Carriers.Amazon.SWA
             // pictureBox
             // 
             this.pictureBox.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox.Image")));
-            this.pictureBox.Location = new System.Drawing.Point(399, 3);
-            this.pictureBox.Size = new System.Drawing.Size(165, 50);
+            this.pictureBox.Location = new System.Drawing.Point(362, -3);
+            this.pictureBox.Size = new System.Drawing.Size(194, 42);
             this.pictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             // 
             // topPanel
@@ -104,7 +104,7 @@ namespace ShipWorks.Shipping.UI.Carriers.Amazon.SWA
             this.elementHost1.Size = new System.Drawing.Size(567, 437);
             this.elementHost1.TabIndex = 1;
             this.elementHost1.Text = "elementHost1";
-            this.elementHost1.Child = this.amazonSWAAuthorizationControl;
+            this.elementHost1.Child = null;
             // 
             // wizardPageContactInfo
             // 
