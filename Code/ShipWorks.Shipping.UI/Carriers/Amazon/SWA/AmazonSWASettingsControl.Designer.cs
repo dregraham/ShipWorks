@@ -53,9 +53,9 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SWA
             this.label1.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label1.Location = new System.Drawing.Point(6, 79);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(134, 13);
+            this.label1.Size = new System.Drawing.Size(159, 13);
             this.label1.TabIndex = 1;
-            this.label1.Text = "AmazonSWA Accounts";
+            this.label1.Text = "Amazon Shipping Accounts";
             // 
             // shippingCutoff
             // 
