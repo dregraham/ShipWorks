@@ -48,7 +48,8 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             ReturnShipment = source.ReturnShipment;
             RequestedLabelFormat = source.RequestedLabelFormat;
             
-            Amazon = (IAmazonProfileEntity) source.Amazon?.AsReadOnly(objectMap);
+            AmazonSFP = (IAmazonSFPProfileEntity) source.AmazonSFP?.AsReadOnly(objectMap);
+            AmazonSWA = (IAmazonSWAProfileEntity) source.AmazonSWA?.AsReadOnly(objectMap);
             Asendia = (IAsendiaProfileEntity) source.Asendia?.AsReadOnly(objectMap);
             BestRate = (IBestRateProfileEntity) source.BestRate?.AsReadOnly(objectMap);
             DhlExpress = (IDhlExpressProfileEntity) source.DhlExpress?.AsReadOnly(objectMap);
@@ -134,7 +135,9 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
         public Nullable<System.Int32> RequestedLabelFormat { get; }
         
-        public IAmazonProfileEntity Amazon { get; }
+        public IAmazonSFPProfileEntity AmazonSFP { get; }
+        
+        public IAmazonSWAProfileEntity AmazonSWA { get; }
         
         public IAsendiaProfileEntity Asendia { get; }
         

@@ -8,7 +8,7 @@ namespace ShipWorks.OrderLookup.Controls.Reference
     /// <summary>
     /// View model for order lookup reference control
     /// </summary>
-    [KeyedComponent(typeof(IReferenceViewModel), ShipmentTypeCode.Amazon)]
+    [KeyedComponent(typeof(IReferenceViewModel), ShipmentTypeCode.AmazonSFP)]
     [WpfView(typeof(AmazonReferenceControl))]
     public class AmazonReferenceViewModel : GenericReferenceViewModel
     {

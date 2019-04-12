@@ -95,7 +95,7 @@ namespace ShipWorks.Data.Modal.Tests.Custom
         [Fact]
         public void GetShipmentDateCutoff_ReturnsDefault_WhenShipmentTypeCodeNotInDictionary()
         {
-            ShipmentDateCutoff cutoff = shippingSettingsEntity.GetShipmentDateCutoff(ShipmentTypeCode.Amazon);
+            ShipmentDateCutoff cutoff = shippingSettingsEntity.GetShipmentDateCutoff(ShipmentTypeCode.AmazonSFP);
 
             Assert.Equal(ShipmentDateCutoff.Default, cutoff);
         }

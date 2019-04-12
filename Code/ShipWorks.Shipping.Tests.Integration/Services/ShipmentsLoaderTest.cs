@@ -144,7 +144,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
             Assert.NotNull(loadedShipment.Postal.Endicia);
             Assert.NotNull(loadedShipment.Postal.Usps);
             Assert.NotNull(loadedShipment.OnTrac);
-            Assert.NotNull(loadedShipment.Amazon);
+            Assert.NotNull(loadedShipment.AmazonSFP);
             Assert.NotNull(loadedShipment.BestRate);
             Assert.NotNull(loadedShipment.Other);
         }

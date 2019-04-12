@@ -6,7 +6,7 @@
              xmlns:ui="http://schemas.shipworks.com/ui"
              xmlns:sw="http://schemas.shipworks.com/sw"
              xmlns:local="clr-namespace:ShipWorks.Shipping.UI.RatingPanel"
-             xmlns:amz="clr-namespace:ShipWorks.Shipping.UI.Carriers.Amazon"
+             xmlns:amz="clr-namespace:ShipWorks.Shipping.UI.Carriers.Amazon.SFP"
              xmlns:upslr="clr-namespace:ShipWorks.Shipping.UI.Carriers.Ups.LocalRating"
              d:DataContext="{d:DesignInstance local:TestRatingPanelViewModel, IsDesignTimeCreatable=True}"
 
@@ -154,10 +154,10 @@
                     </Style>
                 </ListBox.ItemContainerStyle>
                 <ui:TypeBasedTemplateSelector.Templates>
-                    <ui:Template Value="{x:Type amz:AmazonCarrierTermsAndConditionsNotAcceptedFootnoteViewModel}"
-                                 DataTemplate="{StaticResource AmazonCarrierTermsAndConditionsNotAcceptedFootnoteViewModelTemplate}" />
-                    <ui:Template Value="{x:Type amz:AmazonSameDayNotAvailableFootnoteViewModel}"
-                                 DataTemplate="{StaticResource AmazonSameDayNotAvailableFootnoteViewModelTemplate}" />
+                    <ui:Template Value="{x:Type amz:AmazonSFPCarrierTermsAndConditionsNotAcceptedFootnoteViewModel}"
+                                 DataTemplate="{StaticResource AmazonSFPCarrierTermsAndConditionsNotAcceptedFootnoteViewModelTemplate}" />
+                    <ui:Template Value="{x:Type amz:AmazonSFPSameDayNotAvailableFootnoteViewModel}"
+                                 DataTemplate="{StaticResource AmazonSFPSameDayNotAvailableFootnoteViewModelTemplate}" />
                     <ui:Template Value="{x:Type sw:BrokerExceptionsRateFootnoteViewModel}"
                                  DataTemplate="{StaticResource BrokerExceptionsRateFootnoteViewModelTemplate}" />
                     <ui:Template Value="{x:Type sw:CounterRatesInvalidStoreAddressFootnoteViewModel}"

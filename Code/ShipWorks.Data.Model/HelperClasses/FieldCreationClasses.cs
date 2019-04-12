@@ -1044,138 +1044,138 @@ namespace ShipWorks.Data.Model.HelperClasses
 		}
 	}
 
-	/// <summary>Field Creation Class for entity AmazonProfileEntity</summary>
-	public partial class AmazonProfileFields
+	/// <summary>Field Creation Class for entity AmazonSFPProfileEntity</summary>
+	public partial class AmazonSFPProfileFields
 	{
-		/// <summary>Creates a new AmazonProfileEntity.ShippingProfileID field instance</summary>
+		/// <summary>Creates a new AmazonSFPProfileEntity.ShippingProfileID field instance</summary>
 		public static EntityField2 ShippingProfileID
 		{
-			get { return (EntityField2)EntityFieldFactory.Create(AmazonProfileFieldIndex.ShippingProfileID);}
+			get { return (EntityField2)EntityFieldFactory.Create(AmazonSFPProfileFieldIndex.ShippingProfileID);}
 		}
-		/// <summary>Creates a new AmazonProfileEntity.DeliveryExperience field instance</summary>
+		/// <summary>Creates a new AmazonSFPProfileEntity.DeliveryExperience field instance</summary>
 		public static EntityField2 DeliveryExperience
 		{
-			get { return (EntityField2)EntityFieldFactory.Create(AmazonProfileFieldIndex.DeliveryExperience);}
+			get { return (EntityField2)EntityFieldFactory.Create(AmazonSFPProfileFieldIndex.DeliveryExperience);}
 		}
-		/// <summary>Creates a new AmazonProfileEntity.ShippingServiceID field instance</summary>
+		/// <summary>Creates a new AmazonSFPProfileEntity.ShippingServiceID field instance</summary>
 		public static EntityField2 ShippingServiceID
 		{
-			get { return (EntityField2)EntityFieldFactory.Create(AmazonProfileFieldIndex.ShippingServiceID);}
+			get { return (EntityField2)EntityFieldFactory.Create(AmazonSFPProfileFieldIndex.ShippingServiceID);}
 		}
-		/// <summary>Creates a new AmazonProfileEntity.Reference1 field instance</summary>
+		/// <summary>Creates a new AmazonSFPProfileEntity.Reference1 field instance</summary>
 		public static EntityField2 Reference1
 		{
-			get { return (EntityField2)EntityFieldFactory.Create(AmazonProfileFieldIndex.Reference1);}
+			get { return (EntityField2)EntityFieldFactory.Create(AmazonSFPProfileFieldIndex.Reference1);}
 		}
 	}
 
-	/// <summary>Field Creation Class for entity AmazonServiceTypeEntity</summary>
-	public partial class AmazonServiceTypeFields
+	/// <summary>Field Creation Class for entity AmazonSFPServiceTypeEntity</summary>
+	public partial class AmazonSFPServiceTypeFields
 	{
-		/// <summary>Creates a new AmazonServiceTypeEntity.AmazonServiceTypeID field instance</summary>
-		public static EntityField2 AmazonServiceTypeID
+		/// <summary>Creates a new AmazonSFPServiceTypeEntity.AmazonSFPServiceTypeID field instance</summary>
+		public static EntityField2 AmazonSFPServiceTypeID
 		{
-			get { return (EntityField2)EntityFieldFactory.Create(AmazonServiceTypeFieldIndex.AmazonServiceTypeID);}
+			get { return (EntityField2)EntityFieldFactory.Create(AmazonSFPServiceTypeFieldIndex.AmazonSFPServiceTypeID);}
 		}
-		/// <summary>Creates a new AmazonServiceTypeEntity.ApiValue field instance</summary>
+		/// <summary>Creates a new AmazonSFPServiceTypeEntity.ApiValue field instance</summary>
 		public static EntityField2 ApiValue
 		{
-			get { return (EntityField2)EntityFieldFactory.Create(AmazonServiceTypeFieldIndex.ApiValue);}
+			get { return (EntityField2)EntityFieldFactory.Create(AmazonSFPServiceTypeFieldIndex.ApiValue);}
 		}
-		/// <summary>Creates a new AmazonServiceTypeEntity.Description field instance</summary>
+		/// <summary>Creates a new AmazonSFPServiceTypeEntity.Description field instance</summary>
 		public static EntityField2 Description
 		{
-			get { return (EntityField2)EntityFieldFactory.Create(AmazonServiceTypeFieldIndex.Description);}
+			get { return (EntityField2)EntityFieldFactory.Create(AmazonSFPServiceTypeFieldIndex.Description);}
 		}
 	}
 
-	/// <summary>Field Creation Class for entity AmazonShipmentEntity</summary>
-	public partial class AmazonShipmentFields
+	/// <summary>Field Creation Class for entity AmazonSFPShipmentEntity</summary>
+	public partial class AmazonSFPShipmentFields
 	{
-		/// <summary>Creates a new AmazonShipmentEntity.ShipmentID field instance</summary>
+		/// <summary>Creates a new AmazonSFPShipmentEntity.ShipmentID field instance</summary>
 		public static EntityField2 ShipmentID
 		{
-			get { return (EntityField2)EntityFieldFactory.Create(AmazonShipmentFieldIndex.ShipmentID);}
+			get { return (EntityField2)EntityFieldFactory.Create(AmazonSFPShipmentFieldIndex.ShipmentID);}
 		}
-		/// <summary>Creates a new AmazonShipmentEntity.CarrierName field instance</summary>
+		/// <summary>Creates a new AmazonSFPShipmentEntity.CarrierName field instance</summary>
 		public static EntityField2 CarrierName
 		{
-			get { return (EntityField2)EntityFieldFactory.Create(AmazonShipmentFieldIndex.CarrierName);}
+			get { return (EntityField2)EntityFieldFactory.Create(AmazonSFPShipmentFieldIndex.CarrierName);}
 		}
-		/// <summary>Creates a new AmazonShipmentEntity.ShippingServiceName field instance</summary>
+		/// <summary>Creates a new AmazonSFPShipmentEntity.ShippingServiceName field instance</summary>
 		public static EntityField2 ShippingServiceName
 		{
-			get { return (EntityField2)EntityFieldFactory.Create(AmazonShipmentFieldIndex.ShippingServiceName);}
+			get { return (EntityField2)EntityFieldFactory.Create(AmazonSFPShipmentFieldIndex.ShippingServiceName);}
 		}
-		/// <summary>Creates a new AmazonShipmentEntity.ShippingServiceID field instance</summary>
+		/// <summary>Creates a new AmazonSFPShipmentEntity.ShippingServiceID field instance</summary>
 		public static EntityField2 ShippingServiceID
 		{
-			get { return (EntityField2)EntityFieldFactory.Create(AmazonShipmentFieldIndex.ShippingServiceID);}
+			get { return (EntityField2)EntityFieldFactory.Create(AmazonSFPShipmentFieldIndex.ShippingServiceID);}
 		}
-		/// <summary>Creates a new AmazonShipmentEntity.InsuranceValue field instance</summary>
+		/// <summary>Creates a new AmazonSFPShipmentEntity.InsuranceValue field instance</summary>
 		public static EntityField2 InsuranceValue
 		{
-			get { return (EntityField2)EntityFieldFactory.Create(AmazonShipmentFieldIndex.InsuranceValue);}
+			get { return (EntityField2)EntityFieldFactory.Create(AmazonSFPShipmentFieldIndex.InsuranceValue);}
 		}
-		/// <summary>Creates a new AmazonShipmentEntity.DimsProfileID field instance</summary>
+		/// <summary>Creates a new AmazonSFPShipmentEntity.DimsProfileID field instance</summary>
 		public static EntityField2 DimsProfileID
 		{
-			get { return (EntityField2)EntityFieldFactory.Create(AmazonShipmentFieldIndex.DimsProfileID);}
+			get { return (EntityField2)EntityFieldFactory.Create(AmazonSFPShipmentFieldIndex.DimsProfileID);}
 		}
-		/// <summary>Creates a new AmazonShipmentEntity.DimsLength field instance</summary>
+		/// <summary>Creates a new AmazonSFPShipmentEntity.DimsLength field instance</summary>
 		public static EntityField2 DimsLength
 		{
-			get { return (EntityField2)EntityFieldFactory.Create(AmazonShipmentFieldIndex.DimsLength);}
+			get { return (EntityField2)EntityFieldFactory.Create(AmazonSFPShipmentFieldIndex.DimsLength);}
 		}
-		/// <summary>Creates a new AmazonShipmentEntity.DimsWidth field instance</summary>
+		/// <summary>Creates a new AmazonSFPShipmentEntity.DimsWidth field instance</summary>
 		public static EntityField2 DimsWidth
 		{
-			get { return (EntityField2)EntityFieldFactory.Create(AmazonShipmentFieldIndex.DimsWidth);}
+			get { return (EntityField2)EntityFieldFactory.Create(AmazonSFPShipmentFieldIndex.DimsWidth);}
 		}
-		/// <summary>Creates a new AmazonShipmentEntity.DimsHeight field instance</summary>
+		/// <summary>Creates a new AmazonSFPShipmentEntity.DimsHeight field instance</summary>
 		public static EntityField2 DimsHeight
 		{
-			get { return (EntityField2)EntityFieldFactory.Create(AmazonShipmentFieldIndex.DimsHeight);}
+			get { return (EntityField2)EntityFieldFactory.Create(AmazonSFPShipmentFieldIndex.DimsHeight);}
 		}
-		/// <summary>Creates a new AmazonShipmentEntity.DimsWeight field instance</summary>
+		/// <summary>Creates a new AmazonSFPShipmentEntity.DimsWeight field instance</summary>
 		public static EntityField2 DimsWeight
 		{
-			get { return (EntityField2)EntityFieldFactory.Create(AmazonShipmentFieldIndex.DimsWeight);}
+			get { return (EntityField2)EntityFieldFactory.Create(AmazonSFPShipmentFieldIndex.DimsWeight);}
 		}
-		/// <summary>Creates a new AmazonShipmentEntity.DimsAddWeight field instance</summary>
+		/// <summary>Creates a new AmazonSFPShipmentEntity.DimsAddWeight field instance</summary>
 		public static EntityField2 DimsAddWeight
 		{
-			get { return (EntityField2)EntityFieldFactory.Create(AmazonShipmentFieldIndex.DimsAddWeight);}
+			get { return (EntityField2)EntityFieldFactory.Create(AmazonSFPShipmentFieldIndex.DimsAddWeight);}
 		}
-		/// <summary>Creates a new AmazonShipmentEntity.DeliveryExperience field instance</summary>
+		/// <summary>Creates a new AmazonSFPShipmentEntity.DeliveryExperience field instance</summary>
 		public static EntityField2 DeliveryExperience
 		{
-			get { return (EntityField2)EntityFieldFactory.Create(AmazonShipmentFieldIndex.DeliveryExperience);}
+			get { return (EntityField2)EntityFieldFactory.Create(AmazonSFPShipmentFieldIndex.DeliveryExperience);}
 		}
-		/// <summary>Creates a new AmazonShipmentEntity.DeclaredValue field instance</summary>
+		/// <summary>Creates a new AmazonSFPShipmentEntity.DeclaredValue field instance</summary>
 		public static EntityField2 DeclaredValue
 		{
-			get { return (EntityField2)EntityFieldFactory.Create(AmazonShipmentFieldIndex.DeclaredValue);}
+			get { return (EntityField2)EntityFieldFactory.Create(AmazonSFPShipmentFieldIndex.DeclaredValue);}
 		}
-		/// <summary>Creates a new AmazonShipmentEntity.AmazonUniqueShipmentID field instance</summary>
+		/// <summary>Creates a new AmazonSFPShipmentEntity.AmazonUniqueShipmentID field instance</summary>
 		public static EntityField2 AmazonUniqueShipmentID
 		{
-			get { return (EntityField2)EntityFieldFactory.Create(AmazonShipmentFieldIndex.AmazonUniqueShipmentID);}
+			get { return (EntityField2)EntityFieldFactory.Create(AmazonSFPShipmentFieldIndex.AmazonUniqueShipmentID);}
 		}
-		/// <summary>Creates a new AmazonShipmentEntity.Insurance field instance</summary>
+		/// <summary>Creates a new AmazonSFPShipmentEntity.Insurance field instance</summary>
 		public static EntityField2 Insurance
 		{
-			get { return (EntityField2)EntityFieldFactory.Create(AmazonShipmentFieldIndex.Insurance);}
+			get { return (EntityField2)EntityFieldFactory.Create(AmazonSFPShipmentFieldIndex.Insurance);}
 		}
-		/// <summary>Creates a new AmazonShipmentEntity.Reference1 field instance</summary>
+		/// <summary>Creates a new AmazonSFPShipmentEntity.Reference1 field instance</summary>
 		public static EntityField2 Reference1
 		{
-			get { return (EntityField2)EntityFieldFactory.Create(AmazonShipmentFieldIndex.Reference1);}
+			get { return (EntityField2)EntityFieldFactory.Create(AmazonSFPShipmentFieldIndex.Reference1);}
 		}
-		/// <summary>Creates a new AmazonShipmentEntity.RequestedLabelFormat field instance</summary>
+		/// <summary>Creates a new AmazonSFPShipmentEntity.RequestedLabelFormat field instance</summary>
 		public static EntityField2 RequestedLabelFormat
 		{
-			get { return (EntityField2)EntityFieldFactory.Create(AmazonShipmentFieldIndex.RequestedLabelFormat);}
+			get { return (EntityField2)EntityFieldFactory.Create(AmazonSFPShipmentFieldIndex.RequestedLabelFormat);}
 		}
 	}
 
@@ -1441,6 +1441,176 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 AmazonVATS
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(AmazonStoreFieldIndex.AmazonVATS);}
+		}
+	}
+
+	/// <summary>Field Creation Class for entity AmazonSWAAccountEntity</summary>
+	public partial class AmazonSWAAccountFields
+	{
+		/// <summary>Creates a new AmazonSWAAccountEntity.AmazonSWAAccountID field instance</summary>
+		public static EntityField2 AmazonSWAAccountID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(AmazonSWAAccountFieldIndex.AmazonSWAAccountID);}
+		}
+		/// <summary>Creates a new AmazonSWAAccountEntity.RowVersion field instance</summary>
+		public static EntityField2 RowVersion
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(AmazonSWAAccountFieldIndex.RowVersion);}
+		}
+		/// <summary>Creates a new AmazonSWAAccountEntity.ShipEngineCarrierId field instance</summary>
+		public static EntityField2 ShipEngineCarrierId
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(AmazonSWAAccountFieldIndex.ShipEngineCarrierId);}
+		}
+		/// <summary>Creates a new AmazonSWAAccountEntity.Description field instance</summary>
+		public static EntityField2 Description
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(AmazonSWAAccountFieldIndex.Description);}
+		}
+		/// <summary>Creates a new AmazonSWAAccountEntity.FirstName field instance</summary>
+		public static EntityField2 FirstName
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(AmazonSWAAccountFieldIndex.FirstName);}
+		}
+		/// <summary>Creates a new AmazonSWAAccountEntity.MiddleName field instance</summary>
+		public static EntityField2 MiddleName
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(AmazonSWAAccountFieldIndex.MiddleName);}
+		}
+		/// <summary>Creates a new AmazonSWAAccountEntity.LastName field instance</summary>
+		public static EntityField2 LastName
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(AmazonSWAAccountFieldIndex.LastName);}
+		}
+		/// <summary>Creates a new AmazonSWAAccountEntity.Company field instance</summary>
+		public static EntityField2 Company
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(AmazonSWAAccountFieldIndex.Company);}
+		}
+		/// <summary>Creates a new AmazonSWAAccountEntity.Street1 field instance</summary>
+		public static EntityField2 Street1
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(AmazonSWAAccountFieldIndex.Street1);}
+		}
+		/// <summary>Creates a new AmazonSWAAccountEntity.City field instance</summary>
+		public static EntityField2 City
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(AmazonSWAAccountFieldIndex.City);}
+		}
+		/// <summary>Creates a new AmazonSWAAccountEntity.StateProvCode field instance</summary>
+		public static EntityField2 StateProvCode
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(AmazonSWAAccountFieldIndex.StateProvCode);}
+		}
+		/// <summary>Creates a new AmazonSWAAccountEntity.PostalCode field instance</summary>
+		public static EntityField2 PostalCode
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(AmazonSWAAccountFieldIndex.PostalCode);}
+		}
+		/// <summary>Creates a new AmazonSWAAccountEntity.CountryCode field instance</summary>
+		public static EntityField2 CountryCode
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(AmazonSWAAccountFieldIndex.CountryCode);}
+		}
+		/// <summary>Creates a new AmazonSWAAccountEntity.Email field instance</summary>
+		public static EntityField2 Email
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(AmazonSWAAccountFieldIndex.Email);}
+		}
+		/// <summary>Creates a new AmazonSWAAccountEntity.Phone field instance</summary>
+		public static EntityField2 Phone
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(AmazonSWAAccountFieldIndex.Phone);}
+		}
+	}
+
+	/// <summary>Field Creation Class for entity AmazonSWAProfileEntity</summary>
+	public partial class AmazonSWAProfileFields
+	{
+		/// <summary>Creates a new AmazonSWAProfileEntity.ShippingProfileID field instance</summary>
+		public static EntityField2 ShippingProfileID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(AmazonSWAProfileFieldIndex.ShippingProfileID);}
+		}
+		/// <summary>Creates a new AmazonSWAProfileEntity.AmazonSWAAccountID field instance</summary>
+		public static EntityField2 AmazonSWAAccountID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(AmazonSWAProfileFieldIndex.AmazonSWAAccountID);}
+		}
+		/// <summary>Creates a new AmazonSWAProfileEntity.Service field instance</summary>
+		public static EntityField2 Service
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(AmazonSWAProfileFieldIndex.Service);}
+		}
+	}
+
+	/// <summary>Field Creation Class for entity AmazonSWAShipmentEntity</summary>
+	public partial class AmazonSWAShipmentFields
+	{
+		/// <summary>Creates a new AmazonSWAShipmentEntity.ShipmentID field instance</summary>
+		public static EntityField2 ShipmentID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(AmazonSWAShipmentFieldIndex.ShipmentID);}
+		}
+		/// <summary>Creates a new AmazonSWAShipmentEntity.AmazonSWAAccountID field instance</summary>
+		public static EntityField2 AmazonSWAAccountID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(AmazonSWAShipmentFieldIndex.AmazonSWAAccountID);}
+		}
+		/// <summary>Creates a new AmazonSWAShipmentEntity.Service field instance</summary>
+		public static EntityField2 Service
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(AmazonSWAShipmentFieldIndex.Service);}
+		}
+		/// <summary>Creates a new AmazonSWAShipmentEntity.RequestedLabelFormat field instance</summary>
+		public static EntityField2 RequestedLabelFormat
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(AmazonSWAShipmentFieldIndex.RequestedLabelFormat);}
+		}
+		/// <summary>Creates a new AmazonSWAShipmentEntity.ShipEngineLabelID field instance</summary>
+		public static EntityField2 ShipEngineLabelID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(AmazonSWAShipmentFieldIndex.ShipEngineLabelID);}
+		}
+		/// <summary>Creates a new AmazonSWAShipmentEntity.DimsProfileID field instance</summary>
+		public static EntityField2 DimsProfileID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(AmazonSWAShipmentFieldIndex.DimsProfileID);}
+		}
+		/// <summary>Creates a new AmazonSWAShipmentEntity.DimsLength field instance</summary>
+		public static EntityField2 DimsLength
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(AmazonSWAShipmentFieldIndex.DimsLength);}
+		}
+		/// <summary>Creates a new AmazonSWAShipmentEntity.DimsWidth field instance</summary>
+		public static EntityField2 DimsWidth
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(AmazonSWAShipmentFieldIndex.DimsWidth);}
+		}
+		/// <summary>Creates a new AmazonSWAShipmentEntity.DimsHeight field instance</summary>
+		public static EntityField2 DimsHeight
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(AmazonSWAShipmentFieldIndex.DimsHeight);}
+		}
+		/// <summary>Creates a new AmazonSWAShipmentEntity.DimsAddWeight field instance</summary>
+		public static EntityField2 DimsAddWeight
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(AmazonSWAShipmentFieldIndex.DimsAddWeight);}
+		}
+		/// <summary>Creates a new AmazonSWAShipmentEntity.DimsWeight field instance</summary>
+		public static EntityField2 DimsWeight
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(AmazonSWAShipmentFieldIndex.DimsWeight);}
+		}
+		/// <summary>Creates a new AmazonSWAShipmentEntity.InsuranceValue field instance</summary>
+		public static EntityField2 InsuranceValue
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(AmazonSWAShipmentFieldIndex.InsuranceValue);}
+		}
+		/// <summary>Creates a new AmazonSWAShipmentEntity.Insurance field instance</summary>
+		public static EntityField2 Insurance
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(AmazonSWAShipmentFieldIndex.Insurance);}
 		}
 	}
 

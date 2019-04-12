@@ -4,7 +4,7 @@ using Autofac.Extras.Moq;
 using Moq;
 using ShipWorks.Filters.Content.Conditions.Shipments;
 using ShipWorks.Shipping;
-using ShipWorks.Shipping.Carriers.Amazon;
+using ShipWorks.Shipping.Carriers.Amazon.SFP;
 using ShipWorks.Shipping.Carriers.Other;
 using Xunit;
 
@@ -19,7 +19,7 @@ namespace ShipWorks.Tests.Filters.Content.Conditions.Shipments
             {
                 mock.Mock<IShipmentTypeManager>()
                     .Setup(m => m.ShipmentTypes)
-                    .Returns(new List<ShipmentType> { mock.Create<AmazonShipmentType>() });
+                    .Returns(new List<ShipmentType> { mock.Create<AmazonSFPShipmentType>() });
 
                 mock.Mock<IShippingManager>()
                     .Setup(m => m.IsShipmentTypeConfigured(It.IsAny<ShipmentTypeCode>()))
@@ -29,7 +29,7 @@ namespace ShipWorks.Tests.Filters.Content.Conditions.Shipments
 
                 var valueChoices = testObject.ValueChoices;
 
-                Assert.True(valueChoices.SingleOrDefault(c=>c.Value == ShipmentTypeCode.Amazon) != null);
+                Assert.True(valueChoices.SingleOrDefault(c=>c.Value == ShipmentTypeCode.AmazonSFP) != null);
             }
         }
 
@@ -40,7 +40,7 @@ namespace ShipWorks.Tests.Filters.Content.Conditions.Shipments
             {
                 mock.Mock<IShipmentTypeManager>()
                     .Setup(m => m.ShipmentTypes)
-                    .Returns(new List<ShipmentType> { mock.Create<AmazonShipmentType>() });
+                    .Returns(new List<ShipmentType> { mock.Create<AmazonSFPShipmentType>() });
 
                 mock.Mock<IShippingManager>()
                     .Setup(m => m.IsShipmentTypeConfigured(It.IsAny<ShipmentTypeCode>()))
@@ -50,7 +50,7 @@ namespace ShipWorks.Tests.Filters.Content.Conditions.Shipments
 
                 var valueChoices = testObject.ValueChoices;
 
-                Assert.True(valueChoices.SingleOrDefault(c => c.Value == ShipmentTypeCode.Amazon) == null);
+                Assert.True(valueChoices.SingleOrDefault(c => c.Value == ShipmentTypeCode.AmazonSFP) == null);
             }
         }
 
@@ -61,7 +61,7 @@ namespace ShipWorks.Tests.Filters.Content.Conditions.Shipments
             {
                 mock.Mock<IShipmentTypeManager>()
                     .Setup(m => m.ShipmentTypes)
-                    .Returns(new List<ShipmentType> { mock.Create<AmazonShipmentType>(), mock.Create<OtherShipmentType>() });
+                    .Returns(new List<ShipmentType> { mock.Create<AmazonSFPShipmentType>(), mock.Create<OtherShipmentType>() });
 
                 mock.Mock<IShippingManager>()
                     .Setup(m => m.IsShipmentTypeConfigured(It.IsAny<ShipmentTypeCode>()))

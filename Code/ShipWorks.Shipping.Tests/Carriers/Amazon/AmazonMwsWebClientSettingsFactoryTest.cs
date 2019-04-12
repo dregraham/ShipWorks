@@ -1,12 +1,11 @@
 ﻿using System;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Platforms.Amazon.Mws;
-using ShipWorks.Shipping.Carriers.Amazon;
 using Autofac.Extras.Moq;
 using Xunit;
-using ShipWorks.Stores.Content;
 using Moq;
 using ShipWorks.Stores;
+using ShipWorks.Shipping.Carriers.Amazon.SFP;
 
 namespace ShipWorks.Tests.Shipping.Carriers.Amazon.Api
 {
@@ -32,7 +31,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Amazon.Api
 
                 AmazonMwsWebClientSettingsFactory settingsFactory = mock.Create<AmazonMwsWebClientSettingsFactory>();
 
-                IAmazonMwsWebClientSettings testObject = settingsFactory.Create(new AmazonShipmentEntity());
+                IAmazonMwsWebClientSettings testObject = settingsFactory.Create(new AmazonSFPShipmentEntity());
 
                 Assert.Equal("testMerchantID", testObject.Credentials.MerchantID);
             }
@@ -44,7 +43,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Amazon.Api
             using (var mock = AutoMock.GetLoose())
             {
                 AmazonMwsWebClientSettingsFactory testObject = mock.Create<AmazonMwsWebClientSettingsFactory>();
-                AmazonShipmentEntity amazonShipment = null;
+                AmazonSFPShipmentEntity amazonShipment = null;
 
                 Assert.Throws<ArgumentNullException>(() => testObject.Create(amazonShipment));
             }
@@ -56,7 +55,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Amazon.Api
             using (var mock = AutoMock.GetLoose())
             {
                 AmazonMwsWebClientSettingsFactory testObject = mock.Create<AmazonMwsWebClientSettingsFactory>();
-                AmazonShipmentEntity amazonShipment = null;
+                AmazonSFPShipmentEntity amazonShipment = null;
 
                 Assert.Throws<ArgumentNullException>(() => testObject.Create(amazonShipment));
             }

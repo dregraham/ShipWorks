@@ -1,4 +1,4 @@
-﻿using ShipWorks.Shipping.Carriers.Amazon;
+﻿using ShipWorks.Shipping.Carriers.Amazon.SFP;
 using ShipWorks.UI.Controls;
 using System.Windows.Forms;
 
@@ -34,7 +34,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         {
             this.consolidator = new ShipWorks.Stores.Platforms.ChannelAdvisor.ChannelAdvisorConsolidatorSettingsControl();
             this.attributes = new ShipWorks.Stores.Platforms.ChannelAdvisor.ChannelAdvisorAttributesSettingsControl();
-            this.amazon = new ShipWorks.Shipping.Carriers.Amazon.AmazonShippingSettingsControl();
+            this.amazon = new ShipWorks.Shipping.Carriers.Amazon.SFP.AmazonSFPShippingSettingsControl();
             this.daysBack = new ChannelAdvisorDownloadModifiedDaysBackControl();
             this.daysBackTitle = new ShipWorks.UI.Controls.SectionTitle();
             this.daysBackPanel = new System.Windows.Forms.Panel();
@@ -120,7 +120,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
 
         private ChannelAdvisorAttributesSettingsControl attributes;
         private ChannelAdvisorConsolidatorSettingsControl consolidator;
-        private AmazonShippingSettingsControl amazon;
+        private AmazonSFPShippingSettingsControl amazon;
         private Panel daysBackPanel;
         private ChannelAdvisorDownloadModifiedDaysBackControl daysBack;
         private SectionTitle daysBackTitle;

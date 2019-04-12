@@ -181,7 +181,7 @@ namespace ShipWorks.Tests.Shipping.Profiles
 
             var testObject = CreateShippingProfile(profile, new ShortcutEntity());
 
-            testObject.ChangeProvider(ShipmentTypeCode.Amazon);
+            testObject.ChangeProvider(ShipmentTypeCode.AmazonSFP);
             Assert.Empty(profile.Packages);
         }
 
@@ -201,7 +201,7 @@ namespace ShipWorks.Tests.Shipping.Profiles
         [Fact]
         public void ChangeShortcut_SetsShortcutEntityValues()
         {
-            ShippingProfileEntity profile = new ShippingProfileEntity { ShipmentType = ShipmentTypeCode.Amazon };
+            ShippingProfileEntity profile = new ShippingProfileEntity { ShipmentType = ShipmentTypeCode.AmazonSFP };
             var testObject = CreateShippingProfile(profile, new ShortcutEntity());
 
             testObject.ChangeShortcut(new KeyboardShortcutData(KeyboardShortcutCommand.ApplyWeight, VirtualKeys.A, KeyboardShortcutModifiers.Alt, null), "abcd");
@@ -215,7 +215,7 @@ namespace ShipWorks.Tests.Shipping.Profiles
         [Fact]
         public void ChangeShortcut_SetsShortcutEntityValues_WhenKeyboardShortcutValuesAreNull()
         {
-            ShippingProfileEntity profile = new ShippingProfileEntity { ShipmentType = ShipmentTypeCode.Amazon };
+            ShippingProfileEntity profile = new ShippingProfileEntity { ShipmentType = ShipmentTypeCode.AmazonSFP };
             var testObject = CreateShippingProfile(profile, new ShortcutEntity());
 
             testObject.ChangeShortcut(new KeyboardShortcutData(null, null, null, null), "abcd");
@@ -229,7 +229,7 @@ namespace ShipWorks.Tests.Shipping.Profiles
         [Fact]
         public void ChangeShortcut_SetsShortcutEntityValues_WhenKeyboardShortcutIsNull()
         {
-            ShippingProfileEntity profile = new ShippingProfileEntity { ShipmentType = ShipmentTypeCode.Amazon };
+            ShippingProfileEntity profile = new ShippingProfileEntity { ShipmentType = ShipmentTypeCode.AmazonSFP };
             var testObject = CreateShippingProfile(profile, new ShortcutEntity());
 
             testObject.ChangeShortcut(null, "abcd");
@@ -243,7 +243,7 @@ namespace ShipWorks.Tests.Shipping.Profiles
         [Fact]
         public void ChangeShortcut_TrimsBarcode()
         {
-            ShippingProfileEntity profile = new ShippingProfileEntity { ShipmentType = ShipmentTypeCode.Amazon };
+            ShippingProfileEntity profile = new ShippingProfileEntity { ShipmentType = ShipmentTypeCode.AmazonSFP };
             var testObject = CreateShippingProfile(profile, new ShortcutEntity());
 
             testObject.ChangeShortcut(null, "           abcd  ");

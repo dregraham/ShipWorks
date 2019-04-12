@@ -10,12 +10,12 @@ namespace ShipWorks.Shipping.Carriers
     /// <summary>
     /// Basic repository for retrieving postal (w/o postage) accounts
     /// </summary>
-    [KeyedComponent(typeof(ICarrierAccountRetriever), ShipmentTypeCode.Amazon)]
+    [KeyedComponent(typeof(ICarrierAccountRetriever), ShipmentTypeCode.AmazonSFP)]
     [KeyedComponent(typeof(ICarrierAccountRetriever), ShipmentTypeCode.BestRate)]
     [KeyedComponent(typeof(ICarrierAccountRetriever), ShipmentTypeCode.None)]
     [KeyedComponent(typeof(ICarrierAccountRetriever), ShipmentTypeCode.Other)]
     [KeyedComponent(typeof(ICarrierAccountRetriever), ShipmentTypeCode.PostalWebTools)]
-    [KeyedComponent(typeof(ICarrierAccountRepository<NullCarrierAccount, ICarrierAccount>), ShipmentTypeCode.Amazon)]
+    [KeyedComponent(typeof(ICarrierAccountRepository<NullCarrierAccount, ICarrierAccount>), ShipmentTypeCode.AmazonSFP)]
     [KeyedComponent(typeof(ICarrierAccountRepository<NullCarrierAccount, ICarrierAccount>), ShipmentTypeCode.BestRate)]
     [KeyedComponent(typeof(ICarrierAccountRepository<NullCarrierAccount, ICarrierAccount>), ShipmentTypeCode.None)]
     [KeyedComponent(typeof(ICarrierAccountRepository<NullCarrierAccount, ICarrierAccount>), ShipmentTypeCode.Other)]

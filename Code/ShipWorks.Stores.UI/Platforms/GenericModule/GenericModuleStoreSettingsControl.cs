@@ -6,8 +6,8 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping;
 using ShipWorks.Stores.Platforms.Amazon;
-using ShipWorks.Shipping.Carriers.Amazon;
 using Interapptive.Shared.UI;
+using ShipWorks.Shipping.Carriers.Amazon.SFP;
 
 namespace ShipWorks.Stores.UI.Platforms.GenericModule
 {
@@ -26,7 +26,7 @@ namespace ShipWorks.Stores.UI.Platforms.GenericModule
 
             // Show Amazon control if the Amazon ctrl is configured.
             ShippingSettingsEntity settings = ShippingSettings.Fetch();
-            amazonShippingSettingsControl.Visible = settings.ConfiguredTypes.Contains(ShipmentTypeCode.Amazon);
+            amazonShippingSettingsControl.Visible = settings.ConfiguredTypes.Contains(ShipmentTypeCode.AmazonSFP);
         }
 
         /// <summary>
@@ -60,7 +60,7 @@ namespace ShipWorks.Stores.UI.Platforms.GenericModule
             {
                 amazonShippingSettingsControl.SaveToEntity(amazonCredentials);
             }
-            catch (AmazonShippingException ex)
+            catch (AmazonSFPShippingException ex)
             {
                 MessageHelper.ShowError(this, ex.Message);
                 return false;

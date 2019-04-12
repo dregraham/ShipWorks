@@ -46,7 +46,7 @@ namespace ShipWorks.Shipping.Tests.Profiles
         {
             testObject.InitializeForCurrentSession();
             
-            var originalShipments = new[] { new ShipmentEntity() { ShipmentID = 123, ShipmentTypeCode = ShipmentTypeCode.Amazon, Insurance = true, IsNew = false} };
+            var originalShipments = new[] { new ShipmentEntity() { ShipmentID = 123, ShipmentTypeCode = ShipmentTypeCode.AmazonSFP, Insurance = true, IsNew = false} };
             var newShipments = new[] { new ShipmentEntity() { ShipmentID = 123, ShipmentTypeCode = ShipmentTypeCode.Usps, Insurance = false, IsNew = false } };
 
             SendMessage(originalShipments, newShipments);

@@ -58,9 +58,9 @@ namespace ShipWorks.Shipping
         [ShipmentTypeIcon("usps")]
         Usps = 15,
 
-        [Description("Amazon")]
+        [Description("Amazon Seller Fulfilled Prime")]
         [ShipmentTypeIcon("amazon")]
-        Amazon = 16,
+        AmazonSFP = 16,
 
         [Description("DHL Express")]
         [ShipmentTypeIcon("dhl")]
@@ -69,6 +69,10 @@ namespace ShipWorks.Shipping
         [Description("Asendia")]
         [ShipmentTypeIcon("asendia")]
         Asendia = 18,
+
+        [Description("Amazon Shipping")]
+        [ShipmentTypeIcon("amazon")]
+        AmazonSWA = 19,
 
         [Description("None")]
         None = 99

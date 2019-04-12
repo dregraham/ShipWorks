@@ -23,7 +23,7 @@ namespace ShipWorks.Tests.Stores.Platforms.ChannelAdvisor
         private readonly EndiciaShipmentEntity endiciaShipmentEntity;
         private readonly UspsShipmentEntity uspsShipmentEntity;
         private readonly OtherShipmentEntity otherShipmentEntity;
-        private AmazonShipmentEntity amazonShipmentEntity;
+        private AmazonSFPShipmentEntity amazonShipmentEntity;
 
 
         public ChannelAdvisorOnlineUpdaterTest()
@@ -38,7 +38,7 @@ namespace ShipWorks.Tests.Stores.Platforms.ChannelAdvisor
             postalShipmentEntity = new PostalShipmentEntity { Service = (int) PostalServiceType.FirstClass };
             otherShipmentEntity = new OtherShipmentEntity { Carrier = "Some other carrier", Service = "Fast Ground" };
             endiciaShipmentEntity = new EndiciaShipmentEntity();
-            amazonShipmentEntity = new AmazonShipmentEntity { ShippingServiceName = "UPS Ground", CarrierName = "UPS" };
+            amazonShipmentEntity = new AmazonSFPShipmentEntity { ShippingServiceName = "UPS Ground", CarrierName = "UPS" };
         }
 
         [Fact]
@@ -342,7 +342,7 @@ namespace ShipWorks.Tests.Stores.Platforms.ChannelAdvisor
             amazonShipmentEntity.CarrierName = carrierName;
             amazonShipmentEntity.ShippingServiceName = shippingServiceName;
 
-            SetupShipmentDefaults(ShipmentTypeCode.Amazon);
+            SetupShipmentDefaults(ShipmentTypeCode.AmazonSFP);
 
             string code = ChannelAdvisorOnlineUpdater.GetShipmentClassCode(shipmentEntity, storeEntity);
 
@@ -363,7 +363,7 @@ namespace ShipWorks.Tests.Stores.Platforms.ChannelAdvisor
         {
             amazonShipmentEntity.CarrierName = carrierName;
 
-            SetupShipmentDefaults(ShipmentTypeCode.Amazon);
+            SetupShipmentDefaults(ShipmentTypeCode.AmazonSFP);
 
             string code = ChannelAdvisorOnlineUpdater.GetCarrierCode(shipmentEntity, storeEntity);
 
@@ -375,7 +375,7 @@ namespace ShipWorks.Tests.Stores.Platforms.ChannelAdvisor
         {
             amazonShipmentEntity = null;
 
-            SetupShipmentDefaults(ShipmentTypeCode.Amazon);
+            SetupShipmentDefaults(ShipmentTypeCode.AmazonSFP);
 
             Assert.Throws<ArgumentNullException>(
                 () => ChannelAdvisorOnlineUpdater.GetCarrierCode(shipmentEntity, storeEntity));
@@ -386,7 +386,7 @@ namespace ShipWorks.Tests.Stores.Platforms.ChannelAdvisor
         {
             amazonShipmentEntity = null;
 
-            SetupShipmentDefaults(ShipmentTypeCode.Amazon);
+            SetupShipmentDefaults(ShipmentTypeCode.AmazonSFP);
 
             Assert.Throws<ArgumentNullException>(
                 () => ChannelAdvisorOnlineUpdater.GetCarrierCode(shipmentEntity, storeEntity));
@@ -444,7 +444,7 @@ namespace ShipWorks.Tests.Stores.Platforms.ChannelAdvisor
                 Other = otherShipmentEntity,
                 FedEx = fedExEntity,
                 Ups = upsEntity,
-                Amazon = amazonShipmentEntity
+                AmazonSFP = amazonShipmentEntity
             };
         }
     }

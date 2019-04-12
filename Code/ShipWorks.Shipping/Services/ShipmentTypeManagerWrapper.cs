@@ -95,7 +95,7 @@ namespace ShipWorks.Shipping.Services
             IAmazonOrder order = shipment.Order as IAmazonOrder;
             if (order != null && order.IsPrime)
             {
-                initialShipmentType = ShipmentTypeCode.Amazon;
+                initialShipmentType = ShipmentTypeCode.AmazonSFP;
             }
 
             ShipmentType shipmentType = shipmentTypeLookup[initialShipmentType];
