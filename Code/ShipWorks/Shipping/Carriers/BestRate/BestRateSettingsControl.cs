@@ -19,7 +19,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             ShipmentTypeCode.Express1Endicia,
             ShipmentTypeCode.Express1Usps,
             ShipmentTypeCode.UpsWorldShip,
-            ShipmentTypeCode.Amazon,
+            ShipmentTypeCode.AmazonSFP,
             ShipmentTypeCode.iParcel
         };
 

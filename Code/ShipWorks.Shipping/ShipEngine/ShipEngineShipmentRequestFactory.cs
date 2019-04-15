@@ -26,6 +26,14 @@ namespace ShipWorks.Shipping.ShipEngine
         }
 
         /// <summary>
+        /// Create a PurchaseLabelWithoutShipmentRequest
+        /// </summary>
+        public PurchaseLabelWithoutShipmentRequest CreatePurchaseLabelWithoutShipmentRequest(ShipmentEntity shipment)
+        {
+            return shipmentElementFactory.CreatePurchaseLabelWithoutShipmentRequest(shipment);
+        }
+
+        /// <summary>
         /// Creates a ShipEngine purchase label request
         /// </summary>
         public PurchaseLabelRequest CreatePurchaseLabelRequest(ShipmentEntity shipment)
@@ -52,7 +60,7 @@ namespace ShipWorks.Shipping.ShipEngine
         /// <summary>
         /// Creates a ShipEngine rate request
         /// </summary>
-        public RateShipmentRequest CreateRateShipmentRequest(ShipmentEntity shipment)
+        public virtual RateShipmentRequest CreateRateShipmentRequest(ShipmentEntity shipment)
         {
             MethodConditions.EnsureArgumentIsNotNull(shipment, nameof(shipment));
             EnsureCarrierShipmentIsNotNull(shipment);
@@ -96,13 +104,13 @@ namespace ShipWorks.Shipping.ShipEngine
         /// <summary>
         /// Creates the ShipEngine advanced options node
         /// </summary>
-        protected abstract Dictionary<string, object> CreateAdvancedOptions(ShipmentEntity shipment);
+        protected abstract AdvancedOptions CreateAdvancedOptions(ShipmentEntity shipment);
 
         /// <summary>
         /// Creates the ShipEngine customs node
         /// </summary>
         protected abstract InternationalOptions CreateCustoms(ShipmentEntity shipment);
-        
+
         /// <summary>
         /// Gets the carrier specific packages
         /// </summary>

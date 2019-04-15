@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Autofac;
-using ShipWorks.Shipping.Carriers.Amazon;
+using ShipWorks.Shipping.Carriers.Amazon.SFP;
 using ShipWorks.Shipping.Carriers.FedEx;
 using ShipWorks.Shipping.Carriers.iParcel;
 using ShipWorks.Shipping.Carriers.OnTrac;
@@ -32,7 +32,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Carriers
         }
 
         [Theory]
-        [InlineData(ShipmentTypeCode.Amazon, typeof(AmazonShipmentSetupWizard))]
+        [InlineData(ShipmentTypeCode.AmazonSFP, typeof(AmazonSFPShipmentSetupWizard))]
         [InlineData(ShipmentTypeCode.Endicia, typeof(EndiciaSetupWizard))]
         [InlineData(ShipmentTypeCode.Express1Endicia, typeof(Express1EndiciaSetupWizard))]
         [InlineData(ShipmentTypeCode.Express1Usps, typeof(Express1UspsSetupWizard))]

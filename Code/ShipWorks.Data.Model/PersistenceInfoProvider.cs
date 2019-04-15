@@ -46,7 +46,7 @@ namespace ShipWorks.Data.Model
 		/// <summary>Method which initializes the internal datastores with the structure of hierarchical types.</summary>
 		private void Init()
 		{
-			this.InitClass(236);
+			this.InitClass(239);
 			InitActionEntityMappings();
 			InitActionFilterTriggerEntityMappings();
 			InitActionQueueEntityMappings();
@@ -57,10 +57,13 @@ namespace ShipWorks.Data.Model
 			InitAmazonOrderEntityMappings();
 			InitAmazonOrderItemEntityMappings();
 			InitAmazonOrderSearchEntityMappings();
-			InitAmazonProfileEntityMappings();
-			InitAmazonServiceTypeEntityMappings();
-			InitAmazonShipmentEntityMappings();
+			InitAmazonSFPProfileEntityMappings();
+			InitAmazonSFPServiceTypeEntityMappings();
+			InitAmazonSFPShipmentEntityMappings();
 			InitAmazonStoreEntityMappings();
+			InitAmazonSWAAccountEntityMappings();
+			InitAmazonSWAProfileEntityMappings();
+			InitAmazonSWAShipmentEntityMappings();
 			InitAmeriCommerceStoreEntityMappings();
 			InitAsendiaAccountEntityMappings();
 			InitAsendiaProfileEntityMappings();
@@ -429,46 +432,46 @@ namespace ShipWorks.Data.Model
 			this.AddElementFieldMapping("AmazonOrderSearchEntity", "OriginalOrderID", "OriginalOrderID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 3);
 		}
 
-		/// <summary>Inits AmazonProfileEntity's mappings</summary>
-		private void InitAmazonProfileEntityMappings()
+		/// <summary>Inits AmazonSFPProfileEntity's mappings</summary>
+		private void InitAmazonSFPProfileEntityMappings()
 		{
-			this.AddElementMapping("AmazonProfileEntity", @"ShipWorksLocal", @"dbo", "AmazonProfile", 4, 0);
-			this.AddElementFieldMapping("AmazonProfileEntity", "ShippingProfileID", "ShippingProfileID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 0);
-			this.AddElementFieldMapping("AmazonProfileEntity", "DeliveryExperience", "DeliveryExperience", true, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 1);
-			this.AddElementFieldMapping("AmazonProfileEntity", "ShippingServiceID", "ShippingServiceID", true, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 2);
-			this.AddElementFieldMapping("AmazonProfileEntity", "Reference1", "Reference1", true, "NVarChar", 300, 0, 0, false, "", null, typeof(System.String), 3);
+			this.AddElementMapping("AmazonSFPProfileEntity", @"ShipWorksLocal", @"dbo", "AmazonSFPProfile", 4, 0);
+			this.AddElementFieldMapping("AmazonSFPProfileEntity", "ShippingProfileID", "ShippingProfileID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 0);
+			this.AddElementFieldMapping("AmazonSFPProfileEntity", "DeliveryExperience", "DeliveryExperience", true, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 1);
+			this.AddElementFieldMapping("AmazonSFPProfileEntity", "ShippingServiceID", "ShippingServiceID", true, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 2);
+			this.AddElementFieldMapping("AmazonSFPProfileEntity", "Reference1", "Reference1", true, "NVarChar", 300, 0, 0, false, "", null, typeof(System.String), 3);
 		}
 
-		/// <summary>Inits AmazonServiceTypeEntity's mappings</summary>
-		private void InitAmazonServiceTypeEntityMappings()
+		/// <summary>Inits AmazonSFPServiceTypeEntity's mappings</summary>
+		private void InitAmazonSFPServiceTypeEntityMappings()
 		{
-			this.AddElementMapping("AmazonServiceTypeEntity", @"ShipWorksLocal", @"dbo", "AmazonServiceType", 3, 0);
-			this.AddElementFieldMapping("AmazonServiceTypeEntity", "AmazonServiceTypeID", "AmazonServiceTypeID", false, "Int", 0, 10, 0, true, "SCOPE_IDENTITY()", null, typeof(System.Int32), 0);
-			this.AddElementFieldMapping("AmazonServiceTypeEntity", "ApiValue", "ApiValue", false, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 1);
-			this.AddElementFieldMapping("AmazonServiceTypeEntity", "Description", "Description", false, "NVarChar", 100, 0, 0, false, "", null, typeof(System.String), 2);
+			this.AddElementMapping("AmazonSFPServiceTypeEntity", @"ShipWorksLocal", @"dbo", "AmazonSFPServiceType", 3, 0);
+			this.AddElementFieldMapping("AmazonSFPServiceTypeEntity", "AmazonSFPServiceTypeID", "AmazonSFPServiceTypeID", false, "Int", 0, 10, 0, true, "SCOPE_IDENTITY()", null, typeof(System.Int32), 0);
+			this.AddElementFieldMapping("AmazonSFPServiceTypeEntity", "ApiValue", "ApiValue", false, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 1);
+			this.AddElementFieldMapping("AmazonSFPServiceTypeEntity", "Description", "Description", false, "NVarChar", 100, 0, 0, false, "", null, typeof(System.String), 2);
 		}
 
-		/// <summary>Inits AmazonShipmentEntity's mappings</summary>
-		private void InitAmazonShipmentEntityMappings()
+		/// <summary>Inits AmazonSFPShipmentEntity's mappings</summary>
+		private void InitAmazonSFPShipmentEntityMappings()
 		{
-			this.AddElementMapping("AmazonShipmentEntity", @"ShipWorksLocal", @"dbo", "AmazonShipment", 17, 0);
-			this.AddElementFieldMapping("AmazonShipmentEntity", "ShipmentID", "ShipmentID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 0);
-			this.AddElementFieldMapping("AmazonShipmentEntity", "CarrierName", "CarrierName", false, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 1);
-			this.AddElementFieldMapping("AmazonShipmentEntity", "ShippingServiceName", "ShippingServiceName", false, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 2);
-			this.AddElementFieldMapping("AmazonShipmentEntity", "ShippingServiceID", "ShippingServiceID", false, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 3);
-			this.AddElementFieldMapping("AmazonShipmentEntity", "InsuranceValue", "InsuranceValue", false, "Money", 0, 19, 4, false, "", null, typeof(System.Decimal), 4);
-			this.AddElementFieldMapping("AmazonShipmentEntity", "DimsProfileID", "DimsProfileID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 5);
-			this.AddElementFieldMapping("AmazonShipmentEntity", "DimsLength", "DimsLength", false, "Float", 0, 38, 0, false, "", null, typeof(System.Double), 6);
-			this.AddElementFieldMapping("AmazonShipmentEntity", "DimsWidth", "DimsWidth", false, "Float", 0, 38, 0, false, "", null, typeof(System.Double), 7);
-			this.AddElementFieldMapping("AmazonShipmentEntity", "DimsHeight", "DimsHeight", false, "Float", 0, 38, 0, false, "", null, typeof(System.Double), 8);
-			this.AddElementFieldMapping("AmazonShipmentEntity", "DimsWeight", "DimsWeight", false, "Float", 0, 38, 0, false, "", null, typeof(System.Double), 9);
-			this.AddElementFieldMapping("AmazonShipmentEntity", "DimsAddWeight", "DimsAddWeight", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 10);
-			this.AddElementFieldMapping("AmazonShipmentEntity", "DeliveryExperience", "DeliveryExperience", false, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 11);
-			this.AddElementFieldMapping("AmazonShipmentEntity", "DeclaredValue", "DeclaredValue", true, "Money", 0, 19, 4, false, "", null, typeof(System.Decimal), 12);
-			this.AddElementFieldMapping("AmazonShipmentEntity", "AmazonUniqueShipmentID", "AmazonUniqueShipmentID", true, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 13);
-			this.AddElementFieldMapping("AmazonShipmentEntity", "Insurance", "Insurance", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 14);
-			this.AddElementFieldMapping("AmazonShipmentEntity", "Reference1", "Reference1", false, "NVarChar", 300, 0, 0, false, "", null, typeof(System.String), 15);
-			this.AddElementFieldMapping("AmazonShipmentEntity", "RequestedLabelFormat", "RequestedLabelFormat", false, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 16);
+			this.AddElementMapping("AmazonSFPShipmentEntity", @"ShipWorksLocal", @"dbo", "AmazonSFPShipment", 17, 0);
+			this.AddElementFieldMapping("AmazonSFPShipmentEntity", "ShipmentID", "ShipmentID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 0);
+			this.AddElementFieldMapping("AmazonSFPShipmentEntity", "CarrierName", "CarrierName", false, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 1);
+			this.AddElementFieldMapping("AmazonSFPShipmentEntity", "ShippingServiceName", "ShippingServiceName", false, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 2);
+			this.AddElementFieldMapping("AmazonSFPShipmentEntity", "ShippingServiceID", "ShippingServiceID", false, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 3);
+			this.AddElementFieldMapping("AmazonSFPShipmentEntity", "InsuranceValue", "InsuranceValue", false, "Money", 0, 19, 4, false, "", null, typeof(System.Decimal), 4);
+			this.AddElementFieldMapping("AmazonSFPShipmentEntity", "DimsProfileID", "DimsProfileID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 5);
+			this.AddElementFieldMapping("AmazonSFPShipmentEntity", "DimsLength", "DimsLength", false, "Float", 0, 38, 0, false, "", null, typeof(System.Double), 6);
+			this.AddElementFieldMapping("AmazonSFPShipmentEntity", "DimsWidth", "DimsWidth", false, "Float", 0, 38, 0, false, "", null, typeof(System.Double), 7);
+			this.AddElementFieldMapping("AmazonSFPShipmentEntity", "DimsHeight", "DimsHeight", false, "Float", 0, 38, 0, false, "", null, typeof(System.Double), 8);
+			this.AddElementFieldMapping("AmazonSFPShipmentEntity", "DimsWeight", "DimsWeight", false, "Float", 0, 38, 0, false, "", null, typeof(System.Double), 9);
+			this.AddElementFieldMapping("AmazonSFPShipmentEntity", "DimsAddWeight", "DimsAddWeight", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 10);
+			this.AddElementFieldMapping("AmazonSFPShipmentEntity", "DeliveryExperience", "DeliveryExperience", false, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 11);
+			this.AddElementFieldMapping("AmazonSFPShipmentEntity", "DeclaredValue", "DeclaredValue", true, "Money", 0, 19, 4, false, "", null, typeof(System.Decimal), 12);
+			this.AddElementFieldMapping("AmazonSFPShipmentEntity", "AmazonUniqueShipmentID", "AmazonUniqueShipmentID", true, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 13);
+			this.AddElementFieldMapping("AmazonSFPShipmentEntity", "Insurance", "Insurance", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 14);
+			this.AddElementFieldMapping("AmazonSFPShipmentEntity", "Reference1", "Reference1", false, "NVarChar", 300, 0, 0, false, "", null, typeof(System.String), 15);
+			this.AddElementFieldMapping("AmazonSFPShipmentEntity", "RequestedLabelFormat", "RequestedLabelFormat", false, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 16);
 		}
 
 		/// <summary>Inits AmazonStoreEntity's mappings</summary>
@@ -494,6 +497,55 @@ namespace ShipWorks.Data.Model
 			this.AddElementFieldMapping("AmazonStoreEntity", "ExcludeFBA", "ExcludeFBA", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 16);
 			this.AddElementFieldMapping("AmazonStoreEntity", "DomainName", "DomainName", false, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 17);
 			this.AddElementFieldMapping("AmazonStoreEntity", "AmazonVATS", "AmazonVATS", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 18);
+		}
+
+		/// <summary>Inits AmazonSWAAccountEntity's mappings</summary>
+		private void InitAmazonSWAAccountEntityMappings()
+		{
+			this.AddElementMapping("AmazonSWAAccountEntity", @"ShipWorksLocal", @"dbo", "AmazonSWAAccount", 15, 0);
+			this.AddElementFieldMapping("AmazonSWAAccountEntity", "AmazonSWAAccountID", "AmazonSWAAccountID", false, "BigInt", 0, 19, 0, true, "SCOPE_IDENTITY()", null, typeof(System.Int64), 0);
+			this.AddElementFieldMapping("AmazonSWAAccountEntity", "RowVersion", "RowVersion", false, "Timestamp", 2147483647, 0, 0, false, "", null, typeof(System.Byte[]), 1);
+			this.AddElementFieldMapping("AmazonSWAAccountEntity", "ShipEngineCarrierId", "ShipEngineCarrierId", false, "NVarChar", 12, 0, 0, false, "", null, typeof(System.String), 2);
+			this.AddElementFieldMapping("AmazonSWAAccountEntity", "Description", "Description", false, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 3);
+			this.AddElementFieldMapping("AmazonSWAAccountEntity", "FirstName", "FirstName", false, "NVarChar", 30, 0, 0, false, "", null, typeof(System.String), 4);
+			this.AddElementFieldMapping("AmazonSWAAccountEntity", "MiddleName", "MiddleName", false, "NVarChar", 30, 0, 0, false, "", null, typeof(System.String), 5);
+			this.AddElementFieldMapping("AmazonSWAAccountEntity", "LastName", "LastName", false, "NVarChar", 30, 0, 0, false, "", null, typeof(System.String), 6);
+			this.AddElementFieldMapping("AmazonSWAAccountEntity", "Company", "Company", false, "NVarChar", 30, 0, 0, false, "", null, typeof(System.String), 7);
+			this.AddElementFieldMapping("AmazonSWAAccountEntity", "Street1", "Street1", false, "NVarChar", 43, 0, 0, false, "", null, typeof(System.String), 8);
+			this.AddElementFieldMapping("AmazonSWAAccountEntity", "City", "City", false, "NVarChar", 25, 0, 0, false, "", null, typeof(System.String), 9);
+			this.AddElementFieldMapping("AmazonSWAAccountEntity", "StateProvCode", "StateProvCode", false, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 10);
+			this.AddElementFieldMapping("AmazonSWAAccountEntity", "PostalCode", "PostalCode", false, "NVarChar", 10, 0, 0, false, "", null, typeof(System.String), 11);
+			this.AddElementFieldMapping("AmazonSWAAccountEntity", "CountryCode", "CountryCode", false, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 12);
+			this.AddElementFieldMapping("AmazonSWAAccountEntity", "Email", "Email", false, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 13);
+			this.AddElementFieldMapping("AmazonSWAAccountEntity", "Phone", "Phone", false, "NVarChar", 15, 0, 0, false, "", null, typeof(System.String), 14);
+		}
+
+		/// <summary>Inits AmazonSWAProfileEntity's mappings</summary>
+		private void InitAmazonSWAProfileEntityMappings()
+		{
+			this.AddElementMapping("AmazonSWAProfileEntity", @"ShipWorksLocal", @"dbo", "AmazonSWAProfile", 3, 0);
+			this.AddElementFieldMapping("AmazonSWAProfileEntity", "ShippingProfileID", "ShippingProfileID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 0);
+			this.AddElementFieldMapping("AmazonSWAProfileEntity", "AmazonSWAAccountID", "AmazonSWAAccountID", true, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 1);
+			this.AddElementFieldMapping("AmazonSWAProfileEntity", "Service", "Service", true, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 2);
+		}
+
+		/// <summary>Inits AmazonSWAShipmentEntity's mappings</summary>
+		private void InitAmazonSWAShipmentEntityMappings()
+		{
+			this.AddElementMapping("AmazonSWAShipmentEntity", @"ShipWorksLocal", @"dbo", "AmazonSWAShipment", 13, 0);
+			this.AddElementFieldMapping("AmazonSWAShipmentEntity", "ShipmentID", "ShipmentID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 0);
+			this.AddElementFieldMapping("AmazonSWAShipmentEntity", "AmazonSWAAccountID", "AmazonSWAAccountID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 1);
+			this.AddElementFieldMapping("AmazonSWAShipmentEntity", "Service", "Service", false, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 2);
+			this.AddElementFieldMapping("AmazonSWAShipmentEntity", "RequestedLabelFormat", "RequestedLabelFormat", false, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 3);
+			this.AddElementFieldMapping("AmazonSWAShipmentEntity", "ShipEngineLabelID", "ShipEngineLabelID", false, "NVarChar", 12, 0, 0, false, "", null, typeof(System.String), 4);
+			this.AddElementFieldMapping("AmazonSWAShipmentEntity", "DimsProfileID", "DimsProfileID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 5);
+			this.AddElementFieldMapping("AmazonSWAShipmentEntity", "DimsLength", "DimsLength", false, "Float", 0, 38, 0, false, "", null, typeof(System.Double), 6);
+			this.AddElementFieldMapping("AmazonSWAShipmentEntity", "DimsWidth", "DimsWidth", false, "Float", 0, 38, 0, false, "", null, typeof(System.Double), 7);
+			this.AddElementFieldMapping("AmazonSWAShipmentEntity", "DimsHeight", "DimsHeight", false, "Float", 0, 38, 0, false, "", null, typeof(System.Double), 8);
+			this.AddElementFieldMapping("AmazonSWAShipmentEntity", "DimsAddWeight", "DimsAddWeight", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 9);
+			this.AddElementFieldMapping("AmazonSWAShipmentEntity", "DimsWeight", "DimsWeight", false, "Float", 0, 38, 0, false, "", null, typeof(System.Double), 10);
+			this.AddElementFieldMapping("AmazonSWAShipmentEntity", "InsuranceValue", "InsuranceValue", false, "Money", 0, 19, 4, false, "", null, typeof(System.Decimal), 11);
+			this.AddElementFieldMapping("AmazonSWAShipmentEntity", "Insurance", "Insurance", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 12);
 		}
 
 		/// <summary>Inits AmeriCommerceStoreEntity's mappings</summary>
@@ -2792,7 +2844,7 @@ namespace ShipWorks.Data.Model
 			this.AddElementMapping("ProductListItemEntity", @"ShipWorksLocal", @"dbo", "ProductListView", 10, 4);
 			this.AddElementFieldMapping("ProductListItemEntity", "ProductVariantID", "ProductVariantID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 0);
 			this.AddElementFieldMapping("ProductListItemEntity", "SKU", "SKU", false, "NVarChar", 300, 0, 0, false, "", null, typeof(System.String), 1);
-			this.AddElementFieldMapping("ProductListItemEntity", "Name", "Name", false, "NVarChar", 300, 0, 0, false, "", null, typeof(System.String), 2);
+			this.AddElementFieldMapping("ProductListItemEntity", "Name", "Name", true, "NVarChar", 300, 0, 0, false, "", null, typeof(System.String), 2);
 			this.AddElementFieldMapping("ProductListItemEntity", "Length", "Length", true, "Decimal", 0, 10, 2, false, "", null, typeof(System.Decimal), 3);
 			this.AddElementFieldMapping("ProductListItemEntity", "Width", "Width", true, "Decimal", 0, 10, 2, false, "", null, typeof(System.Decimal), 4);
 			this.AddElementFieldMapping("ProductListItemEntity", "Height", "Height", true, "Decimal", 0, 10, 2, false, "", null, typeof(System.Decimal), 5);

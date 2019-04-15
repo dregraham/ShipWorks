@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Autofac;
-using ShipWorks.Shipping.Carriers.Amazon.Api;
+using ShipWorks.Shipping.Carriers.Amazon.SFP.Api;
 using ShipWorks.Shipping.Carriers.Dhl;
 using ShipWorks.Shipping.Carriers.FedEx;
 using ShipWorks.Shipping.Carriers.iParcel;
@@ -28,7 +28,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Carriers
         }
 
         [Theory]
-        [InlineData(ShipmentTypeCode.Amazon, typeof(AmazonRatingService))]
+        [InlineData(ShipmentTypeCode.AmazonSFP, typeof(AmazonSFPRatingService))]
         [InlineData(ShipmentTypeCode.Endicia, typeof(EndiciaRatingService))]
         [InlineData(ShipmentTypeCode.Express1Endicia, typeof(Express1EndiciaRatingService))]
         [InlineData(ShipmentTypeCode.Express1Usps, typeof(Express1UspsRatingService))]

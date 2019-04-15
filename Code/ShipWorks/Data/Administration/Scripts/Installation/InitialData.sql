@@ -287,9 +287,9 @@ INSERT INTO [dbo].[ActionTask] ([ActionID], [TaskIdentifier], [TaskSettings], [S
 VALUES (@ActionID, N'FinishProcessingBatch', CONVERT(xml, N'<Settings />', 1), 0, -1, -1, 0, -1, 0, 0, 0)
 GO
 
-PRINT (N'Add Initial AmazonServiceTypes')
+PRINT (N'Add Initial AmazonSFPServiceTypes')
 GO
-INSERT INTO dbo.AmazonServiceType
+INSERT INTO dbo.AmazonSFPServiceType
 (ApiValue, Description)
 VALUES
 ('USPS_PTP_FC', 'USPS First Class'),

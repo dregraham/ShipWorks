@@ -1,7 +1,7 @@
 ﻿using System;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.Carriers.Amazon;
+using ShipWorks.Shipping.Carriers.Amazon.SFP;
 using ShipWorks.Shipping.Editing.Rating;
 
 namespace ShipWorks.Shipping
@@ -40,9 +40,9 @@ namespace ShipWorks.Shipping
 
                 // If we are getting a cached amazon rate send the AmazonRatesRetrievedMessage
                 // to update the Amazon shipping service control
-                if ((ShipmentTypeCode) shipment.ShipmentType == ShipmentTypeCode.Amazon)
+                if ((ShipmentTypeCode) shipment.ShipmentType == ShipmentTypeCode.AmazonSFP)
                 {
-                    messenger.Send(new AmazonRatesRetrievedMessage(this, rateGroup));
+                    messenger.Send(new AmazonSFPRatesRetrievedMessage(this, rateGroup));
                 }
 
                 return rateGroup;

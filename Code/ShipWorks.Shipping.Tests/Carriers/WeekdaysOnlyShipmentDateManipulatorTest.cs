@@ -62,7 +62,7 @@ namespace ShipWorks.Shipping.Tests.Carriers
             SetupDefaultMocks(new ShipmentDateCutoff(false, TimeSpan.MinValue));
 
             WeekdaysOnlyShipmentDateManipulator testObject = mock.Create<WeekdaysOnlyShipmentDateManipulator>();
-            shipment.ShipmentTypeCode = ShipmentTypeCode.Amazon;
+            shipment.ShipmentTypeCode = ShipmentTypeCode.AmazonSFP;
             testObject.Manipulate(shipment);
 
             shippingSettingsEntity.Verify(x => x.GetShipmentDateCutoff(shipment.ShipmentTypeCode));

@@ -92,17 +92,26 @@ namespace ShipWorks.Data.Model.Linq
 				case ShipWorks.Data.Model.EntityType.AmazonOrderSearchEntity:
 					toReturn = this.AmazonOrderSearch;
 					break;
-				case ShipWorks.Data.Model.EntityType.AmazonProfileEntity:
-					toReturn = this.AmazonProfile;
+				case ShipWorks.Data.Model.EntityType.AmazonSFPProfileEntity:
+					toReturn = this.AmazonSFPProfile;
 					break;
-				case ShipWorks.Data.Model.EntityType.AmazonServiceTypeEntity:
-					toReturn = this.AmazonServiceType;
+				case ShipWorks.Data.Model.EntityType.AmazonSFPServiceTypeEntity:
+					toReturn = this.AmazonSFPServiceType;
 					break;
-				case ShipWorks.Data.Model.EntityType.AmazonShipmentEntity:
-					toReturn = this.AmazonShipment;
+				case ShipWorks.Data.Model.EntityType.AmazonSFPShipmentEntity:
+					toReturn = this.AmazonSFPShipment;
 					break;
 				case ShipWorks.Data.Model.EntityType.AmazonStoreEntity:
 					toReturn = this.AmazonStore;
+					break;
+				case ShipWorks.Data.Model.EntityType.AmazonSWAAccountEntity:
+					toReturn = this.AmazonSWAAccount;
+					break;
+				case ShipWorks.Data.Model.EntityType.AmazonSWAProfileEntity:
+					toReturn = this.AmazonSWAProfile;
+					break;
+				case ShipWorks.Data.Model.EntityType.AmazonSWAShipmentEntity:
+					toReturn = this.AmazonSWAShipment;
 					break;
 				case ShipWorks.Data.Model.EntityType.AmeriCommerceStoreEntity:
 					toReturn = this.AmeriCommerceStore;
@@ -840,28 +849,46 @@ namespace ShipWorks.Data.Model.Linq
 			get { return new DataSource2<AmazonOrderSearchEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
 		}
 		
-		/// <summary>returns the datasource to use in a Linq query when targeting AmazonProfileEntity instances in the database.</summary>
-		public DataSource2<AmazonProfileEntity> AmazonProfile
+		/// <summary>returns the datasource to use in a Linq query when targeting AmazonSFPProfileEntity instances in the database.</summary>
+		public DataSource2<AmazonSFPProfileEntity> AmazonSFPProfile
 		{
-			get { return new DataSource2<AmazonProfileEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
+			get { return new DataSource2<AmazonSFPProfileEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
 		}
 		
-		/// <summary>returns the datasource to use in a Linq query when targeting AmazonServiceTypeEntity instances in the database.</summary>
-		public DataSource2<AmazonServiceTypeEntity> AmazonServiceType
+		/// <summary>returns the datasource to use in a Linq query when targeting AmazonSFPServiceTypeEntity instances in the database.</summary>
+		public DataSource2<AmazonSFPServiceTypeEntity> AmazonSFPServiceType
 		{
-			get { return new DataSource2<AmazonServiceTypeEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
+			get { return new DataSource2<AmazonSFPServiceTypeEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
 		}
 		
-		/// <summary>returns the datasource to use in a Linq query when targeting AmazonShipmentEntity instances in the database.</summary>
-		public DataSource2<AmazonShipmentEntity> AmazonShipment
+		/// <summary>returns the datasource to use in a Linq query when targeting AmazonSFPShipmentEntity instances in the database.</summary>
+		public DataSource2<AmazonSFPShipmentEntity> AmazonSFPShipment
 		{
-			get { return new DataSource2<AmazonShipmentEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
+			get { return new DataSource2<AmazonSFPShipmentEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
 		}
 		
 		/// <summary>returns the datasource to use in a Linq query when targeting AmazonStoreEntity instances in the database.</summary>
 		public DataSource2<AmazonStoreEntity> AmazonStore
 		{
 			get { return new DataSource2<AmazonStoreEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
+		}
+		
+		/// <summary>returns the datasource to use in a Linq query when targeting AmazonSWAAccountEntity instances in the database.</summary>
+		public DataSource2<AmazonSWAAccountEntity> AmazonSWAAccount
+		{
+			get { return new DataSource2<AmazonSWAAccountEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
+		}
+		
+		/// <summary>returns the datasource to use in a Linq query when targeting AmazonSWAProfileEntity instances in the database.</summary>
+		public DataSource2<AmazonSWAProfileEntity> AmazonSWAProfile
+		{
+			get { return new DataSource2<AmazonSWAProfileEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
+		}
+		
+		/// <summary>returns the datasource to use in a Linq query when targeting AmazonSWAShipmentEntity instances in the database.</summary>
+		public DataSource2<AmazonSWAShipmentEntity> AmazonSWAShipment
+		{
+			get { return new DataSource2<AmazonSWAShipmentEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
 		}
 		
 		/// <summary>returns the datasource to use in a Linq query when targeting AmeriCommerceStoreEntity instances in the database.</summary>

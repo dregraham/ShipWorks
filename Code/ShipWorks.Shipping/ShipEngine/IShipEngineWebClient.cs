@@ -23,11 +23,33 @@ namespace ShipWorks.Shipping.ShipEngine
         Task<GenericResult<string>> ConnectAsendiaAccount(string accountNumber, string username, string password);
 
         /// <summary>
+        /// Disconnect the given amazon shipping account
+        /// </summary>
+        /// <param name="accountId"></param>
+        /// <returns></returns>
+        Task<Result> DisconnectAmazonShippingAccount(string accountId);
+
+        /// <summary>
+        /// Connect an Amazon Shipping Account
+        /// </summary>
+        /// <remarks>
+        /// unlike the other methods in this class we are manually interacting
+        /// with the ShipEngine API because they have not added connecting to
+        /// Amazon to their DLL yet
+        /// </remarks>
+        Task<GenericResult<string>> ConnectAmazonShippingAccount(string authCode);
+
+        /// <summary>
         /// Gets rates from ShipEngine using the given request
         /// </summary>
         /// <param name="request">The rate shipment request</param>
         /// <returns>The rate shipment response</returns>
         Task<RateShipmentResponse> RateShipment(RateShipmentRequest request, ApiLogSource apiLogSource);
+
+        /// <summary>
+        /// purchase a label from ShipEngine using the given rateid
+        /// </summary>
+        Task<Label> PurchaseLabelWithRate(string rateId, PurchaseLabelWithoutShipmentRequest request, ApiLogSource apiLogSource);
 
         /// <summary>
         /// Purchases a label from ShipEngine using the given request
@@ -38,7 +60,7 @@ namespace ShipWorks.Shipping.ShipEngine
         /// Void a shipment label
         /// </summary>
         Task<VoidLabelResponse> VoidLabel(string labelId, ApiLogSource apiLogSource);
-        
+
 		/// <summary>
         /// Track a shipment using the label ID
         /// </summary>

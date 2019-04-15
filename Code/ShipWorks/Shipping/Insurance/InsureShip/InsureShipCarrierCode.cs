@@ -23,7 +23,7 @@ namespace ShipWorks.Shipping.Insurance.InsureShip
 
             switch (shipment.ShipmentTypeCode)
             {
-                case ShipmentTypeCode.Amazon:
+                case ShipmentTypeCode.AmazonSFP:
                     carrierCode = GetCarrierCodeForAmazon(shipment);
                     break;
 
@@ -98,7 +98,7 @@ namespace ShipWorks.Shipping.Insurance.InsureShip
         private static string GetCarrierCodeForAmazon(IShipmentEntity shipment)
         {
             string carrierCode;
-            carrierCode = shipment.Amazon.CarrierName;
+            carrierCode = shipment.AmazonSFP.CarrierName;
             if (carrierCode.Equals("STAMPS_DOT_COM", StringComparison.OrdinalIgnoreCase))
             {
                 carrierCode = "USPS";

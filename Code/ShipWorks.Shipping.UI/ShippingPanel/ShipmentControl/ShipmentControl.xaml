@@ -254,6 +254,6 @@
             </StackPanel>
         </Grid>
 
-        <ins:InsuranceControl DataContext="{Binding InsuranceViewModel}" />
+        <ins:InsuranceControl Visibility="{Binding SupportsInsurance,Converter={StaticResource BooleanToVisibility}}" DataContext="{Binding InsuranceViewModel}" />
     </StackPanel>
 </UserControl>

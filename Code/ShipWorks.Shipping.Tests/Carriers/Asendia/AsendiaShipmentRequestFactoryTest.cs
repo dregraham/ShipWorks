@@ -102,9 +102,8 @@ namespace ShipWorks.Shipping.Tests.Carriers.Asendia
             };
 
             var request = testObject.CreateRateShipmentRequest(shipment);
-
-            Assert.Equal(1, request.Shipment.AdvancedOptions.Count());
-            Assert.Equal(nonMachinable, request.Shipment.AdvancedOptions["non_machinable"]);
+            
+            Assert.Equal(nonMachinable, request.Shipment.AdvancedOptions.NonMachinable);
         }
 
         [Theory]
@@ -172,9 +171,8 @@ namespace ShipWorks.Shipping.Tests.Carriers.Asendia
             };
 
             var request = testObject.CreatePurchaseLabelRequest(shipment);
-
-            Assert.Equal(1, request.Shipment.AdvancedOptions.Count());
-            Assert.Equal(nonMachinable, request.Shipment.AdvancedOptions["non_machinable"]);
+            
+            Assert.Equal(nonMachinable, request.Shipment.AdvancedOptions.NonMachinable);
         }
 
         [Theory]

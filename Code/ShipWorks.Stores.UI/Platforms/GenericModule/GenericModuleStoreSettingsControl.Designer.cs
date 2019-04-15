@@ -1,4 +1,5 @@
 ﻿using ShipWorks.Shipping.Carriers.Amazon;
+using ShipWorks.Shipping.Carriers.Amazon.SFP;
 
 namespace ShipWorks.Stores.UI.Platforms.GenericModule
 {
@@ -30,7 +31,7 @@ namespace ShipWorks.Stores.UI.Platforms.GenericModule
         /// </summary>
         private void InitializeComponent()
         {
-            this.amazonShippingSettingsControl = new ShipWorks.Shipping.Carriers.Amazon.AmazonShippingSettingsControl();
+            this.amazonShippingSettingsControl = new ShipWorks.Shipping.Carriers.Amazon.SFP.AmazonSFPShippingSettingsControl();
             this.SuspendLayout();
             // 
             // amazon
@@ -54,6 +55,6 @@ namespace ShipWorks.Stores.UI.Platforms.GenericModule
 
         #endregion
         
-        private AmazonShippingSettingsControl amazonShippingSettingsControl;
+        private AmazonSFPShippingSettingsControl amazonShippingSettingsControl;
     }
 }

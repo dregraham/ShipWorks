@@ -111,7 +111,8 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             BilledWeight = source.BilledWeight;
             ProcessedWithUiMode = source.ProcessedWithUiMode;
             
-            Amazon = (IAmazonShipmentEntity) source.Amazon?.AsReadOnly(objectMap);
+            AmazonSFP = (IAmazonSFPShipmentEntity) source.AmazonSFP?.AsReadOnly(objectMap);
+            AmazonSWA = (IAmazonSWAShipmentEntity) source.AmazonSWA?.AsReadOnly(objectMap);
             Asendia = (IAsendiaShipmentEntity) source.Asendia?.AsReadOnly(objectMap);
             BestRate = (IBestRateShipmentEntity) source.BestRate?.AsReadOnly(objectMap);
             DhlExpress = (IDhlExpressShipmentEntity) source.DhlExpress?.AsReadOnly(objectMap);
@@ -581,7 +582,9 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
         public Nullable<ShipWorks.Settings.UIMode> ProcessedWithUiMode { get; }
         
-        public IAmazonShipmentEntity Amazon { get; }
+        public IAmazonSFPShipmentEntity AmazonSFP { get; }
+        
+        public IAmazonSWAShipmentEntity AmazonSWA { get; }
         
         public IAsendiaShipmentEntity Asendia { get; }
         

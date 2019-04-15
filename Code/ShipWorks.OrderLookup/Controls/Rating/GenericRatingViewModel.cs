@@ -19,7 +19,8 @@ namespace ShipWorks.OrderLookup.Controls.Rating
     /// <summary>
     /// View model for the RatingPanelControl for use with Order lookup mode
     /// </summary>
-    [KeyedComponent(typeof(IRatingViewModel), ShipmentTypeCode.Amazon)]
+    [KeyedComponent(typeof(IRatingViewModel), ShipmentTypeCode.AmazonSFP)]
+    [KeyedComponent(typeof(IRatingViewModel), ShipmentTypeCode.AmazonSWA)]
     [KeyedComponent(typeof(IRatingViewModel), ShipmentTypeCode.BestRate)]
     [KeyedComponent(typeof(IRatingViewModel), ShipmentTypeCode.Endicia)]
     [KeyedComponent(typeof(IRatingViewModel), ShipmentTypeCode.FedEx)]
@@ -55,7 +56,7 @@ namespace ShipWorks.OrderLookup.Controls.Rating
         /// </summary>
         private void OnShipmentModelPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            if ((e.PropertyName == PostalShipmentFields.Service.Name || e.PropertyName == AmazonShipmentFields.ShippingServiceID.Name) && ShipmentModel.ShipmentAdapter != null)
+            if ((e.PropertyName == PostalShipmentFields.Service.Name || e.PropertyName == AmazonSFPShipmentFields.ShippingServiceID.Name) && ShipmentModel.ShipmentAdapter != null)
             {
                 SelectRate(ShipmentModel.ShipmentAdapter);
             }

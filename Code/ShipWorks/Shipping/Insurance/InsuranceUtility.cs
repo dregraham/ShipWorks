@@ -315,7 +315,7 @@ namespace ShipWorks.Shipping.Insurance
 
             switch (shipmentType)
             {
-                case ShipmentTypeCode.Amazon:
+                case ShipmentTypeCode.AmazonSFP:
                     FillInShipWorksCostForAmazon(shipmentType, cost, shipment, declaredValue);
                     return;
                 case ShipmentTypeCode.UpsWorldShip:
@@ -391,7 +391,7 @@ namespace ShipWorks.Shipping.Insurance
         /// </summary>
         private static void FillInShipWorksCostForAmazon(ShipmentTypeCode shipmentType, InsuranceCost cost, ShipmentEntity shipment, decimal declaredValue)
         {
-            if (shipmentType != ShipmentTypeCode.Amazon)
+            if (shipmentType != ShipmentTypeCode.AmazonSFP)
             {
                 throw new ShippingException("The shipment is not an Amazon shipment.");
             }
@@ -399,13 +399,13 @@ namespace ShipWorks.Shipping.Insurance
             decimal adjustedValue = declaredValue;
             decimal rate;
 
-            if (string.IsNullOrEmpty(shipment.Amazon?.CarrierName))
+            if (string.IsNullOrEmpty(shipment.AmazonSFP?.CarrierName))
             {
                 return;
             }
 
             cost.AdvertisePennyOne = false;
-            if (shipment.Amazon.CarrierName == "STAMPS_DOT_COM" || shipment.Amazon.CarrierName == "USPS")
+            if (shipment.AmazonSFP.CarrierName == "STAMPS_DOT_COM" || shipment.AmazonSFP.CarrierName == "USPS")
             {
                 rate = GetUspsRate(shipment);
             }
@@ -495,7 +495,7 @@ namespace ShipWorks.Shipping.Insurance
                     }
                     break;
 
-                case ShipmentTypeCode.Amazon:
+                case ShipmentTypeCode.AmazonSFP:
                 default:
 
                     // Unknown for other

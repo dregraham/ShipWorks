@@ -352,7 +352,7 @@ namespace ShipWorks.Shipping.UI.ShippingRibbon
 
             shippingRibbonActions.CreateLabel.Enabled = !currentShipment.Processed && shipmentsCreateEditProcessAllowed && !shipmentIsNone;
             shippingRibbonActions.Void.Enabled = currentShipment.Processed && !currentShipment.Voided && shipmentsVoidDelete && !shipmentIsNone;
-            shippingRibbonActions.Return.Enabled = currentShipment.Processed && currentShipment.ShipmentTypeCode != ShipmentTypeCode.Amazon && !currentShipment.Voided && shipmentsCreateEditProcessAllowed && !shipmentIsNone;
+            shippingRibbonActions.Return.Enabled = currentShipment.Processed && currentShipment.ShipmentTypeCode != ShipmentTypeCode.AmazonSFP && !currentShipment.Voided && shipmentsCreateEditProcessAllowed && !shipmentIsNone;
             shippingRibbonActions.Reprint.Enabled = currentShipment.Processed && !currentShipment.Voided && !shipmentIsNone;
             shippingRibbonActions.ShipAgain.Enabled = currentShipment.Processed && shipmentsCreateEditProcessAllowed && !shipmentIsNone;
             shippingRibbonActions.ApplyProfile.Enabled = !currentShipment.Processed && shipmentsCreateEditProcessAllowed;

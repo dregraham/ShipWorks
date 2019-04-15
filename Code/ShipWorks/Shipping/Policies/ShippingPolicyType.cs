@@ -27,10 +27,17 @@ namespace ShipWorks.Shipping.Policies
         BestRateUpsRestriction,
 
         /// <summary>
-        /// A policy type to indicate whether Amazon should be allowed as a carrier.
+        /// A policy type to indicate whether Amazon Seller Fulfilled Prim should be allowed as a carrier.
         /// </summary>
-        [Description("Defines whether Amazon should be allowed as a carrier")]
-        [ApiValue("AmazonShipmentRestriction")]
-        AmazonShipmentRestriction
+        [Description("Defines whether Amazon Seller Fulfilled Prime should be allowed as a carrier")]
+        [ApiValue("AmazonSFPShipmentRestriction")]
+        AmazonSFPShipmentRestriction,
+
+        /// <summary>
+        /// A policy type to indicate whether Amazon Shipping should be allowed as a carrier.
+        /// </summary>
+        [Description("Defines whether Amazon Shipping should be allowed as a carrier")]
+        [ApiValue("AmazonSWAShipmentRestriction")]
+        AmazonSWAShipmentRestriction
     }
 }

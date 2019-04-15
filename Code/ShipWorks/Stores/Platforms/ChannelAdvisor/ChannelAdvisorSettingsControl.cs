@@ -4,7 +4,7 @@ using Interapptive.Shared.UI;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping;
-using ShipWorks.Shipping.Carriers.Amazon;
+using ShipWorks.Shipping.Carriers.Amazon.SFP;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Stores.Management;
 
@@ -26,7 +26,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
             // because we need it later on and we can't rely on whether the Amazon control is visible because
             // it won't be until the layout is finished.
             IShippingSettingsEntity settings = ShippingSettings.FetchReadOnly();
-            showAmazonSettings = settings.ConfiguredTypes.Contains(ShipmentTypeCode.Amazon);
+            showAmazonSettings = settings.ConfiguredTypes.Contains(ShipmentTypeCode.AmazonSFP);
 
             InitializeComponent();
 
@@ -68,7 +68,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
                 amazon.SaveToEntity(caStore);
                 daysBack.SaveToEntity(caStore);
             }
-            catch (Exception ex) when (ex.GetType() == typeof(ChannelAdvisorException) || ex.GetType() == typeof(AmazonShippingException))
+            catch (Exception ex) when (ex.GetType() == typeof(ChannelAdvisorException) || ex.GetType() == typeof(AmazonSFPShippingException))
             {
                 MessageHelper.ShowError(this, ex.Message);
                 return false;

@@ -44,7 +44,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations
         /// </summary>
         private void UpdateAmazonServices(ShippingPanelViewModel viewModel)
         {
-            if (viewModel.ShipmentType == ShipmentTypeCode.Amazon)
+            if (viewModel.ShipmentType == ShipmentTypeCode.AmazonSFP)
             {
                 viewModel.UpdateServices();
             }

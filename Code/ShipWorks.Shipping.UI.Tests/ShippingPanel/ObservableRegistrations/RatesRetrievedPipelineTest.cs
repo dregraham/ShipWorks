@@ -43,7 +43,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ObservableRegistrations
             var testObject = mock.Create<RatesRetrievedPipeline>();
                                   
             testObject.Register(shippingPanel);
-            shippingPanel.ShipmentType = ShipmentTypeCode.Amazon;
+            shippingPanel.ShipmentType = ShipmentTypeCode.AmazonSFP;
             shippingPanel.ShipmentViewModel = shipmentViewModel.Object;
 
             messenger.OnNext(new RatesRetrievedMessage(this, string.Empty, GenericResult.FromError<RateGroup>("blah"), null));

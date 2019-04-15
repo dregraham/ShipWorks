@@ -50,7 +50,7 @@ namespace ShipWorks.ApplicationCore.Licensing
             // primarily for debug/internal versions of ShipWorks that have 0.0.0.x
             // version number.
             Version assemblyVersion = Assembly.GetExecutingAssembly().GetName().Version;
-            Version minimumVersion = new Version(5, 0, 0, 0);
+            Version minimumVersion = new Version(6, 4, 0, 0);
 
             return assemblyVersion.Major == 0 ? minimumVersion : assemblyVersion;
         });

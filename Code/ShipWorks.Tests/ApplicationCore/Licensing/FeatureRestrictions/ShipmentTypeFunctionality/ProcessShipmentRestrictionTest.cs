@@ -38,7 +38,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing.FeatureRestrictions.Shipment
             var restrictions = new Dictionary<ShipmentTypeCode, IEnumerable<ShipmentTypeRestrictionType>>
             {
                 {
-                    ShipmentTypeCode.Amazon,
+                    ShipmentTypeCode.AmazonSFP,
                     new List<ShipmentTypeRestrictionType> {ShipmentTypeRestrictionType.Processing}
                 }
             };
@@ -47,7 +47,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing.FeatureRestrictions.Shipment
             licenseCapabilities.Setup(c => c.ShipmentTypeRestriction)
                 .Returns(restrictions);
 
-            Assert.Equal(EditionRestrictionLevel.Forbidden, testObject.Check(licenseCapabilities.Object, ShipmentTypeCode.Amazon));
+            Assert.Equal(EditionRestrictionLevel.Forbidden, testObject.Check(licenseCapabilities.Object, ShipmentTypeCode.AmazonSFP));
         }
 
         [Fact]
@@ -56,7 +56,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing.FeatureRestrictions.Shipment
             var restrictions = new Dictionary<ShipmentTypeCode, IEnumerable<ShipmentTypeRestrictionType>>
             {
                 {
-                    ShipmentTypeCode.Amazon,
+                    ShipmentTypeCode.AmazonSFP,
                     new List<ShipmentTypeRestrictionType> {ShipmentTypeRestrictionType.ShippingAccountConversion}
                 }
             };
@@ -65,7 +65,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing.FeatureRestrictions.Shipment
             licenseCapabilities.Setup(c => c.ShipmentTypeRestriction)
                 .Returns(restrictions);
 
-            Assert.Equal(EditionRestrictionLevel.None, testObject.Check(licenseCapabilities.Object, ShipmentTypeCode.Amazon));
+            Assert.Equal(EditionRestrictionLevel.None, testObject.Check(licenseCapabilities.Object, ShipmentTypeCode.AmazonSFP));
         }
 
         [Fact]
@@ -86,7 +86,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing.FeatureRestrictions.Shipment
             var restrictions = new Dictionary<ShipmentTypeCode, IEnumerable<ShipmentTypeRestrictionType>>
             {
                 {
-                    ShipmentTypeCode.Amazon,
+                    ShipmentTypeCode.AmazonSFP,
                     new List<ShipmentTypeRestrictionType> {ShipmentTypeRestrictionType.Processing}
                 },
                 {
@@ -99,7 +99,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing.FeatureRestrictions.Shipment
             licenseCapabilities.Setup(c => c.ShipmentTypeRestriction)
                 .Returns(restrictions);
 
-            Assert.Equal(EditionRestrictionLevel.Forbidden, testObject.Check(licenseCapabilities.Object, ShipmentTypeCode.Amazon));
+            Assert.Equal(EditionRestrictionLevel.Forbidden, testObject.Check(licenseCapabilities.Object, ShipmentTypeCode.AmazonSFP));
         }
         [Fact]
         public void Check_ReturnsNone_WhenProcessShipmentIsNotRestrictedForTheGivenShipmentTypeButIsRestrictedForAnotherShipmentType()
@@ -107,7 +107,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing.FeatureRestrictions.Shipment
             var restrictions = new Dictionary<ShipmentTypeCode, IEnumerable<ShipmentTypeRestrictionType>>
             {
                 {
-                    ShipmentTypeCode.Amazon,
+                    ShipmentTypeCode.AmazonSFP,
                     new List<ShipmentTypeRestrictionType> {ShipmentTypeRestrictionType.ShippingAccountConversion }
                 },
                 {
@@ -120,7 +120,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing.FeatureRestrictions.Shipment
             licenseCapabilities.Setup(c => c.ShipmentTypeRestriction)
                 .Returns(restrictions);
 
-            Assert.Equal(EditionRestrictionLevel.None, testObject.Check(licenseCapabilities.Object, ShipmentTypeCode.Amazon));
+            Assert.Equal(EditionRestrictionLevel.None, testObject.Check(licenseCapabilities.Object, ShipmentTypeCode.AmazonSFP));
         }
     }
 }

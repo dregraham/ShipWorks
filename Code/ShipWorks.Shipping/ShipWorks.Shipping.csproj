@@ -87,9 +87,8 @@
       <HintPath>..\..\packages\log4net.2.0.7\lib\net45-full\log4net.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
@@ -104,7 +103,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="ShipEngine.ApiClient, Version=1.0.0.0, Culture=neutral, PublicKeyToken=372d6fd19cbc5d92, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Signed.ShipEngine.ApiClient.1.0.4\lib\net46\ShipEngine.ApiClient.dll</HintPath>
+      <HintPath>..\..\packages\Signed.ShipEngine.ApiClient.1.0.8\lib\net46\ShipEngine.ApiClient.dll</HintPath>
     </Reference>
     <Reference Include="Syncfusion.Compression.Base, Version=16.1460.0.26, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Syncfusion.Compression.Base46.16.1.0.26\lib\net46\Syncfusion.Compression.Base.dll</HintPath>
@@ -170,19 +169,36 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Carriers\Amazon\AmazonDownloadedLabelData.cs" />
-    <Compile Include="Carriers\Amazon\AmazonPrefetchProvider.cs" />
-    <Compile Include="Carriers\Amazon\AmazonSameDayNotAvailableFootnoteFactory.cs" />
-    <Compile Include="Carriers\Amazon\AmazonServiceTypeRepository.cs" />
-    <Compile Include="Carriers\Amazon\AmazonShippingProfileApplicationStrategy.cs" />
-    <Compile Include="Carriers\Amazon\IAmazonCarrierTermsAndConditionsNotAcceptedFootnoteViewModel.cs" />
-    <Compile Include="Carriers\Amazon\AmazonShipmentAdapter.cs" />
-    <Compile Include="Carriers\Amazon\AmazonShipmentServicesBuilder.cs" />
-    <Compile Include="Carriers\Amazon\IAmazonCancelShipmentRequest.cs" />
-    <Compile Include="Carriers\Amazon\IAmazonCreateShipmentRequest.cs" />
-    <Compile Include="Carriers\Amazon\IAmazonSameDayNotAvailableFootnoteViewModel.cs" />
-    <Compile Include="Carriers\Amazon\IAmazonServiceTypeRepository.cs" />
-    <Compile Include="Carriers\Amazon\RateGroupFilters\AmazonAvailableServiceTypeRateGroupFilter.cs" />
+    <Compile Include="Carriers\Amazon\SFP\AmazonSFPDownloadedLabelData.cs" />
+    <Compile Include="Carriers\Amazon\SFP\AmazonSFPPrefetchProvider.cs" />
+    <Compile Include="Carriers\Amazon\SFP\AmazonSFPSameDayNotAvailableFootnoteFactory.cs" />
+    <Compile Include="Carriers\Amazon\SFP\AmazonSFPServiceTypeRepository.cs" />
+    <Compile Include="Carriers\Amazon\SFP\AmazonSFPShippingProfileApplicationStrategy.cs" />
+    <Compile Include="Carriers\Amazon\SFP\IAmazonSFPCarrierTermsAndConditionsNotAcceptedFootnoteViewModel.cs" />
+    <Compile Include="Carriers\Amazon\SFP\AmazonSFPShipmentAdapter.cs" />
+    <Compile Include="Carriers\Amazon\SFP\AmazonSFPShipmentServicesBuilder.cs" />
+    <Compile Include="Carriers\Amazon\SFP\IAmazonSFPCancelShipmentRequest.cs" />
+    <Compile Include="Carriers\Amazon\SFP\IAmazonSFPCreateShipmentRequest.cs" />
+    <Compile Include="Carriers\Amazon\SFP\IAmazonSFPSameDayNotAvailableFootnoteViewModel.cs" />
+    <Compile Include="Carriers\Amazon\SFP\IAmazonSFPServiceTypeRepository.cs" />
+    <Compile Include="Carriers\Amazon\SFP\RateGroupFilters\AmazonSFPAvailableServiceTypeRateGroupFilter.cs" />
+    <Compile Include="Carriers\Amazon\SWA\AmazonSWARateHashingService.cs" />
+    <Compile Include="Carriers\Amazon\SWA\AmazonSWAShipmentType.cs" />
+    <Compile Include="Carriers\Amazon\SWA\AmazonSWAPackageAdapter.cs" />
+    <Compile Include="Carriers\Amazon\SWA\AmazonSWAAccountDescription.cs" />
+    <Compile Include="Carriers\Amazon\SWA\AmazonSWAAccountManager.cs" />
+    <Compile Include="Carriers\Amazon\SWA\AmazonSWAAccountRepository.cs" />
+    <Compile Include="Carriers\Amazon\SWA\AmazonSWADownloadedLabelData.cs" />
+    <Compile Include="Carriers\Amazon\SWA\AmazonSWAException.cs" />
+    <Compile Include="Carriers\Amazon\SWA\AmazonSWALabelService.cs" />
+    <Compile Include="Carriers\Amazon\SWA\AmazonSWAPrefetchProvider.cs" />
+    <Compile Include="Carriers\Amazon\SWA\AmazonSWAShipmentAdapter.cs" />
+    <Compile Include="Carriers\Amazon\SWA\AmazonSWAShipmentRequestFactory.cs" />
+    <Compile Include="Carriers\Amazon\SWA\AmazonSWAShipmentServicesBuilder.cs" />
+    <Compile Include="Carriers\Amazon\SWA\AmazonSWAShippingProfileApplicationStrategy.cs" />
+    <Compile Include="Carriers\Amazon\SWA\AmazonSWARatingService.cs" />
+    <Compile Include="Carriers\Amazon\SWA\AmazonSWARateGroupFactory.cs" />
+    <Compile Include="Carriers\Amazon\SWA\IAmazonSWARateGroupFactory.cs" />
     <Compile Include="Carriers\Asendia\AsendiaAccountRepository.cs" />
     <Compile Include="Carriers\Asendia\AsendiaDownloadedLabelData.cs" />
     <Compile Include="Carriers\Asendia\AsendiaException.cs" />
@@ -585,40 +601,39 @@
       <Link>Properties\AssemblyInfoCommon.cs</Link>
     </Compile>
     <Compile Include="CachedRatesService.cs" />
-    <Compile Include="Carriers\Amazon\RateGroupFilters\AmazonAllowedCarriersRateGroupFilter.cs" />
-    <Compile Include="Carriers\Amazon\AmazonCancelShipmentRequest.cs" />
-    <Compile Include="Carriers\Amazon\AmazonCarrierTermsAndConditionsNotAcceptedFootnoteFactory.cs" />
-    <Compile Include="Carriers\Amazon\AmazonInsuranceChoice.cs" />
-    <Compile Include="Carriers\Amazon\AmazonLabelService.cs" />
-    <Compile Include="Carriers\Amazon\AmazonMwsWebClientSettingsFactory.cs" />
-    <Compile Include="Carriers\Amazon\AmazonPackageAdapter.cs" />
-    <Compile Include="Carriers\Amazon\AmazonRatesRetrievedMessage.cs" />
-    <Compile Include="Carriers\Amazon\AmazonCreateShipmentRequest.cs" />
-    <Compile Include="Carriers\Amazon\AmazonShipmentType.cs" />
-    <Compile Include="Carriers\Amazon\Api\AmazonAccountValidator.cs" />
-    <Compile Include="Carriers\Amazon\Api\AmazonMwsSignature.cs" />
+    <Compile Include="Carriers\Amazon\SFP\RateGroupFilters\AmazonSFPAllowedCarriersRateGroupFilter.cs" />
+    <Compile Include="Carriers\Amazon\SFP\AmazonSFPCancelShipmentRequest.cs" />
+    <Compile Include="Carriers\Amazon\SFP\AmazonSFPCarrierTermsAndConditionsNotAcceptedFootnoteFactory.cs" />
+    <Compile Include="Carriers\Amazon\SFP\AmazonSFPInsuranceChoice.cs" />
+    <Compile Include="Carriers\Amazon\SFP\AmazonSFPLabelService.cs" />
+    <Compile Include="Carriers\Amazon\SFP\AmazonMwsWebClientSettingsFactory.cs" />
+    <Compile Include="Carriers\Amazon\SFP\AmazonSFPPackageAdapter.cs" />
+    <Compile Include="Carriers\Amazon\SFP\AmazonSFPRatesRetrievedMessage.cs" />
+    <Compile Include="Carriers\Amazon\SFP\AmazonSFPCreateShipmentRequest.cs" />
+    <Compile Include="Carriers\Amazon\SFP\AmazonSFPShipmentType.cs" />
+    <Compile Include="Carriers\Amazon\SFP\Api\AmazonSFPAccountValidator.cs" />
+    <Compile Include="Carriers\Amazon\SFP\Api\AmazonMwsSignature.cs" />
     <Compile Include="Carriers\UPS\Promo\UpsPromoFactory.cs" />
-    <Compile Include="Carriers\Amazon\Api\AmazonRateGroupFactory.cs" />
-    <Compile Include="Carriers\Amazon\Api\AmazonRatingService.cs" />
-    <Compile Include="Carriers\Amazon\Api\AmazonShipmentRequestDetailsFactory.cs" />
-    <Compile Include="Carriers\Amazon\Api\AmazonShippingWebClient.cs" />
-    <Compile Include="Carriers\Amazon\Api\DTOs\AmazonRateTag.cs" />
-    <Compile Include="Carriers\Amazon\Api\DTOs\CancelShipmentResponse.cs" />
-    <Compile Include="Carriers\Amazon\Api\DTOs\CreateShipmentResponse.cs" />
-    <Compile Include="Carriers\Amazon\Api\DTOs\ErrorResponse.cs" />
-    <Compile Include="Carriers\Amazon\Api\DTOs\GetEligibleShippingServicesResponse.cs" />
-    <Compile Include="Carriers\Amazon\Api\DTOs\ShipmentRequestDetails.cs" />
-    <Compile Include="Carriers\Amazon\Api\IAmazonRateGroupFactory.cs" />
-    <Compile Include="Carriers\Amazon\Api\IAmazonRatingService.cs" />
-    <Compile Include="Carriers\Amazon\Api\IAmazonShipmentRequestDetailsFactory.cs" />
-    <Compile Include="Carriers\Amazon\Api\OperationResponse.cs" />
-    <Compile Include="Carriers\Amazon\EnforcementResult.cs" />
-    <Compile Include="Carriers\Amazon\Enums\AmazonDeliveryExperienceType.cs" />
-    <Compile Include="Carriers\Amazon\IAmazonMwsWebClientSettingsFactory.cs" />
-    <Compile Include="Carriers\Amazon\IAmazonShippingWebClient.cs" />
-    <Compile Include="Carriers\Amazon\RateGroupFilters\IAmazonRateGroupFilter.cs" />
+    <Compile Include="Carriers\Amazon\SFP\Api\AmazonSFPRateGroupFactory.cs" />
+    <Compile Include="Carriers\Amazon\SFP\Api\AmazonSFPRatingService.cs" />
+    <Compile Include="Carriers\Amazon\SFP\Api\AmazonSFPShipmentRequestDetailsFactory.cs" />
+    <Compile Include="Carriers\Amazon\SFP\Api\AmazonSFPShippingWebClient.cs" />
+    <Compile Include="Carriers\Amazon\SFP\Api\DTOs\AmazonRateTag.cs" />
+    <Compile Include="Carriers\Amazon\SFP\Api\DTOs\CancelShipmentResponse.cs" />
+    <Compile Include="Carriers\Amazon\SFP\Api\DTOs\CreateShipmentResponse.cs" />
+    <Compile Include="Carriers\Amazon\SFP\Api\DTOs\ErrorResponse.cs" />
+    <Compile Include="Carriers\Amazon\SFP\Api\DTOs\GetEligibleShippingServicesResponse.cs" />
+    <Compile Include="Carriers\Amazon\SFP\Api\DTOs\ShipmentRequestDetails.cs" />
+    <Compile Include="Carriers\Amazon\SFP\Api\IAmazonSFPRateGroupFactory.cs" />
+    <Compile Include="Carriers\Amazon\SFP\Api\IAmazonSFPRatingService.cs" />
+    <Compile Include="Carriers\Amazon\SFP\Api\IAmazonSFPShipmentRequestDetailsFactory.cs" />
+    <Compile Include="Carriers\Amazon\SFP\Api\OperationResponse.cs" />
+    <Compile Include="Carriers\Amazon\SFP\Enums\AmazonSFPDeliveryExperienceType.cs" />
+    <Compile Include="Carriers\Amazon\SFP\IAmazonMwsWebClientSettingsFactory.cs" />
+    <Compile Include="Carriers\Amazon\SFP\Api\IAmazonSFPShippingWebClient.cs" />
+    <Compile Include="Carriers\Amazon\SFP\RateGroupFilters\IAmazonSFPRateGroupFilter.cs" />
     <Compile Include="Properties\XamlNamespaces.cs" />
-    <Compile Include="Carriers\Amazon\AmazonRateHashingService.cs" />
+    <Compile Include="Carriers\Amazon\SFP\AmazonSFPRateHashingService.cs" />
     <Compile Include="Carriers\BestRate\BestRateLabelService.cs" />
     <Compile Include="Carriers\BestRate\BestRateRatingService.cs" />
     <Compile Include="Carriers\BestRate\BestRateRateHashingService.cs" />

@@ -75,7 +75,7 @@ namespace ShipWorks.Shipping.ShipEngine
         /// <summary>
         /// Gets the ShipWorks PartnerID
         /// </summary>
-        private string GetPartnerApiKey()
+        public string GetPartnerApiKey()
         {
             IEncryptionProvider decrypter = encryptionProviderFactory.CreateSecureTextEncryptionProvider("ShipEngine");
             return decrypter.Decrypt(EncryptedPartnerApiKey);
