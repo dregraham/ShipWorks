@@ -16,6 +16,7 @@ using ShipWorks.Shipping.Carriers.UPS;
 using ShipWorks.Shipping.Carriers.UPS.WorldShip;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Startup;
+using ShipWorks.Tests.Shared.XUnitExtensions.STAThreadAttributes;
 using Xunit;
 
 namespace ShipWorks.Shipping.Tests.Integration.Carriers
@@ -50,7 +51,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Carriers
             Assert.Equal(expectedServiceType, retriever.GetType());
         }
 
-        [Fact]
+        [STAFact]
         public void EnsureAllShipmentTypesThatShouldHaveWizardHaveOneRegistered()
         {
             IEnumerable<ShipmentTypeCode> excludedTypes = new[] { ShipmentTypeCode.BestRate, ShipmentTypeCode.None };

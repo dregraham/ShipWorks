@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
 using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -19,7 +20,7 @@ namespace ShipWorks.Shipping.UI.Amazon.SWA
     [Component]
     public class AmazonSWAAuthorizationViewModel : INotifyPropertyChanged, IAmazonSWAAuthorizationViewModel
     {
-        private readonly IWin32Window window;
+        private readonly Func<IWin32Window> windowFactory;
         private readonly IShipEngineWebClient shipEngineClient;
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -30,10 +31,10 @@ namespace ShipWorks.Shipping.UI.Amazon.SWA
         /// Constructor
         /// </summary>
         public AmazonSWAAuthorizationViewModel(
-            IWin32Window window,
+            Func<IWin32Window> windowFactory,
             IShipEngineWebClient shipEngineClient)
         {
-            this.window = window;
+            this.windowFactory = windowFactory;
             this.shipEngineClient = shipEngineClient;
             handler = new PropertyChangedHandler(this, () => PropertyChanged);
 
@@ -69,7 +70,7 @@ namespace ShipWorks.Shipping.UI.Amazon.SWA
         private void GetAccessCode()
         {
             string authorizationUrl = $"https://www.interapptive.com/amazon/shipping.subscribe.html";
-            WebHelper.OpenUrl(authorizationUrl, window);
+            WebHelper.OpenUrl(authorizationUrl, windowFactory());
         }
     }
 }
