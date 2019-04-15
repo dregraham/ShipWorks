@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<modulegroupdoc
+rxversion="8.1">
+  <testsuiteentryhierarchy>
+    <flatlistofchildren>
+      <modulegroups
+      name="OrderCreation"
+      id="0f37a592-ef93-446b-b04d-d92ff0d64f6c"/>
+    </flatlistofchildren>
+    <childhierarchy>
+      <modulegroups
+      name="OrderCreation"
+      id="0f37a592-ef93-446b-b04d-d92ff0d64f6c"/>
+    </childhierarchy>
+  </testsuiteentryhierarchy>
+</modulegroupdoc>
