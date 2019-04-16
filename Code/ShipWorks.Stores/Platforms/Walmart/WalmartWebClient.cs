@@ -306,7 +306,8 @@ namespace ShipWorks.Stores.Platforms.Walmart
         /// </summary>
         private string GetAuthString(IWalmartStoreEntity store)
         {
-            return "";
+            byte[] auth = System.Text.Encoding.UTF8.GetBytes(store.ClientID + ":" + store.ClientSecret);
+            return "Basic" + Convert.ToBase64String(auth);
         }
     }
 }
