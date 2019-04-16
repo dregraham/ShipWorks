@@ -30,7 +30,7 @@
                 This wizard will assist you in configuring your Amazon
                 Shipping account for use with ShipWorks. This enables
                 you to begin shipping, tracking, and printing Amazon
-                shipping labels with your Amazon Shipping account.
+                Shipping labels with your Amazon Shipping account.
             </TextBlock>
 
             <TextBlock TextWrapping="WrapWithOverflow">
