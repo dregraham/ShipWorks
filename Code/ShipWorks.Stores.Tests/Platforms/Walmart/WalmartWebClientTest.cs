@@ -57,19 +57,6 @@ namespace ShipWorks.Stores.Tests.Platforms.Walmart
         }
 
         [Fact]
-        public void GetOrders_SignsTheRequest()
-        {
-            Mock<IHttpVariableRequestSubmitter> requestSubmitter = SetupHttpVariableRequestSubmitter(OrdersResponse);
-
-            WalmartWebClient testObject = mock.Create<WalmartWebClient>();
-            WalmartStoreEntity store = new WalmartStoreEntity();
-
-            testObject.GetOrders(store, "nextCursorValue");
-
-            mock.Mock<IWalmartRequestSigner>().Verify(s => s.Sign(requestSubmitter.Object, store));
-        }
-
-        [Fact]
         public void GetOrders_AddsWalmartCredentialsHeaders()
         {
             DateTime start = DateTime.UtcNow.AddDays(-3);

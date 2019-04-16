@@ -21,7 +21,6 @@ namespace ShipWorks.Stores.Platforms.Walmart
     [Component]
     public class WalmartWebClient : IWalmartWebClient
     {
-        private readonly IWalmartRequestSigner requestSigner;
         private readonly Func<ApiLogSource, string, IApiLogEntry> apiLogEntryFactory;
         private readonly IHttpRequestSubmitterFactory httpRequestSubmitterFactory;
         private const string ChannelType = "a7a7db08-682f-488a-a005-921af89d7e9b";
@@ -39,11 +38,9 @@ namespace ShipWorks.Stores.Platforms.Walmart
         /// <summary>
         /// Initializes a new instance of the <see cref="WalmartWebClient"/> class.
         /// </summary>
-        public WalmartWebClient(IWalmartRequestSigner requestSigner,
-            Func<ApiLogSource, string, IApiLogEntry> apiLogEntryFactory,
-           IHttpRequestSubmitterFactory httpRequestSubmitterFactory)
+        public WalmartWebClient(Func<ApiLogSource, string, IApiLogEntry> apiLogEntryFactory,
+            IHttpRequestSubmitterFactory httpRequestSubmitterFactory)
         {
-            this.requestSigner = requestSigner;
             this.apiLogEntryFactory = apiLogEntryFactory;
             this.httpRequestSubmitterFactory = httpRequestSubmitterFactory;
         }
@@ -158,8 +155,6 @@ namespace ShipWorks.Stores.Platforms.Walmart
                 submitter.Headers.Add("WM_CONSUMER.ID", store.ConsumerID);
                 submitter.Headers.Add("WM_CONSUMER.CHANNEL.TYPE", ChannelType);
                 submitter.Headers.Add("WM_QOS.CORRELATION_ID", Guid.NewGuid().ToString());
-
-                requestSigner.Sign(submitter, store);
 
                 IApiLogEntry logEntry = apiLogEntryFactory(ApiLogSource.Walmart, action);
                 logEntry.LogRequest(submitter);

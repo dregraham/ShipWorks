@@ -125,7 +125,6 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Walmart
             context = db.CreateDataContext(x => ContainerInitializer.Initialize(x),
                 autoMock =>
                 {
-                    autoMock.Override<IWalmartRequestSigner>();
                     autoMock.Override<IHttpRequestSubmitterFactory>();
                     autoMock.Override<IDateTimeProvider>();
                     autoMock.Override<Func<ApiLogSource, string, IApiLogEntry>>();
@@ -177,7 +176,6 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Walmart
             context = db.CreateDataContext(x => ContainerInitializer.Initialize(x),
                 autoMock =>
                 {
-                    autoMock.Override<IWalmartRequestSigner>();
                     autoMock.Override<IWalmartWebClient>();
                     autoMock.Override<IDateTimeProvider>();
                 });
