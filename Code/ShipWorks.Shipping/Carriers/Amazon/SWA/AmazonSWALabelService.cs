@@ -52,34 +52,6 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SWA
         public override ShipmentTypeCode ShipmentTypeCode => ShipmentTypeCode.AmazonSWA;
 
         /// <summary>
-        /// Create the label
-        /// </summary>
-        public async override Task<TelemetricResult<IDownloadedLabelData>> Create(ShipmentEntity shipment)
-        {
-            // Amazon does not have a concept of service types, instead they offer different services based on how
-            // many days it takes to deliver
-            // we have to get rates to get a list of rateIds and then request a label based on the rateid
-            // if no rate id is sent they will use the fasted rate
-            MethodConditions.EnsureArgumentIsNotNull(shipment, nameof(shipment));
-
-            // to get a specific service we first have to get rates
-            GenericResult<RateGroup> rates = ratesRetriever.GetRates(shipment);
-            if (rates.Success && rates.Value.Rates.Any())
-            {
-                // Select a specific rate
-                RateResult rateToUse = rates.Value.Rates.FirstOrDefault(r => r.Days == EnumHelper.GetApiValue((AmazonSWAServiceType) shipment.AmazonSWA.Service));
-                if (rateToUse != null)
-                {
-                    return await CreateLabelInternal(shipment,
-                        () => shipEngineWebClient.PurchaseLabelWithRate(rateToUse.Tag.ToString(),
-                        shipmentRequestFactory.CreatePurchaseLabelWithoutShipmentRequest(shipment), ApiLogSource));
-                }
-            }
-
-            throw new ShippingException("The selected service is not available for this shipment.");
-        }
-
-        /// <summary>
         /// Get the ShipEngine carrier ID from the shipment
         /// </summary>
         protected override string GetShipEngineCarrierID(ShipmentEntity shipment) => accountRepository.GetAccount(shipment)?.ShipEngineCarrierId ?? string.Empty;

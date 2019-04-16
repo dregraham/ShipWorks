@@ -23,10 +23,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SWA
 
             foreach (Rate apiRate in rateResponse.Rates.Where(r => availableServiceTypeApiCodes.Contains(r.ServiceCode)))
             {
-                string day = apiRate.DeliveryDays > 1 ? "Days" : "Day";
-                string serviceDescription = $"Amazon Shipping {apiRate.DeliveryDays} {day}";
-
-                RateResult rate = new RateResult(serviceDescription, apiRate.DeliveryDays.ToString(), (decimal) (apiRate.ShippingAmount?.Amount ?? 0), apiRate.RateId)
+                RateResult rate = new RateResult("Amazon Shipping Ground", apiRate.DeliveryDays.ToString(), (decimal) (apiRate.ShippingAmount?.Amount ?? 0), apiRate.RateId)
                 {
                     CarrierDescription = string.Empty,
                     ExpectedDeliveryDate = apiRate.EstimatedDeliveryDate,
