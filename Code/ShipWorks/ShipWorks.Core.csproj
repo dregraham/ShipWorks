@@ -10797,6 +10797,7 @@
     <None Include="Resources\alarm.png" />
     <None Include="Resources\airplane.png" />
     <None Include="Resources\alarmclock.png" />
+    <None Include="Resources\amazon.png" />
     <Content Include="Resources\AmazonMWSHeader.png" />
     <None Include="Resources\bullet_ball_glass_blue.png" />
     <None Include="Resources\bullet_ball_glass_green.png" />

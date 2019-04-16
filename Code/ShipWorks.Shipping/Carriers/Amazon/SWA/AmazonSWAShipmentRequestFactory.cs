@@ -69,6 +69,18 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SWA
         }
 
         /// <summary>
+        /// Create Purchase Label Request, adding items which are required by Amazon
+        /// </summary>
+        public override PurchaseLabelRequest CreatePurchaseLabelRequest(ShipmentEntity shipment)
+        {
+            PurchaseLabelRequest request = base.CreatePurchaseLabelRequest(shipment);
+
+            request.Shipment.Items = GetShipmentItems(shipment);
+
+            return request;
+        }
+
+        /// <summary>
         /// Get shipment items from the shipment
         /// </summary>
         private static List<ShipmentItem> GetShipmentItems(ShipmentEntity shipment)

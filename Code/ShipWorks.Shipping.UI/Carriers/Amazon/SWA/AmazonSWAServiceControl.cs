@@ -58,23 +58,6 @@ namespace ShipWorks.Shipping.UI.Carriers.Amazon.SWA
         }
 
         /// <summary>
-        /// A rate has been selected
-        /// </summary>
-        public override void OnRateSelected(object sender, RateSelectedEventArgs e)
-        {
-            int oldIndex = service.SelectedIndex;
-
-            AmazonSWAServiceType selectedValue = EnumHelper.GetEnumList<AmazonSWAServiceType>()
-                .FirstOrDefault(f => f.ApiValue == e.Rate.Days).Value;
-
-            service.SelectedValue = selectedValue;
-            if (service.SelectedIndex == -1 && oldIndex != -1)
-            {
-                service.SelectedIndex = oldIndex;
-            }
-        }
-
-        /// <summary>
         /// Load the list of AmazonSWA accounts
         /// </summary>
         public override void LoadAccounts()
