@@ -4798,9 +4798,6 @@
                     <Field Name="ShippingProfileID" Ordinal="1" IsPrimaryKey="true" DbType="0" Precision="19" />
                     <Field Name="AmazonSWAAccountID" Ordinal="2" IsOptional="true" DbType="0" Precision="19" />
                     <Field Name="Service" Ordinal="3" IsOptional="true" DbType="8" Precision="10" />
-                    <Field Name="NonMachinable" Ordinal="4" IsOptional="true" DbType="2" />
-                    <Field Name="Contents" Ordinal="5" IsOptional="true" DbType="8" Precision="10" />
-                    <Field Name="NonDelivery" Ordinal="6" IsOptional="true" DbType="8" Precision="10" />
                   </Fields>
                 </Table>
                 <Table Name="AmazonSWAShipment">
@@ -4817,19 +4814,16 @@
                         <CustomProperty Name="AuditFormat" Value="132" />
                       </CustomProperties>
                     </Field>
-                    <Field Name="NonMachinable" Ordinal="4" DbType="2" />
-                    <Field Name="RequestedLabelFormat" Ordinal="5" DbType="8" Precision="10" />
-                    <Field Name="Contents" Ordinal="6" DbType="8" Precision="10" />
-                    <Field Name="NonDelivery" Ordinal="7" DbType="8" Precision="10" />
-                    <Field Name="ShipEngineLabelID" Ordinal="8" DbType="12" Length="12" />
-                    <Field Name="DimsProfileID" Ordinal="9" DbType="0" Precision="19" />
-                    <Field Name="DimsLength" Ordinal="10" DbType="6" Precision="38" />
-                    <Field Name="DimsWidth" Ordinal="11" DbType="6" Precision="38" />
-                    <Field Name="DimsHeight" Ordinal="12" DbType="6" Precision="38" />
-                    <Field Name="DimsAddWeight" Ordinal="13" DbType="2" />
-                    <Field Name="DimsWeight" Ordinal="14" DbType="6" Precision="38" />
-                    <Field Name="InsuranceValue" Ordinal="15" DbType="9" Precision="19" Scale="4" />
-                    <Field Name="Insurance" Ordinal="16" DbType="2" />
+                    <Field Name="RequestedLabelFormat" Ordinal="4" DbType="8" Precision="10" />
+                    <Field Name="ShipEngineLabelID" Ordinal="5" DbType="12" Length="12" />
+                    <Field Name="DimsProfileID" Ordinal="6" DbType="0" Precision="19" />
+                    <Field Name="DimsLength" Ordinal="7" DbType="6" Precision="38" />
+                    <Field Name="DimsWidth" Ordinal="8" DbType="6" Precision="38" />
+                    <Field Name="DimsHeight" Ordinal="9" DbType="6" Precision="38" />
+                    <Field Name="DimsAddWeight" Ordinal="10" DbType="2" />
+                    <Field Name="DimsWeight" Ordinal="11" DbType="6" Precision="38" />
+                    <Field Name="InsuranceValue" Ordinal="12" DbType="9" Precision="19" Scale="4" />
+                    <Field Name="Insurance" Ordinal="13" DbType="2" />
                   </Fields>
                 </Table>
                 <Table Name="AmeriCommerceStore">
