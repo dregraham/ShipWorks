@@ -174,7 +174,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
                 .Select(s => s.Value);
 
             // Assert if new shipment types were added to make sure they get updated for insurance changing on shipment type change.
-            Assert.Equal(15, shipmentTypeCodes.Count());
+            Assert.Equal(16, shipmentTypeCodes.Count());
 
             foreach (ShipmentTypeCode startShipmentTypeCode in shipmentTypeCodes)
             {
@@ -319,7 +319,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
                     return Create.Shipment(context.Order).AsPostal(p => p.AsUsps(e => e.Set(es => es.Insurance, insured)))
                         .Set(s => s.Insurance = true).Save();
                 case ShipmentTypeCode.AmazonSFP:
-                    return Create.Shipment(context.Order).AsAmazon(f => f.Set(pkg => pkg.Insurance, insured))
+                    return Create.Shipment(context.Order).AsAmazonSFP(f => f.Set(pkg => pkg.Insurance, insured))
                         .Set(s => s.Insurance = true).Save();
 
                 case ShipmentTypeCode.DhlExpress:
@@ -328,6 +328,10 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
 
                 case ShipmentTypeCode.Asendia:
                     return Create.Shipment(context.Order).AsAsendia(p => p.Set(es => es.Insurance, insured))
+                        .Set(s => s.Insurance = true).Save();
+
+                case ShipmentTypeCode.AmazonSWA:
+                    return Create.Shipment(context.Order).AsAmazonSWA(p => p.Set(es => es.Insurance, insured))
                         .Set(s => s.Insurance = true).Save();
 
                 default:
