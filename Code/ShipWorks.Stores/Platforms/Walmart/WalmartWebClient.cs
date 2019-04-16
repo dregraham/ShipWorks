@@ -21,6 +21,8 @@ namespace ShipWorks.Stores.Platforms.Walmart
     [Component]
     public class WalmartWebClient : IWalmartWebClient
     {
+        private string accessToken = "";
+        private DateTime accessTokenExpireTime;
         private readonly Func<ApiLogSource, string, IApiLogEntry> apiLogEntryFactory;
         private readonly IHttpRequestSubmitterFactory httpRequestSubmitterFactory;
         private const string ChannelType = "a7a7db08-682f-488a-a005-921af89d7e9b";
@@ -28,6 +30,7 @@ namespace ShipWorks.Stores.Platforms.Walmart
         private const string GetOrdersUrl = "https://marketplace.walmartapis.com/v3/orders";
         private const string GetOrderUrl = "https://marketplace.walmartapis.com/v3/orders/{0}";
         private const string AcknowledgeOrderUrl = "https://marketplace.walmartapis.com/v3/orders/{0}/acknowledge";
+        private const string GetTokenUrl = "https://marketplace.walmartapis.com/v3/token";
         private const int DownloadOrderCountLimit = 200;
         private const string UpdateShipmentUrl =
             "https://marketplace.walmartapis.com/v3/orders/{0}/shipping";
@@ -39,7 +42,7 @@ namespace ShipWorks.Stores.Platforms.Walmart
         /// Initializes a new instance of the <see cref="WalmartWebClient"/> class.
         /// </summary>
         public WalmartWebClient(Func<ApiLogSource, string, IApiLogEntry> apiLogEntryFactory,
-            IHttpRequestSubmitterFactory httpRequestSubmitterFactory)
+           IHttpRequestSubmitterFactory httpRequestSubmitterFactory)
         {
             this.apiLogEntryFactory = apiLogEntryFactory;
             this.httpRequestSubmitterFactory = httpRequestSubmitterFactory;
@@ -147,14 +150,21 @@ namespace ShipWorks.Stores.Platforms.Walmart
         /// </summary>
         private T ProcessRequest<T>(IWalmartStoreEntity store, IHttpRequestSubmitter submitter, string action)
         {
+            if (accessToken == "" || accessTokenExpireTime < DateTime.Now)
+            {
+                GetNewToken(store);
+            }
+
             string response = string.Empty;
+            string authString = GetAuthString(store);
             try
             {
                 submitter.AllowHttpStatusCodes(HttpStatusCode.BadRequest, HttpStatusCode.Unauthorized);
                 submitter.Headers.Add("WM_SVC.NAME", "Walmart Marketplace");
-                submitter.Headers.Add("WM_CONSUMER.ID", store.ConsumerID);
                 submitter.Headers.Add("WM_CONSUMER.CHANNEL.TYPE", ChannelType);
                 submitter.Headers.Add("WM_QOS.CORRELATION_ID", Guid.NewGuid().ToString());
+                submitter.Headers.Add("Authorization", authString);
+                submitter.Headers.Add("WM_SEC.ACCESS_TOKEN", accessToken);
 
                 IApiLogEntry logEntry = apiLogEntryFactory(ApiLogSource.Walmart, action);
                 logEntry.LogRequest(submitter);
@@ -169,7 +179,7 @@ namespace ShipWorks.Stores.Platforms.Walmart
                     // description. If we didn't allow them, we'd lose the Walmart message.
                     if (responseReader.HttpWebResponse.StatusCode != HttpStatusCode.OK)
                     {
-                        throw new WebException($"{(int)responseReader.HttpWebResponse.StatusCode} {responseReader.HttpWebResponse.StatusDescription}");
+                        throw new WebException($"{(int) responseReader.HttpWebResponse.StatusCode} {responseReader.HttpWebResponse.StatusDescription}");
                     }
 
                     return DeserializeResponse<T>(response);
@@ -192,7 +202,7 @@ namespace ShipWorks.Stores.Platforms.Walmart
             XmlReader xmlReader = XmlReader.Create(new StringReader(response));
 
             return typeof(T) == typeof(string) ?
-                (T) TypeDescriptor.GetConverter(typeof(T)).ConvertFromString(response):
+                (T) TypeDescriptor.GetConverter(typeof(T)).ConvertFromString(response) :
                 (T) serializer.Deserialize(xmlReader);
         }
 
@@ -239,6 +249,64 @@ namespace ShipWorks.Stores.Platforms.Walmart
                 // If there was an error deserializing the walmart error response, just return the original exception message
                 return $"{BaseErrorMessage}: {Environment.NewLine}{exceptionMessage}";
             }
+        }
+
+        /// <summary>
+        /// Requests a new access token
+        /// </summary>
+        private void GetNewToken(IWalmartStoreEntity store)
+        {
+            string response = string.Empty;
+            string authString = GetAuthString(store);
+            IHttpRequestSubmitter submitter = httpRequestSubmitterFactory.GetHttpTextPostRequestSubmitter("grant_type=client_credentials", "application/x-www-form-urlencoded");
+            submitter.Uri = new Uri(GetTokenUrl);
+            submitter.Verb = HttpVerb.Post;
+
+            try
+            {
+                submitter.AllowHttpStatusCodes(HttpStatusCode.BadRequest, HttpStatusCode.Unauthorized);
+                submitter.Headers.Add("WM_SVC.NAME", "Walmart Marketplace");
+                submitter.Headers.Add("WM_QOS.CORRELATION_ID", Guid.NewGuid().ToString());
+                submitter.Headers.Add("Authorization", authString);
+                submitter.Headers.Add("Accept", "application/xml");
+
+                IApiLogEntry logEntry = apiLogEntryFactory(ApiLogSource.Walmart, "GetToken");
+                logEntry.LogRequest(submitter);
+                accessTokenExpireTime = DateTime.Now;
+
+                using (IHttpResponseReader responseReader = submitter.GetResponse())
+                {
+                    response = responseReader.ReadResult();
+                    logEntry.LogResponse(response, "xml");
+
+                    OAuthTokenDTO token = DeserializeResponse<OAuthTokenDTO>(response);
+
+                    accessToken = token.accessToken;
+                    accessTokenExpireTime.AddSeconds(token.expiresIn);
+
+                    // The reason we allow 400 and 401 above but then throw for everything that is not 200 here is
+                    // because we need to retain both the error DTO from Walmart as well as the HTTP status code
+                    // description. If we didn't allow them, we'd lose the Walmart message.
+                    if (responseReader.HttpWebResponse.StatusCode != HttpStatusCode.OK)
+                    {
+                        throw new WebException($"{(int) responseReader.HttpWebResponse.StatusCode} {responseReader.HttpWebResponse.StatusDescription}");
+                    }
+                }
+            }
+            catch (Exception ex) when (ex.GetType() == typeof(WebException) ||
+                                       ex.GetType() == typeof(InvalidOperationException) ||
+                                       ex.GetType() == typeof(ArgumentNullException))
+            {
+                throw new WalmartException(GetErrorMessage(response, ex.Message), ex);
+            }
+        }
+
+        /// <summary>
+        /// Generates the authentication string
+        /// </summary>
+        private string GetAuthString(IWalmartStoreEntity store)
+        {
+            return "";
         }
     }
 }
