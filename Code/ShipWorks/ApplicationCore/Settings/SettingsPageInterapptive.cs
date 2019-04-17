@@ -93,6 +93,14 @@ namespace ShipWorks.ApplicationCore.Settings
 
             useInsureShipTestServer.Checked = new InsureShipSettings().UseTestServer;
 
+            LoadEnvironmentDetails();
+        }
+
+        /// <summary>
+        /// Load environment Details
+        /// </summary>
+        private void LoadEnvironmentDetails()
+        {
             environmentList.SelectedIndexChanged -= OnEnvironmentListSelectedIndexChanged;
             environmentList.DataSource = webClientEnvironmentFactory.Environments;
             environmentList.DisplayMember = "Name";
@@ -140,6 +148,14 @@ namespace ShipWorks.ApplicationCore.Settings
 
             new InsureShipSettings().UseTestServer = useInsureShipTestServer.Checked;
 
+            SaveEnvironmentDetails();
+        }
+
+        /// <summary>
+        /// Save environment details
+        /// </summary>
+        private void SaveEnvironmentDetails()
+        {
             if (selectedWebClientEnvironment.Name == "Other")
             {
                 if (Uri.IsWellFormedUriString(otherTangoUrlText.Text, UriKind.Absolute) &&
@@ -152,7 +168,6 @@ namespace ShipWorks.ApplicationCore.Settings
                 }
                 else
                 {
-
                     MessageHelper.ShowError(this, "Please enter valid other environment URLs.");
                 }
             }
