@@ -258,7 +258,8 @@ namespace ShipWorks.Stores.Platforms.Walmart
         {
             string response = string.Empty;
             string authString = GenerateAuthString(store);
-            IHttpRequestSubmitter submitter = httpRequestSubmitterFactory.GetHttpTextPostRequestSubmitter("grant_type=client_credentials", "application/x-www-form-urlencoded");
+            IHttpVariableRequestSubmitter submitter = httpRequestSubmitterFactory.GetHttpVariableRequestSubmitter();
+            submitter.Variables.Add("grant_type","client_credentials");
             submitter.Uri = new Uri(GetTokenUrl);
             submitter.Verb = HttpVerb.Post;
 
@@ -282,7 +283,7 @@ namespace ShipWorks.Stores.Platforms.Walmart
                     OAuthTokenDTO token = DeserializeResponse<OAuthTokenDTO>(response);
 
                     accessToken = token.accessToken;
-                    accessTokenExpireTime.AddSeconds(token.expiresIn);
+                    accessTokenExpireTime = accessTokenExpireTime.AddSeconds(token.expiresIn);
 
                     // The reason we allow 400 and 401 above but then throw for everything that is not 200 here is
                     // because we need to retain both the error DTO from Walmart as well as the HTTP status code
@@ -312,7 +313,7 @@ namespace ShipWorks.Stores.Platforms.Walmart
             }
 
             byte[] auth = System.Text.Encoding.UTF8.GetBytes(store.ClientID + ":" + store.ClientSecret);
-            return "Basic" + Convert.ToBase64String(auth);
+            return "Basic " + Convert.ToBase64String(auth);
         }
     }
 }
