@@ -28,7 +28,6 @@ namespace ShipWorks.ApplicationCore.Settings
         /// </summary>
         private void InitializeComponent()
         {
-            this.sectionShipping = new ShipWorks.UI.Controls.SectionTitle();
             this.postalWebTestServer = new System.Windows.Forms.CheckBox();
             this.uspsTestServer = new System.Windows.Forms.CheckBox();
             this.fedexTestServer = new System.Windows.Forms.CheckBox();
@@ -69,18 +68,15 @@ namespace ShipWorks.ApplicationCore.Settings
             this.reinstallTemplates = new System.Windows.Forms.Button();
             this.overstockServer = new System.Windows.Forms.CheckBox();
             this.disableAutoUpdate = new System.Windows.Forms.CheckBox();
+            this.sectionShipping = new ShipWorks.UI.Controls.SectionTitle();
+            this.environmentSection = new ShipWorks.UI.Controls.SectionTitle();
+            this.environmentList = new System.Windows.Forms.ComboBox();
+            this.otherTangoUrlText = new System.Windows.Forms.TextBox();
+            this.otherTangoUrl = new System.Windows.Forms.Label();
+            this.otherWarehouseUrl = new System.Windows.Forms.Label();
+            this.otherWarehouseUrlText = new System.Windows.Forms.TextBox();
             this.panelBuyDotCom.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // sectionShipping
-            // 
-            this.sectionShipping.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.sectionShipping.Location = new System.Drawing.Point(10, 10);
-            this.sectionShipping.Name = "sectionShipping";
-            this.sectionShipping.Size = new System.Drawing.Size(350, 22);
-            this.sectionShipping.TabIndex = 0;
-            this.sectionShipping.Text = "Shipping";
             // 
             // postalWebTestServer
             // 
@@ -487,11 +483,88 @@ namespace ShipWorks.ApplicationCore.Settings
             this.disableAutoUpdate.Text = "Disable auto update on this computer";
             this.disableAutoUpdate.UseVisualStyleBackColor = true;
             // 
+            // sectionShipping
+            // 
+            this.sectionShipping.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.sectionShipping.Location = new System.Drawing.Point(10, 10);
+            this.sectionShipping.Name = "sectionShipping";
+            this.sectionShipping.Size = new System.Drawing.Size(350, 22);
+            this.sectionShipping.TabIndex = 0;
+            this.sectionShipping.Text = "Shipping";
+            // 
+            // environmentSection
+            // 
+            this.environmentSection.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.environmentSection.Location = new System.Drawing.Point(12, 926);
+            this.environmentSection.Name = "environmentSection";
+            this.environmentSection.Size = new System.Drawing.Size(350, 22);
+            this.environmentSection.TabIndex = 41;
+            this.environmentSection.Text = "Environment";
+            // 
+            // environmentList
+            // 
+            this.environmentList.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.environmentList.AutoCompleteCustomSource.AddRange(new string[] {
+            "www.envmgr.com",
+            "elstestserver.endicia.com (New Sandbox)"});
+            this.environmentList.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.environmentList.FormattingEnabled = true;
+            this.environmentList.Location = new System.Drawing.Point(28, 961);
+            this.environmentList.Name = "environmentList";
+            this.environmentList.Size = new System.Drawing.Size(332, 21);
+            this.environmentList.TabIndex = 42;
+            this.environmentList.SelectedIndexChanged += new System.EventHandler(this.OnEnvironmentListSelectedIndexChanged);
+            // 
+            // otherTangoUrlText
+            // 
+            this.otherTangoUrlText.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.otherTangoUrlText.Location = new System.Drawing.Point(108, 988);
+            this.otherTangoUrlText.Name = "otherTangoUrlText";
+            this.otherTangoUrlText.Size = new System.Drawing.Size(252, 21);
+            this.otherTangoUrlText.TabIndex = 43;
+            // 
+            // otherTangoUrl
+            // 
+            this.otherTangoUrl.AutoSize = true;
+            this.otherTangoUrl.Location = new System.Drawing.Point(47, 991);
+            this.otherTangoUrl.Name = "otherTangoUrl";
+            this.otherTangoUrl.Size = new System.Drawing.Size(60, 13);
+            this.otherTangoUrl.TabIndex = 44;
+            this.otherTangoUrl.Text = "Tango Url: ";
+            // 
+            // otherWarehouseUrl
+            // 
+            this.otherWarehouseUrl.AutoSize = true;
+            this.otherWarehouseUrl.Location = new System.Drawing.Point(22, 1018);
+            this.otherWarehouseUrl.Name = "otherWarehouseUrl";
+            this.otherWarehouseUrl.Size = new System.Drawing.Size(85, 13);
+            this.otherWarehouseUrl.TabIndex = 46;
+            this.otherWarehouseUrl.Text = "Warehouse Url: ";
+            // 
+            // otherWarehouseUrlText
+            // 
+            this.otherWarehouseUrlText.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.otherWarehouseUrlText.Location = new System.Drawing.Point(108, 1015);
+            this.otherWarehouseUrlText.Name = "otherWarehouseUrlText";
+            this.otherWarehouseUrlText.Size = new System.Drawing.Size(252, 21);
+            this.otherWarehouseUrlText.TabIndex = 45;
+            // 
             // SettingsPageInterapptive
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
+            this.Controls.Add(this.otherWarehouseUrl);
+            this.Controls.Add(this.otherWarehouseUrlText);
+            this.Controls.Add(this.otherTangoUrl);
+            this.Controls.Add(this.otherTangoUrlText);
+            this.Controls.Add(this.environmentList);
+            this.Controls.Add(this.environmentSection);
             this.Controls.Add(this.disableAutoUpdate);
             this.Controls.Add(this.purgePrintJobsButton);
             this.Controls.Add(this.overstockServer);
@@ -534,7 +607,7 @@ namespace ShipWorks.ApplicationCore.Settings
             this.Controls.Add(this.sectionShipping);
             this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Name = "SettingsPageInterapptive";
-            this.Size = new System.Drawing.Size(374, 949);
+            this.Size = new System.Drawing.Size(374, 1054);
             this.Load += new System.EventHandler(this.OnLoad);
             this.panelBuyDotCom.ResumeLayout(false);
             this.ResumeLayout(false);
@@ -543,8 +616,6 @@ namespace ShipWorks.ApplicationCore.Settings
         }
 
         #endregion
-
-        private ShipWorks.UI.Controls.SectionTitle sectionShipping;
         private System.Windows.Forms.CheckBox postalWebTestServer;
         private System.Windows.Forms.CheckBox uspsTestServer;
         private System.Windows.Forms.CheckBox fedexTestServer;
@@ -585,5 +656,12 @@ namespace ShipWorks.ApplicationCore.Settings
         private System.Windows.Forms.Button reinstallTemplates;
         private System.Windows.Forms.CheckBox overstockServer;
         private System.Windows.Forms.CheckBox disableAutoUpdate;
+        private UI.Controls.SectionTitle sectionShipping;
+        private UI.Controls.SectionTitle environmentSection;
+        private System.Windows.Forms.ComboBox environmentList;
+        private System.Windows.Forms.TextBox otherTangoUrlText;
+        private System.Windows.Forms.Label otherTangoUrl;
+        private System.Windows.Forms.Label otherWarehouseUrl;
+        private System.Windows.Forms.TextBox otherWarehouseUrlText;
     }
 }

@@ -2,10 +2,12 @@ using System;
 using System.Data.Common;
 using System.Reflection;
 using System.Windows.Forms;
+using Autofac;
 using Interapptive.Shared.Data;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using log4net;
+using ShipWorks.ApplicationCore.Licensing.WebClientEnvironments;
 using ShipWorks.ApplicationCore.Settings.PrintResultCleanup;
 using ShipWorks.ApplicationCore.Settings.ResourceCleanup;
 using ShipWorks.Data.Administration;
@@ -38,6 +40,8 @@ namespace ShipWorks.ApplicationCore.Settings
     public partial class SettingsPageInterapptive : SettingsPageBase
     {
         private static readonly ILog log = LogManager.GetLogger(typeof(SettingsPageInterapptive));
+        private readonly WebClientEnvironmentFactory webClientEnvironmentFactory;
+        private WebClientEnvironment selectedWebClientEnvironment;
 
         /// <summary>
         /// Constructor
@@ -45,6 +49,8 @@ namespace ShipWorks.ApplicationCore.Settings
         public SettingsPageInterapptive()
         {
             InitializeComponent();
+            webClientEnvironmentFactory = IoC.UnsafeGlobalLifetimeScope.Resolve<WebClientEnvironmentFactory>();
+            selectedWebClientEnvironment = webClientEnvironmentFactory.SelectedEnvironment;
         }
 
         /// <summary>
@@ -86,6 +92,15 @@ namespace ShipWorks.ApplicationCore.Settings
             endiciaTestServers.Enabled = endiciaTestServer.Checked;
 
             useInsureShipTestServer.Checked = new InsureShipSettings().UseTestServer;
+
+            environmentList.SelectedIndexChanged -= OnEnvironmentListSelectedIndexChanged;
+            environmentList.DataSource = webClientEnvironmentFactory.Environments;
+            environmentList.DisplayMember = "Name";
+            environmentList.ValueMember = "Name";
+            environmentList.SelectedItem = selectedWebClientEnvironment;
+            environmentList.SelectedIndexChanged += OnEnvironmentListSelectedIndexChanged;
+
+            SetEnvironmentOtherUi();
         }
 
         /// <summary>
@@ -124,6 +139,28 @@ namespace ShipWorks.ApplicationCore.Settings
             EndiciaApiClient.UseTestServerUrl = (EndiciaTestServer) endiciaTestServers.SelectedValue;
 
             new InsureShipSettings().UseTestServer = useInsureShipTestServer.Checked;
+
+            if (selectedWebClientEnvironment.Name == "Other")
+            {
+                if (Uri.IsWellFormedUriString(otherTangoUrlText.Text, UriKind.Absolute) &&
+                    Uri.IsWellFormedUriString(otherWarehouseUrlText.Text, UriKind.Absolute))
+                {
+                    selectedWebClientEnvironment.TangoUrl = otherTangoUrlText.Text;
+                    selectedWebClientEnvironment.WarehouseUrl = otherWarehouseUrlText.Text;
+                    webClientEnvironmentFactory.SelectedEnvironment = selectedWebClientEnvironment;
+                    webClientEnvironmentFactory.SaveSelection();
+                }
+                else
+                {
+
+                    MessageHelper.ShowError(this, "Please enter valid other environment URLs.");
+                }
+            }
+            else
+            {
+                webClientEnvironmentFactory.SelectedEnvironment = selectedWebClientEnvironment;
+                webClientEnvironmentFactory.SaveSelection();
+            }
         }
 
         /// <summary>
@@ -244,5 +281,34 @@ namespace ShipWorks.ApplicationCore.Settings
         /// </remarks>
         private void OnReinstallTemplates(object sender, EventArgs e) =>
             BuiltinTemplates.ReinstallTemplates();
+
+        /// <summary>
+        /// Handle changing the selected environment
+        /// </summary>
+        private void OnEnvironmentListSelectedIndexChanged(object sender, EventArgs e)
+        {
+            selectedWebClientEnvironment = (WebClientEnvironment) environmentList.SelectedItem;
+            SetEnvironmentOtherUi();
+        }
+
+        /// <summary>
+        /// Update any Environment Other UI
+        /// </summary>
+        private void SetEnvironmentOtherUi()
+        {
+            if (selectedWebClientEnvironment.Name == "Other")
+            {
+                otherTangoUrlText.Enabled = true;
+                otherWarehouseUrlText.Enabled = true;
+            }
+            else
+            {
+                otherTangoUrlText.Enabled = false;
+                otherWarehouseUrlText.Enabled = false;
+            }
+
+            otherTangoUrlText.Text = selectedWebClientEnvironment.TangoUrl;
+            otherWarehouseUrlText.Text = selectedWebClientEnvironment.WarehouseUrl;
+        }
     }
 }
