@@ -156,7 +156,7 @@ namespace ShipWorks.Stores.Platforms.Walmart
             }
 
             string response = string.Empty;
-            string authString = GetAuthString(store);
+            string authString = GenerateAuthString(store);
             try
             {
                 submitter.AllowHttpStatusCodes(HttpStatusCode.BadRequest, HttpStatusCode.Unauthorized);
@@ -257,7 +257,7 @@ namespace ShipWorks.Stores.Platforms.Walmart
         private void GetNewToken(IWalmartStoreEntity store)
         {
             string response = string.Empty;
-            string authString = GetAuthString(store);
+            string authString = GenerateAuthString(store);
             IHttpRequestSubmitter submitter = httpRequestSubmitterFactory.GetHttpTextPostRequestSubmitter("grant_type=client_credentials", "application/x-www-form-urlencoded");
             submitter.Uri = new Uri(GetTokenUrl);
             submitter.Verb = HttpVerb.Post;
@@ -304,8 +304,13 @@ namespace ShipWorks.Stores.Platforms.Walmart
         /// <summary>
         /// Generates the authentication string
         /// </summary>
-        private string GetAuthString(IWalmartStoreEntity store)
+        private static string GenerateAuthString(IWalmartStoreEntity store)
         {
+            if (store.ClientID == "" || store.ClientSecret == "")
+            {
+                throw new WalmartException("You must upgrade to oauth authentication in order to connect to Walmart.");
+            }
+
             byte[] auth = System.Text.Encoding.UTF8.GetBytes(store.ClientID + ":" + store.ClientSecret);
             return "Basic" + Convert.ToBase64String(auth);
         }
