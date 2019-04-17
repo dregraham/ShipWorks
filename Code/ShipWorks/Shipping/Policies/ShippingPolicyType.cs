@@ -51,7 +51,6 @@ namespace ShipWorks.Shipping.Policies
         /// tango.Activate before calling tango.GetStatus so there is a chance the old value will get returned
         /// </remarks>
         [Description("Defines whether Amazon Seller Fulfilled Prime should be allowed as a carrier")]
-        [Deprecated]
         [ApiValue("AmazonShipmentRestriction")]
         AmazonShipmentRestriction
     }
