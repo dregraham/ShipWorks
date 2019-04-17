@@ -36,7 +36,7 @@ namespace ShipWorks.Shipping.ShipEngine
         /// <summary>
         /// Creates a ShipEngine purchase label request
         /// </summary>
-        public PurchaseLabelRequest CreatePurchaseLabelRequest(ShipmentEntity shipment)
+        public virtual PurchaseLabelRequest CreatePurchaseLabelRequest(ShipmentEntity shipment)
         {
             MethodConditions.EnsureArgumentIsNotNull(shipment, nameof(shipment));
             EnsureCarrierShipmentIsNotNull(shipment);
