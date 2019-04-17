@@ -68,12 +68,10 @@ namespace ShipWorks.Stores.Tests.Platforms.Walmart
             WalmartWebClient testObject = mock.Create<WalmartWebClient>();
 
             WalmartStoreEntity store = new WalmartStoreEntity();
-            store.ConsumerID = "blah blah consumer id";
 
             testObject.GetOrders(store, start);
 
             Assert.Equal("Walmart Marketplace", webHeaderCollection.GetValues("WM_SVC.NAME").First());
-            Assert.Equal(store.ConsumerID, webHeaderCollection.GetValues("WM_CONSUMER.ID").First());
             Assert.NotEmpty(webHeaderCollection.GetValues("WM_QOS.CORRELATION_ID"));
         }
 
