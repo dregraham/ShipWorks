@@ -8,3 +8,7 @@ ALTER TABLE [dbo].[WalmartStore] ADD
 [ClientID] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_WalmartStore_ClientID] DEFAULT (''),
 [ClientSecret] [nvarchar] (2000) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_WalmartStore_ClientSecret] DEFAULT ('')
 GO
+ALTER TABLE [dbo].[WalmartStore] DROP
+COLUMN [ConsumerID],
+COLUMN [PrivateKey]
+GO
