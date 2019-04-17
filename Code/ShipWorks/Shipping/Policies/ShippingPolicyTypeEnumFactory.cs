@@ -38,6 +38,7 @@ namespace ShipWorks.Shipping.Policies
                     }
 
                 case ShippingPolicyType.AmazonSFPShipmentRestriction:
+                case ShippingPolicyType.AmazonShipmentRestriction:
                     return new AmazonSFPShipmentShippingPolicy();
 
                 case ShippingPolicyType.AmazonSWAShipmentRestriction:
