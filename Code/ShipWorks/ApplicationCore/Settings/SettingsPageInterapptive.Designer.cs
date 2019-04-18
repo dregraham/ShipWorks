@@ -75,6 +75,8 @@ namespace ShipWorks.ApplicationCore.Settings
             this.otherTangoUrl = new System.Windows.Forms.Label();
             this.otherWarehouseUrl = new System.Windows.Forms.Label();
             this.otherWarehouseUrlText = new System.Windows.Forms.TextBox();
+            this.activationUrl = new System.Windows.Forms.Label();
+            this.activataionUrlText = new System.Windows.Forms.TextBox();
             this.panelBuyDotCom.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -554,11 +556,31 @@ namespace ShipWorks.ApplicationCore.Settings
             this.otherWarehouseUrlText.Size = new System.Drawing.Size(252, 21);
             this.otherWarehouseUrlText.TabIndex = 45;
             // 
+            // activationUrl
+            // 
+            this.activationUrl.AutoSize = true;
+            this.activationUrl.Location = new System.Drawing.Point(29, 1045);
+            this.activationUrl.Name = "activationUrl";
+            this.activationUrl.Size = new System.Drawing.Size(78, 13);
+            this.activationUrl.TabIndex = 48;
+            this.activationUrl.Text = "Activation Url: ";
+            // 
+            // activataionUrlText
+            // 
+            this.activataionUrlText.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.activataionUrlText.Location = new System.Drawing.Point(108, 1042);
+            this.activataionUrlText.Name = "activataionUrlText";
+            this.activataionUrlText.Size = new System.Drawing.Size(252, 21);
+            this.activataionUrlText.TabIndex = 47;
+            // 
             // SettingsPageInterapptive
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
+            this.Controls.Add(this.activationUrl);
+            this.Controls.Add(this.activataionUrlText);
             this.Controls.Add(this.otherWarehouseUrl);
             this.Controls.Add(this.otherWarehouseUrlText);
             this.Controls.Add(this.otherTangoUrl);
@@ -607,7 +629,7 @@ namespace ShipWorks.ApplicationCore.Settings
             this.Controls.Add(this.sectionShipping);
             this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Name = "SettingsPageInterapptive";
-            this.Size = new System.Drawing.Size(374, 1054);
+            this.Size = new System.Drawing.Size(374, 1076);
             this.Load += new System.EventHandler(this.OnLoad);
             this.panelBuyDotCom.ResumeLayout(false);
             this.ResumeLayout(false);
@@ -663,5 +685,7 @@ namespace ShipWorks.ApplicationCore.Settings
         private System.Windows.Forms.Label otherTangoUrl;
         private System.Windows.Forms.Label otherWarehouseUrl;
         private System.Windows.Forms.TextBox otherWarehouseUrlText;
+        private System.Windows.Forms.Label activationUrl;
+        private System.Windows.Forms.TextBox activataionUrlText;
     }
 }

@@ -21,6 +21,11 @@
         public string WarehouseUrl { get; set; }
 
         /// <summary>
+        /// URL for Tango Activation
+        /// </summary>
+        public string ActivationUrl { get; set; }
+
+        /// <summary>
         /// ShipWorks username that is put in the header
         /// </summary>
         public string HeaderShipWorksUsername { get; set; }

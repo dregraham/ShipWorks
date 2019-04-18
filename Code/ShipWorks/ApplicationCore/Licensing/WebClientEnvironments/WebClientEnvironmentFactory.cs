@@ -21,6 +21,7 @@ namespace ShipWorks.ApplicationCore.Licensing.WebClientEnvironments
         private const string EnvironmentSelectedName = "EnvironmentSelectedName";
         private const string EnvironmentOtherTangoUrl = "EnvironmentOtherTangoUrl";
         private const string EnvironmentOtherWarehouseUrl = "EnvironmentOtherWarehouseUrl";
+        private const string EnvironmentOtherActivationUrl = "EnvironmentOtherActivationUrl";
 
         /// <summary>
         /// Constructor
@@ -62,6 +63,7 @@ namespace ShipWorks.ApplicationCore.Licensing.WebClientEnvironments
             string selectedEnvironmentName = InterapptiveOnly.Registry.GetValue(EnvironmentSelectedName, "");
             string otherTangoUrl = InterapptiveOnly.Registry.GetValue(EnvironmentOtherTangoUrl, "");
             string otherWarehouseUrl = InterapptiveOnly.Registry.GetValue(EnvironmentOtherWarehouseUrl, "");
+            string otherActivationUrl = InterapptiveOnly.Registry.GetValue(EnvironmentOtherActivationUrl, "");
 
             environments = new List<WebClientEnvironment>
             {
@@ -71,7 +73,7 @@ namespace ShipWorks.ApplicationCore.Licensing.WebClientEnvironments
                 CreateWarehouseQaEnvironment(),
                 CreateWarehouseStagingEnvironment(),
                 CreateLocalhostEnvironment(),
-                CreateOtherEnvironment(otherTangoUrl, otherWarehouseUrl)
+                CreateOtherEnvironment(otherTangoUrl, otherWarehouseUrl, otherActivationUrl)
             };
 
             SelectedEnvironment = environments.FirstOrDefault(env => env.Name == selectedEnvironmentName);
@@ -99,6 +101,7 @@ namespace ShipWorks.ApplicationCore.Licensing.WebClientEnvironments
             {
                 InterapptiveOnly.Registry.SetValue(EnvironmentOtherTangoUrl, SelectedEnvironment.TangoUrl);
                 InterapptiveOnly.Registry.SetValue(EnvironmentOtherWarehouseUrl, SelectedEnvironment.WarehouseUrl);
+                InterapptiveOnly.Registry.SetValue(EnvironmentOtherActivationUrl, SelectedEnvironment.ActivationUrl);
             }
         }
 
@@ -115,8 +118,9 @@ namespace ShipWorks.ApplicationCore.Licensing.WebClientEnvironments
             return new WebClientEnvironment()
             {
                 Name = "Production",
-                TangoUrl = "https://www.interapptive.com/ShipWorksNet/ShipWorksV1.svc/account/shipworks",
-                WarehouseUrl = "https://warehouse.interapptive.com/",
+                TangoUrl =      "https://www.interapptive.com/ShipWorksNet/ShipWorksV1.svc/account/shipworks",
+                ActivationUrl = "https://www.interapptive.com/ShipWorksNet/ActivationV1.svc",
+                WarehouseUrl =  "https://warehouse.interapptive.com/",
                 HeaderShipWorksUsername = encryptionProvider.Decrypt("C5NOiKdNaM/324R7sIjFUA=="),
                 HeaderShipWorksPassword = encryptionProvider.Decrypt("lavEgsQoKGM="),
                 SoapAction = "http://stamps.com/xml/namespace/2015/06/shipworks/shipworksv1/IShipWorks/ShipworksPost",
@@ -132,8 +136,9 @@ namespace ShipWorks.ApplicationCore.Licensing.WebClientEnvironments
             return new WebClientEnvironment()
             {
                 Name = "QASC",
-                TangoUrl = "https://qasc.interapptive.warehouseapp.link/ShipWorksNet/ShipWorksV1.svc/account/shipworks",
-                WarehouseUrl = "",
+                TangoUrl =      "https://qasc.interapptive.warehouseapp.link/ShipWorksNet/ShipWorksV1.svc/account/shipworks",
+                ActivationUrl = "https://qasc.interapptive.warehouseapp.link/ShipWorksNet/ActivationV1.svc",
+                WarehouseUrl =  "",
                 HeaderShipWorksUsername = encryptionProvider.Decrypt("C5NOiKdNaM/324R7sIjFUA=="),
                 HeaderShipWorksPassword = encryptionProvider.Decrypt("lavEgsQoKGM="),
                 SoapAction = "http://stamps.com/xml/namespace/2015/06/shipworks/shipworksv1/IShipWorks/ShipworksPost",
@@ -149,8 +154,9 @@ namespace ShipWorks.ApplicationCore.Licensing.WebClientEnvironments
             return new WebClientEnvironment()
             {
                 Name = "Staging",
-                TangoUrl = "https://staging.interapptive.warehouseapp.link/ShipWorksNet/ShipWorksV1.svc/account/shipworks",
-                WarehouseUrl = "",
+                TangoUrl =      "https://staging.interapptive.warehouseapp.link/ShipWorksNet/ShipWorksV1.svc/account/shipworks",
+                ActivationUrl = "https://staging.interapptive.warehouseapp.link/ShipWorksNet/ActivationV1.svc",
+                WarehouseUrl =  "",
                 HeaderShipWorksUsername = encryptionProvider.Decrypt("C5NOiKdNaM/324R7sIjFUA=="),
                 HeaderShipWorksPassword = encryptionProvider.Decrypt("lavEgsQoKGM="),
                 SoapAction = "http://stamps.com/xml/namespace/2015/06/shipworks/shipworksv1/IShipWorks/ShipworksPost",
@@ -166,8 +172,9 @@ namespace ShipWorks.ApplicationCore.Licensing.WebClientEnvironments
             return new WebClientEnvironment()
             {
                 Name = "Warehouse - QA",
-                TangoUrl = "http://qa.fakeshipworksnet.warehouseapp.link/ShipWorksNet/ShipWorksV1.svc/account/shipworks",
-                WarehouseUrl = "http://qa.www.warehouseapp.link/",
+                TangoUrl =      "http://qa.fakeshipworksnet.warehouseapp.link/ShipWorksNet/ShipWorksV1.svc/account/shipworks",
+                ActivationUrl = "http://qa.fakeshipworksnet.warehouseapp.link/ShipWorksNet/ActivationV1.svc",
+                WarehouseUrl =  "http://qa.www.warehouseapp.link/",
                 HeaderShipWorksUsername = "none",
                 HeaderShipWorksPassword = "none",
                 SoapAction = "",
@@ -183,8 +190,9 @@ namespace ShipWorks.ApplicationCore.Licensing.WebClientEnvironments
             return new WebClientEnvironment()
             {
                 Name = "Warehouse - Staging",
-                TangoUrl = "https://www.interapptive.com/ShipWorksNet/ShipWorksV1.svc/account/shipworks",
-                WarehouseUrl = "http://staging.www.warehouseapp.link/",
+                TangoUrl =      "https://www.interapptive.com/ShipWorksNet/ShipWorksV1.svc/account/shipworks",
+                ActivationUrl = "https://www.interapptive.com/ShipWorksNet/ActivationV1.svc",
+                WarehouseUrl =  "http://staging.www.warehouseapp.link/",
                 HeaderShipWorksUsername = "none",
                 HeaderShipWorksPassword = "none",
                 SoapAction = "http://stamps.com/xml/namespace/2015/06/shipworks/shipworksv1/IShipWorks/ShipworksPost",
@@ -200,8 +208,9 @@ namespace ShipWorks.ApplicationCore.Licensing.WebClientEnvironments
             return new WebClientEnvironment()
             {
                 Name = "Localhost",
-                TangoUrl = "http://localhost:4002/ShipWorksNet/ShipWorksV1.svc/account/shipworks",
-                WarehouseUrl = "http://localhost:4001/",
+                TangoUrl =      "http://localhost:4002/ShipWorksNet/ShipWorksV1.svc/account/shipworks",
+                ActivationUrl = "http://localhost:4002/ShipWorksNet/ActivationV1.svc",
+                WarehouseUrl =  "http://localhost:4001/",
                 HeaderShipWorksUsername = "none",
                 HeaderShipWorksPassword = "none",
                 SoapAction = "",
@@ -212,13 +221,14 @@ namespace ShipWorks.ApplicationCore.Licensing.WebClientEnvironments
         /// <summary>
         /// Create an "other" environment
         /// </summary>
-        private WebClientEnvironment CreateOtherEnvironment(string tangoUrl, string warehouseUrl)
+        private WebClientEnvironment CreateOtherEnvironment(string tangoUrl, string warehouseUrl, string activationUrl)
         {
             return new WebClientEnvironment()
             {
                 Name = "Other",
                 TangoUrl = tangoUrl,
                 WarehouseUrl = warehouseUrl,
+                ActivationUrl = activationUrl,
                 HeaderShipWorksUsername = "none",
                 HeaderShipWorksPassword = "none",
                 SoapAction = "http://stamps.com/xml/namespace/2015/06/shipworks/shipworksv1/IShipWorks/ShipworksPost",
