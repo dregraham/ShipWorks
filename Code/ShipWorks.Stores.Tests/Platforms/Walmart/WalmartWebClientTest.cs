@@ -173,6 +173,8 @@ namespace ShipWorks.Stores.Tests.Platforms.Walmart
         [Fact]
         public void UpdateShipmentDetails_UsesCorrectUri()
         {
+            SetupHttpVariableRequestSubmitter(OAuthTokenResponse);
+
             WalmartWebClient testObject = mock.Create<WalmartWebClient>();
 
             testObject.UpdateShipmentDetails(new WalmartStoreEntity(), new orderShipment(), "123");
@@ -184,6 +186,8 @@ namespace ShipWorks.Stores.Tests.Platforms.Walmart
         [Fact]
         public void UpdateShipmentDetails_UsesTextPostSubmitterFromFactory()
         {
+            SetupHttpVariableRequestSubmitter(OAuthTokenResponse);
+
             WalmartWebClient testObject = mock.Create<WalmartWebClient>();
 
             testObject.UpdateShipmentDetails(new WalmartStoreEntity(), new orderShipment(), "123");
@@ -195,8 +199,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Walmart
         [Fact]
         public void UpdateShipmentDetails_ReturnsOrder()
         {
-            Mock<IHttpVariableRequestSubmitter> requestSubmitter = SetupHttpVariableRequestSubmitter(OAuthTokenResponse);
-            requestSubmitter.SetupGet(r => r.Headers);
+            SetupHttpVariableRequestSubmitter(OAuthTokenResponse);
 
             WalmartWebClient testObject = mock.Create<WalmartWebClient>();
 
@@ -311,7 +314,9 @@ namespace ShipWorks.Stores.Tests.Platforms.Walmart
         private Mock<IHttpVariableRequestSubmitter> SetupHttpVariableRequestSubmitter(string response)
         {
             Mock<IHttpResponseReader> responseReader = mock.Mock<IHttpResponseReader>();
-            responseReader.Setup(r => r.ReadResult()).CallBase();
+            responseReader.SetupSequence(r => r.ReadResult())
+                .Returns(response)
+                .CallBase();
             responseReader.Setup(r => r.HttpWebResponse.StatusCode).Returns(HttpStatusCode.OK);
 
             Mock<IHttpVariableRequestSubmitter> requestSubmitter = mock.Mock<IHttpVariableRequestSubmitter>();
