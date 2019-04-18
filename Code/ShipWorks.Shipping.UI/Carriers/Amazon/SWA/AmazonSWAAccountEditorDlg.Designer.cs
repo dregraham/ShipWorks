@@ -74,9 +74,9 @@ namespace ShipWorks.Shipping.UI.Carriers.Amazon.SWA
             this.labelAmazonSWAAccount.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labelAmazonSWAAccount.Location = new System.Drawing.Point(17, 9);
             this.labelAmazonSWAAccount.Name = "labelAmazonSWAAccount";
-            this.labelAmazonSWAAccount.Size = new System.Drawing.Size(128, 13);
+            this.labelAmazonSWAAccount.Size = new System.Drawing.Size(153, 13);
             this.labelAmazonSWAAccount.TabIndex = 178;
-            this.labelAmazonSWAAccount.Text = "AmazonSWA Account";
+            this.labelAmazonSWAAccount.Text = "Amazon Shipping Account";
             // 
             // labelDescription
             // 
@@ -177,7 +177,7 @@ namespace ShipWorks.Shipping.UI.Carriers.Amazon.SWA
             this.ShowIcon = false;
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-            this.Text = "AmazonSWA Account";
+            this.Text = "Amazon Shipping Account";
             this.Load += new System.EventHandler(this.OnLoad);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.fieldLengthProvider)).EndInit();

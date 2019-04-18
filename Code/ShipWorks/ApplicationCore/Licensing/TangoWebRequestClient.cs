@@ -5,8 +5,8 @@ using System.Xml;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Net;
-using Interapptive.Shared.Security;
 using Interapptive.Shared.Utility;
+using ShipWorks.ApplicationCore.Licensing.WebClientEnvironments;
 using ShipWorks.ApplicationCore.Logging;
 using static Interapptive.Shared.Utility.Functional;
 
@@ -18,21 +18,22 @@ namespace ShipWorks.ApplicationCore.Licensing
     [Component(RegistrationType.Self)]
     public class TangoWebRequestClient : ITangoWebRequestClient
     {
-        private readonly IEncryptionProvider encryptionProvider;
         private readonly ILogEntryFactory logEntryFactory;
         private readonly ITangoSecurityValidator securityValidator;
+        private readonly WebClientEnvironment webClientEnvironment;
 
         /// <summary>
         /// Constructor
         /// </summary>
         public TangoWebRequestClient(
-            IEncryptionProviderFactory encryptionProviderFactory,
             ILogEntryFactory logEntryFactory,
-            ITangoSecurityValidator securityValidator)
+            ITangoSecurityValidator securityValidator,
+            WebClientEnvironmentFactory webClientEnvironmentFactory)
         {
             this.securityValidator = securityValidator;
             this.logEntryFactory = logEntryFactory;
-            encryptionProvider = encryptionProviderFactory.CreateSecureTextEncryptionProvider("interapptive");
+
+            webClientEnvironment = webClientEnvironmentFactory.SelectedEnvironment;
         }
 
         /// <summary>
@@ -134,20 +135,19 @@ namespace ShipWorks.ApplicationCore.Licensing
         private void ConfigureRequest(IHttpVariableRequestSubmitter postRequest, ApiLogEntry logEntry)
         {
             postRequest.Timeout = TimeSpan.FromSeconds(60);
-            postRequest.Uri = new Uri("https://www.interapptive.com/ShipWorksNet/ShipWorksV1.svc/account/shipworks");
+            postRequest.Uri = new Uri(webClientEnvironment.TangoUrl);
+            postRequest.ForcePreCallCertificateValidation = webClientEnvironment.ForcePreCallCertificationValidation;
 
             logEntry.LogRequest(postRequest);
 
             postRequest.RequestSubmitting += delegate (object sender, HttpRequestSubmittingEventArgs e)
             {
                 e.HttpWebRequest.KeepAlive = false;
-
                 e.HttpWebRequest.UserAgent = "shipworks";
                 e.HttpWebRequest.Headers.Add("X-SHIPWORKS-VERSION", TangoWebClient.Version);
-
-                e.HttpWebRequest.Headers.Add("X-SHIPWORKS-USER", encryptionProvider.Decrypt("C5NOiKdNaM/324R7sIjFUA=="));
-                e.HttpWebRequest.Headers.Add("X-SHIPWORKS-PASS", encryptionProvider.Decrypt("lavEgsQoKGM="));
-                e.HttpWebRequest.Headers.Add("SOAPAction", "http://stamps.com/xml/namespace/2015/06/shipworks/shipworksv1/IShipWorks/ShipworksPost");
+                e.HttpWebRequest.Headers.Add("X-SHIPWORKS-USER", webClientEnvironment.HeaderShipWorksUsername);
+                e.HttpWebRequest.Headers.Add("X-SHIPWORKS-PASS", webClientEnvironment.HeaderShipWorksPassword);
+                e.HttpWebRequest.Headers.Add("SOAPAction", webClientEnvironment.SoapAction);
             };
         }
     }
