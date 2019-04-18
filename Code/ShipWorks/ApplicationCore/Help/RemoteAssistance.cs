@@ -156,7 +156,11 @@ namespace ShipWorks.ApplicationCore.Help
         /// </summary>
         private string DownloadClient(IProgressReporter progress)
         {
-            string clientExe = Path.Combine(DataPath.CreateUniqueTempPath(), "launcher.exe");
+            string appData = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+            string clientExe = Path.Combine(appData, "Interapptive\\ShipWorks\\RemoteAssistanceLauncher\\launcher.exe");
+
+            // Create the directory
+            Directory.CreateDirectory(Path.GetDirectoryName(clientExe));
 
             // Create the webrequest for downloading
             HttpWebRequest downloadRequest = (HttpWebRequest) WebRequest.Create(downloadUrl);
@@ -167,6 +171,9 @@ namespace ShipWorks.ApplicationCore.Help
             {
                 using (WebResponse response = downloadRequest.GetResponse())
                 {
+                    // Erase the existing file
+                    targetStream.SetLength(0);
+
                     // Copy the input stream to the output stream in 1K chunks
                     byte[] byteBuffer = new byte[10240];
                     int numBytes = 0;
