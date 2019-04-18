@@ -12972,6 +12972,10 @@ namespace ShipWorks.Data.Model
 		InsureShipApiKey,
 		///<summary>StoreID. </summary>
 		StoreID,
+		///<summary>ConsumerID. </summary>
+		ConsumerID,
+		///<summary>PrivateKey. </summary>
+		PrivateKey,
 		///<summary>DownloadModifiedNumberOfDaysBack. </summary>
 		DownloadModifiedNumberOfDaysBack,
 		///<summary>ClientID. </summary>

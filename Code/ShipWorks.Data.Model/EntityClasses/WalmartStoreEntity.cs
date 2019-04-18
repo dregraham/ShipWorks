@@ -332,6 +332,10 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties = new Dictionary<string, Dictionary<string, string>>();
 			Dictionary<string, string> fieldHashtable;
 			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("ConsumerID", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("PrivateKey", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("DownloadModifiedNumberOfDaysBack", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("ClientID", fieldHashtable);
@@ -388,6 +392,26 @@ namespace ShipWorks.Data.Model.EntityClasses
 		protected override Dictionary<string, Dictionary<string, string>> FieldsCustomPropertiesOfType
 		{
 			get { return FieldsCustomProperties;}
+		}
+
+		/// <summary> The ConsumerID property of the Entity WalmartStore<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "WalmartStore"."ConsumerID"<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.String ConsumerID
+		{
+			get { return (System.String)GetValue((int)WalmartStoreFieldIndex.ConsumerID, true); }
+			set	{ SetValue((int)WalmartStoreFieldIndex.ConsumerID, value); }
+		}
+
+		/// <summary> The PrivateKey property of the Entity WalmartStore<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "WalmartStore"."PrivateKey"<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 2000<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.String PrivateKey
+		{
+			get { return (System.String)GetValue((int)WalmartStoreFieldIndex.PrivateKey, true); }
+			set	{ SetValue((int)WalmartStoreFieldIndex.PrivateKey, value); }
 		}
 
 		/// <summary> The DownloadModifiedNumberOfDaysBack property of the Entity WalmartStore<br/><br/></summary>

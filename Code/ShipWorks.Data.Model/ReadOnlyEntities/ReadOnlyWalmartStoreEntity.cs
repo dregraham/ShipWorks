@@ -36,6 +36,8 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
                 objectMap[source] = this;
             }
             
+            ConsumerID = source.ConsumerID;
+            PrivateKey = source.PrivateKey;
             DownloadModifiedNumberOfDaysBack = source.DownloadModifiedNumberOfDaysBack;
             ClientID = source.ClientID;
             ClientSecret = source.ClientSecret;
@@ -47,6 +49,18 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         }
 
         
+        /// <summary> The ConsumerID property of the Entity WalmartStore<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "WalmartStore"."ConsumerID"<br/>
+        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+        public System.String ConsumerID { get; }
+        /// <summary> The PrivateKey property of the Entity WalmartStore<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "WalmartStore"."PrivateKey"<br/>
+        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 2000<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+        public System.String PrivateKey { get; }
         /// <summary> The DownloadModifiedNumberOfDaysBack property of the Entity WalmartStore<br/><br/>
         /// </summary>
         /// <remarks>Mapped on table field: "WalmartStore"."DownloadModifiedNumberOfDaysBack"<br/>
