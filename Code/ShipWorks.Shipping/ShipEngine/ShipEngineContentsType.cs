@@ -13,7 +13,7 @@ namespace ShipWorks.Shipping.ShipEngine
     /// ShipEngine Contents - This is used when sending customs content information to ShipEngine.
     /// </summary>
     /// <remarks>
-    /// The numeric values of the enum values correspond to the numeric values of the enum values 
+    /// The numeric values of the enum values correspond to the numeric values of the enum values
     /// of InternationalOptions.ContentsEnum
     /// </remarks>
     [Obfuscation(Feature = "PreserveLiteralValues", Exclude = false, StripAfterObfuscation = false)]
@@ -21,22 +21,22 @@ namespace ShipWorks.Shipping.ShipEngine
     {
         [Description("Merchandise")]
         [ApiValue("merchandise")]
-        Merchandise = 0,
+        Merchandise = 1,
 
         [Description("Documents")]
         [ApiValue("documents")]
-        Documents = 1,
+        Documents = 2,
 
         [Description("Gift")]
         [ApiValue("gift")]
-        Gift = 2,
+        Gift = 3,
 
         [Description("Returned Goods")]
         [ApiValue("returned_goods")]
-        ReturnedGoods = 3,
+        ReturnedGoods = 4,
 
         [Description("Sample")]
         [ApiValue("sample")]
-        Sample = 4
+        Sample = 5
     }
 }

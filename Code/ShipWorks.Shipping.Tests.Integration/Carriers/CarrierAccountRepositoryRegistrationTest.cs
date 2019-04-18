@@ -30,7 +30,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Carriers
         }
 
         [Theory]
-        [InlineData(ShipmentTypeCode.Amazon, typeof(NullAccountRepository))]
+        [InlineData(ShipmentTypeCode.AmazonSFP, typeof(NullAccountRepository))]
         [InlineData(ShipmentTypeCode.BestRate, typeof(NullAccountRepository))]
         [InlineData(ShipmentTypeCode.Endicia, typeof(EndiciaAccountRepository))]
         [InlineData(ShipmentTypeCode.Express1Endicia, typeof(Express1EndiciaAccountRepository))]

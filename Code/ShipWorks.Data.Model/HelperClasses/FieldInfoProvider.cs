@@ -49,7 +49,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 		/// <summary>Method which initializes the internal datastores.</summary>
 		private void Init()
 		{
-			this.InitClass( (234 + 2));
+			this.InitClass( (237 + 2));
 			InitActionEntityInfos();
 			InitActionFilterTriggerEntityInfos();
 			InitActionQueueEntityInfos();
@@ -60,10 +60,13 @@ namespace ShipWorks.Data.Model.HelperClasses
 			InitAmazonOrderEntityInfos();
 			InitAmazonOrderItemEntityInfos();
 			InitAmazonOrderSearchEntityInfos();
-			InitAmazonProfileEntityInfos();
-			InitAmazonServiceTypeEntityInfos();
-			InitAmazonShipmentEntityInfos();
+			InitAmazonSFPProfileEntityInfos();
+			InitAmazonSFPServiceTypeEntityInfos();
+			InitAmazonSFPShipmentEntityInfos();
 			InitAmazonStoreEntityInfos();
+			InitAmazonSWAAccountEntityInfos();
+			InitAmazonSWAProfileEntityInfos();
+			InitAmazonSWAShipmentEntityInfos();
 			InitAmeriCommerceStoreEntityInfos();
 			InitAsendiaAccountEntityInfos();
 			InitAsendiaProfileEntityInfos();
@@ -423,44 +426,44 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("AmazonOrderSearchEntity", "AmazonOrderID", typeof(System.String), false, false, false, false,  (int)AmazonOrderSearchFieldIndex.AmazonOrderID, 32, 0, 0);
 			this.AddElementFieldInfo("AmazonOrderSearchEntity", "OriginalOrderID", typeof(System.Int64), false, false, false, false,  (int)AmazonOrderSearchFieldIndex.OriginalOrderID, 0, 0, 19);
 		}
-		/// <summary>Inits AmazonProfileEntity's FieldInfo objects</summary>
-		private void InitAmazonProfileEntityInfos()
+		/// <summary>Inits AmazonSFPProfileEntity's FieldInfo objects</summary>
+		private void InitAmazonSFPProfileEntityInfos()
 		{
-			this.AddFieldIndexEnumForElementName(typeof(AmazonProfileFieldIndex), "AmazonProfileEntity");
-			this.AddElementFieldInfo("AmazonProfileEntity", "ShippingProfileID", typeof(System.Int64), true, true, false, false,  (int)AmazonProfileFieldIndex.ShippingProfileID, 0, 0, 19);
-			this.AddElementFieldInfo("AmazonProfileEntity", "DeliveryExperience", typeof(Nullable<System.Int32>), false, false, false, true,  (int)AmazonProfileFieldIndex.DeliveryExperience, 0, 0, 10);
-			this.AddElementFieldInfo("AmazonProfileEntity", "ShippingServiceID", typeof(System.String), false, false, false, true,  (int)AmazonProfileFieldIndex.ShippingServiceID, 50, 0, 0);
-			this.AddElementFieldInfo("AmazonProfileEntity", "Reference1", typeof(System.String), false, false, false, true,  (int)AmazonProfileFieldIndex.Reference1, 300, 0, 0);
+			this.AddFieldIndexEnumForElementName(typeof(AmazonSFPProfileFieldIndex), "AmazonSFPProfileEntity");
+			this.AddElementFieldInfo("AmazonSFPProfileEntity", "ShippingProfileID", typeof(System.Int64), true, true, false, false,  (int)AmazonSFPProfileFieldIndex.ShippingProfileID, 0, 0, 19);
+			this.AddElementFieldInfo("AmazonSFPProfileEntity", "DeliveryExperience", typeof(Nullable<System.Int32>), false, false, false, true,  (int)AmazonSFPProfileFieldIndex.DeliveryExperience, 0, 0, 10);
+			this.AddElementFieldInfo("AmazonSFPProfileEntity", "ShippingServiceID", typeof(System.String), false, false, false, true,  (int)AmazonSFPProfileFieldIndex.ShippingServiceID, 50, 0, 0);
+			this.AddElementFieldInfo("AmazonSFPProfileEntity", "Reference1", typeof(System.String), false, false, false, true,  (int)AmazonSFPProfileFieldIndex.Reference1, 300, 0, 0);
 		}
-		/// <summary>Inits AmazonServiceTypeEntity's FieldInfo objects</summary>
-		private void InitAmazonServiceTypeEntityInfos()
+		/// <summary>Inits AmazonSFPServiceTypeEntity's FieldInfo objects</summary>
+		private void InitAmazonSFPServiceTypeEntityInfos()
 		{
-			this.AddFieldIndexEnumForElementName(typeof(AmazonServiceTypeFieldIndex), "AmazonServiceTypeEntity");
-			this.AddElementFieldInfo("AmazonServiceTypeEntity", "AmazonServiceTypeID", typeof(System.Int32), true, false, true, false,  (int)AmazonServiceTypeFieldIndex.AmazonServiceTypeID, 0, 0, 10);
-			this.AddElementFieldInfo("AmazonServiceTypeEntity", "ApiValue", typeof(System.String), false, false, false, false,  (int)AmazonServiceTypeFieldIndex.ApiValue, 50, 0, 0);
-			this.AddElementFieldInfo("AmazonServiceTypeEntity", "Description", typeof(System.String), false, false, false, false,  (int)AmazonServiceTypeFieldIndex.Description, 100, 0, 0);
+			this.AddFieldIndexEnumForElementName(typeof(AmazonSFPServiceTypeFieldIndex), "AmazonSFPServiceTypeEntity");
+			this.AddElementFieldInfo("AmazonSFPServiceTypeEntity", "AmazonSFPServiceTypeID", typeof(System.Int32), true, false, true, false,  (int)AmazonSFPServiceTypeFieldIndex.AmazonSFPServiceTypeID, 0, 0, 10);
+			this.AddElementFieldInfo("AmazonSFPServiceTypeEntity", "ApiValue", typeof(System.String), false, false, false, false,  (int)AmazonSFPServiceTypeFieldIndex.ApiValue, 50, 0, 0);
+			this.AddElementFieldInfo("AmazonSFPServiceTypeEntity", "Description", typeof(System.String), false, false, false, false,  (int)AmazonSFPServiceTypeFieldIndex.Description, 100, 0, 0);
 		}
-		/// <summary>Inits AmazonShipmentEntity's FieldInfo objects</summary>
-		private void InitAmazonShipmentEntityInfos()
+		/// <summary>Inits AmazonSFPShipmentEntity's FieldInfo objects</summary>
+		private void InitAmazonSFPShipmentEntityInfos()
 		{
-			this.AddFieldIndexEnumForElementName(typeof(AmazonShipmentFieldIndex), "AmazonShipmentEntity");
-			this.AddElementFieldInfo("AmazonShipmentEntity", "ShipmentID", typeof(System.Int64), true, true, false, false,  (int)AmazonShipmentFieldIndex.ShipmentID, 0, 0, 19);
-			this.AddElementFieldInfo("AmazonShipmentEntity", "CarrierName", typeof(System.String), false, false, false, false,  (int)AmazonShipmentFieldIndex.CarrierName, 50, 0, 0);
-			this.AddElementFieldInfo("AmazonShipmentEntity", "ShippingServiceName", typeof(System.String), false, false, false, false,  (int)AmazonShipmentFieldIndex.ShippingServiceName, 50, 0, 0);
-			this.AddElementFieldInfo("AmazonShipmentEntity", "ShippingServiceID", typeof(System.String), false, false, false, false,  (int)AmazonShipmentFieldIndex.ShippingServiceID, 50, 0, 0);
-			this.AddElementFieldInfo("AmazonShipmentEntity", "InsuranceValue", typeof(System.Decimal), false, false, false, false,  (int)AmazonShipmentFieldIndex.InsuranceValue, 0, 4, 19);
-			this.AddElementFieldInfo("AmazonShipmentEntity", "DimsProfileID", typeof(System.Int64), false, false, false, false,  (int)AmazonShipmentFieldIndex.DimsProfileID, 0, 0, 19);
-			this.AddElementFieldInfo("AmazonShipmentEntity", "DimsLength", typeof(System.Double), false, false, false, false,  (int)AmazonShipmentFieldIndex.DimsLength, 0, 0, 38);
-			this.AddElementFieldInfo("AmazonShipmentEntity", "DimsWidth", typeof(System.Double), false, false, false, false,  (int)AmazonShipmentFieldIndex.DimsWidth, 0, 0, 38);
-			this.AddElementFieldInfo("AmazonShipmentEntity", "DimsHeight", typeof(System.Double), false, false, false, false,  (int)AmazonShipmentFieldIndex.DimsHeight, 0, 0, 38);
-			this.AddElementFieldInfo("AmazonShipmentEntity", "DimsWeight", typeof(System.Double), false, false, false, false,  (int)AmazonShipmentFieldIndex.DimsWeight, 0, 0, 38);
-			this.AddElementFieldInfo("AmazonShipmentEntity", "DimsAddWeight", typeof(System.Boolean), false, false, false, false,  (int)AmazonShipmentFieldIndex.DimsAddWeight, 0, 0, 0);
-			this.AddElementFieldInfo("AmazonShipmentEntity", "DeliveryExperience", typeof(System.Int32), false, false, false, false,  (int)AmazonShipmentFieldIndex.DeliveryExperience, 0, 0, 10);
-			this.AddElementFieldInfo("AmazonShipmentEntity", "DeclaredValue", typeof(Nullable<System.Decimal>), false, false, false, true,  (int)AmazonShipmentFieldIndex.DeclaredValue, 0, 4, 19);
-			this.AddElementFieldInfo("AmazonShipmentEntity", "AmazonUniqueShipmentID", typeof(System.String), false, false, false, true,  (int)AmazonShipmentFieldIndex.AmazonUniqueShipmentID, 50, 0, 0);
-			this.AddElementFieldInfo("AmazonShipmentEntity", "Insurance", typeof(System.Boolean), false, false, false, false,  (int)AmazonShipmentFieldIndex.Insurance, 0, 0, 0);
-			this.AddElementFieldInfo("AmazonShipmentEntity", "Reference1", typeof(System.String), false, false, false, false,  (int)AmazonShipmentFieldIndex.Reference1, 300, 0, 0);
-			this.AddElementFieldInfo("AmazonShipmentEntity", "RequestedLabelFormat", typeof(System.Int32), false, false, false, false,  (int)AmazonShipmentFieldIndex.RequestedLabelFormat, 0, 0, 10);
+			this.AddFieldIndexEnumForElementName(typeof(AmazonSFPShipmentFieldIndex), "AmazonSFPShipmentEntity");
+			this.AddElementFieldInfo("AmazonSFPShipmentEntity", "ShipmentID", typeof(System.Int64), true, true, false, false,  (int)AmazonSFPShipmentFieldIndex.ShipmentID, 0, 0, 19);
+			this.AddElementFieldInfo("AmazonSFPShipmentEntity", "CarrierName", typeof(System.String), false, false, false, false,  (int)AmazonSFPShipmentFieldIndex.CarrierName, 50, 0, 0);
+			this.AddElementFieldInfo("AmazonSFPShipmentEntity", "ShippingServiceName", typeof(System.String), false, false, false, false,  (int)AmazonSFPShipmentFieldIndex.ShippingServiceName, 50, 0, 0);
+			this.AddElementFieldInfo("AmazonSFPShipmentEntity", "ShippingServiceID", typeof(System.String), false, false, false, false,  (int)AmazonSFPShipmentFieldIndex.ShippingServiceID, 50, 0, 0);
+			this.AddElementFieldInfo("AmazonSFPShipmentEntity", "InsuranceValue", typeof(System.Decimal), false, false, false, false,  (int)AmazonSFPShipmentFieldIndex.InsuranceValue, 0, 4, 19);
+			this.AddElementFieldInfo("AmazonSFPShipmentEntity", "DimsProfileID", typeof(System.Int64), false, false, false, false,  (int)AmazonSFPShipmentFieldIndex.DimsProfileID, 0, 0, 19);
+			this.AddElementFieldInfo("AmazonSFPShipmentEntity", "DimsLength", typeof(System.Double), false, false, false, false,  (int)AmazonSFPShipmentFieldIndex.DimsLength, 0, 0, 38);
+			this.AddElementFieldInfo("AmazonSFPShipmentEntity", "DimsWidth", typeof(System.Double), false, false, false, false,  (int)AmazonSFPShipmentFieldIndex.DimsWidth, 0, 0, 38);
+			this.AddElementFieldInfo("AmazonSFPShipmentEntity", "DimsHeight", typeof(System.Double), false, false, false, false,  (int)AmazonSFPShipmentFieldIndex.DimsHeight, 0, 0, 38);
+			this.AddElementFieldInfo("AmazonSFPShipmentEntity", "DimsWeight", typeof(System.Double), false, false, false, false,  (int)AmazonSFPShipmentFieldIndex.DimsWeight, 0, 0, 38);
+			this.AddElementFieldInfo("AmazonSFPShipmentEntity", "DimsAddWeight", typeof(System.Boolean), false, false, false, false,  (int)AmazonSFPShipmentFieldIndex.DimsAddWeight, 0, 0, 0);
+			this.AddElementFieldInfo("AmazonSFPShipmentEntity", "DeliveryExperience", typeof(System.Int32), false, false, false, false,  (int)AmazonSFPShipmentFieldIndex.DeliveryExperience, 0, 0, 10);
+			this.AddElementFieldInfo("AmazonSFPShipmentEntity", "DeclaredValue", typeof(Nullable<System.Decimal>), false, false, false, true,  (int)AmazonSFPShipmentFieldIndex.DeclaredValue, 0, 4, 19);
+			this.AddElementFieldInfo("AmazonSFPShipmentEntity", "AmazonUniqueShipmentID", typeof(System.String), false, false, false, true,  (int)AmazonSFPShipmentFieldIndex.AmazonUniqueShipmentID, 50, 0, 0);
+			this.AddElementFieldInfo("AmazonSFPShipmentEntity", "Insurance", typeof(System.Boolean), false, false, false, false,  (int)AmazonSFPShipmentFieldIndex.Insurance, 0, 0, 0);
+			this.AddElementFieldInfo("AmazonSFPShipmentEntity", "Reference1", typeof(System.String), false, false, false, false,  (int)AmazonSFPShipmentFieldIndex.Reference1, 300, 0, 0);
+			this.AddElementFieldInfo("AmazonSFPShipmentEntity", "RequestedLabelFormat", typeof(System.Int32), false, false, false, false,  (int)AmazonSFPShipmentFieldIndex.RequestedLabelFormat, 0, 0, 10);
 		}
 		/// <summary>Inits AmazonStoreEntity's FieldInfo objects</summary>
 		private void InitAmazonStoreEntityInfos()
@@ -485,6 +488,52 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("AmazonStoreEntity", "ExcludeFBA", typeof(System.Boolean), false, false, false, false,  (int)AmazonStoreFieldIndex.ExcludeFBA, 0, 0, 0);
 			this.AddElementFieldInfo("AmazonStoreEntity", "DomainName", typeof(System.String), false, false, false, false,  (int)AmazonStoreFieldIndex.DomainName, 50, 0, 0);
 			this.AddElementFieldInfo("AmazonStoreEntity", "AmazonVATS", typeof(System.Boolean), false, false, false, false,  (int)AmazonStoreFieldIndex.AmazonVATS, 0, 0, 0);
+		}
+		/// <summary>Inits AmazonSWAAccountEntity's FieldInfo objects</summary>
+		private void InitAmazonSWAAccountEntityInfos()
+		{
+			this.AddFieldIndexEnumForElementName(typeof(AmazonSWAAccountFieldIndex), "AmazonSWAAccountEntity");
+			this.AddElementFieldInfo("AmazonSWAAccountEntity", "AmazonSWAAccountID", typeof(System.Int64), true, false, true, false,  (int)AmazonSWAAccountFieldIndex.AmazonSWAAccountID, 0, 0, 19);
+			this.AddElementFieldInfo("AmazonSWAAccountEntity", "RowVersion", typeof(System.Byte[]), false, false, true, false,  (int)AmazonSWAAccountFieldIndex.RowVersion, 2147483647, 0, 0);
+			this.AddElementFieldInfo("AmazonSWAAccountEntity", "ShipEngineCarrierId", typeof(System.String), false, false, false, false,  (int)AmazonSWAAccountFieldIndex.ShipEngineCarrierId, 12, 0, 0);
+			this.AddElementFieldInfo("AmazonSWAAccountEntity", "Description", typeof(System.String), false, false, false, false,  (int)AmazonSWAAccountFieldIndex.Description, 50, 0, 0);
+			this.AddElementFieldInfo("AmazonSWAAccountEntity", "FirstName", typeof(System.String), false, false, false, false,  (int)AmazonSWAAccountFieldIndex.FirstName, 30, 0, 0);
+			this.AddElementFieldInfo("AmazonSWAAccountEntity", "MiddleName", typeof(System.String), false, false, false, false,  (int)AmazonSWAAccountFieldIndex.MiddleName, 30, 0, 0);
+			this.AddElementFieldInfo("AmazonSWAAccountEntity", "LastName", typeof(System.String), false, false, false, false,  (int)AmazonSWAAccountFieldIndex.LastName, 30, 0, 0);
+			this.AddElementFieldInfo("AmazonSWAAccountEntity", "Company", typeof(System.String), false, false, false, false,  (int)AmazonSWAAccountFieldIndex.Company, 30, 0, 0);
+			this.AddElementFieldInfo("AmazonSWAAccountEntity", "Street1", typeof(System.String), false, false, false, false,  (int)AmazonSWAAccountFieldIndex.Street1, 43, 0, 0);
+			this.AddElementFieldInfo("AmazonSWAAccountEntity", "City", typeof(System.String), false, false, false, false,  (int)AmazonSWAAccountFieldIndex.City, 25, 0, 0);
+			this.AddElementFieldInfo("AmazonSWAAccountEntity", "StateProvCode", typeof(System.String), false, false, false, false,  (int)AmazonSWAAccountFieldIndex.StateProvCode, 50, 0, 0);
+			this.AddElementFieldInfo("AmazonSWAAccountEntity", "PostalCode", typeof(System.String), false, false, false, false,  (int)AmazonSWAAccountFieldIndex.PostalCode, 10, 0, 0);
+			this.AddElementFieldInfo("AmazonSWAAccountEntity", "CountryCode", typeof(System.String), false, false, false, false,  (int)AmazonSWAAccountFieldIndex.CountryCode, 50, 0, 0);
+			this.AddElementFieldInfo("AmazonSWAAccountEntity", "Email", typeof(System.String), false, false, false, false,  (int)AmazonSWAAccountFieldIndex.Email, 50, 0, 0);
+			this.AddElementFieldInfo("AmazonSWAAccountEntity", "Phone", typeof(System.String), false, false, false, false,  (int)AmazonSWAAccountFieldIndex.Phone, 15, 0, 0);
+		}
+		/// <summary>Inits AmazonSWAProfileEntity's FieldInfo objects</summary>
+		private void InitAmazonSWAProfileEntityInfos()
+		{
+			this.AddFieldIndexEnumForElementName(typeof(AmazonSWAProfileFieldIndex), "AmazonSWAProfileEntity");
+			this.AddElementFieldInfo("AmazonSWAProfileEntity", "ShippingProfileID", typeof(System.Int64), true, true, false, false,  (int)AmazonSWAProfileFieldIndex.ShippingProfileID, 0, 0, 19);
+			this.AddElementFieldInfo("AmazonSWAProfileEntity", "AmazonSWAAccountID", typeof(Nullable<System.Int64>), false, false, false, true,  (int)AmazonSWAProfileFieldIndex.AmazonSWAAccountID, 0, 0, 19);
+			this.AddElementFieldInfo("AmazonSWAProfileEntity", "Service", typeof(Nullable<System.Int32>), false, false, false, true,  (int)AmazonSWAProfileFieldIndex.Service, 0, 0, 10);
+		}
+		/// <summary>Inits AmazonSWAShipmentEntity's FieldInfo objects</summary>
+		private void InitAmazonSWAShipmentEntityInfos()
+		{
+			this.AddFieldIndexEnumForElementName(typeof(AmazonSWAShipmentFieldIndex), "AmazonSWAShipmentEntity");
+			this.AddElementFieldInfo("AmazonSWAShipmentEntity", "ShipmentID", typeof(System.Int64), true, true, false, false,  (int)AmazonSWAShipmentFieldIndex.ShipmentID, 0, 0, 19);
+			this.AddElementFieldInfo("AmazonSWAShipmentEntity", "AmazonSWAAccountID", typeof(System.Int64), false, false, false, false,  (int)AmazonSWAShipmentFieldIndex.AmazonSWAAccountID, 0, 0, 19);
+			this.AddElementFieldInfo("AmazonSWAShipmentEntity", "Service", typeof(System.Int32), false, false, false, false,  (int)AmazonSWAShipmentFieldIndex.Service, 0, 0, 10);
+			this.AddElementFieldInfo("AmazonSWAShipmentEntity", "RequestedLabelFormat", typeof(System.Int32), false, false, false, false,  (int)AmazonSWAShipmentFieldIndex.RequestedLabelFormat, 0, 0, 10);
+			this.AddElementFieldInfo("AmazonSWAShipmentEntity", "ShipEngineLabelID", typeof(System.String), false, false, false, false,  (int)AmazonSWAShipmentFieldIndex.ShipEngineLabelID, 12, 0, 0);
+			this.AddElementFieldInfo("AmazonSWAShipmentEntity", "DimsProfileID", typeof(System.Int64), false, false, false, false,  (int)AmazonSWAShipmentFieldIndex.DimsProfileID, 0, 0, 19);
+			this.AddElementFieldInfo("AmazonSWAShipmentEntity", "DimsLength", typeof(System.Double), false, false, false, false,  (int)AmazonSWAShipmentFieldIndex.DimsLength, 0, 0, 38);
+			this.AddElementFieldInfo("AmazonSWAShipmentEntity", "DimsWidth", typeof(System.Double), false, false, false, false,  (int)AmazonSWAShipmentFieldIndex.DimsWidth, 0, 0, 38);
+			this.AddElementFieldInfo("AmazonSWAShipmentEntity", "DimsHeight", typeof(System.Double), false, false, false, false,  (int)AmazonSWAShipmentFieldIndex.DimsHeight, 0, 0, 38);
+			this.AddElementFieldInfo("AmazonSWAShipmentEntity", "DimsAddWeight", typeof(System.Boolean), false, false, false, false,  (int)AmazonSWAShipmentFieldIndex.DimsAddWeight, 0, 0, 0);
+			this.AddElementFieldInfo("AmazonSWAShipmentEntity", "DimsWeight", typeof(System.Double), false, false, false, false,  (int)AmazonSWAShipmentFieldIndex.DimsWeight, 0, 0, 38);
+			this.AddElementFieldInfo("AmazonSWAShipmentEntity", "InsuranceValue", typeof(System.Decimal), false, false, false, false,  (int)AmazonSWAShipmentFieldIndex.InsuranceValue, 0, 4, 19);
+			this.AddElementFieldInfo("AmazonSWAShipmentEntity", "Insurance", typeof(System.Boolean), false, false, false, false,  (int)AmazonSWAShipmentFieldIndex.Insurance, 0, 0, 0);
 		}
 		/// <summary>Inits AmeriCommerceStoreEntity's FieldInfo objects</summary>
 		private void InitAmeriCommerceStoreEntityInfos()
@@ -2645,7 +2694,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddFieldIndexEnumForElementName(typeof(ProductListItemFieldIndex), "ProductListItemEntity");
 			this.AddElementFieldInfo("ProductListItemEntity", "ProductVariantID", typeof(System.Int64), false, false, false, false,  (int)ProductListItemFieldIndex.ProductVariantID, 0, 0, 19);
 			this.AddElementFieldInfo("ProductListItemEntity", "SKU", typeof(System.String), false, false, false, false,  (int)ProductListItemFieldIndex.SKU, 300, 0, 0);
-			this.AddElementFieldInfo("ProductListItemEntity", "Name", typeof(System.String), false, false, false, false,  (int)ProductListItemFieldIndex.Name, 300, 0, 0);
+			this.AddElementFieldInfo("ProductListItemEntity", "Name", typeof(System.String), false, false, false, true,  (int)ProductListItemFieldIndex.Name, 300, 0, 0);
 			this.AddElementFieldInfo("ProductListItemEntity", "Length", typeof(Nullable<System.Decimal>), false, false, false, true,  (int)ProductListItemFieldIndex.Length, 0, 2, 10);
 			this.AddElementFieldInfo("ProductListItemEntity", "Width", typeof(Nullable<System.Decimal>), false, false, false, true,  (int)ProductListItemFieldIndex.Width, 0, 2, 10);
 			this.AddElementFieldInfo("ProductListItemEntity", "Height", typeof(Nullable<System.Decimal>), false, false, false, true,  (int)ProductListItemFieldIndex.Height, 0, 2, 10);

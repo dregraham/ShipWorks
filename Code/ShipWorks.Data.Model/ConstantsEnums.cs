@@ -463,8 +463,8 @@ namespace ShipWorks.Data.Model
 		/// <summary></summary>
 		AmountOfFields
 	}
-	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: AmazonProfile.</summary>
-	public enum AmazonProfileFieldIndex
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: AmazonSFPProfile.</summary>
+	public enum AmazonSFPProfileFieldIndex
 	{
 		///<summary>ShippingProfileID. </summary>
 		ShippingProfileID,
@@ -477,11 +477,11 @@ namespace ShipWorks.Data.Model
 		/// <summary></summary>
 		AmountOfFields
 	}
-	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: AmazonServiceType.</summary>
-	public enum AmazonServiceTypeFieldIndex
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: AmazonSFPServiceType.</summary>
+	public enum AmazonSFPServiceTypeFieldIndex
 	{
-		///<summary>AmazonServiceTypeID. </summary>
-		AmazonServiceTypeID,
+		///<summary>AmazonSFPServiceTypeID. </summary>
+		AmazonSFPServiceTypeID,
 		///<summary>ApiValue. </summary>
 		ApiValue,
 		///<summary>Description. </summary>
@@ -489,8 +489,8 @@ namespace ShipWorks.Data.Model
 		/// <summary></summary>
 		AmountOfFields
 	}
-	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: AmazonShipment.</summary>
-	public enum AmazonShipmentFieldIndex
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: AmazonSFPShipment.</summary>
+	public enum AmazonSFPShipmentFieldIndex
 	{
 		///<summary>ShipmentID. </summary>
 		ShipmentID,
@@ -636,6 +636,86 @@ namespace ShipWorks.Data.Model
 		DomainName,
 		///<summary>AmazonVATS. </summary>
 		AmazonVATS,
+		/// <summary></summary>
+		AmountOfFields
+	}
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: AmazonSWAAccount.</summary>
+	public enum AmazonSWAAccountFieldIndex
+	{
+		///<summary>AmazonSWAAccountID. </summary>
+		AmazonSWAAccountID,
+		///<summary>RowVersion. </summary>
+		RowVersion,
+		///<summary>ShipEngineCarrierId. </summary>
+		ShipEngineCarrierId,
+		///<summary>Description. </summary>
+		Description,
+		///<summary>FirstName. </summary>
+		FirstName,
+		///<summary>MiddleName. </summary>
+		MiddleName,
+		///<summary>LastName. </summary>
+		LastName,
+		///<summary>Company. </summary>
+		Company,
+		///<summary>Street1. </summary>
+		Street1,
+		///<summary>City. </summary>
+		City,
+		///<summary>StateProvCode. </summary>
+		StateProvCode,
+		///<summary>PostalCode. </summary>
+		PostalCode,
+		///<summary>CountryCode. </summary>
+		CountryCode,
+		///<summary>Email. </summary>
+		Email,
+		///<summary>Phone. </summary>
+		Phone,
+		/// <summary></summary>
+		AmountOfFields
+	}
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: AmazonSWAProfile.</summary>
+	public enum AmazonSWAProfileFieldIndex
+	{
+		///<summary>ShippingProfileID. </summary>
+		ShippingProfileID,
+		///<summary>AmazonSWAAccountID. </summary>
+		AmazonSWAAccountID,
+		///<summary>Service. </summary>
+		Service,
+		/// <summary></summary>
+		AmountOfFields
+	}
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: AmazonSWAShipment.</summary>
+	public enum AmazonSWAShipmentFieldIndex
+	{
+		///<summary>ShipmentID. </summary>
+		ShipmentID,
+		///<summary>AmazonSWAAccountID. </summary>
+		AmazonSWAAccountID,
+		///<summary>Service. </summary>
+		Service,
+		///<summary>RequestedLabelFormat. </summary>
+		RequestedLabelFormat,
+		///<summary>ShipEngineLabelID. </summary>
+		ShipEngineLabelID,
+		///<summary>DimsProfileID. </summary>
+		DimsProfileID,
+		///<summary>DimsLength. </summary>
+		DimsLength,
+		///<summary>DimsWidth. </summary>
+		DimsWidth,
+		///<summary>DimsHeight. </summary>
+		DimsHeight,
+		///<summary>DimsAddWeight. </summary>
+		DimsAddWeight,
+		///<summary>DimsWeight. </summary>
+		DimsWeight,
+		///<summary>InsuranceValue. </summary>
+		InsuranceValue,
+		///<summary>Insurance. </summary>
+		Insurance,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -13625,14 +13705,20 @@ namespace ShipWorks.Data.Model
 		AmazonOrderItemEntity,
 		///<summary>AmazonOrderSearch</summary>
 		AmazonOrderSearchEntity,
-		///<summary>AmazonProfile</summary>
-		AmazonProfileEntity,
-		///<summary>AmazonServiceType</summary>
-		AmazonServiceTypeEntity,
-		///<summary>AmazonShipment</summary>
-		AmazonShipmentEntity,
+		///<summary>AmazonSFPProfile</summary>
+		AmazonSFPProfileEntity,
+		///<summary>AmazonSFPServiceType</summary>
+		AmazonSFPServiceTypeEntity,
+		///<summary>AmazonSFPShipment</summary>
+		AmazonSFPShipmentEntity,
 		///<summary>AmazonStore</summary>
 		AmazonStoreEntity,
+		///<summary>AmazonSWAAccount</summary>
+		AmazonSWAAccountEntity,
+		///<summary>AmazonSWAProfile</summary>
+		AmazonSWAProfileEntity,
+		///<summary>AmazonSWAShipment</summary>
+		AmazonSWAShipmentEntity,
 		///<summary>AmeriCommerceStore</summary>
 		AmeriCommerceStoreEntity,
 		///<summary>AsendiaAccount</summary>

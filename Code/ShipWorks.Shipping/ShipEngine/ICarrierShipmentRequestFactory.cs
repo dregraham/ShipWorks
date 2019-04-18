@@ -14,6 +14,11 @@ namespace ShipWorks.Shipping.ShipEngine
         RateShipmentRequest CreateRateShipmentRequest(ShipmentEntity shipment);
 
         /// <summary>
+        /// Create a PurchaseLabelWithoutShipmentRequest
+        /// </summary>
+        PurchaseLabelWithoutShipmentRequest CreatePurchaseLabelWithoutShipmentRequest(ShipmentEntity shipment);
+
+        /// <summary>
         /// Creates a PurchaseLabelRequest with carrier specific details from the given shipment
         /// </summary>
         PurchaseLabelRequest CreatePurchaseLabelRequest(ShipmentEntity shipment);

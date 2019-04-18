@@ -5,9 +5,6 @@ using ShipWorks.Startup;
 using ShipWorks.Tests.Shared.Database;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Xunit;
 
 namespace ShipWorks.Core.Tests.Integration.Shipping.Settings
@@ -23,11 +20,11 @@ namespace ShipWorks.Core.Tests.Integration.Shipping.Settings
         {
             context = db.CreateDataContext(x => ContainerInitializer.Initialize(x));
 
-            adapter = new SqlAdapter(false);            
+            adapter = new SqlAdapter(false);
         }
 
         [Theory]
-        [InlineData(ShipmentTypeCode.Amazon)]
+        [InlineData(ShipmentTypeCode.AmazonSFP)]
         [InlineData(ShipmentTypeCode.DhlExpress)]
         [InlineData(ShipmentTypeCode.Endicia)]
         public void MarkAsConfigured_SetsCarrierAsDefault_IfNoOtherCarrierIsConfigured(ShipmentTypeCode carrierToConfigure)
@@ -63,7 +60,7 @@ namespace ShipWorks.Core.Tests.Integration.Shipping.Settings
         }
 
         [Theory]
-        [InlineData(ShipmentTypeCode.Amazon)]
+        [InlineData(ShipmentTypeCode.AmazonSFP)]
         [InlineData(ShipmentTypeCode.DhlExpress)]
         [InlineData(ShipmentTypeCode.Endicia)]
         public void MarkAsConfigured_DoesNotSetCarrierAsDefault_IfNoneNotDefault(ShipmentTypeCode carrierToConfigure)

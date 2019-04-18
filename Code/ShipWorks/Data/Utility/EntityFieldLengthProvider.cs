@@ -185,7 +185,7 @@ namespace ShipWorks.Data.Utility
                            GetMaxLength(EntityFieldLengthSource.PersonStreet2) +
                            GetMaxLength(EntityFieldLengthSource.PersonStreet3);
             }
-            
+
             // Look up based on LLBLGen metadata
             EntityField2 field = GetSourceField(source);
             int length = field.MaxLength;
@@ -366,12 +366,12 @@ namespace ShipWorks.Data.Utility
                 case EntityFieldLengthSource.OnTracReference1: return OnTracShipmentFields.Reference1;
                 case EntityFieldLengthSource.OnTracReference2: return OnTracShipmentFields.Reference2;
 
-                case EntityFieldLengthSource.AmazonShipmentCarrierName: return AmazonShipmentFields.CarrierName;
-                case EntityFieldLengthSource.AmazonShipmentShippingServiceID: return AmazonShipmentFields.ShippingServiceID;
-                case EntityFieldLengthSource.AmazonShipmentShippingServiceName: return AmazonShipmentFields.ShippingServiceName;
+                case EntityFieldLengthSource.AmazonShipmentCarrierName: return AmazonSFPShipmentFields.CarrierName;
+                case EntityFieldLengthSource.AmazonShipmentShippingServiceID: return AmazonSFPShipmentFields.ShippingServiceID;
+                case EntityFieldLengthSource.AmazonShipmentShippingServiceName: return AmazonSFPShipmentFields.ShippingServiceName;
 
                 case EntityFieldLengthSource.OdbcStoreCustomQuery: return OdbcStoreFields.UploadColumnSource;
-                    
+
                 case EntityFieldLengthSource.ReturnItemName: return ShipmentReturnItemFields.Name;
                 case EntityFieldLengthSource.ReturnItemSku: return ShipmentReturnItemFields.SKU;
                 case EntityFieldLengthSource.ReturnItemCode: return ShipmentReturnItemFields.Code;
@@ -381,6 +381,7 @@ namespace ShipWorks.Data.Utility
                 case EntityFieldLengthSource.DhlExpressDescription: return DhlExpressAccountFields.Description;
 
                 case EntityFieldLengthSource.AsendiaDescription: return AsendiaAccountFields.Description;
+                case EntityFieldLengthSource.AmazonSWADescription: return AmazonSWAAccountFields.Description;
             }
 
             throw new InvalidOperationException("Unmapped EntityFieldLengthSource: " + source);

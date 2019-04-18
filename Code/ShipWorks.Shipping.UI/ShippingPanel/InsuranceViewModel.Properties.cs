@@ -20,6 +20,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         private IEnumerable<IPackageAdapter> packageAdapters;
         private IInsuranceChoice insuranceChoice;
         private ICarrierShipmentAdapter shipmentAdapter;
+        private bool supportsInsurance;
         private string insuranceLabelDisplayText;
         private string insuranceTypeLabelDisplayText;
         private string insuranceValueLabelDisplayText;
@@ -60,13 +61,17 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
                 if (SelectedPackageAdapter?.InsuranceChoice != null)
                 {
                     InsuranceChoice = SelectedPackageAdapter.InsuranceChoice;
-
                     Insurance = InsuranceChoice.Insured;
                     DeclaredValue = InsuranceChoice.InsuranceValue;
+                    SupportsInsurance = true;
 
                     UpdateInsuranceLabelDisplayText();
                     UpdateInsuranceTypeLabelDisplayText();
                     UpdateInsuranceValueLabelDisplayText();
+                }
+                else
+                {
+                    SupportsInsurance = false;
                 }
             }
         }
@@ -134,6 +139,16 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         {
             get { return insuranceValueLabelDisplayText; }
             set { handler.Set(nameof(InsuranceValueLabelDisplayText), ref insuranceValueLabelDisplayText, value, true); }
+        }
+
+        /// <summary>
+        /// Sets the insurance type label text value
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public bool SupportsInsurance
+        {
+            get { return supportsInsurance; }
+            set { handler.Set(nameof(SupportsInsurance), ref supportsInsurance, value, true); }
         }
 
         /// <summary>

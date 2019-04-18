@@ -25,6 +25,7 @@ using ShipWorks.Stores.Platforms.Shopify.Enums;
 using ShipWorks.UI.Controls;
 using ShipWorks.Shipping.Carriers.Dhl;
 using ShipWorks.Shipping.Carriers.Asendia;
+using ShipWorks.Shipping.Carriers.Amazon.SWA;
 
 namespace ShipWorks.Users.Audit
 {
@@ -86,6 +87,7 @@ namespace ShipWorks.Users.Audit
             enumMapping[Formats.AmazonDeliveryExperienceType] = null; // AmazonDeliveryExperienceType -- ShipWorks.Core does not know about this type so we register it later
             enumMapping[130] = typeof(DhlExpressServiceType);
             enumMapping[131] = typeof(AsendiaServiceType);
+            enumMapping[132] = typeof(AmazonSWAServiceType);
         }
 
         /// <summary>

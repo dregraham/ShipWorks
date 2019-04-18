@@ -98,8 +98,8 @@ namespace ShipWorks.Tests.Shared.EntityBuilders
         /// <summary>
         /// Make the shipment an Amazon shipment
         /// </summary>
-        public ProfileEntityBuilder AsAmazon(Action<EntityBuilder<AmazonProfileEntity>> builderConfiguration) =>
-            SetShipmentType(builderConfiguration, ShipmentTypeCode.Amazon, x => x.Amazon);
+        public ProfileEntityBuilder AsAmazon(Action<EntityBuilder<AmazonSFPProfileEntity>> builderConfiguration) =>
+            SetShipmentType(builderConfiguration, ShipmentTypeCode.AmazonSFP, x => x.AmazonSFP);
 
         /// <summary>
         /// Make the shipment an BestRate shipment

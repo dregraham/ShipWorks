@@ -63,7 +63,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Postal
             SetupDefaultMocks(new ShipmentDateCutoff(false, TimeSpan.MinValue));
 
             PostalShipmentDateManipulator testObject = mock.Create<PostalShipmentDateManipulator>();
-            shipment.ShipmentTypeCode = ShipmentTypeCode.Amazon;
+            shipment.ShipmentTypeCode = ShipmentTypeCode.AmazonSFP;
             testObject.Manipulate(shipment);
 
             shippingSettingsEntity.Verify(x => x.GetShipmentDateCutoff(shipment.ShipmentTypeCode));

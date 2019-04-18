@@ -48,8 +48,8 @@
             Grid.Column="0"
             Grid.ColumnSpan="2"
             ui:UpdateWhenMessageReceived.MessageType="{x:Type sw:OriginAddressChangedMessage}"
-            DisplayMemberPath="Value"
-            SelectedValuePath="Key"
+            DisplayMemberPath="Key"
+            SelectedValuePath="Value"
             Style="{StaticResource StackedFormComboBox}">
             <ComboBox.IsEnabled>
                 <Binding Mode="OneWay" Path="ShipmentModel.ShipmentAllowEditing" />

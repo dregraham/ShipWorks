@@ -1,6 +1,6 @@
 ﻿using Autofac.Extras.Moq;
 using Interapptive.Shared.Utility;
-using ShipWorks.Shipping.Carriers.Amazon.Api.DTOs;
+using ShipWorks.Shipping.Carriers.Amazon.SFP.Api.DTOs;
 using System.IO;
 using System.Reflection;
 using Xunit;

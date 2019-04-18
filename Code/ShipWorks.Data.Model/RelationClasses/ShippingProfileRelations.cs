@@ -31,7 +31,8 @@ namespace ShipWorks.Data.Model.RelationClasses
 		{
 			List<IEntityRelation> toReturn = new List<IEntityRelation>();
 			toReturn.Add(this.PackageProfileEntityUsingShippingProfileID);
-			toReturn.Add(this.AmazonProfileEntityUsingShippingProfileID);
+			toReturn.Add(this.AmazonSFPProfileEntityUsingShippingProfileID);
+			toReturn.Add(this.AmazonSWAProfileEntityUsingShippingProfileID);
 			toReturn.Add(this.AsendiaProfileEntityUsingShippingProfileID);
 			toReturn.Add(this.BestRateProfileEntityUsingShippingProfileID);
 			toReturn.Add(this.DhlExpressProfileEntityUsingShippingProfileID);
@@ -61,21 +62,40 @@ namespace ShipWorks.Data.Model.RelationClasses
 			}
 		}
 
-		/// <summary>Returns a new IEntityRelation object, between ShippingProfileEntity and AmazonProfileEntity over the 1:1 relation they have, using the relation between the fields:
-		/// ShippingProfile.ShippingProfileID - AmazonProfile.ShippingProfileID
+		/// <summary>Returns a new IEntityRelation object, between ShippingProfileEntity and AmazonSFPProfileEntity over the 1:1 relation they have, using the relation between the fields:
+		/// ShippingProfile.ShippingProfileID - AmazonSFPProfile.ShippingProfileID
 		/// </summary>
-		public virtual IEntityRelation AmazonProfileEntityUsingShippingProfileID
+		public virtual IEntityRelation AmazonSFPProfileEntityUsingShippingProfileID
 		{
 			get
 			{
-				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToOne, "Amazon", true);
+				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToOne, "AmazonSFP", true);
 
-				relation.AddEntityFieldPair(ShippingProfileFields.ShippingProfileID, AmazonProfileFields.ShippingProfileID);
+				relation.AddEntityFieldPair(ShippingProfileFields.ShippingProfileID, AmazonSFPProfileFields.ShippingProfileID);
 
 
 
 				relation.InheritanceInfoPkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("ShippingProfileEntity", true);
-				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("AmazonProfileEntity", false);
+				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("AmazonSFPProfileEntity", false);
+				return relation;
+			}
+		}
+
+		/// <summary>Returns a new IEntityRelation object, between ShippingProfileEntity and AmazonSWAProfileEntity over the 1:1 relation they have, using the relation between the fields:
+		/// ShippingProfile.ShippingProfileID - AmazonSWAProfile.ShippingProfileID
+		/// </summary>
+		public virtual IEntityRelation AmazonSWAProfileEntityUsingShippingProfileID
+		{
+			get
+			{
+				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToOne, "AmazonSWA", true);
+
+				relation.AddEntityFieldPair(ShippingProfileFields.ShippingProfileID, AmazonSWAProfileFields.ShippingProfileID);
+
+
+
+				relation.InheritanceInfoPkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("ShippingProfileEntity", true);
+				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("AmazonSWAProfileEntity", false);
 				return relation;
 			}
 		}
@@ -266,7 +286,8 @@ namespace ShipWorks.Data.Model.RelationClasses
 	internal static class StaticShippingProfileRelations
 	{
 		internal static readonly IEntityRelation PackageProfileEntityUsingShippingProfileIDStatic = new ShippingProfileRelations().PackageProfileEntityUsingShippingProfileID;
-		internal static readonly IEntityRelation AmazonProfileEntityUsingShippingProfileIDStatic = new ShippingProfileRelations().AmazonProfileEntityUsingShippingProfileID;
+		internal static readonly IEntityRelation AmazonSFPProfileEntityUsingShippingProfileIDStatic = new ShippingProfileRelations().AmazonSFPProfileEntityUsingShippingProfileID;
+		internal static readonly IEntityRelation AmazonSWAProfileEntityUsingShippingProfileIDStatic = new ShippingProfileRelations().AmazonSWAProfileEntityUsingShippingProfileID;
 		internal static readonly IEntityRelation AsendiaProfileEntityUsingShippingProfileIDStatic = new ShippingProfileRelations().AsendiaProfileEntityUsingShippingProfileID;
 		internal static readonly IEntityRelation BestRateProfileEntityUsingShippingProfileIDStatic = new ShippingProfileRelations().BestRateProfileEntityUsingShippingProfileID;
 		internal static readonly IEntityRelation DhlExpressProfileEntityUsingShippingProfileIDStatic = new ShippingProfileRelations().DhlExpressProfileEntityUsingShippingProfileID;

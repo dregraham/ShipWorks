@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using Autofac;
-using ShipWorks.Shipping.Carriers.Amazon;
 using ShipWorks.Shipping.Carriers.FedEx;
 using ShipWorks.Shipping.Carriers.iParcel;
 using ShipWorks.Shipping.Carriers.OnTrac;
@@ -15,6 +14,7 @@ using ShipWorks.Shipping.Carriers.UPS;
 using ShipWorks.Startup;
 using Xunit;
 using ShipWorks.Shipping.Carriers.Dhl;
+using ShipWorks.Shipping.Carriers.Amazon.SFP;
 
 namespace ShipWorks.Shipping.Tests.Integration.Carriers
 {
@@ -29,7 +29,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Carriers
         }
 
         [Theory]
-        [InlineData(ShipmentTypeCode.Amazon, typeof(AmazonLabelService))]
+        [InlineData(ShipmentTypeCode.AmazonSFP, typeof(AmazonSFPLabelService))]
         [InlineData(ShipmentTypeCode.Endicia, typeof(EndiciaLabelService))]
         [InlineData(ShipmentTypeCode.Express1Endicia, typeof(Express1EndiciaLabelService))]
         [InlineData(ShipmentTypeCode.Express1Usps, typeof(Express1UspsLabelService))]

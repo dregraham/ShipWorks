@@ -14,7 +14,7 @@ namespace ShipWorks.Shipping.ShipEngine
     /// </summary>
     public abstract class ShipEngineLabelService : ILabelService
     {
-        private readonly IShipEngineWebClient shipEngineWebClient;
+        protected readonly IShipEngineWebClient shipEngineWebClient;
         private readonly Func<ShipmentEntity, Label, IDownloadedLabelData> createDownloadedLabelData;
         protected ICarrierShipmentRequestFactory shipmentRequestFactory;
         protected ILog log;
@@ -45,18 +45,23 @@ namespace ShipWorks.Shipping.ShipEngine
         /// <summary>
         /// Create the label
         /// </summary>
-        public async Task<TelemetricResult<IDownloadedLabelData>> Create(ShipmentEntity shipment)
+        public virtual async Task<TelemetricResult<IDownloadedLabelData>> Create(ShipmentEntity shipment)
         {
             MethodConditions.EnsureArgumentIsNotNull(shipment, nameof(shipment));
-
-            PurchaseLabelRequest request = shipmentRequestFactory.CreatePurchaseLabelRequest(shipment);
-
+            return await CreateLabelInternal(shipment, 
+                () => shipEngineWebClient.PurchaseLabel(shipmentRequestFactory.CreatePurchaseLabelRequest(shipment), ApiLogSource));
+        }
+        
+        /// <summary>
+        /// Create the label
+        /// </summary>
+        protected async Task<TelemetricResult<IDownloadedLabelData>> CreateLabelInternal(ShipmentEntity shipment, Func<Task<Label>> labelRetrievalFunc)
+        {
             try
             {
                 TelemetricResult<IDownloadedLabelData> telemetricResult = new TelemetricResult<IDownloadedLabelData>("API.ResponseTimeInMilliseconds");
                 Label label = await telemetricResult.RunTimedEventAsync(
-                        TelemetricEventType.GetLabel,
-                        () => shipEngineWebClient.PurchaseLabel(request, ApiLogSource))
+                        TelemetricEventType.GetLabel, labelRetrievalFunc)
                     .ConfigureAwait(false);
 
                 telemetricResult.SetValue(createDownloadedLabelData(shipment, label));

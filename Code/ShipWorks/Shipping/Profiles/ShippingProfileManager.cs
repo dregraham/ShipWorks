@@ -203,7 +203,7 @@ namespace ShipWorks.Shipping.Profiles
             List<PackageProfileEntity> allPackageProfiles = profile.Packages.Where(package => package.Fields.State == EntityState.Deleted).ToList();
             foreach (PackageProfileEntity package in allPackageProfiles)
             {
-                // If its new but deleted, just get rid of it                
+                // If its new but deleted, just get rid of it
                 if (package.IsNew)
                 {
                     profile.Packages.Remove(package);
@@ -372,8 +372,10 @@ namespace ShipWorks.Shipping.Profiles
                     return ("Other", typeof(OtherProfileEntity));
                 case ShipmentTypeCode.BestRate:
                     return ("BestRate", typeof(BestRateProfileEntity));
-                case ShipmentTypeCode.Amazon:
-                    return ("Amazon", typeof(AmazonProfileEntity));
+                case ShipmentTypeCode.AmazonSFP:
+                    return ("AmazonSFP", typeof(AmazonSFPProfileEntity));
+                case ShipmentTypeCode.AmazonSWA:
+                    return ("AmazonSWA", typeof(AmazonSWAProfileEntity));
                 case ShipmentTypeCode.DhlExpress:
                     return ("DhlExpress", typeof(DhlExpressProfileEntity));
                 case ShipmentTypeCode.Asendia:

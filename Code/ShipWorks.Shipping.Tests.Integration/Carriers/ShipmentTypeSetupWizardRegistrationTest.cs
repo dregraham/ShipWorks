@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Autofac;
-using ShipWorks.Shipping.Carriers.Amazon;
+using ShipWorks.Shipping.Carriers.Amazon.SFP;
 using ShipWorks.Shipping.Carriers.FedEx;
 using ShipWorks.Shipping.Carriers.iParcel;
 using ShipWorks.Shipping.Carriers.OnTrac;
@@ -16,6 +16,7 @@ using ShipWorks.Shipping.Carriers.UPS;
 using ShipWorks.Shipping.Carriers.UPS.WorldShip;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Startup;
+using ShipWorks.Tests.Shared.XUnitExtensions.STAThreadAttributes;
 using Xunit;
 
 namespace ShipWorks.Shipping.Tests.Integration.Carriers
@@ -32,7 +33,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Carriers
         }
 
         [Theory]
-        [InlineData(ShipmentTypeCode.Amazon, typeof(AmazonShipmentSetupWizard))]
+        [InlineData(ShipmentTypeCode.AmazonSFP, typeof(AmazonSFPShipmentSetupWizard))]
         [InlineData(ShipmentTypeCode.Endicia, typeof(EndiciaSetupWizard))]
         [InlineData(ShipmentTypeCode.Express1Endicia, typeof(Express1EndiciaSetupWizard))]
         [InlineData(ShipmentTypeCode.Express1Usps, typeof(Express1UspsSetupWizard))]
@@ -50,7 +51,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Carriers
             Assert.Equal(expectedServiceType, retriever.GetType());
         }
 
-        [Fact]
+        [STAFact]
         public void EnsureAllShipmentTypesThatShouldHaveWizardHaveOneRegistered()
         {
             IEnumerable<ShipmentTypeCode> excludedTypes = new[] { ShipmentTypeCode.BestRate, ShipmentTypeCode.None };

@@ -87,8 +87,8 @@
     <Reference Include="log4net, Version=2.0.7.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
       <HintPath>..\..\packages\log4net.2.0.7\lib\net45-full\log4net.dll</HintPath>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="PresentationFramework.Aero" />
     <Reference Include="PresentationCore" />
@@ -237,8 +237,12 @@
       <DependentUpon>EndiciaReferenceControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\Reference\EndiciaReferenceViewModel.cs" />
-    <Compile Include="Controls\ShipmentDetails\AmazonShipmentDetailsControl.xaml.cs">
-      <DependentUpon>AmazonShipmentDetailsControl.xaml</DependentUpon>
+    <Compile Include="Controls\ShipmentDetails\AmazonSWAShipmentDetailsViewModel.cs" />
+    <Compile Include="Controls\ShipmentDetails\AmazonSWAShipmentDetailsControl.xaml.cs">
+      <DependentUpon>AmazonSWAShipmentDetailsControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ShipmentDetails\AmazonSFPShipmentDetailsControl.xaml.cs">
+      <DependentUpon>AmazonSFPShipmentDetailsControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\ShipmentDetails\FedExShipmentDetailsControl.xaml.cs">
       <DependentUpon>FedExShipmentDetailsControl.xaml</DependentUpon>
@@ -264,7 +268,7 @@
     </Compile>
     <Compile Include="Controls\ShipmentDetails\CarrierShipmentAdapterOptionsProvider.cs" />
     <Compile Include="Controls\ShipmentDetails\BestRateShipmentDetailsViewModel.cs" />
-    <Compile Include="Controls\ShipmentDetails\AmazonShipmentDetailsViewModel.cs" />
+    <Compile Include="Controls\ShipmentDetails\AmazonSFPShipmentDetailsViewModel.cs" />
     <Compile Include="Controls\ShipmentDetails\UpsShipmentDetailsViewModel.cs" />
     <Compile Include="Controls\ShipmentDetails\UpsShipmentDetailsControl.xaml.cs">
       <DependentUpon>UpsShipmentDetailsControl.xaml</DependentUpon>
@@ -507,7 +511,11 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Controls\ShipmentDetails\AmazonShipmentDetailsControl.xaml">
+    <Page Include="Controls\ShipmentDetails\AmazonSWAShipmentDetailsControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Controls\ShipmentDetails\AmazonSFPShipmentDetailsControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -49,21 +49,21 @@ namespace ShipWorks.Tests.Shipping.Profiles
         {
             securityContext.Setup(s => s.HasPermission(PermissionType.ShipmentsCreateEditProcess, It.IsAny<long>())).Returns(false);
 
-            ShippingProfileEntity profile = new ShippingProfileEntity { ShipmentType = ShipmentTypeCode.Amazon };
-            ShipmentEntity shipment = new ShipmentEntity { ShipmentTypeCode = ShipmentTypeCode.Amazon };
+            ShippingProfileEntity profile = new ShippingProfileEntity { ShipmentType = ShipmentTypeCode.AmazonSFP };
+            ShipmentEntity shipment = new ShipmentEntity { ShipmentTypeCode = ShipmentTypeCode.AmazonSFP };
             var shippingProfileApplicationStrategyFactory = mock.Mock<IShippingProfileApplicationStrategyFactory>();
             var testObject = CreateShippingProfile(profile, new ShortcutEntity());
 
             testObject.Apply(shipment);
 
-            shippingProfileApplicationStrategyFactory.Verify(f => f.Create(ShipmentTypeCode.Amazon), Times.Never);
+            shippingProfileApplicationStrategyFactory.Verify(f => f.Create(ShipmentTypeCode.AmazonSFP), Times.Never);
         }
 
         [Fact]
         public void Apply_DoesNotDelegatesToShippingManagerChangeShipmentType_WhenShipmentAndProfilesShipmentTypesMatch()
         {
-            ShippingProfileEntity profile = new ShippingProfileEntity { ShipmentType = ShipmentTypeCode.Amazon };
-            ShipmentEntity shipment = new ShipmentEntity { ShipmentTypeCode = ShipmentTypeCode.Amazon };
+            ShippingProfileEntity profile = new ShippingProfileEntity { ShipmentType = ShipmentTypeCode.AmazonSFP };
+            ShipmentEntity shipment = new ShipmentEntity { ShipmentTypeCode = ShipmentTypeCode.AmazonSFP };
             var shippingManager = mock.Mock<IShippingManager>();
             var testObject = CreateShippingProfile(profile, new ShortcutEntity());
 
@@ -75,23 +75,23 @@ namespace ShipWorks.Tests.Shipping.Profiles
         [Fact]
         public void Apply_CreatesProfileApplicationStrategyUsingStrategyFactory()
         {
-            ShippingProfileEntity profile = new ShippingProfileEntity { ShipmentType = ShipmentTypeCode.Amazon };
-            ShipmentEntity shipment = new ShipmentEntity { ShipmentTypeCode = ShipmentTypeCode.Amazon };
+            ShippingProfileEntity profile = new ShippingProfileEntity { ShipmentType = ShipmentTypeCode.AmazonSFP };
+            ShipmentEntity shipment = new ShipmentEntity { ShipmentTypeCode = ShipmentTypeCode.AmazonSFP };
             var shippingProfileApplicationStrategyFactory = mock.Mock<IShippingProfileApplicationStrategyFactory>();
             var testObject = CreateShippingProfile(profile, new ShortcutEntity());
 
             testObject.Apply(shipment);
 
-            shippingProfileApplicationStrategyFactory.Verify(f => f.Create(ShipmentTypeCode.Amazon), Times.Once);
+            shippingProfileApplicationStrategyFactory.Verify(f => f.Create(ShipmentTypeCode.AmazonSFP), Times.Once);
         }
 
         [Fact]
         public void Apply_UsesStrategyToApplyProfile()
         {
-            ShippingProfileEntity profile = new ShippingProfileEntity { ShipmentType = ShipmentTypeCode.Amazon };
-            ShipmentEntity shipment = new ShipmentEntity { ShipmentTypeCode = ShipmentTypeCode.Amazon };
+            ShippingProfileEntity profile = new ShippingProfileEntity { ShipmentType = ShipmentTypeCode.AmazonSFP };
+            ShipmentEntity shipment = new ShipmentEntity { ShipmentTypeCode = ShipmentTypeCode.AmazonSFP };
             var strategy = mock.Mock<IShippingProfileApplicationStrategy>();
-            mock.Mock<IShippingProfileApplicationStrategyFactory>().Setup(f => f.Create(ShipmentTypeCode.Amazon)).Returns(strategy);
+            mock.Mock<IShippingProfileApplicationStrategyFactory>().Setup(f => f.Create(ShipmentTypeCode.AmazonSFP)).Returns(strategy);
             var testObject = CreateShippingProfile(profile, new ShortcutEntity());
 
             testObject.Apply(shipment);
@@ -115,10 +115,10 @@ namespace ShipWorks.Tests.Shipping.Profiles
         [Fact]
         public void IsApplicable_ReturnsTrue_WhenShipmentTypeCodeIsAmazonAndProfileIsAmazon()
         {
-            ShippingProfileEntity profile = new ShippingProfileEntity { ShipmentType = ShipmentTypeCode.Amazon };
+            ShippingProfileEntity profile = new ShippingProfileEntity { ShipmentType = ShipmentTypeCode.AmazonSFP };
             var testObject = CreateShippingProfile(profile, new ShortcutEntity());
 
-            Assert.True(testObject.IsApplicable(ShipmentTypeCode.Amazon));
+            Assert.True(testObject.IsApplicable(ShipmentTypeCode.AmazonSFP));
         }
 
         [Fact]
@@ -136,7 +136,7 @@ namespace ShipWorks.Tests.Shipping.Profiles
             ShippingProfileEntity profile = new ShippingProfileEntity { ShipmentType = null };
             var testObject = CreateShippingProfile(profile, new ShortcutEntity());
 
-            Assert.True(testObject.IsApplicable(ShipmentTypeCode.Amazon));
+            Assert.True(testObject.IsApplicable(ShipmentTypeCode.AmazonSFP));
         }
 
         [Fact]
@@ -145,13 +145,13 @@ namespace ShipWorks.Tests.Shipping.Profiles
             ShippingProfileEntity profile = new ShippingProfileEntity { ShipmentType = ShipmentTypeCode.Usps };
             var testObject = CreateShippingProfile(profile, new ShortcutEntity());
 
-            Assert.False(testObject.IsApplicable(ShipmentTypeCode.Amazon));
+            Assert.False(testObject.IsApplicable(ShipmentTypeCode.AmazonSFP));
         }
 
         [Fact]
         public void IsApplicable_ReturnsFalse_WhenShipmentTypeCodeIsUspsAndProfileIsAmazon()
         {
-            ShippingProfileEntity profile = new ShippingProfileEntity { ShipmentType = ShipmentTypeCode.Amazon };
+            ShippingProfileEntity profile = new ShippingProfileEntity { ShipmentType = ShipmentTypeCode.AmazonSFP };
             var testObject = CreateShippingProfile(profile, new ShortcutEntity());
 
             Assert.False(testObject.IsApplicable(ShipmentTypeCode.Usps));
@@ -178,7 +178,7 @@ namespace ShipWorks.Tests.Shipping.Profiles
         [Fact]
         public void IsApplicable_ReturnsFalse_WhenShipmentTypeCodeIsNoneAndProfileIsAmazon()
         {
-            ShippingProfileEntity profile = new ShippingProfileEntity { ShipmentType = ShipmentTypeCode.Amazon };
+            ShippingProfileEntity profile = new ShippingProfileEntity { ShipmentType = ShipmentTypeCode.AmazonSFP };
             var testObject = CreateShippingProfile(profile, new ShortcutEntity());
 
             Assert.True(testObject.IsApplicable(ShipmentTypeCode.None));

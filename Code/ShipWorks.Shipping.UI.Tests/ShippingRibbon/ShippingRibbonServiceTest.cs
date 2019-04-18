@@ -402,7 +402,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingRibbon
         [InlineData(true, false, false, false, ShipmentTypeCode.Usps)]
         [InlineData(false, true, false, false, ShipmentTypeCode.Usps)]
         [InlineData(false, false, false, false, ShipmentTypeCode.Usps)]
-        [InlineData(false, false, false, false, ShipmentTypeCode.Amazon)]
+        [InlineData(false, false, false, false, ShipmentTypeCode.AmazonSFP)]
         public void HandleOrderSelectionChanged_DisablesReturn_WhenLoadedShipmentIsProcessed(bool isProcessed, bool isReturned, bool expected, bool hasPermission, ShipmentTypeCode shipmentTypeCode)
         {
             actions.SetupGet(x => x.Return).Returns(CreateMockedRibbonButton());

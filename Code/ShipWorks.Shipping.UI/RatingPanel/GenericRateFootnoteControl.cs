@@ -1,5 +1,5 @@
 ﻿using Interapptive.Shared.ComponentRegistration;
-using ShipWorks.Shipping.Carriers.Amazon;
+using ShipWorks.Shipping.Carriers.Amazon.SFP;
 using ShipWorks.Shipping.Editing.Rating;
 
 namespace ShipWorks.Shipping.UI.RatingPanel
@@ -7,7 +7,7 @@ namespace ShipWorks.Shipping.UI.RatingPanel
     /// <summary>
     /// Generic control that will display the WPF version of the footnote controls in Windoes Forms
     /// </summary>
-    [KeyedComponent(typeof(RateFootnoteControl), AmazonSameDayNotAvailableFootnoteFactory.ControlKey)]
+    [KeyedComponent(typeof(RateFootnoteControl), AmazonSFPSameDayNotAvailableFootnoteFactory.ControlKey)]
     public partial class GenericRateFootnoteControl : RateFootnoteControl
     {
         /// <summary>

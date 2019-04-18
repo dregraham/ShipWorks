@@ -9,6 +9,7 @@ using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Services;
+using ShipWorks.Stores.Platforms.Amazon;
 using ShipWorks.Templates.Printing;
 using ShipWorks.Users.Security;
 
@@ -115,10 +116,12 @@ namespace ShipWorks.Shipping.Profiles
             {
                 case ShipmentTypeCode.None:
                     return ShippingProfileEntity.ShipmentType != null;
-                case ShipmentTypeCode.Amazon:
-                    return ShippingProfileEntity.ShipmentType == null || ShippingProfileEntity.ShipmentType == ShipmentTypeCode.Amazon;
+                case ShipmentTypeCode.AmazonSFP:
+                    return ShippingProfileEntity.ShipmentType == null ||
+                        ShippingProfileEntity.ShipmentType == ShipmentTypeCode.AmazonSFP ||
+                        ShippingProfileEntity.ShipmentType == ShipmentTypeCode.AmazonSWA;
                 default:
-                    return ShippingProfileEntity.ShipmentType != ShipmentTypeCode.Amazon;
+                    return ShippingProfileEntity.ShipmentType != ShipmentTypeCode.AmazonSFP;
             }
         }
 
@@ -133,6 +136,20 @@ namespace ShipWorks.Shipping.Profiles
         /// </summary>
         private bool CanApply(IEnumerable<ShipmentEntity> shipments) =>
             shipments.All(s => securityContext().HasPermission(PermissionType.ShipmentsCreateEditProcess, s.OrderID)) &&
-                shipments.All(s => IsApplicable(s.ShipmentTypeCode));
+                shipments.All(s => IsApplicable(s.ShipmentTypeCode) && IsApplicable(s));
+
+        /// <summary>
+        /// Check to see if the profile is applicable to the given shipment
+        /// </summary>
+        private bool IsApplicable(ShipmentEntity shipment)
+        {
+            if (ShippingProfileEntity.ShipmentType == ShipmentTypeCode.AmazonSWA)
+            {
+                IAmazonOrder amazonOrder = shipment.Order as IAmazonOrder;
+                return !amazonOrder?.IsPrime ?? false;
+            }
+
+            return true;
+        }
     }
 }

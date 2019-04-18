@@ -576,12 +576,12 @@ namespace ShipWorks.Data.Model.Custom
 
 	
 	/// <summary>
-	/// Strongly typed collection of AmazonProfileEntity
+	/// Strongly typed collection of AmazonSFPProfileEntity
 	/// </summary>
-	public class AmazonProfileCollection : EntityCollection<AmazonProfileEntity>
+	public class AmazonSFPProfileCollection : EntityCollection<AmazonSFPProfileEntity>
 	{
         /// <summary>
-        /// Gets the count of all AmazonProfileEntity rows
+        /// Gets the count of all AmazonSFPProfileEntity rows
         /// </summary>
         public static int GetCount(IDataAccessAdapter adapter)
         {
@@ -589,7 +589,7 @@ namespace ShipWorks.Data.Model.Custom
         }
 
         /// <summary>
-        /// Gets the count of all AmazonProfileEntity rows filtered by the given predicate
+        /// Gets the count of all AmazonSFPProfileEntity rows filtered by the given predicate
         /// </summary>
         public static int GetCount(IDataAccessAdapter adapter, IPredicate filter)
         {
@@ -600,13 +600,13 @@ namespace ShipWorks.Data.Model.Custom
                 bucket = new RelationPredicateBucket(filter);
             }
 
-            return adapter.GetDbCount(new AmazonProfileEntityFactory().CreateFields(), bucket);
+            return adapter.GetDbCount(new AmazonSFPProfileEntityFactory().CreateFields(), bucket);
         }
 
         /// <summary>
         /// Fetch a new collection object that matches the specified filter.
         /// </summary>
-        public static AmazonProfileCollection Fetch(IDataAccessAdapter adapter, IPredicate filter)
+        public static AmazonSFPProfileCollection Fetch(IDataAccessAdapter adapter, IPredicate filter)
         {
 			return Fetch(adapter, filter, null);
         }
@@ -614,9 +614,9 @@ namespace ShipWorks.Data.Model.Custom
 		/// <summary>
         /// Fetch a new collection object that matches the specified filter and uses the given prefetch.
         /// </summary>
-        public static AmazonProfileCollection Fetch(IDataAccessAdapter adapter, IPredicate filter, IPrefetchPath2 prefetchPath)
+        public static AmazonSFPProfileCollection Fetch(IDataAccessAdapter adapter, IPredicate filter, IPrefetchPath2 prefetchPath)
         {
-            AmazonProfileCollection collection = new AmazonProfileCollection();
+            AmazonSFPProfileCollection collection = new AmazonSFPProfileCollection();
 
             RelationPredicateBucket bucket = null;
 
@@ -633,12 +633,12 @@ namespace ShipWorks.Data.Model.Custom
 
 	
 	/// <summary>
-	/// Strongly typed collection of AmazonServiceTypeEntity
+	/// Strongly typed collection of AmazonSFPServiceTypeEntity
 	/// </summary>
-	public class AmazonServiceTypeCollection : EntityCollection<AmazonServiceTypeEntity>
+	public class AmazonSFPServiceTypeCollection : EntityCollection<AmazonSFPServiceTypeEntity>
 	{
         /// <summary>
-        /// Gets the count of all AmazonServiceTypeEntity rows
+        /// Gets the count of all AmazonSFPServiceTypeEntity rows
         /// </summary>
         public static int GetCount(IDataAccessAdapter adapter)
         {
@@ -646,7 +646,7 @@ namespace ShipWorks.Data.Model.Custom
         }
 
         /// <summary>
-        /// Gets the count of all AmazonServiceTypeEntity rows filtered by the given predicate
+        /// Gets the count of all AmazonSFPServiceTypeEntity rows filtered by the given predicate
         /// </summary>
         public static int GetCount(IDataAccessAdapter adapter, IPredicate filter)
         {
@@ -657,13 +657,13 @@ namespace ShipWorks.Data.Model.Custom
                 bucket = new RelationPredicateBucket(filter);
             }
 
-            return adapter.GetDbCount(new AmazonServiceTypeEntityFactory().CreateFields(), bucket);
+            return adapter.GetDbCount(new AmazonSFPServiceTypeEntityFactory().CreateFields(), bucket);
         }
 
         /// <summary>
         /// Fetch a new collection object that matches the specified filter.
         /// </summary>
-        public static AmazonServiceTypeCollection Fetch(IDataAccessAdapter adapter, IPredicate filter)
+        public static AmazonSFPServiceTypeCollection Fetch(IDataAccessAdapter adapter, IPredicate filter)
         {
 			return Fetch(adapter, filter, null);
         }
@@ -671,9 +671,9 @@ namespace ShipWorks.Data.Model.Custom
 		/// <summary>
         /// Fetch a new collection object that matches the specified filter and uses the given prefetch.
         /// </summary>
-        public static AmazonServiceTypeCollection Fetch(IDataAccessAdapter adapter, IPredicate filter, IPrefetchPath2 prefetchPath)
+        public static AmazonSFPServiceTypeCollection Fetch(IDataAccessAdapter adapter, IPredicate filter, IPrefetchPath2 prefetchPath)
         {
-            AmazonServiceTypeCollection collection = new AmazonServiceTypeCollection();
+            AmazonSFPServiceTypeCollection collection = new AmazonSFPServiceTypeCollection();
 
             RelationPredicateBucket bucket = null;
 
@@ -690,12 +690,12 @@ namespace ShipWorks.Data.Model.Custom
 
 	
 	/// <summary>
-	/// Strongly typed collection of AmazonShipmentEntity
+	/// Strongly typed collection of AmazonSFPShipmentEntity
 	/// </summary>
-	public class AmazonShipmentCollection : EntityCollection<AmazonShipmentEntity>
+	public class AmazonSFPShipmentCollection : EntityCollection<AmazonSFPShipmentEntity>
 	{
         /// <summary>
-        /// Gets the count of all AmazonShipmentEntity rows
+        /// Gets the count of all AmazonSFPShipmentEntity rows
         /// </summary>
         public static int GetCount(IDataAccessAdapter adapter)
         {
@@ -703,7 +703,7 @@ namespace ShipWorks.Data.Model.Custom
         }
 
         /// <summary>
-        /// Gets the count of all AmazonShipmentEntity rows filtered by the given predicate
+        /// Gets the count of all AmazonSFPShipmentEntity rows filtered by the given predicate
         /// </summary>
         public static int GetCount(IDataAccessAdapter adapter, IPredicate filter)
         {
@@ -714,13 +714,13 @@ namespace ShipWorks.Data.Model.Custom
                 bucket = new RelationPredicateBucket(filter);
             }
 
-            return adapter.GetDbCount(new AmazonShipmentEntityFactory().CreateFields(), bucket);
+            return adapter.GetDbCount(new AmazonSFPShipmentEntityFactory().CreateFields(), bucket);
         }
 
         /// <summary>
         /// Fetch a new collection object that matches the specified filter.
         /// </summary>
-        public static AmazonShipmentCollection Fetch(IDataAccessAdapter adapter, IPredicate filter)
+        public static AmazonSFPShipmentCollection Fetch(IDataAccessAdapter adapter, IPredicate filter)
         {
 			return Fetch(adapter, filter, null);
         }
@@ -728,9 +728,9 @@ namespace ShipWorks.Data.Model.Custom
 		/// <summary>
         /// Fetch a new collection object that matches the specified filter and uses the given prefetch.
         /// </summary>
-        public static AmazonShipmentCollection Fetch(IDataAccessAdapter adapter, IPredicate filter, IPrefetchPath2 prefetchPath)
+        public static AmazonSFPShipmentCollection Fetch(IDataAccessAdapter adapter, IPredicate filter, IPrefetchPath2 prefetchPath)
         {
-            AmazonShipmentCollection collection = new AmazonShipmentCollection();
+            AmazonSFPShipmentCollection collection = new AmazonSFPShipmentCollection();
 
             RelationPredicateBucket bucket = null;
 
@@ -788,6 +788,177 @@ namespace ShipWorks.Data.Model.Custom
         public static AmazonStoreCollection Fetch(IDataAccessAdapter adapter, IPredicate filter, IPrefetchPath2 prefetchPath)
         {
             AmazonStoreCollection collection = new AmazonStoreCollection();
+
+            RelationPredicateBucket bucket = null;
+
+            if (filter != null)
+            {
+                bucket = new RelationPredicateBucket(filter);
+            }
+
+            adapter.FetchEntityCollection(collection, bucket, prefetchPath);
+
+            return collection;
+        }
+	}
+
+	
+	/// <summary>
+	/// Strongly typed collection of AmazonSWAAccountEntity
+	/// </summary>
+	public class AmazonSWAAccountCollection : EntityCollection<AmazonSWAAccountEntity>
+	{
+        /// <summary>
+        /// Gets the count of all AmazonSWAAccountEntity rows
+        /// </summary>
+        public static int GetCount(IDataAccessAdapter adapter)
+        {
+            return GetCount(adapter, null);
+        }
+
+        /// <summary>
+        /// Gets the count of all AmazonSWAAccountEntity rows filtered by the given predicate
+        /// </summary>
+        public static int GetCount(IDataAccessAdapter adapter, IPredicate filter)
+        {
+            RelationPredicateBucket bucket = null;
+
+            if (filter != null)
+            {
+                bucket = new RelationPredicateBucket(filter);
+            }
+
+            return adapter.GetDbCount(new AmazonSWAAccountEntityFactory().CreateFields(), bucket);
+        }
+
+        /// <summary>
+        /// Fetch a new collection object that matches the specified filter.
+        /// </summary>
+        public static AmazonSWAAccountCollection Fetch(IDataAccessAdapter adapter, IPredicate filter)
+        {
+			return Fetch(adapter, filter, null);
+        }
+
+		/// <summary>
+        /// Fetch a new collection object that matches the specified filter and uses the given prefetch.
+        /// </summary>
+        public static AmazonSWAAccountCollection Fetch(IDataAccessAdapter adapter, IPredicate filter, IPrefetchPath2 prefetchPath)
+        {
+            AmazonSWAAccountCollection collection = new AmazonSWAAccountCollection();
+
+            RelationPredicateBucket bucket = null;
+
+            if (filter != null)
+            {
+                bucket = new RelationPredicateBucket(filter);
+            }
+
+            adapter.FetchEntityCollection(collection, bucket, prefetchPath);
+
+            return collection;
+        }
+	}
+
+	
+	/// <summary>
+	/// Strongly typed collection of AmazonSWAProfileEntity
+	/// </summary>
+	public class AmazonSWAProfileCollection : EntityCollection<AmazonSWAProfileEntity>
+	{
+        /// <summary>
+        /// Gets the count of all AmazonSWAProfileEntity rows
+        /// </summary>
+        public static int GetCount(IDataAccessAdapter adapter)
+        {
+            return GetCount(adapter, null);
+        }
+
+        /// <summary>
+        /// Gets the count of all AmazonSWAProfileEntity rows filtered by the given predicate
+        /// </summary>
+        public static int GetCount(IDataAccessAdapter adapter, IPredicate filter)
+        {
+            RelationPredicateBucket bucket = null;
+
+            if (filter != null)
+            {
+                bucket = new RelationPredicateBucket(filter);
+            }
+
+            return adapter.GetDbCount(new AmazonSWAProfileEntityFactory().CreateFields(), bucket);
+        }
+
+        /// <summary>
+        /// Fetch a new collection object that matches the specified filter.
+        /// </summary>
+        public static AmazonSWAProfileCollection Fetch(IDataAccessAdapter adapter, IPredicate filter)
+        {
+			return Fetch(adapter, filter, null);
+        }
+
+		/// <summary>
+        /// Fetch a new collection object that matches the specified filter and uses the given prefetch.
+        /// </summary>
+        public static AmazonSWAProfileCollection Fetch(IDataAccessAdapter adapter, IPredicate filter, IPrefetchPath2 prefetchPath)
+        {
+            AmazonSWAProfileCollection collection = new AmazonSWAProfileCollection();
+
+            RelationPredicateBucket bucket = null;
+
+            if (filter != null)
+            {
+                bucket = new RelationPredicateBucket(filter);
+            }
+
+            adapter.FetchEntityCollection(collection, bucket, prefetchPath);
+
+            return collection;
+        }
+	}
+
+	
+	/// <summary>
+	/// Strongly typed collection of AmazonSWAShipmentEntity
+	/// </summary>
+	public class AmazonSWAShipmentCollection : EntityCollection<AmazonSWAShipmentEntity>
+	{
+        /// <summary>
+        /// Gets the count of all AmazonSWAShipmentEntity rows
+        /// </summary>
+        public static int GetCount(IDataAccessAdapter adapter)
+        {
+            return GetCount(adapter, null);
+        }
+
+        /// <summary>
+        /// Gets the count of all AmazonSWAShipmentEntity rows filtered by the given predicate
+        /// </summary>
+        public static int GetCount(IDataAccessAdapter adapter, IPredicate filter)
+        {
+            RelationPredicateBucket bucket = null;
+
+            if (filter != null)
+            {
+                bucket = new RelationPredicateBucket(filter);
+            }
+
+            return adapter.GetDbCount(new AmazonSWAShipmentEntityFactory().CreateFields(), bucket);
+        }
+
+        /// <summary>
+        /// Fetch a new collection object that matches the specified filter.
+        /// </summary>
+        public static AmazonSWAShipmentCollection Fetch(IDataAccessAdapter adapter, IPredicate filter)
+        {
+			return Fetch(adapter, filter, null);
+        }
+
+		/// <summary>
+        /// Fetch a new collection object that matches the specified filter and uses the given prefetch.
+        /// </summary>
+        public static AmazonSWAShipmentCollection Fetch(IDataAccessAdapter adapter, IPredicate filter, IPrefetchPath2 prefetchPath)
+        {
+            AmazonSWAShipmentCollection collection = new AmazonSWAShipmentCollection();
 
             RelationPredicateBucket bucket = null;
 

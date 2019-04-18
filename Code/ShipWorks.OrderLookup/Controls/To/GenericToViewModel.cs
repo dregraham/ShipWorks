@@ -18,6 +18,7 @@ namespace ShipWorks.OrderLookup.Controls.To
     /// ViewModel for To panel in the OrderLookup view
     /// </summary>
     [KeyedComponent(typeof(IToViewModel), ShipmentTypeCode.BestRate)]
+    [KeyedComponent(typeof(IToViewModel), ShipmentTypeCode.AmazonSWA)]
     [KeyedComponent(typeof(IToViewModel), ShipmentTypeCode.Endicia)]
     [WpfView(typeof(GenericToControl))]
     public class GenericToViewModel : OrderLookupViewModelBase, IToViewModel
@@ -34,7 +35,7 @@ namespace ShipWorks.OrderLookup.Controls.To
             IOrderLookupShipmentModel shipmentModel,
             AddressViewModel addressViewModel,
             ISchedulerProvider schedulerProvider,
-            OrderLookupFieldLayoutProvider fieldLayoutProvider) : 
+            OrderLookupFieldLayoutProvider fieldLayoutProvider) :
                 base(shipmentModel, new OrderLookupToFieldLayoutProvider(fieldLayoutProvider))
         {
             this.schedulerProvider = schedulerProvider;

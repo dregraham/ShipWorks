@@ -80,7 +80,7 @@ namespace ShipWorks.Data.Administration
 
             // For localdb we manually check to see if a new version is available, this is because
             // the windows service that is running our update service does not have access to localdb
-            if (sqlSession.Configuration.IsLocalDb() && !AutoUpdateSettings.IsAutoUpdateDisabled)
+            if (sqlSession.Configuration.IsLocalDb() && !SqlSchemaUpdater.IsUpgradeRequired() && !AutoUpdateSettings.IsAutoUpdateDisabled)
             {
                 DataProvider.InitializeForApplication();
                 StoreManager.InitializeForCurrentSession(SecurityContext.EmptySecurityContext);

@@ -31,7 +31,7 @@ namespace ShipWorks.Shipping.ShipEngine
                     CarrierDescription = apiRate.CarrierNickname,
                     ExpectedDeliveryDate = apiRate.EstimatedDeliveryDate,
                     ShipmentType = shipmentType,
-                    ProviderLogo = EnumHelper.GetImage(ShipmentTypeCode.DhlExpress)
+                    ProviderLogo = EnumHelper.GetImage(shipmentType)
                 };
                 results.Add(rate);
             }
@@ -65,7 +65,7 @@ namespace ShipWorks.Shipping.ShipEngine
                     errorBuilder.AppendLine(error.Message);
                 }
             }
-            
+
             if (errorBuilder.Length > 0)
             {
                 rateGroup.AddFootnoteFactory(new ExceptionsRateFootnoteFactory(shipmentType, errorBuilder.ToString()));

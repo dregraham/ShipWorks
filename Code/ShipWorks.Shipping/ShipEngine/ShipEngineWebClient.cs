@@ -11,6 +11,7 @@ using Newtonsoft.Json;
 using System;
 using System.Net;
 using Interapptive.Shared.Extensions;
+using Newtonsoft.Json.Linq;
 
 namespace ShipWorks.Shipping.ShipEngine
 {
@@ -41,8 +42,8 @@ namespace ShipWorks.Shipping.ShipEngine
         /// </summary>
         /// <returns>The CarrierId</returns>
         public async Task<GenericResult<string>> ConnectDhlAccount(string accountNumber)
-        {            
-            // Check to see if the account already exists in ShipEngine 
+        {
+            // Check to see if the account already exists in ShipEngine
             GenericResult<string> existingAccount = await GetCarrierId(accountNumber);
 
             if (existingAccount.Success)
@@ -66,11 +67,112 @@ namespace ShipWorks.Shipping.ShipEngine
         }
 
         /// <summary>
+        /// Disconnect AmazonShipping
+        /// </summary>
+        /// <param name="accountId"></param>
+        /// <returns></returns>
+        public async Task<Result> DisconnectAmazonShippingAccount(string accountId)
+        {
+            try
+            {
+                // now we have to connect Amazon to the account id using our partner key
+                HttpJsonVariableRequestSubmitter submitter = new HttpJsonVariableRequestSubmitter();
+                submitter.Headers.Add($"Content-Type: application/json");
+                submitter.Headers.Add($"api-key: {await GetApiKey()}");
+                submitter.Verb = HttpVerb.Delete;
+                submitter.Uri = new Uri($"https://api.shipengine.com/v1/connections/carriers/amazon_shipping_us/{accountId}");
+
+                // Delete request returns no content, this is not an error
+                submitter.AllowHttpStatusCodes(HttpStatusCode.NoContent);
+
+                submitter.ProcessRequest(new ApiLogEntry(ApiLogSource.ShipEngine, "DisconnectAmazonShipping"), typeof(ShipEngineException));
+                return Result.FromSuccess();
+            }
+            catch (Exception ex)
+            {
+                return Result.FromError(ex);
+            }
+        }
+
+        /// <summary>
+        /// Connect an Amazon Shipping Account
+        /// </summary>
+        /// <remarks>
+        /// unlike the other methods in this class we are manually interacting
+        /// with the ShipEngine API because they have not added connecting to
+        /// Amazon to their DLL yet
+        /// </remarks>
+        public async Task<GenericResult<string>> ConnectAmazonShippingAccount(string authCode)
+        {
+#pragma warning disable S125
+            // Doug Wile (ShipEngine): So the root of the error is that we don't currently support connecting an Amazon Shipping account outside
+            // of the partner workflow (partner key + on-behalf-of seller ID). The solution for you will be to use the `GET /v1/environment/whoami`
+            // endpoint to retrieve a seller's ID given their API key. You will then use this ID(with the `se -` prefix) in the `on - behalf - of`
+            // header when making the `POST / v1 / connections / carriers / amazon_shipping_us` request
+
+            // The request / response for whoami looks like this currently
+
+            // Request
+            // GET https://api.shipengine.com/v1/environment/whoami
+            // api - key: { seller api key}```
+
+            // Response
+            // Sections of code should not be "commented out"
+            // {
+            //    "data": {
+            //        "username": "123456" // the seller's account ID
+            // },
+            // "request_id": "cf3dad78-4c95-4763-bdad-1744e9f2b0fc"
+            // }
+
+            // This endpoint is undocumented, but will work.We'll be adding another property which will just be the account ID with the `se-`
+            // prefix to make it a bit cleaner to use. If we end up making a documented account endpoint with the same/similar functionality,
+            // we'll let you know and work with you to help move you over.We definitely don't want to break any of your workflows :smiley:
+#pragma warning restore S125
+
+            try
+            // Sections of code should not be "commented out"
+            {
+                // first we have to get the account id
+                HttpJsonVariableRequestSubmitter whoAmIRequest = new HttpJsonVariableRequestSubmitter();
+                whoAmIRequest.Headers.Add($"Content-Type: application/json");
+                whoAmIRequest.Headers.Add($"api-key: {await GetApiKey()}");
+                whoAmIRequest.Verb = HttpVerb.Get;
+                whoAmIRequest.Uri = new Uri("https://api.shipengine.com/v1/environment/whoami");
+
+                EnumResult<HttpStatusCode> result =
+                    whoAmIRequest.ProcessRequest(new ApiLogEntry(ApiLogSource.ShipEngine, "WhoAmI"), typeof(ShipEngineException));
+                string accountId = JObject.Parse(result.Message)["data"]["username"].ToString();
+
+
+                // now we have to connect Amazon to the account id using our partner key
+                HttpJsonVariableRequestSubmitter submitter = new HttpJsonVariableRequestSubmitter();
+                submitter.Headers.Add($"Content-Type: application/json");
+                submitter.Headers.Add($"api-key: {apiKey.GetPartnerApiKey()}");
+                submitter.Headers.Add($"on-behalf-of: se-{accountId}");
+                submitter.Verb = HttpVerb.Post;
+                submitter.Uri = new Uri($"https://api.shipengine.com/v1/connections/carriers/amazon_shipping_us");
+                submitter.RequestBody = $"{{\"nickname\": \"{authCode}\", \"auth_code\": \"{authCode}\"}}";
+
+
+                EnumResult<HttpStatusCode> connectCarrierResponse =
+                    submitter.ProcessRequest(new ApiLogEntry(ApiLogSource.ShipEngine, "ConnectAmazonShipping"), typeof(ShipEngineException));
+
+                return GenericResult.FromSuccess(JObject.Parse(connectCarrierResponse.Message)["carrier_id"].ToString());
+
+            }
+            catch (Exception ex)
+            {
+                return GenericResult.FromError<string>(ex);
+            }
+        }
+
+        /// <summary>
         /// Connect an Asendia account
         /// </summary>
         public async Task<GenericResult<string>> ConnectAsendiaAccount(string accountNumber, string username, string password)
         {
-            // Check to see if the account already exists in ShipEngine 
+            // Check to see if the account already exists in ShipEngine
             GenericResult<string> existingAccount = await GetCarrierId(accountNumber);
 
             if (existingAccount.Success)
@@ -128,7 +230,7 @@ namespace ShipWorks.Shipping.ShipEngine
 
             return GenericResult.FromError<string>("Unable to find account");
         }
-        
+
         /// <summary>
         /// Connect to a ShipEngine Carrier Account
         /// </summary>
@@ -141,7 +243,7 @@ namespace ShipWorks.Shipping.ShipEngine
         {
             ConfigureLogging(apiInstance, logSource, action, LogActionType.Other);
             ConnectAccountResponseDTO result = await connect.ConfigureAwait(false);
-                
+
             return GenericResult.FromSuccess(result.CarrierId);
         }
 
@@ -162,7 +264,24 @@ namespace ShipWorks.Shipping.ShipEngine
                 return null;
             }
         }
-        
+
+        /// <summary>
+        /// Purchases a label from ShipEngine using the given rateid
+        /// </summary>
+        public async Task<Label> PurchaseLabelWithRate(string rateId, PurchaseLabelWithoutShipmentRequest request, ApiLogSource apiLogSource)
+        {
+            ILabelsApi labelsApi = shipEngineApiFactory.CreateLabelsApi();
+            ConfigureLogging(labelsApi, apiLogSource, "PurchaseLabel", LogActionType.Other);
+            try
+            {
+                return await labelsApi.LabelsPurchaseLabelWithRateAsync(rateId, request, await GetApiKey());
+            }
+            catch (ApiException ex)
+            {
+                throw new ShipEngineException(GetErrorMessage(ex));
+            }
+        }
+
         /// <summary>
         /// Purchases a label from ShipEngine using the given request
         /// </summary>
@@ -216,7 +335,7 @@ namespace ShipWorks.Shipping.ShipEngine
                 throw new ShipEngineException(GetErrorMessage(ex));
             }
         }
-        
+
         /// <summary>
         /// Track a shipment using the label ID
         /// </summary>
@@ -260,7 +379,7 @@ namespace ShipWorks.Shipping.ShipEngine
             apiAccessor.Configuration.ApiClient.RequestLogger = apiLogEntry.LogRequest;
             apiAccessor.Configuration.ApiClient.ResponseLogger = apiLogEntry.LogResponse;
         }
-        
+
         /// <summary>
         /// Get the error message from an ApiException
         /// </summary>

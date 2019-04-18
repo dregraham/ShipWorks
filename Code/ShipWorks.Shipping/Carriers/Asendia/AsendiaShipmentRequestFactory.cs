@@ -66,12 +66,9 @@ namespace ShipWorks.Shipping.Carriers.Asendia
         /// <summary>
         /// Creates the Asendia advanced options node
         /// </summary>
-        protected override Dictionary<string, object> CreateAdvancedOptions(ShipmentEntity shipment)
+        protected override AdvancedOptions CreateAdvancedOptions(ShipmentEntity shipment)
         {
-            return new Dictionary<string, object>()
-            {
-                {"non_machinable", shipment.Asendia.NonMachinable}
-            };
+            return new AdvancedOptions(nonMachinable: shipment.Asendia.NonMachinable);
         }
 
         /// <summary>

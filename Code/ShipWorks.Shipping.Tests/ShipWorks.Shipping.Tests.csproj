@@ -83,15 +83,15 @@
     <Reference Include="Moq, Version=4.7.145.0, Culture=neutral, PublicKeyToken=69f491c39445e920, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Moq.4.7.145\lib\net45\Moq.dll</HintPath>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="SD.LLBLGen.Pro.ORMSupportClasses, Version=5.1.0.0, Culture=neutral, PublicKeyToken=ca73b74ba4e3ff27, processorArchitecture=MSIL">
       <HintPath>..\..\packages\SD.LLBLGen.Pro.ORMSupportClasses.5.1.2\lib\net45\SD.LLBLGen.Pro.ORMSupportClasses.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="ShipEngine.ApiClient, Version=1.0.0.0, Culture=neutral, PublicKeyToken=372d6fd19cbc5d92, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Signed.ShipEngine.ApiClient.1.0.4\lib\net46\ShipEngine.ApiClient.dll</HintPath>
+      <HintPath>..\..\packages\Signed.ShipEngine.ApiClient.1.0.8\lib\net46\ShipEngine.ApiClient.dll</HintPath>
     </Reference>
     <Reference Include="Syncfusion.Compression.Base, Version=16.1460.0.26, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Syncfusion.Compression.Base46.16.1.0.26\lib\net46\Syncfusion.Compression.Base.dll</HintPath>
@@ -165,13 +165,13 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Carriers\Amazon\AmazonCreateShipmentRequestTest.cs" />
-    <Compile Include="Carriers\Amazon\AmazonDownloadedLabelDataTest.cs" />
-    <Compile Include="Carriers\Amazon\AmazonServiceTypeRepositoryTest.cs" />
-    <Compile Include="Carriers\Amazon\AmazonShipmentAdapterTest.cs" />
-    <Compile Include="Carriers\Amazon\AmazonShipmentServiceBuilderTest.cs" />
-    <Compile Include="Carriers\Amazon\AmazonShippingProfileApplicationStrategyTest.cs" />
-    <Compile Include="Carriers\Amazon\RateGroupFilters\AmazonAvailableServiceTypeRateGroupFilterTest.cs" />
+    <Compile Include="Carriers\Amazon\AmazonSFPCreateShipmentRequestTest.cs" />
+    <Compile Include="Carriers\Amazon\AmazonSFPDownloadedLabelDataTest.cs" />
+    <Compile Include="Carriers\Amazon\AmazonSFPServiceTypeRepositoryTest.cs" />
+    <Compile Include="Carriers\Amazon\AmazonSFPShipmentAdapterTest.cs" />
+    <Compile Include="Carriers\Amazon\AmazonSFPShipmentServiceBuilderTest.cs" />
+    <Compile Include="Carriers\Amazon\AmazonSFPShippingProfileApplicationStrategyTest.cs" />
+    <Compile Include="Carriers\Amazon\RateGroupFilters\AmazonSFPAvailableServiceTypeRateGroupFilterTest.cs" />
     <Compile Include="Carriers\Asendia\AsendiaLabelServiceTest.cs" />
     <Compile Include="Carriers\Asendia\AsendiaShipmentRequestFactoryTest.cs" />
     <Compile Include="Carriers\Asendia\AsendiaShipmentTypeTest.cs" />
@@ -384,16 +384,16 @@
     <Compile Include="Services\ShipmentTypeProviderTest.cs" />
     <Compile Include="Services\ShippingManagerWrapperTest.cs" />
     <Compile Include="Services\ShippingOriginManagerWrapperTest.cs" />
-    <Compile Include="Carriers\Amazon\RateGroupFilters\AmazonAllowedCarriersRateGroupFilterTest.cs" />
-    <Compile Include="Carriers\Amazon\AmazonCarrierTermsAndConditionsNotAcceptedFootnoteFactoryTest.cs" />
-    <Compile Include="Carriers\Amazon\AmazonInsuranceChoiceTest.cs" />
-    <Compile Include="Carriers\Amazon\AmazonLabelServiceTest.cs" />
+    <Compile Include="Carriers\Amazon\RateGroupFilters\AmazonSFPAllowedCarriersRateGroupFilterTest.cs" />
+    <Compile Include="Carriers\Amazon\AmazonSFPCarrierTermsAndConditionsNotAcceptedFootnoteFactoryTest.cs" />
+    <Compile Include="Carriers\Amazon\AmazonSFPInsuranceChoiceTest.cs" />
+    <Compile Include="Carriers\Amazon\AmazonSFPLabelServiceTest.cs" />
     <Compile Include="Carriers\Amazon\AmazonMwsWebClientSettingsFactoryTest.cs" />
-    <Compile Include="Carriers\Amazon\AmazonRateGroupFactoryTest.cs" />
-    <Compile Include="Carriers\Amazon\AmazonShipmentRequestDetailsFactoryTest.cs" />
-    <Compile Include="Carriers\Amazon\AmazonShipmentTypeTest.cs" />
-    <Compile Include="Carriers\Amazon\AmazonShippingWebClientTest.cs" />
-    <Compile Include="Carriers\Amazon\Api\AmazonRatingServiceTests.cs" />
+    <Compile Include="Carriers\Amazon\AmazonSFPRateGroupFactoryTest.cs" />
+    <Compile Include="Carriers\Amazon\AmazonSFPShipmentRequestDetailsFactoryTest.cs" />
+    <Compile Include="Carriers\Amazon\AmazonSFPShipmentTypeTest.cs" />
+    <Compile Include="Carriers\Amazon\AmazonSFPShippingWebClientTest.cs" />
+    <Compile Include="Carriers\Amazon\Api\AmazonSFPRatingServiceTests.cs" />
     <Compile Include="Carriers\Amazon\Api\GetEligibleShippingServicesResponseTest.cs" />
     <Compile Include="Carriers\BestRate\BestRateRatingServiceTest.cs" />
     <Compile Include="Carriers\BestRate\FakeExceptionHandlerBroker.cs" />

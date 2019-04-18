@@ -183,7 +183,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor.OnlineUpdating
             // not going through ShippingManager.GetServiceDescription because we need to not include any prefixes like "USPS"
             ShipmentTypeCode type = (ShipmentTypeCode) shipment.ShipmentType;
 
-            if (type == ShipmentTypeCode.Amazon)
+            if (type == ShipmentTypeCode.AmazonSFP)
             {
                 return GetAmazonShipmentClassCode(shipment);
             }
@@ -476,7 +476,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor.OnlineUpdating
 
             switch ((ShipmentTypeCode) shipment.ShipmentType)
             {
-                case ShipmentTypeCode.Amazon:
+                case ShipmentTypeCode.AmazonSFP:
                     return GetAmazonCarrierName(shipment);
 
                 case ShipmentTypeCode.FedEx:
@@ -513,7 +513,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor.OnlineUpdating
 
                 case ShipmentTypeCode.iParcel:
                     return "i-Parcel";
-                
+
                 case ShipmentTypeCode.DhlExpress:
                     return "DHL EXPRESS";
 
@@ -533,9 +533,9 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor.OnlineUpdating
         private static string GetAmazonCarrierName(ShipmentEntity shipment)
         {
             MethodConditions.EnsureArgumentIsNotNull(shipment, nameof(shipment));
-            MethodConditions.EnsureArgumentIsNotNull(shipment.Amazon, nameof(shipment.Amazon));
+            MethodConditions.EnsureArgumentIsNotNull(shipment.AmazonSFP, nameof(shipment.AmazonSFP));
 
-            string carrierName = shipment.Amazon.CarrierName.ToUpperInvariant();
+            string carrierName = shipment.AmazonSFP.CarrierName.ToUpperInvariant();
 
             switch (carrierName)
             {
@@ -549,7 +549,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor.OnlineUpdating
                 case "ONTRAC":
                     return "OnTrac";
                 default:
-                    return shipment.Amazon.CarrierName;
+                    return shipment.AmazonSFP.CarrierName;
             }
         }
 
@@ -561,27 +561,27 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor.OnlineUpdating
         private static string GetAmazonShipmentClassCode(ShipmentEntity shipment)
         {
             MethodConditions.EnsureArgumentIsNotNull(shipment, nameof(shipment));
-            MethodConditions.EnsureArgumentIsNotNull(shipment.Amazon, nameof(shipment.Amazon));
+            MethodConditions.EnsureArgumentIsNotNull(shipment.AmazonSFP, nameof(shipment.AmazonSFP));
 
             // Check to see if it's USPS
-            string shippingServiceName = GetAmazonShipmentClassCodeUsps(shipment.Amazon.ShippingServiceName);
+            string shippingServiceName = GetAmazonShipmentClassCodeUsps(shipment.AmazonSFP.ShippingServiceName);
 
             // If it wasn't, check UPS
             if (string.IsNullOrWhiteSpace(shippingServiceName))
             {
-                shippingServiceName = GetAmazonShipmentClassCodeUps(shipment.Amazon.ShippingServiceName);
+                shippingServiceName = GetAmazonShipmentClassCodeUps(shipment.AmazonSFP.ShippingServiceName);
             }
 
             // If it wasn't, check FedEx
             if (string.IsNullOrWhiteSpace(shippingServiceName))
             {
-                shippingServiceName = GetAmazonShipmentClassCodeFedEx(shipment.Amazon.ShippingServiceName);
+                shippingServiceName = GetAmazonShipmentClassCodeFedEx(shipment.AmazonSFP.ShippingServiceName);
             }
 
             // If it wasn't, default to NONE
             if (string.IsNullOrWhiteSpace(shippingServiceName))
             {
-                shippingServiceName = shipment.Amazon.ShippingServiceName.ReplaceInsensitive($"{shipment.Amazon.CarrierName} ", "");
+                shippingServiceName = shipment.AmazonSFP.ShippingServiceName.ReplaceInsensitive($"{shipment.AmazonSFP.CarrierName} ", "");
             }
 
             return shippingServiceName;

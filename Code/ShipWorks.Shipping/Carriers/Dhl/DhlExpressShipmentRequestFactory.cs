@@ -62,14 +62,12 @@ namespace ShipWorks.Shipping.Carriers.Dhl
         /// <summary>
         /// Creates the DHL Express advanced options node
         /// </summary>
-        protected override Dictionary<string, object> CreateAdvancedOptions(ShipmentEntity shipment)
+        protected override AdvancedOptions CreateAdvancedOptions(ShipmentEntity shipment)
         {
-            return new Dictionary<string, object>()
-            {
-                {"delivered_duty_paid", shipment.DhlExpress.DeliveredDutyPaid},
-                {"non_machinable", shipment.DhlExpress.NonMachinable},
-                {"saturday_delivery", shipment.DhlExpress.SaturdayDelivery}
-            };
+            return new AdvancedOptions(
+                deliveredDutyPaid: shipment.DhlExpress.DeliveredDutyPaid, 
+                nonMachinable: shipment.DhlExpress.NonMachinable, 
+                saturdayDelivery: shipment.DhlExpress.SaturdayDelivery);
         }
 
         /// <summary>

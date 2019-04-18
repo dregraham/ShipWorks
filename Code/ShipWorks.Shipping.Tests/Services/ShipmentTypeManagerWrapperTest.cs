@@ -103,7 +103,7 @@ namespace ShipWorks.Shipping.Tests.Services
         public void InitialShipmentType_SetsInitialShipmentTypeToFirstMatch_WhenShipmentIsInRule()
         {
             var rule1 = new ShippingProviderRuleEntity { ShipmentType = (int) ShipmentTypeCode.FedEx };
-            var rule2 = new ShippingProviderRuleEntity { ShipmentType = (int) ShipmentTypeCode.Amazon };
+            var rule2 = new ShippingProviderRuleEntity { ShipmentType = (int) ShipmentTypeCode.AmazonSFP };
 
             mock.Mock<IShippingProviderRuleManager>()
                 .Setup(x => x.GetRules())
@@ -127,18 +127,18 @@ namespace ShipWorks.Shipping.Tests.Services
 
             var amazonShipmentType = mock.CreateMock<ShipmentType>();
             amazonShipmentType.Setup(x => x.IsAllowedFor(shipment)).Returns(true);
-            amazonShipmentType.Setup(x => x.ShipmentTypeCode).Returns(ShipmentTypeCode.Amazon);
+            amazonShipmentType.Setup(x => x.ShipmentTypeCode).Returns(ShipmentTypeCode.AmazonSFP);
 
             var defaultShipmentType = mock.CreateMock<ShipmentType>();
             defaultShipmentType.Setup(x => x.IsAllowedFor(shipment)).Returns(true);
             defaultShipmentType.Setup(x => x.ShipmentTypeCode).Returns((ShipmentTypeCode)shippingSettings.DefaultType);
 
-            mock.Mock<IIndex<ShipmentTypeCode, ShipmentType>>().Setup(x => x[ShipmentTypeCode.Amazon]).Returns(amazonShipmentType.Object);
+            mock.Mock<IIndex<ShipmentTypeCode, ShipmentType>>().Setup(x => x[ShipmentTypeCode.AmazonSFP]).Returns(amazonShipmentType.Object);
             mock.Mock<IIndex<ShipmentTypeCode, ShipmentType>>().Setup(x => x[defaultShipmentType.Object.ShipmentTypeCode]).Returns(defaultShipmentType.Object);
 
             ShipmentType result = testObject.InitialShipmentType(shipment);
 
-            Assert.Equal(ShipmentTypeCode.Amazon, result.ShipmentTypeCode);
+            Assert.Equal(ShipmentTypeCode.AmazonSFP, result.ShipmentTypeCode);
         }
 
         [Fact]
@@ -150,13 +150,13 @@ namespace ShipWorks.Shipping.Tests.Services
 
             var amazonShipmentType = mock.CreateMock<ShipmentType>();
             amazonShipmentType.Setup(x => x.IsAllowedFor(shipment)).Returns(true);
-            amazonShipmentType.Setup(x => x.ShipmentTypeCode).Returns(ShipmentTypeCode.Amazon);
+            amazonShipmentType.Setup(x => x.ShipmentTypeCode).Returns(ShipmentTypeCode.AmazonSFP);
 
             var defaultShipmentType = mock.CreateMock<ShipmentType>();
             defaultShipmentType.Setup(x => x.IsAllowedFor(shipment)).Returns(true);
             defaultShipmentType.Setup(x => x.ShipmentTypeCode).Returns((ShipmentTypeCode)shippingSettings.DefaultType);
 
-            mock.Mock<IIndex<ShipmentTypeCode, ShipmentType>>().Setup(x => x[ShipmentTypeCode.Amazon]).Returns(amazonShipmentType.Object);
+            mock.Mock<IIndex<ShipmentTypeCode, ShipmentType>>().Setup(x => x[ShipmentTypeCode.AmazonSFP]).Returns(amazonShipmentType.Object);
             mock.Mock<IIndex<ShipmentTypeCode, ShipmentType>>().Setup(x => x[defaultShipmentType.Object.ShipmentTypeCode]).Returns(defaultShipmentType.Object);
 
             ShipmentType result = testObject.InitialShipmentType(shipment);
