@@ -195,7 +195,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Walmart
         [Fact]
         public void UpdateShipmentDetails_ReturnsOrder()
         {
-            Mock<IHttpVariableRequestSubmitter> requestSubmitter = SetupHttpVariableRequestSubmitter(OAuthTokenResponse, OAuthTokenResponse);
+            Mock<IHttpVariableRequestSubmitter> requestSubmitter = SetupHttpVariableRequestSubmitter(OAuthTokenResponse);
             requestSubmitter.SetupGet(r => r.Headers);
 
             WalmartWebClient testObject = mock.Create<WalmartWebClient>();
@@ -308,20 +308,27 @@ namespace ShipWorks.Stores.Tests.Platforms.Walmart
             Assert.Equal("Basic Q2xpZW50SUQ6Q2xpZW50U2VjcmV0", webHeaderCollection.GetValues("Authorization").First());
         }
 
+        private Mock<IHttpVariableRequestSubmitter> SetupHttpVariableRequestSubmitter(string response)
+        {
+            Mock<IHttpResponseReader> responseReader = mock.Mock<IHttpResponseReader>();
+            responseReader.Setup(r => r.ReadResult()).CallBase();
+            responseReader.Setup(r => r.HttpWebResponse.StatusCode).Returns(HttpStatusCode.OK);
+
+            Mock<IHttpVariableRequestSubmitter> requestSubmitter = mock.Mock<IHttpVariableRequestSubmitter>();
+            requestSubmitter.Setup(r => r.GetResponse()).Returns(responseReader);
+            mock.Mock<IHttpRequestSubmitterFactory>()
+                .Setup(f => f.GetHttpVariableRequestSubmitter())
+                .Returns(requestSubmitter.Object);
+
+            return requestSubmitter;
+        }
+
         private Mock<IHttpVariableRequestSubmitter> SetupHttpVariableRequestSubmitter(string response1, string response2)
         {
             Mock<IHttpResponseReader> responseReader = mock.Mock<IHttpResponseReader>();
-            bool firstTime = true;
-            responseReader.Setup(r => r.ReadResult()).Returns(() =>
-            {
-                if (!firstTime)
-                {
-                    return response2;
-                }
-
-                firstTime = false;
-                return response1;
-            });
+            responseReader.SetupSequence(r => r.ReadResult())
+                .Returns(response1)
+                .Returns(response2);
             responseReader.Setup(r => r.HttpWebResponse.StatusCode).Returns(HttpStatusCode.OK);
 
             Mock<IHttpVariableRequestSubmitter> requestSubmitter = mock.Mock<IHttpVariableRequestSubmitter>();
@@ -336,19 +343,27 @@ namespace ShipWorks.Stores.Tests.Platforms.Walmart
         private void SetupHttpVariableRequestSubmitterForBadRequest(string response1, string response2)
         {
             Mock<IHttpResponseReader> responseReader = mock.Mock<IHttpResponseReader>();
-            bool firstTime = true;
-            responseReader.Setup(r => r.ReadResult()).Returns(() =>
-            {
-                if (!firstTime)
-                {
+            int readResultCounter = 0;
+            int statusCodeCounter = 0;
+            responseReader.Setup(r => r.ReadResult())
+                .Returns(() => {
+                    readResultCounter++;
+                    if(readResultCounter < 2)
+                    {
+                        return response1;
+                    }
                     return response2;
-                }
-
-                firstTime = false;
-                return response1;
-            });
-            responseReader.Setup(r => r.HttpWebResponse.StatusCode).Returns(HttpStatusCode.BadRequest);
-            responseReader.Setup(r => r.HttpWebResponse.StatusDescription).Returns("Bad Request");
+                });
+            responseReader.Setup(r => r.HttpWebResponse.StatusCode)
+                .Returns(() => {
+                    statusCodeCounter++;
+                    if (statusCodeCounter < 3)
+                    {
+                        return HttpStatusCode.OK;
+                    }
+                    return HttpStatusCode.BadRequest;
+                });
+            responseReader.SetupSequence(r => r.HttpWebResponse.StatusDescription).Returns("Bad Request");
 
             Mock<IHttpVariableRequestSubmitter> requestSubmitter = mock.Mock<IHttpVariableRequestSubmitter>();
             requestSubmitter.Setup(r => r.GetResponse()).Returns(responseReader);
