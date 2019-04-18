@@ -15,6 +15,7 @@ using Interapptive.Shared.Utility;
 using log4net;
 using ShipWorks.ApplicationCore.Licensing.Activation.WebServices;
 using ShipWorks.ApplicationCore.Licensing.TangoRequests;
+using ShipWorks.ApplicationCore.Licensing.WebClientEnvironments;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.ApplicationCore.Nudges;
 using ShipWorks.Data.Connection;
@@ -38,8 +39,6 @@ namespace ShipWorks.ApplicationCore.Licensing
     [NDependIgnoreLongTypes]
     public static class TangoWebClient
     {
-        private const string ActivationUrl = "https://interapptive.com/ShipWorksNet/ActivationV1.svc";
-
         // Logger
         private static readonly ILog log = LogManager.GetLogger(typeof(TangoWebClient));
 
@@ -930,8 +929,20 @@ namespace ShipWorks.ApplicationCore.Licensing
         {
             try
             {
-                Activation.WebServices.Activation activationService = new Activation.WebServices.Activation(new ApiLogEntry(ApiLogSource.ShipWorks, "Activation")) { Url = ActivationUrl };
-                CustomerLicenseInfoV1 customerLicenseInfo = activationService.GetCustomerLicenseInfo(email, password);
+                CustomerLicenseInfoV1 customerLicenseInfo;
+
+                using (ILifetimeScope scope = IoC.BeginLifetimeScope())
+                {
+                    WebClientEnvironmentFactory webClientEnvironmentFactory = scope.Resolve<WebClientEnvironmentFactory>();
+
+                    Activation.WebServices.Activation activationService =
+                        new Activation.WebServices.Activation(new ApiLogEntry(ApiLogSource.ShipWorks, "Activation"))
+                        {
+                            Url = webClientEnvironmentFactory.SelectedEnvironment.ActivationUrl
+                        };
+
+                    customerLicenseInfo = activationService.GetCustomerLicenseInfo(email, password);
+                }
 
                 return GenericResult.FromSuccess<IActivationResponse>(new ActivationResponse(customerLicenseInfo));
             }

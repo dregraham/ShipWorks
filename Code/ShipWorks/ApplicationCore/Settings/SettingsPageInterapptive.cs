@@ -159,10 +159,12 @@ namespace ShipWorks.ApplicationCore.Settings
             if (selectedWebClientEnvironment.Name == "Other")
             {
                 if (Uri.IsWellFormedUriString(otherTangoUrlText.Text, UriKind.Absolute) &&
-                    Uri.IsWellFormedUriString(otherWarehouseUrlText.Text, UriKind.Absolute))
+                    Uri.IsWellFormedUriString(otherWarehouseUrlText.Text, UriKind.Absolute) &&
+                    Uri.IsWellFormedUriString(activataionUrlText.Text, UriKind.Absolute))
                 {
                     selectedWebClientEnvironment.TangoUrl = otherTangoUrlText.Text;
                     selectedWebClientEnvironment.WarehouseUrl = otherWarehouseUrlText.Text;
+                    selectedWebClientEnvironment.ActivationUrl = activataionUrlText.Text;
                     webClientEnvironmentFactory.SelectedEnvironment = selectedWebClientEnvironment;
                     webClientEnvironmentFactory.SaveSelection();
                 }
@@ -315,15 +317,18 @@ namespace ShipWorks.ApplicationCore.Settings
             {
                 otherTangoUrlText.Enabled = true;
                 otherWarehouseUrlText.Enabled = true;
+                activataionUrlText.Enabled = true;
             }
             else
             {
                 otherTangoUrlText.Enabled = false;
                 otherWarehouseUrlText.Enabled = false;
+                activataionUrlText.Enabled = false;
             }
 
             otherTangoUrlText.Text = selectedWebClientEnvironment.TangoUrl;
             otherWarehouseUrlText.Text = selectedWebClientEnvironment.WarehouseUrl;
+            activataionUrlText.Text = selectedWebClientEnvironment.ActivationUrl;
         }
     }
 }
