@@ -80,8 +80,8 @@ namespace SmokeTest
             Init();
 
             // Validates ShipWorks is in Batch Grid
-            Report.Log(ReportLevel.Info, "Validation", "Validates ShipWorks is in Batch Grid\r\nValidating AttributeEqual (ControlText='All') on item 'ShipWorksSa.PanelDockingArea.KryptonHeader'.", repo.ShipWorksSa.PanelDockingArea.KryptonHeaderInfo, new RecordItemIndex(0));
-            Validate.AttributeEqual(repo.ShipWorksSa.PanelDockingArea.KryptonHeaderInfo, "ControlText", "All");
+            Report.Log(ReportLevel.Info, "Validation", "Validates ShipWorks is in Batch Grid\r\nValidating AttributeEqual (RawText='Orders') on item 'ShipWorksSa.Orders'.", repo.ShipWorksSa.OrdersInfo, new RecordItemIndex(0));
+            Validate.AttributeEqual(repo.ShipWorksSa.OrdersInfo, "RawText", "Orders");
             Delay.Milliseconds(100);
             
             Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Move item 'ShipWorksSa.Application' at Center.", repo.ShipWorksSa.ApplicationInfo, new RecordItemIndex(1));

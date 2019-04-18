@@ -186,6 +186,18 @@
       <UserCode>true</UserCode>
       <id>872d82e0-2670-4edf-9ec7-2d52f28045f3</id>
     </Compile>
+    <Compile Include="CodeModules\AllOrdersFilter_SelectFirstRow_ShipOrders2.cs">
+      <id>2dc10d79-4751-4abf-90e8-33db80435c61</id>
+    </Compile>
+    <Compile Include="CodeModules\ChangeCurrentShipment_ProviderUSPSExpress1.cs">
+      <id>f7812c61-08bb-4c0e-8583-bf34f244d4a9</id>
+    </Compile>
+    <Compile Include="CodeModules\CloseShipOrdersDialog.cs">
+      <id>17a288dd-a631-4c40-b30f-f03b718fec84</id>
+    </Compile>
+    <Compile Include="CodeModules\ShipOrders_ToAddress_Domestic2.cs">
+      <id>0f72f3fa-2052-4510-971e-7d81d43f19b4</id>
+    </Compile>
     <Compile Include="CopyStagingHosts.cs">
       <id>7e3919f9-7e57-4e61-8629-9ab72e1d8a2b</id>
     </Compile>
@@ -2128,6 +2140,9 @@
     </Folder>
     <Folder Include="BatchFile">
       <id>4f8412e7-d3c3-4d21-9b6b-287625c43966</id>
+    </Folder>
+    <Folder Include="CodeModules">
+      <id>91e933d9-6406-4df5-a0f4-9d7990bf430a</id>
     </Folder>
     <Folder Include="ZipFiles">
       <id>a74b6b2e-1791-470e-bd2f-6b76ed961f84</id>
