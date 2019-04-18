@@ -338,6 +338,10 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("AutoUpdateHourOfDay", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("AutoUpdateStartDate", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("WarehouseID", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("WarehouseName", fieldHashtable);
 		}
 		#endregion
 
@@ -604,6 +608,26 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.DateTime)GetValue((int)ConfigurationFieldIndex.AutoUpdateStartDate, true); }
 			set	{ SetValue((int)ConfigurationFieldIndex.AutoUpdateStartDate, value); }
+		}
+
+		/// <summary> The WarehouseID property of the Entity Configuration<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "Configuration"."WarehouseID"<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.String WarehouseID
+		{
+			get { return (System.String)GetValue((int)ConfigurationFieldIndex.WarehouseID, true); }
+			set	{ SetValue((int)ConfigurationFieldIndex.WarehouseID, value); }
+		}
+
+		/// <summary> The WarehouseName property of the Entity Configuration<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "Configuration"."WarehouseName"<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.String WarehouseName
+		{
+			get { return (System.String)GetValue((int)ConfigurationFieldIndex.WarehouseName, true); }
+			set	{ SetValue((int)ConfigurationFieldIndex.WarehouseName, value); }
 		}
 	
 		/// <summary> Gets the type of the hierarchy this entity is in. </summary>

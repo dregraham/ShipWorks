@@ -64,7 +64,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// Endicia Scan Based Returns can be Restricted
         /// </summary>
         bool EndiciaScanBasedReturns { get; set; }
-        
+
         /// <summary>
         /// Controls if using Stamps insurance is enabled for Usps users
         /// </summary>
@@ -145,5 +145,10 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// Gets the ShipmentType Functionality value for the given ShipmentType and PolicyType
         /// </summary>
         string GetShipmentTypeFunctionality(ShipmentTypeCode shipmentType, ShippingPolicyType policy);
+
+        /// <summary>
+        /// Controls if customer is allowed to use Warehouse Site
+        /// </summary>
+        bool Warehouse { get; set; }
     }
 }

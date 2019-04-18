@@ -650,6 +650,8 @@
           <Field Name="LogOnMethod" Type="int" FieldIndex="2" />
           <Field Name="RowVersion" Type="byte[]" IsReadOnly="true" FieldIndex="1" />
           <Field Name="UseParallelActionQueue" Type="bool" FieldIndex="13" />
+          <Field Name="WarehouseID" Type="string" MaxLength="50" FieldIndex="21" />
+          <Field Name="WarehouseName" Type="string" MaxLength="50" FieldIndex="22" />
         </Fields>
       </EntityDefinition>
       <EntityDefinition Name="Customer" ObjectID="49c26834-7e51-4f06-be28-976aea3976f1">
@@ -4541,7 +4543,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2019-03-27T19:21:58.1943987Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2019-04-16T13:38:00.9024573Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -5164,6 +5166,8 @@
                     <Field Name="AutoUpdateDayOfWeek" Ordinal="19" DbType="8" Precision="10" />
                     <Field Name="AutoUpdateHourOfDay" Ordinal="20" DbType="8" Precision="10" />
                     <Field Name="AutoUpdateStartDate" Ordinal="21" DbType="29" Precision="7" />
+                    <Field Name="WarehouseID" Ordinal="22" HasDefaultValue="true" DefaultValue="''" DbType="12" Length="50" />
+                    <Field Name="WarehouseName" Ordinal="23" HasDefaultValue="true" DefaultValue="''" DbType="12" Length="50" />
                   </Fields>
                 </Table>
                 <Table Name="Customer">
@@ -11330,6 +11334,8 @@
             <FieldMapping FieldName="LogOnMethod" TargetFieldName="LogOnMethod" />
             <FieldMapping FieldName="RowVersion" TargetFieldName="RowVersion" />
             <FieldMapping FieldName="UseParallelActionQueue" TargetFieldName="UseParallelActionQueue" />
+            <FieldMapping FieldName="WarehouseID" TargetFieldName="WarehouseID" />
+            <FieldMapping FieldName="WarehouseName" TargetFieldName="WarehouseName" />
           </FieldMappings>
         </EntityMapping>
         <EntityMapping EntityName=":Customer" TargetName="ShipWorksLocal:dbo:Customer">

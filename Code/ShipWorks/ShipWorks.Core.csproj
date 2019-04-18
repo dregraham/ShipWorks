@@ -363,6 +363,7 @@
     <Reference Include="System.IO.Compression.FileSystem" />
     <Reference Include="System.Management" />
     <Reference Include="System.Net" />
+    <Reference Include="System.Net.Http" />
     <Reference Include="System.Numerics" />
     <Reference Include="System.Reactive.Core, Version=3.0.3000.0, Culture=neutral, PublicKeyToken=94bc3704cddfc263, processorArchitecture=MSIL">
       <HintPath>..\..\packages\System.Reactive.Core.3.1.1\lib\net46\System.Reactive.Core.dll</HintPath>
@@ -779,11 +780,17 @@
     <Compile Include="ApplicationCore\IRegistrationOverride.cs" />
     <Compile Include="ApplicationCore\Licensing\FakeTangoWebRequestClient.cs" />
     <Compile Include="ApplicationCore\IShipWorksSession.cs" />
+    <Compile Include="ApplicationCore\Licensing\FeatureRestrictions\WarehouseRestriction.cs" />
+    <Compile Include="ApplicationCore\Licensing\TangoRequests\ITangoGetRedirectToken.cs" />
     <Compile Include="ApplicationCore\Licensing\TangoRequests\ITangoGetReleaseByUserRequest.cs" />
     <Compile Include="ApplicationCore\Licensing\TangoRequests\ITangoGetReleaseByVersionRequest.cs" />
     <Compile Include="ApplicationCore\Licensing\TangoRequests\ShipWorksReleaseInfo.cs" />
+    <Compile Include="ApplicationCore\Licensing\TangoRequests\TangoGetRedirectToken.cs" />
     <Compile Include="ApplicationCore\Licensing\TangoRequests\TangoGetReleaseByUserRequest.cs" />
     <Compile Include="ApplicationCore\Licensing\TangoRequests\TangoGetReleaseByVersionRequest.cs" />
+    <Compile Include="ApplicationCore\Licensing\TokenResponse.cs" />
+    <Compile Include="ApplicationCore\Licensing\Warehouse\IWarehouseRemoteLoginWithToken.cs" />
+    <Compile Include="ApplicationCore\Licensing\Warehouse\WarehouseRemoteLoginWithToken.cs" />
     <Compile Include="ApplicationCore\Licensing\WebClientEnvironments\WebClientEnvironmentFactory.cs" />
     <Compile Include="ApplicationCore\Licensing\WebClientEnvironments\WebClientEnvironment.cs" />
     <Compile Include="ApplicationCore\Settings\AutoUpdateSettings.cs" />
@@ -996,6 +1003,12 @@
     </Compile>
     <Compile Include="ApplicationCore\Settings\SettingsPageShortcuts.Designer.cs">
       <DependentUpon>SettingsPageShortcuts.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ApplicationCore\Settings\SettingsPageWarehouse.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ApplicationCore\Settings\SettingsPageWarehouse.Designer.cs">
+      <DependentUpon>SettingsPageWarehouse.cs</DependentUpon>
     </Compile>
     <Compile Include="ApplicationCore\Settings\SingleScanSettings.cs" />
     <Compile Include="ApplicationCore\Security\CipherContext.cs" />
@@ -7134,6 +7147,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="ApplicationCore\Services\ShipWorksServiceBase.resx">
       <DependentUpon>ShipWorksServiceBase.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ApplicationCore\Settings\SettingsPageWarehouse.resx">
+      <DependentUpon>SettingsPageWarehouse.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Data\Administration\DatabaseDetailsDlg.resx">
       <DependentUpon>DatabaseDetailsDlg.cs</DependentUpon>

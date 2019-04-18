@@ -63,6 +63,9 @@ namespace ShipWorks.ApplicationCore.Licensing
 
             // parse the ups specific capabilities
             SetUpsCapabilities(xmlResponse);
+
+            // Set if warehouse is enabled.
+            Warehouse = XPathUtility.Evaluate(xmlResponse.CreateNavigator(), "//WarehouseEnabled/@status", 0) == 1;
         }
 
         #region Properties
@@ -125,6 +128,11 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// Constrols if using Stamps insurance is enabled for Usps users
         /// </summary>
         public bool StampsInsurance { get; set; }
+
+        /// <summary>
+        /// Controls if customer is allowed to use Warehouse Site
+        /// </summary>
+        public bool Warehouse { get; set; }
 
         /// <summary>
         /// Controls if DHL is enabled for Stamps users

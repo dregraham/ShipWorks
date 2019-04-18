@@ -4977,6 +4977,16 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ConfigurationFieldIndex.AutoUpdateStartDate);}
 		}
+		/// <summary>Creates a new ConfigurationEntity.WarehouseID field instance</summary>
+		public static EntityField2 WarehouseID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ConfigurationFieldIndex.WarehouseID);}
+		}
+		/// <summary>Creates a new ConfigurationEntity.WarehouseName field instance</summary>
+		public static EntityField2 WarehouseName
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ConfigurationFieldIndex.WarehouseName);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity CustomerEntity</summary>

@@ -2154,6 +2154,10 @@ namespace ShipWorks.Data.Model
 		AutoUpdateHourOfDay,
 		///<summary>AutoUpdateStartDate. </summary>
 		AutoUpdateStartDate,
+		///<summary>WarehouseID. </summary>
+		WarehouseID,
+		///<summary>WarehouseName. </summary>
+		WarehouseName,
 		/// <summary></summary>
 		AmountOfFields
 	}

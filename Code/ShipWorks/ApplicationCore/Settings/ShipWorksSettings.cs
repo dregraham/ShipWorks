@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 using Autofac;
+using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Core.Messaging;
+using ShipWorks.Editions;
 using ShipWorks.Messaging.Messages.SingleScan;
 using ShipWorks.Users;
 
@@ -17,6 +19,24 @@ namespace ShipWorks.ApplicationCore.Settings
         // Maps list item name to the settings page that should be displayed for it
         private Dictionary<string, UserControl> settingsPages = new Dictionary<string, UserControl>();
         private readonly IMessenger messenger;
+
+        /// <summary>
+        /// Indicates if warehouse is allowed
+        /// </summary>
+        public static bool IsWarehouseAllowed
+        {
+            get
+            {
+                using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+                {
+                    ILicenseService licenseService = lifetimeScope.Resolve<ILicenseService>();
+                    EditionRestrictionLevel restrictionLevel = licenseService.CheckRestriction(EditionFeature.Warehouse, null);
+
+                    // If warehouse is not allowed, return false
+                    return restrictionLevel == EditionRestrictionLevel.None;
+                }
+            }
+        }
 
         /// <summary>
         /// Constructor
@@ -34,6 +54,11 @@ namespace ShipWorks.ApplicationCore.Settings
 
             settingsPages["Logging"] = InitializeSettingsPage(new SettingsPageLogging());
             settingsPages["Keyboard && Barcode Shortcuts"] = InitializeSettingsPage(new SettingsPageShortcuts(this, scope));
+
+            if (IsWarehouseAllowed)
+            {
+                settingsPages["Warehouse"] = InitializeSettingsPage(new SettingsPageWarehouse(this, scope));
+            }
 
             if (UserSession.IsLoggedOn && UserSession.User.IsAdmin)
             {

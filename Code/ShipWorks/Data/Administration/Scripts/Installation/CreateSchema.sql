@@ -4530,7 +4530,9 @@ CREATE TABLE [dbo].[Configuration]
 [DefaultPickListTemplateID] [bigint] NULL,
 [AutoUpdateDayOfWeek] [int] NOT NULL,
 [AutoUpdateHourOfDay] [int] NOT NULL,
-[AutoUpdateStartDate] [datetime2] NOT NULL
+[AutoUpdateStartDate] [datetime2] NOT NULL,
+[WarehouseID] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_Configuration_WarehouseID] DEFAULT (''),
+[WarehouseName] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_Configuration_WarehouseName] DEFAULT ('')
 )
 GO
 PRINT N'Creating primary key [PK_Configuration] on [dbo].[Configuration]'

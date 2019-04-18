@@ -831,6 +831,8 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("ConfigurationEntity", "AutoUpdateDayOfWeek", typeof(System.DayOfWeek), false, false, false, false,  (int)ConfigurationFieldIndex.AutoUpdateDayOfWeek, 0, 0, 10);
 			this.AddElementFieldInfo("ConfigurationEntity", "AutoUpdateHourOfDay", typeof(System.Int32), false, false, false, false,  (int)ConfigurationFieldIndex.AutoUpdateHourOfDay, 0, 0, 10);
 			this.AddElementFieldInfo("ConfigurationEntity", "AutoUpdateStartDate", typeof(System.DateTime), false, false, false, false,  (int)ConfigurationFieldIndex.AutoUpdateStartDate, 0, 0, 7);
+			this.AddElementFieldInfo("ConfigurationEntity", "WarehouseID", typeof(System.String), false, false, false, false,  (int)ConfigurationFieldIndex.WarehouseID, 50, 0, 0);
+			this.AddElementFieldInfo("ConfigurationEntity", "WarehouseName", typeof(System.String), false, false, false, false,  (int)ConfigurationFieldIndex.WarehouseName, 50, 0, 0);
 		}
 		/// <summary>Inits CustomerEntity's FieldInfo objects</summary>
 		private void InitCustomerEntityInfos()
