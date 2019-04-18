@@ -280,11 +280,6 @@ namespace ShipWorks.Stores.Platforms.Walmart
                     response = responseReader.ReadResult();
                     logEntry.LogResponse(response, "xml");
 
-                    OAuthTokenDTO token = DeserializeResponse<OAuthTokenDTO>(response);
-
-                    accessToken = token.accessToken;
-                    accessTokenExpireTime = accessTokenExpireTime.AddSeconds(token.expiresIn);
-
                     // The reason we allow 400 and 401 above but then throw for everything that is not 200 here is
                     // because we need to retain both the error DTO from Walmart as well as the HTTP status code
                     // description. If we didn't allow them, we'd lose the Walmart message.
@@ -292,6 +287,11 @@ namespace ShipWorks.Stores.Platforms.Walmart
                     {
                         throw new WebException($"{(int) responseReader.HttpWebResponse.StatusCode} {responseReader.HttpWebResponse.StatusDescription}");
                     }
+
+                    OAuthTokenDTO token = DeserializeResponse<OAuthTokenDTO>(response);
+
+                    accessToken = token.accessToken;
+                    accessTokenExpireTime = accessTokenExpireTime.AddSeconds(token.expiresIn);
                 }
             }
             catch (Exception ex) when (ex.GetType() == typeof(WebException) ||

@@ -362,7 +362,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Walmart
             responseReader.Setup(r => r.HttpWebResponse.StatusCode)
                 .Returns(() => {
                     statusCodeCounter++;
-                    if (statusCodeCounter < 3)
+                    if (statusCodeCounter < 2)
                     {
                         return HttpStatusCode.OK;
                     }
