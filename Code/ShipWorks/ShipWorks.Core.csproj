@@ -793,11 +793,13 @@
     <Compile Include="ApplicationCore\Licensing\TangoRequests\TangoGetReleaseByVersionRequest.cs" />
     <Compile Include="ApplicationCore\Licensing\TokenResponse.cs" />
     <Compile Include="ApplicationCore\Licensing\Warehouse\DTO\WarehouseListDto.cs" />
+    <Compile Include="ApplicationCore\Licensing\Warehouse\IWarehouseAssociation.cs" />
     <Compile Include="ApplicationCore\Licensing\Warehouse\IWarehouseList.cs" />
     <Compile Include="ApplicationCore\Licensing\Warehouse\IWarehouseRefreshToken.cs" />
     <Compile Include="ApplicationCore\Licensing\Warehouse\IWarehouseRemoteLoginWithToken.cs" />
     <Compile Include="ApplicationCore\Licensing\Warehouse\WarehouseAuthenticatedRequest.cs" />
     <Compile Include="ApplicationCore\Licensing\Warehouse\WarehouseEndpoints.cs" />
+    <Compile Include="ApplicationCore\Licensing\Warehouse\WarehouseAssociation.cs" />
     <Compile Include="ApplicationCore\Licensing\Warehouse\WarehouseList.cs" />
     <Compile Include="ApplicationCore\Licensing\Warehouse\WarehouseRefreshToken.cs" />
     <Compile Include="ApplicationCore\Licensing\Warehouse\WarehouseRemoteLoginWithToken.cs" />
@@ -1022,12 +1024,6 @@
     </Compile>
     <Compile Include="ApplicationCore\Settings\SettingsPageShortcuts.Designer.cs">
       <DependentUpon>SettingsPageShortcuts.cs</DependentUpon>
-    </Compile>
-    <Compile Include="ApplicationCore\Settings\SettingsPageWarehouse.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="ApplicationCore\Settings\SettingsPageWarehouse.Designer.cs">
-      <DependentUpon>SettingsPageWarehouse.cs</DependentUpon>
     </Compile>
     <Compile Include="ApplicationCore\Settings\SingleScanSettings.cs" />
     <Compile Include="ApplicationCore\Security\CipherContext.cs" />
@@ -7166,9 +7162,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="ApplicationCore\Services\ShipWorksServiceBase.resx">
       <DependentUpon>ShipWorksServiceBase.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="ApplicationCore\Settings\SettingsPageWarehouse.resx">
-      <DependentUpon>SettingsPageWarehouse.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Data\Administration\DatabaseDetailsDlg.resx">
       <DependentUpon>DatabaseDetailsDlg.cs</DependentUpon>

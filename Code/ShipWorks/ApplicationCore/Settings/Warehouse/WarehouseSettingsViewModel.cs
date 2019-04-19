@@ -1,6 +1,5 @@
 ﻿using System.Linq;
 using System.Reflection;
-using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Input;
 using GalaSoft.MvvmLight;
@@ -8,7 +7,6 @@ using GalaSoft.MvvmLight.CommandWpf;
 using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.ApplicationCore.Licensing.Warehouse;
 using ShipWorks.Data;
-using ShipWorks.Data.Model.EntityInterfaces;
 
 namespace ShipWorks.ApplicationCore.Settings.Warehouse
 {
@@ -20,27 +18,32 @@ namespace ShipWorks.ApplicationCore.Settings.Warehouse
     {
         private readonly IWarehouseSettings warehouseSettingsView;
         private readonly IWarehouseListViewModel warehouseList;
-        private readonly IWarehouseRemoteLoginWithToken remoteLoginWithToken;
         private readonly IWarehouseList warehouseListRequest;
+        private readonly IWarehouseAssociation warehouseAssociation;
+        private readonly IConfigurationData configurationData;
         private string warehouseName;
 
         /// <summary>
         /// Constructor
         /// </summary>
         public WarehouseSettingsViewModel(
-            IWarehouseSettings warehouseSettingsView, 
-            IWarehouseListViewModel warehouseList, 
-            IWarehouseRemoteLoginWithToken remoteLoginWithToken,
-            IWarehouseList warehouseListRequest)
+            IWarehouseSettings warehouseSettingsView,
+            IWarehouseListViewModel warehouseList,
+            IWarehouseList warehouseListRequest,
+            IWarehouseAssociation warehouseAssociation,
+            IConfigurationData configurationData)
         {
             this.warehouseSettingsView = warehouseSettingsView;
             this.warehouseList = warehouseList;
-            this.remoteLoginWithToken = remoteLoginWithToken;
             this.warehouseListRequest = warehouseListRequest;
+            this.warehouseAssociation = warehouseAssociation;
+            this.configurationData = configurationData;
             SelectWarehouse = new RelayCommand(OnSelectWarehouse);
 
             warehouseSettingsView.ViewModel = this;
-            warehouseName = "No warehouse selected";
+
+            var config = configurationData.FetchReadOnly();
+            warehouseName = string.IsNullOrEmpty(config.WarehouseID) ? "No warehouse selected" : config.WarehouseName;
         }
 
         /// <summary>
@@ -63,7 +66,7 @@ namespace ShipWorks.ApplicationCore.Settings.Warehouse
         /// Get the control associated with the view model
         /// </summary>
         public Control Control => warehouseSettingsView.Control;
-        
+
         /// <summary>
         /// Save configuration data
         /// </summary>
@@ -74,15 +77,21 @@ namespace ShipWorks.ApplicationCore.Settings.Warehouse
         /// </summary>
         private void OnSelectWarehouse()
         {
-            var tokenResponse = remoteLoginWithToken.RemoteLoginWithToken();
-            if (tokenResponse.Success)
-            {
-                var results = warehouseListRequest.GetList(tokenResponse.Value);
-                var warehouses = results.Value.warehouses.Select(x => new WarehouseViewModel(x));
+            var results = warehouseListRequest.GetList();
+            var warehouses = results.Value.warehouses.Select(x => new WarehouseViewModel(x));
 
-                IWarehouseViewModel warehouse = warehouseList.ChooseWarehouse(warehouses);
-                if (warehouse != null)
+            WarehouseViewModel warehouse = warehouseList.ChooseWarehouse(warehouses);
+            if (warehouse != null)
+            {
+                var associationResponse = warehouseAssociation.Associate(warehouse.Id);
+                if (associationResponse.Success)
                 {
+                    configurationData.UpdateConfiguration(x =>
+                    {
+                        x.WarehouseID = warehouse.Id;
+                        x.WarehouseName = warehouse.Name;
+                    });
+
                     WarehouseName = warehouse.Name;
                 }
             }

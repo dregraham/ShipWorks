@@ -10,6 +10,6 @@ namespace ShipWorks.ApplicationCore.Settings.Warehouse
         /// <summary>
         /// Choose a warehouse to associate ShipWorks with
         /// </summary>
-        IWarehouseViewModel ChooseWarehouse(IEnumerable<WarehouseViewModel> warehouses);
+        WarehouseViewModel ChooseWarehouse(IEnumerable<WarehouseViewModel> warehouses);
     }
 }

@@ -19,8 +19,8 @@ namespace ShipWorks.ApplicationCore.Settings.Warehouse
         private readonly Func<IWarehouseListDialog> createDialog;
         private readonly IMessageHelper messageHelper;
         private IWarehouseListDialog warehouseListDialog;
-        private IWarehouseViewModel selectedWarehouse;
-        private IEnumerable<IWarehouseViewModel> warehouses;
+        private WarehouseViewModel selectedWarehouse;
+        private IEnumerable<WarehouseViewModel> warehouses;
 
         /// <summary>
         /// Constructor
@@ -49,7 +49,7 @@ namespace ShipWorks.ApplicationCore.Settings.Warehouse
         /// Warehouse that's been selected
         /// </summary>
         [Obfuscation]
-        public IWarehouseViewModel SelectedWarehouse
+        public WarehouseViewModel SelectedWarehouse
         {
             get => selectedWarehouse;
             set => Set(ref selectedWarehouse, value);
@@ -59,7 +59,7 @@ namespace ShipWorks.ApplicationCore.Settings.Warehouse
         /// List of warehouses from which to choose
         /// </summary>
         [Obfuscation]
-        public IEnumerable<IWarehouseViewModel> Warehouses
+        public IEnumerable<WarehouseViewModel> Warehouses
         {
             get => warehouses;
             set => Set(ref warehouses, value);
@@ -68,7 +68,7 @@ namespace ShipWorks.ApplicationCore.Settings.Warehouse
         /// <summary>
         /// Choose a warehouse
         /// </summary>
-        public IWarehouseViewModel ChooseWarehouse(IEnumerable<WarehouseViewModel> warehouses)
+        public WarehouseViewModel ChooseWarehouse(IEnumerable<WarehouseViewModel> warehouses)
         {
             Warehouses = warehouses.ToList();
 
