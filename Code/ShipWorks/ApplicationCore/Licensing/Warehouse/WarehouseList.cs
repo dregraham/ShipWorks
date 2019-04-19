@@ -1,10 +1,10 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
 using Newtonsoft.Json;
 using RestSharp;
 using ShipWorks.ApplicationCore.Licensing.Warehouse.DTO;
-using ShipWorks.ApplicationCore.Licensing.WebClientEnvironments;
 
 namespace ShipWorks.ApplicationCore.Licensing.Warehouse
 {
@@ -27,14 +27,17 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse
         /// <summary>
         /// Get list of warehouses
         /// </summary>
-        public GenericResult<WarehouseListDto> GetList()
+        public async Task<GenericResult<WarehouseListDto>> GetList()
         {
             try
             {
-                RestRequest restRequest = new RestRequest(WarehouseEndpoints.Warehouses, Method.GET);
-                restRequest.RequestFormat = DataFormat.Json;
+                RestRequest restRequest = new RestRequest(WarehouseEndpoints.Warehouses, Method.GET)
+                {
+                    RequestFormat = DataFormat.Json
+                };
 
-                GenericResult<IRestResponse> restResponse = warehouseRequestClient.MakeRequest(restRequest);
+                GenericResult<IRestResponse> restResponse = await warehouseRequestClient.MakeRequest(restRequest)
+                    .ConfigureAwait(false);
 
                 if (restResponse.Success)
                 {

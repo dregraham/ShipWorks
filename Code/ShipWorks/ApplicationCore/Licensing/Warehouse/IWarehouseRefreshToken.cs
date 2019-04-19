@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Interapptive.Shared.Utility;
 
 namespace ShipWorks.ApplicationCore.Licensing.Warehouse
@@ -11,6 +12,6 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse
         /// <summary>
         /// Refresh our token from the warehouse
         /// </summary>
-        GenericResult<TokenResponse> RefreshToken(string refreshToken);
+        Task<GenericResult<TokenResponse>> RefreshToken(string refreshToken);
     }
 }

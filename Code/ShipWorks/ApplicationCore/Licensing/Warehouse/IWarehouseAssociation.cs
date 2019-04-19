@@ -1,4 +1,5 @@
-﻿using Interapptive.Shared.Utility;
+﻿using System.Threading.Tasks;
+using Interapptive.Shared.Utility;
 
 namespace ShipWorks.ApplicationCore.Licensing.Warehouse
 {
@@ -10,6 +11,6 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse
         /// <summary>
         /// Get list of warehouses
         /// </summary>
-        Result Associate(string warehouseId);
+        Task<Result> Associate(string warehouseId);
     }
 }

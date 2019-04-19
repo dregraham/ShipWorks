@@ -1,4 +1,5 @@
-﻿using Interapptive.Shared.ComponentRegistration;
+﻿using System.Threading.Tasks;
+using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
 using log4net;
 using ShipWorks.ApplicationCore.Licensing.WebClientEnvironments;
@@ -27,16 +28,19 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse
         /// <summary>
         /// Get a new token
         /// </summary>
-        public GenericResult<TokenResponse> RefreshToken(string refreshToken)
+        public async Task<GenericResult<TokenResponse>> RefreshToken(string refreshToken)
         {
             WebClientEnvironment  webClientEnvironment = webClientEnvironmentFactory.SelectedEnvironment;
-            RestRequest restRequest = new RestRequest(WarehouseEndpoints.RefreshToken, Method.POST);
-            restRequest.RequestFormat = DataFormat.Json;
+            RestRequest restRequest = new RestRequest(WarehouseEndpoints.RefreshToken, Method.POST)
+            {
+                RequestFormat = DataFormat.Json
+            };
             restRequest.AddJsonBody(new { refreshToken = refreshToken });
 
             var restClient = new RestClient(webClientEnvironment.WarehouseUrl);
 
-            IRestResponse restResponse = restClient.Execute(restRequest);
+            IRestResponse restResponse = await restClient.ExecuteTaskAsync(restRequest)
+                .ConfigureAwait(false);
 
             // De-serialize the result
             TokenResponse requestResult = JsonConvert.DeserializeObject<TokenResponse>(restResponse.Content,

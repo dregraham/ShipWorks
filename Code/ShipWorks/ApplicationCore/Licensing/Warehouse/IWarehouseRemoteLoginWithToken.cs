@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Interapptive.Shared.Utility;
 
 namespace ShipWorks.ApplicationCore.Licensing.Warehouse
@@ -11,6 +12,6 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse
         /// <summary>
         /// Login to the warehouse
         /// </summary>
-        GenericResult<TokenResponse> RemoteLoginWithToken();
+        Task<GenericResult<TokenResponse>> RemoteLoginWithToken();
     }
 }

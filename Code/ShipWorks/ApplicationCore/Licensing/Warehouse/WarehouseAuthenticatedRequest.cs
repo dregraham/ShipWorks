@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Net;
+using System.Threading.Tasks;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
 using RestSharp;
@@ -34,14 +35,16 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse
         /// <summary>
         /// Make an authenticated request
         /// </summary>
-        public GenericResult<IRestResponse> MakeRequest(IRestRequest restRequest)
+        public async Task<GenericResult<IRestResponse>> MakeRequest(IRestRequest restRequest)
         {
             try
             {
                 if (authenticationToken.IsNullOrWhiteSpace())
                 {
                     // Get new token
-                    GenericResult<TokenResponse> redirectTokenResult = warehouseRemoteLoginWithToken.RemoteLoginWithToken();
+                    GenericResult<TokenResponse> redirectTokenResult = await warehouseRemoteLoginWithToken.RemoteLoginWithToken()
+                        .ConfigureAwait(false);
+
                     if (redirectTokenResult.Failure)
                     {
                         return GenericResult.FromError<IRestResponse>("Unable to obtain a valid token to authenticate request.");
@@ -55,12 +58,14 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse
 
                 IRestClient restClient = new RestClient(webClientEnvironmentFactory.SelectedEnvironment.WarehouseUrl);
 
-                IRestResponse restResponse = restClient.Execute(restRequest);
+                IRestResponse restResponse = await restClient.ExecuteTaskAsync(restRequest).ConfigureAwait(false);
 
                 if (restResponse.StatusCode == HttpStatusCode.Forbidden)
                 {
                     // Get new token using the refresh token
-                    GenericResult<TokenResponse> refreshTokenResult = warehouseRefreshToken.RefreshToken(refreshToken);
+                    GenericResult<TokenResponse> refreshTokenResult = await warehouseRefreshToken.RefreshToken(refreshToken)
+                        .ConfigureAwait(false);
+
                     if (refreshTokenResult.Failure)
                     {
                         return GenericResult.FromError<IRestResponse>("Unable to obtain a valid token from refreshToken.");
@@ -76,7 +81,7 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse
                         }
                     }
 
-                    restResponse = restClient.Execute(restRequest);
+                    restResponse = await restClient.ExecuteTaskAsync(restRequest).ConfigureAwait(false);
                 }
 
                 return GenericResult.FromSuccess(restResponse);

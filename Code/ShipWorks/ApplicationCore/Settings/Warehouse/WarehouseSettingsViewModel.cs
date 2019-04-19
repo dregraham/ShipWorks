@@ -73,17 +73,19 @@ namespace ShipWorks.ApplicationCore.Settings.Warehouse
         public void Save() { }
 
         /// <summary>
-        /// Handle the select warehouse commandorder
+        /// Handle the select warehouse command 
         /// </summary>
-        private void OnSelectWarehouse()
+#pragma warning disable S3168 // Asynchronous methods should return a Task instead of void
+        private async void OnSelectWarehouse()
+#pragma warning restore S3168 // Asynchronous methods should return a Task instead of void
         {
-            var results = warehouseListRequest.GetList();
+            var results = await warehouseListRequest.GetList().ConfigureAwait(true);
             var warehouses = results.Value.warehouses.Select(x => new WarehouseViewModel(x));
 
             WarehouseViewModel warehouse = warehouseList.ChooseWarehouse(warehouses);
             if (warehouse != null)
             {
-                var associationResponse = warehouseAssociation.Associate(warehouse.Id);
+                var associationResponse = await warehouseAssociation.Associate(warehouse.Id).ConfigureAwait(true);
                 if (associationResponse.Success)
                 {
                     configurationData.UpdateConfiguration(x =>

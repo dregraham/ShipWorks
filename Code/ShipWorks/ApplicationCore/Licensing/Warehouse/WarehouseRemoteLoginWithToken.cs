@@ -1,4 +1,5 @@
-﻿using Interapptive.Shared.ComponentRegistration;
+﻿using System.Threading.Tasks;
+using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
 using log4net;
 using ShipWorks.ApplicationCore.Licensing.TangoRequests;
@@ -31,7 +32,7 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse
         /// <summary>
         /// Get Tango redirect token
         /// </summary>
-        public GenericResult<TokenResponse> RemoteLoginWithToken()
+        public async Task<GenericResult<TokenResponse>> RemoteLoginWithToken()
         {
             WebClientEnvironment  webClientEnvironment = webClientEnvironmentFactory.SelectedEnvironment;
             GenericResult<TokenResponse> redirectToken = tangoGetRedirectToken.GetRedirectToken();
@@ -41,21 +42,25 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse
                 return GenericResult.FromError<TokenResponse>("Could not retrieve redirect token");
             }
 
-            return RemoteLoginWithToken(redirectToken.Value.redirectToken, webClientEnvironment);
+            return await RemoteLoginWithToken(redirectToken.Value.redirectToken, webClientEnvironment)
+                .ConfigureAwait(false);
         }
 
         /// <summary>
         /// Get Tango redirect token
         /// </summary>
-        private GenericResult<TokenResponse> RemoteLoginWithToken(string redirectToken, WebClientEnvironment webClientEnvironment)
+        private async Task<GenericResult<TokenResponse>> RemoteLoginWithToken(string redirectToken, WebClientEnvironment webClientEnvironment)
         {
-            RestRequest restRequest = new RestRequest(WarehouseEndpoints.Login, Method.POST);
-            restRequest.RequestFormat = DataFormat.Json;
+            RestRequest restRequest = new RestRequest(WarehouseEndpoints.Login, Method.POST)
+            {
+                RequestFormat = DataFormat.Json
+            };
             restRequest.AddJsonBody(new { redirectToken = redirectToken});
 
             var restClient = new RestClient(webClientEnvironment.WarehouseUrl);
-
-            IRestResponse restResponse = restClient.Execute(restRequest);
+            
+            IRestResponse restResponse = await restClient.ExecuteTaskAsync(restRequest)
+                .ConfigureAwait(false);
 
             // De-serialize the result
             TokenResponse requestResult = JsonConvert.DeserializeObject<TokenResponse>(restResponse.Content,

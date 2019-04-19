@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
 using Newtonsoft.Json;
@@ -30,7 +31,7 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse
         /// <summary>
         /// Associate this instance of ShipWorks with the given warehouse
         /// </summary>
-        public Result Associate(string warehouseId)
+        public async Task<Result> Associate(string warehouseId)
         {
             try
             {
@@ -38,7 +39,7 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse
                 restRequest.RequestFormat = DataFormat.Json;
                 restRequest.AddJsonBody(new DatabaseDto { databaseId = databaseIdentifier.Get().ToString() });
 
-                return warehouseRequestClient.MakeRequest(restRequest);
+                return await warehouseRequestClient.MakeRequest(restRequest).ConfigureAwait(false);
             }
             catch (Exception ex)
             {
