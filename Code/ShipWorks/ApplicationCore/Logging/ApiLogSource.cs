@@ -144,5 +144,7 @@ namespace ShipWorks.ApplicationCore.Logging
         Asendia,
         [ApiPrivateLogSource]
         AmazonSWA,
+        [ApiPrivateLogSource]
+        ShipWorksWarehouse,
     }
 }

@@ -1,7 +1,7 @@
 ﻿using System;
 using Interapptive.Shared.Utility;
 
-namespace ShipWorks.ApplicationCore.Licensing.TangoRequests
+namespace ShipWorks.ApplicationCore.Licensing.Warehouse
 {
     /// <summary>
     /// Login to the warehouse

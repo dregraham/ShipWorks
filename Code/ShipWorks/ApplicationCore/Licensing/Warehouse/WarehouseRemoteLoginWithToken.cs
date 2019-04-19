@@ -3,9 +3,18 @@ using System.Reflection;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Utility;
+using log4net;
+using ShipWorks.ApplicationCore.Licensing.TangoRequests;
+using ShipWorks.ApplicationCore.Licensing.Warehouse.DTO;
+using ShipWorks.ApplicationCore.Licensing.WebClientEnvironments;
+using ShipWorks.ApplicationCore.Logging;
+using ShipWorks.Common.Net;
 using ShipWorks.Data;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using RestSharp;
 
-namespace ShipWorks.ApplicationCore.Licensing.TangoRequests
+namespace ShipWorks.ApplicationCore.Licensing.Warehouse
 {
     /// <summary>
     /// Login to the warehouse
@@ -13,10 +22,9 @@ namespace ShipWorks.ApplicationCore.Licensing.TangoRequests
     [Component]
     public class WarehouseRemoteLoginWithToken : IWarehouseRemoteLoginWithToken
     {
-        private readonly IHttpRequestSubmitterFactory requestSubmitterFactory;
-        private readonly ITangoWebRequestClient webRequestClient;
+        private static readonly ILog log = LogManager.GetLogger(typeof(WarehouseRemoteLoginWithToken));
         private readonly ITangoGetRedirectToken tangoGetRedirectToken;
-        private readonly ICustomerLicenseReader customerLicenseReader;
+        private readonly WebClientEnvironment webClientEnvironment;
 
         /// <summary>
         /// Constructor
@@ -24,11 +32,12 @@ namespace ShipWorks.ApplicationCore.Licensing.TangoRequests
         public WarehouseRemoteLoginWithToken(
             IHttpRequestSubmitterFactory requestSubmitterFactory,
             ITangoWebRequestClient webRequestClient,
-            ITangoGetRedirectToken tangoGetRedirectToken)
+            ITangoGetRedirectToken tangoGetRedirectToken,
+            IJsonRequest jsonRequest,
+            WebClientEnvironmentFactory webClientEnvironmentFactory)
         {
             this.tangoGetRedirectToken = tangoGetRedirectToken;
-            this.webRequestClient = webRequestClient;
-            this.requestSubmitterFactory = requestSubmitterFactory;
+            webClientEnvironment = webClientEnvironmentFactory.SelectedEnvironment;
         }
 
         /// <summary>
@@ -51,15 +60,26 @@ namespace ShipWorks.ApplicationCore.Licensing.TangoRequests
         /// </summary>
         private GenericResult<TokenResponse> RemoteLoginWithToken(string redirectToken)
         {
-            var request = requestSubmitterFactory.GetHttpVariableRequestSubmitter();
-            request.Variables.Add("action", "remoteloginwithtoken");
-            request.Variables.Add("redirectToken", redirectToken);
+            RestRequest restRequest = new RestRequest("api/auth/token/login", Method.POST);
+            restRequest.RequestFormat = DataFormat.Json;
+            restRequest.AddJsonBody(new { redirectToken = redirectToken});
 
-            request.ForcePreCallCertificateValidation = false;
+            var restClient = new RestClient(webClientEnvironment.WarehouseUrl)
+            {
+                //Authenticator = authenticatorFactory.Create(store)
+            };
 
-            GenericResult<TokenResponse> tokenResponse = webRequestClient.ProcessXmlRequest<TokenResponse>(request, "RemoteLoginWithToken", true);
+            IRestResponse restResponse = restClient.Execute(restRequest);
 
-            return tokenResponse;
+            // De-serialize the result
+            TokenResponse requestResult = JsonConvert.DeserializeObject<TokenResponse>(restResponse.Content,
+                new JsonSerializerSettings
+                {
+                    TypeNameHandling = TypeNameHandling.Auto,
+                    NullValueHandling = NullValueHandling.Ignore
+                });
+
+            return requestResult;
         }
     }
 }

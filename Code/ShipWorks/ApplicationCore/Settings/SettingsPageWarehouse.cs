@@ -12,6 +12,7 @@ using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using Microsoft.ApplicationInsights.DataContracts;
 using ShipWorks.ApplicationCore.Licensing.TangoRequests;
+using ShipWorks.ApplicationCore.Licensing.Warehouse;
 using ShipWorks.Common.IO.Hardware.Scanner;
 using ShipWorks.Common.IO.KeyboardShortcuts;
 using ShipWorks.Common.IO.KeyboardShortcuts.Messages;
@@ -107,32 +108,11 @@ namespace ShipWorks.ApplicationCore.Settings
                 if (tokenResponse.Success)
                 {
                     // Save tokens to memory for use elsewhere.
+
+                    IWarehouseList warehouseListRequest = scope.Resolve<IWarehouseList>();
+                    var results = warehouseListRequest.GetList(tokenResponse.Value);
                 }
             }
-        }
-
-        private void GetRedirectToken()
-        {
-            using (ILifetimeScope scope = IoC.BeginLifetimeScope())
-            {
-                ITangoGetRedirectToken getRedirectTokeRequest = scope.Resolve<ITangoGetRedirectToken>();
-                var redirectToken = getRedirectTokeRequest.GetRedirectToken();
-                if (redirectToken.Success)
-                {
-                    HttpClient client = new HttpClient();
-                    var values = new Dictionary<string, string>
-                    {
-                        { "redirectToken", redirectToken.Value.redirectToken }
-                    };
-
-                    var content = new FormUrlEncodedContent(values);
-
-                    var response = client.PostAsync("http://localhost:4001//api/auth/token/login", content).Result;
-
-                    var responseString = response.Content.ReadAsStringAsync().Result;
-                }
-            }
-
         }
     }
 }
