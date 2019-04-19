@@ -804,6 +804,15 @@
     <Compile Include="ApplicationCore\Licensing\WebClientEnvironments\WebClientEnvironmentFactory.cs" />
     <Compile Include="ApplicationCore\Licensing\WebClientEnvironments\WebClientEnvironment.cs" />
     <Compile Include="ApplicationCore\Settings\AutoUpdateSettings.cs" />
+    <Compile Include="ApplicationCore\Settings\ISettingsPage.cs" />
+    <Compile Include="ApplicationCore\Settings\Warehouse\IWarehouseListDialog.cs" />
+    <Compile Include="ApplicationCore\Settings\Warehouse\IWarehouseListViewModel.cs" />
+    <Compile Include="ApplicationCore\Settings\Warehouse\IWarehouseSettings.cs" />
+    <Compile Include="ApplicationCore\Settings\Warehouse\IWarehouseSettingsViewModel.cs" />
+    <Compile Include="ApplicationCore\Settings\Warehouse\IWarehouseViewModel.cs" />
+    <Compile Include="ApplicationCore\Settings\Warehouse\WarehouseListViewModel.cs" />
+    <Compile Include="ApplicationCore\Settings\Warehouse\WarehouseSettingsViewModel.cs" />
+    <Compile Include="ApplicationCore\Settings\Warehouse\WarehouseViewModel.cs" />
     <Compile Include="ApplicationCore\ShipWorksSessionWrapper.cs" />
     <Compile Include="ApplicationCore\Licensing\ITangoLogShipmentProcessor.cs" />
     <Compile Include="ApplicationCore\Licensing\ITangoSecurityValidator.cs" />

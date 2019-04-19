@@ -13,6 +13,7 @@ using Interapptive.Shared.Utility;
 using Microsoft.ApplicationInsights.DataContracts;
 using ShipWorks.ApplicationCore.Licensing.TangoRequests;
 using ShipWorks.ApplicationCore.Licensing.Warehouse;
+using ShipWorks.ApplicationCore.Settings.Warehouse;
 using ShipWorks.Common.IO.Hardware.Scanner;
 using ShipWorks.Common.IO.KeyboardShortcuts;
 using ShipWorks.Common.IO.KeyboardShortcuts.Messages;
@@ -38,6 +39,7 @@ namespace ShipWorks.ApplicationCore.Settings
         private readonly IMessageHelper messageHelper;
         private readonly IConfigurationData configurationData;
         private UserSettingsEntity settings;
+        private IWarehouseSettingsViewModel warehouseSettings;
         private readonly IWin32Window owner;
         private readonly ILifetimeScope scope;
 
@@ -47,6 +49,11 @@ namespace ShipWorks.ApplicationCore.Settings
         public SettingsPageWarehouse(IWin32Window owner, ILifetimeScope scope)
         {
             InitializeComponent();
+
+            //warehouseSettings = scope.Resolve<IWarehouseSettingsViewModel>();
+            //this.elementHost1.Child = warehouseSettings.Control;
+            //this.Dock = DockStyle.Fill;
+
             messageHelper = scope.Resolve<IMessageHelper>();
             userSession = scope.Resolve<IUserSession>();
             messenger = scope.Resolve<IMessenger>();
@@ -63,7 +70,8 @@ namespace ShipWorks.ApplicationCore.Settings
         {
             if (userSession.IsLoggedOn && userSession.User.IsAdmin)
             {
-                configurationData.UpdateConfiguration(x => x.WarehouseID = "");
+                //warehouseSettings.Save(configurationData);
+               // configurationData.UpdateConfiguration(x => x.WarehouseID = "");
 
                 //UpdateSingleScanTelemetry(warehouseID == configurationData.FetchReadOnly().WarehouseID);
             }
@@ -76,10 +84,12 @@ namespace ShipWorks.ApplicationCore.Settings
         {
             IConfigurationEntity config = configurationData.FetchReadOnly();
 
-            if (!string.IsNullOrWhiteSpace(config.WarehouseName))
-            {
-                selectedWarehouseName.Text = config.WarehouseName;
-            }
+            //warehouseSettings.Load(config);
+
+            //if (!string.IsNullOrWhiteSpace(config.WarehouseName))
+            //{
+            //    selectedWarehouseName.Text = config.WarehouseName;
+            //}
         }
 
         /// <summary>

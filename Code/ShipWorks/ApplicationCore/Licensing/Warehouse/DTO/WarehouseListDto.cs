@@ -25,5 +25,6 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse.DTO
         public string name { get; set; }
         public string id { get; set; }
         public string state { get; set; }
+        public string shipWorksAssociation { get; set; }
     }
 }
