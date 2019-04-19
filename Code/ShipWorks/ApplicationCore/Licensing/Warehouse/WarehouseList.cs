@@ -14,52 +14,46 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse
     [Component]
     public class WarehouseList : IWarehouseList
     {
-        private readonly WebClientEnvironment webClientEnvironment;
+        private readonly WarehouseRequestClient warehouseRequestClient;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public WarehouseList(WebClientEnvironmentFactory webClientEnvironmentFactory)
+        public WarehouseList(WarehouseRequestClient warehouseRequestClient)
         {
-            webClientEnvironment = webClientEnvironmentFactory.SelectedEnvironment;
+            this.warehouseRequestClient = warehouseRequestClient;
         }
 
         /// <summary>
         /// Get list of warehouses
         /// </summary>
-        public GenericResult<WarehouseListDto> GetList(TokenResponse tokenResponse)
+        public GenericResult<WarehouseListDto> GetList()
         {
             try
             {
-                if (tokenResponse?.token.IsNullOrWhiteSpace() == true)
+                RestRequest restRequest = new RestRequest(WarehouseEndpoints.Warehouses, Method.GET);
+                restRequest.RequestFormat = DataFormat.Json;
+
+                GenericResult<IRestResponse> restResponse = warehouseRequestClient.MakeRequest(restRequest);
+
+                if (restResponse.Success)
                 {
-                    return GenericResult.FromError<WarehouseListDto>("Unable to obtain a valid token to authenticate request.");
+                    // De-serialize the result
+                    WarehouseListDto requestResult = JsonConvert.DeserializeObject<WarehouseListDto>(restResponse.Value.Content,
+                        new JsonSerializerSettings
+                        {
+                            TypeNameHandling = TypeNameHandling.Auto,
+                            NullValueHandling = NullValueHandling.Ignore
+                        });
+
+                    return requestResult;
                 }
 
-                RestRequest restRequest = new RestRequest("api/warehouses", Method.GET);
-                restRequest.RequestFormat = DataFormat.Json;
-                restRequest.AddHeader("Authorization", $"Bearer {tokenResponse.token}");
-
-                var restClient = new RestClient(webClientEnvironment.WarehouseUrl)
-                {
-                    //Authenticator = authenticatorFactory.Create(store)
-                };
-
-                IRestResponse restResponse = restClient.Execute(restRequest);
-
-                // De-serialize the result
-                WarehouseListDto requestResult = JsonConvert.DeserializeObject<WarehouseListDto>(restResponse.Content,
-                    new JsonSerializerSettings
-                    {
-                        TypeNameHandling = TypeNameHandling.Auto,
-                        NullValueHandling = NullValueHandling.Ignore
-                    });
-
-                return requestResult;
+                return GenericResult.FromError<WarehouseListDto>(restResponse.Message);
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                return GenericResult.FromError<WarehouseListDto>(e.Message);
+                return GenericResult.FromError<WarehouseListDto>(ex);
             }
         }
     }

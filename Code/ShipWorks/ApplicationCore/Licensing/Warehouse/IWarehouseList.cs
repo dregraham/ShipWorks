@@ -12,6 +12,6 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse
         /// <summary>
         /// Get a list of warehouses
         /// </summary>
-        GenericResult<WarehouseListDto> GetList(TokenResponse tokenResponse);
+        GenericResult<WarehouseListDto> GetList();
     }
 }

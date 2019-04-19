@@ -101,18 +101,8 @@ namespace ShipWorks.ApplicationCore.Settings
         /// </summary>
         private void OnSelectWarehouse(object sender, EventArgs e)
         {
-            using (ILifetimeScope scope = IoC.BeginLifetimeScope())
-            {
-                IWarehouseRemoteLoginWithToken remoteLoginWithToken = scope.Resolve<IWarehouseRemoteLoginWithToken>();
-                var tokenResponse = remoteLoginWithToken.RemoteLoginWithToken();
-                if (tokenResponse.Success)
-                {
-                    // Save tokens to memory for use elsewhere.
-
-                    IWarehouseList warehouseListRequest = scope.Resolve<IWarehouseList>();
-                    var results = warehouseListRequest.GetList(tokenResponse.Value);
-                }
-            }
+            IWarehouseList warehouseListRequest = scope.Resolve<IWarehouseList>();
+            var results = warehouseListRequest.GetList();
         }
     }
 }

@@ -1,17 +1,9 @@
-﻿using System;
-using System.Reflection;
-using Interapptive.Shared.ComponentRegistration;
-using Interapptive.Shared.Net;
+﻿using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
 using log4net;
 using ShipWorks.ApplicationCore.Licensing.TangoRequests;
-using ShipWorks.ApplicationCore.Licensing.Warehouse.DTO;
 using ShipWorks.ApplicationCore.Licensing.WebClientEnvironments;
-using ShipWorks.ApplicationCore.Logging;
-using ShipWorks.Common.Net;
-using ShipWorks.Data;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using RestSharp;
 
 namespace ShipWorks.ApplicationCore.Licensing.Warehouse
@@ -24,20 +16,16 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse
     {
         private static readonly ILog log = LogManager.GetLogger(typeof(WarehouseRemoteLoginWithToken));
         private readonly ITangoGetRedirectToken tangoGetRedirectToken;
-        private readonly WebClientEnvironment webClientEnvironment;
+        private readonly WebClientEnvironmentFactory webClientEnvironmentFactory;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public WarehouseRemoteLoginWithToken(
-            IHttpRequestSubmitterFactory requestSubmitterFactory,
-            ITangoWebRequestClient webRequestClient,
-            ITangoGetRedirectToken tangoGetRedirectToken,
-            IJsonRequest jsonRequest,
+        public WarehouseRemoteLoginWithToken(ITangoGetRedirectToken tangoGetRedirectToken,
             WebClientEnvironmentFactory webClientEnvironmentFactory)
         {
             this.tangoGetRedirectToken = tangoGetRedirectToken;
-            webClientEnvironment = webClientEnvironmentFactory.SelectedEnvironment;
+            this.webClientEnvironmentFactory = webClientEnvironmentFactory;
         }
 
         /// <summary>
@@ -45,6 +33,7 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse
         /// </summary>
         public GenericResult<TokenResponse> RemoteLoginWithToken()
         {
+            WebClientEnvironment  webClientEnvironment = webClientEnvironmentFactory.SelectedEnvironment;
             GenericResult<TokenResponse> redirectToken = tangoGetRedirectToken.GetRedirectToken();
 
             if (redirectToken.Failure)
@@ -52,22 +41,19 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse
                 return GenericResult.FromError<TokenResponse>("Could not retrieve redirect token");
             }
 
-            return RemoteLoginWithToken(redirectToken.Value.redirectToken);
+            return RemoteLoginWithToken(redirectToken.Value.redirectToken, webClientEnvironment);
         }
 
         /// <summary>
         /// Get Tango redirect token
         /// </summary>
-        private GenericResult<TokenResponse> RemoteLoginWithToken(string redirectToken)
+        private GenericResult<TokenResponse> RemoteLoginWithToken(string redirectToken, WebClientEnvironment webClientEnvironment)
         {
-            RestRequest restRequest = new RestRequest("api/auth/token/login", Method.POST);
+            RestRequest restRequest = new RestRequest(WarehouseEndpoints.Login, Method.POST);
             restRequest.RequestFormat = DataFormat.Json;
             restRequest.AddJsonBody(new { redirectToken = redirectToken});
 
-            var restClient = new RestClient(webClientEnvironment.WarehouseUrl)
-            {
-                //Authenticator = authenticatorFactory.Create(store)
-            };
+            var restClient = new RestClient(webClientEnvironment.WarehouseUrl);
 
             IRestResponse restResponse = restClient.Execute(restRequest);
 
