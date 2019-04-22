@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using Common.Logging;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Security;
 using ShipWorks.Data.Connection;
@@ -20,6 +21,7 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
     {
         readonly IDatabaseSpecificEncryptionProvider encryptionProvider;
         readonly ISqlAdapterFactory sqlAdapterFactory;
+        static readonly ILog log = LogManager.GetLogger(typeof(BigCommerceIdentifier));
 
         /// <summary>
         /// Constructor
@@ -43,6 +45,8 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
             catch(EncryptionException ex)
             {
                 // If the identifier can't be decrypted, try generating a new one (See TP #31374 / Zendesk #7732)
+                log.Info("Invalid BigCommerce Identifier. Generating new identifier.");
+
                 BigCommerceStoreEntity store = (BigCommerceStoreEntity) typedStore;
                 store.Identifier = string.Empty;
 
@@ -55,8 +59,7 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
                 identifier = encryptionProvider.Decrypt(typedStore.Identifier);
             }
             return identifier;
-        }
-            
+        }            
 
         /// <summary>
         /// Set the identifier on the given store
