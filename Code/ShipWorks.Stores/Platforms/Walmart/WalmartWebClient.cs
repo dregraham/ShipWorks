@@ -21,7 +21,7 @@ namespace ShipWorks.Stores.Platforms.Walmart
     [Component]
     public class WalmartWebClient : IWalmartWebClient
     {
-        private string accessToken = "";
+        private string accessToken = string.Empty;
         private DateTime accessTokenExpireTime;
         private readonly Func<ApiLogSource, string, IApiLogEntry> apiLogEntryFactory;
         private readonly IHttpRequestSubmitterFactory httpRequestSubmitterFactory;
@@ -150,7 +150,7 @@ namespace ShipWorks.Stores.Platforms.Walmart
         /// </summary>
         private T ProcessRequest<T>(IWalmartStoreEntity store, IHttpRequestSubmitter submitter, string action)
         {
-            if (accessToken == "" || accessTokenExpireTime < DateTime.Now)
+            if (accessToken == string.Empty || accessTokenExpireTime < DateTime.Now)
             {
                 GetNewToken(store);
             }
