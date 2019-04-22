@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using Common.Logging;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Security;
@@ -42,10 +38,10 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
             {
                 identifier = encryptionProvider.Decrypt(typedStore.Identifier);
             }
-            catch(EncryptionException ex)
+            catch (EncryptionException ex)
             {
                 // If the identifier can't be decrypted, try generating a new one (See TP #31374 / Zendesk #7732)
-                log.Info("Invalid BigCommerce Identifier. Generating new identifier.");
+                log.Info("Invalid BigCommerce identifier. Generating new identifier.");
 
                 BigCommerceStoreEntity store = (BigCommerceStoreEntity) typedStore;
                 store.Identifier = string.Empty;
@@ -59,7 +55,7 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
                 identifier = encryptionProvider.Decrypt(typedStore.Identifier);
             }
             return identifier;
-        }            
+        }
 
         /// <summary>
         /// Set the identifier on the given store
