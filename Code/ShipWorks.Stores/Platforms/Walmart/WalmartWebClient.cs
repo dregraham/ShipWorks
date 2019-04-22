@@ -150,9 +150,9 @@ namespace ShipWorks.Stores.Platforms.Walmart
         /// </summary>
         private T ProcessRequest<T>(IWalmartStoreEntity store, IHttpRequestSubmitter submitter, string action)
         {
-            if (accessToken == string.Empty || accessTokenExpireTime < DateTime.Now)
+            if (string.IsNullOrWhiteSpace(accessToken) || accessTokenExpireTime < DateTime.UtcNow)
             {
-                GetNewToken(store);
+                UpdateToken(store);
             }
 
             string response = string.Empty;
@@ -254,7 +254,7 @@ namespace ShipWorks.Stores.Platforms.Walmart
         /// <summary>
         /// Requests a new access token
         /// </summary>
-        private void GetNewToken(IWalmartStoreEntity store)
+        private void UpdateToken(IWalmartStoreEntity store)
         {
             string response = string.Empty;
             string authString = GenerateAuthString(store);
@@ -273,7 +273,7 @@ namespace ShipWorks.Stores.Platforms.Walmart
 
                 IApiLogEntry logEntry = apiLogEntryFactory(ApiLogSource.Walmart, "GetToken");
                 logEntry.LogRequest(submitter);
-                accessTokenExpireTime = DateTime.Now;
+                accessTokenExpireTime = DateTime.UtcNow;
 
                 using (IHttpResponseReader responseReader = submitter.GetResponse())
                 {
@@ -307,7 +307,7 @@ namespace ShipWorks.Stores.Platforms.Walmart
         /// </summary>
         private static string GenerateAuthString(IWalmartStoreEntity store)
         {
-            if (store.ClientID == "" || store.ClientSecret == "")
+            if (string.IsNullOrWhiteSpace(store.ClientID) || string.IsNullOrWhiteSpace(store.ClientSecret))
             {
                 throw new WalmartException("You must upgrade to oauth authentication in order to connect to Walmart.");
             }
