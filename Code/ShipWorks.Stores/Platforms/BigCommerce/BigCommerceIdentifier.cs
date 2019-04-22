@@ -38,7 +38,7 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
             {
                 identifier = encryptionProvider.Decrypt(typedStore.Identifier);
             }
-            catch (EncryptionException ex)
+            catch (EncryptionException)
             {
                 // If the identifier can't be decrypted, try generating a new one (See TP #31374 / Zendesk #7732)
                 log.Info("Invalid BigCommerce identifier. Generating new identifier.");
