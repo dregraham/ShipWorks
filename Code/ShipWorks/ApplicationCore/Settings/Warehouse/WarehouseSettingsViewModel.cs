@@ -5,7 +5,7 @@ using System.Windows.Input;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
 using Interapptive.Shared.ComponentRegistration;
-using ShipWorks.ApplicationCore.Licensing.Warehouse;
+using Interapptive.Shared.UI;
 using ShipWorks.Data;
 
 namespace ShipWorks.ApplicationCore.Settings.Warehouse
@@ -18,10 +18,11 @@ namespace ShipWorks.ApplicationCore.Settings.Warehouse
     {
         private readonly IWarehouseSettings warehouseSettingsView;
         private readonly IWarehouseListViewModel warehouseList;
-        private readonly IWarehouseList warehouseListRequest;
-        private readonly IWarehouseAssociation warehouseAssociation;
         private readonly IConfigurationData configurationData;
+        private readonly IWarehouseSettingsApi warehouseSettingsApi;
+        private readonly IMessageHelper messageHelper;
         private string warehouseName;
+        private bool associatedWithWarehouse;
 
         /// <summary>
         /// Constructor
@@ -29,21 +30,29 @@ namespace ShipWorks.ApplicationCore.Settings.Warehouse
         public WarehouseSettingsViewModel(
             IWarehouseSettings warehouseSettingsView,
             IWarehouseListViewModel warehouseList,
-            IWarehouseList warehouseListRequest,
-            IWarehouseAssociation warehouseAssociation,
-            IConfigurationData configurationData)
+            IWarehouseSettingsApi warehouseSettingsApi,
+            IConfigurationData configurationData,
+            IMessageHelper messageHelper)
         {
+            this.messageHelper = messageHelper;
+            this.warehouseSettingsApi = warehouseSettingsApi;
             this.warehouseSettingsView = warehouseSettingsView;
             this.warehouseList = warehouseList;
-            this.warehouseListRequest = warehouseListRequest;
-            this.warehouseAssociation = warehouseAssociation;
             this.configurationData = configurationData;
             SelectWarehouse = new RelayCommand(OnSelectWarehouse);
 
             warehouseSettingsView.ViewModel = this;
 
             var config = configurationData.FetchReadOnly();
-            warehouseName = string.IsNullOrEmpty(config.WarehouseID) ? "No warehouse selected" : config.WarehouseName;
+            if (string.IsNullOrEmpty(config.WarehouseID))
+            {
+                WarehouseName = "No warehouse selected";
+            }
+            else
+            {
+                WarehouseName = config.WarehouseName;
+                AssociatedWithWarehouse = true;
+            }
         }
 
         /// <summary>
@@ -63,6 +72,16 @@ namespace ShipWorks.ApplicationCore.Settings.Warehouse
         }
 
         /// <summary>
+        /// Is this ShipWorks database already associated with a warehouse
+        /// </summary>
+        [Obfuscation]
+        public bool AssociatedWithWarehouse
+        {
+            get => associatedWithWarehouse;
+            set => Set(ref associatedWithWarehouse, value);
+        }
+
+        /// <summary>
         /// Get the control associated with the view model
         /// </summary>
         public Control Control => warehouseSettingsView.Control;
@@ -73,19 +92,17 @@ namespace ShipWorks.ApplicationCore.Settings.Warehouse
         public void Save() { }
 
         /// <summary>
-        /// Handle the select warehouse command 
+        /// Handle the select warehouse command
         /// </summary>
-#pragma warning disable S3168 // Asynchronous methods should return a Task instead of void
         private async void OnSelectWarehouse()
-#pragma warning restore S3168 // Asynchronous methods should return a Task instead of void
         {
-            var results = await warehouseListRequest.GetList().ConfigureAwait(true);
+            var results = await warehouseSettingsApi.GetAllWarehouses().ConfigureAwait(true);
             var warehouses = results.Value.warehouses.Select(x => new WarehouseViewModel(x));
 
             WarehouseViewModel warehouse = warehouseList.ChooseWarehouse(warehouses);
             if (warehouse != null)
             {
-                var associationResponse = await warehouseAssociation.Associate(warehouse.Id).ConfigureAwait(true);
+                var associationResponse = await warehouseSettingsApi.Associate(warehouse.Id).ConfigureAwait(true);
                 if (associationResponse.Success)
                 {
                     configurationData.UpdateConfiguration(x =>
@@ -95,6 +112,11 @@ namespace ShipWorks.ApplicationCore.Settings.Warehouse
                     });
 
                     WarehouseName = warehouse.Name;
+                    AssociatedWithWarehouse = true;
+                }
+                else
+                {
+                    messageHelper.ShowError("Could not associate this ShipWorks database with the warehouse.");
                 }
             }
         }

@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System;
+using System.Reflection;
 using DTO = ShipWorks.ApplicationCore.Licensing.Warehouse.DTO;
 
 namespace ShipWorks.ApplicationCore.Settings.Warehouse
@@ -81,5 +82,11 @@ namespace ShipWorks.ApplicationCore.Settings.Warehouse
         /// </summary>
         [Obfuscation]
         public bool IsAlreadyAssociated { get; set; }
+
+        /// <summary>
+        /// Can this warehouse be associated with the given GUID
+        /// </summary>
+        public bool CanBeAssociatedWith(Guid guid) =>
+            !IsAlreadyAssociated || shipWorksAssociation == guid.ToString();
     }
 }

@@ -810,9 +810,11 @@
     <Compile Include="ApplicationCore\Settings\Warehouse\IWarehouseListDialog.cs" />
     <Compile Include="ApplicationCore\Settings\Warehouse\IWarehouseListViewModel.cs" />
     <Compile Include="ApplicationCore\Settings\Warehouse\IWarehouseSettings.cs" />
+    <Compile Include="ApplicationCore\Settings\Warehouse\IWarehouseSettingsApi.cs" />
     <Compile Include="ApplicationCore\Settings\Warehouse\IWarehouseSettingsViewModel.cs" />
     <Compile Include="ApplicationCore\Settings\Warehouse\IWarehouseViewModel.cs" />
     <Compile Include="ApplicationCore\Settings\Warehouse\WarehouseListViewModel.cs" />
+    <Compile Include="ApplicationCore\Settings\Warehouse\WarehouseSettingsApi.cs" />
     <Compile Include="ApplicationCore\Settings\Warehouse\WarehouseSettingsViewModel.cs" />
     <Compile Include="ApplicationCore\Settings\Warehouse\WarehouseViewModel.cs" />
     <Compile Include="ApplicationCore\ShipWorksSessionWrapper.cs" />

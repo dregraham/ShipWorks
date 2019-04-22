@@ -1,11 +1,9 @@
 ﻿using System;
+using System.Net;
 using System.Threading.Tasks;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
-using Newtonsoft.Json;
 using RestSharp;
-using ShipWorks.ApplicationCore.Licensing.Warehouse.DTO;
-using ShipWorks.ApplicationCore.Licensing.WebClientEnvironments;
 using ShipWorks.Data;
 
 namespace ShipWorks.ApplicationCore.Licensing.Warehouse
@@ -39,7 +37,9 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse
                 restRequest.RequestFormat = DataFormat.Json;
                 restRequest.AddJsonBody(new DatabaseDto { databaseId = databaseIdentifier.Get().ToString() });
 
-                return await warehouseRequestClient.MakeRequest(restRequest).ConfigureAwait(false);
+                var response = await warehouseRequestClient.MakeRequest(restRequest).ConfigureAwait(false);
+                return response
+                    .Bind(x => x.StatusCode != HttpStatusCode.OK ? new Exception() : Result.FromSuccess());
             }
             catch (Exception ex)
             {
