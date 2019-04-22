@@ -6,6 +6,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Security;
+using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 
@@ -18,13 +19,15 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
     public class BigCommerceIdentifier : IBigCommerceIdentifier
     {
         readonly IDatabaseSpecificEncryptionProvider encryptionProvider;
+        readonly ISqlAdapterFactory sqlAdapterFactory;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public BigCommerceIdentifier(IDatabaseSpecificEncryptionProvider encryptionProvider)
+        public BigCommerceIdentifier(IDatabaseSpecificEncryptionProvider encryptionProvider, ISqlAdapterFactory sqlAdapterFactory)
         {
             this.encryptionProvider = encryptionProvider;
+            this.sqlAdapterFactory = sqlAdapterFactory;
         }
 
         /// <summary>
@@ -42,7 +45,13 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
                 // If the identifier can't be decrypted, try generating a new one (See TP #31374 / Zendesk #7732)
                 BigCommerceStoreEntity store = (BigCommerceStoreEntity) typedStore;
                 store.Identifier = string.Empty;
-                Set(store);
+
+                using (ISqlAdapter sqlAdapter = sqlAdapterFactory.Create())
+                {
+                    Set(store);
+                    sqlAdapter.SaveEntity(store, true);
+                }
+
                 identifier = encryptionProvider.Decrypt(typedStore.Identifier);
             }
             return identifier;
