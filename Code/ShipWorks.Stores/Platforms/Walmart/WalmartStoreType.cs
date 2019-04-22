@@ -82,7 +82,7 @@ namespace ShipWorks.Stores.Platforms.Walmart
         /// <summary>
         /// This is a string that uniquely identifies the store.
         /// </summary>
-        protected override string InternalLicenseIdentifier => walmartStore.ConsumerID;
+        protected override string InternalLicenseIdentifier => (String.IsNullOrWhiteSpace(walmartStore.ConsumerID)) ? walmartStore.ClientID : walmartStore.ConsumerID;
 
         /// <summary>
         /// Creates the add store wizard online update action control for Walmart
