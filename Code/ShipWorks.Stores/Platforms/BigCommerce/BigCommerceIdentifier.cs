@@ -30,8 +30,24 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
         /// <summary>
         /// Get the identifier from the given store
         /// </summary>
-        public string Get(IBigCommerceStoreEntity typedStore) =>
-            encryptionProvider.Decrypt(typedStore.Identifier);
+        public string Get(IBigCommerceStoreEntity typedStore)
+        {
+            string identifier;
+            try
+            {
+                identifier = encryptionProvider.Decrypt(typedStore.Identifier);
+            }
+            catch(EncryptionException ex)
+            {
+                // If the identifier can't be decrypted, try generating a new one (See TP #31374 / Zendesk #7732)
+                BigCommerceStoreEntity store = (BigCommerceStoreEntity) typedStore;
+                store.Identifier = String.Empty;
+                Set(store);
+                identifier = encryptionProvider.Decrypt(typedStore.Identifier);
+            }
+            return identifier;
+        }
+            
 
         /// <summary>
         /// Set the identifier on the given store
