@@ -71,7 +71,7 @@ namespace ShipWorks.Shipping
         Asendia = 18,
 
         [Description("Amazon Shipping")]
-        [ShipmentTypeIcon("amazon")]
+        [ShipmentTypeIcon("amazonswa")]
         AmazonSWA = 19,
 
         [Description("None")]
