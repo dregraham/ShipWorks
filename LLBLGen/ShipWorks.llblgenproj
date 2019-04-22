@@ -4543,7 +4543,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2019-04-16T20:51:26.210248Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2019-04-22T15:39:51.2376528Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -4813,7 +4813,7 @@
                     </Field>
                     <Field Name="Service" Ordinal="3" DbType="8" Precision="10">
                       <CustomProperties>
-                        <CustomProperty Name="AuditFormat" Value="130" />
+                        <CustomProperty Name="AuditFormat" Value="132" />
                       </CustomProperties>
                     </Field>
                     <Field Name="RequestedLabelFormat" Ordinal="4" DbType="8" Precision="10" />
@@ -6855,7 +6855,7 @@
                   <Fields>
                     <Field Name="OrderID" Ordinal="1" IsPrimaryKey="true" DbType="0" Precision="19" />
                     <Field Name="GrouponOrderID" Ordinal="2" DbType="12" Length="50" />
-                    <Field Name="ParentOrderID" Ordinal="3" DbType="12" Length="50" />
+                    <Field Name="ParentOrderID" Ordinal="3" HasDefaultValue="true" DefaultValue="''" DbType="12" Length="50" />
                   </Fields>
                 </Table>
                 <Table Name="GrouponOrderItem">
@@ -6876,8 +6876,8 @@
                     <Field Name="GrouponOrderSearchID" Ordinal="1" IsIdentity="true" IsPrimaryKey="true" DbType="0" Precision="19" />
                     <Field Name="OrderID" Ordinal="2" DbType="0" Precision="19" />
                     <Field Name="GrouponOrderID" Ordinal="3" DbType="12" Length="50" />
-                    <Field Name="ParentOrderID" Ordinal="4" DbType="12" Length="50" />
-                    <Field Name="OriginalOrderID" Ordinal="5" DbType="0" Precision="19" />
+                    <Field Name="OriginalOrderID" Ordinal="4" DbType="0" Precision="19" />
+                    <Field Name="ParentOrderID" Ordinal="5" HasDefaultValue="true" DefaultValue="''" DbType="12" Length="50" />
                   </Fields>
                 </Table>
                 <Table Name="GrouponStore">
@@ -7487,7 +7487,7 @@
                     <Field Name="ShipSenseHashKey" Ordinal="72" DbType="12" Length="64" />
                     <Field Name="ShipSenseRecognitionStatus" Ordinal="73" DbType="8" Precision="10" />
                     <Field Name="ShipAddressType" Ordinal="74" DbType="8" Precision="10" />
-                    <Field Name="CombineSplitStatus" Ordinal="75" DbType="8" Precision="10" />
+                    <Field Name="CombineSplitStatus" Ordinal="75" HasDefaultValue="true" DefaultValue="(0)" DbType="8" Precision="10" />
                     <Field Name="ChannelOrderID" Ordinal="76" HasDefaultValue="true" DefaultValue="''" DbType="12" Length="50" />
                     <Field Name="ShipByDate" Ordinal="77" IsOptional="true" DbType="4" />
                     <Field Name="Custom1" Ordinal="78" HasDefaultValue="true" DefaultValue="''" DbType="12" Length="50" />
@@ -7545,9 +7545,9 @@
                     <Field Name="Quantity" Ordinal="16" DbType="5" Precision="29" Scale="9" />
                     <Field Name="LocalStatus" Ordinal="17" DbType="12" Length="255" />
                     <Field Name="IsManual" Ordinal="18" DbType="2" />
-                    <Field Name="TotalWeight" Ordinal="19" IsOptional="true" IsComputed="true" DbType="5" Precision="38" Scale="6" />
-                    <Field Name="HarmonizedCode" Ordinal="20" DbType="12" Length="20" />
-                    <Field Name="OriginalOrderID" Ordinal="21" DbType="0" Precision="19" />
+                    <Field Name="HarmonizedCode" Ordinal="19" DbType="12" Length="20" />
+                    <Field Name="OriginalOrderID" Ordinal="20" DbType="0" Precision="19" />
+                    <Field Name="TotalWeight" Ordinal="21" IsOptional="true" IsComputed="true" DbType="5" Precision="38" Scale="6" />
                     <Field Name="Length" Ordinal="22" DbType="5" Precision="10" Scale="2" />
                     <Field Name="Width" Ordinal="23" DbType="5" Precision="10" Scale="2" />
                     <Field Name="Height" Ordinal="24" DbType="5" Precision="10" Scale="2" />
@@ -8151,7 +8151,7 @@
                     <Field Name="SearsEmail" Ordinal="2" DbType="12" Length="75" />
                     <Field Name="Password" Ordinal="3" DbType="12" Length="75" />
                     <Field Name="SecretKey" Ordinal="4" DbType="12" Length="255" />
-                    <Field Name="SellerID" Ordinal="5" DbType="12" Length="15" />
+                    <Field Name="SellerID" Ordinal="5" HasDefaultValue="true" DefaultValue="''" DbType="12" Length="15" />
                   </Fields>
                 </Table>
                 <Table Name="ServerMessage">
