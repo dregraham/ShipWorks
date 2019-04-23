@@ -33,21 +33,21 @@ namespace ShipWorks.ApplicationCore.Settings.Warehouse
             this.databaseIdentifier = databaseIdentifier;
             this.createDialog = createDialog;
             this.messageHelper = messageHelper;
-            CancelAssociation = new RelayCommand(OnCancelAssociation);
-            ConfirmAssociation = new RelayCommand(OnConfirmAssociation, () => SelectedWarehouse != null);
+            CancelLink = new RelayCommand(OnCancelLink);
+            ConfirmLink = new RelayCommand(OnConfirmLink, () => SelectedWarehouse != null);
         }
 
         /// <summary>
-        /// Cancel the association process
+        /// Cancel the link process
         /// </summary>
         [Obfuscation]
-        public ICommand CancelAssociation { get; }
+        public ICommand CancelLink { get; }
 
         /// <summary>
-        /// Confirm the association process
+        /// Confirm the link process
         /// </summary>
         [Obfuscation]
-        public ICommand ConfirmAssociation { get; }
+        public ICommand ConfirmLink { get; }
 
         /// <summary>
         /// Warehouse that's been selected
@@ -88,25 +88,25 @@ namespace ShipWorks.ApplicationCore.Settings.Warehouse
         }
 
         /// <summary>
-        /// Handle cancel association
+        /// Handle cancel link
         /// </summary>
-        private void OnCancelAssociation()
+        private void OnCancelLink()
         {
             warehouseListDialog.Close();
         }
 
         /// <summary>
-        /// Handle confirm association
+        /// Handle confirm link
         /// </summary>
-        private void OnConfirmAssociation()
+        private void OnConfirmLink()
         {
-            if (!SelectedWarehouse.CanBeAssociatedWith(databaseIdentifier.Get()))
+            if (!SelectedWarehouse.CanBeLinkedWith(databaseIdentifier.Get()))
             {
-                messageHelper.ShowError("The selected warehouse cannot be associated with this ShipWorks instance");
+                messageHelper.ShowError("The selected warehouse cannot be linked with this ShipWorks instance");
                 return;
             }
 
-            if (messageHelper.ShowQuestion(MessageBoxIcon.Exclamation, MessageBoxButtons.YesNo, $"Are you sure you want to associate this ShipWorks database with the warehouse '{SelectedWarehouse.Name}'?\n\nThis cannot be undone.") == System.Windows.Forms.DialogResult.Yes)
+            if (messageHelper.ShowQuestion(MessageBoxIcon.Exclamation, MessageBoxButtons.YesNo, $"Are you sure you want to link this ShipWorks database with the warehouse '{SelectedWarehouse.Name}'?\n\nThis cannot be undone.") == System.Windows.Forms.DialogResult.Yes)
             {
                 warehouseListDialog.DialogResult = true;
                 warehouseListDialog.Close();

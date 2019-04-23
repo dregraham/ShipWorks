@@ -4,7 +4,7 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse.DTO
 {
     public class WarehouseListDto
     {
-        public List<Warehouse> warehouses { get; set; }
+        public List<Warehouse> warehouses { get; set; } = new List<Warehouse>();
         public int count { get; set; }
         public int scannedCount { get; set; }
     }

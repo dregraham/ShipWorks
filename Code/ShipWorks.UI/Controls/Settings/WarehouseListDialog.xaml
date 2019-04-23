@@ -20,7 +20,7 @@
         FontStretch="Normal"
         FontWeight="Normal"
 
-        Height="220" Width="450"
+        Height="240" Width="450"
         MinHeight="120"
         MinWidth="320">
     <Window.Resources>
@@ -90,12 +90,12 @@
                         VerticalAlignment="Center"
                         IsCancel="True"
                         Margin="12,0"
-                    Command="{Binding CancelAssociation}">Cancel</Button>
+                    Command="{Binding CancelLink}">Cancel</Button>
 
                 <Button Grid.Row="2"
                     Padding="8, 4"
                     IsDefault="True"
-                    Command="{Binding ConfirmAssociation}">Link</Button>
+                    Command="{Binding ConfirmLink}">Link</Button>
             </StackPanel>
         </controls:AlignmentWrapPanel>
     </Grid>
