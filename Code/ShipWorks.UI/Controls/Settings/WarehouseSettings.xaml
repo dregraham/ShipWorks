@@ -23,8 +23,6 @@
                 <ResourceDictionary Source="/ShipWorks.UI;component/Styles/GlobalStyle.xaml" />
             </ResourceDictionary.MergedDictionaries>
 
-            <vc:InvertBooleanConverter x:Key="InvertBoolean" />
-
             <Color
                 x:Key="SectionHeaderBackground"
                 A="255"
@@ -72,7 +70,7 @@
                         Padding="8,0"
                         VerticalAlignment="Center"
                         Command="{Binding SelectWarehouse}"
-                        IsEnabled="{Binding AssociatedWithWarehouse, Converter={StaticResource ResourceKey=InvertBoolean}}">
+                        IsEnabled="{Binding CanLinkWarehouse}">
                         Select Warehouse
                     </Button>
                 </Grid>

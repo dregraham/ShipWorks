@@ -7,6 +7,7 @@ using GalaSoft.MvvmLight.CommandWpf;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.UI;
 using ShipWorks.Data;
+using ShipWorks.Users;
 
 namespace ShipWorks.ApplicationCore.Settings.Warehouse
 {
@@ -22,7 +23,8 @@ namespace ShipWorks.ApplicationCore.Settings.Warehouse
         private readonly IWarehouseSettingsApi warehouseSettingsApi;
         private readonly IMessageHelper messageHelper;
         private string warehouseName;
-        private bool associatedWithWarehouse;
+        private bool canLinkWarehouse;
+        private readonly IUserSession userSession;
 
         /// <summary>
         /// Constructor
@@ -32,8 +34,10 @@ namespace ShipWorks.ApplicationCore.Settings.Warehouse
             IWarehouseListViewModel warehouseList,
             IWarehouseSettingsApi warehouseSettingsApi,
             IConfigurationData configurationData,
+            IUserSession userSession,
             IMessageHelper messageHelper)
         {
+            this.userSession = userSession;
             this.messageHelper = messageHelper;
             this.warehouseSettingsApi = warehouseSettingsApi;
             this.warehouseSettingsView = warehouseSettingsView;
@@ -47,11 +51,11 @@ namespace ShipWorks.ApplicationCore.Settings.Warehouse
             if (string.IsNullOrEmpty(config.WarehouseID))
             {
                 WarehouseName = "No warehouse selected";
+                CanLinkWarehouse = userSession.User.IsAdmin;
             }
             else
             {
                 WarehouseName = config.WarehouseName;
-                AssociatedWithWarehouse = true;
             }
         }
 
@@ -75,10 +79,10 @@ namespace ShipWorks.ApplicationCore.Settings.Warehouse
         /// Is this ShipWorks database already associated with a warehouse
         /// </summary>
         [Obfuscation]
-        public bool AssociatedWithWarehouse
+        public bool CanLinkWarehouse
         {
-            get => associatedWithWarehouse;
-            set => Set(ref associatedWithWarehouse, value);
+            get => canLinkWarehouse;
+            set => Set(ref canLinkWarehouse, value);
         }
 
         /// <summary>
@@ -112,7 +116,7 @@ namespace ShipWorks.ApplicationCore.Settings.Warehouse
                     });
 
                     WarehouseName = warehouse.Name;
-                    AssociatedWithWarehouse = true;
+                    CanLinkWarehouse = false;
                 }
                 else
                 {
