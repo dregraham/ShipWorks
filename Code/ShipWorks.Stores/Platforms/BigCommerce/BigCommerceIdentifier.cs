@@ -45,11 +45,12 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
 
                 BigCommerceStoreEntity store = (BigCommerceStoreEntity) typedStore;
                 store.Identifier = string.Empty;
+                Set(store);
 
-                using (ISqlAdapter sqlAdapter = sqlAdapterFactory.Create())
+                using (ISqlAdapter sqlAdapter = sqlAdapterFactory.CreateTransacted())
                 {
-                    Set(store);
                     sqlAdapter.SaveEntity(store, true);
+                    sqlAdapter.Commit();
                 }
 
                 identifier = encryptionProvider.Decrypt(typedStore.Identifier);
