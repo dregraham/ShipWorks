@@ -43,6 +43,12 @@ namespace ShipWorks.ApplicationCore.CommandLineOptions
 
             log.Info("Autoupdate enabled.");
             SqlSession.Initialize();
+            if (SqlSchemaUpdater.IsUpgradeRequired())
+            {
+                log.Info("Update required. Not sending window");
+                return Task.CompletedTask;
+            }
+
             ConfigurationData.CheckForChangesNeeded();
 
             log.Info("Fetching config data");
