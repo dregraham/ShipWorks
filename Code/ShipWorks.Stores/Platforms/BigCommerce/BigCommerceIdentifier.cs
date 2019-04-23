@@ -5,7 +5,6 @@ using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Security;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data.Model.EntityInterfaces;
 
 namespace ShipWorks.Stores.Platforms.BigCommerce
 {
@@ -45,14 +44,13 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
 
                 store.Identifier = string.Empty;
                 Set(store);
+                identifier = encryptionProvider.Decrypt(store.Identifier);
 
                 using (ISqlAdapter sqlAdapter = sqlAdapterFactory.CreateTransacted())
                 {
-                    sqlAdapter.SaveEntity(store, true);
+                    sqlAdapter.SaveEntity(store);
                     sqlAdapter.Commit();
                 }
-
-                identifier = encryptionProvider.Decrypt(store.Identifier);
             }
             return identifier;
         }
