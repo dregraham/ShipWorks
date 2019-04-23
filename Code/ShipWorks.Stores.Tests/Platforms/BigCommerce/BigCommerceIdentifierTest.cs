@@ -24,7 +24,7 @@ namespace ShipWorks.Stores.Tests.Platforms.BigCommerce
         [InlineData("Bar")]
         public void Get_DelegatesToEncryptionProvider(string identifier)
         {
-            var store = mock.CreateMock<IBigCommerceStoreEntity>(x => x.SetupGet(y => y.Identifier).Returns(identifier)).Object;
+            var store = mock.CreateMock<BigCommerceStoreEntity>(x => x.SetupGet(y => y.Identifier).Returns(identifier)).Object;
             var testObject = mock.Create<BigCommerceIdentifier>();
 
             testObject.Get(store);
@@ -42,7 +42,7 @@ namespace ShipWorks.Stores.Tests.Platforms.BigCommerce
                 .Returns(identifier);
             var testObject = mock.Create<BigCommerceIdentifier>();
 
-            var result = testObject.Get(mock.Build<IBigCommerceStoreEntity>());
+            var result = testObject.Get(mock.Build<BigCommerceStoreEntity>());
 
             Assert.Equal(identifier, result);
         }
