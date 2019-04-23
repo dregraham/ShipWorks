@@ -20,10 +20,9 @@
         FontStretch="Normal"
         FontWeight="Normal"
 
-        Height="400" Width="520"
+        Height="220" Width="450"
         MinHeight="120"
-        MinWidth="220"
-        SizeToContent="Height">
+        MinWidth="320">
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -39,11 +38,11 @@
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-        <TextBlock Grid.Row="0">
-            Select the warehouse
+        <TextBlock Grid.Row="0" Margin="0,0,0,4">
+            Select the warehouse that should be linked with this ShipWorks database
         </TextBlock>
-        <ListBox Grid.Row="1" 
-                 ItemsSource="{Binding Warehouses}" 
+        <ListBox Grid.Row="1"
+                 ItemsSource="{Binding Warehouses}"
                  SelectedItem="{Binding SelectedWarehouse}"
                  HorizontalContentAlignment="Stretch">
             <ListBox.ItemTemplate>
@@ -55,7 +54,7 @@
                             <ColumnDefinition Width="*" />
                         </Grid.ColumnDefinitions>
 
-                        <StackPanel Grid.Column="0" 
+                        <StackPanel Grid.Column="0"
                                     Margin="0, 0, 18, 4"
                                     VerticalAlignment="Bottom">
                             <TextBlock FontSize="14" Text="{Binding Name}" />
@@ -71,10 +70,10 @@
                             </TextBlock>
                         </StackPanel>
 
-                        <TextBlock Grid.Column="2" 
-                                   VerticalAlignment="Center" 
+                        <TextBlock Grid.Column="2"
+                                   VerticalAlignment="Center"
                                    FontSize="16"
-                                   Visibility="{Binding IsAlreadyAssociated, Converter={StaticResource ResourceKey=BooleanToVisibility}}">Already Associated</TextBlock>
+                                   Visibility="{Binding IsAlreadyLinked, Converter={StaticResource ResourceKey=BooleanToVisibility}}">Already Linked</TextBlock>
                     </Grid>
                 </DataTemplate>
             </ListBox.ItemTemplate>
@@ -82,12 +81,6 @@
 
         <controls:AlignmentWrapPanel Grid.Row="2"
                                Margin="0, 8, 0, 0">
-            <TextBlock Grid.Row="0"
-                       FontWeight="Bold"
-                       VerticalAlignment="Center">
-                Are you sure you want to ShipWorks with the selected warehouse?
-            </TextBlock>
-
             <StackPanel Grid.Row="1"
                         Orientation="Horizontal"
                         HorizontalAlignment="Right">
@@ -102,7 +95,7 @@
                 <Button Grid.Row="2"
                     Padding="8, 4"
                     IsDefault="True"
-                    Command="{Binding ConfirmAssociation}">Associate</Button>
+                    Command="{Binding ConfirmAssociation}">Link</Button>
             </StackPanel>
         </controls:AlignmentWrapPanel>
     </Grid>

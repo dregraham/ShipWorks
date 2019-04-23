@@ -9,10 +9,10 @@ using ShipWorks.Data;
 namespace ShipWorks.ApplicationCore.Licensing.Warehouse
 {
     /// <summary>
-    /// Associate this instance of ShipWorks with a warehouse
+    /// Link this instance of ShipWorks with a warehouse
     /// </summary>
     [Component]
-    public class WarehouseAssociation : IWarehouseAssociation
+    public class WarehouseLink : IWarehouseLink
     {
         private readonly WarehouseRequestClient warehouseRequestClient;
         private readonly IDatabaseIdentifier databaseIdentifier;
@@ -20,20 +20,20 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse
         /// <summary>
         /// Constructor
         /// </summary>
-        public WarehouseAssociation(WarehouseRequestClient warehouseRequestClient, IDatabaseIdentifier databaseIdentifier)
+        public WarehouseLink(WarehouseRequestClient warehouseRequestClient, IDatabaseIdentifier databaseIdentifier)
         {
             this.warehouseRequestClient = warehouseRequestClient;
             this.databaseIdentifier = databaseIdentifier;
         }
 
         /// <summary>
-        /// Associate this instance of ShipWorks with the given warehouse
+        /// Link this instance of ShipWorks with the given warehouse
         /// </summary>
-        public async Task<Result> Associate(string warehouseId)
+        public async Task<Result> Link(string warehouseId)
         {
             try
             {
-                RestRequest restRequest = new RestRequest(WarehouseEndpoints.AssociateWarehouse(warehouseId), Method.POST);
+                RestRequest restRequest = new RestRequest(WarehouseEndpoints.LinkWarehouse(warehouseId), Method.POST);
                 restRequest.RequestFormat = DataFormat.Json;
                 restRequest.AddJsonBody(new DatabaseDto { databaseId = databaseIdentifier.Get().ToString() });
 

@@ -4,13 +4,13 @@ using Interapptive.Shared.Utility;
 namespace ShipWorks.ApplicationCore.Licensing.Warehouse
 {
     /// <summary>
-    /// Associate this instance of ShipWorks with a warehouse
+    /// Link this instance of ShipWorks with a warehouse
     /// </summary>
-    public interface IWarehouseAssociation
+    public interface IWarehouseLink
     {
         /// <summary>
         /// Get list of warehouses
         /// </summary>
-        Task<Result> Associate(string warehouseId);
+        Task<Result> Link(string warehouseId);
     }
 }

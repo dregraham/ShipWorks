@@ -9,7 +9,7 @@ namespace ShipWorks.ApplicationCore.Settings.Warehouse
     /// </summary>
     public class WarehouseViewModel : IWarehouseViewModel
     {
-        private string shipWorksAssociation;
+        private readonly string shipWorksLink;
 
         /// <summary>
         /// Constructor
@@ -28,11 +28,11 @@ namespace ShipWorks.ApplicationCore.Settings.Warehouse
             Name = warehouse.details.name;
             City = warehouse.details.city;
             Code = warehouse.details.code;
-            shipWorksAssociation = warehouse.details.shipWorksAssociation;
+            shipWorksLink = warehouse.details.shipWorksLink;
             State = warehouse.details.state;
             Street = warehouse.details.street;
             Zip = warehouse.details.zip;
-            IsAlreadyAssociated = !string.IsNullOrEmpty(shipWorksAssociation);
+            IsAlreadyLinked = !string.IsNullOrEmpty(shipWorksLink);
         }
 
         /// <summary>
@@ -78,15 +78,15 @@ namespace ShipWorks.ApplicationCore.Settings.Warehouse
         public string Zip { get; set; }
 
         /// <summary>
-        /// Is the warehouse already associated with a ShipWorks instance
+        /// Is the warehouse already linked with a ShipWorks instance
         /// </summary>
         [Obfuscation]
-        public bool IsAlreadyAssociated { get; set; }
+        public bool IsAlreadyLinked { get; set; }
 
         /// <summary>
-        /// Can this warehouse be associated with the given GUID
+        /// Can this warehouse be linked with the given GUID
         /// </summary>
-        public bool CanBeAssociatedWith(Guid guid) =>
-            !IsAlreadyAssociated || shipWorksAssociation == guid.ToString();
+        public bool CanBeLinkedWith(Guid guid) =>
+            !IsAlreadyLinked || shipWorksLink == guid.ToString();
     }
 }

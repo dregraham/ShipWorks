@@ -64,11 +64,13 @@
                     <TextBlock
                         Grid.Column="0"
                         Margin="16,0,0,0"
+                        VerticalAlignment="Center"
                         Text="{Binding WarehouseName}" />
                     <Button
                         Grid.Column="1"
                         MinHeight="23"
                         Padding="8,0"
+                        VerticalAlignment="Center"
                         Command="{Binding SelectWarehouse}"
                         IsEnabled="{Binding AssociatedWithWarehouse, Converter={StaticResource ResourceKey=InvertBoolean}}">
                         Select Warehouse

@@ -13,12 +13,12 @@ namespace ShipWorks.ApplicationCore.Settings.Warehouse
     public class WarehouseSettingsApi : IWarehouseSettingsApi
     {
         private readonly IWarehouseList warehouseListRequest;
-        private readonly IWarehouseAssociation warehouseAssociation;
+        private readonly IWarehouseLink warehouseAssociation;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public WarehouseSettingsApi(IWarehouseList warehouseListRequest, IWarehouseAssociation warehouseAssociation)
+        public WarehouseSettingsApi(IWarehouseList warehouseListRequest, IWarehouseLink warehouseAssociation)
         {
             this.warehouseAssociation = warehouseAssociation;
             this.warehouseListRequest = warehouseListRequest;
@@ -32,6 +32,6 @@ namespace ShipWorks.ApplicationCore.Settings.Warehouse
         /// <summary>
         /// Associate the warehouse with this instance of ShipWorks
         /// </summary>
-        public Task<Result> Associate(string id) => warehouseAssociation.Associate(id);
+        public Task<Result> Associate(string id) => warehouseAssociation.Link(id);
     }
 }
