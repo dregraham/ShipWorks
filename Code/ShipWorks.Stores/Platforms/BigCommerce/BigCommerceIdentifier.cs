@@ -31,19 +31,18 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
         /// <summary>
         /// Get the identifier from the given store
         /// </summary>
-        public string Get(IBigCommerceStoreEntity typedStore)
+        public string Get(BigCommerceStoreEntity store)
         {
             string identifier;
             try
             {
-                identifier = encryptionProvider.Decrypt(typedStore.Identifier);
+                identifier = encryptionProvider.Decrypt(store.Identifier);
             }
             catch (EncryptionException)
             {
                 // If the identifier can't be decrypted, try generating a new one (See TP #31374 / Zendesk #7732)
                 log.Info("Invalid BigCommerce identifier. Generating new identifier.");
 
-                BigCommerceStoreEntity store = (BigCommerceStoreEntity) typedStore;
                 store.Identifier = string.Empty;
                 Set(store);
 
@@ -53,7 +52,7 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
                     sqlAdapter.Commit();
                 }
 
-                identifier = encryptionProvider.Decrypt(typedStore.Identifier);
+                identifier = encryptionProvider.Decrypt(store.Identifier);
             }
             return identifier;
         }

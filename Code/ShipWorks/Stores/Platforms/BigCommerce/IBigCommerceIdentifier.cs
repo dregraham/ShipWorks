@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data.Model.EntityInterfaces;
+﻿using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.Stores.Platforms.BigCommerce
 {
@@ -16,7 +10,7 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
         /// <summary>
         /// Get the identifier from the given store
         /// </summary>
-        string Get(IBigCommerceStoreEntity typedStore);
+        string Get(BigCommerceStoreEntity store);
 
         /// <summary>
         /// Set the identifier on the given store
