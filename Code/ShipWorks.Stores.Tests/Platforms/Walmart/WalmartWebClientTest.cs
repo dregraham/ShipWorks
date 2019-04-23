@@ -38,8 +38,12 @@ namespace ShipWorks.Stores.Tests.Platforms.Walmart
             Mock<IHttpVariableRequestSubmitter> requestSubmitter = SetupHttpVariableRequestSubmitter(OAuthTokenResponse, "TestConnectionResponse");
 
             WalmartWebClient testObject = mock.Create<WalmartWebClient>();
+            WalmartStoreEntity store = new WalmartStoreEntity();
 
-            testObject.TestConnection(new WalmartStoreEntity());
+            store.ClientID = "ClientID";
+            store.ClientSecret = "ClientSecret";
+
+            testObject.TestConnection(store);
 
             requestSubmitter.VerifySet(r => r.Uri = new Uri("https://marketplace.walmartapis.com/v3/feeds"));
         }
@@ -51,8 +55,12 @@ namespace ShipWorks.Stores.Tests.Platforms.Walmart
             Mock<IHttpVariableRequestSubmitter> requestSubmitter = SetupHttpVariableRequestSubmitter(OAuthTokenResponse, OrdersResponse);
 
             WalmartWebClient testObject = mock.Create<WalmartWebClient>();
+            WalmartStoreEntity store = new WalmartStoreEntity();
 
-            testObject.GetOrders(new WalmartStoreEntity(), start);
+            store.ClientID = "ClientID";
+            store.ClientSecret = "ClientSecret";
+
+            testObject.GetOrders(store, start);
 
             requestSubmitter.VerifySet(r => r.Uri = new Uri("https://marketplace.walmartapis.com/v3/orders"));
         }
@@ -69,6 +77,9 @@ namespace ShipWorks.Stores.Tests.Platforms.Walmart
             WalmartWebClient testObject = mock.Create<WalmartWebClient>();
 
             WalmartStoreEntity store = new WalmartStoreEntity();
+
+            store.ClientID = "ClientID";
+            store.ClientSecret = "ClientSecret";
 
             testObject.GetOrders(store, start);
 
@@ -95,8 +106,12 @@ namespace ShipWorks.Stores.Tests.Platforms.Walmart
             var requestSubmitter = SetupHttpVariableRequestSubmitter(OAuthTokenResponse, OrdersResponse);
 
             WalmartWebClient testObject = mock.Create<WalmartWebClient>();
+            WalmartStoreEntity store = new WalmartStoreEntity();
 
-            testObject.GetOrders(new WalmartStoreEntity(), "nextCursorValue");
+            store.ClientID = "ClientID";
+            store.ClientSecret = "ClientSecret";
+
+            testObject.GetOrders(store, "nextCursorValue");
 
             requestSubmitter.VerifySet(r => r.Uri = new Uri("https://marketplace.walmartapis.com/v3/ordersnextCursorValue"));
         }
@@ -108,8 +123,12 @@ namespace ShipWorks.Stores.Tests.Platforms.Walmart
             var requestSubmitter = SetupHttpVariableRequestSubmitter(OAuthTokenResponse, OrdersResponse);
 
             WalmartWebClient testObject = mock.Create<WalmartWebClient>();
+            WalmartStoreEntity store = new WalmartStoreEntity();
 
-            testObject.GetOrders(new WalmartStoreEntity(), start);
+            store.ClientID = "ClientID";
+            store.ClientSecret = "ClientSecret";
+
+            testObject.GetOrders(store, start);
 
             requestSubmitter.VerifySet(r => r.Verb = HttpVerb.Get);
         }
@@ -125,8 +144,12 @@ namespace ShipWorks.Stores.Tests.Platforms.Walmart
             requestSubmitter.SetupGet(r => r.Variables).Returns(httpVariables);
 
             WalmartWebClient testObject = mock.Create<WalmartWebClient>();
+            WalmartStoreEntity store = new WalmartStoreEntity();
 
-            testObject.GetOrders(new WalmartStoreEntity(), start);
+            store.ClientID = "ClientID";
+            store.ClientSecret = "ClientSecret";
+
+            testObject.GetOrders(store, start);
 
             Assert.Contains(httpVariables, v => v.Name == "createdStartDate" && v.Value == start.ToString("s"));
         }
@@ -137,8 +160,12 @@ namespace ShipWorks.Stores.Tests.Platforms.Walmart
             SetupHttpVariableRequestSubmitter(OAuthTokenResponse, OrdersResponse);
 
             WalmartWebClient testObject = mock.Create<WalmartWebClient>();
+            WalmartStoreEntity store = new WalmartStoreEntity();
 
-            testObject.GetOrders(new WalmartStoreEntity(), "");
+            store.ClientID = "ClientID";
+            store.ClientSecret = "ClientSecret";
+
+            testObject.GetOrders(store, "");
 
             // There are 2 orders to acknowledge
             acknowledgeMock.Mock<IHttpRequestSubmitter>().Verify(r => r.GetResponse(), Times.Exactly(2));
@@ -150,8 +177,12 @@ namespace ShipWorks.Stores.Tests.Platforms.Walmart
             SetupHttpVariableRequestSubmitter(OAuthTokenResponse, OrdersResponse);
 
             WalmartWebClient testObject = mock.Create<WalmartWebClient>();
+            WalmartStoreEntity store = new WalmartStoreEntity();
 
-            testObject.GetOrders(new WalmartStoreEntity(), new DateTime());
+            store.ClientID = "ClientID";
+            store.ClientSecret = "ClientSecret";
+
+            testObject.GetOrders(store, new DateTime());
 
             // There are 2 orders to acknowledge
             acknowledgeMock.Mock<IHttpRequestSubmitter>().Verify(r => r.GetResponse(), Times.Exactly(2));
@@ -163,8 +194,12 @@ namespace ShipWorks.Stores.Tests.Platforms.Walmart
             SetupHttpVariableRequestSubmitter(OAuthTokenResponse, OrdersResponse);
 
             WalmartWebClient testObject = mock.Create<WalmartWebClient>();
+            WalmartStoreEntity store = new WalmartStoreEntity();
 
-            ordersListType orders = testObject.GetOrders(new WalmartStoreEntity(), new DateTime());
+            store.ClientID = "ClientID";
+            store.ClientSecret = "ClientSecret";
+
+            ordersListType orders = testObject.GetOrders(store, new DateTime());
 
             Assert.Equal(2, orders.elements.Count(order => order.orderLines
                 .All(line => line.orderLineStatuses[0].status == orderLineStatusValueType.Acknowledged)));
@@ -176,8 +211,12 @@ namespace ShipWorks.Stores.Tests.Platforms.Walmart
             SetupHttpVariableRequestSubmitter(OAuthTokenResponse);
 
             WalmartWebClient testObject = mock.Create<WalmartWebClient>();
+            WalmartStoreEntity store = new WalmartStoreEntity();
 
-            testObject.UpdateShipmentDetails(new WalmartStoreEntity(), new orderShipment(), "123");
+            store.ClientID = "ClientID";
+            store.ClientSecret = "ClientSecret";
+
+            testObject.UpdateShipmentDetails(store, new orderShipment(), "123");
 
             acknowledgeMock.Mock<IHttpRequestSubmitter>()
                 .VerifySet(submitter => submitter.Uri = new Uri("https://marketplace.walmartapis.com/v3/orders/123/shipping"));
@@ -189,8 +228,12 @@ namespace ShipWorks.Stores.Tests.Platforms.Walmart
             SetupHttpVariableRequestSubmitter(OAuthTokenResponse);
 
             WalmartWebClient testObject = mock.Create<WalmartWebClient>();
+            WalmartStoreEntity store = new WalmartStoreEntity();
 
-            testObject.UpdateShipmentDetails(new WalmartStoreEntity(), new orderShipment(), "123");
+            store.ClientID = "ClientID";
+            store.ClientSecret = "ClientSecret";
+
+            testObject.UpdateShipmentDetails(store, new orderShipment(), "123");
 
             mock.Mock<IHttpRequestSubmitterFactory>()
                 .Verify(f => f.GetHttpTextPostRequestSubmitter(It.IsAny<string>(), @"application/xml"));
@@ -203,7 +246,12 @@ namespace ShipWorks.Stores.Tests.Platforms.Walmart
 
             WalmartWebClient testObject = mock.Create<WalmartWebClient>();
 
-            var order = testObject.UpdateShipmentDetails(new WalmartStoreEntity(), new orderShipment(), "123");
+            WalmartStoreEntity store = new WalmartStoreEntity();
+
+            store.ClientID = "ClientID";
+            store.ClientSecret = "ClientSecret";
+
+            var order = testObject.UpdateShipmentDetails(store, new orderShipment(), "123");
             var expectedOrder =
                 SerializationUtility.DeserializeFromXml<Order>(GetOrderText(orderLineStatusValueType.Acknowledged));
 
@@ -215,7 +263,12 @@ namespace ShipWorks.Stores.Tests.Platforms.Walmart
         {
             Mock<IHttpVariableRequestSubmitter> requestSubmitter = SetupHttpVariableRequestSubmitter(OAuthTokenResponse, GetOrderText(orderLineStatusValueType.Acknowledged));
             WalmartWebClient testObject = mock.Create<WalmartWebClient>();
-            testObject.GetOrder(new WalmartStoreEntity(), "12345678");
+            WalmartStoreEntity store = new WalmartStoreEntity();
+
+            store.ClientID = "ClientID";
+            store.ClientSecret = "ClientSecret";
+
+            testObject.GetOrder(store, "12345678");
 
             requestSubmitter.VerifySet(r => r.Uri = new Uri("https://marketplace.walmartapis.com/v3/orders/12345678"));
         }
@@ -226,8 +279,12 @@ namespace ShipWorks.Stores.Tests.Platforms.Walmart
             SetupHttpVariableRequestSubmitterForBadRequest(OAuthTokenResponse, ErrorResponse);
 
             WalmartWebClient testObject = mock.Create<WalmartWebClient>();
+            WalmartStoreEntity store = new WalmartStoreEntity();
 
-            Exception ex = Assert.Throws<WalmartException>(() => testObject.GetOrders(new WalmartStoreEntity(), "nextCursorValue"));
+            store.ClientID = "ClientID";
+            store.ClientSecret = "ClientSecret";
+
+            Exception ex = Assert.Throws<WalmartException>(() => testObject.GetOrders(store, "nextCursorValue"));
 
             Assert.Equal($"{BaseErrorMessage}:{Environment.NewLine}400 Bad Request{Environment.NewLine}WM_SVC.ENV set blank or null, WM_CONSUMER.ID set blank or null", ex.Message);
         }
@@ -238,8 +295,12 @@ namespace ShipWorks.Stores.Tests.Platforms.Walmart
             SetupHttpVariableRequestSubmitterForBadRequest(OAuthTokenResponse, OutageErrorResponse);
 
             WalmartWebClient testObject = mock.Create<WalmartWebClient>();
+            WalmartStoreEntity store = new WalmartStoreEntity();
 
-            Exception ex = Assert.Throws<WalmartException>(() => testObject.GetOrders(new WalmartStoreEntity(), "nextCursorValue"));
+            store.ClientID = "ClientID";
+            store.ClientSecret = "ClientSecret";
+
+            Exception ex = Assert.Throws<WalmartException>(() => testObject.GetOrders(store, "nextCursorValue"));
 
             Assert.Equal($"{BaseErrorMessage}. Please try again later. 400 Bad Request", ex.Message);
         }
@@ -250,8 +311,12 @@ namespace ShipWorks.Stores.Tests.Platforms.Walmart
             SetupHttpVariableRequestSubmitterForBadRequest(OAuthTokenResponse, UnexpectedError);
 
             WalmartWebClient testObject = mock.Create<WalmartWebClient>();
+            WalmartStoreEntity store = new WalmartStoreEntity();
 
-            Exception ex = Assert.Throws<WalmartException>(() => testObject.GetOrders(new WalmartStoreEntity(), "nextCursorValue"));
+            store.ClientID = "ClientID";
+            store.ClientSecret = "ClientSecret";
+
+            Exception ex = Assert.Throws<WalmartException>(() => testObject.GetOrders(store, "nextCursorValue"));
 
             Assert.Equal($"ShipWorks encountered an error communicating with Walmart: {Environment.NewLine}400 Bad Request", ex.Message);
         }
@@ -267,6 +332,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Walmart
             WalmartStoreEntity store = new WalmartStoreEntity();
 
             store.ClientID = "";
+            store.ClientSecret = "ClientSecret";
 
             Exception ex = Assert.Throws<WalmartException>(() => testObject.GetOrders(store, start));
 
@@ -284,6 +350,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Walmart
             WalmartStoreEntity store = new WalmartStoreEntity();
 
             store.ClientSecret = "";
+            store.ClientID = "ClientID";
 
             Exception ex = Assert.Throws<WalmartException>(() => testObject.GetOrders(store, start));
 
