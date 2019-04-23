@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using System.Reflection;
+﻿using System.Reflection;
 using System.Windows.Forms;
 using System.Windows.Input;
 using GalaSoft.MvvmLight;
@@ -100,10 +99,7 @@ namespace ShipWorks.ApplicationCore.Settings.Warehouse
         /// </summary>
         private async void OnSelectWarehouse()
         {
-            var results = await warehouseSettingsApi.GetAllWarehouses().ConfigureAwait(true);
-            var warehouses = results.Value.warehouses.Select(x => new WarehouseViewModel(x));
-
-            WarehouseViewModel warehouse = warehouseList.ChooseWarehouse(warehouses);
+            WarehouseViewModel warehouse = warehouseList.ChooseWarehouse();
             if (warehouse != null)
             {
                 var associationResponse = await warehouseSettingsApi.Associate(warehouse.Id).ConfigureAwait(true);

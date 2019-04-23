@@ -29,7 +29,8 @@
                 <ResourceDictionary Source="/ShipWorks.UI;component/Styles/GlobalStyle.xaml"/>
             </ResourceDictionary.MergedDictionaries>
 
-            <vc:BooleanToVisibilityConverter x:Key="BooleanToVisibility" />
+            <vc:BooleanToVisibilityConverter x:Key="ShowWhenTrue" />
+            <vc:BooleanToVisibilityConverter x:Key="ShowWhenFalse" Invert="True" />
         </ResourceDictionary>
     </Window.Resources>
     <Grid Margin="8" Grid.IsSharedSizeScope="True">
@@ -44,7 +45,8 @@
         <ListBox Grid.Row="1"
                  ItemsSource="{Binding Warehouses}"
                  SelectedItem="{Binding SelectedWarehouse}"
-                 HorizontalContentAlignment="Stretch">
+                 HorizontalContentAlignment="Stretch"
+                 Visibility="{Binding LoadingFinished, Converter={StaticResource ResourceKey=ShowWhenTrue}}">
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <Grid HorizontalAlignment="Stretch">
@@ -73,11 +75,18 @@
                         <TextBlock Grid.Column="2"
                                    VerticalAlignment="Center"
                                    FontSize="16"
-                                   Visibility="{Binding IsAlreadyLinked, Converter={StaticResource ResourceKey=BooleanToVisibility}}">Already Linked</TextBlock>
+                                   Visibility="{Binding IsAlreadyLinked, Converter={StaticResource ResourceKey=ShowWhenTrue}}">Already Linked</TextBlock>
                     </Grid>
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
+        <TextBlock Grid.Row="1"
+                   Text="{Binding Message}"
+                   Margin="4"
+                   Visibility="{Binding ShowMessage, Converter={StaticResource ResourceKey=ShowWhenTrue}}"
+                   />
+        <controls:WaitSpinner Grid.Row="1"
+                              Visibility="{Binding LoadingFinished, Converter={StaticResource ResourceKey=ShowWhenFalse}}" />
 
         <controls:AlignmentWrapPanel Grid.Row="2"
                                Margin="0, 8, 0, 0">
