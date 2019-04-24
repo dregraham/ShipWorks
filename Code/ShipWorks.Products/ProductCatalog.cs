@@ -286,6 +286,12 @@ namespace ShipWorks.Products
                 productVariant.CreatedDate = now;
             }
 
+            if (product.IsDirty || productVariant.IsDirty)
+            {
+                // Set the product to be uploaded to the warehouse
+                product.UploadToWarehouseNeeded = true;
+            }
+
             using (ISqlAdapter sqlAdapter = sqlAdapterFactory.CreateTransacted())
             {
                 try
