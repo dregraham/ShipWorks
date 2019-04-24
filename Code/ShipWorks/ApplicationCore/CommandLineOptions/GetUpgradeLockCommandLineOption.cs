@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using Interapptive.Shared.Data;
 using log4net;
 using ShipWorks.ApplicationCore.Interaction;
+using ShipWorks.Data.Administration;
 using ShipWorks.Data.Connection;
 
 namespace ShipWorks.ApplicationCore.CommandLineOptions
@@ -36,6 +37,19 @@ namespace ShipWorks.ApplicationCore.CommandLineOptions
             try
             {
                 SqlSession.Initialize();
+
+                if (!SqlSession.Current.CanConnect())
+                {
+                    log.Info("Cannot connect to SQL Server. Not getting lock");
+                    return;
+                }
+
+                if (SqlSchemaUpdater.IsUpgradeRequired())
+                {
+                    log.Info("Update required. Not getting lock");
+                    return;
+                }
+
                 using (DbConnection conn = new SqlConnection(SqlSession.Current.Configuration.GetConnectionString()))
                 {
                     await conn.OpenAsync().ConfigureAwait(false);
