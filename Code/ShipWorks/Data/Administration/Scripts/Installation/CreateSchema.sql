@@ -7944,7 +7944,8 @@ CREATE TABLE [dbo].[Product]
 [ProductID] [bigint] NOT NULL IDENTITY(1201, 1000),
 [CreatedDate] [datetime] NOT NULL,
 [IsActive] [bit] NOT NULL,
-[IsBundle] [bit] NOT NULL
+[IsBundle] [bit] NOT NULL,
+[UploadToWarehouseNeeded] [bit] NOT NULL CONSTRAINT [DF_Product_UploadToWarehouseNeeded] DEFAULT (1)
 )
 GO
 PRINT N'Creating primary key [PK_Product] on [dbo].[Product]'
