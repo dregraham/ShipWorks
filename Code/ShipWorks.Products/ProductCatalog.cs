@@ -454,6 +454,27 @@ namespace ShipWorks.Products
         }
 
         /// <summary>
+        /// Fetch product variants to upload to the warehouse.
+        /// </summary>
+        public async Task<IEnumerable<IProductVariantEntity>> FetchProductVariantsForUploadToWarehouse(ISqlAdapter sqlAdapter)
+        {
+            QueryFactory factory = new QueryFactory();
+            InnerOuterJoin from = factory.ProductVariant
+                .InnerJoin(factory.Product)
+                .On(ProductFields.ProductID == ProductVariantFields.ProductID);
+
+            EntityQuery<ProductVariantEntity> query = factory.ProductVariant.From(from).Where(ProductFields.UploadToWarehouseNeeded == true);
+
+            foreach (IPrefetchPathElement2 path in ProductPrefetchPath.Value)
+            {
+                query = query.WithPath(path);
+            }
+
+            IEntityCollection2 queryResults = await sqlAdapter.FetchQueryAsync(query).ConfigureAwait(false);
+            return queryResults.OfType<ProductVariantEntity>();
+        }
+
+        /// <summary>
         /// Fetch variants of the same product as the passed in variant.
         /// </summary>
         public async Task<IEnumerable<IProductVariantEntity>> FetchSiblingVariants(IProductVariantEntity productVariant, ISqlAdapter sqlAdapter)

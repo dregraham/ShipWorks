@@ -62,5 +62,10 @@ namespace ShipWorks.Products
         /// Get the available attributes for a variant
         /// </summary>
         Task<IEnumerable<IProductAttributeEntity>> GetAvailableAttributesFor(ISqlAdapter sqlAdapter, ProductVariantEntity variant);
+
+        /// <summary>
+        /// Fetch product variants to upload to the warehouse.
+        /// </summary>
+        Task<IEnumerable<IProductVariantEntity>> FetchProductVariantsForUploadToWarehouse(ISqlAdapter sqlAdapter);
     }
 }
