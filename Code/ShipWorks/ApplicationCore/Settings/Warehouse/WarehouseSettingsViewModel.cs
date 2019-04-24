@@ -1,10 +1,12 @@
 ﻿using System.Reflection;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Input;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.UI;
+using ShipWorks.Core.Common.Threading;
 using ShipWorks.Data;
 using ShipWorks.Users;
 
@@ -42,7 +44,7 @@ namespace ShipWorks.ApplicationCore.Settings.Warehouse
             this.warehouseSettingsView = warehouseSettingsView;
             this.warehouseList = warehouseList;
             this.configurationData = configurationData;
-            SelectWarehouse = new RelayCommand(OnSelectWarehouse);
+            SelectWarehouse = new RelayCommand(() => OnSelectWarehouse().Forget());
 
             warehouseSettingsView.ViewModel = this;
 
@@ -97,7 +99,7 @@ namespace ShipWorks.ApplicationCore.Settings.Warehouse
         /// <summary>
         /// Handle the select warehouse command
         /// </summary>
-        private async void OnSelectWarehouse()
+        private async Task OnSelectWarehouse()
         {
             WarehouseViewModel warehouse = warehouseList.ChooseWarehouse();
             if (warehouse != null)
