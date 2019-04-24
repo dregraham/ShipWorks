@@ -21777,6 +21777,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ProductFieldIndex.IsBundle);}
 		}
+		/// <summary>Creates a new ProductEntity.UploadToWarehouseNeeded field instance</summary>
+		public static EntityField2 UploadToWarehouseNeeded
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ProductFieldIndex.UploadToWarehouseNeeded);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity ProductAttributeEntity</summary>

@@ -40,6 +40,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             CreatedDate = source.CreatedDate;
             IsActive = source.IsActive;
             IsBundle = source.IsBundle;
+            UploadToWarehouseNeeded = source.UploadToWarehouseNeeded;
             
             
             
@@ -78,6 +79,12 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         public System.Boolean IsBundle { get; }
+        /// <summary> The UploadToWarehouseNeeded property of the Entity Product<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "Product"."UploadToWarehouseNeeded"<br/>
+        /// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+        public System.Boolean UploadToWarehouseNeeded { get; }
         
         
         

@@ -9322,6 +9322,8 @@ namespace ShipWorks.Data.Model
 		IsActive,
 		///<summary>IsBundle. </summary>
 		IsBundle,
+		///<summary>UploadToWarehouseNeeded. </summary>
+		UploadToWarehouseNeeded,
 		/// <summary></summary>
 		AmountOfFields
 	}

@@ -2339,6 +2339,7 @@
           <Field Name="IsActive" Type="bool" FieldIndex="2" />
           <Field Name="IsBundle" Type="bool" FieldIndex="3" />
           <Field Name="ProductID" Type="long" IsReadOnly="true" Precision="19" IsPrimaryKey="true" FieldIndex="0" />
+          <Field Name="UploadToWarehouseNeeded" Type="bool" FieldIndex="4" />
         </Fields>
       </EntityDefinition>
       <EntityDefinition Name="ProductAttribute" ObjectID="d0bf81c9-ced6-465c-8a95-1ed9af7b9627">
@@ -4543,7 +4544,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2019-04-16T13:38:00.9024573Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2019-04-24T11:45:20.1205084Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -7852,6 +7853,7 @@
                     <Field Name="CreatedDate" Ordinal="2" DbType="4" />
                     <Field Name="IsActive" Ordinal="3" DbType="2" />
                     <Field Name="IsBundle" Ordinal="4" DbType="2" />
+                    <Field Name="UploadToWarehouseNeeded" Ordinal="5" HasDefaultValue="true" DefaultValue="(1)" DbType="2" />
                   </Fields>
                 </Table>
                 <Table Name="ProductAttribute">
@@ -10450,7 +10452,7 @@
                 <FieldPair PkField="dbo:ProductVariant:ProductVariantID" FkField="dbo:ProductVariantAlias:ProductVariantID" />
               </FieldPairs>
             </ForeignKeyConstraint>
-            <ForeignKeyConstraint Name="dbo:ProductVariantAttributeValue:FK_ProductVariantAttribute_ProductVariant">
+            <ForeignKeyConstraint Name="dbo:ProductVariantAttributeValue:FK_ProductVariantAttributeValue_ProductVariant">
               <FieldPairs>
                 <FieldPair PkField="dbo:ProductVariant:ProductVariantID" FkField="dbo:ProductVariantAttributeValue:ProductVariantID" />
               </FieldPairs>
@@ -13064,6 +13066,7 @@
             <FieldMapping FieldName="IsActive" TargetFieldName="IsActive" />
             <FieldMapping FieldName="IsBundle" TargetFieldName="IsBundle" />
             <FieldMapping FieldName="ProductID" TargetFieldName="ProductID" SequenceToUse="SCOPE_IDENTITY()" />
+            <FieldMapping FieldName="UploadToWarehouseNeeded" TargetFieldName="UploadToWarehouseNeeded" />
           </FieldMappings>
         </EntityMapping>
         <EntityMapping EntityName=":ProductAttribute" TargetName="ShipWorksLocal:dbo:ProductAttribute">

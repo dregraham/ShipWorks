@@ -2673,6 +2673,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("ProductEntity", "CreatedDate", typeof(System.DateTime), false, false, false, false,  (int)ProductFieldIndex.CreatedDate, 0, 0, 0);
 			this.AddElementFieldInfo("ProductEntity", "IsActive", typeof(System.Boolean), false, false, false, false,  (int)ProductFieldIndex.IsActive, 0, 0, 0);
 			this.AddElementFieldInfo("ProductEntity", "IsBundle", typeof(System.Boolean), false, false, false, false,  (int)ProductFieldIndex.IsBundle, 0, 0, 0);
+			this.AddElementFieldInfo("ProductEntity", "UploadToWarehouseNeeded", typeof(System.Boolean), false, false, false, false,  (int)ProductFieldIndex.UploadToWarehouseNeeded, 0, 0, 0);
 		}
 		/// <summary>Inits ProductAttributeEntity's FieldInfo objects</summary>
 		private void InitProductAttributeEntityInfos()

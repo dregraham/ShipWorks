@@ -2815,11 +2815,12 @@ namespace ShipWorks.Data.Model
 		/// <summary>Inits ProductEntity's mappings</summary>
 		private void InitProductEntityMappings()
 		{
-			this.AddElementMapping("ProductEntity", @"ShipWorksLocal", @"dbo", "Product", 4, 0);
+			this.AddElementMapping("ProductEntity", @"ShipWorksLocal", @"dbo", "Product", 5, 0);
 			this.AddElementFieldMapping("ProductEntity", "ProductID", "ProductID", false, "BigInt", 0, 19, 0, true, "SCOPE_IDENTITY()", null, typeof(System.Int64), 0);
 			this.AddElementFieldMapping("ProductEntity", "CreatedDate", "CreatedDate", false, "DateTime", 0, 0, 0, false, "", null, typeof(System.DateTime), 1);
 			this.AddElementFieldMapping("ProductEntity", "IsActive", "IsActive", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 2);
 			this.AddElementFieldMapping("ProductEntity", "IsBundle", "IsBundle", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 3);
+			this.AddElementFieldMapping("ProductEntity", "UploadToWarehouseNeeded", "UploadToWarehouseNeeded", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 4);
 		}
 
 		/// <summary>Inits ProductAttributeEntity's mappings</summary>

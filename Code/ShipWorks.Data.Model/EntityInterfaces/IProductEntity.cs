@@ -45,6 +45,12 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         /// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         System.Boolean IsBundle { get; }
+        /// <summary> The UploadToWarehouseNeeded property of the Entity Product<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "Product"."UploadToWarehouseNeeded"<br/>
+        /// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+        System.Boolean UploadToWarehouseNeeded { get; }
         
         
         
