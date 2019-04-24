@@ -46,6 +46,13 @@ namespace ShipWorks.ApplicationCore.CommandLineOptions
             {
                 log.Info("Autoupdate enabled.");
                 SqlSession.Initialize();
+
+                if (!SqlSession.Current.CanConnect())
+                {
+                    log.Info("Cannot connect to SQL Server. Not sending window");
+                    return Task.CompletedTask;
+                }
+
                 if (SqlSchemaUpdater.IsUpgradeRequired())
                 {
                     log.Info("Update required. Not sending window");
