@@ -29,6 +29,7 @@ namespace ShipWorks.Shipping.Editing
 
         bool enableEditing;
         bool isLoading;
+        bool allowIncludeReturn = true;
 
         // Counter for rate criteria change event suspension
         int suspendRateEvent = 0;
@@ -395,6 +396,11 @@ namespace ShipWorks.Shipping.Editing
 
                 // only enable for editing if all shipments are Returns
                 returnsPanel.Enabled = (LoadedShipments.All(s => s.ReturnShipment));
+
+                // Only enable automatic return labels for Endicia
+                allowIncludeReturn = LoadedShipments.All(st => st.ShipmentTypeCode == ShipmentTypeCode.Endicia);
+
+                includeReturn.Enabled = allowIncludeReturn;
             }
             else
             {
@@ -629,6 +635,16 @@ namespace ShipWorks.Shipping.Editing
 
             sectionRecipient.ExtraText = string.Format("{0}, {1}", name, country);
         }
+        /// <summary>
+        /// Click of the Include Return checkbox
+        /// </summary>
+        private void OnIncludeReturnChanged(object sender, EventArgs e)
+        {
+            if (!isLoading)
+            {
+                returnShipment.Enabled = !includeReturn.Checked;
+            }
+        }
 
         /// <summary>
         /// Click of the Return Shipment checkbox
@@ -637,6 +653,10 @@ namespace ShipWorks.Shipping.Editing
         {
             if (!isLoading)
             {
+                if (allowIncludeReturn)
+                {
+                    includeReturn.Enabled = !returnShipment.Checked;
+                }
                 returnsPanel.Enabled = returnShipment.Checked;
                 SaveReturnsToShipments();
                 ReturnServiceChanged?.Invoke(this, EventArgs.Empty);

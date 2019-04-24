@@ -58,6 +58,5 @@ namespace ShipWorks.Shipping.Carriers.Endicia
         #endregion
 
         private System.Windows.Forms.CheckBox scanBasedReturn;
-
     }
 }
