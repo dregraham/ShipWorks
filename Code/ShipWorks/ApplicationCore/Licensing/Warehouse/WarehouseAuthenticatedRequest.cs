@@ -67,6 +67,11 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse
                 restResponse = await restClient.ExecuteTaskAsync(restRequest).ConfigureAwait(false);
                 logEntry.LogResponse(restResponse);
 
+                if (restResponse.StatusCode == HttpStatusCode.OK)
+                {
+                    return GenericResult.FromSuccess(restResponse);
+                }
+
                 if (restResponse.StatusCode == HttpStatusCode.Forbidden)
                 {
                     // Get new token using the refresh token
@@ -91,7 +96,12 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse
                     restResponse = await restClient.ExecuteTaskAsync(restRequest).ConfigureAwait(false);
                 }
 
-                return GenericResult.FromSuccess(restResponse);
+                if (restResponse.StatusCode == HttpStatusCode.OK)
+                {
+                    return GenericResult.FromSuccess(restResponse);
+                }
+
+                return GenericResult.FromError<IRestResponse>($"Unable to make warehouse request. StatusCode: {restResponse.StatusCode}");
             }
             catch (Exception e)
             {
