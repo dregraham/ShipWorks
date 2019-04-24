@@ -5,6 +5,7 @@ using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
 using RestSharp;
 using ShipWorks.ApplicationCore.Licensing.WebClientEnvironments;
+using ShipWorks.ApplicationCore.Logging;
 
 namespace ShipWorks.ApplicationCore.Licensing.Warehouse
 {
@@ -37,6 +38,9 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse
         /// </summary>
         public async Task<GenericResult<IRestResponse>> MakeRequest(IRestRequest restRequest)
         {
+            ApiLogEntry logEntry = new ApiLogEntry(ApiLogSource.ShipWorksWarehouse, "A warehouse request");
+            IRestResponse restResponse = null;
+
             try
             {
                 if (authenticationToken.IsNullOrWhiteSpace())
@@ -54,11 +58,14 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse
                     refreshToken = redirectTokenResult.Value.refreshToken;
                 }
 
+                logEntry.LogRequest(restRequest);
+
                 restRequest.AddHeader("Authorization", $"Bearer {authenticationToken}");
 
                 IRestClient restClient = new RestClient(webClientEnvironmentFactory.SelectedEnvironment.WarehouseUrl);
 
-                IRestResponse restResponse = await restClient.ExecuteTaskAsync(restRequest).ConfigureAwait(false);
+                restResponse = await restClient.ExecuteTaskAsync(restRequest).ConfigureAwait(false);
+                logEntry.LogResponse(restResponse);
 
                 if (restResponse.StatusCode == HttpStatusCode.Forbidden)
                 {
@@ -88,6 +95,11 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse
             }
             catch (Exception e)
             {
+                if (restResponse != null)
+                {
+                    logEntry.LogResponse(restResponse);
+                }
+
                 return GenericResult.FromError<IRestResponse>(e.Message);
             }
         }

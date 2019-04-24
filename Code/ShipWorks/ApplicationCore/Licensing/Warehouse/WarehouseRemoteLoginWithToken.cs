@@ -6,6 +6,7 @@ using ShipWorks.ApplicationCore.Licensing.TangoRequests;
 using ShipWorks.ApplicationCore.Licensing.WebClientEnvironments;
 using Newtonsoft.Json;
 using RestSharp;
+using ShipWorks.ApplicationCore.Logging;
 
 namespace ShipWorks.ApplicationCore.Licensing.Warehouse
 {
@@ -51,16 +52,21 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse
         /// </summary>
         private async Task<GenericResult<TokenResponse>> RemoteLoginWithToken(string redirectToken, WebClientEnvironment webClientEnvironment)
         {
-            RestRequest restRequest = new RestRequest(WarehouseEndpoints.Login, Method.POST)
+            IRestRequest restRequest = new RestRequest(WarehouseEndpoints.Login, Method.POST)
             {
                 RequestFormat = DataFormat.Json
             };
             restRequest.AddJsonBody(new { redirectToken = redirectToken});
 
             var restClient = new RestClient(webClientEnvironment.WarehouseUrl);
+
+            ApiLogEntry logEntry = new ApiLogEntry(ApiLogSource.ShipWorksWarehouse, "RemoteLoginWithToken");
+            logEntry.LogRequest(restRequest);
             
             IRestResponse restResponse = await restClient.ExecuteTaskAsync(restRequest)
                 .ConfigureAwait(false);
+
+            logEntry.LogResponse(restResponse);
 
             // De-serialize the result
             TokenResponse requestResult = JsonConvert.DeserializeObject<TokenResponse>(restResponse.Content,

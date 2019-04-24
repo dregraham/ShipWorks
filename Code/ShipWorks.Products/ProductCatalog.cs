@@ -456,14 +456,17 @@ namespace ShipWorks.Products
         /// <summary>
         /// Fetch product variants to upload to the warehouse.
         /// </summary>
-        public async Task<IEnumerable<IProductVariantEntity>> FetchProductVariantsForUploadToWarehouse(ISqlAdapter sqlAdapter)
+        public async Task<IEnumerable<IProductVariantEntity>> FetchProductVariantsForUploadToWarehouse(ISqlAdapter sqlAdapter, int pageSize)
         {
             QueryFactory factory = new QueryFactory();
             InnerOuterJoin from = factory.ProductVariant
                 .InnerJoin(factory.Product)
                 .On(ProductFields.ProductID == ProductVariantFields.ProductID);
 
-            EntityQuery<ProductVariantEntity> query = factory.ProductVariant.From(from).Where(ProductFields.UploadToWarehouseNeeded == true);
+            EntityQuery<ProductVariantEntity> query = factory.ProductVariant
+                .From(from)
+                .Where(ProductFields.UploadToWarehouseNeeded == true)
+                .Limit(pageSize);
 
             foreach (IPrefetchPathElement2 path in ProductPrefetchPath.Value)
             {

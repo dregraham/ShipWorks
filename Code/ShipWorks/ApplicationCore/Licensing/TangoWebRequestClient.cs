@@ -105,6 +105,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         private GenericResult<string> PerformRequest(IHttpVariableRequestSubmitter postRequest, ApiLogEntry logEntry, TelemetricResult<Unit> telemetricResult) =>
             securityValidator
                 .ValidateSecureConnection(telemetricResult, postRequest.Uri)
+                .Do(() => logEntry.LogRequest(postRequest))
                 .Map(() => telemetricResult.RunTimedEvent("ActualRequest", postRequest.GetResponse))
                 .Bind(result => ParseValidatedResponse(telemetricResult, result))
                 .Do(response => telemetricResult.RunTimedEvent("LogResponse", () => logEntry.LogResponse(response)));

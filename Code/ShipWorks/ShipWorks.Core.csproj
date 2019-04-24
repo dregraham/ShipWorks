@@ -792,14 +792,17 @@
     <Compile Include="ApplicationCore\Licensing\TangoRequests\TangoGetReleaseByUserRequest.cs" />
     <Compile Include="ApplicationCore\Licensing\TangoRequests\TangoGetReleaseByVersionRequest.cs" />
     <Compile Include="ApplicationCore\Licensing\TokenResponse.cs" />
+    <Compile Include="ApplicationCore\Licensing\Warehouse\DTO\SkusToUploadDto.cs" />
     <Compile Include="ApplicationCore\Licensing\Warehouse\DTO\WarehouseListDto.cs" />
     <Compile Include="ApplicationCore\Licensing\Warehouse\IWarehouseLink.cs" />
+    <Compile Include="ApplicationCore\Licensing\Warehouse\IUploadSkusToWarehouse.cs" />
     <Compile Include="ApplicationCore\Licensing\Warehouse\IWarehouseList.cs" />
     <Compile Include="ApplicationCore\Licensing\Warehouse\IWarehouseRefreshToken.cs" />
     <Compile Include="ApplicationCore\Licensing\Warehouse\IWarehouseRemoteLoginWithToken.cs" />
     <Compile Include="ApplicationCore\Licensing\Warehouse\WarehouseAuthenticatedRequest.cs" />
     <Compile Include="ApplicationCore\Licensing\Warehouse\WarehouseEndpoints.cs" />
     <Compile Include="ApplicationCore\Licensing\Warehouse\WarehouseLink.cs" />
+    <Compile Include="ApplicationCore\Licensing\Warehouse\UploadSkusToWarehouse.cs" />
     <Compile Include="ApplicationCore\Licensing\Warehouse\WarehouseList.cs" />
     <Compile Include="ApplicationCore\Licensing\Warehouse\WarehouseRefreshToken.cs" />
     <Compile Include="ApplicationCore\Licensing\Warehouse\WarehouseRemoteLoginWithToken.cs" />

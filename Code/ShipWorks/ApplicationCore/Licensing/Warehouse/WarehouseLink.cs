@@ -33,7 +33,7 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse
         {
             try
             {
-                RestRequest restRequest = new RestRequest(WarehouseEndpoints.LinkWarehouse(warehouseId), Method.POST);
+                IRestRequest restRequest = new RestRequest(WarehouseEndpoints.LinkWarehouse(warehouseId), Method.POST);
                 restRequest.RequestFormat = DataFormat.Json;
                 restRequest.AddJsonBody(new DatabaseDto { databaseId = databaseIdentifier.Get().ToString() });
 

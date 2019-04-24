@@ -9,6 +9,7 @@
         public const string Login = "api/auth/token/login";
         public const string Warehouses = "api/warehouses";
         public const string RefreshToken = "api/auth/token/refresh";
+        public const string UploadSkus = "api/skus/import";
 
         /// <summary>
         /// Create a link warehouse endpoint

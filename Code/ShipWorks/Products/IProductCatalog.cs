@@ -66,6 +66,6 @@ namespace ShipWorks.Products
         /// <summary>
         /// Fetch product variants to upload to the warehouse.
         /// </summary>
-        Task<IEnumerable<IProductVariantEntity>> FetchProductVariantsForUploadToWarehouse(ISqlAdapter sqlAdapter);
+        Task<IEnumerable<IProductVariantEntity>> FetchProductVariantsForUploadToWarehouse(ISqlAdapter sqlAdapter, int pageSize);
     }
 }
