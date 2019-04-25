@@ -27,13 +27,11 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// </summary>
         public TangoWebRequestClient(
             ILogEntryFactory logEntryFactory,
-            ITangoSecurityValidator securityValidator,
             WebClientEnvironmentFactory webClientEnvironmentFactory)
         {
-            this.securityValidator = securityValidator;
             this.logEntryFactory = logEntryFactory;
-
             webClientEnvironment = webClientEnvironmentFactory.SelectedEnvironment;
+            securityValidator = webClientEnvironment.TangoSecurityValidator;
         }
 
         /// <summary>

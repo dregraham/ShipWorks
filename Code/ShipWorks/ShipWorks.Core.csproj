@@ -781,6 +781,7 @@
     <Compile Include="ApplicationCore\Interaction\SelectionDependentEntry.cs" />
     <Compile Include="ApplicationCore\IoCLogRequestModule.cs" />
     <Compile Include="ApplicationCore\IRegistrationOverride.cs" />
+    <Compile Include="ApplicationCore\Licensing\FakeTangoSecurityValidator.cs" />
     <Compile Include="ApplicationCore\Licensing\FakeTangoWebRequestClient.cs" />
     <Compile Include="ApplicationCore\IShipWorksSession.cs" />
     <Compile Include="ApplicationCore\Licensing\FeatureRestrictions\WarehouseRestriction.cs" />

@@ -44,5 +44,10 @@
         /// Force pre call certification validation
         /// </summary>
         public bool ForcePreCallCertificationValidation { get; set; }
+
+        /// <summary>
+        /// Tango security validator to use
+        /// </summary>
+        public ITangoSecurityValidator TangoSecurityValidator { get; set; }
     }
 }

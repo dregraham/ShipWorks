@@ -17,7 +17,10 @@ namespace ShipWorks.ApplicationCore.Licensing.WebClientEnvironments
         // Logger
         private static readonly ILog log = LogManager.GetLogger(typeof(WebClientEnvironmentFactory));
         private readonly IEncryptionProvider encryptionProvider;
+        private readonly ITangoSecurityValidator fakeTangoSecurityValidator;
+        private readonly ITangoSecurityValidator realTangoSecurityValidator;
         private List<WebClientEnvironment> environments;
+
         private const string EnvironmentSelectedName = "EnvironmentSelectedName";
         private const string EnvironmentOtherTangoUrl = "EnvironmentOtherTangoUrl";
         private const string EnvironmentOtherWarehouseUrl = "EnvironmentOtherWarehouseUrl";
@@ -26,9 +29,12 @@ namespace ShipWorks.ApplicationCore.Licensing.WebClientEnvironments
         /// <summary>
         /// Constructor
         /// </summary>
-        public WebClientEnvironmentFactory(IEncryptionProviderFactory encryptionProviderFactory)
+        public WebClientEnvironmentFactory(IEncryptionProviderFactory encryptionProviderFactory, 
+            ITangoSecurityValidator realTangoSecurityValidator)
         {
             encryptionProvider = encryptionProviderFactory.CreateSecureTextEncryptionProvider("interapptive");
+            fakeTangoSecurityValidator = new FakeTangoSecurityValidator();
+            this.realTangoSecurityValidator = realTangoSecurityValidator;
 
             try
             {
@@ -124,7 +130,8 @@ namespace ShipWorks.ApplicationCore.Licensing.WebClientEnvironments
                 HeaderShipWorksUsername = encryptionProvider.Decrypt("C5NOiKdNaM/324R7sIjFUA=="),
                 HeaderShipWorksPassword = encryptionProvider.Decrypt("lavEgsQoKGM="),
                 SoapAction = "http://stamps.com/xml/namespace/2015/06/shipworks/shipworksv1/IShipWorks/ShipworksPost",
-                ForcePreCallCertificationValidation = true
+                ForcePreCallCertificationValidation = true,
+                TangoSecurityValidator = realTangoSecurityValidator
             };
         }
 
@@ -142,7 +149,8 @@ namespace ShipWorks.ApplicationCore.Licensing.WebClientEnvironments
                 HeaderShipWorksUsername = encryptionProvider.Decrypt("C5NOiKdNaM/324R7sIjFUA=="),
                 HeaderShipWorksPassword = encryptionProvider.Decrypt("lavEgsQoKGM="),
                 SoapAction = "http://stamps.com/xml/namespace/2015/06/shipworks/shipworksv1/IShipWorks/ShipworksPost",
-                ForcePreCallCertificationValidation = true
+                ForcePreCallCertificationValidation = true,
+                TangoSecurityValidator = realTangoSecurityValidator
             };
         }
 
@@ -160,7 +168,8 @@ namespace ShipWorks.ApplicationCore.Licensing.WebClientEnvironments
                 HeaderShipWorksUsername = encryptionProvider.Decrypt("C5NOiKdNaM/324R7sIjFUA=="),
                 HeaderShipWorksPassword = encryptionProvider.Decrypt("lavEgsQoKGM="),
                 SoapAction = "http://stamps.com/xml/namespace/2015/06/shipworks/shipworksv1/IShipWorks/ShipworksPost",
-                ForcePreCallCertificationValidation = true
+                ForcePreCallCertificationValidation = true,
+                TangoSecurityValidator = realTangoSecurityValidator
             };
         }
 
@@ -178,7 +187,8 @@ namespace ShipWorks.ApplicationCore.Licensing.WebClientEnvironments
                 HeaderShipWorksUsername = "none",
                 HeaderShipWorksPassword = "none",
                 SoapAction = "",
-                ForcePreCallCertificationValidation = false
+                ForcePreCallCertificationValidation = false,
+                TangoSecurityValidator = fakeTangoSecurityValidator
             };
         }
 
@@ -196,7 +206,8 @@ namespace ShipWorks.ApplicationCore.Licensing.WebClientEnvironments
                 HeaderShipWorksUsername = "none",
                 HeaderShipWorksPassword = "none",
                 SoapAction = "http://stamps.com/xml/namespace/2015/06/shipworks/shipworksv1/IShipWorks/ShipworksPost",
-                ForcePreCallCertificationValidation = false
+                ForcePreCallCertificationValidation = false,
+                TangoSecurityValidator = fakeTangoSecurityValidator
             };
         }
 
@@ -214,7 +225,8 @@ namespace ShipWorks.ApplicationCore.Licensing.WebClientEnvironments
                 HeaderShipWorksUsername = "none",
                 HeaderShipWorksPassword = "none",
                 SoapAction = "",
-                ForcePreCallCertificationValidation = false
+                ForcePreCallCertificationValidation = false,
+                TangoSecurityValidator = fakeTangoSecurityValidator
             };
         }
 
@@ -232,7 +244,8 @@ namespace ShipWorks.ApplicationCore.Licensing.WebClientEnvironments
                 HeaderShipWorksUsername = "none",
                 HeaderShipWorksPassword = "none",
                 SoapAction = "http://stamps.com/xml/namespace/2015/06/shipworks/shipworksv1/IShipWorks/ShipworksPost",
-                ForcePreCallCertificationValidation = false
+                ForcePreCallCertificationValidation = false,
+                TangoSecurityValidator = fakeTangoSecurityValidator
             };
         }
     }
