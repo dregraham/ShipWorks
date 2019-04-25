@@ -1,7 +1,9 @@
 ﻿using System.Collections.Generic;
+using System.Reflection;
 
 namespace ShipWorks.ApplicationCore.Licensing.Warehouse.DTO
 {
+    [Obfuscation(Exclude = true, ApplyToMembers = true, StripAfterObfuscation = false)]
     public class WarehouseListDto
     {
         public List<Warehouse> warehouses { get; set; } = new List<Warehouse>();
@@ -9,12 +11,14 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse.DTO
         public int scannedCount { get; set; }
     }
 
+    [Obfuscation(Exclude = true, ApplyToMembers = true, StripAfterObfuscation = false)]
     public class Warehouse
     {
         public string id { get; set; }
         public Details details { get; set; }
     }
 
+    [Obfuscation(Exclude = true, ApplyToMembers = true, StripAfterObfuscation = false)]
     public class Details
     {
         public string zip { get; set; }

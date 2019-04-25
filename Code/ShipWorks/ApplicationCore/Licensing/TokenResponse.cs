@@ -1,10 +1,12 @@
-﻿using System.Xml.Serialization;
+﻿using System.Reflection;
+using System.Xml.Serialization;
 
 namespace ShipWorks.ApplicationCore.Licensing
 {
     /// <summary>
     /// Class representing token response
     /// </summary>
+    [Obfuscation(Exclude = false, ApplyToMembers = true, StripAfterObfuscation = true)]
     [XmlType(TypeName = "TokenResponse")]
     public class TokenResponse
     {

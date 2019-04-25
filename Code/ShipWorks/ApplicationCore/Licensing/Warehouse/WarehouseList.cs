@@ -36,7 +36,7 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse
                     RequestFormat = DataFormat.Json
                 };
 
-                GenericResult<IRestResponse> restResponse = await warehouseRequestClient.MakeRequest(restRequest)
+                GenericResult<IRestResponse> restResponse = await warehouseRequestClient.MakeRequest(restRequest, "ListWarehouses")
                     .ConfigureAwait(false);
 
                 if (restResponse.Success)

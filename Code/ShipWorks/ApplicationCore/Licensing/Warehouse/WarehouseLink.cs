@@ -37,7 +37,7 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse
                 restRequest.RequestFormat = DataFormat.Json;
                 restRequest.AddJsonBody(new DatabaseDto { databaseId = databaseIdentifier.Get().ToString() });
 
-                var response = await warehouseRequestClient.MakeRequest(restRequest).ConfigureAwait(false);
+                var response = await warehouseRequestClient.MakeRequest(restRequest, "LinkWarehouse").ConfigureAwait(false);
                 return response
                     .Bind(x => x.StatusCode != HttpStatusCode.OK ? new Exception() : Result.FromSuccess());
             }

@@ -37,7 +37,7 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse
                 restRequest.RequestFormat = DataFormat.Json;
                 restRequest.AddJsonBody(skusToUploadDto);
 
-                GenericResult<IRestResponse> restResponse = await warehouseRequestClient.MakeRequest(restRequest)
+                GenericResult<IRestResponse> restResponse = await warehouseRequestClient.MakeRequest(restRequest, "UploadSkusToWarehouse")
                     .ConfigureAwait(false);
 
                 return restResponse.Success ? Result.FromSuccess() : Result.FromError("Failed to uploaded skus.");

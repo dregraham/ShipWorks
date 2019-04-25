@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Newtonsoft.Json;
 using ShipWorks.Data.Model.EntityInterfaces;
 
 namespace ShipWorks.ApplicationCore.Licensing.Warehouse.DTO
 {
+    [Obfuscation(Exclude = true, ApplyToMembers = true, StripAfterObfuscation = false)]
     /// <summary>
     /// Represents the data for a single upload request
     /// </summary>
@@ -32,6 +32,7 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse.DTO
         public IEnumerable<SkuEntry> SKUs { get; set; }
     }
 
+    [Obfuscation(Exclude = true, ApplyToMembers = true, StripAfterObfuscation = false)]
     /// <summary>
     /// Individual SKU entry to upload
     /// </summary>
