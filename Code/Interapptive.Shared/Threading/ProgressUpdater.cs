@@ -37,12 +37,20 @@ namespace Interapptive.Shared.Threading
         protected int Count { get; private set; }
 
         /// <summary>
-        /// Update the progress
+        /// Update the progress by a single item
         /// </summary>
-        public virtual void Update()
+        public virtual void Update() => Update(1);
+
+        /// <summary>
+        /// Update the progress by the specified amount
+        /// </summary>
+        public virtual void Update(int finishedCount)
         {
-            Count = Math.Min(Count + 1, TotalItems);
-            ProgressReporter.PercentComplete = (int) ((Count / (double) TotalItems) * 100);
+            if (TotalItems > 0)
+            {
+                Count = Math.Min(Count + finishedCount, TotalItems);
+                ProgressReporter.PercentComplete = (int) ((Count / (double) TotalItems) * 100);
+            }
         }
     }
 }

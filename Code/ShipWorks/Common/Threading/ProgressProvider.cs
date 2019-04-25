@@ -11,9 +11,8 @@ namespace ShipWorks.Common.Threading
     /// </summary>
     public class ProgressProvider : IProgressProvider
     {
-        ThreadSafeObservableCollection<IProgressReporter> progressItems = new ThreadSafeObservableCollection<IProgressReporter>();
-
-        bool cancelRequested = false;
+        private ThreadSafeObservableCollection<IProgressReporter> progressItems = new ThreadSafeObservableCollection<IProgressReporter>();
+        private bool cancelRequested = false;
         private readonly TaskCompletionSource<Unit> terminatedCompletionSource = new TaskCompletionSource<Unit>();
 
         /// <summary>
@@ -158,7 +157,7 @@ namespace ShipWorks.Common.Threading
         /// <summary>
         /// Called when changes are made to the progress item collection
         /// </summary>
-        void OnProgressItemCollectionChanged(object sender, CollectionChangedEventArgs<IProgressReporter> e)
+        private void OnProgressItemCollectionChanged(object sender, CollectionChangedEventArgs<IProgressReporter> e)
         {
             if (CancelRequested)
             {

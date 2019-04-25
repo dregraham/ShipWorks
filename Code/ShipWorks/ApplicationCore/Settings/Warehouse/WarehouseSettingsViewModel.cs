@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System;
+using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Input;
@@ -24,8 +25,11 @@ namespace ShipWorks.ApplicationCore.Settings.Warehouse
         private readonly IWarehouseSettingsApi warehouseSettingsApi;
         private readonly IMessageHelper messageHelper;
         private string warehouseName;
+        private int modifiedProducts;
         private bool canLinkWarehouse;
+        private bool canUploadSKUs;
         private readonly IUserSession userSession;
+        private readonly bool isAdmin;
 
         /// <summary>
         /// Constructor
@@ -44,19 +48,24 @@ namespace ShipWorks.ApplicationCore.Settings.Warehouse
             this.warehouseSettingsView = warehouseSettingsView;
             this.warehouseList = warehouseList;
             this.configurationData = configurationData;
+
             SelectWarehouse = new RelayCommand(() => OnSelectWarehouse().Forget());
+            UploadSKUs = new RelayCommand(() => OnUploadSKUs().Forget());
 
             warehouseSettingsView.ViewModel = this;
 
             var config = configurationData.FetchReadOnly();
+            isAdmin = userSession.User.IsAdmin;
+
             if (string.IsNullOrEmpty(config.WarehouseID))
             {
                 WarehouseName = "No warehouse selected";
-                CanLinkWarehouse = userSession.User.IsAdmin;
+                CanLinkWarehouse = isAdmin;
             }
             else
             {
                 WarehouseName = config.WarehouseName;
+                CanUploadSKUs = isAdmin;
             }
         }
 
@@ -65,6 +74,12 @@ namespace ShipWorks.ApplicationCore.Settings.Warehouse
         /// </summary>
         [Obfuscation]
         public ICommand SelectWarehouse { get; }
+
+        /// <summary>
+        /// Upload SKUs from the products catalog
+        /// </summary>
+        [Obfuscation]
+        public ICommand UploadSKUs { get; }
 
         /// <summary>
         /// Name of the warehouse associated with this instance of ShipWorks
@@ -77,6 +92,16 @@ namespace ShipWorks.ApplicationCore.Settings.Warehouse
         }
 
         /// <summary>
+        /// Number of products that have been modified since last update.
+        /// </summary>
+        [Obfuscation]
+        public int ModifiedProducts
+        {
+            get => modifiedProducts;
+            set => Set(ref modifiedProducts, value);
+        }
+
+        /// <summary>
         /// Is this ShipWorks database already associated with a warehouse
         /// </summary>
         [Obfuscation]
@@ -84,6 +109,16 @@ namespace ShipWorks.ApplicationCore.Settings.Warehouse
         {
             get => canLinkWarehouse;
             set => Set(ref canLinkWarehouse, value);
+        }
+
+        /// <summary>
+        /// Can SKUs be uploaded
+        /// </summary>
+        [Obfuscation]
+        public bool CanUploadSKUs
+        {
+            get => canUploadSKUs;
+            set => Set(ref canUploadSKUs, value);
         }
 
         /// <summary>
@@ -115,11 +150,32 @@ namespace ShipWorks.ApplicationCore.Settings.Warehouse
 
                     WarehouseName = warehouse.Name;
                     CanLinkWarehouse = false;
+                    CanUploadSKUs = isAdmin;
                 }
                 else
                 {
                     messageHelper.ShowError("Could not associate this ShipWorks database with the warehouse.");
                 }
+            }
+        }
+
+        /// <summary>
+        /// Upload changed SKUs to the warehouse web application
+        /// </summary>
+        /// <returns></returns>
+        private async Task OnUploadSKUs()
+        {
+            try
+            {
+                using (var progressItem = messageHelper.ShowProgressDialog("Uploading products", "Uploading products to warehouse"))
+                {
+                    await warehouseSettingsApi.UploadProducts(progressItem);
+                    await progressItem.Provider.Terminated.ConfigureAwait(false);
+                }
+            }
+            catch (Exception ex)
+            {
+                messageHelper.ShowError("Error while uploading products", ex);
             }
         }
     }

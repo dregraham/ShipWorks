@@ -37,6 +37,11 @@
                 G="90"
                 R="90" />
             <SolidColorBrush x:Key="SectionHeaderTextBrush" Color="{StaticResource ResourceKey=SectionHeaderText}" />
+
+            <Style x:Key="Section" TargetType="StackPanel">
+                <Setter Property="Orientation" Value="Vertical" />
+                <Setter Property="Margin" Value="0,0,0,12" />
+            </Style>
         </ResourceDictionary>
     </UserControl.Resources>
     <Grid Margin="12">
@@ -44,36 +49,73 @@
             Margin="0"
             Padding="0"
             VerticalScrollBarVisibility="Auto">
-            <StackPanel Orientation="Vertical">
-                <Border
-                    Margin="0,0,0,8"
-                    Padding="8"
-                    Background="{StaticResource ResourceKey=SectionHeaderBackgroundBrush}"
-                    BorderBrush="LightGray"
-                    BorderThickness="0,0,0,1">
-                    <TextBlock FontWeight="Bold" Foreground="{StaticResource ResourceKey=SectionHeaderTextBrush}">Warehouse Selection</TextBlock>
-                </Border>
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="Auto" />
-                    </Grid.ColumnDefinitions>
+            <StackPanel>
+                <StackPanel Style="{StaticResource Section}">
+                    <Border
+                        Margin="0,0,0,8"
+                        Padding="8"
+                        Background="{StaticResource ResourceKey=SectionHeaderBackgroundBrush}"
+                        BorderBrush="LightGray"
+                        BorderThickness="0,0,0,1">
+                        <TextBlock FontWeight="Bold" Foreground="{StaticResource ResourceKey=SectionHeaderTextBrush}">Warehouse Selection</TextBlock>
+                    </Border>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
 
-                    <TextBlock
-                        Grid.Column="0"
-                        Margin="16,0,0,0"
-                        VerticalAlignment="Center"
-                        Text="{Binding WarehouseName}" />
-                    <Button
-                        Grid.Column="1"
-                        MinHeight="23"
-                        Padding="8,0"
-                        VerticalAlignment="Center"
-                        Command="{Binding SelectWarehouse}"
-                        IsEnabled="{Binding CanLinkWarehouse}">
-                        Select Warehouse
-                    </Button>
-                </Grid>
+                        <TextBlock
+                            Grid.Column="0"
+                            Margin="16,0,0,0"
+                            VerticalAlignment="Center"
+                            Text="{Binding WarehouseName}" />
+                        <Button
+                            Grid.Column="1"
+                            MinHeight="23"
+                            Padding="8,0"
+                            VerticalAlignment="Center"
+                            Command="{Binding SelectWarehouse}"
+                            IsEnabled="{Binding CanLinkWarehouse}">
+                            Select Warehouse
+                        </Button>
+                    </Grid>
+                </StackPanel>
+
+                <StackPanel Style="{StaticResource Section}">
+                    <Border
+                        Margin="0,0,0,8"
+                        Padding="8"
+                        Background="{StaticResource ResourceKey=SectionHeaderBackgroundBrush}"
+                        BorderBrush="LightGray"
+                        BorderThickness="0,0,0,1">
+                        <TextBlock FontWeight="Bold" Foreground="{StaticResource ResourceKey=SectionHeaderTextBrush}">SKUs</TextBlock>
+                    </Border>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+
+                        <TextBlock
+                            Grid.Column="0"
+                            Margin="16,0,0,0"
+                            VerticalAlignment="Center"
+                            TextWrapping="Wrap">
+                            There are&#160;<Run Text="{Binding ModifiedProducts, Mode=OneWay, StringFormat={}{0:#,##0}}" />
+                            products that have changes since the last upload</TextBlock>
+                        <Button
+                            Grid.Column="1"
+                            MinHeight="23"
+                            Padding="8,0"
+                            VerticalAlignment="Center"
+                            Command="{Binding UploadSKUs}"
+                            IsEnabled="{Binding CanUploadSKUs}">
+                            Upload SKUs
+                        </Button>
+                    </Grid>
+                    <TextBlock Margin="16" TextWrapping="Wrap">Uploading SKUs will upload all the SKUs that have been set up in the products section and associate them with the linked warehouse.</TextBlock>
+                </StackPanel>
             </StackPanel>
         </ScrollViewer>
     </Grid>

@@ -15,8 +15,9 @@ namespace ShipWorks.Common.Threading
         /// <summary>
         /// Constructor
         /// </summary>
-        public SingleItemProgressDialog(IDisposable disposableDialog, IProgressReporter progressItem)
+        public SingleItemProgressDialog(IDisposable disposableDialog, IProgressReporter progressItem, IProgressProvider progressProvider)
         {
+            Provider = progressProvider;
             this.disposableDialog = disposableDialog;
             ProgressItem = progressItem;
         }
@@ -25,6 +26,11 @@ namespace ShipWorks.Common.Threading
         /// Progress item associated with the dialog
         /// </summary>
         public IProgressReporter ProgressItem { get; }
+
+        /// <summary>
+        /// Progress provider associated with the dialog
+        /// </summary>
+        public IProgressProvider Provider { get; }
 
         /// <summary>
         /// Get a progress updater from this progress reporter

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
+using log4net;
 using RestSharp;
 using ShipWorks.ApplicationCore.Licensing.Warehouse.DTO;
 
@@ -15,13 +16,15 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse
     public class UploadSkusToWarehouse : IUploadSkusToWarehouse
     {
         private readonly WarehouseRequestClient warehouseRequestClient;
+        private readonly ILog log;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public UploadSkusToWarehouse(WarehouseRequestClient warehouseRequestClient)
+        public UploadSkusToWarehouse(WarehouseRequestClient warehouseRequestClient, Func<Type, ILog> createLogger)
         {
             this.warehouseRequestClient = warehouseRequestClient;
+            log = createLogger(GetType());
         }
 
         /// <summary>
@@ -42,6 +45,7 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse
             }
             catch (Exception ex)
             {
+                log.Error(ex);
                 return Result.FromError(ex);
             }
         }

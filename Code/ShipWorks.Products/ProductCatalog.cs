@@ -5,7 +5,6 @@ using System.Data.Common;
 using System.Data.SqlClient;
 using System.IO;
 using System.Linq;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Interapptive.Shared.Collections;
@@ -298,7 +297,7 @@ namespace ShipWorks.Products
                 {
                     if (product.IsBundle)
                     {
-                        foreach(var bundle in productVariant.IncludedInBundles)
+                        foreach (var bundle in productVariant.IncludedInBundles)
                         {
                             await sqlAdapter.DeleteEntityAsync(bundle).ConfigureAwait(true);
                         }
@@ -475,6 +474,24 @@ namespace ShipWorks.Products
 
             IEntityCollection2 queryResults = await sqlAdapter.FetchQueryAsync(query).ConfigureAwait(false);
             return queryResults.OfType<ProductVariantEntity>();
+        }
+
+        /// <summary>
+        /// Fetch count of product variants to upload to the warehouse.
+        /// </summary>
+        public async Task<int> FetchProductVariantsForUploadToWarehouseCount(ISqlAdapter sqlAdapter)
+        {
+            QueryFactory factory = new QueryFactory();
+            InnerOuterJoin from = factory.ProductVariant
+                .InnerJoin(factory.Product)
+                .On(ProductFields.ProductID == ProductVariantFields.ProductID);
+
+            var query = factory.ProductVariant
+                .Select(Functions.CountRow())
+                .From(from)
+                .Where(ProductFields.UploadToWarehouseNeeded == true);
+
+            return await sqlAdapter.FetchScalarAsync<int>(query).ConfigureAwait(false);
         }
 
         /// <summary>
