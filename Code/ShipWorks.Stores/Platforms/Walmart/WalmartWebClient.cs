@@ -134,7 +134,7 @@ namespace ShipWorks.Stores.Platforms.Walmart
         /// </summary>
         private void AcknowledgeOrders(IWalmartStoreEntity store, ordersListType ordersResponse)
         {
-            for (int i = 0; i < ordersResponse.elements.Length; i++)
+            /*for (int i = 0; i < ordersResponse.elements.Length; i++)
             {
                 Order order = ordersResponse.elements[i];
                 if (order.orderLines.Any(oi => oi.orderLineStatuses.Any(ols => ols.status == orderLineStatusValueType.Created)))
@@ -146,7 +146,7 @@ namespace ShipWorks.Stores.Platforms.Walmart
                     Order acknowledgedOrder = ProcessRequest<Order>(store, requestSubmitter, "AcknowledgeOrder");
                     ordersResponse.elements[i] = acknowledgedOrder;
                 }
-            }
+            }*/
         }
 
         /// <summary>
