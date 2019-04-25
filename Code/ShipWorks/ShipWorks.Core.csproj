@@ -767,6 +767,7 @@
     <Compile Include="ApplicationCore\Factory.cs" />
     <Compile Include="ApplicationCore\Heartbeat.cs" />
     <Compile Include="ApplicationCore\HeartbeatPace.cs" />
+    <Compile Include="ApplicationCore\Help\RemoteAssistance.cs" />
     <Compile Include="ApplicationCore\Help\IAboutShipWorksDialog.cs" />
     <Compile Include="ApplicationCore\ICheckForChangesNeeded.cs" />
     <Compile Include="ApplicationCore\IDataPath.cs" />
@@ -2441,12 +2442,6 @@
     </Compile>
     <Compile Include="ApplicationCore\Setup\ShipWorksSetupManager.cs" />
     <Compile Include="ApplicationCore\ShipWorksCommandLine.cs" />
-    <Compile Include="ApplicationCore\Help\RemoteAssistanceDlg.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="ApplicationCore\Help\RemoteAssistanceDlg.Designer.cs">
-      <DependentUpon>RemoteAssistanceDlg.cs</DependentUpon>
-    </Compile>
     <Compile Include="ApplicationCore\Services\Hosting\Windows\WindowsServiceCredentialsDlg.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -9228,9 +9223,6 @@
     <EmbeddedResource Include="Actions\Tasks\Common\Editors\SetOrderStatusTaskEditor.resx">
       <DependentUpon>SetOrderStatusTaskEditor.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="ApplicationCore\Help\RemoteAssistanceDlg.resx">
-      <DependentUpon>RemoteAssistanceDlg.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Data\Grid\Columns\DisplayTypes\Decorators\Editors\GridColumnDecoratorEditor.resx">
       <DependentUpon>GridColumnDecoratorEditor.cs</DependentUpon>
     </EmbeddedResource>
@@ -10835,6 +10827,7 @@
     <None Include="Resources\alarm.png" />
     <None Include="Resources\airplane.png" />
     <None Include="Resources\alarmclock.png" />
+    <None Include="Resources\amazon.png" />
     <Content Include="Resources\AmazonMWSHeader.png" />
     <None Include="Resources\bullet_ball_glass_blue.png" />
     <None Include="Resources\bullet_ball_glass_green.png" />

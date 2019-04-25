@@ -16,7 +16,7 @@ namespace ShipWorks.Escalator
     [Component]
     public class UpgradeTimeWindow : IUpgradeTimeWindow
     {
-        int minutesBetweenWindowChecks = 15;
+        int minutesBetweenWindowChecks = 60;
         private IShipWorksUpgrade shipWorksUpgrade;
         Timer upgradeTimer;
         Timer checkUpgradeWindowTimer;
@@ -70,7 +70,7 @@ namespace ShipWorks.Escalator
             DateTime dateOfNextUpgrade;
 
             dateOfNextUpgrade = DateTime.Today.TodayOrNext(updateWindowData.AutoUpdateDayOfWeek);
-            
+
             log.InfoFormat("Date before adding hours: {0}", dateOfNextUpgrade);
 
             dateOfNextUpgrade = dateOfNextUpgrade.AddHours(updateWindowData.AutoUpdateHourOfDay);
@@ -90,8 +90,8 @@ namespace ShipWorks.Escalator
 
             log.InfoFormat("Setting for {0} milliseconds", millisecondsToOpenWindow);
             upgradeTimer = new Timer(millisecondsToOpenWindow);
-     
-            upgradeTimer.Elapsed += async (sender, e) => 
+
+            upgradeTimer.Elapsed += async (sender, e) =>
                 await shipWorksUpgrade.Upgrade(updateWindowData.TangoCustomerId);
 
             upgradeTimer.AutoReset = false;

@@ -3064,7 +3064,7 @@ namespace ShipWorks
             //
             this.buttonHelpRemote.Guid = new System.Guid("6cf9bab1-98a8-42ca-b15f-0bf198f5f6ff");
             this.buttonHelpRemote.Image = global::ShipWorks.Properties.Resources.remote_assist32;
-            this.buttonHelpRemote.Text = "Enter PIN";
+            this.buttonHelpRemote.Text = "Generate PIN";
             this.buttonHelpRemote.TextContentRelation = Divelements.SandRibbon.TextContentRelation.Underneath;
             this.buttonHelpRemote.Activate += new System.EventHandler(this.OnRemoteAssistance);
             //

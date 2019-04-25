@@ -38,6 +38,20 @@ namespace ShipWorks.Shipping.Policies
         /// </summary>
         [Description("Defines whether Amazon Shipping should be allowed as a carrier")]
         [ApiValue("AmazonSWAShipmentRestriction")]
-        AmazonSWAShipmentRestriction
+        AmazonSWAShipmentRestriction,
+
+        /// <summary>
+        /// This is a legacy value which has been replaced with AmazonSFPShipmentRestriction and AmazonSWAShipmentRestriction
+        /// </summary>
+        /// <remarks>
+        /// Currently there is a very edge code path in tango which would cause this value to come down
+        ///
+        /// Tango sends down the client verion from the tango_customer_store table, this value gets updated
+        /// when calling tango.GetStatus, if you activate a legacy store on a brand new database we call
+        /// tango.Activate before calling tango.GetStatus so there is a chance the old value will get returned
+        /// </remarks>
+        [Description("Defines whether Amazon Seller Fulfilled Prime should be allowed as a carrier")]
+        [ApiValue("AmazonShipmentRestriction")]
+        AmazonShipmentRestriction
     }
 }

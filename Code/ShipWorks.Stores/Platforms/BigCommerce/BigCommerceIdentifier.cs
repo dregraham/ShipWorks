@@ -1,13 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
+using Common.Logging;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Security;
+using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data.Model.EntityInterfaces;
 
 namespace ShipWorks.Stores.Platforms.BigCommerce
 {
@@ -18,20 +15,45 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
     public class BigCommerceIdentifier : IBigCommerceIdentifier
     {
         readonly IDatabaseSpecificEncryptionProvider encryptionProvider;
+        readonly ISqlAdapterFactory sqlAdapterFactory;
+        static readonly ILog log = LogManager.GetLogger(typeof(BigCommerceIdentifier));
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public BigCommerceIdentifier(IDatabaseSpecificEncryptionProvider encryptionProvider)
+        public BigCommerceIdentifier(IDatabaseSpecificEncryptionProvider encryptionProvider, ISqlAdapterFactory sqlAdapterFactory)
         {
             this.encryptionProvider = encryptionProvider;
+            this.sqlAdapterFactory = sqlAdapterFactory;
         }
 
         /// <summary>
         /// Get the identifier from the given store
         /// </summary>
-        public string Get(IBigCommerceStoreEntity typedStore) =>
-            encryptionProvider.Decrypt(typedStore.Identifier);
+        public string Get(BigCommerceStoreEntity store)
+        {
+            string identifier;
+            try
+            {
+                identifier = encryptionProvider.Decrypt(store.Identifier);
+            }
+            catch (EncryptionException)
+            {
+                // If the identifier can't be decrypted, try generating a new one (See TP #31374 / Zendesk #7732)
+                log.Info("Invalid BigCommerce identifier. Generating new identifier.");
+
+                store.Identifier = string.Empty;
+                Set(store);
+                identifier = encryptionProvider.Decrypt(store.Identifier);
+
+                using (ISqlAdapter sqlAdapter = sqlAdapterFactory.CreateTransacted())
+                {
+                    sqlAdapter.SaveEntity(store);
+                    sqlAdapter.Commit();
+                }
+            }
+            return identifier;
+        }
 
         /// <summary>
         /// Set the identifier on the given store

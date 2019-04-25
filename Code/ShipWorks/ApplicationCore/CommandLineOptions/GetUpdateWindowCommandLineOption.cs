@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Autofac;
 using Interapptive.Shared.AutoUpdate;
@@ -41,32 +42,52 @@ namespace ShipWorks.ApplicationCore.CommandLineOptions
                 return Task.CompletedTask;
             }
 
-            log.Info("Autoupdate enabled.");
-            SqlSession.Initialize();
-            ConfigurationData.CheckForChangesNeeded();
-
-            log.Info("Fetching config data");
-            ConfigurationEntity config = ConfigurationData.Fetch();
-
-            log.Info("Fetching customer id");
-            DataProvider.InitializeForApplication();
-            StoreManager.InitializeForCurrentSession(SecurityContext.EmptySecurityContext);
-            UserSession.InitializeForCurrentDatabase();
-            string tangoCustomerId = TangoWebClient.GetTangoCustomerId();
-
-            UpdateWindowData updateData = new UpdateWindowData()
+            try
             {
-                AutoUpdateDayOfWeek = config.AutoUpdateDayOfWeek,
-                AutoUpdateHourOfDay = config.AutoUpdateHourOfDay,
-                TangoCustomerId = tangoCustomerId
-            };
+                log.Info("Autoupdate enabled.");
+                SqlSession.Initialize();
 
-            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+                if (!SqlSession.Current.CanConnect())
+                {
+                    log.Info("Cannot connect to SQL Server. Not sending window");
+                    return Task.CompletedTask;
+                }
+
+                if (SqlSchemaUpdater.IsUpgradeRequired())
+                {
+                    log.Info("Update required. Not sending window");
+                    return Task.CompletedTask;
+                }
+
+                ConfigurationData.CheckForChangesNeeded();
+
+                log.Info("Fetching config data");
+                ConfigurationEntity config = ConfigurationData.Fetch();
+
+                log.Info("Fetching customer id");
+                DataProvider.InitializeForApplication();
+                StoreManager.InitializeForCurrentSession(SecurityContext.EmptySecurityContext);
+                UserSession.InitializeForCurrentDatabase();
+                string tangoCustomerId = TangoWebClient.GetTangoCustomerId();
+
+                UpdateWindowData updateData = new UpdateWindowData()
+                {
+                    AutoUpdateDayOfWeek = config.AutoUpdateDayOfWeek,
+                    AutoUpdateHourOfDay = config.AutoUpdateHourOfDay,
+                    TangoCustomerId = tangoCustomerId
+                };
+
+                using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+                {
+                    string message = JsonConvert.SerializeObject(updateData);
+                    log.InfoFormat("Sending message {0}", message);
+                    lifetimeScope.Resolve<IShipWorksCommunicationBridge>(new TypedParameter(typeof(string), ShipWorksSession.InstanceID.ToString())).SendMessage(message);
+                    log.Info("Message sent");
+                }
+            }
+            catch (Exception ex)
             {
-                string message = JsonConvert.SerializeObject(updateData);
-                log.InfoFormat("Sending message {0}", message);
-                lifetimeScope.Resolve<IShipWorksCommunicationBridge>(new TypedParameter(typeof(string), ShipWorksSession.InstanceID.ToString())).SendMessage(message);
-                log.Info("Message sent");
+                log.Error("An error occurred getting update window.", ex);
             }
 
             log.Info("GetUpdateWindowCommandLineOption Complete.");
