@@ -64,6 +64,11 @@ namespace ShipWorks.Products
         Task<IEnumerable<IProductAttributeEntity>> GetAvailableAttributesFor(ISqlAdapter sqlAdapter, ProductVariantEntity variant);
 
         /// <summary>
+        /// Reset the NeedsUploadToWarehouse flag for the given variants
+        /// </summary>
+        Task<int> ResetNeedsWarehouseUploadFlag(ISqlAdapter sqlAdapter, IEnumerable<IProductVariantEntity> variants);
+
+        /// <summary>
         /// Fetch product variants to upload to the warehouse.
         /// </summary>
         Task<IEnumerable<IProductVariantEntity>> FetchProductVariantsForUploadToWarehouse(ISqlAdapter sqlAdapter, int pageSize);

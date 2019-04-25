@@ -24,5 +24,10 @@ namespace ShipWorks.ApplicationCore.Settings.Warehouse
         /// Upload products to the associated warehouse
         /// </summary>
         Task UploadProducts(ISingleItemProgressDialog progressItem);
+
+        /// <summary>
+        /// Get a count of products that need to be uploaded
+        /// </summary>
+        Task<int> GetCountOfProductsThatNeedUpload();
     }
 }

@@ -12,5 +12,10 @@ namespace ShipWorks.Products.Export
         /// Upload changed products to the warehouse
         /// </summary>
         Task Upload(ISingleItemProgressDialog progressItem);
+
+        /// <summary>
+        /// Get a count of products that need to be uploaded
+        /// </summary>
+        Task<int> GetCountOfProductsThatNeedUpload();
     }
 }

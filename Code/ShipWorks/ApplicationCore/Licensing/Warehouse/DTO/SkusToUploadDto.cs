@@ -6,10 +6,10 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse.DTO
 {
     public class SkusToUploadDto
     {
-        public SkusToUploadDto(IProductVariantEntity productVariant, string databaseId)
+        public SkusToUploadDto(IEnumerable<IProductVariantEntity> productVariants, string databaseId)
         {
             this.databaseId = databaseId;
-            skus = new List<Sku> {new Sku(productVariant.IsActive, productVariant.Aliases)};
+            skus = productVariants.Select(x => new Sku(x.IsActive, x.Aliases)).ToList();
         }
 
         public string databaseId { get; set; }

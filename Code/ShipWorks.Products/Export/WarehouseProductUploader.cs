@@ -1,13 +1,12 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Threading;
+using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore.Licensing.Warehouse;
 using ShipWorks.ApplicationCore.Licensing.Warehouse.DTO;
 using ShipWorks.Data;
 using ShipWorks.Data.Connection;
-using ShipWorks.Data.Model.EntityInterfaces;
 
 namespace ShipWorks.Products.Export
 {
@@ -17,7 +16,7 @@ namespace ShipWorks.Products.Export
     [Component]
     public class WarehouseProductUploader : IWarehouseProductUploader
     {
-        private const int batchSize = 1;
+        private const int batchSize = 100;
 
         private readonly IProductCatalog productCatalog;
         private readonly IUploadSkusToWarehouse uploadRequest;
@@ -42,27 +41,37 @@ namespace ShipWorks.Products.Export
         public async Task Upload(ISingleItemProgressDialog progressItem)
         {
             string databaseId = databaseIdentifier.Get().ToString();
-            Func<IProductVariantEntity, SkusToUploadDto> createDto = x => new SkusToUploadDto(x, databaseId);
             var progressUpdater = await CreateProgressUpdater(progressItem).ConfigureAwait(false);
 
-            bool shouldContinue = true;
+            GenericResult<bool> shouldContinue;
             do
             {
                 using (ISqlAdapter sqlAdapter = sqlAdapterFactory.Create())
                 {
                     var skus = await productCatalog.FetchProductVariantsForUploadToWarehouse(sqlAdapter, batchSize).ConfigureAwait(false);
-                    var results = await uploadRequest.Upload(skus.Select(createDto)).ConfigureAwait(false);
+                    var results = await uploadRequest.Upload(new SkusToUploadDto(skus, databaseId)).ConfigureAwait(false);
+                    await productCatalog.ResetNeedsWarehouseUploadFlag(sqlAdapter, skus).ConfigureAwait(false);
+
                     progressUpdater.Update(batchSize);
 
-                    shouldContinue = results.Match(skus.Any, x =>
-                    {
-                        progressItem.ProgressItem.Failed(x);
-                        return false;
-                    });
+                    shouldContinue = results.Map(() => skus.Any() && !progressItem.Provider.CancelRequested);
                 }
-            } while (shouldContinue);
+            } while (shouldContinue.Match(x => x, ex => false));
 
-            progressItem.ProgressItem.Completed();
+            shouldContinue
+                .Do(x => progressItem.ProgressItem.Completed())
+                .OnFailure(progressItem.ProgressItem.Failed);
+        }
+
+        /// <summary>
+        /// Get a count of products that need to be uploaded
+        /// </summary>
+        public async Task<int> GetCountOfProductsThatNeedUpload()
+        {
+            using (ISqlAdapter sqlAdapter = sqlAdapterFactory.Create())
+            {
+                return await productCatalog.FetchProductVariantsForUploadToWarehouseCount(sqlAdapter).ConfigureAwait(false);
+            }
         }
 
         /// <summary>
@@ -70,11 +79,8 @@ namespace ShipWorks.Products.Export
         /// </summary>
         private async Task<IProgressUpdater> CreateProgressUpdater(ISingleItemProgressDialog progressItem)
         {
-            using (ISqlAdapter sqlAdapter = sqlAdapterFactory.Create())
-            {
-                var productCount = await productCatalog.FetchProductVariantsForUploadToWarehouseCount(sqlAdapter).ConfigureAwait(false);
-                return progressItem.ToUpdater(productCount);
-            }
+            var productCount = await GetCountOfProductsThatNeedUpload().ConfigureAwait(false);
+            return progressItem.ToUpdater(productCount);
         }
     }
 }

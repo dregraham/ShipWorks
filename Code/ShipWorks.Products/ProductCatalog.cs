@@ -495,6 +495,18 @@ namespace ShipWorks.Products
         }
 
         /// <summary>
+        /// Reset the NeedsUploadToWarehouse flag for the given variants
+        /// </summary>
+        public async Task<int> ResetNeedsWarehouseUploadFlag(ISqlAdapter sqlAdapter, IEnumerable<IProductVariantEntity> variants)
+        {
+            var productIds = variants.Select(x => x.ProductID).Distinct();
+            var updateTemplate = new ProductEntity { UploadToWarehouseNeeded = false };
+            var predicateBucket = new RelationPredicateBucket(ProductFields.ProductID.In(productIds));
+
+            return await sqlAdapter.UpdateEntitiesDirectlyAsync(updateTemplate, predicateBucket);
+        }
+
+        /// <summary>
         /// Fetch variants of the same product as the passed in variant.
         /// </summary>
         public async Task<IEnumerable<IProductVariantEntity>> FetchSiblingVariants(IProductVariantEntity productVariant, ISqlAdapter sqlAdapter)

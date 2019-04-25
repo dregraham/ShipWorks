@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
@@ -30,7 +29,7 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse
         /// <summary>
         /// Upload skus to a warehouse
         /// </summary>
-        public async Task<Result> Upload(IEnumerable<SkusToUploadDto> skusToUploadDto)
+        public async Task<Result> Upload(SkusToUploadDto skusToUploadDto)
         {
             try
             {

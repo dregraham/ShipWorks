@@ -67,6 +67,8 @@ namespace ShipWorks.ApplicationCore.Settings.Warehouse
                 WarehouseName = config.WarehouseName;
                 CanUploadSKUs = isAdmin;
             }
+
+            UpdateCountOfProductsThatNeedUpload().Forget();
         }
 
         /// <summary>
@@ -172,11 +174,21 @@ namespace ShipWorks.ApplicationCore.Settings.Warehouse
                     await warehouseSettingsApi.UploadProducts(progressItem);
                     await progressItem.Provider.Terminated.ConfigureAwait(false);
                 }
+
+                UpdateCountOfProductsThatNeedUpload().Forget();
             }
             catch (Exception ex)
             {
                 messageHelper.ShowError("Error while uploading products", ex);
             }
+        }
+
+        /// <summary>
+        /// Update the count of products that need to be uploaded
+        /// </summary>
+        private async Task UpdateCountOfProductsThatNeedUpload()
+        {
+            ModifiedProducts = await warehouseSettingsApi.GetCountOfProductsThatNeedUpload().ConfigureAwait(true);
         }
     }
 }
