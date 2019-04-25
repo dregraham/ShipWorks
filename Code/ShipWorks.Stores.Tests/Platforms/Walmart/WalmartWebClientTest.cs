@@ -324,7 +324,6 @@ namespace ShipWorks.Stores.Tests.Platforms.Walmart
         [Fact]
         public void GenerateAuthString_ThrowsWalmartException_WhenClientIDIsBlank()
         {
-            
             DateTime start = DateTime.UtcNow.AddDays(-3);
 
             WalmartWebClient testObject = mock.Create<WalmartWebClient>();
@@ -342,7 +341,6 @@ namespace ShipWorks.Stores.Tests.Platforms.Walmart
         [Fact]
         public void GenerateAuthString_ThrowsWalmartException_WhenClientSecretIsBlank()
         {
-
             DateTime start = DateTime.UtcNow.AddDays(-3);
 
             WalmartWebClient testObject = mock.Create<WalmartWebClient>();
@@ -355,27 +353,6 @@ namespace ShipWorks.Stores.Tests.Platforms.Walmart
             Exception ex = Assert.Throws<WalmartException>(() => testObject.GetOrders(store, start));
 
             Assert.Equal("You must upgrade to oauth authentication in order to connect to Walmart.", ex.Message);
-        }
-
-        [Fact]
-        public void GenerateAuthString_GeneratesProperlyFormattedAuthString()
-        {
-            DateTime start = DateTime.UtcNow.AddDays(-3);
-            WebHeaderCollection webHeaderCollection = new WebHeaderCollection();
-
-            Mock<IHttpVariableRequestSubmitter> requestSubmitter = SetupHttpVariableRequestSubmitter(OAuthTokenResponse, OrdersResponse);
-            requestSubmitter.SetupGet(r => r.Headers).Returns(webHeaderCollection);
-
-            WalmartWebClient testObject = mock.Create<WalmartWebClient>();
-
-            WalmartStoreEntity store = new WalmartStoreEntity();
-
-            store.ClientID = "ClientID";
-            store.ClientSecret = "ClientSecret";
-
-            testObject.GetOrders(store, start);
-
-            Assert.Equal("Basic Q2xpZW50SUQ6Q2xpZW50U2VjcmV0", webHeaderCollection.GetValues("Authorization").First());
         }
 
         private Mock<IHttpVariableRequestSubmitter> SetupHttpVariableRequestSubmitter(string response)
@@ -418,16 +395,18 @@ namespace ShipWorks.Stores.Tests.Platforms.Walmart
             int readResultCounter = 0;
             int statusCodeCounter = 0;
             responseReader.Setup(r => r.ReadResult())
-                .Returns(() => {
+                .Returns(() =>
+                {
                     readResultCounter++;
-                    if(readResultCounter < 2)
+                    if (readResultCounter < 2)
                     {
                         return response1;
                     }
                     return response2;
                 });
             responseReader.Setup(r => r.HttpWebResponse.StatusCode)
-                .Returns(() => {
+                .Returns(() =>
+                {
                     statusCodeCounter++;
                     if (statusCodeCounter < 2)
                     {

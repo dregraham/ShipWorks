@@ -152,7 +152,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Walmart
                 .Mock(f => f.GetHttpVariableRequestSubmitter());
 
             variableRequestSubmitter.Setup(s => s.GetResponse()).Returns(responseReader.Object);
-            
+
             store.DownloadModifiedNumberOfDaysBack = 5;
             mock.Mock<IDateTimeProvider>()
                 .SetupGet(d => d.UtcNow)
@@ -206,7 +206,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Walmart
                 .Set(x => x.StoreName, "Walmart Store")
                 .Set(x => x.StoreTypeCode = StoreTypeCode.Walmart)
                 .Set(x => x.ClientID = "ClientID")
-                .Set(x => x.ClientSecret = "ClientSecret")
+                .Set(x => x.ClientSecret = "r4AFA7DSXmMwPK9guZTDBw==")
                 .Save();
 
             Create.Entity<StatusPresetEntity>()
