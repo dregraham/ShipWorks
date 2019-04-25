@@ -1,16 +1,17 @@
 ﻿using System;
 using System.ComponentModel;
-using Interapptive.Shared.Net;
-using ShipWorks.ApplicationCore.Logging;
-using ShipWorks.Data.Model.EntityInterfaces;
-using ShipWorks.Stores.Platforms.Walmart.DTO;
-using System.Xml.Serialization;
-using System.Xml;
 using System.IO;
 using System.Linq;
 using System.Net;
-using Interapptive.Shared.Utility;
+using System.Xml;
+using System.Xml.Serialization;
 using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.Net;
+using Interapptive.Shared.Security;
+using Interapptive.Shared.Utility;
+using ShipWorks.ApplicationCore.Logging;
+using ShipWorks.Data.Model.EntityInterfaces;
+using ShipWorks.Stores.Platforms.Walmart.DTO;
 
 namespace ShipWorks.Stores.Platforms.Walmart
 {
@@ -21,6 +22,7 @@ namespace ShipWorks.Stores.Platforms.Walmart
     [Component]
     public class WalmartWebClient : IWalmartWebClient
     {
+        private readonly IEncryptionProvider encryptionProvider;
         private string accessToken = string.Empty;
         private DateTime accessTokenExpireTime;
         private readonly Func<ApiLogSource, string, IApiLogEntry> apiLogEntryFactory;
@@ -42,10 +44,12 @@ namespace ShipWorks.Stores.Platforms.Walmart
         /// Initializes a new instance of the <see cref="WalmartWebClient"/> class.
         /// </summary>
         public WalmartWebClient(Func<ApiLogSource, string, IApiLogEntry> apiLogEntryFactory,
-           IHttpRequestSubmitterFactory httpRequestSubmitterFactory)
+           IHttpRequestSubmitterFactory httpRequestSubmitterFactory,
+           IEncryptionProviderFactory encryptionProviderFactory)
         {
             this.apiLogEntryFactory = apiLogEntryFactory;
             this.httpRequestSubmitterFactory = httpRequestSubmitterFactory;
+            encryptionProvider = encryptionProviderFactory.CreateWalmartEncryptionProvider();
         }
 
         /// <summary>
@@ -259,7 +263,7 @@ namespace ShipWorks.Stores.Platforms.Walmart
             string response = string.Empty;
             string authString = GenerateAuthString(store);
             IHttpVariableRequestSubmitter submitter = httpRequestSubmitterFactory.GetHttpVariableRequestSubmitter();
-            submitter.Variables.Add("grant_type","client_credentials");
+            submitter.Variables.Add("grant_type", "client_credentials");
             submitter.Uri = new Uri(GetTokenUrl);
             submitter.Verb = HttpVerb.Post;
 
@@ -305,14 +309,16 @@ namespace ShipWorks.Stores.Platforms.Walmart
         /// <summary>
         /// Generates the authentication string
         /// </summary>
-        private static string GenerateAuthString(IWalmartStoreEntity store)
+        private string GenerateAuthString(IWalmartStoreEntity store)
         {
             if (string.IsNullOrWhiteSpace(store.ClientID) || string.IsNullOrWhiteSpace(store.ClientSecret))
             {
                 throw new WalmartException("You must upgrade to oauth authentication in order to connect to Walmart.");
             }
 
-            byte[] auth = System.Text.Encoding.UTF8.GetBytes(store.ClientID + ":" + store.ClientSecret);
+            string decryptedClientSecret = encryptionProvider.Decrypt(store.ClientSecret);
+
+            byte[] auth = System.Text.Encoding.UTF8.GetBytes(store.ClientID + ":" + decryptedClientSecret);
             return "Basic " + Convert.ToBase64String(auth);
         }
     }
