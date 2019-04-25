@@ -5,6 +5,7 @@ using Interapptive.Shared.Utility;
 using log4net;
 using RestSharp;
 using ShipWorks.ApplicationCore.Licensing.Warehouse.DTO;
+using ShipWorks.Common.Net;
 
 namespace ShipWorks.ApplicationCore.Licensing.Warehouse
 {
@@ -34,6 +35,7 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse
             try
             {
                 RestRequest restRequest = new RestRequest(WarehouseEndpoints.UploadSkus, Method.POST);
+                restRequest.JsonSerializer = new RestSharpJsonNetSerializer();
                 restRequest.RequestFormat = DataFormat.Json;
                 restRequest.AddJsonBody(skusToUploadDto);
 
