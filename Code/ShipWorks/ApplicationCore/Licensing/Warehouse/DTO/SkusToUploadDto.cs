@@ -1,31 +1,68 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Newtonsoft.Json;
 using ShipWorks.Data.Model.EntityInterfaces;
 
 namespace ShipWorks.ApplicationCore.Licensing.Warehouse.DTO
 {
+    /// <summary>
+    /// Represents the data for a single upload request
+    /// </summary>
     public class SkusToUploadDto
     {
+        /// <summary>
+        /// Constructor
+        /// </summary>
         public SkusToUploadDto(IEnumerable<IProductVariantEntity> productVariants, string databaseId)
         {
-            this.databaseId = databaseId;
-            skus = productVariants.Select(x => new Sku(x.IsActive, x.Aliases)).ToList();
+            this.DatabaseId = databaseId;
+            SKUs = productVariants.Select(x => new SkuEntry(x.IsActive, x.Aliases)).ToList();
         }
 
-        public string databaseId { get; set; }
-        public IEnumerable<Sku> skus { get; set; }
+        /// <summary>
+        /// Id of the ShipWorks database
+        /// </summary>
+        [JsonProperty("databaseId")]
+        public string DatabaseId { get; set; }
+
+        /// <summary>
+        /// Collection of SKUs to upload
+        /// </summary>
+        [JsonProperty("skus")]
+        public IEnumerable<SkuEntry> SKUs { get; set; }
     }
 
-    public class Sku
+    /// <summary>
+    /// Individual SKU entry to upload
+    /// </summary>
+    public class SkuEntry
     {
-        public Sku(bool enabled, IEnumerable<IProductVariantAliasEntity> aliases)
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public SkuEntry(bool enabled, IEnumerable<IProductVariantAliasEntity> aliases)
         {
-            sku = aliases.First(a => a.IsDefault).Sku;
-            this.aliases = aliases.Where(a => !a.IsDefault).Select(a => a.Sku);
-            this.enabled = enabled;
+            Sku = aliases.First(a => a.IsDefault).Sku;
+            this.Aliases = aliases.Where(a => !a.IsDefault).Select(a => a.Sku);
+            this.Enabled = enabled;
         }
-        public string sku { get; set; }
-        public IEnumerable<string> aliases { get; set; }
-        public bool enabled { get; set; }
+
+        /// <summary>
+        /// Primary SKU
+        /// </summary>
+        [JsonProperty("sku")]
+        public string Sku { get; set; }
+
+        /// <summary>
+        /// Alias SKUs for the product
+        /// </summary>
+        [JsonProperty("aliases")]
+        public IEnumerable<string> Aliases { get; set; }
+
+        /// <summary>
+        /// Is the product enabled
+        /// </summary>
+        [JsonProperty("enabled")]
+        public bool Enabled { get; set; }
     }
 }
