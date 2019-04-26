@@ -13,7 +13,7 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse
     /// Makes requests to the warehouse and handles authentication token management
     /// </summary>
     [Component(RegistrationType.Self, SingleInstance = true)]
-    public class WarehouseRequestClient
+    public class WarehouseRequestClient : IInitializeForCurrentUISession
     {
         private readonly IWarehouseRemoteLoginWithToken warehouseRemoteLoginWithToken;
         private readonly IWarehouseRefreshToken warehouseRefreshToken;
@@ -113,5 +113,27 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse
                 return GenericResult.FromError<IRestResponse>(e.Message);
             }
         }
+
+        /// <summary>
+        /// Initialize for the current session
+        /// </summary>
+        public void InitializeForCurrentSession()
+        {
+            // Nothing to do here
+        }
+
+        /// <summary>
+        /// End the current session
+        /// </summary>
+        public void EndSession()
+        {
+            authenticationToken = string.Empty;
+            refreshToken = string.Empty;
+        }
+
+        /// <summary>
+        /// Dispose
+        /// </summary>
+        public void Dispose() => EndSession();
     }
 }

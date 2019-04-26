@@ -121,6 +121,7 @@ namespace ShipWorks.ApplicationCore.Settings.Warehouse
             Message = string.Empty;
             LoadingFinished = false;
             ShowMessage = false;
+            Warehouses = Enumerable.Empty<WarehouseViewModel>();
 
             warehouseSettingsApi.GetAllWarehouses()
                 .ContinueWith(LoadWarehouses);
