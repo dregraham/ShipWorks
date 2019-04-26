@@ -5,6 +5,7 @@ using Interapptive.Shared.Utility;
 using Newtonsoft.Json;
 using RestSharp;
 using ShipWorks.ApplicationCore.Licensing.Warehouse.DTO;
+using ShipWorks.Common.Net;
 
 namespace ShipWorks.ApplicationCore.Licensing.Warehouse
 {
@@ -33,6 +34,7 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse
             {
                 RestRequest restRequest = new RestRequest(WarehouseEndpoints.Warehouses, Method.GET)
                 {
+                    JsonSerializer = new RestSharpJsonNetSerializer(),
                     RequestFormat = DataFormat.Json
                 };
 

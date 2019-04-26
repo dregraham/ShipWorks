@@ -15,15 +15,15 @@ namespace ShipWorks.ApplicationCore.Settings.Warehouse
     public class WarehouseSettingsApi : IWarehouseSettingsApi
     {
         private readonly IWarehouseList warehouseListRequest;
-        private readonly IWarehouseLink warehouseAssociation;
+        private readonly IWarehouseLink warehouseLink;
         private readonly IWarehouseProductUploader uploader;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public WarehouseSettingsApi(IWarehouseList warehouseListRequest, IWarehouseLink warehouseAssociation, IWarehouseProductUploader uploader)
+        public WarehouseSettingsApi(IWarehouseList warehouseListRequest, IWarehouseLink warehouseLink, IWarehouseProductUploader uploader)
         {
-            this.warehouseAssociation = warehouseAssociation;
+            this.warehouseLink = warehouseLink;
             this.uploader = uploader;
             this.warehouseListRequest = warehouseListRequest;
         }
@@ -34,9 +34,9 @@ namespace ShipWorks.ApplicationCore.Settings.Warehouse
         public Task<GenericResult<WarehouseListDto>> GetAllWarehouses() => warehouseListRequest.GetList();
 
         /// <summary>
-        /// Associate the warehouse with this instance of ShipWorks
+        /// Link the warehouse with this instance of ShipWorks
         /// </summary>
-        public Task<Result> Associate(string id) => warehouseAssociation.Link(id);
+        public Task<Result> Link(string id) => warehouseLink.Link(id);
 
         /// <summary>
         /// Upload products to the associated warehouse

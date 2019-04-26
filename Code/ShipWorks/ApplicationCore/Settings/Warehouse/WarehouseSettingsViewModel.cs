@@ -141,7 +141,7 @@ namespace ShipWorks.ApplicationCore.Settings.Warehouse
             WarehouseViewModel warehouse = warehouseList.ChooseWarehouse();
             if (warehouse != null)
             {
-                var associationResponse = await warehouseSettingsApi.Associate(warehouse.Id).ConfigureAwait(true);
+                var associationResponse = await warehouseSettingsApi.Link(warehouse.Id).ConfigureAwait(true);
                 if (associationResponse.Success)
                 {
                     configurationData.UpdateConfiguration(x =>

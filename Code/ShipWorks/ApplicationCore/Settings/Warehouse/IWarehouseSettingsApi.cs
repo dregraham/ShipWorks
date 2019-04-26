@@ -16,9 +16,9 @@ namespace ShipWorks.ApplicationCore.Settings.Warehouse
         Task<GenericResult<WarehouseListDto>> GetAllWarehouses();
 
         /// <summary>
-        /// Associate the warehouse with this instance of ShipWorks
+        /// Link the warehouse with this instance of ShipWorks
         /// </summary>
-        Task<Result> Associate(string id);
+        Task<Result> Link(string id);
 
         /// <summary>
         /// Upload products to the associated warehouse

@@ -3,7 +3,9 @@ using System.Net;
 using System.Threading.Tasks;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
+using Newtonsoft.Json;
 using RestSharp;
+using ShipWorks.Common.Net;
 using ShipWorks.Data;
 
 namespace ShipWorks.ApplicationCore.Licensing.Warehouse
@@ -34,8 +36,9 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse
             try
             {
                 IRestRequest restRequest = new RestRequest(WarehouseEndpoints.LinkWarehouse(warehouseId), Method.POST);
+                restRequest.JsonSerializer = new RestSharpJsonNetSerializer();
                 restRequest.RequestFormat = DataFormat.Json;
-                restRequest.AddJsonBody(new DatabaseDto { databaseId = databaseIdentifier.Get().ToString() });
+                restRequest.AddJsonBody(new DatabaseDto { DatabaseId = databaseIdentifier.Get().ToString() });
 
                 var response = await warehouseRequestClient.MakeRequest(restRequest, "LinkWarehouse").ConfigureAwait(false);
                 return response
@@ -47,9 +50,13 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse
             }
         }
 
+        /// <summary>
+        /// DTO for linking a database to a warehouse
+        /// </summary>
         private class DatabaseDto
         {
-            public string databaseId { get; set; }
+            [JsonProperty("databaseId")]
+            public string DatabaseId { get; set; }
         }
     }
 }
