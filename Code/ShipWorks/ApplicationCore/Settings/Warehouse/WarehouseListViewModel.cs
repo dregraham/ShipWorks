@@ -144,7 +144,10 @@ namespace ShipWorks.ApplicationCore.Settings.Warehouse
             }
             else
             {
-                Warehouses = obj.Result.Value.warehouses.Select(warehouse => new WarehouseViewModel(warehouse)).ToList();
+                Warehouses = obj.Result.Value.warehouses
+                    .Select(warehouse => new WarehouseViewModel(warehouse))
+                    .OrderBy(w => w.Name)
+                    .ToList();
                 Message = Warehouses.None() ? "No warehouses" : string.Empty;
             }
 
