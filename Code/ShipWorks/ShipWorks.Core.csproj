@@ -794,6 +794,7 @@
     <Compile Include="ApplicationCore\Licensing\TangoRequests\TangoGetReleaseByUserRequest.cs" />
     <Compile Include="ApplicationCore\Licensing\TangoRequests\TangoGetReleaseByVersionRequest.cs" />
     <Compile Include="ApplicationCore\Licensing\TokenResponse.cs" />
+    <Compile Include="ApplicationCore\Licensing\Warehouse\DTO\LinkDatabaseDto.cs" />
     <Compile Include="ApplicationCore\Licensing\Warehouse\DTO\SkusToUploadDto.cs" />
     <Compile Include="ApplicationCore\Licensing\Warehouse\DTO\WarehouseListDto.cs" />
     <Compile Include="ApplicationCore\Licensing\Warehouse\IWarehouseLink.cs" />
