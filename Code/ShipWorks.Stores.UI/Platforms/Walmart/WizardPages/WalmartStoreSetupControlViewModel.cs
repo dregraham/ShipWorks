@@ -99,7 +99,7 @@ namespace ShipWorks.Stores.UI.Platforms.Walmart.WizardPages
         /// </summary>
         public void Save(WalmartStoreEntity store)
         {
-            if (EnsureRequiredFieldsHaveValue())
+            if (InputValidation())
             {
                 store.ClientID = ClientID.Trim();
 
@@ -135,26 +135,19 @@ namespace ShipWorks.Stores.UI.Platforms.Walmart.WizardPages
         /// <summary>
         /// Ensures the required fields have a value.
         /// </summary>
-        private bool EnsureRequiredFieldsHaveValue()
+        private bool InputValidation()
         {
-            List<string> invalidFields = new List<string>();
-
             if (string.IsNullOrWhiteSpace(ClientID))
             {
-                invalidFields.Add("Client ID");
+                throw new WalmartException("Please enter a Client ID");
             }
 
             if (string.IsNullOrWhiteSpace(ClientSecret) && IsNewStore)
             {
-                invalidFields.Add("Client secret");
+                throw new WalmartException("Please enter a Client Secret");
             }
 
-            if (invalidFields.Any())
-            {
-                throw new WalmartException($"Please enter your\n\t-{string.Join("\n\t-", invalidFields)}");
-            }
-
-            return !invalidFields.Any();
+            return true;
         }
 
         /// <summary>

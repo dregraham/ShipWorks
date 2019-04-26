@@ -12,6 +12,7 @@ using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Stores.Platforms.Walmart.DTO;
+using log4net;
 
 namespace ShipWorks.Stores.Platforms.Walmart
 {
@@ -23,6 +24,7 @@ namespace ShipWorks.Stores.Platforms.Walmart
     public class WalmartWebClient : IWalmartWebClient
     {
         private readonly IEncryptionProvider encryptionProvider;
+        private readonly ILog log;
         private string accessToken = string.Empty;
         private DateTime accessTokenExpireTime;
         private readonly Func<ApiLogSource, string, IApiLogEntry> apiLogEntryFactory;
@@ -34,8 +36,7 @@ namespace ShipWorks.Stores.Platforms.Walmart
         private const string AcknowledgeOrderUrl = "https://marketplace.walmartapis.com/v3/orders/{0}/acknowledge";
         private const string GetTokenUrl = "https://marketplace.walmartapis.com/v3/token";
         private const int DownloadOrderCountLimit = 200;
-        private const string UpdateShipmentUrl =
-            "https://marketplace.walmartapis.com/v3/orders/{0}/shipping";
+        private const string UpdateShipmentUrl = "https://marketplace.walmartapis.com/v3/orders/{0}/shipping";
 
         private const string BaseErrorMessage = "ShipWorks encountered an error communicating with Walmart";
 
@@ -50,6 +51,7 @@ namespace ShipWorks.Stores.Platforms.Walmart
             this.apiLogEntryFactory = apiLogEntryFactory;
             this.httpRequestSubmitterFactory = httpRequestSubmitterFactory;
             encryptionProvider = encryptionProviderFactory.CreateWalmartEncryptionProvider();
+            this.log = LogManager.GetLogger(typeof(WalmartWebClient));
         }
 
         /// <summary>
@@ -298,11 +300,16 @@ namespace ShipWorks.Stores.Platforms.Walmart
                     accessTokenExpireTime = accessTokenExpireTime.AddSeconds(token.expiresIn);
                 }
             }
-            catch (Exception ex) when (ex.GetType() == typeof(WebException) ||
-                                       ex.GetType() == typeof(InvalidOperationException) ||
+            catch (Exception ex) when (ex.GetType() == typeof(InvalidOperationException) ||
                                        ex.GetType() == typeof(ArgumentNullException))
             {
                 throw new WalmartException(GetErrorMessage(response, ex.Message), ex);
+            }
+
+            catch (WebException webEx)
+            {
+                log.Error(webEx.Message);
+                throw new WalmartException("Unable to contact Walmart. Check your credentials and try again.");
             }
         }
 
