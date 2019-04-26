@@ -141,6 +141,10 @@ namespace ShipWorks.ApplicationCore.Licensing
 
             edition.ShipmentTypeFunctionality = ShipmentTypeFunctionality.Deserialize(store.StoreID, xpath);
 
+            // Check if Warehouse is allowed
+            bool warehouse = XPathUtility.Evaluate(xpath, "//WarehouseEnabled/@status", 0) == 1;
+            edition.SharedOptions.WarehouseEnabled = warehouse;
+
             return edition;
         }
 

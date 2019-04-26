@@ -149,6 +149,12 @@ namespace ShipWorks.Editions
                 AddRestriction(EditionFeature.StampsInsurance, EditionRestrictionLevel.Hidden);
             }
 
+            // Warehouse
+            if (!sharedOptions.WarehouseEnabled)
+            {
+                AddRestriction(EditionFeature.Warehouse, EditionRestrictionLevel.Hidden);
+            }
+
             // Adds any Stamps consolidator restrictions, if required
             AddStampsConsolidatorRestrictions();
 
