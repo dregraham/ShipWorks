@@ -156,7 +156,7 @@ namespace ShipWorks.ApplicationCore.Settings.Warehouse
                 }
                 else
                 {
-                    messageHelper.ShowError("Could not associate this ShipWorks database with the warehouse.");
+                    messageHelper.ShowError("Could not link this ShipWorks database with the warehouse.");
                 }
             }
         }
