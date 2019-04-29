@@ -9,10 +9,10 @@ using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Security;
 using Interapptive.Shared.Utility;
+using log4net;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Stores.Platforms.Walmart.DTO;
-using log4net;
 
 namespace ShipWorks.Stores.Platforms.Walmart
 {
@@ -319,7 +319,7 @@ namespace ShipWorks.Stores.Platforms.Walmart
         {
             if (string.IsNullOrWhiteSpace(store.ClientID) || string.IsNullOrWhiteSpace(store.ClientSecret))
             {
-                throw new WalmartException("You must upgrade to oauth authentication in order to connect to Walmart.");
+                throw new WalmartException("Please log into your Walmart account to update your credentials.");
             }
 
             string decryptedClientSecret = encryptionProvider.Decrypt(store.ClientSecret);
