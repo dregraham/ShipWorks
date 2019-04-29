@@ -305,7 +305,6 @@ namespace ShipWorks.Stores.Platforms.Walmart
             {
                 throw new WalmartException(GetErrorMessage(response, ex.Message), ex);
             }
-
             catch (WebException webEx)
             {
                 log.Error(webEx.Message);

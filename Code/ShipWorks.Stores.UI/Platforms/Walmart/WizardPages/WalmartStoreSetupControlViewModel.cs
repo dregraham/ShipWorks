@@ -135,7 +135,7 @@ namespace ShipWorks.Stores.UI.Platforms.Walmart.WizardPages
         /// <summary>
         /// Ensures the required fields have a value.
         /// </summary>
-        private bool InputValidation()
+        private bool ValidateInput()
         {
             if (string.IsNullOrWhiteSpace(ClientID))
             {
