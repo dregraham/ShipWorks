@@ -308,7 +308,7 @@ namespace ShipWorks.Stores.Platforms.Walmart
             catch (WebException webEx)
             {
                 log.Error(webEx.Message);
-                throw new WalmartException("Unable to contact Walmart. Check your credentials and try again.");
+                throw new WalmartException("Unable to contact Walmart. Please check your credentials and try again.\nFor more help, click: Manage > Stores > Edit Walmart store > Store Connection");
             }
         }
 
@@ -319,7 +319,7 @@ namespace ShipWorks.Stores.Platforms.Walmart
         {
             if (string.IsNullOrWhiteSpace(store.ClientID) || string.IsNullOrWhiteSpace(store.ClientSecret))
             {
-                throw new WalmartException("Please log into your Walmart account to update your credentials.");
+                throw new WalmartException("Please log into your Walmart account to update your credentials.\nFor more help, click: Manage > Stores > Edit Walmart store > Store Connection");
             }
 
             string decryptedClientSecret = encryptionProvider.Decrypt(store.ClientSecret);
