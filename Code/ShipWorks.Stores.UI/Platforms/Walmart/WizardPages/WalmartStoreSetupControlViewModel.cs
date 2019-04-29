@@ -99,7 +99,7 @@ namespace ShipWorks.Stores.UI.Platforms.Walmart.WizardPages
         /// </summary>
         public void Save(WalmartStoreEntity store)
         {
-            if (InputValidation())
+            if (ValidateInput())
             {
                 store.ClientID = ClientID.Trim();
 
