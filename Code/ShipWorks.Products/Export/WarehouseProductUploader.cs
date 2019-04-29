@@ -50,9 +50,12 @@ namespace ShipWorks.Products.Export
                 {
                     var skus = await productCatalog.FetchProductVariantsForUploadToWarehouse(sqlAdapter, batchSize).ConfigureAwait(false);
                     var results = await uploadRequest.Upload(new SkusToUploadDto(skus, databaseId)).ConfigureAwait(false);
-                    await productCatalog.ResetNeedsWarehouseUploadFlag(sqlAdapter, skus).ConfigureAwait(false);
 
-                    progressUpdater.Update(batchSize);
+                    if (results.Success)
+                    {
+                        await productCatalog.ResetNeedsWarehouseUploadFlag(sqlAdapter, skus).ConfigureAwait(false);
+                        progressUpdater.Update(batchSize);
+                    }
 
                     shouldContinue = results.Map(() => skus.Any() && !progressItem.Provider.CancelRequested);
                 }
