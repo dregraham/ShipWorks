@@ -11,7 +11,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SWA
     public enum AmazonSWAServiceType
     {
         [Description("Ground")]
-        [ApiValue("amazon_shipping_standard")]
+        [ApiValue("amazon_shipping_ground")]
         Ground = 1
     }
 }

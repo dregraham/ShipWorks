@@ -48,8 +48,8 @@ namespace ShipWorks.Stores.Platforms.Walmart
             WalmartStoreEntity store = new WalmartStoreEntity();
 
             InitializeStoreDefaults(store);
-            store.ConsumerID = "";
-            store.PrivateKey = "";
+            store.ClientID = "";
+            store.ClientSecret = "";
             store.StoreName = "My Walmart Store";
             store.DownloadModifiedNumberOfDaysBack = 7;
 
@@ -82,7 +82,8 @@ namespace ShipWorks.Stores.Platforms.Walmart
         /// <summary>
         /// This is a string that uniquely identifies the store.
         /// </summary>
-        protected override string InternalLicenseIdentifier => walmartStore.ConsumerID;
+        protected override string InternalLicenseIdentifier => 
+            string.IsNullOrWhiteSpace(walmartStore.ConsumerID) ? walmartStore.ClientID : walmartStore.ConsumerID;
 
         /// <summary>
         /// Creates the add store wizard online update action control for Walmart

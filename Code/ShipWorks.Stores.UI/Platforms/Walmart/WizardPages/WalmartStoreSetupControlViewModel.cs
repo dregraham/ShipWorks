@@ -22,11 +22,11 @@ namespace ShipWorks.Stores.UI.Platforms.Walmart.WizardPages
     {
         private readonly IWalmartWebClient webClient;
         private readonly IEncryptionProvider encryptionProvider;
-        private string consumerID;
-        private string privateKey;
+        private string clientID;
+        private string clientSecret;
         private readonly PropertyChangedHandler handler;
-        private bool updatingPrivateKey;
-        private ICommand updatePrivateKeyCommand;
+        private bool updatingClientSecret;
+        private ICommand updateClientSecretCommand;
         private bool isNewStore;
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -41,7 +41,7 @@ namespace ShipWorks.Stores.UI.Platforms.Walmart.WizardPages
             handler = new PropertyChangedHandler(this, () => PropertyChanged);
 
             IsNewStore = true;
-            UpdatePrivateKeyCommand = new RelayCommand(OnUpdatePrivateKey);
+            UpdateClientSecretCommand = new RelayCommand(OnUpdateClientSecret);
         }
 
         /// <summary>
@@ -55,43 +55,43 @@ namespace ShipWorks.Stores.UI.Platforms.Walmart.WizardPages
         }
 
         /// <summary>
-        /// Consumer ID issued by Walmart
+        /// Client ID issued by Walmart
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public string ConsumerID
+        public string ClientID
         {
-            get { return consumerID; }
-            set { handler.Set(nameof(ConsumerID), ref consumerID, value); }
+            get { return clientID; }
+            set { handler.Set(nameof(ClientID), ref clientID, value); }
         }
 
         /// <summary>
-        /// Private key issued by Walmart
+        /// Client secret issued by Walmart
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public string PrivateKey
+        public string ClientSecret
         {
-            get { return privateKey; }
-            set { handler.Set(nameof(PrivateKey), ref privateKey, value); }
+            get { return clientSecret; }
+            set { handler.Set(nameof(ClientSecret), ref clientSecret, value); }
         }
 
         /// <summary>
-        /// Whether or not the private key is being updated.
+        /// Whether or not the client secret is being updated.
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public bool UpdatingPrivateKey
+        public bool UpdatingClientSecret
         {
-            get { return updatingPrivateKey; }
-            set { handler.Set(nameof(UpdatingPrivateKey), ref updatingPrivateKey, value); }
+            get { return updatingClientSecret; }
+            set { handler.Set(nameof(UpdatingClientSecret), ref updatingClientSecret, value); }
         }
 
         /// <summary>
-        /// Command to run when updating the private key.
+        /// Command to run when updating the client secret.
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public ICommand UpdatePrivateKeyCommand
+        public ICommand UpdateClientSecretCommand
         {
-            get { return updatePrivateKeyCommand; }
-            set { handler.Set(nameof(UpdatePrivateKeyCommand), ref updatePrivateKeyCommand, value); }
+            get { return updateClientSecretCommand; }
+            set { handler.Set(nameof(UpdateClientSecretCommand), ref updateClientSecretCommand, value); }
         }
 
         /// <summary>
@@ -99,13 +99,13 @@ namespace ShipWorks.Stores.UI.Platforms.Walmart.WizardPages
         /// </summary>
         public void Save(WalmartStoreEntity store)
         {
-            if (EnsureRequiredFieldsHaveValue())
+            if (ValidateInput())
             {
-                store.ConsumerID = ConsumerID.Trim();
+                store.ClientID = ClientID.Trim();
 
-                if (!string.IsNullOrWhiteSpace(PrivateKey))
+                if (!string.IsNullOrWhiteSpace(ClientSecret))
                 {
-                    store.PrivateKey = encryptionProvider.Encrypt(PrivateKey.Trim());
+                    store.ClientSecret = encryptionProvider.Encrypt(ClientSecret.Trim());
                 }
 
                 // Throws if credentials are not valid
@@ -113,7 +113,7 @@ namespace ShipWorks.Stores.UI.Platforms.Walmart.WizardPages
 
                 if (!IsNewStore)
                 {
-                    UpdatingPrivateKey = false;
+                    UpdatingClientSecret = false;
                 }
             }
         }
@@ -123,46 +123,39 @@ namespace ShipWorks.Stores.UI.Platforms.Walmart.WizardPages
         /// </summary>
         public void Load(WalmartStoreEntity store)
         {
-            ConsumerID = store.ConsumerID;
+            ClientID = store.ClientID;
 
-            IsNewStore = string.IsNullOrWhiteSpace(store.ConsumerID);
+            IsNewStore = string.IsNullOrWhiteSpace(store.ClientID);
             if (IsNewStore)
             {
-                UpdatingPrivateKey = true;
+                UpdatingClientSecret = true;
             }
         }
 
         /// <summary>
         /// Ensures the required fields have a value.
         /// </summary>
-        private bool EnsureRequiredFieldsHaveValue()
+        private bool ValidateInput()
         {
-            List<string> invalidFields = new List<string>();
-
-            if (string.IsNullOrWhiteSpace(ConsumerID))
+            if (string.IsNullOrWhiteSpace(ClientID))
             {
-                invalidFields.Add("Consumer ID");
+                throw new WalmartException("Please enter a Client ID");
             }
 
-            if (string.IsNullOrWhiteSpace(PrivateKey) && IsNewStore)
+            if (string.IsNullOrWhiteSpace(ClientSecret) && IsNewStore)
             {
-                invalidFields.Add("Private key");
+                throw new WalmartException("Please enter a Client Secret");
             }
 
-            if (invalidFields.Any())
-            {
-                throw new WalmartException($"Please enter your\n\t-{string.Join("\n\t-", invalidFields)}");
-            }
-
-            return !invalidFields.Any();
+            return true;
         }
 
         /// <summary>
-        /// Called when [update private key].
+        /// Called when [update client secret].
         /// </summary>
-        private void OnUpdatePrivateKey()
+        private void OnUpdateClientSecret()
         {
-            UpdatingPrivateKey = true;
+            UpdatingClientSecret = true;
         }
     }
 }

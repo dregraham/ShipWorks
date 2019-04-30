@@ -1,16 +1,18 @@
 ﻿using System;
 using System.ComponentModel;
-using Interapptive.Shared.Net;
-using ShipWorks.ApplicationCore.Logging;
-using ShipWorks.Data.Model.EntityInterfaces;
-using ShipWorks.Stores.Platforms.Walmart.DTO;
-using System.Xml.Serialization;
-using System.Xml;
 using System.IO;
 using System.Linq;
 using System.Net;
-using Interapptive.Shared.Utility;
+using System.Xml;
+using System.Xml.Serialization;
 using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.Net;
+using Interapptive.Shared.Security;
+using Interapptive.Shared.Utility;
+using log4net;
+using ShipWorks.ApplicationCore.Logging;
+using ShipWorks.Data.Model.EntityInterfaces;
+using ShipWorks.Stores.Platforms.Walmart.DTO;
 
 namespace ShipWorks.Stores.Platforms.Walmart
 {
@@ -21,7 +23,10 @@ namespace ShipWorks.Stores.Platforms.Walmart
     [Component]
     public class WalmartWebClient : IWalmartWebClient
     {
-        private readonly IWalmartRequestSigner requestSigner;
+        private readonly IEncryptionProvider encryptionProvider;
+        private readonly ILog log;
+        private string accessToken = string.Empty;
+        private DateTime accessTokenExpireTime;
         private readonly Func<ApiLogSource, string, IApiLogEntry> apiLogEntryFactory;
         private readonly IHttpRequestSubmitterFactory httpRequestSubmitterFactory;
         private const string ChannelType = "a7a7db08-682f-488a-a005-921af89d7e9b";
@@ -29,9 +34,9 @@ namespace ShipWorks.Stores.Platforms.Walmart
         private const string GetOrdersUrl = "https://marketplace.walmartapis.com/v3/orders";
         private const string GetOrderUrl = "https://marketplace.walmartapis.com/v3/orders/{0}";
         private const string AcknowledgeOrderUrl = "https://marketplace.walmartapis.com/v3/orders/{0}/acknowledge";
+        private const string GetTokenUrl = "https://marketplace.walmartapis.com/v3/token";
         private const int DownloadOrderCountLimit = 200;
-        private const string UpdateShipmentUrl =
-            "https://marketplace.walmartapis.com/v3/orders/{0}/shipping";
+        private const string UpdateShipmentUrl = "https://marketplace.walmartapis.com/v3/orders/{0}/shipping";
 
         private const string BaseErrorMessage = "ShipWorks encountered an error communicating with Walmart";
 
@@ -39,13 +44,14 @@ namespace ShipWorks.Stores.Platforms.Walmart
         /// <summary>
         /// Initializes a new instance of the <see cref="WalmartWebClient"/> class.
         /// </summary>
-        public WalmartWebClient(IWalmartRequestSigner requestSigner,
-            Func<ApiLogSource, string, IApiLogEntry> apiLogEntryFactory,
-           IHttpRequestSubmitterFactory httpRequestSubmitterFactory)
+        public WalmartWebClient(Func<ApiLogSource, string, IApiLogEntry> apiLogEntryFactory,
+           IHttpRequestSubmitterFactory httpRequestSubmitterFactory,
+           IEncryptionProviderFactory encryptionProviderFactory)
         {
-            this.requestSigner = requestSigner;
             this.apiLogEntryFactory = apiLogEntryFactory;
             this.httpRequestSubmitterFactory = httpRequestSubmitterFactory;
+            encryptionProvider = encryptionProviderFactory.CreateWalmartEncryptionProvider();
+            this.log = LogManager.GetLogger(typeof(WalmartWebClient));
         }
 
         /// <summary>
@@ -150,16 +156,21 @@ namespace ShipWorks.Stores.Platforms.Walmart
         /// </summary>
         private T ProcessRequest<T>(IWalmartStoreEntity store, IHttpRequestSubmitter submitter, string action)
         {
+            if (string.IsNullOrWhiteSpace(accessToken) || accessTokenExpireTime < DateTime.UtcNow)
+            {
+                UpdateToken(store);
+            }
+
             string response = string.Empty;
+            string authString = GenerateAuthString(store);
             try
             {
                 submitter.AllowHttpStatusCodes(HttpStatusCode.BadRequest, HttpStatusCode.Unauthorized);
                 submitter.Headers.Add("WM_SVC.NAME", "Walmart Marketplace");
-                submitter.Headers.Add("WM_CONSUMER.ID", store.ConsumerID);
                 submitter.Headers.Add("WM_CONSUMER.CHANNEL.TYPE", ChannelType);
                 submitter.Headers.Add("WM_QOS.CORRELATION_ID", Guid.NewGuid().ToString());
-
-                requestSigner.Sign(submitter, store);
+                submitter.Headers.Add("Authorization", authString);
+                submitter.Headers.Add("WM_SEC.ACCESS_TOKEN", accessToken);
 
                 IApiLogEntry logEntry = apiLogEntryFactory(ApiLogSource.Walmart, action);
                 logEntry.LogRequest(submitter);
@@ -174,7 +185,7 @@ namespace ShipWorks.Stores.Platforms.Walmart
                     // description. If we didn't allow them, we'd lose the Walmart message.
                     if (responseReader.HttpWebResponse.StatusCode != HttpStatusCode.OK)
                     {
-                        throw new WebException($"{(int)responseReader.HttpWebResponse.StatusCode} {responseReader.HttpWebResponse.StatusDescription}");
+                        throw new WebException($"{(int) responseReader.HttpWebResponse.StatusCode} {responseReader.HttpWebResponse.StatusDescription}");
                     }
 
                     return DeserializeResponse<T>(response);
@@ -197,7 +208,7 @@ namespace ShipWorks.Stores.Platforms.Walmart
             XmlReader xmlReader = XmlReader.Create(new StringReader(response));
 
             return typeof(T) == typeof(string) ?
-                (T) TypeDescriptor.GetConverter(typeof(T)).ConvertFromString(response):
+                (T) TypeDescriptor.GetConverter(typeof(T)).ConvertFromString(response) :
                 (T) serializer.Deserialize(xmlReader);
         }
 
@@ -244,6 +255,77 @@ namespace ShipWorks.Stores.Platforms.Walmart
                 // If there was an error deserializing the walmart error response, just return the original exception message
                 return $"{BaseErrorMessage}: {Environment.NewLine}{exceptionMessage}";
             }
+        }
+
+        /// <summary>
+        /// Requests a new access token
+        /// </summary>
+        private void UpdateToken(IWalmartStoreEntity store)
+        {
+            string response = string.Empty;
+            string authString = GenerateAuthString(store);
+            IHttpVariableRequestSubmitter submitter = httpRequestSubmitterFactory.GetHttpVariableRequestSubmitter();
+            submitter.Variables.Add("grant_type", "client_credentials");
+            submitter.Uri = new Uri(GetTokenUrl);
+            submitter.Verb = HttpVerb.Post;
+
+            try
+            {
+                submitter.AllowHttpStatusCodes(HttpStatusCode.BadRequest, HttpStatusCode.Unauthorized);
+                submitter.Headers.Add("WM_SVC.NAME", "Walmart Marketplace");
+                submitter.Headers.Add("WM_QOS.CORRELATION_ID", Guid.NewGuid().ToString());
+                submitter.Headers.Add("Authorization", authString);
+                submitter.Headers.Add("Accept", "application/xml");
+
+                IApiLogEntry logEntry = apiLogEntryFactory(ApiLogSource.Walmart, "GetToken");
+                logEntry.LogRequest(submitter);
+                accessTokenExpireTime = DateTime.UtcNow;
+
+                using (IHttpResponseReader responseReader = submitter.GetResponse())
+                {
+                    response = responseReader.ReadResult();
+                    logEntry.LogResponse(response, "xml");
+
+                    // The reason we allow 400 and 401 above but then throw for everything that is not 200 here is
+                    // because we need to retain both the error DTO from Walmart as well as the HTTP status code
+                    // description. If we didn't allow them, we'd lose the Walmart message.
+                    if (responseReader.HttpWebResponse.StatusCode != HttpStatusCode.OK)
+                    {
+                        throw new WebException($"{(int) responseReader.HttpWebResponse.StatusCode} {responseReader.HttpWebResponse.StatusDescription}");
+                    }
+
+                    OAuthTokenDTO token = DeserializeResponse<OAuthTokenDTO>(response);
+
+                    accessToken = token.accessToken;
+                    accessTokenExpireTime = accessTokenExpireTime.AddSeconds(token.expiresIn);
+                }
+            }
+            catch (Exception ex) when (ex.GetType() == typeof(InvalidOperationException) ||
+                                       ex.GetType() == typeof(ArgumentNullException))
+            {
+                throw new WalmartException(GetErrorMessage(response, ex.Message), ex);
+            }
+            catch (WebException webEx)
+            {
+                log.Error(webEx.Message);
+                throw new WalmartException("Unable to contact Walmart. Please check your credentials and try again.\nFor more help, click: Manage > Stores > Edit Walmart store > Store Connection");
+            }
+        }
+
+        /// <summary>
+        /// Generates the authentication string
+        /// </summary>
+        private string GenerateAuthString(IWalmartStoreEntity store)
+        {
+            if (string.IsNullOrWhiteSpace(store.ClientID) || string.IsNullOrWhiteSpace(store.ClientSecret))
+            {
+                throw new WalmartException("ShipWorks requires updated credentials to connect to Walmart.\nFor more help, click: Manage > Stores > Edit Walmart store > Store Connection");
+            }
+
+            string decryptedClientSecret = encryptionProvider.Decrypt(store.ClientSecret);
+
+            byte[] auth = System.Text.Encoding.UTF8.GetBytes(store.ClientID + ":" + decryptedClientSecret);
+            return "Basic " + Convert.ToBase64String(auth);
         }
     }
 }

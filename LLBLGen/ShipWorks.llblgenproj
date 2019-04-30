@@ -3425,6 +3425,8 @@
       </EntityDefinition>
       <EntityDefinition Name="WalmartStore" ObjectID="066c7cc9-cbb0-4190-95cb-2f1203e59c92" InheritanceType="2">
         <Fields>
+          <Field Name="ClientID" Type="string" MaxLength="50" FieldIndex="3" />
+          <Field Name="ClientSecret" Type="string" MaxLength="2000" FieldIndex="4" />
           <Field Name="ConsumerID" Type="string" MaxLength="50" FieldIndex="0" />
           <Field Name="DownloadModifiedNumberOfDaysBack" Type="int" Precision="10" FieldIndex="2" />
           <Field Name="PrivateKey" Type="string" MaxLength="2000" FieldIndex="1" />
@@ -4541,7 +4543,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2019-03-27T19:21:58.1943987Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2019-04-22T15:39:51.2376528Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -5156,8 +5158,8 @@
                     <Field Name="AuditNewOrders" Ordinal="11" DbType="2" />
                     <Field Name="AuditDeletedOrders" Ordinal="12" DbType="2" />
                     <Field Name="CustomerKey" Ordinal="13" DbType="12" Length="2147483647" />
-                    <Field Name="UseParallelActionQueue" Ordinal="14" HasDefaultValue="true" DefaultValue="(0)" DbType="2" />
-                    <Field Name="AllowEbayCombineLocally" Ordinal="15" HasDefaultValue="true" DefaultValue="(1)" DbType="2" />
+                    <Field Name="UseParallelActionQueue" Ordinal="14" HasDefaultValue="true" DefaultValue="(1)" DbType="2" />
+                    <Field Name="AllowEbayCombineLocally" Ordinal="15" HasDefaultValue="true" DefaultValue="(0)" DbType="2" />
                     <Field Name="ArchivalSettingsXml" Ordinal="16" HasDefaultValue="true" DefaultValue="'&lt;ArchivalSettings/&gt;'" DbType="26" Length="2147483647" />
                     <Field Name="AuditEnabled" Ordinal="17" HasDefaultValue="true" DefaultValue="(1)" DbType="2" />
                     <Field Name="DefaultPickListTemplateID" Ordinal="18" IsOptional="true" DbType="0" Precision="19" />
@@ -9381,6 +9383,8 @@
                     <Field Name="ConsumerID" Ordinal="2" DbType="12" Length="50" />
                     <Field Name="PrivateKey" Ordinal="3" DbType="12" Length="2000" />
                     <Field Name="DownloadModifiedNumberOfDaysBack" Ordinal="4" DbType="8" Precision="10" />
+                    <Field Name="ClientID" Ordinal="5" HasDefaultValue="true" DefaultValue="''" DbType="12" Length="50" />
+                    <Field Name="ClientSecret" Ordinal="6" HasDefaultValue="true" DefaultValue="''" DbType="12" Length="2000" />
                   </Fields>
                 </Table>
                 <Table Name="WorldShipGoods">
@@ -10446,14 +10450,14 @@
                 <FieldPair PkField="dbo:ProductVariant:ProductVariantID" FkField="dbo:ProductVariantAlias:ProductVariantID" />
               </FieldPairs>
             </ForeignKeyConstraint>
-            <ForeignKeyConstraint Name="dbo:ProductVariantAttributeValue:FK_ProductVariantAttribute_ProductVariant">
-              <FieldPairs>
-                <FieldPair PkField="dbo:ProductVariant:ProductVariantID" FkField="dbo:ProductVariantAttributeValue:ProductVariantID" />
-              </FieldPairs>
-            </ForeignKeyConstraint>
             <ForeignKeyConstraint Name="dbo:ProductVariantAttributeValue:FK_ProductVariantAttributeValue_ProductAttribute">
               <FieldPairs>
                 <FieldPair PkField="dbo:ProductAttribute:ProductAttributeID" FkField="dbo:ProductVariantAttributeValue:ProductAttributeID" />
+              </FieldPairs>
+            </ForeignKeyConstraint>
+            <ForeignKeyConstraint Name="dbo:ProductVariantAttributeValue:FK_ProductVariantAttributeValue_ProductVariant">
+              <FieldPairs>
+                <FieldPair PkField="dbo:ProductVariant:ProductVariantID" FkField="dbo:ProductVariantAttributeValue:ProductVariantID" />
               </FieldPairs>
             </ForeignKeyConstraint>
             <ForeignKeyConstraint Name="dbo:ProStoresOrder:FK_ProStoresOrder_Order">
@@ -14157,6 +14161,8 @@
         </EntityMapping>
         <EntityMapping EntityName=":WalmartStore" TargetName="ShipWorksLocal:dbo:WalmartStore">
           <FieldMappings>
+            <FieldMapping FieldName="ClientID" TargetFieldName="ClientID" />
+            <FieldMapping FieldName="ClientSecret" TargetFieldName="ClientSecret" />
             <FieldMapping FieldName="ConsumerID" TargetFieldName="ConsumerID" />
             <FieldMapping FieldName="DownloadModifiedNumberOfDaysBack" TargetFieldName="DownloadModifiedNumberOfDaysBack" />
             <FieldMapping FieldName="PrivateKey" TargetFieldName="PrivateKey" />
