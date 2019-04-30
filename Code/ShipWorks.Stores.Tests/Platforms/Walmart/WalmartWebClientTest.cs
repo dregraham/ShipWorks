@@ -335,7 +335,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Walmart
 
             Exception ex = Assert.Throws<WalmartException>(() => testObject.GetOrders(store, start));
 
-            Assert.Equal("You must upgrade to oauth authentication in order to connect to Walmart.", ex.Message);
+            Assert.Equal("ShipWorks requires updated credentials to connect to Walmart.\nFor more help, click: Manage > Stores > Edit Walmart store > Store Connection", ex.Message);
         }
 
         [Fact]
@@ -352,7 +352,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Walmart
 
             Exception ex = Assert.Throws<WalmartException>(() => testObject.GetOrders(store, start));
 
-            Assert.Equal("You must upgrade to oauth authentication in order to connect to Walmart.", ex.Message);
+            Assert.Equal("ShipWorks requires updated credentials to connect to Walmart.\nFor more help, click: Manage > Stores > Edit Walmart store > Store Connection", ex.Message);
         }
 
         private Mock<IHttpVariableRequestSubmitter> SetupHttpVariableRequestSubmitter(string response)
