@@ -2553,12 +2553,14 @@
       <EntityDefinition Name="Shipment" ObjectID="a808842d-a47d-471e-9481-6db39275513e">
         <Fields>
           <Field Name="ActualLabelFormat" Type="int" IsOptional="true" FieldIndex="20" />
+          <Field Name="ApplyReturnProfile" Type="bool" FieldIndex="75" />
           <Field Name="BestRateEvents" Type="byte" FieldIndex="66" />
           <Field Name="BilledType" Type="int" FieldIndex="71" />
           <Field Name="BilledWeight" Type="double" FieldIndex="72" />
           <Field Name="ContentWeight" Type="double" FieldIndex="4" />
           <Field Name="CustomsGenerated" Type="bool" FieldIndex="17" />
           <Field Name="CustomsValue" Type="decimal" Precision="19" Scale="4" FieldIndex="18" />
+          <Field Name="IncludeReturns" Type="bool" FieldIndex="74" />
           <Field Name="Insurance" Type="bool" FieldIndex="60" />
           <Field Name="InsuranceProvider" Type="int" FieldIndex="61" />
           <Field Name="OnlineShipmentID" Type="string" MaxLength="128" FieldIndex="70" />
@@ -2589,6 +2591,7 @@
           <Field Name="RequestedLabelFormat" Type="int" FieldIndex="19" />
           <Field Name="ResidentialDetermination" Type="int" FieldIndex="41" />
           <Field Name="ResidentialResult" Type="bool" FieldIndex="42" />
+          <Field Name="ReturnProfileID" Type="int" Precision="10" FieldIndex="76" />
           <Field Name="ReturnShipment" Type="bool" FieldIndex="59" />
           <Field Name="RowVersion" Type="byte[]" IsReadOnly="true" FieldIndex="1" />
           <Field Name="ShipAddressValidationError" Type="string" MaxLength="300" FieldIndex="36" />
@@ -2706,12 +2709,15 @@
       </EntityDefinition>
       <EntityDefinition Name="ShippingProfile" ObjectID="c9ae4751-442b-4f36-bc23-0f4442f2bdde">
         <Fields>
+          <Field Name="ApplyReturnProfile" Type="bool" FieldIndex="12" />
+          <Field Name="IncludeReturn" Type="bool" FieldIndex="11" />
           <Field Name="Insurance" Type="bool" IsOptional="true" FieldIndex="6" />
           <Field Name="InsuranceInitialValueAmount" Type="decimal" IsOptional="true" Precision="19" Scale="4" FieldIndex="8" />
           <Field Name="InsuranceInitialValueSource" Type="int" IsOptional="true" FieldIndex="7" />
           <Field Name="Name" Type="string" MaxLength="50" FieldIndex="2" />
           <Field Name="OriginID" Type="long" IsOptional="true" FieldIndex="5" />
           <Field Name="RequestedLabelFormat" Type="int" IsOptional="true" FieldIndex="10" />
+          <Field Name="ReturnProfileID" Type="int" Precision="10" FieldIndex="13" />
           <Field Name="ReturnShipment" Type="bool" IsOptional="true" FieldIndex="9" />
           <Field Name="RowVersion" Type="byte[]" IsReadOnly="true" FieldIndex="1" />
           <Field Name="ShipmentType" Type="ShipmentTypeCode" IsOptional="true" FieldIndex="3" />
@@ -4543,7 +4549,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2019-04-22T15:39:51.2376528Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2019-04-30T19:15:14.7823499Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -8357,6 +8363,9 @@
                     <Field Name="BilledType" Ordinal="72" DbType="8" Precision="10" />
                     <Field Name="BilledWeight" Ordinal="73" DbType="6" Precision="38" />
                     <Field Name="ProcessedWithUiMode" Ordinal="74" IsOptional="true" DbType="8" Precision="10" />
+                    <Field Name="IncludeReturns" Ordinal="75" HasDefaultValue="true" DefaultValue="(0)" DbType="2" />
+                    <Field Name="ApplyReturnProfile" Ordinal="76" HasDefaultValue="true" DefaultValue="(0)" DbType="2" />
+                    <Field Name="ReturnProfileID" Ordinal="77" HasDefaultValue="true" DefaultValue="(-1)" DbType="8" Precision="10" />
                   </Fields>
                 </Table>
                 <Table Name="ShipmentCustomsItem">
@@ -8455,6 +8464,9 @@
                     <Field Name="InsuranceInitialValueAmount" Ordinal="9" IsOptional="true" DbType="9" Precision="19" Scale="4" />
                     <Field Name="ReturnShipment" Ordinal="10" IsOptional="true" DbType="2" />
                     <Field Name="RequestedLabelFormat" Ordinal="11" IsOptional="true" DbType="8" Precision="10" />
+                    <Field Name="IncludeReturn" Ordinal="12" HasDefaultValue="true" DefaultValue="(0)" DbType="2" />
+                    <Field Name="ApplyReturnProfile" Ordinal="13" HasDefaultValue="true" DefaultValue="(0)" DbType="2" />
+                    <Field Name="ReturnProfileID" Ordinal="14" HasDefaultValue="true" DefaultValue="(-1)" DbType="8" Precision="10" />
                   </Fields>
                 </Table>
                 <Table Name="ShippingProviderRule">
@@ -13277,12 +13289,14 @@
         <EntityMapping EntityName=":Shipment" TargetName="ShipWorksLocal:dbo:Shipment">
           <FieldMappings>
             <FieldMapping FieldName="ActualLabelFormat" TargetFieldName="ActualLabelFormat" />
+            <FieldMapping FieldName="ApplyReturnProfile" TargetFieldName="ApplyReturnProfile" />
             <FieldMapping FieldName="BestRateEvents" TargetFieldName="BestRateEvents" />
             <FieldMapping FieldName="BilledType" TargetFieldName="BilledType" />
             <FieldMapping FieldName="BilledWeight" TargetFieldName="BilledWeight" />
             <FieldMapping FieldName="ContentWeight" TargetFieldName="ContentWeight" />
             <FieldMapping FieldName="CustomsGenerated" TargetFieldName="CustomsGenerated" />
             <FieldMapping FieldName="CustomsValue" TargetFieldName="CustomsValue" />
+            <FieldMapping FieldName="IncludeReturns" TargetFieldName="IncludeReturns" />
             <FieldMapping FieldName="Insurance" TargetFieldName="Insurance" />
             <FieldMapping FieldName="InsuranceProvider" TargetFieldName="InsuranceProvider" />
             <FieldMapping FieldName="OnlineShipmentID" TargetFieldName="OnlineShipmentID" />
@@ -13313,6 +13327,7 @@
             <FieldMapping FieldName="RequestedLabelFormat" TargetFieldName="RequestedLabelFormat" />
             <FieldMapping FieldName="ResidentialDetermination" TargetFieldName="ResidentialDetermination" />
             <FieldMapping FieldName="ResidentialResult" TargetFieldName="ResidentialResult" />
+            <FieldMapping FieldName="ReturnProfileID" TargetFieldName="ReturnProfileID" />
             <FieldMapping FieldName="ReturnShipment" TargetFieldName="ReturnShipment" />
             <FieldMapping FieldName="RowVersion" TargetFieldName="RowVersion" />
             <FieldMapping FieldName="ShipAddressValidationError" TargetFieldName="ShipAddressValidationError" />
@@ -13430,12 +13445,15 @@
         </EntityMapping>
         <EntityMapping EntityName=":ShippingProfile" TargetName="ShipWorksLocal:dbo:ShippingProfile">
           <FieldMappings>
+            <FieldMapping FieldName="ApplyReturnProfile" TargetFieldName="ApplyReturnProfile" />
+            <FieldMapping FieldName="IncludeReturn" TargetFieldName="IncludeReturn" />
             <FieldMapping FieldName="Insurance" TargetFieldName="Insurance" />
             <FieldMapping FieldName="InsuranceInitialValueAmount" TargetFieldName="InsuranceInitialValueAmount" />
             <FieldMapping FieldName="InsuranceInitialValueSource" TargetFieldName="InsuranceInitialValueSource" />
             <FieldMapping FieldName="Name" TargetFieldName="Name" />
             <FieldMapping FieldName="OriginID" TargetFieldName="OriginID" />
             <FieldMapping FieldName="RequestedLabelFormat" TargetFieldName="RequestedLabelFormat" />
+            <FieldMapping FieldName="ReturnProfileID" TargetFieldName="ReturnProfileID" />
             <FieldMapping FieldName="ReturnShipment" TargetFieldName="ReturnShipment" />
             <FieldMapping FieldName="RowVersion" TargetFieldName="RowVersion" />
             <FieldMapping FieldName="ShipmentType" TargetFieldName="ShipmentType" />

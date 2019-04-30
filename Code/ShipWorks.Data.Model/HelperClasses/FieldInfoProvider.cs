@@ -2979,6 +2979,9 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("ShipmentEntity", "BilledType", typeof(System.Int32), false, false, false, false,  (int)ShipmentFieldIndex.BilledType, 0, 0, 10);
 			this.AddElementFieldInfo("ShipmentEntity", "BilledWeight", typeof(System.Double), false, false, false, false,  (int)ShipmentFieldIndex.BilledWeight, 0, 0, 38);
 			this.AddElementFieldInfo("ShipmentEntity", "ProcessedWithUiMode", typeof(Nullable<ShipWorks.Settings.UIMode>), false, false, false, true,  (int)ShipmentFieldIndex.ProcessedWithUiMode, 0, 0, 10);
+			this.AddElementFieldInfo("ShipmentEntity", "IncludeReturns", typeof(System.Boolean), false, false, false, false,  (int)ShipmentFieldIndex.IncludeReturns, 0, 0, 0);
+			this.AddElementFieldInfo("ShipmentEntity", "ApplyReturnProfile", typeof(System.Boolean), false, false, false, false,  (int)ShipmentFieldIndex.ApplyReturnProfile, 0, 0, 0);
+			this.AddElementFieldInfo("ShipmentEntity", "ReturnProfileID", typeof(System.Int32), false, false, false, false,  (int)ShipmentFieldIndex.ReturnProfileID, 0, 0, 10);
 		}
 		/// <summary>Inits ShipmentCustomsItemEntity's FieldInfo objects</summary>
 		private void InitShipmentCustomsItemEntityInfos()
@@ -3077,6 +3080,9 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("ShippingProfileEntity", "InsuranceInitialValueAmount", typeof(Nullable<System.Decimal>), false, false, false, true,  (int)ShippingProfileFieldIndex.InsuranceInitialValueAmount, 0, 4, 19);
 			this.AddElementFieldInfo("ShippingProfileEntity", "ReturnShipment", typeof(Nullable<System.Boolean>), false, false, false, true,  (int)ShippingProfileFieldIndex.ReturnShipment, 0, 0, 0);
 			this.AddElementFieldInfo("ShippingProfileEntity", "RequestedLabelFormat", typeof(Nullable<System.Int32>), false, false, false, true,  (int)ShippingProfileFieldIndex.RequestedLabelFormat, 0, 0, 10);
+			this.AddElementFieldInfo("ShippingProfileEntity", "IncludeReturn", typeof(System.Boolean), false, false, false, false,  (int)ShippingProfileFieldIndex.IncludeReturn, 0, 0, 0);
+			this.AddElementFieldInfo("ShippingProfileEntity", "ApplyReturnProfile", typeof(System.Boolean), false, false, false, false,  (int)ShippingProfileFieldIndex.ApplyReturnProfile, 0, 0, 0);
+			this.AddElementFieldInfo("ShippingProfileEntity", "ReturnProfileID", typeof(System.Int32), false, false, false, false,  (int)ShippingProfileFieldIndex.ReturnProfileID, 0, 0, 10);
 		}
 		/// <summary>Inits ShippingProviderRuleEntity's FieldInfo objects</summary>
 		private void InitShippingProviderRuleEntityInfos()
