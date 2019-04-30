@@ -8,14 +8,14 @@ namespace ShipWorks.Stores.UI.Platforms.Walmart.WizardPages
     public interface IWalmartStoreSetupControlViewModel
     {
         /// <summary>
-        /// Consumer ID issued by Walmart
+        /// Client ID issued by Walmart
         /// </summary>
-        string ConsumerID { get; set; }
+        string ClientID { get; set; }
 
         /// <summary>
-        /// Private key issued by Walmart
+        /// Client secret issued by Walmart
         /// </summary>
-        string PrivateKey { get; set; }
+        string ClientSecret { get; set; }
 
         /// <summary>
         /// Saves the store credentials

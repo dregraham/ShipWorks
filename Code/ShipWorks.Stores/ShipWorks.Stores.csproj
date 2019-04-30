@@ -854,11 +854,11 @@
     <Compile Include="Platforms\Walmart\CoreExtensions\Filters\WalmartPurchaseOrderIDCondition.cs" />
     <Compile Include="Platforms\Walmart\DTO\CancelRequestV3.cs" />
     <Compile Include="Platforms\Walmart\DTO\Errors.cs" />
+    <Compile Include="Platforms\Walmart\DTO\OAuthTokenDTO.cs" />
     <Compile Include="Platforms\Walmart\DTO\PurchaseOrderV3.cs" />
     <Compile Include="Platforms\Walmart\DTO\RefundRequestV3.cs" />
     <Compile Include="Platforms\Walmart\DTO\ShipConfirmRequestV3.cs" />
     <Compile Include="Platforms\Walmart\IWalmartOrderLoader.cs" />
-    <Compile Include="Platforms\Walmart\IWalmartRequestSigner.cs" />
     <Compile Include="Platforms\Walmart\IWalmartWebClient.cs" />
     <Compile Include="Platforms\Walmart\OnlineUpdating\IShipmentDetailsUpdater.cs" />
     <Compile Include="Platforms\Walmart\OnlineUpdating\IWalmartCombineOrderSearchProvider.cs" />
@@ -871,7 +871,6 @@
     <Compile Include="Platforms\Walmart\WalmartOrderIdentifier.cs" />
     <Compile Include="Platforms\Walmart\WalmartOrderLoader.cs" />
     <Compile Include="Platforms\Walmart\OnlineUpdating\ShipmentDetailsUpdater.cs" />
-    <Compile Include="Platforms\Walmart\WalmartRequestSigner.cs" />
     <Compile Include="Platforms\Walmart\WalmartStoreType.cs" />
     <Compile Include="Platforms\Walmart\WalmartWebClient.cs" />
     <Compile Include="Platforms\WebShopManager\CoreExtensions\Filters\Orders\WebShopManagerAmazonOrderIDCondition.cs" />

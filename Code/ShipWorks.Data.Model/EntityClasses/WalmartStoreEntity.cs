@@ -337,6 +337,10 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("PrivateKey", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("DownloadModifiedNumberOfDaysBack", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("ClientID", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("ClientSecret", fieldHashtable);
 		}
 		#endregion
 
@@ -418,6 +422,26 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.Int32)GetValue((int)WalmartStoreFieldIndex.DownloadModifiedNumberOfDaysBack, true); }
 			set	{ SetValue((int)WalmartStoreFieldIndex.DownloadModifiedNumberOfDaysBack, value); }
+		}
+
+		/// <summary> The ClientID property of the Entity WalmartStore<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "WalmartStore"."ClientID"<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.String ClientID
+		{
+			get { return (System.String)GetValue((int)WalmartStoreFieldIndex.ClientID, true); }
+			set	{ SetValue((int)WalmartStoreFieldIndex.ClientID, value); }
+		}
+
+		/// <summary> The ClientSecret property of the Entity WalmartStore<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "WalmartStore"."ClientSecret"<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 2000<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.String ClientSecret
+		{
+			get { return (System.String)GetValue((int)WalmartStoreFieldIndex.ClientSecret, true); }
+			set	{ SetValue((int)WalmartStoreFieldIndex.ClientSecret, value); }
 		}
 	
 		/// <summary> Gets the type of the hierarchy this entity is in. </summary>

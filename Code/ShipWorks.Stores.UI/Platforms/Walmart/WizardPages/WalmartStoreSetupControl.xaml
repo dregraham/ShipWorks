@@ -47,10 +47,10 @@
             <TextBlock Grid.Row="1"
                        Grid.Column="0"
                        HorizontalAlignment="Right"
-                       Text="Consumer ID:" />
+                       Text="Client ID:" />
             <TextBox Grid.Row="1"
                      Grid.Column="1"
-                     Text="{Binding ConsumerID,
+                     Text="{Binding ClientID,
                                     UpdateSourceTrigger=PropertyChanged}" />
 
             <TextBlock Grid.Row="2"
@@ -58,17 +58,17 @@
                        Margin="3 6 3 3"
                        HorizontalAlignment="Right"
                        VerticalAlignment="Top"
-                       Text="Private Key:" />
+                       Text="Client Secret:" />
             <TextBox Grid.Row="2"
                      Grid.Column="1"
                      AcceptsReturn="True"
                      MaxLines="10"
                      MinLines="10"
-                     Text="{Binding PrivateKey,
+                     Text="{Binding ClientSecret,
                                     UpdateSourceTrigger=PropertyChanged}"
                      TextWrapping="Wrap"
                      VerticalScrollBarVisibility="Auto"
-                     Visibility="{Binding UpdatingPrivateKey,
+                     Visibility="{Binding UpdatingClientSecret,
                                           Converter={StaticResource BooleanToVisibility},
                                           UpdateSourceTrigger=PropertyChanged}" />
             <Button Grid.Row="2"
@@ -78,10 +78,10 @@
                     Margin="3"
                     HorizontalAlignment="Left"
                     VerticalAlignment="Top"
-                    Command="{Binding UpdatePrivateKeyCommand,
+                    Command="{Binding UpdateClientSecretCommand,
                                       UpdateSourceTrigger=PropertyChanged}"
-                    Content="Update Private Key"
-                    Visibility="{Binding UpdatingPrivateKey,
+                    Content="Update Client Secret"
+                    Visibility="{Binding UpdatingClientSecret,
                                          Converter={StaticResource InverseBooleanToVisibility},
                                          UpdateSourceTrigger=PropertyChanged}" />
             <TextBlock Grid.Row="3"

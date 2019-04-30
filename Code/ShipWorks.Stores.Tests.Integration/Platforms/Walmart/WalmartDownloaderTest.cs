@@ -125,7 +125,6 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Walmart
             context = db.CreateDataContext(x => ContainerInitializer.Initialize(x),
                 autoMock =>
                 {
-                    autoMock.Override<IWalmartRequestSigner>();
                     autoMock.Override<IHttpRequestSubmitterFactory>();
                     autoMock.Override<IDateTimeProvider>();
                     autoMock.Override<Func<ApiLogSource, string, IApiLogEntry>>();
@@ -133,12 +132,13 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Walmart
             SetupCommon();
 
             var responseReader = mock.Mock<IHttpResponseReader>();
-            responseReader.Setup(r => r.ReadResult())
+            responseReader.SetupSequence(r => r.ReadResult())
+                .Returns("<OAuthTokenDTO xmlns=\"\"><accessToken>eyJraWQiOiIzN2JmOWQ5MS04ZDRkLTQwYjEtODU4NS1mNzhlZDc3MjM4MDQiLCJlbmMiOiJBMjU2R0NNIiwiYWxnIjoiZGlyIn0..yI0d0EFgt3gpEMQj.APvV5upgh1nBRcZPG6d9a5PYNAwayZdIZc4s-J42Ol-Zk6V9liVWmgs4qyPdkghfLKWwAyOBoc5g1vxRsYQNOeDH_p7KM_dO3D80g8adtGDkcAoEimyhP0inGHOjT2PziwIWjtRbE5bm8WTZN7wwJPV5SFqBP-XvS03OdPcZ2V_f0mVln5EdzaRt0BmpvlVDgqn_9Pe_jIYadWX-qc1N_Lh6oe3Q6bUKTJIhb6N-v8dNDO6qyRbeWo0_0M1s7g_mBKIp2FeO8a_ezIkpjtRv81SwXxEDqFacT2O46GlILO0Nfh7lbI2HZK2eUPrC-XVCiLiGoKsQDxHxD_Po0QrH0OxD6jnQvUfiqpgsULsvtbsSuHpUNl-OlIFhxODRxyIILsjAoWaQi9yEEV5swLVTdCix7e8ZKJPWQKEi55e7WYZm8vJqIUaaKrgdbw8HDlOWiJcrzzKdg-Hk3QBxnuoT4wqiaJaKb3uIQUtPzo5Jn_58PIxHh1WawpJOOmTH5RFgGTHlMB-5nBKG0iW1Bzm_vlg0NU_ZlYjvTWWDGOldk18WbzBr88XUI_jyRylFp_gYxc2peAyPnhZtOJGC4-7Eudbjz7QtClntVenjcG9h0k-xUejD0fcvCQUCty8S0ZfvCMEhrOJXEYCfI9-ESFFzpRh0EDCyfllS2Ugor4ZtUBjztXsj5sz2tp1wOSG7QR22K8rBKBFSyaKdIrNoLoucCEFFqlK_WSxfgsvUhspr4ZztxzPCejv3pKu9XYOV5nM6_qRsQY9ub88kQQKf2ZwNUnuYM_JYcvr2P9R551Pqqssk2KmbU42P35a2t5xJo9h921tGxUNjS9k4LAaO9g.Em_yWzxnUwwvs90IRZzH-Q</accessToken><tokenType>Bearer</tokenType><expiresIn>900</expiresIn></OAuthTokenDTO>")
                 .Returns(
                     "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>" +
                     "<ns3:list xmlns:ns2=\"http://walmart.com/mp/orders\" xmlns:ns3=\"http://walmart.com/mp/v3/orders\" xmlns:ns4=\"http://walmart.com/\">" +
                     "<ns3:meta><ns3:totalCount>177</ns3:totalCount><ns3:limit>200</ns3:limit></ns3:meta>" +
-                    "<ns3:elements>"+
+                    "<ns3:elements>" +
                     "<ns3:order>" +
                     "<ns3:purchaseOrderId>6</ns3:purchaseOrderId><ns3:customerOrderId>5</ns3:customerOrderId><ns3:customerEmailId>91DDE88D93C64028BE36D7771638A274@relay.walmart.com</ns3:customerEmailId><ns3:orderDate>2017-08-22T22:08:59.000Z</ns3:orderDate><ns3:shippingInfo><ns3:phone>6022843111</ns3:phone><ns3:estimatedDeliveryDate>2017-09-05T06:00:00.000Z</ns3:estimatedDeliveryDate><ns3:estimatedShipDate>2017-08-25T06:00:00.000Z</ns3:estimatedShipDate><ns3:methodCode>Value</ns3:methodCode><ns3:postalAddress><ns3:name>michele  gulli</ns3:name><ns3:address1>8818 N 47th Lane</ns3:address1><ns3:city>Glendale</ns3:city><ns3:state>AZ</ns3:state><ns3:postalCode>85302</ns3:postalCode><ns3:country>USA</ns3:country><ns3:addressType>RESIDENTIAL</ns3:addressType></ns3:postalAddress></ns3:shippingInfo><ns3:orderLines><ns3:orderLine><ns3:lineNumber>1</ns3:lineNumber><ns3:item><ns3:productName>Malaseb Shampoo 16 oz</ns3:productName><ns3:sku>00000125</ns3:sku></ns3:item><ns3:charges><ns3:charge><ns3:chargeType>PRODUCT</ns3:chargeType><ns3:chargeName>ItemPrice</ns3:chargeName><ns3:chargeAmount><ns3:currency>USD</ns3:currency><ns3:amount>31.48</ns3:amount></ns3:chargeAmount></ns3:charge><ns3:charge/></ns3:charges><ns3:orderLineQuantity><ns3:unitOfMeasurement>EACH</ns3:unitOfMeasurement><ns3:amount>1</ns3:amount></ns3:orderLineQuantity><ns3:statusDate>2017-08-23T13:04:39.000Z</ns3:statusDate><ns3:orderLineStatuses><ns3:orderLineStatus><ns3:status>Shipped</ns3:status><ns3:statusQuantity><ns3:unitOfMeasurement>EACH</ns3:unitOfMeasurement><ns3:amount>1</ns3:amount></ns3:statusQuantity><ns3:trackingInfo><ns3:shipDateTime>2017-08-23T13:04:40.000Z</ns3:shipDateTime><ns3:carrierName><ns3:carrier>USPS</ns3:carrier></ns3:carrierName><ns3:methodCode>Value</ns3:methodCode><ns3:trackingNumber>9405511899223042388290</ns3:trackingNumber><ns3:trackingURL>http://walmart.narvar.com/walmart/tracking/usps?&amp;type=MP&amp;seller_id=13699&amp;promise_date=09/05/2017&amp;dzip=85302&amp;tracking_numbers=9405511899223042388290</ns3:trackingURL></ns3:trackingInfo></ns3:orderLineStatus></ns3:orderLineStatuses></ns3:orderLine></ns3:orderLines>" +
                     "</ns3:order>" +
@@ -152,7 +152,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Walmart
                 .Mock(f => f.GetHttpVariableRequestSubmitter());
 
             variableRequestSubmitter.Setup(s => s.GetResponse()).Returns(responseReader.Object);
-            
+
             store.DownloadModifiedNumberOfDaysBack = 5;
             mock.Mock<IDateTimeProvider>()
                 .SetupGet(d => d.UtcNow)
@@ -177,7 +177,6 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Walmart
             context = db.CreateDataContext(x => ContainerInitializer.Initialize(x),
                 autoMock =>
                 {
-                    autoMock.Override<IWalmartRequestSigner>();
                     autoMock.Override<IWalmartWebClient>();
                     autoMock.Override<IDateTimeProvider>();
                 });
@@ -206,6 +205,8 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Walmart
                 .WithAddress("123 Main St.", "Suite 456", "St. Louis", "MO", "63123", "US")
                 .Set(x => x.StoreName, "Walmart Store")
                 .Set(x => x.StoreTypeCode = StoreTypeCode.Walmart)
+                .Set(x => x.ClientID = "ClientID")
+                .Set(x => x.ClientSecret = "r4AFA7DSXmMwPK9guZTDBw==")
                 .Save();
 
             Create.Entity<StatusPresetEntity>()

@@ -30157,6 +30157,16 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(WalmartStoreFieldIndex.DownloadModifiedNumberOfDaysBack);}
 		}
+		/// <summary>Creates a new WalmartStoreEntity.ClientID field instance</summary>
+		public static EntityField2 ClientID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(WalmartStoreFieldIndex.ClientID);}
+		}
+		/// <summary>Creates a new WalmartStoreEntity.ClientSecret field instance</summary>
+		public static EntityField2 ClientSecret
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(WalmartStoreFieldIndex.ClientSecret);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity WorldShipGoodsEntity</summary>
