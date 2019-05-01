@@ -10,7 +10,7 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse.DTO
         /// The type of store this is
         /// </summary>
         [JsonProperty("storeType")]
-        public string StoreType { get; set; }
+        public int StoreType { get; set; }
         
         /// <summary>
         /// Store data needed to download orders, such as credentials

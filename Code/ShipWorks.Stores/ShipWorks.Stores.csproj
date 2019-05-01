@@ -896,6 +896,9 @@
     <Compile Include="Services\StoreManagerWrapper.cs" />
     <Compile Include="Services\StoreTypeManagerWrapper.cs" />
     <Compile Include="StoreSettingsTrackedDurationEvent.cs" />
+    <Compile Include="Warehouse\StoreData\AmazonStoreData.cs" />
+    <Compile Include="Warehouse\StoreData\ChannelAdvisorStoreData.cs" />
+    <Compile Include="Warehouse\StoreDtoFactory.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Interapptive.Shared\Interapptive.Shared.csproj">
@@ -953,7 +956,6 @@
   <ItemGroup>
     <EmbeddedResource Include="Orders\Archive\GetArchiveTriggers.sql" />
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
