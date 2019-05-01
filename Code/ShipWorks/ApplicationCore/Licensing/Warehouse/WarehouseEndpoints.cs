@@ -10,7 +10,8 @@
         public const string Warehouses = "api/warehouses";
         public const string RefreshToken = "api/auth/token/refresh";
         public const string UploadSkus = "api/skus/import";
-
+        public const string Stores = "api/stores";
+        
         /// <summary>
         /// Create a link warehouse endpoint
         /// </summary>
