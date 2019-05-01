@@ -42,7 +42,7 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse
                 GenericResult<IRestResponse> restResponse = await warehouseRequestClient.MakeRequest(restRequest, "UploadSkusToWarehouse")
                     .ConfigureAwait(false);
 
-                return restResponse.Success ? Result.FromSuccess() : Result.FromError("Failed to uploaded skus.");
+                return restResponse.Success ? Result.FromSuccess() : Result.FromError("Failed to upload SKUs.");
             }
             catch (Exception ex)
             {
