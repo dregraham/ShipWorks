@@ -95,6 +95,9 @@ namespace ShipWorks.Stores.Services
             StoreManager.CheckForChanges();
         }
 
+        /// <summary>
+        /// Upload the given store to warehouse
+        /// </summary>
         private void UploadStoreToWarehouse(StoreEntity store)
         {
             using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
@@ -104,22 +107,12 @@ namespace ShipWorks.Stores.Services
 
                 if (restrictionLevel == EditionRestrictionLevel.None)
                 {
-                    if (store.IsNew)
-                    {
+                    IRestRequest request = new RestRequest(WarehouseEndpoints.Stores(store.WarehouseStoreID?.ToString("D")), Method.POST);
+                    request.JsonSerializer = new RestSharpJsonNetSerializer();
+                    request.RequestFormat = DataFormat.Json;
+                    // request.AddJsonBody(new LinkDatabaseDto { DatabaseId = databaseIdentifier.Get().ToString() });
 
-                    } else if(store.IsDirty)
-                    {
-
-                        //IRestRequest request = new RestRequest(WarehouseEndpoints.LinkWarehouse(warehouseId), Method.POST);
-                        //request.JsonSerializer = new RestSharpJsonNetSerializer();
-                        //request.RequestFormat = DataFormat.Json;
-                        //request.AddJsonBody(new LinkDatabaseDto { DatabaseId = databaseIdentifier.Get().ToString() });
-
-                        //lifetimeScope.Resolve<WarehouseRequestClient>().MakeRequest(request, "Upload Store");
-                    }
-
-
-
+                    lifetimeScope.Resolve<WarehouseRequestClient>().MakeRequest(request, "Upload Store");
                 }
             }
         }
