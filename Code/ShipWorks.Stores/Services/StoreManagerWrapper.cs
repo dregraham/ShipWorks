@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using Autofac;
 using Interapptive.Shared.ComponentRegistration;
@@ -8,10 +9,12 @@ using RestSharp;
 using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.ApplicationCore.Licensing.Warehouse;
+using ShipWorks.ApplicationCore.Licensing.Warehouse.DTO;
 using ShipWorks.Common.Net;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Editions;
+using ShipWorks.Stores.Warehouse;
 using ShipWorks.Users.Security;
 
 namespace ShipWorks.Stores.Services
@@ -98,7 +101,7 @@ namespace ShipWorks.Stores.Services
         /// <summary>
         /// Upload the given store to warehouse
         /// </summary>
-        private void UploadStoreToWarehouse(StoreEntity store)
+        private async Task UploadStoreToWarehouse(StoreEntity store)
         {
             using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
@@ -110,9 +113,12 @@ namespace ShipWorks.Stores.Services
                     IRestRequest request = new RestRequest(WarehouseEndpoints.Stores(store.WarehouseStoreID?.ToString("D")), Method.POST);
                     request.JsonSerializer = new RestSharpJsonNetSerializer();
                     request.RequestFormat = DataFormat.Json;
-                    // request.AddJsonBody(new LinkDatabaseDto { DatabaseId = databaseIdentifier.Get().ToString() });
 
-                    lifetimeScope.Resolve<WarehouseRequestClient>().MakeRequest(request, "Upload Store");
+                    StoreDto storeDto = await lifetimeScope.Resolve<StoreDtoFactory>().Create(store).ConfigureAwait(false);
+                    request.AddJsonBody(storeDto);
+
+                    await lifetimeScope.Resolve<WarehouseRequestClient>().MakeRequest(request, "Upload Store")
+                        .ConfigureAwait(true);
                 }
             }
         }
