@@ -1,11 +1,17 @@
 using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
+using Autofac;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.ComponentRegistration.Ordering;
+using RestSharp;
 using ShipWorks.ApplicationCore;
+using ShipWorks.ApplicationCore.Licensing;
+using ShipWorks.ApplicationCore.Licensing.Warehouse;
+using ShipWorks.Common.Net;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
+using ShipWorks.Editions;
 using ShipWorks.Users.Security;
 
 namespace ShipWorks.Stores.Services
@@ -82,8 +88,40 @@ namespace ShipWorks.Stores.Services
         public void SaveStore(StoreEntity store)
         {
             StoreManager.SaveStore(store);
+
+            UploadStoreToWarehouse(store);
+
             StatusPresetManager.CheckForChanges();
             StoreManager.CheckForChanges();
+        }
+
+        private void UploadStoreToWarehouse(StoreEntity store)
+        {
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+            {
+                ILicenseService licenseService = lifetimeScope.Resolve<ILicenseService>();
+                EditionRestrictionLevel restrictionLevel = licenseService.CheckRestriction(EditionFeature.Warehouse, null);
+
+                if (restrictionLevel == EditionRestrictionLevel.None)
+                {
+                    if (store.IsNew)
+                    {
+
+                    } else if(store.IsDirty)
+                    {
+
+                        //IRestRequest request = new RestRequest(WarehouseEndpoints.LinkWarehouse(warehouseId), Method.POST);
+                        //request.JsonSerializer = new RestSharpJsonNetSerializer();
+                        //request.RequestFormat = DataFormat.Json;
+                        //request.AddJsonBody(new LinkDatabaseDto { DatabaseId = databaseIdentifier.Get().ToString() });
+
+                        //lifetimeScope.Resolve<WarehouseRequestClient>().MakeRequest(request, "Upload Store");
+                    }
+
+
+
+                }
+            }
         }
 
         /// <summary>
