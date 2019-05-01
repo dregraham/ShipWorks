@@ -768,12 +768,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("ReturnShipment", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("RequestedLabelFormat", fieldHashtable);
-			fieldHashtable = new Dictionary<string, string>();
-			_fieldsCustomProperties.Add("IncludeReturn", fieldHashtable);
-			fieldHashtable = new Dictionary<string, string>();
-			_fieldsCustomProperties.Add("ApplyReturnProfile", fieldHashtable);
-			fieldHashtable = new Dictionary<string, string>();
-			_fieldsCustomProperties.Add("ReturnProfileID", fieldHashtable);
 		}
 		#endregion
 
@@ -1387,36 +1381,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (Nullable<System.Int32>)GetValue((int)ShippingProfileFieldIndex.RequestedLabelFormat, false); }
 			set	{ SetValue((int)ShippingProfileFieldIndex.RequestedLabelFormat, value); }
-		}
-
-		/// <summary> The IncludeReturn property of the Entity ShippingProfile<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "ShippingProfile"."IncludeReturn"<br/>
-		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.Boolean IncludeReturn
-		{
-			get { return (System.Boolean)GetValue((int)ShippingProfileFieldIndex.IncludeReturn, true); }
-			set	{ SetValue((int)ShippingProfileFieldIndex.IncludeReturn, value); }
-		}
-
-		/// <summary> The ApplyReturnProfile property of the Entity ShippingProfile<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "ShippingProfile"."ApplyReturnProfile"<br/>
-		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.Boolean ApplyReturnProfile
-		{
-			get { return (System.Boolean)GetValue((int)ShippingProfileFieldIndex.ApplyReturnProfile, true); }
-			set	{ SetValue((int)ShippingProfileFieldIndex.ApplyReturnProfile, value); }
-		}
-
-		/// <summary> The ReturnProfileID property of the Entity ShippingProfile<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "ShippingProfile"."ReturnProfileID"<br/>
-		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.Int32 ReturnProfileID
-		{
-			get { return (System.Int32)GetValue((int)ShippingProfileFieldIndex.ReturnProfileID, true); }
-			set	{ SetValue((int)ShippingProfileFieldIndex.ReturnProfileID, value); }
 		}
 
 		/// <summary> Gets the EntityCollection with the related entities of type 'PackageProfileEntity' which are related to this entity via a relation of type '1:n'. If the EntityCollection hasn't been fetched yet, the collection returned will be empty.<br/><br/></summary>
