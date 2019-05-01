@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
@@ -10,10 +11,15 @@ using Interapptive.Shared.Business;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Utility;
 using ShipWorks.AddressValidation;
+using ShipWorks.ApplicationCore;
 using ShipWorks.Common.IO.Hardware.Printers;
+using ShipWorks.Core.Messaging;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
+using ShipWorks.Messaging.Messages.Dialogs;
 using ShipWorks.Shipping.Carriers;
 using ShipWorks.Shipping.Editing.Rating;
+using ShipWorks.Shipping.Profiles;
 using ShipWorks.UI.Controls;
 using ShipWorks.UI.Controls.Design;
 
@@ -26,6 +32,9 @@ namespace ShipWorks.Shipping.Editing
     {
         // The type of shipment this instance is servicing
         readonly ShipmentTypeCode shipmentTypeCode;
+
+        private BindingList<KeyValuePair<long, string>> returnProfileList = new BindingList<KeyValuePair<long, string>>();
+        private BindingSource bindingSource = new BindingSource();
 
         bool enableEditing;
         bool isLoading;
@@ -92,7 +101,8 @@ namespace ShipWorks.Shipping.Editing
         /// <summary>
         /// Constructor
         /// </summary>
-        public ServiceControlBase(ShipmentTypeCode shipmentTypeCode, RateControl rateControl)
+        public ServiceControlBase(ShipmentTypeCode shipmentTypeCode,
+            RateControl rateControl)
             : this()
         {
             this.shipmentTypeCode = shipmentTypeCode;
@@ -330,6 +340,10 @@ namespace ShipWorks.Shipping.Editing
                     foreach (ShipmentEntity shipment in LoadedShipments)
                     {
                         returnShipment.ReadMultiCheck(v => shipment.ReturnShipment = v);
+                        includeReturn.ReadMultiCheck(v => shipment.IncludeReturns = v);
+                        applyReturnProfile.ReadMultiCheck(v => shipment.ApplyReturnProfile = v);
+                        returnProfileID.ReadMultiValue(v => shipment.ReturnProfileID = Convert.ToInt32(v));
+
                     }
                 }
 
@@ -354,6 +368,10 @@ namespace ShipWorks.Shipping.Editing
 
             if (anyReturnsSupported)
             {
+                RefreshProfileMenu(shipmentTypeCode);
+                returnProfileID.DisplayMember = "Value";
+                returnProfileID.ValueMember = "Key";
+
                 bool allReturnsSupported = loadedTypes.All(st => st.SupportsReturns);
 
                 // Always show it if any types support returns
@@ -365,6 +383,9 @@ namespace ShipWorks.Shipping.Editing
                     foreach (ShipmentEntity shipment in LoadedShipments)
                     {
                         returnShipment.ApplyMultiCheck(shipment.ReturnShipment);
+                        includeReturn.ApplyMultiCheck(shipment.IncludeReturns);
+                        applyReturnProfile.ApplyMultiCheck(shipment.ApplyReturnProfile);
+                        returnProfileID.ApplyMultiValue(shipment.ReturnProfileID);
                     }
                 }
 
@@ -398,9 +419,11 @@ namespace ShipWorks.Shipping.Editing
                 returnsPanel.Enabled = (LoadedShipments.All(s => s.ReturnShipment));
 
                 // Only enable automatic return labels for Endicia
-                allowIncludeReturn = LoadedShipments.All(st => st.ShipmentTypeCode == ShipmentTypeCode.Endicia);
+                // allowIncludeReturn = LoadedShipments.All(st => st.ShipmentTypeCode == ShipmentTypeCode.Endicia);
 
                 includeReturn.Enabled = allowIncludeReturn;
+                returnProfileID.Enabled = applyReturnProfile.Checked;
+                returnProfileIDLabel.Enabled = applyReturnProfile.Checked;
             }
             else
             {
@@ -635,6 +658,7 @@ namespace ShipWorks.Shipping.Editing
 
             sectionRecipient.ExtraText = string.Format("{0}, {1}", name, country);
         }
+
         /// <summary>
         /// Click of the Include Return checkbox
         /// </summary>
@@ -643,7 +667,83 @@ namespace ShipWorks.Shipping.Editing
             if (!isLoading)
             {
                 returnShipment.Enabled = !includeReturn.Checked;
+                applyReturnProfile.Enabled = includeReturn.Checked;
+                SaveReturnsToShipments();
             }
+        }
+
+        /// <summary>
+        /// Click of the Apply Return Profile checkbox
+        /// </summary>
+        private void OnApplyReturnChanged(object sender, EventArgs e)
+        {
+            if (!isLoading)
+            {
+                returnProfileID.Enabled = applyReturnProfile.Checked;
+                returnProfileIDLabel.Enabled = applyReturnProfile.Checked;
+                SaveReturnsToShipments();
+            }
+        }
+
+        /// <summary>
+        /// Opening the return profiles menu
+        /// </summary>
+        private void OnReturnProfileIDOpened(object sender, EventArgs e)
+        {
+            if (!isLoading)
+            {
+                // Add each relevant profile
+                RefreshProfileMenu(shipmentTypeCode);
+            }
+        }
+
+        /// <summary>
+        /// A return profile is selected
+        /// </summary>
+        private void OnReturnProfileSelected(object sender, EventArgs e)
+        {
+            SaveReturnsToShipments();
+        }
+
+        /// <summary>
+        /// Open the profiles manager
+        /// </summary>
+        private void OnManageProfiles(object sender, EventArgs e)
+        {
+            Messenger.Current.Send(new OpenProfileManagerDialogMessage(this));
+        }
+
+        /// <summary>
+        /// Add applicable profiles for the given shipment type to the context menu
+        /// </summary>
+        private void RefreshProfileMenu(ShipmentTypeCode shipmentTypeCode)
+        {
+            BindingList<KeyValuePair<long, string>> newReturnProfileList = new BindingList<KeyValuePair<long, string>>();
+
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+            {
+                IShippingProfileService shippingProfileService = lifetimeScope.Resolve<IShippingProfileService>();
+
+                IEnumerable<IShippingProfileEntity> returnProfiles = shippingProfileService
+                .GetConfiguredShipmentTypeProfiles()
+                .Where(p => shipmentTypeCode != ShipmentTypeCode.None || p.ShippingProfileEntity.ShipmentType.HasValue)
+                .Where(p => p.IsApplicable(shipmentTypeCode))
+                .Where(p => p.ShippingProfileEntity.ReturnShipment == true)
+                .Select(s => s.ShippingProfileEntity).Cast<IShippingProfileEntity>()
+                .OrderBy(g => g.Name);
+
+                foreach (IShippingProfileEntity profile in returnProfiles)
+                {
+                    newReturnProfileList.Add(new KeyValuePair<long, string>(profile.ShippingProfileID, profile.Name));
+                }
+                if (newReturnProfileList.Count == 0)
+                {
+                    newReturnProfileList.Add(new KeyValuePair<long, string>(-1, "(None)"));
+                }
+            }
+            returnProfileList = newReturnProfileList;
+            bindingSource.DataSource = returnProfileList;
+            returnProfileID.DataSource = bindingSource;
         }
 
         /// <summary>

@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 using Interapptive.Shared;
 using ShipWorks.Templates.Tokens;
@@ -281,6 +279,7 @@ namespace ShipWorks.UI.Controls
                             }
                             else
                             {
+                                // Check returns data compare
                                 comboBox.SelectedValue = data.Value;
 
                                 // If the value is not a valid ComboBox value, pick the first one
