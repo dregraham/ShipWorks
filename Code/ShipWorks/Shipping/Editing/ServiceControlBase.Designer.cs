@@ -28,6 +28,8 @@ namespace ShipWorks.Shipping.Editing
             this.applyReturnProfile = new System.Windows.Forms.CheckBox();
             this.returnProfileID = new ShipWorks.UI.Controls.MultiValueComboBox();
             this.returnProfileIDLabel = new System.Windows.Forms.Label();
+            this.labelReturnWarning = new System.Windows.Forms.Label();
+            this.pictureBoxReturnWarning = new System.Windows.Forms.PictureBox();
             this.linkManageProfiles = new ShipWorks.UI.Controls.LinkControl();
             this.returnShipment = new System.Windows.Forms.CheckBox();
             this.sectionRecipient = new ShipWorks.UI.Controls.CollapsibleGroupControl();
@@ -128,6 +130,8 @@ namespace ShipWorks.Shipping.Editing
             this.sectionReturns.ContentPanel.Controls.Add(this.returnProfileIDLabel);
             this.sectionReturns.ContentPanel.Controls.Add(this.linkManageProfiles);
             this.sectionReturns.ContentPanel.Controls.Add(this.returnShipment);
+            this.sectionReturns.ContentPanel.Controls.Add(this.pictureBoxReturnWarning);
+            this.sectionReturns.ContentPanel.Controls.Add(this.labelReturnWarning);
             this.sectionReturns.ExpandedHeight = 205;
             this.sectionReturns.ExtraText = "";
             this.sectionReturns.Location = new System.Drawing.Point(3, 114);
@@ -143,7 +147,7 @@ namespace ShipWorks.Shipping.Editing
             | System.Windows.Forms.AnchorStyles.Right)));
             this.returnsPanel.AutoSize = true;
             this.returnsPanel.BackColor = System.Drawing.Color.White;
-            this.returnsPanel.Location = new System.Drawing.Point(26, 92);
+            this.returnsPanel.Location = new System.Drawing.Point(26, 94);
             this.returnsPanel.Name = "returnsPanel";
             this.returnsPanel.Size = new System.Drawing.Size(365, 134);
             this.returnsPanel.TabIndex = 76;
@@ -164,7 +168,7 @@ namespace ShipWorks.Shipping.Editing
             // 
             this.applyReturnProfile.AutoSize = true;
             this.applyReturnProfile.BackColor = System.Drawing.Color.White;
-            this.applyReturnProfile.Location = new System.Drawing.Point(37, 31);
+            this.applyReturnProfile.Location = new System.Drawing.Point(37, 33);
             this.applyReturnProfile.Name = "applyReturnProfile";
             this.applyReturnProfile.Size = new System.Drawing.Size(200, 17);
             this.applyReturnProfile.TabIndex = 76;
@@ -176,13 +180,12 @@ namespace ShipWorks.Shipping.Editing
             // 
             this.returnProfileID.AutoSize = true;
             this.returnProfileID.BackColor = System.Drawing.Color.White;
-            this.returnProfileID.Location = new System.Drawing.Point(120, 50);
+            this.returnProfileID.Location = new System.Drawing.Point(120, 52);
             this.returnProfileID.Name = "returnProfileID";
             this.returnProfileID.Size = new System.Drawing.Size(150, 13);
             this.returnProfileID.TabIndex = 77;
             this.returnProfileID.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.returnProfileID.FormattingEnabled = true;
-            this.returnProfileID.PromptText = "(None)";
             this.returnProfileID.DropDown += new System.EventHandler(this.OnReturnProfileIDOpened);
             this.returnProfileID.SelectionChangeCommitted += new System.EventHandler(this.OnReturnProfileSelected);
             // 
@@ -190,7 +193,7 @@ namespace ShipWorks.Shipping.Editing
             // 
             this.returnProfileIDLabel.AutoSize = true;
             this.returnProfileIDLabel.BackColor = System.Drawing.Color.White;
-            this.returnProfileIDLabel.Location = new System.Drawing.Point(37, 53);
+            this.returnProfileIDLabel.Location = new System.Drawing.Point(37, 55);
             this.returnProfileIDLabel.Name = "returnProfileIDLabel";
             this.returnProfileIDLabel.Size = new System.Drawing.Size(50, 13);
             this.returnProfileIDLabel.TabIndex = 77;
@@ -203,24 +206,46 @@ namespace ShipWorks.Shipping.Editing
             this.linkManageProfiles.Cursor = System.Windows.Forms.Cursors.Hand;
             this.linkManageProfiles.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Underline);
             this.linkManageProfiles.ForeColor = System.Drawing.Color.Blue;
-            this.linkManageProfiles.Location = new System.Drawing.Point(275, 53);
+            this.linkManageProfiles.Location = new System.Drawing.Point(275, 55);
             this.linkManageProfiles.Name = "linkManageProfiles";
             this.linkManageProfiles.Size = new System.Drawing.Size(57, 13);
             this.linkManageProfiles.TabIndex = 1;
-            this.linkManageProfiles.Text = "Manage...";
+            this.linkManageProfiles.Text = "Manage Profiles";
             this.linkManageProfiles.Click += new System.EventHandler(this.OnManageProfiles);
             // 
             // returnShipment
             // 
             this.returnShipment.AutoSize = true;
             this.returnShipment.BackColor = System.Drawing.Color.White;
-            this.returnShipment.Location = new System.Drawing.Point(13, 73);
+            this.returnShipment.Location = new System.Drawing.Point(13, 75);
             this.returnShipment.Name = "returnShipment";
             this.returnShipment.Size = new System.Drawing.Size(143, 17);
             this.returnShipment.TabIndex = 78;
             this.returnShipment.Text = "This is a return shipment";
             this.returnShipment.UseVisualStyleBackColor = false;
             this.returnShipment.CheckedChanged += new System.EventHandler(this.OnReturnShipmentChanged);
+            // 
+            // labelReturnWarning
+            // 
+            this.labelReturnWarning.AutoSize = true;
+            this.labelReturnWarning.BackColor = System.Drawing.Color.White;
+            this.labelReturnWarning.ForeColor = System.Drawing.Color.DimGray;
+            this.labelReturnWarning.Location = new System.Drawing.Point(158, 13);
+            this.labelReturnWarning.Name = "labelReturnWarning";
+            this.labelReturnWarning.Size = new System.Drawing.Size(328, 13);
+            this.labelReturnWarning.TabIndex = 82;
+            this.labelReturnWarning.Text = "Shipment rates do not include any return label charges.";
+            // 
+            // pictureBoxReturnWarning
+            // 
+            this.pictureBoxReturnWarning.BackColor = System.Drawing.Color.White;
+            this.pictureBoxReturnWarning.Image = global::ShipWorks.Properties.Resources.exclamation16;
+            this.pictureBoxReturnWarning.Location = new System.Drawing.Point(141, 12);
+            this.pictureBoxReturnWarning.Name = "pictureBoxReturnWarning";
+            this.pictureBoxReturnWarning.Size = new System.Drawing.Size(16, 16);
+            this.pictureBoxReturnWarning.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
+            this.pictureBoxReturnWarning.TabIndex = 81;
+            this.pictureBoxReturnWarning.TabStop = false;
             // 
             // sectionRecipient
             // 
@@ -359,5 +384,7 @@ namespace ShipWorks.Shipping.Editing
         private ShipWorks.UI.Controls.MultiValueComboBox returnProfileID;
         private ShipWorks.UI.Controls.LinkControl linkManageProfiles;
         private System.Windows.Forms.Label returnProfileIDLabel;
+        private System.Windows.Forms.Label labelReturnWarning;
+        private System.Windows.Forms.PictureBox pictureBoxReturnWarning;
     }
 }

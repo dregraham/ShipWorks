@@ -342,7 +342,7 @@ namespace ShipWorks.Shipping.Editing
                         returnShipment.ReadMultiCheck(v => shipment.ReturnShipment = v);
                         includeReturn.ReadMultiCheck(v => shipment.IncludeReturn = v);
                         applyReturnProfile.ReadMultiCheck(v => shipment.ApplyReturnProfile = v);
-                        returnProfileID.ReadMultiValue( v => shipment.ReturnProfileID = (long) v);
+                        returnProfileID.ReadMultiValue(v => shipment.ReturnProfileID = (long) v);
                     }
                 }
                 returnsControl?.SaveToShipments();
@@ -736,7 +736,7 @@ namespace ShipWorks.Shipping.Editing
                 }
                 if (newReturnProfileList.Count == 0)
                 {
-                    newReturnProfileList.Add(new KeyValuePair<long, string>(-1, "(None)"));
+                    newReturnProfileList.Add(new KeyValuePair<long, string>(-1, "(No Profile)"));
                 }
             }
             returnProfileList = newReturnProfileList;
