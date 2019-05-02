@@ -10,24 +10,24 @@
 // ------------------------------------------------------------------------------
 #region Designer generated code
 #pragma warning disable
-namespace WarehouseAutomation.TestCases
+namespace XunitSpecflow.Features
 {
     using TechTalk.SpecFlow;
     
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("TechTalk.SpecFlow", "2.4.0.0")]
     [System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    public partial class SuccessfulLoginFeature : Xunit.IClassFixture<SuccessfulLoginFeature.FixtureData>, System.IDisposable
+    public partial class FailureLoginFeature : Xunit.IClassFixture<FailureLoginFeature.FixtureData>, System.IDisposable
     {
         
         private static TechTalk.SpecFlow.ITestRunner testRunner;
         
         private Xunit.Abstractions.ITestOutputHelper _testOutputHelper;
         
-#line 1 "SuccessfulLogin.feature"
+#line 1 "FailureLogin.feature"
 #line hidden
         
-        public SuccessfulLoginFeature(SuccessfulLoginFeature.FixtureData fixtureData, Xunit.Abstractions.ITestOutputHelper testOutputHelper)
+        public FailureLoginFeature(FailureLoginFeature.FixtureData fixtureData, Xunit.Abstractions.ITestOutputHelper testOutputHelper)
         {
             this._testOutputHelper = testOutputHelper;
             this.TestInitialize();
@@ -36,8 +36,7 @@ namespace WarehouseAutomation.TestCases
         public static void FeatureSetup()
         {
             testRunner = TechTalk.SpecFlow.TestRunnerManager.GetTestRunner();
-            TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "SuccessfulLogin", "\tIf a correct username and password are entered, the user should successfully log" +
-                    " in", ProgrammingLanguage.CSharp, ((string[])(null)));
+            TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "FailureLogin", null, ProgrammingLanguage.CSharp, ((string[])(null)));
             testRunner.OnFeatureStart(featureInfo);
         }
         
@@ -77,35 +76,24 @@ namespace WarehouseAutomation.TestCases
             this.ScenarioTearDown();
         }
         
-        [Xunit.TheoryAttribute(DisplayName="the user logs in successfully to the warehouse")]
-        [Xunit.TraitAttribute("FeatureTitle", "SuccessfulLogin")]
-        [Xunit.TraitAttribute("Description", "the user logs in successfully to the warehouse")]
-        [Xunit.TraitAttribute("Category", "mytag")]
+        [Xunit.TheoryAttribute(DisplayName="Login with invalid credentials")]
+        [Xunit.TraitAttribute("FeatureTitle", "FailureLogin")]
+        [Xunit.TraitAttribute("Description", "Login with invalid credentials")]
         [Xunit.InlineDataAttribute("Chrome", new string[0])]
         [Xunit.InlineDataAttribute("Firefox", new string[0])]
         [Xunit.InlineDataAttribute("Edge", new string[0])]
-        public virtual void TheUserLogsInSuccessfullyToTheWarehouse(string browser, string[] exampleTags)
+        public virtual void LoginWithInvalidCredentials(string browser, string[] exampleTags)
         {
-            string[] @__tags = new string[] {
-                    "mytag"};
-            if ((exampleTags != null))
-            {
-                @__tags = System.Linq.Enumerable.ToArray(System.Linq.Enumerable.Concat(@__tags, exampleTags));
-            }
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("the user logs in successfully to the warehouse", null, @__tags);
-#line 5
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Login with invalid credentials", null, exampleTags);
+#line 3
 this.ScenarioInitialize(scenarioInfo);
             this.ScenarioStart();
+#line 4
+ testRunner.Given(string.Format("the user is on login page on \'{0}\'", browser), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
+#line 5
+ testRunner.And("the user enters invalid username and password", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line 6
- testRunner.Given(string.Format("the user is on warehouse login page using the web browser \'{0}\'", browser), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
-#line 7
- testRunner.When("the user enters username", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
-#line 8
- testRunner.When("the user enters password", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
-#line 9
- testRunner.When("the user clicks login", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
-#line 10
- testRunner.Then("the user sees the home page", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+ testRunner.Then("the user sees the error message", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             this.ScenarioCleanup();
         }
@@ -117,12 +105,12 @@ this.ScenarioInitialize(scenarioInfo);
             
             public FixtureData()
             {
-                SuccessfulLoginFeature.FeatureSetup();
+                FailureLoginFeature.FeatureSetup();
             }
             
             void System.IDisposable.Dispose()
             {
-                SuccessfulLoginFeature.FeatureTearDown();
+                FailureLoginFeature.FeatureTearDown();
             }
         }
     }

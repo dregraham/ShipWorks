@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28010.2003
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WarehouseAutomation", "WarehouseAutomation\WarehouseAutomation.csproj", "{2D0B7535-7FD7-4DA9-AF65-DF608E1FE56B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PageObjectModel", "XunitSpecflow\PageObjectModel.csproj", "{2D0B7535-7FD7-4DA9-AF65-DF608E1FE56B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
