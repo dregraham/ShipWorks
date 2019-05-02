@@ -417,7 +417,7 @@ namespace ShipWorks.Shipping.Editing
                 // allowIncludeReturn = LoadedShipments.All(st => st.ShipmentTypeCode == ShipmentTypeCode.Endicia);
 
                 includeReturn.Enabled = allowIncludeReturn;
-                applyReturnProfile.Enabled = includeReturn.Checked;
+                applyReturnProfile.Enabled = includeReturn.Checked && includeReturn.Enabled;
                 returnProfileID.Enabled = applyReturnProfile.Checked && applyReturnProfile.Enabled;
                 returnProfileIDLabel.Enabled = applyReturnProfile.Checked && applyReturnProfile.Enabled;
             }
@@ -663,9 +663,9 @@ namespace ShipWorks.Shipping.Editing
             if (!isLoading)
             {
                 returnShipment.Enabled = !includeReturn.Checked;
-                applyReturnProfile.Enabled = includeReturn.Checked;
-                returnProfileID.Enabled = includeReturn.Checked;
-                returnProfileIDLabel.Enabled = includeReturn.Checked;
+                applyReturnProfile.Enabled = includeReturn.Checked && includeReturn.Enabled;
+                returnProfileID.Enabled = applyReturnProfile.Checked && applyReturnProfile.Enabled;
+                returnProfileIDLabel.Enabled = applyReturnProfile.Checked && applyReturnProfile.Enabled;
                 SaveReturnsToShipments();
             }
         }
@@ -740,6 +740,8 @@ namespace ShipWorks.Shipping.Editing
                 }
             }
             returnProfileList = newReturnProfileList;
+
+            // Reset data sources because calling resetbindings() doesn't work
             bindingSource.DataSource = returnProfileList;
             returnProfileID.DataSource = bindingSource;
         }
