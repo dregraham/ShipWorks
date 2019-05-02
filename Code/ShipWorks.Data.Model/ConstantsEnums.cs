@@ -10374,6 +10374,12 @@ namespace ShipWorks.Data.Model
 		BilledWeight,
 		///<summary>ProcessedWithUiMode. </summary>
 		ProcessedWithUiMode,
+		///<summary>IncludeReturn. </summary>
+		IncludeReturn,
+		///<summary>ApplyReturnProfile. </summary>
+		ApplyReturnProfile,
+		///<summary>ReturnProfileID. </summary>
+		ReturnProfileID,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -10542,6 +10548,12 @@ namespace ShipWorks.Data.Model
 		ReturnShipment,
 		///<summary>RequestedLabelFormat. </summary>
 		RequestedLabelFormat,
+		///<summary>IncludeReturn. </summary>
+		IncludeReturn,
+		///<summary>ApplyReturnProfile. </summary>
+		ApplyReturnProfile,
+		///<summary>ReturnProfileID. </summary>
+		ReturnProfileID,
 		/// <summary></summary>
 		AmountOfFields
 	}
