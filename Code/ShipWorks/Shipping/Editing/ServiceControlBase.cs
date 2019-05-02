@@ -342,15 +342,10 @@ namespace ShipWorks.Shipping.Editing
                         returnShipment.ReadMultiCheck(v => shipment.ReturnShipment = v);
                         includeReturn.ReadMultiCheck(v => shipment.IncludeReturn = v);
                         applyReturnProfile.ReadMultiCheck(v => shipment.ApplyReturnProfile = v);
-                        returnProfileID.ReadMultiValue(v => shipment.ReturnProfileID = v);
-
+                        returnProfileID.ReadMultiValue( v => shipment.ReturnProfileID = (long) v);
                     }
                 }
-
-                if (returnsControl != null)
-                {
-                    returnsControl.SaveToShipments();
-                }
+                returnsControl?.SaveToShipments();
             }
         }
 
