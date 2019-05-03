@@ -92,6 +92,16 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Features\AddWarehouse.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>AddWarehouse.feature</DependentUpon>
+    </Compile>
+    <Compile Include="Features\CancelAddWarehouse.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>CancelAddWarehouse.feature</DependentUpon>
+    </Compile>
     <Compile Include="Features\FailureLogin.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -104,12 +114,22 @@
     </Compile>
     <Compile Include="Pages\DashboardPage.cs" />
     <Compile Include="Pages\LoginPage.cs" />
+    <Compile Include="Pages\WarehousesPage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Steps\AddWarehouseSteps.cs" />
     <Compile Include="Steps\BaseSteps.cs" />
     <Compile Include="Steps\LoginSteps.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="Features\AddWarehouse.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>AddWarehouse.feature.cs</LastGenOutput>
+    </None>
+    <None Include="Features\CancelAddWarehouse.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>CancelAddWarehouse.feature.cs</LastGenOutput>
+    </None>
     <None Include="Features\FailureLogin.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>FailureLogin.feature.cs</LastGenOutput>

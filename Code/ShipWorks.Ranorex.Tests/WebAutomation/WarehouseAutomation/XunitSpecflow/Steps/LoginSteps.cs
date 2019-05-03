@@ -46,7 +46,7 @@ namespace XunitSpecflow.Steps
         {
             Thread.Sleep(2000);
             Assert.Contains("Invalid username or password", loginPage.GetErrorMessage());
-            loginPage.LoginPageQuit(_driver);
+            loginPage.LoginPageQuit();
         }
     }
 }
