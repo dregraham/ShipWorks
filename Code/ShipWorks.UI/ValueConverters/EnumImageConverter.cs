@@ -20,6 +20,8 @@ namespace ShipWorks.UI.ValueConverters
     [Obfuscation(Exclude = true)]
     public class EnumImageConverter : IValueConverter
     {
+        private static Dictionary<Enum, BitmapSource> imageCache = new Dictionary<Enum, BitmapSource>();
+
         /// <summary>
         /// Convert an enum value into an image for use in an Image control
         /// </summary>
@@ -37,6 +39,21 @@ namespace ShipWorks.UI.ValueConverters
                 return null;
             }
 
+            if (imageCache.TryGetValue(enumValue, out BitmapSource cachedImage))
+            {
+                return cachedImage;
+            }
+
+            var loadedImage = CreateBitmapSource(enumValue);
+            imageCache.Add(enumValue, loadedImage);
+            return loadedImage;
+        }
+
+        /// <summary>
+        /// Create a bitmap source from an enum value
+        /// </summary>
+        private static BitmapSource CreateBitmapSource(Enum enumValue)
+        {
             Image image = EnumHelper.GetImage(enumValue);
             if (image == null)
             {

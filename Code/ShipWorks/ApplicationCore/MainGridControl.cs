@@ -611,7 +611,7 @@ namespace ShipWorks.ApplicationCore
             if (IsSearchActive)
             {
                 headerViewModel.Title = string.Format("Search {0}", EnumHelper.GetDescription(ActiveFilterTarget));
-                headerViewModel.HeaderImage = Resources.view;
+                headerViewModel.HeaderImageName = nameof(Resources.view);
 
                 pictureSearchHourglass.Visible = searchProvider.IsSearching;
                 headerViewModel.IsSearching = searchProvider.IsSearching;
@@ -649,7 +649,7 @@ namespace ShipWorks.ApplicationCore
                 ActiveGrid.OverrideEmptyText = "";
                 headerViewModel.Title = ActiveGrid.ActiveFilterNode?.Filter?.Name ?? string.Empty;
 
-                headerViewModel.HeaderImage = FilterHelper.GetFilterImage(ActiveFilterTarget);
+                headerViewModel.HeaderImageName = FilterHelper.GetFilterImageName(ActiveFilterTarget);
             }
 
             UpdateSearchBox();
@@ -664,7 +664,7 @@ namespace ShipWorks.ApplicationCore
         {
             if (IsSearchActive)
             {
-                headerViewModel.EndSearchImage = searchProvider.IsSearching ? Resources.stop_small : Resources.clear_small;
+                headerViewModel.EndSearchImageName = searchProvider.IsSearching ? nameof(Resources.stop_small) : nameof(Resources.clear_small);
                 headerViewModel.WatermarkText = AdvancedSearchResultsActive ? "Search these results" : "";
             }
             else

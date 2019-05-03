@@ -17,6 +17,7 @@ using ShipWorks.Data.Model.FactoryClasses;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Properties;
 using ShipWorks.Templates;
+using ShipWorks.UI.Utility;
 
 namespace ShipWorks.Data
 {
@@ -649,15 +650,40 @@ namespace ShipWorks.Data
         /// <summary>
         /// Get a 16x16 image representing the given entity
         /// </summary>
-        public static Image GetEntityImage(long entityID)
+        public static Image GetEntityImage(long entityID) =>
+            GetEntityImage(entityID, 16);
+
+        /// <summary>
+        /// Get an image of the given entity of the given size
+        /// </summary>
+        public static Image GetEntityImage(long entityID, int size) =>
+            ResourcesUtility.GetImage(GetEntityImageName(entityID, size));
+
+        /// <summary>
+        /// Get a 16x16 image representing the given EntityType
+        /// </summary>
+        public static Image GetEntityImage(EntityType entityType) =>
+            GetEntityImage(entityType, 16);
+
+        /// <summary>
+        /// Get an image of the given entity of the given size
+        /// </summary>
+        [NDependIgnoreComplexMethodAttribute]
+        public static Image GetEntityImage(EntityType entityType, int size) =>
+            ResourcesUtility.GetImage(GetEntityImageName(entityType, size));
+
+        /// <summary>
+        /// Get a 16x16 image representing the given entity
+        /// </summary>
+        public static string GetEntityImageName(long entityID)
         {
-            return GetEntityImage(entityID, 16);
+            return GetEntityImageName(entityID, 16);
         }
 
         /// <summary>
         /// Get an image of the given entity of the given size
         /// </summary>
-        public static Image GetEntityImage(long entityID, int size)
+        public static string GetEntityImageName(long entityID, int size)
         {
             // If its a template, we can get more specific than the EntityType version
             if (GetEntityType(entityID) == EntityType.TemplateEntity)
@@ -672,36 +698,36 @@ namespace ShipWorks.Data
 
                 if (template != null)
                 {
-                    return TemplateHelper.GetTemplateImage(template);
+                    return TemplateHelper.GetTemplateImageName(template);
                 }
                 else
                 {
                     // Special case for preview, which uses 25 - which we would never give out as a real ID since we start at 1025.
                     if (entityID == 25)
                     {
-                        return TemplateHelper.GetTemplateImage(TemplateType.Standard);
+                        return TemplateHelper.GetTemplateImageName(TemplateType.Standard);
                     }
 
-                    return Resources.template_deleted16;
+                    return nameof(Resources.template_deleted16);
                 }
             }
 
-            return GetEntityImage(GetEntityType(entityID), size);
+            return GetEntityImageName(GetEntityType(entityID), size);
         }
 
         /// <summary>
         /// Get a 16x16 image representing the given EntityType
         /// </summary>
-        public static Image GetEntityImage(EntityType entityType)
+        public static string GetEntityImageName(EntityType entityType)
         {
-            return GetEntityImage(entityType, 16);
+            return GetEntityImageName(entityType, 16);
         }
 
         /// <summary>
         /// Get an image of the given entity of the given size
         /// </summary>
         [NDependIgnoreComplexMethodAttribute]
-        public static Image GetEntityImage(EntityType entityType, int size)
+        public static string GetEntityImageName(EntityType entityType, int size)
         {
             if (size != 16 && size != 32)
             {
@@ -711,32 +737,32 @@ namespace ShipWorks.Data
             switch (entityType)
             {
                 case EntityType.StoreEntity:
-                    return size == 16 ? Resources.school16 : Resources.school32;
+                    return size == 16 ? nameof(Resources.school16) : nameof(Resources.school32);
 
                 case EntityType.OrderEntity:
-                    return size == 16 ? Resources.order16 : Resources.order32;
+                    return size == 16 ? nameof(Resources.order16) : nameof(Resources.order32);
 
                 case EntityType.CustomerEntity:
-                    return size == 16 ? Resources.customer16 : Resources.customer32;
+                    return size == 16 ? nameof(Resources.customer16) : nameof(Resources.customer32);
 
                 case EntityType.ShipmentEntity:
                 case EntityType.FedExPackageEntity:
-                    return size == 16 ? Resources.box_closed16 : Resources.box_closed32;
+                    return size == 16 ? nameof(Resources.box_closed16) : nameof(Resources.box_closed32);
 
                 case EntityType.OrderItemEntity:
-                    return size == 16 ? Resources.shoppingcart16 : Resources.shoppingcart32;
+                    return size == 16 ? nameof(Resources.shoppingcart16) : nameof(Resources.shoppingcart32);
 
                 case EntityType.OrderChargeEntity:
-                    return size == 16 ? Resources.currency_dollar16 : Resources.currency_dollar32;
+                    return size == 16 ? nameof(Resources.currency_dollar16) : nameof(Resources.currency_dollar32);
 
                 case EntityType.OrderItemAttributeEntity:
-                    return size == 16 ? Resources.paperclip16 : Resources.paperclip32;
+                    return size == 16 ? nameof(Resources.paperclip16) : nameof(Resources.paperclip32);
 
                 case EntityType.TemplateEntity:
-                    return size == 16 ? Resources.template_general_16 : Resources.template_general_32;
+                    return size == 16 ? nameof(Resources.template_general_16) : nameof(Resources.template_general_32);
 
                 case EntityType.NoteEntity:
-                    return size == 16 ? Resources.note16 : Resources.note32;
+                    return size == 16 ? nameof(Resources.note16) : nameof(Resources.note32);
 
                 default:
                     //Debug.Fail("EntityType " + entityType + " has no image.");

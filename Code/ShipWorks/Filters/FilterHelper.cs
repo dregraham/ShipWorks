@@ -25,6 +25,7 @@ using ShipWorks.Filters.Content.Conditions;
 using ShipWorks.Filters.Content.Conditions.Orders.Address;
 using ShipWorks.Filters.Management;
 using ShipWorks.Properties;
+using ShipWorks.UI.Utility;
 using ShipWorks.Users;
 
 namespace ShipWorks.Filters
@@ -271,79 +272,8 @@ namespace ShipWorks.Filters
         /// <summary>
         /// Get the image to use for the given node
         /// </summary>
-        public static Image GetFilterImage(FilterNodeEntity node, bool createCopy = true)
-        {
-            FilterEntity filter = node.Filter;
-
-            if (IsBuiltin(filter))
-            {
-                if (filter.Name == myFiltersName)
-                {
-                    return EditionManager.ActiveRestrictions.CheckRestriction(EditionFeature.MyFilters).Level == EditionRestrictionLevel.None ?
-                        GetFilterImage(FilterImageType.MyFilters, createCopy) :
-                        EditionGuiHelper.GetLockImage(16);
-                }
-
-                switch ((FilterTarget) filter.FilterTarget)
-                {
-                    case FilterTarget.Orders: return GetFilterImage(FilterImageType.Orders, createCopy);
-                    case FilterTarget.Customers: return GetFilterImage(FilterImageType.Customers, createCopy);
-                    default:
-                        throw new InvalidOperationException("Unhandled FilterTarget in GetFilterImage");
-                }
-            }
-
-            if (node.Purpose == (int) FilterNodePurpose.Search)
-            {
-                return GetFilterImage(FilterImageType.Search, createCopy);
-            }
-
-            if (IsFilterHardLinked(filter))
-            {
-                if (filter.IsFolder)
-                {
-                    return filter.Definition == null ? GetFilterImage(FilterImageType.HardLinkFolder, createCopy) : GetFilterImage(FilterImageType.HardLinkFodlerWithCondition, createCopy);
-                }
-                else if (filter.IsSavedSearch)
-                {
-                    return GetFilterImage(FilterImageType.HardLinkSavedSearch, createCopy);
-                }
-                else
-                {
-                    return GetFilterImage(FilterImageType.HardLinkFilter, createCopy);
-                }
-            }
-            else if (IsFilterSoftLinked(filter))
-            {
-                if (filter.IsFolder)
-                {
-                    return filter.Definition == null ? GetFilterImage(FilterImageType.SoftLinkFolder, createCopy) : GetFilterImage(FilterImageType.SoftLinkFodlerWithCondition, createCopy);
-                }
-                else if (filter.IsSavedSearch)
-                {
-                    return GetFilterImage(FilterImageType.SoftLinkSavedSearch, createCopy);
-                }
-                else
-                {
-                    return GetFilterImage(FilterImageType.SoftLinkFilter, createCopy);
-                }
-            }
-            else
-            {
-                if (filter.IsFolder)
-                {
-                    return filter.Definition == null ? GetFilterImage(FilterImageType.Folder, createCopy) : GetFilterImage(FilterImageType.FolderWithCondition, createCopy);
-                }
-                else if (filter.IsSavedSearch)
-                {
-                    return GetFilterImage(FilterImageType.SavedSearch, createCopy);
-                }
-                else
-                {
-                    return GetFilterImage(FilterImageType.Filter, createCopy);
-                }
-            }
-        }
+        public static Image GetFilterImage(FilterNodeEntity node, bool createCopy = true) =>
+            GetFilterImageType(node, false, GetFilterImage, EditionGuiHelper.GetLockImage);
 
         /// <summary>
         /// Get the filter image of the given type, either from our a cache of reusable images or creating a new copy
@@ -352,27 +282,7 @@ namespace ShipWorks.Filters
         {
             if (createCopy)
             {
-                switch (filterImageType)
-                {
-                    case FilterImageType.MyFilters: return Resources.my_filters;
-                    case FilterImageType.Orders: return Resources.order16;
-                    case FilterImageType.Customers: return Resources.customer16;
-                    case FilterImageType.Search: return Resources.view;
-                    case FilterImageType.HardLinkFolder: return Resources.folderclosed_linked_infinity;
-                    case FilterImageType.HardLinkFodlerWithCondition: return Resources.folderfilter_linked_infinity;
-                    case FilterImageType.HardLinkFilter: return Resources.funnel_linked_infinity;
-                    case FilterImageType.HardLinkSavedSearch: return Resources.view_linked_infinity;
-                    case FilterImageType.SoftLinkFolder: return Resources.folderclosed_linked_arrow;
-                    case FilterImageType.SoftLinkFodlerWithCondition: return Resources.folderfilter_linked_arrow;
-                    case FilterImageType.SoftLinkFilter: return Resources.funnel_linked_arrow;
-                    case FilterImageType.SoftLinkSavedSearch: return Resources.view_linked_arrow;
-                    case FilterImageType.Folder: return Resources.folderclosed;
-                    case FilterImageType.FolderWithCondition: return Resources.folderfilter;
-                    case FilterImageType.SavedSearch: return Resources.view;
-                    case FilterImageType.Filter: return Resources.filter;
-                }
-
-                throw new NotFoundException("Could not find filter image for " + filterImageType);
+                return ResourcesUtility.GetImage(GetFilterImageName(filterImageType));
             }
             else
             {
@@ -390,9 +300,124 @@ namespace ShipWorks.Filters
         /// <summary>
         /// Get the image to use for the given type
         /// </summary>
-        public static Image GetFilterImage(FilterTarget target)
+        public static Image GetFilterImage(FilterTarget target) =>
+            ResourcesUtility.GetImage(GetFilterImageName(target));
+
+        /// <summary>
+        /// Get the image to use for the given node
+        /// </summary>
+        public static string GetFilterImageName(FilterNodeEntity node) =>
+            GetFilterImageType(node, false, (x, y) => GetFilterImageName(x), EditionGuiHelper.GetLockImageName);
+
+        /// <summary>
+        /// Get the filter image of the given type, either from our a cache of reusable images or creating a new copy
+        /// </summary>
+        private static string GetFilterImageName(FilterImageType filterImageType)
         {
-            return EntityUtility.GetEntityImage(GetEntityType(target));
+            switch (filterImageType)
+            {
+                case FilterImageType.MyFilters: return nameof(Resources.my_filters);
+                case FilterImageType.Orders: return nameof(Resources.order16);
+                case FilterImageType.Customers: return nameof(Resources.customer16);
+                case FilterImageType.Search: return nameof(Resources.view);
+                case FilterImageType.HardLinkFolder: return nameof(Resources.folderclosed_linked_infinity);
+                case FilterImageType.HardLinkFodlerWithCondition: return nameof(Resources.folderfilter_linked_infinity);
+                case FilterImageType.HardLinkFilter: return nameof(Resources.funnel_linked_infinity);
+                case FilterImageType.HardLinkSavedSearch: return nameof(Resources.view_linked_infinity);
+                case FilterImageType.SoftLinkFolder: return nameof(Resources.folderclosed_linked_arrow);
+                case FilterImageType.SoftLinkFodlerWithCondition: return nameof(Resources.folderfilter_linked_arrow);
+                case FilterImageType.SoftLinkFilter: return nameof(Resources.funnel_linked_arrow);
+                case FilterImageType.SoftLinkSavedSearch: return nameof(Resources.view_linked_arrow);
+                case FilterImageType.Folder: return nameof(Resources.folderclosed);
+                case FilterImageType.FolderWithCondition: return nameof(Resources.folderfilter);
+                case FilterImageType.SavedSearch: return nameof(Resources.view);
+                case FilterImageType.Filter: return nameof(Resources.filter);
+            }
+
+            throw new NotFoundException("Could not find filter image for " + filterImageType);
+        }
+
+        /// <summary>
+        /// Get the image to use for the given type
+        /// </summary>
+        public static string GetFilterImageName(FilterTarget target) =>
+          EntityUtility.GetEntityImageName(GetEntityType(target));
+
+        /// <summary>
+        /// Get the image to use for the given node
+        /// </summary>
+        private static T GetFilterImageType<T>(FilterNodeEntity node, bool createCopy, Func<FilterImageType, bool, T> retriever, Func<int, T> getLockImage)
+        {
+            FilterEntity filter = node.Filter;
+
+            if (IsBuiltin(filter))
+            {
+                if (filter.Name == myFiltersName)
+                {
+                    return EditionManager.ActiveRestrictions.CheckRestriction(EditionFeature.MyFilters).Level == EditionRestrictionLevel.None ?
+                        retriever(FilterImageType.MyFilters, createCopy) :
+                        getLockImage(16);
+                }
+
+                switch ((FilterTarget) filter.FilterTarget)
+                {
+                    case FilterTarget.Orders: return retriever(FilterImageType.Orders, createCopy);
+                    case FilterTarget.Customers: return retriever(FilterImageType.Customers, createCopy);
+                    default:
+                        throw new InvalidOperationException("Unhandled FilterTarget in GetFilterImage");
+                }
+            }
+
+            if (node.Purpose == (int) FilterNodePurpose.Search)
+            {
+                return retriever(FilterImageType.Search, createCopy);
+            }
+
+            if (IsFilterHardLinked(filter))
+            {
+                if (filter.IsFolder)
+                {
+                    return filter.Definition == null ? retriever(FilterImageType.HardLinkFolder, createCopy) : retriever(FilterImageType.HardLinkFodlerWithCondition, createCopy);
+                }
+                else if (filter.IsSavedSearch)
+                {
+                    return retriever(FilterImageType.HardLinkSavedSearch, createCopy);
+                }
+                else
+                {
+                    return retriever(FilterImageType.HardLinkFilter, createCopy);
+                }
+            }
+            else if (IsFilterSoftLinked(filter))
+            {
+                if (filter.IsFolder)
+                {
+                    return filter.Definition == null ? retriever(FilterImageType.SoftLinkFolder, createCopy) : retriever(FilterImageType.SoftLinkFodlerWithCondition, createCopy);
+                }
+                else if (filter.IsSavedSearch)
+                {
+                    return retriever(FilterImageType.SoftLinkSavedSearch, createCopy);
+                }
+                else
+                {
+                    return retriever(FilterImageType.SoftLinkFilter, createCopy);
+                }
+            }
+            else
+            {
+                if (filter.IsFolder)
+                {
+                    return filter.Definition == null ? retriever(FilterImageType.Folder, createCopy) : retriever(FilterImageType.FolderWithCondition, createCopy);
+                }
+                else if (filter.IsSavedSearch)
+                {
+                    return retriever(FilterImageType.SavedSearch, createCopy);
+                }
+                else
+                {
+                    return retriever(FilterImageType.Filter, createCopy);
+                }
+            }
         }
 
         /// <summary>
