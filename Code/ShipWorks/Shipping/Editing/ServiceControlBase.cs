@@ -415,8 +415,10 @@ namespace ShipWorks.Shipping.Editing
 
                 // Only enable automatic return labels for Endicia
                 // allowIncludeReturn = LoadedShipments.All(st => st.ShipmentTypeCode == ShipmentTypeCode.Endicia);
+                allowIncludeReturn = !returnShipment.Checked;
 
                 includeReturn.Enabled = allowIncludeReturn;
+                returnShipment.Enabled = !includeReturn.Checked && includeReturn.Enabled;
                 applyReturnProfile.Enabled = includeReturn.Checked && includeReturn.Enabled;
                 returnProfileID.Enabled = applyReturnProfile.Checked && applyReturnProfile.Enabled;
                 returnProfileIDLabel.Enabled = applyReturnProfile.Checked && applyReturnProfile.Enabled;
