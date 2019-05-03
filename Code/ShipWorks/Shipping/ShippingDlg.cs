@@ -2348,6 +2348,8 @@ namespace ShipWorks.Shipping
         {
             Cursor.Current = Cursors.WaitCursor;
 
+            List<ShipmentEntity> newReturnShipments = new List<ShipmentEntity>();
+
             ILicenseService licenseService = lifetimeScope.Resolve<ILicenseService>();
             licenseService.GetLicenses().FirstOrDefault()?.EnforceCapabilities(EnforcementContext.CreateLabel, this);
 
@@ -2356,10 +2358,34 @@ namespace ShipWorks.Shipping
 
             // Clear errors on ones that are already marked as processed. Like if they got the AlreadyProcessed error, and then hit process again,
             // the error shouldn't stay
-            foreach (ShipmentEntity shipment in shipments.Where(s => s.Processed))
+            foreach (ShipmentEntity shipment in shipments)
             {
+                if (!shipment.Processed && shipment.IncludeReturn)
+                {
+                    if (!shipment.ReturnShipment)
+                    {
+                        // Create a copy of the shipment to use for returns
+                        ShipmentEntity returnShipment = shippingManager.CreateReturnShipment(shipment);
+
+                        // Update IncludeReturns to false after the shipment has been copied
+                        returnShipment.IncludeReturn = false;
+
+                        //if (shipment.ApplyReturnProfile)
+                        //{
+                        //    await ApplyProfile(ShippingProfileManager.GetProfileReadOnly(shipment.ReturnProfileID));
+                        //}
+
+                        UpdateReturnShipToAddress(returnShipment, shipment);
+                        UpdateReturnShipFromAddress(returnShipment, shipment);
+
+                        ShippingManager.SaveShipment(returnShipment);
+                        newReturnShipments.Add(returnShipment);
+                    }
+                }
                 ErrorManager.Remove(shipment.ShipmentID);
             }
+
+            shipments = shipments.Concat(newReturnShipments);
 
             IShipmentProcessor shipmentProcessor = createShipmentProcessor();
 
@@ -2380,6 +2406,47 @@ namespace ShipWorks.Shipping
             // shipment, so the status of any remaining unprocessed shipments are reflected correctly
             shipSenseSynchronizer.RefreshKnowledgebaseEntries();
             shipSenseSynchronizer.MonitoredShipments.ToList().ForEach(shipSenseSynchronizer.SynchronizeWith);
+        }
+
+        /// <summary>
+        /// Update ShipTo Address of a automatic return shipment
+        /// </summary>
+        private static void UpdateReturnShipToAddress(ShipmentEntity returnShipment, ShipmentEntity shipment)
+        {
+            returnShipment.ShipFirstName = shipment.OriginFirstName;
+            returnShipment.ShipMiddleName = shipment.OriginMiddleName;
+            returnShipment.ShipLastName = shipment.OriginLastName;
+            returnShipment.ShipUnparsedName = shipment.OriginUnparsedName;
+            returnShipment.ShipCompany = shipment.OriginCompany;
+            returnShipment.ShipStreet1 = shipment.OriginStreet1;
+            returnShipment.ShipStreet2 = shipment.OriginStreet2;
+            returnShipment.ShipStreet3 = shipment.OriginStreet3;
+            returnShipment.ShipCity = shipment.OriginCity;
+            returnShipment.ShipStateProvCode = shipment.OriginStateProvCode;
+            returnShipment.ShipCountryCode = shipment.OriginCountryCode;
+            returnShipment.ShipPhone = shipment.OriginPhone;
+            returnShipment.ShipEmail = shipment.OriginEmail;
+        }
+
+        /// <summary>
+        /// Update ShipFrom Address of a automatic return shipment
+        /// </summary>
+        private static void UpdateReturnShipFromAddress(ShipmentEntity returnShipment, ShipmentEntity shipment)
+        {
+            // Update ShipFrom address fields for return shipment
+            returnShipment.OriginFirstName = shipment.ShipFirstName;
+            returnShipment.OriginMiddleName = shipment.ShipMiddleName;
+            returnShipment.OriginLastName = shipment.ShipLastName;
+            returnShipment.OriginUnparsedName = shipment.ShipUnparsedName;
+            returnShipment.OriginCompany = shipment.ShipCompany;
+            returnShipment.OriginStreet1 = shipment.ShipStreet1;
+            returnShipment.OriginStreet2 = shipment.ShipStreet2;
+            returnShipment.OriginStreet3 = shipment.ShipStreet3;
+            returnShipment.OriginCity = shipment.ShipCity;
+            returnShipment.OriginStateProvCode = shipment.ShipStateProvCode;
+            returnShipment.OriginCountryCode = shipment.ShipCountryCode;
+            returnShipment.OriginPhone = shipment.ShipPhone;
+            returnShipment.OriginEmail = shipment.ShipEmail;
         }
 
         /// <summary>
