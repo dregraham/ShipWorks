@@ -36,6 +36,10 @@ namespace ShipWorks.Shipping.Profiles
             ApplyProfileValue(profile.RequestedLabelFormat, shipment, ShipmentFields.RequestedLabelFormat);
             shipmentType.SaveRequestedLabelFormat((ThermalLanguage) shipment.RequestedLabelFormat, shipment);
 
+            ApplyProfileValue(profile.IncludeReturn, shipment, ShipmentFields.IncludeReturn);
+            ApplyProfileValue(profile.ApplyReturnProfile, shipment, ShipmentFields.ApplyReturnProfile);
+            ApplyProfileValue(profile.ReturnProfileID, shipment, ShipmentFields.ReturnProfileID);
+
             // Special case for insurance
             for (int i = 0; i < shipmentType.GetParcelCount(shipment); i++)
             {
@@ -52,6 +56,17 @@ namespace ShipWorks.Shipping.Profiles
                     InsuranceInitialValueSource source = (InsuranceInitialValueSource) profile.InsuranceInitialValueSource;
                     insuranceChoice.InsuranceValue = InsuranceUtility.GetInsuranceValue(shipment, source, profile.InsuranceInitialValueAmount);
                 }
+            }
+        }
+
+        /// <summary>
+        /// Apply the given value to the specified entity and field, but only if the value is non-null
+        /// </summary>
+        protected static void ApplyProfileValue<T>(T value, EntityBase2 entity, EntityField2 field)
+        {
+            if (value != null)
+            {
+                entity.SetNewFieldValue(field.FieldIndex, value);
             }
         }
 
