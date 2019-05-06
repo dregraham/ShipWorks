@@ -89,14 +89,23 @@ namespace ShipWorks.Shipping.Carriers.Postal
 
             AddValueMapping(profile, ShippingProfileFields.ReturnShipment, returnState, returnShipment);
             AddValueMapping(profile, ShippingProfileFields.IncludeReturn, includeReturnState, includeReturn);
-            AddValueMapping(profile, ShippingProfileFields.ApplyReturnProfile, applyReturnProfileState, applyReturnProfile, new System.Windows.Forms.Control[] { returnProfileID, returnProfileIDLabel });
+            AddValueMapping(profile, ShippingProfileFields.ApplyReturnProfile, applyReturnProfileState, applyReturnProfile);
+            AddValueMapping(profile, ShippingProfileFields.ReturnProfileID, applyReturnProfileState, returnProfileID);
+
+            // Remove state checkbox event handler since we'll be enabling/disabling manually
+            returnState.CheckedChanged -= new EventHandler(OnStateCheckChanged);
+            includeReturnState.CheckedChanged -= new EventHandler(OnStateCheckChanged);
+
+            // Remove this event handler twice since it's added twice by AddValueMapping above
+            applyReturnProfileState.CheckedChanged -= new EventHandler(OnStateCheckChanged);
+            applyReturnProfileState.CheckedChanged -= new EventHandler(OnStateCheckChanged);
 
             // Manually enable/disable for mutually exclusive return controls
             includeReturn.Enabled = includeReturnState.Checked && !returnShipment.Checked;
             returnShipment.Enabled = returnState.Checked && !includeReturn.Checked;
             applyReturnProfile.Enabled = applyReturnProfileState.Checked && includeReturn.Checked;
-            returnProfileID.Enabled = applyReturnProfileState.Checked && applyReturnProfile.Checked;
-            returnProfileIDLabel.Enabled = applyReturnProfileState.Checked && applyReturnProfile.Checked;
+            returnProfileID.Enabled = applyReturnProfileState.Checked && applyReturnProfile.Checked && includeReturn.Checked;
+            returnProfileIDLabel.Enabled = applyReturnProfileState.Checked && applyReturnProfile.Checked && includeReturn.Checked;
 
             groupReturns.Visible = ShipmentTypeManager.GetType((ShipmentTypeCode) profile.ShipmentType).SupportsReturns;
         }
@@ -200,6 +209,26 @@ namespace ShipWorks.Shipping.Carriers.Postal
         }
 
         /// <summary>
+        /// Click of the Include Return State Checkbox
+        /// </summary>
+        protected virtual void OnIncludeReturnStateChanged(object sender, EventArgs e)
+        {
+            if (includeReturnState.Checked)
+            {
+                includeReturn.Enabled = !returnShipment.Checked;
+                applyReturnProfile.Enabled = includeReturn.Checked && applyReturnProfileState.Checked;
+                returnProfileID.Enabled = applyReturnProfile.Checked && applyReturnProfileState.Checked;
+                returnProfileIDLabel.Enabled = applyReturnProfile.Checked && applyReturnProfileState.Checked;
+            }
+            else
+            {
+                includeReturn.Enabled = includeReturn.Checked = false;
+                applyReturnProfile.Enabled = applyReturnProfile.Checked = false;
+                returnProfileID.Enabled = returnProfileIDLabel.Enabled = false;
+            }
+        }
+
+        /// <summary>
         /// Click of the Apply Return Profile State Checkbox
         /// </summary>
         protected virtual void OnApplyReturnProfileStateChanged(object sender, EventArgs e)
@@ -209,6 +238,11 @@ namespace ShipWorks.Shipping.Carriers.Postal
                 applyReturnProfile.Enabled = includeReturn.Checked;
                 returnProfileID.Enabled = applyReturnProfile.Checked;
                 returnProfileIDLabel.Enabled = applyReturnProfile.Checked;
+            }
+            else
+            {
+                applyReturnProfile.Enabled = applyReturnProfile.Checked = false;
+                returnProfileID.Enabled = returnProfileIDLabel.Enabled = false;
             }
         }
 
@@ -221,17 +255,11 @@ namespace ShipWorks.Shipping.Carriers.Postal
             {
                 returnShipment.Enabled = !includeReturn.Checked;
             }
-        }
-
-        /// <summary>
-        /// Click of the Include Return State Checkbox
-        /// </summary>
-        protected virtual void OnIncludeReturnStateChanged(object sender, EventArgs e)
-        {
-            if (includeReturnState.Checked)
+            else
             {
-                includeReturn.Enabled = !returnShipment.Checked;
+                returnShipment.Enabled = returnShipment.Checked = false;
             }
+
         }
 
         /// <summary>

@@ -278,7 +278,7 @@
             // returnShipment
             // 
             this.returnShipment.AutoSize = true;
-            this.returnShipment.Location = new System.Drawing.Point(47, 85);
+            this.returnShipment.Location = new System.Drawing.Point(47, 86);
             this.returnShipment.Name = "returnShipment";
             this.returnShipment.Size = new System.Drawing.Size(143, 17);
             this.returnShipment.TabIndex = 1;
@@ -289,12 +289,12 @@
             // returnState
             // 
             this.returnState.AutoSize = true;
-            this.returnState.Location = new System.Drawing.Point(9, 86);
+            this.returnState.Location = new System.Drawing.Point(9, 87);
             this.returnState.Name = "returnState";
             this.returnState.Size = new System.Drawing.Size(15, 14);
             this.returnState.TabIndex = 0;
             this.returnState.UseVisualStyleBackColor = true;
-            this.applyReturnProfileState.CheckedChanged += new System.EventHandler(this.OnReturnStateChanged);
+            this.returnState.CheckedChanged += new System.EventHandler(this.OnReturnStateChanged);
             // 
             // kryptonBorderEdge3
             // 
@@ -785,13 +785,13 @@
         protected ComponentFactory.Krypton.Toolkit.KryptonBorderEdge kryptonBorderEdge3;
         protected ComponentFactory.Krypton.Toolkit.KryptonBorderEdge kryptonBorderEdge4;
         protected ComponentFactory.Krypton.Toolkit.KryptonBorderEdge kryptonBorderEdge5;
-        private System.Windows.Forms.CheckBox includeReturn;
-        private System.Windows.Forms.CheckBox applyReturnProfile;
-        private ShipWorks.UI.Controls.MultiValueComboBox returnProfileID;
-        private System.Windows.Forms.Label returnProfileIDLabel;
-        private System.Windows.Forms.Label labelReturnWarning;
-        private System.Windows.Forms.PictureBox pictureBoxReturnWarning;
-        private System.Windows.Forms.CheckBox includeReturnState;
-        private System.Windows.Forms.CheckBox applyReturnProfileState;
+        protected System.Windows.Forms.CheckBox includeReturn;
+        protected System.Windows.Forms.CheckBox applyReturnProfile;
+        protected ShipWorks.UI.Controls.MultiValueComboBox returnProfileID;
+        protected System.Windows.Forms.Label returnProfileIDLabel;
+        protected System.Windows.Forms.Label labelReturnWarning;
+        protected System.Windows.Forms.PictureBox pictureBoxReturnWarning;
+        protected System.Windows.Forms.CheckBox includeReturnState;
+        protected System.Windows.Forms.CheckBox applyReturnProfileState;
     }
 }

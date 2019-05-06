@@ -1,5 +1,4 @@
-﻿using ShipWorks.UI.Controls;
-namespace ShipWorks.Shipping.Carriers.Endicia
+﻿namespace ShipWorks.Shipping.Carriers.Endicia
 {
     partial class EndiciaReturnsControl
     {
@@ -38,7 +37,7 @@ namespace ShipWorks.Shipping.Carriers.Endicia
             this.scanBasedReturn.Location = new System.Drawing.Point(9, 3);
             this.scanBasedReturn.Name = "scanBasedReturn";
             this.scanBasedReturn.Size = new System.Drawing.Size(162, 17);
-            this.scanBasedReturn.TabIndex = 14;
+            this.scanBasedReturn.TabIndex = 0;
             this.scanBasedReturn.Text = "Scan Based Payment Return";
             this.scanBasedReturn.UseVisualStyleBackColor = true;
             // 

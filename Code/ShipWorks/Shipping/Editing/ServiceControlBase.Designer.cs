@@ -150,7 +150,7 @@ namespace ShipWorks.Shipping.Editing
             this.returnsPanel.Location = new System.Drawing.Point(26, 94);
             this.returnsPanel.Name = "returnsPanel";
             this.returnsPanel.Size = new System.Drawing.Size(365, 134);
-            this.returnsPanel.TabIndex = 76;
+            this.returnsPanel.TabIndex = 79;
             // 
             // includeReturn
             // 
@@ -217,7 +217,7 @@ namespace ShipWorks.Shipping.Editing
             // 
             this.returnShipment.AutoSize = true;
             this.returnShipment.BackColor = System.Drawing.Color.White;
-            this.returnShipment.Location = new System.Drawing.Point(13, 75);
+            this.returnShipment.Location = new System.Drawing.Point(13, 76);
             this.returnShipment.Name = "returnShipment";
             this.returnShipment.Size = new System.Drawing.Size(143, 17);
             this.returnShipment.TabIndex = 78;

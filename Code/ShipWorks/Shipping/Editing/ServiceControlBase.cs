@@ -414,9 +414,9 @@ namespace ShipWorks.Shipping.Editing
                 returnsPanel.Enabled = (LoadedShipments.All(s => s.ReturnShipment));
 
                 // Only enable automatic return labels for Endicia
-                allowIncludeReturn = LoadedShipments.All(st => st.ShipmentTypeCode == ShipmentTypeCode.Endicia) && !returnShipment.Checked;
+                allowIncludeReturn = LoadedShipments.All(st => st.ShipmentTypeCode == ShipmentTypeCode.Endicia);
 
-                includeReturn.Enabled = allowIncludeReturn;
+                includeReturn.Enabled = allowIncludeReturn && !returnShipment.Checked;
                 returnShipment.Enabled = !includeReturn.Checked;
                 applyReturnProfile.Enabled = includeReturn.Checked;
                 returnProfileID.Enabled = applyReturnProfile.Checked && applyReturnProfile.Enabled;
@@ -718,6 +718,7 @@ namespace ShipWorks.Shipping.Editing
         private void RefreshProfileMenu(ShipmentTypeCode shipmentTypeCode)
         {
             BindingList<KeyValuePair<long, string>> newReturnProfileList = new BindingList<KeyValuePair<long, string>>();
+            newReturnProfileList.Add(new KeyValuePair<long, string>(-1, "(No Profile)"));
 
             using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
@@ -735,10 +736,6 @@ namespace ShipWorks.Shipping.Editing
                 {
                     newReturnProfileList.Add(new KeyValuePair<long, string>(profile.ShippingProfileID, profile.Name));
                 }
-                if (newReturnProfileList.Count == 0)
-                {
-                    newReturnProfileList.Add(new KeyValuePair<long, string>(-1, "(No Profile)"));
-                }
             }
             returnProfileList = newReturnProfileList;
 
@@ -754,7 +751,7 @@ namespace ShipWorks.Shipping.Editing
         {
             if (!isLoading)
             {
-                includeReturn.Enabled = !returnShipment.Checked && allowIncludeReturn;
+                includeReturn.Enabled = allowIncludeReturn && !returnShipment.Checked;
                 returnsPanel.Enabled = returnShipment.Checked;
                 SaveReturnsToShipments();
                 ReturnServiceChanged?.Invoke(this, EventArgs.Empty);

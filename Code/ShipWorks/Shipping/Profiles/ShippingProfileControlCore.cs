@@ -430,7 +430,7 @@ namespace ShipWorks.Shipping.Profiles
         /// <summary>
         /// One of the checkboxes that controls state has changed
         /// </summary>
-        void OnStateCheckChanged(object sender, EventArgs e)
+        protected void OnStateCheckChanged(object sender, EventArgs e)
         {
             CheckBox checkBox = (CheckBox) sender;
 
