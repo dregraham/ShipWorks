@@ -21,11 +21,14 @@ namespace ShipWorks.Stores.Warehouse
         /// <summary>
         /// Constructor
         /// </summary>
-        public StoreDtoFactory(IDownloadStartingPoint downloadStartingPoint)
+        public StoreDtoFactory(IDownloadStartingPoint downloadStartingPoint, IStoreTypeManager storeTypeManager)
         {
             this.downloadStartingPoint = downloadStartingPoint;
+            StoreTypeManager = storeTypeManager;
         }
-        
+
+        public IStoreTypeManager StoreTypeManager { get; }
+
         /// <summary>
         /// Create a StoreDto from the given store entity
         /// </summary>
@@ -35,9 +38,10 @@ namespace ShipWorks.Stores.Warehouse
         {
             StoreDto store = new StoreDto();
             store.StoreType = storeEntity.TypeCode;
-            
+            store.Identifier = StoreTypeManager.GetType(storeEntity.StoreID).LicenseIdentifier;
+
             // todo: Figure out what we want to do about encryption
-            
+
             switch (storeEntity.StoreTypeCode)
             {
                 case StoreTypeCode.Amazon:
@@ -49,7 +53,7 @@ namespace ShipWorks.Stores.Warehouse
                 default:
                     throw new NotSupportedException($"The StoreType {EnumHelper.GetDescription(storeEntity.StoreTypeCode)} is not supported for ShipWorks Warehouse mode.");
             }
-            
+
             return store;
         }
 
@@ -73,7 +77,7 @@ namespace ShipWorks.Stores.Warehouse
                 store.StoreData = storeData;
             }
         }
-        
+
         /// <summary>
         /// Adds ChannelAdvisor store data to the StoreDto
         /// </summary>

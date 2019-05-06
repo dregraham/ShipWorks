@@ -11,7 +11,13 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse.DTO
         /// </summary>
         [JsonProperty("storeType")]
         public int StoreType { get; set; }
-        
+
+        /// <summary>
+        /// The unique identifier for the store
+        /// </summary>
+        [JsonProperty("identifier")]
+        public string Identifier { get; set; }
+
         /// <summary>
         /// Store data needed to download orders, such as credentials
         /// </summary>
