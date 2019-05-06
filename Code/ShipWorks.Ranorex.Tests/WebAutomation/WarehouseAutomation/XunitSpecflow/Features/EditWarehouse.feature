@@ -1,6 +1,6 @@
 ﻿Feature: EditWarehouse
 
-@mytag
+@NotEdge
 Scenario Outline: User edits a warehouse
 	Given the user wants to navigate to the warehouse page using '<Browser>'
 	Then the user clicks the edit button
@@ -14,4 +14,18 @@ Scenario Outline: User edits a warehouse
 	| Browser |
 	| Chrome  |
 	| Firefox |
+
+
+@Edge
+Scenario Outline: User edits a warehouse for edge
+	Given the user wants to navigate to the warehouse page using '<Browser>'
+	Then the user clicks the edit button
+	Then the user enters new details
+	Then the user saves the page
+	#Given the user are on the warehouse list page
+	#Then the user verifies the details
+
+
+	Examples: 
+	| Browser |
 	| Edge    |

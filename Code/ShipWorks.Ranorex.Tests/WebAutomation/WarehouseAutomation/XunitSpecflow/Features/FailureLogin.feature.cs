@@ -79,20 +79,56 @@ namespace XunitSpecflow.Features
         [Xunit.TheoryAttribute(DisplayName="Login with invalid credentials")]
         [Xunit.TraitAttribute("FeatureTitle", "FailureLogin")]
         [Xunit.TraitAttribute("Description", "Login with invalid credentials")]
+        [Xunit.TraitAttribute("Category", "NotEdge")]
         [Xunit.InlineDataAttribute("Chrome", new string[0])]
         [Xunit.InlineDataAttribute("Firefox", new string[0])]
         [Xunit.InlineDataAttribute("Edge", new string[0])]
         public virtual void LoginWithInvalidCredentials(string browser, string[] exampleTags)
         {
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Login with invalid credentials", null, exampleTags);
-#line 3
+            string[] @__tags = new string[] {
+                    "NotEdge"};
+            if ((exampleTags != null))
+            {
+                @__tags = System.Linq.Enumerable.ToArray(System.Linq.Enumerable.Concat(@__tags, exampleTags));
+            }
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Login with invalid credentials", null, @__tags);
+#line 4
 this.ScenarioInitialize(scenarioInfo);
             this.ScenarioStart();
-#line 4
- testRunner.Given(string.Format("the user is on login page on \'{0}\'", browser), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line 5
- testRunner.And("the user enters invalid username and password", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+ testRunner.Given(string.Format("the user is on login page on \'{0}\'", browser), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line 6
+ testRunner.And("the user enters invalid username and password", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line 7
+ testRunner.Then("the user sees the error message", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+#line hidden
+            this.ScenarioCleanup();
+        }
+        
+        [Xunit.TheoryAttribute(DisplayName="Login with invalid credentials for edge")]
+        [Xunit.TraitAttribute("FeatureTitle", "FailureLogin")]
+        [Xunit.TraitAttribute("Description", "Login with invalid credentials for edge")]
+        [Xunit.TraitAttribute("Category", "Edge")]
+        [Xunit.InlineDataAttribute("Chrome", new string[0])]
+        [Xunit.InlineDataAttribute("Firefox", new string[0])]
+        [Xunit.InlineDataAttribute("Edge", new string[0])]
+        public virtual void LoginWithInvalidCredentialsForEdge(string browser, string[] exampleTags)
+        {
+            string[] @__tags = new string[] {
+                    "Edge"};
+            if ((exampleTags != null))
+            {
+                @__tags = System.Linq.Enumerable.ToArray(System.Linq.Enumerable.Concat(@__tags, exampleTags));
+            }
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Login with invalid credentials for edge", null, @__tags);
+#line 16
+this.ScenarioInitialize(scenarioInfo);
+            this.ScenarioStart();
+#line 17
+ testRunner.Given(string.Format("the user is on login page on \'{0}\'", browser), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
+#line 18
+ testRunner.And("the user enters invalid username and password", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line 19
  testRunner.Then("the user sees the error message", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             this.ScenarioCleanup();

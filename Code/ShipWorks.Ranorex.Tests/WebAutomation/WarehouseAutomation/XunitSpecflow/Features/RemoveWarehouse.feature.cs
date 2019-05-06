@@ -79,14 +79,13 @@ namespace XunitSpecflow.Features
         [Xunit.TheoryAttribute(DisplayName="User removes a warehouse")]
         [Xunit.TraitAttribute("FeatureTitle", "RemoveWarehouse")]
         [Xunit.TraitAttribute("Description", "User removes a warehouse")]
-        [Xunit.TraitAttribute("Category", "mytag")]
+        [Xunit.TraitAttribute("Category", "NotEdge")]
         [Xunit.InlineDataAttribute("Chrome", new string[0])]
         [Xunit.InlineDataAttribute("Firefox", new string[0])]
-        [Xunit.InlineDataAttribute("Edge", new string[0])]
         public virtual void UserRemovesAWarehouse(string browser, string[] exampleTags)
         {
             string[] @__tags = new string[] {
-                    "mytag"};
+                    "NotEdge"};
             if ((exampleTags != null))
             {
                 @__tags = System.Linq.Enumerable.ToArray(System.Linq.Enumerable.Concat(@__tags, exampleTags));
@@ -98,6 +97,31 @@ this.ScenarioInitialize(scenarioInfo);
 #line 5
  testRunner.Given(string.Format("the user wants to navigate to the warehouse page using \'{0}\'", browser), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line 6
+ testRunner.Then("the user clicks the remove button", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+#line hidden
+            this.ScenarioCleanup();
+        }
+        
+        [Xunit.TheoryAttribute(DisplayName="User removes a warehouse for edge")]
+        [Xunit.TraitAttribute("FeatureTitle", "RemoveWarehouse")]
+        [Xunit.TraitAttribute("Description", "User removes a warehouse for edge")]
+        [Xunit.TraitAttribute("Category", "Edge")]
+        [Xunit.InlineDataAttribute("Edge", new string[0])]
+        public virtual void UserRemovesAWarehouseForEdge(string browser, string[] exampleTags)
+        {
+            string[] @__tags = new string[] {
+                    "Edge"};
+            if ((exampleTags != null))
+            {
+                @__tags = System.Linq.Enumerable.ToArray(System.Linq.Enumerable.Concat(@__tags, exampleTags));
+            }
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("User removes a warehouse for edge", null, @__tags);
+#line 15
+this.ScenarioInitialize(scenarioInfo);
+            this.ScenarioStart();
+#line 16
+ testRunner.Given(string.Format("the user wants to navigate to the warehouse page using \'{0}\'", browser), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
+#line 17
  testRunner.Then("the user clicks the remove button", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             this.ScenarioCleanup();

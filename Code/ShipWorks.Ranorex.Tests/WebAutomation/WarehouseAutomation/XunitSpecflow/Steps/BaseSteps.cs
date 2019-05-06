@@ -17,20 +17,23 @@ namespace XunitSpecflow.Steps
             {
                 case "Chrome":
                     ChromeOptions chromeOptions = new ChromeOptions();
-                   // chromeOptions.AddArgument("--headless");
+                    chromeOptions.AddArgument("--headless");
                     _driver = new ChromeDriver(Directory.GetCurrentDirectory(), chromeOptions);
+                    _driver.Manage().Window.Maximize();
                     _driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(10);
                     break;
 
                 case "Firefox":
                     FirefoxOptions firefoxOptions = new FirefoxOptions();
-                   // firefoxOptions.AddArgument("--headless");
+                    firefoxOptions.AddArgument("--headless");
                     _driver = new FirefoxDriver(Directory.GetCurrentDirectory(), firefoxOptions);
+                    _driver.Manage().Window.Maximize();
                     _driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(10);
                     break;
 
                 case "Edge":
                     _driver = new EdgeDriver(Directory.GetCurrentDirectory());
+                    _driver.Manage().Window.Maximize();
                     _driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(10);
                     break;
             }

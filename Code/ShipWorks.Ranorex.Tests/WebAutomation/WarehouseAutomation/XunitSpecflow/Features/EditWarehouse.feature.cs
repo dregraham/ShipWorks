@@ -79,14 +79,13 @@ namespace XunitSpecflow.Features
         [Xunit.TheoryAttribute(DisplayName="User edits a warehouse")]
         [Xunit.TraitAttribute("FeatureTitle", "EditWarehouse")]
         [Xunit.TraitAttribute("Description", "User edits a warehouse")]
-        [Xunit.TraitAttribute("Category", "mytag")]
+        [Xunit.TraitAttribute("Category", "NotEdge")]
         [Xunit.InlineDataAttribute("Chrome", new string[0])]
         [Xunit.InlineDataAttribute("Firefox", new string[0])]
-        [Xunit.InlineDataAttribute("Edge", new string[0])]
         public virtual void UserEditsAWarehouse(string browser, string[] exampleTags)
         {
             string[] @__tags = new string[] {
-                    "mytag"};
+                    "NotEdge"};
             if ((exampleTags != null))
             {
                 @__tags = System.Linq.Enumerable.ToArray(System.Linq.Enumerable.Concat(@__tags, exampleTags));
@@ -102,6 +101,35 @@ this.ScenarioInitialize(scenarioInfo);
 #line 7
  testRunner.Then("the user enters new details", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line 8
+ testRunner.Then("the user saves the page", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+#line hidden
+            this.ScenarioCleanup();
+        }
+        
+        [Xunit.TheoryAttribute(DisplayName="User edits a warehouse for edge")]
+        [Xunit.TraitAttribute("FeatureTitle", "EditWarehouse")]
+        [Xunit.TraitAttribute("Description", "User edits a warehouse for edge")]
+        [Xunit.TraitAttribute("Category", "Edge")]
+        [Xunit.InlineDataAttribute("Edge", new string[0])]
+        public virtual void UserEditsAWarehouseForEdge(string browser, string[] exampleTags)
+        {
+            string[] @__tags = new string[] {
+                    "Edge"};
+            if ((exampleTags != null))
+            {
+                @__tags = System.Linq.Enumerable.ToArray(System.Linq.Enumerable.Concat(@__tags, exampleTags));
+            }
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("User edits a warehouse for edge", null, @__tags);
+#line 20
+this.ScenarioInitialize(scenarioInfo);
+            this.ScenarioStart();
+#line 21
+ testRunner.Given(string.Format("the user wants to navigate to the warehouse page using \'{0}\'", browser), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
+#line 22
+ testRunner.Then("the user clicks the edit button", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+#line 23
+ testRunner.Then("the user enters new details", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+#line 24
  testRunner.Then("the user saves the page", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             this.ScenarioCleanup();
