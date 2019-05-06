@@ -194,7 +194,7 @@
             this.includeReturn.Location = new System.Drawing.Point(47, 22);
             this.includeReturn.Name = "includeReturn";
             this.includeReturn.Size = new System.Drawing.Size(143, 17);
-            this.includeReturn.TabIndex = 75;
+            this.includeReturn.TabIndex = 1;
             this.includeReturn.Text = "Include a return label";
             this.includeReturn.UseVisualStyleBackColor = false;
             this.includeReturn.CheckedChanged += new System.EventHandler(this.OnIncludeReturnChanged);
@@ -238,7 +238,7 @@
             this.applyReturnProfile.Location = new System.Drawing.Point(71, 43);
             this.applyReturnProfile.Name = "applyReturnProfile";
             this.applyReturnProfile.Size = new System.Drawing.Size(200, 17);
-            this.applyReturnProfile.TabIndex = 76;
+            this.applyReturnProfile.TabIndex = 3;
             this.applyReturnProfile.Text = "Apply a profile to the return shipment";
             this.applyReturnProfile.UseVisualStyleBackColor = false;
             this.applyReturnProfile.CheckedChanged += new System.EventHandler(this.OnApplyReturnChanged);
@@ -249,7 +249,7 @@
             this.applyReturnProfileState.Location = new System.Drawing.Point(9, 44);
             this.applyReturnProfileState.Name = "applyReturnProfileState";
             this.applyReturnProfileState.Size = new System.Drawing.Size(15, 14);
-            this.applyReturnProfileState.TabIndex = 0;
+            this.applyReturnProfileState.TabIndex = 2;
             this.applyReturnProfileState.UseVisualStyleBackColor = true;
             this.applyReturnProfileState.CheckedChanged += new System.EventHandler(this.OnApplyReturnProfileStateChanged);
             // 
@@ -260,7 +260,7 @@
             this.returnProfileID.Location = new System.Drawing.Point(154, 62);
             this.returnProfileID.Name = "returnProfileID";
             this.returnProfileID.Size = new System.Drawing.Size(150, 13);
-            this.returnProfileID.TabIndex = 77;
+            this.returnProfileID.TabIndex = 4;
             this.returnProfileID.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.returnProfileID.FormattingEnabled = true;
             this.returnProfileID.DropDown += new System.EventHandler(this.OnReturnProfileIDOpened);
@@ -281,7 +281,7 @@
             this.returnShipment.Location = new System.Drawing.Point(47, 86);
             this.returnShipment.Name = "returnShipment";
             this.returnShipment.Size = new System.Drawing.Size(143, 17);
-            this.returnShipment.TabIndex = 1;
+            this.returnShipment.TabIndex = 6;
             this.returnShipment.Text = "This is a return shipment";
             this.returnShipment.UseVisualStyleBackColor = true;
             this.returnShipment.CheckedChanged += new System.EventHandler(this.OnReturnShipmentChanged);
@@ -292,7 +292,7 @@
             this.returnState.Location = new System.Drawing.Point(9, 87);
             this.returnState.Name = "returnState";
             this.returnState.Size = new System.Drawing.Size(15, 14);
-            this.returnState.TabIndex = 0;
+            this.returnState.TabIndex = 5;
             this.returnState.UseVisualStyleBackColor = true;
             this.returnState.CheckedChanged += new System.EventHandler(this.OnReturnStateChanged);
             // 

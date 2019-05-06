@@ -534,7 +534,7 @@
             this.scanBasedPayment.Location = new System.Drawing.Point(47, 108);
             this.scanBasedPayment.Name = "scanBasedPayment";
             this.scanBasedPayment.Size = new System.Drawing.Size(127, 17);
-            this.scanBasedPayment.TabIndex = 3;
+            this.scanBasedPayment.TabIndex = 8;
             this.scanBasedPayment.Text = "Scan-Based Payment";
             this.scanBasedPayment.UseVisualStyleBackColor = false;
             // 
@@ -544,7 +544,7 @@
             this.scanBasedPaymentState.Location = new System.Drawing.Point(9, 109);
             this.scanBasedPaymentState.Name = "scanBasedPaymentState";
             this.scanBasedPaymentState.Size = new System.Drawing.Size(15, 14);
-            this.scanBasedPaymentState.TabIndex = 2;
+            this.scanBasedPaymentState.TabIndex = 7;
             this.scanBasedPaymentState.UseVisualStyleBackColor = true;
             // 
             // groupLabels
