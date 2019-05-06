@@ -92,35 +92,8 @@ namespace ShipWorks.Stores.Services
         {
             StoreManager.SaveStore(store);
 
-            UploadStoreToWarehouse(store);
-
             StatusPresetManager.CheckForChanges();
             StoreManager.CheckForChanges();
-        }
-
-        /// <summary>
-        /// Upload the given store to warehouse
-        /// </summary>
-        private async Task UploadStoreToWarehouse(StoreEntity store)
-        {
-            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
-            {
-                ILicenseService licenseService = lifetimeScope.Resolve<ILicenseService>();
-                EditionRestrictionLevel restrictionLevel = licenseService.CheckRestriction(EditionFeature.Warehouse, null);
-
-                if (restrictionLevel == EditionRestrictionLevel.None)
-                {
-                    IRestRequest request = new RestRequest(WarehouseEndpoints.Stores(store.WarehouseStoreID?.ToString("D")), Method.POST);
-                    request.JsonSerializer = new RestSharpJsonNetSerializer();
-                    request.RequestFormat = DataFormat.Json;
-
-                    StoreDto storeDto = await lifetimeScope.Resolve<StoreDtoFactory>().Create(store).ConfigureAwait(false);
-                    request.AddJsonBody(storeDto);
-
-                    await lifetimeScope.Resolve<WarehouseRequestClient>().MakeRequest(request, "Upload Store")
-                        .ConfigureAwait(true);
-                }
-            }
         }
 
         /// <summary>

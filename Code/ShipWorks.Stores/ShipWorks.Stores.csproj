@@ -899,6 +899,7 @@
     <Compile Include="Warehouse\StoreData\AmazonStoreData.cs" />
     <Compile Include="Warehouse\StoreData\ChannelAdvisorStoreData.cs" />
     <Compile Include="Warehouse\StoreDtoFactory.cs" />
+    <Compile Include="Warehouse\WarehouseStoreClient.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Interapptive.Shared\Interapptive.Shared.csproj">

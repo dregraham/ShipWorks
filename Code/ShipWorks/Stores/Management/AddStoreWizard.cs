@@ -976,7 +976,7 @@ namespace ShipWorks.Stores.Management
         /// <summary>
         /// Stepping into the complete page
         /// </summary>
-        private void OnSteppingIntoComplete(object sender, WizardSteppingIntoEventArgs e)
+        private async void OnSteppingIntoComplete(object sender, WizardSteppingIntoEventArgs e)
         {
             wizardPageFinished.LoadDownloadControl();
 
@@ -990,9 +990,19 @@ namespace ShipWorks.Stores.Management
                     store.License = licenseKey.Text.Trim();
                 }
 
+
                 if (!ValidateLicense(e))
                 {
                     return;
+                }
+
+                using (ILifetimeScope scope = IoC.BeginLifetimeScope())
+                {
+                    Result result = await scope.Resolve<IWarehouseStoreClient>().UploadStoreToWarehouse(store);
+                    if (result.Failure)
+                    {
+                        return;
+                    }
                 }
 
                 using (SqlAdapter adapter = new SqlAdapter(true))
