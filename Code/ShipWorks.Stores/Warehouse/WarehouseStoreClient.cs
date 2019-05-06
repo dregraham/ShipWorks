@@ -41,8 +41,13 @@ namespace ShipWorks.Stores.Warehouse
                     StoreDto storeDto = await storeDtoFactory.Create(store).ConfigureAwait(false);
                     request.AddJsonBody(storeDto);
 
-                    await warehouseRequestClient.MakeRequest(request, "Upload Store")
+                    GenericResult<IRestResponse> response = await warehouseRequestClient.MakeRequest(request, "Upload Store")
                         .ConfigureAwait(true);
+
+                    if (response.Failure)
+                    {
+                        return Result.FromError(response.Message);
+                    }
                 }
 
                 return Result.FromSuccess();
