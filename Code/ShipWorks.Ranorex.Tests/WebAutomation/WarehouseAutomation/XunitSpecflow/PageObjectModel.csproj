@@ -102,15 +102,35 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>CancelAddWarehouse.feature</DependentUpon>
     </Compile>
+    <Compile Include="Features\EditWarehouse.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>EditWarehouse.feature</DependentUpon>
+    </Compile>
     <Compile Include="Features\FailureLogin.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>FailureLogin.feature</DependentUpon>
     </Compile>
+    <Compile Include="Features\FieldLengthValidation.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>FieldLengthValidation.feature</DependentUpon>
+    </Compile>
+    <Compile Include="Features\FieldLengthValidationEditPage.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>FieldLengthValidationEditPage.feature</DependentUpon>
+    </Compile>
     <Compile Include="Features\Login.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Login.feature</DependentUpon>
+    </Compile>
+    <Compile Include="Features\RemoveWarehouse.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>RemoveWarehouse.feature</DependentUpon>
     </Compile>
     <Compile Include="Pages\DashboardPage.cs" />
     <Compile Include="Pages\LoginPage.cs" />
@@ -130,13 +150,29 @@
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>CancelAddWarehouse.feature.cs</LastGenOutput>
     </None>
+    <None Include="Features\EditWarehouse.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>EditWarehouse.feature.cs</LastGenOutput>
+    </None>
     <None Include="Features\FailureLogin.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>FailureLogin.feature.cs</LastGenOutput>
     </None>
+    <None Include="Features\FieldLengthValidation.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>FieldLengthValidation.feature.cs</LastGenOutput>
+    </None>
+    <None Include="Features\FieldLengthValidationEditPage.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>FieldLengthValidationEditPage.feature.cs</LastGenOutput>
+    </None>
     <None Include="Features\Login.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>Login.feature.cs</LastGenOutput>
+    </None>
+    <None Include="Features\RemoveWarehouse.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>RemoveWarehouse.feature.cs</LastGenOutput>
     </None>
     <None Include="packages.config" />
   </ItemGroup>

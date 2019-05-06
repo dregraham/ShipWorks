@@ -9,7 +9,10 @@ namespace XunitSpecflow.Pages
         protected IWebElement DashboardTxt { get; set; }
         [FindsBy(How = How.XPath, Using = "//*[@id='root']/div/div[1]/div/nav/section[1]/a[2]")]
         protected IWebElement WarehouseTab { get; set; }
+        [FindsBy(How = How.XPath, Using = "//*[@id='root']/div/div[1]/div/nav/section[2]/button")]
+        protected IWebElement LogoutButton { get; set; }
         private IWebDriver _driver;
+
 
         public DashboardPage(IWebDriver driver)
         {
@@ -31,6 +34,11 @@ namespace XunitSpecflow.Pages
         public void DashboardQuit()
         {
             _driver.Quit();
+        }
+
+        public void Logout()
+        {
+            LogoutButton.Click();
         }
     }
 }

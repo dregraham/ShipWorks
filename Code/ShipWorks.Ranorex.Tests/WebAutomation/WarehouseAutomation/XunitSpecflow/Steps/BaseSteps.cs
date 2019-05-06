@@ -12,12 +12,12 @@ namespace XunitSpecflow.Steps
         public IWebDriver SetWebDriver(string browser)
         {
             IWebDriver _driver = null;
-            
+
             switch (browser)
             {
                 case "Chrome":
                     ChromeOptions chromeOptions = new ChromeOptions();
-                   //chromeOptions.AddArgument("--headless");
+                   // chromeOptions.AddArgument("--headless");
                     _driver = new ChromeDriver(Directory.GetCurrentDirectory(), chromeOptions);
                     _driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(10);
                     break;
@@ -37,7 +37,7 @@ namespace XunitSpecflow.Steps
 
             return _driver;
         }
-        
+
 
     }
 }

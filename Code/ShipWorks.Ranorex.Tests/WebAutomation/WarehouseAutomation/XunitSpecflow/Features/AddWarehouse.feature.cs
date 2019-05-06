@@ -80,8 +80,6 @@ namespace XunitSpecflow.Features
         [Xunit.TraitAttribute("FeatureTitle", "AddWarehouse")]
         [Xunit.TraitAttribute("Description", "User adds a warehouse")]
         [Xunit.TraitAttribute("Category", "mytag")]
-        [Xunit.InlineDataAttribute("Chrome", new string[0])]
-        [Xunit.InlineDataAttribute("Firefox", new string[0])]
         [Xunit.InlineDataAttribute("Edge", new string[0])]
         public virtual void UserAddsAWarehouse(string browser, string[] exampleTags)
         {
@@ -96,12 +94,10 @@ namespace XunitSpecflow.Features
 this.ScenarioInitialize(scenarioInfo);
             this.ScenarioStart();
 #line 5
- testRunner.Given(string.Format("the user wants to add a warehouse using \'{0}\'", browser), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
+ testRunner.Given(string.Format("the user wants to navigate to the warehouse page using \'{0}\'", browser), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line 6
- testRunner.Then("the user clicks on the Warehouses tab", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
-#line 7
  testRunner.Then("the user clicks the add button", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
-#line 8
+#line 7
  testRunner.Then("the user adds the Warehouse details", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             this.ScenarioCleanup();

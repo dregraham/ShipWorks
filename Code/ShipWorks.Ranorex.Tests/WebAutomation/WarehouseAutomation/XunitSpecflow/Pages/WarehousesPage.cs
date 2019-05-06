@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Support.PageObjects;
 using OpenQA.Selenium.Support.UI;
+using Xunit;
 
 namespace XunitSpecflow.Pages
 {
@@ -37,6 +38,27 @@ namespace XunitSpecflow.Pages
 
         [FindsBy(How = How.XPath, Using = "//*[@id='root']/div/div[2]/div/article/div/div[2]/button[1]/div")]
         protected IWebElement CancelButton { get; set; }
+
+        [FindsBy(How = How.XPath, Using = "//*[@id='root']/div/div[2]/div/article/div[2]/div/nav/div[1]/button/div")]
+        protected IWebElement EditButton { get; set; }
+
+        [FindsBy(How = How.XPath, Using = "//*[@id='root']/div/div[2]/div/article/div/div[2]/button[2]/div")]
+        protected IWebElement SaveButton { get; set; }
+
+        [FindsBy(How = How.XPath, Using = "//*[@id='root']/div/div[2]/div/article/div[2]/div/nav/div[2]/button/div")]
+        protected IWebElement RemoveButton { get; set; }
+
+        [FindsBy(How = How.XPath, Using = "//*[@id='root']/div/div[2]/div/article/div/div[2]/label[1]/span[2]")]
+        protected IWebElement NameCharacterLimitMessage { get; set; }
+
+        [FindsBy(How = How.XPath, Using = "//*[@id='root']/div/div[2]/div/article/div/div[2]/label[2]/span[2]")]
+        protected IWebElement CodeCharacterLimitMessage { get; set; }
+
+        [FindsBy(How = How.XPath, Using = "//*[@id='root']/div/div[2]/div/article/div/div[2]/label[3]/span[2]")]
+        protected IWebElement StreetCharacterLimitMessage { get; set; }
+
+        [FindsBy(How = How.XPath, Using = "//*[@id='root']/div/div[2]/div/article/div/div[2]/label[4]/span[2]")]
+        protected IWebElement CityCharacterLimitMessage { get; set; }
 
 
         IWebDriver _driver;
@@ -75,6 +97,47 @@ namespace XunitSpecflow.Pages
         public void WarehousePageQuit()
         {
             _driver.Quit();
+        }
+
+        public void Edit()
+        {
+            EditButton.Click();
+        }
+
+        public void EditWarehouseDetails(string[] details)
+        {
+            var StateName = new SelectElement(StateDropDown);
+
+            NameTxt.Clear();
+            NameTxt.SendKeys(details[0]);
+            CodeTxt.Clear();
+            CodeTxt.SendKeys(details[1]);
+            StreetTxt.Clear();
+            StreetTxt.SendKeys(details[2]);
+            CityTxt.Clear();
+            CityTxt.SendKeys(details[3]);
+            ZipTxt.Clear();
+            ZipTxt.SendKeys(details[5]);
+
+            StateName.SelectByValue(details[4]);
+        }
+
+        public void Save()
+        {
+            SaveButton.Click();
+        }
+
+        public void Remove()
+        {
+            RemoveButton.Click();
+        }
+
+        public void ValidateFieldLengthErrorMessages()
+        {
+            Assert.Contains("Name cannot be longer than 500 characters", NameCharacterLimitMessage.Text);
+            Assert.Contains("Code cannot be longer than 500 characters", CodeCharacterLimitMessage.Text);
+            Assert.Contains("Street cannot be longer than 500 characters", StreetCharacterLimitMessage.Text);
+            Assert.Contains("City cannot be longer than 500 characters", CityCharacterLimitMessage.Text);
         }
     }
 }

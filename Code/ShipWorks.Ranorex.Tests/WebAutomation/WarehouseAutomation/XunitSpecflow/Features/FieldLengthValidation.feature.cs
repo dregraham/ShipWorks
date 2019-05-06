@@ -17,17 +17,17 @@ namespace XunitSpecflow.Features
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("TechTalk.SpecFlow", "2.4.0.0")]
     [System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    public partial class CancelAddWarehouseFeature : Xunit.IClassFixture<CancelAddWarehouseFeature.FixtureData>, System.IDisposable
+    public partial class FieldLengthValidationFeature : Xunit.IClassFixture<FieldLengthValidationFeature.FixtureData>, System.IDisposable
     {
         
         private static TechTalk.SpecFlow.ITestRunner testRunner;
         
         private Xunit.Abstractions.ITestOutputHelper _testOutputHelper;
         
-#line 1 "CancelAddWarehouse.feature"
+#line 1 "FieldLengthValidation.feature"
 #line hidden
         
-        public CancelAddWarehouseFeature(CancelAddWarehouseFeature.FixtureData fixtureData, Xunit.Abstractions.ITestOutputHelper testOutputHelper)
+        public FieldLengthValidationFeature(FieldLengthValidationFeature.FixtureData fixtureData, Xunit.Abstractions.ITestOutputHelper testOutputHelper)
         {
             this._testOutputHelper = testOutputHelper;
             this.TestInitialize();
@@ -36,7 +36,7 @@ namespace XunitSpecflow.Features
         public static void FeatureSetup()
         {
             testRunner = TechTalk.SpecFlow.TestRunnerManager.GetTestRunner();
-            TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "CancelAddWarehouse", null, ProgrammingLanguage.CSharp, ((string[])(null)));
+            TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "FieldLengthValidation", null, ProgrammingLanguage.CSharp, ((string[])(null)));
             testRunner.OnFeatureStart(featureInfo);
         }
         
@@ -76,14 +76,14 @@ namespace XunitSpecflow.Features
             this.ScenarioTearDown();
         }
         
-        [Xunit.TheoryAttribute(DisplayName="User cancels add warehouse")]
-        [Xunit.TraitAttribute("FeatureTitle", "CancelAddWarehouse")]
-        [Xunit.TraitAttribute("Description", "User cancels add warehouse")]
+        [Xunit.TheoryAttribute(DisplayName="User validates max of 500 characters in fields")]
+        [Xunit.TraitAttribute("FeatureTitle", "FieldLengthValidation")]
+        [Xunit.TraitAttribute("Description", "User validates max of 500 characters in fields")]
         [Xunit.TraitAttribute("Category", "mytag")]
         [Xunit.InlineDataAttribute("Chrome", new string[0])]
         [Xunit.InlineDataAttribute("Firefox", new string[0])]
         [Xunit.InlineDataAttribute("Edge", new string[0])]
-        public virtual void UserCancelsAddWarehouse(string browser, string[] exampleTags)
+        public virtual void UserValidatesMaxOf500CharactersInFields(string browser, string[] exampleTags)
         {
             string[] @__tags = new string[] {
                     "mytag"};
@@ -91,7 +91,7 @@ namespace XunitSpecflow.Features
             {
                 @__tags = System.Linq.Enumerable.ToArray(System.Linq.Enumerable.Concat(@__tags, exampleTags));
             }
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("User cancels add warehouse", null, @__tags);
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("User validates max of 500 characters in fields", null, @__tags);
 #line 4
 this.ScenarioInitialize(scenarioInfo);
             this.ScenarioStart();
@@ -100,7 +100,9 @@ this.ScenarioInitialize(scenarioInfo);
 #line 6
  testRunner.Then("the user clicks the add button", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line 7
- testRunner.Then("the user clicks the cancel button", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+ testRunner.Then("the user adds more than five hundred characters", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+#line 8
+ testRunner.And("the user sees the field validation error messages", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
             this.ScenarioCleanup();
         }
@@ -112,12 +114,12 @@ this.ScenarioInitialize(scenarioInfo);
             
             public FixtureData()
             {
-                CancelAddWarehouseFeature.FeatureSetup();
+                FieldLengthValidationFeature.FeatureSetup();
             }
             
             void System.IDisposable.Dispose()
             {
-                CancelAddWarehouseFeature.FeatureTearDown();
+                FieldLengthValidationFeature.FeatureTearDown();
             }
         }
     }

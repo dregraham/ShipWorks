@@ -11,12 +11,14 @@ namespace XunitSpecflow.Steps
     {
         private IWebDriver _driver;
         LoginPage loginPage;
+        DashboardPage dashboardPage;
 
         [Given(@"the user is on login page on '(.*)'")]
         public void GivenTheUserIsOnLoginPageOn(string browser)
         {
             _driver = SetWebDriver(browser);
-            _driver.Navigate().GoToUrl("https://s2.www.warehouseapp.link/login");            
+            _driver.Navigate().GoToUrl("http://s2.www.warehouseapp.link/login");
+            Assert.Contains("https://s2.www.warehouseapp.link/login", _driver.Url);
         }
 
         [Given(@"the user enters username and password")]
@@ -29,7 +31,7 @@ namespace XunitSpecflow.Steps
         [Then(@"the user sees the dashboard")]
         public void ThenTheUserSeesTheDashboard()
         {
-            DashboardPage dashboardPage = new DashboardPage(_driver);
+            dashboardPage = new DashboardPage(_driver);
             Assert.Contains("Dashboard", dashboardPage.GetDashboard());
             dashboardPage.DashboardQuit();
         }
@@ -47,6 +49,12 @@ namespace XunitSpecflow.Steps
             Thread.Sleep(2000);
             Assert.Contains("Invalid username or password", loginPage.GetErrorMessage());
             loginPage.LoginPageQuit();
+        }
+
+        [Then(@"the user clicks logout")]
+        public void ThenTheUserClicksLogout()
+        {
+            dashboardPage.DashboardQuit();
         }
     }
 }
