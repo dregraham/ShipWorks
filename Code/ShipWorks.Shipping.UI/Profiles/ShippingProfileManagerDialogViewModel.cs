@@ -110,7 +110,10 @@ namespace ShipWorks.Shipping.UI.Profiles
         {
             // Get any profiles that use this profile as a return
             IEnumerable<string> profilesInUse = ShippingProfiles
-                .Where(p => p.ShippingProfileEntity.IncludeReturn.HasValue.Equals(true) && p.ShippingProfileEntity.ApplyReturnProfile.HasValue.Equals(true))
+                .Where(p => p.ShippingProfileEntity.IncludeReturn.HasValue
+                            && p.ShippingProfileEntity.IncludeReturn.Equals(true)
+                            && p.ShippingProfileEntity.ApplyReturnProfile.HasValue
+                            && p.ShippingProfileEntity.ApplyReturnProfile.Equals(true))
                 .Where(p => p.ShippingProfileEntity.ReturnProfileID == SelectedShippingProfile.ShippingProfileEntity.ShippingProfileID)
                 .Select(s => s.ShippingProfileEntity.Name);
 
