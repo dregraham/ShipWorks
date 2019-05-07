@@ -2348,11 +2348,11 @@ namespace ShipWorks.Shipping
         {
             Cursor.Current = Cursors.WaitCursor;
 
-            // List that will keep the new return shipments in order with their parent shipments for processing
-            List<ShipmentEntity> newShipmentList = new List<ShipmentEntity>();
+            // List that will ensure the new return shipments are processed in order with their parent shipments
+            List<ShipmentEntity> shipmentsToProcess = new List<ShipmentEntity>();
 
             // List of just the new return shipments to be added to the grid
-            List<ShipmentEntity> returnShipmentList = new List<ShipmentEntity>();
+            List<ShipmentEntity> newReturnShipments = new List<ShipmentEntity>();
 
             ILicenseService licenseService = lifetimeScope.Resolve<ILicenseService>();
             licenseService.GetLicenses().FirstOrDefault()?.EnforceCapabilities(EnforcementContext.CreateLabel, this);
@@ -2362,10 +2362,10 @@ namespace ShipWorks.Shipping
 
             foreach (ShipmentEntity shipment in shipments)
             {
-                newShipmentList.Add(shipment);
-                if (!shipment.Processed && shipment.IncludeReturn)
+                shipmentsToProcess.Add(shipment);
+                if (!shipment.Processed)
                 {
-                    if (!shipment.ReturnShipment)
+                    if (!shipment.ReturnShipment && shipment.IncludeReturn)
                     {
                         // Create a copy of the shipment to use for returns
                         ShipmentEntity returnShipment = shippingManager.CreateReturnShipment(shipment);
@@ -2388,23 +2388,23 @@ namespace ShipWorks.Shipping
                         }
 
                         ShippingManager.SaveShipment(returnShipment);
-                        newShipmentList.Add(returnShipment);
-                        returnShipmentList.Add(returnShipment);
+                        shipmentsToProcess.Add(returnShipment);
+                        newReturnShipments.Add(returnShipment);
                     }
                 }
-
-                // Clear errors on ones that are already marked as processed. Like if they got the AlreadyProcessed error, and then hit process again,
-                // the error shouldn't stay
-                ErrorManager.Remove(shipment.ShipmentID);
+                else
+                {
+                    // Clear errors on ones that are already marked as processed. Like if they got the AlreadyProcessed error, and then hit process again,
+                    // the error shouldn't stay
+                    ErrorManager.Remove(shipment.ShipmentID);
+                }
             }
 
-            shipmentControl.AddShipments(returnShipmentList);
-
-            shipments = newShipmentList;
+            shipmentControl.AddShipments(newReturnShipments);
 
             IShipmentProcessor shipmentProcessor = createShipmentProcessor();
 
-            IEnumerable<ProcessShipmentResult> results = await shipmentProcessor.Process(shipments, carrierConfigurationShipmentRefresher,
+            IEnumerable<ProcessShipmentResult> results = await shipmentProcessor.Process(shipmentsToProcess, carrierConfigurationShipmentRefresher,
                 rateControl.SelectedRate, CounterRateCarrierConfiguredWhileProcessing);
 
             // Apply any changes made during processing to the grid

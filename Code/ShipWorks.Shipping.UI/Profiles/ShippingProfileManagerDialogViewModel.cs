@@ -10,7 +10,6 @@ using GalaSoft.MvvmLight.CommandWpf;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.UI;
 using ShipWorks.Core.UI;
-using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Profiles;
 using ShipWorks.Templates.Printing;
 
@@ -110,18 +109,15 @@ namespace ShipWorks.Shipping.UI.Profiles
         private void Delete()
         {
             // Get any profiles that use this profile as a return
-            IEnumerable<IShippingProfileEntity> profilesInUse = ShippingProfiles
+            IEnumerable<string> profilesInUse = ShippingProfiles
                 .Where(p => p.ShippingProfileEntity.IncludeReturn == true && p.ShippingProfileEntity.ApplyReturnProfile == true)
                 .Where(p => p.ShippingProfileEntity.ReturnProfileID == SelectedShippingProfile.ShippingProfileEntity.ShippingProfileID)
-                .Select(s => s.ShippingProfileEntity).Cast<IShippingProfileEntity>();
+                .Select(s => s.ShippingProfileEntity.Name);
 
-            if (profilesInUse.Count() > 0)
+            if (profilesInUse.Any())
             {
                 string errorMessage = "This profile cannot be deleted because it is set as a return profile in the following profile(s):\n\n";
-                foreach (IShippingProfileEntity profile in profilesInUse)
-                {
-                    errorMessage += profile.Name + "\n";
-                }
+                errorMessage += string.Join("\n", profilesInUse);
                 messageHelper.ShowError(errorMessage);
                 return;
             }

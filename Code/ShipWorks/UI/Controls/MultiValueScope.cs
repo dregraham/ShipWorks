@@ -279,7 +279,6 @@ namespace ShipWorks.UI.Controls
                             }
                             else
                             {
-                                // Check returns data compare
                                 comboBox.SelectedValue = data.Value;
 
                                 // If the value is not a valid ComboBox value, pick the first one

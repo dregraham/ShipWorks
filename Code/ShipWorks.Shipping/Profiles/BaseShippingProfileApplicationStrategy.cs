@@ -62,17 +62,6 @@ namespace ShipWorks.Shipping.Profiles
         /// <summary>
         /// Apply the given value to the specified entity and field, but only if the value is non-null
         /// </summary>
-        protected static void ApplyProfileValue<T>(T value, EntityBase2 entity, EntityField2 field)
-        {
-            if (value != null)
-            {
-                entity.SetNewFieldValue(field.FieldIndex, value);
-            }
-        }
-
-        /// <summary>
-        /// Apply the given value to the specified entity and field, but only if the value is non-null
-        /// </summary>
         protected static void ApplyProfileValue<T>(T? value, EntityBase2 entity, EntityField2 field) where T : struct
         {
             if (value.HasValue)

@@ -15,7 +15,6 @@ using ShipWorks.ApplicationCore;
 using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Messaging.Messages.Dialogs;
 using ShipWorks.Shipping.Carriers;
 using ShipWorks.Shipping.Editing.Rating;
@@ -33,7 +32,7 @@ namespace ShipWorks.Shipping.Editing
         // The type of shipment this instance is servicing
         readonly ShipmentTypeCode shipmentTypeCode;
 
-        private BindingList<KeyValuePair<long, string>> returnProfileList = new BindingList<KeyValuePair<long, string>>();
+        private BindingList<KeyValuePair<long, string>> includeReturnProfiles = new BindingList<KeyValuePair<long, string>>();
         private BindingSource bindingSource = new BindingSource();
 
         bool enableEditing;
@@ -363,7 +362,7 @@ namespace ShipWorks.Shipping.Editing
 
             if (anyReturnsSupported)
             {
-                RefreshProfileMenu(shipmentTypeCode);
+                RefreshIncludeReturnProfileMenu(shipmentTypeCode);
                 returnProfileID.DisplayMember = "Value";
                 returnProfileID.ValueMember = "Key";
 
@@ -692,7 +691,7 @@ namespace ShipWorks.Shipping.Editing
             if (!isLoading)
             {
                 // Populate the list of profiles
-                RefreshProfileMenu(shipmentTypeCode);
+                RefreshIncludeReturnProfileMenu(shipmentTypeCode);
             }
         }
 
@@ -715,32 +714,32 @@ namespace ShipWorks.Shipping.Editing
         /// <summary>
         /// Add applicable profiles for the given shipment type to the context menu
         /// </summary>
-        private void RefreshProfileMenu(ShipmentTypeCode shipmentTypeCode)
+        private void RefreshIncludeReturnProfileMenu(ShipmentTypeCode? shipmentTypeCode)
         {
-            BindingList<KeyValuePair<long, string>> newReturnProfileList = new BindingList<KeyValuePair<long, string>>();
-            newReturnProfileList.Add(new KeyValuePair<long, string>(-1, "(No Profile)"));
+            BindingList<KeyValuePair<long, string>> newReturnProfiles = new BindingList<KeyValuePair<long, string>>();
 
             using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
                 IShippingProfileService shippingProfileService = lifetimeScope.Resolve<IShippingProfileService>();
 
-                IEnumerable<IShippingProfileEntity> returnProfiles = shippingProfileService
-                .GetConfiguredShipmentTypeProfiles()
-                .Where(p => shipmentTypeCode != ShipmentTypeCode.None || p.ShippingProfileEntity.ShipmentType.HasValue)
-                .Where(p => p.IsApplicable(shipmentTypeCode))
-                .Where(p => p.ShippingProfileEntity.ReturnShipment == true)
-                .Select(s => s.ShippingProfileEntity).Cast<IShippingProfileEntity>()
-                .OrderBy(g => g.Name);
+                List<KeyValuePair<long, string>> returnProfiles = shippingProfileService
+                    .GetConfiguredShipmentTypeProfiles()
+                    .Where(p => p.ShippingProfileEntity.ShipmentType.HasValue)
+                    .Where(p => p.IsApplicable(shipmentTypeCode))
+                    .Where(p => p.ShippingProfileEntity.ReturnShipment == true)
+                    .Select(s => new KeyValuePair<long, string>(s.ShippingProfileEntity.ShippingProfileID, s.ShippingProfileEntity.Name))
+                    .OrderBy(g => g.Value)
+                    .ToList<KeyValuePair<long, string>>();
 
-                foreach (IShippingProfileEntity profile in returnProfiles)
-                {
-                    newReturnProfileList.Add(new KeyValuePair<long, string>(profile.ShippingProfileID, profile.Name));
-                }
+                newReturnProfiles = new BindingList<KeyValuePair<long, string>>(returnProfiles);
             }
-            returnProfileList = newReturnProfileList;
+
+            newReturnProfiles.Insert(0, new KeyValuePair<long, string>(-1, "(No Profile)"));
+
+            includeReturnProfiles = newReturnProfiles;
 
             // Reset data sources because calling resetbindings() doesn't work
-            bindingSource.DataSource = returnProfileList;
+            bindingSource.DataSource = includeReturnProfiles;
             returnProfileID.DataSource = bindingSource;
         }
 
