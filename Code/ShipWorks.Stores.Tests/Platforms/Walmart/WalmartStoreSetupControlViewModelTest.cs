@@ -19,29 +19,29 @@ namespace ShipWorks.Stores.Tests.Platforms.Walmart
         }
 
         [Fact]
-        public void Save_ThrowsWalmartException_WhenConsumerIDIsEmpty()
+        public void Save_ThrowsWalmartException_WhenClientIDIsEmpty()
         {
             var testObject = mock.Create<WalmartStoreSetupControlViewModel>();
-            testObject.PrivateKey = "12345";
+            testObject.ClientSecret = "12345";
 
             Assert.Throws<WalmartException>(() => testObject.Save(new WalmartStoreEntity()));
         }
 
         [Fact]
-        public void Save_ThrowsWalmartException_WhenPrivateKeyIsEmptyAndStoreIsNew()
+        public void Save_ThrowsWalmartException_WhenClientSecretIsEmptyAndStoreIsNew()
         {
             var testObject = mock.Create<WalmartStoreSetupControlViewModel>();
-            testObject.ConsumerID = "ConsumerID";
+            testObject.ClientID = "ClientID";
             testObject.IsNewStore = true;
 
             Assert.Throws<WalmartException>(() => testObject.Save(new WalmartStoreEntity()));
         }
 
         [Fact]
-        public void Save_DoesNotThrowWalmartException_WhenPrivateKeyIsEmptyAndStoreIsNotNew()
+        public void Save_DoesNotThrowWalmartException_WhenClientSecretIsEmptyAndStoreIsNotNew()
         {
             var testObject = mock.Create<WalmartStoreSetupControlViewModel>();
-            testObject.ConsumerID = "ConsumerID";
+            testObject.ClientID = "ClientID";
             testObject.IsNewStore = false;
 
             testObject.Save(new WalmartStoreEntity());
@@ -51,71 +51,71 @@ namespace ShipWorks.Stores.Tests.Platforms.Walmart
         public void Save_DoesNotThrowWalmartException_WhenAllFieldsHaveValue()
         {
             var testObject = mock.Create<WalmartStoreSetupControlViewModel>();
-            testObject.ConsumerID = "ConsumerID";
-            testObject.PrivateKey = "12345";
+            testObject.ClientID = "ClientID";
+            testObject.ClientSecret = "12345";
 
             testObject.Save(new WalmartStoreEntity());
         }
 
         [Fact]
-        public void Save_SavesTrimmedConsumerID()
+        public void Save_SavesTrimmedClientID()
         {
             var testObject = mock.Create<WalmartStoreSetupControlViewModel>();
-            testObject.ConsumerID = "   ConsumerID     ";
-            testObject.PrivateKey = "12345";
+            testObject.ClientID = "   ClientID     ";
+            testObject.ClientSecret = "12345";
 
             WalmartStoreEntity store = new WalmartStoreEntity();
 
             testObject.Save(store);
 
-            Assert.Equal("ConsumerID", store.ConsumerID);
+            Assert.Equal("ClientID", store.ClientID);
         }
 
         [Fact]
-        public void Save_DoesNotSaveTrimmedPrivateKey_WhenPrivateKeyIsEmpty()
+        public void Save_DoesNotSaveTrimmedClientSecret_WhenClientSecretIsEmpty()
         {
             var testObject = mock.Create<WalmartStoreSetupControlViewModel>();
-            testObject.ConsumerID = "ConsumerID";
-            testObject.PrivateKey = "";
+            testObject.ClientID = "ClientID";
+            testObject.ClientSecret = "";
             testObject.IsNewStore = false;
 
             WalmartStoreEntity store = new WalmartStoreEntity();
-            store.PrivateKey = "KEY";
+            store.ClientSecret = "KEY";
 
             testObject.Save(store);
 
-            Assert.Equal("KEY", store.PrivateKey);
+            Assert.Equal("KEY", store.ClientSecret);
         }
 
         [Fact]
-        public void Save_SavesTrimmedPrivateKey_WhenPrivateKeyHasValue()
+        public void Save_SavesTrimmedClientSecret_WhenClientSecretHasValue()
         {
             var encryptionProvider = mock.Mock<IEncryptionProvider>();
             mock.Mock<IEncryptionProviderFactory>().Setup(e => e.CreateWalmartEncryptionProvider()).Returns(encryptionProvider);
 
             var testObject = mock.Create<WalmartStoreSetupControlViewModel>();
-            testObject.ConsumerID = "ConsumerID";
-            testObject.PrivateKey = "NEW KEY";
+            testObject.ClientID = "ClientID";
+            testObject.ClientSecret = "NEW KEY";
 
             WalmartStoreEntity store = new WalmartStoreEntity();
-            store.PrivateKey = "KEY";
+            store.ClientSecret = "KEY";
 
-            encryptionProvider.Setup(e => e.Encrypt(testObject.PrivateKey)).Returns(testObject.PrivateKey);
+            encryptionProvider.Setup(e => e.Encrypt(testObject.ClientSecret)).Returns(testObject.ClientSecret);
 
             testObject.Save(store);
 
-            Assert.Equal("NEW KEY", store.PrivateKey);
+            Assert.Equal("NEW KEY", store.ClientSecret);
         }
 
         [Fact]
-        public void Save_DelegatesToEncryptionProvider_WhenPrivateKeyHasValue()
+        public void Save_DelegatesToEncryptionProvider_WhenClientSecretHasValue()
         {
             var encryptionProvider = mock.Mock<IEncryptionProvider>();
             mock.Mock<IEncryptionProviderFactory>().Setup(e => e.CreateWalmartEncryptionProvider()).Returns(encryptionProvider);
 
             var testObject = mock.Create<WalmartStoreSetupControlViewModel>();
-            testObject.ConsumerID = "ConsumerID";
-            testObject.PrivateKey = "NEW KEY";
+            testObject.ClientID = "ClientID";
+            testObject.ClientSecret = "NEW KEY";
 
             WalmartStoreEntity store = new WalmartStoreEntity();
 
@@ -130,8 +130,8 @@ namespace ShipWorks.Stores.Tests.Platforms.Walmart
             var webClient = mock.Mock<IWalmartWebClient>();
 
             var testObject = mock.Create<WalmartStoreSetupControlViewModel>();
-            testObject.ConsumerID = "ConsumerID";
-            testObject.PrivateKey = "NEW KEY";
+            testObject.ClientID = "ClientID";
+            testObject.ClientSecret = "NEW KEY";
 
             WalmartStoreEntity store = new WalmartStoreEntity();
 
@@ -141,49 +141,49 @@ namespace ShipWorks.Stores.Tests.Platforms.Walmart
         }
 
         [Fact]
-        public void Save_SetsUpdatingPrivateKeyToFalse_WhenStoreIsNotNew()
+        public void Save_SetsUpdatingClientSecretToFalse_WhenStoreIsNotNew()
         {
             var testObject = mock.Create<WalmartStoreSetupControlViewModel>();
-            testObject.ConsumerID = "ConsumerID";
-            testObject.PrivateKey = "NEW KEY";
+            testObject.ClientID = "ClientID";
+            testObject.ClientSecret = "NEW KEY";
             testObject.IsNewStore = false;
-            testObject.UpdatingPrivateKey = true;
+            testObject.UpdatingClientSecret = true;
             testObject.Save(new WalmartStoreEntity());
 
-            Assert.False(testObject.UpdatingPrivateKey);
+            Assert.False(testObject.UpdatingClientSecret);
         }
 
         [Fact]
         public void Save_DoesNotThrowWalmartException_WhenCredentialsAreValid()
         {
             var testObject = mock.Create<WalmartStoreSetupControlViewModel>();
-            testObject.ConsumerID = "ConsumerID";
-            testObject.PrivateKey = "NEW KEY";
+            testObject.ClientID = "ClientID";
+            testObject.ClientSecret = "NEW KEY";
             testObject.IsNewStore = false;
-            testObject.UpdatingPrivateKey = true;
+            testObject.UpdatingClientSecret = true;
             testObject.Save(new WalmartStoreEntity());
         }
 
         [Fact]
-        public void Load_SetsConsumerIDToStoresConsumerID()
+        public void Load_SetsClientIDToStoresClientID()
         {
             var testObject = mock.Create<WalmartStoreSetupControlViewModel>();
 
             WalmartStoreEntity store = new WalmartStoreEntity();
-            store.ConsumerID = "ConsumerID";
+            store.ClientID = "ClientID";
 
             testObject.Load(store);
 
-            Assert.Equal("ConsumerID", testObject.ConsumerID);
+            Assert.Equal("ClientID", testObject.ClientID);
         }
 
         [Fact]
-        public void Load_SetsIsNewStoreToTrue_WhenStoresConsumerIDIsEmpty()
+        public void Load_SetsIsNewStoreToTrue_WhenStoresClientIDIsEmpty()
         {
             var testObject = mock.Create<WalmartStoreSetupControlViewModel>();
 
             WalmartStoreEntity store = new WalmartStoreEntity();
-            store.ConsumerID = "";
+            store.ClientID = "";
 
             testObject.Load(store);
 
@@ -191,12 +191,12 @@ namespace ShipWorks.Stores.Tests.Platforms.Walmart
         }
 
         [Fact]
-        public void Load_SetsIsNewStoreToFalse_WhenStoresConsumerIDHasValue()
+        public void Load_SetsIsNewStoreToFalse_WhenStoresClientIDHasValue()
         {
             var testObject = mock.Create<WalmartStoreSetupControlViewModel>();
 
             WalmartStoreEntity store = new WalmartStoreEntity();
-            store.ConsumerID = "ConsumerID";
+            store.ClientID = "ClientID";
 
             testObject.Load(store);
 
@@ -204,27 +204,27 @@ namespace ShipWorks.Stores.Tests.Platforms.Walmart
         }
 
         [Fact]
-        public void Load_SetsUpdatingPrivateKeyToTrue_WhenStoreIsNew()
+        public void Load_SetsUpdatingClientSecretToTrue_WhenStoreIsNew()
         {
             var testObject = mock.Create<WalmartStoreSetupControlViewModel>();
 
             WalmartStoreEntity store = new WalmartStoreEntity();
-            store.ConsumerID = "";
+            store.ClientID = "";
 
             testObject.Load(store);
 
-            Assert.True(testObject.UpdatingPrivateKey);
+            Assert.True(testObject.UpdatingClientSecret);
         }
 
         [Fact]
-        public void UpdatePrivateKeyCommand_SetsUpdatingPrivateKeyToTrue()
+        public void UpdateClientSecretCommand_SetsUpdatingClientSecretToTrue()
         {
             var testObject = mock.Create<WalmartStoreSetupControlViewModel>();
-            testObject.UpdatingPrivateKey = false;
+            testObject.UpdatingClientSecret = false;
 
-            testObject.UpdatePrivateKeyCommand.Execute(null);
+            testObject.UpdateClientSecretCommand.Execute(null);
 
-            Assert.True(testObject.UpdatingPrivateKey);
+            Assert.True(testObject.UpdatingClientSecret);
         }
 
         public void Dispose()

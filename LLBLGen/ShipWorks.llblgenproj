@@ -3429,6 +3429,8 @@
       </EntityDefinition>
       <EntityDefinition Name="WalmartStore" ObjectID="066c7cc9-cbb0-4190-95cb-2f1203e59c92" InheritanceType="2">
         <Fields>
+          <Field Name="ClientID" Type="string" MaxLength="50" FieldIndex="3" />
+          <Field Name="ClientSecret" Type="string" MaxLength="2000" FieldIndex="4" />
           <Field Name="ConsumerID" Type="string" MaxLength="50" FieldIndex="0" />
           <Field Name="DownloadModifiedNumberOfDaysBack" Type="int" Precision="10" FieldIndex="2" />
           <Field Name="PrivateKey" Type="string" MaxLength="2000" FieldIndex="1" />
@@ -9389,6 +9391,8 @@
                     <Field Name="ConsumerID" Ordinal="2" DbType="12" Length="50" />
                     <Field Name="PrivateKey" Ordinal="3" DbType="12" Length="2000" />
                     <Field Name="DownloadModifiedNumberOfDaysBack" Ordinal="4" DbType="8" Precision="10" />
+                    <Field Name="ClientID" Ordinal="5" HasDefaultValue="true" DefaultValue="''" DbType="12" Length="50" />
+                    <Field Name="ClientSecret" Ordinal="6" HasDefaultValue="true" DefaultValue="''" DbType="12" Length="2000" />
                   </Fields>
                 </Table>
                 <Table Name="WorldShipGoods">
@@ -14169,6 +14173,8 @@
         </EntityMapping>
         <EntityMapping EntityName=":WalmartStore" TargetName="ShipWorksLocal:dbo:WalmartStore">
           <FieldMappings>
+            <FieldMapping FieldName="ClientID" TargetFieldName="ClientID" />
+            <FieldMapping FieldName="ClientSecret" TargetFieldName="ClientSecret" />
             <FieldMapping FieldName="ConsumerID" TargetFieldName="ConsumerID" />
             <FieldMapping FieldName="DownloadModifiedNumberOfDaysBack" TargetFieldName="DownloadModifiedNumberOfDaysBack" />
             <FieldMapping FieldName="PrivateKey" TargetFieldName="PrivateKey" />

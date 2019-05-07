@@ -13046,6 +13046,10 @@ namespace ShipWorks.Data.Model
 		PrivateKey,
 		///<summary>DownloadModifiedNumberOfDaysBack. </summary>
 		DownloadModifiedNumberOfDaysBack,
+		///<summary>ClientID. </summary>
+		ClientID,
+		///<summary>ClientSecret. </summary>
+		ClientSecret,
 		/// <summary></summary>
 		AmountOfFields
 	}
