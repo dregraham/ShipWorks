@@ -17,6 +17,7 @@ namespace ShipWorks.Stores.Warehouse
     public class StoreDtoFactory
     {
         private readonly IDownloadStartingPoint downloadStartingPoint;
+        private readonly IStoreTypeManager storeTypeManager;
 
         /// <summary>
         /// Constructor
@@ -24,21 +25,19 @@ namespace ShipWorks.Stores.Warehouse
         public StoreDtoFactory(IDownloadStartingPoint downloadStartingPoint, IStoreTypeManager storeTypeManager)
         {
             this.downloadStartingPoint = downloadStartingPoint;
-            StoreTypeManager = storeTypeManager;
+            this.storeTypeManager = storeTypeManager;
         }
-
-        public IStoreTypeManager StoreTypeManager { get; }
 
         /// <summary>
         /// Create a StoreDto from the given store entity
         /// </summary>
         /// <exception cref="NotSupportedException">Thrown when the given store's store type is not supported in
         /// ShipWorks warehouse mode.</exception>
-        public async Task<StoreDto> Create(IStoreEntity storeEntity)
+        public async Task<StoreDto> Create(StoreEntity storeEntity)
         {
             StoreDto store = new StoreDto();
             store.StoreType = storeEntity.TypeCode;
-            store.Identifier = StoreTypeManager.GetType(storeEntity.StoreID).LicenseIdentifier;
+            store.Identifier = storeTypeManager.GetType(storeEntity).LicenseIdentifier;
 
             // todo: Figure out what we want to do about encryption
 
