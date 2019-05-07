@@ -1392,30 +1392,30 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <summary> The IncludeReturn property of the Entity ShippingProfile<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "ShippingProfile"."IncludeReturn"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.Boolean IncludeReturn
+		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual Nullable<System.Boolean> IncludeReturn
 		{
-			get { return (System.Boolean)GetValue((int)ShippingProfileFieldIndex.IncludeReturn, true); }
+			get { return (Nullable<System.Boolean>)GetValue((int)ShippingProfileFieldIndex.IncludeReturn, false); }
 			set	{ SetValue((int)ShippingProfileFieldIndex.IncludeReturn, value); }
 		}
 
 		/// <summary> The ApplyReturnProfile property of the Entity ShippingProfile<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "ShippingProfile"."ApplyReturnProfile"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.Boolean ApplyReturnProfile
+		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual Nullable<System.Boolean> ApplyReturnProfile
 		{
-			get { return (System.Boolean)GetValue((int)ShippingProfileFieldIndex.ApplyReturnProfile, true); }
+			get { return (Nullable<System.Boolean>)GetValue((int)ShippingProfileFieldIndex.ApplyReturnProfile, false); }
 			set	{ SetValue((int)ShippingProfileFieldIndex.ApplyReturnProfile, value); }
 		}
 
 		/// <summary> The ReturnProfileID property of the Entity ShippingProfile<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "ShippingProfile"."ReturnProfileID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.Int64 ReturnProfileID
+		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual Nullable<System.Int64> ReturnProfileID
 		{
-			get { return (System.Int64)GetValue((int)ShippingProfileFieldIndex.ReturnProfileID, true); }
+			get { return (Nullable<System.Int64>)GetValue((int)ShippingProfileFieldIndex.ReturnProfileID, false); }
 			set	{ SetValue((int)ShippingProfileFieldIndex.ReturnProfileID, value); }
 		}
 

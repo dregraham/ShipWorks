@@ -1135,9 +1135,9 @@ CREATE TABLE [dbo].[ShippingProfile]
 [InsuranceInitialValueAmount] [money] NULL,
 [ReturnShipment] [bit] NULL,
 [RequestedLabelFormat] [int] NULL,
-[IncludeReturn] [bit] NOT NULL CONSTRAINT [DF_ShippingProfile_IncludeReturn] DEFAULT ((0)),
-[ApplyReturnProfile] [bit] NOT NULL CONSTRAINT [DF_ShippingProfile_ApplyReturnProfile] DEFAULT ((0)),
-[ReturnProfileID] [bigint] NOT NULL CONSTRAINT [DF_ShippingProfile_ReturnProfileID] DEFAULT ((-1))
+[IncludeReturn] [bit] NULL,
+[ApplyReturnProfile] [bit] NULL,
+[ReturnProfileID] [bigint] NULL
 )
 GO
 PRINT N'Creating primary key [PK_ShippingProfile] on [dbo].[ShippingProfile]'

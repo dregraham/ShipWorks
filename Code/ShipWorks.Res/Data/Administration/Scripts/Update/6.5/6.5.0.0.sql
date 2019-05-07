@@ -1,9 +1,9 @@
 ﻿PRINT N'Altering [dbo].[ShippingProfile]'
 GO
 ALTER TABLE [dbo].[ShippingProfile] ADD
-[IncludeReturn] [bit] NOT NULL CONSTRAINT [DF_ShippingProfile_IncludeReturn] DEFAULT ((0)),
-[ApplyReturnProfile] [bit] NOT NULL CONSTRAINT [DF_ShippingProfile_ApplyReturnProfile] DEFAULT ((0)),
-[ReturnProfileID] [bigint] NOT NULL CONSTRAINT [DF_ShippingProfile_ReturnProfileID] DEFAULT ((-1))
+[IncludeReturn] [bit] NULL,
+[ApplyReturnProfile] [bit] NULL,
+[ReturnProfileID] [bigint] NULL
 GO
 PRINT N'Altering [dbo].[Shipment]'
 GO

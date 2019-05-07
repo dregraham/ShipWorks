@@ -3254,9 +3254,9 @@ namespace ShipWorks.Data.Model
 			this.AddElementFieldMapping("ShippingProfileEntity", "InsuranceInitialValueAmount", "InsuranceInitialValueAmount", true, "Money", 0, 19, 4, false, "", null, typeof(System.Decimal), 8);
 			this.AddElementFieldMapping("ShippingProfileEntity", "ReturnShipment", "ReturnShipment", true, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 9);
 			this.AddElementFieldMapping("ShippingProfileEntity", "RequestedLabelFormat", "RequestedLabelFormat", true, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 10);
-			this.AddElementFieldMapping("ShippingProfileEntity", "IncludeReturn", "IncludeReturn", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 11);
-			this.AddElementFieldMapping("ShippingProfileEntity", "ApplyReturnProfile", "ApplyReturnProfile", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 12);
-			this.AddElementFieldMapping("ShippingProfileEntity", "ReturnProfileID", "ReturnProfileID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 13);
+			this.AddElementFieldMapping("ShippingProfileEntity", "IncludeReturn", "IncludeReturn", true, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 11);
+			this.AddElementFieldMapping("ShippingProfileEntity", "ApplyReturnProfile", "ApplyReturnProfile", true, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 12);
+			this.AddElementFieldMapping("ShippingProfileEntity", "ReturnProfileID", "ReturnProfileID", true, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 13);
 		}
 
 		/// <summary>Inits ShippingProviderRuleEntity's mappings</summary>

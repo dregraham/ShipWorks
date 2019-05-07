@@ -2709,15 +2709,15 @@
       </EntityDefinition>
       <EntityDefinition Name="ShippingProfile" ObjectID="c9ae4751-442b-4f36-bc23-0f4442f2bdde">
         <Fields>
-          <Field Name="ApplyReturnProfile" Type="bool" FieldIndex="12" />
-          <Field Name="IncludeReturn" Type="bool" FieldIndex="11" />
+          <Field Name="ApplyReturnProfile" Type="bool" IsOptional="true" FieldIndex="12" />
+          <Field Name="IncludeReturn" Type="bool" IsOptional="true" FieldIndex="11" />
           <Field Name="Insurance" Type="bool" IsOptional="true" FieldIndex="6" />
           <Field Name="InsuranceInitialValueAmount" Type="decimal" IsOptional="true" Precision="19" Scale="4" FieldIndex="8" />
           <Field Name="InsuranceInitialValueSource" Type="int" IsOptional="true" FieldIndex="7" />
           <Field Name="Name" Type="string" MaxLength="50" FieldIndex="2" />
           <Field Name="OriginID" Type="long" IsOptional="true" FieldIndex="5" />
           <Field Name="RequestedLabelFormat" Type="int" IsOptional="true" FieldIndex="10" />
-          <Field Name="ReturnProfileID" Type="long" Precision="19" FieldIndex="13" />
+          <Field Name="ReturnProfileID" Type="long" IsOptional="true" Precision="19" FieldIndex="13" />
           <Field Name="ReturnShipment" Type="bool" IsOptional="true" FieldIndex="9" />
           <Field Name="RowVersion" Type="byte[]" IsReadOnly="true" FieldIndex="1" />
           <Field Name="ShipmentType" Type="ShipmentTypeCode" IsOptional="true" FieldIndex="3" />
@@ -4549,7 +4549,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2019-05-01T21:24:30.6348872Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2019-05-07T15:18:59.9192762Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -8464,9 +8464,9 @@
                     <Field Name="InsuranceInitialValueAmount" Ordinal="9" IsOptional="true" DbType="9" Precision="19" Scale="4" />
                     <Field Name="ReturnShipment" Ordinal="10" IsOptional="true" DbType="2" />
                     <Field Name="RequestedLabelFormat" Ordinal="11" IsOptional="true" DbType="8" Precision="10" />
-                    <Field Name="IncludeReturn" Ordinal="12" HasDefaultValue="true" DefaultValue="(0)" DbType="2" />
-                    <Field Name="ApplyReturnProfile" Ordinal="13" HasDefaultValue="true" DefaultValue="(0)" DbType="2" />
-                    <Field Name="ReturnProfileID" Ordinal="14" HasDefaultValue="true" DefaultValue="(-1)" DbType="0" Precision="19" />
+                    <Field Name="IncludeReturn" Ordinal="12" IsOptional="true" DbType="2" />
+                    <Field Name="ApplyReturnProfile" Ordinal="13" IsOptional="true" DbType="2" />
+                    <Field Name="ReturnProfileID" Ordinal="14" IsOptional="true" DbType="0" Precision="19" />
                   </Fields>
                 </Table>
                 <Table Name="ShippingProviderRule">
