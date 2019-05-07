@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
+using Newtonsoft.Json.Linq;
 using RestSharp;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.ApplicationCore.Licensing.Warehouse;
@@ -47,6 +48,15 @@ namespace ShipWorks.Stores.Warehouse
                     if (response.Failure)
                     {
                         return Result.FromError(response.Message);
+                    }
+
+                    if(Guid.TryParse(JObject.Parse(response.Value.Content)["id"]?.ToString(), out Guid warehouseStoreId))
+                    {
+                        store.WarehouseStoreID = warehouseStoreId;
+                    }
+                    else
+                    {
+                        return Result.FromError($"Invalid Response: {response.Value.Content}");
                     }
                 }
 

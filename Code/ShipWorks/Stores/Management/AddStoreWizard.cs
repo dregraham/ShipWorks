@@ -810,7 +810,7 @@ namespace ShipWorks.Stores.Management
         /// <summary>
         /// Stepping next from the settings page
         /// </summary>
-        private async void OnStepNextSettings(object sender, WizardStepEventArgs e)
+        private void OnStepNextSettings(object sender, WizardStepEventArgs e)
         {
             if (!SaveSettingsInitialDownload())
             {
@@ -822,16 +822,6 @@ namespace ShipWorks.Stores.Management
             {
                 e.NextPage = CurrentPage;
                 return;
-            }
-
-            using (ILifetimeScope scope = IoC.BeginLifetimeScope())
-            {
-                Result result = await scope.Resolve<IWarehouseStoreClient>().UploadStoreToWarehouse(store).ConfigureAwait(true);
-                if (result.Failure)
-                {
-                    MessageHelper.ShowError(this, $"An error occured adding the store to ShipWorks.{Environment.NewLine + Environment.NewLine + result.Message}");
-                    e.NextPage = CurrentPage;
-                }
             }
         }
 
@@ -986,7 +976,7 @@ namespace ShipWorks.Stores.Management
         /// <summary>
         /// Stepping into the complete page
         /// </summary>
-        private void OnSteppingIntoComplete(object sender, WizardSteppingIntoEventArgs e)
+        private async void OnSteppingIntoComplete(object sender, WizardSteppingIntoEventArgs e)
         {
             wizardPageFinished.LoadDownloadControl();
 
@@ -1000,10 +990,19 @@ namespace ShipWorks.Stores.Management
                     store.License = licenseKey.Text.Trim();
                 }
 
-
                 if (!ValidateLicense(e))
                 {
                     return;
+                }
+
+                using (ILifetimeScope scope = IoC.BeginLifetimeScope())
+                {
+                    Result result = await scope.Resolve<IWarehouseStoreClient>().UploadStoreToWarehouse(store).ConfigureAwait(true);
+                    if (result.Failure)
+                    {
+                        MessageHelper.ShowError(this, $"An error occurred saving the store to ShipWorks.{Environment.NewLine + Environment.NewLine + result.Message}");
+                        return;
+                    }
                 }
 
                 using (SqlAdapter adapter = new SqlAdapter(true))
