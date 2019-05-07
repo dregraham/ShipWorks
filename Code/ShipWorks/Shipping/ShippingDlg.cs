@@ -2348,64 +2348,30 @@ namespace ShipWorks.Shipping
         {
             Cursor.Current = Cursors.WaitCursor;
 
-            // List that will ensure the new return shipments are processed in order with their parent shipments
-            List<ShipmentEntity> shipmentsToProcess = new List<ShipmentEntity>();
-
-            // List of just the new return shipments to be added to the grid
-            List<ShipmentEntity> newReturnShipments = new List<ShipmentEntity>();
-
             ILicenseService licenseService = lifetimeScope.Resolve<ILicenseService>();
             licenseService.GetLicenses().FirstOrDefault()?.EnforceCapabilities(EnforcementContext.CreateLabel, this);
 
             // Save changes to the current selection in memory.  We save to the database later on a per-shipment basis in the background thread.
             SaveChangesToUIDisplayedShipments();
 
-            foreach (ShipmentEntity shipment in shipments)
+            foreach (ShipmentEntity shipment in shipments.Where(s => s.Processed))
             {
-                shipmentsToProcess.Add(shipment);
-                if (!shipment.Processed)
-                {
-                    if (!shipment.ReturnShipment && shipment.IncludeReturn)
-                    {
-                        // Create a copy of the shipment to use for returns
-                        ShipmentEntity returnShipment = shippingManager.CreateReturnShipment(shipment);
-
-                        // Update IncludeReturns to false after the shipment has been copied
-                        returnShipment.IncludeReturn = false;
-
-                        if (shipment.ApplyReturnProfile)
-                        {
-                            IShippingProfileEntity returnProfile = ShippingProfileManager.GetProfileReadOnly(shipment.ReturnProfileID);
-                            if (returnProfile != null)
-                            {
-                                shippingProfileService.Get(returnProfile).Apply(returnShipment);
-                            }
-                            else
-                            {
-                                NotFoundException ex = new NotFoundException("The selected return profile could not be found.");
-                                ErrorManager.SetShipmentErrorMessage(returnShipment.ShipmentID, ex);
-                            }
-                        }
-
-                        ShippingManager.SaveShipment(returnShipment);
-                        shipmentsToProcess.Add(returnShipment);
-                        newReturnShipments.Add(returnShipment);
-                    }
-                }
-                else
-                {
-                    // Clear errors on ones that are already marked as processed. Like if they got the AlreadyProcessed error, and then hit process again,
-                    // the error shouldn't stay
-                    ErrorManager.Remove(shipment.ShipmentID);
-                }
+                // Clear errors on ones that are already marked as processed. Like if they got the AlreadyProcessed error, and then hit process again,
+                // the error shouldn't stay
+                ErrorManager.Remove(shipment.ShipmentID);
             }
-
-            shipmentControl.AddShipments(newReturnShipments);
 
             IShipmentProcessor shipmentProcessor = createShipmentProcessor();
 
-            IEnumerable<ProcessShipmentResult> results = await shipmentProcessor.Process(shipmentsToProcess, carrierConfigurationShipmentRefresher,
+            IEnumerable<ProcessShipmentResult> results = await shipmentProcessor.Process(shipments, carrierConfigurationShipmentRefresher,
                 rateControl.SelectedRate, CounterRateCarrierConfiguredWhileProcessing);
+
+            List<ShipmentEntity> createdReturnShipments = results
+                .Where(s => !shipments.Contains(s.Shipment))
+                .Select(s => s.Shipment)
+                .ToList<ShipmentEntity>();
+
+            shipmentControl.AddShipments(createdReturnShipments);
 
             // Apply any changes made during processing to the grid
             ApplyShipmentsToGridRows(results.Select(x => x.Shipment));
