@@ -418,8 +418,8 @@ namespace ShipWorks.Shipping.Editing
                 includeReturn.Enabled = allowIncludeReturn && !returnShipment.Checked;
                 returnShipment.Enabled = !includeReturn.Checked;
                 applyReturnProfile.Enabled = includeReturn.Checked;
-                returnProfileID.Enabled = applyReturnProfile.Checked && applyReturnProfile.Enabled;
-                returnProfileIDLabel.Enabled = applyReturnProfile.Checked && applyReturnProfile.Enabled;
+                returnProfileID.Enabled = applyReturnProfile.Checked;
+                returnProfileIDLabel.Enabled = applyReturnProfile.Checked;
             }
             else
             {
@@ -662,10 +662,14 @@ namespace ShipWorks.Shipping.Editing
         {
             if (!isLoading)
             {
+                if (!includeReturn.Checked)
+                {
+                    applyReturnProfile.Checked = false;
+                }
                 returnShipment.Enabled = !includeReturn.Checked;
                 applyReturnProfile.Enabled = includeReturn.Checked;
-                returnProfileID.Enabled = applyReturnProfile.Checked && applyReturnProfile.Enabled;
-                returnProfileIDLabel.Enabled = applyReturnProfile.Checked && applyReturnProfile.Enabled;
+                returnProfileID.Enabled = applyReturnProfile.Checked;
+                returnProfileIDLabel.Enabled = applyReturnProfile.Checked;
                 SaveReturnsToShipments();
             }
         }
@@ -714,7 +718,7 @@ namespace ShipWorks.Shipping.Editing
         /// <summary>
         /// Add applicable profiles for the given shipment type to the context menu
         /// </summary>
-        private void RefreshIncludeReturnProfileMenu(ShipmentTypeCode? shipmentTypeCode)
+        private void RefreshIncludeReturnProfileMenu(ShipmentTypeCode shipmentTypeCode)
         {
             BindingList<KeyValuePair<long, string>> newReturnProfiles = new BindingList<KeyValuePair<long, string>>();
 

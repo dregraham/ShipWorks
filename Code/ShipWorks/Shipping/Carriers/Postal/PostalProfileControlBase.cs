@@ -164,6 +164,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
             {
                 returnShipment.Enabled = returnState.Checked;
                 applyReturnProfile.Enabled = false;
+                applyReturnProfile.Checked = false;
                 returnProfileID.Enabled = false;
                 returnProfileIDLabel.Enabled = false;
             }
