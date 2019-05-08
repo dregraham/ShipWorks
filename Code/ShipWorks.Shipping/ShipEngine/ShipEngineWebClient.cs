@@ -12,6 +12,8 @@ using System;
 using System.Net;
 using Interapptive.Shared.Extensions;
 using Newtonsoft.Json.Linq;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Stores;
 
 namespace ShipWorks.Shipping.ShipEngine
 {
@@ -24,17 +26,20 @@ namespace ShipWorks.Shipping.ShipEngine
         private readonly IShipEngineApiKey apiKey;
         private readonly ILogEntryFactory apiLogEntryFactory;
         private readonly IShipEngineApiFactory shipEngineApiFactory;
+        private readonly IStoreManager storeManager;
 
         /// <summary>
         /// Constructor
         /// </summary>
         public ShipEngineWebClient(IShipEngineApiKey apiKey,
             ILogEntryFactory apiLogEntryFactory,
-            IShipEngineApiFactory shipEngineApiFactory)
+            IShipEngineApiFactory shipEngineApiFactory,
+            IStoreManager storeManager)
         {
             this.apiKey = apiKey;
             this.apiLogEntryFactory = apiLogEntryFactory;
             this.shipEngineApiFactory = shipEngineApiFactory;
+            this.storeManager = storeManager;
         }
 
         /// <summary>
@@ -104,67 +109,91 @@ namespace ShipWorks.Shipping.ShipEngine
         /// </remarks>
         public async Task<GenericResult<string>> ConnectAmazonShippingAccount(string authCode)
         {
-#pragma warning disable S125
-            // Doug Wile (ShipEngine): So the root of the error is that we don't currently support connecting an Amazon Shipping account outside
-            // of the partner workflow (partner key + on-behalf-of seller ID). The solution for you will be to use the `GET /v1/environment/whoami`
-            // endpoint to retrieve a seller's ID given their API key. You will then use this ID(with the `se -` prefix) in the `on - behalf - of`
-            // header when making the `POST / v1 / connections / carriers / amazon_shipping_us` request
+            AmazonStoreEntity store = storeManager.GetEnabledStores()
+                .FirstOrDefault(s => s.StoreTypeCode == StoreTypeCode.Amazon) as AmazonStoreEntity;
 
-            // The request / response for whoami looks like this currently
+            AmazonShippingUsAccountInformationRequest amazonAccountInfo = new AmazonShippingUsAccountInformationRequest()
+            {
+                Nickname = authCode,
+                AuthCode = authCode,
+                MerchantSellerId = store?.MerchantID ?? string.Empty,
+                MwsAuthToken = store?.AuthToken ?? string.Empty
+            };
 
-            // Request
-            // GET https://api.shipengine.com/v1/environment/whoami
-            // api - key: { seller api key}```
-
-            // Response
-            // Sections of code should not be "commented out"
-            // {
-            //    "data": {
-            //        "username": "123456" // the seller's account ID
-            // },
-            // "request_id": "cf3dad78-4c95-4763-bdad-1744e9f2b0fc"
-            // }
-
-            // This endpoint is undocumented, but will work.We'll be adding another property which will just be the account ID with the `se-`
-            // prefix to make it a bit cleaner to use. If we end up making a documented account endpoint with the same/similar functionality,
-            // we'll let you know and work with you to help move you over.We definitely don't want to break any of your workflows :smiley:
-#pragma warning restore S125
+            ICarrierAccountsApi apiInstance = shipEngineApiFactory.CreateCarrierAccountsApi();
 
             try
-            // Sections of code should not be "commented out"
             {
-                // first we have to get the account id
-                HttpJsonVariableRequestSubmitter whoAmIRequest = new HttpJsonVariableRequestSubmitter();
-                whoAmIRequest.Headers.Add($"Content-Type: application/json");
-                whoAmIRequest.Headers.Add($"api-key: {await GetApiKey()}");
-                whoAmIRequest.Verb = HttpVerb.Get;
-                whoAmIRequest.Uri = new Uri("https://api.shipengine.com/v1/environment/whoami");
-
-                EnumResult<HttpStatusCode> result =
-                    whoAmIRequest.ProcessRequest(new ApiLogEntry(ApiLogSource.ShipEngine, "WhoAmI"), typeof(ShipEngineException));
-                string accountId = JObject.Parse(result.Message)["data"]["username"].ToString();
-
-
-                // now we have to connect Amazon to the account id using our partner key
-                HttpJsonVariableRequestSubmitter submitter = new HttpJsonVariableRequestSubmitter();
-                submitter.Headers.Add($"Content-Type: application/json");
-                submitter.Headers.Add($"api-key: {apiKey.GetPartnerApiKey()}");
-                submitter.Headers.Add($"on-behalf-of: se-{accountId}");
-                submitter.Verb = HttpVerb.Post;
-                submitter.Uri = new Uri($"https://api.shipengine.com/v1/connections/carriers/amazon_shipping_us");
-                submitter.RequestBody = $"{{\"nickname\": \"{authCode}\", \"auth_code\": \"{authCode}\"}}";
-
-
-                EnumResult<HttpStatusCode> connectCarrierResponse =
-                    submitter.ProcessRequest(new ApiLogEntry(ApiLogSource.ShipEngine, "ConnectAmazonShipping"), typeof(ShipEngineException));
-
-                return GenericResult.FromSuccess(JObject.Parse(connectCarrierResponse.Message)["carrier_id"].ToString());
-
+                return await ConnectCarrierAccount(apiInstance, ApiLogSource.Asendia, "ConnectAmazonShippingAccount",
+                apiInstance.AmazonShippingUsAccountCarrierConnectAccountAsync(amazonAccountInfo, await GetApiKey()));
             }
-            catch (Exception ex)
+            catch (ApiException ex)
             {
-                return GenericResult.FromError<string>(ex);
+                string error = GetErrorMessage(ex);
+                return GenericResult.FromError<string>(error);
             }
+
+//#pragma warning disable S125
+//            // Doug Wile (ShipEngine): So the root of the error is that we don't currently support connecting an Amazon Shipping account outside
+//            // of the partner workflow (partner key + on-behalf-of seller ID). The solution for you will be to use the `GET /v1/environment/whoami`
+//            // endpoint to retrieve a seller's ID given their API key. You will then use this ID(with the `se -` prefix) in the `on - behalf - of`
+//            // header when making the `POST / v1 / connections / carriers / amazon_shipping_us` request
+
+//            // The request / response for whoami looks like this currently
+
+//            // Request
+//            // GET https://api.shipengine.com/v1/environment/whoami
+//            // api - key: { seller api key}```
+
+//            // Response
+//            // Sections of code should not be "commented out"
+//            // {
+//            //    "data": {
+//            //        "username": "123456" // the seller's account ID
+//            // },
+//            // "request_id": "cf3dad78-4c95-4763-bdad-1744e9f2b0fc"
+//            // }
+
+//            // This endpoint is undocumented, but will work.We'll be adding another property which will just be the account ID with the `se-`
+//            // prefix to make it a bit cleaner to use. If we end up making a documented account endpoint with the same/similar functionality,
+//            // we'll let you know and work with you to help move you over.We definitely don't want to break any of your workflows :smiley:
+//#pragma warning restore S125
+
+//            try
+//            // Sections of code should not be "commented out"
+//            {
+//                // first we have to get the account id
+//                HttpJsonVariableRequestSubmitter whoAmIRequest = new HttpJsonVariableRequestSubmitter();
+//                whoAmIRequest.Headers.Add($"Content-Type: application/json");
+//                whoAmIRequest.Headers.Add($"api-key: {await GetApiKey()}");
+//                whoAmIRequest.Verb = HttpVerb.Get;
+//                whoAmIRequest.Uri = new Uri("https://api.shipengine.com/v1/environment/whoami");
+
+//                EnumResult<HttpStatusCode> result =
+//                    whoAmIRequest.ProcessRequest(new ApiLogEntry(ApiLogSource.ShipEngine, "WhoAmI"), typeof(ShipEngineException));
+//                string accountId = JObject.Parse(result.Message)["data"]["username"].ToString();
+
+
+//                // now we have to connect Amazon to the account id using our partner key
+//                HttpJsonVariableRequestSubmitter submitter = new HttpJsonVariableRequestSubmitter();
+//                submitter.Headers.Add($"Content-Type: application/json");
+//                submitter.Headers.Add($"api-key: {apiKey.GetPartnerApiKey()}");
+//                submitter.Headers.Add($"on-behalf-of: se-{accountId}");
+//                submitter.Verb = HttpVerb.Post;
+//                submitter.Uri = new Uri($"https://api.shipengine.com/v1/connections/carriers/amazon_shipping_us");
+//                submitter.RequestBody = $"{{\"nickname\": \"{authCode}\", \"auth_code\": \"{authCode}\"}}";
+
+
+//                EnumResult<HttpStatusCode> connectCarrierResponse =
+//                    submitter.ProcessRequest(new ApiLogEntry(ApiLogSource.ShipEngine, "ConnectAmazonShipping"), typeof(ShipEngineException));
+
+//                return GenericResult.FromSuccess(JObject.Parse(connectCarrierResponse.Message)["carrier_id"].ToString());
+
+//            }
+//            catch (Exception ex)
+//            {
+//                return GenericResult.FromError<string>(ex);
+//            }
         }
 
         /// <summary>
