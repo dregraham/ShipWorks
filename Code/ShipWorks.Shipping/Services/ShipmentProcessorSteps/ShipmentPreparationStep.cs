@@ -23,6 +23,7 @@ namespace ShipWorks.Shipping.Services.ShipmentProcessorSteps
         private readonly IShippingManager shippingManager;
         private readonly IShipmentPreProcessorFactory shipmentPreProcessorFactory;
         private readonly IResourceLockFactory resourceLockFactory;
+        private readonly IAutoReturnShipmentService returnService;
 
         /// <summary>
         /// Constructor
@@ -32,13 +33,15 @@ namespace ShipWorks.Shipping.Services.ShipmentProcessorSteps
             IShippingManager shippingManager,
             IResourceLockFactory resourceLockFactory,
             IShipmentPreProcessorFactory shipmentPreProcessorFactory,
-            Func<Type, ILog> getLogger)
+            Func<Type, ILog> getLogger,
+            IAutoReturnShipmentService returnService)
         {
             this.resourceLockFactory = resourceLockFactory;
             this.storeManager = storeManager;
             this.securityContext = securityContext;
             this.shippingManager = shippingManager;
             this.shipmentPreProcessorFactory = shipmentPreProcessorFactory;
+            this.returnService = returnService;
             log = getLogger(GetType());
         }
 
@@ -116,6 +119,8 @@ namespace ShipWorks.Shipping.Services.ShipmentProcessorSteps
             {
                 shipmentsToTryToProcess =
                     preprocessor.Run(shipment, state.ChosenRate, CounterRateCarrierConfiguredWhileProcessing);
+
+                returnService.GetShipments();
             }
             catch (ShippingException ex)
             {
