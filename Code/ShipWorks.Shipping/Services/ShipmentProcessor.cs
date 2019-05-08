@@ -121,9 +121,6 @@ namespace ShipWorks.Shipping.Services
                     // Create a copy of the shipment to use for returns
                     ShipmentEntity returnShipment = shippingManager.CreateReturnShipment(shipment);
 
-                    // Update IncludeReturns to false after the shipment has been copied
-                    returnShipment.IncludeReturn = false;
-
                     if (shipment.ApplyReturnProfile)
                     {
                         IShippingProfileEntity returnProfile = ShippingProfileManager.GetProfileReadOnly(shipment.ReturnProfileID);

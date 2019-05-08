@@ -770,6 +770,8 @@ namespace ShipWorks.Shipping.Editing
                         ShipmentEntity copy = shippingManager.CreateShipmentCopy(shipment, x =>
                         {
                             x.ReturnShipment = forReturn;
+                            x.IncludeReturn = !forReturn;
+                            x.ApplyReturnProfile = !forReturn;
                         });
 
                         if (forReturn)
