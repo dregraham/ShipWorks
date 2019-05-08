@@ -895,7 +895,7 @@
     <Compile Include="Services\StoreManagerWrapper.cs" />
     <Compile Include="Services\StoreTypeManagerWrapper.cs" />
     <Compile Include="StoreSettingsTrackedDurationEvent.cs" />
-    <Compile Include="Warehouse\StoreData\AmazonStoreData.cs" />
+    <Compile Include="Warehouse\StoreData\AmazonStore.cs" />
     <Compile Include="Warehouse\StoreData\ChannelAdvisorStoreData.cs" />
     <Compile Include="Warehouse\StoreDtoFactory.cs" />
     <Compile Include="Warehouse\WarehouseStoreClient.cs" />

@@ -33,25 +33,24 @@ namespace ShipWorks.Stores.Warehouse
         /// </summary>
         /// <exception cref="NotSupportedException">Thrown when the given store's store type is not supported in
         /// ShipWorks warehouse mode.</exception>
-        public async Task<StoreDto> Create(StoreEntity storeEntity)
+        public async Task<Store> Create(StoreEntity storeEntity)
         {
-            StoreDto store = new StoreDto();
-            store.StoreType = storeEntity.TypeCode;
-            store.Identifier = storeTypeManager.GetType(storeEntity).LicenseIdentifier;
+            Store store;
 
-            // todo: Figure out what we want to do about encryption
-
-            switch (storeEntity.StoreTypeCode)
+            switch (storeEntity)
             {
-                case StoreTypeCode.Amazon:
-                    await AddAmazonStoreData(storeEntity, store).ConfigureAwait(false);
+                case AmazonStoreEntity amazonStore:
+                    store = await AddAmazonStoreData(amazonStore).ConfigureAwait(false);
                     break;
-                case StoreTypeCode.ChannelAdvisor:
-                    await AddChannelAdvisorStoreData(storeEntity, store).ConfigureAwait(false);
+                case ChannelAdvisorStoreEntity channelAdvisorStore:
+                    store = await AddChannelAdvisorStoreData(channelAdvisorStore).ConfigureAwait(false);
                     break;
                 default:
                     throw new NotSupportedException($"The StoreType {EnumHelper.GetDescription(storeEntity.StoreTypeCode)} is not supported for ShipWorks Warehouse mode.");
             }
+
+            store.StoreType = storeEntity.TypeCode;
+            store.UniqueIdentifier = storeTypeManager.GetType(storeEntity).LicenseIdentifier;
 
             return store;
         }
@@ -59,40 +58,34 @@ namespace ShipWorks.Stores.Warehouse
         /// <summary>
         /// Adds Amazon store data to the StoreDto
         /// </summary>
-        private async Task AddAmazonStoreData(IStoreEntity storeEntity, StoreDto store)
+        private async Task<Store> AddAmazonStoreData(AmazonStoreEntity storeEntity)
         {
-            if (storeEntity is AmazonStoreEntity amazonStoreEntity)
-            {
-                AmazonStoreData storeData = new AmazonStoreData();
-                storeData.MerchantID = amazonStoreEntity.MerchantID;
-                storeData.MarketplaceID = amazonStoreEntity.MarketplaceID;
-                storeData.AuthToken = amazonStoreEntity.AuthToken;
-                storeData.Region = amazonStoreEntity.AmazonApiRegion;
-                storeData.ExcludeFBA = amazonStoreEntity.ExcludeFBA;
-                storeData.AmazonVATS = amazonStoreEntity.AmazonVATS;
-                storeData.DownloadStartDate = await downloadStartingPoint.OnlineLastModified(amazonStoreEntity)
-                    .ConfigureAwait(false);
+            AmazonStore store = new AmazonStore();
+            store.MerchantID = storeEntity.MerchantID;
+            store.MarketplaceID = storeEntity.MarketplaceID;
+            store.AuthToken = storeEntity.AuthToken;
+            store.Region = storeEntity.AmazonApiRegion;
+            store.ExcludeFBA = storeEntity.ExcludeFBA;
+            store.AmazonVATS = storeEntity.AmazonVATS;
+            store.DownloadStartDate = await downloadStartingPoint.OnlineLastModified(storeEntity)
+                .ConfigureAwait(false);
 
-                store.StoreData = storeData;
-            }
+            return store;
         }
 
         /// <summary>
         /// Adds ChannelAdvisor store data to the StoreDto
         /// </summary>
-        private async Task AddChannelAdvisorStoreData(IStoreEntity storeEntity, StoreDto store)
+        private async Task<Store> AddChannelAdvisorStoreData(ChannelAdvisorStoreEntity storeEntity)
         {
-            if (storeEntity is ChannelAdvisorStoreEntity channelAdvisorStoreEntity)
-            {
-                ChannelAdvisorStoreData storeData = new ChannelAdvisorStoreData();
-                storeData.RefreshToken = channelAdvisorStoreEntity.RefreshToken;
-                storeData.CountryCode = channelAdvisorStoreEntity.CountryCode;
-                storeData.ItemAttributesToImport = channelAdvisorStoreEntity.ParsedAttributesToDownload;
-                storeData.DownloadStartDate =
-                    await downloadStartingPoint.OnlineLastModified(channelAdvisorStoreEntity).ConfigureAwait(false);
+            ChannelAdvisorStore store = new ChannelAdvisorStore();
+            store.RefreshToken = storeEntity.RefreshToken;
+            store.CountryCode = storeEntity.CountryCode;
+            store.ItemAttributesToImport = storeEntity.ParsedAttributesToDownload;
+            store.DownloadStartDate =
+                await downloadStartingPoint.OnlineLastModified(storeEntity).ConfigureAwait(false);
 
-                store.StoreData = storeData;
-            }
+            return store;
         }
     }
 }

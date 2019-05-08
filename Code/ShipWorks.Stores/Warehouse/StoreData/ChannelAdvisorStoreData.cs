@@ -2,11 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.Reflection;
 using Newtonsoft.Json;
+using ShipWorks.ApplicationCore.Licensing.Warehouse.DTO;
 
 namespace ShipWorks.Stores.Warehouse.StoreData
 {
     [Obfuscation(Exclude = true, ApplyToMembers = true, StripAfterObfuscation = false)]
-    public class ChannelAdvisorStoreData
+    public class ChannelAdvisorStore : Store
     {
         /// <summary>
         /// ChannelAdvisor OAuth Refresh token

@@ -35,13 +35,15 @@ namespace ShipWorks.Stores.Tests.Warehouse
 
             var downloadStartingPoint = mock.Mock<IDownloadStartingPoint>();
             downloadStartingPoint.Setup(x => x.OnlineLastModified(amazonStoreEntity)).ReturnsAsync(DateTime.Now);
-            
-            StoreDtoFactory testObject = new StoreDtoFactory(downloadStartingPoint.Object);
+
+            var storeTypeManager = mock.Mock<IStoreTypeManager>();
+
+            StoreDtoFactory testObject = new StoreDtoFactory(downloadStartingPoint.Object, storeTypeManager.Object);
 
             var storeDto = await testObject.Create(amazonStoreEntity);
             
             Assert.Equal((int) StoreTypeCode.Amazon, storeDto.StoreType);
-            Assert.IsAssignableFrom<AmazonStoreData>(storeDto.StoreData);
+            Assert.IsAssignableFrom<AmazonStore>(storeDto);
         }
 
         public void Dispose()

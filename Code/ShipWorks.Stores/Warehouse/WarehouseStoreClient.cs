@@ -53,7 +53,7 @@ namespace ShipWorks.Stores.Warehouse
                     request.JsonSerializer = new RestSharpJsonNetSerializer();
                     request.RequestFormat = DataFormat.Json;
 
-                    StoreDto storeDto = await storeDtoFactory.Create(store).ConfigureAwait(false);
+                    Store storeDto = await storeDtoFactory.Create(store).ConfigureAwait(false);
                     request.AddJsonBody(storeDto);
 
                     GenericResult<IRestResponse> response = await warehouseRequestClient.MakeRequest(request, "Upload Store")

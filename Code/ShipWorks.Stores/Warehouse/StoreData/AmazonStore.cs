@@ -1,11 +1,12 @@
 using System;
 using System.Reflection;
 using Newtonsoft.Json;
+using ShipWorks.ApplicationCore.Licensing.Warehouse.DTO;
 
 namespace ShipWorks.Stores.Warehouse.StoreData
 {
     [Obfuscation(Exclude = true, ApplyToMembers = true, StripAfterObfuscation = false)]
-    public class AmazonStoreData
+    public class AmazonStore : Store
     {
         /// <summary>
         /// The date to start downloading orders from

@@ -4,24 +4,17 @@ using Newtonsoft.Json;
 namespace ShipWorks.ApplicationCore.Licensing.Warehouse.DTO
 {
     [Obfuscation(Exclude = true, ApplyToMembers = true, StripAfterObfuscation = false)]
-    public class StoreDto
+    public class Store
     {
         /// <summary>
         /// The type of store this is
         /// </summary>
-        [JsonProperty("storeType")]
+        [JsonProperty("StoreType")]
         public int StoreType { get; set; }
 
         /// <summary>
         /// The unique identifier for the store
         /// </summary>
-        [JsonProperty("identifier")]
-        public string Identifier { get; set; }
-
-        /// <summary>
-        /// Store data needed to download orders, such as credentials
-        /// </summary>
-        [JsonProperty("storeData")]
-        public object StoreData { get; set; }
+        public string UniqueIdentifier { get; set; }
     }
 }
