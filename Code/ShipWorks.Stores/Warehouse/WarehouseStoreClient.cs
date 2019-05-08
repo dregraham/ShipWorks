@@ -13,6 +13,9 @@ using ShipWorks.Editions;
 
 namespace ShipWorks.Stores.Warehouse
 {
+    /// <summary>
+    /// Client for interacting with the warehouse in regard to stores
+    /// </summary>
     [Component]
     public class WarehouseStoreClient : IWarehouseStoreClient
     {
@@ -20,6 +23,9 @@ namespace ShipWorks.Stores.Warehouse
         private readonly WarehouseRequestClient warehouseRequestClient;
         private readonly StoreDtoFactory storeDtoFactory;
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
         public WarehouseStoreClient(ILicenseService licenseService, WarehouseRequestClient warehouseRequestClient, StoreDtoFactory storeDtoFactory)
         {
             this.licenseService = licenseService;
@@ -27,8 +33,16 @@ namespace ShipWorks.Stores.Warehouse
             this.storeDtoFactory = storeDtoFactory;
         }
 
+        /// <summary>
+        /// Upload the store to warehouse mode
+        /// </summary>
         public async Task<Result> UploadStoreToWarehouse(StoreEntity store)
         {
+            if (!WarehouseStoreTypes.IsSupported(store.StoreTypeCode))
+            {
+                return Result.FromSuccess();
+            }
+
             try
             {
                 EditionRestrictionLevel restrictionLevel = licenseService.CheckRestriction(EditionFeature.Warehouse, null);
