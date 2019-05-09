@@ -123,7 +123,7 @@ namespace ShipWorks.Shipping.ShipEngine
                 ICarrierAccountsApi apiInstance = shipEngineApiFactory.CreateCarrierAccountsApi();
 
                 AmazonShippingUsAccountSettingsDTO updateRequest = new AmazonShippingUsAccountSettingsDTO(
-                    email: amazonSwaAccount?.Email,
+                    email: amazonSwaAccount.Email,
                     merchantSellerId: store?.MerchantID,
                     mwsAuthToken: store?.AuthToken);
 
