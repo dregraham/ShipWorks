@@ -46,9 +46,18 @@ namespace ShipWorks.Shipping.Services.ShipmentProcessorSteps
         }
 
         /// <summary>
-        /// Complete the label creation process
+        /// Complete the label creation process for a shipment/return pair
         /// </summary>
-        public ILabelResultLogResult Complete(ILabelPersistenceResult result)
+        public Tuple<ILabelResultLogResult, ILabelResultLogResult> Complete(Tuple<ILabelPersistenceResult, ILabelPersistenceResult> results)
+        {
+            ILabelResultLogResult completeShipment = CompleteSingle(results.Item1);
+            ILabelResultLogResult completeReturn = CompleteSingle(results.Item2);
+
+            return new Tuple<ILabelResultLogResult, ILabelResultLogResult>(completeShipment, completeReturn);
+        }
+
+
+        private ILabelResultLogResult CompleteSingle(ILabelPersistenceResult result)
         {
             ShipmentEntity shipment = result.OriginalShipment;
             Exception exception = result.Exception;

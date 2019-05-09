@@ -1,70 +1,53 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
+using ShipWorks.Shipping.Profiles;
 
 namespace ShipWorks.Shipping.Services
 {
-    public class AutoReturnShipmentService
+    /// <summary>
+    /// Service that creates automatic returns for shipments
+    /// </summary>
+    [Component]
+    public class AutoReturnShipmentService : IAutoReturnShipmentService
     {
-        private IEnumerable<ShipmentEntity> shipments;
-        private List<Tuple<ShipmentEntity, ShipmentEntity>> shipmentsWithReturns;
+        private readonly IShippingManager shippingManager;
+        private readonly IShippingProfileService shippingProfileService;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public AutoReturnShipmentService(IEnumerable<ShipmentEntity> shipments)
+        public AutoReturnShipmentService(IShippingManager shippingManager,
+            IShippingProfileService shippingProfileService)
         {
-            this.shipments = shipments;
+            this.shippingManager = shippingManager;
+            this.shippingProfileService = shippingProfileService;
         }
 
         /// <summary>
-        /// Creates an auto return shipment
+        /// Applies the given return profile ID to the shipment
         /// </summary>
-        private ShipmentEntity CreateReturnShipment(ShipmentEntity shipment)
+        public void ApplyReturnProfile(ShipmentEntity shipment, long returnProfileID)
         {
-            // Copy auto return shipment logic here
-            throw new NotImplementedException();
-        }
-
-        /// <summary>
-        /// Applies the return profile
-        /// </summary>
-        private void ApplyReturnProfile(ref ShipmentEntity shipment)
-        {
-            // Copy auto return profile logic here
-            throw new NotImplementedException();
-        }
-
-        /// <summary>
-        /// Gets the new auto return shipments
-        /// </summary>
-        /// <returns>
-        /// A tuple that is of the original shipment and the
-        /// new return shipment.
-        /// </returns>
-        public List<Tuple<ShipmentEntity, ShipmentEntity>> GetShipments()
-        {
-            foreach (ShipmentEntity shipment in shipments)
+            IShippingProfileEntity returnProfile = ShippingProfileManager.GetProfileReadOnly(returnProfileID);
+            if (returnProfile != null)
             {
-                if (shipment.IncludeReturn)
-                {
-                    // Create new auto return shipment
-                    var newReturnShipment = CreateReturnShipment(shipment);
-
-                    if (shipment.ApplyReturnProfile)
-                    {
-                        // Apply return profile
-                        ApplyReturnProfile(ref newReturnShipment);
-                    }
-                    shipmentsWithReturns.Add(new Tuple<ShipmentEntity, ShipmentEntity>(shipment, newReturnShipment));
-                }
-                else
-                {
-                    shipmentsWithReturns.Add(new Tuple<ShipmentEntity, ShipmentEntity>(shipment, null));
-                }
+                shippingProfileService.Get(returnProfile).Apply(shipment);
             }
+            else
+            {
+                throw new NotFoundException("The selected return profile could not be found.");
+            }
+        }
 
-            return shipmentsWithReturns;
+        /// <summary>
+        /// Creates a new auto return shipments
+        /// </summary>
+        public ShipmentEntity CreateReturn(ShipmentEntity shipment)
+        {
+            // Create new auto return shipment
+            return shippingManager.CreateReturnShipment(shipment);
         }
     }
 }

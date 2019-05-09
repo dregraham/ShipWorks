@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Shipping.Carriers.Postal.Usps;
 using ShipWorks.Shipping.Carriers.Ups.LocalRating.Validation;
@@ -39,5 +40,10 @@ namespace ShipWorks.Shipping.Services.ProcessShipmentsWorkflow
         /// Is this for Worldship
         /// </summary>
         bool WorldshipExported { get; }
+
+        /// <summary>
+        /// List of shipments
+        /// </summary>
+        IList<ShipmentEntity> Shipments { get; }
     }
 }

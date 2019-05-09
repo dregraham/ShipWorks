@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Threading;
 using Interapptive.Shared;
-using log4net;
 using Interapptive.Shared.ComponentRegistration;
+using log4net;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Utility;
 using ShipWorks.Stores;
@@ -23,7 +23,6 @@ namespace ShipWorks.Shipping.Services.ShipmentProcessorSteps
         private readonly IShippingManager shippingManager;
         private readonly IShipmentPreProcessorFactory shipmentPreProcessorFactory;
         private readonly IResourceLockFactory resourceLockFactory;
-        private readonly IAutoReturnShipmentService returnService;
 
         /// <summary>
         /// Constructor
@@ -33,15 +32,13 @@ namespace ShipWorks.Shipping.Services.ShipmentProcessorSteps
             IShippingManager shippingManager,
             IResourceLockFactory resourceLockFactory,
             IShipmentPreProcessorFactory shipmentPreProcessorFactory,
-            Func<Type, ILog> getLogger,
-            IAutoReturnShipmentService returnService)
+            Func<Type, ILog> getLogger)
         {
             this.resourceLockFactory = resourceLockFactory;
             this.storeManager = storeManager;
             this.securityContext = securityContext;
             this.shippingManager = shippingManager;
             this.shipmentPreProcessorFactory = shipmentPreProcessorFactory;
-            this.returnService = returnService;
             log = getLogger(GetType());
         }
 
@@ -119,8 +116,6 @@ namespace ShipWorks.Shipping.Services.ShipmentProcessorSteps
             {
                 shipmentsToTryToProcess =
                     preprocessor.Run(shipment, state.ChosenRate, CounterRateCarrierConfiguredWhileProcessing);
-
-                returnService.GetShipments();
             }
             catch (ShippingException ex)
             {

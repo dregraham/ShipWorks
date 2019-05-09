@@ -4,19 +4,19 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Transactions;
-using log4net;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
+using log4net;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Common;
 using ShipWorks.Data;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Insurance.InsureShip;
 using ShipWorks.Shipping.Services.ShipmentProcessorSteps.LabelRetrieval;
 using ShipWorks.Stores;
 using ShipWorks.Templates.Tokens;
-using ShipWorks.Shipping.Carriers.Api;
 
 namespace ShipWorks.Shipping.Services.ShipmentProcessorSteps
 {
@@ -31,6 +31,7 @@ namespace ShipWorks.Shipping.Services.ShipmentProcessorSteps
         private readonly ILog log;
         private readonly IOrderedCompositeManipulator<ILabelRetrievalShipmentManipulator, ShipmentEntity> shipmentManipulator;
         private readonly ICompositeValidator<ILabelRetrievalShipmentValidator, ShipmentEntity> shipmentValidator;
+        private readonly IAutoReturnShipmentService autoReturn;
 
         /// <summary>
         /// Constructor
@@ -40,40 +41,86 @@ namespace ShipWorks.Shipping.Services.ShipmentProcessorSteps
             ILabelServiceFactory labelServiceFactory,
             IOrderedCompositeManipulator<ILabelRetrievalShipmentManipulator, ShipmentEntity> shipmentManipulator,
             ICompositeValidator<ILabelRetrievalShipmentValidator, ShipmentEntity> shipmentValidator,
+            IAutoReturnShipmentService autoReturn,
             Func<Type, ILog> createLogger)
         {
             this.shipmentValidator = shipmentValidator;
             this.shipmentManipulator = shipmentManipulator;
             this.labelServiceFactory = labelServiceFactory;
             this.storeTypeManager = storeTypeManager;
+            this.autoReturn = autoReturn;
             log = createLogger(GetType());
         }
 
         /// <summary>
         /// Get a label for a shipment
         /// </summary>
-        public async Task<ILabelRetrievalResult> GetLabel(IShipmentPreparationResult result)
+        public async Task<Tuple<ILabelRetrievalResult, ILabelRetrievalResult>> GetLabels(IShipmentPreparationResult result)
         {
             if (!result.Success)
             {
-                return new LabelRetrievalResult(result);
+                return new Tuple<ILabelRetrievalResult, ILabelRetrievalResult>(new LabelRetrievalResult(result), null);
             }
 
-            ShippingException lastException = null;
+            ShippingException lastShipmentException = null;
 
             foreach (ShipmentEntity shipment in result.Shipments)
             {
+                ILabelRetrievalResult shipmentResult = null;
+                ILabelRetrievalResult returnShipmentResult = null;
+
                 try
                 {
-                    return await GetLabelForShipment(result, shipment).ConfigureAwait(false);
+                    shipmentResult = await GetLabelForShipment(result, shipment).ConfigureAwait(false);
                 }
                 catch (Exception ex) when (CanHandleException(ex))
                 {
-                    lastException = ex as ShippingException ?? new ShippingException(ex.Message, ex);
+                    lastShipmentException = ex as ShippingException ?? new ShippingException(ex.Message, ex);
+                }
+
+                if (shipment.IncludeReturn && shipmentResult != null && shipmentResult.Success)
+                {
+                    returnShipmentResult = await ProcessAutomaticReturn(shipment, result).ConfigureAwait(false);
+
+                    return new Tuple<ILabelRetrievalResult, ILabelRetrievalResult>(shipmentResult, returnShipmentResult);
                 }
             }
 
-            return new LabelRetrievalResult(result, lastException);
+            // Failed to retrieve any shipment
+            return new Tuple<ILabelRetrievalResult, ILabelRetrievalResult>(new LabelRetrievalResult(result, lastShipmentException), null);
+        }
+
+        /// <summary>
+        /// Create a return shipment and retreive a label for it
+        /// </summary>
+        private async Task<ILabelRetrievalResult> ProcessAutomaticReturn(ShipmentEntity shipment, IShipmentPreparationResult result)
+        {
+            ShippingException returnException = null;
+            ShipmentEntity returnShipment = autoReturn.CreateReturn(shipment);
+
+            if (shipment.ApplyReturnProfile)
+            {
+                try
+                {
+                    autoReturn.ApplyReturnProfile(returnShipment, shipment.ReturnProfileID);
+                }
+                catch (Exception ex)
+                {
+                    returnException = ex as ShippingException ?? new ShippingException(ex.Message, ex);
+                    return new LabelRetrievalResult(result, returnShipment, returnException);
+                }
+            }
+
+            try
+            {
+                return await GetLabelForShipment(result, returnShipment).ConfigureAwait(false);
+            }
+            catch (Exception ex) when (CanHandleException(ex))
+            {
+                returnException = ex as ShippingException ?? new ShippingException(ex.Message, ex);
+            }
+
+            return new LabelRetrievalResult(result, returnShipment, returnException);
         }
 
         /// <summary>

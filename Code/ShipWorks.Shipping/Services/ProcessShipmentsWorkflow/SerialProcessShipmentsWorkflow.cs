@@ -64,7 +64,18 @@ namespace ShipWorks.Shipping.Services.ProcessShipmentsWorkflow
         {
             using (ITrackedDurationEvent telemetryEvent = telemetryFactory("Shipping.Shipments.Process"))
             {
-                telemetryEvent.AddMetric("Shipments.Count", shipments.Count());
+                // Get shipment count with automatic returns
+                int shipmentCount = 0;
+                foreach (ShipmentEntity shipment in shipments)
+                {
+                    shipmentCount++;
+                    if (shipment.IncludeReturn)
+                    {
+                        shipmentCount++;
+                    }
+                }
+
+                telemetryEvent.AddMetric("Shipments.Count", shipmentCount);
                 telemetryEvent.AddProperty("Processing.Workflow", Name);
 
                 workProgress.CanCancel = false;
@@ -82,8 +93,12 @@ namespace ShipWorks.Shipping.Services.ProcessShipmentsWorkflow
                         {
                             break;
                         }
+                        Tuple<ILabelResultLogResult, ILabelResultLogResult> processResults;
 
-                        results.Add(await ProcessShipment(processShipmentState, workProgress, shipments.Count(), telemetryEvent).ConfigureAwait(false));
+                        processResults = await ProcessShipment(processShipmentState, workProgress, shipmentCount, telemetryEvent).ConfigureAwait(false);
+
+                        results.Add(processResults.Item1);
+                        results.Add(processResults.Item2);
                     }
 
                     ProcessShipmentsWorkflowResult result = results
@@ -116,6 +131,8 @@ namespace ShipWorks.Shipping.Services.ProcessShipmentsWorkflow
                 workflowResult.OrderHashes.Add(result.OriginalShipment.Order.ShipSenseHashKey);
             }
 
+            workflowResult.Shipments.Add(result.OriginalShipment);
+
             return workflowResult;
         }
 
@@ -140,9 +157,9 @@ namespace ShipWorks.Shipping.Services.ProcessShipmentsWorkflow
         }
 
         /// <summary>
-        /// Process a single shipment
+        /// Process a single shipment and its automatic return
         /// </summary>
-        private async Task<ILabelResultLogResult> ProcessShipment(ProcessShipmentState initial,
+        private async Task<Tuple<ILabelResultLogResult, ILabelResultLogResult>> ProcessShipment(ProcessShipmentState initial,
             IProgressReporter workProgress, int shipmentCount, ITrackedDurationEvent telemetryEvent)
         {
             workProgress.Detail = $"Shipment {initial.Index + 1} of {shipmentCount}";
@@ -160,18 +177,23 @@ namespace ShipWorks.Shipping.Services.ProcessShipmentsWorkflow
                     return null;
                 }
 
-                ILabelRetrievalResult getLabelResult = await telemetricResult.RunTimedEventAsync(
+                Tuple<ILabelRetrievalResult, ILabelRetrievalResult> getLabelResults = await telemetricResult.RunTimedEventAsync(
                         "GenerateLabel.DurationInMilliseconds",
-                        () => getLabelTask.GetLabel(prepareShipmentResult))
+                        () => getLabelTask.GetLabels(prepareShipmentResult))
                     .ConfigureAwait(false);
 
-                ILabelPersistenceResult saveLabelResult = telemetricResult.RunTimedEvent("SaveLabel.DurationInMilliseconds",
-                    () => saveLabelTask.SaveLabel(getLabelResult));
+                if (getLabelResults.Item2 != null)
+                {
+                    workProgress.Detail = $"Shipment {initial.Index + 2} of {shipmentCount}";
+                }
 
-                ILabelResultLogResult logLabelResult = telemetricResult.RunTimedEvent("LogLabel.DurationInMilliseconds",
-                    () => completeLabelTask.Complete(saveLabelResult));
+                Tuple<ILabelPersistenceResult, ILabelPersistenceResult> saveLabelResults = telemetricResult.RunTimedEvent("SaveLabels.DurationInMilliseconds",
+                    () => saveLabelTask.SaveLabels(getLabelResults));
 
-                return logLabelResult;
+                Tuple<ILabelResultLogResult, ILabelResultLogResult> logLabelResults = telemetricResult.RunTimedEvent("LogLabels.DurationInMilliseconds",
+                    () => completeLabelTask.Complete(saveLabelResults));
+
+                return logLabelResults;
 
             }
             finally

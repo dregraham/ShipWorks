@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 
 namespace ShipWorks.Shipping.Services.ShipmentProcessorSteps
 {
@@ -10,6 +11,6 @@ namespace ShipWorks.Shipping.Services.ShipmentProcessorSteps
         /// <summary>
         /// Get a label for a shipment
         /// </summary>
-        Task<ILabelRetrievalResult> GetLabel(IShipmentPreparationResult result);
+        Task<Tuple<ILabelRetrievalResult, ILabelRetrievalResult>> GetLabels(IShipmentPreparationResult result);
     }
 }

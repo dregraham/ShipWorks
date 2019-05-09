@@ -42,6 +42,13 @@ namespace ShipWorks.Shipping.Services.ShipmentProcessorSteps
             Exception = exception;
         }
 
+
+        public LabelRetrievalResult(IShipmentPreparationResult result, ShipmentEntity shipment, ShippingException exception) :
+            this(result, exception)
+        {
+            OriginalShipment = shipment;
+        }
+
         /// <summary>
         /// Constructor
         /// </summary>

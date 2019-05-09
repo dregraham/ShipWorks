@@ -1,28 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using ShipWorks.Data.Model.EntityClasses;
+﻿using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.Shipping.Services
 {
     public interface IAutoReturnShipmentService
     {
         /// <summary>
-        /// Creates an auto return shipment
+        /// Applies the given return profile ID to the shipment
         /// </summary>
-        ShipmentEntity CreateReturnShipment(ShipmentEntity shipment);
+        void ApplyReturnProfile(ShipmentEntity shipment, long returnProfileID);
 
         /// <summary>
-        /// Applies the return profile
+        /// Creates a new auto return shipments
         /// </summary>
-        void ApplyReturnProfile(ref ShipmentEntity shipment);
-
-        /// <summary>
-        /// Gets the new auto return shipments
-        /// </summary>
-        /// <returns>
-        /// A tuple that is of the original shipment and the
-        /// new return shipment.
-        /// </returns>
-        List<Tuple<ShipmentEntity, ShipmentEntity>> GetShipments();
+        ShipmentEntity CreateReturn(ShipmentEntity shipment);
     }
 }

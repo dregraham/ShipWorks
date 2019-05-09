@@ -20,14 +20,12 @@ using ShipWorks.Core.Messaging;
 using ShipWorks.Data;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Editions;
 using ShipWorks.Messaging.Messages.Shipping;
 using ShipWorks.Shipping.Carriers.Postal.Usps;
 using ShipWorks.Shipping.Carriers.Ups.LocalRating.Validation;
 using ShipWorks.Shipping.Carriers.UPS.WorldShip;
 using ShipWorks.Shipping.Editing.Rating;
-using ShipWorks.Shipping.Profiles;
 using ShipWorks.Shipping.Services.ProcessShipmentsWorkflow;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping.ShipSense;
@@ -52,8 +50,6 @@ namespace ShipWorks.Shipping.Services
         private Control owner;
         private readonly IUpsLocalRateValidator upsLocalRateValidator;
         private readonly IMessenger messenger;
-        private readonly IShippingManager shippingManager;
-        private readonly IShippingProfileService shippingProfileService;
 
         /// <summary>
         /// Constructor
@@ -70,9 +66,7 @@ namespace ShipWorks.Shipping.Services
             ISqlAdapterFactory sqlAdapterFactory,
             IActionDispatcher actionDispatcher,
             IUpsLocalRateValidator upsLocalRateValidator,
-            IMessenger messenger,
-            IShippingManager shippingManager,
-            IShippingProfileService shippingProfileService)
+            IMessenger messenger)
         {
             this.messenger = messenger;
             this.upsLocalRateValidator = upsLocalRateValidator;
@@ -85,8 +79,6 @@ namespace ShipWorks.Shipping.Services
             this.ownerRetriever = ownerRetriever;
             this.lifetimeScope = lifetimeScope;
             this.licenseService = licenseService;
-            this.shippingManager = shippingManager;
-            this.shippingProfileService = shippingProfileService;
         }
 
         /// <summary>
@@ -111,35 +103,8 @@ namespace ShipWorks.Shipping.Services
 
             licenseService.GetLicenses().FirstOrDefault()?.EnforceCapabilities(EnforcementContext.CreateLabel, owner);
 
-            List<ShipmentEntity> shipmentsAndReturns = new List<ShipmentEntity>();
-
-            foreach (ShipmentEntity shipment in filteredShipments)
-            {
-                shipmentsAndReturns.Add(shipment);
-                if (!shipment.ReturnShipment && shipment.IncludeReturn)
-                {
-                    // Create a copy of the shipment to use for returns
-                    ShipmentEntity returnShipment = shippingManager.CreateReturnShipment(shipment);
-
-                    if (shipment.ApplyReturnProfile)
-                    {
-                        IShippingProfileEntity returnProfile = ShippingProfileManager.GetProfileReadOnly(shipment.ReturnProfileID);
-                        if (returnProfile != null)
-                        {
-                            shippingProfileService.Get(returnProfile).Apply(returnShipment);
-                        }
-                        else
-                        {
-                            NotFoundException ex = new NotFoundException("The selected return profile could not be found.");
-                            errorManager.SetShipmentErrorMessage(returnShipment.ShipmentID, ex);
-                        }
-                    }
-                    shipmentsAndReturns.Add(returnShipment);
-                }
-            }
-
             // Create clones to be processed - that way any changes made don't have race conditions with the UI trying to paint with them
-            List<ShipmentEntity> clonedShipments = EntityUtility.CloneEntityCollection(shipmentsAndReturns);
+            List<ShipmentEntity> clonedShipments = EntityUtility.CloneEntityCollection(filteredShipments);
             int shipmentCount = clonedShipments.Count;
             shipmentRefresher.ProcessingShipments(clonedShipments);
 
@@ -200,7 +165,7 @@ namespace ShipWorks.Shipping.Services
 
             ShowPostProcessingMessage(clonedShipments);
 
-            IEnumerable<ProcessShipmentResult> results = clonedShipments
+            IEnumerable<ProcessShipmentResult> results = result.Shipments
                 .Select(CreateResultFromShipment)
                 .ToList();
 
