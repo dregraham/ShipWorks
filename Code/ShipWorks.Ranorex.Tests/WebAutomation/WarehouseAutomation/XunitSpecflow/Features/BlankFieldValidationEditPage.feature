@@ -1,28 +1,26 @@
-﻿Feature: EditWarehouse
+﻿Feature: BlankFieldLengthValidationEditPage
 
 @Firefox, @Smoke
-Scenario Outline: User edits a warehouse on Firefox
+Scenario Outline: User validates blank fields on Firefox
 	Given the following user with '<Username>' and '<Password>' wants to navigate to the warehouse page using '<Browser>'
 	Then the user clicks the edit button
-	Then the user enters new details
+	Then the user blanks out all fields
 	Then the user clicks the save button
-	#Given the user are on the warehouse list page
-	#Then the user verifies the details
+	And the user sees empty field error messages
 	Then the user closes the warehouse page
 
 
-	Examples: 
+		Examples: 
 	| Browser | Username              | Password |
 	| Firefox | user-0801@example.com | GOOD     |
 
 	@Chrome
-Scenario Outline: User edits a warehouse on Chrome
+Scenario Outline: User validates blank fields on Chrome
 	Given the following user with '<Username>' and '<Password>' wants to navigate to the warehouse page using '<Browser>'
 	Then the user clicks the edit button
-	Then the user enters new details
+	Then the user blanks out all fields
 	Then the user clicks the save button
-	#Given the user are on the warehouse list page
-	#Then the user verifies the details
+	And the user sees empty field error messages
 	Then the user closes the warehouse page
 
 
@@ -32,13 +30,12 @@ Scenario Outline: User edits a warehouse on Chrome
 
 
 @Edge
-Scenario Outline: User edits a warehouse on Edge
+Scenario Outline: User validates blank fields on Edge
 	Given the following user with '<Username>' and '<Password>' wants to navigate to the warehouse page using '<Browser>'
 	Then the user clicks the edit button
-	Then the user enters new details
+	Then the user blanks out all fields
 	Then the user clicks the save button
-	#Given the user are on the warehouse list page
-	#Then the user verifies the details
+	And the user sees empty field error messages
 	Then the user closes the warehouse page
 
 

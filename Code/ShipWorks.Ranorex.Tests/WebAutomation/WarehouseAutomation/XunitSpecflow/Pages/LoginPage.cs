@@ -5,6 +5,7 @@ using System.Threading;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Remote;
 using OpenQA.Selenium.Support.PageObjects;
+using Xunit;
 
 namespace XunitSpecflow.Pages
 {
@@ -29,7 +30,7 @@ namespace XunitSpecflow.Pages
         public IWebElement ErrorMessage { get; set; }
 
         private readonly IWebDriver _driver;
-
+        string LoginPageURL = "https://s2.www.warehouseapp.link/login";
 
         public LoginPage(IWebDriver driver)
         {
@@ -39,10 +40,18 @@ namespace XunitSpecflow.Pages
 
         public DashboardPage LoginAs(string username, string password)
         {
-            UsernameTxtBox.SendKeys(username);
-            PasswordTxtBox.SendKeys(password);
-            LoginBtn.Click();
-            return new DashboardPage(_driver);
+            try
+            {
+                UsernameTxtBox.SendKeys(username);
+                PasswordTxtBox.SendKeys(password);
+                LoginBtn.Click();
+                return new DashboardPage(_driver);
+            }
+            catch (Exception e)
+            {
+                LoginPageQuit();
+                throw new Exception("Automation failed at LoginPage.LoginAs method. Exception: " + e);
+            }
         }
 
         public string GetErrorMessage()
@@ -58,18 +67,39 @@ namespace XunitSpecflow.Pages
                 //}
                 Thread.Sleep(3000);
                 return ErrorMessage.Text;
-
             }
             catch (Exception e)
             {
-                _driver.Quit();
+                LoginPageQuit();
+                throw new Exception("Automation failed at LoginPage.GetErrorMessage method. Exception: " + e);
             }
-            return ErrorMessage.Text;
         }
 
         public void LoginPageQuit()
         {
-            _driver.Quit();
+            try
+            {
+                _driver.Quit();
+            }
+            catch (Exception e)
+            {
+                throw new Exception("Automation failed at LoginPage.LoginPageQuit method. Exception: " + e);
+            }
+        }
+
+        public void LoginRedirectVerification()
+        {
+            _driver.Navigate().GoToUrl("https://s2.www.warehouseapp.link/"); //Dashboard page redirects to Login page
+            Assert.Equal(LoginPageURL, _driver.Url);
+
+            _driver.Navigate().GoToUrl("https://s2.www.warehouseapp.link/warehouses"); //Warehouses page redirects to Login page
+            Assert.Equal(LoginPageURL, _driver.Url);
+
+            _driver.Navigate().GoToUrl("https://s2.www.warehouseapp.link/warehouses/add"); //Warehouse add page redirects to Login page
+            Assert.Equal(LoginPageURL, _driver.Url);
+
+            _driver.Navigate().GoToUrl("https://s2.www.warehouseapp.link/settings"); //Settings page redirects to Login page
+            Assert.Equal(LoginPageURL, _driver.Url);
         }
     }
 }

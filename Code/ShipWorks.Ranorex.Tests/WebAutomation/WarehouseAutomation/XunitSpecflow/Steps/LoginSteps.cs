@@ -32,7 +32,7 @@ namespace XunitSpecflow.Steps
         public void ThenTheUserSeesTheDashboard()
         {
             dashboardPage = new DashboardPage(_driver);
-            Assert.Contains("Dashboard", dashboardPage.GetDashboard());
+            Assert.Contains("Dashboard", GetText(dashboardPage.DashboardTxt));
             dashboardPage.DashboardQuit();
         }
 
@@ -54,7 +54,20 @@ namespace XunitSpecflow.Steps
         [Then(@"the user clicks logout")]
         public void ThenTheUserClicksLogout()
         {
-            dashboardPage.DashboardQuit();
+            dashboardPage = new DashboardPage(_driver);
+            dashboardPage.Logout();
+        }
+
+        [Then(@"the user validates the browser redirects to the login page from the dashboard, warehouse, settings, and warehouse add pages")]
+        public void ThenTheUserValidatesTheBrowserRedirectsToTheLoginPageFromTheDashboardWarehouseSettingsAndWarehouseAddPages()
+        {
+            loginPage.LoginRedirectVerification();
+        }
+
+        [Then(@"the user closes the browser")]
+        public void ThenTheUserClosesTheBrowser()
+        {
+            loginPage.LoginPageQuit();
         }
     }
 }

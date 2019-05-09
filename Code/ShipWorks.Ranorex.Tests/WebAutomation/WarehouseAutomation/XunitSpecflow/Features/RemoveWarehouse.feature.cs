@@ -76,38 +76,70 @@ namespace XunitSpecflow.Features
             this.ScenarioTearDown();
         }
         
-        [Xunit.TheoryAttribute(DisplayName="User removes a warehouse")]
+        [Xunit.TheoryAttribute(DisplayName="User removes a warehouse for Chrome")]
         [Xunit.TraitAttribute("FeatureTitle", "RemoveWarehouse")]
-        [Xunit.TraitAttribute("Description", "User removes a warehouse")]
-        [Xunit.TraitAttribute("Category", "NotEdge")]
-        [Xunit.InlineDataAttribute("Chrome", new string[0])]
-        [Xunit.InlineDataAttribute("Firefox", new string[0])]
-        public virtual void UserRemovesAWarehouse(string browser, string[] exampleTags)
+        [Xunit.TraitAttribute("Description", "User removes a warehouse for Chrome")]
+        [Xunit.TraitAttribute("Category", "Chrome")]
+        [Xunit.InlineDataAttribute("Chrome", "user-0801@example.com", "GOOD", new string[0])]
+        public virtual void UserRemovesAWarehouseForChrome(string browser, string username, string password, string[] exampleTags)
         {
             string[] @__tags = new string[] {
-                    "NotEdge"};
+                    "Chrome"};
             if ((exampleTags != null))
             {
                 @__tags = System.Linq.Enumerable.ToArray(System.Linq.Enumerable.Concat(@__tags, exampleTags));
             }
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("User removes a warehouse", null, @__tags);
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("User removes a warehouse for Chrome", null, @__tags);
 #line 4
 this.ScenarioInitialize(scenarioInfo);
             this.ScenarioStart();
 #line 5
- testRunner.Given(string.Format("the user wants to navigate to the warehouse page using \'{0}\'", browser), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
+ testRunner.Given(string.Format("the following user with \'{0}\' and \'{1}\' wants to navigate to the warehouse page u" +
+                        "sing \'{2}\'", username, password, browser), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line 6
  testRunner.Then("the user clicks the remove button", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+#line 7
+ testRunner.Then("the user accepts the remove warehouse confirmation", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             this.ScenarioCleanup();
         }
         
-        [Xunit.TheoryAttribute(DisplayName="User removes a warehouse for edge")]
+        [Xunit.TheoryAttribute(DisplayName="User removes a warehouse for Firefox")]
         [Xunit.TraitAttribute("FeatureTitle", "RemoveWarehouse")]
-        [Xunit.TraitAttribute("Description", "User removes a warehouse for edge")]
+        [Xunit.TraitAttribute("Description", "User removes a warehouse for Firefox")]
+        [Xunit.TraitAttribute("Category", "Firefox,")]
+        [Xunit.TraitAttribute("Category", "Smoke")]
+        [Xunit.InlineDataAttribute("Firefox", "user-0801@example.com", "GOOD", new string[0])]
+        public virtual void UserRemovesAWarehouseForFirefox(string browser, string username, string password, string[] exampleTags)
+        {
+            string[] @__tags = new string[] {
+                    "Firefox,",
+                    "Smoke"};
+            if ((exampleTags != null))
+            {
+                @__tags = System.Linq.Enumerable.ToArray(System.Linq.Enumerable.Concat(@__tags, exampleTags));
+            }
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("User removes a warehouse for Firefox", null, @__tags);
+#line 16
+this.ScenarioInitialize(scenarioInfo);
+            this.ScenarioStart();
+#line 17
+ testRunner.Given(string.Format("the following user with \'{0}\' and \'{1}\' wants to navigate to the warehouse page u" +
+                        "sing \'{2}\'", username, password, browser), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
+#line 18
+ testRunner.Then("the user clicks the remove button", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+#line 19
+ testRunner.Then("the user accepts the remove warehouse confirmation", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+#line hidden
+            this.ScenarioCleanup();
+        }
+        
+        [Xunit.TheoryAttribute(DisplayName="User removes a warehouse for Edge")]
+        [Xunit.TraitAttribute("FeatureTitle", "RemoveWarehouse")]
+        [Xunit.TraitAttribute("Description", "User removes a warehouse for Edge")]
         [Xunit.TraitAttribute("Category", "Edge")]
-        [Xunit.InlineDataAttribute("Edge", new string[0])]
-        public virtual void UserRemovesAWarehouseForEdge(string browser, string[] exampleTags)
+        [Xunit.InlineDataAttribute("Edge", "user-0801@example.com", "GOOD", new string[0])]
+        public virtual void UserRemovesAWarehouseForEdge(string browser, string username, string password, string[] exampleTags)
         {
             string[] @__tags = new string[] {
                     "Edge"};
@@ -115,14 +147,17 @@ this.ScenarioInitialize(scenarioInfo);
             {
                 @__tags = System.Linq.Enumerable.ToArray(System.Linq.Enumerable.Concat(@__tags, exampleTags));
             }
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("User removes a warehouse for edge", null, @__tags);
-#line 15
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("User removes a warehouse for Edge", null, @__tags);
+#line 27
 this.ScenarioInitialize(scenarioInfo);
             this.ScenarioStart();
-#line 16
- testRunner.Given(string.Format("the user wants to navigate to the warehouse page using \'{0}\'", browser), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
-#line 17
+#line 28
+ testRunner.Given(string.Format("the following user with \'{0}\' and \'{1}\' wants to navigate to the warehouse page u" +
+                        "sing \'{2}\'", username, password, browser), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
+#line 29
  testRunner.Then("the user clicks the remove button", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+#line 30
+ testRunner.Then("the user accepts the remove warehouse confirmation", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             this.ScenarioCleanup();
         }

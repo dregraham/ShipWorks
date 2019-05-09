@@ -76,40 +76,78 @@ namespace XunitSpecflow.Features
             this.ScenarioTearDown();
         }
         
-        [Xunit.TheoryAttribute(DisplayName="User cancels add warehouse")]
+        [Xunit.TheoryAttribute(DisplayName="User cancels add warehouse for Firefox")]
         [Xunit.TraitAttribute("FeatureTitle", "CancelAddWarehouse")]
-        [Xunit.TraitAttribute("Description", "User cancels add warehouse")]
-        [Xunit.TraitAttribute("Category", "NotEdge")]
-        [Xunit.InlineDataAttribute("Chrome", new string[0])]
-        [Xunit.InlineDataAttribute("Firefox", new string[0])]
-        public virtual void UserCancelsAddWarehouse(string browser, string[] exampleTags)
+        [Xunit.TraitAttribute("Description", "User cancels add warehouse for Firefox")]
+        [Xunit.TraitAttribute("Category", "Firefox,")]
+        [Xunit.TraitAttribute("Category", "Smoke")]
+        [Xunit.InlineDataAttribute("Firefox", "user-0801@example.com", "GOOD", new string[0])]
+        public virtual void UserCancelsAddWarehouseForFirefox(string browser, string username, string password, string[] exampleTags)
         {
             string[] @__tags = new string[] {
-                    "NotEdge"};
+                    "Firefox,",
+                    "Smoke"};
             if ((exampleTags != null))
             {
                 @__tags = System.Linq.Enumerable.ToArray(System.Linq.Enumerable.Concat(@__tags, exampleTags));
             }
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("User cancels add warehouse", null, @__tags);
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("User cancels add warehouse for Firefox", null, @__tags);
 #line 4
 this.ScenarioInitialize(scenarioInfo);
             this.ScenarioStart();
 #line 5
- testRunner.Given(string.Format("the user wants to navigate to the warehouse page using \'{0}\'", browser), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
+ testRunner.Given(string.Format("the following user with \'{0}\' and \'{1}\' wants to navigate to the warehouse page u" +
+                        "sing \'{2}\'", username, password, browser), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line 6
  testRunner.Then("the user clicks the add button", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line 7
  testRunner.Then("the user clicks the cancel button", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+#line 8
+ testRunner.Then("the user verifies that no warehouse was added", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+#line 9
+ testRunner.Then("the user closes the warehouse page", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             this.ScenarioCleanup();
         }
         
-        [Xunit.TheoryAttribute(DisplayName="User cancels add warehouse for edge")]
+        [Xunit.TheoryAttribute(DisplayName="User cancels add warehouse for Chrome")]
         [Xunit.TraitAttribute("FeatureTitle", "CancelAddWarehouse")]
-        [Xunit.TraitAttribute("Description", "User cancels add warehouse for edge")]
+        [Xunit.TraitAttribute("Description", "User cancels add warehouse for Chrome")]
+        [Xunit.TraitAttribute("Category", "Chrome")]
+        [Xunit.InlineDataAttribute("Chrome", "user-0801@example.com", "GOOD", new string[0])]
+        public virtual void UserCancelsAddWarehouseForChrome(string browser, string username, string password, string[] exampleTags)
+        {
+            string[] @__tags = new string[] {
+                    "Chrome"};
+            if ((exampleTags != null))
+            {
+                @__tags = System.Linq.Enumerable.ToArray(System.Linq.Enumerable.Concat(@__tags, exampleTags));
+            }
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("User cancels add warehouse for Chrome", null, @__tags);
+#line 16
+this.ScenarioInitialize(scenarioInfo);
+            this.ScenarioStart();
+#line 17
+ testRunner.Given(string.Format("the following user with \'{0}\' and \'{1}\' wants to navigate to the warehouse page u" +
+                        "sing \'{2}\'", username, password, browser), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
+#line 18
+ testRunner.Then("the user clicks the add button", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+#line 19
+ testRunner.Then("the user clicks the cancel button", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+#line 20
+ testRunner.Then("the user verifies that no warehouse was added", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+#line 21
+ testRunner.Then("the user closes the warehouse page", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+#line hidden
+            this.ScenarioCleanup();
+        }
+        
+        [Xunit.TheoryAttribute(DisplayName="User cancels add warehouse for Edge")]
+        [Xunit.TraitAttribute("FeatureTitle", "CancelAddWarehouse")]
+        [Xunit.TraitAttribute("Description", "User cancels add warehouse for Edge")]
         [Xunit.TraitAttribute("Category", "Edge")]
-        [Xunit.InlineDataAttribute("Edge", new string[0])]
-        public virtual void UserCancelsAddWarehouseForEdge(string browser, string[] exampleTags)
+        [Xunit.InlineDataAttribute("Edge", "user-0801@example.com", "GOOD", new string[0])]
+        public virtual void UserCancelsAddWarehouseForEdge(string browser, string username, string password, string[] exampleTags)
         {
             string[] @__tags = new string[] {
                     "Edge"};
@@ -117,16 +155,21 @@ this.ScenarioInitialize(scenarioInfo);
             {
                 @__tags = System.Linq.Enumerable.ToArray(System.Linq.Enumerable.Concat(@__tags, exampleTags));
             }
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("User cancels add warehouse for edge", null, @__tags);
-#line 16
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("User cancels add warehouse for Edge", null, @__tags);
+#line 28
 this.ScenarioInitialize(scenarioInfo);
             this.ScenarioStart();
-#line 17
- testRunner.Given(string.Format("the user wants to navigate to the warehouse page using \'{0}\'", browser), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
-#line 18
+#line 29
+ testRunner.Given(string.Format("the following user with \'{0}\' and \'{1}\' wants to navigate to the warehouse page u" +
+                        "sing \'{2}\'", username, password, browser), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
+#line 30
  testRunner.Then("the user clicks the add button", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
-#line 19
+#line 31
  testRunner.Then("the user clicks the cancel button", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+#line 32
+ testRunner.Then("the user verifies that no warehouse was added", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+#line 33
+ testRunner.Then("the user closes the warehouse page", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             this.ScenarioCleanup();
         }

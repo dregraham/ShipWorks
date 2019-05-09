@@ -17,17 +17,17 @@ namespace XunitSpecflow.Features
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("TechTalk.SpecFlow", "2.4.0.0")]
     [System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    public partial class AddWarehouseFeature : Xunit.IClassFixture<AddWarehouseFeature.FixtureData>, System.IDisposable
+    public partial class WarehouseZipCodeAddValidationFeature : Xunit.IClassFixture<WarehouseZipCodeAddValidationFeature.FixtureData>, System.IDisposable
     {
         
         private static TechTalk.SpecFlow.ITestRunner testRunner;
         
         private Xunit.Abstractions.ITestOutputHelper _testOutputHelper;
         
-#line 1 "AddWarehouse.feature"
+#line 1 "WarehouseZipCodeAddValidation.feature"
 #line hidden
         
-        public AddWarehouseFeature(AddWarehouseFeature.FixtureData fixtureData, Xunit.Abstractions.ITestOutputHelper testOutputHelper)
+        public WarehouseZipCodeAddValidationFeature(WarehouseZipCodeAddValidationFeature.FixtureData fixtureData, Xunit.Abstractions.ITestOutputHelper testOutputHelper)
         {
             this._testOutputHelper = testOutputHelper;
             this.TestInitialize();
@@ -36,7 +36,7 @@ namespace XunitSpecflow.Features
         public static void FeatureSetup()
         {
             testRunner = TechTalk.SpecFlow.TestRunnerManager.GetTestRunner();
-            TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "AddWarehouse", null, ProgrammingLanguage.CSharp, ((string[])(null)));
+            TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "WarehouseZipCodeAddValidation", null, ProgrammingLanguage.CSharp, ((string[])(null)));
             testRunner.OnFeatureStart(featureInfo);
         }
         
@@ -76,13 +76,15 @@ namespace XunitSpecflow.Features
             this.ScenarioTearDown();
         }
         
-        [Xunit.TheoryAttribute(DisplayName="User adds a warehouse on Firefox")]
-        [Xunit.TraitAttribute("FeatureTitle", "AddWarehouse")]
-        [Xunit.TraitAttribute("Description", "User adds a warehouse on Firefox")]
+        [Xunit.TheoryAttribute(DisplayName="User validates add zip code on Firefox")]
+        [Xunit.TraitAttribute("FeatureTitle", "WarehouseZipCodeAddValidation")]
+        [Xunit.TraitAttribute("Description", "User validates add zip code on Firefox")]
         [Xunit.TraitAttribute("Category", "Firefox,")]
         [Xunit.TraitAttribute("Category", "Smoke")]
-        [Xunit.InlineDataAttribute("Firefox", "user-0801@example.com", "GOOD", new string[0])]
-        public virtual void UserAddsAWarehouseOnFirefox(string browser, string username, string password, string[] exampleTags)
+        [Xunit.InlineDataAttribute("Firefox", "Garrett", "Code 3", "1 Memorial Drive", "St. Louis", "MO", "63102", "user-0801@example.com", "GOOD", new string[0])]
+        [Xunit.InlineDataAttribute("Firefox", "Garrett", "Code 3", "1 Memorial Drive", "St. Louis", "MO", "63102-3410", "user-0801@example.com", "GOOD", new string[0])]
+        [Xunit.InlineDataAttribute("Firefox", "Garrett", "Code 3", "1 Memorial Drive", "St. Louis", "MO", "631023410", "user-0801@example.com", "GOOD", new string[0])]
+        public virtual void UserValidatesAddZipCodeOnFirefox(string browser, string name, string code, string street, string city, string state, string zip, string username, string password, string[] exampleTags)
         {
             string[] @__tags = new string[] {
                     "Firefox,",
@@ -91,7 +93,7 @@ namespace XunitSpecflow.Features
             {
                 @__tags = System.Linq.Enumerable.ToArray(System.Linq.Enumerable.Concat(@__tags, exampleTags));
             }
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("User adds a warehouse on Firefox", null, @__tags);
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("User validates add zip code on Firefox", null, @__tags);
 #line 4
 this.ScenarioInitialize(scenarioInfo);
             this.ScenarioStart();
@@ -101,7 +103,8 @@ this.ScenarioInitialize(scenarioInfo);
 #line 6
  testRunner.Then("the user clicks the add button", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line 7
- testRunner.Then("the user adds the Warehouse details", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+ testRunner.Then(string.Format("the user adds the following Warehouse details \'{0}\' \'{1}\' \'{2}\' \'{3}\' \'{4}\' \'{5}\'" +
+                        "", name, code, street, city, state, zip), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line 8
  testRunner.Then("the user clicks the add warehouse button", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line 9
@@ -110,12 +113,14 @@ this.ScenarioInitialize(scenarioInfo);
             this.ScenarioCleanup();
         }
         
-        [Xunit.TheoryAttribute(DisplayName="User adds a warehouse on Chrome")]
-        [Xunit.TraitAttribute("FeatureTitle", "AddWarehouse")]
-        [Xunit.TraitAttribute("Description", "User adds a warehouse on Chrome")]
+        [Xunit.TheoryAttribute(DisplayName="User validates add zip code on Chrome")]
+        [Xunit.TraitAttribute("FeatureTitle", "WarehouseZipCodeAddValidation")]
+        [Xunit.TraitAttribute("Description", "User validates add zip code on Chrome")]
         [Xunit.TraitAttribute("Category", "Chrome")]
-        [Xunit.InlineDataAttribute("Chrome", "user-0801@example.com", "GOOD", new string[0])]
-        public virtual void UserAddsAWarehouseOnChrome(string browser, string username, string password, string[] exampleTags)
+        [Xunit.InlineDataAttribute("Chrome", "Garrett", "Code 3", "1 Memorial Drive", "St. Louis", "MO", "63102", "user-0801@example.com", "GOOD", new string[0])]
+        [Xunit.InlineDataAttribute("Chrome", "Garrett", "Code 3", "1 Memorial Drive", "St. Louis", "MO", "63102-3410", "user-0801@example.com", "GOOD", new string[0])]
+        [Xunit.InlineDataAttribute("Chrome", "Garrett", "Code 3", "1 Memorial Drive", "St. Louis", "MO", "631023410", "user-0801@example.com", "GOOD", new string[0])]
+        public virtual void UserValidatesAddZipCodeOnChrome(string browser, string name, string code, string street, string city, string state, string zip, string username, string password, string[] exampleTags)
         {
             string[] @__tags = new string[] {
                     "Chrome"};
@@ -123,31 +128,34 @@ this.ScenarioInitialize(scenarioInfo);
             {
                 @__tags = System.Linq.Enumerable.ToArray(System.Linq.Enumerable.Concat(@__tags, exampleTags));
             }
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("User adds a warehouse on Chrome", null, @__tags);
-#line 16
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("User validates add zip code on Chrome", null, @__tags);
+#line 18
 this.ScenarioInitialize(scenarioInfo);
             this.ScenarioStart();
-#line 17
+#line 19
  testRunner.Given(string.Format("the following user with \'{0}\' and \'{1}\' wants to navigate to the warehouse page u" +
                         "sing \'{2}\'", username, password, browser), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
-#line 18
- testRunner.Then("the user clicks the add button", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
-#line 19
- testRunner.Then("the user adds the Warehouse details", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line 20
- testRunner.Then("the user clicks the add warehouse button", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+ testRunner.Then("the user clicks the add button", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line 21
+ testRunner.Then(string.Format("the user adds the following Warehouse details \'{0}\' \'{1}\' \'{2}\' \'{3}\' \'{4}\' \'{5}\'" +
+                        "", name, code, street, city, state, zip), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+#line 22
+ testRunner.Then("the user clicks the add warehouse button", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+#line 23
  testRunner.Then("the user closes the warehouse page", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             this.ScenarioCleanup();
         }
         
-        [Xunit.TheoryAttribute(DisplayName="User adds a warehouse on Edge")]
-        [Xunit.TraitAttribute("FeatureTitle", "AddWarehouse")]
-        [Xunit.TraitAttribute("Description", "User adds a warehouse on Edge")]
+        [Xunit.TheoryAttribute(DisplayName="User validates add zip code on Edge")]
+        [Xunit.TraitAttribute("FeatureTitle", "WarehouseZipCodeAddValidation")]
+        [Xunit.TraitAttribute("Description", "User validates add zip code on Edge")]
         [Xunit.TraitAttribute("Category", "Edge")]
-        [Xunit.InlineDataAttribute("Edge", "user-0801@example.com", "GOOD", new string[0])]
-        public virtual void UserAddsAWarehouseOnEdge(string browser, string username, string password, string[] exampleTags)
+        [Xunit.InlineDataAttribute("Edge", "Garrett", "Code 3", "1 Memorial Drive", "St. Louis", "MO", "63102", "user-0801@example.com", "GOOD", new string[0])]
+        [Xunit.InlineDataAttribute("Edge", "Garrett", "Code 3", "1 Memorial Drive", "St. Louis", "MO", "63102-3410", "user-0801@example.com", "GOOD", new string[0])]
+        [Xunit.InlineDataAttribute("Edge", "Garrett", "Code 3", "1 Memorial Drive", "St. Louis", "MO", "631023410", "user-0801@example.com", "GOOD", new string[0])]
+        public virtual void UserValidatesAddZipCodeOnEdge(string browser, string name, string code, string street, string city, string state, string zip, string username, string password, string[] exampleTags)
         {
             string[] @__tags = new string[] {
                     "Edge"};
@@ -155,20 +163,21 @@ this.ScenarioInitialize(scenarioInfo);
             {
                 @__tags = System.Linq.Enumerable.ToArray(System.Linq.Enumerable.Concat(@__tags, exampleTags));
             }
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("User adds a warehouse on Edge", null, @__tags);
-#line 28
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("User validates add zip code on Edge", null, @__tags);
+#line 32
 this.ScenarioInitialize(scenarioInfo);
             this.ScenarioStart();
-#line 29
+#line 33
  testRunner.Given(string.Format("the following user with \'{0}\' and \'{1}\' wants to navigate to the warehouse page u" +
                         "sing \'{2}\'", username, password, browser), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
-#line 30
+#line 34
  testRunner.Then("the user clicks the add button", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
-#line 31
- testRunner.Then("the user adds the Warehouse details", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
-#line 32
+#line 35
+ testRunner.Then(string.Format("the user adds the following Warehouse details \'{0}\' \'{1}\' \'{2}\' \'{3}\' \'{4}\' \'{5}\'" +
+                        "", name, code, street, city, state, zip), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+#line 36
  testRunner.Then("the user clicks the add warehouse button", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
-#line 33
+#line 37
  testRunner.Then("the user closes the warehouse page", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             this.ScenarioCleanup();
@@ -181,12 +190,12 @@ this.ScenarioInitialize(scenarioInfo);
             
             public FixtureData()
             {
-                AddWarehouseFeature.FeatureSetup();
+                WarehouseZipCodeAddValidationFeature.FeatureSetup();
             }
             
             void System.IDisposable.Dispose()
             {
-                AddWarehouseFeature.FeatureTearDown();
+                WarehouseZipCodeAddValidationFeature.FeatureTearDown();
             }
         }
     }

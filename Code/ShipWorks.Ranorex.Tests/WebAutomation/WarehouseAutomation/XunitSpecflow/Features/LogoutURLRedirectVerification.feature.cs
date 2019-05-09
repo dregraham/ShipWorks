@@ -17,17 +17,17 @@ namespace XunitSpecflow.Features
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("TechTalk.SpecFlow", "2.4.0.0")]
     [System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    public partial class FailureLoginFeature : Xunit.IClassFixture<FailureLoginFeature.FixtureData>, System.IDisposable
+    public partial class LogoutURLRedirectVerificationFeature : Xunit.IClassFixture<LogoutURLRedirectVerificationFeature.FixtureData>, System.IDisposable
     {
         
         private static TechTalk.SpecFlow.ITestRunner testRunner;
         
         private Xunit.Abstractions.ITestOutputHelper _testOutputHelper;
         
-#line 1 "FailureLogin.feature"
+#line 1 "LogoutURLRedirectVerification.feature"
 #line hidden
         
-        public FailureLoginFeature(FailureLoginFeature.FixtureData fixtureData, Xunit.Abstractions.ITestOutputHelper testOutputHelper)
+        public LogoutURLRedirectVerificationFeature(LogoutURLRedirectVerificationFeature.FixtureData fixtureData, Xunit.Abstractions.ITestOutputHelper testOutputHelper)
         {
             this._testOutputHelper = testOutputHelper;
             this.TestInitialize();
@@ -36,7 +36,7 @@ namespace XunitSpecflow.Features
         public static void FeatureSetup()
         {
             testRunner = TechTalk.SpecFlow.TestRunnerManager.GetTestRunner();
-            TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "FailureLogin", null, ProgrammingLanguage.CSharp, ((string[])(null)));
+            TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "LogoutURLRedirectVerification", null, ProgrammingLanguage.CSharp, ((string[])(null)));
             testRunner.OnFeatureStart(featureInfo);
         }
         
@@ -76,13 +76,13 @@ namespace XunitSpecflow.Features
             this.ScenarioTearDown();
         }
         
-        [Xunit.TheoryAttribute(DisplayName="Login with invalid credentials on Firefox")]
-        [Xunit.TraitAttribute("FeatureTitle", "FailureLogin")]
-        [Xunit.TraitAttribute("Description", "Login with invalid credentials on Firefox")]
+        [Xunit.TheoryAttribute(DisplayName="Make sure browser redirects to login page on Firefox")]
+        [Xunit.TraitAttribute("FeatureTitle", "LogoutURLRedirectVerification")]
+        [Xunit.TraitAttribute("Description", "Make sure browser redirects to login page on Firefox")]
         [Xunit.TraitAttribute("Category", "Firefox,")]
         [Xunit.TraitAttribute("Category", "Smoke")]
         [Xunit.InlineDataAttribute("Firefox", new string[0])]
-        public virtual void LoginWithInvalidCredentialsOnFirefox(string browser, string[] exampleTags)
+        public virtual void MakeSureBrowserRedirectsToLoginPageOnFirefox(string browser, string[] exampleTags)
         {
             string[] @__tags = new string[] {
                     "Firefox,",
@@ -91,26 +91,31 @@ namespace XunitSpecflow.Features
             {
                 @__tags = System.Linq.Enumerable.ToArray(System.Linq.Enumerable.Concat(@__tags, exampleTags));
             }
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Login with invalid credentials on Firefox", null, @__tags);
-#line 4
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Make sure browser redirects to login page on Firefox", null, @__tags);
+#line 5
 this.ScenarioInitialize(scenarioInfo);
             this.ScenarioStart();
-#line 5
- testRunner.Given(string.Format("the user is on login page on \'{0}\'", browser), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line 6
- testRunner.Given("the user enters invalid username and password", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
+ testRunner.Given(string.Format("the user is on login page on \'{0}\'", browser), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line 7
- testRunner.Then("the user sees the error message", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+ testRunner.Given("the user enters username and password", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
+#line 8
+ testRunner.Then("the user clicks logout", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+#line 9
+ testRunner.Then("the user validates the browser redirects to the login page from the dashboard, wa" +
+                    "rehouse, settings, and warehouse add pages", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+#line 10
+ testRunner.Then("the user closes the browser", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             this.ScenarioCleanup();
         }
         
-        [Xunit.TheoryAttribute(DisplayName="Login with invalid credentials on Chrome")]
-        [Xunit.TraitAttribute("FeatureTitle", "FailureLogin")]
-        [Xunit.TraitAttribute("Description", "Login with invalid credentials on Chrome")]
+        [Xunit.TheoryAttribute(DisplayName="Make sure browser redirects to login page on Chrome")]
+        [Xunit.TraitAttribute("FeatureTitle", "LogoutURLRedirectVerification")]
+        [Xunit.TraitAttribute("Description", "Make sure browser redirects to login page on Chrome")]
         [Xunit.TraitAttribute("Category", "Chrome")]
         [Xunit.InlineDataAttribute("Chrome", new string[0])]
-        public virtual void LoginWithInvalidCredentialsOnChrome(string browser, string[] exampleTags)
+        public virtual void MakeSureBrowserRedirectsToLoginPageOnChrome(string browser, string[] exampleTags)
         {
             string[] @__tags = new string[] {
                     "Chrome"};
@@ -118,26 +123,31 @@ this.ScenarioInitialize(scenarioInfo);
             {
                 @__tags = System.Linq.Enumerable.ToArray(System.Linq.Enumerable.Concat(@__tags, exampleTags));
             }
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Login with invalid credentials on Chrome", null, @__tags);
-#line 14
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Make sure browser redirects to login page on Chrome", null, @__tags);
+#line 18
 this.ScenarioInitialize(scenarioInfo);
             this.ScenarioStart();
-#line 15
+#line 19
  testRunner.Given(string.Format("the user is on login page on \'{0}\'", browser), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
-#line 16
- testRunner.Given("the user enters invalid username and password", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
-#line 17
- testRunner.Then("the user sees the error message", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+#line 20
+ testRunner.Given("the user enters username and password", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
+#line 21
+ testRunner.Then("the user clicks logout", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+#line 22
+ testRunner.Then("the user validates the browser redirects to the login page from the dashboard, wa" +
+                    "rehouse, settings, and warehouse add pages", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+#line 23
+ testRunner.Then("the user closes the browser", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             this.ScenarioCleanup();
         }
         
-        [Xunit.TheoryAttribute(DisplayName="Login with invalid credentials on Edge")]
-        [Xunit.TraitAttribute("FeatureTitle", "FailureLogin")]
-        [Xunit.TraitAttribute("Description", "Login with invalid credentials on Edge")]
+        [Xunit.TheoryAttribute(DisplayName="Make sure browser redirects to login page on Edge")]
+        [Xunit.TraitAttribute("FeatureTitle", "LogoutURLRedirectVerification")]
+        [Xunit.TraitAttribute("Description", "Make sure browser redirects to login page on Edge")]
         [Xunit.TraitAttribute("Category", "Edge")]
         [Xunit.InlineDataAttribute("Edge", new string[0])]
-        public virtual void LoginWithInvalidCredentialsOnEdge(string browser, string[] exampleTags)
+        public virtual void MakeSureBrowserRedirectsToLoginPageOnEdge(string browser, string[] exampleTags)
         {
             string[] @__tags = new string[] {
                     "Edge"};
@@ -145,16 +155,21 @@ this.ScenarioInitialize(scenarioInfo);
             {
                 @__tags = System.Linq.Enumerable.ToArray(System.Linq.Enumerable.Concat(@__tags, exampleTags));
             }
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Login with invalid credentials on Edge", null, @__tags);
-#line 24
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Make sure browser redirects to login page on Edge", null, @__tags);
+#line 31
 this.ScenarioInitialize(scenarioInfo);
             this.ScenarioStart();
-#line 25
+#line 32
  testRunner.Given(string.Format("the user is on login page on \'{0}\'", browser), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
-#line 26
- testRunner.Given("the user enters invalid username and password", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
-#line 27
- testRunner.Then("the user sees the error message", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+#line 33
+ testRunner.Given("the user enters username and password", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
+#line 34
+ testRunner.Then("the user clicks logout", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+#line 35
+ testRunner.Then("the user validates the browser redirects to the login page from the dashboard, wa" +
+                    "rehouse, settings, and warehouse add pages", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+#line 36
+ testRunner.Then("the user closes the browser", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             this.ScenarioCleanup();
         }
@@ -166,12 +181,12 @@ this.ScenarioInitialize(scenarioInfo);
             
             public FixtureData()
             {
-                FailureLoginFeature.FeatureSetup();
+                LogoutURLRedirectVerificationFeature.FeatureSetup();
             }
             
             void System.IDisposable.Dispose()
             {
-                FailureLoginFeature.FeatureTearDown();
+                LogoutURLRedirectVerificationFeature.FeatureTearDown();
             }
         }
     }

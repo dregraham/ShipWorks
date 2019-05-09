@@ -1,47 +1,29 @@
 ﻿Feature: Login	
 
-@NotEdge
-Scenario Outline: Login with valid credentials
-	Given the user is on login page on '<Browser>'
-	And the user enters username and password	
-	Then the user sees the dashboard
+@Firefox, @Smoke
+Scenario Outline: Login with valid credentials on Firefox
+	Given the following user with '<Username>' and '<Password>' wants to navigate to the warehouse page using '<Browser>'
 
 	Examples: 
-	| Browser |
-	| Chrome  |
-	| Firefox |
+		| Browser | Username              | Password |
+		| Firefox | user-0801@example.com | GOOD     |
 	
 
-@NotEdge
-Scenario Outline: Logout
-	Given the user is on login page on '<Browser>'
-	And the user enters username and password	
-	Then the user sees the dashboard
-	Then the user clicks logout
+	@Chrome
+Scenario Outline: Login with valid credentials on Chrome
+	Given the following user with '<Username>' and '<Password>' wants to navigate to the warehouse page using '<Browser>'
 
 	Examples: 
-	| Browser |
-	| Chrome  |
-	| Firefox |	
+		| Browser | Username              | Password |
+		| Chrome  | user-0801@example.com | GOOD     |
+	
 
 
 @Edge
-Scenario Outline: Login with valid credentials for edge
-	Given the user is on login page on '<Browser>'
-	And the user enters username and password	
-	Then the user sees the dashboard
+Scenario Outline: Login with valid credentials on Edge
+	Given the following user with '<Username>' and '<Password>' wants to navigate to the warehouse page using '<Browser>'
 
 	Examples: 
-	| Browser |
-	| Edge    |
+		| Browser | Username              | Password |
+		| Edge    | user-0801@example.com | GOOD     |
 
-@Edge
-Scenario Outline: Logout for edge
-	Given the user is on login page on '<Browser>'
-	And the user enters username and password	
-	Then the user sees the dashboard
-	Then the user clicks logout
-
-	Examples: 
-	| Browser |
-	| Edge    |

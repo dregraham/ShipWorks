@@ -1,12 +1,16 @@
-﻿using OpenQA.Selenium;
+﻿using System;
+using System.Collections.Generic;
+using System.Reflection;
+using OpenQA.Selenium;
 using OpenQA.Selenium.Support.PageObjects;
+using OpenQA.Selenium.Support.UI;
 
 namespace XunitSpecflow.Pages
 {
     class DashboardPage
     {
         [FindsBy(How = How.XPath, Using = "/html/body/div/div/div[2]/div/header/h1")]
-        protected IWebElement DashboardTxt { get; set; }
+        public IWebElement DashboardTxt { get; set; }
         [FindsBy(How = How.XPath, Using = "//*[@id='root']/div/div[1]/div/nav/section[1]/a[2]")]
         protected IWebElement WarehouseTab { get; set; }
         [FindsBy(How = How.XPath, Using = "//*[@id='root']/div/div[1]/div/nav/section[2]/button")]
@@ -22,23 +26,43 @@ namespace XunitSpecflow.Pages
 
         public WarehousesPage ClickWarehouseTab()
         {
-            WarehouseTab.Click();
-            return new WarehousesPage(_driver);
-        }
-
-        public string GetDashboard()
-        {
-            return DashboardTxt.Text;
+            try
+            {
+                WarehouseTab.Click();
+                return new WarehousesPage(_driver);
+            }
+            catch (Exception e)
+            {
+                DashboardQuit();
+                throw new Exception("Automation failed at DashboardPage.ClickWarehouseTab method. Exception: " + e);
+            }
         }
 
         public void DashboardQuit()
         {
-            _driver.Quit();
+            try
+            {
+                _driver.Quit();
+            }
+            catch (Exception e)
+            {
+                throw new Exception("Automation failed at DashboardPage.DashboardQuit method. Exception: " + e);
+            }
         }
 
-        public void Logout()
+        public LoginPage Logout()
         {
-            LogoutButton.Click();
+            try
+            {
+                LogoutButton.Click();
+                new WebDriverWait(_driver, TimeSpan.FromSeconds(60)).Until(ExpectedConditions.ElementIsVisible(By.XPath("//*[@id='root']/div/div/div/div[2]/button")));
+                return new LoginPage(_driver);
+            }
+            catch (Exception e)
+            {
+                DashboardQuit();
+                throw new Exception("Automation failed at DashboardPage.Logout method. Exception: " + e);
+            }
         }
     }
 }

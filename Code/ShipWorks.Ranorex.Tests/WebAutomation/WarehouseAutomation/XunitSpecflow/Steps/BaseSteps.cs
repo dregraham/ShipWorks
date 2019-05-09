@@ -9,10 +9,10 @@ namespace XunitSpecflow.Steps
 {
     public class BaseSteps
     {
+        IAlert alert;
+        IWebDriver _driver;
         public IWebDriver SetWebDriver(string browser)
         {
-            IWebDriver _driver = null;
-
             switch (browser)
             {
                 case "Chrome":
@@ -25,7 +25,7 @@ namespace XunitSpecflow.Steps
 
                 case "Firefox":
                     FirefoxOptions firefoxOptions = new FirefoxOptions();
-                    firefoxOptions.AddArgument("--headless");
+                     firefoxOptions.AddArgument("--headless");
                     _driver = new FirefoxDriver(Directory.GetCurrentDirectory(), firefoxOptions);
                     _driver.Manage().Window.Maximize();
                     _driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(10);
@@ -40,7 +40,36 @@ namespace XunitSpecflow.Steps
 
             return _driver;
         }
+        public string GetText(IWebElement element)
+        {
+            try
+            {
+                return element.Text;
+            }
+            catch (Exception e)
+            {
+                _driver.Quit();
+                throw new Exception("Automation failed at BaseSteps.GetText method. Exception: " + e);
+            }
+        }
+        public void DisposeWebDriver()
+        {
+            _driver.Quit();
+        }
+        public int GetCount(string identifier)
+        {
+            return _driver.FindElements(By.CssSelector(identifier)).Count;
+        }
 
-
+        public void AcceptAlert()
+        {
+            alert = _driver.SwitchTo().Alert();
+            alert.Accept();
+        }
+        public void DismissAlert()
+        {
+            alert = _driver.SwitchTo().Alert();
+            alert.Dismiss();
+        }
     }
 }
