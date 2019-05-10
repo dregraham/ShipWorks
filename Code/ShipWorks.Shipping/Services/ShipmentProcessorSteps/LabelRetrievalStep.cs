@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Transactions;
+using Interapptive.Shared;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
 using log4net;
@@ -36,6 +37,7 @@ namespace ShipWorks.Shipping.Services.ShipmentProcessorSteps
         /// <summary>
         /// Constructor
         /// </summary>
+        [NDependIgnoreTooManyParamsAttribute]
         public LabelRetrievalStep(
             IStoreTypeManager storeTypeManager,
             ILabelServiceFactory labelServiceFactory,

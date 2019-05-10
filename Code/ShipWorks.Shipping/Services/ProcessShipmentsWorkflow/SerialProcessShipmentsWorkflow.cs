@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Interapptive.Shared;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Threading;
@@ -29,6 +30,7 @@ namespace ShipWorks.Shipping.Services.ProcessShipmentsWorkflow
         /// <summary>
         /// Constructor
         /// </summary>
+        [NDependIgnoreTooManyParamsAttribute]
         public SerialProcessShipmentsWorkflow(
             ShipmentPreparationStep prepareShipmentTask,
             ILabelRetrievalStep getLabelTask,
@@ -58,6 +60,7 @@ namespace ShipWorks.Shipping.Services.ProcessShipmentsWorkflow
         /// <summary>
         /// Process the shipments
         /// </summary>
+        [NDependIgnoreLongMethod]
         public async Task<IProcessShipmentsWorkflowResult> Process(IEnumerable<ShipmentEntity> shipments,
             RateResult chosenRateResult, IProgressReporter workProgress, CancellationTokenSource cancellationSource,
             Action counterRateCarrierConfiguredWhileProcessingAction)
@@ -163,6 +166,7 @@ namespace ShipWorks.Shipping.Services.ProcessShipmentsWorkflow
         /// <summary>
         /// Process a single shipment and its automatic return
         /// </summary>
+        [NDependIgnoreLongMethod]
         private async Task<Tuple<ILabelResultLogResult, ILabelResultLogResult>> ProcessShipment(ProcessShipmentState initial,
             IProgressReporter workProgress, int shipmentCount, ITrackedDurationEvent telemetryEvent)
         {
@@ -185,11 +189,6 @@ namespace ShipWorks.Shipping.Services.ProcessShipmentsWorkflow
                         "GenerateLabel.DurationInMilliseconds",
                         () => getLabelTask.GetLabels(prepareShipmentResult))
                     .ConfigureAwait(false);
-
-                if (getLabelResults.Item2 != null)
-                {
-                    workProgress.Detail = $"Shipment {initial.Index + 2} of {shipmentCount}";
-                }
 
                 Tuple<ILabelPersistenceResult, ILabelPersistenceResult> saveLabelResults = telemetricResult.RunTimedEvent("SaveLabels.DurationInMilliseconds",
                     () => saveLabelTask.SaveLabels(getLabelResults));
