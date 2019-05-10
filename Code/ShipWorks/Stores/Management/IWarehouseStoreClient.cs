@@ -2,7 +2,7 @@
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 
-namespace ShipWorks.Stores
+namespace ShipWorks.Stores.Management
 {
     public interface IWarehouseStoreClient
     {

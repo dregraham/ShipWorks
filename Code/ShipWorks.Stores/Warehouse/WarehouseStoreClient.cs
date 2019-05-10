@@ -10,6 +10,7 @@ using ShipWorks.ApplicationCore.Licensing.Warehouse.DTO;
 using ShipWorks.Common.Net;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Editions;
+using ShipWorks.Stores.Management;
 
 namespace ShipWorks.Stores.Warehouse
 {
@@ -26,7 +27,8 @@ namespace ShipWorks.Stores.Warehouse
         /// <summary>
         /// Constructor
         /// </summary>
-        public WarehouseStoreClient(ILicenseService licenseService, WarehouseRequestClient warehouseRequestClient, StoreDtoFactory storeDtoFactory)
+        public WarehouseStoreClient(ILicenseService licenseService, WarehouseRequestClient warehouseRequestClient,
+                                    StoreDtoFactory storeDtoFactory)
         {
             this.licenseService = licenseService;
             this.warehouseRequestClient = warehouseRequestClient;
@@ -56,7 +58,8 @@ namespace ShipWorks.Stores.Warehouse
                     Store storeDto = await storeDtoFactory.Create(store).ConfigureAwait(false);
                     request.AddJsonBody(storeDto);
 
-                    GenericResult<IRestResponse> response = await warehouseRequestClient.MakeRequest(request, "Upload Store")
+                    GenericResult<IRestResponse> response = await warehouseRequestClient
+                        .MakeRequest(request, "Upload Store")
                         .ConfigureAwait(true);
 
                     if (response.Failure)
@@ -64,7 +67,7 @@ namespace ShipWorks.Stores.Warehouse
                         return Result.FromError(response.Message);
                     }
 
-                    if(Guid.TryParse(JObject.Parse(response.Value.Content)["id"]?.ToString(), out Guid warehouseStoreId))
+                    if (Guid.TryParse(JObject.Parse(response.Value.Content)["id"]?.ToString(), out Guid warehouseStoreId))
                     {
                         store.WarehouseStoreID = warehouseStoreId;
                     }

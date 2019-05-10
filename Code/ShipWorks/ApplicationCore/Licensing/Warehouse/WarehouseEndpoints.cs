@@ -7,11 +7,13 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse
     /// </summary>
     public static class WarehouseEndpoints
     {
-        private const string linkWarehouse = "api/warehouses/{0}/link";
         public const string Login = "api/auth/token/login";
         public const string Warehouses = "api/warehouses";
         public const string RefreshToken = "api/auth/token/refresh";
         public const string UploadSkus = "api/skus/import";
+        public const string GenerateDataKey = "api/store/generateDataKey";
+        
+        private const string linkWarehouse = "api/warehouses/{0}/link";
         private const string stores = "api/stores";
 
         /// <summary>

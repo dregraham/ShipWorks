@@ -4,8 +4,8 @@ using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore.Licensing.Warehouse.DTO;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Stores.Communication;
+using ShipWorks.Stores.Warehouse.Encryption;
 using ShipWorks.Stores.Warehouse.StoreData;
 
 namespace ShipWorks.Stores.Warehouse
@@ -18,14 +18,17 @@ namespace ShipWorks.Stores.Warehouse
     {
         private readonly IDownloadStartingPoint downloadStartingPoint;
         private readonly IStoreTypeManager storeTypeManager;
-
+        private readonly IWarehouseEncryptionService encryptionService;
+        
         /// <summary>
         /// Constructor
         /// </summary>
-        public StoreDtoFactory(IDownloadStartingPoint downloadStartingPoint, IStoreTypeManager storeTypeManager)
+        public StoreDtoFactory(IDownloadStartingPoint downloadStartingPoint, IStoreTypeManager storeTypeManager,
+                               IWarehouseEncryptionService encryptionService)
         {
             this.downloadStartingPoint = downloadStartingPoint;
             this.storeTypeManager = storeTypeManager;
+            this.encryptionService = encryptionService;
         }
 
         /// <summary>
@@ -63,7 +66,8 @@ namespace ShipWorks.Stores.Warehouse
             AmazonStore store = new AmazonStore();
             store.MerchantID = storeEntity.MerchantID;
             store.MarketplaceID = storeEntity.MarketplaceID;
-            store.AuthToken = storeEntity.AuthToken;
+            store.AuthToken = await encryptionService.Encrypt(storeEntity.AuthToken)
+                .ConfigureAwait(false);
             store.Region = storeEntity.AmazonApiRegion;
             store.ExcludeFBA = storeEntity.ExcludeFBA;
             store.AmazonVATS = storeEntity.AmazonVATS;
@@ -79,7 +83,8 @@ namespace ShipWorks.Stores.Warehouse
         private async Task<Store> AddChannelAdvisorStoreData(ChannelAdvisorStoreEntity storeEntity)
         {
             ChannelAdvisorStore store = new ChannelAdvisorStore();
-            store.RefreshToken = storeEntity.RefreshToken;
+            store.RefreshToken = await encryptionService.Encrypt(storeEntity.RefreshToken)
+                .ConfigureAwait(false);
             store.CountryCode = storeEntity.CountryCode;
             store.ItemAttributesToImport = storeEntity.ParsedAttributesToDownload;
             store.DownloadStartDate =
