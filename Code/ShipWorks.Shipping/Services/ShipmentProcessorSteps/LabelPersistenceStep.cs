@@ -63,7 +63,15 @@ namespace ShipWorks.Shipping.Services.ShipmentProcessorSteps
             }
 
             ILabelPersistenceResult saveShipmentResult = SaveSingleLabel(results.Item1);
-            ILabelPersistenceResult saveReturnResult = new LabelPersistenceResult(results.Item2);
+            ILabelPersistenceResult saveReturnResult;
+            if (results.Item2 == null)
+            {
+                saveReturnResult = null;
+            }
+            else
+            {
+                saveReturnResult = new LabelPersistenceResult(results.Item2);
+            }
 
             if (results.Item2 != null && results.Item2.Success)
             {

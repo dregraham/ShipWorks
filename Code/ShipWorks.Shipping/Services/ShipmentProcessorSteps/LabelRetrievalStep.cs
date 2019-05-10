@@ -82,7 +82,14 @@ namespace ShipWorks.Shipping.Services.ShipmentProcessorSteps
                 {
                     returnShipmentResult = await ProcessAutomaticReturn(shipment, result).ConfigureAwait(false);
 
+                    // Successfully retrieved shipment, may or may not have received return
                     return new Tuple<ILabelRetrievalResult, ILabelRetrievalResult>(shipmentResult, returnShipmentResult);
+                }
+
+                if (shipmentResult != null && shipmentResult.Success)
+                {
+                    // Successfully retrieved shipment, and automatic returns was not selected
+                    return new Tuple<ILabelRetrievalResult, ILabelRetrievalResult>(shipmentResult, null);
                 }
             }
 

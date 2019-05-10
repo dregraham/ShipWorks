@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Autofac.Extras.Moq;
-using Autofac.Features.ResolveAnything;
 using Interapptive.Shared.Utility;
 using Moq;
 using ShipWorks.Common;
@@ -40,6 +39,7 @@ namespace ShipWorks.Shipping.Tests.Services.ShipmentProcessorSteps
             getLabelInputMock.SetupGet(x => x.OriginalShipment).Returns(shipment);
             getLabelInputMock.SetupGet(x => x.Shipments).Returns(shipments);
             getLabelInputMock.SetupGet(x => x.Success).Returns(true);
+            getLabelInputMock.SetupGet(x => x.Exception).Returns((ShippingException) null);
             getLabelInput = getLabelInputMock.Object;
 
             // This is needed because mocks can't be cloned, and the GetLabel process clones shipments
@@ -50,11 +50,11 @@ namespace ShipWorks.Shipping.Tests.Services.ShipmentProcessorSteps
             labelService = mock.Mock<ILabelService>();
             telemetricResult = new TelemetricResult<IDownloadedLabelData>("");
             labelService.Setup(x => x.Create(AnyShipment)).ReturnsAsync(telemetricResult);
-            
+
             mock.Mock<ILabelServiceFactory>()
                 .Setup(x => x.Create(ShipmentTypeCode.Other))
                 .Returns(labelService);
-            
+
             testObject = mock.Create<LabelRetrievalStep>();
         }
 
@@ -68,10 +68,10 @@ namespace ShipWorks.Shipping.Tests.Services.ShipmentProcessorSteps
             getLabelInputMock.SetupGet(x => x.EntityLock).Returns(entityLock);
             getLabelInputMock.SetupGet(x => x.Exception).Returns(exception);
 
-            var result = await testObject.GetLabel(getLabelInput);
+            var result = await testObject.GetLabels(getLabelInput);
 
-            Assert.Equal(exception, result.Exception);
-            Assert.Equal(entityLock, result.EntityLock);
+            Assert.Equal(exception, result.Item1.Exception);
+            Assert.Equal(entityLock, result.Item1.EntityLock);
         }
 
         [Fact]
@@ -83,7 +83,7 @@ namespace ShipWorks.Shipping.Tests.Services.ShipmentProcessorSteps
 
             shipments.Add(Create.Shipment(new OrderEntity()).AsOnTrac().Build());
 
-            var result = await testObject.GetLabel(getLabelInput);
+            var result = await testObject.GetLabels(getLabelInput);
 
             mock.Mock<IOrderedCompositeManipulator<ILabelRetrievalShipmentManipulator, ShipmentEntity>>()
                 .Verify(x => x.Apply(shipments[0]));
@@ -97,7 +97,7 @@ namespace ShipWorks.Shipping.Tests.Services.ShipmentProcessorSteps
             mock.Mock<ILabelServiceFactory>()
                 .Setup(x => x.Create(ShipmentTypeCode.OnTrac))
                 .Returns(labelService);
-            
+
             mock.Mock<ICompositeValidator<ILabelRetrievalShipmentValidator, ShipmentEntity>>()
                 .Setup(x => x.Apply(shipment))
                 .Returns(new CompositeValidatorResult(false, new[] { "Foo" }));
@@ -105,9 +105,9 @@ namespace ShipWorks.Shipping.Tests.Services.ShipmentProcessorSteps
             var secondShipment = Create.Shipment(new OrderEntity()).AsOnTrac().Build();
             shipments.Add(secondShipment);
 
-            var result = await testObject.GetLabel(getLabelInput);
+            var result = await testObject.GetLabels(getLabelInput);
 
-            Assert.Equal(secondShipment, result.OriginalShipment);
+            Assert.Equal(secondShipment, result.Item1.OriginalShipment);
         }
 
         [Fact]
@@ -118,7 +118,7 @@ namespace ShipWorks.Shipping.Tests.Services.ShipmentProcessorSteps
                 .Setup(x => x.GetType(getLabelInput.Store))
                 .Returns(storeType);
 
-            var result = await testObject.GetLabel(getLabelInput);
+            var result = await testObject.GetLabels(getLabelInput);
 
             storeType.Verify(x => x.OverrideShipmentDetails(shipment));
         }
@@ -135,15 +135,15 @@ namespace ShipWorks.Shipping.Tests.Services.ShipmentProcessorSteps
                 .Setup(x => x.GetType(getLabelInput.Store))
                 .Returns(storeType);
 
-            var result = await testObject.GetLabel(getLabelInput);
+            var result = await testObject.GetLabels(getLabelInput);
 
-            Assert.Equal(fields, result.FieldsToRestore);
+            Assert.Equal(fields, result.Item1.FieldsToRestore);
         }
 
         [Fact]
         public async Task GetLabel_DelegatesToLabelService()
         {
-            var result = await testObject.GetLabel(getLabelInput);
+            var result = await testObject.GetLabels(getLabelInput);
 
             labelService.Verify(x => x.Create(shipment));
         }
@@ -158,9 +158,9 @@ namespace ShipWorks.Shipping.Tests.Services.ShipmentProcessorSteps
                 .Setup(x => x.Create(It.IsAny<ShipmentTypeCode>()))
                 .Returns(labelService);
 
-            var result = await testObject.GetLabel(getLabelInput);
+            var result = await testObject.GetLabels(getLabelInput);
 
-            Assert.Equal(labelData, result.LabelData);
+            Assert.Equal(labelData, result.Item1.LabelData);
         }
 
         [Fact]
@@ -168,19 +168,19 @@ namespace ShipWorks.Shipping.Tests.Services.ShipmentProcessorSteps
         {
             shipment.ShipmentID = 9876;
 
-            var result = await testObject.GetLabel(getLabelInput);
+            var result = await testObject.GetLabels(getLabelInput);
 
-            Assert.NotEqual(shipment, result.Clone);
-            Assert.Equal(9876, result.Clone.ShipmentID);
+            Assert.NotEqual(shipment, result.Item1.Clone);
+            Assert.Equal(9876, result.Item1.Clone.ShipmentID);
         }
 
         [Fact]
         public async Task GetLabel_ReturnsInputData_WhenLabelIsSuccessful()
         {
-            var result = await testObject.GetLabel(getLabelInput);
+            var result = await testObject.GetLabels(getLabelInput);
 
-            Assert.Equal(getLabelInput.EntityLock, result.EntityLock);
-            Assert.Equal(getLabelInput.OriginalShipment, result.OriginalShipment);
+            Assert.Equal(getLabelInput.EntityLock, result.Item1.EntityLock);
+            Assert.Equal(getLabelInput.OriginalShipment, result.Item1.OriginalShipment);
         }
 
         public void Dispose()
