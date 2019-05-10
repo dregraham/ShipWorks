@@ -100,6 +100,12 @@ namespace ShipWorks.Shipping.Services.ProcessShipmentsWorkflow
 
                         processResults = await ProcessShipment(processShipmentState, workProgress, shipmentCount, telemetryEvent).ConfigureAwait(false);
 
+                        if (processResults == null)
+                        {
+                            results.Add(null);
+                            continue;
+                        }
+
                         results.Add(processResults.Item1);
 
                         if (processResults.Item2 != null)
