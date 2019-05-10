@@ -104,9 +104,9 @@ namespace ShipWorks.Shipping.Services.ShipmentProcessorSteps
                 {
                     autoReturn.ApplyReturnProfile(returnShipment, shipment.ReturnProfileID);
                 }
-                catch (Exception ex)
+                catch (NotFoundException ex)
                 {
-                    returnException = ex as ShippingException ?? new ShippingException(ex.Message, ex);
+                    returnException = new ShippingException(ex.Message, ex);
                     return new LabelRetrievalResult(result, returnShipment, returnException);
                 }
             }

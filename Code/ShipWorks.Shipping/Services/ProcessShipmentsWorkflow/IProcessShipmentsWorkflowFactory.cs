@@ -8,6 +8,6 @@
         /// <summary>
         /// Create the correct workflow
         /// </summary>
-        IProcessShipmentsWorkflow Create(int shipmentCount);
+        IProcessShipmentsWorkflow Create(bool useSerialWorkflow);
     }
 }

@@ -28,7 +28,7 @@ namespace ShipWorks.Shipping.Services.ProcessShipmentsWorkflow
         /// <summary>
         /// Create the correct workflow
         /// </summary>
-        public IProcessShipmentsWorkflow Create(int shipmentCount) =>
-            shipmentCount == 1 ? (IProcessShipmentsWorkflow) createSerialWorkflow() : createParallelWorkflow();
+        public IProcessShipmentsWorkflow Create(bool useSerialWorkflow) =>
+            useSerialWorkflow ? (IProcessShipmentsWorkflow) createSerialWorkflow() : createParallelWorkflow();
     }
 }

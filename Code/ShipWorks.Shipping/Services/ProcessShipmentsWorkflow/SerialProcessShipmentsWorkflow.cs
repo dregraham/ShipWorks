@@ -98,7 +98,10 @@ namespace ShipWorks.Shipping.Services.ProcessShipmentsWorkflow
                         processResults = await ProcessShipment(processShipmentState, workProgress, shipmentCount, telemetryEvent).ConfigureAwait(false);
 
                         results.Add(processResults.Item1);
-                        results.Add(processResults.Item2);
+                        if (processResults.Item2 != null)
+                        {
+                            results.Add(processResults.Item2);
+                        }
                     }
 
                     ProcessShipmentsWorkflowResult result = results

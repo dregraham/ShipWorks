@@ -88,12 +88,19 @@ namespace ShipWorks.Shipping.Services.ProcessShipmentsWorkflow
                 }
             }
 
+            workProgress.Detail = $"Shipment 1 of {shipmentCount}";
+
             var results = Consume(
-                x => workProgress.PercentComplete = (100 * x) / shipmentCount,
+                x =>
+                {
+                    workProgress.PercentComplete = (100 * x) / shipmentCount;
+                    workProgress.Detail = $"Shipment {x} of {shipmentCount}";
+                },
                 new ProcessShipmentsWorkflowResult(chosenRateResult),
                 dataflow);
 
             IEnumerable<ProcessShipmentState> input = await CreateShipmentProcessorInput(shipments, chosenRateResult, cancellationSource);
+
             foreach (var shipment in input)
             {
                 if (cancellationSource.IsCancellationRequested)
@@ -101,7 +108,6 @@ namespace ShipWorks.Shipping.Services.ProcessShipmentsWorkflow
                     break;
                 }
 
-                workProgress.Detail = $"Shipment {shipment.Index + 1} of {shipmentCount}";
                 await dataflow.SendAsync(shipment);
             }
 
@@ -174,14 +180,16 @@ namespace ShipWorks.Shipping.Services.ProcessShipmentsWorkflow
         {
             Tuple<ILabelResultLogResult, ILabelResultLogResult> items = null;
 
+            int curShipmentIndex = 0;
+
             while (await phase.OutputAvailableAsync())
             {
                 if (phase.TryReceive(out items))
                 {
+                    ILabelResultLogResult item = items.Item1;
+
                     for (int i = 0; i < 2; i++)
                     {
-                        ILabelResultLogResult item = items.Item1;
-
                         if (i == 1)
                         {
                             item = items.Item2;
@@ -189,7 +197,8 @@ namespace ShipWorks.Shipping.Services.ProcessShipmentsWorkflow
 
                         if (item != null)
                         {
-                            logProgress(item.Index);
+                            curShipmentIndex++;
+                            logProgress(curShipmentIndex);
                             accumulator.OutOfFundsException = accumulator.OutOfFundsException ?? item.OutOfFundsException;
                             accumulator.TermsAndConditionsException = accumulator.TermsAndConditionsException ?? item.TermsAndConditionsException;
                             accumulator.WorldshipExported |= item.WorldshipExported;

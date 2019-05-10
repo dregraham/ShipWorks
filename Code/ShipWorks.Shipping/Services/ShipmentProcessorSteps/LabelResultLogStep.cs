@@ -51,7 +51,12 @@ namespace ShipWorks.Shipping.Services.ShipmentProcessorSteps
         public Tuple<ILabelResultLogResult, ILabelResultLogResult> Complete(Tuple<ILabelPersistenceResult, ILabelPersistenceResult> results)
         {
             ILabelResultLogResult completeShipment = CompleteSingle(results.Item1);
-            ILabelResultLogResult completeReturn = CompleteSingle(results.Item2);
+            ILabelResultLogResult completeReturn = null;
+            if (results.Item2 != null)
+            {
+                completeReturn = CompleteSingle(results.Item2);
+            }
+
 
             return new Tuple<ILabelResultLogResult, ILabelResultLogResult>(completeShipment, completeReturn);
         }
