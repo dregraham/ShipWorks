@@ -5,6 +5,7 @@ using System.Data;
 using System.Linq;
 using System.Windows.Forms;
 using Autofac;
+using Interapptive.Shared;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore;
@@ -37,6 +38,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
         /// <summary>
         /// Load the UI for the given profile entity
         /// </summary>
+        [NDependIgnoreLongMethod]
         public override void LoadProfile(ShippingProfileEntity profile)
         {
             base.LoadProfile(profile);
