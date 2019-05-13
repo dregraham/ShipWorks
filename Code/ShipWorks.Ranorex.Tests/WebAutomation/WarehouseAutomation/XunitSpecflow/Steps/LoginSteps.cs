@@ -46,7 +46,6 @@ namespace XunitSpecflow.Steps
         [Then(@"the user sees the error message")]
         public void ThenTheUserSeesTheErrorMessage()
         {
-            Thread.Sleep(2000);
             Assert.Contains("Invalid username or password", loginPage.GetErrorMessage());
             loginPage.LoginPageQuit();
         }

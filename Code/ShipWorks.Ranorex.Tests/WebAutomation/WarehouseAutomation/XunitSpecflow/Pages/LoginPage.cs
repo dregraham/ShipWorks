@@ -55,7 +55,13 @@ namespace XunitSpecflow.Pages
         {
             try
             {
-                Thread.Sleep(3000);
+                string text = null;
+                while (text != "Invalid username or password")
+                {
+                    Thread.Sleep(250);
+                    text = ErrorMessage.Text;
+                }
+
                 return ErrorMessage.Text;
             }
             catch (Exception e)
