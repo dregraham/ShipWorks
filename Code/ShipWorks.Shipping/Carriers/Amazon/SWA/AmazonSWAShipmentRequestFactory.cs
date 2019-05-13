@@ -93,6 +93,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SWA
                 AmazonOrderItemEntity amazonItem = item as AmazonOrderItemEntity;
                 result.Add(
                     new ShipmentItem(
+                        externalOrderItemId: amazonItem?.AmazonOrderItemCode ?? string.Empty,
                         externalOrderId: amazonOrder?.AmazonOrderID ?? shipment.Order.OrderNumberComplete,
                         asin: amazonItem?.ASIN ?? string.Empty,
                         name: item.Name));
