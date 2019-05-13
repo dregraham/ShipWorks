@@ -41,8 +41,8 @@ namespace ShipWorks.Stores.Warehouse.Encryption
 
             try
             {
-                byte[] key = keyResponse.Plaintext.ToArray();
-                byte[] encryptedKey = keyResponse.CiphertextBlob.ToArray();
+                byte[] key = Convert.FromBase64String(keyResponse.Plaintext);
+                byte[] encryptedKey = Convert.FromBase64String(keyResponse.CiphertextBlob);
 
                 byte[] encryptedBytes = EncryptWithAES(Encoding.UTF8.GetBytes(plainText), key, encryptedKey);
 
@@ -126,7 +126,7 @@ namespace ShipWorks.Stores.Warehouse.Encryption
             }
 
             GenerateDataKeyResponse dataKeyResponse =
-                JsonConvert.DeserializeObject<GenerateDataKeyResponse>(response.Message);
+                JsonConvert.DeserializeObject<GenerateDataKeyResponse>(response.Value.Content);
 
             return dataKeyResponse;
         }

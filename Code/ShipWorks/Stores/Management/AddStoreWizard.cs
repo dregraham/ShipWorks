@@ -1001,6 +1001,8 @@ namespace ShipWorks.Stores.Management
                     if (result.Failure)
                     {
                         MessageHelper.ShowError(this, $"An error occurred saving the store to ShipWorks.{Environment.NewLine + Environment.NewLine + result.Message}");
+                        e.Skip = true;
+                        e.SkipToPage = wizardPageSettings;
                         return;
                     }
                 }
