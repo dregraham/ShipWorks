@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using Autofac.Extras.Moq;
 using Interapptive.Shared.Utility;
 using Moq;
@@ -18,9 +20,8 @@ namespace ShipWorks.Shipping.Tests.Services.ShipmentProcessorSteps
     public class LabelResultLogStepTest : IDisposable
     {
         private readonly AutoMock mock;
-        private Tuple<ILabelPersistenceResult, ILabelPersistenceResult> input;
+        private List<ILabelPersistenceResult> input;
         private readonly Mock<ILabelPersistenceResult> persistenceResult1;
-        private readonly Mock<ILabelPersistenceResult> persistenceResult2;
         private readonly ShipmentEntity shipment;
         private readonly ShipmentEntity shipmentForTango;
         private readonly StoreEntity store;
@@ -40,13 +41,8 @@ namespace ShipWorks.Shipping.Tests.Services.ShipmentProcessorSteps
             persistenceResult1.SetupGet(x => x.Store).Returns(store);
             persistenceResult1.SetupGet(x => x.Success).Returns(true);
 
-            persistenceResult2 = mock.Mock<ILabelPersistenceResult>();
-            persistenceResult2.SetupGet(x => x.OriginalShipment).Returns(shipment);
-            persistenceResult2.SetupGet(x => x.ShipmentForTango).Returns(shipmentForTango);
-            persistenceResult2.SetupGet(x => x.Store).Returns(store);
-            persistenceResult2.SetupGet(x => x.Success).Returns(true);
-
-            input = new Tuple<ILabelPersistenceResult, ILabelPersistenceResult>(persistenceResult1.Object, persistenceResult2.Object);
+            input = new List<ILabelPersistenceResult>();
+            input.Add(persistenceResult1.Object);
 
             testObject = mock.Create<Shipping.Services.ShipmentProcessorSteps.LabelResultLogStep>();
         }
@@ -124,7 +120,7 @@ namespace ShipWorks.Shipping.Tests.Services.ShipmentProcessorSteps
 
             var result = testObject.Complete(input);
 
-            Assert.Equal<object>(outOfFundsException, result.Item1.OutOfFundsException);
+            Assert.Equal<object>(outOfFundsException, result.First().OutOfFundsException);
         }
 
         [Theory]
@@ -145,7 +141,7 @@ namespace ShipWorks.Shipping.Tests.Services.ShipmentProcessorSteps
 
             var result = testObject.Complete(input);
 
-            Assert.Equal<object>(termsException, result.Item1.TermsAndConditionsException);
+            Assert.Equal<object>(termsException, result.First().TermsAndConditionsException);
         }
 
         [Fact]
@@ -182,7 +178,7 @@ namespace ShipWorks.Shipping.Tests.Services.ShipmentProcessorSteps
 
             var result = testObject.Complete(input);
 
-            Assert.Equal(expected, result.Item1.WorldshipExported);
+            Assert.Equal(expected, result.First().WorldshipExported);
         }
 
         [Fact]
@@ -203,7 +199,7 @@ namespace ShipWorks.Shipping.Tests.Services.ShipmentProcessorSteps
             var result = testObject.Complete(input);
 
             mock.Mock<IShippingErrorManager>().Verify(x => x.SetShipmentErrorMessage(1234, It.IsAny<Exception>()));
-            Assert.Contains("deleted", result.Item1.ErrorMessage);
+            Assert.Contains("deleted", result.First().ErrorMessage);
         }
 
         [Fact]
@@ -220,7 +216,7 @@ namespace ShipWorks.Shipping.Tests.Services.ShipmentProcessorSteps
 
             mock.Mock<IShippingErrorManager>()
                 .Verify(x => x.SetShipmentErrorMessage(It.IsAny<long>(), It.IsAny<Exception>()), Times.Never);
-            Assert.DoesNotContain("deleted", result.Item1.ErrorMessage);
+            Assert.DoesNotContain("deleted", result.First().ErrorMessage);
         }
 
         private Exception CreateException(Type exceptionType)

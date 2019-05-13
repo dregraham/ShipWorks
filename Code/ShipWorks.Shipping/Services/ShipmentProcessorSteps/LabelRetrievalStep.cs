@@ -57,46 +57,48 @@ namespace ShipWorks.Shipping.Services.ShipmentProcessorSteps
         /// <summary>
         /// Get a label for a shipment
         /// </summary>
-        public async Task<Tuple<ILabelRetrievalResult, ILabelRetrievalResult>> GetLabels(IShipmentPreparationResult result)
+        public async Task<IEnumerable<ILabelRetrievalResult>> GetLabels(IShipmentPreparationResult shipmentPreparationResult)
         {
-            if (!result.Success)
+            List<ILabelRetrievalResult> labelRetrievalResults = new List<ILabelRetrievalResult>();
+            if (!shipmentPreparationResult.Success)
             {
-                return new Tuple<ILabelRetrievalResult, ILabelRetrievalResult>(new LabelRetrievalResult(result), null);
+                labelRetrievalResults.Add(new LabelRetrievalResult(shipmentPreparationResult));
+                return labelRetrievalResults;
             }
 
             ShippingException lastShipmentException = null;
 
-            foreach (ShipmentEntity shipment in result.Shipments)
+            foreach (ShipmentEntity shipment in shipmentPreparationResult.Shipments)
             {
                 ILabelRetrievalResult shipmentResult = null;
                 ILabelRetrievalResult returnShipmentResult = null;
 
                 try
                 {
-                    shipmentResult = await GetLabelForShipment(result, shipment).ConfigureAwait(false);
+                    shipmentResult = await GetLabelForShipment(shipmentPreparationResult, shipment).ConfigureAwait(false);
                 }
                 catch (Exception ex) when (CanHandleException(ex))
                 {
                     lastShipmentException = ex as ShippingException ?? new ShippingException(ex.Message, ex);
                 }
 
-                if (shipment.IncludeReturn && shipmentResult != null && shipmentResult.Success)
-                {
-                    returnShipmentResult = await ProcessAutomaticReturn(shipment, result).ConfigureAwait(false);
-
-                    // Successfully retrieved shipment, may or may not have received return
-                    return new Tuple<ILabelRetrievalResult, ILabelRetrievalResult>(shipmentResult, returnShipmentResult);
-                }
-
                 if (shipmentResult != null && shipmentResult.Success)
                 {
-                    // Successfully retrieved shipment, and automatic returns was not selected
-                    return new Tuple<ILabelRetrievalResult, ILabelRetrievalResult>(shipmentResult, null);
+                    labelRetrievalResults.Add(shipmentResult);
+
+                    if (shipment.IncludeReturn)
+                    {
+                        returnShipmentResult = await ProcessAutomaticReturn(shipment, shipmentPreparationResult).ConfigureAwait(false);
+                        labelRetrievalResults.Add(returnShipmentResult);
+                    }
+
+                    return labelRetrievalResults;
                 }
             }
 
-            // Failed to retrieve any shipment
-            return new Tuple<ILabelRetrievalResult, ILabelRetrievalResult>(new LabelRetrievalResult(result, lastShipmentException), null);
+            // Failed to retrieve any shipment labels
+            labelRetrievalResults.Add(new LabelRetrievalResult(shipmentPreparationResult, lastShipmentException));
+            return labelRetrievalResults;
         }
 
         /// <summary>

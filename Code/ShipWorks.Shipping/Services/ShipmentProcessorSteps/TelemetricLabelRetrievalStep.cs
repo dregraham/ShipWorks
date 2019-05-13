@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Interapptive.Shared.Metrics;
@@ -28,16 +27,14 @@ namespace ShipWorks.Shipping.Services.ShipmentProcessorSteps
         /// <summary>
         /// Get a label for a shipment and collect telemetry
         /// </summary>
-        public async Task<Tuple<ILabelRetrievalResult, ILabelRetrievalResult>> GetLabels(IShipmentPreparationResult result)
+        public async Task<IEnumerable<ILabelRetrievalResult>> GetLabels(IShipmentPreparationResult result)
         {
-            Tuple<ILabelRetrievalResult, ILabelRetrievalResult> labelRetrievalResults = await labelRetrievalStep.GetLabels(result);
+            IEnumerable<ILabelRetrievalResult> labelRetrievalResults = await labelRetrievalStep.GetLabels(result);
             using (TrackedDurationEvent telemetryEvent = new TrackedDurationEvent("Shipping.Label.Creation"))
             {
-                SetTelemetryProperties(telemetryEvent, labelRetrievalResults.Item1);
-
-                if (labelRetrievalResults.Item2 != null)
+                foreach (ILabelRetrievalResult labelRetrievalresult in labelRetrievalResults)
                 {
-                    SetTelemetryProperties(telemetryEvent, labelRetrievalResults.Item2);
+                    SetTelemetryProperties(telemetryEvent, labelRetrievalresult);
                 }
             }
 

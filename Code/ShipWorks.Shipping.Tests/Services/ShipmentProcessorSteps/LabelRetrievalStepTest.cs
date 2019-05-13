@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Autofac.Extras.Moq;
 using Interapptive.Shared.Utility;
@@ -70,8 +71,8 @@ namespace ShipWorks.Shipping.Tests.Services.ShipmentProcessorSteps
 
             var result = await testObject.GetLabels(getLabelInput);
 
-            Assert.Equal(exception, result.Item1.Exception);
-            Assert.Equal(entityLock, result.Item1.EntityLock);
+            Assert.Equal(exception, result.First().Exception);
+            Assert.Equal(entityLock, result.First().EntityLock);
         }
 
         [Fact]
@@ -107,7 +108,7 @@ namespace ShipWorks.Shipping.Tests.Services.ShipmentProcessorSteps
 
             var result = await testObject.GetLabels(getLabelInput);
 
-            Assert.Equal(secondShipment, result.Item1.OriginalShipment);
+            Assert.Equal(secondShipment, result.First().OriginalShipment);
         }
 
         [Fact]
@@ -137,7 +138,7 @@ namespace ShipWorks.Shipping.Tests.Services.ShipmentProcessorSteps
 
             var result = await testObject.GetLabels(getLabelInput);
 
-            Assert.Equal(fields, result.Item1.FieldsToRestore);
+            Assert.Equal(fields, result.First().FieldsToRestore);
         }
 
         [Fact]
@@ -160,7 +161,7 @@ namespace ShipWorks.Shipping.Tests.Services.ShipmentProcessorSteps
 
             var result = await testObject.GetLabels(getLabelInput);
 
-            Assert.Equal(labelData, result.Item1.LabelData);
+            Assert.Equal(labelData, result.First().LabelData);
         }
 
         [Fact]
@@ -170,8 +171,8 @@ namespace ShipWorks.Shipping.Tests.Services.ShipmentProcessorSteps
 
             var result = await testObject.GetLabels(getLabelInput);
 
-            Assert.NotEqual(shipment, result.Item1.Clone);
-            Assert.Equal(9876, result.Item1.Clone.ShipmentID);
+            Assert.NotEqual(shipment, result.First().Clone);
+            Assert.Equal(9876, result.First().Clone.ShipmentID);
         }
 
         [Fact]
@@ -179,8 +180,8 @@ namespace ShipWorks.Shipping.Tests.Services.ShipmentProcessorSteps
         {
             var result = await testObject.GetLabels(getLabelInput);
 
-            Assert.Equal(getLabelInput.EntityLock, result.Item1.EntityLock);
-            Assert.Equal(getLabelInput.OriginalShipment, result.Item1.OriginalShipment);
+            Assert.Equal(getLabelInput.EntityLock, result.First().EntityLock);
+            Assert.Equal(getLabelInput.OriginalShipment, result.First().OriginalShipment);
         }
 
         public void Dispose()

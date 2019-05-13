@@ -60,23 +60,15 @@ namespace ShipWorks.Shipping.Services.ProcessShipmentsWorkflow
         /// <summary>
         /// Process the shipments
         /// </summary>
-        [NDependIgnoreLongMethod]
         public async Task<IProcessShipmentsWorkflowResult> Process(IEnumerable<ShipmentEntity> shipments,
             RateResult chosenRateResult, IProgressReporter workProgress, CancellationTokenSource cancellationSource,
             Action counterRateCarrierConfiguredWhileProcessingAction)
         {
             using (ITrackedDurationEvent telemetryEvent = telemetryFactory("Shipping.Shipments.Process"))
             {
-                // Get shipment count with automatic returns
-                int shipmentCount = 0;
-                foreach (ShipmentEntity shipment in shipments)
-                {
-                    shipmentCount++;
-                    if (shipment.IncludeReturn)
-                    {
-                        shipmentCount++;
-                    }
-                }
+                List<ILabelResultLogResult> results = new List<ILabelResultLogResult>();
+
+                int shipmentCount = GetShipmentCount(shipments);
 
                 telemetryEvent.AddMetric("Shipments.Count", shipmentCount);
                 telemetryEvent.AddProperty("Processing.Workflow", Name);
@@ -89,29 +81,14 @@ namespace ShipWorks.Shipping.Services.ProcessShipmentsWorkflow
                 return await Task.Run(async () =>
                 {
                     ProcessShipmentsWorkflowResult workflowResult = new ProcessShipmentsWorkflowResult(chosenRateResult);
-                    List<ILabelResultLogResult> results = new List<ILabelResultLogResult>();
                     foreach (ProcessShipmentState processShipmentState in input)
                     {
                         if (cancellationSource.IsCancellationRequested)
                         {
                             break;
                         }
-                        Tuple<ILabelResultLogResult, ILabelResultLogResult> processResults;
 
-                        processResults = await ProcessShipment(processShipmentState, workProgress, shipmentCount, telemetryEvent).ConfigureAwait(false);
-
-                        if (processResults == null)
-                        {
-                            results.Add(null);
-                            continue;
-                        }
-
-                        results.Add(processResults.Item1);
-
-                        if (processResults.Item2 != null)
-                        {
-                            results.Add(processResults.Item2);
-                        }
+                        results.AddRange(await ProcessShipment(processShipmentState, workProgress, shipmentCount, telemetryEvent).ConfigureAwait(false));
                     }
 
                     ProcessShipmentsWorkflowResult result = results
@@ -123,6 +100,23 @@ namespace ShipWorks.Shipping.Services.ProcessShipmentsWorkflow
                     return result;
                 });
             }
+        }
+
+        /// <summary>
+        /// Get shipment count including automatic returns
+        /// </summary>
+        private int GetShipmentCount(IEnumerable<ShipmentEntity> shipments)
+        {
+            int shipmentCount = 0;
+            foreach (ShipmentEntity shipment in shipments)
+            {
+                shipmentCount++;
+                if (shipment.IncludeReturn)
+                {
+                    shipmentCount++;
+                }
+            }
+            return shipmentCount;
         }
 
         /// <summary>
@@ -172,8 +166,7 @@ namespace ShipWorks.Shipping.Services.ProcessShipmentsWorkflow
         /// <summary>
         /// Process a single shipment and its automatic return
         /// </summary>
-        [NDependIgnoreLongMethod]
-        private async Task<Tuple<ILabelResultLogResult, ILabelResultLogResult>> ProcessShipment(ProcessShipmentState initial,
+        private async Task<IEnumerable<ILabelResultLogResult>> ProcessShipment(ProcessShipmentState initial,
             IProgressReporter workProgress, int shipmentCount, ITrackedDurationEvent telemetryEvent)
         {
             workProgress.Detail = $"Shipment {initial.Index + 1} of {shipmentCount}";
@@ -188,18 +181,20 @@ namespace ShipWorks.Shipping.Services.ProcessShipmentsWorkflow
 
                 if (initial.CancellationSource.IsCancellationRequested)
                 {
-                    return null;
+                    List<ILabelResultLogResult> returns = new List<ILabelResultLogResult>();
+                    returns.Add(null);
+                    return returns;
                 }
 
-                Tuple<ILabelRetrievalResult, ILabelRetrievalResult> getLabelResults = await telemetricResult.RunTimedEventAsync(
+                IEnumerable<ILabelRetrievalResult> getLabelResults = await telemetricResult.RunTimedEventAsync(
                         "GenerateLabel.DurationInMilliseconds",
                         () => getLabelTask.GetLabels(prepareShipmentResult))
                     .ConfigureAwait(false);
 
-                Tuple<ILabelPersistenceResult, ILabelPersistenceResult> saveLabelResults = telemetricResult.RunTimedEvent("SaveLabels.DurationInMilliseconds",
+                IEnumerable<ILabelPersistenceResult> saveLabelResults = telemetricResult.RunTimedEvent("SaveLabels.DurationInMilliseconds",
                     () => saveLabelTask.SaveLabels(getLabelResults));
 
-                Tuple<ILabelResultLogResult, ILabelResultLogResult> logLabelResults = telemetricResult.RunTimedEvent("LogLabels.DurationInMilliseconds",
+                IEnumerable<ILabelResultLogResult> logLabelResults = telemetricResult.RunTimedEvent("LogLabels.DurationInMilliseconds",
                     () => completeLabelTask.Complete(saveLabelResults));
 
                 return logLabelResults;

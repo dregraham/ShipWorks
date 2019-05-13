@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Autofac.Extras.Moq;
 using Interapptive.Shared.Utility;
 using Moq;
@@ -22,8 +23,7 @@ namespace ShipWorks.Shipping.Tests.Services.ShipmentProcessorSteps
         private readonly AutoMock mock;
         private readonly LabelPersistenceStep testObject;
         private readonly Mock<ILabelRetrievalResult> labelResult1;
-        private readonly Mock<ILabelRetrievalResult> labelResult2;
-        private readonly Tuple<ILabelRetrievalResult, ILabelRetrievalResult> input;
+        private readonly List<ILabelRetrievalResult> input;
         private readonly ShipmentEntity shipment;
         private readonly StoreEntity store;
 
@@ -42,14 +42,8 @@ namespace ShipWorks.Shipping.Tests.Services.ShipmentProcessorSteps
                 r.SetupGet(x => x.Store).Returns(store);
             });
 
-            labelResult2 = mock.CreateMock<ILabelRetrievalResult>(r =>
-            {
-                r.SetupGet(x => x.Success).Returns(true);
-                r.SetupGet(x => x.OriginalShipment).Returns(shipment);
-                r.SetupGet(x => x.Store).Returns(store);
-            });
-
-            input = new Tuple<ILabelRetrievalResult, ILabelRetrievalResult>(labelResult1.Object, labelResult2.Object);
+            input = new List<ILabelRetrievalResult>();
+            input.Add(labelResult1.Object);
         }
 
         [Fact]
@@ -65,10 +59,10 @@ namespace ShipWorks.Shipping.Tests.Services.ShipmentProcessorSteps
 
             var result = testObject.SaveLabels(input);
 
-            Assert.Equal(false, result.Item1.Success);
-            Assert.Equal(exception, result.Item1.Exception);
-            Assert.Equal(true, result.Item1.Canceled);
-            Assert.Equal(entityLock, result.Item1.EntityLock);
+            Assert.Equal(false, result.First().Success);
+            Assert.Equal(exception, result.First().Exception);
+            Assert.Equal(true, result.First().Canceled);
+            Assert.Equal(entityLock, result.First().EntityLock);
         }
 
         [Fact]
@@ -91,7 +85,7 @@ namespace ShipWorks.Shipping.Tests.Services.ShipmentProcessorSteps
 
             var result = testObject.SaveLabels(input);
 
-            Assert.Equal(exception, result.Item1.Exception.GetBaseException());
+            Assert.Equal(exception, result.First().Exception.GetBaseException());
         }
 
         [Fact]
@@ -209,9 +203,9 @@ namespace ShipWorks.Shipping.Tests.Services.ShipmentProcessorSteps
 
             var result = testObject.SaveLabels(input);
 
-            Assert.Equal(entityLock, result.Item1.EntityLock);
-            Assert.Equal(store, result.Item1.Store);
-            Assert.Equal(shipment, result.Item1.OriginalShipment);
+            Assert.Equal(entityLock, result.First().EntityLock);
+            Assert.Equal(store, result.First().Store);
+            Assert.Equal(shipment, result.First().OriginalShipment);
         }
 
         [Fact]
@@ -226,9 +220,9 @@ namespace ShipWorks.Shipping.Tests.Services.ShipmentProcessorSteps
 
             var result = testObject.SaveLabels(input);
 
-            Assert.Equal(entityLock, result.Item1.EntityLock);
-            Assert.Equal(store, result.Item1.Store);
-            Assert.Equal(shipment, result.Item1.OriginalShipment);
+            Assert.Equal(entityLock, result.First().EntityLock);
+            Assert.Equal(store, result.First().Store);
+            Assert.Equal(shipment, result.First().OriginalShipment);
         }
 
         public void Dispose()

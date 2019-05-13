@@ -75,7 +75,7 @@ namespace ShipWorks.Shipping.Services.ProcessShipmentsWorkflow
             workProgress.Starting();
             prepareShipmentTask.CounterRateCarrierConfiguredWhileProcessing = counterRateCarrierConfiguredWhileProcessingAction;
 
-            DataFlow<ProcessShipmentState, Tuple<ILabelResultLogResult, ILabelResultLogResult>> dataflow = CreateDataFlow(cancellationSource);
+            DataFlow<ProcessShipmentState, IEnumerable<ILabelResultLogResult>> dataflow = CreateDataFlow(cancellationSource);
 
             // Get shipment count with automatic returns
             int shipmentCount = 0;
@@ -124,19 +124,19 @@ namespace ShipWorks.Shipping.Services.ProcessShipmentsWorkflow
         /// <remarks>
         /// We only handle canceling in the first step because once we're past that, we need to finish the rest
         /// </remarks>
-        private DataFlow<ProcessShipmentState, Tuple<ILabelResultLogResult, ILabelResultLogResult>> CreateDataFlow(CancellationTokenSource cancellationSource)
+        private DataFlow<ProcessShipmentState, IEnumerable<ILabelResultLogResult>> CreateDataFlow(CancellationTokenSource cancellationSource)
         {
             int taskCount = ConcurrencyCount;
 
             var prepareShipmentBlock = new TransformBlock<ProcessShipmentState, IShipmentPreparationResult>(x => prepareShipmentTask.PrepareShipment(x),
                 new ExecutionDataflowBlockOptions { MaxDegreeOfParallelism = 1, BoundedCapacity = 1, CancellationToken = cancellationSource.Token });
-            var getLabelBlock = new TransformBlock<IShipmentPreparationResult, Tuple<ILabelRetrievalResult, ILabelRetrievalResult>>(x => getLabelTask.GetLabels(x),
+            var getLabelBlock = new TransformBlock<IShipmentPreparationResult, IEnumerable<ILabelRetrievalResult>>(x => getLabelTask.GetLabels(x),
                 new ExecutionDataflowBlockOptions { MaxDegreeOfParallelism = taskCount, BoundedCapacity = 8 });
-            var saveLabelBlock = new TransformBlock<Tuple<ILabelRetrievalResult, ILabelRetrievalResult>,
-                Tuple<ILabelPersistenceResult, ILabelPersistenceResult>>(x => saveLabelTask.SaveLabels(x),
+            var saveLabelBlock = new TransformBlock<IEnumerable<ILabelRetrievalResult>,
+                IEnumerable<ILabelPersistenceResult>>(x => saveLabelTask.SaveLabels(x),
                     new ExecutionDataflowBlockOptions { MaxDegreeOfParallelism = 1, BoundedCapacity = 8 });
-            var completeLabelBlock = new TransformBlock<Tuple<ILabelPersistenceResult, ILabelPersistenceResult>,
-                Tuple<ILabelResultLogResult, ILabelResultLogResult>>(x => completeLabelTask.Complete(x),
+            var completeLabelBlock = new TransformBlock<IEnumerable<ILabelPersistenceResult>,
+                IEnumerable<ILabelResultLogResult>>(x => completeLabelTask.Complete(x),
                     new ExecutionDataflowBlockOptions { MaxDegreeOfParallelism = taskCount, BoundedCapacity = 8 });
 
             prepareShipmentBlock.LinkTo(getLabelBlock, new DataflowLinkOptions { PropagateCompletion = true });
@@ -176,9 +176,9 @@ namespace ShipWorks.Shipping.Services.ProcessShipmentsWorkflow
         private static async Task<ProcessShipmentsWorkflowResult> Consume(
             Action<int> logProgress,
             ProcessShipmentsWorkflowResult accumulator,
-            IReceivableSourceBlock<Tuple<ILabelResultLogResult, ILabelResultLogResult>> phase)
+            IReceivableSourceBlock<IEnumerable<ILabelResultLogResult>> phase)
         {
-            Tuple<ILabelResultLogResult, ILabelResultLogResult> items = null;
+            IEnumerable<ILabelResultLogResult> items = null;
 
             int curShipmentIndex = 0;
 
@@ -186,15 +186,8 @@ namespace ShipWorks.Shipping.Services.ProcessShipmentsWorkflow
             {
                 if (phase.TryReceive(out items))
                 {
-                    ILabelResultLogResult item = items.Item1;
-
-                    for (int i = 0; i < 2; i++)
+                    foreach (ILabelResultLogResult item in items)
                     {
-                        if (i == 1)
-                        {
-                            item = items.Item2;
-                        }
-
                         if (item != null)
                         {
                             curShipmentIndex++;

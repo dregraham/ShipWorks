@@ -124,15 +124,8 @@ namespace ShipWorks.Shipping.Services
             // Check for shipment type process shipment nudges
             ShowShipmentTypeProcessingNudges(clonedShipments);
 
-            // Determine which workflow to use
-            bool useSerialWorkflow = true;
-            if (clonedShipments.Count > 1 || clonedShipments.First().IncludeReturn)
-            {
-                useSerialWorkflow = false;
-            }
-
             IProcessShipmentsWorkflowResult result;
-            IProcessShipmentsWorkflow workflow = workflowFactory.Create(useSerialWorkflow);
+            IProcessShipmentsWorkflow workflow = workflowFactory.Create(clonedShipments);
 
             using (CancellationTokenSource cancellationSource = new CancellationTokenSource())
             {

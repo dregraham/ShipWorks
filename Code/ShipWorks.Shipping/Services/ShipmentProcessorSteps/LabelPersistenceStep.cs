@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Interapptive.Shared;
 using Interapptive.Shared.Collections;
@@ -55,30 +56,23 @@ namespace ShipWorks.Shipping.Services.ShipmentProcessorSteps
         /// <summary>
         /// Save both labels generated in the previous phase
         /// </summary>
-        public Tuple<ILabelPersistenceResult, ILabelPersistenceResult> SaveLabels(Tuple<ILabelRetrievalResult, ILabelRetrievalResult> results)
+        public IEnumerable<ILabelPersistenceResult> SaveLabels(IEnumerable<ILabelRetrievalResult> labelRetrievalResults)
         {
-            if (!results.Item1.Success)
+            List<ILabelPersistenceResult> labelPersistenceResults = new List<ILabelPersistenceResult>();
+
+            foreach (ILabelRetrievalResult result in labelRetrievalResults)
             {
-                return new Tuple<ILabelPersistenceResult, ILabelPersistenceResult>(new LabelPersistenceResult(results.Item1), null);
+                if (result.Success)
+                {
+                    labelPersistenceResults.Add(SaveSingleLabel(result));
+                }
+                else
+                {
+                    labelPersistenceResults.Add(new LabelPersistenceResult(result));
+                }
             }
 
-            ILabelPersistenceResult saveShipmentResult = SaveSingleLabel(results.Item1);
-            ILabelPersistenceResult saveReturnResult;
-            if (results.Item2 == null)
-            {
-                saveReturnResult = null;
-            }
-            else
-            {
-                saveReturnResult = new LabelPersistenceResult(results.Item2);
-            }
-
-            if (results.Item2 != null && results.Item2.Success)
-            {
-                saveReturnResult = SaveSingleLabel(results.Item2);
-            }
-
-            return new Tuple<ILabelPersistenceResult, ILabelPersistenceResult>(saveShipmentResult, saveReturnResult);
+            return labelPersistenceResults;
         }
 
         /// <summary>
