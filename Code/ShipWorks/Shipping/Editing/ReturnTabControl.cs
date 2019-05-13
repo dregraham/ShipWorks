@@ -49,7 +49,7 @@ namespace ShipWorks.Shipping.Editing
             weight.Leave += OnLeaveAffectingControl;
             notes.Leave += OnLeaveAffectingControl;
         }
-      
+
         /// <summary>
         /// Load the shipments into the control
         /// </summary>
@@ -79,13 +79,13 @@ namespace ShipWorks.Shipping.Editing
 
             foreach (ShipmentReturnItemEntity item in loadedShipment.ReturnItems)
             {
-                GridRow row = new GridRow(item.Name) {Tag = item};
+                GridRow row = new GridRow(item.Name) { Tag = item };
                 itemsGrid.Rows.Add(row);
             }
 
             if (itemsGrid.Rows.Count != 0)
             {
-                itemsGrid.SelectElement(itemsGrid.Rows[0]);   
+                itemsGrid.SelectElement(itemsGrid.Rows[0]);
             }
 
             ResumeShipSenseFieldChangeEvent();
@@ -114,7 +114,7 @@ namespace ShipWorks.Shipping.Editing
         {
             SuspendShipSenseFieldChangeEvent();
             SaveValuesToSelectedEntities();
-            
+
             if (itemsGrid.SelectedElements.Count == 0)
             {
                 ClearValues();
@@ -164,7 +164,7 @@ namespace ShipWorks.Shipping.Editing
             SaveValuesToSelectedEntities();
             RaiseShipSenseFieldChanged();
         }
-        
+
         /// <summary>
         /// Clear the value data out of the entry controls
         /// </summary>
@@ -175,7 +175,7 @@ namespace ShipWorks.Shipping.Editing
             SuspendShipSenseFieldChangeEvent();
 
             itemsGrid.SelectedElements.Clear();
-                
+
             name.TextChanged -= OnDescriptionChanged;
 
             name.Text = string.Empty;
@@ -201,7 +201,10 @@ namespace ShipWorks.Shipping.Editing
                 SaveReturnItem(returnItem);
             }
 
-            loadedShipment.ContentWeight = loadedShipment.ReturnItems.Sum(c => c.Quantity * c.Weight);
+            if (!loadedShipment.Processed)
+            {
+                loadedShipment.ContentWeight = loadedShipment.ReturnItems.Sum(c => c.Quantity * c.Weight);
+            }
         }
 
         /// <summary>
@@ -229,7 +232,7 @@ namespace ShipWorks.Shipping.Editing
                     returnItem.Weight = newWeight;
                 }
             });
-               
+
             name.ReadMultiText(s => returnItem.Name = s);
             sku.ReadMultiText(s => returnItem.SKU = s);
             code.ReadMultiText(s => returnItem.Code = s);
@@ -243,7 +246,7 @@ namespace ShipWorks.Shipping.Editing
         {
             return shipmentRows.Select(row => row.Tag as ShipmentReturnItemEntity).ToList();
         }
-          
+
         /// <summary>
         /// Delete selected return item
         /// </summary>
@@ -256,7 +259,7 @@ namespace ShipWorks.Shipping.Editing
             }
 
             Cursor.Current = Cursors.WaitCursor;
-            
+
             // Capture the selected rows that will be removed
             List<GridRow> rowsToRemove = itemsGrid.SelectedElements.Cast<GridRow>().ToList();
 
@@ -297,8 +300,8 @@ namespace ShipWorks.Shipping.Editing
                 Weight = 0,
                 Notes = string.Empty
             };
-            
-            GridRow row = new GridRow(newItem.Name) {Tag = newItem};
+
+            GridRow row = new GridRow(newItem.Name) { Tag = newItem };
 
             itemsGrid.Rows.Add(row);
             loadedShipment.ReturnItems.Add(newItem);
