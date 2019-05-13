@@ -92,31 +92,195 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Features\AddWarehouse.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>AddWarehouse.feature</DependentUpon>
+    </Compile>
+    <Compile Include="Features\BlankFieldValidationAddPage.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>BlankFieldValidationAddPage.feature</DependentUpon>
+    </Compile>
+    <Compile Include="Features\BlankFieldValidationEditPage.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>BlankFieldValidationEditPage.feature</DependentUpon>
+    </Compile>
+    <Compile Include="Features\CancelAddWarehouse.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>CancelAddWarehouse.feature</DependentUpon>
+    </Compile>
+    <Compile Include="Features\CancelEditWarehouse.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>CancelEditWarehouse.feature</DependentUpon>
+    </Compile>
+    <Compile Include="Features\ChangeNewlyAddedWarehouseToDefault.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ChangeNewlyAddedWarehouseToDefault.feature</DependentUpon>
+    </Compile>
+    <Compile Include="Features\EditWarehouse.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>EditWarehouse.feature</DependentUpon>
+    </Compile>
     <Compile Include="Features\FailureLogin.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>FailureLogin.feature</DependentUpon>
+    </Compile>
+    <Compile Include="Features\FieldLengthValidation.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>FieldLengthValidation.feature</DependentUpon>
+    </Compile>
+    <Compile Include="Features\FieldLengthValidationEditPage.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>FieldLengthValidationEditPage.feature</DependentUpon>
     </Compile>
     <Compile Include="Features\Login.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Login.feature</DependentUpon>
     </Compile>
+    <Compile Include="Features\LogoutURLRedirectVerification.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>LogoutURLRedirectVerification.feature</DependentUpon>
+    </Compile>
+    <Compile Include="Features\Logout.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Logout.feature</DependentUpon>
+    </Compile>
+    <Compile Include="Features\PageNotFound.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>PageNotFound.feature</DependentUpon>
+    </Compile>
+    <Compile Include="Features\RemoveWarehouse.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>RemoveWarehouse.feature</DependentUpon>
+    </Compile>
+    <Compile Include="Features\WarehouseDeleteConfirmation.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>WarehouseDeleteConfirmation.feature</DependentUpon>
+    </Compile>
+    <Compile Include="Features\WarehouseNameSort.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>WarehouseNameSort.feature</DependentUpon>
+    </Compile>
+    <Compile Include="Features\WarehouseNotFound.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>WarehouseNotFound.feature</DependentUpon>
+    </Compile>
+    <Compile Include="Features\WarehouseZipCodeAddValidation.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>WarehouseZipCodeAddValidation.feature</DependentUpon>
+    </Compile>
+    <Compile Include="Features\WarehouseZipCodeEditValidation.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>WarehouseZipCodeEditValidation.feature</DependentUpon>
+    </Compile>
     <Compile Include="Pages\DashboardPage.cs" />
     <Compile Include="Pages\LoginPage.cs" />
+    <Compile Include="Pages\WarehousesPage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Steps\AddWarehouseSteps.cs" />
     <Compile Include="Steps\BaseSteps.cs" />
     <Compile Include="Steps\LoginSteps.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="Features\AddWarehouse.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>AddWarehouse.feature.cs</LastGenOutput>
+    </None>
+    <None Include="Features\BlankFieldValidationAddPage.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>BlankFieldValidationAddPage.feature.cs</LastGenOutput>
+    </None>
+    <None Include="Features\BlankFieldValidationEditPage.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>BlankFieldValidationEditPage.feature.cs</LastGenOutput>
+    </None>
+    <None Include="Features\CancelAddWarehouse.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>CancelAddWarehouse.feature.cs</LastGenOutput>
+    </None>
+    <None Include="Features\CancelEditWarehouse.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>CancelEditWarehouse.feature.cs</LastGenOutput>
+    </None>
+    <None Include="Features\ChangeNewlyAddedWarehouseToDefault.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>ChangeNewlyAddedWarehouseToDefault.feature.cs</LastGenOutput>
+    </None>
+    <None Include="Features\EditWarehouse.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>EditWarehouse.feature.cs</LastGenOutput>
+    </None>
     <None Include="Features\FailureLogin.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>FailureLogin.feature.cs</LastGenOutput>
     </None>
+    <None Include="Features\FieldLengthValidation.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>FieldLengthValidation.feature.cs</LastGenOutput>
+    </None>
+    <None Include="Features\FieldLengthValidationEditPage.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>FieldLengthValidationEditPage.feature.cs</LastGenOutput>
+    </None>
     <None Include="Features\Login.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>Login.feature.cs</LastGenOutput>
+    </None>
+    <None Include="Features\LogoutURLRedirectVerification.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>LogoutURLRedirectVerification.feature.cs</LastGenOutput>
+    </None>
+    <None Include="Features\Logout.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>Logout.feature.cs</LastGenOutput>
+    </None>
+    <None Include="Features\PageNotFound.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>PageNotFound.feature.cs</LastGenOutput>
+    </None>
+    <None Include="Features\RemoveWarehouse.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>RemoveWarehouse.feature.cs</LastGenOutput>
+    </None>
+    <None Include="Features\WarehouseDeleteConfirmation.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>WarehouseDeleteConfirmation.feature.cs</LastGenOutput>
+    </None>
+    <None Include="Features\WarehouseNameSort.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>WarehouseNameSort.feature.cs</LastGenOutput>
+    </None>
+    <None Include="Features\WarehouseNotFound.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>WarehouseNotFound.feature.cs</LastGenOutput>
+    </None>
+    <None Include="Features\WarehouseZipCodeAddValidation.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>WarehouseZipCodeAddValidation.feature.cs</LastGenOutput>
+    </None>
+    <None Include="Features\WarehouseZipCodeEditValidation.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>WarehouseZipCodeEditValidation.feature.cs</LastGenOutput>
     </None>
     <None Include="packages.config" />
   </ItemGroup>
