@@ -6,6 +6,7 @@ using Newtonsoft.Json;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Communication;
 using ShipWorks.Stores.Warehouse;
+using ShipWorks.Stores.Warehouse.Encryption;
 using ShipWorks.Stores.Warehouse.StoreData;
 using ShipWorks.Tests.Shared;
 using Xunit;
@@ -37,8 +38,9 @@ namespace ShipWorks.Stores.Tests.Warehouse
             downloadStartingPoint.Setup(x => x.OnlineLastModified(amazonStoreEntity)).ReturnsAsync(DateTime.Now);
 
             var storeTypeManager = mock.Mock<IStoreTypeManager>();
+            var encryptionService = mock.Mock<IWarehouseEncryptionService>();
 
-            StoreDtoFactory testObject = new StoreDtoFactory(downloadStartingPoint.Object, storeTypeManager.Object);
+            StoreDtoFactory testObject = new StoreDtoFactory(downloadStartingPoint.Object, storeTypeManager.Object, encryptionService.Object);
 
             var storeDto = await testObject.Create(amazonStoreEntity);
             
