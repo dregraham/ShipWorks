@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using Autofac;
 using Interapptive.Shared.Business;
@@ -976,8 +977,10 @@ namespace ShipWorks.Stores.Management
         /// <summary>
         /// Stepping into the complete page
         /// </summary>
-        private async void OnSteppingIntoComplete(object sender, WizardSteppingIntoEventArgs e)
+        private async Task OnSteppingIntoComplete(object sender, WizardSteppingIntoEventArgs e)
         {
+            Cursor = Cursors.WaitCursor;
+
             wizardPageFinished.LoadDownloadControl();
 
             try
@@ -995,16 +998,14 @@ namespace ShipWorks.Stores.Management
                     return;
                 }
 
-                using (ILifetimeScope scope = IoC.BeginLifetimeScope())
+                Result result = await scope.Resolve<IWarehouseStoreClient>().UploadStoreToWarehouse(store).ConfigureAwait(true);
+                if (result.Failure)
                 {
-                    Result result = await scope.Resolve<IWarehouseStoreClient>().UploadStoreToWarehouse(store).ConfigureAwait(true);
-                    if (result.Failure)
-                    {
-                        MessageHelper.ShowError(this, $"An error occurred saving the store to ShipWorks.{Environment.NewLine + Environment.NewLine + result.Message}");
-                        e.Skip = true;
-                        e.SkipToPage = wizardPageSettings;
-                        return;
-                    }
+                    MessageHelper.ShowError(this, $"An error occurred saving the store to ShipWorks.{Environment.NewLine + Environment.NewLine + result.Message}");
+                    e.Skip = true;
+                    e.SkipToPage = wizardPageSettings;
+                    BackEnabled = true;
+                    return;
                 }
 
                 using (SqlAdapter adapter = new SqlAdapter(true))
@@ -1035,6 +1036,7 @@ namespace ShipWorks.Stores.Management
             finally
             {
                 FilterLayoutContext.PopScope();
+                Cursor = DefaultCursor;
             }
         }
 
