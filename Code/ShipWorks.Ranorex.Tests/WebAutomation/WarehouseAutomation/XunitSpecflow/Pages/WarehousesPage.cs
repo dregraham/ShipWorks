@@ -1,9 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Support.PageObjects;
 using OpenQA.Selenium.Support.UI;
@@ -99,6 +94,22 @@ namespace XunitSpecflow.Pages
         [FindsBy(How = How.XPath, Using = "//*[@id='root']/div/div[2]/div/article/div[1]/div/div/div[3]/button/div")]
         public IWebElement FirstDefaultButton { get; set; }
 
+        [FindsBy(How = How.XPath, Using = "//*[@id='root']/div/div[2]/div/header/h1")]
+        public IWebElement PageNotFoundText { get; set; }
+
+        [FindsBy(How = How.XPath, Using = "//*[@id='root']/div/div[2]/div/article/div")]
+        public IWebElement WarehouseNotFoundText { get; set; }
+
+        [FindsBy(How = How.XPath, Using = "//*[@id='root']/div/div[2]/div/article/div[1]/header/h2")]
+        public IWebElement FirstWarehouseNameText { get; set; }
+
+        [FindsBy(How = How.XPath, Using = "//*[@id='root']/div/div[2]/div/article/div[2]/header/h2")]
+        public IWebElement SecondWarehouseNameText { get; set; }
+
+        [FindsBy(How = How.XPath, Using = "//*[@id='root']/div/div[2]/div/article/div[3]/header/h2")]
+        public IWebElement ThirdWarehouseNameText { get; set; }
+        
+        
         IWebDriver _driver;
 
         public WarehousesPage(IWebDriver driver)

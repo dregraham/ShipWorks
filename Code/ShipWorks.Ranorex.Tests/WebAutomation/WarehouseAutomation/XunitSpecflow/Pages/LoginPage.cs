@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Reflection;
 using System.Threading;
 using OpenQA.Selenium;
-using OpenQA.Selenium.Remote;
 using OpenQA.Selenium.Support.PageObjects;
 using Xunit;
 
@@ -58,13 +55,6 @@ namespace XunitSpecflow.Pages
         {
             try
             {
-                //Type type = _driver.GetType();
-                //IList<PropertyInfo> props = new List<PropertyInfo>(type.GetProperties());
-                //string DriverName = props[1].ReflectedType.Name;
-                //if (DriverName == "EdgeDriver")
-                //{
-                //    Thread.Sleep(5000);
-                //}
                 Thread.Sleep(3000);
                 return ErrorMessage.Text;
             }

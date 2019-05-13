@@ -157,6 +157,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Logout.feature</DependentUpon>
     </Compile>
+    <Compile Include="Features\PageNotFound.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>PageNotFound.feature</DependentUpon>
+    </Compile>
     <Compile Include="Features\RemoveWarehouse.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -166,6 +171,16 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>WarehouseDeleteConfirmation.feature</DependentUpon>
+    </Compile>
+    <Compile Include="Features\WarehouseNameSort.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>WarehouseNameSort.feature</DependentUpon>
+    </Compile>
+    <Compile Include="Features\WarehouseNotFound.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>WarehouseNotFound.feature</DependentUpon>
     </Compile>
     <Compile Include="Features\WarehouseZipCodeAddValidation.feature.cs">
       <AutoGen>True</AutoGen>
@@ -239,6 +254,10 @@
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>Logout.feature.cs</LastGenOutput>
     </None>
+    <None Include="Features\PageNotFound.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>PageNotFound.feature.cs</LastGenOutput>
+    </None>
     <None Include="Features\RemoveWarehouse.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>RemoveWarehouse.feature.cs</LastGenOutput>
@@ -246,6 +265,14 @@
     <None Include="Features\WarehouseDeleteConfirmation.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>WarehouseDeleteConfirmation.feature.cs</LastGenOutput>
+    </None>
+    <None Include="Features\WarehouseNameSort.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>WarehouseNameSort.feature.cs</LastGenOutput>
+    </None>
+    <None Include="Features\WarehouseNotFound.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>WarehouseNotFound.feature.cs</LastGenOutput>
     </None>
     <None Include="Features\WarehouseZipCodeAddValidation.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>

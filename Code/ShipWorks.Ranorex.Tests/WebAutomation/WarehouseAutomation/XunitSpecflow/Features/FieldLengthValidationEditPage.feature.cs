@@ -104,6 +104,8 @@ this.ScenarioInitialize(scenarioInfo);
  testRunner.Then("the user adds more than five hundred characters", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line 8
  testRunner.And("the user sees the field validation error messages", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line 9
+ testRunner.Then("the user closes the warehouse page", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             this.ScenarioCleanup();
         }
@@ -134,6 +136,8 @@ this.ScenarioInitialize(scenarioInfo);
  testRunner.Then("the user adds more than five hundred characters", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line 20
  testRunner.And("the user sees the field validation error messages", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line 21
+ testRunner.Then("the user closes the warehouse page", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             this.ScenarioCleanup();
         }
@@ -152,18 +156,20 @@ this.ScenarioInitialize(scenarioInfo);
                 @__tags = System.Linq.Enumerable.ToArray(System.Linq.Enumerable.Concat(@__tags, exampleTags));
             }
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("User validates max of 500 characters in fields on Edge", null, @__tags);
-#line 29
+#line 28
 this.ScenarioInitialize(scenarioInfo);
             this.ScenarioStart();
-#line 30
+#line 29
  testRunner.Given(string.Format("the following user with \'{0}\' and \'{1}\' wants to navigate to the warehouse page u" +
                         "sing \'{2}\'", username, password, browser), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
-#line 31
+#line 30
  testRunner.Then("the user clicks the edit button", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
-#line 32
+#line 31
  testRunner.Then("the user adds more than five hundred characters", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
-#line 33
+#line 32
  testRunner.And("the user sees the field validation error messages", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line 33
+ testRunner.Then("the user closes the warehouse page", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             this.ScenarioCleanup();
         }

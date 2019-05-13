@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Reflection;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Support.UI;
 using TechTalk.SpecFlow;
@@ -20,16 +21,15 @@ namespace XunitSpecflow.Steps
         [Given(@"the following user with '(.*)' and '(.*)' wants to navigate to the warehouse page using '(.*)'")]
         public void GivenTheFollowingUserWithAndWantsToNavigateToTheWarehousePageUsing(string Username, string Password, string Browser)
         {
-            
-                _driver = SetWebDriver(Browser);
-                _driver.Navigate().GoToUrl("https://s2.www.warehouseapp.link/login");
+            _driver = SetWebDriver(Browser);
+            _driver.Navigate().GoToUrl("https://s2.www.warehouseapp.link/login");
 
-                loginPage = new LoginPage(_driver);
-                loginPage.LoginAs(Username, Password);
+            loginPage = new LoginPage(_driver);
+            loginPage.LoginAs(Username, Password);
 
-                dashboardPage = new DashboardPage(_driver);
-                Assert.Contains("Dashboard", GetText(dashboardPage.DashboardTxt));
-                dashboardPage.ClickWarehouseTab();
+            dashboardPage = new DashboardPage(_driver);
+            Assert.Contains("Dashboard", GetText(dashboardPage.DashboardTxt));
+            dashboardPage.ClickWarehouseTab();
         }
 
 
@@ -214,6 +214,79 @@ namespace XunitSpecflow.Steps
 
             AcceptAlert();
             System.Threading.Thread.Sleep(1000);
+        }
+
+        [Then(@"the user navigates to a nonexistent page")]
+        public void ThenTheUserNavigatesToANonexistentPage()
+        {
+            warehousesPage = new WarehousesPage(_driver);
+            _driver.Navigate().GoToUrl("https://s2.www.warehouseapp.link/wareouses/");
+        }
+
+        [Then(@"the user verifies they are on the not found page")]
+        public void ThenTheUserVerifiesTheyAreOnTheNotFoundPage()
+        {
+            Assert.Equal("Not found", GetText(warehousesPage.PageNotFoundText));
+        }
+
+        [Then(@"the user navigates to a nonexistent warehouse")]
+        public void ThenTheUserNavigatesToANonexistentWarehouse()
+        {
+            warehousesPage = new WarehousesPage(_driver);
+            _driver.Navigate().GoToUrl("https://s2.www.warehouseapp.link/warehouses/edit/bea45790-6dcf-11e9-957c-f19e7");
+        }
+
+        [Then(@"the user checks to see if they are on the warehouse not found page")]
+        public void ThenTheUserChecksToSeeIfTheyAreOnTheWarehouseNotFoundPage()
+        {
+            string text = null;
+            while (text != "Could not find the requested warehouse.")
+            {
+                System.Threading.Thread.Sleep(250);
+                text = GetText(warehousesPage.WarehouseNotFoundText);
+            }
+
+            new WebDriverWait(_driver, TimeSpan.FromSeconds(60)).Until(ExpectedConditions.ElementIsVisible(By.XPath("//*[@id='root']/div/div[2]/div/article/div")));
+            Assert.Equal("Could not find the requested warehouse.", warehousesPage.WarehouseNotFoundText.Text.Trim());
+        }
+
+        [Then(@"the user adds the Warehouse details for name sorting")]
+        public void ThenTheUserAddsTheWarehouseDetailsForNameSorting()
+        {
+            string[] details2 = { "B", "2", "1 Memorial Drive", "St. Louis", "MO", "63102" };
+            warehousesPage.AddWarehouseDetails(details2);
+            warehousesPage.AddWarehouse();
+
+            warehousesPage.CreateWarehouse();
+            string[] details3 = { "C", "3", "1 Memorial Drive", "St. Louis", "MO", "63102" };
+            warehousesPage.AddWarehouseDetails(details3);
+            warehousesPage.AddWarehouse();
+        }
+
+        [Then(@"the user checks the sorting of the warehouse")]
+        public void ThenTheUserChecksTheSortingOfTheWarehouse()
+        {
+            Assert.Equal("A", warehousesPage.FirstWarehouseNameText.Text);
+            Assert.Equal("B", warehousesPage.SecondWarehouseNameText.Text);
+            Assert.Equal("C", warehousesPage.ThirdWarehouseNameText.Text);
+        }
+
+        [Then(@"the user deletes all but the first warehouse")]
+        public void ThenTheUserDeletesAllButTheFirstWarehouse()
+        {
+            Type type = _driver.GetType();
+            IList<PropertyInfo> props = new List<PropertyInfo>(type.GetProperties());
+            string s = props[1].ReflectedType.Name;
+
+            while (_driver.FindElements(By.CssSelector("div.sc-brqgnP")).Count != 1)
+            {
+                warehousesPage.Remove();
+                if (s.Equals("EdgeDriver") || s.Equals("ChromeDriver")) //add an additional delay if any browser but Firefox
+                {
+                    System.Threading.Thread.Sleep(1000);
+                }
+                AcceptAlert();
+            }
         }
     }
 }

@@ -6,6 +6,7 @@ Scenario Outline: User removes a warehouse for Chrome
 	Then the user clicks the remove button
 	Then the user accepts the remove warehouse confirmation
 	#We will want a success message to verify a warehouse has been removed
+	Then the user closes the warehouse page
 
 	Examples: 
 		| Browser | Username              | Password |
@@ -18,6 +19,7 @@ Scenario Outline: User removes a warehouse for Firefox
 	Then the user clicks the remove button
 	Then the user accepts the remove warehouse confirmation
 	#We will want a success message to verify a warehouse has been removed
+	Then the user closes the warehouse page
 
 	Examples: 
 		| Browser | Username              | Password |
@@ -29,6 +31,7 @@ Scenario Outline: User removes a warehouse for Edge
 	Then the user clicks the remove button
 	Then the user accepts the remove warehouse confirmation
 	#We will want a success message to verify a warehouse has been removed
+	Then the user closes the warehouse page
 
 	Examples: 
 		| Browser | Username              | Password |

@@ -25,7 +25,7 @@ namespace XunitSpecflow.Steps
 
                 case "Firefox":
                     FirefoxOptions firefoxOptions = new FirefoxOptions();
-                     firefoxOptions.AddArgument("--headless");
+                    firefoxOptions.AddArgument("--headless");
                     _driver = new FirefoxDriver(Directory.GetCurrentDirectory(), firefoxOptions);
                     _driver.Manage().Window.Maximize();
                     _driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(10);
@@ -44,6 +44,7 @@ namespace XunitSpecflow.Steps
         {
             try
             {
+                System.Threading.Thread.Sleep(350); //waiting for driver to hand off control of element
                 return element.Text;
             }
             catch (Exception e)
@@ -54,6 +55,7 @@ namespace XunitSpecflow.Steps
         }
         public void DisposeWebDriver()
         {
+            System.Threading.Thread.Sleep(1000);
             _driver.Quit();
         }
         public int GetCount(string identifier)
