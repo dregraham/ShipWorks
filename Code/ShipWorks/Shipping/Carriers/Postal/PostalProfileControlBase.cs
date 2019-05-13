@@ -38,7 +38,6 @@ namespace ShipWorks.Shipping.Carriers.Postal
         /// <summary>
         /// Load the UI for the given profile entity
         /// </summary>
-        [NDependIgnoreLongMethod]
         public override void LoadProfile(ShippingProfileEntity profile)
         {
             base.LoadProfile(profile);
@@ -62,6 +61,35 @@ namespace ShipWorks.Shipping.Carriers.Postal
 
             dimensionsControl.Initialize();
 
+            LoadProfileDetails(profile, postal, packageProfile);
+
+            // Remove state checkbox event handler since we'll be enabling/disabling manually
+            returnState.CheckedChanged -= OnStateCheckChanged;
+            includeReturnState.CheckedChanged -= OnStateCheckChanged;
+
+            // Remove this event handler twice since it's added twice by AddValueMapping above
+            applyReturnProfileState.CheckedChanged -= OnStateCheckChanged;
+            applyReturnProfileState.CheckedChanged -= OnStateCheckChanged;
+
+            // Manually enable/disable for mutually exclusive return controls
+            includeReturn.Enabled = includeReturnState.Checked && !returnShipment.Checked;
+            returnShipment.Enabled = returnState.Checked && !includeReturn.Checked;
+            applyReturnProfile.Enabled = applyReturnProfileState.Checked && includeReturn.Checked;
+            returnProfileID.Enabled = applyReturnProfileState.Checked && applyReturnProfile.Checked && includeReturn.Checked;
+            returnProfileIDLabel.Enabled = applyReturnProfileState.Checked && applyReturnProfile.Checked && includeReturn.Checked;
+
+            // Refresh the menu again to prevent it being blank if it was disabled above
+            RefreshIncludeReturnProfileMenu(profile.ShipmentType);
+
+            groupReturns.Visible = ShipmentTypeManager.GetType((ShipmentTypeCode) profile.ShipmentType).SupportsReturns;
+        }
+
+        /// <summary>
+        /// Load all the shipment details 
+        /// </summary>
+        private void LoadProfileDetails(ShippingProfileEntity profile, PostalProfileEntity postal,
+            PackageProfileEntity packageProfile)
+        {
             AddValueMapping(profile, ShippingProfileFields.OriginID, senderState, originCombo, labelSender);
             AddValueMapping(postal, PostalProfileFields.Service, serviceState, service, labelService);
 
@@ -75,13 +103,15 @@ namespace ShipWorks.Shipping.Carriers.Postal
             AddValueMapping(postal, PostalProfileFields.CustomsContentType, customsContentState, contentType);
             AddValueMapping(postal, PostalProfileFields.CustomsContentDescription, customsContentState, contentDescription);
 
-            AddValueMapping(packageProfile, PackageProfileFields.DimsProfileID, dimensionsState, dimensionsControl, labelDimensions);
+            AddValueMapping(packageProfile, PackageProfileFields.DimsProfileID, dimensionsState, dimensionsControl,
+                labelDimensions);
 
             // Insurance
             AddValueMapping(profile, ShippingProfileFields.Insurance, insuranceState, insuranceControl);
 
             // Express Mail
-            AddValueMapping(postal, PostalProfileFields.ExpressSignatureWaiver, expressSignatureRequirementState, expressSignatureRequirement);
+            AddValueMapping(postal, PostalProfileFields.ExpressSignatureWaiver, expressSignatureRequirementState,
+                expressSignatureRequirement);
 
             // Returns
             RefreshIncludeReturnProfileMenu(profile.ShipmentType);
@@ -92,26 +122,6 @@ namespace ShipWorks.Shipping.Carriers.Postal
             AddValueMapping(profile, ShippingProfileFields.IncludeReturn, includeReturnState, includeReturn);
             AddValueMapping(profile, ShippingProfileFields.ApplyReturnProfile, applyReturnProfileState, applyReturnProfile);
             AddValueMapping(profile, ShippingProfileFields.ReturnProfileID, applyReturnProfileState, returnProfileID);
-
-            // Remove state checkbox event handler since we'll be enabling/disabling manually
-            returnState.CheckedChanged -= new EventHandler(OnStateCheckChanged);
-            includeReturnState.CheckedChanged -= new EventHandler(OnStateCheckChanged);
-
-            // Remove this event handler twice since it's added twice by AddValueMapping above
-            applyReturnProfileState.CheckedChanged -= new EventHandler(OnStateCheckChanged);
-            applyReturnProfileState.CheckedChanged -= new EventHandler(OnStateCheckChanged);
-
-            // Manually enable/disable for mutually exclusive return controls
-            includeReturn.Enabled = includeReturnState.Checked && !returnShipment.Checked;
-            returnShipment.Enabled = returnState.Checked && !includeReturn.Checked;
-            applyReturnProfile.Enabled = applyReturnProfileState.Checked && includeReturn.Checked;
-            returnProfileID.Enabled = applyReturnProfileState.Checked && applyReturnProfile.Checked && includeReturn.Checked;
-            returnProfileIDLabel.Enabled = applyReturnProfileState.Checked && applyReturnProfile.Checked && includeReturn.Checked;
-
-            // Refresh the menu again to prevent it being blank if it was disabled above
-            RefreshIncludeReturnProfileMenu(profile.ShipmentType);
-
-            groupReturns.Visible = ShipmentTypeManager.GetType((ShipmentTypeCode) profile.ShipmentType).SupportsReturns;
         }
 
         /// <summary>
