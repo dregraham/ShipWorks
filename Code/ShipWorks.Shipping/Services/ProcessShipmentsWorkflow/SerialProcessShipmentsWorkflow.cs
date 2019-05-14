@@ -186,25 +186,34 @@ namespace ShipWorks.Shipping.Services.ProcessShipmentsWorkflow
                     return returns;
                 }
 
-                IEnumerable<ILabelRetrievalResult> getLabelResults = await telemetricResult.RunTimedEventAsync(
-                        "GenerateLabel.DurationInMilliseconds",
-                        () => getLabelTask.GetLabels(prepareShipmentResult))
-                    .ConfigureAwait(false);
-
-                IEnumerable<ILabelPersistenceResult> saveLabelResults = telemetricResult.RunTimedEvent("SaveLabels.DurationInMilliseconds",
-                    () => saveLabelTask.SaveLabels(getLabelResults));
-
-                IEnumerable<ILabelResultLogResult> logLabelResults = telemetricResult.RunTimedEvent("LogLabels.DurationInMilliseconds",
-                    () => completeLabelTask.Complete(saveLabelResults));
-
-                return logLabelResults;
-
+                return await GetLabelResults(telemetricResult, prepareShipmentResult).ConfigureAwait(false);
             }
             finally
             {
                 telemetricResult.WriteTo(telemetryEvent);
                 prepareShipmentResult?.EntityLock?.Dispose();
             }
+        }
+
+        /// <summary>
+        /// Manages label processing
+        /// </summary>
+        private async Task<IEnumerable<ILabelResultLogResult>> GetLabelResults(TelemetricResult<ILabelResultLogResult> telemetricResult, IShipmentPreparationResult prepareShipmentResult)
+        {
+            var getLabelResults = await telemetricResult.RunTimedEventAsync(
+                    "GenerateLabel.DurationInMilliseconds",
+                    () => getLabelTask.GetLabels(prepareShipmentResult))
+                .ConfigureAwait(false);
+
+            var saveLabelResults = telemetricResult.RunTimedEvent(
+                "SaveLabels.DurationInMilliseconds",
+                () => saveLabelTask.SaveLabels(getLabelResults));
+
+            var logLabelResults = telemetricResult.RunTimedEvent(
+                "LogLabels.DurationInMilliseconds",
+                () => completeLabelTask.Complete(saveLabelResults));
+
+            return logLabelResults;
         }
     }
 }
