@@ -7,6 +7,7 @@ using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
 using ShipWorks.Shipping.Services;
 using Interapptive.Shared.Collections;
+using ShipWorks.Stores.Platforms.Amazon;
 
 namespace ShipWorks.Shipping.Carriers.Amazon.SWA
 {
@@ -65,6 +66,11 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SWA
 
             request.Shipment.Items = GetShipmentItems(shipment);
 
+            if (shipment.Order is AmazonOrderEntity)
+            {
+                request.Shipment.OrderSourceCode = AddressValidatingShipment.OrderSourceCodeEnum.Amazon;
+            }
+
             return request;
         }
 
@@ -74,6 +80,11 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SWA
         public override PurchaseLabelRequest CreatePurchaseLabelRequest(ShipmentEntity shipment)
         {
             PurchaseLabelRequest request = base.CreatePurchaseLabelRequest(shipment);
+
+            if (shipment.Order is AmazonOrderEntity)
+            {
+                request.Shipment.OrderSourceCode = Shipment.OrderSourceCodeEnum.Amazon;
+            }
 
             request.Shipment.Items = GetShipmentItems(shipment);
 

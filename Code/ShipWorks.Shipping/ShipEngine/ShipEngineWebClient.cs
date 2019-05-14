@@ -104,6 +104,15 @@ namespace ShipWorks.Shipping.ShipEngine
         /// </summary>
         public async Task<Result> UpdateAmazonAccount(IAmazonSWAAccountEntity amazonSwaAccount)
         {
+            AmazonStoreEntity store = storeManager.GetEnabledStores()
+                .FirstOrDefault(s => s.StoreTypeCode == StoreTypeCode.Amazon) as AmazonStoreEntity;
+
+            // only update the info if an amazon store exists
+            if (store == null)
+            {
+                return Result.FromSuccess();
+            }
+
             try
             {
                 // first we have to get the account id
@@ -117,15 +126,12 @@ namespace ShipWorks.Shipping.ShipEngine
                     whoAmIRequest.ProcessRequest(new ApiLogEntry(ApiLogSource.ShipEngine, "WhoAmI"), typeof(ShipEngineException));
                 string accountId = JObject.Parse(result.Message)["data"]["username"].ToString();
 
-                AmazonStoreEntity store = storeManager.GetEnabledStores()
-                    .FirstOrDefault(s => s.StoreTypeCode == StoreTypeCode.Amazon) as AmazonStoreEntity;
-
                 ICarrierAccountsApi apiInstance = shipEngineApiFactory.CreateCarrierAccountsApi();
 
                 AmazonShippingUsAccountSettingsDTO updateRequest = new AmazonShippingUsAccountSettingsDTO(
                     email: amazonSwaAccount.Email,
-                    merchantSellerId: store?.MerchantID,
-                    mwsAuthToken: store?.AuthToken);
+                    merchantSellerId: store.MerchantID,
+                    mwsAuthToken: store.AuthToken);
 
                 await apiInstance.AmazonShippingUsAccountCarrierUpdateSettingsAsync(amazonSwaAccount.ShipEngineCarrierId, updateRequest, apiKey.GetPartnerApiKey(), $"se-{accountId}");
                 return Result.FromSuccess();
