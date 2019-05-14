@@ -1,7 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using ShipWorks.Stores;
 
-namespace ShipWorks.Stores.Warehouse
+namespace ShipWorks.Warehouse
 {
     /// <summary>
     /// StoreTypecodes that are supported by warehouse mode

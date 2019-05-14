@@ -2,6 +2,9 @@ using System.Threading.Tasks;
 
 namespace ShipWorks.Stores.Warehouse.Encryption
 {
+    /// <summary>
+    /// Service for encrypting in a way that the ShipWorks Warehouse app can decrypt
+    /// </summary>
     public interface IWarehouseEncryptionService
     {
         /// <summary>

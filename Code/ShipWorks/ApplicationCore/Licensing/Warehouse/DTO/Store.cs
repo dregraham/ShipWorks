@@ -15,6 +15,7 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse.DTO
         /// <summary>
         /// The unique identifier for the store
         /// </summary>
+        [JsonProperty("UniqueIdentifier")]
         public string UniqueIdentifier { get; set; }
     }
 }

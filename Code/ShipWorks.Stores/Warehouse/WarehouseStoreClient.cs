@@ -40,11 +40,6 @@ namespace ShipWorks.Stores.Warehouse
         /// </summary>
         public async Task<Result> UploadStoreToWarehouse(StoreEntity store)
         {
-            if (!WarehouseStoreTypes.IsSupported(store.StoreTypeCode))
-            {
-                return Result.FromSuccess();
-            }
-
             try
             {
                 EditionRestrictionLevel restrictionLevel = licenseService.CheckRestriction(EditionFeature.Warehouse, null);

@@ -5,6 +5,9 @@ using ShipWorks.ApplicationCore.Licensing.Warehouse.DTO;
 
 namespace ShipWorks.Stores.Warehouse.StoreData
 {
+    /// <summary>
+    /// Amazon store credentials needed for downloading
+    /// </summary>
     [Obfuscation(Exclude = true, ApplyToMembers = true, StripAfterObfuscation = false)]
     public class AmazonStore : Store
     {

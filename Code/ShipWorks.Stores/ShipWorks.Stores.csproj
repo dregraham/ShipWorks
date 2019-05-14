@@ -902,7 +902,6 @@
     <Compile Include="Warehouse\StoreData\ChannelAdvisorStoreData.cs" />
     <Compile Include="Warehouse\StoreDtoFactory.cs" />
     <Compile Include="Warehouse\WarehouseStoreClient.cs" />
-    <Compile Include="Warehouse\WarehouseStoreTypes.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Interapptive.Shared\Interapptive.Shared.csproj">

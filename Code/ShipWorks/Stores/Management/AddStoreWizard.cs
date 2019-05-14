@@ -34,6 +34,7 @@ using ShipWorks.UI.Wizard;
 using ShipWorks.Users;
 using ShipWorks.Users.Logon;
 using ShipWorks.Users.Security;
+using ShipWorks.Warehouse;
 using Control = System.Windows.Controls.Control;
 
 namespace ShipWorks.Stores.Management
@@ -998,13 +999,9 @@ namespace ShipWorks.Stores.Management
                     return;
                 }
 
-                Result result = await scope.Resolve<IWarehouseStoreClient>().UploadStoreToWarehouse(store).ConfigureAwait(true);
-                if (result.Failure)
+                if (WarehouseStoreTypes.IsSupported(store.StoreTypeCode) &&
+                    (await UploadStoreToWarehouse(e).ConfigureAwait(true)).Failure)
                 {
-                    MessageHelper.ShowError(this, $"An error occurred saving the store to ShipWorks.{Environment.NewLine + Environment.NewLine + result.Message}");
-                    e.Skip = true;
-                    e.SkipToPage = wizardPageSettings;
-                    BackEnabled = true;
                     return;
                 }
 
@@ -1038,6 +1035,26 @@ namespace ShipWorks.Stores.Management
                 FilterLayoutContext.PopScope();
                 Cursor = DefaultCursor;
             }
+        }
+
+        /// <summary>
+        /// Upload the store to the ShipWorks Warehouse app
+        /// </summary>
+        private async Task<Result> UploadStoreToWarehouse(WizardSteppingIntoEventArgs e)
+        {
+            Result result = await scope.Resolve<IWarehouseStoreClient>().UploadStoreToWarehouse(store)
+                .ConfigureAwait(true);
+            if (result.Failure)
+            {
+                MessageHelper.ShowError(
+                    this,
+                    $"An error occurred saving the store to ShipWorks.{Environment.NewLine + Environment.NewLine + result.Message}");
+                e.Skip = true;
+                e.SkipToPage = wizardPageSettings;
+                BackEnabled = true;
+            }
+
+            return result;
         }
 
         /// <summary>
