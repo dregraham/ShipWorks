@@ -29,6 +29,7 @@ using ShipWorks.Data.Utility;
 using ShipWorks.Users;
 using ShipWorks.Users.Audit;
 using ShipWorks.Users.Security;
+using ShipWorks.Warehouse;
 
 namespace ShipWorks.Stores.Communication
 {
@@ -245,6 +246,37 @@ namespace ShipWorks.Stores.Communication
             }
 
             return storeDownloaders;
+        }
+        
+        public static async Task<IEnumerable<Exception>> DownloadWarehouseOrders(string warehouseID)
+        {
+            List<Exception> caughtExceptions = new List<Exception>();
+
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+            {
+                IWarehouseDownloader downloader = lifetimeScope.Resolve<IWarehouseDownloader>();
+                try
+                {
+                    // create download log
+                    
+                    // check license
+                    
+                    // download
+                    await downloader.Download(warehouseID).ConfigureAwait(false);
+
+                    // update download log
+
+
+                }
+                catch (DownloadException ex)
+                {
+                    caughtExceptions.Add(ex);
+                }
+
+                DownloadComplete?.Invoke(null, new DownloadCompleteEventArgs(caughtExceptions.Any(), false));
+
+                return caughtExceptions;
+            }
         }
 
         /// <summary>

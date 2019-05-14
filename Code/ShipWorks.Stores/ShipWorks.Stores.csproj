@@ -901,6 +901,8 @@
     <Compile Include="Warehouse\StoreData\AmazonStore.cs" />
     <Compile Include="Warehouse\StoreData\ChannelAdvisorStoreData.cs" />
     <Compile Include="Warehouse\StoreDtoFactory.cs" />
+    <Compile Include="Warehouse\WarehouseDownloader.cs" />
+    <Compile Include="Warehouse\WarehouseOrderClient.cs" />
     <Compile Include="Warehouse\WarehouseStoreClient.cs" />
   </ItemGroup>
   <ItemGroup>
