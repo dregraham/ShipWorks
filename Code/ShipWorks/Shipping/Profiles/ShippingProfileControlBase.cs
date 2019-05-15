@@ -1,15 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
+﻿using System.Drawing;
 using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 using ShipWorks.Data.Model.EntityClasses;
-using SD.LLBLGen.Pro.ORMSupportClasses;
-using ShipWorks.UI.Controls;
-using ShipWorks.Shipping.Editing;
 
 namespace ShipWorks.Shipping.Profiles
 {
@@ -31,13 +23,7 @@ namespace ShipWorks.Shipping.Profiles
         /// <summary>
         /// The profile that has been loaded
         /// </summary>
-        protected ShippingProfileEntity Profile
-        {
-            get
-            {
-                return profile;
-            }
-        }
+        protected ShippingProfileEntity Profile => profile;
 
         /// <summary>
         /// Load the given profile
@@ -46,7 +32,7 @@ namespace ShipWorks.Shipping.Profiles
         {
             this.profile = profile;
 
-            base.AllowChangeCheckState = !profile.ShipmentTypePrimary;
+            AllowChangeCheckState = !profile.ShipmentTypePrimary;
         }
 
         /// <summary>

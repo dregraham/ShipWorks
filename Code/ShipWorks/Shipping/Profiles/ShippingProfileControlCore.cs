@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Linq;
 using System.Windows.Forms;
 using Interapptive.Shared;
@@ -99,7 +98,8 @@ namespace ShipWorks.Shipping.Profiles
             checkBox.Checked = entity.GetCurrentFieldValue(field.FieldIndex) != null;
 
             // Update the UI and start listening for changes
-            checkBox.CheckedChanged += new EventHandler(OnStateCheckChanged);
+            checkBox.CheckedChanged -= OnStateCheckChanged;
+            checkBox.CheckedChanged += OnStateCheckChanged;
             OnStateCheckChanged(checkBox, EventArgs.Empty);
 
             checkBox.Enabled = allowChangeCheckState;
