@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Content;
 
@@ -10,6 +11,11 @@ namespace ShipWorks.Data.Import
     /// </summary>
     public interface IOrderElementFactory
     {
+        /// <summary>
+        /// Create a new order with the given identifier
+        /// </summary>
+        Task<GenericResult<OrderEntity>> CreateOrder(OrderIdentifier orderIdentifier);
+        
         /// <summary>
         /// Create a new item attached to the order
         /// </summary>

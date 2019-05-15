@@ -12,16 +12,25 @@ using ShipWorks.Warehouse.DTO.Orders;
 
 namespace ShipWorks.Stores.Warehouse
 {
+    /// <summary>
+    /// Client for retrieving orders from the ShipWorks Warehouse app
+    /// </summary>
     [Component]
     public class WarehouseOrderClient : IWarehouseOrderClient
     {
         private readonly WarehouseRequestClient warehouseRequestClient;
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
         public WarehouseOrderClient(WarehouseRequestClient warehouseRequestClient)
         {
             this.warehouseRequestClient = warehouseRequestClient;
         }
         
+        /// <summary>
+        /// Get orders for the given warehouse ID from the ShipWorks Warehouse app
+        /// </summary>
         public async Task<IEnumerable<WarehouseOrder>> GetOrders(string warehouseID)
         {
             try
@@ -36,8 +45,13 @@ namespace ShipWorks.Stores.Warehouse
                 {
                     throw new DownloadException(response.Message, response.Exception);
                 }
-                
-                IEnumerable<WarehouseOrder> orders = JsonConvert.DeserializeObject<IEnumerable<WarehouseOrder>>(response.Value.Content);
+
+                IEnumerable<WarehouseOrder> orders = JsonConvert.DeserializeObject<IEnumerable<WarehouseOrder>>(
+                    response.Value.Content, 
+                    new JsonSerializerSettings
+                    {
+                        Converters = {new WarehouseOrderJsonConverter()}
+                    });
 
                 return orders;
             }

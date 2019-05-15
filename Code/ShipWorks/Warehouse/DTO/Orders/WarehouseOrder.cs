@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 
 namespace ShipWorks.Warehouse.DTO.Orders
 {
@@ -14,7 +15,7 @@ namespace ShipWorks.Warehouse.DTO.Orders
             Charges = new List<WarehouseOrderCharge>();
             PaymentDetails = new List<WarehouseOrderPaymentDetail>();
             Notes = new List<WarehouseOrderNote>();
-            Items = new List<WarehouseOrderItem>();
+            Items = new Collection<WarehouseOrderItem>();
         }
 
         public string OrderID { get; set; }
@@ -78,6 +79,6 @@ namespace ShipWorks.Warehouse.DTO.Orders
         public List<WarehouseOrderPaymentDetail> PaymentDetails { get; set; }
         public List<WarehouseOrderNote> Notes { get; set; }
         
-        public List<WarehouseOrderItem> Items { get; set; }
+        public virtual Collection<WarehouseOrderItem> Items { get; set; }
     }
 }

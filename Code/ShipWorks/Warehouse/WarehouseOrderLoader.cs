@@ -1,27 +1,25 @@
-using System;
+using System.Collections.Generic;
+using ShipWorks.Data.Import;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Stores;
+using ShipWorks.Stores.Content;
 using ShipWorks.Warehouse.DTO.Orders;
 
 namespace ShipWorks.Warehouse
 {
     public class WarehouseOrderLoader : IWarehouseOrderLoader
     {
-        private readonly Func<StoreTypeCode, IWarehouseOrderItemLoader> itemLoaderFactory;
+        private readonly IOrderElementFactory orderElementFactory;
 
-        public WarehouseOrderLoader(Func<StoreTypeCode, IWarehouseOrderItemLoader> itemLoaderFactory)
+        public WarehouseOrderLoader(IOrderElementFactory orderElementFactory)
         {
-            this.itemLoaderFactory = itemLoaderFactory;
+            this.orderElementFactory = orderElementFactory;
         }
         
-        public void LoadOrder(OrderEntity orderEntity, WarehouseOrder warehouseOrder)
+        public virtual void LoadOrder(OrderEntity orderEntity, WarehouseOrder warehouseOrder)
         {
             // todo: orderid, storeid, warehousecustomerid
             orderEntity.OrderNumberComplete = warehouseOrder.OrderNumber;
             orderEntity.OrderDate = warehouseOrder.OrderDate;
-            
-            
-            // todo: do the order total check, OrderUtility maybe?
             orderEntity.OrderTotal = warehouseOrder.OrderTotal;
             orderEntity.OnlineLastModified = warehouseOrder.OnlineLastModified;
             orderEntity.OnlineCustomerID = warehouseOrder.OnlineCustomerID;
@@ -35,7 +33,7 @@ namespace ShipWorks.Warehouse
 
             LoadShippingAddress(orderEntity, warehouseOrder);
 
-            LoadItems(orderEntity, warehouseOrder);
+            LoadItems(orderEntity, warehouseOrder.Items);
 
             LoadCharges(orderEntity, warehouseOrder);
 
@@ -43,7 +41,35 @@ namespace ShipWorks.Warehouse
 
             LoadNotes(orderEntity, warehouseOrder);
         }
-        
+
+        protected virtual void LoadItem(OrderItemEntity itemEntity, WarehouseOrderItem warehouseItem)
+        {
+            itemEntity.Name = warehouseItem.Name;
+            itemEntity.Code = warehouseItem.Code;
+            itemEntity.SKU = warehouseItem.SKU;
+            itemEntity.ISBN = warehouseItem.ISBN;
+            itemEntity.UPC = warehouseItem.UPC;
+            itemEntity.HarmonizedCode = warehouseItem.HarmonizedCode;
+            itemEntity.Brand = warehouseItem.Brand;
+            itemEntity.MPN = warehouseItem.MPN;
+            itemEntity.Description = warehouseItem.Description;
+            itemEntity.Location = warehouseItem.Location;
+            itemEntity.Image = warehouseItem.Image;
+            itemEntity.Thumbnail = warehouseItem.Thumbnail;
+            itemEntity.UnitPrice = warehouseItem.UnitPrice;
+            itemEntity.UnitCost = warehouseItem.UnitCost;
+            itemEntity.Quantity = warehouseItem.Quantity;
+            itemEntity.Weight = warehouseItem.Weight;
+            itemEntity.Length = warehouseItem.Length;
+            itemEntity.Width = warehouseItem.Width;
+            itemEntity.Height = warehouseItem.Height;
+
+            LoadItemAttributes(itemEntity, warehouseItem);
+        }
+
+        /// <summary>
+        /// Load the billing address from the warehouse order into the order entity
+        /// </summary>
         private static void LoadBillingAddress(OrderEntity orderEntity, WarehouseOrder warehouseOrder)
         {
             // todo: parse names if needed
@@ -67,6 +93,9 @@ namespace ShipWorks.Warehouse
             orderEntity.BillWebsite = warehouseOrder.BillWebsite;
         }
 
+        /// <summary>
+        /// Load the shipping address from the warehouse order into the order entity
+        /// </summary>
         private static void LoadShippingAddress(OrderEntity orderEntity, WarehouseOrder warehouseOrder)
         {
             orderEntity.ShipUnparsedName = warehouseOrder.ShipUnparsedName;
@@ -86,51 +115,69 @@ namespace ShipWorks.Warehouse
             orderEntity.ShipEmail = warehouseOrder.ShipEmail;
             orderEntity.ShipWebsite = warehouseOrder.ShipWebsite;
         }
-
-        private void LoadItems(OrderEntity orderEntity, WarehouseOrder warehouseOrder)
+        
+        /// <summary>
+        /// Load items from the warehouse order into the order entity
+        /// </summary>
+        private void LoadItems(OrderEntity orderEntity, IEnumerable<WarehouseOrderItem> warehouseOrderItems)
         {
-            IWarehouseOrderItemLoader itemLoader = itemLoaderFactory(orderEntity.Store.StoreTypeCode);
-            
-            foreach (WarehouseOrderItem warehouseOrderItem in warehouseOrder.Items)
+            foreach (WarehouseOrderItem warehouseOrderItem in warehouseOrderItems)
             {
-                // todo: replace with instantiate order item
-                OrderItemEntity itemEntity = new OrderItemEntity(orderEntity.OrderID);
-                itemLoader.LoadItem(itemEntity, warehouseOrderItem);
+                OrderItemEntity itemEntity = orderElementFactory.CreateItem(orderEntity);
+                LoadItem(itemEntity, warehouseOrderItem);
+            }
+        }
+        
+        /// <summary>
+        /// Load item attributes from the warehouse item into the item entity
+        /// </summary>
+        private void LoadItemAttributes(OrderItemEntity itemEntity, WarehouseOrderItem warehouseOrderItem)
+        {
+            foreach (WarehouseOrderItemAttribute warehouseItemAttribute in warehouseOrderItem.ItemAttributes)
+            {
+                orderElementFactory.CreateItemAttribute(itemEntity, 
+                                                        warehouseItemAttribute.Name,
+                                                        warehouseItemAttribute.Description,
+                                                        warehouseItemAttribute.UnitPrice,
+                                                        false);
             }
         }
 
+        /// <summary>
+        /// Load charges from the warehouse order into the order entity
+        /// </summary>
         private void LoadCharges(OrderEntity orderEntity, WarehouseOrder warehouseOrder)
         {
             foreach (WarehouseOrderCharge warehouseOrderCharge in warehouseOrder.Charges)
             {
-                // todo: replace with instantiate order charge
-                OrderChargeEntity charge = new OrderChargeEntity(orderEntity.OrderID);
-                charge.Type = warehouseOrderCharge.Type;
-                charge.Description = warehouseOrderCharge.Description;
-                charge.Amount = warehouseOrderCharge.Amount;                
+                orderElementFactory.CreateCharge(orderEntity,
+                                                 warehouseOrderCharge.Type,
+                                                 warehouseOrderCharge.Description,
+                                                 warehouseOrderCharge.Amount);
             }
         }
-    
+        
+        /// <summary>
+        /// Load payment details from the warehouse order into the order entity
+        /// </summary>
         private void LoadPaymentDetails(OrderEntity orderEntity, WarehouseOrder warehouseOrder)
         {
             foreach (WarehouseOrderPaymentDetail warehouseOrderCharge in warehouseOrder.PaymentDetails)
             {
-                // todo: replace with instantiate payment detail
-                OrderPaymentDetailEntity paymentDetailEntity = new OrderPaymentDetailEntity(orderEntity.OrderID);
-                paymentDetailEntity.Label = warehouseOrderCharge.Label;
-                paymentDetailEntity.Value = warehouseOrderCharge.Value;
+                orderElementFactory.CreatePaymentDetail(orderEntity, warehouseOrderCharge.Label,
+                                                        warehouseOrderCharge.Value);
             }
         }
 
+        /// <summary>
+        /// Load notes from the warehouse order into the order entity
+        /// </summary>
         private void LoadNotes(OrderEntity orderEntity, WarehouseOrder warehouseOrder)
         {
             foreach (WarehouseOrderNote warehouseOrderCharge in warehouseOrder.Notes)
             {
-                // todo: replace with instantiate note
-                NoteEntity note = new NoteEntity(orderEntity.OrderID);
-                note.Edited = warehouseOrderCharge.Edited;
-                note.Text = warehouseOrderCharge.Text;
-                note.Visibility = warehouseOrderCharge.Visibility;
+                orderElementFactory.CreateNote(orderEntity, warehouseOrderCharge.Text, warehouseOrderCharge.Edited,
+                                               (NoteVisibility) warehouseOrderCharge.Visibility);
             }
         }
     }

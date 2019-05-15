@@ -1314,6 +1314,12 @@ namespace ShipWorks.Stores.Communication
         // exposing the whole downloader to the dependency
 
         /// <summary>
+        /// Create an order with the given identifier
+        /// </summary>
+        Task<GenericResult<OrderEntity>> IOrderElementFactory.CreateOrder(OrderIdentifier orderIdentifier) =>
+            InstantiateOrder(orderIdentifier);
+        
+        /// <summary>
         /// Create an item for the given order
         /// </summary>
         OrderItemEntity IOrderElementFactory.CreateItem(OrderEntity order) => InstantiateOrderItem(order);
