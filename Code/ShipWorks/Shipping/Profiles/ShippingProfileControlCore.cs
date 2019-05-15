@@ -97,8 +97,12 @@ namespace ShipWorks.Shipping.Profiles
             // Update the check state
             checkBox.Checked = entity.GetCurrentFieldValue(field.FieldIndex) != null;
 
-            // Update the UI and start listening for changes
+            
+            // Remove all potential event handlers to
+            // make sure we only return a single event handler.
             checkBox.CheckedChanged -= OnStateCheckChanged;
+
+            // Update the UI and start listening for changes
             checkBox.CheckedChanged += OnStateCheckChanged;
             OnStateCheckChanged(checkBox, EventArgs.Empty);
 
