@@ -37,7 +37,6 @@ namespace ShipWorks.Shipping.Editing
 
         bool enableEditing;
         bool isLoading;
-        bool allowIncludeReturn = true;
 
         // Counter for rate criteria change event suspension
         int suspendRateEvent = 0;
@@ -412,10 +411,7 @@ namespace ShipWorks.Shipping.Editing
                 // only enable for editing if all shipments are Returns
                 returnsPanel.Enabled = (LoadedShipments.All(s => s.ReturnShipment));
 
-                // Only enable automatic return labels for Endicia
-                allowIncludeReturn = LoadedShipments.All(st => st.ShipmentTypeCode == ShipmentTypeCode.Endicia);
-
-                includeReturn.Enabled = allowIncludeReturn && !returnShipment.Checked;
+                includeReturn.Enabled = !returnShipment.Checked;
                 returnShipment.Enabled = !includeReturn.Checked;
                 applyReturnProfile.Enabled = includeReturn.Checked;
                 returnProfileID.Enabled = applyReturnProfile.Checked;
@@ -730,6 +726,7 @@ namespace ShipWorks.Shipping.Editing
                     .GetConfiguredShipmentTypeProfiles()
                     .Where(p => p.ShippingProfileEntity.ShipmentType.HasValue)
                     .Where(p => p.IsApplicable(shipmentTypeCode))
+                    .Where(p => p.ShippingProfileEntity.ShipmentType == shipmentTypeCode)
                     .Where(p => p.ShippingProfileEntity.ReturnShipment == true)
                     .Select(s => new KeyValuePair<long, string>(s.ShippingProfileEntity.ShippingProfileID, s.ShippingProfileEntity.Name))
                     .OrderBy(g => g.Value)
@@ -754,7 +751,7 @@ namespace ShipWorks.Shipping.Editing
         {
             if (!isLoading)
             {
-                includeReturn.Enabled = allowIncludeReturn && !returnShipment.Checked;
+                includeReturn.Enabled = !returnShipment.Checked;
                 returnsPanel.Enabled = returnShipment.Checked;
                 SaveReturnsToShipments();
                 ReturnServiceChanged?.Invoke(this, EventArgs.Empty);
