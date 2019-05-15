@@ -3,6 +3,7 @@ using System.IO;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
+using Common.Logging;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
 using Newtonsoft.Json;
@@ -19,6 +20,7 @@ namespace ShipWorks.Stores.Warehouse.Encryption
     public class WarehouseEncryptionService : IWarehouseEncryptionService
     {
         private readonly WarehouseRequestClient warehouseRequestClient;
+        private ILog log;
 
         // Encryption Parameters
         private const int BlockBitSize = 128;
@@ -27,9 +29,10 @@ namespace ShipWorks.Stores.Warehouse.Encryption
         /// <summary>
         /// Constructor
         /// </summary>
-        public WarehouseEncryptionService(WarehouseRequestClient warehouseRequestClient)
+        public WarehouseEncryptionService(WarehouseRequestClient warehouseRequestClient, Func<Type, ILog> logFactory)
         {
             this.warehouseRequestClient = warehouseRequestClient;
+            log = logFactory(typeof(WarehouseEncryptionService));
         }
 
         /// <summary>
@@ -50,6 +53,7 @@ namespace ShipWorks.Stores.Warehouse.Encryption
             }
             catch (Exception ex)
             {
+                log.Error(ex);
                 throw new WarehouseEncryptionException("Failed to encrypt using the warehouse encryption service", ex);
             }
         }
