@@ -1,4 +1,6 @@
 using System.Collections.Generic;
+using System.Threading.Tasks;
+using Interapptive.Shared.Utility;
 using ShipWorks.Data.Import;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Content;
@@ -6,18 +8,37 @@ using ShipWorks.Warehouse.DTO.Orders;
 
 namespace ShipWorks.Warehouse
 {
-    public class WarehouseOrderLoader : IWarehouseOrderLoader
+    /// <summary>
+    /// Base order loader for loading ShipWorks Warehouse orders
+    /// </summary>
+    public abstract class WarehouseOrderLoader : IWarehouseOrderLoader
     {
-        private readonly IOrderElementFactory orderElementFactory;
-
-        public WarehouseOrderLoader(IOrderElementFactory orderElementFactory)
+        protected readonly IOrderElementFactory orderElementFactory;
+        
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        protected WarehouseOrderLoader(IOrderElementFactory orderElementFactory)
         {
             this.orderElementFactory = orderElementFactory;
         }
         
-        public virtual void LoadOrder(OrderEntity orderEntity, WarehouseOrder warehouseOrder)
+        /// <summary>
+        /// Load the order details from the warehouse order into the order entity
+        /// </summary>
+        public async Task LoadOrder(WarehouseOrder warehouseOrder)
         {
+            GenericResult<OrderEntity> result = await CreateOrderEntity(warehouseOrder).ConfigureAwait(false);
+            if (result.Failure)
+            {
+                //log.InfoFormat("Skipping order '{0}': {1}.", amazonOrderID, result.Message);
+                return;
+            }
+
+            OrderEntity orderEntity = result.Value;
+            
             // todo: orderid, storeid, warehousecustomerid
+            // todo: figure out what should and shouldn't be downloaded when new
             orderEntity.OrderNumberComplete = warehouseOrder.OrderNumber;
             orderEntity.OrderDate = warehouseOrder.OrderDate;
             orderEntity.OrderTotal = warehouseOrder.OrderTotal;
@@ -39,33 +60,25 @@ namespace ShipWorks.Warehouse
 
             LoadPaymentDetails(orderEntity, warehouseOrder);
 
-            LoadNotes(orderEntity, warehouseOrder);
+            await LoadNotes(orderEntity, warehouseOrder).ConfigureAwait(false);
+
+            LoadStoreSpecificOrderDetails(orderEntity, warehouseOrder);
         }
 
-        protected virtual void LoadItem(OrderItemEntity itemEntity, WarehouseOrderItem warehouseItem)
-        {
-            itemEntity.Name = warehouseItem.Name;
-            itemEntity.Code = warehouseItem.Code;
-            itemEntity.SKU = warehouseItem.SKU;
-            itemEntity.ISBN = warehouseItem.ISBN;
-            itemEntity.UPC = warehouseItem.UPC;
-            itemEntity.HarmonizedCode = warehouseItem.HarmonizedCode;
-            itemEntity.Brand = warehouseItem.Brand;
-            itemEntity.MPN = warehouseItem.MPN;
-            itemEntity.Description = warehouseItem.Description;
-            itemEntity.Location = warehouseItem.Location;
-            itemEntity.Image = warehouseItem.Image;
-            itemEntity.Thumbnail = warehouseItem.Thumbnail;
-            itemEntity.UnitPrice = warehouseItem.UnitPrice;
-            itemEntity.UnitCost = warehouseItem.UnitCost;
-            itemEntity.Quantity = warehouseItem.Quantity;
-            itemEntity.Weight = warehouseItem.Weight;
-            itemEntity.Length = warehouseItem.Length;
-            itemEntity.Width = warehouseItem.Width;
-            itemEntity.Height = warehouseItem.Height;
+        /// <summary>
+        /// Create an order entity with the store specific identifier
+        /// </summary>
+        protected abstract Task<GenericResult<OrderEntity>> CreateOrderEntity(WarehouseOrder warehouseOrder);
 
-            LoadItemAttributes(itemEntity, warehouseItem);
-        }
+        /// <summary>
+        /// Load store specific order details
+        /// </summary>
+        protected abstract void LoadStoreSpecificOrderDetails(OrderEntity orderEntity, WarehouseOrder warehouseOrder);
+        
+        /// <summary>
+        /// Load store specific item details
+        /// </summary>
+        protected abstract void LoadStoreSpecificItemDetails(OrderItemEntity itemEntity, WarehouseOrderItem warehouseItem);
 
         /// <summary>
         /// Load the billing address from the warehouse order into the order entity
@@ -129,6 +142,36 @@ namespace ShipWorks.Warehouse
         }
         
         /// <summary>
+        /// Load the item details from the warehouse item into the item entity
+        /// </summary>
+        private void LoadItem(OrderItemEntity itemEntity, WarehouseOrderItem warehouseItem)
+        {
+            itemEntity.Name = warehouseItem.Name;
+            itemEntity.Code = warehouseItem.Code;
+            itemEntity.SKU = warehouseItem.SKU;
+            itemEntity.ISBN = warehouseItem.ISBN;
+            itemEntity.UPC = warehouseItem.UPC;
+            itemEntity.HarmonizedCode = warehouseItem.HarmonizedCode;
+            itemEntity.Brand = warehouseItem.Brand;
+            itemEntity.MPN = warehouseItem.MPN;
+            itemEntity.Description = warehouseItem.Description;
+            itemEntity.Location = warehouseItem.Location;
+            itemEntity.Image = warehouseItem.Image;
+            itemEntity.Thumbnail = warehouseItem.Thumbnail;
+            itemEntity.UnitPrice = warehouseItem.UnitPrice;
+            itemEntity.UnitCost = warehouseItem.UnitCost;
+            itemEntity.Quantity = warehouseItem.Quantity;
+            itemEntity.Weight = warehouseItem.Weight;
+            itemEntity.Length = warehouseItem.Length;
+            itemEntity.Width = warehouseItem.Width;
+            itemEntity.Height = warehouseItem.Height;
+
+            LoadItemAttributes(itemEntity, warehouseItem);
+            
+            LoadStoreSpecificItemDetails(itemEntity, warehouseItem);
+        }
+        
+        /// <summary>
         /// Load item attributes from the warehouse item into the item entity
         /// </summary>
         private void LoadItemAttributes(OrderItemEntity itemEntity, WarehouseOrderItem warehouseOrderItem)
@@ -172,12 +215,12 @@ namespace ShipWorks.Warehouse
         /// <summary>
         /// Load notes from the warehouse order into the order entity
         /// </summary>
-        private void LoadNotes(OrderEntity orderEntity, WarehouseOrder warehouseOrder)
+        private async Task LoadNotes(OrderEntity orderEntity, WarehouseOrder warehouseOrder)
         {
             foreach (WarehouseOrderNote warehouseOrderCharge in warehouseOrder.Notes)
             {
-                orderElementFactory.CreateNote(orderEntity, warehouseOrderCharge.Text, warehouseOrderCharge.Edited,
-                                               (NoteVisibility) warehouseOrderCharge.Visibility);
+                await orderElementFactory.CreateNote(orderEntity, warehouseOrderCharge.Text, warehouseOrderCharge.Edited,
+                                               (NoteVisibility) warehouseOrderCharge.Visibility).ConfigureAwait(false);
             }
         }
     }

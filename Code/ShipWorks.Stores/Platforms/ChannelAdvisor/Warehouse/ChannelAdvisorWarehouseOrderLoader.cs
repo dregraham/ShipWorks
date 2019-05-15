@@ -1,7 +1,9 @@
+using System.Threading.Tasks;
 using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.Utility;
 using ShipWorks.Data.Import;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Stores.Communication;
+using ShipWorks.Stores.Content;
 using ShipWorks.Warehouse;
 using ShipWorks.Warehouse.DTO.Orders;
 
@@ -19,62 +21,60 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor.Warehouse
         public ChannelAdvisorWarehouseOrderLoader(IOrderElementFactory orderElementFactory) : base(orderElementFactory)
         {
         }
-        
-        /// <summary>
-        /// Load a ChannelAdvisor warehouse order into a ChannelAdvisor order entity
-        /// </summary>
-        /// <exception cref="DownloadException">Throws download exception when given non ChannelAdvisor order</exception>
-        public override void LoadOrder(OrderEntity orderEntity, WarehouseOrder warehouseOrder)
-        {
-            base.LoadOrder(orderEntity, warehouseOrder);
 
-            if (orderEntity is ChannelAdvisorOrderEntity channelAdvisorOrderEntity &&
-                warehouseOrder is ChannelAdvisorWarehouseOrder channelAdvisorWarehouseOrder)
-            {
-                channelAdvisorOrderEntity.CustomOrderIdentifier = channelAdvisorWarehouseOrder.CustomOrderIdentifier;
-                channelAdvisorOrderEntity.ResellerID = channelAdvisorWarehouseOrder.ResellerID;
-                channelAdvisorOrderEntity.OnlineShippingStatus = channelAdvisorWarehouseOrder.OnlineShippingStatus;
-                channelAdvisorOrderEntity.OnlineCheckoutStatus = channelAdvisorWarehouseOrder.OnlineCheckoutStatus;
-                channelAdvisorOrderEntity.OnlinePaymentStatus = channelAdvisorWarehouseOrder.OnlinePaymentStatus;
-                channelAdvisorOrderEntity.FlagStyle = channelAdvisorWarehouseOrder.FlagStyle;
-                channelAdvisorOrderEntity.FlagDescription = channelAdvisorWarehouseOrder.FlagDescription;
-                channelAdvisorOrderEntity.FlagType = channelAdvisorWarehouseOrder.FlagType;
-                channelAdvisorOrderEntity.MarketplaceNames = channelAdvisorWarehouseOrder.MarketplaceNames;
-                channelAdvisorOrderEntity.IsPrime = channelAdvisorWarehouseOrder.IsPrime;
-            }
-            else
-            {
-                throw new DownloadException(
-                    $"Failed to load warehouse order with order number {warehouseOrder.OrderNumber}");
-            }
+        /// <summary>
+        /// Create an order entity with a ChannelAdvisor identifier
+        /// </summary>
+        protected override async Task<GenericResult<OrderEntity>> CreateOrderEntity(WarehouseOrder warehouseOrder)
+        {
+            ChannelAdvisorWarehouseOrder channelAdvisorWarehouseOrder = (ChannelAdvisorWarehouseOrder) warehouseOrder;
+
+            long channelAdvisorOrderID = long.Parse(channelAdvisorWarehouseOrder.OrderNumber);
+
+            // get the order instance
+            GenericResult<OrderEntity> result = await orderElementFactory
+                .CreateOrder(new OrderNumberIdentifier(channelAdvisorOrderID)).ConfigureAwait(false);
+
+            return result;
         }
 
         /// <summary>
-        /// Load a ChannelAdvisor warehouse order item into a ChannelAdvisor order item entity
+        /// Load ChannelAdvisor order details
         /// </summary>
-        /// <exception cref="DownloadException">Throws download exception when given non ChannelAdvisor items</exception>
-        protected override void LoadItem(OrderItemEntity itemEntity, WarehouseOrderItem warehouseItem)
+        protected override void LoadStoreSpecificOrderDetails(OrderEntity orderEntity, WarehouseOrder warehouseOrder)
         {
-            base.LoadItem(itemEntity, warehouseItem);
+            ChannelAdvisorOrderEntity channelAdvisorOrderEntity = (ChannelAdvisorOrderEntity) orderEntity;
+            ChannelAdvisorWarehouseOrder channelAdvisorWarehouseOrder = (ChannelAdvisorWarehouseOrder) warehouseOrder;
+            
+            channelAdvisorOrderEntity.CustomOrderIdentifier = channelAdvisorWarehouseOrder.CustomOrderIdentifier;
+            channelAdvisorOrderEntity.ResellerID = channelAdvisorWarehouseOrder.ResellerID;
+            channelAdvisorOrderEntity.OnlineShippingStatus = channelAdvisorWarehouseOrder.OnlineShippingStatus;
+            channelAdvisorOrderEntity.OnlineCheckoutStatus = channelAdvisorWarehouseOrder.OnlineCheckoutStatus;
+            channelAdvisorOrderEntity.OnlinePaymentStatus = channelAdvisorWarehouseOrder.OnlinePaymentStatus;
+            channelAdvisorOrderEntity.FlagStyle = channelAdvisorWarehouseOrder.FlagStyle;
+            channelAdvisorOrderEntity.FlagDescription = channelAdvisorWarehouseOrder.FlagDescription;
+            channelAdvisorOrderEntity.FlagType = channelAdvisorWarehouseOrder.FlagType;
+            channelAdvisorOrderEntity.MarketplaceNames = channelAdvisorWarehouseOrder.MarketplaceNames;
+            channelAdvisorOrderEntity.IsPrime = channelAdvisorWarehouseOrder.IsPrime;        
+        }
 
-            if (itemEntity is ChannelAdvisorOrderItemEntity channelAdvisorItemEntity &&
-                warehouseItem is ChannelAdvisorWarehouseItem channelAdvisorWarehouseItem)
-            {
-                channelAdvisorItemEntity.MarketplaceName = channelAdvisorWarehouseItem.MarketplaceName;
-                channelAdvisorItemEntity.MarketplaceStoreName = channelAdvisorWarehouseItem.MarketplaceStoreName;
-                channelAdvisorItemEntity.MarketplaceBuyerID = channelAdvisorWarehouseItem.MarketplaceBuyerID;
-                channelAdvisorItemEntity.MarketplaceSalesID = channelAdvisorWarehouseItem.MarketplaceSalesID;
-                channelAdvisorItemEntity.Classification = channelAdvisorWarehouseItem.Classification;
-                channelAdvisorItemEntity.DistributionCenter = channelAdvisorWarehouseItem.DistributionCenter;
-                channelAdvisorItemEntity.IsFBA = channelAdvisorWarehouseItem.IsFBA;
-                channelAdvisorItemEntity.DistributionCenterID = channelAdvisorWarehouseItem.DistributionCenterID;
-                channelAdvisorItemEntity.DistributionCenterName = channelAdvisorWarehouseItem.DistributionCenterName;
-            }
-            else
-            {
-                throw new DownloadException(
-                    $"Failed to load items for warehouse order with order number {itemEntity.Order.OrderNumberComplete}");
-            }
+        /// <summary>
+        /// Load ChannelAdvisor item details
+        /// </summary>
+        protected override void LoadStoreSpecificItemDetails(OrderItemEntity itemEntity, WarehouseOrderItem warehouseItem)
+        {
+            ChannelAdvisorOrderItemEntity channelAdvisorItemEntity = (ChannelAdvisorOrderItemEntity) itemEntity;
+            ChannelAdvisorWarehouseItem channelAdvisorWarehouseItem = (ChannelAdvisorWarehouseItem) warehouseItem;
+            
+            channelAdvisorItemEntity.MarketplaceName = channelAdvisorWarehouseItem.MarketplaceName;
+            channelAdvisorItemEntity.MarketplaceStoreName = channelAdvisorWarehouseItem.MarketplaceStoreName;
+            channelAdvisorItemEntity.MarketplaceBuyerID = channelAdvisorWarehouseItem.MarketplaceBuyerID;
+            channelAdvisorItemEntity.MarketplaceSalesID = channelAdvisorWarehouseItem.MarketplaceSalesID;
+            channelAdvisorItemEntity.Classification = channelAdvisorWarehouseItem.Classification;
+            channelAdvisorItemEntity.DistributionCenter = channelAdvisorWarehouseItem.DistributionCenter;
+            channelAdvisorItemEntity.IsFBA = channelAdvisorWarehouseItem.IsFBA;
+            channelAdvisorItemEntity.DistributionCenterID = channelAdvisorWarehouseItem.DistributionCenterID;
+            channelAdvisorItemEntity.DistributionCenterName = channelAdvisorWarehouseItem.DistributionCenterName;
         }
     }
 }

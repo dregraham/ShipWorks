@@ -9,12 +9,18 @@ using ShipWorks.Warehouse.DTO.Orders;
 
 namespace ShipWorks.Stores.Warehouse
 {
+    /// <summary>
+    /// Downloader for orders coming from ShipWorks Warehouse
+    /// </summary>
     [Component]
     public class WarehouseDownloader : IWarehouseDownloader
     {
         private readonly IWarehouseOrderClient webClient;
         private readonly Func<StoreTypeCode, IWarehouseOrderLoader> orderLoaderFactory;
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
         public WarehouseDownloader(IWarehouseOrderClient webClient, Func<StoreTypeCode, IWarehouseOrderLoader> orderLoaderFactory)
         {
             this.webClient = webClient;
@@ -41,11 +47,8 @@ namespace ShipWorks.Stores.Warehouse
 
                 foreach (WarehouseOrder warehouseOrder in warehouseOrderGroup)
                 {
-                    // instantiate order
-                    OrderEntity orderEntity = new OrderEntity();
-
                     // load order
-                    orderLoader.LoadOrder(orderEntity, warehouseOrder);
+                    await orderLoader.LoadOrder(warehouseOrder).ConfigureAwait(false);
                     
                     // save order
 
