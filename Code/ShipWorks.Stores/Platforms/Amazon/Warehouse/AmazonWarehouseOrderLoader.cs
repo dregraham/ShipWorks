@@ -1,6 +1,8 @@
+using System;
 using System.Threading.Tasks;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
+using log4net;
 using ShipWorks.Data.Import;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Warehouse;
@@ -14,12 +16,15 @@ namespace ShipWorks.Stores.Platforms.Amazon.Warehouse
     [KeyedComponent(typeof(IWarehouseOrderLoader), StoreTypeCode.Amazon)]
     public class AmazonWarehouseOrderLoader : WarehouseOrderLoader
     {
+        private readonly ILog log;
+
         /// <summary>
         /// Constructor
         /// </summary>
-        public AmazonWarehouseOrderLoader(IOrderElementFactory orderElementFactory) : 
+        public AmazonWarehouseOrderLoader(IOrderElementFactory orderElementFactory,  Func<Type, ILog> logFactory) : 
             base(orderElementFactory)
         {
+            log = logFactory(typeof(AmazonWarehouseOrderLoader));
         }
 
         /// <summary>
@@ -35,6 +40,11 @@ namespace ShipWorks.Stores.Platforms.Amazon.Warehouse
             GenericResult<OrderEntity> result = await orderElementFactory
                 .CreateOrder(new AmazonOrderIdentifier(amazonOrderID)).ConfigureAwait(false);
 
+            if (result.Failure)
+            {
+                log.InfoFormat("Skipping order '{0}': {1}.", amazonOrderID, result.Message);
+            }
+            
             return result;
         }
 

@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Interapptive.Shared.Business.Geography;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Import;
 using ShipWorks.Data.Model.EntityClasses;
@@ -14,7 +15,7 @@ namespace ShipWorks.Warehouse
     public abstract class WarehouseOrderLoader : IWarehouseOrderLoader
     {
         protected readonly IOrderElementFactory orderElementFactory;
-        
+
         /// <summary>
         /// Constructor
         /// </summary>
@@ -31,7 +32,6 @@ namespace ShipWorks.Warehouse
             GenericResult<OrderEntity> result = await CreateOrderEntity(warehouseOrder).ConfigureAwait(false);
             if (result.Failure)
             {
-                //log.InfoFormat("Skipping order '{0}': {1}.", amazonOrderID, result.Message);
                 return;
             }
 
@@ -95,11 +95,9 @@ namespace ShipWorks.Warehouse
             orderEntity.BillStreet2 = warehouseOrder.BillStreet2;
             orderEntity.BillStreet3 = warehouseOrder.BillStreet3;
             orderEntity.BillCity = warehouseOrder.BillCity;
-
-            // todo: parse state and country code
-            orderEntity.BillStateProvCode = warehouseOrder.BillStateProvCode;
+            orderEntity.BillStateProvCode = Geography.GetStateProvCode(warehouseOrder.BillStateProvCode);
             orderEntity.BillPostalCode = warehouseOrder.BillPostalCode;
-            orderEntity.BillCountryCode = warehouseOrder.BillCountryCode;
+            orderEntity.BillCountryCode = Geography.GetCountryCode(warehouseOrder.BillCountryCode);
             orderEntity.BillPhone = warehouseOrder.BillPhone;
             orderEntity.BillFax = warehouseOrder.BillFax;
             orderEntity.BillEmail = warehouseOrder.BillEmail;
@@ -120,9 +118,9 @@ namespace ShipWorks.Warehouse
             orderEntity.ShipStreet2 = warehouseOrder.ShipStreet2;
             orderEntity.ShipStreet3 = warehouseOrder.ShipStreet3;
             orderEntity.ShipCity = warehouseOrder.ShipCity;
-            orderEntity.ShipStateProvCode = warehouseOrder.ShipStateProvCode;
+            orderEntity.ShipStateProvCode = Geography.GetStateProvCode(warehouseOrder.ShipStateProvCode);
             orderEntity.ShipPostalCode = warehouseOrder.ShipPostalCode;
-            orderEntity.ShipCountryCode = warehouseOrder.ShipCountryCode;
+            orderEntity.ShipCountryCode = Geography.GetCountryCode(warehouseOrder.ShipCountryCode);
             orderEntity.ShipPhone = warehouseOrder.ShipPhone;
             orderEntity.ShipFax = warehouseOrder.ShipFax;
             orderEntity.ShipEmail = warehouseOrder.ShipEmail;

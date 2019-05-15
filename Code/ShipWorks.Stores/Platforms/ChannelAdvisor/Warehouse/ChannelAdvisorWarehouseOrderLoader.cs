@@ -1,6 +1,8 @@
+using System;
 using System.Threading.Tasks;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
+using log4net;
 using ShipWorks.Data.Import;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Content;
@@ -15,11 +17,14 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor.Warehouse
     [KeyedComponent(typeof(IWarehouseOrderLoader), StoreTypeCode.ChannelAdvisor)]
     public class ChannelAdvisorWarehouseOrderLoader : WarehouseOrderLoader
     {
+        private readonly ILog log;
+
         /// <summary>
         /// Constructor
         /// </summary>
-        public ChannelAdvisorWarehouseOrderLoader(IOrderElementFactory orderElementFactory) : base(orderElementFactory)
+        public ChannelAdvisorWarehouseOrderLoader(IOrderElementFactory orderElementFactory, Func<Type, ILog> logFactory) : base(orderElementFactory)
         {
+            log = logFactory(typeof(ChannelAdvisorWarehouseOrderLoader));
         }
 
         /// <summary>
@@ -35,6 +40,11 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor.Warehouse
             GenericResult<OrderEntity> result = await orderElementFactory
                 .CreateOrder(new OrderNumberIdentifier(channelAdvisorOrderID)).ConfigureAwait(false);
 
+            if (result.Failure)
+            {
+                log.InfoFormat("Skipping order '{0}': {1}.", channelAdvisorOrderID, result.Message);
+            }
+            
             return result;
         }
 
