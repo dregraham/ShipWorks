@@ -531,7 +531,7 @@
             // 
             this.scanBasedPayment.AutoSize = true;
             this.scanBasedPayment.BackColor = System.Drawing.Color.Transparent;
-            this.scanBasedPayment.Location = new System.Drawing.Point(47, 108);
+            this.scanBasedPayment.Location = new System.Drawing.Point(71, 108);
             this.scanBasedPayment.Name = "scanBasedPayment";
             this.scanBasedPayment.Size = new System.Drawing.Size(127, 17);
             this.scanBasedPayment.TabIndex = 8;
