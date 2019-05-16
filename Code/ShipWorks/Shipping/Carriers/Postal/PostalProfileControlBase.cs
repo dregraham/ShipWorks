@@ -22,6 +22,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
     {
         private BindingList<KeyValuePair<long, string>> includeReturnProfiles = new BindingList<KeyValuePair<long, string>>();
         private BindingSource bindingSource = new BindingSource();
+        private double currentProfileID = -1;
 
         /// <summary>
         /// Constructor
@@ -39,6 +40,8 @@ namespace ShipWorks.Shipping.Carriers.Postal
         public override void LoadProfile(ShippingProfileEntity profile)
         {
             base.LoadProfile(profile);
+
+            currentProfileID = profile.ShippingProfileID;
 
             PostalProfileEntity postal = profile.Postal;
             PackageProfileEntity packageProfile = profile.Packages.Single();
@@ -291,6 +294,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
 
                 List<KeyValuePair<long, string>> returnProfiles = shippingProfileService
                     .GetConfiguredShipmentTypeProfiles()
+                    .Where(p => p.ShippingProfileEntity.ShippingProfileID != currentProfileID)
                     .Where(p => p.ShippingProfileEntity.ShipmentType.HasValue)
                     .Where(p => p.IsApplicable(shipmentTypeCode))
                     .Where(p => p.ShippingProfileEntity.ShipmentType == shipmentTypeCode)
