@@ -254,7 +254,7 @@
     <Compile Include="Platforms\Amazon\OnlineUpdating\AmazonOrderSearchProvider.cs" />
     <Compile Include="Platforms\Amazon\Warehouse\AmazonWarehouseItem.cs" />
     <Compile Include="Platforms\Amazon\Warehouse\AmazonWarehouseOrder.cs" />
-    <Compile Include="Platforms\Amazon\Warehouse\AmazonWarehouseOrderLoader.cs" />
+    <Compile Include="Platforms\Amazon\Warehouse\AmazonWarehouseOrderFactory.cs" />
     <Compile Include="Platforms\AmeriCommerce\AmeriCommerceCombineOrderNumberSearchProvider.cs" />
     <Compile Include="Platforms\AmeriCommerce\AmeriCommerceWebClient.cs" />
     <Compile Include="Platforms\Amosoft\CoreExtensions\Filters\Orders\AmosoftAmazonOrderIDCondition.cs" />
@@ -349,7 +349,7 @@
     <Compile Include="Platforms\ChannelAdvisor\OnlineUpdating\ChannelAdvisorOnlineUpdater.cs" />
     <Compile Include="Platforms\ChannelAdvisor\Warehouse\ChannelAdvisorWarehouseItem.cs" />
     <Compile Include="Platforms\ChannelAdvisor\Warehouse\ChannelAdvisorWarehouseOrder.cs" />
-    <Compile Include="Platforms\ChannelAdvisor\Warehouse\ChannelAdvisorWarehouseOrderLoader.cs" />
+    <Compile Include="Platforms\ChannelAdvisor\Warehouse\ChannelAdvisorWarehouseOrderFactory.cs" />
     <Compile Include="Platforms\ChannelSale\CoreExtensions\Filters\Orders\ChannelSaleAmazonOrderIDCondition.cs" />
     <Compile Include="Platforms\ChannelSale\CoreExtensions\Filters\Orders\ChannelSaleIsFBACondition.cs" />
     <Compile Include="Platforms\ChannelSale\CoreExtensions\Filters\Orders\ChannelSaleIsPrimeCondition.cs" />
@@ -909,7 +909,7 @@
     <Compile Include="Warehouse\StoreDtoFactory.cs" />
     <Compile Include="Warehouse\WarehouseDownloader.cs" />
     <Compile Include="Warehouse\WarehouseOrderClient.cs" />
-    <Compile Include="Warehouse\WarehouseOrderFactory.cs" />
+    <Compile Include="Warehouse\WarehouseOrderDTOFactory.cs" />
     <Compile Include="Warehouse\WarehouseOrderJsonConverter.cs" />
     <Compile Include="Warehouse\WarehouseStoreClient.cs" />
   </ItemGroup>

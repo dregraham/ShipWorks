@@ -1360,8 +1360,8 @@
     <Compile Include="Warehouse\DTO\Orders\WarehouseOrderNote.cs" />
     <Compile Include="Warehouse\IWarehouseDownloader.cs" />
     <Compile Include="Warehouse\IWarehouseOrderClient.cs" />
-    <Compile Include="Warehouse\IWarehouseOrderLoader.cs" />
-    <Compile Include="Warehouse\WarehouseOrderLoader.cs" />
+    <Compile Include="Warehouse\IWarehouseOrderFactory.cs" />
+    <Compile Include="Warehouse\WarehouseOrderFactory.cs" />
     <Compile Include="Warehouse\WarehouseStoreTypes.cs" />
     <EmbeddedResource Include="ApplicationCore\MessageBoxes\ListSeparatorFormatRequiredDlg.resx">
       <DependentUpon>ListSeparatorFormatRequiredDlg.cs</DependentUpon>

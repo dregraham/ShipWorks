@@ -12,14 +12,14 @@ namespace ShipWorks.Warehouse
     /// <summary>
     /// Base order loader for loading ShipWorks Warehouse orders
     /// </summary>
-    public abstract class WarehouseOrderLoader : IWarehouseOrderLoader
+    public abstract class WarehouseOrderFactory : IWarehouseOrderFactory
     {
         protected readonly IOrderElementFactory orderElementFactory;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        protected WarehouseOrderLoader(IOrderElementFactory orderElementFactory)
+        protected WarehouseOrderFactory(IOrderElementFactory orderElementFactory)
         {
             this.orderElementFactory = orderElementFactory;
         }
@@ -27,12 +27,12 @@ namespace ShipWorks.Warehouse
         /// <summary>
         /// Load the order details from the warehouse order into the order entity
         /// </summary>
-        public async Task LoadOrder(WarehouseOrder warehouseOrder)
+        public async Task<OrderEntity> CreateOrder(WarehouseOrder warehouseOrder)
         {
-            GenericResult<OrderEntity> result = await CreateOrderEntity(warehouseOrder).ConfigureAwait(false);
+            GenericResult<OrderEntity> result = await CreateStoreOrderEntity(warehouseOrder).ConfigureAwait(false);
             if (result.Failure)
             {
-                return;
+                return null;
             }
 
             OrderEntity orderEntity = result.Value;
@@ -62,23 +62,25 @@ namespace ShipWorks.Warehouse
 
             await LoadNotes(orderEntity, warehouseOrder).ConfigureAwait(false);
 
-            LoadStoreSpecificOrderDetails(orderEntity, warehouseOrder);
+            LoadStoreOrderDetails(orderEntity, warehouseOrder);
+
+            return orderEntity;
         }
 
         /// <summary>
         /// Create an order entity with the store specific identifier
         /// </summary>
-        protected abstract Task<GenericResult<OrderEntity>> CreateOrderEntity(WarehouseOrder warehouseOrder);
+        protected abstract Task<GenericResult<OrderEntity>> CreateStoreOrderEntity(WarehouseOrder warehouseOrder);
 
         /// <summary>
         /// Load store specific order details
         /// </summary>
-        protected abstract void LoadStoreSpecificOrderDetails(OrderEntity orderEntity, WarehouseOrder warehouseOrder);
+        protected abstract void LoadStoreOrderDetails(OrderEntity orderEntity, WarehouseOrder warehouseOrder);
         
         /// <summary>
         /// Load store specific item details
         /// </summary>
-        protected abstract void LoadStoreSpecificItemDetails(OrderItemEntity itemEntity, WarehouseOrderItem warehouseItem);
+        protected abstract void LoadStoreItemDetails(OrderItemEntity itemEntity, WarehouseOrderItem warehouseItem);
 
         /// <summary>
         /// Load the billing address from the warehouse order into the order entity
@@ -166,7 +168,7 @@ namespace ShipWorks.Warehouse
 
             LoadItemAttributes(itemEntity, warehouseItem);
             
-            LoadStoreSpecificItemDetails(itemEntity, warehouseItem);
+            LoadStoreItemDetails(itemEntity, warehouseItem);
         }
         
         /// <summary>

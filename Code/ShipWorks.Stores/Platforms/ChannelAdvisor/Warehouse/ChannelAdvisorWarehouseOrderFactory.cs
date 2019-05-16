@@ -14,23 +14,23 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor.Warehouse
     /// <summary>
     /// ChannelAdvisor specific warehouse order loader
     /// </summary>
-    [KeyedComponent(typeof(IWarehouseOrderLoader), StoreTypeCode.ChannelAdvisor)]
-    public class ChannelAdvisorWarehouseOrderLoader : WarehouseOrderLoader
+    [KeyedComponent(typeof(IWarehouseOrderFactory), StoreTypeCode.ChannelAdvisor)]
+    public class ChannelAdvisorWarehouseOrderFactory : WarehouseOrderFactory
     {
         private readonly ILog log;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public ChannelAdvisorWarehouseOrderLoader(IOrderElementFactory orderElementFactory, Func<Type, ILog> logFactory) : base(orderElementFactory)
+        public ChannelAdvisorWarehouseOrderFactory(IOrderElementFactory orderElementFactory, Func<Type, ILog> logFactory) : base(orderElementFactory)
         {
-            log = logFactory(typeof(ChannelAdvisorWarehouseOrderLoader));
+            log = logFactory(typeof(ChannelAdvisorWarehouseOrderFactory));
         }
 
         /// <summary>
         /// Create an order entity with a ChannelAdvisor identifier
         /// </summary>
-        protected override async Task<GenericResult<OrderEntity>> CreateOrderEntity(WarehouseOrder warehouseOrder)
+        protected override async Task<GenericResult<OrderEntity>> CreateStoreOrderEntity(WarehouseOrder warehouseOrder)
         {
             ChannelAdvisorWarehouseOrder channelAdvisorWarehouseOrder = (ChannelAdvisorWarehouseOrder) warehouseOrder;
 
@@ -51,7 +51,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor.Warehouse
         /// <summary>
         /// Load ChannelAdvisor order details
         /// </summary>
-        protected override void LoadStoreSpecificOrderDetails(OrderEntity orderEntity, WarehouseOrder warehouseOrder)
+        protected override void LoadStoreOrderDetails(OrderEntity orderEntity, WarehouseOrder warehouseOrder)
         {
             ChannelAdvisorOrderEntity channelAdvisorOrderEntity = (ChannelAdvisorOrderEntity) orderEntity;
             ChannelAdvisorWarehouseOrder channelAdvisorWarehouseOrder = (ChannelAdvisorWarehouseOrder) warehouseOrder;
@@ -71,7 +71,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor.Warehouse
         /// <summary>
         /// Load ChannelAdvisor item details
         /// </summary>
-        protected override void LoadStoreSpecificItemDetails(OrderItemEntity itemEntity, WarehouseOrderItem warehouseItem)
+        protected override void LoadStoreItemDetails(OrderItemEntity itemEntity, WarehouseOrderItem warehouseItem)
         {
             ChannelAdvisorOrderItemEntity channelAdvisorItemEntity = (ChannelAdvisorOrderItemEntity) itemEntity;
             ChannelAdvisorWarehouseItem channelAdvisorWarehouseItem = (ChannelAdvisorWarehouseItem) warehouseItem;

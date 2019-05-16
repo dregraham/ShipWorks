@@ -13,24 +13,24 @@ namespace ShipWorks.Stores.Platforms.Amazon.Warehouse
     /// <summary>
     /// Amazon specific warehouse order loader
     /// </summary>
-    [KeyedComponent(typeof(IWarehouseOrderLoader), StoreTypeCode.Amazon)]
-    public class AmazonWarehouseOrderLoader : WarehouseOrderLoader
+    [KeyedComponent(typeof(IWarehouseOrderFactory), StoreTypeCode.Amazon)]
+    public class AmazonWarehouseOrderFactory : WarehouseOrderFactory
     {
         private readonly ILog log;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public AmazonWarehouseOrderLoader(IOrderElementFactory orderElementFactory,  Func<Type, ILog> logFactory) : 
+        public AmazonWarehouseOrderFactory(IOrderElementFactory orderElementFactory,  Func<Type, ILog> logFactory) : 
             base(orderElementFactory)
         {
-            log = logFactory(typeof(AmazonWarehouseOrderLoader));
+            log = logFactory(typeof(AmazonWarehouseOrderFactory));
         }
 
         /// <summary>
         /// Create an order entity with an Amazon identifier
         /// </summary>
-        protected override async Task<GenericResult<OrderEntity>> CreateOrderEntity(WarehouseOrder warehouseOrder)
+        protected override async Task<GenericResult<OrderEntity>> CreateStoreOrderEntity(WarehouseOrder warehouseOrder)
         {
             AmazonWarehouseOrder amazonWarehouseOrder = (AmazonWarehouseOrder) warehouseOrder;
 
@@ -51,7 +51,7 @@ namespace ShipWorks.Stores.Platforms.Amazon.Warehouse
         /// <summary>
         /// Load Amazon order details
         /// </summary>
-        protected override void LoadStoreSpecificOrderDetails(OrderEntity orderEntity, WarehouseOrder warehouseOrder)
+        protected override void LoadStoreOrderDetails(OrderEntity orderEntity, WarehouseOrder warehouseOrder)
         {
             AmazonOrderEntity amazonOrderEntity = (AmazonOrderEntity) orderEntity;
             AmazonWarehouseOrder amazonWarehouseOrder = (AmazonWarehouseOrder) warehouseOrder;
@@ -67,7 +67,7 @@ namespace ShipWorks.Stores.Platforms.Amazon.Warehouse
         /// <summary>
         /// Load Amazon item details
         /// </summary>
-        protected override void LoadStoreSpecificItemDetails(OrderItemEntity itemEntity, WarehouseOrderItem warehouseItem)
+        protected override void LoadStoreItemDetails(OrderItemEntity itemEntity, WarehouseOrderItem warehouseItem)
         {
             AmazonOrderItemEntity amazonItemEntity = (AmazonOrderItemEntity) itemEntity;
             AmazonWarehouseItem amazonWarehouseItem = (AmazonWarehouseItem) warehouseItem;

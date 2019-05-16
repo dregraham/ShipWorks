@@ -16,12 +16,12 @@ namespace ShipWorks.Stores.Warehouse
     public class WarehouseDownloader : IWarehouseDownloader
     {
         private readonly IWarehouseOrderClient webClient;
-        private readonly Func<StoreTypeCode, IWarehouseOrderLoader> orderLoaderFactory;
+        private readonly Func<StoreTypeCode, IWarehouseOrderFactory> orderLoaderFactory;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public WarehouseDownloader(IWarehouseOrderClient webClient, Func<StoreTypeCode, IWarehouseOrderLoader> orderLoaderFactory)
+        public WarehouseDownloader(IWarehouseOrderClient webClient, Func<StoreTypeCode, IWarehouseOrderFactory> orderLoaderFactory)
         {
             this.webClient = webClient;
             this.orderLoaderFactory = orderLoaderFactory;
@@ -43,12 +43,12 @@ namespace ShipWorks.Stores.Warehouse
             // load orders
             foreach (var warehouseOrderGroup in ordersGroupedByStoreType)
             {
-                IWarehouseOrderLoader orderLoader = orderLoaderFactory((StoreTypeCode) warehouseOrderGroup.Key);
+                IWarehouseOrderFactory orderFactory = orderLoaderFactory((StoreTypeCode) warehouseOrderGroup.Key);
 
                 foreach (WarehouseOrder warehouseOrder in warehouseOrderGroup)
                 {
                     // load order
-                    await orderLoader.LoadOrder(warehouseOrder).ConfigureAwait(false);
+                    OrderEntity orderEntity = await orderFactory.CreateOrder(warehouseOrder).ConfigureAwait(false);
                     
                     // save order
 

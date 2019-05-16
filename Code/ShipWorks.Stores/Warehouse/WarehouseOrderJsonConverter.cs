@@ -25,7 +25,7 @@ namespace ShipWorks.Stores.Warehouse
         {
             JObject orderJObject = JObject.Load(reader);
             var orderString = orderJObject.ToString();
-            return WarehouseOrderFactory.CreateOrder(orderString);
+            return WarehouseOrderDTOFactory.CreateWarehouseOrder(orderString);
         }
 
         /// <summary>

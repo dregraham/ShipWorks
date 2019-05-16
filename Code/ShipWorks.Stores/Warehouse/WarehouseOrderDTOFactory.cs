@@ -9,12 +9,12 @@ namespace ShipWorks.Stores.Warehouse
     /// <summary>
     /// Factory for creating store specific warehouse orders from json
     /// </summary>
-    public static class WarehouseOrderFactory
+    public static class WarehouseOrderDTOFactory
     {
         /// <summary>
         /// Create an order from orderData
         /// </summary>
-        public static WarehouseOrder CreateOrder(string orderData)
+        public static WarehouseOrder CreateWarehouseOrder(string orderData)
         {
             StoreTypeCode? storeType = GetStoreType(orderData);
 
