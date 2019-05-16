@@ -19,7 +19,6 @@ namespace ShipWorks.Shipping.Editing
         {
             this.sectionShipment = new ShipWorks.UI.Controls.CollapsibleGroupControl();
             this.sectionLabelOptions = new ShipWorks.UI.Controls.CollapsibleGroupControl();
-            this.help = new System.Windows.Forms.PictureBox();
             this.labelFormat = new ShipWorks.UI.Controls.MultiValueComboBox();
             this.labelFormatLabel = new System.Windows.Forms.Label();
             this.sectionReturns = new ShipWorks.UI.Controls.CollapsibleGroupControl();
@@ -37,18 +36,19 @@ namespace ShipWorks.Shipping.Editing
             this.labelAddress = new System.Windows.Forms.Label();
             this.labelResidentialCommercial = new System.Windows.Forms.Label();
             this.personControl = new ShipWorks.Data.Controls.PersonControl();
+            this.help = new System.Windows.Forms.PictureBox();
             ((System.ComponentModel.ISupportInitialize) (this.sectionShipment)).BeginInit();
             ((System.ComponentModel.ISupportInitialize) (this.sectionShipment.ContentPanel)).BeginInit();
             ((System.ComponentModel.ISupportInitialize) (this.sectionLabelOptions)).BeginInit();
             ((System.ComponentModel.ISupportInitialize) (this.sectionLabelOptions.ContentPanel)).BeginInit();
             this.sectionLabelOptions.ContentPanel.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize) (this.help)).BeginInit();
             ((System.ComponentModel.ISupportInitialize) (this.sectionReturns)).BeginInit();
             ((System.ComponentModel.ISupportInitialize) (this.sectionReturns.ContentPanel)).BeginInit();
             this.sectionReturns.ContentPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize) (this.sectionRecipient)).BeginInit();
             ((System.ComponentModel.ISupportInitialize) (this.sectionRecipient.ContentPanel)).BeginInit();
             this.sectionRecipient.ContentPanel.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize) (this.help)).BeginInit();
             this.SuspendLayout();
             // 
             // sectionShipment
@@ -82,18 +82,6 @@ namespace ShipWorks.Shipping.Editing
             this.sectionLabelOptions.SettingsKey = "{d20eb555-afcd-4050-9c9e-bd982dbc60c9}";
             this.sectionLabelOptions.Size = new System.Drawing.Size(385, 24);
             this.sectionLabelOptions.TabIndex = 4;
-            // 
-            // help
-            // 
-            this.help.BackColor = System.Drawing.Color.Transparent;
-            this.help.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.help.Image = global::ShipWorks.Properties.Resources.help2_16;
-            this.help.Location = new System.Drawing.Point(238, 11);
-            this.help.Name = "help";
-            this.help.Size = new System.Drawing.Size(16, 16);
-            this.help.TabIndex = 8;
-            this.help.TabStop = false;
-            this.help.Click += new System.EventHandler(this.OnHelpClick);
             // 
             // labelFormat
             // 
@@ -330,6 +318,18 @@ namespace ShipWorks.Shipping.Editing
             this.personControl.TabIndex = 0;
             this.personControl.DestinationChanged += new System.EventHandler(this.OnRecipientDestinationChanged);
             // 
+            // help
+            // 
+            this.help.BackColor = System.Drawing.Color.Transparent;
+            this.help.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.help.Image = global::ShipWorks.Properties.Resources.help2_16;
+            this.help.Location = new System.Drawing.Point(238, 11);
+            this.help.Name = "help";
+            this.help.Size = new System.Drawing.Size(16, 16);
+            this.help.TabIndex = 8;
+            this.help.TabStop = false;
+            this.help.Click += new System.EventHandler(this.OnHelpClick);
+            // 
             // ServiceControlBase
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -348,7 +348,6 @@ namespace ShipWorks.Shipping.Editing
             this.sectionLabelOptions.ContentPanel.ResumeLayout(false);
             this.sectionLabelOptions.ContentPanel.PerformLayout();
             ((System.ComponentModel.ISupportInitialize) (this.sectionLabelOptions)).EndInit();
-            ((System.ComponentModel.ISupportInitialize) (this.help)).EndInit();
             ((System.ComponentModel.ISupportInitialize) (this.sectionReturns.ContentPanel)).EndInit();
             this.sectionReturns.ContentPanel.ResumeLayout(false);
             this.sectionReturns.ContentPanel.PerformLayout();
@@ -357,6 +356,7 @@ namespace ShipWorks.Shipping.Editing
             this.sectionRecipient.ContentPanel.ResumeLayout(false);
             this.sectionRecipient.ContentPanel.PerformLayout();
             ((System.ComponentModel.ISupportInitialize) (this.sectionRecipient)).EndInit();
+            ((System.ComponentModel.ISupportInitialize) (this.help)).EndInit();
             this.ResumeLayout(false);
 
         }
