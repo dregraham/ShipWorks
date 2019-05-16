@@ -62,7 +62,7 @@
                 x:Key="AdvancedSearchChevronAngle"
                 False="0"
                 True="180" />
-            <Style TargetType="Button" x:Key="SearchButton">
+            <Style x:Key="SearchButton" TargetType="Button">
                 <Setter Property="OverridesDefaultStyle" Value="True" />
                 <Setter Property="Background" Value="Transparent" />
                 <Setter Property="Foreground" Value="Transparent" />
@@ -70,23 +70,23 @@
                 <Setter Property="Template">
                     <Setter.Value>
                         <ControlTemplate TargetType="{x:Type Button}">
-                            <Border x:Name="border" 
-                                    BorderThickness="0"
-                                    BorderBrush="Transparent"
-                                    Background="{TemplateBinding Background}">
-                                <ContentPresenter x:Name="content" 
-                                          Content="{TemplateBinding Content}"
-                                          HorizontalAlignment="Center" 
-                                          VerticalAlignment="Center" />
+                            <Border
+                                x:Name="border"
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="Transparent"
+                                BorderThickness="0">
+                                <ContentPresenter
+                                    x:Name="content"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    Content="{TemplateBinding Content}" />
                             </Border>
                             <ControlTemplate.Triggers>
                                 <Trigger Property="IsMouseOver" Value="True">
-                                    <Setter TargetName="border" 
-                                            Property="Background" 
-                                            Value="GhostWhite" />
+                                    <Setter TargetName="border" Property="Background" Value="GhostWhite" />
                                 </Trigger>
                                 <Trigger Property="IsPressed" Value="True">
-                                    <Setter TargetName="content" Property="RenderTransform" >
+                                    <Setter TargetName="content" Property="RenderTransform">
                                         <Setter.Value>
                                             <TranslateTransform Y="1.0" />
                                         </Setter.Value>
@@ -147,7 +147,7 @@
                     Height="16"
                     Margin="1,0,4,0"
                     VerticalAlignment="Center"
-                    Source="{Binding HeaderImage, Converter={StaticResource ImageToBitmap}}" />
+                    Source="{Binding HeaderImageName, Converter={StaticResource ImageToBitmap}}" />
                 <TextBlock
                     Grid.Column="1"
                     Margin="0"
@@ -228,15 +228,15 @@
                         <Button
                             Background="White"
                             BorderThickness="0"
-                            Style="{StaticResource SearchButton}"
                             Command="{Binding EndSearch}"
-                            IsEnabled="{Binding IsSearchActive}">
+                            IsEnabled="{Binding IsSearchActive}"
+                            Style="{StaticResource SearchButton}">
                             <Image
                                 Width="11"
                                 Height="11"
                                 Margin="4,0,4,0"
                                 VerticalAlignment="Center"
-                                Source="{Binding EndSearchImage, Converter={StaticResource ImageToBitmap}}" />
+                                Source="{Binding EndSearchImageName, Converter={StaticResource ImageToBitmap}}" />
                         </Button>
                     </StackPanel>
                 </Border>

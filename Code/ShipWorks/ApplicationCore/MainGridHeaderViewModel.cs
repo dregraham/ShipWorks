@@ -1,9 +1,9 @@
 ﻿using System;
-using System.Drawing;
 using System.Reflection;
 using System.Windows.Input;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
+using ShipWorks.Properties;
 using ShipWorks.UI.Controls.Design;
 
 namespace ShipWorks.ApplicationCore
@@ -18,8 +18,8 @@ namespace ShipWorks.ApplicationCore
         private string searchText;
         private string watermarkText;
         private string filterName;
-        private Image headerImage;
-        private Image endSearchImage;
+        private string headerImageName;
+        private string endSearchImageName;
         private bool isSearching;
         private bool isSearchActive;
 
@@ -36,11 +36,11 @@ namespace ShipWorks.ApplicationCore
             {
                 Title = "All";
                 WatermarkText = "Search all orders...";
-                HeaderImage = ShipWorks.Properties.Resources.view;
+                HeaderImageName = nameof(Resources.view);
                 isAdvancedSearchOpen = true;
             }
 
-            EndSearchImage = ShipWorks.Properties.Resources.buttonEndSearchDisabled;
+            EndSearchImageName = nameof(Resources.buttonEndSearchDisabled);
             EndSearch = new RelayCommand(EndSearchAction);
             ToggleAdvancedSearch = new RelayCommand(ToggleAdvancedSearchAction);
             SaveFilter = new RelayCommand(SaveFilterAction);
@@ -101,10 +101,10 @@ namespace ShipWorks.ApplicationCore
         /// Header image
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public Image HeaderImage
+        public string HeaderImageName
         {
-            get => headerImage;
-            set => Set(ref headerImage, value);
+            get => headerImageName;
+            set => Set(ref headerImageName, value);
         }
 
         /// <summary>
@@ -128,7 +128,7 @@ namespace ShipWorks.ApplicationCore
             {
                 if (Set(ref isSearchActive, value) && !value)
                 {
-                    EndSearchImage = ShipWorks.Properties.Resources.buttonEndSearchDisabled;
+                    EndSearchImageName = nameof(Resources.buttonEndSearchDisabled);
                 }
             }
         }
@@ -167,10 +167,10 @@ namespace ShipWorks.ApplicationCore
         /// Image to use for the end search button
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public Image EndSearchImage
+        public string EndSearchImageName
         {
-            get => endSearchImage;
-            set => Set(ref endSearchImage, value);
+            get => endSearchImageName;
+            set => Set(ref endSearchImageName, value);
         }
 
         /// <summary>
