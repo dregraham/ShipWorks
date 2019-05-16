@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -137,7 +138,7 @@ namespace ShipWorks.Data
         /// </summary>
         public static int GetEntitySeed(long entityID)
         {
-            decimal num = (decimal) Math.Abs(entityID) / 100m;
+            decimal num = Math.Abs(entityID) / 100m;
             int seedBase = (int) (100m * Math.Round(num - Math.Truncate(num), 2));
 
             return seedBase;
@@ -271,7 +272,7 @@ namespace ShipWorks.Data
         /// </summary>
         public static bool IsSameField(IEntityFieldCore left, IEntityFieldCore right)
         {
-            if ((object) left == null || (object) right == null)
+            if (left == null || right == null)
             {
                 return false;
             }
@@ -726,7 +727,9 @@ namespace ShipWorks.Data
         /// <summary>
         /// Get an image of the given entity of the given size
         /// </summary>
-        [NDependIgnoreComplexMethodAttribute]
+        [SuppressMessage("ShipWorks", "SW0002:Identifier should not be obfuscated",
+            Justification = "Identifier is not being used for data binding")]
+        [NDependIgnoreComplexMethod]
         public static string GetEntityImageName(EntityType entityType, int size)
         {
             if (size != 16 && size != 32)

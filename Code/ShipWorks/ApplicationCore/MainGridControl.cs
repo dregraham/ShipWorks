@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Reactive.Disposables;
 using System.Windows.Forms;
@@ -606,6 +607,8 @@ namespace ShipWorks.ApplicationCore
         /// <summary>
         /// Update the header control
         /// </summary>
+        [SuppressMessage("ShipWorks", "SW0002:Identifier should not be obfuscated",
+            Justification = "Identifier is not being used for data binding")]
         private void UpdateHeaderContent()
         {
             if (IsSearchActive)

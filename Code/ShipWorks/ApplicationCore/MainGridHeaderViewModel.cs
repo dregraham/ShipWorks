@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using System.Windows.Input;
 using GalaSoft.MvvmLight;
@@ -30,6 +31,8 @@ namespace ShipWorks.ApplicationCore
         /// <summary>
         /// Constructor
         /// </summary>
+        [SuppressMessage("ShipWorks", "SW0002:Identifier should not be obfuscated",
+            Justification = "Identifier is not being used for data binding")]
         public MainGridHeaderViewModel()
         {
             if (DesignModeDetector.IsDesignerHosted())
@@ -120,6 +123,8 @@ namespace ShipWorks.ApplicationCore
         /// <summary>
         /// Is the search active
         /// </summary>
+        [SuppressMessage("ShipWorks", "SW0002:Identifier should not be obfuscated",
+            Justification = "Identifier is not being used for data binding")]
         [Obfuscation(Exclude = true)]
         public bool IsSearchActive
         {
