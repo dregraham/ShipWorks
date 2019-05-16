@@ -117,7 +117,8 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SWA
             {
                 result.Add(new ShipmentItem(
                     name: "NoItem",
-                    externalOrderId: shipment.Order.OrderNumberComplete));
+                    externalOrderId: shipment.Order.OrderNumberComplete,
+                    quantity: 1));
             }
 
             return result;
