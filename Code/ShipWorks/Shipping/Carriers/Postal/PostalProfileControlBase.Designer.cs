@@ -182,7 +182,7 @@
             this.groupReturns.Controls.Add(this.kryptonBorderEdge3);
             this.groupReturns.Location = new System.Drawing.Point(8, 501);
             this.groupReturns.Name = "groupReturns";
-            this.groupReturns.Size = new System.Drawing.Size(417, 53);
+            this.groupReturns.Size = new System.Drawing.Size(417, 117);
             this.groupReturns.TabIndex = 5;
             this.groupReturns.TabStop = false;
             this.groupReturns.Text = "Return Shipment";
@@ -304,7 +304,7 @@
             this.kryptonBorderEdge3.BorderStyle = ComponentFactory.Krypton.Toolkit.PaletteBorderStyle.GridDataCellSheet;
             this.kryptonBorderEdge3.Location = new System.Drawing.Point(29, 20);
             this.kryptonBorderEdge3.Name = "kryptonBorderEdge3";
-            this.kryptonBorderEdge3.Size = new System.Drawing.Size(1, 23);
+            this.kryptonBorderEdge3.Size = new System.Drawing.Size(1, 87);
             this.kryptonBorderEdge3.Text = "kryptonBorderEdge1";
             // 
             // groupInsurance
