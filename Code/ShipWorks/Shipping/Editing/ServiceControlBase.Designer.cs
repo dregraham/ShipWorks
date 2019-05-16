@@ -312,7 +312,6 @@ namespace ShipWorks.Shipping.Editing
             // 
             // personControl
             // 
-            this.personControl.AddressSelector = null;
             this.personControl.AvailableFields = ((ShipWorks.Data.Controls.PersonFields) ((((((((((ShipWorks.Data.Controls.PersonFields.Name | ShipWorks.Data.Controls.PersonFields.Company)
             | ShipWorks.Data.Controls.PersonFields.Street)
             | ShipWorks.Data.Controls.PersonFields.City)
@@ -325,12 +324,10 @@ namespace ShipWorks.Shipping.Editing
             this.personControl.BackColor = System.Drawing.Color.Transparent;
             this.personControl.EnableValidationControls = false;
             this.personControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
-            this.personControl.FullName = "";
             this.personControl.Location = new System.Drawing.Point(3, 2);
             this.personControl.Name = "personControl";
             this.personControl.Size = new System.Drawing.Size(273, 330);
             this.personControl.TabIndex = 0;
-            this.personControl.ValidatedAddressScope = null;
             this.personControl.DestinationChanged += new System.EventHandler(this.OnRecipientDestinationChanged);
             // 
             // ServiceControlBase
