@@ -833,7 +833,7 @@
             this.saturdayReturn.Location = new System.Drawing.Point(49, 193);
             this.saturdayReturn.Name = "saturdayReturn";
             this.saturdayReturn.Size = new System.Drawing.Size(144, 17);
-            this.saturdayReturn.TabIndex = 9;
+            this.saturdayReturn.TabIndex = 14;
             this.saturdayReturn.Text = "This is a Saturday return";
             this.saturdayReturn.UseVisualStyleBackColor = true;
             // 
@@ -845,7 +845,7 @@
             this.saturdayReturnState.Location = new System.Drawing.Point(9, 194);
             this.saturdayReturnState.Name = "saturdayReturnState";
             this.saturdayReturnState.Size = new System.Drawing.Size(15, 14);
-            this.saturdayReturnState.TabIndex = 8;
+            this.saturdayReturnState.TabIndex = 13;
             this.saturdayReturnState.Tag = "";
             this.saturdayReturnState.UseVisualStyleBackColor = true;
             // 
@@ -857,7 +857,7 @@
             this.returnType.Name = "returnType";
             this.returnType.PromptText = "(Multiple Values)";
             this.returnType.Size = new System.Drawing.Size(207, 21);
-            this.returnType.TabIndex = 3;
+            this.returnType.TabIndex = 8;
             // 
             // labelReturnType
             // 
@@ -963,9 +963,10 @@
             this.returnShipment.Location = new System.Drawing.Point(49, 86);
             this.returnShipment.Name = "returnShipment";
             this.returnShipment.Size = new System.Drawing.Size(143, 17);
-            this.returnShipment.TabIndex = 1;
+            this.returnShipment.TabIndex = 6;
             this.returnShipment.Text = "This is a return shipment";
             this.returnShipment.UseVisualStyleBackColor = true;
+            this.returnShipment.CheckedChanged += new System.EventHandler(this.OnReturnShipmentChanged);
             // 
             // rmaReason
             // 
@@ -974,7 +975,7 @@
             this.fieldLengthProvider.SetMaxLengthSource(this.rmaReason, ShipWorks.Data.Utility.EntityFieldLengthSource.FedExRmaReason);
             this.rmaReason.Name = "rmaReason";
             this.rmaReason.Size = new System.Drawing.Size(207, 21);
-            this.rmaReason.TabIndex = 7;
+            this.rmaReason.TabIndex = 12;
             // 
             // labelRmaReason
             // 
@@ -993,7 +994,7 @@
             this.fieldLengthProvider.SetMaxLengthSource(this.rmaNumber, ShipWorks.Data.Utility.EntityFieldLengthSource.FedExRmaNumber);
             this.rmaNumber.Name = "rmaNumber";
             this.rmaNumber.Size = new System.Drawing.Size(207, 21);
-            this.rmaNumber.TabIndex = 5;
+            this.rmaNumber.TabIndex = 10;
             // 
             // labelRmaNumber
             // 
@@ -1013,7 +1014,7 @@
             this.rmaReasonState.Location = new System.Drawing.Point(9, 167);
             this.rmaReasonState.Name = "rmaReasonState";
             this.rmaReasonState.Size = new System.Drawing.Size(15, 14);
-            this.rmaReasonState.TabIndex = 6;
+            this.rmaReasonState.TabIndex = 11;
             this.rmaReasonState.Tag = "";
             this.rmaReasonState.UseVisualStyleBackColor = true;
             // 
@@ -1025,7 +1026,7 @@
             this.rmaNumberState.Location = new System.Drawing.Point(9, 140);
             this.rmaNumberState.Name = "rmaNumberState";
             this.rmaNumberState.Size = new System.Drawing.Size(15, 14);
-            this.rmaNumberState.TabIndex = 4;
+            this.rmaNumberState.TabIndex = 9;
             this.rmaNumberState.Tag = "";
             this.rmaNumberState.UseVisualStyleBackColor = true;
             // 
@@ -1048,7 +1049,7 @@
             this.returnTypeState.Location = new System.Drawing.Point(9, 113);
             this.returnTypeState.Name = "returnTypeState";
             this.returnTypeState.Size = new System.Drawing.Size(15, 14);
-            this.returnTypeState.TabIndex = 2;
+            this.returnTypeState.TabIndex = 7;
             this.returnTypeState.Tag = "";
             this.returnTypeState.UseVisualStyleBackColor = true;
             // 
@@ -1058,7 +1059,7 @@
             this.returnShipmentState.Location = new System.Drawing.Point(9, 87);
             this.returnShipmentState.Name = "returnShipmentState";
             this.returnShipmentState.Size = new System.Drawing.Size(15, 14);
-            this.returnShipmentState.TabIndex = 0;
+            this.returnShipmentState.TabIndex = 5;
             this.returnShipmentState.Tag = "";
             this.returnShipmentState.UseVisualStyleBackColor = true;
             this.returnShipmentState.CheckedChanged += new System.EventHandler(OnReturnStateChanged);
