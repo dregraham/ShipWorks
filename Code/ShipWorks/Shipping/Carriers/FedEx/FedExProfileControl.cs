@@ -29,6 +29,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
     {
         private BindingList<KeyValuePair<long, string>> includeReturnProfiles = new BindingList<KeyValuePair<long, string>>();
         private BindingSource bindingSource = new BindingSource();
+        private double currentProfileID = -1;
 
         /// <summary>
         /// Constructor
@@ -55,6 +56,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         public override void LoadProfile(ShippingProfileEntity profile)
         {
             base.LoadProfile(profile);
+
+            currentProfileID = profile.ShippingProfileID;
 
             FedExProfileEntity fedex = profile.FedEx;
 
@@ -640,6 +643,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
 
                 List<KeyValuePair<long, string>> returnProfiles = shippingProfileService
                     .GetConfiguredShipmentTypeProfiles()
+                    .Where(p => p.ShippingProfileEntity.ShippingProfileID != currentProfileID)
                     .Where(p => p.ShippingProfileEntity.ShipmentType.HasValue)
                     .Where(p => p.IsApplicable(shipmentTypeCode))
                     .Where(p => p.ShippingProfileEntity.ShipmentType == shipmentTypeCode)
