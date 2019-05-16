@@ -8,6 +8,7 @@ using Interapptive.Shared.Utility;
 using ShipWorks.Shipping.Services;
 using Interapptive.Shared.Collections;
 using ShipWorks.Stores.Platforms.Amazon;
+using System;
 
 namespace ShipWorks.Shipping.Carriers.Amazon.SWA
 {
@@ -107,7 +108,8 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SWA
                         externalOrderItemId: amazonItem?.AmazonOrderItemCode ?? string.Empty,
                         externalOrderId: amazonOrder?.AmazonOrderID ?? shipment.Order.OrderNumberComplete,
                         asin: amazonItem?.ASIN ?? string.Empty,
-                        name: item.Name));
+                        name: item.Name,
+                        quantity: Convert.ToInt32(item.Quantity)));
             }
 
             // ShipEngine will throw if there are no items, they recommended we add a fake item
