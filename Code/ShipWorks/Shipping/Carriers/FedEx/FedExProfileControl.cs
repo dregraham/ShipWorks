@@ -103,9 +103,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             // Remove state checkbox event handler since we'll be enabling/disabling manually
             returnShipmentState.CheckedChanged -= OnStateCheckChanged;
             includeReturnState.CheckedChanged -= OnStateCheckChanged;
-
-            // Remove this event handler twice since it's added twice by AddValueMapping above
-            applyReturnProfileState.CheckedChanged -= OnStateCheckChanged;
             applyReturnProfileState.CheckedChanged -= OnStateCheckChanged;
 
             // Manually enable/disable for mutually exclusive return controls
