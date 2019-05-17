@@ -1163,30 +1163,39 @@ namespace ShipWorks.Stores.Management
             BackEnabled = false;
 
             ILicense license = licenseService.GetLicense(store);
-            EnumResult<LicenseActivationState> activateResult = license.Activate(store);
+            EnumResult<LicenseActivationState> activateResult;
+            try
+            {
+                activateResult = license.Activate(store);
+            }
+            catch (TangoException)
+            {
+                activateResult = null;
+            }
 
-            if (activateResult.Value != LicenseActivationState.Active)
+            if (activateResult?.Value != LicenseActivationState.Active)
             {
                 e.Skip = true;
 
                 if (license.IsLegacy)
                 {
-                    MessageHelper.ShowError(this, activateResult.Message);
+                    MessageHelper.ShowError(this, activateResult?.Message ?? "Error activating license.");
                     e.SkipToPage = wizardPageAlreadyActive;
                 }
                 else
                 {
-                    if (activateResult.Value == LicenseActivationState.MaxChannelsExceeded)
+                    if (activateResult?.Value == LicenseActivationState.MaxChannelsExceeded)
                     {
                         IChannelLimitFactory factory = channelLimitFactory();
                         Control channelLimitControl =
-                            (Control) factory.CreateControl((ICustomerLicense) license, (StoreTypeCode) Store.TypeCode, EditionFeature.ChannelCount, this);
+                            (Control) factory.CreateControl((ICustomerLicense) license, (StoreTypeCode) Store.TypeCode,
+                                EditionFeature.ChannelCount, this);
 
                         wizardPageActivationError.SetElementHost(channelLimitControl);
                     }
 
                     showActivationError = true;
-                    wizardPageActivationError.ErrorMessage = activateResult.Message;
+                    wizardPageActivationError.ErrorMessage = activateResult?.Message ?? "Error activating license.";
                     e.SkipToPage = wizardPageActivationError;
                 }
             }
