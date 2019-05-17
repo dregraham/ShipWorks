@@ -663,6 +663,8 @@ namespace ShipWorks.ApplicationCore
         /// <summary>
         /// Update the search box control to show the correct state
         /// </summary>
+        [SuppressMessage("ShipWorks", "SW0002:Identifier should not be obfuscated",
+            Justification = "Identifier is not being used for data binding")]
         private void UpdateSearchBox()
         {
             if (IsSearchActive)

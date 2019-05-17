@@ -684,6 +684,8 @@ namespace ShipWorks.Data
         /// <summary>
         /// Get an image of the given entity of the given size
         /// </summary>
+        [SuppressMessage("ShipWorks", "SW0002:Identifier should not be obfuscated",
+            Justification = "Identifier is not being used for data binding")]
         public static string GetEntityImageName(long entityID, int size)
         {
             // If its a template, we can get more specific than the EntityType version
