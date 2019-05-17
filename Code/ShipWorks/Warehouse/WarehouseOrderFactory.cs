@@ -39,7 +39,7 @@ namespace ShipWorks.Warehouse
             
             // todo: orderid, storeid, warehousecustomerid
             // todo: figure out what should and shouldn't be downloaded when new
-            orderEntity.OrderNumberComplete = warehouseOrder.OrderNumber;
+            orderEntity.ChangeOrderNumber(warehouseOrder.OrderNumber);
             orderEntity.OrderDate = warehouseOrder.OrderDate;
             orderEntity.OrderTotal = warehouseOrder.OrderTotal;
             orderEntity.OnlineLastModified = warehouseOrder.OnlineLastModified;

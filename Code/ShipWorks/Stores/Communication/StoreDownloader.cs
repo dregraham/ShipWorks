@@ -35,6 +35,8 @@ using ShipWorks.Products;
 using ShipWorks.Shipping.ShipSense;
 using ShipWorks.Stores.Content;
 using ShipWorks.Templates.Tokens;
+using ShipWorks.Warehouse;
+using ShipWorks.Warehouse.DTO.Orders;
 
 namespace ShipWorks.Stores.Communication
 {
@@ -159,11 +161,18 @@ namespace ShipWorks.Stores.Communication
             this.downloadLogID = downloadLogID;
             this.connection = connection;
 
-            using (TrackedDurationEvent trackedDurationEvent = new TrackedDurationEvent("Store.Order.Download"))
+            if (Store.WarehouseStoreID == null)
             {
-                await Download(trackedDurationEvent).ConfigureAwait(false);
+                using (TrackedDurationEvent trackedDurationEvent = new TrackedDurationEvent("Store.Order.Download"))
+                {
+                    await Download(trackedDurationEvent).ConfigureAwait(false);
 
-                CollectDownloadTelemetry(trackedDurationEvent);
+                    CollectDownloadTelemetry(trackedDurationEvent);
+                }
+            }
+            else
+            {
+                await DownloadWarehouseOrders().ConfigureAwait(false);
             }
         }
 
@@ -1308,6 +1317,31 @@ namespace ShipWorks.Stores.Communication
         /// Should not download
         /// </summary>
         public virtual bool ShouldDownload(string orderNumber) => false;
+
+        /// <summary>
+        /// Download orders for this store from the ShipWorks Warehouse app
+        /// </summary>
+        private async Task DownloadWarehouseOrders()
+        {
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+            {
+                IWarehouseOrderClient webClient = lifetimeScope.Resolve<IWarehouseOrderClient>();
+                    
+                // get orders for this store and warehouse
+                IEnumerable<WarehouseOrder> orders = await webClient.GetOrders(Store.WarehouseStoreID.ToString()).ConfigureAwait(false);
+
+                IWarehouseOrderFactory orderFactory = lifetimeScope.ResolveKeyed<IWarehouseOrderFactory>(StoreType.TypeCode, new TypedParameter(typeof(IOrderElementFactory), this));
+
+                foreach (WarehouseOrder warehouseOrder in orders)
+                {
+                    // create order
+                    OrderEntity orderEntity = await orderFactory.CreateOrder(warehouseOrder).ConfigureAwait(false);
+                
+                    // save order
+                    await SaveDownloadedOrder(orderEntity).ConfigureAwait(false);
+                }
+            }
+        }
 
         #region Order Element Factory
         // Explicit implementation of the IOrderElementFactory, this allows dependencies to create order elements without

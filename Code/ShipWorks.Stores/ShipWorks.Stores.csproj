@@ -907,7 +907,7 @@
     <Compile Include="Warehouse\StoreData\AmazonStore.cs" />
     <Compile Include="Warehouse\StoreData\ChannelAdvisorStoreData.cs" />
     <Compile Include="Warehouse\StoreDtoFactory.cs" />
-    <Compile Include="Warehouse\WarehouseDownloader.cs" />
+    <Compile Include="Warehouse\WarehouseModule.cs" />
     <Compile Include="Warehouse\WarehouseOrderClient.cs" />
     <Compile Include="Warehouse\WarehouseOrderDTOFactory.cs" />
     <Compile Include="Warehouse\WarehouseOrderJsonConverter.cs" />

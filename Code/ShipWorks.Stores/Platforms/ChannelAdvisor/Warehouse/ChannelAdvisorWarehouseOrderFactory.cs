@@ -22,7 +22,8 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor.Warehouse
         /// <summary>
         /// Constructor
         /// </summary>
-        public ChannelAdvisorWarehouseOrderFactory(IOrderElementFactory orderElementFactory, Func<Type, ILog> logFactory) : base(orderElementFactory)
+        public ChannelAdvisorWarehouseOrderFactory(IOrderElementFactory orderElementFactory,
+                                                   Func<Type, ILog> logFactory) : base(orderElementFactory)
         {
             log = logFactory(typeof(ChannelAdvisorWarehouseOrderFactory));
         }

@@ -21,7 +21,7 @@ namespace ShipWorks.Stores.Platforms.Amazon.Warehouse
         /// <summary>
         /// Constructor
         /// </summary>
-        public AmazonWarehouseOrderFactory(IOrderElementFactory orderElementFactory,  Func<Type, ILog> logFactory) : 
+        public AmazonWarehouseOrderFactory(IOrderElementFactory orderElementFactory, Func<Type, ILog> logFactory) :
             base(orderElementFactory)
         {
             log = logFactory(typeof(AmazonWarehouseOrderFactory));

@@ -9,8 +9,7 @@ namespace ShipWorks.Warehouse.DTO.Orders
         /// <summary>
         /// Constructor
         /// </summary>
-        // ReSharper disable once MemberCanBeProtected.Global - Needs to be public for DynamoDB context
-        public WarehouseOrder()
+        protected WarehouseOrder()
         {
             Charges = new List<WarehouseOrderCharge>();
             PaymentDetails = new List<WarehouseOrderPaymentDetail>();
@@ -24,7 +23,7 @@ namespace ShipWorks.Warehouse.DTO.Orders
 
         public long WarehouseCustomerID { get; set; }
 
-        public int StoreType { get; protected set; }
+        public int StoreType { get; set; }
 
         public string Warehouse { get; set; }
 
