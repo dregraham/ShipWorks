@@ -176,6 +176,7 @@ namespace ShipWorks.Shipping.Editing
             this.returnProfileID.FormattingEnabled = true;
             this.returnProfileID.DropDown += new System.EventHandler(this.OnReturnProfileIDOpened);
             this.returnProfileID.SelectionChangeCommitted += new System.EventHandler(this.OnReturnProfileSelected);
+            this.returnProfileID.EnabledChanged += new System.EventHandler(this.OnReturnProfileIDEnabledChanged);
             // 
             // returnProfileIDLabel
             // 

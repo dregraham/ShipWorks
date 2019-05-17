@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Autofac;
 using Interapptive.Shared.ComponentRegistration;
@@ -77,9 +76,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             if (IsScanBasedReturnsEnabled())
             {
                 AddValueMapping(endiciaProfile, EndiciaProfileFields.ScanBasedReturn, scanBasedPaymentState, scanBasedPayment);
-                scanBasedPaymentState.CheckedChanged -= OnStateCheckChanged;
-                scanBasedPaymentState.CheckedChanged += OnScanBasedPaymentStateChanged;
-                scanBasedPayment.Enabled = scanBasedPaymentState.Checked && returnShipment.Checked;
+                SetParentCheckBox(returnState, returnShipment, scanBasedPaymentState, scanBasedPayment);
             }
 
             AddValueMapping(profile.Postal, PostalProfileFields.SortType, stateSortType, sortType, labelSortType);
@@ -106,43 +103,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             {
                 endiciaAccount.DataSource = new List<KeyValuePair<string, long>> { new KeyValuePair<string, long>("(No accounts)", 0) };
                 endiciaAccount.Enabled = false;
-            }
-        }
-
-        /// <summary>
-        /// Click of the ScanBasedPaymentState checkbox
-        /// </summary>
-        private void OnScanBasedPaymentStateChanged(object sender, EventArgs e)
-        {
-            if (scanBasedPaymentState.Checked)
-            {
-                scanBasedPayment.Enabled = returnShipment.Checked;
-            }
-            else
-            {
-                scanBasedPayment.Enabled = false;
-                scanBasedPayment.Checked = false;
-            }
-        }
-
-        /// <summary>
-        /// Click of the return shipment checkbox
-        /// </summary>
-        protected override void OnReturnShipmentChanged(object sender, EventArgs e)
-        {
-            base.OnReturnShipmentChanged(sender, e);
-
-            if (IsScanBasedReturnsEnabled())
-            {
-                if (returnShipment.Checked)
-                {
-                    scanBasedPayment.Enabled = scanBasedPaymentState.Checked;
-                }
-                else
-                {
-                    scanBasedPayment.Checked = false;
-                    scanBasedPayment.Enabled = false;
-                }
             }
         }
 

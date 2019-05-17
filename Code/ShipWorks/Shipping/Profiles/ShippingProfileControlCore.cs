@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Windows.Forms;
 using Interapptive.Shared;
@@ -27,7 +28,16 @@ namespace ShipWorks.Shipping.Profiles
             public bool IsValueMapping { get; set; }
         }
 
+        class ParentChildMapping
+        {
+            public CheckBox ParentState { get; set; }
+            public CheckBox Parent { get; set; }
+            public CheckBox ChildState { get; set; }
+            public Control Child { get; set; }
+        }
+
         List<CheckStateMapping> checkStateMap = new List<CheckStateMapping>();
+        List<ParentChildMapping> parentChildMap = new List<ParentChildMapping>();
 
         bool allowChangeCheckState = true;
 
@@ -97,7 +107,6 @@ namespace ShipWorks.Shipping.Profiles
             // Update the check state
             checkBox.Checked = entity.GetCurrentFieldValue(field.FieldIndex) != null;
 
-            
             // Remove all potential event handlers to
             // make sure we only return a single event handler.
             checkBox.CheckedChanged -= OnStateCheckChanged;
@@ -347,7 +356,7 @@ namespace ShipWorks.Shipping.Profiles
 
                 if (value is Enum)
                 {
-                    value = (int)value;
+                    value = (int) value;
                 }
             }
 
@@ -391,10 +400,10 @@ namespace ShipWorks.Shipping.Profiles
             InsuranceProfileControl insuranceControl = control as InsuranceProfileControl;
             if (insuranceControl != null)
             {
-                ShippingProfileEntity profile = (ShippingProfileEntity)entity;
+                ShippingProfileEntity profile = (ShippingProfileEntity) entity;
 
                 profile.Insurance = insuranceControl.UseInsurance;
-                profile.InsuranceInitialValueSource = (int)insuranceControl.Source;
+                profile.InsuranceInitialValueSource = (int) insuranceControl.Source;
                 profile.InsuranceInitialValueAmount = insuranceControl.OtherAmount;
 
                 return;
@@ -447,6 +456,115 @@ namespace ShipWorks.Shipping.Profiles
                 foreach (Control control in mapping.OtherControls)
                 {
                     control.Enabled = checkBox.Checked;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Set a parent checkbox for a control to be automatically enabled/disabled based on its parent state
+        /// </summary>
+        protected void SetParentCheckBox(CheckBox parentState, CheckBox parent, CheckBox childState, Control child)
+        {
+            ParentChildMapping parentChild = new ParentChildMapping
+            {
+                ParentState = parentState,
+                Parent = parent,
+                ChildState = childState,
+                Child = child
+            };
+
+            parentChildMap.Add(parentChild);
+
+            // Remove original event handler
+            childState.CheckedChanged -= OnStateCheckChanged;
+
+            // Add new event handlers, but make sure we don't duplicate
+            parentState.CheckedChanged -= OnParentStateChanged;
+            parent.CheckedChanged -= OnParentCheckChanged;
+            childState.CheckedChanged -= OnChildStateChanged;
+            parentState.CheckedChanged += OnParentStateChanged;
+            parent.CheckedChanged += OnParentCheckChanged;
+            childState.CheckedChanged += OnChildStateChanged;
+
+            child.Enabled = childState.Checked && parent.Checked;
+        }
+
+        /// <summary>
+        /// Click of the parent state checkbox
+        /// </summary>
+        protected void OnParentStateChanged(object sender, EventArgs e)
+        {
+            CheckBox parentState = (CheckBox) sender;
+
+            foreach (ParentChildMapping mapping in parentChildMap.Where(x => x.ParentState == parentState))
+            {
+                if (!parentState.Checked)
+                {
+                    // Disable child and clear value if possible
+                    try
+                    {
+                        UpdateState(mapping.Child, false);
+                    }
+                    catch (NotSupportedException)
+                    {
+                        mapping.Child.Enabled = false;
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Click of the parent checkbox
+        /// </summary>
+        protected void OnParentCheckChanged(object sender, EventArgs e)
+        {
+            CheckBox parent = (CheckBox) sender;
+
+            foreach (ParentChildMapping mapping in parentChildMap.Where(x => x.Parent == parent))
+            {
+                if (parent.Checked)
+                {
+                    mapping.Child.Enabled = mapping.ChildState.Checked;
+                }
+                else
+                {
+                    // Disable child and clear value if possible
+                    try
+                    {
+                        UpdateState(mapping.Child, false);
+                    }
+                    catch (NotSupportedException)
+                    {
+                        mapping.Child.Enabled = false;
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Click of the child state checkbox
+        /// </summary>
+        protected void OnChildStateChanged(object sender, EventArgs e)
+        {
+            CheckBox childState = (CheckBox) sender;
+
+            foreach (ParentChildMapping mapping in parentChildMap.Where(x => x.ChildState == childState))
+            {
+                if (childState.Checked)
+                {
+                    mapping.Child.Enabled = mapping.Parent.Checked;
+                }
+                else
+                {
+                    // Disable child and clear value if possible
+                    try
+                    {
+                        UpdateState(mapping.Child, false);
+                    }
+                    catch (NotSupportedException)
+                    {
+                        mapping.Child.Enabled = false;
+                    }
                 }
             }
         }

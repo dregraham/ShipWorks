@@ -383,9 +383,6 @@ namespace ShipWorks.Shipping.Editing
                     }
                 }
 
-                // But only support turning "Returns" on or off if all types support it
-                returnShipment.Enabled = allReturnsSupported;
-
                 // Only if there all the same type can we create the type-specific control
                 if (loadedTypes.Count == 1)
                 {
@@ -415,11 +412,12 @@ namespace ShipWorks.Shipping.Editing
                 // Only enable automatic return labels for Endicia
                 allowIncludeReturn = LoadedShipments.All(st => st.ShipmentTypeCode == ShipmentTypeCode.Endicia);
 
-                includeReturn.Enabled = allowIncludeReturn && !returnShipment.Checked;
-                returnShipment.Enabled = !includeReturn.Checked;
-                applyReturnProfile.Enabled = includeReturn.Checked;
-                returnProfileID.Enabled = applyReturnProfile.Checked;
-                returnProfileIDLabel.Enabled = applyReturnProfile.Checked;
+                // Only enable returns controls if all selected shipments support it
+                includeReturn.Enabled = allowIncludeReturn && allReturnsSupported && !returnShipment.Checked;
+                returnShipment.Enabled = allReturnsSupported && !includeReturn.Checked;
+                applyReturnProfile.Enabled = allReturnsSupported && includeReturn.Checked;
+                returnProfileID.Enabled = allReturnsSupported && applyReturnProfile.Checked;
+                returnProfileIDLabel.Enabled = allReturnsSupported && applyReturnProfile.Checked;
             }
             else
             {
@@ -716,6 +714,17 @@ namespace ShipWorks.Shipping.Editing
         }
 
         /// <summary>
+        /// When ReturnProfileID dropdown is enabled
+        /// </summary>
+        protected void OnReturnProfileIDEnabledChanged(object sender, EventArgs e)
+        {
+            if (returnProfileID.Enabled)
+            {
+                RefreshIncludeReturnProfileMenu(shipmentTypeCode);
+            }
+        }
+
+        /// <summary>
         /// Add applicable profiles for the given shipment type to the context menu
         /// </summary>
         private void RefreshIncludeReturnProfileMenu(ShipmentTypeCode shipmentTypeCode)
@@ -730,6 +739,7 @@ namespace ShipWorks.Shipping.Editing
                     .GetConfiguredShipmentTypeProfiles()
                     .Where(p => p.ShippingProfileEntity.ShipmentType.HasValue)
                     .Where(p => p.IsApplicable(shipmentTypeCode))
+                    .Where(p => p.ShippingProfileEntity.ShipmentType == shipmentTypeCode)
                     .Where(p => p.ShippingProfileEntity.ReturnShipment == true)
                     .Select(s => new KeyValuePair<long, string>(s.ShippingProfileEntity.ShippingProfileID, s.ShippingProfileEntity.Name))
                     .OrderBy(g => g.Value)
@@ -738,6 +748,7 @@ namespace ShipWorks.Shipping.Editing
                 newReturnProfiles = new BindingList<KeyValuePair<long, string>>(returnProfiles);
             }
 
+            // Always add No Profile so if a selected profile was deleted, this becomes the default
             newReturnProfiles.Insert(0, new KeyValuePair<long, string>(-1, "(No Profile)"));
 
             includeReturnProfiles = newReturnProfiles;
