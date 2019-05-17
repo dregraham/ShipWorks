@@ -4,6 +4,11 @@ namespace ShipWorks.Warehouse.DTO.Orders
 {
     public class WarehouseOrderItem
     {
+        public WarehouseOrderItem()
+        {
+            ItemAttributes = new List<WarehouseOrderItemAttribute>();
+        }
+
         public long OrderItemID { get; set; }
         public long OrderID { get; set; }
         public string Name { get; set; }
@@ -25,6 +30,6 @@ namespace ShipWorks.Warehouse.DTO.Orders
         public decimal Length { get; set; }
         public decimal Width { get; set; }
         public decimal Height { get; set; }
-        public List<WarehouseOrderItemAttribute> ItemAttributes { get; set; }
+        public IEnumerable<WarehouseOrderItemAttribute> ItemAttributes { get; set; }
     }
 }

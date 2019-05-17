@@ -31,7 +31,7 @@ namespace ShipWorks.Stores.Warehouse
         /// <summary>
         /// Get orders for the given warehouse ID from the ShipWorks Warehouse app
         /// </summary>
-        public async Task<IEnumerable<WarehouseOrder>> GetOrders(string warehouseStoreID)
+        public async Task<IEnumerable<WarehouseOrder>> GetOrders(string warehouseStoreID, StoreTypeCode storeType)
         {
             try
             {
@@ -47,10 +47,10 @@ namespace ShipWorks.Stores.Warehouse
                 }
 
                 IEnumerable<WarehouseOrder> orders = JsonConvert.DeserializeObject<IEnumerable<WarehouseOrder>>(
-                    response.Value.Content, 
+                    response.Value.Content,
                     new JsonSerializerSettings
                     {
-                        Converters = {new WarehouseOrderJsonConverter()}
+                        Converters = {new WarehouseOrderJsonConverter(storeType)}
                     });
 
                 return orders;

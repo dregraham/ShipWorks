@@ -1328,7 +1328,7 @@ namespace ShipWorks.Stores.Communication
                 IWarehouseOrderClient webClient = lifetimeScope.Resolve<IWarehouseOrderClient>();
                     
                 // get orders for this store and warehouse
-                IEnumerable<WarehouseOrder> orders = await webClient.GetOrders(Store.WarehouseStoreID.ToString())
+                IEnumerable<WarehouseOrder> orders = await webClient.GetOrders(Store.WarehouseStoreID.ToString(), StoreType.TypeCode)
                                                                     .ConfigureAwait(false);
 
                 IWarehouseOrderFactory orderFactory = lifetimeScope.ResolveKeyed<IWarehouseOrderFactory>(StoreType.TypeCode,

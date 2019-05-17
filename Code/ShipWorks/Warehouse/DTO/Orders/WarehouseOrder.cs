@@ -4,7 +4,7 @@ using System.Collections.ObjectModel;
 
 namespace ShipWorks.Warehouse.DTO.Orders
 {
-    public class WarehouseOrder
+    public abstract class WarehouseOrder
     {
         /// <summary>
         /// Constructor
@@ -14,7 +14,6 @@ namespace ShipWorks.Warehouse.DTO.Orders
             Charges = new List<WarehouseOrderCharge>();
             PaymentDetails = new List<WarehouseOrderPaymentDetail>();
             Notes = new List<WarehouseOrderNote>();
-            Items = new Collection<WarehouseOrderItem>();
         }
 
         public string OrderID { get; set; }
@@ -78,6 +77,6 @@ namespace ShipWorks.Warehouse.DTO.Orders
         public List<WarehouseOrderPaymentDetail> PaymentDetails { get; set; }
         public List<WarehouseOrderNote> Notes { get; set; }
         
-        public virtual Collection<WarehouseOrderItem> Items { get; set; }
+        public abstract IEnumerable<WarehouseOrderItem> Items { get; set; }
     }
 }

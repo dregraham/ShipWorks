@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using ShipWorks.Stores;
 using ShipWorks.Warehouse.DTO.Orders;
 
 namespace ShipWorks.Warehouse
@@ -12,6 +13,6 @@ namespace ShipWorks.Warehouse
         /// <summary>
         /// Get orders for the given warehouse store ID from the ShipWorks Warehouse app
         /// </summary>
-        Task<IEnumerable<WarehouseOrder>> GetOrders(string warehouseStoreID);
+        Task<IEnumerable<WarehouseOrder>> GetOrders(string warehouseStoreID, StoreTypeCode storeType);
     }
 }

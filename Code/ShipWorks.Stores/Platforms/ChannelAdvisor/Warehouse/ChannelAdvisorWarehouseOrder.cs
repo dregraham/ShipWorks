@@ -9,6 +9,14 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor.Warehouse
     public class ChannelAdvisorWarehouseOrder : WarehouseOrder
     {
         /// <summary>
+        /// Constructor
+        /// </summary>
+        public ChannelAdvisorWarehouseOrder()
+        {
+            Items = new List<ChannelAdvisorWarehouseItem>();
+        }
+
+        /// <summary>
         /// The CustomOrderIdentifier of the ChannelAdvisorOrder
         /// </summary>
         public string CustomOrderIdentifier { get; set; }
@@ -61,6 +69,6 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor.Warehouse
         /// <summary>
         /// The items in the order
         /// </summary>
-        public List<ChannelAdvisorWarehouseItem> Items { get; set; }
+        public override IEnumerable<WarehouseOrderItem> Items { get; set; }
     }
 }

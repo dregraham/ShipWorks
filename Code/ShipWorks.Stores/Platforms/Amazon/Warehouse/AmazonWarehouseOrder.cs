@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using ShipWorks.Warehouse.DTO.Orders;
 
@@ -9,6 +10,14 @@ namespace ShipWorks.Stores.Platforms.Amazon.Warehouse
     /// </summary>
     public class AmazonWarehouseOrder : WarehouseOrder
     {
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public AmazonWarehouseOrder()
+        {
+            Items = new List<AmazonWarehouseItem>();
+        }
+
         /// <summary>
         /// The orders Amazon order ID
         /// </summary>
@@ -42,6 +51,6 @@ namespace ShipWorks.Stores.Platforms.Amazon.Warehouse
         /// <summary>
         /// The items that belong to this order
         /// </summary>
-        public Collection<AmazonWarehouseItem> Items { get; set; }
+        public override IEnumerable<WarehouseOrderItem> Items { get; set; }
     }
 }
