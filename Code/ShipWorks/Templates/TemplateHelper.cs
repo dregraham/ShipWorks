@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Drawing.Printing;
 using System.IO;
@@ -69,6 +70,8 @@ namespace ShipWorks.Templates
         /// <summary>
         /// Get the image to use for the template based on its type
         /// </summary>
+        [SuppressMessage("ShipWorks", "SW0002:Identifier should not be obfuscated",
+            Justification = "Identifier is not being used for data binding")]
         public static string GetTemplateImageName(TemplateEntity template)
         {
             if (template == null)
@@ -92,6 +95,8 @@ namespace ShipWorks.Templates
         /// <summary>
         /// Get the image to use for the given template type
         /// </summary>
+        [SuppressMessage("ShipWorks", "SW0002:Identifier should not be obfuscated",
+            Justification = "Identifier is not being used for data binding")]
         public static string GetTemplateImageName(TemplateType templateType)
         {
             switch (templateType)

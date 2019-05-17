@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Linq;
 using System.Reflection;
@@ -138,18 +139,20 @@ namespace ShipWorks.Editions
         /// <summary>
         /// Get the lock image name that is closest to the given ideal size
         /// </summary>
+        [SuppressMessage("ShipWorks", "SW0002:Identifier should not be obfuscated",
+            Justification = "Identifier is not being used for data binding")]
         public static string GetLockImageName(int idealSize) =>
           idealSize <= 16 ? nameof(Resources.lock16) : nameof(Resources.lock32);
 
         private class ManagedElement
         {
-            private static object formsButtonClickEventID;
-            private static object toolStripClickEventID;
+            private static readonly object formsButtonClickEventID;
+            private static readonly object toolStripClickEventID;
             private static PropertyInfo componentEventsProperty;
             private static FieldInfo sandWidgetActivatedField;
-            private Component component;
-            private EditionFeature feature;
-            private Func<object> dataProvider;
+            private readonly Component component;
+            private readonly EditionFeature feature;
+            private readonly Func<object> dataProvider;
 
             // Indicates if its currently in a restricted state
             private bool isRestricted = false;
