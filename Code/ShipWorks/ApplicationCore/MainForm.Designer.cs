@@ -731,7 +731,7 @@ namespace ShipWorks
             this.menuItemRemoteAssistance.Guid = new System.Guid("cd90e5ec-14c9-4a0b-b592-e1eee22176c1");
             this.menuItemRemoteAssistance.Image = global::ShipWorks.Properties.Resources.remote_assist32;
             this.menuItemRemoteAssistance.Padding = new Divelements.SandRibbon.WidgetEdges(40, 3, 20, 3);
-            this.menuItemRemoteAssistance.Text = "Enter PIN";
+            this.menuItemRemoteAssistance.Text = "Generate PIN";
             this.menuItemRemoteAssistance.Activate += new System.EventHandler(this.OnRemoteAssistance);
             //
             // menuItemBuySupplies
@@ -3064,7 +3064,7 @@ namespace ShipWorks
             //
             this.buttonHelpRemote.Guid = new System.Guid("6cf9bab1-98a8-42ca-b15f-0bf198f5f6ff");
             this.buttonHelpRemote.Image = global::ShipWorks.Properties.Resources.remote_assist32;
-            this.buttonHelpRemote.Text = "Enter PIN";
+            this.buttonHelpRemote.Text = "Generate PIN";
             this.buttonHelpRemote.TextContentRelation = Divelements.SandRibbon.TextContentRelation.Underneath;
             this.buttonHelpRemote.Activate += new System.EventHandler(this.OnRemoteAssistance);
             //
