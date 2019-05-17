@@ -3,6 +3,9 @@ using ShipWorks.Warehouse.DTO.Orders;
 
 namespace ShipWorks.Stores.Platforms.ChannelAdvisor.Warehouse
 {
+    /// <summary>
+    /// ChannelAdvisor warehouse order
+    /// </summary>
     public class ChannelAdvisorWarehouseOrder : WarehouseOrder
     {
         /// <summary>

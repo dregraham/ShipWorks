@@ -11,7 +11,7 @@ using ShipWorks.Warehouse.DTO.Orders;
 namespace ShipWorks.Stores.Platforms.Amazon.Warehouse
 {
     /// <summary>
-    /// Amazon specific warehouse order loader
+    /// Amazon warehouse order factory
     /// </summary>
     [KeyedComponent(typeof(IWarehouseOrderFactory), StoreTypeCode.Amazon)]
     public class AmazonWarehouseOrderFactory : WarehouseOrderFactory
@@ -32,9 +32,7 @@ namespace ShipWorks.Stores.Platforms.Amazon.Warehouse
         /// </summary>
         protected override async Task<GenericResult<OrderEntity>> CreateStoreOrderEntity(WarehouseOrder warehouseOrder)
         {
-            AmazonWarehouseOrder amazonWarehouseOrder = (AmazonWarehouseOrder) warehouseOrder;
-
-            string amazonOrderID = amazonWarehouseOrder.AmazonOrderID;
+            string amazonOrderID = ((AmazonWarehouseOrder) warehouseOrder).AmazonOrderID;
 
             // get the order instance
             GenericResult<OrderEntity> result = await orderElementFactory

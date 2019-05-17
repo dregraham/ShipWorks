@@ -26,6 +26,9 @@
         public static string Stores(string warehouseStoreID) =>
             string.IsNullOrWhiteSpace(warehouseStoreID) ? stores : $"{stores}/{warehouseStoreID}";
 
-        public static string Orders(string warehouseID) => string.Format(orders, warehouseID);
+        /// <summary>
+        /// Create an orders endpoint with a warehouse store ID
+        /// </summary>
+        public static string Orders(string warehouseStoreID) => string.Format(orders, warehouseStoreID);
     }
 }

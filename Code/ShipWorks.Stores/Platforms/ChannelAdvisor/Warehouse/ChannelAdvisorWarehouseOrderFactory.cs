@@ -12,7 +12,7 @@ using ShipWorks.Warehouse.DTO.Orders;
 namespace ShipWorks.Stores.Platforms.ChannelAdvisor.Warehouse
 {
     /// <summary>
-    /// ChannelAdvisor specific warehouse order loader
+    /// ChannelAdvisor warehouse order factory
     /// </summary>
     [KeyedComponent(typeof(IWarehouseOrderFactory), StoreTypeCode.ChannelAdvisor)]
     public class ChannelAdvisorWarehouseOrderFactory : WarehouseOrderFactory
@@ -33,9 +33,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor.Warehouse
         /// </summary>
         protected override async Task<GenericResult<OrderEntity>> CreateStoreOrderEntity(WarehouseOrder warehouseOrder)
         {
-            ChannelAdvisorWarehouseOrder channelAdvisorWarehouseOrder = (ChannelAdvisorWarehouseOrder) warehouseOrder;
-
-            long channelAdvisorOrderID = long.Parse(channelAdvisorWarehouseOrder.OrderNumber);
+            long channelAdvisorOrderID = long.Parse(((ChannelAdvisorWarehouseOrder) warehouseOrder).OrderNumber);
 
             // get the order instance
             GenericResult<OrderEntity> result = await orderElementFactory

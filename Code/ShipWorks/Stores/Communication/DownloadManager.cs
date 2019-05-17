@@ -29,7 +29,6 @@ using ShipWorks.Data.Utility;
 using ShipWorks.Users;
 using ShipWorks.Users.Audit;
 using ShipWorks.Users.Security;
-using ShipWorks.Warehouse;
 
 namespace ShipWorks.Stores.Communication
 {

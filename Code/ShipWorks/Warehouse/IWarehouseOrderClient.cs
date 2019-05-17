@@ -4,8 +4,14 @@ using ShipWorks.Warehouse.DTO.Orders;
 
 namespace ShipWorks.Warehouse
 {
+    /// <summary>
+    /// Client for retrieving orders from the ShipWorks Warehouse app
+    /// </summary>
     public interface IWarehouseOrderClient
     {
-        Task<IEnumerable<WarehouseOrder>> GetOrders(string warehouseID);
+        /// <summary>
+        /// Get orders for the given warehouse store ID from the ShipWorks Warehouse app
+        /// </summary>
+        Task<IEnumerable<WarehouseOrder>> GetOrders(string warehouseStoreID);
     }
 }

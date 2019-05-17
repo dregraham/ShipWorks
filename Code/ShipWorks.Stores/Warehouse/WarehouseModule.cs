@@ -3,6 +3,9 @@ using ShipWorks.Warehouse;
 
 namespace ShipWorks.Stores.Warehouse
 {
+    /// <summary>
+    /// Module for warehouse registrations
+    /// </summary>
     public class WarehouseModule : Module
     {
         /// <summary>

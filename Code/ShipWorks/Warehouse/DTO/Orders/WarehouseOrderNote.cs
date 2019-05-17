@@ -2,6 +2,9 @@ using System;
 
 namespace ShipWorks.Warehouse.DTO.Orders
 {
+    /// <summary>
+    /// Note for a warehouse order
+    /// </summary>
     public class WarehouseOrderNote
     {
         /// <summary>
@@ -10,12 +13,12 @@ namespace ShipWorks.Warehouse.DTO.Orders
         public DateTime Edited { get; set; }
         
         /// <summary>
-        /// The Text property of the Entity Note<br/><br/>
+        /// The text of the note
         /// </summary>
         public string Text { get; set; }
 
         /// <summary>
-        /// The Visibility property of the Entity Note<br/><br/>
+        /// The visibility of the note
         /// </summary>
         public int Visibility { get; set; }
     }

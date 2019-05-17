@@ -2,6 +2,9 @@ using ShipWorks.Warehouse.DTO.Orders;
 
 namespace ShipWorks.Stores.Platforms.Amazon.Warehouse
 {
+    /// <summary>
+    /// Amazon warehouse item
+    /// </summary>
     public class AmazonWarehouseItem : WarehouseOrderItem
     {
         /// <summary>

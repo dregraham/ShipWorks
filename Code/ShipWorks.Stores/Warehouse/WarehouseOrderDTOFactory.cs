@@ -12,7 +12,7 @@ namespace ShipWorks.Stores.Warehouse
     public static class WarehouseOrderDTOFactory
     {
         /// <summary>
-        /// Create an order from orderData
+        /// Create a warehouse order from order json
         /// </summary>
         public static WarehouseOrder CreateWarehouseOrder(string orderData)
         {
@@ -30,9 +30,9 @@ namespace ShipWorks.Stores.Warehouse
         }
 
         /// <summary>
-        /// Get the datas storetype
+        /// Get the store type from the json
         /// </summary>
-        /// <returns>null if we cant determine the storetype</returns>
+        /// <returns>null if we cant determine the store type</returns>
         private static StoreTypeCode? GetStoreType(string orderData)
         {
             JObject orderObject = JObject.Parse(orderData);

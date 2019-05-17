@@ -2,6 +2,9 @@ using ShipWorks.Warehouse.DTO.Orders;
 
 namespace ShipWorks.Stores.Platforms.ChannelAdvisor.Warehouse
 {
+    /// <summary>
+    /// ChannelAdvisor warehouse item
+    /// </summary>
     public class ChannelAdvisorWarehouseItem : WarehouseOrderItem
     {
         /// <summary>

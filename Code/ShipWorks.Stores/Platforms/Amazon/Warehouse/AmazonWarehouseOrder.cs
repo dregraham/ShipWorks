@@ -4,8 +4,14 @@ using ShipWorks.Warehouse.DTO.Orders;
 
 namespace ShipWorks.Stores.Platforms.Amazon.Warehouse
 {
+    /// <summary>
+    /// Amazon warehouse order
+    /// </summary>
     public class AmazonWarehouseOrder : WarehouseOrder
     {
+        /// <summary>
+        /// The orders Amazon order ID
+        /// </summary>
         public string AmazonOrderID { get; set; }
 
         /// <summary>
