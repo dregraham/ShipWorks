@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
 using System.Data.SqlClient;
+using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Linq;
 using System.Transactions;
@@ -312,6 +313,8 @@ namespace ShipWorks.Filters
         /// <summary>
         /// Get the filter image of the given type, either from our a cache of reusable images or creating a new copy
         /// </summary>
+        [SuppressMessage("ShipWorks", "SW0002:Identifier should not be obfuscated",
+            Justification = "Identifier is not being used for data binding")]
         private static string GetFilterImageName(FilterImageType filterImageType)
         {
             switch (filterImageType)
