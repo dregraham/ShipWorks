@@ -126,7 +126,8 @@ namespace ShipWorks.Stores.Warehouse.Encryption
 
             if (response.Failure)
             {
-                throw new WarehouseEncryptionException($"Failed to generate data key.{Environment.NewLine}{Environment.NewLine}{response.Message}");
+                log.Error(response.Exception);
+                throw new WarehouseEncryptionException($"Failed to generate data key.{Environment.NewLine}{Environment.NewLine}{response.Message}", response.Exception);
             }
 
             GenerateDataKeyResponse dataKeyResponse =

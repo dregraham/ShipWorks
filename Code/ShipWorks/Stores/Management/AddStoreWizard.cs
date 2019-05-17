@@ -10,6 +10,7 @@ using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
+using log4net;
 using Quartz.Util;
 using ShipWorks.Actions;
 using ShipWorks.Actions.Tasks;
@@ -1042,19 +1043,23 @@ namespace ShipWorks.Stores.Management
         /// </summary>
         private async Task<Result> UploadStoreToWarehouse(WizardSteppingIntoEventArgs e)
         {
-            Result result = await scope.Resolve<IWarehouseStoreClient>().UploadStoreToWarehouse(store)
-                .ConfigureAwait(true);
-            if (result.Failure)
+            using (var innerScope = scope.BeginLifetimeScope())
             {
-                MessageHelper.ShowError(
-                    this,
-                    $"An error occurred saving the store to ShipWorks.{Environment.NewLine + Environment.NewLine + result.Message}");
-                e.Skip = true;
-                e.SkipToPage = wizardPageSettings;
-                BackEnabled = true;
+                Result result = await innerScope.Resolve<IWarehouseStoreClient>().UploadStoreToWarehouse(store)
+                    .ConfigureAwait(true);
+                if (result.Failure)
+                {
+                    innerScope.Resolve<Func<Type, ILog>>()(typeof(AddStoreWizard)).Error(result.Message);
+                    
+                    MessageHelper.ShowError(
+                        this,
+                        $"An error occurred saving the store to ShipWorks.");
+                    e.Skip = true;
+                    e.SkipToPage = wizardPageSettings;
+                    BackEnabled = true;
+                }
+                return result;
             }
-
-            return result;
         }
 
         /// <summary>

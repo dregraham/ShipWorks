@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Net;
+using System.Threading.Tasks;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
 using log4net;
@@ -67,6 +68,11 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse
                 .ConfigureAwait(false);
 
             logEntry.LogResponse(restResponse);
+
+            if (!restResponse.IsSuccessful)
+            {
+                throw new WebException("Error in RemoteLoginWithToken", restResponse.ErrorException);
+            }
 
             // De-serialize the result
             TokenResponse requestResult = JsonConvert.DeserializeObject<TokenResponse>(restResponse.Content,
