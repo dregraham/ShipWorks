@@ -830,7 +830,7 @@
             // saturdayReturn
             // 
             this.saturdayReturn.AutoSize = true;
-            this.saturdayReturn.Location = new System.Drawing.Point(49, 193);
+            this.saturdayReturn.Location = new System.Drawing.Point(73, 193);
             this.saturdayReturn.Name = "saturdayReturn";
             this.saturdayReturn.Size = new System.Drawing.Size(144, 17);
             this.saturdayReturn.TabIndex = 14;
@@ -853,7 +853,7 @@
             // 
             this.returnType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.returnType.FormattingEnabled = true;
-            this.returnType.Location = new System.Drawing.Point(159, 109);
+            this.returnType.Location = new System.Drawing.Point(183, 109);
             this.returnType.Name = "returnType";
             this.returnType.PromptText = "(Multiple Values)";
             this.returnType.Size = new System.Drawing.Size(207, 21);
@@ -863,7 +863,7 @@
             // 
             this.labelReturnType.AutoSize = true;
             this.labelReturnType.BackColor = System.Drawing.Color.White;
-            this.labelReturnType.Location = new System.Drawing.Point(48, 112);
+            this.labelReturnType.Location = new System.Drawing.Point(70, 112);
             this.labelReturnType.Name = "labelReturnType";
             this.labelReturnType.Size = new System.Drawing.Size(107, 13);
             this.labelReturnType.TabIndex = 101;
@@ -970,7 +970,7 @@
             // 
             // rmaReason
             // 
-            this.rmaReason.Location = new System.Drawing.Point(159, 163);
+            this.rmaReason.Location = new System.Drawing.Point(183, 163);
             this.rmaReason.MaxLength = 60;
             this.fieldLengthProvider.SetMaxLengthSource(this.rmaReason, ShipWorks.Data.Utility.EntityFieldLengthSource.FedExRmaReason);
             this.rmaReason.Name = "rmaReason";
@@ -981,7 +981,7 @@
             // 
             this.labelRmaReason.AutoSize = true;
             this.labelRmaReason.BackColor = System.Drawing.Color.White;
-            this.labelRmaReason.Location = new System.Drawing.Point(83, 167);
+            this.labelRmaReason.Location = new System.Drawing.Point(107, 167);
             this.labelRmaReason.Name = "labelRmaReason";
             this.labelRmaReason.Size = new System.Drawing.Size(72, 13);
             this.labelRmaReason.TabIndex = 15;
@@ -989,7 +989,7 @@
             // 
             // rmaNumber
             // 
-            this.rmaNumber.Location = new System.Drawing.Point(159, 137);
+            this.rmaNumber.Location = new System.Drawing.Point(183, 137);
             this.rmaNumber.MaxLength = 30;
             this.fieldLengthProvider.SetMaxLengthSource(this.rmaNumber, ShipWorks.Data.Utility.EntityFieldLengthSource.FedExRmaNumber);
             this.rmaNumber.Name = "rmaNumber";
@@ -1000,7 +1000,7 @@
             // 
             this.labelRmaNumber.AutoSize = true;
             this.labelRmaNumber.BackColor = System.Drawing.Color.White;
-            this.labelRmaNumber.Location = new System.Drawing.Point(111, 140);
+            this.labelRmaNumber.Location = new System.Drawing.Point(135, 140);
             this.labelRmaNumber.Name = "labelRmaNumber";
             this.labelRmaNumber.Size = new System.Drawing.Size(44, 13);
             this.labelRmaNumber.TabIndex = 11;
