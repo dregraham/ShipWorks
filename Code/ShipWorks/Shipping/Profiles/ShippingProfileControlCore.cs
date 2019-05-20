@@ -468,6 +468,8 @@ namespace ShipWorks.Shipping.Profiles
         /// </summary>
         protected void SetParentCheckBox(CheckBox parentState, CheckBox parent, CheckBox childState, Control child)
         {
+            bool active = false;
+
             ParentChildMapping parentChild = new ParentChildMapping
             {
                 ParentState = parentState,
@@ -489,7 +491,9 @@ namespace ShipWorks.Shipping.Profiles
             parent.CheckedChanged += OnParentCheckChanged;
             childState.CheckedChanged += OnChildStateChanged;
 
-            child.Enabled = childState.Checked && parent.Checked;
+            // Set initial child state
+            active = childState.Checked && parent.Checked;
+            SetChildState(child, active);
         }
 
         /// <summary>
@@ -503,15 +507,7 @@ namespace ShipWorks.Shipping.Profiles
             {
                 foreach (ParentChildMapping mapping in parentChildMap.Where(x => x.ParentState == parentState))
                 {
-                    // Disable child and clear value if possible
-                    try
-                    {
-                        UpdateState(mapping.Child, false);
-                    }
-                    catch (NotSupportedException)
-                    {
-                        mapping.Child.Enabled = false;
-                    }
+                    SetChildState(mapping.Child, false);
                 }
             }
         }
@@ -522,25 +518,13 @@ namespace ShipWorks.Shipping.Profiles
         protected void OnParentCheckChanged(object sender, EventArgs e)
         {
             CheckBox parent = (CheckBox) sender;
+            bool active;
 
             foreach (ParentChildMapping mapping in parentChildMap.Where(x => x.Parent == parent))
             {
-                if (parent.Checked)
-                {
-                    mapping.Child.Enabled = mapping.ChildState.Checked;
-                }
-                else
-                {
-                    // Disable child and clear value if possible
-                    try
-                    {
-                        UpdateState(mapping.Child, false);
-                    }
-                    catch (NotSupportedException)
-                    {
-                        mapping.Child.Enabled = false;
-                    }
-                }
+                active = parent.Checked ? mapping.ChildState.Checked : false;
+
+                SetChildState(mapping.Child, active);
             }
         }
 
@@ -550,25 +534,28 @@ namespace ShipWorks.Shipping.Profiles
         protected void OnChildStateChanged(object sender, EventArgs e)
         {
             CheckBox childState = (CheckBox) sender;
+            bool active;
 
             foreach (ParentChildMapping mapping in parentChildMap.Where(x => x.ChildState == childState))
             {
-                if (childState.Checked)
-                {
-                    mapping.Child.Enabled = mapping.Parent.Checked;
-                }
-                else
-                {
-                    // Disable child and clear value if possible
-                    try
-                    {
-                        UpdateState(mapping.Child, false);
-                    }
-                    catch (NotSupportedException)
-                    {
-                        mapping.Child.Enabled = false;
-                    }
-                }
+                active = childState.Checked ? mapping.Parent.Checked : false;
+
+                SetChildState(mapping.Child, active);
+            }
+        }
+
+        /// <summary>
+        /// Set child control's state and, if possible, a default value
+        /// </summary>
+        private void SetChildState(Control child, bool active)
+        {
+            try
+            {
+                UpdateState(child, active);
+            }
+            catch (NotSupportedException)
+            {
+                child.Enabled = active;
             }
         }
     }

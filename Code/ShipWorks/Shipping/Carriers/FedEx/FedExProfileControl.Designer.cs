@@ -923,7 +923,6 @@
             this.applyReturnProfile.TabIndex = 3;
             this.applyReturnProfile.Text = "Apply a profile to the return shipment";
             this.applyReturnProfile.UseVisualStyleBackColor = false;
-            this.applyReturnProfile.CheckedChanged += new System.EventHandler(this.OnApplyReturnChanged);
             // 
             // applyReturnProfileState
             // 
@@ -933,7 +932,6 @@
             this.applyReturnProfileState.Size = new System.Drawing.Size(15, 14);
             this.applyReturnProfileState.TabIndex = 2;
             this.applyReturnProfileState.UseVisualStyleBackColor = true;
-            this.applyReturnProfileState.CheckedChanged += new System.EventHandler(this.OnApplyReturnProfileStateChanged);
             // 
             // returnProfileID
             // 
@@ -946,6 +944,7 @@
             this.returnProfileID.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.returnProfileID.FormattingEnabled = true;
             this.returnProfileID.DropDown += new System.EventHandler(this.OnReturnProfileIDOpened);
+            this.returnProfileID.EnabledChanged += new System.EventHandler(this.OnReturnProfileIDEnabledChanged);
             // 
             // returnProfileIDLabel
             // 

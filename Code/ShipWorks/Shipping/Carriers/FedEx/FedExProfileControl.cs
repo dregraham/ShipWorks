@@ -29,7 +29,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx
     {
         private BindingList<KeyValuePair<long, string>> includeReturnProfiles = new BindingList<KeyValuePair<long, string>>();
         private BindingSource bindingSource = new BindingSource();
-        private double currentProfileID = -1;
 
         /// <summary>
         /// Constructor
@@ -56,8 +55,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         public override void LoadProfile(ShippingProfileEntity profile)
         {
             base.LoadProfile(profile);
-
-            currentProfileID = profile.ShippingProfileID;
 
             FedExProfileEntity fedex = profile.FedEx;
 
@@ -88,75 +85,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 insuranceControl.InsuredValueLabel = "Declared value:";
             }
 
-            RefreshIncludeReturnProfileMenu(profile.ShipmentType);
-            returnProfileID.DisplayMember = "Value";
-            returnProfileID.ValueMember = "Key";
-
-            SetupValueMappings(profile, fedex);
-            SetupStateMappings(fedex);
-
-            ApplyEmailNotificationValues(fedex.EmailNotifySender, emailNotifySenderShip, emailNotifySenderException, emailNotifySenderDelivery, emailNotifySenderEstimatedDelivery);
-            ApplyEmailNotificationValues(fedex.EmailNotifyRecipient, emailNotifyRecipientShip, emailNotifyRecipientException, emailNotifyRecipientDelivery, emailNotifyRecipientEstimatedDelivery);
-            ApplyEmailNotificationValues(fedex.EmailNotifyOther, emailNotifyOtherShip, emailNotifyOtherException, emailNotifyOtherDelivery, emailNotifyOtherEstimatedDelivery);
-            ApplyEmailNotificationValues(fedex.EmailNotifyBroker, emailNotifyBrokerShip, emailNotifyBrokerException, emailNotifyBrokerDelivery, emailNotifyBrokerEstimatedDelivery);
-
-            // Remove state checkbox event handler since we'll be enabling/disabling manually
-            returnShipmentState.CheckedChanged -= OnStateCheckChanged;
-            includeReturnState.CheckedChanged -= OnStateCheckChanged;
-            applyReturnProfileState.CheckedChanged -= OnStateCheckChanged;
-
-            // Manually enable/disable for mutually exclusive return controls
-            includeReturn.Enabled = includeReturnState.Checked && !returnShipment.Checked;
-            returnShipment.Enabled = returnShipmentState.Checked && !includeReturn.Checked;
-            applyReturnProfile.Enabled = applyReturnProfileState.Checked && includeReturn.Checked;
-            returnProfileID.Enabled = applyReturnProfileState.Checked && applyReturnProfile.Checked && includeReturn.Checked;
-            returnProfileIDLabel.Enabled = applyReturnProfileState.Checked && applyReturnProfile.Checked && includeReturn.Checked;
-
-            // Refresh the menu again to prevent it being blank if it was disabled above
-            RefreshIncludeReturnProfileMenu(profile.ShipmentType);
-
-            packagesState.Checked = profile.Packages.Count > 0;
-            packagesCount.SelectedIndex = packagesState.Checked ? profile.Packages.Count - 1 : -1;
-            packagesCount.Enabled = packagesState.Checked;
-
-            LoadPackageEditingUI();
-
-            packagesState.CheckedChanged += new EventHandler(OnChangePackagesChecked);
-            packagesCount.SelectedIndexChanged += new EventHandler(OnChangePackagesCount);
-        }
-
-        /// <summary>
-        /// Add enabled state mappings to controls
-        /// </summary>
-        /// <param name="fedex"></param>
-        private void SetupStateMappings(FedExProfileEntity fedex)
-        {
-            AddEnabledStateMapping(fedex, FedExProfileFields.EmailNotifySender, emailNotifySenderState, emailNotifySenderShip, labelEmailSender);
-            AddEnabledStateMapping(fedex, FedExProfileFields.EmailNotifySender, emailNotifySenderState, emailNotifySenderException);
-            AddEnabledStateMapping(fedex, FedExProfileFields.EmailNotifySender, emailNotifySenderState, emailNotifySenderDelivery);
-            AddEnabledStateMapping(fedex, FedExProfileFields.EmailNotifySender, emailNotifySenderState, emailNotifySenderEstimatedDelivery);
-
-            AddEnabledStateMapping(fedex, FedExProfileFields.EmailNotifyRecipient, emailNotifyRecipientState, emailNotifyRecipientShip, labelEmailRecipient);
-            AddEnabledStateMapping(fedex, FedExProfileFields.EmailNotifyRecipient, emailNotifyRecipientState, emailNotifyRecipientException, labelEmailRecipient);
-            AddEnabledStateMapping(fedex, FedExProfileFields.EmailNotifyRecipient, emailNotifyRecipientState, emailNotifyRecipientDelivery, labelEmailRecipient);
-            AddEnabledStateMapping(fedex, FedExProfileFields.EmailNotifyRecipient, emailNotifyRecipientState, emailNotifyRecipientEstimatedDelivery, labelEmailRecipient);
-
-            AddEnabledStateMapping(fedex, FedExProfileFields.EmailNotifyOther, emailNotifyOtherState, emailNotifyOtherShip);
-            AddEnabledStateMapping(fedex, FedExProfileFields.EmailNotifyOther, emailNotifyOtherState, emailNotifyOtherException);
-            AddEnabledStateMapping(fedex, FedExProfileFields.EmailNotifyOther, emailNotifyOtherState, emailNotifyOtherDelivery);
-            AddEnabledStateMapping(fedex, FedExProfileFields.EmailNotifyOther, emailNotifyOtherState, emailNotifyOtherEstimatedDelivery);
-
-            AddEnabledStateMapping(fedex, FedExProfileFields.EmailNotifyBroker, emailNotifyBrokerState, emailNotifyBrokerShip, labelEmailBroker);
-            AddEnabledStateMapping(fedex, FedExProfileFields.EmailNotifyBroker, emailNotifyBrokerState, emailNotifyBrokerException, labelEmailBroker);
-            AddEnabledStateMapping(fedex, FedExProfileFields.EmailNotifyBroker, emailNotifyBrokerState, emailNotifyBrokerDelivery, labelEmailBroker);
-            AddEnabledStateMapping(fedex, FedExProfileFields.EmailNotifyBroker, emailNotifyBrokerState, emailNotifyBrokerEstimatedDelivery, labelEmailBroker);
-        }
-
-        /// <summary>
-        /// Add value mappings to controls
-        /// </summary>
-        private void SetupValueMappings(ShippingProfileEntity profile, FedExProfileEntity fedex)
-        {
             AddValueMapping(fedex, FedExProfileFields.FedExAccountID, accountState, fedexAccount, labelAccount);
             AddValueMapping(profile, ShippingProfileFields.OriginID, senderState, originCombo, labelSender);
 
@@ -187,9 +115,40 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             AddValueMapping(fedex, FedExProfileFields.PayorDutiesType, payorDutiesTypeState, payorDuties, labelPayorDuties);
             AddValueMapping(fedex, FedExProfileFields.PayorDutiesAccount, payorDutiesAccountState, dutiesAccount, labelDutiesAccount);
 
+            AddValueMapping(profile, ShippingProfileFields.ReturnShipment, returnShipmentState, returnShipment);
+            AddValueMapping(fedex, FedExProfileFields.ReturnType, returnTypeState, returnType, labelReturnType);
+            AddValueMapping(fedex, FedExProfileFields.RmaNumber, rmaNumberState, rmaNumber, labelRmaNumber);
+            AddValueMapping(fedex, FedExProfileFields.RmaReason, rmaReasonState, rmaReason, labelRmaReason);
+            AddValueMapping(fedex, FedExProfileFields.ReturnSaturdayPickup, saturdayReturnState, saturdayReturn);
+
             AddValueMapping(fedex, FedExProfileFields.SaturdayDelivery, saturdayState, saturdayDelivery, labelSaturday);
             AddValueMapping(fedex, FedExProfileFields.ReturnsClearance, returnsClearanceState, returnsClearance, labelReturnsClearance);
             AddValueMapping(fedex, FedExProfileFields.ThirdPartyConsignee, consigneeState, thirdPartyConsignee, labelConsignee);
+
+            AddEnabledStateMapping(fedex, FedExProfileFields.EmailNotifySender, emailNotifySenderState, emailNotifySenderShip, labelEmailSender);
+            AddEnabledStateMapping(fedex, FedExProfileFields.EmailNotifySender, emailNotifySenderState, emailNotifySenderException);
+            AddEnabledStateMapping(fedex, FedExProfileFields.EmailNotifySender, emailNotifySenderState, emailNotifySenderDelivery);
+            AddEnabledStateMapping(fedex, FedExProfileFields.EmailNotifySender, emailNotifySenderState, emailNotifySenderEstimatedDelivery);
+
+            AddEnabledStateMapping(fedex, FedExProfileFields.EmailNotifyRecipient, emailNotifyRecipientState, emailNotifyRecipientShip, labelEmailRecipient);
+            AddEnabledStateMapping(fedex, FedExProfileFields.EmailNotifyRecipient, emailNotifyRecipientState, emailNotifyRecipientException, labelEmailRecipient);
+            AddEnabledStateMapping(fedex, FedExProfileFields.EmailNotifyRecipient, emailNotifyRecipientState, emailNotifyRecipientDelivery, labelEmailRecipient);
+            AddEnabledStateMapping(fedex, FedExProfileFields.EmailNotifyRecipient, emailNotifyRecipientState, emailNotifyRecipientEstimatedDelivery, labelEmailRecipient);
+
+            AddEnabledStateMapping(fedex, FedExProfileFields.EmailNotifyOther, emailNotifyOtherState, emailNotifyOtherShip);
+            AddEnabledStateMapping(fedex, FedExProfileFields.EmailNotifyOther, emailNotifyOtherState, emailNotifyOtherException);
+            AddEnabledStateMapping(fedex, FedExProfileFields.EmailNotifyOther, emailNotifyOtherState, emailNotifyOtherDelivery);
+            AddEnabledStateMapping(fedex, FedExProfileFields.EmailNotifyOther, emailNotifyOtherState, emailNotifyOtherEstimatedDelivery);
+
+            AddEnabledStateMapping(fedex, FedExProfileFields.EmailNotifyBroker, emailNotifyBrokerState, emailNotifyBrokerShip, labelEmailBroker);
+            AddEnabledStateMapping(fedex, FedExProfileFields.EmailNotifyBroker, emailNotifyBrokerState, emailNotifyBrokerException, labelEmailBroker);
+            AddEnabledStateMapping(fedex, FedExProfileFields.EmailNotifyBroker, emailNotifyBrokerState, emailNotifyBrokerDelivery, labelEmailBroker);
+            AddEnabledStateMapping(fedex, FedExProfileFields.EmailNotifyBroker, emailNotifyBrokerState, emailNotifyBrokerEstimatedDelivery, labelEmailBroker);
+
+            ApplyEmailNotificationValues(fedex.EmailNotifySender, emailNotifySenderShip, emailNotifySenderException, emailNotifySenderDelivery, emailNotifySenderEstimatedDelivery);
+            ApplyEmailNotificationValues(fedex.EmailNotifyRecipient, emailNotifyRecipientShip, emailNotifyRecipientException, emailNotifyRecipientDelivery, emailNotifyRecipientEstimatedDelivery);
+            ApplyEmailNotificationValues(fedex.EmailNotifyOther, emailNotifyOtherShip, emailNotifyOtherException, emailNotifyOtherDelivery, emailNotifyOtherEstimatedDelivery);
+            ApplyEmailNotificationValues(fedex.EmailNotifyBroker, emailNotifyBrokerShip, emailNotifyBrokerException, emailNotifyBrokerDelivery, emailNotifyBrokerEstimatedDelivery);
 
             AddValueMapping(fedex, FedExProfileFields.EmailNotifyOtherAddress, emailNotifyOtherState, emailNotifyOtherAddress, labelEmailOther);
             AddValueMapping(fedex, FedExProfileFields.EmailNotifyMessage, emailNotifyMessageState, emailNotifyMessage, labelPersonalMessage);
@@ -201,14 +160,44 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             AddValueMapping(profile, ShippingProfileFields.Insurance, insuranceState, insuranceControl);
 
             // Returns
+            RefreshIncludeReturnProfileMenu(profile.ShipmentType);
+            returnProfileID.DisplayMember = "Value";
+            returnProfileID.ValueMember = "Key";
+            returnProfileID.SelectedIndex = -1;
+
             AddValueMapping(profile, ShippingProfileFields.ReturnShipment, returnShipmentState, returnShipment);
-            AddValueMapping(fedex, FedExProfileFields.ReturnType, returnTypeState, returnType, labelReturnType);
-            AddValueMapping(fedex, FedExProfileFields.RmaNumber, rmaNumberState, rmaNumber, labelRmaNumber);
-            AddValueMapping(fedex, FedExProfileFields.RmaReason, rmaReasonState, rmaReason, labelRmaReason);
-            AddValueMapping(fedex, FedExProfileFields.ReturnSaturdayPickup, saturdayReturnState, saturdayReturn);
             AddValueMapping(profile, ShippingProfileFields.IncludeReturn, includeReturnState, includeReturn);
             AddValueMapping(profile, ShippingProfileFields.ApplyReturnProfile, applyReturnProfileState, applyReturnProfile);
-            AddValueMapping(profile, ShippingProfileFields.ReturnProfileID, applyReturnProfileState, returnProfileID);
+            AddValueMapping(profile, ShippingProfileFields.ReturnProfileID, applyReturnProfile, returnProfileID);
+
+            // Map parent/child relationships
+            SetParentCheckBox(includeReturnState, includeReturn, applyReturnProfileState, applyReturnProfile);
+            SetParentCheckBox(applyReturnProfileState, applyReturnProfile, applyReturnProfileState, returnProfileID);
+            SetParentCheckBox(applyReturnProfileState, applyReturnProfile, applyReturnProfileState, returnProfileIDLabel);
+            SetParentCheckBox(returnShipmentState, returnShipment, saturdayReturnState, saturdayReturn);
+            SetParentCheckBox(returnShipmentState, returnShipment, returnTypeState, returnType);
+            SetParentCheckBox(returnShipmentState, returnShipment, returnTypeState, labelReturnType);
+            SetParentCheckBox(returnShipmentState, returnShipment, rmaReasonState, rmaReason);
+            SetParentCheckBox(returnShipmentState, returnShipment, rmaReasonState, labelRmaReason);
+            SetParentCheckBox(returnShipmentState, returnShipment, rmaNumberState, rmaNumber);
+            SetParentCheckBox(returnShipmentState, returnShipment, rmaNumberState, labelRmaNumber);
+
+            // Remove state checkbox event handler since we'll be enabling/disabling manually
+            returnShipmentState.CheckedChanged -= OnStateCheckChanged;
+            includeReturnState.CheckedChanged -= OnStateCheckChanged;
+
+            // Manually enable/disable for mutually exclusive return controls
+            includeReturn.Enabled = includeReturnState.Checked && !returnShipment.Checked;
+            returnShipment.Enabled = returnShipmentState.Checked && !includeReturn.Checked;
+
+            packagesState.Checked = profile.Packages.Count > 0;
+            packagesCount.SelectedIndex = packagesState.Checked ? profile.Packages.Count - 1 : -1;
+            packagesCount.Enabled = packagesState.Checked;
+
+            LoadPackageEditingUI();
+
+            packagesState.CheckedChanged += new EventHandler(OnChangePackagesChecked);
+            packagesCount.SelectedIndexChanged += new EventHandler(OnChangePackagesCount);
         }
 
         /// <summary>
@@ -505,163 +494,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         }
 
         /// <summary>
-        /// Click of the Include Return checkbox
-        /// </summary>
-        private void OnIncludeReturnChanged(object sender, EventArgs e)
-        {
-            if (includeReturn.Checked)
-            {
-                returnShipment.Enabled = false;
-                applyReturnProfile.Enabled = applyReturnProfileState.Checked;
-                returnProfileID.Enabled = applyReturnProfileState.Checked && applyReturnProfile.Checked;
-                returnProfileIDLabel.Enabled = applyReturnProfileState.Checked && applyReturnProfile.Checked;
-            }
-            else
-            {
-                returnShipment.Enabled = returnShipmentState.Checked;
-                applyReturnProfile.Enabled = false;
-                applyReturnProfile.Checked = false;
-                returnProfileID.Enabled = false;
-                returnProfileIDLabel.Enabled = false;
-            }
-        }
-
-        /// <summary>
-        /// Click of the Apply Return Profile checkbox
-        /// </summary>
-        private void OnApplyReturnChanged(object sender, EventArgs e)
-        {
-            if (applyReturnProfile.Checked)
-            {
-                returnProfileID.Enabled = applyReturnProfileState.Checked;
-                returnProfileIDLabel.Enabled = applyReturnProfileState.Checked;
-            }
-            else
-            {
-                returnProfileID.Enabled = false;
-                returnProfileIDLabel.Enabled = false;
-            }
-        }
-
-        /// <summary>
-        /// Opening the return profiles menu
-        /// </summary>
-        private void OnReturnProfileIDOpened(object sender, EventArgs e)
-        {
-            ShipmentTypeCode? shipmentTypeCode = Profile.ShipmentType;
-            // Populate the list of profiles
-            RefreshIncludeReturnProfileMenu(shipmentTypeCode);
-        }
-
-        /// <summary>
-        /// Click of the Return Shipment checkbox
-        /// </summary>
-        protected virtual void OnReturnShipmentChanged(object sender, EventArgs e)
-        {
-            if (returnShipment.Checked)
-            {
-                includeReturn.Enabled = false;
-            }
-            else
-            {
-                includeReturn.Enabled = includeReturnState.Checked;
-            }
-        }
-
-        /// <summary>
-        /// Click of the Include Return State Checkbox
-        /// </summary>
-        protected virtual void OnIncludeReturnStateChanged(object sender, EventArgs e)
-        {
-            if (includeReturnState.Checked)
-            {
-                includeReturn.Enabled = !returnShipment.Checked;
-                applyReturnProfile.Enabled = includeReturn.Checked && applyReturnProfileState.Checked;
-                returnProfileID.Enabled = applyReturnProfile.Checked && applyReturnProfileState.Checked;
-                returnProfileIDLabel.Enabled = applyReturnProfile.Checked && applyReturnProfileState.Checked;
-            }
-            else
-            {
-                includeReturn.Enabled = false;
-                includeReturn.Checked = false;
-                applyReturnProfile.Enabled = false;
-                applyReturnProfile.Checked = false;
-                returnProfileID.Enabled = false;
-                returnProfileIDLabel.Enabled = false;
-            }
-        }
-
-        /// <summary>
-        /// Click of the Apply Return Profile State Checkbox
-        /// </summary>
-        protected virtual void OnApplyReturnProfileStateChanged(object sender, EventArgs e)
-        {
-            if (applyReturnProfileState.Checked)
-            {
-                applyReturnProfile.Enabled = includeReturn.Checked;
-                returnProfileID.Enabled = applyReturnProfile.Checked;
-                returnProfileIDLabel.Enabled = applyReturnProfile.Checked;
-            }
-            else
-            {
-                applyReturnProfile.Enabled = false;
-                applyReturnProfile.Checked = false;
-                returnProfileID.Enabled = false;
-                returnProfileIDLabel.Enabled = false;
-            }
-        }
-
-        /// <summary>
-        /// Click of the Return Shipment State Checkbox
-        /// </summary>
-        protected virtual void OnReturnStateChanged(object sender, EventArgs e)
-        {
-            if (returnShipmentState.Checked)
-            {
-                returnShipment.Enabled = !includeReturn.Checked;
-            }
-            else
-            {
-                returnShipment.Enabled = false;
-                returnShipment.Checked = false;
-            }
-        }
-
-        /// <summary>
-        /// Add applicable profiles for the given shipment type to the context menu
-        /// </summary>
-        private void RefreshIncludeReturnProfileMenu(ShipmentTypeCode? shipmentTypeCode)
-        {
-            BindingList<KeyValuePair<long, string>> newReturnProfiles = new BindingList<KeyValuePair<long, string>>();
-
-            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
-            {
-                IShippingProfileService shippingProfileService = lifetimeScope.Resolve<IShippingProfileService>();
-
-                List<KeyValuePair<long, string>> returnProfiles = shippingProfileService
-                    .GetConfiguredShipmentTypeProfiles()
-                    .Where(p => p.ShippingProfileEntity.ShippingProfileID != currentProfileID)
-                    .Where(p => p.ShippingProfileEntity.ShipmentType.HasValue)
-                    .Where(p => p.IsApplicable(shipmentTypeCode))
-                    .Where(p => p.ShippingProfileEntity.ShipmentType == shipmentTypeCode)
-                    .Where(p => p.ShippingProfileEntity.ReturnShipment == true)
-                    .Select(s => new KeyValuePair<long, string>(s.ShippingProfileEntity.ShippingProfileID, s.ShippingProfileEntity.Name))
-                    .OrderBy(g => g.Value)
-                    .ToList<KeyValuePair<long, string>>();
-
-                newReturnProfiles = new BindingList<KeyValuePair<long, string>>(returnProfiles);
-            }
-
-            newReturnProfiles.Insert(0, new KeyValuePair<long, string>(-1, "(No Profile)"));
-
-            includeReturnProfiles = newReturnProfiles;
-
-            // Reset data sources because calling resetbindings() doesn't work
-            bindingSource.DataSource = includeReturnProfiles;
-            returnProfileID.DataSource = bindingSource;
-        }
-
-        /// <summary>
         /// Load the UI for editing all the package profile controls
         /// </summary>
         private void LoadPackageEditingUI()
@@ -714,6 +546,122 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             }
 
             panelPackageControls.Height = lastControl == null ? 0 : lastControl.Bottom + 4;
+        }
+
+        /// <summary>
+        /// Click of the Include Return checkbox
+        /// </summary>
+        private void OnIncludeReturnChanged(object sender, EventArgs e)
+        {
+            if (includeReturn.Checked)
+            {
+                returnShipment.Enabled = false;
+            }
+            else
+            {
+                returnShipment.Enabled = returnShipmentState.Checked;
+            }
+        }
+
+        /// <summary>
+        /// Opening the return profiles menu
+        /// </summary>
+        private void OnReturnProfileIDOpened(object sender, EventArgs e)
+        {
+            RefreshIncludeReturnProfileMenu(Profile.ShipmentType);
+        }
+
+        /// <summary>
+        /// Click of the Return Shipment checkbox
+        /// </summary>
+        protected virtual void OnReturnShipmentChanged(object sender, EventArgs e)
+        {
+            if (returnShipment.Checked)
+            {
+                includeReturn.Enabled = false;
+            }
+            else
+            {
+                includeReturn.Enabled = includeReturnState.Checked;
+            }
+        }
+
+        /// <summary>
+        /// Click of the Include Return State Checkbox
+        /// </summary>
+        protected virtual void OnIncludeReturnStateChanged(object sender, EventArgs e)
+        {
+            if (includeReturnState.Checked)
+            {
+                includeReturn.Enabled = !returnShipment.Checked;
+            }
+            else
+            {
+                includeReturn.Enabled = false;
+                includeReturn.Checked = false;
+            }
+        }
+
+        /// <summary>
+        /// Click of the Return Shipment State Checkbox
+        /// </summary>
+        protected virtual void OnReturnStateChanged(object sender, EventArgs e)
+        {
+            if (returnShipmentState.Checked)
+            {
+                returnShipment.Enabled = !includeReturn.Checked;
+            }
+            else
+            {
+                returnShipment.Enabled = false;
+                returnShipment.Checked = false;
+            }
+        }
+
+        /// <summary>
+        /// When ReturnProfileID dropdown is enabled
+        /// </summary>
+        protected void OnReturnProfileIDEnabledChanged(object sender, EventArgs e)
+        {
+            if (returnProfileID.Enabled)
+            {
+                RefreshIncludeReturnProfileMenu(Profile.ShipmentType);
+            }
+        }
+
+        /// <summary>
+        /// Add applicable profiles for the given shipment type to the context menu
+        /// </summary>
+        private void RefreshIncludeReturnProfileMenu(ShipmentTypeCode? shipmentTypeCode)
+        {
+            BindingList<KeyValuePair<long, string>> newReturnProfiles = new BindingList<KeyValuePair<long, string>>();
+
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+            {
+                IShippingProfileService shippingProfileService = lifetimeScope.Resolve<IShippingProfileService>();
+
+                List<KeyValuePair<long, string>> returnProfiles = shippingProfileService
+                    .GetConfiguredShipmentTypeProfiles()
+                    .Where(p => p.ShippingProfileEntity.ShippingProfileID != Profile.ShippingProfileID)
+                    .Where(p => p.ShippingProfileEntity.ShipmentType.HasValue)
+                    .Where(p => p.IsApplicable(shipmentTypeCode))
+                    .Where(p => p.ShippingProfileEntity.ShipmentType == shipmentTypeCode)
+                    .Where(p => p.ShippingProfileEntity.ReturnShipment == true)
+                    .Select(s => new KeyValuePair<long, string>(s.ShippingProfileEntity.ShippingProfileID, s.ShippingProfileEntity.Name))
+                    .OrderBy(g => g.Value)
+                    .ToList<KeyValuePair<long, string>>();
+
+                newReturnProfiles = new BindingList<KeyValuePair<long, string>>(returnProfiles);
+            }
+
+            // Always add No Profile so if a selected profile is no longer a return profile, this becomes the default
+            newReturnProfiles.Insert(0, new KeyValuePair<long, string>(-1, "(No Profile)"));
+
+            includeReturnProfiles = newReturnProfiles;
+
+            // Reset data sources because calling resetbindings() doesn't work
+            bindingSource.DataSource = includeReturnProfiles;
+            returnProfileID.DataSource = bindingSource;
         }
 
     }
