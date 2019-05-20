@@ -26,6 +26,7 @@ namespace ShipWorks.Shipping.Profiles
             public Control DataControl { get; set; }
             public Control[] OtherControls { get; set; }
             public bool IsValueMapping { get; set; }
+            public CheckBox Parent { get; set; } = null;
         }
 
         /// <summary>
@@ -132,7 +133,9 @@ namespace ShipWorks.Shipping.Profiles
             {
                 if (mapping.IsValueMapping)
                 {
-                    if (mapping.CheckBox.Checked)
+                    // Only set the field value if the state is checked and no parent is set
+                    // or if both the state and the parent are checked
+                    if (mapping.CheckBox.Checked && (mapping.Parent == null || mapping.Parent.Checked))
                     {
                         SetFieldValue(mapping.Entity, mapping.Field, mapping.DataControl);
                     }
@@ -479,6 +482,11 @@ namespace ShipWorks.Shipping.Profiles
             };
 
             parentChildMap.Add(parentChild);
+
+            foreach (CheckStateMapping mapping in checkStateMap.Where(x => x.DataControl == child))
+            {
+                mapping.Parent = parent;
+            }
 
             // Remove original event handler
             childState.CheckedChanged -= OnStateCheckChanged;
