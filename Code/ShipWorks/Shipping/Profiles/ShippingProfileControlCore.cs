@@ -28,6 +28,9 @@ namespace ShipWorks.Shipping.Profiles
             public bool IsValueMapping { get; set; }
         }
 
+        /// <summary>
+        /// A map setting the relationship between a parent / parent state and its child / child state
+        /// </summary>
         class ParentChildMapping
         {
             public CheckBox ParentState { get; set; }
@@ -478,7 +481,7 @@ namespace ShipWorks.Shipping.Profiles
             // Remove original event handler
             childState.CheckedChanged -= OnStateCheckChanged;
 
-            // Add new event handlers, but make sure we don't duplicate
+            // Add new event handlers, but make sure we only add them once
             parentState.CheckedChanged -= OnParentStateChanged;
             parent.CheckedChanged -= OnParentCheckChanged;
             childState.CheckedChanged -= OnChildStateChanged;
@@ -496,9 +499,9 @@ namespace ShipWorks.Shipping.Profiles
         {
             CheckBox parentState = (CheckBox) sender;
 
-            foreach (ParentChildMapping mapping in parentChildMap.Where(x => x.ParentState == parentState))
+            if (!parentState.Checked)
             {
-                if (!parentState.Checked)
+                foreach (ParentChildMapping mapping in parentChildMap.Where(x => x.ParentState == parentState))
                 {
                     // Disable child and clear value if possible
                     try
