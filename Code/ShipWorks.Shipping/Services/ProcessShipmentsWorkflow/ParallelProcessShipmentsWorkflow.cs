@@ -4,9 +4,9 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Threading.Tasks.Dataflow;
+using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Threading;
 using Interapptive.Shared.Win32;
-using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Services.ShipmentProcessorSteps;
@@ -75,15 +75,32 @@ namespace ShipWorks.Shipping.Services.ProcessShipmentsWorkflow
             workProgress.Starting();
             prepareShipmentTask.CounterRateCarrierConfiguredWhileProcessing = counterRateCarrierConfiguredWhileProcessingAction;
 
-            DataFlow<ProcessShipmentState, ILabelResultLogResult> dataflow = CreateDataFlow(cancellationSource);
+            DataFlow<ProcessShipmentState, IEnumerable<ILabelResultLogResult>> dataflow = CreateDataFlow(cancellationSource);
 
-            int shipmentCount = shipments.Count();
+            // Get shipment count with automatic returns
+            int shipmentCount = 0;
+            foreach (ShipmentEntity shipment in shipments)
+            {
+                shipmentCount++;
+                if (shipment.IncludeReturn)
+                {
+                    shipmentCount++;
+                }
+            }
+
+            workProgress.Detail = $"Shipment 1 of {shipmentCount}";
+
             var results = Consume(
-                x => workProgress.PercentComplete = (100 * x) / shipmentCount,
+                x =>
+                {
+                    workProgress.PercentComplete = (100 * x) / shipmentCount;
+                    workProgress.Detail = $"Shipment {x} of {shipmentCount}";
+                },
                 new ProcessShipmentsWorkflowResult(chosenRateResult),
                 dataflow);
 
             IEnumerable<ProcessShipmentState> input = await CreateShipmentProcessorInput(shipments, chosenRateResult, cancellationSource);
+
             foreach (var shipment in input)
             {
                 if (cancellationSource.IsCancellationRequested)
@@ -91,7 +108,6 @@ namespace ShipWorks.Shipping.Services.ProcessShipmentsWorkflow
                     break;
                 }
 
-                workProgress.Detail = $"Shipment {shipment.Index + 1} of {shipmentCount}";
                 await dataflow.SendAsync(shipment);
             }
 
@@ -106,19 +122,22 @@ namespace ShipWorks.Shipping.Services.ProcessShipmentsWorkflow
         /// Create the data flow
         /// </summary>
         /// <remarks>
-        /// We only handle canceling in the first step because once we're past that, we need to finish the rest</remarks>
-        private DataFlow<ProcessShipmentState, ILabelResultLogResult> CreateDataFlow(CancellationTokenSource cancellationSource)
+        /// We only handle canceling in the first step because once we're past that, we need to finish the rest
+        /// </remarks>
+        private DataFlow<ProcessShipmentState, IEnumerable<ILabelResultLogResult>> CreateDataFlow(CancellationTokenSource cancellationSource)
         {
             int taskCount = ConcurrencyCount;
 
             var prepareShipmentBlock = new TransformBlock<ProcessShipmentState, IShipmentPreparationResult>(x => prepareShipmentTask.PrepareShipment(x),
                 new ExecutionDataflowBlockOptions { MaxDegreeOfParallelism = 1, BoundedCapacity = 1, CancellationToken = cancellationSource.Token });
-            var getLabelBlock = new TransformBlock<IShipmentPreparationResult, ILabelRetrievalResult>(x => getLabelTask.GetLabel(x),
+            var getLabelBlock = new TransformBlock<IShipmentPreparationResult, IEnumerable<ILabelRetrievalResult>>(x => getLabelTask.GetLabels(x),
                 new ExecutionDataflowBlockOptions { MaxDegreeOfParallelism = taskCount, BoundedCapacity = 8 });
-            var saveLabelBlock = new TransformBlock<ILabelRetrievalResult, ILabelPersistenceResult>(x => saveLabelTask.SaveLabel(x),
-                new ExecutionDataflowBlockOptions { MaxDegreeOfParallelism = 1, BoundedCapacity = 8 });
-            var completeLabelBlock = new TransformBlock<ILabelPersistenceResult, ILabelResultLogResult>(x => completeLabelTask.Complete(x),
-                new ExecutionDataflowBlockOptions { MaxDegreeOfParallelism = taskCount, BoundedCapacity = 8 });
+            var saveLabelBlock = new TransformBlock<IEnumerable<ILabelRetrievalResult>,
+                IEnumerable<ILabelPersistenceResult>>(x => saveLabelTask.SaveLabels(x),
+                    new ExecutionDataflowBlockOptions { MaxDegreeOfParallelism = 1, BoundedCapacity = 8 });
+            var completeLabelBlock = new TransformBlock<IEnumerable<ILabelPersistenceResult>,
+                IEnumerable<ILabelResultLogResult>>(x => completeLabelTask.Complete(x),
+                    new ExecutionDataflowBlockOptions { MaxDegreeOfParallelism = taskCount, BoundedCapacity = 8 });
 
             prepareShipmentBlock.LinkTo(getLabelBlock, new DataflowLinkOptions { PropagateCompletion = true });
             getLabelBlock.LinkTo(saveLabelBlock, new DataflowLinkOptions { PropagateCompletion = true });
@@ -157,27 +176,38 @@ namespace ShipWorks.Shipping.Services.ProcessShipmentsWorkflow
         private static async Task<ProcessShipmentsWorkflowResult> Consume(
             Action<int> logProgress,
             ProcessShipmentsWorkflowResult accumulator,
-            IReceivableSourceBlock<ILabelResultLogResult> phase)
+            IReceivableSourceBlock<IEnumerable<ILabelResultLogResult>> phase)
         {
-            ILabelResultLogResult item = null;
+            IEnumerable<ILabelResultLogResult> items = null;
+
+            int curShipmentIndex = 0;
 
             while (await phase.OutputAvailableAsync())
             {
-                if (phase.TryReceive(out item))
+                if (phase.TryReceive(out items))
                 {
-                    logProgress(item.Index);
-                    accumulator.OutOfFundsException = accumulator.OutOfFundsException ?? item.OutOfFundsException;
-                    accumulator.TermsAndConditionsException = accumulator.TermsAndConditionsException ?? item.TermsAndConditionsException;
-                    accumulator.WorldshipExported |= item.WorldshipExported;
-
-                    if (!string.IsNullOrEmpty(item.ErrorMessage))
+                    foreach (ILabelResultLogResult item in items)
                     {
-                        accumulator.NewErrors.Add(item.ErrorMessage);
-                    }
+                        if (item != null)
+                        {
+                            curShipmentIndex++;
+                            logProgress(curShipmentIndex);
+                            accumulator.OutOfFundsException = accumulator.OutOfFundsException ?? item.OutOfFundsException;
+                            accumulator.TermsAndConditionsException = accumulator.TermsAndConditionsException ?? item.TermsAndConditionsException;
+                            accumulator.WorldshipExported |= item.WorldshipExported;
 
-                    if (item.Success)
-                    {
-                        accumulator.OrderHashes.Add(item.OriginalShipment.Order.ShipSenseHashKey);
+                            if (!string.IsNullOrEmpty(item.ErrorMessage))
+                            {
+                                accumulator.NewErrors.Add(item.ErrorMessage);
+                            }
+
+                            if (item.Success)
+                            {
+                                accumulator.OrderHashes.Add(item.OriginalShipment.Order.ShipSenseHashKey);
+                            }
+
+                            accumulator.Shipments.Add(item.OriginalShipment);
+                        }
                     }
                 }
             }

@@ -2354,10 +2354,10 @@ namespace ShipWorks.Shipping
             // Save changes to the current selection in memory.  We save to the database later on a per-shipment basis in the background thread.
             SaveChangesToUIDisplayedShipments();
 
-            // Clear errors on ones that are already marked as processed. Like if they got the AlreadyProcessed error, and then hit process again,
-            // the error shouldn't stay
             foreach (ShipmentEntity shipment in shipments.Where(s => s.Processed))
             {
+                // Clear errors on ones that are already marked as processed. Like if they got the AlreadyProcessed error, and then hit process again,
+                // the error shouldn't stay
                 ErrorManager.Remove(shipment.ShipmentID);
             }
 
@@ -2365,6 +2365,13 @@ namespace ShipWorks.Shipping
 
             IEnumerable<ProcessShipmentResult> results = await shipmentProcessor.Process(shipments, carrierConfigurationShipmentRefresher,
                 rateControl.SelectedRate, CounterRateCarrierConfiguredWhileProcessing);
+
+            List<ShipmentEntity> createdReturnShipments = results
+                .Where(s => !shipments.Contains(s.Shipment))
+                .Select(s => s.Shipment)
+                .ToList<ShipmentEntity>();
+
+            shipmentControl.AddShipments(createdReturnShipments);
 
             // Apply any changes made during processing to the grid
             ApplyShipmentsToGridRows(results.Select(x => x.Shipment));

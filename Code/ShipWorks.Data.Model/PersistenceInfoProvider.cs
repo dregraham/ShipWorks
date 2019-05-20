@@ -3071,7 +3071,7 @@ namespace ShipWorks.Data.Model
 		/// <summary>Inits ShipmentEntity's mappings</summary>
 		private void InitShipmentEntityMappings()
 		{
-			this.AddElementMapping("ShipmentEntity", @"ShipWorksLocal", @"dbo", "Shipment", 74, 0);
+			this.AddElementMapping("ShipmentEntity", @"ShipWorksLocal", @"dbo", "Shipment", 77, 0);
 			this.AddElementFieldMapping("ShipmentEntity", "ShipmentID", "ShipmentID", false, "BigInt", 0, 19, 0, true, "SCOPE_IDENTITY()", null, typeof(System.Int64), 0);
 			this.AddElementFieldMapping("ShipmentEntity", "RowVersion", "RowVersion", false, "Timestamp", 2147483647, 0, 0, false, "", null, typeof(System.Byte[]), 1);
 			this.AddElementFieldMapping("ShipmentEntity", "OrderID", "OrderID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 2);
@@ -3146,6 +3146,9 @@ namespace ShipWorks.Data.Model
 			this.AddElementFieldMapping("ShipmentEntity", "BilledType", "BilledType", false, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 71);
 			this.AddElementFieldMapping("ShipmentEntity", "BilledWeight", "BilledWeight", false, "Float", 0, 38, 0, false, "", null, typeof(System.Double), 72);
 			this.AddElementFieldMapping("ShipmentEntity", "ProcessedWithUiMode", "ProcessedWithUiMode", true, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 73);
+			this.AddElementFieldMapping("ShipmentEntity", "IncludeReturn", "IncludeReturn", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 74);
+			this.AddElementFieldMapping("ShipmentEntity", "ApplyReturnProfile", "ApplyReturnProfile", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 75);
+			this.AddElementFieldMapping("ShipmentEntity", "ReturnProfileID", "ReturnProfileID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 76);
 		}
 
 		/// <summary>Inits ShipmentCustomsItemEntity's mappings</summary>
@@ -3239,7 +3242,7 @@ namespace ShipWorks.Data.Model
 		/// <summary>Inits ShippingProfileEntity's mappings</summary>
 		private void InitShippingProfileEntityMappings()
 		{
-			this.AddElementMapping("ShippingProfileEntity", @"ShipWorksLocal", @"dbo", "ShippingProfile", 11, 0);
+			this.AddElementMapping("ShippingProfileEntity", @"ShipWorksLocal", @"dbo", "ShippingProfile", 14, 0);
 			this.AddElementFieldMapping("ShippingProfileEntity", "ShippingProfileID", "ShippingProfileID", false, "BigInt", 0, 19, 0, true, "SCOPE_IDENTITY()", null, typeof(System.Int64), 0);
 			this.AddElementFieldMapping("ShippingProfileEntity", "RowVersion", "RowVersion", false, "Timestamp", 2147483647, 0, 0, false, "", null, typeof(System.Byte[]), 1);
 			this.AddElementFieldMapping("ShippingProfileEntity", "Name", "Name", false, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 2);
@@ -3251,6 +3254,9 @@ namespace ShipWorks.Data.Model
 			this.AddElementFieldMapping("ShippingProfileEntity", "InsuranceInitialValueAmount", "InsuranceInitialValueAmount", true, "Money", 0, 19, 4, false, "", null, typeof(System.Decimal), 8);
 			this.AddElementFieldMapping("ShippingProfileEntity", "ReturnShipment", "ReturnShipment", true, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 9);
 			this.AddElementFieldMapping("ShippingProfileEntity", "RequestedLabelFormat", "RequestedLabelFormat", true, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 10);
+			this.AddElementFieldMapping("ShippingProfileEntity", "IncludeReturn", "IncludeReturn", true, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 11);
+			this.AddElementFieldMapping("ShippingProfileEntity", "ApplyReturnProfile", "ApplyReturnProfile", true, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 12);
+			this.AddElementFieldMapping("ShippingProfileEntity", "ReturnProfileID", "ReturnProfileID", true, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 13);
 		}
 
 		/// <summary>Inits ShippingProviderRuleEntity's mappings</summary>

@@ -692,6 +692,9 @@ namespace ShipWorks.Shipping
             profile.InsuranceInitialValueAmount = 0;
 
             profile.ReturnShipment = false;
+            profile.IncludeReturn = false;
+            profile.ApplyReturnProfile = false;
+            profile.ReturnProfileID = -1;
 
             profile.RequestedLabelFormat = (int) ThermalLanguage.None;
 

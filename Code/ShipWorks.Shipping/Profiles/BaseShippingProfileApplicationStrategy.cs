@@ -36,6 +36,10 @@ namespace ShipWorks.Shipping.Profiles
             ApplyProfileValue(profile.RequestedLabelFormat, shipment, ShipmentFields.RequestedLabelFormat);
             shipmentType.SaveRequestedLabelFormat((ThermalLanguage) shipment.RequestedLabelFormat, shipment);
 
+            ApplyProfileValue(profile.IncludeReturn, shipment, ShipmentFields.IncludeReturn);
+            ApplyProfileValue(profile.ApplyReturnProfile, shipment, ShipmentFields.ApplyReturnProfile);
+            ApplyProfileValue(profile.ReturnProfileID, shipment, ShipmentFields.ReturnProfileID);
+
             // Special case for insurance
             for (int i = 0; i < shipmentType.GetParcelCount(shipment); i++)
             {
