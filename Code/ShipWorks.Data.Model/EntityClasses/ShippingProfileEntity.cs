@@ -14,7 +14,6 @@ using System.Collections.Generic;
 using System.Runtime.Serialization;
 #endif
 using System.Xml.Serialization;
-using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Data.Model.FactoryClasses;
 using ShipWorks.Data.Model.RelationClasses;

@@ -61,23 +61,18 @@ namespace ShipWorks.Shipping.Carriers.Postal
 
             LoadProfileDetails(profile, postal, packageProfile);
 
+            // Map parent/child relationships
+            SetParentCheckBox(includeReturnState, includeReturn, applyReturnProfileState, applyReturnProfile);
+            SetParentCheckBox(applyReturnProfileState, applyReturnProfile, applyReturnProfileState, returnProfileID);
+            SetParentCheckBox(applyReturnProfileState, applyReturnProfile, applyReturnProfileState, returnProfileIDLabel);
+
             // Remove state checkbox event handler since we'll be enabling/disabling manually
             returnState.CheckedChanged -= OnStateCheckChanged;
             includeReturnState.CheckedChanged -= OnStateCheckChanged;
 
-            // Remove this event handler twice since it's added twice by AddValueMapping above
-            applyReturnProfileState.CheckedChanged -= OnStateCheckChanged;
-            applyReturnProfileState.CheckedChanged -= OnStateCheckChanged;
-
             // Manually enable/disable for mutually exclusive return controls
             includeReturn.Enabled = includeReturnState.Checked && !returnShipment.Checked;
             returnShipment.Enabled = returnState.Checked && !includeReturn.Checked;
-            applyReturnProfile.Enabled = applyReturnProfileState.Checked && includeReturn.Checked;
-            returnProfileID.Enabled = applyReturnProfileState.Checked && applyReturnProfile.Checked && includeReturn.Checked;
-            returnProfileIDLabel.Enabled = applyReturnProfileState.Checked && applyReturnProfile.Checked && includeReturn.Checked;
-
-            // Refresh the menu again to prevent it being blank if it was disabled above
-            RefreshIncludeReturnProfileMenu(profile.ShipmentType);
 
             groupReturns.Visible = ShipmentTypeManager.GetType((ShipmentTypeCode) profile.ShipmentType).SupportsReturns;
         }
@@ -115,11 +110,12 @@ namespace ShipWorks.Shipping.Carriers.Postal
             RefreshIncludeReturnProfileMenu(profile.ShipmentType);
             returnProfileID.DisplayMember = "Value";
             returnProfileID.ValueMember = "Key";
+            returnProfileID.SelectedIndex = -1;
 
             AddValueMapping(profile, ShippingProfileFields.ReturnShipment, returnState, returnShipment);
             AddValueMapping(profile, ShippingProfileFields.IncludeReturn, includeReturnState, includeReturn);
             AddValueMapping(profile, ShippingProfileFields.ApplyReturnProfile, applyReturnProfileState, applyReturnProfile);
-            AddValueMapping(profile, ShippingProfileFields.ReturnProfileID, applyReturnProfileState, returnProfileID);
+            AddValueMapping(profile, ShippingProfileFields.ReturnProfileID, applyReturnProfile, returnProfileID);
         }
 
         /// <summary>
@@ -166,34 +162,10 @@ namespace ShipWorks.Shipping.Carriers.Postal
             if (includeReturn.Checked)
             {
                 returnShipment.Enabled = false;
-                applyReturnProfile.Enabled = applyReturnProfileState.Checked;
-                returnProfileID.Enabled = applyReturnProfileState.Checked && applyReturnProfile.Checked;
-                returnProfileIDLabel.Enabled = applyReturnProfileState.Checked && applyReturnProfile.Checked;
             }
             else
             {
                 returnShipment.Enabled = returnState.Checked;
-                applyReturnProfile.Enabled = false;
-                applyReturnProfile.Checked = false;
-                returnProfileID.Enabled = false;
-                returnProfileIDLabel.Enabled = false;
-            }
-        }
-
-        /// <summary>
-        /// Click of the Apply Return Profile checkbox
-        /// </summary>
-        private void OnApplyReturnChanged(object sender, EventArgs e)
-        {
-            if (applyReturnProfile.Checked)
-            {
-                returnProfileID.Enabled = applyReturnProfileState.Checked;
-                returnProfileIDLabel.Enabled = applyReturnProfileState.Checked;
-            }
-            else
-            {
-                returnProfileID.Enabled = false;
-                returnProfileIDLabel.Enabled = false;
             }
         }
 
@@ -202,9 +174,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
         /// </summary>
         private void OnReturnProfileIDOpened(object sender, EventArgs e)
         {
-            ShipmentTypeCode? shipmentTypeCode = Profile.ShipmentType;
-            // Populate the list of profiles
-            RefreshIncludeReturnProfileMenu(shipmentTypeCode);
+            RefreshIncludeReturnProfileMenu(Profile.ShipmentType);
         }
 
         /// <summary>
@@ -230,38 +200,11 @@ namespace ShipWorks.Shipping.Carriers.Postal
             if (includeReturnState.Checked)
             {
                 includeReturn.Enabled = !returnShipment.Checked;
-                applyReturnProfile.Enabled = includeReturn.Checked && applyReturnProfileState.Checked;
-                returnProfileID.Enabled = applyReturnProfile.Checked && applyReturnProfileState.Checked;
-                returnProfileIDLabel.Enabled = applyReturnProfile.Checked && applyReturnProfileState.Checked;
             }
             else
             {
                 includeReturn.Enabled = false;
                 includeReturn.Checked = false;
-                applyReturnProfile.Enabled = false;
-                applyReturnProfile.Checked = false;
-                returnProfileID.Enabled = false;
-                returnProfileIDLabel.Enabled = false;
-            }
-        }
-
-        /// <summary>
-        /// Click of the Apply Return Profile State Checkbox
-        /// </summary>
-        protected virtual void OnApplyReturnProfileStateChanged(object sender, EventArgs e)
-        {
-            if (applyReturnProfileState.Checked)
-            {
-                applyReturnProfile.Enabled = includeReturn.Checked;
-                returnProfileID.Enabled = applyReturnProfile.Checked;
-                returnProfileIDLabel.Enabled = applyReturnProfile.Checked;
-            }
-            else
-            {
-                applyReturnProfile.Enabled = false;
-                applyReturnProfile.Checked = false;
-                returnProfileID.Enabled = false;
-                returnProfileIDLabel.Enabled = false;
             }
         }
 
@@ -282,6 +225,17 @@ namespace ShipWorks.Shipping.Carriers.Postal
         }
 
         /// <summary>
+        /// When ReturnProfileID dropdown is enabled
+        /// </summary>
+        protected void OnReturnProfileIDEnabledChanged(object sender, EventArgs e)
+        {
+            if (returnProfileID.Enabled)
+            {
+                RefreshIncludeReturnProfileMenu(Profile.ShipmentType);
+            }
+        }
+
+        /// <summary>
         /// Add applicable profiles for the given shipment type to the context menu
         /// </summary>
         private void RefreshIncludeReturnProfileMenu(ShipmentTypeCode? shipmentTypeCode)
@@ -294,6 +248,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
 
                 List<KeyValuePair<long, string>> returnProfiles = shippingProfileService
                     .GetConfiguredShipmentTypeProfiles()
+                    .Where(p => p.ShippingProfileEntity.ShippingProfileID != Profile.ShippingProfileID)
                     .Where(p => p.ShippingProfileEntity.ShipmentType.HasValue)
                     .Where(p => p.IsApplicable(shipmentTypeCode))
                     .Where(p => p.ShippingProfileEntity.ShipmentType == shipmentTypeCode)
@@ -305,6 +260,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
                 newReturnProfiles = new BindingList<KeyValuePair<long, string>>(returnProfiles);
             }
 
+            // Always add No Profile so if a selected profile is no longer a return profile, this becomes the default
             newReturnProfiles.Insert(0, new KeyValuePair<long, string>(-1, "(No Profile)"));
 
             includeReturnProfiles = newReturnProfiles;

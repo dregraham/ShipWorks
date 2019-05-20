@@ -382,9 +382,6 @@ namespace ShipWorks.Shipping.Editing
                     }
                 }
 
-                // But only support turning "Returns" on or off if all types support it
-                returnShipment.Enabled = allReturnsSupported;
-
                 // Only if there all the same type can we create the type-specific control
                 if (loadedTypes.Count == 1)
                 {
@@ -411,11 +408,12 @@ namespace ShipWorks.Shipping.Editing
                 // only enable for editing if all shipments are Returns
                 returnsPanel.Enabled = (LoadedShipments.All(s => s.ReturnShipment));
 
-                includeReturn.Enabled = !returnShipment.Checked;
-                returnShipment.Enabled = !includeReturn.Checked;
-                applyReturnProfile.Enabled = includeReturn.Checked;
-                returnProfileID.Enabled = applyReturnProfile.Checked;
-                returnProfileIDLabel.Enabled = applyReturnProfile.Checked;
+                // Only enable returns controls if all selected shipments support it
+                includeReturn.Enabled = allReturnsSupported && !returnShipment.Checked;
+                returnShipment.Enabled = allReturnsSupported && !includeReturn.Checked;
+                applyReturnProfile.Enabled = allReturnsSupported && includeReturn.Checked;
+                returnProfileID.Enabled = allReturnsSupported && applyReturnProfile.Checked;
+                returnProfileIDLabel.Enabled = allReturnsSupported && applyReturnProfile.Checked;
             }
             else
             {
@@ -712,6 +710,17 @@ namespace ShipWorks.Shipping.Editing
         }
 
         /// <summary>
+        /// When ReturnProfileID dropdown is enabled
+        /// </summary>
+        protected void OnReturnProfileIDEnabledChanged(object sender, EventArgs e)
+        {
+            if (returnProfileID.Enabled)
+            {
+                RefreshIncludeReturnProfileMenu(shipmentTypeCode);
+            }
+        }
+
+        /// <summary>
         /// Add applicable profiles for the given shipment type to the context menu
         /// </summary>
         private void RefreshIncludeReturnProfileMenu(ShipmentTypeCode shipmentTypeCode)
@@ -735,6 +744,7 @@ namespace ShipWorks.Shipping.Editing
                 newReturnProfiles = new BindingList<KeyValuePair<long, string>>(returnProfiles);
             }
 
+            // Always add No Profile so if a selected profile was deleted, this becomes the default
             newReturnProfiles.Insert(0, new KeyValuePair<long, string>(-1, "(No Profile)"));
 
             includeReturnProfiles = newReturnProfiles;

@@ -182,7 +182,7 @@
             this.groupReturns.Controls.Add(this.kryptonBorderEdge3);
             this.groupReturns.Location = new System.Drawing.Point(8, 501);
             this.groupReturns.Name = "groupReturns";
-            this.groupReturns.Size = new System.Drawing.Size(417, 53);
+            this.groupReturns.Size = new System.Drawing.Size(417, 117);
             this.groupReturns.TabIndex = 5;
             this.groupReturns.TabStop = false;
             this.groupReturns.Text = "Return Shipment";
@@ -241,7 +241,6 @@
             this.applyReturnProfile.TabIndex = 3;
             this.applyReturnProfile.Text = "Apply a profile to the return shipment";
             this.applyReturnProfile.UseVisualStyleBackColor = false;
-            this.applyReturnProfile.CheckedChanged += new System.EventHandler(this.OnApplyReturnChanged);
             // 
             // applyReturnProfileState
             // 
@@ -251,7 +250,6 @@
             this.applyReturnProfileState.Size = new System.Drawing.Size(15, 14);
             this.applyReturnProfileState.TabIndex = 2;
             this.applyReturnProfileState.UseVisualStyleBackColor = true;
-            this.applyReturnProfileState.CheckedChanged += new System.EventHandler(this.OnApplyReturnProfileStateChanged);
             // 
             // returnProfileID
             // 
@@ -264,6 +262,7 @@
             this.returnProfileID.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.returnProfileID.FormattingEnabled = true;
             this.returnProfileID.DropDown += new System.EventHandler(this.OnReturnProfileIDOpened);
+            this.returnProfileID.EnabledChanged += new System.EventHandler(this.OnReturnProfileIDEnabledChanged);
             // 
             // returnProfileIDLabel
             // 
@@ -304,7 +303,7 @@
             this.kryptonBorderEdge3.BorderStyle = ComponentFactory.Krypton.Toolkit.PaletteBorderStyle.GridDataCellSheet;
             this.kryptonBorderEdge3.Location = new System.Drawing.Point(29, 20);
             this.kryptonBorderEdge3.Name = "kryptonBorderEdge3";
-            this.kryptonBorderEdge3.Size = new System.Drawing.Size(1, 23);
+            this.kryptonBorderEdge3.Size = new System.Drawing.Size(1, 87);
             this.kryptonBorderEdge3.Text = "kryptonBorderEdge1";
             // 
             // groupInsurance
@@ -771,7 +770,7 @@
         protected System.Windows.Forms.TabPage tabPage;
         private ShipWorks.Data.Utility.EntityFieldLengthProvider fieldLengthProvider;
         protected System.Windows.Forms.CheckBox returnShipment;
-        private System.Windows.Forms.CheckBox returnState;
+        protected System.Windows.Forms.CheckBox returnState;
         private System.Windows.Forms.CheckBox insuranceState;
         protected System.Windows.Forms.GroupBox groupReturns;
         protected System.Windows.Forms.GroupBox groupInsurance;

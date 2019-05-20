@@ -5,6 +5,15 @@ ALTER TABLE [dbo].[ShippingProfile] ADD
 [ApplyReturnProfile] [bit] NULL,
 [ReturnProfileID] [bigint] NULL
 GO
+-- Update the default values for the default profiles
+-- For automatic return shipments ONLY
+UPDATE [dbo].ShippingProfile 
+	SET 
+		[IncludeReturn] = 0,
+		[ApplyReturnProfile] = 0,
+		[ReturnProfileID] = -1
+WHERE ShipmentTypePrimary = 1
+GO
 PRINT N'Altering [dbo].[Shipment]'
 GO
 ALTER TABLE [dbo].[Shipment] ADD
