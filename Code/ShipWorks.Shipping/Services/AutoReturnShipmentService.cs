@@ -26,9 +26,38 @@ namespace ShipWorks.Shipping.Services
         }
 
         /// <summary>
+        /// An exception thrown while trying to apply a profile to the return shipment
+        /// </summary>
+        public ShippingException ApplyProfileException { get; private set; } = null;
+
+        /// <summary>
+        /// Creates a new auto return shipments
+        /// </summary>
+        public ShipmentEntity CreateReturn(ShipmentEntity shipment)
+        {
+            // Create new return shipment
+            ShipmentEntity returnShipment = shippingManager.CreateReturnShipment(shipment);
+
+            // Apply profile if needed
+            if (shipment.ApplyReturnProfile)
+            {
+                try
+                {
+                    ApplyReturnProfile(returnShipment, shipment.ReturnProfileID);
+                }
+                catch (NotFoundException ex)
+                {
+                    ApplyProfileException = new ShippingException(ex.Message, ex);
+                }
+            }
+
+            return returnShipment;
+        }
+
+        /// <summary>
         /// Applies the given return profile ID to the shipment
         /// </summary>
-        public void ApplyReturnProfile(ShipmentEntity shipment, long returnProfileID)
+        private void ApplyReturnProfile(ShipmentEntity shipment, long returnProfileID)
         {
             IShippingProfileEntity returnProfile = ShippingProfileManager.GetProfileReadOnly(returnProfileID);
             if (returnProfile != null)
@@ -39,15 +68,6 @@ namespace ShipWorks.Shipping.Services
             {
                 throw new NotFoundException("The selected return profile could not be found.");
             }
-        }
-
-        /// <summary>
-        /// Creates a new auto return shipments
-        /// </summary>
-        public ShipmentEntity CreateReturn(ShipmentEntity shipment)
-        {
-            // Create new auto return shipment
-            return shippingManager.CreateReturnShipment(shipment);
         }
     }
 }

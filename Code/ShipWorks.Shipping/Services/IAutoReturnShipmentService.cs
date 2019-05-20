@@ -5,9 +5,9 @@ namespace ShipWorks.Shipping.Services
     public interface IAutoReturnShipmentService
     {
         /// <summary>
-        /// Applies the given return profile ID to the shipment
+        /// An exception thrown while trying to apply a profile to the return shipment
         /// </summary>
-        void ApplyReturnProfile(ShipmentEntity shipment, long returnProfileID);
+        ShippingException ApplyProfileException { get; }
 
         /// <summary>
         /// Creates a new auto return shipments

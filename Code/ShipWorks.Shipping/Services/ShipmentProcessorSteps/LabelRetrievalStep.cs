@@ -106,20 +106,11 @@ namespace ShipWorks.Shipping.Services.ShipmentProcessorSteps
         /// </summary>
         private async Task<ILabelRetrievalResult> ProcessAutomaticReturn(ShipmentEntity shipment, IShipmentPreparationResult result)
         {
-            ShippingException returnException = null;
             ShipmentEntity returnShipment = autoReturn.CreateReturn(shipment);
 
-            if (shipment.ApplyReturnProfile)
+            if (autoReturn.ApplyProfileException != null)
             {
-                try
-                {
-                    autoReturn.ApplyReturnProfile(returnShipment, shipment.ReturnProfileID);
-                }
-                catch (NotFoundException ex)
-                {
-                    returnException = new ShippingException(ex.Message, ex);
-                    return new LabelRetrievalResult(result, returnShipment, returnException);
-                }
+                return new LabelRetrievalResult(result, returnShipment, autoReturn.ApplyProfileException);
             }
 
             try
@@ -128,10 +119,9 @@ namespace ShipWorks.Shipping.Services.ShipmentProcessorSteps
             }
             catch (Exception ex) when (CanHandleException(ex))
             {
-                returnException = ex as ShippingException ?? new ShippingException(ex.Message, ex);
+                ShippingException returnException = ex as ShippingException ?? new ShippingException(ex.Message, ex);
+                return new LabelRetrievalResult(result, returnShipment, returnException);
             }
-
-            return new LabelRetrievalResult(result, returnShipment, returnException);
         }
 
         /// <summary>
