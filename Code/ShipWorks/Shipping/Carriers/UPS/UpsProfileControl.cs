@@ -1,23 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Windows.Forms;
-using ShipWorks.Editions;
-using ShipWorks.Shipping.Profiles;
-using ShipWorks.Data.Model.EntityClasses;
-using Interapptive.Shared.Utility;
-using ShipWorks.Data.Model.HelperClasses;
-using SD.LLBLGen.Pro.ORMSupportClasses;
-using System.Diagnostics;
 using Autofac;
 using Interapptive.Shared;
-using ShipWorks.Shipping.Carriers.UPS.Enums;
-using Interapptive.Shared.Business;
 using Interapptive.Shared.Business.Geography;
 using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.Utility;
+using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Licensing;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.HelperClasses;
+using ShipWorks.Editions;
+using ShipWorks.Shipping.Carriers.UPS.Enums;
 using ShipWorks.Shipping.Insurance;
+using ShipWorks.Shipping.Profiles;
 using ShipWorks.Shipping.Settings;
 
 namespace ShipWorks.Shipping.Carriers.UPS
@@ -28,6 +28,9 @@ namespace ShipWorks.Shipping.Carriers.UPS
     [KeyedComponent(typeof(ShippingProfileControlBase), ShipmentTypeCode.UpsOnLineTools)]
     public partial class UpsProfileControl : ShippingProfileControlBase
     {
+        private BindingList<KeyValuePair<long, string>> includeReturnProfiles = new BindingList<KeyValuePair<long, string>>();
+        private BindingSource bindingSource = new BindingSource();
+
         /// <summary>
         /// Constructor
         /// </summary>
@@ -84,7 +87,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
                 insuranceControl.InsuredValueLabel = "Declared value:";
             }
 
-            UpsShipmentType shipmentType = (UpsShipmentType)ShipmentTypeManager.GetType((ShipmentTypeCode)profile.ShipmentType);
+            UpsShipmentType shipmentType = (UpsShipmentType) ShipmentTypeManager.GetType((ShipmentTypeCode) profile.ShipmentType);
 
             bool isMIAvailable = shipmentType.IsMailInnovationsEnabled();
 
@@ -147,9 +150,9 @@ namespace ShipWorks.Shipping.Carriers.UPS
             AddValueMapping(ups, UpsProfileFields.PayorPostalCode, payorAccountState, payorPostalCode, labelPayorPostalCode);
             AddValueMapping(ups, UpsProfileFields.PayorCountryCode, payorAccountState, payorCountry, labelPayorCountry);
 
-            AddValueMapping(ups, UpsProfileFields.ShipmentChargeType,        payorDutiesState,    payorDuties, labelPayorDuties);
-            AddValueMapping(ups, UpsProfileFields.ShipmentChargeAccount,     payorDutiesAccountState, payorDutiesAccount, labelPayorDutiesAccount);
-            AddValueMapping(ups, UpsProfileFields.ShipmentChargePostalCode,  payorDutiesAccountState, payorDutiesPostalCode, labelPayorDutiesPostalCode);
+            AddValueMapping(ups, UpsProfileFields.ShipmentChargeType, payorDutiesState, payorDuties, labelPayorDuties);
+            AddValueMapping(ups, UpsProfileFields.ShipmentChargeAccount, payorDutiesAccountState, payorDutiesAccount, labelPayorDutiesAccount);
+            AddValueMapping(ups, UpsProfileFields.ShipmentChargePostalCode, payorDutiesAccountState, payorDutiesPostalCode, labelPayorDutiesPostalCode);
             AddValueMapping(ups, UpsProfileFields.ShipmentChargeCountryCode, payorDutiesAccountState, payorDutiesCountry, labelPayorDutiesCountry);
 
             AddValueMapping(ups, UpsProfileFields.CustomsDescription, customsDescState, customsDescription, labelCustomsDescription);
@@ -179,8 +182,45 @@ namespace ShipWorks.Shipping.Carriers.UPS
             // Insurance
             AddValueMapping(profile, ShippingProfileFields.Insurance, insuranceState, insuranceControl);
 
+            // SurePost
+            AddValueMapping(ups, UpsProfileFields.Subclassification, surePostClassificationState, surePostClassification, labelSurePostClassification);
+            AddValueMapping(ups, UpsProfileFields.Endorsement, uspsEndorsementState, uspsEndorsement, labelUspsEndorsement);
+            AddValueMapping(ups, UpsProfileFields.CostCenter, costCenterState, costCenter, labelCostCenter);
+            AddValueMapping(ups, UpsProfileFields.UspsPackageID, packageIdState, packageId, labelPackageId);
+            AddValueMapping(ups, UpsProfileFields.IrregularIndicator, irregularIndicatorState, irregularIndicator, labelIrregularIndicator);
+
             // Returns
+            RefreshIncludeReturnProfileMenu(profile.ShipmentType);
+            returnProfileID.DisplayMember = "Value";
+            returnProfileID.ValueMember = "Key";
+            returnProfileID.SelectedIndex = -1;
+
             AddValueMapping(profile, ShippingProfileFields.ReturnShipment, returnState, returnShipment);
+            AddValueMapping(profile, ShippingProfileFields.IncludeReturn, includeReturnState, includeReturn);
+            AddValueMapping(profile, ShippingProfileFields.ApplyReturnProfile, applyReturnProfileState, applyReturnProfile);
+            AddValueMapping(profile, ShippingProfileFields.ReturnProfileID, applyReturnProfile, returnProfileID);
+            AddValueMapping(ups, UpsProfileFields.ReturnService, returnServiceState, returnService, labelReturnService);
+            AddValueMapping(ups, UpsProfileFields.ReturnContents, returnContentsState, returnContents, labelReturnContents);
+            AddValueMapping(ups, UpsProfileFields.ReturnUndeliverableEmail, returnUndeliverableState, returnUndeliverable, labelUndeliverableMail);
+
+            // Map parent/child relationships
+            SetParentCheckBox(includeReturnState, includeReturn, applyReturnProfileState, applyReturnProfile);
+            SetParentCheckBox(applyReturnProfileState, applyReturnProfile, applyReturnProfileState, returnProfileID);
+            SetParentCheckBox(applyReturnProfileState, applyReturnProfile, applyReturnProfileState, returnProfileIDLabel);
+            SetParentCheckBox(returnState, returnShipment, returnContentsState, returnContents);
+            SetParentCheckBox(returnState, returnShipment, returnServiceState, returnService);
+            SetParentCheckBox(returnState, returnShipment, returnUndeliverableState, returnUndeliverable);
+            SetParentCheckBox(returnState, returnShipment, returnUndeliverableState, labelUndeliverableMail);
+            SetParentCheckBox(returnState, returnShipment, returnServiceState, labelReturnService);
+            SetParentCheckBox(returnState, returnShipment, returnContentsState, labelReturnContents);
+
+            // Remove state checkbox event handler since we'll be enabling/disabling manually
+            returnState.CheckedChanged -= OnStateCheckChanged;
+            includeReturnState.CheckedChanged -= OnStateCheckChanged;
+
+            // Manually enable/disable for mutually exclusive return controls
+            includeReturn.Enabled = includeReturnState.Checked && !returnShipment.Checked;
+            returnShipment.Enabled = returnState.Checked && !includeReturn.Checked;
 
             packagesState.Checked = profile.Packages.Count > 0;
             packagesCount.SelectedIndex = packagesState.Checked ? profile.Packages.Count - 1 : -1;
@@ -190,17 +230,6 @@ namespace ShipWorks.Shipping.Carriers.UPS
 
             packagesState.CheckedChanged += new EventHandler(OnChangePackagesChecked);
             packagesCount.SelectedIndexChanged += new EventHandler(OnChangePackagesCount);
-
-            AddValueMapping(ups, UpsProfileFields.ReturnService, returnServiceState, returnService, labelReturnService);
-            AddValueMapping(ups, UpsProfileFields.ReturnContents, returnContentsState, returnContents, labelReturnContents);
-            AddValueMapping(ups, UpsProfileFields.ReturnUndeliverableEmail, returnUndeliverableState, returnUndeliverable, labelUndeliverableMail);
-
-            // SurePost
-            AddValueMapping(ups, UpsProfileFields.Subclassification, surePostClassificationState, surePostClassification, labelSurePostClassification);
-            AddValueMapping(ups, UpsProfileFields.Endorsement, uspsEndorsementState, uspsEndorsement, labelUspsEndorsement);
-            AddValueMapping(ups, UpsProfileFields.CostCenter, costCenterState, costCenter, labelCostCenter);
-            AddValueMapping(ups, UpsProfileFields.UspsPackageID, packageIdState, packageId, labelPackageId);
-            AddValueMapping(ups, UpsProfileFields.IrregularIndicator, irregularIndicatorState, irregularIndicator, labelIrregularIndicator);
         }
 
         /// <summary>
@@ -457,5 +486,120 @@ namespace ShipWorks.Shipping.Carriers.UPS
             panelPackageControls.Height = lastControl == null ? 0 : lastControl.Bottom + 4;
         }
 
+        /// <summary>
+        /// Click of the Include Return checkbox
+        /// </summary>
+        private void OnIncludeReturnChanged(object sender, EventArgs e)
+        {
+            if (includeReturn.Checked)
+            {
+                returnShipment.Enabled = false;
+            }
+            else
+            {
+                returnShipment.Enabled = returnState.Checked;
+            }
+        }
+
+        /// <summary>
+        /// Opening the return profiles menu
+        /// </summary>
+        private void OnReturnProfileIDOpened(object sender, EventArgs e)
+        {
+            RefreshIncludeReturnProfileMenu(Profile.ShipmentType);
+        }
+
+        /// <summary>
+        /// Click of the Return Shipment checkbox
+        /// </summary>
+        protected virtual void OnReturnShipmentChanged(object sender, EventArgs e)
+        {
+            if (returnShipment.Checked)
+            {
+                includeReturn.Enabled = false;
+            }
+            else
+            {
+                includeReturn.Enabled = includeReturnState.Checked;
+            }
+        }
+
+        /// <summary>
+        /// Click of the Include Return State Checkbox
+        /// </summary>
+        protected virtual void OnIncludeReturnStateChanged(object sender, EventArgs e)
+        {
+            if (includeReturnState.Checked)
+            {
+                includeReturn.Enabled = !returnShipment.Checked;
+            }
+            else
+            {
+                includeReturn.Enabled = false;
+                includeReturn.Checked = false;
+            }
+        }
+
+        /// <summary>
+        /// Click of the Return Shipment State Checkbox
+        /// </summary>
+        protected virtual void OnReturnStateChanged(object sender, EventArgs e)
+        {
+            if (returnState.Checked)
+            {
+                returnShipment.Enabled = !includeReturn.Checked;
+            }
+            else
+            {
+                returnShipment.Enabled = false;
+                returnShipment.Checked = false;
+            }
+        }
+
+        /// <summary>
+        /// When ReturnProfileID dropdown is enabled
+        /// </summary>
+        protected void OnReturnProfileIDEnabledChanged(object sender, EventArgs e)
+        {
+            if (returnProfileID.Enabled)
+            {
+                RefreshIncludeReturnProfileMenu(Profile.ShipmentType);
+            }
+        }
+
+        /// <summary>
+        /// Add applicable profiles for the given shipment type to the context menu
+        /// </summary>
+        private void RefreshIncludeReturnProfileMenu(ShipmentTypeCode? shipmentTypeCode)
+        {
+            BindingList<KeyValuePair<long, string>> newReturnProfiles = new BindingList<KeyValuePair<long, string>>();
+
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+            {
+                IShippingProfileService shippingProfileService = lifetimeScope.Resolve<IShippingProfileService>();
+
+                List<KeyValuePair<long, string>> returnProfiles = shippingProfileService
+                    .GetConfiguredShipmentTypeProfiles()
+                    .Where(p => p.ShippingProfileEntity.ShippingProfileID != Profile.ShippingProfileID)
+                    .Where(p => p.ShippingProfileEntity.ShipmentType.HasValue)
+                    .Where(p => p.IsApplicable(shipmentTypeCode))
+                    .Where(p => p.ShippingProfileEntity.ShipmentType == shipmentTypeCode)
+                    .Where(p => p.ShippingProfileEntity.ReturnShipment == true)
+                    .Select(s => new KeyValuePair<long, string>(s.ShippingProfileEntity.ShippingProfileID, s.ShippingProfileEntity.Name))
+                    .OrderBy(g => g.Value)
+                    .ToList<KeyValuePair<long, string>>();
+
+                newReturnProfiles = new BindingList<KeyValuePair<long, string>>(returnProfiles);
+            }
+
+            // Always add No Profile so if a selected profile is no longer a return profile, this becomes the default
+            newReturnProfiles.Insert(0, new KeyValuePair<long, string>(-1, "(No Profile)"));
+
+            includeReturnProfiles = newReturnProfiles;
+
+            // Reset data sources because calling resetbindings() doesn't work
+            bindingSource.DataSource = includeReturnProfiles;
+            returnProfileID.DataSource = bindingSource;
+        }
     }
 }
