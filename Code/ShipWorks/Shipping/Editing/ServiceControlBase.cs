@@ -411,7 +411,7 @@ namespace ShipWorks.Shipping.Editing
                 sectionReturns.Height = returnsPanel.Bottom + 5 + (sectionReturns.Height - sectionReturns.ContentPanel.Height);
 
                 // only enable for editing if all shipments are Returns
-                returnsPanel.Enabled = (LoadedShipments.All(s => s.ReturnShipment));
+                returnsPanel.Enabled = (LoadedShipments.All(s => s.ReturnShipment) && returnShipment.Checked);
 
                 if (showIncludeReturn)
                 {
@@ -676,16 +676,23 @@ namespace ShipWorks.Shipping.Editing
         /// </summary>
         private void OnIncludeReturnChanged(object sender, EventArgs e)
         {
+            if (includeReturn.Checked)
+            {
+                returnShipment.Checked = false;
+                returnsPanel.Enabled = false;
+            }
+            else
+            {
+                applyReturnProfile.Checked = false;
+            }
+
+            returnShipment.Enabled = !includeReturn.Checked;
+            applyReturnProfile.Enabled = includeReturn.Checked;
+            returnProfileID.Enabled = applyReturnProfile.Checked;
+            returnProfileIDLabel.Enabled = applyReturnProfile.Checked;
+
             if (!isLoading)
             {
-                if (!includeReturn.Checked)
-                {
-                    applyReturnProfile.Checked = false;
-                }
-                returnShipment.Enabled = !includeReturn.Checked;
-                applyReturnProfile.Enabled = includeReturn.Checked;
-                returnProfileID.Enabled = applyReturnProfile.Checked;
-                returnProfileIDLabel.Enabled = applyReturnProfile.Checked;
                 SaveReturnsToShipments();
             }
         }
@@ -695,10 +702,11 @@ namespace ShipWorks.Shipping.Editing
         /// </summary>
         private void OnApplyReturnChanged(object sender, EventArgs e)
         {
+            returnProfileID.Enabled = applyReturnProfile.Checked;
+            returnProfileIDLabel.Enabled = applyReturnProfile.Checked;
+
             if (!isLoading)
             {
-                returnProfileID.Enabled = applyReturnProfile.Checked;
-                returnProfileIDLabel.Enabled = applyReturnProfile.Checked;
                 SaveReturnsToShipments();
             }
         }
@@ -708,11 +716,8 @@ namespace ShipWorks.Shipping.Editing
         /// </summary>
         private void OnReturnProfileIDOpened(object sender, EventArgs e)
         {
-            if (!isLoading)
-            {
-                // Populate the list of profiles
-                RefreshIncludeReturnProfileMenu(shipmentTypeCode);
-            }
+            // Populate the list of profiles
+            RefreshIncludeReturnProfileMenu(shipmentTypeCode);
         }
 
         /// <summary>
@@ -781,9 +786,15 @@ namespace ShipWorks.Shipping.Editing
         /// </summary>
         protected virtual void OnReturnShipmentChanged(object sender, EventArgs e)
         {
+            if (returnShipment.Checked)
+            {
+                includeReturn.Checked = false;
+            }
+
+            includeReturn.Enabled = !returnShipment.Checked;
+
             if (!isLoading)
             {
-                includeReturn.Enabled = !returnShipment.Checked;
                 returnsPanel.Enabled = returnShipment.Checked;
                 SaveReturnsToShipments();
                 ReturnServiceChanged?.Invoke(this, EventArgs.Empty);

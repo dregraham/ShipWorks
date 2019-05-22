@@ -73,8 +73,8 @@ namespace ShipWorks.Shipping.Profiles
 
             mapping.IsValueMapping = true;
 
-            // If its checked, apply the current value
-            if (checkBox.Checked)
+            // If its checked, and has a value apply the current value
+            if (checkBox.Checked && entity.GetCurrentFieldValue(field.FieldIndex) != null)
             {
                 ReadFieldValue(entity, field, dataControl);
                 OnStateCheckChanged(checkBox, EventArgs.Empty);
@@ -109,7 +109,7 @@ namespace ShipWorks.Shipping.Profiles
             checkStateMap.Add(mapping);
 
             // Update the check state
-            checkBox.Checked = entity.GetCurrentFieldValue(field.FieldIndex) != null;
+            checkBox.Checked = (entity.GetCurrentFieldValue(field.FieldIndex) != null) || !allowChangeCheckState;
 
             // Remove all potential event handlers to
             // make sure we only return a single event handler.
