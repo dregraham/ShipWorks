@@ -40,6 +40,18 @@ namespace ShipWorks.Shipping.Profiles
             ApplyProfileValue(profile.ApplyReturnProfile, shipment, ShipmentFields.ApplyReturnProfile);
             ApplyProfileValue(profile.ReturnProfileID, shipment, ShipmentFields.ReturnProfileID);
 
+            // Special cases to keep IncludeReturn and ReturnShipment mutually exclusive
+            if (profile.IncludeReturn.HasValue && profile.IncludeReturn.Value && !profile.ReturnShipment.HasValue)
+            {
+                shipment.SetNewFieldValue(ShipmentFields.ReturnShipment.FieldIndex, false);
+            }
+
+            if (profile.ReturnShipment.HasValue && profile.ReturnShipment.Value && !profile.IncludeReturn.HasValue)
+            {
+                shipment.SetNewFieldValue(ShipmentFields.IncludeReturn.FieldIndex, false);
+                shipment.SetNewFieldValue(ShipmentFields.ApplyReturnProfile.FieldIndex, false);
+            }
+
             // Special case for insurance
             for (int i = 0; i < shipmentType.GetParcelCount(shipment); i++)
             {
