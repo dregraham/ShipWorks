@@ -1326,9 +1326,11 @@ namespace ShipWorks.Stores.Communication
             using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
                 IWarehouseOrderClient webClient = lifetimeScope.Resolve<IWarehouseOrderClient>();
-                    
+
+                DateTime? downloadStartPoint = await GetOnlineLastModifiedStartingPoint().ConfigureAwait(false);
+
                 // get orders for this store and warehouse
-                IEnumerable<WarehouseOrder> orders = await webClient.GetOrders(Store.WarehouseStoreID.ToString(), StoreType.TypeCode)
+                IEnumerable<WarehouseOrder> orders = await webClient.GetOrders(config.WarehouseID, Store.WarehouseStoreID.ToString(), downloadStartPoint.Value, StoreType.TypeCode)
                                                                     .ConfigureAwait(false);
 
                 IWarehouseOrderFactory orderFactory = lifetimeScope.ResolveKeyed<IWarehouseOrderFactory>(StoreType.TypeCode,

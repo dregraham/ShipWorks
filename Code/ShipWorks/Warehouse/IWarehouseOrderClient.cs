@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using ShipWorks.Stores;
@@ -13,6 +14,7 @@ namespace ShipWorks.Warehouse
         /// <summary>
         /// Get orders for the given warehouse store ID from the ShipWorks Warehouse app
         /// </summary>
-        Task<IEnumerable<WarehouseOrder>> GetOrders(string warehouseStoreID, StoreTypeCode storeType);
+        Task<IEnumerable<WarehouseOrder>> GetOrders(string warehouseID, string warehouseStoreID, DateTime lastModified,
+                                                    StoreTypeCode storeType);
     }
 }

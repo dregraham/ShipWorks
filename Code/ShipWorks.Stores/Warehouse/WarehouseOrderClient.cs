@@ -31,11 +31,14 @@ namespace ShipWorks.Stores.Warehouse
         /// <summary>
         /// Get orders for the given warehouse ID from the ShipWorks Warehouse app
         /// </summary>
-        public async Task<IEnumerable<WarehouseOrder>> GetOrders(string warehouseStoreID, StoreTypeCode storeType)
+        public async Task<IEnumerable<WarehouseOrder>> GetOrders(string warehouseID, string warehouseStoreID, DateTime lastModified, StoreTypeCode storeType)
         {
             try
             {
-                IRestRequest request = new RestRequest(WarehouseEndpoints.Orders(warehouseStoreID), Method.POST);
+                IRestRequest request = new RestRequest(WarehouseEndpoints.Orders(warehouseID), Method.POST);
+
+                request.AddQueryParameter("storeID", warehouseStoreID);
+                request.AddQueryParameter("onlineLastModified", lastModified.ToString("o"));
 
                 GenericResult<IRestResponse> response = await warehouseRequestClient
                     .MakeRequest(request, "Get Orders")
@@ -57,7 +60,7 @@ namespace ShipWorks.Stores.Warehouse
             }
             catch (Exception ex) when (ex.GetType() != typeof(DownloadException))
             {
-                throw new DownloadException($"An error occured downloading orders for warehouse ID {warehouseStoreID}", ex);
+                throw new DownloadException($"An error occured downloading orders for warehouse ID {warehouseID}", ex);
             }
         }
     }

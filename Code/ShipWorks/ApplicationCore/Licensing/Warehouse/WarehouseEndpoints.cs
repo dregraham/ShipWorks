@@ -13,7 +13,7 @@
         
         private const string linkWarehouse = "api/warehouses/{0}/link";
         private const string stores = "api/stores";
-        private const string orders = "api/orders/{0}";
+        private const string orders = "api/warehouses/{0}";
 
         /// <summary>
         /// Create a link warehouse endpoint
@@ -29,6 +29,6 @@
         /// <summary>
         /// Create an orders endpoint with a warehouse store ID
         /// </summary>
-        public static string Orders(string warehouseStoreID) => string.Format(orders, warehouseStoreID);
+        public static string Orders(string warehouseID) => string.Format(orders, warehouseID);
     }
 }
