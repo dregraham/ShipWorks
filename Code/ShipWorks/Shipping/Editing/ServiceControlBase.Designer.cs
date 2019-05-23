@@ -135,7 +135,7 @@ namespace ShipWorks.Shipping.Editing
             | System.Windows.Forms.AnchorStyles.Right)));
             this.returnsPanel.AutoSize = true;
             this.returnsPanel.BackColor = System.Drawing.Color.White;
-            this.returnsPanel.Location = new System.Drawing.Point(26, 94);
+            this.returnsPanel.Location = new System.Drawing.Point(37, 94);
             this.returnsPanel.Name = "returnsPanel";
             this.returnsPanel.Size = new System.Drawing.Size(365, 134);
             this.returnsPanel.TabIndex = 79;

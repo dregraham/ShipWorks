@@ -34,7 +34,7 @@
             // scanBasedReturn
             // 
             this.scanBasedReturn.AutoSize = true;
-            this.scanBasedReturn.Location = new System.Drawing.Point(9, 3);
+            this.scanBasedReturn.Location = new System.Drawing.Point(0, 3);
             this.scanBasedReturn.Name = "scanBasedReturn";
             this.scanBasedReturn.Size = new System.Drawing.Size(162, 17);
             this.scanBasedReturn.TabIndex = 0;
