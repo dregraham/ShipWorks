@@ -2,6 +2,7 @@
 using Interapptive.Shared.Utility;
 using ShipEngine.ApiClient.Model;
 using ShipWorks.ApplicationCore.Logging;
+using ShipWorks.Data.Model.EntityInterfaces;
 
 namespace ShipWorks.Shipping.ShipEngine
 {
@@ -38,6 +39,11 @@ namespace ShipWorks.Shipping.ShipEngine
         /// Amazon to their DLL yet
         /// </remarks>
         Task<GenericResult<string>> ConnectAmazonShippingAccount(string authCode);
+
+        /// <summary>
+        /// Update an amazon accounts info
+        /// </summary>
+        Task<Result> UpdateAmazonAccount(IAmazonSWAAccountEntity amazonSwaAccount);
 
         /// <summary>
         /// Gets rates from ShipEngine using the given request

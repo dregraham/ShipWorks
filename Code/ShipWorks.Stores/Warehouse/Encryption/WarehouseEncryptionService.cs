@@ -20,12 +20,12 @@ namespace ShipWorks.Stores.Warehouse.Encryption
     public class WarehouseEncryptionService : IWarehouseEncryptionService
     {
         private readonly WarehouseRequestClient warehouseRequestClient;
-        private ILog log;
+        private readonly ILog log;
 
         // Encryption Parameters
         private const int BlockBitSize = 128;
         private const int KeyBitSize = 256;
-        
+
         /// <summary>
         /// Constructor
         /// </summary>
@@ -73,7 +73,7 @@ namespace ShipWorks.Stores.Warehouse.Encryption
                 Mode = CipherMode.CBC,
                 Padding = PaddingMode.PKCS7
             };
-            
+
             // Use AES to encrypt the plain text
             using (aes)
             {
@@ -92,7 +92,7 @@ namespace ShipWorks.Stores.Warehouse.Encryption
                             // Encrypt Data
                             cryptoStream.Write(plainText, 0, plainText.Length);
                             cryptoStream.FlushFinalBlock();
-                            
+
                             encryptedText = cipherStream.ToArray();
                         }
                     }
@@ -112,7 +112,7 @@ namespace ShipWorks.Stores.Warehouse.Encryption
                 return encryptedStream.ToArray();
             }
         }
-        
+
         /// <summary>
         /// Generates a data key to use for encryption
         /// </summary>

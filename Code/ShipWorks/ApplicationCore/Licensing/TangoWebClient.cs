@@ -34,7 +34,7 @@ using ShipWorks.Stores;
 namespace ShipWorks.ApplicationCore.Licensing
 {
     /// <summary>
-    /// Interface for working with the interapptive license server
+    /// Interface for working with the license server
     /// </summary>
     [NDependIgnoreLongTypes]
     public static class TangoWebClient
@@ -53,8 +53,6 @@ namespace ShipWorks.ApplicationCore.Licensing
 
             return assemblyVersion.Major == 0 ? minimumVersion : assemblyVersion;
         });
-
-        private static readonly DateTime nextSecureConnectionValidation = DateTime.MinValue;
 
         /// <summary>
         /// Gets the version - If version is under 5.0.0.0, return 5.0.0.0
@@ -81,7 +79,7 @@ namespace ShipWorks.ApplicationCore.Licensing
             HttpVariableRequestSubmitter postRequest = new HttpVariableRequestSubmitter();
             postRequest.Variables.Add("action", "activate");
 
-            return ProcessAccountRequest(postRequest, store, license, true);
+            return ProcessAccountRequest(postRequest, store, license, false);
         }
 
         /// <summary>
@@ -121,7 +119,7 @@ namespace ShipWorks.ApplicationCore.Licensing
             }
             try
             {
-                XmlDocument xmlResponse = ProcessXmlRequest(postRequest, "associateshipworkswithitself", true);
+                XmlDocument xmlResponse = ProcessXmlRequest(postRequest, "associateshipworkswithitself", false);
                 return new AssociateShipWorksWithItselfResponse(xmlResponse);
             }
             catch (TangoException ex)
@@ -177,7 +175,7 @@ namespace ShipWorks.ApplicationCore.Licensing
             postRequest.Variables.Add("action", "getnudges");
             postRequest.Variables.Add("license", license.Key);
 
-            XmlDocument nudgesDoc = ProcessXmlRequest(postRequest, "GetNudges", true);
+            XmlDocument nudgesDoc = ProcessXmlRequest(postRequest, "GetNudges", false);
             XElement xNudges = XElement.Parse(nudgesDoc.OuterXml);
 
             foreach (XElement xNudge in xNudges.Elements("Nudge"))
@@ -209,7 +207,7 @@ namespace ShipWorks.ApplicationCore.Licensing
             postRequest.Variables.Add("nudgeoptionid", option.NudgeOptionID.ToString(CultureInfo.InvariantCulture));
             postRequest.Variables.Add("result", option.Result);
 
-            ProcessRequest(postRequest, "LogNudgeOption", true);
+            ProcessRequest(postRequest, "LogNudgeOption", false);
         }
 
         /// <summary>
@@ -249,7 +247,7 @@ namespace ShipWorks.ApplicationCore.Licensing
             }
 
             // Get the credentials from Tango
-            XmlDocument responseXmlDocument = ProcessXmlRequest(postRequest, "GetCounterRatesCreds", true);
+            XmlDocument responseXmlDocument = ProcessXmlRequest(postRequest, "GetCounterRatesCreds", false);
 
             // Pull the credentials from the response; none of the fields are encrypted in the response
             // so we can easily/quickly update them in Tango if they ever need to change
@@ -319,7 +317,7 @@ namespace ShipWorks.ApplicationCore.Licensing
             }
 
             // Get the certificate verification data from Tango
-            XmlDocument responseXmlDocument = ProcessXmlRequest(postRequest, "CarrierCertificate", true);
+            XmlDocument responseXmlDocument = ProcessXmlRequest(postRequest, "CarrierCertificate", false);
 
             // Pull certificate verification data from the response; none of the fields are encrypted in the response
             // so we can easily/quickly update them in Tango if they ever need to change
@@ -443,7 +441,7 @@ namespace ShipWorks.ApplicationCore.Licensing
             postRequest.Variables.Add("emailaddress", email);
             postRequest.Variables.Add("password", password);
 
-            ProcessXmlRequest(postRequest, "SendAccountPassword", true);
+            ProcessXmlRequest(postRequest, "SendAccountPassword", false);
         }
 
         /// <summary>
@@ -457,7 +455,7 @@ namespace ShipWorks.ApplicationCore.Licensing
             postRequest.Variables.Add("emailaddress", email);
             postRequest.Variables.Add("username", username);
 
-            ProcessXmlRequest(postRequest, "SendAccountUsername", true);
+            ProcessXmlRequest(postRequest, "SendAccountUsername", false);
         }
 
         /// <summary>
@@ -504,7 +502,7 @@ namespace ShipWorks.ApplicationCore.Licensing
             postRequest.Variables.Add("submissiondate", insurancePolicy.SubmissionDate.Value.ToString("yyyy-MM-dd HH:mm:ss"));
             postRequest.Variables.Add("claimid", insurancePolicy.ClaimID.Value.ToString(CultureInfo.InvariantCulture));
 
-            ProcessXmlRequest(postRequest, "SubmitInsuranceClaim", true);
+            ProcessXmlRequest(postRequest, "SubmitInsuranceClaim", false);
         }
 
         /// <summary>
@@ -520,7 +518,7 @@ namespace ShipWorks.ApplicationCore.Licensing
             postRequest.Variables.Add("swtype", ((int) shipmentTypeCode).ToString(CultureInfo.InvariantCulture));
             postRequest.Variables.Add("stampscontracttype", ((int) uspsAccountContractType).ToString(CultureInfo.InvariantCulture));
 
-            XmlDocument xmlResponse = ProcessXmlRequest(postRequest, "LogStampsAccount", true);
+            XmlDocument xmlResponse = ProcessXmlRequest(postRequest, "LogStampsAccount", false);
 
             // Check for error
             XmlNode errorNode = xmlResponse.SelectSingleNode("//Error");
@@ -570,7 +568,7 @@ namespace ShipWorks.ApplicationCore.Licensing
                 postRequest.Variables.Add("swshipmentid", shipment.ShipmentID.ToString());
                 postRequest.Variables.Add("license", license.Key);
 
-                ProcessXmlRequest(postRequest, "LogShipmentVoided", true);
+                ProcessXmlRequest(postRequest, "LogShipmentVoided", false);
             }
         }
 
@@ -600,7 +598,7 @@ namespace ShipWorks.ApplicationCore.Licensing
             postRequest.Variables.Add("license", license.Key);
 
             // Process the request
-            XmlDocument xmlResponse = ProcessXmlRequest(postRequest, "UpicPolicy", true);
+            XmlDocument xmlResponse = ProcessXmlRequest(postRequest, "UpicPolicy", false);
 
             // check for errors
             XmlNode errorNode = xmlResponse.SelectSingleNode("//Error");
@@ -622,7 +620,7 @@ namespace ShipWorks.ApplicationCore.Licensing
             postRequest.Variables.Add("identifier", store.EBayUserID);
 
             // Process the request
-            XmlDocument xmlResponse = ProcessXmlRequest(postRequest, "FreemiumStatus", true);
+            XmlDocument xmlResponse = ProcessXmlRequest(postRequest, "FreemiumStatus", false);
 
             return new LicenseAccountDetail(xmlResponse, store);
         }
@@ -667,7 +665,7 @@ namespace ShipWorks.ApplicationCore.Licensing
             postRequest.Variables.Add("pay_zip", paymentInfo.CardBillingAddress.PostalCode);
             postRequest.Variables.Add("pay_country", "US");
 
-            XmlDocument xmlResponse = ProcessXmlRequest(postRequest, "FreemiumCreate", true);
+            XmlDocument xmlResponse = ProcessXmlRequest(postRequest, "FreemiumCreate", false);
             LicenseAccountDetail accountDetail = new LicenseAccountDetail(xmlResponse, store);
 
             UpdateLicense(store, accountDetail);
@@ -698,7 +696,7 @@ namespace ShipWorks.ApplicationCore.Licensing
             postRequest.Variables.Add("action", "freemiumsetaccount");
             postRequest.Variables.Add("freemiumaccount", freemiumAccount);
 
-            LicenseAccountDetail accountDetail = ProcessAccountRequest(postRequest, store, new ShipWorksLicense(store.License), true);
+            LicenseAccountDetail accountDetail = ProcessAccountRequest(postRequest, store, new ShipWorksLicense(store.License), false);
 
             UpdateLicense(store, accountDetail);
         }
@@ -720,13 +718,13 @@ namespace ShipWorks.ApplicationCore.Licensing
                 postRequest.Variables.Add("action", "updateTrialGenericModuleInfo");
                 postRequest.Variables.Add("license", store.License);
 
-                ProcessXmlRequest(postRequest, "UpdateTrialGenericModuleInfo", true);
+                ProcessXmlRequest(postRequest, "UpdateTrialGenericModuleInfo", false);
             }
             else
             {
                 postRequest.Variables.Add("action", "updateStoreGenericModuleInfo");
 
-                ProcessAccountRequest(postRequest, store, license, true);
+                ProcessAccountRequest(postRequest, store, license, false);
             }
         }
 
@@ -760,7 +758,7 @@ namespace ShipWorks.ApplicationCore.Licensing
             postRequest.Variables.Add("action", "freemiumupgrade");
             postRequest.Variables.Add("elsplan", endiciaServicePlan.ToString());
 
-            LicenseAccountDetail accountDetail = ProcessAccountRequest(postRequest, store, new ShipWorksLicense(store.License), true);
+            LicenseAccountDetail accountDetail = ProcessAccountRequest(postRequest, store, new ShipWorksLicense(store.License), false);
 
             UpdateLicense(store, accountDetail);
         }
@@ -827,7 +825,7 @@ namespace ShipWorks.ApplicationCore.Licensing
             postRequest.Variables.Add("identifier", storeType.LicenseIdentifier);
 
             // Process the request
-            XmlDocument xmlResponse = ProcessXmlRequest(postRequest, "ProcessTrialRequest", true);
+            XmlDocument xmlResponse = ProcessXmlRequest(postRequest, "ProcessTrialRequest", false);
 
             // Grab the shipment type functionality node
             XmlNode shipmentTypeFunctionality = xmlResponse.SelectSingleNode("//License/ShipmentTypeFunctionality");
@@ -964,7 +962,7 @@ namespace ShipWorks.ApplicationCore.Licensing
             postRequest.Variables.Add("license", storeLicense);
             postRequest.Variables.Add("version", Version);
 
-            XmlDocument xmlResponse = ProcessXmlRequest(postRequest, "GetCustomerEmail", true);
+            XmlDocument xmlResponse = ProcessXmlRequest(postRequest, "GetCustomerEmail", false);
 
             CheckResponseForErrors(xmlResponse);
 
@@ -1002,7 +1000,7 @@ namespace ShipWorks.ApplicationCore.Licensing
             postRequest.Variables.Add("customerlicense", license.Key);
             postRequest.Variables.Add("version", Version);
 
-            XmlDocument xmlResponse = ProcessXmlRequest(postRequest, "GetLicenseCapabilities", true);
+            XmlDocument xmlResponse = ProcessXmlRequest(postRequest, "GetLicenseCapabilities", false);
 
             return xmlResponse;
         }
@@ -1023,7 +1021,7 @@ namespace ShipWorks.ApplicationCore.Licensing
             postRequest.Variables.Add("version", Version);
             postRequest.Variables.Add("storeinfo", store.StoreName);
 
-            XmlDocument xmlResponse = ProcessXmlRequest(postRequest, "AddStore", true);
+            XmlDocument xmlResponse = ProcessXmlRequest(postRequest, "AddStore", false);
 
             try
             {
@@ -1046,7 +1044,7 @@ namespace ShipWorks.ApplicationCore.Licensing
             postRequest.Variables.Add("customerlicense", license.Key);
             postRequest.Variables.Add("version", Version);
 
-            XmlDocument xmlResponse = ProcessXmlRequest(postRequest, "GetActiveStores", true);
+            XmlDocument xmlResponse = ProcessXmlRequest(postRequest, "GetActiveStores", false);
 
             CheckResponseForErrors(xmlResponse);
             List<ActiveStore> activeStores = new GetActiveStoresResponse(xmlResponse).ActiveStores;
@@ -1066,7 +1064,7 @@ namespace ShipWorks.ApplicationCore.Licensing
             postRequest.Variables.Add("storelicensekey[]", storeLicenseKey);
             postRequest.Variables.Add("version", Version);
 
-            XmlDocument xmlResponse = ProcessXmlRequest(postRequest, "DeleteStore", true);
+            XmlDocument xmlResponse = ProcessXmlRequest(postRequest, "DeleteStore", false);
 
             try
             {
@@ -1095,7 +1093,7 @@ namespace ShipWorks.ApplicationCore.Licensing
             postRequest.Variables.Add("storelicensekey[]", licenseKeyParam);
             postRequest.Variables.Add("version", Version);
 
-            XmlDocument xmlResponse = ProcessXmlRequest(postRequest, "DeleteStores", true);
+            XmlDocument xmlResponse = ProcessXmlRequest(postRequest, "DeleteStores", false);
 
             try
             {
@@ -1125,7 +1123,7 @@ namespace ShipWorks.ApplicationCore.Licensing
 
             try
             {
-                XmlDocument xmlResponse = ProcessXmlRequest(postRequest, "AssociateStampsUsernameWithLicense", true);
+                XmlDocument xmlResponse = ProcessXmlRequest(postRequest, "AssociateStampsUsernameWithLicense", false);
 
                 CheckResponseForErrors(xmlResponse);
             }

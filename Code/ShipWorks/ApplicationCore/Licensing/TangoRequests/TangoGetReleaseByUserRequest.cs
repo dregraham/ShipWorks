@@ -55,7 +55,7 @@ namespace ShipWorks.ApplicationCore.Licensing.TangoRequests
             request.Variables.Add("customerid", tangoCustomerID);
             request.Variables.Add("version", version.ToString());
 
-            return webRequestClient.ProcessXmlRequest<ShipWorksReleaseInfo>(request, "GetReleaseByUser", true);
+            return webRequestClient.ProcessXmlRequest<ShipWorksReleaseInfo>(request, "GetReleaseByUser", false);
         }
     }
 }

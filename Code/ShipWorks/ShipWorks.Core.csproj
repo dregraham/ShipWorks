@@ -7079,6 +7079,7 @@
     <Compile Include="Data\Administration\DetailedDatabaseSetupWizard.Designer.cs">
       <DependentUpon>DetailedDatabaseSetupWizard.cs</DependentUpon>
     </Compile>
+    <Compile Include="UI\Utility\ResourcesUtility.cs" />
     <Compile Include="UI\ValueConverters\ShipmentDateCutoffConverter.cs" />
     <Compile Include="Users\Audit\AuditDisplayFormatAttribute.cs" />
     <Compile Include="Users\Audit\AuditMissingObjectLabelException.cs" />

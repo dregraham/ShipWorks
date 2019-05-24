@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Reactive.Disposables;
 using System.Windows.Forms;
@@ -606,12 +607,14 @@ namespace ShipWorks.ApplicationCore
         /// <summary>
         /// Update the header control
         /// </summary>
+        [SuppressMessage("ShipWorks", "SW0002:Identifier should not be obfuscated",
+            Justification = "Identifier is not being used for data binding")]
         private void UpdateHeaderContent()
         {
             if (IsSearchActive)
             {
                 headerViewModel.Title = string.Format("Search {0}", EnumHelper.GetDescription(ActiveFilterTarget));
-                headerViewModel.HeaderImage = Resources.view;
+                headerViewModel.HeaderImageName = nameof(Resources.view);
 
                 pictureSearchHourglass.Visible = searchProvider.IsSearching;
                 headerViewModel.IsSearching = searchProvider.IsSearching;
@@ -649,7 +652,7 @@ namespace ShipWorks.ApplicationCore
                 ActiveGrid.OverrideEmptyText = "";
                 headerViewModel.Title = ActiveGrid.ActiveFilterNode?.Filter?.Name ?? string.Empty;
 
-                headerViewModel.HeaderImage = FilterHelper.GetFilterImage(ActiveFilterTarget);
+                headerViewModel.HeaderImageName = FilterHelper.GetFilterImageName(ActiveFilterTarget);
             }
 
             UpdateSearchBox();
@@ -660,11 +663,13 @@ namespace ShipWorks.ApplicationCore
         /// <summary>
         /// Update the search box control to show the correct state
         /// </summary>
+        [SuppressMessage("ShipWorks", "SW0002:Identifier should not be obfuscated",
+            Justification = "Identifier is not being used for data binding")]
         private void UpdateSearchBox()
         {
             if (IsSearchActive)
             {
-                headerViewModel.EndSearchImage = searchProvider.IsSearching ? Resources.stop_small : Resources.clear_small;
+                headerViewModel.EndSearchImageName = searchProvider.IsSearching ? nameof(Resources.stop_small) : nameof(Resources.clear_small);
                 headerViewModel.WatermarkText = AdvancedSearchResultsActive ? "Search these results" : "";
             }
             else
