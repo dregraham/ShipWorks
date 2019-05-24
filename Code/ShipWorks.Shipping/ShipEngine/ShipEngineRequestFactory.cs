@@ -70,12 +70,12 @@ namespace ShipWorks.Shipping.ShipEngine
         /// <summary>
         /// Gets an AddressDTO from a shipment
         /// </summary>
-        private AddressDTO CreateAddress(PersonAdapter personAdapter)
+        private Address CreateAddress(PersonAdapter personAdapter)
         {
             string countryCode = personAdapter.CountryCode == "UK" ? "GB" : personAdapter.CountryCode;
-            AddressDTO address = new AddressDTO
+            Address address = new Address
             {
-                AddressResidentialIndicator = AddressDTO.AddressResidentialIndicatorEnum.Unknown,
+                AddressResidentialIndicator = Address.AddressResidentialIndicatorEnum.Unknown,
                 Name = personAdapter.UnparsedName,
                 Phone = personAdapter.Phone,
                 CompanyName = personAdapter.Company,

@@ -18,7 +18,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.DhlExpress
     {
         private readonly AutoMock mock;
         private readonly ShipmentEntity shipment;
-        private readonly LinkDTO link;
+        private readonly MultiFormatDownloadLinkDTO link;
         private readonly Label label;
 
         public DhlExpressDownloadedLabelDataTest()
@@ -32,7 +32,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.DhlExpress
                 ShipmentTypeCode = ShipmentTypeCode.DhlExpress
             };
 
-            link = new LinkDTO() { Href = "http://www.google.com" };
+            link = new MultiFormatDownloadLinkDTO() { Href = "http://www.google.com" };
 
             label = new Label()
             {
