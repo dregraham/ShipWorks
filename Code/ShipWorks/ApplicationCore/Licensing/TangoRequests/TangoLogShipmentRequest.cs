@@ -99,14 +99,14 @@ namespace ShipWorks.ApplicationCore.Licensing.TangoRequests
             {
                 // Trial shipment logging
                 PrepareLogTrialShipmentRequest(postRequest, shipmentType, storeEntity);
-                return client.ProcessXmlRequest(postRequest, "LogTrialShipments", true)
+                return client.ProcessXmlRequest(postRequest, "LogTrialShipments", false)
                     .Map(_ => shipment.ShipmentID.ToString());
             }
             else
             {
                 // Regular shipment logging
                 PrepareLogShipmentRequest(shipment, shipmentType, postRequest);
-                return client.ProcessXmlRequest(postRequest, "LogShipmentDetails", true)
+                return client.ProcessXmlRequest(postRequest, "LogShipmentDetails", false)
                     .Bind(x => GetOnlineShipmentID(x, shipment.ShipmentID));
             }
         }
