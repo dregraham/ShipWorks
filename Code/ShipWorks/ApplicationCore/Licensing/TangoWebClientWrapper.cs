@@ -31,7 +31,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// </summary>
         public virtual ILicenseAccountDetail GetLicenseStatus(string licenseKey, StoreEntity store)
         {
-            return TangoWebClient.GetLicenseStatus(licenseKey, store, true);
+            return TangoWebClient.GetLicenseStatus(licenseKey, store, false);
         }
 
         /// <summary>
@@ -180,7 +180,7 @@ namespace ShipWorks.ApplicationCore.Licensing
             // in stale license data. Since customers aren't buying postage all the time, the additional overhead to ensure
             // accuracy may not be that big of a deal.
             List<StoreEntity> stores = StoreManager.GetAllStores();
-            IEnumerable<ILicenseAccountDetail> licenses = stores.Select(store => TangoWebClient.GetLicenseStatus(store.License, store, true)).Where(l => l.Active);
+            IEnumerable<ILicenseAccountDetail> licenses = stores.Select(store => TangoWebClient.GetLicenseStatus(store.License, store, false)).Where(l => l.Active);
 
             // We only need to send up one license for each distinct customer ID
             IEnumerable<ILicenseAccountDetail> licensesForLogging = licenses.GroupBy(l => l.TangoCustomerID).Select(grp => grp.First());

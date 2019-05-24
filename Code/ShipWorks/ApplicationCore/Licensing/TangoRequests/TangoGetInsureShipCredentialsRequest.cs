@@ -44,7 +44,7 @@ namespace ShipWorks.ApplicationCore.Licensing.TangoRequests
                 request.AddVariable("insureshiptestcreds", "true");
             }
 
-            webRequestClient.ProcessXmlRequest(request, "GetInsureShipCredentials", true)
+            webRequestClient.ProcessXmlRequest(request, "GetInsureShipCredentials", false)
                 .Do(x => SetCredentialsOnStore(x, store));
         }
 
