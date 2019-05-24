@@ -25,13 +25,12 @@ namespace ShipWorks.ApplicationCore.Settings.Warehouse
         public WarehouseViewModel(DTO.Warehouse warehouse)
         {
             Id = warehouse.id;
-            Name = warehouse.details.name;
-            City = warehouse.details.city;
-            Code = warehouse.details.code;
-            shipWorksLink = warehouse.details.shipWorksLink;
-            State = warehouse.details.state;
-            Street = warehouse.details.street;
-            Zip = warehouse.details.zip;
+            Name = warehouse.details.Name;
+            City = warehouse.details.City;
+            shipWorksLink = warehouse.details.ShipWorksDatabaseId;
+            State = warehouse.details.State;
+            Street = warehouse.details.Street;
+            Zip = warehouse.details.Zip;
             IsAlreadyLinked = !string.IsNullOrEmpty(shipWorksLink);
         }
 
@@ -52,12 +51,6 @@ namespace ShipWorks.ApplicationCore.Settings.Warehouse
         /// </summary>
         [Obfuscation]
         public string City { get; set; }
-
-        /// <summary>
-        /// Code of the warehouse
-        /// </summary>
-        [Obfuscation]
-        public string Code { get; set; }
 
         /// <summary>
         /// State of the warehouse

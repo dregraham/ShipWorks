@@ -31,30 +31,27 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse.DTO
     public class Details
     {
         [JsonProperty("zip")]
-        public string zip { get; set; }
-
-        [JsonProperty("code")]
-        public string code { get; set; }
+        public string Zip { get; set; }
 
         [JsonProperty("city")]
-        public string city { get; set; }
+        public string City { get; set; }
 
         [JsonProperty("street")]
-        public string street { get; set; }
+        public string Street { get; set; }
 
         [JsonProperty("customerID")]
-        public int customerID { get; set; }
+        public int CustomerId { get; set; }
 
         [JsonProperty("name")]
-        public string name { get; set; }
+        public string Name { get; set; }
 
         [JsonProperty("id")]
-        public string id { get; set; }
+        public string Id { get; set; }
 
         [JsonProperty("state")]
-        public string state { get; set; }
+        public string State { get; set; }
 
-        [JsonProperty("shipWorksLink")]
-        public string shipWorksLink { get; set; }
+        [JsonProperty("shipWorksDatabaseId")]
+        public string ShipWorksDatabaseId { get; set; }
     }
 }
