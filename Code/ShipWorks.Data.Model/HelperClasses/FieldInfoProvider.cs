@@ -3284,6 +3284,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("StoreEntity", "InitialDownloadOrder", typeof(Nullable<System.Int64>), false, false, false, true,  (int)StoreFieldIndex.InitialDownloadOrder, 0, 0, 19);
 			this.AddElementFieldInfo("StoreEntity", "InsureShipClientID", typeof(Nullable<System.Int64>), false, false, false, true,  (int)StoreFieldIndex.InsureShipClientID, 0, 0, 19);
 			this.AddElementFieldInfo("StoreEntity", "InsureShipApiKey", typeof(System.String), false, false, false, true,  (int)StoreFieldIndex.InsureShipApiKey, 255, 0, 0);
+			this.AddElementFieldInfo("StoreEntity", "WarehouseStoreID", typeof(Nullable<System.Guid>), false, false, false, true,  (int)StoreFieldIndex.WarehouseStoreID, 0, 0, 0);
 		}
 		/// <summary>Inits SystemDataEntity's FieldInfo objects</summary>
 		private void InitSystemDataEntityInfos()
@@ -3853,6 +3854,8 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("WalmartStoreEntity", "ConsumerID", typeof(System.String), false, false, false, false,  (int)WalmartStoreFieldIndex.ConsumerID, 50, 0, 0);
 			this.AddElementFieldInfo("WalmartStoreEntity", "PrivateKey", typeof(System.String), false, false, false, false,  (int)WalmartStoreFieldIndex.PrivateKey, 2000, 0, 0);
 			this.AddElementFieldInfo("WalmartStoreEntity", "DownloadModifiedNumberOfDaysBack", typeof(System.Int32), false, false, false, false,  (int)WalmartStoreFieldIndex.DownloadModifiedNumberOfDaysBack, 0, 0, 10);
+			this.AddElementFieldInfo("WalmartStoreEntity", "ClientID", typeof(System.String), false, false, false, false,  (int)WalmartStoreFieldIndex.ClientID, 50, 0, 0);
+			this.AddElementFieldInfo("WalmartStoreEntity", "ClientSecret", typeof(System.String), false, false, false, false,  (int)WalmartStoreFieldIndex.ClientSecret, 2000, 0, 0);
 		}
 		/// <summary>Inits WorldShipGoodsEntity's FieldInfo objects</summary>
 		private void InitWorldShipGoodsEntityInfos()

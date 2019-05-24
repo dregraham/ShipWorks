@@ -40,7 +40,7 @@ namespace ShipWorks.Stores.Platforms.Amazon.CoreExtensions.Grid
             if (order != null)
             {
                 string domainName = await GetDomainName(order).ConfigureAwait(false);
-                string orderUrl = $"https://sellercentral.{domainName}/gp/orders/order-details.html/?orderID={order.AmazonOrderID}";
+                string orderUrl = $"https://sellercentral.{domainName}/orders-v3/order/{order.AmazonOrderID}";
                 Uri orderUri = new Uri(orderUrl);
 
                 if (orderUri.Host != "sellercentral.amazon.com")

@@ -972,7 +972,8 @@ CREATE TABLE [dbo].[Store]
 [InitialDownloadDays] [int] NULL,
 [InitialDownloadOrder] [bigint] NULL,
 [InsureShipClientID] [bigint] NULL,
-[InsureShipApiKey] [nvarchar] (255) NULL
+[InsureShipApiKey] [nvarchar] (255) NULL,
+[WarehouseStoreID] [uniqueidentifier] NULL
 )
 GO
 PRINT N'Creating primary key [PK_Store] on [dbo].[Store]'
@@ -6386,7 +6387,9 @@ CREATE TABLE [dbo].[WalmartStore]
 [StoreID] [bigint] NOT NULL,
 [ConsumerID] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [PrivateKey] [nvarchar] (2000) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[DownloadModifiedNumberOfDaysBack] [int] NOT NULL
+[DownloadModifiedNumberOfDaysBack] [int] NOT NULL,
+[ClientID] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_WalmartStore_ClientID] DEFAULT (''),
+[ClientSecret] [nvarchar] (2000) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_WalmartStore_ClientSecret] DEFAULT ('')
 )
 GO
 PRINT N'Creating primary key [PK_WalmartStore] on [dbo].[WalmartStore]'

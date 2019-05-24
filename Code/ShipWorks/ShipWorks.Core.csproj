@@ -796,6 +796,7 @@
     <Compile Include="ApplicationCore\Licensing\TokenResponse.cs" />
     <Compile Include="ApplicationCore\Licensing\Warehouse\DTO\LinkDatabaseDto.cs" />
     <Compile Include="ApplicationCore\Licensing\Warehouse\DTO\SkusToUploadDto.cs" />
+    <Compile Include="ApplicationCore\Licensing\Warehouse\DTO\Store.cs" />
     <Compile Include="ApplicationCore\Licensing\Warehouse\DTO\WarehouseListDto.cs" />
     <Compile Include="ApplicationCore\Licensing\Warehouse\IWarehouseLink.cs" />
     <Compile Include="ApplicationCore\Licensing\Warehouse\IUploadSkusToWarehouse.cs" />
@@ -1158,6 +1159,8 @@
     <Compile Include="Shipping\ShipSense\NullKnowledgebase.cs" />
     <Compile Include="Shipping\ShipSense\NullShipSenseSynchronizer.cs" />
     <Compile Include="Shipping\ShipSense\Population\NullShipSenseLoaderGateway.cs" />
+    <Compile Include="Stores\Management\GenerateDataKeyResponse.cs" />
+    <Compile Include="Stores\Management\IWarehouseStoreClient.cs" />
     <Compile Include="Stores\Orders\Archive\IOrderArchiver.cs" />
     <Compile Include="Common\IO\KeyboardShortcuts\ShortcutSession.cs" />
     <Compile Include="Data\Administration\Recovery\SqlAdapterRetry.cs" />
@@ -1349,6 +1352,7 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="Properties\XamlNamespaces.cs" />
+    <Compile Include="Warehouse\WarehouseStoreTypes.cs" />
     <EmbeddedResource Include="ApplicationCore\MessageBoxes\ListSeparatorFormatRequiredDlg.resx">
       <DependentUpon>ListSeparatorFormatRequiredDlg.cs</DependentUpon>
       <SubType>Designer</SubType>

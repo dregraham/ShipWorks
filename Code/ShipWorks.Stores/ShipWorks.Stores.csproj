@@ -854,11 +854,11 @@
     <Compile Include="Platforms\Walmart\CoreExtensions\Filters\WalmartPurchaseOrderIDCondition.cs" />
     <Compile Include="Platforms\Walmart\DTO\CancelRequestV3.cs" />
     <Compile Include="Platforms\Walmart\DTO\Errors.cs" />
+    <Compile Include="Platforms\Walmart\DTO\OAuthTokenDTO.cs" />
     <Compile Include="Platforms\Walmart\DTO\PurchaseOrderV3.cs" />
     <Compile Include="Platforms\Walmart\DTO\RefundRequestV3.cs" />
     <Compile Include="Platforms\Walmart\DTO\ShipConfirmRequestV3.cs" />
     <Compile Include="Platforms\Walmart\IWalmartOrderLoader.cs" />
-    <Compile Include="Platforms\Walmart\IWalmartRequestSigner.cs" />
     <Compile Include="Platforms\Walmart\IWalmartWebClient.cs" />
     <Compile Include="Platforms\Walmart\OnlineUpdating\IShipmentDetailsUpdater.cs" />
     <Compile Include="Platforms\Walmart\OnlineUpdating\IWalmartCombineOrderSearchProvider.cs" />
@@ -871,7 +871,6 @@
     <Compile Include="Platforms\Walmart\WalmartOrderIdentifier.cs" />
     <Compile Include="Platforms\Walmart\WalmartOrderLoader.cs" />
     <Compile Include="Platforms\Walmart\OnlineUpdating\ShipmentDetailsUpdater.cs" />
-    <Compile Include="Platforms\Walmart\WalmartRequestSigner.cs" />
     <Compile Include="Platforms\Walmart\WalmartStoreType.cs" />
     <Compile Include="Platforms\Walmart\WalmartWebClient.cs" />
     <Compile Include="Platforms\WebShopManager\CoreExtensions\Filters\Orders\WebShopManagerAmazonOrderIDCondition.cs" />
@@ -896,6 +895,13 @@
     <Compile Include="Services\StoreManagerWrapper.cs" />
     <Compile Include="Services\StoreTypeManagerWrapper.cs" />
     <Compile Include="StoreSettingsTrackedDurationEvent.cs" />
+    <Compile Include="Warehouse\Encryption\IWarehouseEncryptionService.cs" />
+    <Compile Include="Warehouse\Encryption\WarehouseEncryptionException.cs" />
+    <Compile Include="Warehouse\Encryption\WarehouseEncryptionService.cs" />
+    <Compile Include="Warehouse\StoreData\AmazonStore.cs" />
+    <Compile Include="Warehouse\StoreData\ChannelAdvisorStoreData.cs" />
+    <Compile Include="Warehouse\StoreDtoFactory.cs" />
+    <Compile Include="Warehouse\WarehouseStoreClient.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Interapptive.Shared\Interapptive.Shared.csproj">
@@ -953,7 +959,6 @@
   <ItemGroup>
     <EmbeddedResource Include="Orders\Archive\GetArchiveTriggers.sql" />
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
