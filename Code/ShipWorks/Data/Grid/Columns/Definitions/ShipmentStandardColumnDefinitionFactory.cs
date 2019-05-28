@@ -162,7 +162,7 @@ namespace ShipWorks.Data.Grid.Columns.Definitions
 
                 new GridColumnDefinition("{0791736A-46BC-40D9-A0C2-31432C1D64C4}",
                     new GridEnumDisplayType<ValidationDetailStatusType>(EnumSortMethod.Description),
-                    "S: Residential status", ValidationDetailStatusType.Yes,
+                    "S: Residential Status", ValidationDetailStatusType.Yes,
                     ShipmentFields.ShipResidentialStatus)
                     { DefaultWidth = 100 },
 
