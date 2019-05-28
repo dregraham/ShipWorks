@@ -1,28 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using Interapptive.Shared.Utility;
 using ShipWorks.AddressValidation;
+using ShipWorks.AddressValidation.Enums;
 using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Data.Grid.Columns.DisplayTypes;
-using ShipWorks.Data.Model.HelperClasses;
-using ShipWorks.Shipping;
 using ShipWorks.Data.Grid.Columns.ValueProviders;
-using SD.LLBLGen.Pro.ORMSupportClasses;
-using ShipWorks.Shipping.Editing;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Stores.Content.Controls;
+using ShipWorks.Data.Model.HelperClasses;
+using ShipWorks.Properties;
+using ShipWorks.Shipping;
+using ShipWorks.Shipping.CoreExtensions.Grid;
+using ShipWorks.Shipping.Insurance;
+using ShipWorks.Shipping.ShipSense;
+using ShipWorks.Stores.Content.Panels.CoreExtensions.Grid;
 using ShipWorks.Users;
 using ShipWorks.Users.Security;
-using ShipWorks.Stores.Content.Panels;
-using ShipWorks.Shipping.CoreExtensions.Grid;
-using ShipWorks.Stores.Content.Panels.CoreExtensions.Grid;
-using Interapptive.Shared.Utility;
-using ShipWorks.AddressValidation.Enums;
-using ShipWorks.Shipping.Insurance;
-using ShipWorks.Properties;
-using ShipWorks.Shipping.ShipSense;
 
 namespace ShipWorks.Data.Grid.Columns.Definitions
 {
@@ -61,41 +53,54 @@ namespace ShipWorks.Data.Grid.Columns.Definitions
                     new ShipmentServiceUsedDisplayType(), "Service", "First Class",
                     ShipmentFields.ShipmentType),
 
+                new GridColumnDefinition("{D12A7AE9-00F7-4e45-A420-81D7D61331CF}", true,
+                    new GridTextDisplayType(), "Tracking", "1Z0139787879870954",
+                    ShipmentFields.TrackingNumber),
+
+                new GridColumnDefinition("{5B7D5A28-E96C-4BFD-BCE9-0703D98CF9DA}", true,
+                    new GridBooleanDisplayType()
+                    {
+                        TrueText = "Yes",
+                        FalseText = "No"
+                    },
+                    "Return Shipment", "Yes",
+                    ShipmentFields.ReturnShipment),
+
                 new GridColumnDefinition("{55C1B735-5774-453C-B2E1-30C09C6BB27F}",
                     new ShipmentInsuredDisplayType(), "Insured By", new ShipmentEntity { Insurance = true, InsuranceProvider = (int) InsuranceProvider.ShipWorks },
                     ShipmentFields.ShipmentID),
 
-                new GridColumnDefinition("{B19232A4-FD7B-42c9-A45A-5213396C0A49}", 
-                    new GridDateDisplayType { UseDescriptiveDates = true, TimeDisplayFormat = TimeDisplayFormat.None }, 
+                new GridColumnDefinition("{B19232A4-FD7B-42c9-A45A-5213396C0A49}",
+                    new GridDateDisplayType { UseDescriptiveDates = true, TimeDisplayFormat = TimeDisplayFormat.None },
                     "Process Date", DateTimeUtility.ParseEnUS("03/04/2001 1:30").ToUniversalTime(),
                     ShipmentFields.ProcessedDate),
 
-                new GridColumnDefinition("{0D458821-9A30-479D-AE84-1F517EC49458}", 
+                new GridColumnDefinition("{0D458821-9A30-479D-AE84-1F517EC49458}",
                     new GridUserDisplayType(), "Processed By", new object[] { "Joe", Resources.user_16 },
                     ShipmentFields.ProcessedUserID,
                     UserFields.Username),
 
-                new GridColumnDefinition("{E8F8F052-5797-4ABC-AAD1-C751A13F0ADA}", 
+                new GridColumnDefinition("{E8F8F052-5797-4ABC-AAD1-C751A13F0ADA}",
                     new GridComputerDisplayType(), "Processed On", "\\ShippingPC",
                     ShipmentFields.ProcessedComputerID,
                     ComputerFields.Name),
 
                 new GridColumnDefinition("{4037EBEF-0391-4b07-80C3-575BEB07E201}",
-                    new GridDateDisplayType { UseDescriptiveDates = true, TimeDisplayFormat = TimeDisplayFormat.None }, 
+                    new GridDateDisplayType { UseDescriptiveDates = true, TimeDisplayFormat = TimeDisplayFormat.None },
                     "Ship Date", DateTimeUtility.ParseEnUS("03/04/2001 1:30").ToUniversalTime(),
                     ShipmentFields.ShipDate),
 
-                new GridColumnDefinition("{95292493-01A9-40cc-8518-04068A6A5BA3}", 
-                    new GridDateDisplayType { UseDescriptiveDates = true, TimeDisplayFormat = TimeDisplayFormat.None }, 
+                new GridColumnDefinition("{95292493-01A9-40cc-8518-04068A6A5BA3}",
+                    new GridDateDisplayType { UseDescriptiveDates = true, TimeDisplayFormat = TimeDisplayFormat.None },
                     "Void Date", DateTimeUtility.ParseEnUS("03/04/2001 1:30").ToUniversalTime(),
                     ShipmentFields.VoidedDate),
 
-                new GridColumnDefinition("{D53E7614-1771-4942-8CF9-F419B43F01A0}", 
+                new GridColumnDefinition("{D53E7614-1771-4942-8CF9-F419B43F01A0}",
                     new GridUserDisplayType(), "Voided By", new object[] { "Joe", Resources.user_16 },
                     ShipmentFields.VoidedUserID,
                     UserFields.Username),
 
-                new GridColumnDefinition("{C6258887-A20F-458E-8C59-2F91DD174881}", 
+                new GridColumnDefinition("{C6258887-A20F-458E-8C59-2F91DD174881}",
                     new GridComputerDisplayType(), "Voided On", "\\ShippingPC",
                     ShipmentFields.VoidedComputerID,
                     ComputerFields.Name),
@@ -103,10 +108,6 @@ namespace ShipWorks.Data.Grid.Columns.Definitions
                 new GridColumnDefinition("{B7195820-4EA1-4815-9E8B-9857C5D59091}",
                     new GridWeightDisplayType(), "Weight", 3.1,
                     ShipmentFields.TotalWeight),
-
-                new GridColumnDefinition("{D12A7AE9-00F7-4e45-A420-81D7D61331CF}", true,
-                    new GridTextDisplayType(), "Tracking", "1Z0139787879870954",
-                    ShipmentFields.TrackingNumber),
 
                 new GridColumnDefinition("{C83A0678-5375-4ead-A439-47193425CE11}",
                     new GridMoneyDisplayType(), "Cost", 4.18m,
@@ -122,48 +123,48 @@ namespace ShipWorks.Data.Grid.Columns.Definitions
 
                 new GridColumnDefinition("{E735E64D-9F31-4244-B803-7B4C68B31B34}", true,
                     new GridActionDisplayType("Delete", GridLinkAction.Delete), "Delete", "Delete",
-                    ShipmentFields.ShipmentID) 
-                    { 
+                    ShipmentFields.ShipmentID)
+                    {
                         DefaultWidth = 45,
                         ApplicableTest = (o) => o == null || UserSession.Security.HasPermission(PermissionType.ShipmentsVoidDelete, (long) o)
                     },
-                    
+
                 new GridColumnDefinition("{5BB01A4C-203C-4602-A1DD-143C8485455F}",
                     new GridEnumDisplayType<AddressValidationStatusType>(EnumSortMethod.Description),
                     "S: Validation Status", AddressValidationStatusType.Valid,
-                    ShipmentFields.ShipAddressValidationStatus) 
+                    ShipmentFields.ShipAddressValidationStatus)
                     { DefaultWidth = 100 },
 
                 new GridColumnDefinition("{A0015494-C387-44D9-9A1F-466A9341B634}",
-                    new GridActionDisplayType(addressSelector.DisplayValidationSuggestionLabel, 
-                        addressSelector.ShowAddressOptionMenu, addressSelector.IsValidationSuggestionLinkEnabled), 
+                    new GridActionDisplayType(addressSelector.DisplayValidationSuggestionLabel,
+                        addressSelector.ShowAddressOptionMenu, addressSelector.IsValidationSuggestionLinkEnabled),
                     "S: Validation Suggestions", "2 Suggestions",
                     new GridColumnFunctionValueProvider(x => x),
                     new GridColumnSortProvider(ShipmentFields.ShipAddressValidationSuggestionCount, ShipmentFields.ShipAddressValidationStatus))
-                    { DefaultWidth = 120 }, 
+                    { DefaultWidth = 120 },
 
                 new GridColumnDefinition("{70F17C2C-74AD-4AF3-8E44-1DA5597A92F6}",
                     new GridEnumDisplayType<ValidationDetailStatusType>(EnumSortMethod.Description),
                     "S: Residential status",  ValidationDetailStatusType.Yes,
-                    ShipmentFields.ShipResidentialStatus) 
-                    { DefaultWidth = 100 }, 
+                    ShipmentFields.ShipResidentialStatus)
+                    { DefaultWidth = 100 },
 
                 new GridColumnDefinition("{3AF5D697-F319-48E5-87B7-500D3186AABE}",
                     new GridEnumDisplayType<ValidationDetailStatusType>(EnumSortMethod.Description),
                     "S: PO Box", ValidationDetailStatusType.Yes,
-                    ShipmentFields.ShipPOBox) 
-                    { DefaultWidth = 72 }, 
+                    ShipmentFields.ShipPOBox)
+                    { DefaultWidth = 72 },
 
                 new GridColumnDefinition("{2BAFB097-004D-4DE5-9779-F4D86854943E}",
                     new GridEnumDisplayType<ValidationDetailStatusType>(EnumSortMethod.Description),
                     "S: International Territory",  ValidationDetailStatusType.Yes,
-                    ShipmentFields.ShipUSTerritory) 
-                    { DefaultWidth = 145 }, 
+                    ShipmentFields.ShipUSTerritory)
+                    { DefaultWidth = 145 },
 
                 new GridColumnDefinition("{8097B252-BB97-412E-9DA4-CC1D8ADC0007}",
                     new GridEnumDisplayType<ValidationDetailStatusType>(EnumSortMethod.Description),
                     "S: Military Address",  ValidationDetailStatusType.Yes,
-                    ShipmentFields.ShipMilitaryAddress) 
+                    ShipmentFields.ShipMilitaryAddress)
                     { DefaultWidth = 115 },
 
                 new GridColumnDefinition("{72E01539-A415-4D49-B08C-B96FA551CCE9}", false,
