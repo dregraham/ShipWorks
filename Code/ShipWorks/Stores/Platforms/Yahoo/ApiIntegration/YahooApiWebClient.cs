@@ -214,14 +214,14 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
         /// <summary>
         /// Get order endpoint
         /// </summary>
-        private string YahooOrderEndpoint(IYahooStoreEntity store) =>
-            $"https://{store.YahooStoreID}.order.store.yahooapis.com/V1";
+        private string YahooOrderEndpoint(IYahooStoreEntity store) => 
+            $"https://order.store.ysbapis.io/V1";
 
         /// <summary>
         /// Get catalog endpoint
         /// </summary>
-        private string YahooCatalogEndpoint(IYahooStoreEntity store) =>
-            $"https://{store.YahooStoreID}.catalog.store.yahooapis.com/V1";
+        private string YahooCatalogEndpoint(IYahooStoreEntity store) => 
+            $"https://catalog.store.ysbapis.io/V1";
 
         /// <summary>
         /// Cleans the response.
