@@ -2619,35 +2619,6 @@ namespace ShipWorks
             this.buttonOrderLookupViewManageProfiles.TextContentRelation = Divelements.SandRibbon.TextContentRelation.Underneath;
             this.buttonOrderLookupViewManageProfiles.Activate += new System.EventHandler(this.OnManageShippingProfiles);
             //
-            // ribbonChunkOrderLookupViewPreviousLabel
-            //
-            this.ribbonChunkOrderLookupViewPreviousLabel.FurtherOptions = false;
-            this.ribbonChunkOrderLookupViewPreviousLabel.ItemJustification = Divelements.SandRibbon.ItemJustification.Near;
-            this.ribbonChunkOrderLookupViewPreviousLabel.Items.AddRange(new Divelements.SandRibbon.WidgetBase[] {
-            this.buttonOrderLookupViewReprintLast,
-            this.buttonOrderLookupViewVoidLast});
-            this.ribbonChunkOrderLookupViewPreviousLabel.Text = "Previous Label";
-            //
-            // buttonOrderLookupViewReprintLast
-            //
-            this.buttonOrderLookupViewReprintLast.Guid = new System.Guid("0B1191AC-BE79-4F40-961E-F622E496F068");
-            this.buttonOrderLookupViewReprintLast.Image = global::ShipWorks.Properties.Resources.printer;
-            this.ribbonSecurityProvider.SetPermission(this.buttonOrderLookupViewReprintLast, ShipWorks.Users.Security.PermissionType.ShipmentsCreateEditProcess);
-            this.buttonOrderLookupViewReprintLast.QuickAccessKey = "R";
-            this.buttonOrderLookupViewReprintLast.Text = "Reprint\r\nLast";
-            this.buttonOrderLookupViewReprintLast.TextContentRelation = Divelements.SandRibbon.TextContentRelation.Underneath;
-            this.buttonOrderLookupViewReprintLast.Activate += OnOrderLookupViewReprintLastShipment;
-            //
-            // buttonOrderLookupViewVoidLast
-            //
-            this.buttonOrderLookupViewVoidLast.Guid = new System.Guid("C1D07022-AF19-4E72-9CCF-537FCC9F25C2");
-            this.buttonOrderLookupViewVoidLast.Image = global::ShipWorks.Properties.Resources.box_void_32_32;
-            this.ribbonSecurityProvider.SetPermission(this.buttonOrderLookupViewVoidLast, ShipWorks.Users.Security.PermissionType.ShipmentsVoidDelete);
-            this.buttonOrderLookupViewVoidLast.QuickAccessKey = "V";
-            this.buttonOrderLookupViewVoidLast.Text = "Void\r\nLast";
-            this.buttonOrderLookupViewVoidLast.TextContentRelation = Divelements.SandRibbon.TextContentRelation.Underneath;
-            this.buttonOrderLookupViewVoidLast.Activate += new System.EventHandler(this.OnOrderLookupViewVoidLastShipment);
-            //
             // ribbonTabOrderLookupViewShipmentHistory
             //
             this.ribbonTabOrderLookupViewShipmentHistory.Chunks.AddRange(new Divelements.SandRibbon.WidgetBase[] {

@@ -45,32 +45,6 @@ namespace ShipWorks.OrderLookup.ShipmentHistory
                 .Map(() => shipment);
 
         /// <summary>
-        /// Void the processed shipment
-        /// </summary>
-        public Task<Unit> VoidLast() =>
-            shipmentLocator.GetLatestShipmentDetails()
-                .Bind(VoidLastShipment);
-
-        /// <summary>
-        /// Void the previous shipment
-        /// </summary>
-        private Task<Unit> VoidLastShipment(PreviousProcessedShipmentDetails shipment)
-        {
-            if (shipment == null)
-            {
-                return Task.FromException<Unit>(new Exception("Could not find a processed shipment from today"));
-            }
-
-            if (shipment.Voided)
-            {
-                return Task.FromException<Unit>(new Exception("The last processed shipment has already been voided"));
-            }
-
-            return PerformVoid(shipment.ShipmentID)
-                .Match(() => Task.FromResult<Unit>(Unit.Default), ex => Task.FromException<Unit>(ex));
-        }
-
-        /// <summary>
         /// Perform the actual void
         /// </summary>
         private Result PerformVoid(long shipmentID)

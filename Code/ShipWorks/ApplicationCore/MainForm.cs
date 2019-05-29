@@ -257,42 +257,6 @@ namespace ShipWorks
         public UIMode UIMode { get; private set; }
 
         /// <summary>
-        /// Reprint the last order lookup processed shipment
-        /// </summary>
-        private async void OnOrderLookupViewReprintLastShipment(object sender, System.EventArgs e)
-        {
-            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
-            {
-                IPreviousShipmentReprintActionHandler previousShipmentActionManager = lifetimeScope.Resolve<IPreviousShipmentReprintActionHandler>();
-                await previousShipmentActionManager.ReprintLastShipment().ConfigureAwait(false);
-            }
-        }
-
-        /// <summary>
-        /// Void the last order lookup processed shipment
-        /// </summary>
-        private async void OnOrderLookupViewVoidLastShipment(object sender, System.EventArgs e)
-        {
-            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
-            {
-                var messageHelper = lifetimeScope.Resolve<IMessageHelper>();
-                var voidHandler = lifetimeScope.Resolve<IPreviousShipmentVoidActionHandler>();
-
-                try
-                {
-                    await Functional.UsingAsync(
-                        messageHelper.ShowProgressDialog("Voiding", "Voiding last processed shipment"),
-                        _ => voidHandler.VoidLast())
-                    .ConfigureAwait(true);
-                }
-                catch
-                {
-                    // Just continue, as VoidLast already handled the exception
-                }
-            }
-        }
-
-        /// <summary>
         /// User clicks the Create Label button in Order Lookup Mode
         /// </summary>
         private void OnButtonOrderLookupViewCreateLabel(object sender, System.EventArgs e)

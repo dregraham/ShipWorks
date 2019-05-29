@@ -371,7 +371,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ShipmentHistory\ShipmentHistoryEntityGateway.cs" />
     <Compile Include="ShipmentHistory\ShipmentHistoryHeader.cs" />
-    <Compile Include="ShipmentHistory\PreviousShipmentReprintActionHandler.cs" />
     <Compile Include="ShipmentHistory\PreviousShipmentVoidActionHandler.cs" />
     <Compile Include="ShipmentModelPipelines\ApplyProfilePipeline.cs" />
     <Compile Include="ShipmentModelPipelines\SettingsChangedPipeline.cs" />
