@@ -34,7 +34,7 @@ namespace ShipWorks.ApplicationCore.Licensing.TangoRequests
             request.Variables.Add("action", "getreleasebyversion");
             request.Variables.Add("version", version.ToString());
 
-            return webRequestClient.ProcessXmlRequest<ShipWorksReleaseInfo>(request, "GetReleaseByVersion", true);
+            return webRequestClient.ProcessXmlRequest<ShipWorksReleaseInfo>(request, "GetReleaseByVersion", false);
         }
     }
 }
