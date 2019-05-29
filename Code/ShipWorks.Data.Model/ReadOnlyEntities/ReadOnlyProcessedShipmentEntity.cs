@@ -64,6 +64,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             ShipUSTerritory = source.ShipUSTerritory;
             ProcessedWithUiMode = source.ProcessedWithUiMode;
             CombineSplitStatus = source.CombineSplitStatus;
+            ReturnShipment = source.ReturnShipment;
             
             
             
@@ -149,7 +150,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// <remarks>Mapped on view field: "ProcessedShipmentsView"."TotalWeight"<br/>
         /// View field type characteristics (type, precision, scale, length): Decimal, 29, 9, 0<br/>
         /// View field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-        public System.Decimal TotalWeight { get; }
+        public System.Double TotalWeight { get; }
         /// <summary> The TrackingNumber property of the Entity ProcessedShipment<br/><br/>
         /// </summary>
         /// <remarks>Mapped on view field: "ProcessedShipmentsView"."TrackingNumber"<br/>
@@ -240,6 +241,12 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// View field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
         /// View field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         public System.Int32 CombineSplitStatus { get; }
+        /// <summary> The ReturnShipment property of the Entity ProcessedShipment<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on view field: "ProcessedShipmentsView"."ReturnShipment"<br/>
+        /// View field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
+        /// View field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+        public System.Boolean ReturnShipment { get; }
         
         
         

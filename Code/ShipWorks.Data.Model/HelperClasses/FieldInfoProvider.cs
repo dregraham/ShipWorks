@@ -2646,7 +2646,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("ProcessedShipmentEntity", "VoidedDate", typeof(Nullable<System.DateTime>), false, false, true, true,  (int)ProcessedShipmentFieldIndex.VoidedDate, 0, 0, 0);
 			this.AddElementFieldInfo("ProcessedShipmentEntity", "VoidedUserID", typeof(Nullable<System.Int64>), false, true, true, true,  (int)ProcessedShipmentFieldIndex.VoidedUserID, 0, 0, 19);
 			this.AddElementFieldInfo("ProcessedShipmentEntity", "VoidedComputerID", typeof(Nullable<System.Int64>), false, true, true, true,  (int)ProcessedShipmentFieldIndex.VoidedComputerID, 0, 0, 19);
-			this.AddElementFieldInfo("ProcessedShipmentEntity", "TotalWeight", typeof(System.Decimal), false, false, true, false,  (int)ProcessedShipmentFieldIndex.TotalWeight, 0, 9, 29);
+			this.AddElementFieldInfo("ProcessedShipmentEntity", "TotalWeight", typeof(System.Double), false, false, true, false,  (int)ProcessedShipmentFieldIndex.TotalWeight, 0, 9, 29);
 			this.AddElementFieldInfo("ProcessedShipmentEntity", "TrackingNumber", typeof(System.String), false, false, true, false,  (int)ProcessedShipmentFieldIndex.TrackingNumber, 50, 0, 0);
 			this.AddElementFieldInfo("ProcessedShipmentEntity", "ShipmentCost", typeof(System.Decimal), false, false, true, false,  (int)ProcessedShipmentFieldIndex.ShipmentCost, 0, 4, 19);
 			this.AddElementFieldInfo("ProcessedShipmentEntity", "ShipSenseStatus", typeof(System.Int32), false, false, true, false,  (int)ProcessedShipmentFieldIndex.ShipSenseStatus, 0, 0, 10);
@@ -2662,6 +2662,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("ProcessedShipmentEntity", "ShipUSTerritory", typeof(System.Int32), false, false, false, false,  (int)ProcessedShipmentFieldIndex.ShipUSTerritory, 0, 0, 10);
 			this.AddElementFieldInfo("ProcessedShipmentEntity", "ProcessedWithUiMode", typeof(Nullable<System.Int32>), false, false, false, true,  (int)ProcessedShipmentFieldIndex.ProcessedWithUiMode, 0, 0, 10);
 			this.AddElementFieldInfo("ProcessedShipmentEntity", "CombineSplitStatus", typeof(System.Int32), false, false, false, false,  (int)ProcessedShipmentFieldIndex.CombineSplitStatus, 0, 0, 10);
+			this.AddElementFieldInfo("ProcessedShipmentEntity", "ReturnShipment", typeof(System.Boolean), false, false, false, false,  (int)ProcessedShipmentFieldIndex.ReturnShipment, 0, 0, 0);
 		}
 		/// <summary>Inits ProductEntity's FieldInfo objects</summary>
 		private void InitProductEntityInfos()

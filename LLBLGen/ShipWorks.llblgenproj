@@ -2312,6 +2312,7 @@
           <Field Name="ProcessedUserID" Type="long" IsReadOnly="true" IsOptional="true" Precision="19" FieldIndex="6" />
           <Field Name="ProcessedWithUiMode" Type="int" IsOptional="true" Precision="10" FieldIndex="26" />
           <Field Name="RequestedLabelFormat" Type="int" IsReadOnly="true" Precision="10" FieldIndex="20" />
+          <Field Name="ReturnShipment" Type="bool" FieldIndex="28" />
           <Field Name="Service" Type="string" IsReadOnly="true" IsOptional="true" MaxLength="101" FieldIndex="24" />
           <Field Name="ShipAddressValidationStatus" Type="int" IsReadOnly="true" Precision="10" FieldIndex="16" />
           <Field Name="ShipDate" Type="datetime" IsReadOnly="true" FieldIndex="2" />
@@ -2323,7 +2324,7 @@
           <Field Name="ShipResidentialStatus" Type="int" IsReadOnly="true" Precision="10" FieldIndex="17" />
           <Field Name="ShipSenseStatus" Type="int" IsReadOnly="true" Precision="10" FieldIndex="15" />
           <Field Name="ShipUSTerritory" Type="int" Precision="10" FieldIndex="25" />
-          <Field Name="TotalWeight" Type="decimal" IsReadOnly="true" Precision="29" Scale="9" FieldIndex="12" />
+          <Field Name="TotalWeight" Type="double" IsReadOnly="true" FieldIndex="12" />
           <Field Name="TrackingNumber" Type="string" IsReadOnly="true" MaxLength="50" FieldIndex="13" />
           <Field Name="Voided" Type="bool" IsReadOnly="true" FieldIndex="8" />
           <Field Name="VoidedComputerID" Type="long" IsReadOnly="true" IsOptional="true" Precision="19" FieldIndex="11" />
@@ -4549,7 +4550,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2019-05-07T15:18:59.9192762Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2019-05-29T18:50:00.2107313Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -9629,10 +9630,11 @@
                     <Field Name="ShipUSTerritory" Ordinal="22" DbType="8" Precision="10" />
                     <Field Name="RequestedLabelFormat" Ordinal="23" DbType="8" Precision="10" />
                     <Field Name="ActualLabelFormat" Ordinal="24" IsOptional="true" DbType="8" Precision="10" />
-                    <Field Name="OrderID" Ordinal="25" DbType="0" Precision="19" />
-                    <Field Name="OrderNumberComplete" Ordinal="26" DbType="12" Length="50" />
-                    <Field Name="CombineSplitStatus" Ordinal="27" DbType="8" Precision="10" />
-                    <Field Name="Service" Ordinal="28" IsOptional="true" DbType="12" Length="101" />
+                    <Field Name="ReturnShipment" Ordinal="25" DbType="2" />
+                    <Field Name="OrderID" Ordinal="26" DbType="0" Precision="19" />
+                    <Field Name="OrderNumberComplete" Ordinal="27" DbType="12" Length="50" />
+                    <Field Name="CombineSplitStatus" Ordinal="28" DbType="8" Precision="10" />
+                    <Field Name="Service" Ordinal="29" IsOptional="true" DbType="12" Length="101" />
                   </Fields>
                 </View>
                 <View Name="ProductListView">
@@ -13049,6 +13051,7 @@
             <FieldMapping FieldName="ProcessedUserID" TargetFieldName="ProcessedUserID" />
             <FieldMapping FieldName="ProcessedWithUiMode" TargetFieldName="ProcessedWithUiMode" />
             <FieldMapping FieldName="RequestedLabelFormat" TargetFieldName="RequestedLabelFormat" />
+            <FieldMapping FieldName="ReturnShipment" TargetFieldName="ReturnShipment" />
             <FieldMapping FieldName="Service" TargetFieldName="Service" />
             <FieldMapping FieldName="ShipAddressValidationStatus" TargetFieldName="ShipAddressValidationStatus" />
             <FieldMapping FieldName="ShipDate" TargetFieldName="ShipDate" />
@@ -13060,7 +13063,7 @@
             <FieldMapping FieldName="ShipResidentialStatus" TargetFieldName="ShipResidentialStatus" />
             <FieldMapping FieldName="ShipSenseStatus" TargetFieldName="ShipSenseStatus" />
             <FieldMapping FieldName="ShipUSTerritory" TargetFieldName="ShipUSTerritory" />
-            <FieldMapping FieldName="TotalWeight" TargetFieldName="TotalWeight" />
+            <FieldMapping FieldName="TotalWeight" TargetFieldName="TotalWeight" TypeConverterToUse="SD.LLBLGen.Pro.TypeConverters.DoubleDecimalConverter" />
             <FieldMapping FieldName="TrackingNumber" TargetFieldName="TrackingNumber" />
             <FieldMapping FieldName="Voided" TargetFieldName="Voided" />
             <FieldMapping FieldName="VoidedComputerID" TargetFieldName="VoidedComputerID" />
