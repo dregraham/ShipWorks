@@ -54,6 +54,15 @@ namespace ShipWorks.Data.Grid.Columns.Definitions
                     new GridMoneyDisplayType(), "Cost", 4.18m,
                     ProcessedShipmentFields.ShipmentCost),
 
+                new GridColumnDefinition("{5B7D5A28-E96C-4BFD-BCE9-0703D98CF9DA}", true,
+                    new GridBooleanDisplayType()
+                    {
+                        TrueText = "Yes",
+                        FalseText = "No"
+                    },
+                    "Return Shipment", "Yes",
+                    ProcessedShipmentFields.ReturnShipment),
+
                 new GridColumnDefinition("{0F413267-F462-45A2-AFBA-F27EAF268E5C}",
                     new ShipmentInsuredDisplayType(), "Insured By", new ShipmentEntity { Insurance = true, InsuranceProvider = (int) InsuranceProvider.ShipWorks },
                     ProcessedShipmentFields.ShipmentID),
