@@ -1196,7 +1196,7 @@ namespace ShipWorks
             else if (ribbon.SelectedTab == ribbonTabOrderLookupViewShipmentHistory)
             {
                 ToggleVisiblePanel(shipmentHistory?.Control, orderLookupControl?.Control);
-                shipmentHistory.Activate(buttonOrderLookupViewVoid, buttonOrderLookupViewShipAgain);
+                shipmentHistory.Activate(buttonOrderLookupViewVoid, buttonOrderLookupViewReprint, buttonOrderLookupViewShipAgain);
             }
 
             UpdateStatusBar();

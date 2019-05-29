@@ -20,6 +20,7 @@ using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.IO.KeyboardShortcuts;
 using ShipWorks.Messaging.Messages.Shipping;
 using ShipWorks.Messaging.Messages.SingleScan;
+using ShipWorks.Shipping;
 using ShipWorks.Users;
 
 namespace ShipWorks.OrderLookup.ShipmentHistory.Controls
@@ -36,6 +37,7 @@ namespace ShipWorks.OrderLookup.ShipmentHistory.Controls
         private readonly IMessenger messenger;
         private readonly IPreviousShipmentVoidActionHandler shipmentHistoryVoidProcessor;
         private readonly IMessageHelper messageHelper;
+        private readonly IShippingManager shippingManager;
         private IDisposable subscriptions;
 
         /// <summary>
@@ -54,13 +56,15 @@ namespace ShipWorks.OrderLookup.ShipmentHistory.Controls
             Func<ICurrentUserSettings> getCurrentUserSettings,
             IMessenger messenger,
             IPreviousShipmentVoidActionHandler shipmentHistoryVoidProcessor,
-            IMessageHelper messageHelper) : this()
+            IMessageHelper messageHelper,
+            IShippingManager shippingManager) : this()
         {
             this.messageHelper = messageHelper;
             this.shipmentHistoryVoidProcessor = shipmentHistoryVoidProcessor;
             this.messenger = messenger;
             this.getCurrentUserSettings = getCurrentUserSettings;
             this.shipmentGrid = shipmentGrid;
+            this.shippingManager = shippingManager;
 
             shipmentPanel.Controls.Add(shipmentGrid);
         }
@@ -78,7 +82,7 @@ namespace ShipWorks.OrderLookup.ShipmentHistory.Controls
         /// <summary>
         /// Refresh the history, load any components
         /// </summary>
-        public void Activate(Divelements.SandRibbon.Button voidButton, Divelements.SandRibbon.Button shipAgainButton)
+        public void Activate(Divelements.SandRibbon.Button voidButton, Divelements.SandRibbon.Button reprintButton, Divelements.SandRibbon.Button shipAgainButton)
         {
             kryptonHeader.Values.Heading = "Today's Shipments for " + getCurrentUserSettings().UserSession.User.Username;
             shipmentGrid.Reload();
@@ -87,6 +91,9 @@ namespace ShipWorks.OrderLookup.ShipmentHistory.Controls
 
             voidButton.Activate += OnVoid;
             voidButton.Enabled = false;
+
+            reprintButton.Activate += OnReprint;
+            reprintButton.Enabled = false;
 
             shipAgainButton.Activate += OnShipAgain;
             shipAgainButton.Enabled = false;
@@ -123,6 +130,7 @@ namespace ShipWorks.OrderLookup.ShipmentHistory.Controls
                     .Subscribe(),
 
             Disposable.Create(() => voidButton.Activate -= OnVoid),
+                Disposable.Create(() => reprintButton.Activate -= OnReprint),
                 Disposable.Create(() => shipAgainButton.Activate -= OnShipAgain),
                 Disposable.Create(() => shipmentGrid.SelectionChanged -= OnGridSelectionChanged)
             );
@@ -131,14 +139,45 @@ namespace ShipWorks.OrderLookup.ShipmentHistory.Controls
             void OnGridSelectionChanged(object sender, SelectionChangedEventArgs e)
             {
                 var row = e?.Grid.SelectedElements.OfType<ShipWorks.Data.Grid.Paging.PagedEntityGrid.PagedEntityGridRow>()?.FirstOrDefault();
-                voidButton.Enabled = e?.Grid.SelectedElementCount == 1 &&
+
+                bool notVoided = e?.Grid.SelectedElementCount == 1 &&
                     row.Entity is ProcessedShipmentEntity shipment &&
                     !shipment.Voided;
+
+                voidButton.Enabled = notVoided;
+
+                reprintButton.Enabled = notVoided;
 
                 shipAgainButton.Enabled = e?.Grid.SelectedElementCount == 1;
 
                 voidButton.Tag = row;
+                reprintButton.Tag = row;
                 shipAgainButton.Tag = row;
+            }
+        }
+
+        /// <summary>
+        /// Reprint a label
+        /// </summary>
+        private void OnReprint(object sender, EventArgs e)
+        {
+            if (sender is Divelements.SandRibbon.Button reprintButton &&
+                reprintButton.Tag is PagedEntityGrid.PagedEntityGridRow row &&
+                row.Entity is ProcessedShipmentEntity processedShipment)
+            {
+                ShipmentEntity shipment = new ShipmentEntity(processedShipment.ShipmentID);
+
+                try
+                {
+                    shippingManager.RefreshShipment(shipment);
+
+                    messenger.Send(new ReprintLabelsMessage(this, new[] { shipment }), string.Empty);
+                }
+                catch (ObjectDeletedException)
+                {
+                    // Just continue
+                }
+
             }
         }
 
