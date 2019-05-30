@@ -12,9 +12,9 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse
         public const string RefreshToken = "api/auth/token/refresh";
         public const string UploadSkus = "api/skus/import";
         public const string GenerateDataKey = "api/store/generateDataKey";
-        
+        public const string Stores = "api/stores";
+
         private const string linkWarehouse = "api/warehouses/{0}/link";
-        private const string stores = "api/stores";
 
         /// <summary>
         /// Create a link warehouse endpoint
@@ -24,7 +24,7 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse
         /// <summary>
         /// Create a Stores endpoint
         /// </summary>
-        public static string Stores(string warehouseStoreID) =>
-            string.IsNullOrWhiteSpace(warehouseStoreID) ? stores : $"{stores}/{warehouseStoreID}";
+        public static string UpdateStoreCredentials(string warehouseStoreID) =>
+            $"{Stores}/{warehouseStoreID}/credentials";
     }
 }

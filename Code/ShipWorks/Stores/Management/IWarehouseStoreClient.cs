@@ -13,5 +13,10 @@ namespace ShipWorks.Stores.Management
         /// Uploads a store to the ShipWorks Warehouse app
         /// </summary>
         Task<Result> UploadStoreToWarehouse(StoreEntity store);
+
+        /// <summary>
+        /// Update an existing stores credentials
+        /// </summary>
+        Task<Result> UpdateStoreCredentials(StoreEntity store);
     }
 }
