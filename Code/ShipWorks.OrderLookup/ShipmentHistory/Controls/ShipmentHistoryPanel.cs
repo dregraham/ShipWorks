@@ -177,7 +177,6 @@ namespace ShipWorks.OrderLookup.ShipmentHistory.Controls
                 {
                     // Just continue
                 }
-
             }
         }
 
