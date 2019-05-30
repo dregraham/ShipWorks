@@ -258,6 +258,7 @@ namespace ShipWorks
             this.buttonOrderLookupViewManualOrder = new Divelements.SandRibbon.Button();
             this.ribbonChunkOrderLookupViewProfiles = new Divelements.SandRibbon.RibbonChunk();
             this.buttonOrderLookupViewApplyProfile = new Divelements.SandRibbon.Button();
+            this.buttonOrderLookupViewManageProfiles = new Divelements.SandRibbon.Button();
             this.ribbonTabOrderLookupViewShipmentHistory = new Divelements.SandRibbon.RibbonTab();
             this.ribbonChunkOrderLookupViewActions = new Divelements.SandRibbon.RibbonChunk();
             this.buttonOrderLookupViewVoid = new Divelements.SandRibbon.Button();
@@ -2590,7 +2591,8 @@ namespace ShipWorks
             this.ribbonChunkOrderLookupViewProfiles.FurtherOptions = false;
             this.ribbonChunkOrderLookupViewProfiles.ItemJustification = Divelements.SandRibbon.ItemJustification.Near;
             this.ribbonChunkOrderLookupViewProfiles.Items.AddRange(new Divelements.SandRibbon.WidgetBase[] {
-            this.buttonOrderLookupViewApplyProfile});
+            this.buttonOrderLookupViewApplyProfile,
+            this.buttonOrderLookupViewManageProfiles});
             this.ribbonChunkOrderLookupViewProfiles.Text = "Profiles";
             //
             // buttonOrderLookupViewApplyProfile
@@ -2603,6 +2605,16 @@ namespace ShipWorks
             this.buttonOrderLookupViewApplyProfile.QuickAccessKey = "A";
             this.buttonOrderLookupViewApplyProfile.Text = "Apply";
             this.buttonOrderLookupViewApplyProfile.TextContentRelation = Divelements.SandRibbon.TextContentRelation.Underneath;
+            //
+            // buttonOrderLookupViewManageProfiles
+            //
+            this.buttonOrderLookupViewManageProfiles.Guid = new System.Guid("1A9E0525-CDF7-4327-8861-CB3DDFDF22CA");
+            this.buttonOrderLookupViewManageProfiles.Image = global::ShipWorks.Properties.Resources.box_closed_with_label_32_32;
+            this.buttonOrderLookupViewManageProfiles.Padding = new Divelements.SandRibbon.WidgetEdges(3, 2, 4, 14);
+            this.buttonOrderLookupViewManageProfiles.QuickAccessKey = "M";
+            this.buttonOrderLookupViewManageProfiles.Text = "Manage";
+            this.buttonOrderLookupViewManageProfiles.TextContentRelation = Divelements.SandRibbon.TextContentRelation.Underneath;
+            this.buttonOrderLookupViewManageProfiles.Activate += new System.EventHandler(this.OnManageShippingProfiles);
             //
             // ribbonTabOrderLookupViewShipmentHistory
             //
@@ -3468,6 +3480,7 @@ namespace ShipWorks
         private Divelements.SandRibbon.Button buttonOrderLookupViewCreateLabel;
         private Divelements.SandRibbon.Button buttonOrderLookupViewManualOrder;
         private Divelements.SandRibbon.Button buttonOrderLookupViewApplyProfile;
+        private Divelements.SandRibbon.Button buttonOrderLookupViewManageProfiles;
         private Divelements.SandRibbon.Popup popup1;
         private Divelements.SandRibbon.Popup popup2;
         private Divelements.SandRibbon.Button buttonOrderLookupViewVoid;
