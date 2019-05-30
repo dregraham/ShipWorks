@@ -68,7 +68,7 @@ namespace ShipWorks.Data.Grid.Columns.Definitions
                     new GridColumnFieldValueProvider(ShipmentFields.ShipmentType),
                     new GridColumnSortProvider(e => ShipmentTypeManager.GetSortValue((ShipmentTypeCode) ((ShipmentEntity) e).ShipmentType))) { DefaultWidth = 46 },
 
-                new GridColumnDefinition("{E6E060A0-6773-4872-9FBA-9C2D20C43C07}", true,
+                new GridColumnDefinition("{E6E060A0-6773-4872-9FBA-9C2D20C43C07}", false,
                     new GridBooleanDisplayType()
                     {
                         TrueText = "Yes",

@@ -57,7 +57,7 @@ namespace ShipWorks.Data.Grid.Columns.Definitions
                     new GridTextDisplayType(), "Tracking", "1Z0139787879870954",
                     ShipmentFields.TrackingNumber),
 
-                new GridColumnDefinition("{36721913-0A4D-44DB-94A2-D02553F29B7D}", true,
+                new GridColumnDefinition("{36721913-0A4D-44DB-94A2-D02553F29B7D}", false,
                     new GridBooleanDisplayType()
                     {
                         TrueText = "Yes",
