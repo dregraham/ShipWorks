@@ -32,7 +32,7 @@ namespace ShipWorks.Shipping.Settings.Printing
 
             toolStripAddPrintOutput.Renderer = new NoBorderToolStripRenderer();
 
-            // only show the Install Missing if the secret handshake is done
+            // Only show the Install Missing if the secret handshake is done
             installMissingLink.Visible = InterapptiveOnly.MagicKeysDown;
         }
 
@@ -51,6 +51,16 @@ namespace ShipWorks.Shipping.Settings.Printing
             printReturnBox.Checked = actionPrint.Enabled && (trigger.RestrictStandardReturn && trigger.ReturnShipmentsOnly || !trigger.RestrictStandardReturn);
 
             LoadOutputGroups();
+
+            // Only show print returns checkbox for carriers that support returns
+            if (shipmentType.SupportsReturns)
+            {
+                printReturnBox.Visible = true;
+                panelMain.Location = new System.Drawing.Point(panelMain.Location.X, 115);
+                labelInfo.Location = new System.Drawing.Point(labelInfo.Location.X, 94);
+                label1.Location = new System.Drawing.Point(label1.Location.X, 74);
+                installMissingLink.Location = new System.Drawing.Point(installMissingLink.Location.X, 74);
+            }
 
             UpdateLayout();
         }

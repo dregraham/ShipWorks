@@ -44,7 +44,7 @@
             // 
             this.panelMain.Anchor = ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.panelMain.Location = new System.Drawing.Point(16, 115);
+            this.panelMain.Location = new System.Drawing.Point(16, 95);
             this.panelMain.Name = "panelMain";
             this.panelMain.Size = new System.Drawing.Size(558, 59);
             this.panelMain.TabIndex = 1;
@@ -77,7 +77,7 @@
             // 
             // labelInfo
             // 
-            this.labelInfo.Location = new System.Drawing.Point(17, 94);
+            this.labelInfo.Location = new System.Drawing.Point(17, 74);
             this.labelInfo.Name = "labelInfo";
             this.labelInfo.Size = new System.Drawing.Size(424, 19);
             this.labelInfo.TabIndex = 0;
@@ -106,6 +106,7 @@
             this.printReturnBox.TabIndex = 3;
             this.printReturnBox.Text = "Automatically print return labels after processing.";
             this.printReturnBox.UseVisualStyleBackColor = true;
+            this.printReturnBox.Visible = false;
             // 
             // labelActionPrinting
             // 
@@ -121,7 +122,7 @@
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
-            this.label1.Location = new System.Drawing.Point(5, 74);
+            this.label1.Location = new System.Drawing.Point(5, 54);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(80, 13);
             this.label1.TabIndex = 5;
