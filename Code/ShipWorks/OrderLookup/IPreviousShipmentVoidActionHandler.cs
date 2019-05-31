@@ -14,10 +14,5 @@ namespace ShipWorks.OrderLookup
         /// Void a processed shipment
         /// </summary>
         GenericResult<ProcessedShipmentEntity> Void(ProcessedShipmentEntity shipment);
-
-        /// <summary>
-        /// Void last processed shipment
-        /// </summary>
-        Task<Unit> VoidLast();
     }
 }

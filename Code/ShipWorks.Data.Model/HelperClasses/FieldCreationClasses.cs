@@ -21742,6 +21742,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ProcessedShipmentFieldIndex.CombineSplitStatus);}
 		}
+		/// <summary>Creates a new ProcessedShipmentEntity.ReturnShipment field instance</summary>
+		public static EntityField2 ReturnShipment
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ProcessedShipmentFieldIndex.ReturnShipment);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity ProductEntity</summary>

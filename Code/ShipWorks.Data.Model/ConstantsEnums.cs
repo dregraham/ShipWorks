@@ -9304,6 +9304,8 @@ namespace ShipWorks.Data.Model
 		ProcessedWithUiMode,
 		///<summary>CombineSplitStatus. </summary>
 		CombineSplitStatus,
+		///<summary>ReturnShipment. </summary>
+		ReturnShipment,
 		/// <summary></summary>
 		AmountOfFields
 	}

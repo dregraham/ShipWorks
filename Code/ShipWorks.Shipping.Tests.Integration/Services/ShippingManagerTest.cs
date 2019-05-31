@@ -411,6 +411,16 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
             }
         }
 
+        [Fact]
+        public void RefreshShipment_ThrowsObjectDeletedException_WhenShipmentIsDeleted()
+        {
+            ShipmentEntity shipment = CreateShipment(context.Order, mock.Container);
+
+            shipment.DeletedFromDatabase = true;
+
+            Assert.Throws<ObjectDeletedException>(() => ShippingManager.RefreshShipment(shipment));
+        }
+
         #region "Carrier specific tests"
         #region "FedEx"
         [Fact]
