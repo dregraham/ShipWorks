@@ -52,6 +52,7 @@ namespace ShipWorks.Stores.Warehouse
                     throw new NotSupportedException($"The StoreType {EnumHelper.GetDescription(storeEntity.StoreTypeCode)} is not supported for ShipWorks Warehouse mode.");
             }
 
+            store.Name = storeEntity.StoreName;
             store.StoreType = storeEntity.TypeCode;
             store.UniqueIdentifier = storeTypeManager.GetType(storeEntity).LicenseIdentifier;
 
