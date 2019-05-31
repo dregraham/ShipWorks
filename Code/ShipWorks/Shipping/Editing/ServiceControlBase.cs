@@ -686,6 +686,7 @@ namespace ShipWorks.Shipping.Editing
                 returnProfileID.Enabled = applyReturnProfile.Checked;
                 returnProfileIDLabel.Enabled = applyReturnProfile.Checked;
                 SaveReturnsToShipments();
+                RaiseRateCriteriaChanged();
             }
         }
 
@@ -778,7 +779,7 @@ namespace ShipWorks.Shipping.Editing
         /// <summary>
         /// Click of the Return Shipment checkbox
         /// </summary>
-        protected virtual void OnReturnShipmentChanged(object sender, EventArgs e)
+        private void OnReturnShipmentChanged(object sender, EventArgs e)
         {
             if (!isLoading)
             {
@@ -786,6 +787,7 @@ namespace ShipWorks.Shipping.Editing
                 returnsPanel.Enabled = returnShipment.Checked;
                 SaveReturnsToShipments();
                 ReturnServiceChanged?.Invoke(this, EventArgs.Empty);
+                RaiseRateCriteriaChanged();
             }
         }
 
