@@ -139,6 +139,18 @@ namespace ShipWorks.Shipping.Profiles
                     {
                         SetFieldValue(mapping.Entity, mapping.Field, mapping.DataControl);
                     }
+                    // Set reasonable defaults for disabled child controls
+                    else if (mapping.CheckBox.Checked && mapping.Parent != null)
+                    {
+                        if (mapping.DataControl is ComboBox)
+                        {
+                            mapping.Entity.SetNewFieldValue(mapping.Field.FieldIndex, 0);
+                        }
+                        else if (mapping.DataControl is TextBox || mapping.DataControl is TemplateTokenTextBox)
+                        {
+                            mapping.Entity.SetNewFieldValue(mapping.Field.FieldIndex, String.Empty);
+                        }
+                    }
                     else
                     {
                         mapping.Entity.SetNewFieldValue(mapping.Field.FieldIndex, null);
