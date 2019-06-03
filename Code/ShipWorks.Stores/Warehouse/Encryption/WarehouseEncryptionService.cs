@@ -1,5 +1,7 @@
 using System;
+using System.Diagnostics;
 using System.IO;
+using System.Reflection;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
@@ -40,6 +42,11 @@ namespace ShipWorks.Stores.Warehouse.Encryption
         /// </summary>
         public async Task<string> Encrypt(string plainText)
         {
+            if (Assembly.GetExecutingAssembly().GetName().Version == new Version(0, 0, 0, 0))
+            {
+                return plainText;
+            }
+
             GenerateDataKeyResponse keyResponse = await GenerateDataKey().ConfigureAwait(false);
 
             try
