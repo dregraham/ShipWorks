@@ -341,9 +341,16 @@ namespace ShipWorks.Products
 
             using (var item = messageHelper.ShowProgressDialog(text, text))
             {
-                await productCatalog
+                try
+                {
+                    await productCatalog
                     .SetActivation(SelectedProductIDs, makeItActive, item.ProgressItem)
                     .ConfigureAwait(false);
+                }
+                catch (Exception ex)
+                {
+                    messageHelper.ShowError($"There was a problem {text.ToLower()}:\n\n{ex.Message}");
+                }
             }
 
             RefreshProductsAction();

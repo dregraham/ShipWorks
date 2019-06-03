@@ -61,12 +61,33 @@ namespace ShipWorks.Products
             {
                 foreach ((IEnumerable<long> productsChunk, int index) in chunks.Select((x, i) => (x, i)))
                 {
-                    using (DbCommand comm = conn.CreateCommand())
+                    var transaction = conn.BeginTransaction();
+                    try
                     {
-                        comm.CommandText = $"UPDATE ProductVariant SET IsActive = {(activation ? "1" : "0")} WHERE ProductVariantID in (SELECT item FROM @ProductVariantIDs)";
-                        comm.Parameters.Add(CreateProductVariantIDParameter(productsChunk));
+                        using (DbCommand comm = conn.CreateCommand())
+                        {
+                            comm.Transaction = transaction;
+                            comm.CommandText = $"UPDATE ProductVariant SET IsActive = {(activation ? "1" : "0")} WHERE ProductVariantID in (SELECT item FROM @ProductVariantIDs)";
+                            comm.Parameters.Add(CreateProductVariantIDParameter(productsChunk));
 
-                        await comm.ExecuteNonQueryAsync().ConfigureAwait(false);
+                            await comm.ExecuteNonQueryAsync().ConfigureAwait(false);
+                        }
+
+                        using (DbCommand comm = conn.CreateCommand())
+                        {
+                            comm.Transaction = transaction;
+                            comm.CommandText = $"UPDATE Product SET UploadToWarehouseNeeded = 1 WHERE ProductId IN (SELECT DISTINCT ProductId FROM ProductVariant WHERE ProductVariantID in (SELECT item FROM @ProductVariantIDs))";
+                            comm.Parameters.Add(CreateProductVariantIDParameter(productsChunk));
+
+                            await comm.ExecuteNonQueryAsync().ConfigureAwait(false);
+                        }
+
+                        transaction.Commit();
+                    }
+                    catch (Exception)
+                    {
+                        transaction.Rollback();
+                        throw;
                     }
 
                     if (progressReporter.IsCancelRequested)
