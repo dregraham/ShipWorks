@@ -22,7 +22,7 @@ namespace ShipWorks.Stores.Warehouse.StoreData
         /// The date to start downloading orders from
         /// </summary>
         [JsonProperty("DownloadStartDate")]
-        public DateTime? DownloadStartDate { get; set; }
+        public ulong DownloadStartDate { get; set; }
 
         /// <summary>
         /// A list of item attribute names to be imported
