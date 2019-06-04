@@ -35,18 +35,18 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
     [Component]
     public sealed class AmazonMwsClient : IAmazonMwsClient
     {
-        static readonly ILog log = LogManager.GetLogger(typeof(AmazonMwsClient));
+        private static readonly ILog log = LogManager.GetLogger(typeof(AmazonMwsClient));
 
         public const int MaxItemsPerProductDetailsRequest = 5;
 
         // MWS settings class
-        AmazonMwsWebClientSettings mwsSettings;
+        private AmazonMwsWebClientSettings mwsSettings;
 
         // the store/account we are working with
-        AmazonStoreEntity store;
+        private AmazonStoreEntity store;
 
         // Throttling request submitter
-        AmazonMwsRequestThrottle throttler;
+        private AmazonMwsRequestThrottle throttler;
         private readonly IShippingManager shippingManager;
         private readonly AmazonStoreType storeType;
 
@@ -656,6 +656,10 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
                 AmazonMwsResponseHandler.RaiseErrors(amazonMwsApiCall, response, mwsSettings);
 
                 return response;
+            }
+            catch (XmlException xmlException)
+            {
+                throw new AmazonException("Invalid data received from Amazon", xmlException);
             }
             catch (Exception ex)
             {

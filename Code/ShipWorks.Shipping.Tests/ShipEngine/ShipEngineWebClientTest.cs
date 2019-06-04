@@ -45,14 +45,14 @@ namespace ShipWorks.Shipping.Tests.ShipEngine
                     new Carrier(accountNumber: "1234", carrierId: "se-12345")
                 });
 
-            carriersApi.Setup(c => c.CarriersListAsync(It.IsAny<string>())).Returns(Task.FromResult(carriers));
+            carriersApi.Setup(c => c.CarriersListAsync(It.IsAny<string>(), It.IsAny<string>())).Returns(Task.FromResult(carriers));
 
             shipEngineApiFactory = mock.Mock<IShipEngineApiFactory>();
             shipEngineApiFactory.Setup(c => c.CreateCarrierAccountsApi()).Returns(accountsApi);
             shipEngineApiFactory.Setup(c => c.CreateCarrierApi()).Returns(carriersApi);
             shipEngineApiFactory.Setup(c => c.CreateRatesApi()).Returns(ratesApi);
             shipEngineApiFactory.Setup(c => c.CreateLabelsApi()).Returns(labelsApi);
-            
+
             testObject = mock.Create<ShipEngineWebClient>();
         }
 
@@ -82,10 +82,10 @@ namespace ShipWorks.Shipping.Tests.ShipEngine
 
             accountsApi.Setup(a =>
                 a.DHLExpressAccountCarrierConnectAccountAsync(It.IsAny<DHLExpressAccountInformationDTO>(),
-                    It.IsAny<string>())).Throws(new ApiException(500, "", error));
+                    It.IsAny<string>(), It.IsAny<string>())).Throws(new ApiException(500, "", error));
 
             GenericResult<string> result = await testObject.ConnectDhlAccount("abcd");
-            
+
             Assert.False(result.Success);
             Assert.Equal("'account_number' must be 9 characters in length. You entered 3 characters.", result.Message);
         }
@@ -97,7 +97,7 @@ namespace ShipWorks.Shipping.Tests.ShipEngine
 
             accountsApi.Verify(i =>
                 i.DHLExpressAccountCarrierConnectAccountAsync(
-                    It.Is<DHLExpressAccountInformationDTO>(d => d.AccountNumber == "AccountNumber"), "abcd"));
+                    It.Is<DHLExpressAccountInformationDTO>(d => d.AccountNumber == "AccountNumber"), "abcd", It.IsAny<string>()));
         }
 
         [Fact]
@@ -142,11 +142,11 @@ namespace ShipWorks.Shipping.Tests.ShipEngine
 
             ratesApi.Setup(a =>
                 a.RatesRateShipmentAsync(It.IsAny<RateShipmentRequest>(),
-                    It.IsAny<string>())).ThrowsAsync(new ApiException(500, "", error));
+                    It.IsAny<string>(), It.IsAny<string>())).ThrowsAsync(new ApiException(500, "", error));
 
             await Assert.ThrowsAsync<ShipEngineException>(() => testObject.RateShipment(new RateShipmentRequest(), ApiLogSource.ShipEngine));
         }
-        
+
         [Fact]
         public async Task RateShipment_SetsLoggingAction()
         {
@@ -189,7 +189,7 @@ namespace ShipWorks.Shipping.Tests.ShipEngine
 
             labelsApi.Setup(a =>
                 a.LabelsPurchaseLabelAsync(It.IsAny<PurchaseLabelRequest>(),
-                    It.IsAny<string>())).Throws(new ApiException(500, "", error));
+                    It.IsAny<string>(), It.IsAny<string>())).Throws(new ApiException(500, "", error));
 
             await Assert.ThrowsAsync<ShipEngineException>(() => testObject.PurchaseLabel(new PurchaseLabelRequest(), ApiLogSource.ShipEngine));
         }
@@ -244,7 +244,7 @@ namespace ShipWorks.Shipping.Tests.ShipEngine
 
             accountsApi.Setup(a =>
                 a.AsendiaAccountCarrierConnectAccountAsync(It.IsAny<AsendiaAccountInformationDTO>(),
-                    It.IsAny<string>())).Throws(new ApiException(500, "", error));
+                    It.IsAny<string>(), It.IsAny<string>())).Throws(new ApiException(500, "", error));
 
             GenericResult<string> result = await testObject.ConnectAsendiaAccount("abcd", "username", "password");
 
@@ -260,7 +260,7 @@ namespace ShipWorks.Shipping.Tests.ShipEngine
 
             accountsApi.Setup(a =>
                 a.AsendiaAccountCarrierConnectAccountAsync(It.IsAny<AsendiaAccountInformationDTO>(),
-                    It.IsAny<string>())).Throws(new ApiException(500, "", error));
+                    It.IsAny<string>(), It.IsAny<string>())).Throws(new ApiException(500, "", error));
 
             GenericResult<string> result = await testObject.ConnectAsendiaAccount("abcd", "username", "password");
 
@@ -275,7 +275,7 @@ namespace ShipWorks.Shipping.Tests.ShipEngine
 
             accountsApi.Verify(i =>
                 i.AsendiaAccountCarrierConnectAccountAsync(
-                    It.Is<AsendiaAccountInformationDTO>(d => d.AccountNumber == "AccountNumber"), "abcd"));
+                    It.Is<AsendiaAccountInformationDTO>(d => d.AccountNumber == "AccountNumber"), "abcd", It.IsAny<string>()));
         }
 
         [Fact]

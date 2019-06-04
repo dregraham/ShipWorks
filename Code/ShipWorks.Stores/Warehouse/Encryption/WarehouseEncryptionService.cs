@@ -1,10 +1,13 @@
 using System;
+using System.Diagnostics;
 using System.IO;
+using System.Reflection;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
+using log4net;
 using Newtonsoft.Json;
 using RestSharp;
 using ShipWorks.ApplicationCore.Licensing.Warehouse;
@@ -19,17 +22,19 @@ namespace ShipWorks.Stores.Warehouse.Encryption
     public class WarehouseEncryptionService : IWarehouseEncryptionService
     {
         private readonly WarehouseRequestClient warehouseRequestClient;
+        private readonly ILog log;
 
         // Encryption Parameters
         private const int BlockBitSize = 128;
         private const int KeyBitSize = 256;
-        
+
         /// <summary>
         /// Constructor
         /// </summary>
-        public WarehouseEncryptionService(WarehouseRequestClient warehouseRequestClient)
+        public WarehouseEncryptionService(WarehouseRequestClient warehouseRequestClient, Func<Type, ILog> logFactory)
         {
             this.warehouseRequestClient = warehouseRequestClient;
+            log = logFactory(typeof(WarehouseEncryptionService));
         }
 
         /// <summary>
@@ -37,6 +42,11 @@ namespace ShipWorks.Stores.Warehouse.Encryption
         /// </summary>
         public async Task<string> Encrypt(string plainText)
         {
+            if (Assembly.GetExecutingAssembly().GetName().Version == new Version(0, 0, 0, 0))
+            {
+                return plainText;
+            }
+
             GenerateDataKeyResponse keyResponse = await GenerateDataKey().ConfigureAwait(false);
 
             try
@@ -50,6 +60,7 @@ namespace ShipWorks.Stores.Warehouse.Encryption
             }
             catch (Exception ex)
             {
+                log.Error(ex);
                 throw new WarehouseEncryptionException("Failed to encrypt using the warehouse encryption service", ex);
             }
         }
@@ -69,7 +80,7 @@ namespace ShipWorks.Stores.Warehouse.Encryption
                 Mode = CipherMode.CBC,
                 Padding = PaddingMode.PKCS7
             };
-            
+
             // Use AES to encrypt the plain text
             using (aes)
             {
@@ -88,7 +99,7 @@ namespace ShipWorks.Stores.Warehouse.Encryption
                             // Encrypt Data
                             cryptoStream.Write(plainText, 0, plainText.Length);
                             cryptoStream.FlushFinalBlock();
-                            
+
                             encryptedText = cipherStream.ToArray();
                         }
                     }
@@ -108,7 +119,7 @@ namespace ShipWorks.Stores.Warehouse.Encryption
                 return encryptedStream.ToArray();
             }
         }
-        
+
         /// <summary>
         /// Generates a data key to use for encryption
         /// </summary>
@@ -122,7 +133,8 @@ namespace ShipWorks.Stores.Warehouse.Encryption
 
             if (response.Failure)
             {
-                throw new WarehouseEncryptionException($"Failed to generate data key.{Environment.NewLine}{Environment.NewLine}{response.Message}");
+                log.Error(response.Exception);
+                throw new WarehouseEncryptionException($"Failed to generate data key.{Environment.NewLine}{Environment.NewLine}{response.Message}", response.Exception);
             }
 
             GenerateDataKeyResponse dataKeyResponse =

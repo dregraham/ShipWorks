@@ -2235,7 +2235,7 @@ namespace ShipWorks.Properties {
         /// </summary>
         public static System.Drawing.Bitmap graphics_tablet {
             get {
-                object obj = ResourceManager.GetObject("graphics-tablet", resourceCulture);
+                object obj = ResourceManager.GetObject("graphics_tablet", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -3935,7 +3935,7 @@ namespace ShipWorks.Properties {
         /// </summary>
         public static System.Drawing.Bitmap social_facebook {
             get {
-                object obj = ResourceManager.GetObject("social-facebook", resourceCulture);
+                object obj = ResourceManager.GetObject("social_facebook", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -3945,7 +3945,7 @@ namespace ShipWorks.Properties {
         /// </summary>
         public static System.Drawing.Bitmap social_twitter {
             get {
-                object obj = ResourceManager.GetObject("social-twitter", resourceCulture);
+                object obj = ResourceManager.GetObject("social_twitter", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

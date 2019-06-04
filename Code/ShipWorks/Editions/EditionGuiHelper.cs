@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Linq;
 using System.Reflection;
@@ -11,6 +12,7 @@ using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Properties;
 using ShipWorks.UI.Controls;
 using ShipWorks.UI.Controls.Design;
+using ShipWorks.UI.Utility;
 using IContainer = System.ComponentModel.IContainer;
 
 namespace ShipWorks.Editions
@@ -20,7 +22,7 @@ namespace ShipWorks.Editions
     /// </summary>
     public partial class EditionGuiHelper : Component
     {
-        List<ManagedElement> managedElements = null;
+        private List<ManagedElement> managedElements = null;
 
         /// <summary>
         /// Constructor
@@ -69,7 +71,7 @@ namespace ShipWorks.Editions
         /// <summary>
         /// The active edition restrictions have changed
         /// </summary>
-        void OnEditionRestrictionsChanged(object sender, EventArgs e)
+        private void OnEditionRestrictionsChanged(object sender, EventArgs e)
         {
             if (Program.MainForm.InvokeRequired)
             {
@@ -131,30 +133,34 @@ namespace ShipWorks.Editions
         /// <summary>
         /// Get the lock image that is closest to the given ideal size
         /// </summary>
-        public static Image GetLockImage(int idealSize)
+        public static Image GetLockImage(int idealSize) =>
+          ResourcesUtility.GetImage(GetLockImageName(idealSize));
+
+        /// <summary>
+        /// Get the lock image name that is closest to the given ideal size
+        /// </summary>
+        [SuppressMessage("ShipWorks", "SW0002:Identifier should not be obfuscated",
+            Justification = "Identifier is not being used for data binding")]
+        public static string GetLockImageName(int idealSize) =>
+          idealSize <= 16 ? nameof(Resources.lock16) : nameof(Resources.lock32);
+
+        private class ManagedElement
         {
-            return idealSize <= 16 ? Resources.lock16 : Resources.lock32;
-        }
-
-        class ManagedElement
-        {
-            static object formsButtonClickEventID;
-            static object toolStripClickEventID;
-
-            static PropertyInfo componentEventsProperty;
-            static FieldInfo sandWidgetActivatedField;
-
-            Component component;
-            EditionFeature feature;
-            Func<object> dataProvider;
+            private static readonly object formsButtonClickEventID;
+            private static readonly object toolStripClickEventID;
+            private static PropertyInfo componentEventsProperty;
+            private static FieldInfo sandWidgetActivatedField;
+            private readonly Component component;
+            private readonly EditionFeature feature;
+            private readonly Func<object> dataProvider;
 
             // Indicates if its currently in a restricted state
-            bool isRestricted = false;
+            private bool isRestricted = false;
 
             // Original data that will be restored
-            Image originalImage;
-            EventHandler originalClick;
-            Divelements.SandRibbon.Popup originalSandPopup;
+            private Image originalImage;
+            private EventHandler originalClick;
+            private Divelements.SandRibbon.Popup originalSandPopup;
 
             /// <summary>
             /// Static constructor

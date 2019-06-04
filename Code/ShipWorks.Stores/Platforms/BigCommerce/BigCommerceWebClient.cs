@@ -130,7 +130,7 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
                 items = orderItems
             };
 
-            restRequest.AddBody(addShipment);
+            restRequest.AddJsonBody(addShipment);
 
             IRestResponse restResponse;
             try
@@ -179,7 +179,7 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
                 status_id = statusCode
             };
 
-            restRequest.AddBody(updateOrderStatusRequest);
+            restRequest.AddJsonBody(updateOrderStatusRequest);
 
             IRestResponse restResponse;
             try

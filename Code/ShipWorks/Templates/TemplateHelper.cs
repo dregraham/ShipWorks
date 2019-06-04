@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Drawing.Printing;
 using System.IO;
@@ -18,6 +19,7 @@ using ShipWorks.Templates.Media;
 using ShipWorks.Templates.Processing;
 using ShipWorks.Templates.Saving;
 using ShipWorks.UI.Controls.Html;
+using ShipWorks.UI.Utility;
 using ShipWorks.Users;
 
 namespace ShipWorks.Templates
@@ -27,7 +29,7 @@ namespace ShipWorks.Templates
     /// </summary>
     public static class TemplateHelper
     {
-        class TemplateComparer : IEqualityComparer<TemplateEntity>
+        private class TemplateComparer : IEqualityComparer<TemplateEntity>
         {
             public bool Equals(TemplateEntity x, TemplateEntity y)
             {
@@ -56,7 +58,21 @@ namespace ShipWorks.Templates
         /// <summary>
         /// Get the image to use for the template based on its type
         /// </summary>
-        public static Image GetTemplateImage(TemplateEntity template)
+        public static Image GetTemplateImage(TemplateEntity template) =>
+            ResourcesUtility.GetImage(GetTemplateImageName(template));
+
+        /// <summary>
+        /// Get the image to use for the given template type
+        /// </summary>
+        public static Image GetTemplateImage(TemplateType templateType) =>
+            ResourcesUtility.GetImage(GetTemplateImageName(templateType));
+
+        /// <summary>
+        /// Get the image to use for the template based on its type
+        /// </summary>
+        [SuppressMessage("ShipWorks", "SW0002:Identifier should not be obfuscated",
+            Justification = "Identifier is not being used for data binding")]
+        public static string GetTemplateImageName(TemplateEntity template)
         {
             if (template == null)
             {
@@ -65,32 +81,34 @@ namespace ShipWorks.Templates
 
             if (!TemplateXslProvider.FromTemplate(template).IsValid)
             {
-                return Resources.error16;
+                return nameof(Resources.error16);
             }
 
             if (template.IsSnippet)
             {
-                return Resources.template_snippet16;
+                return nameof(Resources.template_snippet16);
             }
 
-            return GetTemplateImage((TemplateType) template.Type);
+            return GetTemplateImageName((TemplateType) template.Type);
         }
 
         /// <summary>
         /// Get the image to use for the given template type
         /// </summary>
-        public static Image GetTemplateImage(TemplateType templateType)
+        [SuppressMessage("ShipWorks", "SW0002:Identifier should not be obfuscated",
+            Justification = "Identifier is not being used for data binding")]
+        public static string GetTemplateImageName(TemplateType templateType)
         {
             switch (templateType)
             {
                 case TemplateType.Standard:
-                    return Resources.template_standard_doc16;
+                    return nameof(Resources.template_standard_doc16);
                 case TemplateType.Label:
-                    return Resources.template_label16;
+                    return nameof(Resources.template_label16);
                 case TemplateType.Report:
-                    return Resources.template_report;
+                    return nameof(Resources.template_report);
                 case TemplateType.Thermal:
-                    return Resources.barcode;
+                    return nameof(Resources.barcode);
             }
 
             throw new InvalidOperationException(string.Format("Invalid template type {0}", templateType));

@@ -8,6 +8,7 @@ using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Model.Custom;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers;
+using ShipWorks.Shipping.ShipEngine;
 
 namespace ShipWorks.Shipping.UI.Carriers.Amazon.SWA
 {
@@ -20,6 +21,7 @@ namespace ShipWorks.Shipping.UI.Carriers.Amazon.SWA
         private readonly AmazonSWAAccountEntity account;
         private readonly ICarrierAccountRetrieverFactory accountRetrieverFactory;
         private readonly IMessageHelper messageHelper;
+        private readonly IShipEngineWebClient shipEngineWebClient;
         private readonly ICarrierAccountDescription accountDescription;
 
         /// <summary>
@@ -28,7 +30,8 @@ namespace ShipWorks.Shipping.UI.Carriers.Amazon.SWA
         public AmazonSWAAccountEditorDlg(ICarrierAccount account,
             ICarrierAccountRetrieverFactory accountRetrieverFactory,
             IMessageHelper messageHelper,
-            IIndex<ShipmentTypeCode, ICarrierAccountDescription> accountDescriptionFactory)
+            IIndex<ShipmentTypeCode, ICarrierAccountDescription> accountDescriptionFactory,
+            IShipEngineWebClient shipEngineWebClient)
         {
             InitializeComponent();
 
@@ -38,6 +41,7 @@ namespace ShipWorks.Shipping.UI.Carriers.Amazon.SWA
             this.account = AmazonSWAAccount;
             this.accountRetrieverFactory = accountRetrieverFactory;
             this.messageHelper = messageHelper;
+            this.shipEngineWebClient = shipEngineWebClient;
             this.accountDescription = accountDescriptionFactory[ShipmentTypeCode.AmazonSWA];
         }
 
@@ -75,7 +79,7 @@ namespace ShipWorks.Shipping.UI.Carriers.Amazon.SWA
         /// <summary>
         /// User is ready to save the changes
         /// </summary>
-        private void OnOK(object sender, EventArgs e)
+        private async void OnOK(object sender, EventArgs e)
         {
             try
             {
@@ -90,6 +94,14 @@ namespace ShipWorks.Shipping.UI.Carriers.Amazon.SWA
 
                 contactInformation.SaveToEntity();
                 accountRetrieverFactory.Create(account.ShipmentType).Save(account);
+
+                var updateResult = await shipEngineWebClient.UpdateAmazonAccount(account);
+
+                if (updateResult.Failure)
+                {
+                    messageHelper.ShowError(this, $"An error occurred when updating the account information. {Environment.NewLine}{updateResult.Message}");
+                    return;
+                }
 
                 DialogResult = DialogResult.OK;
             }

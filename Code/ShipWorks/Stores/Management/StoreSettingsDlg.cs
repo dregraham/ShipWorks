@@ -396,7 +396,7 @@ namespace ShipWorks.Stores.Management
                 {
                     using (ILifetimeScope scope = IoC.BeginLifetimeScope())
                     {
-                        Result warehouseResult = await scope.Resolve<IWarehouseStoreClient>().UploadStoreToWarehouse(store).ConfigureAwait(true);
+                        Result warehouseResult = await scope.Resolve<IWarehouseStoreClient>().UpdateStoreCredentials(store).ConfigureAwait(true);
                         if (warehouseResult.Failure)
                         {
                             MessageHelper.ShowError(this, $"An error occurred saving the store to ShipWorks.{Environment.NewLine + Environment.NewLine + warehouseResult.Message}");

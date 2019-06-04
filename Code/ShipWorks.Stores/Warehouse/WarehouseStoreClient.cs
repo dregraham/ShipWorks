@@ -36,6 +36,42 @@ namespace ShipWorks.Stores.Warehouse
         }
 
         /// <summary>
+        /// Update the stores credentials
+        /// </summary>
+        public async Task<Result> UpdateStoreCredentials(StoreEntity store)
+        {
+            try
+            {
+                EditionRestrictionLevel restrictionLevel = licenseService.CheckRestriction(EditionFeature.Warehouse, null);
+
+                if (restrictionLevel == EditionRestrictionLevel.None)
+                {
+                    IRestRequest request = new RestRequest(WarehouseEndpoints.UpdateStoreCredentials(store.WarehouseStoreID?.ToString("D")), Method.POST);
+                    request.JsonSerializer = new RestSharpJsonNetSerializer();
+                    request.RequestFormat = DataFormat.Json;
+
+                    Store storeDto = await storeDtoFactory.Create(store).ConfigureAwait(false);
+                    request.AddJsonBody(storeDto);
+
+                    GenericResult<IRestResponse> response = await warehouseRequestClient
+                        .MakeRequest(request, "Upload Store")
+                        .ConfigureAwait(true);
+
+                    if (response.Failure)
+                    {
+                        return Result.FromError(response.Message);
+                    }
+                }
+
+                return Result.FromSuccess();
+            }
+            catch (Exception ex)
+            {
+                return Result.FromError(ex);
+            }
+        }
+
+        /// <summary>
         /// Upload the store to warehouse mode
         /// </summary>
         public async Task<Result> UploadStoreToWarehouse(StoreEntity store)
@@ -46,7 +82,7 @@ namespace ShipWorks.Stores.Warehouse
 
                 if (restrictionLevel == EditionRestrictionLevel.None)
                 {
-                    IRestRequest request = new RestRequest(WarehouseEndpoints.Stores(store.WarehouseStoreID?.ToString("D")), Method.POST);
+                    IRestRequest request = new RestRequest(WarehouseEndpoints.Stores, Method.POST);
                     request.JsonSerializer = new RestSharpJsonNetSerializer();
                     request.RequestFormat = DataFormat.Json;
 

@@ -123,7 +123,7 @@
             this.copyAccountNumber.Location = new System.Drawing.Point(182, 127);
             this.copyAccountNumber.Name = "copyAccountNumber";
             this.copyAccountNumber.Size = new System.Drawing.Size(128, 23);
-            this.copyAccountNumber.TabIndex = 72;
+            this.copyAccountNumber.TabIndex = 2;
             this.copyAccountNumber.Text = "Copy To Clipboard";
             this.copyAccountNumber.UseVisualStyleBackColor = true;
             this.copyAccountNumber.Click += new System.EventHandler(this.OnCopyAccountNumberClick);
@@ -140,14 +140,14 @@
             this.marketplaceID.Location = new System.Drawing.Point(155, 280);
             this.marketplaceID.Name = "marketplaceID";
             this.marketplaceID.Size = new System.Drawing.Size(118, 21);
-            this.marketplaceID.TabIndex = 69;
+            this.marketplaceID.TabIndex = 5;
             // 
             // buttonChooseMarketplace
             // 
             this.buttonChooseMarketplace.Location = new System.Drawing.Point(279, 279);
             this.buttonChooseMarketplace.Name = "buttonChooseMarketplace";
             this.buttonChooseMarketplace.Size = new System.Drawing.Size(146, 23);
-            this.buttonChooseMarketplace.TabIndex = 7;
+            this.buttonChooseMarketplace.TabIndex = 6;
             this.buttonChooseMarketplace.Text = "Choose My Marketplace...";
             this.buttonChooseMarketplace.UseVisualStyleBackColor = true;
             this.buttonChooseMarketplace.Click += new System.EventHandler(this.OnClickFindMarketplaces);
@@ -166,7 +166,7 @@
             this.authToken.Location = new System.Drawing.Point(155, 251);
             this.authToken.Name = "authToken";
             this.authToken.Size = new System.Drawing.Size(268, 21);
-            this.authToken.TabIndex = 10;
+            this.authToken.TabIndex = 4;
             // 
             // label4
             // 
@@ -184,7 +184,7 @@
             this.accountNumber.Name = "accountNumber";
             this.accountNumber.ReadOnly = true;
             this.accountNumber.Size = new System.Drawing.Size(102, 21);
-            this.accountNumber.TabIndex = 54;
+            this.accountNumber.TabIndex = 1;
             this.accountNumber.Text = "1025-5115-6476";
             // 
             // label19

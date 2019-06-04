@@ -175,7 +175,7 @@
   <data name="delete_row" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\delete_row.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="social-facebook" type="System.Resources.ResXFileRef, System.Windows.Forms">
+  <data name="social_facebook" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\social-facebook.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="thermal_roll" type="System.Resources.ResXFileRef, System.Windows.Forms">
@@ -1036,7 +1036,7 @@
   <data name="indicator_greengray" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Progress\indicator_greengray.gif;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="social-twitter" type="System.Resources.ResXFileRef, System.Windows.Forms">
+  <data name="social_twitter" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\social-twitter.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="folderclosed_linked_infinity" type="System.Resources.ResXFileRef, System.Windows.Forms">
@@ -1393,7 +1393,7 @@
   <data name="sw_cubes_32x32_april" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\aprilfools-32x32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="graphics-tablet" type="System.Resources.ResXFileRef, System.Windows.Forms">
+  <data name="graphics_tablet" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\graphics-tablet.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="glo_ups_brandmark_pfv1" type="System.Resources.ResXFileRef, System.Windows.Forms">

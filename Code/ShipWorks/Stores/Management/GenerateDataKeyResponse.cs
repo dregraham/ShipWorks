@@ -1,3 +1,4 @@
+using System.Reflection;
 using Newtonsoft.Json;
 
 namespace ShipWorks.Stores.Management
@@ -5,6 +6,7 @@ namespace ShipWorks.Stores.Management
     /// <summary>
     /// Response to the GenerateDataKeyRequest
     /// </summary>
+    [Obfuscation(Exclude = true, ApplyToMembers = true, StripAfterObfuscation = false)]
     public class GenerateDataKeyResponse
     {
         /// <summary>

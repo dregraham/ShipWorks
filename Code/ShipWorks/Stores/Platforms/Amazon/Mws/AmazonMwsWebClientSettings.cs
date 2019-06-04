@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Xml.Linq;
+using ShipWorks.ApplicationCore;
 
 namespace ShipWorks.Stores.Platforms.Amazon.Mws
 {
@@ -19,7 +20,7 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
         public IAmazonCredentials Credentials { get; set; }
 
         // Default base namespace for Amazon requests and responses
-        private static string endpointNamespace = "https://mws.amazonservices.com";
+        private static readonly string endpointNamespace = "https://mws.amazonservices.com";
 
         /// <summary>
         /// HTTP endpoint of the Amazon service
@@ -28,6 +29,17 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
         {
             get
             {
+                if (InterapptiveOnly.IsInterapptiveUser)
+                {
+                    var useLiveEndpoint = InterapptiveOnly.Registry.GetValue("AmazonMwsLive", true);
+                    var endpointOverride = InterapptiveOnly.Registry.GetValue("AmazonMwsEndpoint", string.Empty);
+
+                    if (!useLiveEndpoint && !string.IsNullOrWhiteSpace(endpointOverride))
+                    {
+                        return endpointOverride;
+                    }
+                }
+
                 switch (Credentials.Region)
                 {
                     case "US":
