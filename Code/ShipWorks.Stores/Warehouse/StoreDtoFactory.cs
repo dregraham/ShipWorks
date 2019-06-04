@@ -2,6 +2,7 @@ using System;
 using System.Threading.Tasks;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
+using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Licensing.Warehouse.DTO;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Communication;
@@ -19,7 +20,7 @@ namespace ShipWorks.Stores.Warehouse
         private readonly IDownloadStartingPoint downloadStartingPoint;
         private readonly IStoreTypeManager storeTypeManager;
         private readonly IWarehouseEncryptionService encryptionService;
-        
+
         /// <summary>
         /// Constructor
         /// </summary>
@@ -67,13 +68,21 @@ namespace ShipWorks.Stores.Warehouse
             AmazonStore store = new AmazonStore();
             store.MerchantID = storeEntity.MerchantID;
             store.MarketplaceID = storeEntity.MarketplaceID;
-            store.AuthToken = await encryptionService.Encrypt(storeEntity.AuthToken)
-                .ConfigureAwait(false);
             store.Region = storeEntity.AmazonApiRegion;
             store.ExcludeFBA = storeEntity.ExcludeFBA;
             store.AmazonVATS = storeEntity.AmazonVATS;
             store.DownloadStartDate = await downloadStartingPoint.OnlineLastModified(storeEntity)
                 .ConfigureAwait(false);
+
+            if (InterapptiveOnly.IsInterapptiveUser && !InterapptiveOnly.Registry.GetValue("EncryptWarehouseCredentials", true))
+            {
+                store.AuthToken = storeEntity.AuthToken;
+            }
+            else
+            {
+                store.AuthToken = await encryptionService.Encrypt(storeEntity.AuthToken)
+                    .ConfigureAwait(false);
+            }
 
             return store;
         }
