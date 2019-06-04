@@ -46,7 +46,6 @@ namespace ShipWorks.Shipping.Services
                 {
                     // Throw an exception if the service is UPS SurePost
                     if (shipment.Ups != null &&
-                        shipment.Ups.Service != null &&
                         (shipment.Ups.Service.Equals(17) ||
                         shipment.Ups.Service.Equals(18) ||
                         shipment.Ups.Service.Equals(19) ||
