@@ -388,7 +388,7 @@ namespace ShipWorks.Shipping.Editing
             // Always show it if any types support returns
             sectionReturns.Visible = true;
 
-            LoadInitialReturnValues();
+            LoadInitialReturnValues(loadedTypes.Count);
 
             // Only if there all the same type can we create the type-specific control
             if (loadedTypes.Count == 1)
@@ -424,11 +424,11 @@ namespace ShipWorks.Shipping.Editing
         /// <summary>
         /// Load the return section values into the UI
         /// </summary>
-        private void LoadInitialReturnValues()
+        private void LoadInitialReturnValues(int shipmentTypes)
         {
             // Don't refresh the return profile menu if more than one shipment is selected
             // because doing so will cause the selected profiles to be changed
-            if (LoadedShipments.Count <= 1)
+            if (shipmentTypes == 1)
             {
                 RefreshIncludeReturnProfileMenu(shipmentTypeCode);
                 returnProfileID.DisplayMember = "Value";
@@ -767,7 +767,8 @@ namespace ShipWorks.Shipping.Editing
         /// </summary>
         protected void OnReturnProfileIDEnabledChanged(object sender, EventArgs e)
         {
-            if (returnProfileID.Enabled && !isLoading && LoadedShipments.Count <= 1)
+            List<ShipmentType> loadedTypes = LoadedShipments.Select(s => s.ShipmentType).Distinct().Select(st => ShipmentTypeManager.GetType((ShipmentTypeCode) st)).ToList();
+            if (returnProfileID.Enabled && !isLoading && loadedTypes.Count == 1)
             {
                 RefreshIncludeReturnProfileMenu(shipmentTypeCode);
             }
