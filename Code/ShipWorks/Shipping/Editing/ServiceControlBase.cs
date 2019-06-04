@@ -367,9 +367,14 @@ namespace ShipWorks.Shipping.Editing
                 bool allReturnsSupported = loadedTypes.All(st => st.SupportsReturns);
                 bool enableIncludeReturn = allReturnsSupported && loadedTypes.All(x => x.ShipmentTypeCode != ShipmentTypeCode.Other);
 
-                RefreshIncludeReturnProfileMenu(shipmentTypeCode);
-                returnProfileID.DisplayMember = "Value";
-                returnProfileID.ValueMember = "Key";
+                // Don't refresh the return profile menu if more than one shipment is selected
+                // because doing so will cause the selected profiles to be changed
+                if (LoadedShipments.Count <= 1)
+                {
+                    RefreshIncludeReturnProfileMenu(shipmentTypeCode);
+                    returnProfileID.DisplayMember = "Value";
+                    returnProfileID.ValueMember = "Key";
+                }
 
                 // Always show it if any types support returns
                 sectionReturns.Visible = true;
@@ -736,7 +741,7 @@ namespace ShipWorks.Shipping.Editing
         /// </summary>
         protected void OnReturnProfileIDEnabledChanged(object sender, EventArgs e)
         {
-            if (returnProfileID.Enabled)
+            if (returnProfileID.Enabled && !isLoading && LoadedShipments.Count <= 1)
             {
                 RefreshIncludeReturnProfileMenu(shipmentTypeCode);
             }
