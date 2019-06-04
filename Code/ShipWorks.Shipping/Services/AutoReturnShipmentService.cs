@@ -45,10 +45,12 @@ namespace ShipWorks.Shipping.Services
                 try
                 {
                     // Throw an exception if the service is UPS SurePost
-                    if (shipment.Ups.Service.Equals(17) || 
-                        shipment.Ups.Service.Equals(18) || 
-                        shipment.Ups.Service.Equals(19) || 
-                        shipment.Ups.Service.Equals(20))
+                    if (shipment.Ups != null &&
+                        shipment.Ups.Service != null &&
+                        (shipment.Ups.Service.Equals(17) ||
+                        shipment.Ups.Service.Equals(18) ||
+                        shipment.Ups.Service.Equals(19) ||
+                        shipment.Ups.Service.Equals(20)))
                     {
                         throw new ShippingException("UPS SurePost does not support returns");
                     }
