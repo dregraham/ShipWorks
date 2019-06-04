@@ -20,40 +20,40 @@ namespace ShipWorksPerformanceTestSuite
 {
 #pragma warning disable 0436 //(CS0436) The type 'type' in 'assembly' conflicts with the imported type 'type2' in 'assembly'. Using the type defined in 'assembly'.
     /// <summary>
-    /// The class representing the ShipWorksPerformanceTestSuiteRepository element repository.
+    /// The class representing the PerformanceTestingRepository element repository.
     /// </summary>
     [System.CodeDom.Compiler.GeneratedCode("Ranorex", "8.1")]
-    [RepositoryFolder("0dd6cfa7-ba04-43ea-9088-05ef7ddaa3f1")]
-    public partial class ShipWorksPerformanceTestSuiteRepository : RepoGenBaseFolder
+    [RepositoryFolder("c68153a2-733b-40f8-8fae-1a73b84e55f5")]
+    public partial class PerformanceTestingRepository : RepoGenBaseFolder
     {
-        static ShipWorksPerformanceTestSuiteRepository instance = new ShipWorksPerformanceTestSuiteRepository();
-        ShipWorksPerformanceTestSuiteRepositoryFolders.AddStoreWizardAppFolder _addstorewizard;
-        ShipWorksPerformanceTestSuiteRepositoryFolders.PopupWindowAppFolder _popupwindow;
-        ShipWorksPerformanceTestSuiteRepositoryFolders.List1000AppFolder _list1000;
-        ShipWorksPerformanceTestSuiteRepositoryFolders.BrowseForFolderAppFolder _browseforfolder;
-        ShipWorksPerformanceTestSuiteRepositoryFolders.OpenAppFolder _open;
-        ShipWorksPerformanceTestSuiteRepositoryFolders.MainFormAppFolder _mainform;
-        ShipWorksPerformanceTestSuiteRepositoryFolders.ShippingSettingsDlgAppFolder _shippingsettingsdlg;
-        ShipWorksPerformanceTestSuiteRepositoryFolders.OtherSetupWizardAppFolder _othersetupwizard;
-        ShipWorksPerformanceTestSuiteRepositoryFolders.ShipWorksAppFolder _shipworks;
-        ShipWorksPerformanceTestSuiteRepositoryFolders.ProgressDlgAppFolder _progressdlg;
-        ShipWorksPerformanceTestSuiteRepositoryFolders.ContextMenuOrderGridAppFolder _contextmenuordergrid;
-        ShipWorksPerformanceTestSuiteRepositoryFolders.ShippingDlgAppFolder _shippingdlg;
-        ShipWorksPerformanceTestSuiteRepositoryFolders.SomeFormAppFolder _someform;
-        ShipWorksPerformanceTestSuiteRepositoryFolders.ContextMenuPrintAppFolder _contextmenuprint;
-        ShipWorksPerformanceTestSuiteRepositoryFolders.SimpleDatabaseSetupWizardAppFolder _simpledatabasesetupwizard;
-        ShipWorksPerformanceTestSuiteRepositoryFolders.DetailedDatabaseSetupWizardAppFolder _detaileddatabasesetupwizard;
-        ShipWorksPerformanceTestSuiteRepositoryFolders.DatabaseUpdateWizardAppFolder _databaseupdatewizard;
-        ShipWorksPerformanceTestSuiteRepositoryFolders.DatabaseRestoreDlgAppFolder _databaserestoredlg;
-        ShipWorksPerformanceTestSuiteRepositoryFolders.ShipWorksAboutDlgAppFolder _shipworksaboutdlg;
-        ShipWorksPerformanceTestSuiteRepositoryFolders.LogonDlgAppFolder _logondlg;
-        ShipWorksPerformanceTestSuiteRepositoryFolders.WhatsNextAppFolder _whatsnext;
+        static PerformanceTestingRepository instance = new PerformanceTestingRepository();
+        PerformanceTestingRepositoryFolders.AddStoreWizardAppFolder _addstorewizard;
+        PerformanceTestingRepositoryFolders.PopupWindowAppFolder _popupwindow;
+        PerformanceTestingRepositoryFolders.List1000AppFolder _list1000;
+        PerformanceTestingRepositoryFolders.BrowseForFolderAppFolder _browseforfolder;
+        PerformanceTestingRepositoryFolders.OpenAppFolder _open;
+        PerformanceTestingRepositoryFolders.MainFormAppFolder _mainform;
+        PerformanceTestingRepositoryFolders.ShippingSettingsDlgAppFolder _shippingsettingsdlg;
+        PerformanceTestingRepositoryFolders.OtherSetupWizardAppFolder _othersetupwizard;
+        PerformanceTestingRepositoryFolders.ShipWorksAppFolder _shipworks;
+        PerformanceTestingRepositoryFolders.ProgressDlgAppFolder _progressdlg;
+        PerformanceTestingRepositoryFolders.ContextMenuOrderGridAppFolder _contextmenuordergrid;
+        PerformanceTestingRepositoryFolders.ShippingDlgAppFolder _shippingdlg;
+        PerformanceTestingRepositoryFolders.SomeFormAppFolder _someform;
+        PerformanceTestingRepositoryFolders.ContextMenuPrintAppFolder _contextmenuprint;
+        PerformanceTestingRepositoryFolders.SimpleDatabaseSetupWizardAppFolder _simpledatabasesetupwizard;
+        PerformanceTestingRepositoryFolders.DetailedDatabaseSetupWizardAppFolder _detaileddatabasesetupwizard;
+        PerformanceTestingRepositoryFolders.DatabaseUpdateWizardAppFolder _databaseupdatewizard;
+        PerformanceTestingRepositoryFolders.DatabaseRestoreDlgAppFolder _databaserestoredlg;
+        PerformanceTestingRepositoryFolders.ShipWorksAboutDlgAppFolder _shipworksaboutdlg;
+        PerformanceTestingRepositoryFolders.LogonDlgAppFolder _logondlg;
+        PerformanceTestingRepositoryFolders.WhatsNextAppFolder _whatsnext;
 
         /// <summary>
-        /// Gets the singleton class instance representing the ShipWorksPerformanceTestSuiteRepository element repository.
+        /// Gets the singleton class instance representing the PerformanceTestingRepository element repository.
         /// </summary>
-        [RepositoryFolder("0dd6cfa7-ba04-43ea-9088-05ef7ddaa3f1")]
-        public static ShipWorksPerformanceTestSuiteRepository Instance
+        [RepositoryFolder("c68153a2-733b-40f8-8fae-1a73b84e55f5")]
+        public static PerformanceTestingRepository Instance
         {
             get { return instance; }
         }
@@ -61,30 +61,30 @@ namespace ShipWorksPerformanceTestSuite
         /// <summary>
         /// Repository class constructor.
         /// </summary>
-        public ShipWorksPerformanceTestSuiteRepository() 
-            : base("ShipWorksPerformanceTestSuiteRepository", "/", null, 0, false, "0dd6cfa7-ba04-43ea-9088-05ef7ddaa3f1", ".\\RepositoryImages\\ShipWorksPerformanceTestSuiteRepository0dd6cfa7.rximgres")
+        public PerformanceTestingRepository() 
+            : base("PerformanceTestingRepository", "/", null, 0, false, "c68153a2-733b-40f8-8fae-1a73b84e55f5", ".\\RepositoryImages\\PerformanceTestingRepositoryc68153a2.rximgres")
         {
-            _addstorewizard = new ShipWorksPerformanceTestSuiteRepositoryFolders.AddStoreWizardAppFolder(this);
-            _popupwindow = new ShipWorksPerformanceTestSuiteRepositoryFolders.PopupWindowAppFolder(this);
-            _list1000 = new ShipWorksPerformanceTestSuiteRepositoryFolders.List1000AppFolder(this);
-            _browseforfolder = new ShipWorksPerformanceTestSuiteRepositoryFolders.BrowseForFolderAppFolder(this);
-            _open = new ShipWorksPerformanceTestSuiteRepositoryFolders.OpenAppFolder(this);
-            _mainform = new ShipWorksPerformanceTestSuiteRepositoryFolders.MainFormAppFolder(this);
-            _shippingsettingsdlg = new ShipWorksPerformanceTestSuiteRepositoryFolders.ShippingSettingsDlgAppFolder(this);
-            _othersetupwizard = new ShipWorksPerformanceTestSuiteRepositoryFolders.OtherSetupWizardAppFolder(this);
-            _shipworks = new ShipWorksPerformanceTestSuiteRepositoryFolders.ShipWorksAppFolder(this);
-            _progressdlg = new ShipWorksPerformanceTestSuiteRepositoryFolders.ProgressDlgAppFolder(this);
-            _contextmenuordergrid = new ShipWorksPerformanceTestSuiteRepositoryFolders.ContextMenuOrderGridAppFolder(this);
-            _shippingdlg = new ShipWorksPerformanceTestSuiteRepositoryFolders.ShippingDlgAppFolder(this);
-            _someform = new ShipWorksPerformanceTestSuiteRepositoryFolders.SomeFormAppFolder(this);
-            _contextmenuprint = new ShipWorksPerformanceTestSuiteRepositoryFolders.ContextMenuPrintAppFolder(this);
-            _simpledatabasesetupwizard = new ShipWorksPerformanceTestSuiteRepositoryFolders.SimpleDatabaseSetupWizardAppFolder(this);
-            _detaileddatabasesetupwizard = new ShipWorksPerformanceTestSuiteRepositoryFolders.DetailedDatabaseSetupWizardAppFolder(this);
-            _databaseupdatewizard = new ShipWorksPerformanceTestSuiteRepositoryFolders.DatabaseUpdateWizardAppFolder(this);
-            _databaserestoredlg = new ShipWorksPerformanceTestSuiteRepositoryFolders.DatabaseRestoreDlgAppFolder(this);
-            _shipworksaboutdlg = new ShipWorksPerformanceTestSuiteRepositoryFolders.ShipWorksAboutDlgAppFolder(this);
-            _logondlg = new ShipWorksPerformanceTestSuiteRepositoryFolders.LogonDlgAppFolder(this);
-            _whatsnext = new ShipWorksPerformanceTestSuiteRepositoryFolders.WhatsNextAppFolder(this);
+            _addstorewizard = new PerformanceTestingRepositoryFolders.AddStoreWizardAppFolder(this);
+            _popupwindow = new PerformanceTestingRepositoryFolders.PopupWindowAppFolder(this);
+            _list1000 = new PerformanceTestingRepositoryFolders.List1000AppFolder(this);
+            _browseforfolder = new PerformanceTestingRepositoryFolders.BrowseForFolderAppFolder(this);
+            _open = new PerformanceTestingRepositoryFolders.OpenAppFolder(this);
+            _mainform = new PerformanceTestingRepositoryFolders.MainFormAppFolder(this);
+            _shippingsettingsdlg = new PerformanceTestingRepositoryFolders.ShippingSettingsDlgAppFolder(this);
+            _othersetupwizard = new PerformanceTestingRepositoryFolders.OtherSetupWizardAppFolder(this);
+            _shipworks = new PerformanceTestingRepositoryFolders.ShipWorksAppFolder(this);
+            _progressdlg = new PerformanceTestingRepositoryFolders.ProgressDlgAppFolder(this);
+            _contextmenuordergrid = new PerformanceTestingRepositoryFolders.ContextMenuOrderGridAppFolder(this);
+            _shippingdlg = new PerformanceTestingRepositoryFolders.ShippingDlgAppFolder(this);
+            _someform = new PerformanceTestingRepositoryFolders.SomeFormAppFolder(this);
+            _contextmenuprint = new PerformanceTestingRepositoryFolders.ContextMenuPrintAppFolder(this);
+            _simpledatabasesetupwizard = new PerformanceTestingRepositoryFolders.SimpleDatabaseSetupWizardAppFolder(this);
+            _detaileddatabasesetupwizard = new PerformanceTestingRepositoryFolders.DetailedDatabaseSetupWizardAppFolder(this);
+            _databaseupdatewizard = new PerformanceTestingRepositoryFolders.DatabaseUpdateWizardAppFolder(this);
+            _databaserestoredlg = new PerformanceTestingRepositoryFolders.DatabaseRestoreDlgAppFolder(this);
+            _shipworksaboutdlg = new PerformanceTestingRepositoryFolders.ShipWorksAboutDlgAppFolder(this);
+            _logondlg = new PerformanceTestingRepositoryFolders.LogonDlgAppFolder(this);
+            _whatsnext = new PerformanceTestingRepositoryFolders.WhatsNextAppFolder(this);
         }
 
 #region Variables
@@ -94,7 +94,7 @@ namespace ShipWorksPerformanceTestSuite
         /// <summary>
         /// The Self item info.
         /// </summary>
-        [RepositoryItemInfo("0dd6cfa7-ba04-43ea-9088-05ef7ddaa3f1")]
+        [RepositoryItemInfo("c68153a2-733b-40f8-8fae-1a73b84e55f5")]
         public virtual RepoItemInfo SelfInfo
         {
             get
@@ -107,7 +107,7 @@ namespace ShipWorksPerformanceTestSuite
         /// The AddStoreWizard folder.
         /// </summary>
         [RepositoryFolder("bd4b191e-eda6-4879-8143-476ecb195e36")]
-        public virtual ShipWorksPerformanceTestSuiteRepositoryFolders.AddStoreWizardAppFolder AddStoreWizard
+        public virtual PerformanceTestingRepositoryFolders.AddStoreWizardAppFolder AddStoreWizard
         {
             get { return _addstorewizard; }
         }
@@ -116,7 +116,7 @@ namespace ShipWorksPerformanceTestSuite
         /// The PopupWindow folder.
         /// </summary>
         [RepositoryFolder("55867074-eaaf-4a64-ab58-790a599a047e")]
-        public virtual ShipWorksPerformanceTestSuiteRepositoryFolders.PopupWindowAppFolder PopupWindow
+        public virtual PerformanceTestingRepositoryFolders.PopupWindowAppFolder PopupWindow
         {
             get { return _popupwindow; }
         }
@@ -125,7 +125,7 @@ namespace ShipWorksPerformanceTestSuite
         /// The List1000 folder.
         /// </summary>
         [RepositoryFolder("cddecf1e-2223-47b3-b26f-c4b7aeeb4705")]
-        public virtual ShipWorksPerformanceTestSuiteRepositoryFolders.List1000AppFolder List1000
+        public virtual PerformanceTestingRepositoryFolders.List1000AppFolder List1000
         {
             get { return _list1000; }
         }
@@ -134,7 +134,7 @@ namespace ShipWorksPerformanceTestSuite
         /// The BrowseForFolder folder.
         /// </summary>
         [RepositoryFolder("6ae96697-f5c2-44aa-8054-e942f232f09c")]
-        public virtual ShipWorksPerformanceTestSuiteRepositoryFolders.BrowseForFolderAppFolder BrowseForFolder
+        public virtual PerformanceTestingRepositoryFolders.BrowseForFolderAppFolder BrowseForFolder
         {
             get { return _browseforfolder; }
         }
@@ -143,7 +143,7 @@ namespace ShipWorksPerformanceTestSuite
         /// The Open folder.
         /// </summary>
         [RepositoryFolder("2cbcdfc7-9b9e-4191-82dd-d98b8bf20b3b")]
-        public virtual ShipWorksPerformanceTestSuiteRepositoryFolders.OpenAppFolder Open
+        public virtual PerformanceTestingRepositoryFolders.OpenAppFolder Open
         {
             get { return _open; }
         }
@@ -152,7 +152,7 @@ namespace ShipWorksPerformanceTestSuite
         /// The MainForm folder.
         /// </summary>
         [RepositoryFolder("9774aa4f-9cd8-4b2c-85b7-04d38fb77f65")]
-        public virtual ShipWorksPerformanceTestSuiteRepositoryFolders.MainFormAppFolder MainForm
+        public virtual PerformanceTestingRepositoryFolders.MainFormAppFolder MainForm
         {
             get { return _mainform; }
         }
@@ -161,7 +161,7 @@ namespace ShipWorksPerformanceTestSuite
         /// The ShippingSettingsDlg folder.
         /// </summary>
         [RepositoryFolder("b16e00ac-7c9c-4af6-89ac-0cafeb38176b")]
-        public virtual ShipWorksPerformanceTestSuiteRepositoryFolders.ShippingSettingsDlgAppFolder ShippingSettingsDlg
+        public virtual PerformanceTestingRepositoryFolders.ShippingSettingsDlgAppFolder ShippingSettingsDlg
         {
             get { return _shippingsettingsdlg; }
         }
@@ -170,7 +170,7 @@ namespace ShipWorksPerformanceTestSuite
         /// The OtherSetupWizard folder.
         /// </summary>
         [RepositoryFolder("7f97c878-5040-46da-b0f9-5d8a3b58daea")]
-        public virtual ShipWorksPerformanceTestSuiteRepositoryFolders.OtherSetupWizardAppFolder OtherSetupWizard
+        public virtual PerformanceTestingRepositoryFolders.OtherSetupWizardAppFolder OtherSetupWizard
         {
             get { return _othersetupwizard; }
         }
@@ -179,7 +179,7 @@ namespace ShipWorksPerformanceTestSuite
         /// The ShipWorks folder.
         /// </summary>
         [RepositoryFolder("75607496-c16a-4ead-9b31-0156a11036eb")]
-        public virtual ShipWorksPerformanceTestSuiteRepositoryFolders.ShipWorksAppFolder ShipWorks
+        public virtual PerformanceTestingRepositoryFolders.ShipWorksAppFolder ShipWorks
         {
             get { return _shipworks; }
         }
@@ -188,7 +188,7 @@ namespace ShipWorksPerformanceTestSuite
         /// The ProgressDlg folder.
         /// </summary>
         [RepositoryFolder("baf44c77-5a7e-49df-ab7e-b6b73b257666")]
-        public virtual ShipWorksPerformanceTestSuiteRepositoryFolders.ProgressDlgAppFolder ProgressDlg
+        public virtual PerformanceTestingRepositoryFolders.ProgressDlgAppFolder ProgressDlg
         {
             get { return _progressdlg; }
         }
@@ -197,7 +197,7 @@ namespace ShipWorksPerformanceTestSuite
         /// The ContextMenuOrderGrid folder.
         /// </summary>
         [RepositoryFolder("5a9518d5-117c-4cad-a480-8b3833c30d30")]
-        public virtual ShipWorksPerformanceTestSuiteRepositoryFolders.ContextMenuOrderGridAppFolder ContextMenuOrderGrid
+        public virtual PerformanceTestingRepositoryFolders.ContextMenuOrderGridAppFolder ContextMenuOrderGrid
         {
             get { return _contextmenuordergrid; }
         }
@@ -206,7 +206,7 @@ namespace ShipWorksPerformanceTestSuite
         /// The ShippingDlg folder.
         /// </summary>
         [RepositoryFolder("c1f2c066-fafb-4ca6-a9ef-c7732ede0d76")]
-        public virtual ShipWorksPerformanceTestSuiteRepositoryFolders.ShippingDlgAppFolder ShippingDlg
+        public virtual PerformanceTestingRepositoryFolders.ShippingDlgAppFolder ShippingDlg
         {
             get { return _shippingdlg; }
         }
@@ -215,7 +215,7 @@ namespace ShipWorksPerformanceTestSuite
         /// The SomeForm folder.
         /// </summary>
         [RepositoryFolder("7b65e11d-aa1b-47b1-a504-227fc140b2b0")]
-        public virtual ShipWorksPerformanceTestSuiteRepositoryFolders.SomeFormAppFolder SomeForm
+        public virtual PerformanceTestingRepositoryFolders.SomeFormAppFolder SomeForm
         {
             get { return _someform; }
         }
@@ -224,7 +224,7 @@ namespace ShipWorksPerformanceTestSuite
         /// The ContextMenuPrint folder.
         /// </summary>
         [RepositoryFolder("027db24a-29a1-4b4e-8473-4cf2dc2d4a9f")]
-        public virtual ShipWorksPerformanceTestSuiteRepositoryFolders.ContextMenuPrintAppFolder ContextMenuPrint
+        public virtual PerformanceTestingRepositoryFolders.ContextMenuPrintAppFolder ContextMenuPrint
         {
             get { return _contextmenuprint; }
         }
@@ -233,7 +233,7 @@ namespace ShipWorksPerformanceTestSuite
         /// The SimpleDatabaseSetupWizard folder.
         /// </summary>
         [RepositoryFolder("a033b291-a1bb-4c4b-a85a-02952bafac5a")]
-        public virtual ShipWorksPerformanceTestSuiteRepositoryFolders.SimpleDatabaseSetupWizardAppFolder SimpleDatabaseSetupWizard
+        public virtual PerformanceTestingRepositoryFolders.SimpleDatabaseSetupWizardAppFolder SimpleDatabaseSetupWizard
         {
             get { return _simpledatabasesetupwizard; }
         }
@@ -242,7 +242,7 @@ namespace ShipWorksPerformanceTestSuite
         /// The DetailedDatabaseSetupWizard folder.
         /// </summary>
         [RepositoryFolder("a0730feb-1bff-41a9-a014-6b899188748a")]
-        public virtual ShipWorksPerformanceTestSuiteRepositoryFolders.DetailedDatabaseSetupWizardAppFolder DetailedDatabaseSetupWizard
+        public virtual PerformanceTestingRepositoryFolders.DetailedDatabaseSetupWizardAppFolder DetailedDatabaseSetupWizard
         {
             get { return _detaileddatabasesetupwizard; }
         }
@@ -251,7 +251,7 @@ namespace ShipWorksPerformanceTestSuite
         /// The DatabaseUpdateWizard folder.
         /// </summary>
         [RepositoryFolder("24976891-6eb0-473e-bca4-356061b10a81")]
-        public virtual ShipWorksPerformanceTestSuiteRepositoryFolders.DatabaseUpdateWizardAppFolder DatabaseUpdateWizard
+        public virtual PerformanceTestingRepositoryFolders.DatabaseUpdateWizardAppFolder DatabaseUpdateWizard
         {
             get { return _databaseupdatewizard; }
         }
@@ -260,7 +260,7 @@ namespace ShipWorksPerformanceTestSuite
         /// The DatabaseRestoreDlg folder.
         /// </summary>
         [RepositoryFolder("8f4c40ba-3734-4195-a507-7f70fe0476b5")]
-        public virtual ShipWorksPerformanceTestSuiteRepositoryFolders.DatabaseRestoreDlgAppFolder DatabaseRestoreDlg
+        public virtual PerformanceTestingRepositoryFolders.DatabaseRestoreDlgAppFolder DatabaseRestoreDlg
         {
             get { return _databaserestoredlg; }
         }
@@ -269,7 +269,7 @@ namespace ShipWorksPerformanceTestSuite
         /// The ShipWorksAboutDlg folder.
         /// </summary>
         [RepositoryFolder("c3486984-f0ae-4053-868a-47d9eeed72d5")]
-        public virtual ShipWorksPerformanceTestSuiteRepositoryFolders.ShipWorksAboutDlgAppFolder ShipWorksAboutDlg
+        public virtual PerformanceTestingRepositoryFolders.ShipWorksAboutDlgAppFolder ShipWorksAboutDlg
         {
             get { return _shipworksaboutdlg; }
         }
@@ -278,7 +278,7 @@ namespace ShipWorksPerformanceTestSuite
         /// The LogonDlg folder.
         /// </summary>
         [RepositoryFolder("a960acac-1dd2-418f-bd24-4ad807672de5")]
-        public virtual ShipWorksPerformanceTestSuiteRepositoryFolders.LogonDlgAppFolder LogonDlg
+        public virtual PerformanceTestingRepositoryFolders.LogonDlgAppFolder LogonDlg
         {
             get { return _logondlg; }
         }
@@ -287,7 +287,7 @@ namespace ShipWorksPerformanceTestSuite
         /// The WhatsNext folder.
         /// </summary>
         [RepositoryFolder("df66440b-d880-4cdc-b1b4-81491385725d")]
-        public virtual ShipWorksPerformanceTestSuiteRepositoryFolders.WhatsNextAppFolder WhatsNext
+        public virtual PerformanceTestingRepositoryFolders.WhatsNextAppFolder WhatsNext
         {
             get { return _whatsnext; }
         }
@@ -297,7 +297,7 @@ namespace ShipWorksPerformanceTestSuite
     /// Inner folder classes.
     /// </summary>
     [System.CodeDom.Compiler.GeneratedCode("Ranorex", "8.1")]
-    public partial class ShipWorksPerformanceTestSuiteRepositoryFolders
+    public partial class PerformanceTestingRepositoryFolders
     {
         /// <summary>
         /// The AddStoreWizardAppFolder folder.
@@ -305,7 +305,7 @@ namespace ShipWorksPerformanceTestSuite
         [RepositoryFolder("bd4b191e-eda6-4879-8143-476ecb195e36")]
         public partial class AddStoreWizardAppFolder : RepoGenBaseFolder
         {
-            ShipWorksPerformanceTestSuiteRepositoryFolders.MainPanelFolder _mainpanel;
+            PerformanceTestingRepositoryFolders.MainPanelFolder _mainpanel;
             RepoItemInfo _nextInfo;
 
             /// <summary>
@@ -314,7 +314,7 @@ namespace ShipWorksPerformanceTestSuite
             public AddStoreWizardAppFolder(RepoGenBaseFolder parentFolder) :
                     base("AddStoreWizard", "/form[@controlname='AddStoreWizard']", parentFolder, 30000, null, true, "bd4b191e-eda6-4879-8143-476ecb195e36", "")
             {
-                _mainpanel = new ShipWorksPerformanceTestSuiteRepositoryFolders.MainPanelFolder(this);
+                _mainpanel = new PerformanceTestingRepositoryFolders.MainPanelFolder(this);
                 _nextInfo = new RepoItemInfo(this, "Next", "button[@controlname='next']", 30000, null, "02e8ca1e-6bf5-4087-938a-0b23cb0c6bcd");
             }
 
@@ -370,7 +370,7 @@ namespace ShipWorksPerformanceTestSuite
             /// The MainPanel folder.
             /// </summary>
             [RepositoryFolder("c16ac4f2-5547-4ac9-a43c-3a0eb60165c9")]
-            public virtual ShipWorksPerformanceTestSuiteRepositoryFolders.MainPanelFolder MainPanel
+            public virtual PerformanceTestingRepositoryFolders.MainPanelFolder MainPanel
             {
                 get { return _mainpanel; }
             }
@@ -788,7 +788,7 @@ namespace ShipWorksPerformanceTestSuite
         [RepositoryFolder("6ae96697-f5c2-44aa-8054-e942f232f09c")]
         public partial class BrowseForFolderAppFolder : RepoGenBaseFolder
         {
-            ShipWorksPerformanceTestSuiteRepositoryFolders.Tree1001Folder _tree1001;
+            PerformanceTestingRepositoryFolders.Tree1001Folder _tree1001;
             RepoItemInfo _someindicatorInfo;
             RepoItemInfo _buttonokInfo;
             RepoItemInfo _rawtextokInfo;
@@ -800,7 +800,7 @@ namespace ShipWorksPerformanceTestSuite
             public BrowseForFolderAppFolder(RepoGenBaseFolder parentFolder) :
                     base("BrowseForFolder", "/form[@title='Browse For Folder']", parentFolder, 30000, null, true, "6ae96697-f5c2-44aa-8054-e942f232f09c", "")
             {
-                _tree1001 = new ShipWorksPerformanceTestSuiteRepositoryFolders.Tree1001Folder(this);
+                _tree1001 = new PerformanceTestingRepositoryFolders.Tree1001Folder(this);
                 _someindicatorInfo = new RepoItemInfo(this, "SomeIndicator", ".//scrollbar[@style='Vertical']/indicator", 30000, null, "87f67eb6-555a-44f1-8e58-d3940d02ad3a");
                 _buttonokInfo = new RepoItemInfo(this, "ButtonOK", "button[@text='OK']", 30000, null, "2c87f74c-eb7b-4b0b-9323-95af38b25521");
                 _rawtextokInfo = new RepoItemInfo(this, "RawTextOK", "?/?/rawtext[@rawtext='OK' and @row='0']", 30000, null, "7424d08a-4a46-4b90-a281-27882f5afd7b");
@@ -931,7 +931,7 @@ namespace ShipWorksPerformanceTestSuite
             /// The Tree1001 folder.
             /// </summary>
             [RepositoryFolder("a7b122c3-fdd4-412e-b58b-2a6e50961e70")]
-            public virtual ShipWorksPerformanceTestSuiteRepositoryFolders.Tree1001Folder Tree1001
+            public virtual PerformanceTestingRepositoryFolders.Tree1001Folder Tree1001
             {
                 get { return _tree1001; }
             }
@@ -2433,7 +2433,7 @@ namespace ShipWorksPerformanceTestSuite
         [RepositoryFolder("c1f2c066-fafb-4ca6-a9ef-c7732ede0d76")]
         public partial class ShippingDlgAppFolder : RepoGenBaseFolder
         {
-            ShipWorksPerformanceTestSuiteRepositoryFolders.SplitContainerFolder _splitcontainer;
+            PerformanceTestingRepositoryFolders.SplitContainerFolder _splitcontainer;
             RepoItemInfo _applyprofileInfo;
             RepoItemInfo _createlabelInfo;
             RepoItemInfo _voidlabelsInfo;
@@ -2445,7 +2445,7 @@ namespace ShipWorksPerformanceTestSuite
             public ShippingDlgAppFolder(RepoGenBaseFolder parentFolder) :
                     base("ShippingDlg", "/form[@controlname='ShippingDlg']", parentFolder, 30000, null, true, "c1f2c066-fafb-4ca6-a9ef-c7732ede0d76", "")
             {
-                _splitcontainer = new ShipWorksPerformanceTestSuiteRepositoryFolders.SplitContainerFolder(this);
+                _splitcontainer = new PerformanceTestingRepositoryFolders.SplitContainerFolder(this);
                 _applyprofileInfo = new RepoItemInfo(this, "ApplyProfile", "?/?/button[@controlname='applyProfile']", 30000, null, "c23a026c-3d78-4403-9b1d-846030d6f236");
                 _createlabelInfo = new RepoItemInfo(this, "CreateLabel", "?/?/button[@controlname='processDropDownButton']/rawtext[@row='0' and @column='1']", 30000, null, "3bca3ab3-e588-498f-bb22-6eabd3ae949f");
                 _voidlabelsInfo = new RepoItemInfo(this, "VoidLabels", "?/?/button[@controlname='voidSelected']/rawtext[@rawtext='Void Labels']", 30000, null, "610c7a55-55a4-4026-8f83-1fcc7d23c989");
@@ -2576,7 +2576,7 @@ namespace ShipWorksPerformanceTestSuite
             /// The SplitContainer folder.
             /// </summary>
             [RepositoryFolder("13dd32f8-c565-4c2d-904a-c1782d43192c")]
-            public virtual ShipWorksPerformanceTestSuiteRepositoryFolders.SplitContainerFolder SplitContainer
+            public virtual PerformanceTestingRepositoryFolders.SplitContainerFolder SplitContainer
             {
                 get { return _splitcontainer; }
             }
@@ -2862,7 +2862,7 @@ namespace ShipWorksPerformanceTestSuite
         [RepositoryFolder("7b65e11d-aa1b-47b1-a504-227fc140b2b0")]
         public partial class SomeFormAppFolder : RepoGenBaseFolder
         {
-            ShipWorksPerformanceTestSuiteRepositoryFolders.MainPanelFolder1 _mainpanel;
+            PerformanceTestingRepositoryFolders.MainPanelFolder1 _mainpanel;
             RepoItemInfo _rawtextnewInfo;
             RepoItemInfo _serviceInfo;
             RepoItemInfo _processdropdownbuttonInfo;
@@ -2896,7 +2896,6 @@ namespace ShipWorksPerformanceTestSuite
             RepoItemInfo _showadvancedoptions1Info;
             RepoItemInfo _iaccepttheagreement1Info;
             RepoItemInfo _installothercomponentsInfo;
-            RepoItemInfo _cprogramfilesshipworksinstallsshipInfo;
 
             /// <summary>
             /// Creates a new SomeForm  folder.
@@ -2904,7 +2903,7 @@ namespace ShipWorksPerformanceTestSuite
             public SomeFormAppFolder(RepoGenBaseFolder parentFolder) :
                     base("SomeForm", "/form[@title='Setup - ShipWorks®']", parentFolder, 30000, null, true, "7b65e11d-aa1b-47b1-a504-227fc140b2b0", "")
             {
-                _mainpanel = new ShipWorksPerformanceTestSuiteRepositoryFolders.MainPanelFolder1(this);
+                _mainpanel = new PerformanceTestingRepositoryFolders.MainPanelFolder1(this);
                 _rawtextnewInfo = new RepoItemInfo(this, "RawTextNew", "?/?/element[@controlname='ribbonTabHome']/rawtext[@row='0' and @column='9']", 30000, null, "71b6bebf-ee42-4224-82c8-bde2a969bcdc");
                 _serviceInfo = new RepoItemInfo(this, "Service", "container[@controlname='splitContainer']/?/?/container[@controlname='ratesSplitContainer']/container[@controlname='panel1']/?/?/tabpage[@controlname='tabPageService']/container[@controlname='serviceControlArea']/?/?/container[@controlname='sectionShipment']//text[@controlname='service']/text[@accessiblename='Service:']", 30000, null, "89b5bd36-0015-4059-86ef-cd02f46015e6");
                 _processdropdownbuttonInfo = new RepoItemInfo(this, "ProcessDropDownButton", "?/?/button[@controlname='processDropDownButton']", 30000, null, "30343855-5e78-48fa-922c-70bf0df86b7f");
@@ -2938,7 +2937,6 @@ namespace ShipWorksPerformanceTestSuite
                 _showadvancedoptions1Info = new RepoItemInfo(this, "ShowAdvancedOptions1", ".//link[@controlname='linkLabelAdvancedOptions']/?", 30000, null, "dec6521a-2dd4-4b05-bbb9-3f441df75bdd");
                 _iaccepttheagreement1Info = new RepoItemInfo(this, "IAcceptTheAgreement1", "element[@class='TNewNotebook']/?/?/element[@class='TNewNotebook']/element[@instance='0']/element[3]/radiobutton[@accessiblename='I accept the agreement']", 30000, null, "305b1191-e8b6-433d-971f-1f891c9219e6");
                 _installothercomponentsInfo = new RepoItemInfo(this, "InstallOtherComponents", "element[@controlname='OuterNotebook']/?/?/container[@controlname='MainPanel']/?/?/text[@accessiblename='Install other components']", 30000, null, "39537646-5490-4ee2-9695-06b2d7ff02c2");
-                _cprogramfilesshipworksinstallsshipInfo = new RepoItemInfo(this, "CProgramFilesShipWorksInstallsShip", "element[@controlname='OuterNotebook']//text[@controlname='DirEdit']/rawtext[@rawtext='C:\\Program Files\\ShipWorks Installs\\ShipWorks_6_5_0_12803']", 30000, null, "064d9bca-bd8c-4be5-876a-9bb1229aec3c");
             }
 
             /// <summary>
@@ -3758,34 +3756,10 @@ namespace ShipWorksPerformanceTestSuite
             }
 
             /// <summary>
-            /// The CProgramFilesShipWorksInstallsShip item.
-            /// </summary>
-            [RepositoryItem("064d9bca-bd8c-4be5-876a-9bb1229aec3c")]
-            public virtual Ranorex.RawText CProgramFilesShipWorksInstallsShip
-            {
-                get
-                {
-                    return _cprogramfilesshipworksinstallsshipInfo.CreateAdapter<Ranorex.RawText>(true);
-                }
-            }
-
-            /// <summary>
-            /// The CProgramFilesShipWorksInstallsShip item info.
-            /// </summary>
-            [RepositoryItemInfo("064d9bca-bd8c-4be5-876a-9bb1229aec3c")]
-            public virtual RepoItemInfo CProgramFilesShipWorksInstallsShipInfo
-            {
-                get
-                {
-                    return _cprogramfilesshipworksinstallsshipInfo;
-                }
-            }
-
-            /// <summary>
             /// The MainPanel folder.
             /// </summary>
             [RepositoryFolder("e3cc0729-d555-400e-bd34-c0e9b55572fd")]
-            public virtual ShipWorksPerformanceTestSuiteRepositoryFolders.MainPanelFolder1 MainPanel
+            public virtual PerformanceTestingRepositoryFolders.MainPanelFolder1 MainPanel
             {
                 get { return _mainpanel; }
             }
@@ -4229,7 +4203,7 @@ namespace ShipWorksPerformanceTestSuite
         [RepositoryFolder("a0730feb-1bff-41a9-a014-6b899188748a")]
         public partial class DetailedDatabaseSetupWizardAppFolder : RepoGenBaseFolder
         {
-            ShipWorksPerformanceTestSuiteRepositoryFolders.MainPanelFolder2 _mainpanel;
+            PerformanceTestingRepositoryFolders.MainPanelFolder2 _mainpanel;
             RepoItemInfo _showadvancedoptionsInfo;
             RepoItemInfo _nextInfo;
             RepoItemInfo _wizardpagedatabasenameInfo;
@@ -4242,7 +4216,7 @@ namespace ShipWorksPerformanceTestSuite
             public DetailedDatabaseSetupWizardAppFolder(RepoGenBaseFolder parentFolder) :
                     base("DetailedDatabaseSetupWizard", "/form[@controlname='DetailedDatabaseSetupWizard']", parentFolder, 30000, null, true, "a0730feb-1bff-41a9-a014-6b899188748a", "")
             {
-                _mainpanel = new ShipWorksPerformanceTestSuiteRepositoryFolders.MainPanelFolder2(this);
+                _mainpanel = new PerformanceTestingRepositoryFolders.MainPanelFolder2(this);
                 _showadvancedoptionsInfo = new RepoItemInfo(this, "ShowAdvancedOptions", ".//link[@controlname='linkLabelAdvancedOptions']/rawtext[@rawtext='Show advanced options']", 30000, null, "2158783c-ece5-42c5-8b1a-289802bcb5f9");
                 _nextInfo = new RepoItemInfo(this, "Next", "button[@controlname='next']", 30000, null, "d19c797e-84cf-44ee-a97b-3f1f01face11");
                 _wizardpagedatabasenameInfo = new RepoItemInfo(this, "WizardPageDatabaseName", "?/?/container[@controlname='wizardPageDatabaseName']", 30000, null, "8bcae869-d9ca-459b-abc0-45bb5a33bfc6");
@@ -4398,7 +4372,7 @@ namespace ShipWorksPerformanceTestSuite
             /// The MainPanel folder.
             /// </summary>
             [RepositoryFolder("b1f8def3-53e0-46de-a71b-d1048d85d7e4")]
-            public virtual ShipWorksPerformanceTestSuiteRepositoryFolders.MainPanelFolder2 MainPanel
+            public virtual PerformanceTestingRepositoryFolders.MainPanelFolder2 MainPanel
             {
                 get { return _mainpanel; }
             }

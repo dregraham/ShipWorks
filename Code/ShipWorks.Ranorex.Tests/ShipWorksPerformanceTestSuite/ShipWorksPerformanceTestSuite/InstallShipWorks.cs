@@ -17,6 +17,7 @@ using WinForms = System.Windows.Forms;
 using Ranorex;
 using Ranorex.Core;
 using Ranorex.Core.Testing;
+using Ranorex.Core.Repository;
 
 namespace ShipWorksPerformanceTestSuite
 {
@@ -29,6 +30,9 @@ namespace ShipWorksPerformanceTestSuite
         /// <summary>
         /// Constructs a new instance.
         /// </summary>
+        /// 
+        public static ShipWorksPerformanceTestSuiteRepository repo = ShipWorksPerformanceTestSuiteRepository.Instance;
+        
         public InstallShipWorks()
         {
             // Do not delete - a parameterless constructor is required!
@@ -47,6 +51,120 @@ namespace ShipWorksPerformanceTestSuite
             Delay.SpeedFactor = 1.0;
             
             Host.Local.RunApplication(@"C:\ShipWorks.exe");
+            
+            Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Move item 'SomeForm.IAcceptTheAgreement1' at Center.", repo.SomeForm.IAcceptTheAgreement1Info, new RecordItemIndex(0));
+            repo.SomeForm.IAcceptTheAgreement1.MoveTo();
+            Delay.Milliseconds(0);
+            
+            Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Click item 'SomeForm.IAcceptTheAgreement1' at Center.", repo.SomeForm.IAcceptTheAgreement1Info, new RecordItemIndex(1));
+            repo.SomeForm.IAcceptTheAgreement1.Click();
+            Delay.Milliseconds(1770);
+            
+            Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Move item 'SomeForm.Next' at Center.", repo.SomeForm.NextInfo, new RecordItemIndex(2));
+            repo.SomeForm.Next.MoveTo();
+            Delay.Milliseconds(0);
+            
+            Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Click item 'SomeForm.Next' at Center.", repo.SomeForm.NextInfo, new RecordItemIndex(3));
+            repo.SomeForm.Next.Click();
+            Delay.Milliseconds(2000);
+            
+            Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Move item 'SomeForm.DirEdit' at Center.", repo.SomeForm.DirEditInfo, new RecordItemIndex(4));
+            repo.SomeForm.DirEdit.MoveTo();
+            Delay.Milliseconds(0);
+            
+            Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Click item 'SomeForm.DirEdit' at Center.", repo.SomeForm.DirEditInfo, new RecordItemIndex(5));
+            repo.SomeForm.DirEdit.Click();
+            Delay.Milliseconds(2760);           
+           
+            
+            Report.Log(ReportLevel.Info, "Keyboard", "Key sequence 'C Drive' with focus on 'SomeForm.DirEdit'.", repo.SomeForm.DirEditInfo, new RecordItemIndex(5));
+            repo.SomeForm.DirEdit.PressKeys("{LControlKey down}{Akey}{LControlKey up}C:\\TestFolderSW");
+            Delay.Milliseconds(0);           
+            
+            Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Move item 'SomeForm.Next' at Center.", repo.SomeForm.NextInfo, new RecordItemIndex(7));
+            repo.SomeForm.Next.MoveTo();
+            Delay.Milliseconds(0);
+            
+            Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Click item 'SomeForm.Next' at Center.", repo.SomeForm.NextInfo, new RecordItemIndex(8));
+            repo.SomeForm.Next.Click();
+            Delay.Milliseconds(2320);
+            
+            Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Move item 'SomeForm.Start_Menu' at Center.", repo.SomeForm.Start_MenuInfo, new RecordItemIndex(9));
+            repo.SomeForm.Start_Menu.MoveTo();
+            Delay.Milliseconds(0);
+            
+            Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Click item 'SomeForm.Start_Menu' at Center.", repo.SomeForm.Start_MenuInfo, new RecordItemIndex(10));
+            repo.SomeForm.Start_Menu.Click();
+            Delay.Milliseconds(350);
+            
+            Report.Log(ReportLevel.Info, "Keyboard", "Key sequence '{LControlKey down}{Akey}{LControlKey up}Smoke Test' with focus on 'SomeForm.Start_Menu'.", repo.SomeForm.Start_MenuInfo, new RecordItemIndex(11));
+            repo.SomeForm.Start_Menu.PressKeys("{LControlKey down}{Akey}{LControlKey up}Smoke Test");
+            Delay.Milliseconds(0);
+            
+            Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Move item 'SomeForm.Next' at Center.", repo.SomeForm.NextInfo, new RecordItemIndex(12));
+            repo.SomeForm.Next.MoveTo();
+            Delay.Milliseconds(0);
+            
+            Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Click item 'SomeForm.Next' at Center.", repo.SomeForm.NextInfo, new RecordItemIndex(13));
+            repo.SomeForm.Next.Click();
+            Delay.Milliseconds(2120);
+            
+            Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Move item 'SomeForm.CreateADesktopIcon' at Center.", repo.SomeForm.CreateADesktopIconInfo, new RecordItemIndex(14));
+            repo.SomeForm.CreateADesktopIcon.MoveTo();
+            Delay.Milliseconds(0);
+            
+            Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Click item 'SomeForm.CreateADesktopIcon' at Center.", repo.SomeForm.CreateADesktopIconInfo, new RecordItemIndex(15));
+            repo.SomeForm.CreateADesktopIcon.Click();
+            Delay.Milliseconds(1320);
+            
+            Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Move item 'SomeForm.Next' at Center.", repo.SomeForm.NextInfo, new RecordItemIndex(16));
+            repo.SomeForm.Next.MoveTo();
+            Delay.Milliseconds(0);
+            
+            Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Click item 'SomeForm.Next' at Center.", repo.SomeForm.NextInfo, new RecordItemIndex(17));
+            repo.SomeForm.Next.Click();
+            Delay.Milliseconds(2530);
+            
+            Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Move item 'SomeForm.Install' at Center.", repo.SomeForm.InstallInfo, new RecordItemIndex(18));
+            repo.SomeForm.Install.MoveTo();
+            Delay.Milliseconds(0);
+            
+            Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Click item 'SomeForm.Install' at Center.", repo.SomeForm.InstallInfo, new RecordItemIndex(19));
+            repo.SomeForm.Install.Click();
+            Delay.Milliseconds(2230);
+            
+            // Moves mouse to Install other components title.
+            //Report.Log(ReportLevel.Info, "Mouse", "Moves mouse to Install other components title.\r\nMouse Left Move item 'SomeForm.InstallOtherComponents' at Center.", repo.SomeForm.InstallOtherComponentsInfo, new RecordItemIndex(20));
+            //repo.SomeForm.InstallOtherComponents.MoveTo(300);
+            //Delay.Milliseconds(200);
+            
+            // Clicks the Install other components title.
+            //Report.Log(ReportLevel.Info, "Mouse", "Clicks the Install other components title.\r\nMouse Left Click item 'SomeForm.InstallOtherComponents' at Center.", repo.SomeForm.InstallOtherComponentsInfo, new RecordItemIndex(21));
+            //repo.SomeForm.InstallOtherComponents.Click(300);
+            //Delay.Milliseconds(200);
+            
+            //Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Move item 'SomeForm.Next' at Center.", repo.SomeForm.NextInfo, new RecordItemIndex(22));
+            //repo.SomeForm.Next.MoveTo(300);
+            //Delay.Milliseconds(200);
+            
+            //Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Click item 'SomeForm.Next' at Center.", repo.SomeForm.NextInfo, new RecordItemIndex(23));
+            //repo.SomeForm.Next.Click(300);
+            //Delay.Milliseconds(200);
+            
+            //ClickFinish();
+            //Delay.Milliseconds(0);
+            
+            Report.Log(ReportLevel.Info, "Wait", "Waiting 20m to exist. Associated repository item: 'SomeForm.Finish'", repo.SomeForm.FinishInfo, new ActionTimeout(1200000), new RecordItemIndex(25));
+            repo.SomeForm.FinishInfo.WaitForExists(1200000);
+            
+            Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Move item 'SomeForm.Finish' at Center.", repo.SomeForm.FinishInfo, new RecordItemIndex(26));
+            repo.SomeForm.Finish.MoveTo(300);
+            Delay.Milliseconds(200);
+            
+            Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Click item 'SomeForm.Finish' at Center.", repo.SomeForm.FinishInfo, new RecordItemIndex(27));
+            repo.SomeForm.Finish.Click(300);
+            Delay.Milliseconds(200);
+         
         }
     }
 }
