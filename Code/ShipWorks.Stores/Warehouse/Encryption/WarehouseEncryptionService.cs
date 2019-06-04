@@ -42,11 +42,6 @@ namespace ShipWorks.Stores.Warehouse.Encryption
         /// </summary>
         public async Task<string> Encrypt(string plainText)
         {
-            if (Assembly.GetExecutingAssembly().GetName().Version == new Version(0, 0, 0, 0))
-            {
-                return plainText;
-            }
-
             GenerateDataKeyResponse keyResponse = await GenerateDataKey().ConfigureAwait(false);
 
             try
