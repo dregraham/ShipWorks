@@ -44,12 +44,13 @@ namespace ShipWorks.Shipping.Services
             {
                 try
                 {
+                    // Throw an exception if the service is UPS SurePost
                     if (shipment.Ups.Service.Equals(17) || 
                         shipment.Ups.Service.Equals(18) || 
                         shipment.Ups.Service.Equals(19) || 
                         shipment.Ups.Service.Equals(20))
                     {
-                        throw new Exception("UPS SurePost does not support returns");
+                        throw new ShippingException("UPS SurePost does not support returns");
                     }
                     ApplyReturnProfile(returnShipment, shipment.ReturnProfileID);
                 }
