@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<repository
+name="ShipWorksPerformanceTestSuiteRepository"
+id="7e065f7a-a759-472e-9183-5eb5699d7833"
+rxversion="8.1">
+  <codegen
+  classname="ShipWorksPerformanceTestSuiteRepository"
+  namespace="ShipWorksPerformanceTestSuite"/>
+  <rootfolder
+  name="Root"
+  id="0dd6cfa7-ba04-43ea-9088-05ef7ddaa3f1"
+  searchtimeout="30000ms"
+  capname="unknown"
+  isrooted="True"
+  usecache="True">
+    <basepath/>
+  </rootfolder>
+  <variables/>
+</repository>

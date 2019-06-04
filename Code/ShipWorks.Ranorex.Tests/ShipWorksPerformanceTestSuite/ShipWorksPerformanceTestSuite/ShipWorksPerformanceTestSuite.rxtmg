@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<modulegroupdoc
+rxversion="8.1">
+  <testsuiteentryhierarchy>
+    <flatlistofchildren>
+      <modulegroups
+      name="ShipWorksPerformanceTestSuite"
+      id="d22fed9a-a3c3-4276-bc51-4ccc983b0260"/>
+    </flatlistofchildren>
+    <childhierarchy>
+      <modulegroups
+      name="ShipWorksPerformanceTestSuite"
+      id="d22fed9a-a3c3-4276-bc51-4ccc983b0260"/>
+    </childhierarchy>
+  </testsuiteentryhierarchy>
+</modulegroupdoc>

@@ -1,0 +1,14 @@
+﻿<Properties>
+  <Array name="bookmarks" />
+  <Array name="files">
+    <Element value="ShipWorksPerformanceTestSuite.rxtst" />
+    <Element value="CopyStagingHosts.cs" />
+    <Element value="InstallShipWorks.cs" />
+  </Array>
+  <Properties name="projectSavedData">
+    <Properties name="customTool">
+      <runOnBuild value="False" />
+    </Properties>
+    <Array name="recentusercodeselections" />
+  </Properties>
+</Properties>
