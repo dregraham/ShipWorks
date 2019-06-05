@@ -108,9 +108,9 @@ namespace ShipWorks.Shipping.Services.ShipmentProcessorSteps
         {
             ShipmentEntity returnShipment = autoReturn.CreateReturn(shipment);
 
-            if (autoReturn.ApplyProfileException != null)
+            if (autoReturn.ReturnException != null)
             {
-                return new LabelRetrievalResult(result, returnShipment, autoReturn.ApplyProfileException);
+                return new LabelRetrievalResult(result, returnShipment, autoReturn.ReturnException);
             }
 
             try

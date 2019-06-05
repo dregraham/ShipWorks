@@ -1,5 +1,4 @@
-﻿using System;
-using Interapptive.Shared.ComponentRegistration;
+﻿using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
@@ -27,9 +26,9 @@ namespace ShipWorks.Shipping.Services
         }
 
         /// <summary>
-        /// An exception thrown while trying to apply a profile to the return shipment
+        /// An exception thrown while trying to create the return shipment
         /// </summary>
-        public ShippingException ApplyProfileException { get; private set; } = null;
+        public ShippingException ReturnException { get; private set; } = null;
 
         /// <summary>
         /// Creates a new auto return shipments
@@ -44,21 +43,25 @@ namespace ShipWorks.Shipping.Services
             {
                 try
                 {
-                    // Throw an exception if the service is UPS SurePost
-                    if (shipment.Ups != null &&
-                        (shipment.Ups.Service.Equals(17) ||
-                        shipment.Ups.Service.Equals(18) ||
-                        shipment.Ups.Service.Equals(19) ||
-                        shipment.Ups.Service.Equals(20)))
-                    {
-                        throw new ShippingException("UPS SurePost does not support returns");
-                    }
                     ApplyReturnProfile(returnShipment, shipment.ReturnProfileID);
                 }
-                catch (Exception ex)
+                catch (NotFoundException ex)
                 {
-                    ApplyProfileException = new ShippingException(ex.Message, ex);
+                    ReturnException = new ShippingException(ex.Message, ex);
                 }
+            }
+
+            // If the return shipment's service is UPS SurePost, set an error
+            // but don't overwrite an existing one
+            if ((returnShipment.ShipmentTypeCode == ShipmentTypeCode.UpsOnLineTools ||
+                returnShipment.ShipmentTypeCode == ShipmentTypeCode.UpsWorldShip) &&
+                (returnShipment.Ups.Service.Equals(17) ||
+                returnShipment.Ups.Service.Equals(18) ||
+                returnShipment.Ups.Service.Equals(19) ||
+                returnShipment.Ups.Service.Equals(20)) &&
+                ReturnException == null)
+            {
+                ReturnException = new ShippingException("UPS SurePost does not support returns.");
             }
 
             return returnShipment;
