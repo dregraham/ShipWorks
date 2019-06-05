@@ -388,7 +388,7 @@ namespace ShipWorks.Shipping.Editing
             // Always show it if any types support returns
             sectionReturns.Visible = true;
 
-            LoadInitialReturnValues(loadedTypes.Count);
+            LoadInitialReturnValues();
 
             // Only if there all the same type can we create the type-specific control
             if (loadedTypes.Count == 1)
@@ -424,22 +424,17 @@ namespace ShipWorks.Shipping.Editing
         /// <summary>
         /// Load the return section values into the UI
         /// </summary>
-        private void LoadInitialReturnValues(int shipmentTypes)
+        private void LoadInitialReturnValues()
         {
-            // Don't refresh the return profile menu if more than one shipment is selected
-            // because doing so will cause the selected profiles to be changed
-            if (shipmentTypes == 1)
-            {
-                RefreshIncludeReturnProfileMenu(shipmentTypeCode);
-                returnProfileID.DisplayMember = "Value";
-                returnProfileID.ValueMember = "Key";
-            }
-
             // Load initial values
             using (MultiValueScope scope = new MultiValueScope())
             {
                 foreach (ShipmentEntity shipment in LoadedShipments)
                 {
+                    // Refresh the menu for each shipment to prevent changing the selection
+                    // when multiple types of shipments are selected
+                    RefreshIncludeReturnProfileMenu(shipment.ShipmentTypeCode);
+
                     returnShipment.ApplyMultiCheck(shipment.ReturnShipment);
                     includeReturn.ApplyMultiCheck(shipment.IncludeReturn);
                     applyReturnProfile.ApplyMultiCheck(shipment.ApplyReturnProfile);
@@ -806,6 +801,10 @@ namespace ShipWorks.Shipping.Editing
             // Reset data sources because calling resetbindings() doesn't work
             bindingSource.DataSource = includeReturnProfiles;
             returnProfileID.DataSource = bindingSource;
+
+            // Update display settings
+            returnProfileID.DisplayMember = "Value";
+            returnProfileID.ValueMember = "Key";
         }
 
         /// <summary>
