@@ -1,6 +1,7 @@
 using System;
 using System.Threading.Tasks;
 using Autofac.Extras.Moq;
+using Interapptive.Shared.Security;
 using Moq;
 using Newtonsoft.Json;
 using ShipWorks.Data.Model.EntityClasses;
@@ -21,7 +22,7 @@ namespace ShipWorks.Stores.Tests.Warehouse
         {
             mock = AutoMockExtensions.GetLooseThatReturnsMocks();
         }
-        
+
         [Fact]
         public async Task Create_CreatesStoreDataFromStoreEntity()
         {
@@ -37,13 +38,16 @@ namespace ShipWorks.Stores.Tests.Warehouse
             var downloadStartingPoint = mock.Mock<IDownloadStartingPoint>();
             downloadStartingPoint.Setup(x => x.OnlineLastModified(amazonStoreEntity)).ReturnsAsync(DateTime.Now);
 
+
+            var encryptionProviderFactory = mock.Mock<IEncryptionProviderFactory>();
+
             var storeTypeManager = mock.Mock<IStoreTypeManager>();
             var encryptionService = mock.Mock<IWarehouseEncryptionService>();
 
-            StoreDtoFactory testObject = new StoreDtoFactory(downloadStartingPoint.Object, storeTypeManager.Object, encryptionService.Object);
+            StoreDtoFactory testObject = new StoreDtoFactory(downloadStartingPoint.Object, storeTypeManager.Object, encryptionService.Object,encryptionProviderFactory.Object);
 
             var storeDto = await testObject.Create(amazonStoreEntity);
-            
+
             Assert.Equal((int) StoreTypeCode.Amazon, storeDto.StoreType);
             Assert.IsAssignableFrom<AmazonStore>(storeDto);
         }
