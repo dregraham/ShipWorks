@@ -99,7 +99,9 @@ namespace ShipWorksPerformanceTestSuite
             Delay.Milliseconds(0);
             
             //V-QA-BEEFCAKE1
-            Keyboard.Press("MADKE-PC\\SQL2016");
+            //localhost\ranorex
+            //MADKE-PC\\SQL2016
+            Keyboard.Press("localhost\\ranorex");
             Delay.Milliseconds(0);
             
             Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Move item 'DetailedDatabaseSetupWizard.Next' at Center.", repo.DetailedDatabaseSetupWizard.NextInfo, new RecordItemIndex(21));
@@ -124,9 +126,6 @@ namespace ShipWorksPerformanceTestSuite
             
             Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Click item 'DetailedDatabaseSetupWizard.MainPanel.DatabaseName1' at Center.", repo.DetailedDatabaseSetupWizard.MainPanel.DatabaseName1Info, new RecordItemIndex(26));
             repo.DetailedDatabaseSetupWizard.MainPanel.DatabaseName1.Click(1000);
-            Delay.Milliseconds(0);
-            
-            //Key_sequence_DatabaseName(repo.DetailedDatabaseSetupWizard.MainPanel.DatabaseName1Info);
             Delay.Milliseconds(0);
             
             Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Move item 'DetailedDatabaseSetupWizard.Next' at Center.", repo.DetailedDatabaseSetupWizard.NextInfo, new RecordItemIndex(28));

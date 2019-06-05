@@ -1387,7 +1387,7 @@ XrLp0EM2aG+RntUiB+ZT6fxfIsRPbYnQgbXhGFYAAAAASUVORK5CYII=
 			name="Next"
 			refimgid="ce62c168-e695-4f27-a39d-fab6b393e971"
 			searchtimeout="30000ms">
-				/form[@title='Setup - ShipWorks&#174;']/?/?/button[@accessiblename='Next &amp;gt;']
+				/form[@title='Setup - ShipWorks&#174;']/?/button[@accessiblename='Next &gt;']
 			</item>
 			<item
 			addcaps="text,nativewindow,delphicontrol"
@@ -1409,12 +1409,12 @@ XrLp0EM2aG+RntUiB+ZT6fxfIsRPbYnQgbXhGFYAAAAASUVORK5CYII=
 			</item>
 			<item
 			addcaps="checkbox,accessible,accessibletreeitem"
-			capname="checkbox"
+			capname="rawtext"
 			id="db3b2956-c60c-4693-8667-2b7a01032486"
 			name="CreateADesktopIcon"
 			refimgid="9758cf57-e303-4729-a0c1-3dfb0b155329"
 			searchtimeout="30000ms">
-				/form[@title='Setup - ShipWorks&#174;']/element[@class='TNewNotebook']/?/?/element[@class='TNewNotebook']/element[@instance='0']/?/?/tree[@accessiblename~'^Select\ the\ additional\ tas']/checkbox[@accessiblename='Create a &amp;amp;Desktop icon']
+				/form[@title='Setup - ShipWorks&#174;']/element[@controlname='OuterNotebook']/?/?/element[@controlname='InnerNotebook']/element[@controlname='SelectTasksPage']/element[@controlname='TasksList']/rawtext[@rawtext='Create a &amp;Desktop icon']
 			</item>
 			<item
 			addcaps="button,accessible"
@@ -1662,6 +1662,16 @@ XrLp0EM2aG+RntUiB+ZT6fxfIsRPbYnQgbXhGFYAAAAASUVORK5CYII=
 			refpath="/form[@controlname='WizardForm']/element[@controlname='OuterNotebook']/element/element/element[@controlname='SelectDirPage']/text/rawtext[@rawtext='C:\Program Files\ShipWorks Installs\ShipWorks_6_5_0_12803']"
 			searchtimeout="30000ms">
 				/form[@title='Setup - ShipWorks&#174;']/element[@controlname='OuterNotebook']//text[@controlname='DirEdit']/rawtext[@rawtext='C:\Program Files\ShipWorks Installs\ShipWorks_6_5_0_12803']
+			</item>
+			<item
+			addcaps="unknown,rawtext"
+			capname="rawtext"
+			id="6652577f-7fe1-4244-aa0d-63731d18a76c"
+			name="CreateADesktopIcon1"
+			refimgid="9d75bdca-2667-43aa-bd69-3e1c14ca89b9"
+			refpath="/form[@controlname='WizardForm']/element[@controlname='OuterNotebook']/element/element/element[@controlname='SelectTasksPage']/element[@controlname='TasksList']/rawtext[1]"
+			searchtimeout="30000ms">
+				/form[@title='Setup - ShipWorks&#174;']/element[@controlname='OuterNotebook']//element[@controlname='SelectTasksPage']/element[@controlname='TasksList']/rawtext[1]
 			</item>
 			<basepath>
 				/form[@title='Setup - ShipWorks&#174;']
@@ -2160,6 +2170,56 @@ XrLp0EM2aG+RntUiB+ZT6fxfIsRPbYnQgbXhGFYAAAAASUVORK5CYII=
 			</item>
 			<basepath>
 				/form[@name='What''s next?']
+			</basepath>
+			<icon>
+				iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACx
+jwv8YQUAAAAJcEhZcwAADsQAAA7EAZUrDhsAAALYSURBVDhPfZF9LNRxHMe//5SnWhNZpglLOUeL
+G2mr1mVqJY1i62ZSCjWTodjKQ62QpgersUZxqpnKQ7o8n4ehUsk5bpwT5dyT54iw3Lufn9+S3ea9
+vfZ9+rxfvz9+ZLW4R/GdLAIz3Nx87xowV6vnQ0c/q3dkPr5VPlOZ+2X0V6ZQjjtFMvAetMD2qrDH
++lpNgVlY0R5mXDdVPZMJtbIp9I3MonvoN+r6psD/qEJAVitYiUKQkBKQs/khzLhuEgSy8OSGIQh7
+JpHXNoakeg3CC6Ug54uXyqFvQAJz/Jlx3YRmNp6+UtyHlIoBmhhqf/KpeLm8CC/bmxnXjW9cwfGL
+2WJcyGqnWdzvT/+8UuDzwIMZ101kairXK+U9jt9uYmiG/c3G/wSlOOd9+eLjEM4apkKIpCWXrR3O
+u6yVHqmV1PHm9iUJsDGqEiYUptHUGlsNEkwJKDyjsyFOjIA04MTs1527atpd3WKI9kfcHDQvgIlm
+aEcFmJeGorU+HmnPbuBQQhpsY0pxPUeI76/5GIoOQ+9RL3wLCoLU8xhEtuwF8qfNRKmV8aCV38eC
+yBwLiiSoqjdDWb4WqgJXDD9JwmRjCTTP70KVdQuah/cg2rodImu7RWbIeJOP5OenYMx0pWK8yQ/T
+kngMlq2Folwfcr4t+mPPQJmZCHnyJXyL4kEeGQaR1Q6027AWmSCqKpdmdTUH6mpnqKucMP7JjxLo
+0YKBHHNIeR7o5rmj+9RBmn5/X/rrtMCaNUwUZWYCRfkmqmBKM9LoTAn0lwR8Y0i4LujkcpY4wIHs
+MHdZYMNSEnWlYYiywnBMUW5EFQ2hqbX8JxjMX98gcbKv7XB0gNiRDbEDG10uHEZgN00JIuhfmR5O
+9OTvDIOVFQadqioTKMr01AMCfR79SOXtFhuHzm2sLLE1a7bTjo0OG7uXhZaW5szzypQ9Wrc3L5oY
+MccVydhgafzKwmo3c6RCyF+QF9ssNPjvRAAAAABJRU5ErkJggg==
+			</icon>
+		</appfolder>
+		<appfolder
+		addcaps="form,nativewindow,wpfwin32element,wpfelement,wpfgroupelement"
+		capname="form"
+		id="376ea29c-f8ec-4068-8e0e-2e4965479baa"
+		isrooted="True"
+		name="ShipWorks1"
+		refpath="/form[@title='ShipWorks' and @processname='ShipWorks' and @win32ownerwindowlevel='1']"
+		searchtimeout="30000ms"
+		usecache="True">
+			<item
+			addcaps="text,wpfelement,wpfgroupelement"
+			capname="text"
+			id="2c86dc12-14ed-4db9-ad18-f36626d21c23"
+			name="ShipWorksHasEncounteredAProblemAnd"
+			refimgid="197e6da9-3ef4-4fe5-b910-f8423ed0047c"
+			refpath="/form[@title='ShipWorks' and @processname='ShipWorks' and @win32ownerwindowlevel='1']/text[@caption~'^ShipWorks\ has\ encountered']"
+			searchtimeout="30000ms">
+				/form[@processname='ShipWorks' and @win32ownerwindowlevel='1']/text[@caption~'^ShipWorks\ has\ encountered']
+			</item>
+			<item
+			addcaps="button,wpfelement,wpfgroupelement"
+			capname="button"
+			id="1b07bfdb-3b9d-41f6-9495-7c68fe754d5d"
+			name="ButtonOK"
+			refimgid="8413da96-e0f2-4c6e-8290-7a80d326ac5d"
+			refpath="/form[@title='ShipWorks' and @processname='ShipWorks' and @win32ownerwindowlevel='1']/text/container[2]/button[@text='OK']"
+			searchtimeout="30000ms">
+				/form[@processname='ShipWorks' and @win32ownerwindowlevel='1']/text[@caption~'^ShipWorks\ has\ encountered']/?/?/button[@text='OK']
+			</item>
+			<basepath>
+				/form[@processname='ShipWorks' and @win32ownerwindowlevel='1']
 			</basepath>
 			<icon>
 				iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACx

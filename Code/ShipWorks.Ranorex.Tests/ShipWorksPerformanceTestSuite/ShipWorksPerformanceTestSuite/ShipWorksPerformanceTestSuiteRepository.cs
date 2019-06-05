@@ -49,6 +49,7 @@ namespace ShipWorksPerformanceTestSuite
         ShipWorksPerformanceTestSuiteRepositoryFolders.ShipWorksAboutDlgAppFolder _shipworksaboutdlg;
         ShipWorksPerformanceTestSuiteRepositoryFolders.LogonDlgAppFolder _logondlg;
         ShipWorksPerformanceTestSuiteRepositoryFolders.WhatsNextAppFolder _whatsnext;
+        ShipWorksPerformanceTestSuiteRepositoryFolders.ShipWorks1AppFolder _shipworks1;
 
         /// <summary>
         /// Gets the singleton class instance representing the ShipWorksPerformanceTestSuiteRepository element repository.
@@ -87,6 +88,7 @@ namespace ShipWorksPerformanceTestSuite
             _shipworksaboutdlg = new ShipWorksPerformanceTestSuiteRepositoryFolders.ShipWorksAboutDlgAppFolder(this);
             _logondlg = new ShipWorksPerformanceTestSuiteRepositoryFolders.LogonDlgAppFolder(this);
             _whatsnext = new ShipWorksPerformanceTestSuiteRepositoryFolders.WhatsNextAppFolder(this);
+            _shipworks1 = new ShipWorksPerformanceTestSuiteRepositoryFolders.ShipWorks1AppFolder(this);
         }
 
 #region Variables
@@ -301,6 +303,15 @@ namespace ShipWorksPerformanceTestSuite
         public virtual ShipWorksPerformanceTestSuiteRepositoryFolders.WhatsNextAppFolder WhatsNext
         {
             get { return _whatsnext; }
+        }
+
+        /// <summary>
+        /// The ShipWorks1 folder.
+        /// </summary>
+        [RepositoryFolder("376ea29c-f8ec-4068-8e0e-2e4965479baa")]
+        public virtual ShipWorksPerformanceTestSuiteRepositoryFolders.ShipWorks1AppFolder ShipWorks1
+        {
+            get { return _shipworks1; }
         }
     }
 
@@ -3027,6 +3038,7 @@ namespace ShipWorksPerformanceTestSuite
             RepoItemInfo _iaccepttheagreement1Info;
             RepoItemInfo _installothercomponentsInfo;
             RepoItemInfo _cprogramfilesshipworksinstallsshipInfo;
+            RepoItemInfo _createadesktopicon1Info;
 
             /// <summary>
             /// Creates a new SomeForm  folder.
@@ -3049,10 +3061,10 @@ namespace ShipWorksPerformanceTestSuite
                 _teamemailInfo = new RepoItemInfo(this, "TeamEmail", ".//container[@name='Ribbon']/container[@name='Lower Ribbon']/?/?/container[@name='Quick Steps' and @classname='NetUIChunk']/container[@name='Quick Steps']/?/?/container[@name='Quick Steps']/table[@classname='NetUIGalleryButtonGroup']/listitem[@name='Team Email']", 30000, null, "f7b8b738-6cab-4110-b83c-a7ba9bd8033b");
                 _navigationInfo = new RepoItemInfo(this, "Navigation", "container[@caption='MsoDockLeft']/container[@caption='Navigation']//element[@name='Navigation']", 30000, null, "3384af99-aac6-4885-9223-6495837dc6d7");
                 _iaccepttheagreementInfo = new RepoItemInfo(this, "IAcceptTheAgreement", "element[@controlname='OuterNotebook']//element[@controlname='LicenseAcceptedRadio']/radiobutton[@accessiblename='I accept the agreement']", 30000, null, "39866f9b-02fc-4a13-a300-0750ceb1a3fe");
-                _nextInfo = new RepoItemInfo(this, "Next", "?/?/button[@accessiblename='Next &gt;']", 30000, null, "7e7a9dba-27af-4a1c-8361-2999e6b49a10");
+                _nextInfo = new RepoItemInfo(this, "Next", "?/button[@accessiblename='Next >']", 30000, null, "7e7a9dba-27af-4a1c-8361-2999e6b49a10");
                 _direditInfo = new RepoItemInfo(this, "DirEdit", "element[@class='TNewNotebook']/?/?/element[@class='TNewNotebook']/element[@instance='0']/text[@class='TEdit']", 30000, null, "22462bf9-1051-400a-8e45-f88d7cd689b4");
                 _start_menuInfo = new RepoItemInfo(this, "Start_Menu", "element[@class='TNewNotebook']/?/?/element[@class='TNewNotebook']/element[@instance='0']/element[@class='TNewEdit']", 30000, null, "73963ab2-3d7f-4873-ae06-c84a11365c90");
-                _createadesktopiconInfo = new RepoItemInfo(this, "CreateADesktopIcon", "element[@class='TNewNotebook']/?/?/element[@class='TNewNotebook']/element[@instance='0']/?/?/tree[@accessiblename~'^Select\\ the\\ additional\\ tas']/checkbox[@accessiblename='Create a &amp;Desktop icon']", 30000, null, "db3b2956-c60c-4693-8667-2b7a01032486");
+                _createadesktopiconInfo = new RepoItemInfo(this, "CreateADesktopIcon", "element[@controlname='OuterNotebook']/?/?/element[@controlname='InnerNotebook']/element[@controlname='SelectTasksPage']/element[@controlname='TasksList']/rawtext[@rawtext='Create a &Desktop icon']", 30000, null, "db3b2956-c60c-4693-8667-2b7a01032486");
                 _installInfo = new RepoItemInfo(this, "Install", "?/?/button[@accessiblename='Install']", 30000, null, "af557b2d-c8fe-46cc-a819-a569b68732f1");
                 _finishInfo = new RepoItemInfo(this, "Finish", "?/?/button[@accessiblename='Finish']", 30000, null, "753494ab-8882-4410-a176-f9ea6a3c6b68");
                 _getsetupInfo = new RepoItemInfo(this, "GetSetUp", ".//button[@controlname='detailedSetup']/rawtext[@rawtext='Get set up &gt;']", 30000, null, "9416ffdb-dcb0-46ae-98ad-0b02ec9468dc");
@@ -3070,6 +3082,7 @@ namespace ShipWorksPerformanceTestSuite
                 _iaccepttheagreement1Info = new RepoItemInfo(this, "IAcceptTheAgreement1", "element[@class='TNewNotebook']/?/?/element[@class='TNewNotebook']/element[@instance='0']/element[3]/radiobutton[@accessiblename='I accept the agreement']", 30000, null, "305b1191-e8b6-433d-971f-1f891c9219e6");
                 _installothercomponentsInfo = new RepoItemInfo(this, "InstallOtherComponents", "element[@controlname='OuterNotebook']/?/?/container[@controlname='MainPanel']/?/?/text[@accessiblename='Install other components']", 30000, null, "39537646-5490-4ee2-9695-06b2d7ff02c2");
                 _cprogramfilesshipworksinstallsshipInfo = new RepoItemInfo(this, "CProgramFilesShipWorksInstallsShip", "element[@controlname='OuterNotebook']//text[@controlname='DirEdit']/rawtext[@rawtext='C:\\Program Files\\ShipWorks Installs\\ShipWorks_6_5_0_12803']", 30000, null, "064d9bca-bd8c-4be5-876a-9bb1229aec3c");
+                _createadesktopicon1Info = new RepoItemInfo(this, "CreateADesktopIcon1", "element[@controlname='OuterNotebook']//element[@controlname='SelectTasksPage']/element[@controlname='TasksList']/rawtext[1]", 30000, null, "6652577f-7fe1-4244-aa0d-63731d18a76c");
             }
 
             /// <summary>
@@ -3508,11 +3521,11 @@ namespace ShipWorksPerformanceTestSuite
             /// The CreateADesktopIcon item.
             /// </summary>
             [RepositoryItem("db3b2956-c60c-4693-8667-2b7a01032486")]
-            public virtual Ranorex.CheckBox CreateADesktopIcon
+            public virtual Ranorex.RawText CreateADesktopIcon
             {
                 get
                 {
-                    return _createadesktopiconInfo.CreateAdapter<Ranorex.CheckBox>(true);
+                    return _createadesktopiconInfo.CreateAdapter<Ranorex.RawText>(true);
                 }
             }
 
@@ -3933,6 +3946,30 @@ namespace ShipWorksPerformanceTestSuite
                 get
                 {
                     return _cprogramfilesshipworksinstallsshipInfo;
+                }
+            }
+
+            /// <summary>
+            /// The CreateADesktopIcon1 item.
+            /// </summary>
+            [RepositoryItem("6652577f-7fe1-4244-aa0d-63731d18a76c")]
+            public virtual Ranorex.RawText CreateADesktopIcon1
+            {
+                get
+                {
+                    return _createadesktopicon1Info.CreateAdapter<Ranorex.RawText>(true);
+                }
+            }
+
+            /// <summary>
+            /// The CreateADesktopIcon1 item info.
+            /// </summary>
+            [RepositoryItemInfo("6652577f-7fe1-4244-aa0d-63731d18a76c")]
+            public virtual RepoItemInfo CreateADesktopIcon1Info
+            {
+                get
+                {
+                    return _createadesktopicon1Info;
                 }
             }
 
@@ -5185,6 +5222,98 @@ namespace ShipWorksPerformanceTestSuite
                 get
                 {
                     return _imageInfo;
+                }
+            }
+        }
+
+        /// <summary>
+        /// The ShipWorks1AppFolder folder.
+        /// </summary>
+        [RepositoryFolder("376ea29c-f8ec-4068-8e0e-2e4965479baa")]
+        public partial class ShipWorks1AppFolder : RepoGenBaseFolder
+        {
+            RepoItemInfo _shipworkshasencounteredaproblemandInfo;
+            RepoItemInfo _buttonokInfo;
+
+            /// <summary>
+            /// Creates a new ShipWorks1  folder.
+            /// </summary>
+            public ShipWorks1AppFolder(RepoGenBaseFolder parentFolder) :
+                    base("ShipWorks1", "/form[@processname='ShipWorks' and @win32ownerwindowlevel='1']", parentFolder, 30000, null, true, "376ea29c-f8ec-4068-8e0e-2e4965479baa", "")
+            {
+                _shipworkshasencounteredaproblemandInfo = new RepoItemInfo(this, "ShipWorksHasEncounteredAProblemAnd", "text[@caption~'^ShipWorks\\ has\\ encountered']", 30000, null, "2c86dc12-14ed-4db9-ad18-f36626d21c23");
+                _buttonokInfo = new RepoItemInfo(this, "ButtonOK", "text[@caption~'^ShipWorks\\ has\\ encountered']/?/?/button[@text='OK']", 30000, null, "1b07bfdb-3b9d-41f6-9495-7c68fe754d5d");
+            }
+
+            /// <summary>
+            /// The Self item.
+            /// </summary>
+            [RepositoryItem("376ea29c-f8ec-4068-8e0e-2e4965479baa")]
+            public virtual Ranorex.Form Self
+            {
+                get
+                {
+                    return _selfInfo.CreateAdapter<Ranorex.Form>(true);
+                }
+            }
+
+            /// <summary>
+            /// The Self item info.
+            /// </summary>
+            [RepositoryItemInfo("376ea29c-f8ec-4068-8e0e-2e4965479baa")]
+            public virtual RepoItemInfo SelfInfo
+            {
+                get
+                {
+                    return _selfInfo;
+                }
+            }
+
+            /// <summary>
+            /// The ShipWorksHasEncounteredAProblemAnd item.
+            /// </summary>
+            [RepositoryItem("2c86dc12-14ed-4db9-ad18-f36626d21c23")]
+            public virtual Ranorex.Text ShipWorksHasEncounteredAProblemAnd
+            {
+                get
+                {
+                    return _shipworkshasencounteredaproblemandInfo.CreateAdapter<Ranorex.Text>(true);
+                }
+            }
+
+            /// <summary>
+            /// The ShipWorksHasEncounteredAProblemAnd item info.
+            /// </summary>
+            [RepositoryItemInfo("2c86dc12-14ed-4db9-ad18-f36626d21c23")]
+            public virtual RepoItemInfo ShipWorksHasEncounteredAProblemAndInfo
+            {
+                get
+                {
+                    return _shipworkshasencounteredaproblemandInfo;
+                }
+            }
+
+            /// <summary>
+            /// The ButtonOK item.
+            /// </summary>
+            [RepositoryItem("1b07bfdb-3b9d-41f6-9495-7c68fe754d5d")]
+            public virtual Ranorex.Button ButtonOK
+            {
+                get
+                {
+                    return _buttonokInfo.CreateAdapter<Ranorex.Button>(true);
+                }
+            }
+
+            /// <summary>
+            /// The ButtonOK item info.
+            /// </summary>
+            [RepositoryItemInfo("1b07bfdb-3b9d-41f6-9495-7c68fe754d5d")]
+            public virtual RepoItemInfo ButtonOKInfo
+            {
+                get
+                {
+                    return _buttonokInfo;
                 }
             }
         }

@@ -60,7 +60,7 @@ namespace ShipWorksPerformanceTestSuite
             
             Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Click item 'SomeForm.IAcceptTheAgreement1' at Center.", repo.SomeForm.IAcceptTheAgreement1Info, new RecordItemIndex(1));
             repo.SomeForm.IAcceptTheAgreement1.Click();
-            Delay.Milliseconds(1770);
+            Delay.Milliseconds(0);
             
             Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Move item 'SomeForm.Next' at Center.", repo.SomeForm.NextInfo, new RecordItemIndex(2));
             repo.SomeForm.Next.MoveTo();
@@ -68,7 +68,7 @@ namespace ShipWorksPerformanceTestSuite
             
             Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Click item 'SomeForm.Next' at Center.", repo.SomeForm.NextInfo, new RecordItemIndex(3));
             repo.SomeForm.Next.Click();
-            Delay.Milliseconds(2000);
+            Delay.Milliseconds(0);
             
             Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Move item 'SomeForm.DirEdit' at Center.", repo.SomeForm.DirEditInfo, new RecordItemIndex(4));
             repo.SomeForm.DirEdit.MoveTo();
@@ -76,11 +76,11 @@ namespace ShipWorksPerformanceTestSuite
             
             Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Click item 'SomeForm.DirEdit' at Center.", repo.SomeForm.DirEditInfo, new RecordItemIndex(5));
             repo.SomeForm.DirEdit.Click();
-            Delay.Milliseconds(2760);      
+            Delay.Milliseconds(0);      
             
             Report.Log(ReportLevel.Info, "Keyboard", "Key sequence 'C Drive' with focus on 'SomeForm.DirEdit'.", repo.SomeForm.DirEditInfo, new RecordItemIndex(5));
             repo.SomeForm.DirEdit.PressKeys("{LControlKey down}{Akey}{LControlKey up}C:\\TestFolderSW");
-            Delay.Milliseconds(500);           
+            Delay.Milliseconds(0);           
             
             Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Move item 'SomeForm.Next' at Center.", repo.SomeForm.NextInfo, new RecordItemIndex(7));
             repo.SomeForm.Next.MoveTo();
@@ -88,7 +88,7 @@ namespace ShipWorksPerformanceTestSuite
             
             Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Click item 'SomeForm.Next' at Center.", repo.SomeForm.NextInfo, new RecordItemIndex(8));
             repo.SomeForm.Next.Click();
-            Delay.Milliseconds(2320);
+            Delay.Milliseconds(0);
             
             Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Move item 'SomeForm.Start_Menu' at Center.", repo.SomeForm.Start_MenuInfo, new RecordItemIndex(9));
             repo.SomeForm.Start_Menu.MoveTo();
@@ -148,15 +148,15 @@ namespace ShipWorksPerformanceTestSuite
             
             catch(Exception e)
             {           	
-            		Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Click item 'SomeForm.Close2' at Center.", repo.SomeForm.Close2Info, new RecordItemIndex(6));
-           			repo.SomeForm.Close2.Click();
-            		Delay.Milliseconds(0);
+            	Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Click item 'SomeForm.Close2' at Center.", repo.SomeForm.Close2Info, new RecordItemIndex(6));
+           		repo.SomeForm.Close2.Click();
+            	Delay.Milliseconds(0);
             
-           			Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Click item 'ExitSetup.ButtonYes' at Center.", repo.ExitSetup.ButtonYesInfo, new RecordItemIndex(9));
-           			repo.ExitSetup.ButtonYes.Click();
-          			Delay.Milliseconds(0);         		 
-					 throw e;    
-            	}             	      	
-            }         
-        }        
-    }
+           		Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Click item 'ExitSetup.ButtonYes' at Center.", repo.ExitSetup.ButtonYesInfo, new RecordItemIndex(9));
+           		repo.ExitSetup.ButtonYes.Click();
+          		Delay.Milliseconds(0);         		 
+				throw e;    
+           	}             	      	
+       }         
+   }        
+}

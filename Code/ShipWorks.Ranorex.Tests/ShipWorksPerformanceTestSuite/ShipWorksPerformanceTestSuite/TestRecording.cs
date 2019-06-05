@@ -79,46 +79,12 @@ namespace ShipWorksPerformanceTestSuite
 
             Init();
 
-            Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Click item 'ProgressDlg.HeaderImage' at 8;27.", repo.ProgressDlg.HeaderImageInfo, new RecordItemIndex(0));
-            repo.ProgressDlg.HeaderImage.Click("8;27");
+            Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Click item 'ShipWorks1.ShipWorksHasEncounteredAProblemAnd' at Center.", repo.ShipWorks1.ShipWorksHasEncounteredAProblemAndInfo, new RecordItemIndex(0));
+            repo.ShipWorks1.ShipWorksHasEncounteredAProblemAnd.Click();
             Delay.Milliseconds(0);
             
-            Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Click item 'ProgressDlg.ButtonOk' at Center.", repo.ProgressDlg.ButtonOkInfo, new RecordItemIndex(1));
-            repo.ProgressDlg.ButtonOk.Click();
-            Delay.Milliseconds(0);
-            
-            Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Click item 'DatabaseUpdateWizard.Next' at 45;7.", repo.DatabaseUpdateWizard.NextInfo, new RecordItemIndex(2));
-            repo.DatabaseUpdateWizard.Next.Click("45;7");
-            Delay.Milliseconds(0);
-            
-            Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Click item 'ProgressDlg.HeaderImage' at Center.", repo.ProgressDlg.HeaderImageInfo, new RecordItemIndex(3));
-            repo.ProgressDlg.HeaderImage.Click();
-            Delay.Milliseconds(0);
-            
-            Validate_ButtonOk(repo.ProgressDlg.ButtonOkInfo);
-            Delay.Milliseconds(0);
-            
-            Report.Log(ReportLevel.Info, "Validation", "Validating AttributeEqual (Text='OK') on item 'ProgressDlg.ButtonOk'.", repo.ProgressDlg.ButtonOkInfo, new RecordItemIndex(5));
-            Validate.AttributeEqual(repo.ProgressDlg.ButtonOkInfo, "Text", "OK");
-            Delay.Milliseconds(100);
-            
-            Report.Log(ReportLevel.Info, "Validation", "Validating AttributeEqual (Enabled='True') on item 'ProgressDlg.ButtonOk'.", repo.ProgressDlg.ButtonOkInfo, new RecordItemIndex(6));
-            Validate.AttributeEqual(repo.ProgressDlg.ButtonOkInfo, "Enabled", "True");
-            Delay.Milliseconds(100);
-            
-            Report.Log(ReportLevel.Info, "Wait", "Waiting 5s for the attribute 'Enabled' to equal the specified value 'True'. Associated repository item: 'ProgressDlg.ButtonOk'", repo.ProgressDlg.ButtonOkInfo, new RecordItemIndex(7));
-            repo.ProgressDlg.ButtonOkInfo.WaitForAttributeEqual(5000, "Enabled", "True");
-            
-            Report.Log(ReportLevel.Info, "Validation", "Validating AttributeEqual (Text='OK') on item 'ProgressDlg.ButtonOk'.", repo.ProgressDlg.ButtonOkInfo, new RecordItemIndex(8));
-            Validate.AttributeEqual(repo.ProgressDlg.ButtonOkInfo, "Text", "OK");
-            Delay.Milliseconds(100);
-            
-            Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Click item 'ExitSetup.ButtonYes' at Center.", repo.ExitSetup.ButtonYesInfo, new RecordItemIndex(9));
-            repo.ExitSetup.ButtonYes.Click();
-            Delay.Milliseconds(0);
-            
-            Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Click item 'SomeForm.Button' at Center.", repo.SomeForm.ButtonInfo, new RecordItemIndex(10));
-            repo.SomeForm.Button.Click();
+            Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Click item 'ShipWorks1.ButtonOK' at Center.", repo.ShipWorks1.ButtonOKInfo, new RecordItemIndex(1));
+            repo.ShipWorks1.ButtonOK.Click();
             Delay.Milliseconds(0);
             
         }
