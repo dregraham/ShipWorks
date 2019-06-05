@@ -802,6 +802,16 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(AmazonOrderFieldIndex.Custom5);}
 		}
+		/// <summary>Creates a new AmazonOrderEntity.HubOrderID field instance</summary>
+		public static EntityField2 HubOrderID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(AmazonOrderFieldIndex.HubOrderID);}
+		}
+		/// <summary>Creates a new AmazonOrderEntity.HubSequence field instance</summary>
+		public static EntityField2 HubSequence
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(AmazonOrderFieldIndex.HubSequence);}
+		}
 		/// <summary>Creates a new AmazonOrderEntity.OrderID field instance</summary>
 		public static EntityField2 OrderID
 		{
@@ -3457,6 +3467,16 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ChannelAdvisorOrderFieldIndex.Custom5);}
 		}
+		/// <summary>Creates a new ChannelAdvisorOrderEntity.HubOrderID field instance</summary>
+		public static EntityField2 HubOrderID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ChannelAdvisorOrderFieldIndex.HubOrderID);}
+		}
+		/// <summary>Creates a new ChannelAdvisorOrderEntity.HubSequence field instance</summary>
+		public static EntityField2 HubSequence
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ChannelAdvisorOrderFieldIndex.HubSequence);}
+		}
 		/// <summary>Creates a new ChannelAdvisorOrderEntity.OrderID field instance</summary>
 		public static EntityField2 OrderID
 		{
@@ -4382,6 +4402,16 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ClickCartProOrderFieldIndex.Custom5);}
 		}
+		/// <summary>Creates a new ClickCartProOrderEntity.HubOrderID field instance</summary>
+		public static EntityField2 HubOrderID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ClickCartProOrderFieldIndex.HubOrderID);}
+		}
+		/// <summary>Creates a new ClickCartProOrderEntity.HubSequence field instance</summary>
+		public static EntityField2 HubSequence
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ClickCartProOrderFieldIndex.HubSequence);}
+		}
 		/// <summary>Creates a new ClickCartProOrderEntity.OrderID field instance</summary>
 		public static EntityField2 OrderID
 		{
@@ -4831,6 +4861,16 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 Custom5
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(CommerceInterfaceOrderFieldIndex.Custom5);}
+		}
+		/// <summary>Creates a new CommerceInterfaceOrderEntity.HubOrderID field instance</summary>
+		public static EntityField2 HubOrderID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(CommerceInterfaceOrderFieldIndex.HubOrderID);}
+		}
+		/// <summary>Creates a new CommerceInterfaceOrderEntity.HubSequence field instance</summary>
+		public static EntityField2 HubSequence
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(CommerceInterfaceOrderFieldIndex.HubSequence);}
 		}
 		/// <summary>Creates a new CommerceInterfaceOrderEntity.OrderID field instance</summary>
 		public static EntityField2 OrderID
@@ -6036,6 +6076,16 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 Custom5
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(EbayOrderFieldIndex.Custom5);}
+		}
+		/// <summary>Creates a new EbayOrderEntity.HubOrderID field instance</summary>
+		public static EntityField2 HubOrderID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(EbayOrderFieldIndex.HubOrderID);}
+		}
+		/// <summary>Creates a new EbayOrderEntity.HubSequence field instance</summary>
+		public static EntityField2 HubSequence
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(EbayOrderFieldIndex.HubSequence);}
 		}
 		/// <summary>Creates a new EbayOrderEntity.OrderID field instance</summary>
 		public static EntityField2 OrderID
@@ -7656,6 +7706,16 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 Custom5
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(EtsyOrderFieldIndex.Custom5);}
+		}
+		/// <summary>Creates a new EtsyOrderEntity.HubOrderID field instance</summary>
+		public static EntityField2 HubOrderID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(EtsyOrderFieldIndex.HubOrderID);}
+		}
+		/// <summary>Creates a new EtsyOrderEntity.HubSequence field instance</summary>
+		public static EntityField2 HubSequence
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(EtsyOrderFieldIndex.HubSequence);}
 		}
 		/// <summary>Creates a new EtsyOrderEntity.OrderID field instance</summary>
 		public static EntityField2 OrderID
@@ -10657,6 +10717,16 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(GenericModuleOrderFieldIndex.Custom5);}
 		}
+		/// <summary>Creates a new GenericModuleOrderEntity.HubOrderID field instance</summary>
+		public static EntityField2 HubOrderID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(GenericModuleOrderFieldIndex.HubOrderID);}
+		}
+		/// <summary>Creates a new GenericModuleOrderEntity.HubSequence field instance</summary>
+		public static EntityField2 HubSequence
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(GenericModuleOrderFieldIndex.HubSequence);}
+		}
 		/// <summary>Creates a new GenericModuleOrderEntity.OrderID field instance</summary>
 		public static EntityField2 OrderID
 		{
@@ -11656,6 +11726,16 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 Custom5
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(GrouponOrderFieldIndex.Custom5);}
+		}
+		/// <summary>Creates a new GrouponOrderEntity.HubOrderID field instance</summary>
+		public static EntityField2 HubOrderID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(GrouponOrderFieldIndex.HubOrderID);}
+		}
+		/// <summary>Creates a new GrouponOrderEntity.HubSequence field instance</summary>
+		public static EntityField2 HubSequence
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(GrouponOrderFieldIndex.HubSequence);}
 		}
 		/// <summary>Creates a new GrouponOrderEntity.OrderID field instance</summary>
 		public static EntityField2 OrderID
@@ -13192,6 +13272,16 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(JetOrderFieldIndex.Custom5);}
 		}
+		/// <summary>Creates a new JetOrderEntity.HubOrderID field instance</summary>
+		public static EntityField2 HubOrderID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(JetOrderFieldIndex.HubOrderID);}
+		}
+		/// <summary>Creates a new JetOrderEntity.HubSequence field instance</summary>
+		public static EntityField2 HubSequence
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(JetOrderFieldIndex.HubSequence);}
+		}
 		/// <summary>Creates a new JetOrderEntity.OrderID field instance</summary>
 		public static EntityField2 OrderID
 		{
@@ -14072,6 +14162,16 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(LemonStandOrderFieldIndex.Custom5);}
 		}
+		/// <summary>Creates a new LemonStandOrderEntity.HubOrderID field instance</summary>
+		public static EntityField2 HubOrderID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(LemonStandOrderFieldIndex.HubOrderID);}
+		}
+		/// <summary>Creates a new LemonStandOrderEntity.HubSequence field instance</summary>
+		public static EntityField2 HubSequence
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(LemonStandOrderFieldIndex.HubSequence);}
+		}
 		/// <summary>Creates a new LemonStandOrderEntity.OrderID field instance</summary>
 		public static EntityField2 OrderID
 		{
@@ -14892,6 +14992,16 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(MagentoOrderFieldIndex.Custom5);}
 		}
+		/// <summary>Creates a new MagentoOrderEntity.HubOrderID field instance</summary>
+		public static EntityField2 HubOrderID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(MagentoOrderFieldIndex.HubOrderID);}
+		}
+		/// <summary>Creates a new MagentoOrderEntity.HubSequence field instance</summary>
+		public static EntityField2 HubSequence
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(MagentoOrderFieldIndex.HubSequence);}
+		}
 		/// <summary>Creates a new MagentoOrderEntity.OrderID field instance</summary>
 		public static EntityField2 OrderID_GenericModuleOrder
 		{
@@ -15681,6 +15791,16 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 Custom5
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(MarketplaceAdvisorOrderFieldIndex.Custom5);}
+		}
+		/// <summary>Creates a new MarketplaceAdvisorOrderEntity.HubOrderID field instance</summary>
+		public static EntityField2 HubOrderID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(MarketplaceAdvisorOrderFieldIndex.HubOrderID);}
+		}
+		/// <summary>Creates a new MarketplaceAdvisorOrderEntity.HubSequence field instance</summary>
+		public static EntityField2 HubSequence
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(MarketplaceAdvisorOrderFieldIndex.HubSequence);}
 		}
 		/// <summary>Creates a new MarketplaceAdvisorOrderEntity.OrderID field instance</summary>
 		public static EntityField2 OrderID
@@ -16742,6 +16862,16 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(NetworkSolutionsOrderFieldIndex.Custom5);}
 		}
+		/// <summary>Creates a new NetworkSolutionsOrderEntity.HubOrderID field instance</summary>
+		public static EntityField2 HubOrderID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(NetworkSolutionsOrderFieldIndex.HubOrderID);}
+		}
+		/// <summary>Creates a new NetworkSolutionsOrderEntity.HubSequence field instance</summary>
+		public static EntityField2 HubSequence
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(NetworkSolutionsOrderFieldIndex.HubSequence);}
+		}
 		/// <summary>Creates a new NetworkSolutionsOrderEntity.OrderID field instance</summary>
 		public static EntityField2 OrderID
 		{
@@ -17391,6 +17521,16 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 Custom5
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(NeweggOrderFieldIndex.Custom5);}
+		}
+		/// <summary>Creates a new NeweggOrderEntity.HubOrderID field instance</summary>
+		public static EntityField2 HubOrderID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(NeweggOrderFieldIndex.HubOrderID);}
+		}
+		/// <summary>Creates a new NeweggOrderEntity.HubSequence field instance</summary>
+		public static EntityField2 HubSequence
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(NeweggOrderFieldIndex.HubSequence);}
 		}
 		/// <summary>Creates a new NeweggOrderEntity.OrderID field instance</summary>
 		public static EntityField2 OrderID
@@ -18822,6 +18962,16 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(OrderFieldIndex.Custom5);}
 		}
+		/// <summary>Creates a new OrderEntity.HubOrderID field instance</summary>
+		public static EntityField2 HubOrderID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OrderFieldIndex.HubOrderID);}
+		}
+		/// <summary>Creates a new OrderEntity.HubSequence field instance</summary>
+		public static EntityField2 HubSequence
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OrderFieldIndex.HubSequence);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity OrderChargeEntity</summary>
@@ -19466,6 +19616,16 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 Custom5
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(OrderMotionOrderFieldIndex.Custom5);}
+		}
+		/// <summary>Creates a new OrderMotionOrderEntity.HubOrderID field instance</summary>
+		public static EntityField2 HubOrderID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OrderMotionOrderFieldIndex.HubOrderID);}
+		}
+		/// <summary>Creates a new OrderMotionOrderEntity.HubSequence field instance</summary>
+		public static EntityField2 HubSequence
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OrderMotionOrderFieldIndex.HubSequence);}
 		}
 		/// <summary>Creates a new OrderMotionOrderEntity.OrderID field instance</summary>
 		public static EntityField2 OrderID
@@ -20236,6 +20396,16 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 Custom5
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(OverstockOrderFieldIndex.Custom5);}
+		}
+		/// <summary>Creates a new OverstockOrderEntity.HubOrderID field instance</summary>
+		public static EntityField2 HubOrderID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OverstockOrderFieldIndex.HubOrderID);}
+		}
+		/// <summary>Creates a new OverstockOrderEntity.HubSequence field instance</summary>
+		public static EntityField2 HubSequence
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OverstockOrderFieldIndex.HubSequence);}
 		}
 		/// <summary>Creates a new OverstockOrderEntity.OrderID field instance</summary>
 		public static EntityField2 OrderID
@@ -21106,6 +21276,16 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 Custom5
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(PayPalOrderFieldIndex.Custom5);}
+		}
+		/// <summary>Creates a new PayPalOrderEntity.HubOrderID field instance</summary>
+		public static EntityField2 HubOrderID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(PayPalOrderFieldIndex.HubOrderID);}
+		}
+		/// <summary>Creates a new PayPalOrderEntity.HubSequence field instance</summary>
+		public static EntityField2 HubSequence
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(PayPalOrderFieldIndex.HubSequence);}
 		}
 		/// <summary>Creates a new PayPalOrderEntity.OrderID field instance</summary>
 		public static EntityField2 OrderID
@@ -22547,6 +22727,16 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ProStoresOrderFieldIndex.Custom5);}
 		}
+		/// <summary>Creates a new ProStoresOrderEntity.HubOrderID field instance</summary>
+		public static EntityField2 HubOrderID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ProStoresOrderFieldIndex.HubOrderID);}
+		}
+		/// <summary>Creates a new ProStoresOrderEntity.HubSequence field instance</summary>
+		public static EntityField2 HubSequence
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ProStoresOrderFieldIndex.HubSequence);}
+		}
 		/// <summary>Creates a new ProStoresOrderEntity.OrderID field instance</summary>
 		public static EntityField2 OrderID
 		{
@@ -23356,6 +23546,16 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 Custom5
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(SearsOrderFieldIndex.Custom5);}
+		}
+		/// <summary>Creates a new SearsOrderEntity.HubOrderID field instance</summary>
+		public static EntityField2 HubOrderID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(SearsOrderFieldIndex.HubOrderID);}
+		}
+		/// <summary>Creates a new SearsOrderEntity.HubSequence field instance</summary>
+		public static EntityField2 HubSequence
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(SearsOrderFieldIndex.HubSequence);}
 		}
 		/// <summary>Creates a new SearsOrderEntity.OrderID field instance</summary>
 		public static EntityField2 OrderID
@@ -25432,6 +25632,16 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ShopifyOrderFieldIndex.Custom5);}
 		}
+		/// <summary>Creates a new ShopifyOrderEntity.HubOrderID field instance</summary>
+		public static EntityField2 HubOrderID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShopifyOrderFieldIndex.HubOrderID);}
+		}
+		/// <summary>Creates a new ShopifyOrderEntity.HubSequence field instance</summary>
+		public static EntityField2 HubSequence
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShopifyOrderFieldIndex.HubSequence);}
+		}
 		/// <summary>Creates a new ShopifyOrderEntity.OrderID field instance</summary>
 		public static EntityField2 OrderID
 		{
@@ -27256,6 +27466,16 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 Custom5
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ThreeDCartOrderFieldIndex.Custom5);}
+		}
+		/// <summary>Creates a new ThreeDCartOrderEntity.HubOrderID field instance</summary>
+		public static EntityField2 HubOrderID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ThreeDCartOrderFieldIndex.HubOrderID);}
+		}
+		/// <summary>Creates a new ThreeDCartOrderEntity.HubSequence field instance</summary>
+		public static EntityField2 HubSequence
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ThreeDCartOrderFieldIndex.HubSequence);}
 		}
 		/// <summary>Creates a new ThreeDCartOrderEntity.OrderID field instance</summary>
 		public static EntityField2 OrderID
@@ -29902,6 +30122,16 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(WalmartOrderFieldIndex.Custom5);}
 		}
+		/// <summary>Creates a new WalmartOrderEntity.HubOrderID field instance</summary>
+		public static EntityField2 HubOrderID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(WalmartOrderFieldIndex.HubOrderID);}
+		}
+		/// <summary>Creates a new WalmartOrderEntity.HubSequence field instance</summary>
+		public static EntityField2 HubSequence
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(WalmartOrderFieldIndex.HubSequence);}
+		}
 		/// <summary>Creates a new WalmartOrderEntity.OrderID field instance</summary>
 		public static EntityField2 OrderID
 		{
@@ -31466,6 +31696,16 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 Custom5
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(YahooOrderFieldIndex.Custom5);}
+		}
+		/// <summary>Creates a new YahooOrderEntity.HubOrderID field instance</summary>
+		public static EntityField2 HubOrderID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(YahooOrderFieldIndex.HubOrderID);}
+		}
+		/// <summary>Creates a new YahooOrderEntity.HubSequence field instance</summary>
+		public static EntityField2 HubSequence
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(YahooOrderFieldIndex.HubSequence);}
 		}
 		/// <summary>Creates a new YahooOrderEntity.OrderID field instance</summary>
 		public static EntityField2 OrderID

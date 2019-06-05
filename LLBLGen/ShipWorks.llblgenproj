@@ -1989,6 +1989,8 @@
           <Field Name="Custom4" Type="string" MaxLength="50" FieldIndex="80" />
           <Field Name="Custom5" Type="string" MaxLength="50" FieldIndex="81" />
           <Field Name="CustomerID" Type="long" IsAutoCreated="true" FieldIndex="3" />
+          <Field Name="HubOrderID" Type="guid" IsOptional="true" FieldIndex="82" />
+          <Field Name="HubSequence" Type="long" IsOptional="true" Precision="19" FieldIndex="83" />
           <Field Name="IsManual" Type="bool" FieldIndex="9" />
           <Field Name="LocalStatus" Type="string" MaxLength="100" FieldIndex="8" />
           <Field Name="OnlineCustomerID" Type="object" IsOptional="true" FieldIndex="11" />
@@ -4547,7 +4549,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2019-05-01T19:57:02.7411436Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2019-06-05T18:06:27.3508282Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -4973,10 +4975,10 @@
                     <Field Name="OrderItemID" Ordinal="1" IsPrimaryKey="true" DbType="0" Precision="19" />
                     <Field Name="OrderAddressID" Ordinal="2" DbType="0" Precision="19" />
                     <Field Name="OrderProductID" Ordinal="3" DbType="0" Precision="19" />
-                    <Field Name="ParentOrderProductID" Ordinal="4" IsOptional="true" DbType="0" Precision="19" />
-                    <Field Name="IsDigitalItem" Ordinal="5" HasDefaultValue="true" DefaultValue="(0)" DbType="2" />
-                    <Field Name="EventDate" Ordinal="6" IsOptional="true" DbType="4" />
-                    <Field Name="EventName" Ordinal="7" IsOptional="true" DbType="12" Length="255" />
+                    <Field Name="IsDigitalItem" Ordinal="4" HasDefaultValue="true" DefaultValue="(0)" DbType="2" />
+                    <Field Name="EventDate" Ordinal="5" IsOptional="true" DbType="4" />
+                    <Field Name="EventName" Ordinal="6" IsOptional="true" DbType="12" Length="255" />
+                    <Field Name="ParentOrderProductID" Ordinal="7" IsOptional="true" DbType="0" Precision="19" />
                   </Fields>
                 </Table>
                 <Table Name="BigCommerceStore">
@@ -6882,8 +6884,8 @@
                     <Field Name="GrouponOrderSearchID" Ordinal="1" IsIdentity="true" IsPrimaryKey="true" DbType="0" Precision="19" />
                     <Field Name="OrderID" Ordinal="2" DbType="0" Precision="19" />
                     <Field Name="GrouponOrderID" Ordinal="3" DbType="12" Length="50" />
-                    <Field Name="OriginalOrderID" Ordinal="4" DbType="0" Precision="19" />
-                    <Field Name="ParentOrderID" Ordinal="5" HasDefaultValue="true" DefaultValue="''" DbType="12" Length="50" />
+                    <Field Name="ParentOrderID" Ordinal="4" HasDefaultValue="true" DefaultValue="''" DbType="12" Length="50" />
+                    <Field Name="OriginalOrderID" Ordinal="5" DbType="0" Precision="19" />
                   </Fields>
                 </Table>
                 <Table Name="GrouponStore">
@@ -7501,6 +7503,8 @@
                     <Field Name="Custom3" Ordinal="80" HasDefaultValue="true" DefaultValue="''" DbType="12" Length="50" />
                     <Field Name="Custom4" Ordinal="81" HasDefaultValue="true" DefaultValue="''" DbType="12" Length="50" />
                     <Field Name="Custom5" Ordinal="82" HasDefaultValue="true" DefaultValue="''" DbType="12" Length="50" />
+                    <Field Name="HubOrderID" Ordinal="83" IsOptional="true" DbType="25" />
+                    <Field Name="HubSequence" Ordinal="84" IsOptional="true" DbType="0" Precision="19" />
                   </Fields>
                 </Table>
                 <Table Name="OrderCharge">
@@ -7551,9 +7555,9 @@
                     <Field Name="Quantity" Ordinal="16" DbType="5" Precision="29" Scale="9" />
                     <Field Name="LocalStatus" Ordinal="17" DbType="12" Length="255" />
                     <Field Name="IsManual" Ordinal="18" DbType="2" />
-                    <Field Name="HarmonizedCode" Ordinal="19" DbType="12" Length="20" />
-                    <Field Name="OriginalOrderID" Ordinal="20" DbType="0" Precision="19" />
-                    <Field Name="TotalWeight" Ordinal="21" IsOptional="true" IsComputed="true" DbType="5" Precision="38" Scale="6" />
+                    <Field Name="TotalWeight" Ordinal="19" IsOptional="true" IsComputed="true" DbType="5" Precision="38" Scale="6" />
+                    <Field Name="HarmonizedCode" Ordinal="20" DbType="12" Length="20" />
+                    <Field Name="OriginalOrderID" Ordinal="21" DbType="0" Precision="19" />
                     <Field Name="Length" Ordinal="22" DbType="5" Precision="10" Scale="2" />
                     <Field Name="Width" Ordinal="23" DbType="5" Precision="10" Scale="2" />
                     <Field Name="Height" Ordinal="24" DbType="5" Precision="10" Scale="2" />
@@ -7673,9 +7677,9 @@
                   <Fields>
                     <Field Name="OverstockOrderSearchID" Ordinal="1" IsIdentity="true" IsPrimaryKey="true" DbType="0" Precision="19" />
                     <Field Name="OrderID" Ordinal="2" DbType="0" Precision="19" />
-                    <Field Name="SalesChannelName" Ordinal="3" DbType="12" Length="50" />
-                    <Field Name="WarehouseCode" Ordinal="4" IsOptional="true" DbType="12" Length="50" />
-                    <Field Name="OriginalOrderID" Ordinal="5" DbType="0" Precision="19" />
+                    <Field Name="OriginalOrderID" Ordinal="3" DbType="0" Precision="19" />
+                    <Field Name="SalesChannelName" Ordinal="4" DbType="12" Length="50" />
+                    <Field Name="WarehouseCode" Ordinal="5" IsOptional="true" DbType="12" Length="50" />
                   </Fields>
                 </Table>
                 <Table Name="OverstockStore">
@@ -12715,6 +12719,8 @@
             <FieldMapping FieldName="Custom4" TargetFieldName="Custom4" />
             <FieldMapping FieldName="Custom5" TargetFieldName="Custom5" />
             <FieldMapping FieldName="CustomerID" TargetFieldName="CustomerID" />
+            <FieldMapping FieldName="HubOrderID" TargetFieldName="HubOrderID" />
+            <FieldMapping FieldName="HubSequence" TargetFieldName="HubSequence" />
             <FieldMapping FieldName="IsManual" TargetFieldName="IsManual" />
             <FieldMapping FieldName="LocalStatus" TargetFieldName="LocalStatus" />
             <FieldMapping FieldName="OnlineCustomerID" TargetFieldName="OnlineCustomerID" />
