@@ -80,18 +80,8 @@ namespace ShipWorks.Stores.Warehouse
                 .ConfigureAwait(false);
 
             store.DownloadStartDate = GetUnixTimestampMillis(downloadStartDate);
-
-            if (InterapptiveOnly.IsInterapptiveUser && !InterapptiveOnly.Registry.GetValue("EncryptWarehouseCredentials", true))
-            {
-                store.AuthToken = storeEntity.AuthToken;
-            }
-            else
-            {
-                store.AuthToken = await encryptionService.Encrypt(storeEntity.AuthToken)
-                    .ConfigureAwait(false);
-            }
-
-
+            store.AuthToken = await encryptionService.Encrypt(storeEntity.AuthToken)
+                                .ConfigureAwait(false);
             return store;
         }
 
@@ -100,8 +90,10 @@ namespace ShipWorks.Stores.Warehouse
         /// </summary>
         private async Task<Store> AddChannelAdvisorStoreData(ChannelAdvisorStoreEntity storeEntity)
         {
+            string refreshToken = encryptionProviderFactory.CreateChannelAdvisorEncryptionProvider().Decrypt(storeEntity.RefreshToken);
+
             ChannelAdvisorStore store = new ChannelAdvisorStore();
-            store.RefreshToken = await encryptionService.Encrypt(storeEntity.RefreshToken)
+            store.RefreshToken = await encryptionService.Encrypt(refreshToken)
                 .ConfigureAwait(false);
             store.CountryCode = storeEntity.CountryCode;
             store.ItemAttributesToImport = storeEntity.ParsedAttributesToDownload;
