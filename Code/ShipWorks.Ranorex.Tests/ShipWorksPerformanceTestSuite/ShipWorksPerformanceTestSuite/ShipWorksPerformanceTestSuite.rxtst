@@ -42,6 +42,12 @@ rxversion="8.1">
 			id="db46a630-9dda-4933-8bfc-a7e326045751"
 			name="setup">
 			</setup>
+			<testmodule
+			id="e093264e-3968-4418-a383-8ff80321fd74"
+			name="RestoreDatabase"
+			ref="17a4d054-f29c-4977-9e00-c9788508e533"
+			type="UserCode">
+			</testmodule>
 		</flatlistofchildren>
 		<childhierarchy>
 			<testsuite
@@ -63,6 +69,10 @@ rxversion="8.1">
 							<testmodule
 							id="27507515-bcb7-4c7d-ac95-baf4cc972d1a"
 							name="InstallShipWorks">
+							</testmodule>
+							<testmodule
+							id="e093264e-3968-4418-a383-8ff80321fd74"
+							name="RestoreDatabase">
 							</testmodule>
 						</setup>
 					</testcase>

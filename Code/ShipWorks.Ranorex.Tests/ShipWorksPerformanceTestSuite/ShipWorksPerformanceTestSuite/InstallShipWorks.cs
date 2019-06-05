@@ -74,12 +74,11 @@ namespace ShipWorksPerformanceTestSuite
             
             Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Click item 'SomeForm.DirEdit' at Center.", repo.SomeForm.DirEditInfo, new RecordItemIndex(5));
             repo.SomeForm.DirEdit.Click();
-            Delay.Milliseconds(2760);           
-           
+            Delay.Milliseconds(2760);      
             
             Report.Log(ReportLevel.Info, "Keyboard", "Key sequence 'C Drive' with focus on 'SomeForm.DirEdit'.", repo.SomeForm.DirEditInfo, new RecordItemIndex(5));
             repo.SomeForm.DirEdit.PressKeys("{LControlKey down}{Akey}{LControlKey up}C:\\TestFolderSW");
-            Delay.Milliseconds(0);           
+            Delay.Milliseconds(500);           
             
             Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Move item 'SomeForm.Next' at Center.", repo.SomeForm.NextInfo, new RecordItemIndex(7));
             repo.SomeForm.Next.MoveTo();
