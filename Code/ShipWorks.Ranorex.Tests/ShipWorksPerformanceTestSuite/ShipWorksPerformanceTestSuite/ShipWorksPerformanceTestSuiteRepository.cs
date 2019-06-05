@@ -27,6 +27,7 @@ namespace ShipWorksPerformanceTestSuite
     public partial class ShipWorksPerformanceTestSuiteRepository : RepoGenBaseFolder
     {
         static ShipWorksPerformanceTestSuiteRepository instance = new ShipWorksPerformanceTestSuiteRepository();
+        ShipWorksPerformanceTestSuiteRepositoryFolders.ExitSetupAppFolder _exitsetup;
         ShipWorksPerformanceTestSuiteRepositoryFolders.AddStoreWizardAppFolder _addstorewizard;
         ShipWorksPerformanceTestSuiteRepositoryFolders.PopupWindowAppFolder _popupwindow;
         ShipWorksPerformanceTestSuiteRepositoryFolders.List1000AppFolder _list1000;
@@ -64,6 +65,7 @@ namespace ShipWorksPerformanceTestSuite
         public ShipWorksPerformanceTestSuiteRepository() 
             : base("ShipWorksPerformanceTestSuiteRepository", "/", null, 0, false, "0dd6cfa7-ba04-43ea-9088-05ef7ddaa3f1", ".\\RepositoryImages\\ShipWorksPerformanceTestSuiteRepository0dd6cfa7.rximgres")
         {
+            _exitsetup = new ShipWorksPerformanceTestSuiteRepositoryFolders.ExitSetupAppFolder(this);
             _addstorewizard = new ShipWorksPerformanceTestSuiteRepositoryFolders.AddStoreWizardAppFolder(this);
             _popupwindow = new ShipWorksPerformanceTestSuiteRepositoryFolders.PopupWindowAppFolder(this);
             _list1000 = new ShipWorksPerformanceTestSuiteRepositoryFolders.List1000AppFolder(this);
@@ -101,6 +103,15 @@ namespace ShipWorksPerformanceTestSuite
             {
                 return _selfInfo;
             }
+        }
+
+        /// <summary>
+        /// The ExitSetup folder.
+        /// </summary>
+        [RepositoryFolder("f72c49cd-7518-4d10-8dce-6a4c54beaa8e")]
+        public virtual ShipWorksPerformanceTestSuiteRepositoryFolders.ExitSetupAppFolder ExitSetup
+        {
+            get { return _exitsetup; }
         }
 
         /// <summary>
@@ -299,6 +310,98 @@ namespace ShipWorksPerformanceTestSuite
     [System.CodeDom.Compiler.GeneratedCode("Ranorex", "8.1")]
     public partial class ShipWorksPerformanceTestSuiteRepositoryFolders
     {
+        /// <summary>
+        /// The ExitSetupAppFolder folder.
+        /// </summary>
+        [RepositoryFolder("f72c49cd-7518-4d10-8dce-6a4c54beaa8e")]
+        public partial class ExitSetupAppFolder : RepoGenBaseFolder
+        {
+            RepoItemInfo _rawtextyesInfo;
+            RepoItemInfo _buttonyesInfo;
+
+            /// <summary>
+            /// Creates a new ExitSetup  folder.
+            /// </summary>
+            public ExitSetupAppFolder(RepoGenBaseFolder parentFolder) :
+                    base("ExitSetup", "/form[@title='Exit Setup']", parentFolder, 30000, null, true, "f72c49cd-7518-4d10-8dce-6a4c54beaa8e", "")
+            {
+                _rawtextyesInfo = new RepoItemInfo(this, "RawTextYes", "?/?/rawtext[@rawtext='&amp;Yes']", 30000, null, "24ea3b5c-19d8-4ae4-b56a-743c22b4712f");
+                _buttonyesInfo = new RepoItemInfo(this, "ButtonYes", "button[@text='&Yes']", 30000, null, "ccbfe737-061e-455f-a50a-04ea7ad18787");
+            }
+
+            /// <summary>
+            /// The Self item.
+            /// </summary>
+            [RepositoryItem("f72c49cd-7518-4d10-8dce-6a4c54beaa8e")]
+            public virtual Ranorex.Form Self
+            {
+                get
+                {
+                    return _selfInfo.CreateAdapter<Ranorex.Form>(true);
+                }
+            }
+
+            /// <summary>
+            /// The Self item info.
+            /// </summary>
+            [RepositoryItemInfo("f72c49cd-7518-4d10-8dce-6a4c54beaa8e")]
+            public virtual RepoItemInfo SelfInfo
+            {
+                get
+                {
+                    return _selfInfo;
+                }
+            }
+
+            /// <summary>
+            /// The RawTextYes item.
+            /// </summary>
+            [RepositoryItem("24ea3b5c-19d8-4ae4-b56a-743c22b4712f")]
+            public virtual Ranorex.RawText RawTextYes
+            {
+                get
+                {
+                    return _rawtextyesInfo.CreateAdapter<Ranorex.RawText>(true);
+                }
+            }
+
+            /// <summary>
+            /// The RawTextYes item info.
+            /// </summary>
+            [RepositoryItemInfo("24ea3b5c-19d8-4ae4-b56a-743c22b4712f")]
+            public virtual RepoItemInfo RawTextYesInfo
+            {
+                get
+                {
+                    return _rawtextyesInfo;
+                }
+            }
+
+            /// <summary>
+            /// The ButtonYes item.
+            /// </summary>
+            [RepositoryItem("ccbfe737-061e-455f-a50a-04ea7ad18787")]
+            public virtual Ranorex.Button ButtonYes
+            {
+                get
+                {
+                    return _buttonyesInfo.CreateAdapter<Ranorex.Button>(true);
+                }
+            }
+
+            /// <summary>
+            /// The ButtonYes item info.
+            /// </summary>
+            [RepositoryItemInfo("ccbfe737-061e-455f-a50a-04ea7ad18787")]
+            public virtual RepoItemInfo ButtonYesInfo
+            {
+                get
+                {
+                    return _buttonyesInfo;
+                }
+            }
+        }
+
         /// <summary>
         /// The AddStoreWizardAppFolder folder.
         /// </summary>
@@ -1158,7 +1261,7 @@ namespace ShipWorksPerformanceTestSuite
                 _systemitemnamedisplayInfo = new RepoItemInfo(this, "SystemItemNameDisplay", "element[@class='DUIViewWndClassName']/?/?/element[@instance='1']//listitem[@automationid='4']/text[@automationid='System.ItemNameDisplay' and @text=null()]", 30000, null, "97afc42c-06ae-4a8d-a32c-4e2e847143e5");
                 _systemitemtypetextInfo = new RepoItemInfo(this, "SystemItemTypeText", "element[@class='DUIViewWndClassName']/?/?/element[@instance='1']//listitem[@automationid='4']/text[@automationid='System.ItemTypeText']", 30000, null, "a06254fa-9f84-4698-a668-a265a93b0c94");
                 _systemitemnamedisplay1Info = new RepoItemInfo(this, "SystemItemNameDisplay1", "element[@class='DUIViewWndClassName']/?/?/element[@instance='1']//listitem[@automationid='2']/text[@automationid='System.ItemNameDisplay']", 30000, null, "5ad30584-2de3-45c7-a17b-5f36523d6e18");
-                _rawtextopenInfo = new RepoItemInfo(this, "RawTextOpen", "?/?/rawtext[@rawtext='&Open']", 30000, null, "06e38ce7-b011-4703-bd95-2f4202fa3d33");
+                _rawtextopenInfo = new RepoItemInfo(this, "RawTextOpen", "?/?/rawtext[@rawtext='&amp;Open']", 30000, null, "06e38ce7-b011-4703-bd95-2f4202fa3d33");
                 _systemitemnamedisplay2Info = new RepoItemInfo(this, "SystemItemNameDisplay2", "element[@class='DUIViewWndClassName']/?/?/element[@instance='1']//listitem[@automationid='5']/text[@automationid='System.ItemNameDisplay' and @caption='Generic Performance']", 30000, null, "71abd7fa-b7a4-41d6-824c-ee4bb11317b1");
                 _toolbar1001Info = new RepoItemInfo(this, "ToolBar1001", "element[@class='WorkerW']/?/?/element[@controlid='41477']//toolbar[@controlid='1001']", 30000, null, "067ceaa0-bf2e-46a7-9ab8-b9d1b58b7df8");
                 _combobox1148Info = new RepoItemInfo(this, "ComboBox1148", "combobox[@controlid='1148']", 30000, null, "6c6d5da7-cf03-4bb7-b093-214791794095");
@@ -2223,11 +2326,11 @@ namespace ShipWorksPerformanceTestSuite
         [RepositoryFolder("baf44c77-5a7e-49df-ab7e-b6b73b257666")]
         public partial class ProgressDlgAppFolder : RepoGenBaseFolder
         {
+            RepoItemInfo _headerimageInfo;
             RepoItemInfo _titlebarInfo;
             RepoItemInfo _voidingshipmentsInfo;
             RepoItemInfo _buttonokInfo;
             RepoItemInfo _rawtextokInfo;
-            RepoItemInfo _headerimageInfo;
 
             /// <summary>
             /// Creates a new ProgressDlg  folder.
@@ -2235,11 +2338,11 @@ namespace ShipWorksPerformanceTestSuite
             public ProgressDlgAppFolder(RepoGenBaseFolder parentFolder) :
                     base("ProgressDlg", "/form[@controlname='ProgressDlg']", parentFolder, 30000, null, true, "baf44c77-5a7e-49df-ab7e-b6b73b257666", "")
             {
+                _headerimageInfo = new RepoItemInfo(this, "HeaderImage", "?/?/picture[@controlname='headerImage']", 30000, null, "0ebda92e-de25-4377-a961-bd6290f8ad20");
                 _titlebarInfo = new RepoItemInfo(this, "TitleBar", "titlebar[@accessiblerole='TitleBar']", 30000, null, "e76db55d-ad57-456c-a00b-865b94f7f276");
                 _voidingshipmentsInfo = new RepoItemInfo(this, "VoidingShipments", "?/?/rawtext", 30000, null, "4f457e94-c84a-41c5-aa3c-541e4ff69bda");
                 _buttonokInfo = new RepoItemInfo(this, "ButtonOk", "button[@controlname='ok']", 30000, null, "d6e9c7e3-1ca3-42cc-bb02-894832d10937");
                 _rawtextokInfo = new RepoItemInfo(this, "RawTextOK", "?/?/rawtext[@rawtext='OK']", 30000, null, "baee4044-7999-4ae0-a6bf-42dc77eb93db");
-                _headerimageInfo = new RepoItemInfo(this, "HeaderImage", "?/?/picture[@controlname='headerImage']", 30000, null, "0ebda92e-de25-4377-a961-bd6290f8ad20");
             }
 
             /// <summary>
@@ -2263,6 +2366,30 @@ namespace ShipWorksPerformanceTestSuite
                 get
                 {
                     return _selfInfo;
+                }
+            }
+
+            /// <summary>
+            /// The HeaderImage item.
+            /// </summary>
+            [RepositoryItem("0ebda92e-de25-4377-a961-bd6290f8ad20")]
+            public virtual Ranorex.Picture HeaderImage
+            {
+                get
+                {
+                    return _headerimageInfo.CreateAdapter<Ranorex.Picture>(true);
+                }
+            }
+
+            /// <summary>
+            /// The HeaderImage item info.
+            /// </summary>
+            [RepositoryItemInfo("0ebda92e-de25-4377-a961-bd6290f8ad20")]
+            public virtual RepoItemInfo HeaderImageInfo
+            {
+                get
+                {
+                    return _headerimageInfo;
                 }
             }
 
@@ -2359,30 +2486,6 @@ namespace ShipWorksPerformanceTestSuite
                 get
                 {
                     return _rawtextokInfo;
-                }
-            }
-
-            /// <summary>
-            /// The HeaderImage item.
-            /// </summary>
-            [RepositoryItem("0ebda92e-de25-4377-a961-bd6290f8ad20")]
-            public virtual Ranorex.Picture HeaderImage
-            {
-                get
-                {
-                    return _headerimageInfo.CreateAdapter<Ranorex.Picture>(true);
-                }
-            }
-
-            /// <summary>
-            /// The HeaderImage item info.
-            /// </summary>
-            [RepositoryItemInfo("0ebda92e-de25-4377-a961-bd6290f8ad20")]
-            public virtual RepoItemInfo HeaderImageInfo
-            {
-                get
-                {
-                    return _headerimageInfo;
                 }
             }
         }
@@ -2889,6 +2992,7 @@ namespace ShipWorksPerformanceTestSuite
         public partial class SomeFormAppFolder : RepoGenBaseFolder
         {
             ShipWorksPerformanceTestSuiteRepositoryFolders.MainPanelFolder1 _mainpanel;
+            RepoItemInfo _close2Info;
             RepoItemInfo _rawtextnewInfo;
             RepoItemInfo _serviceInfo;
             RepoItemInfo _processdropdownbuttonInfo;
@@ -2931,6 +3035,7 @@ namespace ShipWorksPerformanceTestSuite
                     base("SomeForm", "/form[@title='Setup - ShipWorks®']", parentFolder, 30000, null, true, "7b65e11d-aa1b-47b1-a504-227fc140b2b0", "")
             {
                 _mainpanel = new ShipWorksPerformanceTestSuiteRepositoryFolders.MainPanelFolder1(this);
+                _close2Info = new RepoItemInfo(this, "Close2", "?/?/button[@accessiblename='Close']", 30000, null, "8ffe4642-71ce-4612-88d6-aed563b8df9e");
                 _rawtextnewInfo = new RepoItemInfo(this, "RawTextNew", "?/?/element[@controlname='ribbonTabHome']/rawtext[@row='0' and @column='9']", 30000, null, "71b6bebf-ee42-4224-82c8-bde2a969bcdc");
                 _serviceInfo = new RepoItemInfo(this, "Service", "container[@controlname='splitContainer']/?/?/container[@controlname='ratesSplitContainer']/container[@controlname='panel1']/?/?/tabpage[@controlname='tabPageService']/container[@controlname='serviceControlArea']/?/?/container[@controlname='sectionShipment']//text[@controlname='service']/text[@accessiblename='Service:']", 30000, null, "89b5bd36-0015-4059-86ef-cd02f46015e6");
                 _processdropdownbuttonInfo = new RepoItemInfo(this, "ProcessDropDownButton", "?/?/button[@controlname='processDropDownButton']", 30000, null, "30343855-5e78-48fa-922c-70bf0df86b7f");
@@ -2944,14 +3049,14 @@ namespace ShipWorksPerformanceTestSuite
                 _teamemailInfo = new RepoItemInfo(this, "TeamEmail", ".//container[@name='Ribbon']/container[@name='Lower Ribbon']/?/?/container[@name='Quick Steps' and @classname='NetUIChunk']/container[@name='Quick Steps']/?/?/container[@name='Quick Steps']/table[@classname='NetUIGalleryButtonGroup']/listitem[@name='Team Email']", 30000, null, "f7b8b738-6cab-4110-b83c-a7ba9bd8033b");
                 _navigationInfo = new RepoItemInfo(this, "Navigation", "container[@caption='MsoDockLeft']/container[@caption='Navigation']//element[@name='Navigation']", 30000, null, "3384af99-aac6-4885-9223-6495837dc6d7");
                 _iaccepttheagreementInfo = new RepoItemInfo(this, "IAcceptTheAgreement", "element[@controlname='OuterNotebook']//element[@controlname='LicenseAcceptedRadio']/radiobutton[@accessiblename='I accept the agreement']", 30000, null, "39866f9b-02fc-4a13-a300-0750ceb1a3fe");
-                _nextInfo = new RepoItemInfo(this, "Next", "?/?/button[@accessiblename='Next >']", 30000, null, "7e7a9dba-27af-4a1c-8361-2999e6b49a10");
+                _nextInfo = new RepoItemInfo(this, "Next", "?/?/button[@accessiblename='Next &gt;']", 30000, null, "7e7a9dba-27af-4a1c-8361-2999e6b49a10");
                 _direditInfo = new RepoItemInfo(this, "DirEdit", "element[@class='TNewNotebook']/?/?/element[@class='TNewNotebook']/element[@instance='0']/text[@class='TEdit']", 30000, null, "22462bf9-1051-400a-8e45-f88d7cd689b4");
                 _start_menuInfo = new RepoItemInfo(this, "Start_Menu", "element[@class='TNewNotebook']/?/?/element[@class='TNewNotebook']/element[@instance='0']/element[@class='TNewEdit']", 30000, null, "73963ab2-3d7f-4873-ae06-c84a11365c90");
-                _createadesktopiconInfo = new RepoItemInfo(this, "CreateADesktopIcon", "element[@class='TNewNotebook']/?/?/element[@class='TNewNotebook']/element[@instance='0']/?/?/tree[@accessiblename~'^Select\\ the\\ additional\\ tas']/checkbox[@accessiblename='Create a &Desktop icon']", 30000, null, "db3b2956-c60c-4693-8667-2b7a01032486");
+                _createadesktopiconInfo = new RepoItemInfo(this, "CreateADesktopIcon", "element[@class='TNewNotebook']/?/?/element[@class='TNewNotebook']/element[@instance='0']/?/?/tree[@accessiblename~'^Select\\ the\\ additional\\ tas']/checkbox[@accessiblename='Create a &amp;Desktop icon']", 30000, null, "db3b2956-c60c-4693-8667-2b7a01032486");
                 _installInfo = new RepoItemInfo(this, "Install", "?/?/button[@accessiblename='Install']", 30000, null, "af557b2d-c8fe-46cc-a819-a569b68732f1");
                 _finishInfo = new RepoItemInfo(this, "Finish", "?/?/button[@accessiblename='Finish']", 30000, null, "753494ab-8882-4410-a176-f9ea6a3c6b68");
-                _getsetupInfo = new RepoItemInfo(this, "GetSetUp", ".//button[@controlname='detailedSetup']/rawtext[@rawtext='Get set up >']", 30000, null, "9416ffdb-dcb0-46ae-98ad-0b02ec9468dc");
-                _next1Info = new RepoItemInfo(this, "Next1", "?/?/rawtext[@rawtext='Next >' and @column='0']", 30000, null, "86b3d395-4bbc-4246-a383-ccdd5c6b4ad4");
+                _getsetupInfo = new RepoItemInfo(this, "GetSetUp", ".//button[@controlname='detailedSetup']/rawtext[@rawtext='Get set up &gt;']", 30000, null, "9416ffdb-dcb0-46ae-98ad-0b02ec9468dc");
+                _next1Info = new RepoItemInfo(this, "Next1", "?/?/rawtext[@rawtext='Next &gt;' and @column='0']", 30000, null, "86b3d395-4bbc-4246-a383-ccdd5c6b4ad4");
                 _next2Info = new RepoItemInfo(this, "Next2", "button[@controlname='next']", 30000, null, "779238c5-52db-44b3-9649-627f83839420");
                 _helpInfo = new RepoItemInfo(this, "Help", "?/?/rawtext[@rawtext='Help']", 30000, null, "4579b5f2-e350-41aa-8ef9-64625927dfbc");
                 _aboutshipworksInfo = new RepoItemInfo(this, "AboutShipWorks", "?/?/element[@controlname='ribbonTabHelp']/rawtext[@rawtext='About ShipWorks']", 30000, null, "3faf2240-1c93-471c-a517-caa994267915");
@@ -2988,6 +3093,30 @@ namespace ShipWorksPerformanceTestSuite
                 get
                 {
                     return _selfInfo;
+                }
+            }
+
+            /// <summary>
+            /// The Close2 item.
+            /// </summary>
+            [RepositoryItem("8ffe4642-71ce-4612-88d6-aed563b8df9e")]
+            public virtual Ranorex.Button Close2
+            {
+                get
+                {
+                    return _close2Info.CreateAdapter<Ranorex.Button>(true);
+                }
+            }
+
+            /// <summary>
+            /// The Close2 item info.
+            /// </summary>
+            [RepositoryItemInfo("8ffe4642-71ce-4612-88d6-aed563b8df9e")]
+            public virtual RepoItemInfo Close2Info
+            {
+                get
+                {
+                    return _close2Info;
                 }
             }
 
@@ -4667,7 +4796,7 @@ namespace ShipWorksPerformanceTestSuite
             public DatabaseUpdateWizardAppFolder(RepoGenBaseFolder parentFolder) :
                     base("DatabaseUpdateWizard", "/form[@controlname='DatabaseUpdateWizard']", parentFolder, 30000, null, true, "24976891-6eb0-473e-bca4-356061b10a81", "")
             {
-                _nextInfo = new RepoItemInfo(this, "Next", "?/?/rawtext[@rawtext='Next >' and @column='0']", 30000, null, "131b91a0-b0f2-495a-97d7-36380c9800a2");
+                _nextInfo = new RepoItemInfo(this, "Next", "?/?/rawtext[@rawtext='Next &gt;' and @column='0']", 30000, null, "131b91a0-b0f2-495a-97d7-36380c9800a2");
                 _next1Info = new RepoItemInfo(this, "Next1", "button[@controlname='next']", 30000, null, "35d25ef8-c7e6-4ba1-8459-b3d8df9b50ea");
             }
 

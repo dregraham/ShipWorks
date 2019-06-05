@@ -50,6 +50,8 @@ namespace ShipWorksPerformanceTestSuite
             Keyboard.DefaultKeyPressTime = 100;
             Delay.SpeedFactor = 1.0;
             
+            try
+            {
             Host.Local.RunApplication(@"C:\ShipWorks.exe");
             
             Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Move item 'SomeForm.IAcceptTheAgreement1' at Center.", repo.SomeForm.IAcceptTheAgreement1Info, new RecordItemIndex(0));
@@ -132,27 +134,6 @@ namespace ShipWorksPerformanceTestSuite
             repo.SomeForm.Install.Click();
             Delay.Milliseconds(2230);
             
-            // Moves mouse to Install other components title.
-            //Report.Log(ReportLevel.Info, "Mouse", "Moves mouse to Install other components title.\r\nMouse Left Move item 'SomeForm.InstallOtherComponents' at Center.", repo.SomeForm.InstallOtherComponentsInfo, new RecordItemIndex(20));
-            //repo.SomeForm.InstallOtherComponents.MoveTo(300);
-            //Delay.Milliseconds(200);
-            
-            // Clicks the Install other components title.
-            //Report.Log(ReportLevel.Info, "Mouse", "Clicks the Install other components title.\r\nMouse Left Click item 'SomeForm.InstallOtherComponents' at Center.", repo.SomeForm.InstallOtherComponentsInfo, new RecordItemIndex(21));
-            //repo.SomeForm.InstallOtherComponents.Click(300);
-            //Delay.Milliseconds(200);
-            
-            //Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Move item 'SomeForm.Next' at Center.", repo.SomeForm.NextInfo, new RecordItemIndex(22));
-            //repo.SomeForm.Next.MoveTo(300);
-            //Delay.Milliseconds(200);
-            
-            //Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Click item 'SomeForm.Next' at Center.", repo.SomeForm.NextInfo, new RecordItemIndex(23));
-            //repo.SomeForm.Next.Click(300);
-            //Delay.Milliseconds(200);
-            
-            //ClickFinish();
-            //Delay.Milliseconds(0);
-            
             Report.Log(ReportLevel.Info, "Wait", "Waiting 20m to exist. Associated repository item: 'SomeForm.Finish'", repo.SomeForm.FinishInfo, new ActionTimeout(1200000), new RecordItemIndex(25));
             repo.SomeForm.FinishInfo.WaitForExists(1200000);
             
@@ -163,7 +144,19 @@ namespace ShipWorksPerformanceTestSuite
             Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Click item 'SomeForm.Finish' at Center.", repo.SomeForm.FinishInfo, new RecordItemIndex(27));
             repo.SomeForm.Finish.Click(300);
             Delay.Milliseconds(200);
-         
-        }
+            }
+            
+            catch(Exception e)
+            {           	
+            		Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Click item 'SomeForm.Close2' at Center.", repo.SomeForm.Close2Info, new RecordItemIndex(6));
+           			repo.SomeForm.Close2.Click();
+            		Delay.Milliseconds(0);
+            
+           			Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Click item 'ExitSetup.ButtonYes' at Center.", repo.ExitSetup.ButtonYesInfo, new RecordItemIndex(9));
+           			repo.ExitSetup.ButtonYes.Click();
+          			Delay.Milliseconds(0);         		 
+					 throw e;    
+            	}             	      	
+            }         
+        }        
     }
-}

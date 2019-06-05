@@ -113,6 +113,14 @@ namespace ShipWorksPerformanceTestSuite
             Validate.AttributeEqual(repo.ProgressDlg.ButtonOkInfo, "Text", "OK");
             Delay.Milliseconds(100);
             
+            Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Click item 'ExitSetup.ButtonYes' at Center.", repo.ExitSetup.ButtonYesInfo, new RecordItemIndex(9));
+            repo.ExitSetup.ButtonYes.Click();
+            Delay.Milliseconds(0);
+            
+            Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Click item 'SomeForm.Button' at Center.", repo.SomeForm.ButtonInfo, new RecordItemIndex(10));
+            repo.SomeForm.Button.Click();
+            Delay.Milliseconds(0);
+            
         }
 
 #region Image Feature Data
