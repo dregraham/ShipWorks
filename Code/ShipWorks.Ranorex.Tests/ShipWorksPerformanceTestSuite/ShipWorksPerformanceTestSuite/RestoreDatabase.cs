@@ -101,7 +101,7 @@ namespace ShipWorksPerformanceTestSuite
             //V-QA-BEEFCAKE1
             //localhost\ranorex
             //MADKE-PC\\SQL2016
-            Keyboard.Press("localhost\\madkepc");
+            Keyboard.Press("GDEBLO-3564182");
             Delay.Milliseconds(0);
             
             Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Move item 'DetailedDatabaseSetupWizard.Next' at Center.", repo.DetailedDatabaseSetupWizard.NextInfo, new RecordItemIndex(21));
@@ -189,9 +189,9 @@ namespace ShipWorksPerformanceTestSuite
             Delay.Milliseconds(0);
             
             // Tab to the Restore Button > Space on the Restore Button
-            Report.Log(ReportLevel.Info, "Keyboard", "Tab to the Restore Button > Space on the Restore Button\r\nKey sequence '{Tab}{Space}'.", new RecordItemIndex(41));
-            Keyboard.Press("{Tab}{Space}");
-            Delay.Milliseconds(0);
+//            Report.Log(ReportLevel.Info, "Keyboard", "Tab to the Restore Button > Space on the Restore Button\r\nKey sequence '{Tab}{Space}'.", new RecordItemIndex(41));
+//            Keyboard.Press("{Tab}{Space}");
+//            Delay.Milliseconds(0);
             
             Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Move item 'DetailedDatabaseSetupWizard.Next' at Center.", repo.DetailedDatabaseSetupWizard.NextInfo, new RecordItemIndex(42));
             repo.DetailedDatabaseSetupWizard.Next.MoveTo();
@@ -203,8 +203,8 @@ namespace ShipWorksPerformanceTestSuite
             
             // Delay - Restore ShipWorks
             Report.Log(ReportLevel.Info, "Delay", "Delay - Restore ShipWorks\r\nWaiting for 14ms.", new RecordItemIndex(44));
-            Delay.Duration(14, false);
-            
+                       
+            repo.ProgressDlg.ButtonOkInfo.WaitForAttributeEqual(60000, "Enabled", "True");
             Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Move item 'ProgressDlg.ButtonOk' at Center.", repo.ProgressDlg.ButtonOkInfo, new RecordItemIndex(45));
             repo.ProgressDlg.ButtonOk.MoveTo();
             Delay.Milliseconds(0);
@@ -247,25 +247,16 @@ namespace ShipWorksPerformanceTestSuite
             Keyboard.Press("password1");
             Delay.Milliseconds(0);
             
-            // Next
-            Report.Log(ReportLevel.Info, "Keyboard", "Next\r\nKey sequence '{Tab}{Space}'.", new RecordItemIndex(56));
-            Keyboard.Press("{Tab}{Space}");
+			Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Click item 'DatabaseUpdateWizard.Next1' at Center.", repo.DatabaseUpdateWizard.Next1Info, new RecordItemIndex(52));
+            repo.DatabaseUpdateWizard.Next1.Click();
             Delay.Milliseconds(0);
             
-            Report.Log(ReportLevel.Info, "Delay", "Waiting for 10s.", new RecordItemIndex(57));
-            Delay.Duration(10000, false);
-            
-            // Next
-            Report.Log(ReportLevel.Info, "Keyboard", "Next\r\nKey sequence '{Tab}{Space}'.", new RecordItemIndex(58));
-            Keyboard.Press("{Tab}{Space}");
+            Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Click item 'DatabaseUpdateWizard.Next1' at Center.", repo.DatabaseUpdateWizard.Next1Info, new RecordItemIndex(52));
+            repo.DatabaseUpdateWizard.Next1.Click();
             Delay.Milliseconds(0);
             
-            Report.Log(ReportLevel.Info, "Delay", "Waiting for 10s.", new RecordItemIndex(59));
-            Delay.Duration(10000, false);
-            
-            // Next
-            Report.Log(ReportLevel.Info, "Keyboard", "Next\r\nKey sequence '{Tab}{Space}'.", new RecordItemIndex(60));
-            Keyboard.Press("{Tab}{Space}");
+            Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Click item 'DatabaseUpdateWizard.Next1' at Center.", repo.DatabaseUpdateWizard.Next1Info, new RecordItemIndex(52));
+            repo.DatabaseUpdateWizard.Next1.Click();
             Delay.Milliseconds(0);
             
             Report.Log(ReportLevel.Info, "Wait", "Waiting 5s for the attribute 'Enabled' to equal the specified value 'True'. Associated repository item: 'ProgressDlg.ButtonOk'", repo.ProgressDlg.ButtonOkInfo, new RecordItemIndex(7));
@@ -278,21 +269,14 @@ namespace ShipWorksPerformanceTestSuite
             Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Click item 'ProgressDlg.ButtonOk' at Center.", repo.ProgressDlg.ButtonOkInfo, new RecordItemIndex(1));
             repo.ProgressDlg.ButtonOk.Click();
             Delay.Milliseconds(0);
-            
-            Report.Log(ReportLevel.Info, "Delay", "Waiting for 10s.", new RecordItemIndex(61));
-            Delay.Duration(10000, false);
-            
-            // Next
-            Report.Log(ReportLevel.Info, "Keyboard", "Next\r\nKey sequence '{Tab}{Space}'.", new RecordItemIndex(62));
-            Keyboard.Press("{Tab}{Space}");
+                      
+            repo.DatabaseUpdateWizard.Next1Info.WaitForAttributeEqual(60000, "Enabled", "True");
+            Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Move item 'DatabaseUpdateWizard.Next1' at Center.", repo.DatabaseUpdateWizard.Next1Info, new RecordItemIndex(51));
+            repo.DatabaseUpdateWizard.Next1.MoveTo();
             Delay.Milliseconds(0);
             
-            Report.Log(ReportLevel.Info, "Delay", "Waiting for 10s.", new RecordItemIndex(63));
-            Delay.Duration(10000, false);
-            
-            // Finish
-            Report.Log(ReportLevel.Info, "Keyboard", "Finish\r\nKey sequence '{Tab}{Space}'.", new RecordItemIndex(64));
-            Keyboard.Press("{Tab}{Space}");
+            Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Click item 'DatabaseUpdateWizard.Next1' at Center.", repo.DatabaseUpdateWizard.Next1Info, new RecordItemIndex(52));
+            repo.DatabaseUpdateWizard.Next1.Click();
             Delay.Milliseconds(0);
         }
     }

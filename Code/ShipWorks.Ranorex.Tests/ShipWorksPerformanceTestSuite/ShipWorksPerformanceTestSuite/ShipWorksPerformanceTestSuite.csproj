@@ -117,6 +117,9 @@
     <Compile Include="CopyStagingHosts.cs">
       <id>66101e65-b729-4748-8ad1-d88160f96704</id>
     </Compile>
+    <Compile Include="ExtraMethods.cs">
+      <id>a2c1dc32-9bf2-4ee7-85cf-4b2673d78fb8</id>
+    </Compile>
     <Compile Include="InstallShipWorks.cs">
       <id>919b01c7-fd83-4b45-b496-d84dc6bbd430</id>
     </Compile>

@@ -96,7 +96,7 @@ namespace ShipWorksPerformanceTestSuite
             
             Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Click item 'SomeForm.Start_Menu' at Center.", repo.SomeForm.Start_MenuInfo, new RecordItemIndex(10));
             repo.SomeForm.Start_Menu.Click();
-            Delay.Milliseconds(350);
+            Delay.Milliseconds(0);
             
             Report.Log(ReportLevel.Info, "Keyboard", "Key sequence '{LControlKey down}{Akey}{LControlKey up}Smoke Test' with focus on 'SomeForm.Start_Menu'.", repo.SomeForm.Start_MenuInfo, new RecordItemIndex(11));
             repo.SomeForm.Start_Menu.PressKeys("{LControlKey down}{Akey}{LControlKey up}Smoke Test");
@@ -108,7 +108,7 @@ namespace ShipWorksPerformanceTestSuite
             
             Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Click item 'SomeForm.Next' at Center.", repo.SomeForm.NextInfo, new RecordItemIndex(13));
             repo.SomeForm.Next.Click();
-            Delay.Milliseconds(2120);
+            Delay.Milliseconds(0);
             
             Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Move item 'SomeForm.CreateADesktopIcon' at Center.", repo.SomeForm.CreateADesktopIconInfo, new RecordItemIndex(14));
             repo.SomeForm.CreateADesktopIcon.MoveTo();
@@ -116,7 +116,7 @@ namespace ShipWorksPerformanceTestSuite
             
             Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Click item 'SomeForm.CreateADesktopIcon' at Center.", repo.SomeForm.CreateADesktopIconInfo, new RecordItemIndex(15));
             repo.SomeForm.CreateADesktopIcon.Click();
-            Delay.Milliseconds(1320);
+            Delay.Milliseconds(0);
             
             Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Move item 'SomeForm.Next' at Center.", repo.SomeForm.NextInfo, new RecordItemIndex(16));
             repo.SomeForm.Next.MoveTo();
@@ -124,7 +124,7 @@ namespace ShipWorksPerformanceTestSuite
             
             Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Click item 'SomeForm.Next' at Center.", repo.SomeForm.NextInfo, new RecordItemIndex(17));
             repo.SomeForm.Next.Click();
-            Delay.Milliseconds(2530);
+            Delay.Milliseconds(0);
             
             Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Move item 'SomeForm.Install' at Center.", repo.SomeForm.InstallInfo, new RecordItemIndex(18));
             repo.SomeForm.Install.MoveTo();
@@ -132,18 +132,18 @@ namespace ShipWorksPerformanceTestSuite
             
             Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Click item 'SomeForm.Install' at Center.", repo.SomeForm.InstallInfo, new RecordItemIndex(19));
             repo.SomeForm.Install.Click();
-            Delay.Milliseconds(2230);
+            Delay.Milliseconds(0);
             
             Report.Log(ReportLevel.Info, "Wait", "Waiting 20m to exist. Associated repository item: 'SomeForm.Finish'", repo.SomeForm.FinishInfo, new ActionTimeout(1200000), new RecordItemIndex(25));
             repo.SomeForm.FinishInfo.WaitForExists(1200000);
             
             Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Move item 'SomeForm.Finish' at Center.", repo.SomeForm.FinishInfo, new RecordItemIndex(26));
-            repo.SomeForm.Finish.MoveTo(300);
-            Delay.Milliseconds(200);
+            repo.SomeForm.Finish.MoveTo(0);
+            Delay.Milliseconds(0);
             
             Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Click item 'SomeForm.Finish' at Center.", repo.SomeForm.FinishInfo, new RecordItemIndex(27));
-            repo.SomeForm.Finish.Click(300);
-            Delay.Milliseconds(200);
+            repo.SomeForm.Finish.Click();
+            Delay.Milliseconds(0);
             }
             
             catch(Exception e)

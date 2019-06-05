@@ -87,6 +87,10 @@ namespace ShipWorksPerformanceTestSuite
             repo.ShipWorks1.ButtonOK.Click();
             Delay.Milliseconds(0);
             
+            Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Click item 'DatabaseUpdateWizard.Next1' at Center.", repo.DatabaseUpdateWizard.Next1Info, new RecordItemIndex(2));
+            repo.DatabaseUpdateWizard.Next1.Click();
+            Delay.Milliseconds(0);
+            
         }
 
 #region Image Feature Data
