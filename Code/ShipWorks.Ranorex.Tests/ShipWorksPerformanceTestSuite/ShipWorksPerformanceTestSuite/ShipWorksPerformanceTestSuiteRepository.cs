@@ -2227,6 +2227,7 @@ namespace ShipWorksPerformanceTestSuite
             RepoItemInfo _voidingshipmentsInfo;
             RepoItemInfo _buttonokInfo;
             RepoItemInfo _rawtextokInfo;
+            RepoItemInfo _headerimageInfo;
 
             /// <summary>
             /// Creates a new ProgressDlg  folder.
@@ -2238,6 +2239,7 @@ namespace ShipWorksPerformanceTestSuite
                 _voidingshipmentsInfo = new RepoItemInfo(this, "VoidingShipments", "?/?/rawtext", 30000, null, "4f457e94-c84a-41c5-aa3c-541e4ff69bda");
                 _buttonokInfo = new RepoItemInfo(this, "ButtonOk", "button[@controlname='ok']", 30000, null, "d6e9c7e3-1ca3-42cc-bb02-894832d10937");
                 _rawtextokInfo = new RepoItemInfo(this, "RawTextOK", "?/?/rawtext[@rawtext='OK']", 30000, null, "baee4044-7999-4ae0-a6bf-42dc77eb93db");
+                _headerimageInfo = new RepoItemInfo(this, "HeaderImage", "?/?/picture[@controlname='headerImage']", 30000, null, "0ebda92e-de25-4377-a961-bd6290f8ad20");
             }
 
             /// <summary>
@@ -2357,6 +2359,30 @@ namespace ShipWorksPerformanceTestSuite
                 get
                 {
                     return _rawtextokInfo;
+                }
+            }
+
+            /// <summary>
+            /// The HeaderImage item.
+            /// </summary>
+            [RepositoryItem("0ebda92e-de25-4377-a961-bd6290f8ad20")]
+            public virtual Ranorex.Picture HeaderImage
+            {
+                get
+                {
+                    return _headerimageInfo.CreateAdapter<Ranorex.Picture>(true);
+                }
+            }
+
+            /// <summary>
+            /// The HeaderImage item info.
+            /// </summary>
+            [RepositoryItemInfo("0ebda92e-de25-4377-a961-bd6290f8ad20")]
+            public virtual RepoItemInfo HeaderImageInfo
+            {
+                get
+                {
+                    return _headerimageInfo;
                 }
             }
         }
@@ -2919,9 +2945,9 @@ namespace ShipWorksPerformanceTestSuite
                 _navigationInfo = new RepoItemInfo(this, "Navigation", "container[@caption='MsoDockLeft']/container[@caption='Navigation']//element[@name='Navigation']", 30000, null, "3384af99-aac6-4885-9223-6495837dc6d7");
                 _iaccepttheagreementInfo = new RepoItemInfo(this, "IAcceptTheAgreement", "element[@controlname='OuterNotebook']//element[@controlname='LicenseAcceptedRadio']/radiobutton[@accessiblename='I accept the agreement']", 30000, null, "39866f9b-02fc-4a13-a300-0750ceb1a3fe");
                 _nextInfo = new RepoItemInfo(this, "Next", "?/?/button[@accessiblename='Next >']", 30000, null, "7e7a9dba-27af-4a1c-8361-2999e6b49a10");
-                _direditInfo = new RepoItemInfo(this, "DirEdit", "element[@controlname='OuterNotebook']//element[@controlname='SelectDirPage']/text[@controlname='DirEdit']", 30000, null, "22462bf9-1051-400a-8e45-f88d7cd689b4");
-                _start_menuInfo = new RepoItemInfo(this, "Start_Menu", "element[@controlname='OuterNotebook']//element[@controlname='SelectProgramGroupPage']/?/?/text[@accessiblerole='Text']", 30000, null, "73963ab2-3d7f-4873-ae06-c84a11365c90");
-                _createadesktopiconInfo = new RepoItemInfo(this, "CreateADesktopIcon", "element[@controlname='OuterNotebook']//element[@controlname='SelectTasksPage']/?/?/tree[@accessiblename~'^Select\\ the\\ additional\\ tas']/checkbox[@accessiblename='Create a &Desktop icon']", 30000, null, "db3b2956-c60c-4693-8667-2b7a01032486");
+                _direditInfo = new RepoItemInfo(this, "DirEdit", "element[@class='TNewNotebook']/?/?/element[@class='TNewNotebook']/element[@instance='0']/text[@class='TEdit']", 30000, null, "22462bf9-1051-400a-8e45-f88d7cd689b4");
+                _start_menuInfo = new RepoItemInfo(this, "Start_Menu", "element[@class='TNewNotebook']/?/?/element[@class='TNewNotebook']/element[@instance='0']/element[@class='TNewEdit']", 30000, null, "73963ab2-3d7f-4873-ae06-c84a11365c90");
+                _createadesktopiconInfo = new RepoItemInfo(this, "CreateADesktopIcon", "element[@class='TNewNotebook']/?/?/element[@class='TNewNotebook']/element[@instance='0']/?/?/tree[@accessiblename~'^Select\\ the\\ additional\\ tas']/checkbox[@accessiblename='Create a &Desktop icon']", 30000, null, "db3b2956-c60c-4693-8667-2b7a01032486");
                 _installInfo = new RepoItemInfo(this, "Install", "?/?/button[@accessiblename='Install']", 30000, null, "af557b2d-c8fe-46cc-a819-a569b68732f1");
                 _finishInfo = new RepoItemInfo(this, "Finish", "?/?/button[@accessiblename='Finish']", 30000, null, "753494ab-8882-4410-a176-f9ea6a3c6b68");
                 _getsetupInfo = new RepoItemInfo(this, "GetSetUp", ".//button[@controlname='detailedSetup']/rawtext[@rawtext='Get set up >']", 30000, null, "9416ffdb-dcb0-46ae-98ad-0b02ec9468dc");
@@ -3329,11 +3355,11 @@ namespace ShipWorksPerformanceTestSuite
             /// The Start_Menu item.
             /// </summary>
             [RepositoryItem("73963ab2-3d7f-4873-ae06-c84a11365c90")]
-            public virtual Ranorex.Text Start_Menu
+            public virtual Ranorex.Unknown Start_Menu
             {
                 get
                 {
-                    return _start_menuInfo.CreateAdapter<Ranorex.Text>(true);
+                    return _start_menuInfo.CreateAdapter<Ranorex.Unknown>(true);
                 }
             }
 

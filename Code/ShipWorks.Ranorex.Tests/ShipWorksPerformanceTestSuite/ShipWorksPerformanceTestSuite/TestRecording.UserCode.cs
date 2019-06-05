@@ -33,5 +33,11 @@ namespace ShipWorksPerformanceTestSuite
             // Your recording specific initialization code goes here.
         }
 
+        public void Validate_ButtonOk(RepoItemInfo buttonInfo)
+        {
+            Report.Log(ReportLevel.Info, "Validation", "Validating AttributeEqual (Enabled='True') on item 'buttonInfo'.", buttonInfo);
+            Validate.AttributeEqual(buttonInfo, "Enabled", "True");
+        }
+
     }
 }

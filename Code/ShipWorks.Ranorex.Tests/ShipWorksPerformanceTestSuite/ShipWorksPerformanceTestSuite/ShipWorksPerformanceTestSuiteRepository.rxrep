@@ -927,6 +927,16 @@ XrLp0EM2aG+RntUiB+ZT6fxfIsRPbYnQgbXhGFYAAAAASUVORK5CYII=
 			searchtimeout="30000ms">
 				/form[@controlname='ProgressDlg']/?/?/rawtext[@rawtext='OK']
 			</item>
+			<item
+			addcaps="picture,control,nativewindow"
+			capname="picture"
+			id="0ebda92e-de25-4377-a961-bd6290f8ad20"
+			name="HeaderImage"
+			refimgid="050b3a76-5b83-42e8-923b-ff6f73de041e"
+			refpath="/form[@controlname='ProgressDlg']/container/picture[@controlname='headerImage']"
+			searchtimeout="30000ms">
+				/form[@controlname='ProgressDlg']/?/?/picture[@controlname='headerImage']
+			</item>
 			<basepath>
 				/form[@controlname='ProgressDlg']
 			</basepath>
@@ -1335,16 +1345,16 @@ XrLp0EM2aG+RntUiB+ZT6fxfIsRPbYnQgbXhGFYAAAAASUVORK5CYII=
 			name="DirEdit"
 			refimgid="dfbd68e9-2600-4675-b29d-d100b3416ac4"
 			searchtimeout="30000ms">
-				/form[@title='Setup - ShipWorks&#174;']/element[@controlname='OuterNotebook']//element[@controlname='SelectDirPage']/text[@controlname='DirEdit']
+				/form[@title='Setup - ShipWorks&#174;']/element[@class='TNewNotebook']/?/?/element[@class='TNewNotebook']/element[@instance='0']/text[@class='TEdit']
 			</item>
 			<item
 			addcaps="text,accessible"
-			capname="text"
+			capname="unknown"
 			id="73963ab2-3d7f-4873-ae06-c84a11365c90"
 			name="Start_Menu"
 			refimgid="ef1179b7-eae4-49e6-9e42-467cb7959527"
 			searchtimeout="30000ms">
-				/form[@title='Setup - ShipWorks&#174;']/element[@controlname='OuterNotebook']//element[@controlname='SelectProgramGroupPage']/?/?/text[@accessiblerole='Text']
+				/form[@title='Setup - ShipWorks&#174;']/element[@class='TNewNotebook']/?/?/element[@class='TNewNotebook']/element[@instance='0']/element[@class='TNewEdit']
 			</item>
 			<item
 			addcaps="checkbox,accessible,accessibletreeitem"
@@ -1353,7 +1363,7 @@ XrLp0EM2aG+RntUiB+ZT6fxfIsRPbYnQgbXhGFYAAAAASUVORK5CYII=
 			name="CreateADesktopIcon"
 			refimgid="9758cf57-e303-4729-a0c1-3dfb0b155329"
 			searchtimeout="30000ms">
-				/form[@title='Setup - ShipWorks&#174;']/element[@controlname='OuterNotebook']//element[@controlname='SelectTasksPage']/?/?/tree[@accessiblename~'^Select\ the\ additional\ tas']/checkbox[@accessiblename='Create a &amp;Desktop icon']
+				/form[@title='Setup - ShipWorks&#174;']/element[@class='TNewNotebook']/?/?/element[@class='TNewNotebook']/element[@instance='0']/?/?/tree[@accessiblename~'^Select\ the\ additional\ tas']/checkbox[@accessiblename='Create a &amp;Desktop icon']
 			</item>
 			<item
 			addcaps="button,accessible"
