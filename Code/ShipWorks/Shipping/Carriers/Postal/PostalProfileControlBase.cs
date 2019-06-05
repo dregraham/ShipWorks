@@ -114,8 +114,8 @@ namespace ShipWorks.Shipping.Carriers.Postal
 
             AddValueMapping(profile, ShippingProfileFields.ReturnShipment, returnState, returnShipment);
             AddValueMapping(profile, ShippingProfileFields.IncludeReturn, includeReturnState, includeReturn);
-            AddValueMapping(profile, ShippingProfileFields.ApplyReturnProfile, applyReturnProfileState, applyReturnProfile);
             AddValueMapping(profile, ShippingProfileFields.ReturnProfileID, applyReturnProfile, returnProfileID);
+            AddValueMapping(profile, ShippingProfileFields.ApplyReturnProfile, applyReturnProfileState, applyReturnProfile);
         }
 
         /// <summary>

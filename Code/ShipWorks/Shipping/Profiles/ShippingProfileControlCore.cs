@@ -150,6 +150,14 @@ namespace ShipWorks.Shipping.Profiles
                         {
                             mapping.Entity.SetNewFieldValue(mapping.Field.FieldIndex, String.Empty);
                         }
+                        else if (mapping.DataControl is CheckBox)
+                        {
+                            mapping.Entity.SetNewFieldValue(mapping.Field.FieldIndex, false);
+                        }
+                        else
+                        {
+                            mapping.Entity.SetNewFieldValue(mapping.Field.FieldIndex, null);
+                        }
                     }
                     else
                     {

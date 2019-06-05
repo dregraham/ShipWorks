@@ -167,8 +167,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx
 
             AddValueMapping(profile, ShippingProfileFields.ReturnShipment, returnShipmentState, returnShipment);
             AddValueMapping(profile, ShippingProfileFields.IncludeReturn, includeReturnState, includeReturn);
-            AddValueMapping(profile, ShippingProfileFields.ApplyReturnProfile, applyReturnProfileState, applyReturnProfile);
             AddValueMapping(profile, ShippingProfileFields.ReturnProfileID, applyReturnProfile, returnProfileID);
+            AddValueMapping(profile, ShippingProfileFields.ApplyReturnProfile, applyReturnProfileState, applyReturnProfile);
 
             // Map parent/child relationships
             SetParentCheckBox(includeReturnState, includeReturn, applyReturnProfileState, applyReturnProfile);

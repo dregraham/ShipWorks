@@ -197,8 +197,8 @@ namespace ShipWorks.Shipping.Carriers.UPS
 
             AddValueMapping(profile, ShippingProfileFields.ReturnShipment, returnState, returnShipment);
             AddValueMapping(profile, ShippingProfileFields.IncludeReturn, includeReturnState, includeReturn);
-            AddValueMapping(profile, ShippingProfileFields.ApplyReturnProfile, applyReturnProfileState, applyReturnProfile);
             AddValueMapping(profile, ShippingProfileFields.ReturnProfileID, applyReturnProfile, returnProfileID);
+            AddValueMapping(profile, ShippingProfileFields.ApplyReturnProfile, applyReturnProfileState, applyReturnProfile);
             AddValueMapping(ups, UpsProfileFields.ReturnService, returnServiceState, returnService, labelReturnService);
             AddValueMapping(ups, UpsProfileFields.ReturnContents, returnContentsState, returnContents, labelReturnContents);
             AddValueMapping(ups, UpsProfileFields.ReturnUndeliverableEmail, returnUndeliverableState, returnUndeliverable, labelUndeliverableMail);
