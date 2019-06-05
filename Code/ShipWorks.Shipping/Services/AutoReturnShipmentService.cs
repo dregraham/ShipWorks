@@ -2,6 +2,8 @@
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
+using ShipWorks.Shipping.Carriers.UPS;
+using ShipWorks.Shipping.Carriers.UPS.Enums;
 using ShipWorks.Shipping.Profiles;
 
 namespace ShipWorks.Shipping.Services
@@ -51,17 +53,18 @@ namespace ShipWorks.Shipping.Services
                 }
             }
 
-            // If the return shipment's service is UPS SurePost, set an error
-            // but don't overwrite an existing one
-            if ((returnShipment.ShipmentTypeCode == ShipmentTypeCode.UpsOnLineTools ||
-                returnShipment.ShipmentTypeCode == ShipmentTypeCode.UpsWorldShip) &&
-                (returnShipment.Ups.Service.Equals(17) ||
-                returnShipment.Ups.Service.Equals(18) ||
-                returnShipment.Ups.Service.Equals(19) ||
-                returnShipment.Ups.Service.Equals(20)) &&
-                ReturnException == null)
+            // Set an error if the return shipment's service doesn't allow returns,
+            // but don't overwrite any existing error
+            if (ReturnException == null)
             {
-                ReturnException = new ShippingException("UPS SurePost does not support returns.");
+                try
+                {
+                    CheckReturnsAllowed(returnShipment);
+                }
+                catch (ShippingException ex)
+                {
+                    ReturnException = ex;
+                }
             }
 
             return returnShipment;
@@ -80,6 +83,30 @@ namespace ShipWorks.Shipping.Services
             else
             {
                 throw new NotFoundException("The selected return profile could not be found.");
+            }
+        }
+
+        /// <summary>
+        /// Throws an exception if the service of the given shipment doesn't allow returns
+        /// </summary>
+        private void CheckReturnsAllowed(ShipmentEntity returnShipment)
+        {
+            // UPS
+            if (returnShipment.ShipmentTypeCode == ShipmentTypeCode.UpsOnLineTools)
+            {
+                UpsServiceType service = (UpsServiceType) returnShipment.Ups.Service;
+
+                // SurePost
+                if (UpsUtility.IsUpsSurePostService(service))
+                {
+                    throw new ShippingException("UPS SurePost does not support returns.");
+                }
+
+                // Mail Innovations
+                if (UpsUtility.IsUpsMiService(service))
+                {
+                    throw new ShippingException("UPS Mail Innovations does not support returns.");
+                }
             }
         }
     }
