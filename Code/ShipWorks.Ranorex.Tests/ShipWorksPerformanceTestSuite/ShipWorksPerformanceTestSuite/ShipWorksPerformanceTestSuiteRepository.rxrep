@@ -14,6 +14,47 @@ rxversion="8.1">
 	searchtimeout="0ms"
 	usecache="True">
 		<appfolder
+		addcaps="form,nativewindow"
+		capname="form"
+		id="f72c49cd-7518-4d10-8dce-6a4c54beaa8e"
+		isrooted="True"
+		name="ExitSetup"
+		refpath="/form[@title='Exit Setup']"
+		searchtimeout="30000ms"
+		usecache="True">
+			<item
+			addcaps="unknown,rawtext"
+			capname="rawtext"
+			id="24ea3b5c-19d8-4ae4-b56a-743c22b4712f"
+			name="RawTextYes"
+			refimgid="628e5d1b-0a00-42d4-9480-b1161b94deb9"
+			refpath="/form[@title='Exit Setup']/button[@text='&amp;Yes']/rawtext[@rawtext='&amp;Yes']"
+			searchtimeout="30000ms">
+				/form[@title='Exit Setup']/?/?/rawtext[@rawtext='&amp;amp;Yes']
+			</item>
+			<item
+			addcaps="button,nativewindow"
+			capname="button"
+			id="ccbfe737-061e-455f-a50a-04ea7ad18787"
+			name="ButtonYes"
+			refimgid="dc20a39b-5db1-4247-8b3e-a5bac36320f8"
+			refpath="/form[@title='Exit Setup']/button[@text='&amp;Yes']"
+			searchtimeout="30000ms">
+				/form[@title='Exit Setup']/button[@text='&amp;Yes']
+			</item>
+			<basepath>
+				/form[@title='Exit Setup']
+			</basepath>
+			<icon>
+				iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACx
+jwv8YQUAAAAJcEhZcwAADsQAAA7EAZUrDhsAAADASURBVDhPjZDtEYQgDETpyZ4sxR6uGwq4/5Sj
+vIRgyIHnOuuQj30yppWO4zhLKUszr2t4Lhb2/XtuE6PXAPb3GhDX8/b5A2BgFkAIpycATdMAcOGN
+RpvXiAIovHPONyCEf/4BB5OFDWDnmTvA34CGX3gyOwMAeUAbDn4NoE7U2pU3snn4yAiwsCxoV94h
+dIeRv5KdDUAPB8CoFaAH5NG7SB21AiDp18d67EjIywMwtUlBIHTG/kw9LJXK9+KsKaULnNkBnU0T
+XiwAAAAASUVORK5CYII=
+			</icon>
+		</appfolder>
+		<appfolder
 		addcaps="form,control,nativewindow"
 		capname="form"
 		id="bd4b191e-eda6-4879-8143-476ecb195e36"
@@ -459,7 +500,7 @@ MccVydhgafzKwmo3c6RCyF+QF9ssNPjvRAAAAABJRU5ErkJggg==
 			refimgid="fa975d8a-9e70-4dd5-ba1e-06a743583fa1"
 			refpath="/form[@title='Open']/button[@text='&amp;Open']/rawtext[@rawtext='&amp;Open']"
 			searchtimeout="30000ms">
-				/form[@title='Open']/?/?/rawtext[@rawtext='&amp;Open']
+				/form[@title='Open']/?/?/rawtext[@rawtext='&amp;amp;Open']
 			</item>
 			<item
 			addcaps="text,uiautomation,uiautomationvalue"
@@ -888,6 +929,16 @@ XrLp0EM2aG+RntUiB+ZT6fxfIsRPbYnQgbXhGFYAAAAASUVORK5CYII=
 		searchtimeout="30000ms"
 		usecache="True">
 			<item
+			addcaps="picture,control,nativewindow"
+			capname="picture"
+			id="0ebda92e-de25-4377-a961-bd6290f8ad20"
+			name="HeaderImage"
+			refimgid="050b3a76-5b83-42e8-923b-ff6f73de041e"
+			refpath="/form[@controlname='ProgressDlg']/container/picture[@controlname='headerImage']"
+			searchtimeout="30000ms">
+				/form[@controlname='ProgressDlg']/?/?/picture[@controlname='headerImage']
+			</item>
+			<item
 			addcaps="titlebar,accessible"
 			capname="titlebar"
 			id="e76db55d-ad57-456c-a00b-865b94f7f276"
@@ -926,16 +977,6 @@ XrLp0EM2aG+RntUiB+ZT6fxfIsRPbYnQgbXhGFYAAAAASUVORK5CYII=
 			refpath="/form[@controlname='ProgressDlg']/button[@controlname='ok']/rawtext[@rawtext='OK']"
 			searchtimeout="30000ms">
 				/form[@controlname='ProgressDlg']/?/?/rawtext[@rawtext='OK']
-			</item>
-			<item
-			addcaps="picture,control,nativewindow"
-			capname="picture"
-			id="0ebda92e-de25-4377-a961-bd6290f8ad20"
-			name="HeaderImage"
-			refimgid="050b3a76-5b83-42e8-923b-ff6f73de041e"
-			refpath="/form[@controlname='ProgressDlg']/container/picture[@controlname='headerImage']"
-			searchtimeout="30000ms">
-				/form[@controlname='ProgressDlg']/?/?/picture[@controlname='headerImage']
 			</item>
 			<basepath>
 				/form[@controlname='ProgressDlg']
@@ -1213,6 +1254,16 @@ XrLp0EM2aG+RntUiB+ZT6fxfIsRPbYnQgbXhGFYAAAAASUVORK5CYII=
 		searchtimeout="30000ms"
 		usecache="True">
 			<item
+			addcaps="button,accessible"
+			capname="button"
+			id="8ffe4642-71ce-4612-88d6-aed563b8df9e"
+			name="Close2"
+			refimgid="e45f6b31-299f-4404-a158-c9d783b9c203"
+			refpath="/form[@controlname='WizardForm']/titlebar/button[@accessiblename='Close']"
+			searchtimeout="30000ms">
+				/form[@title='Setup - ShipWorks&#174;']/?/?/button[@accessiblename='Close']
+			</item>
+			<item
 			addcaps="unknown,rawtext"
 			capname="rawtext"
 			id="71b6bebf-ee42-4224-82c8-bde2a969bcdc"
@@ -1336,7 +1387,7 @@ XrLp0EM2aG+RntUiB+ZT6fxfIsRPbYnQgbXhGFYAAAAASUVORK5CYII=
 			name="Next"
 			refimgid="ce62c168-e695-4f27-a39d-fab6b393e971"
 			searchtimeout="30000ms">
-				/form[@title='Setup - ShipWorks&#174;']/?/?/button[@accessiblename='Next &gt;']
+				/form[@title='Setup - ShipWorks&#174;']/?/?/button[@accessiblename='Next &amp;gt;']
 			</item>
 			<item
 			addcaps="text,nativewindow,delphicontrol"
@@ -1363,7 +1414,7 @@ XrLp0EM2aG+RntUiB+ZT6fxfIsRPbYnQgbXhGFYAAAAASUVORK5CYII=
 			name="CreateADesktopIcon"
 			refimgid="9758cf57-e303-4729-a0c1-3dfb0b155329"
 			searchtimeout="30000ms">
-				/form[@title='Setup - ShipWorks&#174;']/element[@class='TNewNotebook']/?/?/element[@class='TNewNotebook']/element[@instance='0']/?/?/tree[@accessiblename~'^Select\ the\ additional\ tas']/checkbox[@accessiblename='Create a &amp;Desktop icon']
+				/form[@title='Setup - ShipWorks&#174;']/element[@class='TNewNotebook']/?/?/element[@class='TNewNotebook']/element[@instance='0']/?/?/tree[@accessiblename~'^Select\ the\ additional\ tas']/checkbox[@accessiblename='Create a &amp;amp;Desktop icon']
 			</item>
 			<item
 			addcaps="button,accessible"
@@ -1390,7 +1441,7 @@ XrLp0EM2aG+RntUiB+ZT6fxfIsRPbYnQgbXhGFYAAAAASUVORK5CYII=
 			name="GetSetUp"
 			refimgid="fb95e2f2-013d-4106-bd81-b49c2a19fe9f"
 			searchtimeout="30000ms">
-				/form[@title='Setup - ShipWorks&#174;']//button[@controlname='detailedSetup']/rawtext[@rawtext='Get set up &gt;']
+				/form[@title='Setup - ShipWorks&#174;']//button[@controlname='detailedSetup']/rawtext[@rawtext='Get set up &amp;gt;']
 			</item>
 			<item
 			addcaps="unknown,rawtext"
@@ -1399,7 +1450,7 @@ XrLp0EM2aG+RntUiB+ZT6fxfIsRPbYnQgbXhGFYAAAAASUVORK5CYII=
 			name="Next1"
 			refimgid="2e6a326f-a495-4b39-a2a5-204a5cc3905c"
 			searchtimeout="30000ms">
-				/form[@title='Setup - ShipWorks&#174;']/?/?/rawtext[@rawtext='Next &gt;' and @column='0']
+				/form[@title='Setup - ShipWorks&#174;']/?/?/rawtext[@rawtext='Next &amp;gt;' and @column='0']
 			</item>
 			<folder
 			capname="container"
@@ -1931,7 +1982,7 @@ XrLp0EM2aG+RntUiB+ZT6fxfIsRPbYnQgbXhGFYAAAAASUVORK5CYII=
 			refimgid="44398320-786e-4055-adae-ec37f9d5b1ab"
 			refpath="/form[@controlname='DatabaseUpdateWizard']/button[@controlname='next']/rawtext[@rawtext='Next >' and @column='0']"
 			searchtimeout="30000ms">
-				/form[@controlname='DatabaseUpdateWizard']/?/?/rawtext[@rawtext='Next &gt;' and @column='0']
+				/form[@controlname='DatabaseUpdateWizard']/?/?/rawtext[@rawtext='Next &amp;gt;' and @column='0']
 			</item>
 			<item
 			addcaps="button,control,nativewindow"
