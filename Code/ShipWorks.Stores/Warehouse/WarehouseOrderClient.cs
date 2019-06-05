@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 using RestSharp;
 using ShipWorks.ApplicationCore.Licensing.Warehouse;
 using ShipWorks.Stores.Communication;
@@ -27,7 +28,7 @@ namespace ShipWorks.Stores.Warehouse
         {
             this.warehouseRequestClient = warehouseRequestClient;
         }
-        
+
         /// <summary>
         /// Get orders for the given warehouse ID from the ShipWorks Warehouse app
         /// </summary>
@@ -35,9 +36,9 @@ namespace ShipWorks.Stores.Warehouse
         {
             try
             {
-                IRestRequest request = new RestRequest(WarehouseEndpoints.Orders(warehouseID), Method.POST);
+                IRestRequest request = new RestRequest(WarehouseEndpoints.Orders(warehouseID), Method.GET);
 
-                request.AddQueryParameter("storeID", warehouseStoreID);
+                request.AddQueryParameter("storeId", warehouseStoreID);
                 request.AddQueryParameter("onlineLastModified", lastModified.ToString("o"));
 
                 GenericResult<IRestResponse> response = await warehouseRequestClient
@@ -53,7 +54,14 @@ namespace ShipWorks.Stores.Warehouse
                     response.Value.Content,
                     new JsonSerializerSettings
                     {
-                        Converters = {new WarehouseOrderJsonConverter(storeType)}
+                        Converters = { new WarehouseOrderJsonConverter(storeType) },
+                        ContractResolver = new DefaultContractResolver
+                        {
+                            NamingStrategy = new CamelCaseNamingStrategy
+                            {
+                                OverrideSpecifiedNames = false
+                            }
+                        }
                     });
 
                 return orders;

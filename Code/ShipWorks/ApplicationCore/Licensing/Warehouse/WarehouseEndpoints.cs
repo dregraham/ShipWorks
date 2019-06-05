@@ -13,7 +13,7 @@
         public const string Stores = "api/stores";
 
         private const string linkWarehouse = "api/warehouses/{0}/link";
-        private const string orders = "api/warehouses/{0}";
+        private const string orders = "api/warehouses/{0}/orders";
 
         /// <summary>
         /// Create a link warehouse endpoint

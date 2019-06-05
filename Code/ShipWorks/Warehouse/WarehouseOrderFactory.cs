@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Interapptive.Shared.Business;
 using Interapptive.Shared.Business.Geography;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Import;
@@ -23,7 +24,7 @@ namespace ShipWorks.Warehouse
         {
             this.orderElementFactory = orderElementFactory;
         }
-        
+
         /// <summary>
         /// Load the order details from the warehouse order into the order entity
         /// </summary>
@@ -36,7 +37,7 @@ namespace ShipWorks.Warehouse
             }
 
             OrderEntity orderEntity = result.Value;
-            
+
             // todo: orderid, storeid, warehousecustomerid
             // todo: figure out what should and shouldn't be downloaded when new
             orderEntity.ChangeOrderNumber(warehouseOrder.OrderID);
@@ -49,11 +50,10 @@ namespace ShipWorks.Warehouse
             orderEntity.RequestedShipping = warehouseOrder.RequestedShipping;
             orderEntity.ChannelOrderID = warehouseOrder.ChannelOrderID;
             orderEntity.ShipByDate = warehouseOrder.ShipByDate;
+
+            LoadAddress(orderEntity.BillPerson, warehouseOrder.BillAddress);
+            LoadAddress(orderEntity.ShipPerson, warehouseOrder.ShipAddress);
             
-            LoadBillingAddress(orderEntity, warehouseOrder);
-
-            LoadShippingAddress(orderEntity, warehouseOrder);
-
             LoadItems(orderEntity, warehouseOrder.Items);
 
             LoadCharges(orderEntity, warehouseOrder);
@@ -67,6 +67,27 @@ namespace ShipWorks.Warehouse
             return orderEntity;
         }
 
+        private void LoadAddress(PersonAdapter localAddress, WarehouseOrderAddress warehouseOrderAddress)
+        {
+            // todo: parse names if needed
+            localAddress.UnparsedName = warehouseOrderAddress.UnparsedName;
+            localAddress.FirstName = warehouseOrderAddress.FirstName;
+            localAddress.MiddleName = warehouseOrderAddress.MiddleName;
+            localAddress.LastName = warehouseOrderAddress.LastName;
+            localAddress.Company = warehouseOrderAddress.Company;
+            localAddress.Street1 = warehouseOrderAddress.Street1;
+            localAddress.Street2 = warehouseOrderAddress.Street2;
+            localAddress.Street3 = warehouseOrderAddress.Street3;
+            localAddress.City = warehouseOrderAddress.City;
+            localAddress.StateProvCode = Geography.GetStateProvCode(warehouseOrderAddress.StateProvCode);
+            localAddress.PostalCode = warehouseOrderAddress.PostalCode;
+            localAddress.CountryCode = Geography.GetCountryCode(warehouseOrderAddress.CountryCode);
+            localAddress.Phone = warehouseOrderAddress.Phone;
+            localAddress.Fax = warehouseOrderAddress.Fax;
+            localAddress.Email = warehouseOrderAddress.Email;
+            localAddress.Website = warehouseOrderAddress.Website;
+        }
+
         /// <summary>
         /// Create an order entity with the store specific identifier
         /// </summary>
@@ -76,59 +97,12 @@ namespace ShipWorks.Warehouse
         /// Load store specific order details
         /// </summary>
         protected abstract void LoadStoreOrderDetails(OrderEntity orderEntity, WarehouseOrder warehouseOrder);
-        
+
         /// <summary>
         /// Load store specific item details
         /// </summary>
         protected abstract void LoadStoreItemDetails(OrderItemEntity itemEntity, WarehouseOrderItem warehouseItem);
 
-        /// <summary>
-        /// Load the billing address from the warehouse order into the order entity
-        /// </summary>
-        private static void LoadBillingAddress(OrderEntity orderEntity, WarehouseOrder warehouseOrder)
-        {
-            // todo: parse names if needed
-            orderEntity.BillUnparsedName = warehouseOrder.BillUnparsedName;
-            orderEntity.BillFirstName = warehouseOrder.BillFirstName;
-            orderEntity.BillMiddleName = warehouseOrder.BillMiddleName;
-            orderEntity.BillLastName = warehouseOrder.BillLastName;
-            orderEntity.BillCompany = warehouseOrder.BillCompany;
-            orderEntity.BillStreet1 = warehouseOrder.BillStreet1;
-            orderEntity.BillStreet2 = warehouseOrder.BillStreet2;
-            orderEntity.BillStreet3 = warehouseOrder.BillStreet3;
-            orderEntity.BillCity = warehouseOrder.BillCity;
-            orderEntity.BillStateProvCode = Geography.GetStateProvCode(warehouseOrder.BillStateProvCode);
-            orderEntity.BillPostalCode = warehouseOrder.BillPostalCode;
-            orderEntity.BillCountryCode = Geography.GetCountryCode(warehouseOrder.BillCountryCode);
-            orderEntity.BillPhone = warehouseOrder.BillPhone;
-            orderEntity.BillFax = warehouseOrder.BillFax;
-            orderEntity.BillEmail = warehouseOrder.BillEmail;
-            orderEntity.BillWebsite = warehouseOrder.BillWebsite;
-        }
-
-        /// <summary>
-        /// Load the shipping address from the warehouse order into the order entity
-        /// </summary>
-        private static void LoadShippingAddress(OrderEntity orderEntity, WarehouseOrder warehouseOrder)
-        {
-            orderEntity.ShipUnparsedName = warehouseOrder.ShipUnparsedName;
-            orderEntity.ShipFirstName = warehouseOrder.ShipFirstName;
-            orderEntity.ShipMiddleName = warehouseOrder.ShipMiddleName;
-            orderEntity.ShipLastName = warehouseOrder.ShipLastName;
-            orderEntity.ShipCompany = warehouseOrder.ShipCompany;
-            orderEntity.ShipStreet1 = warehouseOrder.ShipStreet1;
-            orderEntity.ShipStreet2 = warehouseOrder.ShipStreet2;
-            orderEntity.ShipStreet3 = warehouseOrder.ShipStreet3;
-            orderEntity.ShipCity = warehouseOrder.ShipCity;
-            orderEntity.ShipStateProvCode = Geography.GetStateProvCode(warehouseOrder.ShipStateProvCode);
-            orderEntity.ShipPostalCode = warehouseOrder.ShipPostalCode;
-            orderEntity.ShipCountryCode = Geography.GetCountryCode(warehouseOrder.ShipCountryCode);
-            orderEntity.ShipPhone = warehouseOrder.ShipPhone;
-            orderEntity.ShipFax = warehouseOrder.ShipFax;
-            orderEntity.ShipEmail = warehouseOrder.ShipEmail;
-            orderEntity.ShipWebsite = warehouseOrder.ShipWebsite;
-        }
-        
         /// <summary>
         /// Load items from the warehouse order into the order entity
         /// </summary>
@@ -140,7 +114,7 @@ namespace ShipWorks.Warehouse
                 LoadItem(itemEntity, warehouseOrderItem);
             }
         }
-        
+
         /// <summary>
         /// Load the item details from the warehouse item into the item entity
         /// </summary>
@@ -167,10 +141,10 @@ namespace ShipWorks.Warehouse
             itemEntity.Height = warehouseItem.Height;
 
             LoadItemAttributes(itemEntity, warehouseItem);
-            
+
             LoadStoreItemDetails(itemEntity, warehouseItem);
         }
-        
+
         /// <summary>
         /// Load item attributes from the warehouse item into the item entity
         /// </summary>
@@ -178,7 +152,7 @@ namespace ShipWorks.Warehouse
         {
             foreach (WarehouseOrderItemAttribute warehouseItemAttribute in warehouseOrderItem.ItemAttributes)
             {
-                orderElementFactory.CreateItemAttribute(itemEntity, 
+                orderElementFactory.CreateItemAttribute(itemEntity,
                                                         warehouseItemAttribute.Name,
                                                         warehouseItemAttribute.Description,
                                                         warehouseItemAttribute.UnitPrice,
@@ -199,7 +173,7 @@ namespace ShipWorks.Warehouse
                                                  warehouseOrderCharge.Amount);
             }
         }
-        
+
         /// <summary>
         /// Load payment details from the warehouse order into the order entity
         /// </summary>
