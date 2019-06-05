@@ -18,6 +18,7 @@ rxversion="8.1">
 			showinvisiblechars="True">
 			</testsuite>
 			<testmodule
+			enabled="False"
 			id="27507515-bcb7-4c7d-ac95-baf4cc972d1a"
 			name="InstallShipWorks"
 			ref="48cccffa-1273-486f-9f8c-ad0e793f6d83"
@@ -33,6 +34,7 @@ rxversion="8.1">
 			reportlevel="Info;20">
 			</testcase>
 			<testmodule
+			enabled="False"
 			id="a256a268-03c1-46bc-952b-e84f2a8f8910"
 			name="CopyStagingHosts"
 			ref="a008879e-2cde-4625-83db-df20be2f6541"
