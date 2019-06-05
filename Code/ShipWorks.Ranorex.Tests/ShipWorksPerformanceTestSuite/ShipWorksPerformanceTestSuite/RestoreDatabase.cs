@@ -146,12 +146,12 @@ namespace ShipWorksPerformanceTestSuite
             
             // Cursor moves to Desktop
             Report.Log(ReportLevel.Info, "Mouse", "Cursor moves to Desktop\r\nMouse Left Move item 'Open.Desktop' at Center.", repo.Open.DesktopInfo, new RecordItemIndex(32));
-            repo.Open.Desktop.MoveTo(1000);
+            repo.Open.Desktop.MoveTo();
             Delay.Milliseconds(0);
             
             // Click Desktop
             Report.Log(ReportLevel.Info, "Mouse", "Click Desktop\r\nMouse Left Click item 'Open.Desktop' at Center.", repo.Open.DesktopInfo, new RecordItemIndex(33));
-            repo.Open.Desktop.Click(1000);
+            repo.Open.Desktop.Click();
             Delay.Milliseconds(0);
             
             Report.Log(ReportLevel.Info, "Keyboard", "Key sequence '{LMenu down}{Dkey}{LMenu up}'.", new RecordItemIndex(34));
@@ -170,12 +170,12 @@ namespace ShipWorksPerformanceTestSuite
             
             // Cursor moves to the File Name Field
             Report.Log(ReportLevel.Info, "Mouse", "Cursor moves to the File Name Field\r\nMouse Left Move item 'Open.ComboBox1148' at Center.", repo.Open.ComboBox1148Info, new RecordItemIndex(37));
-            repo.Open.ComboBox1148.MoveTo(1000);
+            repo.Open.ComboBox1148.MoveTo();
             Delay.Milliseconds(0);
             
             // Click File Name Field
             Report.Log(ReportLevel.Info, "Mouse", "Click File Name Field\r\nMouse Left Click item 'Open.ComboBox1148' at Center.", repo.Open.ComboBox1148Info, new RecordItemIndex(38));
-            repo.Open.ComboBox1148.Click(1000);
+            repo.Open.ComboBox1148.Click();
             Delay.Milliseconds(0);
             
             // Key in text
@@ -194,11 +194,11 @@ namespace ShipWorksPerformanceTestSuite
             Delay.Milliseconds(0);
             
             Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Move item 'DetailedDatabaseSetupWizard.Next' at Center.", repo.DetailedDatabaseSetupWizard.NextInfo, new RecordItemIndex(42));
-            repo.DetailedDatabaseSetupWizard.Next.MoveTo(1000);
+            repo.DetailedDatabaseSetupWizard.Next.MoveTo();
             Delay.Milliseconds(0);
             
             Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Click item 'DetailedDatabaseSetupWizard.Next' at Center.", repo.DetailedDatabaseSetupWizard.NextInfo, new RecordItemIndex(43));
-            repo.DetailedDatabaseSetupWizard.Next.Click(1000);
+            repo.DetailedDatabaseSetupWizard.Next.Click();
             Delay.Milliseconds(0);
             
             // Delay - Restore ShipWorks
@@ -206,19 +206,19 @@ namespace ShipWorksPerformanceTestSuite
             Delay.Duration(14, false);
             
             Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Move item 'ProgressDlg.ButtonOk' at Center.", repo.ProgressDlg.ButtonOkInfo, new RecordItemIndex(45));
-            repo.ProgressDlg.ButtonOk.MoveTo(1000);
+            repo.ProgressDlg.ButtonOk.MoveTo();
             Delay.Milliseconds(0);
             
             Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Click item 'ProgressDlg.ButtonOk' at Center.", repo.ProgressDlg.ButtonOkInfo, new RecordItemIndex(46));
-            repo.ProgressDlg.ButtonOk.Click(1000);
+            repo.ProgressDlg.ButtonOk.Click();
             Delay.Milliseconds(0);
             
             Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Move item 'DetailedDatabaseSetupWizard.Next' at Center.", repo.DetailedDatabaseSetupWizard.NextInfo, new RecordItemIndex(47));
-            repo.DetailedDatabaseSetupWizard.Next.MoveTo(1000);
+            repo.DetailedDatabaseSetupWizard.Next.MoveTo();
             Delay.Milliseconds(0);
             
             Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Click item 'DetailedDatabaseSetupWizard.Next' at Center.", repo.DetailedDatabaseSetupWizard.NextInfo, new RecordItemIndex(48));
-            repo.DetailedDatabaseSetupWizard.Next.Click(1000);
+            repo.DetailedDatabaseSetupWizard.Next.Click();
             Delay.Milliseconds(0);
             
             // Database Update Require
@@ -226,11 +226,11 @@ namespace ShipWorksPerformanceTestSuite
             repo.DatabaseUpdateWizard.SelfInfo.WaitForExists(30000);
             
             Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Move item 'DatabaseUpdateWizard.Next1' at Center.", repo.DatabaseUpdateWizard.Next1Info, new RecordItemIndex(51));
-            repo.DatabaseUpdateWizard.Next1.MoveTo(1000);
+            repo.DatabaseUpdateWizard.Next1.MoveTo();
             Delay.Milliseconds(0);
             
             Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Click item 'DatabaseUpdateWizard.Next1' at Center.", repo.DatabaseUpdateWizard.Next1Info, new RecordItemIndex(52));
-            repo.DatabaseUpdateWizard.Next1.Click(1000);
+            repo.DatabaseUpdateWizard.Next1.Click();
             Delay.Milliseconds(0);
             
             // Entering credentials
