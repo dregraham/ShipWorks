@@ -784,7 +784,6 @@ namespace ShipWorks.Shipping.Editing
                     .GetConfiguredShipmentTypeProfiles()
                     .Where(p => p.ShippingProfileEntity.ShipmentType.HasValue)
                     .Where(p => p.IsApplicable(shipmentTypeCode))
-                    .Where(p => p.ShippingProfileEntity.ShipmentType == shipmentTypeCode)
                     .Where(p => p.ShippingProfileEntity.ReturnShipment == true)
                     .Select(s => new KeyValuePair<long, string>(s.ShippingProfileEntity.ShippingProfileID, s.ShippingProfileEntity.Name))
                     .OrderBy(g => g.Value)
