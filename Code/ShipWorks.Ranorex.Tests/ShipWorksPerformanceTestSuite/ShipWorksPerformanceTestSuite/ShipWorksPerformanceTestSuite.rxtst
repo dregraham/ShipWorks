@@ -33,7 +33,6 @@ rxversion="8.1">
 			reportlevel="Info;20">
 			</testcase>
 			<testmodule
-			enabled="False"
 			id="a256a268-03c1-46bc-952b-e84f2a8f8910"
 			name="CopyStagingHosts"
 			ref="a008879e-2cde-4625-83db-df20be2f6541"
