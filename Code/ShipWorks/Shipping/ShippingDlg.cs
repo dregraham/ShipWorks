@@ -1696,14 +1696,10 @@ namespace ShipWorks.Shipping
         {
             contextMenuProfiles.Items.Clear();
 
-            ShipmentTypeCode? shipmentTypeCode = comboShipmentType.MultiValued ? (ShipmentTypeCode?) null :
-                (ShipmentTypeCode) comboShipmentType.SelectedValue;
+            IEnumerable<ShipmentTypeCode> shipmentTypeCodes = loadedShipmentEntities.Select(x => x.ShipmentTypeCode).Distinct();
 
             // Add each relevant profile
-            if (shipmentTypeCode != null)
-            {
-                AddProfilesToMenu(shipmentTypeCode.Value);
-            }
+            AddProfilesToMenu(shipmentTypeCodes);
 
             if (contextMenuProfiles.Items.Count == 0)
             {
@@ -1721,12 +1717,12 @@ namespace ShipWorks.Shipping
         /// <summary>
         /// Add applicable profiles for the given shipment type to the context menu
         /// </summary>
-        private void AddProfilesToMenu(ShipmentTypeCode shipmentTypeCode)
+        private void AddProfilesToMenu(IEnumerable<ShipmentTypeCode> shipmentTypeCodes)
         {
             IEnumerable<IGrouping<ShipmentTypeCode?, IShippingProfileEntity>> profileGroups = shippingProfileService
                 .GetConfiguredShipmentTypeProfiles()
-                .Where(p => shipmentTypeCode != ShipmentTypeCode.None || p.ShippingProfileEntity.ShipmentType.HasValue)
-                .Where(p => p.IsApplicable(shipmentTypeCode))
+                .Where(p => shipmentTypeCodes.Any(s => s != ShipmentTypeCode.None) || p.ShippingProfileEntity.ShipmentType.HasValue)
+                .Where(p => shipmentTypeCodes.All(s => p.IsApplicable(s)))
                 .Select(s => s.ShippingProfileEntity).Cast<IShippingProfileEntity>()
                 .GroupBy(p => p.ShipmentType)
                 .OrderBy(g => g.Key.HasValue ? ShipmentTypeManager.GetSortValue(g.Key.Value) : -1);
