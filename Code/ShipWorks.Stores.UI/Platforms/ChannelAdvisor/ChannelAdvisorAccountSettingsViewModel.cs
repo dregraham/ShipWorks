@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
@@ -71,7 +70,7 @@ namespace ShipWorks.Stores.UI.Platforms.ChannelAdvisor
         /// </summary>
         private void GetAccessCode()
         {
-            string authorizationUrl = $"{ChannelAdvisorRestClient.EndpointBase}/oauth2/authorize{authorizeUrlParameters}";
+            string authorizationUrl = $"{ChannelAdvisorRestClient.GetEndpointBase()}/oauth2/authorize{authorizeUrlParameters}";
             WebHelper.OpenUrl(authorizationUrl, window);
         }
 
@@ -102,11 +101,19 @@ namespace ShipWorks.Stores.UI.Platforms.ChannelAdvisor
             {
                 try
                 {
-                    string refreshToken = webClient.GetRefreshToken(AccessCode, new ChannelAdvisorStoreType(store).RedirectUrl).Value;
-                    store.RefreshToken = encryptionProviderFactory.CreateSecureTextEncryptionProvider("ChannelAdvisor")
-                        .Encrypt(refreshToken);
+                    var refreshToken = webClient.GetRefreshToken(AccessCode, new ChannelAdvisorStoreType(store).RedirectUrl);
+                    if (refreshToken.Failure)
+                    {
+                        messageHelper.ShowMessage(
+                        "An error occurred requesting access. Please get a new access code and try again." +
+                        $"{Environment.NewLine}{Environment.NewLine}{refreshToken.Exception.Message}");
+                        return false;
+                    }
 
-                    UpdateStoreInfo(store, refreshToken);
+                    store.RefreshToken = encryptionProviderFactory.CreateSecureTextEncryptionProvider("ChannelAdvisor")
+                        .Encrypt(refreshToken.Value);
+
+                    UpdateStoreInfo(store, refreshToken.Value);
 
                     accessCodeForSavedRefreshToken = AccessCode;
                     return true;
@@ -131,7 +138,7 @@ namespace ShipWorks.Stores.UI.Platforms.ChannelAdvisor
             // if we already have a profile id don't do anything
             if (store.ProfileID <= 0)
             {
-                ChannelAdvisorProfile profile = webClient.GetProfiles(refreshToken)?.Profiles?.First();
+                ChannelAdvisorProfile profile = webClient.GetProfiles(refreshToken)?.Profiles?.FirstOrDefault();
 
                 store.ProfileID = profile?.ProfileId ?? 0;
                 store.StoreName = profile?.AccountName ?? string.Empty;

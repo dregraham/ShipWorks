@@ -238,15 +238,15 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor.DTO
         public decimal PromotionAmount { get; set; }
 
         [JsonProperty("Items")]
-        public IList<ChannelAdvisorOrderItem> Items { get; set; }
+        public IList<ChannelAdvisorOrderItem> Items { get; set; } = new List<ChannelAdvisorOrderItem>();
 
         [JsonProperty("Fulfillments")]
-        public IList<ChannelAdvisorFulfillment> Fulfillments { get; set; }
+        public IList<ChannelAdvisorFulfillment> Fulfillments { get; set; } = new List<ChannelAdvisorFulfillment>();
 
         [JsonProperty("Adjustments")]
-        public IList<ChannelAdvisorOrderAdjustment> Adjustments { get; set; }
+        public IList<ChannelAdvisorOrderAdjustment> Adjustments { get; set; } = new List<ChannelAdvisorOrderAdjustment>();
 
         [JsonProperty("CustomFields")]
-        public IList<ChannelAdvisorCustomField> CustomFields { get; set; }
+        public IList<ChannelAdvisorCustomField> CustomFields { get; set; } = new List<ChannelAdvisorCustomField>();
     }
 }
