@@ -1,11 +1,11 @@
-using ShipWorks.Warehouse.DTO.Orders;
+using Newtonsoft.Json;
 
 namespace ShipWorks.Stores.Platforms.ChannelAdvisor.Warehouse
 {
     /// <summary>
     /// ChannelAdvisor warehouse item
     /// </summary>
-    public class ChannelAdvisorWarehouseItem : WarehouseOrderItem
+    public class ChannelAdvisorWarehouseItem
     {
         /// <summary>
         /// The MarketplaceName of the ChannelAdvisorOrderItem
@@ -18,14 +18,16 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor.Warehouse
         public string MarketplaceStoreName { get; set; }
 
         /// <summary>
-        /// The MarketplaceBuyerID of the ChannelAdvisorOrderItem
+        /// The MarketplaceBuyerId of the ChannelAdvisorOrderItem
         /// </summary>
-        public string MarketplaceBuyerID { get; set; }
+        [JsonProperty("marketplaceBuyerId")]
+        public string MarketplaceBuyerId { get; set; }
 
         /// <summary>
-        /// The MarketplaceSalesID of the ChannelAdvisorOrderItem
+        /// The MarketplaceSalesId of the ChannelAdvisorOrderItem
         /// </summary>
-        public string MarketplaceSalesID { get; set; }
+        [JsonProperty("marketplaceSalesId")]
+        public string MarketplaceSalesId { get; set; }
 
         /// <summary>
         /// The Classification of the ChannelAdvisorOrderItem
@@ -43,9 +45,10 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor.Warehouse
         public bool IsFBA { get; set; }
 
         /// <summary>
-        /// The DistributionCenterID of the ChannelAdvisorOrderItem
+        /// The DistributionCenterId of the ChannelAdvisorOrderItem
         /// </summary>
-        public long DistributionCenterID { get; set; }
+        [JsonProperty("distributionCenterId")]
+        public long DistributionCenterId { get; set; }
 
         /// <summary>
         /// The DistributionCenterName of the ChannelAdvisorOrderItem

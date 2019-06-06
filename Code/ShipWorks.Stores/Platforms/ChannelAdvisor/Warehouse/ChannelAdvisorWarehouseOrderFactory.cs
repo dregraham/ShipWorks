@@ -17,6 +17,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor.Warehouse
     [KeyedComponent(typeof(IWarehouseOrderFactory), StoreTypeCode.ChannelAdvisor)]
     public class ChannelAdvisorWarehouseOrderFactory : WarehouseOrderFactory
     {
+        private const string channelAdvisorEntryKey = "channelAdvisor";
         private readonly ILog log;
 
         /// <summary>
@@ -33,7 +34,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor.Warehouse
         /// </summary>
         protected override async Task<GenericResult<OrderEntity>> CreateStoreOrderEntity(WarehouseOrder warehouseOrder)
         {
-            long channelAdvisorOrderID = long.Parse(((ChannelAdvisorWarehouseOrder) warehouseOrder).OrderNumber);
+            long channelAdvisorOrderID = long.Parse(warehouseOrder.OrderNumber);
 
             // get the order instance
             GenericResult<OrderEntity> result = await orderElementFactory
@@ -43,7 +44,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor.Warehouse
             {
                 log.InfoFormat("Skipping order '{0}': {1}.", channelAdvisorOrderID, result.Message);
             }
-            
+
             return result;
         }
 
@@ -53,8 +54,8 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor.Warehouse
         protected override void LoadStoreOrderDetails(OrderEntity orderEntity, WarehouseOrder warehouseOrder)
         {
             ChannelAdvisorOrderEntity channelAdvisorOrderEntity = (ChannelAdvisorOrderEntity) orderEntity;
-            ChannelAdvisorWarehouseOrder channelAdvisorWarehouseOrder = (ChannelAdvisorWarehouseOrder) warehouseOrder;
-            
+            var channelAdvisorWarehouseOrder = warehouseOrder.AdditionalData[channelAdvisorEntryKey].ToObject<ChannelAdvisorWarehouseOrder>();
+
             channelAdvisorOrderEntity.CustomOrderIdentifier = channelAdvisorWarehouseOrder.CustomOrderIdentifier;
             channelAdvisorOrderEntity.ResellerID = channelAdvisorWarehouseOrder.ResellerID;
             channelAdvisorOrderEntity.OnlineShippingStatus = channelAdvisorWarehouseOrder.OnlineShippingStatus;
@@ -64,7 +65,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor.Warehouse
             channelAdvisorOrderEntity.FlagDescription = channelAdvisorWarehouseOrder.FlagDescription;
             channelAdvisorOrderEntity.FlagType = channelAdvisorWarehouseOrder.FlagType;
             channelAdvisorOrderEntity.MarketplaceNames = channelAdvisorWarehouseOrder.MarketplaceNames;
-            channelAdvisorOrderEntity.IsPrime = channelAdvisorWarehouseOrder.IsPrime;        
+            channelAdvisorOrderEntity.IsPrime = channelAdvisorWarehouseOrder.IsPrime;
         }
 
         /// <summary>
@@ -73,16 +74,16 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor.Warehouse
         protected override void LoadStoreItemDetails(OrderItemEntity itemEntity, WarehouseOrderItem warehouseItem)
         {
             ChannelAdvisorOrderItemEntity channelAdvisorItemEntity = (ChannelAdvisorOrderItemEntity) itemEntity;
-            ChannelAdvisorWarehouseItem channelAdvisorWarehouseItem = (ChannelAdvisorWarehouseItem) warehouseItem;
-            
+            var channelAdvisorWarehouseItem = warehouseItem.AdditionalData[channelAdvisorEntryKey].ToObject<ChannelAdvisorWarehouseItem>();
+
             channelAdvisorItemEntity.MarketplaceName = channelAdvisorWarehouseItem.MarketplaceName;
             channelAdvisorItemEntity.MarketplaceStoreName = channelAdvisorWarehouseItem.MarketplaceStoreName;
-            channelAdvisorItemEntity.MarketplaceBuyerID = channelAdvisorWarehouseItem.MarketplaceBuyerID;
-            channelAdvisorItemEntity.MarketplaceSalesID = channelAdvisorWarehouseItem.MarketplaceSalesID;
+            channelAdvisorItemEntity.MarketplaceBuyerID = channelAdvisorWarehouseItem.MarketplaceBuyerId;
+            channelAdvisorItemEntity.MarketplaceSalesID = channelAdvisorWarehouseItem.MarketplaceSalesId;
             channelAdvisorItemEntity.Classification = channelAdvisorWarehouseItem.Classification;
             channelAdvisorItemEntity.DistributionCenter = channelAdvisorWarehouseItem.DistributionCenter;
             channelAdvisorItemEntity.IsFBA = channelAdvisorWarehouseItem.IsFBA;
-            channelAdvisorItemEntity.DistributionCenterID = channelAdvisorWarehouseItem.DistributionCenterID;
+            channelAdvisorItemEntity.DistributionCenterID = channelAdvisorWarehouseItem.DistributionCenterId;
             channelAdvisorItemEntity.DistributionCenterName = channelAdvisorWarehouseItem.DistributionCenterName;
         }
     }

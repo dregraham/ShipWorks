@@ -1,29 +1,21 @@
-using System.Collections.Generic;
-using ShipWorks.Warehouse.DTO.Orders;
+using Newtonsoft.Json;
 
 namespace ShipWorks.Stores.Platforms.ChannelAdvisor.Warehouse
 {
     /// <summary>
     /// ChannelAdvisor warehouse order
     /// </summary>
-    public class ChannelAdvisorWarehouseOrder : WarehouseOrder
+    public class ChannelAdvisorWarehouseOrder
     {
-        /// <summary>
-        /// Constructor
-        /// </summary>
-        public ChannelAdvisorWarehouseOrder()
-        {
-            Items = new List<ChannelAdvisorWarehouseItem>();
-        }
-
         /// <summary>
         /// The CustomOrderIdentifier of the ChannelAdvisorOrder
         /// </summary>
         public string CustomOrderIdentifier { get; set; }
 
         /// <summary>
-        /// The ResellerID of the ChannelAdvisorOrder
+        /// The ResellerId of the ChannelAdvisorOrder
         /// </summary>
+        [JsonProperty("resellerId")]
         public string ResellerID { get; set; }
 
         /// <summary>
@@ -65,10 +57,5 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor.Warehouse
         /// The IsPrime of the ChannelAdvisorOrder
         /// </summary>
         public int IsPrime { get; set; }
-
-        /// <summary>
-        /// The items in the order
-        /// </summary>
-        public override IEnumerable<WarehouseOrderItem> Items { get; set; }
     }
 }

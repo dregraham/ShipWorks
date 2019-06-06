@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace ShipWorks.Warehouse.DTO.Orders
 {
@@ -23,7 +25,7 @@ namespace ShipWorks.Warehouse.DTO.Orders
         public string Website { get; set; }
     }
 
-    public abstract class WarehouseOrder
+    public class WarehouseOrder
     {
         /// <summary>
         /// Constructor
@@ -34,6 +36,9 @@ namespace ShipWorks.Warehouse.DTO.Orders
             PaymentDetails = new List<WarehouseOrderPaymentDetail>();
             Notes = new List<WarehouseOrderNote>();
         }
+
+        public long HubSequence { get; set; }
+        public string HubOrderId { get; set; }
 
         public string OrderID { get; set; }
 
@@ -67,6 +72,9 @@ namespace ShipWorks.Warehouse.DTO.Orders
         public List<WarehouseOrderPaymentDetail> PaymentDetails { get; set; }
         public List<WarehouseOrderNote> Notes { get; set; }
 
-        public abstract IEnumerable<WarehouseOrderItem> Items { get; set; }
+        public IEnumerable<WarehouseOrderItem> Items { get; set; }
+
+        [JsonExtensionData]
+        public IDictionary<string, JToken> AdditionalData { get; set; }
     }
 }

@@ -1,4 +1,6 @@
 using System.Collections.Generic;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace ShipWorks.Warehouse.DTO.Orders
 {
@@ -31,5 +33,8 @@ namespace ShipWorks.Warehouse.DTO.Orders
         public decimal Width { get; set; }
         public decimal Height { get; set; }
         public IEnumerable<WarehouseOrderItemAttribute> ItemAttributes { get; set; }
+
+        [JsonExtensionData]
+        public IDictionary<string, JToken> AdditionalData { get; set; }
     }
 }

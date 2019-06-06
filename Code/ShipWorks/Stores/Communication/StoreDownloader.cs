@@ -233,6 +233,19 @@ namespace ShipWorks.Stores.Communication
         }
 
         /// <summary>
+        /// Gets the largest HubSequence we have in our database for non-manual orders for this store.  If no
+        /// such orders exist, then 0 is returned.
+        /// </summary>
+        protected async Task<long> GetHubSequenceStartingPoint()
+        {
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+            {
+                IDownloadStartingPoint startingPoint = lifetimeScope.Resolve<IDownloadStartingPoint>();
+                return await startingPoint.HubSequence(Store).ConfigureAwait(false);
+            }
+        }
+
+        /// <summary>
         /// Instantiates the order identified by the given identifier.  If no order exists in the database,
         /// a new one is initialized, created, and returned.  If the order does exist in the database,
         /// that order is returned.
@@ -1326,24 +1339,37 @@ namespace ShipWorks.Stores.Communication
             using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
                 IWarehouseOrderClient webClient = lifetimeScope.Resolve<IWarehouseOrderClient>();
+                IWarehouseOrderFactory orderFactory = lifetimeScope
+                    .ResolveKeyed<IWarehouseOrderFactory>(StoreType.TypeCode, TypedParameter.From<IOrderElementFactory>(this));
 
-                DateTime? downloadStartPoint = await GetOnlineLastModifiedStartingPoint().ConfigureAwait(false);
+                bool shouldContinue = false;
+                var count = 1;
 
-                // get orders for this store and warehouse
-                IEnumerable<WarehouseOrder> orders = await webClient.GetOrders(config.WarehouseID, Store.WarehouseStoreID.ToString(), downloadStartPoint.Value, StoreType.TypeCode)
-                                                                    .ConfigureAwait(false);
-
-                IWarehouseOrderFactory orderFactory = lifetimeScope.ResolveKeyed<IWarehouseOrderFactory>(StoreType.TypeCode,
-                    new TypedParameter(typeof(IOrderElementFactory), this));
-
-                foreach (WarehouseOrder warehouseOrder in orders)
+                do
                 {
-                    // create order
-                    OrderEntity orderEntity = await orderFactory.CreateOrder(warehouseOrder).ConfigureAwait(false);
-                
-                    // save order
-                    await SaveDownloadedOrder(orderEntity).ConfigureAwait(false);
-                }
+                    long downloadStartPoint = await GetHubSequenceStartingPoint().ConfigureAwait(false);
+
+                    // get orders for this store and warehouse
+                    IEnumerable<WarehouseOrder> orders = await webClient
+                        .GetOrders(config.WarehouseID, Store.WarehouseStoreID.ToString(), downloadStartPoint, StoreType.TypeCode)
+                        .ConfigureAwait(false);
+
+                    foreach (WarehouseOrder warehouseOrder in orders)
+                    {
+                        if (Progress.IsCancelRequested)
+                        {
+                            return;
+                        }
+
+                        count += 1;
+                        Progress.Detail = "Downloading order " + count.ToString("#,##0");
+
+                        OrderEntity orderEntity = await orderFactory.CreateOrder(warehouseOrder).ConfigureAwait(false);
+                        await SaveDownloadedOrder(orderEntity).ConfigureAwait(false);
+                    }
+
+                    shouldContinue = orders.Any();
+                } while (shouldContinue);
             }
         }
 
@@ -1356,7 +1382,7 @@ namespace ShipWorks.Stores.Communication
         /// </summary>
         Task<GenericResult<OrderEntity>> IOrderElementFactory.CreateOrder(OrderIdentifier orderIdentifier) =>
             InstantiateOrder(orderIdentifier);
-        
+
         /// <summary>
         /// Create an item for the given order
         /// </summary>

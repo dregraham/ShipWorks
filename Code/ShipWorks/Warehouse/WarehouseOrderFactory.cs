@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Interapptive.Shared.Business;
@@ -40,7 +41,7 @@ namespace ShipWorks.Warehouse
 
             // todo: orderid, storeid, warehousecustomerid
             // todo: figure out what should and shouldn't be downloaded when new
-            orderEntity.ChangeOrderNumber(warehouseOrder.OrderID);
+            orderEntity.ChangeOrderNumber(warehouseOrder.OrderNumber);
             orderEntity.OrderDate = warehouseOrder.OrderDate;
             orderEntity.OrderTotal = warehouseOrder.OrderTotal;
             orderEntity.OnlineLastModified = warehouseOrder.OnlineLastModified;
@@ -50,10 +51,12 @@ namespace ShipWorks.Warehouse
             orderEntity.RequestedShipping = warehouseOrder.RequestedShipping;
             orderEntity.ChannelOrderID = warehouseOrder.ChannelOrderID;
             orderEntity.ShipByDate = warehouseOrder.ShipByDate;
+            orderEntity.HubOrderID = Guid.Parse(warehouseOrder.HubOrderId);
+            orderEntity.HubSequence = warehouseOrder.HubSequence;
 
             LoadAddress(orderEntity.BillPerson, warehouseOrder.BillAddress);
             LoadAddress(orderEntity.ShipPerson, warehouseOrder.ShipAddress);
-            
+
             LoadItems(orderEntity, warehouseOrder.Items);
 
             LoadCharges(orderEntity, warehouseOrder);

@@ -16,6 +16,7 @@ namespace ShipWorks.Stores.Platforms.Amazon.Warehouse
     [KeyedComponent(typeof(IWarehouseOrderFactory), StoreTypeCode.Amazon)]
     public class AmazonWarehouseOrderFactory : WarehouseOrderFactory
     {
+        private const string amazonEntryKey = "amazon";
         private readonly ILog log;
 
         /// <summary>
@@ -32,7 +33,7 @@ namespace ShipWorks.Stores.Platforms.Amazon.Warehouse
         /// </summary>
         protected override async Task<GenericResult<OrderEntity>> CreateStoreOrderEntity(WarehouseOrder warehouseOrder)
         {
-            string amazonOrderID = ((AmazonWarehouseOrder) warehouseOrder).AmazonOrderID;
+            string amazonOrderID = warehouseOrder.AdditionalData[amazonEntryKey].ToObject<AmazonWarehouseOrder>().AmazonOrderID;
 
             // get the order instance
             GenericResult<OrderEntity> result = await orderElementFactory
@@ -42,7 +43,7 @@ namespace ShipWorks.Stores.Platforms.Amazon.Warehouse
             {
                 log.InfoFormat("Skipping order '{0}': {1}.", amazonOrderID, result.Message);
             }
-            
+
             return result;
         }
 
@@ -52,14 +53,14 @@ namespace ShipWorks.Stores.Platforms.Amazon.Warehouse
         protected override void LoadStoreOrderDetails(OrderEntity orderEntity, WarehouseOrder warehouseOrder)
         {
             AmazonOrderEntity amazonOrderEntity = (AmazonOrderEntity) orderEntity;
-            AmazonWarehouseOrder amazonWarehouseOrder = (AmazonWarehouseOrder) warehouseOrder;
-            
+            AmazonWarehouseOrder amazonWarehouseOrder = warehouseOrder.AdditionalData[amazonEntryKey].ToObject<AmazonWarehouseOrder>();
+
             amazonOrderEntity.AmazonOrderID = amazonWarehouseOrder.AmazonOrderID;
             amazonOrderEntity.FulfillmentChannel = amazonWarehouseOrder.FulfillmentChannel;
             amazonOrderEntity.IsPrime = amazonWarehouseOrder.IsPrime;
             amazonOrderEntity.EarliestExpectedDeliveryDate = amazonWarehouseOrder.EarliestExpectedDeliveryDate;
             amazonOrderEntity.LatestExpectedDeliveryDate = amazonWarehouseOrder.LatestExpectedDeliveryDate;
-            amazonOrderEntity.PurchaseOrderNumber = amazonWarehouseOrder.PurchaseOrderNumber;        
+            amazonOrderEntity.PurchaseOrderNumber = amazonWarehouseOrder.PurchaseOrderNumber;
         }
 
         /// <summary>
@@ -68,8 +69,8 @@ namespace ShipWorks.Stores.Platforms.Amazon.Warehouse
         protected override void LoadStoreItemDetails(OrderItemEntity itemEntity, WarehouseOrderItem warehouseItem)
         {
             AmazonOrderItemEntity amazonItemEntity = (AmazonOrderItemEntity) itemEntity;
-            AmazonWarehouseItem amazonWarehouseItem = (AmazonWarehouseItem) warehouseItem;
-            
+            AmazonWarehouseItem amazonWarehouseItem = warehouseItem.AdditionalData[amazonEntryKey].ToObject<AmazonWarehouseItem>();
+
             amazonItemEntity.AmazonOrderItemCode = amazonWarehouseItem.AmazonOrderItemCode;
             amazonItemEntity.ASIN = amazonWarehouseItem.ASIN;
             amazonItemEntity.ConditionNote = amazonWarehouseItem.ConditionNote;

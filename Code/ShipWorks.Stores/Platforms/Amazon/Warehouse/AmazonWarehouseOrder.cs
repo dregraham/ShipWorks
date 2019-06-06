@@ -1,26 +1,17 @@
 using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using ShipWorks.Warehouse.DTO.Orders;
+using Newtonsoft.Json;
 
 namespace ShipWorks.Stores.Platforms.Amazon.Warehouse
 {
     /// <summary>
     /// Amazon warehouse order
     /// </summary>
-    public class AmazonWarehouseOrder : WarehouseOrder
+    public class AmazonWarehouseOrder
     {
-        /// <summary>
-        /// Constructor
-        /// </summary>
-        public AmazonWarehouseOrder()
-        {
-            Items = new List<AmazonWarehouseItem>();
-        }
-
         /// <summary>
         /// The orders Amazon order ID
         /// </summary>
+        [JsonProperty("amazonOrderId")]
         public string AmazonOrderID { get; set; }
 
         /// <summary>
@@ -47,10 +38,5 @@ namespace ShipWorks.Stores.Platforms.Amazon.Warehouse
         /// The Purchase Order Number of the order
         /// </summary>
         public string PurchaseOrderNumber { get; set; }
-		
-        /// <summary>
-        /// The items that belong to this order
-        /// </summary>
-        public override IEnumerable<WarehouseOrderItem> Items { get; set; }
     }
 }

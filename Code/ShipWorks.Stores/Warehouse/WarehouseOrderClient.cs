@@ -32,14 +32,14 @@ namespace ShipWorks.Stores.Warehouse
         /// <summary>
         /// Get orders for the given warehouse ID from the ShipWorks Warehouse app
         /// </summary>
-        public async Task<IEnumerable<WarehouseOrder>> GetOrders(string warehouseID, string warehouseStoreID, DateTime lastModified, StoreTypeCode storeType)
+        public async Task<IEnumerable<WarehouseOrder>> GetOrders(string warehouseID, string warehouseStoreID, long mostRecentSequence, StoreTypeCode storeType)
         {
             try
             {
                 IRestRequest request = new RestRequest(WarehouseEndpoints.Orders(warehouseID), Method.GET);
 
                 request.AddQueryParameter("storeId", warehouseStoreID);
-                request.AddQueryParameter("onlineLastModified", lastModified.ToString("o"));
+                request.AddQueryParameter("lastSequence", mostRecentSequence.ToString());
 
                 GenericResult<IRestResponse> response = await warehouseRequestClient
                     .MakeRequest(request, "Get Orders")
@@ -54,7 +54,7 @@ namespace ShipWorks.Stores.Warehouse
                     response.Value.Content,
                     new JsonSerializerSettings
                     {
-                        Converters = { new WarehouseOrderJsonConverter(storeType) },
+                        //Converters = { new WarehouseOrderJsonConverter(storeType) },
                         ContractResolver = new DefaultContractResolver
                         {
                             NamingStrategy = new CamelCaseNamingStrategy
@@ -68,7 +68,7 @@ namespace ShipWorks.Stores.Warehouse
             }
             catch (Exception ex) when (ex.GetType() != typeof(DownloadException))
             {
-                throw new DownloadException($"An error occured downloading orders for warehouse ID {warehouseID}", ex);
+                throw new DownloadException($"An error occurred downloading orders for warehouse ID {warehouseID}", ex);
             }
         }
     }
