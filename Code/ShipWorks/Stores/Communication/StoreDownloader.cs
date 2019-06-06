@@ -1336,6 +1336,11 @@ namespace ShipWorks.Stores.Communication
         /// </summary>
         private async Task DownloadWarehouseOrders()
         {
+            if (config.WarehouseID == null)
+            {
+                return;
+            }
+
             using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
                 IWarehouseOrderClient webClient = lifetimeScope.Resolve<IWarehouseOrderClient>();
