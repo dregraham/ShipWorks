@@ -1,6 +1,6 @@
 ﻿<Properties>
   <Array name="active">
-    <Element value="InstallShipWorks.cs" />
+    <Element value="ShipWorksPerformanceTestSuite.rxtst" />
   </Array>
   <Array name="bookmarks" />
   <Array name="files">
