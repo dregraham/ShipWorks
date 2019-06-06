@@ -1,17 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Drawing;
-using System.Data;
 using System.Linq;
-using System.Text;
 using System.Windows.Forms;
+using Autofac;
 using Interapptive.Shared.ComponentRegistration;
-using ShipWorks.Shipping.Profiles;
+using Interapptive.Shared.Utility;
+using ShipWorks.ApplicationCore;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
-using Interapptive.Shared.Utility;
-using ShipWorks.Shipping.Insurance;
+using ShipWorks.Shipping.Profiles;
 using ShipWorks.UI.Utility;
 
 namespace ShipWorks.Shipping.Carriers.Postal
@@ -22,6 +20,9 @@ namespace ShipWorks.Shipping.Carriers.Postal
     [KeyedComponent(typeof(ShippingProfileControlBase), ShipmentTypeCode.PostalWebTools)]
     public partial class PostalProfileControlBase : ShippingProfileControlBase
     {
+        private BindingList<KeyValuePair<long, string>> includeReturnProfiles = new BindingList<KeyValuePair<long, string>>();
+        private BindingSource bindingSource = new BindingSource();
+
         /// <summary>
         /// Constructor
         /// </summary>
@@ -51,13 +52,37 @@ namespace ShipWorks.Shipping.Carriers.Postal
             LoadServiceTypes();
 
             // Only Express 1 Endicia should see the cubic packaging type
-            EnumHelper.BindComboBox<PostalPackagingType>(packagingType, p => (p != PostalPackagingType.Cubic || (ShipmentTypeCode)profile.ShipmentType == ShipmentTypeCode.Express1Endicia));
+            EnumHelper.BindComboBox<PostalPackagingType>(packagingType, p => (p != PostalPackagingType.Cubic || (ShipmentTypeCode) profile.ShipmentType == ShipmentTypeCode.Express1Endicia));
             EnumHelper.BindComboBox<PostalCustomsContentType>(contentType);
 
             LoadConfirmationTypes(profile);
 
             dimensionsControl.Initialize();
 
+            LoadProfileDetails(profile, postal, packageProfile);
+
+            // Map parent/child relationships
+            SetParentCheckBox(includeReturnState, includeReturn, applyReturnProfileState, applyReturnProfile);
+            SetParentCheckBox(applyReturnProfileState, applyReturnProfile, applyReturnProfileState, returnProfileID);
+            SetParentCheckBox(applyReturnProfileState, applyReturnProfile, applyReturnProfileState, returnProfileIDLabel);
+
+            // Remove state checkbox event handler since we'll be enabling/disabling manually
+            returnState.CheckedChanged -= OnStateCheckChanged;
+            includeReturnState.CheckedChanged -= OnStateCheckChanged;
+
+            // Manually enable/disable for mutually exclusive return controls
+            includeReturn.Enabled = includeReturnState.Checked && !returnShipment.Checked;
+            returnShipment.Enabled = returnState.Checked && !includeReturn.Checked;
+
+            groupReturns.Visible = ShipmentTypeManager.GetType((ShipmentTypeCode) profile.ShipmentType).SupportsReturns;
+        }
+
+        /// <summary>
+        /// Load all the shipment details 
+        /// </summary>
+        private void LoadProfileDetails(ShippingProfileEntity profile, PostalProfileEntity postal,
+            PackageProfileEntity packageProfile)
+        {
             AddValueMapping(profile, ShippingProfileFields.OriginID, senderState, originCombo, labelSender);
             AddValueMapping(postal, PostalProfileFields.Service, serviceState, service, labelService);
 
@@ -71,18 +96,26 @@ namespace ShipWorks.Shipping.Carriers.Postal
             AddValueMapping(postal, PostalProfileFields.CustomsContentType, customsContentState, contentType);
             AddValueMapping(postal, PostalProfileFields.CustomsContentDescription, customsContentState, contentDescription);
 
-            AddValueMapping(packageProfile, PackageProfileFields.DimsProfileID, dimensionsState, dimensionsControl, labelDimensions);
+            AddValueMapping(packageProfile, PackageProfileFields.DimsProfileID, dimensionsState, dimensionsControl,
+                labelDimensions);
 
             // Insurance
             AddValueMapping(profile, ShippingProfileFields.Insurance, insuranceState, insuranceControl);
 
             // Express Mail
-            AddValueMapping(postal, PostalProfileFields.ExpressSignatureWaiver, expressSignatureRequirementState, expressSignatureRequirement);
+            AddValueMapping(postal, PostalProfileFields.ExpressSignatureWaiver, expressSignatureRequirementState,
+                expressSignatureRequirement);
 
             // Returns
-            AddValueMapping(profile, ShippingProfileFields.ReturnShipment, returnState, returnShipment);
+            RefreshIncludeReturnProfileMenu(profile.ShipmentType);
+            returnProfileID.DisplayMember = "Value";
+            returnProfileID.ValueMember = "Key";
+            returnProfileID.SelectedIndex = -1;
 
-            groupReturns.Visible = ShipmentTypeManager.GetType((ShipmentTypeCode)profile.ShipmentType).SupportsReturns;
+            AddValueMapping(profile, ShippingProfileFields.ReturnShipment, returnState, returnShipment);
+            AddValueMapping(profile, ShippingProfileFields.IncludeReturn, includeReturnState, includeReturn);
+            AddValueMapping(profile, ShippingProfileFields.ReturnProfileID, applyReturnProfile, returnProfileID);
+            AddValueMapping(profile, ShippingProfileFields.ApplyReturnProfile, applyReturnProfileState, applyReturnProfile);
         }
 
         /// <summary>
@@ -119,6 +152,121 @@ namespace ShipWorks.Shipping.Carriers.Postal
         private void OnContentTypeChanged(object sender, EventArgs e)
         {
             contentDescription.Visible = contentType.SelectedValue != null && (PostalCustomsContentType) contentType.SelectedValue == PostalCustomsContentType.Other;
+        }
+
+        /// <summary>
+        /// Click of the Include Return checkbox
+        /// </summary>
+        private void OnIncludeReturnChanged(object sender, EventArgs e)
+        {
+            if (includeReturn.Checked)
+            {
+                returnShipment.Enabled = false;
+            }
+            else
+            {
+                returnShipment.Enabled = returnState.Checked;
+            }
+        }
+
+        /// <summary>
+        /// Opening the return profiles menu
+        /// </summary>
+        private void OnReturnProfileIDOpened(object sender, EventArgs e)
+        {
+            RefreshIncludeReturnProfileMenu(Profile.ShipmentType);
+        }
+
+        /// <summary>
+        /// Click of the Return Shipment checkbox
+        /// </summary>
+        protected virtual void OnReturnShipmentChanged(object sender, EventArgs e)
+        {
+            if (returnShipment.Checked)
+            {
+                includeReturn.Enabled = false;
+            }
+            else
+            {
+                includeReturn.Enabled = includeReturnState.Checked;
+            }
+        }
+
+        /// <summary>
+        /// Click of the Include Return State Checkbox
+        /// </summary>
+        protected virtual void OnIncludeReturnStateChanged(object sender, EventArgs e)
+        {
+            if (includeReturnState.Checked)
+            {
+                includeReturn.Enabled = !returnShipment.Checked;
+            }
+            else
+            {
+                includeReturn.Enabled = false;
+                includeReturn.Checked = false;
+            }
+        }
+
+        /// <summary>
+        /// Click of the Return Shipment State Checkbox
+        /// </summary>
+        protected virtual void OnReturnStateChanged(object sender, EventArgs e)
+        {
+            if (returnState.Checked)
+            {
+                returnShipment.Enabled = !includeReturn.Checked;
+            }
+            else
+            {
+                returnShipment.Enabled = false;
+                returnShipment.Checked = false;
+            }
+        }
+
+        /// <summary>
+        /// When ReturnProfileID dropdown is enabled
+        /// </summary>
+        protected void OnReturnProfileIDEnabledChanged(object sender, EventArgs e)
+        {
+            if (returnProfileID.Enabled)
+            {
+                RefreshIncludeReturnProfileMenu(Profile.ShipmentType);
+            }
+        }
+
+        /// <summary>
+        /// Add applicable profiles for the given shipment type to the context menu
+        /// </summary>
+        private void RefreshIncludeReturnProfileMenu(ShipmentTypeCode? shipmentTypeCode)
+        {
+            BindingList<KeyValuePair<long, string>> newReturnProfiles = new BindingList<KeyValuePair<long, string>>();
+
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+            {
+                IShippingProfileService shippingProfileService = lifetimeScope.Resolve<IShippingProfileService>();
+
+                List<KeyValuePair<long, string>> returnProfiles = shippingProfileService
+                    .GetConfiguredShipmentTypeProfiles()
+                    .Where(p => p.ShippingProfileEntity.ShippingProfileID != Profile.ShippingProfileID)
+                    .Where(p => p.ShippingProfileEntity.ShipmentType.HasValue)
+                    .Where(p => p.IsApplicable(shipmentTypeCode))
+                    .Where(p => p.ShippingProfileEntity.ReturnShipment == true)
+                    .Select(s => new KeyValuePair<long, string>(s.ShippingProfileEntity.ShippingProfileID, s.ShippingProfileEntity.Name))
+                    .OrderBy(g => g.Value)
+                    .ToList<KeyValuePair<long, string>>();
+
+                newReturnProfiles = new BindingList<KeyValuePair<long, string>>(returnProfiles);
+            }
+
+            // Always add No Profile so if a selected profile is no longer a return profile, this becomes the default
+            newReturnProfiles.Insert(0, new KeyValuePair<long, string>(-1, "(No Profile)"));
+
+            includeReturnProfiles = newReturnProfiles;
+
+            // Reset data sources because calling resetbindings() doesn't work
+            bindingSource.DataSource = includeReturnProfiles;
+            returnProfileID.DataSource = bindingSource;
         }
     }
 }

@@ -33,6 +33,7 @@
             this.add = new System.Windows.Forms.ToolStripButton();
             this.labelInfo = new System.Windows.Forms.Label();
             this.printActionBox = new System.Windows.Forms.CheckBox();
+            this.printReturnBox = new System.Windows.Forms.CheckBox();
             this.labelActionPrinting = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.installMissingLink = new ShipWorks.UI.Controls.LinkControl();
@@ -41,7 +42,7 @@
             // 
             // panelMain
             // 
-            this.panelMain.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.panelMain.Anchor = ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.panelMain.Location = new System.Drawing.Point(16, 95);
             this.panelMain.Name = "panelMain";
@@ -80,8 +81,7 @@
             this.labelInfo.Name = "labelInfo";
             this.labelInfo.Size = new System.Drawing.Size(424, 19);
             this.labelInfo.TabIndex = 0;
-            this.labelInfo.Text = "ShipWorks will print using the first template in each group that satisfies the co" +
-    "ndition.";
+            this.labelInfo.Text = "ShipWorks will print using the first template in each group that satisfies the condition.";
             // 
             // printActionBox
             // 
@@ -92,13 +92,26 @@
             this.printActionBox.Name = "printActionBox";
             this.printActionBox.Size = new System.Drawing.Size(230, 17);
             this.printActionBox.TabIndex = 3;
-            this.printActionBox.Text = "Automatically print labels after processing.";
+            this.printActionBox.Text = "Automatically print standard labels after processing.";
             this.printActionBox.UseVisualStyleBackColor = true;
+            // 
+            // printReturnBox
+            // 
+            this.printReturnBox.AutoSize = true;
+            this.printReturnBox.Checked = false;
+            this.printReturnBox.CheckState = System.Windows.Forms.CheckState.Unchecked;
+            this.printReturnBox.Location = new System.Drawing.Point(20, 45);
+            this.printReturnBox.Name = "printReturnBox";
+            this.printReturnBox.Size = new System.Drawing.Size(230, 17);
+            this.printReturnBox.TabIndex = 3;
+            this.printReturnBox.Text = "Automatically print return labels after processing.";
+            this.printReturnBox.UseVisualStyleBackColor = true;
+            this.printReturnBox.Visible = false;
             // 
             // labelActionPrinting
             // 
             this.labelActionPrinting.AutoSize = true;
-            this.labelActionPrinting.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelActionPrinting.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
             this.labelActionPrinting.Location = new System.Drawing.Point(5, 6);
             this.labelActionPrinting.Name = "labelActionPrinting";
             this.labelActionPrinting.Size = new System.Drawing.Size(113, 13);
@@ -108,7 +121,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
             this.label1.Location = new System.Drawing.Point(5, 54);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(80, 13);
@@ -136,10 +149,11 @@
             this.Controls.Add(this.label1);
             this.Controls.Add(this.labelActionPrinting);
             this.Controls.Add(this.printActionBox);
+            this.Controls.Add(this.printReturnBox);
             this.Controls.Add(this.labelInfo);
             this.Controls.Add(this.panelMain);
             this.Controls.Add(this.toolStripAddPrintOutput);
-            this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
             this.Name = "PrintOutputControl";
             this.Size = new System.Drawing.Size(584, 214);
             this.toolStripAddPrintOutput.ResumeLayout(false);
@@ -156,6 +170,7 @@
         private System.Windows.Forms.ToolStripButton add;
         private System.Windows.Forms.Label labelInfo;
         private System.Windows.Forms.CheckBox printActionBox;
+        private System.Windows.Forms.CheckBox printReturnBox;
         private System.Windows.Forms.Label labelActionPrinting;
         private System.Windows.Forms.Label label1;
         private UI.Controls.LinkControl installMissingLink;

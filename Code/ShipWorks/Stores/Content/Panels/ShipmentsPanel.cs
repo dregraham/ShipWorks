@@ -298,6 +298,16 @@ namespace ShipWorks.Stores.Content.Panels
                 if (keys.IsCountEqualTo(1))
                 {
                     shipmentAdapter = loadedOrderSelection.ShipmentAdapters?.FirstOrDefault(x => keys.Contains(x.Shipment.ShipmentID));
+
+                    // If the currently loaded order doesn't have this shipment it must
+                    // have been an auto return shipment, so reload the current order
+                    if (shipmentAdapter == null)
+                    {
+                        // When this message is received the shipping panel is reloaded, so we don't
+                        // need to also send the ShipmentSelectionChangedMessage, and can just return
+                        Messenger.Current.Send(new OrderSelectionChangingMessage(this, new List<long>() { loadedOrderSelection.OrderID }));
+                        return;
+                    }
                 }
 
                 Messenger.Current.Send(new ShipmentSelectionChangedMessage(this, keys, shipmentAdapter));

@@ -27,15 +27,18 @@ namespace ShipWorks.Shipping.Services.ShipmentProcessorSteps
         /// <summary>
         /// Get a label for a shipment and collect telemetry
         /// </summary>
-        public async Task<ILabelRetrievalResult> GetLabel(IShipmentPreparationResult result)
+        public async Task<IEnumerable<ILabelRetrievalResult>> GetLabels(IShipmentPreparationResult result)
         {
-            ILabelRetrievalResult labelRetrievalResult = await labelRetrievalStep.GetLabel(result);
+            IEnumerable<ILabelRetrievalResult> labelRetrievalResults = await labelRetrievalStep.GetLabels(result);
             using (TrackedDurationEvent telemetryEvent = new TrackedDurationEvent("Shipping.Label.Creation"))
             {
-                SetTelemetryProperties(telemetryEvent, labelRetrievalResult);
+                foreach (ILabelRetrievalResult labelRetrievalresult in labelRetrievalResults)
+                {
+                    SetTelemetryProperties(telemetryEvent, labelRetrievalresult);
+                }
             }
 
-            return labelRetrievalResult;
+            return labelRetrievalResults;
         }
 
         /// <summary>

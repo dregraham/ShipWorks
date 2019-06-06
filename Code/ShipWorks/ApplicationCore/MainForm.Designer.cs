@@ -259,12 +259,10 @@ namespace ShipWorks
             this.ribbonChunkOrderLookupViewProfiles = new Divelements.SandRibbon.RibbonChunk();
             this.buttonOrderLookupViewApplyProfile = new Divelements.SandRibbon.Button();
             this.buttonOrderLookupViewManageProfiles = new Divelements.SandRibbon.Button();
-            this.ribbonChunkOrderLookupViewPreviousLabel = new Divelements.SandRibbon.RibbonChunk();
-            this.buttonOrderLookupViewReprintLast = new Divelements.SandRibbon.Button();
-            this.buttonOrderLookupViewVoidLast = new Divelements.SandRibbon.Button();
             this.ribbonTabOrderLookupViewShipmentHistory = new Divelements.SandRibbon.RibbonTab();
             this.ribbonChunkOrderLookupViewActions = new Divelements.SandRibbon.RibbonChunk();
             this.buttonOrderLookupViewVoid = new Divelements.SandRibbon.Button();
+            this.buttonOrderLookupViewReprint = new Divelements.SandRibbon.Button();
             this.buttonOrderLookupViewShipAgain = new Divelements.SandRibbon.Button();
             this.buttonOrderLookupViewSCANForm = new Divelements.SandRibbon.Button();
             this.popupOrderLookupViewSCANForm = new Divelements.SandRibbon.Popup();
@@ -2550,8 +2548,7 @@ namespace ShipWorks
             //
             this.ribbonTabOrderLookupViewShipping.Chunks.AddRange(new Divelements.SandRibbon.WidgetBase[] {
             this.ribbonChunkOrderLookupViewShipping,
-            this.ribbonChunkOrderLookupViewProfiles,
-            this.ribbonChunkOrderLookupViewPreviousLabel});
+            this.ribbonChunkOrderLookupViewProfiles});
             this.ribbonTabOrderLookupViewShipping.Location = new System.Drawing.Point(1, 53);
             this.ribbonTabOrderLookupViewShipping.Manager = this.ribbonManager;
             this.ribbonTabOrderLookupViewShipping.Name = "ribbonTabOrderLookupViewShipping";
@@ -2619,35 +2616,6 @@ namespace ShipWorks
             this.buttonOrderLookupViewManageProfiles.TextContentRelation = Divelements.SandRibbon.TextContentRelation.Underneath;
             this.buttonOrderLookupViewManageProfiles.Activate += new System.EventHandler(this.OnManageShippingProfiles);
             //
-            // ribbonChunkOrderLookupViewPreviousLabel
-            //
-            this.ribbonChunkOrderLookupViewPreviousLabel.FurtherOptions = false;
-            this.ribbonChunkOrderLookupViewPreviousLabel.ItemJustification = Divelements.SandRibbon.ItemJustification.Near;
-            this.ribbonChunkOrderLookupViewPreviousLabel.Items.AddRange(new Divelements.SandRibbon.WidgetBase[] {
-            this.buttonOrderLookupViewReprintLast,
-            this.buttonOrderLookupViewVoidLast});
-            this.ribbonChunkOrderLookupViewPreviousLabel.Text = "Previous Label";
-            //
-            // buttonOrderLookupViewReprintLast
-            //
-            this.buttonOrderLookupViewReprintLast.Guid = new System.Guid("0B1191AC-BE79-4F40-961E-F622E496F068");
-            this.buttonOrderLookupViewReprintLast.Image = global::ShipWorks.Properties.Resources.printer;
-            this.ribbonSecurityProvider.SetPermission(this.buttonOrderLookupViewReprintLast, ShipWorks.Users.Security.PermissionType.ShipmentsCreateEditProcess);
-            this.buttonOrderLookupViewReprintLast.QuickAccessKey = "R";
-            this.buttonOrderLookupViewReprintLast.Text = "Reprint\r\nLast";
-            this.buttonOrderLookupViewReprintLast.TextContentRelation = Divelements.SandRibbon.TextContentRelation.Underneath;
-            this.buttonOrderLookupViewReprintLast.Activate += OnOrderLookupViewReprintLastShipment;
-            //
-            // buttonOrderLookupViewVoidLast
-            //
-            this.buttonOrderLookupViewVoidLast.Guid = new System.Guid("C1D07022-AF19-4E72-9CCF-537FCC9F25C2");
-            this.buttonOrderLookupViewVoidLast.Image = global::ShipWorks.Properties.Resources.box_void_32_32;
-            this.ribbonSecurityProvider.SetPermission(this.buttonOrderLookupViewVoidLast, ShipWorks.Users.Security.PermissionType.ShipmentsVoidDelete);
-            this.buttonOrderLookupViewVoidLast.QuickAccessKey = "V";
-            this.buttonOrderLookupViewVoidLast.Text = "Void\r\nLast";
-            this.buttonOrderLookupViewVoidLast.TextContentRelation = Divelements.SandRibbon.TextContentRelation.Underneath;
-            this.buttonOrderLookupViewVoidLast.Activate += new System.EventHandler(this.OnOrderLookupViewVoidLastShipment);
-            //
             // ribbonTabOrderLookupViewShipmentHistory
             //
             this.ribbonTabOrderLookupViewShipmentHistory.Chunks.AddRange(new Divelements.SandRibbon.WidgetBase[] {
@@ -2665,6 +2633,7 @@ namespace ShipWorks
             this.ribbonChunkOrderLookupViewActions.ItemJustification = Divelements.SandRibbon.ItemJustification.Near;
             this.ribbonChunkOrderLookupViewActions.Items.AddRange(new Divelements.SandRibbon.WidgetBase[] {
             this.buttonOrderLookupViewVoid,
+            this.buttonOrderLookupViewReprint,
             this.buttonOrderLookupViewShipAgain,
             this.buttonOrderLookupViewSCANForm,
             this.buttonOrderLookupViewFedExClose});
@@ -2679,6 +2648,16 @@ namespace ShipWorks
             this.buttonOrderLookupViewVoid.QuickAccessKey = "V";
             this.buttonOrderLookupViewVoid.Text = "Void";
             this.buttonOrderLookupViewVoid.TextContentRelation = Divelements.SandRibbon.TextContentRelation.Underneath;
+            //
+            // buttonOrderLookupViewReprint
+            //
+            this.buttonOrderLookupViewReprint.Guid = new System.Guid("11DA60BB-CF89-493F-85C0-6095666292AC");
+            this.buttonOrderLookupViewReprint.Image = global::ShipWorks.Properties.Resources.printer;
+            this.buttonOrderLookupViewReprint.Padding = new Divelements.SandRibbon.WidgetEdges(3, 2, 4, 14);
+            this.ribbonSecurityProvider.SetPermission(this.buttonOrderLookupViewReprint, ShipWorks.Users.Security.PermissionType.ShipmentsCreateEditProcess);
+            this.buttonOrderLookupViewReprint.QuickAccessKey = "R";
+            this.buttonOrderLookupViewReprint.Text = "Reprint";
+            this.buttonOrderLookupViewReprint.TextContentRelation = Divelements.SandRibbon.TextContentRelation.Underneath;
             //
             // buttonOrderLookupViewShipAgain
             //
@@ -3497,17 +3476,15 @@ namespace ShipWorks
         private Divelements.SandRibbon.Menu uiModeMenu;
         private Divelements.SandRibbon.RibbonChunk ribbonChunkOrderLookupViewShipping;
         private Divelements.SandRibbon.RibbonChunk ribbonChunkOrderLookupViewProfiles;
-        private Divelements.SandRibbon.RibbonChunk ribbonChunkOrderLookupViewPreviousLabel;
         private Divelements.SandRibbon.RibbonChunk ribbonChunkOrderLookupViewActions;
         private Divelements.SandRibbon.Button buttonOrderLookupViewCreateLabel;
         private Divelements.SandRibbon.Button buttonOrderLookupViewManualOrder;
         private Divelements.SandRibbon.Button buttonOrderLookupViewApplyProfile;
         private Divelements.SandRibbon.Button buttonOrderLookupViewManageProfiles;
-        private Divelements.SandRibbon.Button buttonOrderLookupViewReprintLast;
-        private Divelements.SandRibbon.Button buttonOrderLookupViewVoidLast;
         private Divelements.SandRibbon.Popup popup1;
         private Divelements.SandRibbon.Popup popup2;
         private Divelements.SandRibbon.Button buttonOrderLookupViewVoid;
+        private Divelements.SandRibbon.Button buttonOrderLookupViewReprint;
         private Divelements.SandRibbon.Button buttonOrderLookupViewShipAgain;
         private Divelements.SandRibbon.Button buttonOrderLookupViewSCANForm;
         private Divelements.SandRibbon.Button buttonOrderLookupViewFedExClose;

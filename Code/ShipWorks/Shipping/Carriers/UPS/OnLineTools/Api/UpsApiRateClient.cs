@@ -141,7 +141,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
                 throw firstExceptionEncountered;
             }
 
-            return GenericResult.FromSuccess(rates, GetMessage(shipment));
+            return GenericResult.FromSuccess(rates);
         }
 
         /// <summary>
@@ -161,16 +161,6 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
                 certificateInspector = new TrustingCertificateInspector();
                 accountRepository = new UpsAccountRepository();
             }
-        }
-
-        /// <summary>
-        /// Gets the message.
-        /// </summary>
-        private string GetMessage(ShipmentEntity shipment)
-        {
-            return shipment.ReturnShipment ?
-                "* Rates reflect the service charge only. This does not include additional fees for returns." :
-                string.Empty;
         }
 
         /// <summary>

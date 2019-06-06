@@ -1,17 +1,14 @@
-﻿using System.Diagnostics;
-using Divelements.SandGrid;
-using Divelements.SandGrid.Specialized;
-using Interapptive.Shared.Utility;
-using ShipWorks.Properties;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
-using ShipWorks.Shipping.Carriers.BestRate;
+using Divelements.SandGrid;
+using Divelements.SandGrid.Specialized;
 using ShipWorks.ApplicationCore.Appearance;
-using ShipWorks.Filters;
-using System.ComponentModel;
+using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.UI.Utility;
 
 namespace ShipWorks.Shipping.Editing.Rating
@@ -193,7 +190,7 @@ namespace ShipWorks.Shipping.Editing.Rating
                     if (selectedRows.Any())
                     {
                         selectedRate = selectedRows.Select(s => s.Tag as RateResult).ToList().FirstOrDefault(f => f.Selectable);
-                        if(selectedRate != null && selectedRate.Tag is BestRateResultTag && !((BestRateResultTag)selectedRate.Tag).IsRealRate)
+                        if (selectedRate != null && selectedRate.Tag is BestRateResultTag && !((BestRateResultTag) selectedRate.Tag).IsRealRate)
                         {
                             selectedRate = null;
                         }
@@ -301,7 +298,8 @@ namespace ShipWorks.Shipping.Editing.Rating
                         new GridCell(rate.Selectable && rate.Taxes.HasValue ? rate.Taxes.Value.ToString("c") : ""),
                         new GridCell(rate.Selectable && rate.Duties.HasValue ? rate.Duties.Value.ToString("c") : ""),
                         new GridCell(rate.Selectable ? rate.FormattedAmount : "", rate.AmountFootnote)
-                    }) { Tag = rate };
+                    })
+                    { Tag = rate };
 
                     if (ActionLinkVisible && rate.Selectable)
                     {
@@ -414,7 +412,8 @@ namespace ShipWorks.Shipping.Editing.Rating
                         new GridCell(""),
                         new GridCell(""),
                         new GridHyperlinkCell("More...")
-                    }) { Tag = showMoreRatesRateResult };
+                    })
+                    { Tag = showMoreRatesRateResult };
 
                     rateGrid.Rows.Add(row);
                 }
@@ -516,6 +515,12 @@ namespace ShipWorks.Shipping.Editing.Rating
             {
                 // We're adding new footnotes first to eliminate UI flickering
                 AddFootnotes(rateGroup.FootnoteFactories);
+
+                if (rateGroup.showReturnFootnote)
+                {
+                    var returnFootnoteFactory = new InformationFootnoteFactory("Rates reflect the service charge only and do not include additional fees for returns.");
+                    AddFootnotes(new[] { returnFootnoteFactory });
+                }
             }
 
             RemoveFootnotes(footnotesToRemove);
