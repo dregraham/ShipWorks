@@ -16,8 +16,13 @@ namespace ShipWorksPerformanceTestSuite
 	public class ExtraMethods
 	{
 		public ExtraMethods()
-		{
-			
+		{				
 		}
+		
+		public void KillBackgroundShipWorksProcesses()
+			{
+				System.Diagnostics.Process.Start("CMD.exe", "/C taskkill -im shipworks* -f");
+				System.Diagnostics.Process.Start("CMD.exe", "/C taskkill -im ShipWorks.Escalator* -f");
+			}
 	}
 }

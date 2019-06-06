@@ -32,6 +32,7 @@ namespace ShipWorksPerformanceTestSuite
         /// </summary>
         /// 
         public static ShipWorksPerformanceTestSuiteRepository repo = ShipWorksPerformanceTestSuiteRepository.Instance;
+        ExtraMethods extra = new ExtraMethods();
         
         public InstallShipWorks()
         {
@@ -154,7 +155,9 @@ namespace ShipWorksPerformanceTestSuite
             
            		Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Click item 'ExitSetup.ButtonYes' at Center.", repo.ExitSetup.ButtonYesInfo, new RecordItemIndex(9));
            		repo.ExitSetup.ButtonYes.Click();
-          		Delay.Milliseconds(0);         		 
+          		Delay.Milliseconds(0);  
+
+          		extra.KillBackgroundShipWorksProcesses();
 				throw e;    
            	}             	      	
        }         

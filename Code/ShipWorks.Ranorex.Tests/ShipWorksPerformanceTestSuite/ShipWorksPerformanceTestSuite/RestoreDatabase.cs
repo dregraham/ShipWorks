@@ -188,11 +188,6 @@ namespace ShipWorksPerformanceTestSuite
             Keyboard.Press("{Return}");
             Delay.Milliseconds(0);
             
-            // Tab to the Restore Button > Space on the Restore Button
-//            Report.Log(ReportLevel.Info, "Keyboard", "Tab to the Restore Button > Space on the Restore Button\r\nKey sequence '{Tab}{Space}'.", new RecordItemIndex(41));
-//            Keyboard.Press("{Tab}{Space}");
-//            Delay.Milliseconds(0);
-            
             Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Move item 'DetailedDatabaseSetupWizard.Next' at Center.", repo.DetailedDatabaseSetupWizard.NextInfo, new RecordItemIndex(42));
             repo.DetailedDatabaseSetupWizard.Next.MoveTo();
             Delay.Milliseconds(0);
