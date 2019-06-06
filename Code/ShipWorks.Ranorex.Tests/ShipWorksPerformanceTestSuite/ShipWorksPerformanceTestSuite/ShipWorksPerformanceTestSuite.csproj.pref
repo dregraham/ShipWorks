@@ -1,12 +1,14 @@
 ﻿<Properties>
   <Array name="active">
-    <Element value="RestoreDatabase.cs" />
+    <Element value="InstallShipWorks.cs" />
   </Array>
   <Array name="bookmarks" />
   <Array name="files">
     <Element value="ShipWorksPerformanceTestSuite.rxtst" />
     <Element value="TestRecording.rxrec" />
     <Element value="RestoreDatabase.cs" />
+    <Element value="InstallShipWorks.cs" />
+    <Element value="ExtraMethods.cs" />
   </Array>
   <Properties name="projectSavedData">
     <Properties name="customTool">

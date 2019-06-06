@@ -18,7 +18,6 @@ rxversion="8.1">
 			showinvisiblechars="True">
 			</testsuite>
 			<testmodule
-			enabled="False"
 			id="27507515-bcb7-4c7d-ac95-baf4cc972d1a"
 			name="InstallShipWorks"
 			ref="48cccffa-1273-486f-9f8c-ad0e793f6d83"
