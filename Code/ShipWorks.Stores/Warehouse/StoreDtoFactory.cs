@@ -90,7 +90,7 @@ namespace ShipWorks.Stores.Warehouse
         /// </summary>
         private async Task<Store> AddChannelAdvisorStoreData(ChannelAdvisorStoreEntity storeEntity)
         {
-            string refreshToken = encryptionProviderFactory.CreateChannelAdvisorEncryptionProvider().Decrypt(storeEntity.RefreshToken);
+            string refreshToken = encryptionProviderFactory.CreateSecureTextEncryptionProvider("ChannelAdvisor").Decrypt(storeEntity.RefreshToken);
 
             ChannelAdvisorStore store = new ChannelAdvisorStore();
             store.RefreshToken = await encryptionService.Encrypt(refreshToken)
