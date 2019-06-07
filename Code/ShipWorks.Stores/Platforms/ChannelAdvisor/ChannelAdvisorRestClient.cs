@@ -68,7 +68,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         /// Get the base endpoint for ChannelAdvisor requests
         /// </summary>
         public static string GetEndpointBase()
-        {
+       {
             if (InterapptiveOnly.IsInterapptiveUser)
             {
                 if (!InterapptiveOnly.Registry.GetValue("ChannelAdvisorLive", true))

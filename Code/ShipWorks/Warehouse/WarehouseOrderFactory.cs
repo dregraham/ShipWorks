@@ -43,7 +43,7 @@ namespace ShipWorks.Warehouse
             // todo: figure out what should and shouldn't be downloaded when new
             orderEntity.ChangeOrderNumber(warehouseOrder.OrderNumber);
             orderEntity.OrderDate = warehouseOrder.OrderDate;
-            orderEntity.OrderTotal = warehouseOrder.OrderTotal;
+            orderEntity.OrderTotal = Math.Round(warehouseOrder.OrderTotal, 2);
             orderEntity.OnlineLastModified = warehouseOrder.OnlineLastModified;
             orderEntity.OnlineCustomerID = warehouseOrder.OnlineCustomerID;
             orderEntity.OnlineStatus = warehouseOrder.OnlineStatus;
@@ -135,8 +135,8 @@ namespace ShipWorks.Warehouse
             itemEntity.Location = warehouseItem.Location;
             itemEntity.Image = warehouseItem.Image;
             itemEntity.Thumbnail = warehouseItem.Thumbnail;
-            itemEntity.UnitPrice = warehouseItem.UnitPrice;
-            itemEntity.UnitCost = warehouseItem.UnitCost;
+            itemEntity.UnitPrice = Math.Round(warehouseItem.UnitPrice, 2);
+            itemEntity.UnitCost = Math.Round(warehouseItem.UnitCost, 2);
             itemEntity.Quantity = warehouseItem.Quantity;
             itemEntity.Weight = warehouseItem.Weight;
             itemEntity.Length = warehouseItem.Length;

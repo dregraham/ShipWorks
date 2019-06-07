@@ -61,7 +61,7 @@ namespace ShipWorks.Stores.Warehouse
                             {
                                 OverrideSpecifiedNames = false
                             }
-                        }
+                        },
                     });
 
                 return orders;
