@@ -1,6 +1,7 @@
 using System;
 using System.Threading.Tasks;
 using Autofac.Extras.Moq;
+using Interapptive.Shared.Security;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Communication;
@@ -36,10 +37,13 @@ namespace ShipWorks.Stores.Tests.Warehouse
             var downloadStartingPoint = mock.Mock<IDownloadStartingPoint>();
             downloadStartingPoint.Setup(x => x.OnlineLastModified(amazonStoreEntity)).ReturnsAsync(DateTime.Now);
 
+
+            var encryptionProviderFactory = mock.Mock<IEncryptionProviderFactory>();
+
             var storeTypeManager = mock.Mock<IStoreTypeManager>();
             var encryptionService = mock.Mock<IWarehouseEncryptionService>();
 
-            StoreDtoFactory testObject = new StoreDtoFactory(downloadStartingPoint.Object, storeTypeManager.Object, encryptionService.Object, null);
+            StoreDtoFactory testObject = new StoreDtoFactory(downloadStartingPoint.Object, storeTypeManager.Object, encryptionService.Object, encryptionProviderFactory.Object);
 
             var storeDto = await testObject.Create(amazonStoreEntity);
 

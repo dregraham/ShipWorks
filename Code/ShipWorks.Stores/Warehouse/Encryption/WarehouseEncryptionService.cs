@@ -10,6 +10,7 @@ using Interapptive.Shared.Utility;
 using log4net;
 using Newtonsoft.Json;
 using RestSharp;
+using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Licensing.Warehouse;
 using ShipWorks.Stores.Management;
 
@@ -42,6 +43,11 @@ namespace ShipWorks.Stores.Warehouse.Encryption
         /// </summary>
         public async Task<string> Encrypt(string plainText)
         {
+            if (InterapptiveOnly.IsInterapptiveUser && !InterapptiveOnly.Registry.GetValue("EncryptWarehouseCredentials", true))
+            {
+                return plainText;
+            }
+
             GenerateDataKeyResponse keyResponse = await GenerateDataKey().ConfigureAwait(false);
 
             try
