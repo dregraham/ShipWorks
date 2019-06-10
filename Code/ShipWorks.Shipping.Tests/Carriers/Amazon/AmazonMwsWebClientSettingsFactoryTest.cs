@@ -1,11 +1,14 @@
 ﻿using System;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Stores.Platforms.Amazon.Mws;
+using Autofac;
 using Autofac.Extras.Moq;
-using Xunit;
 using Moq;
-using ShipWorks.Stores;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Amazon.SFP;
+using ShipWorks.Stores;
+using ShipWorks.Stores.Platforms.Amazon;
+using ShipWorks.Stores.Platforms.Amazon.Mws;
+using ShipWorks.Tests.Shared;
+using Xunit;
 
 namespace ShipWorks.Tests.Shipping.Carriers.Amazon.Api
 {
@@ -15,7 +18,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Amazon.Api
         [Fact]
         public void Create_ReturnsAmazonMwsWebClientSettings_FromShipment()
         {
-            using (var mock = AutoMock.GetLoose())
+            using (var mock = AutoMockExtensions.GetLooseThatReturnsMocks())
             {
                 AmazonStoreEntity amazonStore = new AmazonStoreEntity()
                 {
@@ -29,11 +32,11 @@ namespace ShipWorks.Tests.Shipping.Carriers.Amazon.Api
                     .Returns(amazonStore);
 
 
-                AmazonMwsWebClientSettingsFactory settingsFactory = mock.Create<AmazonMwsWebClientSettingsFactory>();
+                var foo = mock.MockFunc<IAmazonCredentials, IAmazonMwsWebClientSettings>();
+                AmazonMwsWebClientSettingsFactory settingsFactory = mock.Create<AmazonMwsWebClientSettingsFactory>(TypedParameter.From(foo));
 
                 IAmazonMwsWebClientSettings testObject = settingsFactory.Create(new AmazonSFPShipmentEntity());
-
-                Assert.Equal("testMerchantID", testObject.Credentials.MerchantID);
+                foo.Verify(x => x(amazonStore));
             }
         }
 

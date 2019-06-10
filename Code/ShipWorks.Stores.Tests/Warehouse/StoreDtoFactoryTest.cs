@@ -1,15 +1,16 @@
 using System;
 using System.Threading.Tasks;
+using Autofac;
 using Autofac.Extras.Moq;
-using Interapptive.Shared.Security;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Communication;
+using ShipWorks.Stores.Platforms.Amazon;
 using ShipWorks.Stores.Warehouse;
-using ShipWorks.Stores.Warehouse.Encryption;
 using ShipWorks.Stores.Warehouse.StoreData;
 using ShipWorks.Tests.Shared;
 using Xunit;
+using static ShipWorks.Tests.Shared.ExtensionMethods.ParameterShorteners;
 
 namespace ShipWorks.Stores.Tests.Warehouse
 {
@@ -27,6 +28,7 @@ namespace ShipWorks.Stores.Tests.Warehouse
         {
             AmazonStoreEntity amazonStoreEntity = new AmazonStoreEntity();
             amazonStoreEntity.AuthToken = "authtoken";
+            amazonStoreEntity.MerchantToken = "merchant-token";
             amazonStoreEntity.AmazonApiRegion = "US";
             amazonStoreEntity.MarketplaceID = "marketplaceid";
             amazonStoreEntity.MerchantID = "merchantid";
@@ -37,13 +39,10 @@ namespace ShipWorks.Stores.Tests.Warehouse
             var downloadStartingPoint = mock.Mock<IDownloadStartingPoint>();
             downloadStartingPoint.Setup(x => x.OnlineLastModified(amazonStoreEntity)).ReturnsAsync(DateTime.Now);
 
-
-            var encryptionProviderFactory = mock.Mock<IEncryptionProviderFactory>();
-
-            var storeTypeManager = mock.Mock<IStoreTypeManager>();
-            var encryptionService = mock.Mock<IWarehouseEncryptionService>();
-
-            StoreDtoFactory testObject = new StoreDtoFactory(downloadStartingPoint.Object, storeTypeManager.Object, encryptionService.Object, encryptionProviderFactory.Object);
+            var testObject = mock.Create<StoreDtoFactory>();
+            mock.Mock<IStoreTypeManager>()
+                .Setup(x => x.GetType(AnyStore))
+                .Returns(mock.Create<AmazonStoreType>(TypedParameter.From<StoreEntity>(amazonStoreEntity)));
 
             var storeDto = await testObject.Create(amazonStoreEntity);
 
