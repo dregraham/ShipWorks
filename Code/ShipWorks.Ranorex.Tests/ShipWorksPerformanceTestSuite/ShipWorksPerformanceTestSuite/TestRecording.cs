@@ -79,18 +79,6 @@ namespace ShipWorksPerformanceTestSuite
 
             Init();
 
-            Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Click item 'ShipWorks1.ShipWorksHasEncounteredAProblemAnd' at Center.", repo.ShipWorks1.ShipWorksHasEncounteredAProblemAndInfo, new RecordItemIndex(0));
-            repo.ShipWorks1.ShipWorksHasEncounteredAProblemAnd.Click();
-            Delay.Milliseconds(0);
-            
-            Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Click item 'ShipWorks1.ButtonOK' at Center.", repo.ShipWorks1.ButtonOKInfo, new RecordItemIndex(1));
-            repo.ShipWorks1.ButtonOK.Click();
-            Delay.Milliseconds(0);
-            
-            Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Click item 'DatabaseUpdateWizard.Next1' at Center.", repo.DatabaseUpdateWizard.Next1Info, new RecordItemIndex(2));
-            repo.DatabaseUpdateWizard.Next1.Click();
-            Delay.Milliseconds(0);
-            
         }
 
 #region Image Feature Data

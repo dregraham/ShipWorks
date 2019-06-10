@@ -16,13 +16,20 @@ namespace ShipWorksPerformanceTestSuite
 	public class ExtraMethods
 	{
 		public ExtraMethods()
-		{				
+		{
 		}
 		
 		public void KillBackgroundShipWorksProcesses()
-			{
-				System.Diagnostics.Process.Start("CMD.exe", "/C taskkill -im shipworks* -f");
-				System.Diagnostics.Process.Start("CMD.exe", "/C taskkill -im ShipWorks.Escalator* -f");
-			}
+		{
+			System.Diagnostics.Process.Start("CMD.exe", "/C taskkill -im shipworks* -f");
+			System.Diagnostics.Process.Start("CMD.exe", "/C taskkill -im ShipWorks.Escalator* -f");
+		}
+		
+		public string GetFolderName()
+		{
+			string folderName = DateTime.Now.ToString("MMddyyyyHHmmss");
+			string folderPrefix = "SWPerformanceTest_";
+			return(folderPrefix + folderName);
+		}
 	}
 }
