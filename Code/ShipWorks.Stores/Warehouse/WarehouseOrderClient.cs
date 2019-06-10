@@ -54,7 +54,6 @@ namespace ShipWorks.Stores.Warehouse
                     response.Value.Content,
                     new JsonSerializerSettings
                     {
-                        //Converters = { new WarehouseOrderJsonConverter(storeType) },
                         ContractResolver = new DefaultContractResolver
                         {
                             NamingStrategy = new CamelCaseNamingStrategy
