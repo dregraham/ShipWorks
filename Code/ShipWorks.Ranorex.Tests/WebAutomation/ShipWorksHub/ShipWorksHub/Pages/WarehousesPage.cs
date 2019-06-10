@@ -41,7 +41,9 @@ namespace ShipWorksHub.Pages
         public IWebElement FirstWarehouseNameText => _driver.FindElement(By.XPath("//*[@id='root']/div/div[2]/div/article/div[1]/header/h2"));
         public IWebElement SecondWarehouseNameText => _driver.FindElement(By.XPath("//*[@id='root']/div/div[2]/div/article/div[2]/header/h2"));
         public IWebElement ThirdWarehouseNameText => _driver.FindElement(By.XPath("//*[@id='root']/div/div[2]/div/article/div[3]/header/h2"));
-        public string WarehouseList = "div.sc-brqgnP"; //css selector for warehouse list
+
+        public string WarehouseList = "sc-jDwBTQ dJEIm"; //css selector for warehouse list
+        //public string WarehouseList = "div.sc-brqgnP"; //css selector for warehouse list
 
         private IWebDriver _driver;
         public WarehousesPage(IWebDriver driver) => _driver = driver;

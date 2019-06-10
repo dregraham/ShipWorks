@@ -13,6 +13,7 @@ namespace ShipWorksHub.Steps
     public class AddWarehouseSteps : BaseSteps
     {
         int WarehouseBeforeCount; //used to count the number of warehouses on the warehouse page
+        string warehouseName = DateTime.Now.ToString("WMdyyHHmmss");
         private IWebDriver _driver;
         LoginPage loginPage;
         DashboardPage dashboardPage;
@@ -53,8 +54,8 @@ namespace ShipWorksHub.Steps
 
         [Then(@"the user adds the Warehouse details")]
         public void ThenTheUserAddsTheWarehouseDetails()
-        {
-            string[] details = { "Garrett", "123", "1 Memorial Drive", "St. Louis", "MO", "63102" };
+        {            
+            string[] details = { warehouseName, "123", "1 Memorial Drive", "St. Louis", "MO", "63102" };
 
             addWarehousePage.AddWarehouseDetails(details);
         }
