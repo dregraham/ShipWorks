@@ -1336,9 +1336,9 @@ namespace ShipWorks.Stores.Communication
         /// </summary>
         private async Task DownloadWarehouseOrders()
         {
-            if (config.WarehouseID == null)
+            if (string.IsNullOrEmpty(config.WarehouseID))
             {
-                return;
+                throw new DownloadException("Could not download orders because this ShipWorks database is not currently linked to a warehouse in ShipWorks Hub");
             }
 
             using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
