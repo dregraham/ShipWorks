@@ -909,8 +909,6 @@
     <Compile Include="Warehouse\StoreDtoFactory.cs" />
     <Compile Include="Warehouse\WarehouseModule.cs" />
     <Compile Include="Warehouse\WarehouseOrderClient.cs" />
-    <Compile Include="Warehouse\WarehouseOrderItemJsonConverter.cs" />
-    <Compile Include="Warehouse\WarehouseOrderJsonConverter.cs" />
     <Compile Include="Warehouse\WarehouseStoreClient.cs" />
   </ItemGroup>
   <ItemGroup>
