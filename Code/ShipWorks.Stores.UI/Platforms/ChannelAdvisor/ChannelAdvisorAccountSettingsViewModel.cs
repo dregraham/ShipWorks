@@ -70,7 +70,7 @@ namespace ShipWorks.Stores.UI.Platforms.ChannelAdvisor
         /// </summary>
         private void GetAccessCode()
         {
-            string authorizationUrl = $"{ChannelAdvisorRestClient.GetEndpointBase()}/oauth2/authorize{authorizeUrlParameters}";
+            string authorizationUrl = $"{webClient.GetEndpointBase()}/oauth2/authorize{authorizeUrlParameters}";
             WebHelper.OpenUrl(authorizationUrl, window);
         }
 

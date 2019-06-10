@@ -38,6 +38,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         private readonly string profilesEndpoint;
         private readonly string productEndpoint;
         private readonly string distributionCenterEndpoint;
+        private readonly IInterapptiveOnly interapptiveOnly;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ChannelAdvisorRestClient"/> class.
@@ -47,8 +48,10 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         /// <param name="encryptionProviderFactory"></param>
         public ChannelAdvisorRestClient(IHttpRequestSubmitterFactory submitterFactory,
             Func<ApiLogSource, string, IApiLogEntry> apiLogEntryFactory,
-            IEncryptionProviderFactory encryptionProviderFactory)
+            IEncryptionProviderFactory encryptionProviderFactory,
+            IInterapptiveOnly interapptiveOnly)
         {
+            this.interapptiveOnly = interapptiveOnly;
             this.submitterFactory = submitterFactory;
             this.apiLogEntryFactory = apiLogEntryFactory;
             encryptionProvider = encryptionProviderFactory.CreateChannelAdvisorEncryptionProvider();
@@ -67,17 +70,14 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         /// <summary>
         /// Get the base endpoint for ChannelAdvisor requests
         /// </summary>
-        public static string GetEndpointBase()
-       {
-            if (InterapptiveOnly.IsInterapptiveUser)
+        public string GetEndpointBase()
+        {
+            if (interapptiveOnly.IsInterapptiveUser && !interapptiveOnly.Registry.GetValue("ChannelAdvisorLive", true))
             {
-                if (!InterapptiveOnly.Registry.GetValue("ChannelAdvisorLive", true))
+                var endpointOverride = interapptiveOnly.Registry.GetValue("ChannelAdvisorEndpoint", string.Empty);
+                if (!string.IsNullOrWhiteSpace(endpointOverride))
                 {
-                    var endpointOverride = InterapptiveOnly.Registry.GetValue("ChannelAdvisorEndpoint", string.Empty);
-                    if (!string.IsNullOrWhiteSpace(endpointOverride))
-                    {
-                        return endpointOverride;
-                    }
+                    return endpointOverride;
                 }
             }
 
