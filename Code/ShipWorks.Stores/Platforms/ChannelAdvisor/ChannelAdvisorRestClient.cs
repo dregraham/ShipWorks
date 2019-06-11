@@ -72,7 +72,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         /// </summary>
         public string GetEndpointBase()
         {
-            if (interapptiveOnly.IsInterapptiveUser && !interapptiveOnly.Registry.GetValue("ChannelAdvisorLive", true))
+            if (UseFakeApi)
             {
                 var endpointOverride = interapptiveOnly.Registry.GetValue("ChannelAdvisorEndpoint", string.Empty);
                 if (!string.IsNullOrWhiteSpace(endpointOverride))
@@ -219,7 +219,11 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
                     return productCache[productID];
                 }
 
-                IHttpVariableRequestSubmitter submitter = CreateRequest($"{productEndpoint}({productID})", HttpVerb.Get);
+                var productSpecificEndpoint = UseFakeApi ?
+                    $"{productEndpoint}/{productID}" :
+                    $"{productEndpoint}({productID})";
+
+                IHttpVariableRequestSubmitter submitter = CreateRequest(productSpecificEndpoint, HttpVerb.Get);
 
                 submitter.Variables.Add("access_token", GetAccessToken(refreshToken));
                 submitter.Variables.Add("$expand", "Attributes, Images, DCQuantities");
@@ -434,5 +438,11 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
                 throw new ChannelAdvisorException("Failed to decrypt the shared secret", ex);
             }
         }
+
+        /// <summary>
+        /// Should the client use the fake api
+        /// </summary>
+        private bool UseFakeApi =>
+            interapptiveOnly.IsInterapptiveUser && !interapptiveOnly.Registry.GetValue("ChannelAdvisorLive", true);
     }
 }
