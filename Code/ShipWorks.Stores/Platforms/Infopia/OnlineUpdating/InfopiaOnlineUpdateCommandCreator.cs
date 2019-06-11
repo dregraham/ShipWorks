@@ -98,7 +98,7 @@ namespace ShipWorks.Stores.Platforms.Infopia.OnlineUpdating
         /// </summary>
         private async Task<IResult> ShipmentUploadCallback(IInfopiaStoreEntity store, long orderID)
         {
-            ShipmentEntity shipment = await orderUtility.GetLatestActiveShipmentAsync(orderID).ConfigureAwait(false);
+            ShipmentEntity shipment = await orderUtility.GetLatestActiveShipmentAsync(orderID, false).ConfigureAwait(false);
             if (shipment == null)
             {
                 log.InfoFormat("There were no Processed and not Voided shipments to upload for OrderID {0}", orderID);

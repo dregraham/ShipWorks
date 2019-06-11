@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.UI;
@@ -10,7 +11,6 @@ using log4net;
 using ShipWorks.ApplicationCore.Interaction;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Content;
-using System.Windows.Forms;
 
 namespace ShipWorks.Stores.Platforms.GenericModule.OnlineUpdating
 {
@@ -175,7 +175,7 @@ namespace ShipWorks.Stores.Platforms.GenericModule.OnlineUpdating
         private async Task<IResult> UploadShipmentDetailsCallback(long orderID, GenericModuleStoreEntity store)
         {
             // upload tracking number for the most recent processed, not voided shipment
-            ShipmentEntity shipment = await orderManager.GetLatestActiveShipmentAsync(orderID).ConfigureAwait(false);
+            ShipmentEntity shipment = await orderManager.GetLatestActiveShipmentAsync(orderID, false).ConfigureAwait(false);
             if (shipment == null)
             {
                 log.InfoFormat("There were no Processed and not Voided shipments to upload for OrderID {0}", orderID);

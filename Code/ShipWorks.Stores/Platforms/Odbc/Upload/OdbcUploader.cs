@@ -60,7 +60,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Upload
         /// <exception cref="ShipWorksOdbcException">Unable to update shipment.</exception>
         public async Task UploadLatestShipment(OdbcStoreEntity store, long orderid)
         {
-            ShipmentEntity shipment = orderManager.GetLatestActiveShipment(orderid);
+            ShipmentEntity shipment = orderManager.GetLatestActiveShipment(orderid, true);
 
             if (shipment == null || !shipment.Processed)
             {

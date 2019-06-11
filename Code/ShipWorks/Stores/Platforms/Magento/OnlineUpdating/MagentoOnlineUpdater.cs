@@ -46,7 +46,7 @@ namespace ShipWorks.Stores.Platforms.Magento.OnlineUpdating
             tracking = "";
 
             // upload tracking number for the most recent processed, not voided shipment
-            ShipmentEntity shipment = OrderUtility.GetLatestActiveShipment(order.OrderID);
+            ShipmentEntity shipment = OrderUtility.GetLatestActiveShipment(order.OrderID, false);
             if (shipment != null)
             {
                 tracking = shipment.TrackingNumber;

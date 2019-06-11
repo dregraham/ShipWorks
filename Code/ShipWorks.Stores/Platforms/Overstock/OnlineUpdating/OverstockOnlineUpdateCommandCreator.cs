@@ -71,7 +71,7 @@ namespace ShipWorks.Stores.Platforms.Overstock.OnlineUpdating
         /// </summary>
         private async Task<IResult> UploadShipmentDetails(long orderID)
         {
-            ShipmentEntity shipment = await orderManager.GetLatestActiveShipmentAsync(orderID).ConfigureAwait(false);
+            ShipmentEntity shipment = await orderManager.GetLatestActiveShipmentAsync(orderID, false).ConfigureAwait(false);
             if (shipment == null)
             {
                 log.InfoFormat("There were no Processed and not Voided shipments to upload for OrderID {0}", orderID);
