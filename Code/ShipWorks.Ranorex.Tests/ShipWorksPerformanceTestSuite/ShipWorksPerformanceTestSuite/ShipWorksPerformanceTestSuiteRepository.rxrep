@@ -248,6 +248,16 @@ XrLp0EM2aG+RntUiB+ZT6fxfIsRPbYnQgbXhGFYAAAAASUVORK5CYII=
 			searchtimeout="30000ms">
 				/list[@controlid='1000']/rawtext[@rawtext='Other']
 			</item>
+			<item
+			addcaps="listitem,nativeitem,checkable"
+			capname="listitem"
+			id="8647334f-61e0-41ef-a210-bcccd5688c75"
+			name="BestRate"
+			refimgid="5e4dad1c-8422-4a1e-909d-fa9f8419f804"
+			refpath="/list[@controlid='1000']/listitem[@text='Best Rate']"
+			searchtimeout="30000ms">
+				/list[@controlid='1000']/listitem[@text='Best Rate']
+			</item>
 			<basepath>
 				/list[@controlid='1000']
 			</basepath>
@@ -681,6 +691,59 @@ MccVydhgafzKwmo3c6RCyF+QF9ssNPjvRAAAAABJRU5ErkJggg==
 			searchtimeout="30000ms">
 				/form[@controlname='MainForm']/?/?/element[@controlname='ribbonTabHelp']/rawtext[@rawtext='About ShipWorks']
 			</item>
+			<folder
+			addcaps="container,control,nativewindow"
+			capname="container"
+			id="54a0a07e-0058-4a7a-9dfd-d6ce18d74e98"
+			isrooted="True"
+			name="PanelDockingArea"
+			refpath="/form[@controlname='MainForm']/container[@controlname='panelDockingArea']"
+			searchtimeout="30000ms"
+			usecache="False">
+				<item
+				addcaps="unknown,rawtext"
+				capname="rawtext"
+				id="1819e6b7-4b4e-4eac-9e07-47012ea8bd4b"
+				name="RawText500Orders"
+				refimgid="6c504f58-776b-421a-a46e-e448c2b133a2"
+				refpath="/form[@controlname='MainForm']/container[@controlname='panelDockingArea']/container[@caption='' and @controltypename='DockContainer' and @instance='0']/container[@controlname='dockableWindowOrderFilters']/container/element/rawtext[@rawtext='500Orders']"
+				searchtimeout="30000ms">
+					/form[@controlname='MainForm']/container[@controlname='panelDockingArea']/?/?/container[@controlname='dockableWindowOrderFilters']//rawtext[@rawtext='500Orders']
+				</item>
+				<item
+				addcaps="unknown,rawtext"
+				capname="rawtext"
+				id="37c1569a-f0c2-4789-8bd9-c6fcefa2902a"
+				name="RawText1"
+				refimgid="1b51d43c-9daa-4748-b99a-54dd14397909"
+				refpath="/form[@controlname='MainForm']/container[@controlname='panelDockingArea']/container[@controlname='gridControl']/container/element/rawtext[@rawtext='1' and @column='4']"
+				searchtimeout="30000ms">
+					/form[@controlname='MainForm']/container[@controlname='panelDockingArea']/?/?/container[@controlname='gridPanel']/?/?/rawtext[@rawtext='1' and @column='4']
+				</item>
+				<item
+				addcaps="text,uiautomation"
+				capname="text"
+				id="58210762-612f-48a6-8c1a-991dbaad6d06"
+				name="Text500Orders"
+				refimgid="71efab55-dd0b-42c8-94b8-41eefcdf3d48"
+				refpath="/form[@controlname='MainForm']/container[@controlname='panelDockingArea']/container[@controlname='gridControl']/element[@controlname='headerHost']/container/element/element/text[@name='500Orders']"
+				searchtimeout="30000ms">
+					/form[@controlname='MainForm']/container[@controlname='panelDockingArea']/container[@controlname='gridControl']/?/?/container[@classname='Pane']//text[@name='500Orders']
+				</item>
+				<basepath>
+					/form[@controlname='MainForm']/container[@controlname='panelDockingArea']
+				</basepath>
+			</folder>
+			<item
+			addcaps="unknown,rawtext"
+			capname="rawtext"
+			id="dcdfc516-e064-402e-97d1-869ded18c5e6"
+			name="Selected500"
+			refimgid="33f50ee6-cb81-484d-84ed-bca067503f89"
+			refpath="/form[@controlname='MainForm']/element[@controlname='statusBar']/rawtext[@rawtext='Selected: 500']"
+			searchtimeout="30000ms">
+				/form[@controlname='MainForm']/?/?/rawtext[@rawtext='Selected: 500']
+			</item>
 			<basepath>
 				/form[@controlname='MainForm']
 			</basepath>
@@ -978,6 +1041,46 @@ XrLp0EM2aG+RntUiB+ZT6fxfIsRPbYnQgbXhGFYAAAAASUVORK5CYII=
 			searchtimeout="30000ms">
 				/form[@controlname='ProgressDlg']/?/?/rawtext[@rawtext='OK']
 			</item>
+			<item
+			addcaps="unknown,rawtext"
+			capname="rawtext"
+			id="b8672480-5120-4e05-aa37-40f3a3fed7dc"
+			name="LoadShipments"
+			refimgid="ee78f1ec-c4c6-40b4-af74-27ebc978c51e"
+			refpath="/form[@controlname='ProgressDlg']/container/text[@controlname='title']/rawtext[@rawtext='Load Shipments']"
+			searchtimeout="30000ms">
+				/form[@controlname='ProgressDlg']/container[@controlname='headerPanel']/?/?/rawtext[@rawtext='Load Shipments']
+			</item>
+			<item
+			addcaps="unknown,rawtext"
+			capname="rawtext"
+			id="09371216-981a-44c6-96d4-25e8b56203ec"
+			name="PreparingShipments"
+			refimgid="9ecbe10b-0a86-43fa-b062-cb08959b2f29"
+			refpath="/form[@controlname='ProgressDlg']/container/text[@controlname='title']/rawtext[@rawtext='Preparing Shipments']"
+			searchtimeout="30000ms">
+				/form[@controlname='ProgressDlg']/container[@controlname='headerPanel']/?/?/rawtext[@rawtext='Preparing Shipments']
+			</item>
+			<item
+			addcaps="unknown,rawtext"
+			capname="rawtext"
+			id="97809ca3-18cc-4e1e-b661-69e3d22e6a02"
+			name="VoidingShipments1"
+			refimgid="81b4fb9f-1d03-4c00-a972-c67d6ef074a5"
+			refpath="/form[@controlname='ProgressDlg']/container/text[@controlname='title']/rawtext[@rawtext='Voiding Shipments']"
+			searchtimeout="30000ms">
+				/form[@controlname='ProgressDlg']/container[@controlname='headerPanel']/?/?/rawtext[@rawtext='Voiding Shipments']
+			</item>
+			<item
+			addcaps="unknown,rawtext"
+			capname="rawtext"
+			id="ec250ad7-7afa-4397-a654-68974a7a01c3"
+			name="ProcessingShipments"
+			refimgid="367f54de-b5ac-42cb-89bc-6f2d0e84cdd2"
+			refpath="/form[@controlname='ProgressDlg']/container/text[@controlname='title']/rawtext[@rawtext='Processing Shipments']"
+			searchtimeout="30000ms">
+				/form[@controlname='ProgressDlg']/container[@controlname='headerPanel']/?/?/rawtext[@rawtext='Processing Shipments']
+			</item>
 			<basepath>
 				/form[@controlname='ProgressDlg']
 			</basepath>
@@ -1183,6 +1286,56 @@ DAPIxVgFicf/GQCdrAkiuOdOjQAAAABJRU5ErkJggg==
 				searchtimeout="30000ms">
 					/form[@controlname='ShippingDlg']/container[@controlname='splitContainer']//tabpage[@controlname='tabPageService']/container[@controlname='serviceControlArea']/container[@controlname='OtherServiceControl']/container[@controlname='sectionShipment']//text[@controlname='service']
 				</item>
+				<item
+				addcaps="unknown,rawtext"
+				capname="rawtext"
+				id="727ebecf-c136-4309-b407-a12e5b1c09de"
+				name="RawText1"
+				refimgid="6c282a84-8279-4263-a210-b7858a20e83b"
+				refpath="/form[@controlname='ShippingDlg']/container[@controlname='splitContainer']/container[@controlname='panel1']/container/element/rawtext[@rawtext='1']"
+				searchtimeout="30000ms">
+					/form[@controlname='ShippingDlg']/container[@controlname='splitContainer']/container[@controlname='panel1']//rawtext[@rawtext='1']
+				</item>
+				<item
+				addcaps="unknown,rawtext"
+				capname="rawtext"
+				id="09299452-d2db-43ec-9e66-cadd4af60094"
+				name="Selected500"
+				refimgid="9808cd8b-b211-4506-9759-d4ffe7d7eabc"
+				refpath="/form[@controlname='ShippingDlg']/container[@controlname='splitContainer']/container[@controlname='panel1']/container[@controlname='shipmentControl']/container[@controlname='panelStatus']/element[@controlname='kryptonStatusPanel']/container[@controlname='kryptonStatusPanel.Panel']/text[@controlname='labelSelectedShipments']/rawtext[@rawtext='Selected: 500']"
+				searchtimeout="30000ms">
+					/form[@controlname='ShippingDlg']/container[@controlname='splitContainer']//container[@controlname='panelStatus']//text[@controlname='labelSelectedShipments']/rawtext[@rawtext='Selected: 500']
+				</item>
+				<item
+				addcaps="list,accessible"
+				capname="list"
+				id="c1f3dcd1-f116-4d62-b3e3-9170953fbf25"
+				name="List6112019"
+				refimgid="d73da210-4dcb-49d2-8e52-8c141386ad6a"
+				refpath="/form[@controlname='ShippingDlg']/container[@controlname='splitContainer']/container[@controlname='panel2']/container/container[@controlname='panel1']/tabpagelist/tabpage[@controlname='tabPageService']/container/container[@controlname='BestRateServiceControl']/container[@controlname='sectionShipment']/element/container/datetime/list[@accessiblename='6/11/2019']"
+				searchtimeout="30000ms">
+					/form[@controlname='ShippingDlg']/container[@controlname='splitContainer']/container[@controlname='panel2']//tabpage[@controlname='tabPageService']/container[@controlname='serviceControlArea']/?/?/container[@controlname='sectionShipment']//datetime[@controlname='shipDate']/list[@accessiblename='6/11/2019']
+				</item>
+				<item
+				addcaps="unknown,rawtext"
+				capname="rawtext"
+				id="053a1800-2845-43ab-94af-aeb8b50ba411"
+				name="ShipDate"
+				refimgid="65ca8fb9-69a1-4036-9b70-64caf66c837c"
+				refpath="/form[@controlname='ShippingDlg']/container[@controlname='splitContainer']/container[@controlname='panel2']/container/container[@controlname='panel1']/tabpagelist/tabpage[@controlname='tabPageService']/container/container[@controlname='BestRateServiceControl']/container[@controlname='sectionShipment']/element/container/text[@controlname='labelShipDate']/rawtext[@rawtext='Ship date:']"
+				searchtimeout="30000ms">
+					/form[@controlname='ShippingDlg']/container[@controlname='splitContainer']/container[@controlname='panel2']//tabpage[@controlname='tabPageService']/container[@controlname='serviceControlArea']/?/?/container[@controlname='sectionShipment']//text[@controlname='labelShipDate']/rawtext[@rawtext='Ship date:']
+				</item>
+				<item
+				addcaps="unknown,rawtext"
+				capname="rawtext"
+				id="ec199c7e-6cf3-4ca7-a71e-b4033cc4b25b"
+				name="CarrierName1"
+				refimgid="e8c089ac-f3ee-4036-88ca-5faea7516cb8"
+				refpath="/form[@controlname='ShippingDlg']/container[@controlname='splitContainer']/container[@controlname='panel2']/container/container[@controlname='panel1']/tabpagelist/tabpage[@controlname='tabPageService']/container/container[@controlname='OtherServiceControl']/container[@controlname='sectionShipment']/element/container/text[@controlname='labelCarrier']/rawtext[@rawtext='Carrier name:']"
+				searchtimeout="30000ms">
+					/form[@controlname='ShippingDlg']/container[@controlname='splitContainer']/container[@controlname='panel2']//tabpage[@controlname='tabPageService']/container[@controlname='serviceControlArea']/?/?/container[@controlname='sectionShipment']//text[@controlname='labelCarrier']/rawtext[@rawtext='Carrier name:']
+				</item>
 				<basepath>
 					/form[@controlname='ShippingDlg']/container[@controlname='splitContainer']
 				</basepath>
@@ -1226,6 +1379,46 @@ DAPIxVgFicf/GQCdrAkiuOdOjQAAAABJRU5ErkJggg==
 			refpath="/form[@controlname='ShippingDlg']/button[@controlname='close']"
 			searchtimeout="30000ms">
 				/form[@controlname='ShippingDlg']/button[@controlname='close']
+			</item>
+			<item
+			addcaps="unknown,rawtext"
+			capname="rawtext"
+			id="07123c4c-ea8e-4b2e-9d9a-336f850f0421"
+			name="ApplyProfile1"
+			refimgid="01f6a6b3-62da-4007-bc91-c4d54a5c95b3"
+			refpath="/form[@controlname='ShippingDlg']/container[@controlname='panelEditButtons']/button[@controlname='applyProfile']/rawtext[@rawtext='Apply Profile' and @column='0']"
+			searchtimeout="30000ms">
+				/form[@controlname='ShippingDlg']/?/?/button[@controlname='applyProfile']/rawtext[@column='0']
+			</item>
+			<item
+			addcaps="button,control,nativewindow"
+			capname="button"
+			id="b033712e-2139-4d96-be44-5987789d72a0"
+			name="ProcessDropDownButton"
+			refimgid="b144840e-08c2-4b98-a73f-fca3f8b9f136"
+			refpath="/form[@controlname='ShippingDlg']/container[@controlname='panelEditButtons']/button[@controlname='processDropDownButton']"
+			searchtimeout="30000ms">
+				/form[@controlname='ShippingDlg']/?/?/button[@controlname='processDropDownButton']
+			</item>
+			<item
+			addcaps="unknown,rawtext"
+			capname="rawtext"
+			id="bdabe5db-abbb-4968-8129-3b5a1f0ea9fe"
+			name="CreateLabels"
+			refimgid="e5ad5e89-2264-4120-97f8-e950f51f0090"
+			refpath="/form[@controlname='ShippingDlg']/container[@controlname='panelEditButtons']/button[@controlname='processDropDownButton']/rawtext[@rawtext='Create Labels' and @column='1']"
+			searchtimeout="30000ms">
+				/form[@controlname='ShippingDlg']/?/?/button[@controlname='processDropDownButton']/rawtext[@column='1']
+			</item>
+			<item
+			addcaps="button,control,nativewindow"
+			capname="button"
+			id="9792ba48-6b5a-41e2-bb5a-d673a1bb7bd2"
+			name="VoidSelected"
+			refimgid="59c225b7-d143-411f-bef3-1a018baba3b0"
+			refpath="/form[@controlname='ShippingDlg']/container[@controlname='panelEditButtons']/button[@controlname='voidSelected']"
+			searchtimeout="30000ms">
+				/form[@controlname='ShippingDlg']/?/?/button[@controlname='voidSelected']
 			</item>
 			<basepath>
 				/form[@controlname='ShippingDlg']
@@ -1710,6 +1903,36 @@ GORSxAAAAABJRU5ErkJggg==
 			refpath="/contextmenu[@controlname='contextMenuPrint']/menuitem[@accessiblename='Defaults - Other']"
 			searchtimeout="30000ms">
 				/contextmenu[@controlname='contextMenuPrint']/menuitem[@accessiblename='Defaults - Other']
+			</item>
+			<item
+			addcaps="menuitem,accessible"
+			capname="menuitem"
+			id="9109bd54-c40c-431a-965c-d3b430c2e329"
+			name="TestProfile1"
+			refimgid="58ed228f-6c45-4e3a-bacb-ddd23eacab68"
+			refpath="/contextmenu[@controlname='contextMenuPrint']/menuitem[@accessiblename='TestProfile1']"
+			searchtimeout="30000ms">
+				/contextmenu[@controlname='contextMenuPrint']/menuitem[@accessiblename='TestProfile1']
+			</item>
+			<item
+			addcaps="menuitem,accessible"
+			capname="menuitem"
+			id="5e5f8d42-49cf-44d8-8d91-29c453462759"
+			name="OtherProfile"
+			refimgid="f4ea81af-7962-4e46-9cc4-398e31d9b169"
+			refpath="/contextmenu[@controlname='contextMenuPrint']/menuitem[@accessiblename='OtherProfile']"
+			searchtimeout="30000ms">
+				/contextmenu[@controlname='contextMenuPrint']/menuitem[@accessiblename='OtherProfile']
+			</item>
+			<item
+			addcaps="menuitem,accessible"
+			capname="menuitem"
+			id="f8c638a6-2679-45c6-9c5f-5b5faa94b6b5"
+			name="BestRateProfile"
+			refimgid="563ba782-d345-4572-bc9a-17ba05ba3b26"
+			refpath="/contextmenu[@controlname='contextMenuPrint']/menuitem[@accessiblename='BestRateProfile']"
+			searchtimeout="30000ms">
+				/contextmenu[@controlname='contextMenuPrint']/menuitem[@accessiblename='BestRateProfile']
 			</item>
 			<basepath>
 				/contextmenu[@controlname='contextMenuPrint']
@@ -2297,6 +2520,42 @@ kngMlq2Folwfcr4t+mPPQJmZCHnyJXyL4kEeGQaR1Q6027AWmSCqKpdmdTUH6mpnqKucMP7JjxLo
 MHdZYMNSEnWlYYiywnBMUW5EFQ2hqbX8JxjMX98gcbKv7XB0gNiRDbEDG10uHEZgN00JIuhfmR5O
 9OTvDIOVFQadqioTKMr01AMCfR79SOXtFhuHzm2sLLE1a7bTjo0OG7uXhZaW5szzypQ9Wrc3L5oY
 MccVydhgafzKwmo3c6RCyF+QF9ssNPjvRAAAAABJRU5ErkJggg==
+			</icon>
+		</appfolder>
+		<appfolder
+		addcaps="form,control,nativewindow"
+		capname="form"
+		id="6ef51a7c-1bee-4a98-b724-c962a1038ab9"
+		isrooted="True"
+		name="ShipmentVoidConfirmDlg"
+		refpath="/form[@controlname='ShipmentVoidConfirmDlg']"
+		searchtimeout="30000ms"
+		usecache="True">
+			<item
+			addcaps="button,control,nativewindow"
+			capname="button"
+			id="b85416cc-9e6b-47fd-bf7d-e927e8241f89"
+			name="ButtonOk"
+			refimgid="1bd2ab29-21ff-4513-b230-ba5e0ad02015"
+			refpath="/form[@controlname='ShipmentVoidConfirmDlg']/button[@controlname='ok']"
+			searchtimeout="30000ms">
+				/form[@controlname='ShipmentVoidConfirmDlg']/button[@controlname='ok']
+			</item>
+			<basepath>
+				/form[@controlname='ShipmentVoidConfirmDlg']
+			</basepath>
+			<icon>
+				iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACx
+jwv8YQUAAAAJcEhZcwAADsQAAA7EAZUrDhsAAAH4SURBVDhPrdFdSJNhGMbxR1BzhTJzapnsJGgU
+RnQQEXYQhGkEgRIUihSzrKyEMM0ME00ENRY6WjPLmOasObKkHDTKmoSBERUZbNWsVdtys/nRKjr5
+9+F74AvBwLrggufk/l0Hj/gveTDoYD6VzmcB6SnLsDGZbxOdfPW2EnbXMDNawvTjPCaHNnKlOj4y
+MGRQEfY08cVVzsyzQqYeZTN5by2fB9R0VC6KDNxvTZqzmknIrmGiP4VxaxzGsoVyYGxNNM7VMTzP
+iGVkVRyOlQrsusVMDWcT+r1qUxPoS+DTtWh83QJ9qUIOTN/sJWQ2ETDq8Taexro8noEmJaE7GoL9
+yQR6Ffh7ovjYJfBcFuhK4uRA8KIBf3MDnqpy3hwoQq9O5EaDkuCv1XFLDD6z4INJ8K5D4G4XNO5f
+IAfenzqB+3AxzvwdvMjZTPWSFCy1CfivRuGVVscuCV63CZxGQX1RrBxwFe5idFsWTzPXMZKh4aAq
+7a9/P7fS+SxQkZrKEdVSipPS2J24jAJlOlV9b+l08Kftd+GsDequw7Fu2HrcJgekpyxlZhdGO5y5
+DTVWONoF+9qgoOUH67U9kYG9hiectECpCbTnIV/3ndz6ADmVr1iReyEykFc3yJ5zsLM5zPZaH1sq
+XrLp0EM2aG+RntUiB+ZT6fxfIsRPbYnQgbXhGFYAAAAASUVORK5CYII=
 			</icon>
 		</appfolder>
 		<basepath>

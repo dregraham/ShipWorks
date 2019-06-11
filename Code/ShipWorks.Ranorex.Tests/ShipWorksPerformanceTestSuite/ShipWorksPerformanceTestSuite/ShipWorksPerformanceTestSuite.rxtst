@@ -27,11 +27,33 @@ rxversion="8.1">
 			id="44cac686-339b-4902-8a46-560e623779f5"
 			name="TestCase">
 			</testcase>
+			<testmodule
+			id="6663757e-de8f-4a9d-8df4-487dbf92655d"
+			name="Select500Orders"
+			ref="15feb502-a74d-4e42-a249-2dba9b26f18b"
+			type="UserCode">
+			</testmodule>
+			<testmodule
+			id="6ca53a36-dd4f-4108-a8c4-ed60dcd3e6cc"
+			name="Load500Orders"
+			ref="73a28c83-6dd2-4863-9261-44853da1ac68"
+			type="UserCode">
+			</testmodule>
+			<testmodule
+			id="76cf1296-e3cb-4ab3-b744-88fedfa38a28"
+			name="ApplyProfileTo500Orders"
+			ref="f12f721a-a36e-4a5a-88c3-a0c6e7a74a56"
+			type="UserCode">
+			</testmodule>
 			<testcase
 			id="7809f0e4-23f0-43cf-b9df-07386c0239b9"
 			name="ShipWorksPerformanceTestSuite"
 			reportlevel="Info;20">
 			</testcase>
+			<smartfoldernode
+			id="86a90bb7-cb81-4c02-86e1-b81ac5b114f9"
+			name="HighVolumeBaseline">
+			</smartfoldernode>
 			<testmodule
 			id="9b111332-8df8-4e26-8f41-d3426ed9ee25"
 			name="CloseShipWorks"
@@ -56,6 +78,18 @@ rxversion="8.1">
 			id="e093264e-3968-4418-a383-8ff80321fd74"
 			name="RestoreDatabase"
 			ref="17a4d054-f29c-4977-9e00-c9788508e533"
+			type="UserCode">
+			</testmodule>
+			<testmodule
+			id="e1a012e0-78ec-4f1b-b521-0ba953cd1002"
+			name="Process500Orders"
+			ref="c7feaad9-b5ed-4097-9a55-e8ed71d09bbe"
+			type="UserCode">
+			</testmodule>
+			<testmodule
+			id="fc33c31f-f57b-40e8-a1ef-10ea8e3ef31e"
+			name="Void500Shipments"
+			ref="cf731ceb-4065-4afa-85c0-a45fc3aa463a"
 			type="UserCode">
 			</testmodule>
 		</flatlistofchildren>
@@ -85,6 +119,30 @@ rxversion="8.1">
 							name="RestoreDatabase">
 							</testmodule>
 						</setup>
+						<smartfoldernode
+						id="86a90bb7-cb81-4c02-86e1-b81ac5b114f9"
+						name="HighVolumeBaseline">
+							<testmodule
+							id="6663757e-de8f-4a9d-8df4-487dbf92655d"
+							name="Select500Orders">
+							</testmodule>
+							<testmodule
+							id="6ca53a36-dd4f-4108-a8c4-ed60dcd3e6cc"
+							name="Load500Orders">
+							</testmodule>
+							<testmodule
+							id="76cf1296-e3cb-4ab3-b744-88fedfa38a28"
+							name="ApplyProfileTo500Orders">
+							</testmodule>
+							<testmodule
+							id="e1a012e0-78ec-4f1b-b521-0ba953cd1002"
+							name="Process500Orders">
+							</testmodule>
+							<testmodule
+							id="fc33c31f-f57b-40e8-a1ef-10ea8e3ef31e"
+							name="Void500Shipments">
+							</testmodule>
+						</smartfoldernode>
 						<teardown
 						id="af5e1629-1100-4c60-8e81-84ebda8fd5ec"
 						name="teardown">
@@ -109,6 +167,9 @@ rxversion="8.1">
 			</testcontainer>
 			<testcontainer
 			id="7809f0e4-23f0-43cf-b9df-07386c0239b9">
+			</testcontainer>
+			<testcontainer
+			id="86a90bb7-cb81-4c02-86e1-b81ac5b114f9">
 			</testcontainer>
 		</testconfiguration>
 	</testconfigurations>

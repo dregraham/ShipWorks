@@ -5,7 +5,6 @@
   <Array name="bookmarks" />
   <Array name="files">
     <Element value="ShipWorksPerformanceTestSuite.rxtst" />
-    <Element value="RestoreDatabase.cs" />
   </Array>
   <Properties name="projectSavedData">
     <Properties name="customTool">

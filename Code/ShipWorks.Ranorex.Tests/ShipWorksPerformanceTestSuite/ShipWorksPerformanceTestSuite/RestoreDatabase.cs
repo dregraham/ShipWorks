@@ -213,62 +213,73 @@ namespace ShipWorksPerformanceTestSuite
 			repo.DetailedDatabaseSetupWizard.Next.Click();
 			Delay.Milliseconds(0);
 			
-			// Database Update Require
-			Report.Log(ReportLevel.Info, "Wait", "Database Update Require\r\nWaiting 30s to exist. Associated repository item: 'DatabaseUpdateWizard'", repo.DatabaseUpdateWizard.SelfInfo, new ActionTimeout(30000), new RecordItemIndex(49));
-			repo.DatabaseUpdateWizard.SelfInfo.WaitForExists(30000);
+			if(repo.DatabaseUpdateWizard.SelfInfo.Exists(30000))
+			{	
+				Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Move item 'DatabaseUpdateWizard.Next1' at Center.", repo.DatabaseUpdateWizard.Next1Info, new RecordItemIndex(51));
+				repo.DatabaseUpdateWizard.Next1.MoveTo();
+				Delay.Milliseconds(0);
+				
+				Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Click item 'DatabaseUpdateWizard.Next1' at Center.", repo.DatabaseUpdateWizard.Next1Info, new RecordItemIndex(52));
+				repo.DatabaseUpdateWizard.Next1.Click();
+				Delay.Milliseconds(0);
+				
+				// Entering credentials
+				Report.Log(ReportLevel.Info, "Keyboard", "Entering credentials\r\nKey sequence 'ssmempires@email.com'.", new RecordItemIndex(53));
+				Keyboard.Press("ssmempires@email.com");
+				Delay.Milliseconds(0);
+				
+				Report.Log(ReportLevel.Info, "Keyboard", "Key sequence '{Tab}'.", new RecordItemIndex(54));
+				Keyboard.Press("{Tab}");
+				Delay.Milliseconds(0);
+				
+				// Enterin credentials
+				Report.Log(ReportLevel.Info, "Keyboard", "Enterin credentials\r\nKey sequence 'password1'.", new RecordItemIndex(55));
+				Keyboard.Press("password1");
+				Delay.Milliseconds(0);
+				
+				Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Click item 'DatabaseUpdateWizard.Next1' at Center.", repo.DatabaseUpdateWizard.Next1Info, new RecordItemIndex(52));
+				repo.DatabaseUpdateWizard.Next1.Click();
+				Delay.Milliseconds(0);
+				
+				Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Click item 'DatabaseUpdateWizard.Next1' at Center.", repo.DatabaseUpdateWizard.Next1Info, new RecordItemIndex(52));
+				repo.DatabaseUpdateWizard.Next1.Click();
+				Delay.Milliseconds(0);
+				
+				Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Click item 'DatabaseUpdateWizard.Next1' at Center.", repo.DatabaseUpdateWizard.Next1Info, new RecordItemIndex(52));
+				repo.DatabaseUpdateWizard.Next1.Click();
+				Delay.Milliseconds(0);
+				
+				Report.Log(ReportLevel.Info, "Wait", "Waiting 5s for the attribute 'Enabled' to equal the specified value 'True'. Associated repository item: 'ProgressDlg.ButtonOk'", repo.ProgressDlg.ButtonOkInfo, new RecordItemIndex(7));
+				repo.ProgressDlg.ButtonOkInfo.WaitForAttributeEqual(60000, "Enabled", "True");
+				
+				Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Click item 'ProgressDlg.ButtonOk' at Center.", repo.ProgressDlg.ButtonOkInfo, new RecordItemIndex(1));
+				repo.ProgressDlg.ButtonOk.MoveTo();
+				Delay.Milliseconds(0);
+				
+				Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Click item 'ProgressDlg.ButtonOk' at Center.", repo.ProgressDlg.ButtonOkInfo, new RecordItemIndex(1));
+				repo.ProgressDlg.ButtonOk.Click();
+				Delay.Milliseconds(0);
+				
+				repo.DatabaseUpdateWizard.Next1Info.WaitForAttributeEqual(60000, "Enabled", "True");
+				Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Move item 'DatabaseUpdateWizard.Next1' at Center.", repo.DatabaseUpdateWizard.Next1Info, new RecordItemIndex(51));
+				repo.DatabaseUpdateWizard.Next1.MoveTo();
+				Delay.Milliseconds(0);
+				
+				Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Click item 'DatabaseUpdateWizard.Next1' at Center.", repo.DatabaseUpdateWizard.Next1Info, new RecordItemIndex(52));
+				repo.DatabaseUpdateWizard.Next1.Click();
+				Delay.Milliseconds(0);
+			}
 			
-			Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Move item 'DatabaseUpdateWizard.Next1' at Center.", repo.DatabaseUpdateWizard.Next1Info, new RecordItemIndex(51));
-			repo.DatabaseUpdateWizard.Next1.MoveTo();
+			Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Click item 'LogonDlg.Password' at Center.", repo.LogonDlg.PasswordInfo, new RecordItemIndex(0));
+			repo.LogonDlg.Password.Click();
 			Delay.Milliseconds(0);
 			
-			Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Click item 'DatabaseUpdateWizard.Next1' at Center.", repo.DatabaseUpdateWizard.Next1Info, new RecordItemIndex(52));
-			repo.DatabaseUpdateWizard.Next1.Click();
-			Delay.Milliseconds(0);
-			
-			// Entering credentials
-			Report.Log(ReportLevel.Info, "Keyboard", "Entering credentials\r\nKey sequence 'bbenterprise3@fake.com'.", new RecordItemIndex(53));
-			Keyboard.Press("bbenterprise3@fake.com");
-			Delay.Milliseconds(0);
-			
-			Report.Log(ReportLevel.Info, "Keyboard", "Key sequence '{Tab}'.", new RecordItemIndex(54));
-			Keyboard.Press("{Tab}");
-			Delay.Milliseconds(0);
-			
-			// Enterin credentials
-			Report.Log(ReportLevel.Info, "Keyboard", "Enterin credentials\r\nKey sequence 'password1'.", new RecordItemIndex(55));
+			Report.Log(ReportLevel.Info, "Keyboard", "Key sequence 'password1'.", new RecordItemIndex(1));
 			Keyboard.Press("password1");
 			Delay.Milliseconds(0);
 			
-			Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Click item 'DatabaseUpdateWizard.Next1' at Center.", repo.DatabaseUpdateWizard.Next1Info, new RecordItemIndex(52));
-			repo.DatabaseUpdateWizard.Next1.Click();
-			Delay.Milliseconds(0);
-			
-			Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Click item 'DatabaseUpdateWizard.Next1' at Center.", repo.DatabaseUpdateWizard.Next1Info, new RecordItemIndex(52));
-			repo.DatabaseUpdateWizard.Next1.Click();
-			Delay.Milliseconds(0);
-			
-			Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Click item 'DatabaseUpdateWizard.Next1' at Center.", repo.DatabaseUpdateWizard.Next1Info, new RecordItemIndex(52));
-			repo.DatabaseUpdateWizard.Next1.Click();
-			Delay.Milliseconds(0);
-			
-			Report.Log(ReportLevel.Info, "Wait", "Waiting 5s for the attribute 'Enabled' to equal the specified value 'True'. Associated repository item: 'ProgressDlg.ButtonOk'", repo.ProgressDlg.ButtonOkInfo, new RecordItemIndex(7));
-			repo.ProgressDlg.ButtonOkInfo.WaitForAttributeEqual(60000, "Enabled", "True");
-			
-			Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Click item 'ProgressDlg.ButtonOk' at Center.", repo.ProgressDlg.ButtonOkInfo, new RecordItemIndex(1));
-			repo.ProgressDlg.ButtonOk.MoveTo();
-			Delay.Milliseconds(0);
-			
-			Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Click item 'ProgressDlg.ButtonOk' at Center.", repo.ProgressDlg.ButtonOkInfo, new RecordItemIndex(1));
-			repo.ProgressDlg.ButtonOk.Click();
-			Delay.Milliseconds(0);
-			
-			repo.DatabaseUpdateWizard.Next1Info.WaitForAttributeEqual(60000, "Enabled", "True");
-			Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Move item 'DatabaseUpdateWizard.Next1' at Center.", repo.DatabaseUpdateWizard.Next1Info, new RecordItemIndex(51));
-			repo.DatabaseUpdateWizard.Next1.MoveTo();
-			Delay.Milliseconds(0);
-			
-			Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Click item 'DatabaseUpdateWizard.Next1' at Center.", repo.DatabaseUpdateWizard.Next1Info, new RecordItemIndex(52));
-			repo.DatabaseUpdateWizard.Next1.Click();
+			Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Click item 'LogonDlg.Logon' at Center.", repo.LogonDlg.LogonInfo, new RecordItemIndex(2));
+			repo.LogonDlg.Logon.Click();
 			Delay.Milliseconds(0);
 		}
 	}
