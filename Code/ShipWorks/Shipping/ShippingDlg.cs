@@ -112,6 +112,7 @@ namespace ShipWorks.Shipping
         /// Constructor
         /// </summary>
         [NDependIgnoreLongMethod]
+        [NDependIgnoreTooManyParams]
         public ShippingDlg(OpenShippingDialogMessage message,
             IShippingManager shippingManager,
             IShippingErrorManager errorManager,
