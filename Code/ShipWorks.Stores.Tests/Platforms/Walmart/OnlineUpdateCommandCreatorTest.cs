@@ -37,7 +37,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Walmart
 
             await testObject.OnUploadShipmentDetails(null, menuContext.Object);
 
-            mock.Mock<IOrderManager>().Verify(o => o.GetLatestActiveShipmentAsync(42L), Times.Once);
+            mock.Mock<IOrderManager>().Verify(o => o.GetLatestActiveShipmentAsync(42L, false), Times.Once);
         }
 
         [Fact]
@@ -55,7 +55,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Walmart
         {
             var shipment = new ShipmentEntity();
             mock.Mock<IOrderManager>()
-                .Setup(o => o.GetLatestActiveShipmentAsync(42L))
+                .Setup(o => o.GetLatestActiveShipmentAsync(42L, false))
                 .ReturnsAsync(shipment);
 
             var testObject = mock.Create<WalmartOnlineUpdateInstanceCommands>();
@@ -70,7 +70,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Walmart
         {
             var shipment = new ShipmentEntity();
             mock.Mock<IOrderManager>()
-                .Setup(o => o.GetLatestActiveShipmentAsync(42L))
+                .Setup(o => o.GetLatestActiveShipmentAsync(42L, false))
                 .ReturnsAsync(shipment);
 
             var testObject = mock.Create<WalmartOnlineUpdateInstanceCommands>();
@@ -85,7 +85,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Walmart
         {
             var shipment = new ShipmentEntity();
             mock.Mock<IOrderManager>()
-                .Setup(o => o.GetLatestActiveShipmentAsync(42L))
+                .Setup(o => o.GetLatestActiveShipmentAsync(42L, false))
                 .ReturnsAsync(shipment);
 
             var testObject = mock.Create<WalmartOnlineUpdateInstanceCommands>();
@@ -100,7 +100,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Walmart
         {
             var walmartException = new WalmartException();
             mock.Mock<IOrderManager>()
-                .Setup(o => o.GetLatestActiveShipmentAsync(42L))
+                .Setup(o => o.GetLatestActiveShipmentAsync(42L, false))
                 .ThrowsAsync(walmartException);
 
             var testObject = mock.Create<WalmartOnlineUpdateInstanceCommands>();

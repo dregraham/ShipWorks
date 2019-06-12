@@ -182,14 +182,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             SetParentCheckBox(returnShipmentState, returnShipment, rmaNumberState, rmaNumber);
             SetParentCheckBox(returnShipmentState, returnShipment, rmaNumberState, labelRmaNumber);
 
-            // Remove state checkbox event handler since we'll be enabling/disabling manually
-            returnShipmentState.CheckedChanged -= OnStateCheckChanged;
-            includeReturnState.CheckedChanged -= OnStateCheckChanged;
-
-            // Manually enable/disable for mutually exclusive return controls
-            includeReturn.Enabled = includeReturnState.Checked && !returnShipment.Checked;
-            returnShipment.Enabled = returnShipmentState.Checked && !includeReturn.Checked;
-
             packagesState.Checked = profile.Packages.Count > 0;
             packagesCount.SelectedIndex = packagesState.Checked ? profile.Packages.Count - 1 : -1;
             packagesCount.Enabled = packagesState.Checked;
@@ -555,11 +547,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         {
             if (includeReturn.Checked)
             {
-                returnShipment.Enabled = false;
-            }
-            else
-            {
-                returnShipment.Enabled = returnShipmentState.Checked;
+                returnShipment.Checked = false;
             }
         }
 
@@ -578,43 +566,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         {
             if (returnShipment.Checked)
             {
-                includeReturn.Enabled = false;
-            }
-            else
-            {
-                includeReturn.Enabled = includeReturnState.Checked;
-            }
-        }
-
-        /// <summary>
-        /// Click of the Include Return State Checkbox
-        /// </summary>
-        protected virtual void OnIncludeReturnStateChanged(object sender, EventArgs e)
-        {
-            if (includeReturnState.Checked)
-            {
-                includeReturn.Enabled = !returnShipment.Checked;
-            }
-            else
-            {
-                includeReturn.Enabled = false;
                 includeReturn.Checked = false;
-            }
-        }
-
-        /// <summary>
-        /// Click of the Return Shipment State Checkbox
-        /// </summary>
-        protected virtual void OnReturnStateChanged(object sender, EventArgs e)
-        {
-            if (returnShipmentState.Checked)
-            {
-                returnShipment.Enabled = !includeReturn.Checked;
-            }
-            else
-            {
-                returnShipment.Enabled = false;
-                returnShipment.Checked = false;
             }
         }
 

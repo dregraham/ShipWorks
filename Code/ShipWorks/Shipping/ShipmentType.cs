@@ -520,8 +520,11 @@ namespace ShipWorks.Shipping
                 // Apply the Shipping profile
                 shippingProfile.Apply(shipment);
 
-                // Reset ReturnShipment to the original value
-                shipment.ReturnShipment = originalReturnShipment;
+                // Reset ReturnShipment to the original value if IncludeReturn hasn't been set
+                if (!shipment.IncludeReturn)
+                {
+                    shipment.ReturnShipment = originalReturnShipment;
+                }
 
                 // Now apply ShipSense
                 ApplyShipSense(shipment, lifetimeScope);

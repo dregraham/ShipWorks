@@ -64,17 +64,17 @@ namespace ShipWorks.Stores.Content
         /// <summary>
         /// Returns the most recent, non-voided, processed shipment for the provided order
         /// </summary>
-        ShipmentEntity GetLatestActiveShipment(long orderID);
+        ShipmentEntity GetLatestActiveShipment(long orderID, bool includeReturns);
 
         /// <summary>
         /// Returns the most recent, non-voided, processed shipment for the provided order
         /// </summary>
-        Task<ShipmentEntity> GetLatestActiveShipmentAsync(long orderID);
+        Task<ShipmentEntity> GetLatestActiveShipmentAsync(long orderID, bool includeReturns);
 
         /// <summary>
         /// Returns the most recent, non-voided, processed shipment for the provided order
         /// </summary>
-        Task<ShipmentEntity> GetLatestActiveShipmentAsync(long orderID, bool includeOrder);
+        Task<ShipmentEntity> GetLatestActiveShipmentAsync(long orderID, bool includeOrder, bool includeReturns);
 
         /// <summary>
         /// Load the specified orders using the given prefetch path

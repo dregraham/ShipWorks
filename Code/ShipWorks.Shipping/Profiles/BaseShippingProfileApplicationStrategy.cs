@@ -41,12 +41,12 @@ namespace ShipWorks.Shipping.Profiles
             ApplyProfileValue(profile.ReturnProfileID, shipment, ShipmentFields.ReturnProfileID);
 
             // Special cases to keep IncludeReturn and ReturnShipment mutually exclusive
-            if (profile.IncludeReturn.HasValue && profile.IncludeReturn.Value && !profile.ReturnShipment.HasValue)
+            if (profile.IncludeReturn.HasValue && profile.IncludeReturn.Value)
             {
                 shipment.SetNewFieldValue(ShipmentFields.ReturnShipment.FieldIndex, false);
             }
 
-            if (profile.ReturnShipment.HasValue && profile.ReturnShipment.Value && !profile.IncludeReturn.HasValue)
+            if (profile.ReturnShipment.HasValue && profile.ReturnShipment.Value)
             {
                 shipment.SetNewFieldValue(ShipmentFields.IncludeReturn.FieldIndex, false);
                 shipment.SetNewFieldValue(ShipmentFields.ApplyReturnProfile.FieldIndex, false);

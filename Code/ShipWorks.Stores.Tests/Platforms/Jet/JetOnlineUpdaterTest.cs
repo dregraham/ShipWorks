@@ -32,7 +32,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Jet
             order = new OrderEntity() { OrderNumber = 42 };
             shipment = new ShipmentEntity { Order = order };
             mock.Mock<IOrderManager>()
-                .Setup(m => m.GetLatestActiveShipment(It.IsAny<long>()))
+                .Setup(m => m.GetLatestActiveShipment(It.IsAny<long>(), false))
                 .Returns(() => shipment);
 
             mock.Mock<IJetOrderSearchProvider>()

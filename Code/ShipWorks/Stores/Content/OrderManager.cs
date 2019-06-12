@@ -174,24 +174,29 @@ namespace ShipWorks.Stores.Content
         /// <summary>
         /// Returns the most recent, non-voided, processed shipment for the provided order
         /// </summary>
-        public ShipmentEntity GetLatestActiveShipment(long orderID) => OrderUtility.GetLatestActiveShipment(orderID);
+        public ShipmentEntity GetLatestActiveShipment(long orderID, bool includeReturns) => OrderUtility.GetLatestActiveShipment(orderID, includeReturns);
 
         /// <summary>
         /// Returns the most recent, non-voided, processed shipment for the provided order
         /// </summary>
-        public Task<ShipmentEntity> GetLatestActiveShipmentAsync(long orderID) =>
-            GetLatestActiveShipmentAsync(orderID, false);
+        public Task<ShipmentEntity> GetLatestActiveShipmentAsync(long orderID, bool includeReturns) =>
+            GetLatestActiveShipmentAsync(orderID, false, includeReturns);
 
         /// <summary>
         /// Returns the most recent, non-voided, processed shipment for the provided order
         /// </summary>
-        public async Task<ShipmentEntity> GetLatestActiveShipmentAsync(long orderID, bool includeOrder)
+        public async Task<ShipmentEntity> GetLatestActiveShipmentAsync(long orderID, bool includeOrder, bool includeReturns)
         {
             var query = new QueryFactory().Shipment
                 .Where(ShipmentFields.OrderID == orderID)
                 .AndWhere(ShipmentFields.Processed == true)
                 .AndWhere(ShipmentFields.Voided == false)
                 .OrderBy(ShipmentFields.ProcessedDate.Descending());
+
+            if (!includeReturns)
+            {
+                query = query.Where(ShipmentFields.ReturnShipment == false);
+            }
 
             using (ISqlAdapter sqlAdapter = sqlAdapterFactory.Create())
             {

@@ -198,7 +198,7 @@ namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor
         private void UploadShipmentDetailsCallback(long orderID, object userState, BackgroundIssueAdder<long> issueAdder)
         {
             // Upload tracking number for the most recent processed, not voided shipment
-            ShipmentEntity shipment = OrderUtility.GetLatestActiveShipment(orderID);
+            ShipmentEntity shipment = OrderUtility.GetLatestActiveShipment(orderID, false);
 
             if (shipment == null)
             {

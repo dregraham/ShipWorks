@@ -90,7 +90,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
         /// <param name="orderKeys">The order keys.</param>
         public async Task UpdateShipmentDetails(IYahooStoreEntity store, long orderKey)
         {
-            ShipmentEntity shipment = OrderUtility.GetLatestActiveShipment(orderKey);
+            ShipmentEntity shipment = OrderUtility.GetLatestActiveShipment(orderKey, false);
 
             // Check to see if shipment exists
             if (shipment == null)
