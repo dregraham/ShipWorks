@@ -195,7 +195,7 @@
             this.includeReturn.Name = "includeReturn";
             this.includeReturn.Size = new System.Drawing.Size(143, 17);
             this.includeReturn.TabIndex = 1;
-            this.includeReturn.Text = "Include a return label";
+            this.includeReturn.Text = "Automatically include a return label";
             this.includeReturn.UseVisualStyleBackColor = false;
             this.includeReturn.CheckedChanged += new System.EventHandler(this.OnIncludeReturnChanged);
             // 
@@ -207,24 +207,23 @@
             this.includeReturnState.Size = new System.Drawing.Size(15, 14);
             this.includeReturnState.TabIndex = 0;
             this.includeReturnState.UseVisualStyleBackColor = true;
-            this.includeReturnState.CheckedChanged += new System.EventHandler(this.OnIncludeReturnStateChanged);
             // 
             // labelReturnWarning
             // 
             this.labelReturnWarning.AutoSize = true;
             this.labelReturnWarning.BackColor = System.Drawing.Color.White;
             this.labelReturnWarning.ForeColor = System.Drawing.Color.DimGray;
-            this.labelReturnWarning.Location = new System.Drawing.Point(192, 23);
+            this.labelReturnWarning.Location = new System.Drawing.Point(259, 23);
             this.labelReturnWarning.Name = "labelReturnWarning";
             this.labelReturnWarning.Size = new System.Drawing.Size(328, 13);
             this.labelReturnWarning.TabIndex = 82;
-            this.labelReturnWarning.Text = "Shipment rates do not include any return label charges.";
+            this.labelReturnWarning.Text = "Rates do not include return label charges.";
             // 
             // pictureBoxReturnWarning
             // 
             this.pictureBoxReturnWarning.BackColor = System.Drawing.Color.White;
             this.pictureBoxReturnWarning.Image = global::ShipWorks.Properties.Resources.exclamation16;
-            this.pictureBoxReturnWarning.Location = new System.Drawing.Point(175, 22);
+            this.pictureBoxReturnWarning.Location = new System.Drawing.Point(242, 22);
             this.pictureBoxReturnWarning.Name = "pictureBoxReturnWarning";
             this.pictureBoxReturnWarning.Size = new System.Drawing.Size(16, 16);
             this.pictureBoxReturnWarning.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
@@ -281,7 +280,7 @@
             this.returnShipment.Name = "returnShipment";
             this.returnShipment.Size = new System.Drawing.Size(143, 17);
             this.returnShipment.TabIndex = 6;
-            this.returnShipment.Text = "This is a return shipment";
+            this.returnShipment.Text = "Make this a return shipment";
             this.returnShipment.UseVisualStyleBackColor = true;
             this.returnShipment.CheckedChanged += new System.EventHandler(this.OnReturnShipmentChanged);
             // 
@@ -293,7 +292,6 @@
             this.returnState.Size = new System.Drawing.Size(15, 14);
             this.returnState.TabIndex = 5;
             this.returnState.UseVisualStyleBackColor = true;
-            this.returnState.CheckedChanged += new System.EventHandler(this.OnReturnStateChanged);
             // 
             // kryptonBorderEdge3
             // 

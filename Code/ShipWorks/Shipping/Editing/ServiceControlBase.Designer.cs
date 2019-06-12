@@ -148,7 +148,7 @@ namespace ShipWorks.Shipping.Editing
             this.includeReturn.Name = "includeReturn";
             this.includeReturn.Size = new System.Drawing.Size(143, 17);
             this.includeReturn.TabIndex = 75;
-            this.includeReturn.Text = "Include a return label";
+            this.includeReturn.Text = "Automatically include a return label";
             this.includeReturn.UseVisualStyleBackColor = false;
             this.includeReturn.CheckedChanged += new System.EventHandler(this.OnIncludeReturnChanged);
             // 
@@ -210,7 +210,7 @@ namespace ShipWorks.Shipping.Editing
             this.returnShipment.Name = "returnShipment";
             this.returnShipment.Size = new System.Drawing.Size(143, 17);
             this.returnShipment.TabIndex = 78;
-            this.returnShipment.Text = "This is a return shipment";
+            this.returnShipment.Text = "Make this a return shipment";
             this.returnShipment.UseVisualStyleBackColor = false;
             this.returnShipment.CheckedChanged += new System.EventHandler(this.OnReturnShipmentChanged);
             // 
@@ -219,7 +219,7 @@ namespace ShipWorks.Shipping.Editing
             this.labelReturnWarning.AutoSize = true;
             this.labelReturnWarning.BackColor = System.Drawing.Color.White;
             this.labelReturnWarning.ForeColor = System.Drawing.Color.DimGray;
-            this.labelReturnWarning.Location = new System.Drawing.Point(158, 13);
+            this.labelReturnWarning.Location = new System.Drawing.Point(225, 13);
             this.labelReturnWarning.Name = "labelReturnWarning";
             this.labelReturnWarning.Size = new System.Drawing.Size(328, 13);
             this.labelReturnWarning.TabIndex = 82;
@@ -229,7 +229,7 @@ namespace ShipWorks.Shipping.Editing
             // 
             this.pictureBoxReturnWarning.BackColor = System.Drawing.Color.White;
             this.pictureBoxReturnWarning.Image = global::ShipWorks.Properties.Resources.exclamation16;
-            this.pictureBoxReturnWarning.Location = new System.Drawing.Point(141, 12);
+            this.pictureBoxReturnWarning.Location = new System.Drawing.Point(208, 12);
             this.pictureBoxReturnWarning.Name = "pictureBoxReturnWarning";
             this.pictureBoxReturnWarning.Size = new System.Drawing.Size(16, 16);
             this.pictureBoxReturnWarning.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;

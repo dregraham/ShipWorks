@@ -456,8 +456,8 @@ namespace ShipWorks.Shipping.Editing
             if (showIncludeReturn)
             {
                 // Only enable returns controls if all selected shipments support it
-                returnShipment.Enabled = allReturnsSupported && !includeReturn.Checked;
-                includeReturn.Enabled = enableIncludeReturn && !returnShipment.Checked;
+                returnShipment.Enabled = allReturnsSupported;
+                includeReturn.Enabled = enableIncludeReturn;
                 applyReturnProfile.Enabled = enableIncludeReturn && includeReturn.Checked;
                 returnProfileID.Enabled = enableIncludeReturn && applyReturnProfile.Checked;
                 returnProfileIDLabel.Enabled = enableIncludeReturn && applyReturnProfile.Checked;
@@ -707,7 +707,10 @@ namespace ShipWorks.Shipping.Editing
                 {
                     applyReturnProfile.Checked = false;
                 }
-                returnShipment.Enabled = !includeReturn.Checked;
+                else
+                {
+                    returnShipment.Checked = false;
+                }
                 applyReturnProfile.Enabled = includeReturn.Checked;
                 returnProfileID.Enabled = applyReturnProfile.Checked;
                 returnProfileIDLabel.Enabled = applyReturnProfile.Checked;
@@ -813,7 +816,10 @@ namespace ShipWorks.Shipping.Editing
         {
             if (!isLoading)
             {
-                includeReturn.Enabled = !returnShipment.Checked;
+                if (returnShipment.Checked)
+                {
+                    includeReturn.Checked = false;
+                }
                 returnsPanel.Enabled = returnShipment.Checked;
                 SaveReturnsToShipments();
                 ReturnServiceChanged?.Invoke(this, EventArgs.Empty);
