@@ -35,6 +35,8 @@ using ShipWorks.Products;
 using ShipWorks.Shipping.ShipSense;
 using ShipWorks.Stores.Content;
 using ShipWorks.Templates.Tokens;
+using ShipWorks.Warehouse;
+using ShipWorks.Warehouse.DTO.Orders;
 
 namespace ShipWorks.Stores.Communication
 {
@@ -159,11 +161,18 @@ namespace ShipWorks.Stores.Communication
             this.downloadLogID = downloadLogID;
             this.connection = connection;
 
-            using (TrackedDurationEvent trackedDurationEvent = new TrackedDurationEvent("Store.Order.Download"))
+            if (Store.WarehouseStoreID == null)
             {
-                await Download(trackedDurationEvent).ConfigureAwait(false);
+                using (TrackedDurationEvent trackedDurationEvent = new TrackedDurationEvent("Store.Order.Download"))
+                {
+                    await Download(trackedDurationEvent).ConfigureAwait(false);
 
-                CollectDownloadTelemetry(trackedDurationEvent);
+                    CollectDownloadTelemetry(trackedDurationEvent);
+                }
+            }
+            else
+            {
+                await DownloadWarehouseOrders().ConfigureAwait(false);
             }
         }
 
@@ -220,6 +229,19 @@ namespace ShipWorks.Stores.Communication
             {
                 IDownloadStartingPoint startingPoint = lifetimeScope.Resolve<IDownloadStartingPoint>();
                 return await startingPoint.OrderNumber(Store).ConfigureAwait(false);
+            }
+        }
+
+        /// <summary>
+        /// Gets the largest HubSequence we have in our database for non-manual orders for this store.  If no
+        /// such orders exist, then 0 is returned.
+        /// </summary>
+        protected async Task<long> GetHubSequenceStartingPoint()
+        {
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+            {
+                IDownloadStartingPoint startingPoint = lifetimeScope.Resolve<IDownloadStartingPoint>();
+                return await startingPoint.HubSequence(Store).ConfigureAwait(false);
             }
         }
 
@@ -1309,9 +1331,62 @@ namespace ShipWorks.Stores.Communication
         /// </summary>
         public virtual bool ShouldDownload(string orderNumber) => false;
 
+        /// <summary>
+        /// Download orders for this store from the ShipWorks Warehouse app
+        /// </summary>
+        private async Task DownloadWarehouseOrders()
+        {
+            if (string.IsNullOrEmpty(config.WarehouseID))
+            {
+                throw new DownloadException("Could not download orders because this ShipWorks database is not currently linked to a warehouse in ShipWorks Hub");
+            }
+
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+            {
+                IWarehouseOrderClient webClient = lifetimeScope.Resolve<IWarehouseOrderClient>();
+                IWarehouseOrderFactory orderFactory = lifetimeScope
+                    .ResolveKeyed<IWarehouseOrderFactory>(StoreType.TypeCode, TypedParameter.From<IOrderElementFactory>(this));
+
+                bool shouldContinue = false;
+                var count = 1;
+
+                do
+                {
+                    long downloadStartPoint = await GetHubSequenceStartingPoint().ConfigureAwait(false);
+
+                    // get orders for this store and warehouse
+                    IEnumerable<WarehouseOrder> orders = await webClient
+                        .GetOrders(config.WarehouseID, Store.WarehouseStoreID.ToString(), downloadStartPoint, StoreType.TypeCode)
+                        .ConfigureAwait(false);
+
+                    foreach (WarehouseOrder warehouseOrder in orders)
+                    {
+                        if (Progress.IsCancelRequested)
+                        {
+                            return;
+                        }
+
+                        count += 1;
+                        Progress.Detail = "Downloading order " + count.ToString("#,##0");
+
+                        OrderEntity orderEntity = await orderFactory.CreateOrder(warehouseOrder).ConfigureAwait(false);
+                        await SaveDownloadedOrder(orderEntity).ConfigureAwait(false);
+                    }
+
+                    shouldContinue = orders.Any();
+                } while (shouldContinue);
+            }
+        }
+
         #region Order Element Factory
         // Explicit implementation of the IOrderElementFactory, this allows dependencies to create order elements without
         // exposing the whole downloader to the dependency
+
+        /// <summary>
+        /// Create an order with the given identifier
+        /// </summary>
+        Task<GenericResult<OrderEntity>> IOrderElementFactory.CreateOrder(OrderIdentifier orderIdentifier) =>
+            InstantiateOrder(orderIdentifier);
 
         /// <summary>
         /// Create an item for the given order

@@ -38,7 +38,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         /// Gets the next batch of distribution centers.
         /// </summary>
         ChannelAdvisorDistributionCenterResponse GetDistributionCenters(string nextToken, string refreshToken);
-        
+
         /// <summary>
         /// Gets the product.
         /// </summary>
@@ -53,5 +53,10 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         /// Gets next batch of items
         /// </summary>
         ChannelAdvisorOrderItemsResult GetOrderItems(string nextToken, string refreshToken);
+
+        /// <summary>
+        /// Get the base endpoint for ChannelAdvisor requests
+        /// </summary>
+        string GetEndpointBase();
     }
 }

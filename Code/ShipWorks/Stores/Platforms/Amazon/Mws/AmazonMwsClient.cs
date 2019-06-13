@@ -40,7 +40,7 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
         public const int MaxItemsPerProductDetailsRequest = 5;
 
         // MWS settings class
-        private AmazonMwsWebClientSettings mwsSettings;
+        private IAmazonMwsWebClientSettings mwsSettings;
 
         // the store/account we are working with
         private AmazonStoreEntity store;
@@ -53,14 +53,17 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
         /// <summary>
         /// Constructor
         /// </summary>
-        public AmazonMwsClient(AmazonStoreEntity store, IShippingManager shippingManager, Func<StoreEntity, AmazonStoreType> getStoreType)
+        public AmazonMwsClient(AmazonStoreEntity store,
+            IShippingManager shippingManager,
+            Func<StoreEntity, AmazonStoreType> getStoreType,
+            Func<IAmazonCredentials, IAmazonMwsWebClientSettings> getWebClientSettings)
         {
             storeType = getStoreType(store);
             this.shippingManager = shippingManager;
             MethodConditions.EnsureArgumentIsNotNull(store, nameof(store));
 
             this.store = store;
-            this.mwsSettings = new AmazonMwsWebClientSettings(store as IAmazonCredentials);
+            this.mwsSettings = getWebClientSettings(store);
             this.throttler = new AmazonMwsRequestThrottle();
         }
 

@@ -252,6 +252,9 @@
     <Compile Include="Platforms\Amazon\OnlineUpdating\AmazonOnlineUpdateCommandCreator.cs" />
     <Compile Include="Platforms\Amazon\OnlineUpdating\AmazonOnlineUpdater.cs" />
     <Compile Include="Platforms\Amazon\OnlineUpdating\AmazonOrderSearchProvider.cs" />
+    <Compile Include="Platforms\Amazon\Warehouse\AmazonWarehouseItem.cs" />
+    <Compile Include="Platforms\Amazon\Warehouse\AmazonWarehouseOrder.cs" />
+    <Compile Include="Platforms\Amazon\Warehouse\AmazonWarehouseOrderFactory.cs" />
     <Compile Include="Platforms\AmeriCommerce\AmeriCommerceCombineOrderNumberSearchProvider.cs" />
     <Compile Include="Platforms\AmeriCommerce\AmeriCommerceWebClient.cs" />
     <Compile Include="Platforms\Amosoft\CoreExtensions\Filters\Orders\AmosoftAmazonOrderIDCondition.cs" />
@@ -344,6 +347,9 @@
     <Compile Include="Platforms\ChannelAdvisor\Content\ChannelAdvisorCombineOrderAction.cs" />
     <Compile Include="Platforms\ChannelAdvisor\OnlineUpdating\ChannelAdvisorOnlineUpdateCommandCreator.cs" />
     <Compile Include="Platforms\ChannelAdvisor\OnlineUpdating\ChannelAdvisorOnlineUpdater.cs" />
+    <Compile Include="Platforms\ChannelAdvisor\Warehouse\ChannelAdvisorWarehouseItem.cs" />
+    <Compile Include="Platforms\ChannelAdvisor\Warehouse\ChannelAdvisorWarehouseOrder.cs" />
+    <Compile Include="Platforms\ChannelAdvisor\Warehouse\ChannelAdvisorWarehouseOrderFactory.cs" />
     <Compile Include="Platforms\ChannelSale\CoreExtensions\Filters\Orders\ChannelSaleAmazonOrderIDCondition.cs" />
     <Compile Include="Platforms\ChannelSale\CoreExtensions\Filters\Orders\ChannelSaleIsFBACondition.cs" />
     <Compile Include="Platforms\ChannelSale\CoreExtensions\Filters\Orders\ChannelSaleIsPrimeCondition.cs" />
@@ -901,6 +907,8 @@
     <Compile Include="Warehouse\StoreData\AmazonStore.cs" />
     <Compile Include="Warehouse\StoreData\ChannelAdvisorStoreData.cs" />
     <Compile Include="Warehouse\StoreDtoFactory.cs" />
+    <Compile Include="Warehouse\WarehouseModule.cs" />
+    <Compile Include="Warehouse\WarehouseOrderClient.cs" />
     <Compile Include="Warehouse\WarehouseStoreClient.cs" />
   </ItemGroup>
   <ItemGroup>

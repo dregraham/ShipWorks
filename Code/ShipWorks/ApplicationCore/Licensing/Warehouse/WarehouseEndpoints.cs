@@ -1,6 +1,4 @@
-﻿using ShipWorks.Data.Model.EntityClasses;
-
-namespace ShipWorks.ApplicationCore.Licensing.Warehouse
+﻿namespace ShipWorks.ApplicationCore.Licensing.Warehouse
 {
     /// <summary>
     /// Warehouse endpoints
@@ -15,6 +13,7 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse
         public const string Stores = "api/stores";
 
         private const string linkWarehouse = "api/warehouses/{0}/link";
+        private const string orders = "api/warehouses/{0}/orders";
 
         /// <summary>
         /// Create a link warehouse endpoint
@@ -26,5 +25,10 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse
         /// </summary>
         public static string UpdateStoreCredentials(string warehouseStoreID) =>
             $"{Stores}/{warehouseStoreID}/credentials";
+
+        /// <summary>
+        /// Create an orders endpoint with a warehouse store ID
+        /// </summary>
+        public static string Orders(string warehouseID) => string.Format(orders, warehouseID);
     }
 }

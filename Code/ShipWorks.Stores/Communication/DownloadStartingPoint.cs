@@ -18,8 +18,8 @@ namespace ShipWorks.Stores.Communication
     [Component]
     public class DownloadStartingPoint : IDownloadStartingPoint
     {
-        readonly ISqlAdapterFactory sqlAdapterFactory;
-        readonly IDateTimeProvider dateTimeProvider;
+        private readonly ISqlAdapterFactory sqlAdapterFactory;
+        private readonly IDateTimeProvider dateTimeProvider;
         private readonly ILog log;
 
         /// <summary>
@@ -79,6 +79,20 @@ namespace ShipWorks.Stores.Communication
         }
 
         /// <summary>
+        /// Gets the largest OrderNumber we have in our database for non-manual orders for this store.  If no
+        /// such orders exist, then if there is an InitialDownloadPolicy it is applied.  Otherwise, 0 is returned.
+        /// </summary>
+        public async Task<long> HubSequence(IStoreEntity store)
+        {
+            using (ISqlAdapter adapter = sqlAdapterFactory.Create())
+            {
+                long? hubSequence = await GetMaxHubSequenceFromDatabase(adapter, store.StoreID);
+
+                return hubSequence.GetValueOrDefault(0);
+            }
+        }
+
+        /// <summary>
         /// Get the maximum order number from the database
         /// </summary>
         private async Task<long?> GetMaxOrderNumberFromDatabase(ISqlAdapter adapter, long storeID)
@@ -104,6 +118,21 @@ namespace ShipWorks.Stores.Communication
             }
 
             return maxOrder.HasValue ? maxOrder : maxOrderSearch;
+        }
+
+        /// <summary>
+        /// Get the maximum hub sequence from the database
+        /// </summary>
+        private async Task<long?> GetMaxHubSequenceFromDatabase(ISqlAdapter adapter, long storeID)
+        {
+            QueryFactory factory = new QueryFactory();
+
+            DynamicQuery maxOrderQuery = factory.Order
+                .Select(OrderFields.HubSequence.Max())
+                .Where(OrderFields.StoreID == storeID)
+                .AndWhere(OrderFields.IsManual == false);
+
+            return await adapter.FetchScalarAsync<long?>(maxOrderQuery);
         }
 
         /// <summary>

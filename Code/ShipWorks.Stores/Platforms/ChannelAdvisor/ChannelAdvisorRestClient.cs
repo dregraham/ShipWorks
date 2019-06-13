@@ -9,11 +9,11 @@ using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Security;
 using Interapptive.Shared.Utility;
-using ShipWorks.ApplicationCore.Logging;
 using Newtonsoft.Json;
-using ShipWorks.Stores.Platforms.ChannelAdvisor.DTO;
-using System.IO;
 using Newtonsoft.Json.Linq;
+using ShipWorks.ApplicationCore;
+using ShipWorks.ApplicationCore.Logging;
+using ShipWorks.Stores.Platforms.ChannelAdvisor.DTO;
 
 namespace ShipWorks.Stores.Platforms.ChannelAdvisor
 {
@@ -32,12 +32,13 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
 
         private const string EncryptedSharedSecret = "hij91GRVDQQP9SvJq7tKvrTVAyaqNeyG8AwzcuRHXg4=";
 
-        public const string EndpointBase = "https://api.channeladvisor.com";
-        private readonly string tokenEndpoint = $"{EndpointBase}/oauth2/token";
-        private readonly string ordersEndpoint = $"{EndpointBase}/v1/Orders";
-        private readonly string profilesEndpoint = $"{EndpointBase}/v1/Profiles";
-        private readonly string productEndpoint = $"{EndpointBase}/v1/Products";
-        private readonly string distributionCenterEndpoint = $"{EndpointBase}/v1/DistributionCenters";
+        public const string defaultEndpointBase = "https://api.channeladvisor.com";
+        private readonly string tokenEndpoint;
+        private readonly string ordersEndpoint;
+        private readonly string profilesEndpoint;
+        private readonly string productEndpoint;
+        private readonly string distributionCenterEndpoint;
+        private readonly IInterapptiveOnly interapptiveOnly;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ChannelAdvisorRestClient"/> class.
@@ -47,14 +48,40 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         /// <param name="encryptionProviderFactory"></param>
         public ChannelAdvisorRestClient(IHttpRequestSubmitterFactory submitterFactory,
             Func<ApiLogSource, string, IApiLogEntry> apiLogEntryFactory,
-            IEncryptionProviderFactory encryptionProviderFactory)
+            IEncryptionProviderFactory encryptionProviderFactory,
+            IInterapptiveOnly interapptiveOnly)
         {
+            this.interapptiveOnly = interapptiveOnly;
             this.submitterFactory = submitterFactory;
             this.apiLogEntryFactory = apiLogEntryFactory;
             encryptionProvider = encryptionProviderFactory.CreateChannelAdvisorEncryptionProvider();
 
             accessTokenCache = new LruCache<string, string>(50, TimeSpan.FromMinutes(50));
             productCache = new LruCache<int, ChannelAdvisorProduct>(1000);
+
+            var endpointBase = GetEndpointBase();
+            tokenEndpoint = $"{endpointBase}/oauth2/token";
+            ordersEndpoint = $"{endpointBase}/v1/Orders";
+            profilesEndpoint = $"{endpointBase}/v1/Profiles";
+            productEndpoint = $"{endpointBase}/v1/Products";
+            distributionCenterEndpoint = $"{endpointBase}/v1/DistributionCenters";
+        }
+
+        /// <summary>
+        /// Get the base endpoint for ChannelAdvisor requests
+        /// </summary>
+        public string GetEndpointBase()
+        {
+            if (UseFakeApi)
+            {
+                var endpointOverride = interapptiveOnly.Registry.GetValue("ChannelAdvisorEndpoint", string.Empty);
+                if (!string.IsNullOrWhiteSpace(endpointOverride))
+                {
+                    return endpointOverride;
+                }
+            }
+
+            return defaultEndpointBase;
         }
 
         /// <summary>
@@ -179,7 +206,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
                 .Retry(() => ProcessRequest<ChannelAdvisorOrderItemsResult>(submitter, "GetOrders", refreshToken), 10, ShouldRetryRequest)
                 .Match(x => x, ex => throw ex);
         }
-        
+
         /// <summary>
         /// Get detailed product information from ChannelAdvisor with the given product ID
         /// </summary>
@@ -192,7 +219,11 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
                     return productCache[productID];
                 }
 
-                IHttpVariableRequestSubmitter submitter = CreateRequest($"{productEndpoint}({productID})", HttpVerb.Get);
+                var productSpecificEndpoint = UseFakeApi ?
+                    $"{productEndpoint}/{productID}" :
+                    $"{productEndpoint}({productID})";
+
+                IHttpVariableRequestSubmitter submitter = CreateRequest(productSpecificEndpoint, HttpVerb.Get);
 
                 submitter.Variables.Add("access_token", GetAccessToken(refreshToken));
                 submitter.Variables.Add("$expand", "Attributes, Images, DCQuantities");
@@ -281,7 +312,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
                 result = httpResponseReader.ReadResult();
                 apiLogEntry.LogResponse(result, "json");
             }
-            catch (WebException ex) when (((HttpWebResponse)ex.Response).StatusCode == HttpStatusCode.Unauthorized &&
+            catch (WebException ex) when (((HttpWebResponse) ex.Response).StatusCode == HttpStatusCode.Unauthorized &&
                                           !isRetry)
             {
                 apiLogEntry.LogResponse(ex);
@@ -382,7 +413,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
                 NameValueCollection parameterValues = HttpUtility.ParseQueryString(request.Uri.Query);
                 parameterValues.Set("access_token", GetAccessToken(refreshToken, true));
                 string url = request.Uri.AbsolutePath;
-                request.Uri = new Uri(EndpointBase + url + "?" + parameterValues);
+                request.Uri = new Uri(GetEndpointBase() + url + "?" + parameterValues);
             }
 
             return ProcessRequest<T>(request, action, refreshToken, false);
@@ -407,5 +438,11 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
                 throw new ChannelAdvisorException("Failed to decrypt the shared secret", ex);
             }
         }
+
+        /// <summary>
+        /// Should the client use the fake api
+        /// </summary>
+        private bool UseFakeApi =>
+            interapptiveOnly.IsInterapptiveUser && !interapptiveOnly.Registry.GetValue("ChannelAdvisorLive", true);
     }
 }

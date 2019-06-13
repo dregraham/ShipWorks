@@ -524,7 +524,9 @@ CREATE TABLE [dbo].[Order]
 [Custom2] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_Order_Custom2] DEFAULT (''),
 [Custom3] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_Order_Custom3] DEFAULT (''),
 [Custom4] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_Order_Custom4] DEFAULT (''),
-[Custom5] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_Order_Custom5] DEFAULT ('')
+[Custom5] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_Order_Custom5] DEFAULT (''),
+[HubOrderID] [uniqueidentifier] NULL,
+[HubSequence] [bigint] NULL
 )
 GO
 PRINT N'Creating primary key [PK_Order] on [dbo].[Order]'
@@ -718,6 +720,10 @@ GO
 PRINT N'Creating index [IX_SWDefault_Order_CombineSplitStatus] on [dbo].[Order]'
 GO
 CREATE NONCLUSTERED INDEX [IX_SWDefault_Order_CombineSplitStatus] ON [dbo].[Order] ([CombineSplitStatus])
+GO
+PRINT N'Creating index [IX_SWDefault_Order_HubSequence] on [dbo].[Order]'
+GO
+CREATE NONCLUSTERED INDEX [IX_SWDefault_Order_HubSequence] ON [dbo].[Order] ([HubSequence])
 GO
 ALTER TABLE [dbo].[Order] ENABLE CHANGE_TRACKING
 GO

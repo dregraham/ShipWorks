@@ -83,17 +83,7 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse
                         return GenericResult.FromError<IRestResponse>("Unable to obtain a valid token from refreshToken.");
                     }
 
-                    authenticationToken = refreshTokenResult.Value.token;
-
-                    foreach (var param in restRequest.Parameters)
-                    {
-                        if (param.Name == "Authorization")
-                        {
-                            param.Value = $"Bearer {authenticationToken}";
-                        }
-                    }
-
-                    restResponse = await restClient.ExecuteTaskAsync(restRequest).ConfigureAwait(false);
+                    restResponse = await ResendAction(restRequest, restClient, refreshTokenResult);
                 }
 
                 if (restResponse.StatusCode == HttpStatusCode.OK)
@@ -112,6 +102,27 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse
 
                 return GenericResult.FromError<IRestResponse>(e.Message);
             }
+        }
+
+        /// <summary>
+        /// Resend the action after getting a new auth token
+        /// </summary>
+        private async Task<IRestResponse> ResendAction(
+            IRestRequest restRequest,
+            IRestClient restClient,
+            GenericResult<TokenResponse> refreshTokenResult)
+        {
+            authenticationToken = refreshTokenResult.Value.token;
+
+            foreach (var param in restRequest.Parameters)
+            {
+                if (param.Name == "Authorization")
+                {
+                    param.Value = $"Bearer {authenticationToken}";
+                }
+            }
+
+            return await restClient.ExecuteTaskAsync(restRequest).ConfigureAwait(false);
         }
 
         /// <summary>

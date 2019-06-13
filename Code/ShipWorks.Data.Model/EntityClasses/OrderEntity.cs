@@ -827,6 +827,10 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("Custom4", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("Custom5", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("HubOrderID", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("HubSequence", fieldHashtable);
 		}
 		#endregion
 
@@ -1845,6 +1849,26 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.String)GetValue((int)OrderFieldIndex.Custom5, true); }
 			set	{ SetValue((int)OrderFieldIndex.Custom5, value); }
+		}
+
+		/// <summary> The HubOrderID property of the Entity Order<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "Order"."HubOrderID"<br/>
+		/// Table field type characteristics (type, precision, scale, length): UniqueIdentifier, 0, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual Nullable<System.Guid> HubOrderID
+		{
+			get { return (Nullable<System.Guid>)GetValue((int)OrderFieldIndex.HubOrderID, false); }
+			set	{ SetValue((int)OrderFieldIndex.HubOrderID, value); }
+		}
+
+		/// <summary> The HubSequence property of the Entity Order<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "Order"."HubSequence"<br/>
+		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual Nullable<System.Int64> HubSequence
+		{
+			get { return (Nullable<System.Int64>)GetValue((int)OrderFieldIndex.HubSequence, false); }
+			set	{ SetValue((int)OrderFieldIndex.HubSequence, value); }
 		}
 
 		/// <summary> Gets the EntityCollection with the related entities of type 'NoteEntity' which are related to this entity via a relation of type '1:n'. If the EntityCollection hasn't been fetched yet, the collection returned will be empty.<br/><br/></summary>
