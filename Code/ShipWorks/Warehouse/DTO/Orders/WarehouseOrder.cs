@@ -1,10 +1,12 @@
 using System;
 using System.Collections.Generic;
+using System.Reflection;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
 namespace ShipWorks.Warehouse.DTO.Orders
 {
+    [Obfuscation]
     public class WarehouseOrderAddress
     {
         public string UnparsedName { get; set; }
@@ -25,6 +27,7 @@ namespace ShipWorks.Warehouse.DTO.Orders
         public string Website { get; set; }
     }
 
+    [Obfuscation]
     public class WarehouseOrder
     {
         /// <summary>

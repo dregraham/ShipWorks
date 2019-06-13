@@ -1,4 +1,5 @@
 using System;
+using System.Reflection;
 using Newtonsoft.Json;
 
 namespace ShipWorks.Stores.Platforms.Amazon.Warehouse
@@ -6,6 +7,7 @@ namespace ShipWorks.Stores.Platforms.Amazon.Warehouse
     /// <summary>
     /// Amazon warehouse order
     /// </summary>
+    [Obfuscation]
     public class AmazonWarehouseOrder
     {
         /// <summary>

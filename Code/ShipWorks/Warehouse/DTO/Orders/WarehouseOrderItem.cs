@@ -1,9 +1,11 @@
 using System.Collections.Generic;
+using System.Reflection;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
 namespace ShipWorks.Warehouse.DTO.Orders
 {
+    [Obfuscation]
     public class WarehouseOrderItem
     {
         public WarehouseOrderItem()

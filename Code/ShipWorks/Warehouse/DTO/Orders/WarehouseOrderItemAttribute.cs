@@ -1,8 +1,11 @@
+using System.Reflection;
+
 namespace ShipWorks.Warehouse.DTO.Orders
 {
     /// <summary>
     /// Item attribute for warehouse item
     /// </summary>
+    [Obfuscation]
     public class WarehouseOrderItemAttribute
     {
         /// <summary>

@@ -1,8 +1,11 @@
+using System.Reflection;
+
 namespace ShipWorks.Stores.Platforms.Amazon.Warehouse
 {
     /// <summary>
     /// Amazon warehouse item
     /// </summary>
+    [Obfuscation]
     public class AmazonWarehouseItem
     {
         /// <summary>

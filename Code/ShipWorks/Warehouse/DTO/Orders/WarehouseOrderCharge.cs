@@ -1,8 +1,11 @@
+using System.Reflection;
+
 namespace ShipWorks.Warehouse.DTO.Orders
 {
     /// <summary>
     /// Charge for a warehouse order
     /// </summary>
+    [Obfuscation]
     public class WarehouseOrderCharge
     {
         /// <summary>
