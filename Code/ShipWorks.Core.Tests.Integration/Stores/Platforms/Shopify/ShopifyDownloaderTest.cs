@@ -35,8 +35,8 @@ namespace ShipWorks.Core.Tests.Integration.Stores.Platforms.Shopify
         private readonly DownloadEntity downloadEntity;
         private readonly ShopifyStoreEntity shopifyStore;
         private List<JToken> orders;
-        readonly DateTime updatedAt = DateTime.Parse("2017-04-03T15:30:28-05:00").ToUniversalTime();
-        readonly Mock<IShopifyWebClient> webClient = new Mock<IShopifyWebClient>();
+        private readonly DateTime updatedAt = DateTime.Parse("2017-04-03T15:30:28-05:00").ToUniversalTime();
+        private readonly Mock<IShopifyWebClient> webClient = new Mock<IShopifyWebClient>();
 
         public ShopifyDownloaderTest(DatabaseFixture db)
         {
@@ -122,7 +122,7 @@ namespace ShipWorks.Core.Tests.Integration.Stores.Platforms.Shopify
             {
                 using (DbConnection con = SqlSession.Current.OpenConnection())
                 {
-                    await testObject.Download(progress, downloadEntity.DownloadID, con);
+                    await testObject.Download(progress, downloadEntity, con);
                 }
             }
 
@@ -161,7 +161,7 @@ namespace ShipWorks.Core.Tests.Integration.Stores.Platforms.Shopify
                 {
                     using (DbConnection con = SqlSession.Current.OpenConnection())
                     {
-                        await testObject.Download(progress, downloadEntity.DownloadID, con);
+                        await testObject.Download(progress, downloadEntity, con);
                     }
                 }
             }
@@ -192,7 +192,7 @@ namespace ShipWorks.Core.Tests.Integration.Stores.Platforms.Shopify
             {
                 using (DbConnection con = SqlSession.Current.OpenConnection())
                 {
-                    await testObject.Download(progress, downloadEntity.DownloadID, con);
+                    await testObject.Download(progress, downloadEntity, con);
                 }
             }
 

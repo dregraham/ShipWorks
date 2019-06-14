@@ -143,7 +143,7 @@ namespace ShipWorks.Stores.Communication
         /// <summary>
         /// Download data from the configured store.
         /// </summary>
-        public async Task Download(IProgressReporter progress, long downloadLogID, DbConnection connection)
+        public async Task Download(IProgressReporter progress, IDownloadEntity downloadLog, DbConnection connection)
         {
             MethodConditions.EnsureArgumentIsNotNull(progress, nameof(progress));
 
@@ -158,7 +158,7 @@ namespace ShipWorks.Stores.Communication
             itemStatusHasTokens = TemplateTokenProcessor.HasTokens(itemStatusText);
 
             Progress = progress;
-            this.downloadLogID = downloadLogID;
+            this.downloadLogID = downloadLog.DownloadID;
             this.connection = connection;
 
             if (Store.WarehouseStoreID == null)
@@ -172,7 +172,7 @@ namespace ShipWorks.Stores.Communication
             }
             else
             {
-                await DownloadWarehouseOrders().ConfigureAwait(false);
+                await DownloadWarehouseOrders(Guid.NewGuid()).ConfigureAwait(false);
             }
         }
 
@@ -1334,7 +1334,7 @@ namespace ShipWorks.Stores.Communication
         /// <summary>
         /// Download orders for this store from the ShipWorks Warehouse app
         /// </summary>
-        private async Task DownloadWarehouseOrders()
+        private async Task DownloadWarehouseOrders(Guid batchId)
         {
             if (string.IsNullOrEmpty(config.WarehouseID))
             {
@@ -1356,7 +1356,7 @@ namespace ShipWorks.Stores.Communication
 
                     // get orders for this store and warehouse
                     IEnumerable<WarehouseOrder> orders = await webClient
-                        .GetOrders(config.WarehouseID, Store.WarehouseStoreID.ToString(), downloadStartPoint, StoreType.TypeCode)
+                        .GetOrders(config.WarehouseID, Store.WarehouseStoreID.ToString(), downloadStartPoint, StoreType.TypeCode, batchId)
                         .ConfigureAwait(false);
 
                     foreach (WarehouseOrder warehouseOrder in orders)

@@ -518,7 +518,7 @@ namespace ShipWorks.Stores.Communication
                                     AuditBehaviorUser.SuperUser,
                                     new AuditReason(initiatedBy == DownloadInitiatedBy.ShipWorks ? AuditReasonType.AutomaticDownload : AuditReasonType.ManualDownload)))
                                 {
-                                    await downloader.Download(progressItem, downloadLog.DownloadID, con).ConfigureAwait(false);
+                                    await downloader.Download(progressItem, downloadLog, con).ConfigureAwait(false);
                                 }
 
                                 // Item is complete

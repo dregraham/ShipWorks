@@ -9,6 +9,7 @@ using Interapptive.Shared.Threading;
 using Moq;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Data.Model.Linq;
 using ShipWorks.Startup;
 using ShipWorks.Stores.Communication;
@@ -34,7 +35,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.ChannelAdvisor
         private readonly DbConnection dbConnection;
         private readonly ChannelAdvisorRestDownloader testObject;
         private readonly DateTime utcNow;
-        private readonly long downloadLogID;
+        private readonly IDownloadEntity downloadLog;
         private readonly Mock<IChannelAdvisorRestClient> client;
         private readonly ChannelAdvisorOrder order;
 
@@ -76,7 +77,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.ChannelAdvisor
 
             StatusPresetManager.CheckForChanges();
 
-            downloadLogID = Create.Entity<DownloadEntity>()
+            downloadLog = Create.Entity<DownloadEntity>()
                 .Set(x => x.StoreID = store.StoreID)
                 .Set(x => x.ComputerID = context.Computer.ComputerID)
                 .Set(x => x.UserID = context.User.UserID)
@@ -84,7 +85,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.ChannelAdvisor
                 .Set(x => x.Started = utcNow)
                 .Set(x => x.Ended = null)
                 .Set(x => x.Result = (int) DownloadResult.Unfinished)
-                .Save().DownloadID;
+                .Save();
 
             var distributionCenters = new List<ChannelAdvisorDistributionCenter>()
             {
@@ -118,21 +119,21 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.ChannelAdvisor
         [Fact]
         public async Task Download_GetDistributionCenters()
         {
-            await testObject.Download(mockProgressReporter.Object, downloadLogID, dbConnection);
+            await testObject.Download(mockProgressReporter.Object, downloadLog, dbConnection);
             client.Verify(c => c.GetDistributionCenters("refreshToken"), Times.Once);
         }
 
         [Fact]
         public async Task Download_SetsProgressDetailWithOrderCount()
         {
-            await testObject.Download(mockProgressReporter.Object, downloadLogID, dbConnection);
+            await testObject.Download(mockProgressReporter.Object, downloadLog, dbConnection);
             mockProgressReporter.VerifySet(r => r.Detail = $"Downloading orders...");
         }
 
         [Fact]
         public async Task Download_SetsOrderNotes_WhenOrderContainsNotes()
         {
-            await testObject.Download(mockProgressReporter.Object, downloadLogID, dbConnection);
+            await testObject.Download(mockProgressReporter.Object, downloadLog, dbConnection);
 
             NoteEntity note;
             using (SqlAdapter adapter = SqlAdapter.Default)
@@ -146,7 +147,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.ChannelAdvisor
         [Fact]
         public async Task Download_SetsDistributionCode()
         {
-            await testObject.Download(mockProgressReporter.Object, downloadLogID, dbConnection);
+            await testObject.Download(mockProgressReporter.Object, downloadLog, dbConnection);
 
             ChannelAdvisorOrderItemEntity item;
             using (SqlAdapter adapter = SqlAdapter.Default)
@@ -173,7 +174,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.ChannelAdvisor
 
             order.ID = 42;
             order.Items = Enumerable.Range(0, 20).Select(_ => item).ToList();
-            
+
             firstBatch = new ChannelAdvisorOrderResult
             {
                 OdataContext = "",
@@ -182,11 +183,11 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.ChannelAdvisor
             };
 
             client.Setup(c => c.GetOrderItems(AnyString, AnyString))
-                .Returns(new ChannelAdvisorOrderItemsResult { OrderItems = new [] {item} });
-            
-            await testObject.Download(mockProgressReporter.Object, downloadLogID, dbConnection);
+                .Returns(new ChannelAdvisorOrderItemsResult { OrderItems = new[] { item } });
+
+            await testObject.Download(mockProgressReporter.Object, downloadLog, dbConnection);
             string expectedUrl = "https://api.channeladvisor.com/v1/Orders(42)/Items?$skip=20&$expand=FulfillmentItems";
-            client.Verify(c => c.GetOrderItems(expectedUrl,AnyString), Times.Once);
+            client.Verify(c => c.GetOrderItems(expectedUrl, AnyString), Times.Once);
         }
 
         private ChannelAdvisorOrder SingleOrder()

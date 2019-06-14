@@ -32,7 +32,7 @@ namespace ShipWorks.Stores.Warehouse
         /// <summary>
         /// Get orders for the given warehouse ID from the ShipWorks Warehouse app
         /// </summary>
-        public async Task<IEnumerable<WarehouseOrder>> GetOrders(string warehouseID, string warehouseStoreID, long mostRecentSequence, StoreTypeCode storeType)
+        public async Task<IEnumerable<WarehouseOrder>> GetOrders(string warehouseID, string warehouseStoreID, long mostRecentSequence, StoreTypeCode storeType, Guid batchId)
         {
             try
             {
@@ -40,6 +40,7 @@ namespace ShipWorks.Stores.Warehouse
 
                 request.AddQueryParameter("storeId", warehouseStoreID);
                 request.AddQueryParameter("lastSequence", mostRecentSequence.ToString());
+                request.AddQueryParameter("batchId", batchId.ToString());
 
                 GenericResult<IRestResponse> response = await warehouseRequestClient
                     .MakeRequest(request, "Get Orders")

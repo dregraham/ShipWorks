@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Interapptive.Shared.Threading;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 
 namespace ShipWorks.Stores.Communication
 {
@@ -23,8 +24,8 @@ namespace ShipWorks.Stores.Communication
         /// <summary>
         /// Downloads a specific order from the store
         /// </summary>
-        Task Download(IProgressReporter progressItem, long downloadID, DbConnection con);
-        
+        Task Download(IProgressReporter progressItem, IDownloadEntity downloadLog, DbConnection con);
+
         /// <summary>
         /// Download the orderNumber from the store
         /// </summary>
@@ -34,7 +35,7 @@ namespace ShipWorks.Stores.Communication
         /// Whether or not the downloader should download the given order number
         /// </summary>
         bool ShouldDownload(string orderNumber);
-		
+
         /// <summary>
         /// The store the downloader downloads from
         /// </summary>

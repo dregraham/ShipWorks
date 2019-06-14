@@ -5,8 +5,8 @@ using System.Threading.Tasks;
 using Autofac;
 using Autofac.Extras.Moq;
 using Interapptive.Shared.Threading;
-using Moq;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Stores.Platforms.Yahoo;
 using ShipWorks.Stores.Platforms.Yahoo.ApiIntegration;
 using ShipWorks.Stores.Platforms.Yahoo.EmailIntegration;
@@ -17,7 +17,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Yahoo
 {
     public class YahooDownloaderFactoryTest : IDisposable
     {
-        readonly AutoMock mock;
+        private readonly AutoMock mock;
 
         public YahooDownloaderFactoryTest()
         {
@@ -54,10 +54,11 @@ namespace ShipWorks.Stores.Tests.Platforms.Yahoo
 
             var progress = mock.Mock<IProgressReporter>().Object;
             var dbConnection = mock.Mock<DbConnection>().Object;
+            var downloadLog = mock.Build<IDownloadEntity>();
 
-            testObject.Download(progress, 1, dbConnection);
+            testObject.Download(progress, downloadLog, dbConnection);
             mock.Mock<IYahooApiDownloader>()
-                .Verify(x => x.Download(progress, 1, dbConnection));
+                .Verify(x => x.Download(progress, downloadLog, dbConnection));
         }
 
         [Fact]
