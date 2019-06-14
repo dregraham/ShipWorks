@@ -7,6 +7,16 @@
  * To change this template use Tools > Options > Coding > Edit standard headers.
  */
 using System;
+using System.Collections.Generic;
+using System.Text;
+using System.Text.RegularExpressions;
+using System.Drawing;
+using System.Threading;
+using WinForms = System.Windows.Forms;
+
+using Ranorex;
+using Ranorex.Core;
+using Ranorex.Core.Testing;
 
 namespace ShipWorksPerformanceTestSuite
 {
@@ -27,9 +37,48 @@ namespace ShipWorksPerformanceTestSuite
 		
 		public string GetFolderName()
 		{
-			string folderName = DateTime.Now.ToString("MMddyyyyHHmmss");
+			string folderName = System.DateTime.Now.ToString("MMddyyyyHHmmss");
 			string folderPrefix = "SWPerformanceTest_";
 			return(folderPrefix + folderName);
+		}
+	}
+	
+	public static class RetryAction
+	{
+		
+		public static void RetryOnFailure(int maxAttempts, int pressEscape, Action action)
+		{
+			var attempts = 0;
+			
+			do
+			{
+				try
+				{
+					attempts++;
+					
+					EscapeFromScreen(pressEscape);
+					
+					action();
+					break;
+				}
+				catch(Exception e)
+				{
+					if(attempts == maxAttempts)
+					{
+						throw e;
+					}
+				}
+			}
+			while(true);
+		}
+		
+		public static void EscapeFromScreen(int pressEscape)
+		{
+			for (int keyPress = 0; keyPress < pressEscape; keyPress++)
+			{						
+				Keyboard.Press("{Escape}");
+				Delay.Seconds(5);
+			}			
 		}
 	}
 }

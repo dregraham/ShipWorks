@@ -52,6 +52,8 @@ namespace ShipWorksPerformanceTestSuite
         ShipWorksPerformanceTestSuiteRepositoryFolders.ShipWorks1AppFolder _shipworks1;
         ShipWorksPerformanceTestSuiteRepositoryFolders.ShipWorksSetupAppFolder _shipworkssetup;
         ShipWorksPerformanceTestSuiteRepositoryFolders.ShipmentVoidConfirmDlgAppFolder _shipmentvoidconfirmdlg;
+        ShipWorksPerformanceTestSuiteRepositoryFolders.ExplorerAppFolder _explorer;
+        ShipWorksPerformanceTestSuiteRepositoryFolders.ShipWorks2AppFolder _shipworks2;
 
         /// <summary>
         /// Gets the singleton class instance representing the ShipWorksPerformanceTestSuiteRepository element repository.
@@ -93,6 +95,8 @@ namespace ShipWorksPerformanceTestSuite
             _shipworks1 = new ShipWorksPerformanceTestSuiteRepositoryFolders.ShipWorks1AppFolder(this);
             _shipworkssetup = new ShipWorksPerformanceTestSuiteRepositoryFolders.ShipWorksSetupAppFolder(this);
             _shipmentvoidconfirmdlg = new ShipWorksPerformanceTestSuiteRepositoryFolders.ShipmentVoidConfirmDlgAppFolder(this);
+            _explorer = new ShipWorksPerformanceTestSuiteRepositoryFolders.ExplorerAppFolder(this);
+            _shipworks2 = new ShipWorksPerformanceTestSuiteRepositoryFolders.ShipWorks2AppFolder(this);
         }
 
 #region Variables
@@ -334,6 +338,24 @@ namespace ShipWorksPerformanceTestSuite
         public virtual ShipWorksPerformanceTestSuiteRepositoryFolders.ShipmentVoidConfirmDlgAppFolder ShipmentVoidConfirmDlg
         {
             get { return _shipmentvoidconfirmdlg; }
+        }
+
+        /// <summary>
+        /// The Explorer folder.
+        /// </summary>
+        [RepositoryFolder("a9bff37e-5084-4d5a-96ae-de7047cf3982")]
+        public virtual ShipWorksPerformanceTestSuiteRepositoryFolders.ExplorerAppFolder Explorer
+        {
+            get { return _explorer; }
+        }
+
+        /// <summary>
+        /// The ShipWorks2 folder.
+        /// </summary>
+        [RepositoryFolder("a8d6c3c0-44ee-46a6-a783-58b22e20db3f")]
+        public virtual ShipWorksPerformanceTestSuiteRepositoryFolders.ShipWorks2AppFolder ShipWorks2
+        {
+            get { return _shipworks2; }
         }
     }
 
@@ -1563,6 +1585,11 @@ namespace ShipWorksPerformanceTestSuite
             RepoItemInfo _helpInfo;
             RepoItemInfo _aboutshipworksInfo;
             RepoItemInfo _selected500Info;
+            RepoItemInfo _ribbontaborderlookupviewshippingInfo;
+            RepoItemInfo _ribbontaborderlookupviewshipping1Info;
+            RepoItemInfo _createmanualmanagereprintvoidlabelInfo;
+            RepoItemInfo _createmanualmanagereprintvoidlabel1Info;
+            RepoItemInfo _selected100Info;
 
             /// <summary>
             /// Creates a new MainForm  folder.
@@ -1584,6 +1611,11 @@ namespace ShipWorksPerformanceTestSuite
                 _helpInfo = new RepoItemInfo(this, "Help", "?/?/rawtext[@rawtext='Help']", 30000, null, "93a9e5ee-6241-4be9-96c9-47087a74d935");
                 _aboutshipworksInfo = new RepoItemInfo(this, "AboutShipWorks", "?/?/element[@controlname='ribbonTabHelp']/rawtext[@rawtext='About ShipWorks']", 30000, null, "a1bd7269-8e07-43be-891e-a5a762296ec9");
                 _selected500Info = new RepoItemInfo(this, "Selected500", "?/?/rawtext[@rawtext='Selected: 500']", 30000, null, "dcdfc516-e064-402e-97d1-869ded18c5e6");
+                _ribbontaborderlookupviewshippingInfo = new RepoItemInfo(this, "RibbonTabOrderLookupViewShipping", "?/?/element[@rawtext='Profiles']", 30000, null, "c32c6178-8cb1-40de-be16-5dca64a80c9c");
+                _ribbontaborderlookupviewshipping1Info = new RepoItemInfo(this, "RibbonTabOrderLookupViewShipping1", "?/?/element[@controlname='ribbonTabOrderLookupViewShipping']", 30000, null, "d6f7d35d-2128-470f-8483-a88d253f78df");
+                _createmanualmanagereprintvoidlabelInfo = new RepoItemInfo(this, "CreateManualManageReprintVoidLabel", "?/?/element[@controlname='ribbonTabOrderLookupViewShipping' and @rawtext='Create' and @column='3' and @row='0']/rawtextblock[@caption~'^CreateManualManageRepr']", 30000, null, "325a7c7b-87eb-47e2-9089-74785385bc79");
+                _createmanualmanagereprintvoidlabel1Info = new RepoItemInfo(this, "CreateManualManageReprintVoidLabel1", "?/?/element[@controlname='ribbonTabOrderLookupViewShipping' and @controltypename='RibbonTab' and @controltext='&Shipping' and @rawtext='Profiles' and @controltype='Divelements.SandRibbon.RibbonTab']/rawtextblock[@caption~'^CreateManualManageRepr']", 30000, null, "f5372175-2f2e-464f-8932-bad2bdfae92f");
+                _selected100Info = new RepoItemInfo(this, "Selected100", "?/?/rawtext[@rawtext='Selected: 100']", 30000, null, "cf6158cd-f33a-441c-9b3c-3d97676e35cf");
             }
 
             /// <summary>
@@ -1923,6 +1955,126 @@ namespace ShipWorksPerformanceTestSuite
             }
 
             /// <summary>
+            /// The RibbonTabOrderLookupViewShipping item.
+            /// </summary>
+            [RepositoryItem("c32c6178-8cb1-40de-be16-5dca64a80c9c")]
+            public virtual Ranorex.Unknown RibbonTabOrderLookupViewShipping
+            {
+                get
+                {
+                    return _ribbontaborderlookupviewshippingInfo.CreateAdapter<Ranorex.Unknown>(true);
+                }
+            }
+
+            /// <summary>
+            /// The RibbonTabOrderLookupViewShipping item info.
+            /// </summary>
+            [RepositoryItemInfo("c32c6178-8cb1-40de-be16-5dca64a80c9c")]
+            public virtual RepoItemInfo RibbonTabOrderLookupViewShippingInfo
+            {
+                get
+                {
+                    return _ribbontaborderlookupviewshippingInfo;
+                }
+            }
+
+            /// <summary>
+            /// The RibbonTabOrderLookupViewShipping1 item.
+            /// </summary>
+            [RepositoryItem("d6f7d35d-2128-470f-8483-a88d253f78df")]
+            public virtual Ranorex.Unknown RibbonTabOrderLookupViewShipping1
+            {
+                get
+                {
+                    return _ribbontaborderlookupviewshipping1Info.CreateAdapter<Ranorex.Unknown>(true);
+                }
+            }
+
+            /// <summary>
+            /// The RibbonTabOrderLookupViewShipping1 item info.
+            /// </summary>
+            [RepositoryItemInfo("d6f7d35d-2128-470f-8483-a88d253f78df")]
+            public virtual RepoItemInfo RibbonTabOrderLookupViewShipping1Info
+            {
+                get
+                {
+                    return _ribbontaborderlookupviewshipping1Info;
+                }
+            }
+
+            /// <summary>
+            /// The CreateManualManageReprintVoidLabel item.
+            /// </summary>
+            [RepositoryItem("325a7c7b-87eb-47e2-9089-74785385bc79")]
+            public virtual Ranorex.RawTextBlock CreateManualManageReprintVoidLabel
+            {
+                get
+                {
+                    return _createmanualmanagereprintvoidlabelInfo.CreateAdapter<Ranorex.RawTextBlock>(true);
+                }
+            }
+
+            /// <summary>
+            /// The CreateManualManageReprintVoidLabel item info.
+            /// </summary>
+            [RepositoryItemInfo("325a7c7b-87eb-47e2-9089-74785385bc79")]
+            public virtual RepoItemInfo CreateManualManageReprintVoidLabelInfo
+            {
+                get
+                {
+                    return _createmanualmanagereprintvoidlabelInfo;
+                }
+            }
+
+            /// <summary>
+            /// The CreateManualManageReprintVoidLabel1 item.
+            /// </summary>
+            [RepositoryItem("f5372175-2f2e-464f-8932-bad2bdfae92f")]
+            public virtual Ranorex.RawTextBlock CreateManualManageReprintVoidLabel1
+            {
+                get
+                {
+                    return _createmanualmanagereprintvoidlabel1Info.CreateAdapter<Ranorex.RawTextBlock>(true);
+                }
+            }
+
+            /// <summary>
+            /// The CreateManualManageReprintVoidLabel1 item info.
+            /// </summary>
+            [RepositoryItemInfo("f5372175-2f2e-464f-8932-bad2bdfae92f")]
+            public virtual RepoItemInfo CreateManualManageReprintVoidLabel1Info
+            {
+                get
+                {
+                    return _createmanualmanagereprintvoidlabel1Info;
+                }
+            }
+
+            /// <summary>
+            /// The Selected100 item.
+            /// </summary>
+            [RepositoryItem("cf6158cd-f33a-441c-9b3c-3d97676e35cf")]
+            public virtual Ranorex.RawText Selected100
+            {
+                get
+                {
+                    return _selected100Info.CreateAdapter<Ranorex.RawText>(true);
+                }
+            }
+
+            /// <summary>
+            /// The Selected100 item info.
+            /// </summary>
+            [RepositoryItemInfo("cf6158cd-f33a-441c-9b3c-3d97676e35cf")]
+            public virtual RepoItemInfo Selected100Info
+            {
+                get
+                {
+                    return _selected100Info;
+                }
+            }
+
+            /// <summary>
             /// The PanelDockingArea folder.
             /// </summary>
             [RepositoryFolder("54a0a07e-0058-4a7a-9dfd-d6ce18d74e98")]
@@ -1941,6 +2093,9 @@ namespace ShipWorksPerformanceTestSuite
             RepoItemInfo _rawtext500ordersInfo;
             RepoItemInfo _rawtext1Info;
             RepoItemInfo _text500ordersInfo;
+            RepoItemInfo _fedexgroundInfo;
+            RepoItemInfo _rawtext100orderssrInfo;
+            RepoItemInfo _rawtext100ordersInfo;
 
             /// <summary>
             /// Creates a new PanelDockingArea  folder.
@@ -1951,6 +2106,9 @@ namespace ShipWorksPerformanceTestSuite
                 _rawtext500ordersInfo = new RepoItemInfo(this, "RawText500Orders", "?/?/container[@controlname='dockableWindowOrderFilters']//rawtext[@rawtext='500Orders']", 30000, null, "1819e6b7-4b4e-4eac-9e07-47012ea8bd4b");
                 _rawtext1Info = new RepoItemInfo(this, "RawText1", "?/?/container[@controlname='gridPanel']/?/?/rawtext[@rawtext='1' and @column='4']", 30000, null, "37c1569a-f0c2-4789-8bd9-c6fcefa2902a");
                 _text500ordersInfo = new RepoItemInfo(this, "Text500Orders", "container[@controlname='gridControl']/?/?/container[@classname='Pane']//text[@name='500Orders']", 30000, null, "58210762-612f-48a6-8c1a-991dbaad6d06");
+                _fedexgroundInfo = new RepoItemInfo(this, "FedExGround", "?/?/container[@controlname='gridPanel']/?/?/rawtext[@column='8' and @row='1']", 30000, null, "f6982bef-af78-48c0-bab6-09b40bf85f4a");
+                _rawtext100orderssrInfo = new RepoItemInfo(this, "RawText100OrdersSR", "?/?/container[@controlname='dockableWindowOrderFilters']//rawtext[@rawtext='100OrdersSR']", 30000, null, "09e59cf5-76ad-4b28-bb6a-c15f959d4b83");
+                _rawtext100ordersInfo = new RepoItemInfo(this, "RawText100Orders", "?/?/container[@controlname='dockableWindowOrderFilters']//rawtext[@rawtext='100Orders']", 30000, null, "3c0084f5-8e4d-479c-adee-3aa22a44f81c");
             }
 
             /// <summary>
@@ -2046,6 +2204,78 @@ namespace ShipWorksPerformanceTestSuite
                 get
                 {
                     return _text500ordersInfo;
+                }
+            }
+
+            /// <summary>
+            /// The FedExGround item.
+            /// </summary>
+            [RepositoryItem("f6982bef-af78-48c0-bab6-09b40bf85f4a")]
+            public virtual Ranorex.RawText FedExGround
+            {
+                get
+                {
+                    return _fedexgroundInfo.CreateAdapter<Ranorex.RawText>(true);
+                }
+            }
+
+            /// <summary>
+            /// The FedExGround item info.
+            /// </summary>
+            [RepositoryItemInfo("f6982bef-af78-48c0-bab6-09b40bf85f4a")]
+            public virtual RepoItemInfo FedExGroundInfo
+            {
+                get
+                {
+                    return _fedexgroundInfo;
+                }
+            }
+
+            /// <summary>
+            /// The RawText100OrdersSR item.
+            /// </summary>
+            [RepositoryItem("09e59cf5-76ad-4b28-bb6a-c15f959d4b83")]
+            public virtual Ranorex.RawText RawText100OrdersSR
+            {
+                get
+                {
+                    return _rawtext100orderssrInfo.CreateAdapter<Ranorex.RawText>(true);
+                }
+            }
+
+            /// <summary>
+            /// The RawText100OrdersSR item info.
+            /// </summary>
+            [RepositoryItemInfo("09e59cf5-76ad-4b28-bb6a-c15f959d4b83")]
+            public virtual RepoItemInfo RawText100OrdersSRInfo
+            {
+                get
+                {
+                    return _rawtext100orderssrInfo;
+                }
+            }
+
+            /// <summary>
+            /// The RawText100Orders item.
+            /// </summary>
+            [RepositoryItem("3c0084f5-8e4d-479c-adee-3aa22a44f81c")]
+            public virtual Ranorex.RawText RawText100Orders
+            {
+                get
+                {
+                    return _rawtext100ordersInfo.CreateAdapter<Ranorex.RawText>(true);
+                }
+            }
+
+            /// <summary>
+            /// The RawText100Orders item info.
+            /// </summary>
+            [RepositoryItemInfo("3c0084f5-8e4d-479c-adee-3aa22a44f81c")]
+            public virtual RepoItemInfo RawText100OrdersInfo
+            {
+                get
+                {
+                    return _rawtext100ordersInfo;
                 }
             }
         }
@@ -2542,13 +2772,13 @@ namespace ShipWorksPerformanceTestSuite
         {
             RepoItemInfo _headerimageInfo;
             RepoItemInfo _titlebarInfo;
-            RepoItemInfo _voidingshipmentsInfo;
             RepoItemInfo _buttonokInfo;
             RepoItemInfo _rawtextokInfo;
             RepoItemInfo _loadshipmentsInfo;
             RepoItemInfo _preparingshipmentsInfo;
-            RepoItemInfo _voidingshipments1Info;
+            RepoItemInfo _voidingshipmentsInfo;
             RepoItemInfo _processingshipmentsInfo;
+            CancelInfoClass _cancelInfo;
 
             /// <summary>
             /// Creates a new ProgressDlg  folder.
@@ -2558,13 +2788,48 @@ namespace ShipWorksPerformanceTestSuite
             {
                 _headerimageInfo = new RepoItemInfo(this, "HeaderImage", "?/?/picture[@controlname='headerImage']", 30000, null, "0ebda92e-de25-4377-a961-bd6290f8ad20");
                 _titlebarInfo = new RepoItemInfo(this, "TitleBar", "titlebar[@accessiblerole='TitleBar']", 30000, null, "e76db55d-ad57-456c-a00b-865b94f7f276");
-                _voidingshipmentsInfo = new RepoItemInfo(this, "VoidingShipments", "?/?/rawtext", 30000, null, "4f457e94-c84a-41c5-aa3c-541e4ff69bda");
                 _buttonokInfo = new RepoItemInfo(this, "ButtonOk", "button[@controlname='ok']", 30000, null, "d6e9c7e3-1ca3-42cc-bb02-894832d10937");
                 _rawtextokInfo = new RepoItemInfo(this, "RawTextOK", "?/?/rawtext[@rawtext='OK']", 30000, null, "baee4044-7999-4ae0-a6bf-42dc77eb93db");
                 _loadshipmentsInfo = new RepoItemInfo(this, "LoadShipments", "container[@controlname='headerPanel']/?/?/rawtext[@rawtext='Load Shipments']", 30000, null, "b8672480-5120-4e05-aa37-40f3a3fed7dc");
                 _preparingshipmentsInfo = new RepoItemInfo(this, "PreparingShipments", "container[@controlname='headerPanel']/?/?/rawtext[@rawtext='Preparing Shipments']", 30000, null, "09371216-981a-44c6-96d4-25e8b56203ec");
-                _voidingshipments1Info = new RepoItemInfo(this, "VoidingShipments1", "container[@controlname='headerPanel']/?/?/rawtext[@rawtext='Voiding Shipments']", 30000, null, "97809ca3-18cc-4e1e-b661-69e3d22e6a02");
+                _voidingshipmentsInfo = new RepoItemInfo(this, "VoidingShipments", "container[@controlname='headerPanel']/?/?/rawtext[@rawtext='Voiding Shipments']", 30000, null, "97809ca3-18cc-4e1e-b661-69e3d22e6a02");
                 _processingshipmentsInfo = new RepoItemInfo(this, "ProcessingShipments", "container[@controlname='headerPanel']/?/?/rawtext[@rawtext='Processing Shipments']", 30000, null, "ec250ad7-7afa-4397-a654-68974a7a01c3");
+                _cancelInfo = new CancelInfoClass(this);
+            }
+
+            /// <summary>
+            /// The CancelInfoClass folder.
+            /// </summary>
+            [RepositoryItemInfo("cf2bd70e-56d1-40e9-aea4-b716e0d413fb")]
+            public class CancelInfoClass : RepoItemInfo
+            {
+                /// <summary>
+                /// CancelInfoClass class constructor.
+                /// </summary>
+                public CancelInfoClass(RepoGenBaseFolder parentFolder)
+                    : base(parentFolder, "Cancel", "button[@controlname='cancel']", 30000, null, "cf2bd70e-56d1-40e9-aea4-b716e0d413fb")
+                { }
+
+                /// <summary>
+                /// Gets the Screenshot1 item image.
+                /// </summary>
+                /// <returns>The Screenshot1 image.</returns>
+                [RepositoryImage("a87a3195-8197-4312-ad29-0ada312ccec7")]
+                public CompressedImage GetScreenshot1()
+                {
+                    return GetImage("a87a3195-8197-4312-ad29-0ada312ccec7");
+                }
+
+                /// <summary>
+                /// Gets the Screenshot1 item image.
+                /// </summary>
+                /// <param name="cropRect">The bounds of the sub-image to return.</param>
+                /// <returns>The cropped image.</returns>
+                [RepositoryImage("a87a3195-8197-4312-ad29-0ada312ccec7")]
+                public CompressedImage GetScreenshot1(System.Drawing.Rectangle cropRect)
+                {
+                    return GetImage("a87a3195-8197-4312-ad29-0ada312ccec7", cropRect);
+                }
             }
 
             /// <summary>
@@ -2636,30 +2901,6 @@ namespace ShipWorksPerformanceTestSuite
                 get
                 {
                     return _titlebarInfo;
-                }
-            }
-
-            /// <summary>
-            /// The VoidingShipments item.
-            /// </summary>
-            [RepositoryItem("4f457e94-c84a-41c5-aa3c-541e4ff69bda")]
-            public virtual Ranorex.RawText VoidingShipments
-            {
-                get
-                {
-                    return _voidingshipmentsInfo.CreateAdapter<Ranorex.RawText>(true);
-                }
-            }
-
-            /// <summary>
-            /// The VoidingShipments item info.
-            /// </summary>
-            [RepositoryItemInfo("4f457e94-c84a-41c5-aa3c-541e4ff69bda")]
-            public virtual RepoItemInfo VoidingShipmentsInfo
-            {
-                get
-                {
-                    return _voidingshipmentsInfo;
                 }
             }
 
@@ -2760,26 +3001,26 @@ namespace ShipWorksPerformanceTestSuite
             }
 
             /// <summary>
-            /// The VoidingShipments1 item.
+            /// The VoidingShipments item.
             /// </summary>
             [RepositoryItem("97809ca3-18cc-4e1e-b661-69e3d22e6a02")]
-            public virtual Ranorex.RawText VoidingShipments1
+            public virtual Ranorex.RawText VoidingShipments
             {
                 get
                 {
-                    return _voidingshipments1Info.CreateAdapter<Ranorex.RawText>(true);
+                    return _voidingshipmentsInfo.CreateAdapter<Ranorex.RawText>(true);
                 }
             }
 
             /// <summary>
-            /// The VoidingShipments1 item info.
+            /// The VoidingShipments item info.
             /// </summary>
             [RepositoryItemInfo("97809ca3-18cc-4e1e-b661-69e3d22e6a02")]
-            public virtual RepoItemInfo VoidingShipments1Info
+            public virtual RepoItemInfo VoidingShipmentsInfo
             {
                 get
                 {
-                    return _voidingshipments1Info;
+                    return _voidingshipmentsInfo;
                 }
             }
 
@@ -2804,6 +3045,30 @@ namespace ShipWorksPerformanceTestSuite
                 get
                 {
                     return _processingshipmentsInfo;
+                }
+            }
+
+            /// <summary>
+            /// The Cancel item.
+            /// </summary>
+            [RepositoryItem("cf2bd70e-56d1-40e9-aea4-b716e0d413fb")]
+            public virtual Ranorex.Button Cancel
+            {
+                get
+                {
+                    return _cancelInfo.CreateAdapter<Ranorex.Button>(true);
+                }
+            }
+
+            /// <summary>
+            /// The Cancel item info.
+            /// </summary>
+            [RepositoryItemInfo("cf2bd70e-56d1-40e9-aea4-b716e0d413fb")]
+            public virtual CancelInfoClass CancelInfo
+            {
+                get
+                {
+                    return _cancelInfo;
                 }
             }
         }
@@ -2889,6 +3154,7 @@ namespace ShipWorksPerformanceTestSuite
             RepoItemInfo _processdropdownbuttonInfo;
             RepoItemInfo _createlabelsInfo;
             RepoItemInfo _voidselectedInfo;
+            RepoItemInfo _shippingservicesInfo;
 
             /// <summary>
             /// Creates a new ShippingDlg  folder.
@@ -2905,6 +3171,7 @@ namespace ShipWorksPerformanceTestSuite
                 _processdropdownbuttonInfo = new RepoItemInfo(this, "ProcessDropDownButton", "?/?/button[@controlname='processDropDownButton']", 30000, null, "b033712e-2139-4d96-be44-5987789d72a0");
                 _createlabelsInfo = new RepoItemInfo(this, "CreateLabels", "?/?/button[@controlname='processDropDownButton']/rawtext[@column='1']", 30000, null, "bdabe5db-abbb-4968-8129-3b5a1f0ea9fe");
                 _voidselectedInfo = new RepoItemInfo(this, "VoidSelected", "?/?/button[@controlname='voidSelected']", 30000, null, "9792ba48-6b5a-41e2-bb5a-d673a1bb7bd2");
+                _shippingservicesInfo = new RepoItemInfo(this, "ShippingServices", "?/?/container[@controlname='panelSettingsButtons']/button[@controlname='shippingServices']", 30000, null, "f99de409-d5f9-4871-8ebb-a6849ed21ded");
             }
 
             /// <summary>
@@ -3124,6 +3391,30 @@ namespace ShipWorksPerformanceTestSuite
             }
 
             /// <summary>
+            /// The ShippingServices item.
+            /// </summary>
+            [RepositoryItem("f99de409-d5f9-4871-8ebb-a6849ed21ded")]
+            public virtual Ranorex.Button ShippingServices
+            {
+                get
+                {
+                    return _shippingservicesInfo.CreateAdapter<Ranorex.Button>(true);
+                }
+            }
+
+            /// <summary>
+            /// The ShippingServices item info.
+            /// </summary>
+            [RepositoryItemInfo("f99de409-d5f9-4871-8ebb-a6849ed21ded")]
+            public virtual RepoItemInfo ShippingServicesInfo
+            {
+                get
+                {
+                    return _shippingservicesInfo;
+                }
+            }
+
+            /// <summary>
             /// The SplitContainer folder.
             /// </summary>
             [RepositoryFolder("13dd32f8-c565-4c2d-904a-c1782d43192c")]
@@ -3153,6 +3444,12 @@ namespace ShipWorksPerformanceTestSuite
             RepoItemInfo _list6112019Info;
             RepoItemInfo _shipdateInfo;
             RepoItemInfo _carriername1Info;
+            RepoItemInfo _shipments500Info;
+            RepoItemInfo _rawtext1of11Info;
+            RepoItemInfo _rawtext1of12Info;
+            RepoItemInfo _rawtext1of13Info;
+            RepoItemInfo _selected100Info;
+            RepoItemInfo _shipments100Info;
 
             /// <summary>
             /// Creates a new SplitContainer  folder.
@@ -3174,6 +3471,12 @@ namespace ShipWorksPerformanceTestSuite
                 _list6112019Info = new RepoItemInfo(this, "List6112019", "container[@controlname='panel2']//tabpage[@controlname='tabPageService']/container[@controlname='serviceControlArea']/?/?/container[@controlname='sectionShipment']//datetime[@controlname='shipDate']/list[@accessiblename='6/11/2019']", 30000, null, "c1f3dcd1-f116-4d62-b3e3-9170953fbf25");
                 _shipdateInfo = new RepoItemInfo(this, "ShipDate", "container[@controlname='panel2']//tabpage[@controlname='tabPageService']/container[@controlname='serviceControlArea']/?/?/container[@controlname='sectionShipment']//text[@controlname='labelShipDate']/rawtext[@rawtext='Ship date:']", 30000, null, "053a1800-2845-43ab-94af-aeb8b50ba411");
                 _carriername1Info = new RepoItemInfo(this, "CarrierName1", "container[@controlname='panel2']//tabpage[@controlname='tabPageService']/container[@controlname='serviceControlArea']/?/?/container[@controlname='sectionShipment']//text[@controlname='labelCarrier']/rawtext[@rawtext='Carrier name:']", 30000, null, "ec199c7e-6cf3-4ca7-a71e-b4033cc4b25b");
+                _shipments500Info = new RepoItemInfo(this, "Shipments500", ".//container[@controlname='panelStatus']//text[@controlname='labelTotalShipments']/rawtext[@rawtext='Shipments: 500']", 30000, null, "36635a31-a53f-4458-9547-595301aff44a");
+                _rawtext1of11Info = new RepoItemInfo(this, "RawText1Of11", "container[@controlname='panel1']//rawtext[@column='2' and @row='4']", 30000, null, "e2fd1f73-ba24-4a70-a77e-6a81fc057df1");
+                _rawtext1of12Info = new RepoItemInfo(this, "RawText1Of12", "container[@controlname='panel1']//rawtext[@column='2' and @row='2']", 30000, null, "84d33f45-4ff4-4599-a471-860fb86d356d");
+                _rawtext1of13Info = new RepoItemInfo(this, "RawText1Of13", "container[@controlname='panel1']//rawtext[@column='2' and @row='21']", 30000, null, "1b9cabcf-1537-408a-9006-4d6ef54812db");
+                _selected100Info = new RepoItemInfo(this, "Selected100", ".//container[@controlname='panelStatus']//text[@controlname='labelSelectedShipments']/rawtext[@rawtext='Selected: 100']", 30000, null, "0ff2f6eb-e19b-4aa3-928f-68decda6671b");
+                _shipments100Info = new RepoItemInfo(this, "Shipments100", ".//container[@controlname='panelStatus']//text[@controlname='labelTotalShipments']/rawtext[@rawtext='Shipments: 100']", 30000, null, "bc3b5bbe-57b2-455a-aceb-fe9f54a380e7");
             }
 
             /// <summary>
@@ -3533,6 +3836,150 @@ namespace ShipWorksPerformanceTestSuite
                 get
                 {
                     return _carriername1Info;
+                }
+            }
+
+            /// <summary>
+            /// The Shipments500 item.
+            /// </summary>
+            [RepositoryItem("36635a31-a53f-4458-9547-595301aff44a")]
+            public virtual Ranorex.RawText Shipments500
+            {
+                get
+                {
+                    return _shipments500Info.CreateAdapter<Ranorex.RawText>(true);
+                }
+            }
+
+            /// <summary>
+            /// The Shipments500 item info.
+            /// </summary>
+            [RepositoryItemInfo("36635a31-a53f-4458-9547-595301aff44a")]
+            public virtual RepoItemInfo Shipments500Info
+            {
+                get
+                {
+                    return _shipments500Info;
+                }
+            }
+
+            /// <summary>
+            /// The RawText1Of11 item.
+            /// </summary>
+            [RepositoryItem("e2fd1f73-ba24-4a70-a77e-6a81fc057df1")]
+            public virtual Ranorex.RawText RawText1Of11
+            {
+                get
+                {
+                    return _rawtext1of11Info.CreateAdapter<Ranorex.RawText>(true);
+                }
+            }
+
+            /// <summary>
+            /// The RawText1Of11 item info.
+            /// </summary>
+            [RepositoryItemInfo("e2fd1f73-ba24-4a70-a77e-6a81fc057df1")]
+            public virtual RepoItemInfo RawText1Of11Info
+            {
+                get
+                {
+                    return _rawtext1of11Info;
+                }
+            }
+
+            /// <summary>
+            /// The RawText1Of12 item.
+            /// </summary>
+            [RepositoryItem("84d33f45-4ff4-4599-a471-860fb86d356d")]
+            public virtual Ranorex.RawText RawText1Of12
+            {
+                get
+                {
+                    return _rawtext1of12Info.CreateAdapter<Ranorex.RawText>(true);
+                }
+            }
+
+            /// <summary>
+            /// The RawText1Of12 item info.
+            /// </summary>
+            [RepositoryItemInfo("84d33f45-4ff4-4599-a471-860fb86d356d")]
+            public virtual RepoItemInfo RawText1Of12Info
+            {
+                get
+                {
+                    return _rawtext1of12Info;
+                }
+            }
+
+            /// <summary>
+            /// The RawText1Of13 item.
+            /// </summary>
+            [RepositoryItem("1b9cabcf-1537-408a-9006-4d6ef54812db")]
+            public virtual Ranorex.RawText RawText1Of13
+            {
+                get
+                {
+                    return _rawtext1of13Info.CreateAdapter<Ranorex.RawText>(true);
+                }
+            }
+
+            /// <summary>
+            /// The RawText1Of13 item info.
+            /// </summary>
+            [RepositoryItemInfo("1b9cabcf-1537-408a-9006-4d6ef54812db")]
+            public virtual RepoItemInfo RawText1Of13Info
+            {
+                get
+                {
+                    return _rawtext1of13Info;
+                }
+            }
+
+            /// <summary>
+            /// The Selected100 item.
+            /// </summary>
+            [RepositoryItem("0ff2f6eb-e19b-4aa3-928f-68decda6671b")]
+            public virtual Ranorex.RawText Selected100
+            {
+                get
+                {
+                    return _selected100Info.CreateAdapter<Ranorex.RawText>(true);
+                }
+            }
+
+            /// <summary>
+            /// The Selected100 item info.
+            /// </summary>
+            [RepositoryItemInfo("0ff2f6eb-e19b-4aa3-928f-68decda6671b")]
+            public virtual RepoItemInfo Selected100Info
+            {
+                get
+                {
+                    return _selected100Info;
+                }
+            }
+
+            /// <summary>
+            /// The Shipments100 item.
+            /// </summary>
+            [RepositoryItem("bc3b5bbe-57b2-455a-aceb-fe9f54a380e7")]
+            public virtual Ranorex.RawText Shipments100
+            {
+                get
+                {
+                    return _shipments100Info.CreateAdapter<Ranorex.RawText>(true);
+                }
+            }
+
+            /// <summary>
+            /// The Shipments100 item info.
+            /// </summary>
+            [RepositoryItemInfo("bc3b5bbe-57b2-455a-aceb-fe9f54a380e7")]
+            public virtual RepoItemInfo Shipments100Info
+            {
+                get
+                {
+                    return _shipments100Info;
                 }
             }
         }
@@ -6061,7 +6508,7 @@ namespace ShipWorksPerformanceTestSuite
         [RepositoryFolder("6ef51a7c-1bee-4a98-b724-c962a1038ab9")]
         public partial class ShipmentVoidConfirmDlgAppFolder : RepoGenBaseFolder
         {
-            RepoItemInfo _buttonokInfo;
+            ButtonOkInfoClass _buttonokInfo;
 
             /// <summary>
             /// Creates a new ShipmentVoidConfirmDlg  folder.
@@ -6069,7 +6516,42 @@ namespace ShipWorksPerformanceTestSuite
             public ShipmentVoidConfirmDlgAppFolder(RepoGenBaseFolder parentFolder) :
                     base("ShipmentVoidConfirmDlg", "/form[@controlname='ShipmentVoidConfirmDlg']", parentFolder, 30000, null, true, "6ef51a7c-1bee-4a98-b724-c962a1038ab9", "")
             {
-                _buttonokInfo = new RepoItemInfo(this, "ButtonOk", "button[@controlname='ok']", 30000, null, "b85416cc-9e6b-47fd-bf7d-e927e8241f89");
+                _buttonokInfo = new ButtonOkInfoClass(this);
+            }
+
+            /// <summary>
+            /// The ButtonOkInfoClass folder.
+            /// </summary>
+            [RepositoryItemInfo("b85416cc-9e6b-47fd-bf7d-e927e8241f89")]
+            public class ButtonOkInfoClass : RepoItemInfo
+            {
+                /// <summary>
+                /// ButtonOkInfoClass class constructor.
+                /// </summary>
+                public ButtonOkInfoClass(RepoGenBaseFolder parentFolder)
+                    : base(parentFolder, "ButtonOk", "button[@controlname='ok']", 30000, null, "b85416cc-9e6b-47fd-bf7d-e927e8241f89")
+                { }
+
+                /// <summary>
+                /// Gets the Screenshot1 item image.
+                /// </summary>
+                /// <returns>The Screenshot1 image.</returns>
+                [RepositoryImage("fa582484-abb9-4a31-8c29-19b2284ebb13")]
+                public CompressedImage GetScreenshot1()
+                {
+                    return GetImage("fa582484-abb9-4a31-8c29-19b2284ebb13");
+                }
+
+                /// <summary>
+                /// Gets the Screenshot1 item image.
+                /// </summary>
+                /// <param name="cropRect">The bounds of the sub-image to return.</param>
+                /// <returns>The cropped image.</returns>
+                [RepositoryImage("fa582484-abb9-4a31-8c29-19b2284ebb13")]
+                public CompressedImage GetScreenshot1(System.Drawing.Rectangle cropRect)
+                {
+                    return GetImage("fa582484-abb9-4a31-8c29-19b2284ebb13", cropRect);
+                }
             }
 
             /// <summary>
@@ -6112,7 +6594,165 @@ namespace ShipWorksPerformanceTestSuite
             /// The ButtonOk item info.
             /// </summary>
             [RepositoryItemInfo("b85416cc-9e6b-47fd-bf7d-e927e8241f89")]
-            public virtual RepoItemInfo ButtonOkInfo
+            public virtual ButtonOkInfoClass ButtonOkInfo
+            {
+                get
+                {
+                    return _buttonokInfo;
+                }
+            }
+        }
+
+        /// <summary>
+        /// The ExplorerAppFolder folder.
+        /// </summary>
+        [RepositoryFolder("a9bff37e-5084-4d5a-96ae-de7047cf3982")]
+        public partial class ExplorerAppFolder : RepoGenBaseFolder
+        {
+            RepoItemInfo _list1Info;
+
+            /// <summary>
+            /// Creates a new Explorer  folder.
+            /// </summary>
+            public ExplorerAppFolder(RepoGenBaseFolder parentFolder) :
+                    base("Explorer", "/form[@processname='explorer' and @class='WorkerW' and @instance='0']", parentFolder, 30000, null, true, "a9bff37e-5084-4d5a-96ae-de7047cf3982", "")
+            {
+                _list1Info = new RepoItemInfo(this, "List1", "?/?/list[@controlid='1']", 30000, null, "f0f662a1-d276-404b-b6f9-ddbd4f7712d1");
+            }
+
+            /// <summary>
+            /// The Self item.
+            /// </summary>
+            [RepositoryItem("a9bff37e-5084-4d5a-96ae-de7047cf3982")]
+            public virtual Ranorex.Form Self
+            {
+                get
+                {
+                    return _selfInfo.CreateAdapter<Ranorex.Form>(true);
+                }
+            }
+
+            /// <summary>
+            /// The Self item info.
+            /// </summary>
+            [RepositoryItemInfo("a9bff37e-5084-4d5a-96ae-de7047cf3982")]
+            public virtual RepoItemInfo SelfInfo
+            {
+                get
+                {
+                    return _selfInfo;
+                }
+            }
+
+            /// <summary>
+            /// The List1 item.
+            /// </summary>
+            [RepositoryItem("f0f662a1-d276-404b-b6f9-ddbd4f7712d1")]
+            public virtual Ranorex.List List1
+            {
+                get
+                {
+                    return _list1Info.CreateAdapter<Ranorex.List>(true);
+                }
+            }
+
+            /// <summary>
+            /// The List1 item info.
+            /// </summary>
+            [RepositoryItemInfo("f0f662a1-d276-404b-b6f9-ddbd4f7712d1")]
+            public virtual RepoItemInfo List1Info
+            {
+                get
+                {
+                    return _list1Info;
+                }
+            }
+        }
+
+        /// <summary>
+        /// The ShipWorks2AppFolder folder.
+        /// </summary>
+        [RepositoryFolder("a8d6c3c0-44ee-46a6-a783-58b22e20db3f")]
+        public partial class ShipWorks2AppFolder : RepoGenBaseFolder
+        {
+            RepoItemInfo _shipworkshasencounteredaproblemandInfo;
+            RepoItemInfo _buttonokInfo;
+
+            /// <summary>
+            /// Creates a new ShipWorks2  folder.
+            /// </summary>
+            public ShipWorks2AppFolder(RepoGenBaseFolder parentFolder) :
+                    base("ShipWorks2", "/form[@name='ShipWorks']", parentFolder, 30000, null, true, "a8d6c3c0-44ee-46a6-a783-58b22e20db3f", "")
+            {
+                _shipworkshasencounteredaproblemandInfo = new RepoItemInfo(this, "ShipWorksHasEncounteredAProblemAnd", "text[@name~'^ShipWorks\\ has\\ encountered']", 30000, null, "47511ccb-bc14-4f0c-9a67-891794508dad");
+                _buttonokInfo = new RepoItemInfo(this, "ButtonOK", "button[@name='OK']", 30000, null, "79f1790c-1b3e-4dce-a899-7cb29ae4ccd3");
+            }
+
+            /// <summary>
+            /// The Self item.
+            /// </summary>
+            [RepositoryItem("a8d6c3c0-44ee-46a6-a783-58b22e20db3f")]
+            public virtual Ranorex.Form Self
+            {
+                get
+                {
+                    return _selfInfo.CreateAdapter<Ranorex.Form>(true);
+                }
+            }
+
+            /// <summary>
+            /// The Self item info.
+            /// </summary>
+            [RepositoryItemInfo("a8d6c3c0-44ee-46a6-a783-58b22e20db3f")]
+            public virtual RepoItemInfo SelfInfo
+            {
+                get
+                {
+                    return _selfInfo;
+                }
+            }
+
+            /// <summary>
+            /// The ShipWorksHasEncounteredAProblemAnd item.
+            /// </summary>
+            [RepositoryItem("47511ccb-bc14-4f0c-9a67-891794508dad")]
+            public virtual Ranorex.Text ShipWorksHasEncounteredAProblemAnd
+            {
+                get
+                {
+                    return _shipworkshasencounteredaproblemandInfo.CreateAdapter<Ranorex.Text>(true);
+                }
+            }
+
+            /// <summary>
+            /// The ShipWorksHasEncounteredAProblemAnd item info.
+            /// </summary>
+            [RepositoryItemInfo("47511ccb-bc14-4f0c-9a67-891794508dad")]
+            public virtual RepoItemInfo ShipWorksHasEncounteredAProblemAndInfo
+            {
+                get
+                {
+                    return _shipworkshasencounteredaproblemandInfo;
+                }
+            }
+
+            /// <summary>
+            /// The ButtonOK item.
+            /// </summary>
+            [RepositoryItem("79f1790c-1b3e-4dce-a899-7cb29ae4ccd3")]
+            public virtual Ranorex.Button ButtonOK
+            {
+                get
+                {
+                    return _buttonokInfo.CreateAdapter<Ranorex.Button>(true);
+                }
+            }
+
+            /// <summary>
+            /// The ButtonOK item info.
+            /// </summary>
+            [RepositoryItemInfo("79f1790c-1b3e-4dce-a899-7cb29ae4ccd3")]
+            public virtual RepoItemInfo ButtonOKInfo
             {
                 get
                 {

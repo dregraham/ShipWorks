@@ -1,12 +1,4 @@
-﻿/*
- * Created by Ranorex
- * User: SMadke
- * Date: 6/11/2019
- * Time: 11:25 AM
- * 
- * To change this template use Tools > Options > Coding > Edit standard headers.
- */
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -20,29 +12,28 @@ using Ranorex.Core.Testing;
 
 namespace ShipWorksPerformanceTestSuite
 {
-	
-	[TestModule("F12F721A-A36E-4A5A-88C3-A0C6E7A74A56", ModuleType.UserCode, 1)]
-	public class ApplyProfileTo500Orders : ITestModule
-	{
+
+    [TestModule("4833ECEE-B4AC-4EAF-9FA5-25DDF1D28F38", ModuleType.UserCode, 1)]
+    public class ApplyProfileTo100Orders : ITestModule
+    {
 		public static ShipWorksPerformanceTestSuiteRepository repo = ShipWorksPerformanceTestSuiteRepository.Instance;
 		
-		public ApplyProfileTo500Orders()
-		{
-			// Do not delete - a parameterless constructor is required!
-		}
-		
-		void ITestModule.Run()
-		{
-			Mouse.DefaultMoveTime = 300;
-			Keyboard.DefaultKeyPressTime = 100;
-			Delay.SpeedFactor = 1.0;
-			
-			SelectAllShipments();
-			ChangeCarrierBestRate();
-			ApplyBestRateProfile();
-		}
-		
-		public void SelectAllShipments()
+        public ApplyProfileTo100Orders()
+        {
+            // Do not delete - a parameterless constructor is required!
+        }
+
+        void ITestModule.Run()
+        {
+            Mouse.DefaultMoveTime = 300;
+            Keyboard.DefaultKeyPressTime = 100;
+            Delay.SpeedFactor = 1.0;
+            
+            SelectAllShipments();            
+            ApplyBestRateProfile();
+        }
+        
+        public void SelectAllShipments()
 		{		
 			Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Click item 'ShippingDlg.SplitContainer.RawText1Of1' at Center.", repo.ShippingDlg.SplitContainer.RawText1Of1Info, new RecordItemIndex(5));
             repo.ShippingDlg.SplitContainer.RawText1Of1.Click();
@@ -54,11 +45,11 @@ namespace ShipWorksPerformanceTestSuite
 			Delay.Milliseconds(0);
 			
 			Report.Log(ReportLevel.Info, "Validation", "Validating AttributeEqual (Visible='True') on item 'ShippingDlg.SplitContainer.Selected500'.", repo.ShippingDlg.SplitContainer.Selected500Info, new RecordItemIndex(2));
-			Validate.AttributeEqual(repo.ShippingDlg.SplitContainer.Selected500Info, "Visible", "True");
+			Validate.AttributeEqual(repo.ShippingDlg.SplitContainer.Selected100Info, "Visible", "True");
 			Delay.Milliseconds(100);
 			
-			Report.Log(ReportLevel.Info, "Validation", "Validating AttributeEqual (RawText='Selected: 500') on item 'ShippingDlg.SplitContainer.Selected500'.", repo.ShippingDlg.SplitContainer.Selected500Info, new RecordItemIndex(3));
-			Validate.AttributeEqual(repo.ShippingDlg.SplitContainer.Selected500Info, "RawText", "Selected: 500");
+			Report.Log(ReportLevel.Info, "Validation", "Validating AttributeEqual (RawText='Selected: 100') on item 'ShippingDlg.SplitContainer.Selected500'.", repo.ShippingDlg.SplitContainer.Selected500Info, new RecordItemIndex(3));
+			Validate.AttributeEqual(repo.ShippingDlg.SplitContainer.Selected100Info, "RawText", "Selected: 100");
 			Delay.Milliseconds(100);
 		}
 		
@@ -101,5 +92,5 @@ namespace ShipWorksPerformanceTestSuite
 			repo.ShippingDlg.SplitContainer.ShipDateInfo.WaitForExists(120000);
 			Delay.Milliseconds(0);
 		}
-	}
+    }
 }

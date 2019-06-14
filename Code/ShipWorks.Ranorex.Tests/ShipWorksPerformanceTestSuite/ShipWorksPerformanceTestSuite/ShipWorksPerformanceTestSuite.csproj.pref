@@ -1,10 +1,11 @@
 ﻿<Properties>
-  <Array name="active">
-    <Element value="ShipWorksPerformanceTestSuite.rxtst" />
-  </Array>
   <Array name="bookmarks" />
   <Array name="files">
     <Element value="ShipWorksPerformanceTestSuite.rxtst" />
+    <Element value="Void100SRShipments.cs" />
+    <Element value="ExtraMethods.cs" />
+    <Element value="Select500OrdersFilter.cs" />
+    <Element value="SelectAllOrders.cs" />
   </Array>
   <Properties name="projectSavedData">
     <Properties name="customTool">

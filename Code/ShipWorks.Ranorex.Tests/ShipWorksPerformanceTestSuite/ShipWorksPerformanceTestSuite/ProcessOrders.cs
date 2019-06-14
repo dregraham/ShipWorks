@@ -22,11 +22,11 @@ namespace ShipWorksPerformanceTestSuite
 {
 	
 	[TestModule("C7FEAAD9-B5ED-4097-9A55-E8ED71D09BBE", ModuleType.UserCode, 1)]
-	public class Process500Orders : ITestModule
+	public class ProcessOrders : ITestModule
 	{
 		public static ShipWorksPerformanceTestSuiteRepository repo = ShipWorksPerformanceTestSuiteRepository.Instance;
 		
-		public Process500Orders()
+		public ProcessOrders()
 		{
 			// Do not delete - a parameterless constructor is required!
 		}
@@ -46,7 +46,7 @@ namespace ShipWorksPerformanceTestSuite
 			Delay.Milliseconds(0);
 			
 			Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Click item 'ShippingDlg.SplitContainer.CarrierName1' at Center.", repo.ShippingDlg.SplitContainer.CarrierName1Info, new RecordItemIndex(2));
-			repo.ShippingDlg.SplitContainer.CarrierName1.Click();
+			repo.ShippingDlg.SplitContainer.CarrierNameInfo.WaitForExists(120000);
 			Delay.Milliseconds(0);
 			
 			Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Click item 'ShippingDlg.ProcessDropDownButton' at Center.", repo.ShippingDlg.ProcessDropDownButtonInfo, new RecordItemIndex(3));
@@ -56,19 +56,6 @@ namespace ShipWorksPerformanceTestSuite
 			Report.Log(ReportLevel.Info, "Validation", "Validating AttributeEqual (Enabled='False') on item 'ShippingDlg.SplitContainer.ComboShipmentType'.", repo.ShippingDlg.SplitContainer.ComboShipmentTypeInfo, new RecordItemIndex(0));
 			repo.ShippingDlg.SplitContainer.ComboShipmentTypeInfo.WaitForAttributeEqual(120000, "Enabled", "False");
 			Delay.Milliseconds(100);
-			
-			//            Report.Log(ReportLevel.Info, "Validation", "Validating AttributeEqual (HasFocus='False') on item 'ShippingDlg.SplitContainer.ComboShipmentType'.", repo.ShippingDlg.SplitContainer.ComboShipmentTypeInfo, new RecordItemIndex(1));
-			//            Validate.AttributeEqual(repo.ShippingDlg.SplitContainer.ComboShipmentTypeInfo, "HasFocus", "False");
-			//            Delay.Milliseconds(100);
-//
-			//            Report.Log(ReportLevel.Info, "Validation", "Validating AttributeEqual (Visible='True') on item 'ShippingDlg.SplitContainer.ComboShipmentType'.", repo.ShippingDlg.SplitContainer.ComboShipmentTypeInfo, new RecordItemIndex(2));
-			//            Validate.AttributeEqual(repo.ShippingDlg.SplitContainer.ComboShipmentTypeInfo, "Visible", "True");
-			//            Delay.Milliseconds(100);
-//
-			//            Report.Log(ReportLevel.Info, "Validation", "Validating AttributeEqual (Text='Other') on item 'ShippingDlg.SplitContainer.ComboShipmentType'.", repo.ShippingDlg.SplitContainer.ComboShipmentTypeInfo, new RecordItemIndex(3));
-			//            Validate.AttributeEqual(repo.ShippingDlg.SplitContainer.ComboShipmentTypeInfo, "Text", "Other");
-			//            Delay.Milliseconds(100);
-			
 		}
 	}
 }

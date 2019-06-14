@@ -1,12 +1,4 @@
-﻿/*
- * Created by Ranorex
- * User: SMadke
- * Date: 6/11/2019
- * Time: 1:49 PM
- * 
- * To change this template use Tools > Options > Coding > Edit standard headers.
- */
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -20,30 +12,29 @@ using Ranorex.Core.Testing;
 
 namespace ShipWorksPerformanceTestSuite
 {
-	
-	[TestModule("CF731CEB-4065-4AFA-85C0-A45FC3AA463A", ModuleType.UserCode, 1)]
-	public class Void500Shipments : ITestModule
-	{
-		public static ShipWorksPerformanceTestSuiteRepository repo = ShipWorksPerformanceTestSuiteRepository.Instance;
-		SelectAllOrders selectOrders = new SelectAllOrders();
-		Load500Orders loadOrders = new Load500Orders();
-		ApplyProfileTo500Orders applyprofile = new ApplyProfileTo500Orders();
-		Select500OrdersFilter select500filter = new Select500OrdersFilter();
+    [TestModule("DA7C4F4F-6DA0-42F2-975F-4A1838CE9682", ModuleType.UserCode, 1)]
+    public class Void100SRShipments : ITestModule
+    {
+    	public static ShipWorksPerformanceTestSuiteRepository repo = ShipWorksPerformanceTestSuiteRepository.Instance;
+		Select100Orders selectOrders = new Select100Orders();
+		Load100SROrders loadOrders = new Load100SROrders();
+		ApplyProfileTo100Orders applyprofile = new ApplyProfileTo100Orders();
+		SelectShippingRuleFilter selectfilter = new SelectShippingRuleFilter();
 		static int retryMax = 2;
 		static int retryCount = 0;
-		
-		public Void500Shipments()
-		{
-			// Do not delete - a parameterless constructor is required!
-		}
-		
-		void ITestModule.Run()
-		{
-			Mouse.DefaultMoveTime = 300;
-			Keyboard.DefaultKeyPressTime = 100;
-			Delay.SpeedFactor = 1.0;
 			
-			if(repo.ShippingDlg.VoidSelected.Enabled == true)
+        public Void100SRShipments()
+        {
+            // Do not delete - a parameterless constructor is required!
+        }
+
+        void ITestModule.Run()
+        {
+            Mouse.DefaultMoveTime = 300;
+            Keyboard.DefaultKeyPressTime = 100;
+            Delay.SpeedFactor = 1.0;
+            
+         	if(repo.ShippingDlg.VoidSelected.Enabled == true)
 			{
 				VoidShipments();
 				ConfirmVoidShipmentStarted();
@@ -54,11 +45,10 @@ namespace ShipWorksPerformanceTestSuite
 			else
 			{
 				RetryAction.EscapeFromScreen(3);
-			}
-			
-		}
-		
-		void VoidShipments()
+			}   
+        }
+        
+        void VoidShipments()
 		{
 			
 			try {
@@ -88,8 +78,8 @@ namespace ShipWorksPerformanceTestSuite
                	});
 			}
 		}
-		
-		void ConfirmVoidShipmentStarted()
+        
+        void ConfirmVoidShipmentStarted()
 		{
 			try {				
 				
@@ -146,7 +136,7 @@ namespace ShipWorksPerformanceTestSuite
 		{
 			RetryAction.EscapeFromScreen(3);
 			
-			select500filter.SelectFilter();
+			selectfilter.SelectFilter();
 			selectOrders.SelectOrders();
 			loadOrders.LoadOrders();
 			applyprofile.SelectAllShipments();
@@ -162,5 +152,5 @@ namespace ShipWorksPerformanceTestSuite
 			repo.ShippingDlg.Close.Click();
 			Delay.Milliseconds(0);
 		}
-	}
+    }
 }

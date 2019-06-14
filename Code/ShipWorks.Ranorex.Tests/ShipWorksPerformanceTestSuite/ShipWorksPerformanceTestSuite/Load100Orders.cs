@@ -1,12 +1,4 @@
-﻿/*
- * Created by Ranorex
- * User: SMadke
- * Date: 6/11/2019
- * Time: 11:17 AM
- * 
- * To change this template use Tools > Options > Coding > Edit standard headers.
- */
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -20,45 +12,45 @@ using Ranorex.Core.Testing;
 
 namespace ShipWorksPerformanceTestSuite
 {
-	
-	[TestModule("73A28C83-6DD2-4863-9261-44853DA1AC68", ModuleType.UserCode, 1)]
-	public class Load500Orders : ITestModule
-	{
-		public static ShipWorksPerformanceTestSuiteRepository repo = ShipWorksPerformanceTestSuiteRepository.Instance;
-		SelectAllOrders selectOrders = new SelectAllOrders();
-		Select500OrdersFilter select500filter = new Select500OrdersFilter();
+    [TestModule("A2144E13-7E55-455D-9FA5-CFC2CD6D585E", ModuleType.UserCode, 1)]
+    public class Load100Orders : ITestModule
+    {
+    	public static ShipWorksPerformanceTestSuiteRepository repo = ShipWorksPerformanceTestSuiteRepository.Instance;
+		Select100Orders selectOrders = new Select100Orders();
+		SelectShippingRuleFilter selectfilter = new SelectShippingRuleFilter();
 		
-		public Load500Orders()
-		{
-			// Do not delete - a parameterless constructor is required!
-		}
-		
-		void ITestModule.Run()
-		{
-			Mouse.DefaultMoveTime = 300;
-			Keyboard.DefaultKeyPressTime = 100;
-			Delay.SpeedFactor = 1.0;
-			
-			try {
+        public Load100Orders()
+        {
+            // Do not delete - a parameterless constructor is required!
+        }
+
+        void ITestModule.Run()
+        {
+            Mouse.DefaultMoveTime = 300;
+            Keyboard.DefaultKeyPressTime = 100;
+            Delay.SpeedFactor = 1.0;
+            
+            try {
 				
 				LoadOrders();
-               	Validate500OrdersLoaded();
+               	Validate100OrdersLoaded();
                	
 			} 
 			catch (Exception) {
 				
 				RetryAction.RetryOnFailure(3,1,() => {
 				       
-                   	select500filter.SelectFilter();
+                   	selectfilter.SelectFilter();
+                   	selectOrders.SelectOrders();
 	               	selectOrders.SelectOrders();
 	               	LoadOrders();
-	               	Validate500OrdersLoaded();
+	               	Validate100OrdersLoaded();
 	               	
 	           	});	
 			}
-		}
-		
-		public void LoadOrders()
+        }
+        
+        public void LoadOrders()
 		{
 			Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Click item 'MainForm.PanelDockingArea.FedExGround' at Center.", repo.MainForm.PanelDockingArea.FedExGroundInfo, new RecordItemIndex(0));
             repo.MainForm.PanelDockingArea.FedExGround.MoveTo();
@@ -81,13 +73,9 @@ namespace ShipWorksPerformanceTestSuite
 			Delay.Milliseconds(100);
 		}
 		
-		public void Validate500OrdersLoaded(){
+		public void Validate100OrdersLoaded(){
 			
-			repo.ShippingDlg.SplitContainer.Shipments500Info.WaitForExists(5000);
+			repo.ShippingDlg.SplitContainer.Shipments100Info.WaitForExists(5000);
 		}
-	}
+    }
 }
-
-
-
-
