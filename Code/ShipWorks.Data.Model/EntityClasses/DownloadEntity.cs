@@ -454,6 +454,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("Result", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("ErrorMessage", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("BatchID", fieldHashtable);
 		}
 		#endregion
 
@@ -760,6 +762,16 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.String)GetValue((int)DownloadFieldIndex.ErrorMessage, true); }
 			set	{ SetValue((int)DownloadFieldIndex.ErrorMessage, value); }
+		}
+
+		/// <summary> The BatchID property of the Entity Download<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "Download"."BatchID"<br/>
+		/// Table field type characteristics (type, precision, scale, length): UniqueIdentifier, 0, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.Guid BatchID
+		{
+			get { return (System.Guid)GetValue((int)DownloadFieldIndex.BatchID, true); }
+			set	{ SetValue((int)DownloadFieldIndex.BatchID, value); }
 		}
 
 		/// <summary> Gets / sets related entity of type 'ComputerEntity' which has to be set using a fetch action earlier. If no related entity is set for this property, null is returned..<br/><br/></summary>

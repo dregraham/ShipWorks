@@ -5587,6 +5587,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(DownloadFieldIndex.ErrorMessage);}
 		}
+		/// <summary>Creates a new DownloadEntity.BatchID field instance</summary>
+		public static EntityField2 BatchID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(DownloadFieldIndex.BatchID);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity DownloadDetailEntity</summary>

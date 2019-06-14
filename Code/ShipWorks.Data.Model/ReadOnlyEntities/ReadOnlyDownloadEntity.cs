@@ -49,6 +49,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             QuantityNew = source.QuantityNew;
             Result = source.Result;
             ErrorMessage = source.ErrorMessage;
+            BatchID = source.BatchID;
             
             
             Computer = (IComputerEntity) source.Computer?.AsReadOnly(objectMap);
@@ -138,6 +139,12 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 2147483647<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
         public System.String ErrorMessage { get; }
+        /// <summary> The BatchID property of the Entity Download<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "Download"."BatchID"<br/>
+        /// Table field type characteristics (type, precision, scale, length): UniqueIdentifier, 0, 0, 0<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+        public System.Guid BatchID { get; }
         
         
         public IComputerEntity Computer { get; }

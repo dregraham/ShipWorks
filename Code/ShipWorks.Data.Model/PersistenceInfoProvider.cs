@@ -996,7 +996,7 @@ namespace ShipWorks.Data.Model
 		/// <summary>Inits DownloadEntity's mappings</summary>
 		private void InitDownloadEntityMappings()
 		{
-			this.AddElementMapping("DownloadEntity", @"ShipWorksLocal", @"dbo", "Download", 13, 0);
+			this.AddElementMapping("DownloadEntity", @"ShipWorksLocal", @"dbo", "Download", 14, 0);
 			this.AddElementFieldMapping("DownloadEntity", "DownloadID", "DownloadID", false, "BigInt", 0, 19, 0, true, "SCOPE_IDENTITY()", null, typeof(System.Int64), 0);
 			this.AddElementFieldMapping("DownloadEntity", "RowVersion", "RowVersion", false, "Timestamp", 2147483647, 0, 0, false, "", null, typeof(System.Byte[]), 1);
 			this.AddElementFieldMapping("DownloadEntity", "StoreID", "StoreID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 2);
@@ -1010,6 +1010,7 @@ namespace ShipWorks.Data.Model
 			this.AddElementFieldMapping("DownloadEntity", "QuantityNew", "QuantityNew", true, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 10);
 			this.AddElementFieldMapping("DownloadEntity", "Result", "Result", false, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 11);
 			this.AddElementFieldMapping("DownloadEntity", "ErrorMessage", "ErrorMessage", true, "NVarChar", 2147483647, 0, 0, false, "", null, typeof(System.String), 12);
+			this.AddElementFieldMapping("DownloadEntity", "BatchID", "BatchID", false, "UniqueIdentifier", 0, 0, 0, false, "", null, typeof(System.Guid), 13);
 		}
 
 		/// <summary>Inits DownloadDetailEntity's mappings</summary>

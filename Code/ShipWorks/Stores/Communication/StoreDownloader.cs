@@ -172,7 +172,7 @@ namespace ShipWorks.Stores.Communication
             }
             else
             {
-                await DownloadWarehouseOrders(Guid.NewGuid()).ConfigureAwait(false);
+                await DownloadWarehouseOrders(downloadLog.BatchID).ConfigureAwait(false);
             }
         }
 

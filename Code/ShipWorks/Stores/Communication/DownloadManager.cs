@@ -707,6 +707,7 @@ namespace ShipWorks.Stores.Communication
             downloadLog.Started = DateTime.UtcNow;
             downloadLog.Ended = null;
             downloadLog.Result = (int) DownloadResult.Unfinished;
+            downloadLog.BatchID = Guid.NewGuid();
 
             using (SqlAdapter adapter = new SqlAdapter())
             {

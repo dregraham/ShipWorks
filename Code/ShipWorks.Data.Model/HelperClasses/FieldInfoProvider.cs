@@ -968,6 +968,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("DownloadEntity", "QuantityNew", typeof(Nullable<System.Int32>), false, false, false, true,  (int)DownloadFieldIndex.QuantityNew, 0, 0, 10);
 			this.AddElementFieldInfo("DownloadEntity", "Result", typeof(System.Int32), false, false, false, false,  (int)DownloadFieldIndex.Result, 0, 0, 10);
 			this.AddElementFieldInfo("DownloadEntity", "ErrorMessage", typeof(System.String), false, false, false, true,  (int)DownloadFieldIndex.ErrorMessage, 2147483647, 0, 0);
+			this.AddElementFieldInfo("DownloadEntity", "BatchID", typeof(System.Guid), false, false, false, false,  (int)DownloadFieldIndex.BatchID, 0, 0, 0);
 		}
 		/// <summary>Inits DownloadDetailEntity's FieldInfo objects</summary>
 		private void InitDownloadDetailEntityInfos()

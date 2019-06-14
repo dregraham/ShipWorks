@@ -2426,6 +2426,8 @@ namespace ShipWorks.Data.Model
 		Result,
 		///<summary>ErrorMessage. </summary>
 		ErrorMessage,
+		///<summary>BatchID. </summary>
+		BatchID,
 		/// <summary></summary>
 		AmountOfFields
 	}

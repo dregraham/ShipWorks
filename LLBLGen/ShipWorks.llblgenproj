@@ -767,6 +767,7 @@
       </EntityDefinition>
       <EntityDefinition Name="Download" ObjectID="c7488eea-dc0f-4c85-bbf2-586ea32b72a1">
         <Fields>
+          <Field Name="BatchID" Type="guid" FieldIndex="13" />
           <Field Name="ComputerID" Type="long" IsAutoCreated="true" FieldIndex="3" />
           <Field Name="DownloadID" Type="long" IsReadOnly="true" IsPrimaryKey="true" FieldIndex="0" />
           <Field Name="Duration" Type="int" IsReadOnly="true" IsOptional="true" FieldIndex="8" />
@@ -4549,7 +4550,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2019-06-05T18:06:27.3508282Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2019-06-14T19:31:34.6675363Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -5355,6 +5356,7 @@
                     <Field Name="QuantityNew" Ordinal="11" IsOptional="true" DbType="8" Precision="10" />
                     <Field Name="Result" Ordinal="12" DbType="8" Precision="10" />
                     <Field Name="ErrorMessage" Ordinal="13" IsOptional="true" DbType="12" Length="2147483647" />
+                    <Field Name="BatchID" Ordinal="14" DbType="25" />
                   </Fields>
                 </Table>
                 <Table Name="DownloadDetail">
@@ -11463,6 +11465,7 @@
         </EntityMapping>
         <EntityMapping EntityName=":Download" TargetName="ShipWorksLocal:dbo:Download">
           <FieldMappings>
+            <FieldMapping FieldName="BatchID" TargetFieldName="BatchID" />
             <FieldMapping FieldName="ComputerID" TargetFieldName="ComputerID" />
             <FieldMapping FieldName="DownloadID" TargetFieldName="DownloadID" SequenceToUse="SCOPE_IDENTITY()" />
             <FieldMapping FieldName="Duration" TargetFieldName="Duration" />

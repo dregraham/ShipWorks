@@ -1549,7 +1549,8 @@ CREATE TABLE [dbo].[Download]
 [QuantityTotal] [int] NULL,
 [QuantityNew] [int] NULL,
 [Result] [int] NOT NULL,
-[ErrorMessage] [nvarchar] (max) COLLATE SQL_Latin1_General_CP1_CI_AS NULL
+[ErrorMessage] [nvarchar] (max) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+[BatchID] [uniqueidentifier] NOT NULL,
 )
 GO
 PRINT N'Creating primary key [PK_Download] on [dbo].[Download]'
