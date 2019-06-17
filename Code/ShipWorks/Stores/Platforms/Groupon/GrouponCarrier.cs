@@ -24,7 +24,7 @@ namespace ShipWorks.Stores.Platforms.Groupon
                 case ShipmentTypeCode.PostalWebTools:
                 case ShipmentTypeCode.Usps:
                 case ShipmentTypeCode.Endicia:
-                    carrierCode = ShipmentTypeManager.IsDhl((PostalServiceType) shipmentEntity.Postal.Service) ? "dhl" : "usps";
+                    carrierCode = (shipmentEntity.Postal != null && ShipmentTypeManager.IsDhl((PostalServiceType) shipmentEntity.Postal.Service)) ? "dhl" : "usps";
                     break;
 
                 case ShipmentTypeCode.FedEx:
