@@ -8,14 +8,27 @@ namespace Interapptive.Shared.Utility
     /// </summary>
     public static class HtmlEntityUtility
     {
+        // The following strings are used to replace XML entities to prevent them from being decoded
+        // &amp;
+        const string ampReplacement = "78186DB848C1431091DDF887670571B9";
+        // &lt;
+        const string ltReplacement = "8D98F933E20D423889CE736EDC072AC4";
+        // &gt;
+        const string gtReplacement = "5720AC1968854264B485AF56728A16CB";
+        // &apos;
+        const string aposReplacement = "7A56CB5DBD364FA9884F3BC06FAA3256";
+        // &quot;
+        const string quotReplacement = "102A2CE0BAD54F31B26F27EDFDCF80A0";
+
         /// <summary>
         /// Takes a string that may be HTML-encoded multiple times, and decodes the HTML
         /// entites while leaving any XML entities single-encoded
         /// </summary>
         public static string DecodeHtmlWithoutXml(string input)
         {
-            // Escape the &amp; entity for multi-encoded strings, e.g. &amp;amp;trade;
-            string escapedInput = input.Replace("&amp;", "78186DB848C1431091DDF887670571B9&");
+            // Add an & at the end of the &amp; replacement string so that multi-encoded
+            // strings (e.g. &amp;amp;trade;) will still be properly decoded multiple times
+            string escapedInput = input.Replace("&amp;", ampReplacement + "&");
 
             string singleEncoded = escapedInput;
             string toDecode = escapedInput;
@@ -33,10 +46,10 @@ namespace Interapptive.Shared.Utility
             }
 
             // Replace encoded XML entities with strings that won't get decoded
-            singleEncoded = singleEncoded.Replace("&lt;", "8D98F933E20D423889CE736EDC072AC4");
-            singleEncoded = singleEncoded.Replace("&gt;", "5720AC1968854264B485AF56728A16CB");
-            singleEncoded = singleEncoded.Replace("&apos;", "7A56CB5DBD364FA9884F3BC06FAA3256");
-            singleEncoded = singleEncoded.Replace("&quot;", "102A2CE0BAD54F31B26F27EDFDCF80A0");
+            singleEncoded = singleEncoded.Replace("&lt;", ltReplacement);
+            singleEncoded = singleEncoded.Replace("&gt;", gtReplacement);
+            singleEncoded = singleEncoded.Replace("&apos;", aposReplacement);
+            singleEncoded = singleEncoded.Replace("&quot;", quotReplacement);
 
             singleEncoded = HttpUtility.HtmlDecode(singleEncoded);
 
@@ -44,14 +57,14 @@ namespace Interapptive.Shared.Utility
             // replacement string with & at the end, so change it back to &amp;. A stacked &amp;
             // will now be the replacement string with the decoded entity afterwards, so just
             // remove the replacement string
-            singleEncoded = singleEncoded.Replace("78186DB848C1431091DDF887670571B9&", "&amp;");
-            singleEncoded = singleEncoded.Replace("78186DB848C1431091DDF887670571B9", "");
+            singleEncoded = singleEncoded.Replace(ampReplacement + "&", "&amp;");
+            singleEncoded = singleEncoded.Replace(ampReplacement, "");
 
             // Replace the strings from above with the encoded XML entities
-            singleEncoded = singleEncoded.Replace("8D98F933E20D423889CE736EDC072AC4", "&lt;");
-            singleEncoded = singleEncoded.Replace("5720AC1968854264B485AF56728A16CB", "&gt;");
-            singleEncoded = singleEncoded.Replace("7A56CB5DBD364FA9884F3BC06FAA3256", "&apos;");
-            singleEncoded = singleEncoded.Replace("102A2CE0BAD54F31B26F27EDFDCF80A0", "&quot;");
+            singleEncoded = singleEncoded.Replace(ltReplacement, "&lt;");
+            singleEncoded = singleEncoded.Replace(gtReplacement, "&gt;");
+            singleEncoded = singleEncoded.Replace(aposReplacement, "&apos;");
+            singleEncoded = singleEncoded.Replace(quotReplacement, "&quot;");
 
             return singleEncoded;
         }

@@ -8,8 +8,8 @@ namespace Interapptive.Shared.Tests.Utility
         [Fact]
         public void DecodeHtmlWithoutXml_DecodesSingleEncodedHtml()
         {
-            string testString = "This String&trade; is &copy; and &reg;";
-            string expected = "This String™ is © and ®";
+            string testString = "<html><body>This String&trade; is &copy; and &reg;</body></html>";
+            string expected = "<html><body>This String™ is © and ®</body></html>";
             string actual = HtmlEntityUtility.DecodeHtmlWithoutXml(testString);
 
             Assert.Equal(expected, actual);
@@ -18,8 +18,8 @@ namespace Interapptive.Shared.Tests.Utility
         [Fact]
         public void DecodeHtmlWithoutXml_DecodesMultiEncodedHtml()
         {
-            string testString = "This String&amp;amp;amp;amp;amp;amp;trade; is &amp;amp;amp;amp;amp;copy;";
-            string expected = "This String™ is ©";
+            string testString = "<div>This String&amp;amp;amp;amp;amp;amp;trade; is &amp;amp;amp;amp;amp;copy;</div>";
+            string expected = "<div>This String™ is ©</div>";
             string actual = HtmlEntityUtility.DecodeHtmlWithoutXml(testString);
 
             Assert.Equal(expected, actual);
@@ -28,8 +28,8 @@ namespace Interapptive.Shared.Tests.Utility
         [Fact]
         public void DecodeHtmlWithoutXml_LeavesSingleEncodedXmlEncoded()
         {
-            string testString = "by the &lt;&gt; Brother&apos;s &quot;Strings &amp; More&quot; Co.";
-            string expected = "by the &lt;&gt; Brother&apos;s &quot;Strings &amp; More&quot; Co.";
+            string testString = "<?xml version=\"1.0\" encoding=\"UTF - 8\" standalone=\"no\" ?> <root>by the &lt;&gt; Brother&apos;s &quot;Strings &amp; More&quot; Co.</root>";
+            string expected = "<?xml version=\"1.0\" encoding=\"UTF - 8\" standalone=\"no\" ?> <root>by the &lt;&gt; Brother&apos;s &quot;Strings &amp; More&quot; Co.</root>";
             string actual = HtmlEntityUtility.DecodeHtmlWithoutXml(testString);
 
             Assert.Equal(expected, actual);
@@ -38,8 +38,8 @@ namespace Interapptive.Shared.Tests.Utility
         [Fact]
         public void DecodeHtmlWithoutXml_LeavesMultiEncodedXmlSingleEncoded()
         {
-            string testString = "This &amp;amp;amp;amp;amp; That &amp;amp;amp;quot;";
-            string expected = "This &amp; That \"";
+            string testString = "<parentnode><node12>This &amp;amp;amp;amp;amp; That &amp;amp;amp;quot;</node12></parentnode>";
+            string expected = "<parentnode><node12>This &amp; That \"</node12></parentnode>";
             string actual = HtmlEntityUtility.DecodeHtmlWithoutXml(testString);
 
             Assert.Equal(expected, actual);
@@ -48,8 +48,8 @@ namespace Interapptive.Shared.Tests.Utility
         [Fact]
         public void DecodeHtmlWithoutXml_LeavesSingleXmlEncoded_WhenMultiEncodedHtml()
         {
-            string testString = "This &amp; That&amp;amp;amp;trade;";
-            string expected = "This &amp; That™";
+            string testString = "<node attribute=\"test\">This &amp; That&amp;amp;amp;trade;</node>";
+            string expected = "<node attribute=\"test\">This &amp; That™</node>";
             string actual = HtmlEntityUtility.DecodeHtmlWithoutXml(testString);
 
             Assert.Equal(expected, actual);
@@ -58,8 +58,8 @@ namespace Interapptive.Shared.Tests.Utility
         [Fact]
         public void DecodeHtmlWithoutXml_LeavesMultiEncodedXmlSingleEncoded_WhenMultiEncodedHtml()
         {
-            string testString = "This &amp;amp;amp;amp; That&amp;amp;amp;amp;amp;amp;amp;amp;trade;";
-            string expected = "This &amp; That™";
+            string testString = "<node x='y' z='q'>This &amp;amp;amp;amp; That&amp;amp;amp;amp;amp;amp;amp;amp;trade;</node>";
+            string expected = "<node x='y' z='q'>This &amp; That™</node>";
             string actual = HtmlEntityUtility.DecodeHtmlWithoutXml(testString);
 
             Assert.Equal(expected, actual);
