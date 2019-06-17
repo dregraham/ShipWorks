@@ -8,6 +8,7 @@ using Autofac;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Security;
+using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Model.EntityClasses;
@@ -170,7 +171,7 @@ namespace ShipWorks.Stores.Platforms.Magento
                     xmlResponse.LoadXml(result);
 
                     XPathNavigator xpath = xmlResponse.CreateNavigator();
-                    string escapedValue = HtmlDecodeXmlEncode(xpath.Value);
+                    string escapedValue = HtmlEntityUtility.DecodeHtmlWithoutXml(xpath.Value);
                     logEntry.LogResponse(HttpUtility.HtmlDecode(escapedValue), "txt");
                     GenericModuleResponse response = new GenericModuleResponse(escapedValue);
 
@@ -201,45 +202,6 @@ namespace ShipWorks.Stores.Platforms.Magento
                 // Translating failed, throw a new GenericStoreExcpetion
                 throw new GenericStoreException(ex.Message, ex);
             }
-        }
-
-        /// <summary>
-        /// Takes a string that may be HTML-encoded multiple times, and returns a string that is only XML-Encoded.
-        /// </summary>
-        private string HtmlDecodeXmlEncode(string input)
-        {
-            string singleEncoded = input;
-            string toDecode = input;
-            string lastDecoded = HttpUtility.HtmlDecode(input);
-
-            // Continue as long as the already-decoded string can be decoded
-            while (!lastDecoded.Equals(toDecode, StringComparison.OrdinalIgnoreCase))
-            {
-                // Save the encoded string in case it is only encoded once
-                singleEncoded = toDecode;
-
-                // Save the previously decoded string and decode it again
-                toDecode = lastDecoded;
-                lastDecoded = HttpUtility.HtmlDecode(toDecode);
-            }
-
-            // Replace encoded XML entities with strings that won't get decoded
-            singleEncoded = singleEncoded.Replace("&amp;", "78186DB848C1431091DDF887670571B9");
-            singleEncoded = singleEncoded.Replace("&lt;", "8D98F933E20D423889CE736EDC072AC4");
-            singleEncoded = singleEncoded.Replace("&gt;", "5720AC1968854264B485AF56728A16CB");
-            singleEncoded = singleEncoded.Replace("&apos;", "7A56CB5DBD364FA9884F3BC06FAA3256");
-            singleEncoded = singleEncoded.Replace("&quot;", "102A2CE0BAD54F31B26F27EDFDCF80A0");
-
-            singleEncoded = HttpUtility.HtmlDecode(singleEncoded);
-
-            // Replace the strings from above with the encoded XML entities
-            singleEncoded = singleEncoded.Replace("78186DB848C1431091DDF887670571B9", "&amp;");
-            singleEncoded = singleEncoded.Replace("8D98F933E20D423889CE736EDC072AC4", "&lt;");
-            singleEncoded = singleEncoded.Replace("5720AC1968854264B485AF56728A16CB", "&gt;");
-            singleEncoded = singleEncoded.Replace("7A56CB5DBD364FA9884F3BC06FAA3256", "&apos;");
-            singleEncoded = singleEncoded.Replace("102A2CE0BAD54F31B26F27EDFDCF80A0", "&quot;");
-
-            return singleEncoded;
         }
     }
 }
