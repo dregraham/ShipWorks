@@ -128,6 +128,7 @@ namespace ShipWorks.Tests.Shared.Database
                         ComputerID = computer.ComputerID,
                         UserID = 1002,
                         Started = OrderDates.Min(),
+                        BatchID = Guid.NewGuid()
                     };
                     download.InitializeNullsToDefault();
                     sqlAdapter.SaveAndRefetch(download);
