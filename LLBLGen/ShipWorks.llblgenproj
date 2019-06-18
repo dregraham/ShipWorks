@@ -2023,7 +2023,7 @@
           <Field Name="ShipMiddleName" Type="string" MaxLength="30" FieldIndex="38" />
           <Field Name="ShipMilitaryAddress" Type="int" FieldIndex="58" />
           <Field Name="ShipNameParseStatus" Type="int" FieldIndex="69" />
-          <Field Name="ShipPhone" Type="string" MaxLength="25" FieldIndex="48" />
+          <Field Name="ShipPhone" Type="string" MaxLength="35" FieldIndex="48" />
           <Field Name="ShipPOBox" Type="int" FieldIndex="56" />
           <Field Name="ShipPostalCode" Type="string" MaxLength="20" FieldIndex="46" />
           <Field Name="ShipResidentialStatus" Type="int" FieldIndex="55" />
@@ -2899,7 +2899,7 @@
           <Field Name="License" Type="string" MaxLength="150" FieldIndex="2" />
           <Field Name="ManualOrderPostfix" Type="string" MaxLength="10" FieldIndex="28" />
           <Field Name="ManualOrderPrefix" Type="string" MaxLength="10" FieldIndex="27" />
-          <Field Name="Phone" Type="string" MaxLength="25" FieldIndex="16" />
+          <Field Name="Phone" Type="string" MaxLength="35" FieldIndex="16" />
           <Field Name="PostalCode" Type="string" MaxLength="20" FieldIndex="14" />
           <Field Name="RowVersion" Type="byte[]" IsReadOnly="true" FieldIndex="1" />
           <Field Name="SetupComplete" Type="bool" FieldIndex="6" />
@@ -4550,7 +4550,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2019-05-29T18:50:00.2107313Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2019-06-17T15:30:13.4856613Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -7460,7 +7460,7 @@
                         <CustomProperty Name="AuditName" Value="ShipCountry" />
                       </CustomProperties>
                     </Field>
-                    <Field Name="ShipPhone" Ordinal="49" DbType="12" Length="25" />
+                    <Field Name="ShipPhone" Ordinal="49" DbType="12" Length="35" />
                     <Field Name="ShipFax" Ordinal="50" DbType="12" Length="35" />
                     <Field Name="ShipEmail" Ordinal="51" DbType="12" Length="100" />
                     <Field Name="ShipWebsite" Ordinal="52" DbType="12" Length="50" />
@@ -8675,7 +8675,7 @@
                     <Field Name="StateProvCode" Ordinal="14" DbType="12" Length="50" />
                     <Field Name="PostalCode" Ordinal="15" DbType="12" Length="20" />
                     <Field Name="CountryCode" Ordinal="16" DbType="12" Length="50" />
-                    <Field Name="Phone" Ordinal="17" DbType="12" Length="25" />
+                    <Field Name="Phone" Ordinal="17" DbType="12" Length="35" />
                     <Field Name="Fax" Ordinal="18" DbType="12" Length="35" />
                     <Field Name="Email" Ordinal="19" DbType="12" Length="100" />
                     <Field Name="Website" Ordinal="20" DbType="12" Length="50" />

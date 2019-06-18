@@ -2306,7 +2306,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("OrderEntity", "ShipStateProvCode", typeof(System.String), false, false, false, false,  (int)OrderFieldIndex.ShipStateProvCode, 50, 0, 0);
 			this.AddElementFieldInfo("OrderEntity", "ShipPostalCode", typeof(System.String), false, false, false, false,  (int)OrderFieldIndex.ShipPostalCode, 20, 0, 0);
 			this.AddElementFieldInfo("OrderEntity", "ShipCountryCode", typeof(System.String), false, false, false, false,  (int)OrderFieldIndex.ShipCountryCode, 50, 0, 0);
-			this.AddElementFieldInfo("OrderEntity", "ShipPhone", typeof(System.String), false, false, false, false,  (int)OrderFieldIndex.ShipPhone, 25, 0, 0);
+			this.AddElementFieldInfo("OrderEntity", "ShipPhone", typeof(System.String), false, false, false, false,  (int)OrderFieldIndex.ShipPhone, 35, 0, 0);
 			this.AddElementFieldInfo("OrderEntity", "ShipFax", typeof(System.String), false, false, false, false,  (int)OrderFieldIndex.ShipFax, 35, 0, 0);
 			this.AddElementFieldInfo("OrderEntity", "ShipEmail", typeof(System.String), false, false, false, false,  (int)OrderFieldIndex.ShipEmail, 100, 0, 0);
 			this.AddElementFieldInfo("OrderEntity", "ShipWebsite", typeof(System.String), false, false, false, false,  (int)OrderFieldIndex.ShipWebsite, 50, 0, 0);
@@ -3271,7 +3271,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("StoreEntity", "StateProvCode", typeof(System.String), false, false, false, false,  (int)StoreFieldIndex.StateProvCode, 50, 0, 0);
 			this.AddElementFieldInfo("StoreEntity", "PostalCode", typeof(System.String), false, false, false, false,  (int)StoreFieldIndex.PostalCode, 20, 0, 0);
 			this.AddElementFieldInfo("StoreEntity", "CountryCode", typeof(System.String), false, false, false, false,  (int)StoreFieldIndex.CountryCode, 50, 0, 0);
-			this.AddElementFieldInfo("StoreEntity", "Phone", typeof(System.String), false, false, false, false,  (int)StoreFieldIndex.Phone, 25, 0, 0);
+			this.AddElementFieldInfo("StoreEntity", "Phone", typeof(System.String), false, false, false, false,  (int)StoreFieldIndex.Phone, 35, 0, 0);
 			this.AddElementFieldInfo("StoreEntity", "Fax", typeof(System.String), false, false, false, false,  (int)StoreFieldIndex.Fax, 35, 0, 0);
 			this.AddElementFieldInfo("StoreEntity", "Email", typeof(System.String), false, false, false, false,  (int)StoreFieldIndex.Email, 100, 0, 0);
 			this.AddElementFieldInfo("StoreEntity", "Website", typeof(System.String), false, false, false, false,  (int)StoreFieldIndex.Website, 50, 0, 0);

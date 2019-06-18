@@ -1,0 +1,17 @@
+STAGING:
+GetCounterRate
+GetACtiveStores
+LogShipmentDetails
+LogShipmentVoided
+GetStatus
+GetReleaseByVersion
+Activate
+Email
+CreateStore
+DeleteStore
+GetReleaseByUser
+Login
+
+QASC:
+Login
+GetActiveStores

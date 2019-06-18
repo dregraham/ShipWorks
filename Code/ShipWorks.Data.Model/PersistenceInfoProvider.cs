@@ -2429,7 +2429,7 @@ namespace ShipWorks.Data.Model
 			this.AddElementFieldMapping("OrderEntity", "ShipStateProvCode", "ShipStateProvCode", false, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 45);
 			this.AddElementFieldMapping("OrderEntity", "ShipPostalCode", "ShipPostalCode", false, "NVarChar", 20, 0, 0, false, "", null, typeof(System.String), 46);
 			this.AddElementFieldMapping("OrderEntity", "ShipCountryCode", "ShipCountryCode", false, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 47);
-			this.AddElementFieldMapping("OrderEntity", "ShipPhone", "ShipPhone", false, "NVarChar", 25, 0, 0, false, "", null, typeof(System.String), 48);
+			this.AddElementFieldMapping("OrderEntity", "ShipPhone", "ShipPhone", false, "NVarChar", 35, 0, 0, false, "", null, typeof(System.String), 48);
 			this.AddElementFieldMapping("OrderEntity", "ShipFax", "ShipFax", false, "NVarChar", 35, 0, 0, false, "", null, typeof(System.String), 49);
 			this.AddElementFieldMapping("OrderEntity", "ShipEmail", "ShipEmail", false, "NVarChar", 100, 0, 0, false, "", null, typeof(System.String), 50);
 			this.AddElementFieldMapping("OrderEntity", "ShipWebsite", "ShipWebsite", false, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 51);
@@ -3457,7 +3457,7 @@ namespace ShipWorks.Data.Model
 			this.AddElementFieldMapping("StoreEntity", "StateProvCode", "StateProvCode", false, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 13);
 			this.AddElementFieldMapping("StoreEntity", "PostalCode", "PostalCode", false, "NVarChar", 20, 0, 0, false, "", null, typeof(System.String), 14);
 			this.AddElementFieldMapping("StoreEntity", "CountryCode", "CountryCode", false, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 15);
-			this.AddElementFieldMapping("StoreEntity", "Phone", "Phone", false, "NVarChar", 25, 0, 0, false, "", null, typeof(System.String), 16);
+			this.AddElementFieldMapping("StoreEntity", "Phone", "Phone", false, "NVarChar", 35, 0, 0, false, "", null, typeof(System.String), 16);
 			this.AddElementFieldMapping("StoreEntity", "Fax", "Fax", false, "NVarChar", 35, 0, 0, false, "", null, typeof(System.String), 17);
 			this.AddElementFieldMapping("StoreEntity", "Email", "Email", false, "NVarChar", 100, 0, 0, false, "", null, typeof(System.String), 18);
 			this.AddElementFieldMapping("StoreEntity", "Website", "Website", false, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 19);
