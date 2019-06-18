@@ -9,22 +9,22 @@ namespace ShipWorks.Warehouse.DTO.Orders
     [Obfuscation]
     public class WarehouseOrderAddress
     {
-        public string UnparsedName { get; set; }
-        public string FirstName { get; set; }
-        public string MiddleName { get; set; }
-        public string LastName { get; set; }
-        public string Company { get; set; }
-        public string Street1 { get; set; }
-        public string Street2 { get; set; }
-        public string Street3 { get; set; }
-        public string City { get; set; }
-        public string StateProvCode { get; set; }
-        public string PostalCode { get; set; }
-        public string CountryCode { get; set; }
-        public string Phone { get; set; }
-        public string Fax { get; set; }
-        public string Email { get; set; }
-        public string Website { get; set; }
+        public string UnparsedName { get; set; } = string.Empty;
+        public string FirstName { get; set; } = string.Empty;
+        public string MiddleName { get; set; } = string.Empty;
+        public string LastName { get; set; } = string.Empty;
+        public string Company { get; set; } = string.Empty;
+        public string Street1 { get; set; } = string.Empty;
+        public string Street2 { get; set; } = string.Empty;
+        public string Street3 { get; set; } = string.Empty;
+        public string City { get; set; } = string.Empty;
+        public string StateProvCode { get; set; } = string.Empty;
+        public string PostalCode { get; set; } = string.Empty;
+        public string CountryCode { get; set; } = string.Empty;
+        public string Phone { get; set; } = string.Empty;
+        public string Fax { get; set; } = string.Empty;
+        public string Email { get; set; } = string.Empty;
+        public string Website { get; set; } = string.Empty;
     }
 
     [Obfuscation]
