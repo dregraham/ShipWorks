@@ -54,7 +54,7 @@ namespace ShipWorks.ApplicationCore.Licensing.TangoRequests
         private GenericResult<TokenResponse> GetRedirectToken(string customerKey)
         {
             var request = requestSubmitterFactory.GetHttpVariableRequestSubmitter();
-            request.Variables.Add("action", "createredirecttoken");
+            request.Variables.Add("action", "createRedirectToken");
             request.Variables.Add("customerlicense", customerKey);
 
             request.ForcePreCallCertificateValidation = false;

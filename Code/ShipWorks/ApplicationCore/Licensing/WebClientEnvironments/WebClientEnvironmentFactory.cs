@@ -235,14 +235,22 @@ namespace ShipWorks.ApplicationCore.Licensing.WebClientEnvironments
         /// </summary>
         private WebClientEnvironment CreateOtherEnvironment(string tangoUrl, string warehouseUrl, string activationUrl)
         {
+            string username = "none";
+            string password = "none";
+            if (tangoUrl.IndexOf("www.interapptive.com", StringComparison.InvariantCultureIgnoreCase) > 0)
+            {
+                username = encryptionProvider.Decrypt("C5NOiKdNaM/324R7sIjFUA==");
+                password = encryptionProvider.Decrypt("lavEgsQoKGM=");
+            }
+
             return new WebClientEnvironment()
             {
                 Name = "Other",
                 TangoUrl = tangoUrl,
                 WarehouseUrl = warehouseUrl,
                 ActivationUrl = activationUrl,
-                HeaderShipWorksUsername = "none",
-                HeaderShipWorksPassword = "none",
+                HeaderShipWorksUsername = username,
+                HeaderShipWorksPassword = password,
                 SoapAction = "http://stamps.com/xml/namespace/2015/06/shipworks/shipworksv1/IShipWorks/ShipworksPost",
                 ForcePreCallCertificationValidation = false,
                 TangoSecurityValidator = fakeTangoSecurityValidator
