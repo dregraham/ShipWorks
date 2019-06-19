@@ -12,7 +12,7 @@ namespace ShipWorksHub.Pages
 
         public DashboardPage(IWebDriver driver) => _driver = driver;
         public IWebElement DashboardTxt => _driver.FindElement(By.XPath("/html/body/div/div/div[2]/div/header/h1"));
-        public IWebElement WarehouseTab => _driver.FindElement(By.XPath("//*[@id='root']/div/div[1]/div/nav/section[1]/a[2]"));
+        public IWebElement WarehouseTab => _driver.FindElement(By.XPath("//*[@id='root']/div/div[1]/div/nav/section[1]/a[3]"));
         protected IWebElement LogoutButton => _driver.FindElement(By.XPath("//*[@id='root']/div/div[1]/div/nav/section[2]/button"));
         
         public WarehousesPage ClickWarehouseTab()

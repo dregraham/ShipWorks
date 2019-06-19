@@ -17,17 +17,17 @@ namespace ShipWorksHub.Features
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("TechTalk.SpecFlow", "3.0.0.0")]
     [System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    public partial class LoginFeature : Xunit.IClassFixture<LoginFeature.FixtureData>, System.IDisposable
+    public partial class BlankFieldLengthValidationAddPageFeature : Xunit.IClassFixture<BlankFieldLengthValidationAddPageFeature.FixtureData>, System.IDisposable
     {
         
         private static TechTalk.SpecFlow.ITestRunner testRunner;
         
         private Xunit.Abstractions.ITestOutputHelper _testOutputHelper;
         
-#line 1 "Login.feature"
+#line 1 "BlankFieldValidationAddPage.feature"
 #line hidden
         
-        public LoginFeature(LoginFeature.FixtureData fixtureData, Xunit.Abstractions.ITestOutputHelper testOutputHelper)
+        public BlankFieldLengthValidationAddPageFeature(BlankFieldLengthValidationAddPageFeature.FixtureData fixtureData, Xunit.Abstractions.ITestOutputHelper testOutputHelper)
         {
             this._testOutputHelper = testOutputHelper;
             this.TestInitialize();
@@ -36,7 +36,7 @@ namespace ShipWorksHub.Features
         public static void FeatureSetup()
         {
             testRunner = TechTalk.SpecFlow.TestRunnerManager.GetTestRunner();
-            TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "Login", null, ProgrammingLanguage.CSharp, ((string[])(null)));
+            TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "BlankFieldLengthValidationAddPage", null, ProgrammingLanguage.CSharp, ((string[])(null)));
             testRunner.OnFeatureStart(featureInfo);
         }
         
@@ -76,23 +76,22 @@ namespace ShipWorksHub.Features
             this.ScenarioTearDown();
         }
         
-        [Xunit.TheoryAttribute(DisplayName="Login with valid credentials on Firefox")]
-        [Xunit.TraitAttribute("FeatureTitle", "Login")]
-        [Xunit.TraitAttribute("Description", "Login with valid credentials on Firefox")]
-        [Xunit.TraitAttribute("Category", "Firefox")]
+        [Xunit.TheoryAttribute(DisplayName="User validates blank fields on Firefox")]
+        [Xunit.TraitAttribute("FeatureTitle", "BlankFieldLengthValidationAddPage")]
+        [Xunit.TraitAttribute("Description", "User validates blank fields on Firefox")]
+        [Xunit.TraitAttribute("Category", "Firefox,")]
         [Xunit.TraitAttribute("Category", "Smoke")]
-        [Xunit.InlineDataAttribute("Firefox", "user-0801@example.com", "GOOD", new string[] {
-                "Firefox"})]
-        public virtual void LoginWithValidCredentialsOnFirefox(string browser, string username, string password, string[] exampleTags)
+        [Xunit.InlineDataAttribute("Firefox", "user-0801@example.com", "GOOD", new string[0])]
+        public virtual void UserValidatesBlankFieldsOnFirefox(string browser, string username, string password, string[] exampleTags)
         {
             string[] @__tags = new string[] {
-                    "Firefox",
+                    "Firefox,",
                     "Smoke"};
             if ((exampleTags != null))
             {
                 @__tags = System.Linq.Enumerable.ToArray(System.Linq.Enumerable.Concat(@__tags, exampleTags));
             }
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Login with valid credentials on Firefox", null, @__tags);
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("User validates blank fields on Firefox", null, @__tags);
 #line 4
 this.ScenarioInitialize(scenarioInfo);
             this.ScenarioStart();
@@ -100,17 +99,25 @@ this.ScenarioInitialize(scenarioInfo);
  testRunner.Given(string.Format("the following user with \'{0}\' and \'{1}\' wants to navigate to the warehouse page u" +
                         "sing \'{2}\'", username, password, browser), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line 6
+ testRunner.Then("the user clicks the add button", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+#line 7
+ testRunner.Then("the user blanks out all fields", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+#line 8
+ testRunner.Then("the user clicks the add warehouse button", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+#line 9
+ testRunner.And("the user sees empty field error messages", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line 10
  testRunner.Then("the user closes the warehouse page", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             this.ScenarioCleanup();
         }
         
-        [Xunit.TheoryAttribute(DisplayName="Login with valid credentials on Chrome")]
-        [Xunit.TraitAttribute("FeatureTitle", "Login")]
-        [Xunit.TraitAttribute("Description", "Login with valid credentials on Chrome")]
+        [Xunit.TheoryAttribute(DisplayName="User validates blank fields on Chrome")]
+        [Xunit.TraitAttribute("FeatureTitle", "BlankFieldLengthValidationAddPage")]
+        [Xunit.TraitAttribute("Description", "User validates blank fields on Chrome")]
         [Xunit.TraitAttribute("Category", "Chrome")]
         [Xunit.InlineDataAttribute("Chrome", "user-0801@example.com", "GOOD", new string[0])]
-        public virtual void LoginWithValidCredentialsOnChrome(string browser, string username, string password, string[] exampleTags)
+        public virtual void UserValidatesBlankFieldsOnChrome(string browser, string username, string password, string[] exampleTags)
         {
             string[] @__tags = new string[] {
                     "Chrome"};
@@ -118,25 +125,33 @@ this.ScenarioInitialize(scenarioInfo);
             {
                 @__tags = System.Linq.Enumerable.ToArray(System.Linq.Enumerable.Concat(@__tags, exampleTags));
             }
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Login with valid credentials on Chrome", null, @__tags);
-#line 14
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("User validates blank fields on Chrome", null, @__tags);
+#line 17
 this.ScenarioInitialize(scenarioInfo);
             this.ScenarioStart();
-#line 15
+#line 18
  testRunner.Given(string.Format("the following user with \'{0}\' and \'{1}\' wants to navigate to the warehouse page u" +
                         "sing \'{2}\'", username, password, browser), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
-#line 16
+#line 19
+ testRunner.Then("the user clicks the add button", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+#line 20
+ testRunner.Then("the user blanks out all fields", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+#line 21
+ testRunner.Then("the user clicks the add warehouse button", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+#line 22
+ testRunner.And("the user sees empty field error messages", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line 23
  testRunner.Then("the user closes the warehouse page", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             this.ScenarioCleanup();
         }
         
-        [Xunit.TheoryAttribute(DisplayName="Login with valid credentials on Edge")]
-        [Xunit.TraitAttribute("FeatureTitle", "Login")]
-        [Xunit.TraitAttribute("Description", "Login with valid credentials on Edge")]
+        [Xunit.TheoryAttribute(DisplayName="User validates blank fields on Edge")]
+        [Xunit.TraitAttribute("FeatureTitle", "BlankFieldLengthValidationAddPage")]
+        [Xunit.TraitAttribute("Description", "User validates blank fields on Edge")]
         [Xunit.TraitAttribute("Category", "Edge")]
         [Xunit.InlineDataAttribute("Edge", "user-0801@example.com", "GOOD", new string[0])]
-        public virtual void LoginWithValidCredentialsOnEdge(string browser, string username, string password, string[] exampleTags)
+        public virtual void UserValidatesBlankFieldsOnEdge(string browser, string username, string password, string[] exampleTags)
         {
             string[] @__tags = new string[] {
                     "Edge"};
@@ -144,14 +159,22 @@ this.ScenarioInitialize(scenarioInfo);
             {
                 @__tags = System.Linq.Enumerable.ToArray(System.Linq.Enumerable.Concat(@__tags, exampleTags));
             }
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Login with valid credentials on Edge", null, @__tags);
-#line 23
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("User validates blank fields on Edge", null, @__tags);
+#line 30
 this.ScenarioInitialize(scenarioInfo);
             this.ScenarioStart();
-#line 24
+#line 31
  testRunner.Given(string.Format("the following user with \'{0}\' and \'{1}\' wants to navigate to the warehouse page u" +
                         "sing \'{2}\'", username, password, browser), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
-#line 25
+#line 32
+ testRunner.Then("the user clicks the add button", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+#line 33
+ testRunner.Then("the user blanks out all fields", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+#line 34
+ testRunner.Then("the user clicks the add warehouse button", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+#line 35
+ testRunner.And("the user sees empty field error messages", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line 36
  testRunner.Then("the user closes the warehouse page", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             this.ScenarioCleanup();
@@ -164,12 +187,12 @@ this.ScenarioInitialize(scenarioInfo);
             
             public FixtureData()
             {
-                LoginFeature.FeatureSetup();
+                BlankFieldLengthValidationAddPageFeature.FeatureSetup();
             }
             
             void System.IDisposable.Dispose()
             {
-                LoginFeature.FeatureTearDown();
+                BlankFieldLengthValidationAddPageFeature.FeatureTearDown();
             }
         }
     }

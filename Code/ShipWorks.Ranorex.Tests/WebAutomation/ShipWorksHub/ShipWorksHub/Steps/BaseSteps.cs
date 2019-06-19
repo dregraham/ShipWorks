@@ -11,6 +11,7 @@ namespace ShipWorksHub.Steps
     {
         IAlert alert;
         IWebDriver _driver;
+
         public IWebDriver SetWebDriver(string browser)
         {
             switch (browser)

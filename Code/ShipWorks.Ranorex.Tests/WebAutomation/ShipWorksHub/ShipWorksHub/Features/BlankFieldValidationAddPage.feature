@@ -1,18 +1,25 @@
-﻿Feature: Login
+﻿Feature: BlankFieldLengthValidationAddPage
 
-@Firefox @Smoke
-Scenario Outline: Login with valid credentials on Firefox
+@Firefox, @Smoke
+Scenario Outline: User validates blank fields on Firefox
 	Given the following user with '<Username>' and '<Password>' wants to navigate to the warehouse page using '<Browser>'
+	Then the user clicks the add button
+	Then the user blanks out all fields
+	Then the user clicks the add warehouse button
+	And the user sees empty field error messages
 	Then the user closes the warehouse page
 
-	@Firefox
 	Examples:
 		| Browser | Username              | Password |
 		| Firefox | user-0801@example.com | GOOD     |
 
 @Chrome
-Scenario Outline: Login with valid credentials on Chrome
+Scenario Outline: User validates blank fields on Chrome
 	Given the following user with '<Username>' and '<Password>' wants to navigate to the warehouse page using '<Browser>'
+	Then the user clicks the add button
+	Then the user blanks out all fields
+	Then the user clicks the add warehouse button
+	And the user sees empty field error messages
 	Then the user closes the warehouse page
 
 	Examples:
@@ -20,8 +27,12 @@ Scenario Outline: Login with valid credentials on Chrome
 		| Chrome  | user-0801@example.com | GOOD     |
 
 @Edge
-Scenario Outline: Login with valid credentials on Edge
+Scenario Outline: User validates blank fields on Edge
 	Given the following user with '<Username>' and '<Password>' wants to navigate to the warehouse page using '<Browser>'
+	Then the user clicks the add button
+	Then the user blanks out all fields
+	Then the user clicks the add warehouse button
+	And the user sees empty field error messages
 	Then the user closes the warehouse page
 
 	Examples:

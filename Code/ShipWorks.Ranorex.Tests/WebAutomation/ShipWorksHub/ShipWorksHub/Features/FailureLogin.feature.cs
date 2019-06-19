@@ -79,29 +79,21 @@ namespace ShipWorksHub.Features
         [Xunit.TheoryAttribute(DisplayName="Login with invalid credentials on Firefox")]
         [Xunit.TraitAttribute("FeatureTitle", "FailureLogin")]
         [Xunit.TraitAttribute("Description", "Login with invalid credentials on Firefox")]
-        [Xunit.TraitAttribute("Category", "Firefox,")]
-        [Xunit.TraitAttribute("Category", "Smoke")]
-        [Xunit.InlineDataAttribute("Firefox", new string[0])]
+        [Xunit.InlineDataAttribute("Firefox", new string[] {
+                "Firefox"})]
         public virtual void LoginWithInvalidCredentialsOnFirefox(string browser, string[] exampleTags)
         {
-            string[] @__tags = new string[] {
-                    "Firefox,",
-                    "Smoke"};
-            if ((exampleTags != null))
-            {
-                @__tags = System.Linq.Enumerable.ToArray(System.Linq.Enumerable.Concat(@__tags, exampleTags));
-            }
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Login with invalid credentials on Firefox", null, @__tags);
-#line 4
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Login with invalid credentials on Firefox", null, exampleTags);
+#line 3
 this.ScenarioInitialize(scenarioInfo);
             this.ScenarioStart();
-#line 5
+#line 4
  testRunner.Given(string.Format("the user is on login page on \'{0}\'", browser), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
-#line 6
+#line 5
  testRunner.Given("the user enters invalid username and password", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
-#line 7
+#line 6
  testRunner.Then("the user sees the error message", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
-#line 8
+#line 7
  testRunner.Then("the user closes the browser", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             this.ScenarioCleanup();

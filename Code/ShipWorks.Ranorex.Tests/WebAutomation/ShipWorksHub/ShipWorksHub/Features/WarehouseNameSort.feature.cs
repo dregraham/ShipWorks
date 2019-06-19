@@ -17,17 +17,17 @@ namespace ShipWorksHub.Features
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("TechTalk.SpecFlow", "3.0.0.0")]
     [System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    public partial class AddWarehouseFeature : Xunit.IClassFixture<AddWarehouseFeature.FixtureData>, System.IDisposable
+    public partial class WarehouseNameSortFeature : Xunit.IClassFixture<WarehouseNameSortFeature.FixtureData>, System.IDisposable
     {
         
         private static TechTalk.SpecFlow.ITestRunner testRunner;
         
         private Xunit.Abstractions.ITestOutputHelper _testOutputHelper;
         
-#line 1 "AddWarehouse.feature"
+#line 1 "WarehouseNameSort.feature"
 #line hidden
         
-        public AddWarehouseFeature(AddWarehouseFeature.FixtureData fixtureData, Xunit.Abstractions.ITestOutputHelper testOutputHelper)
+        public WarehouseNameSortFeature(WarehouseNameSortFeature.FixtureData fixtureData, Xunit.Abstractions.ITestOutputHelper testOutputHelper)
         {
             this._testOutputHelper = testOutputHelper;
             this.TestInitialize();
@@ -36,7 +36,7 @@ namespace ShipWorksHub.Features
         public static void FeatureSetup()
         {
             testRunner = TechTalk.SpecFlow.TestRunnerManager.GetTestRunner();
-            TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "AddWarehouse", null, ProgrammingLanguage.CSharp, ((string[])(null)));
+            TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "WarehouseNameSort", null, ProgrammingLanguage.CSharp, ((string[])(null)));
             testRunner.OnFeatureStart(featureInfo);
         }
         
@@ -76,13 +76,13 @@ namespace ShipWorksHub.Features
             this.ScenarioTearDown();
         }
         
-        [Xunit.TheoryAttribute(DisplayName="User adds a warehouse on Firefox")]
-        [Xunit.TraitAttribute("FeatureTitle", "AddWarehouse")]
-        [Xunit.TraitAttribute("Description", "User adds a warehouse on Firefox")]
+        [Xunit.TheoryAttribute(DisplayName="The user checks the sorting of the warehouse names on Firefox")]
+        [Xunit.TraitAttribute("FeatureTitle", "WarehouseNameSort")]
+        [Xunit.TraitAttribute("Description", "The user checks the sorting of the warehouse names on Firefox")]
         [Xunit.TraitAttribute("Category", "Firefox,")]
         [Xunit.TraitAttribute("Category", "Smoke")]
-        [Xunit.InlineDataAttribute("Firefox", "user-0801@example.com", "GOOD", new string[0])]
-        public virtual void UserAddsAWarehouseOnFirefox(string browser, string username, string password, string[] exampleTags)
+        [Xunit.InlineDataAttribute("Firefox", "user-9998@example.com", "GOOD", new string[0])]
+        public virtual void TheUserChecksTheSortingOfTheWarehouseNamesOnFirefox(string browser, string username, string password, string[] exampleTags)
         {
             string[] @__tags = new string[] {
                     "Firefox,",
@@ -91,7 +91,7 @@ namespace ShipWorksHub.Features
             {
                 @__tags = System.Linq.Enumerable.ToArray(System.Linq.Enumerable.Concat(@__tags, exampleTags));
             }
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("User adds a warehouse on Firefox", null, @__tags);
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("The user checks the sorting of the warehouse names on Firefox", null, @__tags);
 #line 4
 this.ScenarioInitialize(scenarioInfo);
             this.ScenarioStart();
@@ -99,25 +99,29 @@ this.ScenarioInitialize(scenarioInfo);
  testRunner.Given(string.Format("the following user with \'{0}\' and \'{1}\' wants to navigate to the warehouse page u" +
                         "sing \'{2}\'", username, password, browser), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line 6
- testRunner.Then("the user clicks the add button", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+ testRunner.Then("the user gets the list of all the warehouses", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line 7
- testRunner.Then("the user adds the Warehouse details", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+ testRunner.Then("the user clicks the add button", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line 8
- testRunner.Then("the user clicks the add warehouse button", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+ testRunner.Then("the user adds a warehouse to be sorted", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line 9
- testRunner.Then("the user verifies that they are back on the settings page", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+ testRunner.Then("the user clicks the add warehouse button", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line 10
+ testRunner.Then("the user verifies that they are back on the settings page", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+#line 11
+ testRunner.Then("the user verifies that the warehouses are sorted correctly", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+#line 12
  testRunner.Then("the user closes the warehouse page", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             this.ScenarioCleanup();
         }
         
-        [Xunit.TheoryAttribute(DisplayName="User adds a warehouse on Chrome")]
-        [Xunit.TraitAttribute("FeatureTitle", "AddWarehouse")]
-        [Xunit.TraitAttribute("Description", "User adds a warehouse on Chrome")]
+        [Xunit.TheoryAttribute(DisplayName="The user checks the sorting of the warehouse names on Chrome")]
+        [Xunit.TraitAttribute("FeatureTitle", "WarehouseNameSort")]
+        [Xunit.TraitAttribute("Description", "The user checks the sorting of the warehouse names on Chrome")]
         [Xunit.TraitAttribute("Category", "Chrome")]
-        [Xunit.InlineDataAttribute("Chrome", "user-0801@example.com", "GOOD", new string[0])]
-        public virtual void UserAddsAWarehouseOnChrome(string browser, string username, string password, string[] exampleTags)
+        [Xunit.InlineDataAttribute("Chrome", "user-9996@example.com", "GOOD", new string[0])]
+        public virtual void TheUserChecksTheSortingOfTheWarehouseNamesOnChrome(string browser, string username, string password, string[] exampleTags)
         {
             string[] @__tags = new string[] {
                     "Chrome"};
@@ -125,33 +129,37 @@ this.ScenarioInitialize(scenarioInfo);
             {
                 @__tags = System.Linq.Enumerable.ToArray(System.Linq.Enumerable.Concat(@__tags, exampleTags));
             }
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("User adds a warehouse on Chrome", null, @__tags);
-#line 17
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("The user checks the sorting of the warehouse names on Chrome", null, @__tags);
+#line 19
 this.ScenarioInitialize(scenarioInfo);
             this.ScenarioStart();
-#line 18
+#line 20
  testRunner.Given(string.Format("the following user with \'{0}\' and \'{1}\' wants to navigate to the warehouse page u" +
                         "sing \'{2}\'", username, password, browser), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
-#line 19
- testRunner.Then("the user clicks the add button", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
-#line 20
- testRunner.Then("the user adds the Warehouse details", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line 21
- testRunner.Then("the user clicks the add warehouse button", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+ testRunner.Then("the user gets the list of all the warehouses", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line 22
- testRunner.Then("the user verifies that they are back on the settings page", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+ testRunner.Then("the user clicks the add button", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line 23
+ testRunner.Then("the user adds a warehouse to be sorted", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+#line 24
+ testRunner.Then("the user clicks the add warehouse button", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+#line 25
+ testRunner.Then("the user verifies that they are back on the settings page", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+#line 26
+ testRunner.Then("the user verifies that the warehouses are sorted correctly", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+#line 27
  testRunner.Then("the user closes the warehouse page", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             this.ScenarioCleanup();
         }
         
-        [Xunit.TheoryAttribute(DisplayName="User adds a warehouse on Edge")]
-        [Xunit.TraitAttribute("FeatureTitle", "AddWarehouse")]
-        [Xunit.TraitAttribute("Description", "User adds a warehouse on Edge")]
+        [Xunit.TheoryAttribute(DisplayName="The user checks the sorting of the warehouse names on Edge")]
+        [Xunit.TraitAttribute("FeatureTitle", "WarehouseNameSort")]
+        [Xunit.TraitAttribute("Description", "The user checks the sorting of the warehouse names on Edge")]
         [Xunit.TraitAttribute("Category", "Edge")]
-        [Xunit.InlineDataAttribute("Edge", "user-0801@example.com", "GOOD", new string[0])]
-        public virtual void UserAddsAWarehouseOnEdge(string browser, string username, string password, string[] exampleTags)
+        [Xunit.InlineDataAttribute("Edge", "user-9994@example.com", "GOOD", new string[0])]
+        public virtual void TheUserChecksTheSortingOfTheWarehouseNamesOnEdge(string browser, string username, string password, string[] exampleTags)
         {
             string[] @__tags = new string[] {
                     "Edge"};
@@ -159,22 +167,26 @@ this.ScenarioInitialize(scenarioInfo);
             {
                 @__tags = System.Linq.Enumerable.ToArray(System.Linq.Enumerable.Concat(@__tags, exampleTags));
             }
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("User adds a warehouse on Edge", null, @__tags);
-#line 30
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("The user checks the sorting of the warehouse names on Edge", null, @__tags);
+#line 34
 this.ScenarioInitialize(scenarioInfo);
             this.ScenarioStart();
-#line 31
+#line 35
  testRunner.Given(string.Format("the following user with \'{0}\' and \'{1}\' wants to navigate to the warehouse page u" +
                         "sing \'{2}\'", username, password, browser), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
-#line 32
- testRunner.Then("the user clicks the add button", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
-#line 33
- testRunner.Then("the user adds the Warehouse details", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
-#line 34
- testRunner.Then("the user clicks the add warehouse button", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
-#line 35
- testRunner.Then("the user verifies that they are back on the settings page", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line 36
+ testRunner.Then("the user gets the list of all the warehouses", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+#line 37
+ testRunner.Then("the user clicks the add button", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+#line 38
+ testRunner.Then("the user adds a warehouse to be sorted", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+#line 39
+ testRunner.Then("the user clicks the add warehouse button", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+#line 40
+ testRunner.Then("the user verifies that they are back on the settings page", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+#line 41
+ testRunner.Then("the user verifies that the warehouses are sorted correctly", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+#line 42
  testRunner.Then("the user closes the warehouse page", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             this.ScenarioCleanup();
@@ -187,12 +199,12 @@ this.ScenarioInitialize(scenarioInfo);
             
             public FixtureData()
             {
-                AddWarehouseFeature.FeatureSetup();
+                WarehouseNameSortFeature.FeatureSetup();
             }
             
             void System.IDisposable.Dispose()
             {
-                AddWarehouseFeature.FeatureTearDown();
+                WarehouseNameSortFeature.FeatureTearDown();
             }
         }
     }

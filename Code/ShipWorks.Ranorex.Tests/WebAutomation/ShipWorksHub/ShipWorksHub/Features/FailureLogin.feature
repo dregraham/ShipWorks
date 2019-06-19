@@ -1,12 +1,12 @@
 ﻿Feature: FailureLogin
 
-@Firefox, @Smoke
 Scenario Outline: Login with invalid credentials on Firefox
 	Given the user is on login page on '<Browser>'
 	Given the user enters invalid username and password
 	Then the user sees the error message
 	Then the user closes the browser
 
+	@Firefox
 	Examples:
 		| Browser |
 		| Firefox |

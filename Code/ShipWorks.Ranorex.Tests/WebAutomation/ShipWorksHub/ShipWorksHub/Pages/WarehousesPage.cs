@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Support.UI;
 using Xunit;
@@ -7,31 +9,19 @@ namespace ShipWorksHub.Pages
 {
     class WarehousesPage
     {
+        public string settingsURL = "https://s2.www.warehouseapp.link/settings";
 
-        protected IWebElement CreateWarehouseButton => _driver.FindElement(By.XPath("//*[@id='root']/div/div[2]/div/header/div/button"));
-        protected IWebElement NameTxt => _driver.FindElement(By.Name("name"));
-        protected IWebElement CodeTxt => _driver.FindElement(By.Name("code"));
-        protected IWebElement StreetTxt => _driver.FindElement(By.Name("street"));
-        protected IWebElement CityTxt => _driver.FindElement(By.Name("city"));
-        protected IWebElement ZipTxt => _driver.FindElement(By.Name("zip"));
-        protected IWebElement StateDropDown => _driver.FindElement(By.XPath("//*[@id='root']/div/div[2]/div/article[1]/div/div[1]/label[4]/select"));
-        protected IWebElement AddWarehouseButton => _driver.FindElement(By.XPath("//*[@id='root']/div/div[2]/div/article/div/div[2]/button[2]/div"));
-        protected IWebElement CancelButton => _driver.FindElement(By.XPath("//*[@id='root']/div/div[2]/div/article/div/div[2]/button[1]/div"));
-        protected IWebElement EditButton => _driver.FindElement(By.XPath("//*[@id='root']/div/div[2]/div/article/div[2]/div/nav/div[1]/button/div"));
-        protected IWebElement SaveButton => _driver.FindElement(By.Name("saveWarehouse"));
+        public string warehousesHeadingText = "Warehouses";
+        public IWebElement warehousesHeading => _driver.FindElement(By.XPath("//*[@id='root']/div/div[2]/div/header[1]/h1"));
+        public IWebElement firstWarehouse => _driver.FindElement(By.XPath("//*[@id='root']/div/div[2]/div/article[1]/div[1]/div/header/div[1]/h2"));
+        protected IWebElement ChangeAddress => _driver.FindElement(By.XPath("/html/body/div/div/div[2]/div/article[1]/div[1]/nav/div[2]/button/div"));
+        public IWebElement CreateWarehouseButton => _driver.FindElement(By.XPath("//*[@id='root']/div/div[2]/div/header/div/button"));
         protected IWebElement RemoveButton => _driver.FindElement(By.XPath("//*[@id='root']/div/div[2]/div/article/div[2]/div/nav/div[2]/button/div"));
-        protected IWebElement NameCharacterLimitMessage => _driver.FindElement(By.XPath("//*[@id='root']/div/div[2]/div/article/div/div[2]/label[1]/span[2]"));
-        protected IWebElement CodeCharacterLimitMessage => _driver.FindElement(By.XPath("//*[@id='root']/div/div[2]/div/article/div/div[2]/label[2]/span[2]"));
-        protected IWebElement StreetCharacterLimitMessage => _driver.FindElement(By.XPath("//*[@id='root']/div/div[2]/div/article/div/div[2]/label[3]/span[2]"));
-        protected IWebElement CityCharacterLimitMessage => _driver.FindElement(By.XPath("//*[@id='root']/div/div[2]/div/article/div/div[2]/label[4]/span[2]"));
-        protected IWebElement StateBlankMessage => _driver.FindElement(By.XPath("//*[@id='root']/div/div[2]/div/article/div/div[2]/label[5]/span[2]"));
-        protected IWebElement ZipRequiredMessage => _driver.FindElement(By.XPath("//*[@id='root']/div/div[2]/div/article/div/div[2]/label[6]/span[2]"));
-        protected IWebElement ZipInvalidMessage => _driver.FindElement(By.XPath("//*[@id='root']/div/div[2]/div/article/div/div[2]/label[6]/span[3]"));
-        public IWebElement DoNotRemoveWareHouseName => _driver.FindElement(By.XPath("//*[@id='root']/div/div[2]/div/article/div[2]/header/h2"));
-        public IWebElement DoNotRemoveWarehouseTwoStreetName => _driver.FindElement(By.XPath("//*[@id='root']/div/div[2]/div/article/div[2]/div/div/div[1]"));
-        public IWebElement DoNotRemoveWarehouseTwoCityStateZipName => _driver.FindElement(By.XPath("//*[@id='root']/div/div[2]/div/article/div[2]/div/div/div[2]"));
+        public IWebElement DoNotRemoveWareHouseName => _driver.FindElement(By.XPath("/html/body/div/div/div[2]/div/article[1]/div/div/header/div[1]/h2"));
+        public IWebElement DoNotRemoveWarehouseTwoStreetName => _driver.FindElement(By.XPath("/html/body/div/div/div[2]/div/article[1]/div/div/div/div[1]"));
+        public IWebElement DoNotRemoveWarehouseTwoCityStateZipName => _driver.FindElement(By.XPath("/html/body/div/div/div[2]/div/article[1]/div/div/div/div[2]"));
         public IWebElement DoNotRemoveWarehouseTwoCodeName => _driver.FindElement(By.XPath("//*[@id='root']/div/div[2]/div/article/div[2]/header/div"));
-        public IWebElement OnlyDefaultText => _driver.FindElement(By.XPath("//*[@id='root']/div/div[2]/div/article/div/div/div/div[3]/div"));
+        public IWebElement CheckMarkDefaultText => _driver.FindElement(By.XPath("//*[@id='root']/div/div[2]/div/article[1]/div[1]/nav/div[1]/div"));
         public IWebElement FirstDefaultText => _driver.FindElement(By.XPath("//*[@id='root']/div/div[2]/div/article/div[1]/div/div/div[3]/div"));
         public IWebElement SecondDefaultText => _driver.FindElement(By.XPath("//*[@id='root']/div/div[2]/div/article/div[2]/div/div/div[3]/div"));
         public IWebElement SecondDefaultButton => _driver.FindElement(By.XPath("//*[@id='root']/div/div[2]/div/article/div[2]/div/div/div[3]/button/div"));
@@ -42,11 +32,61 @@ namespace ShipWorksHub.Pages
         public IWebElement SecondWarehouseNameText => _driver.FindElement(By.XPath("//*[@id='root']/div/div[2]/div/article/div[2]/header/h2"));
         public IWebElement ThirdWarehouseNameText => _driver.FindElement(By.XPath("//*[@id='root']/div/div[2]/div/article/div[3]/header/h2"));
 
-        public string WarehouseList = "sc-jDwBTQ dJEIm"; //css selector for warehouse list
-        //public string WarehouseList = "div.sc-brqgnP"; //css selector for warehouse list
+        public string WarehouseList = "div.sc-hzDkRC"; // use css selector of div and not article instead of xpath from context menu for warehouse list
 
         private IWebDriver _driver;
+        
+        List<string> list = new List<string>();
+
+        string lastWarehouseName;
+
         public WarehousesPage(IWebDriver driver) => _driver = driver;
+
+        public bool CheckIfNotDefault()
+        {
+            GetListOfWarehouseNames();
+            int compareMax = Int32.Parse(list.Max().TrimStart('A'));
+            bool displayed = false;
+
+            displayed = _driver.FindElement(By.XPath($"/html/body/div/div/div[2]/div/article[1]/div[{compareMax}]/nav/div[1]/button/div")).Displayed;
+
+            return displayed;
+        }
+
+        public string GetListOfWarehouseNames()
+        {
+            int listMax = _driver.FindElements(By.CssSelector(WarehouseList)).Count;
+            
+            for (int listIndex = 1; listIndex <= listMax; listIndex++)
+            {
+                list.Add(_driver.FindElement(By.XPath($"//*[@id='root']/div/div[2]/div/article[1]/div[{listIndex}]/div/header/div[1]/h2")).Text);
+            }
+            
+            return list.Max();
+        }
+
+        public void CheckWarehouseSort()
+        {
+            GetListOfWarehouseNames();  //  GET LATEST LIST OF WAREHOUSES
+
+            int compareMax = Int32.Parse(list.Max().TrimStart('A'));
+            string warehouseXpath, warehouseName;
+
+            for (int compareIndex = 0; compareIndex < compareMax; compareIndex++)
+            {
+                warehouseXpath = $"//*[@id='root']/div/div[2]/div/article[1]/div[{compareIndex + 1}]/div/header/div[1]/h2";
+                warehouseName = _driver.FindElement(By.XPath(warehouseXpath)).Text;
+                Assert.Equal($"A{compareIndex + 1}", warehouseName);
+            }
+        }
+
+        public string NewWarehouseName(int lastWarehouse)
+        {
+            //int warehouseint = Int32.Parse(lastName.TrimStart('A')) + 1;
+            
+            lastWarehouseName = $"A{++lastWarehouse}";
+            return lastWarehouseName;
+        }
 
         public void CreateWarehouse()
         {
@@ -62,50 +102,6 @@ namespace ShipWorksHub.Pages
             }
         }
 
-        public void AddWarehouseDetails(string[] details)
-        {
-            try
-            {
-                var StateName = new SelectElement(StateDropDown);
-                NameTxt.SendKeys(details[0]);
-                //CodeTxt.SendKeys(details[1]);
-                StreetTxt.SendKeys(details[2]);
-                CityTxt.SendKeys(details[3]);
-                StateName.SelectByValue(details[4]);
-                ZipTxt.SendKeys(details[5]);
-            }
-            catch (Exception e)
-            {
-                WarehousePageQuit();
-                throw new Exception("Automation failed at WarehousePage.AddWarehouseDetails method. Exception: " + e);
-            }
-        }
-
-        public void AddWarehouse()
-        {
-            try
-            {
-                AddWarehouseButton.Click();
-            }
-            catch (Exception e)
-            {
-                WarehousePageQuit();
-                throw new Exception("Automation failed at WarehousePage.AddWarehouse method. Exception: " + e);
-            }
-        }
-
-        public void Cancel()
-        {
-            try
-            {
-                CancelButton.Click();
-            }
-            catch (Exception e)
-            {
-                WarehousePageQuit();
-                throw new Exception("Automation failed at WarehousePage.Cancel method. Exception: " + e);
-            }
-        }
         public void WarehousePageQuit()
         {
             try
@@ -122,50 +118,12 @@ namespace ShipWorksHub.Pages
         {
             try
             {
-                EditButton.Click();
+                ChangeAddress.Click();
             }
             catch (Exception e)
             {
                 WarehousePageQuit();
                 throw new Exception("Automation failed at WarehousePage.Edit method. Exception: " + e);
-            }
-        }
-
-        public void EditWarehouseDetails(string[] details)
-        {
-            try
-            {
-                var StateName = new SelectElement(StateDropDown);
-
-                NameTxt.Clear();
-                NameTxt.SendKeys(details[0]);
-                CodeTxt.Clear();
-                CodeTxt.SendKeys(details[1]);
-                StreetTxt.Clear();
-                StreetTxt.SendKeys(details[2]);
-                CityTxt.Clear();
-                CityTxt.SendKeys(details[3]);
-                ZipTxt.Clear();
-                ZipTxt.SendKeys(details[5]);
-                StateName.SelectByValue(details[4]);
-            }
-            catch (Exception e)
-            {
-                WarehousePageQuit();
-                throw new Exception("Automation failed at WarehousePage.EditWarehouseDetails method. Exception: " + e);
-            }
-        }
-
-        public void Save()
-        {
-            try
-            {
-                SaveButton.Click();
-            }
-            catch (Exception e)
-            {
-                WarehousePageQuit();
-                throw new Exception("Automation failed at WarehousePage.Save method. Exception: " + e);
             }
         }
 
@@ -182,72 +140,31 @@ namespace ShipWorksHub.Pages
             }
         }
 
-        public void ValidateFieldLengthErrorMessages()
-        {
-            try
-            {
-                Assert.Contains("Name cannot be longer than 500 characters", NameCharacterLimitMessage.Text);
-                Assert.Contains("Code cannot be longer than 500 characters", CodeCharacterLimitMessage.Text);
-                Assert.Contains("Street cannot be longer than 500 characters", StreetCharacterLimitMessage.Text);
-                Assert.Contains("City cannot be longer than 500 characters", CityCharacterLimitMessage.Text);
-            }
-            catch (Exception e)
-            {
-                WarehousePageQuit();
-                throw new Exception("Automation failed at WarehousePage.ValidateFieldLengthErrorMessages method. Exception: " + e);
-            }
-        }
-
-        public void ValidateBlankFieldMessages()
-        {
-            try
-            {
-                Assert.Contains("Name is required", NameCharacterLimitMessage.Text);
-                Assert.Contains("Code is required", CodeCharacterLimitMessage.Text);
-                Assert.Contains("Street is required", StreetCharacterLimitMessage.Text);
-                Assert.Contains("City is required", CityCharacterLimitMessage.Text);
-                Assert.Contains("State is required", StateBlankMessage.Text);
-                Assert.Contains("Zip is required", ZipRequiredMessage.Text);
-                Assert.Contains("Zip must be a valid zip code", ZipInvalidMessage.Text);
-            }
-            catch (Exception e)
-            {
-                WarehousePageQuit();
-                throw new Exception("Automation failed at WarehousePage.ValidateBlankFieldMessages method. Exception: " + e);
-            }
-        }
-
-        public void BlankOutFields()
-        {
-            try
-            {
-                var StateName = new SelectElement(StateDropDown);
-
-                StateName.SelectByValue("");
-                NameTxt.SendKeys(Keys.Control + "a" + Keys.Control + Keys.Delete);
-                CodeTxt.SendKeys(Keys.Control + "a" + Keys.Control + Keys.Delete);
-                StreetTxt.SendKeys(Keys.Control + "a" + Keys.Control + Keys.Delete);
-                CityTxt.SendKeys(Keys.Control + "a" + Keys.Control + Keys.Delete);
-                ZipTxt.SendKeys(Keys.Control + "a" + Keys.Control + Keys.Delete);
-            }
-            catch (Exception e)
-            {
-                WarehousePageQuit();
-                throw new Exception("Automation failed at WarehousePage.BlankOutFields method. Exception: " + e);
-            }
-        }
-
         public void CompareWarehouseDetails()
         {
             Assert.Equal("Do Not Remove", DoNotRemoveWareHouseName.Text);
             Assert.Equal("1 Memorial Drive", DoNotRemoveWarehouseTwoStreetName.Text);
             Assert.Equal("St. Louis, MO 63102", DoNotRemoveWarehouseTwoCityStateZipName.Text);
-            Assert.Equal("Code 2", DoNotRemoveWarehouseTwoCodeName.Text);
         }
 
-        public void MakeWarehouseDefault(IWebElement button)
+        public string MakeWarehouseDefault(string warehouse, string warehouseName)
         {
-            button.Click();
+            GetListOfWarehouseNames();
+
+            int i = list.FindIndex(0, x => x == warehouseName);
+
+            switch (warehouse)
+            {
+                case "First":
+                    warehouse = "/html/body/div/div/div[2]/div/article[1]/div[1]/nav/div[1]/button/div";
+                    _driver.FindElement(By.XPath(warehouse)).Click();                    
+                    break;
+                case "New":
+                    warehouse = $"/html/body/div/div/div[2]/div/article[1]/div[{++i}]/nav/div[1]/button/div";
+                    _driver.FindElement(By.XPath(warehouse)).Click();
+                    break;
+            }
+            return warehouse;
         }
     }
 }
