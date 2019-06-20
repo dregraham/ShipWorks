@@ -39,7 +39,7 @@ namespace Interapptive.Shared.Tests.Utility
         public void DecodeHtmlWithoutXml_LeavesMultiEncodedXmlSingleEncoded()
         {
             string testString = "<parentnode><node12>This &amp;amp;amp;amp;amp; That &amp;amp;amp;quot;</node12></parentnode>";
-            string expected = "<parentnode><node12>This &amp; That \"</node12></parentnode>";
+            string expected = "<parentnode><node12>This &amp; That &quot;</node12></parentnode>";
             string actual = HtmlEntityUtility.DecodeHtmlWithoutXml(testString);
 
             Assert.Equal(expected, actual);
@@ -58,8 +58,8 @@ namespace Interapptive.Shared.Tests.Utility
         [Fact]
         public void DecodeHtmlWithoutXml_LeavesMultiEncodedXmlSingleEncoded_WhenMultiEncodedHtml()
         {
-            string testString = "<node x='y' z='q'>This &amp;amp;amp;amp; That&amp;amp;amp;amp;amp;amp;amp;amp;trade;</node>";
-            string expected = "<node x='y' z='q'>This &amp; That™</node>";
+            string testString = "<node x='y' z='q'>This &amp;amp;amp;amp; &amp;amp;lt; That&amp;amp;amp;amp;amp;amp;amp;amp;trade;</node>";
+            string expected = "<node x='y' z='q'>This &amp; &lt; That™</node>";
             string actual = HtmlEntityUtility.DecodeHtmlWithoutXml(testString);
 
             Assert.Equal(expected, actual);
