@@ -760,6 +760,94 @@ MccVydhgafzKwmo3c6RCyF+QF9ssNPjvRAAAAABJRU5ErkJggg==
 				searchtimeout="30000ms">
 					/form[@controlname='MainForm']/container[@controlname='panelDockingArea']/?/?/container[@controlname='dockableWindowOrderFilters']//rawtext[@rawtext='100Orders']
 				</item>
+				<item
+				addcaps="container,uiautomation"
+				capname="container"
+				id="4ffba29c-b19e-4096-8e7d-7ad3d7065abe"
+				name="PARTContentHost"
+				refimgid="e6fb38c4-ee56-41c4-80de-a0c48e40fc6e"
+				refpath="/form[@controlname='MainForm']/container[@controlname='panelDockingArea']/container[@controlname='OrderLookupControl']/element/container/element/element/element/element/text/container[@automationid='PART_ContentHost']"
+				searchtimeout="30000ms">
+					/form[@controlname='MainForm']/container[@controlname='panelDockingArea']//container[@classname='Pane']/?/?/element[@automationid='a']//text[@automationid='a']/container[@automationid='PART_ContentHost']
+				</item>
+				<item
+				addcaps="button,uiautomation,uiautomationinvoke"
+				capname="button"
+				id="9f8c90ee-9d54-4682-aa4d-bf112c4235ed"
+				name="Button"
+				refimgid="07f6bbea-f845-4367-b4a4-590516055779"
+				refpath="/form[@controlname='MainForm']/container[@controlname='panelDockingArea']/container[@controlname='OrderLookupControl']/element/container/element/element/element/element/button[@classname='Button']"
+				searchtimeout="30000ms">
+					/form[@controlname='MainForm']/container[@controlname='panelDockingArea']/container[@controlname='OrderLookupControl']/?/?/container[@classname='Pane']/?/?/element[@automationid='a']/?/?/element/button[@classname='Button']
+				</item>
+				<item
+				addcaps="text,uiautomation"
+				capname="text"
+				id="03e52c6a-b070-42ec-9375-60e8755bdc57"
+				name="ShipmentDetails"
+				refimgid="a7fbe8ca-e1be-45e2-8e94-25273587cc88"
+				refpath="/form[@controlname='MainForm']/container[@controlname='panelDockingArea']/container[@controlname='OrderLookupControl']/element[@controltypename='ElementHost']/container[@classname='Pane']/element[@orientation='None']/element[@automationid='a']/container[@classname='ScrollViewer']/element[@name='Shipment Details']/container[@name='Shipment Details']/button[@automationid='HeaderSite']/text[@name='Shipment Details']"
+				searchtimeout="30000ms">
+					/form[@controlname='MainForm']/container[@controlname='panelDockingArea']//container[@classname='Pane']//element[@name='Shipment Details']/container[@name='Shipment Details']/button[@automationid='HeaderSite']/text[@name='Shipment Details']
+				</item>
+				<item
+				addcaps="button,uiautomation,uiautomationinvoke"
+				capname="button"
+				id="5f66a60a-df39-46f3-8063-cb895fcefb0c"
+				name="CreateLabel"
+				refimgid="9f60f218-93f2-44b3-88b2-f2a7ca4fb8df"
+				searchtimeout="30000ms">
+					/form[@controlname='MainForm']/container[@controlname='panelDockingArea']//container[@classname='Pane']/?/?/element[@automationid='a']/?/?/button[@name='Create Label' and @visible='True']
+				</item>
+				<item
+				addcaps="container,uiautomation"
+				capname="container"
+				id="35d0f9ad-df1d-4c4d-9716-44e9cb15bf8f"
+				name="PARTContentHost1"
+				refimgid="33888305-30b9-47d4-bff5-88eff7aaa6a2"
+				refpath="/form[@controlname='MainForm']/container[@controlname='panelDockingArea']/container[@controlname='OrderLookupControl']/element[@controltypename='ElementHost']/container[@classname='Pane']/element[@orientation='None']/element[@automationid='a']/container[@classname='ScrollViewer']/element[@name='To April Carson (Domestic)']/container[@name='To April Carson (Domestic)']/element[@classname='dpc']/element[@classname='do3']/text[5]/container[@automationid='PART_ContentHost']"
+				searchtimeout="30000ms">
+					<image
+					guid="cdb47dd5-a7df-4e13-8c81-313611846a64"
+					name="Screenshot1">
+						iVBORw0KGgoAAAANSUhEUgAAAfEAAAAaCAYAAACnxmWIAAAABGdBTUEAALGPC/xhBQAAAAlwSFlz
+AAAOxAAADsQBlSsOGwAAAJtJREFUeF7t1YkNgEAQA7Htv1/eA0IdkTySa5jZti0AQJ/Z9z0AQB8T
+B4BSJg4ApeY4jgAAfUwcAErNeZ4BAPqYOACUMnEAKDXXdQUA6GPiAFDKxAGg1Nz3HQCgj4kDQKlZ
+awUA6GPiAFDKxAGg1DzPEwCgj4kDQKl53zcAQB8TB4BSJg4Apeb7vgAAfUwcAEqZOACUmkiSpMKS
+HyK5OmDIo8YYAAAAAElFTkSuQmCC
+					</image>
+					/form[@controlname='MainForm']/container[@controlname='panelDockingArea']//container[@classname='Pane']/?/?/element[@automationid='a']/?/?/element[@name~'^To\ April\ Carson\ \(Domestic']/container[@name~'^To\ April\ Carson\ \(Domestic']/?/?/element/text[5]/container[@automationid='PART_ContentHost']
+				</item>
+				<item
+				addcaps="container,uiautomation"
+				capname="container"
+				id="fa363767-4b48-4404-8013-33376718ed06"
+				name="PARTContentHost2"
+				refimgid="b95508a9-b353-4ab9-bb3e-1ac6f97a44df"
+				refpath="/form[@controlname='MainForm']/container[@controlname='panelDockingArea']/container[@controlname='OrderLookupControl']/element/container/element/element/container/element[@name~'^To\ Glen\ Woodard\ \(Domestic']/container/element/element/text[5]/container[@automationid='PART_ContentHost']"
+				searchtimeout="30000ms">
+					/form[@controlname='MainForm']/container[@controlname='panelDockingArea']//container[@classname='Pane']/?/?/element[@automationid='a']/?/?/element[@name~'^To\ Glen\ Woodard\ \(Domestic']/container[@name~'^To\ Glen\ Woodard\ \(Domestic']/?/?/element/text[5]/container[@automationid='PART_ContentHost']
+				</item>
+				<item
+				addcaps="container,uiautomation"
+				capname="container"
+				id="61b4659c-c17a-4998-ab4b-d2a10ebacfc4"
+				name="PARTContentHost3"
+				refimgid="746f9b15-eac2-479b-813c-1a2d2182fadb"
+				refpath="/form[@controlname='MainForm']/container[@controlname='panelDockingArea']/container[@controlname='OrderLookupControl']/element[@controltypename='ElementHost']/container[@classname='Pane']/element[@orientation='None']/element[@automationid='a']/container[@classname='ScrollViewer']/element[@name='From Account: (None), Other Address']/container[@name='From Account: (None), Other Address']/element[@classname='dqx']/element[@classname='do3']/text[5]/container[@automationid='PART_ContentHost']"
+				searchtimeout="30000ms">
+					/form[@controlname='MainForm']/container[@controlname='panelDockingArea']//container[@classname='Pane']/?/?/element[@automationid='a']/?/?/element[@name~'^From\ Account:\ \(None\),\ Oth']/container[@name~'^From\ Account:\ \(None\),\ Oth']/?/?/element/text[5]/container[@automationid='PART_ContentHost']
+				</item>
+				<item
+				addcaps="container,uiautomation"
+				capname="container"
+				id="1018b857-0e1a-46d4-9da2-9cd194534388"
+				name="PARTContentHost4"
+				refimgid="8a27f279-db77-4ae8-adee-851be66ddd73"
+				refpath="/form[@controlname='MainForm']/container[@controlname='panelDockingArea']/container[@controlname='OrderLookupControl']/element[@controltypename='ElementHost']/container[@classname='Pane']/element[@orientation='None']/element[@automationid='a']/container[@classname='ScrollViewer']/element[@name='To Cheryl Briggs (Domestic)']/container[@name='To Cheryl Briggs (Domestic)']/element[@classname='do9']/element[@classname='do3']/text[5]/container[@automationid='PART_ContentHost']"
+				searchtimeout="30000ms">
+					/form[@controlname='MainForm']/container[@controlname='panelDockingArea']//container[@classname='Pane']/?/?/element[@automationid='a']/?/?/element[@name~'^To\ Cheryl\ Briggs\ \(Domesti']/container[@name~'^To\ Cheryl\ Briggs\ \(Domesti']/?/?/element/text[5]/container[@automationid='PART_ContentHost']
+				</item>
 				<basepath>
 					/form[@controlname='MainForm']/container[@controlname='panelDockingArea']
 				</basepath>
@@ -820,6 +908,16 @@ MccVydhgafzKwmo3c6RCyF+QF9ssNPjvRAAAAABJRU5ErkJggg==
 			refpath="/form[@controlname='MainForm']/element[@controlname='statusBar']/rawtext[@rawtext='Selected: 100']"
 			searchtimeout="30000ms">
 				/form[@controlname='MainForm']/?/?/rawtext[@rawtext='Selected: 100']
+			</item>
+			<item
+			addcaps="unknown,rawtext"
+			capname="rawtext"
+			id="e29dfe24-c53f-4a5c-9ec1-89e83e709a33"
+			name="Void"
+			refimgid="0267f3a0-a9af-4274-ad31-a30fa56c58ec"
+			refpath="/form[@controlname='MainForm']/element[@controlname='ribbon']/element[@controlname='ribbonTabOrderLookupViewShipping']/rawtext[@rawtext='Void']"
+			searchtimeout="30000ms">
+				/form[@controlname='MainForm']/?/?/element[@controlname='ribbonTabOrderLookupViewShipping']/rawtext[@rawtext='Void']
 			</item>
 			<basepath>
 				/form[@controlname='MainForm']
@@ -1040,6 +1138,16 @@ XrLp0EM2aG+RntUiB+ZT6fxfIsRPbYnQgbXhGFYAAAAASUVORK5CYII=
 			refpath="/form[@title='' and @processname='ShipWorks' and @controltypename='xbc4f5b163cf61008']/element[@controlname='x97aec1d74fddac1d']/rawtext[@rawtext='Log Off']"
 			searchtimeout="30000ms">
 				/form[@processname='ShipWorks' and @controltypename='xbc4f5b163cf61008']/?/?/rawtext[@rawtext='Log Off']
+			</item>
+			<item
+			addcaps="unknown,accessible"
+			capname="unknown"
+			id="e648d710-6c89-418a-945c-c1445514c322"
+			name="ViewMode"
+			refimgid="2258f87b-170b-40ff-890d-cacef915ca8c"
+			refpath="/form[@title='' and @processname='ShipWorks' and @controltypename='xbc4f5b163cf61008' and @instance='1']/element/toolbar/element[@accessiblename='View Mode']"
+			searchtimeout="30000ms">
+				/form[@processname='ShipWorks' and @controltypename='xbc4f5b163cf61008']/?/?/toolbar[@accessiblerole='ToolBar']/element[@accessiblename='View Mode']
 			</item>
 			<basepath>
 				/form[@processname='ShipWorks' and @controltypename='xbc4f5b163cf61008']
@@ -2787,6 +2895,107 @@ AElFTkSuQmCC
 			</item>
 			<basepath>
 				/form[@name='ShipWorks']
+			</basepath>
+			<icon>
+				iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACx
+jwv8YQUAAAAJcEhZcwAADsQAAA7EAZUrDhsAAALYSURBVDhPfZF9LNRxHMe//5SnWhNZpglLOUeL
+G2mr1mVqJY1i62ZSCjWTodjKQ62QpgersUZxqpnKQ7o8n4ehUsk5bpwT5dyT54iw3Lufn9+S3ea9
+vfZ9+rxfvz9+ZLW4R/GdLAIz3Nx87xowV6vnQ0c/q3dkPr5VPlOZ+2X0V6ZQjjtFMvAetMD2qrDH
++lpNgVlY0R5mXDdVPZMJtbIp9I3MonvoN+r6psD/qEJAVitYiUKQkBKQs/khzLhuEgSy8OSGIQh7
+JpHXNoakeg3CC6Ug54uXyqFvQAJz/Jlx3YRmNp6+UtyHlIoBmhhqf/KpeLm8CC/bmxnXjW9cwfGL
+2WJcyGqnWdzvT/+8UuDzwIMZ101kairXK+U9jt9uYmiG/c3G/wSlOOd9+eLjEM4apkKIpCWXrR3O
+u6yVHqmV1PHm9iUJsDGqEiYUptHUGlsNEkwJKDyjsyFOjIA04MTs1527atpd3WKI9kfcHDQvgIlm
+aEcFmJeGorU+HmnPbuBQQhpsY0pxPUeI76/5GIoOQ+9RL3wLCoLU8xhEtuwF8qfNRKmV8aCV38eC
+yBwLiiSoqjdDWb4WqgJXDD9JwmRjCTTP70KVdQuah/cg2rodImu7RWbIeJOP5OenYMx0pWK8yQ/T
+kngMlq2Folwfcr4t+mPPQJmZCHnyJXyL4kEeGQaR1Q6027AWmSCqKpdmdTUH6mpnqKucMP7JjxLo
+0YKBHHNIeR7o5rmj+9RBmn5/X/rrtMCaNUwUZWYCRfkmqmBKM9LoTAn0lwR8Y0i4LujkcpY4wIHs
+MHdZYMNSEnWlYYiywnBMUW5EFQ2hqbX8JxjMX98gcbKv7XB0gNiRDbEDG10uHEZgN00JIuhfmR5O
+9OTvDIOVFQadqioTKMr01AMCfR79SOXtFhuHzm2sLLE1a7bTjo0OG7uXhZaW5szzypQ9Wrc3L5oY
+MccVydhgafzKwmo3c6RCyF+QF9ssNPjvRAAAAABJRU5ErkJggg==
+			</icon>
+		</appfolder>
+		<appfolder
+		addcaps="form,nativewindow"
+		capname="form"
+		id="b172d9a7-8bfd-45ad-b405-83107830ca3a"
+		isrooted="True"
+		name="SavePrintOutputAs"
+		searchtimeout="30000ms"
+		usecache="True">
+			<item
+			addcaps="unknown,rawtext"
+			capname="rawtext"
+			id="99d89f31-9435-44a4-b37d-2c03565e21e0"
+			name="Desktop"
+			refimgid="f11199ed-229c-4620-95a8-7710a0293855"
+			searchtimeout="30000ms">
+				/form[@title='Save Print Output As']/element[@class='DUIViewWndClassName']//tree[@controlid='100']/rawtext[3]
+			</item>
+			<item
+			addcaps="text,uiautomation,uiautomationvalue"
+			capname="text"
+			id="a4248946-8fd4-417b-94c9-19d2a5c8c6a1"
+			name="SystemItemNameDisplay"
+			refimgid="26c93413-79c7-43e6-8176-a738daa7fb29"
+			searchtimeout="30000ms">
+				/form[@title='Save Print Output As']/element[@class='DUIViewWndClassName']/?/?/element[@instance='1']//listitem[@automationid='4']/text[@automationid='System.ItemNameDisplay' and @text=null()]
+			</item>
+			<item
+			addcaps="text,uiautomation,uiautomationvalue"
+			capname="text"
+			id="97ddbcb3-6c71-48d4-b283-d2a513a62b0e"
+			name="SystemItemTypeText"
+			refimgid="fec1ca34-a561-43fc-9eb0-c93a23fe10d3"
+			searchtimeout="30000ms">
+				/form[@title='Save Print Output As']/element[@class='DUIViewWndClassName']/?/?/element[@instance='1']//listitem[@automationid='4']/text[@automationid='System.ItemTypeText']
+			</item>
+			<item
+			addcaps="text,uiautomation,uiautomationvalue"
+			capname="text"
+			id="5ea3eeb9-119f-4ad8-b7a5-393875780be4"
+			name="SystemItemNameDisplay1"
+			refimgid="48fecc04-e6d1-41dc-baa0-31ab52cf5991"
+			searchtimeout="30000ms">
+				/form[@title='Save Print Output As']/element[@class='DUIViewWndClassName']/?/?/element[@instance='1']//listitem[@automationid='2']/text[@automationid='System.ItemNameDisplay']
+			</item>
+			<item
+			addcaps="unknown,rawtext"
+			capname="rawtext"
+			id="efbd854d-37a5-40d1-8ef0-9b0385c3d951"
+			name="RawTextOpen"
+			refimgid="9d53f528-646c-47c9-97c7-467c706866f7"
+			searchtimeout="30000ms">
+				/form[@title='Save Print Output As']/?/?/rawtext[@rawtext='&amp;amp;Open']
+			</item>
+			<item
+			addcaps="text,uiautomation,uiautomationvalue"
+			capname="text"
+			id="ea409f34-5495-4ba2-ae74-ef85a539fe5a"
+			name="SystemItemNameDisplay2"
+			refimgid="99650ef4-e0c5-4639-a985-a4659179e33f"
+			searchtimeout="30000ms">
+				/form[@title='Save Print Output As']/element[@class='DUIViewWndClassName']/?/?/element[@instance='1']//listitem[@automationid='5']/text[@automationid='System.ItemNameDisplay' and @caption='Generic Performance']
+			</item>
+			<item
+			addcaps="toolbar,nativewindow"
+			capname="toolbar"
+			id="aba295b4-92c4-4dff-a5e3-620ba1c27bbd"
+			name="ToolBar1001"
+			refimgid="f5f9a646-b08e-493e-9cdb-625738b8d21b"
+			searchtimeout="30000ms">
+				/form[@title='Save Print Output As']/element[@class='WorkerW']/?/?/element[@controlid='41477']//toolbar[@controlid='1001']
+			</item>
+			<item
+			addcaps="combobox,nativewindow"
+			capname="text"
+			id="6d22d07c-2cc2-416b-9ca8-88ccc3b8f9d7"
+			name="ComboBox1148"
+			refimgid="82dc7d84-8c18-456a-8f5c-bcafa69468e3"
+			searchtimeout="30000ms">
+				/form[@title='Save Print Output As']/?/?/?/?/text[@controlid='1001']
+			</item>
+			<basepath>
+				/form[@title='Save Print Output As']
 			</basepath>
 			<icon>
 				iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACx

@@ -4,11 +4,21 @@ rxversion="8.1">
 	<testsuiteentryhierarchy>
 		<flatlistofchildren>
 			<testmodule
+			id="01dcb695-b5d8-44e3-82e9-cfb99b808586"
+			name="LoopNumber"
+			ref="4d233eca-93e5-4260-9280-bc5314c223fb"
+			type="UserCode">
+			</testmodule>
+			<testmodule
 			id="044977bc-3d9a-40ac-80b1-ba948ad57331"
 			name="ProcessOrders"
 			ref="c7feaad9-b5ed-4097-9a55-e8ed71d09bbe"
 			type="UserCode">
 			</testmodule>
+			<smartfoldernode
+			id="0a9541f2-0668-433c-9d03-1cf101138b9b"
+			name="BatchGrid">
+			</smartfoldernode>
 			<testsuite
 			ReportTime="RelativeToTestSuiteStartTime"
 			TracingScreenshotMode="Foreground"
@@ -24,14 +34,34 @@ rxversion="8.1">
 			showinvisiblechars="True">
 			</testsuite>
 			<testmodule
+			id="0f5394fe-a2a7-46f5-921a-baf517bd3567"
+			name="EnterOrder"
+			ref="e739ee77-ca31-4989-93fc-194882657b8c"
+			type="UserCode">
+			</testmodule>
+			<smartfoldernode
+			id="10548d00-b2e1-47d3-bcb3-fa8f658269ad"
+			name="OrderLookupMode">
+			</smartfoldernode>
+			<testmodule
 			id="12fede29-aacf-4ec3-b89e-d554377c74d9"
 			name="Select500OrdersFilter"
 			ref="f1962406-94ae-46ac-becf-f04035c3bd15"
 			type="UserCode">
 			</testmodule>
+			<testmodule
+			id="15eb84e7-b66b-4c64-8e16-3705cacdb6d0"
+			name="VoidLabel"
+			ref="cdff00af-93c5-4627-ac76-cc066dea4b0a"
+			type="UserCode">
+			</testmodule>
 			<smartfoldernode
 			id="1638e2bc-c8c9-4e7c-bba8-c7e6dd7e6742"
 			name="eCommerceBaseline_II">
+			</smartfoldernode>
+			<smartfoldernode
+			id="16a24b29-3c87-44ca-9878-4abaff33a75f"
+			name="ProcessShipment">
 			</smartfoldernode>
 			<testmodule
 			enabled="False"
@@ -44,6 +74,12 @@ rxversion="8.1">
 			id="2fd80ddb-0f79-49ec-9ee8-d447041c909d"
 			name="ApplyProfileTo100Orders"
 			ref="4833ecee-b4ac-4eaf-9fa5-25ddf1d28f38"
+			type="UserCode">
+			</testmodule>
+			<testmodule
+			id="36aeee87-6ff4-4839-890b-833e428ddf62"
+			name="SwitchToOLM"
+			ref="ec58d36e-ff45-4564-9346-918d685ea8fd"
 			type="UserCode">
 			</testmodule>
 			<testmodule
@@ -131,6 +167,12 @@ rxversion="8.1">
 			type="UserCode">
 			</testmodule>
 			<testmodule
+			id="a155f844-d2da-4f0f-b402-dea470086a25"
+			name="ApplyProfile"
+			ref="649b55a9-8a28-4ae7-92ae-504376e9e041"
+			type="UserCode">
+			</testmodule>
+			<testmodule
 			enabled="False"
 			id="a256a268-03c1-46bc-952b-e84f2a8f8910"
 			name="CopyStagingHosts"
@@ -142,9 +184,21 @@ rxversion="8.1">
 			name="teardown">
 			</teardown>
 			<testmodule
+			id="b2dedb2f-c094-4a78-b913-cbf04a439abf"
+			name="PrintLabel"
+			ref="805f6ba8-7a3d-4130-a711-ba21bf1703e6"
+			type="UserCode">
+			</testmodule>
+			<testmodule
 			id="b5e51417-9041-49cd-ad86-b401078bc02e"
 			name="Load100SROrders"
 			ref="9f07305b-b8fd-43c1-af4b-a4372f345ee7"
+			type="UserCode">
+			</testmodule>
+			<testmodule
+			id="d494c876-3c73-453b-b5fb-8e56a838508d"
+			name="CreateLabel"
+			ref="4c843ee3-6e4f-4b5e-9656-8abe6789a336"
 			type="UserCode">
 			</testmodule>
 			<setup
@@ -212,30 +266,70 @@ rxversion="8.1">
 						<smartfoldernode
 						id="86a90bb7-cb81-4c02-86e1-b81ac5b114f9"
 						name="HighVolumeBaseline">
-							<testmodule
-							id="12fede29-aacf-4ec3-b89e-d554377c74d9"
-							name="Select500OrdersFilter">
-							</testmodule>
-							<testmodule
-							id="6663757e-de8f-4a9d-8df4-487dbf92655d"
-							name="SelectAllOrders">
-							</testmodule>
-							<testmodule
-							id="6ca53a36-dd4f-4108-a8c4-ed60dcd3e6cc"
-							name="Load500Orders">
-							</testmodule>
-							<testmodule
-							id="76cf1296-e3cb-4ab3-b744-88fedfa38a28"
-							name="ApplyProfileTo500Orders">
-							</testmodule>
-							<testmodule
-							id="e1a012e0-78ec-4f1b-b521-0ba953cd1002"
-							name="ProcessOrders">
-							</testmodule>
-							<testmodule
-							id="fc33c31f-f57b-40e8-a1ef-10ea8e3ef31e"
-							name="Void500Shipments">
-							</testmodule>
+							<smartfoldernode
+							id="0a9541f2-0668-433c-9d03-1cf101138b9b"
+							name="BatchGrid">
+								<testmodule
+								id="12fede29-aacf-4ec3-b89e-d554377c74d9"
+								name="Select500OrdersFilter">
+								</testmodule>
+								<testmodule
+								id="6663757e-de8f-4a9d-8df4-487dbf92655d"
+								name="SelectAllOrders">
+								</testmodule>
+								<testmodule
+								id="6ca53a36-dd4f-4108-a8c4-ed60dcd3e6cc"
+								name="Load500Orders">
+								</testmodule>
+								<testmodule
+								id="76cf1296-e3cb-4ab3-b744-88fedfa38a28"
+								name="ApplyProfileTo500Orders">
+								</testmodule>
+								<testmodule
+								id="e1a012e0-78ec-4f1b-b521-0ba953cd1002"
+								name="ProcessOrders">
+								</testmodule>
+								<testmodule
+								id="fc33c31f-f57b-40e8-a1ef-10ea8e3ef31e"
+								name="Void500Shipments">
+								</testmodule>
+							</smartfoldernode>
+							<smartfoldernode
+							id="10548d00-b2e1-47d3-bcb3-fa8f658269ad"
+							name="OrderLookupMode">
+								<testmodule
+								id="36aeee87-6ff4-4839-890b-833e428ddf62"
+								name="SwitchToOLM">
+								</testmodule>
+								<smartfoldernode
+								id="16a24b29-3c87-44ca-9878-4abaff33a75f"
+								name="ProcessShipment">
+									<testmodule
+									id="01dcb695-b5d8-44e3-82e9-cfb99b808586"
+									name="LoopNumber">
+									</testmodule>
+									<testmodule
+									id="0f5394fe-a2a7-46f5-921a-baf517bd3567"
+									name="EnterOrder">
+									</testmodule>
+									<testmodule
+									id="a155f844-d2da-4f0f-b402-dea470086a25"
+									name="ApplyProfile">
+									</testmodule>
+									<testmodule
+									id="d494c876-3c73-453b-b5fb-8e56a838508d"
+									name="CreateLabel">
+									</testmodule>
+									<testmodule
+									id="b2dedb2f-c094-4a78-b913-cbf04a439abf"
+									name="PrintLabel">
+									</testmodule>
+									<testmodule
+									id="15eb84e7-b66b-4c64-8e16-3705cacdb6d0"
+									name="VoidLabel">
+									</testmodule>
+								</smartfoldernode>
+							</smartfoldernode>
 						</smartfoldernode>
 						<smartfoldernode
 						id="986dca5a-95fa-4260-90e8-75119798108c"
@@ -313,7 +407,16 @@ rxversion="8.1">
 		<testconfiguration
 		name="TestRun">
 			<testcontainer
+			id="0a9541f2-0668-433c-9d03-1cf101138b9b">
+			</testcontainer>
+			<testcontainer
+			id="10548d00-b2e1-47d3-bcb3-fa8f658269ad">
+			</testcontainer>
+			<testcontainer
 			id="1638e2bc-c8c9-4e7c-bba8-c7e6dd7e6742">
+			</testcontainer>
+			<testcontainer
+			id="16a24b29-3c87-44ca-9878-4abaff33a75f">
 			</testcontainer>
 			<testcontainer
 			id="44cac686-339b-4902-8a46-560e623779f5">
@@ -321,8 +424,17 @@ rxversion="8.1">
 			<testcontainer
 			id="7809f0e4-23f0-43cf-b9df-07386c0239b9">
 			</testcontainer>
+			<testcontainer
+			id="86a90bb7-cb81-4c02-86e1-b81ac5b114f9">
+			</testcontainer>
 		</testconfiguration>
 	</testconfigurations>
 	<references>
+		<reference>
+			..\..\..\..\..\..\..\..\Program Files (x86)\Ranorex 8.1\Bin\Ionic.Zip.dll
+		</reference>
+		<reference>
+			SikuliModule.dll
+		</reference>
 	</references>
 </testsuitedoc>

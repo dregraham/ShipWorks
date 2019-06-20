@@ -35,6 +35,10 @@
     <DefineConstants>TRACE</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Ionic.Zip">
+      <HintPath>..\packages\SikuliIntegrator.1.1.0\lib\Ionic.Zip.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="Ranorex.Bootstrapper">
       <Private>False</Private>
     </Reference>
@@ -95,6 +99,9 @@
     <Reference Include="Ranorex.Plugin.Wpf">
       <Private>False</Private>
     </Reference>
+    <Reference Include="SikuliModule">
+      <HintPath>..\packages\SikuliIntegrator.1.1.0\lib\SikuliModule.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
@@ -103,7 +110,9 @@
     <Reference Include="System.Data.DataSetExtensions">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
-    <Reference Include="System.Drawing" />
+    <Reference Include="System.Drawing">
+      <HintPath>..\packages\SikuliIntegrator.1.1.0\lib\System.Drawing.dll</HintPath>
+    </Reference>
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq">
@@ -111,6 +120,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ApplyProfile.cs">
+      <id>b9134f0a-4023-4db4-b629-27be05844aeb</id>
+    </Compile>
     <Compile Include="ApplyProfileTo100Orders.cs">
       <id>e9e1d283-3f7c-4994-8c30-7b3a599716de</id>
     </Compile>
@@ -126,6 +138,12 @@
     <Compile Include="CopyStagingHosts.cs">
       <id>66101e65-b729-4748-8ad1-d88160f96704</id>
     </Compile>
+    <Compile Include="CreateLabel.cs">
+      <id>fa41df68-db05-4fef-8b13-3cffaf268376</id>
+    </Compile>
+    <Compile Include="EnterOrder.cs">
+      <id>f285ff07-1df6-42e3-9d93-3b217f6bbc14</id>
+    </Compile>
     <Compile Include="ExtraMethods.cs">
       <id>a2c1dc32-9bf2-4ee7-85cf-4b2673d78fb8</id>
     </Compile>
@@ -140,6 +158,12 @@
     </Compile>
     <Compile Include="Load500Orders.cs">
       <id>92fddb98-f683-404b-b60f-1900317a1b24</id>
+    </Compile>
+    <Compile Include="LoopNumber.cs">
+      <id>97d09e6e-bfaa-4916-abd8-ec7bf612f06a</id>
+    </Compile>
+    <Compile Include="PrintLabel.cs">
+      <id>f29b43d8-2501-46ee-b274-c1931124fe77</id>
     </Compile>
     <Compile Include="ProcessOrders.cs">
       <id>f9de5849-db2b-4acb-9206-ec39b51374d2</id>
@@ -171,6 +195,9 @@
       <RepositoryCode>true</RepositoryCode>
       <id>8046bedc-5d9e-4b49-aa0e-00587b18d34a</id>
     </Compile>
+    <Compile Include="SwitchToOLM.cs">
+      <id>3982c5ef-35a8-4199-9e6a-070b0878b6d2</id>
+    </Compile>
     <Compile Include="TestRecording.cs">
       <BoundTo>62628395-c73a-443c-b1bd-b6527981b94e</BoundTo>
       <DependentUpon>TestRecording.rxrec</DependentUpon>
@@ -192,10 +219,19 @@
     <Compile Include="Void500Shipments.cs">
       <id>adf1e739-589e-4914-b5c5-286ee9956b93</id>
     </Compile>
+    <Compile Include="VoidLabel.cs">
+      <id>89a3da4d-5630-4d18-98b5-581ce8e4acdb</id>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config">
       <id>bff5bfd0-e215-480e-8a26-38ccce0d7d35</id>
+    </None>
+    <None Include="JSikuliModule.jar">
+      <id>3cd7aae0-8bcd-41bb-8f73-dd057812fdac</id>
+    </None>
+    <None Include="packages.config">
+      <id>cf7365e3-7d75-4c7a-b46e-3786c4db8c4c</id>
     </None>
     <None Include="ShipWorksPerformanceTestSuiteRepository.rximg">
       <BoundTo>3b68fc90-8037-4fdc-8275-4f7d991469c4</BoundTo>
