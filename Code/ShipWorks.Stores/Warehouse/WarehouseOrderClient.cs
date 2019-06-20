@@ -6,7 +6,11 @@ using Interapptive.Shared.Utility;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using RestSharp;
+using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.ApplicationCore.Licensing.Warehouse;
+using ShipWorks.ApplicationCore.Licensing.Warehouse.DTO;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Editions;
 using ShipWorks.Stores.Communication;
 using ShipWorks.Warehouse;
 using ShipWorks.Warehouse.DTO.Orders;
@@ -20,13 +24,17 @@ namespace ShipWorks.Stores.Warehouse
     public class WarehouseOrderClient : IWarehouseOrderClient
     {
         private readonly WarehouseRequestClient warehouseRequestClient;
+        private readonly ILicenseService licenseService;
+        private readonly ShipmentDtoFactory shipmentDtoFactory;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public WarehouseOrderClient(WarehouseRequestClient warehouseRequestClient)
+        public WarehouseOrderClient(WarehouseRequestClient warehouseRequestClient, ILicenseService licenseService, ShipmentDtoFactory shipmentDtoFactory)
         {
             this.warehouseRequestClient = warehouseRequestClient;
+            this.licenseService = licenseService;
+            this.shipmentDtoFactory = shipmentDtoFactory;
         }
 
         /// <summary>
@@ -69,6 +77,40 @@ namespace ShipWorks.Stores.Warehouse
             catch (Exception ex) when (ex.GetType() != typeof(DownloadException))
             {
                 throw new DownloadException($"An error occurred downloading orders for warehouse ID {warehouseID}", ex);
+            }
+        }
+
+        /// <summary>
+        /// Send a shipment to the hub
+        /// </summary>
+        public async Task<Result> ShipOrder(Guid hubOrderID, ShipmentEntity shipmentEntity)
+        {
+            try
+            {
+                EditionRestrictionLevel restrictionLevel = licenseService.CheckRestriction(EditionFeature.Warehouse, null);
+
+                if (restrictionLevel == EditionRestrictionLevel.None)
+                {
+                    IRestRequest request = new RestRequest(WarehouseEndpoints.ShipOrder(hubOrderID.ToString("N")), Method.PUT);
+
+                    Shipment shipment = shipmentDtoFactory.CreateHubShipment(shipmentEntity);
+                    request.AddJsonBody(JsonConvert.SerializeObject(shipment));
+
+                    GenericResult<IRestResponse> response = await warehouseRequestClient
+                        .MakeRequest(request, "Ship Order")
+                        .ConfigureAwait(true);
+
+                    if (response.Failure)
+                    {
+                        return Result.FromError(response.Message);
+                    }
+                }
+
+                return Result.FromSuccess();
+            }
+            catch (Exception ex)
+            {
+                return Result.FromError(ex);
             }
         }
     }

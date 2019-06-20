@@ -5,11 +5,13 @@ using Interapptive.Shared.Utility;
 using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.ApplicationCore.Licensing;
+using ShipWorks.ApplicationCore.Licensing.Warehouse.DTO;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Shipping.Carriers.Postal.Usps;
 using ShipWorks.Shipping.ShipSense;
+using ShipWorks.Warehouse;
 
 namespace ShipWorks.Shipping.Services.ShipmentProcessorSteps
 {
@@ -25,6 +27,7 @@ namespace ShipWorks.Shipping.Services.ShipmentProcessorSteps
         private readonly IShippingManager shippingManager;
         private readonly IKnowledgebase knowledgebase;
         private readonly ITangoLogShipmentProcessor tangoLogShipmentProcessor;
+        private readonly IWarehouseOrderClient warehouseOrderClient;
 
         /// <summary>
         /// Constructor
@@ -35,6 +38,7 @@ namespace ShipWorks.Shipping.Services.ShipmentProcessorSteps
             IShippingErrorManager errorManager,
             IKnowledgebase knowledgebase,
             ITangoLogShipmentProcessor tangoLogShipmentProcessor,
+            IWarehouseOrderClient warehouseOrderClient,
             Func<Type, ILog> createLogger)
         {
             this.knowledgebase = knowledgebase;
@@ -42,6 +46,7 @@ namespace ShipWorks.Shipping.Services.ShipmentProcessorSteps
             this.shipmentTypeFactory = shipmentTypeFactory;
             this.errorManager = errorManager;
             this.tangoLogShipmentProcessor = tangoLogShipmentProcessor;
+            this.warehouseOrderClient = warehouseOrderClient;
             log = createLogger(GetType());
         }
 
@@ -133,6 +138,11 @@ namespace ShipWorks.Shipping.Services.ShipmentProcessorSteps
             try
             {
                 LogShipmentToTango(shipment, shipmentForTango, store);
+
+                if (shipment.Order.HubOrderID.HasValue)
+                {
+                    warehouseOrderClient.ShipOrder(shipment.Order.HubOrderID.Value, shipment);
+                }
             }
             catch (Exception ex)
             {
