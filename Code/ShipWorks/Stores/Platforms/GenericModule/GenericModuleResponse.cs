@@ -1,12 +1,8 @@
 using System;
-using System.Collections.Generic;
-using System.Text;
+using System.Text.RegularExpressions;
 using System.Xml;
 using System.Xml.XPath;
-using Interapptive.Shared.Net;
-using System.Text.RegularExpressions;
 using Interapptive.Shared.Utility;
-using System.Reflection;
 
 namespace ShipWorks.Stores.Platforms.GenericModule
 {
@@ -36,7 +32,7 @@ namespace ShipWorks.Stores.Platforms.GenericModule
             try
             {
                 xmlResponse = new XmlDocument();
-                
+
                 // we don't want to resolve external entities.
                 xmlResponse.XmlResolver = null;
 
@@ -48,7 +44,7 @@ namespace ShipWorks.Stores.Platforms.GenericModule
             }
 
             xpath = xmlResponse.CreateNavigator();
-            
+
             LoadResponseData();
         }
 

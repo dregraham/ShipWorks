@@ -1,0 +1,128 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <SpecFlowObsoleteCodeBehindFiles Remove="Features\AddWarehouse.feature.cs" />
+    <SpecFlowObsoleteCodeBehindFiles Remove="Features\BlankFieldValidationAddPage.feature.cs" />
+    <SpecFlowObsoleteCodeBehindFiles Remove="Features\BlankFieldValidationEditPage.feature.cs" />
+    <SpecFlowObsoleteCodeBehindFiles Remove="Features\CancelAddWarehouse.feature.cs" />
+    <SpecFlowObsoleteCodeBehindFiles Remove="Features\CancelEditWarehouse.feature.cs" />
+    <SpecFlowObsoleteCodeBehindFiles Remove="Features\ChangeNewlyAddedWarehouseToDefault.feature.cs" />
+    <SpecFlowObsoleteCodeBehindFiles Remove="Features\EditWarehouse.feature.cs" />
+    <SpecFlowObsoleteCodeBehindFiles Remove="Features\FailureLogin.feature.cs" />
+    <SpecFlowObsoleteCodeBehindFiles Remove="Features\FieldLengthValidation.feature.cs" />
+    <SpecFlowObsoleteCodeBehindFiles Remove="Features\FieldLengthValidationEditPage.feature.cs" />
+    <SpecFlowObsoleteCodeBehindFiles Remove="Features\Login.feature.cs" />
+    <SpecFlowObsoleteCodeBehindFiles Remove="Features\Logout.feature.cs" />
+    <SpecFlowObsoleteCodeBehindFiles Remove="Features\LogoutURLRedirectVerification.feature.cs" />
+    <SpecFlowObsoleteCodeBehindFiles Remove="Features\PageNotFound.feature.cs" />
+    <SpecFlowObsoleteCodeBehindFiles Remove="Features\WarehouseNameSort.feature.cs" />
+    <SpecFlowObsoleteCodeBehindFiles Remove="Features\WarehouseNotFound.feature.cs" />
+    <SpecFlowObsoleteCodeBehindFiles Remove="Features\WarehouseZipCodeAddValidation.feature.cs" />
+    <SpecFlowObsoleteCodeBehindFiles Remove="Features\WarehouseZipCodeEditValidation.feature.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.1.1" />
+    <PackageReference Include="Selenium.Chrome.WebDriver" Version="74.0.0" />
+    <PackageReference Include="Selenium.Firefox.WebDriver" Version="0.24.0" />
+    <PackageReference Include="Selenium.Support" Version="3.141.0" />
+    <PackageReference Include="Selenium.WebDriver" Version="3.141.0" />
+    <PackageReference Include="Selenium.WebDriver.MicrosoftDriver" Version="17.17134.0" />
+    <PackageReference Include="SpecFlow" Version="3.0.220" />
+    <PackageReference Include="SpecFlow.Tools.MsBuild.Generation" Version="3.0.220" />
+    <PackageReference Include="SpecFlow.xUnit" Version="3.0.220" />
+    <PackageReference Include="xunit" Version="2.4.1" />
+	<DotNetCliToolReference Include="dotnet-xunit" Version="2.3.0" />
+    <PackageReference Include="xunit.runner.console" Version="2.4.1">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.4.1">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Features\ChangeNewlyAddedWarehouseToDefault.feature.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>ChangeNewlyAddedWarehouseToDefault.feature</DependentUpon>
+    </Compile>
+    <Compile Update="Features\FailureLogin.feature.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>FailureLogin.feature</DependentUpon>
+    </Compile>
+    <Compile Update="Features\Login.feature.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Login.feature</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <SpecFlowFeatureFiles Update="Features\AddWarehouse.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+    </SpecFlowFeatureFiles>
+    <SpecFlowFeatureFiles Update="Features\BlankFieldValidationAddPage.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+    </SpecFlowFeatureFiles>
+    <SpecFlowFeatureFiles Update="Features\BlankFieldValidationEditPage.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+    </SpecFlowFeatureFiles>
+    <SpecFlowFeatureFiles Update="Features\CancelAddWarehouse.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+    </SpecFlowFeatureFiles>
+    <SpecFlowFeatureFiles Update="Features\CancelEditWarehouse.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+    </SpecFlowFeatureFiles>
+    <SpecFlowFeatureFiles Update="Features\ChangeNewlyAddedWarehouseToDefault.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>ChangeNewlyAddedWarehouseToDefault.feature.cs</LastGenOutput>
+    </SpecFlowFeatureFiles>
+    <SpecFlowFeatureFiles Update="Features\EditWarehouse.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+    </SpecFlowFeatureFiles>
+    <SpecFlowFeatureFiles Update="Features\FailureLogin.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>FailureLogin.feature.cs</LastGenOutput>
+    </SpecFlowFeatureFiles>
+    <SpecFlowFeatureFiles Update="Features\FieldLengthValidation.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+    </SpecFlowFeatureFiles>
+    <SpecFlowFeatureFiles Update="Features\FieldLengthValidationEditPage.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+    </SpecFlowFeatureFiles>
+    <SpecFlowFeatureFiles Update="Features\Login.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>Login.feature.cs</LastGenOutput>
+    </SpecFlowFeatureFiles>
+    <SpecFlowFeatureFiles Update="Features\Logout.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+    </SpecFlowFeatureFiles>
+    <SpecFlowFeatureFiles Update="Features\LogoutURLRedirectVerification.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+    </SpecFlowFeatureFiles>
+    <SpecFlowFeatureFiles Update="Features\PageNotFound.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+    </SpecFlowFeatureFiles>
+    <SpecFlowFeatureFiles Update="Features\WarehouseNameSort.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+    </SpecFlowFeatureFiles>
+    <SpecFlowFeatureFiles Update="Features\WarehouseNotFound.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+    </SpecFlowFeatureFiles>
+    <SpecFlowFeatureFiles Update="Features\WarehouseZipCodeAddValidation.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+    </SpecFlowFeatureFiles>
+    <SpecFlowFeatureFiles Update="Features\WarehouseZipCodeEditValidation.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+    </SpecFlowFeatureFiles>
+  </ItemGroup>
+
+</Project>
