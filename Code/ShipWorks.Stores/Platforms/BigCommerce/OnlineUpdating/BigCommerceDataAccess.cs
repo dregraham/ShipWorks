@@ -63,7 +63,7 @@ namespace ShipWorks.Stores.Platforms.BigCommerce.OnlineUpdating
         /// Get the latest active shipment
         /// </summary>
         public Task<ShipmentEntity> GetLatestActiveShipmentAsync(long orderID) =>
-            orderManager.GetLatestActiveShipmentAsync(orderID);
+            orderManager.GetLatestActiveShipmentAsync(orderID, false);
 
         /// <summary>
         /// Get order details for uploading

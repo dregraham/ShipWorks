@@ -1,19 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 using Autofac;
-using Interapptive.Shared;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Utility;
 using ShipWorks.AddressValidation;
+using ShipWorks.ApplicationCore;
 using ShipWorks.Common.IO.Hardware.Printers;
+using ShipWorks.Core.Messaging;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Messaging.Messages.Dialogs;
 using ShipWorks.Shipping.Carriers;
 using ShipWorks.Shipping.Editing.Rating;
+using ShipWorks.Shipping.Profiles;
 using ShipWorks.UI.Controls;
 using ShipWorks.UI.Controls.Design;
 
@@ -27,8 +31,12 @@ namespace ShipWorks.Shipping.Editing
         // The type of shipment this instance is servicing
         readonly ShipmentTypeCode shipmentTypeCode;
 
+        private BindingList<KeyValuePair<long, string>> includeReturnProfiles = new BindingList<KeyValuePair<long, string>>();
+        private BindingSource bindingSource = new BindingSource();
+
         bool enableEditing;
         bool isLoading;
+        bool showIncludeReturn;
 
         // Counter for rate criteria change event suspension
         int suspendRateEvent = 0;
@@ -91,7 +99,8 @@ namespace ShipWorks.Shipping.Editing
         /// <summary>
         /// Constructor
         /// </summary>
-        public ServiceControlBase(ShipmentTypeCode shipmentTypeCode, RateControl rateControl)
+        public ServiceControlBase(ShipmentTypeCode shipmentTypeCode,
+            RateControl rateControl)
             : this()
         {
             this.shipmentTypeCode = shipmentTypeCode;
@@ -329,20 +338,18 @@ namespace ShipWorks.Shipping.Editing
                     foreach (ShipmentEntity shipment in LoadedShipments)
                     {
                         returnShipment.ReadMultiCheck(v => shipment.ReturnShipment = v);
+                        includeReturn.ReadMultiCheck(v => shipment.IncludeReturn = v);
+                        applyReturnProfile.ReadMultiCheck(v => shipment.ApplyReturnProfile = v);
+                        returnProfileID.ReadMultiValue(v => shipment.ReturnProfileID = (long) v);
                     }
                 }
-
-                if (returnsControl != null)
-                {
-                    returnsControl.SaveToShipments();
-                }
+                returnsControl?.SaveToShipments();
             }
         }
 
         /// <summary>
         /// Loads the UI for Return Shipments
         /// </summary>
-        [NDependIgnoreLongMethodAttribute]
         private void LoadReturnsUI()
         {
             ReturnsControlBase newReturnsControl = null;
@@ -353,48 +360,7 @@ namespace ShipWorks.Shipping.Editing
 
             if (anyReturnsSupported)
             {
-                bool allReturnsSupported = loadedTypes.All(st => st.SupportsReturns);
-
-                // Always show it if any types support returns
-                sectionReturns.Visible = true;
-
-                // Checkbox for enabling returns editing
-                using (MultiValueScope scope = new MultiValueScope())
-                {
-                    foreach (ShipmentEntity shipment in LoadedShipments)
-                    {
-                        returnShipment.ApplyMultiCheck(shipment.ReturnShipment);
-                    }
-                }
-
-                // But only support turning "Returns" on or off if all types support it
-                returnShipment.Enabled = allReturnsSupported;
-
-                // Only if there all the same type can we create the type-specific control
-                if (loadedTypes.Count == 1)
-                {
-                    newReturnsControl = loadedTypes[0].CreateReturnsControl();
-                }
-                else
-                {
-                    newReturnsControl = new MultiSelectReturnsControl();
-                }
-
-                newReturnsControl.LoadShipments(LoadedShipments);
-                newReturnsControl.RateCriteriaChanged += OnRateCriteriaChanged;
-
-                // add the control to the UI
-                newReturnsControl.Location = new Point(0, 0);
-                newReturnsControl.Width = returnsPanel.Width;
-                newReturnsControl.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-                returnsPanel.Controls.Add(newReturnsControl);
-
-                // Sizing
-                returnsPanel.Height = newReturnsControl.Height;
-                sectionReturns.Height = returnsPanel.Bottom + 5 + (sectionReturns.Height - sectionReturns.ContentPanel.Height);
-
-                // only enable for editing if all shipments are Returns
-                returnsPanel.Enabled = (LoadedShipments.All(s => s.ReturnShipment));
+                newReturnsControl = GetReturnsControl(loadedTypes);
             }
             else
             {
@@ -410,6 +376,106 @@ namespace ShipWorks.Shipping.Editing
 
             // Update
             returnsControl = newReturnsControl;
+        }
+
+        /// <summary>
+        /// Creates the ReturnsControl for the Returns UI
+        /// </summary>
+        private ReturnsControlBase GetReturnsControl(List<ShipmentType> loadedTypes)
+        {
+            ReturnsControlBase newReturnsControl;
+
+            // Always show it if any types support returns
+            sectionReturns.Visible = true;
+
+            LoadInitialReturnValues();
+
+            // Only if there all the same type can we create the type-specific control
+            if (loadedTypes.Count == 1)
+            {
+                newReturnsControl = loadedTypes[0].CreateReturnsControl();
+            }
+            else
+            {
+                newReturnsControl = new MultiSelectReturnsControl();
+            }
+
+            newReturnsControl.LoadShipments(LoadedShipments);
+            newReturnsControl.RateCriteriaChanged += OnRateCriteriaChanged;
+
+            // add the control to the UI
+            newReturnsControl.Location = new Point(0, 0);
+            newReturnsControl.Width = returnsPanel.Width;
+            newReturnsControl.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            returnsPanel.Controls.Add(newReturnsControl);
+
+            // Sizing
+            returnsPanel.Height = newReturnsControl.Height;
+            sectionReturns.Height = returnsPanel.Bottom + 5 + (sectionReturns.Height - sectionReturns.ContentPanel.Height);
+
+            // only enable for editing if all shipments are Returns
+            returnsPanel.Enabled = (LoadedShipments.All(s => s.ReturnShipment) && returnShipment.Checked);
+
+            DisplayIncludeReturn(loadedTypes);
+
+            return newReturnsControl;
+        }
+
+        /// <summary>
+        /// Load the return section values into the UI
+        /// </summary>
+        private void LoadInitialReturnValues()
+        {
+            // Load initial values
+            using (MultiValueScope scope = new MultiValueScope())
+            {
+                foreach (ShipmentEntity shipment in LoadedShipments)
+                {
+                    // Refresh the menu for each shipment to prevent changing the selection
+                    // when multiple types of shipments are selected
+                    RefreshIncludeReturnProfileMenu(shipment.ShipmentTypeCode);
+
+                    returnShipment.ApplyMultiCheck(shipment.ReturnShipment);
+                    includeReturn.ApplyMultiCheck(shipment.IncludeReturn);
+                    applyReturnProfile.ApplyMultiCheck(shipment.ApplyReturnProfile);
+                    returnProfileID.ApplyMultiValue(shipment.ReturnProfileID);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Show or hide the include return section
+        /// </summary>
+        private void DisplayIncludeReturn(List<ShipmentType> loadedTypes)
+        {
+            // Hide include return section for the "Other" carrier
+            showIncludeReturn = loadedTypes.Any(x => x.ShipmentTypeCode != ShipmentTypeCode.Other);
+            bool allReturnsSupported = loadedTypes.All(st => st.SupportsReturns);
+            bool enableIncludeReturn = allReturnsSupported && loadedTypes.All(x => x.ShipmentTypeCode != ShipmentTypeCode.Other);
+
+            if (showIncludeReturn)
+            {
+                // Only enable returns controls if all selected shipments support it
+                returnShipment.Enabled = allReturnsSupported;
+                includeReturn.Enabled = enableIncludeReturn;
+                applyReturnProfile.Enabled = enableIncludeReturn && includeReturn.Checked;
+                returnProfileID.Enabled = enableIncludeReturn && applyReturnProfile.Checked;
+                returnProfileIDLabel.Enabled = enableIncludeReturn && applyReturnProfile.Checked;
+            }
+            else
+            {
+                returnShipment.Location = new Point(returnShipment.Location.X, includeReturn.Location.Y);
+                sectionReturns.Height -= returnProfileID.Bottom;
+                includeReturn.Checked = false;
+                applyReturnProfile.Checked = false;
+                includeReturn.Visible = false;
+                applyReturnProfile.Visible = false;
+                returnProfileID.Visible = false;
+                returnProfileIDLabel.Visible = false;
+                pictureBoxReturnWarning.Visible = false;
+                labelReturnWarning.Visible = false;
+                linkManageProfiles.Visible = false;
+            }
         }
 
         /// <summary>
@@ -631,15 +697,133 @@ namespace ShipWorks.Shipping.Editing
         }
 
         /// <summary>
-        /// Click of the Return Shipment checkbox
+        /// Click of the Include Return checkbox
         /// </summary>
-        protected virtual void OnReturnShipmentChanged(object sender, EventArgs e)
+        private void OnIncludeReturnChanged(object sender, EventArgs e)
         {
             if (!isLoading)
             {
+                if (!includeReturn.Checked)
+                {
+                    applyReturnProfile.Checked = false;
+                }
+                else
+                {
+                    returnShipment.Checked = false;
+                }
+                applyReturnProfile.Enabled = includeReturn.Checked;
+                returnProfileID.Enabled = applyReturnProfile.Checked;
+                returnProfileIDLabel.Enabled = applyReturnProfile.Checked;
+                SaveReturnsToShipments();
+                RaiseRateCriteriaChanged();
+            }
+        }
+
+        /// <summary>
+        /// Click of the Apply Return Profile checkbox
+        /// </summary>
+        private void OnApplyReturnChanged(object sender, EventArgs e)
+        {
+            if (!isLoading)
+            {
+                returnProfileID.Enabled = applyReturnProfile.Checked;
+                returnProfileIDLabel.Enabled = applyReturnProfile.Checked;
+                SaveReturnsToShipments();
+            }
+        }
+
+        /// <summary>
+        /// Opening the return profiles menu
+        /// </summary>
+        private void OnReturnProfileIDOpened(object sender, EventArgs e)
+        {
+            if (!isLoading)
+            {
+                // Populate the list of profiles
+                RefreshIncludeReturnProfileMenu(shipmentTypeCode);
+            }
+        }
+
+        /// <summary>
+        /// A return profile is selected
+        /// </summary>
+        private void OnReturnProfileSelected(object sender, EventArgs e)
+        {
+            SaveReturnsToShipments();
+        }
+
+        /// <summary>
+        /// Open the profiles manager
+        /// </summary>
+        private void OnManageProfiles(object sender, EventArgs e)
+        {
+            Messenger.Current.Send(new OpenProfileManagerDialogMessage(this));
+        }
+
+        /// <summary>
+        /// When ReturnProfileID dropdown is enabled
+        /// </summary>
+        protected void OnReturnProfileIDEnabledChanged(object sender, EventArgs e)
+        {
+            List<ShipmentType> loadedTypes = LoadedShipments.Select(s => s.ShipmentType).Distinct().Select(st => ShipmentTypeManager.GetType((ShipmentTypeCode) st)).ToList();
+            if (returnProfileID.Enabled && !isLoading && loadedTypes.Count == 1)
+            {
+                RefreshIncludeReturnProfileMenu(shipmentTypeCode);
+            }
+        }
+
+        /// <summary>
+        /// Add applicable profiles for the given shipment type to the context menu
+        /// </summary>
+        private void RefreshIncludeReturnProfileMenu(ShipmentTypeCode shipmentTypeCode)
+        {
+            BindingList<KeyValuePair<long, string>> newReturnProfiles = new BindingList<KeyValuePair<long, string>>();
+
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+            {
+                IShippingProfileService shippingProfileService = lifetimeScope.Resolve<IShippingProfileService>();
+
+                List<KeyValuePair<long, string>> returnProfiles = shippingProfileService
+                    .GetConfiguredShipmentTypeProfiles()
+                    .Where(p => p.ShippingProfileEntity.ShipmentType.HasValue)
+                    .Where(p => p.IsApplicable(shipmentTypeCode))
+                    .Where(p => p.ShippingProfileEntity.ReturnShipment == true)
+                    .Select(s => new KeyValuePair<long, string>(s.ShippingProfileEntity.ShippingProfileID, s.ShippingProfileEntity.Name))
+                    .OrderBy(g => g.Value)
+                    .ToList<KeyValuePair<long, string>>();
+
+                newReturnProfiles = new BindingList<KeyValuePair<long, string>>(returnProfiles);
+            }
+
+            // Always add No Profile so if a selected profile was deleted, this becomes the default
+            newReturnProfiles.Insert(0, new KeyValuePair<long, string>(-1, "(No Profile)"));
+
+            includeReturnProfiles = newReturnProfiles;
+
+            // Reset data sources because calling resetbindings() doesn't work
+            bindingSource.DataSource = includeReturnProfiles;
+            returnProfileID.DataSource = bindingSource;
+
+            // Update display settings
+            returnProfileID.DisplayMember = "Value";
+            returnProfileID.ValueMember = "Key";
+        }
+
+        /// <summary>
+        /// Click of the Return Shipment checkbox
+        /// </summary>
+        private void OnReturnShipmentChanged(object sender, EventArgs e)
+        {
+            if (!isLoading)
+            {
+                if (returnShipment.Checked)
+                {
+                    includeReturn.Checked = false;
+                }
                 returnsPanel.Enabled = returnShipment.Checked;
                 SaveReturnsToShipments();
                 ReturnServiceChanged?.Invoke(this, EventArgs.Empty);
+                RaiseRateCriteriaChanged();
             }
         }
 

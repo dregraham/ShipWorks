@@ -125,7 +125,7 @@ namespace ShipWorks.Shipping.Services
             ShowShipmentTypeProcessingNudges(clonedShipments);
 
             IProcessShipmentsWorkflowResult result;
-            IProcessShipmentsWorkflow workflow = workflowFactory.Create(clonedShipments.Count);
+            IProcessShipmentsWorkflow workflow = workflowFactory.Create(clonedShipments);
 
             using (CancellationTokenSource cancellationSource = new CancellationTokenSource())
             {
@@ -165,7 +165,7 @@ namespace ShipWorks.Shipping.Services
 
             ShowPostProcessingMessage(clonedShipments);
 
-            IEnumerable<ProcessShipmentResult> results = clonedShipments
+            IEnumerable<ProcessShipmentResult> results = result.Shipments
                 .Select(CreateResultFromShipment)
                 .ToList();
 

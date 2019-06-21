@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Linq;
 using System.Reflection;
 using System.Windows.Forms;
 using System.Windows.Input;
@@ -106,6 +108,23 @@ namespace ShipWorks.Shipping.UI.Profiles
         /// </summary>
         private void Delete()
         {
+            // Get any profiles that use this profile as a return
+            IEnumerable<string> profilesInUse = ShippingProfiles
+                .Where(p => p.ShippingProfileEntity.IncludeReturn.HasValue
+                            && p.ShippingProfileEntity.IncludeReturn.Equals(true)
+                            && p.ShippingProfileEntity.ApplyReturnProfile.HasValue
+                            && p.ShippingProfileEntity.ApplyReturnProfile.Equals(true))
+                .Where(p => p.ShippingProfileEntity.ReturnProfileID == SelectedShippingProfile.ShippingProfileEntity.ShippingProfileID)
+                .Select(s => s.ShippingProfileEntity.Name);
+
+            if (profilesInUse.Any())
+            {
+                string errorMessage = "This profile cannot be deleted because it is set as a return profile in the following profile(s):\n\n";
+                errorMessage += string.Join("\n", profilesInUse);
+                messageHelper.ShowError(errorMessage);
+                return;
+            }
+
             DialogResult dialogResult =
                 messageHelper.ShowQuestion($"Delete the profile {SelectedShippingProfile.ShippingProfileEntity.Name}?");
             if (dialogResult == DialogResult.OK)

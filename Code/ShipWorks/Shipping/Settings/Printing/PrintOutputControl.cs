@@ -1,17 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
 using System.Linq;
-using System.Text;
 using System.Windows.Forms;
-using ShipWorks.UI.Utility;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data.Connection;
 using ShipWorks.Actions;
-using ShipWorks.Templates.Printing;
+using ShipWorks.Actions.Triggers;
 using ShipWorks.ApplicationCore;
+using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Templates.Printing;
+using ShipWorks.UI.Utility;
 
 namespace ShipWorks.Shipping.Settings.Printing
 {
@@ -24,6 +21,8 @@ namespace ShipWorks.Shipping.Settings.Printing
 
         ActionEntity actionPrint;
 
+        ShipmentProcessedTrigger trigger;
+
         /// <summary>
         /// Constructor
         /// </summary>
@@ -33,7 +32,7 @@ namespace ShipWorks.Shipping.Settings.Printing
 
             toolStripAddPrintOutput.Renderer = new NoBorderToolStripRenderer();
 
-            // only show the Install Missing if the secret handshake is done
+            // Only show the Install Missing if the secret handshake is done
             installMissingLink.Visible = InterapptiveOnly.MagicKeysDown;
         }
 
@@ -45,9 +44,23 @@ namespace ShipWorks.Shipping.Settings.Printing
             this.shipmentType = shipmentType;
 
             actionPrint = ShippingActionUtility.GetPrintAction(shipmentType.ShipmentTypeCode);
-            printActionBox.Checked = actionPrint.Enabled;
+            trigger = new ShipmentProcessedTrigger(actionPrint.TriggerSettings);
+
+            printActionBox.Checked = actionPrint.Enabled && (trigger.RestrictStandardReturn && !trigger.ReturnShipmentsOnly || !trigger.RestrictStandardReturn);
+
+            printReturnBox.Checked = actionPrint.Enabled && (trigger.RestrictStandardReturn && trigger.ReturnShipmentsOnly || !trigger.RestrictStandardReturn);
 
             LoadOutputGroups();
+
+            // Only show print returns checkbox for carriers that support returns
+            if (shipmentType.SupportsReturns)
+            {
+                printReturnBox.Visible = true;
+                panelMain.Location = new System.Drawing.Point(panelMain.Location.X, 115);
+                labelInfo.Location = new System.Drawing.Point(labelInfo.Location.X, 94);
+                label1.Location = new System.Drawing.Point(label1.Location.X, 74);
+                installMissingLink.Location = new System.Drawing.Point(installMissingLink.Location.X, 74);
+            }
 
             UpdateLayout();
         }
@@ -112,7 +125,7 @@ namespace ShipWorks.Shipping.Settings.Printing
                     return;
                 }
             }
-            
+
             // Add an initial rule
             ShippingPrintOutputRuleEntity rule = new ShippingPrintOutputRuleEntity();
             rule.ShippingPrintOutput = outputGroup;
@@ -194,7 +207,14 @@ namespace ShipWorks.Shipping.Settings.Printing
             }
 
             // Print action enabled
-            actionPrint.Enabled = printActionBox.Checked;
+            actionPrint.Enabled = printActionBox.Checked || printReturnBox.Checked;
+
+            // Trigger setup
+            trigger.RestrictStandardReturn = printActionBox.Checked ^ printReturnBox.Checked;
+            trigger.ReturnShipmentsOnly = printReturnBox.Checked;
+
+            actionPrint.TriggerSettings = trigger.GetXml();
+
             if (actionPrint.IsDirty)
             {
                 using (SqlAdapter adapter = new SqlAdapter())

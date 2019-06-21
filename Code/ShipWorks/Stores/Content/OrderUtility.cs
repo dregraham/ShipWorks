@@ -31,12 +31,12 @@ namespace ShipWorks.Stores.Content
         /// <summary>
         /// Returns the most recent, non-voided, processed shipment for the provided order
         /// </summary>
-        public static ShipmentEntity GetLatestActiveShipment(long orderID)
+        public static ShipmentEntity GetLatestActiveShipment(long orderID, bool includeReturns)
         {
             ShipmentEntity shipment =
                 DataProvider.GetRelatedEntities(orderID, EntityType.ShipmentEntity)
                     .Cast<ShipmentEntity>()
-                    .Where(s => s.Processed && !s.Voided)
+                    .Where(s => s.Processed && !s.Voided && (includeReturns ? true : !s.ReturnShipment))
                     .OrderBy(s => s.ProcessedDate)
                     .LastOrDefault();
 

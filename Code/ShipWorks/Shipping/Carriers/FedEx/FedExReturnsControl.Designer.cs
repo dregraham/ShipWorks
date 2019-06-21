@@ -57,7 +57,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.labelFedExReturnType.Name = "labelFedExReturnType";
             this.labelFedExReturnType.Size = new System.Drawing.Size(107, 13);
             this.labelFedExReturnType.TabIndex = 7;
-            this.labelFedExReturnType.Text = "FedEx Return Type :";
+            this.labelFedExReturnType.Text = "FedEx Return Type:";
             // 
             // labelRmaNumber
             // 

@@ -2,17 +2,17 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Autofac;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using log4net;
+using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Interaction;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Platforms.ThreeDCart.RestApi;
-using Autofac;
-using ShipWorks.ApplicationCore;
 
 namespace ShipWorks.Stores.Platforms.ThreeDCart.OnlineUpdating
 {
@@ -115,7 +115,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.OnlineUpdating
             var exceptions = results.Where(x => x.Failure).Select(x => x.Exception).Where(x => x != null);
             context.Complete(exceptions, MenuCommandResult.Error);
         }
-        
+
         /// <summary>
         /// Worker thread method for updating online order status
         /// </summary>
@@ -166,7 +166,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.OnlineUpdating
         /// </summary>
         private async Task<IResult> UploadShipmentDetailsCallback(long orderID, ThreeDCartStoreEntity store)
         {
-            ShipmentEntity shipment = await orderManager.GetLatestActiveShipmentAsync(orderID).ConfigureAwait(false);
+            ShipmentEntity shipment = await orderManager.GetLatestActiveShipmentAsync(orderID, false).ConfigureAwait(false);
             if (shipment == null)
             {
                 log.InfoFormat("There were no Processed and not Voided shipments to upload for OrderID {0}", orderID);

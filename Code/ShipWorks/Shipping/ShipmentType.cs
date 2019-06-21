@@ -520,8 +520,11 @@ namespace ShipWorks.Shipping
                 // Apply the Shipping profile
                 shippingProfile.Apply(shipment);
 
-                // Reset ReturnShipment to the original value
-                shipment.ReturnShipment = originalReturnShipment;
+                // Reset ReturnShipment to the original value if IncludeReturn hasn't been set
+                if (!shipment.IncludeReturn)
+                {
+                    shipment.ReturnShipment = originalReturnShipment;
+                }
 
                 // Now apply ShipSense
                 ApplyShipSense(shipment, lifetimeScope);
@@ -692,6 +695,9 @@ namespace ShipWorks.Shipping
             profile.InsuranceInitialValueAmount = 0;
 
             profile.ReturnShipment = false;
+            profile.IncludeReturn = false;
+            profile.ApplyReturnProfile = false;
+            profile.ReturnProfileID = -1;
 
             profile.RequestedLabelFormat = (int) ThermalLanguage.None;
 

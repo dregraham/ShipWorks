@@ -26,9 +26,22 @@ namespace ShipWorks.Shipping.Profiles
             public Control DataControl { get; set; }
             public Control[] OtherControls { get; set; }
             public bool IsValueMapping { get; set; }
+            public CheckBox Parent { get; set; } = null;
+        }
+
+        /// <summary>
+        /// A map setting the relationship between a parent / parent state and its child / child state
+        /// </summary>
+        class ParentChildMapping
+        {
+            public CheckBox ParentState { get; set; }
+            public CheckBox Parent { get; set; }
+            public CheckBox ChildState { get; set; }
+            public Control Child { get; set; }
         }
 
         List<CheckStateMapping> checkStateMap = new List<CheckStateMapping>();
+        List<ParentChildMapping> parentChildMap = new List<ParentChildMapping>();
 
         bool allowChangeCheckState = true;
 
@@ -60,8 +73,8 @@ namespace ShipWorks.Shipping.Profiles
 
             mapping.IsValueMapping = true;
 
-            // If its checked, apply the current value
-            if (checkBox.Checked)
+            // If its checked, and has a value apply the current value
+            if (checkBox.Checked && entity.GetCurrentFieldValue(field.FieldIndex) != null)
             {
                 ReadFieldValue(entity, field, dataControl);
                 OnStateCheckChanged(checkBox, EventArgs.Empty);
@@ -96,10 +109,14 @@ namespace ShipWorks.Shipping.Profiles
             checkStateMap.Add(mapping);
 
             // Update the check state
-            checkBox.Checked = entity.GetCurrentFieldValue(field.FieldIndex) != null;
+            checkBox.Checked = (entity.GetCurrentFieldValue(field.FieldIndex) != null) || !allowChangeCheckState;
+
+            // Remove all potential event handlers to
+            // make sure we only return a single event handler.
+            checkBox.CheckedChanged -= OnStateCheckChanged;
 
             // Update the UI and start listening for changes
-            checkBox.CheckedChanged += new EventHandler(OnStateCheckChanged);
+            checkBox.CheckedChanged += OnStateCheckChanged;
             OnStateCheckChanged(checkBox, EventArgs.Empty);
 
             checkBox.Enabled = allowChangeCheckState;
@@ -116,9 +133,31 @@ namespace ShipWorks.Shipping.Profiles
             {
                 if (mapping.IsValueMapping)
                 {
-                    if (mapping.CheckBox.Checked)
+                    // Only set the field value if the state is checked and no parent is set
+                    // or if both the state and the parent are checked
+                    if (mapping.CheckBox.Checked && (mapping.Parent == null || mapping.Parent.Checked))
                     {
                         SetFieldValue(mapping.Entity, mapping.Field, mapping.DataControl);
+                    }
+                    // Set reasonable defaults for disabled child controls
+                    else if (mapping.CheckBox.Checked && mapping.Parent != null)
+                    {
+                        if (mapping.DataControl is ComboBox)
+                        {
+                            mapping.Entity.SetNewFieldValue(mapping.Field.FieldIndex, 0);
+                        }
+                        else if (mapping.DataControl is TextBox || mapping.DataControl is TemplateTokenTextBox)
+                        {
+                            mapping.Entity.SetNewFieldValue(mapping.Field.FieldIndex, String.Empty);
+                        }
+                        else if (mapping.DataControl is CheckBox)
+                        {
+                            mapping.Entity.SetNewFieldValue(mapping.Field.FieldIndex, false);
+                        }
+                        else
+                        {
+                            mapping.Entity.SetNewFieldValue(mapping.Field.FieldIndex, null);
+                        }
                     }
                     else
                     {
@@ -343,7 +382,7 @@ namespace ShipWorks.Shipping.Profiles
 
                 if (value is Enum)
                 {
-                    value = (int)value;
+                    value = (int) value;
                 }
             }
 
@@ -387,10 +426,10 @@ namespace ShipWorks.Shipping.Profiles
             InsuranceProfileControl insuranceControl = control as InsuranceProfileControl;
             if (insuranceControl != null)
             {
-                ShippingProfileEntity profile = (ShippingProfileEntity)entity;
+                ShippingProfileEntity profile = (ShippingProfileEntity) entity;
 
                 profile.Insurance = insuranceControl.UseInsurance;
-                profile.InsuranceInitialValueSource = (int)insuranceControl.Source;
+                profile.InsuranceInitialValueSource = (int) insuranceControl.Source;
                 profile.InsuranceInitialValueAmount = insuranceControl.OtherAmount;
 
                 return;
@@ -430,7 +469,7 @@ namespace ShipWorks.Shipping.Profiles
         /// <summary>
         /// One of the checkboxes that controls state has changed
         /// </summary>
-        void OnStateCheckChanged(object sender, EventArgs e)
+        protected void OnStateCheckChanged(object sender, EventArgs e)
         {
             CheckBox checkBox = (CheckBox) sender;
 
@@ -444,6 +483,107 @@ namespace ShipWorks.Shipping.Profiles
                 {
                     control.Enabled = checkBox.Checked;
                 }
+            }
+        }
+
+        /// <summary>
+        /// Set a parent checkbox for a control to be automatically enabled/disabled based on its parent state
+        /// </summary>
+        protected void SetParentCheckBox(CheckBox parentState, CheckBox parent, CheckBox childState, Control child)
+        {
+            bool active = false;
+
+            ParentChildMapping parentChild = new ParentChildMapping
+            {
+                ParentState = parentState,
+                Parent = parent,
+                ChildState = childState,
+                Child = child
+            };
+
+            parentChildMap.Add(parentChild);
+
+            foreach (CheckStateMapping mapping in checkStateMap.Where(x => x.DataControl == child))
+            {
+                mapping.Parent = parent;
+            }
+
+            // Remove original event handler
+            childState.CheckedChanged -= OnStateCheckChanged;
+
+            // Add new event handlers, but make sure we only add them once
+            parentState.CheckedChanged -= OnParentStateChanged;
+            parent.CheckedChanged -= OnParentCheckChanged;
+            childState.CheckedChanged -= OnChildStateChanged;
+            parentState.CheckedChanged += OnParentStateChanged;
+            parent.CheckedChanged += OnParentCheckChanged;
+            childState.CheckedChanged += OnChildStateChanged;
+
+            // Set initial child state
+            active = childState.Checked && parent.Checked;
+            SetChildState(child, active);
+        }
+
+        /// <summary>
+        /// Click of the parent state checkbox
+        /// </summary>
+        protected void OnParentStateChanged(object sender, EventArgs e)
+        {
+            CheckBox parentState = (CheckBox) sender;
+
+            if (!parentState.Checked)
+            {
+                foreach (ParentChildMapping mapping in parentChildMap.Where(x => x.ParentState == parentState))
+                {
+                    SetChildState(mapping.Child, false);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Click of the parent checkbox
+        /// </summary>
+        protected void OnParentCheckChanged(object sender, EventArgs e)
+        {
+            CheckBox parent = (CheckBox) sender;
+            bool active;
+
+            foreach (ParentChildMapping mapping in parentChildMap.Where(x => x.Parent == parent))
+            {
+                active = parent.Checked ? mapping.ChildState.Checked : false;
+
+                SetChildState(mapping.Child, active);
+            }
+        }
+
+        /// <summary>
+        /// Click of the child state checkbox
+        /// </summary>
+        protected void OnChildStateChanged(object sender, EventArgs e)
+        {
+            CheckBox childState = (CheckBox) sender;
+            bool active;
+
+            foreach (ParentChildMapping mapping in parentChildMap.Where(x => x.ChildState == childState))
+            {
+                active = childState.Checked ? mapping.Parent.Checked : false;
+
+                SetChildState(mapping.Child, active);
+            }
+        }
+
+        /// <summary>
+        /// Set child control's state and, if possible, a default value
+        /// </summary>
+        private void SetChildState(Control child, bool active)
+        {
+            try
+            {
+                UpdateState(child, active);
+            }
+            catch (NotSupportedException)
+            {
+                child.Enabled = active;
             }
         }
     }

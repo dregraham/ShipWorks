@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using Interapptive.Shared.ComponentRegistration;
+using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.Shipping.Services.ProcessShipmentsWorkflow
 {
@@ -28,7 +31,16 @@ namespace ShipWorks.Shipping.Services.ProcessShipmentsWorkflow
         /// <summary>
         /// Create the correct workflow
         /// </summary>
-        public IProcessShipmentsWorkflow Create(int shipmentCount) =>
-            shipmentCount == 1 ? (IProcessShipmentsWorkflow) createSerialWorkflow() : createParallelWorkflow();
+        public IProcessShipmentsWorkflow Create(IEnumerable<ShipmentEntity> shipments)
+        {
+            if (shipments.Count() > 1 || shipments.First().IncludeReturn)
+            {
+                return createParallelWorkflow();
+            }
+            else
+            {
+                return (IProcessShipmentsWorkflow) createSerialWorkflow();
+            }
+        }
     }
 }

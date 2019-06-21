@@ -407,7 +407,7 @@ namespace ShipWorks.ApplicationCore.Dashboard
                     var nextUpdateWindow = lifetimeScope.Resolve<IConfigurationData>().GetNextUpdateWindow(now);
                     var timeUntilUpdateWindow = nextUpdateWindow.Subtract(now);
 
-                    if (timeUntilUpdateWindow.TotalHours <= 24 && timeUntilUpdateWindow.TotalHours > 0)
+                    if (Math.Round(timeUntilUpdateWindow.TotalDays) <= 7 && timeUntilUpdateWindow.TotalHours > 0)
                     {
                         var tangoCustomerId = lifetimeScope.Resolve<ITangoWebClient>().GetTangoCustomerId();
                         var currentVersion = lifetimeScope.Resolve<ISqlSchemaUpdater>().GetBuildVersion();
@@ -419,7 +419,6 @@ namespace ShipWorks.ApplicationCore.Dashboard
                             .Filter(x => x > ShipWorksOnlineVersionChecker.CheckSignedOffVersion())
                             .Do(x => panel.BeginInvoke((MethodInvoker<DashboardOnlineVersionItem>) CheckShipWorksVersionComplete,
                                 new DashboardOnlineVersionItem(x, nextUpdateWindow)));
-
                     }
                 }
             }

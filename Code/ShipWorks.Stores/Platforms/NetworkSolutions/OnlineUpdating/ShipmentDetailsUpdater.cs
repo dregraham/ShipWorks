@@ -46,7 +46,7 @@ namespace ShipWorks.Stores.Platforms.NetworkSolutions.OnlineUpdating
         /// </summary>
         public async Task UploadShipmentDetailsForOrder(INetworkSolutionsStoreEntity store, long orderID)
         {
-            ShipmentEntity shipment = await orderManager.GetLatestActiveShipmentAsync(orderID, includeOrder: true).ConfigureAwait(false);
+            ShipmentEntity shipment = await orderManager.GetLatestActiveShipmentAsync(orderID, includeOrder: true, includeReturns: false).ConfigureAwait(false);
 
             if (shipment == null)
             {

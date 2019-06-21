@@ -89,7 +89,7 @@ namespace ShipWorks.Stores.Platforms.SparkPay.Factories
         private async Task<IResult> UploadShipmentDetailsCallback(long orderID, ISparkPayStoreEntity store)
         {
             // upload tracking number for the most recent processed, not voided shipment
-            ShipmentEntity shipment = OrderUtility.GetLatestActiveShipment(orderID);
+            ShipmentEntity shipment = OrderUtility.GetLatestActiveShipment(orderID, false);
             if (shipment == null)
             {
                 return Result.FromSuccess();
